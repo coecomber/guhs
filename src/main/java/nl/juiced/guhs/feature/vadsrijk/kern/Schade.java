@@ -35,7 +35,12 @@ public final class Schade {
     }
 
     /** One hit: who, on whom, base damage (weapon x skill factor, or the mob's hit), element, kind, can it crit, which skill. */
-    public record Klap(@Nullable LivingEntity bron, LivingEntity doel, double basis, Element element, Soort soort, boolean kanKritiek, String skillId) {
+    public record Klap(@Nullable LivingEntity bron, LivingEntity doel, double basis, Element element, Soort soort, boolean kanKritiek, String skillId,
+            boolean zekerKritiek) {
+        /** The usual hit (crit only by chance). */
+        public Klap(@Nullable LivingEntity bron, LivingEntity doel, double basis, Element element, Soort soort, boolean kanKritiek, String skillId) {
+            this(bron, doel, basis, element, soort, kanKritiek, skillId, false);
+        }
     }
 
     /** What came out (after everything). */
@@ -109,7 +114,7 @@ public final class Schade {
         double ef = Element.factor(k.element(), doelEl, ontvadst);
         if (k.soort() != Soort.WAAR) {
             Stats s = bron instanceof ServerPlayer bp ? Spelers.stats(bp) : new Stats();
-            krit = k.kanKritiek() && bron != null && bron.getRandom().nextDouble() * 100 < s.get(Stat.KRITIEK);
+            krit = k.zekerKritiek() || (k.kanKritiek() && bron != null && bron.getRandom().nextDouble() * 100 < s.get(Stat.KRITIEK));
             n = aanval(n, s, k.soort(), krit, k.element(), doelEl, ontvadst);
             if (bron != null && Statussen.heeft(bron, Status.VAHOEG)) {
                 n *= 1 + Math.max(0.1, Statussen.sterkte(bron, Status.VAHOEG));

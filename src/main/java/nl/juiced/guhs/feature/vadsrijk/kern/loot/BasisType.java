@@ -37,6 +37,11 @@ public record BasisType(String id, String itemId, Slot slot, String soort, @Null
         return new BasisType(id, itemId, Slot.WAPEN, soort, klasse, e, schade, perLevel, basis, groei, flavours);
     }
 
+    /** A piece of jewellery (RING, KETTING, OORBEL): only side stats, they grow with the level. */
+    public static BasisType sieraad(String id, String itemId, Slot slot, Stats basis, Stats perLevel, int flavours) {
+        return new BasisType(id, itemId, slot, "sieraad", null, Element.GEEN, 0, 0, basis, perLevel, flavours);
+    }
+
     public static BasisType harnas(String id, String itemId, Slot slot, double verdediging, double vads, int flavours) {
         return new BasisType(id, itemId, slot, "harnas", null, Element.GEEN, 0, 0, Stats.van(Stat.VERDEDIGING, verdediging, Stat.VADS, vads),
                 Stats.van(Stat.VERDEDIGING, verdediging * 0.25, Stat.VADS, vads * 0.2), flavours);

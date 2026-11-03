@@ -54,11 +54,15 @@ public final class SpelerData implements ValueIOSerializable {
     public final Map<String, Set<String>> boom = new HashMap<>();
     /** Real time (millis) after which a free respec is possible again. */
     public long respecKlaar;
+    /** Worn jewellery: slot name (RING/KETTING/OORBEL) -> raw item tag ({@link Sieraden}). */
+    public final Map<String, CompoundTag> sieraden = new HashMap<>();
     /** Free storage per slice ("npc" = quests, "economie" = mounts/market...). */
     public final Map<String, CompoundTag> extra = new HashMap<>();
 
     /** Not saved: cooldowns (skill id -> game time it is ready), the last area. */
     public final transient Map<String, Long> klaarOp = new HashMap<>();
+    /** Decoded {@link #sieraden} (filled by {@link Sieraden#get}). */
+    public final transient Map<String, net.minecraft.world.item.ItemStack> sieradenCache = new HashMap<>();
     @Nullable
     public transient String gebied;
 
@@ -109,6 +113,9 @@ public final class SpelerData implements ValueIOSerializable {
         boom.forEach((k, v) -> b.putString(k, String.join(",", v)));
         out.store("boom", CompoundTag.CODEC, b);
         out.putLong("respec", respecKlaar);
+        CompoundTag sr = new CompoundTag();
+        sieraden.forEach(sr::put);
+        out.store("sieraden", CompoundTag.CODEC, sr);
         CompoundTag e = new CompoundTag();
         extra.forEach(e::put);
         out.store("extra", CompoundTag.CODEC, e);
@@ -151,6 +158,12 @@ public final class SpelerData implements ValueIOSerializable {
             boom.put(k, s.isEmpty() ? new LinkedHashSet<>() : new LinkedHashSet<>(List.of(s.split(","))));
         }
         respecKlaar = in.getLongOr("respec", 0);
+        sieraden.clear();
+        sieradenCache.clear();
+        CompoundTag sr = in.read("sieraden", CompoundTag.CODEC).orElse(new CompoundTag());
+        for (String k : sr.keySet()) {
+            sr.getCompound(k).ifPresent(t -> sieraden.put(k, t));
+        }
         extra.clear();
         CompoundTag e = in.read("extra", CompoundTag.CODEC).orElse(new CompoundTag());
         for (String k : e.keySet()) {

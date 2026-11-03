@@ -86,5 +86,6 @@ public final class KernClient {
         });
         RijkHud.init(modBus);
         SceneSpeler.init();
+        SieradenScherm.init();
     }
 }

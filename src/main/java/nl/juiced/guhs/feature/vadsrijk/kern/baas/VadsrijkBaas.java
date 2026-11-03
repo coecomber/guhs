@@ -15,6 +15,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.vadsrijk.kern.KernPayloads;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabel;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabellen;
@@ -55,6 +56,43 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
 
     public String ondertitelKey() {
         return titelKey() + ".onder";
+    }
+
+    /**
+     * A boss without a registered {@link Arena} (e.g. the Mika-spion, started by a quest): return the radius around it in which
+     * players get the boss bar (and count for HP scaling). Contribution (damage, tanking, and heals by players within this radius)
+     * and the personal chests work the same. 0 = not a loose boss (default: arena bosses get their bar from {@link Arenas}).
+     * Play the intro yourself with {@link #intro} when the fight starts.
+     */
+    public int losseStraal() {
+        return 0;
+    }
+
+    private final java.util.Set<java.util.UUID> losseKijkers = new java.util.HashSet<>();
+
+    @Override
+    public void tick() {
+        super.tick();
+        if (level().isClientSide() || arena != null || losseStraal() <= 0 || geplofd() || tickCount % 5 != 0 || !(level() instanceof ServerLevel sl)) {
+            return;
+        }
+        double r = losseStraal();
+        java.util.Set<java.util.UUID> nu = new java.util.HashSet<>();
+        for (ServerPlayer p : sl.players()) {
+            if (!p.isSpectator() && p.distanceToSqr(this) <= r * r) {
+                nu.add(p.getUUID());
+                KernPayloads.stuur(p, new KernPayloads.BaasBalk(getId(), net.minecraft.network.chat.Component.translatable(titelKey()), fase(), (float) vads(),
+                        (float) maxVads(), muziek() == null ? "" : muziek().toString()));
+            }
+        }
+        for (java.util.UUID weg : losseKijkers) {
+            if (!nu.contains(weg) && sl.getEntity(weg) instanceof ServerPlayer p) {
+                KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, net.minecraft.network.chat.Component.empty(), 0, 0, 0));
+            }
+        }
+        losseKijkers.clear();
+        losseKijkers.addAll(nu);
+        schaal(nu.size());
     }
 
     /** The signature move during the first intro (default: nothing). */
@@ -149,9 +187,23 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         signatuur();
     }
 
+    /**
+     * What goes into this player's personal chest (only called for players above 5 % contribution). Default: a roll of
+     * {@link #lootTabel()} (items + Vadsmunten), or nothing without a table. Override for first-kill rewards, named items...
+     * {@code eersteKill}: this player never beat this boss type before (remembered per player).
+     */
+    protected LootTabel.Resultaat kistInhoud(ServerPlayer p, boolean eersteKill) {
+        LootTabel t = lootTabel() == null ? null : LootTabellen.van(lootTabel());
+        return t == null ? new LootTabel.Resultaat(java.util.List.of(), 0) : t.rol(mobLevel(), getRandom());
+    }
+
+    /** The id under which a player's first kill of this boss is remembered ({@code SpelerData.gezien}). */
+    protected String killSleutel() {
+        return "baaskill:" + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType());
+    }
+
     @Override
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
-        LootTabel t = lootTabel() == null ? null : LootTabellen.van(lootTabel());
         int kist = 0;
         for (java.util.UUID id : bijdragen.spelers()) {
             if (!(sl.getEntity(id) instanceof ServerPlayer p) || p.distanceTo(this) > 64) {
@@ -159,12 +211,22 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
             }
             Spelers.geefXpGedeeld(p, xp(), "baas");
             Spelers.data(p).opgevrolijkt++;
-            if (t != null && bijdragen.verdientKist(id)) {
-                double a = kist++ * 2.4;
-                Vec3 plek = (arena != null ? Vec3.atBottomCenterOf(arena.centrum()) : position()).add(Math.cos(a) * 3, 0, Math.sin(a) * 3);
-                BaasKist.plaats(sl, p, net.minecraft.core.BlockPos.containing(plek), t.rol(mobLevel(), getRandom()));
+            boolean eerste = Spelers.data(p).gezien.add(killSleutel());
+            if (bijdragen.verdientKist(id)) {
+                LootTabel.Resultaat r = kistInhoud(p, eerste);
+                if (r != null && (!r.items().isEmpty() || r.munten() > 0)) {
+                    double a = kist++ * 2.4;
+                    Vec3 plek = (arena != null ? Vec3.atBottomCenterOf(arena.centrum()) : position()).add(Math.cos(a) * 3, 0, Math.sin(a) * 3);
+                    BaasKist.plaats(sl, p, net.minecraft.core.BlockPos.containing(plek), r);
+                }
             }
         }
+        for (java.util.UUID id : losseKijkers) {
+            if (sl.getEntity(id) instanceof ServerPlayer p) {
+                KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, net.minecraft.network.chat.Component.empty(), 0, 0, 0));
+            }
+        }
+        losseKijkers.clear();
         if (arena != null) {
             Arenas.verslagen(arena);
         }

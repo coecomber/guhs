@@ -106,6 +106,11 @@ final class KernEvents {
                 if (b != null) {
                     b.bijdragen().heal(p.getUUID(), n);
                 }
+                // loose bosses (no arena): healers within their radius count too
+                for (var lb : sl.getEntitiesOfClass(nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas.class, p.getBoundingBox().inflate(48),
+                        x -> x.arena() == null && x.losseStraal() > 0 && !x.geplofd() && x.distanceTo(p) <= x.losseStraal())) {
+                    lb.bijdragen().heal(p.getUUID(), n);
+                }
             }
         });
         Flauwvallen.CHECKPOINT_KIEZER.add(p -> {
@@ -121,13 +126,17 @@ final class KernEvents {
         if (in && !d.binnen) {
             Inventaris.naarRijk(p);
             Haken.BINNEN.forEach(h -> h.accept(p, true));
+            snelheid(p);
             Spelers.sync(p);
+            Sieraden.stuur(p);
             Tips.toon(p, "vadsrijk.kern.tip.welkom");
         } else if (!in && d.binnen) {
             Inventaris.naarThuis(p);
             Statussen.wisAlles(p);
+            snelheidUit(p);
             Haken.BINNEN.forEach(h -> h.accept(p, false));
             KernPayloads.stuurHud(p);   // (binnen = false: the client hides the HUD)
+            Sieraden.stuur(p);
         }
     }
 
@@ -199,13 +208,41 @@ final class KernEvents {
         }
     }
 
-    /** Loopsnelheid -> the vanilla movement attribute (a transient modifier, only in the dimension). */
+    private static final net.minecraft.resources.Identifier LOOP_ID = nl.juiced.guhs.Guhs.id("vr_loopsnelheid"),
+            AANVAL_ID = nl.juiced.guhs.Guhs.id("vr_aanvalssnelheid");
+    /** Basic attacks per second of a class weapon at 0 % Aanvalssnelheid (vanilla sword pace). */
+    public static final double BASIS_AANVALLEN = 1.6;
+
+    /** Outside the dimension: our speed modifiers off again. */
+    static void snelheidUit(ServerPlayer p) {
+        var loop = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
+        if (loop != null) {
+            loop.removeModifier(LOOP_ID);
+        }
+        var aanval = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_SPEED);
+        if (aanval != null) {
+            aanval.removeModifier(AANVAL_ID);
+        }
+    }
+
+    /**
+     * Loopsnelheid -> the movement attribute; Aanvalssnelheid -> the attack speed attribute, so the vanilla attack cooldown (and
+     * its crosshair indicator) paces the basic attack: {@link #BASIS_AANVALLEN} per second x (1 + Aanvalssnelheid%). Only in the dimension.
+     */
     private static void snelheid(ServerPlayer p) {
+        var aanval = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_SPEED);
+        if (aanval != null) {
+            double doel = BASIS_AANVALLEN * (1 + Math.max(-50, Math.min(150, Spelers.stats(p).get(Stat.AANVALSSNELHEID))) / 100.0);
+            aanval.removeModifier(AANVAL_ID);
+            double zonder = aanval.getValue();
+            aanval.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(AANVAL_ID, doel - zonder,
+                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE));
+        }
         var attr = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
         if (attr == null) {
             return;
         }
-        var id = nl.juiced.guhs.Guhs.id("vr_loopsnelheid");
+        var id = LOOP_ID;
         double pct = Math.max(-60, Math.min(60, Spelers.stats(p).get(Stat.LOOPSNELHEID))) / 100.0;
         attr.removeModifier(id);
         if (Math.abs(pct) > 0.001) {

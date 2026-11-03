@@ -22,12 +22,38 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 
 /** Kern's side of the skills: the key press -> checks (dimension, stun, cooldown, energy/ult charge) -> the skill -> pay. */
 public final class Vaardigheden {
+    /** Per-player cooldown factors (klassen: skill-tree nodes, buffs...): all multiplied, after Cooldownreductie. 1 = unchanged. */
+    public static final java.util.List<java.util.function.BiFunction<ServerPlayer, Vaardigheid, Float>> COOLDOWN_MOD =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** Per-player energy cost factors, the same way. */
+    public static final java.util.List<java.util.function.BiFunction<ServerPlayer, Vaardigheid, Float>> ENERGIE_MOD =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
+
     private Vaardigheden() {
     }
 
     public static int cooldown(ServerPlayer p, Vaardigheid v) {
         double cdr = Math.min(50, Spelers.stats(p).get(Stat.COOLDOWNREDUCTIE));
-        return (int) Math.round(v.cooldownTicks() * (1 - cdr / 100.0));
+        double t = v.cooldownTicks() * (1 - cdr / 100.0);
+        for (var f : COOLDOWN_MOD) {
+            Float m = f.apply(p, v);
+            if (m != null) {
+                t *= Math.max(0, m);
+            }
+        }
+        return (int) Math.round(t);
+    }
+
+    /** What this skill costs this player now. */
+    public static double energie(ServerPlayer p, Vaardigheid v) {
+        double e = v.energie();
+        for (var f : ENERGIE_MOD) {
+            Float m = f.apply(p, v);
+            if (m != null) {
+                e *= Math.max(0, m);
+            }
+        }
+        return e;
     }
 
     public static boolean gebruik(ServerPlayer p, int slot) {
@@ -51,7 +77,7 @@ public final class Vaardigheden {
                 nee(p, "vadsrijk.kern.skill.ult_niet_vol");
                 return false;
             }
-        } else if (Spelers.energie(p) < v.energie()) {
+        } else if (Spelers.energie(p) < energie(p, v)) {
             nee(p, "vadsrijk.kern.skill.geen_energie");
             return false;
         }
@@ -62,7 +88,7 @@ public final class Vaardigheden {
         if (v.ult()) {
             d.ultLading = 0;
         } else {
-            d.energie = Spelers.energie(p) - v.energie();
+            d.energie = Spelers.energie(p) - energie(p, v);
         }
         d.klaarOp.put(v.id(), nu + cooldown(p, v));
         Tips.toon(p, "vadsrijk.kern.tip.skill");

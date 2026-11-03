@@ -70,6 +70,12 @@ public final class KernRegistry {
     public static final DeferredItem<Item> PLUISHAMER = wapen("vr_pluishamer");
     public static final DeferredItem<Item> PLUISHELM = harnas("vr_pluishelm", Slot.HOOFD);
     public static final DeferredItem<Item> KNUFFELHARNAS = harnas("vr_knuffelharnas", Slot.BORST);
+    public static final DeferredItem<Item> ROZE_RING = sieraad("vr_roze_ring");
+    public static final DeferredItem<Item> KNUFFELKETTING = sieraad("vr_knuffelketting");
+    public static final DeferredItem<Item> PLUISOORBEL = sieraad("vr_pluisoorbel");
+
+    /** The look every Vadsrijk armour piece gets unless it names its own (assets/guhs/equipment/vr_knuffel.json, pink layers). */
+    public static final String STANDAARD_UITERLIJK = "vr_knuffel";
 
     public static final DeferredBlock<BaasKist> BAASKIST = BLOCKS.registerBlock("vr_baaskist", BaasKist::new,
             () -> BlockBehaviour.Properties.ofFullCopy(Blocks.CHEST).strength(-1, 3600000).noLootTable());
@@ -97,8 +103,29 @@ public final class KernRegistry {
     }
 
     private static DeferredItem<Item> harnas(String id, Slot slot) {
-        return ITEMS.registerItem(id, RijkItem::new, () -> new Item.Properties().stacksTo(1)
-                .component(DataComponents.EQUIPPABLE, Equippable.builder(slot.vanilla).build()));
+        return ITEMS.registerItem(id, RijkItem::new, () -> harnasEigenschappen(slot, null));
+    }
+
+    private static DeferredItem<Item> sieraad(String id) {
+        return ITEMS.registerItem(id, RijkItem::new, () -> new Item.Properties().stacksTo(1));
+    }
+
+    /**
+     * Item properties for a Vadsrijk armour item of any slice: stack 1, equippable in its armour slot, drawn on the player with
+     * the equipment asset {@code guhs:<uiterlijk>} (assets/guhs/equipment/<uiterlijk>.json + textures/entity/equipment/humanoid[_leggings]/),
+     * or kern's pink {@link #STANDAARD_UITERLIJK} when null. Use with {@code new RijkItem(props)}.
+     */
+    public static Item.Properties harnasEigenschappen(Slot slot, @javax.annotation.Nullable String uiterlijk) {
+        if (!slot.harnas()) {
+            throw new IllegalArgumentException("not an armour slot: " + slot);
+        }
+        return new Item.Properties().stacksTo(1).component(DataComponents.EQUIPPABLE, Equippable.builder(slot.vanilla)
+                .setAsset(uiterlijk(uiterlijk == null ? STANDAARD_UITERLIJK : uiterlijk))
+                .setEquipSound(net.minecraft.sounds.SoundEvents.ARMOR_EQUIP_LEATHER).build());
+    }
+
+    public static ResourceKey<net.minecraft.world.item.equipment.EquipmentAsset> uiterlijk(String id) {
+        return ResourceKey.create(net.minecraft.world.item.equipment.EquipmentAssets.ROOT_ID, Guhs.id(id));
     }
 
     public static void register(IEventBus modBus) {
@@ -136,7 +163,13 @@ public final class KernRegistry {
                 13, 2.3, Stats.van(Stat.KRITIEKSCHADE, 10), Stats.van(Stat.KRACHT, 0.3), 3));
         BasisTypes.registreer(BasisType.harnas("pluishelm", "guhs:vr_pluishelm", Slot.HOOFD, 4, 12, 3));
         BasisTypes.registreer(BasisType.harnas("knuffelharnas", "guhs:vr_knuffelharnas", Slot.BORST, 7, 20, 3));
-        List<LootTabel.Regel> alle = List.of(new LootTabel.Regel("kussenzwaard", 3), new LootTabel.Regel("knuffelknots", 3), new LootTabel.Regel("pluishamer", 2),
+        BasisTypes.registreer(BasisType.sieraad("roze_ring", "guhs:vr_roze_ring", Slot.RING, Stats.van(Stat.KRITIEK, 2), Stats.van(Stat.KRITIEK, 0.1), 3));
+        BasisTypes.registreer(BasisType.sieraad("knuffelketting", "guhs:vr_knuffelketting", Slot.KETTING, Stats.van(Stat.VADS, 10),
+                Stats.van(Stat.VADS, 3), 3));
+        BasisTypes.registreer(BasisType.sieraad("pluisoorbel", "guhs:vr_pluisoorbel", Slot.OORBEL, Stats.van(Stat.COOLDOWNREDUCTIE, 2),
+                Stats.van(Stat.COOLDOWNREDUCTIE, 0.1), 3));
+        List<LootTabel.Regel> alle = List.of(new LootTabel.Regel("roze_ring", 1), new LootTabel.Regel("knuffelketting", 1),
+                new LootTabel.Regel("pluisoorbel", 1),new LootTabel.Regel("kussenzwaard", 3), new LootTabel.Regel("knuffelknots", 3), new LootTabel.Regel("pluishamer", 2),
                 new LootTabel.Regel("pluishelm", 3), new LootTabel.Regel("knuffelharnas", 3));
         LootTabellen.registreer("kern:proefklodder", new LootTabel(alle, 1, 0.22, 1.0, 3, 12));
         LootTabellen.registreer("kern:klodderreus", new LootTabel(alle, 3, 1.0, 3.0, 150, 400));

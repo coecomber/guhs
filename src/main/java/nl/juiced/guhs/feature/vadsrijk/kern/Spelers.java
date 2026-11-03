@@ -28,12 +28,42 @@ import nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen;
 public final class Spelers {
     /** Fist damage without a class weapon. */
     public static final double VUIST = 2;
+    /**
+     * Extra stat sources (slices: set bonuses, skill-tree bonuses, buffs...): each is asked in {@link #stats} and added on top.
+     * Only called for server players; return an empty {@link Stats} when it doesn't apply.
+     */
+    public static final java.util.List<java.util.function.Function<net.minecraft.server.level.ServerPlayer, Stats>> EXTRA_STATS =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
 
     private Spelers() {
     }
 
     public static SpelerData data(Player p) {
         return p.getData(KernRegistry.SPELER);
+    }
+
+    /**
+     * The title on the HUD instead of the class name (klassen: job advancement titles): the first non-null lang key wins.
+     */
+    public static final java.util.List<java.util.function.Function<ServerPlayer, String>> TITEL_BRON = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /** The lang key of the title the HUD shows: {@link #TITEL_BRON} or the class name. */
+    public static String titelKey(ServerPlayer p) {
+        for (var f : TITEL_BRON) {
+            String t = f.apply(p);
+            if (t != null) {
+                return t;
+            }
+        }
+        return klasse(p).titelKey(level(p));
+    }
+
+    /**
+     * After changing {@link SpelerData} (e.g. {@code extra(slice)}): nothing to do for saving (the attachment is written with the
+     * player), but it re-sends the HUD. Kept so callers can mark "changed" in one place.
+     */
+    public static void opgeslagen(ServerPlayer p) {
+        sync(p);
     }
 
     public static Klasse klasse(Player p) {
@@ -91,6 +121,20 @@ public final class Spelers {
             Uitrusting u = Rollen.van(st);
             if (u != null && u.basisType() != null && u.basisType().slot().vanilla == es && u.level() <= lvl) {
                 s.plus(Rollen.stats(u));
+            }
+        }
+        if (p instanceof ServerPlayer sp) {
+            for (nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot slot : nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.SIERADEN) {
+                Uitrusting u = Rollen.van(Sieraden.get(sp, slot));
+                if (u != null && u.basisType() != null && u.basisType().slot() == slot && u.level() <= lvl) {
+                    s.plus(Rollen.stats(u));
+                }
+            }
+            for (java.util.function.Function<ServerPlayer, Stats> f : EXTRA_STATS) {
+                Stats extra = f.apply(sp);
+                if (extra != null) {
+                    s.plus(extra);
+                }
             }
         }
         Set<String> knopen = d.boom.getOrDefault(k.id(), Set.of());

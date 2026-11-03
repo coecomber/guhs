@@ -112,6 +112,20 @@ public class RijkItem extends Item {
         return Component.literal(getal + " ").withStyle(kleur).append(Component.translatable(s.key()).withStyle(ChatFormatting.GRAY));
     }
 
+    /** Jewellery: right-click in the dimension puts it on ({@code kern.Sieraden}). */
+    @Override
+    public net.minecraft.world.InteractionResult use(net.minecraft.world.level.Level level, net.minecraft.world.entity.player.Player player,
+            net.minecraft.world.InteractionHand hand) {
+        Uitrusting u = Rollen.van(player.getItemInHand(hand));
+        if (u != null && u.basisType() != null && u.basisType().slot().sieraad()) {
+            if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
+                nl.juiced.guhs.feature.vadsrijk.kern.Sieraden.draag(sp, hand);
+            }
+            return net.minecraft.world.InteractionResult.SUCCESS;
+        }
+        return super.use(level, player, hand);
+    }
+
     @Override
     public boolean isFoil(ItemStack stack) {
         Uitrusting u = Rollen.van(stack);

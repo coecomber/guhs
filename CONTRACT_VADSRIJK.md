@@ -75,7 +75,7 @@ That makes the inventory stash atomic with the player's own inventory (both live
   `Spelers.opgeslagen(p)` after changing it.
 - `Spelers`: `data(p)`, `level(p)` / `level(p, klasse)`, `stats(p)` (computed: class base + level growth + gear + skill tree + status),
   `geefXp(p, n, bron)` (this player only), `geefXpGedeeld(p, n, bron)` (the party within 48 blocks each get n; mobs use this),
-  `zetLevel(p, n)`, `geefMunten(p, n)`, `neemMunten(p, n)`, `sync(p)` (HUD).
+  `zetLevel(p, n)`, `opgeslagen(p)` (no-op for saving: the attachment saves with the player; re-sends the HUD), `geefMunten(p, n)`, `neemMunten(p, n)`, `sync(p)` (HUD).
 - Levels 1..`Levels.MAX` (20); `Levels.xpVoor(level)`; level-up gives automatic stat growth + 1 skill point.
 - **Inventory swap** (`kern.Inventaris`): `naarRijk(p)` / `naarThuis(p)`. Never call these yourself: the kern reconciler swaps on every
   dimension change/login (`binnen` flag vs. actual dimension). Rules: the stash is never overwritten (a non-empty stash merges,
@@ -196,3 +196,29 @@ Still being filled in by kern after this commit (same signatures): the client HU
   HP bars; a custom name only replaces the name part.
 - Boss music hook: override `VadsrijkBaas#muziek()` (default `guhs:vr.kern.muziek.baas`, registered, no asset yet); it plays
   only if the sound exists in sounds.json.
+- Extra stat sources: `Spelers.EXTRA_STATS.add(sp -> Stats...)` (set bonuses, skill-tree bonuses, buffs); added on top in `Spelers.stats`.
+- Spawners: `new Spawner(...10 args...).grot(minY, maxY)` = cave/interior mode (floor search down from maxY to minY, flat 2D
+  distance checks within that y-range). Getters: `Spawners.van(id)`, `Spawners.alle()`, `Spawners.levend(level, spawner)`,
+  `Spawner#max()`, `Spawner#gebied()`.
+- `VadsrijkMob#elite()` is synced (client nameplate shows it).
+- Jewellery: `Slot.RING / KETTING / OORBEL` (`Slot.SIERADEN`, `slot.sieraad()`), base types via `BasisType.sieraad(...)`. Worn pieces
+  live in `SpelerData.sieraden` (kern `Sieraden`: right-click to wear, click the slot right of the inventory screen to take off), Vadsrijk only,
+  counted by `Spelers.stats`. Register jewellery items as plain `new RijkItem(new Item.Properties().stacksTo(1))`.
+- Visible armour: register armour items with `new RijkItem(KernRegistry.harnasEigenschappen(slot, uiterlijk))`; `uiterlijk` =
+  your equipment asset id (assets/guhs/equipment/<id>.json + textures/entity/equipment/humanoid[_leggings]/<id>.png) or null for kern's
+  pink `vr_knuffel`.
+- Boss chests: override `VadsrijkBaas#kistInhoud(ServerPlayer, boolean eersteKill)` (returns a `LootTabel.Resultaat`; default = a roll of
+  `lootTabel()`); xp, the first-kill memory (`killSleutel()`) and the arena notice stay in kern's `beloon`.
+- Bosses without an Arena (quest fights): override `VadsrijkBaas#losseStraal()` (> 0): boss bar + HP scaling for players in that radius,
+  heals inside it count as contribution, chests appear around the boss. Call `intro(p, eersteKeer)` yourself.
+- NOTE on the slice generator stubs (`tools/features/vadsrijk_<slice>.py` as committed in 1b061fabf): their `_schrijf` had a broken
+  `newline="<real line break>"` and `f.write("<real line break>")` literal (a generation bug, the files don't parse). Slices own those files:
+  fix them to `newline="
+"` / `f.write("
+")` (kern's own `vadsrijk_kern.py` was always fine).
+- Skills: `Vaardigheden.COOLDOWN_MOD` / `ENERGIE_MOD` (`BiFunction<ServerPlayer, Vaardigheid, Float>` factors, multiplied; applied before kern
+  checks/pays; `Vaardigheden.cooldown(p, v)` / `energie(p, v)` give the result).
+- `Schade.Klap` has an 8th field `zekerKritiek` (forced crit, gold number); the 7-argument constructor stays.
+- Basic attack pace: the vanilla attack cooldown, with the player's attack speed set in the dimension to 1.6/s x (1 + Aanvalssnelheid%)
+  (`KernEvents.BASIS_AANVALLEN`); damage scales with the cooldown charge as in vanilla. Removed again outside the dimension.
+- HUD title: `Spelers.TITEL_BRON.add(sp -> langKey or null)` (job advancement titles); default `Klasse#titelKey(level)`. Shown left of the hotbar.

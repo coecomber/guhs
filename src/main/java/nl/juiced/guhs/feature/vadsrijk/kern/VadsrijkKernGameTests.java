@@ -249,4 +249,30 @@ public class VadsrijkKernGameTests {
         }
         helper.succeed();
     }
+
+    /** Jewellery counts in the stats (with its level requirement), as do the slices' extra stat sources. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void sieradenEnExtraStats(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        double voor = Spelers.stats(p).get(Stat.KRITIEK);
+        BasisType ring = BasisTypes.van("roze_ring");
+        Uitrusting u = Rollen.rol(ring, 1, Zeldzaamheid.GEWOON, RandomSource.create(3));
+        Sieraden.zet(p, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING, Rollen.stack(u));
+        double met = Spelers.stats(p).get(Stat.KRITIEK);
+        helper.assertTrue(met > voor, "the ring adds kritiek (" + voor + " -> " + met + ")");
+        // through a save + load
+        CompoundTag tag = Nbt.write(p.registryAccess(), Spelers.data(p)::serialize);
+        Spelers.data(p).deserialize(Nbt.input(p.registryAccess(), tag));
+        helper.assertTrue(Spelers.stats(p).get(Stat.KRITIEK) == met, "the ring survives a save");
+        Sieraden.zet(p, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING, Rollen.stack(Rollen.rol(ring, 9, Zeldzaamheid.GEWOON, RandomSource.create(3))));
+        helper.assertTrue(Spelers.stats(p).get(Stat.KRITIEK) == voor, "a level 9 ring does nothing at level 1");
+        java.util.function.Function<ServerPlayer, Stats> set = sp -> Stats.van(Stat.LEVENSROOF, 7);
+        Spelers.EXTRA_STATS.add(set);
+        try {
+            helper.assertTrue(Spelers.stats(p).get(Stat.LEVENSROOF) == 7, "an extra stat source counts");
+        } finally {
+            Spelers.EXTRA_STATS.remove(set);
+        }
+        helper.succeed();
+    }
 }

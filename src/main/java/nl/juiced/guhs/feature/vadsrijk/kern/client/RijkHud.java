@@ -168,6 +168,12 @@ public final class RijkHud {
         g.pose().scale(1.5f, 1.5f);
         g.text(f, lvl, -f.width(lvl), 0, 0xFFFFE27A, true);
         g.pose().popMatrix();
+        String titel = Component.translatable(h.klasse()).getString();   // (the class name, or the job title from Spelers.TITEL_BRON)
+        g.pose().pushMatrix();
+        g.pose().translate(c - 98, ly - 20);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(f, titel, -f.width(titel), 0, 0xFFFFC2E8, true);
+        g.pose().popMatrix();
         String munten = Spelers.munten(h.munten());
         g.text(f, munten, c - 98 - f.width(munten), ly + 2, 0xFFFFD86B, true);
         String opg = Component.translatable("vadsrijk.kern.hud.opgevrolijkt", h.opgevrolijkt()).getString();

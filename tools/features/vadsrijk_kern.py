@@ -69,7 +69,13 @@ ITEMS = {
     "vr_pluishamer": ("minecraft:item/iron_axe", "minecraft:item/handheld"),
     "vr_pluishelm": ("minecraft:item/golden_helmet", "minecraft:item/generated"),
     "vr_knuffelharnas": ("minecraft:item/golden_chestplate", "minecraft:item/generated"),
+    "vr_roze_ring": ("minecraft:item/gold_nugget", "minecraft:item/generated"),
+    "vr_knuffelketting": ("minecraft:item/iron_chain", "minecraft:item/generated"),
+    "vr_pluisoorbel": ("minecraft:item/amethyst_shard", "minecraft:item/generated"),
 }
+# the default armour look of every Vadsrijk armour piece (KernRegistry.STANDAARD_UITERLIJK): vanilla iron layers, tinted pink
+UITERLIJK = "vr_knuffel"
+ROZE_TINT = (255, 150, 205)
 
 K = "vadsrijk.kern."
 TEKSTEN = {
@@ -84,6 +90,30 @@ TEKSTEN = {
     "item.guhs.vr_pluishamer": "Pluishamer",
     "item.guhs.vr_pluishelm": "Pluishelm",
     "item.guhs.vr_knuffelharnas": "Knuffelharnas",
+    "item.guhs.vr_roze_ring": "Roze Ring",
+    "item.guhs.vr_knuffelketting": "Knuffelketting",
+    "item.guhs.vr_pluisoorbel": "Pluisoorbel",
+    "vadsrijk.loot.roze_ring.flavour.0": "\"Past om elk pootje.\"",
+    "vadsrijk.loot.roze_ring.flavour.1": "\"Glimt een beetje als je njeg zegt.\"",
+    "vadsrijk.loot.roze_ring.flavour.2": "\"Gevonden in een klodder. Afgespoeld, beloofd.\"",
+    "vadsrijk.loot.knuffelketting.flavour.0": "\"Een knuffel om je nek, de hele dag.\"",
+    "vadsrijk.loot.knuffelketting.flavour.1": "\"Rammelt vahoeg zacht.\"",
+    "vadsrijk.loot.knuffelketting.flavour.2": "\"Oma-guh breide hem. Van ijzer.\"",
+    "vadsrijk.loot.pluisoorbel.flavour.0": "\"Voor aan je guh-oortje.\"",
+    "vadsrijk.loot.pluisoorbel.flavour.1": "\"Je hoort er de vads mee ruisen.\"",
+    "vadsrijk.loot.pluisoorbel.flavour.2": "\"Kietelt. Dat hoort zo.\"",
+    K + "slot.wapen": "Wapen",
+    K + "slot.hoofd": "Hoofd",
+    K + "slot.borst": "Borst",
+    K + "slot.benen": "Benen",
+    K + "slot.voeten": "Voeten",
+    K + "slot.ring": "Ring",
+    K + "slot.ketting": "Ketting",
+    K + "slot.oorbel": "Oorbel",
+    K + "sieraad.om": "Je draagt nu: %s",
+    K + "sieraad.te_hoog": "Dit sieraad is voor niveau %s.",
+    K + "sieraad.vol": "Je rugzak is vol: het sieraad blijft om.",
+    K + "sieraad.leeg": "%s: leeg. Rechtsklik een sieraad om het om te doen.",
     "block.guhs.vr_baaskist": "Buitkist",
     "entity.guhs.vr_proefklodder": "Proefklodder",
     "entity.guhs.vr_proefkloddertje": "Kloddertje",
@@ -162,7 +192,7 @@ TEKSTEN = {
     K + "skill.knuffelschild": "Knuffelschild",
     K + "skill.vahoege_plof": "Vahoege Plof",
     K + "skill.cooldown": "Nog even wachten...",
-    K + "skill.ult_niet_vol": "Je Vahoege Plof is nog niet opgeladen. Meer meppen!",
+    K + "skill.ult_niet_vol": "Je ultieme vaardigheid is nog niet opgeladen. Meer meppen!",
     K + "skill.geen_energie": "Te weinig Vadsenergie.",
     # moments
     K + "levelop.titel": "NIVEAU OMHOOG!",
@@ -238,6 +268,33 @@ def _assets(w, a):
         "top": "minecraft:block/gold_block", "bottom": "minecraft:block/gold_block", "side": "minecraft:block/pink_glazed_terracotta"}})
     w(os.path.join(a, "items", "vr_baaskist.json"), {"model": {"type": "minecraft:model", "model": "guhs:block/vr_baaskist"}})
     _grijs(a)
+    _uiterlijk(w, a)
+
+
+def _uiterlijk(w, a):
+    """The pink default armour look: assets/guhs/equipment/vr_knuffel.json + the two layer textures (vanilla iron, tinted)."""
+    import zipfile
+    from io import BytesIO
+    from PIL import Image
+    w(os.path.join(a, "equipment", UITERLIJK + ".json"), {"layers": {
+        "humanoid": [{"texture": "guhs:" + UITERLIJK}], "humanoid_leggings": [{"texture": "guhs:" + UITERLIJK}]}})
+    jar = os.path.join("build", "moddev", "artifacts", "minecraft-patched-26.1.2.112.jar")
+    for laag in ("humanoid", "humanoid_leggings"):
+        doel = os.path.join(a, "textures", "entity", "equipment", laag, UITERLIJK + ".png")
+        if not os.path.exists(jar):
+            if not os.path.exists(doel):
+                print("vadsrijk_kern: no minecraft jar (run a gradle build first) for", doel)
+            continue
+        with zipfile.ZipFile(jar) as z:
+            img = Image.open(BytesIO(z.read(f"assets/minecraft/textures/entity/equipment/{laag}/iron.png"))).convert("RGBA")
+        px = img.load()
+        for y in range(img.height):
+            for x in range(img.width):
+                r, g, b, al = px[x, y]
+                l = (0.3 * r + 0.59 * g + 0.11 * b) / 255
+                px[x, y] = (int(ROZE_TINT[0] * l), int(ROZE_TINT[1] * l), int(ROZE_TINT[2] * l), al)
+        os.makedirs(os.path.dirname(doel), exist_ok=True)
+        img.save(doel)
 
 
 def _grijs(a):

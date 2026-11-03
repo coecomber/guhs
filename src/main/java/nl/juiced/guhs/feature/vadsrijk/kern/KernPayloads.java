@@ -33,6 +33,8 @@ public final class KernPayloads {
     };
     public static Consumer<PartyHud> partyOntvanger = h -> {
     };
+    public static Consumer<SieradenSync> sieradenOntvanger = h -> {
+    };
 
     /** Everything the HUD shows about yourself. cd/cdMax: remaining/total cooldown ticks of R, V, G, Z. */
     public record Hud(boolean binnen, float vads, float maxVads, float energie, float maxEnergie, float ult, int level, long xpIn, long xpNodig,
@@ -146,6 +148,31 @@ public final class KernPayloads {
         }
     }
 
+    /** The worn jewellery (RING, KETTING, OORBEL), for the slots next to the inventory screen. */
+    public record SieradenSync(List<net.minecraft.world.item.ItemStack> items) implements CustomPacketPayload {
+        public static final Type<SieradenSync> TYPE = new Type<>(Guhs.id("vr_kern_sieraden"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, SieradenSync> STREAM_CODEC = StreamCodec.ofMember(
+                (t, b) -> b.writeCollection(t.items, (bb, s) -> net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.encode((RegistryFriendlyByteBuf) bb, s)),
+                b -> new SieradenSync(b.readList(bb -> net.minecraft.world.item.ItemStack.OPTIONAL_STREAM_CODEC.decode((RegistryFriendlyByteBuf) bb))));
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client -> server: take off the jewellery in slot i of {@code Slot.SIERADEN}. */
+    public record SieraadAf(int i) implements CustomPacketPayload {
+        public static final Type<SieraadAf> TYPE = new Type<>(Guhs.id("vr_kern_sieraad_af"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, SieraadAf> STREAM_CODEC = StreamCodec.ofMember((s, b) -> b.writeVarInt(s.i),
+                b -> new SieraadAf(b.readVarInt()));
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     public record Lid(String naam, float vads, float max, int level, boolean leider) {
     }
 
@@ -176,6 +203,12 @@ public final class KernPayloads {
         r.playToClient(BaasBalk.TYPE, BaasBalk.STREAM_CODEC, (p, c) -> baasOntvanger.accept(p));
         r.playToClient(PartyHud.TYPE, PartyHud.STREAM_CODEC, (p, c) -> partyOntvanger.accept(p));
         r.playToServer(Skill.TYPE, Skill.STREAM_CODEC, KernPayloads::opSkill);
+        r.playToClient(SieradenSync.TYPE, SieradenSync.STREAM_CODEC, (p, c) -> sieradenOntvanger.accept(p));
+        r.playToServer(SieraadAf.TYPE, SieraadAf.STREAM_CODEC, (p, c) -> {
+            if (c.player() instanceof ServerPlayer sp && p.i() >= 0 && p.i() < nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.SIERADEN.length) {
+                Sieraden.af(sp, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.SIERADEN[p.i()]);
+            }
+        });
     }
 
     private static void opSkill(Skill s, IPayloadContext c) {
@@ -206,7 +239,7 @@ public final class KernPayloads {
         }
         int duiz = (int) Math.max(0, d.duizeligTot - nu);
         stuur(p, new Hud(Vadsrijk.in(p), (float) Spelers.vads(p), (float) Spelers.maxVads(p), (float) Spelers.energie(p), (float) Spelers.maxEnergie(p),
-                (float) d.ultLading, lvl, lvl >= Levels.MAX ? 0 : Levels.restXp(xp), lvl >= Levels.MAX ? 0 : Levels.xpVoor(lvl), k.naamKey(), cd, cdMax, d.munten,
+                (float) d.ultLading, lvl, lvl >= Levels.MAX ? 0 : Levels.restXp(xp), lvl >= Levels.MAX ? 0 : Levels.xpVoor(lvl), Spelers.titelKey(p), cd, cdMax, d.munten,
                 duiz, d.opgevrolijkt, d.gebied == null ? "" : d.gebied, skills));
     }
 
