@@ -66,12 +66,13 @@ TY = TP + 1
 
 
 def zwamtempel(W, K, P):
-    S = WS(262, TP - 12, -520, 150, 110, 150)
+    S = WS(262, TP - 12, -535, 150, 110, 165)
     # ---- terrace + front stairs (the path arrives at z -386)
     S.fill(300, TP, -394, 360, TP, -376, "tegel_hartjes")
     for i in range(6):
         S.fill(318 + i, TP - 6 + i, -376 + 6 - i, 342 - i, TP - 6 + i, -376 + 6 - i, ST("guhs:knuffelsteen_trap", "north"))
-    # ---- voorhal x 313..347 (walls), z -419..-393
+    # ---- the inside: a straight chain north (bazen slice's layout): voorhal -> Lichtzwamkamer -> Hendelkamer -> Ridderzaal
+    #      -> the Opperzwam hall. The gates between them are open AIR (5 wide, 4 high); bazen fills them with its own gate blocks.
     def doos(x1, z1, x2, z2, h, wand=ROZE, dak=FRAMB):
         S.fill(x1, TP, z1, x2, TP, z2, "tegel_hartjes")
         S.walls(x1, TY, z1, x2, TY + h, z2, wand)
@@ -84,7 +85,6 @@ def zwamtempel(W, K, P):
         S.fill(x1 - 1, TY + h + 1, z1 - 1, x2 + 1, TY + h + 1, z2 + 1, "minecraft:gold_block")
         S.fill(x1, TY + h + 1, z1, x2, TY + h + 1, z2, dak)
         S.fill(x1 + 1, TY, z1 + 1, x2 - 1, TY + h, z2 - 1, CARVE)
-        # mossy, a bit ruined
         rng = random.Random(x1 * 7 + z1)
         for _ in range(int((x2 - x1 + z2 - z1) * h * 0.12)):
             if rng.random() < 0.5:
@@ -92,30 +92,28 @@ def zwamtempel(W, K, P):
             else:
                 x, z = rng.randint(x1, x2), rng.choice((z1, z2))
             S.set(x, TY + rng.randint(0, h), z, rng.choice(["minecraft:mossy_stone_bricks", "minecraft:moss_block", "minecraft:cracked_stone_bricks"]))
-    doos(313, -419, 347, -393, 20)
-    doos(289, -445, 317, -419, 14)      # room 1 (inside 290..316, -444..-420)
-    doos(343, -445, 371, -419, 14)      # room 2
-    doos(323, -447, 337, -419, 12)      # the gang (corridor) to the hall
-    # openings: voorhal -> gang, gang -> room 1 / room 2
-    S.fill(328, TY, -419, 332, TY + 6, -419, CARVE)
-    S.fill(323, TY, -433, 323, TY + 4, -429, CARVE)
-    S.fill(317, TY, -433, 317, TY + 4, -429, CARVE)
-    S.fill(318, TY, -433, 322, TY + 4, -429, CARVE)
-    S.fill(318, TP, -433, 322, TP, -429, "tegel_hartjes")
-    S.fill(318, TY + 5, -433, 322, TY + 5, -429, ROZE)
-    S.fill(337, TY, -433, 343, TY + 4, -429, CARVE)
-    S.fill(338, TP, -433, 342, TP, -429, "tegel_hartjes")
-    S.fill(338, TY + 5, -433, 342, TY + 5, -429, ROZE)
-    for z in (-434, -428):
-        S.fill(318, TY, z, 322, TY + 5, z, ROZE)
-        S.fill(338, TY, z, 342, TY + 5, z, ROZE)
-    # voorhal + rooms: lights and pillars
-    for (x, z) in ((318, -414), (342, -414), (318, -398), (342, -398)):
-        S.fill(x, TY, z, x, TY + 19, z, "pastelbaksteen_roze_muur")
-        S.set(x, TY + 12, z, "minecraft:shroomlight")
-    for x in range(316, 346, 6):
-        S.set(x, TY + 19, -406, LANT_H)
-    gezicht_vlak(S, 324, TY + 8, -418, 13, 9, "south")   # face mural on the back wall
+        # lanterns high on the walls, mushrooms in the corners
+        for (x, z) in ((x1 + 1, z1 + 1), (x2 - 1, z1 + 1), (x1 + 1, z2 - 1), (x2 - 1, z2 - 1)):
+            S.set(x, TY, z, "schimmelpaddenstoel")
+        for z in range(z1 + 3, z2 - 1, 5):
+            S.set(x1 + 1, TY + h - 2, z, LANT)
+            S.set(x2 - 1, TY + h - 2, z, LANT)
+
+    def poort(z, breed=5, hoog=4):
+        x0 = 330 - breed // 2
+        S.fill(x0, TY, z, x0 + breed - 1, TY + hoog - 1, z, CARVE)
+        S.fill(x0 - 1, TY + hoog, z, x0 + breed, TY + hoog, z, "minecraft:gold_block")
+        return [x0, TY, z]
+    doos(313, -405, 347, -393, 18)                 # voorhal (inside x 314..346, z -404..-394)
+    doos(317, -426, 343, -405, 10)                 # room 1 Lichtzwamkamer (inside x 318..342, z -425..-406)
+    doos(317, -447, 343, -426, 10)                 # room 2 Hendelkamer (inside z -446..-427)
+    doos(313, -473, 347, -447, 12)                 # room 3 Ridderzaal (inside x 314..346, z -472..-448)
+    poorten = [poort(-405), poort(-426), poort(-447)]
+    for (x, z) in ((318, -400), (342, -400), (318, -398), (342, -398)):
+        S.fill(x, TY, z, x, TY + 17, z, "pastelbaksteen_roze_muur")
+        S.set(x, TY + 11, z, "minecraft:shroomlight")
+    gezicht_vlak(S, 324, TY + 8, -404, 13, 9, "south")   # face mural over the first gate
+
     # ---- facade (z -393 .. -391) with the big door (wings x 324..336, y TY..TY+23, z -392)
     S.fill(300, TY, -393, 360, TY + 32, -391, ROZE)
     for x in range(300, 361, 5):
@@ -168,51 +166,40 @@ def zwamtempel(W, K, P):
         S.set(330 + kant * 9, TY + 1, -384, "minecraft:shroomlight")
     S.set(318, TY, -381, VUUR)
     P["kampvuur_zwamtempel_trap"] = [318, TY, -381]
-    # ---- puzzle room 1: light mushrooms (4 pedestals), hidden room behind the west wall
-    for (dx, dz) in ((-7, -7), (7, -7), (-7, 7), (7, 7)):
-        x, z = 303 + dx, -432 + dz
-        S.fill(x, TY, z, x, TY, z, "pastelbaksteen_framboos")
-        S.set(x, TY + 1, z, "schimmelpaddenstoel")
-    P["puzzel1"] = dict(centrum=[303, TY, -432], lichtzwammen=[[303 + dx, TY + 1, -432 + dz] for dx, dz in ((-7, -7), (7, -7), (-7, 7), (7, 7))])
-    S.fill(282, TP, -437, 288, TP, -427, "tegel_hartjes")
-    S.walls(281, TY, -438, 289, TY + 5, -426, KSTEEN)
-    S.fill(282, TY, -437, 288, TY + 4, -427, CARVE)
-    S.fill(281, TY + 6, -438, 289, TY + 6, -426, KSTEEN)
-    S.fill(289, TY, -433, 289, TY + 2, -431, "minecraft:cracked_stone_bricks")
-    S.set(283, TY, -432, "minecraft:chest[facing=east,type=single,waterlogged=false]")
-    S.set(283, TY + 2, -429, LANT)
-    P["geheim_tempelkamer"] = [285, TY, -432]
-    P["geheim_tempelkamer_muur"] = [289, TY, -432]
-    # ---- puzzle room 2: levers + pressure plates
-    for i, x in enumerate((351, 357, 363)):
-        S.set(x, TY + 2, -444, "minecraft:polished_andesite")
-        S.set(x, TY + 2, -443, "minecraft:lever[face=wall,facing=south,powered=false]")
-    for (dx, dz) in ((-4, -4), (4, -4), (-4, 4), (4, 4)):
-        S.set(357 + dx, TY, -432 + dz, "minecraft:stone_pressure_plate[powered=false]")
-    P["puzzel2"] = dict(centrum=[357, TY, -432], hendels=[[x, TY + 2, -443] for x in (351, 357, 363)],
-                        platen=[[357 + dx, TY, -432 + dz] for dx, dz in ((-4, -4), (4, -4), (-4, 4), (4, 4))])
-    for r_ in (303, 357):
-        for (dx, dz) in ((-11, -11), (11, -11), (-11, 11), (11, 11)):
-            S.set(r_ + dx, TY + 10, -432 + dz, LANT)
-    # ---- the gang ends at the inner door to the hall
-    S.fill(327, TY, -447, 333, TY + 7, -447, "minecraft:mossy_stone_bricks")
-    S.fill(328, TY, -447, 332, TY + 6, -447, "minecraft:polished_deepslate")
-    P["deur_zwamtempel_binnen"] = dict(min=[328, TY, -447], max=[332, TY + 6, -447], as_="x", voor=[330, TY, -444])
+    # ---- room 1: five free floor spots for bazen's light mushrooms; hidden room behind the west wall
+    P["lichtzwamkamer"] = dict(centrum=[330, TY, -415], lichtzwammen=[[322, TY, -421], [326, TY, -424], [330, TY, -425], [334, TY, -424], [338, TY, -421]])
+    S.fill(308, TP, -421, 315, TP, -411, "tegel_hartjes")
+    S.walls(307, TY, -422, 316, TY + 5, -410, KSTEEN)
+    S.fill(308, TY, -421, 315, TY + 4, -411, CARVE)
+    S.fill(307, TY + 6, -422, 316, TY + 6, -410, KSTEEN)
+    S.fill(317, TY, -417, 317, TY + 2, -415, "minecraft:cracked_stone_bricks")
+    S.set(309, TY, -416, "minecraft:chest[facing=east,type=single,waterlogged=false]")
+    S.set(309, TY + 2, -413, LANT)
+    P["geheim_tempelkamer"] = [311, TY, -416]
+    P["geheim_tempelkamer_muur"] = [317, TY, -416]
+    # ---- room 2: free floor for bazen's levers + plate, free north-wall spots for hint mushrooms
+    P["hendelkamer"] = dict(centrum=[330, TY, -436], hendels=[[322, TY, -441], [326, TY, -441], [334, TY, -441], [338, TY, -441]],
+                            plaat=[330, TY, -444], hints=[[338, TY + 5, -446], [334, TY + 5, -446], [326, TY + 5, -446], [322, TY + 5, -446]])
+    # ---- room 3: the knights' hall (open floor)
+    P["ridderzaal"] = dict(centrum=[330, TY, -460], spawns=[[320, TY, -469], [330, TY, -471], [340, TY, -469], [318, TY, -458], [342, TY, -458]])
+    for x in (318, 342):
+        for z in (-466, -454):
+            S.fill(x, TY, z, x, TY + 11, z, "pastelbaksteen_roze_muur")
+            S.set(x, TY + 12, z, "minecraft:shroomlight")
+    P["poorten"] = poorten
     # ---- the Opperzwam hall: round, r 22 inside, a pink mushroom-cap dome (the breakable ceiling)
-    hc = (330, -472)
-    S.cylinder(hc[0], hc[1], 25, TP, TP, "tegel_hartjes")
+    hc = (330, -497)
     for x in range(hc[0] - 25, hc[0] + 26):
         for z in range(hc[1] - 25, hc[1] + 26):
             d = math.hypot(x - hc[0], z - hc[1])
-            if d <= 22.5:
+            if d <= 25.5:
                 ring = int(d) % 6
                 S.set(x, TP, z, "pastelbaksteen_framboos" if ring == 0 else ("gladde_knuffelsteen" if ring % 2 else "tegel_hartjes"))
     S.cylinder(hc[0], hc[1], 25.5, TY, TY + 24, ROZE, hollow=3)
     S.cylinder(hc[0], hc[1], 22.5, TY, TY + 24, CARVE)
-    # entrance from the gang (z -447 .. -449)
-    S.fill(327, TY, -451, 333, TY + 7, -448, CARVE)
-    S.fill(326, TY + 8, -451, 334, TY + 8, -448, "minecraft:gold_block")
-    # dome: an ellipsoid shell of mushroom cap with glowing spots; the inside is the breakable ceiling
+    S.fill(327, TY, -476, 333, TY + 4, -472, CARVE)                   # gate 4 (room 3 -> hall), open AIR
+    S.fill(326, TY + 5, -476, 334, TY + 5, -472, "minecraft:gold_block")
+    poorten.append([328, TY, -474])
     for x in range(hc[0] - 28, hc[0] + 29):
         for z in range(hc[1] - 28, hc[1] + 29):
             d = math.hypot(x - hc[0], z - hc[1])
@@ -228,24 +215,19 @@ def zwamtempel(W, K, P):
             if d <= 23:
                 for y in range(TY + 25, top - 2):
                     S.set(x, y, z, CARVE)
-    # pillars + light-mushroom spots (phase 2) + glowing eyes niche on the north wall
     for k in range(8):
         a = k * math.pi / 4 + math.pi / 8
-        x, z = hc[0] + 19.5 * math.cos(a), hc[1] + 19.5 * math.sin(a)
+        x, z = hc[0] + 20 * math.cos(a), hc[1] + 20 * math.sin(a)
         S.fill(int(x), TY, int(z), int(x), TY + 22, int(z), "pastelbaksteen_roze_muur")
         S.set(int(x), TY + 23, int(z), "minecraft:shroomlight")
-    spots = [[hc[0] - 14, TY, hc[1] + 14], [hc[0] + 14, TY, hc[1] + 14], [hc[0] - 14, TY, hc[1] - 14], [hc[0] + 14, TY, hc[1] - 14]]
-    for (x, y, z) in spots:
-        S.set(x, TP, z, "minecraft:gold_block")
-        S.set(x, TY, z, "pastelbaksteen_framboos")
+    spots = [[hc[0] - 13, TY, hc[1] + 13], [hc[0] + 13, TY, hc[1] + 13], [hc[0] - 13, TY, hc[1] - 13], [hc[0] + 13, TY, hc[1] - 13]]
     S.fill(hc[0] - 6, TY, hc[1] - 22, hc[0] + 6, TY + 3, hc[1] - 20, "minecraft:mycelium[snowy=false]")
-    P["arena_opperzwam"] = dict(centrum=[hc[0], TY, hc[1]], straal=22, deur=[330, TY, -444], bord=[334, TY + 1, -445],
-                                lichtzwammen=[[x, TY + 1, z] for (x, y, z) in spots],
-                                plafond=dict(centrum=[hc[0], TY + 25, hc[1]], straal=23, van_y=TY + 25, tot_y=TY + 42))
-    P["zwamtempel_voorhal"] = [330, TY, -406]
+    P["arena_opperzwam"] = dict(centrum=[hc[0], TY, hc[1]], straal=22, deur=[330, TY, -470], bord=[334, TY, -469],
+                                lichtzwammen=spots,
+                                plafond=dict(centrum=[hc[0], TY + 25, hc[1]], straal=23, van_y=TY + 23, tot_y=TY + 42))
+    P["zwamtempel_voorhal"] = [330, TY, -398]
     W.stempel(S.stempel("zwamtempel"))
-    # the arena region + dungeon as an area (wins over the big boxes)
-    P["gebied_zwamtempel_binnen"] = [280, -500, 372, -380]
+    P["gebied_zwamtempel_binnen"] = [300, -525, 360, -390]
 
 
 def hoed(S, cx, cz, top, r, blok, vlek="knuffelblok_vanille", lamellen=True):

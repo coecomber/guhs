@@ -39,6 +39,26 @@ public class VadsrijkWereldGameTests {
         helper.succeed();
     }
 
+    /** The real path: generating chunks of the dimension places the tiles (jetty plank, a city block, the temple door). */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 400)
+    public static void dimensieKrijgtDeKaart(GameTestHelper helper) {
+        var sl = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(helper.getLevel().getServer());
+        helper.assertTrue(sl != null, "no vadsrijk dimension");
+        BlockPos plank = WereldPlekken.AANKOMST.below();
+        sl.getChunk(plank.getX() >> 4, plank.getZ() >> 4);
+        helper.assertTrue(sl.getBlockState(plank).is(Blocks.SPRUCE_PLANKS), "arrival jetty not generated: " + sl.getBlockState(plank));
+        BlockPos plein = WereldPlekken.plek("plein").below();
+        sl.getChunk(plein.getX() >> 4, plein.getZ() >> 4);
+        helper.assertTrue(!sl.getBlockState(plein).isAir(), "Zwamzoet plein not generated");
+        WereldPlekken.Deur d = WereldDeuren.deur("zwamtempel");
+        sl.getChunk(d.min().getX() >> 4, d.min().getZ() >> 4);
+        sl.getChunk(d.max().getX() >> 4, d.max().getZ() >> 4);
+        BlockPos naad = d.min().offset((d.max().getX() - d.min().getX()) / 2, 0, 0);
+        helper.assertTrue(sl.getBlockState(naad).is(Blocks.GOLD_BLOCK), "temple door seam: " + sl.getBlockState(naad));
+        helper.assertTrue(sl.getBlockState(naad.atY(d.kopieY())).is(Blocks.GOLD_BLOCK), "hidden door copy: " + sl.getBlockState(naad.atY(d.kopieY())));
+        helper.succeed();
+    }
+
     @GuhTest(template = "portal_room", batch = BATCH)
     public static void deurSchuiftEnHerstelt(GameTestHelper helper) {
         // a 5 wide, 2 high door at z 1 (y 1..2), its hidden copy at y 5..6

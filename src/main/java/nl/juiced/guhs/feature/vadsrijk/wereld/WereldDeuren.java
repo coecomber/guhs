@@ -85,7 +85,6 @@ public final class WereldDeuren {
         String sleutel = "vr_w_deur_" + id;
         if (!data.gezien.contains(sleutel)) {
             data.gezien.add(sleutel);
-            Spelers.opgeslagen(p);
             ceremonie(p, d);
             Later.na(30, () -> openZonderScene(sl, id));
         } else {
@@ -96,7 +95,6 @@ public final class WereldDeuren {
 
     public static void ontgrendel(String id, ServerPlayer p) {
         Spelers.data(p).extra("wereld").putBoolean("deur_" + id, true);
-        Spelers.opgeslagen(p);
     }
 
     public static boolean ontgrendeld(String id, ServerPlayer p) {
@@ -126,6 +124,15 @@ public final class WereldDeuren {
         s.doel = 0;
         s.vast = vast;
         s.sluitOp = Long.MAX_VALUE;
+    }
+
+    /** For the bazen slice (it calls these by name): open without a scene / slide shut. */
+    public static void open(ServerLevel sl, String id) {
+        openZonderScene(sl, id);
+    }
+
+    public static void sluit(ServerLevel sl, String id) {
+        sluit(sl, id, false);
     }
 
     public static boolean isOpen(String id) {

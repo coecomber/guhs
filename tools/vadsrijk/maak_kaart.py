@@ -112,7 +112,6 @@ def plekken_nbt(plekken, tx, tz):
 def deuren(plekken):
     d = {"ordetempel": plekken["stad"]["deuren"]["ordetempel"]}
     d["zwamtempel"] = plekken["wereld"]["deur_zwamtempel"]
-    d["zwamtempel_binnen"] = plekken["wereld"]["deur_zwamtempel_binnen"]
     return d
 
 

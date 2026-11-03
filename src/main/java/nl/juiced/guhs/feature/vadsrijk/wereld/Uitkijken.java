@@ -33,7 +33,6 @@ public final class Uitkijken {
                 if (p.position().distanceToSqr(Vec3.atBottomCenterOf(u.top())) < 36) {
                     SpelerData d = Spelers.data(p);
                     if (d.gezien.add("vr_w_uitkijk_" + u.id())) {
-                        Spelers.opgeslagen(p);
                         panorama(p, u);
                     }
                 }
@@ -58,8 +57,8 @@ public final class Uitkijken {
     }
 
     static void markeerBinnen(ServerPlayer p) {
-        if (Vadsrijk.in(p) && Spelers.data(p).gezien.add(Portalen.BINNEN_GEWEEST)) {
-            Spelers.opgeslagen(p);
+        if (Vadsrijk.in(p)) {
+            Spelers.data(p).gezien.add(Portalen.BINNEN_GEWEEST);
         }
     }
 }

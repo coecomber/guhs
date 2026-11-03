@@ -65,7 +65,6 @@ public final class Portalen {
             AFKOELEN.put(p.getUUID(), nu + 200);
             speelOntwaken(p, pos, state.getValue(PortaalBlok.AXIS));
             d.gezien.add(ONTWAAKT);
-            Spelers.opgeslagen(p);
             Later.na(118, () -> {
                 if (!p.isRemoved() && !Vadsrijk.in(p)) {
                     VadsrijkCommando.naarBinnen(p, false);

@@ -71,14 +71,14 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `arena_koning_klodder.veilige_plekken.1` | 410, 69, 110 |
 | `arena_koning_klodder.veilige_plekken.2` | 392, 69, 80 |
 | `arena_koning_klodder.veilige_plekken.3` | 427, 69, 79 |
-| `arena_opperzwam.bord` | 334, 153, -445 |
-| `arena_opperzwam.centrum` | 330, 152, -472 |
-| `arena_opperzwam.deur` | 330, 152, -444 |
-| `arena_opperzwam.lichtzwammen.1` | 316, 153, -458 |
-| `arena_opperzwam.lichtzwammen.2` | 344, 153, -458 |
-| `arena_opperzwam.lichtzwammen.3` | 316, 153, -486 |
-| `arena_opperzwam.lichtzwammen.4` | 344, 153, -486 |
-| `arena_opperzwam.plafond.centrum` | 330, 177, -472 |
+| `arena_opperzwam.bord` | 334, 152, -469 |
+| `arena_opperzwam.centrum` | 330, 152, -497 |
+| `arena_opperzwam.deur` | 330, 152, -470 |
+| `arena_opperzwam.lichtzwammen.1` | 317, 152, -484 |
+| `arena_opperzwam.lichtzwammen.2` | 343, 152, -484 |
+| `arena_opperzwam.lichtzwammen.3` | 317, 152, -510 |
+| `arena_opperzwam.lichtzwammen.4` | 343, 152, -510 |
+| `arena_opperzwam.plafond.centrum` | 330, 177, -497 |
 
 ## Zwamtempel (dungeon)
 
@@ -87,25 +87,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `deur_zwamtempel.max` | 336, 175, -392 |
 | `deur_zwamtempel.min` | 324, 152, -392 |
 | `deur_zwamtempel.voor` | 330, 152, -388 |
-| `deur_zwamtempel_binnen.max` | 332, 158, -447 |
-| `deur_zwamtempel_binnen.min` | 328, 152, -447 |
-| `deur_zwamtempel_binnen.voor` | 330, 152, -444 |
-| `geheim_tempelkamer` | 285, 152, -432 |
-| `geheim_tempelkamer_muur` | 289, 152, -432 |
-| `puzzel1.centrum` | 303, 152, -432 |
-| `puzzel1.lichtzwammen.1` | 296, 153, -439 |
-| `puzzel1.lichtzwammen.2` | 310, 153, -439 |
-| `puzzel1.lichtzwammen.3` | 296, 153, -425 |
-| `puzzel1.lichtzwammen.4` | 310, 153, -425 |
-| `puzzel2.centrum` | 357, 152, -432 |
-| `puzzel2.hendels.1` | 351, 154, -443 |
-| `puzzel2.hendels.2` | 357, 154, -443 |
-| `puzzel2.hendels.3` | 363, 154, -443 |
-| `puzzel2.platen.1` | 353, 152, -436 |
-| `puzzel2.platen.2` | 361, 152, -436 |
-| `puzzel2.platen.3` | 353, 152, -428 |
-| `puzzel2.platen.4` | 361, 152, -428 |
-| `zwamtempel_voorhal` | 330, 152, -406 |
+| `geheim_tempelkamer` | 311, 152, -416 |
+| `geheim_tempelkamer_muur` | 317, 152, -416 |
+| `zwamtempel_voorhal` | 330, 152, -398 |
 
 ## Zwamzoet: ordetempel, plein, questbord, hats (cap tops)
 
@@ -250,20 +234,58 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `slaapheuvel` | 300, 96, 300 |
 | `waterval` | -470, 71, 12 |
 
+## Other
+
+| id | x, y, z |
+|---|---|
+| `hendelkamer.centrum` | 330, 152, -436 |
+| `hendelkamer.hendels.1` | 322, 152, -441 |
+| `hendelkamer.hendels.2` | 326, 152, -441 |
+| `hendelkamer.hendels.3` | 334, 152, -441 |
+| `hendelkamer.hendels.4` | 338, 152, -441 |
+| `hendelkamer.hints.1` | 338, 157, -446 |
+| `hendelkamer.hints.2` | 334, 157, -446 |
+| `hendelkamer.hints.3` | 326, 157, -446 |
+| `hendelkamer.hints.4` | 322, 157, -446 |
+| `hendelkamer.plaat` | 330, 152, -444 |
+| `lichtzwamkamer.centrum` | 330, 152, -415 |
+| `lichtzwamkamer.lichtzwammen.1` | 322, 152, -421 |
+| `lichtzwamkamer.lichtzwammen.2` | 326, 152, -424 |
+| `lichtzwamkamer.lichtzwammen.3` | 330, 152, -425 |
+| `lichtzwamkamer.lichtzwammen.4` | 334, 152, -424 |
+| `lichtzwamkamer.lichtzwammen.5` | 338, 152, -421 |
+| `poorten.1` | 328, 152, -405 |
+| `poorten.2` | 328, 152, -426 |
+| `poorten.3` | 328, 152, -447 |
+| `poorten.4` | 328, 152, -474 |
+| `ridderzaal.centrum` | 330, 152, -460 |
+| `ridderzaal.spawns.1` | 320, 152, -469 |
+| `ridderzaal.spawns.2` | 330, 152, -471 |
+| `ridderzaal.spawns.3` | 340, 152, -469 |
+| `ridderzaal.spawns.4` | 318, 152, -458 |
+| `ridderzaal.spawns.5` | 342, 152, -458 |
+
 ## Moving doors (`WereldDeuren`)
 | id | blocks | open with | notes |
 |---|---|---|---|
 | `ordetempel` | x -7..7, y 177..206, z -32..-31 (the Knuffeldeur, 15 x 30) | `WereldDeuren.open("ordetempel", p)` | the ordetempel hall is also reachable through a normal side door (`ordetempel_zijdeur`), so class change never needs the ceremony |
 | `zwamtempel` | x 324..336, y 152..175, z -392 (13 x 24) | `WereldDeuren.open("zwamtempel", p)` | the dungeon entrance (npc/bazen decide when a player may open it) |
-| `zwamtempel_binnen` | x 328..332, y 152..158, z -447 | `WereldDeuren.open("zwamtempel_binnen", p)` | corridor -> Opperzwam hall; bazen opens it when both puzzles are solved and may keep it shut during the fight (`WereldDeuren.sluit(sl, id, true)`) |
 
 First open per player = a 7.5 s non-click ceremony scene (camera + title card), then the wings slide into the wall (dust, rumble).
 Doors close again after 30 s (never on a player). A player who unlocked a door opens it by right-clicking it.
 Every door has a hidden copy at y 8.. under the same x/z (the generator writes it; never build there).
 
+## Zwamtempel inside (as asked by bazen in POI_VERZOEKEN, moved onto the mountain: floor block y 151, stand y 152)
+A straight chain north behind the big door: voorhal (x 314..346, z -404..-394, 18 high) -> gate at z -405 -> room 1
+Lichtzwamkamer (x 318..342, z -425..-406, 10 high) -> gate z -426 -> room 2 Hendelkamer (z -446..-427) -> gate z -447 -> room 3
+Ridderzaal (x 314..346, z -472..-448, 12 high) -> gate z -472..-476 -> the Opperzwam hall. The gates are open AIR (x 328..332,
+y 152..155; the last one x 327..333, y 152..156): bazen fills them with its own gate blocks. The rooms have empty floors (no levers,
+plates or mushrooms of mine; the listed spots are free).
+
 ## Opperzwam hall ceiling
-The dome over the hall (centre 330, -472) is the "breakable ceiling" (phase 3): everything inside radius 23 between y 177 and y 194
-is the dome shell (`guhs:guhpaddenstoel_hoed` + spots); removing it opens the hall to the sky (there is no rock above it).
+The hall (centre 330, -497, open floor radius 22, walls 24 high) has a pink mushroom-cap dome: everything inside radius 23
+from y 175 (`plafond.van_y`) to y 194 is dome shell or air under it (`guhs:guhpaddenstoel_hoed` + spots, all breakable);
+removing it opens the hall to the sky (there is no rock above it).
 
 ## Area boxes (= kern `Gebieden`, contract §2) and what the terrain looks like
 | area | box | terrain |

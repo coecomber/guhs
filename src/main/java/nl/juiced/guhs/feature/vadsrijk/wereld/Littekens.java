@@ -53,7 +53,6 @@ public final class Littekens {
     /** Helper for the npc slice / dev command: heal (or grey again) the scars for this player. */
     public static void zetKlaar(ServerPlayer p, boolean klaar) {
         Spelers.data(p).extra("npc").putBoolean(SLEUTEL, klaar);
-        Spelers.opgeslagen(p);
         controleer(p, true);
     }
 

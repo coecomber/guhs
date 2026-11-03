@@ -57,7 +57,7 @@ PADEN = {
     "berg": [(205, -265), (230, -280), (400, -292), (410, -305), (400, -322), (280, -345), (272, -360), (285, -372), (330, -380), (330, -386)],
     "haven": [(10, 100), (20, 130), (80, 180), (100, 300), (95, 400), (92, 470)],
     "zuid": [(100, 300), (160, 375)],
-    "weide2": [(220, -80), (230, -130), (330, -200), (400, -300)],
+    "weide2": [(220, -80), (230, -130), (330, -200)],
     "weide3": [(360, 30), (480, -80), (520, -240)],
     "slijm": [(374, 90), (410, 200), (460, 380)],
     "slijm2": [(410, 200), (330, 260), (300, 270)],
@@ -156,7 +156,7 @@ class Kaart:
         berg = 150 * np.exp(-d ** 2 * 1.3) + 22 * np.exp(-((d - 0.42) / 0.12) ** 2)
         H += berg * (1 + 0.12 * n1) + w["tempel"] * (6 + 10 * rug)
         # temple plateau (south slope) + the summit bowl for the Opperzwam hall
-        plat = np.hypot((x - 330) / 72, (z - -442) / 68)
+        plat = np.hypot((x - 330) / 76, (z - -455) / 80)
         H = np.where(plat < 1, TEMPEL_PLATEAU, np.where(plat < 1.35, H * (plat - 1) / 0.35 + TEMPEL_PLATEAU * (1.35 - plat) / 0.35, H))
         # the city: flat at 63 under the scene, ramping up outside
         sx0, sz0, sx1, sz1 = STAD_BOX
