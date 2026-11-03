@@ -4,7 +4,12 @@
     "type": "minecraft:flat",
     "settings": {
       "biome": "guhs:vadsrijk",
-      "layers": [],
+      "layers": [
+        {
+          "block": "minecraft:bedrock",
+          "height": 1
+        }
+      ],
       "lakes": false,
       "features": true,
       "structure_overrides": []

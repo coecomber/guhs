@@ -151,8 +151,6 @@ public final class RijkHud {
         g.fill(c - 91, xpY, c + 91, xpY + 3, 0xC0202020);
         float xp = h.xpNodig() <= 0 ? 1 : (float) h.xpIn() / h.xpNodig();
         g.fill(c - 91, xpY, c - 91 + (int) (182 * Mth.clamp(xp, 0, 1)), xpY + 3, 0xFFFFD24A);
-        String lvl = Component.translatable("vadsrijk.kern.hud.niveau", h.level()).getString();
-        g.text(f, lvl, c - f.width(lvl) / 2, xpY - 9, 0xFFFFE27A, true);
         // skills right of the hotbar
         int sx = c + 98, sy = hh - 22;
         for (int i = 0; i < 4; i++) {
@@ -160,6 +158,12 @@ public final class RijkHud {
         }
         // small info: duizelig, opgevrolijkt, munten (left of the hotbar)
         int ly = hh - 22;
+        String lvl = Component.translatable("vadsrijk.kern.hud.niveau", h.level()).getString();
+        g.pose().pushMatrix();
+        g.pose().translate(c - 98, ly - 12);
+        g.pose().scale(1.5f, 1.5f);
+        g.text(f, lvl, -f.width(lvl), 0, 0xFFFFE27A, true);
+        g.pose().popMatrix();
         String munten = Spelers.munten(h.munten());
         g.text(f, munten, c - 98 - f.width(munten), ly + 2, 0xFFFFD86B, true);
         String opg = Component.translatable("vadsrijk.kern.hud.opgevrolijkt", h.opgevrolijkt()).getString();
@@ -271,14 +275,14 @@ public final class RijkHud {
         if (tip == null || klok - tipStart > 200) {
             return;
         }
-        int bw = 170, x = w - bw - 8, y = 40;
+        int bw = 170, x = 8, y = 8;
         String titelKey = tip + ".titel";
         List<FormattedCharSequence> regels = f.split(Component.translatable(tip), bw - 10);
         int hoog = 18 + regels.size() * 10;
         float in = Mth.clamp((klok - tipStart) / 6f, 0, 1) * Mth.clamp((200 - (klok - tipStart)) / 10f, 0, 1);
         int a = (int) (in * 230) << 24;
         g.fill(x, y, x + bw, y + hoog, a | 0x2A1424);
-        g.fill(x, y, x + 2, y + hoog, a | 0xFF7AC8);
+        g.fill(x, y, x + 2, y + hoog, a | 0xFF7AC8);   // (top left: the minimap of JourneyMap/Xaero sits top right)
         if (in > 0.1f) {
             g.text(f, net.minecraft.client.resources.language.I18n.exists(titelKey) ? Component.translatable(titelKey) : Component.literal("Tip"), x + 7, y + 5,
                     0xFFFF9AD5, true);

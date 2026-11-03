@@ -36,9 +36,10 @@ DIM_TYPE = {
     "timelines": "#minecraft:universal",
 }
 
+# (one bedrock layer: a flat generator with only air counts as "void" and then skips the biome features, i.e. the map)
 DIM = {
     "type": "guhs:vadsrijk",
-    "generator": {"type": "minecraft:flat", "settings": {"biome": "guhs:vadsrijk", "layers": [], "lakes": False, "features": True,
+    "generator": {"type": "minecraft:flat", "settings": {"biome": "guhs:vadsrijk", "layers": [{"block": "minecraft:bedrock", "height": 1}], "lakes": False, "features": True,
                                                           "structure_overrides": []}},
 }
 

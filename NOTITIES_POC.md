@@ -5,7 +5,11 @@ Werkboom: `guhs_vadsrijk/w-poc`, branch `110-vadsrijk-poc` (vanaf v1.9.0). Contr
 ## Hervatpunt
 1. Contract + kern-API: commit `1b061fabf` (de lead brancht de slices hiervan af).
 2. Daarna: HUD (`kern/client/RijkHud`), scènespeler (`kern/client/SceneSpeler`), toetsen (de andere Guhs-toetsen op dezelfde toets worden in de dimensie ingeslikt), gametests (`kern/VadsrijkKernGameTests`, `-Pgt=VadsrijkKern`), TESTEN_VADSRIJK.md.
-3. Nog open (zie onderaan): een autocheck-ronde en de opvolgpunten.
+3. Autocheck (`tools/autocheck/vadsrijk_kern.txt`) gedraaid, 8 screenshots in `run/screenshots/autocheck/vr_*.png`:
+   - wat werkt: de dimensie met de proeftuin, de HUD, lootstralen + tip, naamplaatjes, de baas-intro (camera + titelkaart), de baasbalk en het respawn-bord;
+   - gevonden en opgelost: een flat generator met alleen lucht slaat de biome-features over (void), dus er staat nu 1 laag bedrock;
+   - de tipkaart staat nu linksboven (rechtsboven zit de minimap).
+4. Bekend, niet opgelost: rechts in de energiebalk tekent iets anders 3 gele ringetjes (geen vanilla-laag, want die zijn allemaal verborgen; waarschijnlijk een mod- of Guhs-HUD). Even in de dev-client bekijken.
 
 ## Technische keuzes
 - **MC 26.1.2 / NeoForge 26.1.2.112** (niet 1.21.1): `Identifier`, `ValueInput/ValueOutput`, `GuiGraphicsExtractor`, render states.
