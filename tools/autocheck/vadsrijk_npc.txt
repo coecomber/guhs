@@ -1,0 +1,59 @@
+# Het Vadsrijk npc slice (110-vr-npc): every NPC guh in a row in the proeftuin (clothes, names, the "!" markers), a quest
+# dialogue, the questlog (J) with its tabs, and the BAM scene (dragon fallback, grey fluff, title card).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_npc.txt
+
+section setup
+/gamemode creative
+/time set noon
+wait 40
+
+section binnen
+/guhs vadsrijk proeftuin
+wait 100
+# (the proeftuin may still be void here: an own grass platform)
+/fill 3095 64 3150 3145 64 3195 minecraft:grass_block
+/tp @s 3120 65 3175 180 10
+waitrender 300
+/guhs vadsrijk npc reset
+/guhs vadsrijk npc rij
+wait 60
+look 180 12
+wait 20
+shot vr_npc_rij
+/tp @s 3113 65 3168 180 15
+wait 30
+shot vr_npc_rij_dichtbij
+
+section dialoog
+/tp @s 3113 65 3174 180 20
+wait 20
+interact 3113 65 3171 guhs:vr_npc_guh
+wait 20
+shot vr_npc_dialoog_1 gui
+press Verder »
+wait 10
+shot vr_npc_dialoog_2 gui
+gui close
+wait 10
+
+section questlog
+/guhs vadsrijk npc quest start hq07_littekens
+/guhs vadsrijk npc questlog
+wait 20
+shot vr_npc_questlog gui
+press Geheimen
+wait 10
+shot vr_npc_questlog_geheimen gui
+press Gids
+wait 10
+shot vr_npc_questlog_gids gui
+gui close
+
+section bam
+/tp @s 3120 65 3175 180 0
+/guhs vadsrijk npc bam
+wait 90
+shot vr_npc_bam_draak gui
+wait 80
+shot vr_npc_bam_titel gui
+wait 80
