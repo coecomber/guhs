@@ -310,7 +310,7 @@ BELONING = {
     "oma_bestelling": "Oma Breiguh bestelt voortaan vaak bij je, met een extraatje erbij.",
     "opas_kelder": "Opa's kelder is nu een knusse kamer in je Hoeve, met plekjes voor je vondsten!",
     "bertha_optreden": "Bertha de koe treedt voortaan op tijdens dorpsfeestjes!",
-    "paaltjes_terug": "De grenspaaltjes staan weer op hun plek!",
+    "paaltjes_terug": "Pim zet alle grenspaaltjes weer recht, strikje en al. Je dorp is weer precies even groot als altijd! Als sorry stopt hij je zijn mooiste worteltje toe. Njeg.",
     "testament": "Opa Knabbels testament is compleet, met de laatste bladzijde!",
     "bureau_eindlook": "Je Detectivebureau krijgt zijn mooiste look!",
 }

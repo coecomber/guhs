@@ -33624,7 +33624,7 @@
   "sherlock.beloning.oma_bestelling": "Oma Breiguh bestelt voortaan vaak bij je, met een extraatje erbij.",
   "sherlock.beloning.opas_kelder": "Opa's kelder is nu een knusse kamer in je Hoeve, met plekjes voor je vondsten!",
   "sherlock.beloning.bertha_optreden": "Bertha de koe treedt voortaan op tijdens dorpsfeestjes!",
-  "sherlock.beloning.paaltjes_terug": "De grenspaaltjes staan weer op hun plek!",
+  "sherlock.beloning.paaltjes_terug": "Pim zet alle grenspaaltjes weer recht, strikje en al. Je dorp is weer precies even groot als altijd! Als sorry stopt hij je zijn mooiste worteltje toe. Njeg.",
   "sherlock.beloning.testament": "Opa Knabbels testament is compleet, met de laatste bladzijde!",
   "sherlock.beloning.bureau_eindlook": "Je Detectivebureau krijgt zijn mooiste look!",
   "sherlock.bewijs.testament": "Opa Knabbels testament",
@@ -34483,5 +34483,11 @@
   "erfenis.afwerking.ansicht.8.tekst.3": "gauw terug, met zonnebrand. Trots op je!",
   "erfenis.vondst.ansichtkaart_8": "een ansichtkaart uit Guhwaii",
   "erfenis.afwerking.cmd.beloning": "Sherlock-beloning %s gegeven (dev).",
-  "erfenis.afwerking.cmd.geen_kelder": "Je hebt Opa's kelder nog niet. Los eerst zaak 5 op (of: /guhs erfenis beloning opas_kelder)."
+  "erfenis.afwerking.cmd.geen_kelder": "Je hebt Opa's kelder nog niet. Los eerst zaak 5 op (of: /guhs erfenis beloning opas_kelder).",
+  "erfenis.afwerking.worteltje.naam": "Pims worteltje",
+  "erfenis.afwerking.worteltje.tekst.0": "Met een roze strikje erom, net als de grenspaaltjes.",
+  "erfenis.afwerking.worteltje.tekst.1": "\"Sorry van de paaltjes. Morris zei het!\" - Pim",
+  "erfenis.afwerking.kelder.post": "Spulletjes uit Opa's oude kelder, netjes voor je bewaard! (In de nieuwe kelder paste het niet, of die komt pas bij je volgende bezoek.)",
+  "erfenis.afwerking.kelder.verhuisd": "Opa's kelder is mee verhuisd, met al je spulletjes erin. Opa zou trots zijn, njeg!",
+  "erfenis.afwerking.feestje": "Dorpsfeestje bij de Muziektent! Bertha de koe staat op het podium en zingt (een beetje vals, maar met heel haar hart)."
 }

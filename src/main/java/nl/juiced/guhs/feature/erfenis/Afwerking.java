@@ -53,6 +53,7 @@ public final class Afwerking {
     static void init() {
         ErfenisMomenten.luister(Afwerking::opMoment);
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(Afwerking::commando);
+        net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(Afwerking::tick);
         Sherlock.bureauPlek = (s, u) -> {
             BureauDeur d = bureauDeur(s, u);
             return d == null ? null : d.voor();
@@ -139,7 +140,20 @@ public final class Afwerking {
             geef(p, boek("testament", 3));
         } else if (vlag.equals("opas_kelder")) {
             geef(p, boek("dagboek", 3));
+        } else if (vlag.equals("paaltjes_terug")) {
+            geef(p, pimsWorteltje());
         }
+    }
+
+    /** (1.9.1) Pim's thank-you for the moestuintje (zaak 7): a carrot with a pink bow, the same bow as on the posts. */
+    static ItemStack pimsWorteltje() {
+        ItemStack s = new ItemStack(Items.GOLDEN_CARROT);
+        s.set(DataComponents.CUSTOM_NAME, Component.translatable("erfenis.afwerking.worteltje.naam")
+                .withStyle(Style.EMPTY.withItalic(false).withColor(0xF29BB8)));
+        s.set(DataComponents.LORE, new ItemLore(List.of(
+                Component.translatable("erfenis.afwerking.worteltje.tekst.0").withStyle(st -> st.withItalic(true).withColor(ChatFormatting.GRAY)),
+                Component.translatable("erfenis.afwerking.worteltje.tekst.1").withStyle(st -> st.withItalic(true).withColor(ChatFormatting.GRAY)))));
+        return s;
     }
 
     /** Catches up flags Sherlock gave before this village mirrored them (called before every sync). */
@@ -184,14 +198,88 @@ public final class Afwerking {
             return;
         }
         if (g.type == GebouwType.HOEVE && b.beloningen.contains("opas_kelder")) {
-            GebouwVormen.daarna(level, () -> OpasKelder.stempel(level, hoek, g.b(), g.d()));
-        } else if (g.type == GebouwType.MUZIEKTENT && b.beloningen.contains("bertha_optreden")) {
+            GebouwVormen.daarna(level, () -> {
+                OpasKelder.stempel(level, hoek, g.b(), g.d());
+                OpasKelder.vulAan(level, hoek, g.b(), g.d(), b);   // what was in the old kelder (the Hoeve moved)
+            });
+        } else if (g.type == GebouwType.MUZIEKTENT && b.beloningen.contains("bertha_optreden") && dorpsfeestje(level)) {
             GebouwVormen.daarna(level, () -> bertha(level, hoek, g));
         }
     }
 
+    /**
+     * (1.9.1) Before a Hoeve moves or turns (its old corner and footprint): the old kelder underneath is filled in again,
+     * its contents move along to the new one.
+     */
+    static void voorVerhuizing(ServerLevel level, Base b, Gebouw g, BlockPos oudeHoek, int oudB, int oudD) {
+        if (g.type == GebouwType.HOEVE && g.level > 0 && b.beloningen.contains("opas_kelder")) {
+            OpasKelder.wis(level, oudeHoek, oudB, oudD, b.id);
+            if (b.moetStempelen) {
+                OpasKelder.bezorg(level, b);   // the new kelder only comes on the next visit: the things by post right away
+            }
+        }
+    }
+
+    // =====================================================================================================================
+    // dorpsfeestjes: Bertha only sings now and then
+    // =====================================================================================================================
+
+    /** A dorpsfeestje: the first {@value #FEEST_MIN} minutes of every {@value #FEEST_ELKE} (game time of the erfenis level). */
+    static final int FEEST_MIN = 4, FEEST_ELKE = 20;
+
+    static boolean dorpsfeestje(ServerLevel level) {
+        return level.getGameTime() / 1200L % FEEST_ELKE < FEEST_MIN;
+    }
+
+    /** Every 5 s: during a dorpsfeestje Bertha comes on stage at every loaded Muziektent that has her, afterwards she goes home. */
+    static void tick(net.neoforged.neoforge.event.tick.ServerTickEvent.Post e) {
+        MinecraftServer server = e.getServer();
+        if (server.getTickCount() % 100 != 0) {
+            return;
+        }
+        ServerLevel level = Erfenis.level(server);
+        if (level == null) {
+            return;
+        }
+        boolean feest = dorpsfeestje(level);
+        for (Base b : ErfenisData.get(server).alleBases()) {
+            if (b.npc || !b.beloningen.contains("bertha_optreden")) {
+                continue;
+            }
+            BlockPos o = Plot.oorsprong(b.cx, b.cz);
+            for (Gebouw g : b.gebouwen) {
+                if (g.type != GebouwType.MUZIEKTENT || g.level <= 0) {
+                    continue;
+                }
+                BlockPos hoek = o.offset(g.x, 0, g.z);
+                if (!level.isPositionEntityTicking(hoek) || !level.isPositionEntityTicking(hoek.offset(g.b() - 1, 0, g.d() - 1))) {
+                    continue;
+                }
+                List<Cow> koeien = berthas(level, hoek, g);
+                if (feest && koeien.isEmpty()) {
+                    bertha(level, hoek, g);
+                    ServerPlayer eigenaar = b.eigenaar == null ? null : server.getPlayerList().getPlayer(b.eigenaar);
+                    if (eigenaar != null && Erfenis.in(eigenaar) && eigenaar.blockPosition().closerThan(hoek, 64)) {
+                        eigenaar.sendSystemMessage(Component.translatable("erfenis.afwerking.feestje").withStyle(ChatFormatting.LIGHT_PURPLE));
+                    }
+                } else if (!feest) {
+                    koeien.forEach(Cow::discard);
+                }
+            }
+        }
+    }
+
+    private static List<Cow> berthas(ServerLevel level, BlockPos hoek, Gebouw g) {
+        net.minecraft.world.phys.AABB vak = new net.minecraft.world.phys.AABB(hoek.getX(), hoek.getY() - 2, hoek.getZ(),
+                hoek.getX() + g.b(), hoek.getY() + GebouwVormen.WIS_HOOGTE, hoek.getZ() + g.d());
+        return level.getEntitiesOfClass(Cow.class, vak, c -> c.entityTags().contains(BERTHA_TAG));
+    }
+
     /** Bertha de koe on the stage, next to the singer (Sherlock zaak 6: she sings now; decoration like the shape's creatures). */
     static void bertha(ServerLevel level, BlockPos hoek, Gebouw g) {
+        if (!berthas(level, hoek, g).isEmpty()) {
+            return;   // she is already on stage
+        }
         // the stage spot at (3.3, 4.2) of the 9x9 shape (the singer stands at its middle), turned with the building
         double lx = 3.3, lz = 4.2;
         int w = 9, d = 9;

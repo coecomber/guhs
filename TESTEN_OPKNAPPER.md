@@ -87,10 +87,14 @@ Kant-en-klaar in één keer: **`/guhs erfenis demo`** (Hoeve 6, ~25 gebouwen; je
 
 ## Bekende gaten
 
-- Getuigen van een lopende zaak staan nog op hun vaste tegel (niet bij "hun" gebouw).
-- `paaltjes_terug` (Sherlock) geeft alleen een melding: er werden nooit echt paaltjes verzet.
-- Bertha staat er altijd (er bestaan nog geen dorpsfeestjes). FTB "Dorpsfeest!" gaat af bij de Muziektent.
-- Wordt de Hoeve verplaatst, dan blijft de oude kelder dicht onder de grond; de nieuwe komt onder de nieuwe plek.
+- (1.9.1 opgelost) Getuigen staan bij "hun" gebouw in je dorp (kippenhok, bakkerij, dorpscafé, akker...); heb je dat
+  gebouw niet, dan op de vaste tegel van de zaak. Een gebouw verplaatsen tijdens de zaak: de getuige blijft staan waar hij was.
+- (1.9.1 opgelost) `paaltjes_terug`: nieuwe, eerlijke melding (Pim zet ze recht) + Pims worteltje (gouden wortel met strikje).
+- (1.9.1 opgelost) Bertha staat er alleen tijdens een dorpsfeestje: de eerste 4 minuten van elke 20 (speltijd van de
+  erfenis-dimensie); daarna gaat ze weer weg. FTB "Dorpsfeest!" gaat nog steeds af bij het bouwen van de Muziektent.
+- (1.9.1 opgelost) Hoeve verplaatsen/draaien: de oude kelder wordt weer aarde; wat erin lag (vaten, potten, boekenkast,
+  eigen boek op de lessenaar) gaat naar de nieuwe kelder, wat niet past komt met de Postguh (komt de nieuwe kelder pas
+  bij een volgend bezoek, dan meteen per post). Testen: spul in de kelder, Hoeve verplaatsen, kijken in de nieuwe kelder.
 - Mika-strooptochten: "binnenkort" (alleen het plaatje aan het eind van het FTB-hoofdstuk).
 - De wiki/Discord/pack zijn nog niet bijgewerkt (pas bij de release).
 - In de volledige gametest-suite falen 6 tests die ook op main 1.8.1 al rood zijn (kussengevecht-gids, weide_roze_gras-

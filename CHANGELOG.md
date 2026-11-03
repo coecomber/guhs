@@ -3,6 +3,16 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.1 — Minecraft 26.1.2
+
+### 1.9.1
+
+- Joining a server from the title screen no longer fails.
+- Sherlock's witnesses now wait for you at "their" building in your village (Bonnie at the chicken coop, Koos at the village café, Pim by the field...), if you have it.
+- Bertha the cow only sings during a village party now: every 20 minutes the bandstand throws a little party of a few minutes.
+- Solving "De verschoven paaltjes" now also gets you a thank-you carrot from Pim.
+- Moving or turning the Hoeve now takes Opa's cellar along: the old one is filled in and everything you kept in it moves to the new cellar (what doesn't fit comes by post).
+
 ## 1.9.0 — Een opknapper! — Minecraft 26.1.2
 
 You've got mail! Makelaar Guhrrit has a bargain for you: an overgrown little farm of your own, building report: *vads*, asking price: one cheese nibble. Fix it up into a cosy guh village. Nothing is reset; your world stays as it is.
