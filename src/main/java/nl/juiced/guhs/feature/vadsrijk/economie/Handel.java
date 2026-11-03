@@ -137,8 +137,11 @@ public final class Handel {
         return s;
     }
 
+    /** Gametests only: mock players are not in the dimension. */
+    static boolean alleenInRijk = true;
+
     static boolean dichtbij(ServerPlayer a, ServerPlayer b) {
-        return Vadsrijk.in(a) && Vadsrijk.in(b) && a.distanceToSqr(b) <= AFSTAND * AFSTAND;
+        return (!alleenInRijk || Vadsrijk.in(a) && Vadsrijk.in(b)) && a.level() == b.level() && a.distanceToSqr(b) <= AFSTAND * AFSTAND;
     }
 
     // ---- changing an offer --------------------------------------------------------------------------------------------------
