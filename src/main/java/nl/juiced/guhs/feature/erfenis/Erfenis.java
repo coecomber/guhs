@@ -377,7 +377,26 @@ public final class Erfenis {
 
     /** The arrival spot, on top of whatever stands there now (a building may stand on it). */
     static BlockPos veiligeAankomst(ServerLevel level, Base b) {
+        // 1.9 afwerking: never inside a building (the stamp may still be queued, so look at the tiles, not the heightmap):
+        // the arrival tile, else the nearest free open tile without deco (paths are fine), rings outward
         BlockPos a = Plot.aankomst(b.cx, b.cz);
+        BlockPos o = Plot.oorsprong(b.cx, b.cz);
+        int tx0 = a.getX() - o.getX(), tz0 = a.getZ() - o.getZ();
+        for (int ruim = 1; ruim >= 0; ruim--) {   // first a tile with free tiles all around it (not under a roof edge), then any
+            for (int r = 0; r <= 40; r++) {
+                for (int dx = -r; dx <= r; dx++) {
+                    for (int dz = -r; dz <= r; dz++) {
+                        if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                            continue;
+                        }
+                        int tx = tx0 + dx, tz = tz0 + dz;
+                        if (b.vrij(tx - ruim, tz - ruim, 1 + 2 * ruim, 1 + 2 * ruim, -1) && b.decoOp(tx, tz) == null) {
+                            return o.offset(tx, 1, tz);
+                        }
+                    }
+                }
+            }
+        }
         BlockPos top = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, a);
         return top.getY() > a.getY() ? top : a;
     }
@@ -417,6 +436,7 @@ public final class Erfenis {
 
     /** Sends this base to the player (open = the overview opens; read-only unless the player owns it). */
     public static void sync(ServerPlayer p, Base b, boolean open) {
+        Afwerking.spiegel(p.level().getServer(), b);   // Sherlock's rewards the village did not know yet
         CompoundTag t = b.save(true);
         if (!b.npc && b.eigenaar != null) {   // Sherlock: a case waits in the letterbox (the magnifier bubble above the bureau)
             t.putBoolean("ZaakKlaar", nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.zaakKlaar(p.level().getServer(), b.eigenaar));

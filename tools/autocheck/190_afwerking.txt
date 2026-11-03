@@ -1,0 +1,120 @@
+# Guhs 1.9 "Een opknapper!", afwerking slice (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_afwerking.txt
+# Survival without the letter: the world map (M) refuses. Then creative: demo village (never inside a building), the
+# orders screen counts the real deliveries, Sherlock's characters in front of the Detectivebureau, the makelaar's
+# postcard (Postguh + chat), Sherlock's rewards (theetaartje recipe, bureau end look, Bertha on the Muziektent, Opa's
+# kelder under the Hoeve), and a Leverkist opening on a right-click.
+
+section setup
+guhstaal nl
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/effect give @s minecraft:night_vision infinite 0 true
+/effect give @s minecraft:resistance infinite 4 true
+/effect give @s minecraft:saturation infinite 4 true
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2980 139 2980 3020 139 3020 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode survival
+/clear @s
+wait 20
+
+section kaart zonder brief
+/tp @s 2996.5 140 3004.5 180 0
+wait 20
+clearchat
+/guhs erfenis kaart
+wait 20
+shot afw_01_kaart_geweigerd gui
+gui close
+
+section leverkist openen
+/setblock 2999 140 3001 guhs:leverkist[facing=south,post=false]
+/tp @s 2998.5 140 3003.5 180 20
+wait 10
+gui keep
+use 2999 140 3001
+wait 20
+shot afw_02_leverkist_open gui
+gui close
+
+section demodorp
+/gamemode creative
+/guhs erfenis
+wait 100
+/guhs erfenis demo
+wait 80
+waitrender 300
+shot afw_03_demo_niet_in_gebouw
+log demo: speler staat niet in een gebouw (eerste persoon hierboven)
+gui keep
+/guhs erfenis kaart bestellingen
+wait 30
+shot afw_04_bestellingen_teller gui
+gui close
+
+section sherlock bij het bureau
+/guhs erfenis sherlock moment gebouw_gebouwd:detectivebureau
+wait 60
+shot afw_05_sherlock_welkom gui
+gui close
+wait 10
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+/guhs erfenis ui camera 47,73,14
+wait 40
+waitrender 200
+shot afw_06_cast_voor_bureau gui
+gui close
+
+section ansichtkaart
+clearchat
+/guhs erfenis ansicht 4
+wait 8
+shot afw_07_ansichtkaart gui
+wait 120
+
+section beloningen
+clearchat
+/guhs erfenis beloning recept_theetaartje
+/guhs erfenis beloning bureau_eindlook
+/guhs erfenis beloning bertha_optreden
+/guhs erfenis beloning opas_kelder
+/guhs erfenis beloning testament
+/guhs erfenis snel aan
+/guhs erfenis geef guhlden 20000
+/guhs erfenis geef plank 300
+/guhs erfenis doe plaats muziektent 64 52 0
+wait 100
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+/guhs erfenis ui kies bakkerij
+wait 40
+waitrender 200
+shot afw_08_bakkerij_theetaartje gui
+/guhs erfenis ui camera 47,69,16
+wait 40
+waitrender 200
+shot afw_09_bureau_eindlook gui
+/guhs erfenis ui camera 68,56,14
+wait 40
+waitrender 200
+shot afw_10_bertha_muziektent gui
+gui close
+/guhs erfenis kelder
+wait 40
+waitrender 200
+shot afw_11_opas_kelder
+look 90 10
+wait 10
+shot afw_12_opas_kelder_rond
+look 270 10
+wait 10
+shot afw_13_opas_kelder_luik
+quit

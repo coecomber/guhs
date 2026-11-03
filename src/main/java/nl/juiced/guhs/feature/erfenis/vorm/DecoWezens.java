@@ -241,6 +241,13 @@ public final class DecoWezens {
                 LEVEND.remove(m);
                 continue;
             }
+            if (m.entityTags().contains("guhs_bertha") && m.level() instanceof ServerLevel sl && m.getRandom().nextInt(3) == 0) {
+                // (1.9 afwerking, Sherlock zaak 6) Bertha de koe sings on the Muziektent: little notes, now and then a proud boe
+                sl.sendParticles(net.minecraft.core.particles.ParticleTypes.NOTE, m.getX(), m.getY() + 1.9, m.getZ(), 1, 0.3, 0.1, 0.3, m.getRandom().nextDouble());
+                if (m.getRandom().nextInt(6) == 0) {
+                    m.playAmbientSound();
+                }
+            }
             CompoundTag t = m.getPersistentData().getCompoundOrEmpty(DATA);
             if (t.isEmpty()) {
                 continue;

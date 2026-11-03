@@ -205,6 +205,28 @@ public final class Cast {
         return opGrond(p.level(), x, p.getY(), z);
     }
 
+    /**
+     * (1.9 afwerking) The n-th character of a scene in front of the player's own Detectivebureau (a little half circle before
+     * its door), when the player is in the village near it; null: no bureau (yet) or far away, then {@link #voorSpeler}.
+     */
+    @Nullable
+    static Vec3 bijBureau(ServerPlayer p, int n) {
+        if (p.level().dimension() != nl.juiced.guhs.feature.erfenis.Plot.DIM) {
+            return null;
+        }
+        net.minecraft.server.MinecraftServer server = p.level().getServer();
+        BlockPos voor = Sherlock.bureauPlek.apply(server, p.getUUID());
+        net.minecraft.core.Direction uit = Sherlock.bureauUit.apply(server, p.getUUID());
+        if (voor == null || uit == null || p.distanceToSqr(Vec3.atBottomCenterOf(voor)) > 48 * 48) {
+            return null;
+        }
+        double[][] plekken = {{-1.3, 0.6}, {1.3, 0.6}, {-2.4, 1.6}, {2.4, 1.6}, {0, 2.4}, {-3.4, 2.6}, {3.4, 2.6}};
+        double[] pl = plekken[Math.floorMod(n, plekken.length)];
+        double ox = uit.getStepX(), oz = uit.getStepZ(), sx = -oz, sz = ox;   // out of the door, and sideways
+        double x = voor.getX() + 0.5 + sx * pl[0] + ox * pl[1], z = voor.getZ() + 0.5 + sz * pl[0] + oz * pl[1];
+        return opGrond(p.level(), x, voor.getY(), z);
+    }
+
     /** The highest place to stand at (x, z) not much above y (so never on a roof far above the player). */
     public static Vec3 opGrond(ServerLevel level, double x, double y, double z) {
         BlockPos b = BlockPos.containing(x, y + 2, z);
@@ -230,12 +252,16 @@ public final class Cast {
         if (kind == null) {
             return null;
         }
+        Vec3 pos = bijBureau(p, n);
+        boolean bureau = pos != null;
+        if (pos == null) {
+            pos = voorSpeler(p, n);
+        }
         Entity al = van(p.level().getServer(), p.getUUID(), "scene:" + wie);
-        if (al != null && al.distanceTo(p) < 12) {
+        if (al != null && (bureau ? al.position().distanceTo(pos) < 4 : al.distanceTo(p) < 12)) {
             SPELERS.get(p.getUUID()).put("scene:" + wie, new Plek(al.getUUID(), p.level(), p.level().getGameTime(), true));
             return al;
         }
-        Vec3 pos = voorSpeler(p, n);
         return zet(p.level(), p.getUUID(), "scene:" + wie, wie, kind, pos, kijkNaar(pos, p.position()), null, true);
     }
 

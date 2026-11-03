@@ -71,6 +71,14 @@ public final class GebouwVormen {
         voerUit(lvl, Klus.vorm(lvl, v, palet, minHoek, rot, true));
     }
 
+    /**
+     * (1.9 afwerking) Runs {@code klus} once all stamping queued before it is done (Opa's kelder under the Hoeve, Bertha on the
+     * Muziektent): stamps are spread over ticks, so extra blocks must wait for the shape they go into.
+     */
+    public static void daarna(ServerLevel lvl, Runnable klus) {
+        voerUit(lvl, Klus.actie(lvl, klus));
+    }
+
     /** A footprint back to plain grass with air above (also takes away its decorative creatures). */
     public static void wis(ServerLevel lvl, BlockPos minHoek, int breedte, int diepte) {
         voerUit(lvl, Klus.wis(lvl, minHoek, breedte, diepte));
@@ -304,6 +312,7 @@ public final class GebouwVormen {
         private final int yLaag, yHoog;
         private final List<BlockPos> verbind = new ArrayList<>();
         private int fase;
+        private Runnable actie;
 
         private Klus(ServerLevel lvl, BlockPos o, int bx, int bz, VormBestand v, BlockState[] st, int rot, boolean wisBoven) {
             this.lvl = lvl;
@@ -327,6 +336,12 @@ public final class GebouwVormen {
             return new Klus(lvl, o, bx, bz, null, null, 0, true);
         }
 
+        static Klus actie(ServerLevel lvl, Runnable r) {
+            Klus k = new Klus(lvl, BlockPos.ZERO, 0, 0, null, null, 0, true);   // (v == null needs wisBoven for its height)
+            k.actie = r;
+            return k;
+        }
+
         Klus metBuren() {
             buren = true;
             return this;
@@ -335,6 +350,11 @@ public final class GebouwVormen {
         /** Works up to {@code budget} block changes; true when completely done. */
         boolean werk(int budget) {
             int start = gedaan;
+            if (actie != null) {
+                actie.run();
+                gedaan++;
+                return true;
+            }
             if (fase == 0) {
                 if (kolom == 0 && y == yLaag) {
                     DecoWezens.weg(lvl, o, bx, bz, WIS_HOOGTE);

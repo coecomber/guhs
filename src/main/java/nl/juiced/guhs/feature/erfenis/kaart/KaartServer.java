@@ -72,6 +72,13 @@ public final class KaartServer {
 
     public static void stuur(ServerPlayer p, boolean open) {
         MinecraftServer server = p.level().getServer();
+        // 1.9 afwerking: the world map only after buying the makelaar's letter (creative always), like the overview
+        if (!nl.juiced.guhs.feature.erfenis.Erfenis.magErfenis(p)) {
+            if (open) {
+                p.sendSystemMessage(Component.translatable("erfenis.cmd.nog_geen_erfenis"), true);
+            }
+            return;
+        }
         UUID eigen = KaartFeature.BRON.eigenDorp(p);
         List<KaartDorp> dorpen = alleDorpen(server);
         KaartData data = KaartData.get(server);

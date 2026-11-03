@@ -130,7 +130,11 @@ public final class Stempel {
 
     private static void vorm(ServerLevel level, BlockPos o, Base b, Gebouw g) {
         BlockPos hoek = o.offset(g.x, 0, g.z);
-        GebouwVormen.stempel(level, g.type.id, g.level, g.palet, hoek, g.rot);
+        // 1.9 afwerking: after the court case the Detectivebureau wears its end look (the L10 shape) at any level
+        int vormLevel = g.type == GebouwType.DETECTIVEBUREAU && g.level > 0 && b.beloningen.contains("bureau_eindlook")
+                ? GebouwVormen.levels(g.type.id) : g.level;
+        GebouwVormen.stempel(level, g.type.id, vormLevel, g.palet, hoek, g.rot);
+        Afwerking.naStempel(level, b, g, hoek);   // Opa's kelder under the Hoeve, Bertha on the Muziektent
         if (g.level > 0 && b.inAanbouw(g)) {   // an upgrade runs: scaffolding at the corners
             int hoog = Math.min(Plot.MAX_HOOGTE - 1, g.type.hoogte(g.level));
             for (int[] c : new int[][] {{0, 0}, {g.b() - 1, 0}, {0, g.d() - 1}, {g.b() - 1, g.d() - 1}}) {

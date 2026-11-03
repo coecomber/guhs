@@ -292,6 +292,16 @@ final class ErfenisCommando {
         b.bijgewerkt = nu - 90 * 60_000L;
         Erfenis.bijwerken(source.getServer(), b, false);
         restempel(source.getServer(), b);
+        // the demo stamps over the arrival spot: whoever stands in this village goes to a free tile (never inside a building)
+        net.minecraft.server.level.ServerLevel lvl = Erfenis.level(source.getServer());
+        if (lvl != null) {
+            for (ServerPlayer p : Erfenis.kijkers(source.getServer(), b)) {
+                net.minecraft.core.BlockPos v = Erfenis.veiligeAankomst(lvl, b);
+                p.teleport(new net.minecraft.world.level.portal.TeleportTransition(lvl, net.minecraft.world.phys.Vec3.atBottomCenterOf(v),
+                        net.minecraft.world.phys.Vec3.ZERO, 180f, 20f, net.minecraft.world.level.portal.TeleportTransition.DO_NOTHING));
+                p.resetFallDistance();
+            }
+        }
         return klaar(source, b, Component.translatable("erfenis.cmd.demo"));
     }
 

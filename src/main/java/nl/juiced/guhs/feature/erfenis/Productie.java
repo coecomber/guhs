@@ -64,7 +64,9 @@ public final class Productie {
         r(GebouwType.BAKKERIJ, Recept.werk("brood", Goed.BROOD, 1, BAKKERIJ, 1, Goed.MEEL, 2, Goed.EI, 1),
                 Recept.werk("koek", Goed.KOEK, 1, BAKKERIJ, 1, Goed.MEEL, 1, Goed.EI, 1, Goed.HONING, 1),
                 Recept.werk("wortelcake", Goed.WORTELCAKE, 1, BAKKERIJ, 1, Goed.MEEL, 2, Goed.WORTEL, 2, Goed.EI, 1),
-                Recept.werk("knabbelkoek", Goed.KNABBELKOEK, 1, BAKKERIJ, 1, Goed.ROZEMEEL, 2, Goed.EI, 1));
+                Recept.werk("knabbelkoek", Goed.KNABBELKOEK, 1, BAKKERIJ, 1, Goed.ROZEMEEL, 2, Goed.EI, 1),
+                // 1.9 afwerking (Sherlock zaak 2): Opa's theetaartjes, two koek per batch; only after the reward recept_theetaartje
+                Recept.werk("theetaartje", Goed.KOEK, 2, BAKKERIJ, 1, Goed.MEEL, 1, Goed.EI, 1, Goed.HONING, 1, Goed.MELK, 1));
         r(GebouwType.WEVERIJ, Recept.werk("stof", Goed.STOF, 1, WEVERIJ, 1, Goed.WOL, 2),
                 Recept.werk("knuffelstof", Goed.KNUFFELSTOF, 1, WEVERIJ, 1, Goed.ANGORA, 2),
                 Recept.werk("pluiswol", Goed.WOL, 1, WEVERIJ, 1, Goed.PLUIS, 2),
@@ -80,6 +82,15 @@ public final class Productie {
     }
 
     /** What this type can make (empty: it makes nothing). Index = the building's {@code keuze}. */
+    /** Secret recipes (recipe id -> the Sherlock reward flag that unlocks it, see {@link Base#beloningen}). */
+    public static final Map<String, String> GEHEIM = Map.of("theetaartje", "recept_theetaartje");
+
+    /** May this village use this recipe (secret ones only with their reward)? */
+    public static boolean magRecept(Base b, Recept r) {
+        String vlag = GEHEIM.get(r.id());
+        return vlag == null || b.beloningen.contains(vlag);
+    }
+
     public static List<Recept> recepten(GebouwType t) {
         return RECEPTEN.getOrDefault(t, List.of());
     }

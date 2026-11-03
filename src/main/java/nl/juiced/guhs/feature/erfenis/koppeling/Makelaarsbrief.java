@@ -223,6 +223,32 @@ public final class Makelaarsbrief {
     /** The Postguh pops up next to the player, hands over the letter, waves, and is gone after a few seconds. */
     public static void bezorg(ServerPlayer p) {
         ServerLevel level = p.level();
+        postguhErbij(p);
+        geef(p, new ItemStack(KoppelingFeature.MAKELAARSBRIEF.get()));
+        level.playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.8f, 1.5f);
+        p.sendSystemMessage(Component.translatable("erfenis.koppeling.postguh").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
+                .append(Component.translatable("erfenis.koppeling.brief.bezorgd", p.getName()).withStyle(ChatFormatting.WHITE)));
+    }
+
+    /**
+     * (1.9 afwerking) Other post the same way: the Postguh pops up (not during a scene, a ride or sleep), hands over the item
+     * and says his line (the makelaar's postcards from his holiday).
+     */
+    public static void bezorgPost(ServerPlayer p, ItemStack spul, Component regel) {
+        if (!Cutscenes.bezig(p) && p.getVehicle() == null && !p.isSleeping()) {
+            postguhErbij(p);
+        }
+        geef(p, spul);
+        p.level().playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.8f, 1.5f);
+        p.sendSystemMessage(Component.translatable("erfenis.koppeling.postguh").withStyle(ChatFormatting.GOLD)
+                .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
+                .append(regel.copy().withStyle(ChatFormatting.WHITE)));
+    }
+
+    /** The Postguh himself: pops up next to the player, waves, and is gone after a few seconds (no room: he stays away). */
+    private static void postguhErbij(ServerPlayer p) {
+        ServerLevel level = p.level();
         Vec3 plek = plekVoorPostguh(level, p);
         if (plek != null) {
             GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.TRIGGERED);
@@ -243,11 +269,6 @@ public final class Makelaarsbrief {
                 }
             }
         }
-        geef(p, new ItemStack(KoppelingFeature.MAKELAARSBRIEF.get()));
-        level.playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.8f, 1.5f);
-        p.sendSystemMessage(Component.translatable("erfenis.koppeling.postguh").withStyle(ChatFormatting.GOLD)
-                .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))
-                .append(Component.translatable("erfenis.koppeling.brief.bezorgd", p.getName()).withStyle(ChatFormatting.WHITE)));
     }
 
     /** A spot two blocks in front of the player (or beside them) with room to stand; null: no room (then the letter comes alone). */

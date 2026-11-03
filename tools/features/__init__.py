@@ -193,7 +193,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.9 Een opknapper!: the FTB chapter guhs_erfenis (advancements + stat names; Java: feature/erfenis/ftb; append only)
             'erfenis_ftb',
             # 1.9 Een opknapper!: deco (decowinkel, paden/hekjes trekken, Knusheid-mijlpalen en titels; Java: feature/erfenis/Deco*)
-            'erfenis_deco']
+            'erfenis_deco',
+            # 1.9 Een opknapper!: afwerking (postcards, Sherlock's rewards in the village; Java: feature/erfenis/Afwerking)
+            'erfenis_afwerking']
 
 
 def modules():

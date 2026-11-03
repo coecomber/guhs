@@ -133,6 +133,9 @@ final class GebouwPaneel {
             int x = r.x;
             for (int i = 0; i < recepten.size(); i++) {
                 Recept rc = recepten.get(i);
+                if (!Productie.magRecept(b, rc)) {   // a secret recipe (Sherlock's reward) stays hidden until you have it
+                    continue;
+                }
                 boolean gekozen = rc == nu, mag = rc.minLevel() <= Math.max(1, geb.level);
                 if (r.zichtbaar(r.y, r.y + 20)) {
                     Teken.rond(ui.g, x, r.y, x + 20, r.y + 20, gekozen ? Teken.GOUD : ui.op(x, r.y, x + 20, r.y + 20) ? Teken.ROZE_DONKER : Teken.ROZE, 3);
