@@ -140,11 +140,12 @@ Hij is tijdelijk zoals de hele cast: is er niemand binnen 40 blokken, dan gaat h
    Alleen kijken: `/guhs erfenis sherlock rechtbank`. De hele cast op een rij: `/guhs erfenis sherlock cast`.
 5. AutoCheck: `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_sherlock.txt`.
 
-## STAND BIJ DE PAUZE (WIP-commit)
-- Alles hierboven is geschreven; `compileJava` is groen; resources gegenereerd (erfenis_sherlock.py gedraaid).
-- Gametest-run `-Pgt=SherlockGameTests,TaalsleutelsGameTests,TitelsGameTests,UpstreamSamenGameTests`: 1 fout,
-  `upstreamsamenkindsvoorguhpixel` ("SNOES has no character page"). Dat is een oude kind van 1.8.0, niet van mij.
-  Het log liet niet duidelijk zien of de batch `sherlock` (6 tests) daarna nog draaide → opnieuw draaien met alleen `-Pgt=SherlockGameTests`.
-- Volgende stappen: (1) SherlockGameTests apart draaien en fixen; (2) Taalsleutels/Titels apart bevestigen;
-  (3) AutoCheck `tools/autocheck/190_sherlock.txt` draaien en de screenshots bekijken (cast, Speurboekje, speurbord, rechtbank);
-  (4) looks/indeling bijstellen; (5) definitieve commit.
+## STAND BIJ PAUZE 2 (WIP-commit "WIP 190-opk: pauze 2")
+- `compileJava` is groen. `runGameTestServer -Pgt=SherlockGameTests` is **groen** ("All 7 required tests passed").
+- De SNOES-fout in UpstreamSamenGameTests bestond al (niet van deze slice).
+- Nog te doen (headless): `-Pgt=TaalsleutelsGameTests,TitelsGameTests` opnieuw draaien. Die run is twee keer
+  afgebroken (eerst door de client-stop, daarna door de pauze), dus de uitslag is nog onbekend.
+- Nog te doen (client, pas als de gebruiker weer een client toestaat): AutoCheck
+  `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_sherlock.txt` (cast op een rij, Speurboekje,
+  speurbord met draadjes + tooltip, Speurboekje na oplossen, rechtbank), de screenshots bekijken, looks bijstellen.
+- Daarna: definitieve commit.
