@@ -74,3 +74,15 @@ Niets: deze slice roept geen API's van andere slices aan. Kern vervangt de POC-`
 - `/guhs erfenis vorm decoalle`, `/guhs erfenis vorm plukje 4`, `/guhs erfenis vorm pad bloesemblaadjespad`.
 - AutoCheck: `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/erfenis_vormen.txt`.
 - Gametests: `gradlew runGameTestServer -Pgt=VormenGameTests`.
+
+## PAUZE (2026-11-03, op verzoek van de gebruiker)
+Waar ik ben:
+- Klaar en gecommit: exporter + alle vormen/deco/plukjes/paden in resources, GebouwVormen/DecoWezens/Draai/VormBestand,
+  dev-commando, gametests `VormenGameTests`: groen (3/3 geslaagd; 6460 echte stempels in 3,7 s, geen onbekende blokken).
+- AutoCheck `tools/autocheck/erfenis_vormen.txt`: run 1 was zwart (camera zat onder de grond: de autocheck-wereld is niet
+  superflat), het script is aangepast (alles op y=200 in de lucht + nachtzicht) en run 2 is net klaar (BUILD SUCCESSFUL), maar
+  de screenshots in `run/screenshots/autocheck/vorm_*.png` heb ik nog NIET bekeken.
+Wat er nog moet:
+1. De screenshots van run 2 bekijken en vergelijken met `renders-erfenis/<naam>_L<n>.png`; verschillen met de renders oplossen
+   (exporter of draaien/verbinden), daarna opnieuw exporteren + gametests (`-Pgt=VormenGameTests`).
+2. Daarna het eindrapport aan de lead (overhang-keuze noemen: daken/molenwieken afgeknipt op de footprint).
