@@ -106,7 +106,7 @@ public class ErfenisGameTests {
         b.geefGoed(Goed.GRAAN, 100);
         b.bijgewerkt = T0;
         b.bijwerken(T0 + UUR);
-        helper.assertTrue(ongeveer(molen.inBuffer(Goed.MEEL), 30) && ongeveer(b.goed(Goed.GRAAN), 40), "1 hour: 30 meel from 60 graan");
+        helper.assertTrue(ongeveer(molen.inBuffer(Goed.MEEL), 20) && ongeveer(b.goed(Goed.GRAAN), 60), "1 hour at L2 (= balans L1): 20 meel from 40 graan");
         b.bijwerken(T0 + 3 * UUR);
         helper.assertTrue(ongeveer(molen.inBuffer(Goed.MEEL), 50) && b.goed(Goed.GRAAN) < 1e-6, "graan gone: 50 meel, then it waits");
         // a choice the level doesn't allow yet falls back to the first recipe

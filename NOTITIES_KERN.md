@@ -132,14 +132,19 @@ Alle dev-commando's werken op je eigen erfenis (`/guhs erfenis ...`, op):
 Gametests: `gradlew runGameTestServer -Pgt=ErfenisGameTests` (via `gradle_slot.sh`). AutoCheck:
 `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_opknapper_kern.txt`.
 
-## STAND BIJ DE PAUZE (WIP-commit "WIP 190-opk: pauze")
+## Stand bij oplevering
 
-- Alles hierboven is geschreven; de hele mod **compileerde** (compileJava groen, vóór de laatste kleine edits:
-  `demo`/`ui`-commando's, `devUi` in OverzichtScherm, `Overzicht.richt`, lang `erfenis.cmd.demo`).
-- Gametests eerste ronde: 5 van ErfenisGameTests faalden op test-fouten (niet op de economie); die tests zijn
-  gerepareerd (Hoeve L1 heeft geen timer, speeltuin-intrekmoment, opslag leeg in `ruim()`, bouwer bezig vóór
-  overwoekerd-check, plukje 10 weer dicht). Nog NIET opnieuw gedraaid. Kaart-test `zelfdeRegelsAlsDeKern` faalt
-  verwacht (POC-getallen; kaart-slice).
-- **Volgende stappen:** 1) `compileJava` + `runGameTestServer -Pgt=ErfenisGameTests` → groen maken;
-  2) AutoCheck `tools/autocheck/190_opknapper_kern.txt` draaien en de screenshots (opk_01..15) bekijken, UI bijschaven;
-  3) eindcommit + rapport.
+- compileJava groen; `runGameTestServer -Pgt=ErfenisGameTests`: alle 15 groen. (`KaartGameTests.zelfdeRegelsAlsDeKern`
+  faalt verwacht tot de kaart-slice naar de nieuwe GebouwType-getallen is omgezet.)
+- AutoCheck `tools/autocheck/190_opknapper_kern.txt` is één keer gedraaid (opk_01..15 bekeken: start, plukje, winkel,
+  demodorp, panelen kippenhok/Hoeve/molen/werkplaats, vensters opslag/naar huis/loket/bouwkeet/pension: alles netjes).
+  Daarna gerepareerd zonder nieuwe client-run (regel gebruiker: geen client): `ui camera x,z,afstand` faalde (argument
+  met komma's → nu greedyString), demo zette 24 bewoners bij plek voor 18 (nu begrensd), uitleg in het paneel 6 regels.
+  **Nog te doen met AutoCheck zodra het weer mag:** het script opnieuw draaien en opk_04 (camera) + opk_05..09 bekijken.
+- Itemnamen in het loket staan in de client-taal (Engels in AutoCheck); dat zijn de bestaande item-vertalingen.
+
+## STAND BIJ PAUZE 2 (WIP-commit "WIP 190-opk: pauze 2")
+
+- Laatste fixes (camera-argument, demo-bewoners, 6 uitlegregels) zitten erin; gametests daarna opnieuw: alles groen
+  (14:22, "All 20 required tests passed").
+- **Resterend na resume:** alleen nog de AutoCheck-herhaling (zodra clients weer mogen) en de eindcommit + rapport.

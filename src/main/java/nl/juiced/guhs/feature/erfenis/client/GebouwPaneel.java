@@ -81,7 +81,7 @@ final class GebouwPaneel {
             r.y += 9;
         }
         List<FormattedCharSequence> uitleg = ui.font.split(Component.translatable(geb.type.uitlegKey()), r.w);
-        for (int i = 0; i < Math.min(4, uitleg.size()); i++) {
+        for (int i = 0; i < Math.min(6, uitleg.size()); i++) {
             r.regel(uitleg.get(i), Teken.ZACHT);
         }
         r.y += 3;

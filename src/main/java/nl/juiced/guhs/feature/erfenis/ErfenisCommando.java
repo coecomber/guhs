@@ -142,7 +142,7 @@ final class ErfenisCommando {
         e.then(dev("demo").executes(c -> demo(c.getSource())));
         e.then(dev("ui").then(Commands.argument("wat", StringArgumentType.word())
                 .executes(c -> ui(c.getSource(), StringArgumentType.getString(c, "wat"), ""))
-                .then(Commands.argument("arg", StringArgumentType.word())
+                .then(Commands.argument("arg", StringArgumentType.greedyString())
                         .executes(c -> ui(c.getSource(), StringArgumentType.getString(c, "wat"), StringArgumentType.getString(c, "arg"))))));
         e.then(dev("reset").executes(c -> {
             Base b = eigen(c.getSource());
@@ -274,7 +274,7 @@ final class ErfenisCommando {
             }
         }
         b.kippenhokGratis = false;
-        b.bewoners = 24;
+        b.bewoners = Math.min(24, b.maxBewoners());
         b.bestellingen = 40;
         b.guhlden = 9000;
         for (Object[] kv : new Object[][] {{Goed.PLANK, 320}, {Goed.BAKSTEEN, 140}, {Goed.WOL, 60}, {Goed.EI, 45}, {Goed.GRAAN, 120}, {Goed.MELK, 30},
