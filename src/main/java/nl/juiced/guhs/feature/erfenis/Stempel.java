@@ -13,26 +13,25 @@ import net.minecraft.world.level.block.StandingSignBlock;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
 import net.minecraft.world.level.block.state.BlockState;
+import nl.juiced.guhs.feature.erfenis.vorm.GebouwVormen;
 
 /**
- * De Erfenis (POC): puts a {@link Base} into the world. Every function takes the level and the plot's min corner
+ * De Erfenis: puts a {@link Base} into the world. Every function takes the level and the plot's min corner
  * ({@link Plot#oorsprong}), so game tests can stamp in their own area; {@link Erfenis#stempel} finds both for a real base.
+ * The shapes themselves come from {@link GebouwVormen} (the vormen slice; a stand-in until the merge).
  * <ul>
- *   <li>{@link #stempel} everything: the island, the plot cleared, every building (a visit to a base that is behind).</li>
- *   <li>{@link #gebouw} one building: its footprint cleared, then its shape (a placement, an upgrade, a finished build).</li>
- *   <li>{@link #wis} one footprint back to grass (the old spot of a moved building).</li>
+ *   <li>{@link #stempel} everything: the island, the land (overgrown plukjes, kavels for sale), the paths, every building.</li>
+ *   <li>{@link #gebouw} one building (a placement, an upgrade, a finished build, a new palette).</li>
+ *   <li>{@link #wis} one footprint back to grass (the old spot of a moved building); {@link #plukje} / {@link #kavel} one patch of land.</li>
  * </ul>
- * Blocks are set without neighbour updates and only where they differ, so stamping again is cheap and changes nothing.
- * Setting a block in an unloaded chunk loads it (the dimension is void, so that is quick).
  */
 public final class Stempel {
     private static final int VLAG = Block.UPDATE_CLIENTS | Block.UPDATE_KNOWN_SHAPE;
-    static final String[] OPA = {"Van opa-guh,", "met liefde.", "Njeg. <3", ""};
 
     private Stempel() {
     }
 
-    /** The whole base: island, clean plot, all buildings. */
+    /** The whole base: island, land, paths, deco, all buildings. */
     public static void stempel(ServerLevel level, BlockPos o, Base b) {
         eiland(level, o, b);
         for (int x = 0; x < Plot.MAAT; x++) {
@@ -40,44 +39,106 @@ public final class Stempel {
                 kolomLeeg(level, o.offset(x, 0, z));
             }
         }
+        for (int n = 0; n < Plot.PLUKJES; n++) {
+            if (!b.opgeruimd[n]) {
+                plukje(level, o, b, n);
+            }
+        }
+        for (int k = 0; k < Plot.KAVELS; k++) {
+            if (!b.kavelGekocht(k)) {
+                kavel(level, o, b, k);
+            }
+        }
+        paden(level, o, b, 0, 0, Plot.MAAT, Plot.MAAT);
+        for (Base.Deco d : b.deco) {
+            GebouwVormen.stempelDeco(level, d.id(), o.offset(d.x(), 0, d.z()), d.rot());
+        }
         for (Gebouw g : b.gebouwen) {
             vorm(level, o, b, g);
         }
         b.moetStempelen = false;
     }
 
-    /** One building: its footprint cleared, then its current shape. */
+    /** One building: its footprint (the shape clears it first), then scaffolding when an upgrade runs. */
     public static void gebouw(ServerLevel level, BlockPos o, Base b, Gebouw g) {
-        wis(level, o, g.x, g.z, g.type.maat);
         vorm(level, o, b, g);
     }
 
     /** A footprint back to grass with air above. */
-    public static void wis(ServerLevel level, BlockPos o, int x, int z, int maat) {
-        for (int dx = 0; dx < maat; dx++) {
-            for (int dz = 0; dz < maat; dz++) {
-                kolomLeeg(level, o.offset(x + dx, 0, z + dz));
+    public static void wis(ServerLevel level, BlockPos o, Base b, int x, int z, int w, int h) {
+        GebouwVormen.wis(level, o.offset(x, 0, z), w, h);
+        paden(level, o, b, x, z, w, h);
+    }
+
+    /** One plukje: overgrown, or (cleared) plain grass again. */
+    public static void plukje(ServerLevel level, BlockPos o, Base b, int n) {
+        int[] h = Plot.plukjeHoek(n);
+        if (b.opgeruimd[n]) {
+            GebouwVormen.wis(level, o.offset(h[0], 0, h[1]), Plot.PLUK, Plot.PLUK);
+        } else {
+            GebouwVormen.stempelPlukje(level, o.offset(h[0], 0, h[1]), b.plukjeSoort(n));
+        }
+    }
+
+    /** One kavel: for sale (wild meadow behind little posts) or (bought) plain grass. */
+    public static void kavel(ServerLevel level, BlockPos o, Base b, int k) {
+        int[] v = Plot.kavelVak(k);
+        GebouwVormen.wis(level, o.offset(v[0], 0, v[1]), v[2], v[3]);
+        if (b.kavelGekocht(k)) {
+            return;
+        }
+        java.util.Random rng = new java.util.Random(b.id.getLeastSignificantBits() ^ k * 7919L);
+        for (int x = 0; x < v[2]; x++) {
+            for (int z = 0; z < v[3]; z++) {
+                BlockPos g = o.offset(v[0] + x, 0, v[1] + z);
+                zet(level, g, rng.nextInt(5) == 0 ? Blocks.PODZOL.defaultBlockState() : Blocks.GRASS_BLOCK.defaultBlockState());
+                int r = rng.nextInt(10);
+                if (r < 4) {
+                    zet(level, g.above(), Blocks.SHORT_GRASS.defaultBlockState());
+                } else if (r == 4) {
+                    zet(level, g.above(), Blocks.DANDELION.defaultBlockState());
+                }
+                boolean rand = x == 0 || z == 0 || x == v[2] - 1 || z == v[3] - 1;
+                if (rand && (x + z) % 4 == 0) {
+                    zet(level, g.above(), Blocks.OAK_FENCE.defaultBlockState());
+                }
             }
         }
     }
 
+    /** The paths in a rectangle (the layer of the base; null = none): every tile with its neighbour bitmask N1 E2 S4 W8. */
+    static void paden(ServerLevel level, BlockPos o, Base b, int x0, int z0, int w, int h) {
+        if (b == null) {
+            return;
+        }
+        for (int x = x0; x < x0 + w; x++) {
+            for (int z = z0; z < z0 + h; z++) {
+                int p = pad(b, x, z);
+                if (p <= 0 || b.op(x, z) != null) {
+                    continue;
+                }
+                int v = (pad(b, x, z - 1) > 0 ? 1 : 0) | (pad(b, x + 1, z) > 0 ? 2 : 0) | (pad(b, x, z + 1) > 0 ? 4 : 0) | (pad(b, x - 1, z) > 0 ? 8 : 0);
+                String soort = p - 1 < b.padSoorten.size() ? b.padSoorten.get(p - 1) : "zandpaadje";
+                GebouwVormen.pad(level, o.offset(x, 0, z), soort, v);
+            }
+        }
+    }
+
+    private static int pad(Base b, int x, int z) {
+        return Plot.opPlot(x, z) ? b.paden[x * Plot.MAAT + z] & 0xFF : 0;
+    }
+
     private static void vorm(ServerLevel level, BlockPos o, Base b, Gebouw g) {
         BlockPos hoek = o.offset(g.x, 0, g.z);
-        Vormen.vorm(g.type, g.level, g.rot, b.inAanbouw(g) && g.level > 0, (x, y, z, st) -> {
-            BlockPos p = hoek.offset(x, y, z);
-            zet(level, p, st);
-            if (st.getBlock() instanceof StandingSignBlock && level.getBlockEntity(p) instanceof SignBlockEntity bord) {
-                SignText tekst = new SignText();
-                for (int i = 0; i < 4; i++) {
-                    tekst = tekst.setMessage(i, Component.literal(OPA[i]));
+        GebouwVormen.stempel(level, g.type.id, g.level, g.palet, hoek, g.rot);
+        if (g.level > 0 && b.inAanbouw(g)) {   // an upgrade runs: scaffolding at the corners
+            int hoog = Math.min(Plot.MAX_HOOGTE - 1, g.type.hoogte(g.level));
+            for (int[] c : new int[][] {{0, 0}, {g.b() - 1, 0}, {0, g.d() - 1}, {g.b() - 1, g.d() - 1}}) {
+                for (int y = 1; y <= hoog; y++) {
+                    zet(level, hoek.offset(c[0], y, c[1]), Blocks.SCAFFOLDING.defaultBlockState());
                 }
-                tekst = tekst.setColor(DyeColor.MAGENTA);
-                bord.setText(tekst, true);
-                bord.setWaxed(true);
-                bord.setChanged();
-                level.sendBlockUpdated(p, st, st, Block.UPDATE_CLIENTS);
             }
-        });
+        }
     }
 
     private static void kolomLeeg(ServerLevel level, BlockPos grond) {
@@ -138,7 +199,7 @@ public final class Stempel {
         zet(level, bordPos, bord);
         if (level.getBlockEntity(bordPos) instanceof SignBlockEntity be) {
             SignText t = new SignText().setMessage(0, Component.literal("~ De Erfenis ~")).setMessage(1, Component.literal(b.npc ? "van" : "van guh"))
-                    .setMessage(2, Component.literal(b.naam)).setMessage(3, Component.literal(b.npc ? "(guhdorp)" : "Njeg!")).setColor(DyeColor.MAGENTA);
+                    .setMessage(2, Component.literal(b.naam)).setMessage(3, Component.literal(b.npc ? "(guhdorp)" : "Opknapper! Njeg!")).setColor(DyeColor.MAGENTA);
             be.setText(t, true);
             be.setWaxed(true);
             be.setChanged();

@@ -44,6 +44,10 @@ public final class ErfenisData extends SavedData {
     private int volgendeSpiraal;
     /** Dev: builds and upgrades finish at once. */
     public boolean snel;
+    /** Dev: extra vadskracht at every Vadsmast (on top of the koppeling's source), /guhs erfenis vk. */
+    public int devVk;
+    /** Story moments for players who were offline (delivered at the next login, in order). */
+    private final Map<UUID, java.util.List<String>> momenten = new HashMap<>();
 
     public static ErfenisData get(MinecraftServer server) {
         return GuhSavedData.get(server.overworld(), TYPE, "guhs_erfenis");
@@ -87,9 +91,9 @@ public final class ErfenisData extends SavedData {
     }
 
     /** Phase 2: an NPC village from a building list (see {@link Base#npc(UUID, String, int, int, java.util.List, int, long)}) in the next free cell. */
-    public Base maakNpcBase(String naam, java.util.List<Base.Plan> plan, int bouwspul, long nu) {
+    public Base maakNpcBase(String naam, java.util.List<Base.Plan> plan, int guhlden, long nu) {
         int[] c = vrijeCel();
-        Base b = Base.npc(UUID.randomUUID(), naam, c[0], c[1], plan, bouwspul, nu);
+        Base b = Base.npc(UUID.randomUUID(), naam, c[0], c[1], plan, guhlden, nu);
         voegToe(b);
         return b;
     }
@@ -107,7 +111,7 @@ public final class ErfenisData extends SavedData {
                 return null;
             }
             b = Base.npc(id, naam, cx, cz, plan, 0, nu);
-            b.bouwspul = b.opslag() / 2;
+            b.guhlden = b.guhldenCap() / 2;
             voegToe(b);
             return b;
         }
@@ -151,6 +155,19 @@ public final class ErfenisData extends SavedData {
         }
     }
 
+    void bewaarMoment(UUID speler, String moment) {
+        momenten.computeIfAbsent(speler, k -> new java.util.ArrayList<>()).add(moment);
+        setDirty();
+    }
+
+    java.util.List<String> haalMomenten(UUID speler) {
+        java.util.List<String> l = momenten.remove(speler);
+        if (l != null) {
+            setDirty();
+        }
+        return l == null ? java.util.List.of() : l;
+    }
+
     @Nullable
     public Terug terug(UUID speler) {
         return terug.get(speler);
@@ -171,6 +188,20 @@ public final class ErfenisData extends SavedData {
         ErfenisData d = new ErfenisData();
         d.volgendeSpiraal = t.getIntOr("VolgendeSpiraal", 0);
         d.snel = t.getBooleanOr("Snel", false);
+        d.devVk = t.getIntOr("DevVk", 0);
+        CompoundTag mt = t.getCompoundOrEmpty("Momenten");
+        for (String k : mt.keySet()) {
+            try {
+                UUID u = UUID.fromString(k);
+                java.util.List<String> l = new java.util.ArrayList<>();
+                for (Tag e : mt.getListOrEmpty(k)) {
+                    e.asString().ifPresent(l::add);
+                }
+                d.momenten.put(u, l);
+            } catch (IllegalArgumentException ignored) {
+                // (not a uuid: skip)
+            }
+        }
         for (Tag e : t.getListOrEmpty("Bases")) {
             if (e instanceof CompoundTag c) {
                 Base b = Base.load(c);
@@ -193,6 +224,14 @@ public final class ErfenisData extends SavedData {
         CompoundTag t = new CompoundTag();
         t.putInt("VolgendeSpiraal", volgendeSpiraal);
         t.putBoolean("Snel", snel);
+        t.putInt("DevVk", devVk);
+        CompoundTag mt = new CompoundTag();
+        momenten.forEach((u, l) -> {
+            ListTag lt = new ListTag();
+            l.forEach(m -> lt.add(net.minecraft.nbt.StringTag.valueOf(m)));
+            mt.put(u.toString(), lt);
+        });
+        t.put("Momenten", mt);
         ListTag lijst = new ListTag();
         for (Base b : bases.values()) {
             lijst.add(b.save());
