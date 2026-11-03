@@ -7,8 +7,8 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
 ## Starten
 
 - Dev-client: `gradlew runClient` vanuit `guhs_opk/w-int` (nieuwe wereld, cheats aan).
-- Speel in **survival** als je de echte weg wilt zien: zonder gekochte erfenis zeggen de toets en `/guhs erfenis`
-  "Je hebt nog geen erfenis". In creative mag je altijd (dev-gemak).
+- Speel in **survival** als je de echte weg wilt zien: zonder gekochte erfenis zeggen de toets, de wereldkaart (M) en
+  `/guhs erfenis` "Je hebt nog geen erfenis". In creative mag je altijd (dev-gemak).
 
 ## De hele reis (zo speel je hem)
 
@@ -17,7 +17,8 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
 2. **Hekje en kist**: zet het Erfhekje en de Leverkist neer (de kist is van wie hem neerzet). Loop door het hekje.
 3. **Aankomst**: je staat in je krakkemikkige dorp. Makelaar Guhrrit staat naast je en begint de **makelaarstour**:
    plukje opruimen → gratis Kippenhok → eerste bewoner → eerste bestelling → Hoeve 2 → hij gaat op vakantie (borstbeeld en
-   brievenbus in je decoschuurtje). Klik op hem om de huidige stap nog eens te horen.
+   brievenbus in je decoschuurtje). Klik op hem om de huidige stap nog eens te horen. Daarna stuurt hij bij Hoeve 3 t/m 7
+   een **ansichtkaartje** van vakantie (de Postguh brengt het; het hangt ook op je Kaartjesbord, +2 Knusheid per kaartje).
 4. **Bovenaanzicht** (toets, of `/guhs erfenis bovenaanzicht`): winkel onderin, gebouwpanelen, belletjes om op te halen,
    links Opslag / Naar huis / Alles ophalen / **Deco** / Loket / Logés.
 5. **Deco**: knop **Deco (n)** → Neerzetten (spookje volgt je muis, R draait, klik zet neer) of Opbergen. Vondsten,
@@ -26,7 +27,11 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
    wereldkaart (toets M / `/guhs erfenis kaart`) → een buurdorpje → Bestellingen.
 7. **Sherlock**: zodra je een Detectivebureau bouwt trekt Sherlock in. Ligt er een zaak klaar, dan zweeft er een
    **vergrootglas-wolkje** boven het bureau in het bovenaanzicht (klik = Speurboekje). Rechtsklik op het bureau in je dorp
-   werkt ook.
+   werkt ook. Sherlock, Vadson en de anderen staan bij een scène **voor de deur van je bureau** (ben je ver weg of heb je er
+   nog geen, dan naast je).
+   Beloningen doen nu echt iets: zaak 2 → recept **Opa's theetaartjes** in de Bakkerij, zaak 4 → **Oma Breiguh** bestelt vaak
+   zelf (+50% en een extraatje), zaak 5 → **Opa's kelder** onder de Hoeve (luik in de vloer), zaak 6 → **Bertha** zingt op de
+   Muziektent, zaak 9 → **Opa Knabbels testament** als boek, rechtszaak → het bureau in zijn **eindlook**.
 8. **Naar huis**: venster Naar huis → kies goed + aantal → het komt in je Leverkist in de hoofdwereld (vlaggetje omhoog).
    Glasscherven mogen nu ook mee (thuis smelten tot glas). Het Leverkist-plafond per uur geldt.
 9. **Terug**: knop Terug in het bovenaanzicht of `/guhs erfenis terug` → je staat voor het hekje dat je gebruikte.
@@ -45,9 +50,16 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
 | `/guhs erfenis leverpost [n]`, `dorpszender`, `decobon` | koppeling-testjes |
 | `/guhs erfenis kaart`, `kaart bestellingen`, `kaart bestel snel aan\|vul`, `kaart npc groei` | kaart en bestellingen |
 | `/guhs erfenis sherlock moment <id>`, `zaak <id>`, `vind`, `volgende`, `bureau`, `rechtbank` | Sherlock |
+| `/guhs erfenis ansicht <4-8>` | een ansichtkaartje van de makelaar nu |
+| `/guhs erfenis beloning <vlag>` | een Sherlock-beloning meteen (`recept_theetaartje`, `oma_bestelling`, `opas_kelder`, `bertha_optreden`, `testament`, `bureau_eindlook`) |
+| `/guhs erfenis kelder` | naar Opa's kelder (na de beloning) |
 | `/guhs erfenis vorm <id> <level> <palet> <rot>`, `vorm alle <level> <palet>`, `vorm decoalle` | alle vormen bekijken |
 
 ## Wat zeker het proberen waard is
+
+- (afwerking) Survival zonder brief: M opent de kaart niet. `/guhs erfenis demo`: je staat op een vrij plekje, niet in een
+  gebouw. Bestelscherm telt je echte leveringen. Rechtsklik op een Leverkist opent hem.
+- (afwerking) `/guhs erfenis beloning opas_kelder`, open het luik in de Hoeve-vloer en klim naar beneden (of `/guhs erfenis kelder`).
 
 - Survival zonder brief: toets/commando weigeren netjes. Dan de brief kopen en door het hekje.
 - De makelaarstour van begin tot Hoeve 2 (met `snel aan` gaat het vlot).
@@ -61,9 +73,7 @@ wereldkaart, Handje helpen en het hele Sherlock-verhaal.
 
 ## Bekende gaten
 
-- Geen decowinkel (kopen van deco, paden en hekjes trekken): alleen gekregen stukken staan in het schuurtje.
-- De wereldkaart (toets M) is ook vóór het kopen te openen.
-- Sherlock-getuigen en scènes staan naast de speler, niet bij het bureau; vlaggen als `opas_kelder`, `bureau_eindlook`,
-  `oma_bestelling`, `recept_theetaartje` worden bewaard maar doen nog niks.
-- De ansichtkaartjes van de makelaar op vakantie komen alleen via de vaste plukjes, niet per post.
+- Geen decowinkel (kopen van deco, paden en hekjes trekken): alleen gekregen stukken staan in het schuurtje (deco-slice).
+- Getuigen van een lopende zaak staan nog op hun vaste tegel (niet bij "hun" gebouw).
+- Bekende rode tests in de volledige suite die ook op main 1.8.1 rood zijn: zie `NOTITIES_AFWERKING.md`.
 - Zie ook `NOTITIES_INTEGRATIE.md` en de slice-notities (`NOTITIES_*.md`).

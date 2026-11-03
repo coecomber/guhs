@@ -118,6 +118,9 @@ public final class Base {
     /** The makelaar's tutorial (Makelaarstour): 0 not started, 1..5 the steps, 6 done (he went on holiday). */
     public int tutorial;
     public int knusGemeld;
+    /** (1.9 afwerking) Sherlock's reward flags, mirrored here so the village itself can use them (stamp, recipes, client):
+     *  {@code recept_theetaartje}, {@code oma_bestelling}, {@code opas_kelder}, {@code bertha_optreden}, {@code bureau_eindlook} ... */
+    public final List<String> beloningen = new ArrayList<>();
     public long bijgewerkt;
     /** The blocks in the world are behind: stamp on the next visit. */
     public boolean moetStempelen = true;
@@ -552,7 +555,34 @@ public final class Base {
                 paadjes++;
             }
         }
-        return k + paadjes / 10 + knusDeco;
+        return k + paadjes / 10 + knusDeco + kaartjesbordExtra();
+    }
+
+    /** (1.9 afwerking) How many postcards of the makelaar this village has (found while clearing + sent from his holiday). */
+    public int ansichtkaarten() {
+        int n = 0;
+        for (String v : vondsten) {
+            if (v.startsWith("ansichtkaart")) {
+                n++;
+            }
+        }
+        return Math.min(8, n);
+    }
+
+    /** The Kaartjesbord (deco.md #64) into the decoschuurtje, unless the village already has one (stored or placed). */
+    public void kaartjesbordErbij() {
+        if (!decoOpslag.containsKey("kaartjesbord") && deco.stream().noneMatch(d -> d.id().equals("kaartjesbord"))) {
+            decoOpslag.put("kaartjesbord", 1);
+        }
+    }
+
+    /** deco.md #64: the board grows with every card, 2 Knusheid per card (the piece itself already counts 2). */
+    private int kaartjesbordExtra() {
+        boolean staat = false;
+        for (Deco d : deco) {
+            staat |= d.id().equals("kaartjesbord");
+        }
+        return staat ? 2 * Math.max(0, ansichtkaarten() - 1) : 0;
     }
 
     // =====================================================================================================================
@@ -1032,6 +1062,9 @@ public final class Base {
             return new Fout("erfenis.fout.weg");
         }
         Recept r = Productie.recepten(g.type).get(keuze);
+        if (!Productie.magRecept(this, r)) {
+            return new Fout("erfenis.fout.recept_geheim");
+        }
         if (r.minLevel() > Math.max(1, g.level)) {
             return new Fout("erfenis.fout.recept_level", Integer.toString(r.minLevel()));
         }
@@ -1303,8 +1336,8 @@ public final class Base {
             vondst(vast);
             if (vast.equals("trekguh")) {
                 decoOpslag.merge("trekguh", 1, Integer::sum);
-            } else if (vast.startsWith("ansichtkaart") && !decoOpslag.containsKey("kaartjesbord")) {
-                decoOpslag.put("kaartjesbord", 1);
+            } else if (vast.startsWith("ansichtkaart")) {
+                kaartjesbordErbij();
             }
             bijzonder = true;
         }
@@ -1409,6 +1442,7 @@ public final class Base {
         leverTegoed.forEach((g, v) -> lt.putDouble(g.id, v));
         t.put("LeverTegoed", lt);
         t.put("Vondsten", tekstLijst(vondsten));
+        t.put("Beloningen", tekstLijst(beloningen));
         t.put("PadSoorten", tekstLijst(padSoorten));
         boolean paadjes = false;
         for (byte p : paden) {
@@ -1528,6 +1562,9 @@ public final class Base {
         }
         for (Tag e : t.getListOrEmpty("Vondsten")) {
             e.asString().ifPresent(b.vondsten::add);
+        }
+        for (Tag e : t.getListOrEmpty("Beloningen")) {
+            e.asString().ifPresent(b.beloningen::add);
         }
         for (Tag e : t.getListOrEmpty("PadSoorten")) {
             e.asString().ifPresent(b.padSoorten::add);

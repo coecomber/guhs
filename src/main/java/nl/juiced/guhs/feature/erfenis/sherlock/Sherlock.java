@@ -57,8 +57,10 @@ import nl.juiced.guhs.network.ModNetworking;
  * bubble above the bureau in the overview), {@link #beloningen} (deco and reward flags), {@link Guhrrit} (the tutorial's makelaar).
  */
 public final class Sherlock {
-    /** (optional, kern) where the Detectivebureau of a player stands; unused when null. */
+    /** (kern, set by Afwerking) the spot in front of the door of a player's Detectivebureau (feet); null: no bureau (yet). */
     public static BiFunction<MinecraftServer, UUID, BlockPos> bureauPlek = (s, u) -> null;
+    /** (kern, set by Afwerking) which way the bureau's door looks out (with {@link #bureauPlek}). */
+    public static BiFunction<MinecraftServer, UUID, net.minecraft.core.Direction> bureauUit = (s, u) -> null;
 
     static final String GETUIGE = "sherlock_getuige", VADSON = "sherlock_vadson", TERUG_NAAR_BORD = "sherlock_terugbord";
     private static final int GEZIEN = 1, WAAR = 2, TOON = 3, BORD = 4, DOEI = 9;
@@ -609,6 +611,7 @@ public final class Sherlock {
             if (!v.beloningen.add(b)) {
                 continue;
             }
+            nl.juiced.guhs.feature.erfenis.Afwerking.beloning(p, b);   // the village itself (kelder, eindlook, recipe, Oma, Bertha...)
             if (Zaken.DECO.contains(b)) {
                 ErfenisDeco.geef(server, p.getUUID(), b);
                 p.sendSystemMessage(Component.translatable("sherlock.bericht.deco", Component.translatable("sherlock.deco." + b)).withStyle(ChatFormatting.GREEN));

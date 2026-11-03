@@ -50,6 +50,8 @@ public final class Bestelling {
     public String hulp = "";
     /** The cart drives home empty (refused): the next order comes after the normal wait. */
     public boolean geweigerd;
+    /** (1.9 afwerking, Sherlock zaak 4) Oma Breiguh rides along and orders herself: +50% and an extraatje on delivery. */
+    public boolean oma;
 
     public double factor() {
         return ster ? STER : relatie < 0 ? LAGER : relatie > 0 ? HOGER : GELIJK;
@@ -197,6 +199,7 @@ public final class Bestelling {
         t.putInt("Reden", reden);
         t.putString("Hulp", hulp);
         t.putBoolean("Geweigerd", geweigerd);
+        t.putBoolean("Oma", oma);
         return t;
     }
 
@@ -218,6 +221,7 @@ public final class Bestelling {
         b.reden = t.getIntOr("Reden", 0);
         b.hulp = t.getStringOr("Hulp", "");
         b.geweigerd = t.getBooleanOr("Geweigerd", false);
+        b.oma = t.getBooleanOr("Oma", false);
         return b;
     }
 }

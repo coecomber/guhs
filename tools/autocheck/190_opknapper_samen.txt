@@ -198,6 +198,7 @@ unlock
 /item replace entity @s weapon.mainhand with minecraft:air
 /tp @s 2998.5 140 3003.5 180 20
 wait 10
+gui keep
 use 2999 140 3001
 wait 20
 shot samen_21_leverkist_post gui

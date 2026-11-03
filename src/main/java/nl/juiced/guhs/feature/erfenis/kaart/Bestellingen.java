@@ -70,6 +70,11 @@ public final class Bestellingen {
 
         /** Whether the player can already make this good (an order from a higher village may ask one of the next tier). */
         boolean kanMaken(BestelGoed g);
+
+        /** (1.9 afwerking) Does Oma Breiguh order here (Sherlock's reward oma_bestelling)? */
+        default boolean oma() {
+            return false;
+        }
     }
 
     private Bestellingen() {
@@ -181,6 +186,11 @@ public final class Bestellingen {
                     b.maak(rng, buur.id(), tier, Integer.signum(buur.hoeve() - o.hoeve()), b.ster, o::kanMaken);
                     if (b.ster) {
                         b.deco = sterDeco(o.hoeve(), rng);
+                    }
+                    // Sherlock zaak 4: Oma Breiguh often rides along and orders herself (one in three ordinary carts), +50%
+                    b.oma = !b.ster && o.oma() && rng.nextInt(3) == 0;
+                    if (b.oma) {
+                        b.beloning = (int) Math.round(b.beloning * 1.5);
                     }
                     long van = Math.max(b.eind, nu - 24 * 3_600_000L);
                     if (meteen) {   // the very first carts are there at once
@@ -327,6 +337,11 @@ public final class Bestellingen {
             public boolean kanMaken(BestelGoed g) {
                 return ErfenisEconomie.heeft(server, speler, g.id) > 0;
             }
+
+            @Override
+            public boolean oma() {
+                return nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.beloningen(server, speler).contains("oma_bestelling");
+            }
         };
     }
 
@@ -414,7 +429,9 @@ public final class Bestellingen {
         t.putLong("Nu", System.currentTimeMillis());
         int markt = KaartFeature.BRON.marktpleinLevel(server, speler);
         t.putInt("Marktplein", markt);
-        t.putInt("Geleverd", s.geleverd);
+        // the kern's count is the real one (Hoeve goals; the dev commands and the demo set it too)
+        nl.juiced.guhs.feature.erfenis.Base kern = nl.juiced.guhs.feature.erfenis.ErfenisData.get(server).van(speler);
+        t.putInt("Geleverd", Math.max(s.geleverd, kern == null ? 0 : kern.bestellingen));
         t.putInt("Stempels", s.stempels);
         ListTag l = new ListTag();
         if (s.ster != null && s.ster.fase != Bestelling.WACHT) {
@@ -431,7 +448,7 @@ public final class Bestellingen {
         CompoundTag c = b.save();
         c.putInt("Slot", slot);
         NpcDorp d = KaartData.get(server).npc(b.dorp);
-        c.putString("DorpNaam", d == null ? "?" : d.naam);
+        c.putString("DorpNaam", b.oma ? "Oma Breiguh (" + (d == null ? "?" : d.naam) + ")" : d == null ? "?" : d.naam);
         c.putInt("Kleur", d == null ? 0xFFF29BB8 : d.kleur);
         c.putInt("Uitbetaling", b.uitbetaling());
         c.putInt("DecoKans", b.decoKans());
@@ -528,6 +545,16 @@ public final class Bestellingen {
         p.sendSystemMessage(Component.translatable(b.ster ? "erfenis.kaart.bestel.geleverd_ster" : "erfenis.kaart.bestel.geleverd", naam, geld));
         if (deco != null) {
             p.sendSystemMessage(Component.translatable("erfenis.kaart.bestel.cadeau", naam, Component.translatable("erfenis.kaart.deco." + deco)));
+        }
+        if (b.oma) {   // Sherlock zaak 4: Oma's extraatje (one in four: a Decobon, else a little bag of Guhlden)
+            b.oma = false;
+            if (new Random(b.start).nextInt(4) == 0) {
+                nl.juiced.guhs.feature.erfenis.koppeling.Dorpsbeloningen.geefDecobon(server, id, 1);
+                p.sendSystemMessage(Component.translatable("erfenis.afwerking.oma.decobon").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            } else {
+                int extra = ErfenisEconomie.geef(server, id, "guhlden", 25 + geld / 5);
+                p.sendSystemMessage(Component.translatable("erfenis.afwerking.oma.extra", extra).withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+            }
         }
         p.level().playSound(null, p.blockPosition(), SoundEvents.VILLAGER_CELEBRATE, SoundSource.PLAYERS, 0.8f, 1.3f);
         ErfenisEconomie.bestellingGeleverd(server, id);   // kern counts (Hoeve goals) and fires bestelling_geleverd:<totaal>
