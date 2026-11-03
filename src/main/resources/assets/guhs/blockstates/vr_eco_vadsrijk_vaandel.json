@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/vr_eco_vadsrijk_vaandel"
+    },
+    "facing=east": {
+      "model": "guhs:block/vr_eco_vadsrijk_vaandel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/vr_eco_vadsrijk_vaandel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/vr_eco_vadsrijk_vaandel",
+      "y": 270
+    }
+  }
+}

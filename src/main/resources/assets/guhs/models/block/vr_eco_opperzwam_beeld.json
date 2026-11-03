@@ -1,0 +1,178 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "sokkel": "guhs:block/vadsrijk/economie/sokkel",
+    "zwamsteel": "guhs:block/vadsrijk/economie/zwamsteel",
+    "zwamsteel_gezicht": "guhs:block/vadsrijk/economie/zwamsteel_gezicht",
+    "zwamhoed": "guhs:block/vadsrijk/economie/zwamhoed",
+    "particle": "guhs:block/vadsrijk/economie/sokkel"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#sokkel"
+        },
+        "south": {
+          "texture": "#sokkel"
+        },
+        "east": {
+          "texture": "#sokkel"
+        },
+        "west": {
+          "texture": "#sokkel"
+        },
+        "up": {
+          "texture": "#sokkel"
+        },
+        "down": {
+          "texture": "#sokkel"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        2,
+        5
+      ],
+      "to": [
+        11,
+        9,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zwamsteel_gezicht",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#zwamsteel"
+        },
+        "east": {
+          "texture": "#zwamsteel"
+        },
+        "west": {
+          "texture": "#zwamsteel"
+        },
+        "up": {
+          "texture": "#zwamsteel"
+        },
+        "down": {
+          "texture": "#zwamsteel"
+        }
+      }
+    },
+    {
+      "from": [
+        1,
+        9,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zwamhoed"
+        },
+        "south": {
+          "texture": "#zwamhoed"
+        },
+        "east": {
+          "texture": "#zwamhoed"
+        },
+        "west": {
+          "texture": "#zwamhoed"
+        },
+        "up": {
+          "texture": "#zwamhoed"
+        },
+        "down": {
+          "texture": "#zwamhoed"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        13,
+        3
+      ],
+      "to": [
+        13,
+        15,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zwamhoed"
+        },
+        "south": {
+          "texture": "#zwamhoed"
+        },
+        "east": {
+          "texture": "#zwamhoed"
+        },
+        "west": {
+          "texture": "#zwamhoed"
+        },
+        "up": {
+          "texture": "#zwamhoed"
+        },
+        "down": {
+          "texture": "#zwamhoed"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        15,
+        6
+      ],
+      "to": [
+        10,
+        16,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#zwamhoed"
+        },
+        "south": {
+          "texture": "#zwamhoed"
+        },
+        "east": {
+          "texture": "#zwamhoed"
+        },
+        "west": {
+          "texture": "#zwamhoed"
+        },
+        "up": {
+          "texture": "#zwamhoed"
+        },
+        "down": {
+          "texture": "#zwamhoed"
+        }
+      }
+    }
+  ]
+}

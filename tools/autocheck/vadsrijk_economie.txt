@@ -1,0 +1,59 @@
+# Vadsrijk economie slice: screens, mounts, deco blocks, models (dev only)
+section Vadsrijk economie
+/gamemode creative
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 400
+/guhs vadsrijk munten 50000
+/guhs vadsrijk eco spul
+/guhs vadsrijk loot episch kussenzwaard 8
+/guhs vadsrijk loot legendarisch klodderjas 10
+wait 20
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 20
+shot eco_winkel gui
+widgets
+gui close
+gui keep
+/guhs vadsrijk eco winkel cosmetica
+wait 20
+shot eco_cosmetica gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel uitrusting
+wait 20
+shot eco_uitrusting gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 20
+click 20 60
+wait 10
+shot eco_smid gui
+gui close
+gui keep
+/guhs vadsrijk eco markt
+wait 20
+shot eco_markt gui
+gui close
+/guhs vadsrijk eco rijdier hoedhupper
+/guhs vadsrijk eco rijdier klodderros
+gui keep
+/guhs vadsrijk eco stal
+wait 20
+shot eco_stal gui
+gui close
+/summon guhs:vr_eco_hoedhupper ~3 ~ ~3
+/summon guhs:vr_eco_klodderros ~-3 ~ ~3
+look 0 20
+wait 5
+shot eco_rijdieren
+/setblock ~2 ~ ~5 guhs:vr_eco_mini_koning_klodder[facing=south]
+/setblock ~0 ~ ~5 guhs:vr_eco_opperzwam_beeld[facing=south]
+/setblock ~-2 ~ ~5 guhs:vr_eco_klodderreus_knuffel[facing=south]
+/setblock ~-4 ~ ~5 guhs:vr_eco_vadsrijk_vaandel[facing=south]
+wait 10
+shot eco_deco
+modelcheck
+quit
