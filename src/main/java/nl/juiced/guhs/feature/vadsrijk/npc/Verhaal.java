@@ -194,13 +194,7 @@ public final class Verhaal {
      * reflection: this tree may not hold it). The test also reports the unmasking to the quest.
      */
     static void koppelSpion() {
-        try {
-            Class<?> c = Class.forName("nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion");
-            java.lang.reflect.Field f = c.getField("MAG_ONTMASKEREN");
-            f.set(null, (java.util.function.Predicate<ServerPlayer>) Verhaal::magOntmaskeren);
-        } catch (ReflectiveOperationException | LinkageError | ClassCastException e) {
-            // (no bazen slice in this tree: our own disguised Akim does it, see QuestMotor)
-        }
+        nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion.MAG_ONTMASKEREN = Verhaal::magOntmaskeren;   // (direct since the integration)
         // wereld: the airship to the haven only after the camp story (the BAM and the Klodderreus); back to the camp always
         NpcRollen.zetVeld("nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen#MAG_VLIEGEN",
                 (java.util.function.BiPredicate<ServerPlayer, Object>) (p, naar) -> !String.valueOf(naar).equals("HAVEN")

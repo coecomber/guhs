@@ -177,13 +177,7 @@ public final class KernRegistry {
                 4, nl.juiced.guhs.feature.vadsrijk.kern.Element.WATER, 0.1));
         Spawners.registreer(new Spawners.Spawner("kern:proeftuin_west", new net.minecraft.core.BlockPos(3040, Vadsrijk.GROND + 1, 3160), 16, PROEFKLODDER, 5, 200, 1,
                 2, nl.juiced.guhs.feature.vadsrijk.kern.Element.NATUUR, 0.0));
-        Arenas.registreer(new Arena("kern:proefarena", Ondergrond.ARENA, Ondergrond.ARENA_STRAAL, Ondergrond.ARENA_DEUR, 60, Ondergrond.ARENA_BORD,
-                "vadsrijk.kern.baas.klodderreus"), sl -> {
-                    Klodderreus k = KLODDERREUS.get().create(sl, net.minecraft.world.entity.EntitySpawnReason.SPAWNER);
-                    if (k != null) {
-                        k.stelIn(3, nl.juiced.guhs.feature.vadsrijk.kern.Element.WATER, false, java.util.Set.of());
-                    }
-                    return k;
-                });
+        // (integration 1.10.0: the Grauwe Klodderreus has ONE arena, the npc slice's quest-gated pond arena "npc:kampvijver" at
+        // Knuffelkamp, npc.Verhaal#registreerArena; kern's proeftuin arena "kern:proefarena" is retired. Dev: /summon guhs:vr_klodderreus)
     }
 }

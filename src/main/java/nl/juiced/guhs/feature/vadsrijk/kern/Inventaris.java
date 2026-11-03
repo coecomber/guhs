@@ -210,6 +210,17 @@ public final class Inventaris {
         return (int) Spelers.data(p).gevonden.stream().filter(t -> w.equals(t.getStringOr(WERELD, THUIS))).count();
     }
 
+    /**
+     * Public (integration 1.10.0, for economie): keeps a stack that did not fit in the player's "found items" of the world the
+     * player is in now (handed out later by {@link #haalGevonden}).
+     */
+    public static void bewaar(ServerPlayer p, ItemStack s) {
+        if (!s.isEmpty()) {
+            SpelerData d = Spelers.data(p);
+            bewaar(p, d, s.copy(), d.binnen ? RIJK : THUIS);
+        }
+    }
+
     private static void bewaar(ServerPlayer p, SpelerData d, ItemStack s, String wereld) {
         ItemStackWithSlot.CODEC.encodeStart(ops(p), new ItemStackWithSlot(0, s)).result().ifPresent(t -> {
             if (t instanceof CompoundTag c) {

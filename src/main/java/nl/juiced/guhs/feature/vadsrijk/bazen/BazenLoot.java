@@ -83,8 +83,9 @@ public final class BazenLoot {
     }
 
     private static DeferredItem<Item> harnas(String id, String type, Slot slot) {
-        return BazenRegistry.ITEMS.registerItem(id, p -> new BaasItem(p, type), () -> new Item.Properties().stacksTo(1)
-                .component(DataComponents.EQUIPPABLE, Equippable.builder(slot.vanilla).build()));
+        // visible on the player (kern's pink look)
+        return BazenRegistry.ITEMS.registerItem(id, p -> new BaasItem(p, type),
+                () -> nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry.harnasEigenschappen(slot, null));
     }
 
     private static DeferredItem<Item> trofeeItem(String id) {
@@ -160,6 +161,9 @@ public final class BazenLoot {
         });
     }
 
+    /** Chance per chest of Koning Klodder's Klodderzadel (economie's {@code vr_item_zadel_klodderros}). */
+    public static final double ZADEL_KANS = 0.06;
+
     /** The table for the random gear part: economie's per-boss table when it exists, else kern's reference table. */
     @Nullable
     static LootTabel tabel(String baas) {
@@ -214,6 +218,10 @@ public final class BazenLoot {
         }
         if (eerste || r.nextDouble() < 0.25) {
             items.add(trofee(baas));
+        }
+        // integration 1.10.0: Koning Klodder's rare saddle (economie: unlocks the Klodderros mount)
+        if (baas.equals("koning_klodder") && r.nextDouble() < ZADEL_KANS) {
+            items.add(new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.ZADEL_KLODDERROS.get()));
         }
         if (eerste) {
             extra.putBoolean(sleutel, true);

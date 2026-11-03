@@ -23,18 +23,16 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.kern.Tips;
-import nl.juiced.guhs.feature.vadsrijk.kern.baas.BaasKist;
+import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabel;
 import nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas;
 
 /**
  * What the three bazen bosses share on top of kern's {@link VadsrijkBaas}: GeckoLib (controllers "beweeg" idle/walk and a
  * triggerable "actie"), the boss music hook, the first-fight tip, and personal chests with OUR loot ({@link BazenLoot#kist}:
- * named items, trophies, everything gebonden). Kern's chest code would roll its plain table: during {@code super.beloon} the
- * loot table is hidden so kern only gives xp and notifies the arena, then we place the chests ourselves.
+ * named items, trophies, everything gebonden) through kern's {@code kistInhoud} hook (integration 1.10.0; was a beloon hack).
  */
 public abstract class BazenBaas extends VadsrijkBaas implements GeoEntity {
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
-    private boolean geenTabel;
     /** Where the chests went (for the gametest). */
     public final List<BlockPos> kisten = new ArrayList<>();
 
@@ -52,7 +50,7 @@ public abstract class BazenBaas extends VadsrijkBaas implements GeoEntity {
     @Nullable
     @Override
     public String lootTabel() {
-        return geenTabel ? null : "bazen:" + baasId();
+        return "bazen:" + baasId();
     }
 
     @Override
@@ -67,33 +65,30 @@ public abstract class BazenBaas extends VadsrijkBaas implements GeoEntity {
         Tips.toon(p, "vadsrijk.bazen.tip." + baasId());
     }
 
+    @Override
     protected Vec3 kistMidden() {
         return arena != null ? Vec3.atBottomCenterOf(arena.centrum()) : position();
     }
 
+    /** Our chest contents (kern hook, contract 13): BazenLoot's named items, trophies, economie gear, all gebonden. */
+    @Override
+    protected LootTabel.Resultaat kistInhoud(ServerPlayer p, boolean eersteKill) {
+        return BazenLoot.kist(baasId(), p, mobLevel(), getRandom());
+    }
+
+    @Override
+    protected void kistGeplaatst(ServerPlayer p, BlockPos pos) {
+        kisten.add(pos);
+    }
+
     @Override
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
-        geenTabel = true;
-        try {
-            super.beloon(sl, helpers);
-        } finally {
-            geenTabel = false;
-        }
         kisten.clear();
-        int i = 0;
-        Vec3 m = kistMidden();
+        super.beloon(sl, helpers);   // xp, first-kill memory, our chests via kistInhoud, arena notice
         for (UUID id : bijdragen.spelers()) {
-            if (!(sl.getEntity(id) instanceof ServerPlayer p)) {
-                continue;
+            if (sl.getEntity(id) instanceof ServerPlayer p) {
+                BazenMuziek.stop(p);
             }
-            BazenMuziek.stop(p);
-            if (p.distanceTo(this) > 64 || !bijdragen.verdientKist(id)) {
-                continue;
-            }
-            double a = i++ * 2.4;
-            BlockPos pos = BlockPos.containing(m.add(Math.cos(a) * 3, 0, Math.sin(a) * 3));
-            BaasKist.plaats(sl, p, pos, BazenLoot.kist(baasId(), p, mobLevel(), getRandom()));
-            kisten.add(pos);
         }
     }
 

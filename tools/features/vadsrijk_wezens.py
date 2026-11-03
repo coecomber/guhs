@@ -985,8 +985,42 @@ def assets(a, w=_schrijf_json):
     return n
 
 
+def uiterlijken(a, w=_schrijf_json):
+    """Integration 1.10.0: a worn look per armour piece (KernRegistry.harnasEigenschappen(slot, "vr_mob_<id>")):
+    assets/guhs/equipment/vr_mob_<id>.json + the two layer textures = vanilla iron tinted with the piece's main colour."""
+    import zipfile
+    from io import BytesIO
+    from PIL import Image
+    jar = os.path.join("build", "moddev", "artifacts", "minecraft-patched-26.1.2.112.jar")
+    bron = {}
+    if os.path.exists(jar):
+        with zipfile.ZipFile(jar) as z:
+            for laag in ("humanoid", "humanoid_leggings"):
+                bron[laag] = Image.open(BytesIO(z.read(f"assets/minecraft/textures/entity/equipment/{laag}/iron.png"))).convert("RGBA")
+    for hid, (_slot, _naam, kleur, _k2, _set) in HARNAS.items():
+        uid = "vr_mob_" + hid
+        w(os.path.join(a, "equipment", uid + ".json"), {"layers": {
+            "humanoid": [{"texture": "guhs:" + uid}], "humanoid_leggings": [{"texture": "guhs:" + uid}]}})
+        for laag in ("humanoid", "humanoid_leggings"):
+            doel = os.path.join(a, "textures", "entity", "equipment", laag, uid + ".png")
+            if laag not in bron:
+                if not os.path.exists(doel):
+                    print("vadsrijk_wezens: no minecraft jar (run a gradle build first) for", doel)
+                continue
+            img = bron[laag].copy()
+            px = img.load()
+            for y in range(img.height):
+                for x in range(img.width):
+                    r, g, b, al = px[x, y]
+                    l = min(1.0, (0.3 * r + 0.59 * g + 0.11 * b) / 255 * 1.15)
+                    px[x, y] = (int(kleur[0] * l), int(kleur[1] * l), int(kleur[2] * l), al)
+            os.makedirs(os.path.dirname(doel), exist_ok=True)
+            img.save(doel)
+
+
 def build(h):
     assets(h.A, h.w)
+    uiterlijken(h.A, h.w)
     for k, nl in teksten().items():
         h.lang(k, nl, nl)
 
@@ -994,6 +1028,7 @@ def build(h):
 def _direct():
     a = os.path.join("src", "main", "resources", "assets", "guhs")
     n = assets(a)
+    uiterlijken(a)
     t = teksten()
     for taal in ("nl_nl", "en_us"):
         p = os.path.join(a, "lang", f"{taal}.json")

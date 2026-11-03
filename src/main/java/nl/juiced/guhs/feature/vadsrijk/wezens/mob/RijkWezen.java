@@ -52,7 +52,6 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
  * better elite loot (its own table "<table>_elite"), and the first-time hint of the creature.
  */
 public abstract class RijkWezen extends VadsrijkMob implements GeoEntity {
-    private static final EntityDataAccessor<Boolean> ELITE = SynchedEntityData.defineId(RijkWezen.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> KLEIN = SynchedEntityData.defineId(RijkWezen.class, EntityDataSerializers.BOOLEAN);
     /** A held pose (0 = none): the zwamwachter's block, the druipslijm on the ceiling, the hoedjesbol's charge... */
     private static final EntityDataAccessor<Integer> HOUDING = SynchedEntityData.defineId(RijkWezen.class, EntityDataSerializers.INT);
@@ -105,7 +104,6 @@ public abstract class RijkWezen extends VadsrijkMob implements GeoEntity {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder b) {
         super.defineSynchedData(b);
-        b.define(ELITE, false);
         b.define(KLEIN, false);
         b.define(HOUDING, 0);
     }
@@ -113,15 +111,15 @@ public abstract class RijkWezen extends VadsrijkMob implements GeoEntity {
     @Override
     public void stelIn(int level, @Nullable Element element, boolean elite, Set<Affix> affixen) {
         super.stelIn(level, element, elite, affixen);
-        entityData.set(ELITE, elite);
         if (klein()) {
             zetMaxVads(maxVads() * 0.4, false);
             heal(maxVads());
         }
     }
 
+    /** Kern's elite flag is synced since contract 13 (integration dropped the own copy). */
     public boolean eliteZichtbaar() {
-        return entityData.get(ELITE);
+        return elite();
     }
 
     public boolean klein() {

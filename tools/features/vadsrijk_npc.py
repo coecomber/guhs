@@ -199,7 +199,7 @@ KAMPWACHT_REGELS = [
 QUEST_ITEMS = {
     "grauwe_pluis": ("Grauwe pluis", "minecraft:item/gray_dye"),
     "wolletje": ("Bolletje wol van Oma Truus", "minecraft:item/string"),
-    "zwamhoedje": ("Zwamhoedje", "minecraft:item/red_mushroom"),
+    "zwamhoedje": ("Zwamhoedje", "minecraft:block/red_mushroom"),
     "slijmdruppel": ("Verse slijmdruppel", "minecraft:item/slime_ball"),
     "druppelkristal": ("Druppelkristal", "minecraft:item/prismarine_crystals"),
     "kistje": ("Kistje van Koopman Kees", "minecraft:item/bundle"),

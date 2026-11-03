@@ -380,25 +380,8 @@ ICONEN = {
     "vr_item_rijfluitje": fluitje,
     "vr_item_zadel_hoedhupper": lambda: zadel((225, 60, 70), [(5, 5), (9, 4), (11, 6)]),
     "vr_item_zadel_klodderros": lambda: zadel((110, 200, 240), [(6, 5), (10, 5)], (230, 120, 190)),
-    # gear
-    "vr_item_klodderzwaard": lambda: zwaard((120, 210, 240)),
-    "vr_item_pluisboog": lambda: boog((210, 140, 100), (255, 190, 220)),
-    "vr_item_klodderkatapult": katapult,
-    "vr_item_vadsstaf": lambda: staf(_orb),
-    "vr_item_zwamstaf": lambda: staf(_zwamtop),
-    "vr_item_pluisbroek": lambda: broek(PLUIS),
-    "vr_item_pluissloffen": lambda: sloffen(PLUIS),
-    "vr_item_klodderhelm": lambda: helm(KLODDER),
-    "vr_item_klodderjas": lambda: borst(KLODDER, (80, 170, 170)),
-    "vr_item_klodderbroek": lambda: broek(KLODDER),
-    "vr_item_kloddersloffen": lambda: sloffen(KLODDER),
-    "vr_item_zwamhoed": lambda: helm(ZWAM, _stippen),
-    "vr_item_zwamgewaad": lambda: borst((240, 225, 205), ZWAM),
-    "vr_item_zwambroek": lambda: broek((235, 215, 190)),
-    "vr_item_zwamsloffen": lambda: sloffen(ZWAM),
-    "vr_item_klodderkroon": kroon,
 }
-HANDHELD = {"vr_item_klodderzwaard", "vr_item_pluisboog", "vr_item_klodderkatapult", "vr_item_vadsstaf", "vr_item_zwamstaf"}
+HANDHELD = set()   # (the gear base types moved to their owners at the 1.10.0 integration: klassen/wezens/bazen)
 
 # ======================================================================================================================
 # guh clothes (GuhClothes VR_ITEM_*; existing bones only)
@@ -787,23 +770,6 @@ TEKSTEN = {
     "item.guhs.vr_item_vadsrijksjaal": "Vadsrijk-sjaal",
     "gui.guhs.kledingbron.vadsrijk": "Het Vadsrijk (Thuisbezorger in Zwamzoet)",
     E + "kledingprijs": "Vadsmunten",
-    # gear names + flavour
-    "vadsrijk.loot.klodderzwaard": "Klodderzwaard",
-    "vadsrijk.loot.pluisboog": "Pluisboog",
-    "vadsrijk.loot.klodderkatapult": "Klodderkatapult",
-    "vadsrijk.loot.vadsstaf": "Vadsstaf",
-    "vadsrijk.loot.zwamstaf": "Zwamstaf",
-    "vadsrijk.loot.pluisbroek": "Pluisbroek",
-    "vadsrijk.loot.pluissloffen": "Pluissloffen",
-    "vadsrijk.loot.klodderhelm": "Klodderhelm",
-    "vadsrijk.loot.klodderjas": "Klodderjas",
-    "vadsrijk.loot.klodderbroek": "Klodderbroek",
-    "vadsrijk.loot.kloddersloffen": "Kloddersloffen",
-    "vadsrijk.loot.zwamhoed": "Zwamhoed",
-    "vadsrijk.loot.zwamgewaad": "Zwamgewaad",
-    "vadsrijk.loot.zwambroek": "Zwambroek",
-    "vadsrijk.loot.zwamsloffen": "Zwamsloffen",
-    "vadsrijk.loot.klodderkroon": "Het Klodderkroontje van Koning Klodder",
     # shops
     E + "winkel.drankjes": "Drankjes van Juf Bubbelvads",
     E + "winkel.uitrusting": "Uitrusting bij Meester Pluisnaald",
@@ -1006,22 +972,6 @@ TEKSTEN = {
     E + "tip.rijden": "Spatie = een grote hup. Word je geraakt, dan schrikt je rijdier en huppelt hij weg.",
 }
 FLAVOUR = {
-    "klodderzwaard": ["Plakt een beetje. Dat hoort zo.", "Gesmeed uit drie gelukkige klodders.", "Boing!"],
-    "pluisboog": ["Schiet pijltjes van pluis. Au? Nee, aai.", "De pees is van eenhoornhaar. Zegt de verkoper.", "Pluis pluis pluis."],
-    "klodderkatapult": ["Klodder erin, klodder eruit.", "Ruikt naar aardbeienslijm.", "Mik op het hart!"],
-    "vadsstaf": ["Gloeit roze als je aan knuffels denkt.", "Vahoege magie, gratis bij een knabbel.", "Zwaai zwaai!"],
-    "zwamstaf": ["De zwam bovenop zegt soms 'njeg'.", "Sporen van wijsheid.", "Groeit een beetje als je hem water geeft."],
-    "pluisbroek": ["Superzacht. Niet kriebelig. Beloofd.", "Met een zakje voor knabbels.", "Knieën van pluis."],
-    "pluissloffen": ["Je hoort jezelf niet lopen.", "Warme pootjes!", "Sloffen-dag is elke dag."],
-    "klodderhelm": ["Wiebelt als je knikt.", "Een klodder die je hoofd knuffelt.", "Doorzichtig. Iedereen ziet je haar."],
-    "klodderjas": ["Glibberig van buiten, knus van binnen.", "Waterdicht. Slijmdicht. Mikadicht?", "Boing boing."],
-    "klodderbroek": ["Maakt een klein 'plop'-geluidje bij elke stap.", "Plakt niet aan stoelen. Meestal.", "Blauw en blij."],
-    "kloddersloffen": ["Spring een beetje hoger, voel je dat?", "Klodderpootjes!", "Laat kleine slijmstipjes achter."],
-    "zwamhoed": ["Wijs als een oude paddenstoel.", "Stippen = slimheid.", "Niet opeten."],
-    "zwamgewaad": ["Ruikt naar bos na de regen.", "Sporen van oude verhalen.", "Wuift in de wind."],
-    "zwambroek": ["Steeltjes-stevig.", "Voor lange wandelingen in het Sporenwoud.", "Met mosjes op de knieën."],
-    "zwamsloffen": ["Stap stap stip.", "Zachte zwamzooltjes.", "Groeien ze? Nee. Toch?"],
-    "klodderkroon": ["Koning Klodder gaf hem zomaar. Hij had er nog zeven.", "Wiebelt koninklijk.", "Guhddelijk mooi."],
 }
 for _t, _lijnen in FLAVOUR.items():
     for _i, _l in enumerate(_lijnen):

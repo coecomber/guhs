@@ -39,12 +39,36 @@ public final class KlassenRegistry {
     private KlassenRegistry() {
     }
 
+    /**
+     * Integration 1.10.0 (contract 13): the tree nodes that change a skill's cooldown/energy go through kern's
+     * {@code Vaardigheden.COOLDOWN_MOD/ENERGIE_MOD} (before: patched right after kern paid), and the HUD shows the advancement title.
+     */
+    private static void kernHaken() {
+        nl.juiced.guhs.feature.vadsrijk.kern.Vaardigheden.COOLDOWN_MOD.add((p, v) -> {
+            int min = switch (v.id()) {
+                case "rolsalto" -> nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom.heeft(p, "j_plakbom") ? 40 : 0;
+                case "kussenklap" -> nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom.heeft(p, "r_kussenstorm") ? 30 : 0;
+                case "stormsprong" -> nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom.heeft(p, "r_aanloop") ? 60 : 0;
+                default -> 0;
+            };
+            return min <= 0 || v.cooldownTicks() <= 0 ? null : (float) Math.max(0, v.cooldownTicks() - min) / v.cooldownTicks();
+        });
+        nl.juiced.guhs.feature.vadsrijk.kern.Vaardigheden.ENERGIE_MOD.add((p, v) -> {
+            if (v.id().equals("kussenklap") && v.energie() > 0 && nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom.heeft(p, "r_kussenstorm")) {
+                return (float) (Math.max(0, v.energie() - 8) / v.energie());
+            }
+            return null;
+        });
+        Spelers.TITEL_BRON.add(p -> Spelers.klasse(p) == null ? null : Advancement.titelKey(p));
+    }
+
     public static void register(IEventBus modBus) {
         Wapens.ITEMS.register(modBus);
         Wapens.registreer();
         RidderMetBoom.init();
         Pluisjager.init();
         Vadsmagier.init();
+        kernHaken();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Later.tick();
             Schoten.tick();

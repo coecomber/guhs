@@ -64,8 +64,9 @@ public final class NpcRegistry {
             Quests.alle();
             Verhaal.registreerArena();
             Verhaal.koppelSpion();
-            // klassen: the job advancements now come from our quests (its desk stops showing the "Ceremonie" button)
-            NpcRollen.zetVeld("nl.juiced.guhs.feature.vadsrijk.klassen.Advancement#VIA_BALIE", Boolean.FALSE);
+            // klassen: the job advancements now come from our quests (its desk stops showing the "Ceremonie" button); all roles
+            // bound directly to the other slices (integration 1.10.0)
+            NpcRollen.koppelAlles();
         });
         NeoForge.EVENT_BUS.addListener(NpcHaken::klikBlok);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> NpcMarkers.vergeet(e.getEntity().getUUID()));

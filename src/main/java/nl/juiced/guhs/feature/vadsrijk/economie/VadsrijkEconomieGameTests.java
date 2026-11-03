@@ -104,7 +104,7 @@ public class VadsrijkEconomieGameTests {
         }
         helper.assertTrue(verpluisd + max >= 0, "(stats)");
         // 3. reroll with a kept bonus: same count, the kept bonus stays, no duplicate stats
-        Uitrusting ep = Rollen.rol(BasisTypes.van("klodderjas"), 12, Zeldzaamheid.LEGENDARISCH, RandomSource.create(3));
+        Uitrusting ep = Rollen.rol(BasisTypes.van("klodderhesje"), 12, Zeldzaamheid.LEGENDARISCH, RandomSource.create(3));
         for (int i = 0; i < 200; i++) {
             int houd = i % ep.bonussen().size();
             var nieuw = Smid.herrolBonussen(ep, houd, rs);
@@ -119,7 +119,7 @@ public class VadsrijkEconomieGameTests {
     public static void marktKoopVerkoopAtomisch(GameTestHelper helper) {
         MarktData m = new MarktData();
         ServerPlayer verkoper = GuhMockPlayer.of(helper), koper = GuhMockPlayer.of(helper);
-        ItemStack zwaard = gear("klodderzwaard", 6, Zeldzaamheid.EPISCH, 11);
+        ItemStack zwaard = gear("klodderkling", 6, Zeldzaamheid.EPISCH, 11);
         verkoper.getInventory().setItem(3, zwaard.copy());
         Spelers.data(verkoper).munten = 1000;
         // gebonden can't be listed

@@ -262,19 +262,18 @@ public final class Basisaanval {
 
     /**
      * One hit of a klassen skill/shot through the kern pipeline, with the ult charge. {@code krit}: a guaranteed crit (the
-     * Rolsalto / Jachtroes), done here because kern's crit is a roll.
+     * Rolsalto / Jachtroes) through kern's Klap.zekerKritiek.
      */
     public static Schade.Uitkomst treffer(ServerPlayer p, LivingEntity doel, double basis, Element el, Schade.Soort soort, boolean krit, String skill) {
         if (krit) {
-            Stats st = Spelers.stats(p);
-            basis *= 1.5 + st.get(Stat.KRITIEKSCHADE) / 100.0;
+            // (the crit multiplier itself is kern's: Klap.zekerKritiek, contract 13, so the number is gold too)
             if (doel.level() instanceof ServerLevel sl) {
                 sl.sendParticles(ParticleTypes.CRIT, doel.getX(), doel.getY() + doel.getBbHeight() * 0.6, doel.getZ(), 14, 0.3, 0.3, 0.3, 0.3);
                 sl.sendParticles(ParticleTypes.ENCHANTED_HIT, doel.getX(), doel.getY() + doel.getBbHeight() * 0.6, doel.getZ(), 8, 0.3, 0.3, 0.3, 0.2);
                 Fx.geluid(sl, doel.position(), SoundEvents.PLAYER_ATTACK_CRIT, 0.9f, 1.1f);
             }
         }
-        Schade.Uitkomst u = Schade.doe(new Schade.Klap(p, doel, basis, el, soort, !krit, skill));
+        Schade.Uitkomst u = Schade.doe(new Schade.Klap(p, doel, basis, el, soort, true, skill, krit));
         Spelers.laadUlt(p, u.schade());
         if (u.schade() > 0 && doel.level() instanceof ServerLevel sl && soort == Schade.Soort.AFSTAND) {
             Fx.geluid(sl, doel.position(), SoundEvents.ARROW_HIT_PLAYER, 0.35f, 1.5f);

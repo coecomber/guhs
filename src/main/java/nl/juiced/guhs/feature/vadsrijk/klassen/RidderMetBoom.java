@@ -161,13 +161,7 @@ public final class RidderMetBoom implements Klasse {
             ServerLevel sl = (ServerLevel) p.level();
             switch (v.id()) {
                 case "kussenklap" -> {
-                    if (Boom.heeft(p, "r_kussenstorm")) {
-                        Later.na(0, () -> {
-                            Pluisjager.verkort(p, v.id(), 30);
-                            SpelerData d = Spelers.data(p);
-                            d.energie = Math.min(Spelers.maxEnergie(p), Spelers.energie(p) + 8);
-                        });
-                    }
+                    // (r_kussenstorm: -1.5 s cooldown and 8 energy cheaper, KlassenRegistry.kernHaken via kern's COOLDOWN_MOD/ENERGIE_MOD)
                     if (Boom.heeft(p, "r_adv1")) {
                         Later.na(6, () -> {
                             if (p.isRemoved() || !Vadsrijk.in(p)) {
@@ -182,7 +176,7 @@ public final class RidderMetBoom implements Klasse {
                 }
                 case "stormsprong" -> {
                     if (Boom.heeft(p, "r_aanloop")) {
-                        Later.na(0, () -> Pluisjager.verkort(p, v.id(), 60));
+                        // (-3 s cooldown: KlassenRegistry.kernHaken via kern's COOLDOWN_MOD)
                         Statussen.geef(p, Status.SNELPOOTJES, 100, 1, p);
                     }
                 }

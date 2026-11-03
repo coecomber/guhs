@@ -87,15 +87,8 @@ public final class EcoUtil {
         if (s.isEmpty()) {
             return;
         }
-        SpelerData d = Spelers.data(p);
-        ItemStackWithSlot.CODEC.encodeStart(p.registryAccess().createSerializationContext(NbtOps.INSTANCE), new ItemStackWithSlot(0, s.copy())).result()
-                .ifPresent(t -> {
-                    if (t instanceof CompoundTag c) {
-                        c.putString(Inventaris.WERELD, d.binnen ? Inventaris.RIJK : Inventaris.THUIS);
-                        d.gevonden.add(c);
-                        zeg(p, "vadsrijk.economie.tas_vol_kist");
-                    }
-                });
+        Inventaris.bewaar(p, s);   // kern (integration 1.10.0; was an own copy of the encoding)
+        zeg(p, "vadsrijk.economie.tas_vol_kist");
     }
 
     @Nullable

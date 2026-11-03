@@ -111,8 +111,8 @@ public final class WezensRegistry {
     }
 
     private static DeferredItem<Item> harnas(String id, Slot slot) {
-        return ITEMS.registerItem(id, RijkItem::new, () -> new Item.Properties().stacksTo(1)
-                .component(DataComponents.EQUIPPABLE, Equippable.builder(slot.vanilla).build()));
+        // visible on the player: its own tinted look (equipment asset guhs:<id>, tools/features/vadsrijk_wezens.py uiterlijken)
+        return ITEMS.registerItem(id, RijkItem::new, () -> nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry.harnasEigenschappen(slot, id));
     }
 
     private WezensRegistry() {
@@ -148,16 +148,15 @@ public final class WezensRegistry {
         });
         WezensLoot.basisTypes();
         WezensLoot.tabellen();
+        // the stat part of the set bonuses (kern hook, contract 13)
+        nl.juiced.guhs.feature.vadsrijk.kern.Spelers.EXTRA_STATS.add(SetBonussen::stats);
         WezensSpawners.registreer();
         haken();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Effecten.tick();
             DraakVlucht.tick();
             WezensCommando.Later.tick();
-            ServerLevel sl = Vadsrijk.level(e.getServer());
-            if (sl != null && sl.getGameTime() % 20 == 7) {
-                WezensSpawners.tick(sl);
-            }
+            // (the spawners all tick in kern since the integration: Spawners.grot)
         });
         NeoForge.EVENT_BUS.addListener(WezensCommando::register);
     }

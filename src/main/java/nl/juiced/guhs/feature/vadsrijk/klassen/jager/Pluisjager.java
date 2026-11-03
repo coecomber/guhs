@@ -211,7 +211,7 @@ public final class Pluisjager implements Klasse {
                         Basisaanval.treffer(p, e, c.wapenSchade() * 0.8, Element.WATER, Schade.Soort.AFSTAND, false, "plakbom");
                     }
                 });
-                Later.na(0, () -> verkort(p, id(), 40));
+                // (the -2 s cooldown: KlassenRegistry.kernHaken via kern's COOLDOWN_MOD)
             }
             if (Boom.heeft(p, "j_pluizenmantel")) {
                 Statussen.geef(p, Status.KNUFFELSCHILD, 80, Spelers.maxVads(p) * 0.2, p);

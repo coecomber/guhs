@@ -65,21 +65,7 @@ public final class EcoSpul {
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> HOEDHUPPER = rijdier("vr_eco_hoedhupper", 1.1f, 1.3f);
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KLODDERROS = rijdier("vr_eco_klodderros", 1.3f, 1.6f);
 
-    // ---- gear (the extra base types) ---------------------------------------------------------------------------------------------
-    public static final Map<String, DeferredItem<Item>> UITRUSTING = new LinkedHashMap<>();
-
-    static {
-        for (EcoBasisTypes.Def d : EcoBasisTypes.ALLE) {
-            String id = "vr_item_" + d.id();
-            if (d.slot() == Slot.WAPEN) {
-                UITRUSTING.put(d.id(), ITEMS.registerItem(id, RijkItem::new, () -> new Item.Properties().stacksTo(1)
-                        .component(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY)));
-            } else {
-                UITRUSTING.put(d.id(), ITEMS.registerItem(id, RijkItem::new, () -> new Item.Properties().stacksTo(1)
-                        .component(DataComponents.EQUIPPABLE, Equippable.builder(d.slot().vanilla).build())));
-            }
-        }
-    }
+    // (gear: economie has no base types of its own since the 1.10.0 integration; see EcoBasisTypes)
 
     // ---- trophies / deco (cosmetic, they go home) -----------------------------------------------------------------------------
     public static final DeferredBlock<DecoBlock> MINI_KONING_KLODDER = deco("vr_eco_mini_koning_klodder", MapColor.COLOR_LIGHT_BLUE, SoundType.SLIME_BLOCK,

@@ -26,7 +26,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
  * </ul>
  */
 public final class Adapters {
-    public static final String RIDDER = "guhs:vr_mob_tempelzwamridder", PRIESTER = "guhs:vr_mob_sporenpriester";
+    public static final String RIDDER = "guhs:vr_mob_tempelridder", PRIESTER = "guhs:vr_mob_sporenpriester";   // (the real wezens ids, integration)
     private static final String DEUREN = "nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren";
 
     private Adapters() {

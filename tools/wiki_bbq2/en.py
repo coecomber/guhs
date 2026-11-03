@@ -1362,3 +1362,9 @@ from . import en_guhs190 as _guhs190  # noqa: E402
 
 PAGINA.update(_guhs190.PAGINA)
 TEKST.update(_guhs190.TEKST)
+
+# 1.10.0 Het Vadsrijk: tools/wiki_bbq2/en_vadsrijk.py (the Dutch: tools/features/vadsrijk_npc_wiki.py)
+from . import en_vadsrijk as _vadsrijk  # noqa: E402
+
+PAGINA.update(_vadsrijk.PAGINA)
+TEKST.update(_vadsrijk.TEKST)

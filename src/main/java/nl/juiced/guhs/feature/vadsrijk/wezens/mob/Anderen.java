@@ -239,7 +239,8 @@ public final class Anderen {
             }
             int vrienden = 1 + getRandom().nextInt(2);
             int al = sl.getEntitiesOfClass(Knaag.class, getBoundingBox().inflate(40, 16, 40), k -> spawner.equals(k.spawner) && !k.geplofd()).size();
-            int max = WezensSpawnersMax.max(spawner);
+            var sp = nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners.van(spawner);
+            int max = sp == null ? 4 : sp.max();
             for (int i = 0; i < vrienden && al < max; i++, al++) {
                 RijkWezen k = splits(sl, getType(), mobLevel(), false, i);
                 if (k instanceof Knaag kn) {
@@ -262,19 +263,4 @@ public final class Anderen {
         }
     }
 
-    /** The max of a spawner by id (kern's Spawners keeps them private: the knaag pack asks here). */
-    public static final class WezensSpawnersMax {
-        private static final java.util.Map<String, Integer> MAX = new java.util.HashMap<>();
-
-        private WezensSpawnersMax() {
-        }
-
-        public static void zet(String id, int max) {
-            MAX.put(id, max);
-        }
-
-        public static int max(String id) {
-            return MAX.getOrDefault(id, 4);
-        }
-    }
 }

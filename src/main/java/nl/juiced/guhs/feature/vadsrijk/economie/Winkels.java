@@ -79,8 +79,8 @@ public final class Winkels {
                 item("herrolknabbel", 600, () -> new ItemStack(EcoSpul.HERROLKNABBEL.get())),
                 item("rijfluitje", 25, () -> new ItemStack(EcoSpul.RIJFLUITJE.get())));
         List<Waar> gear = new ArrayList<>();
-        for (String t : new String[] {"kussenzwaard", "pluisboog", "vadsstaf", "pluishelm", "knuffelharnas", "pluisbroek", "pluissloffen",
-                "klodderhelm", "zwamhoed"}) {
+        for (String t : new String[] {"kussenzwaard", "pluisboog", "rozenstaf", "pluishelm", "knuffelharnas", "steelbroek", "plakpantoffels",
+                "klodderkapje", "zwamhoed"}) {
             gear.add(new Waar(t, Soort.GEAR, 30, () -> toonGear(t), t));
         }
         List<Waar> cos = new ArrayList<>();

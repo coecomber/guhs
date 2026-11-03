@@ -81,7 +81,7 @@ public class MikaSpion extends BazenBaas {
     private static long terugOp;
 
     private int hoed, sceneT, blinkT = 160, poederT = 100, klodderT = 300, leegT;
-    private final Set<UUID> kijkers = new HashSet<>(), balk = new HashSet<>();
+    private final Set<UUID> kijkers = new HashSet<>();
     private final List<double[]> poeder = new ArrayList<>();   // x, y, z, tick
     @Nullable
     private UUID ballon;
@@ -97,6 +97,13 @@ public class MikaSpion extends BazenBaas {
         super.defineSynchedData(b);
         b.define(TOESTAND, VERMOMD);
         b.define(ONTHULD, false);
+    }
+
+    /** Kern's loose boss (no Arena): bar, HP scaling and heal contribution for players within 48 while he fights. */
+    @Override
+    public int losseStraal() {
+        int t = toestand();
+        return t == VECHT || t == BALLON ? 48 : 0;
     }
 
     public int toestand() {
@@ -499,7 +506,6 @@ public class MikaSpion extends BazenBaas {
                 } else if (ballon != null) {
                     ballonKapot(null);
                 }
-                balk(sl);
             }
             default -> {
             }
@@ -509,8 +515,6 @@ public class MikaSpion extends BazenBaas {
     private void vechtTick(ServerLevel sl) {
         Vec3 c = hoedTop(sl, hoed);
         List<ServerPlayer> l = vechters(sl);
-        balk(sl);
-        schaal(Math.max(1, l.size()));
         if (l.isEmpty()) {
             if (++leegT > 1200) {
                 ontsnapt();
@@ -584,34 +588,14 @@ public class MikaSpion extends BazenBaas {
         }
     }
 
-    private void balk(ServerLevel sl) {
-        if (tickCount % 5 != 0) {
-            return;
-        }
-        Set<UUID> nu = new HashSet<>();
-        for (ServerPlayer p : vechters(sl)) {
-            nu.add(p.getUUID());
-            KernPayloads.stuur(p, new KernPayloads.BaasBalk(getId(), Component.translatable(titelKey()), fase(), (float) vads(), (float) maxVads()));
-        }
-        for (UUID id : balk) {
-            if (!nu.contains(id) && sl.getEntity(id) instanceof ServerPlayer p) {
-                KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
-            }
-        }
-        balk.clear();
-        balk.addAll(nu);
-    }
-
+    /** Clears the boss bar (kern's loose-boss bar, contract 13) and optionally the music for everyone near the cap. */
     private void stopBalk(ServerLevel sl, boolean muziek) {
-        for (UUID id : balk) {
-            if (sl.getEntity(id) instanceof ServerPlayer p) {
-                KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
-                if (muziek) {
-                    BazenMuziek.stop(p);
-                }
+        for (ServerPlayer p : vechters(sl)) {
+            KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
+            if (muziek) {
+                BazenMuziek.stop(p);
             }
         }
-        balk.clear();
     }
 
     @Override

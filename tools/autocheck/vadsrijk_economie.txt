@@ -7,7 +7,7 @@ waitrender 400
 /guhs vadsrijk munten 50000
 /guhs vadsrijk eco spul
 /guhs vadsrijk loot episch kussenzwaard 8
-/guhs vadsrijk loot legendarisch klodderjas 10
+/guhs vadsrijk loot legendarisch klodderhesje 10
 wait 20
 gui keep
 /guhs vadsrijk eco winkel algemeen

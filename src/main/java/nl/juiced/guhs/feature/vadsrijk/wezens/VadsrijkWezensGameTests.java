@@ -46,7 +46,7 @@ public class VadsrijkWezensGameTests {
         }
         BlockPos midden = helper.absolutePos(new BlockPos(2, 3, 2));
         Spawners.Spawner s = new Spawners.Spawner("wezens:test_grot", midden, 1, WezensRegistry.KNAAG, 3, 100, 12, 14, Element.GEEN, 0);
-        VadsrijkMob m = WezensSpawners.spawn(sl, s);
+        VadsrijkMob m = WezensSpawners.spawn(sl, WezensSpawners.grot(s));
         helper.assertTrue(m != null, "spawned");
         helper.assertTrue(m.getBlockY() == helper.absolutePos(new BlockPos(2, 2, 2)).getY(), "on the cave floor, not the roof: y=" + m.getBlockY());
         helper.assertTrue(m.mobLevel() >= 12 && m.mobLevel() <= 14, "level in range");
@@ -97,6 +97,32 @@ public class VadsrijkWezensGameTests {
             }
         }
         helper.assertTrue(items > 20, "elites drop plenty, got " + items);
+        helper.succeed();
+    }
+
+    /**
+     * Integration 1.10.0: every entry of every loot table (kern, wezens, bazen, klassen, economie) is a registered base type whose
+     * item exists, and every weapon base type's kind is one its class accepts (klassen's wapenSoorten).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void alleTabellenEnWapensKloppen(GameTestHelper helper) {
+        int regels = 0;
+        for (var e : LootTabellen.alle().entrySet()) {
+            for (LootTabel.Regel g : e.getValue().regels()) {
+                helper.assertTrue(BasisTypes.van(g.basisType()) != null, "table " + e.getKey() + ": unknown base type " + g.basisType());
+                regels++;
+            }
+        }
+        helper.assertTrue(LootTabellen.van("economie:baas_koning_klodder") != null && LootTabellen.van("economie:zone1") != null, "economie boss tables");
+        for (var t : BasisTypes.alle()) {
+            var item = net.minecraft.core.registries.BuiltInRegistries.ITEM.getOptional(net.minecraft.resources.Identifier.parse(t.itemId()));
+            helper.assertTrue(item.isPresent(), "item of base type " + t.id() + ": " + t.itemId());
+            if (t.slot() == nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.WAPEN) {
+                var k = nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.van(t.klasse());
+                helper.assertTrue(k != null && k.wapenSoorten().contains(t.soort()), "weapon " + t.id() + " (" + t.soort() + ") fits class " + t.klasse());
+            }
+        }
+        helper.assertTrue(regels > 100, "tables have entries: " + regels);
         helper.succeed();
     }
 

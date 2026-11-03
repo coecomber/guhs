@@ -62,6 +62,8 @@ GROEPEN = [("bbq2_tech", "Guh Technology", "Guh-technologie",
            ("bbq2_bouwhulp", "Building Help", "Bouwhulp", ["bouwhulp"]),
            # 1.7.0 Onder de Wol
            ("bbq2_onderwol", "Under the Wool", "Onder de Wol", ["onderwol"]),
+           # 1.10.0 Het Vadsrijk
+           ("bbq2_vadsrijk", "The Vadsrijk", "Het Vadsrijk", ["vadsrijk_npc"]),
            ("bbq2_meer", "More new things", "Nog meer nieuws", [])]
 
 # --- the docs step's own corrections to the notes ----------------------------------------------------------------------------

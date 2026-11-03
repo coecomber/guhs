@@ -20,4 +20,9 @@ public final class LootTabellen {
     public static LootTabel van(String id) {
         return ALLE.get(id);
     }
+
+    /** Every table by id (read-only; integration check). */
+    public static Map<String, LootTabel> alle() {
+        return java.util.Collections.unmodifiableMap(ALLE);
+    }
 }

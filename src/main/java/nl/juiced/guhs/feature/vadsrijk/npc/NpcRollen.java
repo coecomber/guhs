@@ -35,7 +35,7 @@ import net.minecraft.world.phys.Vec3;
  */
 public final class NpcRollen {
     private static final Logger LOG = LogUtils.getLogger();
-    private static final Map<String, BiConsumer<ServerPlayer, String>> KOPPELS = new ConcurrentHashMap<>();
+    private static final Map<String, java.util.function.BiPredicate<ServerPlayer, String>> KOPPELS = new ConcurrentHashMap<>();
     private static final String V = "nl.juiced.guhs.feature.vadsrijk.";
     /** role -> "class#method" or "class#method@fixed argument" (player first, then the argument when the method takes one). */
     private static final Map<String, List<String>> API = Map.ofEntries(
@@ -56,12 +56,66 @@ public final class NpcRollen {
 
     /** Bind a role to an action of your slice (call from your registry class). */
     public static void koppel(String rol, Consumer<ServerPlayer> actie) {
-        KOPPELS.put(rol, (p, a) -> actie.accept(p));
+        KOPPELS.put(rol, (p, a) -> {
+            actie.accept(p);
+            return true;
+        });
+    }
+
+    /** Bind a role whose action may answer "nothing happened" (false: the caller shows its own fallback). */
+    public static void koppelAls(String rol, java.util.function.BiPredicate<ServerPlayer, String> actie) {
+        KOPPELS.put(rol, actie);
     }
 
     /** Bind a role that takes an argument (a destination, "klasse:tier", a mount id...). */
     public static void koppelMet(String rol, BiConsumer<ServerPlayer, String> actie) {
-        KOPPELS.put(rol, actie);
+        KOPPELS.put(rol, (p, a) -> {
+            actie.accept(p, a);
+            return true;
+        });
+    }
+
+    /**
+     * Integration 1.10.0: all slices are in one tree now, so the roles are bound to the real APIs directly (no reflection).
+     * Only wereld's airship stays on reflection until the wereld slice is merged.
+     */
+    public static void koppelAlles() {
+        String V0 = V;   // (keeps the reflection table for the wereld role)
+        koppelAls("klasse_kiezen", (p, a) -> {
+            if (!nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie.kiesEerste(p)) {
+                nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie.open(p);
+            }
+            return true;
+        });
+        koppel("ordetempel", nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie::open);
+        koppel("smid", nl.juiced.guhs.feature.vadsrijk.economie.Smid::open);
+        koppel("winkel", p -> nl.juiced.guhs.feature.vadsrijk.economie.Winkels.open(p, "drankjes"));
+        koppel("wapenwinkel", p -> nl.juiced.guhs.feature.vadsrijk.economie.Winkels.open(p, "uitrusting"));
+        koppel("kleermaker", p -> nl.juiced.guhs.feature.vadsrijk.economie.Winkels.open(p, "cosmetica"));
+        koppel("markt", nl.juiced.guhs.feature.vadsrijk.economie.Markt::open);
+        koppel("stal", nl.juiced.guhs.feature.vadsrijk.economie.Stal::open);
+        koppelAls("rijdier", (p, a) -> nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.geefEerste(p));
+        koppelAls("mika_spion", (p, a) -> nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion.ontmasker(p));
+        koppelAls("advancement", (p, a) -> nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.doe(p));
+        koppelAls("kampklodder", (p, a) -> p.level() instanceof ServerLevel sl
+                && nl.juiced.guhs.feature.vadsrijk.wezens.Kampklodder.plaats(sl, kampklodderPlek()) != null);
+        koppelAls("draak", NpcRollen::draakDirect);
+        nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.VIA_BALIE = false;
+        LOG.debug("Vadsrijk npc: roles bound directly ({}), reflection only for {}wereld", KOPPELS.size(), V0);
+    }
+
+    /** The dragon through wezens' DraakVlucht (see {@link #draak}). */
+    private static boolean draakDirect(ServerPlayer p, String soort) {
+        if (!(p.level() instanceof ServerLevel sl)) {
+            return false;
+        }
+        if (soort.equals("ver")) {
+            return nl.juiced.guhs.feature.vadsrijk.wezens.draak.DraakVlucht.cirkel(sl, new Vec3(p.getX() + 90, 0, p.getZ() - 110), 70.0,
+                    p.getY() + 60, 320) != null;
+        }
+        Vec3 a = NpcPlekken.DRAAK_VAN, b = NpcPlekken.DRAAK_NAAR;
+        List<Vec3> pad = new ArrayList<>(List.of(a, a.lerp(b, 0.35).add(0, -25, 0), a.lerp(b, 0.65).add(0, -20, 0), b));
+        return nl.juiced.guhs.feature.vadsrijk.wezens.draak.DraakVlucht.vlieg(sl, pad, 170, true) != null;
     }
 
     public static boolean gekoppeld(String rol) {
@@ -79,10 +133,9 @@ public final class NpcRollen {
 
     /** Does the role: the binding, else the other slice's API; false = nothing in this tree (show your own fallback). */
     public static boolean doe(String rol, ServerPlayer p, String arg) {
-        BiConsumer<ServerPlayer, String> k = KOPPELS.get(rol);
+        java.util.function.BiPredicate<ServerPlayer, String> k = KOPPELS.get(rol);
         if (k != null) {
-            k.accept(p, arg);
-            return true;
+            return k.test(p, arg);
         }
         switch (rol) {
             case "luchtschip" -> {
@@ -181,15 +234,7 @@ public final class NpcRollen {
 
     /** Where the Kampklodder lives (wezens' WezensPlekken.KAMPKLODDER when it is in this tree). */
     static BlockPos kampklodderPlek() {
-        Class<?> c = laad(V + "wezens.WezensPlekken");
-        try {
-            if (c != null && c.getField("KAMPKLODDER").get(null) instanceof BlockPos b) {
-                return b;
-            }
-        } catch (ReflectiveOperationException e) {
-            // (fall through)
-        }
-        return NpcPlekken.KAMPVIJVER.offset(16, 0, -17);
+        return nl.juiced.guhs.feature.vadsrijk.wezens.WezensPlekken.KAMPKLODDER;
     }
 
     // ---- reflection ---------------------------------------------------------------------------------------------------------------

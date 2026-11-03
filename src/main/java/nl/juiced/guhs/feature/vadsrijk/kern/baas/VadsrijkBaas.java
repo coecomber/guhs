@@ -73,7 +73,17 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     @Override
     public void tick() {
         super.tick();
-        if (level().isClientSide() || arena != null || losseStraal() <= 0 || geplofd() || tickCount % 5 != 0 || !(level() instanceof ServerLevel sl)) {
+        if (level().isClientSide() || tickCount % 5 != 0 || !(level() instanceof ServerLevel sl)) {
+            return;
+        }
+        if (arena != null || losseStraal() <= 0 || geplofd()) {
+            // (integration: a loose boss that stops fighting, e.g. the Mika-spion fleeing, clears the bars it showed)
+            for (java.util.UUID weg : losseKijkers) {
+                if (sl.getEntity(weg) instanceof ServerPlayer p) {
+                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, net.minecraft.network.chat.Component.empty(), 0, 0, 0));
+                }
+            }
+            losseKijkers.clear();
             return;
         }
         double r = losseStraal();
@@ -197,6 +207,15 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return t == null ? new LootTabel.Resultaat(java.util.List.of(), 0) : t.rol(mobLevel(), getRandom());
     }
 
+    /** Where the personal chests go around (default: the arena centre, else the boss). Integration hook (the Mika's cap). */
+    protected Vec3 kistMidden() {
+        return arena != null ? Vec3.atBottomCenterOf(arena.centrum()) : position();
+    }
+
+    /** Called after a personal chest was placed (default: nothing). */
+    protected void kistGeplaatst(ServerPlayer p, net.minecraft.core.BlockPos pos) {
+    }
+
     /** The id under which a player's first kill of this boss is remembered ({@code SpelerData.gezien}). */
     protected String killSleutel() {
         return "baaskill:" + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType());
@@ -216,8 +235,10 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
                 LootTabel.Resultaat r = kistInhoud(p, eerste);
                 if (r != null && (!r.items().isEmpty() || r.munten() > 0)) {
                     double a = kist++ * 2.4;
-                    Vec3 plek = (arena != null ? Vec3.atBottomCenterOf(arena.centrum()) : position()).add(Math.cos(a) * 3, 0, Math.sin(a) * 3);
-                    BaasKist.plaats(sl, p, net.minecraft.core.BlockPos.containing(plek), r);
+                    Vec3 plek = kistMidden().add(Math.cos(a) * 3, 0, Math.sin(a) * 3);
+                    net.minecraft.core.BlockPos bp = net.minecraft.core.BlockPos.containing(plek);
+                    BaasKist.plaats(sl, p, bp, r);
+                    kistGeplaatst(p, bp);
                 }
             }
         }

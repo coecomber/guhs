@@ -42,8 +42,19 @@ public final class WezensLoot {
     }
 
     /** Extra weapon base types (id, weight) that every table also rolls; economie/klassen may add theirs before the tables are built. */
-    public static final List<LootTabel.Regel> extraWapens = new ArrayList<>(List.of(new LootTabel.Regel("kussenzwaard", 2),
-            new LootTabel.Regel("knuffelknots", 2), new LootTabel.Regel("pluishamer", 1)));
+    public static final List<LootTabel.Regel> extraWapens = new ArrayList<>();
+
+    static {
+        // integration 1.10.0: the 12 class weapons (kern's 3 ridder weapons + klassen.Wapens), 4 per class, weight 1 each
+        for (String w : List.of("kussenzwaard", "knuffelknots", "pluishamer")) {
+            extraWapens.add(new LootTabel.Regel(w, 1));
+        }
+        // (= klassen.Wapens.ALLE; literal so this class never triggers the klassen item registration)
+        for (String w : List.of("klodderkling", "pluisboog", "druppelboog", "snoepkruisboog", "eikelkatapult", "rozenstaf", "vlammenstaf",
+                "zwamstokje", "slijmboek")) {
+            extraWapens.add(new LootTabel.Regel(w, 1));
+        }
+    }
 
     private WezensLoot() {
     }
