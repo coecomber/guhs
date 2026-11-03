@@ -202,6 +202,7 @@ public final class Features {
         nl.juiced.guhs.feature.fabriek.FabriekFeature.register(modBus);   // 1.8.0 (vadskracht): de Fabriekshal (wol, bouwblokken, kleurstof)
         nl.juiced.guhs.feature.erfenis.ErfenisFeature.register(modBus);   // 1.9 POC: De Erfenis (own base, overview, plots dimension)
         nl.juiced.guhs.feature.erfenis.kaart.KaartFeature.register(modBus);   // 1.9 POC: De Erfenis, de wereldkaart + levende NPC-dorpjes
+        nl.juiced.guhs.feature.erfenis.koppeling.KoppelingFeature.register(modBus);   // 1.9 Een opknapper!: koppeling (brief, Erfhekje, Leverkist, Dorpszender; payloads inside)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

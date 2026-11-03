@@ -158,6 +158,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.hamsterbuis.client.HamsterbuisClient.init(modBus);   // 1.8.0: the hamsterbuis station's screen
         nl.juiced.guhs.feature.erfenis.client.ErfenisClient.init(modBus);   // 1.9 POC: De Erfenis (overview key, camera, screen)
         nl.juiced.guhs.feature.erfenis.kaart.client.KaartClient.init(modBus);   // 1.9 POC: De Erfenis, de wereldkaart (toets M)
+        nl.juiced.guhs.feature.erfenis.koppeling.client.KoppelingClient.init(modBus);   // 1.9 Een opknapper!: the makelaarsbrief's screen
     }
 
     private FeaturesClient() {
