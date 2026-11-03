@@ -32,6 +32,7 @@ public final class ErfenisFeature {
         NeoForge.EVENT_BUS.addListener(Erfenis::opSchade);
         NeoForge.EVENT_BUS.addListener(ErfenisMomenten::opLogin);
         Makelaarstour.init();
+        Knusheid.titels();
         NeoForge.EVENT_BUS.addListener(Guhpension::opJoin);
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStoppingEvent e) -> Guhpension.allesWeg(e.getServer()));
     }

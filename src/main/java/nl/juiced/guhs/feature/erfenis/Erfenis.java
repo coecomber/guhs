@@ -18,7 +18,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import nl.juiced.guhs.feature.erfenis.vorm.GebouwVormen;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -250,6 +249,14 @@ public final class Erfenis {
             b.knusGemeld = k;
             b.momenten.add("knusheid:" + k);
         }
+        if (k > b.knusRecord) {   // deco slice: a milestone reached for the first time
+            for (int m : Knusheid.MIJLPALEN) {
+                if (b.knusRecord < m && k >= m) {
+                    b.meldingen.add(new Base.Fout("erfenis.knus.mijlpaal." + m, Integer.toString(m)));
+                }
+            }
+            b.knusRecord = k;
+        }
     }
 
     /** Is a job finished or a resident due (so this base must be caught up now, even with nobody there)? */
@@ -413,6 +420,7 @@ public final class Erfenis {
         CompoundTag t = b.save(true);
         if (!b.npc && b.eigenaar != null) {   // Sherlock: a case waits in the letterbox (the magnifier bubble above the bureau)
             t.putBoolean("ZaakKlaar", nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.zaakKlaar(p.level().getServer(), b.eigenaar));
+            t.putInt("Decobonnen", nl.juiced.guhs.feature.erfenis.koppeling.Dorpsbeloningen.decobonnen(p.level().getServer(), b.eigenaar));
         }
         PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Sync(t, System.currentTimeMillis(), eigen(p, b), open,
                 ErfenisData.get(p.level().getServer()).snel));
@@ -506,7 +514,9 @@ public final class Erfenis {
                 }
                 Base.Fout f = b.plaats(t, a.x(), a.z(), a.rot(), nu, duur);
                 if (f == null) {
-                    stempelGebouw(server, b, b.gebouwen.get(b.gebouwen.size() - 1));
+                    Gebouw nieuw = b.gebouwen.get(b.gebouwen.size() - 1);
+                    stempelGebouw(server, b, nieuw);
+                    DecoActies.rand(server, b, nieuw.x, nieuw.z, nieuw.b(), nieuw.d());
                     geluid(p, SoundEvents.WOOD_PLACE);
                 }
                 return f;
@@ -523,6 +533,7 @@ public final class Erfenis {
                         Stempel.wis(level, o, b, ox, oz, g.b(), g.d());
                     }
                     stempelGebouw(server, b, g);
+                    DecoActies.rand(server, b, g.x, g.z, g.b(), g.d());
                     geluid(p, SoundEvents.WOOD_PLACE);
                 }
                 return f;
@@ -539,6 +550,7 @@ public final class Erfenis {
                         Stempel.wis(level, o, b, g.x, g.z, ow, oh);
                     }
                     stempelGebouw(server, b, g);
+                    DecoActies.rand(server, b, g.x, g.z, Math.max(ow, g.b()), Math.max(oh, g.d()));
                 }
                 return f;
             }
@@ -639,27 +651,7 @@ public final class Erfenis {
                 return null;
             }
             case ErfenisPayloads.Actie.DECO -> {
-                if (a.x2() == ErfenisPayloads.Actie.DECO_WEG) {
-                    Base.Deco d = b.decoOp(a.x(), a.z());
-                    if (d == null) {
-                        return new Base.Fout("erfenis.fout.weg");
-                    }
-                    b.bergDecoOp(d);
-                    int[] m = Base.decoMaat(d.id(), d.rot());
-                    if (level != null && bezocht(server, b) && !b.moetStempelen) {
-                        Stempel.wis(level, o, b, d.x(), d.z(), m[0], m[1]);
-                    }
-                    melding(p, "erfenis.ok.deco_weg", true, "erfenis.deco." + d.id());
-                    return null;
-                }
-                Base.Fout f = b.plaatsDeco(a.tekst(), a.x(), a.z(), a.rot());
-                if (f == null) {
-                    if (level != null && bezocht(server, b) && !b.moetStempelen) {
-                        GebouwVormen.stempelDeco(level, a.tekst(), o.offset(a.x(), 0, a.z()), a.rot() & 3);
-                    }
-                    geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME);
-                }
-                return f;
+                return DecoActies.doe(server, p, b, a);
             }
             case ErfenisPayloads.Actie.MARKT -> {
                 Gebouw g = b.gebouw(a.id());

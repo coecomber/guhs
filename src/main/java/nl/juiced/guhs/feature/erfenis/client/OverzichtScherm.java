@@ -18,6 +18,9 @@ import net.minecraft.util.FormattedCharSequence;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.erfenis.Base;
+import nl.juiced.guhs.feature.erfenis.DecoWinkel;
+import nl.juiced.guhs.feature.erfenis.Knusheid;
+import nl.juiced.guhs.feature.erfenis.Paden;
 import nl.juiced.guhs.feature.erfenis.ErfenisPayloads.Actie;
 import nl.juiced.guhs.feature.erfenis.Gebouw;
 import nl.juiced.guhs.feature.erfenis.GebouwType;
@@ -43,9 +46,14 @@ import org.lwjgl.glfw.GLFW;
  *   <li><b>Windows</b> ({@link Vensters}): storage, Naar huis sturen, Loket, Bouwkeet choice, Guhpension.</li>
  * </ul>
  * Read-only (somebody else's base): no shop and no buttons, only looking. The server checks everything again.
+ * <p>
+ * Deco slice: the shop's last tab "Deco" is the decowinkel ({@link DecoBalk}); a piece goes straight onto the ghost
+ * ({@code Modus.DECO}, bought on the click; shift-click buys it into the decoschuurtje); paths and hekjes are drawn by
+ * dragging over the tiles ({@code Modus.TREK}, also the gum); a placed piece can be clicked (side panel), dragged, turned and
+ * put away.
  */
 public final class OverzichtScherm extends Screen {
-    private enum Modus { KIJKEN, PLAATSEN, VERPLAATSEN, DECO }
+    private enum Modus { KIJKEN, PLAATSEN, VERPLAATSEN, DECO, TREK }
 
     private record Toast(Component tekst, boolean goed, long tot) {
     }
@@ -79,6 +87,22 @@ public final class OverzichtScherm extends Screen {
     private Vensters.Venster venster;
     private int paneelX0 = -1, paneelY1 = -1;
     private long laatsteSim;
+    // deco slice: the decowinkel tab (kept between openings), buying on the ghost, moving a placed piece, drawing tiles
+    static boolean decoTab;
+    static DecoWinkel.Categorie decoCat = DecoWinkel.Categorie.PADEN;
+    static boolean bonModus;
+    private boolean decoKoop;
+    @Nullable
+    private Base.Deco decoVan, selDeco, hoverDeco;
+    @Nullable
+    private String trekSoort;
+    private boolean gum, trekt, sleepDeco;
+    private final List<int[]> streek = new ArrayList<>();
+    private int laatstX = -1000, laatstZ = -1000;
+    /** (dev, AutoCheck) a plot tile that counts as hovered until the mouse moves. */
+    @Nullable
+    private int[] devHover;
+    private int devMuisX, devMuisY;
 
     OverzichtScherm() {
         super(Component.translatable("erfenis.ui.titel"));
@@ -130,7 +154,85 @@ public final class OverzichtScherm extends Screen {
         modus = Modus.DECO;
         decoId = id;
         decoRot = 0;
+        decoKoop = false;
+        decoVan = null;
         kies(-1, -1, -1);
+    }
+
+    /** The decowinkel: this piece on the ghost; the click buys it (or takes the one waiting in the schuurtje). */
+    void decoKoopStart(String id) {
+        decoStart(id);
+        decoKoop = true;
+    }
+
+    /** Moving a placed piece: the ghost (R turns), the click puts it there. */
+    void decoVerplaatsStart(Base.Deco d) {
+        venster = null;
+        modus = Modus.DECO;
+        decoId = d.id();
+        decoRot = d.rot();
+        decoKoop = false;
+        decoVan = d;
+    }
+
+    /** Drawing paths or hekjes of {@code soort} by dragging; null = the gum. Again the same tool = stop. */
+    void trekStart(@Nullable String soort) {
+        if (modus == Modus.TREK && java.util.Objects.equals(trekSoort, soort)) {
+            modus = Modus.KIJKEN;
+            return;
+        }
+        venster = null;
+        modus = Modus.TREK;
+        trekSoort = soort;
+        gum = soort == null;
+        streek.clear();
+        trekt = false;
+        kies(-1, -1, -1);
+    }
+
+    boolean gumAan() {
+        return modus == Modus.TREK && gum;
+    }
+
+    /** Is this shop card the tool in hand? */
+    boolean gekozenDeco(String id) {
+        return modus == Modus.TREK && id.equals(trekSoort) || modus == Modus.DECO && decoKoop && id.equals(decoId);
+    }
+
+    /** A decowinkel card was clicked. */
+    void kiesDeco(String id) {
+        Base b = base();
+        DecoWinkel.Stuk st = DecoWinkel.stuk(id);
+        if (b == null || st == null) {
+            return;
+        }
+        if (b.hoeveLevel() < st.vanaf()) {
+            toast(Component.translatable("erfenis.fout.slot", st.vanaf()), false);
+            return;
+        }
+        if (st.getrokken()) {
+            trekStart(id);
+            return;
+        }
+        if (DecoBalk.shift()) {   // into the decoschuurtje
+            Base.Fout f = DecoWinkel.kanKopen(b, id, bonModus, b.decobonnen);
+            if (f != null) {
+                toast(ErfenisClient.tekst(f.key(), List.of(f.args())), false);
+            } else {
+                ErfenisClient.stuur(new Actie(Actie.DECO, bonModus ? Actie.KOOP_BON : 0, 0, 0, Actie.DECO_KOOP, 0, 0, id));
+            }
+            return;
+        }
+        if (modus == Modus.DECO && decoKoop && id.equals(decoId)) {
+            modus = Modus.KIJKEN;
+            return;
+        }
+        decoKoopStart(id);
+    }
+
+    /** The selected piece was put away. */
+    void decoLos() {
+        selDeco = null;
     }
 
     @Nullable
@@ -170,6 +272,34 @@ public final class OverzichtScherm extends Screen {
             case "verven" -> paneel.verven = true;
             case "deco" -> decoStart(arg);
             case "dicht" -> venster = null;
+            case "decowinkel" -> {   // deco slice: the decowinkel tab (optionally a category)
+                decoTab = true;
+                if (!arg.isEmpty()) {
+                    decoCat = DecoWinkel.Categorie.valueOf(arg.toUpperCase(java.util.Locale.ROOT));
+                }
+            }
+            case "gebouwwinkel" -> {
+                decoTab = false;
+                stopModus();
+            }
+            case "koop" -> decoKoopStart(arg);
+            case "trek" -> trekStart(arg.isEmpty() || "gum".equals(arg) ? null : arg);
+            case "streek" -> {   // "x,z;x,z": a stroke being drawn (the ghost)
+                streek.clear();
+                streek.addAll(Paden.decodeer(arg));
+            }
+            case "hover" -> {   // "x,z": this tile counts as under the mouse until the mouse moves
+                String[] d = arg.split(",");
+                devHover = new int[] {Integer.parseInt(d[0].trim()), Integer.parseInt(d[1].trim())};
+                devMuisX = muisX;
+                devMuisY = muisY;
+            }
+            case "decokies" -> {
+                String[] d = arg.split(",");
+                Base.Deco dk = b.decoOp(Integer.parseInt(d[0].trim()), Integer.parseInt(d[1].trim()));
+                kies(-1, -1, -1);
+                selDeco = dk;
+            }
             case "camera" -> {
                 String[] d = arg.split(",");
                 Overzicht.richt(o.getX() + Double.parseDouble(d[0]), o.getZ() + Double.parseDouble(d[1]), d.length > 2 ? Double.parseDouble(d[2]) : -1);
@@ -223,6 +353,14 @@ public final class OverzichtScherm extends Screen {
         if (modus == Modus.VERPLAATSEN && b.gebouw(verplaatsId) == null) {
             modus = Modus.KIJKEN;
         }
+        if (selDeco != null) {
+            Base.Deco d = b.decoOp(selDeco.x(), selDeco.z());
+            selDeco = d != null && d.id().equals(selDeco.id()) ? d : null;
+        }
+        if (modus == Modus.DECO && decoVan != null && !b.deco.contains(decoVan)) {
+            modus = Modus.KIJKEN;
+            decoVan = null;
+        }
         if (!eigen()) {
             modus = Modus.KIJKEN;
         }
@@ -254,6 +392,7 @@ public final class OverzichtScherm extends Screen {
     }
 
     private void kies(int gebouw, int plukje, int kavel) {
+        selDeco = null;
         geselecteerd = gebouw;
         selPlukje = plukje;
         selKavel = kavel;
@@ -288,15 +427,28 @@ public final class OverzichtScherm extends Screen {
             }
         }
         Vec3 grond = Overzicht.grond(mx, my, width, height);
-        if (grond != null) {
+        if (devHover != null && (Math.abs(mx - devMuisX) > 3 || Math.abs(my - devMuisY) > 3)) {
+            devHover = null;
+        }
+        hoverDeco = null;
+        if (devHover != null) {
+            hoverX = devHover[0];
+            hoverZ = devHover[1];
+            hoverOpPlot = Plot.opPlot(hoverX, hoverZ);
+        } else if (grond != null) {
             hoverX = (int) Math.floor(grond.x - o.getX());
             hoverZ = (int) Math.floor(grond.z - o.getZ());
             hoverOpPlot = Plot.opPlot(hoverX, hoverZ);
-            if (hoverGebouw == null && hoverOpPlot && modus == Modus.KIJKEN) {
-                hoverGebouw = b.op(hoverX, hoverZ);
-            }
         } else {
             hoverX = hoverZ = -1000;
+        }
+        if (hoverX > -100 && hoverOpPlot && modus == Modus.KIJKEN) {
+            if (hoverGebouw == null) {
+                hoverGebouw = b.op(hoverX, hoverZ);
+            }
+            if (hoverGebouw == null) {
+                hoverDeco = b.decoOp(hoverX, hoverZ);
+            }
         }
     }
 
@@ -369,10 +521,27 @@ public final class OverzichtScherm extends Screen {
             int x = voetX(w), z = voetZ(h);
             l.add(spook(o, x, z, w, h, plaatsType.hoogte(1), b.kanPlaatsen(plaatsType, x, z, plaatsRot) == null));
         }
+        if (modus == Modus.DECO && decoVan != null) {
+            int[] m = Base.decoMaat(decoVan.id(), decoVan.rot());
+            l.add(vlak(o, decoVan.x(), decoVan.z(), m[0], m[1], 0x30FFFFFF, 0x80FFFFFF));
+        }
         if (modus == Modus.DECO && decoId != null && hoverX > -100) {
             int[] m = Base.decoMaat(decoId, decoRot);
             int x = voetX(m[0]), z = voetZ(m[1]);
-            l.add(spook(o, x, z, m[0], m[1], 2, b.kanDeco(decoId, x, z, decoRot) == null));
+            l.add(spook(o, x, z, m[0], m[1], 2, decoFout(b, x, z) == null));
+        }
+        if (modus == Modus.KIJKEN && selDeco != null) {
+            int[] m = Base.decoMaat(selDeco.id(), selDeco.rot());
+            l.add(new OverzichtWereld.Doos(o.getX() + selDeco.x(), gy, o.getZ() + selDeco.z(), o.getX() + selDeco.x() + m[0], gy + 2.05,
+                    o.getZ() + selDeco.z() + m[1], 0x30F7B6CB, 0xF0F07CB4, 0.1f));
+        }
+        if (modus == Modus.KIJKEN && hoverDeco != null && !hoverDeco.equals(selDeco)) {
+            int[] m = Base.decoMaat(hoverDeco.id(), hoverDeco.rot());
+            l.add(new OverzichtWereld.Doos(o.getX() + hoverDeco.x(), gy, o.getZ() + hoverDeco.z(), o.getX() + hoverDeco.x() + m[0], gy + 2.05,
+                    o.getZ() + hoverDeco.z() + m[1], 0, 0xC0FFFFFF, 0.07f));
+        }
+        if (modus == Modus.TREK) {
+            trekSpoken(l, b, o);
         }
         if (modus == Modus.VERPLAATSEN) {
             Gebouw g = b.gebouw(verplaatsId);
@@ -383,6 +552,67 @@ public final class OverzichtScherm extends Screen {
             }
         }
         return l;
+    }
+
+    /** Why the deco ghost may not stand at (x, z): from the schuurtje, bought in the shop, or a placed piece being moved. */
+    @Nullable
+    private Base.Fout decoFout(Base b, int x, int z) {
+        if (decoVan != null) {
+            return b.decoPlekFout(decoId, x, z, decoRot, decoVan);
+        }
+        if (decoKoop && b.decoOpslag.getOrDefault(decoId, 0) <= 0) {
+            Base.Fout f = DecoWinkel.kanKopen(b, decoId, bonModus, b.decobonnen);
+            return f != null ? f : b.decoPlekFout(decoId, x, z, decoRot, null);
+        }
+        return b.kanDeco(decoId, x, z, decoRot);
+    }
+
+    /** The drawing tool's ghost: the stroke (green = new, gold = from the stock, red = may not / no money), or the hovered tile. */
+    private void trekSpoken(List<OverzichtWereld.Doos> l, Base b, BlockPos o) {
+        List<int[]> tegels = streek.isEmpty() ? (hoverOpPlot ? List.<int[]>of(new int[] {hoverX, hoverZ}) : List.<int[]>of()) : streek;
+        double gy = Overzicht.grondY();
+        if (gum) {
+            for (int[] t : tegels) {
+                boolean kan = Paden.gumbaar(b, t[0], t[1]);
+                l.add(new OverzichtWereld.Doos(o.getX() + t[0] + 0.04, gy, o.getZ() + t[1] + 0.04, o.getX() + t[0] + 0.96, gy + (kan ? 0.5 : 0.08),
+                        o.getZ() + t[1] + 0.96, kan ? 0x60E8505E : 0x20FFFFFF, kan ? 0xE0E0404E : 0x80FFFFFF, 0.06f));
+            }
+            return;
+        }
+        DecoWinkel.Stuk st = DecoWinkel.stuk(trekSoort);
+        if (st == null) {
+            return;
+        }
+        int voorraad = Paden.voorraad(b, trekSoort), geld = b.guhlden;
+        double hoog = st.soort() == DecoWinkel.Soort.HEK ? 1.0 : 0.14;
+        java.util.Set<Long> gezien = new java.util.HashSet<>();
+        for (int[] t : tegels) {
+            if (!gezien.add((long) t[0] << 32 ^ (t[1] & 0xFFFFFFFFL))) {
+                continue;
+            }
+            Base.Fout f = Paden.tegelFout(b, trekSoort, t[0], t[1]);
+            int vul, rand;
+            if (f != null && "erfenis.decowinkel.fout.al".equals(f.key())) {
+                vul = 0x18FFFFFF;
+                rand = 0x90FFFFFF;
+            } else if (f != null) {
+                vul = 0x60E8505E;
+                rand = 0xE0E0404E;
+            } else if (voorraad > 0) {
+                voorraad--;
+                vul = 0x60F2C14E;
+                rand = 0xE0D4A030;
+            } else if (geld >= st.prijs()) {
+                geld -= st.prijs();
+                vul = 0x5066D98A;
+                rand = 0xE046C070;
+            } else {
+                vul = 0x60E8505E;
+                rand = 0xE0E0404E;
+            }
+            l.add(new OverzichtWereld.Doos(o.getX() + t[0] + 0.04, gy, o.getZ() + t[1] + 0.04, o.getX() + t[0] + 0.96, gy + hoog,
+                    o.getZ() + t[1] + 0.96, vul, rand, 0.06f));
+        }
     }
 
     private static OverzichtWereld.Doos vlak(BlockPos o, int x, int z, int w, int h, int vul, int rand) {
@@ -437,6 +667,9 @@ public final class OverzichtScherm extends Screen {
             } else if (selKavel >= 0) {
                 paneelY1 = paneel.kavel(ui, b, selKavel, px, py, eigen());
                 paneelX0 = px;
+            } else if (selDeco != null) {
+                paneelY1 = DecoBalk.paneel(ui, this, b, selDeco, px, py, eigen());
+                paneelX0 = px;
             }
         }
         if (eigen()) {
@@ -458,7 +691,24 @@ public final class OverzichtScherm extends Screen {
                 return;
             }
         }
-        if (venster == null && modus == Modus.KIJKEN && hoverGebouw != null && hoverGebouw.id != geselecteerd) {
+        if (venster == null && modus == Modus.TREK && !gum && trekSoort != null && (!streek.isEmpty() || hoverOpPlot)) {
+            int[] k = Paden.kosten(b, trekSoort, streek.isEmpty() ? List.<int[]>of(new int[] {hoverX, hoverZ}) : streek);
+            Base.Fout eerste = streek.isEmpty() ? Paden.tegelFout(b, trekSoort, hoverX, hoverZ) : null;
+            Component t = k[0] == 0 ? Component.translatable(eerste != null && "erfenis.decowinkel.fout.al".equals(eerste.key())
+                    ? "erfenis.decowinkel.fout.al" : "erfenis.decowinkel.streek_niks")
+                    : Component.translatable("erfenis.decowinkel.streek", k[0], Ui.getal(k[1])).append(k[2] > 0
+                    ? Component.translatable("erfenis.decowinkel.streek_voorraad", k[2]) : Component.empty());
+            int w = font.width(t) + 10, x = Math.min(width - w - 4, mx + 12), y = Math.max(4, my - 18);
+            boolean teDuur = k[1] > b.guhlden;
+            Teken.rond(g, x, y, x + w, y + 13, teDuur ? Teken.ROOD : Teken.ROZE_DONKER, 3);
+            Teken.rond(g, x + 1, y + 1, x + w - 1, y + 12, Teken.CREME_VOL, 3);
+            g.text(font, t, x + 5, y + 3, teDuur ? Teken.ROOD : Teken.DONKER, false);
+        } else if (venster == null && modus == Modus.KIJKEN && hoverDeco != null && !hoverDeco.equals(selDeco)) {
+            int knus = nl.juiced.guhs.feature.erfenis.ErfenisDeco.knusheid(hoverDeco.id());
+            g.setComponentTooltipForNextFrame(font, List.of(Component.translatable("erfenis.deco." + hoverDeco.id()).withStyle(ChatFormatting.BOLD),
+                    knus > 0 ? Component.translatable("erfenis.decowinkel.knus", knus) : Component.translatable("erfenis.decowinkel.knus_hek"),
+                    Component.translatable(eigen() ? "erfenis.decowinkel.klik_deco" : "erfenis.ui.kijken").withColor(Teken.ZACHT)), mx, my);
+        } else if (venster == null && modus == Modus.KIJKEN && hoverGebouw != null && hoverGebouw.id != geselecteerd) {
             Gebouw h = hoverGebouw;
             List<Component> tip = new ArrayList<>();
             tip.add(Component.translatable(h.type.naamKey()).withStyle(ChatFormatting.BOLD));
@@ -627,9 +877,11 @@ public final class OverzichtScherm extends Screen {
         x = chip(ui, x, GebouwType.HOEVE.icoon(), Component.translatable("erfenis.ui.level", b.hoeveLevel()), Teken.DONKER, -1, 0,
                 List.of(Component.translatable("erfenis.gebouw.hoeve").withStyle(ChatFormatting.BOLD), Component.translatable("erfenis.ui.klik_hoeve")
                         .withColor(Teken.ZACHT)), hoeve == null ? null : () -> kies(hoeve.id, -1, -1));
-        x = chip(ui, x, Ui.KNUS, Component.literal(Ui.getal(b.knusheid())), Teken.DONKER, -1, 0,
-                List.of(Component.translatable("erfenis.ui.knusheid").withStyle(ChatFormatting.BOLD), Component.translatable("erfenis.ui.knus_uitleg")
-                        .withColor(Teken.ZACHT)), null);
+        x = chip(ui, x, Ui.KNUS, Component.literal(Ui.getal(b.knusheid())), Teken.DONKER, -1, 0, knusTip(b),
+                eigen() ? () -> {
+                    decoTab = true;
+                    kies(-1, -1, -1);
+                } : null);
         List<Component> bewTip = new ArrayList<>();
         bewTip.add(Component.translatable("erfenis.ui.bewoners").withStyle(ChatFormatting.BOLD));
         bewTip.add(Component.translatable("erfenis.ui.werkplekken", b.werkplekken()));
@@ -647,6 +899,22 @@ public final class OverzichtScherm extends Screen {
         chip(ui, x, Ui.GUHLDEN, Component.literal("Ƒ " + Ui.getal(b.guhlden) + "/" + Ui.getal(gcap)), b.guhlden >= gcap ? Teken.ROOD : Teken.DONKER,
                 gcap <= 0 ? 0 : b.guhlden / (float) gcap, Teken.GOUD, List.of(Component.translatable("erfenis.ui.guhlden").withStyle(ChatFormatting.BOLD),
                         Component.translatable("erfenis.ui.guhlden_uitleg", Ui.getal(gcap)).withColor(Teken.ZACHT)), null);
+    }
+
+    /** The Knusheid chip's tooltip: what it is made of and the next milestone (deco slice). */
+    private static List<Component> knusTip(Base b) {
+        List<Component> tip = new ArrayList<>();
+        tip.add(Component.translatable("erfenis.ui.knusheid").withStyle(ChatFormatting.BOLD));
+        tip.add(Component.translatable("erfenis.ui.knus_uitleg").withColor(Teken.ZACHT));
+        tip.add(Component.translatable("erfenis.decowinkel.knus_delen", Knusheid.gebouwen(b), Knusheid.paden(b), b.knusDeco));
+        int v = Knusheid.volgende(Math.max(b.knusRecord, b.knusheid()));
+        if (v > 0) {
+            tip.add(Component.translatable("erfenis.decowinkel.knus_volgende", Ui.getal(v)).withColor(Teken.GROEN_DONKER));
+        }
+        if (eigen()) {
+            tip.add(Component.translatable("erfenis.decowinkel.knus_klik").withColor(Teken.ZACHT));
+        }
+        return tip;
     }
 
     /** The own village's tool buttons under the top-left buttons. */
@@ -710,14 +978,15 @@ public final class OverzichtScherm extends Screen {
             }
         }
         int gap = 4, n = Math.max(types.size(), 5);
-        int totaal = Math.max(n * SHOP_W + (n - 1) * gap + 12, GebouwType.Familie.values().length * 66 + 12);
+        int totaal = Math.max(Math.max(n * SHOP_W + (n - 1) * gap + 12, (GebouwType.Familie.values().length + 1) * 64 + 12),
+                decoTab ? DecoBalk.breedte() : 0);
         int x0 = (width - totaal) / 2, y0 = height - SHOP_H - 12;
-        // tabs
+        // tabs (the last one: the decowinkel)
         int tx = x0 + 6;
         for (GebouwType.Familie f : GebouwType.Familie.values()) {
             Component naam = Component.translatable(f.naamKey());
             int tw = 62;
-            boolean open = f == tab;
+            boolean open = f == tab && !decoTab;
             int ty = y0 - TAB_H + (open ? 0 : 2);
             Teken.rond(ui.g, tx, ty, tx + tw, y0 + 4, open ? Teken.ROZE_DONKER : Teken.ROZE, 3);
             Teken.rond(ui.g, tx + 1, ty + 1, tx + tw - 1, y0 + 4, open ? Teken.CREME_VOL : ui.op(tx, ty, tx + tw, y0) ? 0xFFFFF6FA : 0xFFF3E4EB, 3);
@@ -729,11 +998,30 @@ public final class OverzichtScherm extends Screen {
             if (nieuw) {
                 ui.g.fill(tx + tw - 8, ty + 4, tx + tw - 4, ty + 8, Teken.GROEN);
             }
-            ui.klik(tx, ty, tx + tw, y0, () -> tab = f, nieuw ? List.of(Component.translatable("erfenis.ui.tab_nieuw")) : null);
+            ui.klik(tx, ty, tx + tw, y0, () -> {
+                tab = f;
+                decoTab = false;
+                if (modus == Modus.TREK || modus == Modus.DECO && decoKoop) {
+                    modus = Modus.KIJKEN;
+                }
+            }, nieuw ? List.of(Component.translatable("erfenis.ui.tab_nieuw")) : null);
             tx += tw + 2;
+        }
+        {
+            Component naam = Component.translatable("erfenis.decowinkel.tab");
+            int tw = 62, ty = y0 - TAB_H + (decoTab ? 0 : 2);
+            Teken.rond(ui.g, tx, ty, tx + tw, y0 + 4, decoTab ? Teken.GROEN_DONKER : 0xFF9FC98A, 3);
+            Teken.rond(ui.g, tx + 1, ty + 1, tx + tw - 1, y0 + 4, decoTab ? Teken.CREME_VOL : ui.op(tx, ty, tx + tw, y0) ? 0xFFF6FFF2 : 0xFFE9F3E4, 3);
+            ui.item(Ui.KNUS, tx + 3, ty + 2, 0.625f);
+            ui.passend(naam, tx + 15, ty + 3, tw - 19, decoTab ? Teken.DONKER : Teken.ZACHT);
+            ui.klik(tx, ty, tx + tw, y0, () -> decoTab = true, List.of(Component.translatable("erfenis.decowinkel.tab_tip").withColor(Teken.ZACHT)));
         }
         Teken.paneel(ui.g, x0, y0, x0 + totaal, y0 + SHOP_H + 8);
         ui.vlak(x0, y0, x0 + totaal, y0 + SHOP_H + 8, null);
+        if (decoTab) {
+            DecoBalk.kaarten(ui, this, b, x0, y0, totaal);
+            return;
+        }
         int x = x0 + 6;
         for (GebouwType t : types) {
             Base.Fout f = b.kanKopen(t);
@@ -838,7 +1126,8 @@ public final class OverzichtScherm extends Screen {
         String key = switch (modus) {
             case PLAATSEN -> "erfenis.ui.hulp_plaats";
             case VERPLAATSEN -> "erfenis.ui.hulp_verplaats";
-            case DECO -> "erfenis.ui.hulp_deco";
+            case DECO -> decoVan != null ? "erfenis.decowinkel.hulp_verplaats" : decoKoop ? "erfenis.decowinkel.hulp_koop" : "erfenis.ui.hulp_deco";
+            case TREK -> gum ? "erfenis.decowinkel.hulp_gum" : "erfenis.decowinkel.hulp_trek";
             default -> "erfenis.ui.hulp";
         };
         Component t = Component.translatable(key);
@@ -876,10 +1165,10 @@ public final class OverzichtScherm extends Screen {
                 return true;
             }
             if (modus != Modus.KIJKEN) {
-                modus = Modus.KIJKEN;
+                stopModus();
                 return true;
             }
-            if (geselecteerd >= 0 || selPlukje >= 0 || selKavel >= 0) {
+            if (geselecteerd >= 0 || selPlukje >= 0 || selKavel >= 0 || selDeco != null) {
                 kies(-1, -1, -1);
                 return true;
             }
@@ -919,7 +1208,7 @@ public final class OverzichtScherm extends Screen {
             if (venster != null) {
                 venster = null;
             } else if (modus != Modus.KIJKEN) {
-                modus = Modus.KIJKEN;
+                stopModus();
             } else {
                 kies(-1, -1, -1);
             }
@@ -948,7 +1237,26 @@ public final class OverzichtScherm extends Screen {
         startY = vorigY = my;
         kijkOnderMuis(mx, my);
         sleepKandidaat = modus == Modus.KIJKEN && eigen() && hoverGebouw != null && hoverGebouw.id == geselecteerd;
+        sleepDeco = modus == Modus.KIJKEN && eigen() && hoverDeco != null && hoverDeco.equals(selDeco);
+        if (modus == Modus.TREK && eigen()) {   // a stroke starts
+            trekt = true;
+            streek.clear();
+            laatstX = laatstZ = -1000;
+            if (hoverOpPlot) {
+                streek.add(new int[] {hoverX, hoverZ});
+                laatstX = hoverX;
+                laatstZ = hoverZ;
+            }
+        }
         return true;
+    }
+
+    /** Back to looking (clears a stroke being drawn and a piece being moved). */
+    private void stopModus() {
+        modus = Modus.KIJKEN;
+        streek.clear();
+        trekt = false;
+        decoVan = null;
     }
 
     @Override
@@ -957,10 +1265,32 @@ public final class OverzichtScherm extends Screen {
             return true;
         }
         double mx = event.x(), my = event.y();
+        if (modus == Modus.TREK && trekt) {   // the stroke follows the mouse, tile by tile (always side by side)
+            kijkOnderMuis(mx, my);
+            if (hoverOpPlot && (hoverX != laatstX || hoverZ != laatstZ) && streek.size() < Paden.MAX_STREEK) {
+                if (laatstX < -100) {
+                    streek.add(new int[] {hoverX, hoverZ});
+                } else {
+                    for (int[] t : Paden.stap(laatstX, laatstZ, hoverX, hoverZ)) {
+                        if (Plot.opPlot(t[0], t[1]) && streek.size() < Paden.MAX_STREEK) {
+                            streek.add(t);
+                        }
+                    }
+                }
+                laatstX = hoverX;
+                laatstZ = hoverZ;
+            }
+            vorigX = mx;
+            vorigY = my;
+            return true;
+        }
         if (!gesleept && (Math.abs(mx - startX) > 4 || Math.abs(my - startY) > 4)) {
             gesleept = true;
             if (sleepKandidaat) {
                 verplaatsStart(geselecteerd);
+                sleepVerplaats = true;
+            } else if (sleepDeco && selDeco != null) {
+                decoVerplaatsStart(selDeco);
                 sleepVerplaats = true;
             }
         }
@@ -986,9 +1316,18 @@ public final class OverzichtScherm extends Screen {
             return true;
         }
         kijkOnderMuis(event.x(), event.y());
+        if (modus == Modus.TREK && trekt) {
+            trekt = false;
+            trekLos(b);
+            return true;
+        }
         if (sleepVerplaats) {
             sleepVerplaats = false;
-            if (!verplaats(b)) {
+            if (modus == Modus.DECO) {
+                if (!decoKlik(b)) {
+                    stopModus();
+                }
+            } else if (!verplaats(b)) {
                 modus = Modus.KIJKEN;
             }
             return true;
@@ -1000,6 +1339,10 @@ public final class OverzichtScherm extends Screen {
             case KIJKEN -> {
                 if (hoverGebouw != null) {
                     kies(hoverGebouw.id, -1, -1);
+                } else if (hoverDeco != null) {
+                    Base.Deco d = hoverDeco;
+                    kies(-1, -1, -1);
+                    selDeco = d;
                 } else if (hoverPlukje(b) >= 0) {
                     kies(-1, hoverPlukje(b), -1);
                 } else if (hoverKavel(b) >= 0) {
@@ -1022,23 +1365,87 @@ public final class OverzichtScherm extends Screen {
                 }
             }
             case VERPLAATSEN -> verplaats(b);
-            case DECO -> {
-                if (decoId != null && hoverOpPlot) {
-                    int[] m = Base.decoMaat(decoId, decoRot);
-                    int x = voetX(m[0]), z = voetZ(m[1]);
-                    Base.Fout f = b.kanDeco(decoId, x, z, decoRot);
-                    if (f != null) {
-                        toast(ErfenisClient.tekst(f.key(), List.of(f.args())), false);
-                    } else {
-                        ErfenisClient.stuur(new Actie(Actie.DECO, 0, x, z, Actie.DECO_PLAATS, 0, decoRot, decoId));
-                        if (b.decoOpslag.getOrDefault(decoId, 0) <= 1) {
-                            modus = Modus.KIJKEN;
-                        }
-                    }
-                }
+            case DECO -> decoKlik(b);
+            case TREK -> {
             }
         }
         return true;
+    }
+
+    /** A click with the deco ghost: place from the schuurtje, buy-and-place, or drop the piece being moved. True: sent. */
+    private boolean decoKlik(Base b) {
+        if (decoId == null || !hoverOpPlot) {
+            return false;
+        }
+        int[] m = Base.decoMaat(decoId, decoRot);
+        int x = voetX(m[0]), z = voetZ(m[1]);
+        Base.Fout f = decoFout(b, x, z);
+        if (f != null) {
+            toast(ErfenisClient.tekst(f.key(), List.of(f.args())), false);
+            return false;
+        }
+        if (decoVan != null) {
+            Base.Deco van = decoVan;
+            if (x != van.x() || z != van.z() || decoRot != van.rot()) {
+                ErfenisClient.stuur(new Actie(Actie.DECO, x, van.x(), van.z(), Actie.DECO_VERPLAATS, z, decoRot, ""));
+            }
+            stopModus();
+            selDeco = new Base.Deco(van.id(), x, z, decoRot & 3);
+            return true;
+        }
+        if (decoKoop) {   // the shop: the schuurtje's piece first, else bought; the ghost stays for the next one
+            int vlag = Actie.KOOP_PLAATS | (bonModus && b.decoOpslag.getOrDefault(decoId, 0) <= 0 ? Actie.KOOP_BON : 0);
+            ErfenisClient.stuur(new Actie(Actie.DECO, vlag, x, z, Actie.DECO_KOOP, 0, decoRot, decoId));
+            if ((vlag & Actie.KOOP_BON) != 0 && b.decobonnen <= 1) {
+                bonModus = false;
+                modus = Modus.KIJKEN;
+            }
+            return true;
+        }
+        ErfenisClient.stuur(new Actie(Actie.DECO, 0, x, z, Actie.DECO_PLAATS, 0, decoRot, decoId));
+        if (b.decoOpslag.getOrDefault(decoId, 0) <= 1) {
+            modus = Modus.KIJKEN;
+        }
+        return true;
+    }
+
+    /** The stroke is done: send it (draw or gum); the tool stays in hand. */
+    private void trekLos(Base b) {
+        List<int[]> l = new ArrayList<>(streek);
+        streek.clear();
+        if (l.isEmpty()) {
+            return;
+        }
+        if (gum) {
+            boolean iets = false;
+            for (int[] t : l) {
+                iets |= Paden.gumbaar(b, t[0], t[1]);
+            }
+            if (iets) {
+                ErfenisClient.stuur(new Actie(Actie.DECO, 0, 0, 0, Actie.DECO_GUM, 0, 0, Paden.codeer(l)));
+            }
+            return;
+        }
+        if (trekSoort == null) {
+            return;
+        }
+        int[] k = Paden.kosten(b, trekSoort, l);
+        if (k[0] == 0) {
+            boolean al = true;
+            for (int[] t : l) {
+                Base.Fout f = Paden.tegelFout(b, trekSoort, t[0], t[1]);
+                al &= f != null && "erfenis.decowinkel.fout.al".equals(f.key());
+            }
+            if (!al) {
+                toast(Component.translatable("erfenis.decowinkel.fout.hier_niet"), false);
+            }
+            return;
+        }
+        if (k[2] == 0 && b.guhlden < DecoWinkel.stuk(trekSoort).prijs()) {
+            toast(Component.translatable("erfenis.fout.guhlden", DecoWinkel.stuk(trekSoort).prijs()), false);
+            return;
+        }
+        ErfenisClient.stuur(new Actie(Actie.DECO, 0, 0, 0, Actie.DECO_TREK, 0, 0, trekSoort + ":" + Paden.codeer(l)));
     }
 
     /** Drops the building being moved on the hovered spot. True: sent. */

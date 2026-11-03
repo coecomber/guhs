@@ -191,7 +191,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.9: De Erfenis, het Sherlock-verhaal (texts, dialogue speakers, the cast's looks; Java: feature/erfenis/sherlock; append only)
             'erfenis_sherlock',
             # 1.9 Een opknapper!: the FTB chapter guhs_erfenis (advancements + stat names; Java: feature/erfenis/ftb; append only)
-            'erfenis_ftb']
+            'erfenis_ftb',
+            # 1.9 Een opknapper!: deco (decowinkel, paden/hekjes trekken, Knusheid-mijlpalen en titels; Java: feature/erfenis/Deco*)
+            'erfenis_deco']
 
 
 def modules():
