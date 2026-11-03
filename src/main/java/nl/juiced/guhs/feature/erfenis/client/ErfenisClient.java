@@ -108,7 +108,11 @@ public final class ErfenisClient {
             }
         });
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut event) -> {
-            OverzichtScherm.sluitAlles();
+            // "Join server" from the title screen also fires LoggingOut (no world yet): nothing to close then, and
+            // touching the overview classes that early broke joining in 1.9.0.
+            if (net.minecraft.client.Minecraft.getInstance().level != null) {
+                OverzichtScherm.sluitAlles();
+            }
             base = null;
         });
     }

@@ -728,8 +728,16 @@ public final class OverzichtScherm extends Screen {
         }
     }
 
-    private static final net.minecraft.world.item.ItemStack VERGROOTGLAS =
-            new net.minecraft.world.item.ItemStack(nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.VERGROOTGLAS.get());
+    /** Made on first use: a static ItemStack would be built when this class loads, and that can happen on the
+     *  logout event fired by "Join server" from the title screen, before item components are bound (1.9.0 crash). */
+    private static net.minecraft.world.item.ItemStack vergrootglas;
+
+    private static net.minecraft.world.item.ItemStack vergrootglas() {
+        if (vergrootglas == null) {
+            vergrootglas = new net.minecraft.world.item.ItemStack(nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.VERGROOTGLAS.get());
+        }
+        return vergrootglas;
+    }
 
     /** Above the world: job timers (buildings and plukjes), Sherlock's case bubble and the collect bubbles. */
     private void zwevers(Ui ui, Base b, long nu) {
@@ -771,7 +779,7 @@ public final class OverzichtScherm extends Screen {
                     Teken.rond(ui.g, x, y, x + 22, y + 18, Teken.GOUD, 4);
                     Teken.rond(ui.g, x + 1, y + 1, x + 21, y + 17, op && eigen() ? Teken.WIT : Teken.CREME_VOL, 3);
                     ui.g.fill(x + 9, y + 18, x + 13, y + 20, Teken.GOUD);
-                    ui.item(VERGROOTGLAS, x + 3, y + 1);
+                    ui.item(vergrootglas(), x + 3, y + 1);
                     int id = geb.id;
                     ui.klik(x, y, x + 22, y + 20, eigen() ? () -> ErfenisClient.stuur(Actie.op(Actie.BUREAU, id)) : null,
                             List.of(Component.translatable("erfenis.ui.zaak_klaar").withStyle(ChatFormatting.BOLD),
