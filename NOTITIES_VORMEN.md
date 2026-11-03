@@ -82,12 +82,12 @@ Niets: deze slice roept geen API's van andere slices aan. Kern vervangt de POC-`
 
 ## Status (eind)
 - Gametests `VormenGameTests`: 3/3 groen (6460 echte stempels in ~4 s, overhang-schakelaar, alle blokken/wezens bekend).
-- **Nog te doen: AutoCheck-screenshots** (uitgesteld: gebruikersregel "geen gameclient starten"). Script klaar:
+- AutoCheck gedaan (ronde 3): hoeve L1/L5/L10 (+ palet T3), kippenhok L6, molen L6, dorpscafe L10, mammoetwei L3, bosje L9,
+  deco, plukje 1 bekeken naast de renders: komen blok voor blok overeen (behalve de bewust afgeknipte overhang: dakranden en
+  molenwieken). Grasskleur verschilt per biome (de render tint vast groen). In de lucht-test loopt water van fonteinen over de
+  rand omdat er geen buren zijn; in een dorp staat er gras naast en blijft het staan. Geen fixes nodig.
+- (oud) AutoCheck-script: (uitgesteld: gebruikersregel "geen gameclient starten"). Script klaar:
   `tools/autocheck/erfenis_vormen.txt` (alles op y=200 met een barrier onder de camera; ronde 1 was zwart = onder de grond,
   ronde 2 viel de speler van de camera-plek). Daarna vergelijken met `renders-erfenis/hoeve_L01/L05/L10`, `kippenhok_L6`,
   `molen_L6`, `dorpscafe_L10`, `mammoetwei_L10` (= ons L3), `bosje_L9` + hoeve L10 in palet T3 gedraaid, deco en plukje 1.
 
-## PAUZE 2 (2026-11-03)
-Hervatpunt: alles behalve de AutoCheck-ronde is klaar en groen (laatste echte commit 8e93165a2). Na hervatten (en zodra een
-gameclient weer mag): de AutoCheck-ronde uit "Status (eind)" draaien, de screenshots vergelijken met de renders, verschillen fixen,
-opnieuw exporteren en `-Pgt=VormenGameTests` draaien.
