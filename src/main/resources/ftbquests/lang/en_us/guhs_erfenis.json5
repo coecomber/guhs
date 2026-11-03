@@ -1,0 +1,390 @@
+{
+  "chapter.47554813E71C5365.title": "&6Een opknapper!",
+  "chapter.47554813E71C5365.chapter_subtitle": [
+    "18. Bouwkundig rapport: vads",
+  ],
+  "quest.4755489F77A1DB10.title": "Hoe kom je hier?",
+  "quest.4755489F77A1DB10.quest_desc": [
+    "Dit hoofdstuk komt na &dWelkom in de Guhmensie!&r in &dDe Guhmensie&r: een halfuurtje later brengt de &dPostguh&r je een brief van makelaar &dGuhrrit&r.",
+    "",
+    "Opa Knabbels oude boerderij is te koop, voor &eéén kaasknabbel&r! Een beetje een opknapper... Ruim op, bouw je Hoeve tot level 10, laat bewoners intrekken, lever bestellingen aan de buren, stuur spulletjes naar huis en los met &dSherlock Guh&r het raadsel van de boerderij op.",
+    "",
+    "De quests over je dorp vinken zichzelf af zodra het in je dorp zo ver is. Niks zit op slot: elke quest vinkt zichzelf af zodra je hem gedaan hebt, ook als je dat al eerder deed. De kopjes laten zien wat logisch na elkaar komt. Vink dit af en ga lekker vadsig aan de slag!",
+  ],
+  "quest.4755489D39449FD0.title": "Post voor guh!",
+  "quest.4755489D39449FD0.quest_desc": [
+    "Ongeveer een halfuurtje speeltijd na je eerste bezoek aan de Guhmensie komt de &dPostguh&r langs met een brief van makelaar &dGuhrrit&r. Voor jou? Njeg!",
+  ],
+  "quest.475548922B21064B.title": "Eén knabbel, wat een koopje",
+  "quest.475548922B21064B.quest_desc": [
+    "Lees de brief en klik op &eKopen voor 1 kaasknabbel&r. Een hele boerderij voor één kaasknabbel! Bouwkundig rapport: vads. Emotioneel rapport: heel vads.",
+  ],
+  "quest.4755480279263F5C.title": "Hekje naar je boerderij",
+  "quest.4755480279263F5C.quest_desc": [
+    "Bij de koop krijg je een &dErfhekje&r (en een Leverkist). Zet het hekje in je basis: dat is je deurtje naar je eigen boerderij.",
+  ],
+  "quest.475548158B81D04C.title": "Bouwkundig rapport: vads",
+  "quest.475548158B81D04C.quest_desc": [
+    "Loop door het Erfhekje. Tja... het is een opknappertje. Struiken, brandnetels, molshopen. Maar de &dHoeve&r staat er nog!",
+  ],
+  "quest.475548D8F3358F02.title": "Van bovenaf",
+  "quest.475548D8F3358F02.quest_desc": [
+    "Druk op &eO&r: het &dbovenaanzicht&r van je boerderij. Daar bouw, ruim en regel je alles.",
+  ],
+  "task.4755480D9C585961.title": "Plukjes opgeruimd",
+  "quest.47554884D8F77E33.title": "Wieden maar",
+  "quest.47554884D8F77E33.quest_desc": [
+    "Ruim in het bovenaanzicht een &dplukje&r op: een struik, een rotsblok, een oude kar. Soms ligt er iets leuks onder!",
+  ],
+  "quest.47554803435EE390.title": "Tok tok, guh",
+  "quest.47554803435EE390.quest_desc": [
+    "Bouw je eerste &dKippenhok&r. Het eerste is gratis!",
+  ],
+  "task.475548CA43C8AD71.title": "Bewoners in je dorp",
+  "quest.4755489068172224.title": "Een nieuwe buurguh",
+  "quest.4755489068172224.quest_desc": [
+    "Bouw een &dGuhhutje&r: dan trekt er vanzelf een bewoner in. Bewoners werken in je gebouwen.",
+  ],
+  "task.47554883BD825C9A.title": "Bestellingen geleverd",
+  "quest.4755484F79611921.title": "Karretje op pad",
+  "quest.4755484F79611921.quest_desc": [
+    "Lever een eerste bestelling aan een buurdorpje (het &dMarktplein&r, of klik op een karretje op de wereldkaart).",
+  ],
+  "task.4755483FD216E15F.title": "Level van je Hoeve",
+  "quest.4755488C00D6520E.title": "Doei, makelaar!",
+  "quest.4755488C00D6520E.quest_desc": [
+    "Je Hoeve op &elevel 2&r. Makelaar Guhrrit vindt het wel mooi zo en gaat met vakantie. Met een sombrero.",
+  ],
+  "task.475548CB2BED4AF6.title": "Level van je Hoeve",
+  "quest.475548B5AEE5988F.title": "Roze dakpannen",
+  "quest.475548B5AEE5988F.quest_desc": [
+    "Je Hoeve op &elevel 3&r: roze dakpannen! Vergeet je &dOpslagschuur&r niet: meer ruimte voor al je spulletjes.",
+  ],
+  "task.47554896CD6663F7.title": "Level van je Hoeve",
+  "quest.4755484BA4DA0E49.title": "Een echt boerderijtje",
+  "quest.4755484BA4DA0E49.quest_desc": [
+    "Je Hoeve op &elevel 4&r. Het begint ergens op te lijken, guh.",
+  ],
+  "task.475548A54B7792B7.title": "Level van je Hoeve",
+  "quest.475548A39E757ACE.title": "Vakwerk met knuffeltjes",
+  "quest.475548A39E757ACE.quest_desc": [
+    "Je Hoeve op &elevel 5&r: vakwerk, en overal knuffeltjes. Zo knus!",
+  ],
+  "task.475548B9B730BD1D.title": "Level van je Hoeve",
+  "quest.475548DE2235302C.title": "Hoeve met allure",
+  "quest.475548DE2235302C.quest_desc": [
+    "Je Hoeve op &elevel 6&r. De buren kijken een beetje jaloers.",
+  ],
+  "task.475548D82D456962.title": "Level van je Hoeve",
+  "quest.475548B45711DFE6.title": "Een vleugje vads",
+  "quest.475548B45711DFE6.quest_desc": [
+    "Je Hoeve op &elevel 7&r: goud en vads. Heel vahoeg.",
+  ],
+  "task.475548EB5ED9E794.title": "Level van je Hoeve",
+  "quest.47554898F359A686.title": "Herenboerderij",
+  "quest.47554898F359A686.quest_desc": [
+    "Je Hoeve op &elevel 8&r. Een echte herenboerderij, met een guh als heer.",
+  ],
+  "task.475548FCA258886D.title": "Level van je Hoeve",
+  "quest.475548E439332F19.title": "Pastel en lichtjes",
+  "quest.475548E439332F19.quest_desc": [
+    "Je Hoeve op &elevel 9&r: pastelkleuren en lichtjes overal.",
+  ],
+  "task.4755484F45A63379.title": "Level van je Hoeve",
+  "quest.475548CA085912AB.title": "De Grote Knuffelhoeve",
+  "quest.475548CA085912AB.quest_desc": [
+    "Je Hoeve op &elevel 10&r: de Grote Knuffelhoeve! Opa Knabbel zou zo trots zijn.",
+  ],
+  "quest.4755482840CDBF70.title": "Twee handjes extra",
+  "quest.4755482840CDBF70.quest_desc": [
+    "Bouw een &dTimmerschuur&r: een tweede bouwer! Op level 7 komt er nog een derde bij (met koffiepauze).",
+  ],
+  "task.4755487D31985ACE.title": "Plukjes opgeruimd",
+  "quest.4755480B4560C04F.title": "Opgeruimd staat netjes",
+  "quest.4755480B4560C04F.quest_desc": [
+    "Ruim &e16 plukjes&r op: de hele binnenring is schoon.",
+  ],
+  "task.4755484B3DF21A2B.title": "Plukjes opgeruimd",
+  "quest.47554865B5523166.title": "Tot aan de bosrand",
+  "quest.47554865B5523166.quest_desc": [
+    "Ruim &e40 plukjes&r op.",
+  ],
+  "task.4755483B76F23B80.title": "Plukjes opgeruimd",
+  "quest.4755484679B454B1.title": "Geen brandnetel meer",
+  "quest.4755484679B454B1.quest_desc": [
+    "Ruim &ealle 72 plukjes&r op. Geen brandnetel te bekennen!",
+  ],
+  "task.475548FCCC562D36.title": "Kavels gekocht",
+  "quest.47554809B055B075.title": "Grond erbij!",
+  "quest.47554809B055B075.quest_desc": [
+    "Koop in het bovenaanzicht een eerste &dkavel&r grond erbij.",
+  ],
+  "task.475548AB46C01C88.title": "Kavels gekocht",
+  "quest.4755489D022FBF66.title": "Grootgrondguh",
+  "quest.4755489D022FBF66.quest_desc": [
+    "Koop &ealle 16 kavels&r. Zo ver je kunt kijken: allemaal van jou!",
+  ],
+  "quest.475548DDBE0DFE26.title": "Bleh zei het schaapje",
+  "quest.475548DDBE0DFE26.quest_desc": [
+    "Bouw een &dSchaapskooi&r: wol!",
+  ],
+  "quest.47554878A3D82DE1.title": "Pluizige oortjes",
+  "quest.47554878A3D82DE1.quest_desc": [
+    "Bouw een &dKonijnenren&r: angorapluis.",
+  ],
+  "quest.4755484D9C0E8CCF.title": "Kwak, guh",
+  "quest.4755484D9C0E8CCF.quest_desc": [
+    "Bouw een &dEendenvijver&r: dons en eendeneitjes.",
+  ],
+  "quest.4755480C8D50C8FB.title": "Boe-guh",
+  "quest.4755480C8D50C8FB.quest_desc": [
+    "Bouw een &dKoeienstal&r: melk!",
+  ],
+  "quest.475548C993CD9E75.title": "Zoemguhs",
+  "quest.475548C993CD9E75.quest_desc": [
+    "Bouw een &dBijenhof&r: honing en was.",
+  ],
+  "quest.47554885B8E5F5B9.title": "Wolkjes op de wei",
+  "quest.47554885B8E5F5B9.quest_desc": [
+    "Een &dSchaapskooi op level 7&r (en je Hoeve ook op 7): dan komen de &dwolkenschaapjes&r, met extra pluis.",
+  ],
+  "quest.4755483E6CD83C8C.title": "Een heel wollige verrassing",
+  "quest.4755483E6CD83C8C.quest_desc": [
+    "Bouw de &dMammoetwei&r. Met genoeg vadskracht slapen de mammoetjes niet, en maken ze bergen reuzenwol.",
+  ],
+  "quest.475548E4013DA144.title": "Zaaien maar",
+  "quest.475548E4013DA144.quest_desc": [
+    "Bouw een &dAkker&r en kies een gewas: graan, roze graan, wortels, bloemen of pluisbolletjes.",
+  ],
+  "quest.475548F2E70FE050.title": "Bessen plukken",
+  "quest.475548F2E70FE050.quest_desc": [
+    "Bouw een &dBoomgaard&r: knabbelbessen en fruit.",
+  ],
+  "quest.47554870D84B4934.title": "De molen draait",
+  "quest.47554870D84B4934.quest_desc": [
+    "Maal je eerste &dmeel&r in de &dMolen&r.",
+  ],
+  "quest.475548C1A90CB9CC.title": "Vers van de bakker",
+  "quest.475548C1A90CB9CC.quest_desc": [
+    "Bak je eerste &dbrood&r in de &dBakkerij&r.",
+  ],
+  "quest.4755482428E1549E.title": "Een koekje bij de koffie",
+  "quest.4755482428E1549E.quest_desc": [
+    "Bak je eerste &dkoek&r in de Bakkerij.",
+  ],
+  "quest.475548FF39C376B8.title": "Weef, weef",
+  "quest.475548FF39C376B8.quest_desc": [
+    "Weef je eerste &dstof&r in de &dWeverij&r.",
+  ],
+  "quest.4755482E3148DC41.title": "Kaasmaker-guh",
+  "quest.4755482E3148DC41.quest_desc": [
+    "Maak je eerste &dkaas&r in de &dKaasmakerij&r.",
+  ],
+  "quest.475548852A0550FA.title": "Kaarsjes aan",
+  "quest.475548852A0550FA.quest_desc": [
+    "Maak je eerste &dkaarsen&r in de &dKaarsenmakerij&r (die werkt op vadskracht).",
+  ],
+  "quest.47554823932BE8D9.title": "Zestien in één keer",
+  "quest.47554823932BE8D9.quest_desc": [
+    "Je eerste &dreuzenwol&r van de mammoetjes.",
+  ],
+  "quest.475548E3D3E7E0A5.title": "Hout voor de kachel",
+  "quest.475548E3D3E7E0A5.quest_desc": [
+    "Bouw een &dBosje&r en een &dHoutzagerij&r.",
+  ],
+  "task.47554889AD4C36C8.title": "Planken gezaagd in je dorp",
+  "quest.4755485BA3A22CE0.title": "Zaagsel overal",
+  "quest.4755485BA3A22CE0.quest_desc": [
+    "Zaag &e500 planken&r in je Houtzagerij.",
+  ],
+  "quest.475548BB4EC2C14F.title": "Steen voor steen",
+  "quest.475548BB4EC2C14F.quest_desc": [
+    "Bouw een &dGroeve&r: steen en klei.",
+  ],
+  "task.475548C1A37F0BA6.title": "Bakstenen gebakken in je dorp",
+  "quest.47554880234FA8A5.title": "Gebakken en wel",
+  "quest.47554880234FA8A5.quest_desc": [
+    "Bak &e200 bakstenen&r in de &dSteenbakkerij&r.",
+  ],
+  "quest.475548A2537EFEEF.title": "Glashelder",
+  "quest.475548A2537EFEEF.quest_desc": [
+    "Bouw een &dZandkuil&r en een &dGlasblazerij&r.",
+  ],
+  "quest.475548765EA37757.title": "Een kleurtje erbij",
+  "quest.475548765EA37757.quest_desc": [
+    "Kies in de Kaarsenmakerij een &dkleur&r voor je kaarsjes. Kleur maken kost vadskracht!",
+  ],
+  "quest.4755480011896D4D.title": "Kies je blokjes",
+  "quest.4755480011896D4D.quest_desc": [
+    "Kies in de &dBouwblokkenwerkplaats&r welke Bouwkeet-blokken hij maakt (iets anders dan alleen de roze pastelbaksteen).",
+  ],
+  "quest.4755483E2F965BF5.title": "Een Leverkist",
+  "quest.4755483E2F965BF5.quest_desc": [
+    "Een &dLeverkist&r krijg je bij de koop, en je kunt er meer maken. Daar komt de post uit je dorp in.",
+  ],
+  "quest.475548C070E33CE1.title": "Naar huis sturen",
+  "quest.475548C070E33CE1.quest_desc": [
+    "Stuur spulletjes uit je dorp naar je &dLeverkist&r (knop &eNaar huis sturen&r).",
+  ],
+  "task.4755488116209183.title": "Bouwspul naar huis gestuurd",
+  "quest.475548A6FC3B9098.title": "Bouwpakket",
+  "quest.475548A6FC3B9098.quest_desc": [
+    "Stuur &e5.000&r stammen, klei, zand, glasscherven en Bouwkeet-blokken naar huis.",
+  ],
+  "quest.475548CF672C8A04.title": "Aan het loket",
+  "quest.475548CF672C8A04.quest_desc": [
+    "Lever iets uit je zakken in bij het &dBouwmateriaal-loket&r. Grote upgrades vragen spullen uit de echte wereld.",
+  ],
+  "quest.475548C6D588723D.title": "Plons, kleurtje terug",
+  "quest.475548C6D588723D.quest_desc": [
+    "Verf witte wol uit je dorp thuis (verfbad, kleurmolen) en lever de &dgekleurde wol&r in bij het loket.",
+  ],
+  "quest.475548984996E84F.title": "De Dorpszender",
+  "quest.475548984996E84F.quest_desc": [
+    "Maak een &dDorpszender&r (een Vadszender met kristallen en een blok kaasknabbels) en zet hem op je vadskrachtnet.",
+  ],
+  "quest.475548ACDEF2317E.title": "Vonkjes in het dorp",
+  "quest.475548ACDEF2317E.quest_desc": [
+    "Bouw de &dVadsmast&r en laat er &e40 VK&r aankomen van je Dorpszender.",
+  ],
+  "task.4755486E80F993EF.title": "Bewoners in je dorp",
+  "quest.47554864BA40718A.title": "Een gezellig straatje",
+  "quest.47554864BA40718A.quest_desc": [
+    "&e10 bewoners&r in je dorp.",
+  ],
+  "task.4755486218D7F3F2.title": "Bewoners in je dorp",
+  "quest.475548E7E560C177.title": "Een echt dorp",
+  "quest.475548E7E560C177.quest_desc": [
+    "&e50 bewoners&r! Een echt dorp.",
+  ],
+  "quest.475548FA80DC2AE4.title": "Wie wil er schommelen?",
+  "quest.475548FA80DC2AE4.quest_desc": [
+    "Bouw een &dSpeeltuin&r: daar komen nog meer bewoners op af.",
+  ],
+  "quest.4755482AAF27F5C7.title": "Op logeerpartij",
+  "quest.4755482AAF27F5C7.quest_desc": [
+    "Bouw een &dGuhpension&r en laat een eigen guh logeren.",
+  ],
+  "quest.4755489AAA4A29A5.title": "Koffie in De Vadse Koe",
+  "quest.4755489AAA4A29A5.quest_desc": [
+    "Bouw het &dDorpscafé&r: iedereen werkt een beetje harder met koffie.",
+  ],
+  "quest.475548C66A4F7229.title": "Dorpsfeest!",
+  "quest.475548C66A4F7229.quest_desc": [
+    "Bouw de &dMuziektent&r. Muziek, taart, feest! (En alles gaat net iets sneller.)",
+  ],
+  "quest.47554820BDB0A33C.title": "Op de kaart",
+  "quest.47554820BDB0A33C.quest_desc": [
+    "Druk op &eM&r: de &dwereldkaart&r met alle dorpjes en karretjes.",
+  ],
+  "quest.47554897132AD5FC.title": "Even kijken bij de buren",
+  "quest.47554897132AD5FC.quest_desc": [
+    "Ga op bezoek in een ander dorp.",
+  ],
+  "task.4755483C04EA4DC9.title": "Bestellingen geleverd",
+  "quest.4755489956FD17CC.title": "Vaste klant",
+  "quest.4755489956FD17CC.quest_desc": [
+    "Lever &e100 bestellingen&r.",
+  ],
+  "task.475548374E395BA7.title": "Bestellingen geleverd",
+  "quest.4755481B7A5A2C3E.title": "Leverancier van het jaar",
+  "quest.4755481B7A5A2C3E.quest_desc": [
+    "Lever &e400 bestellingen&r. Wat een karretjes!",
+  ],
+  "quest.47554892730F8A6D.title": "Voor de grote buren",
+  "quest.47554892730F8A6D.quest_desc": [
+    "Lever een bestelling aan een dorp dat &ehoger&r is dan het jouwe.",
+  ],
+  "quest.475548CED2C3B28D.title": "Het gouden karretje",
+  "quest.475548CED2C3B28D.quest_desc": [
+    "Elke dag is er één &6gouden ster&r-bestelling. Lever er een!",
+  ],
+  "quest.475548923498020F.title": "Handje helpen",
+  "quest.475548923498020F.quest_desc": [
+    "Klik op de wereldkaart bij het dorp van een andere speler op &eHandje helpen&r.",
+  ],
+  "task.475548D966B92793.title": "Burenstempels",
+  "quest.475548AB68319A27.title": "Goede buur",
+  "quest.475548AB68319A27.quest_desc": [
+    "Verzamel &e25 burenstempels&r met Handje helpen.",
+  ],
+  "quest.4755486C4799BD63.title": "Een eigen speurbureau",
+  "quest.4755486C4799BD63.quest_desc": [
+    "Bouw een &dDetectivebureau&r. Sherlock Guh en Dokter Vadson trekken in, en je krijgt een vergrootglas!",
+  ],
+  "quest.4755487AE7953237.title": "Zaak 1: De verdwenen eieren",
+  "quest.4755487AE7953237.quest_desc": [
+    "Los de zaak &dDe verdwenen eieren&r op. Hij begint als het Detectivebureau staat er (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.475548A7B8050518.title": "Zaak 2: Het kruimelspoor",
+  "quest.475548A7B8050518.quest_desc": [
+    "Los de zaak &dHet kruimelspoor&r op. Hij begint als je bouwt een Bakkerij (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.47554800F8B4812F.title": "Zaak 3: Het spook in het schuurtje",
+  "quest.47554800F8B4812F.quest_desc": [
+    "Los de zaak &dHet spook in het schuurtje&r op. Hij begint als je Hoeve wordt level 4 (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.475548B57104DC98.title": "Zaak 4: De verdwenen wol",
+  "quest.475548B57104DC98.quest_desc": [
+    "Los de zaak &dDe verdwenen wol&r op. Hij begint als een Weverij en 10 bestellingen (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.4755484B9A85D2ED.title": "Zaak 5: De kelder van Opa Knabbel",
+  "quest.4755484B9A85D2ED.quest_desc": [
+    "Los de zaak &dDe kelder van Opa Knabbel&r op. Hij begint als je Hoeve wordt level 5 (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.4755482E620238A8.title": "Zaak 6: De gestolen koeienbel",
+  "quest.4755482E620238A8.quest_desc": [
+    "Los de zaak &dDe gestolen koeienbel&r op. Hij begint als je bouwt een Muziektent (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.4755488E1BAB3B8C.title": "Zaak 7: De verschoven paaltjes",
+  "quest.4755488E1BAB3B8C.quest_desc": [
+    "Los de zaak &dDe verschoven paaltjes&r op. Hij begint als je Hoeve wordt level 7 (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.47554852B62CB271.title": "Zaak 8: Licht in de kelder",
+  "quest.47554852B62CB271.quest_desc": [
+    "Los de zaak &dLicht in de kelder&r op. Hij begint als je bouwt een Kaarsenmakerij (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.4755483FB5B171D4.title": "Zaak 9: Het blikje onder het boompje",
+  "quest.4755483FB5B171D4.quest_desc": [
+    "Los de zaak &dHet blikje onder het boompje&r op. Hij begint als je Hoeve wordt level 8 (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.475548F5E86E2D80.title": "Zaak 10: De voorbereiding",
+  "quest.475548F5E86E2D80.quest_desc": [
+    "Los de zaak &dDe voorbereiding&r op. Hij begint als meteen na het blikje (en de zaak ervoor is opgelost). Speuren, getuigen horen, draadjes spannen: wie was het?",
+  ],
+  "quest.475548645504E796.title": "BEZWAAR, NJEG!",
+  "quest.475548645504E796.quest_desc": [
+    "De &dGrote Knabbelzaak&r: de rechtszaak tegen Morris-Mika (Hoeve 9 en De voorbereiding). Kies het juiste bewijs en roep: BEZWAAR, NJEG!",
+  ],
+  "quest.475548B61FCF3093.title": "Een vleugje knus",
+  "quest.475548B61FCF3093.quest_desc": [
+    "Zet je eerste &ddecostukje&r neer.",
+  ],
+  "quest.4755484889948732.title": "Wat lag hier nou?",
+  "quest.4755484889948732.quest_desc": [
+    "Vind bij het opruimen een oud &ddecostukje&r (of de oude tractor).",
+  ],
+  "quest.475548E6F6A8337D.title": "Een bedankje van de buren",
+  "quest.475548E6F6A8337D.quest_desc": [
+    "Soms stuurt een buurdorpje na een bestelling een &ddecostukje&r als bedankje. Krijg er een!",
+  ],
+  "task.475548DE74DDBDF4.title": "Ansichtkaarten van de makelaar",
+  "quest.475548F9EE742E3C.title": "Groetjes van de makelaar",
+  "quest.475548F9EE742E3C.quest_desc": [
+    "Vind de &e3 ansichtkaarten&r van makelaar Guhrrit onder de plukjes. Ze komen op het kaartjesbord.",
+  ],
+  "quest.475548002F6ED636.title": "Spuitguh",
+  "quest.475548002F6ED636.quest_desc": [
+    "Zet de &dSpuitguh-fontein&r in je dorp (decowinkel, vanaf Hoeve 6). Pfffft!",
+  ],
+  "task.475548A015972E0E.title": "Knusheid van je dorp",
+  "quest.475548C6C7CAF5DE.title": "Heel knus",
+  "quest.475548C6C7CAF5DE.quest_desc": [
+    "&e1.000 Knusheid&r: gebouwen, paadjes en deco.",
+  ],
+  "task.4755481A7A9B3B45.title": "Knusheid van je dorp",
+  "quest.475548915B157A21.title": "Knusser bestaat niet",
+  "quest.475548915B157A21.quest_desc": [
+    "&e2.500 Knusheid&r. Knusser bestaat echt niet.",
+  ],
+}
