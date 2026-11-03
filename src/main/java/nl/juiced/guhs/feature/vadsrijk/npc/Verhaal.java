@@ -196,9 +196,8 @@ public final class Verhaal {
     static void koppelSpion() {
         nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion.MAG_ONTMASKEREN = Verhaal::magOntmaskeren;   // (direct since the integration)
         // wereld: the airship to the haven only after the camp story (the BAM and the Klodderreus); back to the camp always
-        NpcRollen.zetVeld("nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen#MAG_VLIEGEN",
-                (java.util.function.BiPredicate<ServerPlayer, Object>) (p, naar) -> !String.valueOf(naar).equals("HAVEN")
-                        || Questlog.klaar(p, "hq05_klodderreus") || Questlog.actief(p, "hq06_zwamzoet"));
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.MAG_VLIEGEN = (p, naar) -> !String.valueOf(naar).equals("HAVEN")
+                || Questlog.klaar(p, "hq05_klodderreus") || Questlog.actief(p, "hq06_zwamzoet");
     }
 
     static boolean magOntmaskeren(ServerPlayer p) {

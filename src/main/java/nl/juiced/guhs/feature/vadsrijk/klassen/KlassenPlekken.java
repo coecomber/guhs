@@ -1,6 +1,7 @@
 package nl.juiced.guhs.feature.vadsrijk.klassen;
 
 import net.minecraft.core.BlockPos;
+import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
 
 /**
  * Every world spot the klassen slice knows about (SLICE_BRIEF: one class). The klassen logic itself is position-free: the
@@ -9,9 +10,9 @@ import net.minecraft.core.BlockPos;
  */
 public final class KlassenPlekken {
     /** The ordetempel on the highest hat of Zwamzoet (placeholder until POI_VADSRIJK.md): the class desk + the ceremony circle. */
-    public static final BlockPos ORDETEMPEL = new BlockPos(0, 184, -24);
+    public static final BlockPos ORDETEMPEL = WereldPlekken.plek("ordetempel_altaar");   // (real map, integration)
     /** The klasse-tempeltje in Knuffelkamp (first class choice), placeholder. */
-    public static final BlockPos KLASSE_TEMPELTJE = new BlockPos(-30, 66, 1040);
+    public static final BlockPos KLASSE_TEMPELTJE = WereldPlekken.plek("tempeltje");
 
     private KlassenPlekken() {
     }

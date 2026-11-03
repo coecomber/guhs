@@ -28,6 +28,13 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
     public static final int TEGEL = 64, HOOGTE = 320;
     /** Tiles known to be missing (no file), so we don't ask the template manager 16 times per tile. */
     private static final Map<Long, Boolean> GEEN = new ConcurrentHashMap<>();
+    /**
+     * Template memory (integration 1.10.0, was wereld's TegelGeheugen): vanilla's StructureTemplateManager keeps every loaded
+     * template forever (690 tiles, ~12.5 M blocks). A tile is forgotten as soon as all 16 of its chunks are placed; tiles that
+     * stay half-generated are forgotten by {@link #ruimOp} after 2 minutes without use (reloading one costs ~10 ms).
+     */
+    private static final Map<Long, java.util.Set<Long>> GEPLAATST = new ConcurrentHashMap<>();
+    private static final Map<Long, Long> LAATST = new ConcurrentHashMap<>();
 
     public KaartFeature() {
         super(NoneFeatureConfiguration.CODEC);
@@ -62,6 +69,26 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
         StructurePlaceSettings s = new StructurePlaceSettings().setBoundingBox(chunk).setIgnoreEntities(true).setKnownShape(true);
         BlockPos hoek = new BlockPos(tx * TEGEL, 0, tz * TEGEL);
         tegel.placeInWorld(level, hoek, hoek, s, ctx.random(), 2);
+        LAATST.put(sleutel, System.currentTimeMillis());
+        java.util.Set<Long> klaar = GEPLAATST.computeIfAbsent(sleutel, k -> ConcurrentHashMap.newKeySet());
+        klaar.add(cp.pack());
+        if (klaar.size() >= (TEGEL / 16) * (TEGEL / 16)) {
+            GEPLAATST.remove(sleutel);
+            LAATST.remove(sleutel);
+            level.getLevel().getStructureManager().remove(tegelId(tx, tz));
+        }
         return true;
+    }
+
+    /** Forgets the tiles not used for 2 minutes (call now and then from the server thread, e.g. once a minute). */
+    public static void ruimOp(ServerLevel sl) {
+        long grens = System.currentTimeMillis() - 120_000L;
+        for (var e : LAATST.entrySet()) {
+            if (e.getValue() < grens) {
+                long k = e.getKey();
+                LAATST.remove(k);
+                sl.getStructureManager().remove(tegelId((int) (k >> 32), (int) k));
+            }
+        }
     }
 }

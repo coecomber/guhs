@@ -100,8 +100,15 @@ public final class NpcRollen {
         koppelAls("kampklodder", (p, a) -> p.level() instanceof ServerLevel sl
                 && nl.juiced.guhs.feature.vadsrijk.wezens.Kampklodder.plaats(sl, kampklodderPlek()) != null);
         koppelAls("draak", NpcRollen::draakDirect);
+        koppelAls("luchtschip", (p, naar) -> {
+            boolean stad = !naar.equals("knuffelkamp");
+            var kamp = nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.Dok.KAMP;
+            var haven = nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.Dok.HAVEN;
+            nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.vlieg(p, stad ? kamp : haven, stad ? haven : kamp);
+            return true;
+        });
         nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.VIA_BALIE = false;
-        LOG.debug("Vadsrijk npc: roles bound directly ({}), reflection only for {}wereld", KOPPELS.size(), V0);
+        LOG.debug("Vadsrijk npc: all {} roles bound directly ({})", KOPPELS.size(), V0);
     }
 
     /** The dragon through wezens' DraakVlucht (see {@link #draak}). */

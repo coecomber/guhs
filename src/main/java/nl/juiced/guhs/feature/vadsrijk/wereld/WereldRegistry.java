@@ -100,9 +100,9 @@ public final class WereldRegistry {
                     Uitkijken.markeerBinnen(p);
                 }
             }
-            if (sl.getGameTime() - laatsteOpruim > 20 * 300) {
+            if (sl.getGameTime() - laatsteOpruim > 20 * 60) {
                 laatsteOpruim = sl.getGameTime();
-                TegelGeheugen.ruimOp(sl);
+                nl.juiced.guhs.feature.vadsrijk.kern.wereld.KaartFeature.ruimOp(sl);   // (kern since the integration)
             }
         });
         NeoForge.EVENT_BUS.addListener((PlayerInteractEvent.RightClickBlock e) -> {

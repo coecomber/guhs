@@ -33,7 +33,8 @@ DIM_TYPE = {
     "monster_spawn_light_level": 0,
     "monster_spawn_block_light_limit": 0,
     "has_fixed_time": False,
-    "timelines": "#minecraft:universal",
+    "default_clock": "minecraft:overworld",   # (integration: /time set works in the dimension, like the Guhmension)
+    "timelines": "#minecraft:in_overworld",
 }
 
 # (one bedrock layer: a flat generator with only air counts as "void" and then skips the biome features, i.e. the map)

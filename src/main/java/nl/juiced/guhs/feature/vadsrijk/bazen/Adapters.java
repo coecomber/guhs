@@ -1,6 +1,5 @@
 package nl.juiced.guhs.feature.vadsrijk.bazen;
 
-import java.lang.reflect.Method;
 import java.util.Set;
 
 import javax.annotation.Nullable;
@@ -27,7 +26,6 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
  */
 public final class Adapters {
     public static final String RIDDER = "guhs:vr_mob_tempelridder", PRIESTER = "guhs:vr_mob_sporenpriester";   // (the real wezens ids, integration)
-    private static final String DEUREN = "nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren";
 
     private Adapters() {
     }
@@ -55,22 +53,20 @@ public final class Adapters {
         return m;
     }
 
-    private static boolean deur(String methode, ServerLevel sl, String deur) {
-        try {
-            Class<?> c = Class.forName(DEUREN);
-            Method m = c.getMethod(methode, ServerLevel.class, String.class);
-            Object r = m.invoke(null, sl, deur);
-            return !(r instanceof Boolean b) || b;
-        } catch (ReflectiveOperationException | LinkageError ex) {
+    /** The temple door = wereld's moving door (integration 1.10.0: a direct call; the own sliding fallback is no longer used). */
+    public static boolean deurOpen(ServerLevel sl, String deur) {
+        if (nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.deur(deur) == null) {
             return false;
         }
-    }
-
-    public static boolean deurOpen(ServerLevel sl, String deur) {
-        return deur("open", sl, deur);
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.open(sl, deur);
+        return true;
     }
 
     public static boolean deurDicht(ServerLevel sl, String deur) {
-        return deur("sluit", sl, deur);
+        if (nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.deur(deur) == null) {
+            return false;
+        }
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.sluit(sl, deur);
+        return true;
     }
 }
