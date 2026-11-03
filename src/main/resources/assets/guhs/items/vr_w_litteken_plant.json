@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "guhs:item/vr_w_litteken_plant",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -6120280
+      }
+    ]
+  }
+}

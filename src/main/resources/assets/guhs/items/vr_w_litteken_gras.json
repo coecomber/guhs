@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "guhs:block/vr_w_litteken_gras",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": -7435628
+      }
+    ]
+  }
+}

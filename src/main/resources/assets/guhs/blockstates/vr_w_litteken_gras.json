@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "": [
+      {
+        "model": "guhs:block/vr_w_litteken_gras"
+      },
+      {
+        "model": "guhs:block/vr_w_litteken_gras",
+        "y": 90
+      },
+      {
+        "model": "guhs:block/vr_w_litteken_gras",
+        "y": 180
+      },
+      {
+        "model": "guhs:block/vr_w_litteken_gras",
+        "y": 270
+      }
+    ]
+  }
+}

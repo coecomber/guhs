@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:amethyst_shard",
+    "minecraft:pink_dye",
+    "minecraft:glowstone_dust",
+    "minecraft:flint"
+  ],
+  "result": {
+    "id": "guhs:vr_w_vonk",
+    "count": 2
+  }
+}

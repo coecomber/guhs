@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/tinted_cross",
+  "textures": {
+    "cross": "guhs:block/vadsrijk/wereld/litteken_plant"
+  },
+  "render_type": "minecraft:cutout"
+}

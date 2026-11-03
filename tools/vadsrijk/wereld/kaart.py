@@ -54,7 +54,7 @@ PADEN = {
     "grotten3": [(-260, -300), (-180, -360), (-180, -480)],
     "grotten4": [(-260, -300), (-380, -400), (-460, -460)],
     "brug": [(30, -100), (80, -140), (120, -185), (140, -205)],
-    "berg": [(205, -265), (230, -280), (400, -300), (400, -312), (280, -345), (285, -360), (330, -375), (330, -386)],
+    "berg": [(205, -265), (230, -280), (400, -292), (410, -305), (400, -322), (280, -345), (272, -360), (285, -372), (330, -380), (330, -386)],
     "haven": [(10, 100), (20, 130), (80, 180), (100, 300), (95, 400), (92, 470)],
     "zuid": [(100, 300), (160, 375)],
     "weide2": [(220, -80), (230, -130), (330, -200), (400, -300)],
@@ -156,7 +156,7 @@ class Kaart:
         berg = 150 * np.exp(-d ** 2 * 1.3) + 22 * np.exp(-((d - 0.42) / 0.12) ** 2)
         H += berg * (1 + 0.12 * n1) + w["tempel"] * (6 + 10 * rug)
         # temple plateau (south slope) + the summit bowl for the Opperzwam hall
-        plat = np.hypot((x - 330) / 62, (z - -432) / 56)
+        plat = np.hypot((x - 330) / 72, (z - -442) / 68)
         H = np.where(plat < 1, TEMPEL_PLATEAU, np.where(plat < 1.35, H * (plat - 1) / 0.35 + TEMPEL_PLATEAU * (1.35 - plat) / 0.35, H))
         # the city: flat at 63 under the scene, ramping up outside
         sx0, sz0, sx1, sz1 = STAD_BOX
@@ -183,13 +183,17 @@ class Kaart:
         diep = np.clip(1 - (dk / rk) ** 4, 0, 1)
         self.kloof = dk < rk
         H = H * (1 - diep) + (30 + 2 * f) * diep
-        # ponds of Klodderweide (water at their own level)
-        self.wl = np.full((NX, NZ), ZEE, np.float32)
+        # no inland lakes by accident: inland ground stays >= 64 (the Kloof and the ponds are carved on purpose)
+        H = np.where((kustd > 30) & ~self.kloof, np.maximum(H, 64 + 0.5 * f), H)
+        # ponds of Klodderweide (water at their own level); land has no water unless set here
+        self.wl = np.full((NX, NZ), -1, np.float32)
         for (px, pz, rx, rz) in VIJVERS:
             e = np.hypot((x - px) / rx, (z - pz) / rz) + 0.08 * f
             rand = np.median(H[(e > 1.1) & (e < 1.4)]) if np.any((e > 1.1) & (e < 1.4)) else 66
-            vlak = np.clip((e - 1.0) / 0.6, 0, 1)
-            H = np.where(e < 1.6, (rand - 1) * vlak + H * 0 + H * 0 + (rand - 1) * 0 + H * 0 + (rand - 1 - 3 * (1 - e)) * (1 - vlak) * (e < 1) + (rand - 1) * vlak * 0 + (rand - 1) * (1 - vlak) * (e >= 1), H)
+            rand = float(rand)
+            bodem = rand - 2 - 4 * np.clip(1 - e, 0, 1)          # inside: down to 4 deep
+            oever = (rand - 1) + np.clip((e - 1.0) / 0.6, 0, 1) * (H - (rand - 1))   # rim: blend back to the land
+            H = np.where(e < 1.0, bodem, np.where(e < 1.6, oever, H))
             self.wl = np.where(e < 1.0, rand - 1, self.wl)
         # stream in the Kloof
         self.wl = np.where(self.kloof & (H < 34), 33, self.wl)
@@ -205,13 +209,12 @@ class Kaart:
             self.pad = np.maximum(self.pad, np.clip(1 - dp / r, 0, 1) + (dp < r) * 0.5)
         # the mountain path: a proper ramp (ignore the smoothed terrain): from y 70 up to the plateau
         dp, langs = polyafstand(PADEN["berg"])
-        L = langs.max() if langs.max() > 0 else 1
         tot = sum(math.dist(a, b) for a, b in zip(PADEN["berg"], PADEN["berg"][1:]))
         ramp = 72 + (TEMPEL_PLATEAU - 72) * np.clip(langs / tot, 0, 1)
         m = dp < 4.5
         rand = (dp >= 4.5) & (dp < 9)
         H = np.where(m, ramp, H)
-        H = np.where(rand, np.maximum(H, ramp + (dp - 4.5) * 0.0) * 0 + np.maximum(ramp, H), H)
+        H = np.where(rand, np.maximum(H, ramp), H)
         self.bergpad = m
         self.H = np.where(self.land, np.round(H), -1).astype(np.int16)
         self.Hf = H

@@ -1,0 +1,18 @@
+{
+  "variants": {
+    "axis=x,wakker=false": {
+      "model": "guhs:block/vr_w_portaal_slaap"
+    },
+    "axis=z,wakker=false": {
+      "model": "guhs:block/vr_w_portaal_slaap",
+      "y": 90
+    },
+    "axis=x,wakker=true": {
+      "model": "guhs:block/vr_w_portaal_wakker"
+    },
+    "axis=z,wakker=true": {
+      "model": "guhs:block/vr_w_portaal_wakker",
+      "y": 90
+    }
+  }
+}
