@@ -5,7 +5,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 ## 1.9.1 — Minecraft 26.1.2
 
-### 1.9.1
+Small fixes for Een opknapper!
 
 - Joining a server from the title screen no longer fails.
 - Sherlock's witnesses now wait for you at "their" building in your village (Bonnie at the chicken coop, Koos at the village café, Pim by the field...), if you have it.
