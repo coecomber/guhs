@@ -36,6 +36,11 @@ public class VadsrijkWereldGameTests {
         helper.assertTrue(mgr.get(KaartFeature.tegelId(0, 0)).isPresent(), "Zwamzoet tile missing");
         WereldPlekken.Deur d = WereldDeuren.deur("zwamtempel");
         helper.assertTrue(d != null, "door zwamtempel missing");
+        // the Guhmension ruin holds a sleeping portal
+        StructureTemplate tempel = mgr.get(nl.juiced.guhs.Guhs.id("vadsrijk/wereld/portaaltempel")).orElse(null);
+        helper.assertTrue(tempel != null, "portaaltempel template missing");
+        helper.assertTrue(tempel.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), WereldRegistry.PORTAAL.get()).size() > 50,
+                "portaaltempel has no portal");
         helper.succeed();
     }
 

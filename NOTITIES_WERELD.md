@@ -55,5 +55,22 @@ dev commands `/guhs vadsrijk wereld plek|deur|vlieg|littekens|uitkijk|vergeetpor
 - Viewpoint panorama = camera turning once round the needle top (10 s) + title card; no teleport (ronde 11).
 - Ambient "seagulls" are pitched parrots (no vanilla gull); campfire crackle near checkpoints.
 
+6. **`/time set` fails inside the dimension** ("There is no default clock in dimension guhs:vadsrijk", seen in the autocheck round).
+   Kern's dimension type uses `timelines: #minecraft:universal` but no default clock; the day/night still runs on the overworld clock
+   (my sky reads `GuhTime`). Kern may want to look at it (dev commands / night testing).
+7. The gametest server has no Vadsrijk dimension, so my tests place a tile into the test area with a chunk-sized bounding box
+   (the same call KaartFeature makes) instead of generating dimension chunks.
+
+## Tests
+- Gametests `-Pgt=VadsrijkWereld` (4): the arrival tile loads (64x320x64, jetty plank under AANKOMST, the ruin template has its
+  portal), a tile placed with a small box puts exactly its own blocks, a door slides open/half/closed and is rebuilt exactly from
+  its hidden copy, a self-built portal frame lights only when closed. All green.
+- One autocheck client round (`tools/autocheck/vadsrijk_wereld.txt`, 24 screenshots in `run/screenshots/autocheck/`): the dimension
+  generates the map (arrival jetty, camp, city, door ceremony + title card, Haven + airship flight, meadow, arena, scars grey and
+  healed, fossil bridge, temple, Sporenwoud, caves, crystal chamber, viewpoint panorama with title card). No missing models or
+  textures of this slice. Fixed after it: interiors (temple rooms, Opperzwam hall, ordetempel) were too dark -> glowing floor tiles
+  and wall lights; the `plein` spot was inside the statue.
+
 ## Resume point
-See the bottom of TESTEN_WERELD.md for the tests run. Next ideas if time: more houses on the island ring, a few more caves.
+Everything in the brief is built. Possible next steps: more variety in the ring land (a few small hamlets), more cave branches,
+proper sign texts on the shops (needs the 26.1 sign NBT format), a nicer far-dragon texture once the wezens model exists.
