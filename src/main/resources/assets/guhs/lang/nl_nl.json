@@ -34340,5 +34340,16 @@
   "erfenis.tut.3": "Wat een mooi hokje. Nu nog iemand die de eitjes raapt: bewoners trekken vanzelf in als er plek is. Een Guhhutje geeft meer plek.",
   "erfenis.tut.4": "Je eerste bewoner! De buurdorpjes hebben al karretjes gestuurd. Open de wereldkaart (of later het Marktplein) en lever een bestelling.",
   "erfenis.tut.5": "Geleverd en betaald, dat is pas buren. Nu de Hoeve naar level 2: kijk in het paneel van de Hoeve wat er nog nodig is.",
-  "erfenis.tut.6": "Hoeve level 2! Mijn werk zit erop: ik ga op vakantie, njeg. Mijn borstbeeld en een brievenbus staan in je decoschuurtje. Ik stuur je kaartjes!"
+  "erfenis.tut.6": "Hoeve level 2! Mijn werk zit erop: ik ga op vakantie, njeg. Mijn borstbeeld en een brievenbus staan in je decoschuurtje. Ik stuur je kaartjes!",
+  "stat.guhs.erfenis_plukjes": "Plukjes opgeruimd",
+  "stat.guhs.erfenis_bewoners": "Bewoners in je dorp",
+  "stat.guhs.erfenis_bestellingen": "Bestellingen geleverd",
+  "stat.guhs.erfenis_hoeve": "Level van je Hoeve",
+  "stat.guhs.erfenis_kavels": "Kavels gekocht",
+  "stat.guhs.erfenis_planken": "Planken gezaagd in je dorp",
+  "stat.guhs.erfenis_baksteen": "Bakstenen gebakken in je dorp",
+  "stat.guhs.erfenis_naar_huis": "Bouwspul naar huis gestuurd",
+  "stat.guhs.erfenis_burenstempels": "Burenstempels",
+  "stat.guhs.erfenis_ansichtkaarten": "Ansichtkaarten van de makelaar",
+  "stat.guhs.erfenis_knusheid": "Knusheid van je dorp"
 }

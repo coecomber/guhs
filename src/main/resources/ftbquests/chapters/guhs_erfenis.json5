@@ -1,0 +1,2748 @@
+{
+  default_hide_dependency_lines: false,
+  default_quest_shape: "circle",
+  filename: "guhs_erfenis",
+  group: "475548DB0F6F37EB",
+  guhs_chapter_version: 56,
+  icon: {
+    components: {
+      "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_erfenis.png",
+    },
+    id: "ftbquests:custom_icon",
+  },
+  id: "47554813E71C5365",
+  images: [
+    {
+      height: 3.0,
+      id: "4755484756602C0C",
+      image: "guhs:textures/ftbquests/guhs_erfenis/title.png",
+      rotation: 0.0,
+      width: 12.0,
+      x: 10.25,
+      y: -2.4,
+    },
+    {
+      height: 3.0,
+      id: "475548DFB178367A",
+      image: "guhs:textures/ftbquests/guhs_erfenis/welkom.png",
+      rotation: 0.0,
+      width: 6.0,
+      x: 12.15,
+      y: 1.5,
+    },
+    {
+      height: 1.5625,
+      id: "475548B39B892E3A",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_brief.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548BBD8A2D178",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_hoeve.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 4.78125,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548E8E439B783",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_bouwen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 10.24375,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548D6B34C7FF4",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_dieren.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 10.24375,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548F0926E7AA7",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_akkers.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 14.20625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755483C349C269A",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_blokken.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 14.20625,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548058F00941D",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_thuis.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 19.66875,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554887C8BD081D",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_dorp.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 19.66875,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548ADA3C3251C",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_buren.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 23.631249999999998,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548B0EB77072C",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_sherlock.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 23.631249999999998,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "47554825A0BE37DB",
+      image: "guhs:textures/ftbquests/guhs_erfenis/kop_erfenis_deco.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 29.093749999999996,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 3.4375,
+      id: "475548B08CD847D0",
+      image: "guhs:textures/ftbquests/guhs_erfenis/slot_erfenis_ftb.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 33.99375,
+      hover: [
+        "Morris-Mika heeft zijn Knabbelparkinkje...",
+        "maar hij kijkt nog steeds heel vads naar jouw dorp.",
+        "Njeg. Wordt vervolgd!",
+      ],
+    },
+  ],
+  order_index: 17,
+  progression_mode: "flexible",
+  quest_links: [
+    {
+      id: "475548C63AE86FC2",
+      linked_quest: "4755486E9E523698",
+      shape: "hexagon",
+      x: 0.0,
+      y: 1.5,
+    },
+  ],
+  quests: [
+    {
+      id: "4755489F77A1DB10",
+      icon: {
+        components: {
+          "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_erfenis.png",
+        },
+        id: "ftbquests:custom_icon",
+      },
+      tasks: [
+        {
+          type: "checkmark",
+          id: "4755480E292A4CB7",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D4BAB1037E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 4,
+        },
+      ],
+      x: 2.0,
+      y: 1.5,
+      size: 1.3,
+      shape: "gear",
+    },
+    {
+      id: "4755489D39449FD0",
+      icon: {
+        id: "guhs:makelaarsbrief",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:makelaarsbrief",
+          },
+          id: "475548D3AAAD22EC",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485091519E43",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548922B21064B",
+      icon: {
+        id: "guhs:kaas_knabbels",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_koop",
+          id: "47554835E0618AD8",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554803E44E7B28",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 6.5625,
+    },
+    {
+      id: "4755480279263F5C",
+      icon: {
+        id: "guhs:erfhekje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:erfhekje",
+          },
+          id: "4755485EA6C7143D",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488F767ADC4F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548158B81D04C",
+      icon: {
+        id: "guhs:erfhekje",
+      },
+      tasks: [
+        {
+          type: "dimension",
+          dimension: "guhs:erfenis",
+          id: "4755481B4F19AB2C",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D58BEC558C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_klein",
+          },
+        },
+        {
+          id: "475548354A3766E2",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 4.5,
+      y: 6.5625,
+      shape: "gear",
+    },
+    {
+      id: "475548D8F3358F02",
+      icon: {
+        id: "minecraft:spyglass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_overzicht",
+          id: "4755486954CE9042",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B54250B601",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 6.0,
+      y: 6.5625,
+    },
+    {
+      id: "47554884D8F77E33",
+      icon: {
+        id: "minecraft:sweet_berries",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_plukjes",
+          value: 1,
+          id: "4755480D9C585961",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B5031D6035",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 6.5625,
+    },
+    {
+      id: "47554803435EE390",
+      icon: {
+        id: "minecraft:egg",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_kippenhok",
+          id: "47554834BD04C643",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A0CE5568F5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755489068172224",
+      icon: {
+        id: "guhs:guh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_bewoners",
+          value: 1,
+          id: "475548CA43C8AD71",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480FCE9FA9A5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 8.0625,
+    },
+    {
+      id: "4755484F79611921",
+      icon: {
+        id: "minecraft:minecart",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_bestellingen",
+          value: 1,
+          id: "47554883BD825C9A",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480E80FF862A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_klein",
+          },
+        },
+      ],
+      x: 7.5,
+      y: 8.0625,
+    },
+    {
+      id: "4755488C00D6520E",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 2,
+          id: "4755483FD216E15F",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554876E38C777E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755483E77EA96B5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+        {
+          id: "475548523F4D8EBB",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548B5AEE5988F",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 3,
+          id: "475548CB2BED4AF6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EE395D2A09",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_klein",
+          },
+        },
+        {
+          id: "47554823B252E94D",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 13.0,
+      y: 6.5625,
+    },
+    {
+      id: "4755484BA4DA0E49",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 4,
+          id: "47554896CD6663F7",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554829110F370A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755487B880024B4",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 14.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548A39E757ACE",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 5,
+          id: "475548A54B7792B7",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DFB506739F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+        {
+          id: "47554897933ACA87",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 16.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548DE2235302C",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 6,
+          id: "475548B9B730BD1D",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548377D178A81",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+        {
+          id: "475548B4135B75CE",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 17.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548B45711DFE6",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 7,
+          id: "475548D82D456962",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554853163A789A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_ingot",
+          },
+          count: 4,
+        },
+        {
+          id: "475548D069BE6182",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+        {
+          id: "475548F872EE258E",
+          type: "xp",
+          xp: 350,
+        },
+      ],
+      x: 19.0,
+      y: 6.5625,
+    },
+    {
+      id: "47554898F359A686",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 8,
+          id: "475548EB5ED9E794",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554842AA22F458",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 16,
+        },
+        {
+          id: "475548AFC9F5F68B",
+          type: "xp",
+          xp: 400,
+        },
+      ],
+      x: 20.5,
+      y: 6.5625,
+    },
+    {
+      id: "475548E439332F19",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 9,
+          id: "475548FCA258886D",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483C68945D99",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_groot",
+          },
+        },
+        {
+          id: "475548C863D3F983",
+          type: "xp",
+          xp: 450,
+        },
+      ],
+      x: 20.5,
+      y: 8.0625,
+    },
+    {
+      id: "475548CA085912AB",
+      icon: {
+        id: "minecraft:hay_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_hoeve",
+          value: 10,
+          id: "4755484F45A63379",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B9CBABD03F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_ingot",
+          },
+          count: 8,
+        },
+        {
+          id: "475548C81B2AB87A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:gefrituurde_kaasknabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "475548D7714160FC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+        {
+          id: "475548EBE16D4D86",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 19.0,
+      y: 8.0625,
+      shape: "gear",
+    },
+    {
+      id: "4755482840CDBF70",
+      icon: {
+        id: "minecraft:crafting_table",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_timmer",
+          id: "475548EF7131B8DF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AD233E4DD0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_klein",
+          },
+        },
+      ],
+      x: 0.0,
+      y: 12.025,
+    },
+    {
+      id: "4755480B4560C04F",
+      icon: {
+        id: "minecraft:sweet_berries",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_plukjes",
+          value: 16,
+          id: "4755487D31985ACE",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FFD763FDF4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 1.5,
+      y: 12.025,
+    },
+    {
+      id: "47554865B5523166",
+      icon: {
+        id: "minecraft:oak_sapling",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_plukjes",
+          value: 40,
+          id: "4755484B3DF21A2B",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488FDE47621F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+      ],
+      x: 3.0,
+      y: 12.025,
+    },
+    {
+      id: "4755484679B454B1",
+      icon: {
+        id: "minecraft:short_grass",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_plukjes",
+          value: 72,
+          id: "4755483B76F23B80",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487FA5CBCEED",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 12.025,
+      shape: "hexagon",
+    },
+    {
+      id: "47554809B055B075",
+      icon: {
+        id: "minecraft:grass_block",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_kavels",
+          value: 1,
+          id: "475548FCCC562D36",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489E4399112A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 6.0,
+      y: 12.025,
+    },
+    {
+      id: "4755489D022FBF66",
+      icon: {
+        id: "minecraft:filled_map",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_kavels",
+          value: 16,
+          id: "475548AB46C01C88",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548ED4808CE65",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_groot",
+          },
+        },
+        {
+          id: "475548177FF1BBDD",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 7.5,
+      y: 12.025,
+      shape: "gear",
+    },
+    {
+      id: "475548DDBE0DFE26",
+      icon: {
+        id: "minecraft:white_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_schaap",
+          id: "475548446EB4CC50",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554809D6D1BE7E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 12.025,
+    },
+    {
+      id: "47554878A3D82DE1",
+      icon: {
+        id: "minecraft:rabbit_hide",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_konijn",
+          id: "4755482FCDEC953C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C8B15A5528",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 12.025,
+    },
+    {
+      id: "4755484D9C0E8CCF",
+      icon: {
+        id: "minecraft:feather",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_eend",
+          id: "475548788866F5A2",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548807DC48DC6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 12.025,
+    },
+    {
+      id: "4755480C8D50C8FB",
+      icon: {
+        id: "minecraft:milk_bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_koe",
+          id: "475548C36F3DEDED",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BB41032DB8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 16.0,
+      y: 12.025,
+    },
+    {
+      id: "475548C993CD9E75",
+      icon: {
+        id: "minecraft:honeycomb",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_bij",
+          id: "4755489CCB287E18",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548758CC54D05",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 17.5,
+      y: 12.025,
+    },
+    {
+      id: "47554885B8E5F5B9",
+      icon: {
+        id: "minecraft:white_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_wolkenschaap",
+          id: "475548AEEA9B9F0F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484AF54CBCB0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 19.0,
+      y: 12.025,
+    },
+    {
+      id: "4755483E6CD83C8C",
+      icon: {
+        id: "minecraft:brown_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_mammoet",
+          id: "4755488FBBDE33A4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554849E01D6445",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_ingot",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FD36C70597",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 20.5,
+      y: 12.025,
+      shape: "gear",
+    },
+    {
+      id: "475548E4013DA144",
+      icon: {
+        id: "minecraft:wheat_seeds",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_akker",
+          id: "475548DBDF4A525D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F85AC7165D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 15.9875,
+    },
+    {
+      id: "475548F2E70FE050",
+      icon: {
+        id: "guhs:knabbelbessen",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_boomgaard",
+          id: "47554814141B79CA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488EDEE56BC7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 1.5,
+      y: 15.9875,
+    },
+    {
+      id: "47554870D84B4934",
+      icon: {
+        id: "minecraft:sugar",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_molen",
+          id: "47554819F878872E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554861C7F9E1C2",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 15.9875,
+    },
+    {
+      id: "475548C1A90CB9CC",
+      icon: {
+        id: "minecraft:bread",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_brood",
+          id: "475548913A7F876A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548919AF08A24",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 4.5,
+      y: 15.9875,
+    },
+    {
+      id: "4755482428E1549E",
+      icon: {
+        id: "minecraft:cookie",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_koek",
+          id: "4755485F69DB16EC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F770D6E61D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 6.0,
+      y: 15.9875,
+    },
+    {
+      id: "475548FF39C376B8",
+      icon: {
+        id: "minecraft:white_carpet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_stof",
+          id: "4755480D91DD0C38",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482DD5B350AA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 15.9875,
+    },
+    {
+      id: "4755482E3148DC41",
+      icon: {
+        id: "guhs:gatenkaas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_kaas",
+          id: "4755486D69255A2C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489A55AEFD23",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 9.0,
+      y: 15.9875,
+    },
+    {
+      id: "475548852A0550FA",
+      icon: {
+        id: "minecraft:candle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_kaars",
+          id: "475548A9ABDD37FB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554815B433BAAC",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 17.4875,
+    },
+    {
+      id: "47554823932BE8D9",
+      icon: {
+        id: "minecraft:brown_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_reuzenwol",
+          id: "475548C42CCC13D9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E2D88EEB76",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+      ],
+      x: 7.5,
+      y: 17.4875,
+    },
+    {
+      id: "475548E3D3E7E0A5",
+      icon: {
+        id: "minecraft:oak_log",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_bosje",
+          id: "47554891FFD179D0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548CD20C23F2B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 11.5,
+      y: 15.9875,
+    },
+    {
+      id: "4755485BA3A22CE0",
+      icon: {
+        id: "minecraft:oak_planks",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_planken",
+          value: 500,
+          id: "47554889AD4C36C8",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482C25CE8190",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 13.0,
+      y: 15.9875,
+    },
+    {
+      id: "475548BB4EC2C14F",
+      icon: {
+        id: "minecraft:cobblestone",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_groeve",
+          id: "47554861984BA572",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B795C9BA17",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 14.5,
+      y: 15.9875,
+    },
+    {
+      id: "47554880234FA8A5",
+      icon: {
+        id: "minecraft:bricks",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_baksteen",
+          value: 200,
+          id: "475548C1A37F0BA6",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A105EF20F1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 16.0,
+      y: 15.9875,
+    },
+    {
+      id: "475548A2537EFEEF",
+      icon: {
+        id: "minecraft:glass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_glas",
+          id: "4755486CB22CDD90",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548017077F1B6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 17.5,
+      y: 15.9875,
+    },
+    {
+      id: "475548765EA37757",
+      icon: {
+        id: "minecraft:pink_candle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_kleurglas",
+          id: "4755484CF70E299D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BB540329A1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 4,
+        },
+      ],
+      x: 19.0,
+      y: 15.9875,
+    },
+    {
+      id: "4755480011896D4D",
+      icon: {
+        id: "guhs:pastelbaksteen_roze",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_werkplaats",
+          id: "47554856693B6EE1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483F88BD8A1C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 20.5,
+      y: 15.9875,
+    },
+    {
+      id: "4755483E2F965BF5",
+      icon: {
+        id: "guhs:leverkist",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:leverkist",
+          },
+          id: "4755481EF495F6E3",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548321D8C4D43",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 21.45,
+    },
+    {
+      id: "475548C070E33CE1",
+      icon: {
+        id: "guhs:leverkist",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_naar_huis",
+          id: "475548A16D07CDAB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483C8177FD6D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 1.5,
+      y: 21.45,
+    },
+    {
+      id: "475548A6FC3B9098",
+      icon: {
+        id: "minecraft:oak_log",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_naar_huis",
+          value: 5000,
+          id: "4755488116209183",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481B6DC18860",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+      ],
+      x: 3.0,
+      y: 21.45,
+      shape: "hexagon",
+    },
+    {
+      id: "475548CF672C8A04",
+      icon: {
+        id: "minecraft:chest",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_loket",
+          id: "47554815FDD72BED",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480B2FB55B61",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+      ],
+      x: 4.5,
+      y: 21.45,
+    },
+    {
+      id: "475548C6D588723D",
+      icon: {
+        id: "minecraft:pink_wool",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_gekleurde_wol",
+          id: "475548FEF2838A3B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554881F01D1674",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 4,
+        },
+      ],
+      x: 6.0,
+      y: 21.45,
+    },
+    {
+      id: "475548984996E84F",
+      icon: {
+        id: "guhs:dorpszender",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:dorpszender",
+          },
+          id: "47554845F383AE9B",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BACB174ED6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:vahoege_vads_ingot",
+          },
+          count: 4,
+        },
+      ],
+      x: 7.5,
+      y: 21.45,
+    },
+    {
+      id: "475548ACDEF2317E",
+      icon: {
+        id: "guhs:dorpszender",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_vadsmast",
+          id: "4755481D71559E9B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D0D65A3F27",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+      ],
+      x: 9.0,
+      y: 21.45,
+    },
+    {
+      id: "47554864BA40718A",
+      icon: {
+        id: "guhs:guh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_bewoners",
+          value: 10,
+          id: "4755486E80F993EF",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F4211E424E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 11.5,
+      y: 21.45,
+    },
+    {
+      id: "475548E7E560C177",
+      icon: {
+        id: "guhs:guh_spawn_egg",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_bewoners",
+          value: 50,
+          id: "4755486218D7F3F2",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554850A159C9D4",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+      ],
+      x: 13.0,
+      y: 21.45,
+    },
+    {
+      id: "475548FA80DC2AE4",
+      icon: {
+        id: "minecraft:oak_fence",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_speeltuin",
+          id: "47554866D38FD59D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548628C368FE3",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 14.5,
+      y: 21.45,
+    },
+    {
+      id: "4755482AAF27F5C7",
+      icon: {
+        id: "minecraft:red_bed",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_pension",
+          id: "47554884A55BDB1F",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B36AF11A13",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 16.0,
+      y: 21.45,
+    },
+    {
+      id: "4755489AAA4A29A5",
+      icon: {
+        id: "minecraft:bell",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_cafe",
+          id: "475548C8CACDA5FF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485EF447D419",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 17.5,
+      y: 21.45,
+    },
+    {
+      id: "475548C66A4F7229",
+      icon: {
+        id: "minecraft:jukebox",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_feest",
+          id: "475548B92C8657A7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D65370F652",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+      ],
+      x: 19.0,
+      y: 21.45,
+    },
+    {
+      id: "47554820BDB0A33C",
+      icon: {
+        id: "minecraft:map",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_kaart",
+          id: "4755480F14EA6948",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A9C33CE640",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "47554897132AD5FC",
+      icon: {
+        id: "minecraft:oak_door",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_bezoek",
+          id: "475548CC344455CC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554817C436EE43",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 1.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "4755489956FD17CC",
+      icon: {
+        id: "minecraft:minecart",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_bestellingen",
+          value: 100,
+          id: "4755483C04EA4DC9",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548521EF6DEB5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+      ],
+      x: 3.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "4755481B7A5A2C3E",
+      icon: {
+        id: "minecraft:minecart",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_bestellingen",
+          value: 400,
+          id: "475548374E395BA7",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D1BE5DA817",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_groot",
+          },
+        },
+        {
+          id: "475548C4DAA53234",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 4.5,
+      y: 25.412499999999998,
+      shape: "hexagon",
+    },
+    {
+      id: "47554892730F8A6D",
+      icon: {
+        id: "minecraft:chest_minecart",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_hoger_dorp",
+          id: "475548023713130A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D3C460C43A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 6.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548CED2C3B28D",
+      icon: {
+        id: "minecraft:gold_ingot",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_sterbestelling",
+          id: "47554823D50DD81C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548353DBA0778",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+      ],
+      x: 7.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548923498020F",
+      icon: {
+        id: "minecraft:poppy",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_handje",
+          id: "4755488168C0FE34",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DB1DCA5493",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 9.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548AB68319A27",
+      icon: {
+        id: "minecraft:poppy",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_burenstempels",
+          value: 25,
+          id: "475548D966B92793",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485B6C486C91",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+        {
+          id: "475548B521182633",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 4,
+        },
+      ],
+      x: 9.0,
+      y: 26.912499999999998,
+      shape: "hexagon",
+    },
+    {
+      id: "4755486C4799BD63",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_detective",
+          id: "47554897AEDE52F3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548085479995F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 11.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "4755487AE7953237",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_eieren",
+          id: "47554807B9BF40BF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481A04D4136B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_klein",
+          },
+        },
+        {
+          id: "475548DBC50B6B30",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548A7B8050518",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_kruimels",
+          id: "475548B88990670E",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755480F9CC2F4D7",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548CE5E8AE6DA",
+          type: "xp",
+          xp: 125,
+        },
+      ],
+      x: 14.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "47554800F8B4812F",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_spook",
+          id: "4755482C4493E6AC",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554830AB47FF7A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_klein",
+          },
+        },
+        {
+          id: "47554845C31D963A",
+          type: "xp",
+          xp: 150,
+        },
+      ],
+      x: 16.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "475548B57104DC98",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_wol",
+          id: "475548385FCEAF95",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A20296F53C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548EDF6170A47",
+          type: "xp",
+          xp: 175,
+        },
+      ],
+      x: 17.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "4755484B9A85D2ED",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_kelder",
+          id: "4755483919364097",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B7ADD4D52B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+        {
+          id: "4755485F5AFD44DF",
+          type: "xp",
+          xp: 200,
+        },
+      ],
+      x: 19.0,
+      y: 25.412499999999998,
+    },
+    {
+      id: "4755482E620238A8",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_koeienbel",
+          id: "475548C42DB11E56",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481A3A67A112",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+        {
+          id: "475548C68404A0FA",
+          type: "xp",
+          xp: 225,
+        },
+      ],
+      x: 20.5,
+      y: 25.412499999999998,
+    },
+    {
+      id: "4755488E1BAB3B8C",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_paaltjes",
+          id: "475548BA947BE7C3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489C89093253",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+        {
+          id: "47554824D80FAE2D",
+          type: "xp",
+          xp: 250,
+        },
+      ],
+      x: 20.5,
+      y: 26.912499999999998,
+    },
+    {
+      id: "47554852B62CB271",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_licht",
+          id: "475548C8F1AF1CD0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FD71317582",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+        {
+          id: "47554815361C318E",
+          type: "xp",
+          xp: 275,
+        },
+      ],
+      x: 19.0,
+      y: 26.912499999999998,
+    },
+    {
+      id: "4755483FB5B171D4",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_blikje",
+          id: "4755486115BA9579",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483EEE269BD5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guh_kristal",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E9D82D12BA",
+          type: "xp",
+          xp: 300,
+        },
+      ],
+      x: 17.5,
+      y: 26.912499999999998,
+    },
+    {
+      id: "475548F5E86E2D80",
+      icon: {
+        id: "guhs:sherlock_vergrootglas",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_zaak_voorbereiding",
+          id: "475548866C677388",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755483504C23F6C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+        {
+          id: "475548EE17834BC1",
+          type: "xp",
+          xp: 325,
+        },
+      ],
+      x: 16.0,
+      y: 26.912499999999998,
+    },
+    {
+      id: "475548645504E796",
+      icon: {
+        id: "guhs:detective_pet",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_bezwaar",
+          id: "4755488CA53CCF3D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755488E11896587",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_groot",
+          },
+        },
+        {
+          id: "475548379C277AFE",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+        {
+          id: "4755489689E6E8B8",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 14.5,
+      y: 26.912499999999998,
+      shape: "gear",
+    },
+    {
+      id: "475548B61FCF3093",
+      icon: {
+        id: "minecraft:pink_tulip",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_deco",
+          id: "475548879256CE2C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A733EF2E8C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 0.0,
+      y: 30.874999999999996,
+    },
+    {
+      id: "4755484889948732",
+      icon: {
+        id: "minecraft:brush",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_vondst",
+          id: "475548245F38974D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548A0E601B370",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 1.5,
+      y: 30.874999999999996,
+    },
+    {
+      id: "475548E6F6A8337D",
+      icon: {
+        id: "minecraft:poppy",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_bedankje",
+          id: "47554820197529A9",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755481DA10F83E0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 3.0,
+      y: 30.874999999999996,
+    },
+    {
+      id: "475548F9EE742E3C",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_ansichtkaarten",
+          value: 3,
+          id: "475548DE74DDBDF4",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755487D4E2A6B13",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+      ],
+      x: 4.5,
+      y: 30.874999999999996,
+    },
+    {
+      id: "475548002F6ED636",
+      icon: {
+        id: "minecraft:water_bucket",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/erfenis_fontein",
+          id: "475548F0DE8E9AE4",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548467438DD92",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 6.0,
+      y: 30.874999999999996,
+    },
+    {
+      id: "475548C6C7CAF5DE",
+      icon: {
+        id: "minecraft:pink_tulip",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_knusheid",
+          value: 1000,
+          id: "475548A015972E0E",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548F305FCBE85",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje",
+          },
+        },
+      ],
+      x: 7.5,
+      y: 30.874999999999996,
+    },
+    {
+      id: "475548915B157A21",
+      icon: {
+        id: "minecraft:pink_tulip",
+      },
+      tasks: [
+        {
+          type: "stat",
+          stat: "guhs:erfenis_knusheid",
+          value: 2500,
+          id: "4755481A7A9B3B45",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554821026F118E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:guhldenzakje_groot",
+          },
+        },
+        {
+          id: "475548414228072E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:decobon",
+          },
+        },
+        {
+          id: "475548D7C99D7E11",
+          type: "xp",
+          xp: 500,
+        },
+      ],
+      x: 9.0,
+      y: 30.874999999999996,
+      shape: "gear",
+    },
+  ],
+}
