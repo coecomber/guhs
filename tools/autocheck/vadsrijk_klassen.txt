@@ -1,0 +1,106 @@
+# Het Vadsrijk klassen (110-vr-klassen): first class choice, tree + ordetempel desk, Pluisjager shots/skills, Vadsmagier skills, ceremony.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_klassen.txt
+
+section setup
+/gamemode survival
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section kies
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+/guhs vadsrijk klasse kies
+wait 20
+shot kl_keuze gui
+widgets
+press Word Pluisjager!
+wait 30
+shot kl_gekozen gui
+
+section boom
+/guhs vadsrijk level 12
+wait 60
+/guhs vadsrijk klasse boom
+wait 20
+shot kl_boom gui
+widgets
+/guhs vadsrijk klasse balie
+wait 20
+shot kl_balie gui
+widgets
+press Klaar
+press Done
+wait 10
+
+section jager
+/tp @s 3112 66 3120
+look -90 10
+/guhs vadsrijk klasse wapen pluisboog
+/guhs vadsrijk vol
+wait 60
+waitrender 200
+/guhs vadsrijk klasse schiet
+wait 3
+shot kl_pijl gui
+wait 10
+/guhs vadsrijk klasse wapen snoepkruisboog
+/guhs vadsrijk klasse schiet
+wait 4
+shot kl_kruisboog gui
+/guhs vadsrijk klasse skill 0
+wait 18
+shot kl_pluizenregen gui
+wait 30
+/guhs vadsrijk klasse skill 2
+wait 5
+shot kl_knuffelpijl gui
+/guhs vadsrijk vol
+/guhs vadsrijk klasse skill 3
+wait 14
+shot kl_sterrenschot_laden gui
+wait 8
+shot kl_sterrenschot gui
+wait 20
+/guhs vadsrijk klasse skill 1
+wait 6
+shot kl_rolsalto gui
+
+section magier
+/guhs vadsrijk klasse wissel vadsmagier
+/guhs vadsrijk level 12
+/tp @s 3112 66 3120
+look -90 10
+/guhs vadsrijk klasse wapen vlammenstaf
+/guhs vadsrijk vol
+wait 40
+/guhs vadsrijk klasse schiet
+wait 4
+shot kl_toverbol gui
+wait 10
+/guhs vadsrijk klasse skill 0
+wait 8
+shot kl_vuurbal gui
+wait 20
+/guhs vadsrijk klasse skill 2
+wait 25
+shot kl_vadsbron gui
+/guhs vadsrijk vol
+/guhs vadsrijk klasse skill 3
+wait 18
+shot kl_meteoor_val gui
+wait 16
+shot kl_meteoor_plof gui
+
+section ceremonie
+/guhs vadsrijk level 20
+wait 40
+/guhs vadsrijk klasse adv
+wait 40
+shot kl_ceremonie_cam gui
+wait 30
+shot kl_ceremonie_titel gui
+wait 90
+shot kl_ceremonie_na gui
+quit
