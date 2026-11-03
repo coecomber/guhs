@@ -1,0 +1,106 @@
+# 1.9 opknapper (vormen-slice): stamped buildings vs the renders in renders-erfenis/.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/erfenis_vormen.txt
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+wait 40
+
+section hoeve_L1_p0
+/tp @s 0 -60 0 0 0
+/guhs erfenis vorm hoeve 1 0 0
+wait 20
+/tp @s 24 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L1_p0
+
+section hoeve_L5_p0
+/tp @s 40 -60 0 0 0
+/guhs erfenis vorm hoeve 5 0 0
+wait 20
+/tp @s 64 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L5_p0
+
+section hoeve_L10_p0
+/tp @s 80 -60 0 0 0
+/guhs erfenis vorm hoeve 10 0 0
+wait 20
+/tp @s 104 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L10_p0
+
+section kippenhok_L6_p0
+/tp @s 120 -60 0 0 0
+/guhs erfenis vorm kippenhok 6 0 0
+wait 20
+/tp @s 144 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_kippenhok_L6_p0
+
+section molen_L6_p0
+/tp @s 160 -60 0 0 0
+/guhs erfenis vorm molen 6 0 0
+wait 20
+/tp @s 184 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_molen_L6_p0
+
+section dorpscafe_L10_p0
+/tp @s 200 -60 0 0 0
+/guhs erfenis vorm dorpscafe 10 0 0
+wait 20
+/tp @s 224 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_dorpscafe_L10_p0
+
+section mammoetwei_L3_p0
+/tp @s 240 -60 0 0 0
+/guhs erfenis vorm mammoetwei 3 0 0
+wait 20
+/tp @s 264 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_mammoetwei_L3_p0
+
+section bosje_L9_p0
+/tp @s 280 -60 0 0 0
+/guhs erfenis vorm bosje 9 0 0
+wait 20
+/tp @s 304 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_bosje_L9_p0
+
+section hoeve_L10_p3
+/tp @s 320 -60 0 0 0
+/guhs erfenis vorm hoeve 10 3 0
+wait 20
+/tp @s 344 -45 24 135 32
+wait 40
+waitrender 200
+shot vorm_hoeve_L10_p3
+
+section deco
+/tp @s 400 -60 0 0 0
+/guhs erfenis vorm decoalle
+/tp @s 422 -50 26 135 35
+wait 40
+waitrender 200
+shot vorm_deco
+
+section plukje
+/tp @s 480 -60 0 0 0
+/guhs erfenis vorm plukje 1
+/tp @s 494 -54 14 135 35
+wait 30
+waitrender 200
+shot vorm_plukje1
