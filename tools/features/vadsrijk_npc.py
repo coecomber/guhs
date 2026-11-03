@@ -18,11 +18,9 @@ def build(h):
 
 def _schrijf(pad, obj):
     os.makedirs(os.path.dirname(pad), exist_ok=True)
-    with open(pad, "w", encoding="utf-8", newline="
-") as f:
+    with open(pad, "w", encoding="utf-8", newline="\n") as f:
         json.dump(obj, f, indent=2, ensure_ascii=False)
-        f.write("
-")
+        f.write("\n")
 
 
 def _direct():
