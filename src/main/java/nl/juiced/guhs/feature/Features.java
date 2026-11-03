@@ -202,6 +202,7 @@ public final class Features {
         nl.juiced.guhs.feature.fabriek.FabriekFeature.register(modBus);   // 1.8.0 (vadskracht): de Fabriekshal (wol, bouwblokken, kleurstof)
         nl.juiced.guhs.feature.erfenis.ErfenisFeature.register(modBus);   // 1.9 POC: De Erfenis (own base, overview, plots dimension)
         nl.juiced.guhs.feature.erfenis.kaart.KaartFeature.register(modBus);   // 1.9 POC: De Erfenis, de wereldkaart + levende NPC-dorpjes
+        nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.register(modBus);   // 1.9: De Erfenis, het Sherlock-verhaal
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -331,6 +332,7 @@ public final class Features {
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.payloads(registrar);   // 1.8.0: the hamsterbuis station's screen
         nl.juiced.guhs.feature.erfenis.ErfenisFeature.payloads(registrar);   // 1.9 POC: De Erfenis
         nl.juiced.guhs.feature.erfenis.kaart.KaartFeature.payloads(registrar);   // 1.9 POC: De Erfenis, de wereldkaart
+        nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.payloads(registrar);   // 1.9: De Erfenis, het Sherlock-verhaal
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -493,6 +495,7 @@ public final class Features {
         nl.juiced.guhs.feature.hamsterbuis.HamsterbuisFeature.creative(output);   // 1.8.0: Hamsterknooppunt + hamsterbuis station
         nl.juiced.guhs.feature.centrale.CentraleFeature.creative(output);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale
         nl.juiced.guhs.feature.fabriek.FabriekFeature.creative(output);   // 1.8.0 (vadskracht): de Fabriekshal
+        nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.creative(output);   // 1.9: Sherlocks vergrootglas
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */

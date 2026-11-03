@@ -1,0 +1,144 @@
+{
+  "proloog": [
+    "",
+    ""
+  ],
+  "welkom": [
+    "sherlock",
+    "vadson",
+    "sherlock",
+    "vadson",
+    "vadson"
+  ],
+  "zaak.blikje.intro": [
+    "",
+    "vadson",
+    "sherlock"
+  ],
+  "zaak.blikje.oplossing": [
+    "oehoe",
+    "oehoe",
+    "vadson",
+    "sherlock",
+    "",
+    "vadson"
+  ],
+  "zaak.eieren.intro": [
+    "vadson",
+    "sherlock",
+    "sherlock",
+    "vadson"
+  ],
+  "zaak.eieren.oplossing": [
+    "vadson",
+    "sherlock",
+    "",
+    "hendrik",
+    "vadson",
+    "vadson"
+  ],
+  "zaak.kelder.intro": [
+    "oehoe",
+    "",
+    "vadson",
+    "sherlock"
+  ],
+  "zaak.kelder.oplossing": [
+    "",
+    "vadson",
+    "konijntjes",
+    "sherlock",
+    "vadson",
+    "vadson"
+  ],
+  "zaak.koeienbel.intro": [
+    "vadson",
+    "sherlock",
+    "vadson"
+  ],
+  "zaak.koeienbel.oplossing": [
+    "",
+    "bertha",
+    "sherlock",
+    "morris!",
+    "",
+    "vadson"
+  ],
+  "zaak.kruimels.intro": [
+    "vadson",
+    "sherlock",
+    "vadson"
+  ],
+  "zaak.kruimels.oplossing": [
+    "vadson",
+    "",
+    "babyguhs",
+    "sherlock",
+    "vadson",
+    "vadson"
+  ],
+  "zaak.licht.intro": [
+    "vadson",
+    "sherlock",
+    "vadson"
+  ],
+  "zaak.licht.oplossing": [
+    "",
+    "sherlock",
+    "vadson",
+    "",
+    "vadson"
+  ],
+  "zaak.paaltjes.intro": [
+    "vadson",
+    "sherlock",
+    "vadson"
+  ],
+  "zaak.paaltjes.oplossing": [
+    "pim",
+    "pim",
+    "vadson",
+    "pim",
+    "sherlock"
+  ],
+  "zaak.spook.intro": [
+    "vadson",
+    "sherlock",
+    "morris!",
+    "vadson",
+    "sherlock"
+  ],
+  "zaak.spook.oplossing": [
+    "",
+    "oehoe",
+    "vadson",
+    "oehoe",
+    "sherlock",
+    "vadson",
+    "oehoe"
+  ],
+  "zaak.voorbereiding.intro": [
+    "vadson",
+    "sherlock",
+    "guhrrit_vakantie",
+    "vadson"
+  ],
+  "zaak.voorbereiding.oplossing": [
+    "vadson",
+    "sherlock",
+    "guhrrit_vakantie"
+  ],
+  "zaak.wol.intro": [
+    "vadson",
+    "sherlock",
+    "vadson"
+  ],
+  "zaak.wol.oplossing": [
+    "vadson",
+    "",
+    "oma",
+    "oma",
+    "oma",
+    "sherlock"
+  ]
+}
