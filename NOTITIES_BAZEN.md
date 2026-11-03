@@ -74,4 +74,6 @@ All in `BazenPlekken.java`; requests in `guhs_vadsrijk/POI_VERZOEKEN.md` section
 
 ## Resume point
 Done: everything above compiles; gametests `-Pgt=VadsrijkBazen` (split rule, KK split/heal on the entity, Opperzwam phases +
-restore, contribution → chest + bound loot). See TESTEN_BAZEN.md for the Dutch test guide.
+restore, contribution → chest + bound loot): **4/4 passed** (2026-11-03). No dev-client/AutoCheck run was done (slot time):
+the GeckoLib models/textures are only verified by the generator, not rendered in a client yet — integration's AutoCheck should look.
+See TESTEN_BAZEN.md for the Dutch test guide.
