@@ -89,5 +89,10 @@ Other slices may simply `NpcRollen.koppel(...)` instead; a binding always wins o
   you close/finish that dialogue.
 
 ## Resume point
-Everything above compiles; gametests `-Pgt=VadsrijkNpc` (see TESTEN_NPC.md for results). Not done: a dev-client AutoCheck run of
-the full flow on the real map (the map tiles were not in this tree).
+Everything compiles. Gametests `-Pgt=VadsrijkNpc`: **3/3 passed** (questDataKlopt, voortgangViaHaken, inleverenEnZone1Klaar).
+AutoCheck (once, `tools/autocheck/vadsrijk_npc.txt`, proeftuin): all 40 NPCs + a campfire ridder render with their clothes and
+names, the gold "!" marker draws above the sergeant, the quest dialogue opens with pages (1/4, Verder/Doei). Found + fixed after
+the run (not re-run, one run allowed): the questlog payload did not open while the chat screen was up (dev command); it now always
+opens. The BAM screenshot shows the falling grey fluff but no camera move/title: kern's `SceneSpeler` (client scene player) was
+still a stub in this tree, so all RijkScenes (opening, BAM, flights, cliffhanger) need kern's version to look right.
+Not done: a run on the real map (the tiles were not in this tree).

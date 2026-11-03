@@ -59,7 +59,7 @@ public final class NpcClient {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof QuestlogScherm s) {
                 s.update(m.data());
-            } else if (m.open() && mc.screen == null) {
+            } else if (m.open()) {   // (J only sends with no screen open; the dev command may come from the chat screen)
                 mc.setScreen(new QuestlogScherm(m.data()));
             }
         });
