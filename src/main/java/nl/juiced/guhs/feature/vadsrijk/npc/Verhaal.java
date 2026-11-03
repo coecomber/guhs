@@ -139,7 +139,7 @@ public final class Verhaal {
         List<BlockPos> l = new ArrayList<>();
         BlockPos c = NpcPlekken.KAMPPLEIN;
         for (BlockPos b : BlockPos.betweenClosed(c.offset(-40, -6, -60), c.offset(70, 8, 50))) {
-            if (sl.getBlockState(b).is(BlockTags.SMALL_FLOWERS)) {
+            if (sl.hasChunkAt(b) && sl.getBlockState(b).is(BlockTags.SMALL_FLOWERS)) {   // (never load the camp's chunks for this)
                 BlockPos v = b.immutable();
                 l.add(v);
                 p.connection.send(new ClientboundBlockUpdatePacket(v, (l.size() % 3 == 0 ? Blocks.WITHER_ROSE : Blocks.DEAD_BUSH).defaultBlockState()));

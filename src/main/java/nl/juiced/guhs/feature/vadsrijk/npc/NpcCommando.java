@@ -105,6 +105,36 @@ public final class NpcCommando {
             Verhaal.vlieg(c.getSource().getPlayerOrException(), "knuffelkamp");
             return 1;
         })));
+        npc.then(Commands.literal("questlog").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            NpcPayloads.stuur(p, new NpcPayloads.Log(NpcLog.bouw(p), true));
+            return 1;
+        }));
+        npc.then(Commands.literal("rij").executes(c -> {
+            // dev/AutoCheck: every NPC in rows of 8 north of you, looking at you (not tracked: they vanish with the chunk)
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            int i = 0;
+            for (NpcDef d : Npcs.alle()) {
+                if (d.id().startsWith("kampwacht_") && !d.id().equals("kampwacht_weide_1")) {
+                    continue;
+                }
+                RijkGuh g = NpcRegistry.GUH.get().create(p.level(), net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+                if (g == null) {
+                    continue;
+                }
+                double x = p.getX() + (i % 8 - 3.5) * 2, z = p.getZ() - 4 - (i / 8) * 2.5;
+                g.snapTo(x, p.getY(), z, 0, 0);
+                g.setYHeadRot(0);
+                g.setYBodyRot(0);
+                g.stelIn(d);
+                g.thuis = BlockPos.containing(x, p.getY(), z);
+                p.level().addFreshEntity(g);
+                i++;
+            }
+            int n = i;
+            c.getSource().sendSuccess(() -> Component.literal(n + " NPC's op een rij."), false);
+            return n;
+        }));
         npc.then(Commands.literal("npcs").executes(c -> {
             ServerLevel sl = Vadsrijk.level(c.getSource().getServer());
             int n = sl == null ? 0 : Npcs.wisAlles(sl);
