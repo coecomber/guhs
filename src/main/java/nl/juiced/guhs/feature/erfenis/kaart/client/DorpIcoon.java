@@ -4,8 +4,8 @@ import net.minecraft.client.gui.GuiGraphicsExtractor;
 import nl.juiced.guhs.feature.erfenis.kaart.KaartDorp;
 
 /**
- * The little pixel-art village icons of the map, by stadhuis level: 1 a hutje, 2 a huisje, 3 a dorpje (two houses),
- * 4 a torendorp, 5 a kasteel. Roofs in the village's flag colour, a pedestal in the marker colour (own / player / NPC),
+ * The little pixel-art village icons of the map, by Hoeve tier (2 levels each): T1 a hutje, T2 a huisje, T3 a dorpje
+ * (two houses), T4 a torendorp, T5 a kasteel. Roofs in the village's flag colour, a pedestal in the marker colour (own / player / NPC),
  * a flag from level 2. Far out (zoom &lt; 10) a village is a small coloured dot.
  */
 final class DorpIcoon {
@@ -60,7 +60,7 @@ final class DorpIcoon {
     }
 
     private static int lvl(KaartDorp d) {
-        return Math.max(1, Math.min(5, d.stadhuisLevel())) - 1;
+        return (Math.max(1, Math.min(10, d.hoeve())) + 1) / 2 - 1;   // (the Hoeve's tier: 2 levels per icon)
     }
 
     private static int eenheid(float zoom) {
@@ -78,7 +78,7 @@ final class DorpIcoon {
         int u = eenheid(zoom);
         boolean knipper = (tijd / 400) % 2 == 0;
         if (u == 0) {   // far out: a dot
-            int s = 1 + (d.stadhuisLevel() + 1) / 2;
+            int s = 1 + (lvl(d) + 2) / 2;
             if (eigen || gekozen || hover) {
                 int r = s + 2 + (eigen && knipper ? 1 : 0);
                 g.fill(sx - r, sy - r, sx + r + 1, sy + r + 1, gekozen ? 0xFFFFFFFF : soort);
@@ -104,7 +104,7 @@ final class DorpIcoon {
         for (Deel deel : PER_LEVEL[l]) {
             patroon(g, deel.patroon(), x0 + deel.ox() * u, y0 + deel.oy() * u, u, kleur, donker);
         }
-        if (d.stadhuisLevel() >= 2) {   // a flag on top, right
+        if (d.hoeve() >= 3) {   // a flag on top, right
             int fx = x0 + (w - 2) * u, fy = y0 - 4 * u;
             g.fill(fx, fy, fx + u, y0 + u, 0xFF5A4660);
             g.fill(fx + u, fy, fx + 4 * u, fy + 2 * u, kleur);

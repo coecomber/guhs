@@ -31,8 +31,15 @@ public final class KaartData extends SavedData {
     public static final int MAX_NIEUWS = 40;
     static final SavedDataType<KaartData> TYPE = GuhSavedData.tagType("erfenis_kaart", KaartData::new, KaartData::load, KaartData::save);
 
+    /** 2 = the 1.9 rule (villages follow players); 0/1 = a POC map (40-ish random villages), migrated by KaartLeven. */
+    public static final int VERSIE = 2;
+
     public long seed;
     public boolean gezaaid;
+    public int versie = VERSIE;
+    /** The first real player (gets three villages: one lower, one equal, one higher); null until there is one. */
+    @Nullable
+    public UUID eerste;
     final Map<UUID, NpcDorp> npcs = new LinkedHashMap<>();
     final List<KaartNieuws> nieuws = new ArrayList<>();
     /** How many growth ticks happened (each one's randomness comes from seed + this, so it is stable). */
@@ -76,6 +83,23 @@ public final class KaartData extends SavedData {
         setDirty();
     }
 
+    void verwijder(UUID id) {
+        if (npcs.remove(id) != null) {
+            setDirty();
+        }
+    }
+
+    /** The NPC villages that follow this player. */
+    public List<NpcDorp> volgers(UUID speler) {
+        List<NpcDorp> l = new ArrayList<>();
+        for (NpcDorp d : npcs.values()) {
+            if (speler.equals(d.volgt)) {
+                l.add(d);
+            }
+        }
+        return l;
+    }
+
     /** Adds a news line (newest first; the oldest fall off). Also usable by the core (a player's stadhuis went up). */
     public void meld(KaartNieuws n) {
         nieuws.add(0, n);
@@ -97,6 +121,8 @@ public final class KaartData extends SavedData {
         d.gezaaid = t.getBooleanOr("Gezaaid", false);
         d.groeiTeller = t.getIntOr("GroeiTeller", 0);
         d.snel = t.getBooleanOr("Snel", false);
+        d.versie = t.getIntOr("Versie", 0);
+        d.eerste = t.read("Eerste", net.minecraft.core.UUIDUtil.CODEC).orElse(null);
         for (Tag e : t.getListOrEmpty("Npcs")) {
             if (e instanceof CompoundTag c) {
                 NpcDorp n = NpcDorp.load(c);
@@ -119,6 +145,10 @@ public final class KaartData extends SavedData {
         t.putBoolean("Gezaaid", gezaaid);
         t.putInt("GroeiTeller", groeiTeller);
         t.putBoolean("Snel", snel);
+        t.putInt("Versie", versie);
+        if (eerste != null) {
+            t.store("Eerste", net.minecraft.core.UUIDUtil.CODEC, eerste);
+        }
         ListTag l = new ListTag();
         for (NpcDorp n : npcs.values()) {
             l.add(n.save());

@@ -3,12 +3,20 @@ package nl.juiced.guhs.feature.erfenis.kaart;
 import net.minecraft.nbt.CompoundTag;
 
 /**
- * One building of an NPC village's plan: type, level, min corner (x, z) on the 64x64 plot, quarter turns. The same fields as
- * the core's {@code Base.Plan(GebouwType type, int level, int x, int z, int rot)}.
+ * One building of an NPC village's plan: type, level, min corner (x, z) on the plot, quarter turns. The same fields as the
+ * core's {@code Base.Plan}. An odd turn swaps the footprint (non-square buildings only get 0 or 2, see {@link NpcBouwer}).
  */
 public record KaartGebouw(KaartGebouwType type, int level, int x, int z, int rot) {
-    public boolean overlapt(int ox, int oz, int maat) {
-        return ox < x + type.maat && ox + maat > x && oz < z + type.maat && oz + maat > z;
+    public int breedte() {
+        return rot % 2 == 0 ? type.breedte : type.diepte;
+    }
+
+    public int diepte() {
+        return rot % 2 == 0 ? type.diepte : type.breedte;
+    }
+
+    public boolean overlapt(int ox, int oz, int w, int d) {
+        return ox < x + breedte() && ox + w > x && oz < z + diepte() && oz + d > z;
     }
 
     public KaartGebouw metLevel(int nieuw) {
@@ -25,6 +33,7 @@ public record KaartGebouw(KaartGebouwType type, int level, int x, int z, int rot
         return t;
     }
 
+    /** Null for an unknown type (a POC plan: stadhuis, muur, ... are dropped on load and the village is planned anew). */
     @javax.annotation.Nullable
     public static KaartGebouw load(CompoundTag t) {
         KaartGebouwType type = KaartGebouwType.van(t.getStringOr("T", ""));
