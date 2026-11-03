@@ -1,0 +1,47 @@
+# Het Vadsrijk kern (110-vadsrijk-poc): the dimension loads, the HUD draws, loot beams, the boss intro + title card + boss bar.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_kern.txt
+
+section setup
+/gamemode survival
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section binnen
+/guhs vadsrijk
+wait 100
+waitrender 300
+look 0 10
+wait 10
+shot vr_kamp gui
+/guhs vadsrijk level 4
+/guhs vadsrijk loot episch kussenzwaard 3
+/guhs vadsrijk loot guhddelijk pluishelm 3
+/guhs vadsrijk loot zeldzaam pluishamer 3
+wait 60
+shot vr_loot gui
+
+section klodders
+/tp @s 3130 66 3120
+look -90 15
+wait 80
+waitrender 200
+shot vr_klodders gui
+
+section baas
+/guhs vadsrijk vol
+/tp @s 3096 66 3090
+look 180 5
+wait 60
+waitrender 200
+shot vr_arena_bord gui
+/tp @s 3096 66 3078
+wait 25
+shot vr_intro_camera gui
+wait 30
+shot vr_intro_titel gui
+wait 60
+shot vr_baas_hud gui
+wait 40
+shot vr_baas_sprong gui
+quit

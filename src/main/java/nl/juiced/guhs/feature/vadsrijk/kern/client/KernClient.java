@@ -43,6 +43,25 @@ public final class KernClient {
             e.registerEntityRenderer(KernRegistry.PROEFKLODDERTJE.get(), KlodderRenderer::new);
             e.registerEntityRenderer(KernRegistry.KLODDERREUS.get(), KlodderRenderer::new);
         });
+        // In the dimension the skill keys win: other Guhs keys on the same key (maag G, snuffel R/V/Z) are swallowed first.
+        NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre e) -> {
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player == null || !Vadsrijk.in(mc.player)) {
+                return;
+            }
+            for (KeyMapping k : mc.options.keyMappings) {
+                if (k.getCategory() != nl.juiced.guhs.client.GuhKeys.CATEGORY) {
+                    continue;
+                }
+                for (KeyMapping s : SKILLS) {
+                    if (k != s && k.same(s)) {
+                        while (k.consumeClick()) {
+                            // (swallowed)
+                        }
+                    }
+                }
+            }
+        });
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> {
             Minecraft mc = Minecraft.getInstance();
             boolean binnen = mc.player != null && Vadsrijk.in(mc.player);

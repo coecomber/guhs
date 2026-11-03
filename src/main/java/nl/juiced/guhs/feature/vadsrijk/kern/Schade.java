@@ -99,7 +99,7 @@ public final class Schade {
                 || (bron instanceof VadsrijkMob && doel instanceof VadsrijkMob) || (doel instanceof VadsrijkMob m && m.geplofd())) {
             return new Uitkomst(k, 0, false, 1);
         }
-        if (doel instanceof ServerPlayer dp && (dp.isCreative() || dp.isSpectator() || Flauwvallen.beschermd(dp))) {
+        if (doel instanceof ServerPlayer dp && (dp.isCreative() || dp.isSpectator() || Flauwvallen.beschermd(dp) || nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.bezig(dp))) {
             return new Uitkomst(k, 0, false, 1);
         }
         Element doelEl = doel instanceof VadsrijkMob m ? m.element() : Element.GEEN;
