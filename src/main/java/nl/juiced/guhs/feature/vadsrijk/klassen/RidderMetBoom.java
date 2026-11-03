@@ -43,12 +43,12 @@ import nl.juiced.guhs.feature.vadsrijk.klassen.ridder.Knuffelridder;
  * effects can move into Knuffelridder itself.
  */
 public final class RidderMetBoom implements Klasse {
-    public static final RidderMetBoom INSTANCE = new RidderMetBoom();
     private static final Knuffelridder K = Knuffelridder.INSTANCE;
-    private final List<BoomKnoop> boom = Bomen.ridder();
-    private final List<Vaardigheid> skills;
     /** Dubbelklap (adv 1): while the echo swing runs, Kussenklap does 60 %. */
     private static final Map<UUID, Long> ECHO = new HashMap<>();
+    public static final RidderMetBoom INSTANCE = new RidderMetBoom();
+    private final List<BoomKnoop> boom = Bomen.ridder();
+    private final List<Vaardigheid> skills;
 
     private RidderMetBoom() {
         List<Vaardigheid> l = new ArrayList<>();
