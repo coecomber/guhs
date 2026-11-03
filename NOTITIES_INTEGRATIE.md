@@ -63,13 +63,55 @@ conflict take the wereld side, then check it parses).
 - Each slice generator ran, then the full `tools/make_resources.py`. It needs the 1.21.1 resources jar
   (`build/moddev/artifacts/neoforge-21.1.251-client-extra-aka-minecraft-resources.jar`, copied from guhs_opk/w-int).
 
-## Left for the wereld merge
-- Merge 110-vr-wereld; keep its `vadsrijk_wereld.py` (fix the newline literal if needed).
-- Align coordinates with POI_VADSRIJK.md: `Gebieden.AANKOMST` (npc wants 96,87,1015), `BazenPlekken`, `WezensPlekken`
-  (cave y's), `KlassenPlekken`, `EconomiePlekken`, `NpcPlekken`.
-- `bazen.Adapters.deurOpen/deurDicht` (reflection on `wereld.WereldDeuren`) and `NpcRollen` luchtschip/`MAG_VLIEGEN`
-  (reflection on `wereld.WereldReizen`): replace by direct calls.
-- Rerun `vadsrijk_wereld.py` + `make_resources.py`, then the filtered gametests and one AutoCheck on the real map.
+## Resources: the full make_resources.py run is NOT committed
+A full `tools/make_resources.py` run in this tree rewrote ~800 unrelated files (lang reformatted, worldgen noise, tags, sounds.json,
+villager types...): the committed tree is no longer what the full run produces (later releases edited outputs directly). So the
+committed resources come from the slice generators only (`PYTHONPATH="tools;tools/features" python tools/features/vadsrijk_<slice>.py`,
+order: economie, kern, bazen, npc, wereld, klassen, wezens; then drop stale economie lang keys). `tools/check_assets.py`: no
+Vadsrijk problems (fixed `vr_npc_zwamhoedje` -> `minecraft:block/red_mushroom`).
+
+## Wereld merge (cdcdad6a9) + alignment (cfcaabbfd)
+- Every slice Plekken class now reads `wereld.WereldPlekken` (generated from the map) where the map has the spot:
+  - bazen: KK arena (ground y 69, radius 32), temple stand y 152, rooms/gates per POI (gate 2/3/4 = exits of room 1/2/3; gate 1
+    voorhal->room 1 stays open), Opperzwam hall r 22 + dome y 175..194, Mika stall + caps hoed_zuidw/west/oost.
+  - wezens: cave spawners on `grot_knopen.N1..N4` + `kristalkamer`, temple spawners in the voorhal only (rooms = bazen waves),
+    a Klodderweide spot moved out of the new pond (300,120).
+  - npc: shopkeepers inside their shops, Grootmeester inside the ordetempel, kapitein/luchtschipper at the bells, Mopje at
+    `npc_mopje`, campfire knights on `ridder_*`, POIs/clues/treasures/knuffels on the generated ids, Zwamzoet citizens y 64;
+    the opening scene now flies in from the sea to the SOUTH JETTY (AANKOMST stays (0,65,1130), still inside the knuffelkamp area).
+  - klassen/economie: ordetempel_altaar, tempeltje, the shop interiors.
+- Temple door: `bazen.Adapters.deurOpen/deurDicht` call `WereldDeuren.open/sluit` directly. Airship + `MAG_VLIEGEN` bound directly
+  (no reflection left in npc/bazen).
+- The bazen stand-in builds (`/guhs vadsrijk bazen bouw ...`) were already dev-command only; gates = `vr_baas_zwampoort` in wereld's air gaps.
+- Tile memory: `KaartFeature` forgets a tile once its 16 chunks are placed, `KaartFeature.ruimOp` (every minute from wereld's tick)
+  forgets tiles idle for 2 min; wereld's `TegelGeheugen` removed.
+- `/time set` in the dimension: `default_clock: minecraft:overworld` + `timelines: #minecraft:in_overworld` (like the Guhmension).
+- FTB/wiki as above; combined test guide `TESTEN_VADSRIJK_ZONE1.md`.
+
+## Tests
+- Gametests (before the wereld merge) `-Pgt=VadsrijkKern,VadsrijkWezens,VadsrijkBazen,VadsrijkKlassen,VadsrijkEconomie,VadsrijkNpc`:
+  **26/26 passed** (incl. the new `alleTabellenEnWapensKloppen`). After the wereld merge only compileJava + 2 AutoCheck rounds.
+- AutoCheck round 1 `tools/autocheck/vadsrijk_int.txt` (full walk, 43 shots; copies in the session scratchpad only), round 2
+  `tools/autocheck/vadsrijk_int2.txt` (the fixes). Screenshots: `run/screenshots/autocheck/` (round 2).
+  - OK: opening scene + title card, south jetty arrival, camp with NPCs (clothes, names, "!"), training dummies, the BAM (wilted
+    flowers, quest), Klodderreus in the pond, Zwamzoet plein/shops/ordetempel interior with the Grootmeester, Akim at the market,
+    Klodderweide mobs (Klodder/Bubbelklodder/elite Moederklodder), Koning Klodder model, Sporenwoud, caves (Knaag/Kristalklodder/
+    Glimzwam), kristalkamer, temple voorhal + Lichtzwamkamer (bazen light mushrooms placed), closed `vr_baas_zwampoort` gate 4,
+    Opperzwam hall (lit) + the boss (the arena auto-spawns one), viewpoint panorama, portal temple found in the Guhmension.
+  - Fixed: the 9 klassen weapon icons were missing (texture outside the item atlas -> `textures/item/vadsrijk/klassen/`);
+    Sergeant Pluizebol snapped into a sealed air pocket inside the hollowed cliff -> now on the jetty, and the NPC floor search
+    only accepts lit floors away from the exact spot; Zuster Zachtjes now on the tempeltje plinth.
+  - Script artefacts (not bugs): screens opened by commands get closed by AutoCheck before the shot; `/tp` high in the air in
+    creative falls into the sea; one far teleport into the Opperzwam hall fell to y 1 (client had no chunk yet; the tile has the floor).
+  - Pre-existing, not Vadsrijk: droombed, bliksemsmidse_onweerswolkje, guhmon_badgedoos models; FTB "Missing entity icon" errors.
+
+## Known issues / open
+- NPC guhs count as Guhdex discoveries ("Nieuw in je Guhdex: Guh") because they are real guhs.
+- The wereld POI `tempeltje` lies inside the plinth (dev tp lands in a dark hollow).
+- Jewellery exists (kern) but is in no loot table yet.
+- The `kern:proefarena` text in TESTEN_VADSRIJK.md (kern's old guide) is outdated; TESTEN_VADSRIJK_ZONE1.md is the one guide.
+- Balance untested against the real mobs; music hooks without audio.
 
 ## Resume point
-(see the bottom: updated at the end of the integration run)
+Integration DONE (head: see `git log -1`). All 6 slices merged + aligned. Next: the user's dev-client test with
+TESTEN_VADSRIJK_ZONE1.md; then CHANGELOG/version/wiki publish steps of a release (not done here; no push).

@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "guhs:vadsrijk/klassen/eikelkatapult"
+    "layer0": "guhs:item/vadsrijk/klassen/eikelkatapult"
   }
 }

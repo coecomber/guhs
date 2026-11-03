@@ -1,0 +1,235 @@
+# Het Vadsrijk 1.10.0 integration: one walk over the REAL map (all slices merged): arrival + opening, Knuffelkamp + NPCs,
+# class pick, BAM + Klodderreus, airship to De Haven, Zwamzoet (skyline, ordetempel, shops), Klodderweide + Koning Klodder,
+# Sporenwoud, Druipgrotten, Zwamtempel (door, room, Opperzwam hall), a viewpoint, the night sky, the Guhmension portal temple.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_int.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section aankomst
+/guhs vadsrijk
+wait 60
+shot i_opening_1 gui
+wait 120
+waitrender 400
+shot i_opening_2 gui
+wait 200
+look 0 -5
+shot i_aankomst gui
+/guhs vadsrijk wereld plek aankomst_trap_top
+look 180 10
+wait 60
+waitrender 300
+shot i_trap_top gui
+
+section kamp
+/guhs vadsrijk wereld plek kampvuur_kamp
+look 160 10
+wait 80
+waitrender 300
+shot i_kamp_npcs gui
+/guhs vadsrijk npc tp rekruteerder
+wait 40
+waitrender 200
+shot i_sergeant gui
+/guhs vadsrijk npc tp kok
+wait 40
+shot i_kok gui
+/guhs vadsrijk wereld plek training
+look 0 10
+wait 60
+waitrender 200
+shot i_training gui
+/guhs vadsrijk wereld plek tempeltje
+wait 40
+waitrender 200
+shot i_tempeltje gui
+/guhs vadsrijk klasse kies
+wait 20
+shot i_klassekeuze gui
+press Word Knuffelridder!
+press Word Pluisjager!
+wait 20
+/guhs vadsrijk npc questlog
+wait 20
+shot i_questlog gui
+press Doei
+press Done
+wait 10
+
+section bam
+/guhs vadsrijk wereld plek kampvuur_kamp
+wait 40
+/guhs vadsrijk npc bam
+wait 60
+shot i_bam_1 gui
+wait 120
+shot i_bam_2 gui
+wait 120
+shot i_bam_3 gui
+/summon guhs:vr_klodderreus 54 88 1069
+/guhs vadsrijk wereld plek arena_klodderreus.deur
+look 90 10
+wait 60
+shot i_klodderreus gui
+/kill @e[type=guhs:vr_klodderreus]
+
+section luchtschip
+/guhs vadsrijk wereld plek luchtschip_bel
+look 0 5
+wait 60
+waitrender 200
+shot i_luchtschip_kamp gui
+/guhs vadsrijk wereld vlieg stad
+wait 80
+shot i_vlucht gui
+wait 200
+waitrender 300
+shot i_haven gui
+
+section stad
+/tp @s 0 120 140
+look 180 10
+wait 80
+waitrender 400
+shot i_skyline gui
+/guhs vadsrijk wereld plek plein
+look 180 0
+wait 60
+waitrender 300
+shot i_plein_npcs gui
+/guhs vadsrijk npc tp smid
+wait 40
+waitrender 200
+shot i_smidse gui
+/guhs vadsrijk npc tp marktmeester
+wait 40
+shot i_veilinghuis gui
+/guhs vadsrijk npc tp akim_kaasguh
+wait 40
+shot i_akim gui
+/tp @s 0 178 -24
+look 180 -5
+wait 60
+waitrender 200
+shot i_ordetempel_deur gui
+/guhs vadsrijk npc tp grootmeester
+wait 40
+waitrender 200
+shot i_ordetempel_binnen gui
+/guhs vadsrijk eco winkel uitrusting
+wait 20
+shot i_winkel gui
+press Doei
+press Done
+wait 10
+
+section weide
+/tp @s 330 110 150
+look 45 25
+wait 80
+waitrender 300
+shot i_weide gui
+/guhs vadsrijk wereld plek kampvuur_klodderweide_1
+wait 40
+/summon guhs:vr_mob_klodder ~3 ~ ~3
+/summon guhs:vr_mob_bubbelklodder ~-3 ~ ~3
+/summon guhs:vr_mob_moederklodder ~ ~ ~6
+look 0 15
+wait 60
+waitrender 200
+shot i_weide_mobs gui
+/guhs vadsrijk wereld plek arena_koning_klodder.deur
+look 270 5
+wait 60
+waitrender 200
+shot i_kk_arena gui
+/guhs vadsrijk bazen spawn koning_klodder
+wait 60
+shot i_koning_klodder gui
+/kill @e[type=guhs:vr_baas_koning_klodder]
+
+section woud
+/guhs vadsrijk wereld plek lichtstralen.1
+look 90 5
+wait 80
+waitrender 300
+/summon guhs:vr_mob_hoedjesbol ~4 ~ ~
+/summon guhs:vr_mob_zwamwachter ~6 ~ ~3
+/summon guhs:vr_mob_mosgeest ~5 ~1 ~-3
+wait 60
+shot i_sporenwoud gui
+
+section grotten
+/guhs vadsrijk wereld plek grot_knopen.N1
+look 0 0
+wait 80
+waitrender 300
+/summon guhs:vr_mob_knaag ~3 ~ ~
+/summon guhs:vr_mob_kristalklodder ~4 ~ ~3
+/summon guhs:vr_mob_glimzwam ~-3 ~ ~3
+wait 60
+shot i_grot gui
+/guhs vadsrijk wereld plek kristalkamer
+wait 60
+waitrender 200
+shot i_kristalkamer gui
+
+section tempel
+/tp @s 330 200 -330
+look 180 35
+wait 80
+waitrender 400
+shot i_zwamtempel gui
+/guhs vadsrijk wereld plek deur_zwamtempel.voor
+look 180 -10
+wait 60
+waitrender 200
+shot i_tempeldeur gui
+/guhs vadsrijk wereld plek zwamtempel_voorhal
+look 180 0
+wait 60
+waitrender 200
+shot i_voorhal gui
+/guhs vadsrijk wereld plek lichtzwamkamer.centrum
+look 180 0
+wait 60
+waitrender 200
+shot i_lichtzwamkamer gui
+/guhs vadsrijk wereld plek arena_opperzwam.deur
+look 180 0
+wait 60
+waitrender 200
+shot i_opperzwam_poort gui
+/guhs vadsrijk wereld plek arena_opperzwam.centrum
+look 180 30
+wait 60
+waitrender 200
+/guhs vadsrijk bazen spawn opperzwam
+wait 60
+shot i_opperzwam gui
+/kill @e[type=guhs:vr_baas_opperzwam]
+
+section uitkijk
+/guhs vadsrijk wereld plek uitkijk_druipspits
+wait 60
+shot i_panorama gui
+wait 140
+
+section nacht
+/time set 18000
+/tp @s 0 140 300
+look 0 -45
+wait 60
+shot i_nachtlucht gui
+/time set 1000
+
+section portaaltempel
+tplocate guhs:guhmension guhs:vr_w_portaaltempel
+
+section items
+modelcheck
+quit

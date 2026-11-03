@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "guhs:vadsrijk/klassen/klodderkling"
+    "layer0": "guhs:item/vadsrijk/klassen/klodderkling"
   }
 }

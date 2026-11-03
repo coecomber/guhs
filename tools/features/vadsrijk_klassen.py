@@ -432,9 +432,9 @@ def _assets(w, a, png=True):
     for item, (_naam, parent, _fl) in WAPENS.items():
         w(os.path.join(a, "items", "vr_kl_" + item + ".json"), {"model": {"type": "minecraft:model", "model": "guhs:item/vr_kl_" + item}})
         w(os.path.join(a, "models", "item", "vr_kl_" + item + ".json"),
-          {"parent": parent, "textures": {"layer0": "guhs:vadsrijk/klassen/" + item}})
+          {"parent": parent, "textures": {"layer0": "guhs:item/vadsrijk/klassen/" + item}})
         if png:
-            doel = os.path.join(a, "textures", "vadsrijk", "klassen", item + ".png")
+            doel = os.path.join(a, "textures", "item", "vadsrijk", "klassen", item + ".png")   # (the item atlas only takes textures/item; integration fix)
             os.makedirs(os.path.dirname(doel), exist_ok=True)
             TEKENINGEN[item]().beeld().save(doel)
 

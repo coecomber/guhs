@@ -186,7 +186,8 @@ public final class Npcs {
         for (int d = 0; d <= 12; d++) {
             for (int s : new int[] {-1, 1}) {
                 BlockPos b = pos.above(s * d);
-                if (staanOp(sl, b)) {
+                // (integration: the map's terrain is hollowed, sealed air pockets are pitch dark; away from the exact spot only lit floors)
+                if (staanOp(sl, b) && (d == 0 || sl.getMaxLocalRawBrightness(b) > 0)) {
                     return b.getY();
                 }
                 if (d == 0) {
