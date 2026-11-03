@@ -141,10 +141,10 @@ public class KoppelingGameTests {
         z.zetVermogen(100);
         helper.assertTrue(Dorpszender.aankomst(100) == 75 && Dorpszender.aankomst(40) == 30, "25% loss");
         helper.startSequence()
-                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.beschikbaar(s, wie) == 75, "100 sent, 75 arrive: "
-                        + ErfenisVadskracht.beschikbaar(s, wie)))
+                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.huidig().beschikbaar(s, wie) == 75, "100 sent, 75 arrive: "
+                        + ErfenisVadskracht.huidig().beschikbaar(s, wie)))
                 .thenExecute(() -> z.zetVermogen(200))
-                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.beschikbaar(s, wie) == 0, "200 is too much for 150: nothing"))
+                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.huidig().beschikbaar(s, wie) == 0, "200 is too much for 150: nothing"))
                 .thenExecute(() -> {
                     z.zetVermogen(80);
                     helper.setBlock(new BlockPos(2, 2, 2), ModBlocks.GUH_WIRE.get());
@@ -154,10 +154,10 @@ public class KoppelingGameTests {
                     z2.zetEigenaar(wie);
                     z2.zetVermogen(40);
                 })
-                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.beschikbaar(s, wie) == 60 + 30, "two zenders add up: "
-                        + ErfenisVadskracht.beschikbaar(s, wie)))
+                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.huidig().beschikbaar(s, wie) == 60 + 30, "two zenders add up: "
+                        + ErfenisVadskracht.huidig().beschikbaar(s, wie)))
                 .thenExecute(() -> helper.setBlock(new BlockPos(3, 2, 3), Blocks.AIR))
-                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.beschikbaar(s, wie) == 60, "a broken zender stops counting"))
+                .thenWaitUntil(() -> helper.assertTrue(ErfenisVadskracht.huidig().beschikbaar(s, wie) == 60, "a broken zender stops counting"))
                 .thenSucceed();
     }
 

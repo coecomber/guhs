@@ -84,6 +84,7 @@ public final class KoppelingFeature {
     }
 
     public static void register(IEventBus modBus) {
+        nl.juiced.guhs.feature.erfenis.ErfenisVadskracht.zet(Dorpszender::beschikbaar);   // the village gets what the Dorpszenders send
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);

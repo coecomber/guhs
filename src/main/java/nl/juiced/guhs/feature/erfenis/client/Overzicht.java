@@ -27,7 +27,7 @@ import nl.juiced.guhs.feature.erfenis.Plot;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * De Erfenis (POC): the overview camera. While the overview is open the game looks through an invisible camera entity of
+ * De Erfenis: the overview camera. While the overview is open the game looks through an invisible camera entity of
  * our own (like the cutscene camera of the verhaal engine) that hangs tilted above the plot: {@value #PITCH} degrees down,
  * a fixed field of view of {@value #FOV}, turned in quarter steps (Q/E). The player's body stays where it stood.
  * <p>
@@ -170,6 +170,16 @@ public final class Overzicht {
             camera.setYRot(yaw);
             camera.setXRot(PITCH);
         }
+    }
+
+    /** Looks at this world point from this distance (dev / AutoCheck). */
+    static void richt(double wx, double wz, double dist) {
+        doelX = wx;
+        doelZ = wz;
+        if (dist > 0) {
+            doelAfstand = dist;
+        }
+        klem();
     }
 
     static void zoom(double stappen) {

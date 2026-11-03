@@ -14,7 +14,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.Guhs;
 
 /**
- * De Erfenis (POC): the network. The client only sends intents ({@link Actie}); the server checks them against the base of
+ * De Erfenis: the network. The client only sends intents ({@link Actie}); the server checks them against the base of
  * the plot the player stands on, changes and stamps it, and sends the whole base back ({@link Sync}). For a POC a full
  * sync after every change is fine (a base is a few KB).
  */
@@ -26,6 +26,27 @@ public final class ErfenisPayloads {
     };
     public static Consumer<Melding> meldingOntvanger = m -> {
     };
+    public static Consumer<PensionData> pensionOntvanger = m -> {
+    };
+
+    /** The Guhpension screen's lists (see {@link Guhpension#data}); opens or refreshes it. */
+    public record PensionData(CompoundTag data) implements CustomPacketPayload {
+        public static final Type<PensionData> TYPE = new Type<>(Guhs.id("erfenis_pension"));
+        public static final StreamCodec<FriendlyByteBuf, PensionData> STREAM_CODEC = StreamCodec.ofMember(PensionData::write, PensionData::new);
+
+        private PensionData(FriendlyByteBuf buf) {
+            this(buf.readNbt());
+        }
+
+        private void write(FriendlyByteBuf buf) {
+            buf.writeNbt(data);
+        }
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
 
     /**
      * The whole base (as {@link Base#save()}), the server's clock (millis) when sent, whether the receiver owns it (false:
@@ -97,9 +118,16 @@ public final class ErfenisPayloads {
         }
     }
 
-    /** What the client wants. {@code soort}: one of the constants below; the other fields as that soort needs them. */
-    public record Actie(int soort, int id, int x, int z, int x2, int z2, int rot, String gebouw) implements CustomPacketPayload {
-        public static final int OPEN = 0, PLAATS = 1, LIJN = 2, VERPLAATS = 3, DRAAI = 4, VERBETER = 5, OPHALEN = 6, GA = 7, TERUG = 8;
+    /**
+     * What the client wants. {@code soort}: one of the constants below; the other fields as that soort needs them
+     * ({@code tekst}: a good / item / uuid / list of block ids, up to 8192 chars).
+     */
+    public record Actie(int soort, int id, int x, int z, int x2, int z2, int rot, String tekst) implements CustomPacketPayload {
+        public static final int OPEN = 0, PLAATS = 1, VERPLAATS = 3, DRAAI = 4, VERBETER = 5, OPHALEN = 6, GA = 7, TERUG = 8,
+                OPRUIMEN = 9, KAVEL = 10, VERF = 11, KIES = 12, KLEUR = 13, SELECTIE = 14, NAAR_HUIS = 15, LOKET = 16, BUREAU = 17,
+                MARKT = 18, PENSION = 19, OPHALEN_ALLES = 20;
+        /** {@link #PENSION} sub-actions in {@code x}: the lists, send a guh, bring one home, which building it helps ({@code id}). */
+        public static final int PENSION_OPEN = 0, PENSION_STUUR = 1, PENSION_HAAL = 2, PENSION_HELPT = 3;
         /** {@link #GA} with this as {@code id}: and open the own overview once there ("Terug naar mijn erfenis"). */
         public static final int GA_EN_OPEN = 1;
         public static final Type<Actie> TYPE = new Type<>(Guhs.id("erfenis_actie"));
@@ -107,7 +135,7 @@ public final class ErfenisPayloads {
 
         private Actie(FriendlyByteBuf buf) {
             this(buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(), buf.readVarInt(),
-                    buf.readUtf(32));
+                    buf.readUtf(8192));
         }
 
         private void write(FriendlyByteBuf buf) {
@@ -118,7 +146,12 @@ public final class ErfenisPayloads {
             buf.writeVarInt(x2);
             buf.writeVarInt(z2);
             buf.writeVarInt(rot);
-            buf.writeUtf(gebouw, 32);
+            buf.writeUtf(tekst, 8192);
+        }
+
+        /** The POC name of {@link #tekst} (a building type id). */
+        public String gebouw() {
+            return tekst;
         }
 
         public static Actie simpel(int soort) {
@@ -127,6 +160,10 @@ public final class ErfenisPayloads {
 
         public static Actie op(int soort, int id) {
             return new Actie(soort, id, 0, 0, 0, 0, 0, "");
+        }
+
+        public static Actie met(int soort, int id, int x, String tekst) {
+            return new Actie(soort, id, x, 0, 0, 0, 0, tekst);
         }
 
         @Override
@@ -139,6 +176,7 @@ public final class ErfenisPayloads {
         registrar.playToClient(Sync.TYPE, Sync.STREAM_CODEC, (p, c) -> syncOntvanger.accept(p));
         registrar.playToClient(Vraag.TYPE, Vraag.STREAM_CODEC, (p, c) -> vraagOntvanger.accept(p));
         registrar.playToClient(Melding.TYPE, Melding.STREAM_CODEC, (p, c) -> meldingOntvanger.accept(p));
+        registrar.playToClient(PensionData.TYPE, PensionData.STREAM_CODEC, (p, c) -> pensionOntvanger.accept(p));
         registrar.playToServer(Actie.TYPE, Actie.STREAM_CODEC, ErfenisPayloads::opActie);
     }
 

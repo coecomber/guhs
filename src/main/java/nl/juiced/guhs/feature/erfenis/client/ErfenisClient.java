@@ -30,7 +30,7 @@ import nl.juiced.guhs.feature.erfenis.Plot;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * De Erfenis (POC), the client: the overview key (O by default: B is taken by the Snuffeleiland bark and JourneyMap's
+ * De Erfenis, the client: the overview key (O by default: B is taken by the Snuffeleiland bark and JourneyMap's
  * waypoint key), the client's copy of the base it looks at, and the hooks of the overview camera, world drawing and screen.
  * The key on a plot asks the server for the overview; outside the dimension the server answers with "Naar je erfenis?".
  */
@@ -41,6 +41,9 @@ public final class ErfenisClient {
     @Nullable
     static Base base;
     static boolean eigen, snel;
+    /** The Guhpension window's lists (from the server), or null. */
+    @Nullable
+    static net.minecraft.nbt.CompoundTag pension;
     static long klokVerschil;
 
     private ErfenisClient() {
@@ -51,6 +54,12 @@ public final class ErfenisClient {
         ErfenisPayloads.syncOntvanger = ErfenisClient::opSync;
         ErfenisPayloads.vraagOntvanger = v -> Minecraft.getInstance().setScreen(new VraagScherm());
         ErfenisPayloads.meldingOntvanger = ErfenisClient::opMelding;
+        ErfenisPayloads.pensionOntvanger = d -> {
+            pension = d.data();
+            if (Minecraft.getInstance().screen instanceof OverzichtScherm s && !(s.venster() instanceof Vensters.Pension)) {
+                s.open(new Vensters.Pension());
+            }
+        };
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post event) -> {
             Minecraft mc = Minecraft.getInstance();
             while (TOETS.consumeClick()) {
@@ -106,6 +115,12 @@ public final class ErfenisClient {
     }
 
     private static void opMelding(ErfenisPayloads.Melding m) {
+        if ("erfenis.dev.ui".equals(m.key())) {
+            if (Minecraft.getInstance().screen instanceof OverzichtScherm scherm && !m.args().isEmpty()) {
+                scherm.devUi(m.args().get(0), m.args().size() > 1 ? m.args().get(1) : "");
+            }
+            return;
+        }
         Component t = tekst(m.key(), m.args());
         Minecraft mc = Minecraft.getInstance();
         if (mc.screen instanceof OverzichtScherm scherm) {

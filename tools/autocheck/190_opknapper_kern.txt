@@ -1,0 +1,84 @@
+# 1.9 "Een opknapper!", kern slice: the village economy and the overview UI (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_opknapper_kern.txt
+# 1280x720 at gui scale 2 = 640x360 gui pixels. The overview is steered with the dev command /guhs erfenis ui
+# (select a building / plukje, a shop tab, a window), so no clicks on world positions are needed.
+# Flow: the krakkemikkig start (overgrown plot, shop), a plukje panel, then /guhs erfenis demo (Hoeve 6, ~25 buildings,
+# full baskets) and the panels: kippenhok, Hoeve with goals, akker with crops, verven, Bouwblokkenwerkplaats, then the
+# windows: Opslag, Naar huis, Loket, Bouwkeet blocks, Guhpension.
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section start
+/guhs erfenis
+wait 80
+waitrender 300
+/guhs erfenis reset
+wait 40
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+waitrender 200
+shot opk_01_start gui
+/guhs erfenis ui plukje 20
+wait 30
+shot opk_02_plukje gui
+/guhs erfenis ui tab dieren
+wait 10
+shot opk_03_winkel_dieren gui
+
+section demo
+gui close
+/guhs erfenis demo
+wait 60
+waitrender 300
+gui keep
+/guhs erfenis bovenaanzicht
+wait 40
+waitrender 200
+/guhs erfenis ui camera 52,52,70
+wait 40
+shot opk_04_dorp gui
+/guhs erfenis ui kies kippenhok
+wait 40
+shot opk_05_kippenhok gui
+/guhs erfenis ui kies hoeve
+wait 40
+shot opk_06_hoeve gui
+/guhs erfenis ui kies akker
+wait 40
+shot opk_07_akker gui
+/guhs erfenis ui kies molen
+/guhs erfenis ui verven
+wait 40
+shot opk_08_molen_verven gui
+/guhs erfenis ui kies bouwblokkenwerkplaats
+wait 40
+shot opk_09_werkplaats gui
+/guhs erfenis ui tab verwerking
+wait 10
+shot opk_10_winkel_verwerking gui
+
+section vensters
+/guhs erfenis ui venster opslag
+wait 20
+shot opk_11_opslag gui
+/guhs erfenis ui venster naarhuis
+wait 20
+shot opk_12_naar_huis gui
+/guhs erfenis ui venster loket
+wait 20
+shot opk_13_loket gui
+/guhs erfenis ui venster bouwkeet
+wait 20
+shot opk_14_bouwkeet gui
+/guhs erfenis ui venster pension
+wait 40
+shot opk_15_pension gui
+/guhs erfenis ui dicht
+gui close
+/guhs erfenis info
+quit

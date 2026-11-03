@@ -21,6 +21,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BucketItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
@@ -33,9 +34,10 @@ import nl.juiced.guhs.feature.erfenis.kaart.KaartData;
 import nl.juiced.guhs.feature.erfenis.kaart.KaartNieuws;
 
 /**
- * De Erfenis (POC), the server side: going there and back, the actions of the overview, the builder's clock, the
- * protection of the dimension. All checks happen here against the base of the plot the player STANDS on; the client is
- * never trusted (only the owner changes a base, everyone else gets a read-only overview).
+ * De Erfenis, the server side: going there and back, the actions of the overview, the village's clock (production,
+ * builders, residents: {@link #bijwerken}), the protection of the dimension, collecting by walking up to a building. All
+ * checks happen here against the base of the plot the player STANDS on; the client is never trusted (only the owner
+ * changes a base, everyone else gets a read-only overview).
  */
 public final class Erfenis {
     private Erfenis() {
@@ -115,11 +117,16 @@ public final class Erfenis {
         if (b.moetStempelen) {
             stempel(server, b);
         }
-        BlockPos a = Plot.aankomst(b.cx, b.cz);
+        BlockPos a = veiligeAankomst(level, b);
         p.teleport(new TeleportTransition(level, Vec3.atBottomCenterOf(a), Vec3.ZERO, 180f, 20f, TeleportTransition.DO_NOTHING));
         p.resetFallDistance();
         level.playSound(null, a, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f, 1.2f);
         p.sendSystemMessage(Component.translatable(eigen(p, b) ? "erfenis.welkom.eigen" : "erfenis.welkom.ander", b.naam));
+        if (eigen(p, b) && !b.aangekomen) {
+            b.aangekomen = true;
+            data.setDirty();
+            ErfenisMomenten.melding(server, p.getUUID(), "aangekomen");
+        }
         return true;
     }
 
@@ -162,37 +169,96 @@ public final class Erfenis {
     }
 
     // =====================================================================================================================
-    // the builder's clock
+    // the village's clock
     // =====================================================================================================================
 
-    /** Finishes the builder's job if its time has come (or "snel" is on); stamps it when somebody is there. True: something changed. */
-    static boolean bijwerken(MinecraftServer server, Base b, boolean meld) {
-        ErfenisData data = ErfenisData.get(server);
-        long nu = System.currentTimeMillis();
-        if (b.bouw == null || !(data.snel || nu >= b.bouw.eind())) {
+    /**
+     * Catches the village up to now (production, finished jobs, residents) and acts on what happened: stamps finished
+     * buildings and cleared plukjes when somebody is there (else on the next visit), fires the story moments, tells the
+     * owner (toasts, when {@code meld}). True: something changed that the viewers should get.
+     */
+    public static boolean bijwerken(MinecraftServer server, Base b, boolean meld) {
+        if (b.npc) {
             return false;
         }
-        Gebouw g = b.afronden(data.snel ? Math.max(nu, b.bouw.eind()) : nu);
-        data.setDirty();
-        if (g != null) {
-            if (!b.npc && g.type == GebouwType.STADHUIS) {
+        ErfenisData data = ErfenisData.get(server);
+        long nu = System.currentTimeMillis();
+        if (data.snel) {   // (dev: every job done now)
+            b.bouwen.replaceAll(x -> x.eind() > nu ? new Base.Bouw(x.soort(), x.ref(), x.naar(), x.start(), nu) : x);
+        }
+        if (b.eigenaar != null) {
+            b.vk = Math.max(0, ErfenisVadskracht.huidig().beschikbaar(server, b.eigenaar)) + data.devVk;
+        }
+        int oudeBewoners = b.bewoners;
+        b.bijwerken(nu);
+        boolean veranderd = !b.klaar.isEmpty() || !b.momenten.isEmpty() || b.bewoners != oudeBewoners;
+        boolean bezocht = bezocht(server, b);
+        ServerLevel level = level(server);
+        for (Base.Bouw k : b.klaar) {
+            if (level == null) {
+                break;
+            }
+            Gebouw g = k.soort() == Base.Bouw.GEBOUW ? b.gebouw(k.ref()) : null;
+            if (!bezocht) {
+                b.moetStempelen = true;
+            } else if (k.soort() == Base.Bouw.PLUKJE) {
+                if (!b.moetStempelen) {
+                    Stempel.plukje(level, Plot.oorsprong(b.cx, b.cz), b, k.ref());
+                }
+            } else if (g != null) {
+                stempelGebouw(server, b, g);
+            }
+            if (g != null && g.type == GebouwType.HOEVE) {
                 KaartData.get(server).meld(new KaartNieuws("erfenis.kaart.nieuws.speler_stadhuis", List.of(b.naam, Integer.toString(g.level)), nu));
             }
-            if (bezocht(server, b)) {
-                stempelGebouw(server, b, g);
-            } else {
-                b.moetStempelen = true;
+        }
+        b.klaar.clear();
+        meldKnus(b);
+        if (b.eigenaar != null) {
+            for (String m : List.copyOf(b.momenten)) {
+                ErfenisMomenten.melding(server, b.eigenaar, m);
             }
-            if (meld) {
-                for (ServerPlayer p : kijkers(server, b)) {
-                    melding(p, "erfenis.ok.klaar", true, g.type.naamKey(), Integer.toString(g.level));
+            ServerPlayer eigenaar = server.getPlayerList().getPlayer(b.eigenaar);
+            if (meld && eigenaar != null) {
+                for (Base.Fout f : b.meldingen) {
+                    melding(eigenaar, f.key(), true, f.args());
                 }
             }
         }
-        return true;
+        b.momenten.clear();
+        b.meldingen.clear();
+        if (veranderd) {
+            data.setDirty();
+        }
+        return veranderd;
     }
 
-    /** Every second: finished builds, and bases somebody walked onto that are behind. */
+    /** Fires {@code knusheid:<totaal>} when the Knusheid changed since the last time. */
+    static void meldKnus(Base b) {
+        int k = b.knusheid();
+        if (k != b.knusGemeld) {
+            b.knusGemeld = k;
+            b.momenten.add("knusheid:" + k);
+        }
+    }
+
+    /** Is a job finished or a resident due (so this base must be caught up now, even with nobody there)? */
+    private static boolean teDoen(Base b, long nu) {
+        for (Base.Bouw x : b.bouwen) {
+            if (x.eind() <= nu) {
+                return true;
+            }
+        }
+        return b.volgendeIntrek > 0 && b.volgendeIntrek <= nu;
+    }
+
+    /** For the Bouwkeet mix when collecting. */
+    private static final java.util.Random RNG = new java.util.Random();
+
+    /** Players walking up to a building collect it (once every few seconds). */
+    private static final Map<UUID, Long> LOOP_OPHALEN = new HashMap<>();
+
+    /** Every second: bases with something due or with visitors, the logé stand-ins, walking up to collect, falling off. */
     static void tick(ServerTickEvent.Post event) {
         MinecraftServer server = event.getServer();
         if (!openStraks.isEmpty()) {
@@ -211,11 +277,19 @@ public final class Erfenis {
             return;
         }
         ErfenisData data = ErfenisData.get(server);
+        long nu = System.currentTimeMillis();
+        boolean opfrissen = server.getTickCount() % 600 == 7;   // (every 30 s the viewers get a fresh copy anyway)
         for (Base b : new ArrayList<>(data.alleBases())) {
-            if (bijwerken(server, b, true)) {
+            if (b.npc) {
+                continue;
+            }
+            boolean bezocht = bezocht(server, b);
+            boolean veranderd = (teDoen(b, nu) || data.snel || bezocht) && bijwerken(server, b, true);
+            if (veranderd || bezocht && opfrissen) {
                 syncKijkers(server, b);
             }
         }
+        Guhpension.tick(server);
         for (ServerPlayer p : server.getPlayerList().getPlayers()) {
             if (!in(p)) {
                 continue;
@@ -224,17 +298,71 @@ public final class Erfenis {
             if (b != null && b.moetStempelen) {
                 stempel(server, b);
             }
-            if (p.getY() < Plot.Y - 24) {   // fell off the island: back on the path
+            if (b != null && eigen(p, b)) {
+                loopOphalen(server, p, b);
+            }
+            if (p.getY() < Plot.Y - 24) {   // fell off the island: back in the middle
                 Base thuis = b != null ? b : data.van(p.getUUID());
                 if (thuis != null) {
-                    p.teleport(new TeleportTransition((ServerLevel) p.level(), Vec3.atBottomCenterOf(Plot.aankomst(thuis.cx, thuis.cz)), Vec3.ZERO,
-                            180f, 20f, TeleportTransition.DO_NOTHING));
+                    p.teleport(new TeleportTransition((ServerLevel) p.level(), Vec3.atBottomCenterOf(veiligeAankomst((ServerLevel) p.level(), thuis)),
+                            Vec3.ZERO, 180f, 20f, TeleportTransition.DO_NOTHING));
                     p.resetFallDistance();
                 } else {
                     terug(p);
                 }
             }
         }
+    }
+
+    /** Standing right next to (or in) a building with something ready collects it ("nice extra": no need to open the overview). */
+    private static void loopOphalen(MinecraftServer server, ServerPlayer p, Base b) {
+        long nu = System.currentTimeMillis();
+        if (LOOP_OPHALEN.getOrDefault(p.getUUID(), 0L) > nu) {
+            return;
+        }
+        BlockPos o = Plot.oorsprong(b.cx, b.cz);
+        int tx = p.getBlockX() - o.getX(), tz = p.getBlockZ() - o.getZ();
+        for (Gebouw g : b.gebouwen) {
+            if (!g.type.maakt() || g.level <= 0) {
+                continue;
+            }
+            if (tx >= g.x - 1 && tx <= g.x + g.b() && tz >= g.z - 1 && tz <= g.z + g.d()) {
+                if (g.klaar() >= 1) {
+                    Object r = b.ophalen(g.id, RNG);
+                    if (r instanceof Map<?, ?> m) {
+                        p.sendOverlayMessage(Component.translatable("erfenis.ok.opgehaald_lopen", ophaalTekst(m), Component.translatable(g.type.naamKey())));
+                        geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
+                        ErfenisData.get(server).setDirty();
+                        syncKijkers(server, b);
+                    } else if (r instanceof Base.Fout f && "erfenis.fout.vol".equals(f.key())) {
+                        p.sendOverlayMessage(Component.translatable(f.key()));
+                    }
+                    LOOP_OPHALEN.put(p.getUUID(), nu + 4000);
+                }
+                return;
+            }
+        }
+    }
+
+    /** "12 Eieren, 6 Veren" for a collect message. */
+    static Component ophaalTekst(Map<?, ?> m) {
+        net.minecraft.network.chat.MutableComponent t = Component.empty();
+        boolean eerste = true;
+        for (Map.Entry<?, ?> e : m.entrySet()) {
+            if (!eerste) {
+                t.append(", ");
+            }
+            eerste = false;
+            t.append(e.getValue() + " ").append(Component.translatable(((Goed) e.getKey()).naamKey()));
+        }
+        return t;
+    }
+
+    /** The arrival spot, on top of whatever stands there now (a building may stand on it). */
+    static BlockPos veiligeAankomst(ServerLevel level, Base b) {
+        BlockPos a = Plot.aankomst(b.cx, b.cz);
+        BlockPos top = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, a);
+        return top.getY() > a.getY() ? top : a;
     }
 
     /** The players standing in this base's cell. */
@@ -272,7 +400,7 @@ public final class Erfenis {
 
     /** Sends this base to the player (open = the overview opens; read-only unless the player owns it). */
     public static void sync(ServerPlayer p, Base b, boolean open) {
-        PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Sync(b.save(), System.currentTimeMillis(), eigen(p, b), open,
+        PacketDistributor.sendToPlayer(p, new ErfenisPayloads.Sync(b.save(true), System.currentTimeMillis(), eigen(p, b), open,
                 ErfenisData.get(p.level().getServer()).snel));
     }
 
@@ -332,110 +460,285 @@ public final class Erfenis {
             sync(p, b, false);
             return;
         }
-        bijwerken(server, b, false);
+        bijwerken(server, b, true);
         long nu = System.currentTimeMillis();
         long duur = data.snel ? 0 : -1;
-        Base.Fout f = null;
+        Base.Fout f = acties(server, p, b, a, nu, duur);
+        if (f != null) {
+            fout(p, f);
+        }
+        meldKnus(b);
+        bijwerken(server, b, true);
+        data.setDirty();
+        syncKijkers(server, b);
+    }
+
+    /** The owner's actions on their own base (after a catch-up). Returns what went wrong, or null. */
+    @Nullable
+    private static Base.Fout acties(MinecraftServer server, ServerPlayer p, Base b, ErfenisPayloads.Actie a, long nu, long duur) {
+        ServerLevel level = level(server);
+        BlockPos o = Plot.oorsprong(b.cx, b.cz);
         switch (a.soort()) {
             case ErfenisPayloads.Actie.PLAATS -> {
-                GebouwType t = GebouwType.van(a.gebouw());
+                GebouwType t = GebouwType.van(a.tekst());
                 if (t == null) {
-                    return;
+                    return null;
                 }
-                f = b.plaats(t, a.x(), a.z(), a.rot(), nu, duur);
+                Base.Fout f = b.plaats(t, a.x(), a.z(), a.rot(), nu, duur);
                 if (f == null) {
-                    Gebouw g = b.gebouwen.get(b.gebouwen.size() - 1);
-                    stempelGebouw(server, b, g);
+                    stempelGebouw(server, b, b.gebouwen.get(b.gebouwen.size() - 1));
                     geluid(p, SoundEvents.WOOD_PLACE);
                 }
+                return f;
             }
-            case ErfenisPayloads.Actie.LIJN -> f = lijn(server, p, b, a, nu);
             case ErfenisPayloads.Actie.VERPLAATS -> {
                 Gebouw g = b.gebouw(a.id());
                 if (g == null) {
-                    return;
+                    return null;
                 }
                 int ox = g.x, oz = g.z;
-                f = b.verplaats(a.id(), a.x(), a.z());
+                Base.Fout f = b.verplaats(a.id(), a.x(), a.z());
                 if (f == null) {
-                    ServerLevel level = level(server);
                     if (!b.moetStempelen) {
-                        Stempel.wis(level, Plot.oorsprong(b.cx, b.cz), ox, oz, g.type.maat);
+                        Stempel.wis(level, o, b, ox, oz, g.b(), g.d());
                     }
                     stempelGebouw(server, b, g);
                     geluid(p, SoundEvents.WOOD_PLACE);
                 }
+                return f;
             }
             case ErfenisPayloads.Actie.DRAAI -> {
-                f = b.draai(a.id());
-                if (f == null) {
-                    stempelGebouw(server, b, b.gebouw(a.id()));
+                Gebouw g = b.gebouw(a.id());
+                if (g == null) {
+                    return null;
                 }
+                int ow = g.b(), oh = g.d();
+                Base.Fout f = b.draai(a.id());
+                if (f == null) {
+                    if (!b.moetStempelen) {
+                        Stempel.wis(level, o, b, g.x, g.z, ow, oh);
+                    }
+                    stempelGebouw(server, b, g);
+                }
+                return f;
             }
             case ErfenisPayloads.Actie.VERBETER -> {
-                f = b.verbeter(a.id(), nu, duur);
+                Base.Fout f = b.verbeter(a.id(), nu, duur);
                 if (f == null) {
                     stempelGebouw(server, b, b.gebouw(a.id()));
                     geluid(p, SoundEvents.ANVIL_USE);
                 }
+                return f;
             }
             case ErfenisPayloads.Actie.OPHALEN -> {
-                Object r = b.ophalen(a.id(), nu);
+                Object r = b.ophalen(a.id(), RNG);
                 if (r instanceof Base.Fout fout) {
-                    f = fout;
-                } else {
-                    melding(p, "erfenis.ok.opgehaald", true, String.valueOf(r));
-                    geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
+                    return fout;
                 }
+                melding(p, "erfenis.ok.opgehaald", true, ophaalTekst((Map<?, ?>) r).getString());
+                geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
+                return null;
+            }
+            case ErfenisPayloads.Actie.OPHALEN_ALLES -> {
+                Map<Goed, Integer> som = new java.util.LinkedHashMap<>();
+                boolean vol = false;
+                for (Gebouw g : b.gebouwen) {
+                    if (g.type.maakt() && g.klaar() >= 1) {
+                        Object r = b.ophalen(g.id, RNG);
+                        if (r instanceof Map<?, ?> m) {
+                            m.forEach((k, v) -> som.merge((Goed) k, (Integer) v, Integer::sum));
+                        } else if (r instanceof Base.Fout fout && "erfenis.fout.vol".equals(fout.key())) {
+                            vol = true;
+                        }
+                    }
+                }
+                if (som.isEmpty()) {
+                    return new Base.Fout(vol ? "erfenis.fout.vol" : "erfenis.fout.niks");
+                }
+                melding(p, "erfenis.ok.opgehaald", true, ophaalTekst(som).getString());
+                geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
+                return vol ? new Base.Fout("erfenis.fout.vol") : null;
+            }
+            case ErfenisPayloads.Actie.OPRUIMEN -> {
+                Base.Fout f = b.opruimen(a.x(), nu, duur);
+                if (f == null) {
+                    geluid(p, SoundEvents.AZALEA_LEAVES_BREAK);
+                }
+                return f;
+            }
+            case ErfenisPayloads.Actie.KAVEL -> {
+                Base.Fout f = b.kavelKopen(a.x());
+                if (f == null) {
+                    if (!b.moetStempelen && bezocht(server, b)) {
+                        Stempel.kavel(level, o, b, a.x());
+                    }
+                    melding(p, "erfenis.ok.kavel", true, Integer.toString(b.kavelsGekocht()));
+                    geluid(p, SoundEvents.PLAYER_LEVELUP);
+                }
+                return f;
+            }
+            case ErfenisPayloads.Actie.VERF -> {
+                Base.Fout f = b.verf(a.id(), a.x());
+                if (f == null) {
+                    for (Gebouw g : b.gebouwen) {
+                        if (a.id() < 0 || g.id == a.id()) {
+                            stempelGebouw(server, b, g);
+                        }
+                    }
+                    geluid(p, SoundEvents.DYE_USE);
+                }
+                return f;
+            }
+            case ErfenisPayloads.Actie.KIES -> {
+                return b.kies(a.id(), a.x());
+            }
+            case ErfenisPayloads.Actie.KLEUR -> {
+                return b.kleur(a.id(), a.x());
+            }
+            case ErfenisPayloads.Actie.SELECTIE -> {
+                List<String> l = new ArrayList<>();
+                for (String s : a.tekst().split(",")) {
+                    if (!s.isBlank()) {
+                        l.add(s.trim());
+                    }
+                }
+                return b.selectie(a.id(), l);
+            }
+            case ErfenisPayloads.Actie.NAAR_HUIS -> {
+                return naarHuis(server, p, b, Goed.van(a.tekst()), a.x(), nu);
+            }
+            case ErfenisPayloads.Actie.LOKET -> {
+                return loket(p, b, a.tekst(), a.x());
+            }
+            case ErfenisPayloads.Actie.BUREAU -> {
+                Gebouw g = b.gebouw(a.id());
+                if (g == null || g.type != GebouwType.DETECTIVEBUREAU || g.level <= 0) {
+                    return new Base.Fout("erfenis.fout.weg");
+                }
+                nl.juiced.guhs.feature.erfenis.sherlock.Sherlock.openBureau(p);
+                return null;
+            }
+            case ErfenisPayloads.Actie.MARKT -> {
+                Gebouw g = b.gebouw(a.id());
+                if (g == null || g.type != GebouwType.MARKTPLEIN || g.level <= 0) {
+                    return new Base.Fout("erfenis.fout.weg");
+                }
+                nl.juiced.guhs.feature.erfenis.kaart.Bestellingen.open(p);
+                return null;
+            }
+            case ErfenisPayloads.Actie.PENSION -> {
+                Base.Fout f = null;
+                UUID id = null;
+                try {
+                    id = a.tekst().isEmpty() ? null : UUID.fromString(a.tekst());
+                } catch (IllegalArgumentException e) {
+                    return null;
+                }
+                switch (a.x()) {
+                    case ErfenisPayloads.Actie.PENSION_STUUR -> f = id == null ? null : Guhpension.stuur(p, b, id);
+                    case ErfenisPayloads.Actie.PENSION_HAAL -> f = id == null ? null : Guhpension.haal(p, b, id);
+                    case ErfenisPayloads.Actie.PENSION_HELPT -> f = id == null ? null : Guhpension.helpt(b, id, a.id());
+                    default -> {
+                    }
+                }
+                if (f == null && a.x() == ErfenisPayloads.Actie.PENSION_STUUR) {
+                    melding(p, "erfenis.ok.loge", true);
+                }
+                Guhpension.open(p, b);
+                return f;
             }
             default -> {
-                return;
+                return null;
             }
         }
-        if (f != null) {
-            fout(p, f);
-        }
-        data.setDirty();
-        if (data.snel) {
-            bijwerken(server, b, true);
-        }
-        syncKijkers(server, b);
     }
 
-    /** Walls in a straight line from (x, z) to (x2, z2) (the longer axis wins): as many as the limit and Bouwspul allow. */
+    /** "Naar huis sturen": the goods leave the storage for the Leverkist (with the caps per hour; wool exempt). */
     @Nullable
-    private static Base.Fout lijn(MinecraftServer server, ServerPlayer p, Base b, ErfenisPayloads.Actie a, long nu) {
-        GebouwType t = GebouwType.van(a.gebouw());
-        if (t == null || t.maat != 1) {
-            return null;
+    private static Base.Fout naarHuis(MinecraftServer server, ServerPlayer p, Base b, @Nullable Goed g, int n, long nu) {
+        if (g == null) {
+            return new Base.Fout("erfenis.fout.weg");
         }
-        int dx = a.x2() - a.x(), dz = a.z2() - a.z();
-        boolean langsX = Math.abs(dx) >= Math.abs(dz);
-        int n = Math.min(Plot.MAAT, langsX ? Math.abs(dx) : Math.abs(dz));
-        int stap = (langsX ? dx : dz) >= 0 ? 1 : -1;
-        int gezet = 0;
-        Base.Fout laatste = null;
-        for (int i = 0; i <= n; i++) {
-            int x = langsX ? a.x() + i * stap : a.x(), z = langsX ? a.z() : a.z() + i * stap;
-            if (!b.vrij(x, z, 1, -1)) {
-                continue;   // (already a wall there, or something else: skipped)
+        if (g.naarHuis() && !"*".equals(g.thuisItem) && g != Goed.KAARS && Goed.item(g.thuisItem) == null) {
+            return new Base.Fout("erfenis.fout.item_ontbreekt", g.naamKey());
+        }
+        Object r = b.naarHuis(g, n, nu);
+        if (r instanceof Base.Fout f) {
+            return f;
+        }
+        List<ItemStack> spul = new ArrayList<>();
+        for (Map.Entry<?, ?> e : ((Map<?, ?>) r).entrySet()) {
+            net.minecraft.world.item.Item item = Goed.item((String) e.getKey());
+            if (item == null) {
+                item = net.minecraft.world.item.Items.BRICKS;   // (a Bouwkeet block that went missing: never lose the count)
             }
-            Base.Fout f = b.plaats(t, x, z, 0, nu, -1);
-            if (f != null) {
-                laatste = f;
-                break;
+            int over = (Integer) e.getValue();
+            while (over > 0) {
+                ItemStack st = new ItemStack(item);
+                int neem = Math.min(over, st.getMaxStackSize());
+                st.setCount(neem);
+                spul.add(st);
+                over -= neem;
             }
-            stempelGebouw(server, b, b.gebouwen.get(b.gebouwen.size() - 1));
-            gezet++;
         }
-        if (gezet > 0) {
-            geluid(p, SoundEvents.STONE_PLACE);
+        LeverkistPost.verstuur(server, b.eigenaar, spul);
+        melding(p, "erfenis.ok.naar_huis", true, Integer.toString(n), g.naamKey());
+        geluid(p, SoundEvents.BUNDLE_INSERT);
+        return null;
+    }
+
+    /** Every main-world item any upgrade asks for (the Loket only takes these). */
+    private static java.util.Set<String> loketItems;
+
+    static java.util.Set<String> loketItems() {
+        if (loketItems == null) {
+            java.util.Set<String> s = new java.util.LinkedHashSet<>();
+            for (GebouwType t : GebouwType.values()) {
+                for (int l = 1; l <= t.topLevel(); l++) {
+                    s.addAll(Prijzen.gebouw(t, l).hoofdwereld().keySet());
+                }
+            }
+            loketItems = s;
         }
-        return laatste;
+        return loketItems;
+    }
+
+    /** The Loket: hand in main-world items from your pockets (only what an upgrade asks for). */
+    @Nullable
+    private static Base.Fout loket(ServerPlayer p, Base b, String itemId, int n) {
+        if (b.besteLevel(GebouwType.LOKET) <= 0) {
+            return new Base.Fout("erfenis.fout.loket_nodig");
+        }
+        net.minecraft.world.item.Item item = Goed.item(itemId);
+        if (item == null || !loketItems().contains(itemId) || n <= 0) {
+            return new Base.Fout("erfenis.fout.loket_niet");
+        }
+        int over = n, gegeven = 0;
+        var inv = p.getInventory();
+        for (int i = 0; i < inv.getContainerSize() && over > 0; i++) {
+            ItemStack st = inv.getItem(i);
+            if (st.is(item)) {
+                int neem = Math.min(over, st.getCount());
+                st.shrink(neem);
+                over -= neem;
+                gegeven += neem;
+            }
+        }
+        if (gegeven <= 0) {
+            return new Base.Fout("erfenis.fout.loket_geen", item.getDescriptionId());
+        }
+        b.loket.merge(itemId, gegeven, Integer::sum);
+        melding(p, "erfenis.ok.loket", true, Integer.toString(gegeven), item.getDescriptionId());
+        geluid(p, SoundEvents.ITEM_PICKUP);
+        return null;
     }
 
     private static void geluid(ServerPlayer p, net.minecraft.sounds.SoundEvent s) {
         p.level().playSound(null, p.blockPosition(), s, SoundSource.PLAYERS, 0.6f, 1.1f);
+    }
+
+    private static void geluid(ServerPlayer p, net.minecraft.core.Holder<net.minecraft.sounds.SoundEvent> s) {
+        geluid(p, s.value());
     }
 
     // =====================================================================================================================

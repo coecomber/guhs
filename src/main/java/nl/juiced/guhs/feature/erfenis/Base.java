@@ -2,7 +2,11 @@ package nl.juiced.guhs.feature.erfenis;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -11,36 +15,66 @@ import javax.annotation.Nullable;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
+import nl.juiced.guhs.feature.erfenis.Prijzen.Doel;
+import nl.juiced.guhs.feature.erfenis.Prijzen.Prijs;
+import nl.juiced.guhs.feature.erfenis.vorm.GebouwVormen;
 
 /**
- * De Erfenis (POC): one base. The same class holds the rules on the server (the authority) and the copy the client draws
- * (sent whole by {@link ErfenisPayloads.Sync}). Nothing here touches the world: stamping is {@link Stempel}, the plot's place
- * is {@link Plot}, the list of all bases {@link ErfenisData}.
- * <p>
- * <b>Owner.</b> A player's base has {@code eigenaar} = the player's uuid (and {@code id} = the same uuid). An NPC village
- * (phase 2) has {@code npc} = true, no eigenaar, a generated {@code naam} and its own random {@code id}.
- * <p>
- * <b>Time</b> is real-world millis ({@link System#currentTimeMillis()} on the server), so builds and the molens go on while
- * nobody is online. The client gets the server's clock with every sync and keeps the difference.
- * <p>
- * <b>The rules</b> ({@code kan*} return null when allowed, else a {@link Fout}; the actions check again): the stadhuis level
- * limits how many of each type and their max level ({@link GebouwType}); one builder: one build or upgrade at a time
- * ({@link #bouw}); walls and decoration are placed at once, everything else (and every upgrade) takes the builder.
+ * De Erfenis ("Een opknapper!"): one village. The same class holds the rules on the server (the authority) and the copy
+ * the client draws (sent whole by {@link ErfenisPayloads.Sync}). Nothing here touches the world: stamping is {@link Stempel},
+ * the plot's geometry {@link Plot}, the list of all bases {@link ErfenisData}, the server side {@link Erfenis}.
+ * <ul>
+ *   <li><b>Money and goods:</b> Guhlden in the Hoeve (capped per Hoeve level), goods in the storage (Hoeve + Opslagschuren,
+ *   one shared room), main-world items handed in at the Loket ({@link #loket}).</li>
+ *   <li><b>Time</b> is real-world millis; {@link #bijwerken} catches up on everything since the last time (production, builds,
+ *   residents moving in), also for the hours nobody was there. The client runs the same to show live numbers.</li>
+ *   <li><b>Builders:</b> 1, 2 or 3 jobs at a time ({@link #bouwen}): new buildings, upgrades and clearing plukjes.</li>
+ *   <li><b>Land:</b> the open middle, the 72 plukjes ({@link #opgeruimd}), the 16 kavels ({@link #kavels}).</li>
+ *   <li><b>Rules:</b> every {@code kan*} returns null when allowed, else a {@link Fout}; the actions check again.</li>
+ * </ul>
+ * After {@link #bijwerken} the server drains {@link #momenten} (story moments), {@link #klaar} (finished jobs to stamp) and
+ * {@link #meldingen} (toasts for the owner).
  */
 public final class Base {
-    /** A build or upgrade in progress: building {@code gebouw} becomes level {@code naar} at real time {@code eind}. */
-    public record Bouw(int gebouw, int naar, long start, long eind) {
+    /** A builder's job: {@code soort} GEBOUW (building {@code ref} becomes level {@code naar}) or PLUKJE (plukje {@code ref} is cleared). */
+    public record Bouw(int soort, int ref, int naar, long start, long eind) {
+        public static final int GEBOUW = 0, PLUKJE = 1;
+
         public float voortgang(long nu) {
             return eind <= start ? 1f : Math.max(0f, Math.min(1f, (nu - start) / (float) (eind - start)));
         }
     }
 
-    /** Why something may not: a lang key and its arguments (a number, or another lang key, see ErfenisClient.tekst). */
+    /** Why something may not (or a message): a lang key and its arguments (numbers, or other lang keys). */
     public record Fout(String key, String... args) {
     }
 
-    public static final int START_BOUWSPUL = 150;
+    /** A placed decoration piece (phase 2: the deco catalogue; the data lives here already). */
+    public record Deco(String id, int x, int z, int rot) {
+    }
+
+    /** One of your own tamed guhs staying in the Guhpension: its stored data (server only), and the building it helps (-1: none). */
+    public static final class Loge {
+        public final UUID id;
+        public final CompoundTag opslag;
+        public int gebouw;
+
+        public Loge(UUID id, CompoundTag opslag, int gebouw) {
+            this.id = id;
+            this.opslag = opslag;
+            this.gebouw = gebouw;
+        }
+    }
+
+    /** One building of a hand-made or generated layout (the world map's NPC villages). */
+    public record Plan(GebouwType type, int level, int x, int z, int rot) {
+    }
+
+    /** What the makelaar leaves you: 300 Guhlden and opa's last planks and eggs (so the very first builds can start). */
+    public static final int START_GUHLDEN = 300;
+    public static final Map<Goed, Integer> START_GOED = Map.of(Goed.PLANK, 50, Goed.EI, 10);
 
     public final UUID id;
     @Nullable
@@ -50,11 +84,46 @@ public final class Base {
     public int cx, cz;
     public final List<Gebouw> gebouwen = new ArrayList<>();
     public int volgendeId = 1;
-    @Nullable
-    public Bouw bouw;
-    public int bouwspul;
-    /** The blocks in the world are behind (an upgrade finished while nobody was there, a fresh base, a reset): stamp on the next visit. */
+    public final List<Bouw> bouwen = new ArrayList<>();
+    public int guhlden;
+    public final Map<Goed, Double> goederen = new EnumMap<>(Goed.class);
+    /** Which Bouwkeet blocks the "bouwblok" goods in the storage are (block id -> count). */
+    public final Map<String, Integer> bouwblokSoorten = new LinkedHashMap<>();
+    public int bewoners;
+    /** When the next resident moves in (0: no room now). */
+    public long volgendeIntrek;
+    public int bestellingen;
+    public final boolean[] opgeruimd = new boolean[Plot.PLUKJES];
+    /** Bought kavels (bit k = kavel k, see {@link Plot#kavelOp}). */
+    public int kavels;
+    public final List<String> vondsten = new ArrayList<>();
+    public final Map<String, Integer> decoOpslag = new LinkedHashMap<>();
+    public final List<Deco> deco = new ArrayList<>();
+    /** The path layer: per tile 0 (none) or 1 + an index into {@link #padSoorten}. */
+    public byte[] paden = new byte[Plot.MAAT * Plot.MAAT];
+    public final List<String> padSoorten = new ArrayList<>();
+    public int knusDeco;
+    /** Main-world items handed in at the Loket (item id -> count). */
+    public final Map<String, Integer> loket = new LinkedHashMap<>();
+    /** The Leverkist allowance per good (balans 9.4: cap per hour, saves up to 8 hours) and when it was last counted. */
+    public final Map<Goed, Double> leverTegoed = new EnumMap<>(Goed.class);
+    public long leverBijgewerkt;
+    public final List<Loge> loges = new ArrayList<>();
+    /** The VK arriving at the Vadsmast (before its cap), as last known (the server sets it before every catch-up). */
+    public int vk;
+    /** The tutorial's first Kippenhok is free. */
+    public boolean kippenhokGratis = true;
+    /** The owner arrived here at least once ("aangekomen" moment); the Knusheid last announced ("knusheid:<n>" moment). */
+    public boolean aangekomen;
+    public int knusGemeld;
+    public long bijgewerkt;
+    /** The blocks in the world are behind: stamp on the next visit. */
     public boolean moetStempelen = true;
+
+    // transient: what happened during the last catch-up, for the server to act on (never saved or synced)
+    public final transient List<String> momenten = new ArrayList<>();
+    public final transient List<Bouw> klaar = new ArrayList<>();
+    public final transient List<Fout> meldingen = new ArrayList<>();
 
     public Base(UUID id, @Nullable UUID eigenaar, String naam, boolean npc, int cx, int cz) {
         this.id = id;
@@ -69,116 +138,113 @@ public final class Base {
     // a new base
     // =====================================================================================================================
 
-    /** A fresh player base, as opa-guh left it: a level 1 stadhuis in the middle, a molen with a bit inside, his old fence and tree. */
+    /** The Hoeve's spot: the north-west of the open middle (the rest of the middle stays free for the first buildings). */
+    public static final int HOEVE_X = Plot.MIDDEN + 1, HOEVE_Z = Plot.MIDDEN + 1;
+
     public static Base nieuw(UUID eigenaar, String naam, int cx, int cz, long nu) {
         Base b = new Base(eigenaar, eigenaar, naam, false, cx, cz);
         b.vulStart(nu);
         return b;
     }
 
-    /** Back to the start (keeps id, owner and cell). */
+    /** Back to the start (keeps id, owner and cell): the makelaar's krakkemikkig schuurtje on an overgrown plot. */
     public void vulStart(long nu) {
         gebouwen.clear();
         volgendeId = 1;
-        bouw = null;
-        bouwspul = START_BOUWSPUL;
-        nieuwGebouw(GebouwType.STADHUIS, 1, 30, 30, 0, nu);
-        Gebouw molen = nieuwGebouw(GebouwType.MOLEN, 1, 23, 31, 0, nu);
-        molen.voorraad = 20;
-        for (int i = 0; i < 4; i++) {   // opa's old fence
-            nieuwGebouw(GebouwType.MUUR, 1, 29 + i, 37, 0, nu);
+        bouwen.clear();
+        guhlden = START_GUHLDEN;
+        goederen.clear();
+        START_GOED.forEach((g, n) -> goederen.put(g, n.doubleValue()));
+        bouwblokSoorten.clear();
+        bewoners = 0;
+        volgendeIntrek = 0;
+        bestellingen = 0;
+        java.util.Arrays.fill(opgeruimd, false);
+        kavels = 0;
+        vondsten.clear();
+        decoOpslag.clear();
+        deco.clear();
+        paden = new byte[Plot.MAAT * Plot.MAAT];
+        padSoorten.clear();
+        knusDeco = 0;
+        loket.clear();
+        leverTegoed.clear();
+        for (Goed g : Goed.values()) {
+            if (g.capPerUur > 0) {
+                leverTegoed.put(g, g.capPerUur * 8.0);
+            }
         }
-        nieuwGebouw(GebouwType.BOOMPJE, 1, 37, 29, 0, nu);   // and his blossom tree
+        leverBijgewerkt = nu;
+        kippenhokGratis = true;
+        bijgewerkt = nu;
+        nieuwGebouw(GebouwType.HOEVE, 1, HOEVE_X, HOEVE_Z, 0, nu);
         moetStempelen = true;
     }
 
-    /**
-     * (phase 2) An NPC village: a stadhuis of this level in the middle and, at random free spots, as many of every other type
-     * as that level allows, at random allowed levels; walls in a ring around the middle. Deterministic for a seed.
-     */
-    public static Base npc(UUID id, String naam, int cx, int cz, int stadhuisLevel, long seed, long nu) {
+    /** An NPC village (dev /guhs erfenis npc): a Hoeve of this level and as many of everything as that level allows. */
+    public static Base npc(UUID id, String naam, int cx, int cz, int hoeveLevel, long seed, long nu) {
         Base b = new Base(id, null, naam, true, cx, cz);
+        b.allesOpen();
         Random rng = new Random(seed);
-        int th = Math.max(1, Math.min(GebouwType.MAX_STADHUIS, stadhuisLevel));
-        b.nieuwGebouw(GebouwType.STADHUIS, th, 30, 30, rng.nextInt(4), nu);
-        // walls: a ring around the middle, as long as the limit lasts
-        int muren = GebouwType.MUUR.maxAantal(th), r = 9 + th;
-        int muurLevel = Math.max(1, GebouwType.MUUR.maxLevel(th) - rng.nextInt(2));
-        List<int[]> ring = new ArrayList<>();
-        for (int i = -r; i <= r; i++) {
-            ring.add(new int[] {32 + i, 32 - r});
-            ring.add(new int[] {32 + i, 32 + r});
-            if (i != -r && i != r) {
-                ring.add(new int[] {32 - r, 32 + i});
-                ring.add(new int[] {32 + r, 32 + i});
+        int h = Math.max(1, Math.min(GebouwType.MAX_HOEVE, hoeveLevel));
+        b.nieuwGebouw(GebouwType.HOEVE, h, HOEVE_X, HOEVE_Z, 0, nu);
+        for (GebouwType t : GebouwType.values()) {
+            if (t == GebouwType.HOEVE) {
+                continue;
             }
-        }
-        for (int[] p : ring) {
-            if (b.aantal(GebouwType.MUUR) >= muren) {
-                break;
-            }
-            if (!(p[0] == 32 && p[1] == 32 + r) && b.vrij(p[0], p[1], 1, -1)) {   // (a gate in the south)
-                b.nieuwGebouw(GebouwType.MUUR, muurLevel, p[0], p[1], 0, nu);
-            }
-        }
-        for (GebouwType t : new GebouwType[] {GebouwType.MOLEN, GebouwType.SCHUURTJE, GebouwType.BOOMPJE}) {
-            int n = t.maxAantal(th);
-            for (int i = 0, poging = 0; i < n && poging < 400; poging++) {
-                int x = 2 + rng.nextInt(Plot.MAAT - 4 - t.maat), z = 2 + rng.nextInt(Plot.MAAT - 4 - t.maat);
-                if (b.vrij(x, z, t.maat, -1)) {
-                    int lvl = 1 + rng.nextInt(Math.max(1, t.maxLevel(th)));
-                    Gebouw g = b.nieuwGebouw(t, lvl, x, z, rng.nextInt(4), nu);
-                    g.voorraad = t == GebouwType.MOLEN ? rng.nextInt(GebouwType.molenOpslag(lvl) + 1) : 0;
+            int n = t.maxAantal(h);
+            for (int i = 0, poging = 0; i < n && poging < 300; poging++) {
+                int rot = rng.nextInt(4);
+                int x = 2 + rng.nextInt(Plot.MAAT - 4 - t.b(rot)), z = 2 + rng.nextInt(Plot.MAAT - 4 - t.d(rot));
+                if (b.vrij(x, z, t.b(rot), t.d(rot), -1)) {
+                    b.nieuwGebouw(t, 1 + rng.nextInt(Math.max(1, t.maxLevel(h))), x, z, rot, nu);
                     i++;
                 }
             }
         }
-        b.bouwspul = rng.nextInt(b.opslag() + 1);
+        b.bewoners = b.maxBewoners();
+        b.guhlden = rng.nextInt(Productie.guhldenCap(h) + 1);
         return b;
     }
 
-    /** (phase 2) One building of a hand-made or generated layout: type, level (1..top), min corner (x, z) on the plot, quarter turns. */
-    public record Plan(GebouwType type, int level, int x, int z, int rot) {
-    }
-
-    /**
-     * (phase 2) An NPC village from a building list. Entries that stick out of the plot or overlap an earlier entry are skipped;
-     * levels are clamped to 1..top. Without a STADHUIS in the list one of level 1 is put in the middle (if free).
-     */
-    public static Base npc(UUID id, String naam, int cx, int cz, List<Plan> plan, int bouwspul, long nu) {
+    public static Base npc(UUID id, String naam, int cx, int cz, List<Plan> plan, int guhlden, long nu) {
         Base b = new Base(id, null, naam, true, cx, cz);
+        b.allesOpen();
         b.vervangPlan(plan, nu);
-        b.bouwspul = Math.max(0, Math.min(bouwspul, b.opslag()));
+        b.guhlden = Math.max(0, Math.min(guhlden, Productie.guhldenCap(b.hoeveLevel())));
         return b;
     }
 
-    /**
-     * (phase 2) Replaces every building by this list IN PLACE (same object, id, cell and name): an NPC village that grew.
-     * The same rules as {@link #npc(UUID, String, int, int, List, int, long)}; no build in progress afterwards, Bouwspul
-     * clamped to the new storage, and the plot is stamped again on the next visit (or now, see ErfenisData#veranderd).
-     */
+    /** Replaces every building by this list IN PLACE (an NPC village that grew). Overlapping or outside entries are skipped. */
     public void vervangPlan(List<Plan> plan, long nu) {
         gebouwen.clear();
         volgendeId = 1;
-        bouw = null;
+        bouwen.clear();
         for (Plan p : plan) {
-            if (p.type() == GebouwType.STADHUIS && stadhuis() != null) {
+            if (p.type() == GebouwType.HOEVE && hoeve() != null) {
                 continue;
             }
-            if (vrij(p.x(), p.z(), p.type().maat, -1)) {
-                nieuwGebouw(p.type(), Math.max(1, Math.min(p.type().topLevel(), p.level())), p.x(), p.z(), p.rot(), nu);
+            int rot = p.rot() & 3;
+            if (vrij(p.x(), p.z(), p.type().b(rot), p.type().d(rot), -1)) {
+                nieuwGebouw(p.type(), Math.max(1, Math.min(p.type().topLevel(), p.level())), p.x(), p.z(), rot, nu);
             }
         }
-        if (stadhuis() == null && vrij(30, 30, GebouwType.STADHUIS.maat, -1)) {
-            nieuwGebouw(GebouwType.STADHUIS, 1, 30, 30, 0, nu);
+        if (hoeve() == null && vrij(HOEVE_X, HOEVE_Z, 11, 11, -1)) {
+            nieuwGebouw(GebouwType.HOEVE, 1, HOEVE_X, HOEVE_Z, 0, nu);
         }
-        bouwspul = Math.max(0, Math.min(bouwspul, opslag()));
+        bewoners = maxBewoners();
         moetStempelen = true;
     }
 
-    private Gebouw nieuwGebouw(GebouwType type, int level, int x, int z, int rot, long nu) {
+    /** (NPC villages) every plukje cleared and every kavel bought: the whole plot is open land. */
+    void allesOpen() {
+        java.util.Arrays.fill(opgeruimd, true);
+        kavels = (1 << Plot.KAVELS) - 1;
+    }
+
+    Gebouw nieuwGebouw(GebouwType type, int level, int x, int z, int rot, long nu) {
         Gebouw g = new Gebouw(volgendeId++, type, level, x, z, rot);
-        g.bijgewerkt = nu;
+        g.palet = GebouwVormen.vormTier(type.id, Math.max(1, level));
         gebouwen.add(g);
         return g;
     }
@@ -197,7 +263,6 @@ public final class Base {
         return null;
     }
 
-    /** The building on this tile, or null. */
     @Nullable
     public Gebouw op(int tx, int tz) {
         for (Gebouw g : gebouwen) {
@@ -209,18 +274,28 @@ public final class Base {
     }
 
     @Nullable
-    public Gebouw stadhuis() {
+    public Gebouw hoeve() {
         for (Gebouw g : gebouwen) {
-            if (g.type == GebouwType.STADHUIS) {
+            if (g.type == GebouwType.HOEVE) {
                 return g;
             }
         }
         return null;
     }
 
-    public int stadhuisLevel() {
-        Gebouw s = stadhuis();
+    public int hoeveLevel() {
+        Gebouw s = hoeve();
         return s == null ? 1 : Math.max(1, s.level);
+    }
+
+    /** (POC name, the world map) = {@link #hoeveLevel()}. */
+    public int stadhuisLevel() {
+        return hoeveLevel();
+    }
+
+    /** The palettes unlocked: 1 .. the tier the Hoeve reached (T1 = H1-2 ... T5 = H9-10). */
+    public int maxPalet() {
+        return (hoeveLevel() + 1) / 2;
     }
 
     public int aantal(GebouwType type) {
@@ -233,90 +308,420 @@ public final class Base {
         return n;
     }
 
-    /** The most Bouwspul this base can hold: the stadhuis plus every schuurtje (that is built). */
-    public int opslag() {
-        int cap = GebouwType.stadhuisOpslag(stadhuisLevel());
+    /** The highest built level of this type (0: none built). */
+    public int besteLevel(GebouwType type) {
+        int l = 0;
         for (Gebouw g : gebouwen) {
-            if (g.type == GebouwType.SCHUURTJE) {
-                cap += GebouwType.schuurOpslag(g.level);
+            if (g.type == type) {
+                l = Math.max(l, g.level);
+            }
+        }
+        return l;
+    }
+
+    /** Goods room: the Hoeve plus every Opslagschuur. */
+    public int opslag() {
+        int cap = Productie.HOEVE_OPSLAG;
+        for (Gebouw g : gebouwen) {
+            if (g.type == GebouwType.OPSLAGSCHUUR) {
+                cap += Productie.opslagschuur(g.level);
             }
         }
         return cap;
     }
 
-    /** Knusheid: the sum of what every (built) building gives. */
+    /** Goods in the storage now (rounded up: a half egg takes room too). */
+    public int opslagGebruikt() {
+        double s = 0;
+        for (double v : goederen.values()) {
+            s += v;
+        }
+        return (int) Math.ceil(s - 1e-6);
+    }
+
+    public int opslagVrij() {
+        return Math.max(0, opslag() - opslagGebruikt());
+    }
+
+    public int guhldenCap() {
+        return Productie.guhldenCap(hoeveLevel());
+    }
+
+    public double goed(Goed g) {
+        return goederen.getOrDefault(g, 0.0);
+    }
+
+    /** Whole units of this good in the storage. */
+    public int heeft(Goed g) {
+        return (int) Math.floor(goed(g) + 1e-6);
+    }
+
+    void verander(Goed g, double delta) {
+        double n = Math.max(0, goed(g) + delta);
+        if (n < 1e-9) {
+            goederen.remove(g);
+        } else {
+            goederen.put(g, n);
+        }
+    }
+
+    /** Adds Guhlden up to the Hoeve's cap; returns what fitted. */
+    public int geefGuhlden(int n) {
+        int erin = Math.max(0, Math.min(n, guhldenCap() - guhlden));
+        guhlden += erin;
+        return erin;
+    }
+
+    /** Adds goods up to the free room; returns what fitted (Bouwkeet blocks get the default kind). */
+    public int geefGoed(Goed g, int n) {
+        int erin = Math.max(0, Math.min(n, opslagVrij()));
+        if (erin > 0) {
+            verander(g, erin);
+            if (g == Goed.BOUWBLOK) {
+                bouwblokSoorten.merge(Bouwkeet.STANDAARD, erin, Integer::sum);
+            }
+        }
+        return erin;
+    }
+
+    /** Takes whole goods (false: not enough, nothing taken). */
+    public boolean neemGoed(Goed g, int n) {
+        if (heeft(g) < n) {
+            return false;
+        }
+        verander(g, -n);
+        if (g == Goed.BOUWBLOK) {
+            neemSoorten(n);
+        }
+        return true;
+    }
+
+    /** Takes n Bouwkeet blocks of whatever kinds there are (the biggest piles first). */
+    private Map<String, Integer> neemSoorten(int n) {
+        Map<String, Integer> uit = new LinkedHashMap<>();
+        while (n > 0 && !bouwblokSoorten.isEmpty()) {
+            String grootste = Collections.max(bouwblokSoorten.entrySet(), Map.Entry.comparingByValue()).getKey();
+            int heeft = bouwblokSoorten.get(grootste);
+            int neem = Math.min(n, Math.max(1, Math.min(heeft, (n + 1) / 2)));
+            uit.merge(grootste, neem, Integer::sum);
+            n -= neem;
+            if (heeft - neem <= 0) {
+                bouwblokSoorten.remove(grootste);
+            } else {
+                bouwblokSoorten.put(grootste, heeft - neem);
+            }
+        }
+        if (n > 0) {
+            uit.merge(Bouwkeet.STANDAARD, n, Integer::sum);
+        }
+        return uit;
+    }
+
+    /** Residents room: every Guhhutje plus the Speeltuin's extra. */
+    public int maxBewoners() {
+        int n = 0;
+        for (Gebouw g : gebouwen) {
+            if (g.type == GebouwType.GUHHUTJE) {
+                n += Productie.hutjeBewoners(g.level);
+            } else if (g.type == GebouwType.SPEELTUIN) {
+                n += Productie.speeltuinBewoners(g.level);
+            }
+        }
+        return n;
+    }
+
+    /** All workplaces of the village (for the residents panel). */
+    public int werkplekken() {
+        int n = 0;
+        for (Gebouw g : gebouwen) {
+            n += Productie.plekken(g.type, g.level);
+        }
+        return n;
+    }
+
+    /** The VK the village really has: what arrives, capped by the Vadsmast (none without a Vadsmast). */
+    public int vkInDorp() {
+        int cap = Productie.vadsmastCap(besteLevel(GebouwType.VADSMAST));
+        return Math.max(0, Math.min(vk, cap));
+    }
+
+    /** Café + Muziektent bonus in percent. */
+    public int dorpsBonus() {
+        return Productie.bonusProcent(besteLevel(GebouwType.DORPSCAFE)) + Productie.bonusProcent(besteLevel(GebouwType.MUZIEKTENT));
+    }
+
+    public int logesBij(int gebouwId) {
+        int n = 0;
+        for (Loge l : loges) {
+            if (l.gebouw == gebouwId) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public int pensionPlekken() {
+        return Productie.pensionPlekken(besteLevel(GebouwType.GUHPENSION));
+    }
+
+    public int bouwers() {
+        return Productie.bouwers(besteLevel(GebouwType.TIMMERSCHUUR));
+    }
+
+    public int vrijeBouwers() {
+        return Math.max(0, bouwers() - bouwen.size());
+    }
+
+    public boolean inAanbouw(Gebouw g) {
+        return bouwVan(Bouw.GEBOUW, g.id) != null;
+    }
+
+    @Nullable
+    public Bouw bouwVan(int soort, int ref) {
+        for (Bouw b : bouwen) {
+            if (b.soort() == soort && b.ref() == ref) {
+                return b;
+            }
+        }
+        return null;
+    }
+
+    public int dierenverblijven() {
+        int n = 0;
+        for (Gebouw g : gebouwen) {
+            if (g.type.familie == GebouwType.Familie.DIEREN && g.level > 0) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public int opgeruimdTotaal() {
+        int n = 0;
+        for (boolean b : opgeruimd) {
+            if (b) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public int opgeruimdRing(int ring) {
+        int n = 0;
+        for (int i = 0; i < Plot.PLUKJES; i++) {
+            if (opgeruimd[i] && Plot.ring(i) == ring) {
+                n++;
+            }
+        }
+        return n;
+    }
+
+    public int kavelsGekocht() {
+        return Integer.bitCount(kavels);
+    }
+
+    public boolean kavelGekocht(int k) {
+        return (kavels >> k & 1) != 0;
+    }
+
+    /** May something stand on this tile (the middle, a cleared plukje, a bought kavel)? */
+    public boolean open(int tx, int tz) {
+        if (!Plot.opPlot(tx, tz)) {
+            return false;
+        }
+        if (Plot.inMidden(tx, tz)) {
+            return true;
+        }
+        int p = Plot.plukjeOp(tx, tz);
+        if (p >= 0) {
+            return opgeruimd[p];
+        }
+        int k = Plot.kavelOp(tx, tz);
+        return k >= 0 && kavelGekocht(k);
+    }
+
+    /** Knusheid: the buildings (2 per level, the Hoeve 10), the paths (1 per 10 tiles) and the deco ({@link Knusheid#zet}). */
     public int knusheid() {
         int k = 0;
         for (Gebouw g : gebouwen) {
             k += g.type.knus(g.level);
         }
-        return k;
+        int paadjes = 0;
+        for (byte p : paden) {
+            if (p != 0) {
+                paadjes++;
+            }
+        }
+        return k + paadjes / 10 + knusDeco;
     }
 
-    /** Is a footprint of {@code maat} at (x, z) inside the plot and free (ignoring building {@code negeer})? */
-    public boolean vrij(int x, int z, int maat, int negeer) {
-        if (x < 0 || z < 0 || x + maat > Plot.MAAT || z + maat > Plot.MAAT) {
+    /** Is a footprint of w x h at (x, z) on open land and free (ignoring building {@code negeer})? */
+    public boolean vrij(int x, int z, int w, int h, int negeer) {
+        if (x < 0 || z < 0 || x + w > Plot.MAAT || z + h > Plot.MAAT) {
             return false;
         }
+        for (int dx = 0; dx < w; dx++) {
+            for (int dz = 0; dz < h; dz++) {
+                if (!open(x + dx, z + dz)) {
+                    return false;
+                }
+            }
+        }
         for (Gebouw g : gebouwen) {
-            if (g.id != negeer && g.overlapt(x, z, maat)) {
+            if (g.id != negeer && g.overlapt(x, z, w, h)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean binnen(int x, int z, int maat) {
-        return x >= 0 && z >= 0 && x + maat <= Plot.MAAT && z + maat <= Plot.MAAT;
+    public boolean binnen(int x, int z, int w, int h) {
+        return x >= 0 && z >= 0 && x + w <= Plot.MAAT && z + h <= Plot.MAAT;
+    }
+
+    // =====================================================================================================================
+    // prices and goals
+    // =====================================================================================================================
+
+    /** What a new building of this type costs now (the tutorial's first Kippenhok is free). */
+    public Prijs prijsNieuw(GebouwType t) {
+        if (t == GebouwType.KIPPENHOK && kippenhokGratis && aantal(t) == 0) {
+            return new Prijs(0, Map.of(), Map.of(), Prijzen.gebouw(t, 1).tijdMs());
+        }
+        return Prijzen.gebouw(t, 1);
+    }
+
+    /** Can this price be paid now? Null = yes. Main-world items that don't exist (a slice not merged) are skipped. */
+    @Nullable
+    public Fout kanBetalen(Prijs p) {
+        if (guhlden < p.guhlden()) {
+            return new Fout("erfenis.fout.guhlden", Integer.toString(p.guhlden()));
+        }
+        for (Map.Entry<Goed, Integer> e : p.goederen().entrySet()) {
+            if (heeft(e.getKey()) < e.getValue()) {
+                return new Fout("erfenis.fout.goed", Integer.toString(e.getValue() - heeft(e.getKey())), e.getKey().naamKey());
+            }
+        }
+        for (Map.Entry<String, Integer> e : p.hoofdwereld().entrySet()) {
+            if (Goed.item(e.getKey()) == null) {
+                continue;
+            }
+            if (aantal(GebouwType.LOKET) == 0) {
+                return new Fout("erfenis.fout.loket_nodig");
+            }
+            if (loket.getOrDefault(e.getKey(), 0) < e.getValue()) {
+                return new Fout("erfenis.fout.loket");
+            }
+        }
+        return null;
+    }
+
+    void betaal(Prijs p) {
+        guhlden -= p.guhlden();
+        p.goederen().forEach((g, n) -> neemGoed(g, n));
+        p.hoofdwereld().forEach((id, n) -> {
+            if (Goed.item(id) != null) {
+                int over = loket.getOrDefault(id, 0) - n;
+                if (over > 0) {
+                    loket.put(id, over);
+                } else {
+                    loket.remove(id);
+                }
+            }
+        });
+    }
+
+    /** The current value of a Hoeve goal. */
+    public int doelStand(String soort) {
+        return switch (soort) {
+            case "bewoners" -> bewoners;
+            case "bestellingen" -> bestellingen;
+            case "plukjes" -> opgeruimdTotaal();
+            case "ring1" -> opgeruimdRing(1);
+            case "ring12" -> opgeruimdRing(1) + opgeruimdRing(2);
+            case "dierenverblijven" -> dierenverblijven();
+            case "knusheid" -> knusheid();
+            case "vadskracht" -> vkInDorp();
+            case "kavels" -> kavelsGekocht();
+            case "loket" -> aantal(GebouwType.LOKET) > 0 && besteLevel(GebouwType.LOKET) > 0 ? 1 : 0;
+            default -> 0;
+        };
+    }
+
+    /** The goals for the Hoeve's next level that are not reached yet. */
+    public List<Doel> openDoelen(int naar) {
+        List<Doel> l = new ArrayList<>();
+        for (Doel d : Prijzen.doelen(naar)) {
+            if (doelStand(d.soort()) < d.n()) {
+                l.add(d);
+            }
+        }
+        return l;
     }
 
     // =====================================================================================================================
     // the rules
     // =====================================================================================================================
 
-    /** May one more of this type be bought now (anywhere)? Null = yes. */
     @Nullable
     public Fout kanKopen(GebouwType type) {
-        int th = stadhuisLevel();
+        int h = hoeveLevel();
+        if (type == GebouwType.HOEVE) {
+            return new Fout("erfenis.fout.limiet", type.naamKey());
+        }
         int heeft = aantal(type);
-        if (heeft >= type.maxAantal(th)) {
+        if (heeft >= type.maxAantal(h)) {
             int s = type.ontgrendeltAantal(heeft);
             return s > 0 ? new Fout("erfenis.fout.slot", Integer.toString(s)) : new Fout("erfenis.fout.limiet", type.naamKey());
         }
-        if (!type.direct && bouw != null) {
+        if (vrijeBouwers() <= 0) {
             return new Fout("erfenis.fout.bouwer");
         }
-        if (bouwspul < type.kosten(1)) {
-            return new Fout("erfenis.fout.bouwspul", Integer.toString(type.kosten(1)));
-        }
-        return null;
+        return kanBetalen(prijsNieuw(type));
     }
 
-    /** May a new one of this type stand at (x, z)? Null = yes. */
     @Nullable
-    public Fout kanPlaatsen(GebouwType type, int x, int z) {
+    public Fout kanPlaatsen(GebouwType type, int x, int z, int rot) {
         Fout f = kanKopen(type);
-        if (f != null) {
-            return f;
-        }
-        return plekFout(x, z, type.maat, -1);
+        return f != null ? f : plekFout(x, z, type.b(rot), type.d(rot), -1);
     }
 
     @Nullable
-    private Fout plekFout(int x, int z, int maat, int negeer) {
-        if (!binnen(x, z, maat)) {
+    private Fout plekFout(int x, int z, int w, int h, int negeer) {
+        if (!binnen(x, z, w, h)) {
             return new Fout("erfenis.fout.buiten");
         }
-        return vrij(x, z, maat, negeer) ? null : new Fout("erfenis.fout.overlap");
+        for (int dx = 0; dx < w; dx++) {
+            for (int dz = 0; dz < h; dz++) {
+                if (!open(x + dx, z + dz)) {
+                    return new Fout("erfenis.fout.overwoekerd");
+                }
+            }
+        }
+        return vrij(x, z, w, h, negeer) ? null : new Fout("erfenis.fout.overlap");
     }
 
     @Nullable
     public Fout kanVerplaatsen(int id, int x, int z) {
         Gebouw g = gebouw(id);
-        return g == null ? new Fout("erfenis.fout.weg") : plekFout(x, z, g.type.maat, id);
+        return g == null ? new Fout("erfenis.fout.weg") : plekFout(x, z, g.b(), g.d(), id);
     }
 
-    /** May this building go one level up now? Null = yes. */
+    @Nullable
+    public Fout kanDraaien(int id) {
+        Gebouw g = gebouw(id);
+        if (g == null) {
+            return new Fout("erfenis.fout.weg");
+        }
+        int r = (g.rot + 1) & 3;
+        return plekFout(g.x, g.z, g.type.b(r), g.type.d(r), id);
+    }
+
+    /** The price of this building's next level. */
+    public Prijs prijsVolgende(Gebouw g) {
+        return Prijzen.gebouw(g.type, g.level + 1);
+    }
+
     @Nullable
     public Fout kanVerbeteren(int id) {
         Gebouw g = gebouw(id);
@@ -326,49 +731,109 @@ public final class Base {
         if (g.level >= g.type.topLevel()) {
             return new Fout("erfenis.fout.max");
         }
-        int naar = g.level + 1;
-        if (g.type != GebouwType.STADHUIS && naar > g.type.maxLevel(stadhuisLevel())) {
-            return new Fout("erfenis.fout.slot", Integer.toString(g.type.ontgrendeltLevel(naar)));
+        if (inAanbouw(g)) {
+            return new Fout("erfenis.fout.bezig");
         }
-        if (bouw != null) {
+        int naar = g.level + 1;
+        if (g.type == GebouwType.HOEVE) {
+            List<Doel> open = openDoelen(naar);
+            if (!open.isEmpty()) {
+                Doel d = open.get(0);
+                return new Fout("erfenis.fout.doel", "erfenis.doel." + d.soort(), Integer.toString(doelStand(d.soort())), Integer.toString(d.n()));
+            }
+        } else if (naar > g.type.maxLevel(hoeveLevel())) {
+            return new Fout("erfenis.fout.hoeve_level", Integer.toString(g.type.ontgrendeltLevel(naar)));
+        }
+        if (vrijeBouwers() <= 0) {
             return new Fout("erfenis.fout.bouwer");
         }
-        if (bouwspul < g.type.kosten(naar)) {
-            return new Fout("erfenis.fout.bouwspul", Integer.toString(g.type.kosten(naar)));
-        }
-        return null;
+        return kanBetalen(prijsVolgende(g));
     }
 
     @Nullable
-    public Fout kanOphalen(int id, long nu) {
-        Gebouw g = gebouw(id);
-        if (g == null || g.type != GebouwType.MOLEN) {
+    public Fout kanOpruimen(int n) {
+        if (n < 0 || n >= Plot.PLUKJES) {
             return new Fout("erfenis.fout.weg");
         }
-        if (g.voorraadOp(nu) < 1) {
+        if (opgeruimd[n]) {
+            return new Fout("erfenis.fout.al_opgeruimd");
+        }
+        if (bouwVan(Bouw.PLUKJE, n) != null) {
+            return new Fout("erfenis.fout.bezig");
+        }
+        int ring = Plot.ring(n);
+        if (hoeveLevel() < Prijzen.ringOpent(ring)) {
+            return new Fout("erfenis.fout.slot", Integer.toString(Prijzen.ringOpent(ring)));
+        }
+        if (vrijeBouwers() <= 0) {
+            return new Fout("erfenis.fout.bouwer");
+        }
+        return kanBetalen(Prijzen.plukje(ring));
+    }
+
+    @Nullable
+    public Fout kanKavel(int k) {
+        if (k < 0 || k >= Plot.KAVELS) {
+            return new Fout("erfenis.fout.weg");
+        }
+        if (kavelGekocht(k)) {
+            return new Fout("erfenis.fout.al_gekocht");
+        }
+        if (opgeruimdTotaal() < Plot.PLUKJES) {
+            return new Fout("erfenis.fout.eerst_opruimen");
+        }
+        int max = Prijzen.maxKavels(hoeveLevel());
+        if (kavelsGekocht() >= max) {
+            int h = hoeveLevel();
+            while (h < GebouwType.MAX_HOEVE && Prijzen.maxKavels(h) <= kavelsGekocht()) {
+                h++;
+            }
+            return Prijzen.maxKavels(h) > kavelsGekocht() ? new Fout("erfenis.fout.slot", Integer.toString(h)) : new Fout("erfenis.fout.max");
+        }
+        return kanBetalen(Prijzen.kavel(kavelsGekocht() + 1));
+    }
+
+    @Nullable
+    public Fout kanOphalen(int id) {
+        Gebouw g = gebouw(id);
+        if (g == null || !g.type.maakt()) {
+            return new Fout("erfenis.fout.weg");
+        }
+        if (g.klaar() < 1) {
             return new Fout("erfenis.fout.niks");
         }
-        return bouwspul >= opslag() ? new Fout("erfenis.fout.vol") : null;
+        return opslagVrij() <= 0 ? new Fout("erfenis.fout.vol") : null;
+    }
+
+    @Nullable
+    public Fout kanVerven(int id, int palet) {
+        if (palet < 1 || palet > maxPalet()) {
+            return new Fout("erfenis.fout.palet", Integer.toString(palet * 2 - 1));
+        }
+        return id < 0 || gebouw(id) != null ? null : new Fout("erfenis.fout.weg");
     }
 
     // =====================================================================================================================
-    // the actions (the server calls them after its checks; each checks again and returns what went wrong, or null)
+    // the actions (each checks again and returns what went wrong, or null)
     // =====================================================================================================================
 
-    /** Builds a new one: at once (walls, decoration) or as the builder's job. {@code duurMs} &lt; 0: the type's own time. */
+    /** Builds a new one: the builder's job. {@code duurMs} &lt; 0: the type's own time. */
     @Nullable
     public Fout plaats(GebouwType type, int x, int z, int rot, long nu, long duurMs) {
-        Fout f = kanPlaatsen(type, x, z);
+        Fout f = kanPlaatsen(type, x, z, rot);
         if (f != null) {
             return f;
         }
-        bouwspul -= type.kosten(1);
-        if (type.direct) {
-            nieuwGebouw(type, 1, x, z, rot, nu);
-        } else {
-            Gebouw g = nieuwGebouw(type, 0, x, z, rot, nu);
-            bouw = new Bouw(g.id, 1, nu, nu + (duurMs < 0 ? type.tijdSec(1) * 1000L : duurMs));
+        Prijs p = prijsNieuw(type);
+        betaal(p);
+        if (type == GebouwType.KIPPENHOK) {
+            kippenhokGratis = false;
         }
+        Gebouw g = nieuwGebouw(type, 0, x, z, rot & 3, nu);
+        if (type == GebouwType.BOUWBLOKKENWERKPLAATS) {
+            g.selectie.add(Bouwkeet.STANDAARD);
+        }
+        bouwen.add(new Bouw(Bouw.GEBOUW, g.id, 1, nu, nu + (duurMs < 0 ? p.tijdMs() : duurMs)));
         return null;
     }
 
@@ -386,15 +851,15 @@ public final class Base {
 
     @Nullable
     public Fout draai(int id) {
-        Gebouw g = gebouw(id);
-        if (g == null) {
-            return new Fout("erfenis.fout.weg");
+        Fout f = kanDraaien(id);
+        if (f != null) {
+            return f;
         }
+        Gebouw g = gebouw(id);
         g.rot = (g.rot + 1) & 3;
         return null;
     }
 
-    /** Starts the upgrade of this building. {@code duurMs} &lt; 0: the type's own time. */
     @Nullable
     public Fout verbeter(int id, long nu, long duurMs) {
         Fout f = kanVerbeteren(id);
@@ -402,46 +867,401 @@ public final class Base {
             return f;
         }
         Gebouw g = gebouw(id);
-        int naar = g.level + 1;
-        bouwspul -= g.type.kosten(naar);
-        bouw = new Bouw(id, naar, nu, nu + (duurMs < 0 ? g.type.tijdSec(naar) * 1000L : duurMs));
+        Prijs p = prijsVolgende(g);
+        betaal(p);
+        bouwen.add(new Bouw(Bouw.GEBOUW, id, g.level + 1, nu, nu + (duurMs < 0 ? p.tijdMs() : duurMs)));
         return null;
     }
 
-    /** Collects what a molen made: as much as fits in the storage, the rest stays inside. Returns the amount, or a Fout. */
-    public Object ophalen(int id, long nu) {
-        Fout f = kanOphalen(id, nu);
+    @Nullable
+    public Fout opruimen(int n, long nu, long duurMs) {
+        Fout f = kanOpruimen(n);
+        if (f != null) {
+            return f;
+        }
+        Prijs p = Prijzen.plukje(Plot.ring(n));
+        betaal(p);
+        bouwen.add(new Bouw(Bouw.PLUKJE, n, 1, nu, nu + (duurMs < 0 ? p.tijdMs() : duurMs)));
+        return null;
+    }
+
+    @Nullable
+    public Fout kavelKopen(int k) {
+        Fout f = kanKavel(k);
+        if (f != null) {
+            return f;
+        }
+        betaal(Prijzen.kavel(kavelsGekocht() + 1));
+        kavels |= 1 << k;
+        return null;
+    }
+
+    /** Collects a building's basket: as much as fits, its own product first. Returns what came in (good -> n), or a Fout. */
+    public Object ophalen(int id, Random rng) {
+        Fout f = kanOphalen(id);
         if (f != null) {
             return f;
         }
         Gebouw g = gebouw(id);
-        g.telBij(nu);
-        int neem = Math.min((int) Math.floor(g.voorraad), opslag() - bouwspul);
-        g.voorraad -= neem;
-        bouwspul += neem;
-        return neem;
+        Map<Goed, Integer> uit = new LinkedHashMap<>();
+        List<Goed> volgorde = new ArrayList<>(g.buffer.keySet());
+        Recept r = Productie.recept(g);
+        if (r != null && volgorde.remove(r.uit())) {
+            volgorde.add(0, r.uit());
+        }
+        for (Goed goed : volgorde) {
+            int heel = (int) Math.floor(g.inBuffer(goed) + 1e-9);
+            int neem = Math.min(heel, opslagVrij());
+            if (neem <= 0) {
+                continue;
+            }
+            g.buffer.put(goed, g.inBuffer(goed) - neem);
+            verander(goed, neem);
+            uit.merge(goed, neem, Integer::sum);
+            if (goed == Goed.BOUWBLOK) {
+                List<String> keus = Bouwkeet.geldig(g, this);
+                for (int i = 0; i < neem; i++) {
+                    bouwblokSoorten.merge(keus.get(rng.nextInt(keus.size())), 1, Integer::sum);
+                }
+            }
+        }
+        g.buffer.values().removeIf(v -> v < 1e-9);
+        return uit.isEmpty() ? new Fout("erfenis.fout.vol") : uit;
     }
 
-    /** The builder is done at this time: the building goes up a level. Returns that building, or null (nothing finished). */
     @Nullable
-    public Gebouw afronden(long nu) {
-        Bouw b = bouw;
-        if (b == null || nu < b.eind()) {
-            return null;
+    public Fout verf(int id, int palet) {
+        Fout f = kanVerven(id, palet);
+        if (f != null) {
+            return f;
         }
-        bouw = null;
-        Gebouw g = gebouw(b.gebouw());
-        if (g == null) {
-            return null;
+        for (Gebouw g : gebouwen) {
+            if (id < 0 || g.id == id) {
+                g.palet = palet;
+                g.paletGekozen = true;
+            }
         }
-        g.telBij(nu);
-        g.level = Math.max(g.level, b.naar());
-        return g;
+        return null;
     }
 
-    /** Is this building being built or upgraded right now? */
-    public boolean inAanbouw(Gebouw g) {
-        return bouw != null && bouw.gebouw() == g.id;
+    /** Chooses a recipe (a crop for the Akker). */
+    @Nullable
+    public Fout kies(int id, int keuze) {
+        Gebouw g = gebouw(id);
+        if (g == null || keuze < 0 || keuze >= Productie.recepten(g.type).size()) {
+            return new Fout("erfenis.fout.weg");
+        }
+        Recept r = Productie.recepten(g.type).get(keuze);
+        if (r.minLevel() > Math.max(1, g.level)) {
+            return new Fout("erfenis.fout.recept_level", Integer.toString(r.minLevel()));
+        }
+        g.keuze = keuze;
+        return null;
+    }
+
+    @Nullable
+    public Fout kleur(int id, int kleur) {
+        Gebouw g = gebouw(id);
+        if (g == null || g.type != GebouwType.KAARSENMAKERIJ) {
+            return new Fout("erfenis.fout.weg");
+        }
+        g.kleur = Math.max(0, Math.min(16, kleur));
+        return null;
+    }
+
+    /** The Bouwkeet blocks a Bouwblokkenwerkplaats makes (only blocks of its level's sets; at least one). */
+    @Nullable
+    public Fout selectie(int id, List<String> blokken) {
+        Gebouw g = gebouw(id);
+        if (g == null || g.type != GebouwType.BOUWBLOKKENWERKPLAATS) {
+            return new Fout("erfenis.fout.weg");
+        }
+        List<String> mag = Bouwkeet.beschikbaar(g, this);
+        List<String> nieuw = new ArrayList<>();
+        for (String s : blokken) {
+            if (mag.contains(s) && !nieuw.contains(s)) {
+                nieuw.add(s);
+            }
+        }
+        if (nieuw.isEmpty()) {
+            return new Fout("erfenis.fout.selectie_leeg");
+        }
+        g.selectie.clear();
+        g.selectie.addAll(nieuw);
+        return null;
+    }
+
+    // =====================================================================================================================
+    // the Leverkist ("Naar huis sturen")
+    // =====================================================================================================================
+
+    /** Brings the Leverkist allowance up to now (cap per hour, saves up to 8 hours). */
+    public void werkTegoedBij(long nu) {
+        double uren = Math.max(0, nu - leverBijgewerkt) / 3_600_000.0;
+        for (Goed g : Goed.values()) {
+            if (g.capPerUur > 0) {
+                leverTegoed.put(g, Math.min(g.capPerUur * 8.0, leverTegoed.getOrDefault(g, 0.0) + g.capPerUur * uren));
+            }
+        }
+        leverBijgewerkt = nu;
+    }
+
+    /** How many of this good may go home right now (storage and the cap). */
+    public int magNaarHuis(Goed g, long nu) {
+        if (!g.naarHuis()) {
+            return 0;
+        }
+        int n = heeft(g);
+        if (g.capPerUur > 0) {
+            double uren = Math.max(0, nu - leverBijgewerkt) / 3_600_000.0;
+            double tegoed = Math.min(g.capPerUur * 8.0, leverTegoed.getOrDefault(g, 0.0) + g.capPerUur * uren);
+            n = Math.min(n, (int) Math.floor(tegoed + 1e-6));
+        }
+        return n;
+    }
+
+    @Nullable
+    public Fout kanNaarHuis(Goed g, int n, long nu) {
+        if (!g.naarHuis()) {
+            return new Fout("erfenis.fout.niet_naar_huis", g.naamKey());
+        }
+        if (n <= 0) {
+            return new Fout("erfenis.fout.niks");
+        }
+        if (heeft(g) < n) {
+            return new Fout("erfenis.fout.goed", Integer.toString(n - heeft(g)), g.naamKey());
+        }
+        if (magNaarHuis(g, nu) < n) {
+            return new Fout("erfenis.fout.leverkist_cap", Integer.toString(magNaarHuis(g, nu)), Integer.toString(g.capPerUur));
+        }
+        return null;
+    }
+
+    /** Takes the goods out of the storage for the Leverkist; returns item id -> count (or a Fout). */
+    public Object naarHuis(Goed g, int n, long nu) {
+        Fout f = kanNaarHuis(g, n, nu);
+        if (f != null) {
+            return f;
+        }
+        werkTegoedBij(nu);
+        if (g.capPerUur > 0) {
+            leverTegoed.put(g, leverTegoed.getOrDefault(g, 0.0) - n);
+        }
+        verander(g, -n);
+        Map<String, Integer> uit = new LinkedHashMap<>();
+        if (g == Goed.BOUWBLOK) {
+            uit.putAll(neemSoorten(n));
+        } else if (g == Goed.KAARS) {
+            int kleur = 0;
+            for (Gebouw k : gebouwen) {
+                if (k.type == GebouwType.KAARSENMAKERIJ) {
+                    kleur = k.kleur;
+                    break;
+                }
+            }
+            uit.put(Bouwkeet.kaars(kleur), n);
+        } else {
+            uit.put(g.thuisItem, n);
+        }
+        return uit;
+    }
+
+    // =====================================================================================================================
+    // the clock: catching up (production, builds, residents)
+    // =====================================================================================================================
+
+    /** Everything that happened between the last catch-up and {@code nu}, in order of time. */
+    public void bijwerken(long nu) {
+        if (npc) {
+            bijgewerkt = nu;
+            return;
+        }
+        long t = bijgewerkt <= 0 || bijgewerkt > nu ? nu : bijgewerkt;
+        rondAf(t);
+        intrek(t);
+        int veilig = 0;
+        while (t < nu && veilig++ < 10_000) {
+            long volgende = nu;
+            for (Bouw b : bouwen) {
+                if (b.eind() > t && b.eind() < volgende) {
+                    volgende = b.eind();
+                }
+            }
+            if (volgendeIntrek > t && volgendeIntrek < volgende) {
+                volgende = volgendeIntrek;
+            }
+            Productie.produceer(this, t, volgende);
+            t = volgende;
+            rondAf(t);
+            intrek(t);
+        }
+        rondAf(nu);
+        intrek(nu);
+        bijgewerkt = nu;
+    }
+
+    /** Finishes every job whose time has come (earliest first). */
+    private void rondAf(long t) {
+        List<Bouw> af = new ArrayList<>();
+        for (Bouw b : bouwen) {
+            if (b.eind() <= t) {
+                af.add(b);
+            }
+        }
+        if (af.isEmpty()) {
+            return;
+        }
+        af.sort(Comparator.comparingLong(Bouw::eind));
+        int oudeMax = maxBewoners();
+        for (Bouw b : af) {
+            bouwen.remove(b);
+            klaar.add(b);
+            if (b.soort() == Bouw.PLUKJE) {
+                opgeruimd(b.ref());
+                continue;
+            }
+            Gebouw g = gebouw(b.ref());
+            if (g == null) {
+                continue;
+            }
+            g.level = Math.max(g.level, b.naar());
+            if (!g.paletGekozen) {
+                g.palet = GebouwVormen.vormTier(g.type.id, g.level);
+            }
+            if (g.level == 1) {
+                momenten.add("gebouw_gebouwd:" + g.type.id);
+            }
+            momenten.add("gebouw_level:" + g.type.id + ":" + g.level);
+            if (g.type == GebouwType.HOEVE) {
+                momenten.add("hoeve_level:" + g.level);
+            }
+            meldingen.add(new Fout("erfenis.ok.klaar", g.type.naamKey(), Integer.toString(g.level)));
+        }
+        if (maxBewoners() > oudeMax) {
+            regelIntrek(t);
+        }
+    }
+
+    /** Makes sure a move-in is planned when there is room (and none when there isn't). */
+    private void regelIntrek(long t) {
+        if (bewoners >= maxBewoners()) {
+            volgendeIntrek = 0;
+        } else if (volgendeIntrek <= 0) {
+            volgendeIntrek = t + Productie.intrekMs(besteLevel(GebouwType.SPEELTUIN) > 0);
+        }
+    }
+
+    private void intrek(long t) {
+        while (volgendeIntrek > 0 && volgendeIntrek <= t && bewoners < maxBewoners()) {
+            bewoners++;
+            momenten.add("bewoners:" + bewoners);
+            meldingen.add(new Fout("erfenis.ok.bewoner", Integer.toString(bewoners)));
+            long volgende = volgendeIntrek + Productie.intrekMs(besteLevel(GebouwType.SPEELTUIN) > 0);
+            volgendeIntrek = bewoners < maxBewoners() ? volgende : 0;
+        }
+        regelIntrek(t);
+    }
+
+    // =====================================================================================================================
+    // clearing: what you find (balans 6, deco.md "Vondst", sherlock.md proloog)
+    // =====================================================================================================================
+
+    /** The kind of overgrowth on plukje n (0 struik, 1 omgevallen boom, 2 rotsblok, 3 brandnetels, 4 oude kar, 5 molshoopjes). */
+    public int plukjeSoort(int n) {
+        long h = id.getLeastSignificantBits() * 6364136223846793005L + n * 1442695040888963407L;
+        return (int) Math.floorMod(h >>> 33, 6);
+    }
+
+    /** The fixed story finds on fixed plukjes. */
+    public static String vasteVondst(int n) {
+        if (n == Plot.plukjeIndex(4, 2)) {
+            return "ansichtkaart_1";
+        }
+        if (n == Plot.plukjeIndex(1, 4)) {
+            return "oud_kistje";
+        }
+        if (n == Plot.plukjeIndex(7, 4)) {
+            return "ansichtkaart_2";
+        }
+        if (n == Plot.plukjeIndex(4, 8)) {
+            return "trekguh";
+        }
+        if (n == Plot.plukjeIndex(0, 0)) {
+            return "ansichtkaart_3";
+        }
+        return null;
+    }
+
+    private static final String[][] DECO_VONDST = {{"weerhaan"}, {"strooguh", "melkkar"}, {"knabbeltrommel"}};
+    private static final String[] ZELDZAAM = {"zaadje_gouden_graan", "zaadje_regenboogwortel", "dier_gouden_kippetje", "dier_regenboogschaapje",
+            "dier_vlekjeskoe"};
+
+    /** Plukje n is cleared: the land is free, and you find things (always some wood or stone, sometimes more). */
+    private void opgeruimd(int n) {
+        if (opgeruimd[n]) {
+            return;
+        }
+        opgeruimd[n] = true;
+        int ring = Plot.ring(n);
+        Random r = new Random(id.getMostSignificantBits() ^ (n + 1) * 0x9E3779B97F4A7C15L);
+        Goed[] soort = ring == 1 ? new Goed[] {Goed.STAM, Goed.STEEN} : ring == 2 ? new Goed[] {Goed.STAM, Goed.STEEN, Goed.KLEI}
+                : new Goed[] {Goed.STAM, Goed.STEEN, Goed.ZAND};
+        int basis = ring == 1 ? 10 : ring == 2 ? 20 : 40;
+        Goed g = soort[r.nextInt(soort.length)];
+        int erin = geefGoed(g, basis + r.nextInt(basis + 1));
+        meldingen.add(new Fout("erfenis.ok.opgeruimd", Integer.toString(erin), g.naamKey()));
+        if (r.nextInt(100) < 30) {
+            int lo = ring == 1 ? 50 : ring == 2 ? 200 : 600, hi = ring == 1 ? 150 : ring == 2 ? 500 : 1500;
+            int zak = lo + r.nextInt(hi - lo + 1);
+            int echt = geefGuhlden(zak);
+            meldingen.add(new Fout("erfenis.ok.zakje", Integer.toString(echt)));
+            vondst("guhldenzakje");
+        }
+        boolean bijzonder = false;
+        String vast = vasteVondst(n);
+        if (vast != null) {
+            vondst(vast);
+            if (vast.equals("trekguh")) {
+                decoOpslag.merge("trekguh", 1, Integer::sum);
+            } else if (vast.startsWith("ansichtkaart") && !decoOpslag.containsKey("kaartjesbord")) {
+                decoOpslag.put("kaartjesbord", 1);
+            }
+            bijzonder = true;
+        }
+        if (r.nextInt(100) < (ring == 1 ? 10 : ring == 2 ? 15 : 20)) {
+            String[] keus = DECO_VONDST[ring - 1];
+            String d = keus[r.nextInt(keus.length)];
+            decoOpslag.merge(d, 1, Integer::sum);
+            vondst("deco_" + d);
+            bijzonder = true;
+        }
+        if (ring >= 2 && r.nextInt(100) < 5) {
+            vondst(ZELDZAAM[r.nextInt(ZELDZAAM.length)]);
+            bijzonder = true;
+        }
+        // the prologue (sherlock.md): the first special find also brings the rusty little key; by the 3rd plukje for sure
+        if (!vondsten.contains("roestig_sleuteltje") && (bijzonder || opgeruimdTotaal() >= 3)) {
+            vondst("roestig_sleuteltje");
+        }
+        momenten.add("plukje_opgeruimd:" + opgeruimdTotaal());
+    }
+
+    private void vondst(String id) {
+        if (!id.equals("guhldenzakje")) {
+            vondsten.add(id);
+            meldingen.add(new Fout("erfenis.ok.vondst", "erfenis.vondst." + id));
+        }
+        momenten.add("vondst:" + id);
+    }
+
+    /** Dev: every timestamp {@code ms} earlier, so the next catch-up lets that much time pass. */
+    public void verschuif(long ms) {
+        bijgewerkt -= ms;
+        leverBijgewerkt -= ms;
+        if (volgendeIntrek > 0) {
+            volgendeIntrek -= ms;
+        }
+        bouwen.replaceAll(b -> new Bouw(b.soort(), b.ref(), b.naar(), b.start() - ms, b.eind() - ms));
     }
 
     // =====================================================================================================================
@@ -449,6 +1269,11 @@ public final class Base {
     // =====================================================================================================================
 
     public CompoundTag save() {
+        return save(false);
+    }
+
+    /** {@code voorClient}: without the stored guh data of the logé guhs (nobody needs it on the client). */
+    public CompoundTag save(boolean voorClient) {
         CompoundTag t = new CompoundTag();
         t.store("Id", UUIDUtil.CODEC, id);
         if (eigenaar != null) {
@@ -459,22 +1284,105 @@ public final class Base {
         t.putInt("Cx", cx);
         t.putInt("Cz", cz);
         t.putInt("VolgendeId", volgendeId);
-        t.putInt("Bouwspul", bouwspul);
+        t.putInt("Guhlden", guhlden);
         t.putBoolean("MoetStempelen", moetStempelen);
+        t.putInt("Bewoners", bewoners);
+        t.putLong("VolgendeIntrek", volgendeIntrek);
+        t.putInt("Bestellingen", bestellingen);
+        t.putInt("Kavels", kavels);
+        t.putInt("KnusDeco", knusDeco);
+        t.putInt("Vk", vk);
+        t.putBoolean("KippenhokGratis", kippenhokGratis);
+        t.putBoolean("Aangekomen", aangekomen);
+        t.putInt("KnusGemeld", knusGemeld);
+        t.putLong("Bijgewerkt", bijgewerkt);
+        t.putLong("LeverBijgewerkt", leverBijgewerkt);
+        byte[] op = new byte[Plot.PLUKJES];
+        for (int i = 0; i < op.length; i++) {
+            op[i] = (byte) (opgeruimd[i] ? 1 : 0);
+        }
+        t.putByteArray("Opgeruimd", op);
         ListTag lijst = new ListTag();
         for (Gebouw g : gebouwen) {
             lijst.add(g.save());
         }
         t.put("Gebouwen", lijst);
-        if (bouw != null) {
-            CompoundTag b = new CompoundTag();
-            b.putInt("Gebouw", bouw.gebouw());
-            b.putInt("Naar", bouw.naar());
-            b.putLong("Start", bouw.start());
-            b.putLong("Eind", bouw.eind());
-            t.put("Bouw", b);
+        ListTag bl = new ListTag();
+        for (Bouw b : bouwen) {
+            CompoundTag c = new CompoundTag();
+            c.putInt("Soort", b.soort());
+            c.putInt("Ref", b.ref());
+            c.putInt("Naar", b.naar());
+            c.putLong("Start", b.start());
+            c.putLong("Eind", b.eind());
+            bl.add(c);
+        }
+        t.put("Bouwen", bl);
+        CompoundTag gt = new CompoundTag();
+        goederen.forEach((g, v) -> gt.putDouble(g.id, v));
+        t.put("Goederen", gt);
+        t.put("BouwblokSoorten", telling(bouwblokSoorten));
+        t.put("DecoOpslag", telling(decoOpslag));
+        t.put("Loket", telling(loket));
+        CompoundTag lt = new CompoundTag();
+        leverTegoed.forEach((g, v) -> lt.putDouble(g.id, v));
+        t.put("LeverTegoed", lt);
+        t.put("Vondsten", tekstLijst(vondsten));
+        t.put("PadSoorten", tekstLijst(padSoorten));
+        boolean paadjes = false;
+        for (byte p : paden) {
+            paadjes |= p != 0;
+        }
+        if (paadjes) {
+            t.putByteArray("Paden", paden);
+        }
+        ListTag dl = new ListTag();
+        for (Deco d : deco) {
+            CompoundTag c = new CompoundTag();
+            c.putString("Id", d.id());
+            c.putInt("X", d.x());
+            c.putInt("Z", d.z());
+            c.putInt("Rot", d.rot());
+            dl.add(c);
+        }
+        t.put("Deco", dl);
+        ListTag ll = new ListTag();
+        for (Loge l : loges) {
+            CompoundTag c = new CompoundTag();
+            c.store("Id", UUIDUtil.CODEC, l.id);
+            c.putInt("Gebouw", l.gebouw);
+            CompoundTag o = l.opslag.copy();
+            if (voorClient) {
+                o.remove("Data");
+            }
+            c.put("Opslag", o);
+            ll.add(c);
+        }
+        t.put("Loges", ll);
+        return t;
+    }
+
+    private static CompoundTag telling(Map<String, Integer> m) {
+        CompoundTag c = new CompoundTag();
+        m.forEach(c::putInt);
+        return c;
+    }
+
+    private static ListTag tekstLijst(List<String> l) {
+        ListTag t = new ListTag();
+        for (String s : l) {
+            t.add(StringTag.valueOf(s));
         }
         return t;
+    }
+
+    private static void leesTelling(CompoundTag c, Map<String, Integer> m) {
+        for (String k : c.keySet()) {
+            int n = c.getIntOr(k, 0);
+            if (n > 0) {
+                m.put(k, n);
+            }
+        }
     }
 
     @Nullable
@@ -486,8 +1394,23 @@ public final class Base {
         Base b = new Base(id, t.read("Eigenaar", UUIDUtil.CODEC).orElse(null), t.getStringOr("Naam", "?"), t.getBooleanOr("Npc", false),
                 t.getIntOr("Cx", 0), t.getIntOr("Cz", 0));
         b.volgendeId = t.getIntOr("VolgendeId", 1);
-        b.bouwspul = t.getIntOr("Bouwspul", 0);
+        b.guhlden = t.getIntOr("Guhlden", 0);
         b.moetStempelen = t.getBooleanOr("MoetStempelen", true);
+        b.bewoners = t.getIntOr("Bewoners", 0);
+        b.volgendeIntrek = t.getLongOr("VolgendeIntrek", 0L);
+        b.bestellingen = t.getIntOr("Bestellingen", 0);
+        b.kavels = t.getIntOr("Kavels", 0);
+        b.knusDeco = t.getIntOr("KnusDeco", 0);
+        b.vk = t.getIntOr("Vk", 0);
+        b.kippenhokGratis = t.getBooleanOr("KippenhokGratis", true);
+        b.aangekomen = t.getBooleanOr("Aangekomen", false);
+        b.knusGemeld = t.getIntOr("KnusGemeld", 0);
+        b.bijgewerkt = t.getLongOr("Bijgewerkt", 0L);
+        b.leverBijgewerkt = t.getLongOr("LeverBijgewerkt", 0L);
+        byte[] op = t.getByteArray("Opgeruimd").orElse(new byte[0]);
+        for (int i = 0; i < Math.min(op.length, Plot.PLUKJES); i++) {
+            b.opgeruimd[i] = op[i] != 0;
+        }
         for (Tag e : t.getListOrEmpty("Gebouwen")) {
             if (e instanceof CompoundTag c) {
                 Gebouw g = Gebouw.load(c);
@@ -497,14 +1420,56 @@ public final class Base {
                 }
             }
         }
-        CompoundTag bt = t.getCompound("Bouw").orElse(null);
-        if (bt != null) {
-            b.bouw = new Bouw(bt.getIntOr("Gebouw", -1), bt.getIntOr("Naar", 1), bt.getLongOr("Start", 0L), bt.getLongOr("Eind", 0L));
+        for (Tag e : t.getListOrEmpty("Bouwen")) {
+            if (e instanceof CompoundTag c) {
+                b.bouwen.add(new Bouw(c.getIntOr("Soort", 0), c.getIntOr("Ref", -1), c.getIntOr("Naar", 1), c.getLongOr("Start", 0L),
+                        c.getLongOr("Eind", 0L)));
+            }
+        }
+        CompoundTag gt = t.getCompoundOrEmpty("Goederen");
+        for (String k : gt.keySet()) {
+            Goed g = Goed.van(k);
+            if (g != null) {
+                b.goederen.put(g, gt.getDoubleOr(k, 0));
+            }
+        }
+        leesTelling(t.getCompoundOrEmpty("BouwblokSoorten"), b.bouwblokSoorten);
+        leesTelling(t.getCompoundOrEmpty("DecoOpslag"), b.decoOpslag);
+        leesTelling(t.getCompoundOrEmpty("Loket"), b.loket);
+        CompoundTag lt = t.getCompoundOrEmpty("LeverTegoed");
+        for (String k : lt.keySet()) {
+            Goed g = Goed.van(k);
+            if (g != null) {
+                b.leverTegoed.put(g, lt.getDoubleOr(k, 0));
+            }
+        }
+        for (Tag e : t.getListOrEmpty("Vondsten")) {
+            e.asString().ifPresent(b.vondsten::add);
+        }
+        for (Tag e : t.getListOrEmpty("PadSoorten")) {
+            e.asString().ifPresent(b.padSoorten::add);
+        }
+        byte[] p = t.getByteArray("Paden").orElse(null);
+        if (p != null && p.length == Plot.MAAT * Plot.MAAT) {
+            b.paden = p;
+        }
+        for (Tag e : t.getListOrEmpty("Deco")) {
+            if (e instanceof CompoundTag c) {
+                b.deco.add(new Deco(c.getStringOr("Id", ""), c.getIntOr("X", 0), c.getIntOr("Z", 0), c.getIntOr("Rot", 0)));
+            }
+        }
+        for (Tag e : t.getListOrEmpty("Loges")) {
+            if (e instanceof CompoundTag c) {
+                UUID lid = c.read("Id", UUIDUtil.CODEC).orElse(null);
+                if (lid != null) {
+                    b.loges.add(new Loge(lid, c.getCompoundOrEmpty("Opslag"), c.getIntOr("Gebouw", -1)));
+                }
+            }
         }
         return b;
     }
 
-    /** The buildings, read only (phase 2: the world map). */
+    /** The buildings, read only (the world map). */
     public List<Gebouw> gebouwenLijst() {
         return Collections.unmodifiableList(gebouwen);
     }

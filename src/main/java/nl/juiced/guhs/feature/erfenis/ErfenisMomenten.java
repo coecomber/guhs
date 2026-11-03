@@ -7,27 +7,50 @@ import java.util.function.BiConsumer;
 
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-// STUB-kern: the fixed story moments of the village (CONTRACT_OPKNAPPER: brief_gelezen, aangekomen, plukje_opgeruimd:<n>,
-// vondst:<id>, gebouw_gebouwd:<id>, gebouw_level:<id>:<lvl>, hoeve_level:<n>, bestelling_geleverd:<totaal>, bewoners:<totaal>,
-// knusheid:<totaal>). The kern slice owns the real one (it fires them); the sherlock slice listens. This stub only passes a
-// moment on to the listeners when the player is online (the real one may do the same); the lead replaces this file at merge.
+/**
+ * De Erfenis: the fixed story moments (Sherlock's cases start on these, never at random). The kern fires them; the
+ * sherlock slice (and anyone else) listens with {@link #luister}. Ids (contract): {@code brief_gelezen}, {@code aangekomen},
+ * {@code plukje_opgeruimd:<n>}, {@code vondst:<id>}, {@code gebouw_gebouwd:<id>}, {@code gebouw_level:<id>:<lvl>},
+ * {@code hoeve_level:<n>}, {@code bestelling_geleverd:<totaal>}, {@code bewoners:<totaal>}, {@code knusheid:<totaal>}.
+ * <p>
+ * A moment for a player who is offline waits (saved with the erfenis data) and is delivered at the next login, in order.
+ */
 public final class ErfenisMomenten {
     private static final List<BiConsumer<ServerPlayer, String>> LUISTERAARS = new CopyOnWriteArrayList<>();
 
     private ErfenisMomenten() {
     }
 
+    /** Listen to every moment (called on the server thread, with the player online). */
+    public static void luister(BiConsumer<ServerPlayer, String> l) {
+        LUISTERAARS.add(l);
+    }
+
+    /** A moment for this player: now when online, else at the next login. */
     public static void melding(MinecraftServer server, UUID speler, String moment) {
         ServerPlayer p = server.getPlayerList().getPlayer(speler);
-        if (p != null) {
-            for (BiConsumer<ServerPlayer, String> l : LUISTERAARS) {
+        if (p == null) {
+            ErfenisData.get(server).bewaarMoment(speler, moment);
+            return;
+        }
+        for (BiConsumer<ServerPlayer, String> l : LUISTERAARS) {
+            try {
                 l.accept(p, moment);
+            } catch (RuntimeException e) {
+                com.mojang.logging.LogUtils.getLogger().warn("Erfenis: moment {} listener failed", moment, e);
             }
         }
     }
 
-    public static void luister(BiConsumer<ServerPlayer, String> luisteraar) {
-        LUISTERAARS.add(luisteraar);
+    /** Login: the moments that waited. */
+    static void opLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer p) {
+            MinecraftServer s = p.level().getServer();
+            for (String m : ErfenisData.get(s).haalMomenten(p.getUUID())) {
+                melding(s, p.getUUID(), m);
+            }
+        }
     }
 }

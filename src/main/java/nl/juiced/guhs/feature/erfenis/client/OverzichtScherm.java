@@ -15,71 +15,70 @@ import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.erfenis.Base;
-import nl.juiced.guhs.feature.erfenis.ErfenisPayloads;
+import nl.juiced.guhs.feature.erfenis.ErfenisPayloads.Actie;
 import nl.juiced.guhs.feature.erfenis.Gebouw;
 import nl.juiced.guhs.feature.erfenis.GebouwType;
 import nl.juiced.guhs.feature.erfenis.Plot;
-import nl.juiced.guhs.feature.erfenis.Vormen;
+import nl.juiced.guhs.feature.erfenis.Prijzen;
+import nl.juiced.guhs.feature.erfenis.Productie;
+import nl.juiced.guhs.feature.erfenis.Recept;
 import nl.juiced.guhs.feature.erfenis.kaart.client.KaartClient;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * De Erfenis (POC): the overview (bovenaanzicht). A screen without background over the real world, seen through the
+ * De Erfenis: the overview (bovenaanzicht). A screen without background over the real world, seen through the
  * {@link Overzicht} camera; the mouse is free.
  * <ul>
- *   <li><b>Top:</b> whose erfenis (and "alleen kijken" for a visitor), Bouwspul (amount/cap with a bar), Knusheid, stadhuis
- *   level, the builder (vrij, or a timer).</li>
- *   <li><b>World:</b> hover outline, selection, a floating timer above a building under construction, a bubble above a
- *   molen with something to collect (click it). Drag the ground or use WASD to pan, scroll to zoom, Q/E to turn.</li>
- *   <li><b>Right:</b> the selected building: what it is and does, the next level (cost, time, or the lock reason) and the
- *   buttons Verbeteren, Verplaatsen, Draaien, Ophalen. Drag a selected building to move it.</li>
- *   <li><b>Bottom:</b> the shop: every type with cost, count/max and lock reason. A choice gives a ghost on the grid: green
- *   = may, red = may not; click to place; walls are dragged as a line and stay in placing mode.</li>
+ *   <li><b>Top left:</b> whose erfenis, Sluiten / Terug naar de wereld / Wereldkaart (/ Terug naar mijn erfenis); under it
+ *   (own village) Opslag, Naar huis, Loket, Alles ophalen, Logés.</li>
+ *   <li><b>Top right:</b> Guhlden (in the Hoeve, with the cap), storage, residents, Knusheid, Hoeve level, builders (with the
+ *   jobs and their timers in the tooltip).</li>
+ *   <li><b>World:</b> hover outlines (buildings, overgrown plukjes, kavels for sale), the selection, timers above jobs, a
+ *   bubble above every building with something to collect (click = Ophalen). Drag / WASD pans, scroll zooms, Q/E turns.</li>
+ *   <li><b>Right:</b> the side panel ({@link GebouwPaneel}): a building, a plukje or a kavel.</li>
+ *   <li><b>Bottom:</b> the shop: one tab per family, every type with cost, count/max and lock; a choice gives a ghost.</li>
+ *   <li><b>Windows</b> ({@link Vensters}): storage, Naar huis sturen, Loket, Bouwkeet choice, Guhpension.</li>
  * </ul>
  * Read-only (somebody else's base): no shop and no buttons, only looking. The server checks everything again.
  */
 public final class OverzichtScherm extends Screen {
     private enum Modus { KIJKEN, PLAATSEN, VERPLAATSEN }
 
-    private record Klik(int x0, int y0, int x1, int y1, @Nullable Runnable actie, @Nullable List<Component> tip) {
-        boolean op(double mx, double my) {
-            return mx >= x0 && mx < x1 && my >= y0 && my < y1;
-        }
-    }
-
     private record Toast(Component tekst, boolean goed, long tot) {
     }
 
-    private static final int SHOP_W = 64, SHOP_H = 50, PANEEL_W = 152;
-    private static final ItemStack BOUWSPUL = new ItemStack(Items.BRICK), KNUS = new ItemStack(Items.PINK_TULIP),
-            BOUWER = new ItemStack(Items.GOLDEN_SHOVEL);
+    private static final int SHOP_W = 62, SHOP_H = 48, TAB_H = 14;
 
     @Nullable
     private static OverzichtScherm huidig;
+    /** The shop tab last open (kept between openings). */
+    private static GebouwType.Familie tab = GebouwType.Familie.KERN;
 
     private Modus modus = Modus.KIJKEN;
     @Nullable
     private GebouwType plaatsType;
     private int plaatsRot;
     private int verplaatsId = -1;
-    private int geselecteerd = -1;
+    private int geselecteerd = -1, selPlukje = -1, selKavel = -1;
     // the mouse
     private boolean ingedrukt, gesleept, sleepKandidaat, sleepVerplaats;
     private double startX, startY, vorigX, vorigY;
-    @Nullable
-    private int[] muurStart;
+    private int muisX, muisY;
     // what is under the mouse (updated every frame)
-    private int hoverX = -1, hoverZ = -1;
+    private int hoverX = -1000, hoverZ = -1000;
     private boolean hoverOpPlot;
     @Nullable
     private Gebouw hoverGebouw;
-    private final List<Klik> klikken = new ArrayList<>();
+    private final List<Ui.Klik> klikken = new ArrayList<>();
     private final List<Toast> toasts = new ArrayList<>();
+    private final GebouwPaneel paneel = new GebouwPaneel();
+    @Nullable
+    private Vensters.Venster venster;
+    private int paneelX0 = -1, paneelY1 = -1;
+    private long laatsteSim;
 
     OverzichtScherm() {
         super(Component.translatable("erfenis.ui.titel"));
@@ -101,11 +100,85 @@ public final class OverzichtScherm extends Screen {
     }
 
     boolean toetsenVrij() {
-        return true;
+        return venster == null;
     }
 
     boolean toontRaster() {
         return modus != Modus.KIJKEN;
+    }
+
+    int muisX() {
+        return muisX;
+    }
+
+    void open(Vensters.Venster v) {
+        venster = v;
+    }
+
+    void sluitVenster() {
+        venster = null;
+    }
+
+    @Nullable
+    Vensters.Venster venster() {
+        return venster;
+    }
+
+    void verplaatsStart(int id) {
+        modus = Modus.VERPLAATSEN;
+        verplaatsId = id;
+    }
+
+    /** Dev (/guhs erfenis ui, AutoCheck): select something, open a tab or a window, point the camera. */
+    void devUi(String wat, String arg) {
+        Base b = base();
+        if (b == null) {
+            return;
+        }
+        BlockPos o = ErfenisClient.oorsprong();
+        switch (wat) {
+            case "kies" -> {
+                for (Gebouw g : b.gebouwen) {
+                    if (g.type.id.equals(arg)) {
+                        kies(g.id, -1, -1);
+                        Overzicht.richt(o.getX() + g.x + g.b() / 2.0 + 8, o.getZ() + g.z + g.d() / 2.0, 46);
+                        return;
+                    }
+                }
+            }
+            case "plukje" -> {
+                int n = Integer.parseInt(arg);
+                kies(-1, n, -1);
+                int[] h = Plot.plukjeHoek(n);
+                Overzicht.richt(o.getX() + h[0] + 4 + 8, o.getZ() + h[1] + 4, 46);
+            }
+            case "kavel" -> kies(-1, -1, Integer.parseInt(arg));
+            case "tab" -> tab = GebouwType.Familie.valueOf(arg.toUpperCase(java.util.Locale.ROOT));
+            case "verven" -> paneel.verven = true;
+            case "dicht" -> venster = null;
+            case "camera" -> {
+                String[] d = arg.split(",");
+                Overzicht.richt(o.getX() + Double.parseDouble(d[0]), o.getZ() + Double.parseDouble(d[1]), d.length > 2 ? Double.parseDouble(d[2]) : -1);
+            }
+            case "venster" -> {
+                switch (arg) {
+                    case "opslag" -> open(new Vensters.Opslag());
+                    case "naarhuis" -> open(new Vensters.NaarHuis());
+                    case "loket" -> open(new Vensters.Loket());
+                    case "bouwkeet" -> {
+                        for (Gebouw g : b.gebouwen) {
+                            if (g.type == GebouwType.BOUWBLOKKENWERKPLAATS) {
+                                open(new Vensters.Bouwkeet(g.id));
+                            }
+                        }
+                    }
+                    default -> {
+                    }
+                }
+            }
+            default -> {
+            }
+        }
     }
 
     private static boolean eigen() {
@@ -126,6 +199,12 @@ public final class OverzichtScherm extends Screen {
         if (geselecteerd >= 0 && b.gebouw(geselecteerd) == null) {
             geselecteerd = -1;
         }
+        if (selPlukje >= 0 && b.opgeruimd[selPlukje] && b.bouwVan(Base.Bouw.PLUKJE, selPlukje) == null) {
+            selPlukje = -1;
+        }
+        if (selKavel >= 0 && b.kavelGekocht(selKavel)) {
+            selKavel = -1;
+        }
         if (modus == Modus.VERPLAATSEN && b.gebouw(verplaatsId) == null) {
             modus = Modus.KIJKEN;
         }
@@ -135,7 +214,7 @@ public final class OverzichtScherm extends Screen {
     }
 
     void toast(Component tekst, boolean goed) {
-        toasts.add(new Toast(tekst, goed, System.currentTimeMillis() + 2800));
+        toasts.add(new Toast(tekst, goed, System.currentTimeMillis() + 3200));
         while (toasts.size() > 4) {
             toasts.remove(0);
         }
@@ -159,15 +238,16 @@ public final class OverzichtScherm extends Screen {
         // (nothing: the world is the background)
     }
 
+    private void kies(int gebouw, int plukje, int kavel) {
+        geselecteerd = gebouw;
+        selPlukje = plukje;
+        selKavel = kavel;
+        paneel.reset(gebouw >= 0 ? gebouw : plukje >= 0 ? 1000 + plukje : kavel >= 0 ? 2000 + kavel : -1);
+    }
+
     // =====================================================================================================================
     // the world under the mouse
     // =====================================================================================================================
-
-    private static final java.util.Map<Integer, Integer> HOOGTES = new java.util.HashMap<>();
-
-    private static int hoogte(GebouwType t, int level) {
-        return HOOGTES.computeIfAbsent(t.ordinal() * 64 + Math.max(0, level), k -> Vormen.hoogte(t, level, false));
-    }
 
     private void kijkOnderMuis(double mx, double my) {
         Base b = base();
@@ -183,8 +263,8 @@ public final class OverzichtScherm extends Screen {
         if (modus == Modus.KIJKEN) {
             for (Gebouw g : b.gebouwen) {
                 double y0 = Overzicht.grondY() - (g.level == 0 ? 0.2 : 0);
-                AABB doos = new AABB(o.getX() + g.x, y0, o.getZ() + g.z, o.getX() + g.x + g.type.maat,
-                        Overzicht.grondY() + Math.max(1, hoogte(g.type, g.level)), o.getZ() + g.z + g.type.maat);
+                AABB doos = new AABB(o.getX() + g.x, y0, o.getZ() + g.z, o.getX() + g.x + g.b(), Overzicht.grondY() + Math.max(1, g.type.hoogte(g.level)),
+                        o.getZ() + g.z + g.d());
                 Optional<Vec3> raak = doos.clip(s[0], eind);
                 if (raak.isPresent() && raak.get().distanceToSqr(s[0]) < beste) {
                     beste = raak.get().distanceToSqr(s[0]);
@@ -196,40 +276,41 @@ public final class OverzichtScherm extends Screen {
         if (grond != null) {
             hoverX = (int) Math.floor(grond.x - o.getX());
             hoverZ = (int) Math.floor(grond.z - o.getZ());
-            hoverOpPlot = hoverX >= 0 && hoverZ >= 0 && hoverX < Plot.MAAT && hoverZ < Plot.MAAT;
+            hoverOpPlot = Plot.opPlot(hoverX, hoverZ);
             if (hoverGebouw == null && hoverOpPlot && modus == Modus.KIJKEN) {
                 hoverGebouw = b.op(hoverX, hoverZ);
             }
+        } else {
+            hoverX = hoverZ = -1000;
         }
     }
 
-    /** The min corner of a footprint of this size centred on the hovered tile. */
-    private int voetX(int maat) {
-        return hoverX - (maat - 1) / 2;
-    }
-
-    private int voetZ(int maat) {
-        return hoverZ - (maat - 1) / 2;
-    }
-
-    /** The tiles of the wall line being dragged (the longer axis wins, like the server). */
-    private List<int[]> muurLijn() {
-        List<int[]> l = new ArrayList<>();
-        if (muurStart == null) {
-            l.add(new int[] {hoverX, hoverZ});
-            return l;
+    /** The plukje under the mouse that is still overgrown (or being cleared), or -1. */
+    private int hoverPlukje(Base b) {
+        if (!hoverOpPlot || hoverGebouw != null) {
+            return -1;
         }
-        int dx = hoverX - muurStart[0], dz = hoverZ - muurStart[1];
-        boolean langsX = Math.abs(dx) >= Math.abs(dz);
-        int n = Math.min(Plot.MAAT, langsX ? Math.abs(dx) : Math.abs(dz));
-        int stap = (langsX ? dx : dz) >= 0 ? 1 : -1;
-        for (int i = 0; i <= n; i++) {
-            l.add(langsX ? new int[] {muurStart[0] + i * stap, muurStart[1]} : new int[] {muurStart[0], muurStart[1] + i * stap});
-        }
-        return l;
+        int p = Plot.plukjeOp(hoverX, hoverZ);
+        return p >= 0 && (!b.opgeruimd[p] || b.bouwVan(Base.Bouw.PLUKJE, p) != null) ? p : -1;
     }
 
-    /** What the world drawing shows this frame: ghosts, hover and selection. */
+    private int hoverKavel(Base b) {
+        if (!hoverOpPlot || hoverGebouw != null) {
+            return -1;
+        }
+        int k = Plot.kavelOp(hoverX, hoverZ);
+        return k >= 0 && !b.kavelGekocht(k) ? k : -1;
+    }
+
+    private int voetX(int w) {
+        return hoverX - (w - 1) / 2;
+    }
+
+    private int voetZ(int h) {
+        return hoverZ - (h - 1) / 2;
+    }
+
+    /** What the world drawing shows this frame: ghosts, hover and selection outlines. */
     List<OverzichtWereld.Doos> dozen() {
         List<OverzichtWereld.Doos> l = new ArrayList<>();
         Base b = base();
@@ -240,49 +321,59 @@ public final class OverzichtScherm extends Screen {
         double gy = Overzicht.grondY();
         Gebouw sel = geselecteerd >= 0 ? b.gebouw(geselecteerd) : null;
         if (sel != null && modus == Modus.KIJKEN) {
-            l.add(new OverzichtWereld.Doos(o.getX() + sel.x, gy, o.getZ() + sel.z, o.getX() + sel.x + sel.type.maat,
-                    gy + hoogte(sel.type, sel.level) + 0.05, o.getZ() + sel.z + sel.type.maat, 0x30F7B6CB, 0xF0F07CB4, 0.12f));
+            l.add(new OverzichtWereld.Doos(o.getX() + sel.x, gy, o.getZ() + sel.z, o.getX() + sel.x + sel.b(), gy + sel.type.hoogte(sel.level) + 0.05,
+                    o.getZ() + sel.z + sel.d(), 0x30F7B6CB, 0xF0F07CB4, 0.12f));
+        }
+        if (selPlukje >= 0) {
+            int[] h = Plot.plukjeHoek(selPlukje);
+            l.add(vlak(o, h[0], h[1], Plot.PLUK, Plot.PLUK, 0x30F7B6CB, 0xF0F07CB4));
+        }
+        if (selKavel >= 0) {
+            int[] v = Plot.kavelVak(selKavel);
+            l.add(vlak(o, v[0], v[1], v[2], v[3], 0x30F7B6CB, 0xF0F07CB4));
         }
         if (modus == Modus.KIJKEN && hoverGebouw != null && hoverGebouw != sel) {
             Gebouw g = hoverGebouw;
-            l.add(new OverzichtWereld.Doos(o.getX() + g.x, gy, o.getZ() + g.z, o.getX() + g.x + g.type.maat,
-                    gy + hoogte(g.type, g.level) + 0.05, o.getZ() + g.z + g.type.maat, 0, 0xC0FFFFFF, 0.08f));
+            l.add(new OverzichtWereld.Doos(o.getX() + g.x, gy, o.getZ() + g.z, o.getX() + g.x + g.b(), gy + g.type.hoogte(g.level) + 0.05,
+                    o.getZ() + g.z + g.d(), 0, 0xC0FFFFFF, 0.08f));
         } else if (modus == Modus.KIJKEN && hoverOpPlot && hoverGebouw == null) {
-            l.add(new OverzichtWereld.Doos(o.getX() + hoverX, gy, o.getZ() + hoverZ, o.getX() + hoverX + 1, gy + 0.04, o.getZ() + hoverZ + 1,
-                    0x40FFFFFF, 0, 0));
+            int p = hoverPlukje(b), k = hoverKavel(b);
+            if (p >= 0 && p != selPlukje) {
+                int[] h = Plot.plukjeHoek(p);
+                l.add(vlak(o, h[0], h[1], Plot.PLUK, Plot.PLUK, 0x20FFFFFF, 0xB0FFFFFF));
+            } else if (k >= 0 && k != selKavel) {
+                int[] v = Plot.kavelVak(k);
+                l.add(vlak(o, v[0], v[1], v[2], v[3], 0x20FFFFFF, 0xB0FFE08A));
+            } else if (p < 0 && k < 0) {
+                l.add(new OverzichtWereld.Doos(o.getX() + hoverX, gy, o.getZ() + hoverZ, o.getX() + hoverX + 1, gy + 0.04, o.getZ() + hoverZ + 1,
+                        0x40FFFFFF, 0, 0));
+            }
         }
         if (modus == Modus.PLAATSEN && plaatsType != null && hoverX > -100) {
-            if (plaatsType.maat == 1) {
-                int over = Math.min(plaatsType.maxAantal(b.stadhuisLevel()) - b.aantal(plaatsType),
-                        plaatsType.kosten(1) <= 0 ? 999 : b.bouwspul / plaatsType.kosten(1));
-                for (int[] t : muurLijn()) {
-                    boolean vrij = b.vrij(t[0], t[1], 1, -1);
-                    boolean mag = vrij && over-- > 0;
-                    l.add(spook(o, t[0], t[1], 1, hoogte(plaatsType, 1), mag, !vrij));
-                }
-            } else {
-                int x = voetX(plaatsType.maat), z = voetZ(plaatsType.maat);
-                l.add(spook(o, x, z, plaatsType.maat, hoogte(plaatsType, 1), b.kanPlaatsen(plaatsType, x, z) == null, false));
-            }
+            int w = plaatsType.b(plaatsRot), h = plaatsType.d(plaatsRot);
+            int x = voetX(w), z = voetZ(h);
+            l.add(spook(o, x, z, w, h, plaatsType.hoogte(1), b.kanPlaatsen(plaatsType, x, z, plaatsRot) == null));
         }
         if (modus == Modus.VERPLAATSEN) {
             Gebouw g = b.gebouw(verplaatsId);
             if (g != null) {
-                l.add(new OverzichtWereld.Doos(o.getX() + g.x, gy, o.getZ() + g.z, o.getX() + g.x + g.type.maat, gy + 0.06,
-                        o.getZ() + g.z + g.type.maat, 0x30FFFFFF, 0x80FFFFFF, 0.06f));
-                int x = voetX(g.type.maat), z = voetZ(g.type.maat);
-                l.add(spook(o, x, z, g.type.maat, hoogte(g.type, Math.max(1, g.level)), b.kanVerplaatsen(g.id, x, z) == null, false));
+                l.add(vlak(o, g.x, g.z, g.b(), g.d(), 0x30FFFFFF, 0x80FFFFFF));
+                int x = voetX(g.b()), z = voetZ(g.d());
+                l.add(spook(o, x, z, g.b(), g.d(), g.type.hoogte(Math.max(1, g.level)), b.kanVerplaatsen(g.id, x, z) == null));
             }
         }
         return l;
     }
 
-    private static OverzichtWereld.Doos spook(BlockPos o, int x, int z, int maat, int h, boolean mag, boolean zacht) {
+    private static OverzichtWereld.Doos vlak(BlockPos o, int x, int z, int w, int h, int vul, int rand) {
         double gy = Overzicht.grondY();
-        int vul = zacht ? 0x18E06C7E : mag ? 0x5066D98A : 0x60E8505E;
-        int rand = zacht ? 0x60E06C7E : mag ? 0xE046C070 : 0xE0E0404E;
-        return new OverzichtWereld.Doos(o.getX() + x + 0.02, gy + 0.01, o.getZ() + z + 0.02, o.getX() + x + maat - 0.02, gy + h,
-                o.getZ() + z + maat - 0.02, vul, rand, 0.1f);
+        return new OverzichtWereld.Doos(o.getX() + x, gy, o.getZ() + z, o.getX() + x + w, gy + 0.06, o.getZ() + z + h, vul, rand, 0.1f);
+    }
+
+    private static OverzichtWereld.Doos spook(BlockPos o, int x, int z, int w, int d, int h, boolean mag) {
+        double gy = Overzicht.grondY();
+        return new OverzichtWereld.Doos(o.getX() + x + 0.02, gy + 0.01, o.getZ() + z + 0.02, o.getX() + x + w - 0.02, gy + h, o.getZ() + z + d - 0.02,
+                mag ? 0x5066D98A : 0x60E8505E, mag ? 0xE046C070 : 0xE0E0404E, 0.1f);
     }
 
     // =====================================================================================================================
@@ -292,25 +383,54 @@ public final class OverzichtScherm extends Screen {
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float partialTick) {
         klikken.clear();
+        muisX = mx;
+        muisY = my;
         Base b = base();
         if (b == null) {
             return;
         }
-        kijkOnderMuis(mx, my);
         long nu = ErfenisClient.nu();
-        zwevers(g, b, nu, mx, my);
-        bovenbalk(g, b, nu, mx, my);
-        if (geselecteerd >= 0 && b.gebouw(geselecteerd) != null && modus == Modus.KIJKEN) {
-            paneel(g, b, b.gebouw(geselecteerd), nu, mx, my);
+        if (System.currentTimeMillis() - laatsteSim > 500 && !b.npc) {   // (the same catch-up as the server: live numbers)
+            laatsteSim = System.currentTimeMillis();
+            b.bijwerken(nu);
+            b.momenten.clear();
+            b.klaar.clear();
+            b.meldingen.clear();
+        }
+        Ui ui = new Ui(g, font, mx, venster != null ? -1000 : my, klikken);
+        if (venster == null) {
+            kijkOnderMuis(mx, my);
+        }
+        zwevers(ui, b, nu);
+        bovenbalk(ui, b, nu);
+        paneelX0 = -1;
+        int onder = height - (eigen() ? SHOP_H + TAB_H + 34 : 24);
+        int px = width - GebouwPaneel.B - 6, py = 34;
+        if (modus == Modus.KIJKEN) {
+            Gebouw sel = geselecteerd >= 0 ? b.gebouw(geselecteerd) : null;
+            if (sel != null) {
+                paneelY1 = paneel.gebouw(ui, this, b, sel, nu, px, py, onder - py, eigen());
+                paneelX0 = px;
+            } else if (selPlukje >= 0) {
+                paneelY1 = paneel.plukje(ui, b, selPlukje, nu, px, py, eigen());
+                paneelX0 = px;
+            } else if (selKavel >= 0) {
+                paneelY1 = paneel.kavel(ui, b, selKavel, px, py, eigen());
+                paneelX0 = px;
+            }
         }
         if (eigen()) {
-            winkel(g, b, mx, my);
+            winkel(ui, b);
         }
-        hulp(g);
-        toasts(g);
+        hulp(ui);
+        toasts(ui);
+        if (venster != null) {
+            Ui vui = new Ui(g, font, mx, my, klikken);
+            venster.teken(vui, this, b, width, height, nu);
+        }
         // tooltips last
         for (int i = klikken.size() - 1; i >= 0; i--) {
-            Klik k = klikken.get(i);
+            Ui.Klik k = klikken.get(i);
             if (k.op(mx, my)) {
                 if (k.tip() != null && !k.tip().isEmpty()) {
                     g.setComponentTooltipForNextFrame(font, k.tip(), mx, my);
@@ -318,326 +438,322 @@ public final class OverzichtScherm extends Screen {
                 return;
             }
         }
-        if (modus == Modus.KIJKEN && hoverGebouw != null && hoverGebouw.id != geselecteerd) {
+        if (venster == null && modus == Modus.KIJKEN && hoverGebouw != null && hoverGebouw.id != geselecteerd) {
             Gebouw h = hoverGebouw;
-            g.setComponentTooltipForNextFrame(font, List.of(naam(h).copy().withStyle(ChatFormatting.BOLD),
-                    h.level == 0 ? Component.translatable("erfenis.ui.in_aanbouw") : Component.translatable("erfenis.ui.level", h.level)), mx, my);
+            List<Component> tip = new ArrayList<>();
+            tip.add(Component.translatable(h.type.naamKey()).withStyle(ChatFormatting.BOLD));
+            tip.add(h.level == 0 ? Component.translatable("erfenis.ui.in_aanbouw") : Component.translatable("erfenis.ui.level", h.level));
+            if (h.type.maakt() && h.level > 0) {
+                tip.add(Component.translatable("erfenis.ui.maakt_kort", Ui.getal(Math.round(Productie.nuPerUur(b, h))),
+                        Component.translatable(Productie.recept(h).uit().naamKey())).withColor(Teken.ZACHT));
+            }
+            g.setComponentTooltipForNextFrame(font, tip, mx, my);
+        } else if (venster == null && modus == Modus.KIJKEN && hoverPlukje(b) >= 0) {
+            int p = hoverPlukje(b);
+            g.setComponentTooltipForNextFrame(font, List.of(Component.translatable("erfenis.plukje.soort." + b.plukjeSoort(p)).withStyle(ChatFormatting.BOLD),
+                    Component.translatable("erfenis.ui.ring", Plot.ring(p)), Component.translatable("erfenis.ui.klik_opruimen").withColor(Teken.ZACHT)), mx, my);
+        } else if (venster == null && modus == Modus.KIJKEN && hoverKavel(b) >= 0) {
+            g.setComponentTooltipForNextFrame(font, List.of(Component.translatable("erfenis.ui.kavel").withStyle(ChatFormatting.BOLD),
+                    Component.translatable("erfenis.ui.klik_kavel").withColor(Teken.ZACHT)), mx, my);
         }
     }
 
-    private static Component naam(Gebouw g) {
-        return Component.translatable(g.type.naamKey());
-    }
-
-    /** Above the buildings: the construction timer, the molen's collect bubble. */
-    private void zwevers(GuiGraphicsExtractor g, Base b, long nu, int mx, int my) {
+    /** Above the world: job timers (buildings and plukjes) and the collect bubbles. */
+    private void zwevers(Ui ui, Base b, long nu) {
         BlockPos o = ErfenisClient.oorsprong();
+        for (Base.Bouw bouw : b.bouwen) {
+            double cx, cz, top;
+            if (bouw.soort() == Base.Bouw.PLUKJE) {
+                int[] h = Plot.plukjeHoek(bouw.ref());
+                cx = o.getX() + h[0] + 4;
+                cz = o.getZ() + h[1] + 4;
+                top = Overzicht.grondY() + 3;
+            } else {
+                Gebouw g = b.gebouw(bouw.ref());
+                if (g == null) {
+                    continue;
+                }
+                cx = o.getX() + g.x + g.b() / 2.0;
+                cz = o.getZ() + g.z + g.d() / 2.0;
+                top = Overzicht.grondY() + g.type.hoogte(g.level) + 1.8;
+            }
+            double[] p = Overzicht.projecteer(new Vec3(cx, top, cz), width, height);
+            if (p != null && p[1] > 66) {
+                String t = Teken.tijd(bouw.eind() - nu);
+                int w = Math.max(44, font.width(t) + 24), x = (int) p[0] - w / 2, y = (int) p[1] - 9;
+                Teken.chip(ui.g, x, y, x + w, y + 17);
+                ui.item(Ui.BOUWER, x + 1, y);
+                ui.tekst(t, x + 18, y + 3, Teken.DONKER);
+                Teken.balk(ui.g, x + 18, y + 12, x + w - 3, y + 15, bouw.voortgang(nu), Teken.GOUD);
+            }
+        }
         for (Gebouw geb : b.gebouwen) {
-            double cx = o.getX() + geb.x + geb.type.maat / 2.0, cz = o.getZ() + geb.z + geb.type.maat / 2.0;
-            double top = Overzicht.grondY() + hoogte(geb.type, Math.max(geb.level, 0)) + 1.2;
-            if (b.inAanbouw(geb)) {
-                double[] p = Overzicht.projecteer(new Vec3(cx, top + 0.6, cz), width, height);
-                if (p != null && p[1] > 66) {   // (not under the top bar and its button row)
-                    String t = Teken.tijd(b.bouw.eind() - nu);
-                    int w = Math.max(44, font.width(t) + 24), x = (int) p[0] - w / 2, y = (int) p[1] - 9;
-                    Teken.chip(g, x, y, x + w, y + 17);
-                    g.item(BOUWER, x + 1, y);   // (the shovel, a bit cut by the chip: cute)
-                    g.text(font, t, x + 18, y + 3, Teken.DONKER, false);
-                    Teken.balk(g, x + 18, y + 12, x + w - 3, y + 15, b.bouw.voortgang(nu), Teken.GOUD);
-                }
+            if (!geb.type.maakt() || geb.level <= 0 || geb.klaar() < 1) {
+                continue;
             }
-            if (geb.type == GebouwType.MOLEN && geb.level > 0) {
-                double v = geb.voorraadOp(nu);
-                if (v >= 1) {
-                    double[] p = Overzicht.projecteer(new Vec3(cx, top, cz), width, height);
-                    if (p != null && p[1] > 66) {   // (not under the top bar and its button row)
-                        boolean vol = v >= GebouwType.molenOpslag(geb.level);
-                        String t = Integer.toString((int) v);
-                        int w = font.width(t) + 24, x = (int) p[0] - w / 2, y = (int) p[1] - 10;
-                        boolean op = mx >= x && mx < x + w && my >= y && my < y + 18;
-                        Teken.rond(g, x, y + 1, x + w, y + 19, 0x50501830, 4);
-                        Teken.rond(g, x, y, x + w, y + 18, vol ? Teken.GOUD : Teken.ROZE_DONKER, 4);
-                        Teken.rond(g, x + 1, y + 1, x + w - 1, y + 17, op && eigen() ? Teken.WIT : Teken.CREME_VOL, 3);
-                        g.fill(x + w / 2 - 2, y + 18, x + w / 2 + 2, y + 20, vol ? Teken.GOUD : Teken.ROZE_DONKER);   // (the bubble's tail)
-                        g.item(BOUWSPUL, x + 2, y + 1);
-                        g.text(font, t, x + 19, y + 5, Teken.DONKER, false);
-                        int id = geb.id;
-                        klikken.add(new Klik(x, y, x + w, y + 20, eigen() ? () -> ErfenisClient.stuur(ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.OPHALEN, id)) : null,
-                                List.of(Component.translatable("erfenis.ui.ophalen").withStyle(ChatFormatting.BOLD),
-                                        Component.translatable("erfenis.ui.binnen", (int) v, GebouwType.molenOpslag(geb.level)))));
-                    }
-                }
+            Recept r = Productie.recept(geb);
+            double cx = o.getX() + geb.x + geb.b() / 2.0, cz = o.getZ() + geb.z + geb.d() / 2.0;
+            double top = Overzicht.grondY() + geb.type.hoogte(geb.level) + 0.8;
+            double[] p = Overzicht.projecteer(new Vec3(cx, top, cz), width, height);
+            if (p == null || p[1] <= 66) {
+                continue;
             }
+            boolean vol = geb.vol();
+            String t = Ui.getal((long) Math.floor(geb.inBuffer(r.uit())));
+            int w = font.width(t) + 24, x = (int) p[0] - w / 2, y = (int) p[1] - 10;
+            boolean op = ui.op(x, y, x + w, y + 20);
+            Teken.rond(ui.g, x, y + 1, x + w, y + 19, 0x50501830, 4);
+            Teken.rond(ui.g, x, y, x + w, y + 18, vol ? Teken.GOUD : Teken.ROZE_DONKER, 4);
+            Teken.rond(ui.g, x + 1, y + 1, x + w - 1, y + 17, op && eigen() ? Teken.WIT : Teken.CREME_VOL, 3);
+            ui.g.fill(x + w / 2 - 2, y + 18, x + w / 2 + 2, y + 20, vol ? Teken.GOUD : Teken.ROZE_DONKER);
+            ui.item(Ui.icoon(r.uit()), x + 2, y + 1);
+            ui.tekst(t, x + 19, y + 5, Teken.DONKER);
+            int id = geb.id;
+            List<Component> tip = new ArrayList<>();
+            tip.add(Component.translatable("erfenis.ui.ophalen").withStyle(ChatFormatting.BOLD));
+            tip.add(Component.translatable("erfenis.ui.mandje", Ui.getal(geb.klaar()), Ui.getal(Math.round(Productie.bufferCap(geb))),
+                    Productie.bufferUren(geb.level)));
+            if (vol) {
+                tip.add(Component.translatable("erfenis.ui.mandje_vol").withColor(Teken.ROOD));
+            }
+            ui.klik(x, y, x + w, y + 20, eigen() ? () -> ErfenisClient.stuur(Actie.op(Actie.OPHALEN, id)) : null, tip);
         }
     }
 
-    private void bovenbalk(GuiGraphicsExtractor g, Base b, long nu, int mx, int my) {
-        // left: whose erfenis, with the close and back buttons under it
+    private void bovenbalk(Ui ui, Base b, long nu) {
         Component titel = b.npc ? Component.translatable("erfenis.ui.dorp", b.naam) : Component.translatable("erfenis.ui.van", b.naam);
         Component sub = eigen() ? (ErfenisClient.snel ? Component.translatable("erfenis.ui.snel") : null) : Component.translatable("erfenis.ui.kijken");
-        int w = Math.max(font.width(titel) + 16, sub == null ? 0 : font.width(sub) + 16);
+        int w = Math.max(ui.font.width(titel) + 16, sub == null ? 0 : ui.font.width(sub) + 16);
         int h = sub == null ? 20 : 30;
-        Teken.paneel(g, 6, 6, 6 + w, 6 + h);
-        g.text(font, titel.copy().withStyle(ChatFormatting.BOLD), 14, 12, Teken.DONKER, false);
+        Teken.paneel(ui.g, 6, 6, 6 + w, 6 + h);
+        ui.tekst(titel.copy().withStyle(ChatFormatting.BOLD), 14, 12, Teken.DONKER);
         if (sub != null) {
-            g.text(font, sub, 14, 23, eigen() ? Teken.ROOD : Teken.ZACHT, false);
+            ui.tekst(sub, 14, 23, eigen() ? Teken.ROOD : Teken.ZACHT);
         }
-        klikken.add(new Klik(6, 6, 6 + w, 6 + h, null, null));
+        ui.vlak(6, 6, 6 + w, 6 + h, null);
         int by = 6 + h + 4;
         Component sluit = Component.translatable("erfenis.ui.sluiten"), terug = Component.translatable("erfenis.ui.terug");
-        int w1 = font.width(sluit) + 12, w2 = font.width(terug) + 12;
-        Teken.knop(g, font, sluit, 6, by, 6 + w1, by + 14, mx, my, true, Teken.ROZE_DONKER);
-        klikken.add(new Klik(6, by, 6 + w1, by + 14, this::onClose, null));
-        Teken.knop(g, font, terug, 10 + w1, by, 10 + w1 + w2, by + 14, mx, my, true, 0xFFB98AA6);
-        klikken.add(new Klik(10 + w1, by, 10 + w1 + w2, by + 14, () -> {
+        int w1 = ui.font.width(sluit) + 12, w2 = ui.font.width(terug) + 12;
+        ui.knop(sluit, 6, by, 6 + w1, by + 14, true, Teken.ROZE_DONKER, this::onClose, null);
+        ui.knop(terug, 10 + w1, by, 10 + w1 + w2, by + 14, true, 0xFFB98AA6, () -> {
             sluitAlles();
-            ErfenisClient.stuur(ErfenisPayloads.Actie.simpel(ErfenisPayloads.Actie.TERUG));
-        }, null));
-        // the world map (its "Terug" button opens this overview again), and for a visitor the way home
+            ErfenisClient.stuur(Actie.simpel(Actie.TERUG));
+        }, null);
         Component kaartKnop = Component.translatable("erfenis.ui.wereldkaart");
-        int kx = 14 + w1 + w2, w3 = font.width(kaartKnop) + 12;
-        Teken.knop(g, font, kaartKnop, kx, by, kx + w3, by + 14, mx, my, true, 0xFF7FA8D8);
-        klikken.add(new Klik(kx, by, kx + w3, by + 14, () -> {
+        int kx = 14 + w1 + w2, w3 = ui.font.width(kaartKnop) + 12;
+        ui.knop(kaartKnop, kx, by, kx + w3, by + 14, true, 0xFF7FA8D8, () -> {
             sluitAlles();
-            KaartClient.open(() -> ErfenisClient.stuur(ErfenisPayloads.Actie.simpel(ErfenisPayloads.Actie.OPEN)));
-        }, null));
+            KaartClient.open(() -> ErfenisClient.stuur(Actie.simpel(Actie.OPEN)));
+        }, null);
         if (!eigen()) {
             Component naarEigen = Component.translatable("erfenis.ui.naar_eigen");
-            int ex = kx + w3 + 4, w4 = font.width(naarEigen) + 12;
-            Teken.knop(g, font, naarEigen, ex, by, ex + w4, by + 14, mx, my, true, Teken.GROEN_DONKER);
-            klikken.add(new Klik(ex, by, ex + w4, by + 14, () -> {
+            int ex = kx + w3 + 4, w4 = ui.font.width(naarEigen) + 12;
+            ui.knop(naarEigen, ex, by, ex + w4, by + 14, true, Teken.GROEN_DONKER, () -> {
                 sluitAlles();
-                ErfenisClient.stuur(ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.GA, ErfenisPayloads.Actie.GA_EN_OPEN));
-            }, null));
+                ErfenisClient.stuur(Actie.op(Actie.GA, Actie.GA_EN_OPEN));
+            }, null);
+        } else {
+            linkerKnoppen(ui, b, by + 20);
         }
         // right: the chips
         int x = width - 6;
-        // the builder
-        Component bouwer;
-        int bouwerKleur;
         List<Component> bouwerTip = new ArrayList<>();
-        bouwerTip.add(Component.translatable("erfenis.ui.bouwer").withStyle(ChatFormatting.BOLD));
-        if (b.bouw != null) {
-            bouwer = Component.literal(Teken.tijd(b.bouw.eind() - nu));
-            bouwerKleur = Teken.DONKER;
-            Gebouw bg = b.gebouw(b.bouw.gebouw());
-            if (bg != null) {
-                bouwerTip.add(Component.translatable("erfenis.ui.bouwer_bezig").append(": ").append(naam(bg)).append(" ")
-                        .append(Component.translatable("erfenis.ui.level", b.bouw.naar())));
+        bouwerTip.add(Component.translatable("erfenis.ui.bouwers", b.bouwen.size(), b.bouwers()).withStyle(ChatFormatting.BOLD));
+        long eerste = Long.MAX_VALUE;
+        Base.Bouw eersteBouw = null;
+        for (Base.Bouw bouw : b.bouwen) {
+            Component wat;
+            if (bouw.soort() == Base.Bouw.PLUKJE) {
+                wat = Component.translatable("erfenis.ui.job_plukje");
+            } else {
+                Gebouw bg = b.gebouw(bouw.ref());
+                wat = bg == null ? Component.literal("?") : Component.translatable(bg.type.naamKey()).append(" → ")
+                        .append(Component.translatable("erfenis.ui.level", bouw.naar()));
             }
-        } else {
-            bouwer = Component.translatable("erfenis.ui.bouwer_vrij");
-            bouwerKleur = Teken.GROEN_DONKER;
+            bouwerTip.add(Component.literal("• ").append(wat).append(" · " + Teken.tijd(bouw.eind() - nu)));
+            if (bouw.eind() < eerste) {
+                eerste = bouw.eind();
+                eersteBouw = bouw;
+            }
         }
-        x = chip(g, x, BOUWER, bouwer, bouwerKleur, b.bouw != null ? b.bouw.voortgang(nu) : -1, Teken.GOUD, bouwerTip);
-        x = chip(g, x, GebouwType.STADHUIS.icoon(), Component.translatable("erfenis.ui.level", b.stadhuisLevel()), Teken.DONKER, -1, 0,
-                List.of(Component.translatable("erfenis.ui.stadhuis").withStyle(ChatFormatting.BOLD)));
-        x = chip(g, x, KNUS, Component.literal(Integer.toString(b.knusheid())), Teken.DONKER, -1, 0,
-                List.of(Component.translatable("erfenis.ui.knusheid").withStyle(ChatFormatting.BOLD)));
-        int cap = b.opslag();
-        chip(g, x, BOUWSPUL, Component.literal(b.bouwspul + "/" + cap), b.bouwspul >= cap ? Teken.ROOD : Teken.DONKER,
-                cap <= 0 ? 0 : b.bouwspul / (float) cap, Teken.ROZE_DONKER,
-                List.of(Component.translatable("erfenis.ui.bouwspul").withStyle(ChatFormatting.BOLD)));
+        if (b.vrijeBouwers() > 0) {
+            bouwerTip.add(Component.translatable("erfenis.ui.bouwers_vrij", b.vrijeBouwers()).withColor(Teken.GROEN_DONKER));
+        }
+        Component bouwer = b.bouwen.isEmpty() ? Component.translatable("erfenis.ui.bouwer_vrij")
+                : Component.literal(b.bouwen.size() + "/" + b.bouwers() + " · " + Teken.tijd(eerste - nu));
+        x = chip(ui, x, Ui.BOUWER, bouwer, b.vrijeBouwers() > 0 ? Teken.GROEN_DONKER : Teken.DONKER,
+                eersteBouw != null ? eersteBouw.voortgang(nu) : -1, Teken.GOUD, bouwerTip, null);
+        Gebouw hoeve = b.hoeve();
+        x = chip(ui, x, GebouwType.HOEVE.icoon(), Component.translatable("erfenis.ui.level", b.hoeveLevel()), Teken.DONKER, -1, 0,
+                List.of(Component.translatable("erfenis.gebouw.hoeve").withStyle(ChatFormatting.BOLD), Component.translatable("erfenis.ui.klik_hoeve")
+                        .withColor(Teken.ZACHT)), hoeve == null ? null : () -> kies(hoeve.id, -1, -1));
+        x = chip(ui, x, Ui.KNUS, Component.literal(Ui.getal(b.knusheid())), Teken.DONKER, -1, 0,
+                List.of(Component.translatable("erfenis.ui.knusheid").withStyle(ChatFormatting.BOLD), Component.translatable("erfenis.ui.knus_uitleg")
+                        .withColor(Teken.ZACHT)), null);
+        List<Component> bewTip = new ArrayList<>();
+        bewTip.add(Component.translatable("erfenis.ui.bewoners").withStyle(ChatFormatting.BOLD));
+        bewTip.add(Component.translatable("erfenis.ui.werkplekken", b.werkplekken()));
+        if (b.volgendeIntrek > 0) {
+            bewTip.add(Component.translatable("erfenis.ui.intrek_over", Teken.tijd(b.volgendeIntrek - nu)).withColor(Teken.ZACHT));
+        } else if (b.bewoners >= b.maxBewoners()) {
+            bewTip.add(Component.translatable("erfenis.ui.bouw_hutjes").withColor(Teken.ZACHT));
+        }
+        x = chip(ui, x, Ui.BEWONER, Component.literal(b.bewoners + "/" + b.maxBewoners()), Teken.DONKER, -1, 0, bewTip, null);
+        int cap = b.opslag(), vol = b.opslagGebruikt();
+        x = chip(ui, x, Ui.OPSLAG, Component.literal(Ui.getal(vol) + "/" + Ui.getal(cap)), vol >= cap ? Teken.ROOD : Teken.DONKER,
+                cap <= 0 ? 0 : vol / (float) cap, Teken.ROZE_DONKER, List.of(Component.translatable("erfenis.ui.opslag").withStyle(ChatFormatting.BOLD),
+                        Component.translatable("erfenis.ui.klik_opslag").withColor(Teken.ZACHT)), () -> open(new Vensters.Opslag()));
+        int gcap = b.guhldenCap();
+        chip(ui, x, Ui.GUHLDEN, Component.literal("Ƒ " + Ui.getal(b.guhlden) + "/" + Ui.getal(gcap)), b.guhlden >= gcap ? Teken.ROOD : Teken.DONKER,
+                gcap <= 0 ? 0 : b.guhlden / (float) gcap, Teken.GOUD, List.of(Component.translatable("erfenis.ui.guhlden").withStyle(ChatFormatting.BOLD),
+                        Component.translatable("erfenis.ui.guhlden_uitleg", Ui.getal(gcap)).withColor(Teken.ZACHT)), null);
+    }
+
+    /** The own village's tool buttons under the top-left buttons. */
+    private void linkerKnoppen(Ui ui, Base b, int y) {
+        int x0 = 6, x1 = 86;
+        ui.knop(Component.translatable("erfenis.ui.opslag"), x0, y, x1, y + 14, true, 0xFFC8A060, () -> open(new Vensters.Opslag()), null);
+        y += 17;
+        ui.knop(Component.translatable("erfenis.ui.naar_huis"), x0, y, x1, y + 14, true, 0xFF7FA8D8, () -> open(new Vensters.NaarHuis()),
+                List.of(Component.translatable("erfenis.ui.naar_huis_tip")));
+        y += 17;
+        int klaar = 0;
+        for (Gebouw g : b.gebouwen) {
+            klaar += g.type.maakt() ? g.klaar() : 0;
+        }
+        ui.knop(Component.translatable("erfenis.ui.alles_ophalen"), x0, y, x1, y + 14, klaar > 0, Teken.GOUD,
+                () -> ErfenisClient.stuur(Actie.simpel(Actie.OPHALEN_ALLES)), List.of(Component.translatable("erfenis.ui.alles_ophalen_tip", klaar)));
+        y += 17;
+        if (b.besteLevel(GebouwType.LOKET) > 0) {
+            ui.knop(Component.translatable("erfenis.ui.loket"), x0, y, x1, y + 14, true, 0xFFC8A060, () -> open(new Vensters.Loket()), null);
+            y += 17;
+        }
+        if (b.besteLevel(GebouwType.GUHPENSION) > 0) {
+            ui.knop(Component.translatable("erfenis.ui.loges"), x0, y, x1, y + 14, true, 0xFFE07FA8,
+                    () -> ErfenisClient.stuur(new Actie(Actie.PENSION, 0, Actie.PENSION_OPEN, 0, 0, 0, 0, "")), null);
+        }
     }
 
     /** One chip of the top bar, right-aligned at x; returns the x left of it. A bar under the text when deel >= 0. */
-    private int chip(GuiGraphicsExtractor g, int rechts, ItemStack icoon, Component tekst, int kleur, float deel, int balkKleur, List<Component> tip) {
+    private int chip(Ui ui, int rechts, net.minecraft.world.item.ItemStack icoon, Component tekst, int kleur, float deel, int balkKleur,
+                     List<Component> tip, @Nullable Runnable klik) {
         int w = font.width(tekst) + 26, x = rechts - w, y = 6;
-        Teken.chip(g, x, y, rechts, y + 20);
-        g.item(icoon, x + 3, y + 2);
-        g.text(font, tekst, x + 21, y + (deel >= 0 ? 4 : 6), kleur, false);
-        if (deel >= 0) {
-            Teken.balk(g, x + 21, y + 14, rechts - 4, y + 17, deel, balkKleur);
+        Teken.chip(ui.g, x, y, rechts, y + 20);
+        if (klik != null && ui.op(x, y, rechts, y + 20)) {
+            Teken.rond(ui.g, x + 1, y + 1, rechts - 1, y + 19, 0xFFFFFFFF, 3);
         }
-        klikken.add(new Klik(x, y, rechts, y + 20, null, tip));
+        ui.item(icoon, x + 3, y + 2);
+        ui.tekst(tekst, x + 21, y + (deel >= 0 ? 4 : 6), kleur);
+        if (deel >= 0) {
+            Teken.balk(ui.g, x + 21, y + 14, rechts - 4, y + 17, deel, balkKleur);
+        }
+        ui.klik(x, y, rechts, y + 20, klik, tip);
         return x - 4;
     }
 
-    /** The panel of the selected building. */
-    private void paneel(GuiGraphicsExtractor g, Base b, Gebouw geb, long nu, int mx, int my) {
-        int x0 = width - PANEEL_W - 6, x1 = width - 6, y0 = 34;
-        int tw = PANEEL_W - 16;
-        List<FormattedCharSequence> uitleg = font.split(Component.translatable(geb.type.uitlegKey()), tw);
-        List<Component> stats = new ArrayList<>();
-        int lvl = Math.max(1, geb.level);
-        switch (geb.type) {
-            case MOLEN -> {
-                stats.add(Component.translatable("erfenis.ui.produceert", GebouwType.productiePerMinuut(lvl)));
-                stats.add(Component.translatable("erfenis.ui.binnen", (int) geb.voorraadOp(nu), GebouwType.molenOpslag(lvl)));
-            }
-            case SCHUURTJE -> stats.add(Component.translatable("erfenis.ui.opslag", GebouwType.schuurOpslag(lvl)));
-            case STADHUIS -> stats.add(Component.translatable("erfenis.ui.opslag", GebouwType.stadhuisOpslag(lvl)));
-            default -> {
+    /** The shop at the bottom: family tabs and the cards of the open family. */
+    private void winkel(Ui ui, Base b) {
+        int h = b.hoeveLevel();
+        List<GebouwType> types = new ArrayList<>();
+        for (GebouwType t : GebouwType.values()) {
+            if (t.familie == tab && t != GebouwType.HOEVE) {
+                types.add(t);
             }
         }
-        if (geb.type.knus(lvl) > 0) {
-            stats.add(Component.translatable("erfenis.ui.knus", geb.type.knus(lvl)));
+        int gap = 4, n = Math.max(types.size(), 5);
+        int totaal = Math.max(n * SHOP_W + (n - 1) * gap + 12, GebouwType.Familie.values().length * 66 + 12);
+        int x0 = (width - totaal) / 2, y0 = height - SHOP_H - 12;
+        // tabs
+        int tx = x0 + 6;
+        for (GebouwType.Familie f : GebouwType.Familie.values()) {
+            Component naam = Component.translatable(f.naamKey());
+            int tw = 62;
+            boolean open = f == tab;
+            int ty = y0 - TAB_H + (open ? 0 : 2);
+            Teken.rond(ui.g, tx, ty, tx + tw, y0 + 4, open ? Teken.ROZE_DONKER : Teken.ROZE, 3);
+            Teken.rond(ui.g, tx + 1, ty + 1, tx + tw - 1, y0 + 4, open ? Teken.CREME_VOL : ui.op(tx, ty, tx + tw, y0) ? 0xFFFFF6FA : 0xFFF3E4EB, 3);
+            boolean nieuw = false;
+            for (GebouwType t : GebouwType.values()) {
+                nieuw |= t.familie == f && t != GebouwType.HOEVE && b.aantal(t) < t.maxAantal(h);
+            }
+            ui.passend(naam, tx + 5, ty + 3, tw - (nieuw ? 14 : 8), open ? Teken.DONKER : Teken.ZACHT);
+            if (nieuw) {
+                ui.g.fill(tx + tw - 8, ty + 4, tx + tw - 4, ty + 8, Teken.GROEN);
+            }
+            ui.klik(tx, ty, tx + tw, y0, () -> tab = f, nieuw ? List.of(Component.translatable("erfenis.ui.tab_nieuw")) : null);
+            tx += tw + 2;
         }
-        // the next level
-        List<Component> volgende = new ArrayList<>();
-        Base.Fout fout = b.kanVerbeteren(geb.id);
-        boolean bezig = b.inAanbouw(geb);
-        if (!bezig) {
-            if (geb.level >= geb.type.topLevel()) {
-                volgende.add(Component.translatable("erfenis.ui.max").withColor(Teken.GROEN_DONKER));
+        Teken.paneel(ui.g, x0, y0, x0 + totaal, y0 + SHOP_H + 8);
+        ui.vlak(x0, y0, x0 + totaal, y0 + SHOP_H + 8, null);
+        int x = x0 + 6;
+        for (GebouwType t : types) {
+            Base.Fout f = b.kanKopen(t);
+            boolean slot = h < t.opent;
+            boolean gekozen = modus == Modus.PLAATSEN && plaatsType == t;
+            boolean op = ui.op(x, y0 + 4, x + SHOP_W, y0 + 4 + SHOP_H);
+            int y = y0 + 4;
+            Teken.rond(ui.g, x, y, x + SHOP_W, y + SHOP_H, gekozen ? Teken.GOUD : op ? Teken.ROZE_DONKER : Teken.ROZE, 3);
+            Teken.rond(ui.g, x + 1, y + 1, x + SHOP_W - 1, y + SHOP_H - 1, f == null ? (op ? 0xFFFFFFFF : 0xFFFFF0F5) : 0xFFEDE3E8, 3);
+            ui.item(t.icoon(), x + 4, y + 3);
+            if (slot) {
+                ui.g.fill(x + 4, y + 3, x + 20, y + 19, 0xA0EDE3E8);
+                ui.item(Ui.SLOT, x + 8, y + 7, 0.5f);
+            }
+            String telling = b.aantal(t) + "/" + t.maxAantal(h);
+            ui.tekst(telling, x + SHOP_W - 4 - font.width(telling), y + 7, Teken.ZACHT);
+            ui.passend(Component.translatable(t.naamKey()), x + 3, y + 22, SHOP_W - 6, f == null ? Teken.DONKER : Teken.ZACHT);
+            String regel;
+            int kleur;
+            Prijzen.Prijs p = b.prijsNieuw(t);
+            if (slot) {
+                regel = "H" + t.opent;
+                kleur = Teken.ROOD;
+            } else if (f != null && ("erfenis.fout.slot".equals(f.key()) || "erfenis.fout.limiet".equals(f.key()))) {
+                regel = "erfenis.fout.slot".equals(f.key()) ? "H" + f.args()[0] : "max";
+                kleur = Teken.ZACHT;
             } else {
-                int naar = geb.level + 1;
-                volgende.add(Component.translatable("erfenis.ui.volgende", naar).withStyle(ChatFormatting.BOLD));
-                volgende.add(Component.translatable("erfenis.ui.kosten", geb.type.kosten(naar))
-                        .withColor(b.bouwspul >= geb.type.kosten(naar) ? Teken.TEKST : Teken.ROOD));
-                int sec = geb.type.tijdSec(naar);
-                volgende.add(ErfenisClient.snel || sec == 0 ? Component.translatable("erfenis.ui.direct")
-                        : Component.translatable("erfenis.ui.tijd", Teken.tijd(sec * 1000L)));
-                if (fout != null && !"erfenis.fout.bouwspul".equals(fout.key())) {
-                    volgende.add(ErfenisClient.tekst(fout.key(), List.of(fout.args())).copy().withColor(Teken.ROOD));
+                regel = p.guhlden() == 0 ? "gratis!" : "Ƒ" + Ui.getal(p.guhlden());
+                kleur = b.guhlden >= p.guhlden() ? Teken.DONKER : Teken.ROOD;
+            }
+            ui.tekst(regel, x + (SHOP_W - font.width(regel)) / 2, y + 34, kleur);
+            List<Component> tip = new ArrayList<>();
+            tip.add(Component.translatable(t.naamKey()).withStyle(ChatFormatting.BOLD));
+            for (FormattedCharSequence r : font.split(Component.translatable(t.uitlegKey()), 190)) {
+                tip.add(Component.literal(stuk(r)).withColor(Teken.ZACHT));
+            }
+            tip.add(Component.translatable("erfenis.ui.maat", t.breedte, t.diepte));
+            if (slot) {
+                tip.add(Component.translatable("erfenis.fout.slot", t.opent).withColor(Teken.ROOD));
+            } else {
+                tip.add(prijsTekst(p));
+                tip.add(Component.translatable("erfenis.ui.tijd", Ui.duur(ErfenisClient.snel ? 0 : p.tijdMs())));
+                if (f != null) {
+                    tip.add(ErfenisClient.tekst(f.key(), List.of(f.args())).copy().withColor(Teken.ROOD));
                 }
             }
-        }
-        boolean eigen = eigen();
-        int knoppen = !eigen ? 0 : (geb.type == GebouwType.MOLEN ? 3 : 2);
-        int h = 8 + 20 + uitleg.size() * 9 + 4 + stats.size() * 10 + 4 + (bezig ? 22 : volgende.size() * 10) + 4 + knoppen * 17 + 4;
-        int ruimte = height - (eigen ? SHOP_H + 26 : 24) - y0;
-        if (h > ruimte) {
-            uitleg = uitleg.subList(0, Math.max(1, uitleg.size() - (h - ruimte + 8) / 9));
-            h = Math.min(h, ruimte);
-        }
-        int y1 = y0 + h;
-        Teken.paneel(g, x0, y0, x1, y1);
-        klikken.add(new Klik(x0, y0, x1, y1, null, null));
-        int y = y0 + 6;
-        g.item(geb.type.icoon(), x0 + 6, y);
-        g.text(font, naam(geb).copy().withStyle(ChatFormatting.BOLD), x0 + 26, y, Teken.DONKER, false);
-        g.text(font, geb.level == 0 ? Component.translatable("erfenis.ui.in_aanbouw") : Component.translatable("erfenis.ui.level", geb.level),
-                x0 + 26, y + 10, Teken.ROZE_DONKER, false);
-        y += 22;
-        for (FormattedCharSequence r : uitleg) {
-            g.text(font, r, x0 + 8, y, Teken.ZACHT, false);
-            y += 9;
-        }
-        y += 4;
-        for (Component s : stats) {
-            g.text(font, Component.literal("• ").append(s), x0 + 8, y, Teken.TEKST, false);
-            y += 10;
-        }
-        y += 2;
-        g.fill(x0 + 8, y, x1 - 8, y + 1, 0x40D27A9C);
-        y += 4;
-        if (bezig) {
-            g.text(font, Component.translatable("erfenis.ui.bouwer_bezig").append(" · ").append(Teken.tijd(b.bouw.eind() - nu)), x0 + 8, y,
-                    Teken.DONKER, false);
-            Teken.balk(g, x0 + 8, y + 11, x1 - 8, y + 16, b.bouw.voortgang(nu), Teken.GOUD);
-            y += 22;
-        } else {
-            for (Component v : volgende) {
-                g.text(font, v, x0 + 8, y, Teken.TEKST, false);
-                y += 10;
-            }
-        }
-        y += 2;
-        if (!eigen) {
-            return;
-        }
-        int id = geb.id;
-        int bx0 = x0 + 8, bx1 = x1 - 8;
-        boolean kanV = fout == null;
-        List<Component> tipV = fout == null ? null : List.of(ErfenisClient.tekst(fout.key(), List.of(fout.args())));
-        Teken.knop(g, font, Component.translatable("erfenis.ui.verbeteren"), bx0, y, bx1, y + 14, mx, my, kanV, Teken.GROEN);
-        klikken.add(new Klik(bx0, y, bx1, y + 14, kanV ? () -> ErfenisClient.stuur(ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.VERBETER, id)) : null, tipV));
-        y += 17;
-        int mid = (bx0 + bx1) / 2;
-        Teken.knop(g, font, Component.translatable("erfenis.ui.verplaatsen"), bx0, y, mid - 2, y + 14, mx, my, true, Teken.ROZE_DONKER);
-        klikken.add(new Klik(bx0, y, mid - 2, y + 14, () -> {
-            modus = Modus.VERPLAATSEN;
-            verplaatsId = id;
-        }, null));
-        Teken.knop(g, font, Component.translatable("erfenis.ui.draaien"), mid + 2, y, bx1, y + 14, mx, my, true, Teken.ROZE_DONKER);
-        klikken.add(new Klik(mid + 2, y, bx1, y + 14, () -> ErfenisClient.stuur(ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.DRAAI, id)), null));
-        y += 17;
-        if (geb.type == GebouwType.MOLEN) {
-            Base.Fout f = b.kanOphalen(id, nu);
-            Component t = Component.translatable("erfenis.ui.ophalen").append(" (" + (int) geb.voorraadOp(nu) + ")");
-            Teken.knop(g, font, t, bx0, y, bx1, y + 14, mx, my, f == null, Teken.GOUD);
-            klikken.add(new Klik(bx0, y, bx1, y + 14, f == null ? () -> ErfenisClient.stuur(ErfenisPayloads.Actie.op(ErfenisPayloads.Actie.OPHALEN, id)) : null,
-                    f == null ? null : List.of(ErfenisClient.tekst(f.key(), List.of(f.args())))));
+            final GebouwType type = t;
+            ui.klik(x, y, x + SHOP_W, y + SHOP_H, () -> kiesType(type), tip);
+            x += SHOP_W + gap;
         }
     }
 
-    /** The shop bar at the bottom. */
-    private void winkel(GuiGraphicsExtractor g, Base b, int mx, int my) {
-        GebouwType[] types = GebouwType.values();
-        int n = 0;
-        for (GebouwType t : types) {
-            if (t != GebouwType.STADHUIS) {
-                n++;
-            }
+    /** "Ƒ 15 · 10 Planken" for a tooltip. */
+    static Component prijsTekst(Prijzen.Prijs p) {
+        net.minecraft.network.chat.MutableComponent t = Component.translatable("erfenis.ui.kost").append(" ");
+        boolean iets = false;
+        if (p.guhlden() > 0) {
+            t.append("Ƒ" + Ui.getal(p.guhlden()));
+            iets = true;
         }
-        int gap = 5, totaal = n * SHOP_W + (n - 1) * gap + 12;
-        int x0 = (width - totaal) / 2, y0 = height - SHOP_H - 12;
-        Teken.paneel(g, x0, y0, x0 + totaal, y0 + SHOP_H + 8);
-        klikken.add(new Klik(x0, y0, x0 + totaal, y0 + SHOP_H + 8, null, null));
-        int th = b.stadhuisLevel();
-        int x = x0 + 6;
-        for (GebouwType t : types) {
-            if (t == GebouwType.STADHUIS) {
-                continue;
-            }
-            Base.Fout f = b.kanKopen(t);
-            boolean gekozen = modus == Modus.PLAATSEN && plaatsType == t;
-            boolean op = mx >= x && mx < x + SHOP_W && my >= y0 + 4 && my < y0 + 4 + SHOP_H;
-            int y = y0 + 4;
-            int rand = gekozen ? Teken.GOUD : op ? Teken.ROZE_DONKER : Teken.ROZE;
-            Teken.rond(g, x, y, x + SHOP_W, y + SHOP_H, rand, 3);
-            Teken.rond(g, x + 1, y + 1, x + SHOP_W - 1, y + SHOP_H - 1, f == null ? (op ? 0xFFFFFFFF : 0xFFFFF0F5) : 0xFFEDE3E8, 3);
-            g.item(t.icoon(), x + 4, y + 3);
-            if (f != null) {
-                g.fill(x + 4, y + 3, x + 20, y + 19, 0x80EDE3E8);   // (greyed icon)
-            }
-            String telling = b.aantal(t) + "/" + t.maxAantal(th);
-            g.text(font, telling, x + SHOP_W - 4 - font.width(telling), y + 7, Teken.ZACHT, false);
-            Component nm = Component.translatable(t.naamKey());
-            int nw = font.width(nm);
-            float schaal = nw > SHOP_W - 6 ? (SHOP_W - 6) / (float) nw : 1f;   // (long names: a bit smaller, never cut)
-            g.pose().pushMatrix();
-            g.pose().translate(x + SHOP_W / 2f - nw * schaal / 2f, y + 22 + (1 - schaal) * 4);
-            g.pose().scale(schaal, schaal);
-            g.text(font, nm, 0, 0, f == null ? Teken.DONKER : Teken.ZACHT, false);
-            g.pose().popMatrix();
-            // the cost (or the lock)
-            String regel;
-            int kleur;
-            if (f != null && ("erfenis.fout.slot".equals(f.key()) || "erfenis.fout.limiet".equals(f.key()))) {
-                regel = "erfenis.fout.slot".equals(f.key()) ? "SH-lvl " + f.args()[0] : "max";
-                kleur = Teken.ROOD;
-            } else {
-                regel = Integer.toString(t.kosten(1));
-                kleur = b.bouwspul >= t.kosten(1) ? Teken.DONKER : Teken.ROOD;
-            }
-            int rw = font.width(regel) + ("max".equals(regel) || regel.startsWith("SH") ? 0 : 11);
-            int rx = x + (SHOP_W - rw) / 2;
-            if (!("max".equals(regel) || regel.startsWith("SH"))) {
-                g.pose().pushMatrix();
-                g.pose().translate(rx, y + 32);
-                g.pose().scale(0.6f, 0.6f);
-                g.item(BOUWSPUL, 0, 0);
-                g.pose().popMatrix();
-                rx += 11;
-            }
-            g.text(font, regel, rx, y + 34, kleur, false);
-            List<Component> tip = new ArrayList<>();
-            tip.add(nm.copy().withStyle(ChatFormatting.BOLD));
-            for (FormattedCharSequence r : font.split(Component.translatable(t.uitlegKey()), 180)) {
-                tip.add(Component.literal(stuk(r)).withColor(Teken.ZACHT));
-            }
-            tip.add(Component.translatable("erfenis.ui.kosten", t.kosten(1)));
-            tip.add(t.direct ? Component.translatable("erfenis.ui.direct")
-                    : Component.translatable("erfenis.ui.tijd", Teken.tijd((ErfenisClient.snel ? 0 : t.tijdSec(1)) * 1000L)));
-            if (f != null) {
-                tip.add(ErfenisClient.tekst(f.key(), List.of(f.args())).copy().withColor(Teken.ROOD));
-            }
-            final GebouwType type = t;
-            klikken.add(new Klik(x, y, x + SHOP_W, y + SHOP_H, () -> kies(type), tip));
-            x += SHOP_W + gap;
+        for (var e : p.goederen().entrySet()) {
+            t.append(iets ? ", " : "").append(e.getValue() + " ").append(Component.translatable(e.getKey().naamKey()));
+            iets = true;
         }
+        if (!p.hoofdwereld().isEmpty()) {
+            t.append(iets ? " + " : "").append(Component.translatable("erfenis.ui.hoofdwereld_spul"));
+            iets = true;
+        }
+        return iets ? t : Component.translatable("erfenis.ui.gratis");
     }
 
     private static String stuk(FormattedCharSequence seq) {
@@ -649,7 +765,7 @@ public final class OverzichtScherm extends Screen {
         return sb.toString();
     }
 
-    private void kies(GebouwType t) {
+    private void kiesType(GebouwType t) {
         Base b = base();
         if (b == null) {
             return;
@@ -666,33 +782,33 @@ public final class OverzichtScherm extends Screen {
         modus = Modus.PLAATSEN;
         plaatsType = t;
         plaatsRot = 0;
-        geselecteerd = -1;
+        kies(-1, -1, -1);
     }
 
-    private void hulp(GuiGraphicsExtractor g) {
+    private void hulp(Ui ui) {
         String key = switch (modus) {
-            case PLAATSEN -> plaatsType != null && plaatsType.maat == 1 ? "erfenis.ui.hulp_muur" : "erfenis.ui.hulp_plaats";
+            case PLAATSEN -> "erfenis.ui.hulp_plaats";
             case VERPLAATSEN -> "erfenis.ui.hulp_verplaats";
             default -> "erfenis.ui.hulp";
         };
         Component t = Component.translatable(key);
         int w = font.width(t) + 12;
-        int y = eigen() ? height - SHOP_H - 28 : height - 18;
+        int y = eigen() ? height - SHOP_H - TAB_H - 30 : height - 18;
         int x = (width - w) / 2;
-        Teken.rond(g, x, y, x + w, y + 13, modus == Modus.KIJKEN ? 0x90402030 : 0xC0D27A9C, 3);
-        g.text(font, t, x + 6, y + 3, Teken.WIT, false);
+        Teken.rond(ui.g, x, y, x + w, y + 13, modus == Modus.KIJKEN ? 0x90402030 : 0xC0D27A9C, 3);
+        ui.tekst(t, x + 6, y + 3, Teken.WIT);
     }
 
-    private void toasts(GuiGraphicsExtractor g) {
+    private void toasts(Ui ui) {
         long nu = System.currentTimeMillis();
         toasts.removeIf(t -> t.tot() < nu);
         int y = 34;
         for (Toast t : toasts) {
-            int w = font.width(t.tekst()) + 16, x = (width - w) / 2;
-            Teken.rond(g, x, y + 1, x + w, y + 17, 0x50501830, 3);
-            Teken.rond(g, x, y, x + w, y + 16, t.goed() ? Teken.GROEN_DONKER : Teken.ROOD, 3);
-            Teken.rond(g, x + 1, y + 1, x + w - 1, y + 15, Teken.CREME_VOL, 3);
-            g.text(font, t.tekst(), x + 8, y + 4, t.goed() ? Teken.GROEN_DONKER : Teken.ROOD, false);
+            int w = Math.min(width - 200, font.width(t.tekst()) + 16), x = (width - w) / 2;
+            Teken.rond(ui.g, x, y + 1, x + w, y + 17, 0x50501830, 3);
+            Teken.rond(ui.g, x, y, x + w, y + 16, t.goed() ? Teken.GROEN_DONKER : Teken.ROOD, 3);
+            Teken.rond(ui.g, x + 1, y + 1, x + w - 1, y + 15, Teken.CREME_VOL, 3);
+            ui.passend(t.tekst(), x + 8, y + 4, w - 16, t.goed() ? Teken.GROEN_DONKER : Teken.ROOD);
             y += 19;
         }
     }
@@ -705,16 +821,22 @@ public final class OverzichtScherm extends Screen {
     public boolean keyPressed(KeyEvent event) {
         int k = event.key();
         if (k == GLFW.GLFW_KEY_ESCAPE) {
-            if (modus != Modus.KIJKEN) {
-                modus = Modus.KIJKEN;
-                muurStart = null;
+            if (venster != null) {
+                venster = null;
                 return true;
             }
-            if (geselecteerd >= 0) {
-                geselecteerd = -1;
+            if (modus != Modus.KIJKEN) {
+                modus = Modus.KIJKEN;
+                return true;
+            }
+            if (geselecteerd >= 0 || selPlukje >= 0 || selKavel >= 0) {
+                kies(-1, -1, -1);
                 return true;
             }
             onClose();
+            return true;
+        }
+        if (venster != null) {
             return true;
         }
         if (k == GLFW.GLFW_KEY_Q) {
@@ -740,11 +862,12 @@ public final class OverzichtScherm extends Screen {
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         double mx = event.x(), my = event.y();
         if (event.button() == GLFW.GLFW_MOUSE_BUTTON_RIGHT) {
-            if (modus != Modus.KIJKEN) {
+            if (venster != null) {
+                venster = null;
+            } else if (modus != Modus.KIJKEN) {
                 modus = Modus.KIJKEN;
-                muurStart = null;
             } else {
-                geselecteerd = -1;
+                kies(-1, -1, -1);
             }
             return true;
         }
@@ -752,7 +875,7 @@ public final class OverzichtScherm extends Screen {
             return true;
         }
         for (int i = klikken.size() - 1; i >= 0; i--) {
-            Klik k = klikken.get(i);
+            Ui.Klik k = klikken.get(i);
             if (k.op(mx, my)) {
                 if (k.actie() != null) {
                     k.actie().run();
@@ -762,13 +885,15 @@ public final class OverzichtScherm extends Screen {
                 return true;
             }
         }
+        if (venster != null) {
+            return true;
+        }
         ingedrukt = true;
         gesleept = false;
         startX = vorigX = mx;
         startY = vorigY = my;
         kijkOnderMuis(mx, my);
         sleepKandidaat = modus == Modus.KIJKEN && eigen() && hoverGebouw != null && hoverGebouw.id == geselecteerd;
-        muurStart = modus == Modus.PLAATSEN && plaatsType != null && plaatsType.maat == 1 && hoverOpPlot ? new int[] {hoverX, hoverZ} : null;
         return true;
     }
 
@@ -781,12 +906,11 @@ public final class OverzichtScherm extends Screen {
         if (!gesleept && (Math.abs(mx - startX) > 4 || Math.abs(my - startY) > 4)) {
             gesleept = true;
             if (sleepKandidaat) {
-                modus = Modus.VERPLAATSEN;
-                verplaatsId = geselecteerd;
+                verplaatsStart(geselecteerd);
                 sleepVerplaats = true;
             }
         }
-        if (gesleept && muurStart == null && !sleepVerplaats) {
+        if (gesleept && !sleepVerplaats) {
             Vec3 a = Overzicht.grond(vorigX, vorigY, width, height), b = Overzicht.grond(mx, my, width, height);
             if (a != null && b != null) {
                 Overzicht.schuif(a.x - b.x, a.z - b.z);
@@ -808,14 +932,6 @@ public final class OverzichtScherm extends Screen {
             return true;
         }
         kijkOnderMuis(event.x(), event.y());
-        if (muurStart != null) {
-            if (hoverX > -100) {
-                ErfenisClient.stuur(new ErfenisPayloads.Actie(ErfenisPayloads.Actie.LIJN, 0, muurStart[0], muurStart[1], hoverX, hoverZ, 0,
-                        plaatsType.id));
-            }
-            muurStart = null;
-            return true;
-        }
         if (sleepVerplaats) {
             sleepVerplaats = false;
             if (!verplaats(b)) {
@@ -827,15 +943,26 @@ public final class OverzichtScherm extends Screen {
             return true;
         }
         switch (modus) {
-            case KIJKEN -> geselecteerd = hoverGebouw == null ? -1 : hoverGebouw.id;
+            case KIJKEN -> {
+                if (hoverGebouw != null) {
+                    kies(hoverGebouw.id, -1, -1);
+                } else if (hoverPlukje(b) >= 0) {
+                    kies(-1, hoverPlukje(b), -1);
+                } else if (hoverKavel(b) >= 0) {
+                    kies(-1, -1, hoverKavel(b));
+                } else {
+                    kies(-1, -1, -1);
+                }
+            }
             case PLAATSEN -> {
                 if (plaatsType != null && hoverOpPlot) {
-                    int x = voetX(plaatsType.maat), z = voetZ(plaatsType.maat);
-                    Base.Fout f = b.kanPlaatsen(plaatsType, x, z);
+                    int w = plaatsType.b(plaatsRot), h = plaatsType.d(plaatsRot);
+                    int x = voetX(w), z = voetZ(h);
+                    Base.Fout f = b.kanPlaatsen(plaatsType, x, z, plaatsRot);
                     if (f != null) {
                         toast(ErfenisClient.tekst(f.key(), List.of(f.args())), false);
                     } else {
-                        ErfenisClient.stuur(new ErfenisPayloads.Actie(ErfenisPayloads.Actie.PLAATS, 0, x, z, 0, 0, plaatsRot, plaatsType.id));
+                        ErfenisClient.stuur(new Actie(Actie.PLAATS, 0, x, z, 0, 0, plaatsRot, plaatsType.id));
                         modus = Modus.KIJKEN;
                     }
                 }
@@ -851,7 +978,7 @@ public final class OverzichtScherm extends Screen {
         if (g == null || !hoverOpPlot) {
             return false;
         }
-        int x = voetX(g.type.maat), z = voetZ(g.type.maat);
+        int x = voetX(g.b()), z = voetZ(g.d());
         if (x == g.x && z == g.z) {
             modus = Modus.KIJKEN;
             return true;
@@ -861,15 +988,23 @@ public final class OverzichtScherm extends Screen {
             toast(ErfenisClient.tekst(f.key(), List.of(f.args())), false);
             return false;
         }
-        ErfenisClient.stuur(new ErfenisPayloads.Actie(ErfenisPayloads.Actie.VERPLAATS, g.id, x, z, 0, 0, 0, ""));
+        ErfenisClient.stuur(new Actie(Actie.VERPLAATS, g.id, x, z, 0, 0, 0, ""));
         modus = Modus.KIJKEN;
-        geselecteerd = g.id;
+        kies(g.id, -1, -1);
         return true;
     }
 
     @Override
     public boolean mouseScrolled(double mx, double my, double scrollX, double scrollY) {
-        for (Klik k : klikken) {
+        if (venster != null) {
+            venster.scrol(scrollY);
+            return true;
+        }
+        if (paneelX0 >= 0 && mx >= paneelX0 && my >= 34 && my < paneelY1) {
+            paneel.scrol(scrollY);
+            return true;
+        }
+        for (Ui.Klik k : klikken) {
             if (k.op(mx, my)) {
                 return true;
             }

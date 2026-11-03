@@ -1,162 +1,404 @@
 package nl.juiced.guhs.feature.erfenis;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.Blocks;
 import nl.juiced.guhs.gametest.GuhTest;
 
-/** De Erfenis (POC): the rules of a base, the molen, saving, the spiral of cells, and stamping/moving one building. */
+/**
+ * De Erfenis ("Een opknapper!"): the economy maths (offline production, baskets, caps, the staff penalty, workshops using
+ * their inputs, vadskracht, residents, builders, upgrade gating and Hoeve goals, clearing, kavels, the Leverkist caps),
+ * saving, the plot geometry, and stamping one building.
+ */
 public class ErfenisGameTests {
     private static final String BATCH = "erfenis";
-    private static final long T0 = 1_000_000L;
+    private static final long T0 = 1_000_000_000L, UUR = 3_600_000L, MIN = 60_000L;
 
     private static Base start() {
         return Base.nieuw(UUID.randomUUID(), "Testguh", 0, 0, T0);
     }
 
-    /** Overlap, out of bounds, limits and locks are refused; a free spot is fine and costs Bouwspul. */
-    @GuhTest(template = "empty", batch = BATCH)
-    public static void plaatsRegels(GameTestHelper helper) {
+    /** A base with all land open and lots of money and room (for the maths tests). */
+    private static Base ruim() {
         Base b = start();
-        helper.assertTrue(b.stadhuisLevel() == 1 && b.aantal(GebouwType.MOLEN) == 1, "start: stadhuis 1 and a molen");
-        helper.assertTrue(b.kanPlaatsen(GebouwType.MUUR, 31, 31) != null, "overlap with the stadhuis is refused");
-        helper.assertTrue("erfenis.fout.buiten".equals(b.kanPlaatsen(GebouwType.MUUR, 64, 3).key()), "out of the plot is refused");
-        helper.assertTrue("erfenis.fout.buiten".equals(b.kanPlaatsen(GebouwType.BOOMPJE, 63, 10).key()), "a 2x2 over the edge is refused");
-        helper.assertTrue("erfenis.fout.slot".equals(b.kanPlaatsen(GebouwType.MOLEN, 5, 5).key()), "a second molen waits for stadhuis 2");
-        helper.assertTrue("erfenis.fout.slot".equals(b.kanPlaatsen(GebouwType.SCHUURTJE, 5, 5).key()), "the schuurtje waits for stadhuis 2");
-        int voor = b.bouwspul;
-        helper.assertTrue(b.plaats(GebouwType.MUUR, 5, 5, 0, T0, -1) == null, "a wall on a free spot");
-        helper.assertTrue(b.bouwspul == voor - GebouwType.MUUR.kosten(1), "the wall cost Bouwspul");
-        helper.assertTrue(b.op(5, 5) != null && b.op(5, 5).level == 1 && b.bouw == null, "a wall stands at once, no builder");
-        helper.assertTrue(b.kanVerplaatsen(b.op(5, 5).id, 31, 31) != null, "moving onto the stadhuis is refused");
-        helper.assertTrue(b.verplaats(b.op(5, 5).id, 6, 5) == null && b.op(6, 5) != null && b.op(5, 5) == null, "moving to a free spot");
+        b.allesOpen();
+        b.hoeve().level = 10;
+        b.guhlden = 1_000_000;
+        b.goederen.clear();
+        return b;
+    }
+
+    private static boolean ongeveer(double a, double b) {
+        return Math.abs(a - b) < 1e-6 * Math.max(1, Math.abs(b));
+    }
+
+    /** Our 10 levels on balans' 5: L1 = 70%, even = balans, odd = halfway; costs L1 = half. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void tienLevels(GameTestHelper helper) {
+        Recept ei = Productie.recepten(GebouwType.KIPPENHOK).get(0);
+        helper.assertTrue(ongeveer(Productie.perUur(GebouwType.KIPPENHOK, ei, 1), 14), "kippenhok L1 = 70% of 20");
+        helper.assertTrue(ongeveer(Productie.perUur(GebouwType.KIPPENHOK, ei, 2), 20), "kippenhok L2 = balans L1");
+        helper.assertTrue(ongeveer(Productie.perUur(GebouwType.KIPPENHOK, ei, 3), 25), "kippenhok L3 = halfway 20..30");
+        helper.assertTrue(ongeveer(Productie.perUur(GebouwType.KIPPENHOK, ei, 10), 90), "kippenhok L10 = balans L5");
+        Recept wol = Productie.recepten(GebouwType.MAMMOETWEI).get(0);
+        helper.assertTrue(ongeveer(Productie.perUur(GebouwType.MAMMOETWEI, wol, 3), 12), "mammoetwei L3 = 12 (3 levels)");
+        helper.assertTrue(Prijzen.gebouw(GebouwType.KIPPENHOK, 1).guhlden() == 15 && Prijzen.gebouw(GebouwType.KIPPENHOK, 2).guhlden() == 30,
+                "class A: L1 half of 30, L2 30");
+        helper.assertTrue(Prijzen.gebouw(GebouwType.KIPPENHOK, 10).guhlden() == 4000, "class A L10 = 4000");
+        helper.assertTrue(Prijzen.gebouw(GebouwType.TIMMERSCHUUR, 7).hoofdwereld().containsKey("guhs:vahoege_vads_ingot"), "3rd builder asks vads ingots");
+        helper.assertTrue(Prijzen.gebouw(GebouwType.KOEIENSTAL, 2).goederen().get(Goed.PLANK) == 30, "large building: x1.5 goods");
+        helper.assertTrue(Prijzen.gebouw(GebouwType.LOKET, 1).tijdMs() == 20 * MIN, "loket L1 20 min");
+        for (GebouwType t : GebouwType.values()) {
+            for (int l = t == GebouwType.HOEVE ? 2 : 1; l <= t.topLevel(); l++) {
+                long tijd = Prijzen.gebouw(t, l).tijdMs();
+                helper.assertTrue(tijd > 0 && tijd <= 4 * UUR, t.id + " L" + l + ": timer between 1 min and 4 hours");
+            }
+        }
+        helper.assertTrue(Productie.vadsmastCap(1) == 40 && Productie.vadsmastCap(10) == 140, "vadsmast 40 -> 140");
+        helper.assertTrue(Productie.bonusProcent(4) == 5 && Productie.bonusProcent(5) == 10 && Productie.bonusProcent(9) == 15, "café 5/10/15");
+        helper.assertTrue(Productie.bouwers(0) == 1 && Productie.bouwers(1) == 2 && Productie.bouwers(6) == 2 && Productie.bouwers(7) == 3,
+                "builders 1 / 2 (L1) / 3 (L7)");
         helper.succeed();
     }
 
-    /** One builder: an upgrade blocks the next; it finishes at its time; the stadhuis level unlocks more. */
+    /** Offline production: real time, buffer of 6 hours (8 from L7), byproducts, and the staff penalty. */
     @GuhTest(template = "empty", batch = BATCH)
-    public static void bouwerEnLevels(GameTestHelper helper) {
-        Base b = start();
-        b.bouwspul = 10_000;
-        Gebouw sh = b.stadhuis();
-        helper.assertTrue(b.verbeter(sh.id, T0, -1) == null, "the stadhuis upgrade starts");
-        helper.assertTrue(b.bouwspul == 10_000 - GebouwType.STADHUIS.kosten(2), "it cost Bouwspul");
-        helper.assertTrue("erfenis.fout.bouwer".equals(b.kanVerbeteren(sh.id).key()), "the builder is busy (one job at a time)");
-        helper.assertTrue(b.afronden(T0 + 1000) == null && sh.level == 1, "not done too early");
-        long eind = T0 + GebouwType.STADHUIS.tijdSec(2) * 1000L;
-        helper.assertTrue(b.afronden(eind) == sh && sh.level == 2 && b.bouw == null, "done at its time: level 2");
-        helper.assertTrue(b.kanKopen(GebouwType.MOLEN) == null, "stadhuis 2 allows a second molen");
-        helper.assertTrue(b.plaats(GebouwType.MOLEN, 5, 5, 0, eind, -1) == null, "a new molen is placed");
-        Gebouw nieuw = b.op(5, 5);
-        helper.assertTrue(nieuw.level == 0 && b.inAanbouw(nieuw), "a new molen is first built by the builder");
-        helper.assertTrue(b.afronden(eind + 10_000) == nieuw && nieuw.level == 1, "and then stands at level 1");
-        helper.assertTrue(b.kanVerbeteren(nieuw.id) == null, "molen level 2 is allowed at stadhuis 2");
-        b.verbeter(nieuw.id, eind, 0);
-        b.afronden(eind);
-        helper.assertTrue("erfenis.fout.slot".equals(b.kanVerbeteren(nieuw.id).key()), "molen level 3 waits for stadhuis 4");
+    public static void offlineProductie(GameTestHelper helper) {
+        Base b = ruim();
+        Gebouw hok = b.nieuwGebouw(GebouwType.KIPPENHOK, 2, 53, 41, 0, T0);
+        b.bewoners = 1;
+        b.bijgewerkt = T0;
+        b.bijwerken(T0 + UUR);
+        helper.assertTrue(ongeveer(hok.inBuffer(Goed.EI), 20) && ongeveer(hok.inBuffer(Goed.VEER), 10), "1 hour: 20 eggs + 10 feathers, got "
+                + hok.inBuffer(Goed.EI));
+        b.bijwerken(T0 + 10 * UUR);
+        helper.assertTrue(ongeveer(hok.inBuffer(Goed.EI), 6 * 20), "full after 6 hours (L2): 120 eggs, got " + hok.inBuffer(Goed.EI));
+        helper.assertTrue(hok.vol(), "the basket is full");
+        hok.level = 7;
+        hok.buffer.clear();
+        b.bijwerken(T0 + 30 * UUR);
+        helper.assertTrue(ongeveer(hok.inBuffer(Goed.EI), 8 * Productie.perUur(GebouwType.KIPPENHOK, Productie.recept(hok), 7)), "L7: 8 hours");
+        // nobody working: one empty workplace = -25%
+        Base c = ruim();
+        Gebouw h2 = c.nieuwGebouw(GebouwType.KIPPENHOK, 2, 53, 41, 0, T0);
+        c.bewoners = 0;
+        c.bijgewerkt = T0;
+        c.bijwerken(T0 + UUR);
+        helper.assertTrue(ongeveer(h2.inBuffer(Goed.EI), 15), "no staff: 75%, got " + h2.inBuffer(Goed.EI));
+        helper.assertTrue(ongeveer(Productie.werkFactor(3, 0), 0.25) && ongeveer(Productie.werkFactor(3, 1), 0.5)
+                && ongeveer(Productie.werkFactor(5, 0), 0.25), "-25% per empty workplace, never under 25%");
         helper.succeed();
     }
 
-    /** The molen fills per real minute up to its own cap; collecting stops at the storage cap and keeps the rest. */
+    /** A workshop takes its inputs from the storage while it works, and waits when they run out. */
     @GuhTest(template = "empty", batch = BATCH)
-    public static void molenOphalen(GameTestHelper helper) {
-        Base b = start();
-        Gebouw m = b.op(24, 32);
-        m.voorraad = 0;
-        m.bijgewerkt = T0;
-        helper.assertTrue(Math.abs(m.voorraadOp(T0 + 60_000) - GebouwType.productiePerMinuut(1)) < 1e-6, "one minute = one minute of Bouwspul");
-        helper.assertTrue(m.voorraadOp(T0 + 3_600_000) == GebouwType.molenOpslag(1), "it stops when full");
-        b.bouwspul = b.opslag() - 5;
-        Object r = b.ophalen(m.id, T0 + 3_600_000);
-        helper.assertTrue(Integer.valueOf(5).equals(r), "only what fits in the storage");
-        helper.assertTrue(b.bouwspul == b.opslag() && m.voorraad >= GebouwType.molenOpslag(1) - 5 - 1e-6, "the rest stays in the molen");
-        helper.assertTrue("erfenis.fout.vol".equals(b.kanOphalen(m.id, T0 + 3_600_000).key()), "full storage: nothing more");
+    public static void verwerkingGebruiktOpslag(GameTestHelper helper) {
+        Base b = ruim();
+        Gebouw molen = b.nieuwGebouw(GebouwType.MOLEN, 2, 53, 41, 0, T0);
+        b.bewoners = 1;
+        b.geefGoed(Goed.GRAAN, 100);
+        b.bijgewerkt = T0;
+        b.bijwerken(T0 + UUR);
+        helper.assertTrue(ongeveer(molen.inBuffer(Goed.MEEL), 20) && ongeveer(b.goed(Goed.GRAAN), 60), "1 hour at L2 (= balans L1): 20 meel from 40 graan");
+        b.bijwerken(T0 + 3 * UUR);
+        helper.assertTrue(ongeveer(molen.inBuffer(Goed.MEEL), 50) && b.goed(Goed.GRAAN) < 1e-6, "graan gone: 50 meel, then it waits");
+        // a choice the level doesn't allow yet falls back to the first recipe
+        Gebouw kaas = b.nieuwGebouw(GebouwType.KAASMAKERIJ, 2, 53, 51, 0, T0);
+        helper.assertTrue(b.kies(kaas.id, 1) != null, "kaasknabbels only from L3");
+        kaas.level = 3;
+        helper.assertTrue(b.kies(kaas.id, 1) == null && Productie.recept(kaas).uit() == Goed.KAASKNABBEL, "L3: kaasknabbels");
         helper.succeed();
     }
 
-    /** Saving and loading keep everything; the cell spiral never gives a cell twice; an NPC base keeps to its limits. */
+    /** Collecting stops at the storage room (the rest stays inside); Guhlden stop at the Hoeve's cap. */
     @GuhTest(template = "empty", batch = BATCH)
-    public static void opslaanEnCellen(GameTestHelper helper) {
+    public static void opslagEnCaps(GameTestHelper helper) {
         Base b = start();
-        b.bouwspul = 999;
-        b.verbeter(b.stadhuis().id, T0, -1);
-        Base terug = Base.load(b.save());
-        helper.assertTrue(terug != null && terug.id.equals(b.id) && terug.gebouwen.size() == b.gebouwen.size() && terug.bouwspul == b.bouwspul
-                && terug.bouw != null && terug.bouw.eind() == b.bouw.eind() && terug.stadhuisLevel() == 1, "save/load round trip");
+        b.goederen.clear();
+        Gebouw hok = b.nieuwGebouw(GebouwType.KIPPENHOK, 1, 53, 41, 0, T0);
+        hok.buffer.put(Goed.EI, 500.0);
+        helper.assertTrue(b.opslag() == Productie.HOEVE_OPSLAG, "start: only the Hoeve's room");
+        Object r = b.ophalen(hok.id, new Random(1));
+        helper.assertTrue(r instanceof Map<?, ?> m && ((Integer) m.get(Goed.EI)) == Productie.HOEVE_OPSLAG, "only what fits");
+        helper.assertTrue(ongeveer(hok.inBuffer(Goed.EI), 500 - Productie.HOEVE_OPSLAG), "the rest stays in the basket");
+        helper.assertTrue("erfenis.fout.vol".equals(b.kanOphalen(hok.id).key()), "full storage");
+        b.nieuwGebouw(GebouwType.OPSLAGSCHUUR, 2, 41, 53, 0, T0);
+        helper.assertTrue(b.opslag() == Productie.HOEVE_OPSLAG + Productie.opslagschuur(2), "an Opslagschuur adds room");
+        b.guhlden = 0;
+        helper.assertTrue(b.geefGuhlden(10_000) == 500 && b.guhlden == 500, "H1 holds 500 Guhlden");
+        helper.succeed();
+    }
+
+    /** Max level = Hoeve level; counts and locks per Hoeve level; one builder; the Hoeve's goals. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void upgradeRegels(GameTestHelper helper) {
+        Base b = start();
+        b.guhlden = 500;
+        helper.assertTrue("erfenis.fout.slot".equals(b.kanKopen(GebouwType.KONIJNENREN).key()), "konijnenren waits for Hoeve 3");
+        helper.assertTrue(b.kanKopen(GebouwType.KIPPENHOK) == null && b.prijsNieuw(GebouwType.KIPPENHOK).guhlden() == 0, "first kippenhok free");
+        helper.assertTrue(b.plaats(GebouwType.KIPPENHOK, 53, 41, 0, T0, 0) == null, "placed in the open middle");
+        helper.assertTrue("erfenis.fout.slot".equals(b.kanKopen(GebouwType.KIPPENHOK).key()), "a 2nd kippenhok waits for Hoeve 4");
+        b.bijwerken(T0 + 1);
+        helper.assertTrue("erfenis.fout.overwoekerd".equals(b.kanPlaatsen(GebouwType.GUHHUTJE, 5, 5, 0).key()), "not on overgrown land");
+        Gebouw hok = b.op(53, 41);
+        helper.assertTrue(hok != null && hok.level == 1, "built");
+        helper.assertTrue("erfenis.fout.hoeve_level".equals(b.kanVerbeteren(hok.id).key()), "L2 needs Hoeve 2");
+        // the Hoeve's goals
+        Gebouw h = b.hoeve();
+        b.goederen.put(Goed.PLANK, 100.0);
+        b.goederen.put(Goed.EI, 50.0);
+        helper.assertTrue("erfenis.fout.doel".equals(b.kanVerbeteren(h.id).key()), "goals first (1 resident, 1 order, 1 plukje)");
+        b.bewoners = 1;
+        b.bestellingen = 1;
+        b.opgeruimd[0] = true;
+        helper.assertTrue(b.kanVerbeteren(h.id) == null, "goals reached: the Hoeve may go up");
+        helper.assertTrue(b.verbeter(h.id, T0 + 10, -1) == null, "Hoeve 2 starts");
+        helper.assertTrue("erfenis.fout.bouwer".equals(b.kanKopen(GebouwType.AKKER).key()), "one builder: busy");
+        b.bijwerken(T0 + 10 + Prijzen.hoeve(2).tijdMs());
+        helper.assertTrue(b.hoeveLevel() == 2 && b.kanVerbeteren(hok.id) == null, "Hoeve 2: kippenhok L2 allowed");
+        // Hoeve 7 asks for the Loket
+        helper.assertTrue(Prijzen.doelen(7).stream().anyMatch(d -> d.soort().equals("loket")), "Hoeve 7 needs a Loket");
+        helper.succeed();
+    }
+
+    /** Builders: a 2nd from Timmerschuur L1 (two jobs at once). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void bouwers(GameTestHelper helper) {
+        Base b = ruim();
+        b.goederen.put(Goed.PLANK, 5000.0);
+        helper.assertTrue(b.bouwers() == 1, "one builder");
+        helper.assertTrue(b.plaats(GebouwType.AKKER, 53, 41, 0, T0, -1) == null, "job 1");
+        helper.assertTrue("erfenis.fout.bouwer".equals(b.kanKopen(GebouwType.BOSJE).key()), "no second job");
+        b.nieuwGebouw(GebouwType.TIMMERSCHUUR, 1, 41, 56, 0, T0);
+        helper.assertTrue(b.bouwers() == 2 && b.vrijeBouwers() == 1, "Timmerschuur: 2 builders");
+        helper.assertTrue(b.plaats(GebouwType.BOSJE, 70, 20, 0, T0, -1) == null, "job 2 with the second builder");
+        helper.assertTrue("erfenis.fout.bouwer".equals(b.kanKopen(GebouwType.GUHHUTJE).key()), "no third job");
+        helper.succeed();
+    }
+
+    /** Residents move in every 15 minutes while there is room (7.5 with a Speeltuin). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void bewonersTrekkenIn(GameTestHelper helper) {
+        Base b = ruim();
+        b.nieuwGebouw(GebouwType.GUHHUTJE, 1, 53, 41, 0, T0);
+        b.bijgewerkt = T0;
+        b.bijwerken(T0);
+        helper.assertTrue(b.maxBewoners() == 2 && b.bewoners == 0 && b.volgendeIntrek == T0 + 15 * MIN, "room for 2, first in 15 min");
+        b.bijwerken(T0 + 16 * MIN);
+        helper.assertTrue(b.bewoners == 1, "one after 15 min");
+        b.bijwerken(T0 + 5 * UUR);
+        helper.assertTrue(b.bewoners == 2 && b.volgendeIntrek == 0, "full: 2");
+        helper.assertTrue(b.momenten.contains("bewoners:2"), "moment bewoners:2");
+        b.nieuwGebouw(GebouwType.SPEELTUIN, 1, 60, 41, 0, T0);
+        b.bijwerken(T0 + 5 * UUR + 1);
+        helper.assertTrue(b.volgendeIntrek == T0 + 5 * UUR + 7 * MIN + 30_000, "a Speeltuin: 7.5 min, got " + (b.volgendeIntrek - T0));
+        helper.succeed();
+    }
+
+    /** Vadskracht: workshops at L6 speed without it, the Mammoetwei sleeps; with enough VK at the Vadsmast: full speed. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void vadskracht(GameTestHelper helper) {
+        Base b = ruim();
+        Gebouw glas = b.nieuwGebouw(GebouwType.GLASBLAZERIJ, 8, 53, 41, 0, T0);
+        Gebouw mam = b.nieuwGebouw(GebouwType.MAMMOETWEI, 2, 20, 20, 0, T0);
+        b.bewoners = 100;
+        b.geefGoed(Goed.ZAND, 140);
+        Recept r = Productie.recept(glas);
+        helper.assertTrue(ongeveer(Productie.nuPerUur(b, glas), Productie.perUur(GebouwType.GLASBLAZERIJ, r, 6)), "no VK: L6 speed");
+        helper.assertTrue(Productie.nuPerUur(b, mam) == 0, "no VK: the mammoths sleep");
+        b.vk = 500;
+        helper.assertTrue(b.vkInDorp() == 0, "no Vadsmast: nothing arrives");
+        b.nieuwGebouw(GebouwType.VADSMAST, 1, 70, 41, 0, T0);
+        helper.assertTrue(b.vkInDorp() == 40, "Vadsmast L1 takes 40");
+        helper.assertTrue(ongeveer(Productie.nuPerUur(b, glas), Productie.perUur(GebouwType.GLASBLAZERIJ, r, 8)), "8 VK: full speed");
+        helper.assertTrue(Productie.nuPerUur(b, mam) > 0, "glas 8 + mammoet 20 = 28 <= 40: the mammoths work");
+        helper.succeed();
+    }
+
+    /** Clearing: ring gating, a builder, rewards and the moments; kavels only after all 72, priced n x 600. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void opruimenEnKavels(GameTestHelper helper) {
+        Base b = start();
+        b.guhlden = 500;
+        int ring1 = -1, ring2 = -1;
+        for (int i = 0; i < Plot.PLUKJES; i++) {
+            if (Plot.ring(i) == 1 && ring1 < 0) {
+                ring1 = i;
+            }
+            if (Plot.ring(i) == 2 && ring2 < 0) {
+                ring2 = i;
+            }
+        }
+        helper.assertTrue("erfenis.fout.slot".equals(b.kanOpruimen(ring2).key()), "ring 2 waits for Hoeve 3");
+        helper.assertTrue(b.opruimen(ring1, T0, -1) == null && b.guhlden == 475, "ring 1 costs 25");
+        int voor = b.opslagGebruikt();
+        b.bijwerken(T0 + 2 * MIN);
+        helper.assertTrue(b.opgeruimd[ring1] && b.opslagGebruikt() >= voor + 10, "cleared: 10-20 wood or stone");
+        helper.assertTrue(b.momenten.contains("plukje_opgeruimd:1"), "moment plukje_opgeruimd:1");
+        int[] hoek = Plot.plukjeHoek(ring1);
+        helper.assertTrue(b.open(hoek[0], hoek[1]), "the land is open now");
+        helper.assertTrue("erfenis.fout.eerst_opruimen".equals(b.kanKavel(0).key()), "kavels after all plukjes");
+        b.allesOpen();
+        b.kavels = 0;
+        b.hoeve().level = 6;
+        b.guhlden = 5000;
+        b.goederen.put(Goed.PLANK, 100.0);
+        helper.assertTrue(b.kavelKopen(3) == null && b.guhlden == 4400, "kavel 1: 600");
+        helper.assertTrue(b.kavelKopen(5) == null && b.guhlden == 3200, "kavel 2: 1200");
+        helper.assertTrue("erfenis.fout.slot".equals(b.kanKavel(7).key()), "H6: 2 kavels");
+        // the geometry: 72 plukjes (16/24/32), 16 kavels, every tile of the plot belongs to exactly one part
+        int[] ringen = new int[4];
+        for (int i = 0; i < Plot.PLUKJES; i++) {
+            ringen[Plot.ring(i)]++;
+            int[] c = Plot.plukjeHoek(i);
+            helper.assertTrue(Plot.plukjeOp(c[0] + 3, c[1] + 5) == i, "plukje " + i + " round trip");
+        }
+        helper.assertTrue(ringen[1] == 16 && ringen[2] == 24 && ringen[3] == 32, "rings 16/24/32");
+        for (int x = 0; x < Plot.MAAT; x++) {
+            for (int z = 0; z < Plot.MAAT; z++) {
+                int delen = (Plot.inMidden(x, z) ? 1 : 0) + (Plot.plukjeOp(x, z) >= 0 ? 1 : 0) + (Plot.kavelOp(x, z) >= 0 ? 1 : 0);
+                helper.assertTrue(delen == 1, "tile " + x + "," + z + " in " + delen + " parts");
+            }
+        }
+        for (int k = 0; k < Plot.KAVELS; k++) {
+            int[] v = Plot.kavelVak(k);
+            helper.assertTrue(Plot.kavelOp(v[0] + v[2] - 1, v[1] + v[3] - 1) == k, "kavel " + k + " round trip");
+        }
+        helper.succeed();
+    }
+
+    /** The Leverkist: per material a cap per hour that saves up to 8 hours; wool exempt; village-only goods stay. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void leverkistCaps(GameTestHelper helper) {
+        Base b = ruim();
+        b.nieuwGebouw(GebouwType.OPSLAGSCHUUR, 10, 41, 56, 0, T0);
+        b.nieuwGebouw(GebouwType.OPSLAGSCHUUR, 10, 53, 41, 0, T0);
+        b.geefGoed(Goed.STAM, 3000);
+        b.geefGoed(Goed.WOL, 3000);
+        b.geefGoed(Goed.PLANK, 100);
+        helper.assertTrue(b.magNaarHuis(Goed.STAM, T0) == 8 * 150, "8 hours of 150 logs saved up");
+        helper.assertTrue(b.naarHuis(Goed.STAM, 1200, T0) instanceof Map<?, ?>, "1200 logs go home");
+        helper.assertTrue(b.kanNaarHuis(Goed.STAM, 1, T0) != null, "then the cap is used up");
+        helper.assertTrue(b.magNaarHuis(Goed.STAM, T0 + UUR) == 150, "an hour later: 150 more");
+        helper.assertTrue(b.magNaarHuis(Goed.WOL, T0) == b.heeft(Goed.WOL), "wool: no cap");
+        helper.assertTrue(!Goed.PLANK.naarHuis() && "erfenis.fout.niet_naar_huis".equals(b.kanNaarHuis(Goed.PLANK, 1, T0).key()),
+                "planks stay in the village (half-products)");
+        Object r = b.naarHuis(Goed.WOL, 70, T0);
+        helper.assertTrue(r instanceof Map<?, ?> m && Integer.valueOf(70).equals(m.get("minecraft:white_wool")), "white wool goes home finished");
+        helper.succeed();
+    }
+
+    /** Saving and loading keep everything (also buffers, choices, land, paths, the Loket, logés). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void opslaanEnLaden(GameTestHelper helper) {
+        Base b = ruim();
+        Gebouw a = b.nieuwGebouw(GebouwType.AKKER, 3, 53, 41, 1, T0);
+        a.keuze = 2;
+        a.buffer.put(Goed.WORTEL, 12.5);
+        a.palet = 3;
+        a.paletGekozen = true;
+        Gebouw w = b.nieuwGebouw(GebouwType.BOUWBLOKKENWERKPLAATS, 2, 41, 56, 0, T0);
+        w.selectie.add("guhs:pastelbaksteen_aqua");
+        b.paden[5 * Plot.MAAT + 7] = 1;
+        b.padSoorten.add("zandpaadje");
+        b.loket.put("guhs:guh_kristal", 5);
+        b.vondsten.add("roestig_sleuteltje");
+        b.opgeruimd[10] = false;
+        b.opruimen(10, T0, -1);
+        b.kavels = 0b101;
+        b.bestellingen = 7;
+        Base t = Base.load(b.save());
+        Gebouw ta = t.gebouw(a.id);
+        helper.assertTrue(ta != null && ta.keuze == 2 && ongeveer(ta.inBuffer(Goed.WORTEL), 12.5) && ta.palet == 3 && ta.paletGekozen && ta.rot == 1,
+                "building kept");
+        helper.assertTrue(t.gebouw(w.id).selectie.contains("guhs:pastelbaksteen_aqua"), "Bouwkeet choice kept");
+        helper.assertTrue(t.paden[5 * Plot.MAAT + 7] == 1 && t.padSoorten.equals(b.padSoorten), "paths kept");
+        helper.assertTrue(t.loket.equals(b.loket) && t.vondsten.equals(b.vondsten) && t.kavels == b.kavels && t.bestellingen == 7, "rest kept");
+        helper.assertTrue(t.bouwen.size() == 1 && t.bouwen.get(0).soort() == Base.Bouw.PLUKJE, "the clearing job kept");
+        helper.assertTrue(java.util.Arrays.equals(t.opgeruimd, b.opgeruimd) && t.guhlden == b.guhlden, "land and money kept");
         Set<Long> gezien = new HashSet<>();
         for (int i = 0; i < 400; i++) {
             int[] c = Plot.spiraal(i);
             helper.assertTrue(gezien.add(Plot.sleutel(c[0], c[1])), "spiral cell " + i + " given twice");
-            helper.assertTrue(Math.abs(c[0]) <= 10 && Math.abs(c[1]) <= 10, "spiral stays compact");
         }
-        for (int th = 1; th <= GebouwType.MAX_STADHUIS; th++) {
-            Base npc = Base.npc(UUID.randomUUID(), "Knabbeldorp", 3, 4, th, 42L + th, T0);
-            helper.assertTrue(npc.stadhuisLevel() == th, "npc stadhuis level");
+        helper.succeed();
+    }
+
+    /** The Hoeve's moments; Verven within the unlocked palettes; NPC villages keep to their limits. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void momentenEnVerven(GameTestHelper helper) {
+        Base b = ruim();
+        b.hoeve().level = 3;
+        b.bewoners = 99;
+        b.bestellingen = 99;
+        b.goederen.put(Goed.PLANK, 200.0);
+        b.goederen.put(Goed.BAKSTEEN, 100.0);
+        b.goederen.put(Goed.MEEL, 50.0);
+        b.goederen.put(Goed.STOF, 50.0);
+        b.nieuwGebouw(GebouwType.KIPPENHOK, 1, 53, 41, 0, T0);
+        b.nieuwGebouw(GebouwType.SCHAAPSKOOI, 1, 20, 20, 0, T0);
+        b.nieuwGebouw(GebouwType.KOEIENSTAL, 1, 70, 20, 0, T0);
+        helper.assertTrue(b.verbeter(b.hoeve().id, T0, 0) == null, "Hoeve 4 starts");
+        b.bijwerken(T0 + 1);
+        helper.assertTrue(b.momenten.contains("hoeve_level:4") && b.momenten.contains("gebouw_level:hoeve:4"), "moments fired");
+        helper.assertTrue(b.maxPalet() == 2, "Hoeve 4: palettes T1-T2");
+        helper.assertTrue(b.verf(-1, 2) == null && b.gebouwen.stream().allMatch(g -> g.palet == 2), "the whole village in T2");
+        helper.assertTrue("erfenis.fout.palet".equals(b.kanVerven(b.hoeve().id, 3).key()), "T3 not yet");
+        for (int h = 1; h <= GebouwType.MAX_HOEVE; h++) {
+            Base npc = Base.npc(UUID.randomUUID(), "Knabbeldorp", 3, 4, h, 42L + h, T0);
+            helper.assertTrue(npc.hoeveLevel() == h, "npc hoeve level");
             for (GebouwType t : GebouwType.values()) {
-                helper.assertTrue(npc.aantal(t) <= Math.max(1, t.maxAantal(th)), "npc " + t.id + " over its limit at " + th);
+                helper.assertTrue(npc.aantal(t) <= Math.max(1, t.maxAantal(h)), "npc " + t.id + " over its limit at " + h);
             }
             for (Gebouw g : npc.gebouwen) {
-                helper.assertTrue(npc.binnen(g.x, g.z, g.type.maat) && npc.vrij(g.x, g.z, g.type.maat, g.id), "npc building overlaps or sticks out");
+                helper.assertTrue(npc.vrij(g.x, g.z, g.b(), g.d(), g.id), "npc building overlaps or sticks out");
             }
         }
         helper.succeed();
     }
 
-    /** Stamping a stadhuis puts its level's material in the world; moving clears the old spot; an upgrade shows scaffolding. */
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
-    public static void stempelEnVerplaats(GameTestHelper helper) {
-        ServerLevel level = helper.getLevel();
-        BlockPos o = helper.absolutePos(new BlockPos(1, 0, 1)).offset(-30, 0, -30);   // (so the stadhuis at 30,30 lands in the test area)
-        Base b = start();
-        Gebouw sh = b.stadhuis();
-        Stempel.gebouw(level, o, b, sh);
-        BlockPos hoek = o.offset(sh.x, 1, sh.z);
-        helper.assertTrue(level.getBlockState(hoek).is(Blocks.OAK_LOG), "level 1: an oak corner");
-        helper.assertTrue(level.getBlockState(o.offset(sh.x + 1, 1, sh.z)).is(Blocks.OAK_PLANKS), "level 1: oak walls");
-        sh.level = 3;
-        Stempel.gebouw(level, o, b, sh);
-        helper.assertTrue(level.getBlockState(o.offset(sh.x + 1, 1, sh.z)).is(Blocks.IRON_BLOCK), "level 3: iron walls");
-        b.bouwspul = 10_000;
-        b.verbeter(sh.id, T0, -1);
-        Stempel.gebouw(level, o, b, sh);
-        helper.assertTrue(level.getBlockState(hoek).is(Blocks.SCAFFOLDING), "an upgrade shows scaffolding");
-        b.afronden(Long.MAX_VALUE);
-        int ox = sh.x, oz = sh.z;
-        sh.x = ox - 3;
-        Stempel.wis(level, o, ox, oz, sh.type.maat);
-        Stempel.gebouw(level, o, b, sh);
-        helper.assertTrue(level.getBlockState(o.offset(ox + 4, 1, oz)).isAir(), "the old spot is empty again");
-        helper.assertTrue(level.getBlockState(o.offset(ox + 4, 0, oz)).is(Blocks.GRASS_BLOCK), "with grass under it");
-        helper.assertTrue(level.getBlockState(o.offset(sh.x + 1, 1, sh.z)).is(Blocks.GOLD_BLOCK), "level 4 gold at the new spot");
+    /** The Bouwkeet sets (from the registry) and a workshop's selection. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void bouwkeetSets(GameTestHelper helper) {
+        List<List<String>> sets = Bouwkeet.sets();
+        helper.assertTrue(sets.size() == 5 && sets.get(0).size() >= 16 && sets.get(0).contains(Bouwkeet.STANDAARD), "set 1: pastel bricks + wood, got "
+                + Bouwkeet.grootte());
+        for (List<String> s : sets) {
+            helper.assertTrue(!s.isEmpty(), "every set has blocks: " + Bouwkeet.grootte());
+        }
+        Base b = ruim();
+        Gebouw w = b.nieuwGebouw(GebouwType.BOUWBLOKKENWERKPLAATS, 1, 53, 41, 0, T0);
+        helper.assertTrue(b.selectie(w.id, List.of(sets.get(1).get(0))) != null, "L1: no plaster yet");
+        helper.assertTrue(b.selectie(w.id, List.of(sets.get(0).get(0), sets.get(0).get(1))) == null && w.selectie.size() == 2, "a mix of two");
+        w.buffer.put(Goed.BOUWBLOK, 10.0);
+        b.ophalen(w.id, new Random(3));
+        int som = b.bouwblokSoorten.values().stream().mapToInt(Integer::intValue).sum();
+        helper.assertTrue(som == 10 && b.bouwblokSoorten.keySet().stream().allMatch(w.selectie::contains), "10 blocks of the chosen kinds");
         helper.succeed();
     }
 
-    /** Phase 2: an NPC base in a GIVEN cell; the player spiral skips it; growing replaces the buildings in place. */
-    @GuhTest(template = "empty", batch = BATCH)
-    public static void npcBaseOpEigenCel(GameTestHelper helper) {
-        ErfenisData d = new ErfenisData();
-        UUID dorp = UUID.randomUUID();
-        java.util.List<Base.Plan> klein = java.util.List.of(new Base.Plan(GebouwType.STADHUIS, 1, 30, 30, 0), new Base.Plan(GebouwType.MOLEN, 1, 10, 10, 0));
-        Base n = d.npcBase(dorp, "Testdorp", 1, 0, klein, T0);
-        helper.assertTrue(n != null && n.npc && n.cx == 1 && n.cz == 0 && n.gebouwen.size() == 2, "the NPC base stands in its own cell");
-        helper.assertTrue(n.bouwspul <= n.opslag(), "its Bouwspul fits its storage");
-        Base a = d.vanSpeler(UUID.randomUUID(), "A", T0), b = d.vanSpeler(UUID.randomUUID(), "B", T0);
-        helper.assertTrue(a.cx == 0 && a.cz == 0, "the first player gets (0,0)");
-        helper.assertFalse(b.cx == 1 && b.cz == 0, "the second player skips the NPC cell");
-        helper.assertTrue(d.npcBase(UUID.randomUUID(), "Indringer", 0, 0, klein, T0) == null, "a taken cell is refused");
-        helper.assertTrue(d.npcBase(a.id, "Kaper", 0, 0, klein, T0) == null, "a player's base is never replaced");
-        n.moetStempelen = false;
-        java.util.List<Base.Plan> groot = new java.util.ArrayList<>(klein);
-        groot.add(new Base.Plan(GebouwType.BOOMPJE, 1, 40, 40, 0));
-        groot.add(new Base.Plan(GebouwType.MOLEN, 1, 31, 31, 0));   // (overlaps the stadhuis: skipped)
-        Base n2 = d.npcBase(dorp, "Testdorp", 1, 0, groot, T0 + 5);
-        helper.assertTrue(n2 == n && n.gebouwen.size() == 3 && n.moetStempelen, "the same object, new buildings, stamp again");
-        helper.assertTrue(d.bezetteCellen().contains(Plot.sleutel(1, 0)) && d.bezetteCellen().size() == 3, "three cells taken");
+    /** Stamping one building puts blocks in its footprint (the stand-in shapes until the vormen merge). */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
+    public static void stempelGebouw(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Base b = ruim();
+        Gebouw m = b.nieuwGebouw(GebouwType.VADSMAST, 1, 1, 1, 0, T0);
+        BlockPos o = helper.absolutePos(new BlockPos(0, 0, 0)).offset(-1, 0, -1);
+        Stempel.gebouw(level, o, b, m);
+        boolean iets = false;
+        for (int x = 0; x < m.b(); x++) {
+            for (int z = 0; z < m.d(); z++) {
+                iets |= !level.getBlockState(o.offset(m.x + x, 1, m.z + z)).isAir();
+            }
+        }
+        helper.assertTrue(iets, "the vadsmast's footprint has blocks");
         helper.succeed();
     }
 }

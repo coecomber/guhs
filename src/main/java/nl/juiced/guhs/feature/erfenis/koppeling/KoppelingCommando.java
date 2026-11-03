@@ -88,7 +88,7 @@ final class KoppelingCommando {
                         })))
                 .then(Commands.literal("dorpszender").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS)).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
-                    int vk = ErfenisVadskracht.beschikbaar(c.getSource().getServer(), p.getUUID());
+                    int vk = ErfenisVadskracht.huidig().beschikbaar(c.getSource().getServer(), p.getUUID());
                     c.getSource().sendSuccess(() -> Component.translatable("erfenis.koppeling.cmd.dorpszender", vk), false);
                     return 1;
                 }))
