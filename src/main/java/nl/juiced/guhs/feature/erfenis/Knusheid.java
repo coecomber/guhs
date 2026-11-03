@@ -46,6 +46,11 @@ public final class Knusheid {
         return Paden.tegels(b) / 10;
     }
 
+    /** The deco part: the pieces plus the Kaartjesbord's postcards (afwerking), so the three parts add up to the total. */
+    public static int deco(Base b) {
+        return Math.max(0, b.knusheid() - gebouwen(b) - paden(b));
+    }
+
     /** The next milestone above {@code k}, or -1. */
     public static int volgende(int k) {
         for (int m : MIJLPALEN) {

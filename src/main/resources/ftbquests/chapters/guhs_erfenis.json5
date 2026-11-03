@@ -2634,7 +2634,7 @@
         {
           type: "stat",
           stat: "guhs:erfenis_ansichtkaarten",
-          value: 3,
+          value: 8,
           id: "475548DE74DDBDF4",
         },
       ],

@@ -906,7 +906,7 @@ public final class OverzichtScherm extends Screen {
         List<Component> tip = new ArrayList<>();
         tip.add(Component.translatable("erfenis.ui.knusheid").withStyle(ChatFormatting.BOLD));
         tip.add(Component.translatable("erfenis.ui.knus_uitleg").withColor(Teken.ZACHT));
-        tip.add(Component.translatable("erfenis.decowinkel.knus_delen", Knusheid.gebouwen(b), Knusheid.paden(b), b.knusDeco));
+        tip.add(Component.translatable("erfenis.decowinkel.knus_delen", Knusheid.gebouwen(b), Knusheid.paden(b), Knusheid.deco(b)));
         int v = Knusheid.volgende(Math.max(b.knusRecord, b.knusheid()));
         if (v > 0) {
             tip.add(Component.translatable("erfenis.decowinkel.knus_volgende", Ui.getal(v)).withColor(Teken.GROEN_DONKER));

@@ -261,8 +261,8 @@ def ftb(fq):
       [adv("erfenis_vondst")], rewards=((K, 16),))
     q("erfenis_bedankje", "Een bedankje van de buren", "Soms stuurt een buurdorpje na een bestelling een &ddecostukje&r als "
       "bedankje. Krijg er een!", "minecraft:poppy", [adv("erfenis_bedankje")], rewards=((K, 16),))
-    q("erfenis_kaartjes", "Groetjes van de makelaar", "Vind de &e3 ansichtkaarten&r van makelaar Guhrrit onder de plukjes. Ze komen op "
-      "het kaartjesbord.", "minecraft:paper", [st("erfenis_ansichtkaarten", 3)], rewards=((DB, 1),))
+    q("erfenis_kaartjes", "Groetjes van de makelaar", "Verzamel alle &e8 ansichtkaarten&r van makelaar Guhrrit: 3 onder de plukjes, 5 "
+      "stuurt hij per Postguh vanaf zijn vakantie (Hoeve 3 t/m 7). Ze komen op het kaartjesbord.", "minecraft:paper", [st("erfenis_ansichtkaarten", 8)], rewards=((DB, 1),))
     q("erfenis_fontein", "Spuitguh", "Zet de &dSpuitguh-fontein&r in je dorp (decowinkel, vanaf Hoeve 6). Pfffft!", "minecraft:water_bucket",
       [adv("erfenis_fontein")], rewards=((K, 16),))
     q("erfenis_knus_1000", "Heel knus", "&e1.000 Knusheid&r: gebouwen, paadjes en deco.", "minecraft:pink_tulip",

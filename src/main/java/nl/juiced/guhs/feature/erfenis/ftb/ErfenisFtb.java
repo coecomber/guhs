@@ -59,7 +59,8 @@ public final class ErfenisFtb {
     /** A good that has been made at least once ticks off this quest. */
     static final Map<Goed, String> GEMAAKT = new EnumMap<>(Goed.class);
     /** The deco pieces a neighbour village sends after an order (kaart.Bestellingen.DECO + STER_DECO). */
-    static final Set<String> BEDANKJES = Set.of("mika_schrik", "knabbelbessenstruik", "de_eerste_knabbel", "kaassausfonteintje", "mammoetje_van_heg");
+    static final Set<String> BEDANKJES = Set.of("mika_schrik", "knabbelbessenstruik", "de_eerste_knabbel", "kaassausfonteintje", "mammoetje_van_heg")
+            .stream().map(nl.juiced.guhs.feature.erfenis.ErfenisDeco::vorm).collect(java.util.stream.Collectors.toUnmodifiableSet());   // (stored under the vormen ids)
     /** What goes home and counts as "bouwspul" for the quest Bouwpakket (all capped). */
     static final List<Goed> BOUWSPUL = List.of(Goed.STAM, Goed.KLEI, Goed.ZAND, Goed.GLASSCHERF, Goed.BOUWBLOK);
 
