@@ -65,3 +65,6 @@ desktop.ini
 .claude/
 
 # Kept on purpose (do not ignore): blockbench/ (model sources), tools/ (generators), docs/wiki/ + docs/screenshots/ (wiki sources)
+
+# Vadsrijk map generator cache
+tools/vadsrijk/_cache/

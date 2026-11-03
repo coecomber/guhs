@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "RAR",
+    "AEA",
+    "RAR"
+  ],
+  "key": {
+    "R": "guhs:roze_knuffelsteen",
+    "A": "minecraft:amethyst_shard",
+    "E": "minecraft:ender_pearl"
+  },
+  "result": {
+    "id": "guhs:vr_w_poortsteen",
+    "count": 8
+  }
+}
