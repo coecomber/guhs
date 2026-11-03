@@ -633,6 +633,19 @@ public enum GuhClothes {
     /** A round white space helmet with a see-through visor (the circuit helmet bones). */
     ASTRONAUTENHELM(Slot.HEAD, "outfit_circuit_helm", "outfit_circuit_helm_vizier"),
     // </raket>
+    // 1.10.0 Het Vadsrijk, economie slice (tools/features/vadsrijk_economie.py): cosmetics bought with Vadsmunten, delivered home; existing bones
+    // <vadsrijk_economie>
+    /** A little silver knight's helmet with a pink plume stripe (the helmet bones). */
+    VR_ITEM_RIDDERHELMPJE(Slot.HEAD, "outfit_helmet"),
+    /** A red mushroom cap with white dots (the rain hat bones). */
+    VR_ITEM_ZWAMMENHOEDJE(Slot.HEAD, "outfit_rain_hat"),
+    /** Koning Klodder's wobbly slime crown in miniature (the crown bones). */
+    VR_ITEM_KLODDERKROONTJE(Slot.HEAD, "outfit_crown"),
+    /** The order's pink knight cape with a golden guh crest (the cape bones). */
+    VR_ITEM_RIDDERCAPE(Slot.BODY, "outfit_cape"),
+    /** A striped pink-gold Vadsrijk scarf (the scarf bones). */
+    VR_ITEM_VADSRIJKSJAAL(Slot.NECK, "outfit_scarf"),
+    // </vadsrijk_economie>
     ;
 
     /**

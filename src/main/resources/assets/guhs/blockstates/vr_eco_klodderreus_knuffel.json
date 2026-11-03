@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/vr_eco_klodderreus_knuffel"
+    },
+    "facing=east": {
+      "model": "guhs:block/vr_eco_klodderreus_knuffel",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/vr_eco_klodderreus_knuffel",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/vr_eco_klodderreus_knuffel",
+      "y": 270
+    }
+  }
+}

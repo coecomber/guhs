@@ -1,0 +1,177 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "pluche": "guhs:block/vadsrijk/economie/pluche",
+    "pluche_gezicht": "guhs:block/vadsrijk/economie/pluche_gezicht",
+    "slijm": "guhs:block/vadsrijk/economie/slijm",
+    "particle": "guhs:block/vadsrijk/economie/pluche"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        10,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pluche_gezicht",
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#pluche"
+        },
+        "east": {
+          "texture": "#pluche"
+        },
+        "west": {
+          "texture": "#pluche"
+        },
+        "up": {
+          "texture": "#pluche"
+        },
+        "down": {
+          "texture": "#pluche"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        10,
+        3
+      ],
+      "to": [
+        13,
+        12,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pluche"
+        },
+        "south": {
+          "texture": "#pluche"
+        },
+        "east": {
+          "texture": "#pluche"
+        },
+        "west": {
+          "texture": "#pluche"
+        },
+        "up": {
+          "texture": "#pluche"
+        },
+        "down": {
+          "texture": "#pluche"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        12,
+        6
+      ],
+      "to": [
+        5,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pluche"
+        },
+        "south": {
+          "texture": "#pluche"
+        },
+        "east": {
+          "texture": "#pluche"
+        },
+        "west": {
+          "texture": "#pluche"
+        },
+        "up": {
+          "texture": "#pluche"
+        },
+        "down": {
+          "texture": "#pluche"
+        }
+      }
+    },
+    {
+      "from": [
+        11,
+        12,
+        6
+      ],
+      "to": [
+        13,
+        14,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#pluche"
+        },
+        "south": {
+          "texture": "#pluche"
+        },
+        "east": {
+          "texture": "#pluche"
+        },
+        "west": {
+          "texture": "#pluche"
+        },
+        "up": {
+          "texture": "#pluche"
+        },
+        "down": {
+          "texture": "#pluche"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        3,
+        1.5
+      ],
+      "to": [
+        10,
+        6,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#slijm"
+        },
+        "south": {
+          "texture": "#slijm"
+        },
+        "east": {
+          "texture": "#slijm"
+        },
+        "west": {
+          "texture": "#slijm"
+        },
+        "up": {
+          "texture": "#slijm"
+        },
+        "down": {
+          "texture": "#slijm"
+        }
+      }
+    }
+  ]
+}
