@@ -140,11 +140,6 @@ Gametests: `gradlew runGameTestServer -Pgt=ErfenisGameTests` (via `gradle_slot.s
   demodorp, panelen kippenhok/Hoeve/molen/werkplaats, vensters opslag/naar huis/loket/bouwkeet/pension: alles netjes).
   Daarna gerepareerd zonder nieuwe client-run (regel gebruiker: geen client): `ui camera x,z,afstand` faalde (argument
   met komma's → nu greedyString), demo zette 24 bewoners bij plek voor 18 (nu begrensd), uitleg in het paneel 6 regels.
-  **Nog te doen met AutoCheck zodra het weer mag:** het script opnieuw draaien en opk_04 (camera) + opk_05..09 bekijken.
+  Daarna opnieuw gedraaid: geen mislukte commando's; opk_04 (camera op het demodorp, 18/18 bewoners) en opk_07 (akker
+  met volledige uitleg) bekeken: in orde.
 - Itemnamen in het loket staan in de client-taal (Engels in AutoCheck); dat zijn de bestaande item-vertalingen.
-
-## STAND BIJ PAUZE 2 (WIP-commit "WIP 190-opk: pauze 2")
-
-- Laatste fixes (camera-argument, demo-bewoners, 6 uitlegregels) zitten erin; gametests daarna opnieuw: alles groen
-  (14:22, "All 20 required tests passed").
-- **Resterend na resume:** alleen nog de AutoCheck-herhaling (zodra clients weer mogen) en de eindcommit + rapport.
