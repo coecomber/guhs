@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=true": {
+      "model": "guhs:block/vr_baas_lichtzwam_aan"
+    },
+    "lit=false": {
+      "model": "guhs:block/vr_baas_lichtzwam_uit"
+    }
+  }
+}
