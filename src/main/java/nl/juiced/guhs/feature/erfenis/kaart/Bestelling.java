@@ -105,9 +105,11 @@ public final class Bestelling {
             maxN = maxN * 3 / 4;
         }
         // the kinds: one of this tier's own goods first (from T2 on), the rest from everything up to this tier
-        List<BestelGoed> pot = BestelGoed.totTier(tier), gekozen = new ArrayList<>();
+        // (only goods worth enough per piece, so the wanted value fits in the tier's number of goods: no 300 planks at T4)
+        double minWaarde = waarde / (maxN * 1.5);
+        List<BestelGoed> pot = duur(BestelGoed.totTier(tier), minWaarde, soorten), gekozen = new ArrayList<>();
         if (tier > 1) {
-            List<BestelGoed> eigen = BestelGoed.vanTier(tier);
+            List<BestelGoed> eigen = duur(BestelGoed.vanTier(tier), minWaarde, 1);
             gekozen.add(eigen.get(rng.nextInt(eigen.size())));
         }
         while (gekozen.size() < soorten && gekozen.size() < pot.size()) {
@@ -154,6 +156,17 @@ public final class Bestelling {
         }
         beloning = Math.max(5, (int) Math.round(echteWaarde * factor() / 5.0) * 5);
         reden = rng.nextInt(ster ? STER_REDENEN : REDENEN);
+    }
+
+    /** The goods worth at least {@code min} each; when fewer than {@code nodig} are left, all of them. */
+    private static List<BestelGoed> duur(List<BestelGoed> l, double min, int nodig) {
+        List<BestelGoed> r = new ArrayList<>();
+        for (BestelGoed g : l) {
+            if (g.waarde >= min) {
+                r.add(g);
+            }
+        }
+        return r.size() >= nodig ? r : l;
     }
 
     /** A friendly number: above 20 a multiple of 5. */

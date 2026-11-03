@@ -92,11 +92,11 @@ Branch `190-opk-kaart`. Alles in `feature/erfenis/kaart/**` + `tools/features/er
   diens dorp kiezen -> "Handje helpen".
 - Gametests: `gradlew runGameTestServer -Pgt=erfenis_kaart` (7 tests). AutoCheck: `tools/autocheck/190_opk_kaart.txt`.
 
-## PAUZE (2026-11-03 ~13:15) — waar ik ben
-- Alles hierboven is geschreven en compileert (`compileJava` groen).
-- Gametests (`-Pgt=KaartGameTests,ErfenisGameTests`): 13 van 14 groen. Rood: `bestellingenEnBeloningen` —
-  "T4 equal orders pay about balans 4 (346)": T4/T5-bestellingen betalen te weinig, omdat de max-stuks-klem (MAX_N 50/60)
-  bij goedkope goederen (plank 0,3, steen/zand 0,5) de waarde omlaag duwt. Fix-idee: goedkope goederen (< 1) in T4/T5 weren
-  of hun gewicht verlagen, of eerst de dure eigen-tier-goederen vullen. Daarna opnieuw de gametests.
-- Nog te doen: die fix; AutoCheck `tools/autocheck/190_opk_kaart.txt` draaien en de screenshots bekijken (kaart met karretjes,
-  bestelscherm) en zo nodig layout bijwerken; definitieve commit (deze is WIP).
+## PAUZE 2 (2026-11-03 ~14:25): waar ik ben
+- Compileert. Gametests `-Pgt=KaartGameTests,ErfenisGameTests`: alle 14 groen (14:21).
+- T4/T5-betaling is gerepareerd: een bestelling kiest alleen goederen die per stuk genoeg waard zijn
+  (`Bestelling.duur`, min = waarde / (maxN x 1,5)), dus geen honderden planken meer bij T4/T5.
+- Nog te doen: AutoCheck `tools/autocheck/190_opk_kaart.txt` draaien (UITGESTELD: de gebruiker wil nu geen client) en de
+  screenshots bekijken (kaart met karretjes en badges, bestelscherm leeg/vol, paneel van een buur), daarna de layout
+  bijwerken waar nodig en de definitieve commit maken.
+- Test `zelfdeRegelsAlsDeKern` is al weg (de kern heeft de POC-nummers veranderd); de lead lijnt dat uit bij de merge.
