@@ -83,13 +83,10 @@ AutoCheck: `tools/autocheck/190_koppeling.txt`. Gametests: `KoppelingGameTests` 
   ernaast met Guhdraad), rechtsklik om te zetten, `/guhs erfenis dorpszender` = wat er in je dorp aankomt.
 - `/guhs erfenis decobon` = je Decobonnen.
 
-## Stand bij de PAUZE (WIP-commit)
+## Stand (klaar)
 
-- Klaar: alle code + resources hierboven. compileJava groen; gametests `-Pgt=KoppelingGameTests,ErfenisGameTests`:
-  13/13 groen (6 van koppeling). AutoCheck run 1 (`tools/autocheck/190_koppeling.txt`) bekeken: hekje, leverkist (vlag
-  op/neer), dorpszender, Postguh en reis heen/terug zijn in orde.
-- Open: in run 1 opende het briefscherm niet, omdat de rechtsklik op de Postguh viel die nog voor je stond. Het script
-  wacht nu 110 ticks na de Postguh-shot (al aangepast), maar de herhaling is NIET gedraaid (gestopt voordat hij het
-  gradle-slot kreeg).
-- Volgende stap: AutoCheck opnieuw draaien, de shots koppeling_brief_aanbod/_verkocht bekijken (tekst past in 310x200?),
-  en daarna de gewone commit (geen WIP).
+- compileJava groen; gametests `-Pgt=KoppelingGameTests,ErfenisGameTests`: 13/13 groen (6 van koppeling).
+- AutoCheck `tools/autocheck/190_koppeling.txt` bekeken: blokken in de wereld (hekje voor/zij/doorgang, Leverkist vlag
+  neer/op, Dorpszender slaapt/werkt), Postguh met de brief, briefscherm (aanbod en VERKOCHT, tekst past; layout van de
+  onderkant en de knop "Extra hekje: 1 knabbel" na de check verbeterd), kopen geeft hekje + Leverkist, door het hekje
+  naar de erfenis en terug voor het hekje.

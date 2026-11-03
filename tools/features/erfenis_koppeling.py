@@ -61,7 +61,7 @@ TEKSTEN = {
     K + "brief.stempel_rapport": "BOUWKUNDIG RAPPORT: VADS",
     K + "brief.stempel_verkocht": "VERKOCHT! (voor 1 knabbel)",
     K + "brief.knop_koop": "Kopen voor 1 kaasknabbel",
-    K + "brief.knop_extra": "Extra Erfhekje (1 kaasknabbel)",
+    K + "brief.knop_extra": "Extra hekje: 1 knabbel",
     K + "brief.knop_later": "Nog even niet",
     K + "brief.knabbels": "Jij hebt %s kaasknabbels",
     K + "brief.geen_knabbel": "Je hebt geen kaasknabbel bij je, njeg! Guhrrit doet het echt niet voor minder.",

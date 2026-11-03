@@ -17,7 +17,7 @@ import nl.juiced.guhs.feature.erfenis.koppeling.KoppelingPayloads;
  * "Extra Erfhekje (1 kaasknabbel)".
  */
 public class MakelaarsbriefScherm extends Screen {
-    private static final int W = 310, H = 200;
+    private static final int W = 310, H = 226;
     private static final int PAPIER = 0xFFFFF6DC, RAND = 0xFFC9A46A, INKT = 0xFF4A3424, DOF = 0xFF9A8060, ROZE = 0xFFE0629E,
             ROOD = 0xFFC8423C, GROEN = 0xFF4E9A52;
 
@@ -55,7 +55,7 @@ public class MakelaarsbriefScherm extends Screen {
         super.extractBackground(g, mouseX, mouseY, partialTick);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, RAND);
         g.fill(left, top, left + W, top + H, PAPIER);
-        for (int y = top + 44; y < top + H - 30; y += 10) {
+        for (int y = top + 44; y < top + H - 46; y += 10) {
             g.fill(left + 12, y + 9, left + W - 12, y + 10, 0x30A08050);   // (ruled paper)
         }
         // the letterhead: "Makelaardij Guhrrit & Zn."
@@ -70,14 +70,14 @@ public class MakelaarsbriefScherm extends Screen {
         List<FormattedCharSequence> regels = font.split(Component.translatable("erfenis.koppeling.brief.tekst"), W - 28);
         int y = top + 46;
         for (FormattedCharSequence r : regels) {
-            if (y > top + H - 34) {
+            if (y > top + H - 52) {
                 break;
             }
             g.text(font, r, left + 14, y, INKT, false);
             y += 10;
         }
         Component groet = Component.translatable("erfenis.koppeling.brief.groet").withStyle(ChatFormatting.ITALIC);
-        g.text(font, groet, left + W - 14 - font.width(groet), top + H - 22, INKT, false);
+        g.text(font, groet, left + W - 14 - font.width(groet), top + H - 40, INKT, false);
         // the stamp: the report (red, a bit crooked: two lines) or SOLD (green)
         Component stempel = Component.translatable(gekocht ? "erfenis.koppeling.brief.stempel_verkocht" : "erfenis.koppeling.brief.stempel_rapport");
         int sw = font.width(stempel) + 10, sx = left + 14, sy = top + H - 26;
@@ -85,8 +85,8 @@ public class MakelaarsbriefScherm extends Screen {
         g.fill(sx - 1, sy - 1, sx + sw + 1, sy + 13, kleur);
         g.fill(sx, sy, sx + sw, sy + 12, PAPIER);
         g.text(font, stempel, sx + 5, sy + 2, kleur, false);
-        g.text(font, Component.translatable("erfenis.koppeling.brief.knabbels", knabbels), left + W - 14 - font.width(
-                Component.translatable("erfenis.koppeling.brief.knabbels", knabbels)), top + H - 34, DOF, false);
+        Component tel = Component.translatable("erfenis.koppeling.brief.knabbels", knabbels);
+        g.text(font, tel, left + W - 14 - font.width(tel), top + H - 22, DOF, false);
     }
 
     @Override
