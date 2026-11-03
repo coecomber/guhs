@@ -70,3 +70,12 @@ Branch `110-vr-economie`, package `feature/vadsrijk/economie`, generator `tools/
 
 ## Resume point
 All features built, compiled, gametests `-Pgt=VadsrijkEconomie` (see TESTEN_ECONOMIE.md). Nothing pending except tuning.
+
+## Test results (2026-11-04)
+- `runGameTestServer -Pgt=VadsrijkEconomie`: all passed (stars/never-permanent-loss incl. 300 real smid attempts, market atomicity,
+  trade two-sided confirm + tamper re-validation, mount xp).
+- AutoCheck (`-PautocheckScript=tools/autocheck/vadsrijk_economie.txt`, once): winkel/cosmetica/uitrusting/smid/markt/stal screens
+  render (pink, readable); modelcheck shows no missing model/texture for economie ids (the listed problems are other features':
+  droombed, bliksemsmidse_onweerswolkje, guhmon_badgedoos). NOT verified visually: the mount models and deco blocks in the world
+  (the autocheck player stood in the void, setblock "out of this world") - check them in the dev client.
+- Summoned mounts without an owner (creative /summon) now stay as decoration; whistled ones still poof after a reload.

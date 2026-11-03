@@ -30,6 +30,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 
@@ -149,7 +150,10 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
         if (level().isClientSide()) {
             return;
         }
-        if (geladen || !Vadsrijk.in(this) || eigenaar == null) {
+        if (eigenaar == null && !geladen) {
+            return;   // (a summoned one without an owner: just stands there and looks cute; creative/screenshots)
+        }
+        if (geladen || !Vadsrijk.in(this)) {
             Rijdieren.poef(this);
             return;
         }
@@ -207,9 +211,16 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
+    protected void addAdditionalSaveData(ValueOutput tag) {
+        super.addAdditionalSaveData(tag);
+        tag.putBoolean("Gefloten", eigenaar != null);
+    }
+
+    @Override
     protected void readAdditionalSaveData(ValueInput tag) {
         super.readAdditionalSaveData(tag);
-        geladen = true;   // never kept over a restart / chunk reload: the rijfluitje brings a new one
+        // a whistled mount is never kept over a restart / chunk reload: the rijfluitje brings a new one
+        geladen = tag.getBooleanOr("Gefloten", false);
     }
 
     // ---- GeckoLib ---------------------------------------------------------------------------------------------------------------
