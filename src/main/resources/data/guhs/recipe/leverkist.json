@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " K ",
+    "WCW",
+    "PPP"
+  ],
+  "key": {
+    "K": "guhs:kaas_knabbels",
+    "W": "minecraft:pink_wool",
+    "C": "minecraft:chest",
+    "P": "#minecraft:planks"
+  },
+  "result": {
+    "id": "guhs:leverkist",
+    "count": 1
+  }
+}

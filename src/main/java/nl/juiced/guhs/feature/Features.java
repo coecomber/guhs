@@ -203,6 +203,7 @@ public final class Features {
         nl.juiced.guhs.feature.erfenis.ErfenisFeature.register(modBus);   // 1.9 POC: De Erfenis (own base, overview, plots dimension)
         nl.juiced.guhs.feature.erfenis.kaart.KaartFeature.register(modBus);   // 1.9 POC: De Erfenis, de wereldkaart + levende NPC-dorpjes
         nl.juiced.guhs.feature.erfenis.vorm.VormenFeature.register();   // 1.9 "Een opknapper!": de gebouwvormen uit de renders (+ /guhs erfenis vorm)
+        nl.juiced.guhs.feature.erfenis.koppeling.KoppelingFeature.register(modBus);   // 1.9 Een opknapper!: koppeling (brief, Erfhekje, Leverkist, Dorpszender; payloads inside)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

@@ -1,0 +1,200 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/leverkist_zij",
+    "zij": "guhs:block/leverkist_zij",
+    "voor": "guhs:block/leverkist_voor",
+    "boven": "guhs:block/leverkist_boven",
+    "onder": "guhs:block/leverkist_onder",
+    "vlag": "guhs:block/leverkist_vlag"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        1
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#voor",
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#zij",
+          "uv": [
+            1,
+            3,
+            15,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#boven",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ]
+        },
+        "down": {
+          "texture": "#onder",
+          "uv": [
+            1,
+            1,
+            15,
+            15
+          ],
+          "cullface": "down"
+        }
+      }
+    },
+    {
+      "from": [
+        12.5,
+        13,
+        12.5
+      ],
+      "to": [
+        13.5,
+        23,
+        13.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            1,
+            10
+          ]
+        },
+        "south": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            1,
+            10
+          ]
+        },
+        "west": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            1,
+            10
+          ]
+        },
+        "east": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            1,
+            10
+          ]
+        },
+        "up": {
+          "texture": "#vlag",
+          "uv": [
+            0,
+            0,
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        14,
+        12.75
+      ],
+      "to": [
+        12.5,
+        17.5,
+        13.25
+      ],
+      "faces": {
+        "north": {
+          "texture": "#vlag",
+          "uv": [
+            2,
+            4,
+            12,
+            12
+          ]
+        },
+        "south": {
+          "texture": "#vlag",
+          "uv": [
+            12,
+            4,
+            2,
+            12
+          ]
+        },
+        "west": {
+          "texture": "#vlag",
+          "uv": [
+            2,
+            4,
+            3,
+            12
+          ]
+        },
+        "up": {
+          "texture": "#vlag",
+          "uv": [
+            2,
+            4,
+            12,
+            5
+          ]
+        },
+        "down": {
+          "texture": "#vlag",
+          "uv": [
+            2,
+            4,
+            12,
+            5
+          ]
+        }
+      }
+    }
+  ]
+}

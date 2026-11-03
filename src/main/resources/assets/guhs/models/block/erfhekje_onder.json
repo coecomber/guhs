@@ -1,0 +1,209 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/erfhekje_paal",
+    "paal": "guhs:block/erfhekje_paal",
+    "poort": {
+      "sprite": "guhs:block/erfhekje_poort",
+      "force_translucent": true
+    },
+    "gezicht": "guhs:block/knuffelsteen_gezicht_0",
+    "oor": "guhs:block/roze_hooibaal_side",
+    "oor_top": "guhs:block/roze_hooibaal_top",
+    "bloem": "minecraft:block/pink_tulip"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        5
+      ],
+      "to": [
+        3,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal",
+          "uv": [
+            13,
+            0,
+            16,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#paal",
+          "uv": [
+            5,
+            0,
+            11,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#paal",
+          "uv": [
+            5,
+            0,
+            11,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            5,
+            3,
+            11
+          ]
+        },
+        "down": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            5,
+            3,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        13,
+        0,
+        5
+      ],
+      "to": [
+        16,
+        16,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#paal",
+          "uv": [
+            0,
+            0,
+            3,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#paal",
+          "uv": [
+            13,
+            0,
+            16,
+            16
+          ]
+        },
+        "west": {
+          "texture": "#paal",
+          "uv": [
+            5,
+            0,
+            11,
+            16
+          ]
+        },
+        "east": {
+          "texture": "#paal",
+          "uv": [
+            5,
+            0,
+            11,
+            16
+          ]
+        },
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            13,
+            5,
+            16,
+            11
+          ]
+        },
+        "down": {
+          "texture": "#paal",
+          "uv": [
+            13,
+            5,
+            16,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        0,
+        7.5
+      ],
+      "to": [
+        13,
+        16,
+        8.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#poort",
+          "uv": [
+            3,
+            0,
+            13,
+            16
+          ]
+        },
+        "south": {
+          "texture": "#poort",
+          "uv": [
+            3,
+            0,
+            13,
+            16
+          ]
+        }
+      },
+      "light_emission": 15
+    },
+    {
+      "from": [
+        3,
+        0,
+        5.5
+      ],
+      "to": [
+        13,
+        0.5,
+        10.5
+      ],
+      "faces": {
+        "up": {
+          "texture": "#paal",
+          "uv": [
+            3,
+            5.5,
+            13,
+            10.5
+          ]
+        }
+      }
+    }
+  ]
+}

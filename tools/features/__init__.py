@@ -185,7 +185,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.9 POC: De Erfenis (the plots dimension + texts; Java: feature/erfenis; append only)
             'erfenis',
             # 1.9 POC: De Erfenis, de wereldkaart (texts only; Java: feature/erfenis/kaart; append only)
-            'erfenis_kaart']
+            'erfenis_kaart',
+            # 1.9 Een opknapper!: koppeling (Erfhekje, Leverkist, Dorpszender, brief, zakjes; Java: feature/erfenis/koppeling)
+            'erfenis_koppeling']
 
 
 def modules():

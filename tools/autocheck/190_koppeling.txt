@@ -1,0 +1,88 @@
+# 1.9 "Een opknapper!", slice KOPPELING (AutoCheck, dev only). Run:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_koppeling.txt
+# Shots: the three blocks in the world (Erfhekje front + side, Leverkist without and with post, Dorpszender asleep and running),
+# the Postguh bringing the letter, the letter screen (offer, then sold), through the hekje to the erfenis and back.
+
+section setup
+/gamemode spectator
+/time set noon
+/weather clear
+/gamerule doDaylightCycle false
+/gamerule doMobSpawning false
+/effect give @s minecraft:night_vision infinite 0 true
+/tp @s 3000 141 3010
+/forceload add 2970 2970 3030 3030
+wait 80
+/fill 2980 139 2980 3020 139 3020 minecraft:grass_block
+/fill 2980 140 2980 3020 150 3020 minecraft:air
+/gamemode creative
+/clear @s
+wait 20
+
+section blocks
+/setblock 2996 140 3000 guhs:erfhekje[facing=south,half=lower]
+/setblock 2996 141 3000 guhs:erfhekje[facing=south,half=upper]
+/setblock 3000 140 3000 guhs:leverkist[facing=south,post=false]
+/setblock 3002 140 3000 guhs:leverkist[facing=south,post=true]
+/setblock 3005 140 3000 guhs:dorpszender[facing=south,snoet=slaapt]
+/setblock 3007 140 3000 guhs:dorpszender[facing=south,snoet=werkt]
+/setblock 3008 140 3000 guhs:vadskracht_testbron[kracht=10]
+camera 3001.5 141.6 3006.5 180 12
+wait 20
+waitrender 200
+shot koppeling_blokken
+camera 2998.8 141.4 3002.2 140 10
+wait 10
+shot koppeling_hekje_dichtbij
+camera 3001.5 141.2 3002.0 180 30
+wait 10
+shot koppeling_leverkist_dichtbij
+camera 2993.5 141.4 3000.5 270 10
+wait 10
+shot koppeling_hekje_zij
+camera 2996.5 141.0 3001.6 180 0
+wait 10
+shot koppeling_hekje_poort
+unlock
+
+section the letter
+/guhs erfenis brief reset
+/tp @s 2996.5 140 3004.5 180 0
+look 180 10
+wait 10
+/guhs erfenis brief
+wait 6
+shot koppeling_postguh gui
+wait 110
+clearchat
+/give @s guhs:kaas_knabbels 3
+/item replace entity @s weapon.mainhand with guhs:makelaarsbrief
+wait 5
+useitem 2
+wait 20
+shot koppeling_brief_aanbod gui
+widgets
+press Kopen voor 1 kaasknabbel
+wait 20
+shot koppeling_brief_gekocht_chat gui
+/item replace entity @s weapon.mainhand with guhs:makelaarsbrief
+wait 5
+useitem 2
+wait 20
+shot koppeling_brief_verkocht gui
+gui close
+unlock
+
+section through the hekje and back
+/item replace entity @s weapon.mainhand with minecraft:air
+/tp @s 2996.5 140 3002.5 180 0
+wait 10
+use 2996 140 3000
+wait 80
+waitrender 300
+shot koppeling_erfenis_aankomst
+/guhs erfenis terug
+wait 60
+waitrender 200
+shot koppeling_terug_bij_hekje
+quit
