@@ -139,6 +139,10 @@ final class OpasKelder {
             if (!post) {
                 eigenaar.sendSystemMessage(Component.translatable("erfenis.afwerking.kelder.verhuisd").withStyle(net.minecraft.ChatFormatting.GREEN));
             }
+        } else if (base.eigenaar != null && !mee.isEmpty()) {
+            // Owner offline: hand it to the Leverkist post, which is saved with the world (never lost on a restart).
+            LeverkistPost.verstuur(level.getServer(), base.eigenaar, mee);
+            mee.clear();
         }
         if (mee.isEmpty()) {
             VERHUIS.remove(base.id);
