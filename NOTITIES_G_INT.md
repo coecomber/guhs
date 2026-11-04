@@ -14,10 +14,11 @@ build/moddev copied from f-int (artifacts only).
 | 110-g-mounts | ec1a2aea7 | __init__ FEATURES both (biomen + rijdieren); lang 3-way; + boss Pluimguh eggs (BazenLoot.pluimEi) |
 | 110-g-z2 | 25568a596 | Z2NpcPlekken: z2 volgKaart + dragon cams relative with balans' x1.5; ux GEODE/POORT_* -> r 66 gates; Z2WezensSpawners: z2's grid + ONE path rule (kern Spawners.padAfstand - PAD_VRIJ); Z2WezensPlekken.PADEN = generated Z2WereldPlekken.PADEN |
 | 110-g-werver | b5f7af9cf | (contains ux+mounts) Z2NpcPlekken z2_wolfje + volgKaart; lang 3-way with base fb8601735 (werver's ux+mounts merge; `lang3.py --base=`); quests_z2/FTB/source_ftb = ours, then regenerated: `vadsrijk_npc.py` FIRST, then `vadsrijk_z2_npc.py` (npc's _direct deletes the z2 keys otherwise), then make_ftbquests |
+| 110-g-pets | 713418ec8 | VadsrijkFeature/VadsrijkClient registration lines both; lang 3-way |
 | 110-g-klassen | 739674370 | vadsrijk_klassen.py: klassen's scherm.ordetempel text + ui's skilltip keys; lang union |
 
 ## Waiting for
-g-pets. Lead: wait for its message before the final steps.
+NOTHING: all 10 branches merged (biomen, ui, kaart, klassen, balans, ux, mounts, z2, werver, pets).
 
 ## Cross-cutting to do
 - after g-z2: VadsrijkBiomen zone-2 boxes + `zone2Biome` id mapping -> new zone-2 areas.
@@ -35,6 +36,10 @@ g-pets. Lead: wait for its message before the final steps.
 - gametests still owed: VadsrijkNpc (for g-kaart).
 
 ## Log
+- Final: regen both zones `--geen-cache --audit` = identical tiles (deterministic); audit kuil 6 / onder 0 / trap 14 / stap 5 / water 5 / deur 2 (same known set as round 1). FTB CHAPTER_VERSION 60 = max(59 z2) + 1, regen stable.
+- Werver.java called ux's Npcs.standplek -> staanPlek (compile fix).
+- **Final gametests `-Pgt=Vadsrijk,Z2Npc`: 87/87.**
+- TESTEN_VADSRIJK.md updated (1d178bae6).
 - Full run 1 `-Pgt=Vadsrijk,Z2Npc`: 82/83; reisKeuzes = placement (z -7M = zone 2) -> Reiskaart.hier '' outside the Vadsrijk (5cbcf4161). klodderreusVecht passed (flaky earlier).
 - loopcheck whole map: the FROZEN KNUFFELMEER (11946 spots) had a 2-high shore all round (kaart2 oever = ijs+2) -> oever starts at ijs+1; zone 2 regenerated + rechecked.
 - loopcheck zone 2 VALs that stay: tier-house hollows in Kandijkom (63/99 cells, unreachable, g-z2 notes), single cells.
