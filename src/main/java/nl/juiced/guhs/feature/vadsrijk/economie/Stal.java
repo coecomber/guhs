@@ -37,6 +37,10 @@ public final class Stal {
 
     /** The mount key N: the mount screen without the shop. */
     public static void overzicht(ServerPlayer p) {
+        if (!Rijdieren.heeftEen(p)) {   // (I-MOUNTS: mounts start with the zone-3 starter)
+            EcoUtil.zeg(p, "vadsrijk.economie.rijdier.geen");
+            return;
+        }
         if (Vadsrijk.in(p)) {
             stuur(p, "", "");
         }
@@ -146,6 +150,9 @@ public final class Stal {
         }
         if (Rijdieren.heeft(p, s)) {
             return "vadsrijk.economie.rijdier.al";
+        }
+        if (!Rijdieren.heeftEen(p)) {   // (I-MOUNTS: the stal sells only after your first mount, the zone-3 starter)
+            return "vadsrijk.economie.stal.eerst_starter";
         }
         if (!Spelers.neemMunten(p, s.prijs)) {
             return "vadsrijk.economie.smid.te_weinig";

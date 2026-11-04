@@ -47,7 +47,7 @@ public final class NpcRollen {
             Map.entry("kleermaker", List.of(V + "economie.Winkels#open@cosmetica")),
             Map.entry("markt", List.of(V + "economie.Markt#open")),
             Map.entry("stal", List.of(V + "economie.Stal#open")),
-            Map.entry("rijdier", List.of(V + "economie.Rijdieren#geefEerste")),
+            Map.entry("rijdier", List.of(V + "economie.Rijdieren#questBeloning")),
             Map.entry("mika_spion", List.of(V + "bazen.mika.MikaSpion#ontmasker")),
             Map.entry("advancement", List.of(V + "klassen.Advancement#doe")));
 
@@ -94,7 +94,7 @@ public final class NpcRollen {
         koppel("kleermaker", p -> nl.juiced.guhs.feature.vadsrijk.economie.Winkels.open(p, "cosmetica"));
         koppel("markt", nl.juiced.guhs.feature.vadsrijk.economie.Markt::open);
         koppel("stal", nl.juiced.guhs.feature.vadsrijk.economie.Stal::open);
-        koppelAls("rijdier", (p, a) -> nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.geefEerste(p));
+        koppelAls("rijdier", (p, a) -> nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.questBeloning(p));   // (I-MOUNTS: the Wolkenschaapje)
         koppelAls("mika_spion", (p, a) -> nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion.ontmasker(p));
         koppelAls("advancement", (p, a) -> a != null && a.contains(":")   // (g-klassen: the quest's own class, "klasse:stap")
                 ? nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.doe(p, a.substring(0, a.indexOf(':')))

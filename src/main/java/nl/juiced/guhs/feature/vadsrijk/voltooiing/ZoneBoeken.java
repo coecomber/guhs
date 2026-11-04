@@ -68,8 +68,10 @@ public final class ZoneBoeken {
                 baas("opperzwam", "entity.guhs.vr_baas_opperzwam", "zwamtempel", false, "hq11_opperzwam", "guhs:vr_baas_opperzwam"),
                 baas("mika_spion", "entity.guhs.vr_baas_mika_spion", "zwamzoet", true, "geheim_spion", "guhs:vr_baas_mika_spion"))));
         l.add(new Categorie("huisdier", T + "cat.huisdier", "minecraft:lead", huisdieren(1)));
+        // J-INT: the Hoedhupper/Klodderros are gone (i-mounts); zone 1's mounts are the return quests' Knuffelhert + Wolkenschaapje.
+        // Mounts only exist from zone 3 on, so this is a "later" category: shown, never counted (never blocks 100 %).
         l.add(new Categorie("rijdier", T + "cat.rijdier", "minecraft:saddle",
-                rijdieren(RijdierSoort.HOEDHUPPER, RijdierSoort.KLODDERROS, RijdierSoort.KNUFFELHERT)));
+                rijdieren(RijdierSoort.WOLKENSCHAAPJE, RijdierSoort.KNUFFELHERT), true));
         l.add(new Categorie("gebieden", T + "cat.gebieden", "minecraft:map", gebieden(GEBIEDEN_Z1)));
         return l;
     }
@@ -93,7 +95,7 @@ public final class ZoneBoeken {
                 baas("boormeester", "entity.guhs.vr_z2_baas_boormeester", "z2_splinterkloof", true, "z2_geheim_boormeester",
                         "guhs:vr_z2_baas_boormeester"))));
         l.add(new Categorie("huisdier", T + "cat.huisdier", "minecraft:lead", huisdieren(2)));
-        l.add(new Categorie("rijdier", T + "cat.rijdier", "minecraft:saddle", rijdieren(RijdierSoort.GUHWOLF)));
+        l.add(new Categorie("rijdier", T + "cat.rijdier", "minecraft:saddle", rijdieren(RijdierSoort.GUHWOLF), true));   // (J-INT: later, see zone 1)
         l.add(new Categorie("gebieden", T + "cat.gebieden", "minecraft:map", gebieden(GEBIEDEN_Z2)));
         return l;
     }

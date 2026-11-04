@@ -83,6 +83,11 @@ Handig tussendoor:
 - **Starterkeuze:** de eerste regel opent de keuze uit 3 Pluimguhs. Kies er één en lees het chocobo-grapje.
 - **Alle rijdieren:** met de tweede regel heb je ze allemaal. N opent het scherm met kleuren, en daar kies je "Hierop rijden".
 - **Rijden:** X is op- en afstijgen. Rijd met de Pluimguh, het Wolkenschaapje (dubbele sprong) en Slakkie.
+- **Ronde 3, eerst zonder rijdier:** doe `/guhs vadsrijk mount reset`. Druk X en N: "Nog geen rijdier...". Praat met Stalmeester
+  Hoefje (`/guhs vadsrijk npc tp stalmeester`): hij plaagt over het Wolkenschaapje, en de stal verkoopt nog niks.
+- **Ronde 3:** er zijn nu 5 rijdieren (de Hoedhupper en de Klodderros zijn weg). Voel het verschil: de Guhwolf is het snelst
+  maar springt laag, het Knuffelhert springt het hoogst, Slakkie is lekker traag.
+- **Opstapjes:** loop zonder springen tegen een randje van 2 blokken: je rijdier stapt er zo op.
 - **Silhouetten:** zie je die? Doe `/guhs vadsrijk mount reset` en open N opnieuw.
 - **Afstijgen bij een baas:** `/guhs vadsrijk bazen tp koning` en rijd de arena in.
 - **Stal:** `/guhs vadsrijk mount stal`.
@@ -121,7 +126,7 @@ Handig tussendoor:
 
 ## 10. Terug-quests (Hert en Wolf)
 ```
-/guhs vadsrijk mount geef hoedhupper
+/guhs vadsrijk mount geef pluimguh
 /guhs vadsrijk npc quest start rijdier_knuffelhert
 /guhs vadsrijk npc tp boswachter_mos
 ```

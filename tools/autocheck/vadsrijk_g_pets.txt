@@ -42,7 +42,7 @@ wait 5
 shot p_scherm_koning gui
 gui close
 wait 10
-/guhs vadsrijk mount geef hoedhupper
+/guhs vadsrijk mount geef wolkenschaapje
 gui keep
 /guhs vadsrijk mount scherm
 wait 30

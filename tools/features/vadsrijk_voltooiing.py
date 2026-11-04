@@ -28,6 +28,8 @@ def teksten():
         "vadsrijk.voltooiing.cat.huisdier": "Huisdieren",
         "vadsrijk.voltooiing.cat.rijdier": "Rijdieren",
         "vadsrijk.voltooiing.cat.gebieden": "Gebieden",
+        "vadsrijk.voltooiing.cat.later": "%s (later)",
+        "vadsrijk.voltooiing.later.tip": "Rijdieren krijg je pas verderop in het Vadsrijk. Ze tellen niet mee voor je procent.",
         # entries
         "vadsrijk.voltooiing.kampvuur.naam": "Kampvuur: %s %s",
         "vadsrijk.voltooiing.kampvuur.los": "Onderweg",
@@ -37,8 +39,7 @@ def teksten():
         "vadsrijk.voltooiing.hint.ergens": "Ergens in %s...",
         "vadsrijk.voltooiing.hint.uitkijk": "Een hoge naald in %s. Klim naar de top!",
         "vadsrijk.voltooiing.hint.baas": "Woont in %s.",
-        "vadsrijk.voltooiing.hint.rijdier.hoedhupper": "De stalmeester in Zwamzoet heeft een klusje voor je.",
-        "vadsrijk.voltooiing.hint.rijdier.klodderros": "Koning Klodder laat soms een zadel vallen...",
+        "vadsrijk.voltooiing.hint.rijdier.wolkenschaapje": "Heb je eenmaal een rijdier? Stalmeester Hoefje heeft een klusje voor je.",
         "vadsrijk.voltooiing.hint.rijdier.knuffelhert": "Heb je eenmaal een rijdier? Boswachter Mos weet iets over het Sporenwoud.",
         "vadsrijk.voltooiing.hint.rijdier.guhwolf": "Heb je eenmaal een rijdier? In Kandijkom huilt er iets...",
         # milestones + reward

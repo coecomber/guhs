@@ -161,9 +161,6 @@ public final class BazenLoot {
         });
     }
 
-    /** Chance per chest of Koning Klodder's Klodderzadel (economie's {@code vr_item_zadel_klodderros}). */
-    public static final double ZADEL_KANS = 0.06;
-
     /** The table for the random gear part: economie's per-boss table when it exists, else kern's reference table. */
     @Nullable
     static LootTabel tabel(String baas) {
@@ -219,10 +216,7 @@ public final class BazenLoot {
         if (eerste || r.nextDouble() < 0.25) {
             items.add(trofee(baas));
         }
-        // integration 1.10.0: Koning Klodder's rare saddle (economie: unlocks the Klodderros mount)
-        if (baas.equals("koning_klodder") && r.nextDouble() < ZADEL_KANS) {
-            items.add(new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.ZADEL_KLODDERROS.get()));
-        }
+        // (I-MOUNTS: Koning Klodder's Klodderzadel is gone with the Klodderros; his rare mount loot is the sterrennacht egg below)
         // g-int (round 2, mounts): rare Pluimguh eggs (sterrennacht from Koning Klodder, the hidden gold one from the Opperzwam)
         pluimEi(baas, items, r);
         if (eerste) {

@@ -232,9 +232,9 @@ public class RijdierScherm extends EcoScherm {
             iy += 12;
         }
         double sn = t.getDoubleOr("snelheid", 0), sp = t.getDoubleOr("sprong", 0);
-        balkje(g, ix, iy, iw, Component.translatable("vadsrijk.economie.stal.snelheid", Math.round(sn / 0.1 * 100)), sn / 0.42);
+        balkje(g, ix, iy, iw, Component.translatable("vadsrijk.economie.stal.snelheid", Math.round(sn / 0.1 * 100)), sn / 0.45);
         iy += 16;
-        balkje(g, ix, iy, iw, Component.translatable("vadsrijk.economie.stal.sprong", String.format(Locale.ROOT, "%.1f", sp * sp / 0.16 + 0.5)),
+        balkje(g, ix, iy, iw, Component.translatable("vadsrijk.economie.stal.sprong", String.format(Locale.ROOT, "%.1f", RijdierSoort.springHoogte(sp))),
                 sp / 1.05);
         iy += 18;
         if (!eigen) {

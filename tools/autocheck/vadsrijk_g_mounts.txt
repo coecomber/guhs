@@ -12,7 +12,7 @@ wait 400
 waitrender 300
 /guhs vadsrijk munten 500000
 /guhs vadsrijk mount reset
-/guhs vadsrijk mount geef hoedhupper
+/guhs vadsrijk mount geef wolkenschaapje
 /tp @s -14 64 66
 look 180 5
 wait 40
@@ -73,21 +73,6 @@ perspective back
 /guhs vadsrijk mount rijd pluimguh sterrennacht
 wait 20
 shot m_rijd_pluimguh_sterrennacht gui
-/guhs vadsrijk mount rijd hoedhupper
-wait 15
-key up on
-key sprint on
-wait 20
-shot m_rijd_hoedhupper gui
-key all off
-/tp @s -14 64 66
-/guhs vadsrijk mount rijd klodderros
-wait 15
-key up on
-wait 20
-shot m_rijd_klodderros gui
-key all off
-/tp @s -14 64 66
 /guhs vadsrijk mount rijd wolkenschaapje
 wait 15
 key up on

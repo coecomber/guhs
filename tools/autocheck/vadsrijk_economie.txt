@@ -37,15 +37,15 @@ gui keep
 wait 20
 shot eco_markt gui
 gui close
-/guhs vadsrijk eco rijdier hoedhupper
-/guhs vadsrijk eco rijdier klodderros
+/guhs vadsrijk eco rijdier wolkenschaapje
+/guhs vadsrijk eco rijdier slakkie
 gui keep
 /guhs vadsrijk eco stal
 wait 20
 shot eco_stal gui
 gui close
-/summon guhs:vr_eco_hoedhupper ~3 ~ ~3
-/summon guhs:vr_eco_klodderros ~-3 ~ ~3
+/summon guhs:vr_eco_wolkenschaapje ~3 ~ ~3
+/summon guhs:vr_eco_slakkie ~-3 ~ ~3
 look 0 20
 wait 5
 shot eco_rijdieren

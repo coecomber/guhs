@@ -170,7 +170,15 @@ public class BoekScherm extends EcoScherm {
             g.pose().scale(0.6875f, 0.6875f);
             g.item(icoon(c.getStringOr("icoon", "")), 0, 0);
             g.pose().popMatrix();
-            g.text(font, Component.translatable(c.getStringOr("naam", "")), x + 15, y + 3, vol ? GROEN : TEKST, false);
+            boolean later = c.getBooleanOr("later", false);   // (J-INT: e.g. mounts before zone 3: not counted)
+            Component cnaam = Component.translatable(c.getStringOr("naam", ""));
+            if (later) {
+                cnaam = Component.translatable("vadsrijk.voltooiing.cat.later", cnaam);
+                if (hover) {
+                    tip(mx, my, x - 2, y, pw + 4, RIJ, List.of(Component.translatable("vadsrijk.voltooiing.later.tip").withStyle(ChatFormatting.GRAY)));
+                }
+            }
+            g.text(font, cnaam, x + 15, y + 3, vol ? GROEN : later ? ZACHT : TEKST, false);
             String teller = ck + "/" + ct;
             int tx = x + pw - 34 - font.width(teller);
             g.text(font, teller, tx, y + 3, vol ? GROEN : ZACHT, false);

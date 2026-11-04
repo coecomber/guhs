@@ -63,8 +63,16 @@ public final class Voltooiing {
             @Nullable BlockPos plek) {
     }
 
-    /** A category of a zone page: its name, an item id drawn as its icon, its entries. */
-    public record Categorie(String id, String naamKey, String icoon, List<Ding> dingen) {
+    /**
+     * A category of a zone page: its name, an item id drawn as its icon, its entries.
+     *
+     * @param later J-INT: a "later" category (e.g. mounts, which only exist from zone 3 on): shown with its own x/y, but NOT counted
+     *              in the zone's percentage, so it never blocks 100 %
+     */
+    public record Categorie(String id, String naamKey, String icoon, List<Ding> dingen, boolean later) {
+        public Categorie(String id, String naamKey, String icoon, List<Ding> dingen) {
+            this(id, naamKey, icoon, dingen, false);
+        }
     }
 
     /**
@@ -143,6 +151,9 @@ public final class Voltooiing {
     public static Telling tel(ServerPlayer p, ZoneBoek z) {
         int k = 0, t = 0;
         for (Categorie c : categorieen(z)) {
+            if (c.later()) {
+                continue;   // (J-INT: shown, never counted)
+            }
             Telling x = tel(p, c);
             k += x.klaar();
             t += x.totaal();
@@ -353,8 +364,12 @@ public final class Voltooiing {
                 ct.put("d", dl);
                 ct.putInt("k", ck);
                 ct.putInt("t", c.dingen().size());
-                k += ck;
-                t += c.dingen().size();
+                if (c.later()) {
+                    ct.putBoolean("later", true);   // (J-INT: shown, not counted in the zone total)
+                } else {
+                    k += ck;
+                    t += c.dingen().size();
+                }
                 cl.add(ct);
             }
             zt.put("c", cl);

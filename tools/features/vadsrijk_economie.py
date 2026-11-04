@@ -5,7 +5,7 @@
     liquid), smid materials, the rijfluitje, the saddles and the 16 extra gear pieces;
   - the guh clothes (CLOTHES / clothes() / icons(): existing bones only, so the guh model never changes);
   - the 4 trophy/deco blocks (block models from cuboids, guh faces), their blockstates and loot tables;
-  - the mounts (Hoedhupper, Klodderros): GeckoLib geo + animations + textures, generated here;
+  - (the mounts Hoedhupper / Klodderros were removed in I-MOUNTS 2026-11-04; the mount system's assets: vadsrijk_rijdieren.py);
   - every text (Dutch; en_us gets the same Dutch).
 
 Standalone (from the project root): PYTHONPATH="tools;tools/features" python tools/features/vadsrijk_economie.py
@@ -394,8 +394,6 @@ ICONEN = {
     "vr_item_herrolknabbel": knabbel,
     "vr_item_pluisdraad": draad,
     "vr_item_rijfluitje": fluitje,
-    "vr_item_zadel_hoedhupper": lambda: zadel((225, 60, 70), [(5, 5), (9, 4), (11, 6)]),
-    "vr_item_zadel_klodderros": lambda: zadel((110, 200, 240), [(6, 5), (10, 5)], (230, 120, 190)),
 }
 HANDHELD = set()   # (the gear base types moved to their owners at the 1.10.0 integration: klassen/wezens/bazen)
 
@@ -672,80 +670,6 @@ class Model:
         _png(os.path.join(A, "textures", "entity", f"{self.naam}.png"), self.tex)
 
 
-def _guhgezicht(blok, oog=(36, 22, 40), blos=(255, 140, 180)):
-    h, w = blok.shape[:2]
-    cy = h // 2
-    for ox in (w // 2 - 3, w // 2 + 2):
-        blok[cy - 1:cy + 1, ox:ox + 1, :3] = oog
-        blok[cy - 1, ox, :3] = (255, 255, 255)
-        blok[cy:cy + 1, ox:ox + 1, :3] = oog
-    blok[cy + 1, w // 2 - 4, :3] = blos
-    blok[cy + 1, w // 2 + 3, :3] = blos
-    blok[cy + 2, w // 2 - 1:w // 2 + 1, :3] = (110, 50, 70)
-
-
-def _stipjes(kleur):
-    def f(blok):
-        h, w = blok.shape[:2]
-        for y in range(1, h, 3):
-            for x in range((y // 3) % 2 * 2 + 1, w, 4):
-                blok[y, x, :3] = kleur
-    return f
-
-
-def hoedhupper():
-    m = Model("vr_eco_hoedhupper")
-    huid, steel, hoed = (255, 222, 205), (246, 236, 214), (222, 62, 72)
-    m.bone("root", [0, 0, 0])
-    m.bone("body", [0, 13, 0], "root", [([-5, 9, -7], [10, 8, 15], huid), ([-5.5, 16.5, -3], [11, 1, 6], (255, 120, 185))])
-    for naam, x, z in (("leg_fl", -3, -5), ("leg_fr", 3, -5), ("leg_bl", -3, 5), ("leg_br", 3, 5)):
-        m.bone(naam, [x, 9, z], "root", [([x - 1.5, 0, z - 1.5], [3, 9, 3], steel)])
-    m.bone("head", [0, 15, -7], "body", [([-4, 13, -15], [8, 8, 8], huid, _guhgezicht),
-                                         ([-4, 21, -12], [2, 2, 1], huid), ([2, 21, -12], [2, 2, 1], huid)])
-    m.bone("hoed", [0, 21, -11], "head", [([-7, 21, -18], [14, 3, 14], hoed, _stipjes((255, 255, 255))),
-                                          ([-5, 24, -16], [10, 2, 10], hoed, _stipjes((255, 255, 255))),
-                                          ([-2, 26, -13], [4, 1, 4], hoed)])
-    m.bone("tail", [0, 14, 8], "body", [([-1, 12, 8], [2, 3, 2], steel), ([-2, 15, 7], [4, 2, 4], hoed)])
-    m.schrijf()
-
-
-def klodderros():
-    m = Model("vr_eco_klodderros")
-    slijm, licht, goud = (126, 206, 240), (180, 232, 250), (250, 205, 70)
-    m.bone("root", [0, 0, 0])
-    m.bone("body", [0, 13, 0], "root", [([-5, 9, -8], [10, 9, 17], slijm), ([-5.5, 17.5, -3], [11, 1, 6], (255, 120, 185))])
-    for naam, x, z in (("leg_fl", -3, -6), ("leg_fr", 3, -6), ("leg_bl", -3, 6), ("leg_br", 3, 6)):
-        m.bone(naam, [x, 9, z], "root", [([x - 2, 0, z - 2], [4, 9, 4], slijm), ([x - 2.5, 0, z - 2.5], [5, 2, 5], licht)])
-    m.bone("neck", [0, 16, -7], "body", [([-3, 14, -11], [6, 7, 5], slijm)])
-    m.bone("head", [0, 19, -10], "neck", [([-4, 17, -18], [8, 8, 8], slijm, _guhgezicht),
-                                         ([-3, 25, -14], [2, 2, 1], slijm), ([1, 25, -14], [2, 2, 1], slijm)])
-    m.bone("hoed", [0, 25, -14], "head", [([-3, 25, -16], [6, 1, 4], goud), ([-3, 26, -16], [1, 2, 1], goud), ([2, 26, -16], [1, 2, 1], goud),
-                                          ([-0.5, 26, -16], [1, 3, 1], goud)])
-    m.bone("tail", [0, 15, 9], "body", [([-1.5, 10, 9], [3, 6, 3], licht)])
-    m.schrijf()
-
-
-def animaties(naam, nek=False):
-    benen = {"leg_fl": 1, "leg_br": 1, "leg_fr": -1, "leg_bl": -1}
-    hop = {"root": {"position": {"0.0": [0, 0, 0], "0.125": [0, 2.2, 0], "0.25": [0, 0, 0], "0.375": [0, 2.2, 0], "0.5": [0, 0, 0]}},
-           "hoed": {"scale": {"0.0": [1.06, 0.92, 1.06], "0.125": [0.97, 1.05, 0.97], "0.25": [1.06, 0.92, 1.06], "0.375": [0.97, 1.05, 0.97],
-                              "0.5": [1.06, 0.92, 1.06]}},
-           "tail": {"rotation": {"0.0": [10, 0, 0], "0.25": [-15, 0, 0], "0.5": [10, 0, 0]}}}
-    for b, s in benen.items():
-        hop[b] = {"rotation": {"0.0": [28 * s, 0, 0], "0.25": [-28 * s, 0, 0], "0.5": [28 * s, 0, 0]}}
-    stil = {"body": {"position": {"0.0": [0, 0, 0], "1.0": [0, 0.35, 0], "2.0": [0, 0, 0]}},
-            "head": {"rotation": {"0.0": [0, 0, 0], "1.0": [-4, 3, 0], "2.0": [0, 0, 0]}},
-            "tail": {"rotation": {"0.0": [0, -10, 0], "1.0": [0, 10, 0], "2.0": [0, -10, 0]}}}
-    sprong = {"leg_fl": {"rotation": {"0.0": [-45, 0, 0]}}, "leg_fr": {"rotation": {"0.0": [-45, 0, 0]}},
-              "leg_bl": {"rotation": {"0.0": [45, 0, 0]}}, "leg_br": {"rotation": {"0.0": [45, 0, 0]}},
-              "hoed": {"scale": {"0.0": [1.08, 0.9, 1.08]}}}
-    anim = {"format_version": "1.8.0", "animations": {
-        "idle": {"loop": True, "animation_length": 2.0, "bones": stil},
-        "hop": {"loop": True, "animation_length": 0.5, "bones": hop},
-        "sprong": {"loop": True, "animation_length": 0.5, "bones": sprong}}}
-    _schrijf(os.path.join(A, "geckolib", "animations", "entity", f"{naam}.animation.json"), anim)
-
-
 # ======================================================================================================================
 # texts (Dutch; en_us gets the same)
 # ======================================================================================================================
@@ -775,10 +699,6 @@ TEKSTEN = {
     "item.guhs.vr_item_pluisdraad.uitleg": "Om verpluisde uitrusting weer heel te naaien bij de smid.",
     "item.guhs.vr_item_rijfluitje": "Rijfluitje",
     "item.guhs.vr_item_rijfluitje.uitleg": "Fluit je rijdier erbij (nog een keer: het huppelt naar huis).",
-    "item.guhs.vr_item_zadel_hoedhupper": "Zadel van de Hoedhupper",
-    "item.guhs.vr_item_zadel_klodderros": "Zadel van de Klodderros",
-    "entity.guhs.vr_eco_hoedhupper": "Hoedhupper",
-    "entity.guhs.vr_eco_klodderros": "Klodderros",
     "block.guhs.vr_eco_mini_koning_klodder": "Mini Koning Klodder",
     "block.guhs.vr_eco_opperzwam_beeld": "Opperzwam-beeldje",
     "block.guhs.vr_eco_klodderreus_knuffel": "Klodderreus-knuffel",
@@ -946,13 +866,11 @@ TEKSTEN = {
     E + "handel.geannuleerd": "Het ruilen is gestopt.",
     E + "handel.weg": "De ander is weg: het ruilen is gestopt.",
     # mounts + stal
-    E + "rijdier.hoedhupper": "Hoedhupper",
-    E + "rijdier.klodderros": "Klodderros",
     E + "rijdier.nieuw": "Nieuw rijdier: %s! Blaas op je rijfluitje.",
     E + "rijdier.al": "Dat rijdier heb je al.",
     E + "rijdier.level": "%s is nu level %s!",
     E + "rijdier.alleen_rijk": "Je rijdier huppelt alleen in het Vadsrijk.",
-    E + "rijdier.geen": "Je hebt nog geen rijdier. Vraag eens rond in Zwamzoet...",
+    E + "rijdier.geen": "Nog geen rijdier: dat krijg je in De Schemerwortel.",
     E + "rijdier.geschrokken": "Je rijdier schrok en huppelde weg!",
     E + "zadel.uitleg": "Rechtsklik: %s komt in je stal.",
     E + "stal.titel": "De Stal van Stalmeester Hupsakee",
@@ -964,8 +882,6 @@ TEKSTEN = {
     E + "stal.kies": "Deze roepen",
     E + "stal.gekozen_label": "Je fluitje roept deze",
     E + "stal.gekozen": "Je fluitje roept nu dit rijdier.",
-    E + "stal.nog_niet.hoedhupper": "Nog niet van jou. Iemand in Zwamzoet zoekt een hulpje...",
-    E + "stal.nog_niet.klodderros": "Nog niet van jou. Koning Klodder heeft er een zadel van...",
     E + "stal.fluitje_ja": "Je hebt een rijfluitje.",
     E + "stal.fluitje_nee": "Je hebt geen rijfluitje!",
     E + "stal.koop_fluitje": "Nieuw fluitje (%sb)",
@@ -987,7 +903,7 @@ TEKSTEN = {
     "gui.guhs.titels.hint.vr_marktkoopman": "Verkoop tien dingen op de markt van Zwamzoet.",
     # tips
     E + "tip.rijdier.titel": "Je eerste rijdier!",
-    E + "tip.rijdier": "Blaas op je rijfluitje en de Hoedhupper komt eraan. Rijden geeft hem xp: dan wordt hij sneller en springt hij hoger.",
+    E + "tip.rijdier": "Blaas op je rijfluitje en je Wolkenschaapje komt eraan. Rijden geeft het xp: dan wordt het sneller en springt het hoger.",
     E + "tip.rijden.titel": "Rijden",
     E + "tip.rijden": "Spatie = een grote hup. Word je geraakt, dan schrikt je rijdier en huppelt hij weg.",
 }
@@ -1010,10 +926,6 @@ def _items():
 def _assets():
     _items()
     _blokken()
-    hoedhupper()
-    klodderros()
-    animaties("vr_eco_hoedhupper")
-    animaties("vr_eco_klodderros")
 
 
 def build(h):
@@ -1031,7 +943,7 @@ def _direct():
             data = json.load(f)
         data.update(TEKSTEN)
         _schrijf(p, data)
-    print(f"vadsrijk_economie: {len(TEKSTEN)} texts, {len(ICONEN)} item icons, {len(BLOKKEN)} blocks, 2 mounts, {len(CLOTHES)} clothes")
+    print(f"vadsrijk_economie: {len(TEKSTEN)} texts, {len(ICONEN)} item icons, {len(BLOKKEN)} blocks, {len(CLOTHES)} clothes")
 
 
 if __name__ == "__main__":

@@ -239,21 +239,21 @@ public class VadsrijkEconomieGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         helper.assertTrue(Rijdieren.actief(p) == null, "no mount yet");
         helper.assertTrue(Rijdieren.geefEerste(p) && !Rijdieren.geefEerste(p), "the first mount once");
-        helper.assertTrue(Rijdieren.actief(p) == RijdierSoort.HOEDHUPPER, "hoedhupper (G-MOUNTS: the key calls it, no rijfluitje needed)");
-        helper.assertTrue(Rijdieren.level(p, RijdierSoort.HOEDHUPPER) == 1, "level 1");
-        Rijdieren.geefXp(p, RijdierSoort.HOEDHUPPER, RijdierSoort.xpNodig(1) - 1);
-        helper.assertTrue(Rijdieren.level(p, RijdierSoort.HOEDHUPPER) == 1, "not yet");
-        Rijdieren.geefXp(p, RijdierSoort.HOEDHUPPER, 1);
-        helper.assertTrue(Rijdieren.level(p, RijdierSoort.HOEDHUPPER) == 2 && Rijdieren.xp(p, RijdierSoort.HOEDHUPPER) == 0, "level 2");
-        Rijdieren.geefXp(p, RijdierSoort.HOEDHUPPER, 1_000_000);
-        helper.assertTrue(Rijdieren.level(p, RijdierSoort.HOEDHUPPER) == RijdierSoort.MAX_LEVEL, "capped at max");
+        RijdierSoort s = RijdierSoort.WOLKENSCHAAPJE;   // (I-MOUNTS: the lv-8 quest gives the Wolkenschaapje now)
+        helper.assertTrue(Rijdieren.actief(p) == s, "wolkenschaapje (G-MOUNTS: the key calls it, no rijfluitje needed)");
+        helper.assertTrue(Rijdieren.level(p, s) == 1, "level 1");
+        Rijdieren.geefXp(p, s, RijdierSoort.xpNodig(1) - 1);
+        helper.assertTrue(Rijdieren.level(p, s) == 1, "not yet");
+        Rijdieren.geefXp(p, s, 1);
+        helper.assertTrue(Rijdieren.level(p, s) == 2 && Rijdieren.xp(p, s) == 0, "level 2");
+        Rijdieren.geefXp(p, s, 1_000_000);
+        helper.assertTrue(Rijdieren.level(p, s) == RijdierSoort.MAX_LEVEL, "capped at max");
         helper.assertTrue(Cosmetica.heeftTitel(p, Cosmetica.RIJDIERMEESTER), "title at max level");
-        helper.assertTrue(RijdierSoort.HOEDHUPPER.snelheid(10) > RijdierSoort.HOEDHUPPER.snelheid(1)
-                && RijdierSoort.HOEDHUPPER.sprong(10) > RijdierSoort.HOEDHUPPER.sprong(1), "levels make it faster and bouncier");
-        helper.assertTrue(Rijdieren.geefXp(p, RijdierSoort.KLODDERROS, 100) == 0, "no xp for a mount you don't have");
-        Rijdieren.geef(p, RijdierSoort.KLODDERROS);
-        Rijdieren.kies(p, RijdierSoort.KLODDERROS);
-        helper.assertTrue(Rijdieren.actief(p) == RijdierSoort.KLODDERROS, "pick in the stal");
+        helper.assertTrue(s.snelheid(10) > s.snelheid(1) && s.sprong(10) > s.sprong(1), "levels make it faster and bouncier");
+        helper.assertTrue(Rijdieren.geefXp(p, RijdierSoort.SLAKKIE, 100) == 0, "no xp for a mount you don't have");
+        Rijdieren.geef(p, RijdierSoort.SLAKKIE);
+        Rijdieren.kies(p, RijdierSoort.SLAKKIE);
+        helper.assertTrue(Rijdieren.actief(p) == RijdierSoort.SLAKKIE, "pick in the stal");
         helper.succeed();
     }
 }

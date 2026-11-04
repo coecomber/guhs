@@ -1583,7 +1583,8 @@
       "inleveren": "stalmeester",
       "lv": 8,
       "na": [
-        "hq06_zwamzoet"
+        "hq06_zwamzoet",
+        "@rijdier"
       ],
       "doelen": [
         {
@@ -1619,7 +1620,7 @@
       ],
       "praat": {},
       "actie_aanname": "",
-      "actie_klaar": "rijdier:hoedhupper",
+      "actie_klaar": "rijdier:wolkenschaapje",
       "start_items": [],
       "auto": false
     },

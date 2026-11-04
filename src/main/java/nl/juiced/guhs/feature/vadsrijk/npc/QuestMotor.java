@@ -183,6 +183,18 @@ public final class QuestMotor {
                 return;
             }
         }
+        // 5b. (I-MOUNTS) a mount return quest that waits for your first mount: a teaser (the service stays reachable)
+        Quest teaser = RijdierQuests.teaser(p, id);
+        if (teaser != null) {
+            regels.add(new Praat.Regel(npc, "", RijdierQuests.T + "teaser." + teaser.id()));
+            if (dienst(eigenRol)) {
+                open(p, npc, regels, new Gesprek(id, npc.getId(), "", eigenRol, ""),
+                        metExtra(p, id, new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + eigenRol)));
+            } else {
+                open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
+            }
+            return;
+        }
         // 6. the role, or a little chatter
         NpcDef def = Npcs.van(id);
         rol(p, npc, def == null ? null : def.rol());
@@ -569,7 +581,7 @@ public final class QuestMotor {
             case "cliffhanger" -> Verhaal.cliffhanger(p);
             case "ontmasker" -> Verhaal.ontmasker(p);
             case "rijdier" -> {
-                if (!NpcRollen.doe("rijdier", p, a.length > 1 ? a[1] : "hoedhupper")) {
+                if (!NpcRollen.doe("rijdier", p, a.length > 1 ? a[1] : "wolkenschaapje")) {
                     p.sendSystemMessage(Component.translatable("vadsrijk.npc.rijdier.later").withStyle(ChatFormatting.GRAY));
                 }
             }
