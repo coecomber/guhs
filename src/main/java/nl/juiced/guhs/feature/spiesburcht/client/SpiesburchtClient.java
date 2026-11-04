@@ -221,6 +221,9 @@ public final class SpiesburchtClient {
             if (baken.getLevel() == null) {
                 return;
             }
+            if (baken.straalUit()) {
+                return;
+            }
             if (baken.levels() <= 0) {
                 baken.refresh();
                 if (baken.levels() <= 0) {

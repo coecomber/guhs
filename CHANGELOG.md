@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.4 — Minecraft 26.1.2
+
+- **Knabbelbaken:** right-click it for a little menu. Switch every effect you have unlocked on or off, several at once, and hide or show the beam (the effects keep working when it's hidden). It also reaches further now: 25 / 40 / 60 / 80 blocks for 1 / 2 / 3 / 4 layers (was 20 / 30 / 40 / 50).
+- **Guhvilla:** only its two real eyes upstairs are eyes now. The little windows downstairs and on the sides are proper windows with curtains, and there are flower boxes under the front windows.
+- The safari animals' names show up properly again in your guh's chat lines ("Een kleine regenboogschool! Ik smelt..."); 36 animals were missing them.
+
 ## 1.9.3 — Minecraft 26.1.2
 
 - A new Houtzagerij (sawmill) no longer costs planks, only a few Guhlden. Only the Houtzagerij makes planks, so if you had spent Opa's planks on other buildings first, you could get stuck. Upgrades still cost planks as before.
