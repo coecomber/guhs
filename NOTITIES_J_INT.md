@@ -48,3 +48,27 @@ NOTHING: all 6 branches merged (ui, voltooiing, mounts, z2kaart, audio, lore).
 
 ## Resume point
 See the bottom of this file (updated at the end).
+- After the lore merge: make_ftbquests again = no change.
+
+## Gametests (`-Pgt=Vadsrijk,Z2Npc,StadsMuziek`, 97 tests)
+- Run 1 (before lore): 2 failed: `VadsrijkVoltooiing.telling` "mounts per zone" (expected 3+1: the test still knew the
+  Hoedhupper/Klodderros) -> test updated to 2 + 1 and checks that the later category is not in the zone total; and
+  `VadsrijkWezens.grotSpawnerVindtDeVloer` "spawned".
+- Run 2 (final head, after lore): 94/97. Failed: `opperzwamFasen`, `koningVecht`, `opperzwamVecht` (boss timing under machine load:
+  zone-3 agents + gradle build-cache lock contention; the first run passed them) -> rerun `-Pgt=VadsrijkBazen,VadsrijkWezens`:
+  every boss test passed (16 tests), only `grotSpawnerVindtDeVloer` failed again -> `-Pgt=VadsrijkWezens` alone: **7/7 passed**.
+  So: grotSpawner is order-dependent (its spawn is vetoed by `WezensSpawners.npcInBuurt` = any GuhEntity/Kampklodder within 12,
+  or a leftover from an earlier batch near its spot; my guess, not proven). Not caused by round 3 (no spawner/wezens code changed).
+- Note: the gradle build cache (~/.gradle/caches/build-cache-1) can time out on its lock with many agents: use `--no-build-cache`.
+
+## AutoCheck
+- SKIPPED: the machine is under load (zone-3 agents running, ~9 GB free, build-cache lock contention). No walk ran this round.
+
+## Run dir
+- run/ copied from h-melee (config incl. the vadsrijk balans/client/sfeer toml, defaultconfigs, mods, resourcepacks, options.txt,
+  usernamecache), saves EMPTY. The user starts `j-int/run-client.bat` and makes a NEW world.
+
+## Resume point
+Integration DONE. All 6 branches merged; map regenerated; checkers + gametests as above; TESTEN_VADSRIJK.md + SPIEKBRIEF.md
+(renamed from SPIEKBRIEF_RONDE2.md, round 3 sections R1-R10 on top) updated; run/ ready. Open: the user's client checks
+(SPIEKBRIEF R1-R10), mounts stepping over fences, the grotSpawner order flake.
