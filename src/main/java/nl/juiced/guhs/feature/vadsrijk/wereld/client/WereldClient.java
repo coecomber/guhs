@@ -47,6 +47,7 @@ public final class WereldClient {
             }
         });
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> WereldSfeer.tick());
+        nl.juiced.guhs.feature.vadsrijk.zone2.wereld.client.Z2WereldClient.init(modBus);   // [zone 2] sky + ambient of De Splinterpieken
     }
 
     private static void kleuren(RegisterColorHandlersEvent.BlockTintSources event) {

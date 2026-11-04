@@ -96,8 +96,9 @@ final class WereldLucht {
                     new Vector4f(adem, adem, adem, nacht), m(mv, pose));
             pose.popPose();
         }
-        // 4. far landmarks on the horizon (fixed in the world, in the haze)
-        for (int i = 0; i < VERTE.length; i++) {
+        // 4. far landmarks on the horizon (fixed in the world, in the haze); [zone 2] zone 2 draws its own horizon
+        boolean zone2 = mc.player != null && nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.inZone2(mc.player.getX(), mc.player.getZ());
+        for (int i = 0; i < VERTE.length && !zone2; i++) {
             float[] v = VERTE_PLEK[i];
             float a = 0.42f + 0.25f * dag;
             SkyDraw.drawNow("Vadsrijk landmark " + i, SkyDraw.CELESTIAL_TRANSLUCENT, horizon(v[0], v[1], v[2]), SkyDraw.texture(VERTE[i]),

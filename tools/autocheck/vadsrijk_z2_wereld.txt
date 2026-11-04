@@ -1,0 +1,161 @@
+# Het Vadsrijk zone 2 "De Splinterpieken" (110-z2-wereld): tiles generate, Kandijkom, each area, the Spiegelburcht, gondola, sky.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_z2_wereld.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 120
+waitrender 300
+
+section aankomst
+/guhs vadsrijk z2wereld vlieg kandijkom
+wait 120
+shot z2_opening_storm gui
+wait 160
+shot z2_opening_naald gui
+wait 160
+waitrender 400
+look 0 -5
+shot z2_dok gui
+
+section kandijkom
+/tp @s 0 150 -2200
+look 180 30
+wait 80
+waitrender 500
+shot z2_kandijkom_overzicht gui
+/guhs vadsrijk z2wereld plek plein
+look 180 5
+wait 60
+waitrender 300
+shot z2_plein gui
+/guhs vadsrijk z2wereld plek gebouw.cafe.binnen
+look 90 10
+wait 60
+waitrender 200
+shot z2_cafe_binnen gui
+/guhs vadsrijk z2wereld plek gebouw.kristalkapel.binnen
+look 180 5
+wait 60
+waitrender 200
+shot z2_kapel_binnen gui
+/guhs vadsrijk z2wereld plek gebouw.juwelier.deur
+look 90 5
+wait 40
+waitrender 200
+shot z2_juwelier gui
+/guhs vadsrijk z2wereld plek geheim_chocokelder
+look 0 10
+wait 40
+shot z2_chocokelder gui
+
+section gondel
+/guhs vadsrijk z2wereld plek gondel_dal
+look 225 10
+wait 60
+waitrender 300
+shot z2_gondel_dal gui
+/guhs vadsrijk z2wereld gondel op
+wait 110
+shot z2_gondel_rit gui
+wait 150
+waitrender 300
+shot z2_gondel_berg gui
+
+section galm
+/tp @s 330 175 -2200
+look 90 25
+wait 80
+waitrender 500
+shot z2_galmhellingen gui
+/guhs vadsrijk z2wereld plek arena_galmwolf_deur
+look 270 5
+wait 60
+waitrender 300
+shot z2_galmwolf_arena gui
+
+section meer
+/tp @s -260 130 -2120
+look 120 25
+wait 80
+waitrender 500
+shot z2_knuffelmeer gui
+/guhs vadsrijk z2wereld plek knuffel_ijs_1
+look 0 80
+wait 40
+waitrender 200
+shot z2_knuffel_onder_ijs gui
+/guhs vadsrijk z2wereld plek draak_zadel_kijk
+look 180 10
+wait 60
+waitrender 300
+shot z2_drakenzadel gui
+
+section kloof
+/tp @s -160 170 -2700
+look 0 30
+wait 80
+waitrender 500
+shot z2_splinterkloof gui
+/guhs vadsrijk z2wereld plek boortoren_1
+look 0 0
+wait 60
+waitrender 300
+shot z2_boortoren gui
+/guhs vadsrijk z2wereld plek kampvuur_splinterkloof_4
+look 270 10
+wait 60
+waitrender 300
+shot z2_kloofbodem gui
+/guhs vadsrijk z2wereld plek arena_boormeester
+look 0 10
+wait 40
+waitrender 200
+shot z2_boormeester gui
+
+section burcht
+/guhs vadsrijk z2wereld plek brug_3_zuid
+look 180 -10
+wait 60
+waitrender 400
+shot z2_brug_burcht gui
+/tp @s 0 200 -2790
+look 180 20
+wait 80
+waitrender 400
+shot z2_spiegelburcht gui
+/guhs vadsrijk z2wereld plek deur_spiegelburcht_voor
+look 180 -10
+wait 40
+waitrender 200
+shot z2_burcht_deur gui
+/guhs vadsrijk wereld deur spiegelburcht open
+wait 180
+shot z2_burcht_deur_open gui
+/guhs vadsrijk z2wereld plek burcht_lichtkamer
+look 180 5
+wait 40
+waitrender 200
+shot z2_lichtkamer gui
+/guhs vadsrijk z2wereld plek arena_spiegelzucht
+look 180 15
+wait 40
+waitrender 200
+shot z2_spiegelzaal gui
+
+section lucht
+/guhs vadsrijk z2wereld plek uitkijk_galmtop
+look 0 -20
+wait 300
+shot z2_uitkijk gui
+/time set 18000
+wait 80
+look 0 -25
+shot z2_nacht_poollicht gui
+look 20 -8
+shot z2_nacht_maan gui
+/time set 1000
+wait 40
