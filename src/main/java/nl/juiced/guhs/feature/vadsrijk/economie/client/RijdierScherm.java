@@ -270,6 +270,9 @@ public class RijdierScherm extends EcoScherm {
             knop(g, mx, my, left + 8, by, 122, 18, Component.translatable("vadsrijk.economie.stal.koop_fluitje", Stal.FLUITJE_PRIJS), !fluitje,
                     () -> doe("fluitje"));
         } else {
+            // G-PETS: the pet screen from here too
+            knop(g, mx, my, left + w - 78, top + 2, 70, 14, Component.translatable("vadsrijk.huisdieren.knop"), true,
+                    nl.juiced.guhs.feature.vadsrijk.huisdieren.client.HuisdierClient::open);
             String toets = RijdierClient.RIJDEN.getTranslatedKeyMessage().getString();
             for (var line : font.split(Component.translatable("vadsrijk.economie.rijdieren.uitleg", toets), 124)) {
                 g.text(font, line, left + 8, by, ZACHT, false);
