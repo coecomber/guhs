@@ -62,3 +62,12 @@ New package `feature/vadsrijk/kern/beleving` (server) + `kern/beleving/client` (
 - The hit-stop is client-visual only (the server mob keeps its AI); a real server freeze would touch AI (gevecht/bazen).
 - Walk-leg animation of vanilla-model mobs is not held (no setter; would need a mixin); idle/GeckoLib animations are.
 - The victory title replaces a level-up title card that arrives in the same second.
+
+## Results (2026-11-04)
+- Gametests `-Pgt=VadsrijkBeleving`: 3/3 passed (vrolijkeReeks, schadegetallen + the filter self-check).
+- AutoCheck `vadsrijk_beleving.txt` (17 shots in run/screenshots/autocheck, not committed): numbers (sizes, gold ★ crits, element
+  colours, Zwak!/Taai, merged DoT ♨), streak x4/x12 +10 % xp, falling chest with light pillar, Guhddelijk pink flash + glitter +
+  "Dev vond Kussenzwaard!", Koning Klodder phase moment (swoop + letterbox + "Fase 2: Nu wordt het menens!"), real defeat ->
+  shake + "Opgevrolijkt!" card. Not visible in shots (camera at the door, out of sight): the shockwave ring and the arena chests.
+  After the run: the streak number no longer overlaps its title/bar (pop scale capped, centred).
+- Resume point: done; only the integrator steps above. The ★ glyph renders as a chunky blob in the Guhs font at big sizes (ok).

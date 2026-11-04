@@ -338,10 +338,10 @@ public final class BelevingClient {
             String kop = Component.translatableWithFallback("vadsrijk.kern.beleving.reeks", "Vrolijke reeks").getString();
             g.text(f, kop, rx - f.width(kop), ry, 0xFFFF9AD5, true);
             String getal = "×" + reeksN + (reeksN >= 10 ? "!" : "");
-            float pop = 1 + 0.5f * Math.max(0, 1 - tijd / 5f) + (klok - mijlpaalTijd < 20 ? 0.6f * (1 - (klok - mijlpaalTijd + pt) / 20f) : 0);
-            float s = 2.0f * pop;
+            float pop = 1 + 0.15f * Math.max(0, 1 - tijd / 5f) + (klok - mijlpaalTijd < 20 ? 0.25f * (1 - (klok - mijlpaalTijd + pt) / 20f) : 0);
+            float s = 2.0f * Math.min(1.25f, pop);
             g.pose().pushMatrix();
-            g.pose().translate(rx, ry + 11);
+            g.pose().translate(rx, ry + 20 - 4.5f * s);   // (grows around its middle: never into the title or the bar)
             g.pose().scale(s, s);
             int kleur = reeksN >= 50 ? 0xFFFF5FC8 : reeksN >= 10 ? 0xFFFFD24A : 0xFFFFFFFF;
             g.text(f, getal, -f.width(getal), 0, kleur, true);
