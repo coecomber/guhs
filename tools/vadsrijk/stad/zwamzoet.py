@@ -589,9 +589,11 @@ def tempel_voet(x, z):
     return d
 
 
-def funderen(S, x1, z1, x2, z2, y_van, y_tot, y_min, blok="knuffelsteen"):
+def funderen(S, x1, z1, x2, z2, y_van, y_tot, y_min, blok="knuffelsteen", niet_op_trap=False):
     """Fix round 2: every column in the box whose lowest block between y_van..y_tot hangs over air gets a foundation down to
-    the first solid block (at most down to y_min; a column that finds nothing is left alone and reported)."""
+    the first solid block (at most down to y_min; a column that finds nothing is left alone and reported).
+    niet_op_trap (g-int): skip a column whose first solid block is a stair step (planks/stairs/slab), so the spiral-stair
+    shaft that comes up beside a cap house is never filled up (it buried hoed_noordo's stair exit)."""
     los = 0
     for x in range(x1, x2 + 1):
         for z in range(z1, z2 + 1):
@@ -601,7 +603,9 @@ def funderen(S, x1, z1, x2, z2, y_van, y_tot, y_min, blok="knuffelsteen"):
                         yy = y - 1
                         while yy >= y_min and S.is_air(x, yy, z):
                             yy -= 1
-                        if yy >= y_min:
+                        if yy >= y_min and niet_op_trap and any(w in S.get(x, yy, z) for w in ("plank", "stairs", "slab", "trap")):
+                            pass
+                        elif yy >= y_min:
                             S.fill(x, yy + 1, z, x, y - 1, z, blok)
                         else:
                             los += 1
@@ -1048,7 +1052,7 @@ def hoedhuisjes(S, zw, rng):
             huis(S, int(hx - w / 2), T + 1, int(hz - w / 2), w, w, 4, voor, PALETTEN[(k + len(naam)) % 5])
             # (fix round 2) a floor corner past the plateau edge hung over the sloping cap: fill it down with cap
             funderen(S, int(hx - w / 2) - 1, int(hz - w / 2) - 1, int(hx + w / 2) + 1, int(hz + w / 2) + 1, T, T + 1, T - 8,
-                     HOED[kleur])
+                     HOED[kleur], niet_op_trap=True)
             k += 1
         # midden: een bloesemboompje en een lantaarnpaal
         S.set(cx, T + 1, cz, "minecraft:cherry_log[axis=y]")
