@@ -1,0 +1,161 @@
+# Het Vadsrijk, integration of fix round 2 (110-g-int), walk 1: zone 1 + the new systems on the merged tree.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_gint1.txt
+# Camp arrival path, Bram, the ordetempel on its cap, HUD level lines (generic + class), the bell -> travel map, the captain's
+# travel choices, Werver Wimpel, trainers' starter weapons, mount screen + riding, pet unlock + following, biome name (F3).
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk npc reset
+/guhs vadsrijk tips reset
+
+section kamp
+/tp @s 0 89 1109
+look 180 5
+wait 60
+waitrender 200
+shot gi1_trap_top_pad gui
+/tp @s 6 104 1112
+look 170 30
+wait 60
+waitrender 200
+shot gi1_aankomstpad gui
+
+section hud
+/guhs vadsrijk klasse kies
+/guhs vadsrijk klasse generiek 12
+/guhs vadsrijk klasse klasselevel knuffelridder 9
+/guhs vadsrijk klasse wapen kussenzwaard
+wait 40
+/guhs vadsrijk wereld plek kampvuur_kamp
+look 0 10
+wait 60
+waitrender 200
+shot gi1_hud_levels gui
+
+section trainers
+/guhs vadsrijk wereld plek training
+look 0 10
+wait 60
+waitrender 200
+gui keep
+/guhs vadsrijk npc praat trainer_jager
+wait 20
+shot gi1_trainer_jager gui
+gui close
+wait 10
+
+section bel_reiskaart
+/guhs vadsrijk npc quest af hq05_klodderreus
+/guhs vadsrijk npc quest start hq06_zwamzoet
+/guhs vadsrijk wereld plek luchtschip_bel
+look 270 10
+wait 60
+waitrender 200
+shot gi1_bel gui
+gui keep
+/guhs vadsrijk npc praat kapitein
+wait 20
+shot gi1_kapitein gui
+press Verder »
+wait 10
+press Verder »
+wait 10
+shot gi1_kapitein_keuzes gui
+press » Laat de reiskaart zien
+wait 20
+shot gi1_reiskaart gui
+gui close
+wait 10
+
+section bram
+/tp @s 23 66 67
+look 180 15
+wait 80
+waitrender 200
+shot gi1_bram gui
+
+section ordetempel
+/tp @s -42 162 -8
+look 226 -22
+wait 60
+waitrender 300
+shot gi1_ordetempel_toren gui
+/tp @s -2 184 6
+look 180 8
+wait 60
+waitrender 300
+shot gi1_ordetempel_voor gui
+
+section hoed_wenteltrap
+/tp @s 113 118 -88
+look 270 30
+wait 60
+waitrender 200
+shot gi1_hoed_noordo_trap gui
+
+section mounts_pets
+/tp @s -14 64 66
+look 180 5
+wait 40
+waitrender 200
+/guhs vadsrijk mount reset
+/guhs vadsrijk mount geef pluimguh roze
+gui keep
+/guhs vadsrijk mount scherm
+wait 30
+shot gi1_mountscherm gui
+gui close
+wait 10
+/guhs vadsrijk huisdier reset
+/guhs vadsrijk huisdier geef klodderreus
+wait 30
+shot gi1_nieuw_huisdier gui
+wait 60
+perspective back
+/guhs vadsrijk mount rijd pluimguh roze
+wait 20
+key up on
+wait 25
+key all off
+wait 10
+shot gi1_rijden_met_huisdier gui
+perspective first
+gui keep
+/guhs vadsrijk huisdier scherm
+wait 30
+shot gi1_huisdierscherm gui
+gui close
+wait 10
+
+section biome
+/guhs vadsrijk wereld plek kampvuur_kamp
+f3 on
+wait 40
+shot gi1_f3_biome gui
+f3 off
+
+section werver
+/guhs vadsrijk
+wait 200
+waitrender 200
+/guhs vadsrijk npc werver
+wait 20
+/tp @s ~ ~ ~3
+wait 40
+gui keep
+interact npc
+wait 20
+shot gi1_werver_1 gui
+press Verder »
+wait 5
+press Verder »
+wait 5
+shot gi1_werver_3 gui
+gui close
+wait 10

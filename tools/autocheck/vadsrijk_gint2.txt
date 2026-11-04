@@ -1,0 +1,107 @@
+# Het Vadsrijk, integration of fix round 2 (110-g-int), walk 2: the new zone 2 on the regenerated tiles.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_gint2.txt
+# Opening flight, Kandijkom (skyline, plaza + clock tower, market, interiors), the gates (open), the frozen lake shore (one step),
+# Galmwolf arena, the dragon col, ravine bridge, Spiegelburcht, the Kandijkom bell -> travel map, biome name.
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section aankomst
+/guhs vadsrijk z2wereld vlieg kandijkom
+wait 120
+shot gi2_opening_storm gui
+wait 330
+waitrender 400
+look 0 -5
+shot gi2_dok gui
+
+section kandijkom
+/tp @s 0 140 -2270
+look 180 22
+wait 80
+waitrender 500
+shot gi2_skyline gui
+/guhs vadsrijk z2wereld plek plein
+look 180 0
+wait 60
+waitrender 300
+shot gi2_plein_toren gui
+/guhs vadsrijk z2wereld plek chocomelkkraam
+look 270 5
+wait 40
+waitrender 200
+shot gi2_markt gui
+/guhs vadsrijk z2wereld plek gebouw.huis_7.binnen
+look 90 10
+wait 60
+waitrender 200
+shot gi2_huis_binnen gui
+
+section poorten
+/tp @s 40 91 -2400
+look 270 5
+wait 40
+waitrender 300
+shot gi2_oostpoort gui
+/tp @s -40 91 -2400
+look 90 5
+wait 40
+waitrender 300
+shot gi2_westpoort gui
+
+section meer
+/tp @s -172 85 -2330
+look 180 5
+wait 60
+waitrender 300
+shot gi2_meer_ijs gui
+/tp @s -172 86 -2300
+look 0 15
+wait 40
+waitrender 300
+shot gi2_meer_oever gui
+
+section gebieden
+/guhs vadsrijk z2wereld plek arena_galmwolf_deur
+look 270 5
+wait 80
+waitrender 300
+shot gi2_galmwolf_arena gui
+/guhs vadsrijk z2wereld plek draak_zadel_kijk
+look 0 5
+wait 60
+waitrender 300
+shot gi2_drakenzadel gui
+/guhs vadsrijk z2wereld plek kampvuur_splinterkloof_3
+look 180 10
+wait 60
+waitrender 300
+shot gi2_kloofrand gui
+/tp @s 150 190 -2600
+look 0 20
+wait 80
+waitrender 400
+shot gi2_spiegelburcht gui
+
+section bel
+/guhs vadsrijk npc quest af hq12_schaduw
+/guhs vadsrijk z2wereld plek dok_landing
+look 0 0
+wait 60
+waitrender 200
+f3 on
+wait 20
+shot gi2_f3_biome gui
+f3 off
+gui keep
+/guhs vadsrijk npc praat z2_kapitein
+wait 20
+shot gi2_kapitein gui
+gui close
+wait 10
