@@ -1,13 +1,15 @@
-# Testen: Het Vadsrijk (Guhs 1.10), zone 1 na de fixronde + zone 2 "De Splinterpieken"
+# Testen: Het Vadsrijk (Guhs 1.10), na fixronde 2: zone 1 + de nieuwe zone 2 "De Splinterpieken"
 
 Dit is de ENE testgids voor het hele Vadsrijk. Hij vervangt `TESTEN_VADSRIJK_ZONE1.md` en de losse slice-gidsen (die blijven
-alleen als naslag). Gebouwd in `guhs_vadsrijk\f-int` (branch `110-fix-int`).
+alleen als naslag). Gebouwd in `guhs_vadsrijk\g-int` (branch `110-g-int`, fixronde 2 = tweede playtest).
 
 ## Starten
-1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\f-int` (NIET w-poc: dat is de oude POC).
-2. Maak een **nieuwe** wereld (Creatief, cheats aan). De `saves`-map is leeg: oude werelden kennen de nieuwe kaart niet.
-3. `/gamemode survival` als je wilt vechten (in creatief vallen de wezens je niet aan; bazen doen hun aanvallen wel, maar raken je niet).
-4. Erin: `/guhs vadsrijk`. Nog een keer = terug naar huis. In het Vadsrijk heb je een eigen, lege rugzak.
+1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\g-int` (NIET f-int of w-poc: dat zijn de oude rondes).
+2. Maak een **nieuwe** wereld (Creatief, cheats aan). De `saves`-map is leeg: oude werelden kennen de nieuwe kaart (en de nieuwe
+   zone 2) niet.
+3. Zet je **weergaveafstand** hoog (32 chunks, minstens 20): het Vadsrijk is met de hand gebouwd en kan dat makkelijk aan.
+4. `/gamemode survival` als je wilt vechten (in creatief vallen de wezens je niet aan; bazen doen hun aanvallen wel, maar raken je niet).
+5. Erin: `/guhs vadsrijk` (of in survival via het portaaltempeltje in de Guhmensie, na een praatje met Werver Wimpel). Nog een keer = terug naar huis. In het Vadsrijk heb je een eigen, lege rugzak.
 
 Je komt aan op het lage steigertje aan de zuidkust van Knuffelkamp. De houten trap loopt nu helemaal door, als een tunnel in de
 klif, tot boven op het kampplateau.
@@ -20,11 +22,15 @@ klif, tot boven op het kampplateau.
 | Z | je ultieme vaardigheid |
 | **C** | **Knuffelsprong** (nieuw): ~20 blokken vooruit, ~5 hoog, elke 5 s, geen valschade. Elke klasse. 5e vakje op de HUD. |
 | **U** | **Losknuffelen** (nieuw): vast? Sta 3 tellen stil en de knuffelwind zet je op het dichtstbijzijnde veilige plekje. Elke minuut, niet in een bazengevecht. Ook: `/guhs vadsrijk vast`. |
-| K | je skillboom (nu 6 rijen: rij 4 vanaf level 20, rij 5 vanaf level 26) |
+| K | je skillboom (nu 6 rijen: rij 4 vanaf level 20, rij 5 vanaf level 26), met tabs per klasse |
+| **X** | **opstijgen / afstijgen** (nieuw): je actieve rijdier. Icoontje rechts naast de vaardigheden op de HUD. |
+| **N** | **rijdierenscherm** (nieuw): alle rijdieren, wat je nog niet hebt als silhouet, kleuren van de Pluimguh |
+| **P** | **huisdierenscherm** (nieuw): "Verzameld x/y", kies wie er met je meeloopt |
 | J | je questlog (hoofdverhaal bovenaan, "Nu: ..."; Volgen/Niet volgen voor zijquests; Gids met de elementendriehoek) |
 | (geen toets) | questvolger aan/uit en lichtstraal aan/uit: knoppen in de questlog, of zelf een toets kiezen |
 | Rechtsklik | NPC's, kampvuren, deuren, de scheepsbel, munten, sieraden, de draaispiegels in de Spiegelburcht |
-| Sluipen + rechtsklik | op een speler: ruilen. Op de **scheepsbel in De Haven**: de lijn naar Kandijkom |
+| Rechtsklik op een scheepsbel | **de reiskaart** (nieuw): kies waar je heen vliegt (Knuffelkamp, Zwamzoet, Kandijkom) |
+| Sluipen + rechtsklik | op een speler: ruilen. Op de **scheepsbel in De Haven**: meteen de lijn naar Kandijkom |
 | Sluipen tijdens een rondvlucht | de luchtschipvlucht overslaan (pas na de eerste keer) |
 | F9 / F10 | (Guhs 1.9, buiten het Vadsrijk) Erfenis-bovenaanzicht / wereldkaart. Waren O/M; een oude O/M-toets wordt één keer vanzelf verhuisd. |
 
@@ -76,6 +82,75 @@ andere kant ligt.
 - hq10 en hq12 starten vanzelf (geen vastloper meer); "Weet je nog?" bij wie je het laatst iets inleverde.
 - Nieuw geheim: de verstopte hoedenhut (schat `hoedenschat`).
 
+## Wat is nieuw (fixronde 2, tweede playtest)
+**Reizen en uitleg**
+- **Reiskaart**: een grote getekende kaart van het Vadsrijk. Klik op een kapitein (Knuffelkamp, De Haven, Kandijkom) of luid een
+  scheepsbel. Open plekken klik je aan (je vliegt meteen); plekken die je nog niet ontdekt hebt zijn grijs met een "?" en een regel
+  wat je nog moet doen. De Schemerwortel (zone 3) en een vierde gebied zijn een voorproefje ("Binnenkort..."). Slepen met de muis =
+  schuiven. De kapiteins geven ook gewoon de keuzes in het gesprek ("Naar Kandijkom (nog op slot)" zegt waarom).
+- **Werver Wimpel** (Knuffelorde) staat bij het portaaltempeltje in de Guhmensie. Het portaal slaapt tot je met hem gepraat hebt:
+  hij werft je, maakt een grapje (de "Wynn"-grap zit nu bij hem) en geeft weergave-advies. Dat advies staat ook in een tip en in
+  de Avonturiersgids.
+- **Losknuffelen (U)** wordt uitgelegd: Meester Kussensloop vertelt het, de welkomstregel noemt het, en de Avonturiersgids heeft
+  een pagina "Vastzitten? Druk op U".
+- **Job-advancement in de questvolger**: een lichtblauw blok met ✦ wijst naar de Grootmeester (of de Ordemeester in zone 2); in de
+  questlog een rij "Klasse" onder het hoofdverhaal.
+- **Zwamtempel**: de grote deur gaat vanaf **generiek nv 18 altijd** open (rechtsklik); met het verhaal al vanaf 16. hq11 begint
+  met "Klik op de grote deur van de Zwamtempel". De regel onder de poort noemt je level.
+- **Puzzelkamers**: de tip van de kamer staat onderin beeld zolang je erin staat (Zwamtempel en Spiegelburcht).
+- NPC's staan op de goede plek: Bakker Bram in zijn kraam (niet op het dak), Bakker Speculaas voor zijn deur; nooit meer in een
+  donker gat onder een huis.
+
+**Kaart (zone 1)**
+- Knuffelkamp: vanaf de bovenkant van de kliftrap loopt een **pad met randjes en lantaarns** naar het kampvuur (geen boom meer op
+  de uitgang).
+- Het **kasteeltje van Grootmeester Vadsvoet** (ordetempel) staat op een opgehoogde hoed: niets zweeft meer, de torens staan op
+  een sokkel. De hoedhuisjes hebben een fundering (de wenteltrap naast hoed_noordo komt gewoon boven uit).
+- **Biomes per plek**: F3 (F3+F6 voor de biome-regel) en JourneyMap tonen "Het Vadsrijk - Knuffelkamp / Zwamzoet / De Haven /
+  Klodderweide / Sporenwoud / Druipgrotten / De Kloof / Zwamtempel / Tussenland / De Zee", in zone 2 "Kandijkom / Galmhellingen /
+  Bevroren Knuffelmeer / Splinterkloof / Spiegelburcht / De Splinterpieken". Turquoise water in de Druipgrotten. (Oude chunks
+  houden "Het Vadsrijk": nog een reden voor een nieuwe wereld.)
+
+**UI**
+- **Sieraden**: Shift+klik in je inventaris om om te doen; uitleg in de tooltip; een gedragen sieraad toont de volledige tooltip +
+  "Klik om af te doen".
+- **Skill-icoontjes** op de HUD en in de skillboom. Hover op een HUD-vakje = uitleg (energie, afkoeltijd, welke boomknopen en
+  job-advancements hem verbeteren; wat je geleerd hebt in het groen met ✔).
+- Harnas: "Set: Kristalset (2/4 gedragen)" met de vier stukken (gedragen in het groen); losse stukken: "Los stuk: hoort bij geen
+  set." (Het Kristalhelmpje is een los zone-1-stuk, geen deel van de Kristalset.)
+
+**Balans** (een gok: zeg wat te zwaar of te licht voelt)
+- **Verdediging** werkt tegen het level van de aanvaller: verd / (verd + 25 + 15 x level), max 60 %. Harnassen geven 25 % minder
+  verdediging dan eerst.
+- **Gewone wezens en elites slaan 30 % harder** (bazen niet). Instelbaar: `[mobs] schade = 1.3` in het balansbestand (zie Klassen).
+- **Drankjes** in vaste stappen: Klein 120 / Vadsdrankje 300 / Groot 700 Vads, Energie +50 / Groot +120. Drinken duurt 2 s, alle
+  drankjes delen 10 s afkoeltijd (zichtbaar op het item). Het Klein Vadsdrankje is nieuw (8 brons).
+- **Geen wilde spawns binnen ~5 blokken van een pad** (evenveel wezens, maar naast de paden).
+- **Vahoegnir is 50 % groter**; de opening-vlucht ligt iets hoger. Kijk of het filmpje nog mooi in beeld is.
+- **Opgevrolijkte wezens** zijn doorzichtig en hebben geen hitbox meer (pijlen en klappen gaan erdoor).
+
+**Rijdieren (X / N)**
+- X = opstijgen/afstijgen (1 s afkoeling). Je stijgt af als je geraakt wordt (5 s "schrik!"), in een bazenarena en bij flauwvallen.
+  In dorpen mag je blijven rijden. Werkt in het hele Vadsrijk.
+- N = rijdierenscherm: alle rijdieren (wat je nog niet hebt als donker silhouet + "?"), een draaiend voorbeeld,
+  level/xp/snelheid/sprong, "Hierop rijden". Bij de stal ook kopen.
+- **Pluimguh** (hoofdrijdier, placeholder-model; kleuren roze/mint/lavendel = starters, honing (stal), wolkwit (quest),
+  sterrennacht (bazenkist van Koning Klodder of de Galmwolf, 5 %), goud (geheim: Opperzwam of Spiegelzucht, 2 %)), **Hoedhupper**
+  (quest), **Klodderros** (zadel van Koning Klodder), **Wolkenschaapje** (stal; zweeft, dubbele sprong), **Slakkie** (stal; traag
+  maar luxe), **Knuffelhert** en **Guhwolf** (terugkeerquests).
+- De starterkeuze (1 van de 3 Pluimguhs gratis) hoort bij de zone-3-quest; testen met `/guhs vadsrijk mount starter`.
+- **Terugkeerquests** (pas zichtbaar als je een rijdier hebt): "Het Knuffelhert" (zone 1, Boswachter Mos, lv 10: steek 3
+  lantaarns aan in het Sporenwoud en volg de hoefsporen naar de open plek) en "De verdwaalde Guhwolf" (zone 2, Breister Wolwinter
+  in Kandijkom, lv 22: zoek het wolfje op de kloofbodem, vrolijk 5 wezens op in de Splinterkloof).
+
+**Huisdieren (P)**
+- Versla een baas en zijn mini-versie loopt voortaan met je mee (één keer per baas): Mini Grauwe Klodderreus, Mini Koning Klodder,
+  Mini Galmwolf. Titelkaart "Nieuw huisdier!" na de overwinning. Je eerste huisdier loopt meteen mee.
+- P = huisdierenscherm: draaiende minimodelletjes (onbekend = silhouet), "Meenemen" / "Thuislaten". Ook een knop "Huisdieren" in
+  het rijdierenscherm.
+- Huisdieren doen niks in gevechten, zijn niet te raken, volgen je (teleporteren mee als je ver weg bent) en zijn alleen in het
+  Vadsrijk.
+
 ## Klassen: altijd alle drie (fixronde 2, g-klassen)
 - **Je bent altijd Knuffelridder, Pluisjager en Vadsmagiër.** Je klasse is het wapen in je hand: zwaard/knots/hamer/kling =
   Knuffelridder, boog/kruisboog/katapult = Pluisjager, staf/toverstok/boek = Vadsmagiër.
@@ -90,8 +165,8 @@ andere kant ligt.
   - Klasse: Kracht/Behendigheid/Wijsheid, skillpunten van die klasse, wapens ("Vereist: Pluisjager nv 14", rood als je het
     niet haalt), job-advancements (klasse nv 10/20/30).
   - Een wapen dat je nog niet mag: vasthouden mag, aanvallen niet (rode melding), en je wisselt er ook niet mee van klasse.
-- Knuffelkamp: het klasse-tempeltje = **kies je startwapen**. De andere startwapens: aan de ordetempelbalie in Zwamzoet
-  (eerste per klasse gratis, daarna 30 brons). De balie doet verder respec per klasse en de ceremonies; wisselen hoeft daar niet meer.
+- Knuffelkamp: het klasse-tempeltje = **kies je startwapen**. De andere startwapens: bij de **trainers op het trainingsveld**
+  ("Mag ik een Pluisboog?") of aan de ordetempelbalie in Zwamzoet (eerste per klasse gratis, daarna 30 brons). De balie doet verder respec per klasse en de ceremonies; wisselen hoeft daar niet meer.
 - Skillboom (K): de boom van je actieve klasse, met **tabs** bovenaan voor de andere twee (⚔ = actief). Punten per klasse komen
   van het klasseniveau; respec per klasse.
 - Knuffelridder is taaier: 20 % minder schade zolang hij met een melee-wapen actief is, en +4 Vads per klasseniveau.
@@ -100,30 +175,36 @@ andere kant ligt.
 **Balans per klasse (live, zonder herstart)**: `config/guhs-vadsrijk-balans.toml` (in de run-map; wordt de eerste keer met
 standaardwaarden geschreven). Per klasse `[knuffelridder]` / `[pluisjager]` / `[vadsmagier]`: `schade`, `skillschade`, `vads`,
 `verdediging`, `cooldowns`, `energie` (vermenigvuldigers, 1.0 = normaal), `melee_reductie` (0.20 = 20 % minder schade met een
-melee-wapen), `vads_per_klasselevel`. `[algemeen]`: `xp_schaal_generiek`, `xp_schaal_klasse`.
+melee-wapen), `vads_per_klasselevel`. `[algemeen]`: `xp_schaal_generiek`, `xp_schaal_klasse`. `[mobs]`: `schade` (1.3 = gewone
+wezens +30 %).
 - `/guhs vadsrijk balans toon` - alles bekijken
-- `/guhs vadsrijk balans <klasse|algemeen> <sleutel> <waarde>` - meteen actief en meteen in het bestand
+- `/guhs vadsrijk balans <klasse|algemeen|mobs> <sleutel> <waarde>` - meteen actief en meteen in het bestand
 - `/guhs vadsrijk balans herlaad` - het bestand opnieuw lezen (een bewerkt bestand wordt ook vanzelf binnen 5 s gelezen)
 
-## Zone 2: De Splinterpieken (lv 20-35)
-**Erheen**: zone 1 klaar (`zone1_klaar`) + level 20. Praat met Stuurguh Zeppie in De Haven ("Naar Kandijkom") of sluip + rechtsklik
-op de Haven-bel. De eerste keer: het openingsfilmpje (sneeuwstorm, ijsschotsen, licht uit, een Galmwolf huilt op een naald, de naald
-barst, de warme geode). Terug: de bel op de steiger van Kandijkom of Kapitein Poolster.
-- **Kandijkom**: roze kwarts-geode, chocomelkhuisjes met sneeuwkappen, schaatsvijver, Kristalkapel (3e titel op level 30),
-  juwelier (edelstenen inzetten/uithalen), Kandijkraam (grote drankjes, warme chocomelk = ontdooien), café met geheime kelder,
-  **gondel** naar de Galmtop.
-- **Galmhellingen** (20-25): naaldvelden, lawinebanen, de **Galmwolf** (wereldbaas): schuil achter de ijspilaren als hij huilt.
-- **Bevroren Knuffelmeer** (25-30): knuffels onder het ijs (Vlokje's zijquest), ijsvissers, het drakenzadel.
-- **Splinterkloof** (30-34): ravijn met hangbruggen en Mika-boortorens; wezens ook op de kloofbodem.
-- **Spiegelburcht** (33-35): Lichtkamer (straal met draaispiegels naar het slot), Spiegelgang (scherven + 3 golven), Prismazaal
-  (2 stralen), dan **Vrouwe Spiegelzucht**: alleen het spiegelbeeld ZONDER schaduw is zij; klap de spiegel plat op de lijn van het
-  oplichtende oog om haar te verblinden.
-- **Mika-boormeester** (geheim): vind de 5 aanwijzingen; oververhit de 3 boorkoppen in de goede volgorde (het bedieningspaneel
-  speelt de volgorde voor met tonen).
-- Nieuw in de systemen: level-cap 35, 3e job-advancement op 30 (Kristalkampioen / Poolstervalk / Kristalorakel), **sokjes**
-  (0-2) met kristallen (rozekwarts, zonnesteen, galmkristal, spiegelkwarts, vonkkristal, ijsglans; ruw / geslepen / stralend),
-  status **Bevroren** (trager; zware klappen +30 %; staat als blauwe regel boven je balken).
-- 12 hoofdquests, 23 zijquests, 3 klassenproeven, 50 NPC's, geheimen (10 knuffels onder het ijs, 5 aanwijzingen, 5 schatten).
+## Zone 2: De Splinterpieken (lv 20-30), opnieuw gebouwd
+**Erheen**: zone 1 klaar (`zone1_klaar`) + generiek level 20. Via de reiskaart (kapitein of scheepsbel) of sluip + rechtsklik op
+de Haven-bel. De eerste keer: het openingsfilmpje (sneeuwstorm, de Galmwolf huilt op een naald, de naald barst, de warme geode).
+Terug: de bel op de steiger van Kandijkom (reiskaart) of Kapitein Poolster.
+
+**Nieuw**: zone 2 is nu **compact** (~500 x 575 in plaats van 1200 x 1200), een eiland in een wolkenzee, met meer roze/kristal,
+meer leven, minder wit en meer hoogte. Alles ligt dichter bij elkaar.
+- **Kandijkom** (in de geode, kleiner en hoger): twee **terrassen** tegen de geodewand met trappen naast elke poortstraat en
+  bruggetjes, een **kristallen klokkentoren** (34 hoog) midden op het plein met lampionslingers, een **kerstmarkt** (kraampjes, een
+  chocomelkkraam bij de schaatsvijver, vuurkorven), de versierde kerstboom, **19 gebouwen met echte interieurs** (open haard,
+  bedden, boeken, chocomelkbekers; de chocoladekelder onder het café) en kristallen in de geodewand. Stadsleven: schaatsers,
+  sneeuwbalkinderen, pinguguhs, een sleefamilie, marktguhs. De stal staat buiten de zuidpoort.
+- **Vier open poorten** (oost, west, noord, zuid): de poortstraten lopen vlak door de wand en dan geleidelijk omhoog.
+- **Galmhellingen** (oost, lv 20-23): de Galmspleet met de gondel erboven, de bevroren lawinegolf over het pad, de **Galmwolf**.
+- **Bevroren Knuffelmeer** (west, lv 23-26): knuffels onder het ijs, de versteende guhs, het drakenzadel. De oever is overal één
+  stapje hoog (je loopt het ijs weer af).
+- **Splinterkloof** (noord, lv 26-29): ravijn met 4 hangbruggen, bevroren watervallen en richels; wezens op de kloofbodem; de
+  **Mika-boormeester**-grot (geheim).
+- **Spiegelburcht** (noordoost op zijn piek, lv 28-30): Lichtkamer, Spiegelgang, Prismazaal, **Vrouwe Spiegelzucht** (alleen het
+  spiegelbeeld ZONDER schaduw is zij).
+- Kristalbossen, geodegrotten, gehuchtjes met hutjes, lampionpalen langs elk pad, een warmwaterbron.
+- **Quests**: het hoofdverhaal (12) + **5 korte zijquests** (knuffels onder het ijs, schaatsles, het echokoor, ijsbloemen voor de
+  chocomelk, "Naar de top!" met de gondel) + de klassenproeven (klasse nv 30) + het geheim van de boormeester + De verdwaalde Guhwolf.
+- Systemen zoals eerst: sokjes met kristallen, juwelier, Kandijkraam, status **Bevroren**.
 
 ## Dev-commando's (op nodig)
 **Kern**: `/guhs vadsrijk` (erin/eruit), `proeftuin`, `level <1-35>`, `xp <n>`, `munten <n>`, `loot <zeldzaamheid> [type] [niveau]`,
@@ -140,7 +221,10 @@ barst, de warme geode). Terug: de bel op de steiger van Kandijkom of Kapitein Po
 **NPC's en quests**: `/guhs vadsrijk npc log | questlog | quest start|klaar|af|vergeet <id> | tp <npc|poi.<id>|knuffel.<id>|aanwijzing.<id>|schat.<id>> | reset | opening | bam | cliffhanger | vlieg stad|kamp | npcs`.
 **Wezens**: `/guhs vadsrijk wezens spawn <soort> [level] [elite] | affix ... | opruimen | kampklodder | overvlucht | draak <ticks> | set ... | loot ... | spawners`.
 **Bazen (zone 1)**: `/guhs vadsrijk bazen tp koning|tempel|opperzwam|markt|mika | spawn ... | fase 2|3|4 | split | loot <baas> | items | herstel | tempel reset|open|oplossing | mika ontmasker|reset`.
-**Klassen**: `/guhs vadsrijk klasse kies | boom | balie | wissel <klasse> | wapen <type> | skill 0-3 | adv | respecvrij | reset | punten <level> | klasselevel <klasse> <n> | generiek <n>`; `level <n>` (kern) zet generiek + de actieve klasse. **Balans**: `/guhs vadsrijk balans toon | herlaad | <klasse> <sleutel> <waarde>`.
+**Rijdieren**: `/guhs vadsrijk mount geef <soort> [kleur] | alle | reset | starter | scherm | stal | rijd <soort> [kleur]`.
+**Huisdieren**: `/guhs vadsrijk huisdier geef <klodderreus|koning_klodder|galmwolf> | alle | reset | scherm | kies <id|geen> | weg`.
+**Werver/praten**: `/guhs vadsrijk npc werver` (Wimpel aan je voeten) / `npc werver vergeet`; `npc praat <id>` (een NPC aanklikken).
+**Klassen**: `/guhs vadsrijk klasse kies | boom | balie | wissel <klasse> | wapen <type> | skill 0-3 | adv | respecvrij | reset | punten <level> | klasselevel <klasse> <n> | generiek <n>`; `level <n>` (kern) zet generiek + de actieve klasse. **Balans**: `/guhs vadsrijk balans toon | herlaad | <klasse|algemeen|mobs> <sleutel> <waarde>`.
 **Economie**: `/guhs vadsrijk eco winkel <id> | smid | markt | stal | spul | ster <n> | verpluis | handel <speler> | rijdier ... | rijdierxp <n> | ga <plek>`.
 
 **Zone 2**
@@ -158,6 +242,9 @@ Soorten zone-2 wezens: splinterling, galmvleermuis, sneeuwknabbelaar, kristalnaa
 versteende_wacht, ijspuffer, mika_mijnwerker, mika_boorder, kloofgier, kristalspin, spiegelwacht, scherfgeest.
 
 ## Waar op letten
+- **Fixronde 2**: voelt de klasse-wissel via het wapen goed? Zijn de twee levels duidelijk? Is vechten nu te zwaar (+30 %)?
+  Rijden met X/N, huisdieren met P, de reiskaart, Werver Wimpel, en de nieuwe zone 2 (Kandijkom, poorten, het meer, hoogte).
+- De draak is 50 % groter: past hij nog mooi in de opening-vlucht en de drakenpas over Zwamzoet?
 - **Lopen in survival**: kom je overal weer uit (water, kuilen, trappen)? Blijf je ergens hangen: druk U en meld de plek.
 - De draak over de stad, de lichtgolf bij schemer, de sporenstorm: te veel of te weinig? (Sfeer-instelling ZACHT/UIT bestaat.)
 - Knuffelsprong: voelt ~20 ver en ~5 hoog goed? Aanvalstempo per wapen: niet te traag?
@@ -173,7 +260,11 @@ versteende_wacht, ijspuffer, mika_mijnwerker, mika_boorder, kloofgier, kristalsp
   niet). 14 "trappen" = dakpannen van de A-tentjes. 5 waterplekken: een stuk van de baai van Zwamzoet (verder dan 10 slagen van een
   ladder), het Druipschacht-meer (de wenteltrap begint aan de oever).
 - Twee decoratieve deuren in Zwamzoet zitten dicht (stal-zijdeur, een hoeddeur); gras onder overkappingen buiten.
-- Zone 2: U gebruikt de kampvuren en de plekken van de kaart (geen fijnmazige audit-lijst zoals zone 1).
+- Zone 2: U gebruikt de kampvuren en de plekken van de kaart (geen fijnmazige audit-lijst zoals zone 1). loopcheck zone 2: een
+  paar dichte holtes onder de terrashuizen van Kandijkom (je kunt er niet in) en losse blokjes; de "trappen" zijn stoelen/bankjes.
+- Het Pluimguh-model is een placeholder; prijzen en snelheden van de rijdieren zijn een gok. Huisdieren: maat en animatie nog niet
+  beoordeeld; de Mini Klodderreus is grijs.
+- De starterkeuze van de rijdieren hoort bij zone 3 (nog niet gebouwd); de reiskaart toont zone 3/4 als voorproefje.
 - Geen muziek; geluiden zijn vanilla. Modellen en plaatjes zijn een eerste gegenereerde versie. Balans is een eerste gok.
 - Er is maar één opening naar Kandijkom (die van de wereld-slice); de Galmwolf daarin is een geluid, geen model.
 - De karavaanroute is uitgerekend op de kaart van vóór de fixronde; hij is gecontroleerd op de nieuwe kaart (geen water, kleine
