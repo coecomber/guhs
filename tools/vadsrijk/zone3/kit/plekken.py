@@ -486,16 +486,16 @@ def lichtkeverbos(W):
 
 def vijver(W, x, z, rr, g):
     """[zone 3 kaart] A walkable pond: 1-2 deep water (surface g - 1) in a bowl whose banks slope up (0.6 per block)."""
-    if not W.raakt(x - rr - 14, g - 8, z - rr - 14, x + rr + 14, g + 14, z + rr + 14):
+    if not W.raakt(x - rr - 24, g - 8, z - rr - 24, x + rr + 24, g + 24, z + rr + 24):
         return
     D = np.hypot(W.XX - x, W.ZZ - z)
-    m = D < rr + 12
+    m = D < rr + 22
     if not m.any():
         return
     s = np.floor(g - 1 + np.clip(D - rr, 0, None) * 0.6)
     gt = boom.grondhoogte(W.XX, W.ZZ)
     s = np.minimum(s, np.floor(gt + 0.5))
-    W.kolom(s + 1, np.full(D.shape, g + 12.0), "minecraft:air", mask=m)
+    W.kolom(s + 1, np.full(D.shape, g + 22.0), "minecraft:air", mask=m)
     W.kolom(np.full(D.shape, g - 6.0), s, "minecraft:dirt", mask=m, keep=True)
     W.kolom(s, s, W.kies(["minecraft:grass_block", "minecraft:moss_block", "minecraft:mud"], [4, 2, 1], W.XX, 0, W.ZZ, 973), mask=m & (D >= rr))
     W.kolom(np.full(D.shape, g - 3.0), np.full(D.shape, g - 2.0), "minecraft:mud", mask=D < rr)

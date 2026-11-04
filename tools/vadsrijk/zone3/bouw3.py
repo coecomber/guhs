@@ -772,7 +772,7 @@ def wortelweg(W):
     W.kolom(yt, yt, W.kies(["minecraft:dirt_path", "minecraft:dirt_path", "minecraft:coarse_dirt"], [5, 3, 1], W.XX, 0, W.ZZ, 4001), mask=pad)
     W.kolom(yt + 1, yt + 5, LUCHT, mask=pad)
     # lanterns at the tunnel mouths and every ~40 blocks
-    lamp = pad & (np.abs(W.RR - RRw - 2.2) < 0.5) & (hash3(np.round(W.TH * 120), 0, 0, 4002) < 0.05)
+    lamp = (np.abs(W.RR - RRw - 3.4) < 0.5) & (hash3(np.round(W.TH * 120), 0, 0, 4002) < 0.05)
     W.kolom(yt + 1, yt + 2, "minecraft:spruce_fence", mask=lamp)
     W.kolom(yt + 3, yt + 3, "minecraft:lantern[hanging=false,waterlogged=false]", mask=lamp)
 
@@ -879,7 +879,7 @@ def pad_vrij(W):
     if "minecraft:dirt_path" not in W.idx:
         return
     pid = W.idx["minecraft:dirt_path"]
-    laat = {W.idx[s] for s in W.idx if any(w in s for w in ("lantern", "lampion", "fence", "chain", "ladder", "campfire", "petals",
+    laat = {W.idx[s] for s in W.idx if any(w in s for w in ("lantern", "lampion", "chain", "ladder", "campfire", "petals",
                                                           "carpet", "slab", "stairs", "torch", "z3kv"))}
     laat.add(0)
     xs, ys, zs = np.nonzero(W.v == pid)

@@ -74,8 +74,9 @@ Branch `110-z3-wereld` (worktree `guhs_vadsrijk/z3-wereld`, from ab6d952ac). Bri
   grey-blue eyes + the voice "Hij leeft nog... maar niet lang meer.", then the dock. Later flights ~8 s. Dock bell = travel map.
 - `Z3Liften`: right-click a block within ~3 of a stop -> ride scene along the shaft/cable, then you stand at the other stop.
   Honinglift gate `MAG_HONINGLIFT` (default: Questlog flag `z3_honinglift`; creative always).
-- `Z3Wind`: inside a column: levitation 17 (short, refreshed) on the player and on his mount; above the landing y: pushed
-  sideways onto the landing with slow falling. Petals/glow particles from the server.
+- Wind columns: only PLACED here (map + `Z3WereldPlekken.WINDKOLOMMEN`); the physics is z3-systemen's `zone3/systemen/Z3Wind`
+  (lead's instruction). `Z3WereldRegistry.register` points `Z3Wind.KOLOMMEN` at `Z3WereldPlekken.WINDKOLOMMEN` (v1 includes the
+  new `spiraal_kruin` column: top of the Stamspiraal -> the crown top by the nest, with a ladder shaft beside it as the way down).
 - Client (`client/`, one marked line in `wereld.client.WereldClient`): `Z3Lucht` (honey band, Hoogvads floating city east with
   pink night windows, the volcano SE, the Grauwe Einder grey streak), fog colour per LAYER (`Z3WereldClient.laagKleur`),
   `Z3Sfeer` (bees/leaves/petals in the crown, wood creak on branches, drips + hoot in the trunk, fireflies on the ground at night,
@@ -93,11 +94,11 @@ Branch `110-z3-wereld` (worktree `guhs_vadsrijk/z3-wereld`, from ab6d952ac). Bri
 - Resources: `tools/features/vadsrijk_z3_wereld.py` (in FEATURES, one line): textures `z3_hoogvads(_nacht).png`, `z3_einder.png`;
   texts (area names, airship, opening, lifts, viewpoints, travel map/captain lines for schemerwortel).
 
-## Kern areas with y-ranges (open, for z3-systemen / integration)
-- kern `Gebieden.Gebied` is still flat. I did NOT edit kern. The real zone-3 areas are `Z3WereldPlekken.GEBIEDEN` (Gebied3:
-  y-range + box/cylinder, first match wins) with `Z3WereldPlekken.gebied(x, y, z)`. Kern gets only 3 flat boxes (see above),
-  so 2D callers see "Honingtak" in the town and "De Schemerwortel" (z3_ring, lv 30-50) elsewhere. When z3-systemen lands a
-  y-aware kern API, register `GEBIEDEN` there (ids and order are ready) and drop the flat z3_ring.
+## Kern areas with y-ranges
+- **Merged `110-z3-systemen`** (merge commit 565e49892; conflicts only in lang + FEATURES, resolved by keeping both). Its kern
+  layered `Gebied` + `Z3Lagen` (a copy of my area plan, identical to v1) registers the y-aware areas. My
+  `Z3WereldRegistry.vlakkeGebieden()` adds 3 flat boxes ONLY if no `z3_kruinzee` area exists at server start (so: never with
+  z3-systemen present). `Z3WereldPlekken.gebied(x, y, z)` stays as my own lookup (client sky/ambient use it).
 
 ## For the other slices
 - All coordinates: `POI_Z3.md` / `Z3WereldPlekken.plek(id)`. Stand spots unless noted.
@@ -109,8 +110,18 @@ Branch `110-z3-wereld` (worktree `guhs_vadsrijk/z3-wereld`, from ab6d952ac). Bri
   lanterns (switch to lanterns when lit).
 - wezens: `MOBZONES` (with y-ranges) + `PADEN` (no spawns within ~5).
 
+## Requests handled (POI_VERZOEKEN_Z3.md)
+- npc: `kuiken_1..6`; `luchtschipper` (De Haven) also offers schemerwortel; NpcRollen bindings `z3_honinglift_open` (sets flag
+  `z3_honinglift`), `z3_honinglift` (arg op/af: rides), `z3_grotlantaarn` (arg 1..4: the soul lantern becomes a lantern, world
+  block, not per player). NOT done: `z3_ring_aan`, `z3_ketel_uit`, `z3_terugkleur` (per-player visual state; npc fallback).
+  Opening: both exist; integration picks (`Z3Reizen.EERSTE_AANKOMST = Z3Verhaal::opening` to use npc's).
+- bazen: `arena_kruinroofvogel_deur`, `arena_piepvel_deur`, `roquefort_wrak` (+ a wreck platform r 8 beside the deck),
+  `werf_loods_poort` (3x4 air opening in the loods wall), `hart_kwekerij_poort`, `hart_ringenzaal_poort`, `nest_tak_1..6`
+  (spots kept free); no levers/cannons of mine in the loods any more (bazen places them); Ringenzaal + Baron Bleu rooms have
+  flat free floors (r 14 / 22).
+
 ## Tests
-- (see the end of this file, filled in after the checks)
+- (see below)
 
 ## Resume point
 - Regenerate with `python tools/vadsrijk/maak_kaart.py --zone 3` after any generator change; `python tools/vadsrijk/zone3/poi3.py`

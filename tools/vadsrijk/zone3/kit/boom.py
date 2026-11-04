@@ -769,7 +769,7 @@ def duister_vloer(XX, ZZ):
     F = F * (1 - wh) + 12 * wh
     hoog = 14 + 14 * np.clip(vnoise(XX, ZZ, cell=60, seed=206, oct=2) * 0.5 + 0.5, 0, 1)
     C = F + hoog * np.clip((450 - RR) / 60.0, 0, 1) ** 0.7
-    C = np.minimum(C, 58)
+    C = np.minimum(C, np.minimum(58, grondhoogte(XX, ZZ) - 6))   # a roof of >= 6 everywhere: no holes from the valleys
     pilaar = (vnoise(XX, ZZ, cell=28, seed=207, oct=1) > 0.42) & (RR > 70) & (d > 14)
     C = np.where(pilaar, F, C)
     return F, C

@@ -58,6 +58,10 @@ public final class Z3WereldRegistry {
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerAboutToStartEvent e) -> vlakkeGebieden());
         QuestMotor.ACTIES.put("z3_vlieg", (p, naar) -> Z3Reizen.naarHoningtak(p));
         npcBindingen();
+        // the wind-column physics is z3-systemen's Z3Wind: give it the columns as built on the map (v1, incl. spiraal_kruin)
+        nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wind.KOLOMMEN = Z3WereldPlekken.WINDKOLOMMEN.stream()
+                .map(w -> new nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wind.Kolom(w.id(), w.x(), w.z(), w.y0(), w.y1(), w.r(), w.lx(), w.lz()))
+                .toList();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
