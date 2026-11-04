@@ -35,7 +35,7 @@ final class Z2Sfeer {
         if (l == null || p == null || !Vadsrijk.in(l) || mc.isPaused() || !Z2WereldRegistry.inZone2(p.getX(), p.getZ())) {
             return;
         }
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         String id = g == null ? "zee" : g.id();
         int maaiveld = l.getHeight(Heightmap.Types.WORLD_SURFACE, p.getBlockX(), p.getBlockZ());
         boolean binnen = p.getY() < maaiveld - 4;
@@ -56,7 +56,8 @@ final class Z2Sfeer {
         if (nacht && !binnen && R.nextInt(5) == 0 && id.equals("z2_galmhellingen")) {
             l.addParticle(ParticleTypes.GLOW, x + R.nextGaussian() * 8, y + 1 + R.nextDouble() * 3, z + R.nextGaussian() * 8, 0, 0.01, 0);
         }
-        if (R.nextInt(60) != 0) {
+        // (I-AUDIO: not in Kandijkom, its sounds come from stadsmuziek.client.StadsMuziekSpeler)
+        if (R.nextInt(60) != 0 || nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.stadVan(id) != null) {
             return;
         }
         SoundEvent s;

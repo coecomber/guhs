@@ -3,14 +3,14 @@ package nl.juiced.guhs.feature.vadsrijk.kern;
 /**
  * Levels 1..{@link #MAX} and the xp curve. g-klassen (round 2): a player has TWO levels, both from xp: the <b>generic</b> level
  * (Vads, Verdediging, area/quest gates, armour/jewellery) and a <b>class</b> level per class (main stat, skill points, weapons,
- * job advancement). Both cap at 35 and use the same curve shape; each has its own scale ({@link #SCHAAL_GENERIEK},
+ * job advancement). Both cap at 50 and use the same curve shape; each has its own scale ({@link #SCHAAL_GENERIEK},
  * {@link #SCHAAL_KLASSE}, set from {@code config/guhs-vadsrijk-balans.toml}).
  */
 public final class Levels {
-    /** z2-systemen: 20 -> 35 (zone 2 "De Splinterpieken" is lv 20-35; the curve below simply continues, 1 skill point per level). */
-    public static final int MAX = 35;
+    /** z2-systemen: 20 -> 35; z3-systemen: 35 -> 50 (zone 3 "De Schemerwortel" is lv 30-50; the curve simply continues). */
+    public static final int MAX = 50;
     /** The generic level cap (the same as the class cap). */
-    public static final int MAX_GENERIEK = 35;
+    public static final int MAX_GENERIEK = 50;
     /** Xp curve scales (1 = the zone-1 curve); tunable separately in the balans config. */
     public static volatile double SCHAAL_KLASSE = 1, SCHAAL_GENERIEK = 1;
 

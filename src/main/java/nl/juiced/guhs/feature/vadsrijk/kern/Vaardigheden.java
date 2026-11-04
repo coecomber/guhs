@@ -29,6 +29,10 @@ public final class Vaardigheden {
     public static final java.util.List<java.util.function.BiFunction<ServerPlayer, Vaardigheid, Float>> ENERGIE_MOD =
             new java.util.concurrent.CopyOnWriteArrayList<>();
 
+    /** z3-systemen: after a skill was used successfully (player, skill) — e.g. the zone-3 tree nodes and the Nestvorm ults. */
+    public static final java.util.List<java.util.function.BiConsumer<ServerPlayer, Vaardigheid>> NA_GEBRUIK =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
+
     private Vaardigheden() {
     }
 
@@ -100,6 +104,7 @@ public final class Vaardigheden {
             d.energie = Spelers.energie(p) - energie(p, v);
         }
         d.klaarOp.put(v.id(), nu + cooldown(p, v));
+        NA_GEBRUIK.forEach(f -> f.accept(p, v));   // z3-systemen
         blokInZicht(p);
         Tips.toon(p, "vadsrijk.kern.tip.skill");
         Spelers.sync(p);

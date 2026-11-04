@@ -59,9 +59,10 @@ public final class Kristallen {
     public static final double[] FACTOR = {1.0, 1.7, 2.6};
 
     /** One crystal kind: a stat with its value at "ruw" (or null + the ijsglans effect), its colour. */
-    public record Soort(String id, @Nullable Stat stat, double waarde, int kleur) {
-        public String itemId() {
-            return "vr_z2_kristal_" + id;
+    public record Soort(String id, @Nullable Stat stat, double waarde, int kleur, String itemId) {
+        /** A zone-2 crystal (item {@code vr_z2_kristal_<id>}); z3-systemen adds zone-3 kinds with their own item id. */
+        public Soort(String id, @Nullable Stat stat, double waarde, int kleur) {
+            this(id, stat, waarde, kleur, "vr_z2_kristal_" + id);
         }
 
         public double waarde(int kwaliteit) {

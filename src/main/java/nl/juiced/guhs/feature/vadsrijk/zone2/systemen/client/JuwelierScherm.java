@@ -29,7 +29,7 @@ public class JuwelierScherm extends EcoScherm {
     private int glinster = -1;
 
     public JuwelierScherm(CompoundTag data, List<ItemStack> items) {
-        super(SCHERM, Component.translatable("vadsrijk.z2.systemen.juwelier.titel"), data, items, 330, 214);
+        super(SCHERM, Component.translatable("vadsrijk.z2.systemen.juwelier.titel"), data, items, 330, 244);   // (z3-systemen: room for a 3rd socket)
         kies = data.getIntOr("kies", -1);
     }
 

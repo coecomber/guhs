@@ -5,11 +5,14 @@ import java.util.List;
 
 import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
 import nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken;
+import nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Lagen;
 
 /**
  * Fix round 2 "biomen": which Vadsrijk biome ({@code guhs:vadsrijk_<id>}, "Het Vadsrijk - &lt;plek&gt;" in F3 and JourneyMap) lies
  * at a block x/z. Pure and deterministic (only the fixed area boxes, never the runtime list that dungeons/arenas are pushed into):
  * <ol>
+ *   <li>z3-systemen: the zone-3 LAYERS ({@link Z3Lagen#GEBIEDEN}): these need the height, so the biome source is 3D there (crown,
+ *   branches, trunk, ground and roots of the world tree each have their own biome; the zone-3 catch-all = De Schemerwortel);</li>
  *   <li>the zone-2 areas ({@link Z2WereldPlekken#GEBIEDEN}, first match wins; their ring = De Splinterpieken);</li>
  *   <li>the Kloof ravine (the same polyline as the fog of wereld/sfeer GebiedMist: it wins over the box it cuts through);</li>
  *   <li>the zone-1 areas of {@link Gebieden} in their order (their catch-all ring and the proeftuin = Tussenland);</li>
@@ -19,7 +22,9 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken;
 public final class VadsrijkBiomen {
     /** Biome ids (without "vadsrijk_"); the index is what {@link #index} returns. Keep in sync with tools/features/vadsrijk_biomen.py. */
     public static final List<String> IDS = List.of("knuffelkamp", "zwamzoet", "haven", "klodderweide", "sporenwoud", "druipgrotten", "kloof",
-            "zwamtempel", "tussenland", "zee", "kandijkom", "galmhellingen", "knuffelmeer", "splinterkloof", "spiegelburcht", "splinterpieken");
+            "zwamtempel", "tussenland", "zee", "kandijkom", "galmhellingen", "knuffelmeer", "splinterkloof", "spiegelburcht", "splinterpieken",
+            // z3-systemen: zone 3 "De Schemerwortel", one biome per layer
+            "honingtak", "kruinzee", "takkenbanen", "schorsstad", "wortelvelden", "wortelduister", "zeppelinwerf", "hart", "schemerwortel");
     public static final int ZEE = IDS.indexOf("zee"), KLOOF = IDS.indexOf("kloof"), TUSSENLAND = IDS.indexOf("tussenland");
 
     /** The Kloof ravine (tools/vadsrijk/wereld/kaart.py KLOOF and GebiedMist.KLOOF_LIJN, world coordinates). */
@@ -77,8 +82,41 @@ public final class VadsrijkBiomen {
         return IDS.contains(id) ? id : "splinterpieken";
     }
 
-    /** The biome index ({@link #IDS}) at block x/z. */
+    /** A zone-3 area id (z3_...) to its biome id; unknown ids fall back to De Schemerwortel. */
+    static String zone3Biome(String gebied) {
+        String id = gebied.startsWith("z3_") ? gebied.substring(3) : gebied;
+        if (id.startsWith("honingtak")) {
+            return "honingtak";
+        }
+        if (id.equals("stamspiraal")) {
+            return "schorsstad";
+        }
+        return IDS.contains(id) && IDS.indexOf(id) >= IDS.indexOf("honingtak") ? id : "schemerwortel";
+    }
+
+    /** z3-systemen: the biome index at block x/y/z (zone 3 is layered; elsewhere the height does not matter). */
+    public static int index(int x, int y, int z) {
+        if (Z3Lagen.inZone3(x, z)) {
+            for (Gebieden.Gebied g : Z3Lagen.GEBIEDEN) {
+                if (g.bevat(x + 0.5, y, z + 0.5)) {
+                    return IDS.indexOf(zone3Biome(g.id()));
+                }
+            }
+            return IDS.indexOf("schemerwortel");
+        }
+        return index(x, z);
+    }
+
+    /** The biome id at block x/y/z. */
+    public static String id(int x, int y, int z) {
+        return IDS.get(index(x, y, z));
+    }
+
+    /** The biome index ({@link #IDS}) at block x/z (flat: zone 3 gives its ground layer). */
     public static int index(int x, int z) {
+        if (Z3Lagen.inZone3(x, z)) {
+            return index(x, 64, z);
+        }
         for (Doos d : ZONE2) {
             if (d.bevat(x, z)) {
                 return d.index;

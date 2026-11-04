@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/vadsrijk/zone3/systemen/vr_z3_kristal_wortelkristal"
+  }
+}
