@@ -85,4 +85,26 @@ bosses moved and hit) - so the in-game failure was targeting (creative / range) 
 - AutoCheck script `tools/autocheck/vadsrijk_bazen_fix.txt` (player ~14 blocks away in each arena).
 
 ## Results / resume point
-(filled in below)
+- Gametests `-Pgt=VadsrijkBazen`: **10/10 passed** (2026-11-04 10:42). Numbers from the run (player standing still at range):
+  - Klodderreus lv 3 vs a lv-3 player (128 Vads): came from 14 blocks to 0, 5 hits in 18 s, biggest hit 27 (plet now 1.7x).
+  - Koning Klodder lv 8 vs lv 8 (198 Vads): from 16 blocks to 0, 5 hits, biggest 43.
+  - Opperzwam lv 19 vs lv 18 (338 Vads): from 14 blocks to 1, 11 hits, biggest 88 (26 %).
+  - Note: gametest mock players of parallel tests are all around: `VadsrijkBaas.testFilter` (tests only) limits the fighters.
+- AutoCheck `tools/autocheck/vadsrijk_bazen_fix.txt` (one run, creative player): screenshots in `run/screenshots/autocheck/`:
+  - Klodderreus: red landing circle around the player at range (k3), he left the pond and hops at you (k1-k4).
+  - Koning Klodder: jumped right onto the player 14 blocks away (q2: camera inside him), split + Kroonklodders (q5).
+    `bazen fase 3` during the split does nothing (he is invulnerable while split, by design), so q5-q7 show the split, not
+    the crown/Hemelsprong.
+  - Mika: decoys + cheese-wheel lanes (m3: "Vier Mika's?!" + "kaaswiel-lawine" and the red lanes on the cap).
+  - Opperzwam: NOT captured - my script teleported with `/tp ~ ~1 ~14` before the temple tile was loaded, the player fell to
+    y 1. Fix for a next run: `wait 80` + `waitrender` after `wereld plek arena_opperzwam.centrum` before the `/tp`.
+    The Opperzwam behaviour is covered by the gametest (target at range, approach, hits).
+- Head commit: see `git log` on `110-fix-bazen`.
+
+## Open points / for integration
+- Lang keys added directly to nl_nl/en_us (kern key `vadsrijk.kern.baas.te_ver` has no generator; the bazen keys are also in
+  `tools/features/vadsrijk_bazen.py`).
+- Not visually checked in a client: the crown bounce/throw, the shield ring, slime ponds, the root tower (walkability: steps
+  of 1 block, 3x3 platform at +6; please check in the dev client), the sporenlast/spreid circles.
+- Beleving hook: `opFase` is the single phase entry point in every boss; a `Beleving.faseMoment(this, fase)` call can go at its top.
+- Balance (first guesses): Klodderreus 1400 HP at lv 3; plet 1.7x, spit 1.1x, roll 1.2x. KK crown stun 4 s, shield 8 hits.
