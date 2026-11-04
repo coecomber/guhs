@@ -1,0 +1,97 @@
+# Vadsrijk fix round 2, G-PETS: the pet screen (Verzameld x/y, silhouettes, hover info), a pet following, teleporting along,
+# and the three pets side by side.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_g_pets.txt
+# (gui scale 2: the 340x224 pet screen sits at 150,68; grid cells of 36 px from 158,92, 3 px apart)
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk huisdier reset
+/guhs vadsrijk mount reset
+/tp @s -14 64 66
+look 180 5
+wait 40
+waitrender 200
+
+section unlock
+/guhs vadsrijk huisdier geef klodderreus
+wait 25
+shot p_nieuw_huisdier gui
+wait 40
+/guhs vadsrijk huisdier geef koning_klodder
+wait 20
+
+section scherm
+gui keep
+/guhs vadsrijk huisdier scherm
+wait 30
+shot p_scherm_2van3 gui
+mouse 254 110
+wait 5
+shot p_scherm_hover_galmwolf gui
+click 254 110
+wait 5
+shot p_scherm_galmwolf_silhouet gui
+click 215 110
+wait 5
+shot p_scherm_koning gui
+gui close
+wait 10
+/guhs vadsrijk mount geef hoedhupper
+gui keep
+/guhs vadsrijk mount scherm
+wait 30
+shot p_rijdierscherm_knop gui
+gui close
+wait 10
+
+section volgen
+perspective front
+wait 30
+shot p_volgt_stil gui
+perspective back
+key up on
+wait 30
+key all off
+wait 4
+shot p_volgt_loop gui
+/guhs vadsrijk huisdier weg
+wait 2
+shot p_weg_net gui
+wait 10
+shot p_terug_geteleporteerd gui
+/tp @s -14 64 126
+wait 30
+waitrender 100
+shot p_tp_ver gui
+
+section alle
+/tp @s -14 64 66
+look 180 5
+/guhs vadsrijk huisdier alle
+wait 20
+/guhs vadsrijk huisdier kies koning_klodder
+wait 20
+perspective front
+wait 10
+shot p_koning_klodder gui
+/guhs vadsrijk huisdier kies galmwolf
+wait 25
+shot p_galmwolf gui
+/guhs vadsrijk huisdier kies klodderreus
+wait 25
+shot p_klodderreus gui
+perspective back
+gui keep
+/guhs vadsrijk huisdier scherm
+wait 30
+shot p_scherm_alles gui
+gui close
+perspective first
+modelcheck
+quit

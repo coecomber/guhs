@@ -209,6 +209,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z2_bazen',
             # 1.10 fix round 2, G-MOUNTS: the mount system (Pluimguh, Wolkenschaapje, Slakkie, icons, texts); after economie + momenten
             'vadsrijk_rijdieren',
+            # 1.10 fix round 2, G-PETS: the pets (chibi boss animations, the grey klodder texture, texts); after the boss slices
+            'vadsrijk_huisdieren',
             ]
 
 
