@@ -150,7 +150,8 @@ public class VadsrijkWezensGameTests {
     /**
      * Fix round 1 ("leven"): a waking spawner fills up at once but never over its max, the area room caps it, a beaten mob
      * comes back only after the respawn time, nothing spawns within the safe radius of a campfire, mushroom caps are no
-     * ground, and the zone plan has MMO density (the sums of the spawner maxima per area).
+     * ground, and the zone plan has MMO density (the sums of the spawner maxima per area: ~2.5x the area cap, so one player's
+     * 80-block bubble is full while the area caps keep the total at the target).
      */
     @GuhTest(template = "empty", batch = BATCH_LEVEN, timeoutTicks = 200)
     public static void spawnerCapsEnVeiligeStraal(GameTestHelper helper) {
@@ -197,9 +198,9 @@ public class VadsrijkWezensGameTests {
         var plan = WezensSpawners.PLAN;
         com.mojang.logging.LogUtils.getLogger().info("[leven] spawner plan (sum of maxima per area): {} ({} surface + {} floor-search spawners)", plan,
                 WezensSpawners.aantalOppervlak(), WezensSpawners.aantalVloer());
-        helper.assertTrue(plan.getOrDefault("klodderweide", 0) >= 80 && plan.get("klodderweide") <= 130, "klodderweide dense: " + plan);
-        helper.assertTrue(plan.getOrDefault("sporenwoud", 0) >= 85 && plan.get("sporenwoud") <= 130, "sporenwoud dense: " + plan);
-        helper.assertTrue(plan.getOrDefault("druipgrotten", 0) >= 80 && plan.get("druipgrotten") <= 140, "druipgrotten dense: " + plan);
+        helper.assertTrue(plan.getOrDefault("klodderweide", 0) >= 160, "klodderweide dense: " + plan);
+        helper.assertTrue(plan.getOrDefault("sporenwoud", 0) >= 170, "sporenwoud dense: " + plan);
+        helper.assertTrue(plan.getOrDefault("druipgrotten", 0) >= 160, "druipgrotten dense: " + plan);
         helper.assertTrue(plan.getOrDefault("zwamtempel", 0) + plan.getOrDefault("ring", 0) >= 22, "temple path: " + plan);
         helper.succeed();
     }

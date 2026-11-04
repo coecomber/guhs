@@ -118,6 +118,50 @@ public final class WezensSpawners {
         sporenwoud(r);
         druipgrotten(r);
         zwamtempel(r);
+        verticaal();
+    }
+
+    /** A spot of the vertical layer (fix round 1 "verticaal"): only when the map that is loaded has it. */
+    @Nullable
+    private static BlockPos plekAls(String id) {
+        return WereldPlekken.ALLE.get(id);
+    }
+
+    /**
+     * The Hoedenpaden (the hat layer 30-50 up in the Sporenwoud) and the Druipschacht (f-verticaal; their WereldPlekken ids
+     * exist once the map with them is generated, otherwise nothing is added). Narrow y-ranges so the hat layer and the
+     * forest floor below never mix.
+     */
+    private static void verticaal() {
+        String w = "sporenwoud", d = "druipgrotten";
+        Soort[] hoed = {HOEDJES, PUFFER, MOSGEEST, HOEDJES, WACHTER, PUFFER, HOEDJES, MOSGEEST};
+        for (int i = 1; i <= 8; i++) {
+            BlockPos b = plekAls("hoedenpad_wezen_" + i);
+            if (b != null) {
+                zet(w, w + "_hoedenpad_" + i, hoed[i - 1], b.above(1), 3, 2, 300, ELITE, true, b.getY() - 2, b.getY() + 1);
+            }
+        }
+        BlockPos nest = plekAls("hoedenpad_elitenest");
+        if (nest != null) {
+            zet(w, w + "_elite_hoedennest", WACHTER, nest.above(1), 3, 1, 3600, 1.0, true, nest.getY() - 2, nest.getY() + 1);
+            zet(w, w + "_hoedennest", MOSGEEST, nest.above(1), 4, 2, 600, ELITE, true, nest.getY() - 2, nest.getY() + 1);
+        }
+        Soort[] richel = {KNAAG, KRISTAL, KNAAG, KRISTAL};
+        for (int i = 1; i <= 4; i++) {
+            BlockPos b = plekAls("druipschacht_richel_" + i);
+            if (b != null) {
+                zet(d, d + "_schacht_richel_" + i, richel[i - 1], b.above(1), 2, 2, 400, ELITE, true, b.getY() - 2, b.getY() + 1);
+            }
+        }
+        BlockPos bodem = plekAls("druipschacht_bodem");
+        if (bodem != null) {
+            zet(d, d + "_schacht_bodem", KRISTAL, bodem.above(1), 4, 2, 500, ELITE, true, bodem.getY() - 2, bodem.getY() + 1);
+            zet(d, d + "_schacht_bodem", GLIM, bodem.above(1), 4, 1, 500, ELITE, true, bodem.getY() - 2, bodem.getY() + 1);
+        }
+        BlockPos balkon = plekAls("druipschacht_balkon");
+        if (balkon != null) {
+            zet(d, d + "_elite_schacht_balkon", KRISTAL, balkon.above(1), 2, 1, 3600, 1.0, true, balkon.getY() - 2, balkon.getY() + 1);
+        }
     }
 
     /** A guh (NPC, ridder, Kampklodder...) within the safe radius. */
@@ -270,13 +314,13 @@ public final class WezensSpawners {
         String g = "klodderweide";
         List<int[][]> paden = WezensPlekken.paden("weide", "weide2", "weide3", "slijm", "slijm2");
         int[][] niet = {WezensPlekken.ARENA_KONING, WezensPlekken.SLAAPHEUVEL};
-        langsPaden(g, r, paden, 34, niet, KLODDER, 6, BUBBEL, 2, STUITER, 2);
-        kampen(g, r, 5, paden, niet, new Soort[][] {{KLODDER, BUBBEL}, {KLODDER, STUITER}, {STUITER, BUBBEL}},
+        langsPaden(g, r, paden, 18, niet, KLODDER, 6, BUBBEL, 2, STUITER, 2);
+        kampen(g, r, 12, paden, niet, new Soort[][] {{KLODDER, BUBBEL}, {KLODDER, STUITER}, {STUITER, BUBBEL}},
                 new int[][] {{3, 1}, {2, 2}, {2, 2}});
         // the pond rims: bubbelklodders
         int v = 0;
         for (int[] vijver : WezensPlekken.VIJVERS) {
-            for (int a = 0; a < 1; a++) {
+            for (int a = 0; a < 2; a++) {
                 double hoek = a * Math.PI + vijver[0] * 0.01;
                 double x = vijver[0] + Math.cos(hoek) * (vijver[2] + 4), z = vijver[1] + Math.sin(hoek) * (vijver[2] + 4);
                 if (vrij(g, x, z, 5, niet)) {
@@ -299,8 +343,8 @@ public final class WezensSpawners {
         String g = "sporenwoud";
         List<int[][]> paden = WezensPlekken.paden("woud", "woud2");
         int[][] niet = {};
-        langsPaden(g, r, paden, 26, niet, HOEDJES, 4, PUFFER, 3, WACHTER, 2, MOSGEEST, 2);
-        kampen(g, r, 8, paden, niet, new Soort[][] {{HOEDJES, PUFFER}, {WACHTER, PUFFER}, {MOSGEEST, HOEDJES}, {HOEDJES, WACHTER}},
+        langsPaden(g, r, paden, 16, niet, HOEDJES, 4, PUFFER, 3, WACHTER, 2, MOSGEEST, 2);
+        kampen(g, r, 16, paden, niet, new Soort[][] {{HOEDJES, PUFFER}, {WACHTER, PUFFER}, {MOSGEEST, HOEDJES}, {HOEDJES, WACHTER}},
                 new int[][] {{3, 2}, {2, 2}, {2, 2}, {3, 1}});
         Soort[] rond = {WACHTER, MOSGEEST, HOEDJES, PUFFER, WACHTER, MOSGEEST};
         for (int i = 0; i < WereldPlekken.LICHTSTRALEN.size(); i++) {
@@ -318,14 +362,14 @@ public final class WezensSpawners {
         String g = "druipgrotten";
         List<int[][]> paden = WezensPlekken.paden("grotten", "grotten2", "grotten3", "grotten4", "druip");
         int[][] niet = {};
-        langsPaden(g, r, paden, 55, niet, KNAAG, 3, KRISTAL, 2, GLIM, 1);
-        kampen(g, r, 2, paden, niet, new Soort[][] {{KNAAG, GLIM}, {KRISTAL, GLIM}, {KNAAG, KRISTAL}}, new int[][] {{3, 1}, {2, 1}, {3, 1}});
-        // the caves: along every tunnel, groups every 26 blocks (druipslijm on the low tunnel ceilings)
+        langsPaden(g, r, paden, 26, niet, KNAAG, 3, KRISTAL, 2, GLIM, 1);
+        kampen(g, r, 6, paden, niet, new Soort[][] {{KNAAG, GLIM}, {KRISTAL, GLIM}, {KNAAG, KRISTAL}}, new int[][] {{3, 1}, {2, 1}, {3, 1}});
+        // the caves: along every tunnel, groups every 15 blocks (druipslijm on the low tunnel ceilings)
         int n = 0;
         for (WezensPlekken.Gang gang : WezensPlekken.gangen()) {
             double L = gang.lengte();
             int stuk = 0;
-            for (double t = 10; t < L - 8; t += 26) {
+            for (double t = 10; t < L - 8; t += 15) {
                 int[] c = gang.punt(t / L);
                 Soort s = stuk++ % 3 == 0 ? KNAAG : kies(r, DRUIP, 4, KRISTAL, 1, GLIM, 1);
                 int max = s == KNAAG ? 3 : s == GLIM ? 1 : 2;

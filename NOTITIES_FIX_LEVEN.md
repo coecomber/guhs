@@ -68,12 +68,41 @@ bouwsels.py GROT_KNOPEN + the tunnel wiggle; keep in step if the map layout chan
   Kikkerguhs are vanilla Animals: if a player kills one it drops vanilla xp orbs (no Vadsrijk xp).
 
 ## Numbers
-(see "Test results" below; filled in after the runs)
+Plan (sum of spawner maxima = alive if every spawner in the area were awake): **klodderweide 204, sporenwoud 179,
+druipgrotten 215 (surface + caves), zwamtempel 24** (227 surface + 89 floor-search spawners). That is ~2.5x the area caps
+(80 / 90 / 80 / 30) on purpose: one player wakes only the spawners within 80 blocks, so the local bubble is full, while
+several players spread over an area hit the cap = the target ("~60-80 alive").
+
+AutoCheck (dev client, creative, one player, `/guhs vadsrijk wezens spawners` + `/tick query`):
+| spot | awake spawners | alive within the bubble | entities in the dimension | server tick (avg / P95 / P99) |
+|---|---|---|---|---|
+| Klodderweide (330,-40), by the north pond | 12 | 23 | 34 (26 wezens) | 2.2 / 3.6 / 8.0 ms |
+| Sporenwoud (-400,170) | 15 | 28 | 40 (32 wezens) | 3.8 / 6.9 / 24.6 ms |
+| Druipgrotten caves (knot N1 + tunnel) | 29 | 55 | 72 (63 wezens) | 4.0 / 7.0 / 10.4 ms |
+Before (first run with the old density of the plan, ~half): Klodderweide 12, Sporenwoud 14, caves 27 alive. The POC had
+1-2 per spawner near the player. No "Can't keep up" during the round (one at world creation). Tick cost stays far below
+50 ms; the spawner tick is once a second (AABB count per awake spawner only).
+
+Screenshots: `f-leven/run/screenshots/autocheck/l_*.png` (the minimap in the corner shows the density best; the camera of a
+few shots looks at the ground because creative `/tp` to a height drops the player).
+
+## Test results
+- `compileJava` OK; gametests `-Pgt=VadsrijkWezens`: all 7 pass (new: `spawnerCapsEnVeiligeStraal` = fresh fill to max,
+  never over max, respawn queue, area room, no spawn within the campfire radius, ground test, plan density; the floor test
+  moved to its own batch `vadsrijk_wezens_leven` because spawning now keeps 12 blocks from (mock) players; the Moederklodder
+  test waits 230 ticks for the 10 s plof).
+- AutoCheck `tools/autocheck/vadsrijk_leven.txt`: no crash, no errors from my code (only the known model/entity-icon noise).
+
+## Resume point
+Done and committed on `110-fix-leven` (see `git log -1`). Tuning knobs: path step / camp count per area in
+`WezensSpawners.klodderweide/sporenwoud/druipgrotten`, `GEBIED_MAX`, `Spawners.ACTIEF/WEG`, aggro table in `RijkWezen.AGGRO`.
 
 ## Open / for the integrator
-- `f-verticaal` (hat paths in the Sporenwoud with an elite nest, the Druipschacht): NOTITIES_FIX_VERTICAAL.md did not exist
-  when I finished; once its WereldPlekken ids are known, add spawners in `WezensSpawners.sporenwoud()/druipgrotten()` with
-  `zet(..., grot=true, minY, maxY)` around their stand y (a narrow y-range so the hat layer and the ground do not mix).
+- `f-verticaal` (Hoedenpaden + Druipschacht): spawners are ALREADY in `WezensSpawners.verticaal()`, keyed on its WereldPlekken
+  ids (`hoedenpad_wezen_1..8` groups of 2, `hoedenpad_elitenest` elite Zwamwachter + 2 Mosgeesten, `druipschacht_richel_1..4`
+  pairs, `druipschacht_bodem` camp, `druipschacht_balkon` elite). They are only added when the ids exist (after integration
+  regenerates the map with f-verticaal), with narrow y-ranges (stand -2..+1) so the hat layer and the forest floor never mix.
+  Not used: `druipschacht_plafond_*` (no flying cave creature; Druipslijm need a floor to start from), the lookout huts.
 - `f-sfeer` exists too: if it also adds ambient critters/particles, merge so the two do not double up (mine: `Sfeer`,
   `SfeerClient`, tag `guhs_vr_sfeer`).
 - Map layout copies in `WezensPlekken` (paths, ponds, knots) must follow kaart.py/bouwsels.py changes.
