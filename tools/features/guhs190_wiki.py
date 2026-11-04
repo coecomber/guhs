@@ -14,11 +14,11 @@ WIKI = {
         "je-dorp": (
             "Je dorp", "block:guhs:erfhekje",
             "Achter je Erfhekje ligt je eigen dorp: 33 gebouwen die tot level 10 groeien, vijf paletten, paadjes, hekjes en deco. "
-            "Druk op O voor het bovenaanzicht en bouw alles van bovenaf.",
+            "Druk op F9 voor het bovenaanzicht en bouw alles van bovenaf.",
             ["een-opknapper", "buren-en-bestellingen", "leverkist"]),
         "buren-en-bestellingen": (
             "Buren en bestellingen", "item:guhs:guhldenzakje",
-            "Druk op M voor de wereldkaart met de dorpjes van andere spelers en een heleboel buurdorpjes. De buren plaatsen "
+            "Druk op F10 voor de wereldkaart met de dorpjes van andere spelers en een heleboel buurdorpjes. De buren plaatsen "
             "bestellingen, jij levert met je karretjes en krijgt er Guhlden voor.",
             ["je-dorp", "een-opknapper"]),
         "leverkist": (
@@ -63,7 +63,7 @@ WIKI = {
          "pastel-kristal & lichtjes. Verven is gratis, per gebouw of het hele dorp in één keer; een hoger palet komt vrij met "
          "een hogere Hoeve."),
         ("systemen/je-dorp", "Het bovenaanzicht",
-         "Druk op O en je kijkt van bovenaf op je hele dorp: gebouwen neerzetten, verplaatsen, draaien, verbeteren en verven, "
+         "Druk op F9 en je kijkt van bovenaf op je hele dorp: gebouwen neerzetten, verplaatsen, draaien, verbeteren en verven, "
          "met een timer boven elke klus. Je kunt er ook gewoon zelf rondlopen tussen je dorpsguhs."),
         ("systemen/je-dorp", "Deco, paden en Knusheid",
          "In de decowinkel koop je paadjes, hekjes, bloemen, bankjes, lichtjes, fonteinen, beelden en boerderijspul. Paden en "

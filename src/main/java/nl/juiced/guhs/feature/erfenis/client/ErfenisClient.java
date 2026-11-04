@@ -35,7 +35,7 @@ import org.lwjgl.glfw.GLFW;
  * The key on a plot asks the server for the overview; outside the dimension the server answers with "Naar je erfenis?".
  */
 public final class ErfenisClient {
-    public static final KeyMapping TOETS = new KeyMapping("key.guhs.erfenis", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, GuhKeys.CATEGORY);
+    public static final KeyMapping TOETS = new KeyMapping("key.guhs.erfenis", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F9, GuhKeys.CATEGORY);
 
     /** The base on screen (null: none yet), owned by this player?, the server clock minus ours, dev "snel". */
     @Nullable

@@ -14,12 +14,12 @@ vormen komen uit de vormen-slice bij de merge); de wereldkaart werkt nog zoals i
 
 | Toets | Wat |
 |---|---|
-| **O** | Bovenaanzicht van de erfenis waar je op staat. Buiten de Erfenis: *"Naar je erfenis?"* → **Ja, njeg!** |
-| **M** | De Wereldkaart |
+| **F9** | Bovenaanzicht van de erfenis waar je op staat. Buiten de Erfenis: *"Naar je erfenis?"* → **Ja, njeg!** |
+| **F10** | De Wereldkaart |
 
 ## Het begin
 
-- **O** → *Ja, njeg!* (of `/guhs erfenis`). Je staat aan de zuidkant van het **open midden** (24x24). Daar staat het
+- **F9** → *Ja, njeg!* (of `/guhs erfenis`). Je staat aan de zuidkant van het **open midden** (24x24). Daar staat het
   krakkemikkige schuurtje (de Hoeve, level 1). Alles eromheen is overwoekerd: **72 plukjes** van 8x8 in drie ringen,
   en helemaal buitenom **16 kavels** te koop. Samen 104x104.
 - Je krijgt van de makelaar **Ƒ300**, plus **50 planken en 10 eieren** van opa's zolder. Het eerste **Kippenhok is gratis**.
