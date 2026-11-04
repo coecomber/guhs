@@ -35,3 +35,13 @@ JourneyMap and F3 showed "Het Vadsrijk" everywhere. Each area now has its own bi
 - If a zone-2 area id is unknown (after the map is regenerated with new areas), it falls back to De Splinterpieken. Map new ids
   in `VadsrijkBiomen.zone2Biome`.
 - Old worlds: chunks that are already generated keep `guhs:vadsrijk`.
+
+## Tests (2026-11-04)
+- `runGameTestServer -Pgt=VadsrijkBiomen`: 1/1 passed. The test decodes dimension/vadsrijk.json into VadsrijkGenerator +
+  VadsrijkBiomeSource, checks 18 sample points (every area, the Druipschacht, the Kloof, the sea, zone 2), and checks that every
+  biome has vr_kaart.
+- AutoCheck `tools/autocheck/vadsrijk_biomen.txt` on a fresh world: 7 shots, 0 problems. The JourneyMap minimap shows
+  "Het Vadsrijk - Knuffelkamp", "Het Vadsrijk - Druipgrotten" and "Het Vadsrijk - Kandijkom", and the map is still placed. The
+  Druipschacht waterfalls are turquoise.
+- The 26.1 F3 screen does not show the biome line by default; turn it on with F3+F6. JourneyMap does show the name.
+- The `b_schacht_waterval` shot (from druipschacht_bodem) looks at the rock; `b_schacht_balkon` shows the falls.
