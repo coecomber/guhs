@@ -36139,5 +36139,18 @@
   "vadsrijk.wereld.uitkijk.haventand": "Haventand",
   "vadsrijk.wereld.uitkijk.slijmnaald": "Slijmnaald",
   "vadsrijk.wereld.uitkijk.onder": "Uitkijkpunt ontdekt",
-  "vadsrijk.wereld.uitkijk.gevonden": "Uitkijkpunt gevonden: %s. Wat een vads uitzicht!"
+  "vadsrijk.wereld.uitkijk.gevonden": "Uitkijkpunt gevonden: %s. Wat een vads uitzicht!",
+  "key.guhs.vr_vast": "Losknuffelen (vast? naar een veilig plekje)",
+  "vadsrijk.kern.vast.bezig": "Even stilstaan... de knuffelwind tilt je op!",
+  "vadsrijk.kern.vast.klaar": "Hup, weer los! Je staat op een veilig plekje.",
+  "vadsrijk.kern.vast.kampvuur": "Geen veilig plekje dichtbij: de knuffelwind brengt je naar je kampvuur.",
+  "vadsrijk.kern.vast.gestopt.bewogen": "Losknuffelen gestopt: je bewoog.",
+  "vadsrijk.kern.vast.gestopt.geraakt": "Losknuffelen gestopt: je werd geraakt!",
+  "vadsrijk.kern.vast.wacht": "De knuffelwind rust nog even uit: probeer het over %s s weer.",
+  "vadsrijk.kern.vast.gevecht": "Niet tijdens een bazengevecht! Loop door de deur naar buiten (of val flauw).",
+  "vadsrijk.kern.vast.alleen_rijk": "Losknuffelen werkt alleen in het Vadsrijk.",
+  "vadsrijk.kern.vast.hint": "Vast? Druk op %s",
+  "vadsrijk.kern.vast.gered": "Oei, je viel van de wereld! De knuffelwind ving je op.",
+  "vadsrijk.kern.tip.vast.titel": "Vastgelopen?",
+  "vadsrijk.kern.tip.vast": "Zit je ergens vast? Druk op U (of /guhs vadsrijk vast) en sta 3 tellen stil: de knuffelwind zet je op het dichtstbijzijnde veilige plekje. Kan elke minuut, niet tijdens een bazengevecht."
 }

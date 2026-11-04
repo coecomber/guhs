@@ -48,6 +48,8 @@ def main():
     ap.add_argument("--alleen", default=None, help="tx,tz;tx,tz;...")
     ap.add_argument("--geen-cache", action="store_true")
     ap.add_argument("--zonder-bouwsels", action="store_true")
+    ap.add_argument("--audit", action="store_true", help="afterwards: walkability audit (AUDIT_VADSRIJK.md) + the safe spots json for "
+                    "the unstuck key (tools/vadsrijk/audit/audit.py, ~80 s)")
     a = ap.parse_args()
     os.makedirs(CACHE, exist_ok=True)
     os.makedirs(UIT, exist_ok=True)
@@ -103,6 +105,9 @@ def main():
     if not a.alleen:
         import kaartbeeld
         kaartbeeld.teken(W, bovenaan, os.path.join(CACHE, "kaart_bovenaanzicht.png"))
+    # hook (fix round 1, veilig): integration runs this once after the final regen, so the safe spots follow the map
+    if a.audit and not a.alleen:
+        subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
 
 
 def plekken_nbt(plekken, tx, tz):

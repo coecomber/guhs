@@ -85,6 +85,7 @@ public final class KernClient {
             }
         });
         RijkHud.init(modBus);
+        nl.juiced.guhs.feature.vadsrijk.kern.veilig.client.VeiligClient.init(modBus);
         SceneSpeler.init();
         SieradenScherm.init();
     }

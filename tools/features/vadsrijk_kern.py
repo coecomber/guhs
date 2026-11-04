@@ -246,6 +246,20 @@ TEKSTEN = {
     K + "tip.levelop": "Elk niveau maakt je vanzelf sterker: meer Vads, Kracht en Verdediging. Uitrusting met een hoger niveau telt pas als je zover bent.",
     K + "tip.kampvuur.titel": "Kampvuur",
     K + "tip.kampvuur": "Val je flauw, dan word je hier wakker. Je verliest niks, je bent alleen even duizelig.",
+    # fix round 1: losknuffelen (kern.veilig)
+    "key.guhs.vr_vast": "Losknuffelen (vast? naar een veilig plekje)",
+    K + "vast.bezig": "Even stilstaan... de knuffelwind tilt je op!",
+    K + "vast.klaar": "Hup, weer los! Je staat op een veilig plekje.",
+    K + "vast.kampvuur": "Geen veilig plekje dichtbij: de knuffelwind brengt je naar je kampvuur.",
+    K + "vast.gestopt.bewogen": "Losknuffelen gestopt: je bewoog.",
+    K + "vast.gestopt.geraakt": "Losknuffelen gestopt: je werd geraakt!",
+    K + "vast.wacht": "De knuffelwind rust nog even uit: probeer het over %s s weer.",
+    K + "vast.gevecht": "Niet tijdens een bazengevecht! Loop door de deur naar buiten (of val flauw).",
+    K + "vast.alleen_rijk": "Losknuffelen werkt alleen in het Vadsrijk.",
+    K + "vast.hint": "Vast? Druk op %s",
+    K + "vast.gered": "Oei, je viel van de wereld! De knuffelwind ving je op.",
+    K + "tip.vast.titel": "Vastgelopen?",
+    K + "tip.vast": "Zit je ergens vast? Druk op U (of /guhs vadsrijk vast) en sta 3 tellen stil: de knuffelwind zet je op het dichtstbijzijnde veilige plekje. Kan elke minuut, niet tijdens een bazengevecht.",
 }
 
 
