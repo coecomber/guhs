@@ -507,7 +507,7 @@ public final class Z3WereldPlekken {
             Map.entry("spiraal_poort_176", new BlockPos(2276, 177, 96)),
             Map.entry("spiraal_poort_75", new BlockPos(2241, 76, 83)),
             Map.entry("spiraal_top", new BlockPos(2299, 201, -100)),
-            Map.entry("spiraal_voet", new BlockPos(2233, 75, 96)),
+            Map.entry("spiraal_voet", new BlockPos(2299, 81, 156)),
             Map.entry("spiraal_zweefsprong_1", new BlockPos(2200, 191, -12)),
             Map.entry("spiraal_zweefsprong_2", new BlockPos(2299, 151, -100)),
             Map.entry("spiraal_zweefsprong_3", new BlockPos(2404, 111, -14)),

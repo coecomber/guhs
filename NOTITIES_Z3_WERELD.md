@@ -121,7 +121,39 @@ Branch `110-z3-wereld` (worktree `guhs_vadsrijk/z3-wereld`, from ab6d952ac). Bri
   flat free floors (r 14 / 22).
 
 ## Tests
-- (see below)
+- `compileJava` OK (after the z3-systemen merge). No gametests added (world code; tiles use kern's KaartFeature).
+- Map: `maak_kaart.py --zone 3` -> 484 tiles, ~20.5 M blocks, ~72 MB (big: the crown is a thick leaf shell; leaves deeper than 2
+  inside a mass are hollowed, opaque blocks with 6 opaque neighbours too). Top view `tools/vadsrijk/_cache/kaart_z3.png`.
+- **POI check** (`python tools/vadsrijk/zone3/poicheck3.py`, new): every published stand spot has feet + head free and a floor.
+  The map build snaps formula spots onto the real blocks (v1); 389/390 ok, left: `lianenbrug` (a planned spot, no bridge built).
+- **Walkability** (`loopcheck.py`, copied to a scratch dir with Y range 4..316 for the crown; whole zone box, venster 3):
+  run 1: VAL 154, PAD 118 -> fixed: the Wortelduister was 3D-noise caves full of drops (now a heightfield cave with a smooth
+  floor that blends into the Grote Wortelgang and the hall; roof >= 6 under every valley), the Hartslag-zaal sap lake (real
+  floor), pools with walls (shallow ponds with sloping banks), the cliff shore into the cloud sea (now a sloping beach), the
+  Wortelpoort drop (a real staircase), the Stamspiraal foot that ended inside the root hill (a ramp tunnel to the ground),
+  kit plumes/fences on riding paths (`pad_vrij`), Kale Kruin in a crater (now a raised mesa with a stepped skirt).
+  Last run: PAD 1, VAL 21: two big cave regions that only show with the small window (venster 3: the windows cut the cave
+  network; with venster 5/6 over the same area they are not traps), one paddenbloesemdal pond (3 up), ~15 single cells
+  (1-2 blocks, 2-6 up) along root forks/tubes.
+  Targeted run over the trunk + caves (box 2112..2495, -192..383, venster 6): still reports the whole Wortelduister, the
+  Schorsstad floor/ring 1 and one SE valley as "VAL". I believe these are window effects (their way out - the Wortelpoort
+  staircase / the spiral-foot ramp / the valley mouth at the island rim - leads to ground that only reaches the window edge
+  outside the window), but I could not prove it in time: **integration, please run loopcheck once with one big window over the
+  zone, or walk it**: Hartslag-zaal -> Grote Wortelgang -> Wortelpoort stairs (x 2299, z 264 -> 302) and Schorsstad floor ->
+  gate 75 -> spiral foot (y 70, due south) -> ramp (x 2297..2301, z 106 -> 156). The stairs were fixed late (stair blocks
+  were being erased by the tunnel clearing). Small 2-high pits (6-100 cells) on the root hill north of the trunk (x 2250..2325,
+  z -110..-190, y 86..102) remain.
+- **No AutoCheck run**: free memory was ~4.8 GB with other agents' gradle slots busy. Script ready:
+  `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_z3_wereld.txt` (run dir copied from h-melee).
+
+## Open / for the user + integration
+- Not seen in a client yet (no AutoCheck): looks, the opening film camera, lift scenes, sky.
+- Mirroring: the renders were made for the west box; the map is their mirror image (Honingtak west, branches east).
+- `lianenbrug` POI has no bridge; the kit's tak paths/plumes are as in the renders; small root-fork cells (see tests).
+- npc bindings not done: `z3_ring_aan`, `z3_ketel_uit`, `z3_terugkleur`.
+- Tile size ~72 MB for zone 3 (jar/pack size!). Could be cut further (thinner crown shell, fewer ground blocks).
+- `Z3WereldPlekken.java` + `POI_Z3.md` are committed (new files the code needs; integration regenerates them identically);
+  tiles are NOT committed.
 
 ## Resume point
 - Regenerate with `python tools/vadsrijk/maak_kaart.py --zone 3` after any generator change; `python tools/vadsrijk/zone3/poi3.py`

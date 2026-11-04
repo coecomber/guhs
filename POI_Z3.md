@@ -440,7 +440,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `spiraal_poort_176` | 2276, 177, 96 |
 | `spiraal_poort_75` | 2241, 76, 83 |
 | `spiraal_top` | 2299, 201, -100 |
-| `spiraal_voet` | 2233, 75, 96 |
+| `spiraal_voet` | 2299, 81, 156 |
 | `spiraal_zweefsprong_1` | 2200, 191, -12 |
 | `spiraal_zweefsprong_2` | 2299, 151, -100 |
 | `spiraal_zweefsprong_3` | 2404, 111, -14 |

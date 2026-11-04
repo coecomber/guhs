@@ -180,6 +180,11 @@ POORT_Y = (RINGEN[6], RINGEN[3], 75)               # the 3 gates from the Stamsp
 PELSZAAL_Y = 183                                  # floor of the Pelszaal (stand 184)
 
 
+def spiraal_voet_r():
+    """Radius of the Stamspiraal road at its lowest point (y 70, due south): the exit ramp to the ground starts there."""
+    return float(boom.r_buiten(np.array([70.0]), np.array([math.pi / 2]))[0])
+
+
 def spiraal_poort(yp):
     p = boom.SPIRAAL
     a = (p["y_top"] - yp) / (p["y_top"] - p["y_bot"]) * 2 * math.pi * p["slagen"] + p["phi0"]
@@ -375,7 +380,8 @@ def plekken():
         put(f"spiraal_balkon_{k + 1}", r * math.cos(a), yb + 1, r * math.sin(a))
         put(f"spiraal_zweefsprong_{k + 1}", (r + 4) * math.cos(a + 0.25), yb + 1, (r + 4) * math.sin(a + 0.25))
     put("spiraal_top", 0, 201, -100)
-    put("spiraal_voet", 116 * math.cos(math.radians(55)), 71, 116 * math.sin(math.radians(55)))
+    r0 = spiraal_voet_r()
+    put("spiraal_voet", 0, stand_y_grond(0, r0 + 44), r0 + 44)
     put("schorsstad_vloer", 20, 76, 30)
     put("kampvuur_schorsstad_vloer", 26, 76, 34)
     put("kampvuur_schorsstad_ring4", (R_BINNEN - 4) * math.cos(1.2), RINGEN[3] + 1, (R_BINNEN - 4) * math.sin(1.2))

@@ -865,13 +865,28 @@ def poort_trap(W):
     g = int(math.floor(PL.grond(x, z + 34) + 0.5))
     L = boom._spline(PL.WORTELGANG, 10)
     vloer = int(round(L[0][1] - 9))
-    trap_recht(W, (x, z + 34), g, (x, z - 4), vloer, breed=2, blok="minecraft:stripped_spruce_wood")
-    for zz in range(z - 4, z + 36):
+    for zz in range(z - 6, z + 37):
         t = (z + 34 - zz) / 38.0
         y = round(g + (vloer - g) * min(1, max(0, t)))
-        W.wfill(x - 2, y + 1, zz, x + 2, y + 5, zz, LUCHT)
+        W.wfill(x - 2, y, zz, x + 2, y + 6, zz, LUCHT)
         if zz % 7 == 0:
             W.wset(x + 3, y + 3, zz, "minecraft:lantern[hanging=false,waterlogged=false]", keep=True)
+    trap_recht(W, (x, z + 34), g, (x, z - 4), vloer, breed=2, blok="minecraft:stripped_spruce_wood")
+
+
+def spiraal_uitgang(W):
+    """The foot of the Stamspiraal lies below the root hill (y 70): a ramp tunnel due south up to the ground (no dead end)."""
+    r0 = PL.spiraal_voet_r()
+    if not W.raakt(-6, 60, r0 - 10, 6, 110, r0 + 50):
+        return
+    ytop = int(math.floor(PL.grond(0, r0 + 44) + 0.5))
+    for zz in range(round(r0 - 8), round(r0 + 46)):
+        t = (zz - (r0 - 6)) / 50.0
+        y = round(70 + (ytop - 70) * min(1, max(0, t)))
+        W.wfill(-2, y, zz, 2, y + 6, zz, LUCHT)
+        if zz % 8 == 0:
+            W.wset(3, y + 3, zz, "minecraft:lantern[hanging=false,waterlogged=false]", keep=True)
+    trap_recht(W, (0, round(r0 - 6)), 70, (0, round(r0 + 44)), ytop, breed=2, blok="minecraft:stripped_spruce_wood")
 
 
 def pad_vrij(W):
@@ -914,6 +929,7 @@ def bouw(W):
     pelszaal(W)
     spiraal_extra(W)
     poort_trap(W)
+    spiraal_uitgang(W)
     pad_vrij(W)
     geheimen(W)
     kampvuren(W)
