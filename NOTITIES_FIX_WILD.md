@@ -82,5 +82,11 @@ POIs not on the network in my areas: `geheim_tempelkamer` (behind the cracked wa
 - Kloof edges have no fences (the gorge can be walked out of everywhere now via the ramps); add rails at path rims if wanted.
 - Single-cell spots at 37,-99 / 72,26 / 74,25 (Zwamzoet, agent stad) and 42,1215 (Knuffelkamp, agent kamp).
 
+## AutoCheck
+`tools/autocheck/vadsrijk_fix_wild.txt` (spectator mode, 12 shots in `run/screenshots/autocheck/fw_*.png`): needle spiral +
+top platform, needle foot, slime hill edge on the ground, fossil bridge across the Kloof (dry stream banks below) + both
+ends, a Kloof ramp, temple stairs (full width, landing), cave entrance + flat cave room, hollow mushroom. All rendered, no
+missing textures. (First run was in creative: the camera fell to the ground; rerun in spectator.)
+
 ## Resume point
 All 8 points built + checked with loopcheck. Commit = generator sources only.

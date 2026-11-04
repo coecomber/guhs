@@ -3,7 +3,7 @@
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_fix_wild.txt
 
 section setup
-/gamemode creative
+/gamemode spectator
 /time set 1000
 /gamerule doDaylightCycle false
 wait 40
@@ -63,15 +63,15 @@ waitrender 400
 shot fw_kloof_uitgang gui
 
 section tempel
-/tp @s 330 153 -352
-look 180 10
+/tp @s 330 162 -350
+look 180 22
 wait 80
 waitrender 300
 shot fw_tempeltrap gui
 
 section grotten
 /guhs vadsrijk wereld plek grot_ingangen.1
-look 180 10
+look 180 22
 wait 80
 waitrender 300
 shot fw_grot_ingang gui
