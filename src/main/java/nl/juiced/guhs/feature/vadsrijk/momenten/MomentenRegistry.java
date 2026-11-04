@@ -59,7 +59,7 @@ public final class MomentenRegistry {
                     .noSave().build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_mom_handelaar"))));
 
     public static final DeferredItem<RegenboogDrankje> REGENBOOGDRANKJE = ITEMS.registerItem("vr_mom_regenboogdrankje", RegenboogDrankje::new,
-            () -> new Item.Properties().stacksTo(8).rarity(Rarity.EPIC));
+            () -> nl.juiced.guhs.feature.vadsrijk.economie.Drinken.eigenschappen(true).stacksTo(8).rarity(Rarity.EPIC));
 
     private MomentenRegistry() {
     }

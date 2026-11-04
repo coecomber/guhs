@@ -31,6 +31,10 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
  * <li>the caves: groups along every tunnel (Druipslijm hang from the tunnel ceilings), camps in the four knots;</li>
  * <li>an elite at every landmark (light beams, the waterfall, viewpoints, cave knots, the mountain path);</li>
  * <li>respawn 10-20 s near paths, 25-30 s in camps, 3 min for landmark elites (Moederklodder 2 min).</li>
+ * <li>(balans 2026-11, second playtest) nothing spawns ON a path any more: every open-air spawner whose circle reaches within
+ * {@link Spawners#PAD_VRIJ} of a path edge is moved sideways into the wilderness ({@link #naastPad}; the same groups and
+ * maxima, so the per-area plan is unchanged), patrols walk a line parallel to the path beside it, the mountain path's
+ * knights stand on the flanks beside the ramp, and kern refuses any spawn spot next to a path ({@link Spawners#bijPad}).</li>
  * </ul>
  * Area caps ({@link Spawners#GEBIED_MAX}) and the safe spots (campfires + any guh/NPC within 12) are set here too.
  * Spawner ids are "wezens:&lt;group&gt;#&lt;kind&gt;": mobs of one group help each other (social aggro, {@link #groep}).
@@ -70,8 +74,67 @@ public final class WezensSpawners {
 
     // ---- registering ---------------------------------------------------------------------------------------------------
 
+    /** The no-go circles of the area being planned (for {@link #naastPad}). */
+    private static int[][] niet = new int[0][];
+    /** How many open-air spawners were moved off a path / could not be moved (kern's spawn check still keeps those off it). */
+    public static int verschoven, nietVerschoven;
+
+    /**
+     * (balans 2026-11) A spawner centre whose circle (radius {@code straal}) reaches within {@link Spawners#PAD_VRIJ} of a path
+     * edge, moved straight away from the nearest path until it clears every path: first to the side it is already on, then the
+     * other side, then 4 and 8 further. Returns the centre unchanged when it is clear, null when no free spot was found.
+     */
+    @Nullable
+    static double[] naastPad(String gebied, double x, double z, int straal, int[][] nietHier) {
+        double nodig = straal + Spawners.PAD_VRIJ + 1;
+        double[] d = Spawners.dichtstbijPad(x, z);
+        if (d == null || d[2] >= nodig) {
+            return new double[] {x, z};
+        }
+        double nx = x - d[0], nz = z - d[1], L = Math.hypot(nx, nz);
+        if (L < 0.5) {
+            nx = -d[4];
+            nz = d[3];
+        } else {
+            nx /= L;
+            nz /= L;
+        }
+        double breedte = L - d[2];   // the half width of that path
+        for (int verder = 0; verder <= 8; verder += 4) {
+            for (int kant = 1; kant >= -1; kant -= 2) {
+                double a = breedte + nodig + verder;
+                double tx = d[0] + kant * nx * a, tz = d[1] + kant * nz * a;
+                if (Spawners.padAfstand(tx, tz) >= nodig && vrij(gebied, tx, tz, straal, nietHier)) {
+                    return new double[] {tx, tz};
+                }
+            }
+        }
+        return null;
+    }
+
+    /** {@link #naastPad} for a spawner centre: the moved centre (same y), or the old one when nothing was free. */
+    private static BlockPos vanPadAf(String gebied, BlockPos c, int straal, boolean tel) {
+        double[] n = naastPad(gebied, c.getX(), c.getZ(), straal, niet);
+        if (n == null) {
+            if (tel) {
+                nietVerschoven++;
+            }
+            return c;
+        }
+        if ((int) Math.round(n[0]) == c.getX() && (int) Math.round(n[1]) == c.getZ()) {
+            return c;
+        }
+        if (tel) {
+            verschoven++;
+        }
+        return new BlockPos((int) Math.round(n[0]), c.getY(), (int) Math.round(n[1]));
+    }
+
     private static void zet(String gebied, String groep, Soort s, BlockPos c, int straal, int max, int respawn, double elite, boolean grot,
             int minY, int maxY) {
+        if (!grot) {
+            c = vanPadAf(gebied, c, straal, true);
+        }
         Spawners.Spawner sp = new Spawners.Spawner("wezens:" + groep + "#" + s.naam(), c, straal, s.type(), max, respawn, s.min(), s.max(), s.e(), elite);
         if (grot) {
             sp = sp.grot(minY, maxY);
@@ -112,6 +175,8 @@ public final class WezensSpawners {
         Spawners.GEBIED_MAX.putAll(GEBIED_MAX);
         Spawners.VEILIGE_PLEKKEN.addAll(WereldPlekken.KAMPVUREN);
         Spawners.VERBODEN.add(WezensSpawners::npcInBuurt);
+        WezensPlekken.allePaden().forEach((naam, pad) -> Spawners.registreerPad("z1:" + naam, pad, WezensPlekken.padBreedte(naam)));
+        verschoven = nietVerschoven = 0;
 
         Random r = new Random(1100);
         klodderweide(r);
@@ -254,7 +319,12 @@ public final class WezensSpawners {
                     BlockPos b = new BlockPos((int) Math.round(p[0] + p[2] * 12), Spawners.OPPERVLAK_MIN_Y + 6, (int) Math.round(p[1] + p[3] * 12));
                     if (vrij(gebied, p[0], p[1], 14, nietHier) && vrij(gebied, a.getX(), a.getZ(), 3, nietHier) && vrij(gebied, b.getX(), b.getZ(), 3, nietHier)) {
                         String groep = gebied + "_patrouille_" + n++;
-                        opp(gebied, groep, s, new BlockPos((int) p[0], Spawners.OPPERVLAK_MIN_Y + 6, (int) p[1]), 3, 2, 300, ELITE);
+                        // (balans 2026-11) the pair walks beside the path, parallel to it, not on it
+                        BlockPos c = new BlockPos((int) p[0], Spawners.OPPERVLAK_MIN_Y + 6, (int) p[1]);
+                        BlockPos c2 = vanPadAf(gebied, c, 3, false);
+                        a = a.offset(c2.getX() - c.getX(), 0, c2.getZ() - c.getZ());
+                        b = b.offset(c2.getX() - c.getX(), 0, c2.getZ() - c.getZ());
+                        opp(gebied, groep, s, c2, 3, 2, 300, ELITE);
                         ROUTES.put("wezens:" + groep + "#" + s.naam(), new BlockPos[] {a, b});
                     }
                     continue;
@@ -314,6 +384,7 @@ public final class WezensSpawners {
         String g = "klodderweide";
         List<int[][]> paden = WezensPlekken.paden("weide", "weide2", "weide3", "slijm", "slijm2");
         int[][] niet = {WezensPlekken.ARENA_KONING, WezensPlekken.SLAAPHEUVEL};
+        WezensSpawners.niet = niet;
         langsPaden(g, r, paden, 18, niet, KLODDER, 6, BUBBEL, 2, STUITER, 2);
         kampen(g, r, 12, paden, niet, new Soort[][] {{KLODDER, BUBBEL}, {KLODDER, STUITER}, {STUITER, BUBBEL}},
                 new int[][] {{3, 1}, {2, 2}, {2, 2}});
@@ -343,6 +414,7 @@ public final class WezensSpawners {
         String g = "sporenwoud";
         List<int[][]> paden = WezensPlekken.paden("woud", "woud2");
         int[][] niet = {};
+        WezensSpawners.niet = niet;
         langsPaden(g, r, paden, 16, niet, HOEDJES, 4, PUFFER, 3, WACHTER, 2, MOSGEEST, 2);
         kampen(g, r, 16, paden, niet, new Soort[][] {{HOEDJES, PUFFER}, {WACHTER, PUFFER}, {MOSGEEST, HOEDJES}, {HOEDJES, WACHTER}},
                 new int[][] {{3, 2}, {2, 2}, {2, 2}, {3, 1}});
@@ -362,6 +434,7 @@ public final class WezensSpawners {
         String g = "druipgrotten";
         List<int[][]> paden = WezensPlekken.paden("grotten", "grotten2", "grotten3", "grotten4", "druip");
         int[][] niet = {};
+        WezensSpawners.niet = niet;
         langsPaden(g, r, paden, 26, niet, KNAAG, 3, KRISTAL, 2, GLIM, 1);
         kampen(g, r, 6, paden, niet, new Soort[][] {{KNAAG, GLIM}, {KRISTAL, GLIM}, {KNAAG, KRISTAL}}, new int[][] {{3, 1}, {2, 1}, {3, 1}});
         // the caves: along every tunnel, groups every 15 blocks (druipslijm on the low tunnel ceilings)
@@ -403,6 +476,9 @@ public final class WezensSpawners {
 
     // ---- Zwamtempel, lv 18-20: the mountain path + the voorhal ----------------------------------------------------------
 
+    /** Spawn circle of the mountain-path spawners: reaches past the ramp (4.5) + the free strip (5) onto the flanks. */
+    static final int BERG_STRAAL = 14;
+
     private static void zwamtempel(Random r) {
         String g = "zwamtempel";
         int[][] berg = WezensPlekken.BERGPAD;
@@ -419,16 +495,19 @@ public final class WezensSpawners {
             if (!vrij(gebied, p[0], p[1], 3, new int[0][])) {
                 continue;
             }
-            zet(gebied, g + "_bergpad_" + n++, s, new BlockPos((int) p[0], y + 3, (int) p[1]), 2, s == PRIESTER ? 1 : 2, 400, ELITE, true, y - 4, y + 3);
+            // (balans 2026-11) on the flanks beside the ramp: a wide circle around the path point, kern refuses the ramp itself
+            // (Spawners.bijPad: within 5 of its edge at its height); the floor search covers the slope up and down
+            zet(gebied, g + "_bergpad_" + n++, s, new BlockPos((int) p[0], y + 3, (int) p[1]), BERG_STRAAL, s == PRIESTER ? 1 : 2, 400, ELITE, true,
+                    y - 10, y + 10);
         }
         // elites: at the fossil bridge end and the first hairpin
         // (integration: the path was rerouted by fix wild; the elites follow the path instead of fixed old coordinates)
         int[] b1 = WezensPlekken.bergPunt(0.08 * tot);
         int y1 = (int) Math.round(WezensPlekken.bergY(0.08)) + 1;
-        zet("zwamtempel", g + "_elite_brug", RIDDER, new BlockPos(b1[0], y1 + 3, b1[1]), 2, 1, 3600, 1.0, true, y1 - 6, y1 + 6);
+        zet("zwamtempel", g + "_elite_brug", RIDDER, new BlockPos(b1[0], y1 + 3, b1[1]), BERG_STRAAL, 1, 3600, 1.0, true, y1 - 10, y1 + 10);
         int[] bocht = berg[3];
         int y2 = (int) Math.round(WezensPlekken.bergY(WezensPlekken.bergLangs(bocht[0], bocht[1]) / tot)) + 1;
-        zet("zwamtempel", g + "_elite_bocht", PRIESTER, new BlockPos(bocht[0], y2 + 3, bocht[1]), 2, 1, 3600, 1.0, true, y2 - 6, y2 + 6);
+        zet("zwamtempel", g + "_elite_bocht", PRIESTER, new BlockPos(bocht[0], y2 + 3, bocht[1]), BERG_STRAAL, 1, 3600, 1.0, true, y2 - 10, y2 + 10);
         // the voorhal (stand y 152): two knights + a priest, like before
         for (int i = 0; i < WezensPlekken.TEMPELRIDDER.length; i++) {
             BlockPos c = WezensPlekken.TEMPELRIDDER[i];

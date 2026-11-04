@@ -70,7 +70,9 @@ public final class Winkels {
     }
 
     static void registreer() {
-        List<Waar> drank = List.of(item("vadsdrankje", 15, () -> new ItemStack(EcoSpul.VADSDRANKJE.get())),
+        // (balans 2026-11) flat potion tiers: Klein 120 Vads for 8 brons, the Vadsdrankje 300 Vads for 40 brons
+        List<Waar> drank = List.of(item("klein_vadsdrankje", 8, () -> new ItemStack(EcoSpul.KLEIN_VADSDRANKJE.get())),
+                item("vadsdrankje", 40, () -> new ItemStack(EcoSpul.VADSDRANKJE.get())),
                 item("energiedrankje", 20, () -> new ItemStack(EcoSpul.ENERGIEDRANKJE.get())),
                 item("snelpootjesdrankje", 45, () -> new ItemStack(EcoSpul.SNELPOOTJESDRANKJE.get())),
                 item("vahoegdrankje", 60, () -> new ItemStack(EcoSpul.VAHOEGDRANKJE.get())));

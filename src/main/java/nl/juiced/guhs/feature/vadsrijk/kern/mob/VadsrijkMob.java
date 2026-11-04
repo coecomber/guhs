@@ -370,6 +370,39 @@ public abstract class VadsrijkMob extends Monster {
         }
     }
 
+    // ---- after the plof: no hitbox (balans 2026-11) ------------------------------------------------------------------------
+    // A cheered-up creature hops around for a while: it can't be clicked, hit by projectiles, pushed or bumped into, so it never
+    // blocks a hit, a shot or the crosshair meant for the next monster (skills and AoE skip it already: !geplofd()). The
+    // renderers draw it translucent.
+
+    @Override
+    public boolean isPickable() {
+        return !geplofd() && super.isPickable();
+    }
+
+    @Override
+    public boolean canBeHitByProjectile() {
+        return !geplofd() && super.canBeHitByProjectile();
+    }
+
+    @Override
+    public boolean isPushable() {
+        return !geplofd() && super.isPushable();
+    }
+
+    @Override
+    public boolean isAttackable() {
+        return !geplofd() && super.isAttackable();
+    }
+
+    @Override
+    public boolean canBeCollidedWith(@Nullable Entity other) {
+        return !geplofd() && super.canBeCollidedWith(other);
+    }
+
+    /** The alpha (0..255) a renderer draws a cheered-up creature with. */
+    public static final int PLOF_ALPHA = 0x8C;
+
     /** How long (ticks) it stays visible, cheered up and hopping, after the plof before it vanishes. */
     protected int plofDuur() {
         return 30;

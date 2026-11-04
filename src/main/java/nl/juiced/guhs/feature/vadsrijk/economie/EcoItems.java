@@ -96,9 +96,19 @@ public final class EcoItems {
         }
     }
 
-    /** A potion: Vads, energie, or a buff status. Only works in the Vadsrijk. */
+    /**
+     * A potion: Vads, energie, or a buff status. Only works in the Vadsrijk. Balans 2026-11: flat numbers ({@link Drinken}), a 2 s
+     * drink (vanilla drink animation) and the shared 10 s potion cooldown for the Vads/energy ones.
+     */
     public static class Drankje extends Item {
-        public enum Soort { VADS, ENERGIE, VAHOEG, SNELPOOTJES }
+        public enum Soort {
+            VADS, ENERGIE, VAHOEG, SNELPOOTJES, KLEIN_VADS;
+
+            /** In the shared potion cooldown (Vads and energy). */
+            public boolean gedeeld() {
+                return this == VADS || this == ENERGIE || this == KLEIN_VADS;
+            }
+        }
 
         public final Soort soort;
 
@@ -109,39 +119,45 @@ public final class EcoItems {
 
         @Override
         public InteractionResult use(Level level, Player player, InteractionHand hand) {
-            if (!(player instanceof ServerPlayer sp)) {
-                return InteractionResult.SUCCESS;
-            }
-            if (!Vadsrijk.in(sp)) {
-                zeg(sp, "vadsrijk.economie.drankje.buiten");
+            if (Drinken.buiten(player, "vadsrijk.economie.drankje.buiten")) {
                 return InteractionResult.FAIL;
             }
-            ItemStack stack = sp.getItemInHand(hand);
-            switch (soort) {
-                case VADS -> Schade.heal(sp, sp, Spelers.maxVads(sp) * 0.40);
-                case ENERGIE -> {
-                    var d = Spelers.data(sp);
-                    d.energie = Math.min(Spelers.maxEnergie(sp), Spelers.energie(sp) + Spelers.maxEnergie(sp) * 0.5);
-                    Spelers.sync(sp);
+            return super.use(level, player, hand);   // the Consumable component: 2 s of drinking
+        }
+
+        @Override
+        public ItemStack finishUsingItem(ItemStack stack, Level level, net.minecraft.world.entity.LivingEntity entity) {
+            if (entity instanceof ServerPlayer sp && Vadsrijk.in(sp)) {
+                werk(sp);
+                if (!soort.gedeeld()) {
+                    sp.getCooldowns().addCooldown(stack, 40);
                 }
+            }
+            return super.finishUsingItem(stack, level, entity);
+        }
+
+        /** What it does (also called by the gametest). */
+        public void werk(ServerPlayer sp) {
+            switch (soort) {
+                case KLEIN_VADS -> Schade.heal(sp, sp, Drinken.KLEIN_VADS);
+                case VADS -> Schade.heal(sp, sp, Drinken.VADS);
+                case ENERGIE -> Drinken.energie(sp, Drinken.ENERGIE);
                 case VAHOEG -> Statussen.geef(sp, Status.VAHOEG, 20 * 60, 1, sp);
                 case SNELPOOTJES -> Statussen.geef(sp, Status.SNELPOOTJES, 20 * 60, 1, sp);
             }
-            if (!sp.isCreative()) {
-                stack.shrink(1);
-            }
-            sp.getCooldowns().addCooldown(stack, soort == Soort.VADS || soort == Soort.ENERGIE ? 100 : 40);
-            level.playSound(null, sp.blockPosition(), SoundEvents.GENERIC_DRINK.value(), SoundSource.PLAYERS, 0.8f, 1.3f);
-            if (level instanceof ServerLevel sl) {
+            if (sp.level() instanceof ServerLevel sl) {
                 sl.sendParticles(soort == Soort.ENERGIE ? ParticleTypes.GLOW : ParticleTypes.HEART, sp.getX(), sp.getY() + 1.4, sp.getZ(), 6, 0.4, 0.3, 0.4, 0.02);
             }
-            zeg(sp, "vadsrijk.economie.drankje." + soort.name().toLowerCase(java.util.Locale.ROOT) + ".op");
-            return InteractionResult.SUCCESS;
+            String s = soort == Soort.KLEIN_VADS ? "vads" : soort.name().toLowerCase(java.util.Locale.ROOT);
+            zeg(sp, "vadsrijk.economie.drankje." + s + ".op");
         }
 
         @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             tooltip.accept(Component.translatable(getDescriptionId() + ".uitleg").withStyle(ChatFormatting.GRAY));
+            if (soort.gedeeld()) {
+                tooltip.accept(Component.translatable("vadsrijk.economie.drankje.wacht").withStyle(ChatFormatting.DARK_GRAY));
+            }
             tooltip.accept(Component.translatable("vadsrijk.economie.alleen_rijk").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }

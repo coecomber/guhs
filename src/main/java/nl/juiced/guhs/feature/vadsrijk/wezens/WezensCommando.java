@@ -163,7 +163,7 @@ public final class WezensCommando {
         List<Vec3> pad = new ArrayList<>();
         pad.add(o.add(opzij.scale(-140)).add(kijk.scale(40)).add(0, 70, 0));
         pad.add(o.add(opzij.scale(-50)).add(kijk.scale(25)).add(0, 35, 0));
-        pad.add(o.add(kijk.scale(18)).add(0, 22, 0));
+        pad.add(o.add(kijk.scale(18)).add(0, 26, 0));   // (balans 2026-11: +4, the bigger dragon)
         pad.add(o.add(opzij.scale(60)).add(kijk.scale(30)).add(0, 38, 0));
         pad.add(o.add(opzij.scale(150)).add(kijk.scale(70)).add(0, 80, 0));
         var d = DraakVlucht.vlieg(p.level(), pad, 220, false);

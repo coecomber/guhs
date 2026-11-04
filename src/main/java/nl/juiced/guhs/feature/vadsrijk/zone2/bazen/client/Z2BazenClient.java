@@ -101,7 +101,7 @@ public final class Z2BazenClient {
             return r;
         });
         e.registerEntityRenderer(Z2BazenRegistry.WELP.get(), ctx -> {
-            var r = new GeoEntityRenderer<Z2Hulpje, LivingEntityRenderState>(ctx, Z2BazenClient.<Z2Hulpje>model("vr_z2_baas_welp", "welp"));
+            var r = new PlofRenderer(ctx, Z2BazenClient.<Z2Hulpje>model("vr_z2_baas_welp", "welp"));
             r.withRenderLayer(new AutoGlowingGeoLayer<Z2Hulpje, Void, LivingEntityRenderState>(r));
             return r;
         });
@@ -124,8 +124,37 @@ public final class Z2BazenClient {
         }
     }
 
+    /** (balans 2026-11) A boss helper that turns translucent after its plof (no hitbox then either: VadsrijkMob#isPickable). */
+    static class PlofRenderer extends GeoEntityRenderer<Z2Hulpje, LivingEntityRenderState> {
+        static final com.geckolib.constant.dataticket.DataTicket<Boolean> GEPLOFD =
+                com.geckolib.constant.dataticket.DataTicket.create("guhs_vr_z2_hulp_geplofd", Boolean.class);
+
+        PlofRenderer(EntityRendererProvider.Context ctx, com.geckolib.model.GeoModel<Z2Hulpje> model) {
+            super(ctx, model);
+        }
+
+        @Override
+        public void addRenderData(Z2Hulpje mob, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
+            state.addGeckolibData(GEPLOFD, mob.geplofd());
+        }
+
+        @Override
+        public int getRenderColor(Z2Hulpje mob, @Nullable Void related, float partialTick) {
+            int k = super.getRenderColor(mob, related, partialTick);
+            return mob.geplofd() ? (k & 0x00FFFFFF) | (nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob.PLOF_ALPHA << 24) : k;
+        }
+
+        @Override
+        public @Nullable net.minecraft.client.renderer.rendertype.RenderType getRenderType(LivingEntityRenderState state, Identifier texture) {
+            if (Boolean.TRUE.equals(state.getGeckolibData(GEPLOFD)) && !state.isInvisible) {
+                return net.minecraft.client.renderer.rendertype.RenderTypes.entityTranslucent(texture);
+            }
+            return super.getRenderType(state, texture);
+        }
+    }
+
     /** A Mika-mijnwerker: the Mika model with a miner's look. */
-    static class MijnwerkerRenderer extends GeoEntityRenderer<Z2Hulpje, LivingEntityRenderState> {
+    static class MijnwerkerRenderer extends PlofRenderer {
         MijnwerkerRenderer(EntityRendererProvider.Context ctx) {
             super(ctx, new DefaultedEntityGeoModel<Z2Hulpje>(Guhs.id("mika")) {
                 @Override

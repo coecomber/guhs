@@ -168,7 +168,7 @@ def teksten():
         "entity.guhs.vr_mom_karavaan": "Karavaanslak",
         "entity.guhs.vr_mom_handelaar": "Kruimel",
         "item.guhs.vr_mom_regenboogdrankje": "Regenboogdrankje",
-        "item.guhs.vr_mom_regenboogdrankje.uitleg": "Vult je Vads en energie helemaal en geeft 90 s Vahoeg, Snelpootjes en een Knuffelschild.",
+        "item.guhs.vr_mom_regenboogdrankje.uitleg": "Geeft je 700 Vads en 120 energie, en 90 s Vahoeg, Snelpootjes en een Knuffelschild.",
         "vadsrijk.momenten.drankje.buiten": "Dit drankje werkt alleen in het Vadsrijk.",
         "vadsrijk.momenten.drankje.op": "Je glinstert in alle kleuren van de regenboog!",
         "vadsrijk.momenten.golf.titel": "Het Vadsrijk kleurt weer",

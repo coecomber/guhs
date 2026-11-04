@@ -19,6 +19,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
  * {@link Z2WezensPlekken#BOVEN_Y} down (the first floor from above = the snow, a ledge or a hanging bridge; "player near" measured
  * flat), so the mountains' heights never matter. No spawner comes near a safe spot ({@link Z2WezensPlekken#VEILIG}).
  * The Spiegelburcht adds use the room mode (floor search 24 down from the room spot).
+ * <p>Balans 2026-11: no spawns next to the paths ({@link Z2WezensPlekken#PADEN}, registered in kern, which refuses any spot within
+ * 5 of a path edge at the path's height); a grid spawner whose circle reaches a path is moved sideways off it (same kind and
+ * max, so the per-area numbers stay the same).
  */
 public final class Z2WezensSpawners {
     public static final double ELITE = 0.06;
@@ -39,8 +42,13 @@ public final class Z2WezensSpawners {
         return new Soort(naam, type, gewicht, max, respawn, straal);
     }
 
+    /** How many grid spawners were moved off a path / could not be moved (the dev command and the gametest). */
+    public static int verschoven, nietVerschoven;
+
     /** From Z2WezensRegistry.register. */
     public static void registreer() {
+        Z2WezensPlekken.PADEN.forEach((naam, pad) -> Spawners.registreerPad("z2:" + naam, pad, Z2WezensPlekken.PAD_BREEDTE));
+        verschoven = nietVerschoven = 0;
         gebied(Z2WezensPlekken.GALMHELLINGEN, 2001, List.of(
                 s("splinterling", Z2WezensRegistry.SPLINTERLING, 3, 3, 700, 16),
                 s("galmvleermuis", Z2WezensRegistry.GALMVLEERMUIS, 2, 3, 700, 16),
@@ -86,6 +94,39 @@ public final class Z2WezensSpawners {
         MAX_PER_GEBIED.put("spiegelburcht", burcht);
     }
 
+    /**
+     * (balans 2026-11) A grid spawner centre moved straight away from the nearest path until its circle clears every path by
+     * {@link Spawners#PAD_VRIJ} (this side, the other side, then 6 / 12 further), staying in its area and out of safe spots.
+     * The centre itself when already clear; null when nothing fits (kern's spawn check still keeps it off the path).
+     */
+    @javax.annotation.Nullable
+    static int[] naastPad(Z2WezensPlekken.Gebied g, int x, int z, int straal) {
+        double nodig = straal + Spawners.PAD_VRIJ + 1;
+        double[] d = Spawners.dichtstbijPad(x, z);
+        if (d == null || d[2] >= nodig) {
+            return new int[] {x, z};
+        }
+        double nx = x - d[0], nz = z - d[1], L = Math.hypot(nx, nz);
+        if (L < 0.5) {
+            nx = -d[4];
+            nz = d[3];
+        } else {
+            nx /= L;
+            nz /= L;
+        }
+        double breedte = L - d[2];
+        for (int verder = 0; verder <= 12; verder += 6) {
+            for (int kant = 1; kant >= -1; kant -= 2) {
+                double a = breedte + nodig + verder;
+                int tx = (int) Math.round(d[0] + kant * nx * a), tz = (int) Math.round(d[1] + kant * nz * a);
+                if (Spawners.padAfstand(tx, tz) >= nodig && g.bevat(tx, tz) && !Z2WezensPlekken.veilig(tx, tz, straal + 8)) {
+                    return new int[] {tx, tz};
+                }
+            }
+        }
+        return null;
+    }
+
     private static void gebied(Z2WezensPlekken.Gebied g, long seed, List<Soort> mix) {
         Random r = new Random(seed);
         int som = mix.stream().mapToInt(Soort::gewicht).sum(), max = 0, i = 0;
@@ -103,6 +144,14 @@ public final class Z2WezensSpawners {
                 }
                 if (Z2WezensPlekken.veilig(px, pz, s.straal() + 8) || !g.bevat(px, pz)) {
                     continue;
+                }
+                int[] naast = naastPad(g, px, pz, s.straal());
+                if (naast == null) {
+                    nietVerschoven++;
+                } else if (naast[0] != px || naast[1] != pz) {
+                    verschoven++;
+                    px = naast[0];
+                    pz = naast[1];
                 }
                 BlockPos c = new BlockPos(px, (Z2WezensPlekken.BOVEN_Y + Z2WezensPlekken.ONDER_Y) / 2, pz);
                 Spawners.Spawner sp = new Spawners.Spawner("z2wezens:" + g.id() + "_" + i++ + "_" + s.naam(), c, s.straal(), s.type(), s.max(), s.respawn(),

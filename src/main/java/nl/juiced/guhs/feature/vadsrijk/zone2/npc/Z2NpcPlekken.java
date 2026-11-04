@@ -235,10 +235,10 @@ public final class Z2NpcPlekken {
     public static final Vec3 DRAAK_RUST = new Vec3(-330, 128, -2610);
     public static final Vec3[] DRAAK_1 = {
             new Vec3(-344, 150, -2570), DRAAK_RUST,                    // from above the col, looking down
-            new Vec3(-334, 131, -2592), DRAAK_RUST.add(0, 2, 0)};      // down to his head
+            new Vec3(-336, 132.5, -2583), DRAAK_RUST.add(0, 3, 0)};    // (balans 2026-11: offsets x1.5, the dragon is 1.5x bigger)      // down to his head
     public static final Vec3[] DRAAK_2 = {
-            new Vec3(-332, 130, -2596), DRAAK_RUST.add(0, 3, 0),       // close: he looks at you
-            new Vec3(-340, 138, -2580), DRAAK_RUST.add(0, 40, -40),    // he rises
+            new Vec3(-333, 131, -2589), DRAAK_RUST.add(0, 4.5, 0),     // close: he looks at you
+            new Vec3(-345, 143, -2565), DRAAK_RUST.add(0, 40, -40),    // he rises
             new Vec3(-346, 150, -2570), new Vec3(-420, 230, -2900)};   // and flies off to the north
     /** The dragon's path off the col. */
     public static final Vec3[] DRAAK_WEG = {DRAAK_RUST, DRAAK_RUST.add(4, 30, -20), DRAAK_RUST.add(-30, 80, -100), new Vec3(-450, 240, -3000)};

@@ -116,8 +116,8 @@ final class SfeerWereld {
         float sterkte = (float) Mth.clamp(1 - hoog / 110, 0.25, 1) * 0.5f;
         double yaw = Math.toRadians(d.getYRot());
         double fx = -Math.sin(yaw), fz = Math.cos(yaw);     // body direction
-        double lang = 11 + hoog * 0.06, breed = 17 + hoog * 0.1;
-        int n = 14;
+        double lang = 16.5 + hoog * 0.09, breed = 25.5 + hoog * 0.15;   // (balans 2026-11: the dragon is 1.5x bigger)
+        int n = 26;
         double cel = 2.0, half = n * cel / 2;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {

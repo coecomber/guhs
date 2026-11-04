@@ -40,7 +40,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
  * <li>caps: {@code max} per spawner and {@link #GEBIED_MAX} per kern area (summed over the spawners);</li>
  * <li>never in a block, in the air, in fluid, on a mushroom cap/leaves/roof ({@link #slechteVloer}), within
  * {@link #VEILIG_STRAAL} of a {@link #VEILIGE_PLEKKEN} spot (campfires) or where a {@link #VERBODEN} test says no (NPCs), in a
- * town area, or within {@link #MIN_SPELER} of a player.</li>
+ * town area, within {@link #MIN_SPELER} of a player, or (balans 2026-11) within {@link #PAD_VRIJ} of a path ({@link #PADEN},
+ * registered by the zone slices from the map's path tables; only at the path's own height, so caves under a path and the hat
+ * layer above one still spawn).</li>
  * </ul>
  * Elites roll with {@code eliteKans} and get 1-2 random affixes.
  */
@@ -94,6 +96,68 @@ public final class Spawners {
     private static final Map<String, Long> LAATST_ACTIEF = new HashMap<>();
     /** Per spawner: its kern area id (cached). */
     private static final Map<String, String> GEBIED = new HashMap<>();
+
+    /** A map path (flat polyline, world x/z) and its half width. */
+    public record Pad(String naam, int[][] punten, double breedte) {
+    }
+
+    /** No wild spawn within this many blocks of a path's edge (balans 2026-11, second playtest). */
+    public static final double PAD_VRIJ = 5;
+    /** ... at the path's own height (stand y within this of the path surface next to it). */
+    public static final int PAD_HOOGTE = 4;
+    /** The paths of the zones (name -> path); the zone slices register theirs. */
+    public static final Map<String, Pad> PADEN = new java.util.concurrent.ConcurrentHashMap<>();
+
+    public static void registreerPad(String naam, int[][] punten, double breedte) {
+        PADEN.put(naam, new Pad(naam, punten, breedte));
+    }
+
+    /**
+     * The nearest path point to (x, z): {x, z, distance from the path's EDGE (centre distance - half width), dirX, dirZ of the
+     * segment}, or null without paths.
+     */
+    @Nullable
+    public static double[] dichtstbijPad(double x, double z) {
+        double[] best = null;
+        for (Pad pad : PADEN.values()) {
+            int[][] p = pad.punten();
+            for (int i = 0; i + 1 < p.length; i++) {
+                double ax = p[i][0], az = p[i][1], dx = p[i + 1][0] - ax, dz = p[i + 1][1] - az;
+                double L2 = dx * dx + dz * dz;
+                if (L2 <= 0) {
+                    continue;
+                }
+                double t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / L2));
+                double px = ax + t * dx, pz = az + t * dz;
+                double rand = Math.hypot(x - px, z - pz) - pad.breedte();
+                if (best == null || rand < best[2]) {
+                    double L = Math.sqrt(L2);
+                    best = new double[] {px, pz, rand, dx / L, dz / L};
+                }
+            }
+        }
+        return best;
+    }
+
+    /** The flat distance from (x, z) to the nearest path edge (MAX_VALUE without paths; negative = on the path). */
+    public static double padAfstand(double x, double z) {
+        double[] d = dichtstbijPad(x, z);
+        return d == null ? Double.MAX_VALUE : d[2];
+    }
+
+    /** Is this stand spot on or next to a path (within {@link #PAD_VRIJ} of its edge, at the path's height)? */
+    public static boolean bijPad(ServerLevel sl, BlockPos p) {
+        double[] d = dichtstbijPad(p.getX() + 0.5, p.getZ() + 0.5);
+        if (d == null || d[2] >= PAD_VRIJ) {
+            return false;
+        }
+        int px = (int) Math.floor(d[0]), pz = (int) Math.floor(d[1]);
+        if (!sl.isLoaded(new BlockPos(px, 0, pz))) {
+            return true;
+        }
+        int padY = grond(sl, px, pz);
+        return padY == Integer.MIN_VALUE || Math.abs(p.getY() - padY) <= PAD_HOOGTE;
+    }
 
     /** Max alive per kern area id (summed over all its spawners); no entry = no area cap. */
     public static final Map<String, Integer> GEBIED_MAX = new HashMap<>();
@@ -343,6 +407,9 @@ public final class Spawners {
         if (nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(sl)) {
             Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
             if (g != null && g.stad()) {
+                return false;
+            }
+            if (bijPad(sl, p)) {
                 return false;
             }
         }

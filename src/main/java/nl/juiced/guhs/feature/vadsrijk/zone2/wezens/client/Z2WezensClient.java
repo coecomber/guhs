@@ -45,6 +45,7 @@ public final class Z2WezensClient {
     static final DataTicket<Boolean> ELITE = DataTicket.create("guhs_vr_z2_elite", Boolean.class);
     static final DataTicket<Boolean> KLEIN = DataTicket.create("guhs_vr_z2_klein", Boolean.class);
     static final DataTicket<Boolean> VERBORGEN = DataTicket.create("guhs_vr_z2_verborgen", Boolean.class);
+    static final DataTicket<Boolean> GEPLOFD = DataTicket.create("guhs_vr_z2_geplofd", Boolean.class);
 
     private Z2WezensClient() {
     }
@@ -114,6 +115,22 @@ public final class Z2WezensClient {
             state.addGeckolibData(ELITE, w.eliteZichtbaar());
             state.addGeckolibData(KLEIN, w.klein());
             state.addGeckolibData(VERBORGEN, w.verborgen());
+            state.addGeckolibData(GEPLOFD, w.geplofd());
+        }
+
+        /** (balans 2026-11) After the plof: translucent (and no hitbox, see VadsrijkMob#isPickable). */
+        @Override
+        public int getRenderColor(T w, @Nullable Void related, float partialTick) {
+            int k = super.getRenderColor(w, related, partialTick);
+            return w.geplofd() ? (k & 0x00FFFFFF) | (nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob.PLOF_ALPHA << 24) : k;
+        }
+
+        @Override
+        public @Nullable net.minecraft.client.renderer.rendertype.RenderType getRenderType(LivingEntityRenderState state, Identifier texture) {
+            if (Boolean.TRUE.equals(state.getGeckolibData(GEPLOFD)) && !state.isInvisible) {
+                return net.minecraft.client.renderer.rendertype.RenderTypes.entityTranslucent(texture);
+            }
+            return super.getRenderType(state, texture);
         }
 
         @Override
