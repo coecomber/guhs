@@ -56,3 +56,10 @@ Branch `110-z2-wezens`, worktree `guhs_vadsrijk/z2-wezens`. Package `feature/vad
 
 ## Resume point
 See `git log -1`. Remaining: align coordinates with POI_Z2.md; tuning after the user's look.
+
+## Test results (2026-11-04)
+- `compileJava` OK; `runGameTestServer -Pgt=VadsrijkZ2Wezens`: all 4 pass ("All 5 required tests passed").
+- One AutoCheck run (`tools/autocheck/vadsrijk_z2_wezens.txt`): no crash, no zone-2 model/texture/animation errors (only the 4
+  pre-existing problems: droombed, bliksemsmidse_onweerswolkje, guhmon_badgedoos; FTB "Missing entity icon settings" as for every
+  guhs entity). All 17 entities render on the snow platform; elite gold layer, Bevroren frost overlay + tip, crystal shards and
+  the Mika smoke puff visible. Screenshots: `run/screenshots/autocheck/vr_z2_*.png` (not committed).
