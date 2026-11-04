@@ -28,6 +28,8 @@ public final class Quests {
     public static final String BESTAND = "/data/guhs/vadsrijk/npc/quests.json";
     /** Zone 2 (tools/features/vadsrijk_z2_npc.py): read after zone 1, same system, its quests come after zone 1's in the questlog. */
     public static final String BESTAND_Z2 = "/data/guhs/vadsrijk/npc/quests_z2.json";
+    /** Zone 3 (tools/features/vadsrijk_z3_npc.py): read after zone 2, same system. */
+    public static final String BESTAND_Z3 = "/data/guhs/vadsrijk/npc/quests_z3.json";
     private static volatile Map<String, Quest> alle;
 
     private Quests() {
@@ -53,7 +55,7 @@ public final class Quests {
 
     private static Map<String, Quest> laad() {
         Map<String, Quest> m = new LinkedHashMap<>();
-        for (String bestand : new String[] {BESTAND, BESTAND_Z2}) {
+        for (String bestand : new String[] {BESTAND, BESTAND_Z2, BESTAND_Z3}) {
             try (InputStream in = Quests.class.getResourceAsStream(bestand)) {
                 if (in == null) {
                     LOG.error("Vadsrijk npc: {} is missing", bestand);

@@ -645,7 +645,7 @@ Q("z2_hq12_hartsplinter", "hoofd", "z2_prisma", "Een roze splinter",
    ("npc", "Toen Vahoegnir nog roze was, droeg hij een hart van roze kristal. Zolang het heel was, beschermde hij het hele rijk."),
    ("npc", "Iemand heeft het gebroken. De Mika's? Ze boren het grauwe kristal uit de bergen... ze zoeken iets."),
    ("jij", "Dan zoeken wij de andere splinters. Voordat de Mika's ze vinden."),
-   ("npc", "Kijk eens naar het westen. Zie je dat, heel ver weg, achter de wolken? Een boom. Zo groot als een berg.")],
+   ("npc", "Kijk eens naar het oosten. Zie je dat, heel ver weg, achter de wolken? Een boom. Zo groot als een berg.")],
   xp=12000, munten=15000, lv=30, na=["z2_hq11_spiegelzucht"], inleveren="z2_ordemeester", auto=True,
   start_items=[(item("hartsplinter"), 1)], actie_klaar="z2_cliffhanger")
 
@@ -1076,7 +1076,7 @@ OVERIG = {
     Z + "scene.flashback.titel": "Lang geleden...",
     Z + "scene.flashback.onder": "Vahoegnir, de roze beschermdraak van het Vadsrijk",
     Z + "scene.einde.titel": "Wordt vervolgd...",
-    Z + "scene.einde.onder": "Ver in het westen, achter de wolken, staat een boom zo groot als een berg.",
+    Z + "scene.einde.onder": "Ver in het oosten, achter de wolken, staat een boom zo groot als een berg.",
     Z + "scene.gondel.titel": "De Galmhellingen",
     Z + "scene.gondel.onder": "Het bovenste gondelstation",
     Z + "scene.vlucht.kandijkom.titel": "Kandijkom",

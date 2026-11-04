@@ -1417,13 +1417,13 @@ def _direct():
         p = os.path.join(a, "assets", "guhs", "lang", f"{taal}.json")
         with open(p, encoding="utf-8") as f:
             data = json.load(f)
-        for k in [k for k in data if k.startswith((P, "item.guhs.vr_npc_")) and k not in t and ".z2_" not in k and ":z2_" not in k]:
+        for k in [k for k in data if k.startswith((P, "item.guhs.vr_npc_")) and k not in t and not re.search(r"[.:]z[2-9]_|schemerwortel", k)]:
             del data[k]   # (texts this generator no longer writes; zone 2's keys belong to vadsrijk_z2_npc.py)
         data.update(t)
         _schrijf(p, data)
     oud = os.path.join(d, "advancement", "quest")
     for f in os.listdir(oud):
-        if f.startswith("vr_") and not f.startswith("vr_z2_") and f"advancement/quest/{f}" not in advancements():
+        if f.startswith("vr_") and not re.match(r"vr_z[2-9]_", f) and f"advancement/quest/{f}" not in advancements():
             os.remove(os.path.join(oud, f))   # (a quest or secret that is gone)
     print(f"vadsrijk_npc: {len(QUESTS)} quests, {len(NPCS)} + {len(KAMPWACHT_NAMEN)} NPC names, {len(t)} texts")
 

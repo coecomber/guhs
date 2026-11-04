@@ -215,6 +215,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_huisdieren',
             # 1.10 fix round 2, I-VOLTOOIING: the Verkenningsboek (zone completion) texts
             'vadsrijk_voltooiing',
+            # 1.10 zone 3 "De Schemerwortel": one generator per slice
+            'vadsrijk_z3_npc',
             ]
 
 

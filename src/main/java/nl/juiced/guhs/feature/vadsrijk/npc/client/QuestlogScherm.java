@@ -33,7 +33,9 @@ public class QuestlogScherm extends Screen {
     static final String[] GIDS = {"begin", "vastzitten", "weergave", "klassen", "vaardigheden", "loot", "sterren", "kampvuren", "flauw", "elementen", "statussen", "party",
             "quests", "munten", "markt", "rijdieren", "geheimen",
             // zone 2 (tools/features/vadsrijk_z2_npc.py GIDS)
-            "z2_splinterpieken", "z2_kristalwezens", "z2_bevroren", "z2_edelstenen", "z2_reizen", "z2_titel"};
+            "z2_splinterpieken", "z2_kristalwezens", "z2_bevroren", "z2_edelstenen", "z2_reizen", "z2_titel",
+            // zone 3 (tools/features/vadsrijk_z3_npc.py GIDS)
+            "z3_schemerwortel", "z3_pluimguh", "z3_lantaarn", "z3_premiebord", "z3_reizen", "z3_titel"};
     private static final String[] TABS = {"quests", "geheimen", "wezens", "gids"};
 
     private CompoundTag data;

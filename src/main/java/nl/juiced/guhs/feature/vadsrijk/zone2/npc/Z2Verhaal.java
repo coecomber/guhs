@@ -53,7 +53,7 @@ import nl.juiced.guhs.feature.verhaal.Praat;
  *   <li>{@link #draak}: z2_hq09, Vahoegnir wounded and resting in a ravine: you pull out a grey crystal splinter, he looks at you
  *       and flies off (no fight);</li>
  *   <li>{@link #flashback}: z2_hq11, the first shard of his pink heart crystal: long ago, the dragon pink and protective over the realm;</li>
- *   <li>{@link #cliffhanger}: z2_hq12, the giant tree on the far western horizon (zone 3); flag {@code zone2_klaar};</li>
+ *   <li>{@link #cliffhanger}: z2_hq12, the giant tree on the far EASTERN horizon (zone 3); flag {@code zone2_klaar};</li>
  *   <li>{@link #vlieg} (De Haven &lt;-&gt; Kandijkom) and {@link #gondel} (Kandijkom &lt;-&gt; the top of the Galmhellingen).</li>
  * </ul>
  * Other slices may take parts over through NpcRollen bindings (a binding always wins; reflection on the z2-wereld classes next):
