@@ -11,10 +11,12 @@ build/moddev copied from f-int (artifacts only).
 | 110-g-kaart | 786ec74da | clean; + loopcheck `_deur` passable (97cafc68b) |
 | 110-g-balans | f3c03e9b7 | lang union; config unified (see log) |
 | 110-g-ux | 79f8a7dda | Npcs: kaart staanPlek + ux standplek -> ONE `staanPlek` (exact; blocked -> nearest lit free floor same y within 2; down 1-4; up/down 12); lang 3-way per key (scratchpad gint/lang3.py) |
+| 110-g-mounts | ec1a2aea7 | __init__ FEATURES both (biomen + rijdieren); lang 3-way; + boss Pluimguh eggs (BazenLoot.pluimEi) |
+| 110-g-z2 | 25568a596 | Z2NpcPlekken: z2 volgKaart + dragon cams relative with balans' x1.5; ux GEODE/POORT_* -> r 66 gates; Z2WezensSpawners: z2's grid + ONE path rule (kern Spawners.padAfstand - PAD_VRIJ); Z2WezensPlekken.PADEN = generated Z2WereldPlekken.PADEN |
 | 110-g-klassen | 739674370 | vadsrijk_klassen.py: klassen's scherm.ordetempel text + ui's skilltip keys; lang union |
 
 ## Waiting for
-g-ux, g-balans, g-z2, g-mounts (+ maybe zone 3).
+g-werver (after g-mounts, also on g-ux), g-pets. Lead: wait for its message before the final steps.
 
 ## Cross-cutting to do
 - after g-z2: VadsrijkBiomen zone-2 boxes + `zone2Biome` id mapping -> new zone-2 areas.
@@ -32,6 +34,9 @@ g-ux, g-balans, g-z2, g-mounts (+ maybe zone 3).
 - gametests still owed: VadsrijkNpc (for g-kaart).
 
 ## Log
+- Regen 1 (`maak_kaart --zone alle --geen-cache`): audit found a NEW pit at Zwamzoet 110 118 -90 = g-kaart's cap-house funderen filled hoed_noordo's spiral-stair exit -> funderen(niet_op_trap) (11c114a76); zone 1 regenerated again: same as before.
+- FTB: CHAPTER_VERSION 60 (chapter texts changed by ux/z2).
+- Gametest fails after ux merge (5 classes run): reisKeuzes 'lv 20: Kandijkom flies' (diagnostics added b51581a5f) and klodderreusVecht 'hurt the player standing still' (moved 10, closest 6, 0 hits). To check in the full run.
 - Gametests after biomen/ui/kaart/klassen/balans: Klassen,Npc,Kern,Balans,Z2Systemen,Wezens,Z2Wezens 40/40.
 - Bells (ux follow-up): all ship bells open `Reiskaart.open` (texts in vadsrijk_npc.py / vadsrijk_z2_npc.py + lang). Haven sneak-click = Kandijkom kept.
 - Lang check tool: scratchpad gint/langcheck.py <branches> = every branch-changed nl key has the branch value in HEAD (all OK so far).
