@@ -206,6 +206,7 @@ TEKSTEN = {
     K + "kampvuur.rust": "Je warmt je pootjes. Vads en energie zijn weer vol.",
     K + "baas.klodderreus": "GRAUWE KLODDERREUS",
     K + "baas.klodderreus.onder": "De Plakkerige Plaag van het Kamp",
+    K + "baas.te_ver": "Te ver weg! Kom de arena in om de baas te raken.",
     K + "arena.wakker": "is wakker!",
     K + "arena.terug": "terug over %s",
     K + "baaskist.niet_jouw": "Deze buitkist is van %s. Jouw kist staat er vast ook!",
