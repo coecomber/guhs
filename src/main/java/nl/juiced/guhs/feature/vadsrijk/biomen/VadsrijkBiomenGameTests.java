@@ -59,10 +59,11 @@ public class VadsrijkBiomenGameTests {
         // zone 2
         verwacht(helper, vb, Z2WereldPlekken.DOK_LANDING.getX(), Z2WereldPlekken.DOK_LANDING.getZ(), "kandijkom");
         verwacht(helper, vb, 0, -2400, "kandijkom");
-        verwacht(helper, vb, 400, -2200, "galmhellingen");
-        verwacht(helper, vb, -400, -2200, "knuffelmeer");
-        verwacht(helper, vb, -300, -2850, "splinterkloof");
-        verwacht(helper, vb, 0, -2900, "spiegelburcht");
+        verwacht(helper, vb, 170, -2350, "galmhellingen");
+        verwacht(helper, vb, -172, -2378, "knuffelmeer");
+        verwacht(helper, vb, -100, -2545, "splinterkloof");
+        verwacht(helper, vb, 150, -2693, "spiegelburcht");
+        verwacht(helper, vb, 280, -2500, "splinterpieken");   // g-int: g-z2's ring (the cloud sea round the 500x575 island)
         // every biome is a possible biome, and places the map
         var kaart = server.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).getOrThrow(
                 net.minecraft.resources.ResourceKey.create(Registries.PLACED_FEATURE, Guhs.id("vr_kaart")));
