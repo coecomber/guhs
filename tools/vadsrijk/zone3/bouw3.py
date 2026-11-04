@@ -20,6 +20,7 @@ from schemerkit import hash3, vnoise
 
 PLANK, HOUT, HEK = "minecraft:spruce_planks", "minecraft:stripped_spruce_wood", "minecraft:spruce_fence"
 LAMP_R, LAMP_G, LAMP_M = "guhs:lampion_roze", "guhs:lampion_geel", "guhs:lampion_mint"
+ALTAAR = "guhs:vr_z3_baas_altaar"   # K-INT: z3-bazen's Vahoeg altar (VahoegModus)
 KAMPVUUR = "minecraft:campfire[facing=south,lit=false,signal_fire=false,waterlogged=false,z3kv=1]"
 LUCHT = "minecraft:air"
 
@@ -654,6 +655,11 @@ def werf(W):
     # entrance from the branch path down to level A, A -> B, B -> C
     ix, iy, iz = R("werf_ingang")
     W.wfill(ix - 2, iy - 1, iz - 2, ix + 2, iy - 1, iz + 2, "minecraft:dark_oak_planks")
+    # K-INT: the Vahoeg altar (z3-bazen's block, right-click with a Vahoegzegel) on a small pad beside the entrance
+    vx, vy, vz = R("werf_vahoeg_altaar")
+    W.wfill(vx - 1, vy - 1, vz - 1, vx + 1, vy - 1, vz + 1, "minecraft:dark_oak_planks")
+    leeg(W, vx - 1, vy, vz - 1, vx + 1, vy + 2, vz + 1)
+    W.wset(vx, vy, vz, ALTAAR)
     trap_recht(W, (ix, iz + 3), iy - 1, (cx + 18, cz + 16 - 8), A, breed=1, blok="minecraft:dark_oak_planks")
     ax, ay, az = R("werf_trap_ab")
     trap_recht(W, (ax, az), A, (ax - (A - B) - 2, az), B, breed=1, blok="minecraft:dark_oak_planks")
@@ -755,7 +761,7 @@ def hart(W):
         W.wset(lx, ly + 2, lz, "minecraft:soul_lantern[hanging=false,waterlogged=false]")
     for k in ("hart_bord", "hart_vahoeg_altaar"):
         x, y, z = R(k)
-        W.wset(x, y, z, "minecraft:chiseled_stone_bricks" if "altaar" in k else LUCHT)
+        W.wset(x, y, z, ALTAAR if "altaar" in k else LUCHT)   # K-INT: z3-bazen's Vahoeg altar block
 
 
 # ================================================================================================ Wortelvelden

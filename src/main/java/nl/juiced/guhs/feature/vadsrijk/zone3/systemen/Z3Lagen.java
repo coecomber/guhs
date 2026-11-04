@@ -20,21 +20,19 @@ public final class Z3Lagen {
     public static final int STAM_X = 2300, STAM_Z = 0;
     public static final int ZONE_MIN_X = 1600, ZONE_MAX_X = 3000, ZONE_MIN_Z = -700, ZONE_MAX_Z = 700;
     /**
-     * Copied from z3-wereld's POI_Z3.md v0 ({@code Z3WereldPlekken.GEBIEDEN}, same ids, same order) plus a catch-all
-     * {@code z3_ring}. The integrator may replace this with a conversion of that list ({@link #kern}).
+     * K-INT: built from z3-wereld's generated {@code Z3WereldPlekken.GEBIEDEN} (same ids, same order, follows every map regen)
+     * plus a catch-all {@code z3_ring} (the rest of the zone box, every height: flat 2D lookups in zone 3 land here too).
      */
-    public static final List<Gebied> GEBIEDEN = List.of(
-            kern("z3_honingtak", false, 1634, -100, 2014, 110, 150, 290, 30, 50, true),
-            kern("z3_zeppelinwerf", false, 2819, -660, 2979, -480, 95, 185, 38, 40, false),
-            kern("z3_hart", true, 2300, 0, 0, 120, 40, 74, 49, 50, false),
-            kern("z3_schorsstad", true, 2300, 0, 0, 76, 75, 199, 40, 43, false),
-            kern("z3_stamspiraal", true, 2300, 0, 76, 132, 66, 205, 40, 43, false),
-            kern("z3_kruinzee", true, 2300, 0, 0, 400, 200, 320, 30, 34, false),
-            kern("z3_takkenbanen", true, 2300, 0, 0, 820, 120, 320, 34, 38, false),
-            kern("z3_wortelduister", true, 2300, 0, 0, 470, 0, 61, 46, 49, false),
-            kern("z3_wortelvelden", true, 2300, 0, 0, 900, 0, 320, 43, 46, false),
-            // the rest of the zone box (every height): flat 2D lookups in zone 3 land here too
-            new Gebied("z3_ring", ZONE_MIN_X, ZONE_MIN_Z, ZONE_MAX_X, ZONE_MAX_Z, 30, 50, false));
+    public static final List<Gebied> GEBIEDEN = bouw();
+
+    private static List<Gebied> bouw() {
+        java.util.ArrayList<Gebied> l = new java.util.ArrayList<>();
+        for (var g : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.GEBIEDEN) {
+            l.add(kern(g.id(), g.cilinder(), g.a(), g.b(), g.c(), g.d(), g.minY(), g.maxY(), g.minLevel(), g.maxLevel(), g.stad()));
+        }
+        l.add(new Gebied("z3_ring", ZONE_MIN_X, ZONE_MIN_Z, ZONE_MAX_X, ZONE_MAX_Z, 30, 50, false));
+        return List.copyOf(l);
+    }
 
     /**
      * A kern area from z3-wereld's {@code Gebied3} fields: a box (a,b)..(c,d) or a cylinder/ring around (a, b) with radius c..d,

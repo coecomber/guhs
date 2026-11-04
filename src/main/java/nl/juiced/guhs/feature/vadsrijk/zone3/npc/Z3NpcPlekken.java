@@ -1,6 +1,5 @@
 package nl.juiced.guhs.feature.vadsrijk.zone3.npc;
 
-import java.lang.reflect.Method;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,30 +23,12 @@ public final class Z3NpcPlekken {
     private Z3NpcPlekken() {
     }
 
-    // ---- z3-wereld's generated spots, when present ---------------------------------------------------------------------------
-    @Nullable
-    private static final Method WERELD = zoek();
-
-    @Nullable
-    private static Method zoek() {
-        try {
-            return Class.forName("nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken").getMethod("plek", String.class);
-        } catch (ReflectiveOperationException | LinkageError e) {
-            return null;
-        }
-    }
+    // ---- z3-wereld's generated spots (K-INT: a direct reference now; the numbers below are only used for an id it lacks) -----
 
     /** z3-wereld's spot for this id, or null. */
     @Nullable
     public static BlockPos wereld(String id) {
-        if (WERELD == null) {
-            return null;
-        }
-        try {
-            return WERELD.invoke(null, id) instanceof BlockPos b ? b : null;
-        } catch (ReflectiveOperationException | RuntimeException e) {
-            return null;
-        }
+        return nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek(id);
     }
 
     static BlockPos w(String id, int x, int y, int z) {

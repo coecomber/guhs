@@ -45,7 +45,7 @@ class Lezer:
 
 def overslaan(k):
     return (k in SLA_EXACT or k.startswith(SLA_PREFIX) or k.endswith(("doos_min", "doos_max", "_kooi", "premiebord", "jachtbord"))
-            or k.startswith("kampvuur_") or k in ("piepvel_troon", "hart_vahoeg_altaar", "ei"))
+            or k.startswith("kampvuur_") or k in ("piepvel_troon", "hart_vahoeg_altaar", "werf_vahoeg_altaar", "ei"))
 
 
 def staat(blok, x, y, z):

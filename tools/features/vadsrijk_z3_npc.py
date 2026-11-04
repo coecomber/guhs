@@ -859,6 +859,16 @@ OVERIG = {
     Z + "scene.ei.titel": "Het Drakenei",
     Z + "scene.ei.onder": "Warm, roze, en het klopt",
     Z + "scene.ei.warm": "Je pakt het ei op. Het is warm. Het klopje gaat even sneller.",
+    # K-INT: Bleu's egg was a decoy; the Mika-imker secret ends in a lore scene (the boss itself is not built)
+    Z + "scene.ei.nep": "Het ei in de kamer van Baron Bleu? Nep! Een kaaswiel met roze verf. Het echte ei lag hier al die tijd veilig.",
+    Z + "imker.open": "Onder in de Raattrossen klinkt gezoem... en iemand die heel zachtjes \"au, au, au\" zegt.",
+    Z + "imker.naam": "De Mika-imker",
+    Z + "imker.scene.0": "In de raatzaal staat een Mika in een veel te groot imkerpak, met een rookpotje in zijn ene hand en een lepel in de andere.",
+    Z + "imker.scene.1": "\"Niks aan de hand! Gewoon... honing proeven. Voor het rapport. Kwaliteitscontrole!\"",
+    Z + "imker.scene.2": "\"Wat? Grauwe honing? Nee hoor, die is gewoon een beetje... rijp. Net als kaas. Mika's houden van rijp.\"",
+    Z + "imker.scene.3": "De bijtjes zoemen boos om zijn hoofd. Het rookpotje sputtert, hoest één wolkje uit en gaat uit.",
+    Z + "imker.scene.4": "\"Oké, oké! Ik ga al! Dit komt in mijn rapport!\"",
+    Z + "imker.scene.5": "Hij vlucht met een volle pot honing door het luik. De pot laat hij in zijn haast achter. De bijtjes zijn weer blij.",
     Z + "scene.rit.titel": "Ontsnap!",
     Z + "scene.rit.onder": "Omhoog over de Stamspiraal",
     Z + "scene.rit.schudt": "De boom schudt! Takken vallen, schors scheurt. Vahoegnir slaat door de kruin!",
@@ -1169,8 +1179,8 @@ def _schrijf(pad, obj):
 
 def _mijn_sleutel(k):
     """The lang keys this generator owns (so a standalone run can drop the ones it no longer writes)."""
-    return (k.startswith(Z) or k.startswith("item.guhs.vr_z3_npc_") or (k.startswith(P) and ".z3_" in k)
-            or k.startswith(P + "plek.overal.teller:z3_"))
+    return (k.startswith(Z) or k.startswith("item.guhs.vr_z3_npc_") or (k.startswith(P) and ".z3_" in k and not k.startswith(P + "reis."))
+            or k.startswith(P + "plek.overal.teller:z3_"))   # (K-INT: vadsrijk.npc.reis.* is z3-wereld's travel text)
 
 
 def _direct():

@@ -19,25 +19,10 @@ public final class Z3BazenPlekken {
     private Z3BazenPlekken() {
     }
 
-    @Nullable
-    private static java.lang.reflect.Method zoeker;
-    private static boolean gezocht;
-
-    /** (integration) z3-wereld's spot when it exists, else the fallback. */
+    /** (K-INT) z3-wereld's spot (direct reference); the numbers are only used for an id it lacks. */
     static BlockPos w(String id, int x, int y, int z) {
-        try {
-            if (!gezocht) {
-                gezocht = true;
-                Class<?> c = Class.forName("nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken");
-                zoeker = c.getMethod("plek", String.class);
-            }
-            if (zoeker != null && zoeker.invoke(null, id) instanceof BlockPos b) {
-                return b;
-            }
-        } catch (Throwable ignored) {
-            // (no z3-wereld on this branch yet)
-        }
-        return new BlockPos(x, y, z);
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek(id);
+        return b != null ? b : new BlockPos(x, y, z);
     }
 
     public static final BlockPos STAM = new BlockPos(2300, 64, 0);

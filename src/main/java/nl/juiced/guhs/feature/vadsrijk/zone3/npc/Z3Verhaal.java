@@ -325,6 +325,7 @@ public final class Z3Verhaal {
         Vec3 e = Z3NpcPlekken.EI;
         RijkScenes.speel(p, RijkScene.maak("npc:z3_ei", EI_TICKS).camera(0, e.add(6, 4, 6), e.add(0, 0.6, 0)).camera(EI_TICKS, e.add(2, 1.6, 2),
                 e.add(0, 0.6, 0)).titel(Z + "scene.ei.titel", Z + "scene.ei.onder", 40, 90, 0xFF8AD0).bouw());
+        zeg(p, "scene.ei.nep", ChatFormatting.LIGHT_PURPLE);   // K-INT: the egg in Baron Bleu's room was a decoy
         loopt(p, "ei", "");
     }
 
@@ -611,7 +612,14 @@ public final class Z3Verhaal {
                 weg(p.getUUID());
                 bloei(p);
             }
-            case "cliff" -> flashF2(p);
+            case "cliff" -> {
+                if (Z3Koppelingen.f2Gezien(p)) {   // K-INT: z3-bazen's throne room (after Vahoegnir) was the F2
+                    zeg(p, "zone3.klaar", ChatFormatting.LIGHT_PURPLE);
+                    NpcApi.meld(p, "z3", "cliffhanger");
+                } else {
+                    flashF2(p);
+                }
+            }
             case "f2" -> {
                 zeg(p, "zone3.klaar", ChatFormatting.LIGHT_PURPLE);
                 NpcApi.meld(p, "z3", "cliffhanger");

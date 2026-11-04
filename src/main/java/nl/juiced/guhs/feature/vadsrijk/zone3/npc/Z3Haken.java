@@ -66,7 +66,7 @@ public final class Z3Haken {
             HQ11 = "z3_hq11_wortel", HQ12 = "z3_hq12_duister", HQ13 = "z3_hq13_hart", HQ14 = "z3_hq14_vahoegnir", HQ15 = "z3_hq15_hoogvads";
     /** Boss name in an entity type id ("vr_z3_baas_piepvel") -> the quest event name ("z3_piepvel"). */
     static final String[][] BAZEN = {{"taleggio", "z3_taleggio"}, {"brokkel", "z3_brokkel"}, {"roquefort", "z3_roquefort"},
-            {"wortelwurger", "z3_wortelwurger"}, {"bleu", "z3_bleu"}, {"schimmelkolos", "z3_bleu"}, {"piepvel", "z3_piepvel"}, {"imker", "z3_imker"},
+            {"wortelwurger", "z3_wortelwurger"}, {"bleu", "z3_bleu"}, {"piepvel", "z3_piepvel"}, {"imker", "z3_imker"},
             {"kruinroofvogel", "z3_kruinroofvogel"}, {"nestwachter", "z3_nestwachter"}};
     private static final Map<UUID, Long> VAHOEGNIR_START = new ConcurrentHashMap<>();
 
@@ -231,6 +231,11 @@ public final class Z3Haken {
         return b != null && NpcHaken.bij(p, b, straal, 6);
     }
 
+    /** Not given yet? (does not mark it) */
+    static boolean eenmaligNog(ServerPlayer p, String id) {
+        return !Questlog.map(p, GEGEVEN).getBooleanOr(id, false);
+    }
+
     /** A one-off story gift (item + line), remembered so it never comes twice. */
     static boolean eenmalig(ServerPlayer p, String id) {
         CompoundTag m = Questlog.map(p, GEGEVEN);
@@ -329,8 +334,12 @@ public final class Z3Haken {
         if (Questlog.actief(p, HQ10)) {
             ringen(p, sl);
             if (doelKlaar(p, HQ10, 1) && !doelKlaar(p, HQ10, 2) && !Spelers.data(p).gezien.contains("npc:z3_flash_f1")) {
-                Z3Verhaal.flashF1(p);
-                return;
+                if (Z3Koppelingen.f1Gezien(p)) {
+                    Spelers.data(p).gezien.add("npc:z3_flash_f1");   // K-INT: z3-bazen's arm flash was the F1
+                } else {
+                    Z3Verhaal.flashF1(p);   // (fallback: this player was not in the Pelszaal when the arm came)
+                    return;
+                }
             }
             if (doelKlaar(p, HQ10, 1) && !doelKlaar(p, HQ10, 2) && Spelers.data(p).gezien.contains("npc:z3_flash_f1")) {
                 NpcApi.meld(p, "z3", "flash_f1");   // (the scene was cut short)
@@ -385,6 +394,9 @@ public final class Z3Haken {
                     && t - VAHOEGNIR_START.getOrDefault(p.getUUID(), -10000L) > 20 * 30) {
                 startVahoegnir(p);
             }
+            if (doelKlaar(p, HQ14, 1) && !doelKlaar(p, HQ14, 2) && Z3Koppelingen.wachtOpTroon(p)) {
+                return;   // K-INT: z3-bazen's ending + throne room run; the bloom follows on "troonzaal_klaar"
+            }
             if (doelKlaar(p, HQ14, 1) && !doelKlaar(p, HQ14, 2) && !Spelers.data(p).gezien.contains("npc:z3_finale")) {
                 Z3Verhaal.finale(p);
                 return;
@@ -393,6 +405,7 @@ public final class Z3Haken {
                 Z3Verhaal.bloei(p);   // (the finale was cut short)
             }
         }
+        Z3Koppelingen.imkerTik(p);   // K-INT: the Mika-imker secret's lore scene
         // after hq10: the fingerprint as big as a door
         if (Questlog.klaar(p, HQ10) && bij(p, "z3_vingerafdruk", 8) && eenmalig(p, "vingerafdruk")) {
             Z3Verhaal.zeg(p, "vingerafdruk", ChatFormatting.DARK_PURPLE);

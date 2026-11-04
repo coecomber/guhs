@@ -77,6 +77,7 @@ public final class Z3NpcRegistry {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, (ServerStartedEvent e) -> {
             Z3Rollen.koppel();
+            Z3Koppelingen.registreer();   // K-INT: bazen moments, bindings, the one opening
             gebieden();
         });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> commando(e));
@@ -109,9 +110,14 @@ public final class Z3NpcRegistry {
                 ZoneBoeken.baas("roquefort", "vadsrijk.z3npc.baas.roquefort", "z3_zeppelinwerf", false, Z3Haken.HQ08, "guhs:vr_z3_baas_roquefort"),
                 ZoneBoeken.baas("kruinroofvogel", "vadsrijk.z3npc.baas.kruinroofvogel", "z3_kruinzee", false, null, "guhs:vr_z3_baas_kruinroofvogel"),
                 ZoneBoeken.baas("piepvel", "vadsrijk.z3npc.baas.piepvel", "z3_schorsstad", false, Z3Haken.HQ10, "guhs:vr_z3_baas_piepvel"),
-                ZoneBoeken.baas("bleu", "vadsrijk.z3npc.baas.bleu", "z3_hart", false, Z3Haken.HQ13, "guhs:vr_z3_baas_bleu", "guhs:vr_z3_baas_schimmelkolos"),
+                ZoneBoeken.baas("bleu", "vadsrijk.z3npc.baas.bleu", "z3_hart", false, Z3Haken.HQ13, "guhs:vr_z3_baas_bleu"),
                 ZoneBoeken.baas("vahoegnir", "vadsrijk.z3npc.baas.vahoegnir", "z3_kruinzee", false, Z3Haken.HQ14, "guhs:vr_z3_baas_vahoegnir"),
-                ZoneBoeken.baas("imker", "vadsrijk.z3npc.baas.imker", "z3_honingtak", true, "z3_geheim_imker", "guhs:vr_z3_baas_imker"))));
+                ZoneBoeken.baas("imker", "vadsrijk.z3npc.baas.imker", "z3_honingtak", true, "z3_geheim_imker"))));   // (K-INT: a lore scene, no boss entity)
+        // K-INT: z3-wereld's lookouts + campfires (typed lists now that both slices are in one tree)
+        l.add(new Categorie("uitkijk", T + "cat.uitkijk", "minecraft:spyglass",
+                ZoneBoeken.uitkijken(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.UITKIJKEN, GEBIEDEN_Z3)));
+        l.add(new Categorie("kampvuur", T + "cat.kampvuur", "minecraft:campfire",
+                ZoneBoeken.kampvuren(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.KAMPVUREN, GEBIEDEN_Z3)));
         l.add(new Categorie("huisdier", T + "cat.huisdier", "minecraft:lead", ZoneBoeken.huisdieren(3)));
         l.add(new Categorie("rijdier", T + "cat.rijdier", "minecraft:saddle", ZoneBoeken.rijdieren(RijdierSoort.PLUIMGUH)));
         l.add(new Categorie("gebieden", T + "cat.gebieden", "minecraft:map", ZoneBoeken.gebieden(GEBIEDEN_Z3)));

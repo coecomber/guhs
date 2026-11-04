@@ -254,13 +254,13 @@ public final class ZoneBoeken {
     /** The area (from this page's list) a spot is in; null = none of them (e.g. the ring between). */
     @Nullable
     static String gebiedId(BlockPos b, List<String> gebieden) {
-        Gebieden.Gebied op = Gebieden.op(b.getX(), b.getZ());
+        Gebieden.Gebied op = Gebieden.op(b.getX(), b.getY(), b.getZ());   // (K-INT: 3D, zone 3 has layered areas)
         if (op != null && gebieden.contains(op.id())) {
             return op.id();
         }
         for (String id : gebieden) {   // (a small dungeon/arena box in front: fall back to the big area around it)
             Gebieden.Gebied g = Gebieden.van(id);
-            if (g != null && g.bevat(b.getX(), b.getZ())) {
+            if (g != null && g.bevat(b.getX(), b.getY(), b.getZ())) {
                 return id;
             }
         }
@@ -270,6 +270,7 @@ public final class ZoneBoeken {
     /** The name key of the area a spot is in (for "Ergens in ..."), or the zone's catch-all name. */
     static String gebiedNaam(BlockPos b, List<String> gebieden) {
         String g = gebiedId(b, gebieden);
-        return g != null ? "vadsrijk.kern.gebied." + g : gebieden == GEBIEDEN_Z2 ? "vadsrijk.kern.gebied.z2_ring" : "vadsrijk.kern.gebied.ring";
+        return g != null ? "vadsrijk.kern.gebied." + g : gebieden == GEBIEDEN_Z2 ? "vadsrijk.kern.gebied.z2_ring"
+                : !gebieden.isEmpty() && gebieden.get(0).startsWith("z3_") ? "vadsrijk.kern.gebied.z3_ring" : "vadsrijk.kern.gebied.ring";
     }
 }

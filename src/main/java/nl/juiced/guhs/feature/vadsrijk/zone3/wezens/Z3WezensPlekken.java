@@ -1,7 +1,5 @@
 package nl.juiced.guhs.feature.vadsrijk.zone3.wezens;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -134,62 +132,19 @@ public final class Z3WezensPlekken {
         return u;
     }
 
-    // ---- z3-wereld (reflection, soft dependency) -------------------------------------------------------------------------
+    // ---- z3-wereld (direct since K-INT) -------------------------------------------------------------------------------------
 
-    private static final String WERELD = "nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken";
-    private static Class<?> wereldKlasse;
-    private static boolean gezocht;
+    // K-INT: z3-wereld is in the tree now: direct references instead of reflection (the V1 copies stay as the fallback).
 
-    @Nullable
-    private static Class<?> wereldKlasse() {
-        if (!gezocht) {
-            gezocht = true;
-            try {
-                wereldKlasse = Class.forName(WERELD);
-            } catch (Throwable t) {
-                wereldKlasse = null;
-            }
-        }
-        return wereldKlasse;
-    }
-
-    /** Is z3-wereld's generated plekken class there (after integration)? */
+    /** Is z3-wereld's generated plekken class there? (always, after integration) */
     public static boolean wereldBekend() {
-        return wereldKlasse() != null;
+        return true;
     }
 
-    /** Z3WereldPlekken.plek(id), or null (class or id missing). */
+    /** Z3WereldPlekken.plek(id), or null (id missing). */
     @Nullable
     public static BlockPos wereld(String id) {
-        Class<?> k = wereldKlasse();
-        if (k == null) {
-            return null;
-        }
-        try {
-            Method m = k.getMethod("plek", String.class);
-            Object o = m.invoke(null, id);
-            return o instanceof BlockPos b ? b : null;
-        } catch (Throwable t) {
-            return null;
-        }
-    }
-
-    @Nullable
-    private static Object wereldVeld(String naam) {
-        Class<?> k = wereldKlasse();
-        if (k == null) {
-            return null;
-        }
-        try {
-            Field f = k.getField(naam);
-            return f.get(null);
-        } catch (Throwable t) {
-            return null;
-        }
-    }
-
-    private static Object accessor(Object rec, String naam) throws ReflectiveOperationException {
-        return rec.getClass().getMethod(naam).invoke(rec);
+        return nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek(id);
     }
 
     /** A spot: z3-wereld's id when it exists, else this POI_Z3 v1 copy. */
@@ -199,17 +154,8 @@ public final class Z3WezensPlekken {
     }
 
     static {
-        Object o = wereldVeld("MOBZONES");
-        if (o instanceof Collection<?> c && !c.isEmpty()) {
-            try {
-                for (Object g : c) {
-                    MOBZONES.add(new Zone((String) accessor(g, "id"), (Boolean) accessor(g, "cilinder"), (Integer) accessor(g, "a"), (Integer) accessor(g, "b"),
-                            (Integer) accessor(g, "c"), (Integer) accessor(g, "d"), (Integer) accessor(g, "minY"), (Integer) accessor(g, "maxY"),
-                            (Integer) accessor(g, "minLevel"), (Integer) accessor(g, "maxLevel")));
-                }
-            } catch (Throwable t) {
-                MOBZONES.clear();
-            }
+        for (var g : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.MOBZONES) {
+            MOBZONES.add(new Zone(g.id(), g.cilinder(), g.a(), g.b(), g.c(), g.d(), g.minY(), g.maxY(), g.minLevel(), g.maxLevel()));
         }
         if (MOBZONES.isEmpty()) {
             MOBZONES.addAll(MOBZONES_V1);
@@ -314,14 +260,7 @@ public final class Z3WezensPlekken {
                 veilig(k, 9, 6, 16);
             }
         }
-        Object k = wereldVeld("KAMPVUREN");
-        Collection<?> kv = k instanceof Collection<?> c ? c : List.of();
-        List<BlockPos> vuren = new ArrayList<>();
-        for (Object o : kv) {
-            if (o instanceof BlockPos b) {
-                vuren.add(b);
-            }
-        }
+        List<BlockPos> vuren = new ArrayList<>(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.KAMPVUREN);
         if (vuren.isEmpty()) {
             vuren.addAll(KAMPVUREN_V1);
         }
@@ -389,14 +328,7 @@ public final class Z3WezensPlekken {
 
     static {
         Map<String, int[][]> bron = new LinkedHashMap<>();
-        Object o = wereldVeld("PADEN");
-        if (o instanceof Map<?, ?> m) {
-            m.forEach((k, v) -> {
-                if (k instanceof String n && v instanceof int[][] p) {
-                    bron.put(n, p);
-                }
-            });
-        }
+        bron.putAll(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.PADEN);
         if (bron.isEmpty()) {
             bron.putAll(PADEN_V1);
         }
