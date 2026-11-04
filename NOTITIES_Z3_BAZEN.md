@@ -103,3 +103,13 @@ Pets via `Huisdieren.registreer`: kruinroofvogel, piepje, vahoegje.
   "sock cape" variant; his intro line already changes ("Nog steeds koud hier...").
 - Bleu's egg is a prop in his own room (the real egg POI `ei` is in the Nestkamer, 95 blocks away).
 - `/guhs vadsrijk z3bazen bouw` makes stand-in discs (only into air) for testing before the world merge.
+
+## Resume point (2026-11-04)
+- Commits: 6c991c035 (everything), 2fa468679 (merge 110-z3-systemen), f6025413b (systemen APIs, tests). No push.
+- Gametests `runGameTestServer -Pgt=VadsrijkZ3Bazen`: **all passed** (brokkel: target at range + rotation + 40 % armour + cannon
+  knocks a plate off + reload + no hits from outside; roofvogel: grab freed by clicks/help, riding allowed in his arena only
+  while he flees, immune in flight, reset ends the chase; piepvel: 4 cages + 6 posts, shield holds until the 4th lock, cape
+  panels go, dark = all posts out and -50 %, a lit post = full damage, 10 % floor, big cage, defeat, the arm removes him;
+  vahoegnir: lands at 75 %, immune until 3 s in the pink circle, splinter 1 back; puzzles + Vahoeg form).
+  Test notes: bosses got a `testFilter` (Z3Baas.strijders) and the test floors force-load their chunks.
+- No AutoCheck run (memory); the look of all models is unverified in a client (the user judges in the dev client).
