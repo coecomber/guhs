@@ -126,7 +126,7 @@ public class VadsrijkNpcGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         Questlog.wisAlles(p);
         nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 1);
-        java.util.List<Quest> hoofd = Quests.alle().values().stream().filter(Quest::hoofd).filter(q -> !q.id().startsWith("z2_")).toList();   // (zone 1; zone 2 has its own test)
+        java.util.List<Quest> hoofd = Quests.alle().values().stream().filter(Quest::hoofd).filter(q -> nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()) == 1).toList();   // (zone 1; zones 2 and 3 have their own tests; K-INT)
         helper.assertTrue(hoofd.size() == 13, "13 main quests (12 + the element quiz): " + hoofd.size());
         int stappen = 0;
         for (Quest q : hoofd) {

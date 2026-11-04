@@ -114,7 +114,8 @@ public final class Voltooiing {
 
     public static List<ZoneBoek> zones() {
         synchronized (ZONES) {
-            return List.copyOf(ZONES.values());
+            // (K-INT) in zone order by id (zone1, zone2, zone3...), whatever order the slices registered in
+            return ZONES.values().stream().sorted(java.util.Comparator.comparing(ZoneBoek::id)).toList();
         }
     }
 

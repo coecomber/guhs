@@ -1,0 +1,180 @@
+# K-INT (zone-3 integration): z3-wereld's walk + the integration fixes (gate-75 passage, Vahoeg altars, Honingtak music town,
+# the zone-3 book page, a boss arena with its boss).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_k_int.txt
+
+section setup
+/gamemode creative
+/time set 6000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 120
+waitrender 300
+
+section verte
+/tp @s 1450 230 60
+look 270 10
+wait 100
+waitrender 600
+look 90 5
+wait 60
+waitrender 600
+shot z3_boom_vanaf_zee gui
+
+section aankomst
+/guhs vadsrijk z3wereld vlieg honingtak
+wait 120
+shot z3_opening_schors gui
+wait 120
+shot z3_opening_kruin gui
+wait 180
+shot z3_opening_wortels gui
+wait 140
+waitrender 400
+look 90 5
+shot z3_dok gui
+
+section honingtak
+/guhs vadsrijk z3wereld plek plein
+look 90 20
+wait 60
+waitrender 400
+shot z3_bloesemplein gui
+/guhs vadsrijk z3wereld plek gebouw.smid.binnen
+look 0 20
+wait 40
+waitrender 200
+shot z3_korf_smid gui
+/guhs vadsrijk z3wereld plek gebouw.cafe.binnen
+look 0 10
+wait 40
+waitrender 200
+shot z3_cafe gui
+/guhs vadsrijk z3wereld plek gebouw.nestkapel.binnen
+look 180 10
+wait 40
+waitrender 200
+shot z3_nestkapel gui
+/guhs vadsrijk z3wereld plek pluimstal_keuze
+look 180 15
+wait 60
+waitrender 300
+shot z3_pluimstal gui
+
+section kruin
+/guhs vadsrijk z3wereld plek nest_rand
+look 180 25
+wait 60
+waitrender 500
+shot z3_nest gui
+/guhs vadsrijk z3wereld plek arena_kruinroofvogel_bord
+look 315 15
+wait 60
+waitrender 400
+shot z3_kale_kruin gui
+
+section takken
+/guhs vadsrijk z3wereld plek kampvuur_tak_west_30
+look 270 10
+wait 60
+waitrender 500
+shot z3_westtak gui
+/guhs vadsrijk z3wereld plek hangnest_plein
+look 0 10
+wait 60
+waitrender 400
+shot z3_hangnest gui
+/guhs vadsrijk z3wereld plek wind_hangnest_onder
+look 0 -60
+wait 60
+waitrender 400
+shot z3_windkolom gui
+
+section stam
+/guhs vadsrijk z3wereld plek spiraal_balkon_2
+look 0 10
+wait 60
+waitrender 400
+shot z3_stamspiraal gui
+/guhs vadsrijk z3wereld plek schorsstad_vloer
+look 200 -35
+wait 60
+waitrender 400
+shot z3_schorsstad gui
+/guhs vadsrijk z3wereld plek arena_piepvel
+look 0 10
+wait 60
+waitrender 300
+shot z3_pelszaal gui
+
+section grond
+/guhs vadsrijk z3wereld plek mosvoet_plein
+look 0 10
+wait 60
+waitrender 400
+shot z3_mosvoet gui
+/guhs vadsrijk z3wereld plek kampvuur_wortelweg_2
+look 90 10
+wait 60
+waitrender 400
+shot z3_wortelweg gui
+/guhs vadsrijk z3wereld plek hartslag_zaal
+look 180 10
+wait 60
+waitrender 400
+shot z3_hartslag gui
+/guhs vadsrijk z3wereld plek arena_wortelwurger
+look 0 5
+wait 40
+waitrender 300
+shot z3_hart_kamer gui
+
+section werf
+/guhs vadsrijk z3wereld plek arena_roquefort
+look 90 15
+wait 60
+waitrender 400
+shot z3_werf gui
+
+section kint
+/time set 6000
+/guhs vadsrijk z3wereld plek schorsstad_poort_75
+look 215 5
+wait 60
+waitrender 300
+shot kint_poort75_gang gui
+/guhs vadsrijk z3wereld plek spiraal_voet
+look 0 5
+wait 60
+waitrender 300
+shot kint_spiraalvoet gui
+/guhs vadsrijk z3wereld plek werf_ingang
+look 225 20
+wait 60
+waitrender 300
+shot kint_werf_altaar gui
+/guhs vadsrijk z3wereld plek hart_poort
+look 90 20
+wait 60
+waitrender 300
+shot kint_hart_altaar gui
+/guhs vadsrijk z3bazen tp piepvel
+wait 100
+waitrender 300
+shot kint_piepvel gui
+/guhs vadsrijk huisdier geef vahoegje
+/guhs vadsrijk z3wereld plek plein
+wait 60
+waitrender 300
+shot kint_plein_vahoegje gui
+/guhs vadsrijk boek scherm
+wait 40
+shot kint_boek gui
+
+section nacht
+/time set 18000
+/guhs vadsrijk z3wereld plek uitkijk_kroon
+look 90 3
+wait 80
+waitrender 400
+shot z3_lucht_nacht gui
