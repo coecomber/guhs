@@ -429,7 +429,15 @@ public abstract class Z3Baas extends Z2Baas {
                 enragePuls(sl, l);
             }
         }
+        if (l.isEmpty() && !vechtZonderStrijders()) {
+            return;   // (K-INT) nobody fighting (e.g. an arena ticking in loaded chunks far away): the bosses pick l.get(random) in vecht
+        }
         vecht(sl, l);
+    }
+
+    /** (K-INT) Must vecht run although nobody fights right now? Default no (vecht picks random fighters). */
+    protected boolean vechtZonderStrijders() {
+        return false;
     }
 
     /** The boss's own per-tick logic (instead of actieTick). */

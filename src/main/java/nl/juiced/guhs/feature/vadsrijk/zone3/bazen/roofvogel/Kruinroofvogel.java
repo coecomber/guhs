@@ -273,6 +273,12 @@ public class Kruinroofvogel extends Z3Baas {
         rustT = t + 20;
     }
 
+    /** (K-INT) The chase flight goes on while nobody has reached the perch yet (vecht only loops over l there). */
+    @Override
+    protected boolean vechtZonderStrijders() {
+        return zit != null && jachtStart >= 0;
+    }
+
     @Override
     protected void vecht(ServerLevel sl, List<ServerPlayer> l) {
         duikCd--;
