@@ -193,6 +193,7 @@ TEKSTEN = {
     "vadsrijk.klassen.skilltip.cooldown": "%s s afkoeltijd",
     "vadsrijk.klassen.skilltip.verbeteringen": "Verbeteringen (boom en job-advancement):",
     "vadsrijk.klassen.skilltip.verbetert": "Verbetert: %s",
+    "vadsrijk.klassen.skilltip.open_boom": "Open je skillboom (K) om te zien wat je al geleerd hebt.",
     "vadsrijk.klassen.skilluitleg.knuffelsprong": "Een flinke sprong vooruit (zo'n 20 blokken). Elke klasse kan het en je landt altijd zacht.",
     K + "scherm.ordetempel": "Resetten (gratis, 1x per uur) en van klasse wisselen doe je in de ordetempel van Zwamzoet.",
     K + "scherm.balie": "Ordetempel",

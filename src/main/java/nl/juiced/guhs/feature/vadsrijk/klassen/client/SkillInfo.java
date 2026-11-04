@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -19,7 +20,6 @@ import net.minecraft.network.chat.Style;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.feature.vadsrijk.kern.Knuffelsprong;
-import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.client.RijkHud;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.BoomKnoop;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klasse;
@@ -69,7 +69,17 @@ public final class SkillInfo {
         }
     }
 
+    /** The node ids of the current class as the tree screen last received them (null = not opened yet this session). */
+    @Nullable
+    private static volatile Set<String> bekend;
+
+    /** {@link BoomScherm} passes its node list here (every time it gets new data). */
+    static void bekend(Set<String> knopen) {
+        bekend = Set.copyOf(knopen);
+    }
+
     static void init() {
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent.LoggingOut e) -> bekend = null);
         NeoForge.EVENT_BUS.addListener((ScreenEvent.Render.Foreground e) -> {
             if (!(e.getScreen() instanceof InventoryScreen) || !RijkHud.skillsZichtbaar()) {
                 return;
@@ -83,7 +93,12 @@ public final class SkillInfo {
                     if (id == null || mc.player == null) {
                         return;
                     }
-                    List<Component> tip = tip(id, i, mc.font, knoop -> Spelers.heeftKnoop(mc.player, knoop));
+                    // the client has no copy of the bought nodes (SpelerData is not synced): use what the tree screen last showed
+                    Set<String> b = bekend;
+                    List<Component> tip = tip(id, i, mc.font, knoop -> b != null && b.contains(knoop));
+                    if (b == null && i < 4) {
+                        tip.add(Component.translatable("vadsrijk.klassen.skilltip.open_boom").withStyle(ChatFormatting.DARK_AQUA));
+                    }
                     e.getGuiGraphics().setComponentTooltipForNextFrame(mc.font, tip, e.getMouseX(), e.getMouseY());
                     return;
                 }

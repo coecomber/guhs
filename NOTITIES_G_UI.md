@@ -26,6 +26,18 @@ Lang: new or changed keys are in `tools/features/vadsrijk_kern.py`, `vadsrijk_kl
 - The HUD finds the icon from the skill id in the HUD lang key (`RijkHud.skillId`). A new skill only needs a `<id>.png` (add it to `maak_skill_iconen.py`).
 - The advancement unlocks are not skills of their own (they change existing skills), so they get no icon. They show as improvement lines in the skill tooltips (e.g. Kussenkampioen under Kussenklap).
 
+- **HUD hover and learned nodes:** `SpelerData` (`boom`) is NOT synced to the client, so `Spelers.heeftKnoop` on the client always returns false. The HUD tooltip uses the node list the tree screen last received (`SkillInfo.bekend`, set by `BoomScherm`). Before the tree has been opened in a session, it shows a hint "Open je skillboom (K)...". **Suggestion for g-klassen/kern:** put the class's node ids in `KernPayloads.Hud`; then `SkillInfo` can read them directly.
+
 ## Tests
-- Gametest `VadsrijkKernGameTests.sieraadShiftKlik` (run with `-Pgt=VadsrijkKern`).
-- AutoCheck `tools/autocheck/vadsrijk_g_ui.txt`.
+- Gametest `VadsrijkKernGameTests.sieraadShiftKlik` (`-Pgt=VadsrijkKern`): **8/8 passed**.
+- AutoCheck `tools/autocheck/vadsrijk_g_ui.txt` (11 shots, `run/screenshots/autocheck`). Checked:
+  - worn ring hover shows the full tooltip + "Klik om af te doen";
+  - the earring tip shows the how-to line;
+  - Kristalhelmpje shows "Los stuk";
+  - Kristalkroon shows "Set: Kristalset (1/4 gedragen)" with the borstplaat in green;
+  - the HUD icons and the HUD R hover tooltip work;
+  - tree: the skill list has icons, Kussenklap hover shows Vuurkussen and Kussenkampioen in green with ✔ and the rest grey, and the node tip says "Verbetert: Kussenklap".
+
+  The only problems in the run were 3 script `/tp @e[type=item]` lines that found nothing (the loot had already been picked up).
+  The HUD-hover shot was taken before the `bekend` fix (Kussenkampioen was still grey there); after the fix, the code was only compiled, with no new client run.
+- Shift-click itself only ran in the gametest (server logic). The client intercept (shift + `getHoveredSlot`) has not been clicked by hand: **test in the dev client**.

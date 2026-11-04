@@ -50,10 +50,12 @@ public final class BoomScherm extends Screen {
     public BoomScherm(CompoundTag t) {
         super(Component.translatable("vadsrijk.klassen.scherm.boom"));
         this.t = t;
+        SkillInfo.bekend(knopen());   // fix round 2 (g-ui): for the HUD skill tooltips
     }
 
     public void zet(CompoundTag t) {
         this.t = t;
+        SkillInfo.bekend(knopen());   // fix round 2 (g-ui): for the HUD skill tooltips
         gekozen = null;
         rebuildWidgets();
     }
