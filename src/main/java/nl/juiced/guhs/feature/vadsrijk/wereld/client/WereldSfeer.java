@@ -34,7 +34,7 @@ final class WereldSfeer {
             return;
         }
         lichtstralen(l, p);
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         String id = g == null ? "zee" : g.id();
         int maaiveld = l.getHeight(Heightmap.Types.WORLD_SURFACE, p.getBlockX(), p.getBlockZ());
         boolean onder = p.getY() < maaiveld - 6;

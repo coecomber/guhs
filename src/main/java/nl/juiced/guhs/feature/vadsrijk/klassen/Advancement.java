@@ -40,8 +40,8 @@ public final class Advancement {
     private Advancement() {
     }
 
-    /** z2-systemen: the number of steps (was 2). */
-    public static final int MAX_STAP = 3;
+    /** z2-systemen: the number of steps (was 2); z3-systemen: 4 (the 4th at class lv 50, see zone3.systemen.Advancement4). */
+    public static final int MAX_STAP = 4;
     /** z2-systemen: extra ceremony effects per step (player, step), right after the ceremony starts. */
     public static final java.util.List<java.util.function.BiConsumer<ServerPlayer, Integer>> CEREMONIE = new java.util.concurrent.CopyOnWriteArrayList<>();
 
@@ -59,9 +59,9 @@ public final class Advancement {
         return 0;
     }
 
-    /** The level the next step needs (10, 20, 30) or 0 when all are done. */
+    /** The level the next step needs (10, 20, 30, 50) or 0 when all are done. */
     public static int nodigLevel(int stap) {
-        return stap == 0 ? 10 : stap == 1 ? 20 : stap == 2 ? 30 : 0;
+        return stap == 0 ? 10 : stap == 1 ? 20 : stap == 2 ? 30 : stap == 3 ? 50 : 0;
     }
 
     /** The level of step {@code s} (1..MAX_STAP). */

@@ -71,7 +71,7 @@ public final class Verhaal {
             LOOPT.remove(p.getUUID());
             return;
         }
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         if (g != null && g.id().equals("knuffelkamp") && !Spelers.data(p).gezien.contains("npc:opening")) {
             LOOPT.put(p.getUUID(), new Loopt("opening_wacht", p.level().getGameTime(), ""));
         }

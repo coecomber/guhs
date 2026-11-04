@@ -24,5 +24,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.huisdieren.client.HuisdierClient.init(modBus);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.client.VoltooiingClient.init(modBus);   // I-VOLTOOIING (Verkenningsboek, key B)
         nl.juiced.guhs.feature.vadsrijk.stadsmuziek.client.StadsMuziekSpeler.init();   // I-AUDIO: town music + town ambience
+        nl.juiced.guhs.feature.vadsrijk.zone3.systemen.client.Z3SystemenClient.init(modBus);   // zone 3 (z3-systemen)
     }
 }

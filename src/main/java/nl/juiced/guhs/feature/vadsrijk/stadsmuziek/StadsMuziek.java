@@ -85,6 +85,13 @@ public final class StadsMuziek {
         return stadVan(g == null ? null : g.id());
     }
 
+    /** z3-systemen: the town at x/y/z (zone-3 towns are layers: Honingtak sits on a branch above the ground). */
+    @Nullable
+    public static String stadOp(double x, double y, double z) {
+        Gebieden.Gebied g = Gebieden.op(x, y, z);
+        return stadVan(g == null ? null : g.id());
+    }
+
     /** The tunes of a town (empty outside the towns). */
     public static List<DeferredHolder<SoundEvent, SoundEvent>> muziekVan(@Nullable String stad) {
         return stad == null ? List.of() : MUZIEK.getOrDefault(stad, List.of());

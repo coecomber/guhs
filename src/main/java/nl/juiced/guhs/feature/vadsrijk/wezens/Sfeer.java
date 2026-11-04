@@ -64,7 +64,7 @@ public final class Sfeer {
     }
 
     private static void vulAan(ServerLevel sl, ServerPlayer p) {
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         if (g == null) {
             return;
         }

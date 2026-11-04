@@ -190,7 +190,7 @@ public final class Spawners {
     /** The kern area id of a spawner ("" = none). */
     public static String gebiedVan(Spawner s) {
         return GEBIED.computeIfAbsent(s.id(), k -> {
-            Gebieden.Gebied g = Gebieden.op(s.centrum().getX(), s.centrum().getZ());
+            Gebieden.Gebied g = Gebieden.op(s.centrum());
             return g == null ? "" : g.id();
         });
     }
@@ -405,7 +405,7 @@ public final class Spawners {
             }
         }
         if (nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(sl)) {
-            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
             if (g != null && g.stad()) {
                 return false;
             }
