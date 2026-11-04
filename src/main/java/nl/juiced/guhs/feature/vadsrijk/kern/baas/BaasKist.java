@@ -75,17 +75,38 @@ public class BaasKist extends BaseEntityBlock {
         for (int i = 0; i < 4 && !sl.getBlockState(plek).canBeReplaced(); i++) {
             plek = plek.above();
         }
-        sl.setBlock(plek, KernRegistry.BAASKIST.get().defaultBlockState(), 3);
-        if (sl.getBlockEntity(plek) instanceof Inhoud in) {
-            in.eigenaar = p.getUUID();
-            in.naam = p.getGameProfile().name();
-            for (ItemStack s : r.items()) {
-                in.items.add(Nbt.saveStack(sl.registryAccess(), s));
+        BlockPos doel = plek;
+        Runnable neerzetten = () -> {
+            sl.setBlock(doel, KernRegistry.BAASKIST.get().defaultBlockState(), 3);
+            if (sl.getBlockEntity(doel) instanceof Inhoud in) {
+                in.eigenaar = p.getUUID();
+                in.naam = p.getGameProfile().name();
+                for (ItemStack s : r.items()) {
+                    in.items.add(Nbt.saveStack(sl.registryAccess(), s));
+                }
+                in.setChanged();
             }
-            in.setChanged();
+            sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, doel.getX() + 0.5, doel.getY() + 1, doel.getZ() + 0.5, 20, 0.3, 0.5, 0.3, 0.2);
+            sl.playSound(null, doel, SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1f, 1.4f);
+        };
+        // BELEVING (fix round 1): the chest ceremony may let it fall from the sky first (it calls neerzetten when it lands)
+        if (CEREMONIE != null) {
+            CEREMONIE.val(sl, p, plek, r.items(), neerzetten);
+        } else {
+            neerzetten.run();
         }
-        sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, plek.getX() + 0.5, plek.getY() + 1, plek.getZ() + 0.5, 20, 0.3, 0.5, 0.3, 0.2);
-        sl.playSound(null, plek, SoundEvents.CHEST_LOCKED, SoundSource.BLOCKS, 1f, 1.4f);
+    }
+
+    /** BELEVING hook (fix round 1, kern.beleving.Kistceremonie): the falling chest + the opening ceremony. Null = plain. */
+    @Nullable
+    public static Ceremonie CEREMONIE;
+
+    public interface Ceremonie {
+        /** The chest for {@code p} goes to {@code plek}: run {@code neerzetten} (now or later) to really place it. */
+        void val(ServerLevel sl, ServerPlayer p, BlockPos plek, List<ItemStack> buit, Runnable neerzetten);
+
+        /** The owner opened it and got {@code buit} (copies). */
+        void open(ServerLevel sl, ServerPlayer p, BlockPos pos, List<ItemStack> buit);
     }
 
     @Override
@@ -97,6 +118,7 @@ public class BaasKist extends BaseEntityBlock {
             p.sendOverlayMessage(Component.translatable("vadsrijk.kern.baaskist.niet_jouw", in.naam).withStyle(ChatFormatting.GRAY));
             return InteractionResult.SUCCESS;
         }
+        List<ItemStack> buit = new ArrayList<>();   // (BELEVING: for the opening ceremony)
         for (CompoundTag t : in.items) {
             ItemStack s = Nbt.parseStack(sl.registryAccess(), t);
             if (s.isEmpty()) {
@@ -111,6 +133,7 @@ public class BaasKist extends BaseEntityBlock {
                 sl.addFreshEntity(e);
             }
             p.sendSystemMessage(Component.translatable("vadsrijk.kern.baaskist.kreeg", kopie.getHoverName()));
+            buit.add(kopie);
         }
         in.items.clear();
         Vec3 c = Vec3.atCenterOf(pos);
@@ -118,6 +141,9 @@ public class BaasKist extends BaseEntityBlock {
         sl.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1f, 1.2f);
         sl.playSound(null, pos, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.6f, 1.8f);
         sl.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+        if (CEREMONIE != null) {
+            CEREMONIE.open(sl, p, pos, buit);   // BELEVING (fix round 1)
+        }
         return InteractionResult.SUCCESS;
     }
 

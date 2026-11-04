@@ -36139,5 +36139,14 @@
   "vadsrijk.wereld.uitkijk.haventand": "Haventand",
   "vadsrijk.wereld.uitkijk.slijmnaald": "Slijmnaald",
   "vadsrijk.wereld.uitkijk.onder": "Uitkijkpunt ontdekt",
-  "vadsrijk.wereld.uitkijk.gevonden": "Uitkijkpunt gevonden: %s. Wat een vads uitzicht!"
+  "vadsrijk.wereld.uitkijk.gevonden": "Uitkijkpunt gevonden: %s. Wat een vads uitzicht!",
+  "vadsrijk.kern.beleving.zwak": "Zwak!",
+  "vadsrijk.kern.beleving.taai": "Taai",
+  "vadsrijk.kern.beleving.reeks": "Vrolijke reeks",
+  "vadsrijk.kern.beleving.reeks_weg": "Reeks voorbij: ×%s",
+  "vadsrijk.kern.beleving.opgevrolijkt": "Opgevrolijkt!",
+  "vadsrijk.kern.beleving.vond": "%s vond %s!",
+  "vadsrijk.kern.beleving.fase.vr_klodderreus.2": "Fase 2: De reus wordt boos!",
+  "guhs.configuration.vadsrijkSchud": "Vadsrijk: schermschud en hit-stop (%)",
+  "guhs.configuration.vadsrijkSchud.tooltip": "Hoe hard het scherm schudt en de camera meebeweegt bij zware klappen en baasmomenten. 0 = uit."
 }

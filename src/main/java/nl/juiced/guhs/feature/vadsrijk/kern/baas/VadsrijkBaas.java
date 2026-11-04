@@ -163,6 +163,7 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         double frac = vads() / Math.max(1, maxVads());
         while (!geplofd() && fase - 1 < f.length && frac <= f[fase - 1]) {
             fase++;
+            nl.juiced.guhs.feature.vadsrijk.kern.beleving.Beleving.faseMoment(this, fase);   // BELEVING (fix round 1): the phase mini-moment
             opFase(fase);
         }
     }

@@ -197,7 +197,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.9 Een opknapper!: afwerking (postcards, Sherlock's rewards in the village; Java: feature/erfenis/Afwerking)
             'erfenis_afwerking',
             # 1.10 Het Vadsrijk: kern first, then one generator per slice (CONTRACT_VADSRIJK.md; append only)
-            'vadsrijk_kern', 'vadsrijk_klassen', 'vadsrijk_wezens', 'vadsrijk_bazen', 'vadsrijk_wereld', 'vadsrijk_npc', 'vadsrijk_economie']
+            'vadsrijk_kern', 'vadsrijk_klassen', 'vadsrijk_wezens', 'vadsrijk_bazen', 'vadsrijk_wereld', 'vadsrijk_npc', 'vadsrijk_economie',
+            # 1.10 fix round 1: the combat feel (Java: feature/vadsrijk/kern/beleving)
+            'vadsrijk_beleving']
 
 
 def modules():

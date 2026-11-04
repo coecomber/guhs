@@ -87,5 +87,6 @@ public final class KernClient {
         RijkHud.init(modBus);
         SceneSpeler.init();
         SieradenScherm.init();
+        nl.juiced.guhs.feature.vadsrijk.kern.beleving.client.BelevingClient.init(modBus);   // BELEVING (fix round 1)
     }
 }

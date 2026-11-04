@@ -146,10 +146,12 @@ public final class KernRegistry {
         inhoud();
         nl.juiced.guhs.feature.vadsrijk.kern.compat.ExtraVakken.init();
         KernEvents.register();
+        nl.juiced.guhs.feature.vadsrijk.kern.beleving.Beleving.register();   // BELEVING (fix round 1)
     }
 
     public static void payloads(PayloadRegistrar r) {
         KernPayloads.register(r);
+        nl.juiced.guhs.feature.vadsrijk.kern.beleving.Beleving.payloads(r);   // BELEVING (fix round 1)
     }
 
     /** Kern's content: the class, the 5 base types + loot tables, the proeftuin spawner and the Klodderreus arena. */
