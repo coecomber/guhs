@@ -58,7 +58,10 @@ def haven(S):
 
 
 def lift(S, naam, hoek, zw):
-    """Liftje: open shaft, an up column (wolkenlift + wolkenstroom) in the middle and a down column next to it."""
+    """Wolkenlift: open shaft with an up column (wolkenlift + wolkenstroom) and a down column next to it.
+    Top: a roofed station flush with the cap, the puff drops you on it facing the plateau, and a stair ramp (3 wide,
+    1 block per step, headroom kept free) climbs from the station up to the plateau floor. Bottom: a paved square
+    with a path to the nearest town path."""
     cx, cz, T, r, rs, _, p, _ = zw[naam]
     a = math.radians(hoek)
     lx, lz = int(round(cx + (r * 0.84) * math.cos(a))), int(round(cz + (r * 0.84) * math.sin(a)))
@@ -66,31 +69,70 @@ def lift(S, naam, hoek, zw):
     top, _ = Z.hoed_profiel(d, T, r, p)
     vx, vz = cx - lx, cz - lz
     naar = ("east" if vx > 0 else "west") if abs(vx) > abs(vz) else ("south" if vz > 0 else "north")
-    ox, oz = {"east": (0, 1), "west": (0, 1), "south": (1, 0), "north": (1, 0)}[naar]
-    for y in range(G + 1, top + 5):
-        for (dx, dz) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
-            S.set(lx + dx, y, lz + dz, Z.HEK if y % 12 else "roze_lakhout_planken")
+    sx, sz = {"east": (1, 0), "west": (-1, 0), "south": (0, 1), "north": (0, -1)}[naar]
+    ox, oz = sz, sx
+    for y in range(G + 1, top + 4):
+        if y < top:
+            for (dx, dz) in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
+                S.set(lx + dx, y, lz + dz, Z.HEK if y % 12 else "roze_lakhout_planken")
         for (dx, dz) in ((0, -1), (0, 1), (-1, 0), (1, 0), (0, 0)):
-            if y <= top + 3:
-                S.set(lx + dx, y, lz + dz, "minecraft:air")
+            S.set(lx + dx, y, lz + dz, "minecraft:air")
     S.set(lx, G + 1, lz, f"wolkenlift[down=false,facing={naar}]")
     S.set(lx + ox, G + 1, lz + oz, f"wolkenlift[down=true,facing={naar}]")
     for y in range(G + 2, top + 3):
         S.set(lx, y, lz, f"wolkenstroom[down=false,facing={naar}]")
         S.set(lx + ox, y, lz + oz, f"wolkenstroom[down=true,facing={naar}]")
-    # station: a plank floor with the two columns through it, a little roof
+    # station: plank floor at the cap surface with the two columns through it, free headroom, posts on the corners
     for dx in range(-2, 3):
         for dz in range(-2, 3):
             if (dx, dz) not in ((0, 0), (ox, oz)):
                 S.set(lx + dx, top, lz + dz, Z.PLANK)
+                for hy in (1, 2, 3, 4):
+                    S.set(lx + dx, top + hy, lz + dz, "minecraft:air")
+    for (dx, dz) in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
+        for hy in (1, 2, 3):
+            S.set(lx + dx, top + hy, lz + dz, Z.HEK)
+        S.set(lx + dx, top + 4, lz + dz, Z.LANT_H)
     S.fill(lx - 2, top + 5, lz - 2, lx + 2, top + 5, lz + 2, "guh_dakpan_roze")
-    S.set(lx - 2, top + 1, lz - 2, Z.LANT)
-    for t in range(0, int(d - p * r) + 3):
-        x, z = lx - math.cos(a) * t, lz - math.sin(a) * t
-        if t > 2:
-            S.fill(int(x) - 1, T, int(z) - 1, int(x) + 1, T, int(z) + 1, Z.PLANK)
+    # ramp from the station (exit side = naar) up to the plateau
+    y, k = top, 3
+    while True:
+        bx, bz = lx + sx * k, lz + sz * k
+        dd = math.hypot(bx - cx, bz - cz)
+        if y < T:
+            y += 1
+            blok = SK.stairs("minecraft:cherry_stairs", naar)
+        else:
+            blok = Z.PLANK
+        for w_ in (-1, 0, 1):
+            x_, z_ = bx + ox * w_, bz + oz * w_
+            S.set(x_, y, z_, blok)
+            if blok != Z.PLANK:
+                S.set(x_, y - 1, z_, Z.PLANK)
+            if blok != Z.PLANK:          # headroom over the steps (the cap is in the way); the plateau itself is left alone
+                for hy in (1, 2, 3):
+                    if not S.get(x_, y + hy, z_).startswith(("guhs:knuffelsteen", "guhs:tegel_", "guhs:pastel")):
+                        S.set(x_, y + hy, z_, "minecraft:air")
+        if y >= T and (blok == Z.PLANK or dd < p * r - 2):
+            break
+        k += 1
+    # bottom: paved square + a path to the nearest town path
+    for dx in range(-3, 4):
+        for dz in range(-3, 4):
+            if S.get(lx + dx, G, lz + dz) in ("guhs:knuffelgras", "guhs:knuffelklinkers", "guhs:tegel_hartjes"):
+                S.set(lx + dx, G, lz + dz, "tegel_hartjes" if max(abs(dx), abs(dz)) == 3 else Z.KLINK)
+    beste = None
+    for (x1, z1, x2, z2, b) in Z.PADEN:
+        L = math.hypot(x2 - x1, z2 - z1) or 1
+        t_ = max(0.0, min(1.0, ((lx - x1) * (x2 - x1) + (lz - z1) * (z2 - z1)) / (L * L)))
+        qx, qz = x1 + (x2 - x1) * t_, z1 + (z2 - z1) * t_
+        afst = math.hypot(qx - lx, qz - lz)
+        if beste is None or afst < beste[0]:
+            beste = (afst, qx, qz)
+    if beste and beste[0] > 3:
+        Z.pad(S, lx, lz, beste[1], beste[2], 1)
     POI[f"lift_{naam}_voet"] = w(lx, G + 1, lz)
-    POI[f"lift_{naam}_top"] = w(lx, top + 1, lz)
+    POI[f"lift_{naam}_top"] = w(lx + sx * 2, top + 1, lz + sz * 2)
 
 
 # ------------------------------------------------------------------------------------------------ shops
@@ -167,6 +209,40 @@ def grondhuisjes(S, rng):
 
 
 # ------------------------------------------------------------------------------------------------ extras after bouw
+def tuintjes(S, rng):
+    """Little flower strips OUTSIDE along the side and back walls of the ground buildings (never at the door side)."""
+    bloem = ["minecraft:pink_petals[facing=north,flower_amount=4]", "roze_guhbloem", "minecraft:pink_tulip",
+             "minecraft:allium", "minecraft:azure_bluet", "minecraft:lily_of_the_valley"]
+    for soort, lijst in GEBOUWEN.items():
+        for g in lijst:
+            (x0, y0, z0), (x1, _, z1) = g["doos"]
+            if y0 != G + OY:
+                continue
+            x0, z0, x1, z1 = x0 - OX, z0 - OZ, x1 - OX, z1 - OZ
+            dx_, _, dz_ = g["deur"]
+            dx_, dz_ = dx_ - OX, dz_ - OZ
+            rand = [(x, z0 - 1) for x in range(x0, x1 + 1)] + [(x, z1 + 1) for x in range(x0, x1 + 1)] +                    [(x0 - 1, z) for z in range(z0, z1 + 1)] + [(x1 + 1, z) for z in range(z0, z1 + 1)]
+            for (x, z) in rand:
+                if abs(x - dx_) <= 2 and abs(z - dz_) <= 2 or (x == dx_ or z == dz_) and abs(x - dx_) + abs(z - dz_) <= 3:
+                    continue
+                if (x == dx_ and abs(z - dz_) < 6) or (z == dz_ and abs(x - dx_) < 6):
+                    continue
+                if S.get(x, G, z) == "guhs:knuffelgras" and S.is_air(x, G + 1, z) and rng.random() < 0.8:
+                    S.set(x, G + 1, z, rng.choice(bloem))
+
+
+def terrein_weg(S):
+    """The map terrain around the city is at y 64-65, one or two above the scene's ground (63): without this the
+    tile writer's grass covered the plaza, the paths and the floors inside the houses. Every air cell in the three
+    layers above the scene's ground becomes cave_air (= carve: clears the terrain, leaves air)."""
+    ca = S.id("minecraft:cave_air")
+    grond = S.v[:, G, :] > 0
+    for y in range(G + 1, G + 4):
+        laag = S.v[:, y, :]
+        laag[grond & (laag == 0)] = ca
+
+
+
 def questbord(S, x, z):
     for k in range(4):
         S.set(x + k, G + 1, z, "minecraft:spruce_fence")
@@ -187,6 +263,10 @@ def ordetempel_binnen(S, info):
             S.set(x, yv + 23, z, "minecraft:shroomlight")
             S.set(x, yv + 22, z, "minecraft:iron_chain[axis=y]")
             S.set(x, yv + 21, z, "minecraft:lantern[hanging=true,waterlogged=false]")
+    # floor: pink/white marble look (quartz + pink concrete in a 2x2 checker), aisle in smooth quartz with a pink line
+    for x in range(hx1 + 1, hx2):
+        for z in range(hz1 + 1, hz2 + 1):
+            S.set(x, yv - 1, z, "minecraft:quartz_block" if ((x - cx) // 2 + (z - cz) // 2) % 2 else "minecraft:pink_concrete")
     for x in range(hx1 + 3, hx2 - 1, 6):           # glowing floor tiles + wall lights at eye height
         for z in range(hz1 + 3, hz2 - 1, 6):
             S.set(x, yv - 1, z, "minecraft:pearlescent_froglight[axis=y]")
@@ -195,7 +275,7 @@ def ordetempel_binnen(S, info):
         S.set(hx2 - 1, yv + 3, z, "minecraft:shroomlight")
     for z in range(hz1 + 1, hz2 + 1):
         for x in (cx - 1, cx, cx + 1):
-            S.set(x, yv - 1, z, "minecraft:pink_carpet" if False else "pastelbaksteen_framboos")
+            S.set(x, yv - 1, z, "minecraft:pink_concrete" if x == cx else "minecraft:smooth_quartz")
     for lx, kl, ding in ((-6, "minecraft:red_wool", "minecraft:anvil[facing=north]"),
                          (0, "minecraft:lime_wool", "minecraft:target"),
                          (6, "minecraft:purple_wool", "minecraft:enchanting_table")):
@@ -243,7 +323,9 @@ def main(uit):
     POI["mika_aanwijzing_5"] = w(ux, T + 1, cz)
     for naam, z_ in Z.ZWAMMEN.items():
         POI[f"hoed_{naam}"] = w(z_[0], z_[2] + 1, z_[1])
+    tuintjes(S, __import__("random").Random(5))
     S.fix_connections()
+    terrein_weg(S)
     mis = Z.check(S)
     np.savez_compressed(uit, v=S.v, pal=np.array(S.pal), off=np.array([OX, OY, OZ]))
     with open(uit.replace(".npz", ".json"), "w", encoding="utf-8") as f:

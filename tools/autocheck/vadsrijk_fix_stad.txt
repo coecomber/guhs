@@ -1,0 +1,95 @@
+# Vadsrijk fix round 1, Zwamzoet (agent STAD): plaza paving (no terrain grass over it), lamp posts whole + beside the
+# paths, the tempel wolkenlift (ride up, exit ramp at the top), the stem door + hall next to the lift, interiors.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_fix_stad.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section plein
+/guhs vadsrijk
+wait 400
+waitrender 300
+/tp @s 0 92 22
+look 0 50
+wait 80
+waitrender 300
+shot s_plein_boven gui
+/tp @s -14 64 66
+look 225 5
+wait 40
+waitrender 200
+shot s_plein_rand gui
+
+section lamp
+/tp @s -15 64 53
+look 90 10
+wait 40
+shot s_lantaarnpaal gui
+/tp @s 0 66 98
+look 180 5
+wait 40
+waitrender 200
+shot s_boulevard gui
+
+section steeldeur
+/tp @s 0 64 -21
+look 180 10
+wait 60
+waitrender 200
+shot s_steeldeur gui
+/tp @s 0 64 -31
+look 0 10
+wait 40
+shot s_steelhal gui
+
+section lift
+/gamemode survival
+/tp @s 0 64 -16
+look 180 0
+wait 40
+shot s_lift_voet gui
+/tp @s 0 65 -18
+wait 200
+shot s_lift_rit gui
+/gamemode creative
+/guhs vadsrijk wereld plek lift_tempel_top
+look 180 15
+wait 60
+waitrender 200
+shot s_lift_top gui
+/guhs vadsrijk wereld plek lift_west_top
+look 90 15
+wait 60
+waitrender 200
+shot s_lift_west_top gui
+
+section binnen
+/guhs vadsrijk wereld plek gebouw.smidse.1.binnen
+look 90 20
+wait 60
+waitrender 200
+shot s_binnen_smidse gui
+/guhs vadsrijk wereld plek gebouw.kruidenier.1.binnen
+look 90 20
+wait 40
+shot s_binnen_kruidenier gui
+/guhs vadsrijk wereld plek ordetempel_binnen
+look 0 25
+wait 60
+waitrender 200
+shot s_binnen_ordetempel gui
+/guhs vadsrijk wereld plek stal.binnen
+look 270 25
+wait 60
+waitrender 200
+shot s_binnen_stal gui
+
+section markt
+/tp @s 0 66 82
+look 180 15
+wait 40
+waitrender 200
+shot s_markt gui

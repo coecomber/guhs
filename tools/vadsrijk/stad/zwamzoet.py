@@ -22,6 +22,17 @@ DEK = "minecraft:cherry_slab[type=bottom,waterlogged=false]"
 PLANK = "minecraft:cherry_planks"
 KLINK = "knuffelklinkers"
 RAAM = "glasinlood_guh"
+LUCHT = "minecraft:cave_air"     # air that also clears the map terrain under a stamp (the tile writer's CARVE)
+LAMP_O, LAMP_B = "guh_lantaarnpaal[half=lower]", "guh_lantaarnpaal[half=upper]"
+PADEN = []                       # (x1, z1, x2, z2, b) of every ground path, for the lamp posts along them
+DEURVOOR = []                    # cells in front of stem doors that must stay free
+WENTEL_UIT = {}                  # naam -> angle where the spiral stair comes out on the cap
+
+
+def lantaarnpaal(S, x, y, z):
+    """A whole guh lamp post: BOTH halves (the block name alone is only the bottom half, the lamp top goes missing)."""
+    S.set(x, y, z, LAMP_O)
+    S.set(x, y + 1, z, LAMP_B)
 
 # naam: (cx, cz, T = vloer van het hoedplateau, r = hoedstraal, rs = steelstraal, kleur, plateau-fractie, kromming)
 ZWAMMEN = {
@@ -74,6 +85,7 @@ def terrein(S):
 
 
 def pad(S, x1, z1, x2, z2, b=3, blok=KLINK, rand="tegel_hartjes"):
+    PADEN.append((x1, z1, x2, z2, b))
     n = int(max(abs(x2 - x1), abs(z2 - z1))) + 1
     for i in range(n + 1):
         t = i / n
@@ -126,15 +138,8 @@ def zwam(S, cx, cz, T, r, rs, kleur, p=0.65, krom=0.0, ramen=True):
                 a = k * 2 * math.pi / 5 + (y - G) // 9 * 0.7
                 wx, wz = sx + (rr - 0.3) * math.cos(a), cz + (rr - 0.3) * math.sin(a)
                 S.set(wx, y, wz, RAAM)
-    # deur aan de zuidkant
-    rr0 = steel_straal(rs, 0.02)
-    dz = int(cz + rr0 - 0.2)
-    for y in (G + 1, G + 2, G + 3):
-        S.set(cx, y, dz, "minecraft:air" if y < G + 3 else "pastelbaksteen_framboos")
-    S.set(cx, G + 1, dz, "roze_lakhout_deur[facing=south,half=lower,hinge=left,open=false]")
-    S.set(cx, G + 2, dz, "roze_lakhout_deur[facing=south,half=upper,hinge=left,open=false]")
-    S.set(cx - 1, G + 2, dz + 1, LANT)
-    S.set(cx + 1, G + 2, dz + 1, LANT)
+    if ramen:
+        steeldeur(S, cx, cz)
     # hoed
     scx = cx + krom * 0  # bovenkant staat recht boven de voet
     for x in range(int(scx - r - 1), int(scx + r + 2)):
@@ -174,6 +179,44 @@ def zwam(S, cx, cz, T, r, rs, kleur, p=0.65, krom=0.0, ramen=True):
                 S.set(x, T, z, KLINK)
 
 
+def steeldeur(S, cx, cz):
+    """Door on the south side of a big stem, with a real little hall behind it (the stem is solid) and a recess in
+    front of it (the stem's foot flares out wider than the door). Small lamp mushrooms get no door at all."""
+    # outermost stem block in the door column at the foot
+    dz = cz
+    while S.get(cx, G + 1, dz + 1) in (STEEL, "minecraft:mushroom_stem" + MUSH) or \
+            S.get(cx, G + 1, dz + 1).startswith("guhs:schimmelsteel"):
+        dz += 1
+    # hall: 5 wide, 5 deep, 3 high, plank floor with a carpet, lights, a bench and a barrel
+    S.fill(cx - 2, G + 1, dz - 5, cx + 2, G + 3, dz - 1, LUCHT)
+    S.fill(cx - 2, G, dz - 5, cx + 2, G, dz - 1, "roze_lakhout_planken")
+    S.fill(cx, G + 1, dz - 4, cx, G + 1, dz - 1, "minecraft:pink_carpet")
+    S.set(cx - 2, G + 3, dz - 5, LANT_H)
+    S.set(cx + 2, G + 3, dz - 5, LANT_H)
+    S.set(cx - 2, G + 1, dz - 5, "minecraft:barrel[facing=up,open=false]")
+    S.set(cx + 2, G + 1, dz - 5, "minecraft:flower_pot")
+    S.set(cx - 2, G + 1, dz - 3, "minecraft:cherry_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]")
+    S.set(cx + 2, G + 1, dz - 3, "minecraft:cherry_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]")
+    S.set(cx, G + 3, dz - 3, "minecraft:shroomlight")
+    S.set(cx, G + 1, dz, "roze_lakhout_deur[facing=south,half=lower,hinge=left,open=false]")
+    S.set(cx, G + 2, dz, "roze_lakhout_deur[facing=south,half=upper,hinge=left,open=false]")
+    S.set(cx, G + 3, dz, "pastelbaksteen_framboos")
+    for x in (cx - 1, cx + 1):
+        if S.is_air(x, G + 1, dz + 1):
+            S.set(x, G + 1, dz + 1, LANT)
+    for z in range(dz + 1, dz + 4):
+        S.set(cx, G, z, KLINK)
+        DEURVOOR.append((cx, z))
+
+
+def deuren_vrij(S):
+    """Clear the cells in front of the stem doors (spiral stairs / trees must not end up there)."""
+    for (x, z) in DEURVOOR:
+        for y in (G + 1, G + 2):
+            if not S.get(x, y, z).startswith("minecraft:lantern"):
+                S.set(x, y, z, "minecraft:air")
+
+
 def lampzwam(S, cx, cz, h, r, kleur):
     """Klein lampzwammetje (20-40 hoog) met een lichtgevende hoed: puur skyline."""
     T = G + h
@@ -183,6 +226,17 @@ def lampzwam(S, cx, cz, h, r, kleur):
 
 
 # ---------------------------------------------------------------- guh-dingen
+def vaandel(S, x, y, z, as_="x", kleuren=("minecraft:pink_wool", "minecraft:white_wool")):
+    """Guh banner: a cherry pole (7 high) with a 2 x 3 wool cloth and a little ear tip on top. as_ = cloth direction."""
+    for k in range(7):
+        S.set(x, y + k, z, "minecraft:stripped_cherry_log[axis=y]" if k == 0 else HEK)
+    S.set(x, y + 7, z, "minecraft:pink_concrete")
+    for u in (1, 2):
+        for v in (3, 4, 5):
+            b = kleuren[(u + v) % 2]
+            S.set(x + (u if as_ == "x" else 0), y + v, z + (u if as_ == "z" else 0), b)
+
+
 def oortje(S, x, y, z, as_="x", groot=1):
     """Guh-oortje (rechtop plaatje). as_ = langs welke as het plaatje loopt."""
     rij = [(-1, 0), (0, 0), (1, 0), (-1, 1), (0, 1), (1, 1), (0, 2)] if groot == 1 else \
@@ -270,7 +324,7 @@ PALETTEN = [
 ]
 
 
-def huis(S, x0, y0, z0, w=7, d=7, h=5, voor="south", pal=None, oren=True):
+def huis(S, x0, y0, z0, w=7, d=7, h=5, voor="south", pal=None, oren=True, tapijt="minecraft:pink_carpet"):
     """Guhhuisje op vloer y0 (eerste blok boven de vloer = y0). Zadeldak met de gevel aan de voorkant,
     guhgezicht in de voorgevel en twee guh-oortjes op het dak."""
     pal = pal or PALETTEN[0]
@@ -279,7 +333,7 @@ def huis(S, x0, y0, z0, w=7, d=7, h=5, voor="south", pal=None, oren=True):
     S.walls(x0, y0, z0, x1, y0 + h - 1, z1, pal["wand"])
     for (x, z) in ((x0, z0), (x1, z0), (x0, z1), (x1, z1)):
         S.fill(x, y0, z, x, y0 + h - 1, z, pal["hoek"])
-    S.fill(x0 + 1, y0, z0 + 1, x1 - 1, y0 + h - 1, z1 - 1, "minecraft:air")
+    S.fill(x0 + 1, y0, z0 + 1, x1 - 1, y0 + h - 1, z1 - 1, LUCHT)   # cave_air: the map terrain never grows inside
     langs_z = voor in ("north", "south")  # nok loopt langs z -> gevels noord/zuid
     dak, trap = pal["dak"], pal["dak"] + "_trap"
     if langs_z:
@@ -311,6 +365,8 @@ def huis(S, x0, y0, z0, w=7, d=7, h=5, voor="south", pal=None, oren=True):
 
     def P(u, y, off=0):  # u = positie langs de gevel, off = naar buiten
         return (u, y, vz + off * step) if langs_z else (vz + off * step, y, u)
+    for k in range(1, (d if langs_z else w) - 2 if tapijt else 1):  # carpet runner from the door inwards
+        S.set(*P(mid, y0, -k), tapijt)
     S.set(*P(mid, y0), f"roze_lakhout_deur[facing={voor},half=lower,hinge=left,open=false]")
     S.set(*P(mid, y0 + 1), f"roze_lakhout_deur[facing={voor},half=upper,hinge=left,open=false]")
     S.set(*P(mid, y0 + h), f"knuffelsteen_gezicht[facing={voor},stemming=0]")
@@ -335,8 +391,50 @@ def huis(S, x0, y0, z0, w=7, d=7, h=5, voor="south", pal=None, oren=True):
 
 
 # ---------------------------------------------------------------- verbindingen
+MAX_HELLING = 0.85   # a bridge never drops faster than this per block (half-slab steps stay <= 1 block)
+
+
+def wolkentoren(S, x, z, y_onder, y_boven, naar):
+    """A small wolkenlift tower: up column from a floor at y_onder (the pad stands on it) to a landing at y_boven,
+    the puff at the top pushes you towards `naar` onto the landing; a down column right next to it."""
+    sx, sz = {"east": (1, 0), "west": (-1, 0), "south": (0, 1), "north": (0, -1)}[naar]
+    ox, oz = sz, sx                       # down column: next to it, across the way out
+    for y in range(y_onder + 1, y_boven + 4):
+        for (dx, dz) in ((0, 0), (ox, oz)):
+            S.set(x + dx, y, z + dz, "minecraft:air")
+    S.set(x, y_onder + 1, z, f"wolkenlift[down=false,facing={naar}]")
+    S.set(x + ox, y_onder + 1, z + oz, f"wolkenlift[down=true,facing={naar}]")
+    for y in range(y_onder + 2, y_boven + 3):
+        S.set(x, y, z, f"wolkenstroom[down=false,facing={naar}]")
+        S.set(x + ox, y, z + oz, f"wolkenstroom[down=true,facing={naar}]")
+    # landing around both columns, posts at the corners, a roof and lights
+    for dx in range(-2, 3):
+        for dz in range(-2, 3):
+            if (dx, dz) not in ((0, 0), (ox, oz)):
+                S.set(x + dx, y_boven, z + dz, PLANK)
+                for hy in (1, 2, 3):
+                    S.set(x + dx, y_boven + hy, z + dz, "minecraft:air")
+    for (dx, dz) in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
+        for y in range(y_onder + 1, y_boven + 5):
+            S.set(x + dx, y, z + dz, "minecraft:stripped_cherry_log[axis=y]" if y <= y_boven else HEK)
+        S.set(x + dx, y_boven + 4, z + dz, LANT_H)          # lights at the corners, never above a column
+    S.fill(x - 2, y_boven + 5, z - 2, x + 2, y_boven + 5, z + 2, "guh_dakpan_roze")
+    # the foot: a little paved square, free on every side
+    for dx in range(-2, 3):
+        for dz in range(-2, 3):
+            if (dx, dz) not in ((0, 0), (ox, oz)) and abs(dx) + abs(dz) < 4:
+                for hy in (1, 2, 3):
+                    S.set(x + dx, y_onder + hy, z + dz, "minecraft:air")
+                S.set(x + dx, y_onder, z + dz, KLINK)
+
+
 def brug(S, a, b, zw):
-    """Touwbrug tussen twee hoedplateaus (doorhangend, kersenhout + touwhekjes + lantaarntjes)."""
+    """Touwbrug tussen twee hoedplateaus (doorhangend, kersenhout + touwhekjes + lantaarntjes).
+    Walkable: the deck goes in half-slab steps (never more than 1 block between two cells), headroom over the deck is
+    kept free (no fence or lantern of the cap rim in the way), and a bridge that would be too steep ends in a small
+    wolkenlift tower on the lower cap instead."""
+    if zw[a][2] < zw[b][2]:
+        a, b = b, a                       # a = the high end
     ax, az, aT, ar, _, _, ap, _ = zw[a]
     bx, bz, bT, br, _, _, bp, _ = zw[b]
     L = math.hypot(bx - ax, bz - az)
@@ -344,43 +442,68 @@ def brug(S, a, b, zw):
     sx, sz = ax + ux * (ap * ar - 1), az + uz * (ap * ar - 1)
     ex, ez = bx - ux * (bp * br - 1), bz - uz * (bp * br - 1)
     D = math.hypot(ex - sx, ez - sz)
-    sag = 0.07 * D
+    over = (aT - bT) - MAX_HELLING * D
+    eind = bT + max(0.0, over)            # deck height at the low end (above the low cap when too steep)
+    sag = 0.07 * D if over <= 0 else 0.0
     n = int(D * 2)
     px, pz = -uz, ux
     for i in range(n + 1):
         t = i / n
         x, z = sx + (ex - sx) * t, sz + (ez - sz) * t
-        y = aT + (bT - aT) * t - sag * 4 * t * (1 - t) + 1
+        opp = aT + (eind - aT) * t - sag * 4 * t * (1 - t) + 1.0      # wanted walking height
+        q = round(opp * 2) / 2
+        if q == int(q):
+            y, dek = int(q) - 1, "minecraft:cherry_slab[type=top,waterlogged=false]"
+        else:
+            y, dek = int(math.floor(q)), DEK
         for o in (-1, 0, 1):
-            S.set(x + px * o, y, z + pz * o, DEK)
+            S.set(x + px * o, y, z + pz * o, dek)
+            for hy in (1, 2, 3):
+                S.set(x + px * o, y + hy, z + pz * o, "minecraft:air")
         for o in (-2, 2):
             S.set(x + px * o, y, z + pz * o, PLANK)
             S.set(x + px * o, y + 1, z + pz * o, HEK)
+            if i % 16 == 8:
+                S.set(x + px * o, y - 1, z + pz * o, LANT_H)        # lanterns hanging under the bridge
         if i % 24 == 12:
             for o in (-2, 2):
                 S.set(x + px * o, y + 2, z + pz * o, HEK)
                 S.set(x + px * o, y + 3, z + pz * o, LANT)
+    if over > 0:
+        # tower on the low cap, 2 blocks in from the deck end; the puff at the top faces back up the bridge
+        tx, tz = int(round(ex + ux * 2)), int(round(ez + uz * 2))
+        naar = ("west" if ux > 0 else "east") if abs(ux) > abs(uz) else ("north" if uz > 0 else "south")
+        wolkentoren(S, tx, tz, bT, int(round(eind)), naar)
+        TORENS.append((tx, tz))
+
+
+TORENS = []
 
 
 def sporenpad(S, a, b, zw):
-    """Zwevende sporen-stapstenen (roze wolkblokjes met glimzwammetjes) tussen twee hoeden."""
+    """Pad van roze wolkblokjes (met glimzwammetjes) tussen twee hoeden: aaneengesloten, 2 breed, nooit meer dan
+    1 blok stijgen per stap (het waren losse springstenen met gaten en 2+ blokken hoogte)."""
     ax, az, aT, ar, _, _, ap, _ = zw[a]
     bx, bz, bT, br, _, _, bp, _ = zw[b]
     L = math.hypot(bx - ax, bz - az)
     ux, uz = (bx - ax) / L, (bz - az) / L
-    sx, sz = ax + ux * (ap * ar), az + uz * (ap * ar)
-    ex, ez = bx - ux * (bp * br), bz - uz * (bp * br)
+    sx, sz = ax + ux * (ap * ar - 1), az + uz * (ap * ar - 1)
+    ex, ez = bx - ux * (bp * br - 1), bz - uz * (bp * br - 1)
     D = math.hypot(ex - sx, ez - sz)
-    n = max(2, int(D / 3.2))
-    for i in range(1, n):
+    n = int(D * 3)
+    for i in range(n + 1):
         t = i / n
-        x = sx + (ex - sx) * t + 2.2 * math.sin(t * 9)
-        z = sz + (ez - sz) * t + 2.2 * math.cos(t * 7)
-        y = int(aT + (bT - aT) * t + 1.5 * math.sin(t * math.pi))
-        S.fill(int(x), y, int(z), int(x) + 1, y, int(z) + 1, "wolkenblok_roze")
-        S.set(int(x), y - 1, int(z), "minecraft:shroomlight")
-        if i % 2:
-            S.set(int(x) + 1, y + 1, int(z), "glimpaddenstoel")
+        x = sx + (ex - sx) * t + 2.2 * math.sin(t * math.pi * 2) * math.sin(t * math.pi)
+        z = sz + (ez - sz) * t + 2.2 * math.cos(t * math.pi * 2) * math.sin(t * math.pi)
+        y = int(round(aT + (bT - aT) * t))
+        for (dx, dz) in ((0, 0), (1, 0), (0, 1), (1, 1)):
+            S.set(int(x) + dx, y, int(z) + dz, "wolkenblok_roze")
+            for hy in (1, 2, 3):
+                S.set(int(x) + dx, y + hy, int(z) + dz, "minecraft:air")
+        if i % 9 == 0:
+            S.set(int(x), y - 1, int(z), "minecraft:shroomlight")
+        if i % 14 == 7:
+            S.set(int(x) - 1, y + 1, int(z), "glimpaddenstoel")
 
 
 def lift(S, naam, hoek, zw):
@@ -419,19 +542,31 @@ def wenteltrap(S, naam, zw, start=0.0):
     _, onder = hoed_profiel(0, T, r, p)
     h = onder + 2 - G
     a = start
-    for y in range(G + 1, onder - 1):
-        t = (y - G) / h
-        rr = steel_straal(rs, t)
+    # it used to stop under the cap (dead end): now it winds on through the cap and comes out on the plateau
+    rr_top = steel_straal(rs, (onder - 1 - G) / h)
+    for y in range(G + 1, T + 1):
+        t = min(1.0, (y - G) / h)
+        rr = steel_straal(rs, t) if y < onder - 1 else rr_top
         sx = cx + krom * math.sin(math.pi * t)
         R0 = rr + 2.0
-        for k in range(3):
-            aa = a + k * 0.6 / R0
+        door_kap = y >= onder - 4
+        for k in range(4):
+            aa = a + k * 0.5 / R0
             for dr in (0.6, 1.5, 2.4):
-                S.set(sx + (rr + dr) * math.cos(aa), y, cz + (rr + dr) * math.sin(aa), PLANK, keep=True)
-            S.set(sx + (rr + 3.3) * math.cos(aa), y + 1, cz + (rr + 3.3) * math.sin(aa), HEK, keep=True)
-        if (y - G) % 10 == 0:
+                px, pz = sx + (rr + dr) * math.cos(aa), cz + (rr + dr) * math.sin(aa)
+                if door_kap:
+                    S.set(px, y, pz, PLANK)
+                    for hy in (1, 2, 3):
+                        if y + hy <= T + 3:
+                            S.set(px, y + hy, pz, "minecraft:air")
+                else:
+                    S.set(px, y, pz, PLANK, keep=True)
+            if not door_kap:
+                S.set(sx + (rr + 3.3) * math.cos(aa), y + 1, cz + (rr + 3.3) * math.sin(aa), HEK, keep=True)
+        if (y - G) % 10 == 0 and not door_kap:
             S.set(sx + (rr + 3.3) * math.cos(a), y + 2, cz + (rr + 3.3) * math.sin(a), LANT, keep=True)
         a += 1.8 / R0
+    WENTEL_UIT[naam] = a
 
 
 # ---------------------------------------------------------------- tempel van De Knuffelorde
@@ -551,9 +686,7 @@ def tempel(S, zw):
         S.set(cx + kant * 5, yv + 1, fz2 + 8, "minecraft:shroomlight")
     # lantaarnpaden over het plateau
     for kant in (-1, 1):
-        for z in range(fz2 + 6, cz + 16, 4):
-            S.set(cx + kant * 7, yv if z < cz + 14 else y0, z, "guh_lantaarnpaal[half=lower]")
-            S.set(cx + kant * 7, (yv if z < cz + 14 else y0) + 1, z, "guh_lantaarnpaal[half=upper]")
+        lantaarnpaal(S, cx + kant * 8, y0, cz + 19)          # beside the foot of the stair, not on it
     return dict(deur=(dx1, yv, fz1, dw, dh))
 
 
@@ -630,16 +763,24 @@ def plein(S):
     S.fill(px - 5, G + 2, pz - 5, px + 5, G + 2, pz - 5, "minecraft:gold_block")
     S.fill(px - 5, G + 2, pz + 5, px + 5, G + 2, pz + 5, "minecraft:gold_block")
     guhbeeld(S, px, G + 4, pz, 11)
-    # bloembakken + bankjes + lantaarnpalen rondom
-    for k in range(12):
-        a = k * math.pi / 6 + math.pi / 12
-        x, z = px + 14 * math.cos(a), pz + 14 * math.sin(a)
+    # lamp posts + planters on the rim of the plaza (not in the walking area), never in front of an exit
+    uitgangen = [(math.pi / 2, 0.42), (-math.pi / 2, 0.42)] +         [(math.atan2(z_[1] - pz, z_[0] - px), 0.3) for n_, z_ in ZWAMMEN.items() if n_ != "tempel"]
+    for k in range(24):
+        a = k * math.pi / 12 + math.pi / 24
+        if any(abs(math.atan2(math.sin(a - u), math.cos(a - u))) < w for (u, w) in uitgangen):
+            continue
+        x, z = int(round(px + (pr - 1) * math.cos(a))), int(round(pz + (pr - 1) * math.sin(a)))
         if k % 2:
-            S.set(x, G + 1, z, "guh_lantaarnpaal[half=lower]")
-            S.set(x, G + 2, z, "guh_lantaarnpaal[half=upper]")
+            lantaarnpaal(S, x, G + 1, z)
         else:
             S.set(x, G + 1, z, "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]")
-            S.set(x, G + 1, z + 1, "minecraft:pink_petals[facing=north,flower_amount=4]")
+            S.set(x, G + 2, z, "minecraft:pink_petals[facing=north,flower_amount=4]")
+    # vaandels (wool flags on poles) at the two big exits
+    for (u, _) in uitgangen[:2]:
+        for kant in (-1, 1):
+            x = px + kant * 6
+            z = int(round(pz + (pr - 1) * math.sin(u)))
+            vaandel(S, x, G + 1, z, "x")
 
 
 def kraam(S, x, z, kleur, voor="south"):
@@ -654,6 +795,13 @@ def kraam(S, x, z, kleur, voor="south"):
     S.fill(x - 1, G + 4, z - 1, x + 4, G + 4, z - 1, SK.stairs("guhs:" + doek + "_trap", "south"))
     S.set(x + 1, G + 2, z + 2, "roze_guh_koek" if SK.has_block("roze_guh_koek") else "minecraft:cake")
     S.set(x + 2, G + 2, z + 2, LANT)
+    # goods on the back counter (what the stall sells follows its cloth colour)
+    waar = {"rood": ("minecraft:melon", "minecraft:pumpkin"), "geel": ("minecraft:hay_block[axis=y]", "minecraft:honey_block"),
+            "blauw": ("minecraft:potted_blue_orchid", "minecraft:potted_pink_tulip"),
+            "groen": ("minecraft:potted_fern", "minecraft:moss_block"),
+            "creme": ("minecraft:white_wool", "minecraft:pink_wool")}[kleur]
+    S.set(x + 1, G + 2, z, waar[0])
+    S.set(x + 2, G + 2, z, waar[1])
 
 
 def markt(S, rng):
@@ -834,15 +982,17 @@ def hoedhuisjes(S, zw, rng):
         for (a, b) in BRUGGEN + SPORENPADEN:
             if naam in (a, b):
                 o = b if a == naam else a
-                brugrichting.append(math.atan2(zw[o][1] - cz, zw[o][0] - cx))
+                brugrichting.append((math.atan2(zw[o][1] - cz, zw[o][0] - cx), 0.5))
         for (n_, hk) in LIFTEN:
             if n_ == naam:
-                brugrichting.append(math.radians(hk))
+                brugrichting.append((math.radians(hk), 1.0))   # the lift ramp runs along an axis: keep a wide gap
+        if naam in WENTEL_UIT:                      # where the spiral stair comes up through the cap
+            brugrichting.append((WENTEL_UIT[naam], 0.6))
         n = 5 if pr > 11 else 4
         k = 0
         for i in range(n):
             a = i * 2 * math.pi / n + 0.3
-            if any(abs(math.atan2(math.sin(a - b), math.cos(a - b))) < 0.5 for b in brugrichting):
+            if any(abs(math.atan2(math.sin(a - b), math.cos(a - b))) < bw for (b, bw) in brugrichting):
                 continue
             w = 5 if pr < 10 else 6
             hx, hz = cx + (pr - w * 0.75) * math.cos(a), cz + (pr - w * 0.75) * math.sin(a)
@@ -855,6 +1005,32 @@ def hoedhuisjes(S, zw, rng):
         S.set(cx, T + 2, cz, "minecraft:cherry_log[axis=y]")
         S.ellipsoid(cx, T + 4, cz, 2.6, 1.8, 2.6, "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]",
                     keep=True)
+
+
+def padlampen(S, stap=13):
+    """Lamp posts NEXT to the ground paths (one block past the edge tiles), alternating sides; only on free grass,
+    never on the plaza, a door front or another lamp's spot."""
+    px, pz, pr = PLEIN
+    gezet = []
+    kant = 1
+    for (x1, z1, x2, z2, b) in PADEN:
+        L = math.hypot(x2 - x1, z2 - z1)
+        if L < 1:
+            continue
+        ux, uz = (x2 - x1) / L, (z2 - z1) / L
+        for i in range(6, int(L) - 3, stap):
+            kant = -kant
+            x = int(round(x1 + ux * i + (-uz) * kant * (b + 1.5)))
+            z = int(round(z1 + uz * i + ux * kant * (b + 1.5)))
+            if math.hypot(x - px, z - pz) < pr + 4 or any(abs(x - a) + abs(z - c) < 7 for (a, c) in gezet):
+                continue
+            if S.get(x, G, z) != "guhs:knuffelgras":
+                continue
+            if any(not S.is_air(x + dx, y, z + dz) for dx in (-1, 0, 1) for dz in (-1, 0, 1) for y in (G + 1, G + 2, G + 3)):
+                continue
+            lantaarnpaal(S, x, G + 1, z)
+            gezet.append((x, z))
+    return gezet
 
 
 def guhtjes(S, rng):
@@ -883,7 +1059,8 @@ def bouw(S, seed=11):
     for naam, (cx, cz, T, r, rs, kl, p, krom) in ZWAMMEN.items():
         zwam(S, cx, cz, T, r, rs, kl, p, krom)
     for naam in WENTEL:
-        wenteltrap(S, naam, ZWAMMEN, start=rng.random() * 6)
+        # start just past the stem door (south = pi/2), so the first steps never stand in front of it
+        wenteltrap(S, naam, ZWAMMEN, start=math.pi / 2 + 0.6 + rng.random() * 4.4)
     info = tempel(S, ZWAMMEN)
     hoedhuisjes(S, ZWAMMEN, rng)
     for (a, b) in BRUGGEN:
@@ -897,6 +1074,7 @@ def bouw(S, seed=11):
     guhpoort(S, px, 206)
     haven(S)
     grondhuisjes(S, rng)
+    padlampen(S)
     for _ in range(400):
         x, z = rng.randint(4, 251), rng.randint(4, 205)
         if vrij(S, x - 3, z - 3, x + 3, z + 3):
@@ -906,6 +1084,7 @@ def bouw(S, seed=11):
         if S.get(x, G, z) == "guhs:knuffelgras" and S.is_air(x, G + 1, z):
             S.set(x, G + 1, z, rng.choice(["minecraft:pink_petals[facing=north,flower_amount=4]", "roze_guhbloem",
                                            "minecraft:short_grass", "minecraft:pink_tulip"]))
+    deuren_vrij(S)
     guhtjes(S, rng)
     return info
 
