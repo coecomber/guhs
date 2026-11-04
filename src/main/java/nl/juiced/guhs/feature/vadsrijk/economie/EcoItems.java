@@ -164,6 +164,7 @@ public final class EcoItems {
         @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             tooltip.accept(Component.translatable("item.guhs.vr_item_rijfluitje.uitleg").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("vadsrijk.economie.rijfluitje.toets").withStyle(ChatFormatting.GRAY));
             tooltip.accept(Component.translatable("vadsrijk.economie.alleen_rijk").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }
@@ -194,6 +195,36 @@ public final class EcoItems {
         @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             tooltip.accept(Component.translatable("vadsrijk.economie.zadel.uitleg", Component.translatable(soort.naamKey())).withStyle(ChatFormatting.GRAY));
+        }
+    }
+
+    /** G-MOUNTS: a Pluimguh egg (boss loot / quest reward): use it and that colour of the Pluimguh is yours. */
+    public static class PluimEi extends Item {
+        public final RijdierSoort.PluimKleur kleur;
+
+        public PluimEi(Properties p, RijdierSoort.PluimKleur kleur) {
+            super(p);
+            this.kleur = kleur;
+        }
+
+        @Override
+        public InteractionResult use(Level level, Player player, InteractionHand hand) {
+            if (player instanceof ServerPlayer sp) {
+                if (Rijdieren.geefKleur(sp, kleur)) {
+                    if (!sp.isCreative()) {
+                        sp.getItemInHand(hand).shrink(1);
+                    }
+                    sp.level().sendParticles(ParticleTypes.CHERRY_LEAVES, sp.getX(), sp.getY() + 1, sp.getZ(), 30, 0.5, 0.5, 0.5, 0.05);
+                } else {
+                    zeg(sp, "vadsrijk.economie.rijdier.al");
+                }
+            }
+            return InteractionResult.SUCCESS;
+        }
+
+        @Override
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("vadsrijk.economie.pluimei.uitleg", Component.translatable(kleur.naamKey())).withStyle(ChatFormatting.GRAY));
         }
     }
 }

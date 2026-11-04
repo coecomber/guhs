@@ -239,7 +239,7 @@ public class VadsrijkEconomieGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         helper.assertTrue(Rijdieren.actief(p) == null, "no mount yet");
         helper.assertTrue(Rijdieren.geefEerste(p) && !Rijdieren.geefEerste(p), "the first mount once");
-        helper.assertTrue(Rijdieren.actief(p) == RijdierSoort.HOEDHUPPER && EcoUtil.tel(p.getInventory(), EcoSpul.RIJFLUITJE.get()) == 1, "hoedhupper + fluitje");
+        helper.assertTrue(Rijdieren.actief(p) == RijdierSoort.HOEDHUPPER, "hoedhupper (G-MOUNTS: the key calls it, no rijfluitje needed)");
         helper.assertTrue(Rijdieren.level(p, RijdierSoort.HOEDHUPPER) == 1, "level 1");
         Rijdieren.geefXp(p, RijdierSoort.HOEDHUPPER, RijdierSoort.xpNodig(1) - 1);
         helper.assertTrue(Rijdieren.level(p, RijdierSoort.HOEDHUPPER) == 1, "not yet");
