@@ -38,7 +38,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.Arenas;
  *   Vadsrijk, log out, and after a restart (never saved in the world). Riding in towns is fine;</li>
  *   <li>riding gives the mount xp: one per block ({@link #geefXp}); level 1..{@link RijdierSoort#MAX_LEVEL}.</li>
  * </ul>
- * APIs: {@link #geefEerste} (npc, the lv-8 Wolkenschaapje quest), {@link #kiesStarter} (zone 3 main quest: choose 1 of 3 starters),
+ * APIs: {@link #geefEerste} (npc, the Wolkenschaapje return quest), {@link #kiesStarter} (zone 3 main quest: choose 1 of 3 starters),
  * {@link #geef} / {@link #geefKleur} (rewards), {@link #STARTER_GEKOZEN} (quest progress hook).
  */
 public final class Rijdieren {
@@ -190,8 +190,8 @@ public final class Rijdieren {
     // ---- getting mounts ---------------------------------------------------------------------------------------------------------
 
     /**
-     * API (npc slice, the lv ~8 quest of Stalmeester Hoefje, "Een eigen Wolkenschaapje"): the Wolkenschaapje (I-MOUNTS: it replaced
-     * the Hoedhupper). False when the player already had it (e.g. bought at the stal). (The rijfluitje is optional now.)
+     * API (npc slice, the return quest of Stalmeester Hoefje, "Een eigen Wolkenschaapje", only after the zone-3 starter; and dev):
+     * the Wolkenschaapje (I-MOUNTS: it replaced the Hoedhupper). False when the player already had it (e.g. bought at the stal). (The rijfluitje is optional now.)
      */
     public static boolean geefEerste(ServerPlayer p) {
         boolean nieuw = geef(p, RijdierSoort.WOLKENSCHAAPJE);
@@ -202,7 +202,7 @@ public final class Rijdieren {
     }
 
     /**
-     * The reward of the lv-8 quest (npc role "rijdier"): the Wolkenschaapje, or, when the player already bought it at the stal, its
+     * The reward of the Wolkenschaapje return quest (npc role "rijdier"): the Wolkenschaapje, or, when the player already bought it at the stal, its
      * price back. Always true (so the quest never says "later").
      */
     public static boolean questBeloning(ServerPlayer p) {

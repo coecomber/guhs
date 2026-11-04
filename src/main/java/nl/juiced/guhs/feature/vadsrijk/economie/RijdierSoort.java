@@ -18,8 +18,9 @@ import javax.annotation.Nullable;
  *       are 3 of them (zone 3 main quest: {@code Rijdieren.kiesStarter}).</li>
  *   <li>{@link #KNUFFELHERT}: a soft deer with little antlers; return quest in zone 1 (Sporenwoud, "Het Knuffelhert").</li>
  *   <li>{@link #GUHWOLF}: a snow wolf with a scarf; return quest in zone 2 (Kandijkom / Splinterkloof, "De verdwaalde Guhwolf").</li>
- *   <li>{@link #WOLKENSCHAAPJE}: a round woolly sheep that hovers a bit: falls slowly and has a double jump (the lv-8 quest of
- *       Stalmeester Hoefje, {@code Rijdieren.geefEerste}; also for sale at the stal).</li>
+ *   <li>{@link #WOLKENSCHAAPJE}: a round woolly sheep that hovers a bit: falls slowly and has a double jump (the return quest of
+ *       Stalmeester Hoefje, {@code Rijdieren.geefEerste}; also for sale at the stal). Every mount comes after the zone-3 starter
+ *       Pluimguh: the stal sells only once you own one.</li>
  *   <li>{@link #SLAKKIE}: the caravan snail as a slow luxury mount with a little seat (stal).</li>
  * </ul>
  */

@@ -870,7 +870,7 @@ TEKSTEN = {
     E + "rijdier.al": "Dat rijdier heb je al.",
     E + "rijdier.level": "%s is nu level %s!",
     E + "rijdier.alleen_rijk": "Je rijdier huppelt alleen in het Vadsrijk.",
-    E + "rijdier.geen": "Je hebt nog geen rijdier. Vraag eens rond in Zwamzoet...",
+    E + "rijdier.geen": "Nog geen rijdier: dat krijg je in De Schemerwortel.",
     E + "rijdier.geschrokken": "Je rijdier schrok en huppelde weg!",
     E + "zadel.uitleg": "Rechtsklik: %s komt in je stal.",
     E + "stal.titel": "De Stal van Stalmeester Hupsakee",

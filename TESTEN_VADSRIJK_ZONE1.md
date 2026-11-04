@@ -102,7 +102,7 @@ druipslijm, kristalklodder, knaag, glimzwam, tempelridder, sporenpriester.
 **NPC's en quests**
 - Kleding en namen; zwaaien, rondwandelen, zitten. Het **!** (goud = verhaal, geel = zij) en **?** (inleveren) boven de hoofden.
 - Dialogen klik je door ("Verder »"); tussenfilmpjes lopen vanzelf. Questitems vallen alleen als je ze nog nodig hebt.
-- 42 quests: 12 hoofd, 22 zij, rijdier (Stalmeester Hoefje, level 8), 6 klassenproeven (Grootmeester, level 10 en 20), 1 geheim.
+- 42 quests: 12 hoofd, 22 zij, rijdier (Stalmeester Hoefje: terugkeerquest, pas na je eerste rijdier in zone 3), 6 klassenproeven (Grootmeester, level 10 en 20), 1 geheim.
 - Geheimen glinsteren als je dichtbij komt: 10 knuffels (hartjes), 5 aanwijzingen (paars), 5 schatten (goudgeel).
 
 **Wezens**
@@ -133,7 +133,7 @@ druipslijm, kristalklodder, knaag, glimzwam, tempelridder, sporenpriester.
 **Economie**
 - Munten oprapen (rechtsklik), winkels (kopen, verkopen, "Verkoop alle grijze"), de smid (sterren, verpluisd en repareren,
   herrollen met een vast hartje), de markt (zoeken, filteren, opbrengst ophalen), ruilen (allebei Klaar, allebei Ruilen!).
-- Rijdieren: Wolkenschaapje (quest lv 8) en de rest (X/N; Hoedhupper en Klodderros weg sinds ronde 3), levels door te rijden, poef als je geraakt wordt of afstapt.
+- Rijdieren: pas vanaf zone 3 (starter-Pluimguh); daarna Wolkenschaapje (Hoefje), Knuffelhert, Guhwolf en de stal (X/N; Hoedhupper en Klodderros weg sinds ronde 3), levels door te rijden, poef als je geraakt wordt of afstapt.
 - Cosmetica: kleding, beeldjes, vaandel en titels komen per post in je gewone inventaris thuis.
 
 **Buit**

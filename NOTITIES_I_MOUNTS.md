@@ -32,6 +32,17 @@ The user: mounts work very well. This round: two mounts out, new speeds/jumps, a
   (Guhwolf = fastest/low jump, Knuffelhert = highest jump, Pluimguh no longer "the fastest").
 - Docs: TESTEN_VADSRIJK.md, SPIEKBRIEF_RONDE2.md, TESTEN_VADSRIJK_ZONE1.md.
 
+## Correction 2 (coordinator, same day): mounts start in zone 3
+- The first mount is the zone-3 starter Pluimguh (`Rijdieren.kiesStarter`). The Wolkenschaapje quest (`rijdier_hoedhupper`) is now
+  a **return quest** like the Knuffelhert/Guhwolf (`na` holds `@rijdier`); its reward stays the Wolkenschaapje (or its price back).
+- **Teasers:** `RijdierQuests.teaser(p, npc)` + QuestMotor step 5b: before your first mount, Hoefje / Boswachter Mos / Breister
+  Wolwinter tell about their quest (`vadsrijk.npc.rijdierquest.teaser.<quest>`); a shop NPC keeps its service choice.
+  Not done (optional): a greyed "Later" line in the questlog/tracker.
+- The stal sells nothing (also no Wolkenschaapje/Slakkie) before you own a mount: "Eerst je eigen Pluimguh in De Schemerwortel."
+  (Pluimguh colours were already starter-gated.)
+- X and N with no mount: "Nog geen rijdier: dat krijg je in De Schemerwortel." (N no longer opens an empty screen.)
+- Dev commands still give everything.
+
 ## Outside my slice (small, needed)
 - `klassen/KlasseBalans.java` + `KlassenRegistry.java` (the `[rijdieren]` section + command suggestions).
 - `bazen/BazenLoot.java` (Klodderzadel drop removed).
@@ -45,7 +56,8 @@ The user: mounts work very well. This round: two mounts out, new speeds/jumps, a
 - Results: see the end of this file.
 
 ## Test results (2026-11-04)
-- `runGameTestServer -Pgt=VadsrijkRijdieren,VadsrijkEconomie,VadsrijkWerver`: all 13 passed (incl. rooster, snelheden, stapHoogte;
+- Correction 2: `-Pgt=VadsrijkRijdieren,VadsrijkEconomie,VadsrijkWerver,VadsrijkNpc`: all 19 passed (stal gate, teasers, 3 return quests).
+- First pass: `runGameTestServer -Pgt=VadsrijkRijdieren,VadsrijkEconomie,VadsrijkWerver`: all 13 passed (incl. rooster, snelheden, stapHoogte;
   Werver = the return-quest gate still works with the new first mount).
 - Note for gametests: the `empty` structure has a barrier ceiling at relative y 4 (stapHoogte clears it).
 - No AutoCheck client run this round (logic/text changes only; the user judges the feel in the dev client).

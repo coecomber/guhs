@@ -95,7 +95,7 @@ NPCS = {
     "stalmeester": ("Stalmeester Hoefje", [
         "Rijdieren! Ze springen, ze rennen en ze worden sterker met jou mee.",
         "Een Wolkenschaapje zweeft een beetje. Het is dol op wortelzwammen.",
-        "Wil je een rijdier? Kom terug als je een beetje sterker bent, rekruut. Level 8, zeg maar."]),
+        "Een rijdier? Eerst kies je je eigen Pluimguh in De Schemerwortel. Daarna heb ik hier nog meer voor je!"]),
     "havenmeester": ("Havenmeester Ankertje", [
         "Meeuwen, wind en de geur van zout. Heerlijk. Behalve de meeuwen.",
         "Het luchtschip? Dat ligt bij De Haven, aan de overkant van de baai. Stuurguh Zeppie vliegt je waarheen je wilt.",
@@ -690,20 +690,21 @@ Q("z20_premie_tempel", "zij", "klerk", "Premie: de Zwamtempel",
 
 # ===== the mount quest (lv 8) ===============================================================================================
 # (I-MOUNTS 2026-11-04: the Hoedhupper is gone; the quest keeps its id (saves, advancement) and gives the Wolkenschaapje. The
-#  meadow keeps its POI id "hoedhupperwei"; in texts it is the Schaapjeswei.)
+#  meadow keeps its POI id "hoedhupperwei"; in texts it is the Schaapjeswei. Mounts start with the zone-3 starter, so this is a
+#  return quest like the Knuffelhert/Guhwolf: RIJDIER_POORT, and a teaser at Hoefje before that.)
 Q("rijdier_hoedhupper", "rijdier", "stalmeester", "Een eigen Wolkenschaapje",
   "Stalmeester Hoefje helpt je aan je eerste rijdier: een Wolkenschaapje. Vind de Schaapjeswei in de Klodderweide en verzamel "
   "wortelzwammen om er eentje te lokken.",
   [D("geheim", "poi:hoedhupperwei", 1, "Vind de Schaapjeswei"),
    D("verzamel", "guhs:vr_npc_wortelzwam", 5, "Wortelzwammen", "gebied:sporenwoud", 0.4)],
-  [("npc", "Zo, jij bent sterk genoeg geworden voor een eigen rijdier. Tijd voor een Wolkenschaapje!"),
+  [("npc", "Hé, jij hebt al een rijdier! Dan ben je klaar voor een Wolkenschaapje."),
    ("npc", "Een Wolkenschaapje is een bolletje wol dat een beetje zweeft. Het valt heel zacht en kan in de lucht nog een keer "
            "springen. In de Klodderweide is een wei waar er soms eentje komt grazen."),
    ("npc", "Neem vijf wortelzwammen mee uit het Sporenwoud. Daar is geen Wolkenschaapje tegen bestand.")],
   "Vind de Schaapjeswei in het zuidoosten van de Klodderweide, en vijf wortelzwammen uit het Sporenwoud.",
   [("npc", "Kijk eens wie er achter je aan gezweefd is! Het heeft je gekozen. Dat zie ik aan zijn krulletjes."),
    ("npc", "Verzorg het goed. Hoe meer je ermee rijdt, hoe sterker het wordt. Druk op X als je het nodig hebt.")],
-  xp=800, munten=500, lv=8, na=["hq06_zwamzoet"], actie_klaar="rijdier:wolkenschaapje")
+  xp=800, munten=500, lv=8, na=["hq06_zwamzoet", RIJDIER_POORT], actie_klaar="rijdier:wolkenschaapje")
 
 # fix round 2 (g-werver): the mount return quest of zone 1, available once you own any mount (NOTITIES_G_MOUNTS.md)
 Q("rijdier_knuffelhert", "rijdier", "boswachter_mos", "Het Knuffelhert",
@@ -872,8 +873,9 @@ GIDS = {
                              "gaan niet mee naar de gewone wereld."),
     "markt": ("Markt en handel", "Ruil vrij met andere spelers, of zet je buit in het veilinghuis van Marktmeester Hamertje-Tik. "
                                  "Gebonden buit kan niet verhandeld worden."),
-    "rijdieren": ("Rijdieren", "Rond level 8 helpt Stalmeester Hoefje je aan een Wolkenschaapje. Rijdieren hebben eigen snelheid en sprong "
-                               "en worden sterker met jou mee."),
+    "rijdieren": ("Rijdieren", "In De Schemerwortel kies je je eerste rijdier: een Pluimguh. Daarna hebben Stalmeester Hoefje, Boswachter "
+                               "Mos en Breister Wolwinter nog meer rijdieren voor je, en verkoopt de stal er ook. Rijdieren hebben eigen "
+                               "snelheid en sprong en worden sterker met jou mee."),
     "geheimen": ("Geheimen", "Overal in het rijk liggen geheimen: tien verloren knuffels, vijf vreemde aanwijzingen en verborgen "
                              "schatten. Ze glinsteren een beetje als je dichtbij bent. Wie weet waar de aanwijzingen naartoe leiden..."),
 }
@@ -935,6 +937,15 @@ OVERIG = {
     P + "werver.eerst_praten": "Het portaal slaapt nog... Praat eerst met Werver Wimpel, hier bij de tempel. Hij zwaait al naar je!",
     # the mount return quests (RijdierQuests.java): the little moments on the way (narrator pages + the lantern line)
     P + "rijdierquest.lantaarn": "Lantaarn aangestoken! (%s/%s)",
+    # (I-MOUNTS) the teasers before your first mount (RijdierQuests.teaser; the Guhwolf's giver is in zone 2)
+    P + "rijdierquest.teaser.rijdier_hoedhupper": "Oh, een eigen Wolkenschaapje... dat kan pas als je al eens op een rijdier hebt "
+                                                  "gezeten. Kom terug als je je eigen Pluimguh hebt, njeg!",
+    P + "rijdierquest.teaser.rijdier_knuffelhert": "Als de lantaarns in het Sporenwoud branden, komt er soms een heel zacht hert kijken... "
+                                                   "Maar het vertrouwt alleen wie al eens op een rijdier heeft gezeten. Kom terug als je "
+                                                   "je eigen Pluimguh hebt, njeg!",
+    P + "rijdierquest.teaser.z2_rijdier_guhwolf": "Hoor je dat? Ergens in de Splinterkloof huilt iets kleins... Maar zo'n wolfje gaat "
+                                                  "alleen mee met iemand die al op een rijdier heeft gezeten. Kom terug als je je eigen "
+                                                  "Pluimguh hebt, njeg!",
     P + "rijdierquest.hert.sporen.0": "De derde lantaarn gloeit warm op. Het hele bos wordt even stil...",
     P + "rijdierquest.hert.sporen.1": "Daar! In het mos glinsteren kleine roze hoefjes, één voor één, naar het westen. Volg ze maar.",
     P + "rijdierquest.hert.open_plek.0": "De hoefjes houden op bij een open plek vol lichtzwammen. Het is er heel stil.",

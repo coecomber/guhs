@@ -24,8 +24,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 import nl.juiced.guhs.feature.verhaal.Praat;
 
 /**
- * The two mount return quests (fix round 2, g-werver; NOTITIES_G_MOUNTS): "Het Knuffelhert" (zone 1, Boswachter Mos) and
- * "De verdwaalde Guhwolf" (zone 2, Breister Wolwinter). They appear once the player owns any mount: a quest whose {@code na}
+ * The mount return quests (fix round 2, g-werver; NOTITIES_G_MOUNTS): "Het Knuffelhert" (zone 1, Boswachter Mos),
+ * "De verdwaalde Guhwolf" (zone 2, Breister Wolwinter) and (I-MOUNTS) "Een eigen Wolkenschaapje" (zone 1, Stalmeester Hoefje).
+ * Mounts start with the zone-3 starter Pluimguh, so they appear once the player owns any mount: a quest whose {@code na}
  * holds {@link #POORT} is only available while {@link Rijdieren#heeftEen} ({@link Questlog#beschikbaar}). Texts and objectives:
  * vadsrijk_npc.py / vadsrijk_z2_npc.py; the reward is the action {@code rijdier_geef:<soort>} ({@link Rijdieren#geef}).
  * <p>This class adds the little moments on top of the normal objectives: a lantern lights up, the glowing hoof prints that lead
@@ -34,7 +35,7 @@ import nl.juiced.guhs.feature.verhaal.Praat;
 public final class RijdierQuests {
     /** The {@code na} entry that means "owns a mount". */
     public static final String POORT = "@rijdier";
-    public static final String HERT = "rijdier_knuffelhert", WOLF = "z2_rijdier_guhwolf";
+    public static final String HERT = "rijdier_knuffelhert", WOLF = "z2_rijdier_guhwolf", SCHAAP = "rijdier_hoedhupper";
     /** Knuffelhert: objectives 0..2 = the lanterns (GEBIED poi), 3 = the glade (MELD hert:open_plek). */
     static final String[] LANTAARNS = {"hert_lantaarn_1", "hert_lantaarn_2", "hert_lantaarn_3"};
     static final String OPEN_PLEK = "hert_open_plek";
@@ -52,6 +53,23 @@ public final class RijdierQuests {
     /** The {@link #POORT} condition. */
     static boolean poortOpen(ServerPlayer p) {
         return Rijdieren.heeftEen(p);
+    }
+
+    /**
+     * I-MOUNTS: the teaser. A return quest of this NPC that is still locked only because the player has no mount yet (not taken,
+     * the other conditions may still be open): the NPC tells about it ({@code vadsrijk.npc.rijdierquest.teaser.<quest>}). Null = none.
+     */
+    @Nullable
+    public static Quest teaser(ServerPlayer p, String npc) {
+        if (poortOpen(p)) {
+            return null;
+        }
+        for (Quest q : Quests.alle().values()) {
+            if (isRijdierQuest(q) && q.gever().equals(npc) && Questlog.status(p, q.id()) == 0) {
+                return q;
+            }
+        }
+        return null;
     }
 
     static boolean isRijdierQuest(Quest q) {

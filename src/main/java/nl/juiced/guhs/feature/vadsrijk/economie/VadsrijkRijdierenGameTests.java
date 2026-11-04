@@ -31,6 +31,10 @@ public class VadsrijkRijdierenGameTests {
         for (RijdierSoort s : RijdierSoort.values()) {
             helper.assertTrue(!Rijdieren.heeft(p, s), "nothing owned: " + s.id());
         }
+        // (I-MOUNTS) mounts start with the zone-3 starter: the stal sells nothing before your first mount
+        Spelers.data(p).munten = 1_000_000;
+        helper.assertTrue(Stal.koop(p, RijdierSoort.WOLKENSCHAAPJE, null).equals("vadsrijk.economie.stal.eerst_starter")
+                && !Rijdieren.heeft(p, RijdierSoort.WOLKENSCHAAPJE) && Spelers.data(p).munten == 1_000_000, "no buying before the first mount");
         helper.assertTrue(Rijdieren.geef(p, RijdierSoort.WOLKENSCHAAPJE) && !Rijdieren.geef(p, RijdierSoort.WOLKENSCHAAPJE), "given once");
         helper.assertTrue(Rijdieren.actief(p) == RijdierSoort.WOLKENSCHAAPJE, "the first mount becomes active");
         helper.assertTrue(Rijdieren.geefKleur(p, PluimKleur.MINT) && !Rijdieren.geefKleur(p, PluimKleur.MINT), "mint once");

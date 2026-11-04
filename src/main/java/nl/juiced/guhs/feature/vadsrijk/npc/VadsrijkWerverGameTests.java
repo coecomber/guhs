@@ -60,9 +60,9 @@ public class VadsrijkWerverGameTests {
         Questlog.wisAlles(p);
         Rijdieren.reset(p);
         Spelers.zetLevel(p, 25);
-        Quest hert = Quests.van(RijdierQuests.HERT), wolf = Quests.van(RijdierQuests.WOLF);
-        helper.assertTrue(hert != null && wolf != null, "both return quests exist");
-        for (Quest q : new Quest[] {hert, wolf}) {
+        Quest hert = Quests.van(RijdierQuests.HERT), wolf = Quests.van(RijdierQuests.WOLF), schaap = Quests.van(RijdierQuests.SCHAAP);
+        helper.assertTrue(hert != null && wolf != null && schaap != null, "the three return quests exist");
+        for (Quest q : new Quest[] {hert, wolf, schaap}) {
             for (String na : q.na()) {
                 if (!na.equals(RijdierQuests.POORT)) {
                     Questlog.neemAan(p, Quests.van(na));
@@ -71,10 +71,15 @@ public class VadsrijkWerverGameTests {
             }
         }
         Rijdieren.reset(p);   // (a finished story quest may have handed out a mount)
-        helper.assertFalse(Questlog.beschikbaar(p, hert) || Questlog.beschikbaar(p, wolf), "no mount: neither quest is there");
+        helper.assertFalse(Questlog.beschikbaar(p, hert) || Questlog.beschikbaar(p, wolf) || Questlog.beschikbaar(p, schaap),
+                "no mount: no return quest is there");
+        helper.assertTrue(RijdierQuests.teaser(p, schaap.gever()) == schaap && RijdierQuests.teaser(p, hert.gever()) == hert
+                && RijdierQuests.teaser(p, wolf.gever()) == wolf, "but their givers tease them");
         helper.assertTrue(RijdierQuests.trackerQuest(p) == null, "and nothing in the tracker");
         Rijdieren.geef(p, "wolkenschaapje");
-        helper.assertTrue(Questlog.beschikbaar(p, hert) && Questlog.beschikbaar(p, wolf), "owning a mount: both appear");
+        helper.assertTrue(Questlog.beschikbaar(p, hert) && Questlog.beschikbaar(p, wolf) && Questlog.beschikbaar(p, schaap),
+                "owning a mount: all three appear");
+        helper.assertTrue(RijdierQuests.teaser(p, schaap.gever()) == null, "no teaser any more");
         Quest t = RijdierQuests.trackerQuest(p);
         helper.assertTrue(t != null, "one is in the tracker");
         helper.assertTrue(NpcVolg.bouw(p).regels().stream().anyMatch(r -> r.quest().equals(t.id()) && r.doel().isPresent()),
