@@ -217,7 +217,7 @@ public class RijdierScherm extends EcoScherm {
             if (nodig > 0) {
                 g.fill(ix, iy, ix + (int) (iw * Math.min(1.0, xp / (double) nodig)), iy + 5, 0xFFFF5FAF);
                 iy += 7;
-                g.text(font, Component.translatable("vadsrijk.economie.stal.xp", xp, nodig), ix, iy, ZACHT, false);
+                g.text(font, xp + " / " + nodig + " xp", ix, iy, ZACHT, false);
             } else {
                 g.fill(ix, iy, ix + iw, iy + 5, 0xFFFFC040);
                 iy += 7;

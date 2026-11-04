@@ -80,3 +80,17 @@ See the end of this file.
   (the stalmeester) under the Pluimguh's swatches. For the zone-3 npc slice: put the same line in the quest-giver's dialogue when
   `Rijdieren.kiesStarter` is called (e.g. stalmeester: "Nee, het is geen choco-dinges uit een of ander Fantasy-spel. Dit is een
   Pluimguh. Kijk maar naar de oortjes, njeg!").
+
+## Test results (2026-11-04)
+- `runGameTestServer -Pgt=VadsrijkRijdieren,VadsrijkEconomie`: all 8 passed (ownership/selection/stal purchase, starter choice
+  once + hook, dismount on hit/faint/arena, keep riding in town; economie rijdierXp updated: no rijfluitje from geefEerste).
+- AutoCheck `tools/autocheck/vadsrijk_g_mounts.txt` (once, screenshots in run/screenshots/autocheck/m_*.png): the mount screen with
+  silhouettes, the stal, the starter choice (3 turning Pluimguhs) and riding every mount render; HUD icon shows "rijdt". modelcheck:
+  only the known foreign problems (badgedoos, onweerswolkje, droombed). Fixed after the run (compiled, not re-run): the starter
+  texts were wider than the panel (now wrapped), the xp line overflowed the info column (now "x / y xp"), the screen-click
+  coordinate in the script. The arena shot ended up just outside the Koning Klodder arena (the gametest covers the rule).
+- Not judged by me (user judges looks in the dev client): mount sizes/seat heights (Slakkie's rider sits a bit high), animations.
+
+## Resume point
+All done and committed on 110-g-mounts. Open: the two return quests + the "owns a mount" gate (npc slice), the zone-3 starter quest
+calling `Rijdieren.kiesStarter`, the Klodderros/Pluimguh eggs in boss loot tables (bazen), prices/speeds tuning.

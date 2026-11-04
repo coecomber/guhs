@@ -23,7 +23,7 @@ gui keep
 /guhs vadsrijk mount scherm
 wait 30
 shot m_scherm_silhouetten gui
-click 60 40
+click 160 92
 wait 10
 shot m_scherm_pluimguh_silhouet gui
 gui close

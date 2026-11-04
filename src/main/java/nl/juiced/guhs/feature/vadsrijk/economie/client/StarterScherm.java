@@ -30,7 +30,7 @@ public class StarterScherm extends EcoScherm {
     private final List<RijdierEntity> voorbeelden = new ArrayList<>();
 
     public StarterScherm(CompoundTag data, List<ItemStack> items) {
-        super(EcoPayloads.STARTER, Component.translatable("vadsrijk.economie.starter.titel"), data, items, 360, 232);
+        super(EcoPayloads.STARTER, Component.translatable("vadsrijk.economie.starter.titel"), data, items, 360, 250);
         ListTag l = data.getListOrEmpty("starters");
         for (int i = 0; i < l.size(); i++) {
             starters.add(PluimKleur.van(l.getStringOr(i, "roze")));
@@ -50,12 +50,19 @@ public class StarterScherm extends EcoScherm {
                 voorbeelden.add(e);
             }
         }
-        g.centeredText(font, Component.translatable("vadsrijk.economie.starter.vraag"), left + w / 2, top + 23, TEKST);
-        g.centeredText(font, Component.translatable("vadsrijk.economie.starter.grapje").withStyle(net.minecraft.ChatFormatting.ITALIC), left + w / 2, top + 35, ZACHT);
+        int ky = top + 22;
+        for (var line : font.split(Component.translatable("vadsrijk.economie.starter.vraag"), w - 16)) {
+            g.centeredText(font, line, left + w / 2, ky, TEKST);
+            ky += 10;
+        }
+        for (var line : font.split(Component.translatable("vadsrijk.economie.starter.grapje").withStyle(net.minecraft.ChatFormatting.ITALIC), w - 16)) {
+            g.centeredText(font, line, left + w / 2, ky, ZACHT);
+            ky += 10;
+        }
         int n = Math.max(1, starters.size()), kw = (w - 16 - (n - 1) * 8) / n;
         for (int i = 0; i < starters.size(); i++) {
             PluimKleur k = starters.get(i);
-            int x = left + 8 + i * (kw + 8), y = top + 48;
+            int x = left + 8 + i * (kw + 8), y = top + 66;
             boolean hover = binnen(mx, my, x, y, kw, 168);
             g.fill(x, y, x + kw, y + 168, hover ? 0xFFFF5FAF : 0xFFF0B8D8);
             g.fill(x + 1, y + 1, x + kw - 1, y + 167, 0xFFFFF8FC);
