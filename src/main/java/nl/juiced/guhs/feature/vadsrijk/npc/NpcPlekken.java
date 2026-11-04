@@ -45,7 +45,7 @@ public final class NpcPlekken {
     public static final BlockPos TEMPELTJE = w("tempeltje");
     /** The pond with the slimes: the Grauwe Klodderreus lands here (the BAM; POI arena centre/radius/door). */
     public static final BlockPos KAMPVIJVER = w("arena_klodderreus.centrum");
-    public static final int KAMPVIJVER_STRAAL = 18;
+    public static final int KAMPVIJVER_STRAAL = 26;   // (h-melee: was 18; a wide flat dry ring around the pond for melee, = POI straal)
     public static final BlockPos KAMPVIJVER_DEUR = w("arena_klodderreus.deur");
     public static final BlockPos VUURTOREN = w("kampvuur_vuurtoren");
 

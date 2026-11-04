@@ -383,6 +383,15 @@ public abstract class VadsrijkMob extends Monster {
         return !geplofd() && super.isPickable();
     }
 
+    /**
+     * (h-melee) A slightly bigger crosshair target for small mobs (a Proefkloddertje is only 0.52 wide): the vanilla pick
+     * inflates the box by this. The server's reach check uses the real box (with vanilla's own tolerance).
+     */
+    @Override
+    public float getPickRadius() {
+        return getBbWidth() < 1.2f ? 0.3f : 0.1f;
+    }
+
     @Override
     public boolean canBeHitByProjectile() {
         return !geplofd() && super.canBeHitByProjectile();

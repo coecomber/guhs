@@ -1268,7 +1268,8 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
 
 def kamp_arena(P, kamp_poi):
     vx, vy, vz = kamp_poi["vijver"]
-    P["arena_klodderreus"] = dict(centrum=[vx, vy, vz], straal=20, deur=[vx - 22, vy, vz - 8], bord=[vx - 23, vy + 1, vz - 10])
+    # h-melee: radius 26 (was 20 here / 18 in NpcPlekken) with a wide flat dry ring around the pond (kamp.vijver); door outside it
+    P["arena_klodderreus"] = dict(centrum=[vx, vy, vz], straal=26, deur=[vx - 30, vy, vz - 8], bord=[vx - 31, vy + 1, vz - 10])
 
 
 # ================================================================================================ caves (Druipgrotten)

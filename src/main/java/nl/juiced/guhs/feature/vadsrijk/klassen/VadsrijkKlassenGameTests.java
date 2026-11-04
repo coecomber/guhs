@@ -332,7 +332,7 @@ public class VadsrijkKlassenGameTests {
         p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van("pluishamer"), 1, Zeldzaamheid.GEWOON, p.getRandom())));
         helper.assertTrue(Spelers.wapen(p) != null, "the ridder holds his hammer");
         ProefKlodder m = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 1, 2);
-        m.stelIn(1, Element.GEEN, false, Set.of());
+        m.stelIn(10, Element.GEEN, false, Set.of());   // (h-melee: enough Vads for three hammer hits)
         double vol = m.vads();
         volleKracht(p);
         helper.assertTrue(Schade.basisaanval(p, m), "first hammer hit");
@@ -340,9 +340,12 @@ public class VadsrijkKlassenGameTests {
         helper.assertTrue(na1 < vol, "the hit did damage");
         volleKracht(p);
         helper.assertTrue(!Schade.basisaanval(p, m) && m.vads() == na1, "a second click within 3.5 s must do nothing");
+        helper.assertTrue(!Schade.WACHTEND.containsKey(p.getUUID()), "a click 3.5 s early isn't remembered either");
+        // h-melee: the server rhythm alone decides (the vanilla ticker is reset by every click, also misses, so it swallowed hits)
         Schade.VOLGENDE_KLAP.remove(p.getUUID());
         p.resetAttackStrengthTicker();
-        helper.assertTrue(!Schade.basisaanval(p, m) && m.vads() == na1, "without the vanilla cooldown charged: nothing");
+        helper.assertTrue(Schade.basisaanval(p, m) && m.vads() < na1, "ready by the server's rhythm: a hit, whatever the vanilla ticker says");
+        Schade.VOLGENDE_KLAP.remove(p.getUUID());
         helper.succeed();
     }
 

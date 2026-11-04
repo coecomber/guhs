@@ -218,27 +218,81 @@ public final class Schade {
         return n;
     }
 
-    /** Game time from which the next melee basic attack may land (server-side guard next to the vanilla attack cooldown). */
+    /** Game time from which the next melee basic attack may land (server-side; the interval of kern.Aanvalstempo). */
     public static final java.util.Map<java.util.UUID, Long> VOLGENDE_KLAP = new java.util.concurrent.ConcurrentHashMap<>();
+    /**
+     * (h-melee) A melee click at most this many ticks before the weapon is ready is not lost: it is remembered and the hit
+     * lands the moment the weapon is ready ({@link #wachtendeKlap}), like the ranged/magic buffer of klassen.Basisaanval.
+     */
+    public static final int BUFFER = 6;
+    /** (h-melee) Client/server tick jitter: a click this many ticks "early" still counts as ready. */
+    public static final int SPELING = 1;
 
-    /** A left click with the weapon in hand on a Vadsrijk mob (called from {@link VadsrijkMob#hurtServer}). */
+    /** A remembered early melee click: the target and the tick it may land. */
+    public record Wachtend(int doelId, long op) {
+    }
+
+    public static final java.util.Map<java.util.UUID, Wachtend> WACHTEND = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
+     * A left click with the weapon in hand on a Vadsrijk mob (called from {@link VadsrijkMob#hurtServer}).
+     * <p>h-melee (round 3): the server keeps its own rhythm ({@link #VOLGENDE_KLAP}, the weapon's interval) and no longer
+     * also demands the vanilla attack-cooldown charge (&ge; 92 %): the vanilla ticker on the server is reset by EVERY click
+     * (also misses and early clicks) and runs a tick or two apart from the client's crosshair, so a click on "ready" was
+     * sometimes swallowed whole. Now: ready (with {@link #SPELING}) = a hit; up to {@link #BUFFER} ticks early = the hit
+     * lands when ready; earlier = nothing (spam clicking still never beats the interval).
+     */
     public static boolean basisaanval(ServerPlayer p, LivingEntity doel) {
         if (Statussen.heeft(p, Status.VERDOOFD)) {
             return false;
         }
-        // Attack speed is a weapon stat (kern.Aanvalstempo): the vanilla attack cooldown is set to the weapon's interval
-        // (KernEvents.snelheid), so the crosshair indicator shows when you're ready. A click before that does nothing at all
-        // (no 25 % spam hits), so spam-clicking or holding never beats the interval.
         long nu = p.level().getGameTime();
-        if (p.getAttackStrengthScale(0.5f) < 0.92f || nu < VOLGENDE_KLAP.getOrDefault(p.getUUID(), 0L)) {
-            p.level().playSound(null, p.blockPosition(), SoundEvents.PLAYER_ATTACK_NODAMAGE, SoundSource.PLAYERS, 0.5f, 1.3f);
+        long klaar = VOLGENDE_KLAP.getOrDefault(p.getUUID(), 0L);
+        if (nu + SPELING < klaar) {
+            if (klaar - nu <= BUFFER) {
+                WACHTEND.put(p.getUUID(), new Wachtend(doel.getId(), klaar));
+            }
             return false;
         }
-        VOLGENDE_KLAP.put(p.getUUID(), nu + Aanvalstempo.ticks(Aanvalstempo.seconden(p, Spelers.stats(p).get(Stat.AANVALSSNELHEID))) - 1);
+        WACHTEND.remove(p.getUUID());
+        return klap(p, doel, nu);
+    }
+
+    /** The melee hit itself: sets the next ready tick, the damage pipeline, the ult charge. */
+    private static boolean klap(ServerPlayer p, LivingEntity doel, long nu) {
+        VOLGENDE_KLAP.put(p.getUUID(), nu + intervalTicks(p));
         double basis = Spelers.klapSchade(p);
         Uitkomst u = doe(new Klap(p, doel, basis, Spelers.wapenElement(p), Schade.Soort.MELEE, true, "basis"));
         Spelers.laadUlt(p, u.schade());
         return u.schade() > 0;
+    }
+
+    /** This player's melee interval now, in ticks (weapon + Aanvalssnelheid). */
+    public static int intervalTicks(ServerPlayer p) {
+        return Aanvalstempo.ticks(Aanvalstempo.seconden(p, Spelers.stats(p).get(Stat.AANVALSSNELHEID)));
+    }
+
+    /** Every tick per player in the dimension (KernEvents): lands a remembered early click once the weapon is ready. */
+    public static void wachtendeKlap(ServerPlayer p) {
+        Wachtend w = WACHTEND.get(p.getUUID());
+        if (w == null) {
+            return;
+        }
+        long nu = p.level().getGameTime();
+        if (nu + SPELING < w.op()) {
+            return;
+        }
+        WACHTEND.remove(p.getUUID());
+        if (!(p.level() instanceof ServerLevel sl) || !p.isAlive() || p.isSpectator() || Statussen.heeft(p, Status.VERDOOFD)
+                || !(sl.getEntity(w.doelId()) instanceof LivingEntity doel) || doel.isRemoved() || !doel.isAlive()
+                || (doel instanceof VadsrijkMob m && m.geplofd()) || !p.isWithinEntityInteractionRange(doel, 1.0)
+                || !Spelers.voorAanval(p)) {
+            return;
+        }
+        p.swing(net.minecraft.world.InteractionHand.MAIN_HAND, true);
+        if (klap(p, doel, nu)) {
+            sl.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.PLAYER_ATTACK_STRONG, SoundSource.PLAYERS, 1.0f, 1.0f);
+        }
     }
 
     static Component getal(double n, boolean krit) {

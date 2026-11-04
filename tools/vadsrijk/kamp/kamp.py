@@ -18,6 +18,8 @@ KAMP = (150, 160)           # kampvuur
 VLOER = 34                  # bovenkant gras rond het kamp
 TEMPEL = (98, 200)
 VIJVER = (204, 204)
+VIJVER_R = (15, 10)         # half axes of the pond (x, z)
+ARENA_STRAAL = 26           # h-melee: the Klodderreus arena (npc:kampvijver); keep = NpcPlekken.KAMPVIJVER_STRAAL + POI straal
 TRAINING = (212, 116)
 ORDETENT = (150, 126)
 LICHT = (66, 72)            # vuurtoren
@@ -460,12 +462,17 @@ def tempeltje(I, facing="east"):
 
 
 def vijver(I):
-    """Vijver met waterlelies, riet, een vissteigertje en lieve slijmpjes (klodders) aan de oever."""
+    """Vijver met waterlelies, riet, een vissteigertje en lieve slijmpjes (klodders) aan de oever.
+
+    h-melee (round 3): it is also the Grauwe Klodderreus arena (radius ARENA_STRAAL). Around the water a wide ring of FLAT, DRY,
+    open grass (no flowers, no reeds, no slime blocks) so melee fighters have room; the reeds are a thin fringe on the north
+    side only, and the decorative klodders + the moederklodder stand outside the arena."""
     S = I.S
     vx, vz = VIJVER
-    rx, rz = 15, 10
-    I.vlak(vx - rx - 2, vz - rz - 2, vx + rx + 2, vz + rz + 2, VLOER, 6)
-    I.claim(vx - rx - 1, vz - rz - 1, vx + rx + 1, vz + rz + 1, 1)
+    rx, rz = VIJVER_R
+    A = ARENA_STRAAL
+    I.vlak(vx - A - 2, vz - A - 2, vx + A + 2, vz + A + 2, VLOER, 6)
+    I.claim(vx - A - 1, vz - A - 1, vx + A + 1, vz + A + 1, 1)
     y = VLOER
     for x in range(vx - rx - 2, vx + rx + 3):
         for z in range(vz - rz - 2, vz + rz + 3):
@@ -480,10 +487,10 @@ def vijver(I):
                 elif rng.random() < 0.025:
                     S.set(x, y + 1, z, "guhs:guh_waterlelie")
             elif e <= 1.35:
-                if rng.random() < 0.25:
-                    S.set(x, y + 1, z, "guhs:bloesemmeertje_riet[half=lower]")
+                if e <= 1.12 and z < vz - rz * 0.4 and rng.random() < 0.3:
+                    S.set(x, y + 1, z, "guhs:bloesemmeertje_riet[half=lower]")   # (a thin fringe, north side only)
                     S.set(x, y + 2, z, "guhs:bloesemmeertje_riet[half=upper]")
-                elif rng.random() < 0.15:
+                elif rng.random() < 0.3:
                     S.set(x, y, z, "minecraft:sand")
     # vissteigertje
     for x in range(vx - rx + 2, vx - rx + 8):
@@ -491,19 +498,26 @@ def vijver(I):
         S.set(x, y + 1, vz, slab("minecraft:spruce_slab"))
     S.set(vx - rx + 8, y, vz - 1, "minecraft:spruce_fence")
     S.guh(vx - rx + 6.5, y + 1.5, vz + 0.5, 90, sitting=True)
-    # klodders: roze, groen, geel; een moederklodder van 2x2x2
+    # klodders: roze, groen, geel, in a loose ring just OUTSIDE the arena; a moederklodder of 2x2x2 at the east edge
     soorten = ["guhs:roze_slijmblok", "minecraft:slime_block", "minecraft:honey_block"]
     for i in range(16):
         a = rng.uniform(0, 2 * math.pi)
-        rr = rng.uniform(1.25, 1.7)
-        x, z = int(vx + rx * rr * math.cos(a)), int(vz + rz * rr * math.sin(a))
-        if 0 <= x < I.X and 0 <= z < I.Z and S.is_air(x, y + 1, z) and S.get(x, I.h(x, z), z) not in (PAD, KLINKER, "minecraft:gravel"):
+        rr = rng.uniform(A + 2, A + 5)
+        x, z = int(vx + rr * math.cos(a)), int(vz + rr * math.sin(a))
+        if 0 <= x < I.X and 0 <= z < I.Z and I.H[x, z] >= VLOER - 2 and S.is_air(x, I.h(x, z) + 1, z)                 and S.get(x, I.h(x, z), z) not in (PAD, KLINKER, "minecraft:gravel"):
             S.set(x, I.h(x, z) + 1, z, soorten[i % 3])   # (fix round 2: never on a path)
-    mx, mz = vx + rx + 3, vz - 4
-    for dx in (0, 1):
-        for dy in (1, 2):
-            for dz in (0, 1):
-                S.set(mx + dx, y + dy, mz + dz, "guhs:roze_slijmblok")
+    mx, mz = vx + A + 3, vz - 4
+    if I.H[mx, mz] >= 0 and I.H[mx + 1, mz + 1] >= 0:
+        my = I.h(mx, mz)
+        for dx in (0, 1):
+            for dy in (1, 2):
+                for dz in (0, 1):
+                    S.set(mx + dx, my + dy, mz + dz, "guhs:roze_slijmblok")
+
+
+def arena_vrij(x, z):
+    """h-melee: inside the pond arena (+1): no flowers or tall grass (they catch the crosshair and hide the Klodders)."""
+    return math.hypot(x - VIJVER[0], z - VIJVER[1]) <= ARENA_STRAAL + 1
 
 
 def vuurtoren(S, x, y, z, ear_u=(1, 0)):
@@ -767,7 +781,7 @@ def bomen_en_bloemen(I, n_bomen=170):
             h = I.H[x, z]
             if h < 0 or I.kust[x, z] < 2:
                 continue
-            if S.get(x, h, z) == GRAS and S.is_air(x, h + 1, z) and rng.random() < 0.13:
+            if S.get(x, h, z) == GRAS and S.is_air(x, h + 1, z) and rng.random() < 0.13 and not arena_vrij(x, z):
                 S.set(x, h + 1, z, rng.choice(bloemen))
 
 
@@ -779,7 +793,7 @@ def bouw(S):
     for (x, z) in (TEMPEL, VIJVER, TRAINING):
         pass
     vx, vz = VIJVER
-    I.vlak(vx - 18, vz - 13, vx + 18, vz + 13, VLOER, 6)
+    I.vlak(vx - ARENA_STRAAL - 2, vz - ARENA_STRAAL - 2, vx + ARENA_STRAAL + 2, vz + ARENA_STRAAL + 2, VLOER, 6)   # (h-melee: the arena)
     tx, tz = TRAINING
     I.vlak(tx - 17, tz - 11, tx + 17, tz + 11, VLOER, 5)
     I.vlak(LICHT[0] - 8, LICHT[1] - 8, LICHT[0] + 8, LICHT[1] + 8, I.h(*LICHT), 4)

@@ -58,6 +58,7 @@ final class KernEvents {
             Partijen.verlaat(id);
             AANVALSSNELHEID.remove(id);
             Schade.VOLGENDE_KLAP.remove(id);
+            Schade.WACHTEND.remove(id);
             Knuffelsprong.vergeet(id);
         });
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> Partijen.wisAlles());
@@ -198,6 +199,7 @@ final class KernEvents {
             p.getFoodData().setSaturation(0);   // (no hunger here: also keeps AppleSkin's saturation rings off the HUD)
             p.setAirSupply(p.getMaxAirSupply());
             aanvalTempo(p);
+            Schade.wachtendeKlap(p);   // (h-melee) an early melee click lands when the weapon is ready
             Knuffelsprong.tick(p);
             if (t % 20 == 0) {
                 SpelerData d = Spelers.data(p);

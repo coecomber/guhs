@@ -64,7 +64,18 @@ public final class Rollen {
         if (u.verpluisd()) {
             return 1;
         }
-        return t.schadeOp(u.level()) * u.zeldzaamheid().factor * STER_SCHADE.apply(u);
+        return t.schadeOp(u.level()) * u.zeldzaamheid().factor * STER_SCHADE.apply(u) * (isStartzwaard(u) ? STARTZWAARD_FACTOR : 1);
+    }
+
+    /**
+     * h-melee (playtest round 3: "melee is much harder than ranged/magic"): the Knuffelridder's starter sword from
+     * Knuffelkamp (klassen KlasseBalie.startwapen: a BOUND, Gewoon, level-1 kussenzwaard) does twice its damage, so the
+     * tutorial Klodders go down in ~2-3 hits instead of ~5. Loot/shop swords (not bound) are unchanged.
+     */
+    public static final double STARTZWAARD_FACTOR = 2.0;
+
+    public static boolean isStartzwaard(Uitrusting u) {
+        return u.gebonden() && u.level() == 1 && u.zeldzaamheid() == Zeldzaamheid.GEWOON && "kussenzwaard".equals(u.type());
     }
 
     /** One basic hit of this weapon (before the player's stats): rating x class factor x base interval (kern.Aanvalstempo). */
