@@ -52,5 +52,16 @@ NOTHING: all 10 branches merged (biomen, ui, kaart, klassen, balans, ux, mounts,
 - Lang check tool: scratchpad gint/langcheck.py <branches> = every branch-changed nl key has the branch value in HEAD (all OK so far).
 - AutoCheck `gui inventaris` was added by g-ui AND g-klassen (duplicate case): kept klassen's (optional hotbar slot).
 
+## AutoCheck
+- Walks written: `tools/autocheck/vadsrijk_gint1.txt` (zone 1 + systems: arrival path, HUD levels, trainer, bell/captain/travel
+  map, Bram, ordetempel, hoed_noordo stair, mount screen + riding + pet, F3 biome, Werver) and `vadsrijk_gint2.txt` (zone 2:
+  opening, skyline, plaza, market, interior, gates, lake ice + shore, Galmwolf arena, dragon col, ravine, Spiegelburcht, F3,
+  Kandijkom captain).
+- Walk 1 was started (world joined after 40 s) and then **stopped by Claude Code because the machine ran low on memory** (many
+  agents). Not restarted (instruction: only when asked). The orphaned client was stopped, run/saves emptied. NO walk has run yet.
+  Run: `gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_gint1.txt` (then gint2) via gradle_slot.sh.
+- The client did write run/config/guhs-vadsrijk-balans.toml with [algemeen], [mobs] schade = 1.3 and the class sections (one file OK).
+
 ## Resume point
-Merging (see table).
+Integration DONE except the AutoCheck walks (memory). run/ is ready for a NEW world (saves empty; configs incl. the balance
+toml). Open points: see the report (Werver walk command `interact npc` untested; pets/mounts looks; lake shore regen ok).
