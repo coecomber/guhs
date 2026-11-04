@@ -41,12 +41,20 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  */
 public class RijdierEntity extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<Integer> DATA_LEVEL = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> DATA_KLEUR = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.INT);
+
+    /** Client only: a preview in the mount screen drawn as a dark silhouette (a mount you don't have yet). */
+    public boolean silhouet;
+    /** Client only: a preview in a screen (never in the world): always the idle animation, no pop-in. */
+    public boolean voorbeeld;
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     @Nullable
     private UUID eigenaar;
     private boolean geladen;
     private int zonderRuiter, springWacht;
+    /** The Wolkenschaapje's double jump: used in this jump / jump key released since the last jump. */
+    private boolean dubbelGebruikt, springLos;
     private double afstand;
 
     public RijdierEntity(EntityType<? extends PathfinderMob> type, Level level) {
@@ -66,6 +74,7 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
     protected void defineSynchedData(SynchedEntityData.Builder b) {
         super.defineSynchedData(b);
         b.define(DATA_LEVEL, 1);
+        b.define(DATA_KLEUR, 0);
     }
 
     public int rijLevel() {
@@ -74,6 +83,15 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     void zetLevel(int level) {
         entityData.set(DATA_LEVEL, Math.max(1, level));
+    }
+
+    public RijdierSoort.PluimKleur kleur() {
+        RijdierSoort.PluimKleur[] k = RijdierSoort.PluimKleur.values();
+        return k[Math.floorMod(entityData.get(DATA_KLEUR), k.length)];
+    }
+
+    public void zetKleur(RijdierSoort.PluimKleur k) {
+        entityData.set(DATA_KLEUR, k.ordinal());
     }
 
     void zetEigenaar(UUID id, int level) {
@@ -119,14 +137,41 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
             if (springWacht > 0) {
                 springWacht--;
             }
-            if (onGround() && rider.isJumping() && springWacht <= 0) {
+            boolean springt = rider.isJumping();
+            if (onGround()) {
+                dubbelGebruikt = false;
+            }
+            if (onGround() && springt && springWacht <= 0) {
                 Vec3 dm = getDeltaMovement();
                 Vec3 kijk = Vec3.directionFromRotation(0, getYRot()).scale(input.z > 0 ? 0.25 : 0);
                 setDeltaMovement(dm.x + kijk.x, soort().sprong(rijLevel()), dm.z + kijk.z);
                 springWacht = 8;
+                springLos = false;
+            } else if (!onGround() && springt && springLos && !dubbelGebruikt && soort().zweeft()) {
+                // the Wolkenschaapje: a second little hop in the air (a puff of cloud)
+                Vec3 dm = getDeltaMovement();
+                setDeltaMovement(dm.x, soort().sprong(rijLevel()) * 0.85, dm.z);
+                dubbelGebruikt = true;
+                springLos = false;
+                for (int i = 0; i < 8; i++) {
+                    level().addParticle(net.minecraft.core.particles.ParticleTypes.CLOUD, getX() + (random.nextDouble() - 0.5), getY(),
+                            getZ() + (random.nextDouble() - 0.5), 0, -0.05, 0);
+                }
+            }
+            if (!springt) {
+                springLos = true;
+            }
+            if (soort().zweeft() && !onGround() && getDeltaMovement().y < -0.08) {
+                Vec3 dm = getDeltaMovement();   // it hovers: falls gently
+                setDeltaMovement(dm.x, -0.08, dm.z);
             }
         }
         super.travel(input);
+    }
+
+    @Override
+    protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dimensions, float partialTick) {
+        return new Vec3(0, soort().zit, soort() == RijdierSoort.SLAKKIE ? -0.28 : 0).yRot(-getYRot() * Mth.DEG_TO_RAD);
     }
 
     @Override
@@ -159,6 +204,10 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
         }
         if (getFirstPassenger() instanceof ServerPlayer p) {
             zonderRuiter = 0;
+            if (tickCount % 5 == 0 && "arena".equals(Rijdieren.afReden(true, getX(), getY(), getZ()))) {
+                Rijdieren.arena(p, this);   // no mounts in a boss arena
+                return;
+            }
             double dx = getX() - xo, dz = getZ() - zo;
             afstand += Math.min(2, Math.sqrt(dx * dx + dz * dz));
             if (tickCount % 20 == 0 && afstand >= 1) {
@@ -228,11 +277,24 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
     private static final RawAnimation STIL = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation HUP = RawAnimation.begin().thenLoop("hop");
     private static final RawAnimation LUCHT = RawAnimation.begin().thenLoop("sprong");
+    private static final RawAnimation REN = RawAnimation.begin().thenLoop("ren");
+
+    /** Horizontal speed (blocks per tick) from the last tick's movement: walk vs run. */
+    private double tempo() {
+        double dx = getX() - xo, dz = getZ() - zo;
+        return Math.sqrt(dx * dx + dz * dz);
+    }
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<RijdierEntity>("beweeg", 4,
-                state -> state.setAndContinue(!onGround() ? LUCHT : state.isMoving() ? HUP : STIL)));
+        controllers.add(new AnimationController<RijdierEntity>("beweeg", 4, state -> {
+            if (voorbeeld) {
+                return state.setAndContinue(STIL);
+            }
+            boolean lucht = !onGround() && !isInWater() && Math.abs(getY() - yo) > 0.02;
+            double v = tempo();
+            return state.setAndContinue(lucht ? LUCHT : v > 0.2 ? REN : v > 0.015 || state.isMoving() ? HUP : STIL);
+        }));
     }
 
     @Override

@@ -1,0 +1,140 @@
+# Vadsrijk fix round 2, G-MOUNTS: the mount screen (silhouettes), the starter choice, the stal, and riding each mount
+# (walk / run / jump, HUD icon), plus the arena refusal.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_g_mounts.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk munten 500000
+/guhs vadsrijk mount reset
+/guhs vadsrijk mount geef hoedhupper
+/tp @s -14 64 66
+look 180 5
+wait 40
+waitrender 200
+
+section scherm
+gui keep
+/guhs vadsrijk mount scherm
+wait 30
+shot m_scherm_silhouetten gui
+click 60 40
+wait 10
+shot m_scherm_pluimguh_silhouet gui
+gui close
+wait 10
+
+section starter
+gui keep
+/guhs vadsrijk mount starter
+wait 30
+shot m_starter_keuze gui
+gui close
+/guhs vadsrijk mount geef pluimguh mint
+/guhs vadsrijk mount geef wolkenschaapje
+gui keep
+/guhs vadsrijk mount stal
+wait 30
+shot m_stal gui
+gui close
+/guhs vadsrijk mount alle
+gui keep
+/guhs vadsrijk mount scherm
+wait 30
+shot m_scherm_alles gui
+gui close
+wait 10
+
+section rijden
+perspective back
+/guhs vadsrijk mount rijd pluimguh roze
+wait 20
+shot m_rijd_pluimguh_stil gui
+key up on
+wait 25
+shot m_rijd_pluimguh_loop gui
+key sprint on
+wait 25
+shot m_rijd_pluimguh_ren gui
+key jump on
+wait 6
+shot m_rijd_pluimguh_sprong gui
+key all off
+wait 20
+perspective front
+shot m_pluimguh_voor gui
+perspective back
+/tp @s -14 64 66
+/guhs vadsrijk mount rijd pluimguh sterrennacht
+wait 20
+shot m_rijd_pluimguh_sterrennacht gui
+/guhs vadsrijk mount rijd hoedhupper
+wait 15
+key up on
+key sprint on
+wait 20
+shot m_rijd_hoedhupper gui
+key all off
+/tp @s -14 64 66
+/guhs vadsrijk mount rijd klodderros
+wait 15
+key up on
+wait 20
+shot m_rijd_klodderros gui
+key all off
+/tp @s -14 64 66
+/guhs vadsrijk mount rijd wolkenschaapje
+wait 15
+key up on
+key jump on
+wait 8
+shot m_rijd_wolkenschaapje_sprong gui
+key jump off
+wait 4
+key jump on
+wait 6
+shot m_rijd_wolkenschaapje_dubbel gui
+key all off
+wait 20
+/tp @s -14 64 66
+/guhs vadsrijk mount rijd guhwolf
+wait 15
+key up on
+key sprint on
+wait 20
+shot m_rijd_guhwolf gui
+key all off
+/tp @s -14 64 66
+/guhs vadsrijk mount rijd knuffelhert
+wait 15
+key up on
+wait 20
+shot m_rijd_knuffelhert gui
+key all off
+/tp @s -14 64 66
+/guhs vadsrijk mount rijd slakkie
+wait 15
+key up on
+wait 30
+shot m_rijd_slakkie gui
+key all off
+perspective front
+wait 5
+shot m_slakkie_voor gui
+perspective back
+
+section arena
+/guhs vadsrijk bazen tp koning
+wait 80
+waitrender 200
+/guhs vadsrijk mount rijd pluimguh
+wait 20
+shot m_arena gui
+perspective first
+modelcheck
+quit

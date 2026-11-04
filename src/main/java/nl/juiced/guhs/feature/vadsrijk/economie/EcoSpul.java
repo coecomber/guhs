@@ -62,8 +62,32 @@ public final class EcoSpul {
     public static final DeferredItem<EcoItems.Zadel> ZADEL_HOEDHUPPER = ITEMS.registerItem("vr_item_zadel_hoedhupper",
             p -> new EcoItems.Zadel(p, RijdierSoort.HOEDHUPPER), () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
 
+    /** G-MOUNTS: saddles of the stal mounts (also usable as quest/loot rewards), and a Pluimguh egg per colour (hatches = unlocks it). */
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_WOLKENSCHAAPJE = ITEMS.registerItem("vr_item_zadel_wolkenschaapje",
+            p -> new EcoItems.Zadel(p, RijdierSoort.WOLKENSCHAAPJE), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_SLAKKIE = ITEMS.registerItem("vr_item_zadel_slakkie",
+            p -> new EcoItems.Zadel(p, RijdierSoort.SLAKKIE), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_KNUFFELHERT = ITEMS.registerItem("vr_item_zadel_knuffelhert",
+            p -> new EcoItems.Zadel(p, RijdierSoort.KNUFFELHERT), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_GUHWOLF = ITEMS.registerItem("vr_item_zadel_guhwolf",
+            p -> new EcoItems.Zadel(p, RijdierSoort.GUHWOLF), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    public static final Map<RijdierSoort.PluimKleur, DeferredItem<EcoItems.PluimEi>> PLUIMEI = new java.util.EnumMap<>(RijdierSoort.PluimKleur.class);
+
+    static {
+        for (RijdierSoort.PluimKleur k : RijdierSoort.PluimKleur.values()) {
+            PLUIMEI.put(k, ITEMS.registerItem("vr_item_pluimei_" + k.id(), p -> new EcoItems.PluimEi(p, k),
+                    () -> new Item.Properties().stacksTo(1).rarity(k == RijdierSoort.PluimKleur.GOUD || k == RijdierSoort.PluimKleur.STERRENNACHT
+                            ? Rarity.EPIC : Rarity.RARE)));
+        }
+    }
+
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> HOEDHUPPER = rijdier("vr_eco_hoedhupper", 1.1f, 1.3f);
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KLODDERROS = rijdier("vr_eco_klodderros", 1.3f, 1.6f);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> PLUIMGUH = rijdier("vr_eco_pluimguh", 1.4f, 2.6f);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KNUFFELHERT = rijdier("vr_eco_knuffelhert", 1.3f, 2.4f);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> GUHWOLF = rijdier("vr_eco_guhwolf", 1.3f, 2.0f);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> WOLKENSCHAAPJE = rijdier("vr_eco_wolkenschaapje", 1.2f, 1.2f);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> SLAKKIE = rijdier("vr_eco_slakkie", 1.1f, 1.5f);
 
     // (gear: economie has no base types of its own since the 1.10.0 integration; see EcoBasisTypes)
 
@@ -101,11 +125,42 @@ public final class EcoSpul {
                 .clientTrackingRange(10).updateInterval(1).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id(id))));
     }
 
+    public static DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> holder(RijdierSoort s) {
+        return switch (s) {
+            case PLUIMGUH -> PLUIMGUH;
+            case HOEDHUPPER -> HOEDHUPPER;
+            case KLODDERROS -> KLODDERROS;
+            case KNUFFELHERT -> KNUFFELHERT;
+            case GUHWOLF -> GUHWOLF;
+            case WOLKENSCHAAPJE -> WOLKENSCHAAPJE;
+            case SLAKKIE -> SLAKKIE;
+        };
+    }
+
     public static EntityType<RijdierEntity> type(RijdierSoort s) {
-        return s == RijdierSoort.KLODDERROS ? KLODDERROS.get() : HOEDHUPPER.get();
+        return holder(s).get();
     }
 
     public static RijdierSoort soort(EntityType<?> t) {
-        return t == KLODDERROS.get() ? RijdierSoort.KLODDERROS : RijdierSoort.HOEDHUPPER;
+        for (RijdierSoort s : RijdierSoort.values()) {
+            if (holder(s).get() == t) {
+                return s;
+            }
+        }
+        return RijdierSoort.HOEDHUPPER;
+    }
+
+    /** The icon of a mount (screen, HUD): its saddle, or for the Pluimguh the egg of that colour. */
+    public static net.minecraft.world.item.ItemStack icoon(RijdierSoort s, RijdierSoort.PluimKleur k) {
+        Item i = switch (s) {
+            case PLUIMGUH -> PLUIMEI.get(k).get();
+            case HOEDHUPPER -> ZADEL_HOEDHUPPER.get();
+            case KLODDERROS -> ZADEL_KLODDERROS.get();
+            case KNUFFELHERT -> ZADEL_KNUFFELHERT.get();
+            case GUHWOLF -> ZADEL_GUHWOLF.get();
+            case WOLKENSCHAAPJE -> ZADEL_WOLKENSCHAAPJE.get();
+            case SLAKKIE -> ZADEL_SLAKKIE.get();
+        };
+        return new net.minecraft.world.item.ItemStack(i);
     }
 }

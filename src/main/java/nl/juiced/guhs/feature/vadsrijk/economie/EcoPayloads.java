@@ -24,7 +24,8 @@ import nl.juiced.guhs.Guhs;
  * Screens: {@link #WINKEL}, {@link #SMID}, {@link #MARKT}, {@link #HANDEL}, {@link #STAL}.
  */
 public final class EcoPayloads {
-    public static final String WINKEL = "winkel", SMID = "smid", MARKT = "markt", HANDEL = "handel", STAL = "stal", DICHT = "dicht";
+    public static final String WINKEL = "winkel", SMID = "smid", MARKT = "markt", HANDEL = "handel", STAL = "stal", DICHT = "dicht",
+            STARTER = "starter";
 
     /** Server -> client: open (or refresh) a screen. {@code scherm} = {@link #DICHT} closes it. */
     public record Scherm(String scherm, CompoundTag data, List<ItemStack> items) implements CustomPacketPayload {
@@ -63,6 +64,34 @@ public final class EcoPayloads {
         }
     }
 
+    /** G-MOUNTS. Server -> client: the mount HUD icon (active soort + colour, state, cooldown ticks left / max). */
+    public record RijdierHud(String soort, String kleur, int staat, int cd, int cdMax) implements CustomPacketPayload {
+        public static final Type<RijdierHud> TYPE = new Type<>(Guhs.id("vr_rijdier_hud"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, RijdierHud> STREAM_CODEC = StreamCodec.composite(
+                ByteBufCodecs.STRING_UTF8, RijdierHud::soort, ByteBufCodecs.STRING_UTF8, RijdierHud::kleur, ByteBufCodecs.VAR_INT, RijdierHud::staat,
+                ByteBufCodecs.VAR_INT, RijdierHud::cd, ByteBufCodecs.VAR_INT, RijdierHud::cdMax, RijdierHud::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** G-MOUNTS. Client -> server: a mount key: 0 = mount/dismount, 1 = open the mount screen. */
+    public record RijdierToets(int actie) implements CustomPacketPayload {
+        public static final Type<RijdierToets> TYPE = new Type<>(Guhs.id("vr_rijdier_toets"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, RijdierToets> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT,
+                RijdierToets::actie, RijdierToets::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    public static Consumer<RijdierHud> hudOntvanger = s -> {
+    };
+
     /** Set by EconomieClient (client only). */
     public static Consumer<Scherm> schermOntvanger = s -> {
     };
@@ -81,6 +110,16 @@ public final class EcoPayloads {
     static void register(PayloadRegistrar r) {
         r.playToClient(Scherm.TYPE, Scherm.STREAM_CODEC, (p, c) -> schermOntvanger.accept(p));
         r.playToClient(Munten.TYPE, Munten.STREAM_CODEC, (p, c) -> muntenOntvanger.accept(p));
+        r.playToClient(RijdierHud.TYPE, RijdierHud.STREAM_CODEC, (p, c) -> hudOntvanger.accept(p));
+        r.playToServer(RijdierToets.TYPE, RijdierToets.STREAM_CODEC, (p, c) -> {
+            if (c.player() instanceof ServerPlayer sp) {
+                if (p.actie() == 0) {
+                    Rijdieren.toets(sp);
+                } else {
+                    Stal.overzicht(sp);
+                }
+            }
+        });
         r.playToServer(Doe.TYPE, Doe.STREAM_CODEC, (p, c) -> {
             if (c.player() instanceof ServerPlayer sp) {
                 opDoe(sp, p);
@@ -129,10 +168,15 @@ public final class EcoPayloads {
             case SMID -> Smid.doe(p, d.actie(), d.args());
             case MARKT -> Markt.doe(p, d.actie(), d.args());
             case HANDEL -> Handel.doe(p, d.actie(), d.args());
-            case STAL -> Stal.doe(p, d.actie(), d.args());
+            case STAL -> Stal.doe(p, o.context(), d.actie(), d.args());
+            case STARTER -> Stal.doeStarter(p, d.actie(), d.args());
             default -> {
             }
         }
+    }
+
+    static void stuurHud(ServerPlayer p, RijdierHud h) {
+        PacketDistributor.sendToPlayer(p, h);
     }
 
     /** Server: send the wallet value. */
