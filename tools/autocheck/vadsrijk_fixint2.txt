@@ -1,0 +1,127 @@
+# Het Vadsrijk, integration of fix round 1 + zone 2 (110-fix-int), walk 2: zone 2 "De Splinterpieken" on the merged tree.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_fixint2.txt
+# The airship from De Haven to Kandijkom (opening), Kandijkom, the gondola, the areas with their creatures, the three bosses.
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk level 30
+
+section luchtschip
+/guhs vadsrijk wereld plek luchtschip_haven_landing
+wait 80
+waitrender 200
+/guhs vadsrijk z2wereld vlieg kandijkom
+wait 120
+shot f2_opening_storm gui
+wait 160
+shot f2_opening_naald gui
+wait 160
+waitrender 400
+look 0 -5
+shot f2_dok gui
+
+section kandijkom
+/guhs vadsrijk z2wereld plek plein
+look 180 5
+wait 80
+waitrender 300
+shot f2_plein gui
+/guhs vadsrijk z2wereld plek gebouw.kristalkapel.binnen
+look 0 10
+wait 60
+waitrender 200
+shot f2_kristalkapel gui
+/guhs vadsrijk z2wereld plek npc_juwelier
+look 0 0
+wait 60
+shot f2_juwelier gui
+
+section gondel
+/guhs vadsrijk z2wereld plek gondel_dal
+wait 60
+/guhs vadsrijk z2wereld gondel op
+wait 120
+shot f2_gondel_rit gui
+wait 200
+waitrender 300
+shot f2_gondel_top gui
+
+section gebieden
+/gamemode survival
+/guhs vadsrijk z2wereld plek kampvuur_galmhellingen_1
+look 90 0
+wait 200
+waitrender 300
+shot f2_galmhellingen gui
+/guhs vadsrijk z2wereld plek kampvuur_knuffelmeer_3
+look -90 0
+wait 200
+waitrender 300
+shot f2_knuffelmeer gui
+/guhs vadsrijk z2wereld plek kampvuur_splinterkloof_4
+look 0 0
+wait 200
+waitrender 300
+shot f2_kloofbodem gui
+/guhs vadsrijk z2wereld plek brug_3_zuid
+look 0 10
+wait 120
+waitrender 300
+shot f2_brug gui
+/gamemode creative
+
+section galmwolf
+/guhs vadsrijk baas reset z2bazen:galmwolf
+/guhs vadsrijk z2wereld plek arena_galmwolf_deur
+look -90 5
+wait 60
+waitrender 300
+/tp @s ~16 ~ ~
+wait 160
+shot f2_galmwolf gui
+wait 120
+shot f2_galmwolf_2 gui
+
+section burcht
+/guhs vadsrijk z2wereld plek deur_spiegelburcht_voor
+look 180 10
+wait 80
+waitrender 300
+shot f2_burcht_voor gui
+/guhs vadsrijk wereld deur spiegelburcht open
+wait 100
+/guhs vadsrijk z2wereld plek burcht_lichtkamer
+look 180 0
+wait 80
+waitrender 300
+shot f2_lichtkamer gui
+
+section spiegelzucht
+/guhs vadsrijk baas reset z2bazen:spiegelzucht
+/guhs vadsrijk z2wereld plek arena_spiegelzucht
+/tp @s ~ ~ ~14
+look 180 5
+wait 80
+waitrender 300
+wait 160
+shot f2_spiegelzucht gui
+/guhs vadsrijk z2bazen fase 2
+wait 100
+shot f2_spiegelzucht_fase2 gui
+
+section boormeester
+/guhs vadsrijk z2bazen boor ontgrendel
+/guhs vadsrijk z2wereld plek arena_boormeester
+/tp @s ~ ~ ~12
+look 180 5
+wait 80
+waitrender 300
+wait 160
+shot f2_boormeester gui
+wait 160

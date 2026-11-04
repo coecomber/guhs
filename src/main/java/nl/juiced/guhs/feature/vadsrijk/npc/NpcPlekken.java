@@ -147,7 +147,7 @@ public final class NpcPlekken {
         // the grey scars (POI section 8; wereld recolours them after zone1_klaar)
         POI.put("litteken_weide", p(380, 68, 320));
         POI.put("litteken_woud", p(-240, 68, 300));
-        POI.put("litteken_tempel", p(160, 68, -280));
+        POI.put("litteken_tempel", p(145, 88, -265));   // (integration: on the scar beside the rerouted mountain path; 160,-280 is in the Kloof wall now)
         // the lookouts (no teleport, ronde 11; top stands, y ~)
         POI.put("uitkijk_klodderkijk", w("uitkijk_klodderkijk"));
         POI.put("uitkijk_zwamnaald", w("uitkijk_zwamnaald"));

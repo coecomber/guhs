@@ -1,0 +1,170 @@
+# Het Vadsrijk, integration of fix round 1 (110-fix-int), walk 1: the zone-1 fixes and the "epic" features on the merged tree.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_fixint1.txt
+# Jetty stair, lamps, lift, Zwamzoet ladders, lighthouse, boss at range, quest tracker, Knuffelsprong, unstuck, dragon pass,
+# light wave, phase moment + victory + chest, caravan, Hoedenpaden, Druipschacht, Kloof ramp + needle spiral.
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section steiger
+/tp @s 0 66 1140
+look 180 -10
+wait 60
+waitrender 200
+shot f1_steiger_trap gui
+/guhs vadsrijk wereld plek aankomst_trap_top
+look 0 20
+wait 60
+waitrender 200
+shot f1_trap_top gui
+
+section lampen_kamp
+/guhs vadsrijk wereld plek kampvuur_kamp
+/time set 14000
+look 90 5
+wait 60
+waitrender 200
+shot f1_kamp_lampen_nacht gui
+/time set 1000
+
+section vuurtoren
+/guhs vadsrijk wereld plek vuurtoren_top
+look 180 10
+wait 60
+waitrender 200
+shot f1_vuurtoren_top gui
+
+section tracker
+/guhs vadsrijk npc reset
+/guhs vadsrijk tips reset
+/guhs vadsrijk npc quest af hq01_welkom
+wait 40
+/guhs vadsrijk wereld plek kampvuur_kamp
+look 0 0
+wait 60
+shot f1_questvolger gui
+
+section sprong
+/gamemode survival
+/guhs vadsrijk wereld plek training
+look 0 0
+wait 40
+/guhs vadsrijk sprong
+wait 8
+shot f1_sprong_lucht gui
+wait 40
+shot f1_sprong_hud gui
+/gamemode creative
+
+section vast
+/guhs vadsrijk vast
+wait 20
+shot f1_vast_bezig gui
+wait 60
+shot f1_vast_klaar gui
+
+section klodderreus
+/gamemode survival
+/guhs vadsrijk baas reset npc:kampvijver
+/guhs vadsrijk wereld plek arena_klodderreus.deur
+look -90 10
+wait 120
+shot f1_reus_valt_aan gui
+wait 60
+shot f1_reus_2 gui
+/gamemode creative
+/kill @e[type=guhs:vr_klodderreus]
+
+section zwamzoet
+/guhs vadsrijk wereld plek plein
+look 0 5
+wait 80
+waitrender 300
+shot f1_plein gui
+/guhs vadsrijk wereld plek lift_tempel_top
+look 180 10
+wait 60
+waitrender 200
+shot f1_lift_top gui
+/tp @s -62 66 96
+look 0 20
+wait 60
+waitrender 200
+shot f1_kade_ladders gui
+
+section sfeer
+/guhs vadsrijk wereld plek plein
+/guhs vadsrijk sfeer draak stad
+wait 100
+look 0 -30
+shot f1_draak_over_stad gui
+wait 200
+/time set 12400
+/guhs vadsrijk sfeer golf
+wait 200
+shot f1_lichtgolf gui
+/time set 1000
+
+section beleving
+/guhs vadsrijk bazen tp koning
+wait 120
+waitrender 200
+/guhs vadsrijk beleving fase
+wait 18
+shot f1_fasemoment gui
+wait 60
+/guhs vadsrijk beleving versla
+wait 60
+shot f1_overwinning gui
+wait 120
+shot f1_kist gui
+
+section karavaan
+/guhs vadsrijk momenten karavaan tp
+wait 80
+waitrender 200
+shot f1_karavaan gui
+
+section verticaal
+/guhs vadsrijk wereld plek hoedenpad_trap_wenteltrap
+look 0 -20
+wait 60
+waitrender 300
+shot f1_hoedenpad_trap gui
+/guhs vadsrijk wereld plek hoedenpad_elitenest
+look 0 10
+wait 60
+waitrender 300
+shot f1_hoedenpaden gui
+/guhs vadsrijk wereld plek druipschacht_balkon
+look 0 50
+wait 60
+waitrender 300
+shot f1_druipschacht gui
+
+section wild
+/guhs vadsrijk wereld plek fossielbrug.van
+look 0 0
+wait 60
+waitrender 300
+shot f1_fossielbrug gui
+/guhs vadsrijk wereld plek naaldtrap_zwamnaald
+look 0 0
+wait 60
+waitrender 300
+shot f1_naaldtrap gui
+
+section golf
+/guhs vadsrijk wereld plek uitkijk_zwamnaald
+/guhs vadsrijk momenten golf grijs
+wait 40
+/guhs vadsrijk momenten golf
+wait 160
+shot f1_terugkleurgolf gui
+wait 320

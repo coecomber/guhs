@@ -87,11 +87,14 @@ def zwemtrappen(S):
         for z in (222, 234):
             zwemtrap(S, px - 2, z + 1, (-1, 0))
             zwemtrap(S, px + 2, z + 1, (1, 0))
-    for x in range(38, 236, 14):
+    for x in range(36, 236, 10):
         if any(abs(x - px) <= 4 for px in (84, 160)) or abs(x - 34) <= 9:
             continue
         kust = 216 + int(3 * math.sin(x * 0.05))
         zwemtrap(S, x, kust + 1, (0, 1))
+    # the lighthouse island (vuurtoren r 7 at (34, 234)): a ladder on its east and south side
+    zwemtrap(S, 42, 234, (1, 0), steun="knuffelsteen")
+    zwemtrap(S, 34, 242, (0, 1), steun="knuffelsteen")
 
 
 def lift(S, naam, hoek, zw):
@@ -294,6 +297,8 @@ def ordetempel_binnen(S, info):
     cx, cz, T, r, _, _, p, _ = Z.ZWAMMEN["tempel"]
     yv = T + 1 + 3
     hx1, hx2, hz1, hz2 = cx - 13, cx + 13, cz - 11, cz + 8
+    # (integration) the two layers under the hall floor were hollow (a pit the audit found): fill them solid
+    S.fill(hx1 + 1, yv - 3, hz1 + 1, hx2 - 1, yv - 2, hz2, "knuffelsteen", keep=True)
     # lights + carpet + the class altar with three pedestals and a statue
     for x in range(hx1 + 3, hx2 - 2, 5):
         for z in range(hz1 + 3, hz2 - 1, 5):

@@ -100,13 +100,13 @@ def w(i, dx=0, dz=0):
 
 DOELEN = {
     "npc rekruteerder": w("aankomst", 1, 4), "npc kapitein": w("luchtschip_kapitein"), "npc kok": w("kampvuur_kamp", 4, 4),
-    "npc priesteres": w("tempeltje"), "npc trainer_ridder": w("training", -5, -4), "npc trainer_jager": w("training", 5, -4),
+    "npc priesteres": w("tempeltje"), "npc trainer_ridder": w("training", -5, -1), "npc trainer_jager": w("training", 5, -1),
     "npc trainer_magier": w("training", 0, 6), "npc visser_dobber": (36, 87, 1072),
     "npc grootmeester": w("ordetempel_binnen"), "npc luchtschipper": w("luchtschip_haven_kapitein"),
     "npc boswachter_mos": w("kampvuur_sporenwoud_1", 6, -4), "npc mijnwerker_mopje": w("npc_mopje"),
     "npc tempelwachter_steeltje": (326, 152, -382), "npc klerk": w("questbord", 2, 1), "npc tweeling_tap": (-382, 68, 62),
     "poi kampplein": w("kampvuur_kamp"), "poi grotkamp": w("kampvuur_druipgrotten_1"), "poi tempelpoort": w("deur_zwamtempel.voor"),
-    "poi litteken_weide": (380, 68, 320), "poi litteken_woud": (-240, 68, 300), "poi litteken_tempel": (160, 68, -280),
+    "poi litteken_weide": (380, 68, 320), "poi litteken_woud": (-240, 68, 300), "poi litteken_tempel": (145, 88, -265),
     "poi kampvuur_weide_1": w("kampvuur_klodderweide_1"), "poi vuurtoren": w("kampvuur_vuurtoren"), "poi dobberhoed": w("quest_dobber_hoed"),
     "poi hoedhupperwei": w("hoedhupperwei"), "poi tuba": w("quest_tuba"), "poi kristalkamer": w("kristalkamer"),
     "arena klodderreus deur": w("arena_klodderreus.deur"), "arena koning deur": w("arena_koning_klodder.deur"),
