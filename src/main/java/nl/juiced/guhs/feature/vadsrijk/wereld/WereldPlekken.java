@@ -64,9 +64,9 @@ public final class WereldPlekken {
     public static final Map<String, BlockPos> ALLE = Map.ofEntries(
             Map.entry("aankomst", new BlockPos(0, 65, 1130)),
             Map.entry("aankomst_trap_top", new BlockPos(0, 88, 1102)),
-            Map.entry("arena_klodderreus.bord", new BlockPos(31, 88, 1059)),
+            Map.entry("arena_klodderreus.bord", new BlockPos(23, 88, 1059)),
             Map.entry("arena_klodderreus.centrum", new BlockPos(54, 87, 1069)),
-            Map.entry("arena_klodderreus.deur", new BlockPos(32, 87, 1061)),
+            Map.entry("arena_klodderreus.deur", new BlockPos(24, 87, 1061)),
             Map.entry("arena_koning_klodder.bord", new BlockPos(375, 69, 85)),
             Map.entry("arena_koning_klodder.centrum", new BlockPos(410, 69, 90)),
             Map.entry("arena_koning_klodder.deur", new BlockPos(374, 69, 90)),

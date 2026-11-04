@@ -63,9 +63,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `arena_klodderreus.bord` | 31, 88, 1059 |
+| `arena_klodderreus.bord` | 23, 88, 1059 |
 | `arena_klodderreus.centrum` | 54, 87, 1069 |
-| `arena_klodderreus.deur` | 32, 87, 1061 |
+| `arena_klodderreus.deur` | 24, 87, 1061 |
 | `arena_koning_klodder.bord` | 375, 69, 85 |
 | `arena_koning_klodder.centrum` | 410, 69, 90 |
 | `arena_koning_klodder.deur` | 374, 69, 90 |
