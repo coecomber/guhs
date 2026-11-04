@@ -135,13 +135,54 @@
       "auto": false
     },
     {
+      "id": "hq03b_elementen",
+      "soort": "hoofd",
+      "gever": "trainer_magier",
+      "inleveren": "trainer_magier",
+      "lv": 1,
+      "na": [
+        "hq03_poppen"
+      ],
+      "doelen": [
+        {
+          "soort": "meld",
+          "doel": "quiz:elementen",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        }
+      ],
+      "beloning": {
+        "xp": 80,
+        "munten": 40,
+        "items": [],
+        "wapen": false,
+        "loot": ""
+      },
+      "aanbod": [
+        "npc",
+        "npc",
+        "npc",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "",
+      "actie_klaar": "",
+      "start_items": [],
+      "auto": false
+    },
+    {
       "id": "hq04_kampvuur",
       "soort": "hoofd",
       "gever": "kok",
       "inleveren": "kok",
       "lv": 1,
       "na": [
-        "hq03_poppen"
+        "hq03b_elementen"
       ],
       "doelen": [
         {
@@ -376,6 +417,7 @@
         "npc",
         "npc",
         "jij",
+        "npc",
         "npc"
       ],
       "praat": {},
@@ -431,6 +473,7 @@
         "npc",
         "npc",
         "jij",
+        "npc",
         "npc"
       ],
       "praat": {
@@ -439,7 +482,7 @@
         ]
       },
       "actie_aanname": "",
-      "actie_klaar": "",
+      "actie_klaar": "start:hq10_zwamtempel",
       "start_items": [],
       "auto": false
     },
@@ -488,13 +531,14 @@
       ],
       "klaar": [
         "npc",
+        "npc",
         "npc"
       ],
       "praat": {},
       "actie_aanname": "",
       "actie_klaar": "",
       "start_items": [],
-      "auto": false
+      "auto": true
     },
     {
       "id": "hq11_opperzwam",
@@ -524,12 +568,7 @@
       "beloning": {
         "xp": 3000,
         "munten": 2500,
-        "items": [
-          [
-            "guhs:vr_npc_mika_speldje",
-            1
-          ]
-        ],
+        "items": [],
         "wapen": false,
         "loot": "episch"
       },
@@ -545,7 +584,7 @@
       ],
       "praat": {},
       "actie_aanname": "",
-      "actie_klaar": "",
+      "actie_klaar": "start:hq12_schaduw",
       "start_items": [],
       "auto": false
     },
@@ -559,13 +598,6 @@
         "hq11_opperzwam"
       ],
       "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_npc_mika_speldje",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0
-        },
         {
           "soort": "praat",
           "doel": "grootmeester",
@@ -594,8 +626,13 @@
       "praat": {},
       "actie_aanname": "",
       "actie_klaar": "cliffhanger",
-      "start_items": [],
-      "auto": false
+      "start_items": [
+        [
+          "guhs:vr_npc_mika_speldje",
+          1
+        ]
+      ],
+      "auto": true
     },
     {
       "id": "k01_dobber",

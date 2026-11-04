@@ -12,9 +12,10 @@ other side's new keys; resolver script: scratchpad `langunie.py`, logic: drop co
 | 110-fix-gevecht | 649cf3aee | a3210ac40 | lang conflict (union) |
 | main v1.9.2 | 0282ff9c5 | 220882eff | lang conflict (union); Erfenis F9/F10 + ToetsVerhuizing from main |
 | 110-fix-kamp | 608f13a78 | dc9eabbee | lang conflict (union); bouwsels.py auto-merged with stad |
+| 110-fix-sfeer | 1d537afb3 | (git log) | clean |
 
 ## Waiting for
-fix: wild, bazen, quests, leven, sfeer, beleving, verticaal, momenten.
+fix: wild, bazen, quests, leven, beleving, verticaal, momenten.
 zone 2: z2-wereld, z2-wezens, z2-bazen, z2-npc, z2-systemen.
 
 ## Rules to keep while merging

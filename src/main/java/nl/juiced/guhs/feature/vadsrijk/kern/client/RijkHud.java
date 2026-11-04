@@ -113,6 +113,11 @@ public final class RijkHud {
         });
     }
 
+    /** (npc's quest tracker, top right) Where the top of the screen is free: below the boss bar while one shows, else 0. */
+    public static int bovenVrij() {
+        return baas != null ? 46 : 0;
+    }
+
     static boolean binnen() {
         Minecraft mc = Minecraft.getInstance();
         return mc.player != null && Vadsrijk.in(mc.player) && hud != null && hud.binnen();
@@ -318,17 +323,22 @@ public final class RijkHud {
     }
 
     private static void tip(GuiGraphicsExtractor g, Font f, int w) {
-        if (tip == null || klok - tipStart > 200) {
+        if (tip == null) {
             return;
         }
-        int bw = 170, x = 8, y = 8;
+        // fix round 1: top left (the quest tracker owns the top right), below the boss bar when one shows; longer hints stay longer
+        int bw = 190, x = 8, y = 8 + bovenVrij();
         String titelKey = tip + ".titel";
-        List<FormattedCharSequence> regels = f.split(Component.translatable(tip), bw - 10);
-        int hoog = 18 + regels.size() * 10;
-        float in = Mth.clamp((klok - tipStart) / 6f, 0, 1) * Mth.clamp((200 - (klok - tipStart)) / 10f, 0, 1);
-        int a = (int) (in * 230) << 24;
+        List<FormattedCharSequence> regels = f.split(Component.translatable(tip), bw - 12);
+        int duur = 200 + 30 * Math.max(0, regels.size() - 3);
+        if (klok - tipStart > duur) {
+            return;
+        }
+        int hoog = 20 + regels.size() * 10;
+        float in = Mth.clamp((klok - tipStart) / 6f, 0, 1) * Mth.clamp((duur - (klok - tipStart)) / 10f, 0, 1);
+        int a = (int) (in * 235) << 24;
         g.fill(x, y, x + bw, y + hoog, a | 0x2A1424);
-        g.fill(x, y, x + 2, y + hoog, a | 0xFF7AC8);   // (top left: the minimap of JourneyMap/Xaero sits top right)
+        g.fill(x, y, x + 2, y + hoog, a | 0xFF7AC8);
         if (in > 0.1f) {
             g.text(f, net.minecraft.client.resources.language.I18n.exists(titelKey) ? Component.translatable(titelKey) : Component.literal("Tip"), x + 7, y + 5,
                     0xFFFF9AD5, true);
@@ -337,6 +347,9 @@ public final class RijkHud {
                 g.text(f, r, x + 7, ry, 0xFFEFE6EC, true);
                 ry += 10;
             }
+            // a thin bar that runs out: how long the hint stays
+            int rest = (int) ((bw - 4) * Mth.clamp(1 - (klok - tipStart) / (float) duur, 0, 1));
+            g.fill(x + 2, y + hoog - 2, x + 2 + rest, y + hoog - 1, a | 0xFF9AD5);
         }
     }
 

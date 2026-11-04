@@ -58,6 +58,7 @@ public final class NpcRegistry {
             Npcs.tick(e.getServer());
             NpcHaken.tick(e.getServer());
             NpcMarkers.tick(e.getServer());
+            NpcVolg.tick(e.getServer());
             Verhaal.tick(e.getServer());
         });
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
@@ -69,7 +70,10 @@ public final class NpcRegistry {
             NpcRollen.koppelAlles();
         });
         NeoForge.EVENT_BUS.addListener(NpcHaken::klikBlok);
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> NpcMarkers.vergeet(e.getEntity().getUUID()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
+            NpcMarkers.vergeet(e.getEntity().getUUID());
+            NpcVolg.vergeet(e.getEntity().getUUID());
+        });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> NpcCommando.register(e));
     }
 

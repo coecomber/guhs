@@ -39,6 +39,9 @@ public final class NpcLog {
                     doelen.add(d);
                 }
                 a.put("Doelen", doelen);
+                QuestStap st = QuestStap.van(p, q);
+                nl.juiced.guhs.taal.Tekst.put(a, "Wat", st.wat());
+                nl.juiced.guhs.taal.Tekst.put(a, "Waar", st.waar());
                 actief.add(a);
             } else if (s == Questlog.KLAAR) {
                 CompoundTag a = new CompoundTag();
@@ -47,6 +50,27 @@ public final class NpcLog {
                 af.add(a);
             }
         }
+        // the main story: always on top, with its current step (also when no main quest is active) and its history
+        QuestStap h = QuestStap.hoofdlijn(p);
+        if (h != null) {
+            CompoundTag s = new CompoundTag();
+            s.putString("Id", h.quest());
+            s.putBoolean("Actief", Questlog.actief(p, h.quest()));
+            nl.juiced.guhs.taal.Tekst.put(s, "Wat", h.wat());
+            nl.juiced.guhs.taal.Tekst.put(s, "Waar", h.waar());
+            if (h.extra() != null) {
+                nl.juiced.guhs.taal.Tekst.put(s, "Extra", h.extra());
+            }
+            t.put("Hoofd", s);
+        }
+        ListTag geschiedenis = new ListTag();
+        for (Quest q : QuestStap.hoofdGedaan(p)) {
+            geschiedenis.add(StringTag.valueOf(q.id()));
+        }
+        t.put("Geschiedenis", geschiedenis);
+        t.putString("Pin", NpcVolg.pin(p));
+        t.putBoolean("VolgUit", Questlog.vlag(p, "volg_uit"));
+        t.putBoolean("StraalUit", Questlog.vlag(p, "straal_uit"));
         t.put("Actief", actief);
         t.put("Af", af);
         t.putInt("Knuffels", Questlog.map(p, "knuffels").size());

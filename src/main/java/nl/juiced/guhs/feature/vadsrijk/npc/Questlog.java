@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.Tips;
+import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
 
 /**
@@ -229,6 +230,11 @@ public final class Questlog {
         var g = cp == null ? null : nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(cp.getX(), cp.getZ());
         if (g != null) {
             tel(p, Quest.Doel.Type.KAMPVUUR, d -> d.doel().equals(g.id()), 1);
+        }
+        // the same for "go to area x" while you already stand in it (kern only reports ENTERING an area)
+        var hier = nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(p.getX(), p.getZ());
+        if (hier != null && Vadsrijk.in(p)) {
+            tel(p, Quest.Doel.Type.GEBIED, d -> !d.doel().startsWith("poi:") && List.of(d.doel().split("\\|")).contains(hier.id()), 1);
         }
         NpcFtb.aangenomen(p, q);
         NpcMarkers.vies(p);

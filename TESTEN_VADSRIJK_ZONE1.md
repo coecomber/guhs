@@ -21,16 +21,22 @@ Je komt aan op het lage steigertje aan de zuidkust van Knuffelkamp. De eerste ke
 | R / V / G | vaardigheid 1 / 2 / 3 van je klasse |
 | Z | je ultieme vaardigheid (laadt op door schade te doen; het percentage staat in het vakje) |
 | K | je skillboom |
-| J | je questlog: Quests, Geheimen, Wezens (het bestiarium), Gids (de Avonturiersgids) |
+| J | je questlog: Quests (het hoofdverhaal altijd bovenaan, met "Nu: ..." en wat je al deed), Geheimen, Wezens (het bestiarium), Gids (de Avonturiersgids) |
+| (geen toets) | questvolger aan/uit en lichtstraal aan/uit: knoppen onderin de questlog, of zelf een toets kiezen in Besturing |
 | Rechtsklik | NPC's (praten), kampvuren (checkpoint), deuren, de scheepsbel, munten (in je beurs), sieraden (omdoen) |
 | Sluipen + rechtsklik op een speler | ruilen |
 
 De Guhs-toetsen die op dezelfde knoppen zitten (maag, snuffel) doen in het Vadsrijk niks.
 
+**Questvolger** (rechtsboven): de volgende stap van het verhaal, altijd met wat, bij wie en waar, een pijltje en de afstand.
+Boven je doel staat een zachte roze lichtstraal (een vastgepinde zijquest: lichtgeel). Pinnen: questlog > zijquest > Volgen.
+
 ## De snelste route door zone 1
 1. **Knuffelkamp**: Sergeant Pluizebol bij de steiger -> het kampvuur -> Kok Knapperkorst.
 2. Zuster Zachtjes bij het klasse-tempeltje: kies je klasse (Knuffelridder, Pluisjager of Vadsmagiër). Je startwapen komt in je rugzak.
 3. Meester Kussensloop op het trainingsveld: 6 keer op een trainingspop meppen -> je eerste wapen (met lichtstraal).
+   Daarna Opa Sterrenstof (ook op het trainingsveld): **de elementendriehoek** Vuur > Zwam > Slijm > Vuur, met een overhoring
+   (fout = een hint en een nieuwe vraag). De driehoek staat getekend in de questlog, Gids > Elementen.
 4. Steek het kampvuur aan, praat met de kok, klik de dialoog uit -> **de BAM**: Vahoegnir vliegt over, grauwe pluis regent, de
    bloemen verwelken, de **Grauwe Klodderreus** landt in de vijver. Vrolijk hem op (arena `npc:kampvijver`). Daarna woont de
    Kampklodder in de vijver (rechtsklik = aaien).
@@ -44,7 +50,8 @@ De Guhs-toetsen die op dezelfde knoppen zitten (maag, snuffel) doen in het Vadsr
    (voor jou) weer groen en roze.
 9. Geheim: vijf Mika-aanwijzingen -> ontmasker "Akim de Kaasguh" op de markt (rechtsklik) -> het dakgevecht met de Mika-spion.
 
-Snel door het verhaal: `/guhs vadsrijk level <n>` en `/guhs vadsrijk npc quest klaar <id>` (dan inleveren bij de NPC).
+Snel door het verhaal: `/guhs vadsrijk level <n>` en `/guhs vadsrijk npc quest klaar <id>` (dan inleveren bij de NPC), of
+`/guhs vadsrijk npc quest af <id>` (meteen ingeleverd, zonder dialoog).
 
 ## Dev-commando's (op nodig)
 **Kern**
@@ -63,7 +70,7 @@ Snel door het verhaal: `/guhs vadsrijk level <n>` en `/guhs vadsrijk npc quest k
 **Wereld** (`/guhs vadsrijk wereld ...`): `plek <id>` (elke plek uit POI_VADSRIJK.md, tab-aanvulling), `deur ordetempel|zwamtempel
 open`, `vlieg kamp|stad`, `littekens heel|grijs`, `uitkijk <naam>`, `vergeetportaal`.
 
-**NPC's en quests** (`/guhs vadsrijk npc ...`): `log`, `questlog`, `quest start|klaar|vergeet <id>`, `tp <npc-id | poi.<id> |
+**NPC's en quests** (`/guhs vadsrijk npc ...`): `log`, `questlog`, `quest start|klaar|af|vergeet <id>`, `tp <npc-id | poi.<id> |
 knuffel.<id> | aanwijzing.<id> | schat.<id>>`, `reset`, `opening`, `bam`, `cliffhanger`, `vlieg stad|kamp`, `npcs`.
 
 **Wezens** (`/guhs vadsrijk wezens ...`): `spawn <soort> [level] [elite]`, `affix <soort> gloeiend|snel|splitsend|schildend <level>`,

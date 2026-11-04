@@ -1,0 +1,63 @@
+# Het Vadsrijk 1.10.0, fix round 1 (quests): the quest tracker top right (main step: what / who / where, distance + arrow), the
+# pink light beam over the target, the questlog with the main story on top + history, the element quiz and the Gids triangle.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_quests.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section kamp
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk npc reset
+/tp @s 0 66 1140
+look 180 5
+wait 60
+shot q_tracker_start gui
+/guhs vadsrijk npc quest af hq01_welkom
+wait 40
+/tp @s 0 74 1110
+look 131 -8
+wait 60
+waitrender 200
+shot q_tracker_priesteres_straal gui
+
+section questlog
+/guhs vadsrijk npc questlog
+wait 20
+shot q_questlog_hoofd gui
+press Gids
+wait 10
+press Elementen
+wait 10
+shot q_gids_driehoek gui
+gui close
+wait 10
+
+section quiz
+/guhs vadsrijk npc quest af hq02_pad
+/guhs vadsrijk npc quest af hq03_poppen
+/guhs vadsrijk npc quest start hq03b_elementen
+/guhs vadsrijk wereld plek training
+look 0 10
+wait 60
+waitrender 200
+shot q_tracker_quiz gui
+
+section stad
+/guhs vadsrijk npc quest af hq03b_elementen
+/guhs vadsrijk npc quest af hq04_kampvuur
+/guhs vadsrijk npc quest af hq05_klodderreus
+/guhs vadsrijk npc quest start hq06_zwamzoet
+/guhs vadsrijk wereld plek plein
+look 180 -25
+wait 80
+waitrender 300
+shot q_tracker_grootmeester_straal gui
+/guhs vadsrijk npc questlog
+wait 20
+shot q_questlog_geschiedenis gui
+gui close

@@ -74,8 +74,8 @@ public final class NpcPlekken {
         NPC.put("kapitein", w("luchtschip_kapitein"));
         NPC.put("kok", w("kampvuur_kamp", 4, 4));
         NPC.put("priesteres", w("tempeltje"));   // (on the plinth in front of the klasse-tempeltje)
-        NPC.put("trainer_ridder", w("training", -5, -4));
-        NPC.put("trainer_jager", w("training", 5, -4));
+        NPC.put("trainer_ridder", w("training", -5, -1));   // (fix round 1: -4 stood inside a dummy's fence arm)
+        NPC.put("trainer_jager", w("training", 5, -1));
         NPC.put("trainer_magier", w("training", 0, 6));
         NPC.put("visser_dobber", p(36, 87, 1072));
         // Zwamzoet: the order, trade and services (POI section 5: inside the buildings)
@@ -155,6 +155,34 @@ public final class NpcPlekken {
         POI.put("uitkijk_haventand", w("uitkijk_haventand"));
         POI.put("uitkijk_slijmnaald", w("uitkijk_slijmnaald"));
     }
+    // ---- quest tracker targets (fix round 1: the tracker + beam point here; texts vadsrijk.npc.plek.*) -------------------------
+    /** Where the tracker points for "go to / cheer up in area x" (a campfire or the entrance of the area). */
+    public static final Map<String, BlockPos> GEBIED_DOEL = new LinkedHashMap<>();
+    /** The first campfire of each area (KAMPVUUR objectives). */
+    public static final Map<String, BlockPos> KAMPVUUR = new LinkedHashMap<>();
+    /** The boss arenas: "vr_klodderreus" (an entity path) or an area id (BAAS "gebied:x"). */
+    public static final Map<String, BlockPos> BAAS = new LinkedHashMap<>();
+    static {
+        GEBIED_DOEL.put("knuffelkamp", KAMPPLEIN);
+        GEBIED_DOEL.put("zwamzoet", PLEIN);
+        GEBIED_DOEL.put("haven", HAVEN_AANKOMST);
+        GEBIED_DOEL.put("klodderweide", w("kampvuur_klodderweide_1"));
+        GEBIED_DOEL.put("sporenwoud", w("kampvuur_sporenwoud_1"));
+        GEBIED_DOEL.put("druipgrotten", w("grot_ingangen.1"));
+        GEBIED_DOEL.put("zwamtempel", w("deur_zwamtempel.voor"));
+        KAMPVUUR.put("knuffelkamp", KAMPPLEIN);
+        KAMPVUUR.put("zwamzoet", w("kampvuur_zwamzoet"));
+        KAMPVUUR.put("haven", w("kampvuur_haven"));
+        KAMPVUUR.put("klodderweide", w("kampvuur_klodderweide_1"));
+        KAMPVUUR.put("sporenwoud", w("kampvuur_sporenwoud_1"));
+        KAMPVUUR.put("druipgrotten", GROTKAMP);
+        KAMPVUUR.put("zwamtempel", w("kampvuur_zwamtempel_1"));
+        BAAS.put("vr_klodderreus", KAMPVIJVER);
+        BAAS.put("knuffelkamp", KAMPVIJVER);
+        BAAS.put("klodderweide", w("arena_koning_klodder.deur"));
+        BAAS.put("zwamtempel", w("arena_opperzwam.deur"));
+    }
+
     /** Horizontal radius / vertical tolerance for "you are there" (lookout tops are only known after the tiles: 40). */
     public static final double POI_STRAAL = 6, POI_HOOGTE = 10, UITKIJK_HOOGTE = 40;
 

@@ -28,7 +28,11 @@ import nl.juiced.guhs.feature.verhaal.Praat;
  */
 public final class QuestMotor {
     public static final String SLEUTEL = "vr_npc";
-    static final int AANNEMEN = 1, LATER = 2, ROL = 10, VLIEG_STAD = 30, VLIEG_KAMP = 31, KLASSE = 40;
+    static final int AANNEMEN = 1, LATER = 2, ROL = 10, VLIEG_STAD = 30, VLIEG_KAMP = 31, KLASSE = 40, QUIZ = 50;
+    /** The element quiz (hq03b): the questions and the answer that wins (0 vuur, 1 zwam, 2 slijm). */
+    static final String[] QUIZ_VRAAG = {"zwam", "slijm", "vuur"};
+    static final int[] QUIZ_JUIST = {0, 1, 2};
+    static final String[] QUIZ_OPTIE = {"vuur", "zwam", "slijm"};
 
     /** What the open conversation is about: the NPC, a quest to accept, an action to run after reading (na). */
     record Gesprek(String npc, int entity, String quest, String rol, String na) {
@@ -66,6 +70,12 @@ public final class QuestMotor {
                 }
             }
         }
+        // 1b. the element quiz of Opa Sterrenstof (hq03b): a question with three answers
+        Quest quiz = Quests.van("hq03b_elementen");
+        if (quiz != null && id.equals(quiz.gever()) && Questlog.actief(p, quiz.id()) && !Questlog.doelKlaar(p, quiz, 0)) {
+            quiz(p, npc, false);
+            return;
+        }
         // 2. "talk to me" objectives
         for (Quest q : Questlog.actieve(p)) {
             for (int i = 0; i < q.doelen().size(); i++) {
@@ -83,8 +93,14 @@ public final class QuestMotor {
         for (Quest q : Questlog.actieve(p)) {
             if (q.inleveren().equals(id) && Questlog.allesKlaar(p, q)) {
                 Questlog.voltooi(p, q);
+                String na = q.actieKlaar();
+                if (na.startsWith("start:")) {   // (the next quest starts at once, so the tracker and the chat line are right)
+                    doeActie(p, na, npc);
+                    na = "";
+                }
+                NpcVolg.meldVolgende(p, q);
                 regels.addAll(regels(p, npc, q.klaar(), q.sleutel() + ".klaar."));
-                open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", q.actieKlaar()));
+                open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", na));
                 return;
             }
         }
@@ -94,7 +110,8 @@ public final class QuestMotor {
         }
         // 4. a quest to offer
         for (Quest q : Quests.alle().values()) {
-            if (q.gever().equals(id) && !q.auto() && Questlog.beschikbaar(p, q)) {
+            // (an auto main quest whose start was missed, e.g. a log-out during the BAM, is offered by its giver: no soft-lock)
+            if (q.gever().equals(id) && (!q.auto() || q.hoofd()) && Questlog.beschikbaar(p, q)) {
                 regels.addAll(regels(p, npc, q.aanbod(), q.sleutel() + ".aanbod."));
                 if (q.hoofd()) {
                     open(p, npc, regels, new Gesprek(id, npc.getId(), q.id(), "", ""), new Praat.Optie(AANNEMEN, "vadsrijk.npc.optie.hoofd"));
@@ -109,6 +126,8 @@ public final class QuestMotor {
         for (Quest q : Questlog.actieve(p)) {
             if (q.gever().equals(id) || q.inleveren().equals(id)) {
                 regels.add(new Praat.Regel(npc, "", q.sleutel() + ".bezig"));
+                QuestStap s = QuestStap.van(p, q);
+                regels.add(new Praat.Regel(npc, "", QuestStap.P + "hint", s.wat(), s.waar()));
                 open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
                 return;
             }
@@ -154,8 +173,13 @@ public final class QuestMotor {
                     new Gesprek(id, npc.getId(), "", "", "ontmasker"));
             return;
         }
+        Praat.Regel hint = hint(p, id, npc);
         if (rol == null || rol.equals("training") || rol.equals("kampwacht") || rol.equals("marktguh")) {
-            praat(p, npc, gedag, new Gesprek(id, npc.getId(), "", "", ""));
+            if (hint != null) {
+                open(p, npc, List.of(hint), new Gesprek(id, npc.getId(), "", "", ""));
+            } else {
+                praat(p, npc, gedag, new Gesprek(id, npc.getId(), "", "", ""));
+            }
             return;
         }
         switch (rol) {
@@ -171,8 +195,44 @@ public final class QuestMotor {
                     new Praat.Optie(VLIEG_KAMP, "vadsrijk.npc.optie.naar_kamp"));
             case "klasse" -> klasseKeuze(p, npc);
             case "questbord" -> questbord(p, npc);
-            default -> praat(p, npc, gedag, new Gesprek(id, npc.getId(), "", rol, ""), new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + rol));
+            default -> {
+                List<Praat.Regel> l = new ArrayList<>();
+                if (hint != null) {
+                    l.add(hint);
+                }
+                l.add(new Praat.Regel(npc, "", gedag));
+                open(p, npc, l, new Gesprek(id, npc.getId(), "", rol, ""), new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + rol));
+            }
         }
+    }
+
+    /**
+     * Re-talking to whoever sent you on (the one you last handed a main quest in to) repeats where to go next, with who and
+     * where; null when this NPC has nothing to remind you of.
+     */
+    @Nullable
+    static Praat.Regel hint(ServerPlayer p, String id, Entity npc) {
+        List<Quest> gedaan = QuestStap.hoofdGedaan(p);
+        QuestStap s = QuestStap.hoofdlijn(p);
+        if (gedaan.isEmpty() || s == null || !gedaan.get(gedaan.size() - 1).inleveren().equals(id)) {
+            return null;
+        }
+        return new Praat.Regel(npc, "", QuestStap.P + "hint", s.wat(), s.waar());
+    }
+
+    /** One quiz question (a random one); after a wrong answer first a friendly hint. */
+    static void quiz(ServerPlayer p, RijkGuh npc, boolean fout) {
+        int v = p.getRandom().nextInt(QUIZ_VRAAG.length);
+        List<Praat.Regel> l = new ArrayList<>();
+        if (fout) {
+            l.add(new Praat.Regel(npc, "", "vadsrijk.npc.quiz.fout"));
+        }
+        l.add(new Praat.Regel(npc, "", "vadsrijk.npc.quiz.vraag." + QUIZ_VRAAG[v]));
+        Praat.Optie[] o = new Praat.Optie[QUIZ_OPTIE.length];
+        for (int i = 0; i < o.length; i++) {
+            o[i] = new Praat.Optie(QUIZ + i, "vadsrijk.npc.quiz." + QUIZ_OPTIE[i]);
+        }
+        open(p, npc, l, new Gesprek(npc.npcId(), npc.getId(), "", "quiz:" + QUIZ_JUIST[v], ""), o);
     }
 
     static boolean klaarVoorOntmaskeren(ServerPlayer p) {
@@ -269,6 +329,19 @@ public final class QuestMotor {
             Praat.sluit(p);
             afronden(p);
             Verhaal.vlieg(p, optie == VLIEG_STAD ? "zwamzoet" : "knuffelkamp");
+        } else if (optie >= QUIZ && optie < QUIZ + 3) {
+            Praat.sluit(p);
+            afronden(p);
+            RijkGuh npc = p.level().getEntity(g.entity()) instanceof RijkGuh r ? r : null;
+            if (g.rol().equals("quiz:" + (optie - QUIZ))) {
+                NpcApi.meld(p, "quiz", "elementen");
+                Tips.toon(p, "vadsrijk.npc.tip.elementen");
+                if (npc != null) {
+                    klik(p, npc);   // (straight to the hand-in)
+                }
+            } else if (npc != null) {
+                quiz(p, npc, true);
+            }
         } else if (optie >= KLASSE && optie < KLASSE + 9) {
             List<Klasse> alle = new ArrayList<>(Klassen.alle());
             Praat.sluit(p);

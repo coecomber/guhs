@@ -271,8 +271,27 @@ Q("hq03_poppen", "hoofd", "trainer_ridder", "Poppen meppen",
   [("npc", "Kijk eens aan! Netjes. Die pop is helemaal blij van je."),
    ("npc", "Hier, je eerste echte wapen. Zie je die lichtstraal? De kleur vertelt hoe zeldzaam iets is: grijs, groen, blauw, paars, "
            "oranje... en heel soms roze. Roze is guhddelijk!"),
-   ("npc", "Ga daarna terug naar Kok Knapperkorst. Hij wil dat het kampvuur brandt voor het donker wordt.")],
+   ("npc", "Loop nu eerst even naar Opa Sterrenstof, hier op het trainingsveld. Hij legt je de elementen uit. Dat moet je echt "
+           "weten voordat je op avontuur gaat!")],
   xp=120, munten=80, wapen=True, na=["hq02_pad"])
+
+Q("hq03b_elementen", "hoofd", "trainer_magier", "De elementendriehoek",
+  "Opa Sterrenstof leert je de elementendriehoek: Vuur wint van Zwam, Zwam wint van Slijm, en Slijm wint van Vuur. Een sterke "
+  "aanval doet x1,5 en je ziet 'Zwak!'; de andere kant op doet maar x0,7. Roze is sterk tegen alles wat ontvadst is. Het lettertje "
+  "of icoontje naast de levensbalk van een wezen vertelt zijn element. Beantwoord zijn vraag!",
+  [D("meld", "quiz:elementen", 1, "Beantwoord de elementenvraag van Opa Sterrenstof")],
+  [("npc", "Aha, de nieuwe! Ik ben Opa Sterrenstof. Weet je wat het belangrijkste is van meppen? Niet hoe hard. Maar WAARMEE."),
+   ("npc", "Elk wezen in het Vadsrijk heeft een element. Kijk naar het icoontje naast zijn levensbalk: een vlammetje is Vuur, een "
+           "paddenstoeltje is Zwam, een druppeltje is Slijm, en een hartje is Roze."),
+   ("npc", "En dan de driehoek, onthoud hem goed:  VUUR > ZWAM > SLIJM > VUUR.  Vuur verbrandt de zwam, de zwam slurpt het slijm "
+           "op, en het slijm blust het vuur. Pfssst!"),
+   ("npc", "Mep je een wezen met wat er van wint, dan zie je 'Zwak!' en doe je anderhalf keer zoveel. Andersom doe je maar een "
+           "beetje. En Roze? Roze is extra sterk tegen alles wat ontvadst is. Klik straks op mij, dan overhoor ik je!")],
+  "Vuur > Zwam > Slijm > Vuur. Klik op mij, dan overhoor ik je!",
+  [("npc", "Goed zo! Jij bent een slimme. Kijk in je questlog (J) bij Gids, daar staat de driehoek nog een keer getekend."),
+   ("npc", "Ga nu terug naar Kok Knapperkorst, bij het kampvuur op het kampplein. Hij wil dat het vuur brandt voor het donker "
+           "wordt.")],
+  xp=80, munten=40, na=["hq03_poppen"])
 
 Q("hq04_kampvuur", "hoofd", "kok", "Een warm plekje",
   "Kampvuren zijn je checkpoints: steek er een aan met rechtsklik en daar word je wakker als je flauwvalt. Steek het kampvuur op "
@@ -286,7 +305,7 @@ Q("hq04_kampvuur", "hoofd", "kok", "Een warm plekje",
    ("jij", "Het is hier echt mooi."),
    ("npc", "Ja hè? Zo vreedzaam. Zo stil. Zo..."),
    ("npc", "...hé. Wat is dat voor schaduw boven het water?")],
-  xp=100, munten=50, items=[("minecraft:cookie", 2)], na=["hq03_poppen"], actie_klaar="bam")
+  xp=100, munten=50, items=[("minecraft:cookie", 2)], na=["hq03b_elementen"], actie_klaar="bam")
 
 Q("hq05_klodderreus", "hoofd", "rekruteerder", "De Grauwe Klodderreus",
   "Een grote draak vloog over het kamp en liet een klont zwarte pluis in de vijver vallen. Daar kwam een reusachtige grauwe klodder "
@@ -299,8 +318,8 @@ Q("hq05_klodderreus", "hoofd", "rekruteerder", "De Grauwe Klodderreus",
    ("jij", "Maar die draak... wat wás dat?"),
    ("npc", "Dat... was Vahoegnir. Ooit was hij de grote roze beschermdraak van het Vadsrijk. Waar hij vloog, bloeiden de bloemen. "
            "Nu is hij grauw, en waar hij vliegt verwelken ze. Hij is de bron van de Vadsloosheid."),
-   ("npc", "Dit moet de Grootmeester weten. Kapitein Wolkewiet vliegt je naar Zwamzoet. Je bent geen rekruut meer: je bent een "
-           "echte avonturier van De Knuffelorde!")],
+   ("npc", "Dit moet de Grootmeester weten. Kapitein Wolkewiet vliegt je naar Zwamzoet: je vindt hem bij zijn luchtschip op de "
+           "oostelijke steiger van het kamp. Je bent geen rekruut meer: je bent een echte avonturier van De Knuffelorde!")],
   xp=300, munten=300, loot="zeldzaam", na=["hq04_kampvuur"], auto=True, actie_klaar="kampklodder")
 
 Q("hq06_zwamzoet", "hoofd", "kapitein", "Naar Zwamzoet!",
@@ -315,7 +334,8 @@ Q("hq06_zwamzoet", "hoofd", "kapitein", "Naar Zwamzoet!",
            "Grootmeester Vadsvoet."),
    ("npc", "Vahoegnir... Ik heb hem gekend toen hij nog roze was. Hij at suikerspin uit mijn poot. Iets of iemand heeft hem grauw "
            "gemaakt, en nu verspreidt hij de Vadsloosheid over het hele rijk."),
-   ("npc", "Overal waar hij vloog, liggen nu grauwe littekens in het land. Daar moeten we beginnen.")],
+   ("npc", "Overal waar hij vloog, liggen nu grauwe littekens in het land. Daar moeten we beginnen. Praat nog eens met mij, dan "
+           "vertel ik je waar het eerste litteken ligt.")],
   xp=150, munten=100, na=["hq05_klodderreus"], inleveren="grootmeester", actie_aanname="luchtschip")
 
 Q("hq07_littekens", "hoofd", "grootmeester", "Grauwe littekens",
@@ -331,7 +351,8 @@ Q("hq07_littekens", "hoofd", "grootmeester", "Grauwe littekens",
   "Het litteken ligt in het zuidoosten van de Klodderweide. Volg het grijze spoor.",
   [("npc", "Grauwe pluis... Zacht als altijd, maar het voelt koud. En kijk: dit stukje heeft een stempel. Een klein rond pootje."),
    ("jij", "Een pootje? Van een klodder?"),
-   ("npc", "Klodders hebben geen pootjes. Hm. Hm hm. Ik moet hier over nadenken. Ga intussen sterker worden, avonturier.")],
+   ("npc", "Klodders hebben geen pootjes. Hm. Hm hm. Ik moet hier over nadenken. Ga intussen sterker worden, avonturier. Kom "
+           "terug bij mij als je level 6 bent: dan stuur ik je naar het Sporenwoud.")],
   xp=400, munten=300, na=["hq06_zwamzoet"])
 
 Q("hq08_sporenwoud", "hoofd", "grootmeester", "Sporen in het woud",
@@ -348,7 +369,9 @@ Q("hq08_sporenwoud", "hoofd", "grootmeester", "Sporen in het woud",
    ("npc", "Maar ik heb iets gezien. 's Nachts liepen er figuurtjes door het woud. Klein. Met zakken. Ze gingen naar het noorden, naar "
            "de Druipgrotten."),
    ("jij", "Figuurtjes met zakken?"),
-   ("npc", "Ik kon ze niet goed zien. Ze miauwden een beetje. Vreemd, hè?")],
+   ("npc", "Ik kon ze niet goed zien. Ze miauwden een beetje. Vreemd, hè?"),
+   ("npc", "Word eerst wat sterker, level 12, en kom dan terug bij mij, hier bij het kampvuur aan de rand van het woud. Dan vertel "
+           "ik je wie die figuurtjes misschien van dichtbij heeft gezien.")],
   xp=700, munten=500, loot="ongewoon", lv=6, na=["hq07_littekens"], inleveren="boswachter_mos")
 
 Q("hq09_druipgrotten", "hoofd", "boswachter_mos", "Diep in de Druipgrotten",
@@ -366,8 +389,10 @@ Q("hq09_druipgrotten", "hoofd", "boswachter_mos", "Diep in de Druipgrotten",
            "van de Zwamtempel."),
    ("jij", "Wat waren het voor wezens?"),
    ("npc", "Kleine. Met puntoortjes. En een staart. Ze praatten over 'het plan' en 'de baas'. Meer heb ik niet verstaan, mijn "
-           "helmpje zat over mijn oren.")],
-  xp=1100, munten=800, loot="zeldzaam", lv=12, na=["hq08_sporenwoud"], inleveren="mijnwerker_mopje",
+           "helmpje zat over mijn oren."),
+   ("npc", "Ga naar de Zwamtempel, hoog op de berg in het noordoosten, en zoek Tempelwachter Steeltje bij de grote deur. Steek de "
+           "Kloof over via de drakenfossiel-brug. Maar pas op: daar zijn de wezens sterk. Word eerst level 16, dat is veiliger.")],
+  xp=1100, munten=800, loot="zeldzaam", lv=12, na=["hq08_sporenwoud"], inleveren="mijnwerker_mopje", actie_klaar="start:hq10_zwamtempel",
   praat={"mijnwerker_mopje": [("npc", "Hallo? Een avonturier! Eindelijk! Ik ben de weg kwijt. Weer. Breng je me naar het kampvuur? "
                                        "Ik loop wel achter je aan.")]})
 
@@ -382,8 +407,9 @@ Q("hq10_zwamtempel", "hoofd", "mijnwerker_mopje", "De Zwamtempel",
   "De Zwamtempel ligt in het noordoosten, op de berg. Over de drakenfossiel-brug!",
   [("npc", "Halt! Ah, een avonturier van de Orde. Ik ben Tempelwachter Steeltje."),
    ("npc", "Er is iets mis in de tempel. De Opperzwam, de oude hoeder van de tempel, is grauw geworden. Al zijn tempelzwammen zijn "
-           "knorrig. En ik hoorde gemiauw achter de muren.")],
-  xp=1400, munten=1000, lv=16, na=["hq09_druipgrotten"], inleveren="tempelwachter_steeltje")
+           "knorrig. En ik hoorde gemiauw achter de muren."),
+   ("npc", "Ben je level 18? Praat dan nog eens met mij, hier bij de grote deur. Dan laat ik je de tempel in.")],
+  xp=1400, munten=1000, lv=16, na=["hq09_druipgrotten"], inleveren="tempelwachter_steeltje", auto=True)
 
 Q("hq11_opperzwam", "hoofd", "tempelwachter_steeltje", "De Opperzwam",
   "Ga de Zwamtempel in, vrolijk de tempelzwammen op en help de Opperzwam. Pas op voor zijn sporenwolken, en als de tempel donker "
@@ -398,12 +424,13 @@ Q("hq11_opperzwam", "hoofd", "tempelwachter_steeltje", "De Opperzwam",
   [("npc", "Je hebt het gedaan! De Opperzwam is weer zichzelf. Hij huilt een beetje. Van blijdschap, denk ik. Of van de sporen."),
    ("npc", "En kijk wat er uit zijn hoed viel. Een speldje. Met een kattenkopje erop. Met een gemeen lachje."),
    ("jij", "Een Mika!"),
-   ("npc", "Breng het naar de Grootmeester. Snel.")],
-  xp=3000, munten=2500, loot="episch", items=[("guhs:vr_npc_mika_speldje", 1)], lv=18, na=["hq10_zwamtempel"])
+   ("npc", "Breng het naar Grootmeester Vadsvoet, in de ordetempel bovenop de hoogste zwam van Zwamzoet. Neem de lift aan de voet "
+           "van die zwam. Snel!")],
+  xp=3000, munten=2500, loot="episch", lv=18, na=["hq10_zwamtempel"], actie_klaar="start:hq12_schaduw")
 
 Q("hq12_schaduw", "hoofd", "tempelwachter_steeltje", "Een grauwe schaduw",
   "Breng het Mika-speldje naar Grootmeester Vadsvoet in de ordetempel van Zwamzoet.",
-  [D("verzamel", "guhs:vr_npc_mika_speldje", 1, "Heb het Mika-speldje bij je"), D("praat", "grootmeester", 1, "Breng het naar de Grootmeester")],
+  [D("praat", "grootmeester", 1, "Breng het Mika-speldje naar Grootmeester Vadsvoet")],
   [("npc", "Ga maar, avonturier. De Grootmeester moet dit zien.")],
   "Naar de Grootmeester, snel! Hij staat in de ordetempel op de hoogste zwam.",
   [("npc", "Een Mika-speldje... Dus het pootje op de pluis, de figuurtjes met zakken, het gemiauw in de tempel. Het waren Mika's."),
@@ -413,7 +440,8 @@ Q("hq12_schaduw", "hoofd", "tempelwachter_steeltje", "Een grauwe schaduw",
    ("npc", "Kijk maar naar de horizon. Daar, achter de bergen. Hij cirkelt boven de landen die nog niemand van ons heeft gezien."),
    ("npc", "Zone één is weer vads, dankzij jou. De littekens kleuren al terug. Maar dit was pas het begin. Rust wat uit, "
            "avonturier. Het Vadsrijk is groot.")],
-  xp=2000, munten=5000, na=["hq11_opperzwam"], inleveren="grootmeester", actie_klaar="cliffhanger")
+  xp=2000, munten=5000, na=["hq11_opperzwam"], inleveren="grootmeester", actie_klaar="cliffhanger", auto=True,
+  start_items=[("guhs:vr_npc_mika_speldje", 1)])
 
 # ===== side quests in Knuffelkamp ===========================================================================================
 Q("k01_dobber", "zij", "visser_dobber", "Het hoedje van Dobber",
@@ -753,8 +781,9 @@ TIPS = {
                                "duizelig."),
     "elementen": ("Elementen", "Vuur wint van zwam, zwam van slijm, slijm van vuur (x1,5). Roze is sterk tegen alles wat ontvadst is. "
                                "Het gekleurde icoontje voor de naam van een wezen vertelt zijn element."),
-    "quests": ("Je questlog", "Druk op J voor je questlog. Een ! boven een guh betekent een nieuwe quest, een ? betekent: hier inleveren "
-                              "of even praten."),
+    "quests": ("Je questlog", "Rechtsboven staat altijd je volgende stap: wat, bij wie en waar, met een pijltje. Een roze lichtstraal "
+                              "wijst de plek aan. Druk op J voor je questlog. Een ! boven een guh is een nieuwe quest, een ? betekent: "
+                              "hier inleveren of even praten."),
 }
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -866,7 +895,8 @@ OVERIG = {
     P + "klasse.gekozen": "Je nieuwe pad begint hier!",
     P + "rijdier.later": "Je Hoedhupper komt met de stal van het Vadsrijk (economie). Hoefje heeft hem voor je gereserveerd!",
     P + "bam.aanval": "Er valt iets uit de lucht in de kampvijver! De Grauwe Klodderreus!",
-    P + "opening.welkom": "Welkom in Het Vadsrijk! Sergeant Pluizebol wacht op je bij de steiger. (J = questlog)",
+    P + "opening.welkom": "Welkom in Het Vadsrijk! Sergeant Pluizebol wacht op je hier op de steiger. Rechtsboven zie je altijd je "
+                        "volgende stap; J = questlog.",
     P + "scene.opening.titel": "Het Vadsrijk",
     P + "scene.opening.onder": "Knuffelkamp, bij zonsopgang",
     P + "scene.draak.titel": "Vahoegnir",
@@ -887,6 +917,16 @@ OVERIG = {
     P + "spion.dialoog.3": "Die zonnebril. Doe eens af.",
     P + "spion.dialoog.4": "NOOIT! Je krijgt me nooit! De baas zal horen wat je gedaan hebt! Naar de daken!",
     P + "adv.onder": "Een nieuwe titel van De Knuffelorde!",
+    # the element quiz (hq03b, QuestMotor.quiz)
+    P + "quiz.vraag.zwam": "Overhoring! Een boze Hoedjesbol is van het element Zwam. Waarmee mep je hem het hardst?",
+    P + "quiz.vraag.slijm": "Overhoring! Een knorrige Klodder is van het element Slijm. Waarmee mep je hem het hardst?",
+    P + "quiz.vraag.vuur": "Overhoring! Een wezen met een vlammetje naast zijn levensbalk is van het element Vuur. Waarmee mep je hem het hardst?",
+    P + "quiz.vuur": "Met Vuur!",
+    P + "quiz.zwam": "Met Zwam!",
+    P + "quiz.slijm": "Met Slijm!",
+    P + "quiz.fout": "Bijna! Denk aan de driehoek: VUUR > ZWAM > SLIJM > VUUR. Probeer het nog eens!",
+    P + "gids.driehoek": "wint van",
+    P + "gids.driehoek.uitleg": "Sterk = x1,5 en 'Zwak!'. Andersom = x0,7. Roze is sterk tegen alles wat ontvadst is.",
     P + "knuffel.gevonden": "Verloren knuffel gevonden: %s! (%s/%s)",
     P + "aanwijzing.naam": "Aanwijzing",
     P + "aanwijzing.teller": "Aanwijzingen gevonden: %s van de %s. Er klopt iets niet in Zwamzoet...",
@@ -917,6 +957,141 @@ OVERIG = {
     P + "adv.knuffelridder.1": "Kussenkampioen", P + "adv.knuffelridder.2": "Vahoege Paladijn",
     P + "adv.pluisjager.1": "Pluizenschutter", P + "adv.pluisjager.2": "Sterrenjager",
     P + "adv.vadsmagier.1": "Roze Tovenaar", P + "adv.vadsmagier.2": "Vahoege Aartsmagiër",
+}
+
+
+# ---------------------------------------------------------------------------------------------------------------------------
+# Where things are (fix round 1, the quest tracker + questlog + hints): full phrases "bij ... in <gebied>", from the real map
+# (POI_VADSRIJK.md). vadsrijk.npc.plek.npc.<id> / .poi.<id> / .gebied.<id> / .kampvuur.<id> / .baas.<x> (QuestStap.java).
+# ---------------------------------------------------------------------------------------------------------------------------
+_ZZ = "in Zwamzoet"
+PLEK_NPC = {
+    "rekruteerder": "op de lage zuidsteiger van Knuffelkamp, waar je aankwam (onderaan de trap van het klif)",
+    "kapitein": "bij zijn luchtschip op de oostelijke steiger van Knuffelkamp",
+    "kok": "bij het kampvuur op het kampplein, midden in Knuffelkamp",
+    "priesteres": "bij het klasse-tempeltje op de heuvel in het zuidwesten van Knuffelkamp",
+    "trainer_ridder": "op het trainingsveld in het noordoosten van Knuffelkamp",
+    "trainer_jager": "op het trainingsveld in het noordoosten van Knuffelkamp",
+    "trainer_magier": "op het trainingsveld in het noordoosten van Knuffelkamp",
+    "visser_dobber": "aan de kampvijver in het oosten van Knuffelkamp",
+    "grootmeester": "in de ordetempel bovenop de hoogste zwam van Zwamzoet (neem de lift aan de voet van die zwam)",
+    "smid": "in de smidse " + _ZZ,
+    "winkelier": "in de kruidenierswinkel " + _ZZ,
+    "wapenhandelaar": "in de uitrustingswinkel " + _ZZ,
+    "marktmeester": "in het veilinghuis " + _ZZ,
+    "bankier": "in de bank " + _ZZ,
+    "kleermaker": "in de kleermakerij " + _ZZ,
+    "klerk": "bij het questbord aan de noordkant van het plein " + _ZZ,
+    "stalmeester": "in de stal " + _ZZ,
+    "havenmeester": "in het havenmeesterhuisje aan de westkant van Zwamzoet",
+    "luchtschipper": "bij het luchtschip in De Haven, aan de overkant van de baai ten zuiden van Zwamzoet",
+    "akim_kaasguh": "bij zijn kaaskraam op de markt, aan de westkant van het plein " + _ZZ,
+    "oma_truus": "op een bankje bij het plein " + _ZZ,
+    "bakker_bram": "aan de zuidoostkant van het plein " + _ZZ,
+    "kleine_kiki": "midden op het plein " + _ZZ,
+    "dichter_daan": "aan de zuidwestkant van het plein " + _ZZ,
+    "postguh_pim": "aan de noordkant van het plein " + _ZZ,
+    "tuinier_tilly": "aan de oostkant van het plein " + _ZZ,
+    "muzikant_mo": "op het plein " + _ZZ,
+    "professor_pluis": "bij het questbord aan de noordwestkant van het plein " + _ZZ,
+    "ridder_rammel": "bij de zuidpoort (de Guhpoort) van Zwamzoet",
+    "kapster_fohnie": "aan de zuidwestkant van het plein " + _ZZ,
+    "schilder_sien": "aan de westkant van het plein " + _ZZ,
+    "slaapkop_sjors": "op een bankje aan de oostkant van het plein " + _ZZ,
+    "koopman_kees": "bij de zuidpoort (de Guhpoort) van Zwamzoet",
+    "weerguh_wolkje": "aan de noordkant van het plein " + _ZZ,
+    "tweeling_tip": "op het plein " + _ZZ,
+    "wachter_dikkie": "bij de zuidpoort (de Guhpoort) van Zwamzoet",
+    "boswachter_mos": "bij het eerste kampvuur aan de oostrand van het Sporenwoud, ten westen van Zwamzoet",
+    "tweeling_tap": "ergens tussen de reuzenpaddenstoelen midden in het Sporenwoud",
+    "mijnwerker_mopje": "diep in de Druipgrotten (ten noordwesten van Zwamzoet): ga een grotingang in en volg de tunnels omlaag",
+    "tempelwachter_steeltje": "bij de grote deur van de Zwamtempel, bovenop de berg in het noordoosten (over de drakenfossiel-brug)",
+}
+for _k, _w in [("weide", "de Klodderweide"), ("woud", "het Sporenwoud"), ("grotten", "de Druipgrotten"), ("tempel", "de berg van de Zwamtempel")]:
+    for _i in (1, 2, 3):
+        PLEK_NPC[f"kampwacht_{_k}_{_i}"] = f"bij een kampvuur in {_w}"
+PLEK_POI = {
+    "kampplein": "midden in Knuffelkamp, bij het kampvuur",
+    "vuurtoren": "op het klif in het noordwesten van Knuffelkamp",
+    "dobberhoed": "bij de vuurtoren in het noordwesten van Knuffelkamp",
+    "kampvuur_weide_1": "bij het eerste kampvuur van de Klodderweide, ten oosten van Zwamzoet",
+    "grotkamp": "bij het kampvuur bij de grotingang van de Druipgrotten",
+    "tempelpoort": "bovenop de berg van de Zwamtempel in het noordoosten (over de drakenfossiel-brug, dan het pad omhoog)",
+    "hoedhupperwei": "in het zuidoosten van de Klodderweide",
+    "tuba": "bij de picknickplek in het zuidwesten van het Sporenwoud",
+    "kristalkamer": "in het verste zuidwestelijke hoekje van de Druipgrotten, diep onder de grond",
+    "litteken_weide": "in het zuiden van de Klodderweide (volg het grijze spoor)",
+    "litteken_woud": "in het zuiden van het Sporenwoud (volg het grijze spoor)",
+    "litteken_tempel": "tussen Zwamzoet en de Zwamtempel (volg het grijze spoor)",
+    "uitkijk_klodderkijk": "bovenop de rotsnaald in het noordoosten van de Klodderweide",
+    "uitkijk_zwamnaald": "bovenop de rotsnaald in het westen van het Sporenwoud",
+    "uitkijk_druipspits": "bovenop de rotsnaald boven de Druipgrotten",
+    "uitkijk_haventand": "bovenop de rotsnaald ten oosten van De Haven",
+    "uitkijk_slijmnaald": "bovenop de rotsnaald in het zuidoosten van de Klodderweide",
+}
+PLEK_GEBIED = {
+    "knuffelkamp": "in Knuffelkamp, het oefeneiland",
+    "zwamzoet": "in Zwamzoet, de paddenstoelenstad",
+    "haven": "in De Haven, ten zuiden van Zwamzoet",
+    "klodderweide": "in de Klodderweide, ten oosten van Zwamzoet",
+    "sporenwoud": "in het Sporenwoud, ten westen van Zwamzoet",
+    "druipgrotten": "in de Druipgrotten, ten noordwesten van Zwamzoet",
+    "zwamtempel": "bij de Zwamtempel, op de berg in het noordoosten (over de drakenfossiel-brug)",
+    "proeftuin": "in de proeftuin",
+    "ring": "in het Vadsrijk",
+}
+PLEK_KAMPVUUR = {
+    "knuffelkamp": "op het kampplein, midden in Knuffelkamp",
+    "zwamzoet": "op het plein van Zwamzoet",
+    "haven": "in De Haven",
+    "klodderweide": "in de Klodderweide, ten oosten van Zwamzoet (bij elk vuur staat een ridder-guh)",
+    "sporenwoud": "aan de oostrand van het Sporenwoud, ten westen van Zwamzoet",
+    "druipgrotten": "bij de grotingang van de Druipgrotten",
+    "zwamtempel": "op de berg van de Zwamtempel",
+}
+PLEK_BAAS = {
+    "vr_klodderreus": "bij de kampvijver in het oosten van Knuffelkamp",
+    "knuffelkamp": "bij de kampvijver in het oosten van Knuffelkamp",
+    "klodderweide": "in zijn arena midden in de Klodderweide (op het bord bij de deur zie je of hij wakker is)",
+    "zwamtempel": "diep in de Zwamtempel: door de voorhal, de Lichtzwamkamer, de Hendelkamer en de Ridderzaal",
+}
+PLEK_OVERIG = {
+    P + "plek.overal": "overal in het Vadsrijk",
+    P + "plek.overal.knuffel": "overal in het Vadsrijk (ze glinsteren met hartjes als je dichtbij bent)",
+    P + "plek.overal.aanwijzing": "overal in het Vadsrijk (paarse glinsters)",
+    P + "plek.overal.schat": "op geheime plekjes in het Vadsrijk",
+    P + "plek.training": "op het trainingsveld in het noordoosten van Knuffelkamp",
+    P + "plek.daken": "op de daken van Zwamzoet",
+    # the step texts (QuestStap)
+    P + "stap.praat": "Praat met %s",
+    P + "stap.inleveren": "Lever in bij %s",
+    P + "stap.af": "Voltooid",
+    P + "stap.level": "Word eerst level %s (nu %s)",
+    P + "stap.level.tip": "Vrolijk wezens op %s, of help de guhs in Zwamzoet met hun zijquests.",
+    P + "stap.daarna": "Praat daarna met %s, %s.",
+    P + "stap.aanrader": "Aanrader: level %s (jij bent level %s)",
+    P + "stap.escorte.ophalen": "Haal %s op: %s",
+    P + "stap.luchtschip": "%s. Eerst met het luchtschip: praat met %s, %s.",
+    P + "stap.regel": "Volgende stap: %s, %s",
+    P + "stap.hint": "Weet je nog? %s, %s.",
+    # the tracker + questlog
+    "key.guhs.vr_volger": "Questvolger aan/uit (Vadsrijk)",
+    "key.guhs.vr_straal": "Lichtstraal aan/uit (Vadsrijk)",
+    P + "volg.afstand": "%s blokken",
+    P + "volg.hoger": "%s blokken, %s hoger",
+    P + "volg.lager": "%s blokken, %s lager",
+    P + "volg.straal_aan": "Lichtstraal boven je doel: aan",
+    P + "volg.straal_uit": "Lichtstraal boven je doel: uit",
+    P + "log.nu": "Nu: ",
+    P + "log.eerder": "Eerder in het verhaal:",
+    P + "log.nog_niet": "Deze quest heb je nog niet: praat eerst met de guh hierboven.",
+    P + "log.leeg.zone1": "Het verhaal van zone 1 is af! Kijk uit naar een ! boven een guh voor nog meer quests.",
+    P + "log.volger.aan": "Volger: aan",
+    P + "log.volger.uit": "Volger: uit",
+    P + "log.straal.aan": "Straal: aan",
+    P + "log.straal.uit": "Straal: uit",
+    P + "log.pin.vast": "Volgen",
+    P + "log.pin.los": "Niet volgen",
 }
 
 
@@ -978,6 +1153,12 @@ def teksten():
         t[P + "gids." + id + ".tekst"] = tekst
     for id, tekst in WEZENS.items():
         t[P + "wezen." + id] = tekst
+    t.update(PLEK_OVERIG)
+    for groep, tabel in (("npc", PLEK_NPC), ("poi", PLEK_POI), ("gebied", PLEK_GEBIED), ("kampvuur", PLEK_KAMPVUUR), ("baas", PLEK_BAAS)):
+        for id, x in tabel.items():
+            t[P + f"plek.{groep}.{id}"] = x
+    assert not (npc_ids - set(PLEK_NPC)), f"NPCs without a place text: {npc_ids - set(PLEK_NPC)}"
+    assert not (poi_ids - set(PLEK_POI)), f"POIs without a place text: {poi_ids - set(PLEK_POI)}"
     for k, v in t.items():
         assert "%" not in v.replace("%s", ""), f"stray % in {k}"
     return t
@@ -1049,7 +1230,7 @@ def build(h):
 FTB_CHAPTER = "guhs_vadsrijk"
 FTB_PORTRAIT = "guh:golden"
 FTB_SECTIES = [
-    ("vr_kamp", "Knuffelkamp", "guh:normal", ["vr_binnen", "vr_hq01_welkom", "vr_hq02_pad", "vr_hq03_poppen", "vr_hq04_kampvuur",
+    ("vr_kamp", "Knuffelkamp", "guh:normal", ["vr_binnen", "vr_hq01_welkom", "vr_hq02_pad", "vr_hq03_poppen", "vr_hq03b_elementen", "vr_hq04_kampvuur",
                                                "vr_hq05_klodderreus", "vr_k01_dobber", "vr_k02_uitzicht"]),
     ("vr_verhaal", "Het verhaal van zone 1", "guh:golden", ["vr_hq06_zwamzoet", "vr_hq07_littekens", "vr_hq08_sporenwoud",
                                                              "vr_hq09_druipgrotten", "vr_hq10_zwamtempel", "vr_hq11_opperzwam",
