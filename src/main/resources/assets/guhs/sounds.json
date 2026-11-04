@@ -6827,5 +6827,299 @@
       }
     ],
     "subtitle": "subtitles.guhs.dromen.muziek.vlieg"
+  },
+  "vr.stad.muziek.zwamzoet_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/zwamzoet_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.zwamzoet_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/zwamzoet_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.sfeer.zwamzoet": {
+    "sounds": [
+      {
+        "name": "guhs:vogels.pluisvinkje",
+        "type": "event",
+        "weight": 3,
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vogels.kaasmeesje",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:knuffeldal.kruimel_giechel",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:einde2_sponsguh_wezens.guh_babbel",
+        "type": "event",
+        "weight": 3,
+        "volume": 0.35,
+        "pitch": 1.25
+      },
+      {
+        "name": "guhs:wereldleven.ijscobel",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.stad.muziek.knuffelkamp_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/knuffelkamp_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.knuffelkamp_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/knuffelkamp_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.sfeer.knuffelkamp": {
+    "sounds": [
+      {
+        "name": "guhs:vogels.pluisvinkje",
+        "type": "event",
+        "weight": 3,
+        "volume": 0.75,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vogels.kaasmeesje",
+        "type": "event",
+        "weight": 3,
+        "volume": 0.75,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:creche.babygiechel",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:knuffeldal.kruimel_giechel",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.5,
+        "pitch": 1.0
+      },
+      {
+        "name": "minecraft:entity.baby_chicken.ambient",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.stad.muziek.haven_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/haven_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.haven_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/haven_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.sfeer.haven": {
+    "sounds": [
+      {
+        "name": "guhs:vogels.zeemeeuwtje",
+        "type": "event",
+        "weight": 4,
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "name": "minecraft:entity.boat.paddle_water",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.35,
+        "pitch": 0.8
+      },
+      {
+        "name": "minecraft:block.bell.use",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.18,
+        "pitch": 1.5
+      },
+      {
+        "name": "guhs:einde2_sponsguh_wezens.guh_babbel",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.3,
+        "pitch": 1.2
+      },
+      {
+        "name": "guhs:knuffeldal.kruimel_giechel",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.stad.muziek.kandijkom_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/kandijkom_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.kandijkom_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/kandijkom_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.sfeer.kandijkom": {
+    "sounds": [
+      {
+        "name": "guhs:baltoslee.bellen",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:balto.belletjes",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "minecraft:block.campfire.crackle",
+        "type": "event",
+        "weight": 3,
+        "volume": 0.7,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:knuffeldal.kruimel_giechel",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:einde2_sponsguh_wezens.guh_babbel",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.3,
+        "pitch": 1.3
+      }
+    ]
+  },
+  "vr.stad.bed.golfjes": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/bed_golfjes"
+      }
+    ]
+  },
+  "vr.stad.bed.briesje": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/bed_briesje"
+      }
+    ]
+  },
+  "vr.stad.bed.haardvuur": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/bed_haardvuur"
+      }
+    ]
+  },
+  "vr.stad.sfeer.nacht": {
+    "sounds": [
+      {
+        "name": "guhs:vogels.guh_uiltje",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.4,
+        "pitch": 0.9
+      },
+      {
+        "name": "guhs:creche.babygiechel",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 0.85
+      }
+    ]
   }
 }

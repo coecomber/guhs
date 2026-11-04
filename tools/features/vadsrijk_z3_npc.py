@@ -736,6 +736,17 @@ Q("z3_geheim_imker", "geheim", "z3_raatwever", "De grauwe honing",
    ("npc", "Hier, een raatje van de koningin zelf. Ze stuurt haar dank. Met gezoem.")],
   xp=20000, munten=15000, loot="episch", lv=45, auto=True)
 
+# ===== quest xp: z3-systemen's Z3Xp (a main step = 45 % of a level, a side quest = 18 %; same curve as kern Levels.xpVoor) =====
+def z3xp(lv, hoofd):
+    l = max(1, min(49, lv))
+    stap = max(1, round(40 + 25 * l ** 1.6))
+    return max(1, round(stap * (0.45 if hoofd else 0.18)))
+
+
+for _q in QUESTS:
+    _q["beloning"]["xp"] = z3xp(_q["lv"], _q["soort"] != "zij")
+
+
 # ---------------------------------------------------------------------------------------------------------------------------
 # Secrets: 10 knuffels, 5 clues to the Mika-imker, 5 treasures, 8 reliefs (Z3NpcPlekken.KNUFFEL/AANWIJZING/SCHAT/RELIEF)
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -804,11 +815,15 @@ OVERIG = {
     # travel: the destination texts (optie.vlieg.schemerwortel, reis.slot.schemerwortel_*, reis.kies.z3_kapitein) are z3-wereld's
     P + "optie.rol.luchtschip_z3": "Waar vliegen we heen?",
     P + "optie.rol.premiebord": "Het premiebord bekijken",
+    P + "optie.rol.honingkraam": "Wat heb je in De Honingkraam?",
+    P + "optie.z3_jacht": "Het jachtbord bekijken",
+    P + "optie.z3_penningwinkel": "Naar de penningwinkel",
+    P + "optie.z3_gouden_veren": "25 Gouden Veren ruilen voor de Gouden Pluimguh",
+    P + "optie.z3_advancement": "Ik ben klaar voor mijn vierde titel!",
     P + "optie.rol.honinglift": "Met de Honinglift",
     P + "optie.rol.honingthee": "Een kopje honingthee, graag!",
     P + "adv.knuffelridder.4": "Nestwachter", P + "adv.pluisjager.4": "Kruinvalk", P + "adv.vadsmagier.4": "Schemerwijze",
     # roles
-    Z + "premiebord.later": "Het premiebord hangt er nog leeg bij (dat komt met de systemen van zone 3). Kom straks terug!",
     Z + "honinglift.dicht": "De Honinglift zit nog vast. Iemand in de stam moet hem eerst laten zakken...",
     Z + "honinglift.open": "Ergens beneden ratelt een ketting. De Honinglift tussen Honingtak en Mosvoet doet het weer!",
     Z + "honinglift.af": "Instappen! Langzaam zakt de emmer langs de stam omlaag, naar Mosvoet.",

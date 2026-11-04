@@ -409,7 +409,7 @@ public final class Z2Haken {
     /** (dev) the area the player stands in. */
     @Nullable
     static String gebiedVan(ServerPlayer p) {
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         return g == null ? null : g.id();
     }
 }

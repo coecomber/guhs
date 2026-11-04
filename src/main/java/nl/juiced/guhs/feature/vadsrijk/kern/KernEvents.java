@@ -276,7 +276,7 @@ final class KernEvents {
     }
 
     private static void gebied(ServerPlayer p, SpelerData d) {
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         String id = g == null ? "" : g.id();
         if (!id.equals(d.gebied)) {
             d.gebied = id;

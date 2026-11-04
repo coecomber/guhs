@@ -65,7 +65,7 @@ public final class Z3Npcs {
         // --- shops and services -----------------------------------------------------------------------------------------------------
         npc("z3_smid", 90, GuhVariant.CHOCO, Gedrag.STAAN, "smid", 1.15f, BUILDER_HELMET, STRIPED_SWEATER, GRILL_SCHORT);
         npc("z3_juwelier", 90, GuhVariant.MINT, Gedrag.STAAN, "juwelier", MONOCLE, STRIPED_SWEATER, KNUS_SJAALTJE);
-        npc("z3_winkel", 270, GuhVariant.NORMAL, Gedrag.STAAN, "winkel", ZONNEHOEDJE, STRIPED_SWEATER, TUINSCHORTJE);
+        npc("z3_winkel", 270, GuhVariant.NORMAL, Gedrag.STAAN, "honingkraam", ZONNEHOEDJE, STRIPED_SWEATER, TUINSCHORTJE);
         npc("z3_wapens", 270, GuhVariant.GOLDEN, Gedrag.STAAN, "wapenwinkel", EYEPATCH, STRIPED_SWEATER, KNIGHT_ARMOUR);
         npc("z3_kleermaker", 90, GuhVariant.MINT, Gedrag.STAAN, "kleermaker", THEEMUTSJE, STRIPED_SWEATER, BLOESEMKRANSJE);
         npc("z3_markt", 0, GuhVariant.NORMAL, Gedrag.STAAN, "markt", KERMIS_HOED, STRIPED_SWEATER, KERMIS_STRIK);

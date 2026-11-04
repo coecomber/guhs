@@ -14,7 +14,13 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import nl.juiced.guhs.feature.vadsrijk.economie.Winkels;
+import nl.juiced.guhs.feature.vadsrijk.klassen.Advancement;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen;
+import nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor;
+import nl.juiced.guhs.feature.vadsrijk.zone3.systemen.GoudenVeren;
+import nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Premiebord;
+import nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry;
 import nl.juiced.guhs.feature.vadsrijk.npc.Questlog;
 
 /**
@@ -39,19 +45,31 @@ public final class Z3Rollen {
     }
 
     static void koppel() {
+        // z3-systemen (merged): the bounty board, the Honingkraam, the Gouden Veren, the 4th job advancement
         if (!NpcRollen.gekoppeld("premiebord")) {
-            NpcRollen.koppelAls("premiebord", (p, a) -> {
-                if (!reflectie(p, "", "zone3.systemen.Premiebord#open", "zone3.systemen.premie.Premiebord#open", "zone3.systemen.Premies#open")) {
-                    p.sendSystemMessage(Component.translatable(Z3Verhaal.Z + "premiebord.later").withStyle(ChatFormatting.GRAY));
-                }
-                return true;
-            });
+            NpcRollen.koppel("premiebord", p -> Premiebord.open(p, Premiebord.PREMIES));
         }
+        if (!NpcRollen.gekoppeld("honingkraam")) {
+            NpcRollen.koppel("honingkraam", p -> Winkels.open(p, Z3SystemenRegistry.HONINGKRAAM));
+        }
+        extra("z3_jager", "jacht", p -> true, p -> Premiebord.open(p, Premiebord.JACHT));
+        extra("z3_jager", "penningwinkel", p -> true, p -> Premiebord.open(p, Premiebord.WINKEL));
+        extra("z3_veertje", "gouden_veren", GoudenVeren::kanRuilen, p -> GoudenVeren.ruil(p));
+        extra("z3_wasja", "advancement", p -> Advancement.kanDoen(p), p -> Advancement.doe(p));
         if (!NpcRollen.gekoppeld("honinglift")) {
             NpcRollen.koppel("honinglift", Z3Rollen::honinglift);
         }
         if (!NpcRollen.gekoppeld("honingthee")) {
             NpcRollen.koppel("honingthee", Z3Rollen::thee);
+        }
+    }
+
+    /** An extra choice in an NPC's role dialogue (QuestMotor.EXTRA; text vadsrijk.npc.optie.z3_<id>). */
+    static void extra(String npc, String id, java.util.function.Predicate<ServerPlayer> zichtbaar, java.util.function.Consumer<ServerPlayer> doe) {
+        java.util.List<QuestMotor.ExtraOptie> l = QuestMotor.EXTRA.computeIfAbsent(npc, k -> new java.util.concurrent.CopyOnWriteArrayList<>());
+        String key = "vadsrijk.npc.optie.z3_" + id;
+        if (l.stream().noneMatch(e -> e.tekstKey().equals(key))) {
+            l.add(new QuestMotor.ExtraOptie(key, zichtbaar, doe));
         }
     }
 

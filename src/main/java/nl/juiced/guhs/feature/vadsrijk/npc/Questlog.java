@@ -240,12 +240,12 @@ public final class Questlog {
         Tips.toon(p, "vadsrijk.npc.tip.quests");
         // a campfire objective whose area already holds your checkpoint counts at once (kern only reports a NEW checkpoint)
         net.minecraft.core.BlockPos cp = Spelers.data(p).checkpoint;
-        var g = cp == null ? null : nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(cp.getX(), cp.getZ());
+        var g = cp == null ? null : nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(cp.getX(), cp.getY(), cp.getZ());
         if (g != null) {
             tel(p, Quest.Doel.Type.KAMPVUUR, d -> d.doel().equals(g.id()), 1);
         }
         // the same for "go to area x" while you already stand in it (kern only reports ENTERING an area)
-        var hier = nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(p.getX(), p.getZ());
+        var hier = nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(p.getX(), p.getY(), p.getZ());
         if (hier != null && Vadsrijk.in(p)) {
             tel(p, Quest.Doel.Type.GEBIED, d -> !d.doel().startsWith("poi:") && List.of(d.doel().split("\\|")).contains(hier.id()), 1);
         }

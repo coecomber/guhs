@@ -51,7 +51,12 @@ public class VadsrijkBiomeSource extends BiomeSource {
 
     @Override
     public Holder<Biome> getNoiseBiome(int quartX, int quartY, int quartZ, Climate.Sampler sampler) {
-        return perIndex[VadsrijkBiomen.index(QuartPos.toBlock(quartX) + 2, QuartPos.toBlock(quartZ) + 2)];
+        return perIndex[VadsrijkBiomen.index(QuartPos.toBlock(quartX) + 2, QuartPos.toBlock(quartY) + 2, QuartPos.toBlock(quartZ) + 2)];
+    }
+
+    /** The biome at block x/y/z (for tests and tools; zone 3 is layered). */
+    public Holder<Biome> biomeOp(int x, int y, int z) {
+        return perIndex[VadsrijkBiomen.index(x, y, z)];
     }
 
     /** The biome at block x/z (for tests and tools). */

@@ -258,7 +258,8 @@ public final class Z3Haken {
 
     static void verhaal(ServerPlayer p, ServerLevel sl, long t) {
         // hq01: standing in Honingtak counts as arrived (also when the kern area is not y-aware yet)
-        if (Questlog.actief(p, HQ01) && !doelKlaar(p, HQ01, 0) && p.getX() > 1634 && p.getX() < 2014 && Math.abs(p.getZ()) < 110 && p.getY() > 150) {
+        nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.Gebied hier = nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(p.getX(), p.getY(), p.getZ());
+        if (Questlog.actief(p, HQ01) && !doelKlaar(p, HQ01, 0) && hier != null && hier.id().equals("z3_honingtak")) {
             NpcApi.meld(p, "z3", "aangekomen");
         }
         // hq03: on the Pluimguh for the first time, the glide, the title
@@ -518,7 +519,7 @@ public final class Z3Haken {
                 p.level().playSound(null, b, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1.3f);
                 RijkScenes.titel(p, Component.translatable(Z + "schat.titel").withStyle(ChatFormatting.GOLD), Component.translatable(Z + "schat." + id), 60,
                         0xFFD24A);
-                nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType bt = nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2Haken.stukVoor(p);
+                nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType bt = stukVoor(p);
                 List<ItemStack> buit = bt == null ? List.of()
                         : List.of(nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.stack(nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.rol(bt,
                                 Math.max(1, Spelers.level(p)), id.equals("onder_de_tak") ? nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid.EPISCH
@@ -541,7 +542,7 @@ public final class Z3Haken {
             case KUIKENS, LICHTJES -> {
                 sl.sendParticles(p, soort.equals(KUIKENS) ? ParticleTypes.CHERRY_LEAVES : ParticleTypes.GLOW, false, false, c.x, c.y + 0.8, c.z, 16, 0.4,
                         0.4, 0.4, 0.05);
-                p.level().playSound(null, b, soort.equals(KUIKENS) ? SoundEvents.CHICKEN_AMBIENT : SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f,
+                p.level().playSound(null, b, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f,
                         1.6f);
                 p.sendSystemMessage(Component.translatable(Z + (soort.equals(KUIKENS) ? "kuiken" : "lichtje") + ".gevonden", n,
                         (soort.equals(KUIKENS) ? Z3NpcPlekken.KUIKEN : Z3NpcPlekken.LICHTJE).size()).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -551,6 +552,19 @@ public final class Z3Haken {
         }
         Questlog.tel(p, Quest.Doel.Type.GEHEIM, d -> d.doel().equals("teller:" + soort), 1);
         Questlog.kijkLive(p);
+    }
+
+    /** A random piece the player can use: a weapon of their class or any armour/jewellery (as zone 2's treasures). */
+    @Nullable
+    static nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType stukVoor(ServerPlayer p) {
+        String k = Spelers.data(p).klasse;
+        List<nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType> l = new ArrayList<>();
+        for (nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType t : nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes.alle()) {
+            if (t.slot() != nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.WAPEN || k.equals(t.klasse())) {
+                l.add(t);
+            }
+        }
+        return l.isEmpty() ? null : l.get(p.getRandom().nextInt(l.size()));
     }
 
     /** (dev/tests) */
