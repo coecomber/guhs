@@ -1,0 +1,151 @@
+# Het Vadsrijk zone 2, fix round 2 (g-z2): the compact rebuild. Arrival, Kandijkom skyline + market + interiors, the gates,
+# each area, the Spiegelburcht, the Galmwolf arena.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_g_z2.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 120
+waitrender 300
+
+section aankomst
+wait 300
+/guhs vadsrijk z2wereld vlieg kandijkom
+wait 120
+shot gz2_opening_storm gui
+wait 170
+shot gz2_opening_naald gui
+wait 160
+waitrender 400
+look 0 -5
+shot gz2_dok gui
+
+section kandijkom
+/tp @s 0 140 -2270
+look 180 22
+wait 80
+waitrender 500
+shot gz2_skyline gui
+/tp @s -60 128 -2470
+look 135 25
+wait 60
+waitrender 400
+shot gz2_skyline_nw gui
+/guhs vadsrijk z2wereld plek plein
+look 180 0
+wait 60
+waitrender 300
+shot gz2_plein_toren gui
+/guhs vadsrijk z2wereld plek chocomelkkraam
+look 270 5
+wait 40
+waitrender 200
+shot gz2_markt gui
+/guhs vadsrijk z2wereld plek sneeuwguhspar
+look 180 -10
+wait 40
+waitrender 200
+shot gz2_kerstboom gui
+/guhs vadsrijk z2wereld plek gebouw.cafe.binnen
+look 0 10
+wait 60
+waitrender 200
+shot gz2_cafe_binnen gui
+/guhs vadsrijk z2wereld plek gebouw.huis_7.binnen
+look 90 10
+wait 60
+waitrender 200
+shot gz2_huis_binnen gui
+/guhs vadsrijk z2wereld plek gebouw.kristalkapel.binnen
+look 0 5
+wait 60
+waitrender 200
+shot gz2_kapel_binnen gui
+
+section poorten
+/tp @s 40 91 -2400
+look 270 5
+wait 40
+waitrender 300
+shot gz2_oostpoort gui
+/tp @s 96 101 -2399
+look 90 10
+wait 40
+waitrender 300
+shot gz2_oostpoort_buiten gui
+/tp @s 0 91 -2440
+look 180 0
+wait 40
+waitrender 300
+shot gz2_noordpoort_trappen gui
+
+section gebieden
+/guhs vadsrijk z2wereld plek kampvuur_galmhellingen_1
+look 90 5
+wait 60
+waitrender 300
+shot gz2_kampvuur_galm1 gui
+/guhs vadsrijk z2wereld plek lawine_golf
+look 0 15
+wait 60
+waitrender 300
+shot gz2_lawinegolf gui
+/guhs vadsrijk z2wereld plek arena_galmwolf_deur
+look 270 5
+wait 80
+waitrender 300
+shot gz2_galmwolf_arena gui
+/guhs vadsrijk z2wereld plek kampvuur_knuffelmeer_1
+look 90 5
+wait 60
+waitrender 300
+shot gz2_meer gui
+/guhs vadsrijk z2wereld plek draak_zadel_kijk
+look 0 5
+wait 60
+waitrender 300
+shot gz2_drakenzadel gui
+/guhs vadsrijk z2wereld plek kampvuur_splinterkloof_3
+look 180 10
+wait 60
+waitrender 300
+shot gz2_kloofrand gui
+/guhs vadsrijk z2wereld plek brug_5_zuid
+look 270 10
+wait 60
+waitrender 300
+shot gz2_spleetbrug gui
+/guhs vadsrijk z2wereld plek kloof_trap_1
+look 270 0
+wait 60
+waitrender 300
+shot gz2_kloofbodem gui
+/guhs vadsrijk z2wereld plek kristalbos_3
+look 0 10
+wait 60
+waitrender 300
+shot gz2_kristalbos gui
+
+section burcht
+/guhs vadsrijk z2wereld plek brug_3_zuid
+look 180 -15
+wait 60
+waitrender 400
+shot gz2_burcht_brug gui
+/guhs vadsrijk z2wereld plek deur_spiegelburcht_voor
+look 180 -10
+wait 60
+waitrender 300
+shot gz2_burcht_deur gui
+/guhs vadsrijk z2wereld plek arena_spiegelzucht
+look 180 10
+wait 60
+waitrender 300
+shot gz2_spiegelzaal gui
+/guhs vadsrijk z2wereld gondel op
+wait 140
+shot gz2_gondel gui
+wait 200

@@ -47,7 +47,7 @@ public class Z2NpcGameTests {
         Language t = Language.getInstance();
         List<Quest> z2 = z2();
         long hoofd = z2.stream().filter(Quest::hoofd).count(), zij = z2.stream().filter(q -> q.soort() == Quest.Soort.ZIJ).count();
-        helper.assertTrue(hoofd >= 12 && zij >= 20, "zone 2: ~12 main and ~20 side quests: " + hoofd + "/" + zij);
+        helper.assertTrue(hoofd >= 12 && zij >= 5, "zone 2: ~12 main and ~5 side quests: " + hoofd + "/" + zij);
         helper.assertTrue(Quests.van("hq01_welkom") != null, "zone 1 still loads next to zone 2");
         for (String id : Z2NpcPlekken.NPC.keySet()) {
             NpcDef d = Npcs.van(id);

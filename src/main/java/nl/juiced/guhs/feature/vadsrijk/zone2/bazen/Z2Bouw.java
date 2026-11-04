@@ -107,35 +107,36 @@ public final class Z2Bouw {
     /** The Spiegelburcht shell (wereld's layout, POI_Z2.md): 4 rooms with gate openings (x -2..2, 5 high), the round hall with a glass dome. */
     public static int burcht(ServerLevel sl) {
         int y = Z2BazenPlekken.BURCHT_Y;
+        int bx = Z2BazenPlekken.BURCHT_X, dz = Z2BazenPlekken.DZ;
         BlockState vloer = Blocks.SMOOTH_QUARTZ.defaultBlockState(), muur = Blocks.CALCITE.defaultBlockState(), rand = Blocks.POLISHED_TUFF.defaultBlockState();
         BlockPos hal = Z2BazenPlekken.SPIEGEL_CENTRUM;
         for (int z = Z2BazenPlekken.BURCHT_DEUR_Z + 8; z >= hal.getZ() - 28; z -= 16) {
-            laad(sl, new BlockPos(0, y, z), 30);
+            laad(sl, new BlockPos(bx, y, z), 30);
         }
         int n = 0;
         // rooms: x half width, z0 (north), z1 (south)
-        int[][] kamers = {{16, -2879, -2857}, {14, -2899, -2881}, {9, -2917, -2901}, {14, -2937, -2919}};
+        int[][] kamers = {{16, -2879 + dz, -2857 + dz}, {14, -2899 + dz, -2881 + dz}, {9, -2917 + dz, -2901 + dz}, {14, -2937 + dz, -2919 + dz}};
         for (int[] k : kamers) {
             int kx = k[0] + 1;
-            n += doos(sl, -kx, kx, y - 1, y - 1, k[1] - 1, k[2] + 1, vloer);
-            n += doos(sl, -kx, -kx, y, y + 11, k[1] - 1, k[2] + 1, muur);
-            n += doos(sl, kx, kx, y, y + 11, k[1] - 1, k[2] + 1, muur);
-            n += doos(sl, -kx, kx, y + 12, y + 12, k[1] - 1, k[2] + 1, rand);
+            n += doos(sl, bx - kx, bx + kx, y - 1, y - 1, k[1] - 1, k[2] + 1, vloer);
+            n += doos(sl, bx - kx, bx - kx, y, y + 11, k[1] - 1, k[2] + 1, muur);
+            n += doos(sl, bx + kx, bx + kx, y, y + 11, k[1] - 1, k[2] + 1, muur);
+            n += doos(sl, bx - kx, bx + kx, y + 12, y + 12, k[1] - 1, k[2] + 1, rand);
         }
         // cross walls with their openings (the front door 7 wide and 9 high; the gates 5 x 5)
-        int[][] muren = {{Z2BazenPlekken.BURCHT_DEUR_Z, 17, 3, 8}, {-2880, 17, 2, 4}, {-2900, 15, 2, 4}, {-2918, 15, 2, 4}, {-2938, 15, 2, 4}};
+        int[][] muren = {{Z2BazenPlekken.BURCHT_DEUR_Z, 17, 3, 8}, {-2880 + dz, 17, 2, 4}, {-2900 + dz, 15, 2, 4}, {-2918 + dz, 15, 2, 4}, {-2938 + dz, 15, 2, 4}};
         for (int[] m : muren) {
             for (int x = -m[1]; x <= m[1]; x++) {
                 for (int yy = 0; yy <= 11; yy++) {
                     if (Math.abs(x) <= m[2] && yy <= m[3]) {
                         continue;
                     }
-                    n += zet(sl, new BlockPos(x, y + yy, m[0]), yy % 4 == 0 ? rand : muur);
+                    n += zet(sl, new BlockPos(bx + x, y + yy, m[0]), yy % 4 == 0 ? rand : muur);
                 }
             }
-            n += doos(sl, -m[2], m[2], y - 1, y - 1, m[0], m[0], vloer);
+            n += doos(sl, bx - m[2], bx + m[2], y - 1, y - 1, m[0], m[0], vloer);
         }
-        n += doos(sl, -4, 4, y - 1, y - 1, Z2BazenPlekken.BURCHT_DEUR_Z + 1, Z2BazenPlekken.BURCHT_DEUR_Z + 8, vloer);   // the forecourt
+        n += doos(sl, bx - 4, bx + 4, y - 1, y - 1, Z2BazenPlekken.BURCHT_DEUR_Z + 1, Z2BazenPlekken.BURCHT_DEUR_Z + 8, vloer);   // the forecourt
         // the hall: floor, a wall ring (open towards the prismazaal), a flat glass dome at +14
         int hr = Z2BazenPlekken.SPIEGEL_STRAAL;
         n += schijf(sl, hal.below(), hr + 1, vloer);
@@ -152,8 +153,8 @@ public final class Z2Bouw {
         }
         n += schijf(sl, hal.above(Z2BazenPlekken.KOEPEL_ONDER), hr + 1, Blocks.LIGHT_GRAY_STAINED_GLASS.defaultBlockState());
         // light
-        for (int z = -2860; z >= -2934; z -= 6) {
-            for (BlockPos l : new BlockPos[] {new BlockPos(-8, y + 11, z), new BlockPos(8, y + 11, z)}) {
+        for (int z = -2860 + dz; z >= -2934 + dz; z -= 6) {
+            for (BlockPos l : new BlockPos[] {new BlockPos(bx - 8, y + 11, z), new BlockPos(bx + 8, y + 11, z)}) {
                 n += zet(sl, l, Blocks.SEA_LANTERN.defaultBlockState());
             }
         }

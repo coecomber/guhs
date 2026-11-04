@@ -44,7 +44,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.wezens.mob.Meer;
 import nl.juiced.guhs.feature.vadsrijk.zone2.wezens.mob.Z2Wezen;
 
 /**
- * Het Vadsrijk zone 2 "De Splinterpieken", slice "wezens" (Z2_BRIEF): 14 monster kinds for lv 20-35 + the Spiegelburcht adds
+ * Het Vadsrijk zone 2 "De Splinterpieken", slice "wezens" (Z2_BRIEF): 14 monster kinds for lv 20-30 + the Spiegelburcht adds
  * (GeckoLib models from tools/features/vadsrijk_z2_wezens.py), elites (kern affixes, zone-1 look), the status Bevroren
  * ({@link Bevroren}, an adapter: kern has no such status), the spawners ({@link Z2WezensSpawners}, spots in {@link Z2WezensPlekken}),
  * the critters ({@link Z2Critters}), 15 base types + 2 sets + a table per creature ({@link Z2Loot}, {@link Z2Sets}) and the dev

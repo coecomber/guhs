@@ -24,7 +24,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.Telegraaf;
 import nl.juiced.guhs.feature.vadsrijk.wezens.mob.Effecten;
 import nl.juiced.guhs.feature.vadsrijk.zone2.wezens.Bevroren;
 
-/** Het Bevroren Knuffelmeer (lv 25-30): IJzelgeest, Schotsbijter, Versteende Wacht, Ijspuffer. */
+/** Het Bevroren Knuffelmeer (lv 23-26): IJzelgeest, Schotsbijter, Versteende Wacht, Ijspuffer. */
 public final class Meer {
     /** The telegraph colour of frost (ice blue). */
     public static final int IJS = 0x8FD8FF;

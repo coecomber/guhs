@@ -139,7 +139,7 @@ public class VadsrijkZ2BazenGameTests {
         vloer(sl, c, 23);
         Spiegelzucht s = Z2BazenRegistry.SPIEGELZUCHT.get().create(sl, EntitySpawnReason.COMMAND);
         s.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5, 0, 0);
-        s.stelIn(33, Element.NATUUR, false, Set.of());
+        s.stelIn(30, Element.NATUUR, false, Set.of());
         sl.addFreshEntity(s);
         ServerPlayer p = speler(helper, Vec3.atBottomCenterOf(c).add(0, 0, 15));
         helper.runAfterDelay(45, () -> {
@@ -204,11 +204,11 @@ public class VadsrijkZ2BazenGameTests {
         for (Z2BazenPlekken.Puzzel pz : Z2BazenPlekken.PUZZELS) {
             for (int poging = 0; poging < 2; poging++) {
                 boolean oplossing = poging == 1;
-                BlockPos ref = new BlockPos(0, Z2BazenPlekken.BURCHT_Y, pz.z1());
+                BlockPos ref = new BlockPos(Z2BazenPlekken.BURCHT_X, Z2BazenPlekken.BURCHT_Y, pz.z1());
                 java.util.function.Function<BlockPos, BlockPos> hier = b -> o.offset(b.getX() - ref.getX() + 16, 0, b.getZ() - ref.getZ() - 1);
                 for (int x = -pz.x() - 1; x <= pz.x() + 1; x++) {
                     for (int z = pz.z0() - 1; z <= pz.z1() + 1; z++) {
-                        sl.setBlock(hier.apply(new BlockPos(x, ref.getY(), z)), Math.abs(x) == pz.x() + 1 || z == pz.z0() - 1 || z == pz.z1() + 1
+                        sl.setBlock(hier.apply(new BlockPos(ref.getX() + x, ref.getY(), z)), Math.abs(x) == pz.x() + 1 || z == pz.z0() - 1 || z == pz.z1() + 1
                                 ? Blocks.POLISHED_TUFF.defaultBlockState() : Blocks.AIR.defaultBlockState(), 2);
                     }
                 }
@@ -245,7 +245,7 @@ public class VadsrijkZ2BazenGameTests {
         vloer(sl, c, 20);
         Boormeester m = Z2BazenRegistry.BOORMEESTER.get().create(sl, EntitySpawnReason.COMMAND);
         m.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5, 0, 0);
-        m.stelIn(32, Element.VUUR, false, Set.of());
+        m.stelIn(28, Element.VUUR, false, Set.of());
         m.zetOntvadst(false);
         sl.addFreshEntity(m);
         ServerPlayer p = speler(helper, Vec3.atBottomCenterOf(c).add(16, 0, 0));
@@ -297,7 +297,7 @@ public class VadsrijkZ2BazenGameTests {
     public static void z2Loot(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         for (String baas : new String[] {"galmwolf", "spiegelzucht", "boormeester"}) {
-            var r = Z2BazenLoot.kist(baas, p, 33, RandomSource.create(baas.hashCode()));
+            var r = Z2BazenLoot.kist(baas, p, 30, RandomSource.create(baas.hashCode()));
             boolean legendarisch = false, trofee = false;
             for (ItemStack s : r.items()) {
                 Uitrusting u = Rollen.van(s);
@@ -313,7 +313,7 @@ public class VadsrijkZ2BazenGameTests {
         long guhddelijk = Z2BazenLoot.BENOEMD.stream().filter(b -> b.zeldzaamheid() == Zeldzaamheid.GUHDDELIJK).count();
         long leg = Z2BazenLoot.BENOEMD.stream().filter(b -> b.zeldzaamheid() == Zeldzaamheid.LEGENDARISCH).count();
         helper.assertTrue(guhddelijk == 2 && leg == 6, "6 Legendary + 2 Guhddelijk");
-        ItemStack kroon = Z2BazenLoot.maak(Z2BazenLoot.benoemd("z2baas_spiegelkroon"), 33, RandomSource.create(1));
+        ItemStack kroon = Z2BazenLoot.maak(Z2BazenLoot.benoemd("z2baas_spiegelkroon"), 30, RandomSource.create(1));
         helper.assertTrue(Rollen.van(kroon) != null && Rollen.van(kroon).gebonden(), "the Guhddelijk crown rolls and is gebonden");
         helper.succeed();
     }

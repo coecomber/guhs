@@ -35,12 +35,12 @@ NPCS = {
         "Chocomelk! Met slagroom! Met marshmallows! Met nog meer slagroom!",
         "Wie koude pootjes heeft, krijgt van mij een beker. Zo werkt dat in Kandijkom.",
         "Mijn geheime recept? Een snufje kaneel en heel veel knuffels in de pan."],
-        "in het chocomelkcafé aan de zuidoostkant van het plein " + _KK),
+        "in het chocomelkcafé aan de zuidwestkant van het plein " + _KK),
     "z2_burgemeester": ("Burgemeester Kandij", [
         "Welkom in Kandijkom, de warmste plek van de koudste bergen!",
         "Ons stadje ligt in een reuzengeode. Het roze kwarts houdt de warmte vast. En de sneeuw buiten.",
         "Ik heb een ambtsketting van kandijsuiker. Niet aan likken. Ik zie je kijken."],
-        "aan de noordkant van het plein " + _KK + ", voor de grote sneeuwguh-spar"),
+        "aan de noordkant van het plein " + _KK + ", bij de kristallen klokkentoren"),
     "z2_kwarts": ("Kapitein Kwarts", [
         "De Kristalwacht bewaakt Kandijkom. Dag en nacht. Met warme sokken.",
         "Daarbuiten versteent de Vadsloosheid alles tot grauw kristal. Wij laten het hier niet binnen.",
@@ -50,7 +50,7 @@ NPCS = {
         "Dit is het filiaal van De Knuffelorde in de bergen. Klein, maar met verwarming.",
         "Hier wissel je van klasse, net als bij de Grootmeester. En op level 30 wacht je hier een nieuwe titel.",
         "Kristal onthoudt alles. Licht, warmte, liedjes. Daarom luister ik er graag naar."],
-        "in de Kristalkapel aan de noordkant van Kandijkom, achter de grote sneeuwguh-spar"),
+        "in de Kristalkapel, hoog op het bovenste terras in het noordwesten van Kandijkom"),
     # --- Kandijkom: shops and services -----------------------------------------------------------------------------------------
     "z2_juwelier": ("Juweliersguh Glinster", [
         "Ruwe kristallen uit de bergen? Ik zet ze zo in je spullen. Klik, klaar.",
@@ -66,7 +66,7 @@ NPCS = {
         "Warme drankjes, wollen sokken en verband met sneeuwvlokjes erop!",
         "Een pepermuntje voor onderweg? Ze zijn gratis. De drankjes niet.",
         "Mijn winkeltje ruikt naar munt. Dat houdt de verkoudheid buiten."],
-        "in het kandijwinkeltje aan de oostkant van het plein " + _KK),
+        "in het kandijwinkeltje op het eerste terras aan de oostkant " + _KK),
     "z2_wapenhandelaar": ("Wapenhandelaar IJspegel", [
         "Zwaarden met een ijsrandje, bogen met wanten-grip. Alles voor de bergen!",
         "Puntig is goed. Te puntig is gevaarlijk. Ik verkoop precies goed puntig.",
@@ -76,12 +76,12 @@ NPCS = {
         "Een trui voor jou, een trui voor je guh, een trui voor de trui.",
         "Alle guhs in Kandijkom dragen mijn truien. Behalve de burgemeester. Die draagt er twee.",
         "Brei, brei, brei. Dat is mijn liedje. Het heeft maar één woord."],
-        "in de wantjeswinkel aan de westkant van het plein " + _KK),
+        "in de wantjeswinkel op het eerste terras aan de westkant " + _KK),
     "z2_veilingmeester": ("Veilingmeester Suikerspin", [
         "Eenmaal, andermaal... VERKOCHT aan de guh met de warmste muts!",
         "Ook in de bergen kun je handelen met andere avonturiers. Gebonden spullen niet, hoor.",
         "Mijn hamer is van suikerspin. Hij maakt geen geluid, maar hij ruikt wel lekker."],
-        "in het veilinghuis (de oude bank) aan de zuidwestkant van het plein " + _KK),
+        "in het veilinghuis (de oude bank) aan de zuidoostkant van het plein " + _KK),
     "z2_schaatsjuf": ("Schaatsjuf Zwierig", [
         "Rondje links, rondje rechts, pootjes van elkaar en... ZWIER!",
         "Vallen is niet erg. Opstaan is het belangrijkste. Daarna weer vallen.",
@@ -91,23 +91,84 @@ NPCS = {
         "De gondel naar de top! Uitzicht gegarandeerd, wiebelen ook.",
         "Niet uit het raampje hangen. Ook niet als je een sneeuwhaas ziet.",
         "Mijn kabel is honderd jaar oud. Hij heeft nog nooit losgelaten. Nog nooit!"],
-        "bij het gondelstation aan de noordoostkant van Kandijkom"),
+        "bij het gondelstation op het bovenste terras in het noordoosten van Kandijkom"),
     # --- Kandijkom: citizens with side quests -----------------------------------------------------------------------------------
     "z2_opa_sneeuwbal": ("Opa Sneeuwbal", [
         "In mijn tijd liepen we elke dag door de sneeuw naar school. Bergop. Beide kanten op.",
         "Mijn wanten zijn weg. Mijn pootjes zijn nu ijsklontjes.",
         "Kom eens hier, ik vertel je over de winter van '32. Die was koud. Einde verhaal."],
-        "op het terras van het chocomelkcafé, aan de zuidoostkant van het plein " + _KK),
+        "op het terras van het chocomelkcafé, aan de zuidwestkant van het plein " + _KK),
     "z2_bakker": ("Bakker Speculaas", [
         "Kandijkoekjes! Knapperig van buiten, kristal van binnen!",
         "Mijn oven is de tweede warmste plek van Kandijkom. Na het café. En de smidse. Derde dus.",
         "Wie wil er een koekje met een sneeuwvlokje erop?"],
-        "bij zijn bakkerij aan de oostrand van Kandijkom"),
+        "bij zijn bakkerij op het terras in het zuidwesten van Kandijkom"),
     "z2_vlokje": ("Kleine Vlokje", [
         "Mijn knuffels zijn gaan schaatsen en nu zitten ze vast onder het ijs!",
         "Ik ben Vlokje. Ik ben zes. En driekwart.",
         "Als ik groot ben, word ik Kristalwacht. Met een kandijspeer!"],
         "midden op het plein " + _KK + ", bij de schaatsvijver"),
+    # (fix round 2) town life: skaters, snowball kids, penguin guhs, the sledge family, market folk
+    "z2_schaatser_1": ("Zwiertje", [
+        "Kijk! Een pirouette! Bijna dan.",
+        "Schaatsen is gewoon heel snel glijden met stijl.",
+        "Als je valt, sta je op en doe je alsof het een trucje was."],
+        "op de schaatsvijver midden op het plein " + _KK),
+    "z2_schaatser_2": ("Glijbert", [
+        "Rondje links, rondje rechts, rondje chocomelk.",
+        "Ik heb het ijs gisteren nog gepoetst. Met mijn buik.",
+        "Schaats je mee? Er is plek genoeg!"],
+        "op de schaatsvijver midden op het plein " + _KK),
+    "z2_sneeuwbal_1": ("Bolletje", [
+        "Pas op! Sneeuwbal! ...Gemist. Expres natuurlijk.",
+        "Wij hebben een sneeuwballenfort achter de kerstboom.",
+        "Wil jij in ons team? Wij winnen altijd. Soms."],
+        "bij het plein " + _KK + ", vlak bij de grote kerstboom"),
+    "z2_sneeuwbal_2": ("Plofje", [
+        "Raak! O nee, dat was de burgemeester...",
+        "Een goede sneeuwbal is rond, zacht en een beetje roze.",
+        "Bolletje gooit altijd mis. Niet zeggen dat ik dat zei."],
+        "bij het plein " + _KK + ", vlak bij de grote kerstboom"),
+    "z2_pinguguh_1": ("Pinguguh Waggel", [
+        "Waggel waggel. Dat is mijn manier van lopen. En van dansen.",
+        "Pinguguhs hebben het nooit koud. Behalve aan hun voetjes.",
+        "Die kerstboom is mooi, maar ik vind de ballen het lekkerst. Om naar te kijken."],
+        "bij de grote kerstboom op het plein " + _KK),
+    "z2_pinguguh_2": ("Pinguguh Flapper", [
+        "Ik kan niet vliegen, maar ik kan wel heel hard glijden.",
+        "Schaatsen? Ik heb ingebouwde schaatsen. Mijn buik.",
+        "Een visje bij de chocomelk? Nee? Jammer."],
+        "bij de schaatsvijver op het plein " + _KK),
+    "z2_pinguguh_3": ("Pinguguh Smoking", [
+        "Ik draag altijd een smoking. Je weet nooit wanneer er een feestje is.",
+        "Die kraampjes ruiken naar warme koekjes. Hmm.",
+        "Waggel mee naar de markt!"],
+        "op de kerstmarkt op het plein " + _KK),
+    "z2_slee_1": ("Sleetje", [
+        "Wij gaan zo met de slee naar beneden! Wiiiii!",
+        "Papa trekt, mama remt, en ik roep wiiii.",
+        "De beste helling is achter de stal. Niet verder vertellen."],
+        "bij de stal langs de weg naar de haven, ten zuiden van " + _KK),
+    "z2_slee_2": ("Papa Slee", [
+        "Een slee, drie guhs en een thermosfles chocomelk. Dat is een goede dag.",
+        "Trekken is zwaar, maar ze lachen zo hard.",
+        "Pas op voor de bocht bij het dok!"],
+        "bij de stal langs de weg naar de haven, ten zuiden van " + _KK),
+    "z2_marktguh_1": ("Marktguh Kaneel", [
+        "Warme kandijkoekjes! Twee voor de prijs van een glimlach!",
+        "Alles op mijn kraam is zelfgebakken. Behalve de kaarsjes.",
+        "De kerstmarkt is pas echt open als de lampions branden."],
+        "op de kerstmarkt rond het plein " + _KK),
+    "z2_marktguh_2": ("Marktguh Pepernoot", [
+        "Sjaals! Wantjes! Mutsen met een pompon zo groot als je hoofd!",
+        "Ik brei alles zelf. Ook in mijn slaap.",
+        "Roze staat iedereen. Dat is wetenschap."],
+        "op de kerstmarkt rond het plein " + _KK),
+    "z2_marktguh_3": ("Marktguh Hulst", [
+        "Kristallen kerstballen! Ze zingen zachtjes als je ze aanraakt.",
+        "Ik heb ze zelf uit de Galmhellingen gehaald. Heel voorzichtig.",
+        "Eentje voor in je boom? Of in je huisje?"],
+        "op de kerstmarkt rond het plein " + _KK),
     "z2_uitvinder": ("Uitvinder Tandwiel", [
         "Hoor je dat gebrom? Diep in de bergen? Dat is geen lawine. Dat is een machine!",
         "Ik heb een sneeuwschuiver uitgevonden die zelf sneeuwt. Hij werkt niet helemaal goed.",
@@ -122,12 +183,12 @@ NPCS = {
         "Post! Per slee! Wie wil er post?",
         "De post in de bergen gaat per slee. Bergaf heel snel. Bergop... minder snel.",
         "Ik heb een brief voor de berggids, de visser en de kloofwachter. Ik heb alleen geen zin om te klimmen."],
-        "aan de zuidkant van het plein " + _KK + ", bij het postkantoortje"),
+        "op het terras aan de oostkant " + _KK + ", bij het postkantoortje"),
     "z2_sneeuwpop": ("Sneeuwpop-Sjaak", [
         "Ik bouw de grootste sneeuwpop van het Vadsrijk! Hij heet ook Sjaak.",
         "Een goede sneeuwpop heeft een wortel. Een geweldige heeft er twee.",
         "Sneeuwballen gooien? Altijd! Maar nooit naar Opa Sneeuwbal. Die gooit terug."],
-        "bij de sneeuwhoop aan de zuidkant van Kandijkom"),
+        "bij de sneeuwhoop op het terras in het zuidoosten van Kandijkom"),
     "z2_kasguh": ("Kasguh Groentje", [
         "Mijn kas is warm, mijn tomaatjes zijn rood, en mijn bloemetjes zijn... grijs. Hm.",
         "In de geode groeit alles. Behalve geduld. Dat moet je zelf meenemen.",
@@ -137,18 +198,18 @@ NPCS = {
         "Zzz... is het al lente? Nee? Zzz...",
         "Ik hou van de winter. Je mag de hele tijd slapen. Alleen het is te koud om te slapen.",
         "Een warme kruik, een dikke deken, een knuffel. Meer heb je niet nodig."],
-        "voor zijn huisje aan de noordoostkant van Kandijkom"),
+        "voor zijn huisje op het terras aan de noordwestkant van Kandijkom"),
     "z2_poollicht": ("Poollicht Pien", [
         "'s Nachts danst het licht boven de pieken. Groen en roze. Prachtig!",
         "Ik teken sterrenkaarten. De sterren hier hebben guh-oortjes.",
         "Vanaf de hoge uitkijk zie je ver weg een reuzenboom. Niemand weet wat daar is."],
-        "voor haar huisje aan de noordwestkant van Kandijkom"),
+        "voor haar huisje op het terras aan de noordoostkant van Kandijkom"),
     # --- out in the zone -------------------------------------------------------------------------------------------------------
     "z2_gondel_boven": ("Gondelguh Katrol", [
         "Welkom op de top! Pas op, het waait hier een beetje. Hou je oortjes vast.",
         "Terug naar beneden? De gondel staat klaar. Hij wiebelt maar een klein beetje.",
         "Mijn broer Kabeltje zit beneden. Ik zit boven. Wij praten via de kabel. Hij hoort nooit wat."],
-        "bij het bovenste gondelstation, hoog in het noorden van de Galmhellingen"),
+        "bij het bovenste gondelstation, hoog op de Galmtop in het noordoosten van de Galmhellingen"),
     "z2_berggids": ("Berggids Klimpoot", [
         "Volg altijd de vlaggetjes. En nooit de sneeuwhazen: die weten de weg ook niet.",
         "Als de naalden zingen, komt er iets aan. Luister goed.",
@@ -168,12 +229,12 @@ NPCS = {
         "Hangbruggen wiebelen. Dat hoort zo. Denk ik.",
         "Ik ken elke brug van de Splinterkloof. En elk touwtje. Ik heet er niet voor niks zo.",
         "Daar beneden bromt het. Al weken. Mika-machines, zeg ik je."],
-        "bij de middelste hangbrug van de Splinterkloof, recht ten noorden van Kandijkom"),
+        "bij de brede hangbrug naar de Spiegelburcht, in het oosten van de Splinterkloof"),
     "z2_prisma": ("Lichtwachter Prisma", [
         "De Spiegelburcht was ooit het lichtste paleis van het rijk. Nu is ze grauw.",
         "In de burcht moet je het licht laten kaatsen. Spiegel na spiegel.",
         "Vrouwe Spiegelzucht... ze was ooit zo vrolijk. Ze bewonderde zichzelf de hele dag. Nu ziet ze alleen nog grijs."],
-        "bij de poort van de Spiegelburcht, op de hoogste piek in het verre noorden"),
+        "bij de poort van de Spiegelburcht, op de hoogste piek in het noordoosten"),
     # --- the petrified guhs at the lake (grey crystal; you free them, never hurt) ------------------------------------------------
     "z2_versteend_zwier": ("Schaatser Zwier (versteend)", [
         "...(Een guh van grauw kristal, midden in een pirouette. Je hoort heel zachtjes: 'help...')",
@@ -253,7 +314,7 @@ PLEK_POI = {
     "z2_boortoren_2": "bij de Mika-boortoren in het westen van de Splinterkloof",
     "z2_drakenravijn": "op het bergzadel ten noorden van het Bevroren Knuffelmeer, aan de zuidwestrand van de Splinterkloof",
     "z2_boorhal": "in de verborgen boorhal op de bodem van de Splinterkloof, helemaal in het westen (zoek de spleet waar warme lucht uit komt)",
-    "z2_spiegelpoort": "bij de poort van de Spiegelburcht, op de hoogste piek in het verre noorden (achter de Splinterkloof)",
+    "z2_spiegelpoort": "bij de poort van de Spiegelburcht, op de hoogste piek in het noordoosten (achter de Splinterkloof)",
     "z2_uitkijk_poollicht": "bovenop de hoge kristalnaald in het noordwesten van de Splinterkloof (de Kloofkijk)",
     "z2_kampvuur_galm": "bij het kampvuur van Berggids Klimpoot, aan de westrand van de Galmhellingen",
     "z2_kampvuur_meer": "bij het kampvuur aan de oostoever van het Bevroren Knuffelmeer",
@@ -264,7 +325,7 @@ PLEK_GEBIED = {
     "z2_galmhellingen": "op de Galmhellingen, ten oosten van Kandijkom",
     "z2_knuffelmeer": "bij het Bevroren Knuffelmeer, ten westen van Kandijkom",
     "z2_splinterkloof": "in de Splinterkloof, ten noorden van Kandijkom",
-    "z2_spiegelburcht": "in de Spiegelburcht, op de hoogste piek in het verre noorden",
+    "z2_spiegelburcht": "in de Spiegelburcht, op de hoogste piek in het noordoosten",
     "z2_kandijkom_dok": "bij de luchtschipsteiger van Kandijkom",
     "z2_ring": "in de Splinterpieken",
 }
@@ -461,7 +522,7 @@ Q("z2_hq06_versteend", "hoofd", "z2_kwarts", "Versteend!",
   [("npc", "Alle vier vrij! Zwier zwiert alweer, Snoek vist alweer, Pluk breit alweer en IJsje is naar huis gerend."),
    ("npc", "Weet je wat raar is? Toen het kristal kwam, kraakte het ijs. En onder het ijs bewoog iets. Heel veel kleine dingen. "
            "En iets groots.")],
-  xp=7500, munten=5000, loot="zeldzaam", lv=25, na=["z2_hq05_galmwolf"], inleveren="z2_visser",
+  xp=7500, munten=5000, loot="zeldzaam", lv=24, na=["z2_hq05_galmwolf"], inleveren="z2_visser",
   praat=dict({"z2_visser": [
       ("npc", "Pssst. Zachtjes. Het ijs is dun daar. En de wezens zijn wakker."),
       ("npc", "Ik zag het gebeuren. Een grauwe wind waaide over het meer, en waar hij langskwam werden guhs stil. Grijs. Hard. Als "
@@ -491,7 +552,7 @@ Q("z2_hq07_onder_het_ijs", "hoofd", "z2_visser", "Onder het ijs",
            "ze naar het noorden, naar de Splinterkloof."),
    ("jij", "Mika's!"),
    ("npc", "Mika's? Die van de kaas? Ze miauwden wel. En ze zongen een liedje over boren. Heel vals.")],
-  xp=8000, munten=5500, loot="zeldzaam", lv=26, na=["z2_hq06_versteend"], inleveren="z2_beeldhouwer")
+  xp=8000, munten=5500, loot="zeldzaam", lv=25, na=["z2_hq06_versteend"], inleveren="z2_beeldhouwer")
 
 Q("z2_hq08_splinterkloof", "hoofd", "z2_beeldhouwer", "De Splinterkloof",
   "De sleepsporen leiden naar de Splinterkloof, ten noorden van Kandijkom: steile wanden, wiebelende hangbruggen en Mika-boorinstallaties "
@@ -510,7 +571,7 @@ Q("z2_hq08_splinterkloof", "hoofd", "z2_beeldhouwer", "De Splinterkloof",
   [("npc", "Drie boorbeitels. Met Mika-pootafdrukjes erop. En je hebt de grote toren gezien?"),
    ("jij", "Ze boren het grauwe kristal uit de bergen. Zakken vol."),
    ("npc", "Dus dat is het gebrom. Weken al. Maar er is nog iets, avonturier. Iets wat ik niemand durfde te vertellen.")],
-  xp=9000, munten=6000, loot="episch", lv=28, na=["z2_hq07_onder_het_ijs"], inleveren="z2_touwtje",
+  xp=9000, munten=6000, loot="episch", lv=26, na=["z2_hq07_onder_het_ijs"], inleveren="z2_touwtje",
   praat={"z2_touwtje": [
       ("npc", "Hoi! Niet schrikken als de brug wiebelt. Dat doet hij altijd. Ik ben Touwtje."),
       ("npc", "Mika's? O ja. Overal. Met helmpjes en boren en lunchtrommeltjes. Als je ze verslaat, verdwijnen ze in een rookwolk. "
@@ -532,13 +593,13 @@ Q("z2_hq09_draak", "hoofd", "z2_touwtje", "Iets groots in de diepte",
    ("npc", "Ik dacht dat hij de vijand was. De bron van alle grauwheid. Maar hij had pijn... Misschien is het allemaal anders dan "
            "we denken."),
    ("npc", "Die splinter... Lichtwachter Prisma bij de Spiegelburcht weet alles van kristal. Breng hem daarheen. De burcht staat "
-           "op de hoogste piek, in het verre noorden.")],
-  xp=10000, munten=7000, items=[(item("drakensplinter"), 1)], lv=30, na=["z2_hq08_splinterkloof"])
+           "op de hoogste piek, in het noordoosten.")],
+  xp=10000, munten=7000, items=[(item("drakensplinter"), 1)], lv=27, na=["z2_hq08_splinterkloof"])
 
 Q("z2_hq10_spiegelburcht", "hoofd", "z2_touwtje", "De Spiegelburcht",
-  "De Spiegelburcht staat op de hoogste piek in het verre noorden, achter de Splinterkloof: een paleis van grauw kristal vol "
+  "De Spiegelburcht staat op de hoogste piek in het noordoosten, achter de Splinterkloof: een paleis van grauw kristal vol "
   "spiegels. Klim naar de poort en praat met Lichtwachter Prisma.",
-  [D("gebied", "poi:z2_spiegelpoort", 1, "Klim naar de poort van de Spiegelburcht, op de hoogste piek in het verre noorden",
+  [D("gebied", "poi:z2_spiegelpoort", 1, "Klim naar de poort van de Spiegelburcht, op de hoogste piek in het noordoosten",
      plek="poi:z2_spiegelpoort"),
    D("praat", "z2_prisma", 1, "Praat met Lichtwachter Prisma bij de poort van de Spiegelburcht", plek="npc:z2_prisma")],
   [("npc", "Volg de kloof naar het noorden, over deze middelste hangbrug, en dan de trap omhoog. Heel ver omhoog. Je ziet de burcht glinsteren."),
@@ -550,7 +611,7 @@ Q("z2_hq10_spiegelburcht", "hoofd", "z2_touwtje", "De Spiegelburcht",
    ("jij", "Zijn hart?"),
    ("npc", "Zijn hart is in stukken gebroken. Zo begon de Vadsloosheid. En een groot stuk ervan... ligt daarbinnen. Bij Vrouwe "
            "Spiegelzucht.")],
-  xp=8000, munten=6000, lv=31, na=["z2_hq09_draak"], inleveren="z2_prisma",
+  xp=8000, munten=6000, lv=28, na=["z2_hq09_draak"], inleveren="z2_prisma",
   praat={"z2_prisma": [
       ("npc", "Halt, reiziger. Je staat voor de Spiegelburcht. Ooit het lichtste paleis van het rijk. Nu..."),
       ("npc", "...grauw. Ik ben Prisma. Ik bewaak het laatste beetje licht hier.")]})
@@ -570,7 +631,7 @@ Q("z2_hq11_spiegelzucht", "hoofd", "z2_prisma", "Vrouwe Spiegelzucht",
   "Door de spiegelgangen naar achteren naar de Spiegelzaal. Raak alleen het spiegelbeeld zonder schaduw!",
   [("npc", "Je hebt het gedaan. De spiegels zijn weer helder. En kijk... wat je in je pootjes hebt."),
    ("npc", "De splinter van het hartkristal. Roze. Warm. Hij klopt. Kijk er maar eens goed in...")],
-  xp=15000, munten=10000, loot="episch", lv=33, na=["z2_hq10_spiegelburcht"], actie_klaar="z2_flashback")
+  xp=15000, munten=10000, loot="episch", lv=29, na=["z2_hq10_spiegelburcht"], actie_klaar="z2_flashback")
 
 Q("z2_hq12_hartsplinter", "hoofd", "z2_prisma", "Een roze splinter",
   "Je hebt de eerste splinter van het roze hartkristal van Vahoegnir gevonden. Breng hem naar Ordemeester Kristalijn, in het "
@@ -584,7 +645,7 @@ Q("z2_hq12_hartsplinter", "hoofd", "z2_prisma", "Een roze splinter",
    ("npc", "Iemand heeft het gebroken. De Mika's? Ze boren het grauwe kristal uit de bergen... ze zoeken iets."),
    ("jij", "Dan zoeken wij de andere splinters. Voordat de Mika's ze vinden."),
    ("npc", "Kijk eens naar het westen. Zie je dat, heel ver weg, achter de wolken? Een boom. Zo groot als een berg.")],
-  xp=12000, munten=15000, lv=33, na=["z2_hq11_spiegelzucht"], inleveren="z2_ordemeester", auto=True,
+  xp=12000, munten=15000, lv=30, na=["z2_hq11_spiegelzucht"], inleveren="z2_ordemeester", auto=True,
   start_items=[(item("hartsplinter"), 1)], actie_klaar="z2_cliffhanger")
 
 # ===== side quests (~20) ====================================================================================================
@@ -647,7 +708,7 @@ Q("z2_s05_echokoor", "zij", "z2_galmpje", "Het echokoor",
   "Do, re, mi: drie naalden op de Galmhellingen, van laag naar hoog.",
   [("npc", "Ik hoorde ze! Helemaal tot hier! Do... re... MIIII! Het Kandijkoor is weer compleet. Met de echo erbij zijn we met z'n "
            "drieën!")],
-  xp=5000, munten=3000, lv=22, na=["z2_hq03_galmhellingen"])
+  xp=5000, munten=3000, lv=21, na=["z2_hq03_galmhellingen"])
 
 Q("z2_s06_post", "zij", "z2_postguh", "Post voor de bergen",
   "Postguh Sleetje heeft drie brieven voor de bergen, maar geen zin om te klimmen. Breng ze naar Berggids Klimpoot, IJsvisser Wak en "
@@ -746,7 +807,7 @@ Q("z2_s13_ijsbloemen", "zij", "z2_cafe", "IJsbloemen voor de chocomelk",
    ("npc", "Bij het meer hebben de wezens ze soms in hun vacht. Vijf, alsjeblieft!")],
   "Vijf ijsbloemen van de wezens bij het meer in het westen.",
   [("npc", "Ruik eens. Dat is de geur van de beste chocomelk van het rijk. Hier, een beker voor onderweg. En nog een.")],
-  xp=5000, munten=3000, items=[(item("chocomelk"), 3)], lv=25, na=_NA)
+  xp=5000, munten=3000, items=[(item("chocomelk"), 3)], lv=23, na=_NA)
 
 for _i, (_g, _naam, _lv, _na) in enumerate([("z2_galmhellingen", "de Galmhellingen", 21, "z2_hq03_galmhellingen"),
                                              ("z2_knuffelmeer", "het Bevroren Knuffelmeer", 26, "z2_hq06_versteend"),
@@ -842,6 +903,11 @@ Q("z2_s23_gondel", "zij", "z2_gondelier", "Naar de top!",
   xp=3000, munten=2000, lv=20, na=_NA, inleveren="z2_gondelier",
   praat={"z2_gondel_boven": [("npc", "Een groet van Kabeltje? Zeg maar: 'Hoi Kabeltje! Hoor je me nu wel?' Haha. Hij hoort nooit wat.")]})
 
+# fix round 2 (g-z2): zone 2 keeps the main line + only these short side quests (the other 18 definitions stay above for
+# reference/reuse but are not written: no quests_z2.json entry, no texts, no advancement, no FTB quest).
+ZIJ_HOUDEN = ("z2_s03_knuffels", "z2_s04_schaatsen", "z2_s05_echokoor", "z2_s13_ijsbloemen", "z2_s23_gondel")
+QUESTS[:] = [q for q in QUESTS if q["soort"] != "zij" or q["id"] in ZIJ_HOUDEN]
+
 # ===== job advancement at lv 30 per class (klassen + z2-systemen do the ceremony) ===========================================
 KLASSEN = {
     "knuffelridder": ("Knuffelridder", "Kristalkampioen"),
@@ -876,7 +942,7 @@ Q("z2_geheim_boormeester", "geheim", "z2_uitvinder", "Het gebrom in de berg",
    ("npc", "Dus DAT was het gebrom. Een boormachine met drie koppen, diep in de berg. Ze boorden naar het grauwe kristal. Naar "
            "de splinters van het hart, denk ik."),
    ("npc", "Je bent de slimste speurneus van de bergen. Hier, een tandwiel van zijn machine. Ik heb het verguld. Met kandij.")],
-  xp=15000, munten=12000, loot="episch", lv=30, auto=True)
+  xp=15000, munten=12000, loot="episch", lv=28, auto=True)
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # Secrets: 10 knuffels under the ice, 5 clues to the Mika-boormeester, 5 treasures (Z2NpcPlekken.KNUFFEL/AANWIJZING/SCHAT)
@@ -912,8 +978,8 @@ SCHATTEN = {
 # ---------------------------------------------------------------------------------------------------------------------------
 GIDS = {
     "z2_splinterpieken": ("Zone 2: De Splinterpieken", "Na zone 1 en vanaf level 20 vliegt Stuurguh Zeppie je vanuit De Haven naar "
-                          "Kandijkom, een warm stadje in een reuzengeode. Daaromheen: de Galmhellingen (oost, lv 20-25), het Bevroren "
-                          "Knuffelmeer (west, lv 25-30), de Splinterkloof (noord, lv 30-34) en de Spiegelburcht (verre noorden)."),
+                          "Kandijkom, een warm stadje in een reuzengeode. Daaromheen: de Galmhellingen (oost, lv 20-23), het Bevroren "
+                          "Knuffelmeer (west, lv 23-26), de Splinterkloof (noord, lv 26-29) en de Spiegelburcht (lv 28-30)."),
     "z2_kristalwezens": ("Kristalwezens", "In de bergen vecht je tegen echte monsters: grauw kristal zonder hart. Verslagen spatten ze "
                          "uit elkaar in scherven die wegsmelten. Mika's vluchten in een rookwolk naar huis. Guhs doe je nooit pijn: "
                          "versteende guhs bevrijd je met een klik."),
@@ -1127,7 +1193,7 @@ def quests_json():
         uit.append(o)
     hoofd = [q for q in QUESTS if q["soort"] == "hoofd"]
     zij = [q for q in QUESTS if q["soort"] == "zij"]
-    assert len(hoofd) >= 12 and len(zij) >= 20, (len(hoofd), len(zij))
+    assert len(hoofd) >= 12 and len(zij) == len(ZIJ_HOUDEN), (len(hoofd), len(zij))
     return {"_": "generated by tools/features/vadsrijk_z2_npc.py; do not edit", "quests": uit}
 
 

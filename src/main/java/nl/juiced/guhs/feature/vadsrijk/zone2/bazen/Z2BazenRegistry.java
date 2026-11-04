@@ -146,7 +146,7 @@ public final class Z2BazenRegistry {
                 Z2BazenPlekken.GALM_RESPAWN, Z2BazenPlekken.GALM_BORD, "vadsrijk.z2bazen.galmwolf"), sl -> {
                     Galmwolf g = GALMWOLF.get().create(sl, EntitySpawnReason.SPAWNER);
                     if (g != null) {
-                        g.stelIn(24, Element.WATER, false, Set.of());
+                        g.stelIn(23, Element.WATER, false, Set.of());
                     }
                     return g;
                 });
@@ -154,7 +154,7 @@ public final class Z2BazenRegistry {
                 Z2BazenPlekken.SPIEGEL_RESPAWN, Z2BazenPlekken.SPIEGEL_BORD, "vadsrijk.z2bazen.spiegelzucht"), sl -> {
                     Spiegelzucht s = SPIEGELZUCHT.get().create(sl, EntitySpawnReason.SPAWNER);
                     if (s != null) {
-                        s.stelIn(33, Element.NATUUR, false, Set.of());
+                        s.stelIn(30, Element.NATUUR, false, Set.of());
                     }
                     return s;
                 });
@@ -269,18 +269,18 @@ public final class Z2BazenRegistry {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     String baas = StringArgumentType.getString(c, "baas");
                     BaasKist.plaats((ServerLevel) p.level(), p, BlockPos.containing(p.position().add(p.getLookAngle().multiply(2, 0, 2))),
-                            Z2BazenLoot.kist(baas, p, 32, p.getRandom()));
+                            Z2BazenLoot.kist(baas, p, 30, p.getRandom()));
                     return zeg(c, "Een buitkist van " + baas + " voor jou.");
                 })));
         b.then(dev("items").executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             for (Z2BazenLoot.Benoemd x : Z2BazenLoot.BENOEMD) {
-                p.getInventory().add(Z2BazenLoot.maak(x, 32, p.getRandom()));
+                p.getInventory().add(Z2BazenLoot.maak(x, 30, p.getRandom()));
             }
             for (String t : List.of("galmwolf", "spiegelzucht", "boormeester")) {
                 p.getInventory().add(Z2BazenLoot.trofee(t));
             }
-            return zeg(c, "Alle benoemde zone-2-baasitems + trofeeën (lv 32).");
+            return zeg(c, "Alle benoemde zone-2-baasitems + trofeeën (lv 30).");
         }));
         b.then(dev("herstel").executes(c -> {
             ServerLevel sl = rijk(c);

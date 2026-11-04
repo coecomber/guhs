@@ -85,6 +85,19 @@ public final class Z2Npcs {
         npc("z2_kasguh", 90, GuhVariant.MINT, Gedrag.SLENTER, null, TUINHOEDJE, GOLF_TRUI, TUINSCHORTJE);
         npc("z2_winterslaap", 180, GuhVariant.CHOCO, Gedrag.ZITTEN, null, SLAAPMUTSJE, SAMEN_KNUFFELTRUITJE, PLUISSLOFJES);
         npc("z2_poollicht", 180, GuhVariant.SNOW, Gedrag.STAAN, null, MAANMUTSJE, STERRENCAPE, ELFTOCHT_TRUITJE);
+        // --- (fix round 2) town life: skaters, snowball kids, penguin guhs, the sledge family, market folk -----------------------
+        npc("z2_schaatser_1", 90, GuhVariant.MINT, Gedrag.SLENTER, null, 0.85f, ELFTOCHT_SCHAATSMUTS, ELFTOCHT_TRUITJE, ELFTOCHT_SJAAL);
+        npc("z2_schaatser_2", 270, GuhVariant.NORMAL, Gedrag.SLENTER, null, ELFTOCHT_SCHAATSMUTS, STRIPED_SWEATER, WINTER_SCARF);
+        npc("z2_sneeuwbal_1", 0, GuhVariant.SNOW, Gedrag.SLENTER, null, 0.7f, BALTO_SNEEUWMUTS, CHRISTMAS_SWEATER, BALTO_WANTJES);
+        npc("z2_sneeuwbal_2", 180, GuhVariant.CHOCO, Gedrag.SLENTER, null, 0.7f, ELFTOCHT_OORWARMERS, GOLF_TRUI, BALTO_WANTJES);
+        npc("z2_pinguguh_1", 90, GuhVariant.PINGUH, Gedrag.SLENTER, null, 0.8f, WINTER_SCARF);
+        npc("z2_pinguguh_2", 270, GuhVariant.PINGUH, Gedrag.SLENTER, null, 0.75f, SANTA_HAT);
+        npc("z2_pinguguh_3", 180, GuhVariant.PINGUH, Gedrag.SLENTER, null, 0.8f, KNUS_SJAALTJE);
+        npc("z2_slee_1", 180, GuhVariant.MINT, Gedrag.SLENTER, null, 0.7f, BALTO_SNEEUWMUTS, ELFTOCHT_TRUITJE, BALTO_WANTJES);
+        npc("z2_slee_2", 180, GuhVariant.CHOCO, Gedrag.STAAN, null, 1.1f, BALTO_SNEEUWMUTS, WATERSTAM_PARKA, WINTER_SCARF);
+        npc("z2_marktguh_1", 0, GuhVariant.NORMAL, Gedrag.STAAN, null, BAKKERSMUTSJE, CHRISTMAS_SWEATER, BAKKERSSCHORTJE);
+        npc("z2_marktguh_2", 0, GuhVariant.MINT, Gedrag.STAAN, null, THEEMUTSJE, SAMEN_KNUFFELTRUITJE, ELFTOCHT_SJAAL);
+        npc("z2_marktguh_3", 0, GuhVariant.SNOW, Gedrag.STAAN, null, STERRENKIJKERSMUTS, STRIPED_SWEATER, KNUS_SJAALTJE);
         // --- out in the zone -----------------------------------------------------------------------------------------------------------
         npc("z2_gondel_boven", 90, GuhVariant.NORMAL, Gedrag.STAAN, "gondel_terug", KARRETJES_CONDUCTEURSPETJE, ELFTOCHT_TRUITJE, WINTER_SCARF);
         npc("z2_berggids", 90, GuhVariant.CHOCO, Gedrag.STAAN, null, BALTO_SNEEUWMUTS, WATERSTAM_PARKA, CAMPINGMARKT_RUGZAK);

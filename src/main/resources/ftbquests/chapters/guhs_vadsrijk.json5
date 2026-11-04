@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_vadsrijk",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 58,
+  guhs_chapter_version: 59,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_vadsrijk.png",
@@ -2212,70 +2212,6 @@
       shape: "gear",
     },
     {
-      id: "47554836421E529A",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s01_wanten",
-          id: "475548ABFD38919B",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548EBEB01A8EA",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548369E581518",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 0.0,
-      y: 24.45,
-    },
-    {
-      id: "475548D7FDD7E4A6",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s02_kandijkoekjes",
-          id: "475548B80888B54B",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755484C850399C9",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554853D89AF60B",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 1.5,
-      y: 24.45,
-    },
-    {
       id: "4755482505DBFC1B",
       icon: {
         id: "minecraft:writable_book",
@@ -2304,7 +2240,7 @@
           xp: 50,
         },
       ],
-      x: 3.0,
+      x: 0.0,
       y: 24.45,
     },
     {
@@ -2336,7 +2272,7 @@
           xp: 50,
         },
       ],
-      x: 4.5,
+      x: 1.5,
       y: 24.45,
     },
     {
@@ -2368,232 +2304,8 @@
           xp: 50,
         },
       ],
-      x: 6.0,
-      y: 24.45,
-    },
-    {
-      id: "475548A87F73CC04",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s06_post",
-          id: "4755487FD6DFA53F",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755489E1CB6A0A3",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554871B2D775F6",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 7.5,
-      y: 24.45,
-    },
-    {
-      id: "475548511FB173A1",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s07_sneeuwpop",
-          id: "475548E3A127965D",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554877493AC514",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755488112432381",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 9.0,
-      y: 24.45,
-    },
-    {
-      id: "475548B90CEE11B3",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s08_kas",
-          id: "4755481700D2ABBD",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554897F7DCFBE6",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554808A9FF7F4D",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 9.0,
-      y: 25.95,
-    },
-    {
-      id: "475548104137B0D0",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s09_winterslaap",
-          id: "475548070BC72630",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755481E03B5C5E4",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548501F93889A",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 7.5,
-      y: 25.95,
-    },
-    {
-      id: "475548C50B2D1011",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s10_poollicht",
-          id: "47554807790FE663",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548D61B4A9BE6",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "47554871C304FD0C",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 6.0,
-      y: 25.95,
-    },
-    {
-      id: "47554804C965122B",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s11_tandwielen",
-          id: "4755486762151A32",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548BB2B157691",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755484B58844C13",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 4.5,
-      y: 25.95,
-    },
-    {
-      id: "475548BE87D04419",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s12_kandijfeest",
-          id: "4755482B46D83B1C",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548B0394EACB4",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548FF670DBA3E",
-          type: "xp",
-          xp: 50,
-        },
-      ],
       x: 3.0,
-      y: 25.95,
+      y: 24.45,
     },
     {
       id: "475548416EA12D96",
@@ -2624,296 +2336,8 @@
           xp: 50,
         },
       ],
-      x: 1.5,
-      y: 25.95,
-    },
-    {
-      id: "475548F0F35A6650",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s14_premie_galmhellingen",
-          id: "4755483B6ABF70DA",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755488F7FB7FC67",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548A78E4F122A",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 0.0,
-      y: 25.95,
-    },
-    {
-      id: "4755486BF85020A4",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s15_premie_knuffelmeer",
-          id: "47554819525270F0",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755489B86231B09",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755488AE3B0AF62",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 0.0,
-      y: 27.45,
-    },
-    {
-      id: "4755486D3F623467",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s16_premie_splinterkloof",
-          id: "475548EEC12CF590",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548046F01A7FF",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548E3896C4ED3",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 1.5,
-      y: 27.45,
-    },
-    {
-      id: "475548D5A830574D",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s17_model",
-          id: "4755486DCC212FA0",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755485AD3AB959D",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755485220B1B9A8",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 3.0,
-      y: 27.45,
-    },
-    {
-      id: "475548977F6CEA6C",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s18_lawine",
-          id: "4755481EDB702D0C",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548101235030A",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548E1D6BE721F",
-          type: "xp",
-          xp: 50,
-        },
-      ],
       x: 4.5,
-      y: 27.45,
-    },
-    {
-      id: "4755488DE0C90958",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s19_ijsvis",
-          id: "4755482145F2C2A5",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755481810065308",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548A0801AAC44",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 6.0,
-      y: 27.45,
-    },
-    {
-      id: "475548A1D14E2E4D",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s20_bruggen",
-          id: "4755482F828E9566",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548FD4FC610CC",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548E981C4EA9A",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 7.5,
-      y: 27.45,
-    },
-    {
-      id: "47554874B04DE1EF",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s21_truien",
-          id: "475548DE1D1F66CA",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755486C28B1F461",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "4755489D9D4107FA",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 9.0,
-      y: 27.45,
-    },
-    {
-      id: "4755489B0E85091A",
-      icon: {
-        id: "minecraft:writable_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_s22_edelsteen",
-          id: "4755489A507415F9",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "4755482ED4110105",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 8,
-        },
-        {
-          id: "475548FD90E0F713",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 9.0,
-      y: 28.95,
+      y: 24.45,
     },
     {
       id: "475548CAC539BB39",
@@ -2944,8 +2368,8 @@
           xp: 50,
         },
       ],
-      x: 7.5,
-      y: 28.95,
+      x: 6.0,
+      y: 24.45,
     },
     {
       id: "475548198C92C119",
@@ -2976,8 +2400,8 @@
           xp: 50,
         },
       ],
-      x: 6.0,
-      y: 28.95,
+      x: 7.5,
+      y: 24.45,
       shape: "hexagon",
     },
     {
@@ -3009,8 +2433,8 @@
           xp: 50,
         },
       ],
-      x: 4.5,
-      y: 28.95,
+      x: 9.0,
+      y: 24.45,
       shape: "hexagon",
     },
     {
@@ -3042,8 +2466,8 @@
           xp: 50,
         },
       ],
-      x: 3.0,
-      y: 28.95,
+      x: 9.0,
+      y: 25.95,
       shape: "hexagon",
     },
     {

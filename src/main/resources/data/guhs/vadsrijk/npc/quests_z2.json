@@ -272,7 +272,7 @@
       "soort": "hoofd",
       "gever": "z2_kwarts",
       "inleveren": "z2_visser",
-      "lv": 25,
+      "lv": 24,
       "na": [
         "z2_hq05_galmwolf"
       ],
@@ -371,7 +371,7 @@
       "soort": "hoofd",
       "gever": "z2_visser",
       "inleveren": "z2_beeldhouwer",
-      "lv": 26,
+      "lv": 25,
       "na": [
         "z2_hq06_versteend"
       ],
@@ -437,7 +437,7 @@
       "soort": "hoofd",
       "gever": "z2_beeldhouwer",
       "inleveren": "z2_touwtje",
-      "lv": 28,
+      "lv": 26,
       "na": [
         "z2_hq07_onder_het_ijs"
       ],
@@ -508,7 +508,7 @@
       "soort": "hoofd",
       "gever": "z2_touwtje",
       "inleveren": "z2_touwtje",
-      "lv": 30,
+      "lv": 27,
       "na": [
         "z2_hq08_splinterkloof"
       ],
@@ -563,7 +563,7 @@
       "soort": "hoofd",
       "gever": "z2_touwtje",
       "inleveren": "z2_prisma",
-      "lv": 31,
+      "lv": 28,
       "na": [
         "z2_hq09_draak"
       ],
@@ -618,7 +618,7 @@
       "soort": "hoofd",
       "gever": "z2_prisma",
       "inleveren": "z2_prisma",
-      "lv": 33,
+      "lv": 29,
       "na": [
         "z2_hq10_spiegelburcht"
       ],
@@ -667,7 +667,7 @@
       "soort": "hoofd",
       "gever": "z2_prisma",
       "inleveren": "z2_ordemeester",
-      "lv": 33,
+      "lv": 30,
       "na": [
         "z2_hq11_spiegelzucht"
       ],
@@ -708,94 +708,6 @@
         ]
       ],
       "auto": true
-    },
-    {
-      "id": "z2_s01_wanten",
-      "soort": "zij",
-      "gever": "z2_opa_sneeuwbal",
-      "inleveren": "z2_opa_sneeuwbal",
-      "lv": 20,
-      "na": [
-        "z2_hq02_kandijkom"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_wantje",
-          "n": 4,
-          "bron": "gebied:z2_galmhellingen",
-          "kans": 0.4,
-          "plek": "gebied:z2_galmhellingen"
-        }
-      ],
-      "beloning": {
-        "xp": 3500,
-        "munten": 2000,
-        "items": [
-          [
-            "minecraft:cookie",
-            3
-          ]
-        ],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s02_kandijkoekjes",
-      "soort": "zij",
-      "gever": "z2_bakker",
-      "inleveren": "z2_bakker",
-      "lv": 25,
-      "na": [
-        "z2_hq02_kandijkom"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_kandijkristal",
-          "n": 6,
-          "bron": "gebied:z2_knuffelmeer",
-          "kans": 0.45,
-          "plek": "gebied:z2_knuffelmeer"
-        }
-      ],
-      "beloning": {
-        "xp": 5000,
-        "munten": 3000,
-        "items": [
-          [
-            "minecraft:cookie",
-            6
-          ]
-        ],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
     },
     {
       "id": "z2_s03_knuffels",
@@ -886,7 +798,7 @@
       "soort": "zij",
       "gever": "z2_galmpje",
       "inleveren": "z2_galmpje",
-      "lv": 22,
+      "lv": 21,
       "na": [
         "z2_hq03_galmhellingen"
       ],
@@ -937,360 +849,11 @@
       "auto": false
     },
     {
-      "id": "z2_s06_post",
-      "soort": "zij",
-      "gever": "z2_postguh",
-      "inleveren": "z2_postguh",
-      "lv": 28,
-      "na": [
-        "z2_hq07_onder_het_ijs"
-      ],
-      "doelen": [
-        {
-          "soort": "praat",
-          "doel": "z2_berggids",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_berggids"
-        },
-        {
-          "soort": "praat",
-          "doel": "z2_visser",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_visser"
-        },
-        {
-          "soort": "praat",
-          "doel": "z2_touwtje",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_touwtje"
-        }
-      ],
-      "beloning": {
-        "xp": 6000,
-        "munten": 4000,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {
-        "z2_berggids": [
-          "npc"
-        ],
-        "z2_visser": [
-          "npc"
-        ],
-        "z2_touwtje": [
-          "npc"
-        ]
-      },
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s07_sneeuwpop",
-      "soort": "zij",
-      "gever": "z2_sneeuwpop",
-      "inleveren": "z2_sneeuwpop",
-      "lv": 21,
-      "na": [
-        "z2_hq03_galmhellingen"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_sneeuwbal",
-          "n": 8,
-          "bron": "gebied:z2_galmhellingen",
-          "kans": 0.5,
-          "plek": "gebied:z2_galmhellingen"
-        },
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_sneeuwpophelling",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_sneeuwpophelling"
-        }
-      ],
-      "beloning": {
-        "xp": 5000,
-        "munten": 3000,
-        "items": [
-          [
-            "minecraft:carrot",
-            2
-          ]
-        ],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s08_kas",
-      "soort": "zij",
-      "gever": "z2_kasguh",
-      "inleveren": "z2_kasguh",
-      "lv": 30,
-      "na": [
-        "z2_hq08_splinterkloof"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_gloeikristal",
-          "n": 5,
-          "bron": "gebied:z2_splinterkloof",
-          "kans": 0.4,
-          "plek": "gebied:z2_splinterkloof"
-        }
-      ],
-      "beloning": {
-        "xp": 7000,
-        "munten": 4500,
-        "items": [
-          [
-            "minecraft:apple",
-            3
-          ]
-        ],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s09_winterslaap",
-      "soort": "zij",
-      "gever": "z2_winterslaap",
-      "inleveren": "z2_winterslaap",
-      "lv": 22,
-      "na": [
-        "z2_hq03_galmhellingen"
-      ],
-      "doelen": [
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_warmwaterbron",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_warmwaterbron"
-        }
-      ],
-      "beloning": {
-        "xp": 4500,
-        "munten": 2500,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s10_poollicht",
-      "soort": "zij",
-      "gever": "z2_poollicht",
-      "inleveren": "z2_poollicht",
-      "lv": 30,
-      "na": [
-        "z2_hq08_splinterkloof"
-      ],
-      "doelen": [
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_uitkijk_poollicht",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_uitkijk_poollicht"
-        }
-      ],
-      "beloning": {
-        "xp": 6000,
-        "munten": 3500,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s11_tandwielen",
-      "soort": "zij",
-      "gever": "z2_uitvinder",
-      "inleveren": "z2_uitvinder",
-      "lv": 29,
-      "na": [
-        "z2_hq08_splinterkloof"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_tandwiel",
-          "n": 5,
-          "bron": "gebied:z2_splinterkloof",
-          "kans": 0.4,
-          "plek": "gebied:z2_splinterkloof"
-        }
-      ],
-      "beloning": {
-        "xp": 7000,
-        "munten": 4500,
-        "items": [],
-        "wapen": false,
-        "loot": "zeldzaam"
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc",
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s12_kandijfeest",
-      "soort": "zij",
-      "gever": "z2_burgemeester",
-      "inleveren": "z2_burgemeester",
-      "lv": 23,
-      "na": [
-        "z2_hq05_galmwolf"
-      ],
-      "doelen": [
-        {
-          "soort": "praat",
-          "doel": "z2_cafe",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_cafe"
-        },
-        {
-          "soort": "praat",
-          "doel": "z2_bakker",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_bakker"
-        },
-        {
-          "soort": "praat",
-          "doel": "z2_galmpje",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_galmpje"
-        }
-      ],
-      "beloning": {
-        "xp": 4000,
-        "munten": 3000,
-        "items": [
-          [
-            "minecraft:cake",
-            1
-          ]
-        ],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {
-        "z2_cafe": [
-          "npc"
-        ],
-        "z2_bakker": [
-          "npc"
-        ],
-        "z2_galmpje": [
-          "npc"
-        ]
-      },
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
       "id": "z2_s13_ijsbloemen",
       "soort": "zij",
       "gever": "z2_cafe",
       "inleveren": "z2_cafe",
-      "lv": 25,
+      "lv": 23,
       "na": [
         "z2_hq02_kandijkom"
       ],
@@ -1317,394 +880,6 @@
         "loot": ""
       },
       "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s14_premie_galmhellingen",
-      "soort": "zij",
-      "gever": "z2_kwarts",
-      "inleveren": "z2_kwarts",
-      "lv": 21,
-      "na": [
-        "z2_hq03_galmhellingen"
-      ],
-      "doelen": [
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:z2_galmhellingen",
-          "n": 25,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z2_galmhellingen"
-        }
-      ],
-      "beloning": {
-        "xp": 5000,
-        "munten": 4000,
-        "items": [],
-        "wapen": false,
-        "loot": "zeldzaam"
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s15_premie_knuffelmeer",
-      "soort": "zij",
-      "gever": "z2_kwarts",
-      "inleveren": "z2_kwarts",
-      "lv": 26,
-      "na": [
-        "z2_hq06_versteend"
-      ],
-      "doelen": [
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:z2_knuffelmeer",
-          "n": 25,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z2_knuffelmeer"
-        }
-      ],
-      "beloning": {
-        "xp": 6500,
-        "munten": 5500,
-        "items": [],
-        "wapen": false,
-        "loot": "zeldzaam"
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s16_premie_splinterkloof",
-      "soort": "zij",
-      "gever": "z2_kwarts",
-      "inleveren": "z2_kwarts",
-      "lv": 30,
-      "na": [
-        "z2_hq08_splinterkloof"
-      ],
-      "doelen": [
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:z2_splinterkloof",
-          "n": 25,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z2_splinterkloof"
-        }
-      ],
-      "beloning": {
-        "xp": 8000,
-        "munten": 7000,
-        "items": [],
-        "wapen": false,
-        "loot": "zeldzaam"
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s17_model",
-      "soort": "zij",
-      "gever": "z2_beeldhouwer",
-      "inleveren": "z2_beeldhouwer",
-      "lv": 27,
-      "na": [
-        "z2_hq07_onder_het_ijs"
-      ],
-      "doelen": [
-        {
-          "soort": "elite",
-          "doel": "gebied:z2_knuffelmeer",
-          "n": 3,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z2_knuffelmeer"
-        }
-      ],
-      "beloning": {
-        "xp": 7000,
-        "munten": 4500,
-        "items": [],
-        "wapen": false,
-        "loot": "zeldzaam"
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s18_lawine",
-      "soort": "zij",
-      "gever": "z2_berggids",
-      "inleveren": "z2_berggids",
-      "lv": 24,
-      "na": [
-        "z2_hq04_naalden"
-      ],
-      "doelen": [
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_lawinepad",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_lawinepad"
-        },
-        {
-          "soort": "elite",
-          "doel": "gebied:z2_galmhellingen",
-          "n": 2,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_lawinepad"
-        }
-      ],
-      "beloning": {
-        "xp": 6000,
-        "munten": 4000,
-        "items": [],
-        "wapen": false,
-        "loot": "zeldzaam"
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s19_ijsvis",
-      "soort": "zij",
-      "gever": "z2_visser",
-      "inleveren": "z2_visser",
-      "lv": 25,
-      "na": [
-        "z2_hq06_versteend"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_ijsvis",
-          "n": 3,
-          "bron": "gebied:z2_knuffelmeer",
-          "kans": 0.3,
-          "plek": "gebied:z2_knuffelmeer"
-        }
-      ],
-      "beloning": {
-        "xp": 6000,
-        "munten": 4000,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s20_bruggen",
-      "soort": "zij",
-      "gever": "z2_touwtje",
-      "inleveren": "z2_touwtje",
-      "lv": 29,
-      "na": [
-        "z2_hq08_splinterkloof"
-      ],
-      "doelen": [
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_brug_1",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_brug_1"
-        },
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_brug_2",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_brug_2"
-        },
-        {
-          "soort": "gebied",
-          "doel": "poi:z2_brug_3",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "poi:z2_brug_3"
-        }
-      ],
-      "beloning": {
-        "xp": 6500,
-        "munten": 4000,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s21_truien",
-      "soort": "zij",
-      "gever": "z2_breister",
-      "inleveren": "z2_breister",
-      "lv": 21,
-      "na": [
-        "z2_hq03_galmhellingen"
-      ],
-      "doelen": [
-        {
-          "soort": "verzamel",
-          "doel": "guhs:vr_z2_npc_wolpluk",
-          "n": 6,
-          "bron": "gebied:z2_galmhellingen",
-          "kans": 0.45,
-          "plek": "gebied:z2_galmhellingen"
-        },
-        {
-          "soort": "praat",
-          "doel": "z2_kwarts",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_kwarts"
-        }
-      ],
-      "beloning": {
-        "xp": 5000,
-        "munten": 3500,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {
-        "z2_kwarts": [
-          "npc"
-        ]
-      },
-      "actie_aanname": "",
-      "actie_klaar": "",
-      "start_items": [],
-      "auto": false
-    },
-    {
-      "id": "z2_s22_edelsteen",
-      "soort": "zij",
-      "gever": "z2_juwelier",
-      "inleveren": "z2_juwelier",
-      "lv": 20,
-      "na": [
-        "z2_hq02_kandijkom"
-      ],
-      "doelen": [
-        {
-          "soort": "meld",
-          "doel": "edelsteen:ingezet",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "npc:z2_juwelier"
-        }
-      ],
-      "beloning": {
-        "xp": 3000,
-        "munten": 2000,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
         "npc",
         "npc"
       ],
@@ -1917,7 +1092,7 @@
       "soort": "geheim",
       "gever": "z2_uitvinder",
       "inleveren": "z2_uitvinder",
-      "lv": 30,
+      "lv": 28,
       "na": [],
       "doelen": [
         {

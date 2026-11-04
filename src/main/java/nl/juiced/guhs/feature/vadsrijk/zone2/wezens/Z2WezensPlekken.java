@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
+import nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken;
 
 /**
  * Every coordinate of the zone-2 wezens slice (Z2_BRIEF: one class). Zone 2 "De Splinterpieken" = x -600..600, z -3000..-1800.
@@ -33,10 +34,11 @@ public final class Z2WezensPlekken {
         }
     }
 
-    public static final Gebied ZONE = new Gebied("zone2", -600, -3000, 600, -1800, 20, 35);
-    public static final Gebied GALMHELLINGEN = new Gebied("galmhellingen", 160, -2700, 590, -1830, 20, 25);
-    public static final Gebied KNUFFELMEER = new Gebied("knuffelmeer", -590, -2700, -160, -1830, 25, 30);
-    public static final Gebied SPLINTERKLOOF = new Gebied("splinterkloof", -570, -2990, 570, -2715, 30, 34);
+    /** (fix round 2) The compact zone: the boxes follow z2-wereld's generated areas (Z2WereldPlekken.GEBIEDEN). */
+    public static final Gebied ZONE = new Gebied("zone2", Z2WereldPlekken.ZONE_MIN_X - 40, Z2WereldPlekken.ZONE_MIN_Z - 40, Z2WereldPlekken.ZONE_MAX_X + 40, Z2WereldPlekken.ZONE_MAX_Z + 40, 20, 30);
+    public static final Gebied GALMHELLINGEN = uit("galmhellingen", "z2_galmhellingen", 20, 23);
+    public static final Gebied KNUFFELMEER = uit("knuffelmeer", "z2_knuffelmeer", 23, 26);
+    public static final Gebied SPLINTERKLOOF = uit("splinterkloof", "z2_splinterkloof", 26, 29);
     public static final List<Gebied> GEBIEDEN = List.of(GALMHELLINGEN, KNUFFELMEER, SPLINTERKLOOF);
 
     /** Surface spawners search the floor from this height down (the first floor from above = the surface, bridges included). */
@@ -55,8 +57,8 @@ public final class Z2WezensPlekken {
 
     /** No creatures here: Kandijkom + the dock, every zone-2 campfire, the boss arenas (all from Z2WereldPlekken). */
     public static final List<Veilig> VEILIG = new ArrayList<>(List.of(
-            new Veilig(new BlockPos(0, 0, -2400), 200),          // Kandijkom (box 300x300) + a margin
-            new Veilig(new BlockPos(0, 0, -2230), 60),           // the airship dock on the south side
+            new Veilig(new BlockPos(0, 0, -2400), 92),           // Kandijkom (geode r ~80) + a margin
+            new Veilig(new BlockPos(0, 0, -2262), 48),           // the dock road, the stable and the airship dock
             new Veilig(w("arena_galmwolf", 430, -2280, 121), 55),
             new Veilig(w("arena_spiegelzucht", 0, -2963, 176), 40),
             new Veilig(w("arena_boormeester", -500, -2836, 66), 40)));
@@ -64,6 +66,29 @@ public final class Z2WezensPlekken {
         for (BlockPos k : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.KAMPVUREN) {
             VEILIG.add(new Veilig(k, 26));
         }
+    }
+
+    private static Gebied uit(String id, String wereldId, int minLv, int maxLv) {
+        for (nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.Gebied g : Z2WereldPlekken.GEBIEDEN) {
+            if (g.id().equals(wereldId)) {
+                return new Gebied(id, g.minX() + 4, g.minZ() + 4, g.maxX() - 4, g.maxZ() - 4, minLv, maxLv);
+            }
+        }
+        throw new IllegalStateException("no zone-2 area " + wereldId);
+    }
+
+    /** Distance (flat) from (x, z) to the nearest zone-2 path (z2-wereld's PADEN). */
+    public static double padAfstand(double x, double z) {
+        double best = 1e9;
+        for (int[][] pad : Z2WereldPlekken.PADEN) {
+            for (int i = 0; i + 1 < pad.length; i++) {
+                double ax = pad[i][0], az = pad[i][1], bx = pad[i + 1][0], bz = pad[i + 1][1];
+                double dx = bx - ax, dz = bz - az, l2 = dx * dx + dz * dz;
+                double t = l2 == 0 ? 0 : Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / l2));
+                best = Math.min(best, Math.hypot(x - (ax + t * dx), z - (az + t * dz)));
+            }
+        }
+        return best;
     }
 
     private static BlockPos w(String id, int x, int z, int y) {
@@ -84,22 +109,19 @@ public final class Z2WezensPlekken {
     }
 
     /**
-     * (balans 2026-11) The zone-2 paths (tools/vadsrijk/zone2/plan.py PADEN, world x/z; road half width 2.6 in kaart2.weg):
-     * no creature spawns within 5 of them (kern Spawners.bijPad) and the spawners stand beside them.
+     * (balans 2026-11) The zone-2 paths, registered in kern (Spawners.bijPad: no creature spawns within 5 of a path edge).
+     * g-int: taken from the generated {@link Z2WereldPlekken#PADEN} (g-z2's new 500x575 layout) instead of a copy of the old plan.
      */
-    public static final java.util.Map<String, int[][]> PADEN = java.util.Map.ofEntries(
-            java.util.Map.entry("oost", new int[][] {{118, -2400}, {180, -2380}, {232, -2330}, {330, -2290}, {398, -2282}}),
-            java.util.Map.entry("oost_zuid", new int[][] {{232, -2330}, {300, -2200}, {330, -2120}, {400, -1990}}),
-            java.util.Map.entry("oost_noord", new int[][] {{232, -2330}, {250, -2450}, {250, -2560}, {306, -2618}}),
-            java.util.Map.entry("oost_noord2", new int[][] {{330, -2290}, {480, -2440}, {520, -2560}}),
-            java.util.Map.entry("west", new int[][] {{-118, -2400}, {-170, -2390}, {-220, -2300}, {-200, -2120}, {-260, -2060}}),
-            java.util.Map.entry("west_noord", new int[][] {{-170, -2390}, {-250, -2440}, {-330, -2470}, {-470, -2500}, {-540, -2380}, {-560, -2240},
-                    {-540, -2080}}),
-            java.util.Map.entry("zadel", new int[][] {{-250, -2440}, {-290, -2540}, {-330, -2610}}),
-            java.util.Map.entry("noord", new int[][] {{0, -2522}, {10, -2600}, {30, -2680}, {24, -2730}, {0, -2752}}),
-            java.util.Map.entry("kloof_west", new int[][] {{24, -2730}, {-120, -2715}, {-260, -2700}, {-430, -2722}}),
-            java.util.Map.entry("kloof_oost", new int[][] {{24, -2730}, {160, -2716}, {300, -2702}, {460, -2726}}),
-            java.util.Map.entry("zadel_kloof", new int[][] {{-330, -2610}, {-300, -2660}, {-260, -2700}}));
+    public static final java.util.Map<String, int[][]> PADEN;
+
+    static {
+        java.util.Map<String, int[][]> m = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < Z2WereldPlekken.PADEN.size(); i++) {
+            m.put("pad_" + i, Z2WereldPlekken.PADEN.get(i));
+        }
+        PADEN = java.util.Collections.unmodifiableMap(m);
+    }
+
     public static final double PAD_BREEDTE = 2.8;
 
     /** The area of (x, z), or null. */

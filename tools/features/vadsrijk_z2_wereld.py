@@ -31,11 +31,11 @@ TEKSTEN = {
     "vadsrijk.kern.gebied.z2_ring": "De Splinterpieken",
     # the Spiegelburcht door (WereldDeuren id spiegelburcht)
     W + "deur.titel.spiegelburcht": "De Spiegelburcht",
-    W + "deur.onder.spiegelburcht": "Kerker van zone 2 - lv 33-35",
+    W + "deur.onder.spiegelburcht": "Kerker van zone 2 - lv 28-30",
     W + "deur.dicht.spiegelburcht": "De spiegeldeur weerkaatst alleen je eigen gezicht. Er moet een sleutel zijn...",
     # airship line
     Z + "luchtschip.titel": "Kandijkom",
-    Z + "luchtschip.onder": "De Splinterpieken - lv 20-35",
+    Z + "luchtschip.onder": "De Splinterpieken - lv 20-30",
     Z + "luchtschip.onder_haven": "Terug met de guhballon-lijn. Lekker warm!",
     Z + "luchtschip.nog_niet": "De kapitein schudt zijn hoofd: eerst moet het Vadsrijk hier geholpen zijn. Njeg.",
     Z + "luchtschip.te_laag": "De kapitein kijkt bezorgd: daarboven is het ijskoud en gevaarlijk. Kom terug op niveau %s.",

@@ -19,7 +19,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabellen;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.RijkItem;
 
 /**
- * Zone-2 class weapons (lv 20-35): two per class, items {@code guhs:vr_z2_<id>}. Numbers follow the fix-round-1 damage model
+ * Zone-2 class weapons (lv 20-30): two per class, items {@code guhs:vr_z2_<id>}. Numbers follow the fix-round-1 damage model
  * (f-gevecht, kern.Aanvalstempo): {@code schade + perLevel x level} is the damage PER SECOND rating, the attack interval comes from
  * the weapon kind (zwaard 1.0 s, hamer 2.4 s, boog 1.1 s, kruisboog 2.0 s, staf 1.3 s, boek 1.6 s). The ratings are ~7 % above
  * the zone-1 weapons of the same level, plus a zone-2 side stat. Loot table {@code z2systemen:wapens} (all six, for the

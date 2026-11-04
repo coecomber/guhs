@@ -28,7 +28,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.Telegraaf;
 import nl.juiced.guhs.feature.vadsrijk.wezens.mob.Effecten;
 import nl.juiced.guhs.feature.vadsrijk.wezens.mob.RijkWezen;
 
-/** De Splinterkloof (lv 30-34): Mika-mijnwerker, Mika-boorder, Kloofgier, Grauwe Kristalspin. */
+/** De Splinterkloof (lv 26-29): Mika-mijnwerker, Mika-boorder, Kloofgier, Grauwe Kristalspin. */
 public final class Kloof {
     private Kloof() {
     }

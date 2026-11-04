@@ -64,17 +64,17 @@ public final class Z2WezensSpawners {
                 s("mika_boorder", Z2WezensRegistry.MIKA_BOORDER, 2, 3, 700, 16),
                 s("kloofgier", Z2WezensRegistry.KLOOFGIER, 2, 2, 800, 18),
                 s("kristalspin", Z2WezensRegistry.KRISTALSPIN, 3, 3, 700, 14)));
-        // (integration) the Splinterkloof ravine floor (y ~64, z -2810..-2745, z2-wereld's mob_kloof_bodem): the surface search
+        // (integration) the Splinterkloof ravine floor (y ~64, z2-wereld's kloof_bodem_N spots): the surface search
         // finds the rims/bridges, so the floor gets its own spawners with a y-range around it
         int bodem = 0, j = 0;
-        for (int x = -540; x <= 540; x += 90) {
-            BlockPos c = new BlockPos(x, 66, -2772);
+        for (int n = 1; nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek("kloof_bodem_" + n) != null; n++) {
+            BlockPos c = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek("kloof_bodem_" + n).above();
             if (Z2WezensPlekken.veilig(c.getX(), c.getZ(), 20)) {
                 continue;
             }
             boolean mika = j % 2 == 0;
             Spawners.Spawner sp = new Spawners.Spawner("z2wezens:kloofbodem_" + j++ + (mika ? "_mika_mijnwerker" : "_kristalspin"), c, 14,
-                    mika ? Z2WezensRegistry.MIKA_MIJNWERKER : Z2WezensRegistry.KRISTALSPIN, 3, 700, 31, 33, null, ELITE).grot(58, 74);
+                    mika ? Z2WezensRegistry.MIKA_MIJNWERKER : Z2WezensRegistry.KRISTALSPIN, 3, 700, 27, 29, null, ELITE).grot(58, 74);
             Spawners.registreer(sp);
             ALLE.add(sp);
             bodem += 3;
@@ -86,7 +86,7 @@ public final class Z2WezensSpawners {
             BlockPos p = Z2WezensPlekken.BURCHT[i];
             boolean wacht = i % 2 == 0;
             Spawners.Spawner sp = new Spawners.Spawner("z2wezens:burcht_" + i + (wacht ? "_spiegelwacht" : "_scherfgeest"), p, 5,
-                    wacht ? Z2WezensRegistry.SPIEGELWACHT : Z2WezensRegistry.SCHERFGEEST, 2, 900, 33, 35, null, ELITE).grot(p.getY() - 24, p.getY() + 1);
+                    wacht ? Z2WezensRegistry.SPIEGELWACHT : Z2WezensRegistry.SCHERFGEEST, 2, 900, 28, 30, null, ELITE).grot(p.getY() - 24, p.getY() + 1);
             Spawners.registreer(sp);
             ALLE.add(sp);
             burcht += 2;
@@ -94,45 +94,45 @@ public final class Z2WezensSpawners {
         MAX_PER_GEBIED.put("spiegelburcht", burcht);
     }
 
-    /**
-     * (balans 2026-11) A grid spawner centre moved straight away from the nearest path until its circle clears every path by
-     * {@link Spawners#PAD_VRIJ} (this side, the other side, then 6 / 12 further), staying in its area and out of safe spots.
-     * The centre itself when already clear; null when nothing fits (kern's spawn check still keeps it off the path).
-     */
-    @javax.annotation.Nullable
-    static int[] naastPad(Z2WezensPlekken.Gebied g, int x, int z, int straal) {
-        double nodig = straal + Spawners.PAD_VRIJ + 1;
-        double[] d = Spawners.dichtstbijPad(x, z);
-        if (d == null || d[2] >= nodig) {
-            return new int[] {x, z};
-        }
-        double nx = x - d[0], nz = z - d[1], L = Math.hypot(nx, nz);
-        if (L < 0.5) {
-            nx = -d[4];
-            nz = d[3];
-        } else {
-            nx /= L;
-            nz /= L;
-        }
-        double breedte = L - d[2];
-        for (int verder = 0; verder <= 12; verder += 6) {
-            for (int kant = 1; kant >= -1; kant -= 2) {
-                double a = breedte + nodig + verder;
-                int tx = (int) Math.round(d[0] + kant * nx * a), tz = (int) Math.round(d[1] + kant * nz * a);
-                if (Spawners.padAfstand(tx, tz) >= nodig && g.bevat(tx, tz) && !Z2WezensPlekken.veilig(tx, tz, straal + 8)) {
-                    return new int[] {tx, tz};
-                }
-            }
-        }
-        return null;
+    /** One planned spawner (before registering). */
+    private record Plan(int x, int z, Soort s, int straal) {
     }
 
+    /**
+     * (fix round 2) The compact zone: a jittered grid whose spacing is chosen per area so the area holds ~60-100 creatures
+     * (MMO-dense); no spawner within its radius + 5 of a path (user rule: no spawns within ~5 blocks of a path) or near a
+     * safe spot. A spawner close to a path gets a smaller radius (min 6) instead of being dropped.
+     */
     private static void gebied(Z2WezensPlekken.Gebied g, long seed, List<Soort> mix) {
+        List<Plan> plan = List.of();
+        for (int afstand = 18; afstand <= 140; afstand += 3) {
+            plan = plan(g, seed, mix, afstand);
+            int max = plan.stream().mapToInt(p -> p.s().max()).sum();
+            if (max <= 100) {
+                break;
+            }
+        }
+        int max = 0, i = 0;
+        for (Plan p : plan) {
+            Soort s = p.s();
+            BlockPos c = new BlockPos(p.x(), (Z2WezensPlekken.BOVEN_Y + Z2WezensPlekken.ONDER_Y) / 2, p.z());
+            Spawners.Spawner sp = new Spawners.Spawner("z2wezens:" + g.id() + "_" + i++ + "_" + s.naam(), c, p.straal(), s.type(), s.max(), s.respawn(),
+                    g.minLevel(), g.maxLevel(), null, ELITE).grot(Z2WezensPlekken.ONDER_Y, Z2WezensPlekken.BOVEN_Y);
+            Spawners.registreer(sp);
+            ALLE.add(sp);
+            max += s.max();
+        }
+        MAX_PER_GEBIED.put(g.id(), max);
+    }
+
+    private static List<Plan> plan(Z2WezensPlekken.Gebied g, long seed, List<Soort> mix, int afstand) {
         Random r = new Random(seed);
-        int som = mix.stream().mapToInt(Soort::gewicht).sum(), max = 0, i = 0;
-        for (int x = g.minX() + AFSTAND / 2; x <= g.maxX(); x += AFSTAND) {
-            for (int z = g.minZ() + AFSTAND / 2; z <= g.maxZ(); z += AFSTAND) {
-                int px = x + r.nextInt(41) - 20, pz = z + r.nextInt(41) - 20;
+        int som = mix.stream().mapToInt(Soort::gewicht).sum();
+        int jitter = Math.max(4, afstand / 3);
+        List<Plan> uit = new ArrayList<>();
+        for (int x = g.minX() + afstand / 2; x <= g.maxX(); x += afstand) {
+            for (int z = g.minZ() + afstand / 2; z <= g.maxZ(); z += afstand) {
+                int px = x + r.nextInt(2 * jitter + 1) - jitter, pz = z + r.nextInt(2 * jitter + 1) - jitter;
                 int k = r.nextInt(som);
                 Soort s = mix.get(0);
                 for (Soort m : mix) {
@@ -142,25 +142,14 @@ public final class Z2WezensSpawners {
                         break;
                     }
                 }
-                if (Z2WezensPlekken.veilig(px, pz, s.straal() + 8) || !g.bevat(px, pz)) {
+                // g-int: ONE rule with balans/kern: the circle stays PAD_VRIJ (5) from every path EDGE (kern Spawners.padAfstand)
+                int straal = Math.min(s.straal(), (int) Math.floor(Spawners.padAfstand(px, pz) - Spawners.PAD_VRIJ));
+                if (straal < 6 || Z2WezensPlekken.veilig(px, pz, straal + 8) || !g.bevat(px, pz)) {
                     continue;
                 }
-                int[] naast = naastPad(g, px, pz, s.straal());
-                if (naast == null) {
-                    nietVerschoven++;
-                } else if (naast[0] != px || naast[1] != pz) {
-                    verschoven++;
-                    px = naast[0];
-                    pz = naast[1];
-                }
-                BlockPos c = new BlockPos(px, (Z2WezensPlekken.BOVEN_Y + Z2WezensPlekken.ONDER_Y) / 2, pz);
-                Spawners.Spawner sp = new Spawners.Spawner("z2wezens:" + g.id() + "_" + i++ + "_" + s.naam(), c, s.straal(), s.type(), s.max(), s.respawn(),
-                        g.minLevel(), g.maxLevel(), null, ELITE).grot(Z2WezensPlekken.ONDER_Y, Z2WezensPlekken.BOVEN_Y);
-                Spawners.registreer(sp);
-                ALLE.add(sp);
-                max += s.max();
+                uit.add(new Plan(px, pz, s, straal));
             }
         }
-        MAX_PER_GEBIED.put(g.id(), max);
+        return uit;
     }
 }

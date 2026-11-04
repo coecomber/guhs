@@ -33,7 +33,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.wezens.Z2WezensPlekken;
 import nl.juiced.guhs.feature.vadsrijk.zone2.wezens.loot.Z2Loot;
 
 /**
- * The base of every zone-2 creature ("De Splinterpieken", lv 20-35): real monsters, no pink plof. On top of the zone-1
+ * The base of every zone-2 creature ("De Splinterpieken", lv 20-30): real monsters, no pink plof. On top of the zone-1
  * {@link RijkWezen} (GeckoLib anims, elites, split copies, tips):
  * <ul>
  *   <li>{@link #aard()}: KRISTAL shatters into grey shards that melt away, MIKA flees in a smoke puff, BEEST sinks into snow dust

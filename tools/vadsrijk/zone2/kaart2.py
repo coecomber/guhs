@@ -77,131 +77,171 @@ class Kaart2:
     def land_hoogte(self):
         x, z, n1, n2, f, rug = XX, ZZ, self.n1, self.n2, self.fijn, self.rug
         zx0, zz0, zx1, zz1 = PL.ZONE
-        rand = np.minimum.reduce([x - (zx0 - 40), (zx1 + 40) - x, z - (zz0 - 40), (zz1 + 40) - z]) + n1 * 22
+        rand = np.minimum.reduce([x - (zx0 - 40), (zx1 + 40) - x, z - (zz0 - 40), (zz1 + 40) - z]) + n1 * 14
         self.land = rand > 0
         kustd = ndimage.distance_transform_edt(self.land)
         self.kustd = kustd
-        # ---- base massif
-        H = 98 + 8 * n2 + 3 * n1 + 1.2 * f
-        # the south foothills sink a bit towards the coast
-        H -= np.clip((z + 2250) / 450, 0, 1) * 14
-        # Galmhellingen: rising east to snowy ridged peaks
-        oost = smooth((x - 140) / 330)
-        H += oost * (40 + 34 * rug ** 1.6 + 10 * n1)
-        piek = np.exp(-(((x - 520) / 70) ** 2 + ((z + 2585) / 80) ** 2))
-        H += piek * 40
+        # ---- base massif (compact island: everything within ~300 of Kandijkom)
+        H = 100 + 6 * n2 + 3 * n1 + 1.2 * f
+        H -= np.clip((z + 2330) / 120, 0, 1) * 10           # the south sinks towards the dock
+        # Galmhellingen: rising east to ridged crystal peaks
+        oost = smooth((x - 75) / 150)
+        H += oost * (24 + 22 * rug ** 1.6 + 6 * n1)
+        px_, pz_ = PL.GALMPIEK
+        H += 54 * np.exp(-(((x - px_) / 34) ** 2 + ((z - pz_) / 30) ** 2))
         # the west: hills round the lake basin
-        west = smooth((-x - 160) / 300)
-        H += west * (10 + 14 * rug ** 2 + 6 * n1)
-        # the high north plateau
-        noord = smooth((-z - 2600) / 110)
-        H = H * (1 - noord) + (PL.KLOOF_RAND_ZUID + 6 * n1 + 4 * rug) * noord
-        noord2 = smooth((-z - 2800) / 30)
-        H = H * (1 - noord2) + (PL.KLOOF_RAND_NOORD + 10 * n1 + 14 * rug ** 2) * noord2
+        west = smooth((-x - 80) / 140)
+        H += west * (8 + 10 * rug ** 2 + 4 * n1)
+        # the high north plateau (south rim of the Splinterkloof, then the north plateau)
+        noord = smooth((-z - 2468) / 46)
+        H = H * (1 - noord) + np.maximum(H, PL.KLOOF_RAND_ZUID + 4 * n1 + 3 * rug) * noord
+        noord2 = smooth((-z - 2556) / 14)
+        H = H * (1 - noord2) + (PL.KLOOF_RAND_NOORD + 8 * n1 + 12 * rug ** 2) * noord2
         # ---- the Spiegelburcht peak: a cone with a flat top plateau (ellipse)
         bx, bz = PL.BURCHT
-        e = np.hypot(x / 50, (z - (bz - 4)) / 74)
+        e = np.hypot((x - bx) / 46, (z - (bz - 4)) / 74)
         kegel = PL.BURCHT_TOP - (e - 1) * 34
         H = np.where(e < 1, PL.BURCHT_TOP, np.maximum(H, np.minimum(kegel, PL.BURCHT_TOP)))
         self.burcht_plat = e < 1
         # ---- the lake basin
         mx, mz, rx, rz = PL.MEER
-        em = np.hypot((x - mx) / rx, (z - mz) / rz) + 0.05 * n1
+        em = np.hypot((x - mx) / rx, (z - mz) / rz) + 0.04 * n1
         self.meer_e = em
-        oever = PL.MEER_IJS + 2 + np.clip(em - 1, 0, 1) ** 1.3 * 0 + smooth((em - 1.0) / 0.6) * (H - PL.MEER_IJS - 2)
-        bodem = PL.MEER_IJS - 3 - 9 * np.clip((1 - em) / 0.5, 0, 1) + 1.5 * f
-        H = np.where(em < 1, bodem, np.where(em < 1.6, np.minimum(H, oever), H))
+        oever = PL.MEER_IJS + 2 + smooth((em - 1.0) / 0.5) * (H - PL.MEER_IJS - 2)
+        bodem = PL.MEER_IJS - 3 - 7 * np.clip((1 - em) / 0.5, 0, 1) + 1.5 * f
+        H = np.where(em < 1, bodem, np.where(em < 1.5, np.minimum(H, oever), H))
         self.meer = em < 1
-        # island
         ix, iz, ir = PL.MEER_EILAND
         di = np.hypot(x - ix, z - iz)
         H = np.where(di < ir + 6, np.maximum(H, PL.MEER_IJS + 3 - smooth((di - ir + 2) / 8) * 12), H)
         self.meer &= ~(di < ir)
-        # ---- the geode bowl of Kandijkom: flat floor, a crystal ring wall, gates
+        # ---- the geode bowl of Kandijkom: flat floor, tiers (terraces) against the crystal ring wall, 4 gates
         sx, sz = PL.STAD
         r = np.hypot(x - sx, z - sz)
         hoek = np.arctan2(z - sz, x - sx)          # 0 = east, +pi/2 = south
         self.geode_r, self.geode_hoek = r, hoek
-        noordheid = np.clip(-np.sin(hoek), 0, 1)   # 1 at the north
-        top = PL.STAD_TOP + (30 + (PL.GEODE_HOOG - 30) * noordheid) * (1 + 0.12 * n1 + 0.15 * rug)
+        noordheid = np.clip(-np.sin(hoek), 0, 1)
+        top = PL.STAD_TOP + (26 + (PL.GEODE_HOOG - 26) * noordheid) * (1 + 0.12 * n1 + 0.15 * rug)
         R0 = PL.GEODE_R
         wand = np.where(r < R0, 0.0, np.where(r < R0 + 4, 1.0, np.clip(1 - (r - R0 - 4) / (PL.GEODE_DIK + 26), 0, 1) ** 0.8))
         hw = PL.STAD_TOP + (top - PL.STAD_TOP) * wand
+        dx_, dz_ = x - sx, z - sz
         self.poort = np.zeros_like(self.land)
-        for naam, (dx, dz) in PL.POORTEN.items():
-            a0 = math.atan2(dz, dx)
-            da = np.abs(np.angle(np.exp(1j * (hoek - a0))))
-            breed = 13 if naam != "zuid" else 16
-            pm = (np.abs(da * r) < breed) & (r < R0 + PL.GEODE_DIK + 40)
-            self.poort |= pm
-        buiten = r >= R0 + 4
-        H = np.where(r < R0 + 4, PL.STAD_TOP, np.where(r < R0 + 60, np.maximum(H * smooth((r - R0) / 60) + hw * (1 - smooth((r - R0) / 60)), hw), H))
-        self.geode_wand = (r >= R0) & (r < R0 + PL.GEODE_DIK + 8) & ~self.poort
-        self.geode_band = np.where(r < R0 + 6, 4, np.where(r < R0 + 10, 5, 6))
-        self.stad_vloer = r < R0 + 4
+        self.poort_s = np.zeros((NX, NZ), np.float32)   # distance along the gate axis
+        straat = np.zeros_like(self.land)
+        for naam, (ux, uz) in PL.POORTEN.items():
+            s_ = dx_ * ux + dz_ * uz
+            p_ = np.abs(dx_ * uz - dz_ * ux)
+            pm = (s_ > 0) & (p_ <= PL.POORT_HALF)
+            straat |= pm
+            self.poort |= pm & (s_ < R0 + PL.GEODE_DIK + 12)
+            self.poort_s = np.where(pm, s_, self.poort_s)
+        H = np.where(r < R0, PL.STAD_TOP, np.where(r < R0 + 60, np.maximum(H * smooth((r - R0) / 60) + hw * (1 - smooth((r - R0) / 60)), hw), H))
+        self.straat = straat & (r < R0)
+        ta, tb = PL.TIER_A, PL.TIER_B
+        tierA = (r >= ta[0]) & (r < ta[1]) & ~straat
+        tierB = (r >= tb[0]) & (r < tb[1]) & ~straat
+        H = np.where(tierA, ta[2], np.where(tierB, tb[2], H))
+        # stair lanes beside every gate street (|p| 5..7): 90 -> 95 at s 30..34, 95 -> 100 at s 45..49
+        self.trap_baan = np.zeros_like(self.land)
+        self.trap_richting = np.zeros((NX, NZ), np.int8)
+        self.trap_hoogte = np.zeros((NX, NZ), np.int16)
+        for k, (naam, (ux, uz)) in enumerate(PL.POORTEN.items()):
+            s_ = dx_ * ux + dz_ * uz
+            p_ = np.abs(dx_ * uz - dz_ * ux)
+            lane = (s_ > 28.5) & (s_ < 61) & (p_ > PL.POORT_HALF + 0.5) & (p_ <= PL.POORT_HALF + 3.5)
+            sr = np.floor(s_ + 0.5)
+            hl = PL.STAD_TOP + np.clip(sr - 29, 0, 5) + np.clip(sr - 44, 0, 5)
+            H = np.where(lane, hl, H)
+            self.trap_baan |= lane
+            self.trap_richting = np.where(lane, k + 1, self.trap_richting)
+        self.tier = (tierA | tierB | self.trap_baan) & (r < R0)
         # the dock road: a ledge south out of the geode at the town floor, then the land drops away (the pier stands on posts)
-        dock = (np.abs(x) <= 14) & (z > sz + R0 - 8) & (z <= -2251)
+        dock = (np.abs(x) <= 14) & (z > sz + R0 - 4) & (z <= -2251)
         H = np.where(dock, PL.STAD_TOP, H)
         ez = np.hypot(x / 60, (z + 2222) / 34)
         zuid = (z > -2251) & (ez < 1.6)
         H = np.where(zuid, np.minimum(H, 72 + 3 * n1 + smooth((ez - 0.8) / 0.8) * (H - 72)), H)
         self.dok_weg = dock
-        # gates: flat road through the wall (blend out to the land)
-        dpoort = ndimage.distance_transform_edt(~self.poort)
-        H = np.where(self.poort & ~buiten, PL.STAD_TOP, H)
+        # gates: the street runs flat (town floor) straight through the wall
+        doorgang = self.poort & (self.poort_s >= R0 - 2) & (self.poort_s < R0 + PL.GEODE_DIK + 6)
+        H = np.where(doorgang, PL.STAD_TOP, H)
+        self.vast_h = np.where((r < R0) & ~self.tier & straat | doorgang, float(PL.STAD_TOP), np.nan).astype(np.float32)
+        self.geode_wand = (r >= R0) & (r < R0 + PL.GEODE_DIK + 8) & ~self.poort
+        self.geode_band = np.where(r < R0 + 3, 4, np.where(r < R0 + 7, 5, 6))
+        self.stad_vloer = r < R0
         # ---- pads (arena, saddle, stations, campfires, bridge heads): exact flat circles with a soft rim
-        self.pad(PL.GALM_ARENA[0], PL.GALM_ARENA[1], PL.GALM_ARENA[2] + 2, PL.GALM_ARENA_TOP, 26, H0=H)
-        H = self._H
-        dz_ = PL.DRAKENZADEL
-        H = self.pad(dz_[0], dz_[1], dz_[2] + 3, PL.DRAKENZADEL_TOP, 30, H0=H)
-        H = self.pad(PL.GONDEL_BERG[0], PL.GONDEL_BERG[1], 10, PL.GONDEL_BERG_TOP, 22, H0=H)
-        H = self.pad(PL.MIKA_FORT[0], PL.MIKA_FORT[1], 20, 152, 24, H0=H)
-        # the bridge heads of the main bridge (x 0): both rims at deck height
-        kz0 = float(kloof_z(0))
-        H = self.pad(0, kz0 + 26, 7, PL.BRUG_TOP, 22, H0=H)
-        H = self.pad(0, kz0 - 27, 8, PL.BRUG_TOP, 14, H0=H)
-        # ---- the Splinterkloof: vertical walls, floor 64, a frozen stream; ledge ramps (stairways) up the south wall
+        H = self.pad(PL.GALM_ARENA[0], PL.GALM_ARENA[1], PL.GALM_ARENA[2] + 2, PL.GALM_ARENA_TOP, 22, H0=H)
+        dz2 = PL.DRAKENZADEL
+        H = self.pad(dz2[0], dz2[1], dz2[2] + 3, PL.DRAKENZADEL_TOP, 18, H0=H)
+        H = self.pad(PL.GONDEL_BERG[0], PL.GONDEL_BERG[1], 10, PL.GONDEL_BERG_TOP, 18, H0=H)
+        H = self.pad(PL.MIKA_FORT[0], PL.MIKA_FORT[1], 20, PL.MIKA_FORT_TOP, 20, H0=H)
+        H = self.pad(PL.STAL[0], PL.STAL[1], 12, PL.STAD_TOP, 10, H0=H)
+        bx3 = PL.BRUGGEN[2]
+        kz0 = float(kloof_z(bx3))
+        H = self.pad(bx3, kz0 + 25, 7, PL.KLOOF_RAND_ZUID + 4, 16, H0=H)
+        H = self.pad(bx3, kz0 - 25, 7, PL.BRUG_TOP, 12, H0=H)
+        # ---- the Splinterkloof: vertical walls, floor 64, a frozen stream; ledge ramps up the walls
         zc = kloof_z(x)
-        w = PL.KLOOF_BREED / 2 + 3 * n1 + 1.5 * f
-        v = z - zc                         # >0 south of the centre line
+        w = PL.KLOOF_BREED / 2 + 2.5 * n1 + 1.2 * f
+        v = z - zc
         self.kloof_v, self.kloof_w = v, w
-        kloof = (np.abs(v) < w) & (np.abs(x) < 596)      # closed ends: no pit where it meets the coast
-        self.kloof = kloof
+        kloof = (np.abs(v) < w) & (np.abs(x) < PL.KLOOF_X)
         H = np.where(kloof, PL.KLOOF_BODEM + 1.2 * np.clip(f, 0, 1) + 2 * smooth((np.abs(v) - w + 6) / 6), H)
+        self.kloof_hoofd = kloof.copy()
+        # the Galmspleet: a narrow gorge from the ravine south under the gondola, its floor rises to the land at its south end
+        dsp, lsp = polyafstand(PL.GALMSPLEET)
+        Lsp = sum(math.dist(a, b) for a, b in zip(PL.GALMSPLEET, PL.GALMSPLEET[1:]))
+        spleet = (dsp < PL.GALMSPLEET_BREED / 2 + 1.5 * n1) & (z > zc + w - 4)
+        eind = PL.GALMSPLEET[-1]
+        hend = float(H[idx(*eind)])
+        vs = PL.KLOOF_BODEM + 2 + np.clip(lsp / Lsp, 0, 1) ** 1.2 * (hend - PL.KLOOF_BODEM - 2)
+        H = np.where(spleet, np.minimum(H, vs), H)
+        self.spleet = spleet
+        kloof |= spleet
+        self.kloof = kloof
         self.kloof_ramp = np.zeros_like(self.land)
-        ramp_lengte = 2 * (PL.KLOOF_RAND_ZUID - PL.KLOOF_BODEM) + 8
-        for x0 in PL.KLOOF_TRAPPEN:
-            dx = x - x0
-            lane = (v > w - 6) & (v < w + 0.5) & (dx >= 0) & (dx <= ramp_lengte)
-            ramp = PL.KLOOF_BODEM + np.clip(dx, 0, None) / 2
+        for t_ in PL.KLOOF_TRAPPEN:
+            if t_ is None:
+                continue
+            x0, rx_, kant = t_
+            rand_h = PL.KLOOF_RAND_ZUID if kant > 0 else PL.KLOOF_RAND_NOORD
+            lengte = 1.5 * (rand_h - PL.KLOOF_BODEM) + 10
+            dx = (x - x0) * rx_
+            if kant > 0:
+                lane = (v > w - 6) & (v < w + 0.5)
+            else:
+                lane = (v < -w + 6) & (v > -w - 0.5)
+            lane &= (dx >= 0) & (dx <= lengte) & (np.abs(x) < PL.KLOOF_X)
+            ramp = PL.KLOOF_BODEM + np.clip(dx, 0, None) / 1.5
             H = np.where(lane, np.minimum(np.maximum(ramp, PL.KLOOF_BODEM), np.maximum(H, ramp)), H)
             self.kloof_ramp |= lane
-        # the boormeester cave mouth stays at floor level (carved by bouw2)
         # ---- paths: a road profile along each polyline (smoothed, slope limited), cut/filled into the land
         self.pad_m = np.zeros((NX, NZ), np.float32)
         self.pad_kern = np.zeros_like(self.land)
+        self.pad_d = np.full((NX, NZ), 1e9, np.float32)
         for naam, pts in PL.PADEN.items():
             H = self.weg(H, pts)
-        # ---- the gondola cable: keep a free corridor under it (the cable rises straight from the valley to the top station)
-        (ax, az), (bx, bz) = PL.GONDEL_DAL, PL.GONDEL_BERG
-        ya, yb = PL.STAD_TOP + PL.GONDEL_KABEL[0], PL.GONDEL_BERG_TOP + PL.GONDEL_KABEL[1]
-        dk, langs = polyafstand([(ax, az), (bx, bz)])
-        L = math.dist((ax, az), (bx, bz))
+        # ---- the gondola cable: keep a free corridor under it
+        (ax, az), (bx_, bz_) = PL.GONDEL_DAL, PL.GONDEL_BERG
+        ya, yb = PL.GONDEL_DAL_TOP + PL.GONDEL_KABEL[0], PL.GONDEL_BERG_TOP + PL.GONDEL_KABEL[1]
+        dk, langs = polyafstand([(ax, az), (bx_, bz_)])
+        L = math.dist((ax, az), (bx_, bz_))
         ky = ya + (yb - ya) * np.clip(langs / L, 0, 1)
-        self.kabel = dk < 6
+        self.kabel = (dk < 6) & (r > PL.GEODE_R - 2)
         H = np.where(self.kabel, np.minimum(H, ky - 7 + smooth((dk - 3) / 3) * 3), H)
         # ---- kept pads again (paths must not move them)
         for (px, pz, pr, ptop, fall) in self.pads:
             d = np.hypot(x - px, z - pz)
             H = np.where(d <= pr, ptop, H)
-        H = np.where(self.stad_vloer | (self.poort & ~buiten) | dock, PL.STAD_TOP, H)
+        H = np.where(self.stad_vloer & ~self.tier, PL.STAD_TOP, H)
+        H = np.where(dock, PL.STAD_TOP, H)
         # ---- the coast: cliffs down into the cloud sea
-        kt = smooth(kustd / 50) ** 0.7
+        kt = smooth(kustd / 40) ** 0.7
         H = (PL.ZEE + 2) * (1 - kt) + H * kt
         self.Hf = H
         Hi = np.where(self.land, np.round(H), -1).astype(np.int16)
-        # fill little pits (1-2 cells, >1 deep) so nobody gets stuck in the terrain
-        vast = self.meer | (self.kloof & (kustd > 40)) | self.stad_vloer | ~self.land
+        vast = self.meer | (self.kloof & (kustd > 30)) | self.stad_vloer | ~self.land
         for _ in range(4):
             P_ = np.pad(Hi, 1, mode="edge")
             nb = np.sort(np.stack([P_[:-2, 1:-1], P_[2:, 1:-1], P_[1:-1, :-2], P_[1:-1, 2:]]), axis=0)
@@ -211,9 +251,8 @@ class Kaart2:
         # lake water + ice
         self.ijs = self.meer.copy()
         sx_, sz_, sr = PL.SCHOTSEN
-        self.open_water = self.meer & (np.hypot(x - sx_, z - sz_) < sr + 4 * n1)
+        self.open_water = self.meer & (np.hypot(x - sx_, z - sz_) < sr + 3 * n1)
         self.ijs &= ~self.open_water
-        # the open water is shallow (1 deep, you stand in it): nobody can dive under the ice sheet from there
         self.H[self.open_water] = PL.MEER_IJS - 1
         # areas (for materials): index per column
         self.gebied = np.zeros((NX, NZ), np.uint8)
@@ -251,19 +290,26 @@ class Kaart2:
         prof = H[ii, jj].astype(np.float64)
         prof = ndimage.gaussian_filter1d(prof, 8, mode="nearest")
         prof[0], prof[-1] = H[ii[0], jj[0]], H[ii[-1], jj[-1]]
-        # slope limit 0.7 per block (forward + backward), the ends fixed
-        for _ in range(3):
+        # (fix round 2) fixed heights: the town streets and the gate passages stay at the town floor, the road ramps out from there
+        vast = self.vast_h[ii, jj]
+        fix = ~np.isnan(vast)
+        prof[fix] = vast[fix]
+        # slope limit 0.7 per block (forward + backward), the ends + fixed points kept
+        for _ in range(8):
             for i in range(1, n):
                 prof[i] = min(max(prof[i], prof[i - 1] - 0.7), prof[i - 1] + 0.7)
+            prof[fix] = vast[fix]
             for i in range(n - 2, -1, -1):
                 prof[i] = min(max(prof[i], prof[i + 1] - 0.7), prof[i + 1] + 0.7)
+            prof[fix] = vast[fix]
         dp, langs = polyafstand(pts)
         k = np.clip(np.round(langs / lengte * (n - 1)).astype(int), 0, n - 1)
         hp = prof[k]
         mix = smooth((dp - breed) / rand)
-        m = (dp < breed + rand) & ~self.kloof_buiten_ramp(dp)
+        m = (dp < breed + rand) & ~self.kloof_buiten_ramp(dp) & (dp <= self.pad_d + 0.01)   # an earlier road nearer keeps its profile
         H = np.where(m, hp * (1 - mix) + H * mix, H)
         self.pad_kern |= dp < breed
+        self.pad_d = np.minimum(self.pad_d, dp)
         self.pad_m = np.maximum(self.pad_m, np.clip(1 - dp / breed, 0, 1) + (dp < breed) * 0.5)
         return H
 
@@ -275,6 +321,7 @@ class Kaart2:
         d = ndimage.distance_transform_edt(~self.land)
         self.zeed = d
         vloer = PL.ZEE - 2 - np.clip(d / 6, 0, 8)
+        vloer = np.where(d > 40, np.maximum(vloer, PL.ZEE - 2 - np.clip((90 - d) / 6, 0, 8)), vloer)   # the open cloud sea is shallow (small tiles)
         self.vloer = np.round(vloer).astype(np.int16)
 
     def h(self, x, z):
