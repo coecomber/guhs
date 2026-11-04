@@ -1,0 +1,101 @@
+package nl.juiced.guhs.feature.vadsrijk.zone2.wezens;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.function.Supplier;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
+import nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners;
+import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
+
+/**
+ * The zone-2 spawners, all in kern's {@link Spawners} (it ticks them). MMO density (ronde 14: ~60-90 creatures per area):
+ * every area is covered by a jittered grid of spawners (~105 blocks apart, a fixed seed so it is the same every start), each a
+ * kind drawn from the area's mix, max 2-4 alive, 30-45 s respawn, 6 % elites. All surface spawners use kern's floor search from
+ * {@link Z2WezensPlekken#BOVEN_Y} down (the first floor from above = the snow, a ledge or a hanging bridge; "player near" measured
+ * flat), so the mountains' heights never matter. No spawner comes near a safe spot ({@link Z2WezensPlekken#VEILIG}).
+ * The Spiegelburcht adds use the room mode (floor search 24 down from the room spot).
+ */
+public final class Z2WezensSpawners {
+    public static final double ELITE = 0.06;
+    public static final int AFSTAND = 105;
+
+    /** One kind in an area's mix: type, weight, max alive, respawn ticks, radius. */
+    private record Soort(String naam, Supplier<? extends EntityType<? extends VadsrijkMob>> type, int gewicht, int max, int respawn, int straal) {
+    }
+
+    /** Area id -> how many may be alive at most (the sum of the spawners' max), for the dev command and the gametest. */
+    public static final Map<String, Integer> MAX_PER_GEBIED = new LinkedHashMap<>();
+    public static final List<Spawners.Spawner> ALLE = new ArrayList<>();
+
+    private Z2WezensSpawners() {
+    }
+
+    private static Soort s(String naam, Supplier<? extends EntityType<? extends VadsrijkMob>> type, int gewicht, int max, int respawn, int straal) {
+        return new Soort(naam, type, gewicht, max, respawn, straal);
+    }
+
+    /** From Z2WezensRegistry.register. */
+    public static void registreer() {
+        gebied(Z2WezensPlekken.GALMHELLINGEN, 2001, List.of(
+                s("splinterling", Z2WezensRegistry.SPLINTERLING, 3, 3, 700, 16),
+                s("galmvleermuis", Z2WezensRegistry.GALMVLEERMUIS, 2, 3, 700, 16),
+                s("sneeuwknabbelaar", Z2WezensRegistry.SNEEUWKNABBELAAR, 2, 4, 900, 18),
+                s("kristalnaaldkruiper", Z2WezensRegistry.KRISTALNAALDKRUIPER, 2, 3, 700, 14)));
+        gebied(Z2WezensPlekken.KNUFFELMEER, 2002, List.of(
+                s("ijzelgeest", Z2WezensRegistry.IJZELGEEST, 3, 3, 700, 16),
+                s("schotsbijter", Z2WezensRegistry.SCHOTSBIJTER, 2, 2, 800, 14),
+                s("versteende_wacht", Z2WezensRegistry.VERSTEENDE_WACHT, 2, 2, 900, 12),
+                s("ijspuffer", Z2WezensRegistry.IJSPUFFER, 3, 3, 700, 16)));
+        gebied(Z2WezensPlekken.SPLINTERKLOOF, 2003, List.of(
+                s("mika_mijnwerker", Z2WezensRegistry.MIKA_MIJNWERKER, 3, 3, 700, 16),
+                s("mika_boorder", Z2WezensRegistry.MIKA_BOORDER, 2, 3, 700, 16),
+                s("kloofgier", Z2WezensRegistry.KLOOFGIER, 2, 2, 800, 18),
+                s("kristalspin", Z2WezensRegistry.KRISTALSPIN, 3, 3, 700, 14)));
+        // De Spiegelburcht: the rooms (guess, see Z2WezensPlekken.BURCHT)
+        int burcht = 0;
+        for (int i = 0; i < Z2WezensPlekken.BURCHT.length; i++) {
+            BlockPos p = Z2WezensPlekken.BURCHT[i];
+            boolean wacht = i % 2 == 0;
+            Spawners.Spawner sp = new Spawners.Spawner("z2wezens:burcht_" + i + (wacht ? "_spiegelwacht" : "_scherfgeest"), p, 5,
+                    wacht ? Z2WezensRegistry.SPIEGELWACHT : Z2WezensRegistry.SCHERFGEEST, 2, 900, 33, 35, null, ELITE).grot(p.getY() - 24, p.getY() + 1);
+            Spawners.registreer(sp);
+            ALLE.add(sp);
+            burcht += 2;
+        }
+        MAX_PER_GEBIED.put("spiegelburcht", burcht);
+    }
+
+    private static void gebied(Z2WezensPlekken.Gebied g, long seed, List<Soort> mix) {
+        Random r = new Random(seed);
+        int som = mix.stream().mapToInt(Soort::gewicht).sum(), max = 0, i = 0;
+        for (int x = g.minX() + AFSTAND / 2; x <= g.maxX(); x += AFSTAND) {
+            for (int z = g.minZ() + AFSTAND / 2; z <= g.maxZ(); z += AFSTAND) {
+                int px = x + r.nextInt(41) - 20, pz = z + r.nextInt(41) - 20;
+                int k = r.nextInt(som);
+                Soort s = mix.get(0);
+                for (Soort m : mix) {
+                    k -= m.gewicht();
+                    if (k < 0) {
+                        s = m;
+                        break;
+                    }
+                }
+                if (Z2WezensPlekken.veilig(px, pz, s.straal() + 8) || !g.bevat(px, pz)) {
+                    continue;
+                }
+                BlockPos c = new BlockPos(px, (Z2WezensPlekken.BOVEN_Y + Z2WezensPlekken.ONDER_Y) / 2, pz);
+                Spawners.Spawner sp = new Spawners.Spawner("z2wezens:" + g.id() + "_" + i++ + "_" + s.naam(), c, s.straal(), s.type(), s.max(), s.respawn(),
+                        g.minLevel(), g.maxLevel(), null, ELITE).grot(Z2WezensPlekken.ONDER_Y, Z2WezensPlekken.BOVEN_Y);
+                Spawners.registreer(sp);
+                ALLE.add(sp);
+                max += s.max();
+            }
+        }
+        MAX_PER_GEBIED.put(g.id(), max);
+    }
+}
