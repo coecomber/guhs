@@ -53,6 +53,7 @@ public final class NpcRegistry {
         ITEMS.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent e) -> e.put(GUH.get(), GuhEntity.createAttributes().build()));
         QuestMotor.init();
+        KamerTips.init();
         NpcHaken.registreer();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Npcs.tick(e.getServer());
@@ -73,6 +74,8 @@ public final class NpcRegistry {
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             NpcMarkers.vergeet(e.getEntity().getUUID());
             NpcVolg.vergeet(e.getEntity().getUUID());
+            KamerTips.vergeet(e.getEntity().getUUID());
+            Reiskaart.vergeet(e.getEntity().getUUID());
         });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> NpcCommando.register(e));
     }

@@ -174,7 +174,7 @@ public final class Npcs {
         g.setYHeadRot(d.yaw());
         g.setYBodyRot(d.yaw());
         g.stelIn(d);
-        if (!staanOp(sl, s)) {
+        if (!staanOp(sl, s) && Double.isNaN(vloerOfNaN(sl, d.plek()))) {
             g.setNoGravity(true);   // (no floor built here yet: hover instead of falling into the void)
         }
         sl.addFreshEntity(g);
@@ -193,10 +193,15 @@ public final class Npcs {
      * blocked (a counter, a wall), the free floor beside it at the SAME y (within 2 blocks, inside the building/stall) before
      * the column search, which tries downward before upward, so a spot never ends up on the roof above it. */
     public static BlockPos staanPlek(ServerLevel sl, BlockPos pos) {
+        // g-int: ONE rule for g-kaart's staanPlek + g-ux's standplek: the exact spot first; when that cell is blocked (counter,
+        // wall, ground) the nearest free LIT floor at the same y within 2 (ring 1, then ring 2: inside the stall/house, never the
+        // dark pocket under it); then the column: down 1..4 first, then the nearest lit floor up/down within 12 (vloerOfNaN).
         if (staanOp(sl, pos)) {
             return pos;
         }
-        for (int r = 1; r <= 2; r++) {
+        boolean geblokt = !sl.getBlockState(pos).getCollisionShape(sl, pos).isEmpty()
+                || !sl.getBlockState(pos.above()).getCollisionShape(sl, pos.above()).isEmpty();
+        for (int r = 1; geblokt && r <= 2; r++) {
             BlockPos beste = null;
             double bd = Double.MAX_VALUE;
             for (int dx = -r; dx <= r; dx++) {
@@ -206,7 +211,7 @@ public final class Npcs {
                     }
                     BlockPos b = pos.offset(dx, 0, dz);
                     double dd = dx * dx + dz * dz;
-                    if (dd < bd && staanOp(sl, b)) {
+                    if (dd < bd && staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
                         beste = b;
                         bd = dd;
                     }

@@ -87,10 +87,9 @@ public class Z2NpcGameTests {
         Questlog.wisAlles(p);
         Z2NpcRegistry.gebieden();
         // the gate: the haven pilot shows the Kandijkom line only after zone 1
-        QuestMotor.ExtraOptie lijn = QuestMotor.EXTRA.get("luchtschipper").get(0);
-        helper.assertTrue(!lijn.zichtbaar().test(p), "no Kandijkom line before zone 1");
+        helper.assertTrue(!QuestMotor.reisDoelen(p, "luchtschipper").contains("kandijkom"), "no Kandijkom line before zone 1");
         Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, true);
-        helper.assertTrue(lijn.zichtbaar().test(p), "the Kandijkom line after zone 1");
+        helper.assertTrue(QuestMotor.reisDoelen(p, "luchtschipper").contains("kandijkom"), "the Kandijkom line after zone 1");
         Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, false);
         // the chain, in story order
         List<Quest> hoofd = z2().stream().filter(Quest::hoofd).toList();

@@ -28,7 +28,7 @@ import nl.juiced.guhs.feature.verhaal.Praat;
  */
 public final class QuestMotor {
     public static final String SLEUTEL = "vr_npc";
-    static final int AANNEMEN = 1, LATER = 2, ROL = 10, VLIEG_STAD = 30, VLIEG_KAMP = 31, KLASSE = 40, QUIZ = 50;
+    static final int AANNEMEN = 1, LATER = 2, ROL = 10, VLIEG_STAD = 30, VLIEG_KAMP = 31, KLASSE = 40, QUIZ = 50, REIS = 80, REIS_KAART = 79;
     /** The element quiz (hq03b): the questions and the answer that wins (0 vuur, 1 zwam, 2 slijm). */
     static final String[] QUIZ_VRAAG = {"zwam", "slijm", "vuur"};
     static final int[] QUIZ_JUIST = {0, 1, 2};
@@ -136,12 +136,12 @@ public final class QuestMotor {
                 }
                 NpcVolg.meldVolgende(p, q);
                 regels.addAll(regels(p, npc, q.klaar(), q.sleutel() + ".klaar."));
-                open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", na));
+                open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", na), na.isEmpty() ? reisOpties(p, id) : new Praat.Optie[0]);
                 return;
             }
         }
         if (!regels.isEmpty()) {
-            open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
+            open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""), reisOpties(p, id));
             return;
         }
         // 4. a quest to offer
@@ -158,19 +158,49 @@ public final class QuestMotor {
                 return;
             }
         }
-        // 5. how is it going
+        // 5. how is it going (fix round 2: plus what the NPC's line promises: the airship's destinations, the class choice, its shop)
+        NpcDef eigen = Npcs.van(id);
+        String eigenRol = eigen == null ? null : eigen.rol();
         for (Quest q : Questlog.actieve(p)) {
             if (q.gever().equals(id) || q.inleveren().equals(id)) {
+                if ("klasse".equals(eigenRol) && heeftOpen(p, q, Quest.Doel.Type.KLASSE)) {
+                    klasseKeuze(p, npc);   // ("click me again to see the choice")
+                    return;
+                }
                 regels.add(new Praat.Regel(npc, "", q.sleutel() + ".bezig"));
                 QuestStap s = QuestStap.van(p, q);
                 regels.add(new Praat.Regel(npc, "", QuestStap.P + "hint", s.wat(), s.waar()));
-                open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
+                Praat.Optie[] reis = reisOpties(p, id);
+                if (reis.length > 0) {   // (an airship NPC: the real choices, and the bell as the alternative)
+                    regels.add(new Praat.Regel(npc, "", "vadsrijk.npc.reis.kies." + id));
+                    open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""), reis);
+                } else if (dienst(eigenRol)) {   // (a shop/service NPC keeps its service choice during a quest)
+                    open(p, npc, regels, new Gesprek(id, npc.getId(), "", eigenRol, ""),
+                            metExtra(p, id, new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + eigenRol)));
+                } else {
+                    open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
+                }
                 return;
             }
         }
         // 6. the role, or a little chatter
         NpcDef def = Npcs.van(id);
         rol(p, npc, def == null ? null : def.rol());
+    }
+
+    /** A role with its own "do it" choice (a shop, the bank...), not chatter, the class temple, the airship or the board. */
+    static boolean dienst(@Nullable String rol) {
+        return rol != null && !List.of("training", "kampwacht", "marktguh", "klasse", "questbord", "versteend", "luchtschip", "luchtschip_kamp", "luchtschip_z2")
+                .contains(rol);
+    }
+
+    static boolean heeftOpen(ServerPlayer p, Quest q, Quest.Doel.Type t) {
+        for (int i = 0; i < q.doelen().size(); i++) {
+            if (q.doelen().get(i).type() == t && !Questlog.doelKlaar(p, q, i)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static void open(ServerPlayer p, Entity npc, List<Praat.Regel> regels, Gesprek g, Praat.Optie... opties) {
@@ -220,16 +250,16 @@ public final class QuestMotor {
             return;
         }
         switch (rol) {
-            case "luchtschip" -> {
-                if (!Questlog.klaar(p, "hq05_klodderreus")) {
-                    praat(p, npc, "vadsrijk.npc.rol.luchtschip.nog_niet", new Gesprek(id, npc.getId(), "", "", ""));
-                } else {
-                    praat(p, npc, "vadsrijk.npc.rol.luchtschip.vraag", new Gesprek(id, npc.getId(), "", rol, ""),
-                            new Praat.Optie(VLIEG_STAD, "vadsrijk.npc.optie.naar_stad"));
+            case "luchtschip", "luchtschip_kamp", "luchtschip_z2" -> {
+                if (hint == null) {
+                    Reiskaart.open(p);   // (the travel map: every place, flying with one click)
+                    return;
                 }
+                List<Praat.Regel> l = new ArrayList<>();
+                l.add(hint);
+                l.add(new Praat.Regel(npc, "", "vadsrijk.npc.reis.kies." + id));
+                open(p, npc, l, new Gesprek(id, npc.getId(), "", rol, ""), reisOpties(p, id));
             }
-            case "luchtschip_kamp" -> praat(p, npc, "vadsrijk.npc.rol.luchtschip_kamp.vraag", new Gesprek(id, npc.getId(), "", rol, ""),
-                    metExtra(p, id, new Praat.Optie(VLIEG_KAMP, "vadsrijk.npc.optie.naar_kamp")));
             case "klasse" -> klasseKeuze(p, npc);
             case "questbord" -> questbord(p, npc);
             default -> {
@@ -280,6 +310,100 @@ public final class QuestMotor {
     private static void praat(ServerPlayer p, Entity npc, String key, Gesprek g, Praat.Optie... opties) {
         open(p, npc, List.of(new Praat.Regel(npc, "", key)), g, opties);
     }
+
+    // ---- the airship NPCs: a real choice per destination (fix round 2) -----------------------------------------------------------
+
+    /** Airship NPC id -> the destinations it offers, in order ("zwamzoet" = De Haven, "knuffelkamp", "kandijkom"). */
+    public static final Map<String, List<String>> REIZEN = new ConcurrentHashMap<>(Map.of(
+            "kapitein", List.of("zwamzoet", "kandijkom"),
+            "luchtschipper", List.of("knuffelkamp", "kandijkom"),
+            "z2_kapitein", List.of("zwamzoet", "knuffelkamp")));
+    private static final Map<UUID, List<String>> REIS_OPEN = new ConcurrentHashMap<>();
+
+    /** Is this an airship NPC? */
+    public static boolean reisNpc(String npc) {
+        return REIZEN.containsKey(npc);
+    }
+
+    /** The destinations this player sees at this NPC now (Kandijkom only once zone 1 is done; a locked one is still shown). */
+    public static List<String> reisDoelen(ServerPlayer p, String npc) {
+        List<String> l = new ArrayList<>();
+        for (String naar : REIZEN.getOrDefault(npc, List.of())) {
+            if (!naar.equals("kandijkom") || NpcApi.zone1Klaar(p)) {
+                l.add(naar);
+            }
+        }
+        return l;
+    }
+
+    /** Null when the line is open for this player, else the lang key of why not (arg: the player's level). */
+    @Nullable
+    public static String reisSlot(ServerPlayer p, String naar) {
+        return switch (naar) {
+            case "zwamzoet" -> Questlog.klaar(p, "hq05_klodderreus") || Questlog.actief(p, "hq06_zwamzoet") ? null : "vadsrijk.npc.reis.slot.zwamzoet";
+            case "kandijkom" -> Questlog.status(p, "z2_hq01_splinterpieken") != 0 ? null   // (the zone-2 story started: always open)
+                    : !NpcApi.zone1Klaar(p) ? "vadsrijk.npc.reis.slot.kandijkom_verhaal"
+                    : Spelers.level(p) < 20 ? "vadsrijk.npc.reis.slot.kandijkom_level" : null;
+            default -> null;
+        };
+    }
+
+    /** The travel choices of an airship NPC (none for any other NPC); remembered for the answer. */
+    static Praat.Optie[] reisOpties(ServerPlayer p, String npc) {
+        if (!reisNpc(npc)) {
+            return new Praat.Optie[0];
+        }
+        List<String> doelen = reisDoelen(p, npc);
+        REIS_OPEN.put(p.getUUID(), doelen);
+        Praat.Optie[] o = new Praat.Optie[doelen.size() + 1];
+        o[0] = new Praat.Optie(REIS_KAART, "vadsrijk.npc.optie.reiskaart");
+        for (int i = 0; i < doelen.size(); i++) {
+            String naar = doelen.get(i);
+            o[i + 1] = new Praat.Optie(REIS + i, "vadsrijk.npc.optie.vlieg." + naar + (reisSlot(p, naar) != null ? ".slot" : ""));
+        }
+        return o;
+    }
+
+    /** (tests) When set, a chosen flight is reported here ("npc>destination") instead of flown. */
+    @Nullable
+    static java.util.function.BiConsumer<ServerPlayer, String> VLIEG_TEST;
+
+    /** Fly from this NPC's dock to {@code naar} (the same flights as the bells: WereldReizen / Z2Reizen through the bindings). */
+    public static void vliegNaar(ServerPlayer p, String van, String naar) {
+        if (VLIEG_TEST != null) {
+            VLIEG_TEST.accept(p, van + ">" + naar);
+            return;
+        }
+        switch (naar) {
+            case "kandijkom" -> {
+                Quest q = Quests.van("z2_hq01_splinterpieken");
+                if (q != null && Questlog.beschikbaar(p, q)) {
+                    Questlog.neemAan(p, q);
+                }
+                doeActie(p, "z2_vlieg:kandijkom", null);
+            }
+            case "zwamzoet" -> {
+                if (van.equals("z2_kapitein") || QuestStap.zone2(p.getZ())) {
+                    doeActie(p, "z2_vlieg:haven", null);
+                } else {
+                    Verhaal.vlieg(p, "zwamzoet");
+                }
+            }
+            default -> Verhaal.vlieg(p, "knuffelkamp");
+        }
+    }
+
+    /** (tests) Answer the open dialogue as if the player clicked choice {@code optie} (0 = the first choice shown). */
+    public static void kiesVoorTest(ServerPlayer p, int optie) {
+        antwoord(p, null, optie);
+    }
+
+    /** (tests) The open travel choices of this player (destination ids, in order) and their first option id. */
+    public static List<String> reisOpen(ServerPlayer p) {
+        return REIS_OPEN.getOrDefault(p.getUUID(), List.of());
+    }
+
+    public static final int REIS_OPTIE = REIS;
 
     /** The klasse-tempeltje: the klassen slice's screen when it is there, else a choice between the registered classes. */
     static void klasseKeuze(ServerPlayer p, Entity npc) {
@@ -378,6 +502,25 @@ public final class QuestMotor {
                 }
             } else if (npc != null) {
                 quiz(p, npc, true);
+            }
+        } else if (optie == REIS_KAART) {
+            Praat.sluit(p);
+            afronden(p);
+            Reiskaart.open(p);
+        } else if (optie >= REIS && optie < REIS + 5) {
+            List<String> l = REIS_OPEN.remove(p.getUUID());
+            if (l != null && optie - REIS < l.size()) {
+                String naar = l.get(optie - REIS);
+                String slot = reisSlot(p, naar);
+                if (slot != null) {   // (a locked line: the captain says why)
+                    RijkGuh npc = p.level().getEntity(g.entity()) instanceof RijkGuh r ? r : null;
+                    LOPEND.put(p.getUUID(), new Gesprek(g.npc(), g.entity(), "", "", ""));
+                    Praat.scene(p, SLEUTEL, List.of(new Praat.Regel(npc, "", slot, Spelers.level(p))));
+                    return;
+                }
+                Praat.sluit(p);
+                afronden(p);
+                vliegNaar(p, g.npc(), naar);
             }
         } else if (optie >= EXTRA_OPTIE && optie < EXTRA_OPTIE + 10) {
             List<ExtraOptie> l = EXTRA_OPEN.remove(p.getUUID());

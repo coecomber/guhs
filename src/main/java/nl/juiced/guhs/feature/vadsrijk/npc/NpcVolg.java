@@ -29,11 +29,17 @@ public final class NpcVolg {
     }
 
     static void tick(MinecraftServer server) {
-        if (server.getTickCount() % 20 != 7) {
+        if (server.getTickCount() % 10 != 7) {
             return;
         }
         ServerLevel sl = Vadsrijk.level(server);
         if (sl == null) {
+            return;
+        }
+        for (ServerPlayer p : sl.players()) {
+            KamerTips.stuur(p);   // (the puzzle-room line, twice a second)
+        }
+        if (server.getTickCount() % 20 != 7) {
             return;
         }
         for (ServerPlayer p : sl.players()) {
@@ -51,12 +57,40 @@ public final class NpcVolg {
         if (h != null) {
             regels.add(regel(h));
         }
+        // (fix round 2) the job advancement of your class: shown as soon as you may start it, until it is handed in
+        Quest k = klasseQuest(p);
+        if (k != null) {
+            regels.add(regel(QuestStap.van(p, k)));
+        }
         String pin = pin(p);
         Quest q = pin.isEmpty() ? null : Quests.van(pin);
-        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id()))) {
+        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))) {
             regels.add(regel(QuestStap.van(p, q)));
         }
         return new NpcPayloads.Volg(!Questlog.vlag(p, "volg_uit"), !Questlog.vlag(p, "straal_uit"), regels);
+    }
+
+    /**
+     * The job-advancement quest (soort KLASSE) of the player's current class that is active, or that may be started now
+     * (level and earlier quests done); the first in story order. Null = none right now.
+     */
+    @Nullable
+    public static Quest klasseQuest(ServerPlayer p) {
+        String klasse = nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).klasse;
+        if (klasse == null || klasse.isEmpty()) {
+            return null;
+        }
+        for (Quest q : Quests.alle().values()) {
+            if (q.soort() == Quest.Soort.KLASSE && klasse.equals(q.klasse()) && (Questlog.actief(p, q.id()) || Questlog.beschikbaar(p, q))) {
+                return q;
+            }
+        }
+        return null;
+    }
+
+    /** Is this quest id a job advancement? (the client colours its line and beam differently: ids adv.. / z2_adv..) */
+    public static boolean isKlasse(String quest) {
+        return quest.startsWith("adv") || quest.startsWith("z2_adv");
     }
 
     private static NpcPayloads.VolgRegel regel(QuestStap s) {

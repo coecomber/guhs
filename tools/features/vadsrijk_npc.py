@@ -237,6 +237,8 @@ Q("hq01_welkom", "hoofd", "rekruteerder", "Welkom, rekruut!",
    ("jij", "Hoi! Ik kom me aanmelden. Wat doet De Knuffelorde eigenlijk?"),
    ("npc", "Wij vrolijken op wat chagrijnig is geworden! In Het Vadsrijk worden wezens grauw en knorrig. Dat noemen we de "
            "Vadsloosheid. Wij geven ze hun vads terug. Met een kussen. Of een pijl. Of een vuurbal. Heel liefdevol."),
+   ("npc", "...Njeg. Waarom kijk je zo? Heb jij ook het gevoel dat je dit eerder hebt gezien? Iets met 'Wynn'-nogwat?"),
+   ("npc", "Nee hoor. Dit is héél anders. Hier zijn knuffels! En de monsters worden blij in plaats van dood. Heel anders. Echt."),
    ("npc", "Loop maar naar het kampvuur op het plein. Daar zit Kok Knapperkorst. Zeg maar dat ik je stuur, dan krijg je iets lekkers.")],
   "Het kampvuur, rekruut! Rechtdoor, langs de tenten. Je ruikt het vanzelf.",
   [("npc", "Aha! Een rekruut! Pluizebol stuurt je, hè? Ga zitten. Hier, een warme pluiskoek."),
@@ -271,6 +273,8 @@ Q("hq03_poppen", "hoofd", "trainer_ridder", "Poppen meppen",
   [("npc", "Kijk eens aan! Netjes. Die pop is helemaal blij van je."),
    ("npc", "Hier, je eerste echte wapen. Zie je die lichtstraal? De kleur vertelt hoe zeldzaam iets is: grijs, groen, blauw, paars, "
            "oranje... en heel soms roze. Roze is guhddelijk!"),
+   ("npc", "Nog één belangrijk ding, rekruut. Zit je ooit vast? In een kuil, tussen rotsen, of ergens waar je niet meer uit kunt "
+           "klimmen? Druk dan op U en blijf drie tellen stilstaan. De knuffelwind zet je op het dichtstbijzijnde veilige plekje."),
    ("npc", "Loop nu eerst even naar Opa Sterrenstof, hier op het trainingsveld. Hij legt je de elementen uit. Dat moet je echt "
            "weten voordat je op avontuur gaat!")],
   xp=120, munten=80, wapen=True, na=["hq02_pad"])
@@ -329,7 +333,7 @@ Q("hq06_zwamzoet", "hoofd", "kapitein", "Naar Zwamzoet!",
   [("npc", "Daar is de held van het kamp! Instappen! Mijn ballonschip vliegt op warme lucht en goede zin, en we hebben allebei genoeg."),
    ("npc", "Zwamzoet ligt op een eiland ten noorden van hier. Paddenstoelen zo hoog als torens, met huisjes op de hoeden. De tempel "
            "van de Orde staat helemaal bovenop. Klaar?")],
-  "Zeg het maar als je wilt vertrekken! Klik op mij en kies 'Naar Zwamzoet'.",
+  "Zeg het maar als je wilt vertrekken! Kies hieronder 'Naar Zwamzoet', of luid de scheepsbel op de steiger (rechtsklik).",
   [("npc", "Dus jij bent de rekruut die de Klodderreus heeft opgevrolijkt. Welkom in de tempel van De Knuffelorde. Ik ben "
            "Grootmeester Vadsvoet."),
    ("npc", "Vahoegnir... Ik heb hem gekend toen hij nog roze was. Hij at suikerspin uit mijn poot. Iets of iemand heeft hem grauw "
@@ -408,19 +412,21 @@ Q("hq10_zwamtempel", "hoofd", "mijnwerker_mopje", "De Zwamtempel",
   [("npc", "Halt! Ah, een avonturier van de Orde. Ik ben Tempelwachter Steeltje."),
    ("npc", "Er is iets mis in de tempel. De Opperzwam, de oude hoeder van de tempel, is grauw geworden. Al zijn tempelzwammen zijn "
            "knorrig. En ik hoorde gemiauw achter de muren."),
-   ("npc", "Ben je level 18? Praat dan nog eens met mij, hier bij de grote deur. Dan laat ik je de tempel in.")],
+   ("npc", "Ben je level 18? Praat dan nog eens met mij, hier bij de grote deur. En wil je naar binnen: klik met rechts op de grote "
+           "deur, dan gaat hij open. Vanaf level 18 lukt dat altijd.")],
   xp=1400, munten=1000, lv=16, na=["hq09_druipgrotten"], inleveren="tempelwachter_steeltje", auto=True)
 
 Q("hq11_opperzwam", "hoofd", "tempelwachter_steeltje", "De Opperzwam",
-  "Ga de Zwamtempel in, vrolijk de tempelzwammen op en help de Opperzwam. Pas op voor zijn sporenwolken, en als de tempel donker "
-  "wordt: steek de lichtzwammen aan!",
-  [D("opvrolijk", "gebied:zwamtempel", 15, "Vrolijk wezens op in de Zwamtempel"),
+  "Klik met rechts op de grote deur van de Zwamtempel: dan schuift hij open. Ga naar binnen, vrolijk de tempelzwammen op en help "
+  "de Opperzwam. Pas op voor zijn sporenwolken, en als de tempel donker wordt: steek de lichtzwammen aan!",
+  [D("meld", "zwamtempel:deur", 1, "Klik op de grote deur van de Zwamtempel"),
+   D("opvrolijk", "gebied:zwamtempel", 15, "Vrolijk wezens op in de Zwamtempel"),
    D("baas", "gebied:zwamtempel", 1, "Vrolijk de Opperzwam op")],
   [("npc", "De Opperzwam was ooit de liefste zwam van het rijk. Nu laat hij wortels uit de grond schieten en blaast hij grauwe "
            "sporen rond."),
    ("npc", "Als de tempel donker wordt, zie je alleen nog zijn gloeiende ogen. Steek dan de lichtzwammen aan! Neem vrienden mee "
            "als het moet. Samen is altijd vadser.")],
-  "De Opperzwam zit diep in de tempel. Vrolijk eerst zijn tempelzwammen op.",
+  "Klik met rechts op de grote deur om hem te openen. De Opperzwam zit diep in de tempel. Vrolijk eerst zijn tempelzwammen op.",
   [("npc", "Je hebt het gedaan! De Opperzwam is weer zichzelf. Hij huilt een beetje. Van blijdschap, denk ik. Of van de sporen."),
    ("npc", "En kijk wat er uit zijn hoed viel. Een speldje. Met een kattenkopje erop. Met een gemeen lachje."),
    ("jij", "Een Mika!"),
@@ -794,7 +800,12 @@ TIPS = {
 GIDS = {
     "begin": ("Welkom in het Vadsrijk", "Het Vadsrijk is een eigen wereld vol avontuur. Je normale spullen blijven veilig thuis; hier "
                                          "heb je je avonturiersinventaris. Volg de gouden ! en de verhaalquests: die leiden je door "
-                                         "Knuffelkamp naar Zwamzoet en verder. Druk op J voor je questlog."),
+                                         "Knuffelkamp naar Zwamzoet en verder. Druk op J voor je questlog. Zit je vast? Druk op U."),
+    "vastzitten": ("Vastzitten? Druk op U", "Zit je vast in een kuil, tussen rotsen, in het water of ergens waar je niet meer uit kunt "
+                                             "klimmen? Druk op U (Losknuffelen; ook /guhs vadsrijk vast) en blijf 3 tellen stilstaan. "
+                                             "De knuffelwind zet je dan op het dichtstbijzijnde veilige plekje, of bij je kampvuur als er "
+                                             "geen plekje dichtbij is. Het kan elke minuut, maar niet tijdens een bazengevecht. De toets "
+                                             "kun je veranderen in Opties > Besturing > Vadsrijk."),
     "klassen": ("Klassen", "Knuffelridder (dichtbij, stevig), Pluisjager (van ver, beweeglijk) en Vadsmagiër (elementen en heling). "
                            "Elke klasse heeft een eigen level. Wisselen doe je in de ordetempel van Zwamzoet. Op level 10 en 20 krijg "
                            "je een nieuwe titel bij de Grootmeester."),
@@ -879,6 +890,44 @@ OVERIG = {
     P + "optie.later": "Nu even niet",
     P + "optie.naar_stad": "Naar Zwamzoet!",
     P + "optie.naar_kamp": "Naar Knuffelkamp",
+    # (fix round 2) the puzzle rooms: this line stays at the bottom of the screen while you are inside (npc/KamerTips)
+    P + "kamer.lichtzwamkamer": "Lichtzwamkamer: kijk welke lichtzwammen na elkaar oplichten en steek ze in dezelfde volgorde aan "
+                                "(rechtsklik). Fout? Dan laten ze het opnieuw zien.",
+    P + "kamer.hendelkamer": "Hendelkamer: de zwammen op de verre muur verklappen welke hendels AAN moeten, maar gespiegeld! Zet de "
+                             "hendels goed en stap dan op de drukplaat.",
+    P + "kamer.ridderzaal": "Ridderzaal: vrolijk alle drie de golven tempelridders op. Dan gaat de poort naar de Opperzwam open.",
+    # (fix round 2) the airship NPCs: one real choice per destination; a locked line says why when you pick it
+    P + "optie.vlieg.zwamzoet": "Naar Zwamzoet (De Haven)",
+    P + "optie.vlieg.zwamzoet.slot": "Naar Zwamzoet (nog op slot)",
+    P + "optie.vlieg.knuffelkamp": "Naar Knuffelkamp",
+    P + "optie.vlieg.knuffelkamp.slot": "Naar Knuffelkamp (nog op slot)",
+    P + "optie.vlieg.kandijkom": "Naar Kandijkom (De Splinterpieken)",
+    P + "optie.vlieg.kandijkom.slot": "Naar Kandijkom (nog op slot)",
+    P + "reis.kies.kapitein": "Waar wil je heen? Bekijk de reiskaart, of kies hieronder een bestemming. Of luid de scheepsbel op de "
+                              "steiger (rechtsklik), dan vliegen we meteen naar Zwamzoet.",
+    P + "reis.kies.luchtschipper": "Waar wil je heen? Bekijk de reiskaart, of kies hieronder een bestemming. Of luid de scheepsbel op de "
+                                   "steiger (rechtsklik), dan vliegen we naar Knuffelkamp.",
+    P + "reis.slot.zwamzoet.kort": "Nog niet ontdekt. Het verhaal van Knuffelkamp brengt je hier.",
+    P + "reis.slot.kandijkom_verhaal.kort": "Nog niet ontdekt. Maak eerst het verhaal van Zwamzoet af.",
+    P + "reis.slot.kandijkom_level.kort": "Nog niet ontdekt. Vanaf level 20 (jij: level %s).",
+    # (fix round 2) the travel map (npc/Reiskaart + client/ReiskaartScherm; art tools/features/vadsrijk_reiskaart_art.py)
+    P + "optie.reiskaart": "Laat de reiskaart zien",
+    P + "reiskaart.titel": "Reiskaart van het Vadsrijk",
+    P + "reiskaart.uitleg": "Houd de muis ingedrukt en sleep om de kaart te verschuiven. Klik op een bestemming om te vliegen.",
+    P + "reiskaart.jij": "Jij bent hier",
+    P + "reiskaart.hier": "Hier ben je nu.",
+    P + "reiskaart.vlieg": "Klik om hierheen te vliegen!",
+    P + "reiskaart.binnenkort": "Nog niet ontdekt. Binnenkort...",
+    P + "reiskaart.plek.knuffelkamp": "Knuffelkamp",
+    P + "reiskaart.plek.zwamzoet": "Zwamzoet (De Haven)",
+    P + "reiskaart.plek.kandijkom": "Kandijkom",
+    P + "reiskaart.plek.schemerwortel": "De Schemerwortel",
+    P + "reiskaart.plek.zone4": "???",
+    P + "reis.slot.zwamzoet": "Nog niet, rekruut! Eerst moet Knuffelkamp veilig zijn. Volg Sergeant Pluizebol en het verhaal van het "
+                              "kamp (je tracker rechtsboven), daarna vlieg ik je naar Zwamzoet.",
+    P + "reis.slot.kandijkom_verhaal": "Kandijkom? Daar vlieg ik pas heen als het verhaal van dit land af is. Help eerst Grootmeester "
+                                       "Vadsvoet in Zwamzoet.",
+    P + "reis.slot.kandijkom_level": "Brrr, in de Splinterpieken is het ijskoud en gevaarlijk. Kom terug als je level 20 bent (nu level %s).",
     P + "optie.rol.smid": "Naar de smidse",
     P + "optie.rol.winkel": "Laat je winkel zien",
     P + "optie.rol.wapenwinkel": "Laat je wapens zien",
@@ -901,7 +950,7 @@ OVERIG = {
     P + "rijdier.later": "Je Hoedhupper komt met de stal van het Vadsrijk (economie). Hoefje heeft hem voor je gereserveerd!",
     P + "bam.aanval": "Er valt iets uit de lucht in de kampvijver! De Grauwe Klodderreus!",
     P + "opening.welkom": "Welkom in Het Vadsrijk! Sergeant Pluizebol wacht op je hier op de steiger. Rechtsboven zie je altijd je "
-                        "volgende stap; J = questlog.",
+                        "volgende stap; J = questlog. Zit je ergens vast? Druk op U en blijf 3 tellen stilstaan.",
     P + "scene.opening.titel": "Het Vadsrijk",
     P + "scene.opening.onder": "Knuffelkamp, bij zonsopgang",
     P + "scene.draak.titel": "Vahoegnir",

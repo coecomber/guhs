@@ -169,6 +169,11 @@ public class VadsrijkBazenGevechtTests {
                 + Zwamtempel.waaromDicht(p) + ")");
         p.setGameMode(GameType.CREATIVE);
         helper.assertTrue(!Zwamtempel.MAG_NAAR_BINNEN.test(p), "creative is no exception");
+        p.setGameMode(GameType.SURVIVAL);
+        Spelers.zetLevel(p, Zwamtempel.TEMPEL_ALTIJD_LEVEL);
+        helper.assertTrue(Zwamtempel.waaromDicht(p) == null && Zwamtempel.MAG_NAAR_BINNEN.test(p), "level 18: a click always opens it (g-ux rule)");
+        Spelers.zetLevel(p, 17);
+        helper.assertTrue("vadsrijk.bazen.tempel.verhaal".equals(Zwamtempel.waaromDicht(p)), "level 17 without the quest: not yet");
         helper.assertTrue(Zwamtempel.bijDeur(BazenPlekken.TEMPELDEUR_MIN) && Zwamtempel.bijDeur(BazenPlekken.TEMPELDEUR_VOOR)
                 && !Zwamtempel.bijDeur(BazenPlekken.TEMPELDEUR_VOOR.south(12)), "the door area");
         helper.succeed();

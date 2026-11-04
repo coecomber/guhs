@@ -39,6 +39,12 @@ public final class Z2NpcPlekken {
     /** Where the airship sets you down in Kandijkom. */
     public static final BlockPos DOK = w("dok_landing", 0, KK, -2244);                    // POI:dok_landing
     public static final BlockPos DOK_AANKOMST = DOK;
+    /** (fix round 2) The geode: its middle and inner radius, and the inner mouths of its gates (plan.py POORTEN; the tracker
+     *  points there first when you are in town and the target is outside). NOTE (2026-11-04): the east and west gates are
+     *  blocked by a 7-high wall at x +-128 and the north gate by a 4-high step at z -2528 (NOTITIES_G_UX.md). */
+    public static final BlockPos GEODE_MIDDEN = new BlockPos(0, KK, -2400);
+    public static final int GEODE_BINNEN = 124;
+    public static final BlockPos POORT_OOST = p(120, KK, -2400), POORT_WEST = p(-120, KK, -2400), POORT_NOORD = p(0, KK, -2520);
     /** The gondola stations (POI:gondel_dal / gondel_berg). */
     public static final BlockPos GONDEL_BENEDEN = p(78, KK, -2466);
     public static final BlockPos GONDEL_BOVEN = p(306, 151, -2616);
@@ -65,7 +71,7 @@ public final class Z2NpcPlekken {
         NPC.put("z2_gondelier", w("npc_gondel", 76, KK, -2465));                // POI:npc_gondel
         // Kandijkom: citizens
         NPC.put("z2_opa_sneeuwbal", p(36, KK, -2346));            // the cafe terrace (POI:cafe_terras)
-        NPC.put("z2_bakker", p(95, KK, -2392));                   // outside POI:gebouw.huis_4.deur
+        NPC.put("z2_bakker", p(93, KK, -2392));                   // outside POI:gebouw.huis_4.deur (g-ux: x 95 was inside its west wall)
         NPC.put("z2_vlokje", p(-6, KK, -2404));                   // at the skating pond
         NPC.put("z2_uitvinder", p(-52, KK, -2487));               // outside POI:gebouw.huis_8.deur (his workshop)
         NPC.put("z2_galmpje", p(-14, KK, -2424));
@@ -78,8 +84,8 @@ public final class Z2NpcPlekken {
         NPC.put("z2_gondel_boven", p(303, 151, -2612));           // POI:gondel_berg
         NPC.put("z2_berggids", p(236, 99, -2334));                // POI:kampvuur_galmhellingen_1
         NPC.put("z2_visser", w("npc_ijsvisser", -418, 88, -2261));                 // POI:npc_ijsvisser (the island in the lake)
-        NPC.put("z2_beeldhouwer", p(-254, 107, -2444));           // POI:kampvuur_knuffelmeer_3 (north shore)
-        NPC.put("z2_touwtje", p(3, 150, -2762));                  // POI:brug_3_zuid (the middle bridge)
+        NPC.put("z2_beeldhouwer", p(-254, 106, -2444));           // POI:kampvuur_knuffelmeer_3 (north shore)
+        NPC.put("z2_touwtje", p(3, 151, -2762));                  // POI:brug_3_zuid (the middle bridge)
         NPC.put("z2_prisma", p(4, 176, -2846));                   // POI:deur_spiegelburcht_voor / burcht_voorplein
         // the Kristalwacht: one at every campfire (POI:ridder_*), the knights of zone 2
         NPC.put("z2_wacht_dok", p(-7, KK, -2260));
@@ -96,11 +102,11 @@ public final class Z2NpcPlekken {
         NPC.put("z2_wacht_kloof_3", p(26, 132, -2728));
         NPC.put("z2_wacht_kloof_4", p(-98, 65, -2772));
         NPC.put("z2_wacht_kloof_5", p(-358, 147, -2878));
-        NPC.put("z2_wacht_burcht", p(14, 164, -2824));
+        NPC.put("z2_wacht_burcht", p(14, 163, -2824));
         // the petrified guhs on the frozen lake (main quest z2_hq06)
         NPC.put("z2_versteend_zwier", p(-380, 85, -2226));        // POI:meer_midden
         NPC.put("z2_versteend_snoek", p(-334, 85, -2082));        // POI:meer_schotsen (the floes in the south)
-        NPC.put("z2_versteend_pluk", p(-520, 85, -2270));         // the west side of the ice
+        NPC.put("z2_versteend_pluk", p(-520, 87, -2270));         // the west side of the ice
         NPC.put("z2_versteend_ijsje", p(-412, 88, -2266));        // on the island, next to Wak
     }
 

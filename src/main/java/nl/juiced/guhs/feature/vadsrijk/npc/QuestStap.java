@@ -160,6 +160,9 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
                 } else if (d.doel().startsWith("quiz:")) {   // (the element quiz: at the quest giver)
                     waar = npcPlek(q.gever());
                     pos = npcPos(p, q.gever());
+                } else if (d.doel().equals("zwamtempel:deur")) {   // (fix round 2: the big temple door)
+                    waar = poiPlek("tempelpoort");
+                    pos = NpcPlekken.poi("tempelpoort");
                 } else if (d.doel().equals("spion:gevangen")) {
                     waar = Component.translatable(PLEK + "daken");
                     pos = NpcPlekken.MIKA_KRAAM;
@@ -172,8 +175,19 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         return new QuestStap(q.id(), q.hoofd(), titel, wat, waar, pos, extra);
     }
 
+    /** Routes other zones add (zone 2: out of the Kandijkom geode through a gate first); applied after the airship hop. */
+    public static final List<java.util.function.BiFunction<ServerPlayer, QuestStap, QuestStap>> ROUTES = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     /** The target is on the other side of the sea (camp island vs. mainland): first the airship. */
     private static QuestStap reis(ServerPlayer p, QuestStap s) {
+        QuestStap r = reis0(p, s);
+        for (java.util.function.BiFunction<ServerPlayer, QuestStap, QuestStap> f : ROUTES) {
+            r = f.apply(p, r);
+        }
+        return r;
+    }
+
+    private static QuestStap reis0(ServerPlayer p, QuestStap s) {
         if (s.doel() == null || !Questlog.klaar(p, "hq05_klodderreus")) {
             return s;
         }

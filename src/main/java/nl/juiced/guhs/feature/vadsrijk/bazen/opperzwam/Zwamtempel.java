@@ -55,9 +55,19 @@ public final class Zwamtempel {
     public static Predicate<ServerPlayer> MAG_NAAR_BINNEN = p -> waaromDicht(p) == null;
     public static final String QUEST_TEMPEL = "hq10_zwamtempel", QUEST_OPPERZWAM = "hq11_opperzwam";
 
-    /** Null when this player may open the temple door, else the lang key of the friendly "not yet" line. */
+    /** (fix round 2, g-ux) From this level a right-click on the door ALWAYS opens it, whatever the quest state. */
+    public static final int TEMPEL_ALTIJD_LEVEL = 18;
+
+    /**
+     * Null when this player may open the temple door, else the lang key of the friendly "not yet" line (args: the story level
+     * {@link BazenPlekken#TEMPEL_MIN_LEVEL}, the player's level, {@link #TEMPEL_ALTIJD_LEVEL}). Rule (g-ux): level 18+ always;
+     * level 16+ with the temple quest (active/done) or the Opperzwam quest.
+     */
     @javax.annotation.Nullable
     public static String waaromDicht(ServerPlayer p) {
+        if (Spelers.level(p) >= TEMPEL_ALTIJD_LEVEL) {
+            return null;
+        }
         if (Spelers.level(p) < BazenPlekken.TEMPEL_MIN_LEVEL) {
             return "vadsrijk.bazen.tempel.te_laag";
         }
@@ -88,7 +98,7 @@ public final class Zwamtempel {
         }
         String waarom = waaromDicht(p);
         if (waarom != null) {
-            p.sendOverlayMessage(Component.translatable(waarom, BazenPlekken.TEMPEL_MIN_LEVEL).withStyle(ChatFormatting.GRAY));
+            p.sendOverlayMessage(dichtTekst(p, waarom));
             sl.playSound(null, pos, SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.BLOCKS, 0.6f, 0.5f);
             return true;
         }
@@ -105,8 +115,24 @@ public final class Zwamtempel {
         }
         if (deurOpenTot < 0 && deurAnim < 0) {
             ceremonie(sl, sl.getGameTime());
+        } else {
+            meldDeurOpen(p);   // (already open: the quest step "click the big door" still counts)
         }
         return true;
+    }
+
+    /** The line below the gate: what is needed (gold so it reads as advice, not as an error). */
+    static Component dichtTekst(ServerPlayer p, String key) {
+        return Component.translatable(key, BazenPlekken.TEMPEL_MIN_LEVEL, Spelers.level(p), TEMPEL_ALTIJD_LEVEL).withStyle(ChatFormatting.GOLD);
+    }
+
+    /** Tells the quest system this player opened (or walked through) the temple door: hq11's first step. */
+    static void meldDeurOpen(ServerPlayer p) {
+        try {
+            nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.meld(p, "zwamtempel", "deur");
+        } catch (RuntimeException | LinkageError e) {
+            // (no quest system)
+        }
     }
     public static final int RESET_TICKS = 20 * 60 * 10, DEUR_OPEN_TICKS = 20 * 60 * 5;
     private static final String H_DEUR = "tempel_deur";
@@ -240,8 +266,7 @@ public final class Zwamtempel {
                 if (nu > deurDichtBericht) {
                     deurDichtBericht = nu + 100;
                     String waarom = waaromDicht(p);
-                    p.sendOverlayMessage(Component.translatable(waarom == null ? "vadsrijk.bazen.tempel.te_laag" : waarom, BazenPlekken.TEMPEL_MIN_LEVEL)
-                            .withStyle(ChatFormatting.GRAY));
+                    p.sendOverlayMessage(dichtTekst(p, waarom == null ? "vadsrijk.bazen.tempel.te_laag" : waarom));
                 }
                 continue;
             }
@@ -266,6 +291,7 @@ public final class Zwamtempel {
             if (p.position().distanceToSqr(voor) < 24 * 24) {
                 RijkScenes.speel(p, s);
                 p.sendOverlayMessage(Component.translatable("vadsrijk.bazen.tempel.open").withStyle(ChatFormatting.LIGHT_PURPLE));
+                meldDeurOpen(p);
             }
         }
         sl.playSound(null, BlockPos.containing(deurMidden), SoundEvents.WARDEN_EMERGE, SoundSource.BLOCKS, 2f, 1.4f);
@@ -314,6 +340,9 @@ public final class Zwamtempel {
 
     private static void kamer1(ServerLevel sl, long nu) {
         List<ServerPlayer> l = in(sl, BazenPlekken.K1_MIN, BazenPlekken.K1_MAX);
+        if (nu % 20 == 0) {
+            l.forEach(Zwamtempel::meldDeurOpen);   // (inside = through the door, however you got in)
+        }
         if (k1Klaar > 0) {
             if (nu - k1Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K2_MIN, BazenPlekken.K2_MAX).isEmpty()) {
                 k1Reset(sl);
