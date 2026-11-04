@@ -71,14 +71,15 @@ User feedback: "Kok Knapperkorst said 'talk to someone', and later neither he no
 - FTB: `vr_hq03b_elementen` is in the Knuffelkamp section of FTB_SECTIES.
 - Map (static check of the tiles, `bereik.py`/`pad.py` in my scratchpad): see the "Map check" section below.
 - The questlog/HUD use `RijkHud.bovenVrij()` (kern); if kern's HUD moves the boss bar, keep that value right.
-- If the pack has a minimap top right (JourneyMap/Xaero), the tracker sits on it: then give `VolgHud` a y offset (or move the
-  minimap). The dev client has no minimap.
+- Minimap: the dev client runs JourneyMap (localRuntime) with its minimap top right; the AutoCheck showed the tracker under it.
+  Fixed: when journeymap/xaerominimap is loaded the tracker sits left of the minimap (x minus 31% of the GUI height, the JM
+  default size). If the pack uses another minimap size/corner, adjust `VolgHud.MINIMAP` / that offset.
 - The gevecht agent may add element dummies; then hq03b could get a "hit the right dummy" objective (MELD "element:raak").
 
 ## Map check (static, on the committed tiles of 6ec8724ca; for the integrator / the map agents)
 A rough walker over the .nbt tiles (step up 1 with headroom, drop up to 3, doors/gates passable, lifts/ladders climbed;
 committed as `tools/vadsrijk/loopcheck_doelen.py` + `loopcheck_pad.py`, run from the project root with `.`). Every main-quest NPC/POI has a
-floor and open space around it, except what is listed here. **Two real survival blockers:**
+floor and open space around it, except what is listed here. **Two likely survival blockers (verify in the client: the walker is rough and the tiles in git may differ from a fresh regen):**
 1. **South jetty -> plateau (Knuffelkamp)**: the 3-wide spruce stair from the jetty (0,65,1126) ends at (0,72,1119), at the
    foot of the cliff; the cliff above rises in 2-5 block steps to the plateau (84-87). No stair, ladder or lift. A new player
    arrives on this jetty (kern `Gebieden.AANKOMST` (0,65,1130)) and Sergeant Pluizebol stands there: in survival you cannot
@@ -102,5 +103,15 @@ Not modelled: the pink door gates / temple puzzles (bazen) and moving doors.
   right marker; auto starts work; 13 steps of history.
 - AutoCheck script: `tools/autocheck/vadsrijk_quests.txt`.
 
+## AutoCheck (one run, `tools/autocheck/vadsrijk_quests.txt`, screenshots in run/screenshots/autocheck)
+- OK: the tracker shows title / ▸ what / where / arrow + distance for hq01, hq02, hq03b, hq06; the gold "Volgende stap" chat
+  lines after each hand-in; the first-time tip card top left does not overlap the tracker; Opa Sterrenstof stands on the field.
+- Found + fixed after the run (not re-run, one run allowed): (1) the JourneyMap minimap covered the right half of the tracker
+  -> tracker left of the minimap; (2) the kapitein's dock (x 149) lies outside the knuffelkamp area box, so the airship hint
+  doubled ("praat met Kapitein ..., eerst met het luchtschip: praat met Kapitein ...") -> island = z > 800.
+- Not verified visually: the light beam (all shots were within 6 blocks of the target or the camera was inside the cliff) and
+  the questlog screen (the runner closed the screen before the shot). Check both in the dev client.
+
 ## Resume point
-See the final report in the commit log.
+Head = the last commit on `110-fix-quests`. Everything compiles; gametests `-Pgt=VadsrijkNpcGameTests` 5/5. Open: the beam
+and questlog visuals in the client; the two map blockers above (map agents); element dummies (gevecht/wereld).

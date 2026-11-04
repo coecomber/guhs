@@ -45,6 +45,8 @@ public final class VolgHud {
     public static final KeyMapping STRAAL = new KeyMapping("key.guhs.vr_straal", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_UNKNOWN, KernClient.CATEGORIE);
     private static final int BREED = 172;
     private static final float STRAAL_HOOG = 90, STRAAL_VER = 480;
+    private static final boolean MINIMAP = net.neoforged.fml.ModList.get().isLoaded("journeymap") || net.neoforged.fml.ModList.get().isLoaded("xaerominimap")
+            || net.neoforged.fml.ModList.get().isLoaded("xaerominimapfair");
     private static volatile NpcPayloads.Volg volg = new NpcPayloads.Volg(true, true, List.of());
 
     private VolgHud() {
@@ -90,7 +92,8 @@ public final class VolgHud {
         }
         Minecraft mc = Minecraft.getInstance();
         Font f = mc.font;
-        int x = g.guiWidth() - BREED - 6, y = 6 + RijkHud.bovenVrij();
+        // a minimap mod (JourneyMap / Xaero) sits in the top right corner, sized by the screen height: stay left of it
+        int x = g.guiWidth() - BREED - 6 - (MINIMAP ? (int) (g.guiHeight() * 0.31f) + 4 : 0), y = 6 + RijkHud.bovenVrij();
         for (NpcPayloads.VolgRegel r : v.regels()) {
             y = blok(g, f, mc, r, x, y) + 4;
         }

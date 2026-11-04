@@ -10,7 +10,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 
 /**
@@ -180,9 +179,9 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         return new QuestStap(s.quest(), s.hoofd(), s.titel(), s.wat(), waar, npcPos(p, piloot), s.extra());
     }
 
+    /** The camp island (with its east dock just outside the knuffelkamp area box): everything south of z 800. */
     static boolean eiland(double x, double z) {
-        Gebieden.Gebied g = Gebieden.van("knuffelkamp");
-        return g != null && g.bevat(x, z);
+        return z > 800;
     }
 
     @Nullable
