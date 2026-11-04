@@ -262,7 +262,7 @@ public final class QuestMotor {
             return;
         }
         switch (rol) {
-            case "luchtschip", "luchtschip_kamp", "luchtschip_z2" -> {
+            case "luchtschip", "luchtschip_kamp", "luchtschip_z2", "luchtschip_z3" -> {   // (z3-npc: Kapitein Zoemzeil at Honingtak's mast)
                 if (hint == null) {
                     Reiskaart.open(p);   // (the travel map: every place, flying with one click)
                     return;
