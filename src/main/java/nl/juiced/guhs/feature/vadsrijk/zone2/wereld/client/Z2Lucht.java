@@ -84,7 +84,8 @@ final class Z2Lucht {
         Vector4f bandKleur = new Vector4f(Mth.lerp(nacht, 0.92f, 0.16f), Mth.lerp(nacht, 0.96f, 0.2f), Mth.lerp(nacht, 1f, 0.34f), (0.62f * dag + 0.4f * nacht) * s);
         SkyDraw.drawNow("Z2 horizon band", SkyDraw.CELESTIAL_TRANSLUCENT, band(-6f, 34f), SkyDraw.texture(BAND), bandKleur, mv);
         // 2. the giant tree (zone 3) far away
-        SkyDraw.drawNow("Z2 giant tree", SkyDraw.CELESTIAL_TRANSLUCENT, kwad(326f, 9f, 30f, 22f, 1f), SkyDraw.texture(BOOM),
+        // [zone 3] the tree is south-east of zone 2 (x 2300, z 0)
+        SkyDraw.drawNow("Z2 giant tree", SkyDraw.CELESTIAL_TRANSLUCENT, kwad(136f, 9f, 30f, 22f, 1f), SkyDraw.texture(BOOM),
                 new Vector4f(0.78f, 0.86f, 0.95f, (0.42f + 0.18f * dag) * s), mv);
         // 3. the moon through the crystal spires (night), then the spires in front of it
         if (nacht > 0.02f) {

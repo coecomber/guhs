@@ -44,7 +44,7 @@ final class WereldLucht {
     private static final Identifier[] VERTE = {Guhs.id("textures/vadsrijk/wereld/lucht_verte_0.png"), Guhs.id("textures/vadsrijk/wereld/lucht_verte_1.png"),
             Guhs.id("textures/vadsrijk/wereld/lucht_verte_2.png"), Guhs.id("textures/vadsrijk/wereld/lucht_verte_3.png")};
     /** Landmarks: azimuth (0 = north, clockwise), half width and height (blocks at distance 90). */
-    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {75f, 22f, 22f}, {255f, 24f, 24f}, {140f, 28f, 20f}};
+    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {116f, 20f, 20f}, {91f, 24f, 24f}, {148f, 28f, 20f}};   // [zone 3] the giant tree stands in the EAST now (zone 3 at x 2300), the floating castle (Hoogvads) behind it
     /** The dragon: one pass every this many ticks, lasting VLUCHT ticks. */
     private static final int DRAAK_ELKE = 20 * 150, VLUCHT = 20 * 28;
 
@@ -97,7 +97,8 @@ final class WereldLucht {
             pose.popPose();
         }
         // 4. far landmarks on the horizon (fixed in the world, in the haze); [zone 2] zone 2 draws its own horizon
-        boolean zone2 = mc.player != null && nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.inZone2(mc.player.getX(), mc.player.getZ());
+        boolean zone2 = mc.player != null && (nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.inZone2(mc.player.getX(), mc.player.getZ())
+                || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(mc.player.getX(), mc.player.getZ()));   // [zone 3] own horizon too
         for (int i = 0; i < VERTE.length && !zone2; i++) {
             float[] v = VERTE_PLEK[i];
             float a = 0.42f + 0.25f * dag;
