@@ -29,7 +29,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
 public final class StadsMuziek {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
     /** The towns, in a fixed order. */
-    public static final List<String> STEDEN = List.of("zwamzoet", "knuffelkamp", "haven", "kandijkom");
+    public static final List<String> STEDEN = List.of("zwamzoet", "knuffelkamp", "haven", "kandijkom", "honingtak");   // (K-INT: + Honingtak, zone 3)
     /** Tunes per town (at least two each, played one after the other). */
     public static final Map<String, List<DeferredHolder<SoundEvent, SoundEvent>>> MUZIEK = new LinkedHashMap<>();
     /** The ambience bed of each town (a seamless 20 s loop). */
@@ -74,6 +74,7 @@ public final class StadsMuziek {
         return switch (gebied) {
             case "zwamzoet", "knuffelkamp", "haven" -> gebied;
             case "z2_kandijkom", "z2_kandijkom_dok" -> "kandijkom";
+            case "z3_honingtak" -> "honingtak";   // (K-INT: the beekeepers' town on the branch; a layer, so use stadOp(x, y, z))
             default -> null;
         };
     }

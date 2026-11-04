@@ -13,7 +13,7 @@ import json
 import os
 
 A = os.path.join("src", "main", "resources")
-STEDEN = ["zwamzoet", "knuffelkamp", "haven", "kandijkom"]
+STEDEN = ["zwamzoet", "knuffelkamp", "haven", "kandijkom", "honingtak"]   # (K-INT: + Honingtak, zone 3)
 BEDDEN = ["golfjes", "briesje", "haardvuur"]
 
 
@@ -36,11 +36,14 @@ SFEER = {
                   ev("minecraft:block.campfire.crackle", 3, 0.7), ev("guhs:knuffeldal.kruimel_giechel", 2, 0.4),
                   ev("guhs:einde2_sponsguh_wezens.guh_babbel", 2, 0.3, 1.3)],
 }
+SFEER["honingtak"] = [ev("minecraft:block.beehive.work", 3, 0.35, 1.2), ev("minecraft:entity.bee.pollinate", 2, 0.25, 1.3),
+                      ev("guhs:vogels.pluisvinkje", 2, 0.6), ev("guhs:klaterdal.windgong", 2, 0.5, 1.2),
+                      ev("guhs:knuffeldal.kruimel_giechel", 2, 0.4), ev("guhs:einde2_sponsguh_wezens.guh_babbel", 2, 0.3, 1.2)]   # (K-INT)
 NACHT = [ev("guhs:vogels.guh_uiltje", 2, 0.5), ev("guhs:klaterdal.windgong", 2, 0.4, 0.9), ev("guhs:creche.babygiechel", 1, 0.25, 0.85)]
 
 TEKSTEN = {
     "guhs.configuration.stadsmuziek": "Vadsrijk: stadsmuziek",
-    "guhs.configuration.stadsmuziek.tooltip": "Lieve deuntjes in Zwamzoet, Knuffelkamp, De Haven en Kandijkom (schuif Muziek). UIT = daar weer de gewone muziek.",
+    "guhs.configuration.stadsmuziek.tooltip": "Lieve deuntjes in Zwamzoet, Knuffelkamp, De Haven, Kandijkom en Honingtak (schuif Muziek). UIT = daar weer de gewone muziek.",
 }
 
 

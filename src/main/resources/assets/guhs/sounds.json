@@ -7121,5 +7121,67 @@
         "pitch": 0.85
       }
     ]
+  },
+  "vr.stad.muziek.honingtak_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/honingtak_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.honingtak_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/stad/honingtak_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.sfeer.honingtak": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beehive.work",
+        "type": "event",
+        "weight": 3,
+        "volume": 0.35,
+        "pitch": 1.2
+      },
+      {
+        "name": "minecraft:entity.bee.pollinate",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.25,
+        "pitch": 1.3
+      },
+      {
+        "name": "guhs:vogels.pluisvinkje",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.6,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.2
+      },
+      {
+        "name": "guhs:knuffeldal.kruimel_giechel",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:einde2_sponsguh_wezens.guh_babbel",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.3,
+        "pitch": 1.2
+      }
+    ]
   }
 }

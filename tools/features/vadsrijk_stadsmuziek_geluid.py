@@ -7,6 +7,7 @@
       knuffelkamp morning-camp folk               plucked guitar arpeggios, a little flute, a shaker, a soft drum
       haven       gentle harbour shanty (6/8)     flute + celesta, plucked bass, a soft concertina pad, a frame drum
       kandijkom   winter music box                music box + glockenspiel, sleigh bells, a soft pad
+      honingtak   honey waltz (zone 3, K-INT)     music box + pluck, pizzicato, honey-drip glockenspiel, a little bee hum
   assets/guhs/sounds/vadsrijk/stad/bed_<naam>           seamless 20 s ambience loops, quiet under the tunes (fix round L: no
                                                         wind anymore): golfjes (soft water lapping at the jetty), briesje (a
                                                         sweet garden bed: birdsong + distant chimes), haardvuur (a warm
@@ -418,6 +419,47 @@ def kandijkom(n, seed, toon, bpm):
     return niveau(mix(mel + beg + bel, 2.8, seed, nat=0.36, helder=5000), -21.5)
 
 
+def zoem(m, dur, r):
+    """(K-INT) A little honey bee: a soft buzzy hum (a sine with a few low-passed harmonics and a fast tiny wobble)."""
+    n = int((dur + 0.2) * SR)
+    t = np.arange(n) / SR
+    f = hz(m) * (1 + 0.012 * np.sin(2 * np.pi * 23 * t))
+    fase = 2 * np.pi * np.cumsum(f) / SR
+    x = np.sin(fase) + 0.3 * np.sin(2 * fase) + 0.15 * np.sin(3 * fase)
+    att = np.clip(t / 0.08, 0, 1) * np.where(t > dur, np.exp(-(t - dur) / 0.08), 1)
+    return low(x * att, 1400)
+
+
+def honingtak(n, seed, toon, bpm):
+    """(K-INT) Honingtak, the beekeepers' town on the branch: a sweet honey waltz. Music box + plucked melody, a soft bee hum
+    that buzzes along on the first beat now and then, pizzicato chords on 2 and 3, a glockenspiel sprinkle like dripping honey."""
+    A = ["I", "iii", "IV", "V", "I", "vi", "ii", "V"]
+    B = ["IV", "I", "ii", "V", "vi", "IV", "ii", "V"] if n == 1 else ["vi", "iii", "IV", "I", "ii", "V", "I", "V"]
+    C = ["I", "IV", "vi", "V", "IV", "ii", "V", "I"]
+    s = Stuk(toon, 3, bpm, seed).compose([("A", A), ("B", B), ("A", A), ("C", C), ("A", A)],
+                                          [[(0, 2), (2, 1)], [(0, 1), (1, 1), (2, 1)], [(0, 1.5), (1.5, 0.5), (2, 1)], [(0, 1), (1, 2)]], 72, 89)
+    r = s.r
+    mel, beg, bij = s.buf(), s.buf(), s.buf()
+    for (tel, d, p) in s.mel:
+        leg(mel, speeldoos(p, d * s.tel, r) * 0.42, s.t(tel))
+        leg(mel, pluk(p, d * s.tel, r, helder=0.35) * 0.16, s.t(tel) + 0.005)
+    for b, gr in enumerate(s.akk):
+        tonen = akkoord(toon, gr, 4)
+        laatste = b == len(s.akk) - 1
+        leg(beg, bas(akkoord(toon, gr, 2)[0], s.tel * 1.5, r) * 0.36, s.t(b * 3))
+        leg(beg, pad([m - 12 for m in tonen], s.tel * 3.2 * (1.8 if laatste else 1), r, 650) * 0.16, b * 3 * s.tel)
+        if not laatste:
+            for k in (1, 2):
+                for m in tonen:
+                    leg(beg, pluk(m, s.tel * 0.6, r, helder=0.15) * 0.08, s.t(b * 3 + k))
+            if r.random() < 0.3:   # honey drips: a short glockenspiel run down
+                for i, m in enumerate(sorted(tonen, reverse=True)):
+                    leg(beg, glock(m + 12, s.tel * 0.3, r) * 0.05, s.t(b * 3 + 2) + i * 0.09)
+            if b % 4 == (1 if n == 1 else 3):   # a little bee buzzes along
+                leg(bij, zoem(tonen[0] + 12, s.tel * 1.6, r) * 0.05, s.t(b * 3))
+    return niveau(mix(mel + beg + bij, 2.4, seed, nat=0.3, helder=4600), -21.5)
+
+
 # ---------------------------------------------------------------- ambience beds (seamless loops: filtered in the frequency domain)
 
 def lus_ruis(n, r, lo, hi):
@@ -557,12 +599,18 @@ TUNES = {
     "haven_2": lambda: haven(2, 302, 67, 42),            # G major
     "kandijkom_1": lambda: kandijkom(1, 401, 63, 96),   # Eb major waltz
     "kandijkom_2": lambda: kandijkom(2, 402, 68, 84),    # Ab major, 4/4
+    "honingtak_1": lambda: honingtak(1, 601, 67, 100),   # (K-INT) G major honey waltz
+    "honingtak_2": lambda: honingtak(2, 602, 64, 92),    # (K-INT) E major, slower
 }
 BEDDEN = {"bed_golfjes": lambda: bed_golfjes(501), "bed_briesje": lambda: bed_briesje(502), "bed_haardvuur": lambda: bed_haardvuur(503)}
 
 
 def main():
+    import sys
+    alleen = sys.argv[1:]   # (K-INT) optional: only these names, e.g. honingtak_1 honingtak_2
     for naam, maak in {**TUNES, **BEDDEN}.items():
+        if alleen and naam not in alleen:
+            continue
         save(naam, maak(), 0.6 if naam.startswith("bed_") else 0.75)
 
 
