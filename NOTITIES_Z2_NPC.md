@@ -89,5 +89,14 @@ API for others: `Z2NpcApi.zone2Klaar/ZONE2_KLAAR`, `boormeesterMag(p)`, `nogVers
 - Bestiary pages for guessed z2 mob ids (vr_z2_splinterling ...): align with z2-wezens/bazen ids at integration.
 - `vadsrijk.npc.adv.<k>.3` titles: Splinterbreker / Poolsterschutter / Kristalziener (z2-systemen may own other names).
 
-## Resume point
-See the end of this file (status) — updated at the end of the run.
+## Resume point (end of run, 2026-11-04)
+- Compiles; gametests `-Pgt=Z2NpcGameTests` **3/3 passed** (elkeStapWieEnWaar: every z2 step has a target + where text, every NPC
+  name/where/clothes; hoofdlijnViaApi: the whole main chain via the real hooks + NPC clicks up to zone2_klaar, plus the Haven gate;
+  geheimenEnBeelden: knuffels under the ice count only for Vlokje, the 5 clues + boormeester, freeing a petrified guh).
+- AutoCheck once (`tools/autocheck/vadsrijk_z2_npc.txt`, no zone-2 tiles in this tree: `/guhs vadsrijk z2npc proefvloer`): the
+  opening plays (snowstorm particles, darkness, the grey dust wolf + howl, needle burst, pink geode, title "De Splinterpieken");
+  all 50 NPCs render with names and jumpers (row + live on the plaza); the burgemeester's quest dialogue opens (1/4). Seen: the wolf
+  silhouette is small from the camera (z2-bazen's `z2_galmwolf_opening` binding with a real Galmwolf would sell it better); the sky
+  in the storm is still zone 1's pink (z2-wereld's sky). The script's questlog section did not open (the dialogue screen was still
+  open; script timing only).
+- Not done: a run on the real zone-2 map (tiles live in z2-wereld); the f-quests tracker hookup (see above, 3 lines in QuestStap).
