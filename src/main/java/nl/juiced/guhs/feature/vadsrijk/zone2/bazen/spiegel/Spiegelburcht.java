@@ -81,7 +81,7 @@ public final class Spiegelburcht {
     }
 
     public static boolean inGang(double x, double y, double z) {
-        return Math.abs(x) <= Z2BazenPlekken.GANG_X + 1 && z >= Z2BazenPlekken.GANG_Z0 && z <= Z2BazenPlekken.GANG_Z1 + 1
+        return Math.abs(x - Z2BazenPlekken.BURCHT_X) <= Z2BazenPlekken.GANG_X + 1 && z >= Z2BazenPlekken.GANG_Z0 && z <= Z2BazenPlekken.GANG_Z1 + 1
                 && y >= Z2BazenPlekken.BURCHT_Y - 2 && y <= Z2BazenPlekken.BURCHT_Y + 8;
     }
 
@@ -125,7 +125,7 @@ public final class Spiegelburcht {
     private static void poort(ServerLevel sl, String id, int z) {
         for (int x = -Z2BazenPlekken.POORT_BREED; x <= Z2BazenPlekken.POORT_BREED; x++) {
             for (int y = 0; y <= Z2BazenPlekken.POORT_HOOG; y++) {
-                zet(sl, H_POORT + id, new BlockPos(x, Z2BazenPlekken.BURCHT_Y + y, z), Z2BazenRegistry.KRISTALPOORT.get().defaultBlockState());
+                zet(sl, H_POORT + id, new BlockPos(Z2BazenPlekken.BURCHT_X + x, Z2BazenPlekken.BURCHT_Y + y, z), Z2BazenRegistry.KRISTALPOORT.get().defaultBlockState());
             }
         }
     }
@@ -330,7 +330,7 @@ public final class Spiegelburcht {
             hakT = golf >= 3 ? 22 : 30;
             for (int k = 0; k < 2; k++) {
                 int z = Z2BazenPlekken.GANG_Z0 + 2 + sl.getRandom().nextInt(Z2BazenPlekken.GANG_Z1 - Z2BazenPlekken.GANG_Z0 - 3);
-                Vec3 a = new Vec3(-Z2BazenPlekken.GANG_X, Z2BazenPlekken.BURCHT_Y, z + 0.5), b = new Vec3(Z2BazenPlekken.GANG_X + 1, Z2BazenPlekken.BURCHT_Y, z + 0.5);
+                Vec3 a = new Vec3(Z2BazenPlekken.BURCHT_X - Z2BazenPlekken.GANG_X, Z2BazenPlekken.BURCHT_Y, z + 0.5), b = new Vec3(Z2BazenPlekken.BURCHT_X + Z2BazenPlekken.GANG_X + 1, Z2BazenPlekken.BURCHT_Y, z + 0.5);
                 Telegraaf.lijn(sl, a, b, 1.7, 25, Z2Baas.ROOD);
                 HAKKEN.add(new Hak(a, b, new int[1]));
             }
@@ -390,7 +390,7 @@ public final class Spiegelburcht {
             return null;
         }
         m.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-        m.stelIn(31, keuze >= 0 ? GANG_ELEMENT.get(keuze) : Element.WATER, elite, Set.of());
+        m.stelIn(29, keuze >= 0 ? GANG_ELEMENT.get(keuze) : Element.WATER, elite, Set.of());
         if (m instanceof Mob mob) {
             mob.setPersistenceRequired();
         }

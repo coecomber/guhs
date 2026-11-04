@@ -34,7 +34,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners;
 import nl.juiced.guhs.feature.vadsrijk.wezens.mob.Effecten;
 import nl.juiced.guhs.feature.vadsrijk.wezens.mob.RijkWezen;
 
-/** De Galmhellingen (lv 20-25): Splinterling, Galmvleermuis, Sneeuwknabbelaar, Kristalnaaldkruiper. */
+/** De Galmhellingen (lv 20-23): Splinterling, Galmvleermuis, Sneeuwknabbelaar, Kristalnaaldkruiper. */
 public final class Galm {
     private Galm() {
     }

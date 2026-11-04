@@ -49,7 +49,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry;
 import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2Hulpje;
 
 /**
- * De Mika-boormeester, the secret boss of the Splinterkloof drill site (ronde 15), lv 32. A Mika in a drilling machine with
+ * De Mika-boormeester, the secret boss of the Splinterkloof drill site (ronde 15), lv 28. A Mika in a drilling machine with
  * 3 drill heads ({@link Boorkop}: rood, geel, blauw).
  * <ul>
  *   <li>Asleep (dormant machine) until the npc slice's secret trigger calls {@link #ontgrendel(ServerPlayer)}; after that the player
@@ -210,7 +210,7 @@ public class Boormeester extends Z2Baas {
         if (m == null) {
             return null;
         }
-        m.stelIn(32, Element.VUUR, false, Set.of());
+        m.stelIn(28, Element.VUUR, false, Set.of());
         m.zetOntvadst(false);
         m.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5, 180, 0);
         m.zetThuis(Vec3.atBottomCenterOf(c));

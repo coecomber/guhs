@@ -110,6 +110,8 @@ def java_plekken(P):
     mob = P["mobzones"]
     zones = (","+chr(10)).join(f'            new Zone("{k}", {v["min"][0]}, {v["min"][2]}, {v["max"][0]}, {v["max"][2]}, {v["level"][0]}, {v["level"][1]})'
                                for k, v in mob.items())
+    paden = (","+chr(10)).join("            new int[][] {" + ", ".join("{" + str(a) + ", " + str(b) + "}" for (a, b) in pts) + "}"
+                               for pts in PL.PADEN.values())
     gebieden = (","+chr(10)).join(f'            new Gebieden.Gebied("{g[0]}", {g[1]}, {g[2]}, {g[3]}, {g[4]}, {g[5]}, {g[6]}, {str(g[7]).lower()})'
                                   for g in PL.GEBIEDEN)
     src = f"""package nl.juiced.guhs.feature.vadsrijk.zone2.wereld;
@@ -128,6 +130,13 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
  */
 public final class Z2WereldPlekken {{
     public static final int TEGEL_X0 = {PL.TX0}, TEGEL_X1 = {PL.TX1}, TEGEL_Z0 = {PL.TZ0}, TEGEL_Z1 = {PL.TZ1};
+    /** The playable zone box (fix round 2: compact, ~500 x 575; the rest of the tile grid is cloud sea). */
+    public static final int ZONE_MIN_X = {PL.ZONE[0]}, ZONE_MIN_Z = {PL.ZONE[1]}, ZONE_MAX_X = {PL.ZONE[2]}, ZONE_MAX_Z = {PL.ZONE[3]};
+    /** The Spiegelburcht was moved as one piece: v1 position + (BURCHT_DX, 0, BURCHT_DZ). */
+    public static final int BURCHT_DX = {PL.BURCHT_DX}, BURCHT_DZ = {PL.BURCHT_DZ};
+    /** The paths (polylines of x, z) — creatures never spawn within ~5 blocks of them. */
+    public static final List<int[][]> PADEN = List.of(
+{paden});
     /** Kandijkom dock: where the airship from De Haven lands, and its bell. */
     public static final BlockPos DOK_LANDING = {bp(alle["dok_landing"])}, DOK_BEL = {bp(alle["dok_bel"])};
     /** Gondola: the two stations (stand on the platform), their bells, the cable ends. */

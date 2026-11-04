@@ -82,76 +82,117 @@ def op_pad(K, x, z):
 
 
 # ================================================================================================ Kandijkom
-def huis(S, P, gid, cx, cz, w, d, deur, soort, naam):
+MUURKLEUR = ["pastelbaksteen_roze", "pastelbaksteen_lavendel", "pastelbaksteen_hemelsblauw", "pastelbaksteen_perzik",
+             "pastelbaksteen_framboos", "pastelbaksteen_orchidee", "pastelbaksteen_korenbloem", "pastelbaksteen_mokka",
+             "pastelbaksteen_pistache", "pastelbaksteen_aqua"]
+DAKKLEUR = ["minecraft:magenta_terracotta", "minecraft:purple_terracotta", "minecraft:light_blue_terracotta", "minecraft:pink_terracotta",
+            "minecraft:red_terracotta", "minecraft:purple_terracotta", "minecraft:blue_terracotta", "minecraft:brown_terracotta",
+            "minecraft:cyan_terracotta", "minecraft:light_blue_terracotta"]
+VLOER = {"huis": "minecraft:spruce_planks", "winkel": "minecraft:birch_planks", "smid": "minecraft:polished_andesite",
+         "cafe": "minecraft:dark_oak_planks", "tempel": None}
+LAMPION = "elftocht_lampion[hanging=true,lit=true]"
+LAMPION_S = "elftocht_lampion[hanging=false,lit=true]"
+VUURKORF = "elftocht_vuurkorf[lit=true]"
+
+
+def kopjes(f):
+    return f"elftocht_kopjes[facing={f},soort=chocovet]"
+
+
+class Kader:
+    """Local frame of a building: u across the front (door side), v depth from the front wall (0) to the back wall (D-1)."""
+
+    def __init__(self, cx, cz, w, d, deur):
+        self.dx, self.dz = DIR[deur]
+        self.ux, self.uz = -self.dz, self.dx
+        self.W = d if self.dx else w          # width across the front
+        self.D = w if self.dx else d          # depth
+        x1, z1 = cx - w // 2, cz - d // 2
+        x2, z2 = x1 + w - 1, z1 + d - 1
+        if self.dz:
+            self.fx, self.fz = cx, (z1 if self.dz < 0 else z2)
+        else:
+            self.fx, self.fz = (x1 if self.dx < 0 else x2), cz
+        self.voor = FACE[deur]                 # world facing towards the front
+        self.achter = TEGEN[self.voor]
+        self.hw = self.W // 2 - 1              # max |u| inside
+
+    def p(self, u, v):
+        return self.fx + u * self.ux - v * self.dx, self.fz + u * self.uz - v * self.dz
+
+    def kant(self, teken):
+        """World facing of +u (teken 1) / -u (teken -1)."""
+        vx, vz = self.ux * teken, self.uz * teken
+        return {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[(vx, vz)]
+
+
+def huis(S, P, gid, cx, cz, w, d, deur, soort, naam, fy, kleur=0):
+    """A cosy Kandijkom house/shop on floor top fy: pastel walls, a coloured roof with a dusting of snow, a real interior."""
+    sy = fy + 1
     x1, z1 = cx - w // 2, cz - d // 2
     x2, z2 = x1 + w - 1, z1 + d - 1
-    hw = {"huis": 5, "winkel": 6, "smid": 6, "cafe": 6, "tempel": 12}[soort]
-    top = SY + hw
+    hw = {"huis": 5, "winkel": 6, "smid": 6, "cafe": 6, "tempel": 10}[soort]
+    top = sy + hw
     tempel = soort == "tempel"
-    wand = "minecraft:calcite" if tempel else CHOCO
+    wand = "minecraft:calcite" if tempel else MUURKLEUR[kleur % len(MUURKLEUR)]
+    dak = "minecraft:light_gray_terracotta" if tempel else DAKKLEUR[kleur % len(DAKKLEUR)]
     hoek = "guhs:guh_kristal_blok" if tempel else "minecraft:dark_oak_log[axis=y]"
-    S.box(x1, FY - 4, z1, x2, FY, z2, "minecraft:stone_bricks")
-    S.box(x1, SY, z1, x2, top, z2, wand)
-    S.box(x1 + 1, SY, z1 + 1, x2 - 1, top - 1, z2 - 1, CARVE)
+    S.box(x1 - 1, fy - 5, z1 - 1, x2 + 1, fy, z2 + 1, "minecraft:stone_bricks")       # foundation (also on a tier edge)
+    S.box(x1, sy, z1, x2, top, z2, wand)
+    S.box(x1 + 1, sy, z1 + 1, x2 - 1, top - 1, z2 - 1, CARVE)
     for (x, z) in ((x1, z1), (x2, z1), (x1, z2), (x2, z2)):
-        S.box(x, SY, z, x, top, z, hoek)
-    S.box(x1, SY, z1, x2, SY, z2, "minecraft:stone_bricks" if not tempel else "minecraft:polished_diorite")
-    S.box(x1 + 1, SY, z1 + 1, x2 - 1, SY, z2 - 1, CARVE)
-    # floor: planks + a carpet runner (shops/houses/cafe), pink/white marble (temple)
+        S.box(x, sy, z, x, top, z, hoek)
+    S.box(x1, sy, z1, x2, sy, z2, "minecraft:stone_bricks" if not tempel else "minecraft:polished_diorite")
+    S.box(x1 + 1, sy, z1 + 1, x2 - 1, sy, z2 - 1, CARVE)
     if tempel:
         for x in range(x1 + 1, x2):
             for z in range(z1 + 1, z2):
-                S.set(x, FY, z, "minecraft:smooth_quartz" if (x + z) % 2 else "minecraft:pink_terracotta")
+                S.set(x, fy, z, "minecraft:smooth_quartz" if (x + z) % 2 else "minecraft:pink_terracotta")
+    elif soort == "cafe":
+        for x in range(x1 + 1, x2):
+            for z in range(z1 + 1, z2):
+                S.set(x, fy, z, "minecraft:dark_oak_planks" if (x + z) % 2 else "minecraft:spruce_planks")
     else:
-        S.box(x1 + 1, FY, z1 + 1, x2 - 1, FY, z2 - 1, "minecraft:spruce_planks")
-    # windows
+        S.box(x1 + 1, fy, z1 + 1, x2 - 1, fy, z2 - 1, VLOER[soort])
+    # windows (warm light)
     glas = "minecraft:pink_stained_glass" if tempel else "minecraft:orange_stained_glass"
     for x in range(x1 + 2, x2 - 1, 3):
         for z in (z1, z2):
-            S.box(x, SY + 1, z, x, SY + (6 if tempel else 2), z, glas)
+            S.box(x, sy + 1, z, x, sy + (6 if tempel else 2), z, glas)
     for z in range(z1 + 2, z2 - 1, 3):
         for x in (x1, x2):
-            S.box(x, SY + 1, z, x, SY + (6 if tempel else 2), z, glas)
-    # door (centre of the door side), a little step of path outside
-    dx, dz = DIR[deur]
-    if dz:
-        zd = z1 if dz < 0 else z2
-        xd = cx
-        breed = 2 if soort in ("winkel", "cafe", "smid", "tempel") else 1
-        xs = [xd] if breed == 1 else [xd - 1, xd]
-        S.box(xs[0] - 1, SY, zd, xs[-1] + 1, SY + 3, zd, "minecraft:dark_oak_planks" if not tempel else "minecraft:polished_diorite")
-        for i, x in enumerate(xs):
-            hinge = "left" if i == 0 else "right"
-            f = FACE[deur] if False else TEGEN[FACE[deur]]
-            S.set(x, SY, zd, f"minecraft:spruce_door[facing={f},half=lower,hinge={hinge},open=false,powered=false]")
-            S.set(x, SY + 1, zd, f"minecraft:spruce_door[facing={f},half=upper,hinge={hinge},open=false,powered=false]")
-            S.set(x, FY, zd + dz, "guhs:knuffelklinkers")
-            S.set(x, FY, zd - dz, "minecraft:spruce_planks" if not tempel else "minecraft:smooth_quartz")
-        buiten = [xd, SY, zd + 2 * dz]
-        runner = [(xd, z) for z in range(z1 + 1, z2)]
-    else:
-        xd = x1 if dx < 0 else x2
-        zd = cz
-        breed = 2 if soort in ("winkel", "cafe", "smid", "tempel") else 1
-        zs = [zd] if breed == 1 else [zd - 1, zd]
-        S.box(xd, SY, zs[0] - 1, xd, SY + 3, zs[-1] + 1, "minecraft:dark_oak_planks" if not tempel else "minecraft:polished_diorite")
-        for i, z in enumerate(zs):
-            hinge = "left" if i == 0 else "right"
-            f = TEGEN[FACE[deur]]
-            S.set(xd, SY, z, f"minecraft:spruce_door[facing={f},half=lower,hinge={hinge},open=false,powered=false]")
-            S.set(xd, SY + 1, z, f"minecraft:spruce_door[facing={f},half=upper,hinge={hinge},open=false,powered=false]")
-            S.set(xd + dx, FY, z, "guhs:knuffelklinkers")
-            S.set(xd - dx, FY, z, "minecraft:spruce_planks" if not tempel else "minecraft:smooth_quartz")
-        buiten = [xd + 2 * dx, SY, zd]
-        runner = [(x, zd) for x in range(x1 + 1, x2)]
-    if not tempel:
-        for (x, z) in runner:
-            S.set(x, SY, z, "minecraft:red_carpet" if soort != "cafe" else "minecraft:pink_carpet", keep=True)
+            S.box(x, sy + 1, z, x, sy + (6 if tempel else 2), z, glas)
+    F = Kader(cx, cz, w, d, deur)
+    dx, dz = F.dx, F.dz
+    breed = 2 if soort in ("winkel", "cafe", "smid", "tempel") else 1
+    us = [0] if breed == 1 else [-1, 0]
+    # door frame + doors
+    for u in range(us[0] - 1, us[-1] + 2):
+        x, z = F.p(u, 0)
+        S.box(x, sy, z, x, sy + 3, z, "minecraft:dark_oak_planks" if not tempel else "minecraft:polished_diorite")
+    for i, u in enumerate(us):
+        x, z = F.p(u, 0)
+        hinge = "left" if i == 0 else "right"
+        f = F.achter
+        S.set(x, sy, z, f"minecraft:spruce_door[facing={f},half=lower,hinge={hinge},open=false,powered=false]")
+        S.set(x, sy + 1, z, f"minecraft:spruce_door[facing={f},half=upper,hinge={hinge},open=false,powered=false]")
+        S.set(x + dx, fy, z + dz, "guhs:knuffelklinkers")
+        S.box(x + dx, sy, z + dz, x + dx, sy + 2, z + dz, CARVE)
+        S.box(x + 2 * dx, sy, z + 2 * dz, x + 2 * dx, sy + 2, z + 2 * dz, CARVE)
+        xi, zi = F.p(u, 1)
+        S.set(xi, fy, zi, "minecraft:spruce_planks" if not tempel else "minecraft:smooth_quartz")
+    # a lamp beside the door outside + a wreath above it
+    xa, za = F.p(us[-1] + 2, -1)
+    S.set(xa, sy + 2, za, LANT_H) if False else None
+    xw, zw = F.p(us[0] - 1, -1)
+    S.set(xw, sy + 2, zw, LANT, keep=True)
+    buiten = list(F.p(0, -2))
+    buiten = [buiten[0], sy, buiten[1]]
     # lights: hanging lanterns from the ceiling
     for x in range(x1 + 2, x2 - 1, 4):
         for z in range(z1 + 2, z2 - 1, 4):
             S.set(x, top - 1, z, LANT_H)
-    # roof: a thick snow cap over dark oak eaves (gable along the long side), icicles (end rods) under the eaves
+    # roof: coloured tiles, a thin dusting of snow, icicles (end rods) under the eaves
     langs_x = w >= d
     a0, a1 = (z1 - 1, z2 + 1) if langs_x else (x1 - 1, x2 + 1)
     half = (a1 - a0) // 2 + 1
@@ -162,19 +203,15 @@ def huis(S, P, gid, cx, cz, w, d, deur, soort, naam):
             break
         for u in (lo, hi):
             if langs_x:
-                S.box(x1 - 1, y, u, x2 + 1, y, u, SNEEUW)
+                S.box(x1 - 1, y, u, x2 + 1, y, u, dak)
             else:
-                S.box(u, y, z1 - 1, u, y, z2 + 1, SNEEUW)
+                S.box(u, y, z1 - 1, u, y, z2 + 1, dak)
         if langs_x:
-            S.box(x1, y, lo + 1, x2, y, hi - 1, wand if not tempel else "minecraft:calcite")
+            S.box(x1, y, lo + 1, x2, y, hi - 1, wand)
             S.box(x1 + 1, y, lo + 1, x2 - 1, y, hi - 1, CARVE)
-            S.box(x1 - 1, y + 1, lo, x2 + 1, y + 1, lo, laag(4), keep=True)
-            S.box(x1 - 1, y + 1, hi, x2 + 1, y + 1, hi, laag(4), keep=True)
         else:
-            S.box(lo + 1, y, z1, hi - 1, y, z2, wand if not tempel else "minecraft:calcite")
+            S.box(lo + 1, y, z1, hi - 1, y, z2, wand)
             S.box(lo + 1, y, z1 + 1, hi - 1, y, z2 - 1, CARVE)
-            S.box(lo, y + 1, z1 - 1, lo, y + 1, z2 + 1, laag(4), keep=True)
-            S.box(hi, y + 1, z1 - 1, hi, y + 1, z2 + 1, laag(4), keep=True)
     S.box(x1 + 1, top, z1 + 1, x2 - 1, top, z2 - 1, "minecraft:spruce_planks" if not tempel else "minecraft:calcite")
     if langs_x:
         for x in range(x1 - 1, x2 + 2):
@@ -183,6 +220,8 @@ def huis(S, P, gid, cx, cz, w, d, deur, soort, naam):
             if x % 3 == 0:
                 S.set(x, top - 1, z1 - 1, "minecraft:end_rod[facing=down]")
                 S.set(x, top - 1, z2 + 1, "minecraft:end_rod[facing=down]")
+            if x % 2 == 0:
+                S.set(x, top - 1, z1 - 1, LAMPION, keep=True)
     else:
         for z in range(z1 - 1, z2 + 2):
             S.set(x1 - 1, top, z, trap("minecraft:dark_oak_stairs", "east"))
@@ -190,246 +229,509 @@ def huis(S, P, gid, cx, cz, w, d, deur, soort, naam):
             if z % 3 == 0:
                 S.set(x1 - 1, top - 1, z, "minecraft:end_rod[facing=down]")
                 S.set(x2 + 1, top - 1, z, "minecraft:end_rod[facing=down]")
-    # chimney with smoke (lit campfire on top, out of reach) + a fireplace glow inside
-    if not tempel:
-        cxh, czh = (x2 - 1, z1 + 1) if deur != "oost" else (x1 + 1, z1 + 1)
-        if deur == "noord":
-            cxh, czh = x2 - 1, z2 - 1
-        S.box(cxh, SY, czh, cxh, top + half + 3, czh, "minecraft:bricks")
-        S.set(cxh, top + half + 4, czh, ROOK)
-        S.set(cxh, SY, czh, "minecraft:shroomlight")
-    # furniture
-    P_ = {"deur": buiten, "binnen": [cx, SY, cz], "doos": [[x1, FY, z1], [x2, top, z2]], "naam": naam}
-    ox, oz = -dx, -dz            # towards the back
-    bx, bz = cx + ox * (w // 2 - 2 if dx else 0), cz + oz * (d // 2 - 2 if dz else 0)
+    P_ = {"deur": buiten, "binnen": [cx, sy, cz], "doos": [[x1, fy, z1], [x2, top, z2]], "naam": naam}
+    D, hwu = F.D, F.hw
+    # ---- the fireplace (houses, cafe): in the back wall (or a side wall for shops), a chimney with smoke
+    def haard(u, v, kant_naar):
+        """Fireplace in the wall cell (u, v) opening towards kant_naar (world facing)."""
+        x, z = F.p(u, v)
+        S.box(x - 1, sy - 1, z - 1, x + 1, sy + 3, z + 1, "minecraft:bricks", keep=False) if False else None
+        S.set(x, sy, z, "minecraft:campfire[facing=north,lit=true,signal_fire=false,waterlogged=false]")
+        S.set(x, sy + 1, z, "minecraft:bricks")
+        S.box(x, sy + 2, z, x, top + half + 3, z, "minecraft:bricks")
+        S.set(x, top + half + 4, z, ROOK)
+        S.set(x, fy, z, "minecraft:bricks")
+        for du in (-1, 1):
+            xx, zz = F.p(u + du, v) if v in (0, D - 1) else F.p(u, v + du)
+            S.box(xx, sy, zz, xx, sy + 2, zz, "minecraft:bricks")
+        return x, z
+    if soort in ("huis", "cafe"):
+        haard(0, D - 1, F.voor)
+        # behind the fireplace: solid, so the fire never shows outside
+        xb, zb = F.p(0, D)
+        S.box(xb, sy, zb, xb, sy + 1, zb, "minecraft:bricks", keep=True)
+        xr, zr = F.p(0, D - 2)
+        S.set(xr, sy, zr, "minecraft:red_carpet")
     if soort in ("winkel", "smid", "cafe"):
-        # counter across the back third, the NPC behind it
-        if dx:
-            S.box(bx - ox, SY, z1 + 2, bx - ox, SY, z2 - 2, "minecraft:barrel[facing=up,open=false]")
-            S.box(bx - ox, SY, cz, bx - ox, SY, cz, CARVE) if False else None
-            S.box(bx - ox, SY + 1, z1 + 2, bx - ox, SY + 1, z2 - 2, plaat("minecraft:spruce_slab"))
-            S.set(bx - ox, SY, z1 + 1, "minecraft:spruce_trapdoor[facing=east,half=bottom,open=true,powered=false,waterlogged=false]")
-            S.box(bx + ox, SY, z1 + 1, bx + ox, SY + 2, z2 - 1, "minecraft:barrel[facing=up,open=false]" if soort != "smid" else "minecraft:stone_bricks")
-        else:
-            S.box(x1 + 2, SY, bz - oz, x2 - 2, SY, bz - oz, "minecraft:barrel[facing=up,open=false]")
-            S.box(x1 + 2, SY + 1, bz - oz, x2 - 2, SY + 1, bz - oz, plaat("minecraft:spruce_slab"))
-            S.box(x1 + 1, SY, bz + oz, x2 - 1, SY + 2, bz + oz, "minecraft:barrel[facing=up,open=false]")
-        P_["npc"] = [bx, SY, bz]
-        P_["toonbank"] = [bx - 2 * ox, SY, bz - 2 * oz]
+        # counter across v = D-4, the NPC behind it at v = D-3, shelves along the back (v = D-2)
+        vt, vn, vs = D - 4, D - 3, D - 2
+        for u in range(-hwu + 1, hwu):
+            x, z = F.p(u, vt)
+            S.set(x, sy, z, "minecraft:barrel[facing=up,open=false]" if soort != "cafe" else "minecraft:dark_oak_planks")
+            S.set(x, sy + 1, z, plaat("minecraft:spruce_slab"))
+        x, z = F.p(-hwu, vt)
+        S.set(x, sy, z, f"minecraft:spruce_trapdoor[facing={F.kant(-1)},half=bottom,open=true,powered=false,waterlogged=false]")
+        for u in range(-hwu, hwu + 1):
+            if soort == "cafe" and u == 0:
+                continue
+            x, z = F.p(u, vs)
+            if soort == "smid":
+                S.set(x, sy, z, "minecraft:stone_bricks")
+            else:
+                S.box(x, sy, z, x, sy + 1, z, "minecraft:bookshelf" if (u % 2 == 0 and soort == "winkel") else "minecraft:barrel[facing=up,open=false]")
+                S.set(x, sy + 2, z, "minecraft:flower_pot" if u % 3 == 0 else "minecraft:candle[candles=3,lit=true,waterlogged=false]")
+        xn, zn = F.p(0, vn)
+        P_["npc"] = [xn, sy, zn]
+        xt, zt = F.p(0, vt - 1)
+        P_["toonbank"] = [xt, sy, zt]
         if soort == "smid":
-            S.set(bx - 2 * ox + (1 if dz else 0), SY, bz - 2 * oz + (1 if dx else 0), "minecraft:anvil[facing=north]")
-            S.set(x1 + 1, SY, z2 - 1, "minecraft:blast_furnace[facing=north,lit=true]")
-            S.set(x2 - 1, SY, z2 - 1, "minecraft:smithing_table")
-            S.set(x2 - 1, SY, z1 + 1, "minecraft:grindstone[face=floor,facing=north]")
-        if soort == "cafe":
-            # tables + chairs inside, a chocolate cauldron, cake on the counter
-            for (tx, tz) in ((cx - 3, cz - 3), (cx - 3, cz + 3), (cx + 1, cz - 3), (cx + 1, cz + 3)):
-                if x1 + 1 < tx < x2 - 1 and z1 + 1 < tz < z2 - 1:
-                    S.set(tx, SY, tz, STAAF)
-                    S.set(tx, SY + 1, tz, "minecraft:spruce_pressure_plate[powered=false]")
-                    S.set(tx + 1, SY, tz, trap("minecraft:spruce_stairs", "east"))
-                    S.set(tx - 1, SY, tz, trap("minecraft:spruce_stairs", "west"))
-            S.set(bx, SY, z1 + 1, "minecraft:water_cauldron[level=3]")
-            S.set(bx - ox, SY + 2, cz + 1, "minecraft:cake[bites=0]")
+            x, z = F.p(2, vt - 2)
+            S.set(x, sy, z, "minecraft:anvil[facing=north]")
+            x, z = F.p(-hwu, 1)
+            S.set(x, sy, z, "minecraft:blast_furnace[facing=" + F.kant(1) + ",lit=true]")
+            x, z = F.p(hwu, 1)
+            S.set(x, sy, z, "minecraft:smithing_table")
+            x, z = F.p(hwu, 2)
+            S.set(x, sy, z, "minecraft:grindstone[face=floor,facing=north]")
+            x, z = F.p(-hwu, 2)
+            S.set(x, sy, z, "minecraft:furnace[facing=" + F.kant(1) + ",lit=true]")
+            x, z = F.p(-hwu, 3)
+            S.set(x, sy, z, "minecraft:lava_cauldron") if False else S.set(x, sy, z, "minecraft:water_cauldron[level=3]")
+        elif soort == "winkel":
+            # a warm stove in the corner, a little rug, a bench by the window
+            x, z = F.p(-hwu, 1)
+            S.set(x, sy, z, "minecraft:smoker[facing=" + F.kant(1) + ",lit=true]")
+            x, z = F.p(-hwu, 2)
+            S.set(x, sy, z, "minecraft:water_cauldron[level=3]")
+            S.set(x, sy + 1, z, kopjes(F.voor)) if False else None
+            for v in range(1, vt - 1):
+                for u in range(-1, 2):
+                    x, z = F.p(u, v)
+                    S.set(x, sy, z, "minecraft:pink_carpet" if (u + v) % 2 else "minecraft:white_carpet", keep=True)
+            x, z = F.p(hwu, 1)
+            S.set(x, sy, z, trap("minecraft:spruce_stairs", F.kant(1)))
+            x, z = F.p(hwu, 2)
+            S.set(x, sy, z, trap("minecraft:spruce_stairs", F.kant(1)))
+        else:
+            # cafe: tables with chairs in the front half, chocolate kettles + cake on the counter
+            for (u, v) in ((-hwu + 1, 2), (hwu - 2, 2)):
+                if v >= vt - 1:
+                    continue
+                x, z = F.p(u, v)
+                S.set(x, sy, z, STAAF)
+                S.set(x, sy + 1, z, kopjes(F.voor))
+                for du in (-1, 1):
+                    xx, zz = F.p(u + du, v)
+                    S.set(xx, sy, zz, trap("minecraft:spruce_stairs", F.kant(-du)))
+            for u in (-hwu, hwu):
+                x, z = F.p(u, vs)
+                S.set(x, sy, z, "minecraft:water_cauldron[level=3]")
+            x, z = F.p(1, vt)
+            S.set(x, sy + 1, z, "minecraft:cake[bites=0]")
+            x, z = F.p(-1, vt)
+            S.set(x, sy + 1, z, kopjes(F.voor))
             P_["geheim_kelder"] = None
     elif soort == "huis":
-        bedx, bedz = (x1 + 1, z1 + 1) if deur != "noord" else (x1 + 1, z2 - 2)
-        S.set(bedx, SY, bedz, "minecraft:red_bed[facing=south,occupied=false,part=head]")
-        S.set(bedx, SY, bedz + 1, "minecraft:red_bed[facing=south,occupied=false,part=foot]")
-        S.set(x1 + 1, SY, z2 - 1 if deur != "noord" else z1 + 1, "minecraft:barrel[facing=up,open=false]")
-        S.set(cx + 1, SY, cz, STAAF)
-        S.set(cx + 1, SY + 1, cz, "minecraft:spruce_pressure_plate[powered=false]")
-        S.set(cx + 2, SY, cz, trap("minecraft:spruce_stairs", "east"))
-        S.set(x2 - 1, SY, z2 - 1 if deur != "zuid" else z1 + 1, "minecraft:potted_red_tulip")
-        S.box(x1 + 1, SY, z1 + 1, x2 - 1, SY, z2 - 1, "minecraft:white_carpet", keep=True)
+        # bed with a blanket, bookcase, table with chocomelk, a kettle by the fire, a rug
+        bu, bv = -hwu, D - 2
+        x, z = F.p(bu, bv)
+        x2_, z2_ = F.p(bu, bv - 1)
+        S.set(x, sy, z, f"minecraft:pink_bed[facing={F.achter},occupied=false,part=head]")
+        S.set(x2_, sy, z2_, f"minecraft:pink_bed[facing={F.achter},occupied=false,part=foot]")
+        x, z = F.p(bu, bv - 2)
+        S.set(x, sy, z, "minecraft:chest[facing=" + F.kant(1) + ",type=single,waterlogged=false]")
+        for v in range(2, D - 2):
+            x, z = F.p(hwu, v)
+            S.box(x, sy, z, x, sy + 1, z, "minecraft:bookshelf")
+        x, z = F.p(hwu, 1)
+        S.set(x, sy, z, "minecraft:potted_red_tulip")
+        tu, tv = 1, 2
+        x, z = F.p(tu, tv)
+        S.set(x, sy, z, STAAF)
+        S.set(x, sy + 1, z, kopjes(F.voor))
+        x, z = F.p(tu - 1, tv)
+        S.set(x, sy, z, trap("minecraft:spruce_stairs", F.kant(-1)))
+        x, z = F.p(1, D - 2)
+        S.set(x, sy, z, "minecraft:water_cauldron[level=3]")
+        S.set(x, sy + 1, z, "minecraft:candle[candles=2,lit=true,waterlogged=false]") if False else None
+        x, z = F.p(-1, D - 2)
+        S.set(x, sy, z, "minecraft:barrel[facing=up,open=false]")
+        for v in range(1, D - 1):
+            for u in range(-1, 1):
+                x, z = F.p(u, v)
+                S.set(x, sy, z, "minecraft:red_carpet" if (u + v) % 2 else "minecraft:white_carpet", keep=True)
     elif tempel:
-        # the class altar at the back, crystal pillars, free circle in front of it
-        ax, az = cx, z1 + 2
-        S.box(ax - 1, SY, az, ax + 1, SY, az, "minecraft:polished_diorite")
-        S.set(ax, SY + 1, az, "minecraft:amethyst_block")
-        S.set(ax, SY + 2, az, "guhs:guh_kristal_cluster[facing=up]")
-        S.set(ax - 1, SY + 1, az, "minecraft:end_rod[facing=up]")
-        S.set(ax + 1, SY + 1, az, "minecraft:end_rod[facing=up]")
-        for x in (x1 + 2, x2 - 2):
-            for z in range(z1 + 3, z2 - 1, 4):
-                S.box(x, SY, z, x, top - 1, z, "guhs:guh_kristal_blok")
+        ax, az = F.p(0, D - 2)
+        x0_, z0_ = F.p(-1, D - 2)
+        x1_, z1_ = F.p(1, D - 2)
+        S.set(x0_, sy, z0_, "minecraft:polished_diorite")
+        S.set(x1_, sy, z1_, "minecraft:polished_diorite")
+        S.set(ax, sy, az, "minecraft:polished_diorite")
+        S.set(ax, sy + 1, az, "minecraft:amethyst_block")
+        S.set(ax, sy + 2, az, "guhs:guh_kristal_cluster[facing=up]")
+        S.set(x0_, sy + 1, z0_, "minecraft:end_rod[facing=up]")
+        S.set(x1_, sy + 1, z1_, "minecraft:end_rod[facing=up]")
+        for u in (-hwu, hwu):
+            for v in range(2, D - 2, 3):
+                x, z = F.p(u, v)
+                S.box(x, sy, z, x, top - 1, z, "guhs:guh_kristal_blok")
         S.box(x1 + 1, top, z1 + 1, x2 - 1, top, z2 - 1, "minecraft:calcite")
-        for x in range(x1 + 3, x2 - 2, 4):
-            S.set(x, top, cz, "guhs:guh_kristal_lamp")
-        P_["npc"] = [cx, SY, az + 2]
-        P_["altaar"] = [ax, SY, az]
-        # crystal spire on the roof
-        S.kegel(cx, cz, top + half + 1, 14, 2.6, 0.4, "minecraft:pink_stained_glass")
-        S.kegel(cx, cz, top + half + 1, 10, 1.2, 0.2, "guhs:guh_kristal_blok")
+        S.set(cx, top, cz, "guhs:guh_kristal_lamp")
+        xn, zn = F.p(0, D - 4)
+        P_["npc"] = [xn, sy, zn]
+        P_["altaar"] = [ax, sy, az]
+        S.kegel(cx, cz, top + half + 1, 18, 3.0, 0.4, "minecraft:pink_stained_glass")
+        S.kegel(cx, cz, top + half + 1, 13, 1.4, 0.2, "guhs:guh_kristal_blok")
+        S.set(cx, top + half + 15, cz, "guhs:guh_kristal_lamp")
     return P_
 
 
-def lantaarnpaal(S, x, y, z):
+def lantaarnpaal(S, x, y, z, lampion=False):
     S.box(x, y, z, x, y + 2, z, STAAF)
-    S.set(x, y + 3, z, LANT)
+    S.set(x, y + 3, z, LANT if not lampion else LAMPION_S)
+
+
+def slinger(S, a, b, zak=3.0, elk=4):
+    """A garland of lanterns sagging between two points (a, b = world (x, y, z))."""
+    n = int(max(abs(b[0] - a[0]), abs(b[2] - a[2]))) + 1
+    if n < 2:
+        return
+    as_ = "x" if abs(b[0] - a[0]) >= abs(b[2] - a[2]) else "z"
+    for i in range(n + 1):
+        t = i / n
+        x = a[0] + (b[0] - a[0]) * t
+        z = a[2] + (b[2] - a[2]) * t
+        y = a[1] + (b[1] - a[1]) * t - zak * math.sin(math.pi * t)
+        S.set(round(x), round(y), round(z), f"feestslingers[axis={as_}]", keep=True)
+        if i % elk == 2:
+            S.set(round(x), round(y) - 1, round(z), LAMPION, keep=True)
+
+
+def kraam(S, x, z, f, fy, dak1="minecraft:red_wool", dak2="minecraft:white_wool", waar=None):
+    """A Christmas-market stall (3 wide, 2 deep): counter facing f, a striped awning, a lamp, goods on the counter."""
+    sy = fy + 1
+    ddx, ddz = {"north": (0, -1), "south": (0, 1), "east": (1, 0), "west": (-1, 0)}[f]
+    ux, uz = -ddz, ddx
+    for u in (-1, 0, 1):
+        cxx, czz = x + u * ux, z + u * uz
+        S.set(cxx, sy, czz, "minecraft:spruce_planks" if u else "minecraft:barrel[facing=up,open=false]")
+        S.set(cxx, sy + 1, czz, plaat("minecraft:spruce_slab"))
+        S.set(cxx - ddx, fy, czz - ddz, "minecraft:spruce_planks")
+    for u in (-2, 2):
+        for vv in (0, -2):
+            px, pz = x + u * ux + vv * ddx, z + u * uz + vv * ddz
+            S.box(px, sy, pz, px, sy + 2, pz, STAAF)
+    for u in range(-2, 3):
+        for vv in (1, 0, -1, -2):
+            px, pz = x + u * ux + vv * ddx, z + u * uz + vv * ddz
+            S.set(px, sy + 3 + (1 if vv <= -1 else 0), pz, dak1 if (u % 2 == 0) else dak2)
+    S.set(x - ddx, sy + 2, z - ddz, LAMPION)
+    goed = waar or [kopjes(f), "minecraft:cake[bites=0]", "minecraft:candle[candles=4,lit=true,waterlogged=false]"]
+    for u, g in zip((-1, 0, 1), goed):
+        S.set(x + u * ux, sy + 2, z + u * uz, g, keep=True)
 
 
 def stad(W, K, P):
-    S = Vol(-140, FY - 6, -2540, 140, FY + 62, -2250)
     sx, sz = PL.STAD
+    R0 = PL.GEODE_R
+    S = Vol(sx - R0 - 30, FY - 10, sz - R0 - 30, sx + R0 + 30, FY + 90, sz + R0 + 30)
     gb = {}
-    # ---- streets (knuffelklinkers) and the plaza with the skating pond
     weg = "guhs:knuffelklinkers"
-    S.box(-3, FY, sz + 26, 3, FY, -2251, weg)               # south: plaza -> dock road
-    S.box(-3, FY, -2440, 3, FY, sz - 26, weg)               # north stub
-    S.box(-24, FY, -2442, 24, FY, -2438, weg)               # cross street in front of the tree
-    for xs in (-24, 20):
-        S.box(xs, FY, -2524, xs + 4, FY, -2438, weg)        # around the kapel
-    S.box(-24, FY, -2524, 24, FY, -2520, weg)
-    S.box(-3, FY, -2540, 3, FY, -2520, weg)                  # north gate
-    S.box(26, FY, sz - 3, 140, FY, sz + 3, weg)              # east gate
-    S.box(-140, FY, sz - 3, -26, FY, sz + 3, weg)            # west gate
-    S.box(-82, FY, -2444, -26, FY, -2440, weg)               # west quarter street
-    S.box(26, FY, -2444, 86, FY, -2440, weg)
-    S.box(-82, FY, -2348, -26, FY, -2344, weg)
-    S.box(26, FY, -2348, 70, FY, -2344, weg)
-    S.box(-58, FY, -2444, -54, FY, -2290, weg)
-    S.box(54, FY, -2444, 58, FY, -2296, weg)
-    S.box(-54, FY, -2302, 54, FY, -2298, weg)
-    S.box(70, FY, -2480, 74, FY, -2444, weg)                 # to the gondola
+    # ---- gate streets (through the wall) and the plaza
+    for naam, (ux, uz) in PL.POORTEN.items():
+        a = (sx + ux * PL.PLEIN_R - 3 * abs(uz), sz + uz * PL.PLEIN_R - 3 * abs(ux))
+        b = (sx + ux * (R0 + PL.GEODE_DIK + 6) + 3 * abs(uz), sz + uz * (R0 + PL.GEODE_DIK + 6) + 3 * abs(ux))
+        S.box(a[0], FY, a[1], b[0], FY, b[1], weg)
+        # lamp posts with lampions along the street, both sides
+        for s in range(PL.PLEIN_R + 4, R0 - 2, 8):
+            for p in (-4, 4):
+                x, z = sx + ux * s + p * abs(uz), sz + uz * s + p * abs(ux)
+                lantaarnpaal(S, x, SY, z, lampion=True)
+        # the arch over the gate (in the wall, high), with a big lampion
+        s0 = R0 + 2
+        for p in range(-5, 6):
+            x, z = sx + ux * s0 + p * abs(uz), sz + uz * s0 + p * abs(ux)
+            S.box(x, SY + 9, z, x, SY + 10, z, "guhs:guh_kristal_blok" if abs(p) == 5 else "minecraft:pink_stained_glass")
+        S.set(sx + ux * s0, SY + 8, sz + uz * s0, LAMPION)
     S.cyl(sx, sz, PL.PLEIN_R, FY, FY, "parelmoer_tegels")
     S.cyl(sx, sz, PL.PLEIN_R, FY, FY, "minecraft:polished_diorite", hollow=1.2)
-    S.cyl(sx, sz, PL.VIJVER_R + 1.5, FY, FY, SNEEUW)
-    S.cyl(sx, sz, PL.VIJVER_R, FY, FY, "minecraft:packed_ice")
-    S.cyl(sx, sz, PL.VIJVER_R + 1.5, SY, SY, laag(2), hollow=1.4)
-    for a in range(0, 360, 90):
-        r = PL.VIJVER_R + 5
-        x, z = round(sx + r * math.cos(math.radians(a + 45))), round(sz + r * math.sin(math.radians(a + 45)))
-        f = "east" if math.cos(math.radians(a + 45)) > 0 else "west"
-        S.set(x, SY, z, trap("minecraft:spruce_stairs", f))
-        S.set(x, SY, z + 1, trap("minecraft:spruce_stairs", f))
-    for a in range(22, 360, 45):
-        r = PL.PLEIN_R - 2
-        lantaarnpaal(S, round(sx + r * math.cos(math.radians(a))), SY, round(sz + r * math.sin(math.radians(a))))
-    # snow-guh figures on the plaza edge
-    for (x, z, f) in ((-18, -2385, "south"), (18, -2385, "south")):
+    # ---- the skating pond, benches with blankets, snow-guhs
+    vx, vz = PL.VIJVER
+    S.cyl(vx, vz, PL.VIJVER_R + 1.5, FY, FY, SNEEUW)
+    S.cyl(vx, vz, PL.VIJVER_R, FY, FY, "minecraft:packed_ice")
+    for (dx, dz, f) in ((-10, 0, "east"), (10, 0, "west")):
+        for k in (-1, 0, 1):
+            S.set(vx + dx, SY, vz + dz + k, trap("minecraft:spruce_stairs", f))
+    for (x, z, f) in ((vx - 9, vz + 6, "north"), (vx + 9, vz + 6, "north")):
         S.set(x, SY, z, f"guhs:sneeuwpopguh[facing={f},half=lower]")
         S.set(x, SY + 1, z, f"guhs:sneeuwpopguh[facing={f},half=upper]")
-    # ---- the big snow spruce (north of the plaza, between the cross street and the kapel)
-    tx, tz = PL.SNEEUWGUHSPAR[0], -2448
-    S.box(tx, SY, tz, tx, SY + 22, tz, "minecraft:spruce_log[axis=y]")
+    # ---- the crystal clock tower in the middle (walk-through arches on all sides)
+    tx, tz = PL.TOREN
+    th = 34
+    S.box(tx - 3, FY - 3, tz - 3, tx + 3, FY, tz + 3, "minecraft:stone_bricks")
+    S.box(tx - 3, SY, tz - 3, tx + 3, SY + th, tz + 3, "pastelbaksteen_roze")
+    S.box(tx - 2, SY, tz - 2, tx + 2, SY + 4, tz + 2, CARVE)
+    S.box(tx - 1, SY, tz - 3, tx + 1, SY + 3, tz + 3, CARVE)
+    S.box(tx - 3, SY, tz - 1, tx + 3, SY + 3, tz + 1, CARVE)
+    S.box(tx - 2, FY, tz - 2, tx + 2, FY, tz + 2, "parelmoer_tegels")
+    S.set(tx, SY + 4, tz, LAMPION)
+    for (x, z) in ((tx - 3, tz - 3), (tx + 3, tz - 3), (tx - 3, tz + 3), (tx + 3, tz + 3)):
+        S.box(x, SY, z, x, SY + th, z, "guhs:guh_kristal_blok")
+    for y in range(SY + 8, SY + th - 6, 6):
+        for (x, z) in ((tx, tz - 3), (tx, tz + 3), (tx - 3, tz), (tx + 3, tz)):
+            S.box(x, y, z, x, y + 2, z, "minecraft:pink_stained_glass")
+    # clock faces (4 sides) + a balcony with lampions
+    yk = SY + th - 6
+    for (f, x, z) in (("south", tx, tz + 4), ("north", tx, tz - 4), ("east", tx + 4, tz), ("west", tx - 4, tz)):
+        S.set(x, yk, z, f"guhklok[facing={f},signaal=false,snoet=werkt]")
+        ddx, ddz = (x - tx) // 4, (z - tz) // 4
+        for k in (-1, 1):
+            S.set(x + k * abs(ddz), yk, z + k * abs(ddx), "minecraft:smooth_quartz")
+            S.set(x + k * abs(ddz), yk + 1, z + k * abs(ddx), "minecraft:smooth_quartz")
+            S.set(x + k * abs(ddz), yk - 1, z + k * abs(ddx), "minecraft:smooth_quartz")
+        S.set(x, yk + 1, z, "minecraft:smooth_quartz")
+        S.set(x, yk - 1, z, "minecraft:smooth_quartz")
+    S.box(tx - 4, SY + th + 1, tz - 4, tx + 4, SY + th + 1, tz + 4, "minecraft:dark_oak_planks")
+    for k in range(-4, 5):
+        for (x, z) in ((tx + k, tz - 4), (tx + k, tz + 4), (tx - 4, tz + k), (tx + 4, tz + k)):
+            S.set(x, SY + th + 2, z, STAAF)
+            if k % 2 == 0:
+                S.set(x, SY + th, z, LAMPION, keep=True)
+    S.kegel(tx, tz, SY + th + 2, 26, 3.6, 0.4, "minecraft:pink_stained_glass")
+    S.kegel(tx, tz, SY + th + 2, 22, 2.0, 0.3, "guhs:guh_kristal_blok")
+    S.set(tx, SY + th + 24, tz, "guhs:guh_kristal_lamp")
+    S.set(tx, SY + th + 28, tz, "minecraft:amethyst_block")
+    S.set(tx, SY + th + 29, tz, "guhs:guh_kristal_cluster[facing=up]")
+    for k in range(4):     # little side crystals around the spire
+        a = k * math.pi / 2 + math.pi / 4
+        S.kegel(tx + 3.2 * math.cos(a), tz + 3.2 * math.sin(a), SY + th + 2, 9, 1.2, 0.2,
+                ["minecraft:light_blue_stained_glass", "minecraft:purple_stained_glass"][k % 2], scheef=(1.5 * math.cos(a), 1.5 * math.sin(a)))
+    toptoren = (tx, SY + th + 1, tz)
+    # ---- the big decorated tree with presents
+    bx, bz = PL.KERSTBOOM
+    S.box(bx, SY, bz, bx, SY + 22, bz, "minecraft:spruce_log[axis=y]")
+    rng = random.Random(4)
+    versier = ["minecraft:shroomlight", "minecraft:pink_concrete", "minecraft:light_blue_concrete", "minecraft:gold_block",
+               "minecraft:purple_concrete", "minecraft:sea_lantern", "minecraft:red_concrete"]
     for k in range(20):
-        r = max(0.8, 6.5 * (1 - k / 21))
+        r = max(0.8, 6.2 * (1 - k / 21))
         y = SY + 3 + k
-        S.cyl(tx, tz, r, y, y, "minecraft:spruce_leaves", keep=True)
-        if k % 3 == 0:
-            S.cyl(tx, tz, r + 0.1, y + 1, y + 1, laag(1), keep=True, hollow=1)
-    for k in range(18):
+        S.cyl(bx, bz, r, y, y, "minecraft:spruce_leaves[distance=1,persistent=true,waterlogged=false]", keep=True)
+    for k in range(40):
         a = k * 2.4
-        r = max(1.0, 6.0 * (1 - (k * 1.1) / 21))
-        S.set(round(tx + r * math.cos(a)), SY + 3 + int(k * 1.1), round(tz + r * math.sin(a)), "minecraft:shroomlight")
-    S.set(tx, SY + 23, tz, "minecraft:pink_stained_glass")
-    S.set(tx, SY + 24, tz, "guhs:guh_kristal_cluster[facing=up]")
-    S.cyl(tx, tz, 7.5, FY, FY, SNEEUW)
+        kk = k * 0.5
+        r = max(1.0, 6.4 * (1 - kk / 21))
+        S.set(round(bx + r * math.cos(a)), SY + 3 + int(kk), round(bz + r * math.sin(a)), versier[k % len(versier)])
+    S.set(bx, SY + 23, bz, "minecraft:gold_block")
+    S.set(bx, SY + 24, bz, "guhs:guh_kristal_cluster[facing=up]")
+    for k in range(7):
+        a = k * 2 * math.pi / 7
+        x, z = round(bx + 7.5 * math.cos(a)), round(bz + 7.5 * math.sin(a))
+        S.set(x, SY, z, ["minecraft:red_wool", "minecraft:pink_wool", "minecraft:light_blue_wool", "minecraft:lime_wool"][k % 4])
+        S.set(x, SY + 1, z, "minecraft:white_carpet")
+    # ---- garlands of lampions from the tower balcony down to the plaza lamp posts
+    for k in range(8):
+        a = math.radians(22.5 + 45 * k)
+        x, z = round(sx + (PL.PLEIN_R - 2) * math.cos(a)), round(sz + (PL.PLEIN_R - 2) * math.sin(a))
+        lantaarnpaal(S, x, SY, z, lampion=True)
+        slinger(S, (tx + round(4 * math.cos(a)), SY + th, tz + round(4 * math.sin(a))), (x, SY + 3, z), zak=2.5, elk=4)
+    # ---- the Christmas market: stalls round the plaza, a hot-chocolate stand, fire baskets
+    kramen = []
+    for k, ag in enumerate((40, 70, 110, 140, 220, 250, 290, 320)):
+        a = math.radians(ag)
+        x, z = round(sx + 18 * math.cos(a)), round(sz + 18 * math.sin(a))
+        if math.hypot(x - bx, z - bz) < 9 or math.hypot(x - vx, z - vz) < PL.VIJVER_R + 4 or math.hypot(x - tx, z - tz) < 7:
+            continue
+        ddx, ddz = sx - x, sz - z
+        f = ("east" if ddx > 0 else "west") if abs(ddx) > abs(ddz) else ("south" if ddz > 0 else "north")
+        kl = [("minecraft:red_wool", "minecraft:white_wool"), ("minecraft:pink_wool", "minecraft:white_wool"),
+              ("minecraft:light_blue_wool", "minecraft:white_wool"), ("minecraft:purple_wool", "minecraft:pink_wool")][k % 4]
+        kraam(S, x, z, f, FY, kl[0], kl[1])
+        bdx, bdz = {"north": (0, -1), "south": (0, 1), "east": (1, 0), "west": (-1, 0)}[f]
+        kramen.append([x - bdx, SY, z - bdz])        # the vendor's spot behind the counter
+    # the hot-chocolate stand by the pond (big kettle)
+    cx_, cz_ = vx + 13, vz + 2
+    kraam(S, cx_, cz_, "west", FY, "minecraft:brown_wool", "minecraft:pink_wool",
+          [kopjes("west"), "minecraft:water_cauldron[level=3]", kopjes("west")])
+    S.set(cx_ + 2, SY, cz_, "minecraft:water_cauldron[level=3]")
+    S.set(cx_ + 2, FY, cz_, "minecraft:magma_block") if False else S.set(cx_ + 2, FY, cz_, "minecraft:bricks")
+    P["chocomelkkraam"] = [cx_ - 2, SY, cz_]
+    for a in range(0, 360, 60):
+        x, z = round(sx + 23.5 * math.cos(math.radians(a + 15))), round(sz + 23.5 * math.sin(math.radians(a + 15)))
+        if any(abs((x - sx) * uz_ - (z - sz) * ux_) <= 4 and (x - sx) * ux_ + (z - sz) * uz_ > 0 for (ux_, uz_) in PL.POORTEN.values()):
+            continue
+        S.set(x, SY, z, VUURKORF)
     # ---- buildings
-    for gid, (cx, cz, w, d, deur, soort, naam) in PL.GEBOUWEN.items():
-        gb[gid] = huis(S, P, gid, cx, cz, w, d, deur, soort, naam)
-    # cafe terrace (west of the cafe) + the hidden chocolate cellar under it
-    cx, cz = PL.GEBOUWEN["cafe"][0], PL.GEBOUWEN["cafe"][1]
-    for (tx_, tz_) in ((37, -2338), (37, -2351)):
-        S.set(tx_, SY, tz_, STAAF)
-        S.set(tx_, SY + 1, tz_, STAAF)
-        S.set(tx_, SY + 2, tz_, "minecraft:pink_wool")
-        S.box(tx_ - 1, SY + 2, tz_ - 1, tx_ + 1, SY + 2, tz_ + 1, "minecraft:pink_carpet", keep=True)
-        S.set(tx_ + 1, SY, tz_, trap("minecraft:spruce_stairs", "east"))
-        S.set(tx_ - 1, SY, tz_, trap("minecraft:spruce_stairs", "west"))
-    kx1, kz1, kx2, kz2 = cx - 4, cz - 4, cx + 8, cz + 5
+    for n, (gid, (cx, cz, w, d, deur, soort, naam, fy)) in enumerate(PL.GEBOUWEN.items()):
+        gb[gid] = huis(S, P, gid, cx, cz, w, d, deur, soort, naam, fy, kleur=n * 3)
+    # ---- the hidden chocolate cellar under the cafe (ladder behind the counter)
+    cx, cz, w, d, deur = PL.GEBOUWEN["cafe"][:5]
+    F = Kader(cx, cz, w, d, deur)
+    kx1, kz1, kx2, kz2 = cx - 5, cz - 3, cx + 5, cz + 3
     S.box(kx1 - 1, FY - 7, kz1 - 1, kx2 + 1, FY - 1, kz2 + 1, "minecraft:bricks")
     S.box(kx1, FY - 5, kz1, kx2, FY - 2, kz2, CARVE)
     S.box(kx1, FY - 6, kz1, kx2, FY - 6, kz2, "minecraft:spruce_planks")
     S.box(kx1 + 1, FY - 5, kz1 + 1, kx2 - 3, FY - 5, kz2 - 1, "minecraft:brown_carpet")
-    hx, hz = cx + 7, cz + 4
-    S.box(hx, FY - 5, hz + 1, hx, FY, hz + 1, "minecraft:spruce_planks")
+    hx, hz = F.p(F.hw - 1, F.D - 3)       # behind the counter (NPC row), near the side
+    sup = F.p(F.hw - 1, F.D - 2)
+    S.box(sup[0], FY - 5, sup[1], sup[0], FY, sup[1], "minecraft:spruce_planks")
     for y in range(FY - 5, FY + 1):
-        S.set(hx, y, hz, "minecraft:ladder[facing=north,waterlogged=false]")
+        S.set(hx, y, hz, f"minecraft:ladder[facing={F.voor},waterlogged=false]")
     S.set(kx1, FY - 5, kz1, "minecraft:water_cauldron[level=3]")
     S.set(kx1 + 1, FY - 5, kz1, "minecraft:water_cauldron[level=3]")
     S.set(kx2, FY - 5, kz1, "minecraft:barrel[facing=up,open=false]")
     S.set(kx1, FY - 5, kz2, "minecraft:barrel[facing=up,open=false]")
     S.set(cx, FY - 2, cz, LANT_H)
-    S.set(cx + 4, FY - 2, cz, LANT_H)
-    P["geheim_chocokelder"] = [cx, FY - 5, cz]
-    W.lo_extra_set = getattr(W, "lo_extra_set", [])
-    # ---- the stable + paddock
-    sx_, sz_ = PL.STAL
-    S.box(sx_ - 5, FY, sz_ - 4, sx_ + 5, FY, sz_ + 4, "minecraft:spruce_planks")
-    for (x, z) in ((sx_ - 5, sz_ - 4), (sx_ + 5, sz_ - 4), (sx_ - 5, sz_ + 4), (sx_ + 5, sz_ + 4), (sx_, sz_ - 4), (sx_, sz_ + 4)):
-        S.box(x, SY, z, x, SY + 4, z, "minecraft:spruce_log[axis=y]")
-    for k in range(5):
-        S.box(sx_ - 6, SY + 5 + k, sz_ - 5 + k, sx_ + 6, SY + 5 + k, sz_ - 5 + k, SNEEUW)
-        S.box(sx_ - 6, SY + 5 + k, sz_ + 5 - k, sx_ + 6, SY + 5 + k, sz_ + 5 - k, SNEEUW)
-    S.box(sx_ - 5, SY + 5, sz_ - 4, sx_ + 5, SY + 5, sz_ + 4, "minecraft:spruce_planks")
-    S.box(sx_ - 6, SY + 10, sz_, sx_ + 6, SY + 10, sz_, SNEEUW)
-    for (x, z) in ((sx_ - 4, sz_ - 3), (sx_ - 3, sz_ - 3), (sx_ - 4, sz_ + 3)):
-        S.set(x, SY, z, "minecraft:hay_block[axis=y]")
-    S.set(sx_ + 3, SY, sz_ - 3, "minecraft:composter[level=0]")
-    S.set(sx_, SY + 4, sz_, LANT_H)
-    px0, pz0, px1, pz1 = sx_ - 8, sz_ + 6, sx_ + 8, sz_ + 16
-    for x in range(px0, px1 + 1):
-        for z in (pz0, pz1):
-            S.set(x, SY, z, HEK_X)
-    for z in range(pz0, pz1 + 1):
-        for x in (px0, px1):
-            S.set(x, SY, z, HEK_Z)
-    S.set(px1, SY, (pz0 + pz1) // 2, "minecraft:spruce_fence_gate[facing=east,in_wall=false,open=false,powered=false]")
-    S.box(px0 + 1, FY, pz0 + 1, px1 - 1, FY, pz1 - 1, "minecraft:grass_block[snowy=true]")
-    gb["stal"] = {"deur": [sx_ + 7, SY, sz_], "binnen": [sx_, SY, sz_], "doos": [[sx_ - 5, FY, sz_ - 4], [sx_ + 5, SY + 10, sz_ + 4]],
-                  "naam": "De Warme Stal", "npc": [sx_ + 6, SY, sz_ - 1], "wei": [sx_, SY, (pz0 + pz1) // 2]}
+    S.set(cx + 3, FY - 2, cz, LANT_H)
+    P["geheim_chocokelder"] = [cx - 2, FY - 5, cz]
+    # the cafe terrace in front (on the plaza side), tables with parasols and blankets
+    tz0 = cz - d // 2 - 4
+    for x_ in (cx - 4, cx + 4):
+        S.set(x_, SY, tz0, STAAF)
+        S.set(x_, SY + 1, tz0, STAAF)
+        S.set(x_, SY + 2, tz0, "minecraft:pink_wool")
+        S.box(x_ - 1, SY + 2, tz0 - 1, x_ + 1, SY + 2, tz0 + 1, "minecraft:pink_carpet", keep=True)
+        S.set(x_ + 1, SY, tz0, trap("minecraft:spruce_stairs", "east"))
+        S.set(x_ - 1, SY, tz0, trap("minecraft:spruce_stairs", "west"))
+    P["cafe_terras"] = [cx, SY, tz0]
     # ---- quest board
     qx, qz = PL.QUESTBORD
     S.box(qx - 2, SY, qz, qx - 2, SY + 2, qz, "minecraft:spruce_log[axis=y]")
     S.box(qx + 2, SY, qz, qx + 2, SY + 2, qz, "minecraft:spruce_log[axis=y]")
     S.box(qx - 1, SY + 1, qz, qx + 1, SY + 2, qz, "minecraft:birch_planks")
     S.box(qx - 2, SY + 3, qz, qx + 2, SY + 3, qz, plaat("minecraft:dark_oak_slab"))
-    S.set(qx, SY + 2, qz + 1, "minecraft:lantern[hanging=false,waterlogged=false]", keep=True) if False else None
-    # ---- street lamps
-    for z in range(-2372, -2252, 12):
-        lantaarnpaal(S, 5, SY, z)
-    for x in range(34, 130, 14):
-        lantaarnpaal(S, x, SY, sz + 5)
-        lantaarnpaal(S, -x, SY, sz + 5)
-    # ---- the geode crystals: big pink shards leaning out of the inner wall, clusters at its foot
+    S.set(qx, SY + 3, qz, LAMPION_S) if False else None
+    # ---- the tiers: stairs on the lanes, railings on the tier edges, bridges over the gate streets at tier B
+    H = K.H
+    i0, j0 = K2.idx(sx - R0, sz - R0)
+    richt = {1: ("south", 0, 1), 2: ("east", 1, 0), 3: ("west", -1, 0), 4: ("north", 0, -1)}
+    namen = list(PL.POORTEN.keys())
+    for i in range(2 * R0 + 1):
+        for j in range(2 * R0 + 1):
+            ii, jj = i0 + i, j0 + j
+            x, z = ii + PL.X0, jj + PL.Z0
+            if not K.stad_vloer[ii, jj]:
+                continue
+            h = int(H[ii, jj])
+            if K.trap_baan[ii, jj]:
+                k = int(K.trap_richting[ii, jj])
+                ux, uz = PL.POORTEN[namen[k - 1]]
+                hp = int(H[ii - ux, jj - uz])
+                f = FACE[namen[k - 1]]
+                if hp == h - 1:
+                    S.set(x, h, z, trap("minecraft:spruce_stairs", f))
+                    S.box(x, h - 6, z, x, h - 1, z, "minecraft:stone_bricks")
+                else:
+                    S.set(x, h, z, "minecraft:spruce_planks")
+                # railing on the street side of the lane
+                for (nx, nz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    hn = int(H[ii + nx, jj + nz])
+                    if K.straat[ii + nx, jj + nz] and h - hn >= 2 and not K.trap_baan[ii + nx, jj + nz]:
+                        S.set(x + nx, h + 1, z + nz, CARVE) if False else None
+                        S.set(x, h + 1, z, STAAF if hp != h - 1 else CARVE) if False else None
+                continue
+            if not K.tier[ii, jj]:
+                continue
+            # railing where the tier drops by >= 2 to a non-lane neighbour
+            for (nx, nz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                hn = int(H[ii + nx, jj + nz])
+                if h - hn >= 2 and not K.trap_baan[ii + nx, jj + nz]:
+                    S.set(x, h + 1, z, STAAF, keep=True)
+                    break
+    # bridges over the 4 gate streets at tier B (deck at 100, headroom 9 over the street)
+    yb = PL.TIER_B[2]
+    for naam, (ux, uz) in PL.POORTEN.items():
+        if naam == "zuid":
+            continue
+        for s in (57, 58, 59):
+            for p in range(-4, 5):
+                x, z = sx + ux * s + p * abs(uz), sz + uz * s + p * abs(ux)
+                S.set(x, yb, z, "minecraft:spruce_planks")
+                S.set(x, yb - 1, z, "minecraft:dark_oak_slab[type=top,waterlogged=false]")
+        for p in range(-4, 5):
+            for s in (56, 60):
+                x, z = sx + ux * s + p * abs(uz), sz + uz * s + p * abs(ux)
+                S.set(x, yb + 1, z, STAAF)
+        x, z = sx + ux * 58 - 4 * abs(uz), sz + uz * 58 - 4 * abs(ux)
+        slinger(S, (sx + ux * 56 - 4 * abs(uz), yb + 3, sz + uz * 56 - 4 * abs(ux)), (sx + ux * 56 + 4 * abs(uz), yb + 3, sz + uz * 56 + 4 * abs(ux)), zak=1, elk=3)
+        for p in (-4, 4):
+            lantaarnpaal(S, sx + ux * 60 + p * abs(uz), yb + 1, sz + uz * 60 + p * abs(ux), lampion=True)
+    # ---- the geode crystals: big shards (pink, purple, blue) leaning out of the inner wall, glowing cores
     rng = random.Random(4)
-    R0 = PL.GEODE_R
     gates = [math.atan2(dz, dx) for (dx, dz) in PL.POORTEN.values()]
-    for k in range(0, 360, 7):
-        a = math.radians(k + rng.uniform(-2, 2))
-        if any(abs(math.atan2(math.sin(a - g), math.cos(a - g))) < 0.2 for g in gates):
+    kleuren = [("minecraft:pink_stained_glass", "guhs:guh_kristal_blok"), ("minecraft:purple_stained_glass", "minecraft:amethyst_block"),
+               ("minecraft:light_blue_stained_glass", "minecraft:blue_ice"), ("minecraft:magenta_stained_glass", "guhs:guh_kristal_blok")]
+    for k in range(0, 360, 9):
+        a = math.radians(k + rng.uniform(-3, 3))
+        if any(abs(math.atan2(math.sin(a - g), math.cos(a - g))) < 0.22 for g in gates):
             continue
         r = R0 + 2.5
-        bx, bz = sx + r * math.cos(a), sz + r * math.sin(a)
-        y0 = SY + rng.randint(6, 30)
-        h = rng.randint(9, 22)
+        bx_, bz_ = sx + r * math.cos(a), sz + r * math.sin(a)
+        y0 = PL.TIER_B[2] + rng.randint(8, 26)
+        h = rng.randint(8, 18)
         inw = -0.55 * h
         sch = (inw * math.cos(a), inw * math.sin(a))
-        r0 = rng.uniform(1.6, 3.2)
-        S.kegel(bx, bz, y0, h, r0, 0.3, "minecraft:pink_stained_glass", scheef=sch)
-        S.kegel(bx, bz, y0, int(h * 0.8), r0 * 0.5, 0.2, "guhs:guh_kristal_blok", scheef=(sch[0] * 0.8, sch[1] * 0.8))
-        if rng.random() < 0.6:
-            rr = R0 - 0.5
-            S.set(round(sx + rr * math.cos(a)), SY, round(sz + rr * math.sin(a)), "minecraft:amethyst_cluster[facing=up,waterlogged=false]", keep=True)
-    # ---- the gondola valley station
-    gondel_station(S, P, PL.GONDEL_DAL[0], PL.GONDEL_DAL[1], FY, "dal")
+        r0 = rng.uniform(1.4, 2.8)
+        g1, g2 = kleuren[rng.randrange(4)]
+        S.kegel(bx_, bz_, y0, h, r0, 0.3, g1, scheef=sch)
+        S.kegel(bx_, bz_, y0, int(h * 0.8), r0 * 0.5, 0.2, g2, scheef=(sch[0] * 0.8, sch[1] * 0.8))
+        if rng.random() < 0.35:
+            S.set(round(bx_ + sch[0] * 0.3), y0 + int(h * 0.3), round(bz_ + sch[1] * 0.3), "minecraft:pearlescent_froglight[axis=y]")
+    # garlands between the tier-A houses across the lanes, lampions along the tier edges
+    for k in range(16):
+        a = math.radians(11.25 + 22.5 * k)
+        x, z = round(sx + 51.5 * math.cos(a)), round(sz + 51.5 * math.sin(a))
+        i, j = K2.idx(x, z)
+        if K.tier[i, j] and not K.trap_baan[i, j] and not K.straat[i, j]:
+            lantaarnpaal(S, x, int(H[i, j]) + 1, z, lampion=True)
+    # ---- the gondola valley station (tier B)
+    gondel_station(S, P, PL.GONDEL_DAL[0], PL.GONDEL_DAL[1], PL.GONDEL_DAL_TOP, "dal")
     # ---- NPC spots
-    P["plein"] = [0, SY, -2412]
-    P["schaatsvijver"] = [0, SY, -2400]
+    P["plein"] = [0, SY, sz - 12]
+    P["schaatsvijver"] = [vx, SY, vz]
     P["questbord"] = [qx, SY, qz + 1]
-    P["sneeuwguhspar"] = [tx, SY, tz + 8]
-    P["npc_schaatsguh"] = [13, SY, -2400]
-    P["npc_burgemeester"] = [0, SY, -2418]
-    P["npc_stal"] = gb["stal"]["npc"]
+    P["sneeuwguhspar"] = [bx, SY, bz + 9]
+    P["npc_schaatsguh"] = [vx + PL.VIJVER_R + 2, SY, vz]
+    P["npc_burgemeester"] = [0, SY, tz + 6]
+    P["klokkentoren"] = [tx, SY, tz]
+    P["klokkentoren_top"] = list(toptoren)
+    P["markt_kramen"] = {str(i + 1): v for i, v in enumerate(kramen)}
     for gid, g in gb.items():
-        if g.get("npc") and gid != "stal":
+        if g.get("npc"):
             P["npc_" + gid] = g["npc"]
     P["kristalkapel_altaar"] = gb["kristalkapel"]["altaar"]
-    P["cafe_terras"] = [38, SY, -2344]
     P["gebouw"] = {k: {kk: vv for kk, vv in v.items() if kk not in ("naam",) and vv is not None} for k, v in gb.items()}
     W.stempel(S.stempel("kandijkom"))
+
+
+def stal(W, K, P):
+    """The stable with a paddock, along the dock road just outside the south gate."""
+    sx_, sz_ = PL.STAL
+    S = Vol(sx_ - 12, FY - 6, sz_ - 10, sx_ + 12, FY + 14, sz_ + 22)
+    S.box(sx_ - 6, FY - 5, sz_ - 5, sx_ + 6, FY, sz_ + 5, "minecraft:stone")
+    S.box(sx_ - 6, SY, sz_ - 5, sx_ + 6, SY + 10, sz_ + 5, CARVE)
+    S.box(sx_ - 5, FY, sz_ - 4, sx_ + 5, FY, sz_ + 4, "minecraft:spruce_planks")
+    for (x, z) in ((sx_ - 5, sz_ - 4), (sx_ + 5, sz_ - 4), (sx_ - 5, sz_ + 4), (sx_ + 5, sz_ + 4), (sx_, sz_ - 4), (sx_, sz_ + 4)):
+        S.box(x, SY, z, x, SY + 4, z, "minecraft:spruce_log[axis=y]")
+    for k in range(5):
+        S.box(sx_ - 6, SY + 5 + k, sz_ - 5 + k, sx_ + 6, SY + 5 + k, sz_ - 5 + k, "minecraft:red_terracotta")
+        S.box(sx_ - 6, SY + 5 + k, sz_ + 5 - k, sx_ + 6, SY + 5 + k, sz_ + 5 - k, "minecraft:red_terracotta")
+    S.box(sx_ - 5, SY + 5, sz_ - 4, sx_ + 5, SY + 5, sz_ + 4, "minecraft:spruce_planks")
+    S.box(sx_ - 6, SY + 10, sz_, sx_ + 6, SY + 10, sz_, "minecraft:red_terracotta")
+    S.box(sx_ - 6, SY + 11, sz_, sx_ + 6, SY + 11, sz_, laag(2))
+    for (x, z) in ((sx_ - 4, sz_ - 3), (sx_ - 3, sz_ - 3), (sx_ - 4, sz_ + 3)):
+        S.set(x, SY, z, "minecraft:hay_block[axis=y]")
+    S.set(sx_ + 3, SY, sz_ - 3, "minecraft:composter[level=0]")
+    S.set(sx_, SY + 4, sz_, LANT_H)
+    px0, pz0, px1, pz1 = sx_ - 8, sz_ + 7, sx_ + 8, sz_ + 17
+    S.box(px0, FY - 4, pz0, px1, FY, pz1, "minecraft:dirt")
+    S.box(px0, SY, pz0, px1, SY + 4, pz1, CARVE)
+    for x in range(px0, px1 + 1):
+        for z in (pz0, pz1):
+            S.set(x, SY, z, HEK_X)
+    for z in range(pz0, pz1 + 1):
+        for x in (px0, px1):
+            S.set(x, SY, z, HEK_Z)
+    S.set(px0, SY, (pz0 + pz1) // 2, "minecraft:spruce_fence_gate[facing=west,in_wall=false,open=false,powered=false]")
+    gz = (pz0 + pz1) // 2
+    S.box(px0 - 5, FY - 3, gz - 1, px0 - 1, FY, gz + 1, "minecraft:dirt")
+    S.box(px0 - 5, FY, gz - 1, px0 - 1, FY, gz + 1, "minecraft:dirt_path")
+    S.box(px0 - 5, SY, gz - 1, px0 - 1, SY + 3, gz + 1, CARVE)
+    S.box(px0 + 1, FY, pz0 + 1, px1 - 1, FY, pz1 - 1, "minecraft:grass_block[snowy=true]")
+    P["gebouw"]["stal"] = {"deur": [sx_ - 7, SY, sz_], "binnen": [sx_, SY, sz_], "doos": [[sx_ - 5, FY, sz_ - 4], [sx_ + 5, SY + 10, sz_ + 4]],
+                           "npc": [sx_ - 6, SY, sz_ - 1], "wei": [sx_, SY, (pz0 + pz1) // 2]}
+    P["npc_stal"] = [sx_ - 6, SY, sz_ - 1]
+    W.stempel(S.stempel("stal"))
 
 
 def gondel_station(S, P, cx, cz, g, naam):
@@ -437,25 +739,26 @@ def gondel_station(S, P, cx, cz, g, naam):
     S.box(cx - 5, g, cz - 5, cx + 5, g, cz + 5, "minecraft:stone_bricks")
     S.box(cx - 5, g - 6, cz - 5, cx + 5, g - 1, cz + 5, "minecraft:stone_bricks")
     S.box(cx - 4, g, cz - 4, cx + 4, g, cz + 4, "minecraft:spruce_planks")
+    S.box(cx - 5, g + 1, cz - 5, cx + 5, g + 9, cz + 5, CARVE)
     for (x, z) in ((cx - 5, cz - 5), (cx + 5, cz - 5), (cx - 5, cz + 5), (cx + 5, cz + 5)):
         S.box(x, g + 1, z, x, g + 9, z, "minecraft:dark_oak_log[axis=y]")
     S.box(cx - 6, g + 10, cz - 6, cx + 6, g + 10, cz + 6, "minecraft:dark_oak_planks")
-    S.box(cx - 6, g + 11, cz - 6, cx + 6, g + 11, cz + 6, SNEEUW)
-    S.box(cx - 5, g + 12, cz - 5, cx + 5, g + 12, cz + 5, laag(3))
-    # the bull-wheel (ring) under the roof
+    S.box(cx - 6, g + 11, cz - 6, cx + 6, g + 11, cz + 6, "minecraft:magenta_terracotta")
+    S.box(cx - 5, g + 12, cz - 5, cx + 5, g + 12, cz + 5, laag(2))
     for k in range(24):
         a = k * math.pi / 12
         S.set(round(cx + 3.5 * math.cos(a)), g + 9, round(cz + 3.5 * math.sin(a)), "minecraft:stripped_dark_oak_log[axis=y]")
     S.box(cx, g + 9, cz, cx, g + 9, cz, "minecraft:iron_block")
-    # waiting cabin hanging at the platform edge (decoration)
     kx, kz = cx, cz - 2
     S.box(kx - 2, g + 2, kz - 1, kx + 2, g + 5, kz + 1, "minecraft:red_wool")
     S.box(kx - 1, g + 3, kz - 1, kx + 1, g + 4, kz - 1, "minecraft:glass")
     S.box(kx - 1, g + 3, kz + 1, kx + 1, g + 4, kz + 1, "minecraft:glass")
-    S.box(kx - 2, g + 6, kz - 1, kx + 2, g + 6, kz + 1, SNEEUW)
+    S.box(kx - 2, g + 6, kz - 1, kx + 2, g + 6, kz + 1, laag(3))
     S.box(kx, g + 7, kz, kx, g + 8, kz, "minecraft:iron_chain[axis=y]")
     S.set(cx + 3, g + 1, cz + 3, "minecraft:bell[attachment=floor,facing=north,powered=false]")
     S.set(cx - 3, g + 1, cz + 3, LANT)
+    for (x, z) in ((cx - 5, cz), (cx + 5, cz), (cx, cz + 5)):
+        S.set(x, g + 8, z, LAMPION)
     P[f"gondel_{naam}"] = [cx, g + 1, cz + 2]
     P[f"gondel_{naam}_knop"] = [cx + 3, g + 1, cz + 3]
     P[f"gondel_{naam}_kabel"] = [cx, g + 9, cz]
@@ -465,8 +768,8 @@ def gondel_station(S, P, cx, cz, g, naam):
 
 def gondel(W, K, P):
     (ax, az), (bx, bz) = PL.GONDEL_DAL, PL.GONDEL_BERG
-    ya, yb = FY + 9, PL.GONDEL_BERG_TOP + 9
-    S = Vol(min(ax, bx) - 12, min(ya, yb) - 80, min(az, bz) - 12, max(ax, bx) + 12, max(ya, yb) + 16, max(az, bz) + 12)
+    ya, yb = PL.GONDEL_DAL_TOP + 9, PL.GONDEL_BERG_TOP + 9
+    S = Vol(min(ax, bx) - 12, 50, min(az, bz) - 12, max(ax, bx) + 12, max(ya, yb) + 16, max(az, bz) + 12)
     gondel_station(S, P, bx, bz, PL.GONDEL_BERG_TOP, "berg")
     L = math.dist((ax, az), (bx, bz))
     ux, uz = (bx - ax) / L, (bz - az) / L
@@ -475,8 +778,8 @@ def gondel(W, K, P):
         a = (ax + px * kant, ya, az + pz * kant)
         b = (bx + px * kant, yb, bz + pz * kant)
         S.lijn(a, b, "minecraft:iron_chain[axis=x,waterlogged=false]")
-    # pylons (lattice towers) at 1/3 and 2/3
-    for t in (0.33, 0.66):
+    # one tall pylon on the far rim of the Galmspleet
+    for t in (0.55,):
         x, z = ax + (bx - ax) * t, az + (bz - az) * t
         yk = ya + (yb - ya) * t
         g = hoogste(W, round(x), round(z))
@@ -484,15 +787,15 @@ def gondel(W, K, P):
             S.box(round(x) + dx, g + 1, round(z) + dz, round(x) + dx, round(yk) - 1, round(z) + dz, "minecraft:iron_bars[east=false,north=false,south=false,waterlogged=false,west=false]")
         S.box(round(x) - 3, round(yk) - 1, round(z) - 3, round(x) + 3, round(yk) - 1, round(z) + 3, "minecraft:stripped_dark_oak_log[axis=x]")
         S.box(round(x) - 1, g, round(z) - 1, round(x) + 1, g, round(z) + 1, "minecraft:stone_bricks")
-    # two cabins on the cable (one going up, one coming down)
-    for t, kant in ((0.42, -1.5), (0.6, 1.5)):
+        S.set(round(x), round(yk) - 2, round(z), LAMPION)
+    for t, kant in ((0.3, -1.5), (0.75, 1.5)):
         x, z = ax + (bx - ax) * t + px * kant, az + (bz - az) * t + pz * kant
         yk = round(ya + (yb - ya) * t)
         x, z = round(x), round(z)
         S.box(x, yk - 2, z, x, yk - 1, z, "minecraft:iron_chain[axis=y]")
         S.box(x - 2, yk - 6, z - 1, x + 2, yk - 3, z + 1, "minecraft:red_wool")
         S.box(x - 1, yk - 5, z - 1, x + 1, yk - 4, z + 1, "minecraft:glass")
-        S.box(x - 2, yk - 3, z - 1, x + 2, yk - 3, z + 1, SNEEUW)
+        S.box(x - 2, yk - 3, z - 1, x + 2, yk - 3, z + 1, laag(2))
     P["gondel_kabel_dal"] = [ax, ya, az]
     P["gondel_kabel_berg"] = [bx, yb, bz]
     W.stempel(S.stempel("gondel"))
@@ -624,15 +927,25 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
     W.stempel(S.stempel("naald_" + naam))
 
 
+NAALDKLEUR = {False: ("minecraft:light_blue_stained_glass", "minecraft:amethyst_block"), True: ("minecraft:pink_stained_glass", "guhs:guh_kristal_blok"),
+              "roze": ("minecraft:pink_stained_glass", "guhs:guh_kristal_blok"), "paars": ("minecraft:purple_stained_glass", "minecraft:amethyst_block"),
+              "blauw": ("minecraft:light_blue_stained_glass", "minecraft:pearlescent_froglight[axis=y]"),
+              "magenta": ("minecraft:magenta_stained_glass", "guhs:guh_kristal_lamp")}
+
+
+def kleur_kies(rng):
+    return rng.choice(["roze", "roze", "paars", "paars", "blauw", "magenta", False])
+
+
 def kristalnaald(S, x, z, g, h, r0, rng, roze=False):
-    """A crystal needle: an icy foot, a blue-ice body and a glassy tip."""
+    """A crystal needle: an icy foot, a blue-ice body and a coloured glassy tip (pink/purple/blue/magenta)."""
     sch = (rng.uniform(-0.15, 0.15) * h, rng.uniform(-0.15, 0.15) * h)
     S.kegel(x, z, g - 2, int(h * 0.35) + 2, r0 + 0.6, r0 * 0.8, "minecraft:packed_ice", scheef=(sch[0] * 0.35, sch[1] * 0.35))
     S.kegel(x, z, g, int(h * 0.85), r0 * 0.85, r0 * 0.25, "minecraft:blue_ice", scheef=(sch[0] * 0.85, sch[1] * 0.85))
     S.kegel(x, z, g + int(h * 0.3), int(h * 0.7), r0 * 0.6, 0.2,
-            "minecraft:pink_stained_glass" if roze else "minecraft:light_blue_stained_glass", scheef=(sch[0] * 0.7, sch[1] * 0.7))
+            NAALDKLEUR[roze][0], scheef=(sch[0] * 0.7, sch[1] * 0.7))
     tx, tz = x + sch[0], z + sch[1]
-    S.set(round(tx), g + h, round(tz), "minecraft:amethyst_block" if not roze else "guhs:guh_kristal_blok")
+    S.set(round(tx), g + h, round(tz), NAALDKLEUR[roze][1])
 
 
 # ================================================================================================ De Galmhellingen
@@ -661,11 +974,11 @@ def galmhellingen(W, K, P):
         rr = r + rng.uniform(5, 12)
         x, z = round(cx + rr * math.cos(a)), round(cz + rr * math.sin(a))
         gg = max(K.h(x, z), g)
-        kristalnaald(S, x, z, gg, rng.randint(10, 22), rng.uniform(1.6, 2.8), rng)
+        kristalnaald(S, x, z, gg, rng.randint(10, 22), rng.uniform(1.6, 2.8), rng, roze=kleur_kies(rng))
     # the Galmwolf's needle (north rim): tall, with a ledge on top
     nx, nz = cx, cz - r - 8
     gg = max(K.h(nx, nz), g)
-    kristalnaald(S, nx, nz, gg, 34, 4.5, rng)
+    kristalnaald(S, nx, nz, gg, 34, 4.5, rng, roze="paars")
     P["galmwolf_naald"] = [nx, gg + 30, nz]
     P["arena_galmwolf"] = [cx, g + 1, cz]
     W.stempel(S.stempel("galm_arena"))
@@ -682,17 +995,17 @@ def galmhellingen(W, K, P):
             x, z = round(fx + d * math.cos(a)), round(fz + d * math.sin(a))
             if not vrij(K, x, z, 4) or op_pad(K, x, z) or math.hypot(x - cx, z - cz) < r + 14:
                 continue
-            kristalnaald(S, x, z, K.h(x, z), rng.randint(10, 34), rng.uniform(1.5, 3.8), rng, roze=rng.random() < 0.12)
+            kristalnaald(S, x, z, K.h(x, z), rng.randint(10, 30), rng.uniform(1.5, 3.4), rng, roze=kleur_kies(rng))
             n -= 1
         P[f"galm_naalden_{i + 1}"] = [fx, K.h(fx, fz) + 1, fz]
         W.stempel(S.stempel(f"naaldveld_{i}"))
     # loose needles all over the Galmhellingen
-    S = Vol(150, 60, -2700, 600, 280, -1800)
-    for _ in range(260):
-        x, z = rng.randint(170, 590), rng.randint(-2690, -1810)
+    S = Vol(80, 60, -2510, 260, 280, -2190)
+    for _ in range(110):
+        x, z = rng.randint(90, 248), rng.randint(-2500, -2205)
         if not vrij(K, x, z, 5) or op_pad(K, x, z) or math.hypot(x - cx, z - cz) < r + 14 or K.h(x, z) < 96:
             continue
-        kristalnaald(S, x, z, K.h(x, z), rng.randint(7, 24), rng.uniform(1.2, 3.0), rng, roze=rng.random() < 0.1)
+        kristalnaald(S, x, z, K.h(x, z), rng.randint(7, 22), rng.uniform(1.2, 2.8), rng, roze=kleur_kies(rng))
     W.stempel(S.stempel("galm_naalden_los"))
     # avalanche paths: bare snow lanes with snow boulders and broken spruces at the foot
     for i, lijn in enumerate(PL.LAWINES):
@@ -727,7 +1040,15 @@ def grotje(W, K, P, naam, x, z, soort):
     S.cyl(x, z, 9, g - 5, g, "minecraft:stone")
     S.ell(x, g + 1, z, 9, 8, 9, "minecraft:packed_ice" if soort == "galm" else SNEEUW, ymin=g + 1)
     S.ell(x, g + 1, z, 9.3, 8.3, 9.3, "minecraft:snow_block", hollow=0.6, ymin=g + 5)
+    if soort == "galm":   # a geode: amethyst + pink crystal inside, glowing
+        S.ell(x, g + 1, z, 7.4, 6.4, 7.4, "minecraft:amethyst_block", ymin=g + 1)
+        S.ell(x, g + 1, z, 7.0, 6.0, 7.0, "guhs:guh_kristal_blok", hollow=0.6, ymin=g + 3)
+    else:                 # an ice geode: blue ice + light blue glass with froglights
+        S.ell(x, g + 1, z, 7.4, 6.4, 7.4, "minecraft:blue_ice", ymin=g + 1)
+        S.ell(x, g + 1, z, 7.0, 6.0, 7.0, "minecraft:light_blue_stained_glass", hollow=0.6, ymin=g + 3)
     S.ell(x, g + 1, z, 6.5, 5.5, 6.5, CARVE, ymin=g + 1)
+    for (ddx, ddz) in ((5, 0), (-3, 4), (0, -5), (-4, -3)):
+        S.set(x + ddx, g + 3, z + ddz, "minecraft:pearlescent_froglight[axis=y]")
     S.cyl(x, z, 6.5, g, g, "minecraft:snow_block")
     # entrance to the west: a short tunnel, a waterfall curtain of ice with a gap
     S.box(x - 10, g + 1, z - 1, x - 5, g + 3, z + 1, CARVE)
@@ -778,7 +1099,7 @@ def knuffelmeer(W, K, P):
         S.cyl(x, z, rr + 1.5, ijs, ijs, "minecraft:ice")
         P[f"knuffel_ijs_{i + 1}"] = [x, ijs + 1, z]
     # cracks: zigzag lines of packed ice with a few short water gaps
-    for k in range(7):
+    for k in range(4):
         a = rng.uniform(0, 2 * math.pi)
         x, z = mx + rng.uniform(-rx * 0.6, rx * 0.6), mz + rng.uniform(-rz * 0.6, rz * 0.6)
         for s in range(rng.randint(40, 80)):
@@ -794,6 +1115,7 @@ def knuffelmeer(W, K, P):
             S.set(xi, ijs, zi, "minecraft:packed_ice" if (s % 9) else "minecraft:blue_ice")
     # ice floes in the open water at the outflow (spaced so you can always climb out)
     sx, sz, sr = PL.SCHOTSEN
+    S.cyl(sx, sz, 2.2, ijs, ijs, "minecraft:packed_ice")
     for gx in range(-sr - 4, sr + 5, 6):
         for gz in range(-sr - 4, sr + 5, 6):
             x, z = sx + gx + rng.randint(-1, 1), sz + gz + rng.randint(-1, 1)
@@ -802,6 +1124,15 @@ def knuffelmeer(W, K, P):
                 S.cyl(x, z, rng.uniform(1.4, 2.6), ijs, ijs, "minecraft:packed_ice")
                 if rng.random() < 0.4:
                     S.set(x, ijs + 1, z, laag(rng.randint(1, 3)))
+    sx_, sz_ = PL.MEER_SCHEUR
+    for k in range(-16, 17):
+        x = sx_ + k
+        z = sz_ + round(2.5 * math.sin(k / 3.0))
+        i, j = K2.idx(x, z)
+        if K.ijs[i, j]:
+            S.set(x, ijs, z, "minecraft:blue_ice")
+            S.set(x, ijs, z + 1, "minecraft:packed_ice" if k % 3 else "minecraft:light_blue_stained_glass")
+    P["meer_scheur"] = [sx_, ijs + 1, sz_ - 2]
     P["meer_midden"] = [mx, ijs + 1, mz]
     P["meer_schotsen"] = [sx, ijs + 1, sz]
     W.stempel(S.stempel("knuffelmeer"))
@@ -957,19 +1288,33 @@ def boortoren(W, K, P, i, x, z):
 def splinterkloof(W, K, P):
     rng = random.Random(23)
     for i, bx in enumerate(PL.BRUGGEN):
-        if bx == 0:
+        if i == 2:
             brug(W, K, P, i, bx, breed=2, dek="minecraft:dark_oak_slab", hout="minecraft:dark_oak")
         else:
             brug(W, K, P, i, bx)
+    spleetbrug(W, K, P)
     for i, (x, z) in enumerate(PL.BOORTORENS):
         boortoren(W, K, P, i, x, z)
-    for i, x0 in enumerate(PL.KLOOF_TRAPPEN):
-        zt = int(round(float(K2.kloof_z(x0)))) + 10
-        P[f"kloof_trap_{i + 1}"] = [x0 + 1, hoogste(W, x0 + 1, zt) + 1, zt]
-    # grey crystal outcrops and boulders on the ravine floor
-    S = Vol(-700, 55, -2860, 700, 110, -2700)
-    for _ in range(140):
-        x = rng.randint(-600, 600)
+    for i, t_ in enumerate(PL.KLOOF_TRAPPEN):
+        if t_ is None:      # the Galmspleet: its floor is the ramp; the foot where it meets the ravine
+            x0, zt = PL.GALMSPLEET[0][0], int(round(float(K2.kloof_z(PL.GALMSPLEET[0][0])))) + 8
+        else:
+            x0, rx_, kant = t_
+            x0 = x0 + rx_ * 2
+            zt = int(round(float(K2.kloof_z(x0)))) + kant * 12
+        P[f"kloof_trap_{i + 1}"] = [x0, hoogste(W, x0, zt) + 1, zt]
+    # spawn spots on the ravine floor (wezens)
+    n = 0
+    for x in range(-216, 217, 36):
+        zc = int(round(float(K2.kloof_z(x))))
+        i, j = K2.idx(x, zc)
+        if K.kloof[i, j] and not K.kloof_ramp[i, j]:
+            n += 1
+            P[f"kloof_bodem_{n}"] = [x, int(K.H[i, j]) + 1, zc]
+    # grey/purple crystal outcrops and boulders on the ravine floor
+    S = Vol(-250, 55, -2600, 250, 110, -2480)
+    for _ in range(90):
+        x = rng.randint(-232, 232)
         zc = float(K2.kloof_z(x))
         z = round(zc + rng.uniform(-14, 14))
         i, j = K2.idx(x, z)
@@ -977,8 +1322,8 @@ def splinterkloof(W, K, P):
             continue
         g = int(K.H[i, j])
         if rng.random() < 0.5:
-            S.kegel(x, z, g, rng.randint(3, 9), rng.uniform(0.8, 1.8), 0.2, rng.choice(["minecraft:light_gray_stained_glass",
-                                                                                      "minecraft:calcite", "minecraft:tinted_glass"]),
+            S.kegel(x, z, g, rng.randint(3, 9), rng.uniform(0.8, 1.8), 0.2, rng.choice(["minecraft:purple_stained_glass", "minecraft:pink_stained_glass",
+                                                                                      "minecraft:calcite", "minecraft:light_blue_stained_glass"]),
                     scheef=(rng.uniform(-2, 2), rng.uniform(-2, 2)))
         else:
             S.ell(x, g + 1, z, rng.uniform(1.2, 2.4), rng.uniform(1, 1.8), rng.uniform(1.2, 2.4), rng.choice(["minecraft:tuff", "minecraft:deepslate", SNEEUW]))
@@ -1062,12 +1407,17 @@ def mika_fort(W, K, P):
 
 
 # ================================================================================================ De Spiegelburcht
-def spiegelburcht(W, K, P):
+def spiegelburcht(W, K, Pw):
+    """The v1 castle, built in its v1 coordinates (x centred on 0, door plane z -2856) and moved as one piece by
+    (BURCHT_DX, 0, BURCHT_DZ): bazen's puzzle rows/columns stay valid relative to it."""
+    DX, DZ = PL.BURCHT_DX, PL.BURCHT_DZ
+    P = {}
     T = PL.BURCHT_TOP
     Y = T + 1
-    S = Vol(-62, 128, -2998, 62, 246, -2800)
+    S = Vol(-62, 120, -2998, 62, 246, -2780)
     # ---- the grand stair from the bridge head up to the forecourt
-    zn, hn = kloofrand(K, 0, -1)
+    zn, hn = kloofrand(K, PL.BRUGGEN[2], -1)
+    zn -= DZ
     z = zn - 6
     y = PL.BRUG_TOP
     S.box(-4, y - 12, z, 4, y, zn - 2, "minecraft:polished_tuff")
@@ -1092,16 +1442,18 @@ def spiegelburcht(W, K, P):
         S.box(4, y - 14, z, 4, y + 1, z, "minecraft:tuff_bricks")
         S.box(-3, y + 1, z, 3, y + 6, z, CARVE)
     z -= 1
-    # forecourt
-    S.box(-12, T - 6, z - 4, 12, T, z, "minecraft:polished_tuff")
-    S.box(-12, Y, z - 4, 12, Y + 10, z, CARVE)
+    # forecourt (always reaching the facade)
+    D0 = PL.BURCHT_DEUR_Z - DZ
+    zf = min(z - 4, D0 + 4)
+    S.box(-12, T - 6, zf, 12, T, z, "minecraft:polished_tuff")
+    S.box(-12, Y, zf, 12, Y + 10, z, CARVE)
     for x in range(-12, 13, 2):
         S.set(x, T, z - 2, "minecraft:smooth_quartz")
     vz = z - 2
     P["burcht_trap_voet"] = [0, PL.BRUG_TOP + 1, zn - 4]
     P["burcht_voorplein"] = [0, Y, vz]
     # ---- the hull of the front rooms (solid calcite, rooms carved out), facade 4 thick
-    D = PL.BURCHT_DEUR_Z
+    D = D0
     S.box(-19, T - 4, -2939, 19, T, D + 3, "minecraft:polished_tuff")
     S.box(-19, Y, -2939, 19, Y + 17, D + 3, "minecraft:calcite")
     S.box(-19, Y, -2939, 19, Y + 2, D + 3, "minecraft:tuff_bricks")
@@ -1230,7 +1582,17 @@ def spiegelburcht(W, K, P):
     P["arena_spiegelzucht_straal"] = [hr, 0, 0]
     P["arena_spiegelzucht_deur"] = [0, Y, -2937]
     P["arena_spiegelzucht_bord"] = [4, Y, -2936]
+    S.o = (S.o[0] + DX, S.o[1], S.o[2] + DZ)
     W.stempel(S.stempel("spiegelburcht"))
+
+    def schuif(o):
+        if isinstance(o, list) and len(o) == 3 and all(isinstance(v, int) for v in o):
+            return [o[0] + DX, o[1], o[2] + DZ]
+        if isinstance(o, dict):
+            return {k: (v if k == "as_" else schuif(v)) for k, v in o.items()}
+        return o
+    for k, v in P.items():
+        Pw[k] = v if k.endswith("_straal") else schuif(v)
 
 
 # ================================================================================================ the edge: cloud sea, landmarks
@@ -1248,6 +1610,16 @@ def rand(W, K, P):
             S.ell(x + rng.uniform(-10, 10), y + rng.uniform(-2, 3), z + rng.uniform(-10, 10), rng.uniform(7, 14),
                   rng.uniform(3, 6), rng.uniform(7, 14), rng.choice(["wolkenblok_wit", "wolkenblok_wit", "minecraft:white_wool"]))
         W.stempel(S.stempel("wolk"), bezet=False)
+    # cloud banks hugging the island's coast (it floats in the cloud sea)
+    for k in range(36):
+        a = k * 2 * math.pi / 36 + rng.uniform(-0.05, 0.05)
+        x, z = round(PL.STAD[0] + 370 * math.cos(a)), round(-2487 + 400 * math.sin(a))
+        y = rng.randint(58, 74)
+        S = Vol(x - 28, y - 8, z - 28, x + 28, y + 10, z + 28)
+        for _ in range(5):
+            S.ell(x + rng.uniform(-14, 14), y + rng.uniform(-2, 3), z + rng.uniform(-14, 14), rng.uniform(8, 15),
+                  rng.uniform(3, 6), rng.uniform(8, 15), rng.choice(["wolkenblok_wit", "wolkenblok_wit", "minecraft:white_wool"]))
+        W.stempel(S.stempel("wolk_kust"), bezet=False)
     # ice floes on the sea
     S = Vol(PL.X0, PL.ZEE - 1, PL.Z0, PL.X0 + PL.NX - 1, PL.ZEE + 2, PL.Z0 + PL.NZ - 1)
     for _ in range(260):
@@ -1281,7 +1653,7 @@ def decoratie(W, K, P):
         x, z = int(i) + PL.X0, int(j) + PL.Z0
         W.punten.set(x, int(H[i, j]) + 1, z, laag(1))
     # spruces: low/middle ground, not on paths, town, lake, ravine, pads, needles, steep rock
-    kans = np.clip(0.003 + 0.012 * K.n2, 0, 0.018) * np.where(K2.ZZ < -2690, 0.35, 1.0)
+    kans = np.clip(0.002 + 0.008 * K.n2, 0, 0.011) * np.where(K2.ZZ < -2560, 0.35, 1.0)
     hoog = (H > PL.ZEE + 3) & (H < 140)
     m = hoog & ~W.bezet & ~W.steil & (K.pad_m < 0.05) & ~K.stad_vloer & ~K.meer & ~K.kloof & ~K.kabel & (K.meer_e > 1.12)
     from scipy import ndimage as _nd
@@ -1309,9 +1681,14 @@ def decoratie(W, K, P):
         W.punten.set(x, g + h + 1, z, blad)
         W.punten.set(x, g + h + 2, z, laag(2))
     # crystal sprinkles on the Galm snow, ice flowers in the low south
-    m2 = (K2.XX > 160) & ~W.bezet & ~W.steil & (K.pad_m < 0.05) & (rng.random(H.shape) < 0.004) & (H > PL.ZEE + 3) & ~K.kabel
-    for i, j in zip(*np.nonzero(m2)):
-        W.punten.set(int(i) + PL.X0, int(H[i, j]) + 1, int(j) + PL.Z0, "minecraft:amethyst_cluster[facing=up,waterlogged=false]")
+    m2 = ~W.bezet & ~W.steil & (K.pad_d > 3) & (rng.random(H.shape) < 0.006) & (H > PL.ZEE + 3) & ~K.kabel & ~K.stad_vloer & ~K.meer
+    kristal = ["minecraft:amethyst_cluster[facing=up,waterlogged=false]", "guhs:guh_kristal_cluster[facing=up]",
+               "minecraft:large_amethyst_bud[facing=up,waterlogged=false]", "guhs:guh_kristal_cluster[facing=up]"]
+    for n, (i, j) in enumerate(zip(*np.nonzero(m2))):
+        W.punten.set(int(i) + PL.X0, int(H[i, j]) + 1, int(j) + PL.Z0, kristal[n % len(kristal)])
+    m4 = (W.top == i_gras) & ~W.bezet & (K.pad_d > 2) & (rng.random(H.shape) < 0.05)
+    for i, j in zip(*np.nonzero(m4)):
+        W.punten.set(int(i) + PL.X0, int(H[i, j]) + 1, int(j) + PL.Z0, "minecraft:pink_petals[facing=north,flower_amount=3]")
     m3 = (W.top == i_gras) & ~W.bezet & (K.pad_m < 0.05) & (rng.random(H.shape) < 0.01)
     for i, j in zip(*np.nonzero(m3)):
         W.punten.set(int(i) + PL.X0, int(H[i, j]) + 1, int(j) + PL.Z0, "guhs:guh_ijsbloempje")
@@ -1320,22 +1697,358 @@ def decoratie(W, K, P):
 
 # ================================================================================================ mob zones (boxes) + all
 MOBZONES = {
-    "mob_galm_voet": ((160, -2360), (360, -1850), (20, 22)),
-    "mob_galm_naalden": ((360, -2200), (590, -1850), (22, 24)),
-    "mob_galm_top": ((200, -2690), (590, -2370), (23, 25)),
-    "mob_meer_oever": ((-590, -2420), (-160, -1850), (25, 27)),
-    "mob_meer_ijs": ((-520, -2400), (-240, -2060), (27, 29)),
-    "mob_meer_noord": ((-590, -2690), (-160, -2430), (28, 30)),
-    "mob_kloof_zuid": ((-590, -2750), (590, -2700), (30, 31)),
-    "mob_kloof_bodem": ((-590, -2810), (590, -2745), (31, 33)),
-    "mob_kloof_noord": ((-590, -2990), (590, -2810), (32, 34)),
-    "mob_burcht": ((-19, -2984), (19, -2856), (33, 35)),
+    "mob_galm_voet": ((86, -2400), (250, -2200), (20, 21)),
+    "mob_galm_top": ((86, -2504), (250, -2401), (22, 23)),
+    "mob_meer_oever": ((-250, -2330), (-86, -2200), (23, 24)),
+    "mob_meer_ijs": ((-226, -2448), (-118, -2331), (24, 25)),
+    "mob_meer_noord": ((-250, -2504), (-86, -2449), (25, 26)),
+    "mob_kloof_zuid": ((-236, -2528), (236, -2505), (26, 27)),
+    "mob_kloof_bodem": ((-236, -2565), (236, -2529), (27, 28)),
+    "mob_kloof_noord": ((-236, -2775), (109, -2566), (28, 29)),
+    "mob_burcht": ((-19 + PL.BURCHT_DX, -2984 + PL.BURCHT_DZ), (19 + PL.BURCHT_DX, -2856 + PL.BURCHT_DZ), (28, 30)),
 }
+
+
+def stand(W, x, z):
+    return [int(x), hoogste(W, int(x), int(z)) + 1, int(z)]
+
+
+# ================================================================================================ fix round 2: drama + life
+def spleetbrug(W, K, P):
+    """brug_5: a hanging bridge E-W over the Galmspleet (the gondola gorge), on the rim path to the main bridge."""
+    z = PL.SPLEETBRUG_Z
+    x = PL.GALMSPLEET[1][0]
+    i, j = K2.idx(x, z)
+    xw, xe = x, x
+    while K.spleet[K2.idx(xw, z)] or K.kloof[K2.idx(xw, z)]:
+        xw -= 1
+    while K.spleet[K2.idx(xe, z)] or K.kloof[K2.idx(xe, z)]:
+        xe += 1
+    hw = max(int(K.H[K2.idx(xw - k, z + dz)]) for k in range(0, 3) for dz in (-1, 0, 1))
+    he = max(int(K.H[K2.idx(xe + k, z + dz)]) for k in range(0, 3) for dz in (-1, 0, 1))
+    xa, xb = xw - 2, xe + 2
+    S = Vol(xa - 4, min(hw, he) - 14, z - 5, xb + 4, max(hw, he) + 10, z + 5)
+    sa, sb = 2 * (hw + 1) + 1, 2 * (he + 1) + 1
+    n = xb - xa
+    for k, x_ in enumerate(range(xa, xb + 1)):
+        t = k / max(1, n)
+        s_ = int(round(sa + (sb - sa) * t - 3 * math.sin(math.pi * t)))
+        y, top = (s_ - 1) // 2, (s_ - 1) % 2 == 1
+        S.box(x_, y, z - 1, x_, y, z + 1, f"minecraft:spruce_slab[type={'top' if top else 'bottom'},waterlogged=false]")
+        S.box(x_, y + 1, z - 1, x_, y + 4, z + 1, CARVE)
+        for kant in (-1, 1):
+            S.set(x_, y + 1, z + kant * 2, HEK_X)
+            S.set(x_, y, z + kant * 2, "minecraft:spruce_planks")
+        if k % 5 == 0:
+            for kant in (-1, 1):
+                S.set(x_, y - 1, z + kant * 2, "minecraft:iron_chain[axis=y]")
+            S.set(x_, y - 1, z, LAMPION)
+    for (x_, h) in ((xa - 1, hw), (xb + 1, he)):
+        for kant in (-1, 1):
+            S.box(x_, h + 1, z + kant * 3, x_, h + 5, z + kant * 3, "minecraft:spruce_log[axis=y]")
+            S.set(x_, h + 6, z + kant * 3, LAMPION_S)
+        S.box(x_, h + 1, z - 1, x_, h + 4, z + 1, CARVE)
+    W.stempel(S.stempel("brug_spleet"))
+    P["brug_5_zuid"] = stand(W, xa - 3, z)        # (west end; ids kept: _zuid = the town side)
+    P["brug_5_noord"] = stand(W, xb + 3, z)
+
+
+def gehuchten(W, K, P):
+    """Little guh hamlets / warm camps along the way: 2-3 cosy huts (real interiors), a stall, fire baskets, garlands."""
+    rng = random.Random(41)
+    for (gid, gx, gz, n) in PL.GEHUCHTEN:
+        S = Vol(gx - 30, 40, gz - 30, gx + 30, 240, gz + 30)
+        hutten = []
+        pogingen = 0
+        while len(hutten) < n and pogingen < 200:
+            pogingen += 1
+            a, d = rng.uniform(0, 2 * math.pi), rng.uniform(8, 20)
+            x, z = round(gx + d * math.cos(a)), round(gz + d * math.sin(a))
+            if any(math.hypot(x - hx, z - hz) < 11 for (hx, hz, _) in hutten):
+                continue
+            i, j = K2.idx(x, z)
+            sl = (slice(i - 6, i + 7), slice(j - 6, j + 7))
+            if (K.pad_d[sl] < 3.5).any() or K.kloof[sl].any() or K.meer[sl].any() or K.stad_vloer[sl].any() or K.kabel[sl].any():
+                continue
+            hs = K.H[sl].astype(int)
+            if hs.max() - hs.min() > 5 or (W.bezet[sl]).any():
+                continue
+            # door towards the camp centre
+            ddx, ddz = gx - x, gz - z
+            deur = ("oost" if ddx > 0 else "west") if abs(ddx) > abs(ddz) else ("zuid" if ddz > 0 else "noord")
+            F = Kader(x, z, 7, 7, deur)
+            fx, fz = F.p(0, -1)
+            fy = int(K.H[K2.idx(fx, fz)])
+            S.box(x - 4, fy - 6, z - 4, x + 4, fy, z + 4, "minecraft:stone_bricks")
+            S.box(x - 4, fy + 1, z - 4, x + 4, fy + 12, z + 4, CARVE)
+            huis(S, P, gid, x, z, 7, 7, deur, "huis", "hutje", fy, kleur=rng.randrange(10))
+            hutten.append((x, z, fy))
+        if not hutten:
+            continue
+        # the camp square: a stall, fire baskets, garlands between the huts
+        g = hoogste(W, gx, gz)
+        i, j = K2.idx(gx, gz)
+        if K.pad_d[i, j] > 4:
+            S.set(gx, g + 1, gz, VUURKORF)
+        for k, (hx, hz, fy) in enumerate(hutten):
+            hn = hutten[(k + 1) % len(hutten)]
+            if len(hutten) > 1:
+                slinger(S, (hx, fy + 7, hz), (hn[0], hn[2] + 7, hn[1]), zak=2, elk=3)
+        kx, kz = gx + 4, gz + 4
+        i, j = K2.idx(kx, kz)
+        if K.pad_d[i, j] > 5:
+            kraam(S, kx, kz, "west", int(K.H[i, j]), "minecraft:pink_wool", "minecraft:white_wool")
+        P[f"gehucht_{gid}"] = [gx, g + 1, gz]
+        W.stempel(S.stempel(f"gehucht_{gid}"))
+
+
+def kristalbossen(W, K, P):
+    """Crystal forests: crystal 'trees' with an amethyst/calcite trunk, a glassy coloured crown and a glowing heart."""
+    rng = random.Random(43)
+    kleuren = {"roze": ["minecraft:pink_stained_glass", "minecraft:magenta_stained_glass"],
+               "paars": ["minecraft:purple_stained_glass", "minecraft:magenta_stained_glass"],
+               "blauw": ["minecraft:light_blue_stained_glass", "minecraft:cyan_stained_glass"]}
+    for n, (bx, bz, br, kl) in enumerate(PL.KRISTALBOSSEN):
+        S = Vol(bx - br - 10, 40, bz - br - 10, bx + br + 10, 260, bz + br + 10)
+        geplant = 0
+        for _ in range(int(br * br / 12)):
+            a, d = rng.uniform(0, 2 * math.pi), br * math.sqrt(rng.random())
+            x, z = round(bx + d * math.cos(a)), round(bz + d * math.sin(a))
+            i, j = K2.idx(x, z)
+            sl = (slice(i - 4, i + 5), slice(j - 4, j + 5))
+            if (K.pad_d[sl] < 3).any() or K.kloof[sl].any() or K.meer[sl].any() or K.stad_vloer[sl].any() or W.bezet[i, j] or K.kabel[sl].any():
+                continue
+            if int(K.H[sl].max()) - int(K.H[sl].min()) > 3:
+                continue
+            g = int(K.H[i, j])
+            h = rng.randint(5, 10)
+            S.box(x, g + 1, z, x, g + h, z, rng.choice(["minecraft:amethyst_block", "minecraft:calcite", "guhs:guh_kristal_blok"]))
+            glas = rng.choice(kleuren[kl])
+            r = rng.uniform(2.2, 3.4)
+            S.ell(x, g + h + 1, z, r, r * 1.2, r, glas, keep=True)
+            S.set(x, g + h + 1, z, rng.choice(["minecraft:pearlescent_froglight[axis=y]", "guhs:guh_kristal_lamp", "minecraft:verdant_froglight[axis=y]"]))
+            for _k in range(3):
+                aa = rng.uniform(0, 2 * math.pi)
+                S.set(round(x + (r + 0.6) * math.cos(aa)), g + h, round(z + (r + 0.6) * math.sin(aa)),
+                      "minecraft:amethyst_cluster[facing=down,waterlogged=false]", keep=True)
+            for _k in range(2):
+                aa = rng.uniform(0, 2 * math.pi)
+                S.set(round(x + 1.5 * math.cos(aa)), g + 1, round(z + 1.5 * math.sin(aa)), "minecraft:small_amethyst_bud[facing=up,waterlogged=false]", keep=True)
+            geplant += 1
+        P[f"kristalbos_{n + 1}"] = stand(W, bx, bz)
+        W.stempel(S.stempel(f"kristalbos_{n}"))
+
+
+def ijsvallen(W, K, P):
+    """Frozen waterfalls down the ravine walls (packed/blue ice + glass, a glowing core) with a frozen pool at the foot."""
+    for n, (x, z, kant) in enumerate(PL.IJSVALLEN):
+        S = Vol(x - 8, 50, z - 12, x + 8, 200, z + 12)
+        if kant == 0:
+            continue
+        for dx in range(-3, 4):
+            zr, hr = kloofrand(K, x + dx, kant)
+            zi = zr - kant                # the last column inside the ravine (against the wall)
+            breed = 3 - abs(dx)
+            bodem = PL.KLOOF_BODEM + 1
+            for y in range(bodem, hr + 1):
+                b = "minecraft:packed_ice" if (y + dx) % 4 else "minecraft:light_blue_stained_glass"
+                if abs(dx) <= 1:
+                    b = "minecraft:blue_ice" if (y % 3) else "minecraft:light_blue_stained_glass"
+                S.set(x + dx, y, zi, b)
+                if breed >= 2 and y < bodem + 8:
+                    S.set(x + dx, y, zi - kant, "minecraft:packed_ice")
+            if dx == 0:
+                for y in range(bodem + 4, hr, 7):
+                    S.set(x, y, zr, "minecraft:sea_lantern")
+        S.cyl(x, round(float(K2.kloof_z(x)) + kant * (K.kloof_w[K2.idx(x, z)] - 5)), 4, PL.KLOOF_BODEM, PL.KLOOF_BODEM, "minecraft:packed_ice")
+        P[f"ijsval_{n + 1}"] = [x, PL.KLOOF_BODEM + 2, z]
+        W.stempel(S.stempel(f"ijsval_{n}"), bezet=False)
+
+
+def lawinegolf(W, K, P):
+    """The avalanche as a set piece: a giant wave of snow frozen mid-crash, curling over the path, boulders hanging in it."""
+    lx, lz = PL.LAWINE_GOLF
+    g = hoogste(W, lx, lz + 12)
+    S = Vol(lx - 18, g - 4, lz - 20, lx + 18, g + 30, lz + 22)
+    zc, yc, R = lz + 6, g + 10, 10.0
+    rng = random.Random(51)
+    for x in range(lx - 14, lx + 15):
+        w = 1 - (abs(x - lx) / 15) ** 2
+        Rx = R * (0.7 + 0.3 * w)
+        for k in range(0, 72):
+            a = math.radians(-35 + k * 3.2)        # -35 deg (lip, south, low) .. 195 deg (back on the slope)
+            for dr in (0.0, 0.8, 1.6):
+                rr = Rx - dr
+                z = zc + rr * math.cos(math.radians(180) - a) * -1
+                y = yc + rr * math.sin(a)
+                if y < g + 1:
+                    continue
+                b = SNEEUW if dr < 1 else ("minecraft:packed_ice" if (k + x) % 5 else "minecraft:light_blue_stained_glass")
+                S.set(x, y, z, b)
+        # spray along the lip
+        if x % 3 == 0:
+            S.set(x, round(yc + Rx * math.sin(math.radians(-35))) - 1, round(zc + Rx * math.cos(math.radians(-35))), "minecraft:end_rod[facing=down]")
+    # the path under it stays free
+    S.box(lx - 15, g + 1, lz - 2, lx + 15, g + 5, lz + 18, CARVE) if False else None
+    for _ in range(9):
+        x, z = lx + rng.randint(-12, 12), zc + rng.randint(-8, 2)
+        y = yc + rng.randint(2, 8)
+        S.ell(x, y, z, rng.uniform(1.2, 2.2), rng.uniform(1.0, 1.8), rng.uniform(1.2, 2.2), SNEEUW)
+    P["lawine_golf"] = stand(W, lx, lz + 14)
+    W.stempel(S.stempel("lawinegolf"))
+
+
+def warmwaterbron(W, K, P):
+    """A little steaming hot spring (1 deep, you can always walk out) with warm stones and soul lanterns."""
+    x, z = PL.WARMWATERBRON
+    g = K.h(x, z)
+    S = Vol(x - 7, g - 5, z - 7, x + 7, g + 6, z + 7)
+    S.cyl(x, z, 5.5, g - 3, g, "minecraft:mossy_cobblestone")
+    S.cyl(x, z, 5.5, g + 1, g + 5, CARVE)
+    S.cyl(x, z, 3.5, g, g, "minecraft:water")
+    S.cyl(x, z, 3.5, g - 1, g - 1, "minecraft:magma_block") if False else S.cyl(x, z, 3.5, g - 1, g - 1, "minecraft:gravel")
+    for k in range(6):
+        a = k * math.pi / 3
+        S.set(round(x + 5 * math.cos(a)), g + 1, round(z + 5 * math.sin(a)), "minecraft:soul_lantern[hanging=false,waterlogged=false]" if k % 2 else "minecraft:mossy_cobblestone_slab[type=bottom,waterlogged=false]")
+    P["warmwaterbron"] = [x, g + 1, z]
+    W.stempel(S.stempel("warmwaterbron"))
+
+
+def padlampen(W, K, P):
+    """Lampion posts along every path (every ~20 blocks, alternating sides, never on the path)."""
+    S = Vol(-300, 40, -2820, 300, 240, -2150)
+    for naam, pts in PL.PADEN.items():
+        kant = 1
+        for (ax, az), (bx, bz) in zip(pts, pts[1:]):
+            L = math.dist((ax, az), (bx, bz))
+            ux, uz = (bx - ax) / L, (bz - az) / L
+            t = 10.0
+            while t < L - 4:
+                x, z = round(ax + ux * t - uz * 4 * kant), round(az + uz * t + ux * 4 * kant)
+                i, j = K2.idx(x, z)
+                if K.pad_d[i, j] >= 3.2 and not K.kloof[i, j] and not K.stad_vloer[i, j] and not W.bezet[i, j] and not K.meer[i, j]:
+                    g = int(K.H[i, j])
+                    S.box(x, g + 1, z, x, g + 2, z, STAAF)
+                    S.set(x, g + 3, z, LAMPION_S)
+                kant = -kant
+                t += 20
+    W.stempel(S.stempel("padlampen"), bezet=False)
+
+
+def opening_naald(W, K, P):
+    """The crystal needle on the geode rim the Galmwolf howls on in the opening (visible from the dock)."""
+    x, z = 46, -2344
+    g = hoogste(W, x, z)
+    S = Vol(x - 12, g - 4, z - 12, x + 12, g + 50, z + 12)
+    kristalnaald(S, x, z, g, 30, 3.0, random.Random(3), roze="roze")
+    P["opening_naald"] = [x, g + 31, z]
+    W.stempel(S.stempel("opening_naald"))
+
+
+def schat_onder_brug(W, K, P):
+    """A ledge with a chest under the south head of brug_2, a ladder down the ravine wall from the rim."""
+    bx = PL.BRUGGEN[1] + 4
+    zr, hr = kloofrand(K, bx, 1)
+    zi = zr - 1
+    y = hr - 7
+    S = Vol(bx - 4, y - 3, zi - 4, bx + 4, hr + 3, zr + 3)
+    S.box(bx - 1, y - 1, zi - 2, bx + 1, y - 1, zi, "minecraft:spruce_planks")
+    S.box(bx - 1, y, zi - 2, bx + 1, y + 2, zi, CARVE)
+    for yy in range(y, hr + 1):
+        S.set(bx, yy, zr, f"minecraft:ladder[facing=north,waterlogged=false]")
+        S.set(bx, yy, zr + 1, "minecraft:stone") if yy < hr else None
+    S.box(bx, hr + 1, zr, bx, hr + 2, zr, CARVE)
+    S.set(bx - 1, y, zi - 2, "minecraft:chest[facing=south,type=single,waterlogged=false]")
+    S.set(bx + 1, y, zi - 2, LANT)
+    for k in (-1, 0, 1):
+        S.set(bx + k, y - 1, zi - 3, STAAF) if False else S.set(bx + k, y, zi - 3, STAAF)
+    P["schat_onder_de_brug"] = [bx, y, zi - 1]
+    W.stempel(S.stempel("schat_brug"))
+
+
+def npc_plekken(W, K, P):
+    """Stand spots for every zone-2 NPC/POI that npc used to keep as literals (npcplek.<id>, poiplek.<id>, ...)."""
+    def plus(id_, dx, dz):
+        b = P[id_] if "." not in id_ else _pad(P, id_)
+        return stand(W, b[0] + dx, b[2] + dz)
+
+    def huisdeur(h, dx=0, dz=0):
+        d = P["gebouw"][h]["deur"]
+        return stand(W, d[0] + dx, d[2] + dz)
+    N = {}
+    N["z2_kwarts"] = plus("questbord", 3, 1)
+    N["z2_wacht_plein_west"] = plus("plein", -14, 0)
+    N["z2_wacht_plein_oost"] = plus("plein", 14, 0)
+    N["z2_wapenhandelaar"] = list(P["gebouw"]["smid"]["binnen"])
+    N["z2_opa_sneeuwbal"] = plus("cafe_terras", 2, 1)
+    N["z2_bakker"] = huisdeur("huis_4", 1)
+    N["z2_vlokje"] = plus("schaatsvijver", -PL.VIJVER_R - 2, 2)
+    N["z2_uitvinder"] = huisdeur("huis_8", 0, 1)
+    N["z2_galmpje"] = plus("plein", -8, -10)
+    N["z2_postguh"] = huisdeur("huis_5", 0, 1)
+    N["z2_sneeuwpop"] = huisdeur("huis_6", 2)
+    N["z2_kasguh"] = huisdeur("huis_3", 0, 1)
+    N["z2_winterslaap"] = huisdeur("huis_2", 1)
+    N["z2_poollicht"] = huisdeur("huis_1", 1)
+    gb = P["gondel_berg"]
+    N["z2_gondel_boven"] = stand(W, gb[0] - 2, gb[2] + 1)
+    k1 = P["kampvuur_galmhellingen_1"]
+    N["z2_berggids"] = stand(W, k1[0] - 3, k1[2] + 1)
+    k3 = P["kampvuur_knuffelmeer_3"]
+    N["z2_beeldhouwer"] = stand(W, k3[0] - 3, k3[2] + 1)
+    N["z2_touwtje"] = plus("brug_3_zuid", 3, 0)
+    N["z2_prisma"] = plus("burcht_voorplein", 4, 0)
+    N["z2_wacht_dok"] = list(P["ridder_kandijkom_dok_1"])
+    for gebied, kort in (("galmhellingen", "galm"), ("knuffelmeer", "meer"), ("splinterkloof", "kloof")):
+        for i in range(len(PL.KAMPVUREN[gebied])):
+            N[f"z2_wacht_{kort}_{i + 1}"] = list(P[f"ridder_{gebied}_{i + 1}"])
+    N["z2_wacht_burcht"] = list(P["ridder_spiegelburcht_1"])
+    N["z2_versteend_zwier"] = list(P["meer_midden"])
+    N["z2_versteend_snoek"] = list(P["meer_schotsen"])
+    mx, mz, rx, rz = PL.MEER
+    N["z2_versteend_pluk"] = [round(mx - rx * 0.6), PL.MEER_IJS + 1, mz + 8]
+    ij = P["npc_ijsvisser"]
+    N["z2_versteend_ijsje"] = stand(W, ij[0] - 2, ij[2])
+    # town life (fix round 2): skaters, snowball kids, penguin guhs, the sledge family, market folk
+    vx, vz = PL.VIJVER
+    N["z2_schaatser_1"] = [vx - 3, SY, vz - 2]
+    N["z2_schaatser_2"] = [vx + 3, SY, vz + 2]
+    N["z2_sneeuwbal_1"] = plus("plein", -10, 16)
+    N["z2_sneeuwbal_2"] = plus("plein", -4, 20)
+    N["z2_pinguguh_1"] = plus("sneeuwguhspar", 3, 0)
+    N["z2_pinguguh_2"] = plus("schaatsvijver", 9, -6)
+    N["z2_pinguguh_3"] = plus("plein", 10, 18)
+    N["z2_slee_1"] = stand(W, PL.STAL[0] - 10, PL.STAL[1] - 8)
+    N["z2_slee_2"] = stand(W, PL.STAL[0] - 12, PL.STAL[1] - 6)
+    kr = P["markt_kramen"]
+    for i, k in enumerate(list(kr.values())[:3]):
+        N[f"z2_marktguh_{i + 1}"] = list(k)
+    for k, v in N.items():
+        P[f"npcplek.{k}"] = v
+    # literals in npc's POI/secret maps
+    Q = {"z2_lawinepad": list(P["galm_lawine_1_voet"]), "z2_warmwaterbron": list(P["warmwaterbron"]), "z2_meer_scheur": list(P["meer_scheur"]),
+         "z2_brug_1": list(P["brug_3_zuid"]), "z2_brug_2": list(P["brug_2_zuid"]), "z2_brug_3": list(P["brug_1_zuid"]),
+         "z2_uitkijk_poollicht": list(P["uitkijk_kloofkijk"])}
+    for k, v in Q.items():
+        P[f"poiplek.{k}"] = v
+    A = {"olievlek": plus("boortoren_3", 4, 4), "bouwtekening": plus("boortoren_1", 4, 4), "boorgaten": plus("galm_lawine_1_voet", 4, 3),
+         "boorschema": huisdeur("huis_8", 0, 3), "warme_spleet": list(P["geheim_boorplaats"])}
+    for k, v in A.items():
+        P[f"aanwijzing.{k}"] = v
+    P["schat.onder_de_brug"] = list(P["schat_onder_de_brug"])
+
+
+def _pad(P, id_):
+    o = P
+    for k in id_.split("."):
+        o = o[k]
+    return o
 
 
 def bouw_alles(W, K):
     P = {}
     stad(W, K, P)
+    stal(W, K, P)
     dok(W, K, P)
     gondel(W, K, P)
     galmhellingen(W, K, P)
@@ -1344,9 +2057,18 @@ def bouw_alles(W, K):
     spiegelburcht(W, K, P)
     mika_fort(W, K, P)
     for naam, (x, z) in PL.UITKIJK.items():
-        ijsnaald(W, K, P, naam, x, z, {"galmtop": 46, "meerkijk": 52, "kloofkijk": 48}[naam])
+        ijsnaald(W, K, P, naam, x, z, PL.UITKIJK_HOOG[naam])
     kampvuren(W, K, P)
+    opening_naald(W, K, P)
+    lawinegolf(W, K, P)
+    warmwaterbron(W, K, P)
+    schat_onder_brug(W, K, P)
+    ijsvallen(W, K, P)
+    gehuchten(W, K, P)
+    kristalbossen(W, K, P)
+    padlampen(W, K, P)
     rand(W, K, P)
     decoratie(W, K, P)
+    npc_plekken(W, K, P)
     P["mobzones"] = {k: {"min": [a[0], 0, a[1]], "max": [b[0], 0, b[1]], "level": [lv[0], lv[1], 0]} for k, (a, b, lv) in MOBZONES.items()}
     return P

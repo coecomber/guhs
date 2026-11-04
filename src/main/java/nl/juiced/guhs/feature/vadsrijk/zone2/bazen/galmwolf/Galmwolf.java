@@ -41,7 +41,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry;
 import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2Hulpje;
 
 /**
- * De Galmwolf, world boss of the Galmhellingen (ronde 15), lv 24, respawn 20 min. A huge crystal wolf.
+ * De Galmwolf, world boss of the Galmhellingen (ronde 15), lv 23, respawn 20 min. A huge crystal wolf.
  * <ul>
  *   <li><b>Kristalgalm</b> (the signature): a 3 s howl (the whole arena rings purple). Whoever is not behind a frozen pillar when it
  *       goes off takes 60 % of their Vads (true damage), is Bevroren and blown back: two careless howls = fainted. Every pillar that

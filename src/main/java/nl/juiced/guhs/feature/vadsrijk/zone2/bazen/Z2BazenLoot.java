@@ -32,8 +32,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.Uitrusting;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
 
 /**
- * Zone-2 boss loot: 6 named Legendary items (2 per boss; Spiegelzucht's and the Boormeester's roll at lv 32-33, the Galmwolf's at
- * his lv 24) and 2 Guhddelijk ones, the 3 trophies (deco, NOT gebonden so they can go home), and what goes into a personal chest
+ * Zone-2 boss loot: 6 named Legendary items (2 per boss; Spiegelzucht's and the Boormeester's roll at lv 28-30, the Galmwolf's at
+ * his lv 23) and 2 Guhddelijk ones, the 3 trophies (deco, NOT gebonden so they can go home), and what goes into a personal chest
  * ({@link #kist}). The first kill per player guarantees one named Legendary + the trophy. Everything else is gebonden.
  * Item classes are zone-1's ({@link BazenLoot.BaasItem}: the effect line, {@link BazenLoot.Trofee}).
  */

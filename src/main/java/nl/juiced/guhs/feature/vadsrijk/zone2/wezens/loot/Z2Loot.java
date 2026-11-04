@@ -21,7 +21,7 @@ import nl.juiced.guhs.feature.vadsrijk.wezens.loot.WezensLoot;
 import nl.juiced.guhs.feature.vadsrijk.zone2.wezens.mob.Z2Wezen;
 
 /**
- * Zone-2 loot from the creatures (lv 20-35): 15 base types (items guhs:vr_z2_mob_&lt;id&gt;):
+ * Zone-2 loot from the creatures (lv 20-30): 15 base types (items guhs:vr_z2_mob_&lt;id&gt;):
  * <ul>
  *   <li>4 loose armour pieces (sneeuwmuts, galmpantser, schotsbroek, ijzelslofjes);</li>
  *   <li>the <b>Kristalset</b> (4, Verdediging/Wijsheid) and the <b>Mika-buitset</b> (4, Kracht/Behendigheid), see {@link Z2Sets};</li>
@@ -70,7 +70,7 @@ public final class Z2Loot {
         return STUKKEN.get(id) != null && STUKKEN.get(id).sieraad();
     }
 
-    /** An armour piece; base stats ~ 2.6x zone 1 (level 20-35 gear), growth per level like zone 1. */
+    /** An armour piece; base stats ~ 2.6x zone 1 (level 20-30 gear), growth per level like zone 1. */
     private static BasisType stuk(String id, double vd, double vads, Object... extra) {
         Stats basis = Stats.van(Stat.VERDEDIGING, vd, Stat.VADS, vads);
         Stats groei = Stats.van(Stat.VERDEDIGING, vd * 0.25, Stat.VADS, vads * 0.2);

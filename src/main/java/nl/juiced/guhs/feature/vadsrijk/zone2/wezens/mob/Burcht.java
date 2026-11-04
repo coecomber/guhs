@@ -20,7 +20,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Schade;
 import nl.juiced.guhs.feature.vadsrijk.kern.baas.Telegraaf;
 import nl.juiced.guhs.feature.vadsrijk.wezens.mob.Effecten;
 
-/** The adds of De Spiegelburcht (lv 33-35): Spiegelwacht and Scherfgeest. */
+/** The adds of De Spiegelburcht (lv 28-30): Spiegelwacht and Scherfgeest. */
 public final class Burcht {
     private Burcht() {
     }

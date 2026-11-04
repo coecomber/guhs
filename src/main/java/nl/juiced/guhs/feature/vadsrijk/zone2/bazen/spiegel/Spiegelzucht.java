@@ -38,7 +38,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenPlekken;
 import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry;
 
 /**
- * Vrouwe Spiegelzucht, boss of the Spiegelburcht (ronde 15), lv 33, respawn 5 min.
+ * Vrouwe Spiegelzucht, boss of the Spiegelburcht (ronde 15), lv 30, respawn 5 min.
  * <ul>
  *   <li><b>Spiegeling</b>: she splits into mirror images ({@link Spiegelbeeld}) on a ring. Only the one WITHOUT a shadow is her:
  *       hit an image and it shatters and strikes back (20 % of your Vads). Deal 5 % of her Vads while split and the images break.</li>

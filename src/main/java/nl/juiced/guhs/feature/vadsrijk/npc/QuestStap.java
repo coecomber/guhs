@@ -231,7 +231,7 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
     /** Where to level up to n (the zone's level bands, CONTRACT §2). */
     static Component levelPlek(int n) {
         String g = n <= 6 ? "klodderweide" : n <= 12 ? "sporenwoud" : n <= 18 ? "druipgrotten" : n <= 20 ? "zwamtempel"
-                : n <= 25 ? "z2_galmhellingen" : n <= 30 ? "z2_knuffelmeer" : "z2_splinterkloof";
+                : n <= 23 ? "z2_galmhellingen" : n <= 26 ? "z2_knuffelmeer" : "z2_splinterkloof";   // (g-z2: zone 2 = lv 20-30)
         return gebiedPlek(g);
     }
 

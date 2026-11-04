@@ -9,7 +9,7 @@ WIKI = {
     "systemen": {
         "vadsrijk-splinterpieken": (
             "De Splinterpieken (zone 2)", "item:minecraft:amethyst_shard",
-            "Een ijzig kristalgebergte vol echo's en sneeuw, voor avonturiers van level 20 tot 35. Na het verhaal van zone 1 vliegt "
+            "Een ijzig kristalgebergte vol echo's en sneeuw, voor avonturiers van level 20 tot 30. Na het verhaal van zone 1 vliegt "
             "Stuurguh Zeppie je vanuit De Haven naar Kandijkom. Hier versteent de Vadsloosheid wezens tot grauw kristal.",
             ["het-vadsrijk", "vadsrijk-kandijkom", "vadsrijk-z2-quests", "vadsrijk-z2-geheimen"]),
         "vadsrijk-kandijkom": (
@@ -34,8 +34,8 @@ WIKI = {
          "Maak eerst het verhaal van zone 1 af en word level 20. Dan heeft Stuurguh Zeppie in De Haven een nieuwe luchtschiplijn: naar "
          "Kandijkom. De eerste vlucht vergeet je niet snel. Doe je sjaal om."),
         ("systemen/vadsrijk-splinterpieken", "De gebieden",
-         "De Galmhellingen in het oosten (lv 20-25): sneeuwvelden met kristalnaalden die terugzingen. Het Bevroren Knuffelmeer in het "
-         "westen (lv 25-30): knuffels onder het ijs, en het ijs scheurt. De Splinterkloof in het noorden (lv 30-34): hangbruggen en "
+         "De Galmhellingen in het oosten (lv 20-23): sneeuwvelden met kristalnaalden die terugzingen. Het Bevroren Knuffelmeer in het "
+         "westen (lv 23-26): knuffels onder het ijs, en het ijs scheurt. De Splinterkloof in het noorden (lv 26-29): hangbruggen en "
          "Mika-boorinstallaties. En op de hoogste piek: de Spiegelburcht."),
         ("systemen/vadsrijk-splinterpieken", "Echte monsters",
          "In de bergen vecht je tegen echte monsters van grauw kristal: verslagen spatten ze uit elkaar in scherven die wegsmelten. "
@@ -48,8 +48,8 @@ WIKI = {
          "Kapitein Poolster vliegt je van Kandijkom terug naar De Haven. Met de gondel van Gondelguh Kabeltje ben je zo boven op de "
          "Galmhellingen."),
         ("systemen/vadsrijk-z2-quests", "Zijquests",
-         "Ruim twintig zijquests: wanten van Opa Sneeuwbal terughalen, kandijkoekjes, een echokoor met de zingende naalden, post per "
-         "slee, de grootste sneeuwpop, wiebelbruggen, premies van de Kristalwacht en je eerste edelsteen bij de juwelier."),
+         "Een paar korte zijquests naast het verhaal: tien knuffels onder het ijs bevrijden, schaatsles op het plein, een echokoor met "
+         "de zingende naalden, ijsbloemen voor de chocomelk en met de gondel naar de top."),
         ("systemen/vadsrijk-z2-geheimen", "Glinsters",
          "Hartjes onder het ijs = een knuffel van Kleine Vlokje, paarse sterretjes = een boorspoor, goudgeel = een schat. Het "
          "FTB-hoofdstuk \"Het Vadsrijk\" heeft een eigen stukje voor de Splinterpieken; niks staat op slot."),

@@ -26,6 +26,8 @@ GESTEENTE2 = {
     "geode_calciet": ["minecraft:calcite"] * 8,
     "geode_basalt": ["minecraft:smooth_basalt", "minecraft:smooth_basalt", "minecraft:tuff", "minecraft:smooth_basalt",
                      "minecraft:smooth_basalt", "minecraft:basalt[axis=y]", "minecraft:smooth_basalt", "minecraft:tuff"],
+    "stad": ["minecraft:stone_bricks", "minecraft:stone_bricks", "minecraft:mossy_stone_bricks", "minecraft:stone_bricks",
+             "minecraft:cracked_stone_bricks", "minecraft:stone_bricks", "minecraft:polished_andesite", "minecraft:stone_bricks"],
     "oever": ["minecraft:stone", "minecraft:gravel", "minecraft:stone", "minecraft:andesite", "minecraft:tuff",
               "minecraft:stone", "minecraft:gravel", "minecraft:stone"],
 }
@@ -69,11 +71,11 @@ class Wereld2(TG.Wereld):
             if k is not None:
                 soort[mask] = SOORT2[k]
         g = {n: K.gebied == i for i, n in enumerate(K.gnamen)}
-        zet(g["z2_galmhellingen"] | (x > 140), None, None, "galm")
-        zet(g["z2_splinterkloof"] | (z < -2690), None, None, "kloof")
-        zet(K.burcht_plat | (np.hypot(x / 70, (z + 2919) / 95) < 1), None, None, "burcht")
+        zet(g["z2_galmhellingen"] | (x > 85), None, None, "galm")
+        zet(g["z2_splinterkloof"] | (z < -2505), None, None, "kloof")
+        zet(K.burcht_plat | (np.hypot((x - PL.BURCHT[0]) / 66, (z - PL.BURCHT[1]) / 95) < 1), None, None, "burcht")
         # the low south and the lake shore: snowy grass with dirt under it
-        laag = (H < 92) & (z > -2300) & ~K.stad_vloer
+        laag = (H < 104) & (z > -2340) & ~K.stad_vloer & (np.abs(x) > 16)
         zet(laag, GRAS_SNEEUW, "minecraft:dirt")
         oever = (K.meer_e >= 1) & (K.meer_e < 1.12)
         zet(oever, "minecraft:gravel", "minecraft:stone", "oever")
@@ -99,6 +101,15 @@ class Wereld2(TG.Wereld):
         zet(kb & (np.abs(K.kloof_v) < 2.6), "minecraft:packed_ice")
         zet(K.kloof_ramp, "minecraft:cobblestone", "minecraft:stone", "kloof")
         zet(K.kloof_ramp & (rnd < 0.3), "minecraft:gravel")
+        # less white: crystal-tinted patches in the snow (ice, calcite, purple/pink glazed spots)
+        vlek = K.n2 + 0.6 * f
+        hoogland = (H > 110) & ~K.stad_vloer & ~K.kloof
+        zet(hoogland & (vlek > 0.4) & (rnd < 0.55), "minecraft:packed_ice")
+        zet(hoogland & (vlek > 0.75) & (rnd < 0.5), "minecraft:blue_ice")
+        zet(hoogland & (vlek < -0.4) & (rnd < 0.45), "guhs:guh_kristalsteen")
+        zet(hoogland & (vlek < -0.7) & (rnd < 0.5), "minecraft:amethyst_block")
+        zet(hoogland & (rnd > 0.985), "minecraft:amethyst_block")
+        zet((H > 96) & (rnd < 0.012) & ~K.stad_vloer & ~K.kloof, "guhs:guh_kristal_blok")
         # paths
         pad = K.pad_m > 0.5
         zet(pad, "minecraft:dirt_path")
@@ -107,6 +118,8 @@ class Wereld2(TG.Wereld):
         zet(pad & K.stad_vloer, "guhs:knuffelklinkers")
         # town floor (bouw2 stamps the streets/plaza on top)
         zet(K.stad_vloer | K.dok_weg, SNEEUW, "minecraft:stone")
+        zet(K.tier, "guhs:knuffelklinkers", "minecraft:stone_bricks", "stad")
+        zet(K.stad_vloer & ~K.tier, None, None, "stad")
         self.top, self.sub, self.soort = top, sub, soort
         self.boff = (2 * np.sin(x / 7.0) + 2 * np.cos(z / 9.0) + 8).astype(np.int32)
         self.ids = {s: P.id(s) for s in ("minecraft:water", "minecraft:sand", "minecraft:stone", "minecraft:barrier", "minecraft:gravel",
@@ -121,6 +134,25 @@ class Wereld2(TG.Wereld):
     def stempel(self, st, bezet=True):
         st.lut = self.palet.lut(st.pal)
         self.stempels.append(st)
+        # the terrain is a thin shell (down to the lowest neighbour): where a stamp carves into it, the shell must reach
+        # below the carve, or the carve opens a hole into the void (fix round 2: bridge heads)
+        if "minecraft:cave_air" in st.pal:
+            ci = st.pal.index("minecraft:cave_air")
+            cm = st.v == ci
+            heeft = cm.any(axis=1)
+            if heeft.any():
+                ymin = np.argmax(cm, axis=1) + st.off[1]
+                ox, oy, oz = st.off
+                X, Z = heeft.shape
+                i0, j0 = ox - PL.X0, oz - PL.Z0
+                a0, b0 = max(0, -i0), max(0, -j0)
+                a1, b1 = min(X, PL.NX - i0), min(Z, PL.NZ - j0)
+                if a1 > a0 and b1 > b0:
+                    sub = self.lo_extra[i0 + a0:i0 + a1, j0 + b0:j0 + b1]
+                    yy = np.where(heeft[a0:a1, b0:b1], ymin[a0:a1, b0:b1] - 3, 9999).astype(np.int16)
+                    from scipy import ndimage as _nd
+                    yy = _nd.minimum_filter(yy, size=3, mode="nearest")      # the neighbours' shells too (no void under an overhang)
+                    np.minimum(sub, yy, out=sub)
         if bezet:
             voet = np.any(st.v > 0, axis=1)
             ox, oy, oz = st.off

@@ -31,6 +31,26 @@ public final class Z2NpcPlekken {
         return b != null ? b : new BlockPos(x, y, z);
     }
 
+    /** (fix round 2) The map generator publishes a stand spot for every literal below (npcplek.&lt;npc&gt;, poiplek.&lt;poi&gt;,
+     *  aanwijzing.&lt;id&gt;, schat.&lt;id&gt;): those win over the numbers here, so the NPCs follow the rebuilt (compact) zone 2. */
+    static void volgKaart(Map<String, BlockPos> m, String prefix) {
+        for (Map.Entry<String, BlockPos> e : m.entrySet()) {
+            BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(prefix + e.getKey());
+            if (b != null) {
+                e.setValue(b);
+            }
+        }
+    }
+
+    static Vec3 v(String id, double x, double y, double z) {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
+        return b != null ? Vec3.atBottomCenterOf(b) : new Vec3(x, y, z);
+    }
+
+    /** The Spiegelburcht's move (v1 layout + this offset). */
+    static final Vec3 BURCHT_SCHUIF = new Vec3(nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.BURCHT_DX, 0,
+            nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.BURCHT_DZ);
+
     /** Stand y of the Kandijkom geode floor (POI_Z2: 91). */
     static final int KK = 91;
 
@@ -40,8 +60,8 @@ public final class Z2NpcPlekken {
     public static final BlockPos DOK = w("dok_landing", 0, KK, -2244);                    // POI:dok_landing
     public static final BlockPos DOK_AANKOMST = DOK;
     /** The gondola stations (POI:gondel_dal / gondel_berg). */
-    public static final BlockPos GONDEL_BENEDEN = p(78, KK, -2466);
-    public static final BlockPos GONDEL_BOVEN = p(306, 151, -2616);
+    public static final BlockPos GONDEL_BENEDEN = w("gondel_dal", 78, KK, -2466);
+    public static final BlockPos GONDEL_BOVEN = w("gondel_berg", 306, 151, -2616);
 
     // ---- NPC spots (id -> spot; look + clothes in Z2Npcs) ----------------------------------------------------------------------
     public static final Map<String, BlockPos> NPC = new LinkedHashMap<>();
@@ -102,6 +122,20 @@ public final class Z2NpcPlekken {
         NPC.put("z2_versteend_snoek", p(-334, 85, -2082));        // POI:meer_schotsen (the floes in the south)
         NPC.put("z2_versteend_pluk", p(-520, 85, -2270));         // the west side of the ice
         NPC.put("z2_versteend_ijsje", p(-412, 88, -2266));        // on the island, next to Wak
+        // (fix round 2) town life: skaters on the pond, snowball kids, penguin guhs, the sledge family, market folk
+        NPC.put("z2_schaatser_1", p(-3, KK, -2387));
+        NPC.put("z2_schaatser_2", p(3, KK, -2383));
+        NPC.put("z2_sneeuwbal_1", p(-10, KK, -2396));
+        NPC.put("z2_sneeuwbal_2", p(-4, KK, -2392));
+        NPC.put("z2_pinguguh_1", p(-13, KK, -2405));
+        NPC.put("z2_pinguguh_2", p(9, KK, -2391));
+        NPC.put("z2_pinguguh_3", p(10, KK, -2394));
+        NPC.put("z2_slee_1", p(16, KK, -2304));
+        NPC.put("z2_slee_2", p(14, KK, -2302));
+        NPC.put("z2_marktguh_1", p(14, KK, -2388));
+        NPC.put("z2_marktguh_2", p(6, KK, -2383));
+        NPC.put("z2_marktguh_3", p(-6, KK, -2383));
+        volgKaart(NPC, "npcplek.");
     }
 
     // ---- points of interest (quest objectives "poi:<id>", tracker targets "poi:<id>") ------------------------------------------
@@ -131,6 +165,7 @@ public final class Z2NpcPlekken {
         POI.put("z2_kampvuur_galm", w("kampvuur_galmhellingen_1", 232, 99, -2330));           // POI:kampvuur_galmhellingen_1
         POI.put("z2_kampvuur_meer", w("kampvuur_knuffelmeer_1", -200, 89, -2120));          // POI:kampvuur_knuffelmeer_1
         POI.put("z2_kampvuur_kloof", w("kampvuur_splinterkloof_3", 24, 132, -2730));          // POI:kampvuur_splinterkloof_3
+        volgKaart(POI, "poiplek.");
     }
     /** Horizontal radius / vertical tolerance for "you are there" (as zone 1); the high needles/lookouts get more height. */
     public static final double POI_STRAAL = 6, POI_HOOGTE = 10, NAALD_HOOGTE = 30;
@@ -147,12 +182,12 @@ public final class Z2NpcPlekken {
         GEBIED_DOEL.put("z2_splinterkloof", POI.get("z2_kampvuur_kloof"));
         GEBIED_DOEL.put("z2_spiegelburcht", POI.get("z2_spiegelpoort"));
         KAMPVUUR.put("z2_kandijkom", w("kampvuur_kandijkom_dok_1", -9, KK, -2262));          // POI:kampvuur_kandijkom_dok_1
-        KAMPVUUR.put("z2_kandijkom_dok", p(-9, KK, -2262));
+        KAMPVUUR.put("z2_kandijkom_dok", w("kampvuur_kandijkom_dok_1", -9, KK, -2262));
         KAMPVUUR.put("z2_galmhellingen", POI.get("z2_kampvuur_galm"));
         KAMPVUUR.put("z2_knuffelmeer", POI.get("z2_kampvuur_meer"));
         KAMPVUUR.put("z2_splinterkloof", POI.get("z2_kampvuur_kloof"));
-        KAMPVUUR.put("z2_spiegelburcht", p(12, 164, -2826));     // POI:kampvuur_spiegelburcht_1
-        BAAS.put("z2_galmhellingen", p(392, 121, -2280));        // POI:arena_galmwolf_deur
+        KAMPVUUR.put("z2_spiegelburcht", w("kampvuur_spiegelburcht_1", 12, 164, -2826));     // POI:kampvuur_spiegelburcht_1
+        BAAS.put("z2_galmhellingen", w("arena_galmwolf_deur", 392, 121, -2280));        // POI:arena_galmwolf_deur
         BAAS.put("z2_spiegelburcht", w("arena_spiegelzucht_deur", 0, 176, -2937));          // POI:arena_spiegelzucht_deur
         BAAS.put("z2_splinterkloof", POI.get("z2_boorhal"));      // POI:arena_boormeester_deur (secret)
     }
@@ -180,7 +215,7 @@ public final class Z2NpcPlekken {
         int[][] ijs = {{-300, -2160}, {-350, -2300}, {-430, -2180}, {-470, -2320}, {-380, -2380}, {-300, -2340}, {-440, -2090}, {-360, -2110},
                 {-500, -2220}, {-270, -2250}};
         for (int i = 0; i < ijs.length; i++) {
-            KNUFFEL.put("ijs_" + (i + 1), p(ijs[i][0], 85, ijs[i][1]));
+            KNUFFEL.put("ijs_" + (i + 1), w("knuffel_ijs_" + (i + 1), ijs[i][0], 85, ijs[i][1]));
         }
     }
     /** The 5 clues to the Mika-boormeester (start the secret quest; all 5 unlock the boss: bazen Boormeester.ontgrendel). */
@@ -191,6 +226,7 @@ public final class Z2NpcPlekken {
         AANWIJZING.put("boorgaten", p(364, 149, -2426));         // at POI:galm_lawine_1_voet
         AANWIJZING.put("boorschema", p(-56, KK, -2486));         // behind the inventor's workshop (POI:gebouw.huis_8)
         AANWIJZING.put("warme_spleet", p(-496, 66, -2776));      // next to POI:geheim_boorplaats / the boorhal door
+        volgKaart(AANWIJZING, "aanwijzing.");
     }
     /** Hidden treasures (one-time loot; POI_Z2 "Secrets"). */
     public static final Map<String, BlockPos> SCHAT = new LinkedHashMap<>();
@@ -200,6 +236,7 @@ public final class Z2NpcPlekken {
         SCHAT.put("chocokelder", w("geheim_chocokelder", 52, 85, -2344));              // POI:geheim_chocokelder
         SCHAT.put("burchtdak", w("geheim_burchtdak", 10, 195, -2903));               // POI:geheim_burchtdak
         SCHAT.put("onder_de_brug", p(-180, 128, -2774));         // (requested: a chest under the west bridge, POI:brug_2)
+        volgKaart(SCHAT, "schat.");
     }
     public static final double VIND_STRAAL = 3, VIND_HOOGTE = 8;
 
@@ -215,7 +252,7 @@ public final class Z2NpcPlekken {
 
     // ---- scenes (camera keyframes: pos, look-at; world coordinates) ------------------------------------------------------------
     /** The crystal needle on the geode rim where the Galmwolf howls in the opening (it bursts; requested: POI "opening_naald"). */
-    public static final Vec3 OPENING_NAALD = new Vec3(70, 148, -2205);
+    public static final Vec3 OPENING_NAALD = v("opening_naald", 70, 148, -2205);
     /**
      * The opening: the airship comes from the south over the cloud sea into a snowstorm (ice floes, lights out), the Galmwolf howls
      * on a needle that bursts, the ship slips into the warm geode of Kandijkom. The player stands at the dock from tick 0 (so the
@@ -227,44 +264,45 @@ public final class Z2NpcPlekken {
             new Vec3(20, 140, -2165), OPENING_NAALD,                   // 180: turn to the needle: the wolf
             new Vec3(26, 142, -2180), OPENING_NAALD.add(0, 2, 0),      // 250: the howl, the needle bursts
             new Vec3(0, 120, -2205), new Vec3(0, 98, -2400),           // 310: diving into the geode, the pink glow
-            new Vec3(0, 96, -2236), new Vec3(59, 92, -2344)};          // 400: at the dock, looking at the cafe
+            new Vec3(0, 96, -2236), v("npc_cafe", 59, 92, -2344)};          // 400: at the dock, looking at the cafe
     /** The ship's path in the opening (the effects follow it). */
     public static final Vec3 SCHIP_VAN = new Vec3(0, 132, -2150), SCHIP_NAAR = new Vec3(0, 93, -2242);
 
     /** The wounded dragon (z2_hq09) on the col north of the lake (POI:draak_zadel), seen from POI:draak_zadel_kijk. */
-    public static final Vec3 DRAAK_RUST = new Vec3(-330, 128, -2610);
+    public static final Vec3 DRAAK_RUST = v("draak_zadel", -330, 126, -2610).add(0, 2, 0);
     public static final Vec3[] DRAAK_1 = {
-            new Vec3(-344, 150, -2570), DRAAK_RUST,                    // from above the col, looking down
-            new Vec3(-334, 131, -2592), DRAAK_RUST.add(0, 2, 0)};      // down to his head
+            DRAAK_RUST.add(-14, 22, 40), DRAAK_RUST,                    // from above the col, looking down
+            DRAAK_RUST.add(-4, 3, 18), DRAAK_RUST.add(0, 2, 0)};      // down to his head
     public static final Vec3[] DRAAK_2 = {
-            new Vec3(-332, 130, -2596), DRAAK_RUST.add(0, 3, 0),       // close: he looks at you
-            new Vec3(-340, 138, -2580), DRAAK_RUST.add(0, 40, -40),    // he rises
-            new Vec3(-346, 150, -2570), new Vec3(-420, 230, -2900)};   // and flies off to the north
+            DRAAK_RUST.add(-2, 2, 14), DRAAK_RUST.add(0, 3, 0),       // close: he looks at you
+            DRAAK_RUST.add(-10, 10, 30), DRAAK_RUST.add(0, 40, -40),    // he rises
+            DRAAK_RUST.add(-16, 22, 40), DRAAK_RUST.add(-90, 102, -290)};   // and flies off to the north
     /** The dragon's path off the col. */
-    public static final Vec3[] DRAAK_WEG = {DRAAK_RUST, DRAAK_RUST.add(4, 30, -20), DRAAK_RUST.add(-30, 80, -100), new Vec3(-450, 240, -3000)};
+    public static final Vec3[] DRAAK_WEG = {DRAAK_RUST, DRAAK_RUST.add(4, 30, -20), DRAAK_RUST.add(-30, 80, -100), DRAAK_RUST.add(-120, 112, -390)};
 
     /**
      * The flashback (z2_hq11): the shard in the burcht (POI:burcht_splinter), then long ago: the pink dragon over the realm (high
      * above the burcht looking south over the peaks, within the chunks loaded around the player at the gate).
      */
     public static final Vec3[] FLASHBACK = {
-            new Vec3(3, 179, -2971), new Vec3(0, 177.5, -2976),        // the shard close up
-            new Vec3(0, 245, -2840), new Vec3(0, 160, -2600),          // memory: high over the peaks, the realm below
-            new Vec3(-60, 235, -2800), new Vec3(60, 180, -2650)};      // the pink dragon flies over, protective
-    public static final Vec3[] FLASHBACK_DRAAK = {new Vec3(-200, 210, -2720), new Vec3(-60, 224, -2790), new Vec3(70, 220, -2780),
-            new Vec3(230, 232, -2680)};
+            new Vec3(3, 179, -2971).add(BURCHT_SCHUIF), new Vec3(0, 177.5, -2976).add(BURCHT_SCHUIF),        // the shard close up
+            new Vec3(0, 245, -2840).add(BURCHT_SCHUIF), new Vec3(0, 160, -2600).add(BURCHT_SCHUIF),          // memory: high over the peaks, the realm below
+            new Vec3(-60, 235, -2800).add(BURCHT_SCHUIF), new Vec3(60, 180, -2650).add(BURCHT_SCHUIF)};      // the pink dragon flies over, protective
+    public static final Vec3[] FLASHBACK_DRAAK = {new Vec3(-200, 210, -2720).add(BURCHT_SCHUIF), new Vec3(-60, 224, -2790).add(BURCHT_SCHUIF),
+            new Vec3(70, 220, -2780).add(BURCHT_SCHUIF), new Vec3(230, 232, -2680).add(BURCHT_SCHUIF)};
 
     /** The cliffhanger (z2_hq12): from the Kristalkapel to the far west (azimuth ~255, the giant tree landmark of WereldLucht). */
+    private static final Vec3 ALTAAR = v("kristalkapel_altaar", 0, 91, -2476);
     public static final Vec3[] CLIFFHANGER = {
-            new Vec3(4, 93, -2468), new Vec3(0, 92, -2476),            // in the Kristalkapel
-            new Vec3(-10, 130, -2470), new Vec3(-900, 190, -2240),
-            new Vec3(-30, 150, -2450), new Vec3(-1000, 220, -2210)};
+            ALTAAR.add(4, 2, 8), ALTAAR.add(0, 1, 0),            // in the Kristalkapel
+            ALTAAR.add(-10, 39, 6), new Vec3(-900, 190, -2240),
+            ALTAAR.add(-30, 59, 26), new Vec3(-1000, 220, -2210)};
 
     /** The gondola ride (fallback when z2-wereld's own gondola is not in this tree). */
     public static final Vec3[] GONDEL = {
-            new Vec3(84, 100, -2470), new Vec3(306, 159, -2618),       // the valley station, the cable up
-            new Vec3(190, 135, -2540), new Vec3(306, 159, -2618),
-            new Vec3(296, 156, -2606), new Vec3(420, 165, -2480)};     // the top: over the Galmhellingen
+            v("gondel_dal", 84, 100, -2470).add(6, 9, -4), v("gondel_kabel_berg", 306, 159, -2618),       // the valley station, the cable up
+            v("gondel_dal", 84, 100, -2470).lerp(v("gondel_berg", 306, 151, -2616), 0.5).add(0, 20, 0), v("gondel_kabel_berg", 306, 159, -2618),
+            v("gondel_berg", 306, 151, -2616).add(-10, 5, 10), v("arena_galmwolf", 420, 165, -2480).add(0, 40, 0)};     // the top: over the Galmhellingen
     /** The airship between De Haven and Kandijkom (fallback when z2-wereld has no line of its own). */
     public static final Vec3[] VLUCHT_KANDIJKOM = {
             new Vec3(0, 140, -2120), new Vec3(0, 120, -2300),
