@@ -92,5 +92,18 @@ the other two 32/33 = the lv 30-35 band).
 - Two puzzles (Lichtkamer, Prismazaal) + the Spiegelgang gauntlet (wereld's 6 spiegelgang spots unused).
 - Placeholder dev builds (`/guhs vadsrijk z2bazen bouw alles`) only fill air: on the real map they add nothing.
 
-## Resume point
-(see the end of this file: tests + head commit)
+## Resume point (2026-11-04)
+- Everything above is built and committed on `110-z2-bazen`.
+- Gametests `runGameTestServer -Pgt=VadsrijkZ2Bazen`: **5/5 passed** (galmwolf: ranged target + rotation, pillar shields / cracks /
+  shatters, careless howl 60 %, interrupt, no damage from outside, phases + blizzard, reset restores; spiegelzucht: ranged target,
+  hall setup, images strike back / she takes damage / found at 5 %, light cone, beam misses through a diagonal mirror and blinds
+  her through the folded one, fase 3; both puzzles solve with their solution and not with their start; boormeester: asleep,
+  start, ranged target, 25 % armour, wrong order = steam, right order = meltdown + 3 x 10 %, double damage, defeat = cart flight +
+  chest; loot). Each test has its own batch (bosses fight every player within 24, side-by-side tests disturbed each other).
+- AutoCheck `tools/autocheck/vadsrijk_z2_bazen.txt` (player in creative at ~16 blocks in each arena): 23 screenshots in
+  `run/screenshots/autocheck/` (not committed). All three bosses act from the start: Galmwolf pounces onto the ranged player,
+  pillars, purple howl + pups + white blizzard in fase 3; Spiegelzucht's images with particle shadows, red shard circles at the
+  player, she blinks to the ranged player; Boormeester with 3 heads + nameplates, Steenregen circles, rams the player, miners
+  swarm. Burcht: the Lichtkamer beam + lock, gate opens after `burcht los`, Spiegelgang waves.
+  (Dev-build note: in the first run the Galmwolf stand-in floor was missing when the player arrived although the build reported
+  its blocks; the script now builds it again after the teleport. Irrelevant on the real map.)

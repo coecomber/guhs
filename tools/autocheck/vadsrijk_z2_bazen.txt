@@ -14,10 +14,15 @@ section reis
 /guhs vadsrijk
 wait 400
 waitrender 300
-/guhs vadsrijk z2bazen bouw alles
+/guhs vadsrijk z2bazen bouw galmwolf
+/guhs vadsrijk z2bazen bouw burcht
+/guhs vadsrijk z2bazen bouw boor
 wait 40
 
 section galmwolf
+/tp @s 430 135 -2264
+/guhs vadsrijk z2bazen bouw galmwolf
+wait 20
 /tp @s 430 121 -2264
 look 180 12
 wait 60
