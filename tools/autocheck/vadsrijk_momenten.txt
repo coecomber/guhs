@@ -1,0 +1,97 @@
+# Het Vadsrijk fix round 1 "momenten": the travelling caravan (road, shop, attack + reward) and the pink recolour wave.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_momenten.txt
+
+section setup
+/gamemode creative
+/time set 6000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section karavaan_haven
+/guhs vadsrijk wereld plek haven_plein
+wait 80
+waitrender 300
+/guhs vadsrijk momenten karavaan info
+/guhs vadsrijk momenten karavaan tp
+wait 60
+waitrender 200
+shot k_haven gui
+
+section karavaan_weg
+/tp @s 112 72 196
+wait 60
+waitrender 300
+/guhs vadsrijk momenten karavaan hier
+wait 80
+/guhs vadsrijk momenten karavaan tp
+wait 40
+waitrender 200
+shot k_weg
+wait 120
+/guhs vadsrijk momenten karavaan tp
+wait 20
+shot k_weg2
+/guhs vadsrijk momenten karavaan info
+
+section karavaan_winkel
+gui keep
+/guhs vadsrijk momenten karavaan winkel
+wait 20
+shot k_winkel gui
+gui close
+wait 10
+
+section karavaan_aanval
+/guhs vadsrijk momenten karavaan aanval
+wait 40
+/guhs vadsrijk momenten karavaan tp
+wait 30
+shot k_aanval gui
+wait 80
+shot k_aanval2 gui
+/guhs vadsrijk momenten karavaan info
+/execute as @e[tag=vr_mom_karavaan] run damage @s 9999 minecraft:player_attack by @p
+wait 60
+shot k_bedankt gui
+/guhs vadsrijk momenten karavaan info
+
+section karavaan_woud
+/tp @s -150 70 30
+wait 60
+waitrender 300
+/guhs vadsrijk momenten karavaan hier
+wait 40
+/guhs vadsrijk momenten karavaan tp
+wait 40
+waitrender 200
+shot k_woud gui
+
+section golf
+/guhs vadsrijk wereld plek ordetempel_altaar
+wait 80
+waitrender 300
+/guhs vadsrijk momenten golf grijs
+wait 60
+/guhs vadsrijk momenten golf
+wait 30
+shot g_01_start gui
+wait 100
+shot g_02_komt
+wait 40
+shot g_03_dichtbij
+wait 30
+shot g_04_zij
+wait 40
+shot g_05_voorbij
+wait 100
+shot g_06_volgt
+wait 75
+shot g_07_titel gui
+wait 80
+look 135 20
+wait 20
+shot g_08_na
+quit

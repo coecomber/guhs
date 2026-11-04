@@ -24,6 +24,11 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldRegistry;
 public final class WereldClient {
     /** This player's zone-1 quest is done: the scars are green again. */
     static volatile boolean heel;
+    /**
+     * MOMENTEN-HOOK (fix round 1, feature/vadsrijk/momenten GolfClient): while the recolour wave runs (or waits to run) this
+     * decides per block whether a scar is healed already; null = the plain flag {@link #heel}.
+     */
+    public static volatile java.util.function.Predicate<net.minecraft.core.BlockPos> golf;
     private static final int GRIJS_GRAS = 0x8E8A94, GROEN_GRAS = 0x9AD86E, GRIJS_PLANT = 0xA29CA8, ROZE_PLANT = 0xFF8FC8;
 
     private WereldClient() {
@@ -85,6 +90,12 @@ public final class WereldClient {
         @Override
         public int color(BlockState state) {
             return ARGB.opaque(heel ? geheeld : grijs);
+        }
+
+        @Override
+        public int colorInWorld(BlockState state, net.minecraft.client.renderer.block.BlockAndTintGetter level, net.minecraft.core.BlockPos pos) {
+            java.util.function.Predicate<net.minecraft.core.BlockPos> g = golf;   // MOMENTEN-HOOK: the wave decides per position
+            return g == null ? color(state) : ARGB.opaque(g.test(pos) ? geheeld : grijs);
         }
 
         @Override

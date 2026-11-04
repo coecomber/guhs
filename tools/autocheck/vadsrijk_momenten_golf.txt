@@ -1,0 +1,57 @@
+# Het Vadsrijk "momenten": only the recolour wave (camera fix), at the fossil bridge (scar line 2) and at the order temple.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_momenten_golf.txt
+
+section setup
+/gamemode creative
+/time set 6000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section golf_brug
+/guhs vadsrijk wereld plek fossielbrug.van
+wait 80
+waitrender 300
+/guhs vadsrijk momenten golf grijs
+wait 60
+look 135 10
+wait 10
+shot b_00_grijs
+/guhs vadsrijk momenten golf
+wait 30
+shot b_01_start gui
+wait 110
+shot b_02_komt
+wait 40
+shot b_03_dichtbij
+wait 30
+shot b_04_zij
+wait 40
+shot b_05_voorbij
+wait 100
+shot b_06_volgt
+wait 75
+shot b_07_titel gui
+wait 80
+look 135 10
+wait 20
+shot b_08_na
+
+section golf_tempel
+/guhs vadsrijk wereld plek ordetempel_altaar
+wait 80
+waitrender 300
+/guhs vadsrijk momenten golf grijs
+wait 60
+/guhs vadsrijk momenten golf
+wait 140
+shot t_02_komt
+wait 70
+shot t_04_zij
+wait 40
+shot t_05_voorbij
+wait 100
+shot t_06_volgt
+quit
