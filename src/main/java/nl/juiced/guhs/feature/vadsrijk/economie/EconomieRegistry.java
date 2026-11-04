@@ -41,8 +41,9 @@ public final class EconomieRegistry {
         EcoSpul.BLOCKS.register(modBus);
         EcoSpul.ENTITIES.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent e) -> {
-            e.put(EcoSpul.HOEDHUPPER.get(), RijdierEntity.attributen().build());
-            e.put(EcoSpul.KLODDERROS.get(), RijdierEntity.attributen().build());
+            for (RijdierSoort s : RijdierSoort.values()) {
+                e.put(EcoSpul.type(s), RijdierEntity.attributen().build());
+            }
         });
         EcoBasisTypes.registreer();
         Winkels.registreer();
@@ -55,7 +56,7 @@ public final class EconomieRegistry {
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 Handel.annuleer(p, "vadsrijk.economie.handel.weg");
-                Rijdieren.vergeet(p);
+                Rijdieren.uitgelogd(p);
                 EcoPayloads.vergeet(p.getUUID());
                 Handel.vergeet(p.getUUID());
                 LAATST.remove(p.getUUID());
@@ -83,6 +84,9 @@ public final class EconomieRegistry {
                 Post.bezorg(p, true);
             }
         });
+        // fainting: the mount hops home
+        nl.juiced.guhs.feature.vadsrijk.kern.Haken.FLAUW.add(Rijdieren::vergeet);
+        NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> RijdierCommando.register(e));
         // hit while riding: the mount runs off
         Schade.NA_KLAP.add(u -> {
             if (u.klap().doel() instanceof ServerPlayer p && u.schade() > 0) {
@@ -97,6 +101,13 @@ public final class EconomieRegistry {
 
     private static void tick(ServerTickEvent.Post e) {
         long t = e.getServer().getTickCount();
+        if (t % 5 == 0) {
+            for (ServerPlayer p : e.getServer().getPlayerList().getPlayers()) {
+                if (Vadsrijk.in(p)) {
+                    Rijdieren.stuurHud(p);   // G-MOUNTS: the mount HUD icon
+                }
+            }
+        }
         if (t % 10 != 0) {
             return;
         }
