@@ -265,7 +265,7 @@ public final class Werver {
     /** Puts a Wimpel at this spot (also the dev command / tests). */
     @Nullable
     public static RijkGuh zet(ServerLevel sl, Plek plek) {
-        BlockPos s = Npcs.standplek(sl, plek.stand());
+        BlockPos s = Npcs.staanPlek(sl, plek.stand());
         NpcDef d = def(s, plek.yaw());
         RijkGuh g = NpcRegistry.GUH.get().create(sl, EntitySpawnReason.EVENT);
         if (g == null) {
