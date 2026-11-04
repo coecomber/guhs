@@ -33007,8 +33007,8 @@
   "erfenis.fout.geen_plot": "Je staat niet op een erfenis.",
   "erfenis.ok.opgehaald": "Opgehaald: %s. Njeg!",
   "erfenis.ok.klaar": "%s is klaar: level %s! Vahoeg!",
-  "erfenis.welkom.eigen": "Welkom op je opknapper, %s! Bouwkundig rapport: vads. Druk op je Bovenaanzicht-toets (O). Terug: /guhs erfenis terug",
-  "erfenis.welkom.ander": "Je bezoekt de erfenis van %s. Bovenaanzicht (O) = alleen kijken.",
+  "erfenis.welkom.eigen": "Welkom op je opknapper, %s! Bouwkundig rapport: vads. Druk op je Bovenaanzicht-toets (F9). Terug: /guhs erfenis terug",
+  "erfenis.welkom.ander": "Je bezoekt de erfenis van %s. Bovenaanzicht (F9) = alleen kijken.",
   "erfenis.cmd.niet_in": "Je bent niet in De Erfenis.",
   "erfenis.cmd.geen_base": "%s heeft nog geen erfenis.",
   "erfenis.cmd.geen_dim": "De Erfenis-dimensie bestaat niet op deze server.",
@@ -33624,7 +33624,7 @@
   "sherlock.beloning.oma_bestelling": "Oma Breiguh bestelt voortaan vaak bij je, met een extraatje erbij.",
   "sherlock.beloning.opas_kelder": "Opa's kelder is nu een knusse kamer in je Hoeve, met plekjes voor je vondsten!",
   "sherlock.beloning.bertha_optreden": "Bertha de koe treedt voortaan op tijdens dorpsfeestjes!",
-  "sherlock.beloning.paaltjes_terug": "De grenspaaltjes staan weer op hun plek!",
+  "sherlock.beloning.paaltjes_terug": "Pim zet alle grenspaaltjes weer recht, strikje en al. Je dorp is weer precies even groot als altijd! Als sorry stopt hij je zijn mooiste worteltje toe. Njeg.",
   "sherlock.beloning.testament": "Opa Knabbels testament is compleet, met de laatste bladzijde!",
   "sherlock.beloning.bureau_eindlook": "Je Detectivebureau krijgt zijn mooiste look!",
   "sherlock.bewijs.testament": "Opa Knabbels testament",
@@ -36159,5 +36159,11 @@
   "vadsrijk.kern.tip.knuffelsprong.titel": "Knuffelsprong!",
   "vadsrijk.kern.tip.knuffelsprong": "Druk op C voor een flinke sprong vooruit (zo'n 20 blokken). Elke klasse kan het, je landt altijd zacht, en na 5 tellen mag het weer.",
   "vadsrijk.kern.tip.elementen.titel": "Elementen",
-  "vadsrijk.kern.tip.elementen": "Het icoontje voor de naam van een wezen is zijn element:  Vuur wint van  Zwam, Zwam van  Slijm, Slijm van Vuur (x1,5; andersom x0,7).  Roze is extra sterk tegen ontvadste wezens. Geen icoontje = geen element."
+  "vadsrijk.kern.tip.elementen": "Het icoontje voor de naam van een wezen is zijn element:  Vuur wint van  Zwam, Zwam van  Slijm, Slijm van Vuur (x1,5; andersom x0,7).  Roze is extra sterk tegen ontvadste wezens. Geen icoontje = geen element.",
+  "erfenis.afwerking.worteltje.naam": "Pims worteltje",
+  "erfenis.afwerking.worteltje.tekst.0": "Met een roze strikje erom, net als de grenspaaltjes.",
+  "erfenis.afwerking.worteltje.tekst.1": "\"Sorry van de paaltjes. Morris zei het!\" - Pim",
+  "erfenis.afwerking.kelder.post": "Spulletjes uit Opa's oude kelder, netjes voor je bewaard! (In de nieuwe kelder paste het niet, of die komt pas bij je volgende bezoek.)",
+  "erfenis.afwerking.kelder.verhuisd": "Opa's kelder is mee verhuisd, met al je spulletjes erin. Opa zou trots zijn, njeg!",
+  "erfenis.afwerking.feestje": "Dorpsfeestje bij de Muziektent! Bertha de koe staat op het podium en zingt (een beetje vals, maar met heel haar hart)."
 }

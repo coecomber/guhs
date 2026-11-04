@@ -549,6 +549,7 @@ public final class Erfenis {
                 int ox = g.x, oz = g.z;
                 Base.Fout f = b.verplaats(a.id(), a.x(), a.z());
                 if (f == null) {
+                    Afwerking.voorVerhuizing(level, b, g, o.offset(ox, 0, oz), g.b(), g.d());   // Opa's old kelder
                     if (!b.moetStempelen) {
                         Stempel.wis(level, o, b, ox, oz, g.b(), g.d());
                     }
@@ -566,6 +567,7 @@ public final class Erfenis {
                 int ow = g.b(), oh = g.d();
                 Base.Fout f = b.draai(a.id());
                 if (f == null) {
+                    Afwerking.voorVerhuizing(level, b, g, o.offset(g.x, 0, g.z), ow, oh);   // Opa's old kelder
                     if (!b.moetStempelen) {
                         Stempel.wis(level, o, b, g.x, g.z, ow, oh);
                     }

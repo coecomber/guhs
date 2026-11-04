@@ -309,8 +309,8 @@ TEKSTEN = {
     G + "ok.naar_huis": "%s %s gaan naar je Leverkist thuis.",
     G + "ok.loket": "Ingeleverd bij het loket: %s %s",
     G + "ok.loge": "Je guh is gaan logeren. Bedje opgemaakt!",
-    G + "welkom.eigen": "Welkom op je opknapper, %s! Bouwkundig rapport: vads. Druk op je Bovenaanzicht-toets (O). Terug: /guhs erfenis terug",
-    G + "welkom.ander": "Je bezoekt de erfenis van %s. Bovenaanzicht (O) = alleen kijken.",
+    G + "welkom.eigen": "Welkom op je opknapper, %s! Bouwkundig rapport: vads. Druk op je Bovenaanzicht-toets (F9). Terug: /guhs erfenis terug",
+    G + "welkom.ander": "Je bezoekt de erfenis van %s. Bovenaanzicht (F9) = alleen kijken.",
     # ---- commands
     G + "cmd.niet_in": "Je bent niet in De Erfenis.",
     G + "cmd.geen_base": "%s heeft nog geen erfenis.",

@@ -9,20 +9,20 @@ beloningen die echt iets doen) en het FTB-hoofdstuk "Een opknapper!".
 
 1. Dubbelklik **`run-client.bat`** in `guhs_opk\w-int`. Eerste keer duurt het even (Gradle).
 2. Nieuwe wereld, **cheats aan**. Taal: Nederlands.
-3. Wil je de echte weg zien: speel in **survival**. Zonder gekochte erfenis zeggen de toets **O** (bovenaanzicht), de
-   wereldkaart (**M**) en `/guhs erfenis` netjes "Je hebt nog geen erfenis, njeg...". In creative mag alles altijd.
+3. Wil je de echte weg zien: speel in **survival**. Zonder gekochte erfenis zeggen de toets **F9** (bovenaanzicht), de
+   wereldkaart (**F10**) en `/guhs erfenis` netjes "Je hebt nog geen erfenis, njeg...". In creative mag alles altijd.
 
 ## Snelste route (± 20 minuten)
 
 | Stap | Doen | Kijk naar |
 |---|---|---|
-| 1 | `/gamemode survival`, druk **O** en **M** | allebei geweigerd (actiebalk) |
+| 1 | `/gamemode survival`, druk **F9** en **F10** | allebei geweigerd (actiebalk) |
 | 2 | `/guhs erfenis brief` | de Postguh komt met de dikke envelop (normaal na 30 min speeltijd vanaf je eerste Guhmension-bezoek; `brief klok 29` = bijna) |
 | 3 | Brief lezen → **Kopen voor 1 kaasknabbel** (`/give @s guhs:kaas_knabbels` als je er geen hebt) | Erfhekje + Leverkist in je zak |
 | 4 | Hekje en kist neerzetten, door het hekje lopen | aankomst in je krakkemikkige dorp, makelaar Guhrrit begint de tour |
 | 5 | `/guhs erfenis snel aan`, dan de tour doen: plukje opruimen → gratis Kippenhok → bewoner → bestelling → Hoeve 2 | elke stap pas op zijn moment; afscheid: borstbeeld + brievenbus in het decoschuurtje |
 | 6 | `/guhs erfenis hoeve 7` | 5 ansichtkaartjes per Postguh (Hoeve 3 t/m 7), Kaartjesbord in het schuurtje |
-| 7 | `/guhs erfenis geef alles 999` en wat bouwen in het bovenaanzicht (**O**) | winkel onderin, panelen, belletjes, Opslag / Naar huis / Deco / Loket / Logés |
+| 7 | `/guhs erfenis geef alles 999` en wat bouwen in het bovenaanzicht (**F9**) | winkel onderin, panelen, belletjes, Opslag / Naar huis / Deco / Loket / Logés |
 | 8 | Deco-tabje (laatste in de winkelbalk): een paadje met bocht en kruising slepen, hekje eromheen, bankje + fontein | hoekjes/kruisingen vanzelf, hekjes sluiten aan, Knusheid-chipje bovenin (tooltip telt op) |
 | 9 | Detectivebureau bouwen, wolkje (vergrootglas) boven het bureau → Speurboekje → zaak 1 | Sherlock + Vadson staan **voor de deur van je bureau** |
 | 10 | `/guhs erfenis sherlock vind` (alle aanwijzingen) of `sherlock demo`, dan `sherlock volgende` om door de zaken te springen | beloningen: zie hieronder |
@@ -55,7 +55,7 @@ Kant-en-klaar in één keer: **`/guhs erfenis demo`** (Hoeve 6, ~25 gebouwen; je
   als boek; rechtszaak → het bureau in zijn **eindlook** (L10-vorm). Direct: `/guhs erfenis beloning <vlag>`
   (`recept_theetaartje`, `oma_bestelling`, `opas_kelder`, `bertha_optreden`, `testament`, `bureau_eindlook`), en
   `/guhs erfenis kelder` om naar de kelder te gaan.
-- **Bestellingen**: paneel van het Marktplein → Bestellingen, rechtsklik op het Marktplein in je dorp, of **M** → een
+- **Bestellingen**: paneel van het Marktplein → Bestellingen, rechtsklik op het Marktplein in je dorp, of **F10** → een
   buurdorpje. Het scherm telt je echte leveringen.
 - **FTB**: 87 quests + "Hoe kom je hier?", niks op slot. Statistieken (Esc → Statistieken → Algemeen): plukjes, Hoeve,
   Knusheid, ansichtkaarten (doel 8), burenstempels, ...
@@ -87,10 +87,14 @@ Kant-en-klaar in één keer: **`/guhs erfenis demo`** (Hoeve 6, ~25 gebouwen; je
 
 ## Bekende gaten
 
-- Getuigen van een lopende zaak staan nog op hun vaste tegel (niet bij "hun" gebouw).
-- `paaltjes_terug` (Sherlock) geeft alleen een melding: er werden nooit echt paaltjes verzet.
-- Bertha staat er altijd (er bestaan nog geen dorpsfeestjes). FTB "Dorpsfeest!" gaat af bij de Muziektent.
-- Wordt de Hoeve verplaatst, dan blijft de oude kelder dicht onder de grond; de nieuwe komt onder de nieuwe plek.
+- (1.9.1 opgelost) Getuigen staan bij "hun" gebouw in je dorp (kippenhok, bakkerij, dorpscafé, akker...); heb je dat
+  gebouw niet, dan op de vaste tegel van de zaak. Een gebouw verplaatsen tijdens de zaak: de getuige blijft staan waar hij was.
+- (1.9.1 opgelost) `paaltjes_terug`: nieuwe, eerlijke melding (Pim zet ze recht) + Pims worteltje (gouden wortel met strikje).
+- (1.9.1 opgelost) Bertha staat er alleen tijdens een dorpsfeestje: de eerste 4 minuten van elke 20 (speltijd van de
+  erfenis-dimensie); daarna gaat ze weer weg. FTB "Dorpsfeest!" gaat nog steeds af bij het bouwen van de Muziektent.
+- (1.9.1 opgelost) Hoeve verplaatsen/draaien: de oude kelder wordt weer aarde; wat erin lag (vaten, potten, boekenkast,
+  eigen boek op de lessenaar) gaat naar de nieuwe kelder, wat niet past komt met de Postguh (komt de nieuwe kelder pas
+  bij een volgend bezoek, dan meteen per post). Testen: spul in de kelder, Hoeve verplaatsen, kijken in de nieuwe kelder.
 - Mika-strooptochten: "binnenkort" (alleen het plaatje aan het eind van het FTB-hoofdstuk).
 - De wiki/Discord/pack zijn nog niet bijgewerkt (pas bij de release).
 - In de volledige gametest-suite falen 6 tests die ook op main 1.8.1 al rood zijn (kussengevecht-gids, weide_roze_gras-

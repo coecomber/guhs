@@ -295,11 +295,15 @@ public final class Sherlock {
         if (o == null) {
             return;
         }
+        nl.juiced.guhs.feature.erfenis.Base dorp = nl.juiced.guhs.feature.erfenis.ErfenisData.get(p.level().getServer()).van(p.getUUID());
+        int i = 0;
         for (Getuige g : z.getuigen()) {
+            i++;
             if (Cast.van(p.level().getServer(), p.getUUID(), "getuige:" + g.id()) != null) {
                 continue;
             }
-            BlockPos b = Sporen.plek(p.level(), o, g.x(), g.z());
+            int[] tegel = bijGebouw(dorp, g.id(), i);
+            BlockPos b = Sporen.plek(p.level(), o, tegel == null ? g.x() : tegel[0], tegel == null ? g.z() : tegel[1]);
             Vec3 pos = Vec3.atBottomCenterOf(b);
             String naam = kindVan(g.id()) == null ? "sherlock.wie." + g.id() : null;
             Entity e = Cast.zet(p.level(), p.getUUID(), "getuige:" + g.id(), "getuige", g.kind(), pos, Cast.kijkNaar(pos, p.position()), naam, false);
@@ -308,6 +312,51 @@ public final class Sherlock {
                 (e instanceof GuhNpcEntity n ? n.roleData : e.getPersistentData()).putString(Cast.ZAAK, z.id());
             }
         }
+    }
+
+    /** Which buildings a witness belongs at (first one the village has wins). */
+    private static final Map<String, List<nl.juiced.guhs.feature.erfenis.GebouwType>> GETUIGE_GEBOUW = Map.of(
+            "bonnie", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.KIPPENHOK, nl.juiced.guhs.feature.erfenis.GebouwType.HOEVE),
+            "meelmuts", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.BAKKERIJ, nl.juiced.guhs.feature.erfenis.GebouwType.MOLEN),
+            "bouwer", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.TIMMERSCHUUR, nl.juiced.guhs.feature.erfenis.GebouwType.HOUTZAGERIJ),
+            "wolletje", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.SCHAAPSKOOI, nl.juiced.guhs.feature.erfenis.GebouwType.WEVERIJ),
+            "oehoe", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.BOSJE, nl.juiced.guhs.feature.erfenis.GebouwType.BOOMGAARD,
+                    nl.juiced.guhs.feature.erfenis.GebouwType.HOEVE),
+            "koos", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.DORPSCAFE, nl.juiced.guhs.feature.erfenis.GebouwType.MARKTPLEIN),
+            "pim", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.AKKER),
+            "oma", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.WEVERIJ, nl.juiced.guhs.feature.erfenis.GebouwType.GUHHUTJE),
+            "hendrik", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.KIPPENHOK),
+            "guhrrit", List.of(nl.juiced.guhs.feature.erfenis.GebouwType.MARKTPLEIN, nl.juiced.guhs.feature.erfenis.GebouwType.HOEVE));
+
+    /**
+     * The plot tile in front of "their" building (the middle of its front side, turned with it, one tile out; the n-th
+     * witness a little to the side so two at one building don't stand on each other). Null: no such building (yet), then
+     * the case's own fixed tile.
+     */
+    @Nullable
+    static int[] bijGebouw(@Nullable nl.juiced.guhs.feature.erfenis.Base dorp, String getuige, int n) {
+        List<nl.juiced.guhs.feature.erfenis.GebouwType> soorten = GETUIGE_GEBOUW.get(getuige);
+        if (dorp == null || soorten == null) {
+            return null;
+        }
+        for (nl.juiced.guhs.feature.erfenis.GebouwType t : soorten) {
+            for (nl.juiced.guhs.feature.erfenis.Gebouw g : dorp.gebouwen) {
+                if (g.type != t || g.level <= 0) {
+                    continue;
+                }
+                // the front is south at rot 0, turned clockwise with the building (as the shapes are)
+                int[][] uit = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+                int[] u = uit[g.rot & 3];
+                int zij = (n % 3 - 1) * 2;
+                double mx = g.x + g.b() / 2.0, mz = g.z + g.d() / 2.0;
+                double hx = g.b() / 2.0 + 1, hz = g.d() / 2.0 + 1;
+                int tx = (int) Math.floor(mx + u[0] * hx + (u[0] == 0 ? zij : 0));
+                int tz = (int) Math.floor(mz + u[1] * hz + (u[1] == 0 ? zij : 0));
+                int m = nl.juiced.guhs.feature.erfenis.Plot.MAAT;
+                return new int[] {Math.max(1, Math.min(m - 2, tx)), Math.max(1, Math.min(m - 2, tz))};
+            }
+        }
+        return null;
     }
 
     // =====================================================================================================================

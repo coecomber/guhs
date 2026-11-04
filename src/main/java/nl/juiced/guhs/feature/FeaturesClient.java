@@ -157,7 +157,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.kermisritten2.client.Ritten2Client.init(modBus);   // 1.8.1: Botsguhs + Spookguhhuis
         nl.juiced.guhs.feature.hamsterbuis.client.HamsterbuisClient.init(modBus);   // 1.8.0: the hamsterbuis station's screen
         nl.juiced.guhs.feature.erfenis.client.ErfenisClient.init(modBus);   // 1.9 POC: De Erfenis (overview key, camera, screen)
-        nl.juiced.guhs.feature.erfenis.kaart.client.KaartClient.init(modBus);   // 1.9 POC: De Erfenis, de wereldkaart (toets M)
+        nl.juiced.guhs.feature.erfenis.kaart.client.KaartClient.init(modBus);   // 1.9 POC: De Erfenis, de wereldkaart (toets F10)
         nl.juiced.guhs.feature.erfenis.koppeling.client.KoppelingClient.init(modBus);   // 1.9 Een opknapper!: the makelaarsbrief's screen
         nl.juiced.guhs.feature.erfenis.sherlock.client.SherlockClient.init(modBus);   // 1.9: De Erfenis, het Sherlock-verhaal (bureau, looks)
         nl.juiced.guhs.feature.erfenis.ftb.client.ErfenisFtbClient.init(modBus);   // 1.9 Een opknapper!: FTB (tells the server the overview/map opened)

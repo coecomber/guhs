@@ -29,7 +29,7 @@
   ],
   "quest.475548D8F3358F02.title": "Van bovenaf",
   "quest.475548D8F3358F02.quest_desc": [
-    "Druk op &eO&r: het &dbovenaanzicht&r van je boerderij. Daar bouw, ruim en regel je alles.",
+    "Druk op &eF9&r: het &dbovenaanzicht&r van je boerderij. Daar bouw, ruim en regel je alles.",
   ],
   "task.4755480D9C585961.title": "Plukjes opgeruimd",
   "quest.47554884D8F77E33.title": "Wieden maar",
@@ -275,7 +275,7 @@
   ],
   "quest.47554820BDB0A33C.title": "Op de kaart",
   "quest.47554820BDB0A33C.quest_desc": [
-    "Druk op &eM&r: de &dwereldkaart&r met alle dorpjes en karretjes.",
+    "Druk op &eF10&r: de &dwereldkaart&r met alle dorpjes en karretjes.",
   ],
   "quest.47554897132AD5FC.title": "Even kijken bij de buren",
   "quest.47554897132AD5FC.quest_desc": [

@@ -1,7 +1,12 @@
 package nl.juiced.guhs.feature.erfenis;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -9,6 +14,9 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,6 +26,7 @@ import net.minecraft.world.level.block.LanternBlock;
 import net.minecraft.world.level.block.LecternBlock;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.WallSignBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.LecternBlockEntity;
 import net.minecraft.world.level.block.entity.SignBlockEntity;
 import net.minecraft.world.level.block.entity.SignText;
@@ -36,7 +45,122 @@ final class OpasKelder {
     static final int VLOER = -5, PLAFOND = -1;
     private static final int VLAG = Block.UPDATE_CLIENTS;
 
+    /** What the player kept in an old kelder (Hoeve moved or turned), per base, waiting for the new kelder. */
+    private static final Map<UUID, List<ItemStack>> VERHUIS = new HashMap<>();
+
     private OpasKelder() {
+    }
+
+    /**
+     * (1.9.1) The Hoeve moves or turns: the old kelder under {@code hoek} (with the old footprint) goes back to dirt. What
+     * the player put in its barrels, pots and shelves (and a book of their own on the lectern) moves along to the new kelder
+     * ({@link #vulAan}); Opa's diary is stamped there again anyway.
+     */
+    static void wis(ServerLevel level, BlockPos hoek, int b, int d, UUID baseId) {
+        int x0 = 2, x1 = b - 3, z0 = 2, z1 = d - 3;
+        if (x1 - x0 < 3 || z1 - z0 < 3) {
+            return;
+        }
+        List<ItemStack> mee = VERHUIS.computeIfAbsent(baseId, k -> new ArrayList<>());
+        ItemStack dagboek = Afwerking.boek("dagboek", 3);
+        for (int x = x0 - 1; x <= x1 + 1; x++) {
+            for (int z = z0 - 1; z <= z1 + 1; z++) {
+                for (int y = VLOER; y <= PLAFOND; y++) {
+                    BlockPos p = hoek.offset(x, y, z);
+                    BlockEntity be = level.getBlockEntity(p);
+                    if (be instanceof LecternBlockEntity le) {
+                        ItemStack boek = le.getBook();
+                        if (!boek.isEmpty() && !ItemStack.isSameItemSameComponents(boek, dagboek)) {
+                            mee.add(boek.copy());
+                        }
+                        le.clearContent();
+                    } else if (be instanceof Container c) {
+                        for (int i = 0; i < c.getContainerSize(); i++) {
+                            ItemStack st = c.getItem(i);
+                            if (!st.isEmpty()) {
+                                mee.add(st.copy());
+                            }
+                        }
+                        c.clearContent();
+                    }
+                    zet(level, p, Blocks.DIRT.defaultBlockState());
+                }
+            }
+        }
+        if (mee.isEmpty()) {
+            VERHUIS.remove(baseId);
+        }
+    }
+
+    /**
+     * After the new kelder is stamped: the moved things into its barrels/pots/shelves. What doesn't fit goes to the owner
+     * by the Postguh (online), else waits for the next stamp. Never lost.
+     */
+    static void vulAan(ServerLevel level, BlockPos hoek, int b, int d, Base base) {
+        List<ItemStack> mee = VERHUIS.get(base.id);
+        if (mee == null || mee.isEmpty()) {
+            return;
+        }
+        int x0 = 2, x1 = b - 3, z0 = 2, z1 = d - 3;
+        if (x1 - x0 >= 3 && z1 - z0 >= 3) {
+            for (int x = x0; x <= x1 && !mee.isEmpty(); x++) {
+                for (int z = z0; z <= z1 && !mee.isEmpty(); z++) {
+                    if (level.getBlockEntity(hoek.offset(x, VLOER + 1, z)) instanceof Container c && !(c instanceof LecternBlockEntity)) {
+                        stop(c, mee);
+                    }
+                }
+            }
+        }
+        bezorg(level, base, mee);
+    }
+
+    /** The moved things that are still waiting go to the owner by the Postguh (when online). */
+    static void bezorg(ServerLevel level, Base base) {
+        List<ItemStack> mee = VERHUIS.get(base.id);
+        if (mee != null) {
+            bezorg(level, base, mee);
+        }
+    }
+
+    private static void bezorg(ServerLevel level, Base base, List<ItemStack> mee) {
+        ServerPlayer eigenaar = base.eigenaar == null ? null : level.getServer().getPlayerList().getPlayer(base.eigenaar);
+        if (eigenaar != null) {
+            boolean post = !mee.isEmpty();
+            for (int i = 0; i < mee.size(); i++) {
+                ItemStack st = mee.get(i);
+                if (i == 0) {   // one visit of the Postguh, the rest in the same bag
+                    nl.juiced.guhs.feature.erfenis.koppeling.Makelaarsbrief.bezorgPost(eigenaar, st,
+                            Component.translatable("erfenis.afwerking.kelder.post"));
+                } else if (!eigenaar.getInventory().add(st) && !st.isEmpty()) {
+                    eigenaar.drop(st, false);
+                }
+            }
+            mee.clear();
+            if (!post) {
+                eigenaar.sendSystemMessage(Component.translatable("erfenis.afwerking.kelder.verhuisd").withStyle(net.minecraft.ChatFormatting.GREEN));
+            }
+        } else if (base.eigenaar != null && !mee.isEmpty()) {
+            // Owner offline: hand it to the Leverkist post, which is saved with the world (never lost on a restart).
+            LeverkistPost.verstuur(level.getServer(), base.eigenaar, mee);
+            mee.clear();
+        }
+        if (mee.isEmpty()) {
+            VERHUIS.remove(base.id);
+        }
+    }
+
+    private static void stop(Container c, List<ItemStack> mee) {
+        for (int i = 0; i < c.getContainerSize() && !mee.isEmpty(); i++) {
+            ItemStack st = mee.get(0);
+            if (c.getItem(i).isEmpty() && c.canPlaceItem(i, st)) {
+                int n = Math.min(st.getCount(), Math.min(c.getMaxStackSize(st), st.getMaxStackSize()));
+                c.setItem(i, st.split(n));
+                if (st.isEmpty()) {
+                    mee.remove(0);
+                }
+            }
+        }
+        c.setChanged();
     }
 
     /** The cellar under a Hoeve stamped at {@code hoek} with this (turned) footprint. */

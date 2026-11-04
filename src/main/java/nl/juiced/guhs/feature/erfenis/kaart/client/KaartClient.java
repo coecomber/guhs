@@ -22,7 +22,7 @@ import org.lwjgl.glfw.GLFW;
  * and Alt are taken by other Guhs keys, J by JourneyMap in the dev client) and the receiver of the map data.
  */
 public final class KaartClient {
-    public static final KeyMapping TOETS = new KeyMapping("key.guhs.wereldkaart", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_M, GuhKeys.CATEGORY);
+    public static final KeyMapping TOETS = new KeyMapping("key.guhs.wereldkaart", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F10, GuhKeys.CATEGORY);
 
     private KaartClient() {
     }
