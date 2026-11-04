@@ -1,0 +1,89 @@
+# Vadsrijk fix round 1, agent WILD: the fixed wilderness spots (needle spiral top, slime hill edge, fossil bridge ends,
+# former pits: Kloof ramp + cave room/entrance, temple stairs, hollow mushroom floor, cave life).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_fix_wild.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 120
+waitrender 400
+
+section naald
+/tp @s -545 118 -75
+look 315 5
+wait 80
+waitrender 400
+shot fw_naald_spiraal gui
+/tp @s -522 166 -52
+look 315 35
+wait 60
+waitrender 300
+shot fw_naald_top gui
+/guhs vadsrijk wereld plek naaldtrap_zwamnaald
+look 90 -35
+wait 60
+waitrender 300
+shot fw_naald_voet gui
+
+section slaapheuvel
+/guhs vadsrijk wereld plek slaapheuvel
+/tp @s ~62 ~-20 ~-14
+look 49 20
+wait 80
+waitrender 300
+shot fw_slaapheuvel_rand gui
+
+section fossielbrug
+/tp @s 165 100 -232
+look 40 28
+wait 80
+waitrender 400
+shot fw_fossielbrug_overzicht gui
+/guhs vadsrijk wereld plek fossielbrug.van
+/tp @s ~8 ~5 ~8
+look 135 25
+wait 60
+waitrender 300
+shot fw_fossielbrug_zuideind gui
+/guhs vadsrijk wereld plek fossielbrug.naar
+/tp @s ~-9 ~5 ~-9
+look 315 25
+wait 60
+waitrender 300
+shot fw_fossielbrug_noordeind gui
+
+section kloof
+/tp @s 380 100 -280
+look 50 45
+wait 80
+waitrender 400
+shot fw_kloof_uitgang gui
+
+section tempel
+/tp @s 330 153 -352
+look 180 10
+wait 80
+waitrender 300
+shot fw_tempeltrap gui
+
+section grotten
+/guhs vadsrijk wereld plek grot_ingangen.1
+look 180 10
+wait 80
+waitrender 300
+shot fw_grot_ingang gui
+/guhs vadsrijk wereld plek grot_knopen.N1
+look 0 5
+wait 60
+waitrender 300
+shot fw_grot_kamer gui
+
+section woud
+/guhs vadsrijk wereld plek mika_aanwijzing_3
+look 270 5
+wait 60
+waitrender 300
+shot fw_holle_paddenstoel gui

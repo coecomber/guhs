@@ -24,15 +24,17 @@ KAMPVUREN = {
     "klodderweide": [(230, -130), (410, 200), (480, -80)],
     "sporenwoud": [(-220, 10), (-430, 230), (-300, 340)],
     "druipgrotten": [(-260, -300), (-460, -460), (-180, -480)],
-    "zwamtempel": [(200, -240), (400, -300)],
+    "zwamtempel": [(150, -248), (232, -347)],
     "haven": [(100, 452)],
 }
 UITKIJK = {"klodderkijk": (520, -240), "zwamnaald": (-510, -40), "druipspits": (-100, -510), "haventand": (160, 380),
            "slijmnaald": (460, 380)}
 ARENA = (410, 90, 32)          # Koning Klodder (x, z, r)
 SLAAPHEUVEL = (300, 300)
-KLOOF = [(40, -130), (100, -170), (170, -230), (240, -300), (280, -350), (360, -260), (450, -220)]
-FOSSIEL = [(140, -205), (205, -265)]
+# fix round 1: starts at (75, -160), clear of the Zwamzoet box (it used to cut under its NE corner)
+KLOOF = [(75, -160), (100, -170), (170, -230), (240, -300), (280, -350), (360, -260), (450, -220)]
+# the dragon-fossil bridge crosses the Kloof square to it (fix round 1: it used to lie along the gorge): ends on both rims
+FOSSIEL = [(151, -181), (119, -219)]
 BERG = (330, -470)
 TEMPEL_PLATEAU = 151           # top block of the temple plateau
 LITTEKENS = [
@@ -53,17 +55,26 @@ PADEN = {
     "grotten2": [(-260, -300), (-420, -300)],
     "grotten3": [(-260, -300), (-180, -360), (-180, -480)],
     "grotten4": [(-260, -300), (-380, -400), (-460, -460)],
-    "brug": [(30, -100), (80, -140), (120, -185), (140, -205)],
-    "berg": [(205, -265), (230, -280), (400, -292), (410, -305), (400, -322), (280, -345), (272, -360), (285, -372), (330, -380), (330, -386)],
+    "brug": [(30, -100), (70, -112), (120, -150), (151, -181)],
+    # north of the Kloof from the bridge up the mountain flank to the foot of the temple stairs (z -369, stand y TP - 6)
+    "berg": [(119, -219), (140, -270), (190, -330), (240, -375), (290, -385), (330, -366)],
     "haven": [(10, 100), (20, 130), (80, 180), (100, 300), (95, 400), (92, 470)],
     "zuid": [(100, 300), (160, 375)],
     "weide2": [(220, -80), (230, -130), (330, -200)],
     "weide3": [(360, 30), (480, -80), (520, -240)],
     "slijm": [(374, 90), (410, 200), (460, 380)],
-    "slijm2": [(410, 200), (330, 260), (300, 270)],
+    "slijm2": [(410, 200), (330, 260), (300, 262)],
     "woud2": [(-220, 40), (-300, -40), (-420, 40), (-510, -40)],
     "druip": [(-180, -360), (-100, -510)],
 }
+
+# fix round 1: paths that lead to a rock needle stop at the foot of its spiral stair instead of under the rock
+for _naam, _pts in PADEN.items():
+    for (_ux, _uz) in UITKIJK.values():
+        if math.hypot(_pts[-1][0] - _ux, _pts[-1][1] - _uz) < 8:
+            _dx, _dz = _pts[-2][0] - _ux, _pts[-2][1] - _uz
+            _L = math.hypot(_dx, _dz)
+            _pts[-1] = (round(_ux + _dx / _L * 19), round(_uz + _dz / _L * 19))
 
 
 # ---------------------------------------------------------------- helpers
@@ -183,6 +194,8 @@ class Kaart:
         diep = np.clip(1 - (dk / rk) ** 4, 0, 1)
         self.kloof = dk < rk
         H = H * (1 - diep) + (30 + 2 * f) * diep
+        # fix round 1: dry banks (y 34) along both sides of the stream: a walk along the bottom to the ramps
+        H = np.where(self.kloof & (dk > 0.3 * rk) & (dk < 0.62 * rk), np.maximum(H, 34), H)
         # no inland lakes by accident: inland ground stays >= 64 (the Kloof and the ponds are carved on purpose)
         H = np.where((kustd > 30) & ~self.kloof, np.maximum(H, 64 + 0.5 * f), H)
         # ponds of Klodderweide (water at their own level); land has no water unless set here
@@ -207,17 +220,153 @@ class Kaart:
             mix = np.clip((dp - r) / 4, 0, 1)
             H = np.where(m & ~self.kloof, Hs * (1 - mix) + H * mix, H)
             self.pad = np.maximum(self.pad, np.clip(1 - dp / r, 0, 1) + (dp < r) * 0.5)
-        # the mountain path: a proper ramp (ignore the smoothed terrain): from y 70 up to the plateau
+        # fix round 1: no path step higher than 1 block: every path (not the mountain ramp, not the Haven road) gets a smooth
+        # height profile along its length with a slope of at most 0.7, flat across its width
+        H = self.padprofielen(H)
+        # the fossil bridge deck level: both ends get a level landing at the deck height (fix round 1)
+        dek = int(round(max(H[idx(*FOSSIEL[0])], H[idx(*FOSSIEL[1])], 70)))
+        self.dek = dek
+        for (fx, fz) in FOSSIEL:
+            dl = np.hypot(XX - fx, ZZ - fz)
+            H = np.where(dl < 7, dek, np.where(dl < 13, dek + (H - dek) * (dl - 7) / 6, H))
+        # the mountain path: a proper ramp (ignore the smoothed terrain): from the deck up to the foot of the temple stairs
         dp, langs = polyafstand(PADEN["berg"])
         tot = sum(math.dist(a, b) for a, b in zip(PADEN["berg"], PADEN["berg"][1:]))
-        ramp = 72 + (TEMPEL_PLATEAU - 72) * np.clip(langs / tot, 0, 1)
+        ramp = dek + (TEMPEL_PLATEAU - 7 - dek) * np.clip(langs / tot, 0, 1)
         m = dp < 4.5
         rand = (dp >= 4.5) & (dp < 9)
         H = np.where(m, ramp, H)
-        H = np.where(rand, np.maximum(H, ramp), H)
+        H = np.where(rand, np.maximum(H, ramp - (dp - 4.5)), H)
         self.bergpad = m
-        self.H = np.where(self.land, np.round(H), -1).astype(np.int16)
+        H = self.kloofpaden(H)
+        H = np.round(H)
+        H = self.ontsnap(H)
+        self.H = np.where(self.land, H, -1).astype(np.int16)
         self.Hf = H
+
+    # ------------------------------------------------------------ walkability (fix round 1)
+    def padprofielen(self, H):
+        best = np.full(H.shape, 1e9, np.float32)
+        nieuw = H.copy()
+        for naam, pts in PADEN.items():
+            if naam in ("berg", "haven"):
+                continue
+            tot = sum(math.dist(a, b) for a, b in zip(pts, pts[1:]))
+            n = int(tot) + 1
+            # sample the terrain along the line
+            prof = np.zeros(n, np.float32)
+            acc, k = 0.0, 0
+            for (a, b) in zip(pts, pts[1:]):
+                L = math.dist(a, b)
+                while k < n and k <= acc + L:
+                    t = (k - acc) / L
+                    i, j = idx(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)
+                    prof[k] = H[min(max(i, 0), NX - 1), min(max(j, 0), NZ - 1)]
+                    k += 1
+                acc += L
+            prof[k:] = prof[k - 1] if k else 64
+            prof = ndimage.uniform_filter1d(prof, 9, mode="nearest")
+            for _ in range(2):
+                for k in range(1, n):
+                    prof[k] = min(max(prof[k], prof[k - 1] - 0.7), prof[k - 1] + 0.7)
+                for k in range(n - 2, -1, -1):
+                    prof[k] = min(max(prof[k], prof[k + 1] - 0.7), prof[k + 1] + 0.7)
+            dp, langs = polyafstand(pts)
+            ph = np.interp(langs, np.arange(n), prof)
+            m = (dp < 2.8) & (dp < best) & ~self.kloof
+            nieuw = np.where(m, ph, nieuw)
+            rand = (dp >= 2.8) & (dp < 6) & (dp < best) & ~self.kloof
+            mix = (dp - 2.8) / 3.2
+            nieuw = np.where(rand, ph * (1 - mix) + nieuw * mix, nieuw)
+            best = np.minimum(best, dp)
+        return nieuw
+
+    def kloofpaden(self, H):
+        """Ramps out of the Kloof: every ~70 blocks a 5-wide ramp cut along the wall, from the stream bank up to the rim,
+        alternating sides, so a player who falls into the gorge can always walk out (FIX_BRIEF walkability)."""
+        segs = list(zip(KLOOF, KLOOF[1:]))
+        lengte = [math.dist(a, b) for a, b in segs]
+        tot = sum(lengte)
+        self.kloofpad_lijnen = []
+        for k, s0 in enumerate(np.arange(35, tot - 30, 68)):
+            acc = 0
+            for (a, b), L in zip(segs, lengte):
+                if acc + L >= s0:
+                    break
+                acc += L
+            t = (s0 - acc) / L
+            cx, cz = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
+            ux, uz = (b[0] - a[0]) / L, (b[1] - a[1]) / L
+            kant = 1 if k % 2 else -1
+            nx, nz = -uz * kant, ux * kant
+            if math.hypot(cx - 135, cz + 200) < 40:       # not at the fossil bridge
+                continue
+            # rim distance along the normal 50 blocks further along the gorge (slope ~0.7)
+            ex, ez = cx + ux * 50, cz + uz * 50
+            d = 6
+            while d < 40:
+                i, j = idx(ex + nx * d, ez + nz * d)
+                if not self.kloof[i, j]:
+                    break
+                d += 1
+            A = (cx + nx * 5, cz + nz * 5)
+            B = (ex + nx * (d + 6), ez + nz * (d + 6))
+            i, j = idx(*B)
+            hb = float(H[i, j])
+            lijn = [A, ((A[0] + B[0]) / 2 + nx * 2, (A[1] + B[1]) / 2 + nz * 2), B]
+            dp, langs = polyafstand(lijn)
+            Lt = sum(math.dist(p, q) for p, q in zip(lijn, lijn[1:]))
+            ramp = 34 + (hb - 34) * np.clip(langs / Lt, 0, 1)
+            m = dp < 2.6
+            H = np.where(m, ramp, H)
+            sch = (dp >= 2.6) & (dp < 6)
+            H = np.where(sch, np.maximum(H, ramp - (dp - 2.6)), H)
+            self.pad = np.maximum(self.pad, np.clip(1 - dp / 2.6, 0, 1) + (dp < 2.6) * 0.5)
+            self.kloofpad_lijnen.append(lijn)
+        return H
+
+    def ontsnap(self, H):
+        """Fill pits: every land column must reach the sea by steps of at most 1 block up (water counts at its surface).
+        Priority flood from the sea, lowest first; a column lower than (neighbour - 1) is raised to neighbour - 1. Only the
+        wilderness is touched (not under the Zwamzoet, Knuffelkamp and Haven scenes)."""
+        import heapq
+        nx_, nz_ = H.shape
+        E = np.where(self.land, np.maximum(H, np.where(self.wl > H, np.round(self.wl), H)), ZEE).astype(np.int32)
+        sx0, sz0, sx1, sz1 = STAD_BOX
+        hx0, hz0, hx1, hz1 = HAVEN_DORP
+        vrij = self.land & ~((XX >= sx0 - 4) & (XX <= sx1 + 4) & (ZZ >= sz0 - 4) & (ZZ <= sz1 + 4))             & ~((XX >= hx0 - 4) & (XX <= hx1 + 4) & (ZZ >= hz0 - 4) & (ZZ <= hz1 + 4)) & (ZZ < 700)
+        zee = ~self.land
+        rand = zee & ndimage.binary_dilation(self.land)
+        bezocht = zee.copy()
+        Ef = E.ravel().tolist()
+        vrijf = vrij.ravel()
+        bez = bytearray(bezocht.ravel().tobytes())
+        hq = [(Ef[i], i) for i in np.flatnonzero(rand)]
+        heapq.heapify(hq)
+        verhoogd = 0
+        N = nx_ * nz_
+        while hq:
+            v, i = heapq.heappop(hq)
+            x, r = divmod(i, nz_)
+            for n in ((i - nz_) if x > 0 else -1, (i + nz_) if x < nx_ - 1 else -1, (i - 1) if r > 0 else -1,
+                      (i + 1) if r < nz_ - 1 else -1):
+                if n < 0 or bez[n]:
+                    continue
+                bez[n] = 1
+                e = Ef[n]
+                if e < v - 1 and vrijf[n]:
+                    e = v - 1
+                    Ef[n] = e
+                    verhoogd += 1
+                heapq.heappush(hq, (e, n))
+        E2 = np.array(Ef, np.int32).reshape(nx_, nz_)
+        nat = self.wl > H
+        H2 = np.where(self.land & ~nat, np.maximum(H, E2), H)
+        # water columns: raise the bed only when the water itself was too low (keep the water level)
+        H2 = np.where(self.land & nat & (E2 > np.round(self.wl)), E2, H2)
+        self.ontsnap_verhoogd = verhoogd
+        print(f"  ontsnap: {verhoogd} kolommen opgehoogd")
+        return H2
 
     # ------------------------------------------------------------ sea floor
     def zee(self):
