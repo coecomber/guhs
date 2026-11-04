@@ -181,9 +181,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 |---|---|
 | `haven_pakhuis` | 103, 65, 520 |
 | `haven_plein` | 90, 65, 470 |
-| `stal.binnen` | -149, 64, -4 |
-| `stal.deur` | -143, 64, -4 |
-| `stal.wei` | -146, 64, 25 |
+| `stal.binnen` | -149, 65, -4 |
+| `stal.deur` | -143, 65, -4 |
+| `stal.wei` | -146, 65, 25 |
 
 ## Viewpoints (top platform, panorama on first visit)
 

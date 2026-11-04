@@ -280,7 +280,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `werf_loods_poort` | 2927, 126, -546 |
 | `werf_trap_ab` | 2895, 141, -596 |
 | `werf_trap_bc` | 2905, 126, -544 |
-| `werf_vahoeg_altaar` | 2863, 168, -540 |
+| `werf_vahoeg_altaar` | 2864, 169, -540 |
 
 ## Hart van de Boom (dungeon 2) + the egg
 
@@ -438,7 +438,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `spiraal_balkon_3` | 2400, 111, 12 |
 | `spiraal_poort_128` | 2233, 129, 77 |
 | `spiraal_poort_176` | 2276, 177, 96 |
-| `spiraal_poort_75` | 2241, 76, 83 |
+| `spiraal_poort_75` | 2240, 75, 85 |
 | `spiraal_top` | 2299, 201, -100 |
 | `spiraal_voet` | 2299, 81, 156 |
 | `spiraal_zweefsprong_1` | 2200, 191, -12 |
