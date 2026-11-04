@@ -55,6 +55,9 @@ public final class RijkHud {
     private static Component titel, onder;
     private static int titelDuur, titelKleur, titelWacht;
     private static long titelStart = -1;
+    /** (integration fix round 1) A card that arrived while another had just started (< 1 s): shown right after it. */
+    @Nullable
+    private static Object[] titelWachtrij;
     // the hint card
     @Nullable
     private static String tip;
@@ -99,6 +102,11 @@ public final class RijkHud {
             if (titelWacht > 0 && --titelWacht == 0) {
                 titelStart = klok;
             }
+            if (titelWachtrij != null && (titel == null || (titelStart >= 0 && klok - titelStart > titelDuur))) {
+                Object[] q = titelWachtrij;
+                titelWachtrij = null;
+                zetTitel((Component) q[0], (Component) q[1], (Integer) q[2], (Integer) q[3]);
+            }
             if (!binnen() && baas != null) {
                 baas = null;
                 BaasMuziek.zet("");
@@ -109,6 +117,7 @@ public final class RijkHud {
             baas = null;
             party = List.of();
             titel = null;
+            titelWachtrij = null;
             tip = null;
         });
     }
@@ -124,6 +133,15 @@ public final class RijkHud {
     }
 
     static void titel(Component t, Component o, int ticks, int kleur) {
+        // two cards in the same second (a level-up and the boss's "Opgevrolijkt!"): the second one waits for the first
+        if (titel != null && titelStart >= 0 && klok - titelStart < 20 && titelWacht == 0) {
+            titelWachtrij = new Object[]{t, o, ticks, kleur};
+            return;
+        }
+        zetTitel(t, o, ticks, kleur);
+    }
+
+    private static void zetTitel(Component t, Component o, int ticks, int kleur) {
         titel = t;
         onder = o;
         titelDuur = ticks;
@@ -134,7 +152,7 @@ public final class RijkHud {
 
     /** A title card that starts {@code wacht} ticks from now (scenes). */
     static void titelLater(Component t, Component o, int ticks, int kleur, int wacht) {
-        titel(t, o, ticks, kleur);
+        zetTitel(t, o, ticks, kleur);
         if (wacht > 0) {
             titelWacht = wacht;
             titelStart = -1;
