@@ -98,7 +98,16 @@ public class WinkelScherm extends EcoScherm {
             prijs += 25L * niveau;
             g.text(font, Component.translatable("vadsrijk.economie.winkel.gear_uitleg", niveau), left + 30, ry + 11, ZACHT, false);
         } else if (soort.equals("POST")) {
-            g.text(font, Component.translatable("vadsrijk.economie.winkel.per_post_kort"), left + 30, ry + 11, ZACHT, false);
+            // (integration) cut off before the price + buy button, so the post line never runs under the price
+            String post = Component.translatable("vadsrijk.economie.winkel.per_post_kort").getString();
+            long gd = prijs / 10000, zv = prijs / 100 % 100;
+            int prijsBreed = 15 + font.width(String.valueOf(prijs % 100)) + (gd > 0 || zv > 0 ? 15 + font.width(String.valueOf(zv)) : 0)
+                    + (gd > 0 ? 15 + font.width(String.valueOf(gd)) : 0);
+            int ruimte = w - 30 - 10 - 44 - prijsBreed - 6;
+            if (font.width(post) > ruimte) {
+                post = font.plainSubstrByWidth(post, ruimte - font.width("...")) + "...";
+            }
+            g.text(font, post, left + 30, ry + 11, ZACHT, false);
         }
         long munten = data.getLongOr("munten", 0);
         int bx = left + w - 10;
