@@ -39,7 +39,7 @@ public class VadsrijkBelevingGameTests {
         helper.assertTrue(Reeks.xpFactor(25) == 1.15 && Reeks.xpFactor(50) == 1.20, "the higher milestones");
         helper.assertTrue(Reeks.mijlpaal(10) && Reeks.mijlpaal(25) && Reeks.mijlpaal(50) && Reeks.mijlpaal(75) && !Reeks.mijlpaal(11) && !Reeks.mijlpaal(60),
                 "milestones 10/25/50/75");
-        helper.assertTrue(Reeks.verlopen(t + 500 + Reeks.VENSTER).isEmpty(), "not broken at exactly 5 s");
+        helper.assertTrue(!Reeks.verlopen(t + 500 + Reeks.VENSTER).containsKey(id), "not broken at exactly 5 s");   // (other tests run in parallel: only our id)
         helper.assertTrue(Reeks.verlopen(t + 501 + Reeks.VENSTER).get(id) == 10 && Reeks.stand(id, t + 501 + Reeks.VENSTER) == 0,
                 "the break reports the count it reached");
         float vorige = 0;

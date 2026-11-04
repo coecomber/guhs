@@ -79,20 +79,21 @@ public final class Z2BazenLoot {
             new Benoemd("z2baas_stoomlaarzen", STOOMLAARZEN, Zeldzaamheid.LEGENDARISCH, "boormeester", 0.15),
             new Benoemd("z2baas_boorbril", BOORBRIL, Zeldzaamheid.GUHDDELIJK, "boormeester", 0.03));
 
-    /** Base types (only ids: called from the registry after the deferred items exist). */
+    /** Base types (only ids: called from the registry after the deferred items exist). Integration: the weapons use f-gevecht's
+     * damage-per-second rating model (kern.Aanvalstempo): 7.0 + 1.4/lv, a little above zone 1's named 6.5 + 1.3. */
     static void typen() {
         BasisTypes.registreer(BasisType.wapen("z2baas_galmklauw", "guhs:vr_z2_baas_galmklauw", "zwaard", Klassen.RIDDER, Element.WATER,
-                14, 2.4, Stats.van(Stat.KRACHT, 6, Stat.VADS, 30), Stats.van(Stat.KRACHT, 0.6), 1));
+                7.0, 1.4, Stats.van(Stat.KRACHT, 6, Stat.VADS, 30), Stats.van(Stat.KRACHT, 0.6), 1));
         BasisTypes.registreer(new BasisType("z2baas_ijspelsmantel", "guhs:vr_z2_baas_ijspelsmantel", Slot.BORST, "harnas", null, Element.WATER, 0, 0,
                 Stats.van(Stat.VERDEDIGING, 16, Stat.VADS, 60, Stat.ELEMENTWEERSTAND, 6), Stats.van(Stat.VERDEDIGING, 2.4, Stat.VADS, 8), 1));
         BasisTypes.registreer(BasisType.wapen("z2baas_spiegelstaf", "guhs:vr_z2_baas_spiegelstaf", "staf", Klassen.MAGIER, Element.ROZE,
-                14, 2.6, Stats.van(Stat.WIJSHEID, 9, Stat.KRITIEK, 4), Stats.van(Stat.WIJSHEID, 0.7), 1));
+                7.0, 1.4, Stats.van(Stat.WIJSHEID, 9, Stat.KRITIEK, 4), Stats.van(Stat.WIJSHEID, 0.7), 1));
         BasisTypes.registreer(BasisType.wapen("z2baas_schaduwloze", "guhs:vr_z2_baas_schaduwloze", "kruisboog", Klassen.JAGER, Element.NATUUR,
-                15, 2.6, Stats.van(Stat.BEHENDIGHEID, 8, Stat.KRITIEKSCHADE, 10), Stats.van(Stat.BEHENDIGHEID, 0.7), 1));
+                7.0, 1.4, Stats.van(Stat.BEHENDIGHEID, 8, Stat.KRITIEKSCHADE, 10), Stats.van(Stat.BEHENDIGHEID, 0.7), 1));
         BasisTypes.registreer(new BasisType("z2baas_spiegelkroon", "guhs:vr_z2_baas_spiegelkroon", Slot.HOOFD, "harnas", null, Element.ROZE, 0, 0,
                 Stats.van(Stat.VERDEDIGING, 9, Stat.VADS, 45, Stat.WIJSHEID, 6), Stats.van(Stat.VERDEDIGING, 1.6, Stat.VADS, 6), 1));
         BasisTypes.registreer(BasisType.wapen("z2baas_boorhamer", "guhs:vr_z2_baas_boorhamer", "hamer", Klassen.RIDDER, Element.VUUR,
-                17, 2.8, Stats.van(Stat.KRACHT, 8, Stat.VERDEDIGING, 6), Stats.van(Stat.KRACHT, 0.7), 1));
+                7.0, 1.4, Stats.van(Stat.KRACHT, 8, Stat.VERDEDIGING, 6), Stats.van(Stat.KRACHT, 0.7), 1));
         BasisTypes.registreer(new BasisType("z2baas_stoomlaarzen", "guhs:vr_z2_baas_stoomlaarzen", Slot.VOETEN, "harnas", null, Element.VUUR, 0, 0,
                 Stats.van(Stat.VERDEDIGING, 8, Stat.LOOPSNELHEID, 8, Stat.VADS, 30), Stats.van(Stat.VERDEDIGING, 1.4, Stat.VADS, 5), 1));
         BasisTypes.registreer(new BasisType("z2baas_boorbril", "guhs:vr_z2_baas_boorbril", Slot.HOOFD, "harnas", null, Element.GEEN, 0, 0,
