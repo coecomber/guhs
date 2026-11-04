@@ -94,7 +94,7 @@ public final class BoomScherm extends Screen {
     @Override
     protected void init() {
         int rijen = rijen();
-        DY = rijen <= Bomen.RIJEN ? 38 : 32;
+        DY = rijen <= Bomen.RIJEN ? 38 : rijen <= 6 ? 32 : 29;   // (z3-systemen: 8 rows with the zone-3 rows 6/7)
         H = rijen <= Bomen.RIJEN ? 240 : 46 + (rijen - 1) * DY + KNOOP + 20 + 22 + 26 + 8;
         left = (width - W) / 2;
         top = Math.max(24, (height - H) / 2);   // (g-klassen: room for the class tabs above)

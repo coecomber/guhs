@@ -71,7 +71,7 @@ public final class NpcHaken {
     static void verslagen(Haken.Verslagen v) {
         VadsrijkMob mob = v.mob();
         String type = BuiltInRegistries.ENTITY_TYPE.getKey(mob.getType()).toString();
-        Gebieden.Gebied g = Gebieden.op(mob.getX(), mob.getZ());
+        Gebieden.Gebied g = Gebieden.op(mob.getX(), mob.getY(), mob.getZ());
         String gebied = g == null ? "" : g.id();
         boolean baas = mob instanceof VadsrijkBaas;
         Set<ServerPlayer> wie = new LinkedHashSet<>();
@@ -143,7 +143,7 @@ public final class NpcHaken {
     }
 
     static void kampvuur(ServerPlayer p, BlockPos pos) {
-        Gebieden.Gebied g = Gebieden.op(pos.getX(), pos.getZ());
+        Gebieden.Gebied g = Gebieden.op(pos.getX(), pos.getY(), pos.getZ());
         String gebied = g == null ? "" : g.id();
         Questlog.tel(p, Quest.Doel.Type.KAMPVUUR, d -> d.doel().equals("*") || d.doel().equals(gebied), 1);
     }
@@ -167,7 +167,7 @@ public final class NpcHaken {
         if (!s.is(Blocks.TARGET) && !s.is(Blocks.HAY_BLOCK)) {
             return;
         }
-        Gebieden.Gebied g = Gebieden.op(pos.getX(), pos.getZ());
+        Gebieden.Gebied g = Gebieden.op(pos.getX(), pos.getY(), pos.getZ());
         long nu = p.level().getGameTime();
         if (g == null || !g.id().equals("knuffelkamp") || nu < POP_PAUZE.getOrDefault(p.getUUID(), 0L)) {
             return;

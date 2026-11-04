@@ -91,7 +91,7 @@ public class VadsrijkKlassenGameTests {
         helper.assertTrue("uitgesloten".equals(Boom.waaromNiet(j, Set.of("j_scherpoog", "j_vuurregen"), 20, "j_kleefregen")), "variants exclude each other");
         helper.assertTrue("al".equals(Boom.waaromNiet(j, Set.of("j_scherpoog"), 20, "j_scherpoog")), "twice");
         Klasse r = Klassen.van(Klassen.RIDDER);
-        helper.assertTrue(r != null && r.boom().stream().filter(b -> b.rij() < Bomen.RIJEN && !b.id().endsWith("_adv3")).count() == 14,   // z2-systemen: zone-2 rows + adv3 not counted
+        helper.assertTrue(r != null && r.boom().stream().filter(b -> b.rij() < Bomen.RIJEN && !b.id().endsWith("_adv3") && !b.id().endsWith("_adv4")).count() == 14,   // z2-systemen: zone-2 rows + adv3 not counted
                 "the Knuffelridder adapter has no tree");
         helper.assertTrue(Boom.waaromNiet(r, Set.of("r_knuffelspier", "r_slijmkussen"), 20, "r_kussenstorm") == null, "a|b requirement (b)");
         helper.assertTrue(Boom.waaromNiet(r, Set.of("r_knuffelspier", "r_vuurkussen"), 20, "r_kussenstorm") == null, "a|b requirement (a)");

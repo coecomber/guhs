@@ -64,6 +64,18 @@ public class VadsrijkBiomenGameTests {
         verwacht(helper, vb, -100, -2545, "splinterkloof");
         verwacht(helper, vb, 150, -2693, "spiegelburcht");
         verwacht(helper, vb, 280, -2500, "splinterpieken");   // g-int: g-z2's ring (the cloud sea round the 500x575 island)
+        // z3-systemen: zone 3 is LAYERED (same x/z, different height = different biome)
+        verwacht3(helper, vb, 2300, 250, 0, "kruinzee");
+        verwacht3(helper, vb, 2300, 150, 0, "schorsstad");
+        verwacht3(helper, vb, 2300, 40, 0, "hart");
+        verwacht3(helper, vb, 2400, 150, 0, "schorsstad");   // the Stamspiraal
+        verwacht3(helper, vb, 2500, 30, 0, "wortelduister");
+        verwacht3(helper, vb, 2500, 80, 0, "wortelvelden");
+        verwacht3(helper, vb, 1850, 170, 300, "takkenbanen");
+        verwacht3(helper, vb, 1800, 240, 0, "honingtak");
+        verwacht3(helper, vb, 1800, 80, 0, "wortelvelden");   // under Honingtak
+        verwacht3(helper, vb, 2900, 150, -570, "zeppelinwerf");
+        verwacht3(helper, vb, 1620, 150, 690, "schemerwortel");  // a box corner outside the branch ring
         // every biome is a possible biome, and places the map
         var kaart = server.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).getOrThrow(
                 net.minecraft.resources.ResourceKey.create(Registries.PLACED_FEATURE, Guhs.id("vr_kaart")));
@@ -78,6 +90,13 @@ public class VadsrijkBiomenGameTests {
         }
         helper.assertTrue(vb.possibleBiomes().size() == VadsrijkBiomen.IDS.size() + 1, "possible biomes " + vb.possibleBiomes().size());
         helper.succeed();
+    }
+
+    private static void verwacht3(GameTestHelper helper, VadsrijkBiomeSource vb, int x, int y, int z, String id) {
+        String naam = vb.biomeOp(x, y, z).getRegisteredName();
+        helper.assertTrue(naam.equals("guhs:vadsrijk_" + id), "at " + x + ", " + y + ", " + z + ": " + naam + " instead of guhs:vadsrijk_" + id);
+        String q = vb.getNoiseBiome(x >> 2, y >> 2, z >> 2, null).getRegisteredName();
+        helper.assertTrue(q.equals(naam), "getNoiseBiome at " + x + ", " + y + ", " + z + ": " + q);
     }
 
     private static void verwacht(GameTestHelper helper, VadsrijkBiomeSource vb, int x, int z, String id) {
