@@ -6,7 +6,6 @@
     textures/entity/vr_eco_pluimguh_<kleur>.png (roze, mint, lavendel, honing, wolkwit, sterrennacht, goud); its animations here;
   * the Wolkenschaapje (vr_eco_wolkenschaapje): a round woolly sheep that hovers a bit;
   * Slakkie (vr_eco_slakkie): the caravan snail of the momenten slice (its model function, without the cart) with a little seat;
-  * a "ren" (run) animation added to the economie mounts (Hoedhupper, Klodderros);
   * icons: the saddles of the two stal mounts and a Pluimguh egg per colour;
   * every text (Dutch; en_us gets the same Dutch).
 
@@ -307,36 +306,6 @@ def anims_slakkie():
 
 
 # =====================================================================================================================
-# "ren" for the economie mounts (their animation files come from vadsrijk_economie.animaties; this module runs after it)
-# =====================================================================================================================
-def ren_erbij(a, naam, w):
-    pad = os.path.join(a, "geckolib", "animations", "entity", f"{naam}.animation.json")
-    if not os.path.exists(pad):
-        return
-    with open(pad, encoding="utf-8") as f:
-        data = json.load(f)
-    anims = data["animations"]
-    hop = anims.get("hop")
-    if hop is None:
-        return
-    ren = copy.deepcopy(hop)
-    f = 0.6
-    ren["animation_length"] = round(hop["animation_length"] * f, 3)
-    for bone in ren["bones"].values():
-        for kanaal, keys in list(bone.items()):
-            nieuw = {}
-            for t, v in keys.items():
-                if kanaal == "rotation":
-                    v = [x * 1.35 for x in v]
-                elif kanaal == "position":
-                    v = [x * 1.3 for x in v]
-                nieuw[f"{float(t) * f:g}"] = v
-            bone[kanaal] = nieuw
-    anims["ren"] = ren
-    w(pad, data)
-
-
-# =====================================================================================================================
 # icons
 # =====================================================================================================================
 def ei(kleur, stip, oor):
@@ -392,8 +361,8 @@ def teksten():
         "item.guhs.vr_item_zadel_guhwolf": "Zadel van de Guhwolf",
         E + "rijdier.knuffelhert": "Knuffelhert",
         E + "rijdier.guhwolf": "Guhwolf",
-        E + "rijdier.eigen.knuffelhert": "Zacht als een knuffel, met een sierlijk geweitje. Springt heel hoog.",
-        E + "rijdier.eigen.guhwolf": "Een sneeuwwolfje met een sjaal. Snel en trouw.",
+        E + "rijdier.eigen.knuffelhert": "Zacht als een knuffel, met een sierlijk geweitje. Springt het allerhoogst.",
+        E + "rijdier.eigen.guhwolf": "Een sneeuwwolfje met een sjaal. Het snelste rijdier, maar hij springt niet zo hoog.",
         E + "stal.nog_niet.knuffelhert": "Quest: Het Knuffelhert (Sporenwoud). Steek de lantaarns aan en volg het hert...",
         E + "stal.nog_niet.guhwolf": "Quest: De verdwaalde Guhwolf (Kandijkom). Er huilt een wolfje in de Splinterkloof...",
         "item.guhs.vr_item_zadel_wolkenschaapje": "Zadel van het Wolkenschaapje",
@@ -414,16 +383,12 @@ def teksten():
         E + "rijdier.hud.rijdt": "rijdt",
         E + "rijdier.hud.schrik": "schrik!",
         E + "rijdier.hud.arena": "arena",
-        E + "rijdier.eigen.pluimguh": "Het snelste rijdier van het Vadsrijk. Rent als de wind met wapperende oortjes.",
-        E + "rijdier.eigen.hoedhupper": "Hupt vrolijk op zijn zwammenpootjes.",
-        E + "rijdier.eigen.klodderros": "Wiebelt een beetje, maar springt het hoogst.",
+        E + "rijdier.eigen.pluimguh": "Rent als de wind met wapperende oortjes en springt lekker hoog.",
         E + "rijdier.eigen.wolkenschaapje": "Zweeft een beetje: valt heel zacht en kan in de lucht nog een keer springen!",
-        E + "rijdier.eigen.slakkie": "Langzaam maar heel deftig, met een eigen zitje.",
+        E + "rijdier.eigen.slakkie": "Heel langzaam maar heel deftig, met een eigen zitje.",
         E + "stal.nog_niet.pluimguh": "Kies je eerste Pluimguh bij een quest in De Schemerwortel.",
-        E + "stal.nog_niet.wolkenschaapje": "Te koop bij de stal.",
+        E + "stal.nog_niet.wolkenschaapje": "Quest bij Stalmeester Hoefje in Zwamzoet (level 8), of te koop bij de stal.",
         E + "stal.nog_niet.slakkie": "Te koop bij de stal (een luxe rijdier).",
-        E + "stal.nog_niet.klodderros": "Koning Klodder heeft er soms een zadel van bij zich...",
-        E + "stal.nog_niet.hoedhupper": "Iemand in Zwamzoet zoekt een hulpje...",
         E + "stal.koop": "Kopen (%s)",
         E + "stal.gekocht": "Gekocht! Je nieuwe rijdier staat in je stal.",
         E + "stal.eerst_starter": "Kies eerst je eerste Pluimguh (in De Schemerwortel).",
@@ -444,10 +409,11 @@ def teksten():
         E + "starter.grapje": "Nee, het is geen choco-dinges uit een of ander Fantasy-spel. Kijk maar naar de oortjes, njeg!",
         E + "stal.grapje": "Stalmeester: \"Een choco-wat? Nooit van gehoord. Dit is een Pluimguh. Kijk maar naar de oortjes, njeg!\"",
         E + "tip.rijdier.titel": "Je eerste rijdier!",
-        E + "tip.rijdier": "Druk op X (je rijdier-toets) en de Hoedhupper komt eraan; nog een keer X en hij huppelt naar huis. Met N zie je al je rijdieren. Rijden geeft hem xp: dan wordt hij sneller en springt hij hoger.",
+        E + "tip.rijdier": "Druk op X (je rijdier-toets) en je Wolkenschaapje komt eraan; nog een keer X en het huppelt naar huis. Met N zie je al je rijdieren. Rijden geeft het xp: dan wordt het sneller en springt het hoger.",
+        E + "rijdier.al_schaapje": "Je had al een Wolkenschaapje! Hoefje geeft je het geld terug: %s.",
         E + "tip.starter.titel": "Je eigen Pluimguh!",
         E + "tip.starter": "Druk op X om op te stappen en weer af te stappen, N voor al je rijdieren en kleuren. Je Pluimguh rijdt in alle gebieden van het Vadsrijk.",
-        E + "tip.rijden": "Spatie = een grote hup. Word je geraakt, dan schrikt je rijdier en huppelt hij weg. In een baasarena stap je af.",
+        E + "tip.rijden": "Spatie = een grote hup. Een randje of trapje tot 2 blokken hoog loopt je rijdier gewoon op. Word je geraakt, dan schrikt je rijdier en huppelt het weg. In een baasarena stap je af.",
     }
     for k, n in KLEURNAMEN.items():
         t[E + "pluimkleur." + k] = n
@@ -498,9 +464,6 @@ def assets(a, w=_schrijf_json):
     w(os.path.join(geo, "vr_eco_slakkie.geo.json"), m.geo())
     w(os.path.join(ani, "vr_eco_slakkie.animation.json"), W.anim_bestand(anims_slakkie()))
     _png(os.path.join(tex, "vr_eco_slakkie.png"), MOM.schilder_karavaan(m))
-    # "ren" for the economie mounts
-    for naam in ("vr_eco_hoedhupper", "vr_eco_klodderros"):
-        ren_erbij(a, naam, w)
     # icons
     for naam, f in ICONEN.items():
         f().png(os.path.join(a, "textures", "item", ITEM_TEX, f"{naam}.png"))

@@ -185,7 +185,7 @@ public final class EcoItems {
         }
     }
 
-    /** A saddle that unlocks a mount at the stal (rare loot: the Klodderros from Koning Klodder). */
+    /** A saddle that unlocks a mount (quest/loot rewards, the stal mounts). */
     public static class Zadel extends Item {
         public final RijdierSoort soort;
 

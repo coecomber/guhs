@@ -135,9 +135,13 @@ andere kant ligt.
 - N = rijdierenscherm: alle rijdieren (wat je nog niet hebt als donker silhouet + "?"), een draaiend voorbeeld,
   level/xp/snelheid/sprong, "Hierop rijden". Bij de stal ook kopen.
 - **Pluimguh** (hoofdrijdier, placeholder-model; kleuren roze/mint/lavendel = starters, honing (stal), wolkwit (quest),
-  sterrennacht (bazenkist van Koning Klodder of de Galmwolf, 5 %), goud (geheim: Opperzwam of Spiegelzucht, 2 %)), **Hoedhupper**
-  (quest), **Klodderros** (zadel van Koning Klodder), **Wolkenschaapje** (stal; zweeft, dubbele sprong), **Slakkie** (stal; traag
-  maar luxe), **Knuffelhert** en **Guhwolf** (terugkeerquests).
+  sterrennacht (bazenkist van Koning Klodder of de Galmwolf, 5 %), goud (geheim: Opperzwam of Spiegelzucht, 2 %)),
+  **Wolkenschaapje** (quest van Stalmeester Hoefje op lv 8, of de stal; zweeft, dubbele sprong), **Slakkie** (stal; traag maar luxe),
+  **Knuffelhert** en **Guhwolf** (terugkeerquests). De Hoedhupper en de Klodderros zijn weg (ronde 3).
+- **Snelheden** (ronde 3, % van gewoon lopen, level 1): Guhwolf 370 (lage sprong, ~2,4 blokken), Pluimguh 350 (~3,3), Knuffelhert
+  320 (hoogste sprong, ~5 blokken), Wolkenschaapje 300 (+ dubbele sprong), Slakkie 85. Per level +1,5 % snelheid (max +13,5 %).
+  Instelbaar in `config/guhs-vadsrijk-balans.toml`, sectie `[rijdieren]` (snelheid, sprong, groei_snelheid, groei_sprong).
+- **Opstapjes:** elk rijdier loopt zonder springen een randje van 2 blokken op (trappen, halve blokken). 2,5 blok of hoger: springen.
 - De starterkeuze (1 van de 3 Pluimguhs gratis) hoort bij de zone-3-quest; testen met `/guhs vadsrijk mount starter`.
 - **Terugkeerquests** (pas zichtbaar als je een rijdier hebt): "Het Knuffelhert" (zone 1, Boswachter Mos, lv 10: steek 3
   lantaarns aan in het Sporenwoud en volg de hoefsporen naar de open plek) en "De verdwaalde Guhwolf" (zone 2, Breister Wolwinter

@@ -11,7 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
  * What the other slices may call or listen to (server side):
  * <ul>
  *   <li>{@link #meld}: report an event a quest may wait for. Known: {@code meld(p, "klasse", klasseId)} (klassen, after a class
- *       pick), {@code meld(p, "rijdier", "hoedhupper")} (economie, the first mount), {@code meld(p, "advancement", "ridder:1")}
+ *       pick), {@code meld(p, "rijdier", "wolkenschaapje")} (economie, the first mount), {@code meld(p, "advancement", "ridder:1")}
  *       (klassen, after the ceremony), {@code meld(p, "spion", "verslagen")} (bazen, after the rooftop fight).</li>
  *   <li>{@link #zone1Klaar}: the zone-1 story is done (wereld recolours the scars per player); {@link #ZONE1_KLAAR} fires once.</li>
  *   <li>{@link #QUEST_KLAAR}: (player, quest id) after every hand-in.</li>

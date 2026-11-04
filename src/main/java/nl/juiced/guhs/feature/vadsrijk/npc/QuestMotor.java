@@ -569,7 +569,7 @@ public final class QuestMotor {
             case "cliffhanger" -> Verhaal.cliffhanger(p);
             case "ontmasker" -> Verhaal.ontmasker(p);
             case "rijdier" -> {
-                if (!NpcRollen.doe("rijdier", p, a.length > 1 ? a[1] : "hoedhupper")) {
+                if (!NpcRollen.doe("rijdier", p, a.length > 1 ? a[1] : "wolkenschaapje")) {
                     p.sendSystemMessage(Component.translatable("vadsrijk.npc.rijdier.later").withStyle(ChatFormatting.GRAY));
                 }
             }

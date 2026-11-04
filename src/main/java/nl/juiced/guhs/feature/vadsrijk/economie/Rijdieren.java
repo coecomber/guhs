@@ -38,7 +38,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.Arenas;
  *   Vadsrijk, log out, and after a restart (never saved in the world). Riding in towns is fine;</li>
  *   <li>riding gives the mount xp: one per block ({@link #geefXp}); level 1..{@link RijdierSoort#MAX_LEVEL}.</li>
  * </ul>
- * APIs: {@link #geefEerste} (npc, the Hoedhupper quest), {@link #kiesStarter} (zone 3 main quest: choose 1 of 3 starters),
+ * APIs: {@link #geefEerste} (npc, the lv-8 Wolkenschaapje quest), {@link #kiesStarter} (zone 3 main quest: choose 1 of 3 starters),
  * {@link #geef} / {@link #geefKleur} (rewards), {@link #STARTER_GEKOZEN} (quest progress hook).
  */
 public final class Rijdieren {
@@ -189,13 +189,30 @@ public final class Rijdieren {
 
     // ---- getting mounts ---------------------------------------------------------------------------------------------------------
 
-    /** API (npc slice, the lv ~8 quest): the Hoedhupper. False when the player already had it. (The rijfluitje is optional now.) */
+    /**
+     * API (npc slice, the lv ~8 quest of Stalmeester Hoefje, "Een eigen Wolkenschaapje"): the Wolkenschaapje (I-MOUNTS: it replaced
+     * the Hoedhupper). False when the player already had it (e.g. bought at the stal). (The rijfluitje is optional now.)
+     */
     public static boolean geefEerste(ServerPlayer p) {
-        boolean nieuw = geef(p, RijdierSoort.HOEDHUPPER);
+        boolean nieuw = geef(p, RijdierSoort.WOLKENSCHAAPJE);
         if (nieuw) {
             Tips.toon(p, "vadsrijk.economie.tip.rijdier");
         }
         return nieuw;
+    }
+
+    /**
+     * The reward of the lv-8 quest (npc role "rijdier"): the Wolkenschaapje, or, when the player already bought it at the stal, its
+     * price back. Always true (so the quest never says "later").
+     */
+    public static boolean questBeloning(ServerPlayer p) {
+        if (geefEerste(p)) {
+            return true;
+        }
+        long prijs = RijdierSoort.WOLKENSCHAAPJE.prijs;
+        Spelers.geefMunten(p, prijs);
+        EcoUtil.chat(p, "vadsrijk.economie.rijdier.al_schaapje", Component.literal(Spelers.munten(prijs)).withStyle(ChatFormatting.GOLD));
+        return true;
     }
 
     private static void maak(ServerPlayer p, RijdierSoort s) {
@@ -318,7 +335,7 @@ public final class Rijdieren {
         if (op) {
             EcoUtil.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.6f, 1.5f);
             EcoUtil.zeg(p, "vadsrijk.economie.rijdier.level", Component.translatable(s.naamKey()), level);
-            if (p.getVehicle() instanceof RijdierEntity r) {
+            if (p.getVehicle() instanceof RijdierEntity r && r.soort() == s) {
                 r.zetLevel(level);
                 p.level().sendParticles(ParticleTypes.HAPPY_VILLAGER, r.getX(), r.getY() + 1, r.getZ(), 20, 0.6, 0.5, 0.6, 0.1);
             }
@@ -400,7 +417,7 @@ public final class Rijdieren {
             return null;
         }
         r.snapTo(p.getX(), p.getY(), p.getZ(), p.getYRot(), 0);
-        r.zetEigenaar(p.getUUID(), level(p, s));
+        r.zetEigenaar(p.getUUID(), level(p, s));   // (+ its speed/jump for that level, synced: the client steers)
         r.zetKleur(kleur(p, s));
         sl.addFreshEntity(r);
         UIT.put(p.getUUID(), r.getUUID());

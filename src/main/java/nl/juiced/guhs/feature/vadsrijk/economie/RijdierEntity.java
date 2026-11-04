@@ -35,13 +35,17 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 
 /**
- * A summoned mount (the Hoedhupper, the Klodderros): the rider steers, jump = a big hop (its jump stat), the speed comes from its
- * level. It is never hurt (a hit makes it poof away), never pushed, never saved in the world (after a restart it is gone; the
+ * A summoned mount (every {@link RijdierSoort}): the rider steers, jump = a big hop (its jump stat), the speed comes from its
+ * level (the server computes speed + jump with the balans knobs and syncs them: the riding client moves the mount). It steps up
+ * {@link RijdierSoort#STAP} blocks without jumping. It is never hurt (a hit makes it poof away), never pushed, never saved in the world (after a restart it is gone; the
  * rijfluitje brings it back) and only lives in the Vadsrijk. Riding gives it xp (server, one per block).
  */
 public class RijdierEntity extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<Integer> DATA_LEVEL = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> DATA_KLEUR = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.INT);
+    /** The effective speed / jump (server: soort + level + balans), synced so the riding client uses the same numbers. */
+    private static final EntityDataAccessor<Float> DATA_SNELHEID = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.FLOAT);
+    private static final EntityDataAccessor<Float> DATA_SPRONG = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.FLOAT);
 
     /** Client only: a preview in the mount screen drawn as a dark silhouette (a mount you don't have yet). */
     public boolean silhouet;
@@ -62,7 +66,7 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
     }
 
     public static AttributeSupplier.Builder attributen() {
-        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 40).add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.STEP_HEIGHT, 1.05)
+        return Mob.createMobAttributes().add(Attributes.MAX_HEALTH, 40).add(Attributes.MOVEMENT_SPEED, 0.25).add(Attributes.STEP_HEIGHT, RijdierSoort.STAP)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0).add(Attributes.SAFE_FALL_DISTANCE, 64);
     }
 
@@ -75,6 +79,8 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
         super.defineSynchedData(b);
         b.define(DATA_LEVEL, 1);
         b.define(DATA_KLEUR, 0);
+        b.define(DATA_SNELHEID, 0f);
+        b.define(DATA_SPRONG, 0f);
     }
 
     public int rijLevel() {
@@ -83,6 +89,20 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     void zetLevel(int level) {
         entityData.set(DATA_LEVEL, Math.max(1, level));
+        entityData.set(DATA_SNELHEID, (float) soort().snelheid(rijLevel()));
+        entityData.set(DATA_SPRONG, (float) soort().sprong(rijLevel()));
+    }
+
+    /** The ridden speed (0.1 = walking): the synced number, or the default for its level (before the first sync). */
+    public double rijSnelheid() {
+        float f = entityData.get(DATA_SNELHEID);
+        return f > 0 ? f : soort().snelheid(rijLevel());
+    }
+
+    /** The jump velocity: the synced number, or the default for its level. */
+    public double rijSprong() {
+        float f = entityData.get(DATA_SPRONG);
+        return f > 0 ? f : soort().sprong(rijLevel());
     }
 
     public RijdierSoort.PluimKleur kleur() {
@@ -128,7 +148,7 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected float getRiddenSpeed(Player player) {
-        return (float) soort().snelheid(rijLevel());
+        return (float) rijSnelheid();
     }
 
     @Override
@@ -144,13 +164,13 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
             if (onGround() && springt && springWacht <= 0) {
                 Vec3 dm = getDeltaMovement();
                 Vec3 kijk = Vec3.directionFromRotation(0, getYRot()).scale(input.z > 0 ? 0.25 : 0);
-                setDeltaMovement(dm.x + kijk.x, soort().sprong(rijLevel()), dm.z + kijk.z);
+                setDeltaMovement(dm.x + kijk.x, rijSprong(), dm.z + kijk.z);
                 springWacht = 8;
                 springLos = false;
             } else if (!onGround() && springt && springLos && !dubbelGebruikt && soort().zweeft()) {
                 // the Wolkenschaapje: a second little hop in the air (a puff of cloud)
                 Vec3 dm = getDeltaMovement();
-                setDeltaMovement(dm.x, soort().sprong(rijLevel()) * 0.85, dm.z);
+                setDeltaMovement(dm.x, rijSprong() * 0.85, dm.z);
                 dubbelGebruikt = true;
                 springLos = false;
                 for (int i = 0; i < 8; i++) {

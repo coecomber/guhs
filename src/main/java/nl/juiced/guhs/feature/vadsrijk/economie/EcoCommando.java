@@ -63,7 +63,7 @@ final class EcoCommando {
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(java.util.Arrays.stream(RijdierSoort.values()).map(RijdierSoort::id), b)).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     RijdierSoort s = RijdierSoort.van(StringArgumentType.getString(c, "soort"));
-                    if (s == RijdierSoort.HOEDHUPPER) {
+                    if (s == RijdierSoort.WOLKENSCHAAPJE) {
                         Rijdieren.geefEerste(p);
                     } else if (s != null) {
                         Rijdieren.geef(p, s);

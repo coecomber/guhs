@@ -58,11 +58,7 @@ public final class EcoSpul {
     // ---- mounts ---------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<EcoItems.Fluitje> RIJFLUITJE = ITEMS.registerItem("vr_item_rijfluitje", EcoItems.Fluitje::new,
             () -> new Item.Properties().stacksTo(1));
-    /** Rare loot (bazen slice: Koning Klodder): unlocks the Klodderros. Id {@code guhs:vr_item_zadel_klodderros}. */
-    public static final DeferredItem<EcoItems.Zadel> ZADEL_KLODDERROS = ITEMS.registerItem("vr_item_zadel_klodderros",
-            p -> new EcoItems.Zadel(p, RijdierSoort.KLODDERROS), () -> new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
-    public static final DeferredItem<EcoItems.Zadel> ZADEL_HOEDHUPPER = ITEMS.registerItem("vr_item_zadel_hoedhupper",
-            p -> new EcoItems.Zadel(p, RijdierSoort.HOEDHUPPER), () -> new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+    // (I-MOUNTS: the Hoedhupper / Klodderros saddles are gone with their mounts; a leftover stack in a chest just vanishes on load)
 
     /** G-MOUNTS: saddles of the stal mounts (also usable as quest/loot rewards), and a Pluimguh egg per colour (hatches = unlocks it). */
     public static final DeferredItem<EcoItems.Zadel> ZADEL_WOLKENSCHAAPJE = ITEMS.registerItem("vr_item_zadel_wolkenschaapje",
@@ -83,8 +79,6 @@ public final class EcoSpul {
         }
     }
 
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> HOEDHUPPER = rijdier("vr_eco_hoedhupper", 1.1f, 1.3f);
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KLODDERROS = rijdier("vr_eco_klodderros", 1.3f, 1.6f);
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> PLUIMGUH = rijdier("vr_eco_pluimguh", 1.4f, 2.6f);
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KNUFFELHERT = rijdier("vr_eco_knuffelhert", 1.3f, 2.4f);
     public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> GUHWOLF = rijdier("vr_eco_guhwolf", 1.3f, 2.0f);
@@ -130,8 +124,6 @@ public final class EcoSpul {
     public static DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> holder(RijdierSoort s) {
         return switch (s) {
             case PLUIMGUH -> PLUIMGUH;
-            case HOEDHUPPER -> HOEDHUPPER;
-            case KLODDERROS -> KLODDERROS;
             case KNUFFELHERT -> KNUFFELHERT;
             case GUHWOLF -> GUHWOLF;
             case WOLKENSCHAAPJE -> WOLKENSCHAAPJE;
@@ -149,15 +141,13 @@ public final class EcoSpul {
                 return s;
             }
         }
-        return RijdierSoort.HOEDHUPPER;
+        return RijdierSoort.PLUIMGUH;
     }
 
     /** The icon of a mount (screen, HUD): its saddle, or for the Pluimguh the egg of that colour. */
     public static net.minecraft.world.item.ItemStack icoon(RijdierSoort s, RijdierSoort.PluimKleur k) {
         Item i = switch (s) {
             case PLUIMGUH -> PLUIMEI.get(k).get();
-            case HOEDHUPPER -> ZADEL_HOEDHUPPER.get();
-            case KLODDERROS -> ZADEL_KLODDERROS.get();
             case KNUFFELHERT -> ZADEL_KNUFFELHERT.get();
             case GUHWOLF -> ZADEL_GUHWOLF.get();
             case WOLKENSCHAAPJE -> ZADEL_WOLKENSCHAAPJE.get();
