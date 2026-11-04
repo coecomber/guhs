@@ -463,6 +463,11 @@ TEKSTEN = {
     G + "ui.opslag_regel": "In de opslag: %s/%s",
     G + "ui.opslag_leeg": "Leeg. Haal wat op bij je gebouwen!",
     G + "ui.mag_naar_huis": "Mag naar huis (Leverkist).",
+    # 1.9.5: a cap per good, the overflow to the Leverkist
+    G + "ok.overloop": "(%s naar je Leverkist: opslag vol)",
+    G + "ui.goed_cap": "In de opslag: %s/%s (max voor dit goed)",
+    G + "ui.goed_cap_naar_huis": "Vol? Dan gaat de rest bij het ophalen naar je Leverkist.",
+    G + "ui.goed_cap_blijft": "Vol? Dan wacht de rest in het gebouw.",
     G + "ui.blijft_in_dorp": "Blijft in het dorp.",
     G + "ui.bouwblokken": "Bouwkeet-blokken",
     G + "ui.decoschuurtje": "Decoschuurtje",

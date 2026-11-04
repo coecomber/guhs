@@ -345,9 +345,10 @@ public final class Erfenis {
             }
             if (tx >= g.x - 1 && tx <= g.x + g.b() && tz >= g.z - 1 && tz <= g.z + g.d()) {
                 if (g.klaar() >= 1) {
-                    Object r = b.ophalen(g.id, RNG);
-                    if (r instanceof Map<?, ?> m) {
-                        p.sendOverlayMessage(Component.translatable("erfenis.ok.opgehaald_lopen", ophaalTekst(m), Component.translatable(g.type.naamKey())));
+                    Object r = haalOp(server, b, g.id, nu);
+                    if (r instanceof Object[] uit) {
+                        p.sendOverlayMessage(Component.translatable("erfenis.ok.opgehaald_lopen", ophaalRegel(castGoed((Map<?, ?>) uit[0]),
+                                castGoed((Map<?, ?>) uit[1])), Component.translatable(g.type.naamKey())));
                         geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
                         ErfenisData.get(server).setDirty();
                         syncKijkers(server, b);
@@ -585,31 +586,33 @@ public final class Erfenis {
                 return f;
             }
             case ErfenisPayloads.Actie.OPHALEN -> {
-                Object r = b.ophalen(a.id(), RNG);
+                Object r = haalOp(server, b, a.id(), nu);
                 if (r instanceof Base.Fout fout) {
                     return fout;
                 }
-                melding(p, "erfenis.ok.opgehaald", true, ophaalTekst((Map<?, ?>) r).getString());
+                Object[] uit = (Object[]) r;
+                melding(p, "erfenis.ok.opgehaald", true, ophaalRegel(castGoed((Map<?, ?>) uit[0]), castGoed((Map<?, ?>) uit[1])).getString());
                 geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
                 return null;
             }
             case ErfenisPayloads.Actie.OPHALEN_ALLES -> {
-                Map<Goed, Integer> som = new java.util.LinkedHashMap<>();
+                Map<Goed, Integer> som = new java.util.LinkedHashMap<>(), weg = new java.util.LinkedHashMap<>();
                 boolean vol = false;
                 for (Gebouw g : b.gebouwen) {
                     if (g.type.maakt() && g.klaar() >= 1) {
-                        Object r = b.ophalen(g.id, RNG);
-                        if (r instanceof Map<?, ?> m) {
-                            m.forEach((k, v) -> som.merge((Goed) k, (Integer) v, Integer::sum));
+                        Object r = haalOp(server, b, g.id, nu);
+                        if (r instanceof Object[] uit) {
+                            castGoed((Map<?, ?>) uit[0]).forEach((k, v) -> som.merge(k, v, Integer::sum));
+                            castGoed((Map<?, ?>) uit[1]).forEach((k, v) -> weg.merge(k, v, Integer::sum));
                         } else if (r instanceof Base.Fout fout && "erfenis.fout.vol".equals(fout.key())) {
                             vol = true;
                         }
                     }
                 }
-                if (som.isEmpty()) {
+                if (som.isEmpty() && weg.isEmpty()) {
                     return new Base.Fout(vol ? "erfenis.fout.vol" : "erfenis.fout.niks");
                 }
-                melding(p, "erfenis.ok.opgehaald", true, ophaalTekst(som).getString());
+                melding(p, "erfenis.ok.opgehaald", true, ophaalRegel(som, weg).getString());
                 geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
                 return vol ? new Base.Fout("erfenis.fout.vol") : null;
             }
@@ -713,6 +716,17 @@ public final class Erfenis {
     /** "Naar huis sturen": the goods leave the storage for the Leverkist (with the caps per hour; wool exempt). */
     @Nullable
     private static Base.Fout naarHuis(MinecraftServer server, ServerPlayer p, Base b, @Nullable Goed g, int n, long nu) {
+        Object r = stuurNaarHuis(server, b, g, n, nu);
+        if (r instanceof Base.Fout f) {
+            return f;
+        }
+        melding(p, "erfenis.ok.naar_huis", true, Integer.toString((Integer) r), g.naamKey());
+        geluid(p, SoundEvents.BUNDLE_INSERT);
+        return null;
+    }
+
+    /** The goods go from the storage to the Leverkist; returns how many went (Integer) or a Fout (nothing went). */
+    private static Object stuurNaarHuis(MinecraftServer server, Base b, @Nullable Goed g, int n, long nu) {
         if (g == null) {
             return new Base.Fout("erfenis.fout.weg");
         }
@@ -757,9 +771,64 @@ public final class Erfenis {
                             nl.juiced.guhs.feature.erfenis.koppeling.LeverkistPlafond.soort(spul.get(0)), 0))));
         }
         LeverkistPost.verstuur(server, b.eigenaar, mag.mee());
-        melding(p, "erfenis.ok.naar_huis", true, Integer.toString(n - terug), g.naamKey());
-        geluid(p, SoundEvents.BUNDLE_INSERT);
-        return null;
+        return n - terug;
+    }
+
+    /**
+     * 1.9.5: collecting a building's basket. What fits goes into the storage (each good up to its own cap); what no longer
+     * fits because that good is at its cap goes straight home to the Leverkist when it may (the caps per hour still
+     * count), the rest waits in the basket. Returns {collected (good -> n), sent home (good -> n)}, or a Fout.
+     */
+    static Object haalOp(MinecraftServer server, Base b, int id, long nu) {
+        Object r = b.ophalen(id, RNG);
+        Map<Goed, Integer> erin = r instanceof Map<?, ?> m ? castGoed(m) : new java.util.LinkedHashMap<>();
+        Map<Goed, Integer> weg = new java.util.LinkedHashMap<>();
+        Gebouw g = b.gebouw(id);
+        if (g != null && b.eigenaar != null) {
+            for (Goed goed : new ArrayList<>(g.buffer.keySet())) {
+                if (goed == Goed.BOUWBLOK || !goed.naarHuis() || b.ruimte(goed) > 0) {
+                    continue;
+                }
+                int n = Math.min((int) Math.floor(g.inBuffer(goed) + 1e-9), b.magNaarHuis(goed, nu));
+                if (n <= 0) {
+                    continue;
+                }
+                g.buffer.put(goed, g.inBuffer(goed) - n);
+                b.verander(goed, n);   // (through the storage, so the Leverkist's own bookkeeping stays the same)
+                Object st = stuurNaarHuis(server, b, goed, n, nu);
+                int ging = st instanceof Integer i ? i : 0;
+                int terug = n - ging;   // (what could not go: back into the basket, the storage stays at its cap)
+                if (terug > 0) {
+                    b.verander(goed, -terug);
+                    g.buffer.merge(goed, (double) terug, Double::sum);
+                }
+                if (ging > 0) {
+                    weg.merge(goed, ging, Integer::sum);
+                }
+            }
+            g.buffer.values().removeIf(v -> v < 1e-9);
+        }
+        if (erin.isEmpty() && weg.isEmpty()) {
+            return r instanceof Base.Fout f ? f : new Base.Fout("erfenis.fout.vol");
+        }
+        return new Object[] {erin, weg};
+    }
+
+    @SuppressWarnings("unchecked")
+    static Map<Goed, Integer> castGoed(Map<?, ?> m) {
+        return new java.util.LinkedHashMap<>((Map<Goed, Integer>) m);
+    }
+
+    /** The text for a collect: "12 eieren" (+ "en 30 stammen naar je Leverkist"). */
+    private static Component ophaalRegel(Map<Goed, Integer> erin, Map<Goed, Integer> weg) {
+        net.minecraft.network.chat.MutableComponent c = erin.isEmpty() ? Component.empty() : ophaalTekst(erin).copy();
+        if (!weg.isEmpty()) {
+            if (!erin.isEmpty()) {
+                c.append(" ");
+            }
+            c.append(Component.translatable("erfenis.ok.overloop", ophaalTekst(weg)));
+        }
+        return c;
     }
 
     /** Every main-world item any upgrade asks for (the Loket only takes these). */

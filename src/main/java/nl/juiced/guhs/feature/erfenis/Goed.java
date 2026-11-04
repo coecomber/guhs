@@ -80,6 +80,21 @@ public enum Goed {
         this.capPerUur = capPerUur;
     }
 
+    /** Building stuff: cheap and needed by the hundreds, so it may take a big share of the storage. */
+    private static final java.util.Set<String> BOUWSPUL = java.util.Set.of("stam", "steen", "klei", "zand", "plank", "balk", "baksteen",
+            "gladsteen", "glas", "glasscherf");
+
+    /**
+     * 1.9.5: the share of the whole storage one good may take (so one good never fills it all): building stuff 37%, the
+     * ordinary farm goods 25%, the dear things (value 6 and up: bread, cake, cheese, candles...) 11%.
+     */
+    public double opslagDeel() {
+        if (BOUWSPUL.contains(id)) {
+            return 0.37;
+        }
+        return waarde >= 6 ? 0.11 : 0.25;
+    }
+
     /** May this go home with the Leverkist ("Naar huis sturen")? */
     public boolean naarHuis() {
         return thuisItem != null;

@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.5 — Minecraft 26.1.2
+
+- **More storage in your Erfenis:** the Hoeve and every Opslagschuur hold three times as much.
+- **A maximum per good:** one good can no longer fill the whole storage. Building stuff (logs, planks, stone...) may take the most, ordinary farm goods a quarter, dear things (bread, cheese, candles...) the least. The storage window shows how full each good is.
+- **Overflow goes home:** is a good at its maximum when you collect? Then the rest goes straight to your Leverkist, if that good may go home (the hourly limits still count). The rest waits in the building.
+- **Bigger Leverkist:** six rows instead of three, and every slot holds up to 9,999 of one thing. Breaking a Leverkist no longer spills its contents: they go back into your post and come out in your next Leverkist.
+
 ## 1.9.4 — Minecraft 26.1.2
 
 - **Knabbelbaken:** right-click it for a little menu. Switch every effect you have unlocked on or off, several at once, and hide or show the beam (the effects keep working when it's hidden). It also reaches further now: 25 / 40 / 60 / 80 blocks for 1 / 2 / 3 / 4 layers (was 20 / 30 / 40 / 50).

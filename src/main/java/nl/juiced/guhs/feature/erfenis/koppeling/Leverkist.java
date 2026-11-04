@@ -54,7 +54,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 public final class Leverkist {
     public static final EnumProperty<Direction> FACING = HorizontalDirectionalBlock.FACING;
     public static final BooleanProperty POST = BooleanProperty.create("post");
-    public static final int SLOTS = 27;
+    /** 1.9.5: six rows (was 27 slots) and big stacks per slot (was 64), so the village post fits. */
+    public static final int SLOTS = 54;
+    public static final int GROTE_STAPEL = 9999;
 
     private Leverkist() {
     }
@@ -146,6 +148,14 @@ public final class Leverkist {
         }
     }
 
+    /** One saved slot: its index, the item (count 1) and how many (1.9.5: may be far above 99). */
+    record Vak(int slot, ItemStack item, int n) {
+        static final com.mojang.serialization.Codec<Vak> CODEC = com.mojang.serialization.codecs.RecordCodecBuilder.create(i -> i.group(
+                com.mojang.serialization.Codec.INT.fieldOf("Slot").forGetter(Vak::slot),
+                ItemStack.CODEC.fieldOf("Item").forGetter(Vak::item),
+                com.mojang.serialization.Codec.INT.fieldOf("Aantal").forGetter(Vak::n)).apply(i, Vak::new));
+    }
+
     public static class BlockEntityImpl extends BaseContainerBlockEntity {
         private NonNullList<ItemStack> items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
         @Nullable
@@ -179,10 +189,25 @@ public final class Leverkist {
 
         @Override
         public void preRemoveSideEffects(BlockPos pos, BlockState state) {
-            super.preRemoveSideEffects(pos, state);   // (the contents fall out)
             if (level instanceof ServerLevel server) {
                 KoppelingData.get(server.getServer()).haalKistWeg(GlobalPos.of(server.dimension(), pos));
+                if (eigenaar != null) {
+                    // 1.9.5: thousands of items would fall out as hundreds of item entities: they go back into the owner's
+                    // waiting post instead (into their other Leverkisten, or into the next one they put down)
+                    java.util.List<ItemStack> terug = new java.util.ArrayList<>();
+                    for (int i = 0; i < items.size(); i++) {
+                        ItemStack st = items.get(i);
+                        while (!st.isEmpty()) {
+                            terug.add(st.split(st.getMaxStackSize()));
+                        }
+                        items.set(i, ItemStack.EMPTY);
+                    }
+                    if (!terug.isEmpty()) {
+                        Leverkisten.verstuur(server.getServer(), eigenaar, terug);
+                    }
+                }
             }
+            super.preRemoveSideEffects(pos, state);   // (the contents fall out: only what an ownerless chest held)
         }
 
         @Override
@@ -205,6 +230,18 @@ public final class Leverkist {
             return SLOTS;
         }
 
+        /** (1.9.5) Hoppers and pipes still fill a slot to a normal stack; the menu and the post fill it further. */
+        @Override
+        public int getMaxStackSize() {
+            return GROTE_STAPEL;
+        }
+
+        /** (1.9.5) Also per item: setItem limits every stack to this, so it must not be the item's own 64. */
+        @Override
+        public int getMaxStackSize(ItemStack stack) {
+            return GROTE_STAPEL;
+        }
+
         @Override
         protected NonNullList<ItemStack> getItems() {
             return items;
@@ -222,13 +259,20 @@ public final class Leverkist {
 
         @Override
         protected AbstractContainerMenu createMenu(int id, Inventory inventory) {
-            return ChestMenu.threeRows(id, inventory, this);
+            return new LeverkistMenu(id, inventory, this);
         }
 
         @Override
         protected void saveAdditional(ValueOutput output) {
             super.saveAdditional(output);
-            ContainerHelper.saveAllItems(output, items);
+            // 1.9.5: big stacks (the item codec stops at 99): one item and its count per slot
+            ValueOutput.TypedOutputList<Vak> lijst = output.list("Vakken", Vak.CODEC);
+            for (int i = 0; i < items.size(); i++) {
+                ItemStack st = items.get(i);
+                if (!st.isEmpty()) {
+                    lijst.add(new Vak(i, st.copyWithCount(1), st.getCount()));
+                }
+            }
             output.storeNullable("Eigenaar", UUIDUtil.CODEC, eigenaar);
         }
 
@@ -236,7 +280,12 @@ public final class Leverkist {
         protected void loadAdditional(ValueInput input) {
             super.loadAdditional(input);
             items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
-            ContainerHelper.loadAllItems(input, items);
+            ContainerHelper.loadAllItems(input, items);   // (a chest saved before 1.9.5)
+            for (Vak v : input.listOrEmpty("Vakken", Vak.CODEC)) {
+                if (v.slot() >= 0 && v.slot() < SLOTS && !v.item().isEmpty()) {
+                    items.set(v.slot(), v.item().copyWithCount(Math.max(1, v.n())));
+                }
+            }
             eigenaar = input.read("Eigenaar", UUIDUtil.CODEC).orElse(null);
         }
     }

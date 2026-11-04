@@ -111,10 +111,14 @@ final class Vensters {
                 if (cy + 18 > y && cy < y1) {
                     Teken.rond(ui.g, cx, cy, cx + 50, cy + 18, 0xFFF6E9EF, 2);
                     ui.item(Ui.icoon(g), cx + 1, cy + 1);
-                    ui.tekst(Ui.getal(n), cx + 19, cy + 5, Teken.DONKER);
+                    int cap = b.opslagCap(g);   // (1.9.5: every good has its own maximum)
+                    ui.tekst(Ui.getal(n), cx + 19, cy + 5, n >= cap ? Teken.ROOD : Teken.DONKER);
+                    Teken.balk(ui.g, cx + 19, cy + 14, cx + 48, cy + 16, Math.min(1f, n / (float) cap), n >= cap ? Teken.ROOD : Teken.ROZE_DONKER);
                     List<Component> tip = new ArrayList<>();
                     tip.add(Component.translatable(g.naamKey()).withStyle(ChatFormatting.BOLD));
+                    tip.add(Component.translatable("erfenis.ui.goed_cap", Ui.getal(n), Ui.getal(cap)));
                     tip.add(Component.translatable(g.naarHuis() ? "erfenis.ui.mag_naar_huis" : "erfenis.ui.blijft_in_dorp").withColor(Teken.ZACHT));
+                    tip.add(Component.translatable(g.naarHuis() ? "erfenis.ui.goed_cap_naar_huis" : "erfenis.ui.goed_cap_blijft").withColor(Teken.ZACHT));
                     ui.klik(cx, cy, cx + 50, cy + 18, null, tip);
                 }
                 i++;
