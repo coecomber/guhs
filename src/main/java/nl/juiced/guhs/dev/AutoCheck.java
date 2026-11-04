@@ -1546,15 +1546,6 @@ public final class AutoCheck {
                     opened = false;
                     return true;
                 };
-            case "inventaris":
-                // gui inventaris: (Vadsrijk fix round 2, g-ui) open the player's own inventory screen (hover shots with 'mouse')
-                return mc -> {
-                    if (mc.player != null) {
-                        mc.setScreen(new net.minecraft.client.gui.screens.inventory.InventoryScreen(mc.player));
-                        opened = true;
-                    }
-                    return true;
-                };
             case "keep":
                 // gui keep: (3.0 QA) the next screen a server command opens (/guhs hemel scherm...) is wanted: keep it open until 'gui close'
                 return mc -> {
@@ -1562,7 +1553,7 @@ public final class AutoCheck {
                     return true;
                 };
             case "inventaris":
-                // gui inventaris [hotbar slot 0-8]: (vadsrijk g-klassen) the survival inventory, the mouse on that hotbar slot (item tooltip)
+                // gui inventaris [hotbar slot 0-8]: (vadsrijk g-klassen; also g-ui's hover shots, merged by g-int) the survival inventory, the mouse on that hotbar slot (item tooltip)
                 return mc -> {
                     opened = true;
                     var scr = new net.minecraft.client.gui.screens.inventory.InventoryScreen(mc.player);
