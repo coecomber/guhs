@@ -757,6 +757,8 @@ SCHATTEN = {
                                                   "de moeite waard!"),
     "schildpad": ("Op het schildpad-eiland", "Helemaal op het verre schildpad-eiland. Hoe ben je hier gekomen? Zwemmend? Vahoeg!"),
     "vuurtorenkelder": ("De kelder van de vuurtoren", "Onder de vuurtoren van Knuffelkamp. Iemand heeft hier ooit een kistje verstopt."),
+    "hoedenschat": ("De verstopte hoedenhut", "Hoog op een eenzame zwamhoed in het Sporenwoud, aan het eind van een smal plankenpaadje. "
+                                              "Wie heeft dit hutje hier gebouwd?"),
 }
 
 # ---------------------------------------------------------------------------------------------------------------------------

@@ -204,6 +204,7 @@ public final class NpcPlekken {
         SCHAT.put("slaapheuvel", w("geheim_slaapheuvel"));
         SCHAT.put("schildpad", w("geheim_schildpad"));
         SCHAT.put("vuurtorenkelder", w("geheim_vuurtorenkelder"));
+        SCHAT.put("hoedenschat", w("geheim_hoedenschat"));         // (fix verticaal) the secret hut on the Hoedenpaden
     }
 
     /** The 10 lost knuffels (collectibles; Kleine Kiki's quest). */
