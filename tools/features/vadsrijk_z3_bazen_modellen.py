@@ -1140,11 +1140,6 @@ def _iconen():
                                                     d.point([(7, 9)], fill=(255, 230, 245, 255))))
     ic["vr_z3_baas_bleumonocle"] = _icoon(lambda d: (d.ellipse([4, 3, 12, 11], outline=(200, 210, 230, 255), width=2), d.ellipse([6, 5, 10, 9], fill=(170, 200, 240, 160)),
                                                      d.line([(11, 10), (14, 15)], fill=(200, 210, 230, 255))))
-    ic["vr_z3_baas_vahoegzegel"] = _icoon(lambda d: (d.ellipse([2, 2, 14, 14], fill=(230, 90, 150, 255), outline=O), d.ellipse([4, 4, 12, 12], outline=GD),
-                                                     d.polygon([(6, 10), (8, 5), (10, 10), (8, 8)], fill=GD)))
-    ic["vr_z3_baas_gouden_veer"] = _icoon(lambda d: (d.line([(3, 14), (12, 2)], fill=(200, 150, 40, 255)),
-                                                     d.polygon([(12, 1), (14, 3), (8, 12), (5, 11)], fill=GD, outline=(180, 120, 30, 255)),
-                                                     d.point([(11, 4), (9, 7)], fill=(255, 250, 200, 255))))
 
     def trofee(top):
         def t(d):

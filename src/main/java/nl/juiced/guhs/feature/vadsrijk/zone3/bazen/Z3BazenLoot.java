@@ -23,7 +23,8 @@ import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredItem;
 import nl.juiced.guhs.feature.vadsrijk.bazen.BazenLoot;
-import nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren;
+import nl.juiced.guhs.feature.vadsrijk.zone3.systemen.GoudenVeren;
+import nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Spul;
 import nl.juiced.guhs.feature.vadsrijk.kern.Element;
 import nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
@@ -72,28 +73,6 @@ public final class Z3BazenLoot {
         return Z3BazenRegistry.ITEMS.registerItem(id, BazenLoot.Trofee::new, () -> new Item.Properties().stacksTo(16));
     }
 
-    /** The Vahoegzegel: put it on a Vahoeg altar (right-click the altar with it in hand). */
-    public static class Zegel extends Item {
-        public Zegel(Properties p) {
-            super(p);
-        }
-    }
-
-    /** The Gouden Veer: right-click with 25 in your bags = the gold Pluimguh. */
-    public static class Veer extends Item {
-        public Veer(Properties p) {
-            super(p);
-        }
-
-        @Override
-        public InteractionResult use(Level level, Player player, InteractionHand hand) {
-            if (player instanceof ServerPlayer p) {
-                ruilVeren(p);
-            }
-            return InteractionResult.SUCCESS;
-        }
-    }
-
     public static final DeferredItem<Item> TOUWKNOTS = wapen("vr_z3_baas_touwknots", "z3baas_touwknots");
     public static final DeferredItem<Item> LONTSTAF = wapen("vr_z3_baas_lontstaf", "z3baas_lontstaf");
     public static final DeferredItem<Item> ROQUEFORTSABEL = wapen("vr_z3_baas_roquefortsabel", "z3baas_roquefortsabel");
@@ -107,8 +86,6 @@ public final class Z3BazenLoot {
     public static final DeferredItem<Item> SCHIMMELBREKER = wapen("vr_z3_baas_schimmelbreker", "z3baas_schimmelbreker");
     public static final DeferredItem<Item> BLEUMONOCLE = harnas("vr_z3_baas_bleumonocle", "z3baas_bleumonocle", Slot.HOOFD);
     public static final DeferredItem<Item> EIERWARMER = sieraad("vr_z3_baas_eierwarmer", "z3baas_eierwarmer");
-    public static final DeferredItem<Item> VAHOEGZEGEL = Z3BazenRegistry.ITEMS.registerItem("vr_z3_baas_vahoegzegel", Zegel::new, () -> new Item.Properties().stacksTo(16));
-    public static final DeferredItem<Item> GOUDEN_VEER = Z3BazenRegistry.ITEMS.registerItem("vr_z3_baas_gouden_veer", Veer::new, () -> new Item.Properties().stacksTo(64));
 
     public static final List<String> BAZEN = List.of("kruinroofvogel", "taleggio", "brokkel", "roquefort", "piepvel", "wortelwurger", "nestwachter", "bleu",
             "vahoegnir");
@@ -226,15 +203,15 @@ public final class Z3BazenLoot {
         if (eerste || r.nextDouble() < 0.25) {
             items.add(trofee(baas));
         }
-        // the Vahoeg mode: Gouden Veren, a seal now and then, and 2 % for the gold Pluimguh at the end of a run
+        // the Vahoeg mode (z3-systemen's counters): Gouden Veren, and the 2 % gold Pluimguh roll at the end of a run
         if (vahoeg) {
-            items.add(new ItemStack(GOUDEN_VEER.get(), eindbaas ? 2 + r.nextInt(2) : 1 + r.nextInt(2)));
-            if (eindbaas && r.nextDouble() < 0.02) {
-                goudenPluimguh(p);
+            GoudenVeren.geef(p, eindbaas ? 2 + r.nextInt(2) : 1 + r.nextInt(2));
+            if (eindbaas) {
+                GoudenVeren.rolGoudenPluimguh(p);
             }
         }
         if (!vahoeg && List.of("taleggio", "brokkel", "roquefort", "wortelwurger", "nestwachter", "bleu").contains(baas) && r.nextDouble() < 0.2) {
-            items.add(new ItemStack(VAHOEGZEGEL.get()));
+            items.add(new ItemStack(Z3Spul.VAHOEGZEGEL.get()));   // a seal now and then (also sold for Jachtpenningen)
         }
         if (eerste) {
             extra.putBoolean(sleutel, true);
@@ -250,51 +227,6 @@ public final class Z3BazenLoot {
             }
         }
         return new LootTabel.Resultaat(uit, munten);
-    }
-
-    /** The gold Pluimguh (the drop or the 25 feathers), with a server-wide line. */
-    public static boolean goudenPluimguh(ServerPlayer p) {
-        if (!Rijdieren.geef(p, "pluimguh:goud")) {
-            return false;
-        }
-        if (p.level() instanceof ServerLevel sl) {
-            sl.getServer().getPlayerList().broadcastSystemMessage(Component.translatable("vadsrijk.z3bazen.loot.goud", p.getDisplayName())
-                    .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), false);
-            sl.playSound(null, p.blockPosition(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 1f, 1.2f);
-        }
-        return true;
-    }
-
-    public static int veren(ServerPlayer p) {
-        int n = 0;
-        for (ItemStack s : p.getInventory()) {
-            if (s.is(GOUDEN_VEER.get())) {
-                n += s.getCount();
-            }
-        }
-        return n;
-    }
-
-    /** 25 Gouden Veren -> the gold Pluimguh (the guarantee). True when it worked. Veertje (npc) may call this too. */
-    public static boolean ruilVeren(ServerPlayer p) {
-        int n = veren(p);
-        if (n < VEREN_NODIG) {
-            p.sendSystemMessage(Component.translatable("vadsrijk.z3bazen.veer.nog", n, VEREN_NODIG).withStyle(ChatFormatting.GOLD));
-            return false;
-        }
-        if (Rijdieren.heeftKleur(p, nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.PluimKleur.GOUD)) {
-            p.sendSystemMessage(Component.translatable("vadsrijk.z3bazen.veer.al").withStyle(ChatFormatting.GOLD));
-            return false;
-        }
-        int weg = VEREN_NODIG;
-        for (ItemStack s : p.getInventory()) {
-            if (weg > 0 && s.is(GOUDEN_VEER.get())) {
-                int k = Math.min(weg, s.getCount());
-                s.shrink(k);
-                weg -= k;
-            }
-        }
-        return goudenPluimguh(p);
     }
 
     static {

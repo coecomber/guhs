@@ -26,7 +26,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas;
  * The Vahoeg mode of the two dungeons (ZONE3_PLAN 8.5, made LIGHT by the user: no lockouts, no leaderboards, no time board).
  * Put a Vahoegzegel on the Vahoeg altar at the dungeon door: for 30 minutes (or until the last boss falls) every boss of that
  * dungeon that spawns, or still stands untouched, is in its Vahoeg form (lv 52, x1.5 HP, x1.25 damage, one extra mechanic each,
- * and the week seal). Vahoeg bosses drop Gouden Veren (25 = the gold Pluimguh, {@link Z3BazenLoot#ruilVeren}), the last boss of a
+ * and the week seal). Vahoeg bosses drop Gouden Veren (25 = the gold Pluimguh, z3-systemen's GoudenVeren), the last boss of a
  * run has 2 % for the gold Pluimguh itself. Everything else (Normal) stays exactly as it is.
  */
 public final class VahoegModus {
@@ -102,15 +102,14 @@ public final class VahoegModus {
 
     /** The altar: with a Vahoegzegel in hand, start; else explain. */
     public static boolean altaar(ServerLevel sl, ServerPlayer p, String kerker, Vec3 plek) {
-        ItemStack s = p.getMainHandItem();
-        if (!s.is(Z3BazenLoot.VAHOEGZEGEL.get())) {
+        if (!nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Vahoeg.heeftZegel(p)) {
             long rest = actief(sl, kerker) ? (ACTIEF.get(kerker) - sl.getGameTime()) / 20 : 0;
             p.sendSystemMessage(Component.translatable(rest > 0 ? "vadsrijk.z3bazen.vahoeg.loopt" : "vadsrijk.z3bazen.vahoeg.uitleg",
                     Component.translatable(zegel().key()).withStyle(ChatFormatting.GOLD), rest / 60).withStyle(ChatFormatting.LIGHT_PURPLE));
             return false;
         }
-        if (!p.isCreative()) {
-            s.shrink(1);
+        if (!p.isCreative() && !nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Vahoeg.neemZegel(p)) {
+            return false;   // (under lv 50: z3-systemen says why)
         }
         start(sl, kerker, p, plek);
         return true;

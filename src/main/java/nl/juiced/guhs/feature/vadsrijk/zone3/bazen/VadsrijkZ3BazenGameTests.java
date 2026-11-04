@@ -40,6 +40,12 @@ public class VadsrijkZ3BazenGameTests {
     }
 
     private static void vloer(ServerLevel sl, BlockPos c, int r) {
+        // the bosses jump around: keep every chunk of the floor ticking (a test only keeps its own structure's chunks loaded)
+        for (int cx = (c.getX() - r - 8) >> 4; cx <= (c.getX() + r + 8) >> 4; cx++) {
+            for (int cz = (c.getZ() - r - 8) >> 4; cz <= (c.getZ() + r + 8) >> 4; cz++) {
+                sl.setChunkForced(cx, cz, true);
+            }
+        }
         for (int x = -r; x <= r; x++) {
             for (int z = -r; z <= r; z++) {
                 sl.setBlock(c.offset(x, -1, z), Blocks.STONE.defaultBlockState(), 2);
@@ -64,6 +70,7 @@ public class VadsrijkZ3BazenGameTests {
         vloer(sl, c, 20);
         Brokkel b = zet(sl, Z3BazenRegistry.BROKKEL.get(), c, 39);
         ServerPlayer ver = speler(helper, Vec3.atBottomCenterOf(c).add(-16, 0, 0), false);
+        b.testFilter = q -> q == ver;
         helper.runAfterDelay(40, () -> {
             helper.assertTrue(b.strijders().contains(ver) && b.zDoel() != null, "the player 16 blocks away is a target");
             helper.assertTrue(b.aanvallenGedaan >= 1, "he started his rotation (" + b.laatsteAanval + ")");
@@ -101,6 +108,7 @@ public class VadsrijkZ3BazenGameTests {
         vloer(sl, c, 20);
         Kruinroofvogel k = zet(sl, Z3BazenRegistry.KRUINROOFVOGEL.get(), c, 38);
         ServerPlayer p = speler(helper, Vec3.atBottomCenterOf(c).add(-14, 0, 0), true);
+        k.testFilter = q -> q == p;
         helper.runAfterDelay(45, () -> {
             helper.assertTrue(k.strijders().contains(p) && k.aanvallenGedaan >= 1, "he fights the player at range (" + k.laatsteAanval + ")");
             Statussen.geef(k, Status.VERDOOFD, 400, 1, null);
@@ -136,6 +144,7 @@ public class VadsrijkZ3BazenGameTests {
         vloer(sl, c, 18);
         Piepvel g = zet(sl, Z3BazenRegistry.PIEPVEL.get(), c, 42);
         ServerPlayer p = speler(helper, Vec3.atBottomCenterOf(c).add(-6, 0, 3), true);
+        g.testFilter = q -> q == p;
         helper.runAfterDelay(20, () -> {
             helper.assertTrue(g.kooien().size() == 4 && g.groteKooi() != null, "4 cages + the big cage hang in the hall");
             helper.assertTrue(g.palenAan(sl) == 6, "6 lantern posts burn (" + g.palenAan(sl) + ")");
@@ -155,7 +164,7 @@ public class VadsrijkZ3BazenGameTests {
             helper.assertTrue(g.bevrijd == 4 && !g.schild(), "all 4 cages open: the shield is gone");
         });
         helper.runAfterDelay(70, () -> {
-            helper.assertTrue(g.cape() == 0, "the mice nibbled every cape panel away (" + Integer.toBinaryString(g.cape()) + ")");
+            helper.assertTrue(g.cape() == 0, "the mice nibbled every cape panel away (" + Integer.toBinaryString(g.cape()) + ", ticks " + g.tickCount + ", tasks " + g.takenOpen() + ")");
             g.krijgSchade(g.vads() - g.maxVads() * 0.39, p);
             helper.assertTrue(g.fase() == 3 && g.palenAan(sl) == 0, "fase 3: dark, every lantern out");
             double v = g.vads();
@@ -175,7 +184,7 @@ public class VadsrijkZ3BazenGameTests {
             helper.assertTrue(g.groteKooi() != null && g.groteKooi().raakbaar(), "at 10 % the big cage can be opened");
             g.doelGebruikt(g.groteKooi(), p);
         });
-        helper.runAfterDelay(125, () -> helper.assertTrue(g.geplofd() && g.cape() == 0, "the mice storm his cape: defeated, in his shirt"));
+        helper.runAfterDelay(125, () -> helper.assertTrue(g.geplofd() && g.cape() == 0, "the mice storm his cape: defeated, in his shirt (ticks " + g.tickCount + ", tasks " + g.takenOpen() + ")"));
         helper.runAfterDelay(125 + Z3Scenes.ARM_TICKS + 15, () -> {
             helper.assertTrue(g.isRemoved(), "the arm of the Keizer took him away");
             helper.succeed();
@@ -191,6 +200,7 @@ public class VadsrijkZ3BazenGameTests {
         vloer(sl, c, 24);
         Vahoegnir v = zet(sl, Z3BazenRegistry.VAHOEGNIR.get(), c, 50);
         ServerPlayer p = speler(helper, Vec3.atBottomCenterOf(c).add(-10, 0, 0), true);
+        v.testFilter = q -> q == p;
         helper.runAfterDelay(20, () -> {
             helper.assertTrue(v.strijders().contains(p) && v.ei() != null, "he fights, the egg lies in the nest");
             helper.assertTrue(v.splinters() == 0, "grey: 0 splinters");

@@ -136,7 +136,7 @@ public class Piepvel extends Z3Baas {
 
     @Override
     public int xp() {
-        return 5200 + 160 * mobLevel();
+        return nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Xp.baas(Math.min(50, mobLevel()));
     }
 
     @Override
@@ -543,8 +543,9 @@ public class Piepvel extends Z3Baas {
             f.doel = position().add(getRandom().nextGaussian() * 0.5, 0.2, getRandom().nextGaussian() * 0.5);
             vrij.add(f);
         }
+        // the mice gnaw a hole in his cape right away (one panel goes)
+        entityData.set(CAPE, cape() & ~(1 << Math.max(0, Math.min(3, Integer.bitCount(0b1111 & ~cape())))));
         later(30, () -> {
-            entityData.set(CAPE, cape() & ~(1 << Math.max(0, Math.min(3, Integer.bitCount(0b1111 & ~cape())))));
             sl.sendParticles(new DustParticleOptions(0xE0E0EA, 1.8f), getX(), getY() + 1, getZ(), 40, 0.8, 0.6, 0.8, 0.02);
             sl.playSound(null, blockPosition(), SoundEvents.WOOL_BREAK, SoundSource.HOSTILE, 1.5f, 1.4f);
             for (Z3Figurant f : muizen.getOrDefault(k.nummer, List.of())) {

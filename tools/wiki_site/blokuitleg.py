@@ -1828,7 +1828,7 @@ UITLEG = {
            "Right-click a blown-out post and it burns again. Light helps in the fight: in the dark you only hit the Count half "
            "as hard, and a burning post burns Baron Bleu's mould fields away."),
     "vr_z3_baas_altaar": dict(
-        nl="Het Vahoeg-altaar bij de deur van de Kaaszeppelinwerf en van het Hart van de Boom. Houd een Vahoegzegel in je hand "
+        nl="Het Vahoeg-altaar bij de deur van de Kaaszeppelinwerf en van het Hart van de Boom. Met een Vahoegzegel in je tas (vanaf lv 50) "
            "en rechtsklik: een half uur lang zijn de bazen van die kerker sterker (Vahoeg-vorm, met de weekzegel), en ze laten "
            "Gouden Veren vallen. Met 25 Gouden Veren krijg je de Gouden Pluimguh. Zonder zegel vertelt het altaar welke "
            "weekzegel er nu geldt.",

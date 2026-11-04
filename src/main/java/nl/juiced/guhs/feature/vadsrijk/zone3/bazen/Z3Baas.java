@@ -235,6 +235,23 @@ public abstract class Z3Baas extends Z2Baas {
         super.krijgSchade(n, bron);
     }
 
+    /** Like zone 2's, plus kern's {@link #testFilter} (gametests run side by side: each boss only fights its own mock players). */
+    @Override
+    public List<ServerPlayer> strijders() {
+        List<ServerPlayer> l = new ArrayList<>(), creatief = new ArrayList<>();
+        if (!(level() instanceof ServerLevel sl)) {
+            return l;
+        }
+        for (ServerPlayer p : sl.players()) {
+            if (!testFilter.test(p) || !zDoetMee(p) || nl.juiced.guhs.feature.vadsrijk.kern.Flauwvallen.beschermd(p)
+                    || nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.bezig(p)) {
+                continue;
+            }
+            (p.isCreative() ? creatief : l).add(p);
+        }
+        return l.isEmpty() ? creatief : l;
+    }
+
     // ---- hooks for mechanic objects -------------------------------------------------------------------------------------
 
     /** One of its {@link Z3Doel}s was hit (n = damage). */
@@ -270,6 +287,11 @@ public abstract class Z3Baas extends Z2Baas {
                 return t.test(i++);
             }
         });
+    }
+
+    /** Gametests: tasks still waiting. */
+    public int takenOpen() {
+        return taken.size();
     }
 
     /** Runs {@code r} after {@code ticks}. */

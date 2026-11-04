@@ -108,7 +108,7 @@ public class BaronBleu extends Z3Baas {
 
     @Override
     public int xp() {
-        return 7000 + 200 * mobLevel();
+        return nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Xp.baas(Math.min(50, mobLevel()));
     }
 
     @Override

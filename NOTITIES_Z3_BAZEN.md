@@ -67,10 +67,12 @@ ones at range; its own rotation; hits from outside do nothing; a leash; an empty
 
 ## Vahoeg mode (light: no lockouts, no leaderboards)
 `VahoegModus`: right-click the Vahoeg altar (`vr_z3_baas_altaar`, place it at `werf_vahoeg_altaar` / `hart_vahoeg_altaar`) with a
-Vahoegzegel: for 30 min (or until the end boss falls) the bosses of that dungeon spawn as Vahoeg (lv 52, x1.5 HP, x1.25 damage,
-1 extra mechanic each, the week seal by ISO week: Donker / Haastig / Splitsend / Taai). Vahoeg bosses drop 1-3 Gouden Veren;
-the end boss has 2 % for the gold Pluimguh (`Rijdieren.geef(p, "pluimguh:goud")`, server line). 25 Gouden Veren: right-click
-the feather (or `Z3BazenLoot.ruilVeren(p)` from Veertje). Normal dungeon bosses drop a Vahoegzegel 20 % of the time.
+Vahoegzegel in your bags (z3-systemen's `Vahoeg.heeftZegel/neemZegel`, lv 50 via `Vahoeg.magVahoeg`; item `vr_z3_vahoegzegel`):
+for 30 min (or until the end boss falls) the bosses of that dungeon spawn as Vahoeg (lv 52, x1.5 HP, x1.25 damage, 1 extra
+mechanic each, the week seal by ISO week: Donker / Haastig / Splitsend / Taai). Vahoeg bosses give 1-3 Gouden Veren
+(`GoudenVeren.geef`), the end boss rolls `GoudenVeren.rolGoudenPluimguh` (the 2 %); the 25-feather guarantee is systemen's
+(`GoudenVeren.ruil` at Veertje). Normal dungeon bosses drop a Vahoegzegel 20 % of the time. Boss xp = `Z3Xp.baas(level)`.
+**Merged `110-z3-systemen` (ca18781a8) into this branch** for these APIs.
 
 ## Loot (`Z3BazenLoot`, effects `Z3BazenEffecten`)
 Named Legendary (lv 38-50): Roofvogelklauw, Kruinverenmantel (Kruinroofvogel), Takelmeesters Touwknots (Taleggio), Brokkels
@@ -88,8 +90,7 @@ Pets via `Huisdieren.registreer`: kruinroofvogel, piepje, vahoegje.
   `Z3BazenApi.startVahoegnir(p, herinnering)`, `Z3BazenApi.HEEFT_SPLINTERS`. The plan put flash F1/F2 in the npc slice; the
   caller gave them to bazen: they live in `Z3Scenes` (npc only needs the moments). `flash_f2_kijkpunt` (Nestkapel) is unused:
   the F2 set is built above the nest so its chunks are loaded where the players are.
-- **systemen**: the Gouden Veer exchange is `Z3BazenLoot.ruilVeren(p)`; Vahoegzegels can also be sold for Jachtpenningen
-  (item `guhs:vr_z3_baas_vahoegzegel`).
+- **systemen**: merged; bazen uses Vahoeg / GoudenVeren / Z3Xp / Z3Spul.VAHOEGZEGEL (no own seal/feather items).
 - **wereld**: POI requests in `POI_VERZOEKEN_Z3.md` (section bazen). The altars must be PLACED by wereld (block
   `guhs:vr_z3_baas_altaar` at the two altar POIs). Gates are 3x4 planes of `vr_z3_baas_poort` along x, only into air.
 - **wiki**: blokuitleg entries added for lantaarnpaal, altaar, hendel, ringknop.

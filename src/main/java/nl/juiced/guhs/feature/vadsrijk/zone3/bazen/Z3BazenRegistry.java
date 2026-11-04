@@ -332,9 +332,8 @@ public final class Z3BazenRegistry {
             for (String t : Z3BazenLoot.BAZEN) {
                 p.getInventory().add(Z3BazenLoot.trofee(t));
             }
-            p.getInventory().add(new net.minecraft.world.item.ItemStack(Z3BazenLoot.VAHOEGZEGEL.get(), 4));
-            p.getInventory().add(new net.minecraft.world.item.ItemStack(Z3BazenLoot.GOUDEN_VEER.get(), 25));
-            return zeg(c, "Alle zone-3-baasitems, trofeeën, 4 Vahoegzegels en 25 Gouden Veren.");
+            p.getInventory().add(new net.minecraft.world.item.ItemStack(nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Spul.VAHOEGZEGEL.get(), 4));
+            return zeg(c, "Alle zone-3-baasitems, trofeeën en 4 Vahoegzegels.");
         }));
         b.then(dev("herstel").executes(c -> {
             ServerLevel sl = rijk(c);

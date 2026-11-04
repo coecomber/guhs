@@ -60,7 +60,7 @@ TEKSTEN = {
     Z + "vahoeg.intro": "VAHOEG-VORM! Weekzegel: %s.",
     Z + "vahoeg.aan.werf": "Het Vahoeg-altaar gloeit: de bazen van de Kaaszeppelinwerf worden Vahoeg (zegel: %s). Een half uur, of tot Kapitein Roquefort valt.",
     Z + "vahoeg.aan.hart": "Het Vahoeg-altaar gloeit: de bazen van het Hart van de Boom worden Vahoeg (zegel: %s). Een half uur, of tot Baron Bleu vlucht.",
-    Z + "vahoeg.uitleg": "Het Vahoeg-altaar. Leg er een Vahoegzegel op (rechtsklik met de zegel in je hand): de bazen worden sterker, en ze laten Gouden Veren vallen. Weekzegel nu: %s.",
+    Z + "vahoeg.uitleg": "Het Vahoeg-altaar. Leg er een Vahoegzegel op (rechtsklik met een zegel in je tas, vanaf lv 50): de bazen worden sterker, en ze laten Gouden Veren vallen. Weekzegel nu: %s.",
     Z + "vahoeg.loopt": "De Vahoeg-modus loopt al (zegel: %s), nog %s min.",
     Z + "zegel.donker": "Donker (minder tijd om weg te stappen)",
     Z + "zegel.haastig": "Haastig (ze worden eerder boos)",
@@ -252,7 +252,7 @@ TEKSTEN = {
     Z + "tip.lantaarnpaal.titel": "Lantaarnpaal",
     Z + "tip.lantaarnpaal": "Rechtsklik steekt hem aan. Licht helpt: in het donker raak je minder.",
     Z + "tip.altaar.titel": "Vahoeg-altaar",
-    Z + "tip.altaar": "Met een Vahoegzegel in je hand: rechtsklik. De bazen worden sterker en laten Gouden Veren vallen.",
+    Z + "tip.altaar": "Met een Vahoegzegel in je tas (vanaf lv 50): rechtsklik. De bazen worden sterker en laten Gouden Veren vallen.",
     Z + "tip.kanon.titel": "Dekkanon",
     Z + "tip.kanon": "Rechtsklik vuurt waar je kijkt. Alleen herlaadt het sneller.",
     Z + "tip.loods.titel": "De Bewapeningsloods",
@@ -264,8 +264,6 @@ TEKSTEN = {
     Z + "tip.ringen.titel": "De Ringenzaal",
     Z + "tip.ringen": "Elke knop draait twee jaarringen een stukje. Leg de roze nerf in één lijn!",
     # items
-    "item.guhs.vr_z3_baas_vahoegzegel": "Vahoegzegel",
-    "item.guhs.vr_z3_baas_gouden_veer": "Gouden Veer",
 }
 
 ITEMS = {

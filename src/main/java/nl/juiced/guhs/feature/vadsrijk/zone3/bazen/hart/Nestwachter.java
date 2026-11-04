@@ -91,7 +91,7 @@ public class Nestwachter extends Z3Baas {
 
     @Override
     public int xp() {
-        return 5800 + 175 * mobLevel();
+        return nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Xp.baas(Math.min(50, mobLevel()));
     }
 
     @Override

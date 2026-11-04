@@ -26,7 +26,6 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.roofvogel.Kruinroofvogel;
  *       kruinroofvogel, vahoegnir).</li>
  *   <li>{@link #startVahoegnir}: hq14 (after the ride) or the Droomsteen in the Nestkapel ("herinnering").</li>
  *   <li>{@link #HEEFT_SPLINTERS}: who may put splinters back in the fight (default everyone: npc can narrow it).</li>
- *   <li>{@link Z3BazenLoot#ruilVeren}: 25 Gouden Veren -> the gold Pluimguh (Veertje may call it; the feather item does it too).</li>
  * </ul>
  */
 public final class Z3BazenApi {
