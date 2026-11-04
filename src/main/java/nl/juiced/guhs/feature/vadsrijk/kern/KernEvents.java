@@ -37,6 +37,7 @@ final class KernEvents {
 
     static void register() {
         NeoForge.EVENT_BUS.addListener(KernEvents::tick);
+        Buitenstaanders.init();   // (fix round 3: no makelaar, Postguh or followers from the rest of the mod in here)
         NeoForge.EVENT_BUS.addListener(VadsrijkCommando::register);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {

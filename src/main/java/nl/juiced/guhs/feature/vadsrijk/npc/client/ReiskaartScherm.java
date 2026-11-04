@@ -71,6 +71,21 @@ public final class ReiskaartScherm extends Screen {
         return height - 30;
     }
 
+    /** The close button (the ✕, top right in the title band). */
+    private static final int SLUIT = 16;
+
+    private int sluitX() {
+        return vx1() - SLUIT;
+    }
+
+    private int sluitY() {
+        return (vy0() - SLUIT) / 2 - 1;
+    }
+
+    private boolean opSluit(double mx, double my) {
+        return mx >= sluitX() && mx < sluitX() + SLUIT && my >= sluitY() && my < sluitY() + SLUIT;
+    }
+
     @Override
     protected void init() {
         float[] h = PLEKKEN.getOrDefault(kaart.hier(), PLEKKEN.get("zwamzoet"));
@@ -176,6 +191,15 @@ public final class ReiskaartScherm extends Screen {
         // title and the hint line
         g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, 11, 0xFFFFE6EE);
         g.centeredText(font, Component.translatable("vadsrijk.npc.reiskaart.uitleg"), width / 2, height - 20, 0xFFE6D6EE);
+        // (fix round 3) the close button, top right
+        boolean overX = opSluit(mouseX, mouseY);
+        int kx = sluitX(), ky = sluitY();
+        g.fill(kx - 1, ky - 1, kx + SLUIT + 1, ky + SLUIT + 1, INKT);
+        g.fill(kx, ky, kx + SLUIT, ky + SLUIT, overX ? ROZE : PAPIER);
+        g.centeredText(font, Component.literal("✕"), kx + SLUIT / 2, ky + (SLUIT - 8) / 2, overX ? 0xFFFFFFFF : INKT);
+        if (overX) {
+            g.setTooltipForNextFrame(font, Component.translatable("vadsrijk.npc.reiskaart.sluit"), mouseX, mouseY);
+        }
         if (hover != null) {
             NpcPayloads.ReisPlek p = plek(hover);
             if (p != null) {
@@ -245,6 +269,12 @@ public final class ReiskaartScherm extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (super.mouseClicked(event, doubleClick)) {
+            return true;
+        }
+        if (event.button() == 0 && opSluit(event.x(), event.y())) {
+            Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                    net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1f));
+            onClose();
             return true;
         }
         if (event.button() == 0) {

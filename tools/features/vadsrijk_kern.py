@@ -281,6 +281,8 @@ TEKSTEN = {
     K + "hud.klasse": "%s nv %s",
     K + "item.vereist_klasse": "Vereist: %s nv %s",
     K + "item.vereist_generiek": "Vereist: Generiek nv %s",
+    # fix round 3 (i-ui): the rest of the mod stays outside
+    "gui.guhs.vadsrijk.roep.niet_hier": "Je guhs blijven lekker thuis zolang jij in het Vadsrijk op avontuur bent, njeg.",
 }
 
 

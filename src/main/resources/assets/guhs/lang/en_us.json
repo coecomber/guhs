@@ -37756,5 +37756,8 @@
   "vadsrijk.huisdier.koning_klodder.bron": "Versla Koning Klodder voor het eerst.",
   "vadsrijk.huisdier.galmwolf.naam": "Mini Galmwolf",
   "vadsrijk.huisdier.galmwolf.tekst": "Een kristalpupje dat keihard naar de maan wil huilen, maar alleen 'piep' kan zeggen. Glimt een beetje in het donker.",
-  "vadsrijk.huisdier.galmwolf.bron": "Versla de Galmwolf in de Galmhellingen voor het eerst."
+  "vadsrijk.huisdier.galmwolf.bron": "Versla de Galmwolf in de Galmhellingen voor het eerst.",
+  "entity.guhs.vr_huisdier": "Huisdier",
+  "gui.guhs.vadsrijk.roep.niet_hier": "Je guhs blijven lekker thuis zolang jij in het Vadsrijk op avontuur bent, njeg.",
+  "vadsrijk.npc.reiskaart.sluit": "Sluiten"
 }

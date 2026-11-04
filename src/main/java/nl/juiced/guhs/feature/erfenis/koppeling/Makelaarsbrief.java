@@ -217,7 +217,8 @@ public final class Makelaarsbrief {
 
     /** Is this a good moment for the Postguh (no scene, nothing ridden, not in the village itself)? */
     static boolean magNu(ServerPlayer p) {
-        return !Cutscenes.bezig(p) && p.getVehicle() == null && !Erfenis.in(p) && !p.isSleeping();
+        return !Cutscenes.bezig(p) && p.getVehicle() == null && !Erfenis.in(p) && !p.isSleeping()
+                && !nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p);   // (1.10: never in the Vadsrijk, the letter waits)
     }
 
     /** The Postguh pops up next to the player, hands over the letter, waves, and is gone after a few seconds. */
@@ -236,10 +237,16 @@ public final class Makelaarsbrief {
      * and says his line (the makelaar's postcards from his holiday).
      */
     public static void bezorgPost(ServerPlayer p, ItemStack spul, Component regel) {
-        if (!Cutscenes.bezig(p) && p.getVehicle() == null && !p.isSleeping()) {
+        boolean vadsrijk = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p);
+        if (!Cutscenes.bezig(p) && p.getVehicle() == null && !p.isSleeping() && !vadsrijk) {
             postguhErbij(p);
         }
-        geef(p, spul);
+        if (vadsrijk) {
+            // (1.10: no Postguh in the Vadsrijk, and the post belongs in the normal inventory: it waits there)
+            nl.juiced.guhs.feature.vadsrijk.kern.Inventaris.legThuis(p, spul);
+        } else {
+            geef(p, spul);
+        }
         p.level().playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.8f, 1.5f);
         p.sendSystemMessage(Component.translatable("erfenis.koppeling.postguh").withStyle(ChatFormatting.GOLD)
                 .append(Component.literal(": ").withStyle(ChatFormatting.GOLD))

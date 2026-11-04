@@ -166,6 +166,9 @@ public class MomoGuhEntity extends PathfinderMob implements GeoEntity {
             return false;                         // (he waits where he is)
         }
         if (baas.level() != level()) {
+            if (nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(baas)) {
+                return false;                     // (1.10: he waits where he is while his owner is in the Vadsrijk)
+            }
             Momo.opSchouder(baas, this);          // his owner left for another dimension: he caught up
             return false;
         }
