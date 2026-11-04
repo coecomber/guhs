@@ -145,6 +145,22 @@ public final class Z3NpcRegistry {
                 return 1;
             }));
         }
+        // K-INT: ready for zone 3 (testing): the zone-2 story done (quests + flag zone2_klaar) and at least level 30
+        z.then(Commands.literal("klaarzetten").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            for (nl.juiced.guhs.feature.vadsrijk.npc.Quest q : nl.juiced.guhs.feature.vadsrijk.npc.Quests.alle().values()) {
+                if (q.soort() == Quest.Soort.HOOFD && q.id().startsWith("z2_") && !nl.juiced.guhs.feature.vadsrijk.npc.Questlog.klaar(p, q.id())) {
+                    nl.juiced.guhs.feature.vadsrijk.npc.Questlog.voltooi(p, q);
+                }
+            }
+            nl.juiced.guhs.feature.vadsrijk.npc.Questlog.zetVlag(p, nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2Verhaal.VLAG_ZONE2, true);
+            if (nl.juiced.guhs.feature.vadsrijk.kern.Spelers.level(p) < 30) {
+                nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 30);
+            }
+            c.getSource().sendSuccess(() -> net.minecraft.network.chat.Component.literal(
+                    "Zone 2 klaar + level 30: praat met Kapitein Poolster in Kandijkom (z3_hq01) of bel de scheepsbel."), false);
+            return 1;
+        }));
         z.then(Commands.literal("vergeet").executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             Z3Verhaal.vergeet(p);

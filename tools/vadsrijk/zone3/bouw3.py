@@ -895,6 +895,41 @@ def spiraal_uitgang(W):
     trap_recht(W, (0, round(r0 - 6)), 70, (0, round(r0 + 44)), ytop, breed=2, blok="minecraft:stripped_spruce_wood")
 
 
+def poort75_gang(W):
+    """K-INT: the floor gate (y 75) reached only r ~98, but at y 75 the trunk foot is ~20 blocks wider, so the Stamspiraal road
+    runs at r ~113-120 there: a wall of bark between the gate and the road (the Schorsstad floor was a trap). A 5-wide passage
+    from the gate tunnel out to the road: floor y 74 (stand 75), then a half-slab step and the road deck height (stand 76)."""
+    a = PL.spiraal_poort(75)
+    ca, sa = math.cos(a), math.sin(a)
+    weg_r = float(boom.r_buiten(np.array([75.0]), np.array([a]))[0])
+    r0, r1 = 92.0, weg_r + 1.0
+    lo_x, hi_x = sorted((ca * r0, ca * r1))
+    lo_z, hi_z = sorted((sa * r0, sa * r1))
+    if not W.raakt(lo_x - 4, 70, lo_z - 4, hi_x + 4, 82, hi_z + 4):
+        return
+    vloer = "minecraft:stripped_spruce_wood"
+    halve = "minecraft:spruce_slab[type=bottom,waterlogged=false]"
+    r = r0
+    while r <= r1:
+        for d in np.arange(-2.5, 2.51, 0.5):
+            x, z = ca * r - sa * d, sa * r + ca * d
+            xi, zi = int(round(x)), int(round(z))
+            if r < r1 - 5:
+                W.wset(xi, 74, zi, vloer)
+                W.wfill(xi, 75, zi, xi, 79, zi, LUCHT)
+            elif r < r1 - 3:
+                W.wset(xi, 74, zi, vloer)
+                W.wset(xi, 75, zi, halve)
+                W.wfill(xi, 76, zi, xi, 80, zi, LUCHT)
+            else:
+                W.wfill(xi, 74, zi, xi, 75, zi, vloer)
+                W.wfill(xi, 76, zi, xi, 80, zi, LUCHT)
+        r += 0.5
+    for k in (0.3, 0.7):   # two lanterns on the side walls
+        rr = r0 + (r1 - r0) * k
+        W.wset(int(round(ca * rr - sa * 3)), 77, int(round(sa * rr + ca * 3)), "minecraft:lantern[hanging=false,waterlogged=false]", keep=True)
+
+
 def pad_vrij(W):
     """Riding paths stay free: nothing solid in the 3 cells above a dirt-path block (kit plumes, lamps, roots)."""
     if "minecraft:dirt_path" not in W.idx:
@@ -936,6 +971,7 @@ def bouw(W):
     spiraal_extra(W)
     poort_trap(W)
     spiraal_uitgang(W)
+    poort75_gang(W)   # K-INT
     pad_vrij(W)
     geheimen(W)
     kampvuren(W)

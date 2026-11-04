@@ -1,4 +1,4 @@
-# Spiekbriefje: alles testen met commando's (ronde 3 bovenaan, ronde 2 daaronder)
+# Spiekbriefje: alles testen met commando's (zone 3 bovenaan, dan ronde 3, dan ronde 2)
 
 Start de testclient uit `guhs_vadsrijk\j-int\run-client.bat` (ronde 3: ronde 2 + melee + alle fixes van ronde 3) en maak een
 **nieuwe** wereld (de saves-map is leeg).
@@ -14,6 +14,77 @@ Handig tussendoor:
 - `/guhs vadsrijk vol` zet Vads, energie en ult vol en wist de cooldowns.
 - `/guhs vadsrijk info` laat je data zien.
 - Met `/guhs vadsrijk tips reset` krijg je alle tips opnieuw.
+
+---
+
+# ZONE 3: DE SCHEMERWORTEL
+
+## Z1. Erheen + de openingsfilm
+```
+/guhs vadsrijk z3npc klaarzetten
+/guhs vadsrijk npc tp z2_kapitein
+```
+- Klaarzetten = zone 2 klaar + level 30. Klik Kapitein Poolster: "De Schemerwortel" staat in de keuzes en op de reiskaart.
+- Kies hem: de **openingsfilm** (~26 s): schorswand, wolken, gouden kruin, wortels, twee ogen, "Hij leeft nog... maar niet lang meer."
+  Je landt bij de mast van Honingtak. Hoor je de **honingwals** (stadsmuziek)?
+- Nog een keer: `/guhs vadsrijk z3wereld vlieg opnieuw`. Terug: de scheepsbel bij de mast.
+- Ook proberen: zonder klaarzetten in survival krijg je "nog niet" (zone 2 eerst / te laag level).
+
+## Z2. Honingtak + de Pluimguh-starter
+```
+/guhs vadsrijk npc questlog
+```
+- Volg de questvolger: Raatje (hq01), Wasja in de Nestkapel (hq02: de BAM met de kaaszeppelin), dan **hq03 De Pluimstal**.
+- Veertje: het chocobo-grapje, dan het keuzescherm met 3 Pluimguh-kleuren. X = opstijgen, rijd naar het zweefplatform, spring eraf
+  en **houd spatie** = zweven. Titel "Je eerste rit!".
+- Kijk rond: korfhuisjes (smid, juwelier, winkels, bank, jagershut, woningen) met echte interieurs, deuren vrij, touwbruggen.
+
+## Z3. Windkolommen en liften
+```
+/guhs vadsrijk z3wereld plek wind_honingtak_onder
+/guhs vadsrijk z3wereld plek wind_spiraal_kruin_onder
+```
+- Loop in de bloesemring: je zweeft omhoog naar het landingsdek. Op je Pluimguh: omhoog geduwd en op het dek gezet.
+- De spiraal-kolom: van boven in de Stamspiraal naar de kruin; de ladderschacht ernaast is de weg terug.
+- Honinglift: rechtsklik bij een liftstation. De grote Honinglift naar Mosvoet: pas na hq09 (of `/guhs vadsrijk z3wereld lift <id> op`).
+
+## Z4. Bazen
+```
+/guhs vadsrijk level 50
+/guhs vadsrijk z3bazen tp kruinroofvogel
+/guhs vadsrijk z3bazen tp werf
+/guhs vadsrijk z3bazen tp piepvel
+/guhs vadsrijk z3bazen tp hart
+/guhs vadsrijk z3bazen vahoegnir
+```
+- **Kruinroofvogel**: in fase 3 vliegt hij weg: stap op je rijdier en volg het roze spoor (alleen dan mag je in zijn arena rijden).
+- **Werf**: Taleggio (touwhendel), Brokkel (rechtsklik de dekkanonnen), Roquefort (dek kantelt, ballonnen, spring naar het wrak).
+- **Piepvel**: 4 kooien open, lantaarns aan, grote kooi. Dan **F1**: de lange grijze arm. Piepje als huisdier.
+- **Hart**: Wortelwurger, Nestwachter (wordt roze, buigt), Baron Bleu + Schimmelkolos.
+- **Vahoegnir**: splinters terugzetten (roze cirkel, 3 s), achter de nesttakken schuilen, het ei beschermen. Dan het ei komt uit,
+  de straal naar Hoogvads, en **F2** (de troonzaal). Werkt het verhaal mee? (hq14 klaar, `zone3_klaar`.)
+- **Vahoeg-modus**: `/guhs vadsrijk z3systemen zegel`, dan rechtsklik het altaar bij de werf-ingang of in de Hartslag-zaal.
+
+## Z5. Premiebord
+```
+/guhs vadsrijk z3systemen bord
+/guhs vadsrijk z3systemen penningen 100
+/guhs vadsrijk z3systemen premie 0
+/guhs vadsrijk z3systemen dag
+```
+- Drie tabs: Premies (3 per dag, 1 gratis ruil), Jachtbord (contracten, lv 45+), Penningwinkel. Of praat met Jagersguh Raap in de Jagershut.
+
+## Z6. Vahoegje en het Verkenningsboek
+```
+/guhs vadsrijk huisdier geef vahoegje
+```
+- P: "Meenemen". Een piepklein roze draakje dat met je meehuppelt.
+- B: de pagina "De Schemerwortel": hoofdverhaal, zijquests, uitkijkpunten, kampvuren, geheimen, knuffels, bazen, huisdieren,
+  Pluimguh, gebieden. Kloppen de gebiedsnamen ("Ergens in De Kruinzee")?
+
+## Z7. Lopen (survival)
+- Hartslag-zaal -> Grote Wortelgang -> de trap van de Wortelpoort omhoog. Schorsstad-vloer -> poort 75 -> de helling naar buiten.
+- Overal: kun je uit elk gat, elke vijver en elke grot zelf weer naar boven? (`U` = losknuffelen als het toch misgaat.)
 
 ---
 

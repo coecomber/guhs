@@ -179,6 +179,8 @@ public final class NpcCommando {
             java.util.List<String> l = new java.util.ArrayList<>();
             l.addAll(NpcPlekken.NPC.keySet());
             l.addAll(NpcPlekken.KAMPWACHT.keySet());
+            l.addAll(nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2NpcPlekken.NPC.keySet());   // (K-INT)
+            l.addAll(nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcPlekken.NPC.keySet());
             NpcPlekken.POI.keySet().forEach(k -> l.add("poi." + k));
             NpcPlekken.KNUFFEL.keySet().forEach(k -> l.add("knuffel." + k));
             NpcPlekken.AANWIJZING.keySet().forEach(k -> l.add("aanwijzing." + k));
@@ -213,7 +215,15 @@ public final class NpcCommando {
         if (s.startsWith("schat.")) {
             return NpcPlekken.SCHAT.get(s.substring(6));
         }
-        return NpcPlekken.NPC.containsKey(s) ? NpcPlekken.NPC.get(s) : NpcPlekken.KAMPWACHT.get(s);
+        if (NpcPlekken.NPC.containsKey(s)) {
+            return NpcPlekken.NPC.get(s);
+        }
+        // (K-INT) the NPCs of zone 2 and zone 3 too
+        BlockPos z = nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2NpcPlekken.NPC.get(s);
+        if (z == null) {
+            z = nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcPlekken.NPC.get(s);
+        }
+        return z != null ? z : NpcPlekken.KAMPWACHT.get(s);
     }
 
     private static com.mojang.brigadier.builder.RequiredArgumentBuilder<CommandSourceStack, String> questArg() {

@@ -1,11 +1,11 @@
-# Testen: Het Vadsrijk (Guhs 1.10), na fixronde 3: zone 1 + zone 2 "De Splinterpieken"
+# Testen: Het Vadsrijk (Guhs 1.10): zone 1 + zone 2 "De Splinterpieken" + zone 3 "De Schemerwortel"
 
 Dit is de ENE testgids voor het hele Vadsrijk. Hij vervangt `TESTEN_VADSRIJK_ZONE1.md` en de losse slice-gidsen (die blijven
-alleen als naslag). Gebouwd in `guhs_vadsrijk\j-int` (branch `110-j-int`, fixronde 3 = derde playtest). Snel alles langs met
+alleen als naslag). Gebouwd in `guhs_vadsrijk\k-int` (branch `110-k-int`: fixronde 3 + zone 3 + ronde L). Snel alles langs met
 commando's: `SPIEKBRIEF.md` (ronde 3 bovenaan).
 
 ## Starten
-1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\j-int` (NIET h-melee, g-int, f-int of w-poc: dat zijn de oude rondes).
+1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\k-int` (NIET j-int, h-melee, g-int, f-int of w-poc: dat zijn de oude rondes).
 2. Maak een **nieuwe** wereld (Creatief, cheats aan). De `saves`-map is leeg: oude werelden kennen de nieuwe kaart (en de nieuwe
    zone 2) niet.
 3. Zet je **weergaveafstand** hoog (32 chunks, minstens 20): het Vadsrijk is met de hand gebouwd en kan dat makkelijk aan.
@@ -39,6 +39,72 @@ klif, tot boven op het kampplateau.
 **Questvolger** (rechtsboven, onder de bazenbalk als die er is): wat, bij wie, waar, pijltje + afstand. Een roze lichtstraal
 boven je doel (vastgepinde zijquest: lichtgeel). Werkt nu ook in zone 2 en wijst je de luchtschiplijn aan als je doel aan de
 andere kant ligt.
+
+## ZONE 3: De Schemerwortel (nieuw, lv 30-50)
+Een boom zo groot als een berg, ver in het oosten (x +1600..+3000). Lagen boven elkaar: de **kruin** (Kruinzee, het oude nest),
+de **takken** (Takkenbanen, Honingtak, Hangnest Dauwdrup, de Kaaszeppelinwerf), de **holle stam** (Schorsstad met 7 lantaarnringen,
+de Lantaarntoren met de Pelszaal), de **grond** (Wortelvelden, Mosvoet, de Wortelweg) en eronder het **Wortelduister** met het
+**Hart van de Boom**.
+
+**Erheen (snel, met commando's)**
+- `/guhs vadsrijk z3npc klaarzetten` = zone 2 klaar (alle hoofdquests + vlag `zone2_klaar`) en minstens level 30.
+- Dan Kapitein Poolster in Kandijkom (`/guhs vadsrijk npc tp z2_kapitein`), of de kapitein in De Haven / een scheepsbel: kies
+  **De Schemerwortel** op de reiskaart. In creatief mag het altijd.
+- Of direct: `/guhs vadsrijk z3wereld vlieg honingtak` (`... vlieg opnieuw` = de openingsfilm nog een keer).
+- De eerste vlucht is de **openingsfilm** (~26 s, niet klikbaar): langs de schorswand omhoog, door de wolken naar de gouden kruin,
+  langs de stam omlaag de wortels in, twee grijsblauwe ogen in het donker en een stem: "Hij leeft nog... maar niet lang meer."
+  Je landt bij de mast van Honingtak. Daarna duurt een vlucht ~8 s. De scheepsbel bij de mast = de reiskaart terug.
+
+**Honingtak** (het imkersstadje op de westtak): korfhuisjes met echte interieurs, het Bloesemplein, de Raattrossen onder de tak
+(café De Zoete Raat, de Nestkapel), de Pluimstal. Eigen **stadsmuziek** (twee honingwalsjes met een zoemend bijtje) en
+bijengezoem. Kijk: klopt elk interieur, zijn de deuren vrij, sluiten de touwbruggen en honingliften aan?
+
+**Je eerste rijdier** (hq03 De Pluimstal, Stalmeester Veertje): het chocobo-grapje, dan kies je één van de 3 Pluimguh-kleuren.
+Opstijgen (X), naar het zweefplatform rijden, eraf springen en **zweven**: in de lucht op je Pluimguh spatie ingedrukt houden =
+langzaam dalen en ~9 blokken/s vooruit (nooit omhoog). Titel "Je eerste rit!". Dev: `/guhs vadsrijk mount reset` en dan hq03.
+
+**Windkolommen** (7, bloesemring onderaan): loop of rij erin en je gaat omhoog naar een landingsdek. Te voet zweef je, op een
+rijdier word je omhoog geduwd. Plekken: `/guhs vadsrijk z3wereld plek wind_honingtak_onder` (ook `wind_hangnest_onder`,
+`wind_werf_tak_onder`, `wind_paddenbloesem_tak_onder`, `wind_mosvoet_kruin_onder`, `wind_lichtkever_kruin_onder`,
+`wind_spiraal_kruin_onder`: van boven in de Stamspiraal naar de kruin, met een ladderschacht ernaast om terug te gaan).
+**Liften**: rechtsklik bij een honinglift; de grote Honinglift naar Mosvoet gaat pas open na hq09 (`/guhs vadsrijk z3wereld lift <id> op|neer`).
+
+**Bazen** (`/guhs vadsrijk z3bazen tp <naam>`: kruinroofvogel, werf, taleggio, brokkel, loods, roquefort, piepvel, hart,
+aderloop, wortelwurger, kwekerij, nestwachter, ringen, bleu, nest):
+- **De Kruinroofvogel** (lv 38, Kale Kruin, wereldbaas): duikvluchten, grijpklauw (klik je los), fase 3 vlucht hij weg: **stap op
+  je rijdier** en volg het roze spoor naar zijn andere zitplek (alleen dan mag rijden in zijn arena).
+- **De Kaaszeppelinwerf** (lv 38-40): Gieterij, Bewapeningsloods (3 hendels/kanonnen), Takelmeester Taleggio, Bombardier Brokkel
+  (kanonnen op het dek: rechtsklik = vuren), Kapitein Roquefort (het dek kantelt, ballonnen, op het eind spring je naar het wrak).
+- **Graaf Piepvel** (lv 42, de Pelszaal boven op de Lantaarntoren): de cape van muizenvachtjes; maak de 4 kooien open, steek de
+  lantaarns weer aan, open de grote kooi. Daarna **flash F1**: een lange grijze arm grijpt de Graaf. Huisdier Piepje.
+- **Het Hart van de Boom** (lv 49-50): Aderloop, Schimmelkwekerij (3 ketels), Ringenzaal (puzzel), De Wortelwurger, De Oude
+  Nestwachter (wordt roze en buigt), Baron Bleu + Schimmelkolos. (Het ei bij Bleu is nep: het echte ligt in de Nestkamer.)
+- **Vahoegnir** (lv 50, het oude nest, hq14 na de ontsnappingsrit; dev `/guhs vadsrijk z3bazen vahoegnir`): zet de splinters
+  terug (3 s in de roze cirkel), verstop je achter de nesttakken, bescherm het ei. Dan: hij wordt roze, het ei komt uit
+  (**Vahoegje**), de roze straal naar Hoogvads, en **flash F2** (de troonzaal van de Keizer). Daarna `zone3_klaar`.
+- **Vahoeg-modus** (lv 50): rechtsklik het altaar bij de ingang van de werf of de Hartslag-zaal met een Vahoegzegel
+  (`/guhs vadsrijk z3systemen zegel`): 30 min zwaardere bazen + Gouden Veren (25 = de gouden Pluimguh bij Veertje; 2 % kans).
+
+**Premiebord** (Jagershut in Honingtak, Jagersguh Raap; vanaf lv 40): 3 premies per dag (reset 06:00), 1 gratis ruil, een
+weekdoel, de Jachtbord-contracten (lv 45+: 8 sterke elites bij hun hol) en de penningwinkel. Dev: `/guhs vadsrijk z3systemen
+bord`, `... penningen 100`, `... premie <slot>` (meteen klaar), `... dag` (nieuwe dag), `/guhs vadsrijk z3wezens contract <id>`.
+
+**Vahoegje**: het babydraakje. Krijg je in de finale; of `/guhs vadsrijk huisdier geef vahoegje`, dan P en "Meenemen".
+Ook huisdieren van de bazen: `kruinroofvogel`, `piepje`.
+
+**Verkenningsboek** (B), pagina "De Schemerwortel": hoofdverhaal (15), zijquests (5), uitkijkpunten (3), kampvuren, geheimen
+(imkersporen, schatten, reliëfs), verloren knuffels (10), bazen (Roquefort, Kruinroofvogel, Piepvel, Bleu, Vahoegnir + 1 geheim),
+huisdieren, de Pluimguh, gebieden. 100 % = titel "Kenner van de Schemerwortel".
+
+**Overige dev-commando's**: `/guhs vadsrijk z3npc opening|bam|nest|f1|ei|rit|finale|cliffhanger|vergeet` (scènes van de
+npc-slice; F1/F2 zelf zitten in de bazengevechten), `/guhs vadsrijk z3wezens spawn <soort>|alle|licht|spawners`,
+`/guhs vadsrijk z3wereld gebied` (waar sta ik), `/guhs vadsrijk level 50`.
+
+**Lantaarnregel** (Wortelduister/Hart): buiten het licht zijn wezens een donker silhouet en nemen ze -50 % schade ("Te donker!").
+Licht = de Nestlantaarn (hq10, ring 4) in je tas, verlichte lantaarns, de roze aders.
+
+**Niet gezien in een client** (dus juist kijken): de hele kaart van zone 3, alle modellen van wezens en bazen, de schermen
+(premiebord, 8-rijen-skillboom), windkolommen en zweven, liften, de openingsfilm en alle scènes, de stadsmuziek van Honingtak.
 
 ## Wat is nieuw (fixronde 3, derde playtest)
 - **Buitenstaanders blijven buiten:** makelaar Guhrrit, de Postguh, de Sherlock-cast, guhs van thuis, volgers (Libelkonijnguh,
