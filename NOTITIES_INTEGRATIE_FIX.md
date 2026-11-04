@@ -89,3 +89,22 @@ zone 2: z2-wereld, z2-wezens, z2-bazen, z2-npc, z2-systemen.
 - Gametests `-Pgt=Vadsrijk,Z2Npc` in one run: **69/69** (after: z2 boss weapons 7.0+1.4 DPS model, test fixes for parallel
   runs/zone-2 hand-over, a flaky interval test).
 - run/: config/options/defaultconfigs copied from w-poc, `saves` empty.
+
+## AutoCheck (2 walks, screenshots in run/screenshots/autocheck, not committed)
+- Walk 1 `tools/autocheck/vadsrijk_fixint1.txt` (26 shots, 0 problems except one script `/kill`): OK: jetty stair tunnel up the
+  cliff (Sergeant + tracker), quest tracker text + chat "Volgende stap", Knuffelsprong (airborne, C slot cooldown, tip), unstuck U
+  ("Hup, weer los!"), lift top ramp, lighthouse gallery, Koning Klodder phase moment ("Fase 2: De vijver wordt plakkerig!"),
+  victory, caravan, Hoedenpaden deck, Druipschacht balcony, fossil bridge, needle stair, recolour wave (letterbox scene).
+  Script artefacts: the Klodderreus pond arena is quest-gated (no boss without the BAM) -> boss at range checked in walk 2 on
+  Koning Klodder; the quay-ladder shot fell into the bay (creative /tp); chest shot camera angle.
+- Walk 2 `tools/autocheck/vadsrijk_fixint2.txt` (21 shots, 0 problems): Koning Klodder lobs red circles at a player 20 blocks
+  away (boss at range OK); zone-2 opening (storm, the airship, ice spires) + "Welkom in Kandijkom" chocomelk line; Kandijkom plaza
+  (tree, Burgemeester, NPC names); Galmwolf in his pillar arena (Kristalgalm warning + tip); Vrouwe Spiegelzucht with images and
+  shadows; Mika-boormeester + 3 drill heads (cave is very dark); Splinterkloof floor with Kristalwacht.
+- Found + fixed: an arena's boss bar stayed on screen after a far teleport (arena unloaded) -> Arenas clears it (cd2...).
+- Log: only the pre-existing droombed / bliksemsmidse_onweerswolkje model warnings and FTB "Missing entity icon" lines.
+- Final gametests `-Pgt=Vadsrijk,Z2Npc`: **69/69** (one earlier run had the Opperzwam range test at 8.09 vs < 7: timing flake).
+- run/saves emptied (the AutoCheck world removed).
+
+## Resume point
+Integration DONE. Next: the user tests with TESTEN_VADSRIJK.md in f-int (run-client.bat, new world). Open points: see the report.
