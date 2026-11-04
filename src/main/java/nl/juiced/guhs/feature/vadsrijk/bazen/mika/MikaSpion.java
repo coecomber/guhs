@@ -80,7 +80,10 @@ public class MikaSpion extends BazenBaas {
     private static UUID huidig;
     private static long terugOp;
 
-    private int hoed, sceneT, blinkT = 160, poederT = 100, klodderT = 300, leegT;
+    private int hoed, sceneT, blinkT = 160, poederT = 100, klodderT = 300, leegT, lokT = 200, kaasT = 260;
+    /** Cheese wheels rolling over the cap: start x, z, direction x, z, length, tick it starts rolling. */
+    private final List<double[]> kaas = new ArrayList<>();
+    private final List<UUID> lokken = new ArrayList<>();
     private final Set<UUID> kijkers = new HashSet<>();
     private final List<double[]> poeder = new ArrayList<>();   // x, y, z, tick
     @Nullable
@@ -531,9 +534,11 @@ public class MikaSpion extends BazenBaas {
             blinkT = 150 + getRandom().nextInt(60);
             blink(sl, c);
         }
+        lokEnKaas(sl, c, l);
         if (--poederT <= 0) {
             poederT = 100 + getRandom().nextInt(30);
-            ServerPlayer p = l.get(getRandom().nextInt(l.size()));
+            ServerPlayer ver = afstandsSpeler();   // (fix round 1: who keeps away gets the powder first)
+            ServerPlayer p = ver != null ? ver : l.get(getRandom().nextInt(l.size()));
             Vec3 v = new Vec3(p.getX(), Math.floor(p.getY()), p.getZ());
             Telegraaf.cirkel(sl, v, 3, 26, Telegraaf.GRIJS);
             poeder.add(new double[] {v.x, v.y, v.z, sl.getGameTime() + 26});
@@ -572,6 +577,107 @@ public class MikaSpion extends BazenBaas {
             }
             sl.playSound(null, blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.HOSTILE, 1f, 1.2f);
         }
+    }
+
+    // ---- fix round 1: decoy Mika's and the cheese-wheel avalanche --------------------------------------------------------------
+
+    private void lokEnKaas(ServerLevel sl, Vec3 c, List<ServerPlayer> l) {
+        long nu = sl.getGameTime();
+        lokken.removeIf(id -> !(sl.getEntity(id) instanceof LokMika lm) || lm.isRemoved());
+        if (!lokken.isEmpty() && tickCount % 3 == 0) {   // the real one's moustache glitters
+            Vec3 snor = position().add(getLookAngle().multiply(0.45, 0, 0.45)).add(0, getBbHeight() * 0.62, 0);
+            sl.sendParticles(ParticleTypes.WAX_ON, snor.x, snor.y, snor.z, 1, 0.12, 0.04, 0.12, 0);
+            sl.sendParticles(ParticleTypes.ELECTRIC_SPARK, snor.x, snor.y, snor.z, 1, 0.1, 0.03, 0.1, 0);
+        }
+        if (fase() >= 2 && lokken.isEmpty() && --lokT <= 0) {
+            lokT = 600 + getRandom().nextInt(200);
+            lokMikas(sl, c);
+        }
+        if (--kaasT <= 0) {
+            kaasT = (fase() >= 3 ? 300 : 420) + getRandom().nextInt(100);
+            kaasLawine(sl, c);
+        }
+        for (java.util.Iterator<double[]> it = kaas.iterator(); it.hasNext(); ) {
+            double[] k = it.next();
+            double t = nu - k[5];
+            if (t < 0) {
+                continue;
+            }
+            double f = t / 22.0;
+            if (f > 1) {
+                it.remove();
+                continue;
+            }
+            double x = k[0] + k[2] * k[4] * f, z = k[1] + k[3] * k[4] * f, y = c.y + 0.9;
+            var stof = new net.minecraft.core.particles.BlockParticleOption(ParticleTypes.BLOCK, net.minecraft.world.level.block.Blocks.HONEYCOMB_BLOCK.defaultBlockState());
+            for (int i = 0; i < 10; i++) {   // a rolling wheel: a ring of cheese crumbs standing upright along the lane
+                double a = Math.PI * 2 * i / 10 + t * 0.6;
+                sl.sendParticles(stof, x + k[2] * Math.cos(a) * 0.9, y + Math.sin(a) * 0.9, z + k[3] * Math.cos(a) * 0.9, 1, 0, 0, 0, 0);
+            }
+            if (t % 4 == 0) {
+                sl.playSound(null, BlockPos.containing(x, y, z), SoundEvents.MINECART_RIDING, SoundSource.HOSTILE, 0.5f, 1.4f);
+            }
+            for (ServerPlayer p : l) {
+                double dx = p.getX() - x, dz = p.getZ() - z;
+                if (dx * dx + dz * dz < 1.7 * 1.7 && Math.abs(p.getY() - c.y) < 3 && p.invulnerableTime <= 0) {
+                    Schade.doe(new Schade.Klap(this, p, basisSchade(mobLevel()) * 1.3, Element.GEEN, Schade.Soort.MELEE, false, "bazen_kaaswiel"));
+                    p.setDeltaMovement(k[2] * 0.9, 0.5, k[3] * 0.9);
+                    p.hurtMarked = true;
+                    p.invulnerableTime = 12;
+                }
+            }
+        }
+    }
+
+    /** Three decoys poof up around the cap, he poofs to a new spot among them: find the one with the glittering moustache. */
+    private void lokMikas(ServerLevel sl, Vec3 c) {
+        for (int i = 0; i < 3; i++) {
+            LokMika lm = BazenRegistry.LOK_MIKA.get().create(sl, net.minecraft.world.entity.EntitySpawnReason.MOB_SUMMONED);
+            if (lm == null) {
+                return;
+            }
+            lm.stelIn(mobLevel(), Element.GEEN, false, Set.of());
+            lm.snapTo(getX(), getY(), getZ(), getYRot(), 0);
+            sl.addFreshEntity(lm);
+            lm.koppel(this);
+            lokken.add(lm.getUUID());
+            Vec3 voor = position();
+            blinkVan(lm, sl, c);
+            BazenEffecten.poef(sl, voor);
+        }
+        blink(sl, c);
+        zeg(sl, "vadsrijk.bazen.mika.lok", ChatFormatting.LIGHT_PURPLE);
+    }
+
+    private void blinkVan(LokMika lm, ServerLevel sl, Vec3 c) {
+        double a = getRandom().nextDouble() * Math.PI * 2, d = 2 + getRandom().nextDouble() * (BazenPlekken.MIKA_HOED_STRAAL - 3);
+        int x = (int) Math.floor(c.x + Math.cos(a) * d), z = (int) Math.floor(c.z + Math.sin(a) * d);
+        int y = sl.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z);
+        lm.snapTo(x + 0.5, Math.abs(y - c.y) <= 4 ? y : c.y + 0.2, z + 0.5, getYRot(), 0);
+        BazenEffecten.poef(sl, lm.position());
+    }
+
+    /** The cheese-wheel avalanche: red lanes over the cap (gaps between them are safe), then the wheels roll through. */
+    private void kaasLawine(ServerLevel sl, Vec3 c) {
+        double a = getRandom().nextInt(4) * Math.PI / 2 + Math.PI / 4 * getRandom().nextInt(2);
+        double dx = Math.cos(a), dz = Math.sin(a), nx = -dz, nz = dx;
+        double r = BazenPlekken.MIKA_HOED_STRAAL + 1;
+        int banen = fase() >= 3 ? 3 : 2;
+        double start = getRandom().nextBoolean() ? -r * 0.55 : -r * 0.2;
+        long op = sl.getGameTime() + 36;
+        for (int i = 0; i < banen; i++) {
+            double o = start + i * 5.5;
+            if (Math.abs(o) > r) {
+                continue;
+            }
+            Vec3 van = new Vec3(c.x - dx * r + nx * o, c.y, c.z - dz * r + nz * o);
+            Vec3 naar = new Vec3(c.x + dx * r + nx * o, c.y, c.z + dz * r + nz * o);
+            Telegraaf.lijn(sl, van, naar, 3.2, 36, Telegraaf.ROOD);
+            kaas.add(new double[] {van.x, van.z, dx, dz, 2 * r, op + i * 4});
+        }
+        swing(InteractionHand.MAIN_HAND);
+        sl.playSound(null, blockPosition(), SoundEvents.EVOKER_CAST_SPELL, SoundSource.HOSTILE, 1.2f, 0.7f);
+        zeg(sl, "vadsrijk.bazen.mika.kaas", ChatFormatting.GOLD);
     }
 
     private void blink(ServerLevel sl, Vec3 c) {

@@ -36310,5 +36310,20 @@
   "vadsrijk.npc.q.hq03b_elementen.aanbod.2": "En dan de driehoek, onthoud hem goed:  VUUR > ZWAM > SLIJM > VUUR.  Vuur verbrandt de zwam, de zwam slurpt het slijm op, en het slijm blust het vuur. Pfssst!",
   "vadsrijk.npc.q.hq03b_elementen.aanbod.3": "Mep je een wezen met wat er van wint, dan zie je 'Zwak!' en doe je anderhalf keer zoveel. Andersom doe je maar een beetje. En Roze? Roze is extra sterk tegen alles wat ontvadst is. Klik straks op mij, dan overhoor ik je!",
   "vadsrijk.npc.q.hq03b_elementen.klaar.0": "Goed zo! Jij bent een slimme. Kijk in je questlog (J) bij Gids, daar staat de driehoek nog een keer getekend.",
-  "vadsrijk.npc.q.hq03b_elementen.klaar.1": "Ga nu terug naar Kok Knapperkorst, bij het kampvuur op het kampplein. Hij wil dat het vuur brandt voor het donker wordt."
+  "vadsrijk.npc.q.hq03b_elementen.klaar.1": "Ga nu terug naar Kok Knapperkorst, bij het kampvuur op het kampplein. Hij wil dat het vuur brandt voor het donker wordt.",
+  "entity.guhs.vr_baas_lok_mika": "De Mika-spion",
+  "vadsrijk.bazen.tempel.verhaal": "De tempelwachter schudt zijn hoedje: \"Nog niet, njeg. Volg eerst het verhaal: de Grootmeester stuurt je wel als het tijd is.\"",
+  "vadsrijk.bazen.kk.kroon_af": "De kroon van Koning Klodder vliegt eraf! Pak hem en gooi hem terug (rechtsklik)!",
+  "vadsrijk.bazen.kk.kroon_pak": "Je hebt de kroon! Rechtsklik om hem naar Koning Klodder te gooien!",
+  "vadsrijk.bazen.kk.kroon_raak": "%s gooit de kroon tegen Koning Klodder aan! Hij is duizelig!",
+  "vadsrijk.bazen.kk.slijm": "De vijvers van de weide worden plakkerig slijm! Pas op waar je loopt.",
+  "vadsrijk.bazen.kk.schild": "Schild! Alleen %s breekt het meteen (of nog %s klappen).",
+  "vadsrijk.bazen.oz.last": "Sporenlast op %s! Ga er samen GEEL bij staan om de klap te delen!",
+  "vadsrijk.bazen.oz.spreid": "Paarse sporen op iedereen! Ga UIT ELKAAR staan!",
+  "vadsrijk.bazen.oz.vloer": "De tempelvloer scheurt open: wortelvelden! Daar blijf je plakken.",
+  "vadsrijk.bazen.oz.toren": "Een wortel-toren is gegroeid! Klim erop: zijn hoed is zijn zwakke plek!",
+  "vadsrijk.bazen.mika.lok_nep": "Pfff! Nep-Mika! Zijn snor glinsterde niet...",
+  "vadsrijk.bazen.mika.lok": "Vier Mika's?! Alleen de echte heeft een glinsterende snor!",
+  "vadsrijk.bazen.mika.kaas": "Een kaaswiel-lawine! Ga NIET in de rode banen staan!",
+  "vadsrijk.kern.baas.te_ver": "Te ver weg! Kom de arena in om de baas te raken."
 }

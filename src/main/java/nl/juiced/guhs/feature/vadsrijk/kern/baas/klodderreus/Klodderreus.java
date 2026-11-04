@@ -39,12 +39,12 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.ProefKlodder;
  */
 public class Klodderreus extends VadsrijkBaas {
     private enum Doet {
-        RUST, MIKT, SPRINGT, ROLT
+        RUST, MIKT, SPRINGT, ROLT, CHARGE
     }
 
     private Doet doet = Doet.RUST;
-    private int timer = 40, rolHoek;
-    private Vec3 landing = Vec3.ZERO, sprongVan = Vec3.ZERO;
+    private int timer = 40, rolHoek, zet;
+    private Vec3 landing = Vec3.ZERO;
     private int spuugTimer;
 
     public Klodderreus(EntityType<? extends Monster> type, Level level) {
@@ -63,7 +63,7 @@ public class Klodderreus extends VadsrijkBaas {
 
     @Override
     protected double basisVads(int level) {
-        return 700 + 120 * (level - 1);
+        return 1000 + 200 * (level - 1);   // fix round 1: ~2-3 min for a level-3 player (was 700 + 120/lv)
     }
 
     @Override
@@ -148,10 +148,12 @@ public class Klodderreus extends VadsrijkBaas {
         if (level().isClientSide() || geplofd() || stil() || !(level() instanceof ServerLevel sl)) {
             return;
         }
-        LivingEntity t = getTarget();
         if (fase() >= 2 && --spuugTimer <= 0) {
             spuug(2);
             spuugTimer = 240;
+        }
+        if (inSprong()) {
+            return;
         }
         timer--;
         switch (doet) {
@@ -159,86 +161,133 @@ public class Klodderreus extends VadsrijkBaas {
                 if (onGround()) {
                     setDeltaMovement(getDeltaMovement().multiply(0.5, 1, 0.5));
                 }
-                if (timer <= 0 && t != null) {
-                    if (fase() >= 3 && getRandom().nextInt(2) == 0) {
-                        doet = Doet.ROLT;
-                        timer = 160;
-                        rolHoek = (int) Math.toDegrees(Math.atan2(getZ() - midden().z, getX() - midden().x));
-                    } else {
-                        doet = Doet.MIKT;
-                        timer = fase() >= 2 ? 22 : 30;
-                        landing = new Vec3(t.getX(), Math.floor(t.getY()), t.getZ());
-                        if (arena != null) {   // he stays in his arena: aim at the edge when you stand outside
-                            Vec3 m = midden();
-                            Vec3 d = landing.subtract(m).multiply(1, 0, 1);
-                            double max = arena.straal() - 3;
-                            if (d.length() > max) {
-                                landing = m.add(d.normalize().scale(max)).add(0, 0, 0);
-                                landing = new Vec3(landing.x, m.y, landing.z);
-                            }
-                        }
-                        Telegraaf.cirkel(sl, landing, 3.5, timer + 16, Telegraaf.ROOD);
-                        sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2f, 0.6f);
-                    }
+                if (timer > 0) {
+                    break;
+                }
+                ServerPlayer t = volgendDoel();
+                if (t == null) {
+                    timer = 10;
+                    break;
+                }
+                zet++;
+                ServerPlayer ver = afstandsSpeler();
+                if (fase() >= 3 && zet % 3 == 0) {
+                    doet = Doet.ROLT;   // the circle through the camp
+                    timer = 120;
+                    rolHoek = (int) Math.toDegrees(Math.atan2(getZ() - midden().z, getX() - midden().x));
+                } else if (fase() >= 3 && zet % 3 == 1) {
+                    doet = Doet.CHARGE;   // a roll straight at someone: the red strip shows the lane
+                    timer = 26;
+                    Vec3 d = voetenVan(t).subtract(position()).multiply(1, 0, 1);
+                    d = d.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : d.normalize();
+                    landing = binnenArena(position().add(d.scale(position().distanceTo(voetenVan(t)) + 6)));
+                    Telegraaf.lijn(sl, position(), landing, 3.4, timer, Telegraaf.ROOD);
+                    sl.playSound(null, blockPosition(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 1.2f, 1.8f);
+                } else if (fase() >= 2 && ver != null && zet % 2 == 0) {
+                    spuugBal(ver);   // spit at whoever keeps their distance
+                    timer = 30;
+                } else if (fase() >= 2 && zet % 4 == 3) {
+                    spuugBal(t);
+                    timer = 30;
+                } else {
+                    doet = Doet.MIKT;   // the jump: his shadow (red circle) is where he lands
+                    timer = fase() >= 3 ? 20 : fase() >= 2 ? 24 : 30;
+                    landing = voetenVan(t);
+                    Telegraaf.cirkel(sl, landing, 3.5, timer + 14, Telegraaf.ROOD);
+                    sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2f, 0.6f);
                 }
             }
             case MIKT -> {
-                if (timer <= 0) {
+                if (timer <= 0) {   // (he lands where the circle was shown: dodge it)
+                    springNaar(landing, 14, 5);
                     doet = Doet.SPRINGT;
-                    timer = 16;
-                    sprongVan = position();
-                    Vec3 d = landing.subtract(position());
-                    // land at "landing" after ~16 ticks (gravity 0.08/t, drag ignored): vy = 0.08*16/2 + dy/16
-                    setDeltaMovement(d.x / 16.0, 0.64 + d.y / 16.0, d.z / 16.0);
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, 3f, 0.5f);
                 }
             }
             case SPRINGT -> {
-                if (timer < 14) {   // steer towards the shadow so drag and blocks don't make it miss
-                    Vec3 d = landing.subtract(position()).multiply(1, 0, 1);
-                    if (d.length() > 0.5) {
-                        Vec3 v = getDeltaMovement();
-                        setDeltaMovement(d.x / Math.max(1, timer), v.y, d.z / Math.max(1, timer));
-                    }
-                }
-                if ((timer <= 0 && onGround()) || timer < -30) {
-                    neerkomen(sl);
-                    doet = Doet.RUST;
-                    timer = fase() >= 2 ? 40 : 55;
-                }
+                doet = Doet.RUST;   // (geland() did the landing; only reached if a jump got cut short)
+                timer = 20;
             }
             case ROLT -> {
                 Vec3 m = midden();
-                rolHoek += 6;
-                double r = arena != null ? arena.straal() * 0.6 : 10;
+                rolHoek += 5;
+                double r = gevechtsStraal() * 0.6;
                 double a = Math.toRadians(rolHoek);
                 Vec3 doel = new Vec3(m.x + Math.cos(a) * r, getY(), m.z + Math.sin(a) * r);
                 Vec3 v = doel.subtract(position()).multiply(1, 0, 1);
-                setDeltaMovement(v.x * 0.5, getDeltaMovement().y, v.z * 0.5);
+                if (v.length() > 0.9) {
+                    v = v.normalize().scale(0.9);
+                }
+                move(net.minecraft.world.entity.MoverType.SELF, v);
                 if (timer % 10 == 0) {
                     double b = Math.toRadians(rolHoek + 35);
                     Telegraaf.lijn(sl, position(), new Vec3(m.x + Math.cos(b) * r, getY(), m.z + Math.sin(b) * r), 3, 12, Telegraaf.ROOD);
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 1.5f, 0.4f);
                 }
-                for (ServerPlayer p : sl.getEntitiesOfClass(ServerPlayer.class, getBoundingBox().inflate(0.6))) {
-                    if (p.invulnerableTime <= 0) {
-                        Schade.doe(new Schade.Klap(this, p, basisSchade(mobLevel()) * 1.2, element(), Schade.Soort.MELEE, false, "rollen"));
-                        Vec3 weg = p.position().subtract(position()).multiply(1, 0, 1).normalize();
-                        p.setDeltaMovement(weg.x * 1.4, 0.6, weg.z * 1.4);
-                        p.hurtMarked = true;
-                        p.invulnerableTime = 15;
-                    }
-                }
+                rolRaak(sl);
                 if (timer <= 0) {
                     doet = Doet.RUST;
-                    timer = 50;
+                    timer = 40;
                 }
+            }
+            case CHARGE -> {
+                if (timer > 0) {
+                    break;
+                }
+                Vec3 v = landing.subtract(position()).multiply(1, 0, 1);
+                if (v.length() < 1.2 || timer < -40) {
+                    doet = Doet.RUST;
+                    timer = 35;
+                    sl.playSound(null, blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.HOSTILE, 2f, 0.5f);
+                    break;
+                }
+                move(net.minecraft.world.entity.MoverType.SELF, v.normalize());
+                sl.sendParticles(ParticleTypes.ITEM_SLIME, getX(), getY() + 0.3, getZ(), 6, 1, 0.2, 1, 0.05);
+                rolRaak(sl);
             }
         }
     }
 
+    /** The spit: a grey blob lobbed at a player (red circle where it lands). */
+    private void spuugBal(ServerPlayer p) {
+        lob(p, 2.8, 26, 1.1, "spuug", null, 0, new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM,
+                net.minecraft.world.item.Items.SLIME_BALL), Telegraaf.ROOD);
+    }
+
+    /** A point kept inside the arena (2 from the edge). */
+    private Vec3 binnenArena(Vec3 v) {
+        if (arena == null) {
+            return v;
+        }
+        Vec3 m = midden();
+        Vec3 d = v.subtract(m).multiply(1, 0, 1);
+        double max = Math.max(3, arena.straal() - 2);
+        return d.length() > max ? new Vec3(m.x + d.normalize().x * max, v.y, m.z + d.normalize().z * max) : v;
+    }
+
+    private void rolRaak(ServerLevel sl) {
+        for (ServerPlayer p : sl.getEntitiesOfClass(ServerPlayer.class, getBoundingBox().inflate(0.8))) {
+            if (p.invulnerableTime <= 0 && vechters().contains(p)) {
+                Schade.doe(new Schade.Klap(this, p, basisSchade(mobLevel()) * 1.2, element(), Schade.Soort.MELEE, false, "rollen"));
+                Vec3 weg = p.position().subtract(position()).multiply(1, 0, 1).normalize();
+                p.setDeltaMovement(weg.x * 1.4, 0.6, weg.z * 1.4);
+                p.hurtMarked = true;
+                p.invulnerableTime = 15;
+            }
+        }
+    }
+
+    @Override
+    protected void geland() {
+        if (level() instanceof ServerLevel sl) {
+            neerkomen(sl);
+        }
+        doet = Doet.RUST;
+        timer = fase() >= 3 ? 30 : fase() >= 2 ? 38 : 45;
+    }
+
     private Vec3 midden() {
-        return arena != null ? Vec3.atBottomCenterOf(arena.centrum()) : position();
+        return gevechtsMidden();
     }
 
     private void neerkomen(ServerLevel sl) {
@@ -249,12 +298,7 @@ public class Klodderreus extends VadsrijkBaas {
             sl.sendParticles(ParticleTypes.ITEM_SLIME, getX() + Math.cos(a) * 3.5, getY() + 0.3, getZ() + Math.sin(a) * 3.5, 2, 0.1, 0.1, 0.1, 0.05);
             sl.sendParticles(ParticleTypes.CLOUD, getX() + Math.cos(a) * 3, getY() + 0.2, getZ() + Math.sin(a) * 3, 1, 0, 0, 0, 0.03);
         }
-        for (ServerPlayer p : sl.getEntitiesOfClass(ServerPlayer.class, new AABB(BlockPos.containing(position())).inflate(3.6, 2.5, 3.6))) {
-            Schade.doe(new Schade.Klap(this, p, basisSchade(mobLevel()) * 2, element(), Schade.Soort.MELEE, false, "plet"));
-            Vec3 weg = p.position().subtract(position()).multiply(1, 0, 1).normalize();
-            p.setDeltaMovement(weg.x * 1.0, 0.5, weg.z * 1.0);
-            p.hurtMarked = true;
-        }
+        raakRond(position(), 3.6, 1.7, "plet", null, 0, 1.0);   // (fix round 1: 34 raw at lv 3, ~1/4 of a lv-3 player)
     }
 
     @Override

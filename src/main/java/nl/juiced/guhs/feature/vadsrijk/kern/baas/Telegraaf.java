@@ -13,7 +13,8 @@ import net.minecraft.world.phys.Vec3;
  * it "goes off". Particles only (cheap, visible to everyone). Kinds: {@link #cirkel}, {@link #lijn}.
  */
 public final class Telegraaf {
-    public static final int ROOD = 0xFF2A2A, ROZE = 0xFF5FC8, GRIJS = 0x8A8A8A;
+    /** Colour language (fix round 1): red = damage, pink = safe, purple = mechanic, yellow = stack (soak together). */
+    public static final int ROOD = 0xFF2A2A, ROZE = 0xFF5FC8, GRIJS = 0x8A8A8A, PAARS = 0xA040FF, GEEL = 0xFFD62A;
 
     private record Actief(ServerLevel level, Vec3 a, Vec3 b, double straal, int duur, int kleur, boolean lijn, int[] t) {
     }

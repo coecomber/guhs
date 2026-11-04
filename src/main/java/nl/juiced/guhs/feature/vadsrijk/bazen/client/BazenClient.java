@@ -122,6 +122,22 @@ public final class BazenClient {
             r.withScale(1.3f);
             return r;
         });
+        e.registerEntityRenderer(BazenRegistry.LOK_MIKA.get(), ctx -> {   // (fix round 1: a decoy looks exactly like the unmasked spy)
+            var r = new GeoEntityRenderer<nl.juiced.guhs.feature.vadsrijk.bazen.mika.LokMika, LivingEntityRenderState>(ctx,
+                    new DefaultedEntityGeoModel<nl.juiced.guhs.feature.vadsrijk.bazen.mika.LokMika>(Guhs.id("mika")) {
+                        @Override
+                        public Identifier getTextureResource(GeoRenderState state) {
+                            return tex("mika_spion");
+                        }
+                    }.withAltAnimations(Guhs.id("guh"))) {
+                @Override
+                public void adjustModelBonesForRender(RenderPassInfo<LivingEntityRenderState> info, BoneSnapshots bones) {
+                    DefaultAnimations.hardcodedHeadRotation(info, bones, "head");
+                }
+            };
+            r.withScale(1.3f);
+            return r;
+        });
         e.registerEntityRenderer(BazenRegistry.SPION_BALLON.get(), ctx -> {
             var r = new GeoEntityRenderer<SpionBallon, LivingEntityRenderState>(ctx, new DefaultedEntityGeoModel<SpionBallon>(Guhs.id("vr_baas_spion_ballon")) {
                 @Override

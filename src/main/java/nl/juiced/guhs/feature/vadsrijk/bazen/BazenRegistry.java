@@ -69,6 +69,8 @@ public final class BazenRegistry {
     public static final DeferredHolder<EntityType<?>, EntityType<ElementKlodder>> KK_KLODDER = entity("vr_baas_kk_klodder", ElementKlodder::new, 1.0f, 0.85f, 0.5f);
     public static final DeferredHolder<EntityType<?>, EntityType<Opperzwam>> OPPERZWAM = entity("vr_baas_opperzwam", Opperzwam::new, 1.6f, 3.4f, 2.6f);
     public static final DeferredHolder<EntityType<?>, EntityType<MikaSpion>> MIKA_SPION = entity("vr_baas_mika_spion", MikaSpion::new, 1.2f, 1.2f, 0.9f);
+    public static final DeferredHolder<EntityType<?>, EntityType<nl.juiced.guhs.feature.vadsrijk.bazen.mika.LokMika>> LOK_MIKA = entity("vr_baas_lok_mika",
+            nl.juiced.guhs.feature.vadsrijk.bazen.mika.LokMika::new, 1.2f, 1.2f, 0.9f);
     public static final DeferredHolder<EntityType<?>, EntityType<SpionBallon>> SPION_BALLON = entity("vr_baas_spion_ballon", SpionBallon::new, 1.6f, 2.6f, 1.5f);
     public static final DeferredHolder<EntityType<?>, EntityType<HulpSlijmpje>> HULPSLIJMPJE = ENTITIES.register("vr_baas_hulpslijmpje",
             () -> EntityType.Builder.<HulpSlijmpje>of(HulpSlijmpje::new, MobCategory.MISC).sized(0.52f, 0.52f).eyeHeight(0.3f).clientTrackingRange(8)
@@ -113,6 +115,7 @@ public final class BazenRegistry {
             e.put(OPPERZWAM.get(), VadsrijkMob.basisAttributen().add(Attributes.KNOCKBACK_RESISTANCE, 1.0).add(Attributes.FOLLOW_RANGE, 48)
                     .add(Attributes.MOVEMENT_SPEED, 0.24).build());
             e.put(MIKA_SPION.get(), VadsrijkMob.basisAttributen().add(Attributes.FOLLOW_RANGE, 32).add(Attributes.MOVEMENT_SPEED, 0.3).build());
+            e.put(LOK_MIKA.get(), VadsrijkMob.basisAttributen().add(Attributes.MOVEMENT_SPEED, 0.3).build());
             e.put(KK_KLODDER.get(), VadsrijkMob.basisAttributen().add(Attributes.MOVEMENT_SPEED, 0.3).build());
             e.put(SPION_BALLON.get(), VadsrijkMob.basisAttributen().add(Attributes.KNOCKBACK_RESISTANCE, 1.0).build());
             e.put(HULPSLIJMPJE.get(), HulpSlijmpje.attributen().build());
@@ -129,6 +132,44 @@ public final class BazenRegistry {
         NeoForge.EVENT_BUS.addListener(BazenRegistry::tick);
         NeoForge.EVENT_BUS.addListener(BazenRegistry::commando);
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> Herstel.allesTerug(e.getServer()));
+        ElementKlodder.registreerSchild();
+        // fix round 1: the temple gate goes before wereld's door click (a cancelled click never reaches it)
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGH,
+                (net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock e) -> {
+                    if (e.getEntity() instanceof ServerPlayer p && Zwamtempel.klikDeur(p, e.getPos())) {
+                        e.setCanceled(true);
+                        e.setCancellationResult(net.minecraft.world.InteractionResult.FAIL);
+                        return;
+                    }
+                    if (e.getEntity() instanceof ServerPlayer p && e.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && gooiKroon(p)) {
+                        e.setCanceled(true);
+                        e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                    }
+                });
+        // the crown of Koning Klodder: its carrier throws it back with a right-click (item, air, on him)
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickItem e) -> {
+            if (e.getEntity() instanceof ServerPlayer p && e.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && gooiKroon(p)) {
+                e.setCanceled(true);
+                e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.EntityInteract e) -> {
+            if (e.getEntity() instanceof ServerPlayer p && e.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && gooiKroon(p)) {
+                e.setCanceled(true);
+                e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+            }
+        });
+    }
+
+    /** If this player carries Koning Klodder's crown: throw it at him. */
+    static boolean gooiKroon(ServerPlayer p) {
+        if (!(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl)) {
+            return false;
+        }
+        for (KoningKlodder k : sl.getEntitiesOfClass(KoningKlodder.class, p.getBoundingBox().inflate(48), k -> k.kroonDrager() == p)) {
+            return k.gooiKroon(p);
+        }
+        return false;
     }
 
     public static void payloads(PayloadRegistrar registrar) {

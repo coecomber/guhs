@@ -47,8 +47,67 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
  * The gates between rooms are our own Zwampoort blocks (only placed in air, only removed where they are ours).
  */
 public final class Zwamtempel {
-    /** npc slice may replace this (quest progress); default: level 16+. */
-    public static Predicate<ServerPlayer> MAG_NAAR_BINNEN = p -> Spelers.level(p) >= BazenPlekken.TEMPEL_MIN_LEVEL;
+    /**
+     * Who may open the temple (fix round 1): level {@link BazenPlekken#TEMPEL_MIN_LEVEL}+ AND the main story is at the temple
+     * (quest {@link #QUEST_TEMPEL} active or done, or the Opperzwam quest after it). Creative is no exception (dev:
+     * {@code /guhs vadsrijk bazen tempel open}).
+     */
+    public static Predicate<ServerPlayer> MAG_NAAR_BINNEN = p -> waaromDicht(p) == null;
+    public static final String QUEST_TEMPEL = "hq10_zwamtempel", QUEST_OPPERZWAM = "hq11_opperzwam";
+
+    /** Null when this player may open the temple door, else the lang key of the friendly "not yet" line. */
+    @javax.annotation.Nullable
+    public static String waaromDicht(ServerPlayer p) {
+        if (Spelers.level(p) < BazenPlekken.TEMPEL_MIN_LEVEL) {
+            return "vadsrijk.bazen.tempel.te_laag";
+        }
+        boolean verhaal;
+        try {
+            verhaal = nl.juiced.guhs.feature.vadsrijk.npc.Questlog.actief(p, QUEST_TEMPEL) || nl.juiced.guhs.feature.vadsrijk.npc.Questlog.klaar(p, QUEST_TEMPEL)
+                    || nl.juiced.guhs.feature.vadsrijk.npc.Questlog.actief(p, QUEST_OPPERZWAM) || nl.juiced.guhs.feature.vadsrijk.npc.Questlog.klaar(p, QUEST_OPPERZWAM);
+        } catch (RuntimeException | LinkageError e) {
+            verhaal = true;   // (no quest system: the level is enough)
+        }
+        return verhaal ? null : "vadsrijk.bazen.tempel.verhaal";
+    }
+
+    /** Does this block belong to the temple entrance (the moving door, or anything openable right around it)? */
+    public static boolean bijDeur(BlockPos pos) {
+        BlockPos a = BazenPlekken.TEMPELDEUR_MIN, b = BazenPlekken.TEMPELDEUR_MAX;
+        return pos.getX() >= Math.min(a.getX(), b.getX()) - 3 && pos.getX() <= Math.max(a.getX(), b.getX()) + 3 && pos.getY() >= Math.min(a.getY(), b.getY()) - 1
+                && pos.getY() <= Math.max(a.getY(), b.getY()) + 1 && pos.getZ() >= Math.min(a.getZ(), b.getZ()) - 4 && pos.getZ() <= Math.max(a.getZ(), b.getZ()) + 4;
+    }
+
+    /**
+     * A right-click at the temple entrance (BazenRegistry listens before wereld's door click): below the gate a friendly line
+     * and nothing opens (also no vanilla door/gate/trapdoor there); allowed = the ceremony. Returns true when handled.
+     */
+    public static boolean klikDeur(ServerPlayer p, BlockPos pos) {
+        if (!(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl) || !bijDeur(pos)) {
+            return false;
+        }
+        String waarom = waaromDicht(p);
+        if (waarom != null) {
+            p.sendOverlayMessage(Component.translatable(waarom, BazenPlekken.TEMPEL_MIN_LEVEL).withStyle(ChatFormatting.GRAY));
+            sl.playSound(null, pos, SoundEvents.WOODEN_DOOR_CLOSE, SoundSource.BLOCKS, 0.6f, 0.5f);
+            return true;
+        }
+        BlockState st = sl.getBlockState(pos);
+        boolean deurBlok = st.getBlock() instanceof net.minecraft.world.level.block.DoorBlock || st.getBlock() instanceof net.minecraft.world.level.block.TrapDoorBlock
+                || st.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock;
+        if (deurBlok) {
+            return true;   // (vanilla doors in the doorway never open: the temple door is the way in)
+        }
+        try {
+            nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.ontgrendel("zwamtempel", p);
+        } catch (RuntimeException | LinkageError e) {
+            // (no wereld doors)
+        }
+        if (deurOpenTot < 0 && deurAnim < 0) {
+            ceremonie(sl, sl.getGameTime());
+        }
+        return true;
+    }
     public static final int RESET_TICKS = 20 * 60 * 10, DEUR_OPEN_TICKS = 20 * 60 * 5;
     private static final String H_DEUR = "tempel_deur";
 
@@ -180,7 +239,9 @@ public final class Zwamtempel {
             if (!MAG_NAAR_BINNEN.test(p)) {
                 if (nu > deurDichtBericht) {
                     deurDichtBericht = nu + 100;
-                    p.sendOverlayMessage(Component.translatable("vadsrijk.bazen.tempel.te_laag", BazenPlekken.TEMPEL_MIN_LEVEL).withStyle(ChatFormatting.GRAY));
+                    String waarom = waaromDicht(p);
+                    p.sendOverlayMessage(Component.translatable(waarom == null ? "vadsrijk.bazen.tempel.te_laag" : waarom, BazenPlekken.TEMPEL_MIN_LEVEL)
+                            .withStyle(ChatFormatting.GRAY));
                 }
                 continue;
             }
