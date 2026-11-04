@@ -41,11 +41,21 @@ public final class NpcRegistry {
     static {
         for (String id : new String[] {"grauwe_pluis", "wolletje", "zwamhoedje", "slijmdruppel", "druppelkristal", "kistje", "wortelzwam", "brief",
                 "mika_speldje"}) {
-            QUEST_ITEMS.put(id, ITEMS.registerSimpleItem("vr_npc_" + id, () -> new Item.Properties().stacksTo(64)));
+            QUEST_ITEMS.put(id, ITEMS.registerSimpleItem("vr_npc_" + id, () -> metLore(new Item.Properties().stacksTo(64), id, "vr_npc_", "mika_speldje")));
         }
     }
 
     private NpcRegistry() {
+    }
+
+    /** (WERELDVERHAAL §10) A flavour line under the quest items listed: lang item.guhs.&lt;prefix&gt;&lt;id&gt;.lore. */
+    public static Item.Properties metLore(Item.Properties p, String id, String prefix, String... metLore) {
+        if (java.util.Arrays.asList(metLore).contains(id)) {
+            p.component(net.minecraft.core.component.DataComponents.LORE, new net.minecraft.world.item.component.ItemLore(java.util.List.of(
+                    net.minecraft.network.chat.Component.translatable("item.guhs." + prefix + id + ".lore")
+                            .withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC))));
+        }
+        return p;
     }
 
     public static void register(IEventBus modBus) {

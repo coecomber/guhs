@@ -1,10 +1,12 @@
 package nl.juiced.guhs.feature.vadsrijk.npc;
 
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhVariant;
 
@@ -25,5 +27,13 @@ public record NpcDef(String id, BlockPos plek, float yaw, GuhVariant variant, Li
 
     public String naamKey() {
         return "vadsrijk.npc.naam." + id;
+    }
+
+    /** NPCs with a 4th idle line (WERELDVERHAAL §10; tools/features/vadsrijk_npc.py + vadsrijk_z2_npc.py VIER_REGELS). */
+    public static final Set<String> VIER_REGELS = Set.of("oma_truus", "akim_kaasguh", "z2_poollicht", "z2_opa_sneeuwbal");
+
+    /** A random idle line of this NPC: {@code vadsrijk.npc.praat.<id>.1..3} (or ..4). */
+    public static String gedagKey(String id, RandomSource r) {
+        return "vadsrijk.npc.praat." + id + "." + (1 + r.nextInt(VIER_REGELS.contains(id) ? 4 : 3));
     }
 }

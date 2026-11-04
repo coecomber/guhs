@@ -244,7 +244,7 @@ public final class QuestMotor {
 
     private static void rol(ServerPlayer p, RijkGuh npc, @Nullable String rol) {
         String id = npc.npcId();
-        String gedag = "vadsrijk.npc.praat." + id + "." + (1 + p.getRandom().nextInt(3));
+        String gedag = NpcDef.gedagKey(id, p.getRandom());
         if ("marktguh".equals(rol) && klaarVoorOntmaskeren(p)) {
             // (our fallback Akim, when the bazen slice is not in this tree: the unmasking dialogue, then the action)
             open(p, npc, regels(p, npc, List.of("jij", "npc", "npc", "jij", "npc"), "vadsrijk.npc.spion.dialoog."),

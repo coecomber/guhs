@@ -121,7 +121,7 @@ public final class Z2Haken {
             return false;
         }
         // not (yet) on the quest: the statue whispers
-        Praat.scene(p, Z2Verhaal.SLEUTEL, List.of(new Praat.Regel(g, "", "vadsrijk.npc.praat." + id + "." + (1 + p.getRandom().nextInt(3)))));
+        Praat.scene(p, Z2Verhaal.SLEUTEL, List.of(new Praat.Regel(g, "", nl.juiced.guhs.feature.vadsrijk.npc.NpcDef.gedagKey(id, p.getRandom()))));
         Tips.toon(p, "vadsrijk.npc.tip.z2_versteend");
         return true;
     }

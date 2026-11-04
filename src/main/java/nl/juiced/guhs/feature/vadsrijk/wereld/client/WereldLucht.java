@@ -19,6 +19,8 @@ import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.client.SkyDraw;
+import nl.juiced.guhs.feature.vadsrijk.kern.client.SceneSpeler;
+import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScene;
 import nl.juiced.guhs.world.GuhTime;
 import org.joml.Matrix4f;
 import org.joml.Matrix4fc;
@@ -34,7 +36,9 @@ import org.joml.Vector4f;
  *   <li>at night: constellations in guh shape (round head, two ears, eyes, a little "w" mouth) among faint stars;</li>
  *   <li>far landmarks of later zones on the horizon (silhouettes in the haze: crystal spires, a floating castle, a giant
  *       tree, a dark volcano with black fluff);</li>
- *   <li>now and then the grey dragon circling far away (a flapping silhouette; the real model is the wezens slice's).</li>
+ *   <li>now and then the grey dragon circling far away (a flapping silhouette; the real model is the wezens slice's);</li>
+ *   <li>(i-lore, WERELDVERHAAL §10) two hints of the Keizer inside scenes: the second moon that blinks once at the end of the
+ *       zone-1 cliffhanger (#15), and a thin grey line with fingers on the horizon for one second of the zone-2 flashback (#14).</li>
  * </ul>
  * Textures: tools/features/vadsrijk_wereld.py (textures/vadsrijk/wereld/lucht_*.png).
  */
@@ -43,10 +47,19 @@ final class WereldLucht {
     private static final Identifier DRAAK = Guhs.id("textures/vadsrijk/wereld/lucht_draak.png");
     private static final Identifier[] VERTE = {Guhs.id("textures/vadsrijk/wereld/lucht_verte_0.png"), Guhs.id("textures/vadsrijk/wereld/lucht_verte_1.png"),
             Guhs.id("textures/vadsrijk/wereld/lucht_verte_2.png"), Guhs.id("textures/vadsrijk/wereld/lucht_verte_3.png")};
-    /** Landmarks: azimuth (0 = north, clockwise), half width and height (blocks at distance 90). */
-    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {75f, 22f, 22f}, {255f, 24f, 24f}, {140f, 28f, 20f}};
+    /**
+     * Landmarks: azimuth (0 = north, clockwise), half width and height (blocks at distance 90). Crystal spires 350 = zone 2, floating
+     * castle 75 = Hoogvads, giant tree = zone 3 (J-INT: moved from 255 (west) to the EAST, since zone 3 lies at x +1600..+3000; 105
+     * instead of 95 so it doesn't overlap the castle at 75 (+-14 deg) and keeps clear of the volcano), volcano 140 = Roetfront.
+     */
+    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {75f, 22f, 22f}, {105f, 24f, 24f}, {140f, 28f, 20f}};
     /** The dragon: one pass every this many ticks, lasting VLUCHT ticks. */
     private static final int DRAAK_ELKE = 20 * 150, VLUCHT = 20 * 28;
+    /** (i-lore) The moon shot of the zone-1 cliffhanger (Verhaal.cliffhanger, 312 ticks): the moon from OOG_VAN, one blink at OOG_KNIPPER. */
+    private static final String OOG_SCENE = "npc:cliffhanger", VINGER_SCENE = "npc:z2_flashback";
+    private static final int OOG_VAN = 262, OOG_KNIPPER = 292, KNIPPER_DUUR = 6;
+    /** (i-lore) The fingers on the horizon in the zone-2 flashback (Z2Verhaal.flashback, 260 ticks): one second from VINGERS_VAN. */
+    private static final int VINGERS_VAN = 228, VINGERS_DUUR = 20;
 
     @Nullable
     private static GpuBuffer sterren;
@@ -77,12 +90,17 @@ final class WereldLucht {
                     SkyDraw.white(1f), m(mv, pose));
         }
         pose.popPose();
-        // 2. the second moon (pink guh moon), a little behind the vanilla moon
+        // 2. the second moon (pink guh moon), a little behind the vanilla moon (not while the cliffhanger stares at it, see 6.)
+        RijkScene sc = SceneSpeler.huidig();
+        float st = SceneSpeler.tijd() + pt;
+        boolean oogShot = sc != null && OOG_SCENE.equals(sc.id()) && st >= OOG_VAN;
         pose.pushPose();
         pose.mulPose(Axis.XP.rotation(hoek + Mth.PI + 0.42f));
         pose.mulPose(Axis.ZP.rotationDegrees(14f));
         float maanA = 0.3f + 0.7f * nacht;
-        SkyDraw.drawNow("Vadsrijk second moon", SkyDraw.CELESTIAL_TRANSLUCENT, vlak(11f), SkyDraw.texture(MAAN), SkyDraw.white(maanA), m(mv, pose));
+        if (!oogShot) {
+            SkyDraw.drawNow("Vadsrijk second moon", SkyDraw.CELESTIAL_TRANSLUCENT, vlak(11f), SkyDraw.texture(MAAN), SkyDraw.white(maanA), m(mv, pose));
+        }
         pose.popPose();
         // 3. guh constellations at night
         if (nacht > 0.02f) {
@@ -116,6 +134,63 @@ final class WereldLucht {
             SkyDraw.drawNow("Vadsrijk dragon", SkyDraw.CELESTIAL_TRANSLUCENT, draak(az, hoog, 7f, frame), SkyDraw.texture(DRAAK),
                     new Vector4f(0.55f, 0.5f, 0.6f, a), mv);
         }
+        // 6. (i-lore) the Keizer's hints inside two scenes, in the look direction of the scene's last keyframe
+        if (oogShot) {
+            float[] r = richting(sc);
+            float a = Mth.clamp((st - OOG_VAN) / 10f, 0f, 1f);
+            float k = st >= OOG_KNIPPER && st < OOG_KNIPPER + KNIPPER_DUUR ? Math.abs(Mth.cos(Mth.PI * (st - OOG_KNIPPER) / KNIPPER_DUUR)) : 1f;
+            SkyDraw.drawNow("Vadsrijk staring moon", SkyDraw.CELESTIAL_TRANSLUCENT, bord(r[0], r[1], 9f, 9f * Math.max(k, 0.04f)), SkyDraw.texture(MAAN),
+                    SkyDraw.white(a), mv);
+        } else if (sc != null && VINGER_SCENE.equals(sc.id()) && st >= VINGERS_VAN && st < VINGERS_VAN + VINGERS_DUUR) {
+            float a = Mth.sin(Mth.PI * (st - VINGERS_VAN) / VINGERS_DUUR) * 0.8f;
+            SkyDraw.drawNow("Vadsrijk far fingers", SkyDraw.COLOURED_STARS, vingers(richting(sc)[0], ARGB.colorFromFloat(a, 0.43f, 0.41f, 0.47f)), null,
+                    SkyDraw.white(1f), mv);
+        }
+    }
+
+    /** Azimuth and elevation (degrees, as {@link #dir}) of the look direction of a scene's last keyframe. */
+    private static float[] richting(RijkScene sc) {
+        RijkScene.Punt l = sc.punten().get(sc.punten().size() - 1);
+        double dx = l.kijk().x - l.pos().x, dy = l.kijk().y - l.pos().y, dz = l.kijk().z - l.pos().z;
+        return new float[] {(float) Math.toDegrees(Math.atan2(dx, -dz)), (float) Math.toDegrees(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)))};
+    }
+
+    /** A camera-facing textured quad at (az, h): half width hw, half height hh (blocks at distance 92). */
+    private static MeshData bord(float az, float h, float hw, float hh) {
+        Vector3f mid = dir(az, h, 92f);
+        Vector3f rechts = new Vector3f(mid).cross(0, 1, 0).normalize(hw);
+        Vector3f op = new Vector3f(rechts).cross(mid).normalize(hh);
+        BufferBuilder b = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
+        Vector3f[] p = {new Vector3f(mid).sub(rechts).sub(op), new Vector3f(mid).add(rechts).sub(op), new Vector3f(mid).add(rechts).add(op),
+                new Vector3f(mid).sub(rechts).add(op)};
+        float[][] uv = {{0, 1}, {1, 1}, {1, 0}, {0, 0}};
+        for (int[] o : new int[][]{{0, 1, 2, 3}, {3, 2, 1, 0}}) {
+            for (int i : o) {
+                b.addVertex(p[i].x, p[i].y, p[i].z).setUv(uv[i][0], uv[i][1]);
+            }
+        }
+        return b.buildOrThrow();
+    }
+
+    /** A thin grey line on the horizon round azimuth az, with five finger-like bumps a little right of the middle (never named). */
+    private static MeshData vingers(float az, int c) {
+        Vector3f mid = dir(az, 1.2f, 90f);
+        Vector3f rechts = new Vector3f(mid).cross(0, 1, 0).normalize();
+        BufferBuilder b = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+        // {offset to the right, half width, height} in blocks at distance 90; the first is the long thin line
+        float[][] stukken = {{0f, 34f, 0.7f}, {9.2f, 0.65f, 2.6f}, {10.8f, 0.7f, 3.7f}, {12.4f, 0.7f, 4.1f}, {14.0f, 0.7f, 3.5f}, {15.5f, 0.6f, 2.2f}};
+        for (float[] s : stukken) {
+            Vector3f m = new Vector3f(rechts).mul(s[0]).add(mid);
+            Vector3f r = new Vector3f(rechts).mul(s[1]);
+            Vector3f[] p = {new Vector3f(m).sub(r).add(0, -0.6f, 0), new Vector3f(m).add(r).add(0, -0.6f, 0), new Vector3f(m).add(r).add(0, s[2], 0),
+                    new Vector3f(m).sub(r).add(0, s[2], 0)};
+            for (int[] o : new int[][]{{0, 1, 2, 3}, {3, 2, 1, 0}}) {
+                for (int i : o) {
+                    b.addVertex(p[i].x, p[i].y, p[i].z).setColor(c);
+                }
+            }
+        }
+        return b.buildOrThrow();
     }
 
     private static float nachtFactor(long tijd) {
