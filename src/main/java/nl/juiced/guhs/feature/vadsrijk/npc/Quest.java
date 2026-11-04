@@ -27,8 +27,16 @@ public record Quest(String id, Soort soort, String gever, String inleveren, int 
         }
     }
 
-    /** What an objective counts. {@code doel}: an NPC id, "gebied:&lt;area&gt;", "poi:&lt;id&gt;", an entity/item id, "*"... */
-    public record Doel(Type type, String doel, int n, String bron, double kans) {
+    /**
+     * What an objective counts. {@code doel}: an NPC id, "gebied:&lt;area&gt;", "poi:&lt;id&gt;", an entity/item id, "*"...
+     * {@code plek} (zone 2, optional, "" = derive it from the type): where the tracker points, "npc:&lt;id&gt;", "poi:&lt;id&gt;" or
+     * "gebied:&lt;area&gt;" ({@link QuestPlek}).
+     */
+    public record Doel(Type type, String doel, int n, String bron, double kans, String plek) {
+        public Doel(Type type, String doel, int n, String bron, double kans) {
+            this(type, doel, n, bron, kans, "");
+        }
+
         public enum Type {
             /** talk to NPC doel */
             PRAAT,

@@ -26,6 +26,8 @@ import com.mojang.logging.LogUtils;
 public final class Quests {
     private static final Logger LOG = LogUtils.getLogger();
     public static final String BESTAND = "/data/guhs/vadsrijk/npc/quests.json";
+    /** Zone 2 (tools/features/vadsrijk_z2_npc.py): read after zone 1, same system, its quests come after zone 1's in the questlog. */
+    public static final String BESTAND_Z2 = "/data/guhs/vadsrijk/npc/quests_z2.json";
     private static volatile Map<String, Quest> alle;
 
     private Quests() {
@@ -51,18 +53,20 @@ public final class Quests {
 
     private static Map<String, Quest> laad() {
         Map<String, Quest> m = new LinkedHashMap<>();
-        try (InputStream in = Quests.class.getResourceAsStream(BESTAND)) {
-            if (in == null) {
-                LOG.error("Vadsrijk npc: {} is missing", BESTAND);
-                return m;
+        for (String bestand : new String[] {BESTAND, BESTAND_Z2}) {
+            try (InputStream in = Quests.class.getResourceAsStream(bestand)) {
+                if (in == null) {
+                    LOG.error("Vadsrijk npc: {} is missing", bestand);
+                    continue;
+                }
+                JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
+                for (JsonElement e : root.getAsJsonArray("quests")) {
+                    Quest q = quest(e.getAsJsonObject());
+                    m.put(q.id(), q);
+                }
+            } catch (Exception e) {
+                LOG.error("Vadsrijk npc: could not read {}", bestand, e);
             }
-            JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
-            for (JsonElement e : root.getAsJsonArray("quests")) {
-                Quest q = quest(e.getAsJsonObject());
-                m.put(q.id(), q);
-            }
-        } catch (Exception e) {
-            LOG.error("Vadsrijk npc: could not read {}", BESTAND, e);
         }
         return Collections.unmodifiableMap(m);
     }
@@ -74,7 +78,7 @@ public final class Quests {
         for (JsonElement e : arr(o, "doelen")) {
             JsonObject d = e.getAsJsonObject();
             doelen.add(new Quest.Doel(Quest.Doel.Type.van(d.get("soort").getAsString()), str(d, "doel", "*"), d.has("n") ? d.get("n").getAsInt() : 1,
-                    str(d, "bron", ""), d.has("kans") ? d.get("kans").getAsDouble() : 0));
+                    str(d, "bron", ""), d.has("kans") ? d.get("kans").getAsDouble() : 0, str(d, "plek", "")));
         }
         JsonObject b = o.has("beloning") ? o.getAsJsonObject("beloning") : new JsonObject();
         Quest.Beloning bel = new Quest.Beloning(b.has("xp") ? b.get("xp").getAsLong() : 0, b.has("munten") ? b.get("munten").getAsLong() : 0,

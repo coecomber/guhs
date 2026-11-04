@@ -60,7 +60,7 @@ public class RijkGuh extends GuhEntity {
     }
 
     /** Dress and place it after its definition (server side, right after creating it). */
-    void stelIn(NpcDef d) {
+    public void stelIn(NpcDef d) {
         this.npcId = d.id();
         this.thuis = d.plek();
         this.gedrag = d.gedrag();

@@ -102,6 +102,11 @@ public final class Npcs {
         }
     }
 
+    /** Zone 2 (and later zones): add an NPC of your own (its spot in your own Plekken class); kept like zone 1's. */
+    public static void voegToe(NpcDef d) {
+        ALLE.put(d.id(), d);
+    }
+
     public static java.util.Collection<NpcDef> alle() {
         return Collections.unmodifiableCollection(ALLE.values());
     }
@@ -177,7 +182,7 @@ public final class Npcs {
     }
 
     /** The y to stand on: the nearest floor within 12 blocks of the spot's y (the spot's own y when there is none). */
-    static double vloer(ServerLevel sl, BlockPos pos) {
+    public static double vloer(ServerLevel sl, BlockPos pos) {
         double y = vloerOfNaN(sl, pos);
         return Double.isNaN(y) ? pos.getY() : y;
     }

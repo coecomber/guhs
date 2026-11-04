@@ -40,6 +40,37 @@ public final class QuestMotor {
 
     private static final Map<UUID, Gesprek> LOPEND = new ConcurrentHashMap<>();
 
+    // ---- zone 2 (and later zones) hook in here without a parallel quest system --------------------------------------------------
+    /** Quest actions of other zones: "z2_cliffhanger" -> (player, the rest after the first ':'). Looked up for unknown actions. */
+    public static final Map<String, java.util.function.BiConsumer<ServerPlayer, String>> ACTIES = new ConcurrentHashMap<>();
+    /** Asked first on every NPC click; true = handled (e.g. a petrified guh you already freed thanks you). */
+    public static final List<java.util.function.BiPredicate<ServerPlayer, RijkGuh>> KLIK_VOOR = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /** An extra choice in an NPC's role dialogue (zone 2: the haven pilot's line to Kandijkom), shown while {@code zichtbaar}. */
+    public record ExtraOptie(String tekstKey, java.util.function.Predicate<ServerPlayer> zichtbaar, java.util.function.Consumer<ServerPlayer> doe) {
+    }
+
+    /** npc id -> its extra choices. */
+    public static final Map<String, List<ExtraOptie>> EXTRA = new ConcurrentHashMap<>();
+    static final int EXTRA_OPTIE = 70;
+    private static final Map<UUID, List<ExtraOptie>> EXTRA_OPEN = new ConcurrentHashMap<>();
+
+    /** The base choices plus the extra ones of this NPC this player may see now (remembered for the answer). */
+    private static Praat.Optie[] metExtra(ServerPlayer p, String npc, Praat.Optie... basis) {
+        List<ExtraOptie> zicht = new ArrayList<>();
+        for (ExtraOptie e : EXTRA.getOrDefault(npc, List.of())) {
+            if (e.zichtbaar().test(p)) {
+                zicht.add(e);
+            }
+        }
+        EXTRA_OPEN.put(p.getUUID(), zicht);
+        List<Praat.Optie> l = new ArrayList<>(List.of(basis));
+        for (int i = 0; i < zicht.size(); i++) {
+            l.add(new Praat.Optie(EXTRA_OPTIE + i, zicht.get(i).tekstKey()));
+        }
+        return l.toArray(new Praat.Optie[0]);
+    }
+
     private QuestMotor() {
     }
 
@@ -52,6 +83,11 @@ public final class QuestMotor {
         String id = npc.npcId();
         if (id.isEmpty()) {
             return;
+        }
+        for (java.util.function.BiPredicate<ServerPlayer, RijkGuh> h : KLIK_VOOR) {
+            if (h.test(p, npc)) {
+                return;
+            }
         }
         if (p.getUUID().equals(npc.volgt())) {
             p.sendOverlayMessage(Component.translatable("vadsrijk.npc.escorte.volgt", npc.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -143,7 +179,7 @@ public final class QuestMotor {
     }
 
     /** One Praat page per speaker in the list: "npc" = this NPC, "jij" = the player, else that NPC (drawn when it is near). */
-    static List<Praat.Regel> regels(ServerPlayer p, @Nullable Entity npc, List<String> sprekers, String prefix) {
+    public static List<Praat.Regel> regels(ServerPlayer p, @Nullable Entity npc, List<String> sprekers, String prefix) {
         List<Praat.Regel> l = new ArrayList<>();
         for (int i = 0; i < sprekers.size(); i++) {
             String s = sprekers.get(i);
@@ -192,7 +228,7 @@ public final class QuestMotor {
                 }
             }
             case "luchtschip_kamp" -> praat(p, npc, "vadsrijk.npc.rol.luchtschip_kamp.vraag", new Gesprek(id, npc.getId(), "", rol, ""),
-                    new Praat.Optie(VLIEG_KAMP, "vadsrijk.npc.optie.naar_kamp"));
+                    metExtra(p, id, new Praat.Optie(VLIEG_KAMP, "vadsrijk.npc.optie.naar_kamp")));
             case "klasse" -> klasseKeuze(p, npc);
             case "questbord" -> questbord(p, npc);
             default -> {
@@ -201,7 +237,7 @@ public final class QuestMotor {
                     l.add(hint);
                 }
                 l.add(new Praat.Regel(npc, "", gedag));
-                open(p, npc, l, new Gesprek(id, npc.getId(), "", rol, ""), new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + rol));
+                open(p, npc, l, new Gesprek(id, npc.getId(), "", rol, ""), metExtra(p, id, new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + rol)));
             }
         }
     }
@@ -342,6 +378,13 @@ public final class QuestMotor {
             } else if (npc != null) {
                 quiz(p, npc, true);
             }
+        } else if (optie >= EXTRA_OPTIE && optie < EXTRA_OPTIE + 10) {
+            List<ExtraOptie> l = EXTRA_OPEN.remove(p.getUUID());
+            Praat.sluit(p);
+            afronden(p);
+            if (l != null && optie - EXTRA_OPTIE < l.size()) {
+                l.get(optie - EXTRA_OPTIE).doe().accept(p);
+            }
         } else if (optie >= KLASSE && optie < KLASSE + 9) {
             List<Klasse> alle = new ArrayList<>(Klassen.alle());
             Praat.sluit(p);
@@ -353,7 +396,7 @@ public final class QuestMotor {
     }
 
     /** Runs a pending after-reading action (the screen was closed without telling us) and forgets the conversation. */
-    static void afronden(ServerPlayer p) {
+    public static void afronden(ServerPlayer p) {
         Gesprek g = LOPEND.remove(p.getUUID());
         if (g != null && !g.na().isEmpty()) {
             doeActie(p, g.na(), null);
@@ -369,7 +412,7 @@ public final class QuestMotor {
     }
 
     /** The quest actions (after accepting: actie_aanname; after the hand-in dialogue: actie_klaar). */
-    static void doeActie(ServerPlayer p, String actie, @Nullable Entity spreker) {
+    public static void doeActie(ServerPlayer p, String actie, @Nullable Entity spreker) {
         if (actie.isEmpty()) {
             return;
         }
@@ -394,12 +437,16 @@ public final class QuestMotor {
                 }
             }
             default -> {
+                java.util.function.BiConsumer<ServerPlayer, String> x = ACTIES.get(a[0]);
+                if (x != null) {
+                    x.accept(p, actie.indexOf(':') < 0 ? "" : actie.substring(actie.indexOf(':') + 1));
+                }
             }
         }
     }
 
     /** (tests) */
-    static void vergeet(ServerPlayer p) {
+    public static void vergeet(ServerPlayer p) {
         LOPEND.remove(p.getUUID());
     }
 }
