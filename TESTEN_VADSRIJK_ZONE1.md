@@ -1,5 +1,7 @@
 # Testen: Het Vadsrijk, zone 1 (Guhs 1.10.0), alles samen
 
+> **Verouderd**: de actuele testgids is `TESTEN_VADSRIJK.md` (zone 1 na de fixronde + zone 2).
+
 Dit is de ene testgids voor heel zone 1: de kaart, de NPC's en quests, de wezens, de bazen, de klassen en de economie. De losse
 gidsen per slice (TESTEN_VADSRIJK.md, TESTEN_WERELD.md, TESTEN_NPC.md, TESTEN_WEZENS.md, TESTEN_BAZEN.md, TESTEN_KLASSEN.md,
 TESTEN_ECONOMIE.md) blijven als naslag; deze gids gaat voor.
