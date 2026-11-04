@@ -327,9 +327,10 @@ public final class QuestMotor {
 
     /** Airship NPC id -> the destinations it offers, in order ("zwamzoet" = De Haven, "knuffelkamp", "kandijkom"). */
     public static final Map<String, List<String>> REIZEN = new ConcurrentHashMap<>(Map.of(
-            "kapitein", List.of("zwamzoet", "kandijkom"),
-            "luchtschipper", List.of("knuffelkamp", "kandijkom"),
-            "z2_kapitein", List.of("zwamzoet", "knuffelkamp")));
+            "kapitein", List.of("zwamzoet", "kandijkom", "schemerwortel"),            // [z3-wereld] + schemerwortel
+            "luchtschipper", List.of("knuffelkamp", "kandijkom", "schemerwortel"),
+            "z2_kapitein", List.of("zwamzoet", "knuffelkamp", "schemerwortel"),
+            "z3_kapitein", List.of("zwamzoet", "kandijkom", "knuffelkamp")));
     private static final Map<UUID, List<String>> REIS_OPEN = new ConcurrentHashMap<>();
 
     /** Is this an airship NPC? */
@@ -341,7 +342,8 @@ public final class QuestMotor {
     public static List<String> reisDoelen(ServerPlayer p, String npc) {
         List<String> l = new ArrayList<>();
         for (String naar : REIZEN.getOrDefault(npc, List.of())) {
-            if (!naar.equals("kandijkom") || NpcApi.zone1Klaar(p)) {
+            if ((!naar.equals("kandijkom") || NpcApi.zone1Klaar(p))
+                    && (!naar.equals("schemerwortel") || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p))) {   // [z3-wereld]
                 l.add(naar);
             }
         }
@@ -356,6 +358,7 @@ public final class QuestMotor {
             case "kandijkom" -> Questlog.status(p, "z2_hq01_splinterpieken") != 0 ? null   // (the zone-2 story started: always open)
                     : !NpcApi.zone1Klaar(p) ? "vadsrijk.npc.reis.slot.kandijkom_verhaal"
                     : Spelers.level(p) < 20 ? "vadsrijk.npc.reis.slot.kandijkom_level" : null;
+            case "schemerwortel" -> nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.slot(p);   // [z3-wereld] zone2_klaar + lv 30
             default -> null;
         };
     }
@@ -394,6 +397,7 @@ public final class QuestMotor {
                 }
                 doeActie(p, "z2_vlieg:kandijkom", null);
             }
+            case "schemerwortel" -> doeActie(p, "z3_vlieg:honingtak", null);   // [z3-wereld] Z3Reizen.naarHoningtak
             case "zwamzoet" -> {
                 if (van.equals("z2_kapitein") || QuestStap.zone2(p.getZ())) {
                     doeActie(p, "z2_vlieg:haven", null);

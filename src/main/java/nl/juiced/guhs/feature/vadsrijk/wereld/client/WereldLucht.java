@@ -49,10 +49,10 @@ final class WereldLucht {
             Guhs.id("textures/vadsrijk/wereld/lucht_verte_2.png"), Guhs.id("textures/vadsrijk/wereld/lucht_verte_3.png")};
     /**
      * Landmarks: azimuth (0 = north, clockwise), half width and height (blocks at distance 90). Crystal spires 350 = zone 2, floating
-     * castle 75 = Hoogvads, giant tree = zone 3 (J-INT: moved from 255 (west) to the EAST, since zone 3 lies at x +1600..+3000; 105
-     * instead of 95 so it doesn't overlap the castle at 75 (+-14 deg) and keeps clear of the volcano), volcano 140 = Roetfront.
+     * castle 116 = Hoogvads, giant tree 91 = zone 3, volcano 148 = Roetfront. K-INT: z3-wereld's layout (the tree stands in the EAST,
+     * zone 3 at x 2300, with Hoogvads behind it) replaces j-int's 75/105/140.
      */
-    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {75f, 22f, 22f}, {105f, 24f, 24f}, {140f, 28f, 20f}};
+    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {116f, 20f, 20f}, {91f, 24f, 24f}, {148f, 28f, 20f}};
     /** The dragon: one pass every this many ticks, lasting VLUCHT ticks. */
     private static final int DRAAK_ELKE = 20 * 150, VLUCHT = 20 * 28;
     /** (i-lore) The moon shot of the zone-1 cliffhanger (Verhaal.cliffhanger, 312 ticks): the moon from OOG_VAN, one blink at OOG_KNIPPER. */
@@ -115,7 +115,8 @@ final class WereldLucht {
             pose.popPose();
         }
         // 4. far landmarks on the horizon (fixed in the world, in the haze); [zone 2] zone 2 draws its own horizon
-        boolean zone2 = mc.player != null && nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.inZone2(mc.player.getX(), mc.player.getZ());
+        boolean zone2 = mc.player != null && (nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.inZone2(mc.player.getX(), mc.player.getZ())
+                || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(mc.player.getX(), mc.player.getZ()));   // [zone 3] own horizon too
         for (int i = 0; i < VERTE.length && !zone2; i++) {
             float[] v = VERTE_PLEK[i];
             float a = 0.42f + 0.25f * dag;

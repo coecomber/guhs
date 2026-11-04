@@ -37,12 +37,19 @@ public final class Reiskaart {
         if (!Vadsrijk.in(p)) {
             return "";   // (g-int: outside the dimension you are at none of them; a gametest far at z -7M looked like zone 2)
         }
+        if (nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(p.getX(), p.getZ())) {
+            return "schemerwortel";   // [z3-wereld]
+        }
         return QuestStap.zone2(p.getZ()) ? "kandijkom" : QuestStap.eiland(p.getX(), p.getZ()) ? "knuffelkamp" : "zwamzoet";
     }
 
     /** One place for this player: its state, the reason key (ONBEKEND/TEASER) and its argument (the player's level). */
     public static NpcPayloads.ReisPlek plek(ServerPlayer p, String id) {
-        if (id.equals("schemerwortel") || id.equals("zone4")) {
+        if (id.equals("schemerwortel") && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p)
+                && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.bereikt(p)) {   // [z3-wereld] a real place once zone 2 is done
+            return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
+        }
+        if (id.equals("zone4")) {
             return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
         }
         String slot = QuestMotor.reisSlot(p, id);
