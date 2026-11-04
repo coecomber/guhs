@@ -1,0 +1,61 @@
+# Het Vadsrijk zone 3 wezens (110-z3-wezens): every zone-3 creature + critter in a row on a moss platform in the proeftuin
+# (/guhs vadsrijk z3wezens alle builds the platform and summons them without AI), an elite, a contract elite, the silhouette.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_z3_wezens.txt
+
+section setup
+/gamemode creative
+/time set noon
+wait 40
+
+section binnen
+/guhs vadsrijk proeftuin
+wait 100
+/fill 3070 64 3150 3170 64 3200 minecraft:moss_block
+/tp @s 3120 66 3170
+waitrender 300
+/tp @s 3120 66 3170
+look 0 10
+wait 20
+/guhs vadsrijk z3wezens alle 40
+wait 40
+/tp @s 3097 67 3162
+look 0 10
+wait 20
+shot vr_z3_wezens_links
+/tp @s 3113 67 3162
+wait 20
+shot vr_z3_wezens_midden
+/tp @s 3129 67 3162
+wait 20
+shot vr_z3_wezens_rechts
+/tp @s 3145 67 3162
+wait 20
+shot vr_z3_wezens_critters
+
+section elite_en_contract
+/guhs vadsrijk z3wezens opruimen
+/tp @s 3120 67 3170
+look 0 15
+/guhs vadsrijk z3wezens affix harsgolem schildend 43
+wait 30
+shot vr_z3_elite gui
+/guhs vadsrijk z3wezens opruimen
+/guhs vadsrijk z3wezens contract moeder_wesp
+wait 30
+shot vr_z3_contract gui
+/guhs vadsrijk z3wezens opruimen
+/guhs vadsrijk z3wezens spawn rotzwijn 44
+/guhs vadsrijk z3wezens spawn bladrover 32
+wait 30
+/kill @e[type=guhs:vr_z3_mob_rotzwijn]
+/kill @e[type=guhs:vr_z3_mob_bladrover]
+wait 3
+shot vr_z3_pluis_rook gui
+
+section items
+/guhs vadsrijk z3wezens set bloesem 32
+/guhs vadsrijk z3wezens set schors 42
+/guhs vadsrijk z3wezens set wortel 47
+/guhs vadsrijk z3wezens sieraden 45
+modelcheck
+quit

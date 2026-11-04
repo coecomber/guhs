@@ -27,6 +27,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.biomen.BiomenRegistry.register(modBus);   // fix round 2: one biome per area
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.register(modBus);   // G-PETS
+        nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
