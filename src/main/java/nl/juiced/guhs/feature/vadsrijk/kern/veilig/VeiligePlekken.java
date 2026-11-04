@@ -165,6 +165,29 @@ public final class VeiligePlekken {
                 l.add(new Plek(e.getValue(), POI));
             }
         }
+        zone2(l);
         return l;
+    }
+
+    /**
+     * (integration) Zone 2 "De Splinterpieken": its tiles have no audit json yet, so its safe spots come from z2-wereld's generated
+     * spots: 4 around every campfire, and every stand spot of the map except the ones in a boss fight, inside a block or puzzle
+     * (arena_*, *_pilaar_*, *_altaar, *kabel*, puzzel_*, boormeester_kop_*, *_straal, *_bord, galmwolf_naald, geheim_*).
+     */
+    static void zone2(List<Plek> l) {
+        for (BlockPos k : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.KAMPVUREN) {
+            for (BlockPos b : new BlockPos[] {k.south(2), k.north(2), k.east(2), k.west(2)}) {
+                l.add(new Plek(b, POI));
+            }
+        }
+        for (var e : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.ALLE.entrySet()) {
+            String id = e.getKey();
+            if (id.startsWith("arena_") || id.contains("_pilaar_") || id.endsWith("_altaar") || id.contains("kabel") || id.startsWith("puzzel_")
+                    || id.startsWith("boormeester_kop_") || id.endsWith("_straal") || id.endsWith("_bord") || id.equals("galmwolf_naald")
+                    || id.startsWith("geheim_") || e.getValue().getY() <= 0) {
+                continue;
+            }
+            l.add(new Plek(e.getValue(), id.startsWith("kampvuur_") || id.startsWith("brug_") || id.startsWith("kloof_trap_") ? PAD : POI));
+        }
     }
 }

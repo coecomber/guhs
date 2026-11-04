@@ -144,7 +144,7 @@ versteende_wacht, ijspuffer, mika_mijnwerker, mika_boorder, kloofgier, kristalsp
   niet). 14 "trappen" = dakpannen van de A-tentjes. 5 waterplekken: een stuk van de baai van Zwamzoet (verder dan 10 slagen van een
   ladder), het Druipschacht-meer (de wenteltrap begint aan de oever).
 - Twee decoratieve deuren in Zwamzoet zitten dicht (stal-zijdeur, een hoeddeur); gras onder overkappingen buiten.
-- Zone 2 heeft nog geen "veilige plekken"-lijst voor U: het valt terug op kampvuren/je checkpoint.
+- Zone 2: U gebruikt de kampvuren en de plekken van de kaart (geen fijnmazige audit-lijst zoals zone 1).
 - Geen muziek; geluiden zijn vanilla. Modellen en plaatjes zijn een eerste gegenereerde versie. Balans is een eerste gok.
 - Er is maar één opening naar Kandijkom (die van de wereld-slice); de Galmwolf daarin is een geluid, geen model.
 - De karavaanroute is uitgerekend op de kaart van vóór de fixronde; hij is gecontroleerd op de nieuwe kaart (geen water, kleine
