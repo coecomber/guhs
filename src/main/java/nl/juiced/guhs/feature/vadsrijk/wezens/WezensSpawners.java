@@ -422,10 +422,13 @@ public final class WezensSpawners {
             zet(gebied, g + "_bergpad_" + n++, s, new BlockPos((int) p[0], y + 3, (int) p[1]), 2, s == PRIESTER ? 1 : 2, 400, ELITE, true, y - 4, y + 3);
         }
         // elites: at the fossil bridge end and the first hairpin
+        // (integration: the path was rerouted by fix wild; the elites follow the path instead of fixed old coordinates)
+        int[] b1 = WezensPlekken.bergPunt(0.08 * tot);
         int y1 = (int) Math.round(WezensPlekken.bergY(0.08)) + 1;
-        zet("zwamtempel", g + "_elite_brug", RIDDER, new BlockPos(225, y1 + 3, -278), 2, 1, 3600, 1.0, true, y1 - 6, y1 + 6);
-        int y2 = (int) Math.round(WezensPlekken.bergY(WezensPlekken.bergLangs(405, -312) / tot)) + 1;
-        zet("zwamtempel", g + "_elite_bocht", PRIESTER, new BlockPos(405, y2 + 3, -312), 2, 1, 3600, 1.0, true, y2 - 6, y2 + 6);
+        zet("zwamtempel", g + "_elite_brug", RIDDER, new BlockPos(b1[0], y1 + 3, b1[1]), 2, 1, 3600, 1.0, true, y1 - 6, y1 + 6);
+        int[] bocht = berg[3];
+        int y2 = (int) Math.round(WezensPlekken.bergY(WezensPlekken.bergLangs(bocht[0], bocht[1]) / tot)) + 1;
+        zet("zwamtempel", g + "_elite_bocht", PRIESTER, new BlockPos(bocht[0], y2 + 3, bocht[1]), 2, 1, 3600, 1.0, true, y2 - 6, y2 + 6);
         // the voorhal (stand y 152): two knights + a priest, like before
         for (int i = 0; i < WezensPlekken.TEMPELRIDDER.length; i++) {
             BlockPos c = WezensPlekken.TEMPELRIDDER[i];

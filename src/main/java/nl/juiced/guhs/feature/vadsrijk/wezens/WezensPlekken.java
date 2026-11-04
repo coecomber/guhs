@@ -26,7 +26,7 @@ public final class WezensPlekken {
         return WereldPlekken.plek(id).offset(dx, 0, dz);
     }
 
-    // ---- the paths (kaart.py PADEN, world x/z) -----------------------------------------------------------------------------
+    // ---- the paths (kaart.py PADEN after its needle-foot adjustment, world x/z; aligned to fix wild at integration) -----------------------------------------------------------------------------
     private static final String[] PAD_NAMEN = {"weide", "woud", "grotten", "grotten2", "grotten3", "grotten4", "berg", "weide2", "weide3", "slijm",
             "slijm2", "woud2", "druip"};
     private static final int[][][] PADEN = {
@@ -36,13 +36,13 @@ public final class WezensPlekken {
             {{-260, -300}, {-420, -300}},
             {{-260, -300}, {-180, -360}, {-180, -480}},
             {{-260, -300}, {-380, -400}, {-460, -460}},
-            {{205, -265}, {230, -280}, {400, -292}, {410, -305}, {400, -322}, {280, -345}, {272, -360}, {285, -372}, {330, -380}, {330, -386}},
+            {{119, -219}, {140, -270}, {190, -330}, {240, -375}, {290, -385}, {330, -366}},
             {{220, -80}, {230, -130}, {330, -200}},
-            {{360, 30}, {480, -80}, {520, -240}},
-            {{374, 90}, {410, 200}, {460, 380}},
-            {{410, 200}, {330, 260}, {300, 270}},
-            {{-220, 40}, {-300, -40}, {-420, 40}, {-510, -40}},
-            {{-180, -360}, {-100, -510}},
+            {{360, 30}, {480, -80}, {515, -222}},
+            {{374, 90}, {410, 200}, {455, 362}},
+            {{410, 200}, {330, 260}, {300, 262}},
+            {{-220, 40}, {-300, -40}, {-420, 40}, {-496, -27}},
+            {{-180, -360}, {-109, -493}},
     };
 
     public static List<int[][]> paden(String... namen) {
@@ -105,12 +105,29 @@ public final class WezensPlekken {
 
     // ---- Zwamtempel ----------------------------------------------------------------------------------------------------------
     public static final int[][] BERGPAD = PADEN[6];
-    /** kaart.py: the ramp runs from top block y 72 at the fossil bridge to the plateau (151). */
-    public static final int BERG_VOET = 72, TEMPEL_PLATEAU = 151;
+    /** kaart.py (fix wild): the ramp runs from the fossil bridge deck (top block = the north landing's stand y - 1) to the foot
+     * of the temple stairs (top block TEMPEL_PLATEAU - 7). */
+    public static final int TEMPEL_PLATEAU = 151, BERG_TOP = TEMPEL_PLATEAU - 7;
+    public static final int BERG_VOET = WereldPlekken.plek("fossielbrug.naar") != null ? WereldPlekken.plek("fossielbrug.naar").getY() - 1 : 72;
 
     /** The top-block height of the mountain path at fraction f (0..1) of its length. */
     public static double bergY(double f) {
-        return BERG_VOET + (TEMPEL_PLATEAU - BERG_VOET) * Math.max(0, Math.min(1, f));
+        return BERG_VOET + (BERG_TOP - BERG_VOET) * Math.max(0, Math.min(1, f));
+    }
+
+    /** The (x, z) on the mountain path {@code langs} blocks from its start. */
+    public static int[] bergPunt(double langs) {
+        double acc = 0;
+        for (int i = 0; i + 1 < BERGPAD.length; i++) {
+            double ax = BERGPAD[i][0], az = BERGPAD[i][1], dx = BERGPAD[i + 1][0] - ax, dz = BERGPAD[i + 1][1] - az;
+            double L = Math.hypot(dx, dz);
+            if (acc + L >= langs) {
+                double t = (langs - acc) / L;
+                return new int[] {(int) Math.round(ax + t * dx), (int) Math.round(az + t * dz)};
+            }
+            acc += L;
+        }
+        return BERGPAD[BERGPAD.length - 1];
     }
 
     /** How far along the mountain path (in blocks) the point nearest to (x, z) lies. */
