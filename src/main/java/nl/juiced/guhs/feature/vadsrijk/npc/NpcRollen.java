@@ -139,7 +139,8 @@ public final class NpcRollen {
                     p.getY() + 60, 320) != null;
         }
         Vec3 a = NpcPlekken.DRAAK_VAN, b = NpcPlekken.DRAAK_NAAR;
-        List<Vec3> pad = new ArrayList<>(List.of(a, a.lerp(b, 0.35).add(0, -25, 0), a.lerp(b, 0.65).add(0, -20, 0), b));
+        // (balans 2026-11) the dragon is 1.5x bigger: the dip is 11/9 blocks less deep so its wings clear the camp's roofs and trees
+        List<Vec3> pad = new ArrayList<>(List.of(a, a.lerp(b, 0.35).add(0, -14, 0), a.lerp(b, 0.65).add(0, -11, 0), b));
         return nl.juiced.guhs.feature.vadsrijk.wezens.draak.DraakVlucht.vlieg(sl, pad, 170, true) != null;
     }
 
@@ -253,7 +254,7 @@ public final class NpcRollen {
                     new Vec3(p.getX() + 90, 0, p.getZ() - 110), 70.0, p.getY() + 60, 320) != NIETS;
         }
         Vec3 a = NpcPlekken.DRAAK_VAN, b = NpcPlekken.DRAAK_NAAR;
-        List<Vec3> pad = new ArrayList<>(List.of(a, a.lerp(b, 0.35).add(0, -25, 0), a.lerp(b, 0.65).add(0, -20, 0), b));
+        List<Vec3> pad = new ArrayList<>(List.of(a, a.lerp(b, 0.35).add(0, -14, 0), a.lerp(b, 0.65).add(0, -11, 0), b));
         return roep(c, "vlieg", new Class<?>[] {ServerLevel.class, List.class, int.class, boolean.class}, sl, pad, 170, true) != NIETS;
     }
 

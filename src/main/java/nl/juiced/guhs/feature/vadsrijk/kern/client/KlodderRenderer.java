@@ -56,6 +56,17 @@ public class KlodderRenderer extends MobRenderer<VadsrijkMob, KlodderRenderer.St
         pose.scale(w * s.size, 1.0f / w * s.size, w * s.size);
     }
 
+    /** (balans 2026-11) After the plof: translucent (and no hitbox, see VadsrijkMob#isPickable). */
+    @Override
+    protected int getModelTint(Staat s) {
+        return s.geplofd ? (VadsrijkMob.PLOF_ALPHA << 24) | 0xFFFFFF : super.getModelTint(s);
+    }
+
+    @Override
+    protected net.minecraft.client.renderer.rendertype.RenderType getRenderType(Staat s, boolean zichtbaar, boolean doorzichtig, boolean gloeit) {
+        return super.getRenderType(s, zichtbaar, doorzichtig || (s.geplofd && zichtbaar), gloeit);
+    }
+
     @Override
     public Identifier getTextureLocation(Staat s) {
         return s.geplofd ? ROZE : GRIJS;

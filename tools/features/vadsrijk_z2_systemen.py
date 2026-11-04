@@ -161,10 +161,10 @@ WAPENS = {
 }
 
 DRANKEN = {
-    "vr_z2_grote_vadsdrank": ("Grote Vadsdrank", lambda: drankje((255, 70, 150)), "Geeft je 70 % van je Vads terug.", "Glug glug glug... Vahoeg!"),
-    "vr_z2_grote_energiedrank": ("Grote Energiedrank", lambda: drankje((90, 230, 255)), "Je Vadsenergie meteen helemaal vol.", "Bzzzt! Helemaal opgeladen!"),
+    "vr_z2_grote_vadsdrank": ("Groot Vadsdrankje", lambda: drankje((255, 70, 150)), "Geeft je 700 Vads terug.", "Glug glug glug... Vahoeg!"),
+    "vr_z2_grote_energiedrank": ("Groot Energiedrankje", lambda: drankje((90, 230, 255)), "Geeft je 120 energie terug.", "Bzzzt! Helemaal opgeladen!"),
     "vr_z2_warme_chocomelk": ("Warme Chocomelk", chocomelk,
-                              "Ontdooit je (Bevroren is weg), houdt je 3 minuten warm (je bevriest niet) en geeft 15 % Vads.",
+                              "Geeft je 250 Vads, ontdooit je (Bevroren is weg) en houdt je 3 minuten warm (je bevriest niet).",
                               "Mmm, warme chocomelk. Je tenen ontdooien."),
 }
 

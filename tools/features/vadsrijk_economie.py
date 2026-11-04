@@ -168,6 +168,21 @@ def drankje(vloeistof):
     return d.rand()
 
 
+def drankje_klein(vloeistof):
+    """(balans 2026-11) The Klein Vadsdrankje: the same flask, smaller and lower in the icon."""
+    d = Doek()
+    d.rect(7, 4, 8, 5, (160, 110, 70))
+    d.rect(7, 6, 8, 7, (210, 235, 250))
+    d.disc(7.5, 11, 3.8, (215, 238, 252))
+    d.disc(7.5, 11.4, 3.1, vloeistof)
+    d.px(5, 10, (255, 255, 255))
+    d.px(6, 11, (40, 26, 40))
+    d.px(9, 11, (40, 26, 40))
+    d.px(7, 13, (60, 30, 50))
+    d.px(8, 13, (60, 30, 50))
+    return d.rand()
+
+
 def steentje():
     d = Doek()
     d.poly([(8, 1), (14.5, 7), (8, 15), (1.5, 7)], (240, 110, 200))
@@ -371,6 +386,7 @@ ICONEN = {
     "vr_item_munt_zilver": lambda: munt((205, 210, 225)),
     "vr_item_munt_goud": lambda: munt((255, 205, 50)),
     "vr_item_vadsdrankje": lambda: drankje((255, 80, 160)),
+    "vr_item_klein_vadsdrankje": lambda: drankje_klein((255, 110, 180)),
     "vr_item_energiedrankje": lambda: drankje((80, 190, 255)),
     "vr_item_vahoegdrankje": lambda: drankje((255, 170, 40)),
     "vr_item_snelpootjesdrankje": lambda: drankje((110, 225, 110)),
@@ -739,10 +755,14 @@ TEKSTEN = {
     "item.guhs.vr_item_munt_brons": "Bronzen Vadsmunt",
     "item.guhs.vr_item_munt_zilver": "Zilveren Vadsmunt",
     "item.guhs.vr_item_munt_goud": "Gouden Vadsmunt",
-    "item.guhs.vr_item_vadsdrankje": "Vads-drankje",
-    "item.guhs.vr_item_vadsdrankje.uitleg": "Vult 40% van je Vads bij. Smaakt naar aardbei en knuffels.",
-    "item.guhs.vr_item_energiedrankje": "Energie-drankje",
-    "item.guhs.vr_item_energiedrankje.uitleg": "De helft van je energie terug. Bruist een beetje, njeg!",
+    # (balans 2026-11) potions are flat numbers in tiers, 2 s to drink, 10 s shared potion cooldown
+    "item.guhs.vr_item_klein_vadsdrankje": "Klein Vadsdrankje",
+    "item.guhs.vr_item_klein_vadsdrankje.uitleg": "Geeft je 120 Vads terug. Een slokje aardbei voor onderweg.",
+    "item.guhs.vr_item_vadsdrankje": "Vadsdrankje",
+    "item.guhs.vr_item_vadsdrankje.uitleg": "Geeft je 300 Vads terug. Smaakt naar aardbei en knuffels.",
+    "item.guhs.vr_item_energiedrankje": "Energiedrankje",
+    "item.guhs.vr_item_energiedrankje.uitleg": "Geeft je 50 energie terug. Bruist een beetje, njeg!",
+    E + "drankje.wacht": "Drinken duurt 2 tellen. Daarna moet je 10 tellen wachten voor het volgende drankje.",
     "item.guhs.vr_item_vahoegdrankje": "Vahoeg-drankje",
     "item.guhs.vr_item_vahoegdrankje.uitleg": "Een minuut lang Vahoeg: je voelt je heel vahoeg.",
     "item.guhs.vr_item_snelpootjesdrankje": "Snelpootjes-drankje",

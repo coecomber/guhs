@@ -139,10 +139,25 @@ public final class Drakenpas {
         double[] af = {-190, -100, -30, 30, 100, 190}, hoog = {95, 50, 32, 32, 50, 95};
         List<Vec3> p = new ArrayList<>();
         for (int i = 0; i < af.length; i++) {
-            p.add(new Vec3(midden.x + dx * af[i], grond + hoog[i], midden.z + dz * af[i]));
+            // (balans 2026-11) the dragon is 1.5x bigger (wingspan ~31): every point stays 12 above the highest ground (hills,
+            // mushroom caps, roofs) within its wings around its stretch of the line
+            double van = i == 0 ? af[0] : (af[i - 1] + af[i]) / 2, tot = i == af.length - 1 ? af[i] : (af[i] + af[i + 1]) / 2;
+            double top = Double.NEGATIVE_INFINITY;
+            for (double t = van; t <= tot; t += 6) {
+                for (int zij = -16; zij <= 16; zij += 4) {
+                    int x = (int) Math.floor(midden.x + dx * t - dz * zij), z = (int) Math.floor(midden.z + dz * t + dx * zij);
+                    if (sl.hasChunk(x >> 4, z >> 4)) {
+                        top = Math.max(top, sl.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z));
+                    }
+                }
+            }
+            p.add(new Vec3(midden.x + dx * af[i], Math.max(grond + hoog[i], top + VRIJ), midden.z + dz * af[i]));
         }
         return p;
     }
+
+    /** Blocks between the dragon's flight line and the highest ground under its wings (balans 2026-11). */
+    static final int VRIJ = 12;
 
     /** Start a pass along this path. {@code dev}: ignore the fight check. Returns false when someone near the path fights. */
     static boolean start(ServerLevel sl, List<Vec3> pad, boolean dev) {

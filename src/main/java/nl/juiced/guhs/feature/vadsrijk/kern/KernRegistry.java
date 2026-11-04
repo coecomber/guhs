@@ -129,6 +129,7 @@ public final class KernRegistry {
     }
 
     public static void register(IEventBus modBus) {
+        Balans.registreer();
         ATTACHMENTS.register(modBus);
         COMPONENTS.register(modBus);
         ITEMS.register(modBus);

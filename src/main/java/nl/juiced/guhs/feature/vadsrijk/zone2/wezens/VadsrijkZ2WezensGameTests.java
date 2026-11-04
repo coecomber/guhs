@@ -124,6 +124,8 @@ public class VadsrijkZ2WezensGameTests {
     /** MMO density: every area's spawners can hold ~60-90 creatures alive, and no spawner sits in a safe spot. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void spawnersDichtheid(GameTestHelper helper) {
+        com.mojang.logging.LogUtils.getLogger().info("[z2wezens] spawner plan (sum of maxima per area): {} ({} spawners)", Z2WezensSpawners.MAX_PER_GEBIED,
+                Z2WezensSpawners.ALLE.size());
         for (Z2WezensPlekken.Gebied g : Z2WezensPlekken.GEBIEDEN) {
             int max = Z2WezensSpawners.MAX_PER_GEBIED.getOrDefault(g.id(), 0);
             helper.assertTrue(max >= 55 && max <= 105, g.id() + ": max alive " + max);

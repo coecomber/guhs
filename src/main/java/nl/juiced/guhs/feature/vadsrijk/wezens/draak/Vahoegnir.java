@@ -24,9 +24,12 @@ import net.minecraft.world.phys.AABB;
  * Vahoegnir, de Vadsloze Draak: zone 1's NON-combat flyover entity (design 9: once the pink protector dragon with feather
  * wings and guh ears as horns, now grey-purple and crackling with black fluff). It has no AI, no hitbox to hit and is never
  * saved: {@link DraakVlucht} moves it along its path every server tick and removes it at the end. The client draws the big
- * GeckoLib model (x2.5), flaps or glides depending on whether it climbs, and rains grey fluff below it.
+ * GeckoLib model (x3.75), flaps or glides depending on whether it climbs, and rains grey fluff below it.
  */
 public class Vahoegnir extends Entity implements GeoEntity {
+    /** The model scale (balans 2026-11: 50 % bigger, was 2.5): wingspan ~31 blocks, ~27 long. */
+    public static final float SCHAAL = 3.75f;
+
     private static final RawAnimation VLIEG = RawAnimation.begin().thenLoop("vlieg"), ZWEEF = RawAnimation.begin().thenLoop("zweef"),
             BRUL = RawAnimation.begin().thenPlay("brul");
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
@@ -99,7 +102,7 @@ public class Vahoegnir extends Entity implements GeoEntity {
 
     /** The renderer culls with this (the model is far bigger than the entity box). */
     public AABB getBoundingBoxForCulling() {
-        return getBoundingBox().inflate(20, 8, 20);
+        return getBoundingBox().inflate(30, 12, 30);
     }
 
     @Override

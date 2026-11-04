@@ -79,7 +79,7 @@ public final class WezensRegistry {
             () -> EntityType.Builder.of(Kampklodder::new, MobCategory.CREATURE).sized(2.4f, 2.2f).eyeHeight(1.6f).clientTrackingRange(10)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_mob_kampklodder"))));
     public static final DeferredHolder<EntityType<?>, EntityType<Vahoegnir>> DRAAK = ENTITIES.register("vr_mob_draak",
-            () -> EntityType.Builder.<Vahoegnir>of(Vahoegnir::new, MobCategory.MISC).sized(4f, 3f).noSave().fireImmune().clientTrackingRange(32)
+            () -> EntityType.Builder.<Vahoegnir>of(Vahoegnir::new, MobCategory.MISC).sized(6f, 4.5f).noSave().fireImmune().clientTrackingRange(32)
                     .updateInterval(1).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_mob_draak"))));
 
     /** Command name -> type (the dev command and the gametests). */

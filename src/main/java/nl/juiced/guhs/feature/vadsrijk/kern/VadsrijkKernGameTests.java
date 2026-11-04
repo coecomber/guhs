@@ -181,7 +181,9 @@ public class VadsrijkKernGameTests {
         helper.assertTrue(Math.abs(vuur - 20 * 1.5 * 1.1) < 1e-9, "element weakness x1.5 and +10% elementschade");
         double magie = Schade.aanval(10, s, Schade.Soort.MAGIE, false, Element.GEEN, null, false);
         helper.assertTrue(Math.abs(magie - 10) < 1e-9, "magic uses wijsheid (0 here)");
-        helper.assertTrue(Math.abs(Schade.verdediging(100, Stats.van(Stat.VERDEDIGING, 50), Element.GEEN) - 50) < 1e-9, "50 def halves");
+        // (balans 2026-11) level-relative: def / (def + 25 + 15 x attacker level), at most 60 % (VadsrijkBalansGameTests has more)
+        helper.assertTrue(Math.abs(Schade.verdediging(100, Stats.van(Stat.VERDEDIGING, 50), Element.GEEN, 5) - 100 * (1 - 50.0 / 150)) < 1e-9,
+                "50 def vs level 5 takes a third off");
         helper.assertTrue(Math.abs(Schade.verdediging(100, Stats.van(Stat.ELEMENTWEERSTAND, 200), Element.VUUR) - 25) < 1e-9, "resist capped at 75%");
         for (int l = 1; l <= Levels.MAX; l++) {
             helper.assertTrue(Levels.levelVan(Levels.totaalVoor(l)) == l, "level " + l + " round trip");

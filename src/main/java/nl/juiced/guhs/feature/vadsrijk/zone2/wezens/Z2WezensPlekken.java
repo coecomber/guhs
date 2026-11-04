@@ -83,6 +83,25 @@ public final class Z2WezensPlekken {
         return false;
     }
 
+    /**
+     * (balans 2026-11) The zone-2 paths (tools/vadsrijk/zone2/plan.py PADEN, world x/z; road half width 2.6 in kaart2.weg):
+     * no creature spawns within 5 of them (kern Spawners.bijPad) and the spawners stand beside them.
+     */
+    public static final java.util.Map<String, int[][]> PADEN = java.util.Map.ofEntries(
+            java.util.Map.entry("oost", new int[][] {{118, -2400}, {180, -2380}, {232, -2330}, {330, -2290}, {398, -2282}}),
+            java.util.Map.entry("oost_zuid", new int[][] {{232, -2330}, {300, -2200}, {330, -2120}, {400, -1990}}),
+            java.util.Map.entry("oost_noord", new int[][] {{232, -2330}, {250, -2450}, {250, -2560}, {306, -2618}}),
+            java.util.Map.entry("oost_noord2", new int[][] {{330, -2290}, {480, -2440}, {520, -2560}}),
+            java.util.Map.entry("west", new int[][] {{-118, -2400}, {-170, -2390}, {-220, -2300}, {-200, -2120}, {-260, -2060}}),
+            java.util.Map.entry("west_noord", new int[][] {{-170, -2390}, {-250, -2440}, {-330, -2470}, {-470, -2500}, {-540, -2380}, {-560, -2240},
+                    {-540, -2080}}),
+            java.util.Map.entry("zadel", new int[][] {{-250, -2440}, {-290, -2540}, {-330, -2610}}),
+            java.util.Map.entry("noord", new int[][] {{0, -2522}, {10, -2600}, {30, -2680}, {24, -2730}, {0, -2752}}),
+            java.util.Map.entry("kloof_west", new int[][] {{24, -2730}, {-120, -2715}, {-260, -2700}, {-430, -2722}}),
+            java.util.Map.entry("kloof_oost", new int[][] {{24, -2730}, {160, -2716}, {300, -2702}, {460, -2726}}),
+            java.util.Map.entry("zadel_kloof", new int[][] {{-330, -2610}, {-300, -2660}, {-260, -2700}}));
+    public static final double PAD_BREEDTE = 2.8;
+
     /** The area of (x, z), or null. */
     public static Gebied gebied(double x, double z) {
         for (Gebied g : GEBIEDEN) {

@@ -8,8 +8,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -21,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.feature.vadsrijk.economie.Drinken;
 import nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul;
 import nl.juiced.guhs.feature.vadsrijk.economie.Winkels;
 import nl.juiced.guhs.feature.vadsrijk.kern.Schade;
@@ -31,9 +30,12 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  * Zone-2 economy: the tier-2 potions and the Kandijkom shop {@link #KANDIJKRAAM} ("De Kandijkraam", via the economie
  * {@code Winkels} API: z2-npc opens it with {@code Winkels.open(p, Z2Winkel.KANDIJKRAAM)}).
  * <ul>
- *   <li>Grote Vadsdrank: 70 % Vads (zone 1: 40 %);</li>
- *   <li>Grote Energiedrank: full energy (zone 1: 50 %);</li>
- *   <li>Warme Chocomelk: thaws you (Bevroren off), 3 min unfreezable, +15 % Vads. The Kandijkom speciality.</li>
+ *   <li>Groot Vadsdrankje (id vr_z2_grote_vadsdrank): 700 Vads (balans 2026-11: flat numbers, see economie {@code Drinken});</li>
+ *   <li>Groot Energiedrankje (id vr_z2_grote_energiedrank): +120 energy;</li>
+ *   <li>Warme Chocomelk: 250 Vads, thaws you (Bevroren off), 3 min unfreezable. The Kandijkom speciality.</li>
+ * </ul>
+ * All three: 2 s to drink, in the shared 10 s potion cooldown.
+ * <ul>
  * </ul>
  */
 public final class Z2Winkel {
@@ -52,12 +54,14 @@ public final class Z2Winkel {
     }
 
     private static DeferredItem<Drank> drank(String id, Soort s) {
-        return ITEMS.registerItem(id, p -> new Drank(p, s), () -> new Item.Properties().stacksTo(16));
+        return ITEMS.registerItem(id, p -> new Drank(p, s), () -> Drinken.eigenschappen(true));
     }
 
     static void registreer() {
         Winkels.registreer(new Winkels.Winkel(KANDIJKRAAM, true, List.of(
-                Winkels.itemWaar("grote_vadsdrank", 45, () -> new ItemStack(GROTE_VADSDRANK.get())),
+                Winkels.itemWaar("vadsdrankje", 40, () -> new ItemStack(EcoSpul.VADSDRANKJE.get())),
+                Winkels.itemWaar("grote_vadsdrank", 300, () -> new ItemStack(GROTE_VADSDRANK.get())),   // (balans 2026-11: 3 zilver)
+                Winkels.itemWaar("energiedrankje", 20, () -> new ItemStack(EcoSpul.ENERGIEDRANKJE.get())),
                 Winkels.itemWaar("grote_energiedrank", 55, () -> new ItemStack(GROTE_ENERGIEDRANK.get())),
                 Winkels.itemWaar("warme_chocomelk", 30, () -> new ItemStack(WARME_CHOCOMELK.get())),
                 Winkels.itemWaar("vahoegdrankje", 60, () -> new ItemStack(EcoSpul.VAHOEGDRANKJE.get())),
@@ -76,41 +80,41 @@ public final class Z2Winkel {
 
         @Override
         public InteractionResult use(Level level, Player player, InteractionHand hand) {
-            if (!(player instanceof ServerPlayer sp)) {
-                return InteractionResult.SUCCESS;
-            }
-            if (!Vadsrijk.in(sp)) {
-                sp.sendOverlayMessage(Component.translatable("vadsrijk.economie.drankje.buiten").withStyle(ChatFormatting.LIGHT_PURPLE));
+            if (Drinken.buiten(player, "vadsrijk.economie.drankje.buiten")) {
                 return InteractionResult.FAIL;
             }
-            ItemStack stack = sp.getItemInHand(hand);
+            return super.use(level, player, hand);   // the Consumable component: 2 s of drinking
+        }
+
+        @Override
+        public ItemStack finishUsingItem(ItemStack stack, Level level, net.minecraft.world.entity.LivingEntity entity) {
+            if (entity instanceof ServerPlayer sp && Vadsrijk.in(sp)) {
+                werk(sp);
+            }
+            return super.finishUsingItem(stack, level, entity);
+        }
+
+        /** What it does (also called by the gametest). */
+        public void werk(ServerPlayer sp) {
             switch (soort) {
-                case GROTE_VADS -> Schade.heal(sp, sp, Spelers.maxVads(sp) * 0.70);
-                case GROTE_ENERGIE -> {
-                    Spelers.data(sp).energie = Spelers.maxEnergie(sp);
-                    Spelers.sync(sp);
-                }
+                case GROTE_VADS -> Schade.heal(sp, sp, Drinken.GROOT_VADS);
+                case GROTE_ENERGIE -> Drinken.energie(sp, Drinken.GROOT_ENERGIE);
                 case CHOCOMELK -> {
                     Bevroren.ontdooi(sp, 20 * 180);
-                    Schade.heal(sp, sp, Spelers.maxVads(sp) * 0.15);
+                    Schade.heal(sp, sp, Drinken.CHOCOMELK_VADS);
                 }
             }
-            if (!sp.isCreative()) {
-                stack.shrink(1);
-            }
-            sp.getCooldowns().addCooldown(stack, soort == Soort.CHOCOMELK ? 60 : 100);
-            level.playSound(null, sp.blockPosition(), SoundEvents.GENERIC_DRINK.value(), SoundSource.PLAYERS, 0.8f, soort == Soort.CHOCOMELK ? 0.9f : 1.2f);
-            if (level instanceof ServerLevel sl) {
+            if (sp.level() instanceof ServerLevel sl) {
                 sl.sendParticles(soort == Soort.GROTE_ENERGIE ? ParticleTypes.GLOW : soort == Soort.CHOCOMELK ? ParticleTypes.CAMPFIRE_COSY_SMOKE : ParticleTypes.HEART,
                         sp.getX(), sp.getY() + 1.4, sp.getZ(), soort == Soort.CHOCOMELK ? 3 : 8, 0.3, 0.3, 0.3, 0.01);
             }
             sp.sendOverlayMessage(Component.translatable(getDescriptionId() + ".op").withStyle(ChatFormatting.LIGHT_PURPLE));
-            return InteractionResult.SUCCESS;
         }
 
         @Override
         public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
             tooltip.accept(Component.translatable(getDescriptionId() + ".uitleg").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("vadsrijk.economie.drankje.wacht").withStyle(ChatFormatting.DARK_GRAY));
             tooltip.accept(Component.translatable("vadsrijk.economie.alleen_rijk").withStyle(ChatFormatting.DARK_PURPLE));
         }
     }

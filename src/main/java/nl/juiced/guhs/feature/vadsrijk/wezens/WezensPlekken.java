@@ -28,7 +28,7 @@ public final class WezensPlekken {
 
     // ---- the paths (kaart.py PADEN after its needle-foot adjustment, world x/z; aligned to fix wild at integration) -----------------------------------------------------------------------------
     private static final String[] PAD_NAMEN = {"weide", "woud", "grotten", "grotten2", "grotten3", "grotten4", "berg", "weide2", "weide3", "slijm",
-            "slijm2", "woud2", "druip"};
+            "slijm2", "woud2", "druip", "brug", "haven", "zuid"};
     private static final int[][][] PADEN = {
             {{30, -40}, {90, -40}, {220, -80}, {300, -20}, {360, 30}, {374, 90}},
             {{-60, 20}, {-130, 20}, {-220, 40}, {-350, 120}, {-430, 230}, {-300, 340}},
@@ -43,7 +43,25 @@ public final class WezensPlekken {
             {{410, 200}, {330, 260}, {300, 262}},
             {{-220, 40}, {-300, -40}, {-420, 40}, {-496, -27}},
             {{-180, -360}, {-109, -493}},
+            // (balans 2026-11) the other map paths too, so no creature spawns on them either (kaart.py PADEN)
+            {{30, -100}, {70, -112}, {120, -150}, {151, -181}},
+            {{10, 100}, {20, 130}, {80, 180}, {100, 300}, {95, 400}, {92, 470}},
+            {{100, 300}, {160, 375}},
     };
+
+    /** Every path by name (for kern's no-spawn-on-paths rule). */
+    public static java.util.Map<String, int[][]> allePaden() {
+        java.util.Map<String, int[][]> m = new java.util.LinkedHashMap<>();
+        for (int i = 0; i < PAD_NAMEN.length; i++) {
+            m.put(PAD_NAMEN[i], PADEN[i]);
+        }
+        return m;
+    }
+
+    /** Half width of a path as the map draws it (kaart.py: 2.8 flat profile; the mountain ramp 4.5). */
+    public static double padBreedte(String naam) {
+        return naam.equals("berg") ? 4.5 : 2.8;
+    }
 
     public static List<int[][]> paden(String... namen) {
         List<int[][]> uit = new ArrayList<>();

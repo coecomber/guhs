@@ -24,7 +24,7 @@ public final class Bonussen {
         POOL.put(Stat.KRACHT, new Bereik(1, 3, 0.35, 10));
         POOL.put(Stat.BEHENDIGHEID, new Bereik(1, 3, 0.35, 8));
         POOL.put(Stat.WIJSHEID, new Bereik(1, 3, 0.35, 8));
-        POOL.put(Stat.VERDEDIGING, new Bereik(1, 3, 0.3, 8));
+        POOL.put(Stat.VERDEDIGING, new Bereik(1, 2, 0.22, 8));   // (balans 2026-11: was 1-3 +0.3/level, ~-25 %)
         POOL.put(Stat.KRITIEK, new Bereik(1, 3, 0.05, 7));
         POOL.put(Stat.KRITIEKSCHADE, new Bereik(4, 10, 0.2, 6));
         POOL.put(Stat.AANVALSSNELHEID, new Bereik(2, 6, 0.1, 5));

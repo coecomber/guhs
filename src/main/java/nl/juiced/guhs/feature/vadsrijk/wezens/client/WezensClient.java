@@ -120,6 +120,21 @@ public final class WezensClient {
             state.addGeckolibData(PLAFOND, w instanceof Klodders.Druipslijm d && d.aanPlafond() ? w.getBbHeight() : 0f);
         }
 
+        /** (balans 2026-11) After the plof: translucent (and no hitbox, see VadsrijkMob#isPickable). */
+        @Override
+        public int getRenderColor(T w, @Nullable Void related, float partialTick) {
+            int k = super.getRenderColor(w, related, partialTick);
+            return w.geplofd() ? (k & 0x00FFFFFF) | (nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob.PLOF_ALPHA << 24) : k;
+        }
+
+        @Override
+        public @Nullable net.minecraft.client.renderer.rendertype.RenderType getRenderType(LivingEntityRenderState state, Identifier texture) {
+            if (Boolean.TRUE.equals(state.getGeckolibData(GEPLOFD)) && !state.isInvisible) {
+                return net.minecraft.client.renderer.rendertype.RenderTypes.entityTranslucent(texture);
+            }
+            return super.getRenderType(state, texture);
+        }
+
         float factor(RenderPassInfo<LivingEntityRenderState> info) {
             return schaal * (info.getOrDefaultGeckolibData(ELITE, false) ? 1.25f : 1f) * (info.getOrDefaultGeckolibData(KLEIN, false) ? 0.6f : 1f);
         }
@@ -196,7 +211,7 @@ public final class WezensClient {
         }
     }
 
-    /** Vahoegnir: the huge model (x2.5), turned along its flight, leaning into climbs and dives; glowing eyes and sparks. */
+    /** Vahoegnir: the huge model (x3.75 since balans 2026-11, was x2.5), turned along its flight, leaning into climbs and dives; glowing eyes and sparks. */
     public static class DraakRenderer extends GeoEntityRenderer<Vahoegnir, EntityRenderState> {
         public DraakRenderer(EntityRendererProvider.Context context) {
             super(context, new DefaultedEntityGeoModel<Vahoegnir>(Guhs.id("vadsrijk/wezens/draak")) {
@@ -205,7 +220,7 @@ public final class WezensClient {
                     return tex("draak");
                 }
             });
-            withScale(2.5f);
+            withScale(nl.juiced.guhs.feature.vadsrijk.wezens.draak.Vahoegnir.SCHAAL);
             this.shadowRadius = 0f;
             withRenderLayer(new GloedLaag<>(this, tex("draak_gloed")));
         }

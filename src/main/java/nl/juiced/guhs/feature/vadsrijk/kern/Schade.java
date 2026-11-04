@@ -23,7 +23,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen;
  *   <li>attacker: weapon/skill base x main stat (Kracht for melee, Behendigheid for ranged, Wijsheid for magic: +2 % per point)
  *   x Vahoeg, crit (Kritiek% chance, x1.5 + Kritiekschade%), element ({@link Element#factor}, + Elementschade% when it has one);</li>
  *   <li>{@link #VOOR_KLAP} modifiers (blocks, reflects, boss shields);</li>
- *   <li>defender (players): Verdediging (n x 100 / (100 + 2 x def)), Elementweerstand%, then Knuffelschild absorbs;</li>
+ *   <li>defender (players): Verdediging, level-relative ({@link #verdedigingFactor}: def / (def + 25 + 15 x attacker level), at
+ *   most 60 % off), Elementweerstand%, then Knuffelschild absorbs. Hits of normal mobs (not bosses) first get
+ *   {@link Balans#mobSchade()} (config guhs-vadsrijk-balans.toml);</li>
  *   <li>apply: players lose {@link SpelerData#vads} (0 = {@link Flauwvallen}), mobs {@link VadsrijkMob#krijgSchade}; lifesteal;
  *   a floating number; {@link #NA_KLAP}.</li>
  * </ol>
@@ -86,13 +88,38 @@ public final class Schade {
         return n;
     }
 
-    /** Pure maths of step 4. */
+    /** At most this much of a hit is taken off by Verdediging (balans 2026-11). */
+    public static final double MAX_VERDEDIGING = 0.60;
+
+    /**
+     * The share of a hit Verdediging takes off (0..{@link #MAX_VERDEDIGING}), level-relative (balans 2026-11):
+     * def / (def + 25 + 15 x attacker level). 50 def takes 56 % off a level-1 hit (50 / 90), but only 22 % off a level-10 hit.
+     */
+    public static double verdedigingFactor(double def, int aanvallerLevel) {
+        def = Math.max(0, def);
+        return Math.min(MAX_VERDEDIGING, def / (def + 25.0 + 15.0 * Math.max(1, aanvallerLevel)));
+    }
+
+    /** Pure maths of step 4 (attacker level 1: tests, old callers). */
     public static double verdediging(double n, Stats s, Element element) {
-        n = n * 100.0 / (100.0 + 2.0 * Math.max(0, s.get(Stat.VERDEDIGING)));
+        return verdediging(n, s, element, 1);
+    }
+
+    /** Pure maths of step 4: level-relative Verdediging, then Elementweerstand. */
+    public static double verdediging(double n, Stats s, Element element, int aanvallerLevel) {
+        n = n * (1 - verdedigingFactor(s.get(Stat.VERDEDIGING), aanvallerLevel));
         if (element != Element.GEEN) {
             n *= 1 - Math.min(75, s.get(Stat.ELEMENTWEERSTAND)) / 100.0;
         }
         return n;
+    }
+
+    /** The level the defender's Verdediging is measured against: a mob's level, else the defender's own level. */
+    public static int aanvallerLevel(@Nullable LivingEntity bron, ServerPlayer doel) {
+        if (bron instanceof VadsrijkMob m) {
+            return m.mobLevel();
+        }
+        return Spelers.level(doel);
     }
 
     public static Uitkomst doe(Klap k) {
@@ -123,8 +150,11 @@ public final class Schade {
         for (Aanpasser a : VOOR_KLAP) {
             n = a.pas(k, n);
         }
+        if (doel instanceof ServerPlayer && bron instanceof VadsrijkMob && !(bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas)) {
+            n *= Balans.mobSchade();   // (balans 2026-11) normal zone mobs + elites hit harder; bosses unchanged
+        }
         if (doel instanceof ServerPlayer dp && k.soort() != Soort.WAAR) {
-            n = verdediging(n, Spelers.stats(dp), k.element());
+            n = verdediging(n, Spelers.stats(dp), k.element(), aanvallerLevel(bron, dp));
         }
         Statussen.Actief schild = Statussen.actief(doel, Status.KNUFFELSCHILD);
         if (schild != null && n > 0) {

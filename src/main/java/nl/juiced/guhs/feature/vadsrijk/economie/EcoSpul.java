@@ -40,6 +40,8 @@ public final class EcoSpul {
             () -> new Item.Properties().stacksTo(99).rarity(Rarity.UNCOMMON));
 
     // ---- drankjes -----------------------------------------------------------------------------------------------------------
+    /** (balans 2026-11) 120 Vads, the cheap zone-1 potion. */
+    public static final DeferredItem<EcoItems.Drankje> KLEIN_VADSDRANKJE = drankje("vr_item_klein_vadsdrankje", EcoItems.Drankje.Soort.KLEIN_VADS);
     public static final DeferredItem<EcoItems.Drankje> VADSDRANKJE = drankje("vr_item_vadsdrankje", EcoItems.Drankje.Soort.VADS);
     public static final DeferredItem<EcoItems.Drankje> ENERGIEDRANKJE = drankje("vr_item_energiedrankje", EcoItems.Drankje.Soort.ENERGIE);
     public static final DeferredItem<EcoItems.Drankje> VAHOEGDRANKJE = drankje("vr_item_vahoegdrankje", EcoItems.Drankje.Soort.VAHOEG);
@@ -88,7 +90,7 @@ public final class EcoSpul {
     }
 
     private static DeferredItem<EcoItems.Drankje> drankje(String id, EcoItems.Drankje.Soort s) {
-        return ITEMS.registerItem(id, p -> new EcoItems.Drankje(p, s), () -> new Item.Properties().stacksTo(16));
+        return ITEMS.registerItem(id, p -> new EcoItems.Drankje(p, s), () -> Drinken.eigenschappen(s.gedeeld()));
     }
 
     private static DeferredBlock<DecoBlock> deco(String id, MapColor kleur, SoundType geluid, net.minecraft.world.phys.shapes.VoxelShape vorm) {
