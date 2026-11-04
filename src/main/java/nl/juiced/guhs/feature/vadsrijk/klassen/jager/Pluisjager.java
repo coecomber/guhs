@@ -27,6 +27,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.SkillContext;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Vaardigheid;
 import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
+import nl.juiced.guhs.feature.vadsrijk.klassen.Balans;
 import nl.juiced.guhs.feature.vadsrijk.klassen.Basisaanval;
 import nl.juiced.guhs.feature.vadsrijk.klassen.Fx;
 import nl.juiced.guhs.feature.vadsrijk.klassen.Later;
@@ -139,7 +140,7 @@ public final class Pluisjager implements Klasse {
             int golven = kleef ? 4 : 3;
             double straal = 4;
             Element el = c.element();
-            double basis = c.wapenSchade() * 0.6;
+            double basis = c.wapenSchade() * Balans.PLUIZENREGEN;
             Telegraaf.cirkel(sl, doel, straal, 8 + 8 * golven, vuur ? 0xFF7A3A : kleef ? 0x7FE07F : Telegraaf.ROZE);
             Fx.geluid(sl, p.position(), SoundEvents.ARROW_SHOOT, 1f, 0.7f);
             Fx.geluid(sl, p.position(), SoundEvents.CROSSBOW_LOADING_END.value(), 0.8f, 1.4f);
@@ -208,7 +209,7 @@ public final class Pluisjager implements Klasse {
                     Fx.geluid(sl, oud, SoundEvents.SLIME_SQUISH, 1f, 0.8f);
                     for (LivingEntity e : Fx.mobsBij(sl, oud, 3)) {
                         Statussen.geef(e, Status.PLAKKERIG, 60, 1, p);
-                        Basisaanval.treffer(p, e, c.wapenSchade() * 0.8, Element.WATER, Schade.Soort.AFSTAND, false, "plakbom");
+                        Basisaanval.treffer(p, e, c.wapenSchade() * Balans.PLAKBOM, Element.WATER, Schade.Soort.AFSTAND, false, "plakbom");
                     }
                 });
                 // (the -2 s cooldown: KlassenRegistry.kernHaken via kern's COOLDOWN_MOD)
@@ -241,7 +242,7 @@ public final class Pluisjager implements Klasse {
                 }
             }
             Vec3 richting = doel != null ? doel.getBoundingBox().getCenter().subtract(p.getEyePosition()).normalize() : p.getLookAngle();
-            Basisaanval.vuur(p, "boog", Basisaanval.SOORTEN.get("boog"), richting, c.wapenSchade() * 0.7, c.element(), false, false);
+            Basisaanval.vuur(p, "boog", Basisaanval.SOORTEN.get("boog"), richting, c.wapenSchade() * Balans.SALVO, c.element(), false, false);
             Fx.geluid((ServerLevel) p.level(), p.position(), SoundEvents.ARROW_SHOOT, 0.6f, 1.6f);
         }
     }
@@ -280,7 +281,7 @@ public final class Pluisjager implements Klasse {
                     Fx.geluid(sl, vriend.position(), SoundEvents.AMETHYST_BLOCK_CHIME, 1f, 1.5f);
                 } else {
                     boolean krit = Basisaanval.neemSaltoKrit(p);
-                    Basisaanval.treffer(p, doel, c.wapenSchade() * 1.8 * (hartjes ? 1.3 : 1), Element.ROZE, Schade.Soort.AFSTAND, krit, "knuffelpijl");
+                    Basisaanval.treffer(p, doel, c.wapenSchade() * Balans.KNUFFELPIJL * (hartjes ? 1.3 : 1), Element.ROZE, Schade.Soort.AFSTAND, krit, "knuffelpijl");
                     sl.sendParticles(Fx.stof(Fx.ROZE, 2f), doel.getX(), doel.getY() + 1, doel.getZ(), 16, 0.4, 0.4, 0.4, 0.02);
                 }
                 return false;
@@ -333,7 +334,7 @@ public final class Pluisjager implements Klasse {
             for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, new AABB(a, b).inflate(1.6), x -> x instanceof VadsrijkMob m && !m.geplofd())) {
                 if (e.getBoundingBox().inflate(1.3).clip(a, b).isPresent() && al.add(e.getUUID())) {
                     boolean krit = Basisaanval.neemSaltoKrit(p);
-                    tot += Basisaanval.treffer(p, e, c.wapenSchade() * 4 * (ster ? 1.5 : 1), c.element() == Element.GEEN ? Element.ROZE : c.element(),
+                    tot += Basisaanval.treffer(p, e, c.wapenSchade() * Balans.STERRENSCHOT * (ster ? 1.5 : 1), c.element() == Element.GEEN ? Element.ROZE : c.element(),
                             Schade.Soort.AFSTAND, krit, "sterrenschot").schade();
                     sl.sendParticles(ParticleTypes.FIREWORK, e.getX(), e.getY() + 1, e.getZ(), 20, 0.3, 0.5, 0.3, 0.15);
                 }

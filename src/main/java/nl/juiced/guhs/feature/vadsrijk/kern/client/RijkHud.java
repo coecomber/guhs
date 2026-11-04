@@ -31,7 +31,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  * The HUD inside the dimension (vanilla hearts, hunger, armour, air and the xp bar are hidden there):
  * <ul>
  *   <li>above the hotbar: the Vads bar (left) and the energy bar (right), the level + xp bar in the vanilla xp spot;</li>
- *   <li>right of the hotbar: 4 skill slots with the key, a cooldown sweep + seconds, the ult's charge;</li>
+ *   <li>right of the hotbar: 4 skill slots with the key, a cooldown sweep + seconds, the ult's charge; a 5th small slot for the
+ *   Knuffelsprong (C);</li>
  *   <li>top: the big boss bar (name, phase); a big title card (Souls/Dungeons style) for bosses, areas, level-ups;</li>
  *   <li>left: the party; top right: a first-time hint card.</li>
  * </ul>
@@ -160,6 +161,9 @@ public final class RijkHud {
         for (int i = 0; i < 4; i++) {
             slot(g, f, sx + i * 23, sy, i, h);
         }
+        if (h.cd().length > 4) {
+            sprong(g, f, sx + 4 * 23 + 1, sy + 4, h);
+        }
         // small info: duizelig, opgevrolijkt, munten (left of the hotbar)
         int ly = hh - 22;
         String lvl = Component.translatable("vadsrijk.kern.hud.niveau", h.level()).getString();
@@ -228,6 +232,38 @@ public final class RijkHud {
         }
         KeyMapping k = KernClient.SKILLS[i];
         String toets = k.getTranslatedKeyMessage().getString();
+        if (toets.length() > 3) {
+            toets = toets.substring(0, 3);
+        }
+        g.pose().pushMatrix();
+        g.pose().translate(x + 1, y + 1);
+        g.pose().scale(0.6f, 0.6f);
+        g.text(f, toets, 0, 0, 0xFFFFFFFF, true);
+        g.pose().popMatrix();
+    }
+
+    /** The 5th, smaller slot: the Knuffelsprong (every class), with its key and cooldown. */
+    private static void sprong(GuiGraphicsExtractor g, Font f, int x, int y, KernPayloads.Hud h) {
+        int z = 16;
+        int cd = h.cd()[4], max = Math.max(1, h.cdMax()[4]);
+        g.fill(x - 1, y - 1, x + z + 1, y + z + 1, cd > 0 ? 0xFF4A3A4A : 0xFF8FD4FF);
+        g.fill(x, y, x + z, y + z, 0xE0281A24);
+        // a little arc with a heart on top: the leap
+        int[][] boog = {{2, 12}, {3, 10}, {4, 8}, {5, 7}, {6, 6}, {7, 5}, {8, 5}, {9, 5}, {10, 6}, {11, 7}, {12, 8}, {13, 10}};
+        for (int[] b : boog) {
+            g.fill(x + b[0], y + b[1], x + b[0] + 1, y + b[1] + 1, 0xFFFFC2E8);
+        }
+        g.fill(x + 7, y + 2, x + 8, y + 3, 0xFFFF6AA8);
+        g.fill(x + 9, y + 2, x + 10, y + 3, 0xFFFF6AA8);
+        g.fill(x + 7, y + 3, x + 10, y + 4, 0xFFFF6AA8);
+        g.fill(x + 8, y + 4, x + 9, y + 5, 0xFFFF6AA8);
+        if (cd > 0) {
+            int hoog = (int) Math.ceil(z * (float) cd / max);
+            g.fill(x, y + z - hoog, x + z, y + z, 0xB0000000);
+            String s = String.valueOf((cd + 19) / 20);
+            g.text(f, s, x + z / 2 - f.width(s) / 2, y + 4, 0xFFFFFFFF, true);
+        }
+        String toets = KernClient.SKILLS[4].getTranslatedKeyMessage().getString();
         if (toets.length() > 3) {
             toets = toets.substring(0, 3);
         }

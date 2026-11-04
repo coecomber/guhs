@@ -1,0 +1,51 @@
+# Het Vadsrijk fix round 1 "gevecht": the Knuffelsprong (distance/height, cooldown, the 5th HUD slot), the element icons on the
+# nameplates and the Elementen tip.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/fix_gevecht.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section sprong
+/guhs vadsrijk
+wait 400
+waitrender 300
+/tp @s 0 66 1140
+look 180 0
+/gamemode survival
+wait 60
+waitrender 100
+hier
+shot g_voor gui
+/guhs vadsrijk sprong
+wait 10
+hier
+shot g_lucht gui
+wait 40
+hier
+shot g_na gui
+/guhs vadsrijk sprong
+wait 80
+/guhs vadsrijk sprong
+wait 12
+hier
+wait 50
+hier
+shot g_na2 gui
+
+section iconen
+/gamemode creative
+/guhs vadsrijk wereld plek kampvuur_klodderweide_1
+wait 40
+/summon guhs:vr_mob_klodder ~3 ~ ~3
+/summon guhs:vr_mob_hoedjesbol ~-3 ~ ~3
+/summon guhs:vr_mob_druipslijm ~ ~ ~5
+look 0 15
+wait 60
+waitrender 200
+shot g_iconen gui
+sla guhs:vr_mob_klodder
+wait 20
+shot g_tip_elementen gui

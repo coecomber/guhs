@@ -7,21 +7,27 @@ import net.minecraft.ChatFormatting;
  * other way. Roze (vads energy) is neutral, but x1.5 against "ontvadst" creatures. GEEN = no element (x1).
  */
 public enum Element {
-    GEEN("-", ChatFormatting.GRAY, 0xAAAAAA),
-    ROZE("R", ChatFormatting.LIGHT_PURPLE, 0xFF7AC8),
-    VUUR("V", ChatFormatting.RED, 0xFF5A2A),
-    NATUUR("N", ChatFormatting.GREEN, 0x5BD14A),
-    WATER("W", ChatFormatting.AQUA, 0x3FA9FF);
+    GEEN("-", "", ChatFormatting.GRAY, 0xAAAAAA),
+    ROZE("R", "", ChatFormatting.LIGHT_PURPLE, 0xFF7AC8),
+    VUUR("V", "", ChatFormatting.RED, 0xFF5A2A),
+    NATUUR("N", "", ChatFormatting.GREEN, 0x5BD14A),
+    WATER("W", "", ChatFormatting.AQUA, 0x3FA9FF);
 
     public static final double STERK = 1.5, ZWAK = 0.7, ROZE_TEGEN_ONTVADST = 1.5;
 
-    /** The letter on nameplates and tooltips, its chat colour, its RGB. */
+    /** The letter (logs/commands), its chat colour, its RGB. */
     public final String letter;
+    /**
+     * The small coloured icon (fix round 1: replaces the letter on nameplates): a glyph of the default font, added by
+     * {@code assets/minecraft/font/default.json} (texture {@code guhs:font/vr_element.png}): heart, flame, leaf, drop. "" for GEEN.
+     */
+    public final String teken;
     public final ChatFormatting kleur;
     public final int rgb;
 
-    Element(String letter, ChatFormatting kleur, int rgb) {
+    Element(String letter, String teken, ChatFormatting kleur, int rgb) {
         this.letter = letter;
+        this.teken = teken;
         this.kleur = kleur;
         this.rgb = rgb;
     }
@@ -54,6 +60,12 @@ public enum Element {
             return ZWAK;
         }
         return 1.0;
+    }
+
+    /** The icon + a space (white, so the glyph keeps its own colours); empty for GEEN. */
+    public net.minecraft.network.chat.MutableComponent icoon() {
+        return teken.isEmpty() ? net.minecraft.network.chat.Component.empty()
+                : net.minecraft.network.chat.Component.literal(teken + " ").withStyle(ChatFormatting.WHITE);
     }
 
     public String key() {

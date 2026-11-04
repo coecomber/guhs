@@ -378,7 +378,7 @@ public abstract class VadsrijkMob extends Monster {
     /** The nameplate text: [element letter] (Elite) name Lv n and a coloured HP bar (or a heart after the plof). */
     public Component plaatje() {
         Element e = element();
-        MutableComponent n = Component.literal("[" + e.letter + "] ").withStyle(e.kleur);
+        MutableComponent n = e.icoon();   // (fix round 1: a small coloured element icon instead of the "[W]" letter; GEEN = nothing)
         if (elite()) {
             n.append(Component.translatable("vadsrijk.kern.elite").withStyle(ChatFormatting.GOLD)).append(" ");
         }

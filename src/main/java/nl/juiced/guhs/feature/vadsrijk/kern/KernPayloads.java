@@ -36,7 +36,7 @@ public final class KernPayloads {
     public static Consumer<SieradenSync> sieradenOntvanger = h -> {
     };
 
-    /** Everything the HUD shows about yourself. cd/cdMax: remaining/total cooldown ticks of R, V, G, Z. */
+    /** Everything the HUD shows about yourself. cd/cdMax: remaining/total cooldown ticks of R, V, G, Z and the Knuffelsprong (C). */
     public record Hud(boolean binnen, float vads, float maxVads, float energie, float maxEnergie, float ult, int level, long xpIn, long xpNodig,
             String klasse, int[] cd, int[] cdMax, long munten, int duizelig, int opgevrolijkt, String gebied, List<String> skills)
             implements CustomPacketPayload {
@@ -75,7 +75,7 @@ public final class KernPayloads {
         }
     }
 
-    /** Client -> server: skill key 0..3 (R, V, G, Z) pressed. */
+    /** Client -> server: skill key 0..3 (R, V, G, Z) pressed; 4 = the Knuffelsprong (C). */
     public record Skill(int slot) implements CustomPacketPayload {
         public static final Type<Skill> TYPE = new Type<>(Guhs.id("vr_kern_skill"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Skill> STREAM_CODEC = StreamCodec.ofMember((s, b) -> b.writeVarInt(s.slot),
@@ -213,6 +213,10 @@ public final class KernPayloads {
 
     private static void opSkill(Skill s, IPayloadContext c) {
         if (c.player() instanceof ServerPlayer p) {
+            if (s.slot() == Knuffelsprong.SLOT) {
+                Knuffelsprong.gebruik(p);
+                return;
+            }
             Vaardigheden.gebruik(p, s.slot());
         }
     }
@@ -226,7 +230,7 @@ public final class KernPayloads {
         var k = Spelers.klasse(p);
         int lvl = d.level(k.id());
         long xp = d.xp(k.id());
-        int[] cd = new int[4], cdMax = new int[4];
+        int[] cd = new int[5], cdMax = new int[5];   // (index 4 = the Knuffelsprong, every class)
         List<String> skills = new ArrayList<>();
         long nu = p.level().getGameTime();
         for (int i = 0; i < 4; i++) {
@@ -237,6 +241,9 @@ public final class KernPayloads {
                 cdMax[i] = Vaardigheden.cooldown(p, v);
             }
         }
+        cd[Knuffelsprong.SLOT] = (int) Math.max(0, d.klaarOp.getOrDefault(Knuffelsprong.ID, 0L) - nu);
+        cdMax[Knuffelsprong.SLOT] = Knuffelsprong.COOLDOWN;
+        skills.add("vadsrijk.kern.skill.knuffelsprong");
         int duiz = (int) Math.max(0, d.duizeligTot - nu);
         stuur(p, new Hud(Vadsrijk.in(p), (float) Spelers.vads(p), (float) Spelers.maxVads(p), (float) Spelers.energie(p), (float) Spelers.maxEnergie(p),
                 (float) d.ultLading, lvl, lvl >= Levels.MAX ? 0 : Levels.restXp(xp), lvl >= Levels.MAX ? 0 : Levels.xpVoor(lvl), Spelers.titelKey(p), cd, cdMax, d.munten,

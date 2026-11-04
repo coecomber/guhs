@@ -75,12 +75,16 @@ public class RijkItem extends Item {
                 .append(Component.translatable("vadsrijk.kern.item.level", u.level()).withStyle(ChatFormatting.YELLOW)));
         if (bt != null && bt.slot() == Slot.WAPEN) {
             Element e = u.element();
-            MutableComponent s = Component.translatable("vadsrijk.kern.item.schade", String.format(Locale.ROOT, "%.0f", Rollen.wapenSchade(u)))
+            MutableComponent s = Component.translatable("vadsrijk.kern.item.schade", String.format(Locale.ROOT, "%.0f", Rollen.klapSchade(u)))
                     .withStyle(ChatFormatting.WHITE);
             if (e != Element.GEEN) {
-                s.append(Component.literal(" · ").withStyle(ChatFormatting.DARK_GRAY)).append(Component.translatable(e.key()).withStyle(e.kleur));
+                s.append(Component.literal(" · ").withStyle(ChatFormatting.DARK_GRAY)).append(e.icoon())
+                        .append(Component.translatable(e.key()).withStyle(e.kleur));
             }
             t.accept(s);
+            t.accept(Component.translatable("vadsrijk.kern.item.aanvalssnelheid",
+                    nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo.tekst(nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo.seconden(bt)))
+                    .withStyle(ChatFormatting.GRAY));
         }
         if (bt != null) {
             Stats basis = bt.statsOp(u.level()).maal(z.factor);

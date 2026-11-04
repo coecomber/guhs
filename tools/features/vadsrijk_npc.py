@@ -752,7 +752,7 @@ TIPS = {
     "flauw": ("Flauwgevallen", "Geen zorgen: je verliest niks. Je wordt wakker bij je laatste kampvuur en bent 30 tellen een beetje "
                                "duizelig."),
     "elementen": ("Elementen", "Vuur wint van zwam, zwam van slijm, slijm van vuur (x1,5). Roze is sterk tegen alles wat ontvadst is. "
-                               "Het lettertje bij de levensbalk van een wezen vertelt zijn element."),
+                               "Het gekleurde icoontje voor de naam van een wezen vertelt zijn element."),
     "quests": ("Je questlog", "Druk op J voor je questlog. Een ! boven een guh betekent een nieuwe quest, een ? betekent: hier inleveren "
                               "of even praten."),
 }
@@ -767,8 +767,10 @@ GIDS = {
     "klassen": ("Klassen", "Knuffelridder (dichtbij, stevig), Pluisjager (van ver, beweeglijk) en Vadsmagiër (elementen en heling). "
                            "Elke klasse heeft een eigen level. Wisselen doe je in de ordetempel van Zwamzoet. Op level 10 en 20 krijg "
                            "je een nieuwe titel bij de Grootmeester."),
-    "vaardigheden": ("Vaardigheden", "Linkerklik is je gewone aanval. R, V en G zijn je vaardigheden (ze kosten energie), Z is je "
-                                     "ultieme vaardigheid: die laadt op door te vechten. De toetsen kun je zelf instellen."),
+    "vaardigheden": ("Vaardigheden", "Linkerklik is je gewone aanval; elk wapen heeft zijn eigen aanvalssnelheid (zie de tooltip, het kruisje "
+                                     "laat zien wanneer je weer kunt). R, V en G zijn je vaardigheden (ze kosten energie), Z is je "
+                                     "ultieme vaardigheid: die laadt op door te vechten. C is de Knuffelsprong: een grote sprong vooruit, elke klasse, "
+                                     "zonder valschade. De toetsen kun je zelf instellen."),
     "loot": ("Buit en zeldzaamheid", "Grijs (gewoon), groen (ongewoon), blauw (zeldzaam), paars (episch), oranje (legendarisch) en roze "
                                      "(guhddelijk). Buit is persoonlijk. Bij een baas krijgt iedereen die genoeg hielp een eigen kist."),
     "sterren": ("Sterren en de smid", "De smid zet sterren op je spullen, met een beetje risico. Verpluisde spullen repareert hij. Je kunt "
@@ -778,7 +780,9 @@ GIDS = {
     "flauw": ("Flauwvallen", "Valt je Vads op nul, dan word je wakker bij je kampvuur (bij een baas: bij de arenadeur). Je verliest niks, "
                              "je bent alleen 30 tellen duizelig."),
     "elementen": ("Elementen", "Vuur > Zwam > Slijm > Vuur: x1,5 schade op een zwakte en x0,7 de andere kant op. Roze is extra sterk "
-                               "tegen ontvadste wezens. Kijk naar het lettertje bij de levensbalk."),
+                               "tegen ontvadste wezens. Het icoontje voor de naam van een wezen (en op je wapen) is zijn element: "
+                               " vlammetje = Vuur,  blaadje = Zwam (natuur),  druppel = Slijm (water),  hartje = Roze. "
+                               "Geen icoontje = geen element."),
     "statussen": ("Statussen", "Brandend en Gesporen doen schade over tijd, Plakkerig maakt traag, Verdoofd houdt je even stil. "
                                "Teambuffs: Vahoeg (meer schade), Knuffelschild (vangt klappen op) en Snelpootjes (sneller)."),
     "party": ("Samen spelen", "Een groep is maximaal vijf avonturiers. Je deelt xp in de buurt en opvrolijk-voortgang, en je kunt elkaar "

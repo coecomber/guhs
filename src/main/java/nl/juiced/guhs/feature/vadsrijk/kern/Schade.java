@@ -155,6 +155,9 @@ public final class Schade {
                 heal(bp, bp, n * roof / 100.0);
             }
             Getallen.toon(sl, doel, n, krit, k.element(), ef);
+            if (doelEl != Element.GEEN || k.element() != Element.GEEN) {
+                Tips.toon(bp, "vadsrijk.kern.tip.elementen");   // (the first hit with/on an element: the triangle + the icons)
+            }
         } else if (doel instanceof ServerPlayer && n > 0) {
             Getallen.toon(sl, doel, n, false, Element.GEEN, 1);
         }
@@ -185,14 +188,25 @@ public final class Schade {
         return n;
     }
 
+    /** Game time from which the next melee basic attack may land (server-side guard next to the vanilla attack cooldown). */
+    public static final java.util.Map<java.util.UUID, Long> VOLGENDE_KLAP = new java.util.concurrent.ConcurrentHashMap<>();
+
     /** A left click with the weapon in hand on a Vadsrijk mob (called from {@link VadsrijkMob#hurtServer}). */
     public static boolean basisaanval(ServerPlayer p, LivingEntity doel) {
         if (Statussen.heeft(p, Status.VERDOOFD)) {
             return false;
         }
-        double kracht = p.getAttackStrengthScale(0.5f);
-        double basis = Spelers.wapenSchade(p) * (0.25 + 0.75 * kracht * kracht);
-        Uitkomst u = doe(new Klap(p, doel, basis, Spelers.wapenElement(p), Schade.Soort.MELEE, kracht > 0.9, "basis"));
+        // Attack speed is a weapon stat (kern.Aanvalstempo): the vanilla attack cooldown is set to the weapon's interval
+        // (KernEvents.snelheid), so the crosshair indicator shows when you're ready. A click before that does nothing at all
+        // (no 25 % spam hits), so spam-clicking or holding never beats the interval.
+        long nu = p.level().getGameTime();
+        if (p.getAttackStrengthScale(0.5f) < 0.92f || nu < VOLGENDE_KLAP.getOrDefault(p.getUUID(), 0L)) {
+            p.level().playSound(null, p.blockPosition(), SoundEvents.PLAYER_ATTACK_NODAMAGE, SoundSource.PLAYERS, 0.5f, 1.3f);
+            return false;
+        }
+        VOLGENDE_KLAP.put(p.getUUID(), nu + Aanvalstempo.ticks(Aanvalstempo.seconden(p, Spelers.stats(p).get(Stat.AANVALSSNELHEID))) - 1);
+        double basis = Spelers.klapSchade(p);
+        Uitkomst u = doe(new Klap(p, doel, basis, Spelers.wapenElement(p), Schade.Soort.MELEE, true, "basis"));
         Spelers.laadUlt(p, u.schade());
         return u.schade() > 0;
     }

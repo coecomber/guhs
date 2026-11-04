@@ -63,7 +63,7 @@ WAPENS = {
 
 SKILLS = {
     # id: (name or None for kern-named, uitleg, kort)
-    "kussenklap": (None, "Zwaai in een kegel voor je (4,5 blokken) voor 1,6x wapenschade met flinke knockback. 20 energie, 3 s.",
+    "kussenklap": (None, "Zwaai in een kegel voor je (4,5 blokken) voor 1,5x wapenschade met flinke knockback. 20 energie, 3 s.",
                    "Kegelzwaai met knockback."),
     "stormsprong": (None, "Spring naar je doel (of 8 blokken vooruit). De landing is een schokgolf: 1,3x schade rondom. 25 energie, 8 s.",
                     "Sprong naar je doel met een landingsschok."),
@@ -75,11 +75,11 @@ SKILLS = {
                      "Pijlen regenen op een gebied."),
     "rolsalto": ("Rolsalto", "Een achterwaartse salto weg van waar je kijkt, met even Snelpootjes. Je volgende schot binnen 5 s is gegarandeerd kritiek. 20 energie, 8 s.",
                  "Salto achteruit; volgende schot kritiek."),
-    "knuffelpijl": ("Knuffelpijl", "Een hartjespijl. Raakt hij een teamgenoot, dan healt die 12 % van zijn Vads + 0,5x je wapenschade. Een vijand krijgt 1,8x Roze schade. 25 energie, 7 s.",
+    "knuffelpijl": ("Knuffelpijl", "Een hartjespijl. Raakt hij een teamgenoot, dan healt die 12 % van zijn Vads + 0,5x je wapenschade. Een vijand krijgt 2x Roze schade. 25 energie, 7 s.",
                     "Healt een teamgenoot of prikt een vijand."),
     "sterrenschot": ("Sterrenschot", "ULTIEM: 1 s opladen (je loopt trager), dan een enorme laserpijl van 40 blokken dwars door alles heen: 4x wapenschade.",
                      "Opladen, dan een laserpijl door alles."),
-    "roze_vuurbal": ("Roze Vuurbal", "Een trage bal die ontploft (straal 3,5) voor 2x wapenschade in het element van je wapen. Vuur laat branden, Natuur spoort, Water plakt. 25 energie, 5 s.",
+    "roze_vuurbal": ("Roze Vuurbal", "Een trage bal die ontploft (straal 3,5) voor 2,8x wapenschade in het element van je wapen. Vuur laat branden, Natuur spoort, Water plakt. 25 energie, 4,5 s.",
                      "Ontploft in het element van je staf."),
     "blink": ("Blink", "Teleporteer tot 10 blokken in je kijkrichting (stopt netjes voor muren). 20 energie, 6 s.",
               "Korte teleport waar je kijkt."),

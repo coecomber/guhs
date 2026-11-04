@@ -52,6 +52,11 @@ public final class KlassenClient {
                     ClientPacketDistributor.sendToServer(new KlassenPayloads.Schiet());
                     vuurTik = 2;
                 }
+                // The attack-ready indicator: kern sets the attack speed attribute to the weapon's interval, so the vanilla
+                // crosshair cooldown runs at the same pace as the server's shots; restart it when a shot goes out (prediction).
+                if (mc.player.getAttackStrengthScale(0f) >= 1f) {
+                    mc.player.resetAttackStrengthTicker();
+                }
             } else {
                 vuurTik = 0;
             }

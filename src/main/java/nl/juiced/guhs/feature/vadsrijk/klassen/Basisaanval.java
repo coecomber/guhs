@@ -17,6 +17,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
+import nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo;
 import nl.juiced.guhs.feature.vadsrijk.kern.Element;
 import nl.juiced.guhs.feature.vadsrijk.kern.Schade;
 import nl.juiced.guhs.feature.vadsrijk.kern.SpelerData;
@@ -36,22 +37,25 @@ import nl.juiced.guhs.feature.vadsrijk.klassen.schot.Schoten;
 /**
  * The basic attack of the ranged classes (CONTRACT 7: "left click with a class weapon"): holding the left mouse button with a
  * bow, crossbow, catapult, staff, wand or book fires real projectiles through the kern damage pipeline. The client sends
- * {@link KlassenPayloads.Schiet} while the button is down; the server keeps the rhythm (the weapon kind's interval, faster
- * with Aanvalssnelheid) and buffers a press that comes a few ticks early, so holding the button gives a steady stream.
+ * {@link KlassenPayloads.Schiet} while the button is down; the server keeps the rhythm (the weapon's interval, a weapon
+ * stat in kern.Aanvalstempo, faster with Aanvalssnelheid) and buffers a press that comes a few ticks early, so holding the button gives a steady stream.
  */
 public final class Basisaanval {
-    /** How a weapon kind shoots. interval in ticks; snelheid blocks/tick; spat = splash radius (50 % to the others). */
-    public record Soort(int interval, double snelheid, double zwaarte, double sturen, double spat, int doorboren, @Nullable String item,
+    /**
+     * How a weapon kind shoots: snelheid blocks/tick; spat = splash radius (50 % to the others). The interval is a weapon stat
+     * now (fix round 1: kern.Aanvalstempo, e.g. boog 1.1 s, kruisboog 2.0 s), not part of the kind.
+     */
+    public record Soort(double snelheid, double zwaarte, double sturen, double spat, int doorboren, @Nullable String item,
             boolean schuin, float schaal, Schade.Soort schade) {
     }
 
     public static final Map<String, Soort> SOORTEN = Map.of(
-            "boog", new Soort(6, 2.6, 0.012, 0, 0, 0, "minecraft:arrow", true, 0.85f, Schade.Soort.AFSTAND),
-            "kruisboog", new Soort(13, 3.6, 0.006, 0, 0, 1, "minecraft:spectral_arrow", true, 1.0f, Schade.Soort.AFSTAND),
-            "katapult", new Soort(9, 1.9, 0.045, 0, 1.6, 0, "minecraft:cocoa_beans", false, 0.55f, Schade.Soort.AFSTAND),
-            "toverstok", new Soort(6, 2.0, 0, 0.12, 0, 0, null, false, 0, Schade.Soort.MAGIE),
-            "staf", new Soort(10, 1.5, 0, 0.05, 1.5, 0, null, false, 0, Schade.Soort.MAGIE),
-            "boek", new Soort(12, 1.3, 0, 0.35, 0, 0, "minecraft:paper", false, 0.45f, Schade.Soort.MAGIE));
+            "boog", new Soort(2.6, 0.012, 0, 0, 0, "minecraft:arrow", true, 0.85f, Schade.Soort.AFSTAND),
+            "kruisboog", new Soort(3.6, 0.006, 0, 0, 1, "minecraft:spectral_arrow", true, 1.0f, Schade.Soort.AFSTAND),
+            "katapult", new Soort(1.9, 0.045, 0, 1.6, 0, "minecraft:cocoa_beans", false, 0.55f, Schade.Soort.AFSTAND),
+            "toverstok", new Soort(2.0, 0, 0.12, 0, 0, null, false, 0, Schade.Soort.MAGIE),
+            "staf", new Soort(1.5, 0, 0.05, 1.5, 0, null, false, 0, Schade.Soort.MAGIE),
+            "boek", new Soort(1.3, 0, 0.35, 0, 0, "minecraft:paper", false, 0.45f, Schade.Soort.MAGIE));
 
     private static final Map<UUID, Long> KLAAR = new HashMap<>();
     private static final Map<UUID, Long> WACHT = new HashMap<>();
@@ -81,9 +85,9 @@ public final class Basisaanval {
         return t != null && SOORTEN.containsKey(t.soort());
     }
 
-    public static int interval(ServerPlayer p, Soort s) {
-        double as = Math.max(-50, Math.min(150, Spelers.stats(p).get(Stat.AANVALSSNELHEID)));
-        return Math.max(2, (int) Math.round(s.interval() / (1 + as / 100.0)));
+    /** Ticks until the next basic shot: the held weapon's interval (kern.Aanvalstempo) / (1 + Aanvalssnelheid%). */
+    public static int interval(ServerPlayer p) {
+        return Aanvalstempo.ticks(Aanvalstempo.seconden(p, Spelers.stats(p).get(Stat.AANVALSSNELHEID)));
     }
 
     /** The client's left mouse button is down with a ranged weapon. */
@@ -142,7 +146,7 @@ public final class Basisaanval {
             return;
         }
         long nu = p.level().getGameTime();
-        KLAAR.put(p.getUUID(), nu + interval(p, s));
+        KLAAR.put(p.getUUID(), nu + interval(p));
         int n = TELLER.merge(p.getUUID(), 1, Integer::sum);
         boolean jachtroes = Boom.heeft(p, "j_jachtroes") && n % 4 == 0;
         Long krit = KRIT_TOT.get(p.getUUID());
@@ -151,7 +155,7 @@ public final class Basisaanval {
             KRIT_TOT.remove(p.getUUID());
         }
         Element el = Spelers.wapenElement(p);
-        double basis = Spelers.wapenSchade(p);
+        double basis = Spelers.klapSchade(p);   // (one shot = damage per second x the weapon's interval)
         Vec3 kijk = p.getLookAngle();
         vuur(p, t.soort(), s, kijk, basis, el, jachtroes || salto, true);
         if (jachtroes) {

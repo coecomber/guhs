@@ -223,6 +223,9 @@ public final class Schoten {
         }
         s.pos = eind;
         if (blok.getType() != HitResult.Type.MISS) {
+            if (schutter != null) {   // (fix round 1: shots on a training dummy count for the quest; the npc slice listens)
+                nl.juiced.guhs.feature.vadsrijk.kern.Haken.BLOK_GERAAKT.forEach(h -> h.accept(schutter, blok.getBlockPos()));
+            }
             einde(s, eind.subtract(s.snelheid.normalize().scale(0.1)), true);
             return;
         }
