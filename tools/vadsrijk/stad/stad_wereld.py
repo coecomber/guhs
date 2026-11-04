@@ -52,6 +52,12 @@ def haven(S):
                         S.set(px + dx, y, z, "minecraft:cherry_log[axis=y]")
             if z % 8 == 0:
                 S.set(px + 2, G + 1, z, Z.LANT)
+    # (fix L) the quay railing (terrein) ran straight across the start of both jetties: clear the walking surface
+    for px in (84, 160):
+        for z in range(208, 222):
+            for x in range(px - 1, px + 2):
+                if S.get(x, G + 1, z) in (Z.HEK, Z.LANT):
+                    S.set(x, G + 1, z, "minecraft:air")
     for (bx, bz) in ((92, 228), (152, 236), (70, 240)):
         Z.bootje(S, bx, bz)
     Z.vuurtoren(S, 34, 234)

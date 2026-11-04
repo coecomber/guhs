@@ -43,7 +43,7 @@ import nl.juiced.guhs.world.GuhTime;
  * </ul>
  */
 public final class StadsMuziekSpeler {
-    static final float MUZIEK_VOLUME = 0.75f, BED_VOLUME = 0.55f;
+    static final float MUZIEK_VOLUME = 0.85f, BED_VOLUME = 0.4f;   // fix L: the tunes and the sweet details lead, the bed stays underneath
     private static final int GRATIE = 60, FADE_IN = 80, FADE_UIT = 60, FADE_SNEL = 20;
     private static final RandomSource R = RandomSource.create();
 

@@ -1055,6 +1055,10 @@ def hoedhuisjes(S, zw, rng):
                      HOED[kleur], niet_op_trap=True)
             k += 1
         # midden: een bloesemboompje en een lantaarnpaal
+        # (fix L) not on a small cap where a house door opens right onto the middle (the trunk blocked the hoeko door)
+        if any("deur" in S.get(cx + dx, T + 1, cz + dz) or "door" in S.get(cx + dx, T + 1, cz + dz)
+               for dx in range(-2, 3) for dz in range(-2, 3)):
+            continue
         S.set(cx, T + 1, cz, "minecraft:cherry_log[axis=y]")
         S.set(cx, T + 2, cz, "minecraft:cherry_log[axis=y]")
         S.ellipsoid(cx, T + 4, cz, 2.6, 1.8, 2.6, "minecraft:cherry_leaves[distance=7,persistent=true,waterlogged=false]",

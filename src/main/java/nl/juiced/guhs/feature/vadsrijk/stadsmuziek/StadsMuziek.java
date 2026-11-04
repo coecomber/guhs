@@ -20,7 +20,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
  * <ul>
  *   <li>Zwamzoet, Knuffelkamp and De Haven (zone 1) and Kandijkom (zone 2, with its dock) each have two tunes
  *       ({@code guhs:vr.stad.muziek.<stad>_<n>}, synthesized by tools/features/vadsrijk_stadsmuziek_geluid.py);</li>
- *   <li>an ambience bed per town ({@code vr.stad.bed.*}: harbour water, a breeze, winter wind + a fire) and now-and-then
+ *   <li>an ambience bed per town ({@code vr.stad.bed.*}, quiet, no wind: lapping water, birdsong + chimes, a warm hearth + sleigh bells) and now-and-then
  *       sounds ({@code vr.stad.sfeer.<stad>} / {@code vr.stad.sfeer.nacht}: birds, guh giggles, the market chatter, wind
  *       chimes, little bells, sleigh bells, crackling fire baskets), made of existing Guhs and vanilla sounds in sounds.json.</li>
  * </ul>
