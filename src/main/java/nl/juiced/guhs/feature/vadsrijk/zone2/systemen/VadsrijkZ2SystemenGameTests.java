@@ -38,13 +38,13 @@ public class VadsrijkZ2SystemenGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void levelCap35(GameTestHelper helper) {
-        helper.assertTrue(Levels.MAX == 35, "cap 35, is " + Levels.MAX);
+        helper.assertTrue(Levels.MAX >= 35, "cap at least 35, is " + Levels.MAX);   // (z3-systemen: 50)
         for (int l = 1; l <= Levels.MAX; l++) {
             helper.assertTrue(Levels.levelVan(Levels.totaalVoor(l)) == l, "level " + l + " round trip");
             helper.assertTrue(l == 1 || Levels.levelVan(Levels.totaalVoor(l) - 1) == l - 1, "one xp short of " + l);
             helper.assertTrue(l == Levels.MAX || Levels.xpVoor(l + 1) > Levels.xpVoor(l), "the curve rises at " + l);
         }
-        helper.assertTrue(Levels.levelVan(Long.MAX_VALUE / 4) == 35, "capped at 35");
+        helper.assertTrue(Levels.levelVan(Long.MAX_VALUE / 4) == Levels.MAX, "capped at " + Levels.MAX);
         helper.assertTrue(Levels.skillpunten(35) - Levels.skillpunten(20) == 15, "lv 21-35 gives 15 points");
         for (Klasse k : Klassen.alle()) {
             helper.assertTrue(k.basis(35).get(Stat.VADS) > k.basis(20).get(Stat.VADS), k.id() + ": stats keep growing after 20");
@@ -121,7 +121,7 @@ public class VadsrijkZ2SystemenGameTests {
         helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 3, "step 3 done");
         helper.assertTrue(Advancement.titelKey(p).equals("vadsrijk.klassen.titel.pluisjager.3"), "new title " + Advancement.titelKey(p));
         helper.assertTrue(Spelers.stats(p).get(Stat.KRITIEK) > kritVoor, "the adv3 node gives its stats");
-        helper.assertTrue(!Advancement.kanDoen(p) && !Advancement.doe(p), "no 4th step");
+        helper.assertTrue(!Advancement.kanDoen(p) && !Advancement.doe(p), "no 4th step before lv 50");   // (z3-systemen: step 4 at 50)
         Boom.knopen(d, Klassen.JAGER).add("j_scherpoog");
         d.respecKlaar = 0;
         helper.assertTrue(Boom.respec(d, Klassen.JAGER, System.currentTimeMillis()) == null, "respec");
@@ -134,7 +134,7 @@ public class VadsrijkZ2SystemenGameTests {
         for (Klasse k : Klassen.alle()) {
             int nieuw = 0;
             for (BoomKnoop b : k.boom()) {
-                if (b.rij() >= Bomen.RIJEN) {
+                if (b.rij() >= Bomen.RIJEN && b.rij() <= 5) {   // (z3-systemen: rows 6/7 are zone 3)
                     nieuw++;
                     helper.assertTrue(b.rij() <= 5 && b.kolom() < Bomen.KOLOMMEN, k.id() + ": outside the grid " + b.id());
                     helper.assertTrue(Boom.MIN_LEVEL.getOrDefault(b.id(), 0) >= 20, k.id() + ": zone-2 node without level gate " + b.id());

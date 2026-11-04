@@ -35,7 +35,7 @@ public final class Rollen {
         int n = z.minBonus + (z.maxBonus > z.minBonus ? r.nextInt(z.maxBonus - z.minBonus + 1) : 0);
         Uitrusting u = new Uitrusting(t.id(), z, level, Bonussen.rol(n, level, z, r), t.element(), t.flavours() <= 0 ? 0 : r.nextInt(t.flavours()), 0,
                 false, false, r.nextLong());
-        int sokjes = Math.max(0, Math.min(2, SOKJES.aantal(t, level, z, r)));   // z2-systemen
+        int sokjes = Math.max(0, Math.min(3, SOKJES.aantal(t, level, z, r)));   // z2-systemen (z3-systemen: up to 3 from lv 45)
         return sokjes == 0 ? u : u.metSokjes(java.util.Collections.nCopies(sokjes, ""));
     }
 
