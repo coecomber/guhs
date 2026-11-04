@@ -92,5 +92,23 @@ werf in the east, Mosvoet SW, schimmelboerderij NE), every spot `w("<POI_Z3 id>"
 - Titles "Muizenbevrijder/Drakenvriend" are not granted here (z3-bazen loot per plan §5); Wasja says "Drakenvriend".
 - Not done: WERELDVERHAAL §10 small references in zone 1/2 (only the zone-2 cliffhanger direction).
 
-## Resume point / tests
-See the end of this file.
+## z3-systemen wiring (merged 110-z3-systemen ca18781a8, commit 697156575)
+- Jagersguh Raap: role `premiebord` -> `Premiebord.open(p, PREMIES)`; extra choices Jachtbord (`JACHT`) and penningwinkel (`WINKEL`).
+- Juweliersguh Glinsterhoning: role `juwelier` (zone 2's binding -> `zone2.systemen.Juwelier.open(p)`, handles zone-3 gems).
+- Winkelguh Bijenwas: role `honingkraam` -> `Winkels.open(p, Z3SystemenRegistry.HONINGKRAAM)`.
+- Stalmeester Veertje: extra choice "25 Gouden Veren ruilen" (visible when `GoudenVeren.kanRuilen`) -> `GoudenVeren.ruil(p)`.
+- Ordemeester Wasja: extra choice "vierde titel" (when `Advancement.kanDoen`) -> `Advancement.doe(p)`; the class quests
+  `z3_adv50_<k>` end with `advancement:<k>:4` (MAX_STAP is 4 now).
+- Quest xp = `Z3Xp` shares, computed in the generator (`z3xp(lv, hoofd)`: main/class/secret 45 %, side 18 % of the level's xp).
+- Areas: `Gebieden.op(x, y, z)` (hq01 "in Honingtak"); our flat fallback boxes only register when an id is missing (Z3Lagen
+  registers them all now).
+
+## Resume point / tests (2026-11-04)
+- Head: see `git log` on 110-z3-npc. Compiles; `runGameTestServer -Pgt=Z3NpcGameTests`: **2/2 passed** (elkeStapWieEnWaar: every
+  z3 step has a target + where text, every NPC name/where/spot in zone 3, Vahoegje registered; hoofdlijnViaApi: the 15 main steps via
+  the real hooks (starter Pluimguh via `Z3Haken.starter` + `Rijdieren.geefStarter`, scenes run to their end), hand-ins by clicking
+  the NPCs, up to `zone3_klaar` + Vahoegje + all splinters).
+- No AutoCheck run (memory; the real zone-3 map lives in z3-wereld). Worth checking in the dev client after integration: NPC spots on
+  the real map, the scenes' camera paths (opening fallback, BAM, nest, F1, ride, finale, F2), the starter screen from Veertje.
+- Lang files were regenerated after the merge (npc, z2_npc, z3_npc, voltooiing, z3_systemen generators); integration regenerates
+  anyway.
