@@ -135,6 +135,13 @@ public final class Arenas {
             Arena a = t.arena;
             if (!sl.isLoaded(a.centrum())) {
                 t.bord = null;
+                // (integration) a far teleport unloads the arena: clear the bar of whoever was inside, or it stays on screen
+                for (UUID weg : t.binnen) {
+                    if (sl.getEntity(weg) instanceof ServerPlayer p) {
+                        KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
+                    }
+                }
+                t.binnen.clear();
                 continue;
             }
             ArenaData data = ArenaData.get(server);

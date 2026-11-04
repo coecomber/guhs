@@ -12,6 +12,20 @@ wait 400
 waitrender 300
 /guhs vadsrijk level 30
 
+section bereik
+/guhs vadsrijk baas reset bazen:koning_klodder
+/guhs vadsrijk bazen tp koning
+wait 80
+waitrender 200
+/gamemode survival
+/tp @s 395 70 90
+look 90 5
+wait 160
+shot f2_koning_op_afstand gui
+wait 80
+shot f2_koning_op_afstand2 gui
+/gamemode creative
+
 section luchtschip
 /guhs vadsrijk wereld plek luchtschip_haven_landing
 wait 80
