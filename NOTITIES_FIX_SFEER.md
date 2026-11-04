@@ -29,7 +29,16 @@ makes the server's slimes hop), `stop`, `zuil aan|uit` (adds/removes the Opperzw
 first-kill reward), `status` (next dragon in s, clock values).
 
 ## Tests
-- AutoCheck script `tools/autocheck/vadsrijk_sfeer.txt` (see the result below).
+- compileJava green. No gametests (client-only visuals; the server part is a scheduler + packets).
+- AutoCheck `tools/autocheck/vadsrijk_sfeer.txt` (one round, 18 shots in `run/screenshots/autocheck/`, no errors in the log):
+  OK: fog stad pink-gold, weide golden, woud green-gold with god ray, druipgrotten turquoise; dragon pass low over the plein;
+  dusk wave (lights flash on in rings, halos over the city at night); storm (orange-purple sky, thick spores, pink-glowing
+  mushrooms, slanted ray); pink sky + rain, then a full rainbow; aurora ribbons above the temple mountain, bright pink + light
+  pillar after `zuil aan`. Script artefacts: the zwamtempel fog shot stood inside the temple wall (wrong spot, not a bug); the kloof
+  grey is subtle in the shot; the beacon halo is small from 200 blocks away.
+
+## Resume point
+Everything in the brief is built and committed. Visual tuning (colours, strengths) waits for the user's dev-client check.
 
 ## Open / for the integrator
 - Lights are a glow layer: in daylight the light blocks shine anyway (as before). If the user wants real dark lamps by day, the
