@@ -111,7 +111,7 @@ public final class Libelkonijnguh {
 
     /** "Never lost": a player who has one and did not tell it to stay gets it at their side when it is not near. */
     public static void controleer(ServerPlayer p) {
-        if (!heeft(p) || blijft(p) || p.isSpectator() || !p.isAlive()) {
+        if (!heeft(p) || blijft(p) || p.isSpectator() || !p.isAlive() || nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p)) {   // (1.10: it waits outside the Vadsrijk)
             return;
         }
         LibelkonijnguhEntity pet = vind(p);

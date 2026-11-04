@@ -48,6 +48,9 @@ public final class Guhrrit {
     /** Guhrrit at this block with this yaw; vakantie = with sunburn and sombrero. One Guhrrit per spot (shared, no owner). */
     @Nullable
     public static GuhNpcEntity verschijn(ServerLevel level, BlockPos pos, float yaw, boolean vakantie) {
+        if (nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(level)) {
+            return null;   // (1.10: the makelaar never comes into the Vadsrijk)
+        }
         Vec3 v = Vec3.atBottomCenterOf(pos);
         String sleutel = "guhrrit@" + pos.asLong();
         Entity e = Cast.zet(level, Cast.IEDEREEN, sleutel, "guhrrit", vakantie ? Kind.GUHRRIT_VAKANTIE : Kind.MAKELAAR_GUHRRIT, v, yaw, null, false);

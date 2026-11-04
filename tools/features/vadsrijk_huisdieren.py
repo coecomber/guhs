@@ -129,6 +129,7 @@ def grauwe_klodder(bron):
 # =====================================================================================================================
 def teksten():
     t = {
+        "entity.guhs.vr_huisdier": "Huisdier",
         "key.guhs.vr_huisdieren": "Huisdieren (scherm)",
         "vadsrijk.huisdieren.titel": "Huisdieren",
         "vadsrijk.huisdieren.verzameld": "Verzameld %s/%s",

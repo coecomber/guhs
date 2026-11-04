@@ -197,7 +197,7 @@ public final class Maatjes {
     }
 
     private static <T extends EigenWezen> void kijk(ServerPlayer p, String soort, Supplier<EntityType<T>> type) {
-        if (!heeft(p, soort) || thuis(p, soort)) {
+        if (!heeft(p, soort) || thuis(p, soort) || nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p)) {   // (1.10: it waits outside the Vadsrijk)
             return;
         }
         String key = p.getUUID() + soort;

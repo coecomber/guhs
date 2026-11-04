@@ -36,6 +36,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.client.KernClient;
 public final class RijdierClient {
     public static final KeyMapping RIJDEN = new KeyMapping("key.guhs.vr_rijdier", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_X, KernClient.CATEGORIE);
     public static final KeyMapping SCHERM = new KeyMapping("key.guhs.vr_rijdieren", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_N, KernClient.CATEGORIE);
+    /** (fix round 3) Its tab in {@link nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs}. */
+    public static final String TAB = "rijdieren";
 
     private static EcoPayloads.RijdierHud hud;
     private static long hudTijd;
@@ -44,6 +46,8 @@ public final class RijdierClient {
     }
 
     public static void init(IEventBus modBus) {
+        nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.registreer(TAB, 10, () -> Component.translatable("vadsrijk.economie.rijdieren.titel"),
+                () -> ClientPacketDistributor.sendToServer(new EcoPayloads.RijdierToets(1)));
         modBus.addListener((RegisterKeyMappingsEvent e) -> {
             e.register(RIJDEN);
             e.register(SCHERM);

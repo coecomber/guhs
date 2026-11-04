@@ -116,7 +116,8 @@ public final class E2AppaClient {
         if (level == null || !(level.getEntity(event.getRenderState().id) instanceof Player player)) {
             return;
         }
-        if (!E2AppaPayloads.CLIENT_SCHOUDERS.contains(player.getId()) || player.isInvisible() || player.isSleeping()) {
+        if (!E2AppaPayloads.CLIENT_SCHOUDERS.contains(player.getId()) || player.isInvisible() || player.isSleeping()
+                || nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(level)) {   // (1.10: Momo stays out of the Vadsrijk)
             return;
         }
         MomoGuhEntity momo = SCHOUDER_MOMOS.compute(player.getId(), (id, m) -> m != null && m.level() == level ? m
