@@ -36,6 +36,16 @@ BIOMEN = {
     "splinterkloof": ("Splinterkloof", "#a8b0d0", "#b8bcd8", "#8fa0d8", "#6070a8", "#98c890", "#80b880"),
     "spiegelburcht": ("Spiegelburcht", "#d0c0ff", "#e0d8ff", "#b0a8f8", "#8070d0", GRAS, LOOF),
     "splinterpieken": ("De Splinterpieken", "#c0d8f8", "#dce8f8", "#a0b8f0", "#7088c8", GRAS, LOOF),
+    # zone 3 "De Schemerwortel" (z3-systemen Z3Lagen.GEBIEDEN): LAYERED, the biome source picks these by height too
+    "honingtak": ("Honingtak", "#ffc890", "#ffd8a8", "#f0c070", "#c89040", "#b8e070", "#e0b850"),
+    "kruinzee": ("De Kruinzee", "#ffd0a0", "#ffe0b8", "#f0c878", "#c89848", "#c0e070", "#f0b8d0"),
+    "takkenbanen": ("De Takkenbanen", "#f0b890", "#e8c098", "#d8a870", "#a87840", "#a8d070", "#c8a050"),
+    "schorsstad": ("De Schorsstad", "#c88860", "#a87050", "#e0a070", "#906040", "#a0b860", "#b88848"),
+    "wortelvelden": ("De Wortelvelden", "#a8b8a0", "#8aa898", "#58c8c0", "#30908a", "#78b860", "#68a858"),
+    "wortelduister": ("Het Wortelduister", "#4a3868", "#3a2c58", "#50c8c8", "#285858", "#6a9870", "#5a8860"),
+    "zeppelinwerf": ("De Kaaszeppelinwerf", "#c0b8b0", "#b0a8a8", "#a8b0c8", "#788098", "#a0b880", "#90a870"),
+    "hart": ("Het Hart van de Boom", "#6a3870", "#582a60", "#e070c0", "#903880", "#7aa070", "#6a9060"),
+    "schemerwortel": ("De Schemerwortel", "#ffc8a0", "#ffd8b8", "#b0a8f0", "#8f7fd0", GRAS, LOOF),
 }
 
 

@@ -74,7 +74,7 @@ public final class Flauwvallen {
     /** The area's respawn: the proeftuin camp for the test area, else the Knuffelkamp arrival. */
     public static BlockPos standaard(@Nullable ServerPlayer p) {
         if (p != null) {
-            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
             if (g != null && g.id().equals("proeftuin")) {
                 return nl.juiced.guhs.feature.vadsrijk.kern.wereld.Ondergrond.KAMP;
             }

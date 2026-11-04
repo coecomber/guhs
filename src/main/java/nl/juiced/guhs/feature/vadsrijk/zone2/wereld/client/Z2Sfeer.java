@@ -35,7 +35,7 @@ final class Z2Sfeer {
         if (l == null || p == null || !Vadsrijk.in(l) || mc.isPaused() || !Z2WereldRegistry.inZone2(p.getX(), p.getZ())) {
             return;
         }
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         String id = g == null ? "zee" : g.id();
         int maaiveld = l.getHeight(Heightmap.Types.WORLD_SURFACE, p.getBlockX(), p.getBlockZ());
         boolean binnen = p.getY() < maaiveld - 4;

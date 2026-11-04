@@ -34,7 +34,7 @@ public final class SfeerClient {
         if (l == null || p == null || mc.isPaused() || !l.dimension().equals(Vadsrijk.DIM) || l.getGameTime() % 2 != 0) {
             return;
         }
-        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+        Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         if (g == null) {
             return;
         }

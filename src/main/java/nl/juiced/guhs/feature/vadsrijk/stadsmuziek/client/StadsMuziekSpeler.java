@@ -71,7 +71,7 @@ public final class StadsMuziekSpeler {
         if (mc.level == null || p == null || !Vadsrijk.in(mc.level)) {
             return null;
         }
-        return StadsMuziek.stadOp(p.getX(), p.getZ());
+        return StadsMuziek.stadOp(p.getX(), p.getY(), p.getZ());
     }
 
     /** Something else owns the music now: a boss fight or a cutscene. */

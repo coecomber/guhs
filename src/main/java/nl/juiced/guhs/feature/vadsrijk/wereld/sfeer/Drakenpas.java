@@ -91,7 +91,7 @@ public final class Drakenpas {
         }
         List<ServerPlayer> kandidaten = new ArrayList<>();
         for (ServerPlayer p : sl.players()) {
-            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
             if (g != null && !g.id().equals("proeftuin") && !p.isSpectator() && buiten(sl, p)) {
                 kandidaten.add(p);
             }
@@ -102,7 +102,7 @@ public final class Drakenpas {
         // the city first (the skyline is where it looks best), else the area of a random player
         ServerPlayer doel = null;
         for (ServerPlayer p : kandidaten) {
-            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
             if (g != null && g.id().equals("zwamzoet")) {
                 doel = p;
             }

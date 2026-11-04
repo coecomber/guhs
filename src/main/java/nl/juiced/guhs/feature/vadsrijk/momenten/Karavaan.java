@@ -167,7 +167,7 @@ public final class Karavaan {
 
     /** Not in a town, and not right at a stop. */
     static boolean magAanval(KaravaanStaat st, Vec3 pos) {
-        Gebieden.Gebied g = Gebieden.op(pos.x, pos.z);
+        Gebieden.Gebied g = Gebieden.op(pos.x, pos.y, pos.z);
         if (g != null && g.stad()) {
             return false;
         }
