@@ -47,7 +47,7 @@ _BLOK = np.dtype([("t_pos", "u1"), ("n_pos", ">u2"), ("s_pos", "S3"), ("et", "u1
 assert _BLOK.itemsize == 36
 
 
-def schrijf(pad, size, palette, xs, ys, zs, states, extra_nbt=None, niveau=6):
+def schrijf(pad, size, palette, xs, ys, zs, states, extra_nbt=None, niveau=9):
     """palette: list of (name, props dict). xs/ys/zs/states: int arrays (one entry per block).
     extra_nbt: {(x,y,z): dict} block-entity nbt for a few blocks (written in a slow second list part)."""
     extra_nbt = extra_nbt or {}
@@ -63,6 +63,9 @@ def schrijf(pad, size, palette, xs, ys, zs, states, extra_nbt=None, niveau=6):
     a["t_st"], a["n_st"], a["s_st"] = 3, 5, b"state"
     a["st"] = states[mask]
     a["end"] = 0
+    # K-INT: y-major order (y, z, x) + gzip level 9: ~13 % smaller tiles. The order is free: vanilla StructureTemplate sorts the
+    # blocks itself on load (buildInfoList), and the Python readers do not care.
+    a = a[np.lexsort((a["x"], a["z"], a["y"]))]
     slow = b""
     nslow = 0
     for i in np.nonzero(~mask)[0]:
