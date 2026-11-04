@@ -9,16 +9,17 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | id | x, y, z |
 |---|---|
 | `aankomst` | 0, 65, 1130 |
-| `aankomst_trap_top` | 0, 73, 1119 |
-| `lift_oost_top` | 50, 151, -42 |
+| `aankomst_trap_top` | 0, 88, 1102 |
+| `lift_oost_top` | 52, 151, -42 |
 | `lift_oost_voet` | 50, 64, -42 |
-| `lift_tempel_top` | 0, 171, -18 |
+| `lift_tempel_top` | 0, 171, -20 |
 | `lift_tempel_voet` | 0, 64, -18 |
-| `lift_west_top` | -50, 141, -33 |
+| `lift_west_top` | -52, 141, -33 |
 | `lift_west_voet` | -50, 64, -33 |
 | `luchtschip_bel` | 149, 87, 1008 |
 | `luchtschip_haven_bel` | 86, 65, 488 |
 | `luchtschip_haven_kapitein` | 86, 65, 491 |
+| `luchtschip_haven_landing` | 92, 65, 484 |
 | `luchtschip_haven_mast_top` | 92, 115, 500 |
 | `luchtschip_kapitein` | 149, 87, 1010 |
 | `steiger_eind` | 151, 87, 1015 |
@@ -30,33 +31,33 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `kampvuur_druipgrotten_1` | -260, 89, -300 |
-| `kampvuur_druipgrotten_2` | -460, 100, -460 |
-| `kampvuur_druipgrotten_3` | -180, 74, -480 |
+| `kampvuur_druipgrotten_1` | -260, 98, -311 |
+| `kampvuur_druipgrotten_2` | -468, 99, -460 |
+| `kampvuur_druipgrotten_3` | -180, 74, -488 |
 | `kampvuur_haven` | 100, 65, 452 |
 | `kampvuur_kamp` | 0, 87, 1025 |
-| `kampvuur_klodderweide_1` | 230, 68, -130 |
-| `kampvuur_klodderweide_2` | 410, 72, 200 |
-| `kampvuur_klodderweide_3` | 480, 65, -80 |
-| `kampvuur_sporenwoud_1` | -220, 65, 10 |
-| `kampvuur_sporenwoud_2` | -430, 72, 230 |
-| `kampvuur_sporenwoud_3` | -300, 71, 340 |
+| `kampvuur_klodderweide_1` | 240, 69, -126 |
+| `kampvuur_klodderweide_2` | 418, 73, 198 |
+| `kampvuur_klodderweide_3` | 489, 65, -81 |
+| `kampvuur_sporenwoud_1` | -228, 65, 17 |
+| `kampvuur_sporenwoud_2` | -436, 72, 224 |
+| `kampvuur_sporenwoud_3` | -300, 72, 348 |
 | `kampvuur_vuurtoren` | -73, 92, 946 |
-| `kampvuur_zwamtempel_1` | 200, 68, -240 |
-| `kampvuur_zwamtempel_2` | 400, 110, -300 |
+| `kampvuur_zwamtempel_1` | 138, 79, -236 |
+| `kampvuur_zwamtempel_2` | 226, 85, -347 |
 | `kampvuur_zwamtempel_trap` | 318, 152, -381 |
 | `kampvuur_zwamzoet` | -14, 64, 58 |
-| `ridder_druipgrotten_1` | -258, 89, -298 |
-| `ridder_druipgrotten_2` | -458, 100, -458 |
-| `ridder_druipgrotten_3` | -178, 74, -478 |
-| `ridder_klodderweide_1` | 232, 68, -128 |
-| `ridder_klodderweide_2` | 412, 72, 202 |
-| `ridder_klodderweide_3` | 482, 65, -78 |
-| `ridder_sporenwoud_1` | -218, 65, 12 |
-| `ridder_sporenwoud_2` | -428, 72, 232 |
-| `ridder_sporenwoud_3` | -298, 71, 342 |
-| `ridder_zwamtempel_1` | 202, 68, -238 |
-| `ridder_zwamtempel_2` | 402, 110, -298 |
+| `ridder_druipgrotten_1` | -258, 98, -309 |
+| `ridder_druipgrotten_2` | -466, 99, -458 |
+| `ridder_druipgrotten_3` | -178, 74, -486 |
+| `ridder_klodderweide_1` | 242, 69, -124 |
+| `ridder_klodderweide_2` | 420, 73, 200 |
+| `ridder_klodderweide_3` | 491, 65, -79 |
+| `ridder_sporenwoud_1` | -226, 65, 19 |
+| `ridder_sporenwoud_2` | -434, 72, 226 |
+| `ridder_sporenwoud_3` | -298, 72, 350 |
+| `ridder_zwamtempel_1` | 140, 79, -234 |
+| `ridder_zwamtempel_2` | 228, 85, -345 |
 
 ## Arenas (centre / straal / deur = stand outside the door / bord = respawn board)
 
@@ -172,7 +173,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `tempeltje` | -52, 94, 1065 |
 | `training` | 62, 87, 981 |
 | `vijver` | 54, 87, 1069 |
-| `vuurtoren_top` | -84, 125, 937 |
+| `vuurtoren_top` | -84, 125, 932 |
 
 ## De Haven + Stal
 
@@ -188,9 +189,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `uitkijk_druipspits` | -100, 189, -510 |
-| `uitkijk_haventand` | 160, 133, 380 |
-| `uitkijk_klodderkijk` | 520, 148, -240 |
+| `uitkijk_druipspits` | -100, 190, -510 |
+| `uitkijk_haventand` | 160, 134, 380 |
+| `uitkijk_klodderkijk` | 520, 147, -240 |
 | `uitkijk_slijmnaald` | 460, 142, 380 |
 | `uitkijk_zwamnaald` | -510, 153, -40 |
 
@@ -198,6 +199,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
+| `geheim_hoedenschat` | -359, 95, 159 |
 | `geheim_schildpad` | 524, 76, 722 |
 | `geheim_slaapheuvel` | 300, 69, 296 |
 | `geheim_slaapheuvel_ingang` | 300, 69, 266 |
@@ -214,11 +216,11 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `fossielbrug.naar` | 205, 73, -265 |
-| `fossielbrug.van` | 140, 73, -205 |
-| `grot_ingangen.1` | -300, 89, -220 |
+| `fossielbrug.naar` | 119, 78, -219 |
+| `fossielbrug.van` | 151, 78, -181 |
+| `grot_ingangen.1` | -300, 90, -220 |
 | `grot_ingangen.2` | -420, 83, -300 |
-| `grot_ingangen.3` | -180, 112, -360 |
+| `grot_ingangen.3` | -180, 111, -360 |
 | `grot_knopen.N1` | -320, 46, -300 |
 | `grot_knopen.N2` | -400, 41, -380 |
 | `grot_knopen.N3` | -260, 44, -420 |
@@ -238,6 +240,24 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
+| `druipschacht_balkon` | -504, 85, -484 |
+| `druipschacht_bodem` | -499, 32, -484 |
+| `druipschacht_ingang` | -463, 41, -470 |
+| `druipschacht_lichtschacht` | -498, 119, -474 |
+| `druipschacht_meer` | -498, 31, -474 |
+| `druipschacht_plafond_1` | -485, 93, -475 |
+| `druipschacht_plafond_2` | -505, 102, -469 |
+| `druipschacht_plafond_3` | -508, 85, -484 |
+| `druipschacht_plafond_4` | -496, 65, -489 |
+| `druipschacht_plafond_5` | -506, 102, -477 |
+| `druipschacht_plafond_6` | -489, 101, -477 |
+| `druipschacht_richel_1` | -487, 42, -471 |
+| `druipschacht_richel_2` | -510, 55, -475 |
+| `druipschacht_richel_3` | -486, 67, -475 |
+| `druipschacht_richel_4` | -509, 80, -472 |
+| `druipschacht_waterval_1` | -492, 32, -472 |
+| `druipschacht_waterval_2` | -503, 32, -470 |
+| `druipschacht_waterval_3` | -499, 32, -480 |
 | `hendelkamer.centrum` | 330, 152, -436 |
 | `hendelkamer.hendels.1` | 322, 152, -441 |
 | `hendelkamer.hendels.2` | 326, 152, -441 |
@@ -248,6 +268,41 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `hendelkamer.hints.3` | 326, 157, -446 |
 | `hendelkamer.hints.4` | 322, 157, -446 |
 | `hendelkamer.plaat` | 330, 152, -444 |
+| `hoedenpad_elitenest` | -462, 121, 197 |
+| `hoedenpad_netwerk.hoeden.1` | -428, 108, 165 |
+| `hoedenpad_netwerk.hoeden.10` | -496, 117, 211 |
+| `hoedenpad_netwerk.hoeden.11` | -352, 115, 201 |
+| `hoedenpad_netwerk.hoeden.12` | -472, 113, 133 |
+| `hoedenpad_netwerk.hoeden.13` | -465, 117, 170 |
+| `hoedenpad_netwerk.hoeden.14` | -462, 121, 197 |
+| `hoedenpad_netwerk.hoeden.2` | -409, 108, 180 |
+| `hoedenpad_netwerk.hoeden.3` | -545, 112, 141 |
+| `hoedenpad_netwerk.hoeden.4` | -392, 103, 151 |
+| `hoedenpad_netwerk.hoeden.5` | -389, 119, 212 |
+| `hoedenpad_netwerk.hoeden.6` | -376, 112, 191 |
+| `hoedenpad_netwerk.hoeden.7` | -523, 114, 157 |
+| `hoedenpad_netwerk.hoeden.8` | -506, 119, 180 |
+| `hoedenpad_netwerk.hoeden.9` | -368, 108, 228 |
+| `hoedenpad_schat_kist` | -358, 95, 159 |
+| `hoedenpad_top_holle_steel` | -341, 108, 228 |
+| `hoedenpad_top_wenteltrap` | -421, 119, 199 |
+| `hoedenpad_top_wortelpad` | -393, 103, 130 |
+| `hoedenpad_trap_holle_steel` | -342, 72, 228 |
+| `hoedenpad_trap_wenteltrap` | -428, 71, 202 |
+| `hoedenpad_trap_wortelpad` | -395, 69, 125 |
+| `hoedenpad_uitkijkhut_1` | -409, 108, 180 |
+| `hoedenpad_uitkijkhut_2` | -472, 113, 133 |
+| `hoedenpad_uitkijkhut_3` | -496, 117, 211 |
+| `hoedenpad_wezen_1` | -426, 108, 165 |
+| `hoedenpad_wezen_10` | -463, 117, 170 |
+| `hoedenpad_wezen_2` | -543, 112, 141 |
+| `hoedenpad_wezen_3` | -390, 103, 151 |
+| `hoedenpad_wezen_4` | -387, 119, 212 |
+| `hoedenpad_wezen_5` | -374, 112, 191 |
+| `hoedenpad_wezen_6` | -521, 114, 157 |
+| `hoedenpad_wezen_7` | -504, 119, 180 |
+| `hoedenpad_wezen_8` | -366, 108, 228 |
+| `hoedenpad_wezen_9` | -350, 115, 201 |
 | `hoedhupperwei` | 520, 73, 300 |
 | `knuffel_1` | -68, 89, 952 |
 | `knuffel_10` | 326, 150, -374 |
@@ -257,14 +312,19 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `knuffel_5` | 116, 65, 466 |
 | `knuffel_6` | 300, 69, 250 |
 | `knuffel_7` | 470, 75, 185 |
-| `knuffel_8` | -400, 72, -100 |
-| `knuffel_9` | -300, 87, -226 |
+| `knuffel_8` | -400, 125, -100 |
+| `knuffel_9` | -300, 90, -226 |
 | `lichtzwamkamer.centrum` | 330, 152, -415 |
 | `lichtzwamkamer.lichtzwammen.1` | 322, 152, -421 |
 | `lichtzwamkamer.lichtzwammen.2` | 326, 152, -424 |
 | `lichtzwamkamer.lichtzwammen.3` | 330, 152, -425 |
 | `lichtzwamkamer.lichtzwammen.4` | 334, 152, -424 |
 | `lichtzwamkamer.lichtzwammen.5` | 338, 152, -421 |
+| `naaldtrap_druipspits` | -97, 108, -497 |
+| `naaldtrap_haventand` | 155, 67, 368 |
+| `naaldtrap_klodderkijk` | 508, 74, -234 |
+| `naaldtrap_slijmnaald` | 450, 72, 372 |
+| `naaldtrap_zwamnaald` | -497, 73, -39 |
 | `npc_mopje` | -400, 41, -380 |
 | `poorten.1` | 328, 152, -405 |
 | `poorten.2` | 328, 152, -426 |
@@ -278,6 +338,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridderzaal.spawns.3` | 340, 152, -469 |
 | `ridderzaal.spawns.4` | 318, 152, -458 |
 | `ridderzaal.spawns.5` | 342, 152, -458 |
+| `rondvlucht_schip` | 40, 106, 763 |
 
 ## Moving doors (`WereldDeuren`)
 | id | blocks | open with | notes |
