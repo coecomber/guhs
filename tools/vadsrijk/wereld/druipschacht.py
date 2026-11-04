@@ -86,6 +86,9 @@ def bouw(W, K, P):
     rmax = R_WAND + 2
     binnen = set()
     dak = {}
+    RK = profiel(top, vloer, top) + 0.3          # skylight radius
+    lens = set()
+    ys = max(K.h(x, z) for x in range(cx - 6, cx + 7) for z in range(cz - 6, cz + 7) if math.hypot(x - cx, z - cz) <= RK)
     for x in range(cx - rmax, cx + rmax + 1):
         for z in range(cz - rmax, cz + rmax + 1):
             d = math.hypot(x - cx, z - cz)
@@ -99,27 +102,36 @@ def bouw(W, K, P):
                     hoogste = y
             if hoogste is not None:
                 dak[(x, z)] = hoogste
-                if hoogste >= h - 1 or d <= profiel(top, vloer, top) + 0.3:
-                    # skylight: glass flush with the hill top, crystal ribs
-                    rib = abs(math.sin(4 * math.atan2(z - cz, x - cx))) < 0.2 or d < 1.2
-                    B.set(x, h, z, "guh_kristal_blok" if rib else "minecraft:pink_stained_glass")
-                    for y in range(hoogste + 1, h):
+                rib = abs(math.sin(4 * math.atan2(z - cz, x - cx))) < 0.2 or d < 1.2
+                glas = "guh_kristal_blok" if rib else "minecraft:pink_stained_glass"
+                if d <= RK:
+                    # skylight: one flat crystal lens at the highest ground of the opening
+                    B.set(x, ys, z, glas)
+                    for y in range(hoogste + 1, ys):
                         binnen.add((x, y, z))
-                    dak[(x, z)] = h - 1
+                    dak[(x, z)] = ys - 1
+                    lens.add((x, z))
+                    W.bezet[i, j] = True
+                elif hoogste >= h - 1:
+                    B.set(x, h, z, glas)
                     W.bezet[i, j] = True
     for (x, y, z) in binnen:
         B.carve(x, y, z)
-    # rim of the skylight on the hill: crystals
-    for k in range(18):
-        a = k * math.pi / 9
-        x, z = int(round(cx + 6.5 * math.cos(a))), int(round(cz + 6.5 * math.sin(a)))
-        if (x, z) in dak:
-            continue
-        h = K.h(x, z)
-        B.set(x, h + 1, z, rng.choice(["minecraft:amethyst_cluster[facing=up,waterlogged=false]", "guh_kristal_cluster",
-                                       "weidekristal_roze"]))
-        i, j = KA.idx(x, z)
-        W.bezet[i, j] = True
+    # the collar round the lens on the hill (closes the chimney where the ground is lower, steps of 1), crystals on it
+    for x in range(cx - 9, cx + 10):
+        for z in range(cz - 9, cz + 10):
+            d = math.hypot(x - cx, z - cz)
+            if not RK < d <= RK + 2 or (x, z) in lens:
+                continue
+            h = K.h(x, z)
+            kop = ys - 1 if d <= RK + 1 else ys - 2
+            for y in range(h + 1, kop + 1):
+                B.set(x, y, z, rng.choice(["minecraft:calcite", "minecraft:calcite", "minecraft:amethyst_block", "minecraft:tuff"]))
+            if rng.random() < 0.3:
+                B.set(x, max(h, kop) + 1, z, rng.choice(["minecraft:amethyst_cluster[facing=up,waterlogged=false]",
+                                                         "guh_kristal_cluster", "weidekristal_roze"]))
+            i, j = KA.idx(x, z)
+            W.bezet[i, j] = True
     # ------------------------------------------------ floor, lake, waterfalls
     for x in range(cx - rmax, cx + rmax + 1):
         for z in range(cz - rmax, cz + rmax + 1):
@@ -307,7 +319,7 @@ def bouw(W, K, P):
         "druipschacht_bodem": [int(round(cx + (MEER_R + 2.5) * math.cos(phi0 + 0.3))), vloer + 1,
                                int(round(cz + (MEER_R + 2.5) * math.sin(phi0 + 0.3)))],
         "druipschacht_balkon": balkon,
-        "druipschacht_lichtschacht": [cx, K.h(cx, cz) + 1, cz],
+        "druipschacht_lichtschacht": [cx, ys + 1, cz],
         "druipschacht_meer": [cx, vloer, cz],
     }
     for k, p in enumerate(rich):

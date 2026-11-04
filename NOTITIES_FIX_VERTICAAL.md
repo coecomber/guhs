@@ -32,8 +32,9 @@ right after `sporenwoud(W, K, P)`):
   - The place is **searched**: the highest hill top in the Druipgrotten whose rock column has no existing cave within
     radius 21 (so it keeps fitting if `wild` changes the caves). The shaft never breaks through the hill except at its
     skylight. Terrain columns are made solid down to the floor (`lo_extra`).
-  - **Crystal skylight**: pink stained glass with guh-crystal ribs, flush with the hill top (you can walk over it; daylight
-    falls in), and crystal clusters round it on the hill.
+  - **Crystal skylight**: a chimney (radius 5) from the dome up to one flat lens of pink stained glass with guh-crystal ribs,
+    at the highest ground of the opening (y 118 now; you can walk over it, and daylight falls in). A calcite/amethyst collar
+    (steps of 1) closes the chimney where the hill is lower, with crystal clusters on it.
   - A lake (radius 8) on a crystal/calcite floor, and **3 waterfalls** dropping from the dome into the lake. Dripstone,
     amethyst and guh crystals on the ceiling and walls, plus invisible light blocks in the void.
   - **Spiral ledge path**: 3 wide, polished deepslate with slab half steps, and a deepslate wall rail on the void side. It
@@ -61,7 +62,7 @@ For leven/npc/wezens integration (spawners, loot, secrets):
 | `druipschacht_plafond_1..6` | air just under the ceiling: hanging/flying creatures | |
 | `druipschacht_waterval_1..3` | foot of each waterfall | |
 | `druipschacht_meer` | lake centre (water) | |
-| `druipschacht_lichtschacht` | on the hill, on top of the skylight | -498, 115, -474 |
+| `druipschacht_lichtschacht` | on the hill, on top of the skylight lens | -498, 119, -474 |
 
 The coordinates shift if the Sporenwoud/caves change (the network and the shaft are searched), so use the ids. They land in
 "Other" in POI_VADSRIJK.md (`geheim_hoedenschat` under secrets). I did not touch the SECTIES list in maak_kaart.py.
@@ -73,8 +74,16 @@ The coordinates shift if the Sporenwoud/caves change (the network and the shaft 
     and **0 trap states** (every reachable spot can walk/climb/fall back to the forest floor).
   - Druipschacht: from `druipschacht_ingang`, the bottom, the balcony, all 4 ledges and the waterfalls are reachable, with **0 traps**.
   - Sanity: the checker does flag a 1x1 pit 3 deep and a stepped pit with 1.5-block steps.
-- Map regenerated locally (690 tiles); tiles/WereldPlekken/POI are NOT committed (FIX_BRIEF).
-- AutoCheck: `tools/autocheck/vadsrijk_verticaal.txt` (see below for the result).
+- The check is committed: `python tools/vadsrijk/controleer_verticaal.py` (from the project root, after one
+  `maak_kaart.py` run; ~3 min, exit 1 on any unreachable spot or trap). Last result: `FOUTEN 0 0`.
+- Map regenerated locally (690 tiles, no unknown blocks); tiles/WereldPlekken/POI are NOT committed (FIX_BRIEF).
+- AutoCheck `tools/autocheck/vadsrijk_verticaal.txt` (18 shots in `run/screenshots/autocheck/v_*.png`): the hat paths from
+  below (spectator) and on top (decks, bridges, hut, nest, treasure room, tower tops), Het Wortelpad, the shaft from the
+  balcony, from the top (looking down the whole shaft to the lake) and from the bottom (looking up to the skylight), a
+  ledge, the tunnel and the skylight. No missing textures. I made 2 runs instead of 1: the first one had bad camera spots
+  (dark under a cap, and a player falling from a sky teleport). After it, the shaft got more light (glowing wall blocks,
+  light blocks in two rings, more rail lanterns). The flat skylight lens (above) came after the 2nd run and was checked with
+  the flood fill + a block dump only.
 
 ## Notes / open points
 - The network, towers and shaft are chosen from the world as it is built. After `wild` merges, integration should
@@ -83,3 +92,6 @@ The coordinates shift if the Sporenwoud/caves change (the network and the shaft 
 - The full build and the Sporenwoud-only build give different mushrooms (sporenwoud() depends on `W.bezet` of earlier
   stamps), so always look at a full `maak_kaart.py` run.
 - The hut doorways are open (no door blocks), so nothing can get stuck closed.
+- The waterfalls in the shaft are columns of water source blocks, the same technique as the Sporenwoud waterfall. In the
+  screenshots they read as pink light beams (biome water colour); the user can judge them in the dev client.
+- Treasure chest content: the chest is empty, so npc/economie can fill it via `hoedenpad_schat_kist`.
