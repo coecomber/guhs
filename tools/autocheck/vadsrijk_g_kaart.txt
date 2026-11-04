@@ -1,0 +1,85 @@
+# Het Vadsrijk, fix round 2 (110-g-kaart): camp stair top + arrival path, Bakker Bram inside his stall, the ordetempel towers
+# on the cap, a few other NPCs.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_g_kaart.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/gamemode spectator
+
+section trap_top
+/tp @s 0 89 1109
+look 180 5
+wait 60
+waitrender 200
+shot g_trap_top gui
+/tp @s 6 104 1112
+look 170 30
+wait 60
+waitrender 200
+shot g_aankomstpad_overzicht gui
+/tp @s 2 89 1070
+look 180 5
+wait 40
+waitrender 200
+shot g_aankomstpad_naar_kamp gui
+/tp @s 8 92 1040
+look 160 20
+wait 40
+waitrender 200
+shot g_kok_kampvuur gui
+
+section bram
+/tp @s 23 66 67
+look 180 15
+wait 80
+waitrender 200
+shot g_bram_kraam gui
+/tp @s 27 70 64
+look 135 40
+wait 40
+shot g_bram_kraam_boven gui
+
+section kasteel
+/tp @s -42 162 -8
+look 226 -22
+wait 60
+waitrender 300
+shot g_toren_west_onder gui
+/tp @s 42 166 -12
+look 128 -18
+wait 60
+waitrender 300
+shot g_toren_oost_onder gui
+/tp @s -2 184 6
+look 180 8
+wait 60
+waitrender 300
+shot g_tempel_voorkant gui
+
+section npcs
+/tp @s 0 178 -40
+look 180 5
+wait 60
+waitrender 200
+shot g_grootmeester gui
+/tp @s -40 65 48
+look 90 10
+wait 60
+waitrender 200
+shot g_smid gui
+/tp @s -18 66 42
+look 180 15
+wait 60
+waitrender 200
+shot g_oma_truus gui
+/tp @s 62 89 990
+look 180 15
+wait 60
+waitrender 200
+shot g_trainers gui
