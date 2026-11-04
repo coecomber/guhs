@@ -18,9 +18,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabellen;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.RijkItem;
 
 /**
- * The class weapon base types (4 per class incl. kern's 3 Knuffelridder weapons). Every one has an element; damage per hit
- * is {@code schade + perLevel x level}. The ranged/magic ones shoot at the interval of their kind ({@link Basisaanval#SOORTEN}),
- * so their numbers are balanced on damage per second, not per hit (see NOTITIES_KLASSEN.md).
+ * The class weapon base types (4 per class incl. kern's 3 Knuffelridder weapons). Every one has an element. Fix round 1:
+ * {@code schade + perLevel x level} is the damage PER SECOND; one hit = that x the class factor x the weapon's interval
+ * (kern.Aanvalstempo), see NOTITIES_FIX_GEVECHT.md.
  * Also a loot table "klassen:wapens" with all 13 class weapons (for the economie/wezens slices, e.g. a class-weapon chest).
  */
 public final class Wapens {
@@ -45,17 +45,17 @@ public final class Wapens {
     static void registreer() {
         String r = Klassen.RIDDER, j = Klassen.JAGER, m = Klassen.MAGIER;
         // Knuffelridder (kern has kussenzwaard/knuffelknots/pluishamer): a lifesteal sword
-        w(KLODDERKLING, "zwaard", r, Element.WATER, 9, 1.7, Stats.van(Stat.LEVENSROOF, 3), Stats.van(Stat.KRACHT, 0.3, Stat.LEVENSROOF, 0.1));
-        // Pluisjager: interval boog 6, kruisboog 13, katapult 9 ticks
-        w(PLUISBOOG, "boog", j, Element.ROZE, 7, 1.4, Stats.van(Stat.BEHENDIGHEID, 2), Stats.van(Stat.BEHENDIGHEID, 0.4));
-        w(DRUPPELBOOG, "boog", j, Element.WATER, 7.5, 1.5, Stats.van(Stat.KRITIEK, 3), Stats.van(Stat.BEHENDIGHEID, 0.3, Stat.KRITIEK, 0.1));
-        w(SNOEPKRUISBOOG, "kruisboog", j, Element.VUUR, 15, 3.0, Stats.van(Stat.KRITIEKSCHADE, 10), Stats.van(Stat.BEHENDIGHEID, 0.3));
-        w(EIKELKATAPULT, "katapult", j, Element.NATUUR, 10, 2.0, Stats.van(Stat.AANVALSSNELHEID, 4), Stats.van(Stat.BEHENDIGHEID, 0.3));
-        // Vadsmagier: interval staf 10, toverstok 6, boek 12 ticks; the staff element is the Roze Vuurbal's element
-        w(ROZENSTAF, "staf", m, Element.ROZE, 11, 2.2, Stats.van(Stat.WIJSHEID, 2), Stats.van(Stat.WIJSHEID, 0.4));
-        w(VLAMMENSTAF, "staf", m, Element.VUUR, 12, 2.4, Stats.van(Stat.ELEMENTSCHADE, 6), Stats.van(Stat.WIJSHEID, 0.3));
-        w(ZWAMSTOKJE, "toverstok", m, Element.NATUUR, 6.5, 1.3, Stats.van(Stat.COOLDOWNREDUCTIE, 4), Stats.van(Stat.WIJSHEID, 0.3));
-        w(SLIJMBOEK, "boek", m, Element.WATER, 13, 2.6, Stats.van(Stat.HEALKRACHT, 8), Stats.van(Stat.WIJSHEID, 0.3, Stat.HEALKRACHT, 0.2));
+        w(KLODDERKLING, "zwaard", r, Element.WATER, 5.2, 1.05, Stats.van(Stat.LEVENSROOF, 3), Stats.van(Stat.KRACHT, 0.3, Stat.LEVENSROOF, 0.1));
+        // Pluisjager: interval boog 1.1 s, kruisboog 2.0 s, katapult 1.6 s (kern.Aanvalstempo)
+        w(PLUISBOOG, "boog", j, Element.ROZE, 5.5, 1.1, Stats.van(Stat.BEHENDIGHEID, 2), Stats.van(Stat.BEHENDIGHEID, 0.4));
+        w(DRUPPELBOOG, "boog", j, Element.WATER, 5.5, 1.1, Stats.van(Stat.KRITIEK, 3), Stats.van(Stat.BEHENDIGHEID, 0.3, Stat.KRITIEK, 0.1));
+        w(SNOEPKRUISBOOG, "kruisboog", j, Element.VUUR, 5.7, 1.15, Stats.van(Stat.KRITIEKSCHADE, 10), Stats.van(Stat.BEHENDIGHEID, 0.3));
+        w(EIKELKATAPULT, "katapult", j, Element.NATUUR, 5.2, 1.05, Stats.van(Stat.AANVALSSNELHEID, 4), Stats.van(Stat.BEHENDIGHEID, 0.3));
+        // Vadsmagier: interval staf 1.3 s, toverstok 0.9 s, boek 1.6 s; the staff element is the Roze Vuurbal's element
+        w(ROZENSTAF, "staf", m, Element.ROZE, 5.5, 1.1, Stats.van(Stat.WIJSHEID, 2), Stats.van(Stat.WIJSHEID, 0.4));
+        w(VLAMMENSTAF, "staf", m, Element.VUUR, 5.5, 1.1, Stats.van(Stat.ELEMENTSCHADE, 6), Stats.van(Stat.WIJSHEID, 0.3));
+        w(ZWAMSTOKJE, "toverstok", m, Element.NATUUR, 5.5, 1.1, Stats.van(Stat.COOLDOWNREDUCTIE, 4), Stats.van(Stat.WIJSHEID, 0.3));
+        w(SLIJMBOEK, "boek", m, Element.WATER, 5.3, 1.05, Stats.van(Stat.HEALKRACHT, 8), Stats.van(Stat.WIJSHEID, 0.3, Stat.HEALKRACHT, 0.2));
         List<LootTabel.Regel> regels = new java.util.ArrayList<>();
         for (String id : List.of("kussenzwaard", "knuffelknots", "pluishamer")) {
             regels.add(new LootTabel.Regel(id, 3));

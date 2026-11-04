@@ -54,6 +54,7 @@ public final class NpcHaken {
         Haken.VERSLAGEN.add(NpcHaken::verslagen);
         Haken.GEBIED_BETREDEN.add((p, gebied) -> gebied(p, gebied));
         Haken.KAMPVUUR.add(NpcHaken::kampvuur);
+        Haken.BLOK_GERAAKT.add(NpcHaken::popGeraakt);   // (fix gevecht: arrows, magic and skills on a dummy count too)
         Haken.LEVEL_OP.add((p, wat) -> {
             Questlog.kijkLive(p);
             NpcMarkers.vies(p);
@@ -149,23 +150,33 @@ public final class NpcHaken {
 
     /** (PlayerInteractEvent.LeftClickBlock) a smack on a training dummy (target or hay block) in Knuffelkamp. */
     static void klikBlok(PlayerInteractEvent.LeftClickBlock e) {
-        if (!(e.getEntity() instanceof ServerPlayer p) || !Vadsrijk.in(p)) {
+        if (e.getEntity() instanceof ServerPlayer p) {
+            popGeraakt(p, e.getPos());
+        }
+    }
+
+    /**
+     * A hit on a training dummy (target or hay block) in Knuffelkamp: a hand smack, a ranged/magic shot or a skill aimed at it
+     * (fix gevecht, through kern's {@link Haken#BLOK_GERAAKT}). At most one count per 8 ticks.
+     */
+    static void popGeraakt(ServerPlayer p, BlockPos pos) {
+        if (!Vadsrijk.in(p)) {
             return;
         }
-        BlockState s = p.level().getBlockState(e.getPos());
+        BlockState s = p.level().getBlockState(pos);
         if (!s.is(Blocks.TARGET) && !s.is(Blocks.HAY_BLOCK)) {
             return;
         }
-        Gebieden.Gebied g = Gebieden.op(e.getPos().getX(), e.getPos().getZ());
+        Gebieden.Gebied g = Gebieden.op(pos.getX(), pos.getZ());
         long nu = p.level().getGameTime();
         if (g == null || !g.id().equals("knuffelkamp") || nu < POP_PAUZE.getOrDefault(p.getUUID(), 0L)) {
             return;
         }
         POP_PAUZE.put(p.getUUID(), nu + 8);
         if (p.level() instanceof ServerLevel sl) {
-            sl.sendParticles(ParticleTypes.CRIT, e.getPos().getX() + 0.5, e.getPos().getY() + 1.0, e.getPos().getZ() + 0.5, 8, 0.3, 0.3, 0.3, 0.1);
+            sl.sendParticles(ParticleTypes.CRIT, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 8, 0.3, 0.3, 0.3, 0.1);
         }
-        p.level().playSound(null, e.getPos(), SoundEvents.WOOL_HIT, net.minecraft.sounds.SoundSource.BLOCKS, 1f, 1.2f);
+        p.level().playSound(null, pos, SoundEvents.WOOL_HIT, net.minecraft.sounds.SoundSource.BLOCKS, 1f, 1.2f);
         Questlog.tel(p, Quest.Doel.Type.POP, d -> true, 1);
     }
 

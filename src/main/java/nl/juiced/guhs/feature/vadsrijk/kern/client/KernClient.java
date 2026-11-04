@@ -17,7 +17,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * Kern's client: the skill keys (category "Vadsrijk", R/V/G/Z, only active in the dimension), the renderers of kern's
+ * Kern's client: the skill keys (category "Vadsrijk", R/V/G/Z + C for the Knuffelsprong, only active in the dimension), the renderers of kern's
  * entities, the HUD ({@link RijkHud}), scenes and title cards ({@link SceneSpeler}).
  */
 public final class KernClient {
@@ -26,7 +26,9 @@ public final class KernClient {
             new KeyMapping("key.guhs.vr_r", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_R, CATEGORIE),
             new KeyMapping("key.guhs.vr_v", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_V, CATEGORIE),
             new KeyMapping("key.guhs.vr_g", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, CATEGORIE),
-            new KeyMapping("key.guhs.vr_z", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORIE)};
+            new KeyMapping("key.guhs.vr_z", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Z, CATEGORIE),
+            // index 4 = the Knuffelsprong (every class, kern.Knuffelsprong.SLOT)
+            new KeyMapping("key.guhs.vr_sprong", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_C, CATEGORIE)};
 
     private KernClient() {
     }

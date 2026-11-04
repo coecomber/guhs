@@ -113,6 +113,12 @@ public final class VadsrijkCommando {
             Spelers.sync(p);
             return 1;
         }));
+        v.then(dev("sprong").executes(c -> {   // (dev/AutoCheck: the Knuffelsprong as if C was pressed)
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            boolean ok = Knuffelsprong.gebruik(p);
+            c.getSource().sendSuccess(() -> Component.literal("Knuffelsprong: " + ok + " vanaf " + p.blockPosition().toShortString()), false);
+            return ok ? 1 : 0;
+        }));
         v.then(dev("tips").then(Commands.literal("reset").executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             Tips.vergeet(p);

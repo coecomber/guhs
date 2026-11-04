@@ -91,9 +91,23 @@ public final class Vaardigheden {
             d.energie = Spelers.energie(p) - energie(p, v);
         }
         d.klaarOp.put(v.id(), nu + cooldown(p, v));
+        blokInZicht(p);
         Tips.toon(p, "vadsrijk.kern.tip.skill");
         Spelers.sync(p);
         return true;
+    }
+
+    /** A skill aimed at a block (e.g. a training dummy): {@link Haken#BLOK_GERAAKT}. */
+    private static void blokInZicht(ServerPlayer p) {
+        if (Haken.BLOK_GERAAKT.isEmpty()) {
+            return;
+        }
+        Vec3 oog = p.getEyePosition();
+        net.minecraft.world.phys.BlockHitResult r = p.level().clip(new net.minecraft.world.level.ClipContext(oog, oog.add(p.getViewVector(1f).scale(24)),
+                net.minecraft.world.level.ClipContext.Block.OUTLINE, net.minecraft.world.level.ClipContext.Fluid.NONE, p));
+        if (r.getType() == net.minecraft.world.phys.HitResult.Type.BLOCK) {
+            Haken.BLOK_GERAAKT.forEach(h -> h.accept(p, r.getBlockPos()));
+        }
     }
 
     private static void nee(ServerPlayer p, String key) {

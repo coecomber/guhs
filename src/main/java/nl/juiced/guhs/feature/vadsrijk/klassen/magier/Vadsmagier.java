@@ -31,6 +31,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klasse;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.SkillContext;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Vaardigheid;
+import nl.juiced.guhs.feature.vadsrijk.klassen.Balans;
 import nl.juiced.guhs.feature.vadsrijk.klassen.Basisaanval;
 import nl.juiced.guhs.feature.vadsrijk.klassen.Fx;
 import nl.juiced.guhs.feature.vadsrijk.klassen.Later;
@@ -170,7 +171,7 @@ public final class Vadsmagier implements Klasse {
 
     static final class RozeVuurbal extends Skill {
         RozeVuurbal() {
-            super("roze_vuurbal", 0, 25, 100);
+            super("roze_vuurbal", 0, 25, Balans.VUURBAL_CD);
         }
 
         @Override
@@ -182,10 +183,10 @@ public final class Vadsmagier implements Klasse {
             Vec3 kijk = p.getLookAngle();
             if (drie) {
                 for (int z = -1; z <= 1; z++) {
-                    bal(p, kijk.yRot((float) Math.toRadians(14 * z)), c.wapenSchade() * 2.0 * 0.65, 2.6, el);
+                    bal(p, kijk.yRot((float) Math.toRadians(14 * z)), c.wapenSchade() * Balans.VUURBAL * 0.65, 2.6, el);
                 }
             } else {
-                bal(p, kijk, c.wapenSchade() * 2.0 * (groot ? 1.2 : 1), groot ? 5.25 : 3.5, el);
+                bal(p, kijk, c.wapenSchade() * Balans.VUURBAL * (groot ? 1.2 : 1), groot ? 5.25 : 3.5, el);
             }
             Fx.geluid(sl, p.position(), SoundEvents.FIRECHARGE_USE, 0.9f, el == Element.VUUR ? 0.9f : 1.4f);
             Fx.geluid(sl, p.position(), SoundEvents.EVOKER_CAST_SPELL, 0.5f, 1.5f);
@@ -283,7 +284,7 @@ public final class Vadsmagier implements Klasse {
                 Element el = c.element() == Element.GEEN ? Element.ROZE : c.element();
                 Vec3 o = oud;
                 Later.na(4, () -> {
-                    Basisaanval.gebied(p, o, 3, c.wapenSchade() * 1.2, el, Schade.Soort.MAGIE, "glitterblink", null);
+                    Basisaanval.gebied(p, o, 3, c.wapenSchade() * Balans.GLITTERBLINK, el, Schade.Soort.MAGIE, "glitterblink", null);
                     Fx.plof(sl, o, 1.6, el);
                     Fx.geluid(sl, o, SoundEvents.FIREWORK_ROCKET_TWINKLE, 1f, 1.2f);
                 });
@@ -365,7 +366,7 @@ public final class Vadsmagier implements Klasse {
             ServerLevel sl = (ServerLevel) p.level();
             Vec3 doel = Fx.mikpunt(p, c.doel(), 30);
             double w = c.wapenSchade();
-            meteoor(p, sl, doel, 4.5f, 30, 6, w * 5, true);
+            meteoor(p, sl, doel, 4.5f, 30, 6, w * Balans.METEOOR, true);
             if (Boom.heeft(p, "m_meteoorregen")) {
                 for (int i = 0; i < 3; i++) {
                     double a = Math.PI * 2 * i / 3 + sl.getRandom().nextDouble();

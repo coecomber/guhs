@@ -53,7 +53,13 @@ final class KernEvents {
                 verzoen(p);
             }
         });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> Partijen.verlaat(e.getEntity().getUUID()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
+            java.util.UUID id = e.getEntity().getUUID();
+            Partijen.verlaat(id);
+            AANVALSSNELHEID.remove(id);
+            Schade.VOLGENDE_KLAP.remove(id);
+            Knuffelsprong.vergeet(id);
+        });
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> Partijen.wisAlles());
         NeoForge.EVENT_BUS.addListener(KernEvents::schade);
         NeoForge.EVENT_BUS.addListener((LivingDeathEvent e) -> {
@@ -154,7 +160,7 @@ final class KernEvents {
             return;
         }
         if (s.is(DamageTypes.FALL)) {
-            Schade.doe(new Schade.Klap(null, p, e.getAmount() * Spelers.maxVads(p) * 0.04, Element.GEEN, Schade.Soort.WAAR, false, "val"));
+            Knuffelsprong.valSchade(p, e.getAmount());   // (none during/just after a Knuffelsprong)
         } else if (s.is(DamageTypes.LAVA) || s.is(DamageTypes.IN_FIRE) || s.is(DamageTypes.ON_FIRE) || s.is(DamageTypes.DROWN)) {
             if (p.invulnerableTime <= 0) {
                 Schade.doe(new Schade.Klap(null, p, Spelers.maxVads(p) * 0.05, Element.GEEN, Schade.Soort.WAAR, false, "omgeving"));
@@ -191,6 +197,8 @@ final class KernEvents {
             p.getFoodData().setFoodLevel(20);
             p.getFoodData().setSaturation(0);   // (no hunger here: also keeps AppleSkin's saturation rings off the HUD)
             p.setAirSupply(p.getMaxAirSupply());
+            aanvalTempo(p);
+            Knuffelsprong.tick(p);
             if (t % 20 == 0) {
                 SpelerData d = Spelers.data(p);
                 d.energie = Math.min(Spelers.maxEnergie(p), Spelers.energie(p) + Spelers.klasse(p).energieRegen(Spelers.level(p)));
@@ -210,8 +218,6 @@ final class KernEvents {
 
     private static final net.minecraft.resources.Identifier LOOP_ID = nl.juiced.guhs.Guhs.id("vr_loopsnelheid"),
             AANVAL_ID = nl.juiced.guhs.Guhs.id("vr_aanvalssnelheid");
-    /** Basic attacks per second of a class weapon at 0 % Aanvalssnelheid (vanilla sword pace). */
-    public static final double BASIS_AANVALLEN = 1.6;
 
     /** Outside the dimension: our speed modifiers off again. */
     static void snelheidUit(ServerPlayer p) {
@@ -225,19 +231,34 @@ final class KernEvents {
         }
     }
 
+    /** Aanvalssnelheid% per player (refreshed every second with the other stats; the weapon is checked every tick). */
+    private static final java.util.Map<java.util.UUID, Double> AANVALSSNELHEID = new java.util.concurrent.ConcurrentHashMap<>();
+
     /**
-     * Loopsnelheid -> the movement attribute; Aanvalssnelheid -> the attack speed attribute, so the vanilla attack cooldown (and
-     * its crosshair indicator) paces the basic attack: {@link #BASIS_AANVALLEN} per second x (1 + Aanvalssnelheid%). Only in the dimension.
+     * Attack speed is a weapon stat (kern.Aanvalstempo): the vanilla attack speed attribute = 1 / (the held weapon's interval
+     * / (1 + Aanvalssnelheid%)), so the vanilla attack cooldown and its crosshair indicator pace every basic attack (melee,
+     * ranged and magic). Every tick (a weapon swap shows at once); only in the dimension.
      */
-    private static void snelheid(ServerPlayer p) {
+    static void aanvalTempo(ServerPlayer p) {
         var aanval = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.ATTACK_SPEED);
-        if (aanval != null) {
-            double doel = BASIS_AANVALLEN * (1 + Math.max(-50, Math.min(150, Spelers.stats(p).get(Stat.AANVALSSNELHEID))) / 100.0);
-            aanval.removeModifier(AANVAL_ID);
-            double zonder = aanval.getValue();
-            aanval.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(AANVAL_ID, doel - zonder,
-                    net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE));
+        if (aanval == null) {
+            return;
         }
+        double doel = 1.0 / Aanvalstempo.seconden(p, AANVALSSNELHEID.getOrDefault(p.getUUID(), 0.0));
+        var oud = aanval.getModifier(AANVAL_ID);
+        double zonder = aanval.getValue() - (oud == null ? 0 : oud.amount());
+        if (oud != null && Math.abs(zonder + oud.amount() - doel) < 1e-4) {
+            return;
+        }
+        aanval.removeModifier(AANVAL_ID);
+        aanval.addTransientModifier(new net.minecraft.world.entity.ai.attributes.AttributeModifier(AANVAL_ID, doel - zonder,
+                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADD_VALUE));
+    }
+
+    /** Loopsnelheid -> the movement attribute (and the Aanvalssnelheid cache for {@link #aanvalTempo}). Only in the dimension. */
+    private static void snelheid(ServerPlayer p) {
+        AANVALSSNELHEID.put(p.getUUID(), Spelers.stats(p).get(Stat.AANVALSSNELHEID));
+        aanvalTempo(p);
         var attr = p.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MOVEMENT_SPEED);
         if (attr == null) {
             return;

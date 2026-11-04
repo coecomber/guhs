@@ -155,7 +155,7 @@ public final class Knuffelridder implements Klasse {
                 if (naar.length() > 4.8 || (naar.length() > 0.8 && naar.normalize().dot(kijk) < Math.cos(Math.toRadians(55)))) {
                     continue;
                 }
-                Schade.Uitkomst u = Schade.doe(new Schade.Klap(p, e, c.wapenSchade() * 1.6, c.element(), Schade.Soort.MELEE, true, id()));
+                Schade.Uitkomst u = Schade.doe(new Schade.Klap(p, e, c.wapenSchade() * nl.juiced.guhs.feature.vadsrijk.klassen.Balans.KUSSENKLAP, c.element(), Schade.Soort.MELEE, true, id()));
                 totaal += u.schade();
                 e.knockback(1.2, -kijk.x, -kijk.z);
                 e.hurtMarked = true;
@@ -310,7 +310,7 @@ public final class Knuffelridder implements Klasse {
             Nbt.load(d, tag);
             d.snapTo(doel.x, doel.y + 16, doel.z, 0, 0);
             sl.addFreshEntity(d);
-            KUSSENS.add(new Kussen(sl, d, doel, p.getUUID(), c.wapenSchade() * 3, new int[1]));
+            KUSSENS.add(new Kussen(sl, d, doel, p.getUUID(), c.wapenSchade() * nl.juiced.guhs.feature.vadsrijk.klassen.Balans.VAHOEGE_PLOF, new int[1]));
             sl.playSound(null, p.blockPosition(), SoundEvents.ELYTRA_FLYING, SoundSource.PLAYERS, 0.6f, 1.6f);
             return true;
         }
@@ -370,7 +370,7 @@ public final class Knuffelridder implements Klasse {
     private static void landing(ServerPlayer p) {
         ServerLevel sl = (ServerLevel) p.level();
         double totaal = 0;
-        double basis = Spelers.wapenSchade(p) * 1.3;
+        double basis = Spelers.wapenSchade(p) * nl.juiced.guhs.feature.vadsrijk.klassen.Balans.STORMSPRONG;
         for (LivingEntity e : sl.getEntitiesOfClass(LivingEntity.class, new AABB(p.blockPosition()).inflate(3.5, 2, 3.5), x -> x instanceof VadsrijkMob m && !m.geplofd())) {
             totaal += Schade.doe(new Schade.Klap(p, e, basis, Spelers.wapenElement(p), Schade.Soort.MELEE, true, "stormsprong")).schade();
             Vec3 weg = e.position().subtract(p.position()).multiply(1, 0, 1).normalize();

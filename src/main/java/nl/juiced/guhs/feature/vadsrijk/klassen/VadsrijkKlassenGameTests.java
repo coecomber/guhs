@@ -7,7 +7,19 @@ import java.util.Set;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.InteractionHand;
+import nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo;
+import nl.juiced.guhs.feature.vadsrijk.kern.Element;
+import nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry;
+import nl.juiced.guhs.feature.vadsrijk.kern.Knuffelsprong;
 import nl.juiced.guhs.feature.vadsrijk.kern.Levels;
+import nl.juiced.guhs.feature.vadsrijk.kern.Schade;
+import nl.juiced.guhs.feature.vadsrijk.kern.Stat;
+import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType;
+import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes;
+import nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot;
+import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
+import nl.juiced.guhs.feature.vadsrijk.kern.mob.ProefKlodder;
 import nl.juiced.guhs.feature.vadsrijk.kern.SpelerData;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.klasse.BoomKnoop;
@@ -130,6 +142,104 @@ public class VadsrijkKlassenGameTests {
         helper.assertTrue(KlasseBalie.wissel(p, Klassen.JAGER) && bogen(p) == 1, "the starter bow only once");
         helper.assertTrue(Spelers.vads(p) <= Spelers.maxVads(p) && Spelers.vads(p) > 0, "vads within the new max");
         helper.succeed();
+    }
+
+    // ---- fix round 1 (gevecht) ------------------------------------------------------------------------------------------
+
+    /** Attack speed is a weapon stat; a melee click before the interval does nothing (no spam hits). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void aanvalstempoHoudtInterval(GameTestHelper helper) {
+        helper.assertTrue(Math.abs(Aanvalstempo.seconden(BasisTypes.van(Wapens.PLUISBOOG)) - 1.1) < 1e-9, "boog 1.1 s");
+        helper.assertTrue(Math.abs(Aanvalstempo.seconden(BasisTypes.van(Wapens.SNOEPKRUISBOOG)) - 2.0) < 1e-9, "kruisboog 2.0 s");
+        helper.assertTrue(Math.abs(Aanvalstempo.seconden(BasisTypes.van("pluishamer")) - 3.5) < 1e-9, "pluishamer 3.5 s");
+        helper.assertTrue(Math.abs(Aanvalstempo.seconden(BasisTypes.van(Wapens.ZWAMSTOKJE)) - 0.9) < 1e-9, "toverstok 0.9 s");
+        for (BasisType t : BasisTypes.alle()) {
+            if (t.slot() == Slot.WAPEN) {
+                helper.assertTrue(Aanvalstempo.SOORT.containsKey(t.soort()) || Aanvalstempo.TYPE.containsKey(t.id()), "no interval for " + t.id());
+            }
+        }
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        SpelerData d = Spelers.data(p);
+        // ranged: a jager with a pluisboog shoots every 22 ticks, a crossbow every 40
+        d.klasse = Klassen.JAGER;
+        p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van(Wapens.PLUISBOOG), 1, Zeldzaamheid.GEWOON, p.getRandom())));
+        helper.assertTrue(Basisaanval.interval(p) == 22, "boog interval " + Basisaanval.interval(p));
+        p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van(Wapens.SNOEPKRUISBOOG), 1, Zeldzaamheid.GEWOON, p.getRandom())));
+        helper.assertTrue(Basisaanval.interval(p) == 40, "kruisboog interval " + Basisaanval.interval(p));
+        // melee: the pluishamer hits once, a second click right after does nothing, even with a full vanilla cooldown
+        d.klasse = Klassen.RIDDER;
+        p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van("pluishamer"), 1, Zeldzaamheid.GEWOON, p.getRandom())));
+        helper.assertTrue(Spelers.wapen(p) != null, "the ridder holds his hammer");
+        ProefKlodder m = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 1, 2);
+        m.stelIn(1, Element.GEEN, false, Set.of());
+        double vol = m.vads();
+        volleKracht(p);
+        helper.assertTrue(Schade.basisaanval(p, m), "first hammer hit");
+        double na1 = m.vads();
+        helper.assertTrue(na1 < vol, "the hit did damage");
+        volleKracht(p);
+        helper.assertTrue(!Schade.basisaanval(p, m) && m.vads() == na1, "a second click within 3.5 s must do nothing");
+        Schade.VOLGENDE_KLAP.remove(p.getUUID());
+        p.resetAttackStrengthTicker();
+        helper.assertTrue(!Schade.basisaanval(p, m) && m.vads() == na1, "without the vanilla cooldown charged: nothing");
+        helper.succeed();
+    }
+
+    /** The DPS ratio melee 100 / ranged 70 / magic 85, and no basic hit one-shots a normal zone mob of the same level. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void dpsTabelKlopt(GameTestHelper helper) {
+        for (int lv : new int[] {1, 5, 10, 15, 20}) {
+            double r = Balans.dps(Klassen.RIDDER, "kussenzwaard", lv);
+            double j = Balans.dps(Klassen.JAGER, Wapens.PLUISBOOG, lv);
+            double m = Balans.dps(Klassen.MAGIER, Wapens.ROZENSTAF, lv);
+            helper.assertTrue(j / r > 0.65 && j / r < 0.75, "lv " + lv + ": ranged/melee = " + j / r);
+            helper.assertTrue(m / r > 0.80 && m / r < 0.90, "lv " + lv + ": magic/melee = " + m / r);
+            // the weakest normal zone-1 mob (wezens: 30 Vads at lv 1, +30 % per level); neutral element, no crit
+            double mob = 30 * (1 + 0.3 * (lv - 1));
+            for (BasisType t : BasisTypes.alle()) {
+                if (t.slot() != Slot.WAPEN || t.klasse() == null || t.id().startsWith("baas_")) {
+                    continue;
+                }
+                Klasse k = Klassen.ofRidder(t.klasse());
+                nl.juiced.guhs.feature.vadsrijk.kern.Stats s = k.basis(lv).kopie().plus(t.statsOp(lv));
+                double hoofd = switch (Aanvalstempo.schadeSoort(t)) {
+                    case AFSTAND -> s.get(Stat.BEHENDIGHEID);
+                    case MAGIE -> s.get(Stat.WIJSHEID);
+                    default -> s.get(Stat.KRACHT);
+                };
+                Uitrusting u = Rollen.rol(t, lv, Zeldzaamheid.GEWOON, helper.getLevel().getRandom());
+                double klap = Rollen.klapSchade(u) * (1 + 0.02 * hoofd);
+                helper.assertTrue(klap < mob, "lv " + lv + ": one " + t.id() + " hit (" + (int) klap + ") one-shots a " + (int) mob + " Vads mob");
+            }
+        }
+        helper.succeed();
+    }
+
+    /** The Knuffelsprong never gives fall damage; a normal fall does. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void knuffelsprongGeenValschade(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        SpelerData d = Spelers.data(p);
+        d.vads = Spelers.maxVads(p);
+        Knuffelsprong.beschermTot(p, helper.getLevel().getGameTime() + 100);
+        helper.assertTrue(Knuffelsprong.beschermd(p), "protected after a leap");
+        helper.assertTrue(Knuffelsprong.valSchade(p, 12) == 0 && Spelers.vads(p) == Spelers.maxVads(p), "fall damage during the leap");
+        Knuffelsprong.beschermTot(p, helper.getLevel().getGameTime() - 1);
+        helper.assertTrue(!Knuffelsprong.beschermd(p), "protection ends");
+        helper.assertTrue(Knuffelsprong.valSchade(p, 12) > 0 && Spelers.vads(p) < Spelers.maxVads(p), "a normal fall still hurts");
+        helper.succeed();
+    }
+
+    private static void volleKracht(ServerPlayer p) {
+        try {
+            java.lang.reflect.Field f = net.minecraft.world.entity.LivingEntity.class.getDeclaredField("attackStrengthTicker");
+            f.setAccessible(true);
+            f.setInt(p, 1000);
+        } catch (ReflectiveOperationException e) {
+            throw new IllegalStateException(e);
+        }
     }
 
     private static int bogen(ServerPlayer p) {

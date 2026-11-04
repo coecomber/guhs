@@ -197,6 +197,8 @@ public final class KlasseBalie {
                 RijkScenes.titel(p, Component.translatable("vadsrijk.klassen.kies.titel", Component.translatable(Spelers.klasse(p).naamKey())).withStyle(ChatFormatting.LIGHT_PURPLE),
                         Component.translatable("vadsrijk.klassen.kies.onder." + arg), 70, Fx.ROZE);
                 Tips_.toon(p, "gekozen");
+                // (fix gevecht) after that card: the Knuffelsprong (C), every class has it from the start
+                Later.na(240, () -> nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, "vadsrijk.kern.tip.knuffelsprong"));
                 return;   // (the choice screen closes itself)
             }
             case "adv" -> {

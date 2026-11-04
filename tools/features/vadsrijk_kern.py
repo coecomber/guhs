@@ -86,6 +86,7 @@ TEKSTEN = {
     "key.guhs.vr_v": "Vaardigheid 2 (V)",
     "key.guhs.vr_g": "Vaardigheid 3 (G)",
     "key.guhs.vr_z": "Ultieme vaardigheid (Z)",
+    "key.guhs.vr_sprong": "Knuffelsprong (C)",
     "item.guhs.vr_kussenzwaard": "Kussenzwaard",
     "item.guhs.vr_knuffelknots": "Knuffelknots",
     "item.guhs.vr_pluishamer": "Pluishamer",
@@ -192,6 +193,7 @@ TEKSTEN = {
     K + "skill.stormsprong": "Stormsprong",
     K + "skill.knuffelschild": "Knuffelschild",
     K + "skill.vahoege_plof": "Vahoege Plof",
+    K + "skill.knuffelsprong": "Knuffelsprong",
     K + "skill.cooldown": "Nog even wachten...",
     K + "skill.ult_niet_vol": "Je ultieme vaardigheid is nog niet opgeladen. Meer meppen!",
     K + "skill.geen_energie": "Te weinig Vadsenergie.",
@@ -214,7 +216,8 @@ TEKSTEN = {
     K + "item.ongerold": "Nog niet gerold (vraag een /guhs vadsrijk loot).",
     K + "item.alle_klassen": "Alle klassen",
     K + "item.level": "Niveau %s",
-    K + "item.schade": "%s schade",
+    K + "item.schade": "%s schade per klap",
+    K + "item.aanvalssnelheid": "Aanvalssnelheid: %s s",
     K + "item.gebonden": "Gebonden: niet te ruilen",
     K + "item.verpluisd_uitleg": "Verpluisd! Laat hem repareren bij de smidguh.",
     K + "item.guhddelijk": "Er dwarrelt roze glitter van af...",
@@ -245,6 +248,10 @@ TEKSTEN = {
     K + "tip.levelop.titel": "Niveau omhoog!",
     K + "tip.levelop": "Elk niveau maakt je vanzelf sterker: meer Vads, Kracht en Verdediging. Uitrusting met een hoger niveau telt pas als je zover bent.",
     K + "tip.kampvuur.titel": "Kampvuur",
+    K + "tip.knuffelsprong.titel": "Knuffelsprong!",
+    K + "tip.knuffelsprong": "Druk op C voor een flinke sprong vooruit (zo'n 20 blokken). Elke klasse kan het, je landt altijd zacht, en na 5 tellen mag het weer.",
+    K + "tip.elementen.titel": "Elementen",
+    K + "tip.elementen": "Het icoontje voor de naam van een wezen is zijn element:  Vuur wint van  Zwam, Zwam van  Slijm, Slijm van Vuur (x1,5; andersom x0,7).  Roze is extra sterk tegen ontvadste wezens. Geen icoontje = geen element.",
     K + "tip.kampvuur": "Val je flauw, dan word je hier wakker. Je verliest niks, je bent alleen even duizelig.",
     # fix round 1: losknuffelen (kern.veilig)
     "key.guhs.vr_vast": "Losknuffelen (vast? naar een veilig plekje)",
@@ -274,7 +281,103 @@ def build(h):
         h.lang(k, nl, nl)
 
 
+# fix gevecht: the element icons (heart, flame, leaf, drop) as glyphs U+F8A1..U+F8A4 of minecraft:default
+ICOON_TEKENS = ""
+ICONEN = {
+    # 16x16 pixel art, '.' = transparent; colours per letter
+    "kleuren": {"a": (255, 122, 200), "b": (255, 190, 228), "c": (190, 60, 140),          # roze
+                "d": (255, 90, 42), "e": (255, 200, 60), "f": (170, 40, 20),            # vuur
+                "g": (91, 209, 74), "h": (170, 240, 130), "i": (40, 120, 40),           # natuur
+                "j": (63, 169, 255), "k": (190, 230, 255), "l": (30, 90, 170)},         # water
+    "roze": [
+        "................",
+        "................",
+        "...ccc....ccc...",
+        "..cbbac..caaac..",
+        ".cbbaaaccaaaaac.",
+        ".cbaaaaaaaaaaac.",
+        ".caaaaaaaaaaaac.",
+        ".caaaaaaaaaaaac.",
+        "..caaaaaaaaaac..",
+        "...caaaaaaaac...",
+        "....caaaaaac....",
+        ".....caaaac.....",
+        "......caac......",
+        ".......cc.......",
+        "................",
+        "................"],
+    "vuur": [
+        "........f.......",
+        ".......fdf......",
+        ".......fddf.....",
+        "......fddddf....",
+        "....f.fdddddf...",
+        "...fdffddeddf...",
+        "...fddfdeedddf..",
+        "..fdddddeeeddf..",
+        "..fddddeeeeddf..",
+        "..fdddeeeeeddf..",
+        "..fdddeeeeeeddf.",
+        "..fddeeeeeeeddf.",
+        "...fddeeeeeddf..",
+        "....fddeeeddf...",
+        ".....fffffff....",
+        "................"],
+    "natuur": [
+        "................",
+        "...........iii..",
+        ".........iigggi.",
+        ".......iiggghgi.",
+        "......igggghhgi.",
+        ".....iggggghggi.",
+        "....igggghhgggi.",
+        "....iggghggggi..",
+        "...igghhggggi...",
+        "...ighgggggi....",
+        "...ihgggggi.....",
+        "..ihiggiii......",
+        "..ii.iii........",
+        ".ii.............",
+        ".i..............",
+        "................"],
+    "water": [
+        ".......l........",
+        "......ljl.......",
+        "......ljl.......",
+        ".....ljjjl......",
+        ".....ljjjl......",
+        "....ljjjjjl.....",
+        "...ljjjjjjjl....",
+        "...ljkjjjjjl....",
+        "..ljkkjjjjjjl...",
+        "..ljkjjjjjjjl...",
+        "..ljkjjjjjjjl...",
+        "..ljjjjjjjjjl...",
+        "...ljjjjjjjl....",
+        "....ljjjjjl.....",
+        ".....lllll......",
+        "................"],
+}
+
+
+def _iconen(w, a):
+    """assets/guhs/textures/font/vr_element.png (64x16) + a bitmap provider added to minecraft:default."""
+    from PIL import Image
+    img = Image.new("RGBA", (64, 16), (0, 0, 0, 0))
+    for i, naam in enumerate(("roze", "vuur", "natuur", "water")):
+        for y, regel in enumerate(ICONEN[naam]):
+            for x, c in enumerate(regel):
+                if c != ".":
+                    img.putpixel((i * 16 + x, y), ICONEN["kleuren"][c] + (255,))
+    doel = os.path.join(a, "textures", "font", "vr_element.png")
+    os.makedirs(os.path.dirname(doel), exist_ok=True)
+    img.save(doel)
+    w(os.path.join(a, "..", "minecraft", "font", "default.json"), {"providers": [
+        {"type": "bitmap", "file": "guhs:font/vr_element.png", "ascent": 7, "height": 8, "chars": [ICOON_TEKENS]}]})
+
+
 def _assets(w, a):
+    _iconen(w, a)
     for item, (tex, parent) in ITEMS.items():
         w(os.path.join(a, "items", item + ".json"), {"model": {"type": "minecraft:model", "model": "guhs:item/" + item}})
         w(os.path.join(a, "models", "item", item + ".json"), {"parent": parent, "textures": {"layer0": tex}})

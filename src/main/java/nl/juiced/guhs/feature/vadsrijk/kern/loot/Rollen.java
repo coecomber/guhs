@@ -55,6 +55,12 @@ public final class Rollen {
         return t.schadeOp(u.level()) * u.zeldzaamheid().factor * STER_SCHADE.apply(u);
     }
 
+    /** One basic hit of this weapon (before the player's stats): rating x class factor x base interval (kern.Aanvalstempo). */
+    public static double klapSchade(Uitrusting u) {
+        BasisType t = u.basisType();
+        return wapenSchade(u) * nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo.klasseFactor(t) * nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo.seconden(t);
+    }
+
     /** The item stack for this roll (empty when the base type's item is unknown). */
     public static ItemStack stack(Uitrusting u) {
         BasisType t = u.basisType();

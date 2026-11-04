@@ -96,9 +96,19 @@ public final class Spelers {
         return u.level() <= level(p) ? u : null;
     }
 
+    /**
+     * The weapon's damage per second for skills: its rating ({@link Rollen#wapenSchade}) x the class factor of its kind
+     * ({@link Aanvalstempo}). Skills multiply this; a basic hit is {@link #klapSchade}.
+     */
     public static double wapenSchade(Player p) {
         Uitrusting u = wapen(p);
-        return u == null ? VUIST + 0.5 * level(p) : Rollen.wapenSchade(u);
+        return u == null ? VUIST + 0.5 * level(p) : Rollen.wapenSchade(u) * Aanvalstempo.klasseFactor(u.basisType());
+    }
+
+    /** One basic attack: {@link #wapenSchade} x the weapon's base interval in seconds (slow weapons hit big). */
+    public static double klapSchade(Player p) {
+        Uitrusting u = wapen(p);
+        return wapenSchade(p) * Aanvalstempo.seconden(u == null ? null : u.basisType());
     }
 
     public static Element wapenElement(Player p) {

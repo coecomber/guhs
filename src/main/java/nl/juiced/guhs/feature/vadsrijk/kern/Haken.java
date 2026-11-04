@@ -34,6 +34,11 @@ public final class Haken {
     public static final List<BiConsumer<LivingEntity, Status>> STATUS = new CopyOnWriteArrayList<>();
     /** A player entered (true) or left (false) the dimension, after the inventory swap. */
     public static final List<BiConsumer<ServerPlayer, Boolean>> BINNEN = new CopyOnWriteArrayList<>();
+    /**
+     * A player's attack touched a block (fix round 1): a ranged/magic shot landing on it, or a skill aimed at it (the block
+     * under the crosshair within 24). The npc slice counts training dummies with this.
+     */
+    public static final List<BiConsumer<ServerPlayer, BlockPos>> BLOK_GERAAKT = new CopyOnWriteArrayList<>();
     /** A player fainted (before waking at the checkpoint). */
     public static final List<Consumer<ServerPlayer>> FLAUW = new CopyOnWriteArrayList<>();
 

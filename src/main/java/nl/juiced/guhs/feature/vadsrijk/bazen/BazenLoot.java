@@ -118,11 +118,11 @@ public final class BazenLoot {
     static void typen() {
         // weapons: soort = the class weapon kind (ridder: knots; jager: boog; magier: staf - klassen slice decides the list)
         BasisTypes.registreer(BasisType.wapen("baas_klodderknots", "guhs:vr_baas_klodderknots", "knots", Klassen.RIDDER, Element.WATER,
-                12, 2.2, Stats.van(Stat.KRACHT, 4, Stat.VADS, 20), Stats.van(Stat.KRACHT, 0.5), 1));
+                6.5, 1.3, Stats.van(Stat.KRACHT, 4, Stat.VADS, 20), Stats.van(Stat.KRACHT, 0.5), 1));
         BasisTypes.registreer(BasisType.wapen("baas_pluisboog", "guhs:vr_baas_pluisboog", "boog", Klassen.JAGER, Element.WATER,
-                10, 2.0, Stats.van(Stat.BEHENDIGHEID, 4, Stat.KRITIEK, 3), Stats.van(Stat.BEHENDIGHEID, 0.5), 1));
+                6.5, 1.3, Stats.van(Stat.BEHENDIGHEID, 4, Stat.KRITIEK, 3), Stats.van(Stat.BEHENDIGHEID, 0.5), 1));
         BasisTypes.registreer(BasisType.wapen("baas_sporenstaf", "guhs:vr_baas_sporenstaf", "staf", Klassen.MAGIER, Element.NATUUR,
-                11, 2.3, Stats.van(Stat.WIJSHEID, 6, Stat.HEALKRACHT, 5), Stats.van(Stat.WIJSHEID, 0.6), 1));
+                6.5, 1.3, Stats.van(Stat.WIJSHEID, 6, Stat.HEALKRACHT, 5), Stats.van(Stat.WIJSHEID, 0.6), 1));
         BasisTypes.registreer(new BasisType("baas_wortelwambuis", "guhs:vr_baas_wortelwambuis", Slot.BORST, "harnas", null, Element.NATUUR, 0, 0,
                 Stats.van(Stat.VERDEDIGING, 12, Stat.VADS, 40, Stat.ELEMENTWEERSTAND, 5), Stats.van(Stat.VERDEDIGING, 2, Stat.VADS, 6), 1));
         BasisTypes.registreer(BasisType.harnas("baas_lichtzwamhelm", "guhs:vr_baas_lichtzwamhelm", Slot.HOOFD, 7, 24, 1));

@@ -154,15 +154,18 @@ public final class KernRegistry {
         nl.juiced.guhs.feature.vadsrijk.kern.veilig.Veilig.payloads(r);
     }
 
-    /** Kern's content: the class, the 5 base types + loot tables, the proeftuin spawner and the Klodderreus arena. */
+    /**
+     * Kern's content: the class, the 5 base types + loot tables, the proeftuin spawner and the Klodderreus arena. (fix gevecht)
+     * Weapon schade/perLevel = damage PER SECOND (kern.Aanvalstempo): zwaard 1.0 s, knots 1.4 s, pluishamer 3.5 s.
+     */
     private static void inhoud() {
         Knuffelridder.init();
         BasisTypes.registreer(BasisType.wapen("kussenzwaard", "guhs:vr_kussenzwaard", "zwaard", Klassen.RIDDER, nl.juiced.guhs.feature.vadsrijk.kern.Element.ROZE,
-                8, 1.6, Stats.van(Stat.KRACHT, 2), Stats.van(Stat.KRACHT, 0.4), 3));
+                5.5, 1.1, Stats.van(Stat.KRACHT, 2), Stats.van(Stat.KRACHT, 0.4), 3));
         BasisTypes.registreer(BasisType.wapen("knuffelknots", "guhs:vr_knuffelknots", "knots", Klassen.RIDDER, nl.juiced.guhs.feature.vadsrijk.kern.Element.NATUUR,
-                10, 1.9, Stats.van(Stat.VERDEDIGING, 2), Stats.van(Stat.VERDEDIGING, 0.4), 3));
+                5.3, 1.05, Stats.van(Stat.VERDEDIGING, 2), Stats.van(Stat.VERDEDIGING, 0.4), 3));
         BasisTypes.registreer(BasisType.wapen("pluishamer", "guhs:vr_pluishamer", "hamer", Klassen.RIDDER, nl.juiced.guhs.feature.vadsrijk.kern.Element.VUUR,
-                13, 2.3, Stats.van(Stat.KRITIEKSCHADE, 10), Stats.van(Stat.KRACHT, 0.3), 3));
+                5.5, 1.1, Stats.van(Stat.KRITIEKSCHADE, 10), Stats.van(Stat.KRACHT, 0.3), 3));
         BasisTypes.registreer(BasisType.harnas("pluishelm", "guhs:vr_pluishelm", Slot.HOOFD, 4, 12, 3));
         BasisTypes.registreer(BasisType.harnas("knuffelharnas", "guhs:vr_knuffelharnas", Slot.BORST, 7, 20, 3));
         BasisTypes.registreer(BasisType.sieraad("roze_ring", "guhs:vr_roze_ring", Slot.RING, Stats.van(Stat.KRITIEK, 2), Stats.van(Stat.KRITIEK, 0.1), 3));
