@@ -209,6 +209,10 @@ public final class RijkHud {
             String d = Component.translatable("vadsrijk.kern.hud.duizelig", (h.duizelig() + 19) / 20).getString();
             g.text(f, d, c - f.width(d) / 2, hh - 52, 0xFFB98CFF, true);
         }
+        if (h.bevroren() > 0) {   // (integration: zone-2 status Bevroren gets a HUD line)
+            String b = Component.translatable("vadsrijk.kern.hud.bevroren", (h.bevroren() + 19) / 20).getString();
+            g.text(f, b, c - f.width(b) / 2, hh - (h.duizelig() > 0 ? 62 : 52), 0xFF9EE3FF, true);
+        }
         bossBalk(g, f, w, dt.getGameTimeDeltaPartialTick(false));
         party(g, f, hh);
         tip(g, f, w);

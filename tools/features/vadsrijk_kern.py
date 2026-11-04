@@ -239,6 +239,7 @@ TEKSTEN = {
     K + "hud.fase": "Fase %s",
     K + "hud.ult_klaar": "KLAAR!",
     K + "hud.duizelig": "Duizelig %ss",
+    K + "hud.bevroren": "❄ Bevroren %ss",
     # first-time hints
     K + "tip.welkom.titel": "Welkom in Het Vadsrijk!",
     K + "tip.welkom": "Hier heb je een eigen rugzak: je gewone spullen liggen veilig thuis. Linkermuis = meppen, R V G = vaardigheden, Z = je ultieme klap.",

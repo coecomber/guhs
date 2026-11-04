@@ -36479,5 +36479,6 @@
   "item.guhs.vr_z2_grote_energiedrank.op": "Bzzzt! Helemaal opgeladen!",
   "item.guhs.vr_z2_warme_chocomelk": "Warme Chocomelk",
   "item.guhs.vr_z2_warme_chocomelk.uitleg": "Ontdooit je (Bevroren is weg), houdt je 3 minuten warm (je bevriest niet) en geeft 15 % Vads.",
-  "item.guhs.vr_z2_warme_chocomelk.op": "Mmm, warme chocomelk. Je tenen ontdooien."
+  "item.guhs.vr_z2_warme_chocomelk.op": "Mmm, warme chocomelk. Je tenen ontdooien.",
+  "vadsrijk.kern.hud.bevroren": "❄ Bevroren %ss"
 }
