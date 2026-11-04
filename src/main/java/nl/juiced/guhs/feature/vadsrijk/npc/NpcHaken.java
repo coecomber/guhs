@@ -102,7 +102,7 @@ public final class NpcHaken {
     }
 
     /** "*", "gebied:&lt;area&gt;" or an entity type id (with or without "guhs:"). */
-    static boolean pastMob(String doel, String type, String gebied) {
+    public static boolean pastMob(String doel, String type, String gebied) {
         if (doel.equals("*")) {
             return true;
         }
@@ -323,7 +323,7 @@ public final class NpcHaken {
         Questlog.kijkLive(p);
     }
 
-    static boolean bij(net.minecraft.world.entity.Entity e, BlockPos b, double straal, double hoogte) {
+    public static boolean bij(net.minecraft.world.entity.Entity e, BlockPos b, double straal, double hoogte) {
         double dx = e.getX() - (b.getX() + 0.5), dz = e.getZ() - (b.getZ() + 0.5);
         return dx * dx + dz * dz <= straal * straal && Math.abs(e.getY() - b.getY()) <= hoogte;
     }

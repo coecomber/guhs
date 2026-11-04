@@ -1,0 +1,84 @@
+# Het Vadsrijk zone 2, slice z2-npc: the opening scene (snowstorm, ice floes, lights out, the Galmwolf on the needle, the geode)
+# and the Kandijkom NPC guhs in their jumpers (names, markers), a quest dialogue and the zone-2 Gids page.
+# This tree has no zone-2 tiles yet: /guhs vadsrijk z2npc proefvloer lays a plain floor under Kandijkom first.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_z2_npc.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section binnen
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk z2npc proefvloer
+wait 40
+/guhs vadsrijk npc reset
+/guhs vadsrijk z2npc reset
+/tp @s 0 91 -2400
+wait 100
+waitrender 300
+
+section opening
+/guhs vadsrijk z2npc opening
+wait 60
+shot z2_opening_storm gui
+wait 70
+shot z2_opening_donker gui
+wait 70
+shot z2_opening_wolf gui
+wait 50
+shot z2_opening_naald gui
+wait 70
+shot z2_opening_geode gui
+wait 40
+shot z2_opening_titel gui
+wait 60
+
+section kandijkom
+/tp @s 0 92 -2380 180 10
+wait 60
+waitrender 200
+shot z2_plein gui
+/tp @s 40 92 -2360 135 10
+wait 40
+shot z2_cafe_kant gui
+/tp @s -40 92 -2425 -90 10
+wait 40
+shot z2_juwelier_kant gui
+
+section rij
+/tp @s 0 91 -2300 180 12
+wait 40
+/guhs vadsrijk z2npc rij
+wait 60
+shot z2_rij gui
+/tp @s 0 91 -2305 180 18
+wait 30
+shot z2_rij_dichtbij gui
+
+section dialoog
+/guhs vadsrijk npc quest start hq12_schaduw
+/guhs vadsrijk npc quest klaar hq12_schaduw
+/guhs vadsrijk npc quest start z2_hq02_kandijkom
+/tp @s 0 91 -2414 180 10
+wait 60
+interact 0 91 -2418 guhs:vr_npc_guh
+wait 20
+shot z2_dialoog_burgemeester gui
+press Verder »
+wait 10
+shot z2_dialoog_burgemeester_2 gui
+gui close
+wait 10
+
+section questlog
+/guhs vadsrijk npc questlog
+wait 20
+shot z2_questlog gui
+press Gids
+wait 10
+shot z2_questlog_gids gui
+gui close

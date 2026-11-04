@@ -53,7 +53,7 @@ public final class Questlog {
         return q;
     }
 
-    static CompoundTag map(ServerPlayer p, String naam) {
+    public static CompoundTag map(ServerPlayer p, String naam) {
         CompoundTag d = data(p);
         if (!(d.get(naam) instanceof CompoundTag t)) {
             CompoundTag n = new CompoundTag();
@@ -135,7 +135,7 @@ public final class Questlog {
                 case "knuffel" -> Math.min(d.n(), map(p, "knuffels").size());
                 case "aanwijzing" -> Math.min(d.n(), map(p, "aanwijzingen").size());
                 case "schat" -> Math.min(d.n(), map(p, "schatten").size());
-                default -> Math.min(d.n(), v(p, q)[i]);
+                default -> d.doel().startsWith("teller:") ? Math.min(d.n(), map(p, d.doel().substring(7)).size()) : Math.min(d.n(), v(p, q)[i]);
             };
             default -> Math.min(d.n(), v(p, q)[i]);
         };
@@ -185,7 +185,7 @@ public final class Questlog {
     }
 
     /** A live objective (items, level, secrets) may have become complete: tell the player once per quest. */
-    static void kijkLive(ServerPlayer p) {
+    public static void kijkLive(ServerPlayer p) {
         for (Quest q : actieve(p)) {
             CompoundTag t = quests(p).getCompoundOrEmpty(q.id());
             boolean nu = allesKlaar(p, q);

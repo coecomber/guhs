@@ -18,6 +18,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.wereld.WereldRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2NpcRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.register(modBus);
     }
 

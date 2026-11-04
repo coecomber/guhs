@@ -29,7 +29,9 @@ public class QuestlogScherm extends Screen {
     private static final int PANEL = 0xF0301A26, RAND = 0xFFF7B6CB, TEKST = 0xFFFFE6EE, ZACHT = 0xFFB8A0B0, GOUD = 0xFFFFC94A, GROEN = 0xFF7EE08A;
     /** The Avonturiersgids topics (lang vadsrijk.npc.gids.&lt;id&gt;.titel / .tekst). */
     static final String[] GIDS = {"begin", "klassen", "vaardigheden", "loot", "sterren", "kampvuren", "flauw", "elementen", "statussen", "party",
-            "quests", "munten", "markt", "rijdieren", "geheimen"};
+            "quests", "munten", "markt", "rijdieren", "geheimen",
+            // zone 2 (tools/features/vadsrijk_z2_npc.py GIDS)
+            "z2_splinterpieken", "z2_kristalwezens", "z2_bevroren", "z2_edelstenen", "z2_reizen", "z2_titel"};
     private static final String[] TABS = {"quests", "geheimen", "wezens", "gids"};
 
     private CompoundTag data;
