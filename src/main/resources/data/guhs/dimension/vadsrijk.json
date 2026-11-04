@@ -1,18 +1,10 @@
 {
   "type": "guhs:vadsrijk",
   "generator": {
-    "type": "minecraft:flat",
-    "settings": {
-      "biome": "guhs:vadsrijk",
-      "layers": [
-        {
-          "block": "minecraft:bedrock",
-          "height": 1
-        }
-      ],
-      "lakes": false,
-      "features": true,
-      "structure_overrides": []
+    "type": "guhs:vadsrijk_kaart",
+    "biome_source": {
+      "type": "guhs:vadsrijk_gebieden",
+      "oud": "guhs:vadsrijk"
     }
   }
 }

@@ -37,11 +37,11 @@ DIM_TYPE = {
     "timelines": "#minecraft:in_overworld",
 }
 
-# (one bedrock layer: a flat generator with only air counts as "void" and then skips the biome features, i.e. the map)
+# (fix round 2 "biomen": the generator guhs:vadsrijk_kaart = the old flat generator (one bedrock layer, no structures, the
+# biome features = the map) with a biome per area from guhs:vadsrijk_gebieden; the biomes: vadsrijk_biomen.py)
 DIM = {
     "type": "guhs:vadsrijk",
-    "generator": {"type": "minecraft:flat", "settings": {"biome": "guhs:vadsrijk", "layers": [{"block": "minecraft:bedrock", "height": 1}], "lakes": False, "features": True,
-                                                          "structure_overrides": []}},
+    "generator": {"type": "guhs:vadsrijk_kaart", "biome_source": {"type": "guhs:vadsrijk_gebieden", "oud": "guhs:vadsrijk"}},
 }
 
 BIOME = {
