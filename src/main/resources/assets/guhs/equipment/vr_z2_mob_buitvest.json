@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "guhs:vr_z2_mob_buitvest"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "guhs:vr_z2_mob_buitvest"
+      }
+    ]
+  }
+}

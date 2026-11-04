@@ -202,6 +202,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_beleving',
             # 1.10 zone 2 "De Splinterpieken": one generator per slice
             'vadsrijk_z2_systemen',
+            'vadsrijk_z2_wezens',
             ]
 
 

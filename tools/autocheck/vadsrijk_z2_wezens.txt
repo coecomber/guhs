@@ -1,0 +1,60 @@
+# Het Vadsrijk zone 2 wezens (110-z2-wezens): every zone-2 creature + critter in a row on a snow platform in the proeftuin
+# (/guhs vadsrijk z2wezens alle builds the platform and summons them without AI), an elite, a defeat (shards / smoke), the items.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_z2_wezens.txt
+
+section setup
+/gamemode creative
+/time set noon
+wait 40
+
+section binnen
+/guhs vadsrijk proeftuin
+wait 100
+/fill 3080 64 3150 3160 64 3200 minecraft:snow_block
+/tp @s 3120 66 3170
+waitrender 300
+/tp @s 3120 66 3170
+look 0 10
+wait 20
+/guhs vadsrijk z2wezens alle 25
+wait 40
+/tp @s 3102 67 3162
+look 0 10
+wait 20
+shot vr_z2_wezens_links
+/tp @s 3119 67 3162
+wait 20
+shot vr_z2_wezens_midden
+/tp @s 3136 67 3162
+wait 20
+shot vr_z2_wezens_rechts
+/tp @s 3140 66 3170
+look 0 25
+wait 20
+shot vr_z2_critters
+
+section elite_en_verslagen
+/guhs vadsrijk z2wezens opruimen
+/tp @s 3120 67 3170
+look 0 15
+/guhs vadsrijk z2wezens affix versteende_wacht schildend 28
+/guhs vadsrijk z2wezens bevroren 200
+wait 40
+shot vr_z2_elite_bevroren gui
+/guhs vadsrijk z2wezens opruimen
+/guhs vadsrijk z2wezens spawn splinterling 22
+/guhs vadsrijk z2wezens spawn mika_mijnwerker 31
+wait 30
+/kill @e[type=guhs:vr_z2_mob_splinterling]
+/kill @e[type=guhs:vr_z2_mob_mika_mijnwerker]
+wait 3
+shot vr_z2_scherven_rook gui
+wait 30
+shot vr_z2_scherven_smelten gui
+
+section items
+/guhs vadsrijk z2wezens set kristal 25
+/guhs vadsrijk z2wezens set mika 30
+/guhs vadsrijk z2wezens sieraden 30
+modelcheck
+quit
