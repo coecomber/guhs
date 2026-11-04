@@ -859,7 +859,7 @@ TEKSTEN = {
     "vadsrijk.wezens.elite.gloeiend": "Gloeiend",
     "vadsrijk.wezens.set.klodder": "Klodderset",
     "vadsrijk.wezens.set.zwam": "Zwamset",
-    "vadsrijk.wezens.set.stukken": "%s (%s/4)",
+    "vadsrijk.wezens.set.stukken": "Set: %s (%s/4 gedragen)",
     "vadsrijk.wezens.set.klodder.2": "(2) Glibberig: 15%% kans dat een klap gewoon van je af glijdt",
     "vadsrijk.wezens.set.klodder.4": "(4) Stuiterkracht: +12%% schade en je klappen maken soms Plakkerig",
     "vadsrijk.wezens.set.zwam.2": "(2) Sporenschild: 10%% minder schade",

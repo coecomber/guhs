@@ -723,7 +723,7 @@ TEKSTEN = {
     "vadsrijk.z2wezens.gespiegeld": "Gespiegeld!",
     "vadsrijk.z2wezens.set.kristal": "Kristalset",
     "vadsrijk.z2wezens.set.mika": "Mika-buitset",
-    "vadsrijk.z2wezens.set.stukken": "%s (%s/4)",
+    "vadsrijk.z2wezens.set.stukken": "Set: %s (%s/4 gedragen)",
     "vadsrijk.z2wezens.set.kristal.2": "(2) Kristalhuid: +8 Elementweerstand, Bevroren duurt half zo lang en zware klappen doen dan niks extra",
     "vadsrijk.z2wezens.set.kristal.4": "(4) Splinterslag: 20%% kans dat je klap in scherven barst (25%% schade op alles eromheen)",
     "vadsrijk.z2wezens.set.mika.2": "(2) Mijnlamp: +5 Kritiek",

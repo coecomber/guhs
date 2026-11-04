@@ -32,6 +32,7 @@ public final class KlassenClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterKeyMappingsEvent e) -> e.register(BOOM));
         KlassenPayloads.staatOntvanger = s -> open(s.tag());
+        SkillInfo.init();   // fix round 2 (g-ui): HUD skill slot tooltips while the inventory is open
         NeoForge.EVENT_BUS.addListener((InputEvent.InteractionKeyMappingTriggered e) -> {
             Minecraft mc = Minecraft.getInstance();
             if (e.isAttack() && mc.player != null && Vadsrijk.in(mc.player) && Basisaanval.isAfstandswapen(mc.player.getMainHandItem())) {

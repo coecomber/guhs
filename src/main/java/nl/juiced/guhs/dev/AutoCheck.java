@@ -1546,6 +1546,15 @@ public final class AutoCheck {
                     opened = false;
                     return true;
                 };
+            case "inventaris":
+                // gui inventaris: (Vadsrijk fix round 2, g-ui) open the player's own inventory screen (hover shots with 'mouse')
+                return mc -> {
+                    if (mc.player != null) {
+                        mc.setScreen(new net.minecraft.client.gui.screens.inventory.InventoryScreen(mc.player));
+                        opened = true;
+                    }
+                    return true;
+                };
             case "keep":
                 // gui keep: (3.0 QA) the next screen a server command opens (/guhs hemel scherm...) is wanted: keep it open until 'gui close'
                 return mc -> {

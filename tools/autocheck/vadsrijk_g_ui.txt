@@ -1,0 +1,101 @@
+# Vadsrijk fix round 2 (g-ui): jewellery tooltips + worn-slot hover, "Los stuk" / set lines, HUD skill icons + hover, skill-tree hover.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_g_ui.txt
+# gui 640x360 (1280x720, scale 2): inventory at (232,97); jewellery slots x 411, y 105/125/145; hotbar y 239; HUD skills x 418+23i, y 338.
+# tree screen (6 rows): left 128, top 26; node (r,c) at (148+52c, 72+32r); skill list x 342, rows from y 76 every 19.
+
+section setup
+/gamemode survival
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+
+section binnen
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+/guhs vadsrijk level 12
+/guhs vadsrijk klasse adv
+wait 260
+/clear @s
+wait 5
+
+section sieraden
+/guhs vadsrijk loot zeldzaam roze_ring 5
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 15
+useitem 3
+wait 10
+/guhs vadsrijk loot episch pluisoorbel 5
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 15
+/guhs vadsrijk loot zeldzaam kristalhelmpje 5
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 15
+/guhs vadsrijk loot zeldzaam kristalkroon 5
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 15
+/guhs vadsrijk loot zeldzaam kristalborstplaat 5
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 15
+/item replace entity @s armor.chest from entity @s hotbar.3
+wait 5
+shot gui_hud_iconen gui
+gui inventaris
+wait 10
+mouse 248 247
+wait 5
+shot gui_oorbel_tip gui
+mouse 266 247
+wait 5
+shot gui_kristalhelmpje_tip gui
+mouse 284 247
+wait 5
+shot gui_kristalkroon_tip gui
+mouse 420 114
+wait 5
+shot gui_ring_gedragen gui
+mouse 420 134
+wait 5
+shot gui_ketting_leeg gui
+mouse 428 348
+wait 5
+shot gui_hud_skill_r gui
+mouse 519 350
+wait 5
+shot gui_hud_sprong gui
+gui close
+
+section boom
+gui keep
+/guhs vadsrijk klasse boom
+wait 20
+click 213 85
+wait 3
+click 213 85
+wait 10
+click 161 117
+wait 3
+click 161 117
+wait 15
+mouse 360 84
+wait 5
+shot gui_boom_skill_r gui
+mouse 360 141
+wait 5
+shot gui_boom_skill_z gui
+mouse 161 117
+wait 5
+shot gui_boom_knoop gui
+gui close
+quit

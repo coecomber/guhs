@@ -163,6 +163,18 @@ public final class KernPayloads {
         }
     }
 
+    /** (fix round 2) Shift-click on jewellery in the inventory: {@code index} = the player-inventory slot (0..35). */
+    public record SieraadShift(int index) implements CustomPacketPayload {
+        public static final Type<SieraadShift> TYPE = new Type<>(Guhs.id("vr_kern_sieraad_shift"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, SieraadShift> STREAM_CODEC = StreamCodec.ofMember((s, b) -> b.writeVarInt(s.index),
+                b -> new SieraadShift(b.readVarInt()));
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     /** Client -> server: take off the jewellery in slot i of {@code Slot.SIERADEN}. */
     public record SieraadAf(int i) implements CustomPacketPayload {
         public static final Type<SieraadAf> TYPE = new Type<>(Guhs.id("vr_kern_sieraad_af"));
@@ -206,6 +218,11 @@ public final class KernPayloads {
         r.playToClient(PartyHud.TYPE, PartyHud.STREAM_CODEC, (p, c) -> partyOntvanger.accept(p));
         r.playToServer(Skill.TYPE, Skill.STREAM_CODEC, KernPayloads::opSkill);
         r.playToClient(SieradenSync.TYPE, SieradenSync.STREAM_CODEC, (p, c) -> sieradenOntvanger.accept(p));
+        r.playToServer(SieraadShift.TYPE, SieraadShift.STREAM_CODEC, (p, c) -> {
+            if (c.player() instanceof ServerPlayer sp) {
+                Sieraden.draagUitInventaris(sp, p.index());
+            }
+        });
         r.playToServer(SieraadAf.TYPE, SieraadAf.STREAM_CODEC, (p, c) -> {
             if (c.player() instanceof ServerPlayer sp && p.i() >= 0 && p.i() < nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.SIERADEN.length) {
                 Sieraden.af(sp, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.SIERADEN[p.i()]);

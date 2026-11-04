@@ -20,5 +20,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zone2.wezens.client.Z2WezensClient.init(modBus);   // zone 2 (z2-wezens)
         nl.juiced.guhs.feature.vadsrijk.momenten.client.MomentenClient.init(modBus);   // MOMENTEN-HOOK (fix round 1: wave + caravan)
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.client.Z2BazenClient.init(modBus);
+        UitrustingTips.init();   // fix round 2 (g-ui): jewellery how-to, "Los stuk", set piece lists
     }
 }

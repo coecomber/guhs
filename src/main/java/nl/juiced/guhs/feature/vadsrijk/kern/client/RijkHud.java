@@ -122,6 +122,48 @@ public final class RijkHud {
         });
     }
 
+    // ---- (fix round 2, g-ui) skill slots for the hover tooltip and the icons -------------------------------------------------
+
+    private static final java.util.Map<String, Boolean> HEEFT_ICOON = new java.util.HashMap<>();
+
+    /** Are the HUD skill slots drawn right now (in the dimension, HUD on)? */
+    public static boolean skillsZichtbaar() {
+        return binnen() && hud != null && !Minecraft.getInstance().options.hideGui;
+    }
+
+    /** Slot {@code i} (0..3 = R/V/G/Z, 4 = the Knuffelsprong) on a gui of w x h: {x, y, size}. */
+    public static int[] skillVak(int i, int w, int h) {
+        int sx = w / 2 + 98, sy = h - 22;
+        return i < 4 ? new int[] {sx + i * 23, sy, 20} : new int[] {sx + 4 * 23 + 1, sy + 4, 16};
+    }
+
+    /** The skill id in HUD slot {@code i} (from its lang key), or null. */
+    @Nullable
+    public static String skillId(int i) {
+        KernPayloads.Hud h = hud;
+        if (h == null || i >= h.skills().size() || h.skills().get(i).isEmpty()) {
+            return null;
+        }
+        String k = h.skills().get(i);
+        return k.substring(k.lastIndexOf('.') + 1);
+    }
+
+    /** The icon of a skill (textures/gui/vadsrijk/skill/&lt;id&gt;.png, 32x32, made by tools/vadsrijk/maak_skill_iconen.py), or null. */
+    @Nullable
+    public static Identifier skillIcoon(@Nullable String skillId) {
+        if (skillId == null || skillId.isEmpty()) {
+            return null;
+        }
+        Identifier id = Guhs.id("textures/gui/vadsrijk/skill/" + skillId + ".png");
+        boolean er = HEEFT_ICOON.computeIfAbsent(skillId, x -> Minecraft.getInstance().getResourceManager().getResource(id).isPresent());
+        return er ? id : null;
+    }
+
+    /** Draws a skill icon (32x32 source) at (x, y) in a z x z square. */
+    public static void tekenIcoon(GuiGraphicsExtractor g, Identifier tex, int x, int y, int z) {
+        g.blit(net.minecraft.client.renderer.RenderPipelines.GUI_TEXTURED, tex, x, y, 0, 0, z, z, 32, 32, 32, 32);
+    }
+
     /** (npc's quest tracker, top right) Where the top of the screen is free: below the boss bar while one shows, else 0. */
     public static int bovenVrij() {
         return baas != null ? 46 : 0;
@@ -237,9 +279,14 @@ public final class RijkHud {
         int rand = ult ? (h.ult() >= 100 ? 0xFFFFD24A : 0xFF8A5A2A) : 0xFF6A3A5A;
         g.fill(x - 1, y - 1, x + 21, y + 21, rand);
         g.fill(x, y, x + 20, y + 20, 0xE0281A24);
-        String naam = i < h.skills().size() ? Component.translatable(h.skills().get(i)).getString() : "";
-        String letters = naam.isEmpty() ? "?" : naam.substring(0, Math.min(2, naam.length()));
-        g.text(f, letters, x + 10 - f.width(letters) / 2, y + 6, 0xFFFFC2E8, true);
+        Identifier icoon = skillIcoon(skillId(i));
+        if (icoon != null) {
+            tekenIcoon(g, icoon, x + 1, y + 1, 18);
+        } else {
+            String naam = i < h.skills().size() ? Component.translatable(h.skills().get(i)).getString() : "";
+            String letters = naam.isEmpty() ? "?" : naam.substring(0, Math.min(2, naam.length()));
+            g.text(f, letters, x + 10 - f.width(letters) / 2, y + 6, 0xFFFFC2E8, true);
+        }
         int cd = h.cd()[i], max = Math.max(1, h.cdMax()[i]);
         if (ult && h.ult() < 100) {
             int vol = (int) (20 * h.ult() / 100f);
@@ -275,15 +322,12 @@ public final class RijkHud {
         int cd = h.cd()[4], max = Math.max(1, h.cdMax()[4]);
         g.fill(x - 1, y - 1, x + z + 1, y + z + 1, cd > 0 ? 0xFF4A3A4A : 0xFF8FD4FF);
         g.fill(x, y, x + z, y + z, 0xE0281A24);
-        // a little arc with a heart on top: the leap
-        int[][] boog = {{2, 12}, {3, 10}, {4, 8}, {5, 7}, {6, 6}, {7, 5}, {8, 5}, {9, 5}, {10, 6}, {11, 7}, {12, 8}, {13, 10}};
-        for (int[] b : boog) {
-            g.fill(x + b[0], y + b[1], x + b[0] + 1, y + b[1] + 1, 0xFFFFC2E8);
+        Identifier icoon = skillIcoon(skillId(4));
+        if (icoon != null) {
+            tekenIcoon(g, icoon, x, y, z);
+        } else {
+            sprongTekening(g, x, y);
         }
-        g.fill(x + 7, y + 2, x + 8, y + 3, 0xFFFF6AA8);
-        g.fill(x + 9, y + 2, x + 10, y + 3, 0xFFFF6AA8);
-        g.fill(x + 7, y + 3, x + 10, y + 4, 0xFFFF6AA8);
-        g.fill(x + 8, y + 4, x + 9, y + 5, 0xFFFF6AA8);
         if (cd > 0) {
             int hoog = (int) Math.ceil(z * (float) cd / max);
             g.fill(x, y + z - hoog, x + z, y + z, 0xB0000000);
@@ -299,6 +343,18 @@ public final class RijkHud {
         g.pose().scale(0.6f, 0.6f);
         g.text(f, toets, 0, 0, 0xFFFFFFFF, true);
         g.pose().popMatrix();
+    }
+
+    /** The old hand-drawn leap (fallback when the icon texture is missing). */
+    private static void sprongTekening(GuiGraphicsExtractor g, int x, int y) {
+        int[][] boog = {{2, 12}, {3, 10}, {4, 8}, {5, 7}, {6, 6}, {7, 5}, {8, 5}, {9, 5}, {10, 6}, {11, 7}, {12, 8}, {13, 10}};
+        for (int[] b : boog) {
+            g.fill(x + b[0], y + b[1], x + b[0] + 1, y + b[1] + 1, 0xFFFFC2E8);
+        }
+        g.fill(x + 7, y + 2, x + 8, y + 3, 0xFFFF6AA8);
+        g.fill(x + 9, y + 2, x + 10, y + 3, 0xFFFF6AA8);
+        g.fill(x + 7, y + 3, x + 10, y + 4, 0xFFFF6AA8);
+        g.fill(x + 8, y + 4, x + 9, y + 5, 0xFFFF6AA8);
     }
 
     private static void bossBalk(GuiGraphicsExtractor g, Font f, int w, float pt) {
