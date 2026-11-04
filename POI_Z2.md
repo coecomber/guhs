@@ -256,7 +256,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kampvuur_knuffelmeer_1` | -100, 100, -2330 |
 | `kampvuur_knuffelmeer_2` | -236, 104, -2342 |
 | `kampvuur_knuffelmeer_3` | -128, 106, -2458 |
-| `kampvuur_knuffelmeer_4` | -176, 93, -2292 |
+| `kampvuur_knuffelmeer_4` | -176, 92, -2292 |
 | `kampvuur_spiegelburcht_1` | 162, 160, -2590 |
 | `kampvuur_splinterkloof_1` | -196, 114, -2512 |
 | `kampvuur_splinterkloof_2` | 128, 123, -2508 |
@@ -271,7 +271,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridder_knuffelmeer_1` | -98, 100, -2328 |
 | `ridder_knuffelmeer_2` | -234, 104, -2340 |
 | `ridder_knuffelmeer_3` | -126, 106, -2456 |
-| `ridder_knuffelmeer_4` | -174, 93, -2290 |
+| `ridder_knuffelmeer_4` | -174, 92, -2290 |
 | `ridder_spiegelburcht_1` | 164, 160, -2588 |
 | `ridder_splinterkloof_1` | -194, 114, -2510 |
 | `ridder_splinterkloof_2` | 130, 123, -2506 |
@@ -369,7 +369,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `geheim_burchtdak` | 160, 195, -2681 |
 | `geheim_galmgrot` | 236, 121, -2346 |
 | `geheim_galmgrot_ingang` | 225, 118, -2346 |
-| `geheim_ijsgrot` | -240, 111, -2410 |
+| `geheim_ijsgrot` | -240, 110, -2410 |
 | `geheim_ijsgrot_ingang` | -251, 122, -2410 |
 
 ## Landmarks
@@ -467,7 +467,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_wacht_meer_1` | -98, 100, -2328 |
 | `npcplek.z2_wacht_meer_2` | -234, 104, -2340 |
 | `npcplek.z2_wacht_meer_3` | -126, 106, -2456 |
-| `npcplek.z2_wacht_meer_4` | -174, 93, -2290 |
+| `npcplek.z2_wacht_meer_4` | -174, 92, -2290 |
 | `npcplek.z2_wacht_plein_oost` | 14, 95, -2412 |
 | `npcplek.z2_wacht_plein_west` | -14, 91, -2412 |
 | `npcplek.z2_wapenhandelaar` | 23, 91, -2424 |

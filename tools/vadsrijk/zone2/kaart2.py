@@ -107,7 +107,8 @@ class Kaart2:
         mx, mz, rx, rz = PL.MEER
         em = np.hypot((x - mx) / rx, (z - mz) / rz) + 0.04 * n1
         self.meer_e = em
-        oever = PL.MEER_IJS + 2 + smooth((em - 1.0) / 0.5) * (H - PL.MEER_IJS - 2)
+        # (g-int) the shore starts ONE block above the ice (was 2: the whole frozen lake was a pit you could not walk out of)
+        oever = PL.MEER_IJS + 1 + smooth((em - 1.0) / 0.5) * (H - PL.MEER_IJS - 1)
         bodem = PL.MEER_IJS - 3 - 7 * np.clip((1 - em) / 0.5, 0, 1) + 1.5 * f
         H = np.where(em < 1, bodem, np.where(em < 1.5, np.minimum(H, oever), H))
         self.meer = em < 1
