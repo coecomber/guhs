@@ -213,6 +213,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_rijdieren',
             # 1.10 fix round 2, G-PETS: the pets (chibi boss animations, the grey klodder texture, texts); after the boss slices
             'vadsrijk_huisdieren',
+            # 1.10 fix round 2, I-VOLTOOIING: the Verkenningsboek (zone completion) texts
+            'vadsrijk_voltooiing',
             ]
 
 

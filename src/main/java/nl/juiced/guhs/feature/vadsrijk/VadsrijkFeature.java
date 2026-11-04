@@ -27,6 +27,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.biomen.BiomenRegistry.register(modBus);   // fix round 2: one biome per area
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.register(modBus);   // G-PETS
+        nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.register(modBus);   // I-VOLTOOIING (Verkenningsboek)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -42,5 +43,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.momenten.MomentenRegistry.payloads(registrar);   // MOMENTEN-HOOK
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.payloads(registrar);   // G-PETS
+        nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.payloads(registrar);   // I-VOLTOOIING
     }
 }
