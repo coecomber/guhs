@@ -15,5 +15,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.wereld.client.WereldClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.npc.client.NpcClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.client.EconomieClient.init(modBus);
+        nl.juiced.guhs.feature.vadsrijk.zone2.bazen.client.Z2BazenClient.init(modBus);
     }
 }

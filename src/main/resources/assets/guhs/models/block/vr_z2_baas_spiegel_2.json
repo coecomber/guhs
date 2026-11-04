@@ -1,0 +1,71 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/vr_z2_baas_spiegel",
+    "spiegel": "guhs:block/vr_z2_baas_spiegel",
+    "rand": "guhs:block/vr_z2_baas_spiegel_rand"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "down": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        2,
+        3
+      ],
+      "to": [
+        13,
+        3,
+        13
+      ],
+      "faces": {
+        "up": {
+          "texture": "#spiegel"
+        },
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        }
+      }
+    }
+  ]
+}
