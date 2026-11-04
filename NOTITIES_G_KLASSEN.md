@@ -62,3 +62,12 @@ niveaus (generiek + klasse); balansconfig per klasse.
 - g-ui werkt aan RijkHud (skill-iconen) en tooltips: mijn RijkHud-wijziging is alleen het niveau-blok en de xp-balk.
 - Het luchtschip/tempel blijven op hun eigen getallen (20 / 16 + quest); de opdracht noemde ook "lv 18" voor de tempel: niet
   veranderd (BazenPlekken.TEMPEL_MIN_LEVEL = 16 + quest is wat er nu staat).
+
+## Resultaat (stand bij de commit)
+- Gametests: `-Pgt=VadsrijkKlassen` 11/11 (incl. 5 nieuwe); `-Pgt=VadsrijkZ2Systemen,VadsrijkKern,VadsrijkNpc,VadsrijkBazenGevecht` 21/21.
+- AutoCheck `tools/autocheck/vadsrijk_gklassen.txt` (run/screenshots/autocheck/gk_*.png, niet gecommit): HUD "Generiek nv 12 /
+  Knuffelridder nv 9"; boog vasthouden = nog ridder; schieten = "Nu Pluisjager!", R/V/G op 6/8/7 s; terug naar zwaard midden in
+  het gevecht; lege hand = grijze klasseregel + melding; lv-14-boog: rode melding + rode "Vereist: Pluisjager nv 14" tooltip;
+  boomtabs; balie met wapenknoppen; balans toon/zet. (De tooltip-sectie draaide ik nog één keer kort, in survival: in creatief
+  opent de inventaris het creatieve scherm; het script staat nu goed.)
+- AutoCheck-tool: nieuw commando `gui inventaris [hotbarslot]` (survival-inventaris, muis op dat vakje) in `dev/AutoCheck.java`.

@@ -116,7 +116,7 @@ public final class BoomScherm extends Screen {
             for (Klasse k : Klassen.alle()) {
                 boolean had = t.getBooleanOr("start_" + k.id(), false);
                 Button b = Button.builder(had ? Component.translatable("vadsrijk.klassen.scherm.wapen.koop", nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(prijs))
-                        : Component.translatable("vadsrijk.klassen.scherm.wapen.gratis"), x -> stuur("wapen", k.id())).bounds(rx + rw - 62, y + 4, 60, 16)
+                        : Component.translatable("vadsrijk.klassen.scherm.wapen.gratis"), x -> stuur("wapen", k.id())).bounds(rx + rw - 74, y + 4, 72, 16)
                         .tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.wapen.tip", Component.translatable(k.naamKey())))).build();
                 addRenderableWidget(b);
                 y += 30;

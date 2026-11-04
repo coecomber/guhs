@@ -73,6 +73,8 @@ shot gk_geen_wapen gui
 /gamemode creative
 
 section tooltip
+# (survival: in creative the inventory key opens the creative screen)
+/gamemode survival
 # a lv 14 bow for a Pluisjager nv 4: red requirement, can't attack
 /guhs vadsrijk klasse klasselevel pluisjager 14
 /guhs vadsrijk klasse wapen pluisboog
@@ -91,6 +93,7 @@ gui inventaris 0
 wait 20
 shot gk_tooltip_groen gui
 gui close
+/gamemode creative
 
 section boom
 gui keep
