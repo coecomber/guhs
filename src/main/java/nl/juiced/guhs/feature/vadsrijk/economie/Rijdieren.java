@@ -374,7 +374,7 @@ public final class Rijdieren {
             EcoUtil.zeg(p, "vadsrijk.economie.rijdier.geen");
             return;
         }
-        if (Arenas.op(p.getX(), p.getY(), p.getZ()) != null) {
+        if (inArenaVerbod(p.getX(), p.getY(), p.getZ())) {
             EcoUtil.zeg(p, "vadsrijk.economie.rijdier.arena_niet");
             return;
         }
@@ -446,7 +446,27 @@ public final class Rijdieren {
         if (!inRijk) {
             return "rijk";
         }
-        return Arenas.op(x, y, z) != null ? "arena" : null;
+        return inArenaVerbod(x, y, z) ? "arena" : null;
+    }
+
+    /**
+     * (z3-bazen) Spots inside a boss arena where riding is allowed anyway, e.g. the Kruinroofvogel's chase phase (mount up and
+     * follow him to his other perch). Empty = the normal rule: no mounts in any arena.
+     */
+    public static final List<java.util.function.Predicate<net.minecraft.world.phys.Vec3>> RIJDEN_IN_ARENA = new CopyOnWriteArrayList<>();
+
+    /** In a boss arena where no exception ({@link #RIJDEN_IN_ARENA}) allows riding right now. */
+    public static boolean inArenaVerbod(double x, double y, double z) {
+        if (Arenas.op(x, y, z) == null) {
+            return false;
+        }
+        net.minecraft.world.phys.Vec3 v = new net.minecraft.world.phys.Vec3(x, y, z);
+        for (java.util.function.Predicate<net.minecraft.world.phys.Vec3> f : RIJDEN_IN_ARENA) {
+            if (f.test(v)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /** The rider entered a boss arena: off you get. */
@@ -485,7 +505,7 @@ public final class Rijdieren {
         if (cd > 0 && c != null) {
             return new int[] {c[2] == 1 ? HUD_GESCHROKKEN : HUD_WACHT, cd, (int) c[1]};
         }
-        if (Arenas.op(p.getX(), p.getY(), p.getZ()) != null) {
+        if (inArenaVerbod(p.getX(), p.getY(), p.getZ())) {
             return new int[] {HUD_ARENA, 0, 0};
         }
         return new int[] {HUD_KLAAR, 0, 0};

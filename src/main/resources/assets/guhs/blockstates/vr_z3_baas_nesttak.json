@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "barst=0": {
+      "model": "guhs:block/vr_z3_baas_nesttak_0"
+    },
+    "barst=1": {
+      "model": "guhs:block/vr_z3_baas_nesttak_1"
+    }
+  }
+}

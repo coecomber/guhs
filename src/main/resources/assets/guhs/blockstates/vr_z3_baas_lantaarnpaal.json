@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/vr_z3_baas_lantaarnpaal_uit"
+    },
+    "lit=true": {
+      "model": "guhs:block/vr_z3_baas_lantaarnpaal_aan"
+    }
+  }
+}

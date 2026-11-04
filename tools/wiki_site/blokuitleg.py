@@ -1815,6 +1815,39 @@ UITLEG = {
            "straight through). That way you bounce the beam of light to the lock that opens the next gate. In Lady "
            "Mirrorsigh's hall, fold the mirror flat on the line of the crystal eye that lights up: the beam then blinds her "
            "for a moment."),
+    # z3-bazen (De Schemerwortel)
+    "vr_z3_baas_lantaarnpaal": dict(
+        nl="Een lantaarnpaal in de Pelszaal van Graaf Piepvel en in de zaal van Baron Bleu (Het Vadsrijk, De Schemerwortel). Je "
+           "vindt hem niet in je eigen spullen.\n"
+           "\n"
+           "Rechtsklik op een uitgeblazen paal en hij gaat weer branden. In het gevecht helpt licht: in het donker raak je de "
+           "Graaf maar half zo hard, en een brandende paal brandt de schimmelvelden van Baron Bleu weg.",
+        en="A lantern post in Count Squeakfur's Fur Hall and in Baron Bleu's hall (the Vadsrijk, the Twilight Root). You won't "
+           "find it among your own things.\n"
+           "\n"
+           "Right-click a blown-out post and it burns again. Light helps in the fight: in the dark you only hit the Count half "
+           "as hard, and a burning post burns Baron Bleu's mould fields away."),
+    "vr_z3_baas_altaar": dict(
+        nl="Het Vahoeg-altaar bij de deur van de Kaaszeppelinwerf en van het Hart van de Boom. Houd een Vahoegzegel in je hand "
+           "en rechtsklik: een half uur lang zijn de bazen van die kerker sterker (Vahoeg-vorm, met de weekzegel), en ze laten "
+           "Gouden Veren vallen. Met 25 Gouden Veren krijg je de Gouden Pluimguh. Zonder zegel vertelt het altaar welke "
+           "weekzegel er nu geldt.",
+        en="The Vahoeg altar at the door of the Cheese Zeppelin Yard and of the Heart of the Tree. Hold a Vahoeg seal and "
+           "right-click: for half an hour the bosses of that dungeon are stronger (Vahoeg form, with the week seal), and they "
+           "drop Golden Feathers. 25 Golden Feathers get you the Golden Pluimguh. Without a seal the altar tells you the "
+           "current week seal."),
+    "vr_z3_baas_hendel": dict(
+        nl="Een hendel in de Kaaszeppelinwerf. In de Bewapeningsloods draait elke hendel twee kanonnen een kwartslag: richt ze "
+           "alle drie op de poort en ze schieten hem open. In het gevecht met Takelmeester Taleggio trek je hem naar beneden "
+           "als hij boven een hendel aan zijn touwen zwaait.",
+        en="A lever in the Cheese Zeppelin Yard. In the armoury each lever turns two cannons a quarter: aim all three at the "
+           "gate and they blow it open. In the fight with Rigger Taleggio you pull him down when he swings on his ropes above "
+           "a lever."),
+    "vr_z3_baas_ringknop": dict(
+        nl="Een jaarringknop in de Ringenzaal van het Hart van de Boom. Elke knop draait twee jaarringen een stukje verder. "
+           "Leg de roze nerf van alle drie de ringen in één lijn en de zaal schuift open.",
+        en="A year-ring knob in the Ring Hall of the Heart of the Tree. Each knob turns two year rings a little further. Line "
+           "up the pink vein of all three rings and the hall slides open."),
 }
 
 LINK = {
