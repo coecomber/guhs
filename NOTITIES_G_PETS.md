@@ -50,3 +50,22 @@ Generator: `tools/features/vadsrijk_huisdieren.py` (new, appended to FEATURES af
 
 ## Tests / resume point
 See the end of this file.
+
+## Test results (2026-11-04)
+- `runGameTestServer -Pgt=VadsrijkHuisdieren,VadsrijkRijdieren`: all 6 passed (eersteKillEenKeer: a real Klodderreus `verslagen`
+  unlocks once, the second kill gives nothing, one title card queued, Koning Klodder once via the hook, normal mobs nothing,
+  catch-up from the first-kill key once; kiezenEnBewaren: pick/refuse, survives a SpelerData save/load, "none" stays none, no
+  pet outside the Vadsrijk, entity not pickable/attackable/saved/hurt; plus the 4 mount tests still green).
+- AutoCheck `tools/autocheck/vadsrijk_g_pets.txt` (screenshots `run/screenshots/autocheck/p_*.png`). The first run crashed when
+  the screen opened: the GeckoLib ids lacked the `entity/` prefix (fixed in `Huisdier.modelId/animatieId`). Second run fine:
+  "Verzameld 2/3" with the Galmwolf as a dark silhouette + hover tooltip (name, flavour, "Zo krijg je hem"), "Verzameld 3/3"
+  with all three mini models, the "Nieuw huisdier!" title card + poof, the "Huisdieren" button in the mount screen, and the
+  teleport-along poof after `huisdier weg`. modelcheck: only the known foreign problems (droombed, badgedoos, onweerswolkje).
+- Fixed after that run (compiled, NOT re-run; the brief allows one AutoCheck run): the pet was hidden behind the player in the
+  shots, so it now spawns/teleports BESIDE the player, a bit behind; the "Zo krijg je hem" text ran into the button (smaller
+  preview + clipping).
+- Not judged by me: sizes, animations, the grey klodder look (the user judges in the dev client).
+
+## Resume point
+Done and committed on 110-g-pets (merged 110-g-mounts first). Open: the zone-3 bosses register their pets
+(`Huisdieren.registreer`, see above); the choices listed above.

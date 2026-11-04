@@ -145,7 +145,7 @@ public class HuisdierScherm extends EcoScherm {
             return;
         }
         boolean heeft = bezit.contains(h.id()), loopt = h.id().equals(actief());
-        int px = gx + KOLOMMEN * (VAK + 3) + 6, pw = left + w - 8 - px, py = top + 24, ph = 78;
+        int px = gx + KOLOMMEN * (VAK + 3) + 6, pw = left + w - 8 - px, py = top + 24, ph = 62;
         g.fill(px, py, px + pw, py + ph, 0xFFF0B8D8);
         g.fill(px + 1, py + 1, px + pw - 1, py + ph - 1, heeft ? 0xFFFFF8FC : 0xFFEDE6EE);
         g.fill(px + 1, py + ph - 16, px + pw - 1, py + ph - 1, heeft ? 0xFFFFE6F3 : 0xFFE2DAE4);   // a little floor
@@ -167,13 +167,20 @@ public class HuisdierScherm extends EcoScherm {
         }
         iy += 1;
         for (var line : font.split(Component.translatable(h.tekstKey()).withStyle(ChatFormatting.ITALIC), pw)) {
+            if (iy > top + h() - 64) {
+                break;
+            }
             g.text(font, line, px, iy, ZACHT, false);
             iy += 9;
         }
         iy += 3;
         g.text(font, Component.translatable("vadsrijk.huisdieren.hoe").withStyle(ChatFormatting.BOLD), px, iy, GOUD, false);
         iy += 10;
+        int stop = top + h() - 34;   // (never into the button)
         for (var line : font.split(Component.translatable(h.bronKey()), pw)) {
+            if (iy > stop) {
+                break;
+            }
             g.text(font, line, px, iy, heeft ? ZACHT : 0xFF9A3A7A, false);
             iy += 9;
         }

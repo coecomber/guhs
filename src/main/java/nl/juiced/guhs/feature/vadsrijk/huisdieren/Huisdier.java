@@ -44,7 +44,7 @@ public record Huisdier(String id, String baas, String model, String textuur, Str
     }
 
     public Identifier modelId() {
-        return Guhs.id(model);
+        return Guhs.id("entity/" + model);   // (GeckoLib resolves geckolib/models/<id>.geo.json)
     }
 
     public Identifier textuurId() {
@@ -52,6 +52,6 @@ public record Huisdier(String id, String baas, String model, String textuur, Str
     }
 
     public Identifier animatieId() {
-        return Guhs.id(animatie);
+        return Guhs.id("entity/" + animatie);
     }
 }

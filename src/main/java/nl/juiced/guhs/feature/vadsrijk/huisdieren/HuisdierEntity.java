@@ -107,8 +107,10 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
 
     /** A free spot right behind the player (or the player's own spot). */
     static Vec3 plekBij(Player p) {
-        Vec3 achter = Vec3.directionFromRotation(0, p.getYRot()).scale(-1.3);
-        for (double[] d : new double[][] {{achter.x, achter.z}, {-achter.z, achter.x}, {achter.z, -achter.x}}) {
+        // beside the player, a little behind (so it shows next to you, not hidden behind your back), else the other side, else behind
+        Vec3 f = Vec3.directionFromRotation(0, p.getYRot());
+        double zx = -f.z, zz = f.x;
+        for (double[] d : new double[][] {{-f.x * 0.5 + zx, -f.z * 0.5 + zz}, {-f.x * 0.5 - zx, -f.z * 0.5 - zz}, {-f.x * 1.3, -f.z * 1.3}}) {
             Vec3 v = new Vec3(p.getX() + d[0], p.getY(), p.getZ() + d[1]);
             AABB box = new AABB(v.x - 0.2, v.y, v.z - 0.2, v.x + 0.2, v.y + 0.45, v.z + 0.2);
             BlockPos onder = BlockPos.containing(v.x, v.y - 0.5, v.z);
