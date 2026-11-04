@@ -56,6 +56,7 @@ public final class NpcClient {
                 MARKERS.put(m.ids()[i], m.soort()[i]);
             }
         });
+        NpcPayloads.reiskaartOntvanger = m -> Minecraft.getInstance().execute(() -> Minecraft.getInstance().setScreen(new ReiskaartScherm(m)));
         NpcPayloads.logOntvanger = m -> Minecraft.getInstance().execute(() -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof QuestlogScherm s) {

@@ -151,6 +151,18 @@ public final class NpcCommando {
             c.getSource().sendSuccess(() -> Component.literal(n + " NPC's op een rij."), false);
             return n;
         }));
+        // (fix round 2, dev/AutoCheck) talk to an NPC as if you right-clicked its live guh (it must be loaded near you)
+        npc.then(Commands.literal("praat").then(Commands.argument("id", StringArgumentType.word()).executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            ServerLevel sl = Vadsrijk.level(c.getSource().getServer());
+            RijkGuh g = sl == null ? null : Npcs.levend(sl, StringArgumentType.getString(c, "id"));
+            if (g == null) {
+                c.getSource().sendFailure(Component.literal("Die NPC is hier niet (geladen)."));
+                return 0;
+            }
+            QuestMotor.klik(p, g);
+            return 1;
+        })));
         npc.then(Commands.literal("npcs").executes(c -> {
             ServerLevel sl = Vadsrijk.level(c.getSource().getServer());
             int n = sl == null ? 0 : Npcs.wisAlles(sl);

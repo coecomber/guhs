@@ -63,6 +63,21 @@ public final class NpcLog {
             }
             t.put("Hoofd", s);
         }
+        // (fix round 2) the job advancement you may start now (an active one is in Actief already): always listed, like the main story
+        Quest kq = NpcVolg.klasseQuest(p);
+        if (kq != null && !Questlog.actief(p, kq.id())) {
+            CompoundTag s = new CompoundTag();
+            s.putString("Id", kq.id());
+            s.putString("Soort", kq.soort().name());
+            s.putBoolean("Volgende", true);
+            QuestStap st = QuestStap.van(p, kq);
+            nl.juiced.guhs.taal.Tekst.put(s, "Wat", st.wat());
+            nl.juiced.guhs.taal.Tekst.put(s, "Waar", st.waar());
+            if (st.extra() != null) {
+                nl.juiced.guhs.taal.Tekst.put(s, "Extra", st.extra());
+            }
+            t.put("Klasse", s);
+        }
         ListTag geschiedenis = new ListTag();
         for (Quest q : QuestStap.hoofdGedaan(p)) {
             geschiedenis.add(StringTag.valueOf(q.id()));

@@ -76,7 +76,7 @@ public final class Z2Npcs {
         npc("z2_gondelier", 270, GuhVariant.CHOCO, Gedrag.STAAN, "gondel", KARRETJES_CONDUCTEURSPETJE, GOLF_TRUI, WINTER_SCARF);
         // --- Kandijkom: citizens ------------------------------------------------------------------------------------------------------
         npc("z2_opa_sneeuwbal", 0, GuhVariant.SNOW, Gedrag.ZITTEN, null, SANTA_HAT, STRIPED_SWEATER, BIEB_LEESBRIL);
-        npc("z2_bakker", 270, GuhVariant.NORMAL, Gedrag.STAAN, null, BAKKERSMUTSJE, CHRISTMAS_SWEATER, BAKKERSSCHORTJE);
+        npc("z2_bakker", 90, GuhVariant.NORMAL, Gedrag.STAAN, null, BAKKERSMUTSJE, CHRISTMAS_SWEATER, BAKKERSSCHORTJE);
         npc("z2_vlokje", 180, GuhVariant.MINT, Gedrag.SLENTER, null, 0.75f, BALTO_SNEEUWMUTS, ELFTOCHT_TRUITJE, BALTO_WANTJES);
         npc("z2_uitvinder", 90, GuhVariant.CHOCO, Gedrag.STAAN, null, RACEBRIL, GOLF_TRUI, TIMMER_GEREEDSCHAPSRIEM);
         npc("z2_galmpje", 270, GuhVariant.NORMAL, Gedrag.STAAN, null, KOORSTRIKJE, SAMEN_KNUFFELTRUITJE, ELFTOCHT_SJAAL);

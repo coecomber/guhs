@@ -48,6 +48,8 @@ public final class VolgHud {
     private static final boolean MINIMAP = net.neoforged.fml.ModList.get().isLoaded("journeymap") || net.neoforged.fml.ModList.get().isLoaded("xaerominimap")
             || net.neoforged.fml.ModList.get().isLoaded("xaerominimapfair");
     private static volatile NpcPayloads.Volg volg = new NpcPayloads.Volg(true, true, List.of());
+    /** The puzzle room's tip key ("" = none): a line at the bottom while you stand in the room (fix round 2). */
+    private static volatile String kamer = "";
 
     private VolgHud() {
     }
@@ -57,8 +59,12 @@ public final class VolgHud {
             e.register(TRACKER);
             e.register(STRAAL);
         });
-        modBus.addListener((RegisterGuiLayersEvent e) -> e.registerAboveAll(Guhs.id("vr_npc_volg"), VolgHud::teken));
+        modBus.addListener((RegisterGuiLayersEvent e) -> {
+            e.registerAboveAll(Guhs.id("vr_npc_volg"), VolgHud::teken);
+            e.registerAboveAll(Guhs.id("vr_npc_kamertip"), VolgHud::tekenKamer);
+        });
         NpcPayloads.volgOntvanger = v -> Minecraft.getInstance().execute(() -> volg = v);
+        NpcPayloads.kamerOntvanger = k -> Minecraft.getInstance().execute(() -> kamer = k.tekstKey());
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> {
             while (TRACKER.consumeClick()) {
                 kies(NpcPayloads.VolgKeuze.TRACKER);
@@ -68,7 +74,10 @@ public final class VolgHud {
             }
         });
         NeoForge.EVENT_BUS.addListener(VolgHud::straal);
-        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> volg = new NpcPayloads.Volg(true, true, List.of()));
+        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> {
+            volg = new NpcPayloads.Volg(true, true, List.of());
+            kamer = "";
+        });
     }
 
     private static void kies(int soort) {
@@ -81,6 +90,32 @@ public final class VolgHud {
     private static boolean tonen() {
         Minecraft mc = Minecraft.getInstance();
         return mc.player != null && Vadsrijk.in(mc.player) && !mc.options.hideGui;
+    }
+
+    // ---- the puzzle-room line (bottom, above the action bar) ----------------------------------------------------------------
+
+    private static void tekenKamer(GuiGraphicsExtractor g, DeltaTracker dt) {
+        String k = kamer;
+        if (k.isEmpty() || !tonen()) {
+            return;
+        }
+        Font f = Minecraft.getInstance().font;
+        int breed = Math.min(340, g.guiWidth() - 32);
+        List<FormattedCharSequence> l = f.split(Component.translatable(k), breed);
+        if (l.size() > 3) {
+            l = l.subList(0, 3);
+        }
+        int w = 0;
+        for (FormattedCharSequence r : l) {
+            w = Math.max(w, f.width(r));
+        }
+        int c = g.guiWidth() / 2, onder = g.guiHeight() - 80, y = onder - l.size() * 10;
+        g.fill(c - w / 2 - 5, y - 3, c + w / 2 + 5, onder + 1, 0xA0200E1A);
+        g.fill(c - w / 2 - 5, y - 3, c - w / 2 - 3, onder + 1, 0xFF7AD8FF);
+        for (FormattedCharSequence r : l) {
+            g.text(f, r, c - f.width(r) / 2, y, 0xFFE6F7FF, true);
+            y += 10;
+        }
     }
 
     // ---- the panel ---------------------------------------------------------------------------------------------------------
@@ -109,12 +144,13 @@ public final class VolgHud {
         List<FormattedCharSequence> extra = r.extra().map(c -> f.split(c, tw)).orElse(List.of());
         boolean pijl = r.doel().isPresent();
         int hoog = 6 + 10 + wat.size() * 10 + waar.size() * 9 + extra.size() * 9 + (pijl ? 12 : 0) + 3;
-        int accent = r.hoofd() ? 0xFFFFB21A : 0xFFFFF27A;
+        boolean klasse = nl.juiced.guhs.feature.vadsrijk.npc.NpcVolg.isKlasse(r.quest());
+        int accent = r.hoofd() ? 0xFFFFB21A : klasse ? 0xFF7AD8FF : 0xFFFFF27A;
         g.fill(x, y, x + BREED, y + hoog, 0xA0200E1A);
         g.fill(x, y, x + 2, y + hoog, accent);
         int ty = y + 4;
-        String titel = (r.hoofd() ? "★ " : "◆ ") + r.titel().getString();
-        g.text(f, f.plainSubstrByWidth(titel, tw), x + 7, ty, r.hoofd() ? 0xFFFFC94A : 0xFFFFF27A, true);
+        String titel = (r.hoofd() ? "★ " : klasse ? "✦ " : "◆ ") + r.titel().getString();
+        g.text(f, f.plainSubstrByWidth(titel, tw), x + 7, ty, r.hoofd() ? 0xFFFFC94A : klasse ? 0xFF9AE4FF : 0xFFFFF27A, true);
         ty += 11;
         for (FormattedCharSequence l : wat) {
             g.text(f, l, x + 7, ty, 0xFFFFFFFF, true);
@@ -194,7 +230,7 @@ public final class VolgHud {
             }
             float zicht = (float) Mth.clamp((afstand - 5) / 12.0, 0, 1);   // fades in as you walk away from it
             float breed = (float) Math.max(0.3, Math.min(afstand, STRAAL_VER) * 0.004);
-            int kleur = r.hoofd() ? 0xFF8AD0 : 0xFFF27A;
+            int kleur = r.hoofd() ? 0xFF8AD0 : nl.juiced.guhs.feature.vadsrijk.npc.NpcVolg.isKlasse(r.quest()) ? 0x7AD8FF : 0xFFF27A;   // (job advancement: light blue)
             pose.pushPose();
             pose.translate(voet.x - cam.x, voet.y - cam.y + 2.2, voet.z - cam.z);
             Matrix4f m = pose.last().pose();

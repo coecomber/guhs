@@ -66,7 +66,7 @@ TEKSTEN = {
     # Zwamtempel
     # fix round 1
     "entity.guhs.vr_baas_lok_mika": "De Mika-spion",
-    B + "tempel.verhaal": "De tempelwachter schudt zijn hoedje: \"Nog niet, njeg. Volg eerst het verhaal: de Grootmeester stuurt je wel als het tijd is.\"",
+    B + "tempel.verhaal": "De grote tempeldeur blijft nog dicht (jij bent level %2$s). Op level %3$s opent een rechtsklik op de deur hem altijd. Eerder? Volg het verhaal tot Tempelwachter Steeltje je hier ontvangt, dan kan het al vanaf level %1$s.",
     B + "kk.kroon_af": "De kroon van Koning Klodder vliegt eraf! Pak hem en gooi hem terug (rechtsklik)!",
     B + "kk.kroon_pak": "Je hebt de kroon! Rechtsklik om hem naar Koning Klodder te gooien!",
     B + "kk.kroon_raak": "%s gooit de kroon tegen Koning Klodder aan! Hij is duizelig!",
@@ -79,7 +79,7 @@ TEKSTEN = {
     B + "mika.lok_nep": "Pfff! Nep-Mika! Zijn snor glinsterde niet...",
     B + "mika.lok": "Vier Mika's?! Alleen de echte heeft een glinsterende snor!",
     B + "mika.kaas": "Een kaaswiel-lawine! Ga NIET in de rode banen staan!",
-    B + "tempel.te_laag": "De tempeldeur blijft dicht. \"Kom terug als je minstens level %s bent, njeg.\"",
+    B + "tempel.te_laag": "De grote tempeldeur blijft nog dicht (jij bent level %2$s). Kom terug op level %3$s: dan opent een rechtsklik op de deur hem altijd. Met de verhaalquest van de Zwamtempel kan het al vanaf level %1$s.",
     B + "tempel.open": "De Zwamtempel gaat open...",
     B + "tempel.kamer1": "De Lichtzwamkamer: kijk goed in welke volgorde de zwammen oplichten...",
     B + "tempel.kamer1_fout": "Pfff! Verkeerde volgorde. De zwammen gaan uit en laten het nog een keer zien.",

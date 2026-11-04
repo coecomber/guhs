@@ -212,4 +212,98 @@ public class VadsrijkNpcGameTests {
         }
         return l;
     }
+
+    // ---- fix round 2 (g-ux) ----------------------------------------------------------------------------------------------------
+
+    /** The airship NPCs: the travel map (open/here/unknown/teaser), real dialogue choices, flying from both. */
+    @GuhTest(template = "empty", batch = B)
+    public static void reisKeuzes(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Questlog.wisAlles(p);
+        nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 5);
+        java.util.List<String> gevlogen = new java.util.ArrayList<>();
+        QuestMotor.VLIEG_TEST = (x, w) -> gevlogen.add(w);
+        try {
+            RijkGuh kap = helper.spawn(NpcRegistry.GUH.get(), new BlockPos(1, 1, 1));
+            kap.stelIn(Npcs.van("kapitein"));
+            // before the BAM: a click opens the travel map; Zwamzoet and Kandijkom are not discovered, zone 3/4 are teasers
+            QuestMotor.klik(p, kap);
+            helper.assertTrue(Reiskaart.openSinds(p.getUUID()) != null, "the captain opens the travel map");
+            helper.assertTrue(Reiskaart.plek(p, "knuffelkamp").staat() != Reiskaart.ONBEKEND, "the camp is always open");
+            helper.assertTrue(Reiskaart.plek(p, "zwamzoet").staat() == Reiskaart.ONBEKEND && Reiskaart.plek(p, "kandijkom").staat() == Reiskaart.ONBEKEND,
+                    "Zwamzoet and Kandijkom not discovered yet");
+            helper.assertTrue(Reiskaart.plek(p, "schemerwortel").staat() == Reiskaart.TEASER && Reiskaart.plek(p, "zone4").staat() == Reiskaart.TEASER,
+                    "zone 3 and 4 are teasers");
+            Reiskaart.kiesVoorTest(p, "zwamzoet");
+            helper.assertTrue(gevlogen.isEmpty(), "an undiscovered place does not fly");
+            // the playtest case: hq06 runs ("say when you want to leave") -> the dialogue has the map + the real choice now
+            Questlog.neemAan(p, Quests.van("hq06_zwamzoet"));
+            QuestMotor.klik(p, kap);
+            helper.assertTrue(QuestMotor.reisOpen(p).equals(java.util.List.of("zwamzoet")), "hq06 running: the choice is there: " + QuestMotor.reisOpen(p));
+            QuestMotor.kiesVoorTest(p, QuestMotor.REIS_OPTIE);
+            helper.assertTrue(gevlogen.equals(java.util.List.of("kapitein>zwamzoet")), "choosing it flies: " + gevlogen);
+            // ... and through the map
+            QuestMotor.klik(p, kap);
+            QuestMotor.kiesVoorTest(p, QuestMotor.REIS_KAART);
+            helper.assertTrue(Reiskaart.openSinds(p.getUUID()) != null, "the dialogue's map choice opens the map");
+            Reiskaart.kiesVoorTest(p, "zwamzoet");
+            helper.assertTrue(gevlogen.get(gevlogen.size() - 1).equals("kaart>zwamzoet"), "the map flies too: " + gevlogen);
+            Reiskaart.kiesVoorTest(p, "knuffelkamp");
+            helper.assertTrue(gevlogen.size() == 2, "a map choice only counts right after opening it at an airship NPC");
+            // the haven pilot: Kandijkom after zone 1 and lv 20 (or once the zone-2 story started)
+            RijkGuh pil = helper.spawn(NpcRegistry.GUH.get(), new BlockPos(2, 1, 1));
+            pil.stelIn(Npcs.van("luchtschipper"));
+            Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, true);
+            QuestMotor.klik(p, pil);
+            helper.assertTrue(Reiskaart.plek(p, "kandijkom").staat() == Reiskaart.ONBEKEND
+                    && "vadsrijk.npc.reis.slot.kandijkom_level".equals(QuestMotor.reisSlot(p, "kandijkom")), "Kandijkom locked below lv 20");
+            Reiskaart.kiesVoorTest(p, "kandijkom");
+            helper.assertTrue(gevlogen.size() == 2, "locked Kandijkom does not fly");
+            nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 20);
+            QuestMotor.klik(p, pil);
+            Reiskaart.kiesVoorTest(p, "kandijkom");
+            helper.assertTrue(gevlogen.get(gevlogen.size() - 1).equals("kaart>kandijkom"), "lv 20: Kandijkom flies: " + gevlogen);
+            // the Kandijkom captain: back to De Haven or straight to the camp (dialogue choices exist for him too)
+            helper.assertTrue(QuestMotor.reisDoelen(p, "z2_kapitein").equals(java.util.List.of("zwamzoet", "knuffelkamp")), "Kandijkom captain's lines");
+            RijkGuh pool = helper.spawn(NpcRegistry.GUH.get(), new BlockPos(3, 1, 1));
+            pool.stelIn(Npcs.van("z2_kapitein"));
+            QuestMotor.klik(p, pool);
+            helper.assertTrue(Reiskaart.openSinds(p.getUUID()) != null, "the Kandijkom captain opens the map too");
+        } finally {
+            QuestMotor.VLIEG_TEST = null;
+            QuestMotor.vergeet(p);
+            Reiskaart.vergeet(p.getUUID());
+        }
+        helper.succeed();
+    }
+
+    /** The job advancement shows in the tracker (and questlog) once it may be started, pointing at the Grootmeester. */
+    @GuhTest(template = "empty", batch = B)
+    public static void klasseInTracker(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Questlog.wisAlles(p);
+        var d = nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p);
+        String oud = d.klasse;
+        d.klasse = "knuffelridder";
+        nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 5);
+        helper.assertTrue(NpcVolg.klasseQuest(p) == null, "lv 5, story not there: no advancement line");
+        Quest q = Quests.van("adv10_knuffelridder");
+        for (String na : q.na()) {
+            Questlog.neemAan(p, Quests.van(na));
+            Questlog.voltooi(p, Quests.van(na));
+        }
+        nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, q.lv());
+        helper.assertTrue(NpcVolg.klasseQuest(p) == q, "requirements met: the advancement quest is offered: " + NpcVolg.klasseQuest(p));
+        NpcPayloads.Volg v = NpcVolg.bouw(p);
+        helper.assertTrue(v.regels().stream().anyMatch(r -> r.quest().equals(q.id()) && r.doel().isPresent()), "it is in the tracker with a beam target");
+        helper.assertTrue(NpcLog.bouw(p).get("Klasse") instanceof net.minecraft.nbt.CompoundTag, "and in the questlog");
+        Questlog.neemAan(p, q);
+        helper.assertTrue(NpcVolg.bouw(p).regels().stream().anyMatch(r -> r.quest().equals(q.id())), "still tracked while active");
+        Questlog.voltooi(p, q);
+        helper.assertTrue(NpcVolg.klasseQuest(p) == null || !NpcVolg.klasseQuest(p).id().equals(q.id()), "gone once handed in");
+        d.klasse = "pluisjager";
+        helper.assertTrue(NpcVolg.klasseQuest(p) == null || !"knuffelridder".equals(NpcVolg.klasseQuest(p).klasse()), "only your own class");
+        d.klasse = oud;
+        helper.succeed();
+    }
 }

@@ -85,10 +85,10 @@ public final class Z2Haken {
         QuestMotor.ACTIES.put("z2_vlieg", (p, naar) -> Z2Verhaal.vlieg(p, naar.isEmpty() ? "kandijkom" : naar));
         QuestMotor.ACTIES.put("z2_flashback", (p, a) -> Z2Verhaal.flashback(p));
         QuestMotor.ACTIES.put("z2_cliffhanger", (p, a) -> Z2Verhaal.cliffhanger(p));
-        // the haven pilot (zone 1, De Haven): the new line to Kandijkom, shown once zone 1 is done (the level is checked on choosing)
-        QuestMotor.EXTRA.computeIfAbsent("luchtschipper", k -> new java.util.concurrent.CopyOnWriteArrayList<>())
-                .add(new QuestMotor.ExtraOptie("vadsrijk.z2npc.optie.naar_kandijkom", NpcApi::zone1Klaar, Z2Verhaal::naarKandijkom));
+        // (fix round 2) the haven pilot's line to Kandijkom is one of QuestMotor's travel choices now (QuestMotor.REIZEN)
         Praat.luister(SLEUTEL_PILOOT, Z2Haken::pilootAntwoord);
+        kamers();
+        nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.ROUTES.add(Z2Haken::geodePoort);
     }
 
     // ---- NPC clicks -------------------------------------------------------------------------------------------------------------
@@ -97,16 +97,6 @@ public final class Z2Haken {
 
     static boolean klikVoor(ServerPlayer p, RijkGuh g) {
         String id = g.npcId();
-        if (id.equals("luchtschipper")) {
-            // z2_hq01 runs (you flew back before seeing Mallow): his dialogue would only say "how is it going"; offer both flights
-            if (Questlog.actief(p, HQ01)) {
-                Praat.scene(p, SLEUTEL_PILOOT, List.of(new Praat.Regel(g, "", "vadsrijk.npc.rol.luchtschip_kamp.vraag")),
-                        new Praat.Optie(OPTIE_KANDIJKOM, "vadsrijk.z2npc.optie.naar_kandijkom"),
-                        new Praat.Optie(OPTIE_KAMP, "vadsrijk.npc.optie.naar_kamp"));
-                return true;
-            }
-            return false;
-        }
         if (!Z2Npcs.versteend(id)) {
             return false;
         }
@@ -134,6 +124,40 @@ public final class Z2Haken {
         Praat.scene(p, Z2Verhaal.SLEUTEL, List.of(new Praat.Regel(g, "", "vadsrijk.npc.praat." + id + "." + (1 + p.getRandom().nextInt(3)))));
         Tips.toon(p, "vadsrijk.npc.tip.z2_versteend");
         return true;
+    }
+
+    /**
+     * (fix round 2) Inside the Kandijkom geode with a target outside it: the tracker first points at the gate on that side (the
+     * straight line runs into the geode wall). Gates: Z2NpcPlekken.POORT_*.
+     */
+    static nl.juiced.guhs.feature.vadsrijk.npc.QuestStap geodePoort(ServerPlayer p, nl.juiced.guhs.feature.vadsrijk.npc.QuestStap s) {
+        BlockPos d = s.doel();
+        BlockPos m = Z2NpcPlekken.GEODE_MIDDEN;
+        if (d == null || Math.hypot(p.getX() - m.getX(), p.getZ() - m.getZ()) > Z2NpcPlekken.GEODE_BINNEN
+                || Math.hypot(d.getX() - m.getX(), d.getZ() - m.getZ()) < Z2NpcPlekken.GEODE_BINNEN + 12 || d.getZ() > m.getZ() + 140) {
+            return s;   // (not in the geode, the target is in town, or it is the dock / the airship: no gate needed)
+        }
+        int dx = d.getX() - m.getX(), dz = d.getZ() - m.getZ();
+        String poort = Math.abs(dx) >= Math.abs(dz) || dz > 0 ? (dx >= 0 ? "oost" : "west") : "noord";
+        BlockPos pos = poort.equals("oost") ? Z2NpcPlekken.POORT_OOST : poort.equals("west") ? Z2NpcPlekken.POORT_WEST : Z2NpcPlekken.POORT_NOORD;
+        return new nl.juiced.guhs.feature.vadsrijk.npc.QuestStap(s.quest(), s.hoofd(), s.titel(), s.wat(),
+                Component.translatable("vadsrijk.npc.stap.z2_poort", s.waar(), Component.translatable("vadsrijk.npc.plek.z2_poort_" + poort)), pos,
+                s.extra());
+    }
+
+    /** (fix round 2) The Spiegelburcht's puzzle rooms: their tip stays at the bottom of the screen while you are inside. */
+    static void kamers() {
+        int y = nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenPlekken.BURCHT_Y;
+        for (nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenPlekken.Puzzel pz : nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenPlekken.PUZZELS) {
+            nl.juiced.guhs.feature.vadsrijk.npc.KamerTips.KAMERS.add(new nl.juiced.guhs.feature.vadsrijk.npc.KamerTips.Kamer("z2_" + pz.id(),
+                    (x, yy, z) -> Math.abs(x) <= pz.x() + 1 && z >= pz.z0() && z <= pz.z1() + 1 && yy >= y - 2 && yy <= y + 12,
+                    p -> nl.juiced.guhs.feature.vadsrijk.zone2.bazen.spiegel.Spiegelburcht.opgelost(pz.id()) ? "vadsrijk.npc.kamer.z2_opgelost"
+                            : "vadsrijk.npc.kamer.z2_" + pz.id()));
+        }
+        nl.juiced.guhs.feature.vadsrijk.npc.KamerTips.KAMERS.add(new nl.juiced.guhs.feature.vadsrijk.npc.KamerTips.Kamer("z2_spiegelgang",
+                nl.juiced.guhs.feature.vadsrijk.zone2.bazen.spiegel.Spiegelburcht::inGang,
+                p -> nl.juiced.guhs.feature.vadsrijk.zone2.bazen.spiegel.Spiegelburcht.gangKlaar() ? "vadsrijk.npc.kamer.z2_opgelost"
+                        : "vadsrijk.npc.kamer.z2_spiegelgang"));
     }
 
     private static void pilootAntwoord(ServerPlayer p, @Nullable net.minecraft.world.entity.Entity spreker, int optie) {

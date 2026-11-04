@@ -143,7 +143,8 @@ public final class Npcs {
                     zet(sl, d);
                 }
             } else if (g.volgt == null && !g.rust() && g.distanceToSqr(d.plek().getX() + 0.5, g.getY(), d.plek().getZ() + 0.5) > 24 * 24) {
-                g.snapTo(d.plek().getX() + 0.5, vloer(sl, d.plek()), d.plek().getZ() + 0.5, d.yaw(), 0);   // (wandered/escorted off: home)
+                BlockPos s = standplek(sl, d.plek());
+                g.snapTo(s.getX() + 0.5, s.getY(), s.getZ() + 0.5, d.yaw(), 0);   // (wandered/escorted off: home)
             }
         }
     }
@@ -168,17 +169,47 @@ public final class Npcs {
         if (g == null) {
             return null;
         }
-        double y = vloer(sl, d.plek());
-        g.snapTo(d.plek().getX() + 0.5, y, d.plek().getZ() + 0.5, d.yaw(), 0);
+        BlockPos s = standplek(sl, d.plek());
+        g.snapTo(s.getX() + 0.5, s.getY(), s.getZ() + 0.5, d.yaw(), 0);
         g.setYHeadRot(d.yaw());
         g.setYBodyRot(d.yaw());
         g.stelIn(d);
-        if (Double.isNaN(vloerOfNaN(sl, d.plek()))) {
+        if (!staanOp(sl, s) && Double.isNaN(vloerOfNaN(sl, d.plek()))) {
             g.setNoGravity(true);   // (no floor built here yet: hover instead of falling into the void)
         }
         sl.addFreshEntity(g);
         LEVEND.put(d.id(), g.getUUID());
         return g;
+    }
+
+    /**
+     * Where an NPC stands (fix round 2, g-ux; shared by zone 1 and 2): the spot itself when it is free with a floor; when the spot
+     * lies INSIDE a block (a wall, the ground: a spot data error) first a free, lit spot right next to it (ring 1..3, same height
+     * +-1), so it never drops into a dark pocket under a house; else the nearest lit floor up/down within 12 ({@link #vloer}).
+     */
+    public static BlockPos standplek(ServerLevel sl, BlockPos pos) {
+        if (staanOp(sl, pos)) {
+            return pos;
+        }
+        if (!sl.getBlockState(pos).getCollisionShape(sl, pos).isEmpty()) {
+            for (int r = 1; r <= 3; r++) {
+                for (int dy : new int[] {0, 1, -1}) {
+                    for (int dx = -r; dx <= r; dx++) {
+                        for (int dz = -r; dz <= r; dz++) {
+                            if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                                continue;
+                            }
+                            BlockPos b = pos.offset(dx, dy, dz);
+                            if (staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
+                                return b;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        double y = vloerOfNaN(sl, pos);
+        return Double.isNaN(y) ? pos : new BlockPos(pos.getX(), (int) y, pos.getZ());
     }
 
     /** The y to stand on: the nearest floor within 12 blocks of the spot's y (the spot's own y when there is none). */

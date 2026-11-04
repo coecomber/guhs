@@ -375,17 +375,18 @@ Q("z2_hq02_kandijkom", "hoofd", "z2_cafe", "Welkom in Kandijkom",
 Q("z2_hq03_galmhellingen", "hoofd", "z2_kwarts", "De Galmhellingen",
   "Ten oosten van Kandijkom liggen de Galmhellingen: sneeuwvelden met kristalnaalden die terugzingen als je ze raakt. Steek het "
   "kampvuur van Berggids Klimpoot aan, praat met hem en versla de kristalwezens die daar rondlopen.",
-  [D("kampvuur", "z2_galmhellingen", 1, "Steek het kampvuur aan bij Berggids Klimpoot, aan de westrand van de Galmhellingen",
+  [D("kampvuur", "z2_galmhellingen", 1, "Steek het kampvuur aan bij Berggids Klimpoot: door de oostpoort van Kandijkom, dan het pad "
+                                          "omhoog naar de westrand van de Galmhellingen",
      plek="poi:z2_kampvuur_galm"),
    D("praat", "z2_berggids", 1, "Praat met Berggids Klimpoot bij dat kampvuur", plek="npc:z2_berggids"),
    D("opvrolijk", "gebied:z2_galmhellingen", 12, "Versla 12 wezens op de Galmhellingen, ten oosten van Kandijkom",
      plek="gebied:z2_galmhellingen")],
-  [("npc", "De Galmhellingen. Ga de geode uit naar het oosten en volg het pad omhoog. Bij het eerste kampvuur zit Berggids Klimpoot."),
+  [("npc", "De Galmhellingen. Ga de geode uit door de oostpoort, aan het eind van de straat langs de Kandijkraam, en volg het pad omhoog. Bij het eerste kampvuur zit Berggids Klimpoot."),
    ("npc", "Steek dat vuur aan: daar word je wakker als het misgaat. En pas op voor de Splinterlingen. Ze schieten scherven als je "
            "ze raakt."),
    ("npc", "Hier geldt geen opvrolijk-plof, avonturier. Dit zijn echte monsters. Grauw kristal zonder hart. Als je ze verslaat, "
            "spatten ze uit elkaar in scherven die wegsmelten.")],
-  "De geode uit naar het oosten, het pad omhoog, naar het kampvuur van Berggids Klimpoot.",
+  "De geode uit door de oostpoort (de straat langs de Kandijkraam), het pad omhoog, naar het kampvuur van Berggids Klimpoot.",
   [("npc", "Twaalf! Goed werk. De helling is al een beetje stiller. Alleen de naalden zingen nog vals."),
    ("npc", "Weet je, die naalden zingen altijd. Maar sinds kort klinken ze... boos. Ik denk dat er iets in de scherven zit.")],
   xp=4000, munten=2500, loot="zeldzaam", lv=20, na=["z2_hq02_kandijkom"], inleveren="z2_berggids",
@@ -946,6 +947,19 @@ OVERIG = {
     Z + "optie.naar_kandijkom": "Naar Kandijkom (De Splinterpieken)",
     Z + "optie.naar_haven": "Terug naar De Haven",
     P + "optie.rol.luchtschip_z2": "Terug naar De Haven",
+    # (fix round 2) the Spiegelburcht's puzzle rooms: a line at the bottom of the screen while you are inside (npc/KamerTips)
+    P + "kamer.z2_lichtkamer": "Lichtkamer: draai de spiegels met rechtsklik (/ , \\ of plat) tot de lichtstraal het kristalslot raakt. "
+                               "Dan gaat de kristalpoort open.",
+    P + "kamer.z2_prismazaal": "Prismazaal: twee stralen, twee sloten. Draai de spiegels (rechtsklik) tot BEIDE sloten tegelijk gloeien.",
+    P + "kamer.z2_spiegelgang": "Spiegelgang: overleef drie golven kristalwezens. Rode banen = vliegende scherven: stap eruit voor de "
+                                "baan vol is!",
+    P + "kamer.z2_opgelost": "Opgelost! De kristalpoort is open: ga door naar de volgende zaal.",
+    P + "stap.z2_poort": "%s. Eerst de geode van Kandijkom uit: %s.",
+    P + "plek.z2_poort_oost": "door de oostpoort, aan het eind van de straat langs de Kandijkraam",
+    P + "plek.z2_poort_west": "door de westpoort, aan het eind van de straat langs Warme Wantjes",
+    P + "plek.z2_poort_noord": "door de noordpoort, achter de Kristalkapel",
+    P + "reis.kies.z2_kapitein": "Terug naar het warme zuiden? Bekijk de reiskaart, of kies hieronder waarheen. Of luid de scheepsbel op de steiger "
+                                 "(rechtsklik), dan vlieg ik je naar De Haven.",
     P + "optie.rol.juwelier": "Edelstenen inzetten of uithalen",
     P + "optie.rol.gondel": "Met de gondel naar de top",
     P + "optie.rol.gondel_terug": "Met de gondel naar beneden",

@@ -30,7 +30,7 @@ public class QuestlogScherm extends Screen {
     private static final int W = 360, H = 240, LIJST = 120, RIJ = 14, PER_PAGINA = 11;
     private static final int PANEL = 0xF0301A26, RAND = 0xFFF7B6CB, TEKST = 0xFFFFE6EE, ZACHT = 0xFFB8A0B0, GOUD = 0xFFFFC94A, GROEN = 0xFF7EE08A;
     /** The Avonturiersgids topics (lang vadsrijk.npc.gids.&lt;id&gt;.titel / .tekst). */
-    static final String[] GIDS = {"begin", "klassen", "vaardigheden", "loot", "sterren", "kampvuren", "flauw", "elementen", "statussen", "party",
+    static final String[] GIDS = {"begin", "vastzitten", "klassen", "vaardigheden", "loot", "sterren", "kampvuren", "flauw", "elementen", "statussen", "party",
             "quests", "munten", "markt", "rijdieren", "geheimen",
             // zone 2 (tools/features/vadsrijk_z2_npc.py GIDS)
             "z2_splinterpieken", "z2_kristalwezens", "z2_bevroren", "z2_edelstenen", "z2_reizen", "z2_titel"};
@@ -75,6 +75,9 @@ public class QuestlogScherm extends Screen {
             t.putString("Soort", "HOOFD");
             t.putBoolean("Volgende", true);
             l.add(t);
+        }
+        if (tab == 0 && data.get("Klasse") instanceof CompoundTag k) {
+            l.add(k);   // (the job advancement you may start now: "talk to the Grootmeester")
         }
         for (Tag t : data.getListOrEmpty(lijst)) {
             if (t instanceof CompoundTag c) {
@@ -132,7 +135,7 @@ public class QuestlogScherm extends Screen {
                     b -> kies(NpcPayloads.VolgKeuze.STRAAL, "")).bounds(bx + 74, top + H - 24, 70, 16).build());
             if (!rijen.isEmpty()) {
                 CompoundTag q = rijen.get(Math.min(keuze, rijen.size() - 1));
-                if (!q.getStringOr("Soort", "").equals("HOOFD")) {
+                if (!q.getStringOr("Soort", "").equals("HOOFD") && !q.getBooleanOr("Volgende", false)) {
                     String id = q.getStringOr("Id", "");
                     boolean vast = id.equals(data.getStringOr("Pin", ""));
                     addRenderableWidget(Button.builder(Component.translatable(vast ? "vadsrijk.npc.log.pin.los" : "vadsrijk.npc.log.pin.vast"),

@@ -40,6 +40,8 @@
         "npc",
         "jij",
         "npc",
+        "npc",
+        "npc",
         "npc"
       ],
       "klaar": [
@@ -124,6 +126,7 @@
         "npc"
       ],
       "klaar": [
+        "npc",
         "npc",
         "npc",
         "npc"
@@ -550,6 +553,13 @@
         "hq10_zwamtempel"
       ],
       "doelen": [
+        {
+          "soort": "meld",
+          "doel": "zwamtempel:deur",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        },
         {
           "soort": "opvrolijk",
           "doel": "gebied:zwamtempel",
