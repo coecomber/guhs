@@ -225,10 +225,18 @@ public final class Spelers {
     // ---- xp -------------------------------------------------------------------------------------------------------------
 
     /** Xp for this player's current class only. */
+    /** BELEVING hook (fix round 1): xp factors per player (the Vrolijke reeks gives +10 %), all multiplied. */
+    public static final List<java.util.function.ToDoubleFunction<ServerPlayer>> XP_FACTOR = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     public static void geefXp(ServerPlayer p, long n, String bron) {
         if (n <= 0) {
             return;
         }
+        double factor = 1;
+        for (java.util.function.ToDoubleFunction<ServerPlayer> f : XP_FACTOR) {
+            factor *= f.applyAsDouble(p);
+        }
+        n = Math.round(n * factor);
         SpelerData d = data(p);
         String k = d.klasse;
         int voor = d.level(k);

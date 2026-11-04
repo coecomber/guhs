@@ -90,5 +90,6 @@ public final class KernClient {
         nl.juiced.guhs.feature.vadsrijk.kern.veilig.client.VeiligClient.init(modBus);
         SceneSpeler.init();
         SieradenScherm.init();
+        nl.juiced.guhs.feature.vadsrijk.kern.beleving.client.BelevingClient.init(modBus);   // BELEVING (fix round 1)
     }
 }

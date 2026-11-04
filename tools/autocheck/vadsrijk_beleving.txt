@@ -1,0 +1,72 @@
+# Het Vadsrijk 1.10 fix round 1, BELEVING: the damage numbers, the Vrolijke reeks, the chest ceremony (Guhddelijk), a phase
+# moment and the victory moment on Koning Klodder (with the real chests falling).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_beleving.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section getallen
+/guhs vadsrijk proeftuin
+wait 300
+waitrender 300
+/tp @s 3096 65 3112 180 0
+look 180 5
+wait 40
+/guhs vadsrijk beleving getallen
+wait 3
+shot b_getallen gui
+wait 30
+
+section reeks
+/guhs vadsrijk beleving reeks 4
+wait 10
+shot b_reeks4 gui
+/guhs vadsrijk beleving reeks 12
+wait 3
+shot b_reeks12 gui
+wait 130
+shot b_reeks_weg gui
+
+section kist
+/guhs vadsrijk beleving kist guhddelijk 3096 65 3104
+look 180 25
+wait 10
+shot b_kist_valt gui
+wait 14
+shot b_kist_geland gui
+use 3096 65 3104
+wait 12
+shot b_kist_open gui
+wait 16
+shot b_kist_guhddelijk gui
+wait 12
+shot b_kist_glitter gui
+
+section koning
+/guhs vadsrijk tips reset
+/guhs vadsrijk bazen tp koning
+wait 60
+waitrender 300
+wait 200
+shot b_koning_arena gui
+/guhs vadsrijk beleving fase
+wait 6
+shot b_fase_zwiep gui
+wait 10
+shot b_fase_naam gui
+wait 60
+/guhs vadsrijk beleving versla
+wait 8
+shot b_overwinning gui
+wait 14
+shot b_schokgolf gui
+wait 16
+shot b_opgevrolijkt gui
+wait 22
+shot b_kist_zuil gui
+wait 20
+shot b_kisten gui
+quit

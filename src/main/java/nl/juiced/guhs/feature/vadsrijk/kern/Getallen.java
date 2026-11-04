@@ -6,14 +6,12 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.FloatTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.ComponentSerialization;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
@@ -34,30 +32,22 @@ public final class Getallen {
     }
 
     public static void toon(ServerLevel sl, Entity doel, double n, boolean krit, Element el, double factor) {
-        MutableComponent t = Component.literal((krit ? "✨" : "") + (int) Math.ceil(n));
-        if (krit) {
-            t.withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
-        } else if (factor > 1.01) {
-            t.withStyle(el.kleur, ChatFormatting.BOLD);
-        } else if (factor < 0.99) {
-            t.withStyle(ChatFormatting.GRAY);
-        } else {
-            t.withStyle(doel instanceof net.minecraft.server.level.ServerPlayer ? ChatFormatting.RED : ChatFormatting.WHITE);
-        }
-        tekst(sl, doel.getX() + (sl.getRandom().nextDouble() - 0.5) * 0.8, doel.getY() + doel.getBbHeight() + 0.2, doel.getZ() + (sl.getRandom().nextDouble() - 0.5) * 0.8,
-                t, krit ? 1.3f : 1.0f);
+        // BELEVING (fix round 1): size by damage, gold star crit, element colour, Zwak!/Taai, merged DoT ticks
+        nl.juiced.guhs.feature.vadsrijk.kern.beleving.Getalstijl.toon(sl, doel, n, krit, el, factor);
     }
 
-    /** A short rising text at this spot. */
-    public static void tekst(ServerLevel sl, double x, double y, double z, Component t, float schaal) {
+    /** A short rising text at this spot (BELEVING: returns the display, null if none). */
+    @Nullable
+    public static Display.TextDisplay tekst(ServerLevel sl, double x, double y, double z, Component t, float schaal) {
         Display.TextDisplay d = maak(sl, t, schaal, 0);
         if (d == null) {
-            return;
+            return null;
         }
         d.snapTo(x, y, z, 0, 0);
         d.addTag(TAG);
         sl.addFreshEntity(d);
         ACTIEF.add(d);
+        return d;
     }
 
     /** A lasting text display (not saved: re-made by its owner after a restart). */

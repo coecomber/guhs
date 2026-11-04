@@ -36325,5 +36325,21 @@
   "vadsrijk.bazen.mika.lok_nep": "Pfff! Nep-Mika! Zijn snor glinsterde niet...",
   "vadsrijk.bazen.mika.lok": "Vier Mika's?! Alleen de echte heeft een glinsterende snor!",
   "vadsrijk.bazen.mika.kaas": "Een kaaswiel-lawine! Ga NIET in de rode banen staan!",
-  "vadsrijk.kern.baas.te_ver": "Te ver weg! Kom de arena in om de baas te raken."
+  "vadsrijk.kern.baas.te_ver": "Te ver weg! Kom de arena in om de baas te raken.",
+  "vadsrijk.kern.beleving.zwak": "Zwak!",
+  "vadsrijk.kern.beleving.taai": "Taai",
+  "vadsrijk.kern.beleving.reeks": "Vrolijke reeks",
+  "vadsrijk.kern.beleving.reeks_weg": "Reeks voorbij: ×%s",
+  "vadsrijk.kern.beleving.opgevrolijkt": "Opgevrolijkt!",
+  "vadsrijk.kern.beleving.vond": "%s vond %s!",
+  "vadsrijk.kern.beleving.fase.vr_klodderreus.2": "Fase 2: De reus wordt boos!",
+  "guhs.configuration.vadsrijkSchud": "Vadsrijk: schermschud en hit-stop (%)",
+  "guhs.configuration.vadsrijkSchud.tooltip": "Hoe hard het scherm schudt en de camera meebeweegt bij zware klappen en baasmomenten. 0 = uit.",
+  "vadsrijk.kern.beleving.fase.vr_klodderreus.3": "Fase 3: Rollen maar!",
+  "vadsrijk.kern.beleving.fase.vr_baas_koning_klodder.2": "Fase 2: De vijver wordt plakkerig!",
+  "vadsrijk.kern.beleving.fase.vr_baas_koning_klodder.3": "Fase 3: De koning springt dubbel!",
+  "vadsrijk.kern.beleving.fase.vr_baas_opperzwam.2": "Fase 2: Sporen overal!",
+  "vadsrijk.kern.beleving.fase.vr_baas_opperzwam.3": "Fase 3: De wortels groeien!",
+  "vadsrijk.kern.beleving.fase.vr_baas_mika_spion.2": "Fase 2: Welke Mika is echt?",
+  "vadsrijk.kern.beleving.fase.vr_baas_mika_spion.3": "Fase 3: Nog meer kaaswielen!"
 }
