@@ -2,7 +2,8 @@
 
 Writes the sound events into sounds.json and the config texts:
   vr.stad.muziek.<stad>_<1|2>   the town tunes (streamed OGGs from vadsrijk_stadsmuziek_geluid.py, assets/guhs/sounds/vadsrijk/stad)
-  vr.stad.bed.<naam>            the ambience beds (seamless 20 s loops; golfjes, briesje, haardvuur)
+  vr.stad.bed.<naam>            the ambience beds (seamless 20 s loops; golfjes = lapping water, briesje = birdsong + chimes,
+                                haardvuur = warm hearth + sleigh bells; no wind since fix round L)
   vr.stad.sfeer.<stad>          now-and-then town sounds by day, mixed from existing Guhs + vanilla sound events
   vr.stad.sfeer.nacht           the same at night (all towns)
 The OGGs are committed (make them with: python tools/features/vadsrijk_stadsmuziek_geluid.py); build() checks they exist.

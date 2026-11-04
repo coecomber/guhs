@@ -500,7 +500,10 @@ def haven(W, K, P):
     zwemtrap(S, 42, 467, (0, -1), g, steun="minecraft:cherry_log[axis=y]")
     for x in (37, 52, 62):
         zwemtrap(S, x, 473 if x != 52 else 467, (0, 1) if x != 52 else (0, -1), g, steun="minecraft:cherry_log[axis=y]")
-    guhvlag(S, 31, g + 1, 468, "z", 7)
+    guhvlag(S, 30, g + 1, 473, "z", 7)             # (fix L) on the end post, not on the deck (was (31, 468): a pole on the pier)
+    for z in range(468, 473):                      # (fix L) the quay railing ran across the pier's start: keep it open
+        if z in oevers:
+            S.set(oevers[z], g + 1, z, CARVE)
     for (bx, bz) in ((40, 478), (52, 461)):
         S.fill(bx - 3, g - 1, bz - 1, bx + 3, g - 1, bz + 1, "minecraft:cherry_planks")
         S.fill(bx - 3, g, bz - 1, bx + 3, g, bz - 1, "roze_lakhout_planken")
@@ -549,6 +552,12 @@ def haven(W, K, P):
     # houses (planks floor + a carpet runner), stalls, campfire
     for i, (x, z, v) in enumerate(((100, 430, "west"), (110, 444, "west"), (100, 540, "west"), (106, 553, "north"))):
         Z.huis(S, x, g + 1, z, 7, 7, 5, v, Z.PALETTEN[i % 5])
+        # (fix L) the door sill is the floor (g); where the ground in front is lower, a slab step up to it
+        vx, vz = (x - 1, z + 3) if v == "west" else (x + 3, z - 1)
+        if K.h(vx, vz) < g:
+            for yy in range(K.h(vx, vz) + 1, g):
+                S.set(vx, yy, vz, KSTEEN)
+            S.set(vx, g, vz, "minecraft:cherry_slab[type=bottom,waterlogged=false]")
         loper(S, x, z, 7, 7, v, g + 1, ["minecraft:pink_carpet", "minecraft:magenta_carpet", "minecraft:light_blue_carpet",
                                           "minecraft:lime_carpet"][i])
     for i, z in enumerate((480, 488, 532)):
@@ -1077,13 +1086,20 @@ def schildpad(W, K, P):
 
 # ================================================================================================ stal, campfires, kamp south jetty
 def stal(W, K, P):
-    g = 63
+    # (fix L) the ground here is y 64, not 63: with g = 63 the meadow grass stood right in front of the door (no way in
+    # without /tp). Now the yard sits on the real ground level, the bumps above it are carved flat, and a paved path leads
+    # from the door out east.
+    x0, z0 = -158, -10
+    g = max(63, K.h(x0 + 17, z0 + 6))
     S = WS(-165, g - 4, -18, 40, 30, 60)
     for x in range(-162, -128):
         for z in range(-14, 38):
             S.fill(x, g - 2, z, x, g - 1, z, "minecraft:dirt")
             S.set(x, g, z, "guhs:knuffelgras")
-    x0, z0 = -158, -10
+            S.fill(x, g + 1, z, x, g + 4, z, CARVE)
+    for x in range(x0 + 15, x0 + 24):                     # the path from the door: 3 wide, head room free
+        for z in range(z0 + 5, z0 + 8):
+            S.set(x, g, z, "knuffelklinkers")
     Z.huis(S, x0, g + 1, z0, 15, 13, 7, "east", Z.PALETTEN[3], tapijt=None)
     S.fill(x0 + 1, g, z0 + 1, x0 + 8, g, z0 + 11, "minecraft:hay_block[axis=x]")      # stable floor: hay in the stalls
     for z in range(z0 + 1, z0 + 12):

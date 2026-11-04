@@ -7,8 +7,10 @@
       knuffelkamp morning-camp folk               plucked guitar arpeggios, a little flute, a shaker, a soft drum
       haven       gentle harbour shanty (6/8)     flute + celesta, plucked bass, a soft concertina pad, a frame drum
       kandijkom   winter music box                music box + glockenspiel, sleigh bells, a soft pad
-  assets/guhs/sounds/vadsrijk/stad/bed_<naam>           seamless 20 s ambience loops: golfjes (harbour water), briesje (a
-                                                        soft breeze with leaves), haardvuur (winter wind + crackling fire)
+  assets/guhs/sounds/vadsrijk/stad/bed_<naam>           seamless 20 s ambience loops, quiet under the tunes (fix round L: no
+                                                        wind anymore): golfjes (soft water lapping at the jetty), briesje (a
+                                                        sweet garden bed: birdsong + distant chimes), haardvuur (a warm
+                                                        crackling hearth + soft sleigh bells)
 
 Not part of make_resources.py: the OGGs are committed like the other sounds; vadsrijk_stadsmuziek.py writes sounds.json and
 checks the files. Fixed seeds, so a rerun gives the same music. Needs numpy, scipy and soundfile:
@@ -436,38 +438,114 @@ def golf(t, perioden, r):
     return (x - x.min()) / (x.max() - x.min())
 
 
+def leg_rond(buf, x, at):
+    """Add x at time 'at', wrapping around the end (so the loop stays seamless)."""
+    a = int(at * SR) % len(buf)
+    for i in range(0, len(x), len(buf)):
+        stuk = x[i:i + len(buf)]
+        e = a + len(stuk)
+        if e <= len(buf):
+            buf[a:e] += stuk
+        else:
+            k = len(buf) - a
+            buf[a:] += stuk[:k]
+            buf[:len(stuk) - k] += stuk[k:]
+
+
+def galm_rond(x, sec, seed, nat, helder=4200):
+    """Reverb by circular convolution: the tail of the loop's end rings on at its start."""
+    ir = galm(sec, seed, helder)
+    n = len(x)
+    ir = np.concatenate([ir, np.zeros(max(0, n - len(ir)))])[:n]
+    return x + nat * np.fft.irfft(np.fft.rfft(x) * np.fft.rfft(ir), n)
+
+
+def tjilp(r, f0, dur, sweep):
+    """One little bird chirp: a quick soft sine glide with a touch of trill."""
+    n = int(dur * SR)
+    t = np.arange(n) / SR
+    f = f0 * (1 + sweep * (t / dur)) * (1 + 0.02 * np.sin(2 * np.pi * r.uniform(25, 45) * t))
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.15 * np.sin(4 * np.pi * np.cumsum(f) / SR)
+    return x * np.sin(np.pi * t / dur) ** 2
+
+
+def vogeltjes(n, r, aantal, sterk=1.0):
+    buf = np.zeros(n)
+    for _ in range(aantal):
+        at, f0, kort = r.uniform(0, n / SR), r.uniform(2600, 4600), r.uniform(0.06, 0.13)
+        sweep, vol = r.choice([-0.25, 0.2, 0.35, -0.1]), r.uniform(0.25, 1.0) * sterk
+        for k in range(int(r.integers(2, 6))):          # a little phrase of 2-5 chirps
+            leg_rond(buf, tjilp(r, f0 * (1 + r.uniform(-0.06, 0.08)), kort, sweep) * vol, at + k * kort * r.uniform(1.3, 1.9))
+    return low(buf, 7000)
+
+
+def belletjes_verte(n, r, aantal, toon=72):
+    """Soft distant chimes: single pentatonic glockenspiel notes, low-passed, far away."""
+    buf = np.zeros(n)
+    penta = [0, 2, 4, 7, 9, 12, 14, 16]
+    for _ in range(aantal):
+        leg_rond(buf, glock(toon + int(r.choice(penta)), 0.5, r) * r.uniform(0.4, 1.0), r.uniform(0, n / SR))
+    return low(buf, 3200)
+
+
 def bed_golfjes(seed):
+    """The harbour: soft water lapping against the jetty (separate little laps + droplets, no wind), a distant chime."""
     r = np.random.default_rng(seed)
     n = 20 * SR
     t = np.arange(n) / SR
-    water = lus_ruis(n, r, 120, 1500) * (0.25 + 0.75 * golf(t, [3, 5], r) ** 2)
-    klots = lus_ruis(n, r, 600, 3500) * golf(t, [7, 11], r) ** 4 * 0.35
-    return niveau(water + klots, -27)
+    water = low(lus_ruis(n, r, 80, 500), 600) * (0.35 + 0.65 * golf(t, [3, 5], r)) * 0.25
+    laps = np.zeros(n)
+    for _ in range(34):
+        k = int(r.uniform(0.35, 0.7) * SR)
+        tt = np.arange(k) / SR
+        lap = band(r.standard_normal(k), 150, r.uniform(700, 1100)) * (1 - np.exp(-tt / 0.07)) * np.exp(-tt / r.uniform(0.12, 0.22))
+        leg_rond(laps, lap * r.uniform(0.5, 1.0), r.uniform(0, 20))
+    plip = np.zeros(n)
+    for _ in range(14):
+        k = int(0.05 * SR)
+        tt = np.arange(k) / SR
+        f = r.uniform(500, 900) * (1 + 2.5 * tt / 0.05)
+        leg_rond(plip, np.sin(2 * np.pi * np.cumsum(f) / SR) * np.sin(np.pi * tt / 0.05) * r.uniform(0.15, 0.35), r.uniform(0, 20))
+    bel = belletjes_verte(n, r, 3, toon=74) * 0.25
+    x = galm_rond(water + laps + plip + bel, 1.4, seed, 0.25, helder=3000)
+    return niveau(x, -34)
 
 
 def bed_briesje(seed):
+    """Zwamzoet + Knuffelkamp: a sweet garden bed (gentle birdsong, soft distant chimes, a faint warm hum), no wind."""
     r = np.random.default_rng(seed)
     n = 20 * SR
     t = np.arange(n) / SR
-    wind = lus_ruis(n, r, 150, 900) * (0.35 + 0.65 * golf(t, [2, 3], r))
-    blad = lus_ruis(n, r, 2500, 7000) * golf(t, [4, 9], r) ** 3 * 0.3
-    return niveau(wind + blad, -29)
+    vogels = vogeltjes(n, r, 11)
+    bel = belletjes_verte(n, r, 6) * 0.45
+    warm = low(lus_ruis(n, r, 90, 260), 300) * (0.6 + 0.4 * golf(t, [2], r)) * 0.08
+    x = galm_rond(vogels + bel + warm, 1.8, seed, 0.3, helder=5000)
+    return niveau(x, -35)
 
 
 def bed_haardvuur(seed):
+    """Kandijkom: a warm crackling hearth with soft sleigh bells now and then (no cold wind)."""
     r = np.random.default_rng(seed)
     n = 20 * SR
     t = np.arange(n) / SR
-    wind = lus_ruis(n, r, 200, 1200) * (0.3 + 0.7 * golf(t, [2, 3], r)) * 0.8
-    gloed = lus_ruis(n, r, 60, 400) * 0.5
+    gloed = low(lus_ruis(n, r, 50, 300), 350) * (0.75 + 0.25 * golf(t, [3, 7], r)) * 0.4
     knap = np.zeros(n)
-    for _ in range(170):
-        a = int(r.uniform(0, n - 3000))
-        k = int(r.uniform(150, 900))
+    for _ in range(150):
+        k = int(r.uniform(150, 700))
         tt = np.arange(k) / SR
-        knap[a:a + k] += r.standard_normal(k) * np.exp(-tt * r.uniform(150, 600)) * r.uniform(0.3, 1.0) ** 2
-    knap = band(knap, 900, 6000) * 2.0
-    return niveau(wind + gloed + knap, -27)
+        leg_rond(knap, r.standard_normal(k) * np.exp(-tt * r.uniform(200, 600)) * r.uniform(0.3, 1.0) ** 2, r.uniform(0, 20))
+    for _ in range(10):                                        # a few deeper, cosy log pops
+        k = int(0.04 * SR)
+        tt = np.arange(k) / SR
+        leg_rond(knap, low(r.standard_normal(k), 1800) * np.exp(-tt * 90) * 1.5, r.uniform(0, 20))
+    knap = low(band(knap, 500, 5000), 4000) * 1.6
+    bellen = np.zeros(n)
+    for _ in range(4):                                         # a soft jingle: 3-6 shakes
+        at = r.uniform(0, 20)
+        for k in range(int(r.integers(3, 7))):
+            leg_rond(bellen, sleebel(r, r.uniform(0.5, 1.0)), at + k * 0.16)
+    x = galm_rond(gloed + knap + bellen * 1.8, 1.2, seed, 0.2, helder=4500)
+    return niveau(x, -33)
 
 
 TUNES = {
