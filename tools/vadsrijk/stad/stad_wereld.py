@@ -61,7 +61,7 @@ def haven(S):
 ZEE_LOKAAL = 62 - OY          # the global sea's water top (kaart.ZEE) in scene y
 
 
-def zwemtrap(S, x, z, uit, y_top=G, y_bodem=2, steun="minecraft:cherry_log[axis=y]"):
+def zwemtrap(S, x, z, uit, y_top=G, y_bodem=59 - OY, steun="minecraft:cherry_log[axis=y]"):
     """Scene-coordinate twin of bouwsels.zwemtrap: a ladder out of the bay in column (x, z) up to the deck/quay floor
     y_top, hanging on the support column (x, z) - uit (filled solid below the deck), headroom carved above."""
     f = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[uit]
@@ -69,6 +69,9 @@ def zwemtrap(S, x, z, uit, y_top=G, y_bodem=2, steun="minecraft:cherry_log[axis=
     for y in range(y_bodem, y_top):
         if S.get(sx, y, sz) in ("minecraft:air", "minecraft:cave_air"):
             S.set(sx, y, sz, steun)
+    for y in range(1, y_bodem):                  # solid under the ladder and its post (the sea floor is only a skin over the hollow)
+        S.set(x, y, z, "minecraft:sandstone")
+        S.set(sx, y, sz, "minecraft:sandstone")
     for y in range(y_bodem, y_top + 1):
         S.set(x, y, z, f"minecraft:ladder[facing={f},waterlogged={'true' if y <= ZEE_LOKAAL else 'false'}]")
     for y in (y_top + 1, y_top + 2):

@@ -579,9 +579,10 @@ def tempel(S, zw):
     for i, (hw, hd) in enumerate(((19, 15), (17, 13), (15, 11))):
         S.fill(cx - hw, y0 + i, cz - hd - 2, cx + hw, y0 + i, cz + hd + 1, "knuffelsteen" if i < 2 else "tegel_hartjes")
     yv = y0 + 3  # tempelvloer
-    # trap naar het bordes (zuid)
-    for i in range(3):
-        S.fill(cx - 6, y0 + i, cz + 16 + 2 - i, cx + 6, y0 + i, cz + 16 + 2 - i,
+    # trap naar het bordes (zuid): one stair in front of each tier's edge (the tiers step back 2 per level), so every step
+    # is a half step and the stair always lands on the next tier (integration fix round 1: it ended 2 above tier 1 at z+15)
+    for i, (hw, hd) in enumerate(((19, 15), (17, 13), (15, 11))):
+        S.fill(cx - 6, y0 + i, cz + hd + 2, cx + 6, y0 + i, cz + hd + 2,
                SK.stairs("guhs:knuffelsteen_trap", "north"))
     # hal
     hx1, hx2, hz1, hz2 = cx - 13, cx + 13, cz - 11, cz + 8
