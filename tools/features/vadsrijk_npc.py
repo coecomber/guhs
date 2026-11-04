@@ -107,12 +107,16 @@ NPCS = {
     "akim_kaasguh": ("Akim de Kaasguh", [
         "Kaas! Echte guh-kaas! Zelf gemaakt! Niet aankomen. Wel kopen. Eh... later.",
         "Ik ben een gewone guh. Heel gewoon. Ik hou van kaasknabbels en... eh... muizen niet. Nee. Bah, muizen.",
-        "Waarom kijk je zo? Ik heb gewoon een zonnebril op. Het is zonnig. Binnen ook."]),
+        "Waarom kijk je zo? Ik heb gewoon een zonnebril op. Het is zonnig. Binnen ook.",
+        # (WERELDVERHAAL §10 #6: a 4th idle line, NpcDef.VIER_REGELS)
+        "Ik werk voor niemand! Nou ja, voor mijn baas. En zijn baas. En die z'n baas... die noemen we liever niet."]),
     # Zwamzoet: citizens
     "oma_truus": ("Oma Truus", [
         "Breien is net als knuffelen, vadsje. Steekje voor steekje.",
         "Toen ik jong was, waren de klodders nog roze en de manen nog maar met z'n eentjes.",
-        "Kom eens hier, je hebt een pluisje op je oortje. Zo."]),
+        "Kom eens hier, je hebt een pluisje op je oortje. Zo.",
+        # (WERELDVERHAAL §10 #1: a 4th idle line, NpcDef.VIER_REGELS)
+        "Die tweede maan kwam op een nacht zomaar. Hij knippert nooit. Manen horen niet te staren, vadsje."]),
     "bakker_bram": ("Bakker Bram", [
         "Mijn zwamtaart is beroemd tot in de Druipgrotten. Daar wonen er alleen niet zoveel.",
         "Deeg kneden is goed voor je pootjes. En voor je humeur.",
@@ -191,6 +195,8 @@ NPCS = {
         "De grote deur gaat alleen open voor wie de zwammen van de tempel helpt.",
         "Ik sta hier al honderd jaar. Mijn poten slapen."]),
 }
+# NPCs with a 4th idle line (WERELDVERHAAL §10); keep in step with NpcDef.VIER_REGELS in Java
+VIER_REGELS = {"oma_truus", "akim_kaasguh"}
 KAMPWACHT_NAMEN = ["Warmpootje", "Gloeiwang", "Vonkje", "Haardje", "Smeulie", "Knetter", "Pookje", "Sintel", "Vlammetje", "Roosterbol", "Asje",
                    "Gensje"]
 KAMPWACHT_REGELS = [
@@ -211,6 +217,10 @@ QUEST_ITEMS = {
     "wortelzwam": ("Wortelzwam", "minecraft:item/carrot"),
     "brief": ("Brief met een hartje", "minecraft:item/paper"),
     "mika_speldje": ("Speldje met een Mika-kop", "minecraft:item/gold_nugget"),
+}
+# flavour lines under a quest item (item.guhs.vr_npc_<id>.lore; NpcRegistry gives these items an ItemLore). WERELDVERHAAL §10 #4.
+QUEST_ITEM_LORE = {
+    "mika_speldje": "Op de achterkant, heel klein gegraveerd: een handje met één opgestoken pinkje.",
 }
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -450,6 +460,7 @@ Q("hq12_schaduw", "hoofd", "tempelwachter_steeltje", "Een grauwe schaduw",
   [("npc", "Een Mika-speldje... Dus het pootje op de pluis, de figuurtjes met zakken, het gemiauw in de tempel. Het waren Mika's."),
    ("npc", "De Mika's hebben Vahoegnir grauw gemaakt. Ze vangen zijn vads op in zakken, en waar hij vliegt, laten ze grauwe pluis "
            "achter. Zo wordt het hele rijk vadsloos, en zij worden steeds sterker."),
+   ("npc", "Maar Mika's zijn kruimeldieven, geen drakentemmers. Zoveel vads in zakken... Voor wie? Wie eet er zoveel?"),
    ("jij", "Waar is de draak nu?"),
    ("npc", "Kijk maar naar de horizon. Daar, achter de bergen. Hij cirkelt boven de landen die nog niemand van ons heeft gezien."),
    ("npc", "Zone één is weer vads, dankzij jou. De littekens kleuren al terug. Maar dit was pas het begin. Rust wat uit, "
@@ -567,7 +578,8 @@ Q("z08_pluis", "zij", "professor_pluis", "Grauwe pluis onder de loep",
    ("npc", "Breng me acht plukjes grauwe pluis. Van elk ontvadst wezen, maakt niet uit welk. Voorzichtig: het niest.")],
   "Acht plukjes grauwe pluis! Elk ontvadst wezen kan het laten vallen.",
   [("npc", "Fascinerend! Kijk door mijn vergrootglas. Zie je die kleine stempeltjes? Pootjes. Overal pootjes."),
-   ("npc", "Wie stempelt er nou pootjes op pluis? Wetenschappelijk gezien: iemand met pootjes.")],
+   ("npc", "Wie stempelt er nou pootjes op pluis? Wetenschappelijk gezien: iemand met pootjes."),
+   ("npc", "En kijk: alle pootjes lopen dezelfde kant op. Weg van ons. Allemaal. Wetenschappelijk gezien heel verdacht.")],
   xp=400, munten=300, lv=4, na=["hq06_zwamzoet"])
 
 Q("z09_kristal", "zij", "professor_pluis", "Kristalhelder",
@@ -636,7 +648,9 @@ Q("z15_lichtjes", "zij", "weerguh_wolkje", "Lichtjes in het rijk",
   [("npc", "Sinds de draak overkwam, is de lucht grijzig. Ik meet het elke dag. Grijzigheid: zeven. Te hoog!"),
    ("npc", "Kampvuren helpen. Als er in elk gebied weer eentje brandt, wordt de lucht vanzelf vadser. Weerkundig bewezen!")],
   "Een kampvuur in de wei, het woud en de grotten. Bij elk vuur staat een ridder-guh.",
-  [("npc", "Grijzigheid... twee! Kijk, de wolken worden al roze. Je bent een held, en een weerkundige!")],
+  [("npc", "Grijzigheid... twee! Kijk, de wolken worden al roze. Je bent een held, en een weerkundige!"),
+   ("npc", "Raar alleen: ik meet ook grijzigheid uit een richting waar de draak nooit vliegt. Mijn meter zegt 'heel ver weg'. Hij "
+           "overdrijft vast.")],
   xp=900, munten=700, lv=12, na=["hq06_zwamzoet"])
 
 Q("z16_verstoppertje", "zij", "tweeling_tip", "Verstoppertje",
@@ -781,7 +795,7 @@ AANWIJZINGEN = {
     "krassen": ("Krassen in de kristalkamer", "In de kristallen staan krassen. Krabsporen. Iemand heeft hier kristallen losgekrabd en "
                                               "in een zak gestopt. Er ligt een strohoedje-strootje."),
     "uitkijkpost": ("Een uitkijkpost op de oostzwam", "Op de hoed van de oostzwam staat een verrekijker, gericht op de Knuffeldeur "
-                                                       "van de ordetempel. Ernaast: een kaasbroodje en een briefje 'Hoofdkwartier: "
+                                                       "van de ordetempel. Ernaast: een kaasbroodje en een briefje 'Aan de Pink: "
                                                        "deur zit op slot. Miauw. A.'"),
 }
 SCHATTEN = {
@@ -1238,7 +1252,7 @@ def teksten():
     t = dict(OVERIG)
     npc_ids, poi_ids = _java_ids()
     for id, (naam, regels) in NPCS.items():
-        assert len(regels) == 3, id
+        assert len(regels) == (4 if id in VIER_REGELS else 3), id
         t[P + "naam." + id] = naam
         for i, r in enumerate(regels, 1):
             t[P + f"praat.{id}.{i}"] = r
@@ -1250,6 +1264,9 @@ def teksten():
     assert not missend, f"NPCs without a name: {missend}"
     for id, (naam, _tex) in QUEST_ITEMS.items():
         t[f"item.guhs.vr_npc_{id}"] = naam
+    for id, regel in QUEST_ITEM_LORE.items():
+        assert id in QUEST_ITEMS, id
+        t[f"item.guhs.vr_npc_{id}.lore"] = regel
     for q in QUESTS:
         s = P + "q." + q["id"]
         t[s + ".titel"] = q["titel"]

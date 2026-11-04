@@ -679,6 +679,10 @@ public class Boormeester extends Z2Baas {
                 p.sendSystemMessage(Component.translatable("vadsrijk.z2bazen.bm.naam").withStyle(ChatFormatting.RED)
                         .append(Component.literal(": ").withStyle(ChatFormatting.GRAY))
                         .append(Component.translatable("vadsrijk.z2bazen.bm.cliff").withStyle(ChatFormatting.WHITE)));
+                // (WERELDVERHAAL §10 #11) the slip of the tongue: the only "Keizer" in zone 1-2
+                p.sendSystemMessage(Component.translatable("vadsrijk.z2bazen.bm.naam").withStyle(ChatFormatting.RED)
+                        .append(Component.literal(": ").withStyle(ChatFormatting.GRAY))
+                        .append(Component.translatable("vadsrijk.z2bazen.bm.cliff2").withStyle(ChatFormatting.WHITE)));
                 RijkScenes.titel(p, Component.translatable("vadsrijk.z2bazen.bm.cliff_titel").withStyle(ChatFormatting.BOLD),
                         Component.translatable("vadsrijk.z2bazen.bm.cliff_onder"), 80, 0xFFB040);
             }

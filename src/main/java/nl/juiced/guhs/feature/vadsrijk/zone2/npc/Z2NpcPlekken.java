@@ -298,12 +298,12 @@ public final class Z2NpcPlekken {
     public static final Vec3[] FLASHBACK_DRAAK = {new Vec3(-200, 210, -2720).add(BURCHT_SCHUIF), new Vec3(-60, 224, -2790).add(BURCHT_SCHUIF),
             new Vec3(70, 220, -2780).add(BURCHT_SCHUIF), new Vec3(230, 232, -2680).add(BURCHT_SCHUIF)};
 
-    /** The cliffhanger (z2_hq12): from the Kristalkapel to the far west (azimuth ~255, the giant tree landmark of WereldLucht). */
+    /** The cliffhanger (z2_hq12): from the Kristalkapel to the far EAST (WERELDVERHAAL §12 q1: zone 3 lies east; was west). */
     private static final Vec3 ALTAAR = v("kristalkapel_altaar", 0, 91, -2476);
     public static final Vec3[] CLIFFHANGER = {
             ALTAAR.add(4, 2, 8), ALTAAR.add(0, 1, 0),            // in the Kristalkapel
-            ALTAAR.add(-10, 39, 6), new Vec3(-900, 190, -2240),
-            ALTAAR.add(-30, 59, 26), new Vec3(-1000, 220, -2210)};
+            ALTAAR.add(10, 39, 6), new Vec3(900, 190, -2240),
+            ALTAAR.add(30, 59, 26), new Vec3(1000, 220, -2210)};
 
     /** The gondola ride (fallback when z2-wereld's own gondola is not in this tree). */
     public static final Vec3[] GONDEL = {

@@ -61,6 +61,17 @@ public final class SceneSpeler {
         return scene != null;
     }
 
+    /** (i-lore) The scene playing now, or null: lets the sky add a moment to a shot (WereldLucht, WERELDVERHAAL §10). */
+    @Nullable
+    public static RijkScene huidig() {
+        return scene;
+    }
+
+    /** (i-lore) The tick of the scene playing now. */
+    public static int tijd() {
+        return t;
+    }
+
     /** 0..1 how far the black bars are in. */
     static float balk(float pt) {
         RijkScene s = scene;

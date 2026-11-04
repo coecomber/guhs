@@ -728,6 +728,8 @@ TEKSTEN = {
     "vadsrijk.z2wezens.set.kristal.4": "(4) Splinterslag: 20%% kans dat je klap in scherven barst (25%% schade op alles eromheen)",
     "vadsrijk.z2wezens.set.mika.2": "(2) Mijnlamp: +5 Kritiek",
     "vadsrijk.z2wezens.set.mika.4": "(4) Boorkracht: +15%% schade op versteende wezens, +25%% op je eerste klap",
+    # (WERELDVERHAAL §10 #13: under every Mika-buitset piece, Z2WezensClient.setRegels)
+    "vadsrijk.z2wezens.set.mika.stempel": "Gestempeld: EIGENDOM VAN NOOITGENOEG. Niet aan knabbelen.",
     "vadsrijk.z2wezens.mika.weg.0": "Dit zeg ik tegen de baas!",
     "vadsrijk.z2wezens.mika.weg.1": "Terugtrekken! TERUGTREKKEN!",
     "vadsrijk.z2wezens.mika.weg.2": "Ik kom terug! Met meer kaas!",

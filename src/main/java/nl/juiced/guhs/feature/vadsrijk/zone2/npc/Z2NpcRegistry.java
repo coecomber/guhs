@@ -30,7 +30,8 @@ public final class Z2NpcRegistry {
     static {
         for (String id : new String[] {"galmscherf", "wantje", "kandijkristal", "sneeuwbal", "gloeikristal", "tandwiel", "boorbeitel", "ijsbloem",
                 "ijsvis", "wolpluk", "hartsplinter", "drakensplinter"}) {
-            QUEST_ITEMS.put(id, ITEMS.registerSimpleItem("vr_z2_npc_" + id, () -> new Item.Properties().stacksTo(64)));
+            QUEST_ITEMS.put(id, ITEMS.registerSimpleItem("vr_z2_npc_" + id,
+                    () -> nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.metLore(new Item.Properties().stacksTo(64), id, "vr_z2_npc_", "drakensplinter")));
         }
         QUEST_ITEMS.put("chocomelk", ITEMS.registerSimpleItem("vr_z2_npc_chocomelk",
                 () -> new Item.Properties().stacksTo(16).food(new FoodProperties.Builder().nutrition(4).saturationModifier(0.6f).alwaysEdible().build(),

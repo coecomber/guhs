@@ -97,6 +97,8 @@ TEKSTEN = {
     Z + "bm.fase3": "OVERDRUK",
     Z + "bm.fase3.onder": "De machine kraakt in al haar voegen",
     Z + "bm.cliff": "Pfff! Dit is nog niet voorbij! In het fort wacht de Opperboor... en die boort door ALLES heen! Njeheheh!",
+    # (WERELDVERHAAL §10 #11: the only time "Keizer" is said in zone 1-2, only for whoever finds the secret boss)
+    Z + "bm.cliff2": "Dat kristal was voor de Vingers! De Keizer wacht niet gr... VERGEET DAT IK DAT ZEI!",
     Z + "bm.cliff_titel": "WORDT VERVOLGD...",
     Z + "bm.cliff_onder": "De Mika-boormeester rijdt in een rookwolk terug naar het fort",
     # Spiegelburcht

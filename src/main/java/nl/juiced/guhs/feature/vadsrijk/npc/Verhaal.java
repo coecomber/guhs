@@ -242,9 +242,17 @@ public final class Verhaal {
 
     // ---- the end of zone 1, the spy, the advancements ---------------------------------------------------------------------------
 
+    /** The moon shot at the end of the zone-1 cliffhanger: the camera's elevation (degrees). */
+    public static final double MAAN_HOOGTE = 32;
+
     public static void cliffhanger(ServerPlayer p) {
         Vec3[] k = NpcPlekken.CLIFFHANGER;
-        RijkScene s = RijkScene.maak("npc:cliffhanger", 260).camera(0, k[0], k[1]).camera(120, k[2], k[3]).camera(260, k[4], k[5])
+        // (WERELDVERHAAL §10 #15) after the title, one last shot: the camera tilts up to the second moon, which blinks once
+        // (WereldLucht draws it in the look direction of this last keyframe and blinks it at MAAN_KNIPPER)
+        Vec3 vlak = new Vec3(k[5].x - k[4].x, 0, k[5].z - k[4].z).normalize();
+        Vec3 maan = k[4].add(vlak.scale(20 * Math.cos(Math.toRadians(MAAN_HOOGTE)))).add(0, 20 * Math.sin(Math.toRadians(MAAN_HOOGTE)), 0);
+        RijkScene s = RijkScene.maak("npc:cliffhanger", 312).camera(0, k[0], k[1]).camera(120, k[2], k[3]).camera(258, k[4], k[5])
+                .camera(278, k[4], maan).camera(312, k[4], maan)
                 .titel("vadsrijk.npc.scene.einde.titel", "vadsrijk.npc.scene.einde.onder", 150, 100, 0x9A86B0).bouw();
         RijkScenes.speel(p, s);
         NpcRollen.doe("draak", p, "ver");

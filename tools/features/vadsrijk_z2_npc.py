@@ -96,7 +96,10 @@ NPCS = {
     "z2_opa_sneeuwbal": ("Opa Sneeuwbal", [
         "In mijn tijd liepen we elke dag door de sneeuw naar school. Bergop. Beide kanten op.",
         "Mijn wanten zijn weg. Mijn pootjes zijn nu ijsklontjes.",
-        "Kom eens hier, ik vertel je over de winter van '32. Die was koud. Einde verhaal."],
+        "Kom eens hier, ik vertel je over de winter van '32. Die was koud. Einde verhaal.",
+        # (WERELDVERHAAL §10 #12: a 4th idle line, NpcDef.VIER_REGELS)
+        "Die winter kwam er een guh over de pieken van heel ver weg. Mager als een breinaald. Hij at drie weken onze pannenkoeken en "
+        "zei geen woord over waar hij vandaan kwam."],
         "op het terras van het chocomelkcafé, aan de zuidwestkant van het plein " + _KK),
     "z2_bakker": ("Bakker Speculaas", [
         "Kandijkoekjes! Knapperig van buiten, kristal van binnen!",
@@ -202,7 +205,10 @@ NPCS = {
     "z2_poollicht": ("Poollicht Pien", [
         "'s Nachts danst het licht boven de pieken. Groen en roze. Prachtig!",
         "Ik teken sterrenkaarten. De sterren hier hebben guh-oortjes.",
-        "Vanaf de hoge uitkijk zie je ver weg een reuzenboom. Niemand weet wat daar is."],
+        "Vanaf de hoge uitkijk zie je ver weg een reuzenboom. Niemand weet wat daar is.",
+        # (WERELDVERHAAL §10 #9: a 4th idle line, NpcDef.VIER_REGELS)
+        "Ik teken sterrenbeelden met guh-oortjes. Maar aan de verre rand staat er één met heel lange armen. Hij staat elk jaar een "
+        "stukje dichterbij."],
         "voor haar huisje op het terras aan de noordoostkant van Kandijkom"),
     # --- out in the zone -------------------------------------------------------------------------------------------------------
     "z2_gondel_boven": ("Gondelguh Katrol", [
@@ -353,6 +359,9 @@ PLEK_OVERIG = {
 # ---------------------------------------------------------------------------------------------------------------------------
 # Quest items (Z2NpcRegistry.QUEST_ITEMS): name, vanilla texture
 # ---------------------------------------------------------------------------------------------------------------------------
+# NPCs with a 4th idle line (WERELDVERHAAL §10); keep in step with NpcDef.VIER_REGELS in Java
+VIER_REGELS = {"z2_poollicht", "z2_opa_sneeuwbal"}
+
 QUEST_ITEMS = {
     "galmscherf": ("Galmscherf (hij zoemt een beetje)", "minecraft:item/amethyst_shard"),
     "wantje": ("Want van Opa Sneeuwbal", "minecraft:item/leather"),
@@ -367,6 +376,10 @@ QUEST_ITEMS = {
     "hartsplinter": ("Roze hartsplinter van Vahoegnir", "minecraft:item/pink_dye"),
     "drakensplinter": ("Grauwe drakensplinter", "minecraft:item/flint"),
     "chocomelk": ("Warme chocomelk", "minecraft:item/honey_bottle"),
+}
+# flavour lines under a quest item (item.guhs.vr_z2_npc_<id>.lore; Z2NpcRegistry gives these items an ItemLore). WERELDVERHAAL §10 #8.
+QUEST_ITEM_LORE = {
+    "drakensplinter": "Grauw, hard en een beetje gebogen. Net een nagelknipsel. Van iets héél groots. Bah.",
 }
 
 # ---------------------------------------------------------------------------------------------------------------------------
@@ -642,10 +655,12 @@ Q("z2_hq12_hartsplinter", "hoofd", "z2_prisma", "Een roze splinter",
   [("npc", "Ga, avonturier. De Orde moet dit weten.")],
   "Naar Ordemeester Kristalijn in de Kristalkapel aan de noordkant van Kandijkom (achter de grote sneeuwguh-spar).",
   [("npc", "Een splinter van het hartkristal... Ik heb er alleen over gelezen. In de oudste boeken van de Orde."),
+   ("npc", "Er stond ook een plaatje in van een kat met armen tot over de rand van de bladzijde. Die bladzijde is eruit gescheurd. "
+           "Niet door mij."),
    ("npc", "Toen Vahoegnir nog roze was, droeg hij een hart van roze kristal. Zolang het heel was, beschermde hij het hele rijk."),
    ("npc", "Iemand heeft het gebroken. De Mika's? Ze boren het grauwe kristal uit de bergen... ze zoeken iets."),
    ("jij", "Dan zoeken wij de andere splinters. Voordat de Mika's ze vinden."),
-   ("npc", "Kijk eens naar het westen. Zie je dat, heel ver weg, achter de wolken? Een boom. Zo groot als een berg.")],
+   ("npc", "Kijk eens naar het oosten. Zie je dat, heel ver weg, achter de wolken? Een boom. Zo groot als een berg.")],
   xp=12000, munten=15000, lv=30, na=["z2_hq11_spiegelzucht"], inleveren="z2_ordemeester", auto=True,
   start_items=[(item("hartsplinter"), 1)], actie_klaar="z2_cliffhanger")
 
@@ -768,9 +783,9 @@ Q("z2_s10_poollicht", "zij", "z2_poollicht", "Het poollicht",
   [D("gebied", "poi:z2_uitkijk_poollicht", 1, "Klim op de hoge kristalnaald in het noordwesten van de Splinterkloof",
      plek="poi:z2_uitkijk_poollicht")],
   [("npc", "Vanaf de hoogste naald in de kloof zie je het hele rijk. Het poollicht. De sterren met oortjes. En iets... groots, in "
-           "het westen."),
+           "het oosten."),
    ("npc", "Wil jij voor mij kijken? Mijn pootjes zijn te kort om te klimmen.")],
-  "De hoge kristalnaald in het noordwesten van de Splinterkloof. Kijk goed naar het westen!",
+  "De hoge kristalnaald in het noordwesten van de Splinterkloof. Kijk goed naar het oosten!",
   [("npc", "Een boom? Zo groot als een berg? Met lichtjes in de takken? Dat... staat op geen enkele kaart. Ik ga hem tekenen!")],
   xp=6000, munten=3500, lv=30, na=["z2_hq08_splinterkloof"])
 
@@ -1076,7 +1091,7 @@ OVERIG = {
     Z + "scene.flashback.titel": "Lang geleden...",
     Z + "scene.flashback.onder": "Vahoegnir, de roze beschermdraak van het Vadsrijk",
     Z + "scene.einde.titel": "Wordt vervolgd...",
-    Z + "scene.einde.onder": "Ver in het westen, achter de wolken, staat een boom zo groot als een berg.",
+    Z + "scene.einde.onder": "Ver in het oosten, achter de wolken, staat een boom zo groot als een berg.",
     Z + "scene.gondel.titel": "De Galmhellingen",
     Z + "scene.gondel.onder": "Het bovenste gondelstation",
     Z + "scene.vlucht.kandijkom.titel": "Kandijkom",
@@ -1114,7 +1129,7 @@ def teksten():
     t.update(PLEK_OVERIG)
     npc_ids, poi_ids, gebied_ids, baas_ids, _npc1 = _java_ids()
     for id, (naam, regels, waar) in NPCS.items():
-        assert len(regels) == 3, id
+        assert len(regels) == (4 if id in VIER_REGELS else 3), id
         t[P + "naam." + id] = naam
         t[P + "plek.npc." + id] = waar
         for i, r in enumerate(regels, 1):
@@ -1134,6 +1149,9 @@ def teksten():
     assert gebied_ids <= set(PLEK_GEBIED) and baas_ids <= set(PLEK_BAAS), "area/boss without a plek text"
     for id, (naam, _tex) in QUEST_ITEMS.items():
         t[f"item.guhs.vr_z2_npc_{id}"] = naam
+    for id, regel in QUEST_ITEM_LORE.items():
+        assert id in QUEST_ITEMS, id
+        t[f"item.guhs.vr_z2_npc_{id}.lore"] = regel
     for q in QUESTS:
         s = P + "q." + q["id"]
         t[s + ".titel"] = q["titel"]
