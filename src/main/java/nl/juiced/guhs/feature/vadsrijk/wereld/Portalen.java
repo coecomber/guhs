@@ -48,7 +48,7 @@ public final class Portalen {
     }
 
     /** A player stands in a portal block (server, every tick while inside). */
-    static void aanraking(ServerPlayer p, BlockPos pos, BlockState state) {
+    public static void aanraking(ServerPlayer p, BlockPos pos, BlockState state) {
         long nu = p.level().getGameTime();
         Long tot = AFKOELEN.get(p.getUUID());
         if ((tot != null && nu < tot) || RijkScenes.bezig(p)) {
@@ -60,6 +60,11 @@ public final class Portalen {
             return;
         }
         SpelerData d = Spelers.data(p);
+        // (fix round 2, g-werver) the temple's portal first wants a talk with Werver Wimpel; a self-built one never does
+        if (!nl.juiced.guhs.feature.vadsrijk.npc.Werver.magDoor(p, (ServerLevel) p.level(), pos, state.getValue(PortaalBlok.WAKKER))) {
+            nl.juiced.guhs.feature.vadsrijk.npc.Werver.weiger(p);
+            return;
+        }
         if (!state.getValue(PortaalBlok.WAKKER)) {
             ontwaak((ServerLevel) p.level(), pos);
             AFKOELEN.put(p.getUUID(), nu + 200);

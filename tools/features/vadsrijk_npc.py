@@ -21,6 +21,11 @@ JAVA = os.path.join("src", "main", "java", "nl", "juiced", "guhs", "feature", "v
 # NPCs: name + 3 idle lines (vadsrijk.npc.naam.<id>, vadsrijk.npc.praat.<id>.1..3)
 # ---------------------------------------------------------------------------------------------------------------------------
 NPCS = {
+    # the ruined order temple in the Guhmension (Werver.java; fix round 2, g-werver): you talk to him before the portal wakes
+    "werver": ("Werver Wimpel", [
+        "De Knuffelorde zoekt jou! Ja, jou. Met die oortjes.",
+        "Ik werf al honderd jaar rekruten bij deze tempel. Jij bent nummer drie.",
+        "Het portaal snurkt een beetje. Dat doen oude portalen."]),
     # Knuffelkamp
     "rekruteerder": ("Sergeant Pluizebol", [
         "Rug recht, oortjes omhoog, rekruut! Zo. Vahoeg.",
@@ -215,8 +220,12 @@ QUEST_ITEMS = {
 QUESTS = []
 
 
-def D(soort, doel, n, tekst, bron="", kans=0.0):
-    return dict(soort=soort, doel=doel, n=n, tekst=tekst, bron=bron, kans=kans)
+def D(soort, doel, n, tekst, bron="", kans=0.0, plek=""):
+    return dict(soort=soort, doel=doel, n=n, tekst=tekst, bron=bron, kans=kans, plek=plek)
+
+
+# the na entry that means "owns any mount" (RijdierQuests.POORT, checked in Questlog.beschikbaar)
+RIJDIER_POORT = "@rijdier"
 
 
 def Q(id, soort, gever, titel, tekst, doelen, aanbod, bezig, klaar, xp=0, munten=0, items=(), wapen=False, loot="", lv=1, na=(),
@@ -237,8 +246,6 @@ Q("hq01_welkom", "hoofd", "rekruteerder", "Welkom, rekruut!",
    ("jij", "Hoi! Ik kom me aanmelden. Wat doet De Knuffelorde eigenlijk?"),
    ("npc", "Wij vrolijken op wat chagrijnig is geworden! In Het Vadsrijk worden wezens grauw en knorrig. Dat noemen we de "
            "Vadsloosheid. Wij geven ze hun vads terug. Met een kussen. Of een pijl. Of een vuurbal. Heel liefdevol."),
-   ("npc", "...Njeg. Waarom kijk je zo? Heb jij ook het gevoel dat je dit eerder hebt gezien? Iets met 'Wynn'-nogwat?"),
-   ("npc", "Nee hoor. Dit is héél anders. Hier zijn knuffels! En de monsters worden blij in plaats van dood. Heel anders. Echt."),
    ("npc", "Loop maar naar het kampvuur op het plein. Daar zit Kok Knapperkorst. Zeg maar dat ik je stuur, dan krijg je iets lekkers.")],
   "Het kampvuur, rekruut! Rechtdoor, langs de tenten. Je ruikt het vanzelf.",
   [("npc", "Aha! Een rekruut! Pluizebol stuurt je, hè? Ga zitten. Hier, een warme pluiskoek."),
@@ -695,6 +702,26 @@ Q("rijdier_hoedhupper", "rijdier", "stalmeester", "Een eigen Hoedhupper",
    ("npc", "Verzorg hem goed. Hoe meer je met hem rijdt, hoe sterker hij wordt. Fluit maar als je hem nodig hebt.")],
   xp=800, munten=500, lv=8, na=["hq06_zwamzoet"], actie_klaar="rijdier:hoedhupper")
 
+# fix round 2 (g-werver): the mount return quest of zone 1, available once you own any mount (NOTITIES_G_MOUNTS.md)
+Q("rijdier_knuffelhert", "rijdier", "boswachter_mos", "Het Knuffelhert",
+  "Boswachter Mos vertelt over een heel zacht hert dat soms komt kijken als de oude lantaarns bij de lichtstralen van het "
+  "Sporenwoud branden. Steek de drie lantaarns aan en volg de glimmende hoefjes naar de verborgen open plek.",
+  [D("gebied", "poi:hert_lantaarn_1", 1, "Steek de lantaarn aan bij de lichtstraal in het zuidoosten van het Sporenwoud"),
+   D("gebied", "poi:hert_lantaarn_2", 1, "Steek de lantaarn aan bij de lichtstraal midden in het Sporenwoud"),
+   D("gebied", "poi:hert_lantaarn_3", 1, "Steek de lantaarn aan bij de lichtstraal in het noordwesten van het Sporenwoud"),
+   D("meld", "hert:open_plek", 1, "Volg de glimmende hoefjes naar de verborgen open plek", plek="poi:hert_open_plek")],
+  [("npc", "Hé, jij hebt een rijdier! Dan ben jij misschien wel de juiste voor dit verhaaltje."),
+   ("npc", "Bij de lichtstralen in het Sporenwoud staan drie oude lantaarns van de Orde. Als ze branden, komt er soms een heel zacht "
+           "hert kijken. Zo zacht als een knuffel. Ik noem het het Knuffelhert."),
+   ("jij", "Een knuffelhert? Bestaat dat echt?"),
+   ("npc", "Niemand heeft het ooit van dichtbij gezien. Steek de drie lantaarns aan, dan volg je de glimmende hoefjes. Stil zijn, "
+           "hè. Herten houden niet van gesnurk.")],
+  "Drie lantaarns bij de lichtstralen in het Sporenwoud. Daarna de glimmende hoefjes volgen!",
+  [("npc", "Het hert is met je meegelopen?! Helemaal tot hier? Kijk, het staat achter je te snuffelen!"),
+   ("npc", "Dat doet het alleen bij iemand die het helemaal vertrouwt. Het wil met je mee, avonturier. Zorg goed voor het, en "
+           "geef het af en toe een wortelzwam.")],
+  xp=1500, munten=800, lv=10, na=["hq06_zwamzoet", RIJDIER_POORT], actie_klaar="rijdier_geef:knuffelhert")
+
 # ===== job advancements at lv 10 and 20 per class (klassen slice does the ceremony) ========================================
 KLASSEN = {
     "knuffelridder": ("Knuffelridder", "Kussenkampioen", "Vahoege Paladijn", "Meester Kussensloop"),
@@ -772,6 +799,9 @@ SCHATTEN = {
 # The rest are written here for the slices that own the system (NOTITIES_NPC.md: who calls which).
 # ---------------------------------------------------------------------------------------------------------------------------
 TIPS = {
+    "weergave": ("Zet je weergaveafstand hoger!", "Het Vadsrijk is met de hand gebouwd, zonder zware wereldgeneratie. Zet je "
+                                                  "weergaveafstand op 32 chunks (minstens 20): dat kan hier meestal zonder haperen, "
+                                                  "en de uitzichten zijn het waard. Opties > Video-instellingen."),
     "skill": ("Je eerste vaardigheid", "Druk op R, V of G voor je vaardigheden en op Z voor je ultieme vaardigheid. Ze kosten energie "
                                       "en hebben een korte afkoeltijd. Je ziet ze onderaan in je balk."),
     "loot": ("Buit!", "De kleur van de lichtstraal vertelt hoe zeldzaam iets is: grijs, groen, blauw, paars, oranje en heel soms roze "
@@ -798,6 +828,10 @@ TIPS = {
 # The Avonturiersgids (questlog tab "Gids"; QuestlogScherm.GIDS has the same ids)
 # ---------------------------------------------------------------------------------------------------------------------------
 GIDS = {
+    "weergave": ("Weergaveafstand", "Werver Wimpel raadt het iedereen aan: speel het Vadsrijk met een weergaveafstand van 32 chunks, en "
+                                    "minstens 20 (Opties > Video-instellingen > Weergaveafstand). Het Vadsrijk is met de hand gebouwd, "
+                                    "zonder zware wereldgeneratie, dus hier kan je weergaveafstand meestal een stuk hoger dan in de "
+                                    "Guhmensie zonder dat het hapert. Dan zie je de stad, de reuzenzwammen en de draak al van ver."),
     "begin": ("Welkom in het Vadsrijk", "Het Vadsrijk is een eigen wereld vol avontuur. Je normale spullen blijven veilig thuis; hier "
                                          "heb je je avonturiersinventaris. Volg de gouden ! en de verhaalquests: die leiden je door "
                                          "Knuffelkamp naar Zwamzoet en verder. Druk op J voor je questlog. Zit je vast? Druk op U."),
@@ -876,6 +910,40 @@ WEZENS = {
 # All other texts
 # ---------------------------------------------------------------------------------------------------------------------------
 OVERIG = {
+    # Werver Wimpel at the ruined order temple in the Guhmension (Werver.java, fix round 2): the talk before the portal wakes.
+    # (who says what: Werver.GESPREK = npc, jij, npc, npc, npc, npc, jij, npc)
+    P + "werver.gesprek.0": "Halt! Njeg, niet schrikken. Ik ben Werver Wimpel, van De Knuffelorde. En jij... jij hebt precies de goede "
+                            "oortjes.",
+    P + "werver.gesprek.1": "De goede oortjes? Waarvoor dan?",
+    P + "werver.gesprek.2": "Om avonturier te worden! Achter dit oude portaal ligt Het Vadsrijk. Daar worden wezens grauw en knorrig: de "
+                            "Vadsloosheid. De Orde zoekt rekruten die ze weer blij knuffelen. Met een kussen. Of een pijl. Of een "
+                            "vuurbal. Heel liefdevol.",
+    P + "werver.gesprek.3": "Je krijgt een klasse, vaardigheden, quests, buit met kleurtjes, een luchtschip... ...Njeg. Waarom kijk je zo? "
+                            "Heb jij ook het gevoel dat je dit eerder hebt gezien? Iets met 'Wynn'-nogwat?",
+    P + "werver.gesprek.4": "Nee hoor. Dit is héél anders. Hier zijn knuffels! En de monsters worden blij in plaats van dood. Heel anders. "
+                            "Echt.",
+    P + "werver.gesprek.5": "Nog één goede raad, rekruut: zet je weergaveafstand op 32 chunks, en minstens op 20 (Opties > "
+                            "Video-instellingen). Het Vadsrijk is met de hand gebouwd, zonder zware wereldgeneratie. Daar kan het "
+                            "meestal veel hoger dan hier in de Guhmensie zonder dat het hapert. En de uitzichten! Vahoeg!",
+    P + "werver.gesprek.6": "Goed, 32 chunks. En dan?",
+    P + "werver.gesprek.7": "Dan stap je door het portaal. Het slaapt nog, maar voor een rekruut van de Orde wordt het wel wakker. Je "
+                            "eigen spullen blijven veilig hier. Zeg tegen Sergeant Pluizebol dat Wimpel je stuurt!",
+    P + "werver.weer": "Daar is mijn rekruut weer! Het portaal staat klaar. En denk aan je weergaveafstand: 32 chunks, minstens 20!",
+    P + "werver.eerst_praten": "Het portaal slaapt nog... Praat eerst met Werver Wimpel, hier bij de tempel. Hij zwaait al naar je!",
+    # the mount return quests (RijdierQuests.java): the little moments on the way (narrator pages + the lantern line)
+    P + "rijdierquest.lantaarn": "Lantaarn aangestoken! (%s/%s)",
+    P + "rijdierquest.hert.sporen.0": "De derde lantaarn gloeit warm op. Het hele bos wordt even stil...",
+    P + "rijdierquest.hert.sporen.1": "Daar! In het mos glinsteren kleine roze hoefjes, één voor één, naar het westen. Volg ze maar.",
+    P + "rijdierquest.hert.open_plek.0": "De hoefjes houden op bij een open plek vol lichtzwammen. Het is er heel stil.",
+    P + "rijdierquest.hert.open_plek.1": "Tussen de zwammen staat een hert, zo zacht als een knuffel. Het kijkt je aan met grote, natte "
+                                         "ogen.",
+    P + "rijdierquest.hert.open_plek.2": "Voorzichtig komt het dichterbij en snuffelt aan je hand. Dan loopt het met je mee. Breng het "
+                                         "nieuws naar Boswachter Mos!",
+    P + "rijdierquest.wolf.gevonden.0": "Daar, achter een ijsblok op de bodem van de kloof: een piepklein sneeuwwolfje, met een "
+                                        "sneeuwvlok op zijn neus. Het rilt.",
+    P + "rijdierquest.wolf.gevonden.1": "Het wolfje kruipt meteen in je capuchon. Het is zo licht als een kussentje en het piept zachtjes.",
+    P + "rijdierquest.wolf.gevonden.2": "Om jullie heen snuffelen knorrige wezens. Vrolijk ze op, dan kan het wolfje veilig mee naar "
+                                        "Breister Wolwinter in Kandijkom.",
     "entity.guhs.vr_npc_guh": "Guh",
     "key.guhs.vr_questlog": "Questlog (Vadsrijk)",
     P + "jij": "Jij",
@@ -1079,6 +1147,10 @@ PLEK_POI = {
     "uitkijk_druipspits": "bovenop de rotsnaald boven de Druipgrotten",
     "uitkijk_haventand": "bovenop de rotsnaald ten oosten van De Haven",
     "uitkijk_slijmnaald": "bovenop de rotsnaald in het zuidoosten van de Klodderweide",
+    "hert_lantaarn_1": "bij de lichtstraal in het zuidoosten van het Sporenwoud, ten zuidwesten van Zwamzoet",
+    "hert_lantaarn_2": "bij de lichtstraal midden in het Sporenwoud",
+    "hert_lantaarn_3": "bij de lichtstraal in het noordwesten van het Sporenwoud, niet ver van de waterval",
+    "hert_open_plek": "op een verborgen open plek bij de westelijke lichtstraal van het Sporenwoud",
 }
 PLEK_GEBIED = {
     "knuffelkamp": "in Knuffelkamp, het oefeneiland",
@@ -1230,7 +1302,7 @@ def quests_json():
         for wie in (q["gever"], q["inleveren"]):
             assert wie in npc_ids, f"{q['id']}: unknown NPC {wie}"
         for na in q["na"]:
-            assert na in ids, f"{q['id']}: unknown previous quest {na}"
+            assert na in ids or na == RIJDIER_POORT, f"{q['id']}: unknown previous quest {na}"
         for d in q["doelen"]:
             for x in (d["doel"], d["bron"]):
                 if x.startswith("poi:"):
@@ -1243,7 +1315,8 @@ def quests_json():
             for wie, _x in groep:
                 assert wie in ("npc", "jij") or wie in npc_ids, f"{q['id']}: unknown speaker {wie}"
         o = dict(id=q["id"], soort=q["soort"], gever=q["gever"], inleveren=q["inleveren"], lv=q["lv"], na=q["na"],
-                 doelen=[dict(soort=d["soort"], doel=d["doel"], n=d["n"], bron=d["bron"], kans=d["kans"]) for d in q["doelen"]],
+                 doelen=[dict(soort=d["soort"], doel=d["doel"], n=d["n"], bron=d["bron"], kans=d["kans"], **({"plek": d["plek"]} if d["plek"] else {}))
+                         for d in q["doelen"]],
                  beloning=q["beloning"], aanbod=[w for w, _x in q["aanbod"]], klaar=[w for w, _x in q["klaar"]],
                  praat={npc: [w for w, _x in r] for npc, r in q["praat"].items()}, actie_aanname=q["actie_aanname"],
                  actie_klaar=q["actie_klaar"], start_items=q["start_items"], auto=q["auto"])
@@ -1288,7 +1361,7 @@ FTB_SECTIES = [
                                                              "vr_hq12_schaduw"]),
     ("vr_zwamzoet", "Zwamzoet helpen", "guh:mint", None),
     ("vr_klassen", "Klassen en rijdieren", "guh:snow", [f"vr_adv10_{k}" for k in KLASSEN] + [f"vr_adv20_{k}" for k in KLASSEN]
-     + ["vr_rijdier_hoedhupper"]),
+     + ["vr_rijdier_hoedhupper", "vr_rijdier_knuffelhert"]),
     ("vr_geheimen", "Geheimen", "guh:choco", ["vr_geheim_spion", "vr_knuffels_alle", "vr_aanwijzingen_alle"]
      + [f"vr_schat_{s}" for s in SCHATTEN]),
 ]

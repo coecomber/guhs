@@ -62,9 +62,15 @@ public final class NpcVolg {
         if (k != null) {
             regels.add(regel(QuestStap.van(p, k)));
         }
+        // (fix round 2, g-werver) a mount return quest (Knuffelhert / Guhwolf): shown once it is available, until it is handed in
+        Quest r = RijdierQuests.trackerQuest(p);
+        if (r != null) {
+            regels.add(regel(QuestStap.van(p, r)));
+        }
         String pin = pin(p);
         Quest q = pin.isEmpty() ? null : Quests.van(pin);
-        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))) {
+        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))
+                && (r == null || !r.id().equals(q.id()))) {
             regels.add(regel(QuestStap.van(p, q)));
         }
         return new NpcPayloads.Volg(!Questlog.vlag(p, "volg_uit"), !Questlog.vlag(p, "straal_uit"), regels);

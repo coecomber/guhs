@@ -1565,6 +1565,38 @@
       y: 12.025,
     },
     {
+      id: "4755480836A06893",
+      icon: {
+        id: "minecraft:saddle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_rijdier_knuffelhert",
+          id: "4755487696C2CB18",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E5A263227B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554859250BFB72",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 20.5,
+      y: 13.525,
+    },
+    {
       id: "47554865956A583A",
       icon: {
         id: "minecraft:spyglass",
@@ -2916,6 +2948,38 @@
       y: 28.95,
     },
     {
+      id: "475548BFF5E7E296",
+      icon: {
+        id: "minecraft:saddle",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z2_rijdier_guhwolf",
+          id: "47554890C7A271CF",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482A3B74073E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755481816205068",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 28.95,
+    },
+    {
       id: "475548CAC539BB39",
       icon: {
         id: "minecraft:writable_book",
@@ -2944,7 +3008,7 @@
           xp: 50,
         },
       ],
-      x: 7.5,
+      x: 6.0,
       y: 28.95,
     },
     {
@@ -2976,7 +3040,7 @@
           xp: 50,
         },
       ],
-      x: 6.0,
+      x: 4.5,
       y: 28.95,
       shape: "hexagon",
     },
@@ -3009,7 +3073,7 @@
           xp: 50,
         },
       ],
-      x: 4.5,
+      x: 3.0,
       y: 28.95,
       shape: "hexagon",
     },
@@ -3042,7 +3106,7 @@
           xp: 50,
         },
       ],
-      x: 3.0,
+      x: 1.5,
       y: 28.95,
       shape: "hexagon",
     },

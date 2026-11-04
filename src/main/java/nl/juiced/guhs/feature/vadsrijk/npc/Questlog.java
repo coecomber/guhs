@@ -117,6 +117,12 @@ public final class Questlog {
             return false;
         }
         for (String na : q.na()) {
+            if (na.equals(RijdierQuests.POORT)) {   // (fix round 2: the mount return quests, once you own any mount)
+                if (!RijdierQuests.poortOpen(p)) {
+                    return false;
+                }
+                continue;
+            }
             if (!klaar(p, na)) {
                 return false;
             }

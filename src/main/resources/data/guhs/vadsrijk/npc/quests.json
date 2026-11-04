@@ -40,8 +40,6 @@
         "npc",
         "jij",
         "npc",
-        "npc",
-        "npc",
         "npc"
       ],
       "klaar": [
@@ -1622,6 +1620,70 @@
       "praat": {},
       "actie_aanname": "",
       "actie_klaar": "rijdier:hoedhupper",
+      "start_items": [],
+      "auto": false
+    },
+    {
+      "id": "rijdier_knuffelhert",
+      "soort": "rijdier",
+      "gever": "boswachter_mos",
+      "inleveren": "boswachter_mos",
+      "lv": 10,
+      "na": [
+        "hq06_zwamzoet",
+        "@rijdier"
+      ],
+      "doelen": [
+        {
+          "soort": "gebied",
+          "doel": "poi:hert_lantaarn_1",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        },
+        {
+          "soort": "gebied",
+          "doel": "poi:hert_lantaarn_2",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        },
+        {
+          "soort": "gebied",
+          "doel": "poi:hert_lantaarn_3",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        },
+        {
+          "soort": "meld",
+          "doel": "hert:open_plek",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0,
+          "plek": "poi:hert_open_plek"
+        }
+      ],
+      "beloning": {
+        "xp": 1500,
+        "munten": 800,
+        "items": [],
+        "wapen": false,
+        "loot": ""
+      },
+      "aanbod": [
+        "npc",
+        "npc",
+        "jij",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "",
+      "actie_klaar": "rijdier_geef:knuffelhert",
       "start_items": [],
       "auto": false
     },

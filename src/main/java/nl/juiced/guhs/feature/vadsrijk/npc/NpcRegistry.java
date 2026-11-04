@@ -54,6 +54,8 @@ public final class NpcRegistry {
         modBus.addListener((EntityAttributeCreationEvent e) -> e.put(GUH.get(), GuhEntity.createAttributes().build()));
         QuestMotor.init();
         KamerTips.init();
+        Werver.init();
+        RijdierQuests.init();
         NpcHaken.registreer();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Npcs.tick(e.getServer());
@@ -61,6 +63,8 @@ public final class NpcRegistry {
             NpcMarkers.tick(e.getServer());
             NpcVolg.tick(e.getServer());
             Verhaal.tick(e.getServer());
+            Werver.tick(e.getServer());
+            RijdierQuests.tick(e.getServer());
         });
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
             Quests.alle();
@@ -71,11 +75,19 @@ public final class NpcRegistry {
             NpcRollen.koppelAlles();
         });
         NeoForge.EVENT_BUS.addListener(NpcHaken::klikBlok);
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStoppedEvent e) -> Werver.wis());
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> {
+            // (fix round 2) the view distance tip on arrival; a first visit gets it at the end of the opening scene instead
+            if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer p && Questlog.status(p, "hq01_welkom") != 0) {
+                nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, Werver.TIP);
+            }
+        });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             NpcMarkers.vergeet(e.getEntity().getUUID());
             NpcVolg.vergeet(e.getEntity().getUUID());
             KamerTips.vergeet(e.getEntity().getUUID());
             Reiskaart.vergeet(e.getEntity().getUUID());
+            RijdierQuests.vergeet(e.getEntity().getUUID());
         });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> NpcCommando.register(e));
     }

@@ -258,6 +258,7 @@ PLEK_POI = {
     "z2_kampvuur_galm": "bij het kampvuur van Berggids Klimpoot, aan de westrand van de Galmhellingen",
     "z2_kampvuur_meer": "bij het kampvuur aan de oostoever van het Bevroren Knuffelmeer",
     "z2_kampvuur_kloof": "bij het kampvuur aan de zuidrand van de Splinterkloof",
+    "z2_wolfje": "op de bodem van de Splinterkloof, onderaan de tweede trap naar beneden (ten westen van de middelste hangbrug)",
 }
 PLEK_GEBIED = {
     "z2_kandijkom": "in Kandijkom, de warme geode van de Splinterpieken",
@@ -829,6 +830,25 @@ Q("z2_s22_edelsteen", "zij", "z2_juwelier", "Je eerste edelsteen",
   [("npc", "Kijk hoe hij glanst! Dat is jouw eerste edelsteen. Ze gaan nooit kapot, en je kunt ze altijd wisselen. Veel plezier ermee!")],
   xp=3000, munten=2000, lv=20, na=_NA)
 
+# fix round 2 (g-werver): the mount return quest of zone 2, available once you own any mount (vadsrijk_npc.RIJDIER_POORT)
+Q("z2_rijdier_guhwolf", "rijdier", "z2_breister", "De verdwaalde Guhwolf",
+  "Breister Wolwinter hoort 's nachts iets huilen in de Splinterkloof: een sneeuwwolfje, helemaal alleen. Zoek het op de bodem van "
+  "de kloof, vrolijk de knorrige wezens eromheen op en breng het veilig naar Kandijkom.",
+  [D("gebied", "poi:z2_wolfje", 1, "Zoek het huilende wolfje op de bodem van de Splinterkloof, onderaan de tweede trap naar beneden",
+     plek="poi:z2_wolfje"),
+   D("opvrolijk", "gebied:z2_splinterkloof", 5, "Vrolijk 5 knorrige wezens in de Splinterkloof op, zodat het wolfje veilig mee kan",
+     plek="gebied:z2_splinterkloof")],
+  [("npc", "Psst. Jij hebt een rijdier, hè? Dan snap jij dit vast. Hoor je dat? 's Nachts huilt er iets in de Splinterkloof."),
+   ("npc", "Een sneeuwwolfje! Zo klein als een kussentje, helemaal alleen op de bodem van de kloof. Ik kan niet klimmen, ik brei."),
+   ("jij", "Ik ga het zoeken!"),
+   ("npc", "Fijn! Neem het mee hierheen. Ik brei vast een sjaaltje. Een heel klein sjaaltje. Voor nu.")],
+  "Het wolfje zit op de bodem van de Splinterkloof, onderaan de tweede trap. Breng het veilig hier!",
+  [("npc", "Daar is hij! Kom maar, kleintje. Hier, je sjaaltje. Staat je prachtig."),
+   ("verteller", "Een paar dagen, heel veel chocomelk en drie sjaaltjes later..."),
+   ("npc", "Kijk eens hoe groot hij is geworden! Hij past niet meer in je capuchon. Maar hij wil wel met je mee. Op zijn rug, zelfs!"),
+   ("npc", "Hier, zijn sjaaltje-zadel. Pas goed op elkaar, jullie twee. En kom af en toe langs voor een nieuwe sjaal.")],
+  xp=6000, munten=3000, lv=22, na=["z2_hq02_kandijkom", "@rijdier"], actie_klaar="rijdier_geef:guhwolf")
+
 Q("z2_s23_gondel", "zij", "z2_gondelier", "Naar de top!",
   "Gondelguh Kabeltje vindt dat iedereen een keer met de gondel naar de top moet. Neem de gondel en zeg Gondelguh Katrol boven gedag.",
   [D("gebied", "poi:z2_gondel_top", 1, "Neem de gondel bij Gondelguh Kabeltje (noordoostkant van Kandijkom) naar het bovenste station",
@@ -1158,7 +1178,7 @@ FTB_CHAPTER = "guhs_vadsrijk"
 FTB_PORTRAIT = "guh:snow"
 FTB_SECTIES = [
     ("vr_z2_verhaal", "De Splinterpieken (zone 2)", "guh:snow", [f"vr_{q['id']}" for q in QUESTS if q["soort"] == "hoofd"]),
-    ("vr_z2_kandijkom", "Kandijkom helpen", "guh:choco", [f"vr_{q['id']}" for q in QUESTS if q["soort"] in ("zij", "klasse")]),
+    ("vr_z2_kandijkom", "Kandijkom helpen", "guh:choco", [f"vr_{q['id']}" for q in QUESTS if q["soort"] in ("zij", "klasse", "rijdier")]),
     ("vr_z2_geheimen", "Geheimen van de Splinterpieken", "guh:mint", ["vr_z2_geheim_boormeester", "vr_z2_knuffels_alle",
                                                                       "vr_z2_aanwijzingen_alle"] + [f"vr_z2_schat_{s}" for s in SCHATTEN]),
 ]
@@ -1169,7 +1189,8 @@ def ftb(fq):
     K = "guhs:kaas_knabbels"
     for d in QUESTS:
         tekst = d["tekst"].replace("Kandijkom", "&bKandijkom&r")
-        icon = {"hoofd": "minecraft:amethyst_shard", "klasse": "minecraft:enchanted_book", "geheim": "minecraft:spyglass"}.get(
+        icon = {"hoofd": "minecraft:amethyst_shard", "klasse": "minecraft:enchanted_book", "geheim": "minecraft:spyglass",
+                "rijdier": "minecraft:saddle"}.get(
             d["soort"], "minecraft:writable_book")
         vorm = "gear" if d["soort"] == "hoofd" else ("hexagon" if d["soort"] in ("klasse", "geheim") else None)
         q(f"vr_{d['id']}", d["titel"], tekst + " &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)", icon,
