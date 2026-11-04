@@ -48,6 +48,7 @@ TEKSTEN = {
     W + "luchtschip.titel.haven": "De Haven",
     W + "luchtschip.onder": "Met de guhballon-lijn. Vahoeg!",
     W + "luchtschip.nog_niet": "De kapitein doet nog een dutje. Kom straks terug, njeg.",
+    W + "luchtschip.overslaan": "Sluipen = de rondvlucht overslaan",
     W + "uitkijk.klodderkijk": "Klodderkijk",
     W + "uitkijk.zwamnaald": "Zwamnaald",
     W + "uitkijk.druipspits": "Druipspits",

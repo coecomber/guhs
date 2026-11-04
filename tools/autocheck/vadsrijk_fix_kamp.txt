@@ -1,0 +1,103 @@
+# Vadsrijk fix round 1, KAMP (110-fix-kamp): the arrival stair, the ways out of the sea, the lighthouse cellar shaft,
+# tent floors, De Haven (organic edge, tower, arch, quay ladders) and the sightseeing flight with the safe landing.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_fix_kamp.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 120
+waitrender 400
+
+section trap
+/tp @s 6 67 1150
+look 200 -12
+wait 60
+waitrender 300
+shot k_steiger_trap gui
+/tp @s 0 66 1128
+look 180 -35
+wait 40
+waitrender 200
+shot k_trap_omhoog gui
+/guhs vadsrijk wereld plek aankomst_trap_top
+look 0 20
+wait 40
+waitrender 200
+shot k_trap_boven gui
+/tp @s 7 63 1140
+look 90 -10
+wait 40
+waitrender 200
+shot k_steiger_ladder gui
+
+section uitgangen
+/tp @s -103 63 944
+look -53 -25
+wait 60
+waitrender 300
+shot k_uitgang_west gui
+/tp @s 99 63 1080
+look 121 -25
+wait 60
+waitrender 300
+shot k_uitgang_zuidoost gui
+/tp @s 60 120 1180
+look 160 40
+wait 60
+waitrender 300
+shot k_kust_zuid gui
+
+section vuurtoren
+/tp @s -85 87 936
+look -56 -30
+wait 60
+waitrender 200
+shot k_kelder_schacht gui
+/tp @s -84 94 938
+look -90 60
+wait 40
+waitrender 200
+shot k_kelder_luik gui
+
+section tenten
+/guhs vadsrijk wereld plek ordetent
+look 180 10
+wait 40
+waitrender 200
+shot k_ordetent gui
+
+section haven
+/guhs vadsrijk wereld plek luchtschip_haven_landing
+look 180 -5
+wait 80
+waitrender 400
+shot h_aankomst gui
+/tp @s 30 110 420
+look 140 30
+wait 80
+waitrender 400
+shot h_overzicht gui
+/tp @s 40 66 500
+look 90 -10
+wait 60
+waitrender 300
+shot h_kade gui
+
+section vlucht
+/guhs vadsrijk wereld plek steiger_eind
+wait 60
+waitrender 200
+/guhs vadsrijk wereld vlieg haven
+wait 130
+shot v_schip gui
+wait 90
+shot v_wolken gui
+wait 140
+shot v_skyline gui
+wait 180
+shot v_haven gui
+wait 130
+shot v_geland gui

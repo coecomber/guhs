@@ -124,7 +124,10 @@ public final class WereldRegistry {
                 Littekens.controleer(p, true);
             }
         });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> Littekens.vergeet(e.getEntity().getUUID()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
+            Littekens.vergeet(e.getEntity().getUUID());
+            WereldReizen.vergeet(e.getEntity().getUUID());
+        });
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> {
             Later.wis();
             WereldDeuren.wis();
@@ -134,6 +137,8 @@ public final class WereldRegistry {
 
     public static void payloads(PayloadRegistrar registrar) {
         registrar.playToClient(Littekens.Vlag.TYPE, Littekens.Vlag.STREAM_CODEC, (v, c) -> Littekens.ontvanger.accept(v.klaar()));
+        registrar.playToClient(WereldReizen.Info.TYPE, WereldReizen.Info.STREAM_CODEC, (v, c) -> WereldReizen.ontvanger.accept(v.overslaanTicks()));
+        registrar.playToServer(WereldReizen.Overslaan.TYPE, WereldReizen.Overslaan.STREAM_CODEC, WereldReizen.Overslaan::handle);
     }
 
     // ------------------------------------------------------------------------------------------------ dev commands
@@ -180,10 +185,10 @@ public final class WereldRegistry {
             return 1;
         }))));
         w.then(dev("vlieg").then(Commands.literal("kamp").executes(c -> {
-            WereldReizen.vlieg(c.getSource().getPlayerOrException(), WereldReizen.Dok.HAVEN, WereldReizen.Dok.KAMP);
+            WereldReizen.vlieg(c.getSource().getPlayerOrException(), WereldReizen.Dok.HAVEN, WereldReizen.Dok.KAMP, true);
             return 1;
         })).then(Commands.literal("haven").executes(c -> {
-            WereldReizen.vlieg(c.getSource().getPlayerOrException(), WereldReizen.Dok.KAMP, WereldReizen.Dok.HAVEN);
+            WereldReizen.vlieg(c.getSource().getPlayerOrException(), WereldReizen.Dok.KAMP, WereldReizen.Dok.HAVEN, true);
             return 1;
         })));
         w.then(dev("littekens").then(Commands.literal("heel").executes(c -> {

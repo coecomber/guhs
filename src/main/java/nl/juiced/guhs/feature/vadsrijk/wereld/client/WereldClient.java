@@ -46,7 +46,34 @@ public final class WereldClient {
                 WereldLucht.teken(e);
             }
         });
-        NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> WereldSfeer.tick());
+        NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> {
+            WereldSfeer.tick();
+            vluchtTick();
+        });
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.ontvanger = t -> Minecraft.getInstance().execute(() -> overslaanTicks = t);
+    }
+
+    /** The airship flight may be skipped by sneaking for this many more ticks (0 = not skippable / no flight). */
+    private static int overslaanTicks;
+
+    private static void vluchtTick() {
+        if (overslaanTicks <= 0) {
+            return;
+        }
+        overslaanTicks--;
+        Minecraft mc = Minecraft.getInstance();
+        com.mojang.blaze3d.platform.InputConstants.Key k = mc.options.keyShift.getKey();
+        if (k.getType() == com.mojang.blaze3d.platform.InputConstants.Type.KEYSYM && overslaanTicks < WereldReizenDuur.MAX - 20
+                && com.mojang.blaze3d.platform.InputConstants.isKeyDown(mc.getWindow(), k.getValue())) {
+            overslaanTicks = 0;
+            net.neoforged.neoforge.client.network.ClientPacketDistributor.sendToServer(
+                    new nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.Overslaan());
+        }
+    }
+
+    /** (the first second of a flight never skips: the sneak that may still be held from before) */
+    private static final class WereldReizenDuur {
+        static final int MAX = 720;
     }
 
     private static void kleuren(RegisterColorHandlersEvent.BlockTintSources event) {

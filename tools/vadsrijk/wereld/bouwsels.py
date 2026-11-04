@@ -299,57 +299,198 @@ def luchtschip(S, cx, cz, cy, mast_x=None, richting=1):
 
 
 def mast(S, cx, cz, g, top):
-    S.cylinder(cx, cz, 5, g - 3, g, KSTEEN)
-    S.cylinder(cx, cz, 5, g, g, "knuffelklinkers")
-    for y in range(g + 1, top):
-        for (dx, dz) in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
+    """The grand airship tower of De Haven: an octagonal pink hall with four arches, a timber lattice with ring beams and a
+    ladder in the middle (one trapdoor at the top), a railed top platform with lanterns, flags, the beacon and guh ears."""
+    S.cylinder(cx, cz, 7.3, g - 3, g - 1, KSTEEN)
+    S.cylinder(cx, cz, 7.3, g, g, "knuffelklinkers")
+    S.cylinder(cx, cz, 5.4, g, g, "tegel_hartjes")
+    # the hall: a ring wall with four arched doorways and windows
+    for x in range(cx - 6, cx + 7):
+        for z in range(cz - 6, cz + 7):
+            d = math.hypot(x - cx, z - cz)
+            if 4.5 < d <= 5.6:
+                for y in range(g + 1, g + 9):
+                    b = PASTEL if (y - g) % 4 else FRAMB
+                    if y in (g + 5, g + 6) and (abs(x - cx) == 2 or abs(z - cz) == 2) and abs(x - cx) + abs(z - cz) > 5:
+                        b = "glasinlood_guh"
+                    S.set(x, y, z, b)
+    for (ux, uz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        for w in (-1, 0, 1):
+            for y in range(g + 1, g + 5):
+                for r in (4, 5, 6):
+                    S.set(cx + ux * r + uz * w, y, cz + uz * r + ux * w, CARVE)
+        S.set(cx + ux * 5 + uz * 0, g + 5, cz + uz * 5, "glasinlood_hartje")
+        for kant in (-2, 2):
+            S.set(cx + ux * 6 + uz * kant, g + 1, cz + uz * 6 + ux * kant, LANT)
+    S.cylinder(cx, cz, 6.2, g + 9, g + 9, GLAD)
+    S.cylinder(cx, cz, 6.2, g + 10, g + 10, "guh_dakpan_roze")
+    S.cylinder(cx, cz, 4.6, g + 10, g + 10, GLAD)
+    # the core (3x3) with the ladder on its south face
+    S.fill(cx - 1, g + 1, cz - 1, cx + 1, top - 1, cz + 1, KSTEEN)
+    for y in range(g + 11, top):
+        for (dx, dz) in ((-3, -3), (3, -3), (-3, 3), (3, 3)):
             S.set(cx + dx, y, cz + dz, "minecraft:stripped_cherry_log[axis=y]")
-        if y % 8 == 0:
-            S.walls(cx - 2, y, cz - 2, cx + 2, y, cz + 2, "minecraft:cherry_planks")
-    for y in range(g + 1, top + 1):     # ladder inside
-        S.set(cx, y, cz + 1, "minecraft:ladder[facing=north,waterlogged=false]")
-        S.set(cx, y, cz + 2, "minecraft:cherry_planks")
-    S.fill(cx - 4, top, cz - 4, cx + 4, top, cz + 4, "minecraft:cherry_planks")
-    S.set(cx, top, cz + 1, "minecraft:cherry_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
-    S.walls(cx - 4, top + 1, cz - 4, cx + 4, top + 1, cz + 4, "minecraft:cherry_fence")
-    for (dx, dz) in ((-4, -4), (4, -4), (-4, 4), (4, 4)):
+        if (y - g) % 8 == 0:
+            S.walls(cx - 3, y, cz - 3, cx + 3, y, cz + 3, "minecraft:cherry_planks")
+            for (dx, dz) in ((-3, -3), (3, -3), (-3, 3), (3, 3)):
+                S.set(cx + dx + (1 if dx > 0 else -1), y, cz + dz + (1 if dz > 0 else -1), "minecraft:cherry_planks")
+                S.set(cx + dx + (1 if dx > 0 else -1), y - 1, cz + dz + (1 if dz > 0 else -1), LANT_H)
+        if (y - g) % 8 == 4:
+            for (dx, dz) in ((-2, -3), (2, -3), (-2, 3), (2, 3), (-3, -2), (3, -2), (-3, 2), (3, 2)):
+                S.set(cx + dx, y, cz + dz, "minecraft:cherry_fence")
+    for y in range(g + 1, top):
+        S.set(cx, y, cz + 2, "minecraft:ladder[facing=south,waterlogged=false]")
+    for y in range(g + 1, g + 4):
+        S.set(cx, y, cz + 3, CARVE)
+    S.cylinder(cx, cz, 5.3, top, top, "minecraft:cherry_planks")
+    S.cylinder(cx, cz, 5.3, top - 1, top - 1, "minecraft:stripped_cherry_log[axis=y]", hollow=1)
+    S.set(cx, top, cz + 2, "minecraft:cherry_trapdoor[facing=south,half=top,open=false,powered=false,waterlogged=false]")
+    for x in range(cx - 6, cx + 7):
+        for z in range(cz - 6, cz + 7):
+            if 4.6 < math.hypot(x - cx, z - cz) <= 5.3:
+                S.set(x, top + 1, z, "minecraft:cherry_fence")
+    for (dx, dz) in ((-4, -2), (4, -2), (-4, 2), (4, 2), (-2, 4), (2, 4), (-2, -4), (2, -4)):
         S.set(cx + dx, top + 2, cz + dz, LANT)
+    for (dx, dz) in ((-3, 3), (3, 3)):
+        guhvlag(S, cx + dx, top + 1, cz + dz, "x", 7)
     S.fill(cx, top + 1, cz - 3, cx, top + 8, cz - 3, "minecraft:cherry_log[axis=y]")
     S.set(cx, top + 9, cz - 3, "minecraft:shroomlight")
-    Z.oortje(S, cx, top + 10, cz - 3, "z")
+    Z.oortje(S, cx, top + 10, cz - 3, "z", groot=2)
+
+
+def guhvlag(S, x, y, z, as_="x", h=6):
+    """A guh flag: a cherry pole with a pink cloth (white rim, two dark eyes and a little blush) at the top."""
+    S.fill(x, y, z, x, y + h - 1, z, "minecraft:cherry_fence")
+    for u in range(1, 5):
+        for v in range(0, 3):
+            b = "minecraft:pink_wool"
+            if v == 2 or u == 4:
+                b = "minecraft:white_wool"
+            if v == 1 and u in (1, 3):
+                b = "minecraft:black_wool"
+            pos = (x + u, y + h - 1 - v, z) if as_ == "x" else (x, y + h - 1 - v, z + u)
+            S.set(*pos, b)
+
+
+def kraan(S, x, z, g, uit=-1):
+    """A wooden harbour crane on the inner edge of the quay: post, boom out over the water, chain and a hanging crate."""
+    S.fill(x - 1, g + 1, z - 1, x + 1, g + 1, z + 1, "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+    S.fill(x, g + 1, z, x, g + 11, z, "minecraft:spruce_log[axis=y]")
+    for i in range(-2, 9):
+        S.set(x + uit * i, g + 12, z, "minecraft:stripped_spruce_log[axis=x]")
+    for i in range(1, 4):
+        S.set(x + uit * i, g + 12 - i, z, "minecraft:spruce_fence")
+    S.set(x - uit * 2, g + 11, z, "minecraft:hay_block[axis=y]")
+    kx = x + uit * 7
+    S.fill(kx, g + 6, z, kx, g + 11, z, "minecraft:iron_chain[axis=y]")
+    S.set(kx, g + 5, z, "minecraft:barrel[facing=up,open=false]")
+    S.set(x + uit * 8, g + 13, z, LANT)
+
+
+def kratten(S, x, z, g, rng):
+    """A stack of crates and barrels (2x2, one or two on top)."""
+    soorten = ["minecraft:barrel[facing=up,open=false]", "minecraft:spruce_planks", "minecraft:hay_block[axis=y]",
+               "minecraft:stripped_spruce_wood[axis=y]"]
+    for dx in (0, 1):
+        for dz in (0, 1):
+            S.set(x + dx, g + 1, z + dz, rng.choice(soorten))
+    S.set(x, g + 2, z, rng.choice(soorten))
+    if rng.random() < 0.5:
+        S.set(x + 1, g + 2, z + 1, rng.choice(soorten))
+
+
+def loper(S, x0, z0, w, d, voor, y, kleur="minecraft:pink_carpet"):
+    """A carpet runner from the door of a zwamzoet.huis (planks floor) to the back wall."""
+    if voor in ("west", "east"):
+        mid = z0 + (d - 1) // 2
+        for x in range(x0 + 1, x0 + w - 1):
+            S.set(x, y, mid, kleur)
+    else:
+        mid = x0 + (w - 1) // 2
+        for z in range(z0 + 1, z0 + d - 1):
+            S.set(mid, y, z, kleur)
+
+
+def kei(S, x, y, z, r, rng):
+    """A mossy boulder."""
+    blokken = ["minecraft:stone", "minecraft:andesite", "minecraft:mossy_cobblestone", "minecraft:cobblestone", "minecraft:tuff"]
+    for xx in range(int(x - r - 1), int(x + r + 2)):
+        for yy in range(int(y - r), int(y + r + 1)):
+            for zz in range(int(z - r - 1), int(z + r + 2)):
+                d = ((xx - x) / r) ** 2 + ((yy - y) / (r * 0.75)) ** 2 + ((zz - z) / r) ** 2
+                if d <= 1 + rng.uniform(-0.15, 0.1):
+                    S.set(xx, yy, zz, "minecraft:moss_block" if yy >= y + r * 0.5 and rng.random() < 0.5 else rng.choice(blokken))
 
 
 def haven(W, K, P):
+    """De Haven (contract box (-120,400)..(120,600)): a curved quay along the bay shore that ends in beaches and rocks, a pier,
+    the grand airship tower with the moored airship, an arrival arch, cranes, crates, lanterns, guh flags, houses and the
+    warehouse. Ways out of the water: ladders every ~14 blocks along the quay and the pier, two stone stairs into the water."""
     g = 64
-    S = WS(10, 40, 410, 130, 100, 170)
-    # quay along the bay shore + a pier into the bay
-    for z in range(425, 575):
-        oever = None
+    rng = random.Random(64)
+    S = WS(0, 40, 395, 136, 110, 212)
+    # quay along the bay shore, z 438..550 (the ends run out into the beach)
+    oevers = {}
+    for z in range(438, 551):
         for x in range(30, 130):
             if K.h(x, z) >= 0:
-                oever = x
+                oevers[z] = x
                 break
-        if oever is None:
-            continue
-        for x in range(oever, oever + 4):
-            for y in range(g - 4, g + 1):
-                S.set(x, y, z, KSTEEN if y < g else "knuffelklinkers")
+    for z, oever in oevers.items():
+        rand = z < 444 or z > 544
+        for x in range(oever, oever + (3 if rand else 4)):
+            for y in range(57, g + 1):
+                S.set(x, y, z, KSTEEN if y < g else ("knuffelklinkers" if x > oever else "minecraft:stone_bricks"))
         S.set(oever, g + 1, z, "minecraft:cherry_fence" if z % 7 else LANT)
+        # the land behind the quay: level with it
+        for x in range(oever + 4, oever + 8):
+            if K.h(x, z) < g:
+                S.set(x, g, z, "knuffelklinkers" if x < oever + 6 else "knuffelgras")
+    trappen = (456, 528)
+    for z, oever in oevers.items():
+        if z % 14 == 0 and not 462 <= z <= 478 and all(abs(z - t) > 4 for t in trappen) and 444 <= z <= 544:
+            zwemtrap(S, oever - 1, z, (-1, 0), g)
+    for t in trappen:
+        oever = oevers[t]
+        for w in (-1, 0, 1):
+            z = t + w
+            ox = oevers.get(z, oever)
+            S.set(ox, g + 1, z, CARVE)
+            for i in range(0, 5):
+                x, y = ox - 1 - i, g - 1 - i
+                wl = "true" if y <= KA.ZEE else "false"
+                S.set(x, y, z, f"minecraft:stone_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged={wl}]")
+                for yy in range(56, y):
+                    S.set(x, yy, z, "minecraft:stone_bricks")
+                for yy in range(y + 1, g + 1):
+                    if yy > KA.ZEE:
+                        S.set(x, yy, z, CARVE)
+            for zz in (t - 2, t + 2):
+                for i in range(0, 5):
+                    S.set(ox - 1 - i, g - 1 - i, zz, "minecraft:stone_bricks")
+                    for yy in range(56, g - 1 - i):
+                        S.set(ox - 1 - i, yy, zz, "minecraft:stone_bricks")
+    # the pier into the bay
     for x in range(30, 72):
         for z in range(468, 473):
             S.set(x, g, z, "minecraft:cherry_planks")
         if x % 5 == 0:
             for z in (467, 473):
-                S.fill(x, g - 4, z, x, g, z, "minecraft:cherry_log[axis=y]")
+                S.fill(x, 57, z, x, g, z, "minecraft:cherry_log[axis=y]")
                 S.set(x, g + 1, z, LANT if x % 10 == 0 else "minecraft:cherry_fence")
-    for (bx, bz) in ((40, 478), (52, 462)):
+    zwemtrap(S, 29, 470, (-1, 0), g, steun="minecraft:cherry_log[axis=y]")
+    zwemtrap(S, 42, 467, (0, -1), g, steun="minecraft:cherry_log[axis=y]")
+    for x in (37, 52, 62):
+        zwemtrap(S, x, 473 if x != 52 else 467, (0, 1) if x != 52 else (0, -1), g, steun="minecraft:cherry_log[axis=y]")
+    guhvlag(S, 31, g + 1, 468, "z", 7)
+    for (bx, bz) in ((40, 478), (52, 461)):
         S.fill(bx - 3, g - 1, bz - 1, bx + 3, g - 1, bz + 1, "minecraft:cherry_planks")
         S.fill(bx - 3, g, bz - 1, bx + 3, g, bz - 1, "roze_lakhout_planken")
         S.fill(bx - 3, g, bz + 1, bx + 3, g, bz + 1, "roze_lakhout_planken")
         S.fill(bx, g, bz, bx, g + 6, bz, "minecraft:cherry_fence")
         for i in range(5):
             S.fill(bx + 1, g + 1 + i, bz, bx + 4 - i, g + 1 + i, bz, "minecraft:white_wool")
-    # the airship mast + the moored airship + the bell
+    # the airship tower + the moored airship + the bell
     mx, mz, mtop = 92, 500, g + 50
     mast(S, mx, mz, g, mtop)
     luchtschip(S, mx - 32, mz - 3, mtop + 2, mast_x=mx - 5, richting=1)
@@ -358,30 +499,116 @@ def haven(W, K, P):
     P["luchtschip_haven_bel"] = [mx - 6, g + 1, mz - 12]
     P["luchtschip_haven_kapitein"] = [mx - 6, g + 1, mz - 9]
     P["luchtschip_haven_mast_top"] = [mx, mtop + 1, mz]
+    # the arrival square between the tower and the arch: a ring of heart tiles, the landing spot in the middle
+    for x in range(mx - 9, mx + 10):
+        for z in range(468, 491):
+            d = math.hypot((x - mx) / 9.5, (z - 479) / 11.5)
+            if d <= 1:
+                S.set(x, g, z, "tegel_hartjes" if d > 0.8 else ("knuffelklinkers" if (x + z) % 3 else "tegel_guhgezicht"))
+    P["luchtschip_haven_landing"] = [mx, g + 1, 484]
+    for (x, z) in ((mx - 9, 474), (mx + 9, 474), (mx - 9, 486), (mx + 9, 486)):
+        S.set(x, g + 1, z, "guh_lantaarnpaal[half=lower]")
+        S.set(x, g + 2, z, "guh_lantaarnpaal[half=upper]")
+    # the big arrival arch over the road (its face looks at the landing)
+    Z.guhpoort.__globals__["G"] = g
+    Z.guhpoort(S, mx, 462, breed=9, hoog=16)
+    Z.guhpoort.__globals__["G"] = 8
+    for kant in (-1, 1):
+        guhvlag(S, mx + kant * 7 - (4 if kant > 0 else 0), g + 22, 462, "x", 6)
+        S.set(mx + kant * 7, g + 1, 466, LANT)
     # warehouse (pakhuis) with Mika clue 2
     x0, z0 = 104, 515
     Z.huis(S, x0, g + 1, z0, 13, 11, 6, "west", Z.PALETTEN[2])
     for k in range(3):
         S.set(x0 + 9, g + 1, z0 + 2 + k * 3, "minecraft:barrel[facing=up,open=false]")
         S.set(x0 + 10, g + 1, z0 + 2 + k * 3, "minecraft:barrel[facing=up,open=false]")
+    for x in range(x0 + 1, x0 + 9):
+        S.set(x, g + 1, z0 + 8, "minecraft:brown_carpet")
     for (dx, dz) in ((3, 4), (4, 5), (5, 6)):
         S.set(x0 + dx, g, z0 + dz, "mika_steen")
     P["mika_aanwijzing_2"] = [x0 + 4, g + 1, z0 + 5]
     P["haven_pakhuis"] = [x0 - 1, g + 1, z0 + 5]
-    # houses + stalls + lamp posts + campfire
-    for i, (x, z, v) in enumerate(((100, 430, "west"), (112, 446, "west"), (100, 540, "west"), (114, 558, "north"))):
+    # houses (planks floor + a carpet runner), stalls, campfire
+    for i, (x, z, v) in enumerate(((100, 430, "west"), (110, 444, "west"), (100, 540, "west"), (106, 553, "north"))):
         Z.huis(S, x, g + 1, z, 7, 7, 5, v, Z.PALETTEN[i % 5])
+        loper(S, x, z, 7, 7, v, g + 1, ["minecraft:pink_carpet", "minecraft:magenta_carpet", "minecraft:light_blue_carpet",
+                                          "minecraft:lime_carpet"][i])
     for i, z in enumerate((480, 488, 532)):
+        S.fill(77, g, z - 1, 82, g, z + 3, "minecraft:spruce_planks")       # a plank floor under the stall (no pit, no grass)
+        for yy in range(58, g):
+            S.fill(77, yy, z - 1, 82, yy, z + 3, KSTEEN)
         Z.kraam.__globals__["G"] = g
-        Z.kraam(S, 80, z, ["rood", "geel", "blauw"][i])
+        Z.kraam(S, 78, z, ["rood", "geel", "blauw"][i])
+        S.fill(79, g + 1, z + 1, 80, g + 1, z + 1, "minecraft:spruce_slab[type=bottom,waterlogged=false]")
     Z.kraam.__globals__["G"] = 8
-    for z in range(430, 570, 12):
-        S.set(86, g + 1, z, "guh_lantaarnpaal[half=lower]")
-        S.set(86, g + 2, z, "guh_lantaarnpaal[half=upper]")
     S.set(100, g + 1, 452, VUUR)
     P["kampvuur_haven"] = [100, g + 1, 452]
     P["haven_plein"] = [90, g + 1, 470]
+    # along the quay: cranes, crates, lanterns, flags (on the land side, never on the walkway)
+    for (z, oever) in sorted(oevers.items()):
+        binnen = oever + 4
+        if z in (447, 541):
+            kraan(S, oever + 3, z, g)
+        elif z % 12 == 3 and 446 <= z <= 540 and not 460 <= z <= 492:
+            S.set(binnen, g + 1, z, "guh_lantaarnpaal[half=lower]")
+            S.set(binnen, g + 2, z, "guh_lantaarnpaal[half=upper]")
+        elif z % 24 == 9 and 446 <= z <= 540 and not 460 <= z <= 492:
+            guhvlag(S, binnen, g + 1, z, "z", 7)
+        elif z % 17 == 0 and 446 <= z <= 540 and not 458 <= z <= 494:
+            kratten(S, binnen + 1, z, g, rng)
+    for (x, z) in ((98, 506), (99, 509), (84, 512), (110, 508), (73, 470)):
+        kratten(S, x, z, g, rng)
+    # the coast around the quay: rocks on the beach and in the shallows, sand coves
+    for _ in range(140):
+        x, z = rng.randint(20, 120), rng.randint(400, 598)
+        if 440 <= z <= 548 and x < 120:
+            if rng.random() < 0.85:
+                continue
+        i, j = KA.idx(x, z)
+        h = int(K.H[i, j])
+        kd = float(K.kustd[i, j])
+        if K.pad[i, j] > 0.05 or W.bezet[i, j]:
+            continue
+        if h >= 0 and kd < 6:
+            kei(S, x, h + 0.5, z, rng.uniform(1.0, 2.4), rng)
+        elif h < 0 and float(K.zeed[i, j]) < 4:
+            kei(S, x, KA.ZEE - 0.5, z, rng.uniform(1.0, 1.8), rng)
+    # the soft rim of the village: a few boulders and shrubs where the flat ground turns into the meadow
+    for _ in range(60):
+        x, z = rng.randint(40, 120), rng.randint(405, 595)
+        i, j = KA.idx(x, z)
+        if not 4 < float(K.haven_d[i, j]) < 16 or K.pad[i, j] > 0.05 or K.H[i, j] < 63 or W.bezet[i, j]:
+            continue
+        h = int(K.H[i, j])
+        if rng.random() < 0.5:
+            kei(S, x, h + 0.3, z, rng.uniform(0.9, 1.7), rng)
+        else:
+            S.ellipsoid(x, h + 1.5, z, 1.6, 1.2, 1.6, "minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]", keep=True)
     W.stempel(S.stempel("haven"))
+
+
+def rondvlucht(W, K, P):
+    """Set pieces for the sightseeing flight Knuffelkamp <-> De Haven (WereldReizen): an airship at anchor in the sky over the
+    sea (the flight passes it; guhs wave from its balcony, code-spawned) and cloud banks on both sides of the route."""
+    cx, cy, cz = 40, 118, 760          # = WereldReizen.SCHIP
+    S = WS(cx - 30, cy - 20, cz - 14, 62, 40, 28)
+    luchtschip(S, cx, cz, cy)
+    gy = cy - 8 - 5
+    S.fill(cx - 6, gy, cz + 3, cx + 6, gy, cz + 4, "minecraft:cherry_planks")
+    S.fill(cx - 7, gy + 1, cz + 5, cx + 7, gy + 1, cz + 5, "minecraft:cherry_fence")
+    for x in (cx - 7, cx + 7):
+        S.fill(x, gy + 1, cz + 3, x, gy + 1, cz + 4, "minecraft:cherry_fence")
+    for x in (cx - 7, cx + 7):
+        S.set(x, gy + 2, cz + 5, LANT)
+    P["rondvlucht_schip"] = [cx, gy + 1, cz + 3]
+    W.stempel(S.stempel("rondvlucht_schip"), bezet=False)
+    rng = random.Random(77)
+    for (x, y, z) in ((68, 128, 690), (140, 134, 650), (70, 136, 610), (150, 140, 700), (58, 132, 650)):
+        S = WS(x - 24, y - 10, z - 24, 49, 22, 49)
+        for _ in range(5):
+            S.ellipsoid(x + rng.uniform(-10, 10), y + rng.uniform(-2, 3), z + rng.uniform(-10, 10), rng.uniform(6, 12),
+                        rng.uniform(3, 5), rng.uniform(6, 12), rng.choice(["wolkenblok_wit", "wolkenblok_wit", "wolkenblok_roze"]))
+        W.stempel(S.stempel("rondvlucht_wolk"), bezet=False)
 
 
 # ================================================================================================ Klodderweide
@@ -724,8 +951,27 @@ def kampvuren(W, K, P):
             W.stempel(S.stempel(f"kampvuur_{gebied}_{i}"))
 
 
+def zwemtrap(S, x, z, uit, y_top, y_bodem=59, steun="minecraft:spruce_log[axis=y]"):
+    """A ladder out of the sea: ladder blocks in column (x, z) from y_bodem up to y_top (the floor block of the deck/quay it
+    leads onto), hanging on the support column (x, z) - uit, which is filled solid from y_bodem to y_top - 1."""
+    f = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[uit]
+    sx, sz = x - uit[0], z - uit[1]
+    for y in range(y_bodem, y_top):
+        if S.get(sx, y, sz) in ("minecraft:air", CARVE):
+            S.set(sx, y, sz, steun)
+    for y in range(y_bodem - 3, y_bodem):        # solid ground under the ladder and its post (the sea floor is only a skin)
+        S.set(x, y, z, "minecraft:sandstone")
+        S.set(sx, y, sz, "minecraft:sandstone")
+    for y in range(y_bodem, y_top + 1):
+        S.set(x, y, z, f"minecraft:ladder[facing={f},waterlogged={'true' if y <= KA.ZEE else 'false'}]")
+    for y in (y_top + 1, y_top + 2):
+        S.set(x, y, z, CARVE)
+        S.set(sx, y, sz, CARVE)
+
+
 def kamp_zuidsteiger(W, K, P, kamp_d):
-    """Kern's AANKOMST (0, 65, 1130): a low jetty on the south coast of Knuffelkamp + a wooden stair up the cliff."""
+    """Kern's AANKOMST (0, 65, 1130): a low jetty on the south coast of Knuffelkamp + a wooden stair up the cliff all the way to
+    the camp plateau (a cutting into the cliff, walls of stone, lanterns), and ladders out of the water onto the jetty."""
     hoog = kamp_d["hoogte"]
     ox, oy, oz = [int(v) for v in kamp_d["off"]]
 
@@ -734,7 +980,7 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
         if 0 <= i < hoog.shape[0] and 0 <= j < hoog.shape[1]:
             return int(hoog[i, j])
         return -1
-    S = WS(-12, 50, 1080, 25, 50, 80)
+    S = WS(-12, 50, 1060, 25, 60, 100)
     for z in range(1126, 1157):
         for x in range(-2, 3):
             S.set(x, 64, z, "minecraft:spruce_planks")
@@ -745,34 +991,58 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
     S.fill(-5, 64, 1146, 5, 64, 1156, "minecraft:spruce_planks")
     S.set(-4, 65, 1147, "guhs:ballonsteiger")
     P["aankomst"] = [0, 65, 1130]
-    # stair north up the cliff: one step per block until we meet the plateau
+    # ways out of the water onto the jetty: both sides halfway, both sides of the platform, the far end
+    for (x, z, uit) in ((3, 1130, (1, 0)), (-3, 1130, (-1, 0)), (3, 1138, (1, 0)), (-3, 1138, (-1, 0)), (6, 1150, (1, 0)), (-6, 1150, (-1, 0)), (2, 1157, (0, 1)),
+                        (-2, 1157, (0, 1))):
+        zwemtrap(S, x, z, uit, 64)
+
+    def hoogte_voor(z):
+        return max(kh(x, z) for x in range(-2, 3))
+    # the stair north up the cliff: one step per block, until the ground ahead is no higher than the step
     y, z = 65, 1126
-    while y < 88 and z > 1080:
-        t = kh(0, z)
+    trap = []
+    while z > 1066 and y < 100:
+        trap.append((y, z))
+        if hoogte_voor(z - 1) <= y and hoogte_voor(z - 2) <= y + 1 and hoogte_voor(z - 3) <= y + 1 and kh(0, z - 1) >= y - 1:
+            break
+        y += 1
+        z -= 1
+    for (y, z) in trap:
+        t = hoogte_voor(z)
         for x in range(-1, 2):
             S.set(x, y, z, ST("minecraft:spruce_stairs", "north"))
             for yy in range(y + 1, y + 4):
                 S.set(x, yy, z, CARVE)
-            for yy in range(max(58, y - 12), y):
+            for yy in range(58, y):
                 if S.get(x, yy, z) == "minecraft:air":
                     S.set(x, yy, z, "minecraft:spruce_planks" if yy == y - 1 else "minecraft:stone")
         binnen = t > y + 1
         for x in (-2, 2):
-            S.set(x, y + 1, z, "minecraft:stone" if binnen else "minecraft:spruce_fence")
+            S.set(x, y + 1, z, "minecraft:stone_bricks" if binnen else "minecraft:spruce_fence")
             top = max(kh(x, z), y + 3)
             for yy in range(y + 2, top + 1):
-                S.set(x, yy, z, "minecraft:stone")
-            S.set(x, y, z, "minecraft:spruce_planks")
+                S.set(x, yy, z, "minecraft:stone_bricks" if yy <= y + 4 else "minecraft:stone")
+            for yy in range(58, y + 1):
+                S.set(x, yy, z, "minecraft:spruce_planks" if yy == y else "minecraft:stone")
         if t > y + 4:
             for x in range(-2, 3):
-                S.set(x, y + 4, z, "minecraft:stone")
+                S.set(x, y + 4, z, "minecraft:stone_bricks")
+                for yy in range(y + 5, kh(x, z)):
+                    S.set(x, yy, z, "minecraft:stone")
             if z % 5 == 0:
                 S.set(0, y + 3, z, LANT_H)
-        if t >= 0 and t <= y - 1:
-            break
-        y += 1
-        z -= 1
-    P["aankomst_trap_top"] = [0, y + 1, z]
+        elif z % 5 == 0:
+            S.set(2, y + 2, z, LANT)
+    # the top: a short landing on the plateau (the ground of the first columns is cut to the stair level)
+    y, z = trap[-1]
+    for zz in range(z - 1, z - 4, -1):
+        for x in range(-2, 3):
+            g = kh(x, zz)
+            for yy in range(y + 1, max(g, y + 3) + 1):
+                S.set(x, yy, zz, CARVE)
+            for yy in range(max(58, min(g, y) - 3), y + 1):
+                S.set(x, yy, zz, "minecraft:dirt_path" if yy == y else "minecraft:dirt")
+    P["aankomst_trap_top"] = [0, y + 1, z - 2]
     W.stempel(S.stempel("kamp_zuidsteiger"))
 
 
@@ -1111,6 +1381,7 @@ def bouw_alles(W, K, kamp_d):
     stal(W, K, P)
     kampvuren(W, K, P)
     kamp_zuidsteiger(W, K, P, kamp_d)
+    rondvlucht(W, K, P)
     grotten(W, K, P)
     sporenwoud(W, K, P)
     randwolken(W, K, P)
