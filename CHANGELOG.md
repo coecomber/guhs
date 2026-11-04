@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.2 — Minecraft 26.1.2
+
+- The Erfenis keys moved off O and M so they no longer take over your own keys: the overview is now **F9** and the world map **F10**. If you still had them on O and M, they move over once by themselves; keys you picked yourself stay as they are. You can change both in Options > Controls > Guhs.
+
 ## 1.9.1 — Minecraft 26.1.2
 
 Small fixes for Een opknapper!

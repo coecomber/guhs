@@ -126,7 +126,7 @@ def ftb(fq):
       "dat is je deurtje naar je eigen boerderij.", "guhs:erfhekje", [item("guhs:erfhekje")])
     q("erfenis_aankomst", "Bouwkundig rapport: vads", "Loop door het Erfhekje. Tja... het is een opknappertje. Struiken, brandnetels, "
       "molshopen. Maar de &dHoeve&r staat er nog!", "guhs:erfhekje", [fq.dim("guhs:erfenis")], rewards=((GZK, 1),), shape="gear", xp=100)
-    q("erfenis_overzicht", "Van bovenaf", "Druk op &eO&r: het &dbovenaanzicht&r van je boerderij. Daar bouw, ruim en regel je alles.",
+    q("erfenis_overzicht", "Van bovenaf", "Druk op &eF9&r: het &dbovenaanzicht&r van je boerderij. Daar bouw, ruim en regel je alles.",
       "minecraft:spyglass", [adv("erfenis_overzicht")])
     q("erfenis_eerste_pluk", "Wieden maar", "Ruim in het bovenaanzicht een &dplukje&r op: een struik, een rotsblok, een oude kar. "
       "Soms ligt er iets leuks onder!", "minecraft:sweet_berries", [st("erfenis_plukjes", 1)])
@@ -228,7 +228,7 @@ def ftb(fq):
       "minecraft:jukebox", [adv("erfenis_feest")], rewards=((GZM, 1),))
 
     # --- 9. neighbours and orders ------------------------------------------------------------------------------------------
-    q("erfenis_kaart", "Op de kaart", "Druk op &eM&r: de &dwereldkaart&r met alle dorpjes en karretjes.", "minecraft:map",
+    q("erfenis_kaart", "Op de kaart", "Druk op &eF10&r: de &dwereldkaart&r met alle dorpjes en karretjes.", "minecraft:map",
       [adv("erfenis_kaart")])
     q("erfenis_bezoek", "Even kijken bij de buren", "Ga op bezoek in een ander dorp.", "minecraft:oak_door", [adv("erfenis_bezoek")])
     q("erfenis_bestellingen_100", "Vaste klant", "Lever &e100 bestellingen&r.", "minecraft:minecart", [st("erfenis_bestellingen", 100)],

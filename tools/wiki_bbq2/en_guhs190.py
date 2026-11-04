@@ -11,10 +11,10 @@ PAGINA = {
     "systemen/je-dorp": (
         "Your village",
         "Behind your Erfhekje lies your own village: 33 buildings that grow up to level 10, five palettes, paths, fences and "
-        "deco. Press O for the overview and build everything from above."),
+        "deco. Press F9 for the overview and build everything from above."),
     "systemen/buren-en-bestellingen": (
         "Neighbours and orders",
-        "Press M for the world map with the villages of other players and plenty of neighbour villages. The neighbours place "
+        "Press F10 for the world map with the villages of other players and plenty of neighbour villages. The neighbours place "
         "orders, you deliver them with your little carts and earn Guhlden."),
     "systemen/leverkist": (
         "The Leverkist",
@@ -62,7 +62,7 @@ TEKST = {
         "with a higher Hoeve."),
     ("systemen/je-dorp", "Het bovenaanzicht"): (
         "The overview",
-        "Press O and you look down on your whole village: place, move, rotate, upgrade and paint buildings, with a timer above "
+        "Press F9 and you look down on your whole village: place, move, rotate, upgrade and paint buildings, with a timer above "
         "every job. You can also just walk around between your village guhs yourself."),
     ("systemen/je-dorp", "Deco, paden en Knusheid"): (
         "Deco, paths and Knusheid",

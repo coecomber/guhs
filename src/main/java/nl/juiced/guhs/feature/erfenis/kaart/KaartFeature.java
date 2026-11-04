@@ -16,7 +16,7 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
  *   <li>orders: {@link Bestellingen} (carts, star order; data {@link BestelData}, one cart {@link Bestelling}, goods
  *   {@link BestelGoed}); helping: {@link Handje}</li>
  *   <li>server: {@link KaartServer}; network: {@link KaartPayloads}; commands: {@link KaartCommando} (/guhs erfenis kaart)</li>
- *   <li>client: client/KaartClient (key M "Wereldkaart"), client/KaartScherm (the map), client/KaartLand (the pastel land)</li>
+ *   <li>client: client/KaartClient (key F10 "Wereldkaart"), client/KaartScherm (the map), client/KaartLand (the pastel land)</li>
  *   <li>THE SEAM to the core: {@link KaartBron} in {@link #BRON} = {@link KaartBronErfenis} (players = the core's non-NPC
  *   bases, visit = Erfenis.gaNaar + the read-only overview, every NPC village = a real NPC base in its own cell)</li>
  * </ul>

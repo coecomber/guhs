@@ -1,6 +1,6 @@
 # Guhs 1.9 "Een opknapper!", afwerking slice (AutoCheck, dev only). Run:
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/190_afwerking.txt
-# Survival without the letter: the world map (M) refuses. Then creative: demo village (never inside a building), the
+# Survival without the letter: the world map (F10) refuses. Then creative: demo village (never inside a building), the
 # orders screen counts the real deliveries, Sherlock's characters in front of the Detectivebureau, the makelaar's
 # postcard (Postguh + chat), Sherlock's rewards (theetaartje recipe, bureau end look, Bertha on the Muziektent, Opa's
 # kelder under the Hoeve), and a Leverkist opening on a right-click.

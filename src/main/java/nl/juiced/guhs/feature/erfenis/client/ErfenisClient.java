@@ -30,12 +30,12 @@ import nl.juiced.guhs.feature.erfenis.Plot;
 import org.lwjgl.glfw.GLFW;
 
 /**
- * De Erfenis, the client: the overview key (O by default: B is taken by the Snuffeleiland bark and JourneyMap's
- * waypoint key), the client's copy of the base it looks at, and the hooks of the overview camera, world drawing and screen.
+ * De Erfenis, the client: the overview key (F9 by default since 1.9.2: O and M clashed with players' own keys; B is taken
+ * by the Snuffeleiland bark and JourneyMap's waypoint key), the client's copy of the base it looks at, and the hooks of the overview camera, world drawing and screen.
  * The key on a plot asks the server for the overview; outside the dimension the server answers with "Naar je erfenis?".
  */
 public final class ErfenisClient {
-    public static final KeyMapping TOETS = new KeyMapping("key.guhs.erfenis", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_O, GuhKeys.CATEGORY);
+    public static final KeyMapping TOETS = new KeyMapping("key.guhs.erfenis", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_F9, GuhKeys.CATEGORY);
 
     /** The base on screen (null: none yet), owned by this player?, the server clock minus ours, dev "snel". */
     @Nullable
@@ -54,6 +54,7 @@ public final class ErfenisClient {
 
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterKeyMappingsEvent event) -> event.register(TOETS));
+        ToetsVerhuizing.init();   // 1.9.2: O/M -> F9/F10 once for existing options.txt
         ErfenisPayloads.syncOntvanger = ErfenisClient::opSync;
         ErfenisPayloads.vraagOntvanger = v -> Minecraft.getInstance().setScreen(new VraagScherm());
         ErfenisPayloads.meldingOntvanger = ErfenisClient::opMelding;
