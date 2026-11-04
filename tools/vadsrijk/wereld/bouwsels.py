@@ -66,15 +66,23 @@ TY = TP + 1
 
 
 def zwamtempel(W, K, P):
-    S = WS(262, TP - 12, -535, 150, 110, 165)
+    S = WS(262, TP - 16, -535, 150, 114, 175)      # z to -361: the front stairs + landing (fix round 1)
     # ---- terrace + front stairs (the path arrives at z -386)
     S.fill(300, TP, -394, 360, TP, -376, "tegel_hartjes")
-    for i in range(6):
-        S.fill(318 + i, TP - 6 + i, -376 + 6 - i, 342 - i, TP - 6 + i, -376 + 6 - i, ST("guhs:knuffelsteen_trap", "north"))
+    for i in range(7):
+        # fix round 1: a real staircase (solid under it, free above it) so it never ends buried in the hill
+        S.fill(316, TP - 14, -370 - i, 344, TP - 7 + i, -370 - i, KSTEEN)
+        S.fill(318, TP - 6 + i, -370 - i, 342, TP - 6 + i, -370 - i, ST("guhs:knuffelsteen_trap", "north"))
+        S.fill(318, TP - 5 + i, -370 - i, 342, TP + 1, -370 - i, CARVE)
+        for x in (316, 317, 343, 344):      # side walls of the staircase
+            S.fill(x, TP - 6 + i, -370 - i, x, TP - 5 + i, -370 - i, KSTEEN)
+    S.fill(316, TP - 14, -369, 344, TP - 7, -365, KSTEEN)          # a landing at the foot of the stairs (path end)
+    S.fill(316, TP - 7, -369, 344, TP - 7, -365, "tegel_hartjes")
+    S.fill(316, TP - 6, -369, 344, TP - 2, -365, CARVE)
     # ---- the inside: a straight chain north (bazen slice's layout): voorhal -> Lichtzwamkamer -> Hendelkamer -> Ridderzaal
     #      -> the Opperzwam hall. The gates between them are open AIR (5 wide, 4 high); bazen fills them with its own gate blocks.
     def doos(x1, z1, x2, z2, h, wand=ROZE, dak=FRAMB):
-        S.fill(x1, TP, z1, x2, TP, z2, "tegel_hartjes")
+        marmer(S, x1, z1, x2, z2, TP)
         S.walls(x1, TY, z1, x2, TY + h, z2, wand)
         for x in range(x1, x2 + 1, 4):
             S.fill(x, TY, z1, x, TY + h, z1, GLAD)
@@ -137,7 +145,9 @@ def zwamtempel(W, K, P):
             rand = (not binnen) and ((-2 <= u < dw + 2) if v < vb else math.hypot(uu, v + 0.5 - vb) <= dw / 2 + 2)
             x = 324 + u
             if binnen:
-                S.fill(x, TY + v, -393, x, TY + v, -391, CARVE)
+                # fix round 1: the inner slice (z -393) stays shut above the voorhal roof (y TY + 19), so nobody can
+                # drop from the roof through the arch into the closed temple
+                S.fill(x, TY + v, -393 if v < 19 else -392, x, TY + v, -391, CARVE)
                 mid = u == dw // 2
                 b = "minecraft:gold_block" if (mid or u in (0, dw - 1) or v == 0) else \
                     ("minecraft:pink_concrete" if v % 6 else "roze_lakhout_planken")
@@ -175,7 +185,7 @@ def zwamtempel(W, K, P):
     P["kampvuur_zwamtempel_trap"] = [318, TY, -381]
     # ---- room 1: five free floor spots for bazen's light mushrooms; hidden room behind the west wall
     P["lichtzwamkamer"] = dict(centrum=[330, TY, -415], lichtzwammen=[[322, TY, -421], [326, TY, -424], [330, TY, -425], [334, TY, -424], [338, TY, -421]])
-    S.fill(308, TP, -421, 315, TP, -411, "tegel_hartjes")
+    marmer(S, 308, -421, 315, -411, TP)
     S.walls(307, TY, -422, 316, TY + 5, -410, KSTEEN)
     S.fill(308, TY, -421, 315, TY + 4, -411, CARVE)
     S.fill(307, TY + 6, -422, 316, TY + 6, -410, KSTEEN)
@@ -201,7 +211,7 @@ def zwamtempel(W, K, P):
             d = math.hypot(x - hc[0], z - hc[1])
             if d <= 25.5:
                 ring = int(d) % 6
-                S.set(x, TP, z, "pastelbaksteen_framboos" if ring == 0 else ("gladde_knuffelsteen" if ring % 2 else "tegel_hartjes"))
+                S.set(x, TP, z, "minecraft:quartz_bricks" if ring == 0 else ("minecraft:pink_concrete" if ring % 2 else "minecraft:quartz_block"))
     S.cylinder(hc[0], hc[1], 25.5, TY, TY + 24, ROZE, hollow=3)
     S.cylinder(hc[0], hc[1], 22.5, TY, TY + 24, CARVE)
     S.fill(327, TY, -476, 333, TY + 4, -472, CARVE)                   # gate 4 (room 3 -> hall), open AIR
@@ -241,6 +251,14 @@ def zwamtempel(W, K, P):
     P["zwamtempel_voorhal"] = [330, TY, -398]
     W.stempel(S.stempel("zwamtempel"))
     P["gebied_zwamtempel_binnen"] = [300, -525, 360, -390]
+
+
+def marmer(S, x1, z1, x2, z2, y):
+    """Temple floor (user choice, fix round 1): a pink/white marble look of quartz and pink concrete."""
+    for x in range(x1, x2 + 1):
+        for z in range(z1, z2 + 1):
+            k = (x // 2 + z // 2) % 2
+            S.set(x, y, z, "minecraft:quartz_block" if k else ("minecraft:pink_concrete" if (x + z) % 5 else "minecraft:quartz_pillar[axis=y]"))
 
 
 def hoed(S, cx, cz, top, r, blok, vlek="knuffelblok_vanille", lamellen=True):
@@ -662,7 +680,7 @@ def slaapheuvel(W, K, P):
     cx, cz = KA.SLAAPHEUVEL
     g = K.h(cx, cz)
     rx, ry, rz = 46, 26, 32
-    S = WS(cx - rx - 2, g - 3, cz - rz - 2, 2 * rx + 5, ry + 22, 2 * rz + 5)
+    S = WS(cx - rx - 2, g - 12, cz - rz - 16, 2 * rx + 5, ry + 31, 2 * rz + 19)
     rng = random.Random(5)
     for x in range(cx - rx, cx + rx + 1):
         for z in range(cz - rz, cz + rz + 1):
@@ -670,15 +688,15 @@ def slaapheuvel(W, K, P):
             if e > 1:
                 continue
             top = g + int(ry * math.sqrt(1 - e) ** 1.15)
-            for y in range(max(g - 1, top - 2), top + 1):
+            # fix round 1: the slime is solid down to the LOCAL ground (min with the centre ground), so its edge meets
+            # the terrain everywhere and nobody can crawl under it
+            gl = min(K.h(x, z), g) - 1
+            top = max(top, gl + 1)
+            for y in range(gl, top + 1):
                 b = "minecraft:lime_wool" if rng.random() < 0.75 else "minecraft:lime_concrete"
                 if y == top and e < 0.25 and rng.random() < 0.7:
                     b = "minecraft:moss_block"
                 S.set(x, y, z, b)
-            # the inside goes down to the ground (sides)
-            for y in range(g - 1, max(g - 1, top - 2)):
-                if e > 0.85:
-                    S.set(x, y, z, "minecraft:lime_wool")
             if e < 0.3 and rng.random() < 0.08:
                 S.set(x, top + 1, z, rng.choice(["minecraft:short_grass", "minecraft:pink_tulip", "guhs:roze_guhbloem"]))
     # shine
@@ -733,10 +751,25 @@ def slaapheuvel(W, K, P):
         S.set(cx + 2, g, z, "minecraft:lime_wool")
         S.set(cx + 2, g + 1, z, "minecraft:lime_wool")
         S.set(cx + 2, g + 2, z, "minecraft:lime_wool")
+    # the way in: if the ground north of the tunnel is higher than its floor, stairs down into it (no pit)
+    for k in range(1, 14):
+        z = cz - rz - 1 - k
+        hz = max(K.h(x, z) for x in range(cx - 1, cx + 2))
+        ys = g - 1 + k
+        if ys > hz:
+            break
+        for x in range(cx - 1, cx + 2):
+            S.set(x, ys, z, ST("minecraft:mossy_cobblestone_stairs", "north"))
+            for y in range(ys + 1, ys + 4):
+                S.set(x, y, z, CARVE)
+        for x in (cx - 2, cx + 2):
+            for y in range(ys, ys + 3):
+                S.set(x, y, z, "minecraft:lime_wool")
     kz = cz - rz + 26
     S.ellipsoid(cx, g + 2, kz, 5, 4, 5, "minecraft:lime_terracotta")
     S.ellipsoid(cx, g + 2, kz, 4, 3, 4, CARVE)
     S.fill(cx - 4, g - 1, kz - 4, cx + 4, g - 1, kz + 4, "minecraft:lime_terracotta")
+    S.fill(cx - 1, g, cz - rz - 1, cx + 1, g + 2, kz - 2, CARVE)      # fix round 1: the chamber shell closed the tunnel
     S.set(cx, g, kz + 2, "minecraft:chest[facing=north,type=single,waterlogged=false]")
     S.set(cx + 2, g, kz, "minecraft:ochre_froglight[axis=y]")
     S.set(cx - 2, g, kz, "minecraft:ochre_froglight[axis=y]")
@@ -747,17 +780,26 @@ def slaapheuvel(W, K, P):
 
 
 # ================================================================================================ needles, bridge, turtle
+def naald_straal(t):
+    """Nominal rock radius of a needle at relative height t (0 = ground, 1 = top)."""
+    return 8.5 * (1 - min(max(t, 0), 1)) ** 0.7 + 3.2
+
+
 def naald(W, K, P, naam, x, z, hoogte):
+    """Rock needle with a viewpoint on top (fix round 1): one continuous walkway spiral cut into the rock that rises
+    half a block per step (slabs; no jumping), a fence rail on the outside only, headroom carved, ending level with the
+    top platform where the platform railing is open. Height as a function of the angle, so it is radially even."""
     g = K.h(x, z)
     top = g + hoogte
-    S = WS(x - 12, g - 4, z - 12, 25, hoogte + 18, 25)
+    R = 19
+    S = WS(x - R, g - 4, z - R, 2 * R + 1, hoogte + 18, 2 * R + 1)
     lagen = ["minecraft:stone", "minecraft:andesite", "minecraft:calcite", "minecraft:stone", "minecraft:tuff", "minecraft:diorite"]
-    rng = random.Random(hash(naam) & 0xFFFF)
+    rng = random.Random(sum(map(ord, naam)) * 7919)
     for y in range(g - 3, top + 1):
         t = (y - g) / hoogte
-        r = 8.5 * (1 - t) ** 0.7 + 3.2
-        for xx in range(x - 11, x + 12):
-            for zz in range(z - 11, z + 12):
+        r = naald_straal(t)
+        for xx in range(x - 13, x + 14):
+            for zz in range(z - 13, z + 14):
                 a = math.atan2(zz - z, xx - x)
                 rr = r * (1 + 0.12 * math.sin(3 * a + y * 0.15) + 0.06 * math.sin(7 * a))
                 d = math.hypot(xx - x, zz - z)
@@ -766,46 +808,134 @@ def naald(W, K, P, naam, x, z, hoogte):
                     if rng.random() < 0.08:
                         b = "minecraft:moss_block"
                     S.set(xx, y, zz, b)
-    # spiral stair around it
-    a = 0.0
-    for y in range(g + 1, top + 1):
-        t = (y - g) / hoogte
-        r = 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
-        for k in range(3):
-            aa = a + k * 0.5 / r
-            for dr in (0.0, 0.9, 1.8):
-                S.set(x + (r + dr) * math.cos(aa), y, z + (r + dr) * math.sin(aa), "minecraft:spruce_slab[type=top,waterlogged=false]", keep=True)
-            S.set(x + (r + 2.7) * math.cos(aa), y + 1, z + (r + 2.7) * math.sin(aa), "minecraft:spruce_fence", keep=True)
-        if (y - g) % 12 == 0:
-            S.set(x + (r + 2.7) * math.cos(a), y + 2, z + (r + 2.7) * math.sin(a), LANT, keep=True)
-        a += 1.3 / r
-    # top platform
+    # ---- the spiral: feet height h(theta); dh/dtheta = 0.4 * inner radius (<= half a block per block at the inner edge)
+    BREED = 3.4
+    # start where the path arrives (the path that ends at this needle), else on the side facing the map centre
+    a0 = math.atan2(-z, -x)
+    for pts in KA.PADEN.values():
+        if math.hypot(pts[-1][0] - x, pts[-1][1] - z) < 18:
+            a0 = math.atan2(pts[-2][1] - z, pts[-2][0] - x)
+    sx_, sz_ = x + (naald_straal(0) + 1.5) * math.cos(a0), z + (naald_straal(0) + 1.5) * math.sin(a0)
+    th, h = a0, float(max(g, K.h(int(sx_), int(sz_))) + 1)
+    h0 = int(h)
+    stappen = [(th, h)]
+    while h < top + 2:
+        r_in = 0.82 * naald_straal((h - g) / hoogte)
+        th += 0.01
+        h = min(top + 2.0, h + 0.01 * 0.42 * r_in)
+        stappen.append((th, h))
+    th_eind = th
+    ths = np.array([s_[0] for s_ in stappen])
+    hs = np.array([s_[1] for s_ in stappen])
+
+    def hoogte_bij(theta):
+        return float(np.interp(theta, ths, hs))
+    loop = {}           # (xx, zz) -> list of feet heights (one per loop)
+    rand = {}
+    for xx in range(x - R + 1, x + R):
+        for zz in range(z - R + 1, z + R):
+            d = math.hypot(xx - x, zz - z)
+            a = math.atan2(zz - z, xx - x)
+            k0 = math.floor((a0 - a) / (2 * math.pi))
+            for k in range(k0, k0 + 12):
+                theta = a + 2 * math.pi * k
+                if theta < a0 - 0.05 or theta > th_eind:
+                    continue
+                hh = hoogte_bij(theta)
+                rn = naald_straal((hh - g) / hoogte)
+                r_in = 0.82 * rn
+                r_uit = rn + BREED
+                q = math.floor(hh * 2) / 2
+                if r_in - 0.5 <= d <= r_uit:
+                    loop.setdefault((xx, zz), []).append(q)
+                elif r_uit < d <= r_uit + 1.2:
+                    rand.setdefault((xx, zz), []).append(q)
+    # the top platform first: the spiral cuts its own way through the last part of it
     S.cylinder(x, z, 6.5, top + 1, top + 1, "minecraft:spruce_planks")
     S.cylinder(x, z, 6.5, top + 2, top + 2, "minecraft:spruce_fence", hollow=1)
-    S.fill(x, top + 2, z, x, top + 7, z, "minecraft:spruce_fence")
-    S.set(x, top + 8, z, "minecraft:shroomlight")
+    S.fill(x, top + 2, z, x, top + 9, z, "minecraft:spruce_fence")
+    S.set(x, top + 10, z, "minecraft:shroomlight")
     for i in range(4):
-        S.fill(x + 1, top + 4 + i, z, x + 4 - i, top + 4 + i, z, "minecraft:pink_wool")
-    S.set(x - 3, top + 2, z - 3, LANT)
-    # opening in the railing where the stair arrives
+        S.fill(x + 1, top + 6 + i, z, x + 4 - i, top + 6 + i, z, "minecraft:pink_wool")
+    S.set(x - 2, top + 2, z - 2, LANT)
+
+    def vloer(xx, zz, q):
+        y = int(math.floor(q))
+        if q == y:      # whole block: a top slab under the feet
+            S.set(xx, y - 1, zz, "minecraft:spruce_slab[type=top,waterlogged=false]")
+        else:           # half: a bottom slab in the feet cell
+            S.set(xx, y, zz, "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+        return y
+    for (xx, zz), qs in loop.items():
+        for q in qs:
+            y = int(math.floor(q))
+            for yy in range(y, y + 3):
+                S.set(xx, yy, zz, CARVE)
+    for (xx, zz), qs in rand.items():
+        for q in qs:
+            y = int(math.floor(q))
+            for yy in range(y, y + 3):
+                if (xx, zz) not in loop:
+                    S.set(xx, yy, zz, CARVE)
+    for (xx, zz), qs in loop.items():
+        for q in qs:
+            vloer(xx, zz, q)
+    n = 0
+    for (xx, zz), qs in sorted(rand.items()):
+        if (xx, zz) in loop:
+            continue
+        for q in qs:
+            y = vloer(xx, zz, q)
+            if q < g + 3 or q >= top + 1.5:
+                continue        # no rail near the ground (step on from the side) nor at the arrival on the platform
+            fy = y if q == y else y + 1
+            S.set(xx, fy, zz, "minecraft:spruce_fence")
+            n += 1
+            if n % 23 == 0:
+                S.set(xx, fy + 1, zz, LANT)
+    # platform columns beside a lower part of the arriving ramp get a fence (no unexpected drop)
+    for xx in range(x - 7, x + 8):
+        for zz in range(z - 7, z + 8):
+            if math.hypot(xx - x, zz - z) > 6.5 or (xx, zz) in loop:
+                continue
+            for (bx, bz) in ((xx + 1, zz), (xx - 1, zz), (xx, zz + 1), (xx, zz - 1)):
+                laag = [q for q in loop.get((bx, bz), []) if top - 4 < q <= top + 0.5]
+                if laag:
+                    S.set(xx, top + 2, zz, "minecraft:spruce_fence")
+    # the arrival: the last loop column (highest) is level with the platform; no fence in the 3 blocks around it
+    aankomst = max(((q, xy) for xy, qs in loop.items() for q in qs), key=lambda t: t[0])[1]
+    for xx in range(aankomst[0] - 2, aankomst[0] + 3):
+        for zz in range(aankomst[1] - 2, aankomst[1] + 3):
+            if S.get(xx, top + 2, zz) == "minecraft:spruce_fence" and not (xx == x and zz == z):
+                S.set(xx, top + 2, zz, CARVE)
+    start = (round(x + (naald_straal(0) + 1.5) * math.cos(a0)), round(z + (naald_straal(0) + 1.5) * math.sin(a0)))
     P[f"uitkijk_{naam}"] = [x, top + 2, z]
+    P[f"naaldtrap_{naam}"] = [start[0], h0, start[1]]
     W.stempel(S.stempel("naald_" + naam))
+    return R
 
 
 def fossielbrug(W, K, P):
+    """The dragon-fossil bridge square over the Kloof (fix round 1): a bone deck at the higher rim, rails, rib arches, and
+    at both ends a 5-wide stone stair down to the ground (no deck ending in the air)."""
     (ax, az), (bx, bz) = KA.FOSSIEL
-    y = max(K.h(ax, az), K.h(bx, bz))
+    y = K.dek
     L = math.hypot(bx - ax, bz - az)
     ux, uz = (bx - ax) / L, (bz - az) / L
     px, pz = -uz, ux
-    S = WS(min(ax, bx) - 30, y - 30, min(az, bz) - 30, abs(bx - ax) + 61, 60, abs(bz - az) + 61)
+    S = WS(min(ax, bx) - 34, y - 45, min(az, bz) - 34, abs(bx - ax) + 69, 75, abs(bz - az) + 69)
+
+    def vlak(t, o):
+        return ax + ux * t + px * o, az + uz * t + pz * o
     n = int(L * 2)
-    for i in range(-10, n + 12):
+    for i in range(-2, n + 3):
         t = i / 2
         cx, cz = ax + ux * t, az + uz * t
         for o in np.arange(-2.5, 2.6, 0.5):
             S.set(cx + px * o, y, cz + pz * o, "minecraft:bone_block[axis=y]")
             S.set(cx + px * o, y - 1, cz + pz * o, "minecraft:bone_block[axis=y]")
+            for d_ in range(1, 4):
+                S.set(cx + px * o, y + d_, cz + pz * o, CARVE)
         for o in (-3, 3):
             S.set(cx + px * o, y, cz + pz * o, "minecraft:calcite")
             S.set(cx + px * o, y + 1, cz + pz * o, "minecraft:diorite_wall")
@@ -813,18 +943,40 @@ def fossielbrug(W, K, P):
         if i % 6 == 0:
             for k in range(1, 5):
                 S.set(cx, y - 1 - k, cz, "minecraft:bone_block[axis=y]")
-    # bone steps down to the ground at both ends (the deck lies at the higher bank)
-    for (ex, ez, sx_, sz_) in ((ax - ux * 5, az - uz * 5, -ux, -uz), (bx + ux * 5.5, bz + uz * 5.5, ux, uz)):
-        yy = y
-        k = 0
-        while yy > K.h(int(ex + sx_ * k), int(ez + sz_ * k)) and k < 20:
-            k += 1
-            yy -= 1
-            cx, cz = ex + sx_ * k, ez + sz_ * k
+
+    # both ends: stairs (facing back to the deck) down to the local ground, the rail follows, headroom carved
+    def trap_af(t0, richting):
+        """richting -1 = before A (going away from B), +1 = after B."""
+        for st in range(0, 30):
+            t = t0 + richting * (st + 1)
+            cx, cz = ax + ux * t, az + uz * t
+            grond = max(K.h(int(round(cx + px * o)), int(round(cz + pz * o))) for o in (-2, 0, 2))
+            yy = y - st
+            if yy <= grond:
+                # level with the ground (or ground higher): flatten a landing and stop
+                for o in np.arange(-2.5, 2.6, 0.5):
+                    for t2 in (t, t + richting * 0.5):
+                        qx, qz = ax + ux * t2 + px * o, az + uz * t2 + pz * o
+                        S.set(qx, grond, qz, "minecraft:bone_block[axis=y]")
+                        for d_ in range(1, 4):
+                            S.set(qx, grond + d_, qz, CARVE)
+                return
+            facing = richting_naar(-ux * richting, -uz * richting)
             for o in np.arange(-2.5, 2.6, 0.5):
-                S.set(cx + px * o, yy, cz + pz * o, "minecraft:bone_block[axis=y]")
+                for t2 in (t - richting * 0.25, t + richting * 0.25):
+                    qx, qz = ax + ux * t2 + px * o, az + uz * t2 + pz * o
+                    S.set(qx, yy, qz, ST("minecraft:polished_diorite_stairs", facing))
+                    for d_ in range(1, 4):
+                        S.set(qx, yy - d_, qz, "minecraft:calcite")
+                    for d_ in range(1, 4):
+                        S.set(qx, yy + d_, qz, CARVE)
+            for o in (-3, 3):
+                S.set(cx + px * o, yy, cz + pz * o, "minecraft:calcite")
+                S.set(cx + px * o, yy + 1, cz + pz * o, "minecraft:diorite_wall")
                 for d_ in range(1, 4):
                     S.set(cx + px * o, yy - d_, cz + pz * o, "minecraft:calcite")
+    trap_af(-1, -1)
+    trap_af(L + 1.5, 1)
     # ribs: arches over the deck every 6 blocks
     for i in range(4, int(L) - 3, 6):
         cx, cz = ax + ux * i, az + uz * i
@@ -835,20 +987,53 @@ def fossielbrug(W, K, P):
         for kant in (-1, 1):
             for k in range(0, 8):   # rib tips curling down below the deck
                 S.set(cx + px * kant * (6 + k * 0.2), y - k, cz + pz * kant * (6 + k * 0.2), "minecraft:bone_block[axis=y]")
-    # the skull at the far end, beside the path, facing back along the bridge, with guh-ear horns
-    sx, sz = bx + ux * 8 + px * 9, bz + uz * 8 + pz * 9
-    S.ellipsoid(sx, y + 6, sz, 7, 6, 8, "minecraft:bone_block[axis=y]", hollow=1.5)
-    S.ellipsoid(sx - ux * 7, y + 3, sz - uz * 7, 4, 3, 5, "minecraft:bone_block[axis=y]", hollow=1.2)
+    # the skull at the far end, well beside the path, facing back along the bridge, with guh-ear horns
+    gs = K.h(int(bx + ux * 8 + px * 13), int(bz + uz * 8 + pz * 13))
+    sx, sz = bx + ux * 8 + px * 13, bz + uz * 8 + pz * 13
+    S.ellipsoid(sx, gs + 5, sz, 6, 6, 6, "minecraft:bone_block[axis=y]", hollow=1.5)
+    S.ellipsoid(sx - ux * 6, gs + 3, sz - uz * 6, 4, 3, 4, "minecraft:bone_block[axis=y]", hollow=1.2)
     for kant in (-1, 1):
         ex, ez = sx - ux * 4 + px * kant * 3.5, sz - uz * 4 + pz * kant * 3.5
-        S.ellipsoid(ex, y + 8, ez, 1.8, 1.8, 1.8, CARVE)
-        S.set(ex, y + 8, ez, "minecraft:soul_lantern[hanging=false,waterlogged=false]")
-        # guh-ear horns
+        S.ellipsoid(ex, gs + 7, ez, 1.8, 1.8, 1.8, CARVE)
+        S.set(ex, gs + 7, ez, "minecraft:soul_lantern[hanging=false,waterlogged=false]")
         for k in range(10):
-            S.set(sx + px * kant * (4 + k * 0.15), y + 12 + k, sz + pz * kant * (4 + k * 0.15), "minecraft:calcite")
-            S.set(sx + px * kant * (5 + k * 0.15), y + 12 + k, sz + pz * kant * (5 + k * 0.15), "minecraft:pink_terracotta")
+            S.set(sx + px * kant * (4 + k * 0.15), gs + 11 + k, sz + pz * kant * (4 + k * 0.15), "minecraft:calcite")
+            S.set(sx + px * kant * (5 + k * 0.15), gs + 11 + k, sz + pz * kant * (5 + k * 0.15), "minecraft:pink_terracotta")
+    # the skull is solid: no room to fall into (its inside is hollowed by the tile writer only where fully enclosed)
+    S.ellipsoid(sx, gs + 5, sz, 4.6, 4.6, 4.6, "minecraft:bone_block[axis=y]")
     P["fossielbrug"] = dict(van=[ax, y + 1, az], naar=[bx, y + 1, bz])
     W.stempel(S.stempel("fossielbrug"))
+
+
+def trap_naar_buiten(S, K, x, z, dx, dz, yvloer, breed, blok="minecraft:cobblestone_stairs", vul="minecraft:cobblestone"):
+    """From a floor (top block y = yvloer) at (x, z) walk outward along (dx, dz): while the ground there is higher, lay
+    stairs up (facing outward), carve headroom, so a room/tunnel mouth below the terrain is never a pit."""
+    fac = richting_naar(dx, dz)
+    for k in range(0, 16):
+        cx, cz = x + dx * k, z + dz * k
+        cel = [(cx + dz * o, cz + dx * o) for o in range(-(breed // 2), breed // 2 + 1)]
+        grond = max(K.h(a, b) for a, b in cel)
+        ys = yvloer + k + 1
+        if grond < ys:
+            for (a, b) in cel:
+                if k:       # a landing level with the top of the last step
+                    for yy in range(K.h(a, b) + 1, ys):
+                        S.set(a, yy, b, vul)
+                for yy in range(ys if k else yvloer + 1, ys + 3):
+                    S.set(a, yy, b, CARVE)
+            return
+        for (a, b) in cel:
+            S.set(a, ys, b, ST(blok, fac))
+            S.set(a, ys - 1, b, vul)
+            for yy in range(ys + 1, ys + 4):
+                S.set(a, yy, b, CARVE)
+
+
+def richting_naar(dx, dz):
+    """Compass facing of a (dx, dz) direction (stairs facing = the way you walk UP them)."""
+    if abs(dx) >= abs(dz):
+        return "east" if dx > 0 else "west"
+    return "south" if dz > 0 else "north"
 
 
 def schildpad(W, K, P):
@@ -930,22 +1115,30 @@ def kampvuren(W, K, P):
         if gebied == "haven":
             continue
         for i, (x, z) in enumerate(lijst):
+            x, z = naast_pad(K, x, z)
             g = K.h(x, z)
-            S = WS(x - 6, g - 2, z - 6, 13, 10, 13)
+            S = WS(x - 6, g - 5, z - 6, 13, 13, 13)
+            # fix round 1: the camp sits beside the path (logs and tent no longer on the walking route), on a level plaza
+            S.fill(x - 4, g + 1, z - 4, x + 4, g + 5, z + 4, CARVE)
+            S.fill(x - 4, g - 4, z - 4, x + 4, g - 1, z + 4, "minecraft:dirt")
+            S.fill(x - 4, g, z - 4, x + 4, g, z + 4, "minecraft:grass_block[snowy=false]")
             S.fill(x - 3, g, z - 3, x + 3, g, z + 3, "minecraft:coarse_dirt")
             S.fill(x - 2, g, z - 2, x + 2, g, z + 2, "minecraft:dirt_path")
-            S.fill(x - 4, g - 1, z - 4, x + 4, g - 1, z + 4, "minecraft:dirt")
             S.set(x, g + 1, z, VUUR)
             for (dx, dz, ax) in ((-3, 0, "z"), (3, 0, "z"), (0, 3, "x")):
                 S.set(x + dx, g + 1, z + dz, f"minecraft:spruce_log[axis={ax}]")
                 S.set(x + dx + (0 if ax == "z" else 1), g + 1, z + dz + (1 if ax == "z" else 0), f"minecraft:spruce_log[axis={ax}]")
             S.set(x + 3, g + 1, z - 3, "guh_lantaarnpaal[half=lower]")
             S.set(x + 3, g + 2, z - 3, "guh_lantaarnpaal[half=upper]")
-            # a little order tent
+            # a little order tent (with a carpet floor inside, fix round 1)
             for k in range(3):
                 for dz in range(-5, -2):
                     S.set(x - 5 + k, g + 1 + k, z + dz, "minecraft:pink_wool")
                     S.set(x - 1 - k, g + 1 + k, z + dz, "minecraft:white_wool")
+            for dz in range(-5, -2):
+                for dx in (-4, -3, -2):
+                    S.set(x + dx, g, z + dz, "minecraft:coarse_dirt")
+                    S.set(x + dx, g + 1, z + dz, "minecraft:red_carpet" if dx == -3 else "minecraft:white_carpet")
             P[f"kampvuur_{gebied}_{i + 1}"] = [x, g + 1, z]
             P[f"ridder_{gebied}_{i + 1}"] = [x + 2, g + 1, z + 2]
             W.stempel(S.stempel(f"kampvuur_{gebied}_{i}"))
@@ -967,6 +1160,33 @@ def zwemtrap(S, x, z, uit, y_top, y_bodem=59, steun="minecraft:spruce_log[axis=y
     for y in (y_top + 1, y_top + 2):
         S.set(x, y, z, CARVE)
         S.set(sx, y, sz, CARVE)
+
+
+def naast_pad(K, x, z):
+    """A campfire spot 6-8 blocks beside the path near (x, z), on the flattest ground."""
+    from scipy import ndimage  # noqa: F401
+    i0, j0 = KA.idx(x, z)
+    best, bs = (x, z), 1e9
+    for dx in range(-12, 13):
+        for dz in range(-12, 13):
+            i, j = i0 + dx, j0 + dz
+            d = float(_padafst(K)[i, j])
+            if not 6 <= d <= 8.5:
+                continue
+            blok = K.H[i - 4:i + 5, j - 4:j + 5]
+            if (blok < 64).any() or K.kloof[i - 4:i + 5, j - 4:j + 5].any():
+                continue
+            score = (int(blok.max()) - int(blok.min())) * 3 + math.hypot(dx, dz) * 0.2
+            if score < bs:
+                best, bs = (x + dx, z + dz), score
+    return best
+
+
+def _padafst(K):
+    if "k" not in _PADAFSTAND:
+        from scipy import ndimage
+        _PADAFSTAND["k"] = ndimage.distance_transform_edt(~(K.pad > 0.5)).astype(np.float32)
+    return _PADAFSTAND["k"]
 
 
 def kamp_zuidsteiger(W, K, P, kamp_d):
@@ -1059,16 +1279,29 @@ def grotten(W, K, P):
     x0, z0, x1, z1 = -560, -560, -150, -180
     S = WS(x0, 30, z0, x1 - x0 + 1, 100, z1 - z0 + 1)
     rng = random.Random(12)
+    # fix round 1: every room has a flat floor (stand y = voet, the POI height) and every tunnel runs floor to floor, so
+    # no bowl or step is higher than 1 block; the entrances start outside the hill at ground level
+    voet = {k: v[1] - int(v[3] * 0.7) + 1 for k, v in GROT_KNOPEN.items()}
+
+    def knoop(k):
+        x, _, z, _ = GROT_KNOPEN[k]
+        return (x, voet[k] + 2, z)
     gangen = []
     for (ex, ez), naar in zip(KA.GROT_INGANGEN, ("N1", "N2", "N3")):
-        gangen.append(((ex, K.h(ex, ez) - 1, ez), GROT_KNOPEN[naar][:3], 3.6))
+        nx_, _, nz_ = knoop(naar)
+        L0 = math.hypot(ex - nx_, ez - nz_)
+        bx, bz = ex + (ex - nx_) / L0 * 7, ez + (ez - nz_) / L0 * 7
+        gangen.append(((bx, K.h(int(bx), int(bz)) + 2, bz), knoop(naar), 3.6))
     for a, b in (("N1", "N2"), ("N2", "N3"), ("N2", "N4"), ("N1", "N3")):
-        gangen.append((GROT_KNOPEN[a][:3], GROT_KNOPEN[b][:3], 3.2))
+        gangen.append((knoop(a), knoop(b), 3.2))
     holte = set()
+    vloer_min = {}
 
-    def bol(cx, cy, cz, r):
+    def bol(cx, cy, cz, r, vlak=None):
         for x in range(int(cx - r), int(cx + r) + 1):
             for y in range(int(cy - r * 0.7), int(cy + r * 0.8) + 1):
+                if vlak is not None and y < vlak:
+                    continue
                 for z in range(int(cz - r), int(cz + r) + 1):
                     if ((x - cx) / r) ** 2 + ((y - cy) / (r * 0.75)) ** 2 + ((z - cz) / r) ** 2 <= 1:
                         holte.add((x, y, z))
@@ -1081,19 +1314,21 @@ def grotten(W, K, P):
             p = [a[k] + (b[k] - a[k]) * t for k in range(3)]
             p[0] += w * (b[2] - a[2]) / max(1, L)
             p[2] -= w * (b[0] - a[0]) / max(1, L)
-            bol(p[0], p[1], p[2], r + 0.8 * math.sin(i * 0.7))
+            # the floor of a tunnel follows the straight line between its ends (no bumps): carve from there up
+            bol(p[0], p[1], p[2], r + 0.4 * math.sin(i * 0.7), vlak=int(round(p[1] - 2)))
     for k, (cx, cy, cz, r) in GROT_KNOPEN.items():
-        bol(cx, cy, cz, r)
-    # crystal chamber + the narrow crack from N4
+        bol(cx, cy, cz, r, vlak=voet[k])
+    # crystal chamber (flat floor at the POI height) + the crack from N4, 3 high, floor to floor
     kx, ky, kz = KA.KRISTALKAMER
-    bol(kx, ky, kz, 12)
-    a, b = GROT_KNOPEN["N4"][:3], (kx, ky, kz)
+    bol(kx, ky, kz, 12, vlak=ky - 6)
+    a, b = (GROT_KNOPEN["N4"][0], voet["N4"], GROT_KNOPEN["N4"][2]), (kx, ky - 6, kz)
     n = int(math.dist(a, b))
     for i in range(n + 1):
         t = i / n
         x, y, z = [a[k] + (b[k] - a[k]) * t for k in range(3)]
-        for dy in (0, 1):
-            holte.add((int(x), int(y) + dy, int(z)))
+        for dy in (0, 1, 2):
+            for dx in (0, 1):
+                holte.add((int(x) + dx, int(round(y)) + dy, int(z)))
     # footprint: columns must be solid down to the cave floor
     for (x, y, z) in holte:
         i, j = KA.idx(x, z)
@@ -1111,7 +1346,7 @@ def grotten(W, K, P):
         in_kamer = math.dist((x, y, z), (kx, ky, kz)) < 13
         r = rng.random()
         if in_kamer:
-            if onder and r < 0.25:
+            if onder and r < 0.08:
                 S.set(x, y, z, rng.choice(["guh_kristal_cluster", "weidekristal_roze", "minecraft:amethyst_cluster[facing=up,waterlogged=false]"]))
             elif boven and r < 0.2:
                 S.set(x, y, z, "minecraft:amethyst_cluster[facing=down,waterlogged=false]")
@@ -1128,6 +1363,60 @@ def grotten(W, K, P):
             S.set(x, y, z, "minecraft:pointed_dripstone[thickness=tip,vertical_direction=up,waterlogged=false]")
         elif onder and r < 0.09:
             S.set(x, y - 1, z, "minecraft:dripstone_block")
+    # fix round 1: life along the cave paths (no mobs): little abandoned miner camps, rail ends with a cart's barrels,
+    # crystal clusters, glowing mushroom patches and hanging lanterns, always at the side so the walkway stays free
+    def vloer_bij(x, y0, z):
+        for y in range(y0 - 3, y0 + 4):
+            if (x, y, z) in holte and (x, y - 1, z) not in holte and (x, y + 1, z) in holte and y <= K.h(x, z) - 1:
+                return y
+        return None
+    soort = 0
+    for (a, b, r) in gangen:
+        L = math.dist(a, b)
+        dx, dz = (b[0] - a[0]) / max(1, L), (b[2] - a[2]) / max(1, L)
+        for s_ in np.arange(14, L - 10, 19):
+            t = s_ / L
+            w = math.sin(t * math.pi * 3) * 5
+            cx = a[0] + (b[0] - a[0]) * t + w * (b[2] - a[2]) / max(1, L)
+            cz = a[2] + (b[2] - a[2]) * t - w * (b[0] - a[0]) / max(1, L)
+            cy = a[1] + (b[1] - a[1]) * t
+            kant = 1 if soort % 2 else -1
+            x, z = int(round(cx - dz * 2.4 * kant)), int(round(cz + dx * 2.4 * kant))
+            y = vloer_bij(x, int(round(cy - 2)), z)
+            if y is None:
+                continue
+            soort += 1
+            k = soort % 5
+            if k == 0:      # abandoned camp: bedroll, barrel, lantern, an unlit candle
+                S.set(x, y, z, "minecraft:barrel[facing=up,open=false]")
+                S.set(x + int(dx * 1.5), y, z + int(dz * 1.5), "minecraft:brown_carpet")
+                S.set(x + int(dx * 2.5), y, z + int(dz * 2.5), "minecraft:red_carpet")
+                S.set(x - int(dx * 1.5), y, z - int(dz * 1.5), LANT)
+            elif k == 1:    # the end of an old cart track: a few rails, a chest-less cart's load of barrels
+                for u in range(-2, 2):
+                    q = (x + int(round(dx * u)), z + int(round(dz * u)))
+                    if vloer_bij(q[0], y, q[1]) == y:
+                        S.set(q[0], y, q[1], "minecraft:rail[shape=north_south,waterlogged=false]" if abs(dz) > abs(dx)
+                              else "minecraft:rail[shape=east_west,waterlogged=false]")
+                q = (x + int(round(dx * 2)), z + int(round(dz * 2)))
+                if vloer_bij(q[0], y, q[1]) == y:
+                    S.set(q[0], y, q[1], "minecraft:barrel[facing=up,open=false]")
+            elif k == 2:    # crystals
+                S.set(x, y, z, "guh_kristal_cluster")
+                S.set(x + int(round(dx)), y, z + int(round(dz)), "minecraft:amethyst_cluster[facing=up,waterlogged=false]")
+                S.set(x, y - 1, z, "guh_kristal_blok")
+            elif k == 3:    # glowing mushrooms
+                for (u, v) in ((0, 0), (1, 0), (0, 1), (-1, 0)):
+                    if vloer_bij(x + u, y, z + v) == y:
+                        S.set(x + u, y, z + v, "glimpaddenstoel")
+            else:           # a lantern hanging from the ceiling on a chain over the walkway edge
+                for yy in range(y + 2, y + 9):
+                    if (x, yy + 1, z) not in holte:
+                        S.set(x, yy, z, LANT_H)
+                        for y2 in range(yy + 1, y + 10):
+                            if (x, y2, z) in holte:
+                                S.set(x, y2, z, "minecraft:iron_chain[axis=y]")
+                        break
     # crystal chamber shell (amethyst + guh crystal) so it sparkles
     for (x, y, z) in holte:
         if math.dist((x, y, z), (kx, ky, kz)) < 13 and y <= K.h(x, z):
@@ -1157,25 +1446,29 @@ def sporenwoud(W, K, P):
     hoeden = [(ROOD, "minecraft:white_wool"), (BRUIN, "knuffelblok_roze"), (HOED_ROZE, "knuffelblok_vanille"),
               ("geestpaddenstoel_hoed", "minecraft:pearlescent_froglight[axis=y]")]
     stelen = [STEEL, "guhpaddenstoel_steel", "geestpaddenstoel_steel", STEEL]
-    paden = K.pad > 0.1
+    afst = padafstand(W, K)
     for _ in range(6000):
         x, z = rng.randint(x0 + 10, x1 - 10), rng.randint(z0 + 10, z1 - 10)
         i, j = KA.idx(x, z)
-        if not woud[i, j] or paden[max(0, i - 6):i + 7, max(0, j - 6):j + 7].any() or W.bezet[i, j]:
+        r = rng.uniform(6, 15)
+        krom = rng.uniform(-3, 3)
+        rs = max(1.5, r * 0.22)
+        # fix round 1: the stem (+ its bend) keeps 4 blocks off every path and building, the whole mushroom off the needles
+        if not woud[i, j] or afst[i, j] < rs * 1.6 + abs(krom) + 4 or W.bezet[i, j]:
             continue
         if any(math.hypot(x - a, z - b) < 18 for (a, b) in KA.LICHTSTRALEN):
             continue
-        if any(math.hypot(x - a, z - b) < 24 for (a, b, _) in gekozen):
+        if any(math.hypot(x - a, z - b) < 24 for (a, b, *_) in gekozen):
             continue
-        r = rng.uniform(6, 15)
-        gekozen.append((x, z, r))
-    for (x, z, r) in gekozen:
+        if any(math.hypot(x - a, z - b) < 19 + r + 4 for (a, b) in KA.UITKIJK.values()):
+            continue
+        gekozen.append((x, z, r, krom))
+    for (x, z, r, krom) in gekozen:
         g = K.h(x, z)
         h = int(r * rng.uniform(2.2, 3.6))
         k = rng.randrange(4)
         steel = stelen[k]
         rs = max(1.5, r * 0.22)
-        krom = rng.uniform(-3, 3)
         for y in range(g - 1, g + h):
             t = (y - g) / h
             sx = x + krom * math.sin(math.pi * t)
@@ -1187,6 +1480,46 @@ def sporenwoud(W, K, P):
         hoed(S, x, z, g + h + int(r * 0.4), r, hoeden[k][0], hoeden[k][1])
         if rng.random() < 0.3:
             S.set(x + rs + 1, g + 1, z, "glimpaddenstoel")
+    # fix round 1: more life beside the paths (no mobs): forest camps, glowing fairy rings, fallen logs, lamp posts
+    n_leven = 0
+    for _ in range(4000):
+        if n_leven >= 34:
+            break
+        x, z = rng.randint(x0 + 10, x1 - 10), rng.randint(z0 + 10, z1 - 10)
+        i, j = KA.idx(x, z)
+        if not woud[i, j] or not 4 <= afst[i, j] <= 11 or W.bezet[i - 3:i + 4, j - 3:j + 4].any():
+            continue
+        if any(math.hypot(x - a, z - b) < rr * 0.35 + 6 for (a, b, rr, _) in gekozen):
+            continue
+        blok = K.H[i - 3:i + 4, j - 3:j + 4]
+        if int(blok.max()) - int(blok.min()) > 1:
+            continue
+        g = K.h(x, z)
+        k = n_leven % 4
+        n_leven += 1
+        if k == 0:      # a little forest camp
+            S.set(x, g + 1, z, "minecraft:spruce_log[axis=y]")
+            S.set(x, g + 2, z, LANT)
+            S.set(x + 1, g + 1, z + 1, "minecraft:barrel[facing=up,open=false]")
+            S.set(x - 1, g + 1, z + 1, "minecraft:barrel[facing=up,open=false]")
+            for u in (-1, 0, 1):
+                S.set(x + u, g + 1, z - 2, "minecraft:green_carpet" if u else "minecraft:white_carpet")
+        elif k == 1:    # a glowing fairy ring
+            for a in range(12):
+                aa = a * math.pi / 6
+                S.set(x + round(2.8 * math.cos(aa)), g + 1, z + round(2.8 * math.sin(aa)), "glimpaddenstoel")
+            S.set(x, g, z, "minecraft:shroomlight")
+        elif k == 2:    # a fallen log with moss and little mushrooms
+            for u in range(-2, 3):
+                S.set(x + u, g + 1, z, "minecraft:spruce_log[axis=x]")
+                if u % 2:
+                    S.set(x + u, g + 2, z, "minecraft:moss_carpet")
+            S.set(x, g + 2, z, "minecraft:brown_mushroom")
+            S.set(x + 2, g + 2, z, "glimpaddenstoel")
+        else:           # a spore lamp post
+            S.fill(x, g + 1, z, x, g + 3, z, "minecraft:spruce_fence")
+            S.set(x, g + 4, z, "minecraft:shroomlight")
+            S.set(x + 1, g + 1, z, "glimpaddenstoel")
     # light beams: a glowing clearing (the beam itself = client particles + light blocks)
     for (x, z) in KA.LICHTSTRALEN:
         g = K.h(x, z)
@@ -1208,6 +1541,14 @@ def sporenwoud(W, K, P):
                 if d <= 4.2:
                     S.set(x, y, z, STEEL if d > 3 else CARVE)
     hoed(S, hx + 13, hz, g + 6, 7, ROOD, "minecraft:white_wool")
+    for x in range(hx - 9, hx + 10):      # fix round 1: a flat walkable floor (cobble/gravel) through the whole stem
+        for z in range(hz - 2, hz + 3):
+            S.set(x, g, z, ["minecraft:cobblestone", "minecraft:gravel", "minecraft:mossy_cobblestone"][(x * 3 + z) % 3])
+            S.set(x, g - 1, z, STEEL)
+            for y in range(g + 1, g + 4):
+                S.set(x, y, z, CARVE)
+    for (x_, d_) in ((hx - 10, -1), (hx + 10, 1)):
+        trap_naar_buiten(S, K, x_, hz, d_, 0, g, 5)
     S.set(hx, g, hz, "minecraft:black_carpet")
     S.set(hx + 2, g, hz + 1, "minecraft:black_wool")
     P["mika_aanwijzing_3"] = [hx, g, hz]
@@ -1217,12 +1558,30 @@ def sporenwoud(W, K, P):
     S.ellipsoid(wx, g + 6, wz, 13, 16, 9, "minecraft:mossy_cobblestone")
     S.ellipsoid(wx, g + 6, wz, 12, 15, 8, "minecraft:stone", keep=False)
     S.ellipsoid(wx, g + 6, wz, 11, 14, 7, CARVE)
+    # fix round 1: the egg-shaped cavity went 8 blocks below the floor (a pit around the floor): fill it up to the floor
+    for x in range(wx - 12, wx + 13):
+        for z in range(wz - 8, wz + 9):
+            for y in range(g - 9, g + 1):
+                if S.get(x, y, z) == CARVE:
+                    S.set(x, y, z, "minecraft:stone" if y < g else ["minecraft:stone", "minecraft:cobblestone", "minecraft:gravel", "minecraft:cobblestone"][(x + 2 * z) % 4])
     S.fill(wx - 4, g + 1, wz - 3, wx + 4, g + 5, wz + 3, CARVE)
-    S.fill(wx - 5, g, wz - 4, wx + 5, g, wz + 4, "minecraft:moss_block")
+    for x in range(wx - 5, wx + 6):       # fix round 1: a stone/cobble floor instead of moss
+        for z in range(wz - 4, wz + 5):
+            S.set(x, g, z, ["minecraft:stone", "minecraft:cobblestone", "minecraft:gravel", "minecraft:cobblestone"][(x + 2 * z) % 4])
     S.set(wx, g + 1, wz - 2, "minecraft:chest[facing=south,type=single,waterlogged=false]")
     S.set(wx - 3, g + 1, wz, "minecraft:ochre_froglight[axis=y]")
     S.set(wx + 3, g + 1, wz, "minecraft:ochre_froglight[axis=y]")
-    S.fill(wx - 1, g + 1, wz + 8, wx + 1, g + 3, wz + 9, CARVE)       # entrance (south) behind the water
+    # fix round 1: a clearing in front of the waterfall at the room's floor level, the floor runs on under the curtain
+    # into the room, and stairs lead from the clearing up to the forest (it used to be a pool in a pit)
+    for x in range(wx - 7, wx + 8):
+        for z in range(wz + 10, wz + 24):
+            for y in range(g + 1, g + 14):
+                S.set(x, y, z, CARVE)
+            for y in range(g - 3, g):
+                S.set(x, y, z, "minecraft:stone")
+            S.set(x, g, z, "minecraft:moss_block" if (x + z) % 3 else "minecraft:grass_block[snowy=false]")
+    S.fill(wx - 1, g, wz + 7, wx + 1, g, wz + 10, "minecraft:cobblestone")
+    S.fill(wx - 1, g + 1, wz + 7, wx + 1, g + 3, wz + 9, CARVE)       # entrance (south) behind the water
     for y in range(g + 1, g + 20):
         for x in range(wx - 1, wx + 2):
             S.set(x, y, wz + 10, "minecraft:water")
@@ -1232,10 +1591,11 @@ def sporenwoud(W, K, P):
             S.set(x, g - 1, z, "minecraft:clay")
             if abs(x - wx) == 4 or z == wz + 16:
                 S.set(x, g, z, "minecraft:mossy_cobblestone")
+    trap_naar_buiten(S, K, wx, wz + 24, 0, 1, g, 5, "minecraft:mossy_cobblestone_stairs", "minecraft:mossy_cobblestone")
     P["geheim_waterval"] = [wx, g + 1, wz]
     P["waterval"] = [wx, g + 1, wz + 12]
     W.stempel(S.stempel("sporenwoud"), bezet=False)
-    for (x, z, r) in gekozen:
+    for (x, z, r, _) in gekozen:
         i, j = KA.idx(x, z)
         W.bezet[i - 2:i + 3, j - 2:j + 3] = True
 
@@ -1260,6 +1620,19 @@ def randwolken(W, K, P):
 
 
 # ================================================================================================ decoration
+_PADAFSTAND = {}
+
+
+def padafstand(W, K):
+    """Distance (blocks) of every column to the nearest walking surface: map paths, the Kloof ramps and the dirt-path /
+    klinker floors the stamps lay (campfire plazas)."""
+    if "a" not in _PADAFSTAND:
+        from scipy import ndimage
+        pad = K.pad > 0.5
+        _PADAFSTAND["a"] = ndimage.distance_transform_edt(~pad).astype(np.float32)
+    return _PADAFSTAND["a"]
+
+
 def decoratie(W, K, P):
     P_ = W.punten
     rng = np.random.default_rng(42)
@@ -1272,6 +1645,9 @@ def decoratie(W, K, P):
     mos = {pal.id(s) for s in ("minecraft:moss_block", "minecraft:podzol[snowy=false]", "minecraft:mycelium[snowy=false]")}
     lit = pal.id("guhs:vr_w_litteken_gras")
     ok = (H >= 63) & ~W.bezet & (K.pad < 0.1) & (H >= np.round(K.wl))
+    # trees: trunk 6+ blocks from any path surface (the crown is up to 3.4 wide) and 5+ from buildings/needles
+    from scipy import ndimage
+    boom_ok = (padafstand(W, K) >= 6) & ~ndimage.binary_dilation(W.bezet, iterations=5)
     sx, sz = np.nonzero(ok)
     namen = K.namen
     bloemen_weide = ["minecraft:pink_tulip", "minecraft:allium", "minecraft:oxeye_daisy", "minecraft:cornflower",
@@ -1286,7 +1662,7 @@ def decoratie(W, K, P):
         if t == lit:
             if q < 0.12:
                 P_.set(x, y, z, "guhs:vr_w_litteken_plant")
-            elif q > 0.9985:
+            elif q > 0.9985 and boom_ok[i, j]:
                 bomen.append((x, y, z, "dood"))
             continue
         if t in groen:
@@ -1298,7 +1674,7 @@ def decoratie(W, K, P):
                 elif q < 0.29:
                     P_.set(x, y, z, "minecraft:tall_grass[half=lower]")
                     P_.set(x, y + 1, z, "minecraft:tall_grass[half=upper]")
-                elif q > 0.9975 and gb != "stad":
+                elif q > 0.9975 and gb != "stad" and boom_ok[i, j]:
                     bomen.append((x, y, z, "bloesem" if r2[i, j] < 0.5 else "azalea"))
                 elif q > 0.9965 and gb == "weide":
                     P_.set(x, y, z, "guhs:roze_slijmblok" if r2[i, j] < 0.5 else "minecraft:slime_block")
@@ -1327,7 +1703,20 @@ def decoratie(W, K, P):
             P_.set(x, y, z, "minecraft:pointed_dripstone[thickness=tip,vertical_direction=up,waterlogged=false]")
     for (x, y, z, soort) in bomen:
         boom(P_, x, y, z, soort, random.Random(x * 31 + z))
-    # ponds: lilies + reed
+    # ponds: lilies + reed; big ponds get little stepping islands so land is never more than ~10 swims away (fix round 1)
+    for (px, pz, rx, rz) in KA.VIJVERS:
+        if rx > 18:
+            for k in (-1, 0, 1):
+                ix, iz = int(px + k * rx * 0.5), int(pz)
+                wl = int(round(K.wl[KA.idx(ix, iz)]))
+                for u in range(-1, 2):
+                    for v in range(-1, 2):
+                        bodem = K.h(ix + u, iz + v)
+                        for yy in range(bodem + 1, wl):
+                            P_.set(ix + u, yy, iz + v, "minecraft:mossy_cobblestone")
+                        P_.set(ix + u, wl, iz + v, "minecraft:moss_block")
+                P_.set(ix, wl + 1, iz, "guhs:bloesemmeertje_riet[half=lower]")
+                P_.set(ix, wl + 2, iz, "guhs:bloesemmeertje_riet[half=upper]")
     for (px, pz, rx, rz) in KA.VIJVERS:
         rr = random.Random(px)
         for _ in range(int(rx * rz * 0.15)):

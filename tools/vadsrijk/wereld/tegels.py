@@ -160,6 +160,7 @@ class Wereld:
     def stempel(self, st, bezet=True):
         st.lut = self.palet.lut(st.pal)
         self.stempels.append(st)
+        self.onder_uitgraving(st)
         if bezet:
             voet = np.any(st.v > 0, axis=1)
             ox, oy, oz = st.off
@@ -169,6 +170,28 @@ class Wereld:
             a1, b1 = min(X, KA.NX - i0), min(Z, KA.NZ - j0)
             if a1 > a0 and b1 > b0:
                 self.bezet[i0 + a0:i0 + a1, j0 + b0:j0 + b1] |= voet[a0:a1, b0:b1]
+
+    def onder_uitgraving(self, st):
+        """Fix round 1: where a stamp carves into the terrain (caves, cuts, plazas), the terrain skin of the carved columns
+        AND their neighbours (2 around) must reach below the carved floor, or the hollow space under the skin shows
+        through the side of the cut (you could fall out of a cave under the map)."""
+        from scipy import ndimage
+        uit = st.lut[st.v] == 1
+        if not uit.any():
+            return
+        X, Y, Z = st.v.shape
+        heeft = uit.any(1)
+        ymin = np.where(heeft, np.argmax(uit, axis=1), 10 ** 4).astype(np.int32)
+        ymin = ndimage.minimum_filter(ymin, size=5, mode="constant", cval=10 ** 4)
+        ox, oy, oz = st.off
+        i0, j0 = ox - KA.X0, oz - KA.Z0
+        a0, b0 = max(0, -i0), max(0, -j0)
+        a1, b1 = min(X, KA.NX - i0), min(Z, KA.NZ - j0)
+        if a1 <= a0 or b1 <= b0:
+            return
+        doel = self.lo_extra[i0 + a0:i0 + a1, j0 + b0:j0 + b1]
+        nieuw = np.where(ymin[a0:a1, b0:b1] < 10 ** 4, ymin[a0:a1, b0:b1] + oy - 2, 9999)
+        self.lo_extra[i0 + a0:i0 + a1, j0 + b0:j0 + b1] = np.minimum(doel, nieuw).astype(np.int16)
 
     def blok_op(self, x, y, z):
         """Global id of what the stamps put at a world position (last stamp wins; 0 = nothing)."""
