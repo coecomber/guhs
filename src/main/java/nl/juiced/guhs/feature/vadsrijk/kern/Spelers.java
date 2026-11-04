@@ -55,7 +55,7 @@ public final class Spelers {
                 return t;
             }
         }
-        return klasse(p).titelKey(level(p));
+        return klasse(p).titelKey(klasseLevel(p));
     }
 
     /**
@@ -70,30 +70,132 @@ public final class Spelers {
         return Klassen.ofRidder(data(p).klasse);
     }
 
+    /**
+     * The GENERIC level (g-klassen): Vads, Verdediging, area/quest gates, armour and jewellery, the party HUD. For the class
+     * level use {@link #level(Player, String)} or {@link #klasseLevel}.
+     */
     public static int level(Player p) {
         return data(p).level();
     }
 
+    /** The level of one class (main stat, skill points, weapons, job advancement). */
     public static int level(Player p, String klasse) {
         return data(p).level(klasse);
     }
 
-    /** The class weapon in the main hand (a piece of gear of a weapon base type this class accepts), or null. */
+    /** The level of the active class. */
+    public static int klasseLevel(Player p) {
+        return data(p).klasseLevel();
+    }
+
+    // ---- class weapons (g-klassen: the class is the weapon in your hand) -------------------------------------------------
+
+    /** The class a weapon base type belongs to: its own {@code klasse}, else by kind (melee = ridder, ranged = jager, magic = magier). */
     @Nullable
-    public static Uitrusting wapen(Player p) {
-        Uitrusting u = Rollen.van(p.getMainHandItem());
-        if (u == null) {
-            return null;
-        }
-        BasisType t = u.basisType();
+    public static String wapenKlasse(@Nullable BasisType t) {
         if (t == null || t.slot() != Slot.WAPEN) {
             return null;
         }
-        Klasse k = klasse(p);
-        if (t.klasse() != null && !t.klasse().equals(k.id())) {
-            return null;
+        if (t.klasse() != null && Klassen.van(t.klasse()) != null) {
+            return t.klasse();
         }
-        return u.level() <= level(p) ? u : null;
+        return switch (Aanvalstempo.schadeSoort(t)) {
+            case AFSTAND -> Klassen.JAGER;
+            case MAGIE -> Klassen.MAGIER;
+            default -> Klassen.RIDDER;
+        };
+    }
+
+    /** The class weapon in the main hand, requirement met or not (null = no class weapon: only the punch). */
+    @Nullable
+    public static Uitrusting wapenInHand(Player p) {
+        Uitrusting u = Rollen.van(p.getMainHandItem());
+        return u != null && u.basisType() != null && u.basisType().slot() == Slot.WAPEN ? u : null;
+    }
+
+    /** Weapon requirement: the CLASS level of the weapon's class. */
+    public static boolean magWapen(Player p, Uitrusting u) {
+        String k = wapenKlasse(u.basisType());
+        return k == null || u.level() <= level(p, k);
+    }
+
+    /** The class weapon in the main hand whose requirement you meet (any class), or null. */
+    @Nullable
+    public static Uitrusting wapen(Player p) {
+        Uitrusting u = wapenInHand(p);
+        return u != null && magWapen(p, u) ? u : null;
+    }
+
+    /** The class of the weapon in your hand that you may use, or null (then: no skills, the HUD class line is grey). */
+    @Nullable
+    public static String actieveWapenKlasse(Player p) {
+        Uitrusting u = wapen(p);
+        return u == null ? null : wapenKlasse(u.basisType());
+    }
+
+    /** Called on a class switch (player, old class, new class), after the cooldowns are set. */
+    public static final List<KlasseWissel> KLASSE_GEWISSELD = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    @FunctionalInterface
+    public interface KlasseWissel {
+        void accept(ServerPlayer p, String oud, String nieuw);
+    }
+
+    private static final java.util.Map<java.util.UUID, Long> MELDING = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
+     * Every attack (basic melee hit, ranged/magic shot, skill) asks this first. With a class weapon whose requirement you
+     * don't meet: a message and false (the attack doesn't happen). With a weapon of another class: the active class switches
+     * ({@link #wisselKlasse}). Without a class weapon: true (the weak punch).
+     */
+    public static boolean voorAanval(ServerPlayer p) {
+        Uitrusting u = wapenInHand(p);
+        if (u == null) {
+            return true;
+        }
+        String k = wapenKlasse(u.basisType());
+        if (!magWapen(p, u)) {
+            long nu = p.level().getGameTime();
+            if (nu > MELDING.getOrDefault(p.getUUID(), 0L)) {
+                MELDING.put(p.getUUID(), nu + 40);
+                p.sendOverlayMessage(Component.translatable("vadsrijk.kern.wapen.vereist", Component.translatable(Klassen.ofRidder(k).naamKey()), u.level(),
+                        level(p, k)).withStyle(ChatFormatting.RED));
+                p.level().playSound(null, p.blockPosition(), SoundEvents.NOTE_BLOCK_BASS.value(), SoundSource.PLAYERS, 0.4f, 0.6f);
+            }
+            return false;
+        }
+        if (k != null && !k.equals(data(p).klasse)) {
+            wisselKlasse(p, k);
+        }
+        return true;
+    }
+
+    /**
+     * Switches the active class: your Vads keep their percentage, the new class's R/V/G start on FULL cooldown and its ult
+     * meter at 0 (the Knuffelsprong keeps its own cooldown).
+     */
+    public static void wisselKlasse(ServerPlayer p, String nieuw) {
+        SpelerData d = data(p);
+        Klasse k = Klassen.van(nieuw);
+        if (k == null || nieuw.equals(d.klasse)) {
+            return;
+        }
+        String oud = d.klasse;
+        double deel = vads(p) / maxVads(p);
+        d.klasse = nieuw;
+        d.vads = Math.max(1, maxVads(p) * deel);
+        d.energie = Math.min(Math.max(0, d.energie), maxEnergie(p));
+        d.ultLading = 0;
+        long nu = p.level().getGameTime();
+        for (var v : k.vaardigheden()) {
+            if (!v.ult()) {
+                d.klaarOp.put(v.id(), nu + Vaardigheden.cooldown(p, v));
+            }
+        }
+        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.klasse.actief", Component.translatable(titelKey(p))).withStyle(ChatFormatting.LIGHT_PURPLE));
+        p.level().playSound(null, p.blockPosition(), SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.PLAYERS, 0.6f, 1.4f);
+        KLASSE_GEWISSELD.forEach(h -> h.accept(p, oud, nieuw));
+        sync(p);
     }
 
     /**
@@ -116,12 +218,26 @@ public final class Spelers {
         return u == null ? Element.GEEN : u.element();
     }
 
-    /** Everything that counts now: class growth + gear (level requirement met) + tree + statuses. */
+    /**
+     * Final stat changes after gear/tree/extras (klassen: the balans multipliers per class, the Knuffelridder's Vads per class
+     * level). Called before the statuses (Duizelig etc.).
+     */
+    public static final List<java.util.function.BiConsumer<ServerPlayer, Stats>> STATS_NA = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /**
+     * Everything that counts now (g-klassen): the active class's growth, with Vads and Verdediging from the GENERIC level and
+     * the rest (main stats) from the CLASS level; the weapon (class level requirement), armour and jewellery (generic level
+     * requirement), the tree of the active class, statuses.
+     */
     public static Stats stats(Player p) {
         SpelerData d = data(p);
         Klasse k = klasse(p);
-        int lvl = d.level(k.id());
-        Stats s = k.basis(lvl).kopie();
+        int klv = d.level(k.id());
+        int lvl = d.level();
+        Stats s = k.basis(klv).kopie();
+        Stats gen = k.basis(lvl);
+        s.zet(Stat.VADS, gen.get(Stat.VADS));
+        s.zet(Stat.VERDEDIGING, gen.get(Stat.VERDEDIGING));
         Uitrusting w = wapen(p);
         if (w != null) {
             s.plus(Rollen.stats(w));
@@ -151,6 +267,11 @@ public final class Spelers {
         for (BoomKnoop b : k.boom()) {
             if (knopen.contains(b.id()) && b.bonus() != null) {
                 s.plus(b.bonus());
+            }
+        }
+        if (p instanceof ServerPlayer sp) {
+            for (var f : STATS_NA) {
+                f.accept(sp, s);
             }
         }
         if (Statussen.heeft(p, Status.DUIZELIG)) {
@@ -184,7 +305,7 @@ public final class Spelers {
     }
 
     public static double maxEnergie(Player p) {
-        return klasse(p).maxEnergie(level(p));
+        return klasse(p).maxEnergie(klasseLevel(p));
     }
 
     public static double energie(Player p) {
@@ -224,11 +345,53 @@ public final class Spelers {
 
     // ---- xp -------------------------------------------------------------------------------------------------------------
 
-    /** Xp for this player's current class only. */
     /** BELEVING hook (fix round 1): xp factors per player (the Vrolijke reeks gives +10 %), all multiplied. */
     public static final List<java.util.function.ToDoubleFunction<ServerPlayer>> XP_FACTOR = new java.util.concurrent.CopyOnWriteArrayList<>();
 
+    /**
+     * g-klassen: while a defeat hands out xp ({@code VadsrijkMob.verslagen}), the damage per player per class on that mob: the
+     * class that dealt the most damage gets the class xp. Null outside a defeat.
+     */
+    @Nullable
+    private static java.util.Map<java.util.UUID, java.util.Map<String, Double>> klasseBijdrage;
+
+    /** Runs {@code wat} (the xp/loot hand-out of a defeat) with the per-class damage of that mob known to {@link #geefXp}. */
+    public static void metKlasseBijdrage(java.util.Map<java.util.UUID, java.util.Map<String, Double>> bijdrage, Runnable wat) {
+        var oud = klasseBijdrage;
+        klasseBijdrage = bijdrage;
+        try {
+            wat.run();
+        } finally {
+            klasseBijdrage = oud;
+        }
+    }
+
+    /** The class that gets this player's class xp now: the class that hit the defeated mob the hardest, else the active class. */
+    public static String xpKlasse(ServerPlayer p) {
+        var m = klasseBijdrage == null ? null : klasseBijdrage.get(p.getUUID());
+        if (m != null && !m.isEmpty()) {
+            String beste = null;
+            double b = -1;
+            for (var e : m.entrySet()) {
+                if (e.getValue() > b && Klassen.van(e.getKey()) != null) {
+                    b = e.getValue();
+                    beste = e.getKey();
+                }
+            }
+            if (beste != null) {
+                return beste;
+            }
+        }
+        return data(p).klasse;
+    }
+
+    /** Xp (g-klassen): ALL of it to the generic level AND to the class of {@link #xpKlasse}. */
     public static void geefXp(ServerPlayer p, long n, String bron) {
+        geefXp(p, n, bron, xpKlasse(p));
+    }
+
+    /** Xp to the generic level and to {@code klasse} (null = only generic). */
+    public static void geefXp(ServerPlayer p, long n, String bron, @Nullable String klasse) {
         if (n <= 0) {
             return;
         }
@@ -238,14 +401,16 @@ public final class Spelers {
         }
         n = Math.round(n * factor);
         SpelerData d = data(p);
-        String k = d.klasse;
-        int voor = d.level(k);
-        long max = Levels.totaalVoor(Levels.MAX);
-        d.xp.put(k, Math.min(max, d.xp(k) + n));
-        int na = d.level(k);
-        if (na > voor) {
-            levelOp(p, k, na);
+        int gVoor = d.level();
+        d.generiekXp = Math.min(Levels.totaalVoorGeneriek(Levels.MAX_GENERIEK), d.generiekXp + n);
+        int gNa = d.level();
+        int kVoor = 0, kNa = 0;
+        if (klasse != null && Klassen.van(klasse) != null) {
+            kVoor = d.level(klasse);
+            d.xp.put(klasse, Math.min(Levels.totaalVoor(Levels.MAX), d.xp(klasse) + n));
+            kNa = d.level(klasse);
         }
+        levelOp(p, gNa > gVoor ? gNa : 0, klasse, kNa > kVoor ? kNa : 0);
         sync(p);
     }
 
@@ -257,31 +422,66 @@ public final class Spelers {
         }
     }
 
+    /** Dev/tests: sets the generic level AND the active class's level. */
     public static void zetLevel(ServerPlayer p, int level) {
         SpelerData d = data(p);
-        int voor = d.level();
-        d.xp.put(d.klasse, Levels.totaalVoor(Math.max(1, Math.min(Levels.MAX, level))));
+        level = Math.max(1, Math.min(Levels.MAX, level));
+        int gVoor = d.level(), kVoor = d.klasseLevel();
+        d.generiekXp = Levels.totaalVoorGeneriek(level);
+        d.xp.put(d.klasse, Levels.totaalVoor(level));
         d.vads = maxVads(p);
-        if (d.level() > voor) {
-            levelOp(p, d.klasse, d.level());
-        }
+        levelOp(p, d.level() > gVoor ? d.level() : 0, d.klasse, d.klasseLevel() > kVoor ? d.klasseLevel() : 0);
         sync(p);
     }
 
-    private static void levelOp(ServerPlayer p, String klasse, int level) {
+    /** Dev/tests: only the generic level. */
+    public static void zetGeneriek(ServerPlayer p, int level) {
+        SpelerData d = data(p);
+        int voor = d.level();
+        d.generiekXp = Levels.totaalVoorGeneriek(Math.max(1, Math.min(Levels.MAX_GENERIEK, level)));
+        levelOp(p, d.level() > voor ? d.level() : 0, null, 0);
+        sync(p);
+    }
+
+    /** Dev/tests: only one class's level. */
+    public static void zetKlasseLevel(ServerPlayer p, String klasse, int level) {
+        SpelerData d = data(p);
+        int voor = d.level(klasse);
+        d.xp.put(klasse, Levels.totaalVoor(Math.max(1, Math.min(Levels.MAX, level))));
+        levelOp(p, 0, klasse, d.level(klasse) > voor ? d.level(klasse) : 0);
+        sync(p);
+    }
+
+    /**
+     * Level-up effects. {@code generiek} / {@code klasseLevel}: the new level, 0 = that one didn't go up. Hook
+     * {@link Haken#LEVEL_OP} with "generiek:N" and/or "&lt;klasse&gt;:N".
+     */
+    private static void levelOp(ServerPlayer p, int generiek, @Nullable String klasse, int klasseLevel) {
+        if (generiek <= 0 && klasseLevel <= 0) {
+            return;
+        }
         SpelerData d = data(p);
         d.vads = maxVads(p);
         d.energie = maxEnergie(p);
         if (p.level() instanceof ServerLevel sl) {
-            sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, p.getX(), p.getY() + 1, p.getZ(), 60, 0.6, 1.0, 0.6, 0.3);
+            sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, p.getX(), p.getY() + 1, p.getZ(), generiek > 0 ? 60 : 25, 0.6, 1.0, 0.6, 0.3);
             sl.sendParticles(ParticleTypes.CHERRY_LEAVES, p.getX(), p.getY() + 2, p.getZ(), 40, 1.2, 0.6, 1.2, 0.05);
-            sl.playSound(null, p.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, 1.0f);
+            sl.playSound(null, p.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 1f, generiek > 0 ? 1.0f : 1.3f);
             sl.playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1f, 0.8f);
         }
+        Component naam = klasse == null ? Component.empty() : Component.translatable(Klassen.ofRidder(klasse).naamKey());
+        Component onder = generiek > 0 && klasseLevel > 0 ? Component.translatable("vadsrijk.kern.levelop.beide", generiek, naam, klasseLevel)
+                : generiek > 0 ? Component.translatable("vadsrijk.kern.levelop.generiek", generiek)
+                : Component.translatable("vadsrijk.kern.levelop.onder", naam, klasseLevel);
         nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.titel(p, Component.translatable("vadsrijk.kern.levelop.titel").withStyle(ChatFormatting.GOLD),
-                Component.translatable("vadsrijk.kern.levelop.onder", Component.translatable(Klassen.ofRidder(klasse).naamKey()), level), 50, 0xFFD24A);
+                onder, 50, 0xFFD24A);
         Tips.toon(p, "vadsrijk.kern.tip.levelop");
-        Haken.LEVEL_OP.forEach(h -> h.accept(p, klasse + ":" + level));
+        if (generiek > 0) {
+            Haken.LEVEL_OP.forEach(h -> h.accept(p, "generiek:" + generiek));
+        }
+        if (klasseLevel > 0 && klasse != null) {
+            Haken.LEVEL_OP.forEach(h -> h.accept(p, klasse + ":" + klasseLevel));
+        }
     }
 
     // ---- coins ----------------------------------------------------------------------------------------------------------

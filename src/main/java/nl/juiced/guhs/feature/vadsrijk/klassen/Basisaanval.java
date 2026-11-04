@@ -95,6 +95,9 @@ public final class Basisaanval {
         if (!Vadsrijk.in(p) || p.isSpectator() || RijkScenes.bezig(p) || Statussen.heeft(p, Status.VERDOOFD)) {
             return;
         }
+        if (!Spelers.voorAanval(p)) {   // g-klassen: weapon requirement (class level) + switch to this weapon's class
+            return;
+        }
         long nu = p.level().getGameTime();
         long klaar = KLAAR.getOrDefault(p.getUUID(), 0L);
         if (nu >= klaar) {
@@ -132,17 +135,7 @@ public final class Basisaanval {
         Uitrusting u = Spelers.wapen(p);
         BasisType t = u == null ? null : u.basisType();
         Soort s = t == null ? null : SOORTEN.get(t.soort());
-        if (s == null) {
-            Uitrusting hand = Rollen.van(p.getMainHandItem());
-            long nu = p.level().getGameTime();
-            if (hand != null && nu > MELDING.getOrDefault(p.getUUID(), 0L)) {
-                MELDING.put(p.getUUID(), nu + 40);
-                BasisType ht = hand.basisType();
-                Component wie = ht != null && ht.klasse() != null ? Component.translatable(nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.ofRidder(ht.klasse()).naamKey())
-                        : Component.literal("?");
-                p.sendOverlayMessage(hand.level() > Spelers.level(p) ? Component.translatable("vadsrijk.klassen.wapen.te_hoog", hand.level()).withStyle(ChatFormatting.GRAY)
-                        : Component.translatable("vadsrijk.klassen.wapen.verkeerd", wie).withStyle(ChatFormatting.GRAY));
-            }
+        if (s == null || !Spelers.voorAanval(p)) {   // (g-klassen: swapped to a melee weapon meanwhile, or a weapon you can't use yet)
             return;
         }
         long nu = p.level().getGameTime();

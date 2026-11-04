@@ -72,10 +72,14 @@ public class RijkItem extends Item {
         }
         t.accept(Component.literal(sterren + "  ").withStyle(ChatFormatting.GOLD)
                 .append(Component.translatable(z.key()).withStyle(Style.EMPTY.withColor(TextColor.fromRgb(z.rgb)).withBold(true))));
-        MutableComponent wie = bt != null && bt.klasse() != null ? Component.translatable(Klassen.ofRidder(bt.klasse()).naamKey())
-                : Component.translatable("vadsrijk.kern.item.alle_klassen");
-        t.accept(wie.withStyle(ChatFormatting.GRAY).append(Component.literal(" · ").withStyle(ChatFormatting.DARK_GRAY))
-                .append(Component.translatable("vadsrijk.kern.item.level", u.level()).withStyle(ChatFormatting.YELLOW)));
+        // g-klassen: a weapon needs the CLASS level of its class ("Vereist: Pluisjager nv 14"), armour and jewellery the generic
+        // level; red when this client's player doesn't meet it (levels from the last HUD packet).
+        String wk = nl.juiced.guhs.feature.vadsrijk.kern.Spelers.wapenKlasse(bt);
+        var hud = nl.juiced.guhs.feature.vadsrijk.kern.KernPayloads.laatsteHud;
+        Integer heeft = hud == null || !hud.binnen() ? null : wk != null ? hud.klasseLv().get(wk) : Integer.valueOf(hud.generiek());
+        ChatFormatting eis = heeft == null ? ChatFormatting.YELLOW : heeft >= u.level() ? ChatFormatting.GREEN : ChatFormatting.RED;
+        t.accept(wk != null ? Component.translatable("vadsrijk.kern.item.vereist_klasse", Component.translatable(Klassen.ofRidder(wk).naamKey()), u.level()).withStyle(eis)
+                : Component.translatable("vadsrijk.kern.item.vereist_generiek", u.level()).withStyle(eis));
         if (bt != null && bt.slot() == Slot.WAPEN) {
             Element e = u.element();
             MutableComponent s = Component.translatable("vadsrijk.kern.item.schade", String.format(Locale.ROOT, "%.0f", Rollen.klapSchade(u)))

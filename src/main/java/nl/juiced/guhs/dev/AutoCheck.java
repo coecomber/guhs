@@ -1561,6 +1561,19 @@ public final class AutoCheck {
                     opened = true;
                     return true;
                 };
+            case "inventaris":
+                // gui inventaris [hotbar slot 0-8]: (vadsrijk g-klassen) the survival inventory, the mouse on that hotbar slot (item tooltip)
+                return mc -> {
+                    opened = true;
+                    var scr = new net.minecraft.client.gui.screens.inventory.InventoryScreen(mc.player);
+                    mc.setScreen(scr);
+                    if (a.length > 2) {
+                        var slot = mc.player.inventoryMenu.slots.get(36 + Integer.parseInt(a[2]));
+                        double s = mc.getWindow().getGuiScale();
+                        setCursor(mc, (scr.getGuiLeft() + slot.x + 8) * s, (scr.getGuiTop() + slot.y + 8) * s);
+                    }
+                    return true;
+                };
             case "guhdex": {
                 String prefix = a.length > 2 ? a[2] : "gui_guhdex";
                 boolean none = a.length > 3 && a[3].equalsIgnoreCase("none");

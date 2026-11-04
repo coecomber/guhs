@@ -113,7 +113,9 @@ public final class Questlog {
 
     /** Could this NPC/the story give this quest now? (not taken yet, level, previous quests, class) */
     public static boolean beschikbaar(ServerPlayer p, Quest q) {
-        if (status(p, q.id()) != 0 || Spelers.level(p) < q.lv()) {
+        // g-klassen: a class quest (job advancement) looks at that CLASS level, any other quest at the generic level; you are
+        // always all 3 classes, so every class's quest can be offered (no 'current class' check any more)
+        if (status(p, q.id()) != 0 || lvVoor(p, q) < q.lv()) {
             return false;
         }
         for (String na : q.na()) {
@@ -121,7 +123,12 @@ public final class Questlog {
                 return false;
             }
         }
-        return q.klasse() == null || q.klasse().equals(Spelers.data(p).klasse);
+        return q.klasse() == null || nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.van(q.klasse()) != null;
+    }
+
+    /** g-klassen: the level a quest compares with: its class's level for a class quest, else the generic level. */
+    public static int lvVoor(ServerPlayer p, Quest q) {
+        return q.klasse() != null ? Spelers.level(p, q.klasse()) : Spelers.level(p);
     }
 
     // ---- objectives -----------------------------------------------------------------------------------------------------------
@@ -131,7 +138,7 @@ public final class Questlog {
         Quest.Doel d = q.doelen().get(i);
         return switch (d.type()) {
             case VERZAMEL -> Math.min(d.n(), telItems(p, item(d.doel())));
-            case LEVEL -> Math.min(d.n(), Spelers.level(p, q.klasse() != null ? q.klasse() : Spelers.data(p).klasse));
+            case LEVEL -> Math.min(d.n(), lvVoor(p, q));
             case GEHEIM -> switch (d.doel()) {
                 case "knuffel" -> Math.min(d.n(), map(p, "knuffels").size());
                 case "aanwijzing" -> Math.min(d.n(), map(p, "aanwijzingen").size());

@@ -52,7 +52,7 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
     /** The step of one quest: active = its first open objective (or the hand-in), not taken yet = go to the giver. */
     public static QuestStap van(ServerPlayer p, Quest q) {
         Component titel = Component.translatable(q.titelKey());
-        int lv = Spelers.level(p);
+        int lv = Questlog.lvVoor(p, q);   // (g-klassen: class quests by class level, the rest by generic level)
         if (Questlog.actief(p, q.id())) {
             Component extra = q.lv() > lv ? Component.translatable(P + "aanrader", q.lv(), lv) : null;
             if (Questlog.allesKlaar(p, q)) {

@@ -68,8 +68,8 @@ public final class Advancement3 {
         Schade.VOOR_KLAP.add(Advancement3::voorKlap);
         Schade.NA_KLAP.add(Advancement3::naKlap);
         Haken.LEVEL_OP.add((p, wat) -> {
-            if (Spelers.level(p) == LEVEL && Advancement.kanDoen(p)) {
-                String k = Spelers.klasse(p).id();
+            String k = wat.substring(0, Math.max(0, wat.lastIndexOf(':')));   // (g-klassen: "<klasse>:N", the class level)
+            if (Klassen.van(k) != null && wat.equals(k + ":" + LEVEL) && Advancement.kanDoen(p, k)) {
                 p.sendSystemMessage(Component.translatable("vadsrijk.z2.systemen.adv3.klaar", Component.translatable(Advancement.titelKey(k, 3)))
                         .withStyle(ChatFormatting.GOLD));
                 Tips.toon(p, "vadsrijk.z2.systemen.tip.adv3");

@@ -35,7 +35,7 @@ import nl.juiced.guhs.gametest.GuhTest;
 /**
  * Het Vadsrijk klassen: only the risky logic. The skill tree point maths (19 points at lv 20, requirements incl. "a|b",
  * the either/or variants, you can't take everything, advancement nodes are free), the respec cooldown of one real hour
- * (advancements survive it), and switching classes keeps every class's own level (and gives a starter weapon only once).
+ * (advancements survive it); g-klassen: the class switch on attack, the xp split, weapon requirements, the balans config, the save migration.
  * Run: {@code runGameTestServer -Pgt=VadsrijkKlassen}.
  */
 public class VadsrijkKlassenGameTests {
@@ -123,28 +123,184 @@ public class VadsrijkKlassenGameTests {
         helper.succeed();
     }
 
+    // ---- g-klassen (round 2): always all 3 classes, the class is the weapon in your hand, two levels -------------------------
+
+    private static ItemStack wapen(ServerPlayer p, String type, int level) {
+        return Rollen.stack(Rollen.rol(BasisTypes.van(type), level, Zeldzaamheid.GEWOON, p.getRandom()));
+    }
+
+    /**
+     * Holding another class's weapon changes nothing; ATTACKING with it switches the class: its R/V/G on full cooldown, ult 0,
+     * the Knuffelsprong untouched. No class weapon: no class (skills off), the last class stays.
+     */
     @GuhTest(template = "empty", batch = BATCH)
-    public static void klasseWisselenHoudtLevels(GameTestHelper helper) {
+    public static void klasseWisseltBijAanval(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         SpelerData d = Spelers.data(p);
         d.klasse = Klassen.RIDDER;
-        d.xp.put(Klassen.RIDDER, Levels.totaalVoor(7));
-        Boom.knopen(d, Klassen.RIDDER).add("r_pluisvacht");
-        helper.assertTrue(Spelers.level(p) == 7, "ridder lv 7");
-        helper.assertTrue(KlasseBalie.wissel(p, Klassen.JAGER), "switch to jager");
-        helper.assertTrue(Spelers.level(p) == 1 && d.klasse.equals(Klassen.JAGER), "a new class starts at lv 1");
-        helper.assertTrue(bogen(p) == 1, "one starter bow, got " + bogen(p));
-        helper.assertTrue(KlasseBalie.gekozen(p), "switching counts as having chosen");
-        d.xp.put(Klassen.JAGER, Levels.totaalVoor(4) + 5);
-        helper.assertTrue(Spelers.level(p) == 4, "jager lv 4");
-        helper.assertTrue(!Spelers.heeftKnoop(p, "r_pluisvacht"), "the ridder's tree leaked into the jager");
-        helper.assertTrue(KlasseBalie.wissel(p, Klassen.RIDDER), "back to ridder");
-        helper.assertTrue(Spelers.level(p) == 7 && Spelers.level(p, Klassen.JAGER) == 4, "levels per class kept");
-        helper.assertTrue(Spelers.heeftKnoop(p, "r_pluisvacht"), "the ridder's tree kept");
-        helper.assertTrue(!KlasseBalie.wissel(p, Klassen.RIDDER), "switching to the same class does nothing");
-        helper.assertTrue(!KlasseBalie.wissel(p, "bestaatniet"), "unknown class");
-        helper.assertTrue(KlasseBalie.wissel(p, Klassen.JAGER) && bogen(p) == 1, "the starter bow only once");
-        helper.assertTrue(Spelers.vads(p) <= Spelers.maxVads(p) && Spelers.vads(p) > 0, "vads within the new max");
+        long nu = p.level().getGameTime();
+        d.klaarOp.put(Knuffelsprong.ID, nu + 7);
+        d.ultLading = 100;
+        p.setItemInHand(InteractionHand.MAIN_HAND, wapen(p, "kussenzwaard", 1));
+        helper.assertTrue(Spelers.voorAanval(p) && d.klasse.equals(Klassen.RIDDER) && d.ultLading == 100, "attacking with your own class's weapon: no switch");
+        p.setItemInHand(InteractionHand.MAIN_HAND, wapen(p, Wapens.PLUISBOOG, 1));
+        helper.assertTrue(d.klasse.equals(Klassen.RIDDER), "only holding the bow must not switch");
+        helper.assertTrue(Klassen.JAGER.equals(Spelers.actieveWapenKlasse(p)), "the bow is a jager weapon");
+        helper.assertTrue(Spelers.voorAanval(p), "the attack goes on");
+        helper.assertTrue(d.klasse.equals(Klassen.JAGER), "attacking with the bow makes you a Pluisjager");
+        helper.assertTrue(d.ultLading == 0, "ult meter at 0 after a switch");
+        Klasse j = Klassen.van(Klassen.JAGER);
+        for (var v : j.vaardigheden()) {
+            long klaar = d.klaarOp.getOrDefault(v.id(), 0L);
+            if (v.ult()) {
+                continue;
+            }
+            helper.assertTrue(klaar == nu + nl.juiced.guhs.feature.vadsrijk.kern.Vaardigheden.cooldown(p, v) && klaar > nu,
+                    v.id() + " must start on its full cooldown, klaar=" + klaar + " nu=" + nu);
+        }
+        helper.assertTrue(d.klaarOp.get(Knuffelsprong.ID) == nu + 7, "the Knuffelsprong keeps its own cooldown");
+        // and back: the ridder's skills start on full cooldown again
+        d.ultLading = 60;
+        p.setItemInHand(InteractionHand.MAIN_HAND, wapen(p, "pluishamer", 1));
+        helper.assertTrue(Spelers.voorAanval(p) && d.klasse.equals(Klassen.RIDDER) && d.ultLading == 0, "back to ridder on a hammer hit");
+        for (var v : Klassen.van(Klassen.RIDDER).vaardigheden()) {
+            helper.assertTrue(v.ult() || d.klaarOp.getOrDefault(v.id(), 0L) > nu, v.id() + " on cooldown after switching back");
+        }
+        // empty hand: a punch, no class weapon (skills off), the last class stays (HUD grey)
+        p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        helper.assertTrue(Spelers.voorAanval(p) && Spelers.actieveWapenKlasse(p) == null && d.klasse.equals(Klassen.RIDDER), "no weapon: punch, last class kept");
+        helper.assertTrue(Spelers.wapenKlasse(BasisTypes.van(Wapens.SLIJMBOEK)).equals(Klassen.MAGIER), "a book is a magier weapon");
+        helper.succeed();
+    }
+
+    /**
+     * Xp: all of it to the generic level and to the class of the weapon; a defeat gives the class xp to the class that dealt the
+     * most damage to that mob; levels are separate (generic gives Vads/Verdediging, class the main stat).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void xpGaatNaarGeneriekEnKlasse(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        SpelerData d = Spelers.data(p);
+        d.klasse = Klassen.JAGER;
+        Spelers.geefXp(p, 50, "test");
+        helper.assertTrue(d.generiekXp == 50 && d.xp(Klassen.JAGER) == 50 && d.xp(Klassen.RIDDER) == 0 && d.xp(Klassen.MAGIER) == 0,
+                "50 xp to generic and jager only: g=" + d.generiekXp + " " + d.xp);
+        // a mob hit for 10 as jager and 30 as magier: the magier gets the class xp
+        ProefKlodder m = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 1, 2);
+        m.stelIn(1, Element.GEEN, false, Set.of());
+        m.krijgSchade(Math.min(10, m.vads() / 4), p);
+        d.klasse = Klassen.MAGIER;
+        long g0 = d.generiekXp, j0 = d.xp(Klassen.JAGER);
+        m.krijgSchade(m.vads() + 5, p);   // (defeat)
+        long xp = m.xp();
+        helper.assertTrue(d.generiekXp == g0 + xp, "the defeat's xp to generic: " + (d.generiekXp - g0) + " vs " + xp);
+        helper.assertTrue(d.xp(Klassen.MAGIER) == xp && d.xp(Klassen.JAGER) == j0, "the class with the most damage (magier) gets it: " + d.xp);
+        // the two levels drive different stats
+        Spelers.zetGeneriek(p, 10);
+        Spelers.zetKlasseLevel(p, Klassen.MAGIER, 2);
+        p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        Klasse k = Klassen.van(Klassen.MAGIER);
+        var s = Spelers.stats(p);
+        helper.assertTrue(Math.abs(s.get(Stat.VADS) - KlasseBalans.get(Klassen.MAGIER, "vads") * k.basis(10).get(Stat.VADS)) < 1e-6,
+                "Vads from the generic level: " + s.get(Stat.VADS));
+        helper.assertTrue(Math.abs(s.get(Stat.WIJSHEID) - k.basis(2).get(Stat.WIJSHEID)) < 1e-6, "Wijsheid from the class level: " + s.get(Stat.WIJSHEID));
+        helper.assertTrue(Spelers.level(p) == 10 && Spelers.klasseLevel(p) == 2 && Spelers.level(p, Klassen.RIDDER) == 1, "generic 10, magier 2, ridder 1");
+        helper.succeed();
+    }
+
+    /** A weapon needs its class's level: held but no attack (and no class switch) until you have it; armour needs the generic level. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void wapenVereistKlasseLevel(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        SpelerData d = Spelers.data(p);
+        d.klasse = Klassen.RIDDER;
+        Spelers.zetGeneriek(p, 20);
+        Spelers.zetKlasseLevel(p, Klassen.JAGER, 5);
+        p.setItemInHand(InteractionHand.MAIN_HAND, wapen(p, Wapens.PLUISBOOG, 8));
+        Uitrusting u = Spelers.wapenInHand(p);
+        helper.assertTrue(u != null && !Spelers.magWapen(p, u) && Spelers.wapen(p) == null, "jager 5 can't use a lv 8 bow (generic 20 doesn't count)");
+        helper.assertTrue(!Spelers.voorAanval(p) && d.klasse.equals(Klassen.RIDDER), "an unmet weapon doesn't attack and doesn't switch");
+        Spelers.zetKlasseLevel(p, Klassen.JAGER, 8);
+        helper.assertTrue(Spelers.wapen(p) != null && Spelers.voorAanval(p) && d.klasse.equals(Klassen.JAGER), "jager 8: the bow works and switches");
+        // armour: the generic level
+        p.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, Rollen.stack(Rollen.rol(BasisTypes.van("pluishelm"), 25, Zeldzaamheid.GEWOON, p.getRandom())));
+        double zonder = Spelers.stats(p).get(Stat.VERDEDIGING);
+        Spelers.zetGeneriek(p, 25);
+        double met = Spelers.stats(p).get(Stat.VERDEDIGING);
+        Klasse j = Klassen.van(Klassen.JAGER);
+        helper.assertTrue(met - zonder > (j.basis(25).get(Stat.VERDEDIGING) - j.basis(20).get(Stat.VERDEDIGING)) * KlasseBalans.get(Klassen.JAGER, "verdediging") + 0.5,
+                "a lv 25 helmet counts from generic 25 (" + zonder + " -> " + met + ")");
+        helper.succeed();
+    }
+
+    /** The balans config: multipliers per class work live (stats, damage, cooldowns), melee reduction, back to defaults. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void balansConfigWerkt(GameTestHelper helper) {
+        KlasseBalans.zonderBestand = true;
+        try {
+            ServerPlayer p = GuhMockPlayer.of(helper);
+            SpelerData d = Spelers.data(p);
+            d.klasse = Klassen.MAGIER;
+            p.setItemInHand(InteractionHand.MAIN_HAND, wapen(p, Wapens.ROZENSTAF, 1));
+            double vads = Spelers.maxVads(p);
+            helper.assertTrue(KlasseBalans.zet(Klassen.MAGIER, "vads", 2.0, false) == null, "set vads");
+            helper.assertTrue(Math.abs(Spelers.maxVads(p) - 2 * vads) < 1e-6, "magier vads x2: " + vads + " -> " + Spelers.maxVads(p));
+            Klasse k = Klassen.van(Klassen.MAGIER);
+            var v = k.vaardigheden().get(0);
+            int cd = nl.juiced.guhs.feature.vadsrijk.kern.Vaardigheden.cooldown(p, v);
+            KlasseBalans.zet(Klassen.MAGIER, "cooldowns", 0.5, false);
+            int cd2 = nl.juiced.guhs.feature.vadsrijk.kern.Vaardigheden.cooldown(p, v);
+            helper.assertTrue(Math.abs(cd2 - cd / 2.0) <= 1, "cooldowns x0.5: " + cd + " -> " + cd2);
+            KlasseBalans.zet(Klassen.MAGIER, "schade", 1.5, false);
+            KlasseBalans.zet(Klassen.MAGIER, "skillschade", 2.0, false);
+            helper.assertTrue(Math.abs(KlasseBalans.klapFactor(Klassen.MAGIER, "basis", null, false) - 1.5) < 1e-9, "basic x1.5");
+            helper.assertTrue(Math.abs(KlasseBalans.klapFactor(Klassen.MAGIER, "roze_vuurbal", null, false) - 3.0) < 1e-9, "skill x1.5 x2");
+            helper.assertTrue(Math.abs(KlasseBalans.klapFactor(null, "mob", Klassen.RIDDER, true) - 0.8) < 1e-9, "ridder with a melee weapon takes 20 % less");
+            helper.assertTrue(KlasseBalans.klapFactor(null, "mob", Klassen.RIDDER, false) == 1, "no melee weapon: no reduction");
+            helper.assertTrue(KlasseBalans.zet("bestaatniet", "vads", 1, false) != null && KlasseBalans.zet(Klassen.RIDDER, "onzin", 1, false) != null,
+                    "unknown class/key refused");
+            KlasseBalans.zet(KlasseBalans.ALGEMEEN, "xp_schaal_generiek", 2.0, false);
+            helper.assertTrue(Levels.xpVoorGeneriek(5) == 2 * Levels.xpVoor(5) || Math.abs(Levels.xpVoorGeneriek(5) - 2 * Levels.xpVoor(5)) <= 1,
+                    "generic curve x2 on its own");
+            KlasseBalans.standaardAlles();
+            helper.assertTrue(Math.abs(Spelers.maxVads(p) - vads) < 1e-6 && Levels.xpVoorGeneriek(5) == Levels.xpVoor(5), "defaults again");
+            // the Knuffelridder's extra Vads per class level
+            d.klasse = Klassen.RIDDER;
+            p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            double r1 = Spelers.maxVads(p);
+            Spelers.zetKlasseLevel(p, Klassen.RIDDER, 11);
+            helper.assertTrue(Math.abs(Spelers.maxVads(p) - r1 - 10 * KlasseBalans.get(Klassen.RIDDER, "vads_per_klasselevel")) < 1e-6,
+                    "ridder +4 Vads per class level: " + r1 + " -> " + Spelers.maxVads(p));
+        } finally {
+            KlasseBalans.standaardAlles();
+            KlasseBalans.zonderBestand = false;
+        }
+        helper.succeed();
+    }
+
+    /** An old save (xp per class only) gets generic xp = the highest class xp; a new save keeps its generic xp. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void opslagMigratie(GameTestHelper helper) {
+        var reg = helper.getLevel().registryAccess();
+        SpelerData oud = new SpelerData();
+        oud.xp.put(Klassen.RIDDER, Levels.totaalVoor(12) + 3);
+        oud.xp.put(Klassen.JAGER, Levels.totaalVoor(7));
+        var out = net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, reg);
+        oud.serialize(out);
+        net.minecraft.nbt.CompoundTag tag = out.buildResult();
+        tag.remove("gxp");   // (= a save from before g-klassen)
+        SpelerData na = new SpelerData();
+        na.deserialize(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, reg, tag));
+        helper.assertTrue(na.gemigreerd, "flagged as migrated");
+        helper.assertTrue(na.level() == 12 && na.generiekXp == Levels.totaalVoor(12) + 3, "generic = the highest class (12), got " + na.level());
+        helper.assertTrue(na.level(Klassen.RIDDER) == 12 && na.level(Klassen.JAGER) == 7, "class levels kept");
+        na.generiekXp = Levels.totaalVoorGeneriek(15);
+        var out2 = net.minecraft.world.level.storage.TagValueOutput.createWithContext(net.minecraft.util.ProblemReporter.DISCARDING, reg);
+        na.serialize(out2);
+        SpelerData weer = new SpelerData();
+        weer.deserialize(net.minecraft.world.level.storage.TagValueInput.create(net.minecraft.util.ProblemReporter.DISCARDING, reg, out2.buildResult()));
+        helper.assertTrue(!weer.gemigreerd && weer.level() == 15, "a new save keeps its generic level");
+        helper.assertTrue(SpelerData.migreerGeneriek(java.util.Map.of("a", Long.MAX_VALUE / 4)) == Levels.totaalVoorGeneriek(Levels.MAX_GENERIEK), "capped");
         helper.succeed();
     }
 

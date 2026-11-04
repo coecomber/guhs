@@ -69,19 +69,31 @@ public final class Advancement {
         return nodigLevel(s - 1);
     }
 
-    /** Can this player do the next advancement of their current class now? */
+    /** Can this player do the next advancement of their active class now? */
     public static boolean kanDoen(ServerPlayer p) {
-        String k = Spelers.klasse(p).id();
-        int s = stap(p, k);
-        return s < MAX_STAP && Spelers.level(p) >= nodigLevel(s);
+        return kanDoen(p, Spelers.klasse(p).id());
     }
 
-    /** Does the next advancement (with the ceremony). Returns false when it can't. */
-    public static boolean doe(ServerPlayer p) {
-        if (!kanDoen(p)) {
+    /** g-klassen: can this player do the next advancement of this class (its CLASS level counts)? */
+    public static boolean kanDoen(ServerPlayer p, String klasse) {
+        if (Klassen.van(klasse) == null) {
             return false;
         }
-        Klasse k = Spelers.klasse(p);
+        int s = stap(p, klasse);
+        return s < MAX_STAP && Spelers.level(p, klasse) >= nodigLevel(s);
+    }
+
+    /** Does the next advancement of the active class (with the ceremony). Returns false when it can't. */
+    public static boolean doe(ServerPlayer p) {
+        return doe(p, Spelers.klasse(p).id());
+    }
+
+    /** Does the next advancement of this class (with the ceremony). Returns false when it can't. */
+    public static boolean doe(ServerPlayer p, String klasse) {
+        if (!kanDoen(p, klasse)) {
+            return false;
+        }
+        Klasse k = Klassen.van(klasse);
         int s = stap(p, k.id()) + 1;
         SpelerData d = Spelers.data(p);
         Boom.knopen(d, k.id()).add(Bomen.advKnoop(k.id(), s));

@@ -1,0 +1,124 @@
+# Het Vadsrijk g-klassen (fix round 2): always all 3 classes, the class = the weapon you attack with, two levels on the HUD,
+# the weapon requirement in the tooltip, the tree tabs + desk.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_gklassen.txt
+
+section setup
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+/guhs vadsrijk tips reset
+
+section kies
+/guhs vadsrijk klasse kies
+wait 20
+shot gk_keuze gui
+widgets
+press Start als Knuffelridder!
+wait 60
+
+section niveaus
+/guhs vadsrijk klasse generiek 12
+/guhs vadsrijk klasse klasselevel knuffelridder 9
+/guhs vadsrijk klasse klasselevel pluisjager 4
+/guhs vadsrijk klasse wapen pluisboog
+/item replace entity @s hotbar.1 from entity @s weapon.mainhand
+/guhs vadsrijk klasse wapen kussenzwaard
+/item replace entity @s hotbar.2 from entity @s weapon.mainhand
+/tp @s 3112 66 3120
+look -90 10
+wait 80
+shot gk_hud_ridder gui
+
+section gevecht
+/gamemode survival
+/guhs vadsrijk wezens spawn klodder 3
+/guhs vadsrijk wezens spawn klodder 3
+wait 40
+sla
+wait 30
+sla
+wait 10
+shot gk_ridder_mept gui
+# only holding the bow: still a Knuffelridder
+/item replace entity @s weapon.mainhand from entity @s hotbar.1
+wait 20
+shot gk_boog_vast_nog_ridder gui
+# shooting with it: now a Pluisjager, its skills on full cooldown, ult 0
+/guhs vadsrijk klasse schiet
+wait 6
+shot gk_boog_schiet_jager gui
+/guhs vadsrijk klasse skill 0
+wait 4
+shot gk_skill_op_cooldown gui
+wait 30
+/guhs vadsrijk klasse schiet
+wait 30
+# back to the sword in the middle of the fight
+/item replace entity @s weapon.mainhand from entity @s hotbar.2
+wait 10
+sla
+wait 6
+shot gk_terug_ridder gui
+# empty hand: no class weapon, the class line grey
+/item replace entity @s weapon.mainhand with minecraft:air
+wait 10
+/guhs vadsrijk klasse skill 0
+wait 4
+shot gk_geen_wapen gui
+/guhs vadsrijk wezens opruimen
+/gamemode creative
+
+section tooltip
+# (survival: in creative the inventory key opens the creative screen)
+/gamemode survival
+# a lv 14 bow for a Pluisjager nv 4: red requirement, can't attack
+/guhs vadsrijk klasse klasselevel pluisjager 14
+/guhs vadsrijk klasse wapen pluisboog
+/guhs vadsrijk klasse klasselevel pluisjager 4
+wait 20
+/guhs vadsrijk klasse schiet
+wait 4
+shot gk_wapen_te_hoog gui
+gui inventaris 0
+wait 20
+shot gk_tooltip_rood gui
+gui close
+/item replace entity @s weapon.mainhand from entity @s hotbar.2
+wait 10
+gui inventaris 0
+wait 20
+shot gk_tooltip_groen gui
+gui close
+/gamemode creative
+
+section boom
+gui keep
+/guhs vadsrijk klasse boom
+wait 20
+shot gk_boom_tabs gui
+widgets
+press Pluisjager
+wait 20
+shot gk_boom_tab_jager gui
+gui close
+gui keep
+/guhs vadsrijk klasse balie
+wait 20
+shot gk_balie gui
+widgets
+gui close
+
+section balans
+/guhs vadsrijk balans toon
+wait 10
+shot gk_balans_toon gui
+/guhs vadsrijk balans knuffelridder vads 2
+wait 20
+shot gk_balans_vads_x2 gui
+/guhs vadsrijk balans knuffelridder vads 1
+wait 10
+quit

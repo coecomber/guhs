@@ -76,6 +76,35 @@ andere kant ligt.
 - hq10 en hq12 starten vanzelf (geen vastloper meer); "Weet je nog?" bij wie je het laatst iets inleverde.
 - Nieuw geheim: de verstopte hoedenhut (schat `hoedenschat`).
 
+## Klassen: altijd alle drie (fixronde 2, g-klassen)
+- **Je bent altijd Knuffelridder, Pluisjager en Vadsmagiër.** Je klasse is het wapen in je hand: zwaard/knots/hamer/kling =
+  Knuffelridder, boog/kruisboog/katapult = Pluisjager, staf/toverstok/boek = Vadsmagiër.
+- Je wisselt pas als je **aanvalt** (mep, schot of R/V/G/Z) met een wapen van een andere klasse, niet bij vasthouden of scrollen.
+  Dan beginnen R/V/G van die klasse op hun **volle cooldown** en de ult-meter op 0. De Knuffelsprong (C) blijft gewoon.
+- Geen klassewapen in je hand: geen vaardigheden, alleen een zwak klapje; de klasseregel op de HUD wordt grijs.
+- **Twee niveaus**, links van de hotbar: "Generiek nv X" (goud) en "<klasse/titel> nv Y" (roze). Alle xp gaat volledig naar
+  generiek EN naar de klasse van het wapen (bij een verslagen wezen: de klasse die er de meeste schade op deed). De xp-balk:
+  goud = generiek, dun roze lijntje eronder = klasse.
+  - Generiek: Vads, Verdediging, gebieden, quests, de tempeldeur (nv 16 + quest), het luchtschip naar zone 2 (nv 20),
+    harnassen en sieraden ("Vereist: Generiek nv X").
+  - Klasse: Kracht/Behendigheid/Wijsheid, skillpunten van die klasse, wapens ("Vereist: Pluisjager nv 14", rood als je het
+    niet haalt), job-advancements (klasse nv 10/20/30).
+  - Een wapen dat je nog niet mag: vasthouden mag, aanvallen niet (rode melding), en je wisselt er ook niet mee van klasse.
+- Knuffelkamp: het klasse-tempeltje = **kies je startwapen**. De andere startwapens: aan de ordetempelbalie in Zwamzoet
+  (eerste per klasse gratis, daarna 30 brons). De balie doet verder respec per klasse en de ceremonies; wisselen hoeft daar niet meer.
+- Skillboom (K): de boom van je actieve klasse, met **tabs** bovenaan voor de andere twee (⚔ = actief). Punten per klasse komen
+  van het klasseniveau; respec per klasse.
+- Knuffelridder is taaier: 20 % minder schade zolang hij met een melee-wapen actief is, en +4 Vads per klasseniveau.
+- **Oude saves**: generieke xp = de hoogste klasse-xp (niet de som), klasseniveaus blijven.
+
+**Balans per klasse (live, zonder herstart)**: `config/guhs-vadsrijk-balans.toml` (in de run-map; wordt de eerste keer met
+standaardwaarden geschreven). Per klasse `[knuffelridder]` / `[pluisjager]` / `[vadsmagier]`: `schade`, `skillschade`, `vads`,
+`verdediging`, `cooldowns`, `energie` (vermenigvuldigers, 1.0 = normaal), `melee_reductie` (0.20 = 20 % minder schade met een
+melee-wapen), `vads_per_klasselevel`. `[algemeen]`: `xp_schaal_generiek`, `xp_schaal_klasse`.
+- `/guhs vadsrijk balans toon` - alles bekijken
+- `/guhs vadsrijk balans <klasse|algemeen> <sleutel> <waarde>` - meteen actief en meteen in het bestand
+- `/guhs vadsrijk balans herlaad` - het bestand opnieuw lezen (een bewerkt bestand wordt ook vanzelf binnen 5 s gelezen)
+
 ## Zone 2: De Splinterpieken (lv 20-35)
 **Erheen**: zone 1 klaar (`zone1_klaar`) + level 20. Praat met Stuurguh Zeppie in De Haven ("Naar Kandijkom") of sluip + rechtsklik
 op de Haven-bel. De eerste keer: het openingsfilmpje (sneeuwstorm, ijsschotsen, licht uit, een Galmwolf huilt op een naald, de naald
@@ -111,7 +140,7 @@ barst, de warme geode). Terug: de bel op de steiger van Kandijkom of Kapitein Po
 **NPC's en quests**: `/guhs vadsrijk npc log | questlog | quest start|klaar|af|vergeet <id> | tp <npc|poi.<id>|knuffel.<id>|aanwijzing.<id>|schat.<id>> | reset | opening | bam | cliffhanger | vlieg stad|kamp | npcs`.
 **Wezens**: `/guhs vadsrijk wezens spawn <soort> [level] [elite] | affix ... | opruimen | kampklodder | overvlucht | draak <ticks> | set ... | loot ... | spawners`.
 **Bazen (zone 1)**: `/guhs vadsrijk bazen tp koning|tempel|opperzwam|markt|mika | spawn ... | fase 2|3|4 | split | loot <baas> | items | herstel | tempel reset|open|oplossing | mika ontmasker|reset`.
-**Klassen**: `/guhs vadsrijk klasse kies | boom | balie | wissel <klasse> | wapen <type> | skill 0-3 | adv | respecvrij | reset | punten <level>`.
+**Klassen**: `/guhs vadsrijk klasse kies | boom | balie | wissel <klasse> | wapen <type> | skill 0-3 | adv | respecvrij | reset | punten <level> | klasselevel <klasse> <n> | generiek <n>`; `level <n>` (kern) zet generiek + de actieve klasse. **Balans**: `/guhs vadsrijk balans toon | herlaad | <klasse> <sleutel> <waarde>`.
 **Economie**: `/guhs vadsrijk eco winkel <id> | smid | markt | stal | spul | ster <n> | verpluis | handel <speler> | rijdier ... | rijdierxp <n> | ga <plek>`.
 
 **Zone 2**

@@ -97,16 +97,29 @@ public final class BoomScherm extends Screen {
         DY = rijen <= Bomen.RIJEN ? 38 : 32;
         H = rijen <= Bomen.RIJEN ? 240 : 46 + (rijen - 1) * DY + KNOOP + 20 + 22 + 26 + 8;
         left = (width - W) / 2;
-        top = (height - H) / 2;
+        top = Math.max(24, (height - H) / 2);   // (g-klassen: room for the class tabs above)
         int rx = left + 214, rw = W - 214 - 10;
+        // g-klassen: a tab per class (you are always all three; the active one = the weapon you last attacked with)
+        int tx = left;
+        for (Klasse k : Klassen.alle()) {
+            boolean nu = k.id().equals(klasse().id());
+            boolean actief = k.id().equals(t.getStringOr("actief", ""));
+            Component naam = Component.translatable(k.naamKey());
+            Button b = Button.builder(actief ? Component.literal("⚔ ").append(naam) : naam, x -> stuur("tab", k.id()))
+                    .bounds(tx, top - 21, 100, 18).tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.tab.tip",
+                            naam, t.getIntOr("lv_" + k.id(), 1)))).build();
+            b.active = !nu;
+            addRenderableWidget(b);
+            tx += 104;
+        }
         if (balie()) {
             int y = top + 46;
+            long prijs = t.getLongOr("prijs", 30);
             for (Klasse k : Klassen.alle()) {
-                boolean nu = k.id().equals(klasse().id());
-                Button b = Button.builder(Component.translatable(nu ? "vadsrijk.klassen.scherm.huidig" : "vadsrijk.klassen.scherm.wissel"),
-                        x -> stuur("wissel", k.id())).bounds(rx + rw - 58, y + 4, 56, 16)
-                        .tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.wissel.tip"))).build();
-                b.active = !nu;
+                boolean had = t.getBooleanOr("start_" + k.id(), false);
+                Button b = Button.builder(had ? Component.translatable("vadsrijk.klassen.scherm.wapen.koop", nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(prijs))
+                        : Component.translatable("vadsrijk.klassen.scherm.wapen.gratis"), x -> stuur("wapen", k.id())).bounds(rx + rw - 74, y + 4, 72, 16)
+                        .tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.wapen.tip", Component.translatable(k.naamKey())))).build();
                 addRenderableWidget(b);
                 y += 30;
             }
@@ -155,7 +168,8 @@ public final class BoomScherm extends Screen {
         g.pose().scale(1.5f, 1.5f);
         g.text(font, Component.translatable(t.getStringOr("titel", k.naamKey())).withStyle(ChatFormatting.BOLD), 0, 0, 0xFFFFFFFF, true);
         g.pose().popMatrix();
-        g.text(font, Component.translatable("vadsrijk.klassen.scherm.niveau", level, Component.translatable(k.naamKey())), left + 12, top + 23, LICHT, false);
+        g.text(font, Component.translatable("vadsrijk.klassen.scherm.niveau2", Component.translatable(k.naamKey()), level, t.getIntOr("generiek", 1)),
+                left + 12, top + 23, LICHT, false);
         int punten = t.getIntOr("punten", 0);
         Component pc = Component.translatable("vadsrijk.klassen.scherm.punten", punten);
         g.text(font, pc, left + W - 12 - font.width(pc), top + 10, punten > 0 ? GOUD : LICHT, true);
@@ -260,7 +274,7 @@ public final class BoomScherm extends Screen {
             g.text(font, Component.translatable("vadsrijk.klassen.scherm.balie").withStyle(ChatFormatting.BOLD), rx, top + 38, GOUD, false);
             int y = top + 46;
             for (Klasse x : Klassen.alle()) {
-                boolean nu = x.id().equals(k.id());
+                boolean nu = x.id().equals(t.getStringOr("actief", k.id()));
                 g.fill(rx, y, rx + rw, y + 26, nu ? 0x70FF7AC8 : 0x40FFFFFF);
                 g.text(font, Component.translatable(t.getStringOr("titel_" + x.id(), x.naamKey())), rx + 4, y + 3, nu ? 0xFFFFFFFF : LICHT, false);
                 g.text(font, Component.translatable("vadsrijk.klassen.scherm.nv", t.getIntOr("lv_" + x.id(), 1)), rx + 4, y + 14, GOUD, false);
