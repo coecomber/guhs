@@ -13,6 +13,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.wezens.client.WezensClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.bazen.client.BazenClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.wereld.client.WereldClient.init(modBus);
+        nl.juiced.guhs.feature.vadsrijk.wereld.sfeer.client.SfeerClient.init(modBus);   // fix round 1: atmosphere
         nl.juiced.guhs.feature.vadsrijk.npc.client.NpcClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.client.EconomieClient.init(modBus);
     }
