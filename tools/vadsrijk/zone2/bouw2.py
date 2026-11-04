@@ -82,6 +82,76 @@ def op_pad(K, x, z):
 
 
 # ================================================================================================ Kandijkom
+def poortboog(S, sx, sz, ux, uz, s0, hout=False):
+    """(i-z2kaart) A complete gate arch over a 7-wide street: two 2x2 pillars (|p| 5..6) on a foundation, a rounded arch
+    (upside-down stairs at the springing), crystal finials, a big lampion under the keystone and lampions on the pillars.
+    hout=True: a festive wooden welcome arch (spruce, snow on the beam) instead of the calcite/crystal one."""
+    vx, vz = abs(uz), abs(ux)               # across the street
+
+    def w(p, s):
+        return sx + ux * s + p * vx, sz + uz * s + p * vz
+    kant_f = {(1, 0): ("west", "east"), (0, 1): ("north", "south")}[(vx, vz)]   # facing towards -p / +p
+    body = "minecraft:spruce_log[axis=y]" if hout else "minecraft:calcite"
+    rand_ = "minecraft:stripped_spruce_log[axis=y]" if hout else "minecraft:polished_diorite"
+    boog = "minecraft:spruce_planks" if hout else "minecraft:calcite"
+    trapb = "minecraft:spruce_stairs" if hout else "minecraft:diorite_stairs"
+    hp = 7 if hout else 9                  # pillar height above the floor
+    for sgn in (-1, 1):
+        for p in (5, 6):
+            for ds in (0, 1):
+                x, z = w(sgn * p, s0 + ds)
+                S.box(x, FY - 4, z, x, FY, z, "minecraft:stone_bricks")
+                S.box(x, SY, z, x, SY + hp, z, body if (p == 5 and ds == 0) or hout else rand_)
+                if not hout and p == 6:
+                    S.set(x, SY, z, "minecraft:polished_diorite")
+        # finial on the pillar
+        x, z = w(sgn * 5.5, s0 + 0.5)
+        if hout:
+            for ds in (0, 1):
+                xx, zz = w(sgn * 5, s0 + ds)
+                S.set(xx, SY + hp + 1, zz, LAMPION_S)
+        else:
+            S.kegel(x, z, SY + hp + 1, 5, 1.3, 0.3, "minecraft:pink_stained_glass")
+            S.kegel(x, z, SY + hp + 1, 4, 0.7, 0.2, "guhs:guh_kristal_blok")
+            for ds in (0, 1):
+                xx, zz = w(sgn * 7, s0 + ds)
+                S.set(xx, SY + 5, zz, LAMPION_S) if ds == 0 else None
+    # the arch: a beam over the street, rounded underneath
+    yb = SY + hp - 1
+    for p in range(-6, 7):
+        for ds in (0, 1):
+            x, z = w(p, s0 + ds)
+            S.box(x, yb, z, x, yb + 1, z, boog)
+            if abs(p) == 4:
+                S.set(x, yb - 1, z, trap(trapb, kant_f[1] if p > 0 else kant_f[0], half="top"))
+    if hout:
+        for p in range(-6, 7):
+            for ds in (0, 1):
+                x, z = w(p, s0 + ds)
+                S.set(x, yb + 2, z, laag(3))
+        # a pink sign board on the outer face of the beam (the guhs know what it says: "welkom")
+        for p in range(-3, 4):
+            x, z = w(p, s0 + 2)
+            S.set(x, yb, z, "minecraft:pink_wool" if abs(p) < 3 else "minecraft:white_wool")
+            S.set(x, yb + 1, z, "minecraft:white_wool" if abs(p) == 3 else "minecraft:pink_wool")
+        x, z = w(0, s0 + 2)
+        S.set(x, yb + 1, z, "guhs:guh_kristal_lamp")
+    else:
+        # keystone crystal + a crown of little shards along the top
+        x, z = w(0, s0)
+        S.set(x, yb + 1, z, "guhs:guh_kristal_lamp")
+        for p in range(-6, 7, 3):
+            x, z = w(p, s0 + 0.5)
+            S.kegel(x, z, yb + 2, 2 + (3 if p == 0 else 0), 0.9, 0.2, "minecraft:pink_stained_glass" if p else "guhs:guh_kristal_blok")
+    for ds in (0, 1):
+        x, z = w(0, s0 + ds)
+        S.set(x, yb - 1, z, LAMPION)
+    # a garland across the street on both faces (stone arch: high enough)
+    for ds in (() if hout else (-1, 2)):
+        a, b = w(-5, s0 + ds), w(5, s0 + ds)
+        slinger(S, (a[0], yb - 1, a[1]), (b[0], yb - 1, b[1]), zak=1.5, elk=3)
+
+
 MUURKLEUR = ["pastelbaksteen_roze", "pastelbaksteen_lavendel", "pastelbaksteen_hemelsblauw", "pastelbaksteen_perzik",
              "pastelbaksteen_framboos", "pastelbaksteen_orchidee", "pastelbaksteen_korenbloem", "pastelbaksteen_mokka",
              "pastelbaksteen_pistache", "pastelbaksteen_aqua"]
@@ -437,12 +507,8 @@ def stad(W, K, P):
             for p in (-4, 4):
                 x, z = sx + ux * s + p * abs(uz), sz + uz * s + p * abs(ux)
                 lantaarnpaal(S, x, SY, z, lampion=True)
-        # the arch over the gate (in the wall, high), with a big lampion
-        s0 = R0 + 2
-        for p in range(-5, 6):
-            x, z = sx + ux * s0 + p * abs(uz), sz + uz * s0 + p * abs(ux)
-            S.box(x, SY + 9, z, x, SY + 10, z, "guhs:guh_kristal_blok" if abs(p) == 5 else "minecraft:pink_stained_glass")
-        S.set(sx + ux * s0, SY + 8, sz + uz * s0, LAMPION)
+        # (i-z2kaart) a real gate arch on the inner face of the wall (was: a strip of pink glass floating over the gap)
+        poortboog(S, sx, sz, ux, uz, R0 - 1)
     S.cyl(sx, sz, PL.PLEIN_R, FY, FY, "parelmoer_tegels")
     S.cyl(sx, sz, PL.PLEIN_R, FY, FY, "minecraft:polished_diorite", hollow=1.2)
     # ---- the skating pond, benches with blankets, snow-guhs
@@ -663,6 +729,11 @@ def stad(W, K, P):
         sch = (inw * math.cos(a), inw * math.sin(a))
         r0 = rng.uniform(1.4, 2.8)
         g1, g2 = kleuren[rng.randrange(4)]
+        # (i-z2kaart) the gates are notches now: a shard always grows out of the wall, never in the air above a lower wall
+        hb = int(K.H[K2.idx(round(bx_), round(bz_))])
+        if hb < SY + 10:
+            continue
+        y0 = min(y0, hb - 3)
         S.kegel(bx_, bz_, y0, h, r0, 0.3, g1, scheef=sch)
         S.kegel(bx_, bz_, y0, int(h * 0.8), r0 * 0.5, 0.2, g2, scheef=(sch[0] * 0.8, sch[1] * 0.8))
         if rng.random() < 0.35:
@@ -832,6 +903,140 @@ def dok(W, K, P):
     P["dok_kapitein"] = [-4, g + 1, -2240]
     P["dok_eind"] = [0, g + 1, -2226]
     W.stempel(S.stempel("dok"))
+
+
+# ================================================================================================ (i-z2kaart) the arrival
+def _kei(S, x, g, z, r, rng):
+    """A half-buried boulder with a snow cap."""
+    steen = rng.choice(["minecraft:stone", "minecraft:calcite", "minecraft:tuff", "minecraft:cobblestone", "minecraft:andesite"])
+    S.ell(x, g, z, r, r * 0.75, r * rng.uniform(0.8, 1.2), steen, ymin=g - 1)
+    S.ell(x, g + 0.6, z, r * 0.8, r * 0.7, r * 0.8, SNEEUW, keep=True, ymin=g + round(r * 0.6))
+
+
+def poort_overgang(S, K, ux, uz, s_a, s_b, rng, vrij_=lambda x, z: True, dicht=1.0):
+    """Natural dressing of a gate notch / road cutting: snow drifts at the foot of the banks, boulders, crystal clusters and
+    little crystal spikes on the slopes (both sides of the axis, never on the street |p| <= 5)."""
+    sx, sz = PL.STAD
+    vx, vz = abs(uz), abs(ux)
+    for sgn in (-1, 1):
+        for s_ in range(s_a, s_b + 1):
+            # drifts: the foot of the bank (first cells next to the street that sit below the next cell out)
+            for p in (6, 7, 8):
+                x, z = sx + ux * s_ + sgn * p * vx, sz + uz * s_ + sgn * p * vz
+                if not vrij_(x, z):
+                    continue
+                g, gu = K.h(x, z), K.h(x + sgn * vx, z + sgn * vz)
+                if gu > g:
+                    S.set(x, g + 1, z, laag(min(7, 2 + 2 * (p - 5) + rng.randint(0, 1))), keep=True)
+        n = int((s_b - s_a) * 0.28 * dicht)
+        for _ in range(n):
+            s_ = rng.randint(s_a, s_b)
+            p = rng.randint(7, 15)
+            x, z = sx + ux * s_ + sgn * p * vx, sz + uz * s_ + sgn * p * vz
+            if not vrij_(x, z):
+                continue
+            g = K.h(x, z)
+            k = rng.random()
+            if k < 0.35:
+                _kei(S, x, g, z, rng.uniform(1.3, 2.6), rng)
+            elif k < 0.55:
+                kristalnaald(S, x, z, g + 1, rng.randint(4, 8), rng.uniform(0.9, 1.4), rng, roze=rng.choice(["roze", "paars", "blauw"]))
+            elif k < 0.85:
+                S.set(x, g + 1, z, rng.choice(["guhs:guh_kristal_cluster[facing=up]", "minecraft:amethyst_cluster[facing=up,waterlogged=false]",
+                                               "minecraft:large_amethyst_bud[facing=up,waterlogged=false]"]), keep=True)
+            else:
+                S.set(x, g + 1, z, laag(rng.randint(3, 6)), keep=True)
+
+
+def aankomst(W, K, P):
+    """(i-z2kaart) The arrival from the airship pier to the south gate: a cobbled road in a soft cutting (kaart2.poort_dal),
+    lampion posts, light strings across the road, fire baskets, a wooden welcome arch at the pier, a hot-chocolate kiosk with
+    a greeter spot, a bench by a fire basket, and boulders/crystals/snow drifts on the banks."""
+    rng = random.Random(77)
+    za, zb = -2314, -2252                  # gate end -> pier end
+    S = Vol(-40, FY - 8, za - 8, 40, FY + 30, zb + 2)
+    kamp = PL.KAMPVUREN["kandijkom_dok"][0]
+    stal = PL.STAL
+
+    def vrij_(x, z):
+        if math.hypot(x - kamp[0], z - kamp[1]) < 8:
+            return False
+        if stal[0] - 14 <= x <= stal[0] + 14 and stal[1] - 13 <= z <= stal[1] + 23:
+            return False
+        if 5 <= x <= 12 and -2272 <= z <= -2259:     # the kiosk
+            return False
+        return True
+    # the road: knuffelklinkers (7 wide) on a stone bed, snow shoulders
+    S.box(-3, FY - 3, za, 3, FY - 1, zb, "minecraft:stone")
+    S.box(-3, FY, za, 3, FY, zb, "guhs:knuffelklinkers")
+    S.box(-5, SY, za, 5, SY + 5, zb, CARVE)
+    poort_overgang(S, K, 0, 1, za + 2400 - 6, zb + 2400 - 4, rng, vrij_, dicht=1.3)
+    # lampion posts every 8 both sides; tall garland posts every 16 with a light string across
+    for z in range(za + 2, zb - 1, 8):
+        for x in (-5, 5):
+            if not vrij_(x, z):
+                continue
+            if (z - za) % 16 == 2:
+                S.box(x, SY, z, x, SY + 4, z, STAAF)
+                S.set(x, SY + 5, z, LAMPION_S)
+            else:
+                lantaarnpaal(S, x, SY, z, lampion=True)
+        if (z - za) % 16 == 2:
+            slinger(S, (-5, SY + 5, z), (5, SY + 5, z), zak=1.0, elk=3)
+    # fire baskets halfway between the posts (alternating sides)
+    for k, z in enumerate(range(za + 6, zb - 1, 16)):
+        x = 5 if k % 2 else -5
+        if vrij_(x, z):
+            S.set(x, SY, z, VUURKORF)
+    # a bench by a fire basket (west shoulder)
+    for z in (-2285, -2284, -2283):
+        S.set(-5, SY, z, trap("minecraft:spruce_stairs", "west"))
+    S.set(-5, SY, -2281, VUURKORF)
+    # the hot-chocolate kiosk on a little terrace cut into the east bank, near the pier
+    kx, kz = 8, -2266
+    S.box(5, FY - 4, kz - 5, 12, FY - 1, kz + 5, "minecraft:stone")
+    S.box(5, FY, kz - 5, 12, FY, kz + 5, "minecraft:spruce_planks")
+    S.box(5, SY, kz - 5, 12, SY + 8, kz + 5, CARVE)
+    S.box(13, FY - 2, kz - 6, 13, SY + 1, kz + 6, "minecraft:stone_bricks")      # a low retaining wall round it (open to the road)
+    S.box(6, FY - 2, kz - 6, 12, SY + 1, kz - 6, "minecraft:stone_bricks")
+    S.box(6, FY - 2, kz + 6, 12, SY + 1, kz + 6, "minecraft:stone_bricks")
+    S.box(6, SY + 2, kz - 6, 13, SY + 2, kz - 6, laag(3))
+    S.box(6, SY + 2, kz + 6, 13, SY + 2, kz + 6, laag(3))
+    S.box(13, SY + 2, kz - 6, 13, SY + 2, kz + 6, laag(3))
+    kraam(S, kx, kz, "west", FY, "minecraft:pink_wool", "minecraft:white_wool",
+          [kopjes("west"), "minecraft:water_cauldron[level=3]", kopjes("west")])
+    S.set(kx + 2, SY, kz - 3, VUURKORF)
+    for z in (kz + 3, kz + 4):
+        S.set(10, SY, z, trap("minecraft:spruce_stairs", "east"))
+    S.set(11, SY, kz + 3, "minecraft:barrel[facing=up,open=false]")
+    S.set(11, SY + 1, kz + 3, LAMPION_S)
+    # the wooden welcome arch at the pier end
+    poortboog(S, 0, PL.STAD[1], 0, 1, zb - PL.STAD[1] - 1, hout=True)
+    P["dok_kiosk"] = [kx + 1, SY, kz]
+    P["dok_welkom"] = [3, SY, zb - 4]
+    P["dok_bankje"] = [-4, SY, -2284]
+    W.stempel(S.stempel("aankomst"))
+
+
+def poort_overgangen(W, K, P):
+    """(i-z2kaart) The other three gates: boulders, crystals and drifts in their notches, a lampion post pair outside."""
+    rng = random.Random(78)
+    sx, sz = PL.STAD
+    for naam, (ux, uz) in PL.POORTEN.items():
+        if naam == "zuid":
+            continue
+        s_a, s_b = PL.GEODE_R + 1, PL.GEODE_R + PL.GEODE_DIK + 12
+        xs = [sx + ux * s_a, sx + ux * s_b]
+        zs = [sz + uz * s_a, sz + uz * s_b]
+        S = Vol(min(xs) - 20, FY - 8, min(zs) - 20, max(xs) + 20, FY + 60, max(zs) + 20)
+        poort_overgang(S, K, ux, uz, s_a, s_b, rng)
+        vx, vz = abs(uz), abs(ux)
+        for s_ in (s_a + 6, s_b - 2):
+            for sgn in (-1, 1):
+                x, z = sx + ux * s_ + sgn * 5 * vx, sz + uz * s_ + sgn * 5 * vz
+                g = K.h(x, z)
+                lantaarnpaal(S, x, g + 1, z, lampion=True)
+        W.stempel(S.stempel(f"poort_{naam}"))
 
 
 # ================================================================================================ campfires, needles
@@ -1210,38 +1415,116 @@ def kloofrand(K, x, richting):
     return z, int(K.H[K2.idx(x, z)])
 
 
-def brug(W, K, P, i, bx, breed=1, dek="minecraft:spruce_slab", hout="minecraft:spruce"):
-    zs, hs = kloofrand(K, bx, 1)
-    zn, hn = kloofrand(K, bx, -1)
-    for dx in range(-breed - 1, breed + 2):
-        hs = max(hs, int(K.H[K2.idx(bx + dx, zs)]))
-        hn = max(hn, int(K.H[K2.idx(bx + dx, zn)]))
-    za, zb = zs + 2, zn - 2          # deck from 2 blocks onto the land on both sides
-    S = Vol(bx - breed - 6, min(hs, hn) - 12, zb - 4, bx + breed + 6, max(hs, hn) + 12, za + 4)
-    sa, sb = 2 * (hs + 1) + 1, 2 * (hn + 1) + 1
-    n = za - zb
-    for k, z in enumerate(range(za, zb - 1, -1)):
+def _in_kloof(K, x, z):
+    i, j = K2.idx(x, z)
+    return bool(K.kloof[i, j])
+
+
+def _landing(K, x, z, ax, az, standaard=6):
+    """(i-z2kaart) Where a bridge walkway meets the land: from the rim cell (x, z) outward along (ax, az) the first path cell
+    within 3..16 blocks (so the walkway runs straight onto the road), else `standaard` blocks out. Returns (x, z, stand y)."""
+    for k in range(3, 17):
+        xx, zz = x + ax * k, z + az * k
+        if K.pad_m[K2.idx(xx, zz)] > 0.5:
+            return xx, zz, K.h(xx, zz) + 1
+    xx, zz = x + ax * standaard, z + az * standaard
+    return xx, zz, K.h(xx, zz) + 1
+
+
+def hangbrug(K, S, cellen, dwars, breed, dek, hout, hek, sag=4.0, ketting=6, lampion=False, stand_b=None):
+    """(i-z2kaart) A hanging bridge whose two ends are walkways ON the land, flush with the ground at both landings.
+
+    cellen: (x, z) along the axis from landing A to landing B. dwars: unit (px, pz) across. The deck profile (in half blocks =
+    stand height * 2) runs from the ground at A to the ground at B, sags over the ravine and changes at most half a block per
+    cell (slabs only: always walkable, no jump). Over land the deck lies on a filled foot (stone bricks) and everything above
+    it is cut away, so it never floats above or hides under the landing. Returns the deck profile [(x, z, slab y, stand y)]."""
+    px, pz = dwars
+    n = len(cellen) - 1
+    (xa, za_), (xb, zb_) = cellen[0], cellen[-1]
+    sa, sb = 2 * (K.h(xa, za_) + 1), 2 * (stand_b if stand_b is not None else K.h(xb, zb_) + 1)
+    kl = [_in_kloof(K, x, z) for (x, z) in cellen]
+    ia = kl.index(True) if True in kl else 0
+    ib = n - kl[::-1].index(True) if True in kl else n
+    prof = []
+    for k in range(n + 1):
         t = k / max(1, n)
-        s = sa + (sb - sa) * t - 4 * math.sin(math.pi * t)
-        s = int(round(s))
+        s = sa + (sb - sa) * t
+        if ia - 2 <= k <= ib + 2:
+            s -= sag * math.sin(math.pi * (k - ia + 2) / max(1, ib - ia + 4))
+        prof.append(int(round(s)))
+    prof[0], prof[n] = sa, sb
+    for _ in range(2):        # slope limiter: at most 1 half block per cell (fixed ends)
+        for k in range(1, n + 1):
+            prof[k] = min(max(prof[k], prof[k - 1] - 1), prof[k - 1] + 1)
+        prof[n] = sb
+        for k in range(n - 1, -1, -1):
+            prof[k] = min(max(prof[k], prof[k + 1] - 1), prof[k + 1] + 1)
+        prof[0] = sa
+    uit = []
+    for k, ((x, z), s) in enumerate(zip(cellen, prof)):
         y, top = (s - 1) // 2, (s - 1) % 2 == 1
-        typ = "top" if top else "bottom"
-        S.box(bx - breed, y, z, bx + breed, y, z, f"{dek}[type={typ},waterlogged=false]")
-        S.box(bx - breed, y + 1, z, bx + breed, y + 4, z, CARVE)
-        for kant in (-1, 1):
-            S.set(bx + kant * (breed + 1), y + 1, z, HEK_Z if hout == "minecraft:spruce" else "minecraft:dark_oak_fence[east=false,north=true,south=true,waterlogged=false,west=false]")
-            S.set(bx + kant * (breed + 1), y, z, f"{hout}_planks")
-        if k % 6 == 0:
+        slab = f"{dek}_slab[type={'top' if top else 'bottom'},waterlogged=false]"
+        rand_ = ia - 2 <= k <= ib + 2          # the hanging part (+2 cells onto the land each side)
+        w = breed + 1
+        for p in range(-w, w + 1):
+            cx, cz = x + p * px, z + p * pz
+            if k in (0, n) and p and K.h(cx, cz) + 1 < s / 2:
+                continue        # the very end: a side column lower than the landing keeps its ground (a natural step)
+            if abs(p) <= breed or not rand_:
+                S.set(cx, y, cz, slab)
+            else:
+                S.set(cx, y, cz, f"{hout}_planks")
+            S.box(cx, y + 1, cz, cx, max(y + 5, K.h(cx, cz) + 1), cz, CARVE)
+            if not _in_kloof(K, cx, cz):
+                g = K.h(cx, cz)
+                if g < y - 1:
+                    S.box(cx, g + 1, cz, cx, y - 1, cz, "minecraft:stone_bricks")
+                elif g >= y:
+                    S.set(cx, y - 1, cz, "minecraft:stone_bricks")
+        if rand_:
             for kant in (-1, 1):
-                S.set(bx + kant * (breed + 1), y - 1, z, "minecraft:iron_chain[axis=y]")
-    for (z, h) in ((za + 1, hs), (zb - 1, hn)):
-        for kant in (-1, 1):
-            S.box(bx + kant * (breed + 2), h + 1, z, bx + kant * (breed + 2), h + 5, z, f"{hout}_log[axis=y]")
-            S.set(bx + kant * (breed + 2), h + 6, z, LANT)
-        S.box(bx - breed, h + 1, z, bx + breed, h + 4, z, CARVE)
+                S.set(x + kant * w * px, y + 1, z + kant * w * pz, hek)
+            if k % ketting == 0 and kl[k]:
+                for kant in (-1, 1):
+                    S.set(x + kant * w * px, y - 1, z + kant * w * pz, "minecraft:iron_chain[axis=y]")
+                if lampion:
+                    S.set(x, y - 1, z, LAMPION)
+        uit.append((x, z, y, s // 2))
+    # head posts with a lantern on the first land cell beside the ravine (both ends)
+    for k in (ia - 1, ib + 1):
+        if 0 <= k <= n:
+            x, z, y, _ = uit[k]
+            for kant in (-1, 1):
+                qx, qz = x + kant * (breed + 2) * px, z + kant * (breed + 2) * pz
+                g = min(K.h(qx, qz), y)
+                S.box(qx, g + 1, qz, qx, y + 5, qz, f"{hout}_log[axis=y]")
+                S.set(qx, y + 6, qz, LAMPION_S if lampion else LANT)
+                # no pocket between the post and the hillside: the cell outside the post is raised to the deck
+                ox, oz = qx + kant * px, qz + kant * pz
+                g2 = K.h(ox, oz)
+                buren = [K.h(ox + ax, oz + az) for (ax, az) in ((1, 0), (-1, 0), (0, 1), (0, -1)) if (ox + ax, oz + az) != (qx, qz)]
+                doel = max(y, min(buren) - 1)
+                if g2 < doel and not _in_kloof(K, ox, oz):
+                    S.box(ox, g2 + 1, oz, ox, doel, oz, "minecraft:stone")
+    return uit
+
+
+def brug(W, K, P, i, bx, breed=1, dek="minecraft:spruce", hout="minecraft:spruce"):
+    zs, _ = kloofrand(K, bx, 1)
+    zn, _ = kloofrand(K, bx, -1)
+    _, za, _ = _landing(K, bx, zs, 0, 1)
+    _, zb, _ = _landing(K, bx, zn, 0, -1)
+    stand_b = None
+    if i == 2:      # the main bridge lands on the Spiegelburcht's grand stair (its tuff landing starts at zn - 2, stand BRUG_TOP + 1)
+        zb, stand_b = zn - 2, PL.BRUG_TOP + 1
+    S = Vol(bx - breed - 6, 40, zb - 8, bx + breed + 6, 200, za + 4)
+    hek = HEK_Z if hout == "minecraft:spruce" else "minecraft:dark_oak_fence[east=false,north=true,south=true,waterlogged=false,west=false]"
+    hangbrug(K, S, [(bx, z) for z in range(za, zb - 1, -1)], (1, 0), breed, dek, hout, hek, stand_b=stand_b)
+    if i == 2:      # keep the grand stair's landing clear (a ridge of terrain stuck out of it: a 1-block bump)
+        S.box(bx - 4, PL.BRUG_TOP + 1, zn - 7, bx + 4, PL.BRUG_TOP + 8, zn - 2, CARVE)
     W.stempel(S.stempel(f"brug_{i}"))
-    P[f"brug_{i + 1}_zuid"] = [bx, hoogste(W, bx, za + 3) + 1, za + 3]
-    P[f"brug_{i + 1}_noord"] = [bx, hoogste(W, bx, zb - 3) + 1, zb - 3]
+    P[f"brug_{i + 1}_zuid"] = [bx, hoogste(W, bx, zs + 3) + 1, zs + 3]
+    P[f"brug_{i + 1}_noord"] = [bx, hoogste(W, bx, zn - 3) + 1, zn - 3] if i != 2 else [bx, PL.BRUG_TOP + 1, zn - 3]
 
 
 def boortoren(W, K, P, i, x, z):
@@ -1289,7 +1572,7 @@ def splinterkloof(W, K, P):
     rng = random.Random(23)
     for i, bx in enumerate(PL.BRUGGEN):
         if i == 2:
-            brug(W, K, P, i, bx, breed=2, dek="minecraft:dark_oak_slab", hout="minecraft:dark_oak")
+            brug(W, K, P, i, bx, breed=2, dek="minecraft:dark_oak", hout="minecraft:dark_oak")
         else:
             brug(W, K, P, i, bx)
     spleetbrug(W, K, P)
@@ -1718,39 +2001,19 @@ def spleetbrug(W, K, P):
     """brug_5: a hanging bridge E-W over the Galmspleet (the gondola gorge), on the rim path to the main bridge."""
     z = PL.SPLEETBRUG_Z
     x = PL.GALMSPLEET[1][0]
-    i, j = K2.idx(x, z)
     xw, xe = x, x
     while K.spleet[K2.idx(xw, z)] or K.kloof[K2.idx(xw, z)]:
         xw -= 1
     while K.spleet[K2.idx(xe, z)] or K.kloof[K2.idx(xe, z)]:
         xe += 1
-    hw = max(int(K.H[K2.idx(xw - k, z + dz)]) for k in range(0, 3) for dz in (-1, 0, 1))
-    he = max(int(K.H[K2.idx(xe + k, z + dz)]) for k in range(0, 3) for dz in (-1, 0, 1))
-    xa, xb = xw - 2, xe + 2
-    S = Vol(xa - 4, min(hw, he) - 14, z - 5, xb + 4, max(hw, he) + 10, z + 5)
-    sa, sb = 2 * (hw + 1) + 1, 2 * (he + 1) + 1
-    n = xb - xa
-    for k, x_ in enumerate(range(xa, xb + 1)):
-        t = k / max(1, n)
-        s_ = int(round(sa + (sb - sa) * t - 3 * math.sin(math.pi * t)))
-        y, top = (s_ - 1) // 2, (s_ - 1) % 2 == 1
-        S.box(x_, y, z - 1, x_, y, z + 1, f"minecraft:spruce_slab[type={'top' if top else 'bottom'},waterlogged=false]")
-        S.box(x_, y + 1, z - 1, x_, y + 4, z + 1, CARVE)
-        for kant in (-1, 1):
-            S.set(x_, y + 1, z + kant * 2, HEK_X)
-            S.set(x_, y, z + kant * 2, "minecraft:spruce_planks")
-        if k % 5 == 0:
-            for kant in (-1, 1):
-                S.set(x_, y - 1, z + kant * 2, "minecraft:iron_chain[axis=y]")
-            S.set(x_, y - 1, z, LAMPION)
-    for (x_, h) in ((xa - 1, hw), (xb + 1, he)):
-        for kant in (-1, 1):
-            S.box(x_, h + 1, z + kant * 3, x_, h + 5, z + kant * 3, "minecraft:spruce_log[axis=y]")
-            S.set(x_, h + 6, z + kant * 3, LAMPION_S)
-        S.box(x_, h + 1, z - 1, x_, h + 4, z + 1, CARVE)
+    xa, _, _ = _landing(K, xw, z, -1, 0)
+    xb, _, _ = _landing(K, xe, z, 1, 0)
+    S = Vol(xa - 4, 40, z - 6, xb + 4, 200, z + 6)
+    hangbrug(K, S, [(x_, z) for x_ in range(xa, xb + 1)], (0, 1), 1, "minecraft:spruce", "minecraft:spruce", HEK_X,
+             sag=3.0, ketting=5, lampion=True)
     W.stempel(S.stempel("brug_spleet"))
-    P["brug_5_zuid"] = stand(W, xa - 3, z)        # (west end; ids kept: _zuid = the town side)
-    P["brug_5_noord"] = stand(W, xb + 3, z)
+    P["brug_5_zuid"] = stand(W, xw - 3, z)        # (west end; ids kept: _zuid = the town side)
+    P["brug_5_noord"] = stand(W, xe + 3, z)
 
 
 def gehuchten(W, K, P):
@@ -2054,6 +2317,8 @@ def bouw_alles(W, K):
     stad(W, K, P)
     stal(W, K, P)
     dok(W, K, P)
+    aankomst(W, K, P)
+    poort_overgangen(W, K, P)
     gondel(W, K, P)
     galmhellingen(W, K, P)
     knuffelmeer(W, K, P)
