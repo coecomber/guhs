@@ -17,6 +17,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.wezens.WezensRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.wereld.WereldRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.wereld.sfeer.SfeerRegistry.register(modBus);   // fix round 1: atmosphere
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.register(modBus);
     }
@@ -27,6 +28,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.wezens.WezensRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.wereld.WereldRegistry.payloads(registrar);
+        nl.juiced.guhs.feature.vadsrijk.wereld.sfeer.SfeerRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.payloads(registrar);
     }

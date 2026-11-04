@@ -1,0 +1,121 @@
+# Het Vadsrijk fix round 1, SFEER: fog/light per area, the skyline light wave, the spore storm, the pink shower + rainbow,
+# the aurora (+ light pillar after the Opperzwam) and a dragon pass over Zwamzoet.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_sfeer.txt
+
+section setup
+/gamemode creative
+/time set 5000
+/gamerule doDaylightCycle false
+wait 40
+
+section binnen
+/guhs vadsrijk
+wait 400
+waitrender 300
+/gamemode spectator
+wait 20
+
+section mist
+/tp @s 0 72 110
+look 180 -5
+wait 80
+waitrender 200
+shot s_mist_stad gui
+/tp @s 410 80 200
+look -90 -2
+wait 80
+waitrender 200
+shot s_mist_weide gui
+/tp @s -336 72 128
+look 135 -10
+wait 80
+waitrender 200
+shot s_mist_woud gui
+/tp @s -300 95 -225
+look 200 -5
+wait 80
+waitrender 200
+shot s_mist_druipgrotten gui
+/tp @s 140 80 -205
+look 135 15
+wait 80
+waitrender 200
+shot s_mist_kloof gui
+/tp @s 318 158 -375
+look 180 -5
+wait 80
+waitrender 200
+shot s_mist_zwamtempel gui
+/tp @s 220 80 -10
+look 90 0
+wait 120
+shot s_mist_overgang_stad_weide gui
+
+section draak
+/time set 5000
+/tp @s 0 70 112
+look 180 -22
+wait 60
+waitrender 200
+/guhs vadsrijk sfeer draak stad
+wait 90
+shot s_draak_1 gui
+wait 30
+shot s_draak_2 gui
+wait 30
+shot s_draak_3 gui
+wait 120
+
+section golf
+/time set 14000
+/tp @s 0 92 165
+look 180 -8
+wait 60
+waitrender 200
+/guhs vadsrijk sfeer golf
+wait 60
+shot s_golf_1 gui
+wait 140
+shot s_golf_2 gui
+wait 260
+shot s_golf_3_baken gui
+
+section storm
+/guhs vadsrijk sfeer stop
+/time set 12200
+/tp @s -330 75 140
+look 160 -15
+wait 60
+waitrender 200
+/guhs vadsrijk sfeer storm
+wait 220
+shot s_storm gui
+
+section bui
+/guhs vadsrijk sfeer stop
+/time set 6500
+/tp @s 410 76 200
+look -90 -10
+wait 60
+waitrender 200
+/guhs vadsrijk sfeer bui
+wait 200
+shot s_bui gui
+look -90 -25
+wait 1050
+shot s_regenboog gui
+
+section noorderlicht
+/guhs vadsrijk sfeer stop
+/time set 18000
+/tp @s 160 120 -120
+look -150 -25
+wait 60
+waitrender 200
+shot s_noorderlicht gui
+/guhs vadsrijk sfeer zuil aan
+wait 60
+shot s_noorderlicht_zuil gui
+/guhs vadsrijk sfeer zuil uit
+/guhs vadsrijk sfeer status
+wait 20
