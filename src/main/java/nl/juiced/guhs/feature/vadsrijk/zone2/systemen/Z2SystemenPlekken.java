@@ -14,9 +14,15 @@ public final class Z2SystemenPlekken {
     /** Gear of this level or higher counts as a zone-2 drop (0-2 sockets). */
     public static final int ZONE2_LEVEL = 20;
     /** POI_Z2: npc_juwelier, npc_winkel_kandij, kristalkapel_altaar. */
-    public static final BlockPos JUWELIER = new BlockPos(-52, 91, -2440);
-    public static final BlockPos KANDIJKRAAM = new BlockPos(66, 91, -2392);
-    public static final BlockPos ALTAAR = new BlockPos(0, 91, -2476);
+    public static final BlockPos JUWELIER = w("npc_juwelier", -52, 91, -2440);
+    public static final BlockPos KANDIJKRAAM = w("npc_winkel_kandij", 66, 91, -2392);
+    public static final BlockPos ALTAAR = w("kristalkapel_altaar", 0, 91, -2476);
+
+    /** (integration) from z2-wereld's generated spots; the number is only a fallback. */
+    private static BlockPos w(String id, int x, int y, int z) {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
+        return b != null ? b : new BlockPos(x, y, z);
+    }
 
     private Z2SystemenPlekken() {
     }

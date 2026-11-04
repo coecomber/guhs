@@ -86,6 +86,13 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         }
         Component waar;
         BlockPos pos;
+        // (integration, zone 2) an explicit target on the objective wins (QuestPlek: "npc:"/"poi:"/"gebied:"/"baas:")
+        if (d.plek() != null && !d.plek().isEmpty()) {
+            BlockPos b = QuestPlek.pos(p.level() instanceof ServerLevel sl ? sl : null, d.plek());
+            if (b != null) {
+                return new QuestStap(q.id(), q.hoofd(), titel, wat, Component.translatable(QuestPlek.tekstKey(d.plek())), b, extra);
+            }
+        }
         switch (d.type()) {
             case PRAAT -> {
                 waar = npcPlek(d.doel());
@@ -170,6 +177,16 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         if (s.doel() == null || !Questlog.klaar(p, "hq05_klodderreus")) {
             return s;
         }
+        // (integration) zone 2 (De Splinterpieken, z < -1700): the airship line Haven <-> Kandijkom
+        boolean ikZone2 = zone2(p.getZ()), doelZone2 = zone2(s.doel().getZ());
+        if (ikZone2 != doelZone2 && !(doelZone2 && eiland(p.getX(), p.getZ()))) {
+            String piloot = ikZone2 ? "z2_kapitein" : "luchtschipper";
+            Component waar = Component.translatable(P + "luchtschip", s.waar(), naam(piloot), npcPlek(piloot));
+            return new QuestStap(s.quest(), s.hoofd(), s.titel(), s.wat(), waar, npcPos(p, piloot), s.extra());
+        }
+        if (ikZone2 && doelZone2) {
+            return s;
+        }
         boolean ikEiland = eiland(p.getX(), p.getZ()), doelEiland = eiland(s.doel().getX(), s.doel().getZ());
         if (ikEiland == doelEiland) {
             return s;
@@ -182,6 +199,11 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
     /** The camp island (with its east dock just outside the knuffelkamp area box): everything south of z 800. */
     static boolean eiland(double x, double z) {
         return z > 800;
+    }
+
+    /** Zone 2 (De Splinterpieken): its box starts at z -1800; the sea/cloud gap lies between. */
+    static boolean zone2(double z) {
+        return z < -1700;
     }
 
     @Nullable
@@ -208,7 +230,8 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
 
     /** Where to level up to n (the zone's level bands, CONTRACT §2). */
     static Component levelPlek(int n) {
-        String g = n <= 6 ? "klodderweide" : n <= 12 ? "sporenwoud" : n <= 18 ? "druipgrotten" : "zwamtempel";
+        String g = n <= 6 ? "klodderweide" : n <= 12 ? "sporenwoud" : n <= 18 ? "druipgrotten" : n <= 20 ? "zwamtempel"
+                : n <= 25 ? "z2_galmhellingen" : n <= 30 ? "z2_knuffelmeer" : "z2_splinterkloof";
         return gebiedPlek(g);
     }
 
@@ -220,7 +243,14 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
             return g.blockPosition();
         }
         BlockPos b = NpcPlekken.NPC.get(npc);
-        return b != null ? b : NpcPlekken.KAMPWACHT.get(npc);
+        if (b == null) {
+            b = NpcPlekken.KAMPWACHT.get(npc);
+        }
+        if (b == null) {   // (zone 2 NPCs: their own spot)
+            NpcDef d = Npcs.van(npc);
+            b = d == null ? null : d.plek();
+        }
+        return b;
     }
 
     /** One line for chat: "Volgende stap: <wat>, <waar>." */

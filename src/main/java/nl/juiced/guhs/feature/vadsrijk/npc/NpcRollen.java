@@ -107,6 +107,11 @@ public final class NpcRollen {
             nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.vlieg(p, stad ? kamp : haven, stad ? haven : kamp);
             return true;
         });
+        // (integration, zone 2) the airship line + gondola are z2-wereld's (Z2Reizen / Z2Gondel: gate, landing, the opening scene)
+        koppelAls("z2_luchtlijn", (p, naar) -> naar.equals("haven")
+                ? nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Reizen.naarHaven(p)
+                : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Reizen.naarKandijkom(p));
+        koppelAls("z2_gondelbaan", (p, a) -> nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Gondel.rijd(p, a.equals("op")));
         nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.VIA_BALIE = false;
         LOG.debug("Vadsrijk npc: all {} roles bound directly ({})", KOPPELS.size(), V0);
     }

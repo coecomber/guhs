@@ -206,9 +206,14 @@ public final class Z2Verhaal {
     /** De Haven -> Kandijkom ("kandijkom", the first time with the opening) or back ("haven"). */
     public static void vlieg(ServerPlayer p, String naar) {
         boolean heen = naar.equals("kandijkom");
-        if (heen && !openingGezien(p)) {
+        // (integration) ONE opening: z2-wereld's (Z2Reizen plays it on the first flight, on the real map with its landing fix).
+        // This slice's own opening only runs when no airship binding is there (it is: NpcRollen.koppelAlles binds z2_luchtlijn).
+        if (heen && !openingGezien(p) && !NpcRollen.gekoppeld("z2_luchtlijn")) {
             opening(p);
             return;
+        }
+        if (heen) {
+            Spelers.data(p).gezien.add("npc:z2_opening");
         }
         if (NpcRollen.doe("z2_luchtlijn", p, naar) || Z2Rollen.reflectie(p, naar, "zone2.wereld.Z2Reizen#vlieg", "zone2.wereld.Luchtlijn#vlieg")) {
             return;

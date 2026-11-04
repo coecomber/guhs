@@ -56,7 +56,23 @@ public final class Z2WezensSpawners {
                 s("mika_boorder", Z2WezensRegistry.MIKA_BOORDER, 2, 3, 700, 16),
                 s("kloofgier", Z2WezensRegistry.KLOOFGIER, 2, 2, 800, 18),
                 s("kristalspin", Z2WezensRegistry.KRISTALSPIN, 3, 3, 700, 14)));
-        // De Spiegelburcht: the rooms (guess, see Z2WezensPlekken.BURCHT)
+        // (integration) the Splinterkloof ravine floor (y ~64, z -2810..-2745, z2-wereld's mob_kloof_bodem): the surface search
+        // finds the rims/bridges, so the floor gets its own spawners with a y-range around it
+        int bodem = 0, j = 0;
+        for (int x = -540; x <= 540; x += 90) {
+            BlockPos c = new BlockPos(x, 66, -2772);
+            if (Z2WezensPlekken.veilig(c.getX(), c.getZ(), 20)) {
+                continue;
+            }
+            boolean mika = j % 2 == 0;
+            Spawners.Spawner sp = new Spawners.Spawner("z2wezens:kloofbodem_" + j++ + (mika ? "_mika_mijnwerker" : "_kristalspin"), c, 14,
+                    mika ? Z2WezensRegistry.MIKA_MIJNWERKER : Z2WezensRegistry.KRISTALSPIN, 3, 700, 31, 33, null, ELITE).grot(58, 74);
+            Spawners.registreer(sp);
+            ALLE.add(sp);
+            bodem += 3;
+        }
+        MAX_PER_GEBIED.put("splinterkloof_bodem", bodem);
+        // De Spiegelburcht: the rooms (Z2WezensPlekken.BURCHT, from the real map)
         int burcht = 0;
         for (int i = 0; i < Z2WezensPlekken.BURCHT.length; i++) {
             BlockPos p = Z2WezensPlekken.BURCHT[i];

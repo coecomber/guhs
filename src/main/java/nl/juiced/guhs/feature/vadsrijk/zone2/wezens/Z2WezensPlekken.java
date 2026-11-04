@@ -42,24 +42,34 @@ public final class Z2WezensPlekken {
     /** Surface spawners search the floor from this height down (the first floor from above = the surface, bridges included). */
     public static final int BOVEN_Y = 240, ONDER_Y = 40;
 
-    /** The Spiegelburcht on its peak (guess): the rooms the adds stand in (floor search 24 down from y+1). */
-    public static final BlockPos BURCHT_MIDDEN = new BlockPos(0, 180, -2900);
-    public static final BlockPos[] BURCHT = {new BlockPos(0, 181, -2860), new BlockPos(-22, 181, -2885), new BlockPos(22, 181, -2885),
-            new BlockPos(-18, 189, -2915), new BlockPos(18, 189, -2915), new BlockPos(0, 189, -2930)};
+    /** (integration: aligned to Z2WereldPlekken / POI_Z2) The Spiegelburcht rooms the adds stand in (floor search 24 down from
+     * y+1): voorhal, lichtkamer, spiegelgang, prismazaal + the two side positions of the lichtkamer. The boss hall itself
+     * (arena_spiegelzucht) is the boss's. */
+    public static final BlockPos BURCHT_MIDDEN = w("burcht_spiegelgang", 0, -2909, 176);
+    public static final BlockPos[] BURCHT = {w("burcht_voorhal", 0, -2868, 176), w("puzzel_lichtkamer_1", -7, -2894, 176),
+            w("puzzel_lichtkamer_4", 7, -2885, 176), w("burcht_spiegelgang", 0, -2909, 176), w("puzzel_prismazaal_2", -8, -2923, 176),
+            w("burcht_prismazaal", 0, -2928, 176)};
 
-    /** The Mika fort the Mika's flee to in their smoke puff (direction of the puff trail; guess: the drilling rigs, north-west). */
-    public static final BlockPos MIKA_FORT = new BlockPos(-420, 120, -2900);
+    /** The Mika fort the Mika's flee to in their smoke puff (POI mika_fort, on the north plateau of the Splinterkloof). */
+    public static final BlockPos MIKA_FORT = w("mika_fort", 300, -2882, 153);
 
-    /** No creatures here: Kandijkom + the dock, the campfires (guess, 3 per area), the boss arenas (guess). */
+    /** No creatures here: Kandijkom + the dock, every zone-2 campfire, the boss arenas (all from Z2WereldPlekken). */
     public static final List<Veilig> VEILIG = new ArrayList<>(List.of(
             new Veilig(new BlockPos(0, 0, -2400), 200),          // Kandijkom (box 300x300) + a margin
             new Veilig(new BlockPos(0, 0, -2230), 60),           // the airship dock on the south side
-            new Veilig(new BlockPos(260, 0, -2060), 26), new Veilig(new BlockPos(430, 0, -2330), 26), new Veilig(new BlockPos(330, 0, -2600), 26),
-            new Veilig(new BlockPos(-260, 0, -2060), 26), new Veilig(new BlockPos(-430, 0, -2330), 26), new Veilig(new BlockPos(-330, 0, -2600), 26),
-            new Veilig(new BlockPos(-300, 0, -2800), 26), new Veilig(new BlockPos(300, 0, -2800), 26), new Veilig(new BlockPos(0, 0, -2740), 26),
-            new Veilig(new BlockPos(470, 0, -2150), 55),         // Galmwolf arena (world boss, guess)
-            new Veilig(new BlockPos(0, 0, -2900), 95),           // the Spiegelburcht itself (its adds are the burcht spawners)
-            new Veilig(new BlockPos(-440, 0, -2930), 40)));      // Mika-boormeester (secret, guess)
+            new Veilig(w("arena_galmwolf", 430, -2280, 121), 55),
+            new Veilig(w("arena_spiegelzucht", 0, -2963, 176), 40),
+            new Veilig(w("arena_boormeester", -500, -2836, 66), 40)));
+    static {
+        for (BlockPos k : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.KAMPVUREN) {
+            VEILIG.add(new Veilig(k, 26));
+        }
+    }
+
+    private static BlockPos w(String id, int x, int z, int y) {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
+        return b != null ? b : new BlockPos(x, y, z);
+    }
 
     /** Is (x, z) inside a safe spot (extra = an added margin)? */
     public static boolean veilig(double x, double z, int extra) {

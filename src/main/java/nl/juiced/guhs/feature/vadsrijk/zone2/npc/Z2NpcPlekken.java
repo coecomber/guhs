@@ -25,13 +25,19 @@ public final class Z2NpcPlekken {
         return new BlockPos(x, y, z);
     }
 
+    /** (integration) The spot from z2-wereld's generated Z2WereldPlekken; the numbers are only the fallback. */
+    static BlockPos w(String id, int x, int y, int z) {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
+        return b != null ? b : new BlockPos(x, y, z);
+    }
+
     /** Stand y of the Kandijkom geode floor (POI_Z2: 91). */
     static final int KK = 91;
 
     // ---- Kandijkom -----------------------------------------------------------------------------------------------------------
-    public static final BlockPos PLEIN = p(0, KK, -2412);                  // POI:plein
+    public static final BlockPos PLEIN = w("plein", 0, KK, -2412);                  // POI:plein
     /** Where the airship sets you down in Kandijkom. */
-    public static final BlockPos DOK = p(0, KK, -2244);                    // POI:dok_landing
+    public static final BlockPos DOK = w("dok_landing", 0, KK, -2244);                    // POI:dok_landing
     public static final BlockPos DOK_AANKOMST = DOK;
     /** The gondola stations (POI:gondel_dal / gondel_berg). */
     public static final BlockPos GONDEL_BENEDEN = p(78, KK, -2466);
@@ -41,22 +47,22 @@ public final class Z2NpcPlekken {
     public static final Map<String, BlockPos> NPC = new LinkedHashMap<>();
     static {
         // Kandijkom: travel, the order, the guard
-        NPC.put("z2_kapitein", p(-4, KK, -2240));                 // POI:dok_kapitein
-        NPC.put("z2_cafe", p(59, KK, -2344));                     // POI:npc_cafe (behind the counter of the cafe)
-        NPC.put("z2_burgemeester", p(0, KK, -2418));              // POI:npc_burgemeester
+        NPC.put("z2_kapitein", w("dok_kapitein", -4, KK, -2240));                 // POI:dok_kapitein
+        NPC.put("z2_cafe", w("npc_cafe", 59, KK, -2344));                     // POI:npc_cafe (behind the counter of the cafe)
+        NPC.put("z2_burgemeester", w("npc_burgemeester", 0, KK, -2418));              // POI:npc_burgemeester
         NPC.put("z2_kwarts", p(17, KK, -2425));                   // next to POI:questbord
         NPC.put("z2_wacht_plein_west", p(-24, KK, -2412));
         NPC.put("z2_wacht_plein_oost", p(24, KK, -2412));
-        NPC.put("z2_ordemeester", p(0, KK, -2474));               // POI:npc_kristalkapel (the chapel = the order's branch here)
+        NPC.put("z2_ordemeester", w("npc_kristalkapel", 0, KK, -2474));               // POI:npc_kristalkapel (the chapel = the order's branch here)
         // Kandijkom: shops and services
-        NPC.put("z2_juwelier", p(-55, KK, -2440));                // POI:gebouw.juwelier.npc
-        NPC.put("z2_smid", p(55, KK, -2440));                     // POI:gebouw.smid.npc
+        NPC.put("z2_juwelier", w("gebouw.juwelier.npc", -55, KK, -2440));                // POI:gebouw.juwelier.npc
+        NPC.put("z2_smid", w("gebouw.smid.npc", 55, KK, -2440));                     // POI:gebouw.smid.npc
         NPC.put("z2_wapenhandelaar", p(48, KK, -2437));           // in the smithy (POI:gebouw.smid.binnen)
-        NPC.put("z2_winkelier", p(68, KK, -2392));                // POI:gebouw.winkel_kandij.npc
-        NPC.put("z2_breister", p(-68, KK, -2392));                // POI:gebouw.winkel_wantjes.npc
-        NPC.put("z2_veilingmeester", p(-55, KK, -2344));          // POI:gebouw.bank.npc
-        NPC.put("z2_schaatsjuf", p(13, KK, -2400));               // POI:npc_schaatsguh
-        NPC.put("z2_gondelier", p(76, KK, -2465));                // POI:npc_gondel
+        NPC.put("z2_winkelier", w("gebouw.winkel_kandij.npc", 68, KK, -2392));                // POI:gebouw.winkel_kandij.npc
+        NPC.put("z2_breister", w("gebouw.winkel_wantjes.npc", -68, KK, -2392));                // POI:gebouw.winkel_wantjes.npc
+        NPC.put("z2_veilingmeester", w("gebouw.bank.npc", -55, KK, -2344));          // POI:gebouw.bank.npc
+        NPC.put("z2_schaatsjuf", w("npc_schaatsguh", 13, KK, -2400));               // POI:npc_schaatsguh
+        NPC.put("z2_gondelier", w("npc_gondel", 76, KK, -2465));                // POI:npc_gondel
         // Kandijkom: citizens
         NPC.put("z2_opa_sneeuwbal", p(36, KK, -2346));            // the cafe terrace (POI:cafe_terras)
         NPC.put("z2_bakker", p(95, KK, -2392));                   // outside POI:gebouw.huis_4.deur
@@ -71,7 +77,7 @@ public final class Z2NpcPlekken {
         // out in the zone
         NPC.put("z2_gondel_boven", p(303, 151, -2612));           // POI:gondel_berg
         NPC.put("z2_berggids", p(236, 99, -2334));                // POI:kampvuur_galmhellingen_1
-        NPC.put("z2_visser", p(-418, 88, -2261));                 // POI:npc_ijsvisser (the island in the lake)
+        NPC.put("z2_visser", w("npc_ijsvisser", -418, 88, -2261));                 // POI:npc_ijsvisser (the island in the lake)
         NPC.put("z2_beeldhouwer", p(-254, 107, -2444));           // POI:kampvuur_knuffelmeer_3 (north shore)
         NPC.put("z2_touwtje", p(3, 150, -2762));                  // POI:brug_3_zuid (the middle bridge)
         NPC.put("z2_prisma", p(4, 176, -2846));                   // POI:deur_spiegelburcht_voor / burcht_voorplein
@@ -103,28 +109,28 @@ public final class Z2NpcPlekken {
     static {
         POI.put("z2_dok", DOK);
         POI.put("z2_plein", PLEIN);
-        POI.put("z2_schaatsvijver", p(0, KK, -2400));             // POI:schaatsvijver
-        POI.put("z2_galmnaald", p(430, 155, -2320));              // POI:galmwolf_naald
-        POI.put("z2_naald_do", p(260, 95, -1980));                // POI:galm_naalden_3
-        POI.put("z2_naald_re", p(330, 130, -2200));               // POI:galm_naalden_1
-        POI.put("z2_naald_mi", p(420, 165, -2480));               // POI:galm_naalden_4
+        POI.put("z2_schaatsvijver", w("schaatsvijver", 0, KK, -2400));             // POI:schaatsvijver
+        POI.put("z2_galmnaald", w("galmwolf_naald", 430, 155, -2320));              // POI:galmwolf_naald
+        POI.put("z2_naald_do", w("galm_naalden_3", 260, 95, -1980));                // POI:galm_naalden_3
+        POI.put("z2_naald_re", w("galm_naalden_1", 330, 130, -2200));               // POI:galm_naalden_1
+        POI.put("z2_naald_mi", w("galm_naalden_4", 420, 165, -2480));               // POI:galm_naalden_4
         POI.put("z2_lawinepad", p(360, 149, -2430));              // POI:galm_lawine_1_voet
-        POI.put("z2_sneeuwpophelling", p(400, 137, -1880));       // POI:galm_lawine_3_voet
+        POI.put("z2_sneeuwpophelling", w("galm_lawine_3_voet", 400, 137, -1880));       // POI:galm_lawine_3_voet
         POI.put("z2_warmwaterbron", p(520, 146, -1960));          // (requested: a small hot spring near POI:galm_naalden_2)
         POI.put("z2_gondel_top", GONDEL_BOVEN);
         POI.put("z2_meer_scheur", p(-390, 85, -2392));            // (requested: a crack in the ice, north part of the lake)
         POI.put("z2_brug_1", p(0, 150, -2765));                   // POI:brug_3_zuid (the middle bridge, Touwtje)
         POI.put("z2_brug_2", p(-180, 140, -2750));                // POI:brug_2_zuid
         POI.put("z2_brug_3", p(-430, 138, -2734));                // POI:brug_1_zuid (the far west bridge)
-        POI.put("z2_boortoren", p(400, 136, -2744));              // POI:boortoren_3 (east)
-        POI.put("z2_boortoren_2", p(-330, 140, -2738));           // POI:boortoren_1 (west)
-        POI.put("z2_drakenravijn", p(-330, 126, -2582));          // POI:draak_zadel_kijk (the dragon rests at POI:draak_zadel)
-        POI.put("z2_boorhal", p(-500, 66, -2779));                // POI:arena_boormeester_deur
-        POI.put("z2_spiegelpoort", p(0, 176, -2851));             // POI:deur_spiegelburcht_voor
+        POI.put("z2_boortoren", w("boortoren_3", 400, 136, -2744));              // POI:boortoren_3 (east)
+        POI.put("z2_boortoren_2", w("boortoren_1", -330, 140, -2738));           // POI:boortoren_1 (west)
+        POI.put("z2_drakenravijn", w("draak_zadel_kijk", -330, 126, -2582));          // POI:draak_zadel_kijk (the dragon rests at POI:draak_zadel)
+        POI.put("z2_boorhal", w("arena_boormeester_deur", -500, 66, -2779));                // POI:arena_boormeester_deur
+        POI.put("z2_spiegelpoort", w("deur_spiegelburcht_voor", 0, 176, -2851));             // POI:deur_spiegelburcht_voor
         POI.put("z2_uitkijk_poollicht", p(-210, 208, -2930));     // POI:uitkijk_kloofkijk
-        POI.put("z2_kampvuur_galm", p(232, 99, -2330));           // POI:kampvuur_galmhellingen_1
-        POI.put("z2_kampvuur_meer", p(-200, 89, -2120));          // POI:kampvuur_knuffelmeer_1
-        POI.put("z2_kampvuur_kloof", p(24, 132, -2730));          // POI:kampvuur_splinterkloof_3
+        POI.put("z2_kampvuur_galm", w("kampvuur_galmhellingen_1", 232, 99, -2330));           // POI:kampvuur_galmhellingen_1
+        POI.put("z2_kampvuur_meer", w("kampvuur_knuffelmeer_1", -200, 89, -2120));          // POI:kampvuur_knuffelmeer_1
+        POI.put("z2_kampvuur_kloof", w("kampvuur_splinterkloof_3", 24, 132, -2730));          // POI:kampvuur_splinterkloof_3
     }
     /** Horizontal radius / vertical tolerance for "you are there" (as zone 1); the high needles/lookouts get more height. */
     public static final double POI_STRAAL = 6, POI_HOOGTE = 10, NAALD_HOOGTE = 30;
@@ -140,14 +146,14 @@ public final class Z2NpcPlekken {
         GEBIED_DOEL.put("z2_knuffelmeer", POI.get("z2_kampvuur_meer"));
         GEBIED_DOEL.put("z2_splinterkloof", POI.get("z2_kampvuur_kloof"));
         GEBIED_DOEL.put("z2_spiegelburcht", POI.get("z2_spiegelpoort"));
-        KAMPVUUR.put("z2_kandijkom", p(-9, KK, -2262));          // POI:kampvuur_kandijkom_dok_1
+        KAMPVUUR.put("z2_kandijkom", w("kampvuur_kandijkom_dok_1", -9, KK, -2262));          // POI:kampvuur_kandijkom_dok_1
         KAMPVUUR.put("z2_kandijkom_dok", p(-9, KK, -2262));
         KAMPVUUR.put("z2_galmhellingen", POI.get("z2_kampvuur_galm"));
         KAMPVUUR.put("z2_knuffelmeer", POI.get("z2_kampvuur_meer"));
         KAMPVUUR.put("z2_splinterkloof", POI.get("z2_kampvuur_kloof"));
         KAMPVUUR.put("z2_spiegelburcht", p(12, 164, -2826));     // POI:kampvuur_spiegelburcht_1
         BAAS.put("z2_galmhellingen", p(392, 121, -2280));        // POI:arena_galmwolf_deur
-        BAAS.put("z2_spiegelburcht", p(0, 176, -2937));          // POI:arena_spiegelzucht_deur
+        BAAS.put("z2_spiegelburcht", w("arena_spiegelzucht_deur", 0, 176, -2937));          // POI:arena_spiegelzucht_deur
         BAAS.put("z2_splinterkloof", POI.get("z2_boorhal"));      // POI:arena_boormeester_deur (secret)
     }
 
@@ -189,10 +195,10 @@ public final class Z2NpcPlekken {
     /** Hidden treasures (one-time loot; POI_Z2 "Secrets"). */
     public static final Map<String, BlockPos> SCHAT = new LinkedHashMap<>();
     static {
-        SCHAT.put("ijsgrot", p(-575, 122, -2400));               // POI:geheim_ijsgrot
-        SCHAT.put("galmgrot", p(566, 140, -1990));               // POI:geheim_galmgrot
-        SCHAT.put("chocokelder", p(52, 85, -2344));              // POI:geheim_chocokelder
-        SCHAT.put("burchtdak", p(10, 195, -2903));               // POI:geheim_burchtdak
+        SCHAT.put("ijsgrot", w("geheim_ijsgrot", -575, 122, -2400));               // POI:geheim_ijsgrot
+        SCHAT.put("galmgrot", w("geheim_galmgrot", 566, 140, -1990));               // POI:geheim_galmgrot
+        SCHAT.put("chocokelder", w("geheim_chocokelder", 52, 85, -2344));              // POI:geheim_chocokelder
+        SCHAT.put("burchtdak", w("geheim_burchtdak", 10, 195, -2903));               // POI:geheim_burchtdak
         SCHAT.put("onder_de_brug", p(-180, 128, -2774));         // (requested: a chest under the west bridge, POI:brug_2)
     }
     public static final double VIND_STRAAL = 3, VIND_HOOGTE = 8;
