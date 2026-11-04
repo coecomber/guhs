@@ -61,6 +61,7 @@ public final class Z2Gondel {
         }
         b.titel("vadsrijk.wereld.z2.gondel.titel", omhoog ? "vadsrijk.wereld.z2.gondel.omhoog" : "vadsrijk.wereld.z2.gondel.omlaag", 30, 80, 0xBFE8FF);
         RijkScenes.speel(p, b.bouw());
+        Z2Reizen.landOp(p, Vec3.atBottomCenterOf(aankomst), DUUR - 5);
         for (int t = 0; t < DUUR; t += 40) {
             Later.na(t, () -> sl.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.MINECART_INSIDE, SoundSource.AMBIENT, 0.25f, 0.7f));
         }

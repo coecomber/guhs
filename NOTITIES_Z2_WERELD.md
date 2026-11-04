@@ -69,7 +69,30 @@ Branch `110-z2-wereld` (worktree `guhs_vadsrijk/z2-wereld`, from 6ec8724ca). Bri
   `Z2Reizen.EERSTE_AANKOMST` to replace the opening; the gondola guh may gate `Z2Gondel.MAG_RIJDEN`.
 
 ## Tests
-(see the end of this file, filled in after the run)
+- **Walkability** (`loopcheck.py` from f-wild, copied to a scratch dir with one fix: `snow_block` is a full block, not a snow
+  layer; run with `--tegels <this worktree's tiles> --box=-704,-3072,703,-1729`): VAL 10, TRAP 28, PAD 0, LEEG 0.
+  - The 10 VAL are single cells (1-2 blocks, 2 up to get out) inside tree canopies / needle feet / the kloofkijk spiral stair; no pits,
+    rooms or water traps. The 28 TRAP are chairs (stairs used as furniture: cafe, houses, plaza benches), not real stairs.
+  - Fixed on the way: Mika fort sat in a terrain hollow (now on a pad), the cafe cellar ladder (now up to the floor), single-cell
+    terrain pits (filled), trees on slopes (pockets under leaves), the ravine's open ends at the coast (closed), the Spiegelzaal
+    mirror alcove that blocked the gate from the Prismazaal, campfire tents on paths, the burcht campfire on the steep cone.
+  - Also a POI check (every generated stand spot: feet+head free, floor under it): only the intended block spots are left
+    (`galmwolf_pilaar_*` = pillar centre, `*_altaar`, `gondel_*_kabel`).
+- **AutoCheck** (`tools/autocheck/vadsrijk_z2_wereld.txt`, 30 screenshots in `run/screenshots/autocheck/z2_*.png`) + a short
+  re-check of the sky/arena/opening (`vadsrijk_z2_lucht.txt`, `z2b_*.png`): Kandijkom (plaza, tree, geode wall, cafe, kapel, cellar),
+  gondola station + ride + top station, Galmhellingen needles, Galmwolf arena with pillars, frozen lake, dragon saddle, ravine
+  + drilling rig + Boormeester cave, bridge, Spiegelburcht outside, door ceremony + open, rooms, boss hall, viewpoint panorama,
+  day sky (pale veil, pearl clouds, crystal spires, giant tree) and night sky (green-pink aurora, the big moon behind the spires).
+  The opening scene plays (snow, the chocomelk line). Found and fixed: the body could drop through not-yet-loaded chunks during a
+  long flight scene -> `Z2Reizen.landOp` puts the player back on the landing spot during/after the scene (airship + gondola).
+- No gametests added (world code only; the tile mechanism is zone 1's, covered by `VadsrijkWereld` tests).
+
+## Open / for the user
+- The plushies under the ice are visible but subtle from above (clear ice over dark water); maybe brighter wool or lights later.
+- Walls of the houses are `pastelbaksteen_mokka` (reads more like light toffee brick than dark chocolate).
+- Haven side of the airship: sneak + right-click the Haven bell (plain click = Knuffelkamp). The npc captain should offer it too.
+- The Galmwolf howl in the opening is a low elder-guardian sound (no vanilla wolf howl in 26.1).
 
 ## Resume point
-(see below)
+Everything in the brief is built and checked. Regenerate with `python tools/vadsrijk/maak_kaart.py --zone 2` after any generator
+change (POI_Z2.md + Z2WereldPlekken.java come along). Integration: run without `--zone` (both zones) once after merging.

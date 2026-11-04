@@ -11,6 +11,7 @@ wait 120
 waitrender 300
 
 section aankomst
+wait 400
 /guhs vadsrijk z2wereld vlieg kandijkom
 wait 120
 shot z2_opening_storm gui
@@ -73,6 +74,8 @@ waitrender 500
 shot z2_galmhellingen gui
 /guhs vadsrijk z2wereld plek arena_galmwolf_deur
 look 270 5
+wait 40
+waitrender 300
 wait 60
 waitrender 300
 shot z2_galmwolf_arena gui
@@ -153,9 +156,9 @@ wait 300
 shot z2_uitkijk gui
 /time set 18000
 wait 80
-look 0 -25
+look 180 -25
 shot z2_nacht_poollicht gui
-look 20 -8
+look 196 -6
 shot z2_nacht_maan gui
 /time set 1000
 wait 40

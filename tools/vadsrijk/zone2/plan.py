@@ -119,7 +119,7 @@ BURCHT_KAMERS = {
     "spiegelgang": (-9, -2917, 9, -2901, 12),
     "prismazaal": (-14, -2937, 14, -2919, 12),
 }
-SPIEGELZAAL = (0, -2961, 22)   # boss hall: centre x, z, radius (dome)
+SPIEGELZAAL = (0, -2963, 22)   # boss hall: centre x, z, radius (dome)
 
 # ------------------------------------------------------------------------------------------------ campfires (x, z) per area
 KAMPVUREN = {

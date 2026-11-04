@@ -67,6 +67,8 @@ public final class Z2Reizen {
         p.teleport(new TeleportTransition(sl, a, Vec3.ZERO, 180f, 0f, TeleportTransition.DO_NOTHING));
         p.resetFallDistance();
         SpelerData d = Spelers.data(p);
+        boolean eerste = !d.gezien.contains(GEZIEN_EERSTE);
+        landOp(p, a, eerste ? 405 : 205);
         if (d.gezien.add(GEZIEN_EERSTE)) {
             if (EERSTE_AANKOMST != null) {
                 EERSTE_AANKOMST.accept(p);
@@ -97,6 +99,7 @@ public final class Z2Reizen {
                 .titel("vadsrijk.wereld.luchtschip.titel.haven", "vadsrijk.wereld.z2.luchtschip.onder_haven", 110, 60, 0xFFC6E0)
                 .bouw();
         RijkScenes.speel(p, s);
+        landOp(p, a, 185);
         sl.playSound(null, p.blockPosition(), SoundEvents.ELYTRA_FLYING, SoundSource.AMBIENT, 0.5f, 1.1f);
         return true;
     }
@@ -174,6 +177,25 @@ public final class Z2Reizen {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Puts the player back on the landing spot when the scene ends (and on the way): while the camera is far away the client may
+     * not have the chunks round the body yet and let it drop through them.
+     */
+    static void landOp(ServerPlayer p, Vec3 a, int ticks) {
+        for (int t = 20; t <= ticks; t += 40) {
+            Later.na(Math.min(t, ticks), () -> zet(p, a));
+        }
+        Later.na(ticks, () -> zet(p, a));
+    }
+
+    private static void zet(ServerPlayer p, Vec3 a) {
+        if (p.isRemoved() || !(p.level() instanceof ServerLevel sl) || p.position().distanceToSqr(a) < 0.5) {
+            return;
+        }
+        p.teleport(new TeleportTransition(sl, a, Vec3.ZERO, p.getYRot(), p.getXRot(), TeleportTransition.DO_NOTHING));
+        p.resetFallDistance();
     }
 
     /** A sound at the player (heard wherever the scene camera is). */

@@ -620,7 +620,7 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
     for i in range(4):
         S.box(x + 1, top + 4 + i, z, x + 4 - i, top + 4 + i, z, "minecraft:light_blue_wool")
     S.set(x - 3, top + 2, z - 3, LANT)
-    P[f"uitkijk_{naam}"] = [x, top + 2, z]
+    P[f"uitkijk_{naam}"] = [x - 2, top + 2, z + 2]
     W.stempel(S.stempel("naald_" + naam))
 
 
@@ -668,9 +668,9 @@ def galmhellingen(W, K, P):
     kristalnaald(S, nx, nz, gg, 34, 4.5, rng)
     P["galmwolf_naald"] = [nx, gg + 30, nz]
     P["arena_galmwolf"] = [cx, g + 1, cz]
-    P["arena_galmwolf_deur"] = [cx - r - 6, g + 1, cz]
-    P["arena_galmwolf_bord"] = [cx - r - 5, g + 1, cz + 4]
     W.stempel(S.stempel("galm_arena"))
+    P["arena_galmwolf_deur"] = [cx - r - 4, hoogste(W, cx - r - 4, cz) + 1, cz]
+    P["arena_galmwolf_bord"] = [cx - r - 3, hoogste(W, cx - r - 3, cz + 4) + 1, cz + 4]
     # crystal needle fields
     for i, (fx, fz, fr) in enumerate(PL.NAALD_VELDEN):
         S = Vol(fx - fr - 12, 60, fz - fr - 12, fx + fr + 12, 260, fz + fr + 12)
@@ -715,8 +715,8 @@ def galmhellingen(W, K, P):
                 for k in range(L):
                     S.set(x + (k if ax == "x" else 0), gg + 1, z + (k if ax == "z" else 0), f"minecraft:spruce_log[axis={ax}]")
         P[f"galm_lawine_{i + 1}"] = [lijn[0][0], K.h(*lijn[0]) + 1, lijn[0][1]]
-        P[f"galm_lawine_{i + 1}_voet"] = [ex, K.h(ex, ez) + 1, ez]
         W.stempel(S.stempel(f"lawine_{i}"), bezet=False)
+        P[f"galm_lawine_{i + 1}_voet"] = [ex, hoogste(W, ex, ez) + 1, ez]
     grotje(W, K, P, "geheim_galmgrot", PL.GALMGROT[0], PL.GALMGROT[1], "galm")
 
 
@@ -748,8 +748,8 @@ def grotje(W, K, P, naam, x, z, soort):
         S.set(x + 2, g + 1, z + 2, "minecraft:white_carpet")
     S.set(x, g + 5, z, LANT_H)
     P[naam] = [x, g + 1, z]
-    P[naam + "_ingang"] = [x - 11, g + 1, z]
     W.stempel(S.stempel(naam))
+    P[naam + "_ingang"] = [x - 11, hoogste(W, x - 11, z) + 1, z]
 
 
 # ================================================================================================ Het Bevroren Knuffelmeer
@@ -908,9 +908,9 @@ def brug(W, K, P, i, bx, breed=1, dek="minecraft:spruce_slab", hout="minecraft:s
             S.box(bx + kant * (breed + 2), h + 1, z, bx + kant * (breed + 2), h + 5, z, f"{hout}_log[axis=y]")
             S.set(bx + kant * (breed + 2), h + 6, z, LANT)
         S.box(bx - breed, h + 1, z, bx + breed, h + 4, z, CARVE)
-    P[f"brug_{i + 1}_zuid"] = [bx, hs + 1, za + 2]
-    P[f"brug_{i + 1}_noord"] = [bx, hn + 1, zb - 2]
     W.stempel(S.stempel(f"brug_{i}"))
+    P[f"brug_{i + 1}_zuid"] = [bx, hoogste(W, bx, za + 3) + 1, za + 3]
+    P[f"brug_{i + 1}_noord"] = [bx, hoogste(W, bx, zb - 3) + 1, zb - 3]
 
 
 def boortoren(W, K, P, i, x, z):
@@ -964,7 +964,8 @@ def splinterkloof(W, K, P):
     for i, (x, z) in enumerate(PL.BOORTORENS):
         boortoren(W, K, P, i, x, z)
     for i, x0 in enumerate(PL.KLOOF_TRAPPEN):
-        P[f"kloof_trap_{i + 1}"] = [x0 + 1, PL.KLOOF_BODEM + 2, int(round(float(K2.kloof_z(x0)))) + 12]
+        zt = int(round(float(K2.kloof_z(x0)))) + 10
+        P[f"kloof_trap_{i + 1}"] = [x0 + 1, hoogste(W, x0 + 1, zt) + 1, zt]
     # grey crystal outcrops and boulders on the ravine floor
     S = Vol(-700, 55, -2860, 700, 110, -2700)
     for _ in range(140):
@@ -1208,8 +1209,10 @@ def spiegelburcht(W, K, P):
             if d <= hr:
                 S.set(x, T, zz, "minecraft:smooth_quartz" if int(d) % 4 < 2 else "minecraft:polished_tuff")
     S.set(hx_, T, hz_, "minecraft:pearlescent_froglight[axis=y]")
+    S.box(-2, Y, hz_ + hr - 1, 2, Y + 4, -2938, CARVE)          # the gate from the Prismazaal (open AIR)
+    S.box(-3, Y + 5, hz_ + hr, 3, Y + 5, -2938, "minecraft:polished_tuff")
     for k in range(6):
-        a = k * math.pi / 3 + math.pi / 6
+        a = k * math.pi / 3
         x, zz = round(hx_ + 17 * math.cos(a)), round(hz_ + 17 * math.sin(a))
         wx, wz = round(hx_ + (hr + 1) * math.cos(a)), round(hz_ + (hr + 1) * math.sin(a))
         S.box(wx - 1, Y, wz - 1, wx + 1, Y + 6, wz + 1, CARVE)
@@ -1222,7 +1225,7 @@ def spiegelburcht(W, K, P):
     sx, sz = 0, hz_ - 17
     S.box(sx - 1, Y, sz - 1, sx + 1, Y, sz + 1, "minecraft:calcite")
     S.set(sx, Y + 1, sz, "minecraft:polished_tuff_slab[type=bottom,waterlogged=false]")
-    P["burcht_splinter"] = [sx, Y + 1, sz + 2]
+    P["burcht_splinter"] = [sx, Y, sz + 2]
     P["arena_spiegelzucht"] = [hx_, Y, hz_]
     P["arena_spiegelzucht_straal"] = [hr, 0, 0]
     P["arena_spiegelzucht_deur"] = [0, Y, -2937]

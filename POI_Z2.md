@@ -169,9 +169,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `arena_boormeester_deur` | -500, 66, -2779 |
 | `arena_boormeester_straal` | 20, 0, 0 |
 | `arena_galmwolf` | 430, 121, -2280 |
-| `arena_galmwolf_bord` | 393, 121, -2276 |
-| `arena_galmwolf_deur` | 392, 121, -2280 |
-| `arena_spiegelzucht` | 0, 176, -2961 |
+| `arena_galmwolf_bord` | 395, 121, -2276 |
+| `arena_galmwolf_deur` | 394, 124, -2280 |
+| `arena_spiegelzucht` | 0, 176, -2963 |
 | `arena_spiegelzucht_bord` | 4, 176, -2936 |
 | `arena_spiegelzucht_deur` | 0, 176, -2937 |
 | `arena_spiegelzucht_straal` | 22, 0, 0 |
@@ -187,12 +187,12 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `galmwolf_pilaar_6` | 420, 121, -2296 |
 | `galmwolf_pilaar_7` | 434, 121, -2299 |
 | `galmwolf_pilaar_8` | 446, 121, -2290 |
-| `spiegelzucht_spiegel_1` | 15, 176, -2952 |
-| `spiegelzucht_spiegel_2` | 0, 176, -2944 |
-| `spiegelzucht_spiegel_3` | -15, 176, -2952 |
-| `spiegelzucht_spiegel_4` | -15, 176, -2970 |
-| `spiegelzucht_spiegel_5` | 0, 176, -2978 |
-| `spiegelzucht_spiegel_6` | 15, 176, -2970 |
+| `spiegelzucht_spiegel_1` | 17, 176, -2963 |
+| `spiegelzucht_spiegel_2` | 9, 176, -2948 |
+| `spiegelzucht_spiegel_3` | -8, 176, -2948 |
+| `spiegelzucht_spiegel_4` | -17, 176, -2963 |
+| `spiegelzucht_spiegel_5` | -9, 176, -2978 |
+| `spiegelzucht_spiegel_6` | 9, 176, -2978 |
 
 ## De Spiegelburcht (dungeon): door, rooms, gates (open AIR, bazen fills), puzzle spots
 
@@ -201,7 +201,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `burcht_lichtkamer` | 0, 176, -2890 |
 | `burcht_prismazaal` | 0, 176, -2928 |
 | `burcht_spiegelgang` | 0, 176, -2909 |
-| `burcht_splinter` | 0, 177, -2976 |
+| `burcht_splinter` | 0, 176, -2978 |
 | `burcht_trap_voet` | 0, 151, -2807 |
 | `burcht_voorhal` | 0, 176, -2868 |
 | `burcht_voorplein` | 0, 176, -2843 |
@@ -268,16 +268,16 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `uitkijk_galmtop` | 520, 221, -2585 |
-| `uitkijk_kloofkijk` | -210, 208, -2930 |
-| `uitkijk_meerkijk` | -540, 157, -2060 |
+| `uitkijk_galmtop` | 518, 221, -2583 |
+| `uitkijk_kloofkijk` | -212, 208, -2928 |
+| `uitkijk_meerkijk` | -542, 157, -2058 |
 
 ## De Galmhellingen
 
 | id | x, y, z |
 |---|---|
 | `galm_lawine_1` | 500, 168, -2640 |
-| `galm_lawine_1_voet` | 360, 149, -2430 |
+| `galm_lawine_1_voet` | 360, 152, -2430 |
 | `galm_lawine_2` | 590, 158, -2380 |
 | `galm_lawine_2_voet` | 500, 145, -2120 |
 | `galm_lawine_3` | 560, 134, -2050 |
@@ -317,20 +317,20 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `boortoren_2_top` | 130, 157, -2822 |
 | `boortoren_3` | 400, 136, -2744 |
 | `boortoren_3_top` | 400, 156, -2744 |
-| `brug_1_noord` | -430, 139, -2781 |
-| `brug_1_zuid` | -430, 138, -2734 |
-| `brug_2_noord` | -180, 141, -2797 |
-| `brug_2_zuid` | -180, 140, -2750 |
-| `brug_3_noord` | 0, 151, -2807 |
-| `brug_3_zuid` | 0, 150, -2765 |
-| `brug_4_noord` | 220, 142, -2810 |
-| `brug_4_zuid` | 220, 142, -2758 |
-| `brug_5_noord` | 460, 132, -2791 |
-| `brug_5_zuid` | 460, 132, -2750 |
-| `kloof_trap_1` | -399, 66, -2753 |
-| `kloof_trap_2` | -109, 66, -2764 |
-| `kloof_trap_3` | 161, 66, -2763 |
-| `kloof_trap_4` | 421, 66, -2763 |
+| `brug_1_noord` | -430, 139, -2782 |
+| `brug_1_zuid` | -430, 137, -2733 |
+| `brug_2_noord` | -180, 142, -2798 |
+| `brug_2_zuid` | -180, 139, -2749 |
+| `brug_3_noord` | 0, 151, -2808 |
+| `brug_3_zuid` | 0, 151, -2764 |
+| `brug_4_noord` | 220, 143, -2811 |
+| `brug_4_zuid` | 220, 142, -2757 |
+| `brug_5_noord` | 460, 132, -2792 |
+| `brug_5_zuid` | 460, 133, -2749 |
+| `kloof_trap_1` | -399, 65, -2755 |
+| `kloof_trap_2` | -109, 65, -2766 |
+| `kloof_trap_3` | 161, 66, -2765 |
+| `kloof_trap_4` | 421, 65, -2765 |
 
 ## Secrets
 
@@ -339,9 +339,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `geheim_boorplaats` | -500, 66, -2783 |
 | `geheim_burchtdak` | 10, 195, -2903 |
 | `geheim_galmgrot` | 566, 140, -1990 |
-| `geheim_galmgrot_ingang` | 555, 140, -1990 |
+| `geheim_galmgrot_ingang` | 555, 141, -1990 |
 | `geheim_ijsgrot` | -575, 122, -2400 |
-| `geheim_ijsgrot_ingang` | -586, 122, -2400 |
+| `geheim_ijsgrot_ingang` | -586, 121, -2400 |
 
 ## Landmarks
 
