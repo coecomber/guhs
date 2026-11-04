@@ -345,11 +345,19 @@ public abstract class VadsrijkMob extends Monster {
         int plof = plofTicks();
         if (plof >= 0) {
             entityData.set(PLOF, plof + 1);
-            if (plof % 8 == 0 && onGround()) {   // happy hops away from where it was beaten
+            if (plof < 30 && plof % 8 == 0 && onGround()) {   // happy hops away from where it was beaten
                 double a = getYRot() * Math.PI / 180;
                 setDeltaMovement(-Math.sin(a) * 0.3, 0.42, Math.cos(a) * 0.3);
+            } else if (plof >= 30 && plof % 14 == 0 && onGround() && level() instanceof ServerLevel sl0) {   // then happy hops around
+                double a = getRandom().nextDouble() * Math.PI * 2;
+                setYRot((float) Math.toDegrees(Math.atan2(-Math.cos(a), Math.sin(a))));
+                setYBodyRot(getYRot());
+                setDeltaMovement(Math.cos(a) * 0.15, 0.38, Math.sin(a) * 0.15);
+                if (getRandom().nextInt(3) == 0) {
+                    sl0.sendParticles(ParticleTypes.HEART, getX(), getY() + getBbHeight() + 0.2, getZ(), 1, 0.2, 0.1, 0.2, 0);
+                }
             }
-            if (plof > 30) {
+            if (plof > plofDuur()) {
                 if (level() instanceof ServerLevel sl) {
                     sl.sendParticles(ParticleTypes.CHERRY_LEAVES, getX(), getY() + 0.3, getZ(), 10, 0.3, 0.2, 0.3, 0.02);
                 }
@@ -360,6 +368,11 @@ public abstract class VadsrijkMob extends Monster {
         if (affixen.contains(Affix.SCHILDEND) && tickCount % 200 == 0) {
             Statussen.geef(this, Status.KNUFFELSCHILD, 100, maxVads() * 0.15, this);
         }
+    }
+
+    /** How long (ticks) it stays visible, cheered up and hopping, after the plof before it vanishes. */
+    protected int plofDuur() {
+        return 30;
     }
 
     /** Standing still (no goals run; physics go on): after the plof, while stunned; bosses also during their intro. */

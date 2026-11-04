@@ -1,0 +1,76 @@
+# Het Vadsrijk fix round 1 "leven": mob density in the Klodderweide, the Sporenwoud and the Druipgrotten (surface + caves),
+# the ambient critters, and the numbers (awake spawners, alive per area, entities) via /guhs vadsrijk wezens spawners (also in the log).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_leven.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section klodderweide
+/guhs vadsrijk
+wait 400
+waitrender 300
+/tp @s 300 64 -20
+wait 200
+waitrender 300
+/tp @s 300 92 -20
+look 135 25
+wait 100
+shot l_weide_boven gui
+/tp @s 330 72 -40
+look 160 10
+wait 60
+shot l_weide_pad gui
+/guhs vadsrijk wezens spawners
+/tick query
+wait 40
+shot l_weide_getallen gui
+
+section sporenwoud
+/tp @s -350 72 120
+wait 200
+waitrender 300
+look 45 10
+wait 100
+shot l_woud_pad gui
+/tp @s -400 110 170
+look 135 35
+wait 80
+shot l_woud_boven gui
+/guhs vadsrijk wezens spawners
+/tick query
+wait 40
+shot l_woud_getallen gui
+/time set 15000
+wait 100
+/tp @s -350 72 120
+look 45 5
+wait 60
+shot l_woud_nacht gui
+/time set 1000
+
+section druipgrotten
+/tp @s -230 100 -270
+wait 200
+waitrender 300
+look 135 25
+wait 100
+shot l_grot_boven gui
+/guhs vadsrijk wereld plek grot_knopen.N1
+wait 160
+waitrender 200
+look 90 5
+wait 80
+shot l_grot_knoop gui
+look -90 5
+wait 20
+shot l_grot_knoop2 gui
+/tp @s -356 48 -343
+wait 80
+shot l_grot_gang gui
+/guhs vadsrijk wezens spawners
+/tick query
+wait 40
+shot l_grot_getallen gui

@@ -94,6 +94,22 @@ public final class WezensCommando {
                 .then(Commands.literal("spawners").executes(c -> {
                     c.getSource().sendSuccess(() -> Component.translatable("vadsrijk.wezens.cmd.spawners", WezensSpawners.aantalOppervlak(),
                             WezensSpawners.aantalVloer()), false);
+                    // live numbers (fix round 1): awake spawners, alive per area, plan per area, entities in the level
+                    ServerLevel vr = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(c.getSource().getServer());
+                    int alles = 0, wezens = 0;
+                    if (vr != null) {
+                        for (var e : vr.getAllEntities()) {
+                            alles++;
+                            if (e instanceof RijkWezen) {
+                                wezens++;
+                            }
+                        }
+                    }
+                    String tekst = "Wakker: " + nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners.laatstActief + " spawners, levend " + nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners.laatstLevend
+                            + " " + nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners.LAATST_PER_GEBIED + " | plan " + WezensSpawners.PLAN + " | entiteiten " + alles
+                            + " (wezens " + wezens + ")";
+                    c.getSource().sendSuccess(() -> Component.literal(tekst), false);
+                    com.mojang.logging.LogUtils.getLogger().info("[leven] {}", tekst);
                     return 1;
                 }))));
     }

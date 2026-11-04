@@ -77,6 +77,7 @@ public final class WezensClient {
             e.registerEntityRenderer(WezensRegistry.DRAAK.get(), DraakRenderer::new);
         });
         NeoForge.EVENT_BUS.addListener((ItemTooltipEvent e) -> setRegels(e));
+        SfeerClient.init();
     }
 
     private static <T extends RijkWezen> void wezen(EntityRenderersEvent.RegisterRenderers e, EntityType<T> type, String model, String tex, float schaal,

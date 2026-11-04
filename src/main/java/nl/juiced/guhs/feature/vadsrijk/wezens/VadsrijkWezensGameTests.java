@@ -33,9 +33,11 @@ import nl.juiced.guhs.gametest.GuhTest;
  */
 public class VadsrijkWezensGameTests {
     private static final String BATCH = "vadsrijk_wezens";
+    /** Without mock players (a spawner never spawns within 12 of a player). */
+    private static final String BATCH_LEVEN = "vadsrijk_wezens_leven";
 
     /** The floor-search spawner puts a cave creature ON the cave floor (not on the roof) with a level in range. */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH_LEVEN)
     public static void grotSpawnerVindtDeVloer(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         for (int x = 0; x < 5; x++) {
@@ -56,7 +58,7 @@ public class VadsrijkWezensGameTests {
     }
 
     /** A Moederklodder is always an elite; cheering her up = the plof (no death) and three kloddertjes hop out. */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 300)
     public static void moederklodderPloftEnSplitst(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         ServerPlayer p = GuhMockPlayer.of(helper);
@@ -69,7 +71,7 @@ public class VadsrijkWezensGameTests {
         helper.assertTrue(kleintjes.size() == 3, "three kloddertjes, got " + kleintjes.size());
         helper.assertTrue(kleintjes.stream().noneMatch(Klodders.Klodder::geplofd), "the kloddertjes are still ontvadst");
         kleintjes.forEach(net.minecraft.world.entity.Entity::discard);
-        helper.runAfterDelay(40, () -> {
+        helper.runAfterDelay(230, () -> {
             helper.assertTrue(m.isRemoved(), "hopped away and vanished");
             helper.succeed();
         });
@@ -142,6 +144,63 @@ public class VadsrijkWezensGameTests {
         p.setItemSlot(EquipmentSlot.HEAD, Rollen.stack(Rollen.rol(BasisTypes.van("zwamhoed"), 3, Zeldzaamheid.GEWOON, r)));
         helper.assertTrue(SetBonussen.stukken(p, SetBonussen.KLODDER) == 3 && SetBonussen.stukken(p, SetBonussen.ZWAM) == 1, "3 + 1");
         helper.assertTrue(Set.copyOf(SetBonussen.KLODDERSET).size() == 4, "4 distinct");
+        helper.succeed();
+    }
+
+    /**
+     * Fix round 1 ("leven"): a waking spawner fills up at once but never over its max, the area room caps it, a beaten mob
+     * comes back only after the respawn time, nothing spawns within the safe radius of a campfire, mushroom caps are no
+     * ground, and the zone plan has MMO density (the sums of the spawner maxima per area).
+     */
+    @GuhTest(template = "empty", batch = BATCH_LEVEN, timeoutTicks = 200)
+    public static void spawnerCapsEnVeiligeStraal(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int x = 0; x < 9; x++) {
+            for (int z = 0; z < 9; z++) {
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.STONE.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 6, z), Blocks.STONE.defaultBlockState());
+            }
+        }
+        BlockPos midden = helper.absolutePos(new BlockPos(4, 2, 4));
+        Spawners.Spawner s = new Spawners.Spawner("wezens:test_caps", midden, 3, WezensRegistry.KLODDER, 3, 100, 1, 2, Element.WATER, 0)
+                .grot(midden.getY() - 3, midden.getY() + 2);
+        Spawners.vergeetToestand();
+        long nu = sl.getGameTime();
+        int n = Spawners.stap(sl, s, 0, nu, 100);
+        helper.assertTrue(n == 3, "a fresh spawner fills up at once: " + n);
+        List<VadsrijkMob> mobs = sl.getEntitiesOfClass(VadsrijkMob.class, new AABB(midden).inflate(8), m -> "wezens:test_caps".equals(m.spawner));
+        helper.assertTrue(mobs.size() == 3 && Spawners.levend(sl, s) == 3, "3 alive: " + mobs.size());
+        helper.assertTrue(mobs.stream().allMatch(m -> m.getBlockY() == midden.getY()), "all on the floor");
+        helper.assertTrue(Spawners.stap(sl, s, 3, nu + 20, 100) == 0, "never over the max");
+        mobs.get(0).discard();
+        helper.assertTrue(Spawners.stap(sl, s, 2, nu + 40, 100) == 0, "a beaten one waits for its respawn time");
+        helper.assertTrue(Spawners.stap(sl, s, 2, nu + 60, 100) == 0, "still waiting");
+        helper.assertTrue(Spawners.stap(sl, s, 2, nu + 160, 100) == 1, "back after the respawn time");
+        // the area room
+        Spawners.Spawner s2 = new Spawners.Spawner("wezens:test_caps2", midden, 3, WezensRegistry.KLODDER, 4, 100, 1, 2, Element.WATER, 0)
+                .grot(midden.getY() - 3, midden.getY() + 2);
+        helper.assertTrue(Spawners.stap(sl, s2, 0, nu, 1) == 1, "the area cap allows only 1");
+        // the safe radius (a campfire spot right here)
+        Spawners.VEILIGE_PLEKKEN.add(midden);
+        try {
+            for (int i = 0; i < 20; i++) {
+                helper.assertTrue(Spawners.spawn(sl, s) == null, "nothing within the safe radius of a campfire");
+            }
+        } finally {
+            Spawners.VEILIGE_PLEKKEN.remove(midden);
+        }
+        helper.assertTrue(Spawners.slechteVloer(Blocks.RED_MUSHROOM_BLOCK.defaultBlockState()) && Spawners.slechteVloer(Blocks.OAK_LEAVES.defaultBlockState())
+                && !Spawners.slechteVloer(Blocks.GRASS_BLOCK.defaultBlockState()) && !Spawners.slechteVloer(Blocks.DIRT_PATH.defaultBlockState()), "ground test");
+        sl.getEntitiesOfClass(VadsrijkMob.class, new AABB(midden).inflate(8)).forEach(net.minecraft.world.entity.Entity::discard);
+        Spawners.vergeetToestand();
+        // the plan
+        var plan = WezensSpawners.PLAN;
+        com.mojang.logging.LogUtils.getLogger().info("[leven] spawner plan (sum of maxima per area): {} ({} surface + {} floor-search spawners)", plan,
+                WezensSpawners.aantalOppervlak(), WezensSpawners.aantalVloer());
+        helper.assertTrue(plan.getOrDefault("klodderweide", 0) >= 80 && plan.get("klodderweide") <= 130, "klodderweide dense: " + plan);
+        helper.assertTrue(plan.getOrDefault("sporenwoud", 0) >= 85 && plan.get("sporenwoud") <= 130, "sporenwoud dense: " + plan);
+        helper.assertTrue(plan.getOrDefault("druipgrotten", 0) >= 80 && plan.get("druipgrotten") <= 140, "druipgrotten dense: " + plan);
+        helper.assertTrue(plan.getOrDefault("zwamtempel", 0) + plan.getOrDefault("ring", 0) >= 22, "temple path: " + plan);
         helper.succeed();
     }
 }

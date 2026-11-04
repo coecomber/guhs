@@ -83,7 +83,7 @@ public final class Anderen {
         protected void registerGoals() {
             this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 10f));
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+            this.targetSelector.addGoal(2, new RijkWezen.Aggro(this));
         }
 
         @Override
@@ -109,7 +109,7 @@ public final class Anderen {
                 return;
             }
             LivingEntity doel = getTarget();
-            int grond = sl.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, getBlockX(), getBlockZ());
+            int grond = grondOnder(sl);
             Vec3 wil;
             if (doel != null) {
                 hoek += 0.04;
@@ -123,7 +123,10 @@ public final class Anderen {
                             p -> klap(p, 1.0, Schade.Soort.AFSTAND, "mosbal"));
                 }
             } else {
-                if (tickCount % 60 == 0) {
+                Vec3 thuis = thuisDoel();
+                if (thuis != null) {
+                    hoek = Math.atan2(thuis.z - getZ(), thuis.x - getX());
+                } else if (tickCount % 60 == 0) {
                     hoek = getRandom().nextDouble() * Math.PI * 2;
                 }
                 wil = position().add(Math.cos(hoek) * 2, 0, Math.sin(hoek) * 2);
@@ -147,6 +150,23 @@ public final class Anderen {
                 doHurtTarget(sl, doel);
                 aanvalPauze = 30;
             }
+        }
+
+        /** The floor under it (looking down at most 10 blocks, so under a giant mushroom cap it is the forest floor, not the cap). */
+        private int grondOnder(ServerLevel sl) {
+            BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+            for (int dy = 0; dy <= 10; dy++) {
+                m.set(getBlockX(), getBlockY() - dy, getBlockZ());
+                if (!sl.getBlockState(m).getCollisionShape(sl, m).isEmpty() || !sl.getFluidState(m).isEmpty()) {
+                    return m.getY() + 1;
+                }
+            }
+            return sl.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, getBlockX(), getBlockZ());
+        }
+
+        @Override
+        protected boolean gebruiktNavigatie() {
+            return false;
         }
 
         /** The dodge: 30 % chance when it is ready (every 3 s at most): whoosh, 3 blocks to the side. */
@@ -214,7 +234,7 @@ public final class Anderen {
             this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8f));
             this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(Knaag.class));
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+            this.targetSelector.addGoal(2, new RijkWezen.Aggro(this));
         }
 
         @Override

@@ -156,6 +156,10 @@ public final class WezensRegistry {
             Effecten.tick();
             DraakVlucht.tick();
             WezensCommando.Later.tick();
+            var vr = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(e.getServer());
+            if (vr != null) {
+                Sfeer.tick(vr);
+            }
             // (the spawners all tick in kern since the integration: Spawners.grot)
         });
         NeoForge.EVENT_BUS.addListener(WezensCommando::register);
