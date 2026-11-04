@@ -324,7 +324,7 @@ public final class Klodders {
             if (!level().isClientSide() && aanPlafond() && !geplofd()) {
                 setDeltaMovement(Vec3.ZERO);
                 if (tickCount % 10 == 0) {
-                    for (Player p : level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(2.5, 10, 2.5),
+                    for (Player p : level().getEntitiesOfClass(Player.class, getBoundingBox().inflate(2.5, 14, 2.5),
                             p -> !p.isCreative() && !p.isSpectator() && p.getY() < getY())) {
                         laatVallen(p);
                         break;
@@ -371,7 +371,7 @@ public final class Klodders {
 
         private void naarPlafond() {
             BlockPos b = blockPosition();
-            for (int dy = 2; dy <= 8; dy++) {
+            for (int dy = 2; dy <= 12; dy++) {
                 BlockPos boven = b.above(dy);
                 if (!level().getBlockState(boven).getCollisionShape(level(), boven).isEmpty()) {
                     setPos(getX(), boven.getY() - getBbHeight() - 0.01, getZ());

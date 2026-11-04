@@ -32,7 +32,12 @@ public abstract class Slijmwezen extends RijkWezen {
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8f));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new RijkWezen.Aggro(this));
+    }
+
+    @Override
+    protected boolean gebruiktNavigatie() {
+        return false;
     }
 
     @Override
@@ -109,6 +114,15 @@ public abstract class Slijmwezen extends RijkWezen {
             lookAt(doel, 30, 30);
             hopPauze = hopTijd();
             playSound(piepGeluid(), 0.4f, 1.0f + getRandom().nextFloat() * 0.4f);
+        } else if (thuisDoel() != null) {
+            // back to its camp / along its patrol route: a steady hop every hop time
+            Vec3 naar = thuisDoel().subtract(position()).multiply(1, 0, 1);
+            double a = Math.atan2(naar.z, naar.x);
+            double k = opWegTerug() ? 0.3 : 0.22;
+            setDeltaMovement(Math.cos(a) * k, 0.38, Math.sin(a) * k);
+            setYRot((float) Math.toDegrees(Math.atan2(-Math.cos(a), Math.sin(a))));
+            setYBodyRot(getYRot());
+            hopPauze = hopTijd() + 4;
         } else if (getRandom().nextInt(5) == 0) {
             double a = getRandom().nextDouble() * Math.PI * 2;
             setDeltaMovement(Math.cos(a) * 0.18, 0.36, Math.sin(a) * 0.18);

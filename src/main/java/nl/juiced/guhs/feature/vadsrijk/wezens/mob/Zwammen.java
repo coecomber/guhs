@@ -62,7 +62,7 @@ public final class Zwammen {
             this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8f));
             this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+            this.targetSelector.addGoal(2, new RijkWezen.Aggro(this));
         }
 
         /** The direction it looks in (flat). */
@@ -514,7 +514,7 @@ public final class Zwammen {
             this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 12f));
             this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
             this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers());
-            this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+            this.targetSelector.addGoal(2, new RijkWezen.Aggro(this));
         }
 
         @Override

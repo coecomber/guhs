@@ -1,16 +1,18 @@
 package nl.juiced.guhs.feature.vadsrijk.wezens;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.core.BlockPos;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
 
 /**
- * Every coordinate the wezens slice uses (SLICE_BRIEF: one class). Integration 1.10.0: the caves and the temple are aligned with
- * the real map (WereldPlekken grot_knopen / kristalkamer / zwamtempel_voorhal, POI v1); before: POI_VADSRIJK.md v0, section 10
- * "Mob spawn zones" (+ the arenas, ponds, slime hill and temple rooms it lists). Integration aligns them with v1.
- * <p>Surface spots go to kern's heightmap spawners (only x/z matter). Cave and temple spots use the slice's floor-search
- * spawners ({@link WezensSpawners}): there the y must be INSIDE the cave / temple room (the floor is searched from y down to
- * y-24, then up to y+6). The cave y values are still a guess (POI v0: "caves under y 75 around the 3 entrances").
+ * Every coordinate the wezens slice uses (SLICE_BRIEF: one class). Fix round 1 ("leven"): the spawner plan
+ * ({@link WezensSpawners}) is built from the real map: the generator's paths, ponds, cave tunnels and knots below are copies
+ * of {@code tools/vadsrijk/wereld/kaart.py} (PADEN, VIJVERS, ARENA, SLAAPHEUVEL, GROT_INGANGEN, BERG ramp) and
+ * {@code bouwsels.py} (GROT_KNOPEN, the tunnel wiggle). Keep them in step when the map layout changes. Stand heights come
+ * from {@link WereldPlekken} where it has them.
  */
 public final class WezensPlekken {
     private WezensPlekken() {
@@ -20,50 +22,117 @@ public final class WezensPlekken {
         return new BlockPos(x, Vadsrijk.GROND + 1, z);
     }
 
-    private static BlockPos p(int x, int y, int z) {
-        return new BlockPos(x, y, z);
-    }
-
-    /** A spot of the real map (WereldPlekken), moved a little; for cave spawners the y must be the stand y inside the cave. */
     private static BlockPos w(String id, int dx, int dz) {
         return WereldPlekken.plek(id).offset(dx, 0, dz);
     }
 
-    // ---- Klodderweide (POI: (180,-280)..(580,380) minus the Koning Klodder arena (410,90) r40 and the slime hill (300,300) r50),
-    //      lv 1-6. Bubbelklodders at the pond rims: ponds (330,-70) r30, (470,160) r25, (250,260) r25, (520,40) r20.
-    public static final BlockPos[] KLODDER = {p(250, -130), p(420, -210), p(330, 160), p(490, 30), p(390, 290), p(545, -100), p(215, 190)};
-    public static final BlockPos[] BUBBELKLODDER = {p(330, -28), p(470, 196), p(212, 262), p(520, 70)};
-    public static final BlockPos[] STUITERKLODDER = {p(455, -130), p(540, 320), p(350, 200)};
+    // ---- the paths (kaart.py PADEN, world x/z) -----------------------------------------------------------------------------
+    private static final String[] PAD_NAMEN = {"weide", "woud", "grotten", "grotten2", "grotten3", "grotten4", "berg", "weide2", "weide3", "slijm",
+            "slijm2", "woud2", "druip"};
+    private static final int[][][] PADEN = {
+            {{30, -40}, {90, -40}, {220, -80}, {300, -20}, {360, 30}, {374, 90}},
+            {{-60, 20}, {-130, 20}, {-220, 40}, {-350, 120}, {-430, 230}, {-300, 340}},
+            {{-60, -70}, {-110, -120}, {-180, -220}, {-260, -300}, {-300, -220}},
+            {{-260, -300}, {-420, -300}},
+            {{-260, -300}, {-180, -360}, {-180, -480}},
+            {{-260, -300}, {-380, -400}, {-460, -460}},
+            {{205, -265}, {230, -280}, {400, -292}, {410, -305}, {400, -322}, {280, -345}, {272, -360}, {285, -372}, {330, -380}, {330, -386}},
+            {{220, -80}, {230, -130}, {330, -200}},
+            {{360, 30}, {480, -80}, {520, -240}},
+            {{374, 90}, {410, 200}, {460, 380}},
+            {{410, 200}, {330, 260}, {300, 270}},
+            {{-220, 40}, {-300, -40}, {-420, 40}, {-510, -40}},
+            {{-180, -360}, {-100, -510}},
+    };
+
+    public static List<int[][]> paden(String... namen) {
+        List<int[][]> uit = new ArrayList<>();
+        for (String n : namen) {
+            for (int i = 0; i < PAD_NAMEN.length; i++) {
+                if (PAD_NAMEN[i].equals(n)) {
+                    uit.add(PADEN[i]);
+                }
+            }
+        }
+        return uit;
+    }
+
+    // ---- Klodderweide ------------------------------------------------------------------------------------------------------
+    /** Ponds (x, z, r) (kaart.py VIJVERS). */
+    public static final int[][] VIJVERS = {{330, -70, 30}, {470, 160, 25}, {250, 260, 22}, {520, 40, 20}, {300, 120, 14}};
+    /** No-go circles (x, z, r): the Koning Klodder arena, the slime hill with the secret. */
+    public static final int[] ARENA_KONING = {410, 90, 44};
+    public static final int[] SLAAPHEUVEL = {300, 300, 50};
     public static final BlockPos[] MOEDERKLODDER = {p(230, 40), p(560, -240)};
 
-    // ---- Sporenwoud (POI: (-580,-140)..(-180,380)), lv 6-13 ---------------------------------------------------------------------
-    public static final BlockPos[] HOEDJESBOL = {p(-240, -60), p(-300, 180), p(-420, 40), p(-520, 260), p(-210, 330)};
-    public static final BlockPos[] SPORENPUFFER = {p(-360, -80), p(-480, 160), p(-260, 320), p(-540, 20)};
-    public static final BlockPos[] ZWAMWACHTER = {p(-400, 280), p(-540, -60), p(-320, 60)};
-    public static final BlockPos[] MOSGEEST = {p(-460, -110), p(-250, 100), p(-560, 340), p(-380, 200)};
+    // ---- Druipgrotten ------------------------------------------------------------------------------------------------------
+    /** Cave knots: centre x, y, z and radius (bouwsels.py GROT_KNOPEN; the floor is at about y - 0.7 r). */
+    public static final int[][] KNOPEN = {{-320, 52, -300, 11}, {-400, 48, -380, 12}, {-260, 50, -420, 10}, {-460, 46, -470, 9}};
+    /** The three cave mouths (x, z) (kaart.py GROT_INGANGEN), each leading to knot N1, N2, N3. */
+    public static final int[][] GROT_INGANGEN = {{-300, -220}, {-420, -300}, {-180, -360}};
 
-    // ---- Druipgrotten (POI: surface (-580,-580)..(-180,-180); caves under y 75 around the entrances (-300,-220), (-420,-300),
-    //      (-180,-360); the hidden crystal chamber (-490,52,-520)), lv 12-18 --------------------------------------------------------
-    /** A guess for "inside the caves" (floor search goes 24 down from here). */
-    public static final int GROT_Y = 62;
-    public static final BlockPos[] DRUIPSLIJM = {w("grot_knopen.N1", 0, 0), w("grot_knopen.N2", 0, 0), w("grot_knopen.N3", 0, 0),
-            w("grot_knopen.N4", 0, 0)};
-    public static final BlockPos[] KRISTALKLODDER_GROT = {w("kristalkamer", 3, 3), w("grot_knopen.N4", 4, 4), w("grot_knopen.N2", -4, 4)};
-    public static final BlockPos[] KRISTALKLODDER = {p(-520, -440), p(-300, -480)};
-    public static final BlockPos[] KNAAG = {p(-240, -400), p(-380, -250), p(-480, -420), p(-320, -560), p(-540, -230)};
-    public static final BlockPos[] KNAAG_GROT = {w("grot_knopen.N1", 4, -4), w("grot_knopen.N3", -4, 4)};
-    public static final BlockPos[] GLIMZWAM = {p(-400, -400), p(-260, -300), p(-500, -300)};
-    public static final BlockPos[] GLIMZWAM_GROT = {w("kristalkamer", -3, -3)};
+    /** A tunnel from a to b (centre line), with the generator's sideways wiggle. */
+    public record Gang(double ax, double ay, double az, double bx, double by, double bz) {
+        public double lengte() {
+            return Math.sqrt((bx - ax) * (bx - ax) + (by - ay) * (by - ay) + (bz - az) * (bz - az));
+        }
 
-    // ---- Zwamtempel (POI: interior x 280..380, z -500..-395, floor stand y 152; NOT the Opperzwam hall (330,152,-470) r22;
-    //      the mountain path (180,-580)..(580,-310)), lv 18-20 ---------------------------------------------------------------------
-    public static final int TEMPEL_Y = 152;
-    /** The voorhal (x 314..346, z -404..-394); the puzzle rooms and the Ridderzaal are bazen's (its waves). */
+        /** The centre at t (0..1), as in bouwsels.grotten. */
+        public int[] punt(double t) {
+            double L = Math.max(1, lengte());
+            double w = Math.sin(t * Math.PI * 3) * 5;
+            double x = ax + (bx - ax) * t + w * (bz - az) / L;
+            double y = ay + (by - ay) * t;
+            double z = az + (bz - az) * t - w * (bx - ax) / L;
+            return new int[] {(int) Math.round(x), (int) Math.floor(y), (int) Math.round(z)};
+        }
+    }
+
+    public static List<Gang> gangen() {
+        List<Gang> uit = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            BlockPos in = WereldPlekken.plek("grot_ingangen." + (i + 1));   // stand y = terrain + 1; the tunnel starts at terrain - 1
+            int[] k = KNOPEN[i];
+            uit.add(new Gang(in.getX(), in.getY() - 2, in.getZ(), k[0], k[1], k[2]));
+        }
+        int[][] paren = {{0, 1}, {1, 2}, {1, 3}, {0, 2}};
+        for (int[] pr : paren) {
+            int[] a = KNOPEN[pr[0]], b = KNOPEN[pr[1]];
+            uit.add(new Gang(a[0], a[1], a[2], b[0], b[1], b[2]));
+        }
+        return uit;
+    }
+
+    // ---- Zwamtempel ----------------------------------------------------------------------------------------------------------
+    public static final int[][] BERGPAD = PADEN[6];
+    /** kaart.py: the ramp runs from top block y 72 at the fossil bridge to the plateau (151). */
+    public static final int BERG_VOET = 72, TEMPEL_PLATEAU = 151;
+
+    /** The top-block height of the mountain path at fraction f (0..1) of its length. */
+    public static double bergY(double f) {
+        return BERG_VOET + (TEMPEL_PLATEAU - BERG_VOET) * Math.max(0, Math.min(1, f));
+    }
+
+    /** How far along the mountain path (in blocks) the point nearest to (x, z) lies. */
+    public static double bergLangs(double x, double z) {
+        double best = Double.MAX_VALUE, uit = 0, acc = 0;
+        for (int i = 0; i + 1 < BERGPAD.length; i++) {
+            double ax = BERGPAD[i][0], az = BERGPAD[i][1], dx = BERGPAD[i + 1][0] - ax, dz = BERGPAD[i + 1][1] - az;
+            double L = Math.hypot(dx, dz);
+            double t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (L * L)));
+            double d = Math.hypot(x - (ax + t * dx), z - (az + t * dz));
+            if (d < best) {
+                best = d;
+                uit = acc + t * L;
+            }
+            acc += L;
+        }
+        return uit;
+    }
+
+    /** The voorhal (x 314..346, z -404..-394, stand y 152); the puzzle rooms and the Ridderzaal are bazen's (its waves). */
     public static final BlockPos[] TEMPELRIDDER = {w("zwamtempel_voorhal", -9, 0), w("zwamtempel_voorhal", 9, 0)};
     public static final BlockPos[] SPORENPRIESTER = {w("zwamtempel_voorhal", 0, -3)};
-    /** Outside, on the mountain path (surface). */
-    public static final BlockPos[] TEMPELRIDDER_PAD = {p(250, -350), p(450, -340), p(380, -560)};
-    public static final BlockPos[] SPORENPRIESTER_PAD = {p(300, -330)};
 
     // ---- Knuffelkamp: the Kampklodder's home at the rim of the camp pond (the Klodderreus arena ~(54,87,1069) r18) ------------
     public static final BlockPos KAMPKLODDER = new BlockPos(70, 87, 1052);

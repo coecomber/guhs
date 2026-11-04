@@ -15,6 +15,7 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.animation.object.PlayState;
 import com.geckolib.util.GeckoLibUtil;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -43,7 +44,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootBundel;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabel;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabellen;
 import nl.juiced.guhs.feature.vadsrijk.kern.mob.Affix;
+import nl.juiced.guhs.feature.vadsrijk.kern.mob.Spawners;
 import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
+import nl.juiced.guhs.feature.vadsrijk.wezens.WezensSpawners;
 
 /**
  * The base of every wezens-slice creature: a {@link VadsrijkMob} with a GeckoLib model, the shared animation set (idle / walk
@@ -66,6 +69,10 @@ public abstract class RijkWezen extends VadsrijkMob implements GeoEntity {
 
     protected RijkWezen(EntityType<? extends Monster> type, Level level) {
         super(type, level);
+        var volg = getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.FOLLOW_RANGE);
+        if (volg != null) {
+            volg.setBaseValue(Math.max(volg.getBaseValue(), LEIBAND + 4));   // the leash decides when a chase ends, not the follow range
+        }
     }
 
     protected static RawAnimation loop(String naam) {
@@ -187,6 +194,14 @@ public abstract class RijkWezen extends VadsrijkMob implements GeoEntity {
         if (geplofd()) {
             return;
         }
+        if ((tickCount + getId()) % 10 == 0 && leiband(sl)) {
+            return;
+        }
+        LivingEntity nuDoel = getTarget();
+        if (nuDoel instanceof Player p && vorigDoel == null) {
+            roepGroep(p);
+        }
+        vorigDoel = nuDoel;
         if (eliteZichtbaar() && tickCount % 10 == 0) {
             eliteDeeltjes(sl);
         }
@@ -197,6 +212,153 @@ public abstract class RijkWezen extends VadsrijkMob implements GeoEntity {
             if (eliteZichtbaar()) {
                 Tips.toon(p, "vadsrijk.wezens.tip.elite");
             }
+        }
+    }
+
+    // ---- leven (fix round 1): aggro range, leash, patrols, social aggro ------------------------------------------------------
+
+    /** How far a chase may take it from its spawner before it gives up, heals and walks home. */
+    public static final int LEIBAND = 30;
+    /** Aggro range per kind (simple class name); 0 = never starts a fight itself. */
+    private static final Map<String, Double> AGGRO = Map.ofEntries(Map.entry("Klodder", 9.0), Map.entry("Bubbelklodder", 12.0),
+            Map.entry("Stuiterklodder", 10.0), Map.entry("Moederklodder", 10.0), Map.entry("Druipslijm", 8.0), Map.entry("Kristalklodder", 9.0),
+            Map.entry("Hoedjesbol", 13.0), Map.entry("Sporenpuffer", 9.0), Map.entry("Zwamwachter", 8.0), Map.entry("Glimzwam", 0.0),
+            Map.entry("Tempelridder", 12.0), Map.entry("Sporenpriester", 15.0), Map.entry("Mosgeest", 14.0), Map.entry("Knaag", 14.0));
+
+    /** Until this tickCount it is walking home after a chase (ignores players that do not hit it). */
+    protected int terugTot;
+    @Nullable
+    private LivingEntity vorigDoel;
+
+    /** How close a player may come before it attacks on its own. */
+    public double aggroBereik() {
+        return AGGRO.getOrDefault(getClass().getSimpleName(), 10.0);
+    }
+
+    /** Cheered-up creatures stay ~10 s, hopping around happily (fix round 1: the user wants to see them be happy). */
+    @Override
+    protected int plofDuur() {
+        return 200;
+    }
+
+    public boolean opWegTerug() {
+        return terugTot > tickCount;
+    }
+
+    /**
+     * Every half second: lost mobs (far from home, or an old spawner id) vanish; a chase too far from home ends (heal, walk
+     * back); an idle mob outside its camp or on patrol walks to where it belongs. True = it was removed.
+     */
+    private boolean leiband(ServerLevel sl) {
+        if (spawner.isEmpty()) {
+            return false;
+        }
+        Spawners.Spawner sp = Spawners.van(spawner);
+        if (sp == null) {
+            if (spawner.startsWith("wezens:") && !spawner.startsWith("wezens:test")) {
+                discard();   // a creature of a spawner that no longer exists (an older plan)
+                return true;
+            }
+            return false;
+        }
+        double dx = getX() - (sp.centrum().getX() + 0.5), dz = getZ() - (sp.centrum().getZ() + 0.5), d = Math.sqrt(dx * dx + dz * dz);
+        LivingEntity doel = getTarget();
+        if (doel == null && d > sp.straal() + LEIBAND + 20 && tickCount > 100) {
+            discard();
+            return true;
+        }
+        if (doel != null && d > sp.straal() + LEIBAND) {
+            setTarget(null);
+            bijdrage.clear();
+            heal(maxVads());
+            terugTot = tickCount + 160;
+            sl.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + getBbHeight(), getZ(), 4, 0.3, 0.2, 0.3, 0);
+        }
+        if (getTarget() == null) {
+            Vec3 thuis = thuisDoel();
+            if (thuis != null && gebruiktNavigatie()) {
+                getNavigation().moveTo(thuis.x, thuis.y, thuis.z, opWegTerug() ? 1.25 : 0.8);
+            }
+        }
+        return false;
+    }
+
+    /** Walks with the vanilla navigation (slimes hop and the Mosgeest floats: they steer themselves with {@link #thuisDoel}). */
+    protected boolean gebruiktNavigatie() {
+        return true;
+    }
+
+    /**
+     * Where an idle creature should go now: the current end of its patrol route (the pair turns every 15 s), its camp when it
+     * strayed out of it, or null (wander freely).
+     */
+    @Nullable
+    public Vec3 thuisDoel() {
+        Spawners.Spawner sp = spawner.isEmpty() ? null : Spawners.van(spawner);
+        if (sp == null) {
+            return null;
+        }
+        BlockPos[] route = WezensSpawners.route(spawner);
+        if (route != null) {
+            BlockPos e = route[(int) ((level().getGameTime() / 300) % 2)];
+            double ex = e.getX() + 0.5 - getX(), ez = e.getZ() + 0.5 - getZ();
+            return ex * ex + ez * ez > 6 ? new Vec3(e.getX() + 0.5, getY(), e.getZ() + 0.5) : null;
+        }
+        double dx = getX() - (sp.centrum().getX() + 0.5), dz = getZ() - (sp.centrum().getZ() + 0.5);
+        if (dx * dx + dz * dz > (sp.straal() + 3.0) * (sp.straal() + 3.0) || opWegTerug() && dx * dx + dz * dz > 4) {
+            return new Vec3(sp.centrum().getX() + 0.5, getY(), sp.centrum().getZ() + 0.5);
+        }
+        return null;
+    }
+
+    /** Social aggro: the idle members of its group (same spawner group) within 12 blocks join the fight. */
+    private void roepGroep(Player p) {
+        if (spawner.isEmpty()) {
+            return;
+        }
+        String groep = WezensSpawners.groep(spawner);
+        for (RijkWezen o : level().getEntitiesOfClass(RijkWezen.class, getBoundingBox().inflate(12, 6, 12),
+                o -> o != this && !o.geplofd() && o.getTarget() == null && !o.spawner.isEmpty() && groep.equals(WezensSpawners.groep(o.spawner)))) {
+            o.vorigDoel = p;   // (no chain: it was called, it does not call again)
+            o.setTarget(p);
+        }
+    }
+
+    /** The target goal of every wezen: the nearest survival player within {@link #aggroBereik} that it can see (not while walking home). */
+    public static class Aggro extends net.minecraft.world.entity.ai.goal.target.TargetGoal {
+        private final RijkWezen w;
+        @Nullable
+        private Player kandidaat;
+
+        public Aggro(RijkWezen w) {
+            super(w, false);
+            this.w = w;
+            setFlags(EnumSet.of(Flag.TARGET));
+        }
+
+        @Override
+        public boolean canUse() {
+            double r = w.aggroBereik();
+            if (r <= 0 || w.opWegTerug() || w.geplofd() || w.getRandom().nextInt(5) != 0) {
+                return false;
+            }
+            kandidaat = null;
+            double best = r * r;
+            for (Player p : w.level().getEntitiesOfClass(Player.class, w.getBoundingBox().inflate(r, Math.min(r, 8), r),
+                    p -> !p.isCreative() && !p.isSpectator() && p.isAlive())) {
+                double d = p.distanceToSqr(w);
+                if (d <= best && w.hasLineOfSight(p)) {
+                    best = d;
+                    kandidaat = p;
+                }
+            }
+            return kandidaat != null;
+        }
+
+        @Override
+        public void start() {
+            w.setTarget(kandidaat);
+            super.start();
         }
     }
 
