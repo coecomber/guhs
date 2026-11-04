@@ -167,9 +167,9 @@ public class VadsrijkKlassenGameTests {
         SpelerData d = Spelers.data(p);
         // ranged: a jager with a pluisboog shoots every 22 ticks, a crossbow every 40
         d.klasse = Klassen.JAGER;
-        p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van(Wapens.PLUISBOOG), 1, Zeldzaamheid.GEWOON, p.getRandom())));
+        zonderTempoBonus(p, Wapens.PLUISBOOG);
         helper.assertTrue(Basisaanval.interval(p) == 22, "boog interval " + Basisaanval.interval(p));
-        p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van(Wapens.SNOEPKRUISBOOG), 1, Zeldzaamheid.GEWOON, p.getRandom())));
+        zonderTempoBonus(p, Wapens.SNOEPKRUISBOOG);
         helper.assertTrue(Basisaanval.interval(p) == 40, "kruisboog interval " + Basisaanval.interval(p));
         // melee: the pluishamer hits once, a second click right after does nothing, even with a full vanilla cooldown
         d.klasse = Klassen.RIDDER;
@@ -188,6 +188,16 @@ public class VadsrijkKlassenGameTests {
         p.resetAttackStrengthTicker();
         helper.assertTrue(!Schade.basisaanval(p, m) && m.vads() == na1, "without the vanilla cooldown charged: nothing");
         helper.succeed();
+    }
+
+    /** (integration) A rolled weapon may carry a random Aanvalssnelheid bonus (kern Bonussen pool): reroll until it has none. */
+    private static void zonderTempoBonus(ServerPlayer p, String type) {
+        for (int i = 0; i < 100; i++) {
+            p.setItemInHand(InteractionHand.MAIN_HAND, Rollen.stack(Rollen.rol(BasisTypes.van(type), 1, Zeldzaamheid.GEWOON, p.getRandom())));
+            if (Spelers.stats(p).get(nl.juiced.guhs.feature.vadsrijk.kern.Stat.AANVALSSNELHEID) == 0) {
+                return;
+            }
+        }
     }
 
     /** The DPS ratio melee 100 / ranged 70 / magic 85, and no basic hit one-shots a normal zone mob of the same level. */
