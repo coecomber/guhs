@@ -672,7 +672,8 @@ def stal(W, K, P):
             S.fill(x, g - 2, z, x, g - 1, z, "minecraft:dirt")
             S.set(x, g, z, "guhs:knuffelgras")
     x0, z0 = -158, -10
-    Z.huis(S, x0, g + 1, z0, 15, 13, 7, "east", Z.PALETTEN[3])
+    Z.huis(S, x0, g + 1, z0, 15, 13, 7, "east", Z.PALETTEN[3], tapijt=None)
+    S.fill(x0 + 1, g, z0 + 1, x0 + 8, g, z0 + 11, "minecraft:hay_block[axis=x]")      # stable floor: hay in the stalls
     for z in range(z0 + 1, z0 + 12):
         if z % 3 == 0:
             S.set(x0 + 2, g + 1, z, "minecraft:hay_block[axis=y]")
