@@ -26,6 +26,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone2.wezens.Z2WezensRegistry.register(modBus);   // zone 2 (z2-wezens)
         nl.juiced.guhs.feature.vadsrijk.momenten.MomentenRegistry.register(modBus);   // MOMENTEN-HOOK (fix round 1: wave + caravan)
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.biomen.BiomenRegistry.register(modBus);   // fix round 2: one biome per area
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.register(modBus);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.register(modBus);   // I-VOLTOOIING (Verkenningsboek)

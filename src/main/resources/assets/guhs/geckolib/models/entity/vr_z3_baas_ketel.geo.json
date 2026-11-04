@@ -1,0 +1,348 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.ketel",
+        "texture_width": 128,
+        "texture_height": 128,
+        "visible_bounds_width": 2,
+        "visible_bounds_height": 2,
+        "visible_bounds_offset": [
+          0,
+          0.5,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": []
+        },
+        {
+          "name": "ketel",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -8,
+                0,
+                -8
+              ],
+              "size": [
+                16,
+                14,
+                16
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    16,
+                    14
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    16,
+                    0
+                  ],
+                  "uv_size": [
+                    16,
+                    14
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    32,
+                    0
+                  ],
+                  "uv_size": [
+                    16,
+                    14
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    48,
+                    0
+                  ],
+                  "uv_size": [
+                    16,
+                    14
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    64,
+                    0
+                  ],
+                  "uv_size": [
+                    16,
+                    16
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    96,
+                    16
+                  ],
+                  "uv_size": [
+                    -16,
+                    -16
+                  ]
+                }
+              }
+            },
+            {
+              "origin": [
+                6,
+                8,
+                -2
+              ],
+              "size": [
+                3,
+                12,
+                3
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    96,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    12
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    99,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    12
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    102,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    12
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    105,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    12
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    108,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    3
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    114,
+                    3
+                  ],
+                  "uv_size": [
+                    -3,
+                    -3
+                  ]
+                }
+              }
+            }
+          ],
+          "parent": "root"
+        },
+        {
+          "name": "deksel",
+          "pivot": [
+            0,
+            14,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -7,
+                14,
+                -7
+              ],
+              "size": [
+                14,
+                3,
+                14
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    114,
+                    0
+                  ],
+                  "uv_size": [
+                    14,
+                    3
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    0,
+                    16
+                  ],
+                  "uv_size": [
+                    14,
+                    3
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    14,
+                    16
+                  ],
+                  "uv_size": [
+                    14,
+                    3
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    28,
+                    16
+                  ],
+                  "uv_size": [
+                    14,
+                    3
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    42,
+                    16
+                  ],
+                  "uv_size": [
+                    14,
+                    14
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    70,
+                    30
+                  ],
+                  "uv_size": [
+                    -14,
+                    -14
+                  ]
+                }
+              }
+            },
+            {
+              "origin": [
+                -1.5,
+                17,
+                -1.5
+              ],
+              "size": [
+                3,
+                2,
+                3
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    70,
+                    16
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    73,
+                    16
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    76,
+                    16
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    79,
+                    16
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    82,
+                    16
+                  ],
+                  "uv_size": [
+                    3,
+                    3
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    88,
+                    19
+                  ],
+                  "uv_size": [
+                    -3,
+                    -3
+                  ]
+                }
+              }
+            }
+          ],
+          "parent": "ketel"
+        }
+      ]
+    }
+  ]
+}

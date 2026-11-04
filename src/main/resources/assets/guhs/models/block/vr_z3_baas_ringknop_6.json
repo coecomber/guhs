@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "guhs:block/vr_z3_baas_ringknop_6",
+    "side": "guhs:block/vr_z3_baas_ringknop_zijkant",
+    "bottom": "guhs:block/vr_z3_baas_ringknop_zijkant"
+  }
+}

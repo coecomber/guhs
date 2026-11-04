@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "stand=0": {
+      "model": "guhs:block/vr_z3_baas_ringknop_0"
+    },
+    "stand=1": {
+      "model": "guhs:block/vr_z3_baas_ringknop_1"
+    },
+    "stand=2": {
+      "model": "guhs:block/vr_z3_baas_ringknop_2"
+    },
+    "stand=3": {
+      "model": "guhs:block/vr_z3_baas_ringknop_3"
+    },
+    "stand=4": {
+      "model": "guhs:block/vr_z3_baas_ringknop_4"
+    },
+    "stand=5": {
+      "model": "guhs:block/vr_z3_baas_ringknop_5"
+    },
+    "stand=6": {
+      "model": "guhs:block/vr_z3_baas_ringknop_6"
+    },
+    "stand=7": {
+      "model": "guhs:block/vr_z3_baas_ringknop_7"
+    }
+  }
+}

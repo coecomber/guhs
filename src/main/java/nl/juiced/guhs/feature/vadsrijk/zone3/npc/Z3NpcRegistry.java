@@ -51,10 +51,9 @@ public final class Z3NpcRegistry {
                         net.minecraft.world.item.component.Consumables.defaultDrink().build())));
     }
 
-    /** The baby dragon (special pet; given in the finale, never by a kill: its "boss" id does not exist). */
+    /** The baby dragon (special pet). K-INT: one registration only, z3-bazen's (it also unlocks on Vahoegnir's first "kill"). */
     public static final String VAHOEGJE = "vahoegje";
-    public static final Huisdier VAHOEGJE_PET = Huisdieren.registreer(new Huisdier(VAHOEGJE, "guhs:vr_z3_vahoegje", "vadsrijk/wezens/draak",
-            "textures/vadsrijk/zone3/vahoegje.png", "vr_huisdier_vahoegje", 0.16f, null));
+    public static final Huisdier VAHOEGJE_PET = nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenRegistry.PET_VAHOEGJE;
 
     public static final List<String> GEBIEDEN_Z3 = List.of("z3_honingtak", "z3_kruinzee", "z3_takkenbanen", "z3_zeppelinwerf", "z3_schorsstad",
             "z3_wortelvelden", "z3_wortelduister", "z3_hart");

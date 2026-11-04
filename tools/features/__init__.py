@@ -207,6 +207,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z2_wereld',
             'vadsrijk_z2_npc',
             'vadsrijk_z2_bazen',
+            'vadsrijk_z3_bazen',
             # 1.10 fix round 2: one biome per area (Java: feature/vadsrijk/biomen)
             'vadsrijk_biomen',
             # 1.10 fix round 2, G-MOUNTS: the mount system (Pluimguh, Wolkenschaapje, Slakkie, icons, texts); after economie + momenten

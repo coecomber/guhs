@@ -1,0 +1,285 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.schimmelbol",
+        "texture_width": 64,
+        "texture_height": 64,
+        "visible_bounds_width": 1,
+        "visible_bounds_height": 1,
+        "visible_bounds_offset": [
+          0,
+          0.3,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "root",
+          "pivot": [
+            0,
+            0,
+            0
+          ],
+          "cubes": []
+        },
+        {
+          "name": "body",
+          "pivot": [
+            0,
+            2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                2,
+                -4
+              ],
+              "size": [
+                8,
+                7,
+                8
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    0,
+                    0
+                  ],
+                  "uv_size": [
+                    8,
+                    7
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    8,
+                    0
+                  ],
+                  "uv_size": [
+                    8,
+                    7
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    16,
+                    0
+                  ],
+                  "uv_size": [
+                    8,
+                    7
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    24,
+                    0
+                  ],
+                  "uv_size": [
+                    8,
+                    7
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    32,
+                    0
+                  ],
+                  "uv_size": [
+                    8,
+                    8
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    48,
+                    8
+                  ],
+                  "uv_size": [
+                    -8,
+                    -8
+                  ]
+                }
+              }
+            }
+          ],
+          "parent": "root"
+        },
+        {
+          "name": "voet_l",
+          "pivot": [
+            -2,
+            2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                0,
+                -1.5
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    48,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    2
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    50,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    2
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    52,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    55,
+                    0
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    58,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    3
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    62,
+                    3
+                  ],
+                  "uv_size": [
+                    -2,
+                    -3
+                  ]
+                }
+              }
+            }
+          ],
+          "parent": "body"
+        },
+        {
+          "name": "voet_r",
+          "pivot": [
+            2,
+            2,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                -1.5
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": {
+                "north": {
+                  "uv": [
+                    62,
+                    0
+                  ],
+                  "uv_size": [
+                    2,
+                    2
+                  ]
+                },
+                "south": {
+                  "uv": [
+                    0,
+                    8
+                  ],
+                  "uv_size": [
+                    2,
+                    2
+                  ]
+                },
+                "east": {
+                  "uv": [
+                    2,
+                    8
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "west": {
+                  "uv": [
+                    5,
+                    8
+                  ],
+                  "uv_size": [
+                    3,
+                    2
+                  ]
+                },
+                "up": {
+                  "uv": [
+                    8,
+                    8
+                  ],
+                  "uv_size": [
+                    2,
+                    3
+                  ]
+                },
+                "down": {
+                  "uv": [
+                    12,
+                    11
+                  ],
+                  "uv_size": [
+                    -2,
+                    -3
+                  ]
+                }
+              }
+            }
+          ],
+          "parent": "body"
+        }
+      ]
+    }
+  ]
+}

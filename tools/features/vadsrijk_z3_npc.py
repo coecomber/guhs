@@ -924,8 +924,6 @@ OVERIG = {
     Z + "baas.bleu": "Baron Bleu", Z + "baas.vahoegnir": "Vahoegnir, de Vadsloze Draak", Z + "baas.imker": "De Mika-imker",
     # the pet + the Verkenningsboek page
     "vadsrijk.huisdier.vahoegje.naam": "Vahoegje",
-    "vadsrijk.huisdier.vahoegje.tekst": "Een piepklein roze draakje dat niest als het blij is. Het groeit met elk deel van het avontuur.",
-    "vadsrijk.huisdier.vahoegje.bron": "Uit het Drakenei, aan het eind van het verhaal van De Schemerwortel.",
     "vadsrijk.voltooiing.zone.zone3": "De Schemerwortel",
     "vadsrijk.voltooiing.hint.rijdier.pluimguh": "Bij Stalmeester Veertje in de Pluimstal van Honingtak.",
     "gui.guhs.titels.naam.vr_kenner_van_de_schemerwortel": "Kenner van de Schemerwortel",
@@ -1109,14 +1107,7 @@ def _assets(w, a, png=None):
     for id, (_naam, tex) in QUEST_ITEMS.items():
         w(os.path.join(a, "items", f"vr_z3_npc_{id}.json"), {"model": {"type": "minecraft:model", "model": f"guhs:item/vr_z3_npc_{id}"}})
         w(os.path.join(a, "models", "item", f"vr_z3_npc_{id}.json"), {"parent": "minecraft:item/generated", "textures": {"layer0": tex}})
-    w(os.path.join(a, "geckolib", "animations", "entity", "vr_huisdier_vahoegje.animation.json"),
-      {"format_version": "1.8.0", "animations": vahoegje_anims()})
-    doel = os.path.join(a, "textures", "vadsrijk", "zone3", "vahoegje.png")
-    os.makedirs(os.path.dirname(doel), exist_ok=True)
-    try:
-        vahoegje_textuur(a).save(doel)
-    except ImportError:
-        pass   # (no Pillow: the committed png stays)
+    # K-INT: Vahoegje's animation + texture are z3-bazen's (vadsrijk_z3_bazen_modellen.py); one pet registration.
 
 
 def build(h):

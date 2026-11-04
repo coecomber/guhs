@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "stand=0": {
+      "model": "guhs:block/vr_z3_baas_hendel"
+    },
+    "stand=1": {
+      "model": "guhs:block/vr_z3_baas_hendel",
+      "y": 90
+    },
+    "stand=2": {
+      "model": "guhs:block/vr_z3_baas_hendel",
+      "y": 180
+    },
+    "stand=3": {
+      "model": "guhs:block/vr_z3_baas_hendel",
+      "y": 270
+    }
+  }
+}
