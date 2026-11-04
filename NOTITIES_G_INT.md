@@ -13,10 +13,11 @@ build/moddev copied from f-int (artifacts only).
 | 110-g-ux | 79f8a7dda | Npcs: kaart staanPlek + ux standplek -> ONE `staanPlek` (exact; blocked -> nearest lit free floor same y within 2; down 1-4; up/down 12); lang 3-way per key (scratchpad gint/lang3.py) |
 | 110-g-mounts | ec1a2aea7 | __init__ FEATURES both (biomen + rijdieren); lang 3-way; + boss Pluimguh eggs (BazenLoot.pluimEi) |
 | 110-g-z2 | 25568a596 | Z2NpcPlekken: z2 volgKaart + dragon cams relative with balans' x1.5; ux GEODE/POORT_* -> r 66 gates; Z2WezensSpawners: z2's grid + ONE path rule (kern Spawners.padAfstand - PAD_VRIJ); Z2WezensPlekken.PADEN = generated Z2WereldPlekken.PADEN |
+| 110-g-werver | b5f7af9cf | (contains ux+mounts) Z2NpcPlekken z2_wolfje + volgKaart; lang 3-way with base fb8601735 (werver's ux+mounts merge; `lang3.py --base=`); quests_z2/FTB/source_ftb = ours, then regenerated: `vadsrijk_npc.py` FIRST, then `vadsrijk_z2_npc.py` (npc's _direct deletes the z2 keys otherwise), then make_ftbquests |
 | 110-g-klassen | 739674370 | vadsrijk_klassen.py: klassen's scherm.ordetempel text + ui's skilltip keys; lang union |
 
 ## Waiting for
-g-werver (after g-mounts, also on g-ux), g-pets. Lead: wait for its message before the final steps.
+g-pets. Lead: wait for its message before the final steps.
 
 ## Cross-cutting to do
 - after g-z2: VadsrijkBiomen zone-2 boxes + `zone2Biome` id mapping -> new zone-2 areas.
@@ -34,6 +35,10 @@ g-werver (after g-mounts, also on g-ux), g-pets. Lead: wait for its message befo
 - gametests still owed: VadsrijkNpc (for g-kaart).
 
 ## Log
+- Full run 1 `-Pgt=Vadsrijk,Z2Npc`: 82/83; reisKeuzes = placement (z -7M = zone 2) -> Reiskaart.hier '' outside the Vadsrijk (5cbcf4161). klodderreusVecht passed (flaky earlier).
+- loopcheck whole map: the FROZEN KNUFFELMEER (11946 spots) had a 2-high shore all round (kaart2 oever = ijs+2) -> oever starts at ijs+1; zone 2 regenerated + rechecked.
+- loopcheck zone 2 VALs that stay: tier-house hollows in Kandijkom (63/99 cells, unreachable, g-z2 notes), single cells.
+- controleer_verticaal: Druipschacht 0 traps; Hoedenpaden 6671 = sea edge of its box (known artefact).
 - Regen 1 (`maak_kaart --zone alle --geen-cache`): audit found a NEW pit at Zwamzoet 110 118 -90 = g-kaart's cap-house funderen filled hoed_noordo's spiral-stair exit -> funderen(niet_op_trap) (11c114a76); zone 1 regenerated again: same as before.
 - FTB: CHAPTER_VERSION 60 (chapter texts changed by ux/z2).
 - Gametest fails after ux merge (5 classes run): reisKeuzes 'lv 20: Kandijkom flies' (diagnostics added b51581a5f) and klodderreusVecht 'hurt the player standing still' (moved 10, closest 6, 0 hits). To check in the full run.
