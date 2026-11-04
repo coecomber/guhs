@@ -223,6 +223,8 @@ public final class BazenLoot {
         if (baas.equals("koning_klodder") && r.nextDouble() < ZADEL_KANS) {
             items.add(new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.ZADEL_KLODDERROS.get()));
         }
+        // g-int (round 2, mounts): rare Pluimguh eggs (sterrennacht from Koning Klodder, the hidden gold one from the Opperzwam)
+        pluimEi(baas, items, r);
         if (eerste) {
             extra.putBoolean(sleutel, true);
         }
@@ -235,6 +237,23 @@ public final class BazenLoot {
             gebonden.add(s);
         }
         return new LootTabel.Resultaat(gebonden, munten);
+    }
+
+    /** Chance per chest of a sterrennacht / gold Pluimguh egg (g-mounts colours; mount screen: "baas" / hidden "goud"). */
+    public static final double EI_STERRENNACHT_KANS = 0.05, EI_GOUD_KANS = 0.02;
+
+    /** g-int: the Pluimguh egg drops of the zone-1 and zone-2 bosses (Z2BazenLoot calls this too). */
+    public static void pluimEi(String baas, List<ItemStack> items, RandomSource r) {
+        var kleur = switch (baas) {
+            case "koning_klodder", "galmwolf" -> r.nextDouble() < EI_STERRENNACHT_KANS
+                    ? nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.PluimKleur.STERRENNACHT : null;
+            case "opperzwam", "spiegelzucht" -> r.nextDouble() < EI_GOUD_KANS
+                    ? nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.PluimKleur.GOUD : null;
+            default -> null;
+        };
+        if (kleur != null) {
+            items.add(new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.PLUIMEI.get(kleur).get()));
+        }
     }
 
     static String id(Zeldzaamheid z) {

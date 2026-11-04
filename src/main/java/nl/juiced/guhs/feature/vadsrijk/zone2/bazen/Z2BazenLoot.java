@@ -176,6 +176,7 @@ public final class Z2BazenLoot {
         if (eerste || r.nextDouble() < 0.25) {
             items.add(trofee(baas));
         }
+        nl.juiced.guhs.feature.vadsrijk.bazen.BazenLoot.pluimEi(baas, items, r);   // g-int: sterrennacht (Galmwolf) / gold (Spiegelzucht) egg
         if (eerste) {
             extra.putBoolean(sleutel, true);
         }
