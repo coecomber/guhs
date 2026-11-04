@@ -23,5 +23,6 @@ public final class VadsrijkClient {
         UitrustingTips.init();   // fix round 2 (g-ui): jewellery how-to, "Los stuk", set piece lists
         nl.juiced.guhs.feature.vadsrijk.huisdieren.client.HuisdierClient.init(modBus);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.client.VoltooiingClient.init(modBus);   // I-VOLTOOIING (Verkenningsboek, key B)
+        nl.juiced.guhs.feature.vadsrijk.stadsmuziek.client.StadsMuziekSpeler.init();   // I-AUDIO: town music + town ambience
     }
 }

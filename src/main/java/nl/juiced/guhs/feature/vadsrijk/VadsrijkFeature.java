@@ -28,6 +28,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.biomen.BiomenRegistry.register(modBus);   // fix round 2: one biome per area
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.register(modBus);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.register(modBus);   // I-VOLTOOIING (Verkenningsboek)
+        nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.register(modBus);   // I-AUDIO: town music + town ambience
     }
 
     public static void payloads(PayloadRegistrar registrar) {

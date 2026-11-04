@@ -60,8 +60,8 @@ final class WereldSfeer {
         if (nacht && !onder && R.nextInt(4) == 0 && (id.equals("sporenwoud") || id.equals("klodderweide"))) {
             l.addParticle(ParticleTypes.GLOW, x + R.nextGaussian() * 8, y + 1 + R.nextDouble() * 3, z + R.nextGaussian() * 8, 0, 0.01, 0);
         }
-        // sounds now and then
-        if (R.nextInt(70) != 0) {
+        // sounds now and then (I-AUDIO: not in the towns, their sweet sounds come from stadsmuziek.client.StadsMuziekSpeler)
+        if (R.nextInt(70) != 0 || (!onder && nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.stadVan(id) != null)) {
             return;
         }
         SoundEvent s;

@@ -215,6 +215,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_huisdieren',
             # 1.10 fix round 2, I-VOLTOOIING: the Verkenningsboek (zone completion) texts
             'vadsrijk_voltooiing',
+            # 1.10 fix round 2, I-AUDIO: town music + town ambience (Java: feature/vadsrijk/stadsmuziek; OGGs from vadsrijk_stadsmuziek_geluid.py)
+            'vadsrijk_stadsmuziek',
             ]
 
 

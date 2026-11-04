@@ -37794,5 +37794,7 @@
   "vadsrijk.npc.rijdierquest.teaser.z2_rijdier_guhwolf": "Hoor je dat? Ergens in de Splinterkloof huilt iets kleins... Maar zo'n wolfje gaat alleen mee met iemand die al op een rijdier heeft gezeten. Kom terug als je je eigen Pluimguh hebt, njeg!",
   "vadsrijk.voltooiing.cat.later": "%s (later)",
   "vadsrijk.voltooiing.later.tip": "Rijdieren krijg je pas verderop in het Vadsrijk. Ze tellen niet mee voor je procent.",
-  "vadsrijk.voltooiing.hint.rijdier.wolkenschaapje": "Heb je eenmaal een rijdier? Stalmeester Hoefje heeft een klusje voor je."
+  "vadsrijk.voltooiing.hint.rijdier.wolkenschaapje": "Heb je eenmaal een rijdier? Stalmeester Hoefje heeft een klusje voor je.",
+  "guhs.configuration.stadsmuziek": "Vadsrijk: stadsmuziek",
+  "guhs.configuration.stadsmuziek.tooltip": "Lieve deuntjes in Zwamzoet, Knuffelkamp, De Haven en Kandijkom (schuif Muziek). UIT = daar weer de gewone muziek."
 }
