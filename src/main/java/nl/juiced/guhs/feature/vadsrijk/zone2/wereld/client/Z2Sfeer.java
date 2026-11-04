@@ -56,7 +56,8 @@ final class Z2Sfeer {
         if (nacht && !binnen && R.nextInt(5) == 0 && id.equals("z2_galmhellingen")) {
             l.addParticle(ParticleTypes.GLOW, x + R.nextGaussian() * 8, y + 1 + R.nextDouble() * 3, z + R.nextGaussian() * 8, 0, 0.01, 0);
         }
-        if (R.nextInt(60) != 0) {
+        // (I-AUDIO: not in Kandijkom, its sounds come from stadsmuziek.client.StadsMuziekSpeler)
+        if (R.nextInt(60) != 0 || nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.stadVan(id) != null) {
             return;
         }
         SoundEvent s;

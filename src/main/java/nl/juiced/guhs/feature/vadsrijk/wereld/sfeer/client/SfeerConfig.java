@@ -10,6 +10,7 @@ public final class SfeerConfig {
 
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.EnumValue<Niveau> NIVEAU;
+    public static final ModConfigSpec.BooleanValue STADSMUZIEK;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -17,7 +18,16 @@ public final class SfeerConfig {
                         "het noorderlicht en de effecten van de overvliegende draak.",
                         "VOL = alles, ZACHT = minder deeltjes en zachtere mist, UIT = niets van dit alles (alleen de gewone lucht).")
                 .defineEnum("sfeer", Niveau.VOL);
+        STADSMUZIEK = b.comment("Lieve deuntjes in de steden van het Vadsrijk (Zwamzoet, Knuffelkamp, De Haven, Kandijkom).",
+                        "Volgt de schuif Muziek; het stadsgeluid (vogels, belletjes, giechels) volgt de schuif Omgeving.",
+                        "true = AAN, false = UIT (dan speelt daar weer de gewone muziek).")
+                .define("stadsmuziek", true);
         SPEC = b.build();
+    }
+
+    /** (I-AUDIO) The town tunes on/off. */
+    public static boolean stadsmuziek() {
+        return !SPEC.isLoaded() || STADSMUZIEK.get();
     }
 
     static Niveau niveau() {
