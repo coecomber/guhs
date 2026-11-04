@@ -31,6 +31,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
  */
 public class RijkItem extends Item {
     public static final int MAX_STERREN = 10;
+    /** z2-systemen hook: extra tooltip lines after the bonuses (the gem sockets). Called on the client. */
+    public static final java.util.List<java.util.function.BiConsumer<Uitrusting, Consumer<Component>>> TOOLTIP_EXTRA =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
 
     public RijkItem(Properties p) {
         super(p);
@@ -93,6 +96,7 @@ public class RijkItem extends Item {
         for (Bonus b : u.bonussen()) {
             t.accept(regel(b.stat(), b.waarde(), ChatFormatting.GREEN));
         }
+        TOOLTIP_EXTRA.forEach(f -> f.accept(u, t));   // z2-systemen
         if (u.gebonden()) {
             t.accept(Component.translatable("vadsrijk.kern.item.gebonden").withStyle(ChatFormatting.RED));
         }

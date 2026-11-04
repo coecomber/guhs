@@ -1,8 +1,9 @@
 package nl.juiced.guhs.feature.vadsrijk.kern;
 
-/** Levels 1..{@link #MAX} (zone 1 cap 20), the xp curve, and the automatic stat growth per level. */
+/** Levels 1..{@link #MAX} (zone 1 cap 20, zone 2 cap 35), the xp curve, and the automatic stat growth per level. */
 public final class Levels {
-    public static final int MAX = 20;
+    /** z2-systemen: 20 -> 35 (zone 2 "De Splinterpieken" is lv 20-35; the curve below simply continues, 1 skill point per level). */
+    public static final int MAX = 35;
 
     private Levels() {
     }

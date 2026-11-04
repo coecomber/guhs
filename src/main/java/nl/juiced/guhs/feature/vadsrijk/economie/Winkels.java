@@ -109,6 +109,16 @@ public final class Winkels {
         WINKELS.put(w.id(), w);
     }
 
+    /** z2-systemen: another slice registers a shop (e.g. the Kandijkom stock); call from your registry's register. */
+    public static void registreer(Winkel w) {
+        zet(w);
+    }
+
+    /** z2-systemen: a plain ITEM ware (buy 1 or 5). */
+    public static Waar itemWaar(String id, long prijs, Supplier<ItemStack> s) {
+        return item(id, prijs, s);
+    }
+
     private static Waar item(String id, long prijs, Supplier<ItemStack> s) {
         return new Waar(id, Soort.ITEM, prijs, s, "");
     }

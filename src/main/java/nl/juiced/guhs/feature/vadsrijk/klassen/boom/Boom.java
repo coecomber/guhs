@@ -20,6 +20,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
 public final class Boom {
     /** One hour of real time between two free respecs. */
     public static final long RESPEC_MS = 60L * 60L * 1000L;
+    /** z2-systemen: node id -> the class level it needs (the zone-2 rows 4/5 open at lv 20/26). Reason "level". */
+    public static final java.util.Map<String, Integer> MIN_LEVEL = new java.util.concurrent.ConcurrentHashMap<>();
 
     private Boom() {
     }
@@ -72,6 +74,9 @@ public final class Boom {
             if (!een) {
                 return "vereist";
             }
+        }
+        if (level < MIN_LEVEL.getOrDefault(id, 0)) {
+            return "level";   // z2-systemen
         }
         if (vrij(k, heeft, level) < b.kosten()) {
             return "punten";

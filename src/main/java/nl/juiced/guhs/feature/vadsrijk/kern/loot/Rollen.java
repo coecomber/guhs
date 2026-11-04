@@ -18,14 +18,25 @@ public final class Rollen {
     public static Function<Uitrusting, Stats> STER_BONUS = u -> new Stats();
     /** Economie hook: weapon damage factor of the stars (default +5 % per star). */
     public static Function<Uitrusting, Double> STER_SCHADE = u -> 1 + 0.05 * u.sterren();
+    /** z2-systemen hook: how many gem sockets a fresh roll gets (default none; zone2.systemen sets it). */
+    public static SokjesRol SOKJES = (t, level, z, r) -> 0;
+    /** z2-systemen hook: the extra stats of the gems in a piece's sockets (default none). */
+    public static Function<Uitrusting, Stats> SOKJE_BONUS = u -> new Stats();
+
+    @FunctionalInterface
+    public interface SokjesRol {
+        int aantal(BasisType t, int level, Zeldzaamheid z, RandomSource r);
+    }
 
     private Rollen() {
     }
 
     public static Uitrusting rol(BasisType t, int level, Zeldzaamheid z, RandomSource r) {
         int n = z.minBonus + (z.maxBonus > z.minBonus ? r.nextInt(z.maxBonus - z.minBonus + 1) : 0);
-        return new Uitrusting(t.id(), z, level, Bonussen.rol(n, level, z, r), t.element(), t.flavours() <= 0 ? 0 : r.nextInt(t.flavours()), 0,
+        Uitrusting u = new Uitrusting(t.id(), z, level, Bonussen.rol(n, level, z, r), t.element(), t.flavours() <= 0 ? 0 : r.nextInt(t.flavours()), 0,
                 false, false, r.nextLong());
+        int sokjes = Math.max(0, Math.min(2, SOKJES.aantal(t, level, z, r)));   // z2-systemen
+        return sokjes == 0 ? u : u.metSokjes(java.util.Collections.nCopies(sokjes, ""));
     }
 
     /** The stats a piece gives (nothing when verpluisd). */
@@ -40,6 +51,7 @@ public final class Rollen {
             s.plus(b.stat(), b.waarde());
         }
         s.plus(STER_BONUS.apply(u));
+        s.plus(SOKJE_BONUS.apply(u));   // z2-systemen
         return s;
     }
 

@@ -28,7 +28,9 @@ import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom;
  *   <li>Vadsmagier: 1 Sterrenwever = the Roze Vuurbal leaves an element puddle for 3 s; 2 Vahoege Aartsmagier = Vadsoverloop
  *   (every 3rd skill costs no energy, +10 % cooldown reduction, +8 % element damage).</li>
  * </ul>
- * Each step is a hidden tree node ({@code <x>_adv1/2}, cost 0) that a respec never removes and that carries a stat bonus.
+ * z2-systemen: a 3rd step at lv 30 (Kristalkampioen / Poolstervalk / Kristalorakel, see {@code zone2.systemen.Advancement3}); its
+ * hidden node {@code <x>_adv3} is added to the trees by that class. {@link #MAX_STAP} = 3.
+ * Each step is a hidden tree node ({@code <x>_adv1/2/3}, cost 0) that a respec never removes and that carries a stat bonus.
  * API for the npc slice's advancement quests: {@link #kanDoen} / {@link #doe}.
  */
 public final class Advancement {
@@ -38,25 +40,40 @@ public final class Advancement {
     private Advancement() {
     }
 
-    /** 0, 1 or 2: how many advancements this player did in this class. */
+    /** z2-systemen: the number of steps (was 2). */
+    public static final int MAX_STAP = 3;
+    /** z2-systemen: extra ceremony effects per step (player, step), right after the ceremony starts. */
+    public static final java.util.List<java.util.function.BiConsumer<ServerPlayer, Integer>> CEREMONIE = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /** 0..{@link #MAX_STAP}: how many advancements this player did in this class. */
     public static int stap(Player p, String klasse) {
         var k = Spelers.data(p).boom.get(klasse);
         if (k == null) {
             return 0;
         }
-        return k.contains(Bomen.advKnoop(klasse, 2)) ? 2 : k.contains(Bomen.advKnoop(klasse, 1)) ? 1 : 0;
+        for (int s = MAX_STAP; s >= 1; s--) {
+            if (k.contains(Bomen.advKnoop(klasse, s))) {
+                return s;
+            }
+        }
+        return 0;
     }
 
-    /** The level the next step needs (10, 20) or 0 when both are done. */
+    /** The level the next step needs (10, 20, 30) or 0 when all are done. */
     public static int nodigLevel(int stap) {
-        return stap == 0 ? 10 : stap == 1 ? 20 : 0;
+        return stap == 0 ? 10 : stap == 1 ? 20 : stap == 2 ? 30 : 0;
+    }
+
+    /** The level of step {@code s} (1..MAX_STAP). */
+    public static int levelVan(int s) {
+        return nodigLevel(s - 1);
     }
 
     /** Can this player do the next advancement of their current class now? */
     public static boolean kanDoen(ServerPlayer p) {
         String k = Spelers.klasse(p).id();
         int s = stap(p, k);
-        return s < 2 && Spelers.level(p) >= nodigLevel(s);
+        return s < MAX_STAP && Spelers.level(p) >= nodigLevel(s);
     }
 
     /** Does the next advancement (with the ceremony). Returns false when it can't. */
@@ -103,6 +120,7 @@ public final class Advancement {
                 .titel(titelKey(klasse, stap), "vadsrijk.klassen.adv.onder." + klasse + "." + stap, 60, 80, Fx.ROZE)
                 .bouw();
         RijkScenes.speel(p, scene);
+        CEREMONIE.forEach(f -> f.accept(p, stap));   // z2-systemen
         Fx.geluid(sl, c, SoundEvents.BEACON_ACTIVATE, 1.5f, 0.8f);
         for (int t = 0; t < 140; t += 4) {
             int tt = t;

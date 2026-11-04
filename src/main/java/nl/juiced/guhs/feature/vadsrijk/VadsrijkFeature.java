@@ -19,6 +19,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.wereld.WereldRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2SystemenRegistry.register(modBus);
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -29,5 +30,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.wereld.WereldRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.payloads(registrar);
+        nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2SystemenRegistry.payloads(registrar);
     }
 }
