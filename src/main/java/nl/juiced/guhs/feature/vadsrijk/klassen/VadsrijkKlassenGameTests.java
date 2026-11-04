@@ -47,6 +47,9 @@ public class VadsrijkKlassenGameTests {
         for (Klasse k : Klassen.alle()) {
             int zichtbaar = 0, totaal = 0;
             for (BoomKnoop b : k.boom()) {
+                if (b.rij() >= Bomen.RIJEN) {
+                    continue;   // z2-systemen: the zone-2 rows 4/5 are tested in VadsrijkZ2SystemenGameTests
+                }
                 if (b.rij() >= 0) {
                     zichtbaar++;
                     totaal += b.kosten();
@@ -62,7 +65,7 @@ public class VadsrijkKlassenGameTests {
             while (meer) {
                 meer = false;
                 for (BoomKnoop b : k.boom()) {
-                    if (b.rij() >= 0 && Boom.waaromNiet(k, heeft, 20, b.id()) == null) {
+                    if (b.rij() >= 0 && b.rij() < Bomen.RIJEN && Boom.waaromNiet(k, heeft, 20, b.id()) == null) {
                         heeft.add(b.id());
                         meer = true;
                     }
@@ -88,7 +91,8 @@ public class VadsrijkKlassenGameTests {
         helper.assertTrue("uitgesloten".equals(Boom.waaromNiet(j, Set.of("j_scherpoog", "j_vuurregen"), 20, "j_kleefregen")), "variants exclude each other");
         helper.assertTrue("al".equals(Boom.waaromNiet(j, Set.of("j_scherpoog"), 20, "j_scherpoog")), "twice");
         Klasse r = Klassen.van(Klassen.RIDDER);
-        helper.assertTrue(r != null && r.boom().size() == 14, "the Knuffelridder adapter has no tree");
+        helper.assertTrue(r != null && r.boom().stream().filter(b -> b.rij() < Bomen.RIJEN && !b.id().endsWith("_adv3")).count() == 14,   // z2-systemen: zone-2 rows + adv3 not counted
+                "the Knuffelridder adapter has no tree");
         helper.assertTrue(Boom.waaromNiet(r, Set.of("r_knuffelspier", "r_slijmkussen"), 20, "r_kussenstorm") == null, "a|b requirement (b)");
         helper.assertTrue(Boom.waaromNiet(r, Set.of("r_knuffelspier", "r_vuurkussen"), 20, "r_kussenstorm") == null, "a|b requirement (a)");
         helper.assertTrue("vereist".equals(Boom.waaromNiet(r, Set.of("r_knuffelspier"), 20, "r_kussenstorm")), "a|b requirement (none)");

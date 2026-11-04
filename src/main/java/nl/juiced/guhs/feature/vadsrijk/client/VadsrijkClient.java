@@ -16,5 +16,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.wereld.sfeer.client.SfeerClient.init(modBus);   // fix round 1: atmosphere
         nl.juiced.guhs.feature.vadsrijk.npc.client.NpcClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.client.EconomieClient.init(modBus);
+        nl.juiced.guhs.feature.vadsrijk.zone2.systemen.client.Z2SystemenClient.init(modBus);
     }
 }

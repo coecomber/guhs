@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/vadsrijk/zone2/systemen/vr_z2_kristal_spiegelkwarts"
+  }
+}

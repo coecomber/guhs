@@ -199,7 +199,10 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 Het Vadsrijk: kern first, then one generator per slice (CONTRACT_VADSRIJK.md; append only)
             'vadsrijk_kern', 'vadsrijk_klassen', 'vadsrijk_wezens', 'vadsrijk_bazen', 'vadsrijk_wereld', 'vadsrijk_npc', 'vadsrijk_economie',
             # 1.10 fix round 1: the combat feel (Java: feature/vadsrijk/kern/beleving)
-            'vadsrijk_beleving']
+            'vadsrijk_beleving',
+            # 1.10 zone 2 "De Splinterpieken": one generator per slice
+            'vadsrijk_z2_systemen',
+            ]
 
 
 def modules():

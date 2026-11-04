@@ -37,9 +37,11 @@ import org.lwjgl.glfw.GLFW;
  * badge, and a tooltip with what the node really does. Click a node once to select it, again to learn it.
  */
 public final class BoomScherm extends Screen {
-    private static final int W = 384, H = 240;
+    private static final int W = 384;
+    /** z2-systemen: the height and row distance depend on the rows of the tree (4 in zone 1, 6 with the zone-2 rows). */
+    private int H = 240, DY = 38;
     private static final int ROZE = 0xFFFF7AC8, LICHT = 0xFFFFC2E8, DIEP = 0xFF2A1022, PANEEL = 0xF0401A34, GOUD = 0xFFFFD24A, GRIJS = 0xFF8A6A7E;
-    private static final int KNOOP = 26, DX = 52, DY = 38;
+    private static final int KNOOP = 26, DX = 52;
     private CompoundTag t;
     private int left, top;
     @Nullable
@@ -73,8 +75,25 @@ public final class BoomScherm extends Screen {
         ClientPacketDistributor.sendToServer(new KlassenPayloads.Actie(soort, arg));
     }
 
+    /** z2-systemen: rows in this class's tree. */
+    private int rijen() {
+        int r = Bomen.RIJEN;
+        for (BoomKnoop b : klasse().boom()) {
+            r = Math.max(r, b.rij() + 1);
+        }
+        return r;
+    }
+
+    /** z2-systemen: top of the advancement badges (relative to top). */
+    private int badgeY() {
+        return rijen() <= Bomen.RIJEN ? H - 34 : 46 + (rijen() - 1) * DY + KNOOP + 20;
+    }
+
     @Override
     protected void init() {
+        int rijen = rijen();
+        DY = rijen <= Bomen.RIJEN ? 38 : 32;
+        H = rijen <= Bomen.RIJEN ? 240 : 46 + (rijen - 1) * DY + KNOOP + 20 + 22 + 26 + 8;
         left = (width - W) / 2;
         top = (height - H) / 2;
         int rx = left + 214, rw = W - 214 - 10;
@@ -159,9 +178,20 @@ public final class BoomScherm extends Screen {
                 }
             }
         }
-        for (int r = 0; r < Bomen.RIJEN; r++) {
+        for (int r = 0; r < rijen(); r++) {
             int kost = r == 0 ? 1 : r == 3 ? 3 : 2;
+            int minLv = 0;
+            for (BoomKnoop b : k.boom()) {   // z2-systemen: the cost and the level gate from the row's own nodes
+                if (b.rij() == r) {
+                    kost = b.kosten();
+                    minLv = Math.max(minLv, Boom.MIN_LEVEL.getOrDefault(b.id(), 0));
+                }
+            }
             g.text(font, Component.literal(String.valueOf(kost)).withStyle(ChatFormatting.BOLD), gx - 12, gy + r * DY + 9, 0x90FFC2E8, false);
+            if (minLv > 0) {
+                g.text(font, Component.translatable("vadsrijk.klassen.scherm.rij_lv", minLv), gx + 3 * DX - 6, gy + r * DY + 9,
+                        level >= minLv ? 0x90FFC2E8 : 0xFFFF9A9A, false);
+            }
         }
         for (BoomKnoop b : k.boom()) {
             if (b.rij() < 0) {
@@ -196,10 +226,13 @@ public final class BoomScherm extends Screen {
         }
         // advancement badges
         int stap = t.getIntOr("adv_" + k.id(), 0);
-        int by = top + H - 34;
+        int by = top + badgeY();
         g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.kop").withStyle(ChatFormatting.BOLD), gx - 8, by - 12, LICHT, false);
-        for (int s = 1; s <= 2; s++) {
-            int bx = gx - 8 + (s - 1) * 94;
+        for (int s = 1; s <= nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.MAX_STAP; s++) {
+            int bx = gx - 8 + ((s - 1) % 2) * 94;   // z2-systemen: step 3 on a second line
+            if (s > 2) {
+                by = top + badgeY() + 26;
+            }
             boolean open = stap >= s;
             boolean hover = mx >= bx && mx < bx + 90 && my >= by && my < by + 22;
             g.fill(bx, by, bx + 90, by + 22, open ? 0xFFB8436F : 0xFF3A2433);
@@ -209,13 +242,13 @@ public final class BoomScherm extends Screen {
             g.pose().translate(bx + 22, by + 4);
             g.pose().scale(0.75f, 0.75f);
             g.text(font, Component.translatable("vadsrijk.klassen.titel." + k.id() + "." + s), 0, 0, open ? 0xFFFFFFFF : GRIJS, false);
-            g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.lv", s == 1 ? 10 : 20), 0, 11, open ? GOUD : GRIJS, false);
+            g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.lv", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.levelVan(s)), 0, 11, open ? GOUD : GRIJS, false);
             g.pose().popMatrix();
             if (hover) {
                 tip = new ArrayList<>();
                 tip.add(Component.translatable("vadsrijk.klassen.titel." + k.id() + "." + s).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
                 tip.addAll(regels("vadsrijk.klassen.adv.uitleg." + k.id() + "." + s, ChatFormatting.WHITE));
-                tip.add(Component.translatable(open ? "vadsrijk.klassen.scherm.adv.open" : "vadsrijk.klassen.scherm.adv.dicht", s == 1 ? 10 : 20)
+                tip.add(Component.translatable(open ? "vadsrijk.klassen.scherm.adv.open" : "vadsrijk.klassen.scherm.adv.dicht", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.levelVan(s))
                         .withStyle(open ? ChatFormatting.GREEN : ChatFormatting.GRAY));
             }
         }
@@ -236,8 +269,8 @@ public final class BoomScherm extends Screen {
                     rx, top + 135, GRIJS, false);
             if (t.getBooleanOr("advBalie", true)) {
                 Component a = t.getBooleanOr("kanAdv", false) ? Component.translatable("vadsrijk.klassen.scherm.adv.klaar")
-                        : stap >= 2 ? Component.translatable("vadsrijk.klassen.scherm.adv.alles")
-                        : Component.translatable("vadsrijk.klassen.scherm.adv.nog", stap == 0 ? 10 : 20);
+                        : stap >= nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.MAX_STAP ? Component.translatable("vadsrijk.klassen.scherm.adv.alles")
+                        : Component.translatable("vadsrijk.klassen.scherm.adv.nog", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.nodigLevel(stap));
                 int yy = top + 188;
                 for (var l : font.split(a, rw)) {
                     g.text(font, l, rx, yy, LICHT, false);
@@ -302,7 +335,9 @@ public final class BoomScherm extends Screen {
             l.add(Component.translatable(sel ? "vadsrijk.klassen.scherm.bevestig" : "vadsrijk.klassen.scherm.klik").withStyle(ChatFormatting.YELLOW));
         } else {
             MutableComponent w = Component.translatable("vadsrijk.klassen.boom.nee." + nee);
-            if (nee.equals("vereist")) {
+            if (nee.equals("level")) {   // z2-systemen
+                w = Component.translatable("vadsrijk.klassen.scherm.pas_op", Boom.MIN_LEVEL.getOrDefault(b.id(), 0));
+            } else if (nee.equals("vereist")) {
                 List<Component> namen = new ArrayList<>();
                 for (String v : b.vereist()) {
                     for (String alt : v.split("\\|")) {
