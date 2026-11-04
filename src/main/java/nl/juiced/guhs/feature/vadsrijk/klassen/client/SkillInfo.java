@@ -93,8 +93,9 @@ public final class SkillInfo {
                     if (id == null || mc.player == null) {
                         return;
                     }
-                    // the client has no copy of the bought nodes (SpelerData is not synced): use what the tree screen last showed
-                    Set<String> b = bekend;
+                    // g-int: the HUD payload carries the active class's bought nodes; before the first HUD packet, what the tree showed
+                    var hud = nl.juiced.guhs.feature.vadsrijk.kern.KernPayloads.laatsteHud;
+                    Set<String> b = hud != null ? Set.copyOf(hud.knopen()) : bekend;
                     List<Component> tip = tip(id, i, mc.font, knoop -> b != null && b.contains(knoop));
                     if (b == null && i < 4) {
                         tip.add(Component.translatable("vadsrijk.klassen.skilltip.open_boom").withStyle(ChatFormatting.DARK_AQUA));

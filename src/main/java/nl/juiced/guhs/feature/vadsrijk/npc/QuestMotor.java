@@ -211,10 +211,11 @@ public final class QuestMotor {
         }
         Praat.Regel hint = hint(p, id, npc);
         if (rol == null || rol.equals("training") || rol.equals("kampwacht") || rol.equals("marktguh")) {
+            // (g-int: + the extra choices of this NPC, e.g. the trainers' starter weapons)
             if (hint != null) {
-                open(p, npc, List.of(hint), new Gesprek(id, npc.getId(), "", "", ""));
+                open(p, npc, List.of(hint), new Gesprek(id, npc.getId(), "", "", ""), metExtra(p, id));
             } else {
-                praat(p, npc, gedag, new Gesprek(id, npc.getId(), "", "", ""));
+                praat(p, npc, gedag, new Gesprek(id, npc.getId(), "", "", ""), metExtra(p, id));
             }
             return;
         }

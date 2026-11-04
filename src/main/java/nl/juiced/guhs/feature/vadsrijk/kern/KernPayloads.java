@@ -42,7 +42,8 @@ public final class KernPayloads {
     /** Everything the HUD shows about yourself. cd/cdMax: remaining/total cooldown ticks of R, V, G, Z and the Knuffelsprong (C). */
     public record Hud(boolean binnen, float vads, float maxVads, float energie, float maxEnergie, float ult, int level, long xpIn, long xpNodig,
             String klasse, int[] cd, int[] cdMax, long munten, int duizelig, int opgevrolijkt, String gebied, List<String> skills,
-            int bevroren, int generiek, long gXpIn, long gXpNodig, boolean grijs, java.util.Map<String, Integer> klasseLv)
+            int bevroren, int generiek, long gXpIn, long gXpNodig, boolean grijs, java.util.Map<String, Integer> klasseLv,
+            List<String> knopen)
             implements CustomPacketPayload {
         public static final Type<Hud> TYPE = new Type<>(Guhs.id("vr_kern_hud"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Hud> STREAM_CODEC = StreamCodec.ofMember(Hud::schrijf, Hud::lees);
@@ -71,13 +72,14 @@ public final class KernPayloads {
             b.writeVarLong(gXpNodig);
             b.writeBoolean(grijs);
             b.writeMap(klasseLv, (bb, k) -> bb.writeUtf(k), (bb, v) -> bb.writeVarInt(v));
+            b.writeCollection(knopen, (bb, s) -> bb.writeUtf(s));
         }
 
         private static Hud lees(RegistryFriendlyByteBuf b) {
             return new Hud(b.readBoolean(), b.readFloat(), b.readFloat(), b.readFloat(), b.readFloat(), b.readFloat(), b.readVarInt(), b.readVarLong(),
                     b.readVarLong(), b.readUtf(), b.readVarIntArray(), b.readVarIntArray(), b.readVarLong(), b.readVarInt(), b.readVarInt(), b.readUtf(),
                     b.readList(bb -> bb.readUtf()), b.readVarInt(), b.readVarInt(), b.readVarLong(), b.readVarLong(), b.readBoolean(),
-                    b.readMap(bb -> bb.readUtf(), bb -> bb.readVarInt()));
+                    b.readMap(bb -> bb.readUtf(), bb -> bb.readVarInt()), b.readList(bb -> bb.readUtf()));
         }
 
         @Override
@@ -285,7 +287,9 @@ public final class KernPayloads {
                 (float) d.ultLading, lvl, lvl >= Levels.MAX ? 0 : Levels.restXp(xp), lvl >= Levels.MAX ? 0 : Levels.xpVoor(lvl), Spelers.titelKey(p), cd, cdMax, d.munten,
                 duiz, d.opgevrolijkt, d.gebied == null ? "" : d.gebied, skills, Statussen.ticks(p, Status.BEVROREN), gl,
                 gl >= Levels.MAX_GENERIEK ? 0 : Levels.restXpGeneriek(d.generiekXp), gl >= Levels.MAX_GENERIEK ? 0 : Levels.xpVoorGeneriek(gl),
-                Spelers.actieveWapenKlasse(p) == null, klasseLv));
+                Spelers.actieveWapenKlasse(p) == null, klasseLv,
+                // g-int: the bought tree nodes of the active class (incl. hidden _adv steps), for the client skill tooltips (SkillInfo)
+                List.copyOf(d.boom.getOrDefault(k.id(), java.util.Set.of()))));
     }
 
     public static void stuurParty(ServerPlayer p) {

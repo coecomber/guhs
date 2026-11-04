@@ -115,6 +115,16 @@ public final class NpcRollen {
                 : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Reizen.naarKandijkom(p));
         koppelAls("z2_gondelbaan", (p, a) -> nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Gondel.rijd(p, a.equals("op")));
         koppelAls("z2_boormeester", (p, a) -> nl.juiced.guhs.feature.vadsrijk.zone2.bazen.boor.Boormeester.ontgrendel(p));
+        // g-int (round 2): the Knuffelkamp trainers hand out their class's starter weapon (first one free, then WAPEN_PRIJS brons)
+        for (String[] t : new String[][] {{"trainer_ridder", nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.RIDDER},
+                {"trainer_jager", nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.JAGER},
+                {"trainer_magier", nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.MAGIER}}) {
+            String klasse = t[1];
+            QuestMotor.EXTRA.computeIfAbsent(t[0], k -> new java.util.concurrent.CopyOnWriteArrayList<>()).add(new QuestMotor.ExtraOptie(
+                    "vadsrijk.npc.optie.startwapen." + klasse, p -> true,
+                    p -> nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie.geefStartwapen(p, klasse,
+                            nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie.WAPEN_PRIJS)));
+        }
         nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.VIA_BALIE = false;
         LOG.debug("Vadsrijk npc: all {} roles bound directly ({})", KOPPELS.size(), V0);
     }
