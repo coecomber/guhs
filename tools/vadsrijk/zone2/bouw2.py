@@ -1888,8 +1888,12 @@ def lawinegolf(W, K, P):
         # spray along the lip
         if x % 3 == 0:
             S.set(x, round(yc + Rx * math.sin(math.radians(-35))) - 1, round(zc + Rx * math.cos(math.radians(-35))), "minecraft:end_rod[facing=down]")
-    # the path under it stays free
-    S.box(lx - 15, g + 1, lz - 2, lx + 15, g + 5, lz + 18, CARVE) if False else None
+    # the path under it stays free (4 blocks of headroom over every path cell)
+    for x in range(lx - 17, lx + 18):
+        for z in range(lz - 8, lz + 22):
+            i, j = K2.idx(x, z)
+            if K.pad_d[i, j] < 4:
+                S.box(x, int(K.H[i, j]) + 1, z, x, int(K.H[i, j]) + 5, z, CARVE)
     for _ in range(9):
         x, z = lx + rng.randint(-12, 12), zc + rng.randint(-8, 2)
         y = yc + rng.randint(2, 8)

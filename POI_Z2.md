@@ -250,7 +250,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 |---|---|
 | `kampvuur_galmhellingen_1` | 110, 100, -2390 |
 | `kampvuur_galmhellingen_2` | 142, 103, -2262 |
-| `kampvuur_galmhellingen_3` | 198, 137, -2418 |
+| `kampvuur_galmhellingen_3` | 208, 144, -2428 |
 | `kampvuur_galmhellingen_4` | 232, 125, -2296 |
 | `kampvuur_kandijkom_dok_1` | -9, 91, -2262 |
 | `kampvuur_knuffelmeer_1` | -100, 100, -2330 |
@@ -259,13 +259,13 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kampvuur_knuffelmeer_4` | -176, 93, -2292 |
 | `kampvuur_spiegelburcht_1` | 162, 160, -2590 |
 | `kampvuur_splinterkloof_1` | -196, 114, -2512 |
-| `kampvuur_splinterkloof_2` | 128, 125, -2510 |
-| `kampvuur_splinterkloof_3` | 0, 116, -2506 |
+| `kampvuur_splinterkloof_2` | 128, 123, -2508 |
+| `kampvuur_splinterkloof_3` | 8, 115, -2504 |
 | `kampvuur_splinterkloof_4` | -96, 65, -2546 |
 | `kampvuur_splinterkloof_5` | -136, 131, -2604 |
 | `ridder_galmhellingen_1` | 112, 100, -2388 |
 | `ridder_galmhellingen_2` | 144, 103, -2260 |
-| `ridder_galmhellingen_3` | 200, 137, -2416 |
+| `ridder_galmhellingen_3` | 210, 144, -2426 |
 | `ridder_galmhellingen_4` | 234, 125, -2294 |
 | `ridder_kandijkom_dok_1` | -7, 91, -2260 |
 | `ridder_knuffelmeer_1` | -98, 100, -2328 |
@@ -274,8 +274,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridder_knuffelmeer_4` | -174, 93, -2290 |
 | `ridder_spiegelburcht_1` | 164, 160, -2588 |
 | `ridder_splinterkloof_1` | -194, 114, -2510 |
-| `ridder_splinterkloof_2` | 130, 125, -2508 |
-| `ridder_splinterkloof_3` | 2, 116, -2504 |
+| `ridder_splinterkloof_2` | 130, 123, -2506 |
+| `ridder_splinterkloof_3` | 10, 115, -2502 |
 | `ridder_splinterkloof_4` | -94, 65, -2544 |
 | `ridder_splinterkloof_5` | -134, 131, -2602 |
 
@@ -338,7 +338,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `brug_2_noord` | -100, 131, -2572 |
 | `brug_2_zuid` | -100, 122, -2530 |
 | `brug_3_noord` | 150, 137, -2562 |
-| `brug_3_zuid` | 150, 137, -2526 |
+| `brug_3_zuid` | 150, 127, -2526 |
 | `brug_4_noord` | 40, 135, -2565 |
 | `brug_4_zuid` | 40, 121, -2526 |
 | `brug_5_noord` | 124, 124, -2514 |
@@ -385,7 +385,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `aantal_bomen` | 193, 0, 0 |
+| `aantal_bomen` | 194, 0, 0 |
 | `aanwijzing.boorgaten` | 164, 131, -2425 |
 | `aanwijzing.boorschema` | -44, 104, -2427 |
 | `aanwijzing.bouwtekening` | -146, 126, -2518 |
@@ -393,7 +393,6 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `aanwijzing.warme_spleet` | -30, 66, -2563 |
 | `chocomelkkraam` | 11, 91, -2383 |
 | `gehucht_galmdorpje` | 128, 104, -2414 |
-| `gehucht_kloofkamp` | -40, 121, -2510 |
 | `gehucht_meerkamp` | -112, 101, -2306 |
 | `gehucht_plateaukamp` | 60, 130, -2600 |
 | `ijsval_1` | -160, 66, -2525 |
@@ -447,7 +446,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_sneeuwbal_1` | -10, 91, -2396 |
 | `npcplek.z2_sneeuwbal_2` | -4, 91, -2392 |
 | `npcplek.z2_sneeuwpop` | 24, 96, -2368 |
-| `npcplek.z2_touwtje` | 153, 137, -2526 |
+| `npcplek.z2_touwtje` | 153, 127, -2526 |
 | `npcplek.z2_uitvinder` | -44, 101, -2429 |
 | `npcplek.z2_versteend_ijsje` | -186, 88, -2392 |
 | `npcplek.z2_versteend_pluk` | -204, 85, -2370 |
@@ -458,11 +457,11 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_wacht_dok` | -7, 91, -2260 |
 | `npcplek.z2_wacht_galm_1` | 112, 100, -2388 |
 | `npcplek.z2_wacht_galm_2` | 144, 103, -2260 |
-| `npcplek.z2_wacht_galm_3` | 200, 137, -2416 |
+| `npcplek.z2_wacht_galm_3` | 210, 144, -2426 |
 | `npcplek.z2_wacht_galm_4` | 234, 125, -2294 |
 | `npcplek.z2_wacht_kloof_1` | -194, 114, -2510 |
-| `npcplek.z2_wacht_kloof_2` | 130, 125, -2508 |
-| `npcplek.z2_wacht_kloof_3` | 2, 116, -2504 |
+| `npcplek.z2_wacht_kloof_2` | 130, 123, -2506 |
+| `npcplek.z2_wacht_kloof_3` | 10, 115, -2502 |
 | `npcplek.z2_wacht_kloof_4` | -94, 65, -2544 |
 | `npcplek.z2_wacht_kloof_5` | -134, 131, -2602 |
 | `npcplek.z2_wacht_meer_1` | -98, 100, -2328 |
@@ -474,7 +473,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_wapenhandelaar` | 23, 91, -2424 |
 | `npcplek.z2_winterslaap` | -21, 96, -2432 |
 | `opening_naald` | 46, 145, -2344 |
-| `poiplek.z2_brug_1` | 150, 137, -2526 |
+| `poiplek.z2_brug_1` | 150, 127, -2526 |
 | `poiplek.z2_brug_2` | -100, 122, -2530 |
 | `poiplek.z2_brug_3` | -190, 120, -2522 |
 | `poiplek.z2_lawinepad` | 160, 124, -2428 |

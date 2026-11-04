@@ -166,6 +166,7 @@ class Kaart2:
         # gates: the street runs flat (town floor) straight through the wall
         doorgang = self.poort & (self.poort_s >= R0 - 2) & (self.poort_s < R0 + PL.GEODE_DIK + 6)
         H = np.where(doorgang, PL.STAD_TOP, H)
+        self.vast_h = np.where((r < R0) & ~self.tier & straat | doorgang, float(PL.STAD_TOP), np.nan).astype(np.float32)
         self.geode_wand = (r >= R0) & (r < R0 + PL.GEODE_DIK + 8) & ~self.poort
         self.geode_band = np.where(r < R0 + 3, 4, np.where(r < R0 + 7, 5, 6))
         self.stad_vloer = r < R0
@@ -178,7 +179,7 @@ class Kaart2:
         H = self.pad(PL.STAL[0], PL.STAL[1], 12, PL.STAD_TOP, 10, H0=H)
         bx3 = PL.BRUGGEN[2]
         kz0 = float(kloof_z(bx3))
-        H = self.pad(bx3, kz0 + 25, 7, PL.BRUG_TOP, 16, H0=H)
+        H = self.pad(bx3, kz0 + 25, 7, PL.KLOOF_RAND_ZUID + 4, 16, H0=H)
         H = self.pad(bx3, kz0 - 25, 7, PL.BRUG_TOP, 12, H0=H)
         # ---- the Splinterkloof: vertical walls, floor 64, a frozen stream; ledge ramps up the walls
         zc = kloof_z(x)
@@ -289,17 +290,23 @@ class Kaart2:
         prof = H[ii, jj].astype(np.float64)
         prof = ndimage.gaussian_filter1d(prof, 8, mode="nearest")
         prof[0], prof[-1] = H[ii[0], jj[0]], H[ii[-1], jj[-1]]
-        # slope limit 0.7 per block (forward + backward), the ends fixed
-        for _ in range(3):
+        # (fix round 2) fixed heights: the town streets and the gate passages stay at the town floor, the road ramps out from there
+        vast = self.vast_h[ii, jj]
+        fix = ~np.isnan(vast)
+        prof[fix] = vast[fix]
+        # slope limit 0.7 per block (forward + backward), the ends + fixed points kept
+        for _ in range(8):
             for i in range(1, n):
                 prof[i] = min(max(prof[i], prof[i - 1] - 0.7), prof[i - 1] + 0.7)
+            prof[fix] = vast[fix]
             for i in range(n - 2, -1, -1):
                 prof[i] = min(max(prof[i], prof[i + 1] - 0.7), prof[i + 1] + 0.7)
+            prof[fix] = vast[fix]
         dp, langs = polyafstand(pts)
         k = np.clip(np.round(langs / lengte * (n - 1)).astype(int), 0, n - 1)
         hp = prof[k]
         mix = smooth((dp - breed) / rand)
-        m = (dp < breed + rand) & ~self.kloof_buiten_ramp(dp)
+        m = (dp < breed + rand) & ~self.kloof_buiten_ramp(dp) & (dp <= self.pad_d + 0.01)   # an earlier road nearer keeps its profile
         H = np.where(m, hp * (1 - mix) + H * mix, H)
         self.pad_kern |= dp < breed
         self.pad_d = np.minimum(self.pad_d, dp)
