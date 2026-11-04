@@ -93,5 +93,21 @@ zone-2 npc package, small fixes in the bazen temple-door gate.
 - AutoCheck: `tools/autocheck/vadsrijk_g_ux.txt` (dev command `/guhs vadsrijk npc praat <id>` added for it).
 - Spot checker used for zone 2: scratchpad `gux/npcz2.py <worktree>` (reads the tiles with tools/vadsrijk/audit/tegellezer.py).
 
-## Resume point / open
-See the bottom of this file (filled at the end of the run).
+### 8. Coordinator extras
+- Wynn joke: Sergeant Pluizebol's hq01 offer has two extra pages ("...Heb jij ook het gevoel dat je dit eerder hebt gezien? Iets
+  met 'Wynn'-nogwat?" / "Nee hoor. Dit is héél anders. Hier zijn knuffels!"), seen once with the first quest.
+- Dev command `/guhs vadsrijk npc praat <id>` (AutoCheck: put `gui keep` before it).
+
+## Resume point
+- Gametests `-Pgt=VadsrijkNpc,Z2Npc,VadsrijkBazenGevecht`: **15/15 passed** (incl. reisKeuzes, klasseInTracker, tempeldeurPoort).
+- AutoCheck `tools/autocheck/vadsrijk_g_ux.txt` (2 runs: the first had a script error, commands need `gui keep`): captain dialogue
+  with "» Laat de reiskaart zien" + "» Naar Zwamzoet (De Haven)" choices OK, the travel map at De Haven OK (Zwamzoet "Jij bent
+  hier", Kandijkom / Schemerwortel grey with "?", dotted routes), tracker with the light-blue job advancement block OK, the
+  Lichtzwamkamer bottom line OK, the Wynn joke page OK. The press of the choice buttons missed (labels start with "» "; script
+  fixed afterwards, not re-run), so the map-from-dialogue and the flight were only covered by the gametest.
+- Seen in passing (zone 1, g-kaart's area): Sergeant Pluizebol's spot looked dark/enclosed in the intro shot.
+
+## Open
+- Kandijkom gates blocked (section 7) -> zone-2 redesign.
+- Optional: the bells could open the travel map too (wereld code).
+- hq11 save shift for players with hq11 already active (dev saves).

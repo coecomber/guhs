@@ -13,6 +13,23 @@ waitrender 300
 /guhs vadsrijk npc reset
 /guhs vadsrijk tips reset
 
+section intro
+/guhs vadsrijk npc tp rekruteerder
+wait 60
+waitrender 200
+gui keep
+/guhs vadsrijk npc praat rekruteerder
+wait 20
+press Verder »
+wait 5
+press Verder »
+wait 5
+press Verder »
+wait 10
+shot ux_intro_wynn gui
+gui close
+wait 10
+
 section kapitein
 /guhs vadsrijk npc quest af hq05_klodderreus
 /guhs vadsrijk npc quest start hq06_zwamzoet
@@ -20,6 +37,7 @@ section kapitein
 look 270 10
 wait 80
 waitrender 200
+gui keep
 /guhs vadsrijk npc praat kapitein
 wait 20
 shot ux_kapitein_1 gui
@@ -29,23 +47,28 @@ shot ux_kapitein_2 gui
 press Verder »
 wait 10
 shot ux_kapitein_keuzes gui
-press Laat de reiskaart zien
+press » Laat de reiskaart zien
 wait 20
 shot ux_reiskaart_kamp gui
 gui close
 wait 10
+gui keep
 /guhs vadsrijk npc praat kapitein
 wait 20
 press Verder »
 wait 10
 press Verder »
 wait 10
-press Naar Zwamzoet (De Haven)
+press » Naar Zwamzoet (De Haven)
 wait 100
 shot ux_vlucht gui
 wait 600
 waitrender 200
 shot ux_haven_aankomst gui
+/guhs vadsrijk npc tp luchtschipper
+wait 60
+waitrender 200
+gui keep
 /guhs vadsrijk npc praat luchtschipper
 wait 20
 shot ux_reiskaart_haven gui
@@ -58,6 +81,7 @@ section klasse_tracker
 /guhs vadsrijk level 10
 wait 60
 shot ux_tracker_klasse gui
+gui keep
 /guhs vadsrijk npc questlog
 wait 20
 shot ux_questlog_klasse gui
