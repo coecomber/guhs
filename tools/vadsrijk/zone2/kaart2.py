@@ -158,7 +158,7 @@ class Kaart2:
             self.trap_richting = np.where(lane, k + 1, self.trap_richting)
         self.tier = (tierA | tierB | self.trap_baan) & (r < R0)
         # the dock road: a ledge south out of the geode at the town floor, then the land drops away (the pier stands on posts)
-        dock = (np.abs(x) <= 14) & (z > sz + R0 - 4) & (z <= -2251)
+        dock = (np.abs(x) <= PL.POORT_HALF + 1) & (z > sz + R0 - 4) & (z <= -2251)
         H = np.where(dock, PL.STAD_TOP, H)
         ez = np.hypot(x / 60, (z + 2222) / 34)
         zuid = (z > -2251) & (ez < 1.6)
@@ -167,6 +167,7 @@ class Kaart2:
         # gates: the street runs flat (town floor) straight through the wall
         doorgang = self.poort & (self.poort_s >= R0 - 2) & (self.poort_s < R0 + PL.GEODE_DIK + 6)
         H = np.where(doorgang, PL.STAD_TOP, H)
+        H = self.poort_dal(H)
         self.vast_h = np.where((r < R0) & ~self.tier & straat | doorgang, float(PL.STAD_TOP), np.nan).astype(np.float32)
         self.geode_wand = (r >= R0) & (r < R0 + PL.GEODE_DIK + 8) & ~self.poort
         self.geode_band = np.where(r < R0 + 3, 4, np.where(r < R0 + 7, 5, 6))
@@ -237,6 +238,7 @@ class Kaart2:
             H = np.where(d <= pr, ptop, H)
         H = np.where(self.stad_vloer & ~self.tier, PL.STAD_TOP, H)
         H = np.where(dock, PL.STAD_TOP, H)
+        H = np.where(self.stad_vloer, H, self.poort_dal(H))
         # ---- the coast: cliffs down into the cloud sea
         kt = smooth(kustd / 40) ** 0.7
         H = (PL.ZEE + 2) * (1 - kt) + H * kt
@@ -262,6 +264,31 @@ class Kaart2:
             m = (x >= a) & (x <= c) & (z >= b) & (z <= d)
             self.gebied[m] = len(PL.GEBIEDEN) - 1 - i
         self.gnamen = [g[0] for g in PL.GEBIEDEN]
+
+    def poort_dal(self, H):
+        """(i-z2kaart) The 4 gates (and the dock road south) as natural notches instead of slots with vertical walls: across the
+        gate axis the land may rise/fall at most ~1.3 per block from the street edge (rocky, a little noise), so the geode wall
+        opens like a mountain pass and the dock road lies in a soft cutting/embankment. Fades out past the wall (the roads take
+        over); the south notch runs on to the pier."""
+        x, z = XX, ZZ
+        sx, sz = PL.STAD
+        R0 = PL.GEODE_R
+        dx_, dz_ = x - sx, z - sz
+        for naam, (ux, uz) in PL.POORTEN.items():
+            s_ = dx_ * ux + dz_ * uz
+            p_ = np.abs(dx_ * uz - dz_ * ux)
+            if naam == "zuid":
+                s_eind, fade = (PL.DOK[1] - 15) - sz + 1, 3.0
+            else:
+                s_eind, fade = R0 + PL.GEODE_DIK + 16, 10.0
+            w = np.clip((s_eind - s_) / fade, 0, 1) * smooth((s_ - (R0 - 3)) / 3)
+            e = np.maximum(p_ - (PL.POORT_HALF + 1), 0)
+            ruw = (2.4 * self.fijn + 2.0 * self.n1) * np.clip(e / 6, 0, 1)
+            hoog = PL.STAD_TOP + 1.3 * e + 0.08 * e * e * (naam != "zuid") + ruw
+            laag = PL.STAD_TOP - 1.1 * e - ruw
+            Hc = np.clip(H, laag, hoog)
+            H = np.where(w > 0, H * (1 - w) + Hc * w, H)
+        return H
 
     def pad(self, px, pz, r, top, fall, H0):
         d = np.hypot(XX - px, ZZ - pz)
