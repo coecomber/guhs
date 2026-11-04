@@ -59,7 +59,9 @@ public final class Spiegelburcht {
     public static final String H_INHOUD = "z2_burcht_inhoud", H_POORT = "z2_burcht_poort_";
     public static final int LEEG_TICKS = 1200, GOLVEN = 3;
     /** Possible ids of the zone-2 crystal creatures for the gauntlet (z2-wezens); missing = kern's grey test klodder. */
-    public static final List<String> GANG_MOBS = List.of("guhs:vr_mob_splinterling", "guhs:vr_z2_splinterling", "guhs:vr_mob_ijzelgeest");
+    public static final List<String> GANG_MOBS = List.of("guhs:vr_z2_mob_spiegelwacht", "guhs:vr_z2_mob_scherfgeest", "guhs:vr_z2_mob_splinterling");
+    /** (integration) their elements (z2-wezens: Spiegelwacht/Splinterling GEEN + versteend, Scherfgeest VUUR). */
+    private static final List<Element> GANG_ELEMENT = List.of(Element.GEEN, Element.VUUR, Element.GEEN);
 
     private static final Set<String> OPGELOST = new HashSet<>();
     private static boolean opgezet;
@@ -363,13 +365,17 @@ public final class Spiegelburcht {
 
     private static VadsrijkMob gangMob(ServerLevel sl, BlockPos pos, boolean elite) {
         Entity e = null;
-        for (String id : GANG_MOBS) {
+        int start = sl.getRandom().nextInt(GANG_MOBS.size()), keuze = -1;
+        for (int k = 0; k < GANG_MOBS.size(); k++) {
+            String id = GANG_MOBS.get((start + k) % GANG_MOBS.size());
+            keuze = (start + k) % GANG_MOBS.size();
             EntityType<?> t = BuiltInRegistries.ENTITY_TYPE.getOptional(Identifier.parse(id)).orElse(null);
             if (t != null) {
                 e = t.create(sl, EntitySpawnReason.MOB_SUMMONED);
                 if (e instanceof VadsrijkMob) {
                     break;
                 }
+                keuze = -1;
                 if (e != null) {
                     e.discard();
                     e = null;
@@ -377,13 +383,14 @@ public final class Spiegelburcht {
             }
         }
         if (e == null) {
+            keuze = -1;
             e = KernRegistry.PROEFKLODDER.get().create(sl, EntitySpawnReason.MOB_SUMMONED);
         }
         if (!(e instanceof VadsrijkMob m)) {
             return null;
         }
         m.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-        m.stelIn(31, Element.WATER, elite, Set.of());
+        m.stelIn(31, keuze >= 0 ? GANG_ELEMENT.get(keuze) : Element.WATER, elite, Set.of());
         if (m instanceof Mob mob) {
             mob.setPersistenceRequired();
         }

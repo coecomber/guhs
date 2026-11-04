@@ -15,13 +15,19 @@ public final class Z2BazenPlekken {
     private Z2BazenPlekken() {
     }
 
+    /** (integration) The spot from z2-wereld's generated Z2WereldPlekken; the numbers are only the fallback. */
+    private static BlockPos w(String id, int x, int y, int z) {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
+        return b != null ? b : new BlockPos(x, y, z);
+    }
+
     // ---- De Galmwolf (world boss): the flat snow bowl in the Galmhellingen ------------------------------------------------
     /** POI arena_galmwolf (bowl r 32, floor top 120). */
-    public static final BlockPos GALM_CENTRUM = new BlockPos(430, 121, -2280);
+    public static final BlockPos GALM_CENTRUM = w("arena_galmwolf", 430, 121, -2280);
     public static final int GALM_STRAAL = 32;
     /** POI arena_galmwolf_deur / _bord (west entrance, outside the bowl). */
-    public static final BlockPos GALM_DEUR = new BlockPos(392, 121, -2280);
-    public static final BlockPos GALM_BORD = new BlockPos(393, 121, -2276);
+    public static final BlockPos GALM_DEUR = w("arena_galmwolf_deur", 392, 121, -2280);
+    public static final BlockPos GALM_BORD = w("arena_galmwolf_bord", 393, 121, -2276);
     public static final int GALM_RESPAWN = 20 * 60;
     /** POI galmwolf_pilaar_1..8: the centres of wereld's 8 frozen pillars (3x3, 9 high), relative to the arena centre. */
     public static final int[][] GALM_PILAREN = {{19, 4}, {10, 16}, {-4, 19}, {-16, 10}, {-19, -4}, {-10, -16}, {4, -19}, {16, -10}};
@@ -32,7 +38,7 @@ public final class Z2BazenPlekken {
     public static final int BURCHT_Y = 176;
     /** The front door (WereldDeuren "spiegelburcht", plane z -2856) and where you stand in front of it (deur_spiegelburcht_voor). */
     public static final int BURCHT_DEUR_Z = -2856;
-    public static final BlockPos BURCHT_VOOR = new BlockPos(0, BURCHT_Y, -2851);
+    public static final BlockPos BURCHT_VOOR = w("deur_spiegelburcht_voor", 0, BURCHT_Y, -2851);
     /** Rooms (inner boxes, wereld plan.BURCHT_KAMERS): voorhal x ±16 z -2879..-2857, lichtkamer x ±14 z -2899..-2881, spiegelgang x ±9
      *  z -2917..-2901, prismazaal x ±14 z -2937..-2919. The gates poort_1..4 (open AIR, x -2..2, y +0..+4) are at z -2880, -2900, -2918,
      *  -2938; bazen fills poort_2..4. */
@@ -42,10 +48,10 @@ public final class Z2BazenPlekken {
     public static final int GANG_X = 9, GANG_Z0 = -2917, GANG_Z1 = -2901, GANG_POORT = -2918;
     /** Vrouwe Spiegelzucht's hall (arena_spiegelzucht, r 22, a glass dome from y +14), door arena_spiegelzucht_deur (inside the
      *  prismazaal, before poort_4). */
-    public static final BlockPos SPIEGEL_CENTRUM = new BlockPos(0, BURCHT_Y, -2961);
+    public static final BlockPos SPIEGEL_CENTRUM = w("arena_spiegelzucht", 0, BURCHT_Y, -2963);
     public static final int SPIEGEL_STRAAL = 22;
-    public static final BlockPos SPIEGEL_DEUR = new BlockPos(0, BURCHT_Y, -2937);
-    public static final BlockPos SPIEGEL_BORD = new BlockPos(4, BURCHT_Y, -2936);
+    public static final BlockPos SPIEGEL_DEUR = w("arena_spiegelzucht_deur", 0, BURCHT_Y, -2937);
+    public static final BlockPos SPIEGEL_BORD = w("arena_spiegelzucht_bord", 4, BURCHT_Y, -2936);
     public static final int SPIEGEL_RESPAWN = 5 * 60;
     /** The dome (breaks open ring by ring in fase 3): from y +14 to +38 inside radius 24. */
     public static final int KOEPEL_ONDER = 14, KOEPEL_BOVEN = 38, KOEPEL_STRAAL = 24;
@@ -93,12 +99,12 @@ public final class Z2BazenPlekken {
 
     // ---- De Mika-boormeester (secret): the cave in the north wall of the Splinterkloof ------------------------------------------
     /** POI arena_boormeester (cave r 20, floor top 65), entrance arena_boormeester_deur. */
-    public static final BlockPos BOOR_CENTRUM = new BlockPos(-500, 66, -2836);
+    public static final BlockPos BOOR_CENTRUM = w("arena_boormeester", -500, 66, -2836);
     public static final int BOOR_STRAAL = 20;
-    public static final BlockPos BOOR_DEUR = new BlockPos(-500, 66, -2779);
+    public static final BlockPos BOOR_DEUR = w("arena_boormeester_deur", -500, 66, -2779);
     public static final int BOOR_TERUG_SECONDEN = 10 * 60;
     /** POI mika_fort: where the defeated Boormeester's cart rolls off to (the smoke trail points there). */
-    public static final BlockPos MIKA_FORT = new BlockPos(300, 140, -2885);
+    public static final BlockPos MIKA_FORT = w("mika_fort", 300, 140, -2885);
 
     /** (dev / AutoCheck) */
     public static List<BlockPos> galmPilaarPlekken() {

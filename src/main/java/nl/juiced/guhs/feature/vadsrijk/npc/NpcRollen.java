@@ -112,6 +112,7 @@ public final class NpcRollen {
                 ? nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Reizen.naarHaven(p)
                 : nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Reizen.naarKandijkom(p));
         koppelAls("z2_gondelbaan", (p, a) -> nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2Gondel.rijd(p, a.equals("op")));
+        koppelAls("z2_boormeester", (p, a) -> nl.juiced.guhs.feature.vadsrijk.zone2.bazen.boor.Boormeester.ontgrendel(p));
         nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.VIA_BALIE = false;
         LOG.debug("Vadsrijk npc: all {} roles bound directly ({})", KOPPELS.size(), V0);
     }

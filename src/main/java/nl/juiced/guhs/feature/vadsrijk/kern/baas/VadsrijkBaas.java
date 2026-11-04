@@ -302,6 +302,14 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return n;
     }
 
+    /**
+     * (integration) True for a boss with its own fight engine (zone 2's {@code Z2Baas}: own targets, leash, empty-arena reset):
+     * kern then only flies the lobs and kinematic jumps, so the two engines never both leash/reset/retarget.
+     */
+    protected boolean eigenGevecht() {
+        return false;
+    }
+
     /** Resets the fight when the arena stayed empty (default: away, the arena spawns a fresh one). */
     protected void leegReset() {
         if (level() instanceof ServerLevel sl) {
@@ -349,7 +357,7 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
                 }
             }
         }
-        if (geplofd() || tickCount % 5 != 0) {
+        if (geplofd() || tickCount % 5 != 0 || eigenGevecht()) {
             return;
         }
         java.util.List<ServerPlayer> l = vechters();

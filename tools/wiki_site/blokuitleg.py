@@ -1800,6 +1800,21 @@ UITLEG = {
         en="Decoration from The Guhde's shop, for 32 pin buttons: a neon sign with a pin and a ball. It gives light; it "
            "does nothing else."),
     # </minigames2>
+    "vr_z2_baas_spiegel": dict(
+        nl="Een draaispiegel in de Spiegelburcht (Het Vadsrijk, De Splinterpieken). Je vindt hem niet in je eigen spullen: hij "
+           "hoort bij de lichtpuzzels van de burcht en bij het gevecht met Vrouwe Spiegelzucht.\n"
+           "\n"
+           "Rechtsklik erop en hij draait een stand verder: schuin naar de ene kant, schuin naar de andere kant, of plat (dan "
+           "gaat het licht er recht doorheen). Zo kaats je de lichtstraal naar het slot dat de volgende poort opent. In de "
+           "zaal van Vrouwe Spiegelzucht klap je de spiegel plat op de lijn van het kristaloog dat oplicht: dan verblindt de "
+           "straal haar even.",
+        en="A turning mirror in the Mirror Castle (the Vadsrijk, the Splinter Peaks). You won't find it among your own things: "
+           "it belongs to the light puzzles of the castle and to the fight with Lady Mirrorsigh.\n"
+           "\n"
+           "Right-click it and it turns one step: slanted one way, slanted the other way, or flat (then the light goes "
+           "straight through). That way you bounce the beam of light to the lock that opens the next gate. In Lady "
+           "Mirrorsigh's hall, fold the mirror flat on the line of the crystal eye that lights up: the beam then blinds her "
+           "for a moment."),
 }
 
 LINK = {

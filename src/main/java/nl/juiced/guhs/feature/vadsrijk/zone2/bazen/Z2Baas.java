@@ -383,6 +383,12 @@ public abstract class Z2Baas extends VadsrijkBaas implements GeoEntity {
 
     // ---- the tick ------------------------------------------------------------------------------------------------------------
 
+    /** (integration) This engine does targets/leash/reset itself; kern's VadsrijkBaas only keeps its lobs and jumps. */
+    @Override
+    protected boolean eigenGevecht() {
+        return true;
+    }
+
     @Override
     public boolean stil() {
         return super.stil() || zInSprong();
