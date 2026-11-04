@@ -93,7 +93,7 @@ public final class NpcPlekken {
         NPC.put("akim_kaasguh", MIKA_KRAAM);
         // Zwamzoet: citizens with side quests (around the plein and the market)
         NPC.put("oma_truus", p(-18, 64, 36));
-        NPC.put("bakker_bram", p(22, 64, 62));
+        NPC.put("bakker_bram", p(23, 64, 61));   // (fix round 2: INSIDE his bread stall, behind the koek; 22,64,62 was the barrel counter -> roof)
         NPC.put("kleine_kiki", p(6, 64, 44));
         NPC.put("dichter_daan", p(-10, 64, 64));
         NPC.put("postguh_pim", p(12, 64, 30));

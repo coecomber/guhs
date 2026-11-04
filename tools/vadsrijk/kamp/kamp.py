@@ -154,6 +154,66 @@ def lijn(I, pts, w=1, blok=PAD, mix=None, kans=0.0):
                             top(I, xx, zz, mix if (mix and rng.random() < kans) else blok)
 
 
+AANKOMSTPAD = [(150, 242), (149, 228), (152, 212), (151, 196), (151, 172)]   # (fix round 2: stair top (world 0,1102) -> plein)
+AANKOMSTPAD_TAK = [(151, 204), (166, 196), (181, 188)]                        # branch onto the pond path
+
+
+def aankomstpad(I):
+    """Fix round 2: the arrival path from the top of the cliff stair (bouwsels.kamp_zuidsteiger, world x 0 = local 150) to the
+    campfire square. 3 wide (dirt path with gravel/klinkers), stone-brick edging flush in the grass, lamp posts beside it.
+    Claims a corridor so no tree grows on or over it (the old tree stood right on the stair exit)."""
+    S = I.S
+    rand = {}
+    kern = set()
+
+    def afstand(px, pz, pts):
+        best = 1e9
+        for (x1, z1), (x2, z2) in zip(pts, pts[1:]):
+            dx, dz = x2 - x1, z2 - z1
+            t = max(0.0, min(1.0, ((px - x1) * dx + (pz - z1) * dz) / float(dx * dx + dz * dz)))
+            best = min(best, math.hypot(px - (x1 + t * dx), pz - (z1 + t * dz)))
+        return best
+
+    # true distance to the centre line: core <= 1.5 (3 wide), edging 1.5..2.5 (one continuous row of stones)
+    alle = AANKOMSTPAD + AANKOMSTPAD_TAK
+    for x in range(min(p[0] for p in alle) - 3, max(p[0] for p in alle) + 4):
+        for z in range(min(p[1] for p in alle) - 3, max(p[1] for p in alle) + 4):
+            d = min(afstand(x, z, AANKOMSTPAD), afstand(x, z, AANKOMSTPAD_TAK))
+            if d <= 1.5:
+                kern.add((x, z))
+            elif d <= 2.5:
+                rand[(x, z)] = True
+    for (x, z) in kern:
+        if 0 <= x < I.X and 0 <= z < I.Z and I.S.get(x, I.h(x, z), z) == GRAS:
+            r = rng.random()
+            top(I, x, z, "minecraft:gravel" if r < 0.16 else KLINKER if r < 0.22 else PAD)
+            for k in (1, 2, 3):
+                S.set(x, I.h(x, z) + k, z, "minecraft:air")
+    for (x, z) in rand:
+        if (x, z) not in kern and 0 <= x < I.X and 0 <= z < I.Z and I.S.get(x, I.h(x, z), z) == GRAS:
+            top(I, x, z, "minecraft:stone_bricks" if rng.random() < 0.6 else "minecraft:mossy_stone_bricks")
+    # lamp posts every ~11 blocks, alternating sides, never next to the tents (z 176..192) or the plein (z < 176)
+    ptn = AANKOMSTPAD
+    stap = 0
+    for (x1, z1), (x2, z2) in zip(ptn, ptn[1:]):
+        L = math.hypot(x2 - x1, z2 - z1)
+        nx, nz = -(z2 - z1) / L, (x2 - x1) / L
+        k = 0.0
+        while k < L:
+            x, z = x1 + (x2 - x1) * k / L, z1 + (z2 - z1) * k / L
+            if 194 <= z <= 240:
+                s = 1 if stap % 2 == 0 else -1
+                lx, lz = int(round(x + s * nx * 3)), int(round(z + s * nz * 3))
+                if (lx, lz) not in kern and (lx, lz) not in rand and I.H[lx, lz] >= 0:
+                    S.set(lx, I.h(lx, lz) + 1, lz, LAMP_O)
+                    S.set(lx, I.h(lx, lz) + 2, lz, LAMP_B)
+                stap += 1
+            k += 11
+    # no trees on/over the path (bomen_en_bloemen keeps 3 off PAD and skips claimed cells)
+    for (x, z) in list(kern) + list(rand):
+        I.claim(x, z, x, z, 3)
+
+
 # ----------------------------------------------------------------------------------------------------- kamp
 def kampplein(I):
     S = I.S
@@ -305,8 +365,9 @@ def trainingsveld(I):
         S.set(x2 - 3, y + 1, pz, "minecraft:oak_fence")
         S.set(x2 - 3, y + 2, pz, "minecraft:target")
         S.set(x2 - 3, y + 3, pz, "minecraft:target")
-    S.set(x1 + 3, y + 1, z0, "minecraft:barrel[facing=up,open=false]")
-    S.set(x1 + 3, y + 1, z0 + 1, "minecraft:hay_block")
+    for (bx, bz, b) in ((x1 + 3, z0, "minecraft:barrel[facing=up,open=false]"), (x1 + 3, z0 + 1, "minecraft:hay_block")):
+        S.set(bx, y, bz, "minecraft:coarse_dirt")    # (fix round 2: field ground, not a path block, under the props)
+        S.set(bx, y + 1, bz, b)
     S.guh(x1 + 7.5, y + 1, z0 + 0.5, 90)
     S.guh(x1 + 13.5, y + 1, z0 + 0.5, 90)
     S.guh(x2 - 9.5, y + 1, z0 - 2.5, 90)
@@ -436,8 +497,8 @@ def vijver(I):
         a = rng.uniform(0, 2 * math.pi)
         rr = rng.uniform(1.25, 1.7)
         x, z = int(vx + rx * rr * math.cos(a)), int(vz + rz * rr * math.sin(a))
-        if 0 <= x < I.X and 0 <= z < I.Z and S.is_air(x, y + 1, z):
-            S.set(x, I.h(x, z) + 1, z, soorten[i % 3])
+        if 0 <= x < I.X and 0 <= z < I.Z and S.is_air(x, y + 1, z) and S.get(x, I.h(x, z), z) not in (PAD, KLINKER, "minecraft:gravel"):
+            S.set(x, I.h(x, z) + 1, z, soorten[i % 3])   # (fix round 2: never on a path)
     mx, mz = vx + rx + 3, vz - 4
     for dx in (0, 1):
         for dy in (1, 2):
@@ -733,6 +794,7 @@ def bouw(S):
     lijn(I, [(KAMP[0] + 9, KAMP[1] + 9), (VIJVER[0] - 14, VIJVER[1] - 8)], 1, PAD)
     lijn(I, [(KAMP[0] + 8, KAMP[1] - 10), (TRAINING[0] - 2, TRAINING[1] + 11)], 1, PAD)
     lijn(I, [(KAMP[0] - 6, KAMP[1] - 12), (118, 112), (92, 96), (LICHT[0] + 7, LICHT[1] + 7)], 1, PAD, KLINKER, 0.15)
+    aankomstpad(I)
     kampplein(I)
     ordetent(I)
     cx, cz = KAMP

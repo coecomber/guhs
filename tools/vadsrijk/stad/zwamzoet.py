@@ -113,8 +113,10 @@ def steel_straal(rs, t):
     return rs * (1 + 0.75 * math.exp(-t * 9)) * (1 - 0.12 * t)
 
 
-def zwam(S, cx, cz, T, r, rs, kleur, p=0.65, krom=0.0, ramen=True):
-    """Reuzenpaddenstoel: steel van G+1 tot onder de hoed, hoed met plat plateau (vloer = T) en lamellen."""
+def zwam(S, cx, cz, T, r, rs, kleur, p=0.65, krom=0.0, ramen=True, voet=None):
+    """Reuzenpaddenstoel: steel van G+1 tot onder de hoed, hoed met plat plateau (vloer = T) en lamellen.
+    voet(x, z) (fix round 2) = distance outside the footprint of a building on the cap (0 inside): the cap top is raised to T
+    there (one block of flat margin), sloping 1:1 back down to the normal profile, so nothing of the building floats."""
     hoed, vlek = HOED[kleur], VLEK[kleur]
     _, onder_mid = hoed_profiel(0, T, r, p)
     h = onder_mid + 2 - G
@@ -148,6 +150,8 @@ def zwam(S, cx, cz, T, r, rs, kleur, p=0.65, krom=0.0, ramen=True):
             if d > r + 0.4:
                 continue
             top, under = hoed_profiel(d, T, r, p)
+            if voet is not None:
+                top = max(top, T - max(0, int(round(voet(x, z))) - 1))
             for y in range(under, top + 1):
                 blok = hoed
                 if y == under and d > rs + 1:
@@ -570,6 +574,42 @@ def wenteltrap(S, naam, zw, start=0.0):
 
 
 # ---------------------------------------------------------------- tempel van De Knuffelorde
+TEMPEL_TOREN_DZ = 12     # (fix round 2: tower centres at cz + 12, was cz + 10: clear of the west/east bridges, which cut
+#  away the ground under the old towers; the cap is raised under them, see tempel_voet)
+
+
+def tempel_voet(x, z):
+    """Distance of (x, z) outside the ordetempel's footprint on the cap (bordes + stair + the two corner towers); 0 inside."""
+    cx, cz = ZWAMMEN["tempel"][0], ZWAMMEN["tempel"][1]
+    dx = max(cx - 19 - x, x - (cx + 19), 0)
+    dz = max(cz - 17 - z, z - (cz + 18), 0)
+    d = math.hypot(dx, dz)
+    for kant in (-1, 1):
+        d = min(d, max(0.0, math.hypot(x - (cx + kant * 19), z - (cz + TEMPEL_TOREN_DZ)) - 5.7))
+    return d
+
+
+def funderen(S, x1, z1, x2, z2, y_van, y_tot, y_min, blok="knuffelsteen"):
+    """Fix round 2: every column in the box whose lowest block between y_van..y_tot hangs over air gets a foundation down to
+    the first solid block (at most down to y_min; a column that finds nothing is left alone and reported)."""
+    los = 0
+    for x in range(x1, x2 + 1):
+        for z in range(z1, z2 + 1):
+            for y in range(y_van, y_tot + 1):
+                if not S.is_air(x, y, z):
+                    if S.is_air(x, y - 1, z):
+                        yy = y - 1
+                        while yy >= y_min and S.is_air(x, yy, z):
+                            yy -= 1
+                        if yy >= y_min:
+                            S.fill(x, yy + 1, z, x, y - 1, z, blok)
+                        else:
+                            los += 1
+                    break
+    if los:
+        print(f"  funderen: {los} kolommen zonder grond", flush=True)
+
+
 def tempel(S, zw):
     """Tempel op de hoogste hoed. Voorgevel (zuid) met torens, een boogpoort met een deur van 30 hoog en
     een reuzen-guhgezicht erop; erachter een koepel in de vorm van een guhhoofd."""
@@ -624,7 +664,11 @@ def tempel(S, zw):
         S.fill(x, yv, fz2 + 1, x, yv + fh - 1, fz2 + 1, "roze_knuffelsteen")
     # torens
     for tx in (fx1 - 3, fx2 + 3):
-        toren(S, tx, yv, fz1 + 1, 5, fh + 10)
+        tz = cz + TEMPEL_TOREN_DZ
+        # (fix round 2) a solid plinth down into the cap and a stepped base course, so the tower stands ON the cap
+        S.cylinder(tx, tz, 5, T - 3, yv - 1, "knuffelsteen", keep=True)
+        S.cylinder(tx, tz, 5.7, T - 1, T + 1, "roze_knuffelsteen", keep=True)
+        toren(S, tx, yv, tz, 5, fh + 10)
     # boogpoort met deur (15 breed, 30 hoog)
     dw, dh = 15, 30
     dx1 = cx - dw // 2
@@ -688,6 +732,8 @@ def tempel(S, zw):
     # lantaarnpaden over het plateau
     for kant in (-1, 1):
         lantaarnpaal(S, cx + kant * 8, y0, cz + 19)          # beside the foot of the stair, not on it
+    # (fix round 2) nothing of the temple's lower part hangs in the air: foundations down to the (raised) cap
+    funderen(S, cx - 26, cz - 22, cx + 26, cz + 24, y0, yv, T - 14)
     return dict(deur=(dx1, yv, fz1, dw, dh))
 
 
@@ -1000,6 +1046,9 @@ def hoedhuisjes(S, zw, rng):
             vx, vz = -math.cos(a), -math.sin(a)
             voor = ("east" if vx > 0 else "west") if abs(vx) > abs(vz) else ("south" if vz > 0 else "north")
             huis(S, int(hx - w / 2), T + 1, int(hz - w / 2), w, w, 4, voor, PALETTEN[(k + len(naam)) % 5])
+            # (fix round 2) a floor corner past the plateau edge hung over the sloping cap: fill it down with cap
+            funderen(S, int(hx - w / 2) - 1, int(hz - w / 2) - 1, int(hx + w / 2) + 1, int(hz + w / 2) + 1, T, T + 1, T - 8,
+                     HOED[kleur])
             k += 1
         # midden: een bloesemboompje en een lantaarnpaal
         S.set(cx, T + 1, cz, "minecraft:cherry_log[axis=y]")
@@ -1058,7 +1107,7 @@ def bouw(S, seed=11):
     for (cx, cz, h, r, kl) in KLEIN:
         lampzwam(S, cx, cz, h, r, kl)
     for naam, (cx, cz, T, r, rs, kl, p, krom) in ZWAMMEN.items():
-        zwam(S, cx, cz, T, r, rs, kl, p, krom)
+        zwam(S, cx, cz, T, r, rs, kl, p, krom, voet=tempel_voet if naam == "tempel" else None)
     for naam in WENTEL:
         # start just past the stem door (south = pi/2), so the first steps never stand in front of it
         wenteltrap(S, naam, ZWAMMEN, start=math.pi / 2 + 0.6 + rng.random() * 4.4)

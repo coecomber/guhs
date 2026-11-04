@@ -74,7 +74,7 @@ public final class Npcs {
         npc("akim_kaasguh", 0, GuhVariant.CHOCO, Gedrag.STAAN, "marktguh", STRAW_HAT, SUNGLASSES, SAFETY_VEST);
         // --- Zwamzoet: citizens --------------------------------------------------------------------------------------------------
         npc("oma_truus", 90, GuhVariant.SNOW, Gedrag.SLENTER, null, THEEMUTSJE, KNUS_SJAALTJE, BIEB_LEESBRIL);
-        npc("bakker_bram", 270, GuhVariant.NORMAL, Gedrag.STAAN, null, BAKKERSMUTSJE, BAKKERSSCHORTJE);
+        npc("bakker_bram", 0, GuhVariant.NORMAL, Gedrag.STAAN, null, BAKKERSMUTSJE, BAKKERSSCHORTJE);
         npc("kleine_kiki", 180, GuhVariant.MINT, Gedrag.SLENTER, null, 0.75f, OORSTRIKJE_ROZE, ROMPERTJE);
         npc("dichter_daan", 180, GuhVariant.NORMAL, Gedrag.SLENTER, null, PIET_BERET, STRIPED_SWEATER);
         npc("postguh_pim", 0, GuhVariant.NORMAL, Gedrag.SLENTER, null, POLICE_CAP, CAMPINGMARKT_RUGZAK);
@@ -143,7 +143,8 @@ public final class Npcs {
                     zet(sl, d);
                 }
             } else if (g.volgt == null && !g.rust() && g.distanceToSqr(d.plek().getX() + 0.5, g.getY(), d.plek().getZ() + 0.5) > 24 * 24) {
-                g.snapTo(d.plek().getX() + 0.5, vloer(sl, d.plek()), d.plek().getZ() + 0.5, d.yaw(), 0);   // (wandered/escorted off: home)
+                BlockPos s = staanPlek(sl, d.plek());
+                g.snapTo(s.getX() + 0.5, s.getY(), s.getZ() + 0.5, d.yaw(), 0);   // (wandered/escorted off: home)
             }
         }
     }
@@ -168,12 +169,12 @@ public final class Npcs {
         if (g == null) {
             return null;
         }
-        double y = vloer(sl, d.plek());
-        g.snapTo(d.plek().getX() + 0.5, y, d.plek().getZ() + 0.5, d.yaw(), 0);
+        BlockPos s = staanPlek(sl, d.plek());
+        g.snapTo(s.getX() + 0.5, s.getY(), s.getZ() + 0.5, d.yaw(), 0);
         g.setYHeadRot(d.yaw());
         g.setYBodyRot(d.yaw());
         g.stelIn(d);
-        if (Double.isNaN(vloerOfNaN(sl, d.plek()))) {
+        if (!staanOp(sl, s)) {
             g.setNoGravity(true);   // (no floor built here yet: hover instead of falling into the void)
         }
         sl.addFreshEntity(g);
@@ -181,22 +182,63 @@ public final class Npcs {
         return g;
     }
 
-    /** The y to stand on: the nearest floor within 12 blocks of the spot's y (the spot's own y when there is none). */
+    /** The y to stand on in the spot's own column: the spot's exact y, else down (max 4) first, then the nearest floor within 12
+     * blocks either way (the spot's own y when there is none). */
     public static double vloer(ServerLevel sl, BlockPos pos) {
         double y = vloerOfNaN(sl, pos);
         return Double.isNaN(y) ? pos.getY() : y;
     }
 
-    private static double vloerOfNaN(ServerLevel sl, BlockPos pos) {
-        for (int d = 0; d <= 12; d++) {
-            for (int s : new int[] {-1, 1}) {
-                BlockPos b = pos.above(s * d);
-                // (integration: the map's terrain is hollowed, sealed air pockets are pitch dark; away from the exact spot only lit floors)
-                if (staanOp(sl, b) && (d == 0 || sl.getMaxLocalRawBrightness(b) > 0)) {
-                    return b.getY();
+    /** Fix round 2 (Bakker Bram stood on his stall's roof): where an NPC of this spot stands. The exact spot first; when that is
+     * blocked (a counter, a wall), the free floor beside it at the SAME y (within 2 blocks, inside the building/stall) before
+     * the column search, which tries downward before upward, so a spot never ends up on the roof above it. */
+    public static BlockPos staanPlek(ServerLevel sl, BlockPos pos) {
+        if (staanOp(sl, pos)) {
+            return pos;
+        }
+        for (int r = 1; r <= 2; r++) {
+            BlockPos beste = null;
+            double bd = Double.MAX_VALUE;
+            for (int dx = -r; dx <= r; dx++) {
+                for (int dz = -r; dz <= r; dz++) {
+                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
+                        continue;
+                    }
+                    BlockPos b = pos.offset(dx, 0, dz);
+                    double dd = dx * dx + dz * dz;
+                    if (dd < bd && staanOp(sl, b)) {
+                        beste = b;
+                        bd = dd;
+                    }
                 }
-                if (d == 0) {
-                    break;
+            }
+            if (beste != null) {
+                return beste;
+            }
+        }
+        double y = vloerOfNaN(sl, pos);
+        return Double.isNaN(y) ? pos : new BlockPos(pos.getX(), (int) y, pos.getZ());
+    }
+
+    private static double vloerOfNaN(ServerLevel sl, BlockPos pos) {
+        if (staanOp(sl, pos)) {
+            return pos.getY();
+        }
+        // (integration: the map's terrain is hollowed, sealed air pockets are pitch dark; away from the exact spot only lit floors)
+        for (int d = 1; d <= 4; d++) {   // (fix round 2: down first, the floor of the room the spot is in)
+            BlockPos b = pos.below(d);
+            if (staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
+                return b.getY();
+            }
+        }
+        for (int d = 1; d <= 12; d++) {
+            for (int s : new int[] {-1, 1}) {
+                if (s < 0 && d <= 4) {
+                    continue;
+                }
+                BlockPos b = pos.above(s * d);
+                if (staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
+                    return b.getY();
                 }
             }
         }
