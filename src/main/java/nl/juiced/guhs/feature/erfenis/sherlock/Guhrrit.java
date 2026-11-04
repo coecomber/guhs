@@ -48,8 +48,16 @@ public final class Guhrrit {
     /** Guhrrit at this block with this yaw; vakantie = with sunburn and sombrero. One Guhrrit per spot (shared, no owner). */
     @Nullable
     public static GuhNpcEntity verschijn(ServerLevel level, BlockPos pos, float yaw, boolean vakantie) {
+        return verschijn(level, pos, yaw, vakantie, "guhrrit@" + pos.asLong());
+    }
+
+    /**
+     * Guhrrit under a fixed key: the one that already stands under that key is reused (and walks over when he is far),
+     * so a moving spot (the tutorial: in front of the player) never makes a second Guhrrit.
+     */
+    @Nullable
+    public static GuhNpcEntity verschijn(ServerLevel level, BlockPos pos, float yaw, boolean vakantie, String sleutel) {
         Vec3 v = Vec3.atBottomCenterOf(pos);
-        String sleutel = "guhrrit@" + pos.asLong();
         Entity e = Cast.zet(level, Cast.IEDEREEN, sleutel, "guhrrit", vakantie ? Kind.GUHRRIT_VAKANTIE : Kind.MAKELAAR_GUHRRIT, v, yaw, null, false);
         if (e instanceof GuhNpcEntity g) {
             g.setKind(vakantie ? Kind.GUHRRIT_VAKANTIE : Kind.MAKELAAR_GUHRRIT);

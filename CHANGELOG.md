@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.3 — Minecraft 26.1.2
+
+- A new Houtzagerij (sawmill) no longer costs planks, only a few Guhlden. Only the Houtzagerij makes planks, so if you had spent Opa's planks on other buildings first, you could get stuck. Upgrades still cost planks as before.
+- Makelaar Guhrrit no longer brings a new copy of himself for every tutorial step: there is one Guhrrit, and he walks along with you.
+
 ## 1.9.2 — Minecraft 26.1.2
 
 - The Erfenis keys moved off O and M so they no longer take over your own keys: the overview is now **F9** and the world map **F10**. If you still had them on O and M, they move over once by themselves; keys you picked yourself stay as they are. You can change both in Options > Controls > Guhs.
