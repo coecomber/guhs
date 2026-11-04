@@ -484,6 +484,24 @@ def lichtkeverbos(W):
     W.label(0, 120, -470, "Lichtkeverbos")
 
 
+def vijver(W, x, z, rr, g):
+    """[zone 3 kaart] A walkable pond: 1-2 deep water (surface g - 1) in a bowl whose banks slope up (0.6 per block)."""
+    if not W.raakt(x - rr - 14, g - 8, z - rr - 14, x + rr + 14, g + 14, z + rr + 14):
+        return
+    D = np.hypot(W.XX - x, W.ZZ - z)
+    m = D < rr + 12
+    if not m.any():
+        return
+    s = np.floor(g - 1 + np.clip(D - rr, 0, None) * 0.6)
+    gt = boom.grondhoogte(W.XX, W.ZZ)
+    s = np.minimum(s, np.floor(gt + 0.5))
+    W.kolom(s + 1, np.full(D.shape, g + 12.0), "minecraft:air", mask=m)
+    W.kolom(np.full(D.shape, g - 6.0), s, "minecraft:dirt", mask=m, keep=True)
+    W.kolom(s, s, W.kies(["minecraft:grass_block", "minecraft:moss_block", "minecraft:mud"], [4, 2, 1], W.XX, 0, W.ZZ, 973), mask=m & (D >= rr))
+    W.kolom(np.full(D.shape, g - 3.0), np.full(D.shape, g - 2.0), "minecraft:mud", mask=D < rr)
+    W.kolom(np.full(D.shape, g - 1.0), np.full(D.shape, g - 1.0), "minecraft:water", mask=D < rr)
+
+
 def paddenbloesemdal(W):
     c = (-300, 300)
     if not W.raakt(c[0] - 150, 50, c[1] - 150, c[0] + 150, 130, c[1] + 150):
@@ -494,8 +512,7 @@ def paddenbloesemdal(W):
         r = rng.uniform(300, 560)
         x, z, rr = r * math.cos(a), r * math.sin(a), rng.uniform(8, 16)
         g = grond(W, x, z)
-        W.bol((x, g, z), rr, "minecraft:air", ry=4, ymin=g - 1)
-        W.bol((x, g - 1, z), rr, "minecraft:water", ry=3, ymax=g - 1)
+        vijver(W, x, z, rr, g)   # [zone 3 kaart] shallow pond with sloping banks (was a 4-deep bowl with walls)
         for _ in range(int(rr * 2)):
             aa, d = rng.uniform(0, 6.28), rng.uniform(0, rr * 0.8)
             W.wset(x + d * math.cos(aa), g, z + d * math.sin(aa), "minecraft:lily_pad", keep=True)
@@ -525,8 +542,7 @@ def honingmoeras(W):
         if math.hypot(x - MOSVOET[0], z - MOSVOET[2]) < 45:
             continue
         g = grond(W, x, z)
-        W.bol((x, g, z), rr, "minecraft:air", ry=4, ymin=g - 1)
-        W.bol((x, g - 1, z), rr, "minecraft:water", ry=3, ymax=g - 1)
+        vijver(W, x, z, rr, g)   # [zone 3 kaart] shallow pond with sloping banks (was a 4-deep bowl with walls)
         # honingeilandje
         W.bol((x + rr * 0.2, g - 1, z), rr * 0.3, None, ry=2, mixfn=lambda xx, y, zz, m: W.kies(
             ["minecraft:honeycomb_block", "minecraft:honey_block", "minecraft:resin_block"], [3, 2, 1], xx, y, zz, 970))

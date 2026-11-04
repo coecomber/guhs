@@ -201,6 +201,19 @@ def maak(alleen=None, werkers=6):
         print("zone 3 ONBEKENDE BLOKKEN:", sorted(onb))
     if not alleen:
         kaartbeeld(hgt, nm)
+    # v1: every published stand spot snapped onto the real blocks (a formula spot that landed in a fence/pillar/air moves to the
+    # nearest standable block; the builder itself keeps using the plan spots)
+    import poicheck3
+    vervang = poicheck3.snap(poi3_alle())
+    poi3.schrijf(PL.plekken(), "v1 (map, stand spots snapped onto the tiles)", vervang)
+    print(f"zone 3: {len(vervang)} plekken op de echte blokken gezet")
+
+
+def poi3_alle():
+    import poi3
+    alle = {}
+    poi3.plat("", PL.plekken(), alle)
+    return alle
 
 
 def verwerk(r, n, N, hgt, nm, totaal, grootte, onb, t0):

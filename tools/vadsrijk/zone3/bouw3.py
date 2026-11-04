@@ -76,26 +76,30 @@ def loopbrug(W, a, b, y, breed=1, blok=PLANK, hekken=True):
 
 
 def trap_recht(W, a, ya, b, yb, breed=1, blok="minecraft:spruce_planks"):
-    """A real staircase between (a, ya) and (b, yb) floors (rel x/z), 1 up per block forward, stair blocks + fill below."""
+    """A real staircase between floor (a, ya) and floor (b, yb) (rel x/z): one block up per block forward, stair blocks facing
+    the way up, air above every step (also through decks above it)."""
+    if yb < ya:
+        a, ya, b, yb = b, yb, a, ya
     dy = yb - ya
     if dy == 0:
         return loopbrug(W, a, b, ya, breed)
     L = max(abs(b[0] - a[0]), abs(b[1] - a[1]))
     n = max(abs(dy), int(L))
     ux, uz = (b[0] - a[0]) / max(1e-9, L), (b[1] - a[1]) / max(1e-9, L)
-    richt = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}
-    stap = (int(round(ux)), int(round(uz)))
-    up = dy > 0
-    f = richt.get(stap if up else (-stap[0], -stap[1]), "north")
-    nx, nz = -uz, ux
+    if abs(ux) >= abs(uz):
+        f = "east" if ux > 0 else "west"
+    else:
+        f = "south" if uz > 0 else "north"
+    ln = math.hypot(ux, uz) or 1
+    nx, nz = -uz / ln, ux / ln
     for i in range(n + 1):
         t = i / n
         x, z = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
         y = ya + round(dy * t)
+        nxt = ya + round(dy * min(1, (i + 1) / n))
         for w in range(-breed, breed + 1):
             px, pz = x + nx * w, z + nz * w
             W.wset(px, y, pz, blok)
-            nxt = ya + round(dy * min(1, (i + 1) / n))
             if nxt > y:
                 W.wset(px, y + 1, pz, f"minecraft:spruce_stairs[facing={f},half=bottom,shape=straight,waterlogged=false]")
                 for h in (2, 3, 4):
@@ -147,6 +151,29 @@ def windkolommen(W):
     for (wid, x, z, y0, y1, r, lx, lz) in PL.windkolommen():
         if not W.raakt(x - 14, y0 - 3, z - 14, x + 14, y1 + 8, z + 14) and not W.raakt(lx - 6, y1 - 3, lz - 6, lx + 6, y1 + 5, lz + 6):
             continue
+        # through the crown: a blossom tube round the shaft (so nobody drifts into the hollow crown), plus for the spiral column a
+        # ladder shaft beside it (the way down)
+        if y1 > 200 and math.hypot(x, z) < 380:
+            yb = max(y0 + 3, 186)
+            W.cilinder(x, z, r + 1.8, yb, y1 - 1, None, hollow=1.2, mixfn=lambda xx, yy, zz, m: W.kies(
+                ["minecraft:flowering_azalea_leaves", "minecraft:cherry_leaves", "minecraft:stripped_cherry_wood"], [3, 2, 0.4], xx, yy, zz, 3402))
+        if wid == "spiraal_kruin":
+            lx_ = x + r + 3
+            W.wfill(lx_ + 1, y0, z - 1, lx_ + 1, y1 - 1, z + 1, "minecraft:stripped_spruce_wood")
+            W.wfill(lx_, y0, z - 1, lx_, y1 + 2, z + 1, "minecraft:stripped_spruce_wood")
+            for yy in range(y0, y1):
+                W.wset(lx_, yy, z, "minecraft:ladder[facing=west,waterlogged=false]")
+            W.wset(lx_, y1, z, LUCHT)
+            W.wset(lx_, y1 + 1, z, LUCHT)
+            W.wfill(lx_ - 1, y0 - 1, z - 1, lx_ - 1, y1 + 2, z + 1, "minecraft:stripped_spruce_wood")
+            W.wfill(lx_ - 1, y0, z, lx_ - 1, y0 + 1, z, LUCHT)
+            W.wfill(lx_ - 1, y1, z, lx_ - 1, y1 + 1, z, LUCHT)
+            W.wfill(x - 6, y0 - 1, z - 6, x + 6, y0 - 1, z + 14, PLANK)
+            leeg(W, x - 6, y0, z - 6, x + 6, y0 + 3, z + 14)
+            for xx in range(int(x) + 2, int(lx_) + 3):
+                for zz in range(int(z) - 3, int(z) + 4):
+                    if not (xx == int(lx_) and zz == int(z)):
+                        W.wset(xx, y1 - 1, zz, PLANK)
         # the shaft: free air up to the top (through leaves / plumes)
         W.cilinder(x, z, r + 0.6, y0, y1 + 6, LUCHT)
         # bottom: a blossom ring on the ground (petals, lanterns), flush with the ground
@@ -225,6 +252,9 @@ def honingtak_toegang(W):
             cel_deur(W, cx, yb, cz, Rr, 1, sz)
         loopbrug(W, (sx + 1, sz), (cx - 2, sz), yb, breed=1)
         W.wfill(sx - 1, yb, sz - 1, sx + 1, yb, sz + 1, PLANK)
+        W.wfill(cx - 3, yb, sz - 1, cx + 1, yb, sz + 1, PLANK)
+        leeg(W, cx - 3, yb + 1, sz - 1, cx + 1, yb + 3, sz + 1)          # the junction of the two bridges stays open
+        leeg(W, sx + 1, yb + 1, sz - 1, sx + 2, yb + 3, sz + 1)
 
 
 def honinglift(W):
@@ -395,10 +425,11 @@ def kale_kruin(W):
     x, y, z = R("arena_kruinroofvogel")
     if not W.raakt(x - 40, y - 15, z - 40, x + 40, y + 30, z + 40):
         return
-    # a dead, flat crown top: bare pale floor (r 24), dead branches round the rim, a nest ring of grey sticks
-    W.cilinder(x + 0.5, z + 0.5, 27, y, y + 26, LUCHT)
-    for yy in range(y - 6, y):
-        W.cilinder(x + 0.5, z + 0.5, 24 + (yy - y) * 0.5, yy, yy, None, mixfn=lambda xx, y_, zz, m: W.kies(
+    # a dead, flat crown top raised above the crown (a mesa, never a pit): bare pale floor (r 24) on a stepped skirt (1 block
+    # per step, so you walk up from any side), dead branches round the rim, a nest ring of grey sticks
+    W.cilinder(x + 0.5, z + 0.5, PL.KALE_R + 1, y, y + 26, LUCHT)
+    for yy in range(y - 2, y - 16, -1):
+        W.cilinder(x + 0.5, z + 0.5, PL.KALE_R + (y - 1 - yy), yy, yy, None, keep=True, mixfn=lambda xx, y_, zz, m: W.kies(
             ["minecraft:pale_oak_leaves", "minecraft:pale_moss_block", "minecraft:stripped_pale_oak_wood"], [3, 2, 1], xx, y_, zz, 3501))
     W.cilinder(x + 0.5, z + 0.5, 24, y - 1, y - 1, None, mixfn=lambda xx, y_, zz, m: W.kies(
         ["minecraft:pale_moss_block", "minecraft:light_gray_terracotta", "minecraft:stripped_pale_oak_wood", "minecraft:gravel"],
@@ -420,6 +451,8 @@ def kale_kruin(W):
         if W.raakt(px - 12, py - 6, pz - 12, px + 12, py + 20, pz + 12):
             W.cilinder(px + 0.5, pz + 0.5, 7, py - 1, py - 1, "minecraft:stripped_pale_oak_wood")
             W.cilinder(px + 0.5, pz + 0.5, 8, py, py + 12, LUCHT)
+            for yy in range(py - 2, py - 14, -1):
+                W.cilinder(px + 0.5, pz + 0.5, 7 + (py - 1 - yy), yy, yy, "minecraft:pale_oak_leaves", keep=True)
             W.buis([(px - 5, py - 1, pz), (px - 7, py + 10, pz + 2)], [1.4, 0.7], "minecraft:pale_oak_wood")
             W.buis([(px + 5, py - 1, pz), (px + 6, py + 8, pz - 3)], [1.4, 0.7], "minecraft:pale_oak_wood")
 
@@ -577,6 +610,12 @@ def werf(W):
     W.wset(kx + 3, C + 1, kz, "minecraft:chest[facing=west,type=single,waterlogged=false]")
     W.wset(kx + 4, C + 3, kz, "minecraft:lantern[hanging=false,waterlogged=false]")
     VK_vlag(W, cx - 24, C + 1, cz)
+    # the wreck next to the deck (Roquefort phase 3: you jump over): a tilted half hull with a flat plank top (r ~8)
+    wx_, wy_, wz_ = R("roquefort_wrak")
+    W.bol((wx_, wy_ - 4, wz_), 11, None, ry=4, rz=7, ymax=wy_ - 2, mixfn=lambda x, y, z, m: W.kies(
+        ["guhs:gatenkaas_stenen", "minecraft:dark_oak_planks", "minecraft:yellow_concrete"], [2, 2, 1], x, y, z, 3803))
+    W.cilinder(wx_, wz_, 8, wy_ - 1, wy_ - 1, "minecraft:dark_oak_planks")
+    leeg(W, wx_ - 8, wy_, wz_ - 8, wx_ + 8, wy_ + 6, wz_ + 8)
     # level B (y 125): gieterij, bewapeningsloods, Brokkel's open deck, walkways
     W.wfill(cx - 40, B, cz - 30, cx + 40, B, cz - 26, "minecraft:dark_oak_planks")
     W.wfill(cx - 40, B, cz + 26, cx + 40, B, cz + 30, "minecraft:dark_oak_planks")
@@ -587,9 +626,10 @@ def werf(W):
     hal(W, gx, B, gz, 9, 7, 7, "minecraft:bricks", "minecraft:magma_block")
     bx_, by_, bz_ = R("werf_kamer_bewapening")
     hal(W, bx_, B, bz_, 9, 7, 7, "minecraft:dark_oak_planks", None)
-    for i in range(4):
-        W.wset(bx_ - 6 + i * 4, B + 2, bz_ - 6, "minecraft:lever[face=wall,facing=south,powered=false]")
-        W.wset(bx_ - 6 + i * 4, B + 2, bz_ - 7, "minecraft:dark_oak_planks")
+    # (levers + cannons: bazen; the gate the cannons blow open = werf_loods_poort, a 3x4 opening of air in the south wall)
+    gx_, gy_, gz_ = R("werf_loods_poort")
+    leeg(W, gx_ - 1, B + 1, gz_ - 1, gx_ + 1, B + 4, gz_)
+    W.wfill(gx_ - 1, B, gz_ - 1, gx_ + 1, B, gz_ + 2, "minecraft:dark_oak_planks")
     for i in (1, 2):
         kx_, ky_, kz_ = R(f"arena_brokkel_kanon_{i}")
         W.wset(kx_, B + 1, kz_, "minecraft:polished_blackstone_wall[east=none,north=none,south=none,up=true,waterlogged=false,west=none]")
@@ -616,8 +656,8 @@ def werf(W):
     W.wfill(ix - 2, iy - 1, iz - 2, ix + 2, iy - 1, iz + 2, "minecraft:dark_oak_planks")
     trap_recht(W, (ix, iz + 3), iy - 1, (cx + 18, cz + 16 - 8), A, breed=1, blok="minecraft:dark_oak_planks")
     ax, ay, az = R("werf_trap_ab")
-    trap_recht(W, (ax, az), A, (ax + (A - B) + 2, az), B, breed=1, blok="minecraft:dark_oak_planks")
-    loopbrug(W, (ax, az), (cx + 20, cz - 18), A, breed=1)
+    trap_recht(W, (ax, az), A, (ax - (A - B) - 2, az), B, breed=1, blok="minecraft:dark_oak_planks")
+    loopbrug(W, (ax, cz - 6), (ax, az + 2), A, breed=1)
     bx2, by2, bz2 = R("werf_trap_bc")
     trap_recht(W, (bx2, bz2), B, (bx2 + (B - C) + 2, bz2 - 0), C, breed=1, blok="minecraft:dark_oak_planks")
     loopbrug(W, (bx2 + (B - C) + 2, bz2), (cx, cz + 9), C, breed=1)
@@ -760,6 +800,19 @@ def mosvoet_vloer(W):
     for (dx, dz) in ((-8, 6), (9, -5), (-4, -12)):
         W.wset(mx + dx, g + 1, mz + dz, "guhs:guh_tafel[facing=south]")
         W.wset(mx + dx, g + 2, mz + dz, "guhs:theepotje[facing=south]")
+    # the little root-knot houses round it (kit): a flat floor at ground level and a flush door sill
+    for (dx, dz) in ((-38, 10), (-30, -26), (34, -22), (40, 18), (6, 40), (-18, 38)):
+        hx, hz = mx + dx, mz + dz
+        gg = int(math.floor(PL.grond(hx, hz)))
+        W.cilinder(hx, hz, 5.4, gg - 3, gg - 1, "minecraft:dirt")
+        W.cilinder(hx, hz, 5.4, gg, gg, "minecraft:spruce_planks")
+        W.cilinder(hx, hz, 4.8, gg + 1, gg + 3, LUCHT)
+        a = math.atan2(mz - hz, mx - hx)
+        for d in np.arange(4.5, 8.5, 0.5):
+            W.wset(hx + d * math.cos(a), gg, hz + d * math.sin(a), PLANK)
+            W.wset(hx + d * math.cos(a), gg + 1, hz + d * math.sin(a), LUCHT)
+            W.wset(hx + d * math.cos(a), gg + 2, hz + d * math.sin(a), LUCHT)
+        W.wset(hx, gg + 1, hz, "minecraft:moss_carpet")
     W.wset(mx, g + 16, mz, "minecraft:iron_chain[axis=y]")
     W.wset(mx, g + 15, mz, "minecraft:lantern[hanging=true,waterlogged=false]")
 
@@ -804,6 +857,41 @@ def kampvuren(W):
         W.wset(x + 2, y, z, "minecraft:stripped_spruce_log[axis=z]")
 
 
+def poort_trap(W):
+    """The Grote Wortelpoort: a real staircase from the ground in the south down into the Grote Wortelgang (no drop)."""
+    x, z = PL.WORTELPOORT
+    if not W.raakt(x - 10, 40, z - 20, x + 10, 90, z + 45):
+        return
+    g = int(math.floor(PL.grond(x, z + 34) + 0.5))
+    L = boom._spline(PL.WORTELGANG, 10)
+    vloer = int(round(L[0][1] - 9))
+    trap_recht(W, (x, z + 34), g, (x, z - 4), vloer, breed=2, blok="minecraft:stripped_spruce_wood")
+    for zz in range(z - 4, z + 36):
+        t = (z + 34 - zz) / 38.0
+        y = round(g + (vloer - g) * min(1, max(0, t)))
+        W.wfill(x - 2, y + 1, zz, x + 2, y + 5, zz, LUCHT)
+        if zz % 7 == 0:
+            W.wset(x + 3, y + 3, zz, "minecraft:lantern[hanging=false,waterlogged=false]", keep=True)
+
+
+def pad_vrij(W):
+    """Riding paths stay free: nothing solid in the 3 cells above a dirt-path block (kit plumes, lamps, roots)."""
+    if "minecraft:dirt_path" not in W.idx:
+        return
+    pid = W.idx["minecraft:dirt_path"]
+    laat = {W.idx[s] for s in W.idx if any(w in s for w in ("lantern", "lampion", "fence", "chain", "ladder", "campfire", "petals",
+                                                          "carpet", "slab", "stairs", "torch", "z3kv"))}
+    laat.add(0)
+    xs, ys, zs = np.nonzero(W.v == pid)
+    for dy in (1, 2, 3):
+        yy = ys + dy
+        ok = yy < W.v.shape[1]
+        a, b, c = xs[ok], yy[ok], zs[ok]
+        cur = W.v[a, b, c]
+        weg = ~np.isin(cur, list(laat)) & (cur != pid)
+        W.v[a[weg], b[weg], c[weg]] = 0
+
+
 def voor_kit(W):
     pass
 
@@ -825,5 +913,7 @@ def bouw(W):
     kruin_extra(W)
     pelszaal(W)
     spiraal_extra(W)
+    poort_trap(W)
+    pad_vrij(W)
     geheimen(W)
     kampvuren(W)

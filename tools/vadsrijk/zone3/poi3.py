@@ -32,9 +32,11 @@ def gebied_java(g, rec):
     return f'            {rec}.cilinder("{i}", {p[0]}, {p[1]}, {p[2]}, {p[3]}, {y0}, {y1}, {lo}, {hi}{extra})'
 
 
-def schrijf(P, versie="v0 (plan)"):
+def schrijf(P, versie="v0 (plan)", vervang=None):
     alle = {}
     plat("", P, alle)
+    if vervang:   # stand spots snapped onto the built map (maak3 -> poicheck3.snap)
+        alle.update({k: list(v) for k, v in vervang.items() if k in alle})
     kv = sorted(k for k in alle if k.startswith("kampvuur_"))
     uit = sorted(k for k in alle if k.startswith("uitkijk_"))
     gb = PL.gebieden()

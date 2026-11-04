@@ -333,7 +333,7 @@ def stam(W):
         d = np.array([x, 0, z]) / 90.0
         W.buis([(d[0] * 55, y, d[2] * 55), (d[0] * 115, y + 4, d[2] * 115)], [r, r * 0.8], None)
     # 3 poorten van de spiraal naar binnen (y 175, 125, 75)
-    for yp in (175, 125, 75):
+    for yp in (176, 128, 75):   # [zone 3 kaart] the gates land on ring floors (plan3.POORT_Y)
         p = SPIRAAL
         a = (p["y_top"] - yp) / (p["y_top"] - p["y_bot"]) * 2 * math.pi * p["slagen"] + p["phi0"]
         d = (math.cos(a), math.sin(a))
@@ -730,18 +730,16 @@ def wortelduister(W):
     sz = slice(max(0, W.vz(-460)), min(Z, W.vz(460) + 1))
     XX, ZZ = W.XX[sx, sz], W.ZZ[sx, sz]
     RR = np.hypot(XX, ZZ)
+    # [zone 3 kaart] WALKABLE caves (walkability standard): a heightfield cave instead of 3D noise. A smooth floor F (slope well
+    # under 1) and a ceiling C above it; root pillars where a noise is high; the floor blends into the Grote Wortelgang and the
+    # Hartslag-zaal (no drops between them), the cave closes softly towards r 450. The low floors hold shallow sap pools.
+    F, C = duister_vloer(XX, ZZ)
     for j in range(Y):
         y = W.ys[j]
-        if y < 6 or y > 60:
+        if y < 5 or y > 60:
             continue
         sl = W.v[sx, j, sz]
-        # grotten: 3D-ruis, groter naar het midden, binnen r<=450
-        n = vnoise3(XX, y * 1.6, ZZ, cell=58, seed=201, oct=2)
-        drempel = 0.06 + 0.25 * np.clip(RR / 450.0, 0, 1) ** 2 + 0.15 * np.clip((y - 50) / 10.0, 0, 1) + \
-            0.2 * np.clip((14 - y) / 8.0, 0, 1)
-        grot = (np.abs(n) > drempel) & (RR < 450)
-        grot &= ~((n > 0.5) & (RR < 440))  # dikke pilaren laten staan
-        sl[grot] = 0
+        sl[(y > F) & (y <= C)] = 0
     # Hartslag-zaal en de Grote Wortelgang
     cx, fy, cz, r, h = HARTSLAG
     W.bol((cx, fy + h * 0.45, cz), r, None, ry=h * 0.62)
@@ -750,6 +748,31 @@ def wortelduister(W):
     W.buis(L, np.full(len(L), 9.0), None, plat=1.1)
     # wanden aankleden: rotsen, roze aders, mos, schimmel
     wortelduister_aankleden(W, sx, sz)
+
+
+def duister_vloer(XX, ZZ):
+    """Floor F and ceiling C (world y) of the Wortelduister caves at (XX, ZZ) (rel); C <= F where there is no cave."""
+    RR = np.hypot(XX, ZZ)
+    F = 13 + 9 * vnoise(XX, ZZ, cell=90, seed=205, oct=2) + 6 * np.clip(RR / 450.0, 0, 1)
+    # blend into the gang floor (centre y - 8) near the Grote Wortelgang and to the hall floor (12) near the trunk axis
+    L = _spline(WORTELGANG, 10)
+    d = np.full(XX.shape, 1e9)
+    gy = np.zeros(XX.shape)
+    for i in range(0, len(L)):
+        dd = np.hypot(XX - L[i, 0], ZZ - L[i, 2])
+        beter = dd < d
+        d = np.where(beter, dd, d)
+        gy = np.where(beter, L[i, 1] - 8, gy)
+    w = np.clip(1 - (d - 10) / 75.0, 0, 1)
+    F = F * (1 - w) + gy * w
+    wh = np.clip(1 - (RR - 64) / 40.0, 0, 1)
+    F = F * (1 - wh) + 12 * wh
+    hoog = 14 + 14 * np.clip(vnoise(XX, ZZ, cell=60, seed=206, oct=2) * 0.5 + 0.5, 0, 1)
+    C = F + hoog * np.clip((450 - RR) / 60.0, 0, 1) ** 0.7
+    C = np.minimum(C, 58)
+    pilaar = (vnoise(XX, ZZ, cell=28, seed=207, oct=1) > 0.42) & (RR > 70) & (d > 14)
+    C = np.where(pilaar, F, C)
+    return F, C
 
 
 def wortelduister_aankleden(W, sx, sz):

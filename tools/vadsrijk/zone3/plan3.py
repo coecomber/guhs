@@ -99,9 +99,20 @@ HONINGLIFT_ONDER = (262, None, 392)      # y from the terrain
 # ================================================================================================ Kruinzee
 NEST = (0, -40)
 NEST_Y = int(round(kruin(*NEST)))          # floor of the nest bowl (stand)
-KALE_KRUIN = (170, -170)                   # the dead crown top: world boss Kruinroofvogel
-KALE_Y = int(round(kruin(*KALE_KRUIN))) + 1
-ROOFVOGEL_ZIT = [(262, 42), (-40, -292)]   # the two other perches (phase 3, ~200 away)
+KALE_KRUIN = (-210, -80)                   # the dead crown top: world boss Kruinroofvogel (~210 from the nest)
+
+
+def _max_kruin(c, r):
+    xs = np.linspace(-r, r, 2 * int(r) + 1)
+    X, Z = np.meshgrid(xs, xs)
+    m = X ** 2 + Z ** 2 <= r * r
+    t, _ = boom.kruin_top(c[0] + X[m], c[1] + Z[m])
+    return float(t.max())
+
+
+KALE_R = 24
+KALE_Y = int(math.ceil(_max_kruin(KALE_KRUIN, KALE_R + 2))) + 1    # stand y on the raised dead top (a mesa with a stepped skirt)
+ROOFVOGEL_ZIT = [(-60, -250), (-250, 110)]  # the two other perches (phase 3, ~200 away)
 MIKA_STEIGER = (-190, -200)
 VIJVERS = boom.VIJVERS
 GRAUWE_VLEKKEN = [(150, 120), (-110, 205), (60, -250)]   # z3_hq04: 3 sprayed leaf patches
@@ -216,6 +227,9 @@ def windkolommen():
         a = math.atan2(z, x)
         lx, lz = x - 9 * math.cos(a), z - 9 * math.sin(a)
         out.append((wid, x, z, stand_y_grond(x, z), int(round(kruin(lx, lz))) + 1, 3.5, lx, lz))
+    # the top of the Stamspiraal (y 200, under the crown) up through the crown to the crown top near the old nest; a ladder
+    # shaft beside it is the way down
+    out.append(("spiraal_kruin", 0, -102, 201, int(round(kruin(0, -90))) + 1, 3.0, 0, -90))
     x, z = HONINGLIFT_BOVEN[0] + 10, HONINGLIFT_BOVEN[2] + 12
     out.append(("honingtak", x, z, stand_y_grond(x, z), DEK_Y + 1, 3.0, HONINGLIFT_BOVEN[0] + 4, HONINGLIFT_BOVEN[2] + 4))
     return out
@@ -300,7 +314,7 @@ def plekken():
     put("arena_kruinroofvogel", kx, KALE_Y, kz)
     put("arena_kruinroofvogel_bord", kx + 20, KALE_Y, kz + 20)
     for i, (x, z) in enumerate(ROOFVOGEL_ZIT):
-        put(f"kruinroofvogel_zit_{i + 1}", x, int(round(kruin(x, z))) + 1, z)
+        put(f"kruinroofvogel_zit_{i + 1}", x, int(math.ceil(_max_kruin((x, z), 8))) + 1, z)
     mx, mz = MIKA_STEIGER
     put("mika_steiger", mx + 6, int(kruin(mx, mz)) + 2, mz + 4)
     put("mika_bevel", mx - 6, int(kruin(mx, mz)) + 2, mz - 4)
@@ -481,6 +495,26 @@ def plekken():
     put("geheim_schat_5", 410, stand_y_grond(410, 270), 270)
     for i, (x, y, z) in enumerate(((452, DEK_Y + 1, -12), (600, 226, 30), (560, 196, 8), (446, 239, 12), (WONEN[0] + 3, WOON_CEL[1] + 1, 2))):
         put(f"imker_aanwijzing_{i + 1}", x, y, z)
+
+    # ---- requests (POI_VERZOEKEN_Z3.md)
+    for i, (x, z, rr) in enumerate(VIJVERS):
+        a = 0.8 + i * 1.3
+        kx, kz = x + (rr + 9) * math.cos(a), z + (rr + 9) * math.sin(a)
+        put(f"kuiken_{i + 1}", kx, int(round(kruin(kx, kz))) + 1, kz)
+    zx, zz = ZWEEFPLATFORMS[1]
+    put("kuiken_6", zx - 14, int(round(kruin(zx - 14, zz - 6))) + 1, zz - 6)
+    kx, kz = KALE_KRUIN
+    put("arena_kruinroofvogel_deur", kx + 30, int(round(kruin(kx + 30, kz))) + 1, kz)
+    put("arena_piepvel_deur", 4, PELSZAAL_Y + 1, 13)
+    cx, cy, cz = WERF
+    put("roquefort_wrak", cx, WERF_C - 3 + 1, cz - 17)
+    put("werf_loods_poort", cx - 28, WERF_B + 1, cz + 16 + 8)
+    for naam in ("schimmelkwekerij", "ringenzaal"):
+        a_deg = [k for k in HART_KAMERS if k[0] == naam][0][1]
+        x, z = polar(a_deg - 9, HART_RING_R)
+        put(f"hart_{'kwekerij' if naam == 'schimmelkwekerij' else naam}_poort", x, HART_VLOER + 1, z)
+    for i, (dx, dz) in enumerate(((11, 5), (-11, 5), (0, 13), (11, -7), (-11, -7), (0, -14))):
+        put(f"nest_tak_{i + 1}", NEST[0] + dx, NEST_Y, NEST[1] + dz)
 
     # ---- Keizer flash + landmarks
     put("flash_f2_kijkpunt", KAPEL_CEL[0], KAPEL_CEL[1] + 1, KAPEL_CEL[2] + 4)

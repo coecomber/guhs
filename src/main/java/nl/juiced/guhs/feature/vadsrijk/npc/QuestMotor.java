@@ -316,7 +316,7 @@ public final class QuestMotor {
     /** Airship NPC id -> the destinations it offers, in order ("zwamzoet" = De Haven, "knuffelkamp", "kandijkom"). */
     public static final Map<String, List<String>> REIZEN = new ConcurrentHashMap<>(Map.of(
             "kapitein", List.of("zwamzoet", "kandijkom", "schemerwortel"),            // [z3-wereld] + schemerwortel
-            "luchtschipper", List.of("knuffelkamp", "kandijkom"),
+            "luchtschipper", List.of("knuffelkamp", "kandijkom", "schemerwortel"),
             "z2_kapitein", List.of("zwamzoet", "knuffelkamp", "schemerwortel"),
             "z3_kapitein", List.of("zwamzoet", "kandijkom", "knuffelkamp")));
     private static final Map<UUID, List<String>> REIS_OPEN = new ConcurrentHashMap<>();

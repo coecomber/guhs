@@ -108,6 +108,7 @@ public final class Z3WereldPlekken {
             new Windkolom("werf_tak", 2734, -390, 71, 197, 3.0, 2724, -401),
             new Windkolom("mosvoet_kruin", 2094, 195, 73, 258, 3.5, 2101, 188),
             new Windkolom("lichtkever_kruin", 2259, -300, 77, 251, 3.5, 2261, -291),
+            new Windkolom("spiraal_kruin", 2299, -102, 201, 270, 3.0, 2299, -90),
             new Windkolom("honingtak", 1897, 38, 71, 239, 3.0, 1903, 30));
 
     public static final List<Lift> LIFTEN = List.of(
@@ -157,8 +158,8 @@ public final class Z3WereldPlekken {
             Map.entry("arena_brokkel", new BlockPos(2875, 126, -554)),
             Map.entry("arena_brokkel_kanon_1", new BlockPos(2883, 126, -546)),
             Map.entry("arena_brokkel_kanon_2", new BlockPos(2867, 126, -546)),
-            Map.entry("arena_kruinroofvogel", new BlockPos(2129, 238, -170)),
-            Map.entry("arena_kruinroofvogel_bord", new BlockPos(2109, 238, -150)),
+            Map.entry("arena_kruinroofvogel", new BlockPos(2509, 268, -80)),
+            Map.entry("arena_kruinroofvogel_bord", new BlockPos(2489, 268, -60)),
             Map.entry("arena_nestwachter", new BlockPos(2232, 51, 67)),
             Map.entry("arena_piepvel", new BlockPos(2299, 184, 0)),
             Map.entry("arena_roquefort", new BlockPos(2899, 111, -570)),
@@ -372,8 +373,8 @@ public final class Z3WereldPlekken {
             Map.entry("kampvuur_wortelweg_5", new BlockPos(2464, 68, -452)),
             Map.entry("kampvuur_wortelweg_6", new BlockPos(1991, 68, -368)),
             Map.entry("knuffelbeeld", new BlockPos(1829, 239, -2)),
-            Map.entry("kruinroofvogel_zit_1", new BlockPos(2037, 258, 42)),
-            Map.entry("kruinroofvogel_zit_2", new BlockPos(2339, 248, -292)),
+            Map.entry("kruinroofvogel_zit_1", new BlockPos(2359, 262, -250)),
+            Map.entry("kruinroofvogel_zit_2", new BlockPos(2549, 247, 110)),
             Map.entry("landmark_hoogvads_richting", new BlockPos(2999, 260, 0)),
             Map.entry("lantaarnring_1", new BlockPos(2299, 84, 5)),
             Map.entry("lantaarnring_1_kooi", new BlockPos(2303, 84, -3)),
@@ -517,6 +518,8 @@ public final class Z3WereldPlekken {
             Map.entry("wind_mosvoet_kruin_onder", new BlockPos(2094, 73, 195)),
             Map.entry("wind_paddenbloesem_tak_boven", new BlockPos(2705, 198, 361)),
             Map.entry("wind_paddenbloesem_tak_onder", new BlockPos(2715, 69, 349)),
+            Map.entry("wind_spiraal_kruin_boven", new BlockPos(2299, 270, -90)),
+            Map.entry("wind_spiraal_kruin_onder", new BlockPos(2299, 201, -102)),
             Map.entry("wind_werf_tak_boven", new BlockPos(2724, 197, -402)),
             Map.entry("wind_werf_tak_onder", new BlockPos(2734, 71, -391)),
             Map.entry("wortelgewelf", new BlockPos(1959, 74, -150)),

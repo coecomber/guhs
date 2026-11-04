@@ -38,7 +38,7 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
  *   <li>{@link Z3Reizen}: the airship line to the Honingtak dock (gate zone2_klaar + lv 30, opening film), quest action
  *       {@code z3_vlieg} for the captains / travel map;</li>
  *   <li>{@link Z3Liften}: honey lifts, the Honinglift, the Schorsstad lifts (ride scenes);</li>
- *   <li>{@link Z3Wind}: the upward blossom-wind columns (players + mounts);</li>
+ *   <li>the wind columns are only PLACED here (map + {@link Z3WereldPlekken#WINDKOLOMMEN}); their physics is z3-systemen's Z3Wind;</li>
  *   <li>the zone-3 viewpoints (zone 1's panorama scene);</li>
  *   <li>client: the zone-3 sky, fog per layer and ambient ({@code zone3.wereld.client}).</li>
  * </ul>
@@ -53,29 +53,20 @@ public final class Z3WereldRegistry {
     }
 
     public static void register(IEventBus modBus) {
-        // flat areas for kern's 2D lookups (first match wins): the zone box last, the town and the dungeon in front of it
-        Gebieden.voegVooraan(new Gebieden.Gebied("z3_ring", Z3WereldPlekken.ZONE_MIN_X, Z3WereldPlekken.TEGEL_Z0 * 64,
-                Z3WereldPlekken.TEGEL_X1 * 64 + 63, Z3WereldPlekken.TEGEL_Z1 * 64 + 63, 30, 50, false));
-        for (Z3WereldPlekken.Gebied3 g : Z3WereldPlekken.GEBIEDEN) {
-            if (!g.cilinder() && (g.id().equals("z3_zeppelinwerf") || g.id().equals("z3_honingtak"))) {
-                Gebieden.voegVooraan(new Gebieden.Gebied(g.id(), g.a(), g.b(), g.c(), g.d(), g.minLevel(), g.maxLevel(), g.stad()));
-            }
-        }
+        // flat areas for kern's 2D lookups, ONLY when nobody registered the layered zone-3 areas (z3-systemen's Z3Lagen puts the
+        // y-aware areas into kern; then these flat boxes would override them): checked once the server starts
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerAboutToStartEvent e) -> vlakkeGebieden());
         QuestMotor.ACTIES.put("z3_vlieg", (p, naar) -> Z3Reizen.naarHoningtak(p));
+        npcBindingen();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
                 return;
             }
             long t = sl.getGameTime();
-            boolean iemand = false;
             for (ServerPlayer p : sl.players()) {
                 if (!inZone3(p.getX(), p.getZ()) || p.isSpectator()) {
                     continue;
-                }
-                iemand = true;
-                if (!RijkScenes.bezig(p)) {
-                    Z3Wind.tick(p, sl, t);
                 }
                 if (t % 10 == 0 && !RijkScenes.bezig(p)) {
                     for (WereldPlekken.Uitkijk u : Z3WereldPlekken.UITKIJKEN) {
@@ -87,9 +78,6 @@ public final class Z3WereldRegistry {
                         }
                     }
                 }
-            }
-            if (iemand && t % 5 == 0) {
-                Z3Wind.deeltjes(sl);
             }
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, (PlayerInteractEvent.RightClickBlock e) -> {
@@ -103,6 +91,41 @@ public final class Z3WereldRegistry {
             }
         });
         NeoForge.EVENT_BUS.addListener(Z3WereldRegistry::commandos);
+    }
+
+    static void vlakkeGebieden() {
+        if (Gebieden.van("z3_kruinzee") != null) {
+            return;
+        }
+        Gebieden.voegVooraan(new Gebieden.Gebied("z3_ring", Z3WereldPlekken.ZONE_MIN_X, Z3WereldPlekken.TEGEL_Z0 * 64,
+                Z3WereldPlekken.TEGEL_X1 * 64 + 63, Z3WereldPlekken.TEGEL_Z1 * 64 + 63, 30, 50, false));
+        for (Z3WereldPlekken.Gebied3 g : Z3WereldPlekken.GEBIEDEN) {
+            if (!g.cilinder() && (g.id().equals("z3_zeppelinwerf") || g.id().equals("z3_honingtak"))) {
+                Gebieden.voegVooraan(new Gebieden.Gebied(g.id(), g.a(), g.b(), g.c(), g.d(), g.minLevel(), g.maxLevel(), g.stad()));
+            }
+        }
+    }
+
+    /** The npc slice's optional bindings (POI_VERZOEKEN_Z3): the Honinglift opens / rides, a cave lantern lights. */
+    static void npcBindingen() {
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppel("z3_honinglift_open",
+                p -> nl.juiced.guhs.feature.vadsrijk.npc.Questlog.zetVlag(p, "z3_honinglift", true));
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppelMet("z3_honinglift", (p, arg) -> {
+            Z3WereldPlekken.Lift l = Z3Liften.lift("honinglift");
+            if (l != null) {
+                Z3Liften.rijd(p, l, "op".equals(arg));
+            }
+        });
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppelMet("z3_grotlantaarn", (p, arg) -> {
+            BlockPos b = Z3WereldPlekken.plek("hart_grotlantaarn_" + arg);
+            if (b != null && p.level() instanceof ServerLevel sl) {
+                BlockPos lamp = b.above(2);
+                if (sl.getBlockState(lamp).is(net.minecraft.world.level.block.Blocks.SOUL_LANTERN)) {
+                    sl.setBlock(lamp, net.minecraft.world.level.block.Blocks.LANTERN.defaultBlockState(), 3);
+                }
+                sl.sendParticles(net.minecraft.core.particles.ParticleTypes.FLAME, lamp.getX() + 0.5, lamp.getY() + 0.5, lamp.getZ() + 0.5, 12, 0.2, 0.2, 0.2, 0.01);
+            }
+        });
     }
 
     // ------------------------------------------------------------------------------------------------ dev commands
