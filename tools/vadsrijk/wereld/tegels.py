@@ -116,9 +116,10 @@ class Wereld:
             zet(G[k] & (f > 0.5), "guhs:weide_roze_gras")
         # city + haven ground: knuffelgras
         zet(G["stad"], "guhs:knuffelgras")
-        hx0, hz0, hx1, hz1 = KA.HAVEN_DORP
-        hv = (KA.XX >= hx0) & (KA.XX <= hx1) & (KA.ZZ >= hz0) & (KA.ZZ <= hz1)
+        hd = K.haven_d + 3 * f
+        hv = hd < 0
         zet(hv, "guhs:knuffelgras")
+        zet((hd >= 0) & (hd < 7) & (rnd < 0.55 - hd / 14), "guhs:knuffelgras")
         # steep: bare rock on top, no dirt
         steen = np.array([P.id(GESTEENTE[k][0]) for k in GESTEENTE], np.uint16)
         top = np.where(steil & (H > 70), steen[soort], top)

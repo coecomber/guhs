@@ -44,7 +44,7 @@ GROT_INGANGEN = [(-300, -220), (-420, -300), (-180, -360)]
 KRISTALKAMER = (-490, 52, -520)
 LICHTSTRALEN = [(-340, 120), (-420, 40), (-240, 220), (-480, 160), (-300, -40), (-360, 300)]
 SCHILDPAD = (520, 720)
-HAVEN_DORP = (60, 420, 125, 560)
+HAVEN_DORP = (56, 418, 120, 564)
 VIJVERS = [(330, -70, 30, 18), (470, 160, 25, 16), (250, 260, 22, 14), (520, 40, 20, 13), (300, 120, 14, 10)]
 PADEN = {
     "weide": [(30, -40), (90, -40), (220, -80), (300, -20), (360, 30), (374, 90)],
@@ -163,10 +163,14 @@ class Kaart:
         ds = np.maximum(np.maximum(sx0 - x, x - sx1), np.maximum(sz0 - z, z - sz1))
         t = np.clip(ds / 48, 0, 1)
         H = 63 * (1 - t) + H * t
-        # De Haven village: flat at 64
+        # De Haven village: flat at 64 inside an organic (noisy, rounded) outline, a long soft rim out to the meadows
         hx0, hz0, hx1, hz1 = HAVEN_DORP
-        dh = np.maximum(np.maximum(hx0 - x, x - hx1), np.maximum(hz0 - z, z - hz1))
-        th = np.clip(dh / 20, 0, 1)
+        hcx, hcz, hrx, hrz = (hx0 + hx1) / 2, (hz0 + hz1) / 2, (hx1 - hx0) / 2, (hz1 - hz0) / 2
+        rr = ((np.abs(x - hcx) / hrx) ** 3 + (np.abs(z - hcz) / hrz) ** 3) ** (1 / 3)
+        dh = (rr - 1) * min(hrx, hrz) + 7 * n1 + 2.5 * f
+        self.haven_d = dh
+        th = np.clip(dh / 26, 0, 1)
+        th = th * th * (3 - 2 * th)
         H = 64 * (1 - th) + H * th
         # Koning Klodder arena: a flat round meadow
         da = np.hypot(x - ARENA[0], z - ARENA[1])

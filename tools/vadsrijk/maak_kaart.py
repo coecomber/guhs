@@ -165,7 +165,7 @@ public final class WereldPlekken {{
     public static final int TEGEL_X0 = {KA.TX0}, TEGEL_X1 = {KA.TX1}, TEGEL_Z0 = {KA.TZ0}, TEGEL_Z1 = {KA.TZ1};
     /** First arrival (kern Gebieden.AANKOMST): the low jetty on the south coast of Knuffelkamp. */
     public static final BlockPos AANKOMST = {bp(W_["aankomst"])};
-    public static final BlockPos KAMP_LANDING = {bp(plekken["kamp"]["steiger_eind"])}, HAVEN_LANDING = {bp(W_["luchtschip_haven_kapitein"])};
+    public static final BlockPos KAMP_LANDING = {bp(plekken["kamp"]["steiger_eind"])}, HAVEN_LANDING = {bp(W_["luchtschip_haven_landing"])};
     public static final BlockPos KAMP_BEL = {bp(plekken["kamp"]["luchtschip_bel"])}, HAVEN_BEL = {bp(W_["luchtschip_haven_bel"])};
 
     /** A moving temple door: the box of its blocks, where you stand in front of it, the y of its hidden copy, wings along x? */

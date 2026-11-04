@@ -29,6 +29,7 @@ ROZESTEEN, GLAD, PASTEL = "guhs:roze_knuffelsteen", "guhs:gladde_knuffelsteen", 
 WOL, BETON, WIT = "minecraft:pink_wool", "minecraft:pink_concrete", "minecraft:white_wool"
 HEK = "minecraft:cherry_fence"
 LAMP = "guhs:guh_lantaarnpaal"
+LAMP_O, LAMP_B = LAMP + "[half=lower]", LAMP + "[half=upper]"
 
 rng = random.Random(110)
 
@@ -186,7 +187,8 @@ def kampplein(I):
         yaw = (math.degrees(math.atan2(cx - x, -(cz - z))) + 360) % 360
         S.guh(x + 0.5, y + (2 if sit else 1), z + 0.5, yaw, sitting=sit)
     for (x, z) in ((cx - 11, cz - 11), (cx + 11, cz - 11), (cx - 11, cz + 11), (cx + 11, cz + 11)):
-        S.set(x, y + 1, z, LAMP)
+        S.set(x, y + 1, z, LAMP_O)
+        S.set(x, y + 2, z, LAMP_B)
     # vlaggen van de orde rond het plein
     for (x, z, u) in ((cx - 13, cz - 3, (0, 1)), (cx + 13, cz - 3, (0, 1)), (cx - 3, cz + 13, (1, 0))):
         vlag(S, x, y + 1, z, u, h=5, w=3, paal_h=9, embleem="guhs:mini_luchtballon")
@@ -210,10 +212,20 @@ def tent(I, x, z, facing, kleur="guhs:pleister_roze", h=4, diep=9):
                 if lz == 0 and lx == 0 and k < 2:
                     continue
                 T.set(lx, k, lz, creme)
+    # interior: a plank floor with carpets (no grass or flowers inside the tent)
+    for lz in range(0, diep):
+        for lx in range(-(h - 2), h - 1):
+            T.set(lx, -1, lz, "minecraft:spruce_planks")
+            if 0 < lz < diep - 1:
+                T.set(lx, 0, lz, "minecraft:pink_carpet" if lx == 0 else "minecraft:white_carpet")
     T.set(0, h, 0, "minecraft:cherry_fence")
     T.set(0, h + 1, 0, WOL)
     T.set(1, h + 1, 0, WOL)
-    T.set(h, 0, -1, LAMP if rng.random() < 0.5 else "minecraft:barrel[facing=up,open=false]")
+    if rng.random() < 0.5:
+        T.set(h, 0, -1, LAMP_O)
+        T.set(h, 1, -1, LAMP_B)
+    else:
+        T.set(h, 0, -1, "minecraft:barrel[facing=up,open=false]")
     cs = [T.w(lx, 0, lz) for lx in (-h, h) for lz in (0, diep)]
     I.claim(min(c[0] for c in cs), min(c[2] for c in cs), max(c[0] for c in cs), max(c[2] for c in cs), 1)
     T.guh(-h + 1, 0, -2, 0)
@@ -243,6 +255,12 @@ def ordetent(I):
                 if lz == 0 and abs(lx) <= 1 and k < 4:
                     continue
                 T.set(lx, k, lz, "guhs:campingmarkt_tentdoek_creme" if k >= WAND else WOL)
+    # interior: plank floor with a red carpet runner (no grass inside)
+    for lz in range(0, D):
+        for lx in range(-W + 1, W):
+            T.set(lx, -1, lz, "minecraft:spruce_planks")
+            if 0 < lz < D - 1:
+                T.set(lx, 0, lz, "minecraft:red_carpet" if abs(lx) <= 1 else "minecraft:pink_carpet")
     # guhgezicht boven de ingang + oortjes op de nok
     pix(S, *T.w(-2, WAND + 6, -1), T.r, K.GEZICHT_5, K.GEZICHT_KEY)
     fx, fz = T.w(0, 0, 1)[0], T.w(0, 0, 1)[2]
@@ -272,7 +290,8 @@ def trainingsveld(I):
                     S.set(x, y + 1, z, HEK)
     for (x, z) in ((x1, z1), (x2, z1), (x1, z2), (x2, z2)):
         S.set(x, y + 1, z, "minecraft:stripped_cherry_log[axis=y]")
-        S.set(x, y + 2, z, LAMP)
+        S.set(x, y + 2, z, LAMP_O)
+        S.set(x, y + 3, z, LAMP_B)
     for i in range(4):
         for j in range(2):
             px, pz = x1 + 5 + i * 5, z0 - 4 + j * 8
@@ -331,6 +350,13 @@ def tempeltje(I, facing="east"):
                     if abs(lx) == 5 and lz % 4 == 1 and 4 <= k <= 6:
                         b = "guhs:glasinlood_guh"
                     T.set(lx, k, lz, b)
+    # cella floor: pink/white marble (quartz + pink concrete checker)
+    for lz in range(6, 20):
+        for lx in range(-4, 5):
+            T.set(lx, 1, lz, "minecraft:quartz_block" if (lx + lz) % 2 else "minecraft:pink_concrete")
+    for lz in range(4, 6):
+        for lx in range(-1, 2):
+            T.set(lx, 1, lz, "minecraft:quartz_block")
     # architraaf
     for lz in range(0, D + 1):
         for lx in range(-W, W + 1):
@@ -361,7 +387,8 @@ def tempeltje(I, facing="east"):
         T.set(lx, 1, -8, GLAD)
         T.set(lx, 2, -8, ding)
         vlag(S, *T.w(lx + 2, 0, -9), T.r, kleur=kl, h=4, w=2, paal_h=7)
-        T.set(lx - 2, 0, -7, LAMP)
+        T.set(lx - 2, 0, -7, LAMP_O)
+        T.set(lx - 2, 1, -7, LAMP_B)
     for lz in range(-12, -3):
         for lx in range(-2, 3):
             T.set(lx, -1, lz, KLINKER)
@@ -521,7 +548,8 @@ def steiger(I):
             S.set(px, y + k, z, WOL)
     oortjes(S, px, y + 17, z0, (0, 1), gap=1, h=4, w=3)
     for z in (z0 - 5, z0 + 5):
-        S.set(px + 1, y + 1, z, LAMP)
+        S.set(px + 1, y + 1, z, LAMP_O)
+        S.set(px + 1, y + 2, z, LAMP_B)
     # rekruten en een havenguh
     for (gx, gz, a) in ((kx + 20, z0 + 1, 270), (kx + 22, z0 - 1, 270), (kx + 8, z0, 270), (x_eind - 3, z0 + 3, 200)):
         S.guh(gx + 0.5, y + 1, gz + 0.5, a)
@@ -664,6 +692,9 @@ def bomen_en_bloemen(I, n_bomen=170):
             continue
         if math.hypot(x - KAMP[0], z - KAMP[1]) < 22:
             continue
+        if any(S.get(x + dx, I.h(x + dx, z + dz), z + dz) in (PAD, KLINKER, "minecraft:coarse_dirt")
+               for dx in range(-3, 4) for dz in range(-3, 4) if 0 <= x + dx < I.X and 0 <= z + dz < I.Z):
+            continue                      # (no trees on or overhanging the paths)
         soort = rng.choice([BOOM_ROZE, BOOM_ROZE, BOOM_GROEN, BOOM_BLOEI])
         boom(S, x, I.h(x, z), z, soort, h=rng.randint(4, 7), r=rng.uniform(2.6, 3.8))
         I.claim(x - 2, z - 2, x + 2, z + 2, 0)
@@ -731,6 +762,18 @@ def bouw(S):
     for z in range(hz - 1, hz + 6):
         S.set(hx + 2, hy + 7, z, slab("guhs:guh_dakpan_roze_plaat"))
         S.set(hx + 3, hy + 7, z, slab("guhs:guh_dakpan_roze_plaat"))
+    # a door in the south wall + a step outside it, a plank floor inside
+    for x in range(hx + 1, hx + 5):
+        for z in range(hz + 1, hz + 4):
+            S.set(x, hy, z, "minecraft:spruce_planks")
+            for k in (1, 2, 3):
+                S.set(x, hy + k, z, "minecraft:air")
+    S.set(hx + 2, hy + 1, hz + 4, "minecraft:spruce_door[facing=south,half=lower,hinge=left,open=false,powered=false]")
+    S.set(hx + 2, hy + 2, hz + 4, "minecraft:spruce_door[facing=south,half=upper,hinge=left,open=false,powered=false]")
+    for dz in (5, 6):
+        S.set(hx + 2, hy, hz + dz, PAD)
+        for k in (1, 2, 3):
+            S.set(hx + 2, hy + k, hz + dz, "minecraft:air")
     S.guh(lx + 5.5, I.h(lx + 5, lz + 6) + 1, lz + 6.5, 135)
     kx, xe = steiger(I)
     luchtschip(S, kx + 2, VLOER - 1, STEIGER_Z + 10)
