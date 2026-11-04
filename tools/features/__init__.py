@@ -206,6 +206,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_momenten',
             'vadsrijk_z2_wereld',
             'vadsrijk_z2_npc',
+            'vadsrijk_z2_bazen',
             ]
 
 

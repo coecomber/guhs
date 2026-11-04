@@ -24,6 +24,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2SystemenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone2.wezens.Z2WezensRegistry.register(modBus);   // zone 2 (z2-wezens)
         nl.juiced.guhs.feature.vadsrijk.momenten.MomentenRegistry.register(modBus);   // MOMENTEN-HOOK (fix round 1: wave + caravan)
+        nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.register(modBus);
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -37,5 +38,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2SystemenRegistry.payloads(registrar);
         nl.juiced.guhs.feature.vadsrijk.momenten.MomentenRegistry.payloads(registrar);   // MOMENTEN-HOOK
+        nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.payloads(registrar);
     }
 }

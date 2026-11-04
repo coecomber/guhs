@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "guhs:block/vr_z2_baas_kristalslot_uit"
+    },
+    "lit=true": {
+      "model": "guhs:block/vr_z2_baas_kristalslot_aan"
+    }
+  }
+}

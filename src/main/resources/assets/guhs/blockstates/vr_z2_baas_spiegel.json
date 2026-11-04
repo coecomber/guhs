@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "stand=0": {
+      "model": "guhs:block/vr_z2_baas_spiegel_0"
+    },
+    "stand=1": {
+      "model": "guhs:block/vr_z2_baas_spiegel_1"
+    },
+    "stand=2": {
+      "model": "guhs:block/vr_z2_baas_spiegel_2"
+    }
+  }
+}

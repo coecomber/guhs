@@ -1,0 +1,274 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/vr_z2_baas_spiegel",
+    "spiegel": "guhs:block/vr_z2_baas_spiegel",
+    "rand": "guhs:block/vr_z2_baas_spiegel_rand"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        0,
+        2
+      ],
+      "to": [
+        14,
+        2,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#rand"
+        },
+        "south": {
+          "texture": "#rand"
+        },
+        "east": {
+          "texture": "#rand"
+        },
+        "west": {
+          "texture": "#rand"
+        },
+        "up": {
+          "texture": "#rand"
+        },
+        "down": {
+          "texture": "#rand"
+        }
+      }
+    },
+    {
+      "from": [
+        0,
+        2,
+        14
+      ],
+      "to": [
+        2,
+        15,
+        16
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        2,
+        2,
+        12
+      ],
+      "to": [
+        4,
+        15,
+        14
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        2,
+        10
+      ],
+      "to": [
+        6,
+        15,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        2,
+        8
+      ],
+      "to": [
+        8,
+        15,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        8,
+        2,
+        6
+      ],
+      "to": [
+        10,
+        15,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        2,
+        4
+      ],
+      "to": [
+        12,
+        15,
+        6
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        12,
+        2,
+        2
+      ],
+      "to": [
+        14,
+        15,
+        4
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    },
+    {
+      "from": [
+        14,
+        2,
+        0
+      ],
+      "to": [
+        16,
+        15,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#spiegel"
+        },
+        "south": {
+          "texture": "#spiegel"
+        },
+        "east": {
+          "texture": "#spiegel"
+        },
+        "west": {
+          "texture": "#spiegel"
+        },
+        "up": {
+          "texture": "#spiegel"
+        }
+      }
+    }
+  ]
+}

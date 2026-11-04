@@ -1,0 +1,108 @@
+# Het Vadsrijk zone 2 (Guhs 1.10), slice z2-bazen: the three zone-2 bosses really fight a player AT RANGE (~16 blocks) in each
+# arena. Zone 2 is still void (no z2-wereld map yet): the dev stand-in builds go first. The screenshots must show the bosses
+# acting: red/pink/purple/yellow telegraphs, pounces, pillars, mirror images with shadows, the beam path, drill heads + panel.
+# (creative: the bosses also target creative players when nobody else is there; they just can't hurt them)
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_z2_bazen.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section reis
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk z2bazen bouw galmwolf
+/guhs vadsrijk z2bazen bouw burcht
+/guhs vadsrijk z2bazen bouw boor
+wait 40
+
+section galmwolf
+/tp @s 430 135 -2264
+/guhs vadsrijk z2bazen bouw galmwolf
+wait 20
+/tp @s 430 121 -2264
+look 180 12
+wait 60
+waitrender 200
+wait 120
+shot g1_galmwolf_intro gui
+wait 40
+shot g2_galmwolf_aanval gui
+wait 50
+shot g3_galmwolf_aanval gui
+wait 60
+shot g4_galmwolf_galm gui
+/guhs vadsrijk z2bazen fase 2
+wait 80
+shot g5_galmwolf_fase2 gui
+/guhs vadsrijk z2bazen fase 3
+wait 100
+shot g6_galmwolf_sneeuwjacht gui
+/guhs vadsrijk baas reset z2bazen:galmwolf
+
+section burcht
+/tp @s 0 176 -2862
+look 180 15
+wait 60
+waitrender 200
+wait 40
+shot b1_burcht_voorhal gui
+/tp @s -3 176 -2883
+look 180 20
+wait 40
+shot b2_burcht_lichtkamer gui
+/guhs vadsrijk z2bazen burcht los
+wait 30
+shot b3_burcht_opgelost gui
+/tp @s 0 176 -2903
+look 180 10
+wait 80
+shot b4_spiegelgang gui
+wait 60
+shot b5_spiegelgang_golf gui
+
+section spiegelzucht
+/tp @s 0 176 -2945
+look 180 10
+wait 60
+waitrender 200
+wait 120
+shot s1_spiegelzucht_intro gui
+wait 40
+shot s2_spiegelzucht_aanval gui
+/guhs vadsrijk z2bazen split
+wait 20
+shot s3_spiegelzucht_beelden gui
+wait 40
+shot s4_spiegelzucht_schaduwen gui
+/guhs vadsrijk z2bazen fase 2
+wait 120
+shot s5_spiegelzucht_lichtval gui
+wait 160
+shot s6_spiegelzucht_straal gui
+/guhs vadsrijk z2bazen fase 3
+wait 100
+shot s7_spiegelzucht_zaal gui
+/guhs vadsrijk baas reset z2bazen:spiegelzucht
+
+section boor
+/tp @s -500 66 -2820
+look 180 10
+wait 60
+waitrender 200
+/guhs vadsrijk z2bazen boor ontgrendel
+wait 130
+shot m1_boormeester_intro gui
+wait 40
+shot m2_boormeester_paneel gui
+wait 60
+shot m3_boormeester_aanval gui
+/guhs vadsrijk z2bazen fase 2
+wait 120
+shot m4_boormeester_fase2 gui
+wait 120
+shot m5_boormeester_mijnwerkers gui
+quit
