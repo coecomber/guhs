@@ -177,7 +177,8 @@ public class VadsrijkNpcGameTests {
             }
             stappen++;
         }
-        helper.assertTrue(QuestStap.hoofdlijn(p) == null && Questlog.klaar(p, "hq12_schaduw"), "the main story is done");
+        QuestStap na = QuestStap.hoofdlijn(p);   // (integration: after zone 1 the main line goes on in zone 2)
+        helper.assertTrue((na == null || na.quest().startsWith("z2_")) && Questlog.klaar(p, "hq12_schaduw"), "the zone-1 main story is done");
         helper.assertTrue(QuestStap.hoofdGedaan(p).size() == 13, "13 steps of history");
         helper.assertTrue(stappen > 30, "walked " + stappen + " steps");
         Questlog.wisAlles(p);
