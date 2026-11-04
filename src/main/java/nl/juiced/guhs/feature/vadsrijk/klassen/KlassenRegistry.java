@@ -213,7 +213,7 @@ public final class KlassenRegistry {
     }
 
     /**
-     * g-klassen, dev (op 2): {@code /guhs vadsrijk balans toon | herlaad | <klasse|algemeen> <sleutel> <waarde>} (see
+     * g-klassen, dev (op 2): {@code /guhs vadsrijk balans toon | herlaad | <klasse|algemeen|mobs> <sleutel> <waarde>} (see
      * {@link KlasseBalans}; the value is written to config/guhs-vadsrijk-balans.toml at once).
      */
     private static LiteralArgumentBuilder<CommandSourceStack> balans() {
@@ -230,11 +230,12 @@ public final class KlassenRegistry {
             return 1;
         }));
         b.then(Commands.argument("klasse", StringArgumentType.word())
-                .suggests((c, sb) -> SharedSuggestionProvider.suggest(java.util.stream.Stream.concat(java.util.stream.Stream.of(KlasseBalans.ALGEMEEN),
+                .suggests((c, sb) -> SharedSuggestionProvider.suggest(java.util.stream.Stream.concat(java.util.stream.Stream.of(KlasseBalans.ALGEMEEN, KlasseBalans.MOBS),
                         Klassen.alle().stream().map(Klasse::id)), sb))
                 .then(Commands.argument("sleutel", StringArgumentType.word())
                         .suggests((c, sb) -> SharedSuggestionProvider.suggest(KlasseBalans.ALGEMEEN.equals(StringArgumentType.getString(c, "klasse"))
-                                ? KlasseBalans.ALGEMEEN_SLEUTELS : KlasseBalans.SLEUTELS, sb))
+                                ? KlasseBalans.ALGEMEEN_SLEUTELS : KlasseBalans.MOBS.equals(StringArgumentType.getString(c, "klasse"))
+                                ? KlasseBalans.MOBS_SLEUTELS : KlasseBalans.SLEUTELS, sb))
                         .then(Commands.argument("waarde", com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg(0, 100)).executes(c -> {
                             String kl = StringArgumentType.getString(c, "klasse"), sl = StringArgumentType.getString(c, "sleutel");
                             double v = com.mojang.brigadier.arguments.DoubleArgumentType.getDouble(c, "waarde");

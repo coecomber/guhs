@@ -48,6 +48,9 @@ public final class KlasseBalans {
     public static final List<String> SLEUTELS = List.of("schade", "skillschade", "vads", "verdediging", "cooldowns", "energie", "melee_reductie",
             "vads_per_klasselevel");
     public static final List<String> ALGEMEEN_SLEUTELS = List.of("xp_schaal_generiek", "xp_schaal_klasse");
+    /** g-int: g-balans' kern {@code Balans} section in the same file ({@code [mobs] schade}, default 1.3). */
+    public static final String MOBS = "mobs";
+    public static final List<String> MOBS_SLEUTELS = List.of("schade");
 
     private static final Map<String, Map<String, Double>> WAARDEN = new LinkedHashMap<>();
     private static long gelezen = Long.MIN_VALUE;
@@ -63,6 +66,7 @@ public final class KlasseBalans {
         return switch (sleutel) {
             case "melee_reductie" -> Klassen.RIDDER.equals(klasse) ? 0.20 : 0;
             case "vads_per_klasselevel" -> Klassen.RIDDER.equals(klasse) ? 4 : 0;
+            case "schade" -> MOBS.equals(klasse) ? nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_SCHADE_STANDAARD : 1.0;
             default -> 1.0;
         };
     }
@@ -70,6 +74,7 @@ public final class KlasseBalans {
     private static List<String> secties() {
         List<String> l = new ArrayList<>();
         l.add(ALGEMEEN);
+        l.add(MOBS);
         for (var k : Klassen.alle()) {
             l.add(k.id());
         }
@@ -77,7 +82,7 @@ public final class KlasseBalans {
     }
 
     private static List<String> sleutels(String sectie) {
-        return ALGEMEEN.equals(sectie) ? ALGEMEEN_SLEUTELS : SLEUTELS;
+        return ALGEMEEN.equals(sectie) ? ALGEMEEN_SLEUTELS : MOBS.equals(sectie) ? MOBS_SLEUTELS : SLEUTELS;
     }
 
     public static synchronized double get(String klasse, String sleutel) {
@@ -112,6 +117,7 @@ public final class KlasseBalans {
     private static void pasToe() {
         Levels.SCHAAL_GENERIEK = Math.max(0.05, get(ALGEMEEN, "xp_schaal_generiek"));
         Levels.SCHAAL_KLASSE = Math.max(0.05, get(ALGEMEEN, "xp_schaal_klasse"));
+        nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetMobSchade(get(MOBS, "schade"));
     }
 
     // ---- the file ---------------------------------------------------------------------------------------------------------
@@ -181,6 +187,7 @@ public final class KlasseBalans {
         b.append("# schade/skillschade/vads/verdediging/cooldowns/energie zijn vermenigvuldigers (1.0 = normaal).\n");
         b.append("# melee_reductie = minder schade (0.20 = 20 %) zolang deze klasse actief is met een melee-wapen.\n");
         b.append("# vads_per_klasselevel = extra max Vads per klasseniveau boven 1.\n");
+        b.append("# [mobs] schade = vermenigvuldiger op de klappen van gewone wezens en elites (geen bazen); 1.3 = +30 %.\n");
         for (String s : secties()) {
             b.append('\n').append('[').append(s).append("]\n");
             for (String k : sleutels(s)) {
