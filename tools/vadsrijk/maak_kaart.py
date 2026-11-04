@@ -50,7 +50,10 @@ def main():
     ap.add_argument("--zonder-bouwsels", action="store_true")
     ap.add_argument("--audit", action="store_true", help="afterwards: walkability audit (AUDIT_VADSRIJK.md) + the safe spots json for "
                     "the unstuck key (tools/vadsrijk/audit/audit.py, ~80 s)")
+    ap.add_argument("--zone", default="alle", choices=("1", "2", "alle"))   # [zone 2] which zone(s) to build
     a = ap.parse_args()
+    if a.zone == "2":   # [zone 2] only the zone-2 map (tools/vadsrijk/zone2)
+        return zone2(a)
     os.makedirs(CACHE, exist_ok=True)
     os.makedirs(UIT, exist_ok=True)
     t0 = time.time()
@@ -108,6 +111,14 @@ def main():
     # hook (fix round 1, veilig): integration runs this once after the final regen, so the safe spots follow the map
     if a.audit and not a.alleen:
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
+    if a.zone == "alle":   # [zone 2] then the zone-2 map
+        zone2(a)
+
+
+def zone2(a):   # [zone 2] De Splinterpieken: own grid/tiles (tx -11..10, tz -48..-28), POI_Z2.md, Z2WereldPlekken.java
+    sys.path.insert(0, os.path.join(HIER, "zone2"))
+    import maak2
+    maak2.maak(a.alleen)
 
 
 def plekken_nbt(plekken, tx, tz):

@@ -48,6 +48,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 public final class WereldDeuren {
     public static final int OPEN_TICKS = 20 * 30, STAP_TICKS = 5;
     private static final Map<String, Staat> STAAT = new HashMap<>();
+    /** [zone 2] Doors of other zones' maps (zone2.wereld adds the Spiegelburcht door); searched after {@link WereldPlekken#DEUREN}. */
+    public static final List<WereldPlekken.Deur> EXTRA = new java.util.ArrayList<>();
 
     private static final class Staat {
         int stap, doel;
@@ -60,7 +62,7 @@ public final class WereldDeuren {
 
     @Nullable
     public static WereldPlekken.Deur deur(String id) {
-        for (WereldPlekken.Deur d : WereldPlekken.DEUREN) {
+        for (WereldPlekken.Deur d : alle()) {
             if (d.id().equals(id)) {
                 return d;
             }
@@ -69,7 +71,12 @@ public final class WereldDeuren {
     }
 
     public static List<WereldPlekken.Deur> alle() {
-        return WereldPlekken.DEUREN;
+        if (EXTRA.isEmpty()) {
+            return WereldPlekken.DEUREN;
+        }
+        List<WereldPlekken.Deur> l = new java.util.ArrayList<>(WereldPlekken.DEUREN);   // [zone 2]
+        l.addAll(EXTRA);
+        return l;
     }
 
     // ------------------------------------------------------------------------------------------------ the API
@@ -143,7 +150,7 @@ public final class WereldDeuren {
     /** Which door is this block part of (or null)? */
     @Nullable
     public static WereldPlekken.Deur bij(BlockPos p) {
-        for (WereldPlekken.Deur d : WereldPlekken.DEUREN) {
+        for (WereldPlekken.Deur d : alle()) {
             if (p.getX() >= d.min().getX() - 1 && p.getX() <= d.max().getX() + 1 && p.getY() >= d.min().getY() && p.getY() <= d.max().getY()
                     && p.getZ() >= d.min().getZ() - 1 && p.getZ() <= d.max().getZ() + 1) {
                 return d;

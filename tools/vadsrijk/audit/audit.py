@@ -75,7 +75,8 @@ def lees_plekken():
 
 
 def laad():
-    lijst = list(TL.tegels(TEGELS))
+    # (integration) zone 1 only: the zone-2 tiles (tz -48..-28) share the folder but are a separate map
+    lijst = [t for t in TL.tegels(TEGELS) if t[1] > -20]
     txs = [t[0] for t in lijst]
     tzs = [t[1] for t in lijst]
     tx0, tz0 = min(txs), min(tzs)

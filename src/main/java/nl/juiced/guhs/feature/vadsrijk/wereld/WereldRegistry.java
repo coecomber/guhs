@@ -133,6 +133,7 @@ public final class WereldRegistry {
             WereldDeuren.wis();
         });
         NeoForge.EVENT_BUS.addListener(WereldRegistry::commandos);
+        nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.register(modBus);   // [zone 2] De Splinterpieken (z2-wereld)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
