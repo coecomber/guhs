@@ -105,6 +105,14 @@ public final class Winkels {
         zet(new Winkel(ALGEMEEN, true, alg));
     }
 
+    /**
+     * MOMENTEN-HOOK (fix round 1, feature/vadsrijk/momenten): a shop registered from outside the economie slice (the travelling
+     * caravan "karavaan", whose stock rotates: it calls this again with the new stock). Replaces a shop with the same id.
+     */
+    public static void registreerExtra(Winkel w) {
+        zet(w);
+    }
+
     private static void zet(Winkel w) {
         WINKELS.put(w.id(), w);
     }

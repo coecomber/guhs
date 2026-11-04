@@ -15,5 +15,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.wereld.client.WereldClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.npc.client.NpcClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.economie.client.EconomieClient.init(modBus);
+        nl.juiced.guhs.feature.vadsrijk.momenten.client.MomentenClient.init(modBus);   // MOMENTEN-HOOK (fix round 1: wave + caravan)
     }
 }
