@@ -28,7 +28,7 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
  * The airship line De Haven (zone 1) &lt;-&gt; Kandijkom (zone 2), a route of its own next to zone 1's
  * {@code wereld.WereldReizen} (which stays untouched).
  * <ul>
- *   <li>Kandijkom side: right-click the bell on the dock -&gt; back to De Haven.</li>
+ *   <li>Kandijkom side: right-click the bell on the dock -&gt; the travel map (g-int round 2; was: back to De Haven).</li>
  *   <li>Haven side: <b>sneak</b> + right-click the Haven bell -&gt; Kandijkom (a plain click keeps flying to Knuffelkamp), or the
  *       npc slice's captain calls {@link #naarKandijkom}.</li>
  * </ul>
@@ -169,7 +169,9 @@ public final class Z2Reizen {
     /** Right-click on a block: the Kandijkom dock bell, or sneak-click on the Haven bell. */
     static boolean klik(ServerPlayer p, BlockPos pos) {
         if (Z2WereldPlekken.DOK_BEL.distManhattan(pos) <= 1) {
-            naarHaven(p);
+            // g-int (round 2): the bell opens the travel map (npc Reiskaart), like the zone-1 bells
+            p.level().playSound(null, pos, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1.0f, 0.9f);
+            nl.juiced.guhs.feature.vadsrijk.npc.Reiskaart.open(p);
             return true;
         }
         if (p.isShiftKeyDown() && WereldPlekken.HAVEN_BEL.distManhattan(pos) <= 1) {

@@ -410,7 +410,9 @@ public final class WereldReizen {
     static boolean klik(ServerPlayer p, BlockPos pos) {
         for (Dok d : Dok.values()) {
             if (d.bel().distManhattan(pos) <= 1) {
-                vlieg(p, d, d.ander());
+                // g-int (round 2): the bell opens g-ux's travel map (all destinations + locks); the map flies through vlieg
+                p.level().playSound(null, pos, SoundEvents.BELL_BLOCK, SoundSource.BLOCKS, 1.0f, 1.1f);
+                nl.juiced.guhs.feature.vadsrijk.npc.Reiskaart.open(p);
                 return true;
             }
         }

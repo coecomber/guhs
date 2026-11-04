@@ -958,8 +958,8 @@ OVERIG = {
     P + "plek.z2_poort_oost": "door de oostpoort, aan het eind van de straat langs de Kandijkraam",
     P + "plek.z2_poort_west": "door de westpoort, aan het eind van de straat langs Warme Wantjes",
     P + "plek.z2_poort_noord": "door de noordpoort, achter de Kristalkapel",
-    P + "reis.kies.z2_kapitein": "Terug naar het warme zuiden? Bekijk de reiskaart, of kies hieronder waarheen. Of luid de scheepsbel op de steiger "
-                                 "(rechtsklik), dan vlieg ik je naar De Haven.",
+    P + "reis.kies.z2_kapitein": "Terug naar het warme zuiden? Kies hieronder waarheen of bekijk de reiskaart. (De scheepsbel op de steiger "
+                                 "opent de reiskaart ook.)",
     P + "optie.rol.juwelier": "Edelstenen inzetten of uithalen",
     P + "optie.rol.gondel": "Met de gondel naar de top",
     P + "optie.rol.gondel_terug": "Met de gondel naar beneden",

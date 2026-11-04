@@ -333,7 +333,8 @@ Q("hq06_zwamzoet", "hoofd", "kapitein", "Naar Zwamzoet!",
   [("npc", "Daar is de held van het kamp! Instappen! Mijn ballonschip vliegt op warme lucht en goede zin, en we hebben allebei genoeg."),
    ("npc", "Zwamzoet ligt op een eiland ten noorden van hier. Paddenstoelen zo hoog als torens, met huisjes op de hoeden. De tempel "
            "van de Orde staat helemaal bovenop. Klaar?")],
-  "Zeg het maar als je wilt vertrekken! Kies hieronder 'Naar Zwamzoet', of luid de scheepsbel op de steiger (rechtsklik).",
+  "Zeg het maar als je wilt vertrekken! Kies hieronder 'Naar Zwamzoet', of luid de scheepsbel op de steiger (rechtsklik) en kies "
+  "Zwamzoet op de reiskaart.",
   [("npc", "Dus jij bent de rekruut die de Klodderreus heeft opgevrolijkt. Welkom in de tempel van De Knuffelorde. Ik ben "
            "Grootmeester Vadsvoet."),
    ("npc", "Vahoegnir... Ik heb hem gekend toen hij nog roze was. Hij at suikerspin uit mijn poot. Iets of iemand heeft hem grauw "
@@ -903,10 +904,10 @@ OVERIG = {
     P + "optie.vlieg.knuffelkamp.slot": "Naar Knuffelkamp (nog op slot)",
     P + "optie.vlieg.kandijkom": "Naar Kandijkom (De Splinterpieken)",
     P + "optie.vlieg.kandijkom.slot": "Naar Kandijkom (nog op slot)",
-    P + "reis.kies.kapitein": "Waar wil je heen? Bekijk de reiskaart, of kies hieronder een bestemming. Of luid de scheepsbel op de "
-                              "steiger (rechtsklik), dan vliegen we meteen naar Zwamzoet.",
-    P + "reis.kies.luchtschipper": "Waar wil je heen? Bekijk de reiskaart, of kies hieronder een bestemming. Of luid de scheepsbel op de "
-                                   "steiger (rechtsklik), dan vliegen we naar Knuffelkamp.",
+    P + "reis.kies.kapitein": "Waar wil je heen? Kies hieronder een bestemming of bekijk de reiskaart. (Luid je de scheepsbel op "
+                              "de steiger, dan krijg je de reiskaart ook.)",
+    P + "reis.kies.luchtschipper": "Waar wil je heen? Kies hieronder een bestemming of bekijk de reiskaart. (Luid je de scheepsbel op "
+                                   "de steiger, dan krijg je de reiskaart ook.)",
     P + "reis.slot.zwamzoet.kort": "Nog niet ontdekt. Het verhaal van Knuffelkamp brengt je hier.",
     P + "reis.slot.kandijkom_verhaal.kort": "Nog niet ontdekt. Maak eerst het verhaal van Zwamzoet af.",
     P + "reis.slot.kandijkom_level.kort": "Nog niet ontdekt. Vanaf level 20 (jij: level %s).",
