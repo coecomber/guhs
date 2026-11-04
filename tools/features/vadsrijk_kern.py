@@ -248,7 +248,7 @@ TEKSTEN = {
     K + "tip.loot.titel": "Buit!",
     K + "tip.loot": "De kleur van de lichtstraal is de zeldzaamheid. Alleen jij kunt jouw buit oppakken. Kijk in de tooltip voor de bonussen.",
     K + "tip.levelop.titel": "Niveau omhoog!",
-    K + "tip.levelop": "Elk niveau maakt je vanzelf sterker: meer Vads, Kracht en Verdediging. Uitrusting met een hoger niveau telt pas als je zover bent.",
+    K + "tip.levelop": "Je hebt twee niveaus. Generiek (alles wat je doet): meer Vads en Verdediging, nieuwe gebieden en quests. Klasse (het wapen waarmee je raakt): je hoofdstat, skillpunten en betere wapens.",
     K + "tip.kampvuur.titel": "Kampvuur",
     K + "tip.knuffelsprong.titel": "Knuffelsprong!",
     K + "tip.knuffelsprong": "Druk op C voor een flinke sprong vooruit (zo'n 20 blokken). Elke klasse kan het, je landt altijd zacht, en na 5 tellen mag het weer.",
@@ -269,6 +269,15 @@ TEKSTEN = {
     K + "vast.gered": "Oei, je viel van de wereld! De knuffelwind ving je op.",
     K + "tip.vast.titel": "Vastgelopen?",
     K + "tip.vast": "Zit je ergens vast? Druk op U (of /guhs vadsrijk vast) en sta 3 tellen stil: de knuffelwind zet je op het dichtstbijzijnde veilige plekje. Kan elke minuut, niet tijdens een bazengevecht.",
+    K + "wapen.vereist": "Dit wapen vereist %s nv %s (jij: nv %s). Vasthouden mag, aanvallen nog niet.",
+    K + "klasse.actief": "⚔ Nu %s!",
+    K + "skill.geen_wapen": "Geen klassewapen in je hand: geen vaardigheden, alleen een zwak klapje.",
+    K + "levelop.beide": "Generiek nv %s · %s nv %s. Vahoeg!",
+    K + "levelop.generiek": "Generiek niveau %s: meer Vads en Verdediging. Vahoeg!",
+    K + "hud.generiek": "Generiek nv %s",
+    K + "hud.klasse": "%s nv %s",
+    K + "item.vereist_klasse": "Vereist: %s nv %s",
+    K + "item.vereist_generiek": "Vereist: Generiek nv %s",
 }
 
 

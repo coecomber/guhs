@@ -96,7 +96,9 @@ public final class NpcRollen {
         koppel("stal", nl.juiced.guhs.feature.vadsrijk.economie.Stal::open);
         koppelAls("rijdier", (p, a) -> nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.geefEerste(p));
         koppelAls("mika_spion", (p, a) -> nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion.ontmasker(p));
-        koppelAls("advancement", (p, a) -> nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.doe(p));
+        koppelAls("advancement", (p, a) -> a != null && a.contains(":")   // (g-klassen: the quest's own class, "klasse:stap")
+                ? nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.doe(p, a.substring(0, a.indexOf(':')))
+                : nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.doe(p));
         koppelAls("kampklodder", (p, a) -> p.level() instanceof ServerLevel sl
                 && nl.juiced.guhs.feature.vadsrijk.wezens.Kampklodder.plaats(sl, kampklodderPlek()) != null);
         koppelAls("draak", NpcRollen::draakDirect);

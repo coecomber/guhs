@@ -177,8 +177,10 @@ public final class RijkHud {
         // xp in the vanilla spot
         int xpY = hh - 29;
         g.fill(c - 91, xpY, c + 91, xpY + 3, 0xC0202020);
-        float xp = h.xpNodig() <= 0 ? 1 : (float) h.xpIn() / h.xpNodig();
-        g.fill(c - 91, xpY, c - 91 + (int) (182 * Mth.clamp(xp, 0, 1)), xpY + 3, 0xFFFFD24A);
+        float xp = h.gXpNodig() <= 0 ? 1 : (float) h.gXpIn() / h.gXpNodig();   // (g-klassen: gold = generic, pink line = class)
+        g.fill(c - 91, xpY, c - 91 + (int) (182 * Mth.clamp(xp, 0, 1)), xpY + 2, 0xFFFFD24A);
+        float kxp = h.xpNodig() <= 0 ? 1 : (float) h.xpIn() / h.xpNodig();
+        g.fill(c - 91, xpY + 2, c - 91 + (int) (182 * Mth.clamp(kxp, 0, 1)), xpY + 3, h.grijs() ? 0xFF8A7A84 : 0xFFFF7AC8);
         // skills right of the hotbar
         int sx = c + 98, sy = hh - 22;
         for (int i = 0; i < 4; i++) {
@@ -189,18 +191,12 @@ public final class RijkHud {
         }
         // small info: duizelig, opgevrolijkt, munten (left of the hotbar)
         int ly = hh - 22;
-        String lvl = Component.translatable("vadsrijk.kern.hud.niveau", h.level()).getString();
-        g.pose().pushMatrix();
-        g.pose().translate(c - 98, ly - 12);
-        g.pose().scale(1.5f, 1.5f);
-        g.text(f, lvl, -f.width(lvl), 0, 0xFFFFE27A, true);
-        g.pose().popMatrix();
-        String titel = Component.translatable(h.klasse()).getString();   // (the class name, or the job title from Spelers.TITEL_BRON)
-        g.pose().pushMatrix();
-        g.pose().translate(c - 98, ly - 20);
-        g.pose().scale(0.75f, 0.75f);
-        g.text(f, titel, -f.width(titel), 0, 0xFFFFC2E8, true);
-        g.pose().popMatrix();
+        // g-klassen: two levels. "Generiek nv X" (Vads, Verdediging, areas, quests) and "<class/title> nv Y" (the weapon in
+        // your hand); without a class weapon the class line is grey (the last active class).
+        String gen = Component.translatable("vadsrijk.kern.hud.generiek", h.generiek()).getString();
+        g.text(f, gen, c - 98 - f.width(gen), ly - 22, 0xFFFFE27A, true);
+        String titel = Component.translatable("vadsrijk.kern.hud.klasse", Component.translatable(h.klasse()), h.level()).getString();
+        g.text(f, titel, c - 98 - f.width(titel), ly - 11, h.grijs() ? 0xFF8A7A84 : 0xFFFFC2E8, true);
         String munten = Spelers.munten(h.munten());
         g.text(f, munten, c - 98 - f.width(munten), ly + 2, 0xFFFFD86B, true);
         String opg = Component.translatable("vadsrijk.kern.hud.opgevrolijkt", h.opgevrolijkt()).getString();

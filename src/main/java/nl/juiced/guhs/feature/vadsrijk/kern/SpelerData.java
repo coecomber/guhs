@@ -36,9 +36,17 @@ public final class SpelerData implements ValueIOSerializable {
     @Nullable
     public CompoundTag terug;
 
+    /**
+     * The ACTIVE class (g-klassen: you are always all 3 classes; this is the class of the weapon you last attacked with, see
+     * {@code Spelers.voorAanval}). Without a class weapon in the hand the HUD shows it greyed.
+     */
     public String klasse = "knuffelridder";
-    /** Total xp per class (the level is derived: {@link Levels#levelVan}). */
+    /** Total xp per class (the class level is derived: {@link Levels#levelVan}). */
     public final Map<String, Long> xp = new HashMap<>();
+    /** g-klassen: total generic xp (every xp gained also goes here; level: {@link Levels#generiekVan}). */
+    public long generiekXp;
+    /** Not saved: set when this data was migrated from a save without generic xp (for the log/tests). */
+    public transient boolean gemigreerd;
     /** Runtime values; -1 = full (first time). */
     public double vads = -1, energie = -1, ultLading;
     /** Vadsmunten, in brons (100 brons = 1 zilver, 100 zilver = 1 goud). */
@@ -78,8 +86,26 @@ public final class SpelerData implements ValueIOSerializable {
         return Levels.levelVan(xp(klasse));
     }
 
+    /** The GENERIC level (g-klassen; before: the current class's level). */
     public int level() {
+        return Levels.generiekVan(generiekXp);
+    }
+
+    /** The level of the active class. */
+    public int klasseLevel() {
         return level(klasse);
+    }
+
+    /**
+     * g-klassen save migration: a save from before the two levels only has xp per class. The generic xp becomes the HIGHEST
+     * class xp (not the sum: someone who levelled two classes to 15 should not jump to generic 22), capped at the generic max.
+     */
+    public static long migreerGeneriek(Map<String, Long> perKlasse) {
+        long m = 0;
+        for (long v : perKlasse.values()) {
+            m = Math.max(m, v);
+        }
+        return Math.min(m, Levels.totaalVoorGeneriek(Levels.MAX_GENERIEK));
     }
 
     @Override
@@ -97,6 +123,7 @@ public final class SpelerData implements ValueIOSerializable {
         CompoundTag x = new CompoundTag();
         xp.forEach(x::putLong);
         out.store("xp", CompoundTag.CODEC, x);
+        out.putLong("gxp", generiekXp);
         out.putDouble("vads", vads);
         out.putDouble("energie", energie);
         out.putDouble("ult", ultLading);
@@ -139,6 +166,9 @@ public final class SpelerData implements ValueIOSerializable {
         for (String k : x.keySet()) {
             xp.put(k, x.getLongOr(k, 0L));
         }
+        java.util.Optional<Long> g = in.getLong("gxp");
+        gemigreerd = g.isEmpty();
+        generiekXp = g.orElseGet(() -> migreerGeneriek(xp));
         vads = in.getDoubleOr("vads", -1);
         energie = in.getDoubleOr("energie", -1);
         ultLading = in.getDoubleOr("ult", 0);

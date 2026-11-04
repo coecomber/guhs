@@ -60,6 +60,15 @@ public final class Vaardigheden {
         if (!Vadsrijk.in(p) || p.isSpectator() || RijkScenes.bezig(p) || Statussen.heeft(p, Status.VERDOOFD)) {
             return false;
         }
+        // g-klassen: the class is the weapon in your hand. Attacking with another class's weapon switches (its skills start on
+        // full cooldown); an unmet weapon requirement or no class weapon at all: no skills.
+        if (!Spelers.voorAanval(p)) {
+            return false;
+        }
+        if (Spelers.actieveWapenKlasse(p) == null) {
+            nee(p, "vadsrijk.kern.skill.geen_wapen");
+            return false;
+        }
         Klasse k = Spelers.klasse(p);
         List<Vaardigheid> vs = k.vaardigheden();
         if (slot < 0 || slot >= vs.size()) {

@@ -72,6 +72,8 @@ public abstract class VadsrijkMob extends Monster {
     protected boolean elite;
     /** Damage per player (for xp/loot sharing; bosses keep more in {@code Bijdrage}). */
     protected final Map<UUID, Double> bijdrage = new HashMap<>();
+    /** g-klassen: damage per player per (active) class, so a defeat gives class xp to the class that hit hardest. */
+    protected final Map<UUID, Map<String, Double>> klasseBijdrage = new HashMap<>();
     /** Which spawner made it ({@link Spawners}), or "". */
     public String spawner = "";
     private boolean ingesteld;
@@ -206,6 +208,7 @@ public abstract class VadsrijkMob extends Monster {
         }
         if (bron instanceof ServerPlayer p) {
             bijdrage.merge(p.getUUID(), n, Double::sum);
+            klasseBijdrage.computeIfAbsent(p.getUUID(), x -> new HashMap<>()).merge(Spelers.data(p).klasse, n, Double::sum);
             if (getTarget() == null || !(getTarget() instanceof Player)) {
                 setTarget(p);
             }
@@ -245,7 +248,7 @@ public abstract class VadsrijkMob extends Monster {
             return true;
         }
         if (source.getEntity() instanceof ServerPlayer p && source.getDirectEntity() == p && Vadsrijk.in(p)) {
-            return Schade.basisaanval(p, this);
+            return Spelers.voorAanval(p) && Schade.basisaanval(p, this);   // (g-klassen: weapon requirement + class switch first)
         }
         return false;
     }
@@ -286,7 +289,7 @@ public abstract class VadsrijkMob extends Monster {
         if (laatste instanceof ServerPlayer p) {
             helpers.add(p);
         }
-        beloon(sl, helpers);
+        Spelers.metKlasseBijdrage(klasseBijdrage, () -> beloon(sl, helpers));
         Haken.VERSLAGEN.forEach(h -> h.accept(new Haken.Verslagen(this, helpers)));
         setTarget(null);
         getNavigation().stop();

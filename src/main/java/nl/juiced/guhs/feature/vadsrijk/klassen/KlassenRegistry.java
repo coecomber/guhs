@@ -69,7 +69,11 @@ public final class KlassenRegistry {
         Pluisjager.init();
         Vadsmagier.init();
         kernHaken();
+        KlasseBalans.installeer();
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStartingEvent e) ->
+                com.mojang.logging.LogUtils.getLogger().info("Vadsrijk balans: {}", KlasseBalans.laad()));
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+            KlasseBalans.tick();
             Later.tick();
             Schoten.tick();
             Basisaanval.tick(e.getServer());
@@ -85,13 +89,24 @@ public final class KlassenRegistry {
         });
         NeoForge.EVENT_BUS.addListener(KlassenRegistry::commando);
         Haken.LEVEL_OP.add((p, wat) -> {
-            int lvl = Spelers.level(p);
+            // g-klassen: "<klasse>:N" = a class level (skill point, advancement); "generiek:N" = the generic level
+            int i = wat.lastIndexOf(':');
+            String kl = i < 0 ? "" : wat.substring(0, i);
+            int lvl;
+            try {
+                lvl = Integer.parseInt(wat.substring(i + 1));
+            } catch (NumberFormatException e) {
+                return;
+            }
+            if (Klassen.van(kl) == null) {
+                return;
+            }
             if (lvl >= 2) {
                 Tips.toon(p, "vadsrijk.klassen.tip.punt");
             }
-            if (Advancement.kanDoen(p) && (lvl == 10 || lvl == 20)) {
+            if (Advancement.kanDoen(p, kl) && (lvl == 10 || lvl == 20)) {
                 p.sendSystemMessage(Component.translatable("vadsrijk.klassen.adv.klaar", Component.translatable(
-                        Advancement.titelKey(Spelers.klasse(p).id(), Advancement.stap(p, Spelers.klasse(p).id()) + 1))).withStyle(ChatFormatting.GOLD));
+                        Advancement.titelKey(kl, Advancement.stap(p, kl) + 1))).withStyle(ChatFormatting.GOLD));
                 Tips.toon(p, "vadsrijk.klassen.tip.adv");
             }
         });
@@ -117,7 +132,7 @@ public final class KlassenRegistry {
             ServerPlayer p = c.getSource().getPlayerOrException();
             Klasse kl = Spelers.klasse(p);
             c.getSource().sendSuccess(() -> Component.translatable("vadsrijk.klassen.cmd.info", Component.translatable(Advancement.titelKey(p)),
-                    Spelers.level(p), Spelers.skillpunten(p, kl.id()), String.join(", ", Boom.knopen(Spelers.data(p), kl.id()))), false);
+                    Spelers.klasseLevel(p), Spelers.level(p), Spelers.skillpunten(p, kl.id()), String.join(", ", Boom.knopen(Spelers.data(p), kl.id()))), false);
             return 1;
         });
         k.then(dev("kies").executes(c -> {
@@ -137,6 +152,17 @@ public final class KlassenRegistry {
         k.then(dev("wissel").then(Commands.argument("klasse", StringArgumentType.word())
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(Klassen.alle().stream().map(Klasse::id), b))
                 .executes(c -> KlasseBalie.wissel(c.getSource().getPlayerOrException(), StringArgumentType.getString(c, "klasse")) ? 1 : 0)));
+        k.then(dev("klasselevel").then(Commands.argument("klasse", StringArgumentType.word())
+                .suggests((c, b) -> SharedSuggestionProvider.suggest(Klassen.alle().stream().map(Klasse::id), b))
+                .then(Commands.argument("level", IntegerArgumentType.integer(1, 35)).executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    Spelers.zetKlasseLevel(p, StringArgumentType.getString(c, "klasse"), IntegerArgumentType.getInteger(c, "level"));
+                    return 1;
+                }))));
+        k.then(dev("generiek").then(Commands.argument("level", IntegerArgumentType.integer(1, 35)).executes(c -> {
+            Spelers.zetGeneriek(c.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(c, "level"));
+            return 1;
+        })));
         k.then(dev("respecvrij").executes(c -> {
             Spelers.data(c.getSource().getPlayerOrException()).respecKlaar = 0;
             c.getSource().sendSuccess(() -> Component.literal("Respec-afkoeltijd weg."), false);
@@ -166,7 +192,8 @@ public final class KlassenRegistry {
                     if (bt == null) {
                         return 0;
                     }
-                    var u = nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.rol(bt, Math.max(1, Spelers.level(p)),
+                    String wk = Spelers.wapenKlasse(bt);
+                    var u = nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.rol(bt, Math.max(1, wk == null ? Spelers.level(p) : Spelers.level(p, wk)),
                             nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid.ZELDZAAM, p.getRandom());
                     p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.stack(u));
                     return 1;
@@ -182,6 +209,44 @@ public final class KlassenRegistry {
             return 1;
         }));
         event.getDispatcher().register(VadsrijkCommando.wortel(k));
+        event.getDispatcher().register(VadsrijkCommando.wortel(balans()));
+    }
+
+    /**
+     * g-klassen, dev (op 2): {@code /guhs vadsrijk balans toon | herlaad | <klasse|algemeen> <sleutel> <waarde>} (see
+     * {@link KlasseBalans}; the value is written to config/guhs-vadsrijk-balans.toml at once).
+     */
+    private static LiteralArgumentBuilder<CommandSourceStack> balans() {
+        LiteralArgumentBuilder<CommandSourceStack> b = dev("balans");
+        b.then(Commands.literal("toon").executes(c -> {
+            for (String r : KlasseBalans.toon()) {
+                c.getSource().sendSuccess(() -> Component.literal(r), false);
+            }
+            return 1;
+        }));
+        b.then(Commands.literal("herlaad").executes(c -> {
+            String r = KlasseBalans.laad();
+            c.getSource().sendSuccess(() -> Component.literal("Balans: " + r), false);
+            return 1;
+        }));
+        b.then(Commands.argument("klasse", StringArgumentType.word())
+                .suggests((c, sb) -> SharedSuggestionProvider.suggest(java.util.stream.Stream.concat(java.util.stream.Stream.of(KlasseBalans.ALGEMEEN),
+                        Klassen.alle().stream().map(Klasse::id)), sb))
+                .then(Commands.argument("sleutel", StringArgumentType.word())
+                        .suggests((c, sb) -> SharedSuggestionProvider.suggest(KlasseBalans.ALGEMEEN.equals(StringArgumentType.getString(c, "klasse"))
+                                ? KlasseBalans.ALGEMEEN_SLEUTELS : KlasseBalans.SLEUTELS, sb))
+                        .then(Commands.argument("waarde", com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg(0, 100)).executes(c -> {
+                            String kl = StringArgumentType.getString(c, "klasse"), sl = StringArgumentType.getString(c, "sleutel");
+                            double v = com.mojang.brigadier.arguments.DoubleArgumentType.getDouble(c, "waarde");
+                            String nee = KlasseBalans.zet(kl, sl, v, true);
+                            if (nee != null) {
+                                c.getSource().sendFailure(Component.literal(nee));
+                                return 0;
+                            }
+                            c.getSource().sendSuccess(() -> Component.literal("Balans: [" + kl + "] " + sl + " = " + v), true);
+                            return 1;
+                        }))));
+        return b;
     }
 
     private static LiteralArgumentBuilder<CommandSourceStack> dev(String naam) {

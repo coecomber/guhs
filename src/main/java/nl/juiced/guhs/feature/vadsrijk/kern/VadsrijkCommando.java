@@ -142,7 +142,7 @@ public final class VadsrijkCommando {
             ServerPlayer p = c.getSource().getPlayerOrException();
             SpelerData d = Spelers.data(p);
             c.getSource().sendSuccess(() -> Component.literal("binnen=" + d.binnen + " opgeborgen=" + d.opgeborgen.size() + " rijk=" + d.rijkInventaris.size()
-                    + " gevonden=" + d.gevonden.size() + " klasse=" + d.klasse + " lv=" + d.level() + " xp=" + d.xp(d.klasse) + " vads=" + (int) Spelers.vads(p) + "/"
+                    + " gevonden=" + d.gevonden.size() + " klasse=" + d.klasse + " generiek=" + d.level() + " (" + d.generiekXp + " xp) klasselv=" + d.klasseLevel() + " xp=" + d.xp + " vads=" + (int) Spelers.vads(p) + "/"
                     + (int) Spelers.maxVads(p) + " munten=" + Spelers.munten(d.munten) + " stats=" + Spelers.stats(p)), false);
             return 1;
         }));

@@ -201,7 +201,7 @@ final class KernEvents {
             Knuffelsprong.tick(p);
             if (t % 20 == 0) {
                 SpelerData d = Spelers.data(p);
-                d.energie = Math.min(Spelers.maxEnergie(p), Spelers.energie(p) + Spelers.klasse(p).energieRegen(Spelers.level(p)));
+                d.energie = Math.min(Spelers.maxEnergie(p), Spelers.energie(p) + Spelers.klasse(p).energieRegen(Spelers.klasseLevel(p)));
                 double max = Spelers.maxVads(p);
                 d.vads = Math.min(max, Spelers.vads(p) + max * 0.01);
                 gebied(p, d);

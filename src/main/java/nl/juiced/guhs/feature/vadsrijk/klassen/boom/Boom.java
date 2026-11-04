@@ -88,11 +88,20 @@ public final class Boom {
         return d.boom.computeIfAbsent(klasse, x -> new LinkedHashSet<>());
     }
 
-    /** Buys a node of the current class. Returns null when it worked, else the reason. */
+    /** Buys a node of the active class. Returns null when it worked, else the reason. */
     @Nullable
     public static String koop(ServerPlayer p, String id) {
+        return koop(p, Spelers.klasse(p).id(), id);
+    }
+
+    /** g-klassen: buys a node in the tree of {@code klasse} (its own CLASS level gives the points). */
+    @Nullable
+    public static String koop(ServerPlayer p, String klasse, String id) {
         SpelerData d = Spelers.data(p);
-        Klasse k = Spelers.klasse(p);
+        Klasse k = Klassen.van(klasse);
+        if (k == null) {
+            return "onbekend";
+        }
         Set<String> heeft = knopen(d, k.id());
         String nee = waaromNiet(k, heeft, d.level(k.id()), id);
         if (nee == null) {

@@ -23,6 +23,9 @@ public final class KernPayloads {
     /** Client hooks (set by KernClient; common code never touches client classes). */
     public static Consumer<Hud> hudOntvanger = h -> {
     };
+    /** g-klassen: the last HUD values this client got (item tooltips read the class/generic levels from it); null on a server. */
+    @javax.annotation.Nullable
+    public static volatile Hud laatsteHud;
     public static Consumer<Scene> sceneOntvanger = h -> {
     };
     public static Consumer<Titel> titelOntvanger = h -> {
@@ -39,7 +42,7 @@ public final class KernPayloads {
     /** Everything the HUD shows about yourself. cd/cdMax: remaining/total cooldown ticks of R, V, G, Z and the Knuffelsprong (C). */
     public record Hud(boolean binnen, float vads, float maxVads, float energie, float maxEnergie, float ult, int level, long xpIn, long xpNodig,
             String klasse, int[] cd, int[] cdMax, long munten, int duizelig, int opgevrolijkt, String gebied, List<String> skills,
-            int bevroren)
+            int bevroren, int generiek, long gXpIn, long gXpNodig, boolean grijs, java.util.Map<String, Integer> klasseLv)
             implements CustomPacketPayload {
         public static final Type<Hud> TYPE = new Type<>(Guhs.id("vr_kern_hud"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Hud> STREAM_CODEC = StreamCodec.ofMember(Hud::schrijf, Hud::lees);
@@ -63,12 +66,18 @@ public final class KernPayloads {
             b.writeUtf(gebied);
             b.writeCollection(skills, (bb, s) -> bb.writeUtf(s));
             b.writeVarInt(bevroren);
+            b.writeVarInt(generiek);
+            b.writeVarLong(gXpIn);
+            b.writeVarLong(gXpNodig);
+            b.writeBoolean(grijs);
+            b.writeMap(klasseLv, (bb, k) -> bb.writeUtf(k), (bb, v) -> bb.writeVarInt(v));
         }
 
         private static Hud lees(RegistryFriendlyByteBuf b) {
             return new Hud(b.readBoolean(), b.readFloat(), b.readFloat(), b.readFloat(), b.readFloat(), b.readFloat(), b.readVarInt(), b.readVarLong(),
                     b.readVarLong(), b.readUtf(), b.readVarIntArray(), b.readVarIntArray(), b.readVarLong(), b.readVarInt(), b.readVarInt(), b.readUtf(),
-                    b.readList(bb -> bb.readUtf()), b.readVarInt());
+                    b.readList(bb -> bb.readUtf()), b.readVarInt(), b.readVarInt(), b.readVarLong(), b.readVarLong(), b.readBoolean(),
+                    b.readMap(bb -> bb.readUtf(), bb -> bb.readVarInt()));
         }
 
         @Override
@@ -198,7 +207,10 @@ public final class KernPayloads {
     }
 
     public static void register(PayloadRegistrar r) {
-        r.playToClient(Hud.TYPE, Hud.STREAM_CODEC, (p, c) -> hudOntvanger.accept(p));
+        r.playToClient(Hud.TYPE, Hud.STREAM_CODEC, (p, c) -> {
+            laatsteHud = p;
+            hudOntvanger.accept(p);
+        });
         r.playToClient(Scene.TYPE, Scene.STREAM_CODEC, (p, c) -> sceneOntvanger.accept(p));
         r.playToClient(Titel.TYPE, Titel.STREAM_CODEC, (p, c) -> titelOntvanger.accept(p));
         r.playToClient(Tip.TYPE, Tip.STREAM_CODEC, (p, c) -> tipOntvanger.accept(p));
@@ -232,6 +244,11 @@ public final class KernPayloads {
         var k = Spelers.klasse(p);
         int lvl = d.level(k.id());
         long xp = d.xp(k.id());
+        int gl = d.level();
+        java.util.Map<String, Integer> klasseLv = new java.util.LinkedHashMap<>();
+        for (var x : nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.alle()) {
+            klasseLv.put(x.id(), d.level(x.id()));
+        }
         int[] cd = new int[5], cdMax = new int[5];   // (index 4 = the Knuffelsprong, every class)
         List<String> skills = new ArrayList<>();
         long nu = p.level().getGameTime();
@@ -249,7 +266,9 @@ public final class KernPayloads {
         int duiz = (int) Math.max(0, d.duizeligTot - nu);
         stuur(p, new Hud(Vadsrijk.in(p), (float) Spelers.vads(p), (float) Spelers.maxVads(p), (float) Spelers.energie(p), (float) Spelers.maxEnergie(p),
                 (float) d.ultLading, lvl, lvl >= Levels.MAX ? 0 : Levels.restXp(xp), lvl >= Levels.MAX ? 0 : Levels.xpVoor(lvl), Spelers.titelKey(p), cd, cdMax, d.munten,
-                duiz, d.opgevrolijkt, d.gebied == null ? "" : d.gebied, skills, Statussen.ticks(p, Status.BEVROREN)));
+                duiz, d.opgevrolijkt, d.gebied == null ? "" : d.gebied, skills, Statussen.ticks(p, Status.BEVROREN), gl,
+                gl >= Levels.MAX_GENERIEK ? 0 : Levels.restXpGeneriek(d.generiekXp), gl >= Levels.MAX_GENERIEK ? 0 : Levels.xpVoorGeneriek(gl),
+                Spelers.actieveWapenKlasse(p) == null, klasseLv));
     }
 
     public static void stuurParty(ServerPlayer p) {
