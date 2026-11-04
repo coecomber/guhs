@@ -1,0 +1,68 @@
+# Het Vadsrijk, fix round 2 "biomen": the F3 screen shows "Het Vadsrijk - <plek>" per area, and the Druipschacht waterfalls
+# are blue-turquoise (biome water colour of vadsrijk_druipgrotten).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_biomen.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section kamp
+/guhs vadsrijk wereld plek kampvuur_kamp
+look 90 5
+wait 60
+waitrender 200
+f3 on
+wait 10
+shot b_kamp_f3 gui
+f3 off
+
+section zwamzoet
+/guhs vadsrijk wereld plek plein
+look 0 5
+wait 60
+waitrender 200
+f3 on
+wait 10
+shot b_zwamzoet_f3 gui
+f3 off
+
+section klodderweide
+/guhs vadsrijk wereld plek kampvuur_klodderweide_1
+look 90 5
+wait 60
+waitrender 200
+f3 on
+wait 10
+shot b_klodderweide_f3 gui
+f3 off
+
+section druipschacht
+/guhs vadsrijk wereld plek druipschacht_bodem
+look 354 -35
+wait 80
+waitrender 300
+shot b_schacht_waterval gui
+f3 on
+wait 10
+shot b_schacht_f3 gui
+f3 off
+/guhs vadsrijk wereld plek druipschacht_balkon
+look 329 20
+wait 60
+waitrender 300
+shot b_schacht_balkon gui
+
+section kandijkom
+/guhs vadsrijk z2wereld plek plein
+look 0 5
+wait 80
+waitrender 300
+f3 on
+wait 10
+shot b_kandijkom_f3 gui
+f3 off

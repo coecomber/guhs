@@ -207,6 +207,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z2_wereld',
             'vadsrijk_z2_npc',
             'vadsrijk_z2_bazen',
+            # 1.10 fix round 2: one biome per area (Java: feature/vadsrijk/biomen)
+            'vadsrijk_biomen',
             ]
 
 

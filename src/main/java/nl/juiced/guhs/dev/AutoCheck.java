@@ -1139,6 +1139,12 @@ public final class AutoCheck {
                     mc2.gui.getChat().clearMessages(false);
                     return true;
                 };
+            case "f3":
+                // f3 on|off: show or hide the debug screen (fix round 2 "biomen": the biome name in screenshots)
+                return mc2 -> {
+                    mc2.debugEntries.setOverlayVisible(a.length < 2 || !a[1].equalsIgnoreCase("off"));
+                    return true;
+                };
             case "guhkamer":
                 // guhkamer stuur [n] | maag | binnen: send n own guhs close by to the Guhkamer / go to your own Guhmaag /
                 // into your own Guhkamer (built first when needed)
