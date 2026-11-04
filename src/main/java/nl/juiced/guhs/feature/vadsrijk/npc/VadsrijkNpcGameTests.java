@@ -114,4 +114,101 @@ public class VadsrijkNpcGameTests {
         Questlog.wisAlles(p);
         helper.succeed();
     }
+
+    /**
+     * Fix round 1: walk the whole main story through the API; at every step (before taking a quest, each open objective, the
+     * hand-in) the tracker's step must say WHAT and WHERE in real text (every key translated), point at a spot, and name the
+     * NPC for talk/hand-in steps. Also: the level gate says "level first, then talk to ...", the auto-started quests (hq05, hq10,
+     * hq12) start, and the Mika pin can never be lost (it is hq12's start item, not a collect objective).
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 200)
+    public static void hoofdlijnHeeftAltijdWieEnWaar(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Questlog.wisAlles(p);
+        nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 1);
+        java.util.List<Quest> hoofd = Quests.alle().values().stream().filter(Quest::hoofd).toList();
+        helper.assertTrue(hoofd.size() == 13, "13 main quests (12 + the element quiz): " + hoofd.size());
+        int stappen = 0;
+        for (Quest q : hoofd) {
+            QuestStap s = QuestStap.hoofdlijn(p);
+            helper.assertTrue(s != null && s.quest().equals(q.id()), "the tracker is at " + q.id() + ": " + (s == null ? null : s.quest()));
+            if (!Questlog.actief(p, q.id())) {
+                if (nl.juiced.guhs.feature.vadsrijk.kern.Spelers.level(p) < q.lv()) {
+                    check(helper, s, q.id() + " level gate", true);
+                    helper.assertTrue(sleutels(s.wat()).contains(QuestStap.P + "level") && sleutels(s.waar()).contains(Npcs.van(q.gever()).naamKey()),
+                            q.id() + ": the level gate names the level and then the giver");
+                    nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, q.lv());
+                    s = QuestStap.hoofdlijn(p);
+                }
+                check(helper, s, q.id() + " offer", true);
+                helper.assertTrue(sleutels(s.wat()).contains(Npcs.van(q.gever()).naamKey()), q.id() + ": go to the giver, by name");
+                helper.assertTrue(q.auto() || NpcMarkers.marker(p, q.gever()) == NpcMarkers.HOOFD, q.id() + ": the giver shows the gold !");
+                Questlog.neemAan(p, q);
+                stappen++;
+            }
+            for (int i = 0; i < q.doelen().size(); i++) {
+                if (Questlog.doelKlaar(p, q, i)) {
+                    continue;
+                }
+                QuestStap d = QuestStap.hoofdlijn(p);
+                Quest.Doel doel = q.doelen().get(i);
+                check(helper, d, q.id() + " objective " + i + " (" + doel.type() + ")", doel.type() != Quest.Doel.Type.LEVEL);
+                if (doel.type() == Quest.Doel.Type.PRAAT) {
+                    helper.assertTrue(sleutels(d.waar()).contains(QuestStap.PLEK + "npc." + doel.doel()), q.id() + ": where " + doel.doel() + " is");
+                }
+                if (doel.type() == Quest.Doel.Type.VERZAMEL) {
+                    Questlog.geef(p, new ItemStack(Questlog.item(doel.doel()), doel.n()));
+                } else {
+                    int[] v = Questlog.v(p, q);
+                    v[i] = doel.n();
+                    Questlog.zetV(p, q, v);
+                }
+                stappen++;
+            }
+            QuestStap in = QuestStap.hoofdlijn(p);
+            check(helper, in, q.id() + " hand-in", true);
+            helper.assertTrue(sleutels(in.wat()).contains(Npcs.van(q.inleveren()).naamKey()), q.id() + ": hand in to " + q.inleveren() + ", by name");
+            helper.assertTrue(NpcMarkers.marker(p, q.inleveren()) == NpcMarkers.INLEVEREN, q.id() + ": a ? over " + q.inleveren());
+            Questlog.voltooi(p, q);
+            if (q.actieKlaar().startsWith("start:")) {
+                QuestMotor.doeActie(p, q.actieKlaar(), null);
+            } else if (q.id().equals("hq04_kampvuur")) {
+                Questlog.neemAan(p, Quests.van("hq05_klodderreus"));   // (what the BAM does)
+            }
+            stappen++;
+        }
+        helper.assertTrue(QuestStap.hoofdlijn(p) == null && Questlog.klaar(p, "hq12_schaduw"), "the main story is done");
+        helper.assertTrue(QuestStap.hoofdGedaan(p).size() == 13, "13 steps of history");
+        helper.assertTrue(stappen > 30, "walked " + stappen + " steps");
+        Questlog.wisAlles(p);
+        helper.succeed();
+    }
+
+    private static void check(GameTestHelper helper, QuestStap s, String waar, boolean plek) {
+        helper.assertTrue(s != null, waar + ": a step");
+        for (net.minecraft.network.chat.Component c : new net.minecraft.network.chat.Component[] {s.wat(), s.waar()}) {
+            helper.assertTrue(!c.getString().isBlank(), waar + ": empty text");
+            for (String k : sleutels(c)) {
+                helper.assertTrue(net.minecraft.locale.Language.getInstance().has(k), waar + ": missing text " + k);
+            }
+        }
+        helper.assertTrue(!plek || s.doel() != null, waar + ": the tracker has a spot to point at");
+    }
+
+    /** Every translation key in a component (also in its arguments). */
+    private static java.util.Set<String> sleutels(net.minecraft.network.chat.Component c) {
+        java.util.Set<String> l = new java.util.HashSet<>();
+        if (c.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t) {
+            l.add(t.getKey());
+            for (Object a : t.getArgs()) {
+                if (a instanceof net.minecraft.network.chat.Component x) {
+                    l.addAll(sleutels(x));
+                }
+            }
+        }
+        for (net.minecraft.network.chat.Component x : c.getSiblings()) {
+            l.addAll(sleutels(x));
+        }
+        return l;
+    }
 }

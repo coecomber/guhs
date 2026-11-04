@@ -1,8 +1,13 @@
 package nl.juiced.guhs.feature.vadsrijk.npc;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -20,6 +25,8 @@ public final class NpcPayloads {
     public static Consumer<Markers> markerOntvanger = m -> {
     };
     public static Consumer<Log> logOntvanger = m -> {
+    };
+    public static Consumer<Volg> volgOntvanger = m -> {
     };
 
     private NpcPayloads() {
@@ -51,6 +58,50 @@ public final class NpcPayloads {
         }
     }
 
+    /** One line of the quest tracker: the quest, its step (what / where / an extra line) and the spot to point at (or none). */
+    public record VolgRegel(String quest, boolean hoofd, Component titel, Component wat, Component waar, Optional<Component> extra,
+            Optional<BlockPos> doel) {
+        static final StreamCodec<RegistryFriendlyByteBuf, VolgRegel> STREAM_CODEC = StreamCodec.ofMember((r, b) -> {
+            b.writeUtf(r.quest);
+            b.writeBoolean(r.hoofd);
+            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(b, r.titel);
+            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(b, r.wat);
+            ComponentSerialization.TRUSTED_STREAM_CODEC.encode(b, r.waar);
+            b.writeBoolean(r.extra.isPresent());
+            r.extra.ifPresent(c -> ComponentSerialization.TRUSTED_STREAM_CODEC.encode(b, c));
+            b.writeBoolean(r.doel.isPresent());
+            r.doel.ifPresent(b::writeBlockPos);
+        }, b -> new VolgRegel(b.readUtf(), b.readBoolean(), ComponentSerialization.TRUSTED_STREAM_CODEC.decode(b),
+                ComponentSerialization.TRUSTED_STREAM_CODEC.decode(b), ComponentSerialization.TRUSTED_STREAM_CODEC.decode(b),
+                b.readBoolean() ? Optional.of(ComponentSerialization.TRUSTED_STREAM_CODEC.decode(b)) : Optional.empty(),
+                b.readBoolean() ? Optional.of(b.readBlockPos()) : Optional.empty()));
+    }
+
+    /** The quest tracker (top right) and the light beam: on/off + the main story's step + the pinned quest's step. */
+    public record Volg(boolean aan, boolean straal, List<VolgRegel> regels) implements CustomPacketPayload {
+        public static final Type<Volg> TYPE = new Type<>(Guhs.id("vr_npc_volg"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, Volg> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.BOOL, Volg::aan,
+                ByteBufCodecs.BOOL, Volg::straal, VolgRegel.STREAM_CODEC.apply(ByteBufCodecs.list(4)), Volg::regels, Volg::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client -> server: tracker choices. soort: PIN (quest = id, "" = unpin), TRACKER / STRAAL (toggle). */
+    public record VolgKeuze(int soort, String quest) implements CustomPacketPayload {
+        public static final int PIN = 0, TRACKER = 1, STRAAL = 2;
+        public static final Type<VolgKeuze> TYPE = new Type<>(Guhs.id("vr_npc_volgkeuze"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, VolgKeuze> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, VolgKeuze::soort,
+                ByteBufCodecs.STRING_UTF8, VolgKeuze::quest, VolgKeuze::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
     /** Client -> server: J was pressed (in the dimension). */
     public record LogVraag() implements CustomPacketPayload {
         public static final Type<LogVraag> TYPE = new Type<>(Guhs.id("vr_npc_logvraag"));
@@ -66,6 +117,12 @@ public final class NpcPayloads {
         r.playToClient(Markers.TYPE, Markers.STREAM_CODEC, (m, c) -> markerOntvanger.accept(m));
         r.playToClient(Log.TYPE, Log.STREAM_CODEC, (m, c) -> logOntvanger.accept(m));
         r.playToServer(LogVraag.TYPE, LogVraag.STREAM_CODEC, NpcPayloads::opVraag);
+        r.playToClient(Volg.TYPE, Volg.STREAM_CODEC, (m, c) -> volgOntvanger.accept(m));
+        r.playToServer(VolgKeuze.TYPE, VolgKeuze.STREAM_CODEC, (m, c) -> {
+            if (c.player() instanceof ServerPlayer p) {
+                NpcVolg.keuze(p, m);
+            }
+        });
     }
 
     private static void opVraag(LogVraag v, IPayloadContext c) {

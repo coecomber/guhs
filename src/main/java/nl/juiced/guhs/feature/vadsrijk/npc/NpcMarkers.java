@@ -49,7 +49,7 @@ public final class NpcMarkers {
             return m;
         }
         for (Quest q : Quests.alle().values()) {
-            if (q.gever().equals(npc) && !q.auto() && Questlog.beschikbaar(p, q)) {
+            if (q.gever().equals(npc) && (!q.auto() || q.hoofd()) && Questlog.beschikbaar(p, q)) {
                 return q.hoofd() ? HOOFD : ZIJ;
             }
         }

@@ -73,6 +73,22 @@ public final class NpcCommando {
                     NpcMarkers.vies(p);
                     return 1;
                 })))
+                .then(Commands.literal("af").then(questArg().executes(c -> {
+                    // dev: hand in at once (rewards, no dialogue); "start:" actions run, story actions (bam, cliffhanger) do not
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    Quest q = Quests.van(StringArgumentType.getString(c, "id"));
+                    if (q == null) {
+                        return 0;
+                    }
+                    if (!Questlog.klaar(p, q.id())) {
+                        Questlog.voltooi(p, q);
+                        if (q.actieKlaar().startsWith("start:")) {
+                            QuestMotor.doeActie(p, q.actieKlaar(), null);
+                        }
+                    }
+                    NpcVolg.meldVolgende(p, q);
+                    return 1;
+                })))
                 .then(Commands.literal("vergeet").then(questArg().executes(c -> {
                     Questlog.vergeet(c.getSource().getPlayerOrException(), StringArgumentType.getString(c, "id"));
                     return 1;

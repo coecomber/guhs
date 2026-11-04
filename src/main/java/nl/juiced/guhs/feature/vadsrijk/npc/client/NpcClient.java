@@ -41,6 +41,7 @@ public final class NpcClient {
     public static void init(IEventBus modBus) {
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> e.registerEntityRenderer(NpcRegistry.GUH.get(), GuhRenderer::new));
         modBus.addListener((RegisterKeyMappingsEvent e) -> e.register(QUESTLOG));
+        VolgHud.init(modBus);
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> {
             Minecraft mc = Minecraft.getInstance();
             while (QUESTLOG.consumeClick()) {
