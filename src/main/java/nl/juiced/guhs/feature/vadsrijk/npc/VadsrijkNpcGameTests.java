@@ -262,7 +262,8 @@ public class VadsrijkNpcGameTests {
             nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 20);
             QuestMotor.klik(p, pil);
             Reiskaart.kiesVoorTest(p, "kandijkom");
-            helper.assertTrue(gevlogen.get(gevlogen.size() - 1).equals("kaart>kandijkom"), "lv 20: Kandijkom flies: " + gevlogen);
+            helper.assertTrue(gevlogen.get(gevlogen.size() - 1).equals("kaart>kandijkom"), "lv 20: Kandijkom flies: " + gevlogen + " (lv " + nl.juiced.guhs.feature.vadsrijk.kern.Spelers.level(p) + ", slot "
+                    + QuestMotor.reisSlot(p, "kandijkom") + ", hier " + Reiskaart.hier(p) + ", kaart open " + Reiskaart.openSinds(p.getUUID()) + ")");
             // the Kandijkom captain: back to De Haven or straight to the camp (dialogue choices exist for him too)
             helper.assertTrue(QuestMotor.reisDoelen(p, "z2_kapitein").equals(java.util.List.of("zwamzoet", "knuffelkamp")), "Kandijkom captain's lines");
             RijkGuh pool = helper.spawn(NpcRegistry.GUH.get(), new BlockPos(3, 1, 1));
