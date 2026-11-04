@@ -143,7 +143,7 @@ public final class KlassenRegistry {
             return 1;
         }));
         k.then(dev("adv").executes(c -> Advancement.doe(c.getSource().getPlayerOrException()) ? 1 : 0));
-        k.then(dev("punten").then(Commands.argument("level", IntegerArgumentType.integer(1, 20)).executes(c -> {
+        k.then(dev("punten").then(Commands.argument("level", IntegerArgumentType.integer(1, 35)).executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             Spelers.zetLevel(p, IntegerArgumentType.getInteger(c, "level"));
             KlasseBalie.boom(p);
