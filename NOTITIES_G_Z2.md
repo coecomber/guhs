@@ -70,11 +70,27 @@ quests) is in `NOTITIES_G_Z2_LEVELS.md`.
 - `python tools/vadsrijk/maak_kaart.py --zone 2 --geen-cache`: OK, no unknown blocks.
 - loopcheck `--box=-300,-2820,300,-2150`: **LEEG 0, PAD 0**, TRAP 44 (all chairs/benches = stairs used as furniture), VAL 26:
   14 enclosed attics/culled hollows under the tier houses (no opening, unreachable), the rest single cells (1.5-2 up to get out).
-- Gametests / AutoCheck: see Resume point.
+- Every road walked block by block on the tiles (scratch `padloop.py`): no step > 1 and no blocker on any path (fixed after
+  g-ux's note: roads now ramp out from fixed town-floor heights through the gates; the east/west/north exits were the bug).
+- POI stand-spot check (feet + head free, a floor under it) over all 385 generated spots: OK (only markers left: the camps'
+  fire baskets, ice-fall/forest markers). All NPC spots (incl. g-ux's 5 corrected ones: bakker, beeldhouwer, touwtje,
+  wacht_burcht, versteend_pluk) now come from `npcplek.*` on the new tiles (volgKaart overrides the literals).
+- Gametests `-Pgt=Vadsrijk,Z2Npc`: 67/69 on the first run (spawnersDichtheid: galm max 41 -> spacing from 18, min radius 6;
+  grotSpawnerVindtDeVloer = zone-1 flake); rerun `-Pgt=VadsrijkWezens,VadsrijkZ2Wezens` 11/11.
+- AutoCheck `tools/autocheck/vadsrijk_g_z2.txt` (27 shots, run/screenshots/autocheck/gz2_*.png, on the tiles before the road
+  fix): opening (storm, needle), dock, plaza + clock-tower street with the tier stairs and the bridge, market stall, tree, cafe +
+  house + kapel interiors, east gate out, Galm campfire, avalanche wave, Galmwolf arena, lake, dragon saddle, ravine rim/floor,
+  Galmspleet bridge, crystal forest, main bridge with the Spiegelburcht on its peak, burcht door + hall, gondola ride. (The
+  skyline shot fell to the ground: creative /tp without flying.) run/saves still holds the AutoCheck world (run/ is ignored).
 
 ## Open / for the user
 - Looks are judged by the user in the dev client (goed is goed): roof colours, amount of snow vs crystal, density of the market.
 - The where-texts of the 18 removed side-quest givers are kept (they are citizens now).
 
+## Merge notes
+- g-ux also edited Z2NpcPlekken (5 spots): keep my `volgKaart` lines; their numbers are only fallbacks now.
+- Integration: regenerate zone 2 (`maak_kaart.py --zone 2 --geen-cache`); the tile grid is unchanged, so no tiles to delete.
+- Z2WereldPlekken.java + POI_Z2.md are committed (the code needs ZONE_*, BURCHT_DX/DZ, PADEN to compile); tiles are not.
+
 ## Resume point
-(see the end of the file)
+Done: map rebuilt, code aligned, checks + gametests + one AutoCheck walk. Open: the user's look judgement in the dev client.
