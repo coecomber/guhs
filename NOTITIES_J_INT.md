@@ -11,11 +11,10 @@ f-int / w-poc. build/moddev copied from h-melee (artifacts only). Scratch: scrat
 | 110-i-mounts | 157c9c985 | lang 3-way (scratchpad gint/lang3.py). Book follow-up, see below |
 | 110-i-z2kaart | 737b92773 | clean (generator sources only) |
 | 110-i-audio | a115b99de | VadsrijkFeature / VadsrijkClient / tools/features/__init__.py: both lines (voltooiing + stadsmuziek); lang 3-way |
+| 110-i-lore | 45b1a2dee | lang 3-way; vadsrijk_npc.py + vadsrijk_z2_npc.py rerun = identical lang; make_ftbquests rerun = no change (lore at 60, we stay 61). No map generator touched -> no map regen needed after it |
 
 ## Waiting for
-- 110-i-lore (Keizer hints in zones 1+2, zone-2 cliffhanger east): the lead will message. After it: regen both zones again
-  (`--geen-cache --audit`), npc generators (vadsrijk_npc.py FIRST, then vadsrijk_z2_npc.py), make_ftbquests (CHAPTER_VERSION =
-  max(branches) + 1; lore at 60 -> keep 61, at 61 -> 62), gametests again.
+NOTHING: all 6 branches merged (ui, voltooiing, mounts, z2kaart, audio, lore).
 
 ## Cross-cutting decisions
 - **Verkenningsboek mounts** (i-voltooiing listed Hoedhupper + Klodderros): zone 1 = Wolkenschaapje + Knuffelhert, zone 2 = Guhwolf.
@@ -31,6 +30,10 @@ f-int / w-poc. build/moddev copied from h-melee (artifacts only). Scratch: scrat
   (creative only; pre-existing, not changed). Verdict: no clash to fix.
 - **Generator bug fixed:** `vadsrijk_z2_npc.py` `_mijn_sleutel` dropped `vadsrijk.npc.rijdierquest.teaser.z2_rijdier_guhwolf`
   (written by vadsrijk_npc.py since i-mounts) on a standalone run -> excluded the teaser prefix.
+- **Giant-tree landmark** (lead's request): `WereldLucht.VERTE_PLEK` index 2 (lucht_verte_2 = reuzenboom = zone 3) from azimuth 255
+  (west) to **105** (east). Not 95: the floating castle at 75 is +-14 deg wide and the tree +-15 deg, so 95 would overlap it; 105
+  sits between the castle and the volcano (140, +-17 deg). WERELDVERHAAL.md §12 still says "~95" (not my file).
+- Zone-2 cliffhanger east: taken from i-lore (Z2NpcPlekken.CLIFFHANGER mirrored). The zone-3 npc slice may do the same: keep one.
 - FTB: CHAPTER_VERSION 61 (i-mounts changed the rijdier_hoedhupper quest into the Wolkenschaapje return quest).
 
 ## Log

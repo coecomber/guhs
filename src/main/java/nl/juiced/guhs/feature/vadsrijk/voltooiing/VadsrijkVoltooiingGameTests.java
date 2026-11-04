@@ -71,7 +71,18 @@ public class VadsrijkVoltooiingGameTests {
                     "every lookout and campfire of zone 1");
             helper.assertTrue(totaal(z1, "knuffel") == NpcPlekken.KNUFFEL.size() && totaal(z1, "geheim") == NpcPlekken.AANWIJZING.size() + NpcPlekken.SCHAT.size(),
                     "knuffels; clues + treasures");
-            helper.assertTrue(totaal(z1, "rijdier") == 3 && totaal(z2, "rijdier") == 1, "mounts per zone");
+            // J-INT: zone 1 = Wolkenschaapje + Knuffelhert (Hoedhupper/Klodderros are gone), zone 2 = Guhwolf; a "later" category
+            // (mounts start in zone 3): shown, but not in the zone total
+            helper.assertTrue(totaal(z1, "rijdier") == 2 && totaal(z2, "rijdier") == 1, "mounts per zone");
+            int zonderLater = 0;
+            for (Categorie c : Voltooiing.categorieen(z1)) {
+                if (c.id().equals("rijdier")) {
+                    helper.assertTrue(c.later(), "the mounts are a later category");
+                } else {
+                    zonderLater += c.dingen().size();
+                }
+            }
+            helper.assertTrue(Voltooiing.tel(p, z1).totaal() == zonderLater, "later categories are not counted in the zone total");
             helper.assertTrue(totaal(z1, "huisdier") == 2 && totaal(z2, "huisdier") == 1, "pets by their boss's zone");
             helper.assertTrue(ZoneBoeken.zoneVan("z2_hq01_x") == 2 && ZoneBoeken.zoneVan("z3_a") == 3 && ZoneBoeken.zoneVan("zij_x") == 1
                     && ZoneBoeken.zoneVan("z17_koning") == 1 && ZoneBoeken.zoneVan("z01_wolletjes") == 1, "zone ids (zone 1's z01..z20 stay zone 1)");

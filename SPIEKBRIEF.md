@@ -117,6 +117,17 @@ In het Vadsrijk:
 - `/guhs vadsrijk boek tel` laat je tellingen zien, `boek reset` begint opnieuw.
 - **B en de snuffelhond:** B is ook "blaffen" als hond op Het Snuffeleiland. In het Vadsrijk wint het boek; als hond blaf je gewoon.
 
+## R10. Kleine geheimpjes en de horizon (lore)
+```
+/guhs vadsrijk npc cliffhanger
+/guhs vadsrijk z2npc flashback
+/guhs vadsrijk z2npc cliffhanger
+```
+- Er zitten nu een paar hele kleine hints in zone 1 en 2 (praatjes, tooltips, de filmpjes). Let in de filmpjes goed op: soms is er
+  maar één seconde iets te zien. Het einde van zone 2 wijst nu naar het **oosten**.
+- **Horizon:** in zone 1 staat de reuzenboom (zone 3) nu in het oosten, naast het zwevende kasteel. Kijk vanaf Knuffelkamp naar het
+  oosten (F3: richting "east").
+
 ---
 
 # RONDE 2 (nog steeds geldig)
