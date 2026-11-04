@@ -1,0 +1,94 @@
+# Het Vadsrijk 1.10.0 fix round 1 (bazen): every boss really fights. The player stands AT RANGE (~14 blocks) in each arena;
+# the screenshots must show the boss acting: red/pink/purple/yellow telegraphs, jumps, lobs, the crown, decoys, cheese wheels.
+# (creative: the bosses also pick creative players as target when nobody else is there; they just can't hurt them)
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_bazen_fix.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+
+section reis
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section klodderreus
+/guhs vadsrijk wereld plek arena_klodderreus.deur
+/tp @s ~8 ~ ~3
+look -70 15
+wait 60
+waitrender 200
+/summon guhs:vr_klodderreus 54 88 1069
+wait 25
+shot k1_klodderreus_mikt gui
+wait 15
+shot k2_klodderreus_sprong gui
+wait 30
+shot k3_klodderreus_geland gui
+wait 60
+shot k4_klodderreus_weer gui
+/kill @e[type=guhs:vr_klodderreus]
+/kill @e[type=guhs:vr_proefkloddertje]
+
+section koning
+/guhs vadsrijk wereld plek arena_koning_klodder.centrum
+/tp @s ~-14 ~1 ~
+look -90 15
+wait 160
+waitrender 200
+shot q1_koning_intro gui
+wait 40
+shot q2_koning_aanval gui
+wait 40
+shot q3_koning_aanval gui
+/guhs vadsrijk bazen fase 2
+wait 30
+shot q4_koning_split gui
+/guhs vadsrijk bazen fase 3
+wait 40
+shot q5_koning_fase3_kroon gui
+wait 140
+shot q6_koning_hemelsprong gui
+wait 60
+shot q7_koning_na gui
+/guhs vadsrijk baas reset bazen:koning_klodder
+
+section opperzwam
+/guhs vadsrijk wereld plek arena_opperzwam.centrum
+/tp @s ~ ~1 ~14
+look 180 10
+wait 160
+waitrender 200
+shot o1_opperzwam_intro gui
+wait 50
+shot o2_opperzwam_aanval gui
+wait 50
+shot o3_opperzwam_aanval gui
+/guhs vadsrijk bazen fase 2
+wait 60
+shot o4_opperzwam_donker gui
+/guhs vadsrijk bazen fase 3
+wait 120
+shot o5_opperzwam_toren gui
+wait 60
+shot o6_opperzwam_fase3 gui
+/guhs vadsrijk baas reset bazen:opperzwam
+
+section mika
+/guhs vadsrijk bazen tp mika
+look 270 10
+wait 80
+waitrender 200
+/guhs vadsrijk bazen spawn mika_spion
+wait 60
+shot m1_mika gui
+/guhs vadsrijk bazen fase 2
+wait 120
+shot m2_mika_fase2 gui
+wait 140
+shot m3_mika_lok gui
+wait 140
+shot m4_mika_kaas gui
+quit

@@ -73,6 +73,9 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     @Override
     public void tick() {
         super.tick();
+        if (!level().isClientSide() && level() instanceof ServerLevel sl0) {
+            vechtTick(sl0);
+        }
         if (level().isClientSide() || tickCount % 5 != 0 || !(level() instanceof ServerLevel sl)) {
             return;
         }
@@ -103,6 +106,304 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         losseKijkers.clear();
         losseKijkers.addAll(nu);
         schaal(nu.size());
+    }
+
+    // ---- fighting (fix round 1: every boss really fights) -------------------------------------------------------------------
+    // The bosses used to wait for vanilla's NearestAttackableTargetGoal. That never picks a creative player (26.1), loses a
+    // player beyond the follow range, and the jumps were plain velocity (in the pond's water the drag ate them). Now kern
+    // picks the target itself among everyone in the arena, jumps are kinematic arcs, lobs punish standing at range, hits from
+    // outside the arena do nothing, and an empty arena resets the boss.
+
+    /** A lob in flight: a blob from the boss to {@code plek}, landing after {@code duur} ticks (red circle meanwhile). */
+    private record Inslag(Vec3 van, Vec3 plek, double straal, int duur, int[] t, double factor, String skill, @Nullable nl.juiced.guhs.feature.vadsrijk.kern.Status st,
+            int stTicks, net.minecraft.core.particles.ParticleOptions deeltje) {
+    }
+
+    private final java.util.List<Inslag> inslagen = new java.util.ArrayList<>();
+    @Nullable
+    private java.util.UUID doelId;
+    private int doelWissel, buitenT, leegT;
+    private long teVerBericht;
+    /** Per player: ticks (in steps of 5) they stood far away from the boss in a row. */
+    private final java.util.Map<java.util.UUID, Integer> verT = new java.util.HashMap<>();
+    @Nullable
+    private Vec3 thuis;
+    // the kinematic jump
+    private int sprongT = -1, sprongDuur;
+    private Vec3 sprongVan = Vec3.ZERO, sprongNaar = Vec3.ZERO;
+    private double sprongHoogte;
+
+    /** Distance from which standing away from the boss counts as "at range" (punished after {@link #VER_TICKS}). */
+    public static final double VER = 9;
+    public static final int VER_TICKS = 50;
+
+    /** The centre of the fight: the arena centre, else where it first stood. */
+    public Vec3 gevechtsMidden() {
+        if (arena != null) {
+            return Vec3.atBottomCenterOf(arena.centrum());
+        }
+        return thuis != null ? thuis : position();
+    }
+
+    /** The radius of the fight: the arena's, a loose boss's {@link #losseStraal}, else 24. */
+    public double gevechtsStraal() {
+        return arena != null ? arena.straal() : losseStraal() > 0 ? losseStraal() : 24;
+    }
+
+    /** Is this player in the fight (inside the arena / near a loose boss)? Only they can hurt it, only they are chased. */
+    public boolean inGevecht(net.minecraft.world.entity.player.Player p) {
+        if (p.isSpectator()) {
+            return false;
+        }
+        if (arena != null) {
+            return arena.binnen(p.getX(), p.getY(), p.getZ());
+        }
+        double r = gevechtsStraal();
+        return p.distanceToSqr(this) <= r * r;
+    }
+
+    /**
+     * Everyone the boss fights: players in the fight who can be hurt (not fainted/protected, not watching a scene). Creative
+     * players only when nobody else is there: they can't be hurt, but the boss still shows his moves at them.
+     */
+    /** Gametests only: which players may count as fighters (parallel tests leave mock players all around). */
+    public java.util.function.Predicate<ServerPlayer> testFilter = p -> true;
+
+    public java.util.List<ServerPlayer> vechters() {
+        java.util.List<ServerPlayer> l = new java.util.ArrayList<>(), creatief = new java.util.ArrayList<>();
+        if (!(level() instanceof ServerLevel sl)) {
+            return l;
+        }
+        for (ServerPlayer p : sl.players()) {
+            if (!p.isAlive() || !testFilter.test(p) || !inGevecht(p) || nl.juiced.guhs.feature.vadsrijk.kern.Flauwvallen.beschermd(p)
+                    || nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.bezig(p)) {
+                continue;
+            }
+            (p.isCreative() ? creatief : l).add(p);
+        }
+        return l.isEmpty() ? creatief : l;
+    }
+
+    /** The player it is after right now (kern's own choice, also creative players), or null. */
+    @Nullable
+    public ServerPlayer doel() {
+        if (doelId != null && level() instanceof ServerLevel sl && sl.getEntity(doelId) instanceof ServerPlayer p && p.isAlive()) {
+            return p;
+        }
+        return null;
+    }
+
+    /** The player furthest away from it, or null. */
+    @Nullable
+    public ServerPlayer verste() {
+        ServerPlayer best = null;
+        double d = -1;
+        for (ServerPlayer p : vechters()) {
+            double x = p.distanceToSqr(this);
+            if (x > d) {
+                d = x;
+                best = p;
+            }
+        }
+        return best;
+    }
+
+    /** A player who has stood at range ({@link #VER}+ blocks) for {@link #VER_TICKS} ticks: punish them (the furthest such), or null. */
+    @Nullable
+    public ServerPlayer afstandsSpeler() {
+        ServerPlayer best = null;
+        double d = -1;
+        for (ServerPlayer p : vechters()) {
+            if (verT.getOrDefault(p.getUUID(), 0) >= VER_TICKS && p.distanceToSqr(this) > d) {
+                d = p.distanceToSqr(this);
+                best = p;
+            }
+        }
+        return best;
+    }
+
+    /** The target for the next move: a ranged player first (they get punished), else {@link #doel()}. */
+    @Nullable
+    public ServerPlayer volgendDoel() {
+        ServerPlayer v = afstandsSpeler();
+        return v != null && getRandom().nextInt(3) > 0 ? v : doel();
+    }
+
+    /** Where a player stands, kept inside the arena (a little from the edge): a landing spot / lob target. */
+    public Vec3 voetenVan(LivingEntity p) {
+        Vec3 v = new Vec3(p.getX(), Math.floor(p.getY() + 0.01), p.getZ());
+        if (arena != null) {
+            Vec3 m = gevechtsMidden();
+            Vec3 d = v.subtract(m).multiply(1, 0, 1);
+            double max = Math.max(3, arena.straal() - 2);
+            if (d.length() > max) {
+                Vec3 r = m.add(d.normalize().scale(max));
+                v = new Vec3(r.x, v.y, r.z);
+            }
+        }
+        return v;
+    }
+
+    /** Jumps in an arc to {@code naar} (lands after {@code ticks}); then {@link #geland()} is called. Ignores water and drag. */
+    public void springNaar(Vec3 naar, int ticks, double hoogte) {
+        sprongVan = position();
+        sprongNaar = naar;
+        sprongDuur = Math.max(4, ticks);
+        sprongT = 0;
+        sprongHoogte = hoogte;
+        setNoGravity(true);
+        getNavigation().stop();
+    }
+
+    public boolean inSprong() {
+        return sprongT >= 0;
+    }
+
+    /** Called when a {@link #springNaar} jump lands (default: nothing). */
+    protected void geland() {
+    }
+
+    /**
+     * Lobs a blob at where this player stands: a red circle shows where it lands, a trail flies there, and after {@code ticks}
+     * everyone within {@code straal} gets {@code factor} x the boss's hit (+ an optional status).
+     */
+    public void lob(LivingEntity p, double straal, int ticks, double factor, String skill, @Nullable nl.juiced.guhs.feature.vadsrijk.kern.Status st, int stTicks,
+            net.minecraft.core.particles.ParticleOptions deeltje, int kleur) {
+        if (!(level() instanceof ServerLevel sl)) {
+            return;
+        }
+        Vec3 plek = voetenVan(p);
+        Telegraaf.cirkel(sl, plek, straal, ticks, kleur);
+        inslagen.add(new Inslag(position().add(0, getBbHeight() * 0.8, 0), plek, straal, ticks, new int[1], factor, skill, st, stTicks, deeltje));
+        swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+        sl.playSound(null, blockPosition(), net.minecraft.sounds.SoundEvents.LLAMA_SPIT, net.minecraft.sounds.SoundSource.HOSTILE, 2f, 0.5f);
+    }
+
+    /** Hits every fighter within r of v (|dy| < 3) with factor x the boss's hit; returns how many were hit. */
+    public int raakRond(Vec3 v, double r, double factor, String skill, @Nullable nl.juiced.guhs.feature.vadsrijk.kern.Status st, int stTicks, double duw) {
+        int n = 0;
+        for (ServerPlayer p : vechters()) {
+            double dx = p.getX() - v.x, dz = p.getZ() - v.z;
+            if (dx * dx + dz * dz <= r * r && Math.abs(p.getY() - v.y) < 3) {
+                nl.juiced.guhs.feature.vadsrijk.kern.Schade.doe(new nl.juiced.guhs.feature.vadsrijk.kern.Schade.Klap(this, p, basisSchade(mobLevel()) * factor,
+                        element(), nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort.MELEE, false, skill));
+                if (st != null) {
+                    nl.juiced.guhs.feature.vadsrijk.kern.Statussen.geef(p, st, stTicks, Math.max(0.4, mobLevel() * 0.5), this);
+                }
+                if (duw > 0) {
+                    Vec3 weg = new Vec3(dx, 0, dz);
+                    weg = weg.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : weg.normalize();
+                    p.setDeltaMovement(weg.x * duw, 0.5, weg.z * duw);
+                    p.hurtMarked = true;
+                }
+                n++;
+            }
+        }
+        return n;
+    }
+
+    /** Resets the fight when the arena stayed empty (default: away, the arena spawns a fresh one). */
+    protected void leegReset() {
+        if (level() instanceof ServerLevel sl) {
+            sl.sendParticles(net.minecraft.core.particles.ParticleTypes.CLOUD, getX(), getY() + 1, getZ(), 30, 1.5, 1, 1.5, 0.02);
+        }
+        discard();
+    }
+
+    private void vechtTick(ServerLevel sl) {
+        if (thuis == null) {
+            thuis = position();
+        }
+        // lobs in flight (also after the plof: what's thrown lands)
+        for (java.util.Iterator<Inslag> it = inslagen.iterator(); it.hasNext(); ) {
+            Inslag i = it.next();
+            int t = ++i.t()[0];
+            double f = (double) t / i.duur();
+            Vec3 v = i.van().lerp(i.plek(), f).add(0, 4 * Math.max(3, i.van().distanceTo(i.plek()) * 0.35) * f * (1 - f), 0);
+            sl.sendParticles(i.deeltje(), v.x, v.y, v.z, 3, 0.15, 0.15, 0.15, 0.01);
+            if (t >= i.duur()) {
+                it.remove();
+                sl.sendParticles(i.deeltje(), i.plek().x, i.plek().y + 0.4, i.plek().z, 40, i.straal() * 0.4, 0.3, i.straal() * 0.4, 0.05);
+                sl.playSound(null, net.minecraft.core.BlockPos.containing(i.plek()), net.minecraft.sounds.SoundEvents.SLIME_SQUISH, net.minecraft.sounds.SoundSource.HOSTILE, 1.6f, 0.6f);
+                if (!geplofd()) {
+                    raakRond(i.plek(), i.straal(), i.factor(), i.skill(), i.st(), i.stTicks(), 0.4);
+                }
+            }
+        }
+        // the kinematic jump
+        if (sprongT >= 0) {
+            sprongT++;
+            double f = Math.min(1, (double) sprongT / sprongDuur);
+            Vec3 v = sprongVan.lerp(sprongNaar, f).add(0, 4 * sprongHoogte * f * (1 - f), 0);
+            setPos(v.x, v.y, v.z);
+            setDeltaMovement(Vec3.ZERO);
+            resetFallDistance();
+            if (f >= 1) {
+                sprongT = -1;
+                setNoGravity(false);
+                for (int up = 0; up < 6 && !sl.noCollision(this); up++) {   // never end up stuck in a block
+                    setPos(getX(), Math.floor(getY()) + 1, getZ());
+                }
+                if (!geplofd()) {
+                    geland();
+                }
+            }
+        }
+        if (geplofd() || tickCount % 5 != 0) {
+            return;
+        }
+        java.util.List<ServerPlayer> l = vechters();
+        // range memory
+        java.util.Set<java.util.UUID> nu = new java.util.HashSet<>();
+        for (ServerPlayer p : l) {
+            nu.add(p.getUUID());
+            verT.put(p.getUUID(), p.distanceToSqr(this) > VER * VER ? verT.getOrDefault(p.getUUID(), 0) + 5 : 0);
+        }
+        verT.keySet().retainAll(nu);
+        // the target: keep it while it's in the fight; every few seconds the nearest (or a hitter) may take over
+        ServerPlayer d = doel();
+        if (d == null || !l.contains(d) || (++doelWissel % 16 == 0 && getRandom().nextInt(3) == 0)) {
+            ServerPlayer best = null;
+            double bd = Double.MAX_VALUE;
+            for (ServerPlayer p : l) {
+                double x = p.distanceToSqr(this);
+                if (x < bd) {
+                    bd = x;
+                    best = p;
+                }
+            }
+            if (best != null && d != null && l.contains(d) && getRandom().nextBoolean()) {
+                best = d;
+            }
+            d = best;
+            doelId = d == null ? null : d.getUUID();
+        }
+        if (d != null) {
+            if (!d.isCreative() && getTarget() != d) {
+                setTarget(d);
+            }
+            getLookControl().setLookAt(d, 30, 30);
+        } else if (getTarget() instanceof net.minecraft.world.entity.player.Player) {
+            setTarget(null);
+        }
+        // registered arenas: a leash back to the middle, and a reset after 30 s without anyone inside
+        if (arena != null && Arenas.van(arena.id()) == arena && !inSprong()) {
+            Vec3 m = gevechtsMidden();
+            double dx = getX() - m.x, dz = getZ() - m.z;
+            buitenT = dx * dx + dz * dz > Math.pow(arena.straal() + 2, 2) ? buitenT + 5 : 0;
+            if (buitenT >= 30) {
+                buitenT = 0;
+                springNaar(m, 20, 6);
+            }
+            boolean iemand = false;
+            for (ServerPlayer p : sl.players()) {
+                iemand |= !p.isSpectator() && arena.binnen(p.getX(), p.getY(), p.getZ());
+            }
+            leegT = iemand ? 0 : leegT + 5;
+            if (leegT >= 600 && vads() < maxVads()) {
+                leegReset();
+            }
+        }
     }
 
     /** The signature move during the first intro (default: nothing). */
@@ -153,6 +454,14 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     @Override
     public void krijgSchade(double n, @Nullable LivingEntity bron) {
         if (inIntro()) {
+            return;
+        }
+        if (bron instanceof ServerPlayer p && !inGevecht(p)) {   // fix round 1: no hitting him from outside the arena
+            long nu = level().getGameTime();
+            if (nu > teVerBericht) {
+                teVerBericht = nu + 40;
+                p.sendOverlayMessage(Component.translatable("vadsrijk.kern.baas.te_ver").withStyle(ChatFormatting.GOLD));
+            }
             return;
         }
         if (bron instanceof ServerPlayer p) {

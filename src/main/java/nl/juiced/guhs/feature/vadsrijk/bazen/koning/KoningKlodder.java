@@ -29,6 +29,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.bazen.BazenBaas;
 import nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry;
+import nl.juiced.guhs.feature.vadsrijk.bazen.Herstel;
+import net.minecraft.world.level.block.Blocks;
 import nl.juiced.guhs.feature.vadsrijk.kern.Element;
 import nl.juiced.guhs.feature.vadsrijk.kern.Schade;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
@@ -66,6 +68,10 @@ public class KoningKlodder extends BazenBaas {
     private long splitOpnieuw = -1;
     private int hemelOver = -1;
     private final List<Vec3> veilig = new ArrayList<>();
+    private int zet, kroonT;
+    private boolean nogEenSprong, kroonAlGevlogen, opgeruimd;
+    @Nullable
+    private UUID kroon, kroonDrager;
 
     public KoningKlodder(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -175,9 +181,12 @@ public class KoningKlodder extends BazenBaas {
         sl.playSound(null, blockPosition(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 2f, 1.6f);
         speel("brul");
         if (fase == 2) {
+            slijmVijvers(sl, 0.5);
             splits(sl);
         } else if (fase == 3) {
-            hemelOver = 60;
+            slijmVijvers(sl, 1.0);
+            hemelOver = 160;
+            kroonAf(sl);
         }
     }
 
@@ -194,6 +203,7 @@ public class KoningKlodder extends BazenBaas {
         regel = new SplitRegel(sl.getGameTime());
         Element[] el = {Element.ROZE, Element.WATER, Element.VUUR};
         double elk = maxVads() * 0.25 / 3;
+        int schildIndex = 1 + getRandom().nextInt(2);   // the blue (Water) or the yellow (Vuur) one: breaks on its weak element
         for (int i = 0; i < 3; i++) {
             ElementKlodder k = BazenRegistry.KK_KLODDER.get().create(sl, EntitySpawnReason.MOB_SUMMONED);
             if (k == null) {
@@ -203,6 +213,9 @@ public class KoningKlodder extends BazenBaas {
             k.snapTo(getX(), getY() + 1.5, getZ(), (float) Math.toDegrees(a), 0);
             k.stelIn(mobLevel(), el[i], false, Set.of());
             k.koppel(this, i, elk);
+            if (i == schildIndex) {
+                k.zetSchild(true);
+            }
             k.setDeltaMovement(Math.cos(a) * 0.8, 0.7, Math.sin(a) * 0.8);
             sl.addFreshEntity(k);
             klodders[i] = k.getUUID();
@@ -295,11 +308,23 @@ public class KoningKlodder extends BazenBaas {
         }
         if (spawnPlek == null) {
             spawnPlek = position();
+            if (!opgeruimd) {   // a fresh king: whatever an earlier fight turned to slime is a pond again
+                opgeruimd = true;
+                herstel(sl);
+            }
         }
         if (geplofd()) {
             return;
         }
         long nu = sl.getGameTime();
+        kroonTick(sl);
+        if (tickCount % 10 == 0 && Herstel.heeft(sl, H_SLIJM)) {   // the slimed ponds stick
+            for (ServerPlayer p : vechters()) {
+                if (sl.getBlockState(p.blockPosition().below()).is(Blocks.SLIME_BLOCK) || sl.getBlockState(p.blockPosition()).is(Blocks.SLIME_BLOCK)) {
+                    Statussen.geef(p, Status.PLAKKERIG, 30, 0.4, this);
+                }
+            }
+        }
         if (gesplitst()) {
             setDeltaMovement(0, getDeltaMovement().y, 0);
             splitControle(nu);
@@ -308,12 +333,18 @@ public class KoningKlodder extends BazenBaas {
         if (stil() && doet != Doet.HEMEL_OP && doet != Doet.HEMEL_NEER) {
             return;
         }
-        if (fase() == 2 && splitOpnieuw > 0 && nu >= splitOpnieuw && doet == Doet.RUST) {
+        if (fase() == 1 && !kroonAlGevlogen && vads() < maxVads() * 0.8) {
+            kroonAlGevlogen = true;
+            kroonAf(sl);
+        }
+        if (fase() == 2 && splitOpnieuw > 0 && nu >= splitOpnieuw && doet == Doet.RUST && !inSprong()) {
             splitOpnieuw = -1;
             splits(sl);
             return;
         }
-        LivingEntity t = getTarget();
+        if (inSprong()) {
+            return;
+        }
         timer--;
         if (hemelOver > 0) {
             hemelOver--;
@@ -326,49 +357,55 @@ public class KoningKlodder extends BazenBaas {
                 if (timer > 0) {
                     break;
                 }
+                ServerPlayer t = volgendDoel();
+                ServerPlayer ver = afstandsSpeler();
+                zet++;
+                boolean dichtbij = false;
+                for (ServerPlayer p : vechters()) {
+                    dichtbij |= p.distanceToSqr(this) < 7.5 * 7.5;
+                }
                 if (fase() >= 3 && hemelOver == 0) {
                     hemelOp(sl);
-                } else if (t != null && getRandom().nextInt(3) > 0) {
-                    doet = Doet.MIKT;
-                    timer = fase() >= 2 ? 22 : 30;
-                    landing = new Vec3(t.getX(), Math.floor(t.getY()), t.getZ());
-                    Telegraaf.cirkel(sl, landing, 4.5, timer + 16, Telegraaf.ROOD);
-                } else if (t != null) {
-                    doet = Doet.SCHOK;
-                    timer = 32;
+                } else if (t == null) {
+                    timer = 10;
+                } else if (ver != null && zet % 3 == 0) {
+                    // the far ones get a rain of klodderspat: 3 blobs around them
+                    for (int i = 0; i < 3; i++) {
+                        lob(ver, 2.6, 22 + i * 6, 1.2, "bazen_klodderspat", Status.PLAKKERIG, 40, new net.minecraft.core.particles.ItemParticleOption(
+                                ParticleTypes.ITEM, net.minecraft.world.item.Items.SLIME_BALL), Telegraaf.ROOD);
+                    }
+                    timer = 40;
+                } else if (dichtbij && zet % 3 == 1) {
+                    doet = Doet.SCHOK;   // shock wave: get out of the red circle around him
+                    timer = fase() >= 3 ? 24 : 32;
                     speel("brul");
                     Telegraaf.cirkel(sl, position(), 8, timer, Telegraaf.ROOD);
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2.5f, 0.3f);
+                } else {
+                    doet = Doet.MIKT;   // the jump: his shadow = the landing spot; in fase 3 two in a row
+                    timer = fase() >= 2 ? 22 : 30;
+                    landing = voetenVan(t);
+                    nogEenSprong = fase() >= 3;
+                    Telegraaf.cirkel(sl, landing, 4.5, timer + 16, Telegraaf.ROOD);
                 }
             }
             case MIKT -> {
                 if (timer <= 0) {
-                    doet = Doet.SPRINGT;
-                    timer = 16;
                     speel("spring");
-                    Vec3 d = landing.subtract(position());
-                    setDeltaMovement(d.x / 16.0, 0.64 + d.y / 16.0, d.z / 16.0);
+                    springNaar(landing, 16, 6);
+                    doet = Doet.SPRINGT;
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, 3f, 0.4f);
                 }
             }
             case SPRINGT -> {
-                if (timer < 14) {
-                    Vec3 d = landing.subtract(position()).multiply(1, 0, 1);
-                    if (d.length() > 0.5) {
-                        setDeltaMovement(d.x / Math.max(1, timer), getDeltaMovement().y, d.z / Math.max(1, timer));
-                    }
-                }
-                if ((timer <= 0 && onGround()) || timer < -30) {
-                    plet(sl, 4.6, 2.0);
-                    doet = Doet.RUST;
-                    timer = fase() >= 2 ? 40 : 55;
-                }
+                doet = Doet.RUST;
+                timer = 20;
             }
             case SCHOK -> {
                 if (timer <= 0) {
                     plet(sl, 8, 1.5);
                     doet = Doet.RUST;
-                    timer = 45;
+                    timer = 40;
                 }
             }
             case HEMEL_OP -> {
@@ -396,6 +433,170 @@ public class KoningKlodder extends BazenBaas {
         }
     }
 
+    @Override
+    protected void geland() {
+        if (!(level() instanceof ServerLevel sl)) {
+            return;
+        }
+        plet(sl, 4.6, 2.0);
+        ServerPlayer t = nogEenSprong ? volgendDoel() : null;
+        nogEenSprong = false;
+        if (t != null) {   // fase 3: straight into a second jump (shorter warning)
+            doet = Doet.MIKT;
+            timer = 16;
+            landing = voetenVan(t);
+            Telegraaf.cirkel(sl, landing, 4.5, timer + 16, Telegraaf.ROOD);
+        } else {
+            doet = Doet.RUST;
+            timer = fase() >= 2 ? 36 : 48;
+        }
+    }
+
+    // ---- the crown (fix round 1): it flies off and bounces through the meadow; carry it back and throw it: he's dizzy -------
+
+    /** Knocks the crown off: a golden crown bounces around the arena for {@link #KROON_TICKS}. */
+    public void kroonAf(ServerLevel sl) {
+        if (kroon != null && sl.getEntity(kroon) instanceof net.minecraft.world.entity.item.ItemEntity) {
+            return;
+        }
+        net.minecraft.world.entity.item.ItemEntity i = new net.minecraft.world.entity.item.ItemEntity(sl, getX(), getY() + getBbHeight() + 0.5, getZ(),
+                new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GOLDEN_HELMET));
+        i.setNeverPickUp();
+        i.setUnlimitedLifetime();
+        i.setGlowingTag(true);
+        double a = getRandom().nextDouble() * Math.PI * 2;
+        i.setDeltaMovement(Math.cos(a) * 0.6, 0.8, Math.sin(a) * 0.6);
+        sl.addFreshEntity(i);
+        kroon = i.getUUID();
+        kroonT = KROON_TICKS;
+        kroonDrager = null;
+        sl.playSound(null, blockPosition(), SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.HOSTILE, 2f, 0.6f);
+        zeg(sl, Component.translatable("vadsrijk.bazen.kk.kroon_af").withStyle(ChatFormatting.GOLD));
+    }
+
+    public static final int KROON_TICKS = 20 * 20;
+
+    @Nullable
+    public ServerPlayer kroonDrager() {
+        return kroonDrager != null && level() instanceof ServerLevel sl && sl.getEntity(kroonDrager) instanceof ServerPlayer p ? p : null;
+    }
+
+    private void kroonTick(ServerLevel sl) {
+        ServerPlayer drager = kroonDrager();
+        if (drager != null) {
+            if (tickCount % 4 == 0) {
+                sl.sendParticles(ParticleTypes.WAX_ON, drager.getX(), drager.getY() + 2.3, drager.getZ(), 3, 0.25, 0.1, 0.25, 0);
+            }
+            if (!inGevecht(drager) || --kroonT <= 0) {
+                kroonTerug(sl, false);
+            } else if (drager.distanceToSqr(this) < 3.5 * 3.5) {
+                gooiKroon(drager);   // (walked it right up to him: that counts too)
+            }
+            return;
+        }
+        if (kroon == null) {
+            return;
+        }
+        if (!(sl.getEntity(kroon) instanceof net.minecraft.world.entity.item.ItemEntity i) || i.isRemoved()) {
+            kroon = null;
+            return;
+        }
+        if (tickCount % 3 == 0) {
+            sl.sendParticles(ParticleTypes.WAX_ON, i.getX(), i.getY() + 0.5, i.getZ(), 2, 0.2, 0.2, 0.2, 0);
+        }
+        if (i.onGround() && tickCount % 12 == 0) {   // it bounces on, towards somewhere in the arena
+            Vec3 m = midden();
+            Vec3 d = m.subtract(i.position()).multiply(1, 0, 1);
+            double a = getRandom().nextDouble() * Math.PI * 2;
+            Vec3 v = new Vec3(Math.cos(a), 0, Math.sin(a)).scale(0.35);
+            if (d.length() > straal() * 0.7) {
+                v = d.normalize().scale(0.35);
+            }
+            i.setDeltaMovement(v.x, 0.55, v.z);
+            sl.playSound(null, i.blockPosition(), SoundEvents.SLIME_JUMP_SMALL, SoundSource.HOSTILE, 0.8f, 1.6f);
+        }
+        for (ServerPlayer p : vechters()) {
+            if (p.distanceToSqr(i) < 1.8 * 1.8) {
+                i.discard();
+                kroon = null;
+                kroonDrager = p.getUUID();
+                kroonT = 20 * 15;
+                p.sendOverlayMessage(Component.translatable("vadsrijk.bazen.kk.kroon_pak").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+                sl.playSound(null, p.blockPosition(), SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.PLAYERS, 1.5f, 1.2f);
+                return;
+            }
+        }
+        if (--kroonT <= 0) {
+            kroonTerug(sl, false);
+        }
+    }
+
+    /** The carrier throws the crown at him (right-click, see {@link nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry}): dizzy 4 s. */
+    public boolean gooiKroon(ServerPlayer p) {
+        if (!(level() instanceof ServerLevel sl) || kroonDrager == null || !kroonDrager.equals(p.getUUID())) {
+            return false;
+        }
+        kroonDrager = null;
+        Vec3 van = p.getEyePosition(), naar = position().add(0, getBbHeight(), 0);
+        for (int s = 0; s <= 12; s++) {
+            Vec3 v = van.lerp(naar, s / 12.0).add(0, Math.sin(Math.PI * s / 12.0) * 2, 0);
+            sl.sendParticles(ParticleTypes.WAX_ON, v.x, v.y, v.z, 2, 0.05, 0.05, 0.05, 0);
+        }
+        sl.playSound(null, blockPosition(), SoundEvents.ANVIL_LAND, SoundSource.HOSTILE, 1.2f, 1.6f);
+        sl.sendParticles(ParticleTypes.CRIT, getX(), getY() + getBbHeight(), getZ(), 40, 1, 0.5, 1, 0.3);
+        if (!gesplitst() && doet != Doet.HEMEL_OP && doet != Doet.HEMEL_NEER) {
+            Statussen.geef(this, Status.VERDOOFD, 80, 1, p);
+            doet = Doet.RUST;
+            timer = 20;
+        }
+        zeg(sl, Component.translatable("vadsrijk.bazen.kk.kroon_raak", p.getDisplayName()).withStyle(ChatFormatting.GREEN));
+        return true;
+    }
+
+    private void kroonTerug(ServerLevel sl, boolean stil) {
+        if (kroon != null && sl.getEntity(kroon) instanceof net.minecraft.world.entity.item.ItemEntity i) {
+            i.discard();
+        }
+        kroon = null;
+        kroonDrager = null;
+        if (!stil) {
+            sl.sendParticles(ParticleTypes.WAX_ON, getX(), getY() + getBbHeight(), getZ(), 20, 0.6, 0.3, 0.6, 0);
+            sl.playSound(null, blockPosition(), SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.HOSTILE, 1.5f, 0.8f);
+        }
+    }
+
+    // ---- the meadow changes per phase (fix round 1): the ponds turn to slime (Plakkerig), restored after the fight ----------
+
+    public static final String H_SLIJM = "kk_slijm";
+
+    private void slijmVijvers(ServerLevel sl, double deel) {
+        Vec3 m = midden();
+        int r = (int) straal(), n = 0;
+        net.minecraft.core.BlockPos c = net.minecraft.core.BlockPos.containing(m);
+        for (net.minecraft.core.BlockPos p : net.minecraft.core.BlockPos.betweenClosed(c.offset(-r, -4, -r), c.offset(r, 3, r))) {
+            double dx = p.getX() + 0.5 - m.x, dz = p.getZ() + 0.5 - m.z;
+            if (dx * dx + dz * dz > (double) r * r || n > 600) {
+                continue;
+            }
+            if (sl.getFluidState(p).is(net.minecraft.tags.FluidTags.WATER) && sl.getBlockState(p.above()).isAir()
+                    && getRandom().nextDouble() < deel) {
+                Herstel.zet(sl, H_SLIJM, p, Blocks.SLIME_BLOCK.defaultBlockState());
+                if (n++ % 4 == 0) {
+                    sl.sendParticles(ParticleTypes.ITEM_SLIME, p.getX() + 0.5, p.getY() + 1.1, p.getZ() + 0.5, 3, 0.3, 0.1, 0.3, 0.02);
+                }
+            }
+        }
+        if (n > 0) {
+            sl.playSound(null, blockPosition(), SoundEvents.SLIME_BLOCK_PLACE, SoundSource.HOSTILE, 2f, 0.5f);
+            zeg(sl, Component.translatable("vadsrijk.bazen.kk.slijm").withStyle(ChatFormatting.GREEN));
+        }
+    }
+
+    /** Everything the fight changed in the meadow back (the ponds), and the crown away. */
+    public static void herstel(ServerLevel sl) {
+        Herstel.terug(sl, H_SLIJM);
+    }
+
     private void plet(ServerLevel sl, double r, double factor) {
         speel("land");
         sl.playSound(null, blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.HOSTILE, 3f, 0.4f);
@@ -404,7 +605,7 @@ public class KoningKlodder extends BazenBaas {
             double a = Math.PI * 2 * i / 40;
             sl.sendParticles(ParticleTypes.ITEM_SLIME, getX() + Math.cos(a) * r, getY() + 0.3, getZ() + Math.sin(a) * r, 2, 0.1, 0.1, 0.1, 0.05);
         }
-        for (ServerPlayer p : spelers(sl)) {
+        for (ServerPlayer p : vechters()) {
             double dx = p.getX() - getX(), dz = p.getZ() - getZ();
             if (dx * dx + dz * dz <= r * r && Math.abs(p.getY() - getY()) < 3) {
                 Schade.doe(new Schade.Klap(this, p, basisSchade(mobLevel()) * factor, element(), Schade.Soort.MELEE, false, "bazen_plet"));
@@ -468,12 +669,17 @@ public class KoningKlodder extends BazenBaas {
         doet = Doet.RUST;
         timer = 60;
         hemelOver = 440;
+        BazenRegistry.later(sl.getServer(), 30, () -> {
+            if (!geplofd() && !isRemoved()) {
+                kroonAf(sl);
+            }
+        });
         speel("land");
         sl.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 3f, 0.5f);
         sl.playSound(null, blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.HOSTILE, 4f, 0.3f);
         sl.sendParticles(ParticleTypes.EXPLOSION_EMITTER, getX(), getY() + 1, getZ(), 2, 1, 0.5, 1, 0);
         sl.sendParticles(ParticleTypes.ITEM_SLIME, getX(), getY() + 1, getZ(), 200, straal() / 3, 0.5, straal() / 3, 0.3);
-        for (ServerPlayer p : spelers(sl)) {
+        for (ServerPlayer p : vechters()) {
             if (!veiligOp(p.position())) {
                 Schade.doe(new Schade.Klap(this, p, Spelers.maxVads(p) * 0.55, element(), Schade.Soort.WAAR, false, "bazen_hemelsprong"));
                 p.setDeltaMovement(0, 0.9, 0);
@@ -493,6 +699,8 @@ public class KoningKlodder extends BazenBaas {
             sl.sendParticles(ParticleTypes.HEART, getX(), getY() + 4, getZ(), 30, 2, 1, 2, 0);
             sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, getX(), getY() + 2, getZ(), 120, 2, 2, 2, 0.4);
             sl.playSound(null, blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.HOSTILE, 2f, 0.6f);
+            kroonTerug(sl, true);
+            BazenRegistry.later(sl.getServer(), 200, () -> herstel(sl));
             for (UUID id : klodders) {
                 if (id != null && sl.getEntity(id) instanceof ElementKlodder k) {
                     k.discard();
@@ -504,6 +712,11 @@ public class KoningKlodder extends BazenBaas {
     @Override
     public void remove(RemovalReason reason) {
         if (!level().isClientSide() && level() instanceof ServerLevel sl) {
+            kroonTerug(sl, true);
+            if (reason != RemovalReason.UNLOADED_TO_CHUNK && reason != RemovalReason.UNLOADED_WITH_PLAYER && reason != RemovalReason.CHANGED_DIMENSION
+                    && !geplofd()) {
+                herstel(sl);   // dev reset / empty-arena reset mid-fight
+            }
             for (UUID id : klodders) {
                 if (id != null && sl.getEntity(id) instanceof ElementKlodder k) {
                     k.discard();

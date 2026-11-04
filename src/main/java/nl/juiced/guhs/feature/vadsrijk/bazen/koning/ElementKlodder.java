@@ -31,6 +31,62 @@ public class ElementKlodder extends VadsrijkMob implements GeoEntity {
     @Nullable
     private UUID koning;
     private int index;
+    private static final net.minecraft.network.syncher.EntityDataAccessor<Boolean> SCHILD = net.minecraft.network.syncher.SynchedEntityData.defineId(
+            ElementKlodder.class, net.minecraft.network.syncher.EntityDataSerializers.BOOLEAN);
+    /** Hits of the wrong element the shield still takes before it cracks anyway (so a solo player without the element can do it). */
+    public static final int SCHILD_KLAPPEN = 8;
+    private int schildKlappen;
+    private int hopT = 30;
+
+    @Override
+    protected void defineSynchedData(net.minecraft.network.syncher.SynchedEntityData.Builder b) {
+        super.defineSynchedData(b);
+        b.define(SCHILD, false);
+    }
+
+    /** The shielded Kroonklodder (fix round 1): only its weak element breaks the shield at once. */
+    public void zetSchild(boolean aan) {
+        entityData.set(SCHILD, aan);
+        schildKlappen = 0;
+    }
+
+    public boolean schild() {
+        return entityData.get(SCHILD);
+    }
+
+    /** The element that breaks this one's shield (what beats its element; Roze: none). */
+    @Nullable
+    public Element zwakte() {
+        for (Element e : Element.values()) {
+            if (e.verslaat() == element()) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    /** Kern damage hook (registered once by BazenRegistry): a shielded Kroonklodder takes nothing except from its weak element. */
+    public static void registreerSchild() {
+        nl.juiced.guhs.feature.vadsrijk.kern.Schade.VOOR_KLAP.add((k, n) -> {
+            if (!(k.doel() instanceof ElementKlodder e) || !e.schild() || !(e.level() instanceof ServerLevel sl)) {
+                return n;
+            }
+            if (k.element() == e.zwakte() || ++e.schildKlappen >= SCHILD_KLAPPEN) {
+                e.zetSchild(false);
+                sl.playSound(null, e.blockPosition(), net.minecraft.sounds.SoundEvents.SHIELD_BREAK.value(), net.minecraft.sounds.SoundSource.HOSTILE, 1.5f, 1f);
+                sl.sendParticles(ParticleTypes.CRIT, e.getX(), e.getY() + 0.8, e.getZ(), 30, 0.6, 0.6, 0.6, 0.3);
+                return n;
+            }
+            sl.playSound(null, e.blockPosition(), net.minecraft.sounds.SoundEvents.SHIELD_BLOCK.value(), net.minecraft.sounds.SoundSource.HOSTILE, 1f, 1.2f);
+            if (k.bron() instanceof ServerPlayer p) {
+                Element z = e.zwakte();
+                p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.bazen.kk.schild",
+                        z == null ? net.minecraft.network.chat.Component.literal("?") : net.minecraft.network.chat.Component.translatable(z.key()).withStyle(z.kleur),
+                        SCHILD_KLAPPEN - e.schildKlappen).withStyle(net.minecraft.ChatFormatting.AQUA));
+            }
+            return 0;
+        });
+    }
 
     public ElementKlodder(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -117,8 +173,46 @@ public class ElementKlodder extends VadsrijkMob implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
-        if (!level().isClientSide() && tickCount > 40 && koning() == null && !geplofd()) {
+        if (level().isClientSide() || !(level() instanceof ServerLevel sl)) {
+            return;
+        }
+        KoningKlodder k = koning();
+        if (tickCount > 40 && k == null && !geplofd()) {
             discard();   // (orphaned after a reload or a reset)
+            return;
+        }
+        if (geplofd() || k == null || stil()) {
+            return;
+        }
+        if (schild() && tickCount % 4 == 0) {   // the visible shield: a ring in the colour of its weak element
+            Element z = zwakte();
+            var stof = new net.minecraft.core.particles.DustParticleOptions(z == null ? 0xFFFFFF : z.rgb, 1.2f);
+            for (int i = 0; i < 10; i++) {
+                double a = Math.PI * 2 * i / 10 + tickCount * 0.1;
+                sl.sendParticles(stof, getX() + Math.cos(a) * 1.1, getY() + 0.6 + Math.sin(a * 2) * 0.3, getZ() + Math.sin(a) * 1.1, 1, 0, 0, 0, 0);
+            }
+        }
+        // fix round 1: hop at the king's fighters (also the ones far away or in creative), not only vanilla targets
+        if (onGround() && --hopT <= 0) {
+            hopT = 26 + getRandom().nextInt(16);
+            ServerPlayer doel = null;
+            double best = Double.MAX_VALUE;
+            for (ServerPlayer p : k.vechters()) {
+                if (p.distanceToSqr(this) < best) {
+                    best = p.distanceToSqr(this);
+                    doel = p;
+                }
+            }
+            if (doel != null && best > 2.5 * 2.5) {
+                net.minecraft.world.phys.Vec3 d = doel.position().subtract(position()).multiply(1, 0, 1);
+                double len = Math.min(1.0, d.length() / 8.0);
+                d = d.normalize().scale(0.35 + 0.45 * len);
+                setDeltaMovement(d.x, 0.55, d.z);
+                getLookControl().setLookAt(doel, 30, 30);
+            } else if (doel != null && tickCount % 2 == 0) {
+                aanval(doel);
+                swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+            }
         }
     }
 

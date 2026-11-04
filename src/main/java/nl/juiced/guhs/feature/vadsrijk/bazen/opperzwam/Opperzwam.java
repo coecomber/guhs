@@ -71,6 +71,7 @@ public class Opperzwam extends BazenBaas {
     private final List<Vec3> plekken = new ArrayList<>();
     private Vec3 veilig = Vec3.ZERO, landing = Vec3.ZERO;
     private boolean opgeruimd;
+    private int zet;
 
     public Opperzwam(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -185,6 +186,7 @@ public class Opperzwam extends BazenBaas {
         speel("brul");
         sl.playSound(null, blockPosition(), SoundEvents.WARDEN_ROAR, SoundSource.HOSTILE, 2f, 1.3f);
         if (fase == 2) {
+            wortelvelden(sl, 5);
             gaDonker(sl);
         } else if (fase == 3) {
             if (donker()) {
@@ -287,6 +289,8 @@ public class Opperzwam extends BazenBaas {
     public static void herstel(ServerLevel sl) {
         Herstel.terug(sl, H_PLAFOND);
         Herstel.terug(sl, H_LICHT);
+        Herstel.terug(sl, H_VLOER);
+        Herstel.terug(sl, H_TOREN);
     }
 
     @Override
@@ -294,7 +298,7 @@ public class Opperzwam extends BazenBaas {
         if (doet == Doet.KANTEL) {
             return;
         }
-        super.krijgSchade(donker() ? n * 0.25 : n, bron);
+        super.krijgSchade((donker() ? n * 0.25 : n) * capFactor(bron), bron);
     }
 
     @Override
@@ -303,6 +307,146 @@ public class Opperzwam extends BazenBaas {
         if (!level().isClientSide() && donker()) {
             setCustomNameVisible(false);
         }
+    }
+
+    // ---- fix round 1: Sporenlast (yellow, soak together), spread markers (purple), root fields, the root tower -----------------
+
+    public static final String H_VLOER = "oz_vloer", H_TOREN = "oz_toren";
+    /** Sporenlast: the marked player, ticks left. Spread: the marked players, ticks left. */
+    @Nullable
+    private java.util.UUID last;
+    private int lastT = -1, spreidT = -1;
+    private final List<java.util.UUID> spreid = new ArrayList<>();
+    private int torenT = -1;
+
+    /** Yellow: a heavy spore load lands on one player; whoever stands with them shares the hit (solo works, but hurts). */
+    private void sporenlast(ServerLevel sl, ServerPlayer p) {
+        last = p.getUUID();
+        lastT = 70;
+        zeg(sl, "vadsrijk.bazen.oz.last", ChatFormatting.YELLOW, p.getDisplayName());
+        sl.playSound(null, p.blockPosition(), SoundEvents.BELL_RESONATE, SoundSource.HOSTILE, 1.5f, 1.4f);
+    }
+
+    /** Purple: every fighter gets a spore marker that bursts in 3.5 s; stand apart (each other marker nearby adds a hit). */
+    private void spreidSporen(ServerLevel sl) {
+        spreid.clear();
+        for (ServerPlayer p : vechters()) {
+            spreid.add(p.getUUID());
+        }
+        spreidT = 70;
+        zeg(sl, "vadsrijk.bazen.oz.spreid", ChatFormatting.DARK_PURPLE);
+        sl.playSound(null, blockPosition(), SoundEvents.EVOKER_PREPARE_ATTACK, SoundSource.HOSTILE, 1.5f, 0.8f);
+    }
+
+    private void markeringen(ServerLevel sl) {
+        if (lastT >= 0 && last != null && sl.getEntity(last) instanceof ServerPlayer p) {
+            if (lastT % 8 == 0) {
+                Telegraaf.cirkel(sl, new Vec3(p.getX(), Math.floor(p.getY() + 0.01), p.getZ()), 3, 9, Telegraaf.GEEL);
+            }
+            if (lastT-- == 0) {
+                List<ServerPlayer> samen = new ArrayList<>();
+                for (ServerPlayer q : vechters()) {
+                    if (q.distanceToSqr(p) <= 3.2 * 3.2) {
+                        samen.add(q);
+                    }
+                }
+                double elk = basisSchade(mobLevel()) * Math.max(1.0, 3.2 / Math.max(1, samen.size()));
+                for (ServerPlayer q : samen) {
+                    Schade.doe(new Schade.Klap(this, q, elk, element(), Schade.Soort.MAGIE, false, "bazen_sporenlast"));
+                }
+                sl.sendParticles(ParticleTypes.SPORE_BLOSSOM_AIR, p.getX(), p.getY() + 1, p.getZ(), 80, 1.5, 1, 1.5, 0.05);
+                sl.sendParticles(ParticleTypes.FALLING_SPORE_BLOSSOM, p.getX(), p.getY() + 2, p.getZ(), 40, 1.5, 0.5, 1.5, 0.01);
+                sl.playSound(null, p.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 1f, 1.4f);
+                last = null;
+            }
+        } else {
+            lastT = -1;
+        }
+        if (spreidT >= 0) {
+            List<ServerPlayer> l = new ArrayList<>();
+            for (java.util.UUID id : spreid) {
+                if (sl.getEntity(id) instanceof ServerPlayer p && p.isAlive()) {
+                    l.add(p);
+                }
+            }
+            if (spreidT % 8 == 0) {
+                for (ServerPlayer p : l) {
+                    Telegraaf.cirkel(sl, new Vec3(p.getX(), Math.floor(p.getY() + 0.01), p.getZ()), 3, 9, Telegraaf.PAARS);
+                }
+            }
+            if (spreidT-- == 0) {
+                for (ServerPlayer p : l) {
+                    int buren = 0;
+                    for (ServerPlayer q : l) {
+                        if (q != p && q.distanceToSqr(p) <= 3.2 * 3.2) {
+                            buren++;
+                        }
+                    }
+                    Schade.doe(new Schade.Klap(this, p, basisSchade(mobLevel()) * (0.6 + 1.4 * buren), element(), Schade.Soort.MAGIE, false, "bazen_spreidsporen"));
+                    sl.sendParticles(ParticleTypes.WITCH, p.getX(), p.getY() + 1, p.getZ(), 40, 1.2, 0.8, 1.2, 0.05);
+                }
+                spreid.clear();
+            }
+        }
+    }
+
+    /** Root fields: patches of the hall floor crack open into roots (Plakkerig while you stand on them). Restored after the fight. */
+    private void wortelvelden(ServerLevel sl, int aantal) {
+        Vec3 m = midden();
+        BlockPos c = BlockPos.containing(m).below();
+        for (int i = 0; i < aantal; i++) {
+            double a = getRandom().nextDouble() * Math.PI * 2, d = 5 + getRandom().nextDouble() * (straal() - 8);
+            BlockPos v = c.offset((int) Math.round(Math.cos(a) * d), 0, (int) Math.round(Math.sin(a) * d));
+            for (BlockPos p : BlockPos.betweenClosed(v.offset(-2, 0, -2), v.offset(2, 0, 2))) {
+                if (p.distSqr(v) <= 5 && sl.getBlockState(p).isSolidRender() && sl.getBlockState(p.above()).isAir()) {
+                    Herstel.zet(sl, H_VLOER, p, Blocks.ROOTED_DIRT.defaultBlockState());
+                    if (getRandom().nextInt(3) == 0) {
+                        sl.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()), p.getX() + 0.5, p.getY() + 1.1,
+                                p.getZ() + 0.5, 4, 0.3, 0.1, 0.3, 0.05);
+                    }
+                }
+            }
+        }
+        sl.playSound(null, blockPosition(), SoundEvents.ROOTED_DIRT_BREAK, SoundSource.HOSTILE, 2f, 0.4f);
+        zeg(sl, "vadsrijk.bazen.oz.vloer", ChatFormatting.DARK_GREEN);
+    }
+
+    /** Where the root tower stands: 4 blocks from the centre (so its top is right at his cap once he is gigantic). */
+    public BlockPos torenVoet() {
+        return BlockPos.containing(midden()).offset(4, 0, 0);
+    }
+
+    /** The tower is 7 high: a stem, a 3x3 platform on top, and root steps (1 block each) climbing round it one ring further out. */
+    public static final int TOREN_HOOGTE = 7;
+    private static final int[][] TREDEN = {{2, -1}, {2, 0}, {2, 1}, {2, 2}, {1, 2}, {0, 2}, {-1, 2}};
+
+    private void torenStap(ServerLevel sl, int h) {
+        BlockPos v = torenVoet();
+        if (h < TOREN_HOOGTE) {
+            Herstel.zet(sl, H_TOREN, v.above(h), Blocks.MUSHROOM_STEM.defaultBlockState());
+            BlockPos trede = v.offset(TREDEN[h][0], h, TREDEN[h][1]);
+            if (sl.getBlockState(trede).canBeReplaced()) {
+                Herstel.zet(sl, H_TOREN, trede, Blocks.ROOTED_DIRT.defaultBlockState());
+            }
+            if (h == TOREN_HOOGTE - 1) {
+                for (BlockPos p : BlockPos.betweenClosed(v.offset(-1, h, -1), v.offset(1, h, 1))) {
+                    if (sl.getBlockState(p).canBeReplaced()) {
+                        Herstel.zet(sl, H_TOREN, p.immutable(), Blocks.MUSHROOM_STEM.defaultBlockState());
+                    }
+                }
+            }
+        }
+        sl.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, Blocks.ROOTED_DIRT.defaultBlockState()), v.getX() + 0.5, v.getY() + h + 0.5, v.getZ() + 0.5,
+                12, 1, 0.4, 1, 0.1);
+        sl.playSound(null, v.above(h), SoundEvents.ROOTED_DIRT_PLACE, SoundSource.BLOCKS, 1.5f, 0.6f);
+    }
+
+    /** Fase 3: his stem is tough (ground hits x0.5), his cap is the weak spot (hits from the root tower's top x2). */
+    private double capFactor(@Nullable LivingEntity bron) {
+        if (fase() < 3 || bron == null) {
+            return 1;
+        }
+        return bron.getY() >= getY() + TOREN_HOOGTE - 1.5 ? 2.0 : 0.5;
     }
 
     // ---- the fight ---------------------------------------------------------------------------------------------------------
@@ -323,6 +467,21 @@ public class Opperzwam extends BazenBaas {
         if (geplofd()) {
             return;
         }
+        markeringen(sl);
+        if (torenT >= 0 && tickCount % 6 == 0) {   // the root tower grows step by step
+            torenStap(sl, torenT++);
+            if (torenT >= TOREN_HOOGTE) {
+                torenT = -1;
+                zeg(sl, "vadsrijk.bazen.oz.toren", ChatFormatting.GOLD);
+            }
+        }
+        if (tickCount % 10 == 0 && Herstel.heeft(sl, H_VLOER)) {
+            for (ServerPlayer p : vechters()) {
+                if (sl.getBlockState(p.blockPosition().below()).is(Blocks.ROOTED_DIRT) && p.getY() < midden().y + 1) {
+                    Statussen.geef(p, Status.PLAKKERIG, 30, 0.4, this);
+                }
+            }
+        }
         if (donker() && tickCount % 40 == 0) {
             for (ServerPlayer p : spelers(sl)) {
                 p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 80, 0, false, false));
@@ -335,11 +494,14 @@ public class Opperzwam extends BazenBaas {
         if (stil()) {
             return;
         }
-        LivingEntity t = getTarget();
+        if (inSprong()) {
+            return;
+        }
+        LivingEntity t = doel();
         timer--;
         if (t != null && doet == Doet.RUST) {
             double d = distanceTo(t);
-            if (d > (donker() ? 2 : 6)) {
+            if (d > (donker() ? 2 : 3.5) && fase() < 3) {   // (fase 3: rooted in the middle, next to his root tower)
                 getNavigation().moveTo(t, donker() ? 1.15 : 0.7);
             } else if (tickCount % 30 == 0 && d < 3.5 * getScale()) {
                 aanval(t);
@@ -352,10 +514,21 @@ public class Opperzwam extends BazenBaas {
                     break;
                 }
                 int keuze = getRandom().nextInt(donker() ? 1 : fase() >= 3 ? 3 : 2);
-                if (donker()) {
+                zet++;
+                ServerPlayer ver = afstandsSpeler();
+                if (!donker() && ver != null && zet % 3 == 0) {   // standing at range: a spore ball comes your way
+                    lob(ver, 3, 26, 1.4, "bazen_sporenbal", Status.GESPOREN, 80, ParticleTypes.SPORE_BLOSSOM_AIR, Telegraaf.ROOD);
+                    timer = 30;
+                } else if (!donker() && zet % 5 == 2 && volgendDoel() != null) {
+                    sporenlast(sl, volgendDoel());
+                    timer = 45;
+                } else if (!donker() && fase() >= 2 && zet % 5 == 4) {
+                    spreidSporen(sl);
+                    timer = 45;
+                } else if (donker()) {
                     doet = Doet.MIKT;
                     timer = 25;
-                    landing = new Vec3(t.getX(), Math.floor(t.getY()), t.getZ());
+                    landing = voetenVan(t);
                     Telegraaf.cirkel(sl, landing, 3, 41, Telegraaf.ROOD);
                 } else if (keuze == 0) {
                     wortels(sl);
@@ -407,25 +580,13 @@ public class Opperzwam extends BazenBaas {
             case MIKT -> {
                 if (timer <= 0) {
                     doet = Doet.SPRINGT;
-                    timer = 16;
-                    Vec3 d = landing.subtract(position());
-                    setDeltaMovement(d.x / 16.0, 0.64 + d.y / 16.0, d.z / 16.0);
+                    springNaar(landing, 16, 4);
                     sl.playSound(null, blockPosition(), SoundEvents.RAVAGER_STEP, SoundSource.HOSTILE, 2f, 0.6f);
                 }
             }
             case SPRINGT -> {
-                if (timer < 14) {
-                    Vec3 d = landing.subtract(position()).multiply(1, 0, 1);
-                    if (d.length() > 0.5) {
-                        setDeltaMovement(d.x / Math.max(1, timer), getDeltaMovement().y, d.z / Math.max(1, timer));
-                    }
-                }
-                if ((timer <= 0 && onGround()) || timer < -30) {
-                    raak(sl, List.of(position()), 3.2, 1.6, null, 0);
-                    speel("stamp");
-                    doet = Doet.RUST;
-                    timer = 60;
-                }
+                doet = Doet.RUST;
+                timer = 30;
             }
             case STAMP -> {
                 if (timer <= 0) {
@@ -443,8 +604,25 @@ public class Opperzwam extends BazenBaas {
         }
     }
 
+    @Override
+    protected void geland() {
+        if (level() instanceof ServerLevel sl) {
+            raak(sl, List.of(position()), 3.2, 1.6, null, 0);
+            speel("stamp");
+        }
+        doet = Doet.RUST;
+        timer = 60;
+    }
+
     private void kantelStap(ServerLevel sl) {
         kantelT++;
+        if (kantelT == 1) {   // fase 3: back to the middle; the floor cracks, the root tower starts to grow
+            Vec3 m = midden();
+            getNavigation().stop();
+            snapTo(m.x, m.y, m.z, getYRot(), 0);
+            wortelvelden(sl, 8);
+            torenT = 0;
+        }
         setDeltaMovement(0, getDeltaMovement().y, 0);
         var schaal = getAttribute(Attributes.SCALE);
         if (schaal != null && kantelT <= 40) {
@@ -504,7 +682,7 @@ public class Opperzwam extends BazenBaas {
     }
 
     private void raak(ServerLevel sl, List<Vec3> waar, double r, double factor, @Nullable Status st, int stTicks) {
-        for (ServerPlayer p : spelers(sl)) {
+        for (ServerPlayer p : vechters()) {
             for (Vec3 v : waar) {
                 double dx = p.getX() - v.x, dz = p.getZ() - v.z;
                 if (dx * dx + dz * dz <= r * r && Math.abs(p.getY() - v.y) < 3) {
