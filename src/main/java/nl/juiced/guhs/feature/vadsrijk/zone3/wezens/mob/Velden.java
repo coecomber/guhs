@@ -69,7 +69,7 @@ public final class Velden {
 
         @Override
         public int xp() {
-            return 50 + 5 * mobLevel();
+            return xp3(1.2);
         }
 
         @Override
@@ -213,7 +213,7 @@ public final class Velden {
 
         @Override
         public int xp() {
-            return 50 + 5 * mobLevel();
+            return xp3(1.1);
         }
 
         @Override
@@ -345,7 +345,7 @@ public final class Velden {
 
         @Override
         public int xp() {
-            return 50 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override
@@ -474,7 +474,7 @@ public final class Velden {
 
         @Override
         public int xp() {
-            return 10 + mobLevel();
+            return xp3(0.25);
         }
 
         @Override

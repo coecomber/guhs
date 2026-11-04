@@ -51,7 +51,15 @@ public final class Z3WezensPlekken {
 
     /** Is this in the Wortelduister or the Hart below the trunk: the soft lantern rule applies. */
     public static boolean duister(double x, double y, double z) {
-        return inZone(x, z) && y < 62 && r(x, z) <= 470;
+        if (!inZone(x, z)) {
+            return false;
+        }
+        // z3-systemen's layered kern areas (Gebieden.op(x, y, z)); the plain geometry as a fallback outside them
+        nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.Gebied g = nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.op(x, y, z);
+        if (g != null && g.id().startsWith("z3_")) {
+            return g.id().equals("z3_wortelduister") || g.id().equals("z3_hart");
+        }
+        return y < 62 && r(x, z) <= 470;
     }
 
     // ---- mob zones ------------------------------------------------------------------------------------------------------

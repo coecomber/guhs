@@ -91,6 +91,12 @@ public abstract class Z3Wezen extends Z2Wezen {
         return basis * (1 + 0.22 * (level - 1));
     }
 
+    /** Xp by z3-systemen's pacing ({@link nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Xp#mob}: 1/55 of a level; elites x3
+     * in the beloon step) times a weight per kind (big ones a bit more, adds a quarter). Contract xp is the board's. */
+    protected int xp3(double factor) {
+        return (int) Math.max(1, Math.round(nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Xp.mob(mobLevel()) * factor));
+    }
+
     @Nullable
     @Override
     public String lootTabel() {

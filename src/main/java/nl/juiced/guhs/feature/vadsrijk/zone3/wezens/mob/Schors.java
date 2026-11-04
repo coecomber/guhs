@@ -63,7 +63,7 @@ public final class Schors {
 
         @Override
         public int xp() {
-            return 44 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override
@@ -177,7 +177,7 @@ public final class Schors {
 
         @Override
         public int xp() {
-            return 44 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override
@@ -316,7 +316,7 @@ public final class Schors {
 
         @Override
         public int xp() {
-            return 56 + 6 * mobLevel();
+            return xp3(1.5);
         }
 
         @Override

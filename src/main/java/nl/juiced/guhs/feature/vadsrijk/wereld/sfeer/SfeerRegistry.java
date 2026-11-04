@@ -105,7 +105,7 @@ public final class SfeerRegistry {
     /** The pink shower: slimes near players on the Klodderweide hop happily (only the ones not fighting). */
     private static void blijeSlijmpjes(ServerLevel sl) {
         for (ServerPlayer p : sl.players()) {
-            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getZ());
+            Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
             if (g == null || !g.id().equals("klodderweide")) {
                 continue;
             }

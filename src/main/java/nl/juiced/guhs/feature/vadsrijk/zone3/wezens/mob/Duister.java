@@ -67,7 +67,7 @@ public final class Duister {
 
         @Override
         public int xp() {
-            return 48 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override
@@ -177,7 +177,7 @@ public final class Duister {
 
         @Override
         public int xp() {
-            return 60 + 6 * mobLevel();
+            return xp3(1.6);
         }
 
         /** Never by sight: only {@link #hoort}. */

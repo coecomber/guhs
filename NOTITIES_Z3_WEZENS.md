@@ -26,6 +26,14 @@ it reuses the zone-1 helpers of `vadsrijk_wezens.py` and the zone-2 builders of 
 | Gametests | `VadsrijkZ3WezensGameTests` (5): every kind spawns + defeats + vanishes; loot tables/items/jewellery/contract tables/trophies; contract elite (affixes, ~6x health, only its owner hurts it, board hook fires); lantern rule (dark = half damage, a froglight is light); spawners per layer (55-105 alive, cave mode inside the layer, 5 from paths at their height, not in safe spots, no contract target) + a two-floor cave-mode spawn lands on the right floor |
 | AutoCheck | `tools/autocheck/vadsrijk_z3_wezens.txt` (line-up on moss in the proeftuin, an elite, a contract elite, fluff/smoke, the sets, modelcheck) |
 
+## Merged: 110-z3-systemen (ca18781a8) into this branch
+- Merged for compile-time use (conflicts only in the one-line wiring lists and the lang files; lang = theirs + this generator re-run).
+- **Xp:** every creature's `xp()` = `Z3Wezen.xp3(weight)` = `Z3Xp.mob(level)` (1/55 of a level) x a weight per kind (Grauwe Rups/Rotzwijn 1.2, Wortelslang 1.1, Harsgolem 1.5, Dove Ziener 1.6, Schimmelbolletje 0.25); elites x3 as before. Contract xp is the board's (`Z3Xp.contract`, paid by z3-systemen's `Contracten.verslagen` through my `VERSLAGEN` hook).
+- **Layered areas:** the lantern rule's "is this the Wortelduister/Hart" uses `Gebieden.op(x, y, z)` (z3-systemen's `Z3Lagen`); kern's `Spawners.magHier` is now 3D too (towns by height), so the note about Honingtak blocking the ground below no longer applies.
+- **Weapons:** the creature tables drop z3-systemen's six zone-3 class weapons (`Z3Wapens.ALLE`) instead of the zone-1 ones.
+- **Contracts:** z3-systemen wires itself by reflection to `Z3Contracten.spawnElite(ServerPlayer, String)`, `VERSLAGEN` and `VERTROKKEN` (names/signatures kept).
+- **Bounties:** not used here (event bounties are `Premies.activeer/meld`; z3-systemen counts kills itself via Haken.VERSLAGEN).
+
 ## API for other slices
 - **Bounty board (z3-npc / z3-systemen):** `Z3Contracten.spawnElite(ServerPlayer p, String id)` → the target at its lair (`Z3WezensPlekken.HOLEN`, near a Pluimpost) for p + their party, or the one already out, or null. Ids: `Z3Contracten.IDS`. Lair for the map trail: `Z3Contracten.hol(id)`. Active? `Z3Contracten.actief(p, id)`. Hooks: `Z3Contracten.VERSLAGEN` (player, id) per contract player who helped — the board pays Jachtpenningen, the daily chest and the 3 % Pluimguh pattern there; `Z3Contracten.VERTROKKEN` (id, players) when it left (12 min or 30 s without its players). The trophy + a rich loot roll drop here.
 - **Lantern light (bazen: Pelszaal phase 3, the Hart):** `Lantaarnlicht.inLicht(level, pos)`, add light sources with `Lantaarnlicht.BRONNEN.add((level, pos) -> ...)`; the Nestlantaarn just has to have "nestlantaarn" in its item id.
@@ -54,3 +62,7 @@ it reuses the zone-1 helpers of `vadsrijk_wezens.py` and the zone-2 builders of 
 
 ## Resume point
 See `git log -1`.
+
+## Test results (2026-11-04)
+- `runGameTestServer -Pgt=VadsrijkZ3Wezens` on the merged tree: "All 6 required tests passed" (spawner plan: kruinzee 101, takkenbanen 87, schorsstad 63, wortelvelden 99, wortelduister 98 max alive; 202 spawners; z3-systemen logs "hunting contracts wired to z3-wezens Z3Contracten").
+- AutoCheck NOT run (the machine is low on memory; all 3 gradle slots were busy all session). Script ready: `tools/autocheck/vadsrijk_z3_wezens.txt`. Looks unverified in a client.

@@ -13,7 +13,6 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabel;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabellen;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot;
-import nl.juiced.guhs.feature.vadsrijk.wezens.loot.WezensLoot;
 
 /**
  * Zone-3 loot from the creatures (lv 30-50): 15 base types (items guhs:vr_z3_mob_&lt;id&gt;):
@@ -24,8 +23,8 @@ import nl.juiced.guhs.feature.vadsrijk.wezens.loot.WezensLoot;
  *   <li>3 pieces of jewellery: honingring, harsketting, sporenoorbel.</li>
  * </ul>
  * See {@link Z3Sets} for the bonuses. A table per creature "z3wezens:&lt;naam&gt;" + "_elite", and a rich one per contract
- * elite "z3wezens:contract_&lt;id&gt;". Weapons: the zone-1 ones ({@link WezensLoot#extraWapens}) plus whatever another slice
- * adds with {@link #voegWapenToe} (zone-3 weapons are bazen/systemen's). Crystals: z3-systemen drops them itself for every
+ * elite "z3wezens:contract_&lt;id&gt;". Weapons: z3-systemen's six zone-3 class weapons (Z3Wapens.ALLE) plus whatever another slice
+ * adds with {@link #voegWapenToe}. Crystals: z3-systemen drops them itself for every
  * defeated creature (as z2-systemen does), so nothing here.
  */
 public final class Z3Loot {
@@ -118,7 +117,9 @@ public final class Z3Loot {
         for (int i = 0; i + 1 < paren.length; i += 2) {
             l.add(new LootTabel.Regel((String) paren[i], (Integer) paren[i + 1]));
         }
-        l.addAll(WezensLoot.extraWapens);
+        for (String w : nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wapens.ALLE) {   // z3-systemen's six zone-3 class weapons
+            l.add(new LootTabel.Regel(w, 1));
+        }
         l.addAll(EXTRA);
         return l;
     }

@@ -71,7 +71,7 @@ public final class Takken {
 
         @Override
         public int xp() {
-            return 42 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override
@@ -206,7 +206,7 @@ public final class Takken {
 
         @Override
         public int xp() {
-            return 38 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override
@@ -306,7 +306,7 @@ public final class Takken {
 
         @Override
         public int xp() {
-            return 38 + 5 * mobLevel();
+            return xp3(1.0);
         }
 
         @Override

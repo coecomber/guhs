@@ -126,6 +126,11 @@ public final class RijkHud {
 
     private static final java.util.Map<String, Boolean> HEEFT_ICOON = new java.util.HashMap<>();
 
+    /** (I-AUDIO) Does a boss bar show (a boss fight with its own music)? The town music keeps quiet then. */
+    public static boolean baasActief() {
+        return baas != null;
+    }
+
     /** Are the HUD skill slots drawn right now (in the dimension, HUD on)? */
     public static boolean skillsZichtbaar() {
         return binnen() && hud != null && !Minecraft.getInstance().options.hideGui;

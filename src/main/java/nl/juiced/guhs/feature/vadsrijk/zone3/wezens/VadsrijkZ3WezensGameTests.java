@@ -205,6 +205,11 @@ public class VadsrijkZ3WezensGameTests {
         // the mechanism: two floors (y 1 and y 8); the spawner's range covers only the lower one
         vloer(helper, 1);
         vloer(helper, 8);
+        for (int y = 2; y <= 16; y++) {
+            if (y != 8) {
+                helper.setBlock(new BlockPos(4, y, 4), Blocks.AIR.defaultBlockState());
+            }
+        }
         BlockPos c = helper.absolutePos(new BlockPos(4, 4, 4));
         int laag = helper.absolutePos(new BlockPos(0, 2, 0)).getY();
         Spawners.Spawner sp = new Spawners.Spawner("z3wezens:test_laag", c, 3, Z3WezensRegistry.ROTZWIJN, 1, 20, 44, 44, null, 0).grot(laag - 1, laag + 4);
