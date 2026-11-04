@@ -24,6 +24,8 @@ import nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingPayloads;
  * Guhs keys on the same key, e.g. the snuffel "blaf" on B), the book screen, the milestone toasts and the collection tabs.
  */
 public final class VoltooiingClient {
+    /** Its id in CollectieTabs. */
+    public static final String TAB = "voltooiing";
     public static final KeyMapping BOEK = new KeyMapping("key.guhs.vr_boek", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_B, KernClient.CATEGORIE);
 
     private VoltooiingClient() {
@@ -64,7 +66,9 @@ public final class VoltooiingClient {
                 }
             }
         });
-        BoekTabs.init();
+        // the book's tab next to Rijdieren (10) and Huisdieren (20) on top of the collection screens
+        nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.registreer(TAB, 30, () -> Component.translatable("vadsrijk.voltooiing.tab.boek"),
+                VoltooiingClient::open);
     }
 
     /** Asks the server for the book (the key, the tab). */

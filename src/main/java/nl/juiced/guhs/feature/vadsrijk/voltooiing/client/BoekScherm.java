@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
@@ -17,7 +16,7 @@ import nl.juiced.guhs.feature.vadsrijk.economie.client.EcoScherm;
  * I-VOLTOOIING: the Verkenningsboek. An open pink book: zone bookmarks on top; the left page shows the zone's overall percentage
  * (a big number + a ribbon bar), the 100 % reward, and every category with its icon, x/y and a little bar (click one); the right
  * page lists the chosen category: done = green tick + name, busy = yellow dot, not done = grey (secrets: "???" + a small hint).
- * The collection tabs (Rijdieren / Huisdieren / Boek) sit on the right edge ({@link BoekTabs}). All data comes from the server.
+ * The collection tabs (Rijdieren / Huisdieren / Verkenningsboek) sit above the panel (i-ui CollectieTabs, via EcoScherm). All data comes from the server.
  */
 public class BoekScherm extends EcoScherm {
     private static final int RIJ = 13, REGEL = 11;
@@ -41,6 +40,20 @@ public class BoekScherm extends EcoScherm {
                     zone = i;
                 }
             }
+        }
+    }
+
+    /** Its tab next to Rijdieren / Huisdieren (CollectieTabs, drawn and clicked by EcoScherm). */
+    @Override
+    protected String collectieTab() {
+        return VoltooiingClient.TAB;
+    }
+
+    static net.minecraft.world.item.ItemStack icoon(String id) {
+        try {
+            return new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse(id)));
+        } catch (RuntimeException e) {
+            return net.minecraft.world.item.ItemStack.EMPTY;
         }
     }
 
@@ -112,7 +125,6 @@ public class BoekScherm extends EcoScherm {
         linkerPagina(g, mx, my, bl + 7, bt + 6, mid - 2 - bl - 14, bb - 6);
         rechterPagina(g, mx, my, mid + 9, bt + 6, br - mid - 2 - 14 - 10, bb - 6);
 
-        BoekTabs.teken(g, this, left + w + 3, top, mx, my);
     }
 
     private void linkerPagina(GuiGraphicsExtractor g, int mx, int my, int x, int y, int pw, int onder) {
@@ -156,7 +168,7 @@ public class BoekScherm extends EcoScherm {
             g.pose().pushMatrix();
             g.pose().translate(x + 1, y + 1);
             g.pose().scale(0.6875f, 0.6875f);
-            g.item(BoekTabs.icoon(c.getStringOr("icoon", "")), 0, 0);
+            g.item(icoon(c.getStringOr("icoon", "")), 0, 0);
             g.pose().popMatrix();
             g.text(font, Component.translatable(c.getStringOr("naam", "")), x + 15, y + 3, vol ? GROEN : TEKST, false);
             String teller = ck + "/" + ct;
@@ -285,14 +297,6 @@ public class BoekScherm extends EcoScherm {
             scroll = 0;
         }
         return true;
-    }
-
-    @Override
-    public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
-        if (event.button() == 0 && BoekTabs.klik(this, left + w + 3, top, event.x(), event.y())) {
-            return true;
-        }
-        return super.mouseClicked(event, doubleClick);
     }
 
     @Override

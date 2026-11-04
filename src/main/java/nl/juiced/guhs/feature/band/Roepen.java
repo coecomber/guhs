@@ -152,6 +152,10 @@ public final class Roepen {
      * (or {@link #WACHT} ticks later we say it can't be found). Tells the player (overlay) and refreshes their Guhdex.
      */
     public static Uitkomst roep(ServerPlayer speler, UUID id) {
+        if (nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(speler)) {   // (1.10: your guhs stay home while you adventure)
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.vadsrijk.roep.niet_hier").withStyle(ChatFormatting.GOLD));
+            return Uitkomst.NIET_THUIS;
+        }
         boolean inGuhpixel = nl.juiced.guhs.feature.guhpixel.Guhpixel.in(speler);   // (no guhs in guhpixel)
         Uitkomst u = inGuhpixel ? Uitkomst.NIET_THUIS : probeer(speler, id);
         Component naam = naam(speler.level().getServer(), speler.getUUID(), id);

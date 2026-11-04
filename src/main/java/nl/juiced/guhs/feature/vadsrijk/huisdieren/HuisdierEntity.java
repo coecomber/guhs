@@ -12,6 +12,7 @@ import com.geckolib.animation.RawAnimation;
 import com.geckolib.util.GeckoLibUtil;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -91,6 +92,19 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
 
     public void zetSoort(String id) {
         entityData.set(DATA_SOORT, id);
+    }
+
+    /** (fix round 3) Its own Dutch name ("Mini Koning Klodder") wherever a name is shown, never the raw type key. */
+    @Override
+    protected Component getTypeName() {
+        Huisdier h = soort();
+        return h != null ? Component.translatable(h.naamKey()) : super.getTypeName();
+    }
+
+    /** No nameplate above a pet (the client also refuses it, see HuisdierClient). */
+    @Override
+    public boolean shouldShowName() {
+        return false;
     }
 
     void zet(String id, UUID eigenaar) {

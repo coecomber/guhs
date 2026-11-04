@@ -1,6 +1,6 @@
 """
 1.10.0 "Het Vadsrijk", I-VOLTOOIING: the Verkenningsboek (zone completion) texts.
-Java: feature/vadsrijk/voltooiing (Voltooiing, ZoneBoeken, VoltooiingRegistry, client/BoekScherm, client/BoekTabs, client/VoltooiingClient).
+Java: feature/vadsrijk/voltooiing (Voltooiing, ZoneBoeken, VoltooiingRegistry, client/BoekScherm, client/VoltooiingClient).
 Only texts (no assets: the icons are vanilla items). en_us gets the same Dutch text.
 A new zone page: add "vadsrijk.voltooiing.zone.<id>" + the title "gui.guhs.titels.naam|hint.<titelId>" here.
 Standalone (from the project root): PYTHONPATH="tools;tools/features" python tools/features/vadsrijk_voltooiing.py
@@ -51,8 +51,6 @@ def teksten():
         "vadsrijk.voltooiing.beloning.nog": "Bij 100%%: de titel %s + %s",
         "vadsrijk.voltooiing.beloning.behaald": "Behaald: de titel %s!",
         # collection tabs
-        "vadsrijk.voltooiing.tab.rijdieren": "Rijdieren",
-        "vadsrijk.voltooiing.tab.huisdieren": "Huisdieren",
         "vadsrijk.voltooiing.tab.boek": "Verkenningsboek",
         # titles (titles feature)
         "gui.guhs.titels.naam.vr_kenner_van_zwamzoet": "Kenner van Zwamzoet",

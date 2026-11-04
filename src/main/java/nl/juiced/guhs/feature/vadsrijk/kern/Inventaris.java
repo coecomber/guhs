@@ -221,6 +221,31 @@ public final class Inventaris {
         }
     }
 
+    /**
+     * (fix round 3) An item for the NORMAL inventory (post from the rest of the mod, e.g. the makelaar's postcards) while the
+     * player may be in the Vadsrijk: inside it waits with the stored normal inventory and comes out on the way home (any free
+     * slot, else the found items); outside it goes straight into the inventory.
+     */
+    public static void legThuis(ServerPlayer p, ItemStack s) {
+        if (s.isEmpty()) {
+            return;
+        }
+        SpelerData d = Spelers.data(p);
+        if (!d.binnen) {
+            if (!p.getInventory().add(s) && !s.isEmpty()) {
+                p.drop(s, false);
+            }
+            return;
+        }
+        ItemStackWithSlot.CODEC.encodeStart(ops(p), new ItemStackWithSlot(THUIS_POST_SLOT, s.copy())).result().ifPresent(t -> {
+            if (t instanceof CompoundTag c) {
+                d.opgeborgen.add(c);   // (slot out of range: laad puts it anywhere)
+            }
+        });
+    }
+
+    static final int THUIS_POST_SLOT = 251;
+
     private static void bewaar(ServerPlayer p, SpelerData d, ItemStack s, String wereld) {
         ItemStackWithSlot.CODEC.encodeStart(ops(p), new ItemStackWithSlot(0, s)).result().ifPresent(t -> {
             if (t instanceof CompoundTag c) {

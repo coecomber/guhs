@@ -67,6 +67,22 @@ public abstract class EcoScherm extends Screen {
     protected void init() {
         left = (width - w) / 2;
         top = (height - h) / 2;
+        if (heeftTabs()) {
+            top = (height - h + nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.HOOGTE) / 2;   // (panel + tabs centred together)
+        }
+    }
+
+    /**
+     * (fix round 3) The collection tab of this screen ({@link nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs}), or null
+     * for none: then the tab row is drawn above the panel and switches to the other collection screens.
+     */
+    @Nullable
+    protected String collectieTab() {
+        return null;
+    }
+
+    private boolean heeftTabs() {
+        return collectieTab() != null && nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.zichtbaar();
     }
 
     protected ItemStack item(int i) {
@@ -115,6 +131,9 @@ public abstract class EcoScherm extends Screen {
         g.fill(left + 8, top - 5, left + 12, top, 0xFFFFC8E4);
         g.fill(left + w - 12, top - 5, left + w - 8, top, 0xFFFFC8E4);
         g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 8, top + 5, WIT, true);
+        if (heeftTabs()) {
+            nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.teken(g, font, left, top, w, collectieTab(), mouseX, mouseY);
+        }
         if (data.contains("munten")) {
             munten(g, left + w - 8, top + 5, data.getLongOr("munten", 0), true, true);
         }
@@ -220,6 +239,10 @@ public abstract class EcoScherm extends Screen {
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (super.mouseClicked(event, doubleClick)) {
+            return true;
+        }
+        if (event.button() == 0 && heeftTabs()
+                && nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.klik(event.x(), event.y(), left, top, w, collectieTab())) {
             return true;
         }
         if (event.button() == 0) {

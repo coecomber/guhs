@@ -983,6 +983,7 @@ OVERIG = {
     P + "optie.reiskaart": "Laat de reiskaart zien",
     P + "reiskaart.titel": "Reiskaart van het Vadsrijk",
     P + "reiskaart.uitleg": "Houd de muis ingedrukt en sleep om de kaart te verschuiven. Klik op een bestemming om te vliegen.",
+    P + "reiskaart.sluit": "Sluiten",
     P + "reiskaart.jij": "Jij bent hier",
     P + "reiskaart.hier": "Hier ben je nu.",
     P + "reiskaart.vlieg": "Klik om hierheen te vliegen!",

@@ -17,6 +17,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -41,13 +42,23 @@ import nl.juiced.guhs.feature.vadsrijk.kern.client.KernClient;
  */
 public final class HuisdierClient {
     public static final KeyMapping SCHERM = new KeyMapping("key.guhs.vr_huisdieren", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_P, KernClient.CATEGORIE);
+    /** (fix round 3) Its tab in {@link nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs}. */
+    public static final String TAB = "huisdieren";
 
     private HuisdierClient() {
     }
 
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterKeyMappingsEvent e) -> e.register(SCHERM));
+        nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.registreer(TAB, 20, () -> Component.translatable("vadsrijk.huisdieren.titel"),
+                HuisdierClient::open);
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> e.registerEntityRenderer(HuisdierenRegistry.HUISDIER.get(), HuisdierRenderer::new));
+        // (fix round 3) no nameplate above a pet ("entity.guhs.vr_huisdier" showed when looking at it)
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.RenderNameTagEvent.CanRender e) -> {
+            if (e.getEntity() instanceof HuisdierEntity) {
+                e.setCanRender(net.minecraft.util.TriState.FALSE);
+            }
+        });
         HuisdierPayloads.schermOntvanger = s -> Minecraft.getInstance().execute(() -> {
             Minecraft mc = Minecraft.getInstance();
             if (mc.screen instanceof HuisdierScherm h) {

@@ -40,6 +40,12 @@ public class HuisdierScherm extends EcoScherm {
         super("huisdieren", Component.translatable("vadsrijk.huisdieren.titel"), data, List.of(), 340, 224);
     }
 
+    /** (fix round 3) The collection tabs (Rijdieren | Huisdieren | ...). */
+    @Override
+    protected String collectieTab() {
+        return HuisdierClient.TAB;
+    }
+
     private List<String> bezit() {
         List<String> l = new ArrayList<>();
         for (String s : data.getStringOr("bezit", "").split(",")) {

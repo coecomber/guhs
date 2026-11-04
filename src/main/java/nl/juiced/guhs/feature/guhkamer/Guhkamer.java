@@ -263,6 +263,10 @@ public final class Guhkamer {
             speler.sendOverlayMessage(Component.translatable("gui.guhs.guhpixel.roep.niet_hier", Component.empty()).withStyle(ChatFormatting.GOLD));
             return null;
         }
+        if (nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(speler)) {   // (1.10: no guhs from home in the Vadsrijk)
+            speler.sendOverlayMessage(Component.translatable("gui.guhs.vadsrijk.roep.niet_hier").withStyle(ChatFormatting.GOLD));
+            return null;
+        }
         MinecraftServer s = speler.level().getServer();
         GuhkamerData data = GuhkamerData.get(s);
         GuhkamerData.Kamer k = data.vind(speler.getUUID());
