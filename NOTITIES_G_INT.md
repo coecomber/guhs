@@ -9,6 +9,7 @@ build/moddev copied from f-int (artifacts only).
 | 110-g-biomen | b8427f57a | clean |
 | 110-g-ui | 8c48f6aa8 | lang union (scratchpad gint/langunie.py); Kern+Biomen 9/9 |
 | 110-g-kaart | 786ec74da | clean; + loopcheck `_deur` passable (97cafc68b) |
+| 110-g-balans | f3c03e9b7 | lang union; config unified (see log) |
 | 110-g-klassen | 739674370 | vadsrijk_klassen.py: klassen's scherm.ordetempel text + ui's skilltip keys; lang union |
 
 ## Waiting for
@@ -20,12 +21,15 @@ g-ux, g-balans, g-z2, g-mounts (+ maybe zone 3).
 - level users (quests, gates, xp, tracker, mounts, z2 airship gate) -> generic vs class level.
 - npc package: g-ux + g-z2 (+ g-kaart's Npcs.staanPlek / NpcPlekken Bram).
 - DONE (after klassen): `KernPayloads.Hud.knopen` = active class's bought nodes -> SkillInfo HUD hover; VERBETERINGEN unchanged (klassen did not touch nodes). Trainers: `QuestMotor.EXTRA` option per trainer -> `KlasseBalie.geefStartwapen(p, klasse, WAPEN_PRIJS)`; the "training" role dialog now shows metExtra.
-- g-balans `mobs.schade` -> extra section in KlasseBalans's toml + loader.
+- DONE: one balance file: kern.Balans = value holder, KlasseBalans reads/writes `[mobs] schade` (1.3) next to [algemeen] + classes.
+- after g-z2 (balans): Z2WezensPlekken.PADEN copied from the OLD zone-2 plan.py -> refresh from the new layout (and the zone-2 spawner moves follow).
+- dragon 3.75 scale + raised opening dip: user should judge the framing (TESTEN).
 - g-ux Zwamtempel gate: generic lv 18 -> always open: keep.
 - audit.py: MemoryError under load -> run when few agents are busy.
 - gametests still owed: VadsrijkNpc (for g-kaart).
 
 ## Log
+- AutoCheck `gui inventaris` was added by g-ui AND g-klassen (duplicate case): kept klassen's (optional hotbar slot).
 
 ## Resume point
 Merging (see table).
