@@ -1284,8 +1284,9 @@ def _schrijf(pad, obj):
 
 def _mijn_sleutel(k):
     """The lang keys this generator owns (so a standalone run can drop the ones it no longer writes)."""
-    return (k.startswith(Z) or k.startswith("item.guhs.vr_z2_npc_") or (k.startswith(P) and ".z2_" in k)
-            or k.startswith(P + "plek.overal.teller:z2_"))
+    # (J-INT: the mount teasers incl. z2_rijdier_guhwolf are written by vadsrijk_npc.py (i-mounts), so not ours to drop)
+    return ((k.startswith(Z) or k.startswith("item.guhs.vr_z2_npc_") or (k.startswith(P) and ".z2_" in k)
+            or k.startswith(P + "plek.overal.teller:z2_")) and not k.startswith(P + "rijdierquest.teaser."))
 
 
 def _direct():

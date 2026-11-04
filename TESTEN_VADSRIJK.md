@@ -1,10 +1,11 @@
-# Testen: Het Vadsrijk (Guhs 1.10), na fixronde 2: zone 1 + de nieuwe zone 2 "De Splinterpieken"
+# Testen: Het Vadsrijk (Guhs 1.10), na fixronde 3: zone 1 + zone 2 "De Splinterpieken"
 
 Dit is de ENE testgids voor het hele Vadsrijk. Hij vervangt `TESTEN_VADSRIJK_ZONE1.md` en de losse slice-gidsen (die blijven
-alleen als naslag). Gebouwd in `guhs_vadsrijk\g-int` (branch `110-g-int`, fixronde 2 = tweede playtest).
+alleen als naslag). Gebouwd in `guhs_vadsrijk\j-int` (branch `110-j-int`, fixronde 3 = derde playtest). Snel alles langs met
+commando's: `SPIEKBRIEF.md` (ronde 3 bovenaan).
 
 ## Starten
-1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\g-int` (NIET f-int of w-poc: dat zijn de oude rondes).
+1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\j-int` (NIET h-melee, g-int, f-int of w-poc: dat zijn de oude rondes).
 2. Maak een **nieuwe** wereld (Creatief, cheats aan). De `saves`-map is leeg: oude werelden kennen de nieuwe kaart (en de nieuwe
    zone 2) niet.
 3. Zet je **weergaveafstand** hoog (32 chunks, minstens 20): het Vadsrijk is met de hand gebouwd en kan dat makkelijk aan.
@@ -23,9 +24,10 @@ klif, tot boven op het kampplateau.
 | **C** | **Knuffelsprong** (nieuw): ~20 blokken vooruit, ~5 hoog, elke 5 s, geen valschade. Elke klasse. 5e vakje op de HUD. |
 | **U** | **Losknuffelen** (nieuw): vast? Sta 3 tellen stil en de knuffelwind zet je op het dichtstbijzijnde veilige plekje. Elke minuut, niet in een bazengevecht. Ook: `/guhs vadsrijk vast`. |
 | K | je skillboom (nu 6 rijen: rij 4 vanaf level 20, rij 5 vanaf level 26), met tabs per klasse |
-| **X** | **opstijgen / afstijgen** (nieuw): je actieve rijdier. Icoontje rechts naast de vaardigheden op de HUD. |
+| **B** | **Verkenningsboek** (ronde 3): per zone wat je al gedaan hebt, in %. Nog een keer B = dicht. (Als snuffelhond is B blaffen; in het Vadsrijk wint het boek.) |
+| **X** | **opstijgen / afstijgen** (nieuw; zonder rijdier: "Nog geen rijdier..."): je actieve rijdier. Icoontje rechts naast de vaardigheden op de HUD. |
 | **N** | **rijdierenscherm** (nieuw): alle rijdieren, wat je nog niet hebt als silhouet, kleuren van de Pluimguh |
-| **P** | **huisdierenscherm** (nieuw): "Verzameld x/y", kies wie er met je meeloopt |
+| **P** | **huisdierenscherm** (nieuw): "Verzameld x/y", kies wie er met je meeloopt. N, P en B hebben tabjes bovenaan: klik om te wisselen. |
 | J | je questlog (hoofdverhaal bovenaan, "Nu: ..."; Volgen/Niet volgen voor zijquests; Gids met de elementendriehoek) |
 | (geen toets) | questvolger aan/uit en lichtstraal aan/uit: knoppen in de questlog, of zelf een toets kiezen |
 | Rechtsklik | NPC's, kampvuren, deuren, de scheepsbel, munten, sieraden, de draaispiegels in de Spiegelburcht |
@@ -37,6 +39,29 @@ klif, tot boven op het kampplateau.
 **Questvolger** (rechtsboven, onder de bazenbalk als die er is): wat, bij wie, waar, pijltje + afstand. Een roze lichtstraal
 boven je doel (vastgepinde zijquest: lichtgeel). Werkt nu ook in zone 2 en wijst je de luchtschiplijn aan als je doel aan de
 andere kant ligt.
+
+## Wat is nieuw (fixronde 3, derde playtest)
+- **Buitenstaanders blijven buiten:** makelaar Guhrrit, de Postguh, de Sherlock-cast, guhs van thuis, volgers (Libelkonijnguh,
+  Sponsguh, Gerrit) en Momo komen niet in het Vadsrijk. "Roep naar mij" en de Guhkamer-roep werken daar niet ("Je guhs blijven
+  lekker thuis..."). Post (makelaarsbrief, kaartjes, Opa's kelderpost) wacht tot je weer thuis bent.
+- **Huisdieren:** geen naambordje meer boven je huisdier.
+- **Reiskaart:** een ✕ rechtsboven om hem te sluiten.
+- **Tabjes:** Rijdieren (N), Huisdieren (P) en het Verkenningsboek (B) hebben tabjes boven het paneel; de oude "Huisdieren"-knop in
+  het rijdierenscherm is weg. Niet bij de stalmeester.
+- **Rijdieren:** de Hoedhupper en de Klodderros zijn weg. Rijdieren beginnen in zone 3 (zie hieronder bij Rijdieren). Nieuwe
+  snelheden en sprongen, en elk rijdier stapt een randje van 2 blokken op.
+- **Zone 2, hangbruggen:** alle 5 bruggen sluiten vlak aan op de grond, elke stap hooguit een half blok (ook de grote brug bij
+  Kloofwachter Touwtje).
+- **Zone 2, aankomst bij het dok:** het zwevende roze glas is weg. Een calciet-poortboog met kristallamp, een glooiende bergpas in
+  plaats van rechte wanden, een weg met lampions, lichtsnoeren en vuurkorven, een bankje, een chocomelk-kiosk en een welkomstboog
+  bij de pier. De noord-, oost- en westpoort kregen dezelfde boog en pas.
+- **Muziek in de steden:** Zwamzoet, Knuffelkamp, De Haven en Kandijkom hebben elk twee lieve deuntjes (schuif Muziek) en eigen
+  achtergrondgeluid (schuif Omgeving). Weg bij bazen en filmpjes; in de wildernis alleen sfeer. Uit: `stadsmuziek = false` in de
+  sfeer-config.
+- **Verkenningsboek (B):** per zone een pagina met % en categorieën (hoofdverhaal, zijmissies, uitkijkpunten, kampvuren, geheimen,
+  verloren knuffels, bazen, huisdieren, gebieden). Hints voor wat je nog niet hebt; geheimen zijn "???". Bij 25/50/75 % een toast,
+  bij 100 % een titel ("Kenner van Zwamzoet" / "Kenner van de Splinterpieken") en Vadsmunten. Rijdieren staan erin als
+  "(later)": je ziet ze, maar ze tellen niet mee (die krijg je pas in zone 3). Dev: `/guhs vadsrijk boek scherm | tel | check | reset`.
 
 ## Wat is nieuw (fixronde 1)
 **Kaart en lopen (survival)**
@@ -250,6 +275,9 @@ Soorten zone-2 wezens: splinterling, galmvleermuis, sneeuwknabbelaar, kristalnaa
 versteende_wacht, ijspuffer, mika_mijnwerker, mika_boorder, kloofgier, kristalspin, spiegelwacht, scherfgeest.
 
 ## Waar op letten
+- **Fixronde 3:** klinken de stadsdeuntjes lief (niet te hard, niet te vaak)? Ziet de dok-aankomst in Kandijkom er goed uit
+  (poortboog, bergpas, kiosk)? Loop je zonder springen over alle hangbruggen? Voelen de nieuwe rijdiersnelheden goed, en is het
+  OK dat een rijdier over een hek stapt? Is het Verkenningsboek duidelijk, en kloppen de tabjes N/P/B?
 - **Fixronde 2**: voelt de klasse-wissel via het wapen goed? Zijn de twee levels duidelijk? Is vechten nu te zwaar (+30 %)?
   Rijden met X/N, huisdieren met P, de reiskaart, Werver Wimpel, en de nieuwe zone 2 (Kandijkom, poorten, het meer, hoogte).
 - De draak is 50 % groter: past hij nog mooi in de opening-vlucht en de drakenpas over Zwamzoet?
@@ -273,7 +301,7 @@ versteende_wacht, ijspuffer, mika_mijnwerker, mika_boorder, kloofgier, kristalsp
 - Het Pluimguh-model is een placeholder; prijzen en snelheden van de rijdieren zijn een gok. Huisdieren: maat en animatie nog niet
   beoordeeld; de Mini Klodderreus is grijs.
 - De starterkeuze van de rijdieren hoort bij zone 3 (nog niet gebouwd); de reiskaart toont zone 3/4 als voorproefje.
-- Geen muziek; geluiden zijn vanilla. Modellen en plaatjes zijn een eerste gegenereerde versie. Balans is een eerste gok.
+- Muziek alleen in de steden (ronde 3, gesynthetiseerd); verder zijn geluiden vanilla. Modellen en plaatjes zijn een eerste gegenereerde versie. Balans is een eerste gok.
 - Er is maar één opening naar Kandijkom (die van de wereld-slice); de Galmwolf daarin is een geluid, geen model.
 - De karavaanroute is uitgerekend op de kaart van vóór de fixronde; hij is gecontroleerd op de nieuwe kaart (geen water, kleine
   opstapjes), maar rijdt in Zwamzoet onder een plankenbrug door.

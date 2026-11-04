@@ -1,9 +1,9 @@
-# Spiekbriefje ronde 2: alles testen met commando's
+# Spiekbriefje: alles testen met commando's (ronde 3 bovenaan, ronde 2 daaronder)
 
-Start de testclient uit `guhs_vadsrijk\h-melee\run-client.bat` (ronde 2 + de melee-fix) en maak een nieuwe wereld.
+Start de testclient uit `guhs_vadsrijk\j-int\run-client.bat` (ronde 3: ronde 2 + melee + alle fixes van ronde 3) en maak een
+**nieuwe** wereld (de saves-map is leeg).
 
-Doorloop het van boven naar beneden: elk blok test één onderdeel van ronde 2. Copy-paste de commando's in de chat.
-Alle commando's beginnen met `/guhs vadsrijk ...`.
+Doorloop het van boven naar beneden: elk blok test één onderdeel. Copy-paste de commando's in de chat.
 
 Starten:
 - Nieuwe wereld, cheats aan.
@@ -16,6 +16,110 @@ Handig tussendoor:
 - Met `/guhs vadsrijk tips reset` krijg je alle tips opnieuw.
 
 ---
+
+# RONDE 3
+
+## R1. Makelaar en andere buitenstaanders blijven buiten
+In het Vadsrijk:
+```
+/summon guhs:guh_npc ~ ~ ~2
+/guhs erfenis brief
+```
+- **Summon:** er verschijnt niks. Guhs-wezens van thuis (makelaar Guhrrit, de Postguh, de Sherlock-cast) mogen er niet in.
+- **Brief:** de makelaarsbrief komt niet in het Vadsrijk. Hij wacht tot je weer thuis bent (`/guhs vadsrijk` = terug).
+- **Roepen:** "Roep naar mij" (guh-band) of de Guhkamer-roep in het Vadsrijk zegt "Je guhs blijven lekker thuis...".
+- **Volgers:** een Libelkonijnguh, Sponsguh, Gerrit of Momo op je schouder gaat niet mee naar binnen, en staat er weer als je terug bent.
+
+## R2. Huisdier zonder naambordje
+```
+/guhs vadsrijk huisdier geef koning_klodder
+```
+- Druk P, kies "Meenemen".
+- Boven je huisdier staat **geen** naambordje meer (eerst stond er "entity.guhs.vr_huisdier").
+
+## R3. Reiskaart: het kruisje
+```
+/guhs vadsrijk npc tp kapitein
+```
+- Klik op de kapitein. Rechtsboven in de roze titelbalk van de reiskaart staat een ✕ ("Sluiten" als je eroverheen gaat).
+- Klik erop: de kaart gaat dicht, met een klikgeluidje.
+
+## R4. Tabbladen: Rijdieren / Huisdieren / Verkenningsboek
+```
+/guhs vadsrijk mount alle
+/guhs vadsrijk huisdier alle
+```
+- Druk N. Boven het paneel, tussen de guh-oortjes, zitten drie tabjes: **Rijdieren**, **Huisdieren**, **Verkenningsboek**.
+- Klik heen en weer. Het actieve tabje hangt vast aan de roze titelbalk.
+- Bij de stalmeester (`/guhs vadsrijk mount stal`) zijn er géén tabjes.
+
+## R5. Rijdieren (ronde 3)
+```
+/guhs vadsrijk mount reset
+```
+- **Nog geen rijdier:** druk X en N: "Nog geen rijdier: dat krijg je in De Schemerwortel."
+- **Teasers:** `/guhs vadsrijk npc tp stalmeester`. Hoefje plaagt over het Wolkenschaapje en de stal verkoopt nog niks.
+  Ook bij Boswachter Mos (`npc tp boswachter_mos`) en in Kandijkom bij Breister Wolwinter (Guhwolf).
+- **Weg:** de Hoedhupper en de Klodderros bestaan niet meer. Er zijn er nu 5.
+```
+/guhs vadsrijk mount alle
+```
+- **Snelheid:** Guhwolf het snelst (springt laag), Pluimguh, Knuffelhert (springt het hoogst, ~5 blokken), Wolkenschaapje (dubbele
+  sprong), Slakkie lekker traag.
+- **Opstapjes:** rijd zonder springen tegen een randje van 2 blokken: je rijdier stapt erop. Let op: een hek (1,5 hoog) stapt hij
+  nu ook over. Zeg het als je dat niet wilt.
+- **Instellen:** `/guhs vadsrijk balans rijdieren snelheid 1.2` (sectie `[rijdieren]` in `run/config/guhs-vadsrijk-balans.toml`).
+
+## R6. Zone 2: hangbruggen
+```
+/guhs vadsrijk z2wereld plek brug_3_zuid
+```
+- Dit is de grote brug bij Kloofwachter Touwtje naar de Spiegelburcht. Loop eroverheen **zonder te springen**: elke stap is
+  hooguit een half blokje, aan beide kanten sluit hij aan op de grond.
+- Ook: `brug_1_zuid`, `brug_2_zuid`, `brug_4_zuid` (Splinterkloof) en `brug_5_zuid` (Galmspleet).
+
+## R7. Zone 2: aankomst bij het dok en de poorten
+```
+/guhs vadsrijk z2wereld plek dok_landing
+```
+- **Glas weg:** het zwevende roze glas boven de poort is weg. Er staat nu een calciet-poortboog met een kristallamp.
+- **Bergpas:** de weg naar de zuidpoort loopt glooiend door een pas, niet meer tussen rechte wanden.
+- **Aankleding:** lampions en lichtsnoeren over de weg, vuurkorven, een bankje, een **chocomelk-kiosk** (`z2wereld plek dok_kiosk`)
+  en een houten **welkomstboog** bij de pier (`z2wereld plek dok_welkom`). Sneeuw en kristallen langs de randen.
+- **Andere poorten:** loop vanaf het plein van Kandijkom de noord-, oost- en westpoort uit. Dezelfde boog en een glooiende pas.
+
+## R8. Muziek in de steden
+```
+/guhs vadsrijk npc tp bakker_bram
+/guhs vadsrijk wereld plek haven_plein
+/guhs vadsrijk z2wereld vlieg kandijkom
+```
+- Zet de schuif **Muziek** aan (en **Omgeving** voor de achtergrond).
+- Na ~2 s begint een lief deuntje (Zwamzoet = wals, Knuffelkamp = ochtendfolk, De Haven = zeemanslied, Kandijkom = winterspeeldoos).
+  Elke stad heeft er twee, met wat stilte ertussen.
+- **Achtergrond:** vogeltjes, guh-gegiechel, belletjes; golfjes in De Haven, een haardvuur in Kandijkom; geknetter bij de kampvuren.
+- **Weglopen:** loop de stad uit. Na ~3 s fadet de muziek weg; in de wildernis is er geen muziek.
+- **Baas of scène:** bij een bazenbalk of een filmpje stopt het deuntje.
+- **Uit:** in de mod-config (sfeer) `stadsmuziek = false`.
+
+## R9. Het Verkenningsboek (B)
+```
+/guhs vadsrijk boek scherm
+```
+- Druk **B** (of klik het derde tabje). Een open roze boek met een bladwijzer per zone (De Knuffelzwammen, De Splinterpieken).
+- **Links:** groot %, "x van de y gedaan", de beloning bij 100 %, en de categorieën (hoofdverhaal, zijmissies, uitkijkpunten,
+  kampvuren, geheimen, verloren knuffels, bazen, huisdieren, gebieden).
+- **Rijdieren (later):** die categorie staat er wel (zone 1: Wolkenschaapje + Knuffelhert, zone 2: Guhwolf), maar telt **niet** mee
+  voor je %; rijdieren krijg je pas in zone 3. Hover erover voor de uitleg.
+- **Rechts:** wat je hebt (groen vinkje), waar je mee bezig bent (geel) en wat nog niet (grijs met een hint; geheimen zijn "???").
+- **Mijlpalen:** steek een paar kampvuren aan of klim een uitkijknaald op. Bij 25/50/75 % krijg je een roze toast.
+  Bij 100 %: "Helemaal verkend!", een titel en Vadsmunten.
+- `/guhs vadsrijk boek tel` laat je tellingen zien, `boek reset` begint opnieuw.
+- **B en de snuffelhond:** B is ook "blaffen" als hond op Het Snuffeleiland. In het Vadsrijk wint het boek; als hond blaf je gewoon.
+
+---
+
+# RONDE 2 (nog steeds geldig)
 
 ## 1. Klassen: het wapen is je klasse
 ```

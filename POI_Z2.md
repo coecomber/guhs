@@ -38,10 +38,13 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
+| `dok_bankje` | -4, 91, -2284 |
 | `dok_bel` | 4, 91, -2232 |
 | `dok_eind` | 0, 91, -2226 |
 | `dok_kapitein` | -4, 91, -2240 |
+| `dok_kiosk` | 9, 91, -2266 |
 | `dok_landing` | 0, 91, -2244 |
+| `dok_welkom` | 3, 91, -2256 |
 | `gondel_berg` | 182, 151, -2476 |
 | `gondel_berg_kabel` | 182, 159, -2478 |
 | `gondel_berg_knop` | 185, 151, -2475 |
@@ -252,7 +255,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kampvuur_galmhellingen_2` | 142, 103, -2262 |
 | `kampvuur_galmhellingen_3` | 208, 144, -2428 |
 | `kampvuur_galmhellingen_4` | 232, 125, -2296 |
-| `kampvuur_kandijkom_dok_1` | -9, 91, -2262 |
+| `kampvuur_kandijkom_dok_1` | -9, 92, -2262 |
 | `kampvuur_knuffelmeer_1` | -100, 100, -2330 |
 | `kampvuur_knuffelmeer_2` | -236, 104, -2342 |
 | `kampvuur_knuffelmeer_3` | -128, 106, -2458 |
@@ -267,7 +270,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridder_galmhellingen_2` | 144, 103, -2260 |
 | `ridder_galmhellingen_3` | 210, 144, -2426 |
 | `ridder_galmhellingen_4` | 234, 125, -2294 |
-| `ridder_kandijkom_dok_1` | -7, 91, -2260 |
+| `ridder_kandijkom_dok_1` | -7, 92, -2260 |
 | `ridder_knuffelmeer_1` | -98, 100, -2328 |
 | `ridder_knuffelmeer_2` | -234, 104, -2340 |
 | `ridder_knuffelmeer_3` | -126, 106, -2456 |
@@ -333,16 +336,16 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `boortoren_2_top` | 60, 152, -2572 |
 | `boortoren_3` | 204, 144, -2522 |
 | `boortoren_3_top` | 204, 164, -2522 |
-| `brug_1_noord` | -190, 135, -2566 |
-| `brug_1_zuid` | -190, 120, -2522 |
-| `brug_2_noord` | -100, 131, -2572 |
-| `brug_2_zuid` | -100, 122, -2530 |
-| `brug_3_noord` | 150, 137, -2562 |
-| `brug_3_zuid` | 150, 127, -2526 |
-| `brug_4_noord` | 40, 135, -2565 |
-| `brug_4_zuid` | 40, 121, -2526 |
-| `brug_5_noord` | 124, 124, -2514 |
-| `brug_5_zuid` | 99, 122, -2514 |
+| `brug_1_noord` | -190, 137, -2564 |
+| `brug_1_zuid` | -190, 123, -2524 |
+| `brug_2_noord` | -100, 131, -2570 |
+| `brug_2_zuid` | -100, 123, -2532 |
+| `brug_3_noord` | 150, 137, -2560 |
+| `brug_3_zuid` | 150, 129, -2528 |
+| `brug_4_noord` | 40, 131, -2563 |
+| `brug_4_zuid` | 40, 122, -2528 |
+| `brug_5_noord` | 122, 124, -2514 |
+| `brug_5_zuid` | 101, 122, -2514 |
 | `kloof_bodem_1` | -216, 66, -2541 |
 | `kloof_bodem_10` | 108, 65, -2548 |
 | `kloof_bodem_11` | 144, 65, -2545 |
@@ -446,7 +449,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_sneeuwbal_1` | -10, 91, -2396 |
 | `npcplek.z2_sneeuwbal_2` | -4, 91, -2392 |
 | `npcplek.z2_sneeuwpop` | 24, 96, -2368 |
-| `npcplek.z2_touwtje` | 153, 127, -2526 |
+| `npcplek.z2_touwtje` | 153, 129, -2528 |
 | `npcplek.z2_uitvinder` | -44, 101, -2429 |
 | `npcplek.z2_versteend_ijsje` | -186, 88, -2392 |
 | `npcplek.z2_versteend_pluk` | -204, 85, -2370 |
@@ -454,7 +457,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_versteend_zwier` | -172, 85, -2378 |
 | `npcplek.z2_vlokje` | -9, 91, -2383 |
 | `npcplek.z2_wacht_burcht` | 164, 160, -2588 |
-| `npcplek.z2_wacht_dok` | -7, 91, -2260 |
+| `npcplek.z2_wacht_dok` | -7, 92, -2260 |
 | `npcplek.z2_wacht_galm_1` | 112, 100, -2388 |
 | `npcplek.z2_wacht_galm_2` | 144, 103, -2260 |
 | `npcplek.z2_wacht_galm_3` | 210, 144, -2426 |
@@ -473,9 +476,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_wapenhandelaar` | 23, 91, -2424 |
 | `npcplek.z2_winterslaap` | -21, 96, -2432 |
 | `opening_naald` | 46, 145, -2344 |
-| `poiplek.z2_brug_1` | 150, 127, -2526 |
-| `poiplek.z2_brug_2` | -100, 122, -2530 |
-| `poiplek.z2_brug_3` | -190, 120, -2522 |
+| `poiplek.z2_brug_1` | 150, 129, -2528 |
+| `poiplek.z2_brug_2` | -100, 123, -2532 |
+| `poiplek.z2_brug_3` | -190, 123, -2524 |
 | `poiplek.z2_lawinepad` | 160, 124, -2428 |
 | `poiplek.z2_meer_scheur` | -170, 85, -2432 |
 | `poiplek.z2_uitkijk_poollicht` | -88, 170, -2700 |
