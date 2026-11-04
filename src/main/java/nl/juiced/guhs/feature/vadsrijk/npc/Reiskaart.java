@@ -34,6 +34,9 @@ public final class Reiskaart {
 
     /** Where the player is now: the camp island, zone 1's mainland or zone 2. */
     public static String hier(ServerPlayer p) {
+        if (!Vadsrijk.in(p)) {
+            return "";   // (g-int: outside the dimension you are at none of them; a gametest far at z -7M looked like zone 2)
+        }
         return QuestStap.zone2(p.getZ()) ? "kandijkom" : QuestStap.eiland(p.getX(), p.getZ()) ? "knuffelkamp" : "zwamzoet";
     }
 
