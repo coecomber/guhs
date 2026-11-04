@@ -60,7 +60,17 @@ def main(uit):
     S.set(lx - 2, ly - 6, lz - 2, "minecraft:chest[facing=south,type=single,waterlogged=false]")
     S.set(lx - 3, ly - 5, lz - 3, "minecraft:lantern[hanging=false,waterlogged=false]")
     poi["geheim_vuurtorenkelder"] = w(lx - 2, ly - 6, lz - 2)
-    poi["vuurtoren_top"] = w(lx, ly + 32, lz)
+    # integration (fix round 1): a ladder up the inside of the tower to the gallery (kamp.vuurtoren: tower floor ly, walls
+    # k 1..30, gallery floor ly + 31 with the glass light room at d 2.2..3.3). Ladder at (lx, lz - 2) on a pillar at
+    # (lx, lz - 3), through the gallery floor, then a doorway north through the glass ring onto the gallery.
+    for y in range(ly + 1, ly + 31):
+        S.set(lx, y, lz - 3, ROZESTEEN)
+    for y in range(ly + 1, ly + 32):
+        S.set(lx, y, lz - 2, "minecraft:ladder[facing=south,waterlogged=false]")
+    for y in (ly + 32, ly + 33):
+        S.set(lx, y, lz - 2, "minecraft:air")
+        S.set(lx, y, lz - 3, "minecraft:air")
+    poi["vuurtoren_top"] = w(lx, ly + 32, lz - 5)
     # dock + airship
     z0 = KP.STEIGER_Z
     kx = max(x for x in range(I.X) if I.H[x, z0] >= 0)

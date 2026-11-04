@@ -55,6 +55,40 @@ def haven(S):
     for (bx, bz) in ((92, 228), (152, 236), (70, 240)):
         Z.bootje(S, bx, bz)
     Z.vuurtoren(S, 34, 234)
+    zwemtrappen(S)
+
+
+ZEE_LOKAAL = 62 - OY          # the global sea's water top (kaart.ZEE) in scene y
+
+
+def zwemtrap(S, x, z, uit, y_top=G, y_bodem=2, steun="minecraft:cherry_log[axis=y]"):
+    """Scene-coordinate twin of bouwsels.zwemtrap: a ladder out of the bay in column (x, z) up to the deck/quay floor
+    y_top, hanging on the support column (x, z) - uit (filled solid below the deck), headroom carved above."""
+    f = {(1, 0): "east", (-1, 0): "west", (0, 1): "south", (0, -1): "north"}[uit]
+    sx, sz = x - uit[0], z - uit[1]
+    for y in range(y_bodem, y_top):
+        if S.get(sx, y, sz) in ("minecraft:air", "minecraft:cave_air"):
+            S.set(sx, y, sz, steun)
+    for y in range(y_bodem, y_top + 1):
+        S.set(x, y, z, f"minecraft:ladder[facing={f},waterlogged={'true' if y <= ZEE_LOKAAL else 'false'}]")
+    for y in (y_top + 1, y_top + 2):
+        S.set(x, y, z, "minecraft:cave_air")
+        S.set(sx, y, sz, "minecraft:cave_air")
+
+
+def zwemtrappen(S):
+    """Ways out of the bay (fix round 1): ladders at the end and on both sides of the two jetties, and every ~14 blocks
+    up the fenced quay (the fence/lantern above the ladder is cleared)."""
+    for px in (84, 160):
+        zwemtrap(S, px, 246, (0, 1))
+        for z in (222, 234):
+            zwemtrap(S, px - 2, z + 1, (-1, 0))
+            zwemtrap(S, px + 2, z + 1, (1, 0))
+    for x in range(38, 236, 14):
+        if any(abs(x - px) <= 4 for px in (84, 160)) or abs(x - 34) <= 9:
+            continue
+        kust = 216 + int(3 * math.sin(x * 0.05))
+        zwemtrap(S, x, kust + 1, (0, 1))
 
 
 def lift(S, naam, hoek, zw):
