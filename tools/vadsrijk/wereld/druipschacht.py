@@ -201,7 +201,7 @@ def bouw(W, K, P):
     for (x, z, L) in rails:
         if any((x, z, L2) in lanen for L2 in range(L - 3, L + 4)):
             continue
-        B.reling(x, z, L, STEEN, lamp=(x * 3 + z * 7) % 17 == 0)
+        B.reling(x, z, L, STEEN, lamp=(x * 3 + z * 7) % 7 == 0)
         B.set(x, (L - 1) // 2 - 1, z, "minecraft:cobbled_deepslate", keep=True)
     # the tunnel (3 wide, carved 4 high, deck follows from the node floor to the ledge)
     tunnel = []
@@ -273,17 +273,21 @@ def bouw(W, K, P):
             if q in binnen or B.get(*q) is not None:
                 continue
             r = rng.random()
-            if r < 0.08:
+            if r < 0.025:
+                B.set(*q, rng.choice(["minecraft:ochre_froglight[axis=y]", "minecraft:pearlescent_froglight[axis=y]",
+                                      "minecraft:shroomlight", "guh_kristal_blok"]))
+            elif r < 0.09:
                 B.set(*q, rng.choice(["minecraft:amethyst_block", "guh_kristal_blok", "minecraft:calcite", "minecraft:budding_amethyst"]))
             elif r < 0.11 and B.get(x, y, z) is None and B.get(x, y - 1, z) is None and (x, y, z) not in B.c - binnen:
                 B.set(x, y, z, f"minecraft:amethyst_cluster[facing={fac},waterlogged=false]", keep=True)
     # invisible light in the void + a few crystal clusters on the lake shore
-    for y in range(vloer + 4, top - 4, 8):
-        for a in range(0, 360, 120):
-            x = int(round(cx + 4 * math.cos(math.radians(a + y * 7))))
-            z = int(round(cz + 4 * math.sin(math.radians(a + y * 7))))
-            if B.get(x, y, z) is None:
-                B.set(x, y, z, "minecraft:light[level=12,waterlogged=false]")
+    for y in range(vloer + 3, top - 4, 5):
+        for a in range(0, 360, 72):
+            for rr in (3.5, 8.5):
+                x = int(round(cx + rr * math.cos(math.radians(a + y * 7 + rr * 20))))
+                z = int(round(cz + rr * math.sin(math.radians(a + y * 7 + rr * 20))))
+                if B.get(x, y, z) is None and (x, y, z) in binnen:
+                    B.set(x, y, z, "minecraft:light[level=15,waterlogged=false]")
     for k in range(10):
         a = k * 0.63
         x, z = int(round(cx + (MEER_R + 1.5) * math.cos(a))), int(round(cz + (MEER_R + 1.5) * math.sin(a)))

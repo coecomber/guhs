@@ -12,16 +12,18 @@ wait 120
 waitrender 400
 
 section hoed_onder
-/tp @s -350 72 180
-look 200 -55
+/gamemode spectator
+/tp @s -335 82 100
+look 10 -28
 wait 80
 waitrender 400
 shot v_hoed_onder gui
-/guhs vadsrijk wereld plek hoedenpad_trap_wenteltrap
-look 225 -40
+/tp @s -352 74 168
+look 120 -35
 wait 60
 waitrender 300
 shot v_wenteltrap_voet gui
+/gamemode creative
 /tp @s -326 80 134
 look 270 -25
 wait 80
@@ -34,11 +36,18 @@ waitrender 300
 shot v_holle_steel_voet gui
 
 section hoed_boven
-/tp @s -290 140 265
-look 135 25
+/gamemode spectator
+/tp @s -270 145 275
+look 135 28
 wait 80
 waitrender 400
 shot v_hoed_overzicht gui
+/tp @s -350 100 185
+look 0 -15
+wait 60
+waitrender 300
+shot v_hoed_tussen gui
+/gamemode creative
 /guhs vadsrijk wereld plek hoedenpad_uitkijkhut_2
 look 0 15
 wait 60
@@ -60,7 +69,7 @@ wait 60
 waitrender 200
 shot v_hoedenschat gui
 /guhs vadsrijk wereld plek hoedenpad_top_wenteltrap
-look 90 15
+look 270 15
 wait 60
 waitrender 200
 shot v_wenteltrap_top gui
@@ -72,15 +81,27 @@ wait 80
 waitrender 300
 shot v_schacht_ingang gui
 /guhs vadsrijk wereld plek druipschacht_balkon
-look 329 50
+look 329 20
+wait 60
+waitrender 300
+shot v_schacht_balkon gui
+/gamemode spectator
+/tp @s -498 106 -474
+look 0 90
 wait 60
 waitrender 300
 shot v_schacht_boven gui
-/guhs vadsrijk wereld plek druipschacht_bodem
-look 354 -60
+/tp @s -498 34 -474
+look 0 -90
 wait 60
 waitrender 300
 shot v_schacht_onder gui
+/gamemode creative
+/guhs vadsrijk wereld plek druipschacht_bodem
+look 354 -35
+wait 60
+waitrender 300
+shot v_schacht_oever gui
 /guhs vadsrijk wereld plek druipschacht_richel_2
 look 60 20
 wait 60

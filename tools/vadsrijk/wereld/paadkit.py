@@ -96,7 +96,7 @@ class Bouw:
         nieuw = {}
         for (x, y, z), s in self.b.items():
             naam = s.split("[")[0]
-            hek = naam.endswith(HEK_FAM)
+            hek = naam.endswith(HEK_FAM + ("glass_pane",))
             muur = naam.endswith(MUUR_FAM)
             if not (hek or muur):
                 continue
@@ -107,7 +107,7 @@ class Bouw:
                     con[d] = False
                     continue
                 on = o.split("[")[0]
-                con[d] = on.endswith(HEK_FAM + MUUR_FAM) or vol_blok(o)
+                con[d] = on.endswith(HEK_FAM + MUUR_FAM + ("glass_pane",)) or vol_blok(o)
             if hek:
                 props = ",".join(f"{d}={'true' if con[d] else 'false'}" for d in dirs)
                 nieuw[(x, y, z)] = f"{naam}[{props},waterlogged=false]"
