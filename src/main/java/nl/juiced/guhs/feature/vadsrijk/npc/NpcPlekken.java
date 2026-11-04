@@ -154,6 +154,11 @@ public final class NpcPlekken {
         POI.put("uitkijk_druipspits", w("uitkijk_druipspits"));
         POI.put("uitkijk_haventand", w("uitkijk_haventand"));
         POI.put("uitkijk_slijmnaald", w("uitkijk_slijmnaald"));
+        // (fix round 2, g-werver) "Het Knuffelhert": three lanterns at the Sporenwoud's light beams, the deer's glade at a fourth
+        POI.put("hert_lantaarn_1", w("lichtstralen.3"));
+        POI.put("hert_lantaarn_2", w("lichtstralen.1"));
+        POI.put("hert_lantaarn_3", w("lichtstralen.2"));
+        POI.put("hert_open_plek", w("lichtstralen.4"));
     }
     // ---- quest tracker targets (fix round 1: the tracker + beam point here; texts vadsrijk.npc.plek.*) -------------------------
     /** Where the tracker points for "go to / cheer up in area x" (a campfire or the entrance of the area). */

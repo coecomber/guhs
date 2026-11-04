@@ -312,6 +312,7 @@ public final class Verhaal {
                     if (t >= 280) {
                         it.remove();
                         p.sendSystemMessage(Component.translatable("vadsrijk.npc.opening.welkom").withStyle(ChatFormatting.LIGHT_PURPLE));
+                        nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, Werver.TIP);   // (fix round 2: the view distance advice)
                     }
                 }
                 case "bam" -> {

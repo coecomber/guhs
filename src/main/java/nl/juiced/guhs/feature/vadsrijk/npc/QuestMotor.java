@@ -203,7 +203,7 @@ public final class QuestMotor {
         return false;
     }
 
-    private static void open(ServerPlayer p, Entity npc, List<Praat.Regel> regels, Gesprek g, Praat.Optie... opties) {
+    static void open(ServerPlayer p, @Nullable Entity npc, List<Praat.Regel> regels, Gesprek g, Praat.Optie... opties) {
         LOPEND.put(p.getUUID(), g);
         Praat.scene(p, SLEUTEL, regels, opties);
     }

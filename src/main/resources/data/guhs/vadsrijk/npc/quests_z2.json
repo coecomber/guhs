@@ -893,6 +893,59 @@
       "auto": false
     },
     {
+      "id": "z2_rijdier_guhwolf",
+      "soort": "rijdier",
+      "gever": "z2_breister",
+      "inleveren": "z2_breister",
+      "lv": 22,
+      "na": [
+        "z2_hq02_kandijkom",
+        "@rijdier"
+      ],
+      "doelen": [
+        {
+          "soort": "gebied",
+          "doel": "poi:z2_wolfje",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0,
+          "plek": "poi:z2_wolfje"
+        },
+        {
+          "soort": "opvrolijk",
+          "doel": "gebied:z2_splinterkloof",
+          "n": 5,
+          "bron": "",
+          "kans": 0.0,
+          "plek": "gebied:z2_splinterkloof"
+        }
+      ],
+      "beloning": {
+        "xp": 6000,
+        "munten": 3000,
+        "items": [],
+        "wapen": false,
+        "loot": ""
+      },
+      "aanbod": [
+        "npc",
+        "npc",
+        "jij",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "verteller",
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "",
+      "actie_klaar": "rijdier_geef:guhwolf",
+      "start_items": [],
+      "auto": false
+    },
+    {
       "id": "z2_s23_gondel",
       "soort": "zij",
       "gever": "z2_gondelier",

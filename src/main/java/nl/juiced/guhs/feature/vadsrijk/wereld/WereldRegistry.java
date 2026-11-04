@@ -216,6 +216,7 @@ public final class WereldRegistry {
             ServerPlayer p = c.getSource().getPlayerOrException();
             nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).gezien.remove(Portalen.ONTWAAKT);
             nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).gezien.remove(Portalen.BINNEN_GEWEEST);
+            nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).gezien.remove(nl.juiced.guhs.feature.vadsrijk.npc.Werver.GESPROKEN);
             return 1;
         }));
         event.getDispatcher().register(VadsrijkCommando.wortel(w));

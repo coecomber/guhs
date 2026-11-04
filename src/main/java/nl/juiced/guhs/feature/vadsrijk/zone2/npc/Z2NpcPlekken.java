@@ -171,6 +171,7 @@ public final class Z2NpcPlekken {
         POI.put("z2_kampvuur_galm", w("kampvuur_galmhellingen_1", 232, 99, -2330));           // POI:kampvuur_galmhellingen_1
         POI.put("z2_kampvuur_meer", w("kampvuur_knuffelmeer_1", -200, 89, -2120));          // POI:kampvuur_knuffelmeer_1
         POI.put("z2_kampvuur_kloof", w("kampvuur_splinterkloof_3", 24, 132, -2730));          // POI:kampvuur_splinterkloof_3
+        POI.put("z2_wolfje", w("kloof_trap_2", -109, 65, -2766));          // POI:kloof_trap_2 (fix round 2, g-werver: the lost Guhwolf pup)
         volgKaart(POI, "poiplek.");
     }
     /** Horizontal radius / vertical tolerance for "you are there" (as zone 1); the high needles/lookouts get more height. */

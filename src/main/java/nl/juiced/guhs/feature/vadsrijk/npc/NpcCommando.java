@@ -44,6 +44,12 @@ public final class NpcCommando {
             c.getSource().sendSuccess(() -> Component.literal("zone1_klaar=" + NpcApi.zone1Klaar(p) + " quests=" + Quests.alle().size()), false);
             return 1;
         }));
+        // (fix round 2, g-werver) Werver Wimpel right here (any dimension), or forget that you talked to him
+        npc.then(Commands.literal("werver").executes(c -> Werver.zetHier(c.getSource().getPlayerOrException()) == null ? 0 : 1)
+                .then(Commands.literal("vergeet").executes(c -> {
+                    Werver.gesproken(c.getSource().getPlayerOrException(), false);
+                    return 1;
+                })));
         npc.then(Commands.literal("quest")
                 .then(Commands.literal("start").then(questArg().executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
