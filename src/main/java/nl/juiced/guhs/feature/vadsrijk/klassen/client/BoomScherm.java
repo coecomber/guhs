@@ -279,20 +279,35 @@ public final class BoomScherm extends Screen {
             }
         } else {
             g.text(font, Component.translatable("vadsrijk.klassen.scherm.skills").withStyle(ChatFormatting.BOLD), rx, top + 38, GOUD, false);
-            String[] toets = {"R", "V", "G", "Z"};
+            // fix round 2 (g-ui): each skill with its icon; hover = the full skill info with the tree improvements
+            String[] toets = {"R", "V", "G", "Z", "C"};
             int y = top + 50;
             List<Vaardigheid> vs = k.vaardigheden();
+            List<String> ids = new ArrayList<>();
+            List<String> namen = new ArrayList<>();
             for (int i = 0; i < vs.size() && i < 4; i++) {
-                Vaardigheid v = vs.get(i);
-                g.fill(rx, y, rx + 14, y + 12, i == 3 ? GOUD : ROZE);
-                g.centeredText(font, toets[i], rx + 7, y + 2, 0xFF2A1022);
-                g.text(font, Component.translatable(v.naamKey()), rx + 18, y + 2, 0xFFFFFFFF, false);
-                if (mx >= rx && mx < rx + rw && my >= y && my < y + 12) {
-                    tip = new ArrayList<>();
-                    tip.add(Component.translatable(v.naamKey()).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
-                    tip.addAll(regels("vadsrijk.klassen.skilluitleg." + v.id(), ChatFormatting.WHITE));
+                ids.add(vs.get(i).id());
+                namen.add(vs.get(i).naamKey());
+            }
+            ids.add(nl.juiced.guhs.feature.vadsrijk.kern.Knuffelsprong.ID);
+            namen.add("vadsrijk.kern.skill.knuffelsprong");
+            for (int i = 0; i < ids.size(); i++) {
+                int slot = i < ids.size() - 1 ? i : 4;
+                boolean hover = mx >= rx && mx < rx + rw && my >= y - 1 && my < y + 17;
+                if (hover) {
+                    g.fill(rx - 2, y - 2, rx + rw, y + 18, 0x40FFC2E8);
                 }
-                y += 16;
+                g.fill(rx, y + 1, rx + 12, y + 15, slot == 3 ? GOUD : slot == 4 ? 0xFF8FD4FF : ROZE);
+                g.centeredText(font, toets[slot], rx + 6, y + 4, 0xFF2A1022);
+                Identifier ic = nl.juiced.guhs.feature.vadsrijk.kern.client.RijkHud.skillIcoon(ids.get(i));
+                if (ic != null) {
+                    nl.juiced.guhs.feature.vadsrijk.kern.client.RijkHud.tekenIcoon(g, ic, rx + 14, y, 16);
+                }
+                g.text(font, Component.translatable(namen.get(i)), rx + 34, y + 4, 0xFFFFFFFF, false);
+                if (hover) {
+                    tip = SkillInfo.tip(ids.get(i), slot, font, heeft::contains);
+                }
+                y += 19;
             }
             int yy = y + 6;
             for (var l : font.split(Component.translatable("vadsrijk.klassen.scherm.ordetempel"), rw)) {
@@ -323,6 +338,7 @@ public final class BoomScherm extends Screen {
         List<Component> l = new ArrayList<>();
         l.add(Component.translatable(b.naamKey()).withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
         l.add(Component.translatable("vadsrijk.klassen.scherm.kost", b.kosten()).withStyle(ChatFormatting.GOLD));
+        l.addAll(SkillInfo.verbetert(b));   // fix round 2 (g-ui)
         if (b.bonus() != null) {
             b.bonus().alles().forEach((st, v) -> l.add(Component.literal((st.procent ? String.format(java.util.Locale.ROOT, "+%.0f%% ", v)
                     : String.format(java.util.Locale.ROOT, "+%.0f ", v))).withStyle(ChatFormatting.GREEN)

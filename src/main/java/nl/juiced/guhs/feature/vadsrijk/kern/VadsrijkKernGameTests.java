@@ -275,4 +275,44 @@ public class VadsrijkKernGameTests {
         }
         helper.succeed();
     }
+
+    /** (fix round 2, g-ui) Shift-click on jewellery: into its slot, swap with the worn one, level gate, only jewellery, and off again. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void sieraadShiftKlik(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        var RING = nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING;
+        Inventory inv = p.getInventory();
+        BasisType ring = BasisTypes.van("roze_ring");
+        try {
+            ItemStack a = Rollen.stack(Rollen.rol(ring, 1, Zeldzaamheid.GEWOON, RandomSource.create(3)));
+            ItemStack b = Rollen.stack(Rollen.rol(ring, 1, Zeldzaamheid.ZELDZAAM, RandomSource.create(4)));
+            inv.setItem(5, a.copy());
+            helper.assertTrue(Sieraden.wisselMetInventaris(p, 5), "shift-click wears the ring");
+            helper.assertTrue(inv.getItem(5).isEmpty(), "the ring left the inventory slot");
+            helper.assertTrue(ItemStack.isSameItemSameComponents(Sieraden.get(p, RING), a), "the ring is worn");
+            inv.setItem(7, b.copy());
+            helper.assertTrue(Sieraden.wisselMetInventaris(p, 7), "a second ring swaps");
+            helper.assertTrue(ItemStack.isSameItemSameComponents(Sieraden.get(p, RING), b), "the new ring is worn");
+            helper.assertTrue(ItemStack.isSameItemSameComponents(inv.getItem(7), a), "the old ring took its inventory slot");
+            ItemStack hoog = Rollen.stack(Rollen.rol(ring, 9, Zeldzaamheid.GEWOON, RandomSource.create(5)));
+            inv.setItem(8, hoog.copy());
+            helper.assertFalse(Sieraden.wisselMetInventaris(p, 8), "a level 9 ring is refused at level 1");
+            helper.assertTrue(ItemStack.isSameItemSameComponents(inv.getItem(8), hoog), "and stays in the inventory");
+            inv.setItem(9, new ItemStack(Items.COBBLESTONE, 3));
+            helper.assertFalse(Sieraden.wisselMetInventaris(p, 9), "cobblestone is no jewellery");
+            helper.assertTrue(inv.getItem(9).getCount() == 3, "cobblestone untouched");
+            helper.assertFalse(Sieraden.wisselMetInventaris(p, 40), "an index outside the 36 slots does nothing");
+            inv.clearContent();
+            helper.assertTrue(Sieraden.afZonderCheck(p, RING), "clicking the worn slot takes it off");
+            helper.assertTrue(Sieraden.get(p, RING).isEmpty(), "nothing worn any more");
+            boolean terug = false;
+            for (int i = 0; i < Inventory.INVENTORY_SIZE; i++) {
+                terug |= ItemStack.isSameItemSameComponents(inv.getItem(i), b);
+            }
+            helper.assertTrue(terug, "the ring is back in the inventory");
+        } finally {
+            Sieraden.zet(p, RING, ItemStack.EMPTY);
+        }
+        helper.succeed();
+    }
 }

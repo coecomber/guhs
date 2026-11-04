@@ -241,6 +241,7 @@ public final class WezensClient {
         int waar = Math.max(1, t.size() - 1);
         t.add(waar++, Component.translatable("vadsrijk.wezens.set.stukken", Component.translatable("vadsrijk.wezens.set." + set), n)
                 .withStyle(ChatFormatting.GOLD));
+        t.add(waar++, nl.juiced.guhs.feature.vadsrijk.client.UitrustingTips.stukken((SetBonussen.KLODDER.equals(set) ? SetBonussen.KLODDERSET : SetBonussen.ZWAMSET), p));   // fix round 2 (g-ui)
         t.add(waar++, Component.translatable("vadsrijk.wezens.set." + set + ".2").withStyle(n >= 2 ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
         t.add(waar, Component.translatable("vadsrijk.wezens.set." + set + ".4").withStyle(n >= 4 ? ChatFormatting.GREEN : ChatFormatting.DARK_GRAY));
     }

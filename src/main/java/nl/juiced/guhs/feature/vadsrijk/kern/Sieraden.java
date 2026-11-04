@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen;
@@ -20,7 +21,8 @@ import nl.juiced.guhs.storage.Nbt;
 /**
  * Jewellery (RING, KETTING, OORBEL): there are no vanilla slots for them, so they live in the player data
  * ({@link SpelerData#sieraden}, raw item tags, Vadsrijk only: they never touch the live inventory, so the inventory swap can't lose
- * them). Put one on: right-click it in the dimension (the one you wore goes into your hand). Take one off: click its slot
+ * them). Put one on: right-click it in the dimension (the one you wore goes into your hand), or shift-click it in the
+ * inventory ({@link #draagUitInventaris}: into its slot, swapping with the worn one). Take one off: click (or shift-click) its slot
  * next to the inventory screen. {@link Spelers#stats} counts them (level requirement as for all gear).
  */
 public final class Sieraden {
@@ -78,26 +80,74 @@ public final class Sieraden {
         return true;
     }
 
+    /** (fix round 2) Shift-click on a piece of jewellery in the inventory: wear it (dimension only). */
+    public static boolean draagUitInventaris(ServerPlayer p, int index) {
+        return Vadsrijk.in(p) && wisselMetInventaris(p, index);
+    }
+
+    /**
+     * The shift-click logic without the dimension check (gametest): the piece in inventory slot {@code index} (0..35) goes
+     * into its jewellery slot; a piece that was worn there goes back into that inventory slot. Returns whether it moved.
+     */
+    static boolean wisselMetInventaris(ServerPlayer p, int index) {
+        Inventory inv = p.getInventory();
+        if (index < 0 || index >= Inventory.INVENTORY_SIZE) {
+            return false;
+        }
+        ItemStack s = inv.getItem(index);
+        Uitrusting u = Rollen.van(s);
+        BasisType t = u == null ? null : u.basisType();
+        if (t == null || !t.slot().sieraad()) {
+            return false;
+        }
+        if (u.level() > Spelers.level(p)) {
+            p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.te_hoog", u.level()).withStyle(ChatFormatting.GRAY));
+            return false;
+        }
+        ItemStack oud = get(p, t.slot());
+        zet(p, t.slot(), s.copyWithCount(1));
+        s.shrink(1);
+        if (s.isEmpty()) {
+            inv.setItem(index, oud.isEmpty() ? ItemStack.EMPTY : oud.copy());
+        } else if (!oud.isEmpty() && !inv.add(oud.copy())) {
+            p.drop(oud.copy(), false);
+        }
+        inv.setChanged();
+        p.level().playSound(null, p.blockPosition(), SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.PLAYERS, 1f, 1.3f);
+        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.om", get(p, t.slot()).getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        stuur(p);
+        Spelers.sync(p);
+        return true;
+    }
+
     /** Take a piece off (into the inventory; stays on when the inventory is full). */
     public static void af(ServerPlayer p, Slot slot) {
-        if (!slot.sieraad() || !Vadsrijk.in(p)) {
-            return;
+        if (Vadsrijk.in(p)) {
+            afZonderCheck(p, slot);
+        }
+    }
+
+    /** {@link #af} without the dimension check (gametest). Returns whether it came off. */
+    static boolean afZonderCheck(ServerPlayer p, Slot slot) {
+        if (!slot.sieraad()) {
+            return false;
         }
         ItemStack s = get(p, slot);
         if (s.isEmpty()) {
-            return;
+            return false;
         }
         ItemStack kopie = s.copy();
         if (!p.getInventory().add(kopie) || !kopie.isEmpty()) {
             if (kopie.getCount() == s.getCount()) {
                 p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.vol").withStyle(ChatFormatting.GRAY));
-                return;
+                return false;
             }
         }
         zet(p, slot, ItemStack.EMPTY);
         p.level().playSound(null, p.blockPosition(), SoundEvents.ARMOR_EQUIP_GENERIC.value(), SoundSource.PLAYERS, 1f, 1.1f);
         stuur(p);
         Spelers.sync(p);
+        return true;
     }
 
     /** The worn pieces to the client (for the slots next to the inventory screen). */

@@ -18,8 +18,10 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot;
 
 /**
  * The 3 jewellery slots (Ring, Ketting, Oorbel) as a small column on the right of the inventory screen, only in the dimension.
- * Hover = the item's tooltip; click = take it off (the server checks). Putting one on = right-click it with the item in hand.
- * (Right side: the Maagwand tongue already sits on the left.)
+ * Hover = the item's full tooltip; click = take it off (the server checks). Putting one on = right-click it with the item in hand,
+ * or shift-click it in the inventory ({@link KernPayloads.SieraadShift}). (Right side: the Maagwand tongue already sits on the left.)
+ * <p>Fix round 2: drawn in {@link ScreenEvent.Render.Foreground} (inside the screen's own render, before the deferred tooltip is
+ * drawn): a tooltip set from {@code Render.Post} came after the deferred elements and so never showed.
  */
 final class SieradenScherm {
     private static List<ItemStack> items = new ArrayList<>(List.of(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY));
@@ -30,9 +32,17 @@ final class SieradenScherm {
 
     static void init() {
         KernPayloads.sieradenOntvanger = s -> items = new ArrayList<>(s.items());
-        NeoForge.EVENT_BUS.addListener((ScreenEvent.Render.Post e) -> teken(e));
+        NeoForge.EVENT_BUS.addListener((ScreenEvent.Render.Foreground e) -> teken(e));
         NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre e) -> {
             if (!(e.getScreen() instanceof InventoryScreen s) || !binnen()) {
+                return;
+            }
+            // shift-click on a piece of jewellery in your inventory: wear it (like armour goes into its slot)
+            net.minecraft.world.inventory.Slot onder = s.getHoveredSlot();
+            if (e.getMouseButtonEvent().hasShiftDown() && onder != null && onder.container instanceof net.minecraft.world.entity.player.Inventory
+                    && onder.getContainerSlot() < net.minecraft.world.entity.player.Inventory.INVENTORY_SIZE && isSieraad(onder.getItem())) {
+                ClientPacketDistributor.sendToServer(new KernPayloads.SieraadShift(onder.getContainerSlot()));
+                e.setCanceled(true);
                 return;
             }
             int i = vak(s, e.getMouseX(), e.getMouseY());
@@ -47,17 +57,22 @@ final class SieradenScherm {
                 ItemStack.EMPTY)));
     }
 
+    private static boolean isSieraad(ItemStack s) {
+        var u = nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.van(s);
+        return u != null && u.basisType() != null && u.basisType().slot().sieraad();
+    }
+
     private static boolean binnen() {
         Minecraft mc = Minecraft.getInstance();
         return mc.player != null && Vadsrijk.in(mc.player);
     }
 
     private static int x(InventoryScreen s) {
-        return s.getGuiLeft() + 176 + 3;
+        return s.getLeftPos() + 176 + 3;
     }
 
     private static int y(InventoryScreen s, int i) {
-        return s.getGuiTop() + 8 + i * (MAAT + 2);
+        return s.getTopPos() + 8 + i * (MAAT + 2);
     }
 
     private static int vak(InventoryScreen s, double mx, double my) {
@@ -71,7 +86,7 @@ final class SieradenScherm {
         return -1;
     }
 
-    private static void teken(ScreenEvent.Render.Post e) {
+    private static void teken(ScreenEvent.Render.Foreground e) {
         if (!(e.getScreen() instanceof InventoryScreen s) || !binnen()) {
             return;
         }
@@ -96,7 +111,10 @@ final class SieradenScherm {
         if (hover >= 0) {
             ItemStack it = items.get(hover);
             if (!it.isEmpty()) {
-                g.setTooltipForNextFrame(Minecraft.getInstance().font, it, e.getMouseX(), e.getMouseY());
+                Minecraft mc = Minecraft.getInstance();
+                List<Component> regels = new ArrayList<>(net.minecraft.client.gui.screens.Screen.getTooltipFromItem(mc, it));
+                regels.add(Component.translatable("vadsrijk.kern.sieraad.klik_af").withStyle(net.minecraft.ChatFormatting.DARK_AQUA));
+                g.setTooltipForNextFrame(mc.font, regels, it.getTooltipImage(), it, e.getMouseX(), e.getMouseY());
             } else {
                 g.setTooltipForNextFrame(Minecraft.getInstance().font, Component.translatable("vadsrijk.kern.sieraad.leeg",
                         Component.translatable(Slot.SIERADEN[hover].key())), e.getMouseX(), e.getMouseY());
