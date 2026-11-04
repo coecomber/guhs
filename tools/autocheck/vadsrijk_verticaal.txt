@@ -1,0 +1,93 @@
+# Vadsrijk fix round "verticaal" (110-fix-verticaal): De Hoedenpaden (Sporenwoud) and De Druipschacht (Druipgrotten).
+#   gradle_slot.sh <worktree> runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_verticaal.txt
+# Coordinates without a plek id are from the current map build (hoedenpaden network round x -410..-290, z 125..240).
+
+section setup
+/gamemode creative
+/time set 6000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 120
+waitrender 400
+
+section hoed_onder
+/tp @s -350 72 180
+look 200 -55
+wait 80
+waitrender 400
+shot v_hoed_onder gui
+/guhs vadsrijk wereld plek hoedenpad_trap_wenteltrap
+look 225 -40
+wait 60
+waitrender 300
+shot v_wenteltrap_voet gui
+/tp @s -326 80 134
+look 270 -25
+wait 80
+waitrender 300
+shot v_wortelpad gui
+/guhs vadsrijk wereld plek hoedenpad_trap_holle_steel
+look 0 -10
+wait 60
+waitrender 300
+shot v_holle_steel_voet gui
+
+section hoed_boven
+/tp @s -290 140 265
+look 135 25
+wait 80
+waitrender 400
+shot v_hoed_overzicht gui
+/guhs vadsrijk wereld plek hoedenpad_uitkijkhut_2
+look 0 15
+wait 60
+waitrender 300
+shot v_uitkijkhut gui
+/guhs vadsrijk wereld plek hoedenpad_wezen_5
+look 30 10
+wait 60
+waitrender 300
+shot v_hoedbrug gui
+/guhs vadsrijk wereld plek hoedenpad_elitenest
+look 90 25
+wait 60
+waitrender 300
+shot v_elitenest gui
+/guhs vadsrijk wereld plek geheim_hoedenschat
+look 0 20
+wait 60
+waitrender 200
+shot v_hoedenschat gui
+/guhs vadsrijk wereld plek hoedenpad_top_wenteltrap
+look 90 15
+wait 60
+waitrender 200
+shot v_wenteltrap_top gui
+
+section schacht
+/guhs vadsrijk wereld plek druipschacht_ingang
+look 97 5
+wait 80
+waitrender 300
+shot v_schacht_ingang gui
+/guhs vadsrijk wereld plek druipschacht_balkon
+look 329 50
+wait 60
+waitrender 300
+shot v_schacht_boven gui
+/guhs vadsrijk wereld plek druipschacht_bodem
+look 354 -60
+wait 60
+waitrender 300
+shot v_schacht_onder gui
+/guhs vadsrijk wereld plek druipschacht_richel_2
+look 60 20
+wait 60
+waitrender 300
+shot v_schacht_richel gui
+/guhs vadsrijk wereld plek druipschacht_lichtschacht
+look 0 80
+wait 60
+waitrender 300
+shot v_lichtschacht gui

@@ -1112,6 +1112,8 @@ def bouw_alles(W, K, kamp_d):
     kamp_zuidsteiger(W, K, P, kamp_d)
     grotten(W, K, P)
     sporenwoud(W, K, P)
+    __import__("hoedenpaden").bouw(W, K, P)  # verticaal: De Hoedenpaden (wereld/hoedenpaden.py)
+    __import__("druipschacht").bouw(W, K, P)  # verticaal: De Druipschacht (wereld/druipschacht.py)
     randwolken(W, K, P)
     terugportalen(W, K, P)
     decoratie(W, K, P)
