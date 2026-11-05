@@ -47,3 +47,9 @@ or the whole `vadsrijk_z3_bazen_modellen.py`. Both are deterministic.
   A proper fold with these feather wings looked messy. Check in the client whether that works in the arena.
 - The model is about 10 model px taller than the old one (feet at y=0, body at y 9-27). The boss hitbox is unchanged.
 - The n-extra critters can reuse `vahoegje.geo.json` / `vahoegje.png` if they want a pink baby dragon.
+
+## Tests
+- `-Pgt=VadsrijkWezensGameTests,VadsrijkZ3BazenGameTests,Z3NpcGameTests`: everything passed except `grotSpawnerVindtDeVloer`.
+  That is the known order-dependent flake (see NOTITIES_J_INT.md). Run alone, `-Pgt=VadsrijkWezensGameTests` gives **7/7 passed**.
+- No AutoCheck/client run. Instead, the offline check renders in `renders-draak/controle_ingame/` were made from the jar assets.
+  The look in the dev client (animation feel, boss arena) is still to be checked by the user.
