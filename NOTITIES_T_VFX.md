@@ -114,3 +114,11 @@ zones 1-3 upgraded with decal telegraphs, new particles, generic animations and 
   cheer-up and their profile attacks. Adding `BaasVfx.windup/cast(this, ...)` next to their Telegraaf calls is a 1-line job each.
 - Vahoeg mode does not shorten bouwdoos telegraphs (Z3Baas.tg) - could be added in `Bouwdoos.leg` for Z3Baas.
 - Sound: bouwdoos uses vanilla sounds (ravager roar / evoker prepare / shield break); the t-geluid slice may want own stingers.
+
+## Test results
+- `-Pgt=VadsrijkVfx,VadsrijkBazen,VadsrijkZ2Bazen,VadsrijkZ3Bazen,VadsrijkBeleving` (head ff8600ecb): 27 tests, 26 passed, all 5
+  VadsrijkVfx passed. Failed: `VadsrijkBazenGevechtTests.koningVecht` ("came at the player at range", closest 10): the known
+  load-flaky boss-timing test (see NOTITIES_J_INT run 2); BaasVfx.probeer does nothing on the gametest server, so the Koning's
+  behaviour there is unchanged. Rerun of `-Pgt=VadsrijkBazenGevecht`: see below.
+- No AutoCheck client run (machine busy with many gradle agents; the visuals need the user's eyes anyway).
+- Rerun `-Pgt=VadsrijkBazenGevecht`: All 6 passed (koningVecht included): it was the load flake.
