@@ -71,6 +71,8 @@ public final class Puzzels {
     /** Live instances: the world ones by puzzle id, test ones by "test:..." ids. */
     private static final Map<String, Inst> INST = new ConcurrentHashMap<>();
     private static final Map<GlobalPos, Ref> INDEX = new ConcurrentHashMap<>();
+    /** The plate each player stood on last tick (a step counts once). */
+    private static final Map<UUID, BlockPos> OP_PLAAT = new ConcurrentHashMap<>();
     /** T-KLEDING etc.: called once when a player unlocks a cosmetic id (from a puzzle reward). */
     public static final List<BiConsumer<ServerPlayer, String>> ONTGRENDEL_HAAK = new CopyOnWriteArrayList<>();
     /** Dev/tests: treat it as night everywhere (star puzzles). */
@@ -721,11 +723,16 @@ public final class Puzzels {
         // plates: whoever stands on one (stepOn is not reliable for a 1-pixel plate)
         for (ServerPlayer p : server.getPlayerList().getPlayers()) {
             ServerLevel sl = (ServerLevel) p.level();
-            if ((sl == rijk || !INST.isEmpty()) && !p.isSpectator()) {
-                BlockPos voet = p.blockPosition();
-                if (sl.getBlockState(voet).getBlock() instanceof PuzzelBlok b && (b.soort.equals("drukplaat") || b.soort.equals("eindplaat"))) {
-                    stap(sl, voet, p);
+            if (INST.isEmpty() || p.isSpectator()) {
+                continue;
+            }
+            BlockPos voet = p.blockPosition();
+            if (sl.getBlockState(voet).getBlock() instanceof PuzzelBlok b && (b.soort.equals("drukplaat") || b.soort.equals("eindplaat"))) {
+                if (!voet.equals(OP_PLAAT.put(p.getUUID(), voet))) {
+                    stap(sl, voet, p);   // (only when stepping ON: standing still on a plate is one step, not one per tick)
                 }
+            } else {
+                OP_PLAAT.remove(p.getUUID());
             }
         }
     }

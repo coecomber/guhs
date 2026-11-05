@@ -7,7 +7,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -82,13 +81,5 @@ public class PuzzelBlok extends Block {
             Puzzels.klik(sl, pos, p);
         }
         return InteractionResult.SUCCESS;
-    }
-
-    @Override
-    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-        if ((soort.equals("drukplaat") || soort.equals("eindplaat")) && level instanceof ServerLevel sl && entity instanceof ServerPlayer p) {
-            Puzzels.stap(sl, pos, p);
-        }
-        super.stepOn(level, pos, state, entity);
     }
 }
