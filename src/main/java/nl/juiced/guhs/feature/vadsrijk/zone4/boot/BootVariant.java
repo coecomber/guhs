@@ -37,7 +37,7 @@ public enum BootVariant {
         }
 
         public BootVariant standaard() {
-            for (BootVariant v : values()) {   // (the "start" one of this axis)
+            for (BootVariant v : BootVariant.values()) {   // (the "start" one of this axis)
                 if (v.as == this && v.bron.equals("start")) {
                     return v;
                 }

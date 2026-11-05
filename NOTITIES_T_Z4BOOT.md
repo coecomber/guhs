@@ -72,7 +72,7 @@ Branch `110-t-z4boot` (vanaf dbf82899d). Code: `src/main/java/nl/juiced/guhs/fea
 ## Tests
 - `VadsrijkZ4BootGameTests` (batch `vadsrijk_z4boot`): zeilen, kringstroom, drijven (echt water), krijgenEnUiterlijk, welkRijdier,
   steigers, geenVreemdeBoten. Plus `VadsrijkRijdieren` (rooster aangepast).
-- Draaien: `-Pgt=VadsrijkZ4Boot,VadsrijkRijdieren`.
+- Draaien: `-Pgt=VadsrijkZ4Boot,VadsrijkRijdieren`: **14/14 groen** (2026-11-06 00:25).
 
 ## Open punten
 - Echte steigers + zee van zone 4 (t-z4wereld); daarna in de client: aanmeren op echte planken, Kringstroom aan de rand.
