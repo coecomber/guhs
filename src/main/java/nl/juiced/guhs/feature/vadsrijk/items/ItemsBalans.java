@@ -22,21 +22,21 @@ public final class ItemsBalans {
         STANDAARD.put("budget_cape", 0.60);
         // upgrade safety nets
         STANDAARD.put("pity_per_mislukking", 0.05);  // +5 % success chance per failed attempt in a row
-        STANDAARD.put("pity_tot_ster", 7);           // pity only helps on the way up to star 7 (attempts from 0..6)
-        STANDAARD.put("talisman_prijs", 150);        // brons + 15 x item level at the smid
-        STANDAARD.put("polijst_prijs", 25);          // brons + 6 x item level per polish
+        STANDAARD.put("pity_tot_ster", 7.0);           // pity only helps on the way up to star 7 (attempts from 0..6)
+        STANDAARD.put("talisman_prijs", 150.0);        // brons + 15 x item level at the smid
+        STANDAARD.put("polijst_prijs", 25.0);          // brons + 6 x item level per polish
         // Erfstukken
         STANDAARD.put("vertrouwd_per_level", 0.02);  // +2 % base stats and weapon damage per Vertrouwd level (max 5 = +10 %)
         STANDAARD.put("vertrouwd_xp_schaal", 1.0);   // x on the item xp per kill
-        STANDAARD.put("doorgroei_levels", 10);       // +10 item levels per doorgroei (one zone tier)
+        STANDAARD.put("doorgroei_levels", 10.0);       // +10 item levels per doorgroei (one zone tier)
         STANDAARD.put("doorgroei_roll", 0.95);       // the rolls land at 95 % of their old place in the new range
-        STANDAARD.put("doorgroei_prijs", 400);       // brons per new item level (x2 for Guhddelijk)
+        STANDAARD.put("doorgroei_prijs", 400.0);       // brons per new item level (x2 for Guhddelijk)
         STANDAARD.put("overvads_mislukking", 0.15);  // chance of a "lieve mislukking": the roll lands at 70 % of its place
-        STANDAARD.put("overvads_prijs", 300);        // brons + 20 x target level
+        STANDAARD.put("overvads_prijs", 300.0);        // brons + 20 x target level
         // the new stats
-        STANDAARD.put("negeren_max", 50);            // Verdediging negeren % is capped here
-        STANDAARD.put("effect_max", 40);             // Kans op effect % is capped here
-        STANDAARD.put("leven_per_tik", 4);           // Leven per treffer: at most this many heals per player per tick (area skills)
+        STANDAARD.put("negeren_max", 50.0);            // Verdediging negeren % is capped here
+        STANDAARD.put("effect_max", 40.0);             // Kans op effect % is capped here
+        STANDAARD.put("leven_per_tik", 4.0);           // Leven per treffer: at most this many heals per player per tick (area skills)
     }
 
     public static final List<String> SLEUTELS = List.copyOf(STANDAARD.keySet());
