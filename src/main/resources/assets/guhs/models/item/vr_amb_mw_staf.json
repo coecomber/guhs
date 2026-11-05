@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "guhs:item/vadsrijk/ambacht/vr_amb_mw_staf"
+  }
+}

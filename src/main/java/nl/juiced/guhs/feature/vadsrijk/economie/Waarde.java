@@ -10,6 +10,9 @@ public final class Waarde {
     /** Per rarity (GEWOON .. GUHDDELIJK). */
     public static final int[] ZELDZAAM_FACTOR = {1, 2, 4, 9, 20, 50};
 
+    /** T-AMBACHT: extra sale values per ONE item (the Ambachten materials, dishes, potions); 0 = not theirs. */
+    public static final java.util.List<java.util.function.ToLongFunction<ItemStack>> EXTRA = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     private Waarde() {
     }
 
@@ -32,6 +35,12 @@ public final class Waarde {
         Item i = s.getItem();
         if (i instanceof EcoItems.Munt) {
             return 0;
+        }
+        for (java.util.function.ToLongFunction<ItemStack> f : EXTRA) {   // T-AMBACHT
+            long v = f.applyAsLong(s);
+            if (v > 0) {
+                return v * s.getCount();
+            }
         }
         long stuk = Winkels.koopPrijs(i) / 2;
         return stuk * s.getCount();
