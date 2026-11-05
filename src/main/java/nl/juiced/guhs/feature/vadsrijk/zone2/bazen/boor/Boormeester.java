@@ -386,6 +386,7 @@ public class Boormeester extends Z2Baas {
             stoom++;
             Vec3 v = k.position();
             Telegraaf.cirkel(sl, new Vec3(v.x, getY(), v.z), 6, 20, ROOD);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, 20);   // T-VFX: wind-up animation (held until the hit / auto-release)
             inslagen.add(new Inslag(new Vec3(v.x, getY(), v.z), 6, new int[1], 20, 0.45, "stoom", true));
             sl.sendParticles(ParticleTypes.CLOUD, v.x, v.y + 0.5, v.z, 60, 1, 0.6, 1, 0.15);
             sl.playSound(null, k.blockPosition(), SoundEvents.FIRE_EXTINGUISH, SoundSource.HOSTILE, 2.5f, 0.5f);
@@ -472,6 +473,8 @@ public class Boormeester extends Z2Baas {
                 Vec3 naar = stootVan.add(r.scale(len));
                 stootNaar = voetVan(new Vec3(naar.x, stootVan.y, naar.z));
                 Telegraaf.lijn(sl, stootVan, stootNaar, 3.5, 30, ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, 30);   // T-VFX: wind-up animation (held until the hit / auto-release)
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "boorstoot", 30);   // T-VFX: cast bar
                 setYRot((float) Math.toDegrees(Math.atan2(-r.x, r.z)));
                 actie = Actie.STOOT;
                 actieT = 30;

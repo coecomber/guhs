@@ -168,6 +168,7 @@ public class Roquefort extends Z3Baas {
             Vec3 w = Vec3.atBottomCenterOf(Z3BazenPlekken.ROQUEFORT_WRAK);
             Telegraaf.cirkel(sl, w, 6, tg(120), ROZE);
             Telegraaf.cirkel(sl, super.zMidden(), super.zStraal(), tg(120), ROOD);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "zinkend_schip", tg(120));   // T-VFX: cast bar
             zeg("vadsrijk.z3bazen.rq.zinkt", ChatFormatting.RED);
             zinkT = tg(120);
         }
@@ -230,6 +231,7 @@ public class Roquefort extends Z3Baas {
                 r = r.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : r.normalize();
                 naar = voetVan(van.add(r.scale(Math.max(8, voetVan(v).distanceTo(van) + 4))));
                 Telegraaf.lijn(sl, van, naar, 3, tg(25), ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(25));   // T-VFX: wind-up animation (held until the hit / auto-release)
                 enterT = tg(25) + 10;
                 enterGeraakt.clear();
                 speel("sprong");

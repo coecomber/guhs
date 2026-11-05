@@ -141,6 +141,7 @@ public class Nestwachter extends Z3Baas {
                 r = r.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : r.normalize();
                 naar = voetVan(van.add(r.scale(Math.max(8, voetVan(v).distanceTo(van) + 3))));
                 Telegraaf.lijn(sl, van, naar, 3, tg(28), ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(28));   // T-VFX: wind-up animation (held until the hit / auto-release)
                 stootT = tg(28) + 12;
                 stootGeraakt.clear();
                 speel("stoot");

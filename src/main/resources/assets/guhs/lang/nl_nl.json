@@ -39474,5 +39474,10 @@
   "guhs.configuration.vadsrijkVfx.tooltip": "Deeltjes, schokgolven, stralen en flitsen van bazen. Telegraphs op de grond blijven altijd zichtbaar.",
   "vadsrijk.vfx.aanval.grauwe_huil": "Grauwe Huil",
   "vadsrijk.vfx.aanval.vleugelwind": "Vleugelwind",
-  "vadsrijk.vfx.aanval.grauw_vuur": "Grauw Vuur"
+  "vadsrijk.vfx.aanval.grauw_vuur": "Grauw Vuur",
+  "vadsrijk.vfx.aanval.galm": "De Galm",
+  "vadsrijk.vfx.aanval.boorstoot": "Boorstoot",
+  "vadsrijk.vfx.aanval.vleugelslag": "Vleugelslag",
+  "vadsrijk.vfx.aanval.duikvlucht": "Duikvlucht",
+  "vadsrijk.vfx.aanval.zinkend_schip": "Het schip zinkt!"
 }

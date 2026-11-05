@@ -39474,5 +39474,10 @@
   "guhs.configuration.vadsrijkVfx.tooltip": "Boss particles, shockwaves, beams and flashes. Ground telegraphs always stay visible.",
   "vadsrijk.vfx.aanval.grauwe_huil": "Grey Howl",
   "vadsrijk.vfx.aanval.vleugelwind": "Wing Gust",
-  "vadsrijk.vfx.aanval.grauw_vuur": "Grey Fire"
+  "vadsrijk.vfx.aanval.grauw_vuur": "Grey Fire",
+  "vadsrijk.vfx.aanval.galm": "The Howl",
+  "vadsrijk.vfx.aanval.boorstoot": "Drill Thrust",
+  "vadsrijk.vfx.aanval.vleugelslag": "Wing Beat",
+  "vadsrijk.vfx.aanval.duikvlucht": "Dive",
+  "vadsrijk.vfx.aanval.zinkend_schip": "The ship is sinking!"
 }

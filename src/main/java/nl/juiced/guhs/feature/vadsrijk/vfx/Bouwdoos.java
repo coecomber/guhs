@@ -327,6 +327,9 @@ public final class Bouwdoos {
         }
         klaar = true;
         Vfx.weg(sl, baas.position(), groep);
+        if (!doorOnderbreking && eersteTreffer) {
+            BaasAnims.speel(baas, "vfx_treffer");   // (release the held wind-up)
+        }
         if (aanval.cast) {
             Vfx.castStop(baas, doorOnderbreking);
         }

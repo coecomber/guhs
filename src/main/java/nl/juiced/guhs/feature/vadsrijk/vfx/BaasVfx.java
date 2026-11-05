@@ -32,6 +32,8 @@ public final class BaasVfx {
         Bouwdoos lopend;
         final Map<String, Long> klaarOp = new HashMap<>();
         long faseStart = -1, gevechtStart = -1, laatsteFlinch, laatsteBouwdoos;
+        /** A boss's own wind-up (one-liner) is released by this game time if no hit came (the hold must never stick). */
+        long windupTot = -1;
         int faseGezien = 1;
         boolean woede;
         /** Gametests/dev: the last attack started and how it ended. */
@@ -98,6 +100,12 @@ public final class BaasVfx {
         }
         if (b.geplofd()) {
             return;
+        }
+        if (s.windupTot > 0 && nu > s.windupTot) {
+            s.windupTot = -1;
+            if (s.lopend == null) {
+                BaasAnims.speel(b, "vfx_treffer");
+            }
         }
         if (b.tickCount % 20 == 0) {
             boolean vecht = !vechters(b).isEmpty();
@@ -272,6 +280,7 @@ public final class BaasVfx {
      */
     public static void windup(VadsrijkBaas b, int ticks) {
         if (b.level() instanceof ServerLevel sl && !loopt(b)) {
+            staat(b).windupTot = sl.getGameTime() + ticks + 8;
             BaasAnims.speel(b, "vfx_windup");
             Vfx.pose(sl, b, "windup", ticks);
             Vfx.deeltjes(sl, Deeltje.GLOED, b.position().add(0, b.getBbHeight() * 0.5, 0), 8, 0xFFE0A0, b.getBbWidth() * 0.5, 0.02);
@@ -288,6 +297,7 @@ public final class BaasVfx {
     /** One-liner: the hit of a boss's OWN attack (ends the held wind-up with the pop, a shockwave at the spot). */
     public static void treffer(VadsrijkBaas b, Vec3 waar, double r, int kleur) {
         if (b.level() instanceof ServerLevel sl && !loopt(b)) {
+            staat(b).windupTot = -1;
             BaasAnims.speel(b, "vfx_treffer");
             Vfx.pose(sl, b, "treffer", 8);
             Vfx.golf(sl, waar, r, kleur, 10);

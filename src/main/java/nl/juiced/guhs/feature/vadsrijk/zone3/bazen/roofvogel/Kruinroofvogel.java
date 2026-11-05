@@ -239,6 +239,8 @@ public class Kruinroofvogel extends Z3Baas {
         }
         if (windCd <= 0 && getRandom().nextInt(3) == 0) {
             Telegraaf.cirkel(sl, position(), 13, tg(30), PAARS);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(30));   // T-VFX: wind-up animation (held until the hit / auto-release)
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "vleugelslag", tg(30));   // T-VFX: cast bar
             start(Actie.WIND, tg(30));
             windCd = 220;
             speel("wind");
@@ -254,6 +256,8 @@ public class Kruinroofvogel extends Z3Baas {
                 r = r.lengthSqr() < 0.01 ? new Vec3(0, 0, 1) : r.normalize();
                 naar = voetVan(van.add(r.scale(Math.max(10, voetVan(v).distanceTo(van) + 5))));
                 Telegraaf.lijn(sl, van, naar, 3.5, tg(30), ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(30));   // T-VFX: wind-up animation (held until the hit / auto-release)
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "duikvlucht", tg(30));   // T-VFX: cast bar
                 start(Actie.DUIK, tg(30) + 14);
                 duikGeraakt.clear();
                 duikCd = fase() >= 3 ? 90 : 120;

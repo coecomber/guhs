@@ -64,6 +64,11 @@ AANVALLEN = {
     "grauwe_huil": ("Grauwe Huil", "Grey Howl"),
     "vleugelwind": ("Vleugelwind", "Wing Gust"),
     "grauw_vuur": ("Grauw Vuur", "Grey Fire"),
+    "galm": ("De Galm", "The Howl"),
+    "boorstoot": ("Boorstoot", "Drill Thrust"),
+    "vleugelslag": ("Vleugelslag", "Wing Beat"),
+    "duikvlucht": ("Duikvlucht", "Dive"),
+    "zinkend_schip": ("Het schip zinkt!", "The ship is sinking!"),
     "demo": ("Proefcast", "Test Cast"),
 }
 TEKSTEN = {

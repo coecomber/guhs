@@ -376,6 +376,8 @@ public abstract class Z3Baas extends Z2Baas {
         later(w, () -> {
             sl.sendParticles(deeltje, v.x, v.y + 0.4, v.z, 30, r * 0.4, 0.3, r * 0.4, 0.05);
             sl.playSound(null, v.x, v.y, v.z, SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 0.8f, 1.3f);
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.golf(sl, v, r * 1.15, 0xFF8A5A, 10);   // T-VFX: a shockwave + flash where it goes off
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.flits(sl, v.add(0, 0.6, 0), Math.max(1.4, r * 0.6), 0xFFB080);
             for (ServerPlayer p : mechRond(v, r, fractie, skill)) {
                 if (st != null) {
                     Statussen.geef(p, st, 60, 0.4, this);
@@ -400,6 +402,8 @@ public abstract class Z3Baas extends Z2Baas {
             int moet = Math.max(1, Math.min(nodig, strijders().size()));
             boolean ok = in.size() >= moet;
             sl.sendParticles(new DustParticleOptions(GEEL, 2.2f), v.x, v.y + 0.3, v.z, 60, r * 0.5, 0.2, r * 0.5, 0);
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.golf(sl, v, r * 1.2, ok ? 0xFFD62A : 0xFF2A2A, 12);   // T-VFX: the stack goes off
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.deeltjes(sl, ok ? nl.juiced.guhs.feature.vadsrijk.vfx.Deeltje.STER : nl.juiced.guhs.feature.vadsrijk.vfx.Deeltje.ROOK, v.add(0, 0.5, 0), 20, ok ? 0xFFE060 : 0x806060, r * 0.5, 0.2);
             if (ok) {
                 for (ServerPlayer p : in) {
                     mech(p, fractie / in.size(), skill);
