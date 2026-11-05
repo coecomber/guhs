@@ -236,7 +236,7 @@ public final class Z3Scenes {
             }
             if (t == 140) {
                 sl.playSound(null, ei.x, ei.y, ei.z, SoundEvents.TURTLE_EGG_HATCH, SoundSource.NEUTRAL, 2f, 1.2f);
-                jong[0] = Z3Figurant.maak(sl, ei.add(0, 0.3, 0), 0, "vadsrijk/wezens/draak", "textures/vadsrijk/z3bazen/vahoegje.png", "vr_huisdier_vahoegje", "idle", 0.12f);
+                jong[0] = Z3Figurant.maak(sl, ei.add(0, 0.3, 0), 0, "vadsrijk/wezens/vahoegje", "textures/vadsrijk/z3bazen/vahoegje.png", "vr_huisdier_vahoegje", "idle", 0.45f);
                 sl.sendParticles(new DustParticleOptions(Z3Baas.ROZE, 1.4f), ei.x, ei.y + 0.6, ei.z, 30, 0.4, 0.3, 0.4, 0);
             }
             if (t == 158) {   // it sneezes

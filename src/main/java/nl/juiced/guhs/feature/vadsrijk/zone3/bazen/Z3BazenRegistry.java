@@ -119,8 +119,8 @@ public final class Z3BazenRegistry {
             "textures/vadsrijk/z3bazen/kruinroofvogel.png", "vr_z3_baas_kruinroofvogel", 0.2f, "textures/vadsrijk/z3bazen/kruinroofvogel_glowmask.png"));
     public static final Huisdier PET_PIEPJE = Huisdieren.registreer(new Huisdier("piepje", "guhs:vr_z3_baas_piepvel", "pieppiepmuisje",
             "textures/entity/pieppiepmuisje.png", "vr_huisdier_piepje", 1.0f, null));
-    public static final Huisdier PET_VAHOEGJE = Huisdieren.registreer(new Huisdier("vahoegje", "guhs:vr_z3_baas_vahoegnir", "vadsrijk/wezens/draak",
-            "textures/vadsrijk/z3bazen/vahoegje.png", "vr_huisdier_vahoegje", 0.12f, null));
+    public static final Huisdier PET_VAHOEGJE = Huisdieren.registreer(new Huisdier("vahoegje", "guhs:vr_z3_baas_vahoegnir", "vadsrijk/wezens/vahoegje",
+            "textures/vadsrijk/z3bazen/vahoegje.png", "vr_huisdier_vahoegje", 0.45f, null));   // o-draak: own chibi model (vadsrijk_draak.py)
 
     private Z3BazenRegistry() {
     }
