@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:hoogvads_vaandel_onder",
+  "result": {
+    "id": "guhs:hoogvads_vaandel_boven"
+  }
+}

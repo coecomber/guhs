@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "side": "guhs:block/hoogvads/gouden_zuilkop",
+    "end": "guhs:block/hoogvads/roze_marmer_zuil_top"
+  }
+}

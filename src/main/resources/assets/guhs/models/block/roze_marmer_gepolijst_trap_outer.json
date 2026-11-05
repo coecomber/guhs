@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "guhs:block/hoogvads/roze_marmer_gepolijst",
+    "top": "guhs:block/hoogvads/roze_marmer_gepolijst",
+    "side": "guhs:block/hoogvads/roze_marmer_gepolijst"
+  }
+}

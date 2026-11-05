@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/gouden_zuilkop"
+    },
+    "axis=x": {
+      "model": "guhs:block/gouden_zuilkop_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "guhs:block/gouden_zuilkop_horizontal",
+      "x": 90
+    }
+  }
+}

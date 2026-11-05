@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/hoogvads_vaandel_onder",
+      "y": 0
+    },
+    "facing=east": {
+      "model": "guhs:block/hoogvads_vaandel_onder",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/hoogvads_vaandel_onder",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/hoogvads_vaandel_onder",
+      "y": 270
+    }
+  }
+}

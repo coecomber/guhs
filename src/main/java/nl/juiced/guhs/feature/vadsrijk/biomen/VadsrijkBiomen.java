@@ -24,7 +24,10 @@ public final class VadsrijkBiomen {
     public static final List<String> IDS = List.of("knuffelkamp", "zwamzoet", "haven", "klodderweide", "sporenwoud", "druipgrotten", "kloof",
             "zwamtempel", "tussenland", "zee", "kandijkom", "galmhellingen", "knuffelmeer", "splinterkloof", "spiegelburcht", "splinterpieken",
             // z3-systemen: zone 3 "De Schemerwortel", one biome per layer
-            "honingtak", "kruinzee", "takkenbanen", "schorsstad", "wortelvelden", "wortelduister", "zeppelinwerf", "hart", "schemerwortel");
+            "honingtak", "kruinzee", "takkenbanen", "schorsstad", "wortelvelden", "wortelduister", "zeppelinwerf", "hart", "schemerwortel",
+            // T-Z5WERELD: zone 5 "Hoogvads" (above zone 4, by height: Z5WereldRegistry.biome)
+            "hoogvads_paleis", "hoogvads_universiteit", "hoogvads_academie", "hoogvads_markt", "hoogvads_kathedraal", "hoogvads_luchthaven",
+            "hoogvads_staartpark", "hoogvads_ooggaarde", "hoogvads", "moeder_wolkwal");
     public static final int ZEE = IDS.indexOf("zee"), KLOOF = IDS.indexOf("kloof"), TUSSENLAND = IDS.indexOf("tussenland");
 
     /** The Kloof ravine (tools/vadsrijk/wereld/kaart.py KLOOF and GebiedMist.KLOOF_LIJN, world coordinates). */
@@ -96,6 +99,10 @@ public final class VadsrijkBiomen {
 
     /** z3-systemen: the biome index at block x/y/z (zone 3 is layered; elsewhere the height does not matter). */
     public static int index(int x, int y, int z) {
+        String z5 = nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldRegistry.biome(x, y, z);   // T-Z5WERELD: Hoogvads, above zone 4
+        if (z5 != null) {
+            return IDS.indexOf(z5);
+        }
         if (Z3Lagen.inZone3(x, z)) {
             for (Gebieden.Gebied g : Z3Lagen.GEBIEDEN) {
                 if (g.bevat(x + 0.5, y, z + 0.5)) {

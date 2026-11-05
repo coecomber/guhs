@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/gouden_dakpan_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/gouden_dakpan"
+    },
+    "type=top": {
+      "model": "guhs:block/gouden_dakpan_plaat_top"
+    }
+  }
+}

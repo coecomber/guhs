@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:walvishuid",
+  "result": {
+    "id": "guhs:walvishuid_licht"
+  }
+}

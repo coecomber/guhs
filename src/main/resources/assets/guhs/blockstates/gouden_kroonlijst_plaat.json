@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/gouden_kroonlijst_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/gouden_kroonlijst"
+    },
+    "type=top": {
+      "model": "guhs:block/gouden_kroonlijst_plaat_top"
+    }
+  }
+}

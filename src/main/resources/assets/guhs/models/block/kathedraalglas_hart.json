@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": {
+      "sprite": "guhs:block/hoogvads/kathedraalglas_hart",
+      "force_translucent": true
+    }
+  }
+}

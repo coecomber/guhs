@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:roze_marmer",
+  "result": {
+    "id": "guhs:roze_marmer_gepolijst_plaat",
+    "count": 2
+  }
+}

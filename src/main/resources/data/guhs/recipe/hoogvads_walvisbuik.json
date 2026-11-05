@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:white_terracotta",
+    "minecraft:white_wool"
+  ],
+  "result": {
+    "id": "guhs:walvisbuik",
+    "count": 2
+  }
+}

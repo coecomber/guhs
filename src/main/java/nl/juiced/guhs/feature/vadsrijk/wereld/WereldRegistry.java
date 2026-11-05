@@ -135,6 +135,7 @@ public final class WereldRegistry {
         NeoForge.EVENT_BUS.addListener(WereldRegistry::commandos);
         nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.register(modBus);   // [zone 2] De Splinterpieken (z2-wereld)
         nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldRegistry.register(modBus);   // [zone 3] De Schemerwortel (z3-wereld)
+        nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldRegistry.register(modBus);   // T-Z5WERELD: zone 5 Hoogvads (map, blocks, areas)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

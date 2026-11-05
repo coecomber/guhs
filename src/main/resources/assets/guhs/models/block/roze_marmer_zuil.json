@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "side": "guhs:block/hoogvads/roze_marmer_zuil",
+    "end": "guhs:block/hoogvads/roze_marmer_zuil_top"
+  }
+}

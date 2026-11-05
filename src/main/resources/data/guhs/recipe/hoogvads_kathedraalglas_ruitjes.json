@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "GOG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:white_stained_glass",
+    "O": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "guhs:kathedraalglas_ruitjes",
+    "count": 8
+  }
+}
