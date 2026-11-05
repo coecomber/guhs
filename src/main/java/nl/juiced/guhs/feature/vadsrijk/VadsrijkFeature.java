@@ -34,6 +34,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.register(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
+        nl.juiced.guhs.feature.vadsrijk.web.WebRegistry.register(modBus);   // S-SITE: guhs.nl/vadsrijk live export (off by default) + wiki dump
     }
 
     public static void payloads(PayloadRegistrar registrar) {
