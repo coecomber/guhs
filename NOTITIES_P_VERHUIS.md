@@ -70,3 +70,10 @@ Merged: `110-m-bazen` (c4b476917), `110-n-extra` (09834cae6, incl. o-draak; lang
 ## Open
 - "De Stamspiraal" is still the area name of the riding spiral (z3-wereld's lang); maybe "Het Rijpad".
 - Nothing seen in a client: the riders' seat height (guh at +1.55 on the Pluimguh) and the mist look need a look in the dev client.
+
+## Tests (2026-11-05)
+- `runGameTestServer -Pgt=VadsrijkZ3,Z3Npc,VadsrijkVriendjes,VadsrijkBiomen`: 28 tests, 27 passed; the one failure (VadsrijkZ3Wezens
+  spawnersPerLaag: no branch spawners, the Honingtak safe cylinder reached over the branches) is fixed: rerun `-Pgt=VadsrijkZ3Wezens` 6/6.
+  Plan now: kruinzee 91, takkenbanen 27, schorsstad 51, wortelvelden 87, wortelduister 71 alive max (147 spawners).
+- `poicode3.py`: OK. No AutoCheck (memory; the map tiles are p-wereld's and not regenerated here).
+- Last merge of 110-p-wereld: 51ea05dee (nothing newer at the end).
