@@ -24,8 +24,9 @@ public class StadsMuziekGameTests {
         verwacht(helper, kplein.getX(), kplein.getZ(), "kandijkom");
         verwacht(helper, Z2WereldPlekken.DOK_LANDING.getX(), Z2WereldPlekken.DOK_LANDING.getZ(), "kandijkom");
         // (K-INT) Honingtak is a layer: the town on the branch, not the ground below it
-        BlockPos dok = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.DOK_LANDING;
-        helper.assertTrue("honingtak".equals(StadsMuziek.stadOp(dok.getX(), dok.getY(), dok.getZ())), "Honingtak dock: honingtak");
+        // (R-INT) revamp: the dock is the Weststeiger on a branch tip OUTSIDE the ring town, so the Bloesemplein is the town spot
+        BlockPos dok = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek("plein");
+        helper.assertTrue("honingtak".equals(StadsMuziek.stadOp(dok.getX(), dok.getY(), dok.getZ())), "Honingtak Bloesemplein: honingtak");
         helper.assertTrue(StadsMuziek.stadOp(dok.getX(), 66, dok.getZ()) == null, "under Honingtak: no town music");
         // the wilderness stays ambient only
         verwacht(helper, 380, 0, null);       // Klodderweide

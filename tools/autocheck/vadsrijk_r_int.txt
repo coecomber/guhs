@@ -1,0 +1,120 @@
+# R-INT: q-dialoog portraits (its own script, unchanged) + a short walk over the revamped zone 3.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_r_int.txt
+
+section setup
+/gamemode creative
+/time set noon
+wait 40
+
+section portrettest
+/guhs vadsrijk proeftuin
+wait 100
+/fill 3095 64 3150 3145 64 3195 minecraft:grass_block
+/tp @s 3120 65 3175 180 10
+waitrender 200
+/guhs vadsrijk npc portrettest
+wait 20
+shot vr_qd_1_speler gui
+press Verder »
+wait 10
+shot vr_qd_2_zone1_standin gui
+press Verder »
+wait 10
+shot vr_qd_3_zone3_standin gui
+press Verder »
+wait 10
+shot vr_qd_4_verteller gui
+gui close
+wait 10
+
+section live
+/guhs vadsrijk npc reset
+/guhs vadsrijk npc rij
+wait 40
+/tp @s 3113 65 3174 180 20
+wait 20
+interact 3113 65 3171 guhs:vr_npc_guh
+wait 20
+shot vr_qd_5_live gui
+gui close
+
+section z3_in
+/time set 6000
+/gamerule doDaylightCycle false
+/guhs vadsrijk z3wereld vlieg honingtak
+wait 160
+shot rint_opening_1 gui
+wait 200
+shot rint_opening_2 gui
+wait 220
+waitrender 400
+shot rint_weststeiger gui
+
+section z3_revamp
+/guhs vadsrijk z3wereld plek plein
+look 90 15
+wait 60
+waitrender 400
+shot rint_bloesemplein gui
+/guhs vadsrijk z3wereld plek rijpad_start
+look 180 5
+wait 60
+waitrender 400
+shot rint_rijpad_start gui
+/guhs vadsrijk z3wereld plek rijpad_honingplein
+look 90 5
+wait 60
+waitrender 400
+shot rint_rijpad_midden gui
+/guhs vadsrijk z3wereld plek trap_bordes_1
+look 0 20
+wait 60
+waitrender 400
+shot rint_binnentrap_vloer gui
+/guhs vadsrijk z3wereld plek trap_bordes_2
+look 90 -20
+wait 60
+waitrender 400
+shot rint_binnentrap_honingtak gui
+/guhs vadsrijk z3wereld plek binnenhof
+look 0 10
+wait 60
+waitrender 300
+shot rint_binnenhof gui
+/guhs vadsrijk z3wereld plek hangnest_woning_3
+look 0 10
+wait 60
+waitrender 300
+shot rint_raatweide_huis3 gui
+/guhs vadsrijk z3wereld plek kuiken_6
+look 0 10
+wait 60
+waitrender 300
+shot rint_kruin1_rand gui
+/guhs vadsrijk z3wereld plek kabelbrug_begin
+look 45 10
+wait 60
+waitrender 400
+shot rint_kabelbrug gui
+
+section z3_bazen
+/guhs vadsrijk level 50
+/guhs vadsrijk z3bazen spawn piepvel
+wait 100
+waitrender 300
+shot rint_piepvel_cape gui
+/guhs vadsrijk z3wereld plek schorsstad_vloer
+wait 60
+waitrender 300
+shot rint_schorsstad_boven_pelszaal gui
+/guhs vadsrijk vriendjes draak nest
+wait 200
+waitrender 400
+shot rint_roze_draak_nest gui
+wait 200
+shot rint_roze_draak_beestjes gui
+/guhs vadsrijk huisdier geef vahoegje
+/guhs vadsrijk z3wereld plek plein
+wait 80
+waitrender 300
+shot rint_vahoegje gui
