@@ -58,6 +58,7 @@ public final class WereldClient {
         nl.juiced.guhs.feature.vadsrijk.wereld.WereldReizen.ontvanger = t -> Minecraft.getInstance().execute(() -> overslaanTicks = t);
         nl.juiced.guhs.feature.vadsrijk.zone2.wereld.client.Z2WereldClient.init(modBus);   // [zone 2] sky + ambient of De Splinterpieken
         nl.juiced.guhs.feature.vadsrijk.zone3.wereld.client.Z3WereldClient.init(modBus);   // [zone 3] sky + fog per layer + ambient of De Schemerwortel
+        nl.juiced.guhs.feature.vadsrijk.zone4.wereld.client.Z4WereldClient.init(modBus);   // T-Z4WERELD the Grauwe Mistbank fog
     }
 
     /** The airship flight may be skipped by sneaking for this many more ticks (0 = not skippable / no flight). */
