@@ -357,9 +357,9 @@ public final class GeluidSpeler {
         String nu = gebied != null ? "speelt: " + gebied.naam : stilte() ? "stil (baas/scene/voorbeeld)"
                 : s == null || s.themas().isEmpty() ? "geen gebiedsmuziek hier (stad of buiten de zones)"
                 : "stilte, nog " + Math.max(0, (volgendeOp - klok) / 20) + " s";
-        mc.gui.getChat().addMessage(Component.literal("Gebied: " + (g == null ? "-" : g.id()) + "  streek: " + (s == null ? "-" : s.id())
+        p.sendSystemMessage(Component.literal("Gebied: " + (g == null ? "-" : g.id()) + "  streek: " + (s == null ? "-" : s.id())
                 + "  thema's: " + (s == null ? "-" : String.join(", ", s.themas())) + "  bed: " + GebiedSfeerSpeler.huidig()).withStyle(ChatFormatting.AQUA));
-        mc.gui.getChat().addMessage(Component.literal("Muziek: " + nu + (baasThema != null ? "  |  baas: " + baasThema : "")
+        p.sendSystemMessage(Component.literal("Muziek: " + nu + (baasThema != null ? "  |  baas: " + baasThema : "")
                 + "  |  schuifjes: gebied " + pct(GeluidConfig.gebied()) + " bazen " + pct(GeluidConfig.bazen()) + " stingers "
                 + pct(GeluidConfig.stingers()) + " omgeving " + pct(GeluidConfig.omgeving())).withStyle(ChatFormatting.AQUA));
     }
