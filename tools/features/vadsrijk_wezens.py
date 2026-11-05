@@ -32,12 +32,39 @@ def _face_dims(face, size):
     return {"north": (sx, sy), "south": (sx, sy), "east": (sz, sy), "west": (sz, sy), "up": (sx, sz), "down": (sx, sz)}[face]
 
 
+_STIJL = [1]   # T-MODELS: the default model style; 2 = model kit v2 (vadsrijk_t_modelkit.py), switched on per zone with stijl(2)
+
+
+class stijl:
+    """T-MODELS: `with stijl(2): ...` builds every Model made inside with the v2 kit (rounded boxes, tapered limbs, v2 painting)."""
+
+    def __init__(self, n):
+        self.n = n
+
+    def __enter__(self):
+        self.oud = _STIJL[0]
+        _STIJL[0] = self.n
+        return self
+
+    def __exit__(self, *a):
+        _STIJL[0] = self.oud
+
+
+def _kit():
+    try:
+        from features import vadsrijk_t_modelkit as k
+    except ImportError:
+        import vadsrijk_t_modelkit as k
+    return k
+
+
 class Model:
-    def __init__(self, naam, px=4, breedte=64, bounds=(2, 2, 0.5)):
+    def __init__(self, naam, px=4, breedte=64, bounds=(2, 2, 0.5), stijl=None):
         self.naam, self.px, self.W = naam, px, breedte
         self.bones, self.regios = [], []
         self.x = self.y = self.rij = 0
         self.bounds = bounds
+        self.stijl = _STIJL[0] if stijl is None else stijl
 
     def _neem(self, w, h):
         w, h = max(1, int(math.ceil(w))), max(1, int(math.ceil(h)))
@@ -57,12 +84,26 @@ class Model:
         self.bones.append(b)
         return self
 
-    def cube(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0, gezicht=None):
+    def cube(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0, gezicht=None, rond=None):
+        """rond (stijl 2 only): None = automatic (vadsrijk_t_modelkit.auto_c), 0 = sharp, > 0 = that edge radius in px."""
+        if self.stijl >= 2:
+            k = _kit()
+            c = k.auto_c(rol, size, gezicht) if rond is None else rond
+            if c > 0:
+                k.rond_blok(self, self._cube, bone, rol, origin, size, c, rot, pivot, inflate, gezicht)
+                return self
+            if rond is None and not gezicht and k.is_taps(rol, size):
+                k.taps(self._cube, bone, rol, origin, size, rot, pivot, inflate)
+                return self
+        return self._cube(bone, rol, origin, size, rot, pivot, inflate, gezicht, None)
+
+    def _cube(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0, gezicht=None, rec=None):
         uv = {}
         for f in FACES:
             w, h = _face_dims(f, size)
             x, y, ww, hh = self._neem(w, h)
-            self.regios.append({"rol": rol, "f": f, "r": (x, y, ww, hh), "gezicht": gezicht if f == "north" else None})
+            self.regios.append({"rol": rol, "f": f, "r": (x, y, ww, hh), "gezicht": gezicht if f == "north" else None,
+                                "o": tuple(float(v) for v in origin), "s": tuple(float(v) for v in size), "rec": rec})
             uv[f] = {"uv": [x, y], "uv_size": [w, h]}
         c = {"origin": [float(v) for v in origin], "size": [float(v) for v in size], "uv": uv}
         if inflate:
@@ -76,12 +117,12 @@ class Model:
                 return self
         raise KeyError(bone)
 
-    def spiegel(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0):
+    def spiegel(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0, rond=None):
         """The same cube mirrored in x (for the right-hand side): origin x -> -(x + size x), rotations y/z flipped."""
         o = [-(origin[0] + size[0]), origin[1], origin[2]]
         r = None if rot is None else [rot[0], -rot[1], -rot[2]]
         p = None if pivot is None else [-pivot[0], pivot[1], pivot[2]]
-        return self.cube(bone, rol, o, size, r, p, inflate)
+        return self.cube(bone, rol, o, size, r, p, inflate, rond=rond)
 
     def hoogte(self):
         h = self.y + self.rij + 1
@@ -229,8 +270,52 @@ def gezicht(blok, mood, ey=0.42, schaal=1.0):
                      (mx + er * 0.3, mond_y + er * 0.5), (mx + er * 0.8, mond_y)], (110, 40, 70), max(1, int(er * 0.35)))
 
 
+VACHT_ROLLEN = ("vacht", "pluis", "manen", "geest", "mos")
+
+
+def _ogen_van(blok, ey, schaal):
+    h, w = blok.shape[:2]
+    s = min(w, h) * schaal
+    er = max(1.6, s * 0.11)
+    return (w * 0.5 - s * 0.22, w * 0.5 + s * 0.22), h * ey, er
+
+
+def schilder_v2(model, palet, mood, seed, grauw):
+    """T-MODELS: the v2 painter (light, bevels, soft patterns, fur, anti-aliased faces with shine). Same palette format."""
+    k = _kit()
+    S = model.px
+    img = np.zeros((model.hoogte() * S, model.W * S, 4), np.uint8)
+    r = _rng(seed)
+    model._yb = k.model_hoogte(model)
+    for reg in model.regios:
+        x, y, w, h = reg["r"]
+        blok = img[y * S:(y + h) * S, x * S:(x + w) * S]
+        kleur, pat, k2 = palet.get(reg["rol"], ((255, 0, 255), None, None))
+        if grauw and reg["rol"] not in ("oog", "tand"):
+            kleur, k2 = _grauw(kleur), (_grauw(k2) if k2 else None)
+        f = reg["f"]
+        L = k.vul_v2(model, reg, blok, kleur, r)
+        if pat:
+            k.patroon_v2(blok, pat, k2, r, f, L)
+        if reg["rol"] in VACHT_ROLLEN:
+            k.vacht_v2(blok, r, 0.7)
+        if reg["gezicht"]:
+            g = reg["gezicht"]
+            m = g.get("mood", mood)
+            if grauw and m in ("blij", "o"):
+                m = "boos"
+            ey, sch = g.get("ey", 0.42), g.get("schaal", 1.0) * 1.1
+            k.supersample(blok, lambda gb: gezicht(gb, m, ey, sch))
+            if m in ("blij", "o"):
+                ogen, cy, er = _ogen_van(blok, ey, sch)
+                k.oogglans(blok, ogen, cy, er)
+    return Image.fromarray(img)
+
+
 def schilder(model, palet, mood, seed, grauw):
     """palet: rol -> (kleur, patroon or None, tweede kleur). grauw: the ontvadst version (grey colours, grumpy)."""
+    if getattr(model, "stijl", 1) >= 2:
+        return schilder_v2(model, palet, mood, seed, grauw)
     S = model.px
     img = np.zeros((model.hoogte() * S, model.W * S, 4), np.uint8)
     r = _rng(seed)
@@ -264,7 +349,10 @@ def gloed(model, rollen, seed, kleur_van=None):
         x, y, w, h = reg["r"]
         blok = img[y * S:(y + h) * S, x * S:(x + w) * S]
         if reg["rol"] in rollen:
-            _vul(blok, rollen[reg["rol"]], r, 10)
+            if getattr(model, "stijl", 1) >= 2:
+                _kit().gloed_v2(blok, rollen[reg["rol"]], r)
+            else:
+                _vul(blok, rollen[reg["rol"]], r, 10)
         if kleur_van and reg["gezicht"]:
             tmp = np.zeros_like(blok)
             gezicht(tmp, "draak", reg["gezicht"].get("ey", 0.42))
@@ -305,8 +393,13 @@ def slijm_basis(naam, hoog=10, lift=0.0, px=4):
     m = Model(naam, px=px, breedte=64)
     m.bone("root")
     m.bone("lijf", "root", (0, lift, 0))
-    m.cube("lijf", "slijm", (-6, lift, -6), (12, hoog, 12), gezicht={"ey": 0.42})
-    m.cube("lijf", "slijm", (-5, lift + hoog, -5), (10, 1.5, 10))
+    if m.stijl >= 2:   # T-MODELS: a round blob, the top cap on its own jiggle bone "wiebel" (new bone, nothing renamed)
+        m.cube("lijf", "slijm", (-6, lift, -6), (12, hoog, 12), gezicht={"ey": 0.40, "schaal": 1.45}, rond=2.5)
+        m.bone("wiebel", "lijf", (0, lift + hoog * 0.55, 0))
+        m.cube("wiebel", "slijm", (-3.5, lift + hoog - 2.2, -3.5), (7, 3.4, 7), rond=1.5)
+    else:
+        m.cube("lijf", "slijm", (-6, lift, -6), (12, hoog, 12), gezicht={"ey": 0.42})
+        m.cube("lijf", "slijm", (-5, lift + hoog, -5), (10, 1.5, 10))
     top = lift + hoog + 1
     m.bone("oor_l", "lijf", (-3.5, top, 0), (0, 0, 18))
     m.cube("oor_l", "slijm", (-5.5, top - 0.5, -1), (3, 3.5, 2))
@@ -923,6 +1016,11 @@ def _png(pad, img):
 
 
 def assets(a, w=_schrijf_json):
+    with stijl(2):   # T-MODELS: zone 1 is built with model kit v2
+        return _assets(a, w)
+
+
+def _assets(a, w=_schrijf_json):
     geo_dir = os.path.join(a, "geckolib", "models", "entity", *SUB.split("/"))
     anim_dir = os.path.join(a, "geckolib", "animations", "entity", *SUB.split("/"))
     tex_dir = os.path.join(a, "textures", *SUB.split("/"))
@@ -930,6 +1028,11 @@ def assets(a, w=_schrijf_json):
 
     def schrijf(naam, m, anims, pal, seed, glow=None):
         nonlocal n
+        if m.stijl >= 2:
+            k = _kit()
+            k.naloop(m, anims)
+            if any(b["name"] == "wiebel" for b in m.bones):
+                k.wiebel_kap(anims)
         w(os.path.join(geo_dir, naam + ".geo.json"), m.geo())
         w(os.path.join(anim_dir, naam + ".animation.json"), anim_bestand(anims))
         grauw = schilder(m, pal, "blij", seed, True)
