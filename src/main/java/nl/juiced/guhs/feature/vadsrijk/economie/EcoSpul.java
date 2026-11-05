@@ -128,6 +128,7 @@ public final class EcoSpul {
             case GUHWOLF -> GUHWOLF;
             case WOLKENSCHAAPJE -> WOLKENSCHAAPJE;
             case SLAKKIE -> SLAKKIE;
+            case ZEILBOOTJE -> nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootSpul.ZEILBOOTJE;   // T-Z4BOOT
         };
     }
 
@@ -152,6 +153,7 @@ public final class EcoSpul {
             case GUHWOLF -> ZADEL_GUHWOLF.get();
             case WOLKENSCHAAPJE -> ZADEL_WOLKENSCHAAPJE.get();
             case SLAKKIE -> ZADEL_SLAKKIE.get();
+            case ZEILBOOTJE -> nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootSpul.ICOON.get();   // T-Z4BOOT
         };
         return new net.minecraft.world.item.ItemStack(i);
     }

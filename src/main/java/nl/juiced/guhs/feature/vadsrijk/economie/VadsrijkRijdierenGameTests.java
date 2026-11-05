@@ -114,7 +114,7 @@ public class VadsrijkRijdierenGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void rooster(GameTestHelper helper) {
         java.util.List<String> ids = java.util.Arrays.stream(RijdierSoort.values()).map(RijdierSoort::id).toList();
-        helper.assertTrue(ids.equals(java.util.List.of("pluimguh", "knuffelhert", "guhwolf", "wolkenschaapje", "slakkie")), "the roster: " + ids);
+        helper.assertTrue(ids.equals(java.util.List.of("pluimguh", "knuffelhert", "guhwolf", "wolkenschaapje", "slakkie", "zeilbootje")), "the roster: " + ids);
         helper.assertTrue(RijdierSoort.van("hoedhupper") == null && RijdierSoort.van("klodderros") == null, "the two are gone");
         ServerPlayer p = GuhMockPlayer.of(helper);
         Rijdieren.reset(p);

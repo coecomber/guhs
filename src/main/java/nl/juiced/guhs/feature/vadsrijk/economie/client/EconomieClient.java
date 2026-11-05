@@ -55,6 +55,9 @@ public final class EconomieClient {
         };
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> {
             for (RijdierSoort s : RijdierSoort.values()) {
+                if (s.water()) {
+                    continue;   // T-Z4BOOT: the Zeilbootje has its own renderer (zone4.boot.client.BootClient)
+                }
                 e.registerEntityRenderer(EcoSpul.type(s), c -> new RijdierRenderer(c, s));
             }
         });
