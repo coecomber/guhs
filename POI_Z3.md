@@ -42,12 +42,12 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, z | y | r | landing |
 |---|---|---|---|---|
-| `werf_tak` | 1295, -619 | 213 -> 220 | 3.0 | 1302, -617 |
-| `hangnest` | 1463, -481 | 203 -> 223 | 3.0 | 1459, -487 |
-| `paddenbloesem_tak` | 1342, -482 | 209 -> 224 | 3.0 | 1346, -488 |
-| `spiraal_kruin` | 1378, -680 | 191 -> 225 | 3.0 | 1379, -673 |
-| `mosvoet_kruin` | 1378, -648 | 233 -> 254 | 3.0 | 1380, -641 |
-| `lichtkever_kruin` | 1443, -600 | 261 -> 284 | 3.0 | 1437, -596 |
+| `werf_tak` | 1295, -619 | 213 -> 223 | 3.0 | 1302, -617 |
+| `hangnest` | 1463, -481 | 203 -> 226 | 3.0 | 1459, -487 |
+| `paddenbloesem_tak` | 1342, -482 | 209 -> 227 | 3.0 | 1346, -488 |
+| `spiraal_kruin` | 1378, -680 | 191 -> 228 | 3.0 | 1379, -673 |
+| `mosvoet_kruin` | 1378, -648 | 233 -> 257 | 3.0 | 1380, -641 |
+| `lichtkever_kruin` | 1443, -600 | 261 -> 285 | 3.0 | 1437, -596 |
 | `honingtak` | 1333, -609 | 75 -> 167 | 3.0 | 1346, -603 |
 
 ## Travel: airship dock (Imkerstraat tip), lifts, Honinglift A/B, wind columns, cable bridge, riding spiral
@@ -55,7 +55,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | id | x, y, z |
 |---|---|
 | `binnenhof` | 1404, 167, -570 |
-| `dok_bel` | 1197, 167, -604 |
+| `dok_bel` | 1196, 167, -604 |
 | `dok_kapitein` | 1199, 167, -600 |
 | `dok_landing` | 1201, 167, -601 |
 | `dok_luchtschip` | 1169, 165, -605 |
@@ -79,19 +79,19 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `schorslift_1_onder` | 1403, 81, -585 |
 | `schorslift_2_boven` | 1412, 233, -576 |
 | `schorslift_2_onder` | 1412, 167, -576 |
-| `wind_hangnest_boven` | 1459, 223, -487 |
+| `wind_hangnest_boven` | 1459, 226, -487 |
 | `wind_hangnest_onder` | 1463, 203, -481 |
 | `wind_honingtak_boven` | 1346, 167, -603 |
 | `wind_honingtak_onder` | 1333, 75, -609 |
-| `wind_lichtkever_kruin_boven` | 1437, 284, -596 |
+| `wind_lichtkever_kruin_boven` | 1437, 285, -596 |
 | `wind_lichtkever_kruin_onder` | 1443, 261, -600 |
-| `wind_mosvoet_kruin_boven` | 1380, 254, -641 |
+| `wind_mosvoet_kruin_boven` | 1380, 257, -641 |
 | `wind_mosvoet_kruin_onder` | 1378, 233, -648 |
-| `wind_paddenbloesem_tak_boven` | 1346, 224, -488 |
+| `wind_paddenbloesem_tak_boven` | 1346, 227, -488 |
 | `wind_paddenbloesem_tak_onder` | 1342, 209, -482 |
-| `wind_spiraal_kruin_boven` | 1379, 225, -673 |
+| `wind_spiraal_kruin_boven` | 1379, 228, -673 |
 | `wind_spiraal_kruin_onder` | 1378, 190, -680 |
-| `wind_werf_tak_boven` | 1302, 220, -617 |
+| `wind_werf_tak_boven` | 1302, 223, -617 |
 | `wind_werf_tak_onder` | 1295, 213, -619 |
 
 ## The inner spiral stair: one stand spot per landing (1 = Schorsstad floor 80, 2 = Honingtak 166, 3/4/5 = kruin 1/2/3, 6 = nest floor)
@@ -159,9 +159,9 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `gebouw.jagershut.deur` | 1456, 167, -581 |
 | `gebouw.jagershut.doos_max` | 1468, 178, -575 |
 | `gebouw.jagershut.doos_min` | 1454, 166, -589 |
-| `gebouw.jagershut.jachtbord` | 1465, 167, -581 |
-| `gebouw.jagershut.npc` | 1463, 167, -582 |
-| `gebouw.jagershut.premiebord` | 1465, 167, -584 |
+| `gebouw.jagershut.jachtbord` | 1461, 167, -578 |
+| `gebouw.jagershut.npc` | 1462, 167, -582 |
+| `gebouw.jagershut.premiebord` | 1460, 167, -585 |
 | `gebouw.juwelier.binnen` | 1352, 167, -600 |
 | `gebouw.juwelier.deur` | 1357, 167, -598 |
 | `gebouw.juwelier.doos_max` | 1358, 178, -594 |
@@ -184,7 +184,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `gebouw.smid.deur` | 1370, 167, -536 |
 | `gebouw.smid.doos_max` | 1373, 178, -525 |
 | `gebouw.smid.doos_min` | 1359, 166, -539 |
-| `gebouw.smid.npc` | 1365, 167, -530 |
+| `gebouw.smid.npc` | 1366, 167, -531 |
 | `gebouw.uitrusting.binnen` | 1413, 167, -632 |
 | `gebouw.uitrusting.deur` | 1412, 167, -627 |
 | `gebouw.uitrusting.doos_max` | 1420, 178, -627 |
@@ -246,7 +246,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `arena_kruinroofvogel_deur` | 1288, 227, -548 |
 | `arena_nestwachter` | 1481, 29, -496 |
 | `arena_piepvel` | 1404, 61, -576 |
-| `arena_piepvel_deur` | 1405, 61, -589 |
+| `arena_piepvel_deur` | 1405, 61, -590 |
 | `arena_roquefort` | 1692, 224, -821 |
 | `arena_taleggio` | 1615, 168, -821 |
 | `arena_vahoegnir` | 1404, 293, -576 |
@@ -284,12 +284,12 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `roquefort_wrak` | 1686, 221, -805 |
 | `werf_bord` | 1606, 160, -785 |
 | `werf_ingang` | 1609, 160, -782 |
-| `werf_kamer_bewapening` | 1671, 163, -830 |
-| `werf_kamer_gieterij` | 1647, 162, -848 |
-| `werf_kamer_touwwerk` | 1636, 162, -821 |
-| `werf_loods_poort` | 1671, 163, -821 |
-| `werf_trap_ab` | 1655, 162, -857 |
-| `werf_trap_bc` | 1682, 159, -823 |
+| `werf_kamer_bewapening` | 1664, 165, -838 |
+| `werf_kamer_gieterij` | 1636, 157, -884 |
+| `werf_kamer_touwwerk` | 1621, 158, -795 |
+| `werf_loods_poort` | 1664, 165, -829 |
+| `werf_trap_ab` | 1647, 158, -884 |
+| `werf_trap_bc` | 1675, 160, -824 |
 | `werf_vahoeg_altaar` | 1612, 161, -779 |
 
 ## Hart van de Boom (dungeon 2) + the egg
@@ -358,7 +358,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `uitkijk_kroon` | 1469, 270, -530 |
 | `uitkijk_nest` | 1406, 293, -559 |
 | `uitkijk_oosttak` | 1620, 167, -486 |
-| `uitkijk_takpunt` | 1267, 217, -631 |
+| `uitkijk_takpunt` | 1295, 213, -619 |
 | `uitkijk_westtak` | 1189, 167, -600 |
 | `uitkijk_wortelgewelf` | 1350, 81, -743 |
 
@@ -398,7 +398,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `hangnest_woning_6` | 1364, 193, -685 |
 | `kaasschutterpost_1` | 1303, 211, -616 |
 | `kaasschutterpost_2` | 1499, 194, -587 |
-| `kaasschutterpost_3` | 1336, 212, -469 |
+| `kaasschutterpost_3` | 1345, 208, -488 |
 | `lianenbrug` | 1454, 191, -581 |
 | `molenhoek_plein` | 1384, 187, -662 |
 | `pluimpost_westtak` | 1338, 209, -600 |
@@ -413,19 +413,19 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `boomvolk_lichtje_2` | 1392, 186, -561 |
 | `boomvolk_lichtje_3` | 1420, 199, -568 |
 | `boomvolk_lichtje_4` | 1409, 212, -595 |
-| `lantaarnring_1` | 1407, 94, -576 |
+| `lantaarnring_1` | 1408, 93, -576 |
 | `lantaarnring_1_kooi` | 1400, 93, -576 |
-| `lantaarnring_2` | 1407, 104, -576 |
+| `lantaarnring_2` | 1408, 103, -576 |
 | `lantaarnring_2_kooi` | 1400, 103, -576 |
-| `lantaarnring_3` | 1407, 114, -576 |
+| `lantaarnring_3` | 1408, 113, -576 |
 | `lantaarnring_3_kooi` | 1400, 113, -576 |
-| `lantaarnring_4` | 1407, 124, -576 |
+| `lantaarnring_4` | 1408, 123, -576 |
 | `lantaarnring_4_kooi` | 1400, 123, -576 |
-| `lantaarnring_5` | 1407, 134, -576 |
+| `lantaarnring_5` | 1408, 133, -576 |
 | `lantaarnring_5_kooi` | 1400, 133, -576 |
-| `lantaarnring_6` | 1407, 144, -576 |
+| `lantaarnring_6` | 1408, 143, -576 |
 | `lantaarnring_6_kooi` | 1400, 143, -576 |
-| `lantaarnring_7` | 1407, 154, -576 |
+| `lantaarnring_7` | 1408, 153, -576 |
 | `lantaarnring_7_kooi` | 1400, 153, -576 |
 | `muurverhaal_1` | 1382, 101, -581 |
 | `muurverhaal_2` | 1425, 110, -572 |
@@ -435,25 +435,24 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `muurverhaal_6` | 1425, 146, -572 |
 | `muurverhaal_7` | 1417, 195, -593 |
 | `muurverhaal_8` | 1390, 204, -560 |
-| `nestlantaarn_knoest` | 1404, 124, -573 |
+| `nestlantaarn_knoest` | 1404, 123, -572 |
 | `npc_oude_knoest` | 1405, 123, -603 |
-| `pelszaal_trap_boven` | 1392, 80, -594 |
-| `schorshuis.1` | 1405, 87, -603 |
-| `schorshuis.10` | 1430, 128, -575 |
-| `schorshuis.11` | 1402, 132, -550 |
-| `schorshuis.12` | 1377, 137, -578 |
-| `schorshuis.13` | 1405, 141, -603 |
-| `schorshuis.14` | 1430, 146, -575 |
-| `schorshuis.15` | 1402, 150, -550 |
-| `schorshuis.16` | 1377, 155, -578 |
-| `schorshuis.2` | 1430, 92, -575 |
-| `schorshuis.3` | 1402, 96, -550 |
-| `schorshuis.4` | 1377, 101, -578 |
-| `schorshuis.5` | 1405, 105, -603 |
-| `schorshuis.6` | 1430, 110, -575 |
-| `schorshuis.7` | 1402, 114, -550 |
-| `schorshuis.8` | 1377, 119, -578 |
-| `schorshuis.9` | 1405, 123, -603 |
+| `pelszaal_trap_boven` | 1384, 81, -568 |
+| `schorshuis.1` | 1430, 92, -575 |
+| `schorshuis.10` | 1402, 132, -550 |
+| `schorshuis.11` | 1377, 137, -578 |
+| `schorshuis.12` | 1405, 141, -603 |
+| `schorshuis.13` | 1430, 146, -575 |
+| `schorshuis.14` | 1402, 150, -550 |
+| `schorshuis.15` | 1377, 155, -578 |
+| `schorshuis.2` | 1402, 96, -550 |
+| `schorshuis.3` | 1377, 101, -578 |
+| `schorshuis.4` | 1405, 105, -603 |
+| `schorshuis.5` | 1430, 110, -575 |
+| `schorshuis.6` | 1402, 114, -550 |
+| `schorshuis.7` | 1377, 119, -578 |
+| `schorshuis.8` | 1405, 123, -603 |
+| `schorshuis.9` | 1430, 128, -575 |
 | `schorsstad_poort_128` | 1403, 81, -596 |
 | `schorsstad_poort_176` | 1404, 167, -555 |
 | `schorsstad_poort_75` | 1393, 81, -561 |
@@ -466,16 +465,16 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `schorsstad_ring_7` | 1383, 155, -581 |
 | `schorsstad_vloer` | 1413, 81, -584 |
 | `spiraal_balkon_1` | 1360, 109, -592 |
-| `spiraal_balkon_2` | 1441, 161, -555 |
-| `spiraal_balkon_3` | 1390, 216, -613 |
+| `spiraal_balkon_2` | 1442, 127, -554 |
+| `spiraal_balkon_3` | 1390, 182, -614 |
 | `spiraal_poort_128` | 1403, 80, -616 |
 | `spiraal_poort_176` | 1404, 168, -531 |
 | `spiraal_poort_75` | 1380, 80, -542 |
 | `spiraal_top` | 1417, 232, -548 |
 | `spiraal_voet` | 1423, 84, -618 |
 | `spiraal_zweefsprong_1` | 1357, 109, -594 |
-| `spiraal_zweefsprong_2` | 1445, 161, -553 |
-| `spiraal_zweefsprong_3` | 1389, 216, -617 |
+| `spiraal_zweefsprong_2` | 1446, 127, -552 |
+| `spiraal_zweefsprong_3` | 1388, 182, -618 |
 
 ## Wortelvelden (Mosvoet hamlet, Pluimposten, camps, valleys)
 
@@ -527,17 +526,17 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `geheim_knuffel_1` | 1358, 230, -497 |
+| `geheim_knuffel_1` | 1354, 229, -490 |
 | `geheim_knuffel_10` | 1364, 23, -546 |
-| `geheim_knuffel_2` | 1357, 260, -594 |
-| `geheim_knuffel_3` | 1376, 194, -693 |
+| `geheim_knuffel_2` | 1403, 261, -616 |
+| `geheim_knuffel_3` | 1380, 190, -678 |
 | `geheim_knuffel_4` | 1250, 61, -448 |
-| `geheim_knuffel_5` | 1506, 226, -636 |
+| `geheim_knuffel_5` | 1494, 229, -629 |
 | `geheim_knuffel_6` | 1605, 67, -541 |
 | `geheim_knuffel_7` | 1386, 59, -776 |
 | `geheim_knuffel_8` | 1434, 23, -616 |
-| `geheim_knuffel_9` | 1375, 101, -578 |
-| `geheim_schat_1` | 1324, 217, -451 |
+| `geheim_knuffel_9` | 1405, 105, -605 |
+| `geheim_schat_1` | 1347, 208, -493 |
 | `geheim_schat_2` | 1408, 293, -592 |
 | `geheim_schat_3` | 1402, 150, -548 |
 | `geheim_schat_4` | 1344, 25, -566 |
@@ -558,14 +557,14 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `kuiken_1` | 1454, 230, -496 |
-| `kuiken_2` | 1373, 227, -490 |
-| `kuiken_3` | 1312, 227, -607 |
-| `kuiken_4` | 1413, 230, -670 |
-| `kuiken_5` | 1486, 230, -629 |
-| `kuiken_6` | 1342, 226, -665 |
-| `oosttaksteiger_bel` | 1610, 167, -485 |
+| `kuiken_1` | 1467, 225, -489 |
+| `kuiken_2` | 1374, 228, -476 |
+| `kuiken_3` | 1297, 213, -605 |
+| `kuiken_4` | 1408, 227, -683 |
+| `kuiken_5` | 1493, 228, -641 |
+| `kuiken_6` | 1345, 228, -658 |
+| `oosttaksteiger_bel` | 1609, 167, -485 |
 | `oosttaksteiger_kapitein` | 1610, 167, -490 |
-| `oosttaksteiger_landing` | 1607, 167, -488 |
+| `oosttaksteiger_landing` | 1607, 165, -488 |
 | `oosttaksteiger_luchtschip` | 1637, 165, -476 |
-| `oosttaksteiger_mast` | 1615, 167, -485 |
+| `oosttaksteiger_mast` | 1614, 167, -485 |

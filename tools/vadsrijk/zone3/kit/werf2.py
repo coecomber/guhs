@@ -165,23 +165,15 @@ def toren(W, x, z, y0, y1, R=6, d=None):
                 W.wfill(px, g, pz, px, top - 1, pz, "minecraft:dark_oak_fence")
         if i % 24 == 12:
             W.wset(px + nx * 2.4, ry + 1, pz + nz * 2.4, LANTAARN)
-    for k in range(4):
-        cx_, cz_ = ((-1, -1), (1, -1), (1, 1), (-1, 1))[k]
-        best = min(pad, key=lambda q: abs(q[0] - (x + cx_ * TRAP_H)) + abs(q[1] - (z + cz_ * TRAP_H)))
-        if abs(best[0] - (x + cx_ * TRAP_H)) + abs(best[1] - (z + cz_ * TRAP_H)) < 1.0:
-            for ddx in np.arange(-1.5, 1.51, 0.5):
-                for ddz in np.arange(-1.5, 1.51, 0.5):
-                    P.trede(W, x + cx_ * TRAP_H + ddx, best[2], z + cz_ * TRAP_H + ddz, "minecraft:dark_oak_planks",
-                            "minecraft:dark_oak_slab[type=bottom,waterlogged=false]", lucht=4)
 
 
 def podium_trap(d):
     """[zone 3 kaart] Dok 1 stands on a stone podium: a straight half-step ramp from the ground up to the boss gate."""
     x, y, z = dok_pos(d)
     g = math.atan2(C[1] - z, C[0] - x)
-    a = (x + 15.5 * math.cos(g), z + 15.5 * math.sin(g))
+    a = (x + 19.5 * math.cos(g), z + 19.5 * math.sin(g))       # where the gate bridge ends
     for L in range(8, 40):
-        b = (x + (15.5 + L) * math.cos(g), z + (15.5 + L) * math.sin(g))
+        b = (x + (19.5 + L) * math.cos(g), z + (19.5 + L) * math.sin(g))
         sb = math.floor(werf_top(*b)) + 1
         if L >= 2 * (y - sb) + 2:
             return a, b, sb

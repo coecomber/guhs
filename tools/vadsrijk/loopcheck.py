@@ -48,7 +48,7 @@ _PASS_WOORDEN = ("structure_void", "short_grass", "tall_grass", "fern", "tulip",
                  "sapling", "lily_pad", "riet", "guhbloem", "guhoortjes", "litteken_plant", "hanging_moss", "firefly_bush",
                  "bush", "portal", "cobweb", "pointed_dripstone", "waterlelie", "lantern[", "lantern", "chain", "bell",
                  "door", "_deur", "fence_gate", "trapdoor", "flower", "dandelion", "poppy", "orchid", "lilac", "rose", "peony",
-                 "knuffel_", "redstone_wire", "lever", "amethyst_cluster", "kristal_cluster", "weidekristal", "candle",
+                 "knuffel_", "redstone_wire", "lever", "amethyst_cluster", "kristal_cluster", "weidekristalletjes", "candle",
                  "lava", "snow[", "glow_lichen", "sculk_vein", "seagrass", "kelp", "head", "skull", "banner",
                  "item_frame", "flower_pot", "potted", "cave_air", "spore_blossom", "moss_carpet", "lightning_rod",
                  "end_rod", "tripwire", "dead_bush")
@@ -62,6 +62,8 @@ def klasse(naam, props):
             or kort.endswith("vines") or kort.endswith("vines_plant") or props.get("waterlogged") == "true" and kort.endswith("slab") is False and kort in ("seagrass", "kelp", "kelp_plant"):
         return CLIMB
     if kort.endswith(("leaves", "bladeren", "_log", "_wood", "_hoed", "_steel")) or "light" in kort and kort != "light":
+        return SOLID
+    if kort in ("sea_lantern", "redstone_lamp") or kort.startswith("weidekristal_"):   # full blocks despite "lantern"/"kristal"
         return SOLID
     if kort.endswith("_slab") or kort.endswith("_plaat"):
         t = props.get("type", "bottom")

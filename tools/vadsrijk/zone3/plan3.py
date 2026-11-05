@@ -97,6 +97,7 @@ def rij_punt_lev(k, th, frac=0.5):
 
 # ================================================================================================ fixed places
 RIJ_START_TH = B.RIJ["th0"]
+BALKONS = ((0, 200), (1, 30), (2, 250))      # riding-spiral balconies (turn, deg)
 WORTELWEG_R = 172                    # the ground ring path
 NEST_STAND = B.NEST_Y + 1            # nest floor (top block NEST_Y)
 PELSZAAL_VLOER = 60                  # the Pelszaal under the Schorsstad floor: floor block y 60 (stand 61), r 16
@@ -189,12 +190,13 @@ def plekken():
     gebouw = {}
     for fn, (hx, hz, deur, R, waar, soort) in ring_functies():
         dx, dz = math.cos(deur), math.sin(deur)
-        gebouw[fn] = {"npc": W(hx - dx * 2.2, HY + 1, hz - dz * 2.2), "binnen": W(hx + dx * 1.6, HY + 1, hz + dz * 1.6),
+        nd = 2.2 if soort != 2 else 1.0
+        gebouw[fn] = {"npc": W(hx - dx * nd, HY + 1, hz - dz * nd), "binnen": W(hx + dx * 1.6, HY + 1, hz + dz * 1.6),
                       "deur": W(hx + dx * (R + 1.8), HY + 1, hz + dz * (R + 1.8)),
                       "doos_min": W(hx - 7, HY, hz - 7), "doos_max": W(hx + 7, HY + 12, hz + 7)}
-        if fn == "jagershut":
-            gebouw[fn]["premiebord"] = W(hx - dx * 3.5 - dz * 1.5, HY + 1, hz - dz * 3.5 + dx * 1.5)
-            gebouw[fn]["jachtbord"] = W(hx - dx * 3.5 + dz * 1.5, HY + 1, hz - dz * 3.5 - dx * 1.5)
+        if fn == "jagershut":       # the boards stand against the side walls (the hunter behind his counter stays free)
+            gebouw[fn]["premiebord"] = W(hx + dx * 0.5 - dz * 3.4, HY + 1, hz + dz * 0.5 + dx * 3.4)
+            gebouw[fn]["jachtbord"] = W(hx + dx * 0.5 + dz * 3.4, HY + 1, hz + dz * 0.5 - dx * 3.4)
     for naam, (ad, Rc, hc) in P.CELLEN.items():
         a = math.radians(ad)
         ccx, ccz = pol(a, 55)
@@ -253,11 +255,11 @@ def plekken():
     put("schorsstad_vloer", 9, B.VOET + 1, -8)
     put("kampvuur_schorsstad_vloer", -10, B.VOET + 1, 7)
     for i, y in enumerate(P.TOREN_RINGEN):
-        put(f"lantaarnring_{i + 1}", 3.4, y + 1, 0.5)
-        put(f"lantaarnring_{i + 1}_kooi", -3.4, y + 1, 0.5)
+        put(f"lantaarnring_{i + 1}", 4.0, y + 1, 0.5)
+        put(f"lantaarnring_{i + 1}_kooi", -4.0, y + 1, 0.5)
         x, yy, z = trap_punt(y + 2, 20.5)
         put(f"schorsstad_ring_{i + 1}", x, yy, z)
-    put("nestlantaarn_knoest", 0.5, P.TOREN_RINGEN[3] + 1, 3.4)
+    put("nestlantaarn_knoest", 0.5, P.TOREN_RINGEN[3] + 1, 4.0)
     huizen = P.schors_huizen()
     for k, (y0_, a, h) in enumerate(huizen):
         ca, sa_ = math.cos(a), math.sin(a)
@@ -300,7 +302,7 @@ def plekken():
     put("spiraal_poort_176", 45 * math.cos(a), HY + 1, 45 * math.sin(a))
     put("rijpad_honingplein", 37 * math.cos(B.TH_M), HY + 1, 37 * math.sin(B.TH_M))
     # balconies on the riding spiral (glide jumps) + its end on kruin 1
-    for k, (turn, deg) in enumerate(((0, 200), (2, 30), (3, 250))):
+    for k, (turn, deg) in enumerate(BALKONS):
         th = math.radians(deg)
         x, yy, z = rij_punt_lev(turn, th, 1.0)
         a = math.atan2(z, x)
@@ -327,7 +329,7 @@ def plekken():
     put("hartsplinter_4", 3, fy + 1, 4)
     pa = pelszaal_trap_hoek()
     put("arena_piepvel_deur", 13 * math.cos(pa), fy + 1, 13 * math.sin(pa))
-    put("pelszaal_trap_boven", 21 * math.cos(pa - 0.75), B.VOET + 1, 21 * math.sin(pa - 0.75))
+    put("pelszaal_trap_boven", 21 * math.cos(pa - 44.0 / 21.0 - 0.06), B.VOET + 1, 21 * math.sin(pa - 44.0 / 21.0 - 0.06))
     # ---------------------------------------------------------------- Kruinzee (the 3 crown storeys + the nest)
     put("arena_vahoegnir", 0, NEST_STAND, 0)
     put("nest_eierkuil", 0, NEST_STAND, 0)
@@ -356,12 +358,12 @@ def plekken():
         x, z = pol(a, r)
         ex_, ez_ = x + (R + 3) * math.cos(a + 1.6), z + (R + 3) * math.sin(a + 1.6)
         put(f"honingvijver_{i + 1}", ex_, kstand(0, ex_, ez_), ez_)
-        kx_, kz_ = x + (R + 6) * math.cos(a + 3.4), z + (R + 6) * math.sin(a + 3.4)
+        kx_, kz_ = x + (R + 3) * math.cos(a - 1.6), z + (R + 3) * math.sin(a - 1.6)
         put(f"kuiken_{i + 1}", kx_, kstand(0, kx_, kz_), kz_)
     for i, deg in enumerate((75, 235)):
         x, z = pol(math.radians(deg), 116)
         put(f"zweefplatform_{i + 1}", x, kstand(0, x, z), z)
-    zx, zz = pol(math.radians(235), 108)
+    zx, zz = pol(math.radians(235), 100)
     put("kuiken_6", zx, kstand(0, zx, zz), zz)
     ux_, uz_ = pol(0.62, 80)
     put("uitkijk_kroon", ux_, kstand(1, ux_, uz_) + 14, uz_)
@@ -402,10 +404,10 @@ def plekken():
         put(key, x, y, z)
     x, y, z = tak_punt("Westtak", 72, 0.4)
     put("pluimpost_westtak", x, y, z)
-    for i, (tak, s_) in enumerate((("Westtak", 108), ("Noordtak", 96), ("Zuidwesttak", 128))):
+    for i, (tak, s_) in enumerate((("Westtak", 108), ("Noordtak", 96), ("Zuidwesttak", 106))):
         x, y, z = tak_punt(tak, s_)
         put(f"kaasschutterpost_{i + 1}", x, y, z)
-    x, y, z = tak_punt("Westtak", 146)
+    x, y, z = tak_punt("Westtak", 118)
     put("uitkijk_takpunt", x, y, z)
     for key, tak in (("valbrug", "Westtak"), ("lianenbrug", "Noordtak")):
         x, y, z = tak_punt(tak, 50)
@@ -431,17 +433,13 @@ def plekken():
     put("hartsplinter_3", x + 8 * math.cos(a3 + 2.1), y, z + 8 * math.sin(a3 + 2.1))
     put("grauwe_brief_1", x + 8 * math.cos(a3 + 1.7), y, z + 8 * math.sin(a3 + 1.7))
     put("roquefort_wrak", x + 17 * math.cos(a3 - 1.4), y - 3, z + 17 * math.sin(a3 - 1.4))
-    for key, (deg, r) in (("werf_kamer_touwwerk", (160, 20)), ("werf_kamer_gieterij", (250, 22)),
-                          ("werf_kamer_bewapening", (350, 17))):
-        x, z = WF.C[0] + r * math.cos(math.radians(deg)), WF.C[1] + r * math.sin(math.radians(deg))
+    for key, (x, z) in werf_kamers().items():
         put(key, x, werf_stand(x, z), z)
     bx_, by_, bz_ = PP["werf_kamer_bewapening"]
     PP["werf_loods_poort"] = [bx_, by_, bz_ + 9]
     for key, d in (("werf_trap_ab", WF.DOKKEN[1]), ("werf_trap_bc", WF.DOKKEN[2])):
-        x, y, z = WF.dok_pos(d)
-        g = math.atan2(WF.C[1] - z, WF.C[0] - x)
-        fx, fz = x + 10 * math.cos(g), z + 10 * math.sin(g)
-        put(key, fx, werf_stand(fx, fz), fz)
+        px_, pz_, sh_, nx_, nz_ = WF.toren_trap(d)[0]
+        put(key, px_, sh_, pz_)
     # ---------------------------------------------------------------- Wortelvelden (the ground of the island)
     mx, mz = MOSVOET
     put("mosvoet_plein", mx, gstand(mx, mz), mz)
@@ -510,8 +508,8 @@ def plekken():
         PP[f"wind_{wid}_onder"] = W(x, y0, z)
         PP[f"wind_{wid}_boven"] = W(lx, y1, lz)
     # ---------------------------------------------------------------- secrets
-    sec = [("kruin1", pol(math.radians(120), 92)), ("kruin2", pol(math.radians(200), 50)), ("tak", ("Molentak", 120)),
-           ("grond", pol(math.radians(140), 200)), ("kruin1", pol(math.radians(330), 118)), ("grond", pol(math.radians(10), 205)),
+    sec = [("kruin1", pol(math.radians(120), 100)), ("kruin2", pol(B.trap_landing(3)[0] + 0.5, 40)), ("tak", ("Molentak", 104)),
+           ("grond", pol(math.radians(140), 200)), ("kruin1", pol(math.radians(330), 104)), ("grond", pol(math.radians(10), 205)),
            ("grond", pol(math.radians(265), 200)), ("hal", (30, -40)), ("schors", 3), ("duister", (-40, 30))]
     for i, (waar, v) in enumerate(sec):
         if waar.startswith("kruin"):
@@ -530,7 +528,7 @@ def plekken():
             x, z = v
             y = gstand(x, z)
         put(f"geheim_knuffel_{i + 1}", x, y, z)
-    x, y, z = tak_punt("Zuidwesttak", 150)
+    x, y, z = tak_punt("Zuidwesttak", 100)
     put("geheim_schat_1", x, y, z)
     put("geheim_schat_2", 4, NEST_STAND, -16)
     y0_, a, h = huizen[-2]
@@ -562,6 +560,16 @@ def pelszaal_trap_hoek():
     """The angle of the Pelszaal stair (away from the riding-spiral gates and the stair foot)."""
     a0, _ = B.trap_landing(0)
     return a0 + math.pi * 0.8
+
+
+def werf_kamers():
+    """The werf halls (rel x, z of the centre): the bewapeningsloods north-west of the tower-3 stair start (its +z gate, 3 x 4,
+    opens onto a short path to the stair), the gieterij west of the tower-2 stair start, the touwwerk south of Dok 1."""
+    s3 = WF.toren_trap(WF.DOKKEN[2])[0]
+    s2 = WF.toren_trap(WF.DOKKEN[1])[0]
+    x1, y1, z1 = WF.dok_pos(WF.DOKKEN[0])
+    return {"werf_kamer_bewapening": (s3[0] - 11, s3[1] - 14), "werf_kamer_gieterij": (s2[0] - 11, s2[1]),
+            "werf_kamer_touwwerk": (x1 + 6, z1 + 26)}
 
 
 def werf_stand(x, z):
