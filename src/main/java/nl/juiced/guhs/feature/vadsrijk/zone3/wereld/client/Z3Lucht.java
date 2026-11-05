@@ -84,6 +84,9 @@ final class Z3Lucht {
         SkyDraw.drawNow("Z3 volcano", SkyDraw.CELESTIAL_TRANSLUCENT, kwad(118f, 4.5f, 22f, 11f), SkyDraw.texture(VULKAAN),
                 new Vector4f(0.75f, 0.68f, 0.78f, (0.5f + 0.2f * dag) * s), mv);
         // 4. Hoogvads, the floating city (east), bobbing a little; windows glow pink at night
+        if (nl.juiced.guhs.feature.vadsrijk.luchtschip.client.Schimmen.vervangt("hoogvads")) {
+            return;   // T-LUCHTSCHIP: Hoogvads is a real-position silhouette now
+        }
         float bob = Mth.sin(t * 0.004f) * 0.6f;
         SkyDraw.drawNow("Z3 Hoogvads", SkyDraw.CELESTIAL_TRANSLUCENT, kwad(93f, 9.5f + bob, 20f, 13f), SkyDraw.texture(HOOGVADS),
                 new Vector4f(Mth.lerp(nacht, 1f, 0.5f), Mth.lerp(nacht, 0.95f, 0.46f), Mth.lerp(nacht, 0.98f, 0.62f), (0.6f + 0.2f * dag) * s), mv);
