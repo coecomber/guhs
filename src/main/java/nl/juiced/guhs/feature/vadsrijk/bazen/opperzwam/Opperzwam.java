@@ -494,7 +494,7 @@ public class Opperzwam extends BazenBaas {
         if (stil()) {
             return;
         }
-        if (inSprong()) {
+        if (inSprong() || nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.loopt(this)) {   // (T-VFX: a bouwdoos attack runs: wait)
             return;
         }
         LivingEntity t = doel();
@@ -511,6 +511,11 @@ public class Opperzwam extends BazenBaas {
         switch (doet) {
             case RUST -> {
                 if (timer > 0 || t == null) {
+                    break;
+                }
+                int vfx = donker() ? 0 : nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.probeer(this, sl);   // T-VFX: the spore cone(s) (not in the dark)
+                if (vfx > 0) {
+                    timer = vfx;
                     break;
                 }
                 int keuze = getRandom().nextInt(donker() ? 1 : fase() >= 3 ? 3 : 2);
@@ -595,6 +600,11 @@ public class Opperzwam extends BazenBaas {
                         sl.sendParticles(ParticleTypes.EXPLOSION, v.x, v.y + 0.5, v.z, 3, 1.5, 0.3, 1.5, 0);
                     }
                     raak(sl, plekken, 4.5, 1.8, null, 0);
+                    for (Vec3 v : plekken) {   // T-VFX: the pop + a spore shockwave per spot
+                        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.treffer(this, v, 4.5, 0xC8A0FF);
+                        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.deeltjes(sl, nl.juiced.guhs.feature.vadsrijk.vfx.Deeltje.SPOOR, v.add(0, 0.5, 0), 14, 0xC8A0FF, 2, 0.15);
+                    }
+                    speel("stamp");
                     doet = Doet.RUST;
                     timer = 45;
                 }
@@ -678,7 +688,8 @@ public class Opperzwam extends BazenBaas {
             plekken.add(v);
             Telegraaf.cirkel(sl, v, 4.5, timer, Telegraaf.ROOD);
         }
-        speel("stamp");
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, timer);   // T-VFX: wind-up + cast bar, the stamp itself pops it
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "sporenstamp", timer);
     }
 
     private void raak(ServerLevel sl, List<Vec3> waar, double r, double factor, @Nullable Status st, int stTicks) {

@@ -432,7 +432,7 @@ public abstract class Z2Baas extends VadsrijkBaas implements GeoEntity {
             return;
         }
         actieTick(sl, l);
-        if (zInSprong() || l.isEmpty()) {
+        if (zInSprong() || l.isEmpty() || nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.loopt(this)) {   // (T-VFX: a bouwdoos attack runs: wait)
             return;
         }
         if (!bezig()) {
@@ -456,7 +456,13 @@ public abstract class Z2Baas extends VadsrijkBaas implements GeoEntity {
         if (--rustT <= 0 && !bezig()) {
             rustT = 40;
             aanvallenGedaan++;
-            kiesAanval(sl, l);
+            int vfx = nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.probeer(this, sl);   // T-VFX: sometimes a bouwdoos attack instead
+            if (vfx > 0) {
+                rustT = vfx + 10;
+                laatsteAanval = "vfx";
+            } else {
+                kiesAanval(sl, l);
+            }
         }
     }
 
@@ -570,6 +576,7 @@ public abstract class Z2Baas extends VadsrijkBaas implements GeoEntity {
             actie.triggerableAnim(a, RawAnimation.begin().thenPlay(a));
         }
         controllers.add(actie);
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.controllers(controllers);   // T-VFX: wind-up/hit/flinch/phase/cheer
     }
 
     protected void speel(String anim) {

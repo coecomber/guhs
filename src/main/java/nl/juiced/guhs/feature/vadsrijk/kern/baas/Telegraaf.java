@@ -9,8 +9,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Ground telegraphs (design 4.6: red/pink circles on the ground): a ring of coloured dust that pulses and fills inwards until
- * it "goes off". Particles only (cheap, visible to everyone). Kinds: {@link #cirkel}, {@link #lijn}.
+ * Ground telegraphs (design 4.6: red/pink circles on the ground). T-VFX: since the VFX kit these are real ground DECALS (flat
+ * textured quads that fill up until they "go off", drawn by the client: vfx.client.Decals; one packet each instead of dust every
+ * 3 ticks). {@link #DECALS} = false brings back the old dust rings. Kinds: {@link #cirkel}, {@link #lijn}, {@link #kegel},
+ * {@link #donut}, {@link #veilig}.
  */
 public final class Telegraaf {
     /** Colour language (fix round 1): red = damage, pink = safe, purple = mechanic, yellow = stack (soak together). */
@@ -24,14 +26,42 @@ public final class Telegraaf {
     private Telegraaf() {
     }
 
+    /** T-VFX: true = telegraphs are ground decals (one packet, drawn by the client's VFX kit); false = the old dust rings. */
+    public static boolean DECALS = true;
+
     /** A circle on the ground at {@code centrum} (its y = the ground surface) for {@code ticks}. */
     public static void cirkel(ServerLevel level, Vec3 centrum, double straal, int ticks, int kleur) {
+        if (DECALS) {   // T-VFX
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.decal(level, nl.juiced.guhs.feature.vadsrijk.vfx.Vorm.cirkel(straal), centrum, 0, ticks, kleur, 0);
+            return;
+        }
         ALLE.add(new Actief(level, centrum, centrum, straal, ticks, kleur, false, new int[1]));
     }
 
     /** A strip from a to b, {@code breedte} wide. */
     public static void lijn(ServerLevel level, Vec3 a, Vec3 b, double breedte, int ticks, int kleur) {
+        if (DECALS) {   // T-VFX
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.decalLijn(level, a, b, breedte, ticks, kleur, 0);
+            return;
+        }
         ALLE.add(new Actief(level, a, b, breedte / 2, ticks, kleur, true, new int[1]));
+    }
+
+    // ---- T-VFX: the new shapes (decals only) -----------------------------------------------------------------------------------
+
+    /** A cone from {@code punt} towards {@code richting} (radians, atan2(dz, dx)), {@code graden} wide, r long. */
+    public static void kegel(ServerLevel level, Vec3 punt, double richting, double r, double graden, int ticks, int kleur) {
+        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.decal(level, nl.juiced.guhs.feature.vadsrijk.vfx.Vorm.kegel(r, graden), punt, richting, ticks, kleur, 0);
+    }
+
+    /** A ring: safe within {@code binnen}, hit up to {@code buiten}. */
+    public static void donut(ServerLevel level, Vec3 centrum, double binnen, double buiten, int ticks, int kleur) {
+        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.decal(level, nl.juiced.guhs.feature.vadsrijk.vfx.Vorm.donut(binnen, buiten), centrum, 0, ticks, kleur, 0);
+    }
+
+    /** A pink safe spot (the pattern; the danger around it is the caller's). */
+    public static void veilig(ServerLevel level, Vec3 centrum, double straal, int ticks) {
+        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.decal(level, nl.juiced.guhs.feature.vadsrijk.vfx.Vorm.veilig(straal), centrum, 0, ticks, ROZE, 0);
     }
 
     public static void tick() {

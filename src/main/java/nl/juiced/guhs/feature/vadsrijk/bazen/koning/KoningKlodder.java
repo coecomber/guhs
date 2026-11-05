@@ -342,7 +342,7 @@ public class KoningKlodder extends BazenBaas {
             splits(sl);
             return;
         }
-        if (inSprong()) {
+        if (inSprong() || nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.loopt(this)) {   // (T-VFX: a bouwdoos attack runs: wait)
             return;
         }
         timer--;
@@ -359,6 +359,11 @@ public class KoningKlodder extends BazenBaas {
                 }
                 ServerPlayer t = volgendDoel();
                 ServerPlayer ver = afstandsSpeler();
+                int vfx = fase() >= 3 ? 0 : nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.probeer(this, sl);   // T-VFX: crown rain / the royal bath (not in the sky phase)
+                if (vfx > 0) {
+                    timer = vfx;
+                    break;
+                }
                 zet++;
                 boolean dichtbij = false;
                 for (ServerPlayer p : vechters()) {
@@ -380,6 +385,7 @@ public class KoningKlodder extends BazenBaas {
                     timer = fase() >= 3 ? 24 : 32;
                     speel("brul");
                     Telegraaf.cirkel(sl, position(), 8, timer, Telegraaf.ROOD);
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "grote_plof", timer);   // T-VFX: the cast bar names it
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2.5f, 0.3f);
                 } else {
                     doet = Doet.MIKT;   // the jump: his shadow = the landing spot; in fase 3 two in a row
@@ -387,6 +393,7 @@ public class KoningKlodder extends BazenBaas {
                     landing = voetenVan(t);
                     nogEenSprong = fase() >= 3;
                     Telegraaf.cirkel(sl, landing, 4.5, timer + 16, Telegraaf.ROOD);
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, timer);   // T-VFX: he crouches for the jump
                 }
             }
             case MIKT -> {
@@ -599,6 +606,8 @@ public class KoningKlodder extends BazenBaas {
 
     private void plet(ServerLevel sl, double r, double factor) {
         speel("land");
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.treffer(this, position(), r, 0x8AD0FF);   // T-VFX: the shockwave of the landing
+        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.deeltjes(sl, nl.juiced.guhs.feature.vadsrijk.vfx.Deeltje.SLIJM, position().add(0, 0.4, 0), 30, 0x8AD0FF, r * 0.4, 0.3);
         sl.playSound(null, blockPosition(), SoundEvents.SLIME_BLOCK_FALL, SoundSource.HOSTILE, 3f, 0.4f);
         sl.playSound(null, blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 1f, 0.7f);
         for (int i = 0; i < 40; i++) {
