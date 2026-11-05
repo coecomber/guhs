@@ -34,6 +34,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.register(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
+        nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.register(modBus);   // T-KLEDING: Kledingkast, wings, effects
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -51,5 +52,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.payloads(registrar);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.payloads(registrar);   // I-VOLTOOIING
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.payloads(registrar);   // zone 3 (z3-systemen)
+        nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.payloads(registrar);   // T-KLEDING
     }
 }
