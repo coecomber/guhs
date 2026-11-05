@@ -58,13 +58,17 @@ public final class Z3Critters {
         boolean nacht = sl.isDarkOutside();
         int w = r.nextInt(10);
         double y = p.getY(), rr = Z3WezensPlekken.r(p.getX(), p.getZ());
-        if (y < 62 && rr <= 460) {   // Wortelduister
+        // (P-VERHUIS) the revamped layers: the roots hall under the trunk, the hollow trunk (r < 26, 55-232), branches + crown from 140
+        if (y < 64 && rr <= 160) {   // Wortelduister
             return w < 5 ? Z3WezensRegistry.LANTAARNKEVER.get() : w < 9 ? Z3WezensRegistry.SPORENMOT.get() : Z3WezensRegistry.WORTELMUIS.get();
         }
-        if (rr <= 75 && y < 196) {   // the hollow trunk
+        if (rr <= 26 && y >= 55 && y < 232) {   // the hollow trunk
             return w < 6 ? Z3WezensRegistry.WORTELMUIS.get() : Z3WezensRegistry.LANTAARNKEVER.get();
         }
-        if (y >= 132) {              // crown, branches, Honingtak
+        if (!nacht && bijKorf(p)) {  // a bee swarm by the beekeepers' hives (POI v2 BIJENKORVEN)
+            return w < 9 ? Z3WezensRegistry.HONINGBIJ.get() : Z3WezensRegistry.SPORENMOT.get();
+        }
+        if (y >= 140) {              // crown, branches, Honingtak
             if (nacht) {
                 return w < 7 ? Z3WezensRegistry.LANTAARNKEVER.get() : Z3WezensRegistry.HONINGBIJ.get();
             }
@@ -74,6 +78,16 @@ public final class Z3Critters {
             return w < 6 ? Z3WezensRegistry.LANTAARNKEVER.get() : w < 9 ? Z3WezensRegistry.SPORENMOT.get() : Z3WezensRegistry.WORTELMUIS.get();
         }
         return w < 5 ? Z3WezensRegistry.WORTELMUIS.get() : w < 7 ? Z3WezensRegistry.HONINGBIJ.get() : Z3WezensRegistry.SPORENMOT.get();
+    }
+
+    /** Within 30 blocks of a beekeepers' hive (the swarm spots of the map). */
+    static boolean bijKorf(ServerPlayer p) {
+        for (BlockPos b : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.BIJENKORVEN) {
+            if (b.distToCenterSqr(p.getX(), p.getY(), p.getZ()) < 30 * 30) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /** The first standing spot searching down (solid floor, 2 free blocks, no fluid), or MIN_VALUE. */

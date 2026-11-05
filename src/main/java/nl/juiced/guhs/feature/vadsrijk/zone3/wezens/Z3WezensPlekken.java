@@ -25,8 +25,16 @@ public final class Z3WezensPlekken {
     private Z3WezensPlekken() {
     }
 
-    public static final int TX = 2300, TZ = 0;
-    public static final int MIN_X = 1900, MAX_X = 2700, MIN_Z = -400, MAX_Z = 400;
+    /** The trunk axis and the zone box: from the map (zone 3 can move; the numbers below are v2-frame fallbacks, shifted). */
+    public static final int TX = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, TZ = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;
+    public static final int MIN_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_X, MAX_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_X, MIN_Z = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_Z,
+            MAX_Z = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_Z;
+    /** The frame of the fallback numbers in this class (POI v2: trunk at (2300, 0)). */
+    static final int V2_X = 2300, V2_Z = 0;
+
+    static BlockPos v2(int x, int y, int z) {
+        return new BlockPos(x - V2_X + TX, y, z - V2_Z + TZ);
+    }
 
     /** The five layers (areas) with their levels (ZONE3_PLAN §2) and heights (POI_Z3 v2 mob zones: the crown storeys from 222, the
      *  branches 170-222, the dark stair section of the trunk 172-228, the ground 50-110, the roots hall and passage 14-72). */
@@ -45,7 +53,7 @@ public final class Z3WezensPlekken {
     }
 
     public static boolean inZone(double x, double z) {
-        return x >= MIN_X && x <= MAX_X && z >= MIN_Z && z <= MAX_Z;
+        return nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(x, z);
     }
 
     /** Is this in the Wortelduister or the Hart below the trunk: the soft lantern rule applies. */
@@ -151,15 +159,19 @@ public final class Z3WezensPlekken {
     /** A spot: z3-wereld's id when it exists, else this POI_Z3 v1 copy. */
     private static BlockPos w(String id, int x, int y, int z) {
         BlockPos b = wereld(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : v2(x, y, z);
     }
 
     static {
         for (var g : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.MOBZONES) {
             MOBZONES.add(new Zone(g.id(), g.cilinder(), g.a(), g.b(), g.c(), g.d(), g.minY(), g.maxY(), g.minLevel(), g.maxLevel()));
         }
-        if (MOBZONES.isEmpty()) {
-            MOBZONES.addAll(MOBZONES_V1);
+        if (MOBZONES.isEmpty()) {   // (v2-frame copy, shifted to the map's trunk)
+            for (Zone g : MOBZONES_V1) {
+                int sx = TX - V2_X, sz = TZ - V2_Z;
+                MOBZONES.add(g.cilinder() ? new Zone(g.id(), true, g.a() + sx, g.b() + sz, g.c(), g.d(), g.minY(), g.maxY(), g.minLevel(), g.maxLevel())
+                        : new Zone(g.id(), false, g.a() + sx, g.b() + sz, g.c() + sx, g.d() + sz, g.minY(), g.maxY(), g.minLevel(), g.maxLevel()));
+            }
         }
     }
 
@@ -185,7 +197,7 @@ public final class Z3WezensPlekken {
             return b;
         }
         BlockPos a = wereld(anker);
-        return a != null ? a.offset(dx, dy, dz) : new BlockPos(x, y, z);
+        return a != null ? a.offset(dx, dy, dz) : v2(x, y, z);
     }
 
     /** The named area leaders' landmarks (ZONE3_PLAN §6: "elites staan bij de landmarks"); floor search 24 down / 10 up. */
@@ -295,7 +307,7 @@ public final class Z3WezensPlekken {
         }
         List<BlockPos> vuren = new ArrayList<>(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.KAMPVUREN);
         if (vuren.isEmpty()) {
-            vuren.addAll(KAMPVUREN_V1);
+            KAMPVUREN_V1.forEach(b -> vuren.add(v2(b.getX(), b.getY(), b.getZ())));
         }
         for (BlockPos b : vuren) {
             veilig(b, 20, 12, 18);
@@ -362,7 +374,13 @@ public final class Z3WezensPlekken {
         Map<String, int[][]> bron = new LinkedHashMap<>();
         bron.putAll(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.PADEN);
         if (bron.isEmpty()) {
-            bron.putAll(PADEN_V1);
+            PADEN_V1.forEach((n, pts) -> {
+                int[][] q = new int[pts.length][];
+                for (int i = 0; i < pts.length; i++) {
+                    q[i] = new int[] {pts[i][0] - V2_X + TX, pts[i][1] - V2_Z + TZ};
+                }
+                bron.put(n, q);
+            });
         }
         bron.forEach((n, p) -> {
             if (p.length > 1) {

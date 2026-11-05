@@ -207,7 +207,7 @@ NPCS = {
         "Ik teken sterrenkaarten. De sterren hier hebben guh-oortjes.",
         "Vanaf de hoge uitkijk zie je ver weg een reuzenboom. Niemand weet wat daar is.",
         # (WERELDVERHAAL §10 #9: a 4th idle line, NpcDef.VIER_REGELS)
-        "Ik teken sterrenbeelden met guh-oortjes. Maar aan de verre rand staat er één met heel lange armen. Hij staat elk jaar een "
+        "Ik teken sterrenbeelden met guh-oortjes. Maar aan de verre rand hangt een grauwe mistbank waar geen ster doorheen komt. Hij komt elk jaar een "
         "stukje dichterbij."],
         "voor haar huisje op het terras aan de noordoostkant van Kandijkom"),
     # --- out in the zone -------------------------------------------------------------------------------------------------------
@@ -655,7 +655,7 @@ Q("z2_hq12_hartsplinter", "hoofd", "z2_prisma", "Een roze splinter",
   [("npc", "Ga, avonturier. De Orde moet dit weten.")],
   "Naar Ordemeester Kristalijn in de Kristalkapel aan de noordkant van Kandijkom (achter de grote sneeuwguh-spar).",
   [("npc", "Een splinter van het hartkristal... Ik heb er alleen over gelezen. In de oudste boeken van de Orde."),
-   ("npc", "Er stond ook een plaatje in van een kat met armen tot over de rand van de bladzijde. Die bladzijde is eruit gescheurd. "
+   ("npc", "Er stond ook een plaatje in van een kat met een kroontje, en grauwe mist die over de hele bladzijde kroop. Die bladzijde is eruit gescheurd. "
            "Niet door mij."),
    ("npc", "Toen Vahoegnir nog roze was, droeg hij een hart van roze kristal. Zolang het heel was, beschermde hij het hele rijk."),
    ("npc", "Iemand heeft het gebroken. De Mika's? Ze boren het grauwe kristal uit de bergen... ze zoeken iets."),

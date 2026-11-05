@@ -32,9 +32,9 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.piepvel.Piepvel;
 /**
  * The zone-3 boss moments that run without clicks:
  * <ul>
- *   <li>{@link #armFlash}: flash F1, the first flash of the empire. After Graaf Piepvel's defeat a long, thin, grey arm with five
- *       long fingers reaches in through a knothole, grabs the count by his shirt and snatches him away ("Nee nee nee, Keizer, ik
- *       kan het uitleggen!"). Floep. Silence.</li>
+ *   <li>{@link #armFlash}: flash F1, the first flash of the empire. After Graaf Piepvel's defeat a cold grey mist of the
+ *       Vadsloosheid rolls in through a knothole, two Mika henchmen step out of it and drag the count back into it ("Nee nee nee,
+ *       Keizer, ik kan het uitleggen!"). Floep. Silence. (The Keizer's "long arms" are figurative: his reach, never a real arm.)</li>
  *   <li>{@link #vahoegnirEinde}: the last splinters, Vahoegnir turns pink, the egg hatches (Vahoegje), the pink beam toward
  *       Hoogvads, the dragon flies off along it; then {@link #troonzaal}.</li>
  *   <li>{@link #troonzaal}: flash F2, the Keizer's throne room at night (a small set built above the nest for the scene, removed
@@ -107,56 +107,86 @@ public final class Z3Scenes {
                 .append(Component.translatable(key).withStyle(ChatFormatting.WHITE));
     }
 
-    // ---- flash F1: the arm -------------------------------------------------------------------------------------------------
+    // ---- flash F1: the grey mist ------------------------------------------------------------------------------------------
+    // (lore correction, the user: the Keizer's "long arms" are FIGURATIVE: his grasping power, his reach. Never a literal giant arm.)
 
-    /** The arm of the Keizer snatches Graaf Piepvel away (he must be beaten: geplofd, in his shirt). */
+    private static final DustParticleOptions MIST = new DustParticleOptions(0x8A8A9A, 3.5f), MIST_DONKER = new DustParticleOptions(0x5A5A66, 4.0f);
+
+    /**
+     * The Keizer's reach takes Graaf Piepvel (he must be beaten: geplofd, in his shirt): a cold grey mist of the Vadsloosheid rolls
+     * in through the knot hole in the Pelszaal wall, two Mika henchmen step out of it, take the count by his arms and drag him back
+     * into the mist. It swallows them; floep, gone. Same timing and the same story beat ("piepvel_weg") as before.
+     */
     public static void armFlash(ServerLevel sl, Piepvel g, List<Z3Figurant> muizen) {
         Vec3 piep = g.position();
-        Vec3 richting = Z3BazenPlekken.PIEP_KWASTGAT_RICHTING;   // from the hall toward the knothole
-        Vec3 vooruit = richting.scale(-1);                           // the arm reaches this way
-        float yaw = (float) Math.toDegrees(Math.atan2(-vooruit.x, vooruit.z));
-        double lengte = 175 / 16.0 * 2.5;                            // the model's reach at scale 2.5
-        Vec3 ver = piep.add(0, 1.2, 0).subtract(vooruit.scale(lengte + 30)), dichtbij = piep.add(0, 1.2, 0).subtract(vooruit.scale(lengte - 0.5));
+        Vec3 richting = Z3BazenPlekken.PIEP_KWASTGAT_RICHTING;           // from the hall toward the knothole (where the mist comes from)
+        Vec3 gat = Vec3.atCenterOf(Z3BazenPlekken.PIEP_KWASTGAT);
+        Vec3 zijw = new Vec3(-richting.z, 0, richting.x).normalize();
         List<ServerPlayer> kijkers = rond(sl, piep, 40);
         for (ServerPlayer p : kijkers) {
             if (Spelers.data(p).gezien.add("z3:f1_arm")) {
-                Vec3 zij = new Vec3(-richting.z, 0, richting.x).normalize();
                 RijkScenes.speel(p, RijkScene.maak("z3_f1_arm", ARM_TICKS)
-                        .camera(0, piep.add(zij.scale(5)).add(0, 1.8, 0), piep.add(0, 1, 0))
-                        .camera(45, piep.add(zij.scale(7)).add(0, 2.5, 0).subtract(richting.scale(2)), piep.add(0, 1.5, 0).add(richting.scale(4)))
-                        .camera(95, piep.add(zij.scale(9)).add(0, 3, 0).subtract(richting.scale(3)), piep.add(0, 2, 0).add(richting.scale(6)))
-                        .camera(ARM_TICKS, piep.add(zij.scale(10)).add(0, 5, 0), piep.add(richting.scale(18)).add(0, 4, 0))
+                        .camera(0, piep.add(zijw.scale(5)).add(0, 1.8, 0), piep.add(0, 1, 0))
+                        .camera(45, piep.add(zijw.scale(7)).add(0, 2.5, 0).subtract(richting.scale(2)), piep.add(0, 1.5, 0).add(richting.scale(4)))
+                        .camera(95, piep.add(zijw.scale(9)).add(0, 3, 0).subtract(richting.scale(3)), piep.add(0, 2, 0).add(richting.scale(6)))
+                        .camera(ARM_TICKS, piep.add(zijw.scale(10)).add(0, 5, 0), gat)
                         .titel("vadsrijk.z3bazen.f1.titel", "vadsrijk.z3bazen.f1.onder", 115, 35, 0x8A8A9A).bouw());
             }
         }
-        Z3Figurant[] arm = new Z3Figurant[1];
+        Z3Figurant[] mika = new Z3Figurant[2];
+        Vec3[] start = {gat.add(zijw.scale(1.2)).add(0, -3, 0), gat.add(zijw.scale(-1.2)).add(0, -3, 0)};
         loop(t -> {
+            // the mist bank: from the knot hole toward the count, thicker and thicker; it takes him back with it
+            if (t >= 40 && t <= 125) {
+                double f = t <= 88 ? (t - 40) / 48.0 : 1 - (t - 88) / 37.0;
+                Vec3 kop = gat.lerp(piep.add(0, 1, 0), Math.max(0, Math.min(1, f)));
+                sl.sendParticles(MIST, kop.x, kop.y, kop.z, 18, 2.2, 1.2, 2.2, 0.01);
+                sl.sendParticles(MIST_DONKER, gat.x, gat.y, gat.z, 10, 1.5, 1.5, 1.5, 0.01);
+                if (t % 3 == 0) {
+                    sl.sendParticles(net.minecraft.core.particles.ParticleTypes.CAMPFIRE_SIGNAL_SMOKE, kop.x, kop.y - 0.5, kop.z, 2, 1.5, 0.3, 1.5, 0.005);
+                }
+            }
             if (t == 30) {
                 zeg(kijkers, spreker("vadsrijk.z3bazen.piepvel", "vadsrijk.z3bazen.pv.mijn_cape"));
             }
             if (t == 40) {
-                sl.playSound(null, piep.x, piep.y, piep.z, SoundEvents.WOOD_BREAK, SoundSource.AMBIENT, 3f, 0.4f);
+                sl.playSound(null, piep.x, piep.y, piep.z, SoundEvents.ELYTRA_FLYING, SoundSource.AMBIENT, 1.5f, 0.4f);   // a cold wind
+                sl.playSound(null, piep.x, piep.y, piep.z, SoundEvents.POWDER_SNOW_STEP, SoundSource.AMBIENT, 2f, 0.5f);
                 for (ServerPlayer p : kijkers) {
-                    Beleving.schud(p, 0.8f, 30);
+                    Beleving.schud(p, 0.5f, 20);
                 }
             }
             if (t == 50) {
-                arm[0] = Z3Figurant.maak(sl, ver, yaw, "vr_z3_baas_keizerarm", "textures/vadsrijk/z3bazen/keizerarm.png", "vr_z3_baas_keizerarm", "idle", 2.5f);
-                sl.playSound(null, piep.x, piep.y, piep.z, SoundEvents.WARDEN_EMERGE, SoundSource.AMBIENT, 2f, 1.4f);
+                for (int i = 0; i < 2; i++) {
+                    mika[i] = Z3Figurant.maak(sl, start[i], 0, "mika", "textures/vadsrijk/z3bazen/matroos.png", "guh", "animation.guh.walk", 1.0f);
+                    if (mika[i] != null) {
+                        mika[i].doel = piep.add(zijw.scale(i == 0 ? 0.9 : -0.9));
+                        mika[i].snelheid = 0.35;
+                    }
+                }
+                sl.playSound(null, piep.x, piep.y, piep.z, SoundEvents.WARDEN_EMERGE, SoundSource.AMBIENT, 1.2f, 1.6f);
             }
-            if (arm[0] != null && t > 50 && t <= 75) {
-                arm[0].zet(ver.lerp(dichtbij, (t - 50) / 25.0));
-            }
-            if (t == 76 && arm[0] != null) {
-                arm[0].anim("1:grijp");
+            if (t == 76) {
+                for (Z3Figurant m : mika) {
+                    if (m != null) {
+                        m.anim("animation.guh.idle");
+                    }
+                }
                 zeg(kijkers, spreker("vadsrijk.z3bazen.piepvel", "vadsrijk.z3bazen.f1.uitleggen"));
             }
-            if (arm[0] != null && t > 88 && t <= 118) {
-                Vec3 v = dichtbij.lerp(ver, (t - 88) / 30.0);
-                arm[0].zet(v);
-                Vec3 hand = v.add(vooruit.scale(lengte - 0.5)).add(0, -1.2, 0);
+            if (t > 88 && t <= 118) {
+                // dragged back into the mist
+                double f = (t - 88) / 30.0;
+                Vec3 v = piep.lerp(gat.add(0, -2, 0), f);
                 if (!g.isRemoved()) {
-                    g.setPos(hand.x, hand.y, hand.z);
+                    g.setPos(v.x, v.y, v.z);
+                }
+                for (int i = 0; i < 2; i++) {
+                    if (mika[i] != null) {
+                        mika[i].doel = null;
+                        mika[i].anim("animation.guh.walk");
+                        mika[i].zet(v.add(zijw.scale(i == 0 ? 0.9 : -0.9)));
+                    }
                 }
             }
             if (t == 105) {
@@ -164,8 +194,10 @@ public final class Z3Scenes {
                 sl.playSound(null, piep.x, piep.y, piep.z, SoundEvents.CHICKEN_EGG, SoundSource.AMBIENT, 2f, 0.5f);
             }
             if (t == 120) {
-                if (arm[0] != null) {
-                    arm[0].discard();
+                for (Z3Figurant m : mika) {
+                    if (m != null) {
+                        m.discard();
+                    }
                 }
                 if (!g.isRemoved()) {
                     g.discard();
@@ -353,10 +385,8 @@ public final class Z3Scenes {
             graaf.verberg("cape");
         }
         Z3Figurant krabbel = Z3Figurant.maak(sl, m.add(2.5, 0, -1.5), 120, "mika", "textures/vadsrijk/z3bazen/krabbel.png", "guh", "animation.guh.idle", 0.8f);
-        // the hand on the armrest: the arm comes from far behind the throne, far too long
-        double lengte = 175 / 16.0;
-        Z3Figurant hand = Z3Figurant.maak(sl, troon.add(1.2, 1.4, -lengte + 0.6), 0, "vr_z3_baas_keizerarm", "textures/vadsrijk/z3bazen/keizerarm.png",
-                "vr_z3_baas_keizerarm", "tik", 1.0f);
+        // (lore correction) no hand or arm: the Keizer stays a shadow behind the throne; only the tapping and a cold grey haze
+        Z3Figurant hand = null;
         p.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, TROON_TICKS + 20, 0, false, false));
         RijkScenes.speel(p, RijkScene.maak("z3_f2_troonzaal", TROON_TICKS)
                 .camera(0, m.add(0, 2.2, 4.5), m.add(0, 0.8, -2))
@@ -375,6 +405,7 @@ public final class Z3Scenes {
                 case 160 -> zeg(een, spreker("vadsrijk.z3bazen.krabbel", "vadsrijk.z3bazen.f2.rapport2"));
                 case 200 -> {
                     zeg(een, Component.translatable("vadsrijk.z3bazen.f2.tik").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+                    sl.sendParticles(p, MIST, true, false, troon.x, troon.y + 1.5, troon.z, 30, 1.2, 0.8, 1.2, 0.005);
                     Z3Vast.geluid(p, SoundEvents.NOTE_BLOCK_HAT.value(), 1f, 0.5f);
                 }
                 case 270 -> zeg(een, spreker("vadsrijk.z3bazen.keizer", "vadsrijk.z3bazen.f2.reik"));

@@ -35,7 +35,20 @@ public final class Z3NpcPlekken {
 
     static BlockPos w(String id, int x, int y, int z) {
         BlockPos b = wereld(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : v2(x, y, z);
+    }
+
+    /** The v2 frame: the fallback numbers in this class are written for the trunk at (2300, 0); shifted to the map's trunk. */
+    public static final int V2_X = 2300, V2_Z = 0;
+
+    /** A v2-frame block position on the map as it is now (zone 3 may move: P-VERHUIS, the lead moves the trunk). */
+    public static BlockPos v2(int x, int y, int z) {
+        return new BlockPos(x - V2_X + TX, y, z - V2_Z + TZ);
+    }
+
+    /** A v2-frame point on the map as it is now. */
+    public static Vec3 v2(double x, double y, double z) {
+        return new Vec3(x - V2_X + TX, y, z - V2_Z + TZ);
     }
 
     /** A z3-wereld spot moved a little (an NPC next to a campfire, not in it). */
@@ -43,8 +56,8 @@ public final class Z3NpcPlekken {
         return w(id, x, y, z).offset(dx, 0, dz);
     }
 
-    /** The trunk axis. */
-    public static final int TX = 2300, TZ = 0;
+    /** The trunk axis (from the map: zone 3 can move). */
+    public static final int TX = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, TZ = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;
 
     // ---- (P-VERHUIS) the outer riding spiral (boom2.py RIJ: y 82 -> 236, 34 per turn, meets the Honingplein at y 166, south) -----
     public static final double RIJ_Y0 = 82, RIJ_STIJG = 34, RIJ_EIND = 232, RIJ_BREED = 9, HONING_Y = 166;
@@ -84,9 +97,9 @@ public final class Z3NpcPlekken {
         return l;
     }
 
-    /** Is this x in zone 3 (the tracker's airship hop)? */
-    public static boolean zone3(double x) {
-        return x > 1500;
+    /** Is this point in zone 3 (the tracker's airship hop)? One shared lookup: the map's zone box. */
+    public static boolean zone3(double x, double z) {
+        return nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(x, z);
     }
 
     // ---- Honingtak (the hub town on the west branch) ---------------------------------------------------------------------------
@@ -169,7 +182,7 @@ public final class Z3NpcPlekken {
         int[] kies = {0, 4, 7, 9, 11, 13};
         int[][] bv = {{2345, 198, 44}, {2241, 207, 69}, {2287, 188, -89}, {2360, 167, 33}, {2252, 167, -52}, {2456, 161, -153}};
         for (int i = 0; i < kies.length; i++) {
-            npc("z3_brug_" + (i + 1), kies[i] < brug.size() ? brug.get(kies[i]) : new BlockPos(bv[i][0], bv[i][1], bv[i][2]));
+            npc("z3_brug_" + (i + 1), kies[i] < brug.size() ? brug.get(kies[i]) : v2(bv[i][0], bv[i][1], bv[i][2]));
         }
     }
 
@@ -213,7 +226,7 @@ public final class Z3NpcPlekken {
         poi("z3_spiraalpoort", w("spiraal_poort_176", 2300, 167, 45));
         poi("z3_lantaarntoren", w("lantaarnring_1", 2303, 93, 0));
         for (int i = 1; i <= 7; i++) {
-            poi("z3_ring_" + i, w("lantaarnring_" + i, 2303, 83 + 10 * i, 0));
+            poi("z3_ring_" + i, w("schorsstad_ring_" + i, 2300, 85 + 10 * i, 20));   // (revamp) the stair spot beside ring i (always reachable)
         }
         poi("z3_pelszaal", w("arena_piepvel", 2300, 61, 0));
         poi("z3_capespeld", w("hartsplinter_4", 2303, 61, 4));
@@ -278,8 +291,9 @@ public final class Z3NpcPlekken {
     }
 
     public static final List<Gebied> GEBIEDEN = List.of(
-            new Gebied("z3_zeppelinwerf", 2456, -346, 2646, -156, 38, 40, false),
-            new Gebied("z3_ring", 1900, -400, 2700, 400, 30, 50, false));
+            new Gebied("z3_zeppelinwerf", TX + 156, TZ - 346, TX + 346, TZ - 156, 38, 40, false),
+            new Gebied("z3_ring", nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_X, nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_Z, nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_X,
+                    nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_Z, 30, 50, false));
 
     // ---- secrets ---------------------------------------------------------------------------------------------------------------
     /** 10 lost knuffels; 3 only by gliding or high branches. */
@@ -335,23 +349,23 @@ public final class Z3NpcPlekken {
      * the trunk into the roots where two grey-blue eyes open. The player waits under the camera (OPENING_ANKER) so the chunks load.
      */
     public static final Vec3[] OPENING = {
-            new Vec3(2380, 110, 95), new Vec3(2300, 140, 0),          // 0: low along the bark wall (south-east)
-            new Vec3(2410, 210, 110), new Vec3(2300, 240, 0),         // 120: higher, into the clouds
-            new Vec3(2440, 320, 160), new Vec3(2300, 285, 0),         // 200: above the clouds: the crown in gold, the nest on top
-            new Vec3(2318, 178, 98), new Vec3(2300, 167, 52),         // 270: the Honingplein, beekeepers waving
-            new Vec3(2370, 95, 60), new Vec3(2300, 40, 0),            // 340: down along the trunk into the dusk
-            new Vec3(2335, 24, 22), new Vec3(2300, 24, -12)};         // 420: deep in the roots hall: two eyes open
+            v2(2380.0, 110, 95), v2(2300.0, 140, 0),          // 0: low along the bark wall (south-east)
+            v2(2410.0, 210, 110), v2(2300.0, 240, 0),         // 120: higher, into the clouds
+            v2(2440.0, 320, 160), v2(2300.0, 285, 0),         // 200: above the clouds: the crown in gold, the nest on top
+            v2(2318.0, 178, 98), v2(2300.0, 167, 52),         // 270: the Honingplein, beekeepers waving
+            v2(2370.0, 95, 60), v2(2300.0, 40, 0),            // 340: down along the trunk into the dusk
+            v2(2335.0, 24, 22), v2(2300.0, 24, -12)};         // 420: deep in the roots hall: two eyes open
     public static final int[] OPENING_T = {0, 120, 200, 270, 340, 420};
     /** Where the player waits during the parts of the opening: by the nest (t 0), on the plaza (t 260), in the Hartslag-zaal (t 335). */
     public static final BlockPos[] OPENING_ANKER = {w("nest_rand", 2296, 294, -13), PLEIN, w("hartslag_zaal", 2352, 23, 0)};
     /** The eyes in the dark (the Schimmelkolos), just behind the egg's root basket. */
-    public static final Vec3 OGEN = new Vec3(2300, 24, -12);
+    public static final Vec3 OGEN = v2(2300.0, 24, -12);
 
     /** The small BAM (z3_hq02): a Mika zeppelin over the Honingplein market (south of the trunk). */
-    public static final Vec3 ZEPPELIN_VAN = new Vec3(2420, 192, 130), ZEPPELIN_NAAR = new Vec3(2200, 188, 30);
+    public static final Vec3 ZEPPELIN_VAN = v2(2420.0, 192, 130), ZEPPELIN_NAAR = v2(2200.0, 188, 30);
     public static final Vec3[] BAM = {
-            new Vec3(2312, 172, 84), new Vec3(2340, 186, 40),
-            new Vec3(2290, 172, 76), new Vec3(2262, 184, 32)};
+            v2(2312.0, 172, 84), v2(2340.0, 186, 40),
+            v2(2290.0, 172, 76), v2(2262.0, 184, 32)};
 
     /** The old nest flashback (z3_hq05): Vahoegnir, still pink, lays a glowing egg and wraps his wings around it. */
     public static final Vec3 NEST = Vec3.atBottomCenterOf(w("nest_eierkuil", 2300, 294, 0));
@@ -378,7 +392,7 @@ public final class Z3NpcPlekken {
      * The dragon skims the bark. Built from {@link #rijpad()} so it follows the map.
      */
     public static final Vec3[] RIT = rit();
-    public static final Vec3[] RIT_DRAAK = {new Vec3(2520, 240, 160), new Vec3(2400, 150, 80), new Vec3(2200, 230, -110), NEST.add(0, 20, -10)};
+    public static final Vec3[] RIT_DRAAK = {v2(2520.0, 240, 160), v2(2400.0, 150, 80), v2(2200.0, 230, -110), NEST.add(0, 20, -10)};
 
     private static Vec3[] rit() {
         List<Vec3> pad = rijpad();
@@ -414,7 +428,7 @@ public final class Z3NpcPlekken {
     public static final Vec3 HOOGVADS = Vec3.atCenterOf(w("landmark_hoogvads_richting", 3000, 260, 0)).add(300, 60, 0);
 
     /** Flash F2 (z3_hq15): the throne room, far away (a private set high above the far north-east, outside the zone, never walked). */
-    public static final Vec3 TROON = new Vec3(2990, 300, -680);
+    public static final Vec3 TROON = v2(2990.0, 300, -680);
     public static final Vec3[] FLASH_F2 = {
             TROON.add(0, 3, 14), TROON.add(0, 2, 0),
             TROON.add(-3, 2, 6), TROON.add(0, 1, -2),
@@ -425,11 +439,11 @@ public final class Z3NpcPlekken {
      * balcony; the Nestkapel is now a honeycomb cell under the deck without a view.)
      */
     private static final Vec3 BALKON = Vec3.atBottomCenterOf(w("knuffelbeeld", 2300, 167, 52)).add(0, 0, 12);
-    public static final Vec3[] CLIFFHANGER = {BALKON.add(-4, 2, -6), BALKON.add(20, 0, 0), BALKON.add(6, 40, -10), new Vec3(3800, 330, 0)};
+    public static final Vec3[] CLIFFHANGER = {BALKON.add(-4, 2, -6), BALKON.add(20, 0, 0), BALKON.add(6, 40, -10), v2(3800.0, 330, 0)};
 
     /** The airship to Honingtak (fallback when z3-wereld has no line): over the cloud sea from the west to the mast (north-west). */
     public static final Vec3[] VLUCHT = {
-            new Vec3(1960, 240, -170), new Vec3(2215, 170, -88),
-            new Vec3(2110, 200, -130), new Vec3(2215, 168, -88),
-            new Vec3(2190, 172, -100), new Vec3(2300, 180, 0)};
+            v2(1960.0, 240, -170), v2(2215.0, 170, -88),
+            v2(2110.0, 200, -130), v2(2215.0, 168, -88),
+            v2(2190.0, 172, -100), v2(2300.0, 180, 0)};
 }

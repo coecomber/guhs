@@ -42,22 +42,23 @@ public class VadsrijkZ3SystemenGameTests {
     public static void gelaagdeGebieden(GameTestHelper helper) {
         Z3Lagen.registreer();
         // same x/z, different heights
+        int X0 = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, Z0 = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;   // (P-VERHUIS) zone 3 can move: everything relative to the trunk
         // (P-VERHUIS) the revamped tree (POI v2): crown 212+, Honingtak ring 145-200, hollow trunk r < 26, roots hall r < 160 with the
         // Hart's ring of rooms r 76-150 round it, the riding spiral r 26-64 outside the trunk
-        verwacht(helper, 2300, 250, 0, "z3_kruinzee");
-        verwacht(helper, 2300, 150, 0, "z3_schorsstad");
-        verwacht(helper, 2410, 29, 10, "z3_hart");
-        verwacht(helper, 2300, 40, 0, "z3_wortelduister");
-        verwacht(helper, 2250, 30, 0, "z3_wortelduister");
-        verwacht(helper, 2500, 80, 0, "z3_wortelvelden");
-        verwacht(helper, 2300, 170, 100, "z3_honingtak");
-        verwacht(helper, 2450, 80, 150, "z3_wortelvelden");
-        verwacht(helper, 2300, 205, 190, "z3_takkenbanen");
-        verwacht(helper, 2551, 192, -291, "z3_zeppelinwerf");
-        verwacht(helper, 2300, -10, 0, "z3_ring");
-        verwacht(helper, 2345, 120, 0, "z3_stamspiraal");
+        verwacht(helper, X0 + 0, 250, Z0 + 0, "z3_kruinzee");
+        verwacht(helper, X0 + 0, 150, Z0 + 0, "z3_schorsstad");
+        verwacht(helper, X0 + 110, 29, Z0 + 10, "z3_hart");
+        verwacht(helper, X0 + 0, 40, Z0 + 0, "z3_wortelduister");
+        verwacht(helper, X0 + -50, 30, Z0 + 0, "z3_wortelduister");
+        verwacht(helper, X0 + 200, 80, Z0 + 0, "z3_wortelvelden");
+        verwacht(helper, X0 + 0, 170, Z0 + 100, "z3_honingtak");
+        verwacht(helper, X0 + 150, 80, Z0 + 150, "z3_wortelvelden");
+        verwacht(helper, X0 + 0, 205, Z0 + 190, "z3_takkenbanen");
+        verwacht(helper, X0 + 251, 192, Z0 + -291, "z3_zeppelinwerf");
+        verwacht(helper, X0 + 0, -10, Z0 + 0, "z3_ring");
+        verwacht(helper, X0 + 45, 120, Z0 + 0, "z3_stamspiraal");
         // a flat lookup cannot know the layer: it skips the layered areas
-        Gebieden.Gebied plat = Gebieden.op(2300, 0);
+        Gebieden.Gebied plat = Gebieden.op(X0, Z0);
         helper.assertTrue(plat != null && plat.id().equals("z3_ring"), "flat lookup in zone 3: " + (plat == null ? null : plat.id()));
         // zone 1/2 are unchanged (no layer, every height)
         helper.assertTrue(Gebieden.op(0, 0).id().equals("zwamzoet") && Gebieden.op(0, 300, 0).id().equals("zwamzoet")
@@ -69,7 +70,7 @@ public class VadsrijkZ3SystemenGameTests {
         Gebieden.Gebied ring = c.metRing(0, 0, 4, 10);
         helper.assertTrue(!ring.bevat(1, 5, 1) && ring.bevat(6, 5, 0), "ring");
         // Z3Lagen agrees with the runtime list
-        helper.assertTrue(Z3Lagen.op(2300, 250, 0).id().equals("z3_kruinzee") && Z3Lagen.op(0, 64, 0) == null, "Z3Lagen.op");
+        helper.assertTrue(Z3Lagen.op(X0, 250, Z0).id().equals("z3_kruinzee") && Z3Lagen.op(0, 64, 0) == null, "Z3Lagen.op");
         helper.succeed();
     }
 

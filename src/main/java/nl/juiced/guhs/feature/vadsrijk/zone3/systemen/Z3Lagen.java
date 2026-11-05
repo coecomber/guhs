@@ -18,7 +18,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.Gebied;
  * The biome source ({@code VadsrijkBiomen}) reads this list too (pure: it never reads the runtime Gebieden list).
  */
 public final class Z3Lagen {
-    public static final int STAM_X = 2300, STAM_Z = 0;
+    public static final int STAM_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, STAM_Z = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;
     /** (P-VERHUIS) the zone box follows the map (revamp: x 1900..2700, z -400..400). */
     public static final int ZONE_MIN_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_X,
             ZONE_MAX_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_X,
@@ -54,8 +54,9 @@ public final class Z3Lagen {
     private Z3Lagen() {
     }
 
+    /** (P-VERHUIS) one shared zone lookup: the map's zone box ({@code Z3WereldPlekken.inZone3}); zone 3 can move. */
     public static boolean inZone3(double x, double z) {
-        return x >= ZONE_MIN_X && x <= ZONE_MAX_X + 0.999 && z >= ZONE_MIN_Z && z <= ZONE_MAX_Z + 0.999;
+        return nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(x, z);
     }
 
     /** The zone-3 area at x/y/z from this fixed plan (null outside the zone box). */

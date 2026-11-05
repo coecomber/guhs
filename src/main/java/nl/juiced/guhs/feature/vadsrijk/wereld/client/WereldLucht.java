@@ -38,7 +38,7 @@ import org.joml.Vector4f;
  *       tree, a dark volcano with black fluff);</li>
  *   <li>now and then the grey dragon circling far away (a flapping silhouette; the real model is the wezens slice's);</li>
  *   <li>(i-lore, WERELDVERHAAL §10) two hints of the Keizer inside scenes: the second moon that blinks once at the end of the
- *       zone-1 cliffhanger (#15), and a thin grey line with fingers on the horizon for one second of the zone-2 flashback (#14).</li>
+ *       zone-1 cliffhanger (#15), and a grey mist bank on the far horizon for one second of the zone-2 flashback (#14; the Keizer's reach is figurative).</li>
  * </ul>
  * Textures: tools/features/vadsrijk_wereld.py (textures/vadsrijk/wereld/lucht_*.png).
  */
@@ -58,7 +58,7 @@ final class WereldLucht {
     /** (i-lore) The moon shot of the zone-1 cliffhanger (Verhaal.cliffhanger, 312 ticks): the moon from OOG_VAN, one blink at OOG_KNIPPER. */
     private static final String OOG_SCENE = "npc:cliffhanger", VINGER_SCENE = "npc:z2_flashback";
     private static final int OOG_VAN = 262, OOG_KNIPPER = 292, KNIPPER_DUUR = 6;
-    /** (i-lore) The fingers on the horizon in the zone-2 flashback (Z2Verhaal.flashback, 260 ticks): one second from VINGERS_VAN. */
+    /** (i-lore; lore correction: a grey mist bank, no fingers) The mist on the horizon in the zone-2 flashback (Z2Verhaal.flashback, 260 ticks): one second from VINGERS_VAN. */
     private static final int VINGERS_VAN = 228, VINGERS_DUUR = 20;
 
     @Nullable
@@ -144,7 +144,7 @@ final class WereldLucht {
                     SkyDraw.white(a), mv);
         } else if (sc != null && VINGER_SCENE.equals(sc.id()) && st >= VINGERS_VAN && st < VINGERS_VAN + VINGERS_DUUR) {
             float a = Mth.sin(Mth.PI * (st - VINGERS_VAN) / VINGERS_DUUR) * 0.8f;
-            SkyDraw.drawNow("Vadsrijk far fingers", SkyDraw.COLOURED_STARS, vingers(richting(sc)[0], ARGB.colorFromFloat(a, 0.43f, 0.41f, 0.47f)), null,
+            SkyDraw.drawNow("Vadsrijk far mist", SkyDraw.COLOURED_STARS, vingers(richting(sc)[0], ARGB.colorFromFloat(a, 0.43f, 0.41f, 0.47f)), null,
                     SkyDraw.white(1f), mv);
         }
     }
@@ -173,25 +173,37 @@ final class WereldLucht {
         return b.buildOrThrow();
     }
 
-    /** A thin grey line on the horizon round azimuth az, with five finger-like bumps a little right of the middle (never named). */
+    /**
+     * (lore correction: the Keizer's "long arms" are figurative) A grey mist bank on the far horizon round azimuth az: a long low
+     * band with soft rounded swells, its top fading to nothing. Nothing shaped like an arm or fingers.
+     */
     private static MeshData vingers(float az, int c) {
         Vector3f mid = dir(az, 1.2f, 90f);
         Vector3f rechts = new Vector3f(mid).cross(0, 1, 0).normalize();
         BufferBuilder b = Tesselator.getInstance().begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
-        // {offset to the right, half width, height} in blocks at distance 90; the first is the long thin line
-        float[][] stukken = {{0f, 34f, 0.7f}, {9.2f, 0.65f, 2.6f}, {10.8f, 0.7f, 3.7f}, {12.4f, 0.7f, 4.1f}, {14.0f, 0.7f, 3.5f}, {15.5f, 0.6f, 2.2f}};
-        for (float[] s : stukken) {
-            Vector3f m = new Vector3f(rechts).mul(s[0]).add(mid);
-            Vector3f r = new Vector3f(rechts).mul(s[1]);
-            Vector3f[] p = {new Vector3f(m).sub(r).add(0, -0.6f, 0), new Vector3f(m).add(r).add(0, -0.6f, 0), new Vector3f(m).add(r).add(0, s[2], 0),
-                    new Vector3f(m).sub(r).add(0, s[2], 0)};
+        int weg = ARGB.color(0, ARGB.red(c), ARGB.green(c), ARGB.blue(c));
+        // columns along the horizon: a smooth height profile (a few overlapping swells), solid at the bottom, fading at the top
+        int n = 48;
+        float breed = 40f;
+        for (int i = 0; i < n; i++) {
+            float x0 = -breed + 2 * breed * i / n, x1 = -breed + 2 * breed * (i + 1) / n;
+            float h0 = mistHoogte(x0 / breed), h1 = mistHoogte(x1 / breed);
+            Vector3f a0 = new Vector3f(rechts).mul(x0).add(mid), a1 = new Vector3f(rechts).mul(x1).add(mid);
             for (int[] o : new int[][]{{0, 1, 2, 3}, {3, 2, 1, 0}}) {
-                for (int i : o) {
-                    b.addVertex(p[i].x, p[i].y, p[i].z).setColor(c);
+                Vector3f[] q = {new Vector3f(a0).add(0, -0.6f, 0), new Vector3f(a1).add(0, -0.6f, 0), new Vector3f(a1).add(0, h1, 0), new Vector3f(a0).add(0, h0, 0)};
+                int[] kl = {c, c, weg, weg};
+                for (int k : o) {
+                    b.addVertex(q[k].x, q[k].y, q[k].z).setColor(kl[k]);
                 }
             }
         }
         return b.buildOrThrow();
+    }
+
+    /** The mist bank's height at u in -1..1: low at the ends, a few soft swells in the middle. */
+    private static float mistHoogte(float u) {
+        float rand = Math.max(0f, 1f - u * u);
+        return rand * (1.6f + 1.1f * Mth.sin(u * 5.3f + 0.7f) * Mth.sin(u * 2.1f + 1.3f) + 0.9f * Mth.cos(u * 9.7f) * 0.5f + 0.9f);
     }
 
     private static float nachtFactor(long tijd) {

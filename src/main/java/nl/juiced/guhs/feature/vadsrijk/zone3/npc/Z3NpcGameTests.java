@@ -55,7 +55,7 @@ public class Z3NpcGameTests {
             NpcDef d = Npcs.van(id);
             helper.assertTrue(d != null && d.plek() != null, "NPC " + id + " is registered with a spot");
             helper.assertTrue(t.has(d.naamKey()) && t.has("vadsrijk.npc.plek.npc." + id), "NPC " + id + ": name + where text");
-            helper.assertTrue(Z3NpcPlekken.zone3(d.plek().getX()), "NPC " + id + " stands in zone 3");
+            helper.assertTrue(Z3NpcPlekken.zone3(d.plek().getX(), d.plek().getZ()), "NPC " + id + " stands in zone 3");
         }
         for (Quest q : z3) {
             for (String wie : List.of(q.gever(), q.inleveren())) {

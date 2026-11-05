@@ -49,7 +49,7 @@ import nl.juiced.guhs.feature.vadsrijk.npc.Quests;
  *       beekeepers; down along the trunk into the roots where two grey-blue eyes open;</li>
  *   <li>{@link #bam}: z3_hq02, a Mika zeppelin sprays grey over the market, Bladrovers drop onto the plaza (guhs hide, nobody hit);</li>
  *   <li>{@link #nest}: z3_hq05, the old nest flashback: the pink dragon lays a glowing egg and wraps his wings around it;</li>
- *   <li>{@link #flashF1}: z3_hq10, after Graaf Piepvel: a long grey arm through a knot hole grabs the Count;</li>
+ *   <li>{@link #flashF1}: z3_hq10, after Graaf Piepvel: a grey mist through a knot hole, Mika henchmen drag the Count into it;</li>
  *   <li>{@link #ei}: z3_hq13, the egg in the Nestkamer; {@link #rit}: z3_hq14, the escape up the Stamspiraal to the old nest;</li>
  *   <li>{@link #finale}: z3_hq14, the splinters go back, the egg hatches into Vahoegje, the beam to Hoogvads, {@code zone3_klaar};</li>
  *   <li>{@link #cliffhanger}: z3_hq15, from the Nestkapel to the far east, then flash F2 (the throne room).</li>
@@ -288,19 +288,17 @@ public final class Z3Verhaal {
             zeg(p, "scene.f1.cape", ChatFormatting.GRAY);
         }
         if (t == 50) {
-            geluid(p, SoundEvents.WOOD_BREAK, 2f, 0.4f);
+            geluid(p, SoundEvents.POWDER_SNOW_STEP, 2f, 0.5f);
             zeg(p, "scene.f1.kraak", ChatFormatting.DARK_GRAY);
         }
         if (t >= 70 && t < 150) {
-            // the arm: far too long, grey, five long fingers; out of the knot hole to the Count, then back
+            // (lore correction: the Keizer's reach is figurative) a grey mist bank rolls out of the knot hole over the Count, then back
             double f = t < 110 ? (t - 70) / 40.0 : 1 - (t - 110) / 40.0;
-            Vec3 hand = gat.lerp(graaf, f);
-            for (double s = 0; s <= f; s += 0.04) {
-                deeltjes(p, sl, new DustParticleOptions(0x6E6A78, 2.4f), gat.lerp(graaf, s), 1, 0.1, 0.1, 0);
+            Vec3 kop = gat.lerp(graaf, f);
+            for (double s = 0; s <= f; s += 0.08) {
+                deeltjes(p, sl, new DustParticleOptions(0x8A8A9A, 3.2f), gat.lerp(graaf, s), 3, 0.9, 0.6, 0);
             }
-            for (int v = -2; v <= 2; v++) {
-                deeltjes(p, sl, new DustParticleOptions(0x5A5664, 1.6f), hand.add(0.6, v * 0.35, 0), 2, 0.05, 0.05, 0);
-            }
+            deeltjes(p, sl, new DustParticleOptions(0x5A5A66, 3.8f), kop, 8, 1.4, 0.9, 0);
             if (t == 100) {
                 zeg(p, "scene.f1.nee", ChatFormatting.WHITE);
             }

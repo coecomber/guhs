@@ -146,10 +146,10 @@ TEKSTEN = {
     Z + "pv.enrage.onder": "Hij houdt van kou. Jij niet.",
     # flash F1
     Z + "f1.uitleggen": "Nee nee nee, Keizer, ik kan het uitleggen! Het was de ridder! Het was —",
-    Z + "f1.floep": "Floep.",
-    Z + "f1.stilte": "Stilte. Op de schors blijft één grauwe vingerafdruk achter.",
+    Z + "f1.floep": "De grauwe mist slokt hen op. Floep. Weg.",
+    Z + "f1.stilte": "Stilte. Op de schors blijft een grauwe, koude rijpvlek achter, waar de mist naar binnen kwam.",
     Z + "f1.titel": "FLOEP.",
-    Z + "f1.onder": "Een arm. Veel te lang. Met vijf lange vingers.",
+    Z + "f1.onder": "Een koude, grauwe mist. Hij reikt overal naartoe.",
     # Wortelwurger
     Z + "ww.grijp": "Grauwe wortels schieten uit de muur! Uit de rode stroken!",
     Z + "ww.gekapt": "Een voedingswortel is doorgekapt! (%s van 4)",
@@ -178,8 +178,8 @@ TEKSTEN = {
     Z + "bb.fase3.onder": "Sta SAMEN in de gele cirkel bij het ei",
     Z + "bb.ei": "Kolos! Pak het ei! Pak het EI!",
     Z + "bb.grijparm": "De grijparm reikt naar het ei! Ga samen in de gele cirkel!",
-    Z + "bb.geblokt": "Geblokt! De arm komt niet bij het ei.",
-    Z + "bb.gegrepen": "De arm graait aan het ei! De Baron lacht en knapt op.",
+    Z + "bb.geblokt": "Geblokt! De grijparm van de Kolos komt niet bij het ei.",
+    Z + "bb.gegrepen": "De grijparm van de Kolos graait aan het ei! De Baron lacht en knapt op.",
     Z + "bb.vlucht": "Dit hoeft de Keizer niet te weten! ...Toch? (Hij ontsnapt in zijn zeppelinnetje door een gat in de wortels.)",
     # Vahoegnir
     Z + "vn.splinter1": "HIJ LANDT",
@@ -214,10 +214,10 @@ TEKSTEN = {
     Z + "f2.rillen": "Een grauwe zaal. Mager licht. Graaf Piepvel knielt in zijn hemdje en rilt.",
     Z + "f2.rapport1": "Rapport uit het westen. De draak is... eh... roze.",
     Z + "f2.rapport2": "Het ei is... eh... uit. De Pink is... kaal.",
-    Z + "f2.tik": "Lange grauwe vingers trommelen op een armleuning. Tik. Tik. Tik. Tik. Tik.",
+    Z + "f2.tik": "Uit de schaduw achter de troon klinkt ongeduldig getik op een armleuning. Tik. Tik. Tik. Tik. Tik.",
     Z + "f2.reik": "Dan... reik... ik... verder.",
     Z + "f2.titel": "WORDT VERVOLGD...",
-    Z + "f2.onder": "Ver in het oosten strekt iets zijn armen.",
+    Z + "f2.onder": "Ver in het oosten wil iets steeds meer.",
     # dungeons
     # (M-BAZEN) dungeon order, one fight at a time, the Hart's gate hint
     Z + "volgorde": "%s laat zich nog niet zien. Versla eerst %s.",

@@ -65,18 +65,19 @@ public class VadsrijkBiomenGameTests {
         verwacht(helper, vb, 150, -2693, "spiegelburcht");
         verwacht(helper, vb, 280, -2500, "splinterpieken");   // g-int: g-z2's ring (the cloud sea round the 500x575 island)
         // z3-systemen: zone 3 is LAYERED (same x/z, different height = different biome)
+        int X0 = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, Z0 = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;   // (P-VERHUIS) zone 3 can move: everything relative to the trunk
         // (P-VERHUIS) the revamped tree (POI v2, box x 1900..2700, z -400..400)
-        verwacht3(helper, vb, 2300, 250, 0, "kruinzee");
-        verwacht3(helper, vb, 2300, 150, 0, "schorsstad");
-        verwacht3(helper, vb, 2410, 29, 10, "hart");         // the Hart's ring of rooms round the roots hall
-        verwacht3(helper, vb, 2345, 120, 0, "schorsstad");   // the riding spiral (z3_stamspiraal) outside the trunk
-        verwacht3(helper, vb, 2300, 30, 0, "wortelduister");
-        verwacht3(helper, vb, 2500, 80, 0, "wortelvelden");
-        verwacht3(helper, vb, 2300, 205, 190, "takkenbanen");
-        verwacht3(helper, vb, 2300, 170, 100, "honingtak");
-        verwacht3(helper, vb, 2300, 80, 120, "wortelvelden");   // under Honingtak
-        verwacht3(helper, vb, 2551, 192, -291, "zeppelinwerf");
-        verwacht3(helper, vb, 2300, -10, 0, "schemerwortel");  // below everything: the catch-all
+        verwacht3(helper, vb, X0 + 0, 250, Z0 + 0, "kruinzee");
+        verwacht3(helper, vb, X0 + 0, 150, Z0 + 0, "schorsstad");
+        verwacht3(helper, vb, X0 + 110, 29, Z0 + 10, "hart");         // the Hart's ring of rooms round the roots hall
+        verwacht3(helper, vb, X0 + 45, 120, Z0 + 0, "schorsstad");   // the riding spiral (z3_stamspiraal) outside the trunk
+        verwacht3(helper, vb, X0 + 0, 30, Z0 + 0, "wortelduister");
+        verwacht3(helper, vb, X0 + 200, 80, Z0 + 0, "wortelvelden");
+        verwacht3(helper, vb, X0 + 0, 205, Z0 + 190, "takkenbanen");
+        verwacht3(helper, vb, X0 + 0, 170, Z0 + 100, "honingtak");
+        verwacht3(helper, vb, X0 + 0, 80, Z0 + 120, "wortelvelden");   // under Honingtak
+        verwacht3(helper, vb, X0 + 251, 192, Z0 + -291, "zeppelinwerf");
+        verwacht3(helper, vb, X0 + 0, -10, Z0 + 0, "schemerwortel");  // below everything: the catch-all
         // every biome is a possible biome, and places the map
         var kaart = server.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).getOrThrow(
                 net.minecraft.resources.ResourceKey.create(Registries.PLACED_FEATURE, Guhs.id("vr_kaart")));

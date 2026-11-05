@@ -23,10 +23,11 @@ public final class Z3BazenPlekken {
     /** (K-INT) z3-wereld's spot (direct reference); the numbers are only used for an id it lacks. */
     static BlockPos w(String id, int x, int y, int z) {
         BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : new BlockPos(x - 2300 + nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, y, z + nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z);   // (v2-frame fallback, shifted)
     }
 
-    public static final BlockPos STAM = new BlockPos(2300, 64, 0);   // the trunk axis
+    /** The trunk axis (from the map: zone 3 can move). */
+    public static final BlockPos STAM = new BlockPos(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, 64, nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z);
 
     /** The offset of POI {@code id} from {@code c} (layouts inside an arena follow the arena). */
     static int[] rel(BlockPos c, String id, int x, int y, int z) {
@@ -49,7 +50,19 @@ public final class Z3BazenPlekken {
     // ---- Kerker 1: De Kaaszeppelinwerf (lv 38-40): its own island in the north-east, three docks far apart -------------------
     /** The dungeon box (the z3_zeppelinwerf island, centre ~(2551, -251) r 95): the yard is at ~160, the docks 168 / 192 / 224;
      *  WERF_Y0 = the island top (the safety net catches falls below it), WERF_Y1 = above the highest deck. */
-    public static final int WERF_X0 = 2456, WERF_X1 = 2646, WERF_Z0 = -346, WERF_Z1 = -156, WERF_Y0 = 156, WERF_Y1 = 242;
+    public static final int WERF_X0 = werf(0), WERF_X1 = werf(1), WERF_Z0 = werf(2), WERF_Z1 = werf(3), WERF_Y0 = 156, WERF_Y1 = 242;
+
+    /** The werf island box from the map's z3_zeppelinwerf cylinder (minX, maxX, minZ, maxZ); v2-frame fallback. */
+    private static int werf(int i) {
+        for (var g : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.GEBIEDEN) {
+            if (g.id().equals("z3_zeppelinwerf")) {
+                int[] b = g.cilinder() ? new int[] {g.a() - g.d(), g.a() + g.d(), g.b() - g.d(), g.b() + g.d()} : new int[] {g.a(), g.c(), g.b(), g.d()};
+                return b[i];
+            }
+        }
+        int sx = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X - 2300, sz = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;
+        return new int[] {2456 + sx, 2646 + sx, -346 + sz, -156 + sz}[i];
+    }
     public static final BlockPos WERF_INGANG = w("werf_ingang", 2861, 169, -537);
     public static final BlockPos WERF_ALTAAR = w("werf_vahoeg_altaar", 2864, 169, -540);
     /** De Gieterij (fondue gutters): a box around the room centre; the gutters run along x every 4 blocks. */
@@ -137,7 +150,7 @@ public final class Z3BazenPlekken {
     public static final int[][] NEST_TAKKEN = {{11, 0, 5}, {-11, 0, 5}, {0, 0, 13}, {11, 0, -7}, {-11, 0, -7}, {0, 0, -14}};
     public static final int NEST_TAK_HOOG = 5;
     /** Where the pink beam points: Hoogvads, far east above the clouds. */
-    public static final Vec3 HOOGVADS = new Vec3(4600, 330, -120);
+    public static final Vec3 HOOGVADS = new Vec3(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X + 2300, 330, nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z - 120);   // far east of the trunk
 
     // ---- (M-BAZEN) arena layout: no two arenas share space -------------------------------------------------------------------
     /** Height window of a dungeon arena (werf decks, Hart rooms): 6 below the floor (a wreck to jump to), 14 above. */

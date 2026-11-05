@@ -166,7 +166,7 @@ public final class Z3Haken {
         if (d == null || !Vadsrijk.in(p) || !Questlog.klaar(p, "hq05_klodderreus")) {
             return s;
         }
-        boolean ik = Z3NpcPlekken.zone3(p.getX()), doel = Z3NpcPlekken.zone3(d.getX());
+        boolean ik = Z3NpcPlekken.zone3(p.getX(), p.getZ()), doel = Z3NpcPlekken.zone3(d.getX(), d.getZ());
         if (ik == doel || p.getZ() > 800) {
             return s;   // (same side, or on the camp island: zone 1's hop goes first)
         }
@@ -189,7 +189,7 @@ public final class Z3Haken {
             return;
         }
         for (ServerPlayer p : sl.players()) {
-            if (p.isSpectator() || !Z3NpcPlekken.zone3(p.getX())) {
+            if (p.isSpectator() || !Z3NpcPlekken.zone3(p.getX(), p.getZ())) {
                 continue;   // (zone 1/2 players skip all of this)
             }
             if (RijkScenes.bezig(p) || Z3Verhaal.bezig(p)) {
