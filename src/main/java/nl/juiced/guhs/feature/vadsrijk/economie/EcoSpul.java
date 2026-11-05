@@ -60,30 +60,44 @@ public final class EcoSpul {
             () -> new Item.Properties().stacksTo(1));
     // (I-MOUNTS: the Hoedhupper / Klodderros saddles are gone with their mounts; a leftover stack in a chest just vanishes on load)
 
-    /** G-MOUNTS: saddles of the stal mounts (also usable as quest/loot rewards), and a Pluimguh egg per colour (hatches = unlocks it). */
-    public static final DeferredItem<EcoItems.Zadel> ZADEL_WOLKENSCHAAPJE = ITEMS.registerItem("vr_item_zadel_wolkenschaapje",
-            p -> new EcoItems.Zadel(p, RijdierSoort.WOLKENSCHAAPJE), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
-    public static final DeferredItem<EcoItems.Zadel> ZADEL_SLAKKIE = ITEMS.registerItem("vr_item_zadel_slakkie",
-            p -> new EcoItems.Zadel(p, RijdierSoort.SLAKKIE), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
-    public static final DeferredItem<EcoItems.Zadel> ZADEL_KNUFFELHERT = ITEMS.registerItem("vr_item_zadel_knuffelhert",
-            p -> new EcoItems.Zadel(p, RijdierSoort.KNUFFELHERT), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
-    public static final DeferredItem<EcoItems.Zadel> ZADEL_GUHWOLF = ITEMS.registerItem("vr_item_zadel_guhwolf",
-            p -> new EcoItems.Zadel(p, RijdierSoort.GUHWOLF), () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    /**
+     * G-MOUNTS: a saddle per mount (except the Pluimguh: an egg per colour), also usable as quest/loot rewards (right-click = it's
+     * yours). T-RIJDIER: registered in a loop over {@link RijdierSoort} ({@code vr_item_zadel_<id>}), like the entity types below,
+     * so a new mount species needs no line here.
+     */
+    public static final Map<RijdierSoort, DeferredItem<EcoItems.Zadel>> ZADELS = new java.util.EnumMap<>(RijdierSoort.class);
+    /** T-RIJDIER: the mount entity per species ({@code vr_eco_<id>}, size from {@link RijdierSoort#breedte}/{@link RijdierSoort#hoogte}). */
+    public static final Map<RijdierSoort, DeferredHolder<EntityType<?>, EntityType<RijdierEntity>>> RIJDIEREN = new java.util.EnumMap<>(RijdierSoort.class);
+
+    static {
+        for (RijdierSoort s : RijdierSoort.values()) {
+            if (!s.kleuren()) {
+                ZADELS.put(s, ITEMS.registerItem("vr_item_zadel_" + s.id(), p -> new EcoItems.Zadel(p, s),
+                        () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+            }
+            RIJDIEREN.put(s, rijdier("vr_eco_" + s.id(), s.breedte, s.hoogte));
+        }
+    }
+
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_WOLKENSCHAAPJE = ZADELS.get(RijdierSoort.WOLKENSCHAAPJE);
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_SLAKKIE = ZADELS.get(RijdierSoort.SLAKKIE);
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_KNUFFELHERT = ZADELS.get(RijdierSoort.KNUFFELHERT);
+    public static final DeferredItem<EcoItems.Zadel> ZADEL_GUHWOLF = ZADELS.get(RijdierSoort.GUHWOLF);
     public static final Map<RijdierSoort.PluimKleur, DeferredItem<EcoItems.PluimEi>> PLUIMEI = new java.util.EnumMap<>(RijdierSoort.PluimKleur.class);
 
     static {
         for (RijdierSoort.PluimKleur k : RijdierSoort.PluimKleur.values()) {
             PLUIMEI.put(k, ITEMS.registerItem("vr_item_pluimei_" + k.id(), p -> new EcoItems.PluimEi(p, k),
                     () -> new Item.Properties().stacksTo(1).rarity(k == RijdierSoort.PluimKleur.GOUD || k == RijdierSoort.PluimKleur.STERRENNACHT
-                            ? Rarity.EPIC : Rarity.RARE)));
+                            || k == RijdierSoort.PluimKleur.KRISTAL ? Rarity.EPIC : Rarity.RARE)));
         }
     }
 
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> PLUIMGUH = rijdier("vr_eco_pluimguh", 1.4f, 2.6f);
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KNUFFELHERT = rijdier("vr_eco_knuffelhert", 1.3f, 2.4f);
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> GUHWOLF = rijdier("vr_eco_guhwolf", 1.3f, 2.0f);
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> WOLKENSCHAAPJE = rijdier("vr_eco_wolkenschaapje", 1.2f, 1.2f);
-    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> SLAKKIE = rijdier("vr_eco_slakkie", 1.1f, 1.5f);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> PLUIMGUH = RIJDIEREN.get(RijdierSoort.PLUIMGUH);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> KNUFFELHERT = RIJDIEREN.get(RijdierSoort.KNUFFELHERT);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> GUHWOLF = RIJDIEREN.get(RijdierSoort.GUHWOLF);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> WOLKENSCHAAPJE = RIJDIEREN.get(RijdierSoort.WOLKENSCHAAPJE);
+    public static final DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> SLAKKIE = RIJDIEREN.get(RijdierSoort.SLAKKIE);
 
     // (gear: economie has no base types of its own since the 1.10.0 integration; see EcoBasisTypes)
 
@@ -122,13 +136,7 @@ public final class EcoSpul {
     }
 
     public static DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> holder(RijdierSoort s) {
-        return switch (s) {
-            case PLUIMGUH -> PLUIMGUH;
-            case KNUFFELHERT -> KNUFFELHERT;
-            case GUHWOLF -> GUHWOLF;
-            case WOLKENSCHAAPJE -> WOLKENSCHAAPJE;
-            case SLAKKIE -> SLAKKIE;
-        };
+        return RIJDIEREN.get(s);
     }
 
     public static EntityType<RijdierEntity> type(RijdierSoort s) {
@@ -146,13 +154,7 @@ public final class EcoSpul {
 
     /** The icon of a mount (screen, HUD): its saddle, or for the Pluimguh the egg of that colour. */
     public static net.minecraft.world.item.ItemStack icoon(RijdierSoort s, RijdierSoort.PluimKleur k) {
-        Item i = switch (s) {
-            case PLUIMGUH -> PLUIMEI.get(k).get();
-            case KNUFFELHERT -> ZADEL_KNUFFELHERT.get();
-            case GUHWOLF -> ZADEL_GUHWOLF.get();
-            case WOLKENSCHAAPJE -> ZADEL_WOLKENSCHAAPJE.get();
-            case SLAKKIE -> ZADEL_SLAKKIE.get();
-        };
+        Item i = s.kleuren() ? PLUIMEI.get(k).get() : ZADELS.get(s).get();
         return new net.minecraft.world.item.ItemStack(i);
     }
 }

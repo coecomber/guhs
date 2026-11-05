@@ -120,6 +120,8 @@ public final class HuisdierClient {
     private static final DataTicket<String> SOORT = DataTicket.create("guhs_vr_huisdier_soort", String.class);
     private static final DataTicket<Boolean> DONKER = DataTicket.create("guhs_vr_huisdier_donker", Boolean.class);
     private static final DataTicket<Float> GROEI = DataTicket.create("guhs_vr_huisdier_groei", Float.class);
+    /** T-RIJDIER: the pet's synced extra size (Vahoegje grows). */
+    private static final DataTicket<Float> GROOTTE = DataTicket.create("guhs_vr_huisdier_grootte", Float.class);
 
     private static Huisdier soort(GeoRenderState state) {
         Huisdier h = Huisdieren.van(state.getOrDefaultGeckolibData(SOORT, ""));
@@ -166,13 +168,14 @@ public final class HuisdierClient {
             // pop-in: 0.2 -> 1.15 -> 1.0
             float g = t >= 9 ? 1f : t < 6 ? 0.2f + 0.95f * (t / 6f) : 1.15f - 0.15f * ((t - 6) / 3f);
             state.addGeckolibData(GROEI, g);
+            state.addGeckolibData(GROOTTE, e.grootte());   // T-RIJDIER
         }
 
         @Override
         public void scaleModelForRender(RenderPassInfo<LivingEntityRenderState> info, float w, float h) {
             float g = info.getOrDefaultGeckolibData(GROEI, 1f);
             Huisdier s = Huisdieren.van(info.getOrDefaultGeckolibData(SOORT, ""));
-            float k = (s != null ? s.schaal() : 0.4f) * g;
+            float k = (s != null ? s.schaal() : 0.4f) * g * info.getOrDefaultGeckolibData(GROOTTE, 1f);
             super.scaleModelForRender(info, w * k, h * k);
         }
 

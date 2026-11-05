@@ -228,6 +228,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z3_wereld',
             # 1.10 zone 3 "De Schemerwortel": z3-wezens (Java: feature/vadsrijk/zone3/wezens)
             'vadsrijk_z3_wezens',
+            # 1.10 night round T, T-RIJDIER: mount looks, 3 new land mounts, pet roles (Java: feature/vadsrijk/rijdier); after vadsrijk_rijdieren
+            'vadsrijk_t_rijdier',
             ]
 
 

@@ -29,6 +29,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.biomen.BiomenRegistry.register(modBus);   // fix round 2: one biome per area
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.register(modBus);   // G-PETS
+        nl.juiced.guhs.feature.vadsrijk.rijdier.RijdierExtraRegistry.register(modBus);   // T-RIJDIER: mount looks + new mounts + pet abilities
         nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.register(modBus);   // I-VOLTOOIING (Verkenningsboek)
         nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.register(modBus);   // I-AUDIO: town music + town ambience
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.register(modBus);   // zone 3 (z3-systemen)

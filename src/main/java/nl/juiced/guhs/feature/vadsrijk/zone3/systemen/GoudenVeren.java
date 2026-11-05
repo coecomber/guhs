@@ -47,6 +47,15 @@ public final class GoudenVeren {
         return new ItemStack(Z3Spul.GOUDEN_VEER.get(), n);
     }
 
+    /** T-RIJDIER: spends n feathers (mount looks and mounts in the mount screen). False (nothing taken) when there are too few. */
+    public static boolean neem(ServerPlayer p, int n) {
+        if (n <= 0 || Z3Data.veren(p) < n) {
+            return false;
+        }
+        Z3Data.zetVeren(p, Z3Data.veren(p) - n);
+        return true;
+    }
+
     public static boolean heeftGoud(ServerPlayer p) {
         return Rijdieren.heeftKleur(p, PluimKleur.GOUD);
     }

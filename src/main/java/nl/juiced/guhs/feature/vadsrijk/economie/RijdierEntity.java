@@ -46,6 +46,8 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
     /** The effective speed / jump (server: soort + level + balans), synced so the riding client uses the same numbers. */
     private static final EntityDataAccessor<Float> DATA_SNELHEID = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.FLOAT);
     private static final EntityDataAccessor<Float> DATA_SPRONG = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.FLOAT);
+    /** T-RIJDIER: the look, "vacht|patroon|tuig" (ids of rijdier.Uiterlijk; "" = the plain look). */
+    private static final EntityDataAccessor<String> DATA_UITERLIJK = SynchedEntityData.defineId(RijdierEntity.class, EntityDataSerializers.STRING);
 
     /** Client only: a preview in the mount screen drawn as a dark silhouette (a mount you don't have yet). */
     public boolean silhouet;
@@ -81,6 +83,7 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
         b.define(DATA_KLEUR, 0);
         b.define(DATA_SNELHEID, 0f);
         b.define(DATA_SPRONG, 0f);
+        b.define(DATA_UITERLIJK, "");
     }
 
     public int rijLevel() {
@@ -112,6 +115,28 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     public void zetKleur(RijdierSoort.PluimKleur k) {
         entityData.set(DATA_KLEUR, k.ordinal());
+    }
+
+    /** T-RIJDIER: the look "vacht|patroon|tuig" (see rijdier.Uiterlijk). */
+    public String uiterlijk() {
+        return entityData.get(DATA_UITERLIJK);
+    }
+
+    public void zetUiterlijk(String u) {
+        entityData.set(DATA_UITERLIJK, u == null ? "" : u);
+    }
+
+    /** T-RIJDIER (STEVIG mounts): game time of the last hit it shrugged off. */
+    private long schrikOp = -1000;
+
+    /** A sturdy mount takes the first hit: true = shrugged off (the next hit within 10 s does scare it). */
+    boolean vangSchrikOp() {
+        long nu = level().getGameTime();
+        if (nu - schrikOp > 200) {
+            schrikOp = nu;
+            return true;
+        }
+        return false;
     }
 
     void zetEigenaar(UUID id, int level) {

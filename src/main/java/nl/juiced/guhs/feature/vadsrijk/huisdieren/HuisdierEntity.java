@@ -43,6 +43,8 @@ import net.minecraft.world.phys.Vec3;
  */
 public class HuisdierEntity extends PathfinderMob implements GeoEntity {
     private static final EntityDataAccessor<String> DATA_SOORT = SynchedEntityData.defineId(HuisdierEntity.class, EntityDataSerializers.STRING);
+    /** T-RIJDIER: extra render size (Vahoegje grows with the story: rijdier.Vahoegje). */
+    private static final EntityDataAccessor<Float> DATA_GROOTTE = SynchedEntityData.defineId(HuisdierEntity.class, EntityDataSerializers.FLOAT);
 
     /** Teleport along beyond this distance (blocks). */
     public static final double TELEPORT = 12;
@@ -79,6 +81,7 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
     protected void defineSynchedData(SynchedEntityData.Builder b) {
         super.defineSynchedData(b);
         b.define(DATA_SOORT, "");
+        b.define(DATA_GROOTTE, 1f);
     }
 
     public String soortId() {
@@ -88,6 +91,17 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
     @Nullable
     public Huisdier soort() {
         return Huisdieren.van(soortId());
+    }
+
+    /** T-RIJDIER: the extra render size (1 = normal). */
+    public float grootte() {
+        return entityData.get(DATA_GROOTTE);
+    }
+
+    public void zetGrootte(float f) {
+        if (Math.abs(grootte() - f) > 0.001f) {
+            entityData.set(DATA_GROOTTE, f);
+        }
     }
 
     public void zetSoort(String id) {
