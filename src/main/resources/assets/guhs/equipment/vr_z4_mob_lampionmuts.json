@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "guhs:vr_z4_mob_lampionmuts"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "guhs:vr_z4_mob_lampionmuts"
+      }
+    ]
+  }
+}
