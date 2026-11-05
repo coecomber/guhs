@@ -41,8 +41,10 @@ public final class ClientPlekken {
             Ambacht a = Ambacht.van(e.getStringOr("a", "mijnen"));
             List<BlockPos> bl = new ArrayList<>();
             ListTag b = e.getListOrEmpty("bloemen");
-            for (int k = 0; k < b.size(); k++) {
-                b.getLong(k).ifPresent(v -> bl.add(BlockPos.of(v)));
+            for (net.minecraft.nbt.Tag x : b) {
+                if (x instanceof net.minecraft.nbt.LongTag lt) {
+                    bl.add(BlockPos.of(lt.longValue()));
+                }
             }
             l.add(new Plek(e.getStringOr("id", ""), BlockPos.of(e.getLongOr("pos", 0L)), a == null ? Ambacht.MIJNEN : a, e.getIntOr("tier", 1),
                     e.getBooleanOr("leeg", false), e.getBooleanOr("zeldzaam", false), e.getBooleanOr("lvOk", true), e.getBooleanOr("eigen", false),

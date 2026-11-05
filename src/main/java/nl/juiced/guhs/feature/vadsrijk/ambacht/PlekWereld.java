@@ -298,8 +298,10 @@ public final class PlekWereld extends SavedData {
 
     private static List<BlockPos> posities(ListTag t) {
         List<BlockPos> l = new ArrayList<>();
-        for (int i = 0; i < t.size(); i++) {
-            t.getLong(i).ifPresent(v -> l.add(BlockPos.of(v)));
+        for (net.minecraft.nbt.Tag x : t) {
+            if (x instanceof LongTag lt) {
+                l.add(BlockPos.of(lt.longValue()));
+            }
         }
         return l;
     }
