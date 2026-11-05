@@ -50,7 +50,7 @@ import nl.juiced.guhs.feature.vadsrijk.npc.Quests;
  *   <li>{@link #bam}: z3_hq02, a Mika zeppelin sprays grey over the market, Bladrovers drop onto the plaza (guhs hide, nobody hit);</li>
  *   <li>{@link #nest}: z3_hq05, the old nest flashback: the pink dragon lays a glowing egg and wraps his wings around it;</li>
  *   <li>{@link #flashF1}: z3_hq10, after Graaf Piepvel: a grey mist through a knot hole, Mika henchmen drag the Count into it;</li>
- *   <li>{@link #ei}: z3_hq13, the egg in the Nestkamer; {@link #rit}: z3_hq14, the escape up the Stamspiraal to the old nest;</li>
+ *   <li>{@link #ei}: z3_hq13, the egg in the Nestkamer; {@link #rit}: z3_hq14, the escape up Het Rijpad (the riding spiral) to the old nest;</li>
  *   <li>{@link #finale}: z3_hq14, the splinters go back, the egg hatches into Vahoegje, the beam to Hoogvads, {@code zone3_klaar};</li>
  *   <li>{@link #cliffhanger}: z3_hq15, from the Nestkapel to the far east, then flash F2 (the throne room).</li>
  * </ul>

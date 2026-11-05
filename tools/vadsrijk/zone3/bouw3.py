@@ -1113,6 +1113,117 @@ def pad_vrij(W):
         W.v[a[weg], b[weg], c[weg]] = 0
 
 
+# ================================================================================================ (r-int) village houses free
+def dorp_vrij(W):
+    """The beekeeper-village houses on the branch tips (P.imkerdorpen) are built after the crown: a house that sits inside the
+    crown-1 leaf mass (Raatweide house 3 = hangnest_woning_3) was full of leaves. Clear leaves/vines inside every house
+    (the skep dome / hex house), the furniture-free floor stays."""
+    for (tak, naam, j, cx, cz, yt, deur, *_r) in P.dorp_huizen():
+        fy = yt + 1
+        R = 4.4 if (j == 1) else 4.8
+        if not W.raakt(cx - R - 1, fy, cz - R - 1, cx + R + 1, fy + 10, cz + R + 1):
+            continue
+        hgt = 9 if j != 1 else 7
+        for k in range(hgt):
+            r = (R * math.sqrt(max(0.0, 1 - (k / hgt) ** 2.2)) + 0.4 - 1.4) if j != 1 else R - 1.2
+            if r <= 0:
+                continue
+            for x in range(int(math.floor(cx - r)), int(math.ceil(cx + r)) + 1):
+                for z in range(int(math.floor(cz - r)), int(math.ceil(cz + r)) + 1):
+                    if math.hypot(x + 0.5 - cx, z + 0.5 - cz) > r:
+                        continue
+                    b = W.wget(x, fy + k, z)
+                    if b.split("[")[0].endswith(("_leaves", "vines", "vines_plant", "hanging_moss")):
+                        W.wset(x, fy + k, z, LUCHT)
+
+
+# ================================================================================================ (r-int) trap pockets
+# The small VAL pockets of loopcheck3 above the island undersides (p-wereld's leftovers: a leaf hollow beside the Kruinlifttak
+# house platform, a gap beside the Oosttaksteiger platform, the row between the fence and the hay bales on a branch deck, a
+# hanging-moss shaft, ground dips by the Mosvoet fence, single 2-up holes). Each cell (rel x, feet y, rel z, layers, block) is
+# filled with its floor block, `layers` high, so the way out becomes a normal step. Made from loopcheck's `cellen`
+# (scratch dicht.py); after a generator change that moves these spots, rerun loopcheck3 and remake the list.
+DICHT = [
+    (-125, 47, 192, 1, 'minecraft:dirt'),
+    (-120, 162, 46, 1, 'minecraft:jungle_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-119, 162, 46, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-119, 163, 45, 1, 'minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-119, 164, 44, 1, 'minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-118, 162, 46, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-118, 163, 45, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-118, 164, 44, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-117, 162, 46, 1, 'minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-117, 163, 45, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-117, 164, 44, 1, 'minecraft:jungle_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-116, 162, 46, 1, 'minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-116, 162, 47, 1, 'minecraft:flowering_azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-116, 163, 45, 1, 'minecraft:jungle_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-116, 164, 44, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-115, 162, 46, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-115, 162, 47, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-115, 163, 45, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-115, 165, 44, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-114, 162, 47, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-114, 163, 46, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-114, 164, 45, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-113, 162, 47, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-113, 163, 46, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-113, 164, 45, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-112, 163, 47, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-112, 164, 46, 1, 'minecraft:birch_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-112, 165, 45, 1, 'minecraft:birch_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-111, 163, 47, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-111, 164, 48, 1, 'minecraft:spruce_wood'),
+    (-111, 165, 46, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-110, 164, 47, 1, 'minecraft:oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-110, 164, 48, 1, 'minecraft:dark_oak_wood'),
+    (-110, 165, 49, 1, 'minecraft:dark_oak_wood'),
+    (-109, 165, 48, 1, 'minecraft:azalea_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-104, 206, 63, 4, 'minecraft:pale_oak_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (-47, 167, -76, 1, 'minecraft:spruce_planks'),
+    (-47, 167, -75, 1, 'minecraft:spruce_planks'),
+    (-42, 193, -114, 1, 'minecraft:spruce_planks'),
+    (-41, 193, -114, 1, 'minecraft:spruce_planks'),
+    (-40, 193, -114, 1, 'minecraft:spruce_planks'),
+    (-39, 193, -114, 1, 'minecraft:spruce_planks'),
+    (-38, 193, -114, 1, 'minecraft:stripped_spruce_wood'),
+    (-35, 72, -131, 1, 'minecraft:moss_block'),
+    (-33, 72, -130, 1, 'minecraft:moss_block'),
+    (-32, 72, -131, 1, 'minecraft:moss_block'),
+    (-32, 72, -130, 1, 'minecraft:moss_block'),
+    (-31, 72, -130, 1, 'minecraft:moss_block'),
+    (-30, 72, -129, 1, 'minecraft:moss_block'),
+    (-28, 72, -129, 1, 'minecraft:moss_block'),
+    (-28, 72, -128, 1, 'minecraft:moss_block'),
+    (-26, 261, 15, 1, 'minecraft:pink_concrete_powder'),
+    (15, 174, 30, 2, 'minecraft:dark_oak_wood'),
+    (27, 276, -49, 1, 'guhs:guhbloesem_leaves[distance=7,persistent=true,waterlogged=false]'),
+    (31, 160, 26, 1, 'minecraft:jungle_wood'),
+    (178, 45, -120, 1, 'minecraft:dirt'),
+    (216, 165, 96, 1, 'minecraft:moss_block'),
+    (217, 164, 96, 1, 'minecraft:dark_oak_wood'),
+    (217, 165, 95, 1, 'minecraft:oak_wood'),
+    (218, 164, 95, 1, 'minecraft:jungle_wood'),
+    (218, 165, 93, 1, 'minecraft:dark_oak_wood'),
+    (218, 165, 94, 1, 'minecraft:spruce_wood'),
+    (219, 164, 91, 1, 'minecraft:spruce_wood'),
+    (219, 164, 92, 1, 'minecraft:oak_wood'),
+    (219, 164, 93, 1, 'minecraft:dark_oak_wood'),
+    (-48, 167, -77, 1, 'minecraft:spruce_planks'),
+    (-45, 193, -112, 1, 'minecraft:stripped_spruce_wood'),
+    (-45, 193, -111, 1, 'minecraft:spruce_planks'),
+    (-44, 193, -113, 1, 'minecraft:spruce_planks'),
+    (-44, 193, -112, 1, 'minecraft:spruce_planks'),
+    (-43, 193, -113, 1, 'minecraft:spruce_planks'),
+]
+
+
+def dichten(W):
+    for (x, y, z, n, s) in DICHT:
+        for dy in range(n):
+            W.wset(x, y + dy, z, s)
+
+
 def bouw(W):
     windkolommen(W)
     honingtak_extra(W)
@@ -1125,6 +1236,8 @@ def bouw(W):
     pad_vrij(W)
     geheimen(W)
     kampvuren(W)
+    dorp_vrij(W)
+    dichten(W)
 
 
 init()

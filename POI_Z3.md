@@ -68,7 +68,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kabelbrug_eind` | 1603, 160, -776 |
 | `lift_cafe_boven` | 1340, 167, -588 |
 | `lift_cafe_onder` | 1343, 155, -587 |
-| `lift_kapel_boven` | 1394, 168, -641 |
+| `lift_kapel_boven` | 1394, 167, -642 |
 | `lift_kapel_onder` | 1395, 152, -638 |
 | `lift_raattros_boven` | 1464, 167, -566 |
 | `lift_raattros_onder` | 1461, 157, -566 |
@@ -243,7 +243,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `arena_brokkel_kanon_2` | 1663, 192, -864 |
 | `arena_kruinroofvogel` | 1259, 226, -530 |
 | `arena_kruinroofvogel_bord` | 1289, 227, -539 |
-| `arena_kruinroofvogel_deur` | 1288, 227, -548 |
+| `arena_kruinroofvogel_deur` | 1288, 229, -549 |
 | `arena_nestwachter` | 1481, 29, -496 |
 | `arena_piepvel` | 1404, 61, -576 |
 | `arena_piepvel_deur` | 1405, 61, -590 |
@@ -367,8 +367,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | id | x, y, z |
 |---|---|
 | `bloesemwaterval_top` | 1365, 222, -465 |
-| `grauwe_vlek_1` | 1495, 228, -524 |
-| `grauwe_vlek_2` | 1352, 259, -532 |
+| `grauwe_vlek_1` | 1494, 229, -525 |
+| `grauwe_vlek_2` | 1350, 260, -532 |
 | `grauwe_vlek_3` | 1365, 226, -682 |
 | `honingvijver_1` | 1448, 224, -478 |
 | `honingvijver_2` | 1356, 228, -484 |
@@ -557,12 +557,12 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `kuiken_1` | 1467, 225, -489 |
+| `kuiken_1` | 1467, 226, -489 |
 | `kuiken_2` | 1374, 228, -476 |
 | `kuiken_3` | 1297, 213, -605 |
 | `kuiken_4` | 1408, 227, -683 |
 | `kuiken_5` | 1493, 228, -641 |
-| `kuiken_6` | 1345, 228, -658 |
+| `kuiken_6` | 1346, 231, -658 |
 | `oosttaksteiger_bel` | 1609, 167, -485 |
 | `oosttaksteiger_kapitein` | 1610, 167, -490 |
 | `oosttaksteiger_landing` | 1607, 165, -488 |

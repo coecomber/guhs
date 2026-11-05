@@ -27,7 +27,7 @@ TEKSTEN = {
     "vadsrijk.kern.gebied.z3_kruinzee": "De Kruinzee",
     "vadsrijk.kern.gebied.z3_takkenbanen": "De Takkenbanen",
     "vadsrijk.kern.gebied.z3_schorsstad": "De Schorsstad",
-    "vadsrijk.kern.gebied.z3_stamspiraal": "De Stamspiraal",
+    "vadsrijk.kern.gebied.z3_stamspiraal": "Het Rijpad",
     "vadsrijk.kern.gebied.z3_wortelvelden": "De Wortelvelden",
     "vadsrijk.kern.gebied.z3_wortelduister": "Het Wortelduister",
     "vadsrijk.kern.gebied.z3_zeppelinwerf": "De Kaaszeppelinwerf",

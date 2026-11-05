@@ -392,6 +392,8 @@ def analyse(V, kern, route=None, soepel=None):
                                  ymin=int(pts[:, 1].min()) + Y0, ymax=int(pts[:, 1].max()) + Y0,
                                  doos=[int(pts[:, 0].min()) + V.x0, int(pts[:, 2].min()) + V.z0,
                                        int(pts[:, 0].max()) + V.x0, int(pts[:, 2].max()) + V.z0]))
+            if len(pts) <= 64:   # (r-int) the cells of a small trap, for a fill pass (zone 3: bouw3.DICHT)
+                uitkomst[-1]["cellen"] = [[int(q[0]) + V.x0, int(q[1]) + Y0, int(q[2]) + V.z0] for q in pts]
     # stairs (only the reachable ones)
     bereik = np.zeros(k.shape, bool)
     bereik[nx_[F[:N]], ny_[F[:N]], nz_[F[:N]]] = True

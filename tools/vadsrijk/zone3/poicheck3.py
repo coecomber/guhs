@@ -23,7 +23,12 @@ DOOR = ("air", "carpet", "petals", "lantern", "chain", "ladder", "short_grass", 
 
 
 def door(s):
-    return s is None or any(w in s for w in DOOR)
+    # (r-int) match the block NAME (+ the bottom-slab state): "water" used to match every "waterlogged=false" state, so leaves,
+    # fences and full slabs counted as passable (kuiken_6 sat inside the crown-1 leaves and was never snapped)
+    if s is None:
+        return True
+    naam = s.split("[")[0]
+    return any(w in naam for w in DOOR) or s.startswith(("minecraft:", "guhs:")) and "_slab[" in s and "type=bottom" in s
 
 
 class Lezer:
@@ -57,7 +62,15 @@ def staat(blok, x, y, z):
         fout.append(f"hoofd {hoofd}")
     if onder is None or ("water" in onder and "waterlogged" not in onder):
         fout.append("geen vloer" if onder is None else "water")
+    elif hek(onder):
+        fout.append(f"op een hek {onder}")   # (r-int) not a floor: you cannot stand on a fence/wall top
     return fout
+
+
+def hek(s):
+    naam = (s or "").split("[")[0]
+    return naam.endswith(("_fence", "_wall", "_pane", "iron_bars")) or "lantaarnpaal" in naam
+
 
 
 def snap(alle, blok=None):
@@ -69,12 +82,16 @@ def snap(alle, blok=None):
         if overslaan(k) or not staat(blok, x, y, z):
             continue
         beste = None
+        # (r-int) a spot buried in blocks (feet inside leaves/ground) looks UP first: going down found hollows inside the crown
+        v = (blok(x, y, z) or "").split("[")[0]
+        omhoog = v.endswith(("_leaves", "moss_block", "grass_block", "dirt", "knuffelgras", "podzol", "terracotta", "concrete_powder"))   # terrain only (not a bell/bed/wall)
+        dys = (0, 1, 2, 3, 4, 5, 6, -1, -2, -3, -4) if omhoog else (0, -1, -2, -3, -4, -5, -6, -7, -8, 1, 2, 3, 4)
         for r in range(0, 6):
             for dx in range(-r, r + 1):
                 for dz in range(-r, r + 1):
                     if max(abs(dx), abs(dz)) != r:
                         continue
-                    for dy in (0, -1, -2, -3, -4, -5, -6, -7, -8, 1, 2, 3, 4):
+                    for dy in dys:
                         if not staat(blok, x + dx, y + dy, z + dz):
                             c = (abs(dx) + abs(dz)) * 2 + abs(dy)
                             if beste is None or c < beste[0]:

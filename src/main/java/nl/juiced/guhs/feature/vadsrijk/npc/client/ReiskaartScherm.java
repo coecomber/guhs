@@ -37,8 +37,9 @@ public final class ReiskaartScherm extends Screen {
             "kandijkom", new float[] {0.52f, 0.22f, 104, 72},
             "schemerwortel", new float[] {0.77f, 0.56f, 150, 108},
             "zone4", new float[] {0.93f, 0.14f, 52, 30});
-    /** The airship routes (dotted). */
-    static final String[][] ROUTES = {{"knuffelkamp", "zwamzoet"}, {"zwamzoet", "kandijkom"}, {"zwamzoet", "schemerwortel"}, {"kandijkom", "zone4"}};
+    /** The airship routes (dotted). (R-INT, WERELDINDELING §4) line 0 camp-Haven, A Zwamzoet-Kandijkom, B Galmdok (zone 2) -> Weststeiger
+     *  (zone 3), C Oosttaksteiger (zone 3) -> Lampionhaven (zone 4). No direct line Zwamzoet-Schemerwortel any more. */
+    static final String[][] ROUTES = {{"knuffelkamp", "zwamzoet"}, {"zwamzoet", "kandijkom"}, {"kandijkom", "schemerwortel"}, {"schemerwortel", "zone4"}};
     private static final int INKT = 0xFF4A3A55, PAPIER = 0xF2FFF6EC, ROZE = 0xFFF2A9C4, GRIJS = 0xFF9A93A2, GOUD = 0xFFFFD54A;
 
     private final NpcPayloads.Reiskaart kaart;
