@@ -17,7 +17,10 @@ RAAT = "minecraft:honeycomb_block"
 GLAS = "minecraft:orange_stained_glass"
 HY = B.HONING_Y
 # Honingtak-takken: hoek (graden), lengte; de Werftak (315) loopt door naar de kabelbrug
-HTAKKEN = [("Lifttak", 30, 122), ("Kruinlifttak", 150, 112), ("Imkerstraat", 225, 118), ("Werftak", 315, 138)]
+HTAKKEN = [("Lifttak", 30, 122), ("Kruinlifttak", 150, 112), ("Imkerstraat", 225, 118), ("Werftak", 315, 138),
+           # [wereldindeling] the two airship piers on long branch tips: west (from zone 2) and east (to zone 4)
+           ("Weststeiger", 184, 200), ("Oosttaksteiger", 19, 218)]
+STEIGERS = ("Weststeiger", "Oosttaksteiger")
 WERFTAK_HOEK = 315
 
 
@@ -139,6 +142,34 @@ def trede(W, x, sh, z, vol, half, lucht=4):
         y0 = int(math.floor(sh)) + 1
     for h in range(lucht):
         W.wset(x, y0 + h, z, "minecraft:air")
+
+
+def helling(W, a, sh_a, b, sh_b, breed=1.5, vol=PLANK, half="minecraft:spruce_slab[type=bottom,waterlogged=false]",
+            hek=HEK, steun=HOUT, lucht=4, grond=None):
+    """[zone 3 kaart] A walkway from (a = (x, z), stand sh_a) to (b, stand sh_b) in HALF steps (never a jump): the stand height
+    goes linearly and is quantized to 0.5. Fence rails on both sides (hek=None: none), a post under it every 4 blocks down to
+    grond(x, z) (a function giving the top block y below; None = 3 blocks of support)."""
+    L = math.hypot(b[0] - a[0], b[1] - a[1])
+    n = max(2, int(L * 2) + 1)
+    ux, uz = (b[0] - a[0]) / max(L, 1e-9), (b[1] - a[1]) / max(L, 1e-9)
+    nx, nz = -uz, ux
+    for i in range(n + 1):
+        t = i / n
+        x, z = a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t
+        sh = float(B.stand(sh_a - 1 + (sh_b - sh_a) * t))
+        for w in np.arange(-breed, breed + 0.01, 0.5):
+            trede(W, x + nx * w, sh, z + nz * w, vol, half, lucht=lucht)
+        top = int(sh) - 1 if sh % 1 == 0 else int(math.floor(sh))
+        if hek is not None and 0.0 < t < 1.0:
+            ry = int(sh) if sh % 1 == 0 else int(math.floor(sh)) + 1
+            for s_ in (-1, 1):
+                W.wset(x + nx * s_ * (breed + 0.9), ry, z + nz * s_ * (breed + 0.9), hek, keep=True)
+        if i % 8 == 0:
+            g = grond(x, z) if grond else top - 3
+            if g < top - 1:
+                for s_ in (-1, 1):
+                    W.wfill(x + nx * s_ * breed, g, z + nz * s_ * breed, x + nx * s_ * breed, top - 1, z + nz * s_ * breed,
+                            steun, keep=True)
 
 
 def lampionsnoer(W, p0, p1, zak=2.5, elke=3):
@@ -297,7 +328,7 @@ def honingtak(W):
     #    off the deck onto it without a drop
     for (naam, a, lengte) in HTAKKEN:
         L, rr = htak_lijn(naam)
-        B.bouw_tak(W, naam, L, rr, seed=int(a) + 77, blad=(naam not in ("Werftak", "Lifttak")), bovenlaag=False)
+        B.bouw_tak(W, naam, L, rr, seed=int(a) + 77, blad=(naam not in ("Werftak", "Lifttak") + STEIGERS), bovenlaag=False)
         lo, hi = L.min(0) - 20, L.max(0) + 20
         if not W.raakt(lo[0], HY - 20, lo[2], hi[0], HY + 10, hi[2]):
             continue

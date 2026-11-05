@@ -3,13 +3,13 @@
 Called from tools/vadsrijk/maak_kaart.py (``--zone 3`` = only zone 3; ``alle`` = 1, 2 and 3) in a SEPARATE process (the render
 kit in zone3/kit shares module names with zone 1's kits). Standalone from the project root:
     python tools/vadsrijk/zone3/maak3.py [--alleen "tx,tz;..."] [--werkers N]
-Writes src/main/resources/data/guhs/structure/vadsrijk/tegels/t_<tx>_<tz>.nbt for tx 25..46, tz -11..10 (never touches the
-zone-1/2 tiles), tools/vadsrijk/_cache/plekken_z3.json + kaart_z3.png, Z3WereldPlekken.java and POI_Z3.md.
+Writes src/main/resources/data/guhs/structure/vadsrijk/tegels/t_<tx>_<tz>.nbt for tx 29..42, tz -7..6 (the revamp grid) and
+DELETES the v1 zone-3 tiles outside it (tx 25..46, tz -11..10; never zone 1/2), tools/vadsrijk/_cache/plekken_z3.json +
+kaart_z3.png, Z3WereldPlekken.java and POI_Z3.md.
 
-How: every tile is a window (k=1) of the render kit (kit/: boom, honingtak, plekken = the approved render generators, copied
-and adapted, see the [zone 3 kaart] marks) plus bouw3 (the game parts: campfires, wind columns, lifts, arenas, dungeon
-shells, interiors, routes, cloud sea). The kit works relative to the trunk axis; the tile is MIRRORED in x into the world
-(plan3: X = 2299 - xr), block states are mirrored with it (facing east<->west, stair shapes, hinges, rotations).
+How: every tile is a window (k=1) of the revamp kit (kit/: boom2, plekken2, werf2 = the approved round-20 render generators,
+adapted, see the [zone 3 kaart] marks) plus bouw3 (the game parts). The kit works relative to the trunk axis, NOT mirrored:
+world x = 2300 + rel x.
 """
 import argparse
 import os
@@ -96,26 +96,29 @@ class Werker:
 
     def tegel(self, tx, tz):
         import schemerkit as SK
-        import boom
-        import honingtak as HT
-        import plekken as PK
+        import boom2 as B
+        import plekken2 as P
+        import werf2 as WF
         import bouw3
-        x1 = PL.rel_x(tx * T + T - 1)
-        W = SK.Wereld(x1, 0, tz * T, x1 + T, HOOG, tz * T + T, k=1)
-        boom.bouw(W, ("terrein", "wortels", "wortelduister", "stam", "takken", "kruin", "bosjes"))
-        bouw3.voor_kit(W)
-        HT.plaats(W, guhs=False)
-        PK.bouw(W)
+        x1, z1 = PL.rel_x(tx * T), PL.rel_z(tz * T)
+        W = SK.Wereld(x1, 0, z1, x1 + T, HOOG, z1 + T, k=1)
+        B.bouw(W, ("terrein", "wortels_boven", "wortelduister", "hangwortels", "takken", "kruin"))
+        P.honingtak(W)
+        B.bouw(W, ("stam", "schors_leven", "nest", "wolken", "wortelpoort"))
+        P.bouw(W)
+        WF.bouw(W)
+        B.bosjes(W)
+        B.rijpad(W)
+        B.wenteltrap(W)          # again: through the nest floor and anything built over it
         bouw3.bouw(W)
         pal = []
         for s in W.pal:
-            if s.startswith("minecraft:campfire") and "z3kv" not in s:
+            if s.startswith("minecraft:campfire") and "z3kv" not in s and "lit=false" not in s:
                 s = "minecraft:air"
             s = s.replace(",z3kv=1", "").replace("z3kv=1,", "")
-            pal.append(spiegel(s))
+            pal.append(s)
         lut = np.array([0 if s in ("minecraft:air", "minecraft:cave_air") else self.palet.id(s) for s in pal], np.uint16)
-        vol = lut[W.v][::-1, :, :].copy()
-        return vol
+        return lut[W.v].copy()
 
     def hol(self, vol):
         """Hollow: an opaque block with 6 opaque neighbours is never seen (removed); a LEAF block deeper than 2 blocks inside a
@@ -176,13 +179,26 @@ def maak(alleen=None, werkers=6):
     t0 = time.time()
     os.makedirs(CACHE, exist_ok=True)
     os.makedirs(UIT, exist_ok=True)
-    poi3.schrijf(PL.plekken(), "v1 (map)")
+    poi3.schrijf(PL.plekken(), "v2 (map)")
     tegels = [(tx, tz) for tx in range(PL.TX0, PL.TX1 + 1) for tz in range(PL.TZ0, PL.TZ1 + 1)]
+    if not alleen:
+        # the v1 zone-3 tiles outside the revamp grid go (the KaartFeature places nothing where no tile exists)
+        weg = 0
+        oud = {(tx, tz) for (a0, a1, b0, b1) in PL.OUDE_RASTERS for tx in range(a0, a1 + 1) for tz in range(b0, b1 + 1)}
+        for (tx, tz) in sorted(oud):
+            if PL.TX0 <= tx <= PL.TX1 and PL.TZ0 <= tz <= PL.TZ1:
+                continue
+            if True:
+                p = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
+                if os.path.exists(p):
+                    os.remove(p)
+                    weg += 1
+        print(f"zone 3: {weg} oude tegels buiten het nieuwe raster verwijderd")
     if alleen:
         tegels = [tuple(int(v) for v in s.split(",")) for s in alleen.split(";")]
         tegels = [t for t in tegels if PL.TX0 <= t[0] <= PL.TX1 and PL.TZ0 <= t[1] <= PL.TZ1]
     # heavy tiles first (trunk / town), so the pool ends evenly
-    tegels.sort(key=lambda t: abs(t[0] * 64 + 32 - 2300) + abs(t[1] * 64 + 32))
+    tegels.sort(key=lambda t: abs(t[0] * 64 + 32 - PL.TX_STAM) + abs(t[1] * 64 + 32 - PL.TZ_STAM))
     NX, NZ = (PL.TX1 - PL.TX0 + 1) * T, (PL.TZ1 - PL.TZ0 + 1) * T
     hgt = np.full((NX, NZ), -1, np.int16)
     nm = np.full((NX, NZ), "minecraft:air", dtype=object)
@@ -205,7 +221,7 @@ def maak(alleen=None, werkers=6):
     # nearest standable block; the builder itself keeps using the plan spots)
     import poicheck3
     vervang = poicheck3.snap(poi3_alle())
-    poi3.schrijf(PL.plekken(), "v1 (map, stand spots snapped onto the tiles)", vervang)
+    poi3.schrijf(PL.plekken(), "v2 (map, stand spots snapped onto the tiles)", vervang)
     print(f"zone 3: {len(vervang)} plekken op de echte blokken gezet")
 
 
@@ -246,6 +262,6 @@ def kaartbeeld(hgt, nm):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--alleen", default=None)
-    ap.add_argument("--werkers", type=int, default=6)
+    ap.add_argument("--werkers", type=int, default=4)
     a = ap.parse_args()
     maak(a.alleen, a.werkers)

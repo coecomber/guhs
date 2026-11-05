@@ -20,21 +20,26 @@ import boom2 as B  # noqa: E402
 import plekken2 as P  # noqa: E402
 import werf2 as WF  # noqa: E402
 
-TX_STAM = 2300
-X0, X1, Z0, Z1 = 1900, 2700, -400, 400        # the zone box
-TX0, TX1, TZ0, TZ1 = 29, 42, -7, 6             # the tile grid (64x320x64 tiles), x 1856..2751, z -448..447
-OUD_TX0, OUD_TX1, OUD_TZ0, OUD_TZ1 = 25, 46, -11, 10   # v1 grid: tiles outside the new grid are deleted by maak3
+# [wereldindeling 2026-11-05] the connected world: zone 3 moved by (-896, -576). THE one offset: world = rel + (TX_STAM, TZ_STAM).
+TX_STAM, TZ_STAM = 1404, -576
+X0, X1, Z0, Z1 = TX_STAM - 380, TX_STAM + 323, TZ_STAM - 448, TZ_STAM + 447   # the zone box (x 1024..1727, z -1024..-129)
+TX0, TX1, TZ0, TZ1 = 16, 26, -16, -3           # the tile grid (64x320x64 tiles), x 1024..1727, z -1024..-129
+# earlier zone-3 grids (v1: trunk 2300,0, 484 tiles; v2 revamp at the old place): their tiles outside the new grid are deleted
+OUDE_RASTERS = [(25, 46, -11, 10), (29, 42, -7, 6)]
 HY = B.HONING_Y
-ZEE_Y = 24                                      # top of the cloud sea (water) under the floating island
 
 
 def W(x, y, z):
     """rel point -> world block [X, Y, Z]."""
-    return [TX_STAM + int(math.floor(x)), int(math.floor(y)), int(math.floor(z))]
+    return [TX_STAM + int(math.floor(x)), int(math.floor(y)), TZ_STAM + int(math.floor(z))]
 
 
 def rel_x(X):
     return X - TX_STAM
+
+
+def rel_z(Z):
+    return Z - TZ_STAM
 
 
 def pol(a, r):
@@ -93,7 +98,7 @@ def rij_punt_lev(k, th, frac=0.5):
 # ================================================================================================ fixed places
 RIJ_START_TH = B.RIJ["th0"]
 WORTELWEG_R = 172                    # the ground ring path
-NEST_STAND = B.NEST_Y + 2            # nest floor (top block NEST_Y + 1)
+NEST_STAND = B.NEST_Y + 1            # nest floor (top block NEST_Y)
 PELSZAAL_VLOER = 60                  # the Pelszaal under the Schorsstad floor: floor block y 60 (stand 61), r 16
 PELSZAAL_R = 16
 KALE_KRUIN = pol(math.radians(162), 152)
@@ -128,6 +133,15 @@ def ring_functies():
     return list(zip(fn, huizen))
 
 
+def steiger(naam):
+    """((x, z) of the mast at the tip of a pier branch, (ux, uz) outward)."""
+    L, rr = P.htak_lijn(naam)
+    tip = L[-1]
+    ua = math.atan2(tip[2], tip[0])
+    ux, uz = math.cos(ua), math.sin(ua)
+    return (tip[0] - ux * 4, tip[2] - uz * 4), (ux, uz)
+
+
 def windkolommen():
     """(id, x, z, y0 = stand at the foot, y1 = stand on the landing, radius, landing x, landing z), rel coords."""
     out = []
@@ -138,13 +152,6 @@ def windkolommen():
             a = math.atan2(z, x)
             lx, lz = x - 7 * math.cos(a), z - 7 * math.sin(a)
         out.append((wid, x, z, y0 + 1, y1 + 1, 3.0, lx, lz))
-    # the cloud sea: 6 rescue columns from the sea up to the island rim
-    for k in range(6):
-        a = math.radians(k * 60 + 15)
-        rim = float(B.eilandrand(np.array([a]))[0])
-        x, z = pol(a, rim + 12)
-        lx, lz = pol(a, rim - 14)
-        out.append((f"zee_{k + 1}", x, z, ZEE_Y + 1, gstand(lx, lz), 3.0, lx, lz))
     return out
 
 
@@ -155,17 +162,17 @@ def plekken():
     def put(k, x, y, z):
         PP[k] = W(x, y, z)
 
-    # ---------------------------------------------------------------- Honingtak: the dock at the tip of the Imkerstraat
-    L, rr = P.htak_lijn("Imkerstraat")
-    tip = L[-1]
-    ua = math.atan2(tip[2], tip[0])
-    ux, uz = math.cos(ua), math.sin(ua)
-    mx, mz = tip[0] - ux * 4, tip[2] - uz * 4
-    put("dok_mast", mx, HY + 1, mz)
-    put("dok_landing", mx - ux * 8, HY + 1, mz - uz * 8)
-    put("dok_bel", mx - ux * 4 - uz * 2, HY + 1, mz - uz * 4 + ux * 2)
-    put("dok_kapitein", mx - ux * 6 + uz * 2, HY + 1, mz - uz * 6 - ux * 2)
-    put("dok_luchtschip", mx + ux * 24, HY - 1, mz + uz * 24)
+    # ---------------------------------------------------------------- the airship piers on two long branch tips (Honingtak level)
+    #   Weststeiger = the dock (dok_*, line B from zone 2's Galmdok), Oosttaksteiger (line C to Lampionhaven, zone 4)
+    for naam, pre in (("Weststeiger", "dok"), ("Oosttaksteiger", "oosttaksteiger")):
+        (mx, mz), (ux, uz) = steiger(naam)
+        put(f"{pre}_mast", mx, HY + 1, mz)
+        put(f"{pre}_landing", mx - ux * 8, HY + 1, mz - uz * 8)
+        put(f"{pre}_bel", mx - ux * 4 - uz * 2, HY + 1, mz - uz * 4 + ux * 2)
+        put(f"{pre}_kapitein", mx - ux * 6 + uz * 2, HY + 1, mz - uz * 6 - ux * 2)
+        put(f"{pre}_luchtschip", mx + ux * 24, HY - 1, mz + uz * 24)
+        put(f"uitkijk_{'westtak' if pre == 'dok' else 'oosttak'}", mx + ux * 4 + uz * 3, HY + 1, mz + uz * 4 - ux * 3)
+    put("uitkijk_nest", 0, NEST_STAND, 17)
     # ---------------------------------------------------------------- Honingtak: the Honingplein + the ring
     cx, cz = pol(B.TH_M, 52)
     put("knuffelbeeld", cx, HY + 1, cz)
@@ -182,7 +189,7 @@ def plekken():
     gebouw = {}
     for fn, (hx, hz, deur, R, waar, soort) in ring_functies():
         dx, dz = math.cos(deur), math.sin(deur)
-        gebouw[fn] = {"npc": W(hx - dx * 1.5, HY + 1, hz - dz * 1.5), "binnen": W(hx, HY + 1, hz),
+        gebouw[fn] = {"npc": W(hx - dx * 2.2, HY + 1, hz - dz * 2.2), "binnen": W(hx + dx * 1.6, HY + 1, hz + dz * 1.6),
                       "deur": W(hx + dx * (R + 1.8), HY + 1, hz + dz * (R + 1.8)),
                       "doos_min": W(hx - 7, HY, hz - 7), "doos_max": W(hx + 7, HY + 12, hz + 7)}
         if fn == "jagershut":
@@ -485,8 +492,8 @@ def plekken():
         put(f"hart_grotlantaarn_{k + 1}", x, hal_stand(x, z), z)
     put("hart_bord", hx + 6, hal_stand(hx + 6, hz + 5), hz + 5)
     put("hart_vahoeg_altaar", hx + 6, hal_stand(hx + 6, hz - 5), hz - 5)
-    ax, az = pol(math.radians(180), HART_R - 4)
-    put("hart_kamer_aderloop", ax, HART_VLOER + 1, az)
+    ax, az = pol(math.radians(HART_KAMERS[0][1]), HART_R)
+    put("hart_kamer_aderloop", ax, HART_VLOER + 1, az * 0.45)
     for (naam, deg, kr) in HART_KAMERS:
         x, z = pol(math.radians(deg), HART_R)
         key = f"arena_{naam}" if naam in ("wortelwurger", "nestwachter", "baron_bleu") else f"hart_kamer_{naam}"
@@ -585,8 +592,26 @@ def hart_poort_van(naam):
 
 
 # ================================================================================================ areas (y-ranges)
+def _schuif(lijst):
+    """The area tables are written with z relative to the trunk (x already world): add TZ_STAM to every z."""
+    out = []
+    for g in lijst:
+        p = list(g[2])
+        if g[1] == "doos":
+            p[1] += TZ_STAM
+            p[3] += TZ_STAM
+        else:
+            p[1] += TZ_STAM
+        out.append((g[0], g[1], tuple(p)) + tuple(g[3:]))
+    return out
+
+
 # (id, shape, params, y0, y1, minLv, maxLv, town). shape "doos": (x1, z1, x2, z2) world; "cilinder": (cx, cz, r0, r1) world.
 def gebieden():
+    return _schuif(_gebieden())
+
+
+def _gebieden():
     T = (TX_STAM, 0)
     wc = (TX_STAM + int(WF.C[0]), int(WF.C[1]))
     return [
@@ -603,6 +628,10 @@ def gebieden():
 
 
 def mobzones():
+    return _schuif(_mobzones())
+
+
+def _mobzones():
     T = (TX_STAM, 0)
     return [
         ("z3_kruinzee_zeppelin", "cilinder", (TX_STAM + 55, -95, 0, 34), 220, 250, 31, 34),
@@ -622,6 +651,10 @@ def mobzones():
 
 
 def paden():
+    return {k: [(x, z + TZ_STAM) for (x, z) in v] for k, v in _paden().items()}
+
+
+def _paden():
     """The routes (polylines of world x, z): no wild spawns within ~5 blocks of them."""
     out = {}
     pts = []

@@ -91,8 +91,14 @@ def pol(r, a, y):
 
 
 # ===================================================================================================== terrein
+LOBBEN = [(math.radians(184), 30.0, 0.32), (math.radians(19), 26.0, 0.30), (math.radians(110), 14.0, 0.4)]   # [wereldindeling]
+
+
 def eilandrand(th):
-    return EILAND_R + 16 * vnoise(np.cos(th) * 300, np.sin(th) * 300, cell=90, seed=7, oct=2)
+    r = EILAND_R + 16 * vnoise(np.cos(th) * 300, np.sin(th) * 300, cell=90, seed=7, oct=2)
+    for (a, h, w) in LOBBEN:     # root capes under the two piers (west to zone 2, east to zone 4) and a small one south
+        r = r + h * np.exp(-(wrap(th - a) / w) ** 2)
+    return r
 
 
 def grondhoogte(XX, ZZ):
@@ -217,7 +223,7 @@ def r_stam(y, th):
 # [zone 3 kaart] the inner spiral stair, rebuilt: ONE stair from the Schorsstad floor (80) to the nest floor (292) with a flat
 # landing (bordes) per layer; the steps are HALF blocks (a full block or a bottom slab per stand height), so you never jump.
 # lev(phi) = the level (top block y) at helix angle phi (0 = start of the floor landing); the 166 landing is centred on TH_M.
-TRAP_LANDINGEN = [80, 166, 232, 260, 284, NEST_Y + 1]   # the last = the nest floor (stand NEST_Y + 2)
+TRAP_LANDINGEN = [80, 166, 232, 260, 284, NEST_Y]   # the last = the nest floor (top block NEST_Y, stand NEST_Y + 1)
 TRAP_WL = 0.62                       # landing arc (rad), ~11 blocks along the middle of the stair
 TRAP_R0, TRAP_R1 = 16.0, R_IN + 1.0  # stair from the rail (r 16) to the wall
 
@@ -832,17 +838,21 @@ def kussens(W, s):
             W.bol(c, R, None, ry=R * 0.45, hollow=2.5, keep=True, mixfn=bladmix(W, soort, 230 + i))
 
 
+VIJVERS = [(1.05, 108, 8), (1.95, 104, 7), (3.5, 110, 8), (4.85, 106, 7), (5.75, 110, 7)]   # [zone 3 kaart] 5 ponds, kruin 1
+
+
 def kruin_inhoud(W):
     """Leven op de kruinverdiepingen: honingvijvers, bijenkorven, bloesemboompjes, een kampje, een ruïne."""
     rng = np.random.default_rng(401)
     # honingvijvers op kruin 1
-    for (a, r, R) in ((0.9, 118, 9), (3.4, 128, 8), (5.0, 105, 7)):
+    for (a, r, R) in VIJVERS:
         x, z = r * math.cos(a), r * math.sin(a)
         t = kruin_top(0, x, z)
         if W.raakt(x - 12, t - 4, z - 12, x + 12, t + 2, z + 12):
-            W.cilinder(x, z, R + 1.5, t - 2, t, "minecraft:honeycomb_block")
-            W.cilinder(x, z, R, t - 1, t + 1, None)
-            W.cilinder(x, z, R, t - 1, t - 1, "minecraft:honey_block")
+            t = math.floor(t)
+            W.cilinder(x, z, R + 2.5, t - 2, t, "minecraft:honeycomb_block")     # [zone 3 kaart] flush rim, 1 deep
+            W.cilinder(x, z, R + 3.5, t + 1, t + 4, None)
+            W.cilinder(x, z, R, t, t, "minecraft:honey_block")       # flush: a honey surface (a honey pit = no jump out)
             W.label(x, t + 4, z, "honingvijver")
     # bloesemboompjes op elke verdieping (rand vrij)
     for s, kr in enumerate(KRUIN):
@@ -851,7 +861,7 @@ def kruin_inhoud(W):
             a = rng.uniform(0, 2 * math.pi)
             r = rng.uniform(40 if s < 2 else 34, kr["R"] * 0.78)
             if s < 2 and r < KRUIN[s + 1]["R"] + 8:
-                r = KRUIN[s + 1]["R"] + 8 + rng.uniform(0, kr["R"] * 0.7 - KRUIN[s + 1]["R"])
+                r = KRUIN[s + 1]["R"] + 6 + rng.uniform(0, max(1.0, kr["R"] * 0.88 - KRUIN[s + 1]["R"] - 6))
             x, z = r * math.cos(a), r * math.sin(a)
             t = kruin_top(s, x, z)
             h = rng.uniform(5, 9)
@@ -1045,12 +1055,14 @@ def aankleden(W, sx, sz):
         hang = plafond & (hash3(XX, y, ZZ, 218) < 0.06)
         on[hang & (on == 0)] = W.id("minecraft:hanging_roots")
     # sap-poeltjes in de laagste kommen (gloeiend turkoois)
-    for j in range(Y):
+    # [zone 3 kaart] glowing sap patches on the floor instead of pools (no pits)
+    plas = (vnoise(XX, ZZ, cell=16, seed=219) > 0.25) & (RR < 80) & (RR > HART[3] + 10)
+    for j in range(1, Y - 1):
         y = W.ys[j]
-        if 17 <= y <= 19:
-            sl = W.v[sx, j, sz]
-            plas = vnoise(XX, ZZ, cell=16, seed=219) > 0.15
-            sl[(sl == 0) & plas & (RR < 80) & (RR > HART[3] + 10)] = W.id("minecraft:water")
+        if 14 <= y <= 30:
+            sl, bo = W.v[sx, j, sz], W.v[sx, j + 1, sz]
+            m = plas & (sl != 0) & (bo == 0)
+            sl[m] = np.where(hash3(XX, y, ZZ, 219)[m] < 0.7, W.id("guhs:weidekristal_cyaan"), W.id("minecraft:sea_lantern"))
 
 
 def hart(W):
@@ -1066,11 +1078,7 @@ def hart(W):
             W.buis(_spline(pts, 6), np.full(13, 1.5), None, mixfn=sch)
     W.cilinder(cx, cz, R * 0.8, cy - R * 0.72, cy - R * 0.72, None, mixfn=mix(W, [
         "minecraft:moss_block", "guhs:glimmos", "minecraft:mangrove_roots"], [3, 1, 1], 701))
-    # poort (oost)
-    W.buis([(R - 6, cy - R * 0.72 + 4, 0), (R + 6, cy - R * 0.72 + 4, 0)], [4.5, 4.5], None, plat=1.3)
-    for s in (-1, 1):
-        W.wfill(R + 1, cy - R * 0.72 + 1, s * 5, R + 1, cy - R * 0.72 + 8, s * 5, "minecraft:stripped_dark_oak_wood")
-        W.wset(R + 2, cy - R * 0.72 + 7, s * 5, LAMP_R)
+    # [zone 3 kaart] no gate: the egg chamber is the last room of the Hart dungeon (a stair comes up through the floor)
     # het ei in een wortelwieg
     ey = cy - R * 0.72 + 6
     W.bol((cx, ey, cz), 4.2, "guhs:weidekristal_roze", ry=6)
@@ -1112,15 +1120,20 @@ def wortelpoort(W):
 
 
 def hangwortels(W):
-    """Wortels die onder het zwevende eiland uithangen, met gloeiende puntjes (paars-blauw)."""
+    """Wortels die onder het zwevende eiland uithangen, met gloeiende puntjes (paars-blauw).
+    [wereldindeling] 30 more on the west side: long roots hanging into the Wolkenkloof."""
     rng = np.random.default_rng(55)
-    for i in range(40):
-        a = rng.uniform(0, 2 * math.pi)
-        r = rng.uniform(40, 200)
+    for i in range(70):
+        if i < 40:
+            a = rng.uniform(0, 2 * math.pi)
+            r = rng.uniform(40, 200)
+        else:
+            a = math.radians(rng.uniform(130, 235))
+            r = rng.uniform(170, 236)
         x, z = r * math.cos(a), r * math.sin(a)
         g = grondhoogte(np.array([x]), np.array([z]))
         b = float(onderkant(np.array([x]), np.array([z]), g)[0])
-        lng = rng.uniform(14, 40)
+        lng = rng.uniform(14, 40) * (1.8 if i >= 40 else 1.0)
         if not W.raakt(x - 10, b - lng - 4, z - 10, x + 10, b + 6, z + 10):
             continue
         p1 = (x + rng.uniform(-6, 6), b - lng * 0.5, z + rng.uniform(-6, 6))
