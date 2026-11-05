@@ -36,21 +36,39 @@ public class PraatScherm extends Screen {
     /** The balloon: how wide a line of text may be, how many lines fit without growing, the height of a line. */
     private static final int REGEL_BREED = W - (10 + PIC + 8) - 10 - 10, REGELS = 6, REGEL_HOOG = 10;
     private static final int PANEL = 0xF0301A26, BORDER = 0xFFF7B6CB, TEXT = 0xFFFFE6EE;
-    private int npcId;
-    private CompoundTag data;
+    protected int npcId;   // (T-DIALOOG: protected for RijkPraatScherm)
+    protected CompoundTag data;
     private int left, top;
     /** 1.4.0: how much taller than {@link #H} the screen is now, for a text of more than {@link #REGELS} lines. */
     private int extra;
     /** 1.6.0 test round 5: the height without the extra text lines: taller when the answers need room under the balloon. */
     private int basis = H;
     /** 3.0 (verhaal.Praat): the page of a scene ("Paginas"), and whether the -1 "read/closed" answer was sent. */
-    private int pagina;
-    private boolean klaarGemeld;
+    protected int pagina;
+    protected boolean klaarGemeld;
 
     public PraatScherm(int npcId, CompoundTag data) {
         super(Component.translatable("gui.guhs.knuffeldal.praat"));
         this.npcId = npcId;
         this.data = data;
+    }
+
+    /**
+     * T-DIALOOG: another look for some conversations (Het Vadsrijk's RijkPraatScherm for payloads with "Rijk"); null = this one.
+     * Set once by a client init.
+     */
+    @javax.annotation.Nullable
+    public static java.util.function.BiFunction<Integer, CompoundTag, PraatScherm> stijl;
+
+    /** T-DIALOOG: the screen for this payload (a style's own screen, else this plain one). */
+    public static PraatScherm maak(int npcId, CompoundTag data) {
+        PraatScherm s = stijl == null ? null : stijl.apply(npcId, data);
+        return s != null ? s : new PraatScherm(npcId, data);
+    }
+
+    /** T-DIALOOG: may this open screen show that payload in place (same style)? The plain screen takes all but "Rijk" ones. */
+    public boolean past(CompoundTag newData) {
+        return stijl == null || !newData.getBooleanOr("Rijk", false);
     }
 
     public int npcId() {
@@ -78,22 +96,22 @@ public class PraatScherm extends Screen {
         rebuildWidgets();
     }
 
-    private int paginas() {
+    protected int paginas() {
         return data.getListOrEmpty("Paginas").size();
     }
 
-    private boolean laatstePagina() {
+    protected boolean laatstePagina() {
         return pagina >= paginas() - 1;
     }
 
     /** The page shown now (a scene), or the screen's own data. */
-    private CompoundTag nu() {
+    protected CompoundTag nu() {
         var list = data.getListOrEmpty("Paginas");
         return list.isEmpty() ? data : list.getCompoundOrEmpty(Math.min(pagina, list.size() - 1));
     }
 
     /** What this page says (its text with its arguments). */
-    private static Component tekst(CompoundTag pg) {
+    protected static Component tekst(CompoundTag pg) {
         List<Object> args = new ArrayList<>();
         for (Tag t : pg.getListOrEmpty("Args")) {
             args.add(t instanceof CompoundTag a ? nl.juiced.guhs.taal.Tekst.get(a, "A") : t.asString().orElse(""));
@@ -157,7 +175,7 @@ public class PraatScherm extends Screen {
                 .bounds(left + W - 10 - 96, top + hoogte() - 26, 96, 20).build());
     }
 
-    private void send(int action) {
+    protected void send(int action) {
         ClientPacketDistributor.sendToServer(new KnuffeldalPayloads.Action(npcId, action));
     }
 
@@ -175,6 +193,11 @@ public class PraatScherm extends Screen {
     private Entity spreker() {
         int id = nu().contains("Spreker") ? nu().getIntOr("Spreker", 0) : npcId;
         return minecraft.level == null || id < 0 ? null : minecraft.level.getEntity(id);
+    }
+
+    /** T-DIALOOG: only the screen's own (blurred/dimmed) background, for a style that draws its own panel. */
+    protected final void schermAchtergrond(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(g, mouseX, mouseY, partialTick);
     }
 
     @Override
@@ -224,7 +247,7 @@ public class PraatScherm extends Screen {
     }
 
     /** q-dialoog: stand-ins for speakers that are not on this client, by their portrait (built once, kept while in this world). */
-    private static final java.util.Map<String, LivingEntity> STAND_INS = new java.util.HashMap<>();
+    protected static final java.util.Map<String, LivingEntity> STAND_INS = new java.util.HashMap<>();
 
     /**
      * q-dialoog: who is drawn for the page shown now. The player's own lines ("Speler"): you. Else the speaker when this
@@ -232,7 +255,7 @@ public class PraatScherm extends Screen {
      * page that only names an NPC). Null: nobody (a narrator).
      */
     @javax.annotation.Nullable
-    private LivingEntity portret() {
+    protected LivingEntity portret() {
         CompoundTag pg = nu();
         if (pg.getBooleanOr("Speler", false)) {
             return minecraft.player;

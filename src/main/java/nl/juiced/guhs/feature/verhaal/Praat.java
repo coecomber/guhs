@@ -69,6 +69,33 @@ public final class Praat {
         PORTRET_BRONNEN.add(b);
     }
 
+    /**
+     * T-DIALOOG: a feature may add its own tags to what goes to the talking screen (Het Vadsrijk: "Rijk" + per page the
+     * faction, voice and emotion, the "what now?" objective); called just before sending, with the sleutel (may be null) and
+     * the conversation's first speaker in the world other than the reader (may be null).
+     */
+    @FunctionalInterface
+    public interface Versierder {
+        void versier(ServerPlayer p, @Nullable String sleutel, @Nullable Entity spreker, CompoundTag data);
+    }
+
+    private static final List<Versierder> VERSIERDERS = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /** T-DIALOOG */
+    public static void versierder(Versierder v) {
+        VERSIERDERS.add(v);
+    }
+
+    private static void versier(ServerPlayer p, @Nullable String sleutel, @Nullable Entity spreker, CompoundTag data) {   // T-DIALOOG
+        for (Versierder v : VERSIERDERS) {
+            try {
+                v.versier(p, sleutel, spreker, data);
+            } catch (RuntimeException ex) {
+                com.mojang.logging.LogUtils.getLogger().warn("Praat versierder failed for {}", sleutel, ex);   // (never block a conversation)
+            }
+        }
+    }
+
     private static final Map<String, Antwoord> LUISTERAARS = new ConcurrentHashMap<>();
     private static final Map<UUID, Lopend> LOPEND = new ConcurrentHashMap<>();
 
@@ -94,6 +121,7 @@ public final class Praat {
                 data.put("Portret", portret);
             }
         }
+        versier(p, sleutel, spreker == p ? null : spreker, data);   // T-DIALOOG
         LOPEND.put(p.getUUID(), new Lopend(p, sleutel, spreker.getId()));
         ModNetworking.sendTo(p, new KnuffeldalPayloads.Open(spreker.getId(), data));
     }
@@ -132,6 +160,14 @@ public final class Praat {
             data.putString("Tekst", regels.get(0).tekstKey());
         }
         data.put("Opties", opties(opties));
+        Entity eersteSpreker = null;   // T-DIALOOG: the first speaker in the world that is not the reader
+        for (Regel r : regels) {
+            if (r.spreker() != null && r.spreker() != p) {
+                eersteSpreker = r.spreker();
+                break;
+            }
+        }
+        versier(p, sleutel, eersteSpreker, data);   // T-DIALOOG
         LOPEND.put(p.getUUID(), new Lopend(p, sleutel, eerste));
         ModNetworking.sendTo(p, new KnuffeldalPayloads.Open(eerste, data));
     }

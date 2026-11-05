@@ -81,10 +81,11 @@ public final class KnuffeldalClient {
             }
             return;
         }
-        if (mc.screen instanceof PraatScherm scherm && (scherm.npcId() == payload.npcId() || payload.data().contains("Sleutel"))) {
+        if (mc.screen instanceof PraatScherm scherm && (scherm.npcId() == payload.npcId() || payload.data().contains("Sleutel"))
+                && scherm.past(payload.data())) {   // (T-DIALOOG: same style only)
             scherm.update(payload.npcId(), payload.data());
         } else {
-            mc.setScreen(new PraatScherm(payload.npcId(), payload.data()));
+            mc.setScreen(PraatScherm.maak(payload.npcId(), payload.data()));   // T-DIALOOG (a style's own screen)
         }
     }
 

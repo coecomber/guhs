@@ -234,6 +234,11 @@ public final class QuestMotor {
         for (int i = 0; i < sprekers.size(); i++) {
             String s = sprekers.get(i);
             String key = prefix + i;
+            int dubbel = s.indexOf(':');   // T-DIALOOG: "npc:blij" = this line with an emotion in the portrait
+            if (dubbel > 0) {
+                nl.juiced.guhs.feature.vadsrijk.dialoog.RijkDialoog.emotie(key, s.substring(dubbel + 1));
+                s = s.substring(0, dubbel);
+            }
             if (s.equals("npc")) {
                 l.add(new Praat.Regel(npc, "", key));
             } else if (s.equals("jij")) {
