@@ -664,6 +664,18 @@ public final class Erfenis {
             case ErfenisPayloads.Actie.NAAR_HUIS -> {
                 return naarHuis(server, p, b, Goed.van(a.tekst()), a.x(), nu);
             }
+            case ErfenisPayloads.Actie.WEGGEVEN -> {
+                Goed g = Goed.van(a.tekst());
+                if (g == null) {
+                    return new Base.Fout("erfenis.fout.weg");
+                }
+                Base.Fout f = b.weggeven(g, a.x());
+                if (f == null) {
+                    melding(p, "erfenis.ok.weggegeven", true, Integer.toString(a.x()), g.naamKey());
+                    geluid(p, SoundEvents.BUNDLE_DROP_CONTENTS);
+                }
+                return f;
+            }
             case ErfenisPayloads.Actie.LOKET -> {
                 return loket(p, b, a.tekst(), a.x());
             }

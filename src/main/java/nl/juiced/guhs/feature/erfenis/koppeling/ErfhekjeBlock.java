@@ -196,7 +196,7 @@ public class ErfhekjeBlock extends Block {
 
     /** May this player use a hekje (bought their erfenis, or creative)? Tells them why not. */
     static boolean mag(ServerPlayer p, boolean klik) {
-        if (Makelaarsbrief.gekocht(p.level().getServer(), p.getUUID()) || p.isCreative()) {
+        if (Makelaarsbrief.gekocht(p.level().getServer(), p.getUUID()) || p.isCreative() || Erfenis.in(p)) {
             return true;
         }
         p.sendOverlayMessage(Component.translatable("erfenis.koppeling.hekje.op_slot").withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -239,6 +239,12 @@ public class ErfhekjeBlock extends Block {
         RUSTIG.put(p.getUUID(), server.getTickCount() + (long) RUST);
         van.sendParticles(ROZE, p.getX(), p.getY() + 1, p.getZ(), 20, 0.3, 0.6, 0.3, 0);
         van.playSound(null, onder, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 1f, 1.3f);
+        if (van.dimension() == nl.juiced.guhs.feature.erfenis.Plot.DIM) {
+            // 1.9.7: a Terughekje (deco) inside the erfenis: back to where you came from, like "terug"
+            Erfenis.terug(p);
+            rust(p);
+            return true;
+        }
         if (!Erfenis.gaNaar(p, Erfenis.eigenBase(p))) {
             p.sendOverlayMessage(Component.translatable("erfenis.koppeling.hekje.dicht").withStyle(ChatFormatting.RED));
             return false;

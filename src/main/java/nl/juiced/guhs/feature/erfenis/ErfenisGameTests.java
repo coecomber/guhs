@@ -457,4 +457,21 @@ public class ErfenisGameTests {
                 && b.decoOpslag.getOrDefault("hartjesnest", 0) == 1, "a building over it: the piece goes back into the schuurtje");
         helper.succeed();
     }
+
+    /** 1.9.7: from the storage you can always give a good away (Leger des Heilguhs), also one that may not go home. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void weggeven(GameTestHelper helper) {
+        Base b = start();
+        b.goederen.clear();
+        b.geefGoed(Goed.PLANK, 100);
+        helper.assertTrue(!Goed.PLANK.naarHuis() && b.heeft(Goed.PLANK) == 100, "planks: may not go home");
+        helper.assertTrue(b.weggeven(Goed.PLANK, 0) != null && b.weggeven(Goed.PLANK, 101) != null && b.heeft(Goed.PLANK) == 100,
+                "nothing, or more than there is: nothing goes");
+        helper.assertTrue(b.weggeven(Goed.PLANK, 60) == null && b.heeft(Goed.PLANK) == 40, "60 planks given away, 40 stay");
+        b.bouwblokSoorten.clear();
+        b.geefGoed(Goed.BOUWBLOK, 30);
+        helper.assertTrue(b.weggeven(Goed.BOUWBLOK, 30) == null && b.heeft(Goed.BOUWBLOK) == 0 && b.bouwblokSoorten.isEmpty(),
+                "Bouwkeet blocks: their kinds go too");
+        helper.succeed();
+    }
 }

@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.7 — Minecraft 26.1.2
+
+- **Terughekje:** a new deco piece (5 Guhlden, from Hoeve level 1) with a real Erfhekje between two flowers. Walk through it (or right-click it) inside your Erfenis and you go back to where you came from. Place, turn and move it like any other deco.
+- **Give away or send home from the storage:** click a good in the storage window. Send it to your Leverkist (if that good may go home; the hourly limits still count), or give it away to the Leger des Heilguhs to make room. Giving away always works, asks once more, and gives nothing back.
+
 ## 1.9.6 — Minecraft 26.1.2
 
 - No more double villagers in your Erfenis: the marktmeester-Mika behind the counter, the farmer at the coop and friends no longer get a twin when a building is stamped again while its chunk was still loading. Doubles that are already there clean themselves up.

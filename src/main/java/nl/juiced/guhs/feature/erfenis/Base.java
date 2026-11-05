@@ -1199,6 +1199,22 @@ public final class Base {
         return null;
     }
 
+    /** 1.9.7: gives {@code n} of this good away (the Leger des Heilguhs): out of the storage, nothing back. Null = done. */
+    @Nullable
+    public Fout weggeven(Goed g, int n) {
+        if (n <= 0) {
+            return new Fout("erfenis.fout.weggeven_niks");
+        }
+        if (heeft(g) < n) {
+            return new Fout("erfenis.fout.goed", Integer.toString(n - heeft(g)), g.naamKey());
+        }
+        verander(g, -n);
+        if (g == Goed.BOUWBLOK) {
+            neemSoorten(n);
+        }
+        return null;
+    }
+
     /** Takes the goods out of the storage for the Leverkist; returns item id -> count (or a Fout). */
     public Object naarHuis(Goed g, int n, long nu) {
         Fout f = kanNaarHuis(g, n, nu);

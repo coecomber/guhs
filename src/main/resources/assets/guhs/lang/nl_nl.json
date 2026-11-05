@@ -34545,5 +34545,15 @@
   "erfenis.afwerking.worteltje.tekst.1": "\"Sorry van de paaltjes. Morris zei het!\" - Pim",
   "erfenis.afwerking.kelder.post": "Spulletjes uit Opa's oude kelder, netjes voor je bewaard! (In de nieuwe kelder paste het niet, of die komt pas bij je volgende bezoek.)",
   "erfenis.afwerking.kelder.verhuisd": "Opa's kelder is mee verhuisd, met al je spulletjes erin. Opa zou trots zijn, njeg!",
-  "erfenis.afwerking.feestje": "Dorpsfeestje bij de Muziektent! Bertha de koe staat op het podium en zingt (een beetje vals, maar met heel haar hart)."
+  "erfenis.afwerking.feestje": "Dorpsfeestje bij de Muziektent! Bertha de koe staat op het podium en zingt (een beetje vals, maar met heel haar hart).",
+  "erfenis.deco.terughekje": "Terughekje",
+  "erfenis.ui.goed_klik": "Klik: weggeven of naar huis sturen",
+  "erfenis.ui.alles_knop": "Alles",
+  "erfenis.ui.naar_leverkist": "Naar je Leverkist (%s)",
+  "erfenis.ui.weggeven": "Weggeven aan het Leger des Heilguhs (%s)",
+  "erfenis.ui.weggeven_zeker": "Zeker? Klik nog eens om %s weg te geven",
+  "erfenis.ui.weggeven_tip": "Weg is weg: je krijgt er niks voor terug.",
+  "erfenis.ui.weggeven_uitleg": "Het Leger des Heilguhs deelt het uit aan guhs die wel wat kunnen gebruiken. Zo maak je ruimte in je opslag.",
+  "erfenis.ok.weggegeven": "%s %s gaan naar het Leger des Heilguhs. Dankjewel, lieve guh!",
+  "erfenis.fout.weggeven_niks": "Kies eerst hoeveel je wilt weggeven."
 }

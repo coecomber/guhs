@@ -110,6 +110,7 @@ public final class DecoWinkel {
         s(c, Soort.STUK, "windvaantje", 180, 4, "guhs:guh_molentje");
         s(c, Soort.STUK, "hooiwagen", 450, 5, "minecraft:cherry_trapdoor");
         c = Categorie.BIJZONDER;
+        s(c, Soort.STUK, "terughekje", 5, 1, "guhs:erfhekje");   // 1.9.7: an Erfhekje back to the world, placed like any deco
         s(c, Soort.STUK, "guhballon", 50, 3, "guhs:mini_luchtballon");
         s(c, Soort.STUK, "reuzengatenkaas", 300, 4, "guhs:gatenkaas");
         s(c, Soort.STUK, "hangmat", 1000, 6, "minecraft:pink_carpet");
