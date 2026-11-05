@@ -27,13 +27,63 @@ Wat al accountbreed is: `extra("huisdieren")` (hele slice), `extra("economie")` 
 `titels`, `post`, en de SpelerData-velden `binnen`, `opgeborgen(_slot)`, `terug`, `gevonden`, `tips`.
 
 ## Gebouwd
-(wordt aangevuld)
+Package `feature/vadsrijk/karakter/`:
+- `Karakter` - de API + de splitsing van SpelerData in karakterdeel / accountdeel (`alleenKarakter`, `metAccount`) + migratie.
+- `Karakters` - maak / wissel / hernoem / modus omlaag / pensioen; de plekregel (`waaromNiet`); een wissel-lock per speler.
+- `Modus` - NORMAAL / EENVADS / KNUFFEL (+ factoren, badge, "alleen omlaag").
+- `Badges` - badge bij de naam (server NameFormat + TabListNameFormat, client NameFormat via payload-kaart).
+- `RustendeRidders` - SavedData `guhs:vr_rustende_ridders` (lijst) + de zaal (gebouwd door code) + standbeelden.
+- `KarakterScherm` (server) + `client/KarakterSchermClient` (EcoScherm-stijl) + `client/KarakterClient`.
+- `KarakterPayloads` - Scherm / Doe / Badges.
+- `KarakterRegistry` - haken (XP_FACTOR, Schade.VOOR_KLAP, FLAUW, BINNEN, login/logout, tick, NPC-opties) + `/guhs vadsrijk karakter`.
+- `KarakterTest` (migratie-test) + `VadsrijkKarakterGameTests` (5 tests).
+- Teksten: `tools/features/vadsrijk_t_karakter.py` (NL in nl_nl via build, EN in `tools/lang/en/c300_vr_t_karakter.json`).
+
+### Hoe de wissel werkt
+1. `Karakter.VOOR_WISSEL`; in het Vadsrijk ook kern `Haken.BINNEN(false)` (handel weg, rijdier naar huis, huisdier weg, verhaal-loopjes
+   gewist) + statussen gewist + `closeContainer`.
+2. Zit de Vadsrijk-inventaris live (`d.binnen`): `Inventaris.naarThuis` (kern's eigen "nooit iets kwijt"-wissel) zet hem in
+   `rijkInventaris` van het oude karakter.
+3. SpelerData -> tag; het karakterdeel (zonder accountvelden/-slices) gaat in `s<oud>.data`, plus waar hij stond (`plek`) en
+   een snapshot (level, klasse, munten) voor het scherm.
+4. Het nieuwe karakterdeel + het accountdeel van nu -> SpelerData; `Inventaris.naarRijk` haalt zijn inventaris eruit.
+5. In het Vadsrijk: teleport naar zijn eigen plek (nieuw karakter: `Gebieden.AANKOMST` = Knuffelkamp, dus het openingsfilmpje
+   start), `Haken.BINNEN(true)` (huisdier terug, quest-markers vies), Sieraden + HUD sync, titelkaart.
+6. `Karakter.GEWISSELD` + badge verversen.
+Alles in 1 servertick, in player.dat: geen dupe via accountopslag (een wissel-lock voorkomt dubbel klikken).
 
 ## Eigen keuzes
-(wordt aangevuld)
+- **Actieve-karakter-in-de-attachment** in plaats van elke store om te bouwen naar `Map<Sleutel,...>`: alles in SpelerData is
+  daardoor automatisch per karakter (ook stores die andere slices vannacht toevoegen) en de bestaande code hoeft niet te veranderen.
+  Default = per karakter; accountbreed moet je expliciet zeggen. Zo kan een vergeten store nooit "doorlekken".
+- **Rijdieren + huisdieren: ook hun levels accountbreed** (voorstel zei levels per karakter). Reden: eenvoud, en R1 noemt
+  "mounts, huisdieren" accountbreed zonder uitzondering. Wil de gebruiker het toch per karakter: alleen de `accountBreed`-regels
+  in `Karakter` aanpassen (bv. alleen `rijdieren` bezit splitsen) - kleine wijziging.
+- **Tips accountbreed** (geen uitlegtips opnieuw), **verhaalfilmpjes (`gezien`) per karakter** (nieuw karakter = verhaal opnieuw).
+- **Markt**: aanbiedingen + opbrengst blijven per speler-UUID (de bestaande MarktData). De opbrengst komt bij het karakter dat
+  hem ophaalt. Munten tussen je eigen ridders schuiven kan dus via de markt; geen probleem (geen IJzerguh).
+- **Party, arena-bijdragen, gesprekken**: runtime per UUID; prima, want je speelt maar 1 karakter tegelijk.
+- **Wissel-plekregel**: stad (`Gebieden.Gebied.stad`), binnen 8 blokken van een kampvuurblok, of de eerste 60 s na binnenkomst
+  (het scherm bij de ingang). Niet in een baasarena, niet tijdens een scene. Buiten het Vadsrijk mag het altijd (wisselt alleen data).
+- **Nieuw karakter begint in de Knuffelkamp** (`Gebieden.AANKOMST`), een bestaand karakter waar hij stond, anders zijn kampvuur.
+- **Eénvads**: pensioen bij flauwvallen BUITEN een stad (in creative/spectator nooit). +10% xp zolang hij leeft.
+  **Knuffelmodus**: 50% inkomende schade (alle schade via `Schade.doe`, ook omgeving), -10% xp.
+  Factoren staan in `Modus` (makkelijk te tunen).
+- **Badges**: ❤ goud = Eénvads, ☁ roze = Knuffel, ✦ goud = met pensioen. Alleen zichtbaar terwijl je in het Vadsrijk bent.
+- **Rustende Ridders-zaal = structuurstuk door code**, niet in de kaartgenerator (de kaart wordt vannacht door anderen omgebouwd;
+  zo botst er niets). Plek: `RustendeRidders.ANKER` = (-27, 63, 71), Zwamzoet, grasveld west van het plein tussen de Kruidenier
+  (deur -35,64,68 blijft vrij: 3 blokken tussenruimte) en de huizen, ingang zuid op de havenpromenade (z 80). 9x11, wanden 5 hoog.
+  Wordt 1x gebouwd zodra die chunk geladen is EN het veld nog vrij is (anders 1 waarschuwing in de log; dan `zaal bouw hier`).
+  Beelden = pantserstandaards (getagd `vr_rustende_ridder`) met spelershoofd; de 11 nieuwste ridders krijgen een sokkel.
+- **Scherm-opening**: geen nieuwe toets (alle goede toetsen bezet); via commando, NPC-keuze en automatisch bij binnenkomst (2+ ridders).
 
-## Gedeelde bestanden aangeraakt
-(wordt aangevuld)
+## Gedeelde bestanden aangeraakt (add-only, gemarkeerd T-KARAKTER)
+- `feature/vadsrijk/VadsrijkFeature.java`: 2 regels (register + payloads).
+- `feature/vadsrijk/client/VadsrijkClient.java`: 1 regel (KarakterClient.init).
+- `tools/features/__init__.py`: 1 regel in FEATURES (`vadsrijk_t_karakter`).
+- `assets/guhs/lang/nl_nl.json` + `en_us.json`: 52 nieuwe sleutels `vadsrijk.karakter.*` (door de generator).
+- Geen wijziging in kern-klassen: alles via bestaande haken (`Spelers.XP_FACTOR`, `Schade.VOOR_KLAP`, `Haken.FLAUW/BINNEN`,
+  `QuestMotor.EXTRA`).
 
 ## Hervatpunt / open
 (wordt aangevuld)
