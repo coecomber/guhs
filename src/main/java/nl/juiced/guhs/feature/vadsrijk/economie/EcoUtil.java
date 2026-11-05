@@ -113,7 +113,7 @@ public final class EcoUtil {
                 n += inv.getItem(i).getCount();
             }
         }
-        return n;
+        return (int) Math.min(Integer.MAX_VALUE, n + nl.juiced.guhs.feature.vadsrijk.opslag.Opslag.tasVoor(inv, item));   // T-OPSLAG: + the materiaaltas
     }
 
     /** Takes n of this item (only call after {@link #tel} said there are enough). */
@@ -127,5 +127,6 @@ public final class EcoUtil {
             }
         }
         inv.setChanged();
+        nl.juiced.guhs.feature.vadsrijk.opslag.Opslag.neemRestUitTas(inv, item, n);   // T-OPSLAG: the rest from the materiaaltas
     }
 }

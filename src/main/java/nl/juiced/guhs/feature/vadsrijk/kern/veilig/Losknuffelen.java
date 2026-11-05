@@ -93,6 +93,12 @@ public final class Losknuffelen {
         KLAAR_OP.put(id, nu + COOLDOWN_TICKS);
     }
 
+    /** T-OPSLAG: the game time this player's channel began (-1 = none), for the cast bar (opslag.Gietbalk). */
+    public static long kanaalBegin(UUID id) {
+        Kanaal k = KANALEN.get(id);
+        return k == null ? -1 : k.begin();
+    }
+
     /** Dev/tests: forget this player's cooldown and channel. */
     public static void vergeet(UUID id) {
         KLAAR_OP.remove(id);
