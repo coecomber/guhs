@@ -166,3 +166,8 @@ dungeon and their loot.
 - The Wrak's room layout is t-z4wereld's; if their rooms are elsewhere, move `z4_mobs_wrak_*` (or add the POI aliases).
 - The Schildpadeiland turtle (moving) is not mine.
 - No AutoCheck run.
+
+## Test results (2026-11-06)
+- `runGameTestServer -Pgt=VadsrijkZ4`: **"All 8 required tests passed"** (4 wezens + 3 bazen + the krab/slak test; the first run caught 2
+  compile errors, now fixed: a trophy list type and a name clash with Z2Baas.inStrook → `Zeeslurf.inBaan`).
+- No AutoCheck client run (3 gradle slots were busy all night; looks unverified).

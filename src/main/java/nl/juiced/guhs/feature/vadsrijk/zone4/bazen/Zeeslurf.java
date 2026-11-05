@@ -397,7 +397,7 @@ public class Zeeslurf extends Z4Baas {
                 sl.sendParticles(ParticleTypes.SPLASH, spuitNaar.x, spuitNaar.y + 0.5, spuitNaar.z, 40, 1, 0.3, 1, 0.2);
                 sl.playSound(null, blockPosition(), SoundEvents.ELDER_GUARDIAN_AMBIENT, SoundSource.HOSTILE, 2f, 1.6f);
                 for (ServerPlayer p : l) {
-                    if (inStrook(p.position(), van, spuitNaar, 2.5) && Math.abs(p.getY() - spuitNaar.y) < 4) {
+                    if (inBaan(p.position(), van, spuitNaar, 2.5) && Math.abs(p.getY() - spuitNaar.y) < 4) {
                         mech(p, 0.18, "slurfspuit");
                         duw(p, van, 1.0);
                     }
@@ -546,7 +546,7 @@ public class Zeeslurf extends Z4Baas {
     }
 
     /** Is p within the strip a->b of width w (flat)? */
-    static boolean inStrook(Vec3 p, Vec3 a, Vec3 b, double w) {
+    public static boolean inBaan(Vec3 p, Vec3 a, Vec3 b, double w) {
         Vec3 ab = b.subtract(a).multiply(1, 0, 1), ap = p.subtract(a).multiply(1, 0, 1);
         double l2 = ab.lengthSqr();
         if (l2 < 1e-4) {

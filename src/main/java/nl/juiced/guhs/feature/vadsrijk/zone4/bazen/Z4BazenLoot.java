@@ -71,7 +71,8 @@ public final class Z4BazenLoot {
 
     public static final List<String> BAZEN = List.of("zeeslurf", "vliegervanger");
     public static final List<DeferredItem<Item>> TROFEEEN = BAZEN.stream()
-            .map(b -> Z4BazenRegistry.ITEMS.registerItem("vr_z4_baas_trofee_" + b, BazenLoot.Trofee::new, () -> new Item.Properties().stacksTo(16))).toList();
+            .map(b -> Z4BazenRegistry.ITEMS.<Item>registerItem("vr_z4_baas_trofee_" + b, p -> new BazenLoot.Trofee(p), () -> new Item.Properties().stacksTo(16)))
+            .toList();
 
     public static final List<Benoemd> BENOEMD = List.of(
             new Benoemd("z4baas_slurfstaf", SLURFSTAF, Zeldzaamheid.LEGENDARISCH, "zeeslurf", 0.12),

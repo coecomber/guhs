@@ -333,7 +333,7 @@ public class Vliegervanger extends Z4Baas {
             Z4Vfx.wind(sl, van, netNaar);
             sl.playSound(null, blockPosition(), SoundEvents.FISHING_BOBBER_THROW, SoundSource.HOSTILE, 2f, 0.6f);
             for (ServerPlayer p : l) {
-                if (Zeeslurf.inStrook(p.position(), van, netNaar, 2.2) && Math.abs(p.getY() - getY()) < 3) {
+                if (Zeeslurf.inBaan(p.position(), van, netNaar, 2.2) && Math.abs(p.getY() - getY()) < 3) {
                     mech(p, 0.15, "knuffelnet");
                     Statussen.geef(p, Status.PLAKKERIG, 60, 1, this);
                 }
@@ -383,7 +383,7 @@ public class Vliegervanger extends Z4Baas {
             later(tg(20), () -> {
                 Z4Vfx.wind(sl, van, naar);
                 for (ServerPlayer q : strijders()) {
-                    if (Zeeslurf.inStrook(q.position(), van, naar, 3)) {
+                    if (Zeeslurf.inBaan(q.position(), van, naar, 3)) {
                         q.push(rr.x * 1.2, 0.3, rr.z * 1.2);
                         q.hurtMarked = true;
                         mech(q, 0.06, "windvlaag");
