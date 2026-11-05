@@ -195,4 +195,23 @@ public class VormenGameTests {
         }
         return null;
     }
+
+    /** 1.9.6: a stamp that didn't see its old creatures (their chunk still loading) made doubles: only the newest stamp stays. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void geenDubbeleWezens(GameTestHelper helper) {
+        net.minecraft.server.level.ServerLevel lvl = helper.getLevel();
+        VormBestand v = GebouwVormen.vorm("marktplein", 2);
+        helper.assertTrue(v != null && !v.wezens.isEmpty(), "the Marktplein L2 has its marktmeester-Mika");
+        net.minecraft.core.BlockPos o = helper.absolutePos(new net.minecraft.core.BlockPos(1, 0, 1));
+        DecoWezens.zet(lvl, v, o, v.w, v.d, 0);   // the old stamp ...
+        DecoWezens.zet(lvl, v, o, v.w, v.d, 0);   // ... and a new one on top, without "weg" (it didn't see the old one)
+        net.minecraft.world.phys.AABB doos = new net.minecraft.world.phys.AABB(o).inflate(v.w + v.d);
+        int voor = lvl.getEntities((net.minecraft.world.entity.Entity) null, doos, DecoWezens::isDeco).size();
+        helper.assertTrue(voor == 2 * v.wezens.size(), "two stamps: doubles (" + voor + ")");
+        DecoWezens.ontdubbel();
+        int na = lvl.getEntities((net.minecraft.world.entity.Entity) null, doos, e -> DecoWezens.isDeco(e) && !e.isRemoved()).size();
+        helper.assertTrue(na == v.wezens.size(), "only the newest stamp stays (" + na + ")");
+        DecoWezens.weg(lvl, o, v.w, v.d, GebouwVormen.WIS_HOOGTE);
+        helper.succeed();
+    }
 }

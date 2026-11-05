@@ -157,7 +157,7 @@ def ftb(fq):
 
     # --- 4. animals --------------------------------------------------------------------------------------------------------
     q("erfenis_schaap", "Bleh zei het schaapje", "Bouw een &dSchaapskooi&r: wol!", "minecraft:white_wool", [adv("erfenis_schaap")])
-    q("erfenis_konijn", "Pluizige oortjes", "Bouw een &dKonijnenren&r: angorapluis.", "minecraft:rabbit_hide", [adv("erfenis_konijn")])
+    q("erfenis_konijn", "Pluizige oortjes", "Bouw een &dKonijnenren&r: konijnenpluis.", "minecraft:rabbit_hide", [adv("erfenis_konijn")])
     q("erfenis_eend", "Kwak, guh", "Bouw een &dEendenvijver&r: dons en eendeneitjes.", "minecraft:feather", [adv("erfenis_eend")])
     q("erfenis_koe", "Boe-guh", "Bouw een &dKoeienstal&r: melk!", "minecraft:milk_bucket", [adv("erfenis_koe")])
     q("erfenis_bij", "Zoemguhs", "Bouw een &dBijenhof&r: honing en was.", "minecraft:honeycomb", [adv("erfenis_bij")], rewards=((K, 16),))

@@ -43,6 +43,7 @@ public final class DecoWezens {
     public static final String TAG = "guhs_erfenis_deco";
     private static final String DATA = "guhs_erfdeco";
     private static final Set<Mob> LEVEND = Collections.newSetFromMap(new WeakHashMap<>());
+    private static long laatsteStempel;
 
     private DecoWezens() {
     }
@@ -70,6 +71,8 @@ public final class DecoWezens {
 
     /** Spawns the creatures of a shape stamped at o (turned rot). */
     static void zet(ServerLevel lvl, VormBestand v, BlockPos o, int bx, int bz, int rot) {
+        long stempel = Math.max(System.currentTimeMillis(), ++laatsteStempel);   // (1.9.6: which stamp made it, see ontdubbel)
+        laatsteStempel = stempel;
         for (VormBestand.Wezen w : v.wezens) {
             Entity e = maak(lvl, w);
             if (e == null) {
@@ -93,6 +96,7 @@ public final class DecoWezens {
             t.putDouble("hx", x);
             t.putDouble("hy", y);
             t.putDouble("hz", z);
+            t.putLong("s", stempel);
             e.getPersistentData().put(DATA, t);
             if (e instanceof Mob m) {
                 m.setPersistenceRequired();
@@ -231,11 +235,49 @@ public final class DecoWezens {
         }
     }
 
+    /**
+     * 1.9.6: a footprint is stamped again while its old creatures were not loaded yet (their chunk still loading): "weg"
+     * didn't see them, so when they load they stand next to the new ones (two marktmeester-Mikas behind one counter). Per
+     * footprint only the newest stamp stays, and of one stamp only one creature per spot.
+     */
+    static void ontdubbel() {
+        java.util.Map<String, java.util.List<Mob>> perPlek = new java.util.HashMap<>();
+        for (Mob m : new ArrayList<>(LEVEND)) {
+            CompoundTag t = m.getPersistentData().getCompoundOrEmpty(DATA);
+            if (m.isRemoved() || t.isEmpty()) {
+                continue;
+            }
+            String k = m.level().dimension().identifier() + "|" + t.getIntOr("x1", 0) + "," + t.getIntOr("z1", 0) + ","
+                    + t.getIntOr("x2", 0) + "," + t.getIntOr("z2", 0) + "," + t.getIntOr("y", 0);
+            perPlek.computeIfAbsent(k, x -> new ArrayList<>()).add(m);
+        }
+        for (java.util.List<Mob> groep : perPlek.values()) {
+            if (groep.size() < 2) {
+                continue;
+            }
+            long nieuwste = 0;
+            for (Mob m : groep) {
+                nieuwste = Math.max(nieuwste, m.getPersistentData().getCompoundOrEmpty(DATA).getLongOr("s", 0L));
+            }
+            Set<String> plekken = new java.util.HashSet<>();
+            for (Mob m : groep) {
+                CompoundTag t = m.getPersistentData().getCompoundOrEmpty(DATA);
+                String wie = BuiltInRegistries.ENTITY_TYPE.getKey(m.getType()) + "|" + (m instanceof GuhNpcEntity n ? n.getKind() : "")
+                        + "|" + Math.round(t.getDoubleOr("hx", 0) * 4) + "," + Math.round(t.getDoubleOr("hy", 0) * 4) + "," + Math.round(t.getDoubleOr("hz", 0) * 4);
+                if (t.getLongOr("s", 0L) < nieuwste || !plekken.add(wie)) {
+                    LEVEND.remove(m);
+                    m.discard();
+                }
+            }
+        }
+    }
+
     private static void opTick(ServerTickEvent.Post e) {
         GebouwVormen.tick();
         if (e.getServer().getTickCount() % 40 != 0 || LEVEND.isEmpty()) {
             return;
         }
+        ontdubbel();
         for (Mob m : new ArrayList<>(LEVEND)) {
             if (m.isRemoved()) {
                 LEVEND.remove(m);

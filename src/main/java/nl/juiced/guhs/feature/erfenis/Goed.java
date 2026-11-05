@@ -61,7 +61,7 @@ public enum Goed {
     KAASKNABBEL("kaasknabbel", 2, "guhs:kaas_knabbels", "guhs:kaas_knabbels", 80),
     KAARS("kaars", 8, "minecraft:candle", "minecraft:candle", 0),
     LANTAARN("lantaarn", 15, "minecraft:lantern", "minecraft:lantern", 0),
-    BOUWBLOK("bouwblok", 5, "guhs:pastelbaksteen_roze", "*", 500);
+    BOUWBLOK("bouwblok", 5, "guhs:bouwkeet", "*", 500);   // (1.9.6: the Bouwkeet as its icon: the pink brick looked like Baksteen)
 
     /** The id in saved data, lang keys and the ErfenisEconomie API. */
     public final String id;

@@ -677,6 +677,7 @@ public final class OverzichtScherm extends Screen {
         }
         hulp(ui);
         toasts(ui);
+        OverzichtChat.teken(ui, font, width, height);   // (1.9.6: the chat, at the left in the middle)
         if (venster != null) {
             Ui vui = new Ui(g, font, mx, my, klikken);
             venster.teken(vui, this, b, width, height, nu);

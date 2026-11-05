@@ -3,6 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.6 — Minecraft 26.1.2
+
+- No more double villagers in your Erfenis: the marktmeester-Mika behind the counter, the farmer at the coop and friends no longer get a twin when a building is stamped again while its chunk was still loading. Doubles that are already there clean themselves up.
+- Sherlock's witnesses no longer get a twin either when you leave and come back.
+- The chat now shows in the Erfenis overview too (at the left, in the middle), so you can follow what the others say while you build.
+- Clearer, sweeter names: Angora is now **Konijnenpluis**, Pluis **Wolkenpluis**, Was **Bijenwas**, Stof **Lapjes stof** and Dons **Eendendons**.
+- Bouwkeet blocks have the Bouwkeet as their icon, so they no longer look like a second Baksteen.
+
 ## 1.9.5 — Minecraft 26.1.2
 
 - **More storage in your Erfenis:** the Hoeve and every Opslagschuur hold three times as much.
