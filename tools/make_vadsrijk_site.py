@@ -38,13 +38,17 @@ def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/",
     data = bron.build()
     from wiki_site.site import MOD_VERSION
     if os.path.isdir(out):
-        shutil.rmtree(out)
-    os.makedirs(out)
+        for _ in range(5):   # (Windows: a file indexer/AV can hold a folder for a moment)
+            shutil.rmtree(out, ignore_errors=True)
+            if not os.path.exists(out):
+                break
+            time.sleep(1)
+    os.makedirs(out, exist_ok=True)
     kaart_bron = os.path.join(root, "docs", "wiki", "vadsrijk_kaart")
     kaart = None
     if os.path.exists(os.path.join(kaart_bron, "kaart.json")):
         kaart = json.load(open(os.path.join(kaart_bron, "kaart.json"), encoding="utf-8"))
-        shutil.copytree(os.path.join(kaart_bron, "tegels"), os.path.join(out, "kaart", "tegels"))
+        shutil.copytree(os.path.join(kaart_bron, "tegels"), os.path.join(out, "kaart", "tegels"), dirs_exist_ok=True)
     else:
         bron.notes.append("no map tiles (docs/wiki/vadsrijk_kaart): run python tools/wiki_site/vadsrijk/kaart.py")
     voorbeeld_aan = not echt and not live_url

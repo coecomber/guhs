@@ -65,6 +65,8 @@ seal, contracts, caravan, boss timers) · Patch notes · Privacy.
 - `runGameTestServer -Pgt=VadsrijkWeb` (slot script, GUHS_SLOTS=3): **all 3 required tests passed** (wikiExport, allowlist + the
   status/world builders + atomic write).
 - Site: link check 0 broken; `node --check` on the scripts; pages looked at in headless Edge (screenshots above).
+- Full site: `python tools/make_wiki_site.py --vadsrijk` -> docs/site (git-ignored): 0 broken over the whole site (144k links);
+  its one note (vadskracht_wiki.py KeyError) is older than this branch.
 
 ## Open choices / for the integration
 - **Map tiles vs. layout:** the committed `.nbt` tiles (from k-int) still have zone 3 at its OLD place (trunk 2300,0), while the
