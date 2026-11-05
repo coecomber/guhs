@@ -125,7 +125,7 @@ def zone2(a):   # [zone 2] De Splinterpieken: own grid/tiles (tx -11..10, tz -48
     maak2.maak(a.alleen)
 
 
-def zone3(a):   # [zone 3] De Schemerwortel: own process (its render kit shares module names), tiles tx 25..46, tz -11..10
+def zone3(a):   # [zone 3] De Schemerwortel: own process (its render kit shares module names), tiles tx 29..42, tz -7..6 (revamp)
     cmd = [sys.executable, os.path.join(HIER, "zone3", "maak3.py"), "--werkers", str(a.werkers)]
     if a.alleen:
         cmd += ["--alleen", a.alleen]

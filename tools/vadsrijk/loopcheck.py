@@ -166,6 +166,11 @@ class Venster:
                 self.f[x[m] + ox, y[m] - Y0, z[m] + oz] = fc[st[m]]
 
 
+SEEDS = None     # [p-wereld] optional: [[x, y, z], ...] stand spots that count as "safe" instead of the window ring
+LINKS = []       # [p-wereld] optional: [[[x, y, z], [x, y, z], both], ...] lifts (both) / wind columns (one way) as extra edges
+POIS = None      # [p-wereld] optional: {id: [x, y, z]}: report which are not reachable / not able to get back
+
+
 def analyse(V, kern, route=None, soepel=None):
     """kern = (x0, z0, x1, z1) world box whose findings count. Returns a list of findings (dicts)."""
     k = V.k
@@ -291,6 +296,32 @@ def analyse(V, kern, route=None, soepel=None):
     runs = (node & ~dn(node)).sum(1)
     rx, rz = np.nonzero(ring & (topc >= 0) & (runs == 1))
     uit = ids[rx, topc[rx, rz], rz]
+
+    def nid2(p):
+        if not (0 <= p[0] - V.x0 < NX and 0 <= p[1] - Y0 < NY and 0 <= p[2] - V.z0 < NZ):
+            return -2
+        for dy in (0, 1, -1, 2, -2):
+            yy_ = p[1] - Y0 + dy
+            if 0 <= yy_ < NY:
+                i_ = ids[p[0] - V.x0, yy_, p[2] - V.z0]
+                if i_ >= 0:
+                    return int(i_)
+        return -1
+    if SEEDS is not None:
+        uit = np.array([i_ for i_ in (nid2(p) for p in SEEDS) if i_ >= 0], np.int64)
+        lb, ld = [], []
+        for (a_, b_, beide) in LINKS:
+            ia, ib = nid2(a_), nid2(b_)
+            if ia >= 0 and ib >= 0:
+                lb.append(ia)
+                ld.append(ib)
+                if beide:
+                    lb.append(ib)
+                    ld.append(ia)
+            else:
+                print(f"  link zonder staplek: {a_} -> {b_} ({ia}, {ib})")
+        bron = np.concatenate([bron, np.array(lb, np.int64)])
+        doel = np.concatenate([doel, np.array(ld, np.int64)])
     S = N
     bron = np.concatenate([bron, np.full(len(uit), S), uit])
     doel = np.concatenate([doel, uit, np.full(len(uit), S)])
@@ -310,6 +341,17 @@ def analyse(V, kern, route=None, soepel=None):
             print("   ", st)
     R = np.zeros(N + 1, bool)
     R[breadth_first_order(G.T.tocsr(), S, directed=True, return_predecessors=False)] = True
+    if POIS is not None:
+        for k_, p in sorted(POIS.items()):
+            i_ = nid2(p)
+            if i_ == -2:
+                continue
+            if i_ < 0:
+                print(f"POI   {k_:34s} {p}: geen staplek")
+            elif not F[i_]:
+                print(f"POI   {k_:34s} {p}: NIET BEREIKBAAR vanaf de veilige plekken")
+            elif not R[i_]:
+                print(f"POI   {k_:34s} {p}: bereikbaar maar je komt NIET terug (val)")
     val = F[:N] & ~R[:N]
     uitkomst = []
     kx0, kz0, kx1, kz1 = kern
@@ -389,7 +431,17 @@ def main():
     ap.add_argument("--venster", type=int, default=4, help="core tiles per window side")
     ap.add_argument("--soepel", default=None, help="x,y,z;x,y,z: can you walk from A to B without a single jump/drop?")
     ap.add_argument("--route", default=None, help="x,y,z: print how a player gets to this stand position (debug)")
+    ap.add_argument("--zaden", default=None, help="json {seeds: [[x,y,z]..], links: [[a, b, both]..], pois: {id: [x,y,z]}}")
+    ap.add_argument("--y0", type=int, default=None, help="lowest checked y (default 16)")
+    ap.add_argument("--y1", type=int, default=None, help="highest checked y + 1 (default 272; zone 3 needs 316)")
     a = ap.parse_args()
+    global Y0, Y1, SEEDS, LINKS, POIS
+    if a.zaden:
+        with open(a.zaden, encoding="utf-8") as f:
+            zd = json.load(f)
+        SEEDS, LINKS, POIS = zd["seeds"], zd.get("links", []), zd.get("pois")
+    Y0 = a.y0 if a.y0 is not None else Y0
+    Y1 = a.y1 if a.y1 is not None else Y1
     bes = glob.glob(os.path.join(a.tegels, "t_*.nbt"))
     tt = [tuple(int(v) for v in re.findall(r"-?\d+", os.path.basename(b))) for b in bes]
     TX0, TX1 = min(t[0] for t in tt), max(t[0] for t in tt)

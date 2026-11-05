@@ -120,14 +120,7 @@ public final class Z3Avondlicht {
                 }
             }
         }
-        // chimney smoke (every 6 ticks per house in range)
-        if (teller % 6 == 0) {
-            for (BlockPos b : schoorstenen) {
-                if (b.distToCenterSqr(x, y, z) < 72 * 72 && R.nextInt(2) == 0) {
-                    l.addAlwaysVisibleParticle(ParticleTypes.CAMPFIRE_COSY_SMOKE, true, b.getX() + 0.5, b.getY() + 0.2, b.getZ() + 0.5, 0, 0.035, 0);
-                }
-            }
-        }
+        // (chimney smoke + bee hives: z3-wereld's Z3Sfeer does those from SCHOORSTENEN / BIJENKORVEN; here only the swarm motes below)
         // campfire sparks
         if (teller % 4 == 0) {
             for (BlockPos k : Z3WereldPlekken.KAMPVUREN) {

@@ -140,7 +140,7 @@ public final class Z3NpcPlekken {
         npc("z3_raatwever", w("gebouw.woning_5.npc", 1733, 230, 20));
         npc("z3_bloesem", wo("bloesemboompje", 2, 2, 1751, 239, 9));
         npc("z3_druppel", w("gebouw.cafe.podium", 1870, 182, 2));
-        npc("z3_lampion", w("gebouw.woning_7.npc", 1789, 230, 20));
+        npc("z3_lampion", w("gebouw.woning_2.npc", 2262, 167, 46));
         npc("z3_imker_1", w("gebouw.woning_1.npc", 1911, 216, 21));
         npc("z3_imker_2", w("gebouw.woning_3.npc", 1869, 228, -28));
         npc("z3_imker_3", w("gebouw.woning_6.npc", 1823, 230, -26));

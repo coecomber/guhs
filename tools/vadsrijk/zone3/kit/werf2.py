@@ -91,38 +91,101 @@ def werf_top(x, z):
     return float(t[0])
 
 
-def toren(W, x, z, y0, y1, R=6):
-    """Steigertoren (donker hout, kruisverbanden) met een trap eromheen."""
+TRAP_H = 17.0     # [zone 3 kaart] half size of the square stair round a dock tower (outside the deck, r 15)
+
+
+def _vierkant(p, H):
+    """Point on the square of half size H (start corner (-H, -H), going +x, then +z, -x, -z) at perimeter length p,
+    with its outward normal."""
+    p = p % (8 * H)
+    side, f = int(p // (2 * H)), p % (2 * H)
+    if side == 0:
+        return (-H + f, -H), (0, -1)
+    if side == 1:
+        return (H, -H + f), (1, 0)
+    if side == 2:
+        return (H - f, H), (0, 1)
+    return (-H, H - f), (-1, 0)
+
+
+def _p_van_hoek(g, H):
+    """Perimeter length of the point of the square in direction g."""
+    best, bp = 1e9, 0.0
+    for p in np.arange(0, 8 * H, 0.25):
+        (qx, qz), _ = _vierkant(p, H)
+        d = abs(B.wrap(math.atan2(qz, qx) - g))
+        if d < best:
+            best, bp = d, p
+    return bp
+
+
+def toren_trap(d):
+    """[zone 3 kaart] The stair round a dock tower: [(x, z, stand, nx, nz)] every half block from the ground to the deck edge
+    at the boss gate (towards the island centre)."""
+    x, y, z = dok_pos(d)
+    g = math.atan2(C[1] - z, C[0] - x)
+    H = TRAP_H
+    p_end = _p_van_hoek(g, H)
+    L_trap = 2.0 * (y - 160) + 8
+    (sx, sz), _ = _vierkant(p_end - L_trap, H)
+    sh0 = float(math.floor(werf_top(x + sx, z + sz))) + 1
+    L_trap = 2.0 * (y - sh0) + 8
+    p0 = p_end - L_trap
+    out = []
+    for p in np.arange(p0, p_end + 0.01, 0.5):
+        (qx, qz), (nx, nz) = _vierkant(p, H)
+        sh = float(B.stand(sh0 - 1 + max(0.0, (p - p0 - 6) / 2.0)))
+        out.append((x + qx, z + qz, min(sh, float(y)), nx, nz))
+    return out
+
+
+def toren(W, x, z, y0, y1, R=6, d=None):
+    """Steigertoren (donker hout, kruisverbanden) met een trap eromheen ([zone 3 kaart] the stair: toren_trap, half steps)."""
     for (dx, dz) in ((-R, -R), (R, -R), (-R, R), (R, R)):
         W.wfill(x + dx, y0, z + dz, x + dx, y1, z + dz, "minecraft:stripped_dark_oak_log[axis=y]")
     for y in range(int(y0) + 8, int(y1), 8):
         for (a, b) in (((-R, -R), (R, -R)), ((R, -R), (R, R)), ((R, R), (-R, R)), ((-R, R), (-R, -R))):
             W.buis([(x + a[0], y, z + a[1]), (x + b[0], y, z + b[1])], [0.6, 0.6], "minecraft:dark_oak_planks")
             W.buis([(x + a[0], y - 7, z + a[1]), (x + b[0], y, z + b[1])], [0.5, 0.5], "minecraft:dark_oak_fence")
-    # trap rond de toren (vierkante wenteltrap)
-    n = int((y1 - y0) * 4.2)
-    rand = []
+    if d is None:
+        return
+    pad = toren_trap(d)
+    for i, (px, pz, sh, nx, nz) in enumerate(pad):
+        for w in np.arange(-1.5, 1.51, 0.5):
+            P.trede(W, px + nx * w, sh, pz + nz * w, "minecraft:dark_oak_planks",
+                    "minecraft:dark_oak_slab[type=bottom,waterlogged=false]", lucht=4)
+        ry = int(sh) if sh % 1 == 0 else int(math.floor(sh)) + 1
+        if 4 < i < len(pad) - 3:
+            for s in (-1, 1):
+                W.wset(px + nx * s * 2.4, ry, pz + nz * s * 2.4, "minecraft:dark_oak_fence", keep=True)
+        top = int(sh) - 1 if sh % 1 == 0 else int(math.floor(sh))
+        if i % 10 == 0:
+            g = math.floor(werf_top(px, pz))
+            if g < top - 1:
+                W.wfill(px, g, pz, px, top - 1, pz, "minecraft:dark_oak_fence")
+        if i % 24 == 12:
+            W.wset(px + nx * 2.4, ry + 1, pz + nz * 2.4, LANTAARN)
     for k in range(4):
-        a = [(-R - 2, -R - 2), (R + 2, -R - 2), (R + 2, R + 2), (-R - 2, R + 2)]
-        rand.append(a[k])
-    omtrek = 4 * (2 * R + 4)
-    for i in range(n):
-        t = i / n
-        s = (t * (y1 - y0) * 4.2) % omtrek
-        side = int(s // (2 * R + 4))
-        f = (s % (2 * R + 4)) / (2 * R + 4)
-        p0, p1 = rand[side], rand[(side + 1) % 4]
-        px = x + p0[0] + (p1[0] - p0[0]) * f
-        pz = z + p0[1] + (p1[1] - p0[1]) * f
-        py = y0 + t * (y1 - y0)
-        for w in (-0.7, 0.7):
-            nx, nz = (p1[1] - p0[1]), -(p1[0] - p0[0])
-            ln = math.hypot(nx, nz) + 1e-9
-            W.wset(px + nx / ln * w, py, pz + nz / ln * w, "minecraft:spruce_slab[type=bottom,waterlogged=false]")
-        if i % 6 == 0:
-            nx, nz = (p1[1] - p0[1]), -(p1[0] - p0[0])
-            ln = math.hypot(nx, nz) + 1e-9
-            W.wset(px - nx / ln * 1.8, py + 1, pz - nz / ln * 1.8, HEK)
+        cx_, cz_ = ((-1, -1), (1, -1), (1, 1), (-1, 1))[k]
+        best = min(pad, key=lambda q: abs(q[0] - (x + cx_ * TRAP_H)) + abs(q[1] - (z + cz_ * TRAP_H)))
+        if abs(best[0] - (x + cx_ * TRAP_H)) + abs(best[1] - (z + cz_ * TRAP_H)) < 1.0:
+            for ddx in np.arange(-1.5, 1.51, 0.5):
+                for ddz in np.arange(-1.5, 1.51, 0.5):
+                    P.trede(W, x + cx_ * TRAP_H + ddx, best[2], z + cz_ * TRAP_H + ddz, "minecraft:dark_oak_planks",
+                            "minecraft:dark_oak_slab[type=bottom,waterlogged=false]", lucht=4)
+
+
+def podium_trap(d):
+    """[zone 3 kaart] Dok 1 stands on a stone podium: a straight half-step ramp from the ground up to the boss gate."""
+    x, y, z = dok_pos(d)
+    g = math.atan2(C[1] - z, C[0] - x)
+    a = (x + 15.5 * math.cos(g), z + 15.5 * math.sin(g))
+    for L in range(8, 40):
+        b = (x + (15.5 + L) * math.cos(g), z + (15.5 + L) * math.sin(g))
+        sb = math.floor(werf_top(*b)) + 1
+        if L >= 2 * (y - sb) + 2:
+            return a, b, sb
+    return a, b, sb
 
 
 def dek(W, d):
@@ -131,10 +194,14 @@ def dek(W, d):
         return
     g = werf_top(x, z)
     if d["toren"]:
-        toren(W, x, z, g, y - 1, R=6)
+        toren(W, x, z, g, y - 1, R=6, d=d)
     else:
         W.cilinder(x, z, 16, g - 4, y - 2, None, mixfn=mix(W, ["minecraft:stone_bricks", "minecraft:mossy_stone_bricks",
                                                               "minecraft:cobblestone"], [3, 2, 1], 920))
+        a_, b_, sb = podium_trap(d)
+        P.helling(W, b_, sb, a_, y, breed=1.5, vol="minecraft:stone_bricks",
+                  half="minecraft:stone_brick_slab[type=bottom,waterlogged=false]", hek="minecraft:dark_oak_fence",
+                  steun="minecraft:stone_bricks", grond=lambda xx, zz: math.floor(werf_top(xx, zz)))
     # arena-dek: rond, met gekleurde rand (de kleur van de baas) en een hek
     W.cilinder(x, z, 15, y - 1, y - 1, None, mixfn=mix(W, ["minecraft:dark_oak_planks", "minecraft:spruce_planks",
                                                           "minecraft:stripped_dark_oak_wood"], [3, 2, 1], 921))
@@ -154,8 +221,12 @@ def dek(W, d):
         a = k * math.pi / 3
         W.buis([(x + 13 * math.cos(a), y - 2, z + 13 * math.sin(a)), (x + 5 * math.cos(a), y - 14, z + 5 * math.sin(a))],
                [1, 1], "minecraft:dark_oak_log[axis=y]")
-    # baaspoort
+    # baaspoort ([zone 3 kaart] the rail is open there and a plank bridge reaches the stair)
     a = math.atan2(C[1] - z, C[0] - x)
+    for rr in np.arange(12.0, 19.6, 0.5):
+        for w_ in np.arange(-1.5, 1.51, 0.5):
+            P.trede(W, x + rr * math.cos(a) - w_ * math.sin(a), float(y), z + rr * math.sin(a) + w_ * math.cos(a),
+                    "minecraft:dark_oak_planks", "minecraft:dark_oak_slab[type=bottom,waterlogged=false]", lucht=4)
     px, pz = x + 15 * math.cos(a), z + 15 * math.sin(a)
     for s in (-1, 1):
         qx, qz = px - math.sin(a) * 3 * s, pz + math.cos(a) * 3 * s
