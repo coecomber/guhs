@@ -12,7 +12,7 @@ blockbench/vadsrijk/z3/):
   vr_z3_baas_wortelwurger    root, kern, wortel_1..6 (idle, walk, grijp, klop) + glowmask
   vr_z3_baas_nestwachter     root, body, head, arm_l, arm_r, been_l, been_r, kristallen (idle, walk, stoot, stamp, buig) + roze + glowmasks
   vr_z3_baas_schimmelkolos   root, ketel, deksel, pijp, poot_1..4, grijparm (idle, walk, pomp, grijp)
-  vr_z3_baas_vahoegnir       animations only (the draak.geo.json model), textures vahoegnir_0..5 + vahoegje
+  vr_z3_baas_vahoegnir       + Vahoegje: everything from vadsrijk_draak.py (the redesigned dragon, o-draak)
   vr_huisdier_vahoegje / vr_huisdier_piepje   pet animations (idle, hop, sprong); muisje_kaal.png
   vr_z3_baas_keizerarm       root, arm, onderarm, hand, vinger_1..5 (idle, grijp, tik; plus walk = idle)
   props/adds: kooi, ballon, voedingswortel, kanon, ketel, schimmelbol, kloddertje; matroos.png (mika texture)
@@ -31,8 +31,10 @@ from PIL import Image
 
 try:
     from features.vadsrijk_bazen import Geo, vlak, disc, lijn, kf, bbmodel, _icoon, _rng
+    from features.vadsrijk_draak import alles as draak_alles
 except ImportError:  # standalone
     from vadsrijk_bazen import Geo, vlak, disc, lijn, kf, bbmodel, _icoon, _rng
+    from vadsrijk_draak import alles as draak_alles
 
 TEX = "textures/vadsrijk/z3bazen"
 
@@ -635,107 +637,7 @@ def schimmelkolos():
 ROZE_DRAAK = (255, 154, 208)
 
 
-def _draak_maskers(a_dir, shape):
-    """Per bone group, a mask of the texture pixels its faces use."""
-    geo = json.load(open(os.path.join(a_dir, "geckolib", "models", "entity", "vadsrijk", "wezens", "draak.geo.json"), encoding="utf-8"))
-    d = geo["minecraft:geometry"][0]
-    k = shape[1] / d["description"]["texture_width"]
-    maskers = {}
-    for b in d["bones"]:
-        m = np.zeros(shape[:2], bool)
-        for c in b.get("cubes", []):
-            for f in c["uv"].values():
-                u, v = f["uv"]
-                du, dv = f["uv_size"]
-                x0, x1 = sorted((u, u + du))
-                y0, y1 = sorted((v, v + dv))
-                m[int(y0 * k):int(math.ceil(y1 * k)), int(x0 * k):int(math.ceil(x1 * k))] = True
-        maskers[b["name"]] = m
-    return maskers
-
-
-def draak_texturen(a_dir):
-    bron = np.asarray(Image.open(os.path.join(a_dir, "textures", "vadsrijk", "wezens", "draak.png")).convert("RGBA"), np.float32)
-    maskers = _draak_maskers(a_dir, bron.shape)
-    stappen = [[], ["vleugel2_l", "vleugel2_r"], ["vleugel_l", "vleugel_r"], ["staart1", "staart2", "staart3", "staart4"],
-               ["lijf", "nek1", "nek2", "poot_lv", "poot_rv", "poot_la", "poot_ra"], ["kop", "kaak", "oor_l", "oor_r"]]
-    l = bron[..., :3].mean(axis=2, keepdims=True)
-    roze = np.clip(np.array(ROZE_DRAAK) * (0.55 + 0.55 * l / 255.0), 0, 255)
-    r = _rng(401)
-    pluis = r.random(bron.shape[:2]) < 0.035
-    uit, m = {}, np.zeros(bron.shape[:2], bool)
-    for i, groep in enumerate(stappen):
-        for b in groep:
-            m |= maskers.get(b, np.zeros(bron.shape[:2], bool))
-        a = bron.copy()
-        sterk = 0.85 if i < 5 else 0.95
-        a[m, :3] = a[m, :3] * (1 - sterk) + roze[m] * sterk
-        if i == 5:
-            p = pluis & (bron[..., 3] > 0)
-            a[p, :3] = a[p, :3] * 0.3 + np.array([255, 245, 250]) * 0.7
-        uit[f"vahoegnir_{i}"] = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
-    a = bron.copy()
-    alle = bron[..., 3] > 0
-    baby = np.clip(np.array((255, 176, 222)) * (0.65 + 0.5 * l / 255.0), 0, 255)
-    a[alle, :3] = baby[alle]
-    p = pluis & alle
-    a[p, :3] = (255, 250, 252)
-    uit["vahoegje"] = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8), "RGBA")
-    return uit
-
-
-def vahoegnir_anims(a_dir):
-    bron = json.load(open(os.path.join(a_dir, "geckolib", "animations", "entity", "vadsrijk", "wezens", "draak.animation.json"), encoding="utf-8"))["animations"]
-    st = [0, 5, 0]
-    vl, vr, v2l, v2r = [0, -25, 60], [0, 25, -60], [0, 40, 50], [0, -40, -50]
-    gevouwen = {"vleugel_l": {"rotation": {0: vl, 2.0: vl}}, "vleugel_r": {"rotation": {0: vr, 2.0: vr}},
-                "vleugel2_l": {"rotation": {0: v2l, 2.0: v2l}}, "vleugel2_r": {"rotation": {0: v2r, 2.0: v2r}}}
-    an = {
-        "idle": kf({"root": {"position": {0: st, 3.0: st}}, **{k: {"rotation": {0: v["rotation"][0], 3.0: v["rotation"][0]}} for k, v in gevouwen.items()},
-                    "lijf": {"scale": {0: [1, 1, 1], 1.5: [1.03, 1.04, 1.02], 3.0: [1, 1, 1]}},
-                    "nek1": {"rotation": {0: [-10, 0, 0], 1.5: [-14, 0, 0], 3.0: [-10, 0, 0]}},
-                    "kop": {"rotation": {0: [8, 0, 0], 1.5: [4, 8, 0], 3.0: [8, 0, 0]}},
-                    "staart2": {"rotation": {0: [0, 8, 0], 1.5: [0, -8, 0], 3.0: [0, 8, 0]}},
-                    "staart3": {"rotation": {0: [0, 12, 0], 1.5: [0, -12, 0], 3.0: [0, 12, 0]}}}),
-        "walk": kf({"root": {"position": {0: st, 0.5: [0, 6, 0], 1.0: st, 1.5: [0, 6, 0], 2.0: st}},
-                    **gevouwen,
-                    "poot_lv": {"rotation": {0: [-25, 0, 0], 1.0: [25, 0, 0], 2.0: [-25, 0, 0]}},
-                    "poot_ra": {"rotation": {0: [-25, 0, 0], 1.0: [25, 0, 0], 2.0: [-25, 0, 0]}},
-                    "poot_rv": {"rotation": {0: [25, 0, 0], 1.0: [-25, 0, 0], 2.0: [25, 0, 0]}},
-                    "poot_la": {"rotation": {0: [25, 0, 0], 1.0: [-25, 0, 0], 2.0: [25, 0, 0]}},
-                    "staart1": {"rotation": {0: [0, 10, 0], 1.0: [0, -10, 0], 2.0: [0, 10, 0]}}}),
-        "vlieg": bron["vlieg"],
-        "brul": bron["brul"],
-        "adem": kf({"root": {"position": {0: st, 1.6: st}},
-                    "nek1": {"rotation": {0: [0, 0, 0], 0.4: [-15, 0, 0], 0.6: [10, 0, 0], 1.4: [10, 0, 0], 1.6: [0, 0, 0]}},
-                    "kop": {"rotation": {0: [0, 0, 0], 0.4: [-10, 0, 0], 0.6: [12, 0, 0], 1.4: [12, 0, 0], 1.6: [0, 0, 0]}},
-                    "kaak": {"rotation": {0: [0, 0, 0], 0.5: [35, 0, 0], 1.4: [35, 0, 0], 1.6: [0, 0, 0]}}}, loop=False),
-        "duik": kf({"lijf": {"rotation": {0: [0, 0, 0], 0.4: [-15, 0, 0], 0.8: [35, 0, 0], 1.4: [0, 0, 0]}},
-                    "vleugel_l": {"rotation": {0: [0, 0, -30], 0.4: [0, 0, -40], 0.8: [0, 50, 15], 1.4: [0, 0, 0]}},
-                    "vleugel_r": {"rotation": {0: [0, 0, 30], 0.4: [0, 0, 40], 0.8: [0, -50, -15], 1.4: [0, 0, 0]}},
-                    "nek1": {"rotation": {0: [0, 0, 0], 0.8: [20, 0, 0], 1.4: [0, 0, 0]}}}, loop=False),
-        "land": kf({"root": {"position": {0: [0, 14, 0], 0.6: [0, 7, 0], 1.0: st}},
-                    "vleugel_l": {"rotation": {0: [0, 0, -35], 0.3: [0, 0, 30], 0.6: [0, 0, -30], 1.0: vl}},
-                    "vleugel_r": {"rotation": {0: [0, 0, 35], 0.3: [0, 0, -30], 0.6: [0, 0, 30], 1.0: vr}},
-                    "poot_lv": {"rotation": {0: [-30, 0, 0], 1.0: [0, 0, 0]}}, "poot_rv": {"rotation": {0: [-30, 0, 0], 1.0: [0, 0, 0]}}}, loop=False),
-        "buig": kf({"root": {"position": {0: st, 2.4: st}}, **{k: {"rotation": {0: v["rotation"][0], 2.4: v["rotation"][0]}} for k, v in gevouwen.items()},
-                    "nek1": {"rotation": {0: [0, 0, 0], 0.8: [30, 0, 0], 2.0: [30, 0, 0], 2.4: [0, 0, 0]}},
-                    "nek2": {"rotation": {0: [0, 0, 0], 0.8: [20, 0, 0], 2.0: [20, 0, 0], 2.4: [0, 0, 0]}},
-                    "kop": {"rotation": {0: [0, 0, 0], 0.8: [18, 0, 0], 2.0: [18, 0, 0], 2.4: [0, 0, 0]}}}, loop=False),
-    }
-    pet = {
-        "idle": kf({"root": {"position": {0: st, 2.0: st}}, "lijf": {"scale": {0: [1, 1, 1], 1.0: [1.04, 1.05, 1.03], 2.0: [1, 1, 1]}},
-                    "vleugel_l": {"rotation": {0: [0, 0, 10], 1.0: [0, 0, 20], 2.0: [0, 0, 10]}},
-                    "vleugel_r": {"rotation": {0: [0, 0, -10], 1.0: [0, 0, -20], 2.0: [0, 0, -10]}},
-                    "kop": {"rotation": {0: [0, 0, 0], 1.2: [0, 0, 10], 1.6: [0, 0, 0], 2.0: [0, 0, 0]}}}),
-        "hop": kf({"root": {"position": {0: st, 0.25: [0, 10, 0], 0.5: st}},
-                   "vleugel_l": {"rotation": {0: [0, 0, 0], 0.25: [0, 0, -40], 0.5: [0, 0, 0]}},
-                   "vleugel_r": {"rotation": {0: [0, 0, 0], 0.25: [0, 0, 40], 0.5: [0, 0, 0]}}}),
-        "sprong": kf({"root": {"position": {0: st, 0.4: [0, 22, 0], 0.9: st}},
-                      "vleugel_l": {"rotation": {0: [0, 0, 0], 0.15: [0, 0, -40], 0.3: [0, 0, 35], 0.45: [0, 0, -40], 0.6: [0, 0, 35], 0.9: [0, 0, 0]}},
-                      "vleugel_r": {"rotation": {0: [0, 0, 0], 0.15: [0, 0, 40], 0.3: [0, 0, -35], 0.45: [0, 0, 40], 0.6: [0, 0, -35], 0.9: [0, 0, 0]}}}, loop=False),
-    }
-    return {"animations": an}, {"animations": pet}
+# The dragon assets (geo, flyover + boss anims, vahoegnir_0..5 + glowmasks, Vahoegje) come from vadsrijk_draak.py since o-draak.
 
 
 def piepje_anims():
@@ -1202,15 +1104,8 @@ def alles(w, a_dir, png):
     glowmask("nestwachter_roze", nestwachter(roze=True, glow=True)[0])
     g, an = schimmelkolos()
     model("vr_z3_baas_schimmelkolos", g, an, (6, 6, 2), "schimmelkolos")
-    # Vahoegnir + Vahoegje (draak model)
-    for naam, im in draak_texturen(a_dir).items():
-        png(os.path.join(tex, naam + ".png"), im)
-    an, pet = vahoegnir_anims(a_dir)
-    w(os.path.join(anim_dir, "vr_z3_baas_vahoegnir.animation.json"), {"format_version": "1.8.0", **an})
-    w(os.path.join(anim_dir, "vr_huisdier_vahoegje.animation.json"), {"format_version": "1.8.0", **pet})
-    draak = json.load(open(os.path.join(geo_dir, "vadsrijk", "wezens", "draak.geo.json"), encoding="utf-8"))
-    bb["vr_z3_baas_vahoegnir"] = (draak, Image.open(os.path.join(tex, "vahoegnir_5.png")) if os.path.exists(os.path.join(tex, "vahoegnir_5.png"))
-                                  else draak_texturen(a_dir)["vahoegnir_5"], an)
+    # Vahoegnir + Vahoegje: the redesigned dragon (o-draak), its own generator
+    bb.update(draak_alles(w, a_dir, png))
     w(os.path.join(anim_dir, "vr_huisdier_piepje.animation.json"), {"format_version": "1.8.0", **piepje_anims()})
     png(os.path.join(tex, "muisje_kaal.png"), muisje_kaal(a_dir))
     g, an = keizerarm()

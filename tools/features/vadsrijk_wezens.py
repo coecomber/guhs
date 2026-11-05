@@ -968,13 +968,8 @@ def assets(a, w=_schrijf_json):
     schrijf("mosgeest", m, anims, pal, 1300)
     m, anims, pal = model_knaag()
     schrijf("knaag", m, anims, pal, 1301)
-    # the dragon: no "blij"/elite needed (it is not a mob), one texture + the glowmask (eyes, crackling sparks)
-    m, anims, pal = model_draak()
-    w(os.path.join(geo_dir, "draak.geo.json"), m.geo())
-    w(os.path.join(anim_dir, "draak.animation.json"), anim_bestand(anims))
-    _png(os.path.join(tex_dir, "draak.png"), schilder(m, pal, "draak", 1400, False))
-    _png(os.path.join(tex_dir, "draak_gloed.png"), gloed(m, {"zwart": (40, 10, 60)}, 1401, kleur_van=True))
-    n += 1
+    # the dragon (draak.geo.json/.animation.json, draak.png, draak_gloed.png): since o-draak (2026-11 redesign) written by
+    # tools/features/vadsrijk_draak.py (called from vadsrijk_z3_bazen_modellen.py); model_draak() below is the old model, unused.
     # armour items
     for i, (k, (slot, naam, kleur, accent, s)) in enumerate(HARNAS.items()):
         item = "vr_mob_" + k
