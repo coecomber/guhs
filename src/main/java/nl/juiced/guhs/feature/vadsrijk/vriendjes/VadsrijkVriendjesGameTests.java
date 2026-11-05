@@ -71,7 +71,7 @@ public class VadsrijkVriendjesGameTests {
         helper.runAfterDelay(140, () -> {
             int n = DraakVriendjes.aantal(draak);
             helper.assertTrue(n >= 10, "critters gathered around the pink dragon: " + n);
-            for (Z3Figurant f : DraakVriendjes.rond(draak)) {
+            for (VriendjeEntity f : DraakVriendjes.rond(draak)) {
                 helper.assertTrue(!f.shouldBeSaved() && !f.isPickable(), "never saved, never in the way");
                 helper.assertTrue(f.position().distanceTo(draak.position()) < DraakVriendjes.STRAAL + 40, "near the dragon");
             }
@@ -81,5 +81,33 @@ public class VadsrijkVriendjesGameTests {
             helper.assertTrue(DraakVriendjes.aantal(draak) == 0, "all gone after the dragon left: " + DraakVriendjes.aantal(draak));
             helper.succeed();
         });
+    }
+
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void rozeDraakPerSpelerEnAaien(GameTestHelper helper) {
+        ServerPlayer klaar = GuhMockPlayer.of(helper), nieuw = GuhMockPlayer.of(helper);
+        ServerLevel sl = helper.getLevel();
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.zetVlag(klaar, nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3Verhaal.VLAG_ZONE3, true);
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.zetVlag(nieuw, nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3Verhaal.VLAG_ZONE3, false);
+        helper.assertTrue(RozeDraakBeheer.nestPlek() != null, "the nest POI (" + RozeDraakBeheer.NEST_POI + ") exists");
+        Vec3 m = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(3, 1, 3)));
+        RozeDraak d = RozeDraakBeheer.maakNest(sl, m);
+        helper.assertTrue(d != null && d.opGrond() && DraakVriendjes.roze(d), "a resting pink dragon");
+        try {
+            helper.assertTrue(d.broadcastToPlayer(klaar) && !d.broadcastToPlayer(nieuw), "only sent to whoever finished zone 3");
+            helper.assertTrue(!d.shouldBeSaved() && !d.isAttackable() && !d.canBeHitByProjectile()
+                    && !d.hurtServer(sl, sl.damageSources().generic(), 50), "never saved, attacked, shot or hurt");
+            helper.assertTrue(d.aai((ServerPlayer) klaar) && d.geaaid.contains(klaar.getUUID()), "petting works");
+            helper.assertTrue(!d.aai((ServerPlayer) klaar), "not twice in a row (a short wait)");
+            helper.assertTrue(!d.aai((ServerPlayer) nieuw), "someone who doesn't see him can't pet him");
+            helper.assertTrue(d.anim().startsWith("1:"), "he bows when petted: " + d.anim());
+            // a visit is only for players who are done, and never in this (non-Vadsrijk) test level
+            helper.assertTrue(!RozeDraakBeheer.magBezoek(nieuw) && !RozeDraakBeheer.magBezoek(klaar), "no visit without the flag / outside the Vadsrijk");
+            helper.assertTrue(RozeDraakBeheer.anker("plein") && RozeDraakBeheer.anker("kampvuur_zwamzoet") && RozeDraakBeheer.anker("haven_plein")
+                    && !RozeDraakBeheer.anker("zwamtempel_voorhal") && RozeDraakBeheer.ankers().size() > 10, "visit anchors = town squares + campfires");
+        } finally {
+            d.discard();
+        }
+        helper.succeed();
     }
 }

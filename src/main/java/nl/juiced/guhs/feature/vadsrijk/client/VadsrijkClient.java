@@ -27,5 +27,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.stadsmuziek.client.StadsMuziekSpeler.init();   // I-AUDIO: town music + town ambience
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.client.Z3SystemenClient.init(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.client.Z3WezensClient.init(modBus);   // zone 3 (z3-wezens)
+        nl.juiced.guhs.feature.vadsrijk.vriendjes.client.VriendjesClient.init(modBus);   // N-EXTRA: the pink dragon + critters
     }
 }

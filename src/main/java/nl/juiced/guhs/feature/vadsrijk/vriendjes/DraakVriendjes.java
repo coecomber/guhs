@@ -30,17 +30,32 @@ import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Vahoegnir;
-import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Figurant;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+
+import net.minecraft.ChatFormatting;
+import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobCategory;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.feature.vadsrijk.kern.VadsrijkCommando;
 
 /**
  * N-EXTRA: the cheered-up (pink) Vahoegnir draws sweet critters. While a pink dragon is in the Vadsrijk with a player within
  * {@link #KIJKER} blocks, up to {@link #MAX} critters gather within ~{@link #STRAAL} blocks: pluisvinkjes and kaasmeesjes (fluttering
  * around him, hopping and pecking on the ground, perched on his back, neck and tail), pluiseekhoorntjes, a few guh-konijntjes,
- * pink pieppiepmuisjes and knabbelvlindertjes. They reuse the existing Guhs critter models as server-moved {@link Z3Figurant} props
+ * pink pieppiepmuisjes and knabbelvlindertjes. They reuse the existing Guhs critter models as server-moved {@link VriendjeEntity} props
  * (no AI, no hitbox, never hurt, never saved). When the dragon is gone (or nobody is near) the birds and butterflies fly off and
  * the others hop away with a little poof.
  * <p>Pink = the zone-3 boss {@link Vahoegnir} with all 5 splinters back (his ending scene: from splinter 5 until he flies off along
- * the beam), or any entity a later scene hands to {@link #volg} (a pink dragon resting somewhere).
+ * the beam), the resting/visiting {@link RozeDraak} while he is on the ground ({@link RozeDraakBeheer}; critters are then only
+ * sent to the players who see him), or any entity a later scene hands to {@link #volg}.
  */
 public final class DraakVriendjes {
     /** Critters live within this radius around the dragon. */
@@ -48,6 +63,14 @@ public final class DraakVriendjes {
     /** Someone must be this close to the dragon for critters to come (and stay). */
     public static final double KIJKER = 48;
     public static final int MAX = 32;
+
+    public static final DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(Registries.ENTITY_TYPE, Guhs.MODID);
+    public static final DeferredHolder<EntityType<?>, EntityType<VriendjeEntity>> VRIENDJE = ENTITIES.register("vr_draakvriendje",
+            () -> EntityType.Builder.<VriendjeEntity>of(VriendjeEntity::new, MobCategory.MISC).sized(0.4f, 0.4f).noSave().fireImmune()
+                    .clientTrackingRange(6).updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_draakvriendje"))));
+    public static final DeferredHolder<EntityType<?>, EntityType<RozeDraak>> ROZE_DRAAK = ENTITIES.register("vr_roze_draak",
+            () -> EntityType.Builder.<RozeDraak>of(RozeDraak::new, MobCategory.MISC).sized(4.0f, 3.6f).noSave().fireImmune()
+                    .clientTrackingRange(12).updateInterval(2).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_roze_draak"))));
 
     /** Extra pink dragons (later scenes). */
     private static final Set<Entity> EXTRA = Collections.newSetFromMap(new WeakHashMap<>());
@@ -57,11 +80,50 @@ public final class DraakVriendjes {
     }
 
     public static void register(IEventBus modBus) {
+        ENTITIES.register(modBus);
         NeoForge.EVENT_BUS.addListener(DraakVriendjes::opTick);
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> {
             GROEPEN.clear();
             EXTRA.clear();
+            RozeDraakBeheer.wis();
         });
+        NeoForge.EVENT_BUS.addListener(DraakVriendjes::commando);
+    }
+
+    /** {@code /guhs vadsrijk vriendjes draak nest|bezoek|timer}: the resting dragon (teleports you to the nest edge), a visit now. */
+    private static void commando(RegisterCommandsEvent event) {
+        LiteralArgumentBuilder<CommandSourceStack> m = Commands.literal("vriendjes").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
+        m.then(Commands.literal("draak").then(Commands.literal("nest").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            ServerLevel rijk = Vadsrijk.level(c.getSource().getServer());
+            BlockPos b = RozeDraakBeheer.nestPlek();
+            if (rijk == null || b == null) {
+                c.getSource().sendFailure(Component.literal("Geen nest-POI gevonden"));
+                return 0;
+            }
+            RozeDraakBeheer.DEV_ZIEN.add(p.getUUID());
+            BlockPos rand = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek(RozeDraakBeheer.NEST_RAND_POI);
+            BlockPos naar = rand != null ? rand : b.offset(0, 0, 14);
+            p.teleportTo(rijk, naar.getX() + 0.5, naar.getY() + 1, naar.getZ() + 0.5, java.util.Set.of(), p.getYRot(), p.getXRot(), true);
+            c.getSource().sendSuccess(() -> Component.literal("Roze Vahoegnir rust in het nest (jij ziet hem nu ook zonder zone3_klaar)"), false);
+            return 1;
+        })).then(Commands.literal("bezoek").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            RozeDraakBeheer.DEV_ZIEN.add(p.getUUID());
+            RozeDraak d = RozeDraakBeheer.bezoek(p);
+            if (d == null) {
+                c.getSource().sendFailure(Component.literal("Geen veilige landingsplek hier (ga naar een plein of kampvuur in zone 1/2)"));
+                return 0;
+            }
+            c.getSource().sendSuccess(() -> Component.literal("Vahoegnir komt op bezoek: landt bij " + BlockPos.containing(d.plek).toShortString())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE), false);
+            return 1;
+        })).then(Commands.literal("timer").executes(c -> {
+            RozeDraakBeheer.bezoekNu(c.getSource().getPlayerOrException());
+            c.getSource().sendSuccess(() -> Component.literal("Volgende bezoek: zo meteen (als het mag)"), false);
+            return 1;
+        })));
+        event.getDispatcher().register(VadsrijkCommando.wortel(m));
     }
 
     /** A later scene: this entity is a pink dragon (critters gather while it exists and players are near). */
@@ -74,6 +136,9 @@ public final class DraakVriendjes {
         if (e.isRemoved()) {
             return false;
         }
+        if (e instanceof RozeDraak r) {
+            return r.opGrond();
+        }
         return e instanceof Vahoegnir v ? v.splinters() >= 5 : EXTRA.contains(e);
     }
 
@@ -84,9 +149,9 @@ public final class DraakVriendjes {
     }
 
     /** Gametests / dev: the critters around this dragon. */
-    public static List<Z3Figurant> rond(Entity draak) {
+    public static List<VriendjeEntity> rond(Entity draak) {
         Groep g = GROEPEN.get(draak);
-        List<Z3Figurant> l = new ArrayList<>();
+        List<VriendjeEntity> l = new ArrayList<>();
         if (g != null) {
             for (Vriendje v : g.vriendjes) {
                 l.add(v.f);
@@ -97,6 +162,7 @@ public final class DraakVriendjes {
 
     private static void opTick(ServerTickEvent.Post e) {
         tick(e.getServer());
+        RozeDraakBeheer.tick(e.getServer());
     }
 
     static void tick(MinecraftServer server) {
@@ -140,7 +206,8 @@ public final class DraakVriendjes {
 
     static boolean kijkers(Entity draak) {
         for (var p : draak.level().players()) {
-            if (!p.isRemoved() && p.distanceToSqr(draak) < KIJKER * KIJKER) {
+            if (!p.isRemoved() && p.distanceToSqr(draak) < KIJKER * KIJKER
+                    && (!(draak instanceof RozeDraak r) || (p instanceof ServerPlayer sp && r.broadcastToPlayer(sp)))) {
                 return true;
             }
         }
@@ -196,12 +263,12 @@ public final class DraakVriendjes {
             Soort.KONIJN, Soort.VLINDER, Soort.MUIS, Soort.MEES, Soort.EEKHOORN, Soort.VINK, Soort.VLINDER, Soort.VINK};
 
     /**
-     * Perch spots on the dragon (side, up, forward; blocks, for the zone-3 boss model x1.6 standing): back, neck, tail. Small
-     * critters sit there; birds flutter on and off.
+     * Perch spots on the dragon (side, up, forward; blocks, for the o-draak model x1.6 standing, feet at y 0, 0.1 block per
+     * model px): back, neck root, tail. Small critters sit there; birds flutter on and off. The wings stand in a V: no perches.
      */
     private static final double[][] ZITPLEK = {
-            {0, 2.8, 0.2}, {0.45, 2.8, -0.7}, {-0.45, 2.75, 0.9}, {0, 2.55, 1.9}, {0, 2.65, 2.8},
-            {0, 2.05, -2.0}, {0, 1.95, -3.2}, {0, 1.85, -4.3}};
+            {0, 3.55, 0.2}, {0.55, 3.45, -0.7}, {-0.55, 3.45, 0.9}, {0, 3.75, 1.2},
+            {0, 2.95, -2.2}, {0, 2.65, -3.4}, {0, 2.45, -4.6}, {0, 2.15, -5.7}};
 
     enum Rol {
         GROND, ZIT, FLADDER, NAAR, WEG
@@ -321,7 +388,7 @@ public final class DraakVriendjes {
             if (s.vliegt) {
                 double a = r().nextDouble() * Math.PI * 2;
                 Vec3 van = draak.position().add(Math.cos(a) * (STRAAL + 6), 8 + r().nextDouble() * 6, Math.sin(a) * (STRAAL + 6));
-                Z3Figurant f = Z3Figurant.maak(sl, van, 0, s.model, tex, s.anims, s.vlieg, s.schaal);
+                VriendjeEntity f = VriendjeEntity.maak(sl, draak, van, 0, s.model, tex, s.anims, s.vlieg, s.schaal);
                 if (f == null) {
                     return;
                 }
@@ -347,7 +414,7 @@ public final class DraakVriendjes {
                 if (g == null) {
                     return;
                 }
-                Z3Figurant f = Z3Figurant.maak(sl, g, r().nextFloat() * 360, s.model, tex, s.anims, s.stil, s.schaal);
+                VriendjeEntity f = VriendjeEntity.maak(sl, draak, g, r().nextFloat() * 360, s.model, tex, s.anims, s.stil, s.schaal);
                 if (f == null) {
                     return;
                 }
@@ -371,7 +438,7 @@ public final class DraakVriendjes {
 
     static final class Vriendje {
         final Soort s;
-        final Z3Figurant f;
+        final VriendjeEntity f;
         Rol rol = Rol.GROND;
         /** Ticks until it decides something new. */
         int timer;
@@ -386,7 +453,7 @@ public final class DraakVriendjes {
         Vec3 fladderMidden;
         double hoek, fladderStraal;
 
-        Vriendje(Soort s, Z3Figurant f) {
+        Vriendje(Soort s, VriendjeEntity f) {
             this.s = s;
             this.f = f;
         }

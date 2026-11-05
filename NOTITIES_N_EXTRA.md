@@ -26,3 +26,25 @@
 ## Tests
 - `VadsrijkVriendjesGameTests` (`-Pgt=VadsrijkVriendjes`): nameplate component (Koning Klodder + Vahoegje, the real summon) and
   critters gathering around a stand-in pink dragon and leaving after it is gone.
+
+## 3. Follow-up: the pink Vahoegnir after zone 3 (merged 110-o-draak first: the new model)
+- `vriendjes/RozeDraak` (entity `guhs:vr_roze_draak`, o-draak model x1.6, `vahoegnir_5` texture + glowmask, the boss animation
+  file): only sent to players with `zone3_klaar` (`broadcastToPlayer`; dev override via the command). Never hurt, not
+  attackable, projectiles pass, not saved; right-click = petting (hearts, sniffer-happy rumble + soft dragon purr, the "buig"
+  bow, a rotating sweet line `vadsrijk.vriendjes.aai.0..5`, 1.5 s per-player wait).
+- `vriendjes/VriendjeEntity` (`guhs:vr_draakvriendje`): the critters now have their own prop entity (was Z3Figurant) so they are
+  only sent to whoever sees their dragon (unfinished players at the nest see nothing).
+- `vriendjes/RozeDraakBeheer`:
+  - Nest: rests at POI `nest_eierkuil` (fallback `arena_vahoegnir`), faces `nest_rand`, leashed (position reset every tick),
+    turns up to 35 degrees toward the nearest player who sees him. Exists while such a player is within 80 blocks and no
+    Vahoegnir boss entity is within 96 (a Droomsteen memory fight / ending scene = the nest is the story's).
+  - Visits: per player (in memory) every 20-40 min; only with zone3_klaar, outside zone 3, not in a cutscene
+    (`RijkScenes.bezig`), not in an arena / boss fight (`Arenas.op`, `Losknuffelen.inGevecht`), no damage dealt/taken for 20 s,
+    no other visit within 200 blocks. Anchor = nearest `plein` / `*_plein` / `kampvuur_*` POI of zone 1/2 within 140 blocks;
+    landing spot 10-32 blocks from it, 8-60 from the player, a flat 13x13 patch (heightmap +-1, no leaves/roof/water, solid
+    ground). Approach/leave = a DraakVlucht spline (`DraakVlucht.punt`) from 130 blocks out, checked >= 6 blocks above the
+    terrain (loaded chunks). Lands (cloud + petals), stays 60-90 s with critters, flies off. No spot = retry in 2 min.
+- Dev: `/guhs vadsrijk vriendjes draak nest` (teleport to the nest edge; you see him even without zone3_klaar),
+  `draak bezoek` (a visit near you now), `draak timer` (next regular visit check now).
+- Texts in `tools/features/vadsrijk_vriendjes.py` (added to tools/features/__init__.py FEATURES).
+- Not checked in a client: the landing feel, the nest pose with the V-wings, perch heights on the new model.

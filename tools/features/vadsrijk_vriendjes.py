@@ -5,6 +5,7 @@ pieppiepmuisje, knabbelvlindertje); only a pink pieppiepmuisje texture is genera
 Standalone (from the project root): python tools/features/vadsrijk_vriendjes.py
 """
 import colorsys
+import json
 import os
 
 from PIL import Image
@@ -30,9 +31,38 @@ def roze_muisje():
     im.save(os.path.join(TEX, "vadsrijk", "vriendjes", "muisje_roze.png"))
 
 
+def teksten():
+    return {
+        "entity.guhs.vr_roze_draak": "Vahoegnir",
+        "entity.guhs.vr_draakvriendje": "Vriendje",
+        "vadsrijk.vriendjes.bezoek": "In de verte klinkt een blij gebrom... Vahoegnir komt even gedag zeggen!",
+        "vadsrijk.vriendjes.aai.0": "Vahoegnir spint als een hele grote poes.",
+        "vadsrijk.vriendjes.aai.1": "Vahoegnir legt zijn zachte kop even tegen je aan.",
+        "vadsrijk.vriendjes.aai.2": "Een vinkje op zijn rug piept mee. Vahoegnir giechelt.",
+        "vadsrijk.vriendjes.aai.3": "Vahoegnir knippert langzaam met zijn ogen. Dat betekent: ik vind jou lief.",
+        "vadsrijk.vriendjes.aai.4": "Zijn oren worden nog een tikje rozer.",
+        "vadsrijk.vriendjes.aai.5": "Vahoegnir bromt zo blij dat de grond een beetje kriebelt.",
+    }
+
+
+def build(h):
+    roze_muisje()
+    for k, nl in teksten().items():
+        h.lang(k, nl, nl)
+
+
 def main():
     roze_muisje()
-    print("vadsrijk_vriendjes: pink pieppiepmuisje texture")
+    t = teksten()
+    for taal in ("nl_nl", "en_us"):
+        p = os.path.join(ROOT, "src", "main", "resources", "assets", "guhs", "lang", f"{taal}.json")
+        with open(p, encoding="utf-8") as f:
+            data = json.load(f)
+        data.update(t)
+        with open(p, "w", encoding="utf-8", newline="\n") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+            f.write("\n")
+    print(f"vadsrijk_vriendjes: pink pieppiepmuisje texture, {len(t)} texts")
 
 
 if __name__ == "__main__":
