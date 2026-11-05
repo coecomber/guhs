@@ -1,11 +1,11 @@
 """Schemerkit: bouw- en renderkit voor zone 3 "De Schemerwortel" (Guhs 1.10, Het Vadsrijk).
 
 Bovenop de kopieën van de zone-1-kit in deze map (vrkit/erfkit/mijnkit/vibekit/mcrender/mcextra/stadkit;
-assets = renders-erfenis/_bron/jars/guhs-assets-1.8.1.zip, alleen gelezen). Renders gaan naar renders-schemerwortel/.
+assets = renders-erfenis/_bron/jars/guhs-assets-1.8.1.zip, alleen gelezen). Renders gaan naar renders-schemerwortel2/ (revamp, ronde 20).
 
 Kern:
   Wereld(x1, y1, z1, x2, y2, z2, k)
-      Een venster op de zone in WERELDCOORDINATEN RELATIEF AAN DE STAMAS T (T = wereld -2300, 0).
+      Een venster op de zone in WERELDCOORDINATEN RELATIEF AAN DE STAMAS T (T = spel 2300, 0).
       k = voxels per blok: k=1 is de echte schaal (close-ups), k=0.5 is half (het hele vak in één scène).
       Alle bouwfuncties werken in wereldcoördinaten, dus hetzelfde bouwscript vult elk venster en elke schaal.
       Hulpjes: kolom (per kolom vullen tussen twee hoogtekaarten), bol, buis (tak/wortel langs een lijn),
@@ -27,7 +27,7 @@ import stadkit as SK  # noqa: E402
 V, R, E, K = VK.V, VK.R, VK.E, VK.K
 OUT = os.path.abspath(os.path.join(HERE, ".."))
 V.OUT = K.OUT = VK.OUT = SK.OUT = OUT
-T_WERELD = (-2300, 0)
+T_WERELD = (2300, 0)   # revamp: stamas op spel (2300, 0); spel_x = x + 2300, spel_z = z
 
 # kleuren voor getinte blokken: goudgroen blad, turquoise sap
 R.GRASS = (150, 204, 92)
@@ -44,7 +44,9 @@ V.EMISSIVE |= {"minecraft:pearlescent_froglight", "minecraft:ochre_froglight", "
                "guhs:weidekristal_cyaan", "guhs:glimpaddenstoel", "guhs:glimmos", "guhs:lichtmosblok", "guhs:lichtmos",
                "guhs:glimtegel", "guhs:sterrenlantaarn", "guhs:guh_lantaarnpaal", "guhs:japan_lampion",
                "guhs:elftocht_lampion", "guhs:park_lantaarn", "guhs:kaasmos", "guhs:paddenstoellampje",
-               "guhs:schimmelguh_licht", "guhs:belletjeskristal"}
+               "guhs:schimmelguh_licht", "guhs:belletjeskristal",
+               "minecraft:candle", "minecraft:pink_candle", "minecraft:yellow_candle", "minecraft:orange_candle",
+               "guhs:weidekristal_roze", "minecraft:honey_block_glow"}
 EMISSIVE = V.EMISSIVE
 
 Scene, stairs, slab, has_block = VK.Scene, VK.stairs, VK.slab, VK.has_block
@@ -132,6 +134,7 @@ class Wereld(Scene):
         self.TH = np.arctan2(self.ZZ, self.XX)
         self.labels = []
         self.extra = []
+        self.deeltjes = []
 
     # ---- coördinaten
     def vx(self, x):
@@ -460,6 +463,8 @@ def render(W, naam, yaw=35, pitch=28, scale=4.0, ss=2, sky=((250, 196, 150), (25
         o = 1 - (1 - o) * (1 - np.clip(bloom, 0, 1) * 0.85)
         bg = Image.fromarray((np.clip(o, 0, 1) * 255).astype(np.uint8)).convert("RGBA")
     bg = bg.convert("RGB")
+    if getattr(W, "deeltjes", None):
+        bg = teken_deeltjes(bg, W, cam, ox, oy, ss, zb, scale, crop_px=None)
 
     def proj(p):
         v = np.array(W.naar_voxel(p), float)
@@ -493,6 +498,53 @@ def render(W, naam, yaw=35, pitch=28, scale=4.0, ss=2, sky=((250, 196, 150), (25
     print(naam, "klaar %.0fs" % (time.time() - t0), bg.size, flush=True)
     W.proj = proj
     return pad
+
+
+def teken_deeltjes(bg, W, cam, ox, oy, ss, zb, scale, crop_px=None):
+    """Kleine bewegende dingen (bijen, vlinders, vallende bloesem, vuurvliegjes, honingdruppels) als stipjes.
+    W.deeltjes = lijst (x, y, z, (r,g,b), grootte_in_blokken, gloed, vorm) in wereldcoördinaten.
+    Diepte-test tegen de dieptebuffer, zodat ze achter de boom verdwijnen. vorm: 'stip', 'druppel', 'vlinder'."""
+    D = W.deeltjes
+    P = np.array([W.naar_voxel(d[:3]) for d in D], float)
+    sc = scale * ss
+    sx = P @ cam.right * sc + ox
+    sy = -(P @ cam.up) * sc + oy
+    dz = P @ cam.d
+    H, Wd = zb.shape
+    w2, h2 = bg.size
+    laag = Image.new("RGBA", bg.size, (0, 0, 0, 0))
+    gl = Image.new("RGBA", bg.size, (0, 0, 0, 0))
+    d1 = ImageDraw.Draw(laag)
+    d2 = ImageDraw.Draw(gl)
+    pxb = scale * W.k  # pixels per blok in het eindbeeld
+    for i, (x, y, z, kl, gr, gloed, vorm) in enumerate(D):
+        px, py = int(sx[i]), int(sy[i])
+        if not (0 <= px < Wd and 0 <= py < H):
+            continue
+        if zb[py, px] > dz[i] + 1.5 * W.k:
+            continue  # zit erachter
+        fx, fy = sx[i] / ss, sy[i] / ss
+        r = max(0.7, gr * pxb * 0.5)
+        if vorm == "druppel":
+            d1.ellipse((fx - r * 0.6, fy - r * 1.4, fx + r * 0.6, fy + r * 1.1), fill=tuple(kl) + (235,))
+        elif vorm == "vlinder":
+            d1.ellipse((fx - r * 1.3, fy - r, fx - r * 0.1, fy + r * 0.4), fill=tuple(kl) + (240,))
+            d1.ellipse((fx + r * 0.1, fy - r, fx + r * 1.3, fy + r * 0.4), fill=tuple(kl) + (240,))
+            d1.line((fx, fy - r, fx, fy + r * 0.6), fill=(60, 40, 50, 255), width=max(1, int(r * 0.3)))
+        elif vorm == "bij":
+            d1.ellipse((fx - r, fy - r * 0.7, fx + r, fy + r * 0.7), fill=(250, 200, 40, 255))
+            d1.line((fx, fy - r * 0.7, fx, fy + r * 0.7), fill=(40, 30, 20, 255), width=max(1, int(r * 0.45)))
+            d1.ellipse((fx - r * 0.6, fy - r * 1.5, fx + r * 0.3, fy - r * 0.5), fill=(255, 255, 255, 190))
+        else:
+            d1.ellipse((fx - r, fy - r, fx + r, fy + r), fill=tuple(kl) + (230,))
+        if gloed:
+            g = r * 3.2 * gloed
+            d2.ellipse((fx - g, fy - g, fx + g, fy + g), fill=tuple(kl) + (150,))
+    gl = gl.filter(ImageFilter.GaussianBlur(max(2, pxb * 0.8)))
+    o = bg.convert("RGBA")
+    o = Image.alpha_composite(o, gl)
+    o = Image.alpha_composite(o, laag)
+    return o.convert("RGB")
 
 
 def _is_kubus(bk, s):
@@ -571,6 +623,19 @@ def lichtcirkel_post(punten, straal=12.0, kleur=(1.0, 0.82, 0.55), kracht=1.0):
             d = np.sqrt((P[..., 0] - px) ** 2 + (P[..., 1] - py) ** 2 + (P[..., 2] - pz) ** 2)
             tot = np.maximum(tot, np.nan_to_num(np.clip(1 - d / straal, 0, 1)) ** 1.3)
         return rgb * (1 + tot[..., None] * kracht * 2.2 * np.array(kleur, np.float32))
+    return f
+
+
+def snijvlak_post(as_, waarde, kant=1, sterkte=0.55, kleur=(1.0, 0.86, 0.7)):
+    """Maakt het snijvlak van een doorsnede lichter (warm), zodat je ziet wat 'doorgezaagd' is.
+    as_ = 0 (x) of 2 (z); waarde = coördinaat van het snijvlak."""
+    kl = np.array(kleur, np.float32)
+
+    def f(rgb, al, P):
+        c = np.nan_to_num(P[..., as_], nan=1e9)
+        m = np.abs(c - waarde) < 1.2
+        t = m[..., None] * sterkte
+        return rgb * (1 - t) + (rgb * 0.6 + kl * 0.4) * t * 1.35
     return f
 
 
