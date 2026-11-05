@@ -152,5 +152,22 @@ Zone 2 is 704 naar het oosten en 1344 naar het zuiden geschoven (Kandijkom rond 
 - Rond het wortel-eiland ligt nu **zee met een wolkenzee erop**; onder het eiland geen leegte meer. Kijk of nergens water in
   de wortelgrotten/het Hart staat (`z3wereld plek` naar `hart_poort`) en of de wortelrand niet half onder water staat.
 
+## Nieuwe coördinaten (voor `/tp`, oude → nieuw)
+| plek | oud | nieuw |
+|---|---|---|
+| aankomst (zuidsteiger kamp) | 0 65 1130 | -384 65 1130 |
+| kampvuur kamp | 0 87 1025 | -384 87 1025 |
+| kampsteiger (luchtschip kamp) | 151 87 1015 | -233 87 1015 |
+| Kandijkom plein | 0 91 -2412 | 704 91 -1068 |
+| Kandijkom-dok | 0 91 -2244 | 704 91 -900 |
+| Galmwolf-deur | 146 115 -2318 | 850 115 -974 |
+| Spiegelburcht-deur | 150 176 -2629 | 854 176 -1285 |
+| Boormeester-deur | -30 66 -2559 | 674 66 -1215 |
+| Noordklifhaven (nieuw) | - | 150 127 -653 |
+| Galmdok (nieuw) | - | 980 117 -856 |
+| Weststeiger / Oosttaksteiger (zone 3) | - | 1201 167 -601 / 1607 165 -488 |
+
+Alle andere zone-2-plekken: oud + (704, 0, 1344). Zone 1 (behalve het kamp) en zone 3 zijn niet verschoven.
+
 ## W7. Trappencheck (worldgen)
 - Zie NOTITIES_T_WERELD.md, "Trappenrapport": welke trappen de checker nog meldt. Loop er een paar na met de coördinaten daar.

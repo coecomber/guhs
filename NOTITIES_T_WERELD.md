@@ -107,5 +107,51 @@ generators): `tools/vadsrijk/indeling.py`. Keep placing things in your zone's LO
 - U1/U3 viewpoints are the harbour platforms' far corners (no extra paths/stairs to maintain); U2 = the Kandijkom dock end.
 - Free keys: none used.
 
+## Map regen + checkers (2026-11-06 night)
+`python tools/vadsrijk/maak_kaart.py --zone alle --geen-cache --audit` ran clean (zone 1: 690 tiles 63 MB; gap row tz -12:
+18 tiles, 55 spires; zone 2: 110 tiles 6.8 MB, 462 old-place tiles deleted; zone 3: 154 tiles 30.8 MB). Zone 1 and 2 were
+regenerated again after fixes (`--zone 1 --audit`, `--zone 2`).
+
+| checker | result |
+|---|---|
+| audit.py (zone 1 + camp) | stairs 0 (was 14: the camp tent ridges, now counted as roofs), path steps 5 (= baseline, all old: camp lighthouse, camp south, Druipgrotten, temple foot), doors 0, under-map 0, pits 4 (old: camp lighthouse cellar + Zwamzoet ordetempel roof), water 20 (new ones = open sea round the camp/turtle island + 1-column pools at the SW peninsula and under the north cliffs, all in the barrier zone) |
+| controleer_verticaal.py | 0 errors (Hoedenpaden 73549 states, Druipschacht 2135, no traps) |
+| loopcheck.py zone 2 box | VAL 30 / TRAP 46 vs baseline 28 / 46 at the old place (same set; +5 single-column coast pools at the new organic coast, -3 old ones) |
+| loopcheck.py gap row | only 2 "LEEG" at the window edge under the sea bed (y 37, checker artefact of the hollowed zone-1 sea floor) |
+| loopcheck3.py (zone 3) | no VAL / TRAP / POI; PAD 396 (baseline 388) |
+| poicheck3.py | 0 of 430 (oosttaksteiger_luchtschip = an airship anchor in the air, now skipped like dok_luchtschip) |
+
+Note: the Hoedenpaden network is generated from the Sporenwoud's giant mushrooms, and these shift a little with the new
+coast; the layout changed slightly but controleer_verticaal proves it fully walkable again.
+
+## Stairs report (trappencheck worldgen zone 1-3)
+- Zone 1 + camp (audit.py, every bottom-half stair checked for a floor on both sides): **0 disconnected stairs**. The 14 it
+  used to list (also in the baseline) are the ridges of the camp tents (`pleister_roze_trap` on `tentdoek`), roofs, not stairs.
+- Zone 1 towers (Hoedenpaden) + Druipschacht (controleer_verticaal): every stair/ramp reachable and walkable, 0 traps.
+- Zone 2 (loopcheck.py TRAP, 46, all also in the baseline): every one inspected by type = **furniture**: chairs (a stair at a
+  table with cups: Kandijkom houses, Galmdorpje, cafe), benches round the Kandijkom plaza and the dock, a bench behind a fence
+  armrest. No stair flight with a gap, no floating step, no blocked exit. Coordinates in `scratchpad`-free form: e.g. chairs at
+  (578,99,-951), (748,129,-1261), (813,103,-1070); benches at (694,91,-1042..-1040), (699,91,-941).
+- Zone 3 (loopcheck3, whole zone in one window incl. lifts/wind columns): 0 TRAP, 0 VAL.
+- New pieces of this slice: Noordklifhaven path (max step 1 along the whole path, checked) and plaza flush with the pier;
+  Galmdok plaza flush with its pier. Pier/platform decks are flush with their plazas (no steps).
+- NOT fixed (old, not stairs): the 5 path steps of 2 blocks in zone 1 (camp lighthouse -457,92,948; camp south -386/-382,91,1103;
+  Druipgrotten -263,90,-301; temple foot 319,68,-325) and Zwamzoet's 2 old roof pits.
+
 ## Resume point / status
-(filled in below after the regen)
+- Head: see git log (last commit "t-wereld: ..."). Generated files (tiles, *WereldPlekken.java, POI_*.md, AUDIT, veilige_plekken)
+  are NOT committed; integration regenerates with the command above.
+- Gametests: `-Pgt=Indeling,VadsrijkBiomen,StadsMuziek,VadsrijkNpc,VadsrijkZ2Systemen` (result below).
+
+## Open points
+- **Zone 4 (t-z4wereld):** zone 3 now has sea at y 62 to its tile edge (x 1727), so zone 4's tiles meet water. Zone 4 should not
+  put invisible walls at its tile edges; outside its tiles the procedural sea fills (floor 49). Its free area for the barrier
+  push-back is the superellipse in `Barrieres.VRIJ` ("z4": centre 2152,-491, 390 x 262); adjust there if islands end up outside.
+- **Zone 5:** its tiles east of zone 4 (x >= 2560) get the procedural sea under them automatically (KaartFeature hook).
+- **t-luchtschip:** exempt your riders/ship with the tag `guhs_luchtschip` or `Barrieres.VRIJSTELLING`; POIs above.
+- POI_VERZOEKEN*.md (shared folder) still hold old zone-2 coordinates in old requests: add (704, 1344) when reading them.
+- The far "verre schimmen" (client-side silhouettes at real positions) and the per-dimension view distance (W-3) are not built
+  here; only the horizon azimuths were corrected.
+- Departure boards are plain dark boards on posts; the timetable text/display is t-luchtschip's (`haven_*_bord`).
+- Zone 3 Weststeiger/Oosttaksteiger have no physical board (bell spot = `_bord`).
+- AutoCheck client run: not done (gradle slots were busy all night).
