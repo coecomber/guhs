@@ -60,6 +60,7 @@ public final class Smid {
         d.putInt("kies", kies);
         d.putString("uitkomst", uitkomst);
         d.putString("melding", melding);
+        nl.juiced.guhs.feature.vadsrijk.items.SmidExtra.data(p, d);   // T-ITEMS: talismans, Groeipluis, the talisman switch
         EcoPayloads.open(p, EcoPayloads.SMID, "", d, items);
     }
 
@@ -72,7 +73,7 @@ public final class Smid {
             case "ster" -> ster(p, slot, p.getRandom());
             case "herrol" -> herrol(p, slot, a.getIntOr("houd", -1), p.getRandom());
             case "repareer" -> repareer(p, slot);
-            default -> new String[] {"", ""};
+            default -> nl.juiced.guhs.feature.vadsrijk.items.SmidExtra.doe(p, actie, a);   // T-ITEMS: polijst, doorgroei, overvads, talisman
         };
         stuur(p, slot, r[0], r[1]);
     }
@@ -111,8 +112,8 @@ public final class Smid {
             return new String[] {"", "vadsrijk.economie.smid.te_weinig"};
         }
         EcoUtil.neem(p.getInventory(), EcoSpul.VERBETERSTEENTJE.get(), steen);
-        SterRegels.Uitkomst k = SterRegels.rol(u, r);
-        Uitrusting na = SterRegels.pasToe(u, k);
+        SterRegels.Uitkomst k = nl.juiced.guhs.feature.vadsrijk.items.Vangnet.rol(p, u, r);   // T-ITEMS: pity + Knuffeltalisman
+        Uitrusting na = nl.juiced.guhs.feature.vadsrijk.items.Vangnet.naPoging(SterRegels.pasToe(u, k), u, k);   // T-ITEMS: the pity counter
         zet(p, slot, na);
         feest(p, k);
         if (na.sterren() >= SterRegels.MAX) {
@@ -170,7 +171,7 @@ public final class Smid {
     /** New bonuses: as many as before; the kept one stays (same place, same value), the others are distinct from it. */
     public static List<Bonus> herrolBonussen(Uitrusting u, int houd, RandomSource r) {
         int n = u.bonussen().size();
-        List<Bonus> nieuw = Bonussen.rol(n + 1, u.level(), u.zeldzaamheid(), r);
+        List<Bonus> nieuw = Bonussen.rol(n + 1, u.level(), u.zeldzaamheid(), r, u.basisType() == null ? null : u.basisType().slot());   // T-ITEMS: slot pool
         List<Bonus> uit = new ArrayList<>();
         Bonus vast = houd >= 0 ? u.bonussen().get(houd) : null;
         for (Bonus b : nieuw) {

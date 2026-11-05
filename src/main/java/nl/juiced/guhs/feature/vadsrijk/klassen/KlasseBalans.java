@@ -54,6 +54,8 @@ public final class KlasseBalans {
     /** I-MOUNTS: the mount knobs ({@code [rijdieren]}; pushed to economie's {@code RijdierSoort.Balans}). */
     public static final String RIJDIEREN = "rijdieren";
     public static final List<String> RIJDIEREN_SLEUTELS = List.of("snelheid", "sprong", "groei_snelheid", "groei_sprong");
+    /** T-ITEMS: the itemisatie-2.0 knobs ({@code [items]}; pushed to {@code items.ItemsBalans}). */
+    public static final String ITEMS = "items";
 
     private static final Map<String, Map<String, Double>> WAARDEN = new LinkedHashMap<>();
     private static long gelezen = Long.MIN_VALUE;
@@ -66,6 +68,9 @@ public final class KlasseBalans {
 
     /** The default of a key for a class. */
     public static double standaard(String klasse, String sleutel) {
+        if (ITEMS.equals(klasse)) {
+            return nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.standaard(sleutel);   // T-ITEMS
+        }
         return switch (sleutel) {
             case "melee_reductie" -> Klassen.RIDDER.equals(klasse) ? 0.20 : 0;
             case "vads_per_klasselevel" -> Klassen.RIDDER.equals(klasse) ? 4 : 0;
@@ -81,6 +86,7 @@ public final class KlasseBalans {
         l.add(ALGEMEEN);
         l.add(MOBS);
         l.add(RIJDIEREN);
+        l.add(ITEMS);   // T-ITEMS
         for (var k : Klassen.alle()) {
             l.add(k.id());
         }
@@ -89,7 +95,8 @@ public final class KlasseBalans {
 
     private static List<String> sleutels(String sectie) {
         return ALGEMEEN.equals(sectie) ? ALGEMEEN_SLEUTELS : MOBS.equals(sectie) ? MOBS_SLEUTELS
-                : RIJDIEREN.equals(sectie) ? RIJDIEREN_SLEUTELS : SLEUTELS;
+                : RIJDIEREN.equals(sectie) ? RIJDIEREN_SLEUTELS
+                : ITEMS.equals(sectie) ? nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.SLEUTELS : SLEUTELS;   // T-ITEMS
     }
 
     public static synchronized double get(String klasse, String sleutel) {
@@ -127,6 +134,7 @@ public final class KlasseBalans {
         nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetMobSchade(get(MOBS, "schade"));
         nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.Balans.zet(get(RIJDIEREN, "snelheid"), get(RIJDIEREN, "sprong"),
                 get(RIJDIEREN, "groei_snelheid"), get(RIJDIEREN, "groei_sprong"));
+        nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.zet(k -> get(ITEMS, k));   // T-ITEMS
     }
 
     // ---- the file ---------------------------------------------------------------------------------------------------------
@@ -199,6 +207,8 @@ public final class KlasseBalans {
         b.append("# [mobs] schade = vermenigvuldiger op de klappen van gewone wezens en elites (geen bazen); 1.3 = +30 %.\n");
         b.append("# [rijdieren] snelheid/sprong = vermenigvuldigers op alle rijdieren; groei_snelheid = extra snelheid per rijdierlevel\n");
         b.append("# (0.015 = +1,5 %), groei_sprong = extra sprongkracht per rijdierlevel (0.01 = ongeveer +0,07 blok).\n");
+        b.append("# [items] = itemisatie 2.0: budget_* = vermenigvuldiger op alles wat een stuk in dat vak geeft; pity, Vertrouwd,\n");   // T-ITEMS
+        b.append("# doorgroeien, overvadsen en de maxima van de nieuwe stats. Uitleg: NOTITIES_T_ITEMS.md.\n");
         for (String s : secties()) {
             b.append('\n').append('[').append(s).append("]\n");
             for (String k : sleutels(s)) {
