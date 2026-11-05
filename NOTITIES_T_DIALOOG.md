@@ -74,10 +74,16 @@ Branch 110-t-dialoog, from dbf82899d (r-int, incl. the q-dialoog portrait fix).
   - the Rijk flag (vr_ yes, other no, `oud` no);
   - `"npc:blij"`;
   - "Wat moet ik doen?" through a real `QuestMotor.klik` on the sergeant (offer → Doel aanbod; after accepting → actief).
-- See the report/resume point below for the results.
+- Results:
+  - `compileJava` OK;
+  - `-Pgt=VadsrijkDialoog`: all 5 required passed (4 own tests);
+  - `-Pgt=VadsrijkNpc` (QuestMotor/Praat regression): all 7 passed.
+- No AutoCheck client run: only ~7.7 GB RAM was free, below the 8 GB rule, so the screen itself is UNSEEN by me.
+  The first client test = SPIEK_T_DIALOOG D1/D2 at GUI 2/3/4.
+- Warning for other agents: the scratchpad is shared between sibling agents. Use unique log names (gt2.log got mixed with t-vfx/t-luchtschip output); the run-dir `run/logs/latest.log` is reliable.
 
 ## Resume point / open
-- See the final report in the commit log. Open:
+- Everything listed under "What I built" is done and committed. Open:
   - the last conversation per NPC in the questlog (J) (roadmap);
   - small choices with consequences;
   - context greetings (night, pet, zone done);
