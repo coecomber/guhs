@@ -1,13 +1,12 @@
-"""Zone 3 "De Schemerwortel": every fixed coordinate of the zone-3 map (the single source for the builder, POI_Z3.md and
-Z3WereldPlekken.java).
+"""Zone 3 "De Schemerwortel" (REVAMP, round 20): every fixed coordinate of the zone-3 map (the single source for the builder,
+POI_Z3.md and Z3WereldPlekken.java).
 
-Coordinates are written RELATIVE TO THE TRUNK AXIS ("rel": xr, y, zr), like the render generators in kit/ (copied from
-renders-schemerwortel/_bron). The zone lies in the EAST (ZONE3_PLAN, decision after WERELDVERHAAL): box x +1600..+3000,
-z -700..700, trunk at (+2300, 0), MIRRORED in x relative to the renders (the renders were made for the old west box, with
-Honingtak on the branch that points to zone 1; mirrored, Honingtak still points west to zone 1/2 and the far east, with
-Hoogvads, lies behind the tree). So:
-    world X = 2299 - floor(xr),  world Z = floor(zr),  y = y.
-A block at rel x cell [a, a+1) is world block 2299 - a. All "stand" points are the air block a player/NPC stands in.
+The map is the approved revamp design (renders-schemerwortel2/_bron, copied to kit/: boom2, plekken2, werf2, schemerkit) with
+the user's adjustments (narrower crown 130/95/60, one inner stair floor -> nest with half steps, a broad riding spiral with half
+steps, ...). Coordinates in the kit are RELATIVE TO THE TRUNK AXIS ("rel": x, y, z), NOT mirrored:
+    world X = 2300 + floor(x),  world Z = floor(z),  y = y.
+Zone box x 1900..2700, z -400..400 (800 x 800); tiles tx 29..42, tz -7..6 (196 tiles). All "stand" points are the air block a
+player/NPC stands in. Ids are kept from v1 wherever the place still exists (see NOTITIES_P_WERELD.md for the mapping).
 """
 import math
 import os
@@ -17,566 +16,685 @@ import numpy as np
 
 HIER = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HIER, "kit"))
-import boom  # noqa: E402
+import boom2 as B  # noqa: E402
+import plekken2 as P  # noqa: E402
+import werf2 as WF  # noqa: E402
 
 TX_STAM = 2300
-X0, X1, Z0, Z1 = 1600, 3000, -700, 700        # the zone box (plan)
-TX0, TX1, TZ0, TZ1 = 25, 46, -11, 10           # the tile grid (64x320x64 tiles), x 1600..3007, z -704..703
+X0, X1, Z0, Z1 = 1900, 2700, -400, 400        # the zone box
+TX0, TX1, TZ0, TZ1 = 29, 42, -7, 6             # the tile grid (64x320x64 tiles), x 1856..2751, z -448..447
+OUD_TX0, OUD_TX1, OUD_TZ0, OUD_TZ1 = 25, 46, -11, 10   # v1 grid: tiles outside the new grid are deleted by maak3
+HY = B.HONING_Y
+ZEE_Y = 24                                      # top of the cloud sea (water) under the floating island
 
 
-def wx(xr):
-    return int(2299 - math.floor(xr))
-
-
-def W(xr, y, zr):
+def W(x, y, z):
     """rel point -> world block [X, Y, Z]."""
-    return [wx(xr), int(math.floor(y)), int(math.floor(zr))]
+    return [TX_STAM + int(math.floor(x)), int(math.floor(y)), int(math.floor(z))]
 
 
 def rel_x(X):
-    """world block X -> rel block x (its cell start)."""
-    return 2299 - X
+    return X - TX_STAM
 
 
-def grond(xr, zr):
-    return float(boom.grondhoogte(np.array([float(xr)]), np.array([float(zr)]))[0])
-
-
-def kruin(xr, zr):
-    return float(boom.kruin_top(np.array([float(xr)]), np.array([float(zr)]))[0])
-
-
-def polar(a_deg, r):
-    a = math.radians(a_deg)
+def pol(a, r):
     return r * math.cos(a), r * math.sin(a)
 
 
-# ================================================================================================ Honingtak (hub)
-DEK_Y = 238                       # deck planks; stand 239
-PLEIN = (470, -2)
-MAST = (622, 0)
-KAPEL = (505, 0)
-CAFE = (428, 0)
-WONEN = (568, 0)
-STAL = (296, 236, 26)             # corner of the stable plateau (planks at y 235, stand 236)
-# korfhuisjes: (x, side, floor-y, kind, function)
-KORVEN = [(388, 1, 216, 0, "woning_1"), (412, -1, 212, 1, "smid"), (440, 1, 222, 2, "juwelier"),
-          (458, -1, 218, 0, "drankjes"), (492, 1, 214, 1, "uitrusting"), (520, -1, 224, 2, "algemeen"),
-          (546, 1, 220, 0, "bank"), (584, -1, 214, 1, "jagershut"), (600, 1, 226, 2, "burgemeester"),
-          (402, 1, 228, 1, "woning_2"), (430, -1, 228, 2, "woning_3"), (536, -1, 210, 0, "woning_4"),
-          (566, 1, 230, 2, "woning_5"), (476, -1, 230, 1, "woning_6"), (510, 1, 230, 0, "woning_7"),
-          (594, -1, 230, 2, "woning_8")]
-KORF_R = 6.0
+def grond(x, z):
+    return float(B.grondhoogte(np.array([float(x)]), np.array([float(z)]))[0])
 
 
-def tak_oost(x):
-    L, rr = boom.tak_lijn("oost")
-    i = int(np.argmin(np.abs(L[:, 0] - x)))
-    return float(L[i, 1]), float(rr[i]), float(L[i, 2])
+def gstand(x, z):
+    """Stand y on the ground (top block = floor(g))."""
+    return int(math.floor(grond(x, z))) + 1
 
 
-def korf_midden(x, kant, fy):
-    yc, r, zc = tak_oost(x)
-    return zc + kant * (r + 6.5 + (2 if fy >= 228 else 0))
+def kstand(s, x, z):
+    """Stand y on crown storey s."""
+    return int(math.floor(B.kruin_top(s, x, z))) + 1
 
 
-def tak_onder(x):
-    yc, r, zc = tak_oost(x)
-    return yc - r * 0.72
-
-
-# raatcel bottoms (the cafe, the Nestkapel and the woontros lowest cell): floor y, centre, R
-CAFE_CEL = (CAFE[0], int(tak_onder(CAFE[0]) - 19 - 10), CAFE[1], 9)
-KAPEL_CEL = (KAPEL[0], int(tak_onder(KAPEL[0]) - 19 - 13), KAPEL[1], 10)
-WOON_CEL = (WONEN[0], int(tak_onder(WONEN[0]) - 17 - 8), WONEN[1] - 1, 6)
-# small honey lifts: (id, x, z of the shaft, bottom stop y (stand), the cell it serves)
-LIFTJES = [("cafe", 428, -22, CAFE_CEL[1] + 1), ("kapel", 505, 23, KAPEL_CEL[1] + 1), ("raattros", 568, -20, WOON_CEL[1] + 1)]
-# the big Honinglift (Honingtak <-> Mosvoet), opens after z3_hq09
-HONINGLIFT_BOVEN = (392, DEK_Y + 1, 26)
-MOSVOET = (250, 420)
-HONINGLIFT_ONDER = (262, None, 392)      # y from the terrain
-
-# ================================================================================================ Kruinzee
-NEST = (0, -40)
-NEST_Y = int(round(kruin(*NEST)))          # floor of the nest bowl (stand)
-KALE_KRUIN = (-210, -80)                   # the dead crown top: world boss Kruinroofvogel (~210 from the nest)
-
-
-def _max_kruin(c, r):
-    xs = np.linspace(-r, r, 2 * int(r) + 1)
-    X, Z = np.meshgrid(xs, xs)
-    m = X ** 2 + Z ** 2 <= r * r
-    t, _ = boom.kruin_top(c[0] + X[m], c[1] + Z[m])
-    return float(t.max())
-
-
-KALE_R = 24
-KALE_Y = int(math.ceil(_max_kruin(KALE_KRUIN, KALE_R + 2))) + 1    # stand y on the raised dead top (a mesa with a stepped skirt)
-ROOFVOGEL_ZIT = [(-60, -250), (-250, 110)]  # the two other perches (phase 3, ~200 away)
-MIKA_STEIGER = (-190, -200)
-VIJVERS = boom.VIJVERS
-GRAUWE_VLEKKEN = [(150, 120), (-110, 205), (60, -250)]   # z3_hq04: 3 sprayed leaf patches
-ZWEEFPLATFORMS = [(-300, 70), (-235, 215)]               # Pluimzweef down to the Takkenbanen (crown edge, west/south-west)
-KROON_UITKIJK = (-150, 150)
-WATERVAL_A = 108
-
-
-def kruinring_punt(a_deg):
-    a = math.radians(a_deg)
-    rr = 225 + 75 * math.cos(a) + 5
-    return rr * math.cos(a), rr * math.sin(a)
-
-
-# ================================================================================================ Takkenbanen
-HANGNEST = (-488, 140, 33)
-HANGNEST_HUISJES = [(-20, -6, 4), (-14, 14, -3), (2, 21, 6), (18, 12, -6), (22, -6, 3), (8, -20, -1),
-                    (-8, -22, 8), (-30, 6, 11), (30, 4, 10), (-2, 32, 12)]
-HANGNEST_FUNCTIE = {0: "lusje", 1: "herberg", 2: "winkeltje", 3: "stalpost", 4: "woning_1", 5: "woning_2",
-                    6: "woning_3", 7: "woning_4", 8: "woning_5", 9: "woning_6"}
-WERF = (-600, 140, -570)
-TAKPUNT = "zuidwest"
-KAASSCHUTTER_POSTEN = [("west", 0.42), ("noordwest", 0.45), ("zuidwest", 0.55)]
-
-
-def tak_zij_punt(naam, t, frac):
-    """Point on top of branch 'naam' at fraction t, moved sideways by frac * radius (off the riding path): (x, stand-y, z)."""
-    L, rr = boom.tak_lijn(naam)
-    i = max(1, min(len(L) - 2, int(round(t * (len(L) - 1)))))
-    d = L[i + 1] - L[i - 1]
-    n = np.array([-d[2], 0.0, d[0]])
+def tak_punt(tak, s_, zij=0.0):
+    """(x, stand y, z) on top of big branch 'tak' at distance s_ from the trunk, moved sideways by zij * radius."""
+    L, rr = B.tak_van(tak)
+    d = np.hypot(L[:, 0], L[:, 2])
+    i = max(1, min(len(L) - 2, int(np.argmin(np.abs(d - s_)))))
+    dv = L[i + 1] - L[i - 1]
+    n = np.array([-dv[2], 0.0, dv[0]])
     n /= np.linalg.norm(n) + 1e-9
-    c = L[i] + n * frac * rr[i]
-    y = L[i, 1] + math.sqrt(max(0.0, 1 - frac * frac)) * rr[i] * 0.72
+    c = L[i] + n * zij * rr[i]
+    y = L[i, 1] + math.sqrt(max(0.0, 1 - zij * zij)) * rr[i] * 0.7
     return float(c[0]), int(math.floor(y)) + 1, float(c[2])
 
 
-def tak_punt(naam, t):
-    """Point on the riding path on top of branch 'naam' at fraction t (0 = trunk, 1 = tip): (x, stand-y, z)."""
-    L, rr = boom.tak_lijn(naam)
-    i = int(round(t * (len(L) - 1)))
-    return float(L[i, 0]), float(L[i, 1] + rr[i] * 0.72) + 1, float(L[i, 2])
+def htak_punt(tak, s_):
+    """(x, stand, z) on a Honingtak boardwalk (level HY)."""
+    L, rr = P.htak_lijn(tak)
+    d = np.hypot(L[:, 0], L[:, 2])
+    i = int(np.argmin(np.abs(d - s_)))
+    return float(L[i, 0]), HY + 1, float(L[i, 2])
 
 
-# the Kaaszeppelinwerf (dungeon 1): three deck levels under the NW branch tip (rel; y = stand)
-WERF_A, WERF_B, WERF_C = 140, 125, 110       # deck floors (planks at y, stand y+1)
+def trap_punt(lev, r=20.0):
+    """(x, stand, z) on the inner stair at level lev (continuous)."""
+    a = B.trap_hoek(lev)
+    return r * math.cos(a), float(B.stand(lev)), r * math.sin(a)
 
 
-def werf_plekken():
-    cx, cy, cz = WERF
-    return {"werf_kamer_touwwerk": (cx + 18, WERF_A + 1, cz + 16), "arena_taleggio": (cx - 22, WERF_A + 1, cz - 14),
-            "werf_kamer_gieterij": (cx + 26, WERF_B + 1, cz - 16), "werf_kamer_bewapening": (cx - 28, WERF_B + 1, cz + 16),
-            "arena_brokkel": (cx + 24, WERF_B + 1, cz + 16), "arena_brokkel_kanon_1": (cx + 16, WERF_B + 1, cz + 24),
-            "arena_brokkel_kanon_2": (cx + 32, WERF_B + 1, cz + 24), "arena_roquefort": (cx, WERF_C + 1, cz),
-            "roquefort_kajuit": (cx + 12, WERF_C + 1, cz), "hartsplinter_3": (cx + 13, WERF_C + 1, cz + 2),
-            "grauwe_brief_1": (cx + 13, WERF_C + 1, cz - 2), "werf_trap_ab": (cx + 4, WERF_A + 1, cz - 26),
-            "werf_trap_bc": (cx - 6, WERF_B + 1, cz + 26)}
+def rij_punt_lev(k, th, frac=0.5):
+    """(x, stand, z) on the riding spiral turn k at angle th, frac across the width (0 inner .. 1 outer)."""
+    lev = B.rij_lev(th, k)
+    Rr = float(B.r_stam(lev, np.array([th - lev / 160.0]))[0])
+    r = Rr - 2.5 + 0.5 + (B.RIJ["breed"] - 1.5) * frac
+    return r * math.cos(th), float(B.stand(lev)), r * math.sin(th)
 
 
-# ================================================================================================ Schorsstad (hollow trunk)
-R_BINNEN = boom.R_BINNEN
-RINGEN = [80 + 16 * i for i in range(7)]          # terrace floors (planks at y, stand y+1)
-TOREN_RING_Y = [y + 3 for y in RINGEN]            # tower ring platforms (stand +1)
-POORT_Y = (RINGEN[6], RINGEN[3], 75)               # the 3 gates from the Stamspiraal in (= a ring floor / the floor)
-PELSZAAL_Y = 183                                  # floor of the Pelszaal (stand 184)
+# ================================================================================================ fixed places
+RIJ_START_TH = B.RIJ["th0"]
+WORTELWEG_R = 172                    # the ground ring path
+NEST_STAND = B.NEST_Y + 2            # nest floor (top block NEST_Y + 1)
+PELSZAAL_VLOER = 60                  # the Pelszaal under the Schorsstad floor: floor block y 60 (stand 61), r 16
+PELSZAAL_R = 16
+KALE_KRUIN = pol(math.radians(162), 152)
+KALE_R = 23
+KALE_Y = 226                         # stand on the dead mesa
+MOSVOET = pol(math.radians(36), 158)
+PLUIMSTAL = pol(RIJ_START_TH - 0.45, 104)    # the stable near the foot of the riding spiral
+VIJVERS = [(1.05, 108, 8), (1.95, 104, 7), (3.5, 110, 8), (4.85, 106, 7), (5.75, 110, 7)]   # honey ponds on kruin 1
+KRAMEN = [(i, kant, B.TH_M + da, r) for i, da in enumerate((-0.42, -0.21, 0.0, 0.21, 0.42))
+          for kant, r in (("n", 45.5), ("z", 64.0))]
+# Hart van de Boom: the dungeon ring round the Wortelduister hall (floor block y 28, stand 29), r 112
+HART_VLOER = 28
+HART_R = 112
+HART_KAMERS = [("schimmelkwekerij", 152, 15), ("ringenzaal", 120, 15), ("wortelwurger", 86, 20),
+               ("nestwachter", 46, 20), ("baron_bleu", 6, 22)]
+HART_POORT = pol(math.radians(180), 80)      # the gate in the west wall of the hall
+WERF_C = WF.C
 
 
-def spiraal_voet_r():
-    """Radius of the Stamspiraal road at its lowest point (y 70, due south): the exit ramp to the ground starts there."""
-    return float(boom.r_buiten(np.array([70.0]), np.array([math.pi / 2]))[0])
-
-
-def spiraal_poort(yp):
-    p = boom.SPIRAAL
-    a = (p["y_top"] - yp) / (p["y_top"] - p["y_bot"]) * 2 * math.pi * p["slagen"] + p["phi0"]
-    return a
-
-
-# ================================================================================================ Wortelvelden
-POSTEN = [(270, 520), (225, 520), (135, 500), (45, 540)]          # Pluimposten (deg, r)
-WORTELWEG_R = 470
-WORTELGEWELF = (340, -150)
-WORTELPOORT = (0, 268)
-SCHIMMEL_KETELS = [(-320, -280), (-280, -330), (-345, -335), (-260, -270)]
-
-# ================================================================================================ Wortelduister + Hart
-HARTSLAG = boom.HARTSLAG                # (cx, floor y, cz, r, h)
-WORTELGANG = boom.WORTELGANG
-EI = (0, 56, 0)
-HART_RING_R = 95                        # the dungeon rooms of the Hart lie in a ring at r 95, floor y 50
-HART_VLOER = 50
-HART_KAMERS = [("aderloop", -135, 12), ("schimmelkwekerij", 180, 16), ("ringenzaal", 135, 14),
-               ("wortelwurger", 90, 20), ("nestwachter", 45, 20), ("baron_bleu", 0, 22)]
-
-# ================================================================================================ wind columns
-def _tak_zij(naam, t, zij, extra=6.0):
-    L, rr = boom.tak_lijn(naam)
-    i = max(1, min(len(L) - 2, int(round(t * (len(L) - 1)))))
-    d = L[i + 1] - L[i - 1]
-    n = np.array([-d[2], 0.0, d[0]])
-    n /= np.linalg.norm(n) + 1e-9
-    c = L[i] + n * zij * (rr[i] + extra)
-    lp = L[i] + n * zij * (rr[i] * 0.45)
-    return float(c[0]), float(c[2]), int(L[i, 1] + rr[i] * 0.72) + 1, float(lp[0]), float(lp[2])
+def ring_functies():
+    """The Honingtak buildings: ring houses then branch houses, by function."""
+    fn = ["smid", "juwelier", "drankjes", "uitrusting", "algemeen", "bank", "jagershut", "burgemeester",
+          "woning_1", "woning_2", "woning_3", "woning_4", "woning_5", "woning_6", "woning_7", "woning_8", "woning_9",
+          "woning_10", "woning_11"]
+    huizen = []
+    ring = sorted(P.ring_huizen(), key=lambda h: B.wrap(h[1] - B.TH_M) % (2 * math.pi))
+    for (k, a, cx, cz, soort) in ring:
+        R = [5.2, 4.8, 3.5][soort]
+        huizen.append((cx, cz, a + math.pi, R, "ring", soort))
+    for (naam, j, cx, cz, deur, b, soort) in P.tak_huizen():
+        huizen.append((cx, cz, deur, [5.0, 4.6][soort], naam, soort))
+    return list(zip(fn, huizen))
 
 
 def windkolommen():
-    """(id, x, z, y0 stand at the bottom, y1 = stand y of the landing, radius, landing x, landing z), rel coords.
-    Upward blossom wind: from the ground (a petal ring) straight up; at the top the wind sets you down on the landing
-    next to it (a branch path / the crown top / the Honingtak balcony)."""
+    """(id, x, z, y0 = stand at the foot, y1 = stand on the landing, radius, landing x, landing z), rel coords."""
     out = []
-    for wid, naam, t, zij in (("hangnest", "west", 0.70, -1), ("paddenbloesem_tak", "zuidwest", 0.62, 1),
-                              ("werf_tak", "noordwest", 0.62, -1)):
-        x, z, y1, lx, lz = _tak_zij(naam, t, zij)
-        out.append((wid, x, z, stand_y_grond(x, z), y1, 3.0, lx, lz))
-    for wid, (x, z) in (("mosvoet_kruin", (205, 195)), ("lichtkever_kruin", (40, -300))):
-        a = math.atan2(z, x)
-        lx, lz = x - 9 * math.cos(a), z - 9 * math.sin(a)
-        out.append((wid, x, z, stand_y_grond(x, z), int(round(kruin(lx, lz))) + 1, 3.5, lx, lz))
-    # the top of the Stamspiraal (y 200, under the crown) up through the crown to the crown top near the old nest; a ladder
-    # shaft beside it is the way down
-    out.append(("spiraal_kruin", 0, -102, 201, int(round(kruin(0, -90))) + 1, 3.0, 0, -90))
-    x, z = HONINGLIFT_BOVEN[0] + 10, HONINGLIFT_BOVEN[2] + 12
-    out.append(("honingtak", x, z, stand_y_grond(x, z), DEK_Y + 1, 3.0, HONINGLIFT_BOVEN[0] + 4, HONINGLIFT_BOVEN[2] + 4))
+    for (wid, x, z, y0, y1, naam) in P.windkolommen_plan():
+        if wid == "honingtak":
+            lx, lz = pol(math.atan2(z, x), 63)
+        else:
+            a = math.atan2(z, x)
+            lx, lz = x - 7 * math.cos(a), z - 7 * math.sin(a)
+        out.append((wid, x, z, y0 + 1, y1 + 1, 3.0, lx, lz))
+    # the cloud sea: 6 rescue columns from the sea up to the island rim
+    for k in range(6):
+        a = math.radians(k * 60 + 15)
+        rim = float(B.eilandrand(np.array([a]))[0])
+        x, z = pol(a, rim + 12)
+        lx, lz = pol(a, rim - 14)
+        out.append((f"zee_{k + 1}", x, z, ZEE_Y + 1, gstand(lx, lz), 3.0, lx, lz))
     return out
-
-
-WINDKOLOMMEN = None   # filled lazily (needs stand_y_grond below)
-
-
-def stand_y_grond(xr, zr):
-    return int(math.floor(grond(xr, zr))) + 1
 
 
 def plekken():
     """All POIs (world coordinates) as a nested dict; ids are flattened with '_' / '.'."""
-    P = {}
+    PP = {}
 
-    def put(k, xr, y, zr):
-        P[k] = W(xr, y, zr)
+    def put(k, x, y, z):
+        PP[k] = W(x, y, z)
 
-    # ---- airship dock + travel
-    put("dok_landing", MAST[0] - 12, DEK_Y + 1, MAST[1] + 2)
-    put("dok_bel", MAST[0] - 4, DEK_Y + 1, MAST[1] + 3)
-    put("dok_mast", MAST[0], DEK_Y + 1, MAST[1])
-    put("dok_luchtschip", MAST[0] - 18, DEK_Y - 1, MAST[1] + 24)
-    put("dok_kapitein", MAST[0] - 8, DEK_Y + 1, MAST[1] - 3)
-    # ---- Honingtak hub
-    put("plein", PLEIN[0] - 10, DEK_Y + 1, PLEIN[1] - 8)
-    put("respawn", PLEIN[0] - 10, DEK_Y + 1, PLEIN[1] + 6)
-    put("knuffelbeeld", PLEIN[0], DEK_Y + 1, PLEIN[1])
-    put("npc_raatje_plein", PLEIN[0] + 6, DEK_Y + 1, PLEIN[1] - 6)
-    put("questbord", PLEIN[0] - 12, DEK_Y + 1, PLEIN[1] - 3)
-    put("markt", 420, DEK_Y + 1, 0)
-    for i, x in enumerate(range(398, 448, 12)):
-        for s in (-1, 1):
-            yc, r, zc = tak_oost(x)
-            put(f"npc_kraam_{i + 1}{'n' if s < 0 else 'z'}", x, DEK_Y + 1, zc + s * (r * 0.62 + 1 + 3) + (0.5 if s > 0 else -0.5) - s)
-    put("bloesemboompje", 548, DEK_Y + 1, 9)
+    # ---------------------------------------------------------------- Honingtak: the dock at the tip of the Imkerstraat
+    L, rr = P.htak_lijn("Imkerstraat")
+    tip = L[-1]
+    ua = math.atan2(tip[2], tip[0])
+    ux, uz = math.cos(ua), math.sin(ua)
+    mx, mz = tip[0] - ux * 4, tip[2] - uz * 4
+    put("dok_mast", mx, HY + 1, mz)
+    put("dok_landing", mx - ux * 8, HY + 1, mz - uz * 8)
+    put("dok_bel", mx - ux * 4 - uz * 2, HY + 1, mz - uz * 4 + ux * 2)
+    put("dok_kapitein", mx - ux * 6 + uz * 2, HY + 1, mz - uz * 6 - ux * 2)
+    put("dok_luchtschip", mx + ux * 24, HY - 1, mz + uz * 24)
+    # ---------------------------------------------------------------- Honingtak: the Honingplein + the ring
+    cx, cz = pol(B.TH_M, 52)
+    put("knuffelbeeld", cx, HY + 1, cz)
+    put("plein", cx - 8, HY + 1, cz - 1)
+    put("respawn", cx + 8, HY + 1, cz - 1)
+    put("npc_raatje_plein", cx + 5, HY + 1, cz + 5)
+    put("questbord", cx - 6, HY + 1, cz + 6)
+    put("markt", cx, HY + 1, cz + 8)
+    for (i, kant, a, r) in KRAMEN:
+        x, z = pol(a, r + (2.2 if kant == "n" else -2.2))
+        put(f"npc_kraam_{i + 1}{kant}", x, HY + 1, z)
+    x, z = pol(B.TH_M + 0.62, 50)
+    put("bloesemboompje", x, HY + 1, z)
     gebouw = {}
-    for (x, kant, fy, soort, fn) in KORVEN:
-        cz = korf_midden(x, kant, fy)
-        gebouw[fn] = {"npc": W(x, fy, cz - kant * 2.5), "binnen": W(x, fy, cz), "deur": W(x, fy, cz + kant * (KORF_R + 0.9)),
-                      "doos_min": W(x + 7, fy - 1, min(cz - 7, cz + 7)), "doos_max": W(x - 7, fy + 11, max(cz - 7, cz + 7))}
-    cx, yb, cz, R = CAFE_CEL
-    gebouw["cafe"] = {"npc": W(cx, yb + 1, cz - 6), "binnen": W(cx, yb + 1, cz + 1), "deur": W(cx, yb + 1, cz - R - 3),
-                      "podium": W(cx + 1, yb + 1, cz + 2)}
-    cx, yb, cz, R = KAPEL_CEL
-    gebouw["nestkapel"] = {"npc": W(cx, yb + 1, cz - 6), "binnen": W(cx, yb + 1, cz + 3), "deur": W(cx, yb + 1, cz + R + 3),
-                           "eiersokkel": W(cx, yb + 1, cz - 2), "droomsteen": W(cx - 5, yb + 1, cz + 2),
-                           "advancement": W(cx + 4, yb + 1, cz + 2)}
-    cx, yb, cz, R = WOON_CEL
-    gebouw["raattros"] = {"binnen": W(cx, yb + 1, cz), "deur": W(cx, yb + 1, cz - R - 3)}
-    x0, y, z0 = STAL
-    gebouw["pluimstal"] = {"npc": W(x0 + 30, y, z0 + 17), "binnen": W(x0 + 30, y + 1, z0 + 8), "deur": W(x0 + 30, y, z0 + 18),
-                           "voer": W(x0 + 20, y, z0 + 17)}
-    jx, jk, jfy = KORVEN[7][0], KORVEN[7][1], KORVEN[7][2]
-    jcz = korf_midden(jx, jk, jfy)
-    gebouw["jagershut"]["premiebord"] = W(jx - 3, jfy, jcz - jk * 2)
-    gebouw["jagershut"]["jachtbord"] = W(jx + 3, jfy, jcz - jk * 2)
-    P["gebouw"] = gebouw
-    put("pluimstal_keuze", x0 + 34, y, z0 + 32)                      # the starter choice: player stands here
-    for i, dx in enumerate((-8, 0, 8)):
-        put(f"pluimstal_keuze_pluimguh_{i + 1}", x0 + 34 + dx, y, z0 + 42)
-    put("pluimstal_oefenbaan", x0 + 34 + 26, y, z0 + 40)
-    put("pluimstal_zweefplatform", x0 + 6, y, z0 + 76)
-    put("pluimstal_kruinring_start", x0 + 2, y, z0 - 6)
-    # small honey lifts (stand spots at the top and bottom stop)
-    for (lid, x, z, yo) in LIFTJES:
-        put(f"lift_{lid}_boven", x, DEK_Y + 1, z + (2 if z < 0 else -2))
-        put(f"lift_{lid}_onder", x, yo, z + (2 if z < 0 else -2) * -1)
-    put("honinglift_boven", HONINGLIFT_BOVEN[0], HONINGLIFT_BOVEN[1], HONINGLIFT_BOVEN[2] - 2)
-    put("honinglift_onder", 255 + 2, int(math.floor(grond(255, 400))) + 1, 400)
-    put("mika_imker_luik", WONEN[0] + 3, WOON_CEL[1] + 1, WONEN[1] + 2)        # secret hatch in the Raattrossen
-    put("mika_imker_raatzaal", WONEN[0] + 2, WOON_CEL[1] - 12, WONEN[1])       # secret honeycomb hall (arena, lv 45)
-
-    # ---- Kruinzee
-    nx, nz = NEST
-    put("arena_vahoegnir", nx, NEST_Y, nz)
-    put("nest_eierkuil", nx, NEST_Y, nz)
-    put("nest_rand", nx, NEST_Y + 3, nz + 22)
-    put("hartsplinter_2", nx - 14, NEST_Y, nz - 9)
-    kx, kz = KALE_KRUIN
-    put("arena_kruinroofvogel", kx, KALE_Y, kz)
-    put("arena_kruinroofvogel_bord", kx + 20, KALE_Y, kz + 20)
-    for i, (x, z) in enumerate(ROOFVOGEL_ZIT):
-        put(f"kruinroofvogel_zit_{i + 1}", x, int(math.ceil(_max_kruin((x, z), 8))) + 1, z)
-    mx, mz = MIKA_STEIGER
-    put("mika_steiger", mx + 6, int(kruin(mx, mz)) + 2, mz + 4)
-    put("mika_bevel", mx - 6, int(kruin(mx, mz)) + 2, mz - 4)
-    for i, (x, z) in enumerate(GRAUWE_VLEKKEN):
-        put(f"grauwe_vlek_{i + 1}", x, int(round(kruin(x, z))) + 1, z)
-    for i, (x, z, r) in enumerate(VIJVERS):
-        put(f"honingvijver_{i + 1}", x + r + 4, int(round(kruin(x + r + 4, z))) + 1, z)
-    for i, (x, z) in enumerate(ZWEEFPLATFORMS):
-        put(f"zweefplatform_{i + 1}", x, int(round(kruin(x, z))) + 1, z)
-    put("uitkijk_kroon", KROON_UITKIJK[0], int(round(kruin(*KROON_UITKIJK))) + 15, KROON_UITKIJK[1])
-    for k in range(3):
-        a = k * 120 + 30
-        x, z = kruinring_punt(a)
-        put(f"kampvuur_kruin_{k + 1}", x, int(round(kruin(x, z))) + 1, z)
-    put("kampvuur_kruin_nest", nx + 34, int(round(kruin(nx + 34, nz + 30))) + 1, nz + 30)
-    a = math.radians(WATERVAL_A)
-    rr = float(boom.kruinrand(np.array([a]))[0]) - 12
-    put("bloesemwaterval_top", rr * math.cos(a), int(round(kruin(rr * math.cos(a), rr * math.sin(a)))) + 1, rr * math.sin(a))
-
-    # ---- Takkenbanen
-    hx, hy, hz = HANGNEST
-    put("hangnest_plein", hx + 4, hy, hz + 4)
-    put("kampvuur_hangnest", hx, hy, hz)
-    for i, (dx, dz, dy) in enumerate(HANGNEST_HUISJES):
-        f = HANGNEST_FUNCTIE[i]
-        put(f"hangnest_{f}", hx + dx, hy + dy, hz + dz)
-    put("hangnest_ladder_top", hx + 10, int(boom.tak_top("west", hx + 10, hz)) + 1, hz)
-    for naam, t in (("west", 0.3), ("west", 0.62), ("noordwest", 0.6), ("zuidwest", 0.45)):
-        x, y, z = tak_zij_punt(naam, t, 0.5)
-        put(f"kampvuur_tak_{naam}_{int(t * 100)}", x, y, z)
-    x, y, z = tak_zij_punt("west", 0.5, -0.5)
-    put("pluimpost_westtak", x, y, z)
-    for i, (naam, t) in enumerate(KAASSCHUTTER_POSTEN):
-        x, y, z = tak_punt(naam, t)
-        put(f"kaasschutterpost_{i + 1}", x, y, z)
-    x, y, z = tak_punt("zuidwest", 1.0)
-    put("uitkijk_takpunt", x, y, z)
-    put("valbrug", -455, 186, 160)
-    put("lianenbrug", -380, 196, -40)
-    # ---- Kaaszeppelinwerf (dungeon 1)
-    cx, cy, cz = WERF
-    x, y, z = tak_punt("noordwest", 0.9)
-    put("werf_ingang", x, y, z)
-    put("werf_bord", x + 3, y, z + 3)
-    put("werf_vahoeg_altaar", x - 3, y, z - 3)
-    for k, v in werf_plekken().items():
-        put(k, *v)
-
-    # ---- Stamspiraal + Schorsstad
-    for yp in POORT_Y:
-        a = spiraal_poort(yp)
-        put(f"spiraal_poort_{yp}", 104 * math.cos(a), yp + 1, 104 * math.sin(a))
-        put(f"schorsstad_poort_{yp}", 60 * math.cos(a), yp + 1, 60 * math.sin(a))
-    for k, yb in enumerate((190, 150, 110)):
-        p = boom.SPIRAAL
-        a = (p["y_top"] - yb) / (p["y_top"] - p["y_bot"]) * 2 * math.pi * p["slagen"] + p["phi0"]
-        r = float(boom.r_buiten(np.array([float(yb)]), np.array([a]))[0]) + 6
-        put(f"spiraal_balkon_{k + 1}", r * math.cos(a), yb + 1, r * math.sin(a))
-        put(f"spiraal_zweefsprong_{k + 1}", (r + 4) * math.cos(a + 0.25), yb + 1, (r + 4) * math.sin(a + 0.25))
-    put("spiraal_top", 0, 201, -100)
-    r0 = spiraal_voet_r()
-    put("spiraal_voet", 0, stand_y_grond(0, r0 + 44), r0 + 44)
-    put("schorsstad_vloer", 20, 76, 30)
-    put("kampvuur_schorsstad_vloer", 26, 76, 34)
-    put("kampvuur_schorsstad_ring4", (R_BINNEN - 4) * math.cos(1.2), RINGEN[3] + 1, (R_BINNEN - 4) * math.sin(1.2))
-    a = spiraal_poort(POORT_Y[1])
-    put("npc_oude_knoest", 56 * math.cos(a - 0.12), RINGEN[3] + 1, 56 * math.sin(a - 0.12))
-    for i, y in enumerate(RINGEN):
-        put(f"lantaarnring_{i + 1}", 0, TOREN_RING_Y[i] + 1, 5)
-        put(f"lantaarnring_{i + 1}_kooi", -4, TOREN_RING_Y[i] + 1, -3)
-        put(f"schorsstad_ring_{i + 1}", (R_BINNEN - 4) * math.cos(0.3 + i), y + 1, (R_BINNEN - 4) * math.sin(0.3 + i))
-    put("nestlantaarn_knoest", 0, TOREN_RING_Y[3] + 1, -4)
-    put("arena_piepvel", 0, PELSZAAL_Y + 1, 0)
-    put("piepvel_troon", 0, PELSZAAL_Y + 1, -12)
-    put("piepvel_grote_kooi", 5, PELSZAAL_Y + 1, -12)
+    for fn, (hx, hz, deur, R, waar, soort) in ring_functies():
+        dx, dz = math.cos(deur), math.sin(deur)
+        gebouw[fn] = {"npc": W(hx - dx * 1.5, HY + 1, hz - dz * 1.5), "binnen": W(hx, HY + 1, hz),
+                      "deur": W(hx + dx * (R + 1.8), HY + 1, hz + dz * (R + 1.8)),
+                      "doos_min": W(hx - 7, HY, hz - 7), "doos_max": W(hx + 7, HY + 12, hz + 7)}
+        if fn == "jagershut":
+            gebouw[fn]["premiebord"] = W(hx - dx * 3.5 - dz * 1.5, HY + 1, hz - dz * 3.5 + dx * 1.5)
+            gebouw[fn]["jachtbord"] = W(hx - dx * 3.5 + dz * 1.5, HY + 1, hz - dz * 3.5 - dx * 1.5)
+    for naam, (ad, Rc, hc) in P.CELLEN.items():
+        a = math.radians(ad)
+        ccx, ccz = pol(a, 55)
+        yb = HY - 2 - hc                    # cell floor block (honeycomb) -> stand yb + 1
+        ux_, uz_ = math.cos(a), math.sin(a)
+        g = {"binnen": W(ccx, yb + 1, ccz), "npc": W(ccx - ux_ * 3, yb + 1, ccz - uz_ * 3),
+             "deur": W(ccx + ux_ * (Rc - 1.5), yb + 1, ccz + uz_ * (Rc - 1.5))}
+        if naam == "cafe":
+            g["podium"] = W(ccx - ux_ * 5 + uz_ * 3, yb + 1, ccz - uz_ * 5 - ux_ * 3)
+        if naam == "nestkapel":
+            g["eiersokkel"] = W(ccx - ux_ * 6, yb + 1, ccz - uz_ * 6)
+            g["droomsteen"] = W(ccx - ux_ * 2 + uz_ * 5, yb + 1, ccz - uz_ * 2 - ux_ * 5)
+            g["advancement"] = W(ccx - ux_ * 2 - uz_ * 5, yb + 1, ccz - uz_ * 2 + ux_ * 5)
+        gebouw[naam] = g
+        lid = {"cafe": "cafe", "nestkapel": "kapel", "raattros": "raattros"}[naam]
+        rs = 55 + Rc + 3.5                   # the lift shaft just outside the cell, a hole in the deck
+        put(f"lift_{lid}_boven", (rs - 3) * ux_, HY + 1, (rs - 3) * uz_)
+        put(f"lift_{lid}_onder", (55 + Rc - 2.5) * ux_, yb + 1, (55 + Rc - 2.5) * uz_)
+        if naam == "raattros":
+            put("mika_imker_luik", ccx - uz_ * 2, yb + 1, ccz + ux_ * 2)
+            put("mika_imker_raatzaal", ccx, yb - 11, ccz)
+        if naam == "nestkapel":
+            put("flash_f2_kijkpunt", ccx - ux_ * 1, yb + 1, ccz - uz_ * 1)
+    # the Pluimstal (ground, near the foot of the riding spiral)
+    sx, sz = PLUIMSTAL
+    sa = math.atan2(sz, sx)
+    ox, oz = math.cos(sa), math.sin(sa)       # outward
+    tx_, tz_ = -oz, ox                        # along the building
+    gs = gstand(sx, sz)
+    gebouw["pluimstal"] = {"npc": W(sx - ox * 5, gs, sz - oz * 5), "binnen": W(sx, gs, sz),
+                           "deur": W(sx - ox * 9, gs, sz - oz * 9), "voer": W(sx + tx_ * 7, gs, sz + tz_ * 7)}
+    PP["gebouw"] = gebouw
+    kx, kz = sx + ox * 16, sz + oz * 16
+    put("pluimstal_keuze", kx, gstand(kx, kz), kz)
+    for i, d in enumerate((-6, 0, 6)):
+        put(f"pluimstal_keuze_pluimguh_{i + 1}", kx + ox * 6 + tx_ * d, gstand(kx + ox * 6 + tx_ * d, kz + oz * 6 + tz_ * d),
+            kz + oz * 6 + tz_ * d)
+    ex, ez = sx + ox * 36 + tx_ * 20, sz + oz * 36 + tz_ * 20
+    put("pluimstal_oefenbaan", ex, gstand(ex, ez), ez)
+    x, y, z = rij_punt_lev(0, RIJ_START_TH + 0.25, 0.5)
+    put("pluimstal_kruinring_start", x, y, z)
+    put("rijpad_start", x, y, z)
+    put("spiraal_voet", x, y, z)
+    put("tijdrit_start", x + ox * 2, y, z + oz * 2)
+    # ---------------------------------------------------------------- lifts
+    lx, lz, y0, y1, aan = P.lift_a()
+    put("honinglift_boven", lx, y1 + 1, lz - 3)
+    put("honinglift_onder", lx, y0, lz + 3)
+    lx, lz, y0, y1, aan = P.lift_b()
+    put("honinglift_kruin_boven", lx, y1 + 1, lz - 3)
+    put("honinglift_kruin_onder", lx, y0 + 1, lz + 3)
+    # ---------------------------------------------------------------- the inner stair + Schorsstad (hollow trunk)
+    for i, (yb, naam) in enumerate(B.BORDES + [(B.NEST_Y + 1, "nest")]):
+        a, L_ = B.trap_landing(i)
+        put(f"trap_bordes_{i + 1}", 20 * math.cos(a), L_ + 1, 20 * math.sin(a))
+    put("schorsstad_vloer", 9, B.VOET + 1, -8)
+    put("kampvuur_schorsstad_vloer", -10, B.VOET + 1, 7)
+    for i, y in enumerate(P.TOREN_RINGEN):
+        put(f"lantaarnring_{i + 1}", 3.4, y + 1, 0.5)
+        put(f"lantaarnring_{i + 1}_kooi", -3.4, y + 1, 0.5)
+        x, yy, z = trap_punt(y + 2, 20.5)
+        put(f"schorsstad_ring_{i + 1}", x, yy, z)
+    put("nestlantaarn_knoest", 0.5, P.TOREN_RINGEN[3] + 1, 3.4)
+    huizen = P.schors_huizen()
+    for k, (y0_, a, h) in enumerate(huizen):
+        ca, sa_ = math.cos(a), math.sin(a)
+        PP.setdefault("schorshuis", {})[str(k + 1)] = W((B.R_IN + 3.5) * ca, h + 1, (B.R_IN + 3.5) * sa_)
+    y0_, a, h = huizen[len(huizen) // 2]
+    put("npc_oude_knoest", (B.R_IN + 3.5) * math.cos(a), h + 1, (B.R_IN + 3.5) * math.sin(a))
+    y0_, a, h = huizen[len(huizen) // 2 + 2]
+    put("kampvuur_schorsstad_ring4", (B.R_IN + 4) * math.cos(a), h + 1, (B.R_IN + 4) * math.sin(a))
+    for k in range(8):
+        lev = 100 + k * 9 + (40 if k >= 6 else 0)
+        a = B.trap_hoek(lev)
+        put(f"muurverhaal_{k + 1}", 21.5 * math.cos(a), float(B.stand(lev)), 21.5 * math.sin(a))
+    for k in range(4):
+        lev = 172 + k * 13
+        x, yy, z = trap_punt(lev, 19)
+        put(f"boomvolk_lichtje_{k + 1}", x, yy, z)
+    a = B.KWASTGATEN[0][0]
+    lev_k = None
+    for hs in B.trap_hoogtes(np.array([a])):
+        if not np.isnan(hs[0]) and abs(hs[0] - 120) < 10:
+            lev_k = float(hs[0])
+    lev_k = lev_k if lev_k is not None else 120.0
+    put("flash_f1_kwastgat", 21 * math.cos(a), float(B.stand(lev_k)), 21 * math.sin(a))
+    put("vingerafdruk", 23.5 * math.cos(a + 0.18), float(B.stand(lev_k)) + 2, 23.5 * math.sin(a + 0.18))
+    # the two lifts in the hollow trunk: floor -> the Honingtak landing (binnenhof deck), binnenhof -> the kruin-1 landing
+    a1 = B.TH_M + math.pi
+    put("schorslift_1_onder", 9 * math.cos(a1), B.VOET + 1, 9 * math.sin(a1))
+    put("schorslift_1_boven", 9 * math.cos(a1), HY + 1, 9 * math.sin(a1))
+    a2, L2 = B.trap_landing(2)
+    put("schorslift_2_onder", 9 * math.cos(a2), HY + 1, 9 * math.sin(a2))
+    put("schorslift_2_boven", 9 * math.cos(a2), L2 + 1, 9 * math.sin(a2))
+    put("binnenhof", 0, HY + 1, 6)
+    # gates: the two ground gates (v1 ids 75 / 128) and the Honingtak door (v1 id 176)
+    for yid, a in zip((75, 128), B.POORT_HOEKEN):
+        put(f"schorsstad_poort_{yid}", 19 * math.cos(a), B.VOET + 1, 19 * math.sin(a))
+        r_uit = poort_uit_r(a)
+        put(f"spiraal_poort_{yid}", r_uit * math.cos(a), gstand(r_uit * math.cos(a), r_uit * math.sin(a)), r_uit * math.sin(a))
+    a, _ = B.trap_landing(1)
+    put("schorsstad_poort_176", 21 * math.cos(a), HY + 1, 21 * math.sin(a))
+    put("spiraal_poort_176", 45 * math.cos(a), HY + 1, 45 * math.sin(a))
+    put("rijpad_honingplein", 37 * math.cos(B.TH_M), HY + 1, 37 * math.sin(B.TH_M))
+    # balconies on the riding spiral (glide jumps) + its end on kruin 1
+    for k, (turn, deg) in enumerate(((0, 200), (2, 30), (3, 250))):
+        th = math.radians(deg)
+        x, yy, z = rij_punt_lev(turn, th, 1.0)
+        a = math.atan2(z, x)
+        r = math.hypot(x, z)
+        put(f"spiraal_balkon_{k + 1}", (r + 4) * math.cos(a), yy, (r + 4) * math.sin(a))
+        put(f"spiraal_zweefsprong_{k + 1}", (r + 8) * math.cos(a), yy, (r + 8) * math.sin(a))
+        if k == 0:
+            put("pluimstal_zweefplatform", (r + 8) * math.cos(a), yy, (r + 8) * math.sin(a))
+    th_end = B.RIJ["th0"] + 2 * math.pi * (B.RIJ["eind"] - B.RIJ["y0"]) / B.RIJ["stijg"]
+    x, yy, z = rij_punt_lev(int((B.RIJ["eind"] - B.RIJ["y0"]) // B.RIJ["stijg"]), th_end - 0.08, 0.5)
+    put("spiraal_top", x, yy, z)
+    put("rijpad_eind", x, yy, z)
+    # the Pelszaal (Graaf Piepvel) under the Schorsstad floor
+    fy = PELSZAAL_VLOER
+    put("arena_piepvel", 0, fy + 1, 0)
+    put("piepvel_troon", 0, fy + 1, -12)
+    put("piepvel_grote_kooi", 6, fy + 1, -11)
     for k in range(4):
         a = k * math.pi / 2 + math.pi / 4
-        put(f"piepvel_kooi_{k + 1}", 11 * math.cos(a), PELSZAAL_Y + 3 + 3 * k, 11 * math.sin(a))
+        put(f"piepvel_kooi_{k + 1}", 10 * math.cos(a), fy + 3 + 2 * k, 10 * math.sin(a))
     for k in range(6):
         a = k * math.pi / 3
-        put(f"piepvel_lantaarnpaal_{k + 1}", 14 * math.cos(a), PELSZAAL_Y + 1, 14 * math.sin(a))
-    put("hartsplinter_4", 2, PELSZAAL_Y + 1, 3)
-    a = math.radians(20)
-    put("flash_f1_kwastgat", (R_BINNEN + 2) * math.cos(a), 178, (R_BINNEN + 2) * math.sin(a))
-    put("vingerafdruk", (R_BINNEN - 1) * math.cos(a + 0.12), 172, (R_BINNEN - 1) * math.sin(a + 0.12))
-    for k in range(8):
-        a = k * 2 * math.pi / 8 + 0.15
-        y = RINGEN[k % 7] + 1
-        put(f"muurverhaal_{k + 1}", (R_BINNEN - 2.5) * math.cos(a), y, (R_BINNEN - 2.5) * math.sin(a))
-    for k in range(4):
-        a = k * 1.7 + 0.6
-        put(f"boomvolk_lichtje_{k + 1}", (R_BINNEN - 2.5) * math.cos(a), RINGEN[(k * 2 + 1) % 7] + 4, (R_BINNEN - 2.5) * math.sin(a))
-    for k, (a, y0, y1) in enumerate(((2.6, 76, 177), (5.2, 76, 145))):
-        x, z = (R_BINNEN - 10) * math.cos(a), (R_BINNEN - 10) * math.sin(a)
-        put(f"schorslift_{k + 1}_onder", x, y0, z)
-        put(f"schorslift_{k + 1}_boven", x, y1 + 1, z)
-
-    # ---- Wortelvelden
+        put(f"piepvel_lantaarnpaal_{k + 1}", 13.5 * math.cos(a), fy + 1, 13.5 * math.sin(a))
+    put("hartsplinter_4", 3, fy + 1, 4)
+    pa = pelszaal_trap_hoek()
+    put("arena_piepvel_deur", 13 * math.cos(pa), fy + 1, 13 * math.sin(pa))
+    put("pelszaal_trap_boven", 21 * math.cos(pa - 0.75), B.VOET + 1, 21 * math.sin(pa - 0.75))
+    # ---------------------------------------------------------------- Kruinzee (the 3 crown storeys + the nest)
+    put("arena_vahoegnir", 0, NEST_STAND, 0)
+    put("nest_eierkuil", 0, NEST_STAND, 0)
+    a5, _ = B.trap_landing(5)
+    put("nest_rand", 13 * math.cos(a5), NEST_STAND, 13 * math.sin(a5))
+    put("hartsplinter_2", -7, NEST_STAND, 6)
+    for i, (dx, dz) in enumerate(((11, 5), (-11, 5), (0, 13), (11, -7), (-11, -7), (0, -14))):
+        put(f"nest_tak_{i + 1}", dx, NEST_STAND, dz)
+    kx, kz = KALE_KRUIN
+    put("arena_kruinroofvogel", kx, KALE_Y, kz)
+    ka = math.atan2(kz, kx)
+    bx_, bz_ = pol(ka, 120)
+    put("arena_kruinroofvogel_bord", bx_, kstand(0, bx_, bz_), bz_)
+    bx_, bz_ = pol(ka + 0.08, 119)
+    put("arena_kruinroofvogel_deur", bx_, kstand(0, bx_, bz_), bz_)
+    for i, (tak, s_) in enumerate((("Bijentak", 140), ("Noordtak", 128))):
+        x, y, z = tak_punt(tak, s_)
+        put(f"kruinroofvogel_zit_{i + 1}", x, y + 1, z)
+    mx_, mz_ = pol(math.radians(300), 110)
+    put("mika_steiger", mx_, kstand(0, mx_, mz_), mz_)
+    put("mika_bevel", mx_ - 6, kstand(0, mx_ - 6, mz_ + 4), mz_ + 4)
+    for i, (s, deg, r) in enumerate(((0, 30, 104), (1, 140, 70), (0, 250, 112))):
+        x, z = pol(math.radians(deg), r)
+        put(f"grauwe_vlek_{i + 1}", x, kstand(s, x, z), z)
+    for i, (a, r, R) in enumerate(VIJVERS):
+        x, z = pol(a, r)
+        ex_, ez_ = x + (R + 3) * math.cos(a + 1.6), z + (R + 3) * math.sin(a + 1.6)
+        put(f"honingvijver_{i + 1}", ex_, kstand(0, ex_, ez_), ez_)
+        kx_, kz_ = x + (R + 6) * math.cos(a + 3.4), z + (R + 6) * math.sin(a + 3.4)
+        put(f"kuiken_{i + 1}", kx_, kstand(0, kx_, kz_), kz_)
+    for i, deg in enumerate((75, 235)):
+        x, z = pol(math.radians(deg), 116)
+        put(f"zweefplatform_{i + 1}", x, kstand(0, x, z), z)
+    zx, zz = pol(math.radians(235), 108)
+    put("kuiken_6", zx, kstand(0, zx, zz), zz)
+    ux_, uz_ = pol(0.62, 80)
+    put("uitkijk_kroon", ux_, kstand(1, ux_, uz_) + 14, uz_)
+    kampen = P.kampen()
+    x, z, y, seed, lab = kampen[3]
+    put("kampvuur_kruin_1", x, y, z)
+    x, z = pol(4.0, 66)
+    put("kampvuur_kruin_2", x, kstand(1, x, z), z)
+    x, z = pol(2.0, 44)
+    put("kampvuur_kruin_3", x, kstand(2, x, z), z)
+    a4, L4 = B.trap_landing(4)
+    x, z = pol(a4 + 0.25, 38)
+    put("kampvuur_kruin_nest", x, kstand(2, x, z), z)
+    x, z = pol(1.9, 118)
+    put("bloesemwaterval_top", x, kstand(0, x, z), z)
+    # ---------------------------------------------------------------- Takkenbanen (the big branches + 3 beekeeper villages)
+    dh = P.dorp_huizen()
+    zoem = [h for h in dh if h[0] == "Bijentak"]
+    rest = [h for h in dh if h[0] != "Bijentak"]
+    for (fn, h) in zip(("lusje", "herberg", "winkeltje"), zoem):
+        put(f"hangnest_{fn}", h[3], h[5] + 1, h[4])
+    for i, h in enumerate(rest[:6]):
+        put(f"hangnest_woning_{i + 1}", h[3], h[5] + 1, h[4])
+    for (tak, dorp) in P.DORPEN:
+        x, y, z = tak_punt(tak, 88)
+        key = {"Bijentak": "hangnest_plein", "Zuidwesttak": "raatweide_plein", "Molentak": "molenhoek_plein"}[tak]
+        put(key, x, y, z)
+    x, y, z = tak_punt("Bijentak", 75, 0.45)
+    put("kampvuur_hangnest", x, y, z)
+    x, y, z = tak_punt("Bijentak", 100, -0.4)
+    put("hangnest_stalpost", x, y, z)
+    x, y, z = tak_punt("Bijentak", 46)
+    put("hangnest_ladder_top", x, y, z)
+    for key, tak, s_, zij in (("kampvuur_tak_west_30", "Westtak", 56, 0.45), ("kampvuur_tak_west_62", "Westtak", 96, -0.45),
+                              ("kampvuur_tak_noordwest_60", "Molentak", 76, 0.5),
+                              ("kampvuur_tak_zuidwest_45", "Zuidwesttak", 76, 0.5)):
+        x, y, z = tak_punt(tak, s_, zij)
+        put(key, x, y, z)
+    x, y, z = tak_punt("Westtak", 72, 0.4)
+    put("pluimpost_westtak", x, y, z)
+    for i, (tak, s_) in enumerate((("Westtak", 108), ("Noordtak", 96), ("Zuidwesttak", 128))):
+        x, y, z = tak_punt(tak, s_)
+        put(f"kaasschutterpost_{i + 1}", x, y, z)
+    x, y, z = tak_punt("Westtak", 146)
+    put("uitkijk_takpunt", x, y, z)
+    for key, tak in (("valbrug", "Westtak"), ("lianenbrug", "Noordtak")):
+        x, y, z = tak_punt(tak, 50)
+        put(key, x, y, z)
+    # ---------------------------------------------------------------- Kaaszeppelinwerf (dungeon 1): its own island
+    px, pz = WF.poort_pos()
+    put("werf_ingang", px, 161, pz)
+    pa_ = WF.POORT_HOEK
+    put("werf_bord", px - math.sin(pa_) * 4, 161, pz + math.cos(pa_) * 4)
+    put("werf_vahoeg_altaar", px + math.sin(pa_) * 4, 161, pz - math.cos(pa_) * 4)
+    b0 = WF.brug_begin()
+    put("kabelbrug_begin", b0[0], HY + 1, b0[2])
+    put("kabelbrug_eind", px + math.cos(pa_) * 9, 161, pz + math.sin(pa_) * 9)
+    for d, aid in zip(WF.DOKKEN, ("arena_taleggio", "arena_brokkel", "arena_roquefort")):
+        x, y, z = WF.dok_pos(d)
+        put(aid, x, y, z)
+    x, y, z = WF.dok_pos(WF.DOKKEN[1])
+    put("arena_brokkel_kanon_1", x - 8, y, z + 3)
+    put("arena_brokkel_kanon_2", x + 8, y, z + 3)
+    x, y, z = WF.dok_pos(WF.DOKKEN[2])
+    a3 = math.atan2(WF.C[1] - z, WF.C[0] - x)     # towards the island centre (the boss gate side)
+    put("roquefort_kajuit", x + 7 * math.cos(a3 + 1.9), y, z + 7 * math.sin(a3 + 1.9))
+    put("hartsplinter_3", x + 8 * math.cos(a3 + 2.1), y, z + 8 * math.sin(a3 + 2.1))
+    put("grauwe_brief_1", x + 8 * math.cos(a3 + 1.7), y, z + 8 * math.sin(a3 + 1.7))
+    put("roquefort_wrak", x + 17 * math.cos(a3 - 1.4), y - 3, z + 17 * math.sin(a3 - 1.4))
+    for key, (deg, r) in (("werf_kamer_touwwerk", (160, 20)), ("werf_kamer_gieterij", (250, 22)),
+                          ("werf_kamer_bewapening", (350, 17))):
+        x, z = WF.C[0] + r * math.cos(math.radians(deg)), WF.C[1] + r * math.sin(math.radians(deg))
+        put(key, x, werf_stand(x, z), z)
+    bx_, by_, bz_ = PP["werf_kamer_bewapening"]
+    PP["werf_loods_poort"] = [bx_, by_, bz_ + 9]
+    for key, d in (("werf_trap_ab", WF.DOKKEN[1]), ("werf_trap_bc", WF.DOKKEN[2])):
+        x, y, z = WF.dok_pos(d)
+        g = math.atan2(WF.C[1] - z, WF.C[0] - x)
+        fx, fz = x + 10 * math.cos(g), z + 10 * math.sin(g)
+        put(key, fx, werf_stand(fx, fz), fz)
+    # ---------------------------------------------------------------- Wortelvelden (the ground of the island)
     mx, mz = MOSVOET
-    g = stand_y_grond(mx, mz)
-    put("mosvoet_plein", mx, g, mz + 4)
-    put("kampvuur_mosvoet", mx - 6, g, mz - 6)
+    put("mosvoet_plein", mx, gstand(mx, mz), mz)
+    put("kampvuur_mosvoet", mx - 5, gstand(mx - 5, mz + 5), mz + 5)
     for i, f in enumerate(("burgemeester", "theehuis", "winkel", "stalpost", "waterrad", "woning")):
-        dx, dz = ((-38, 10), (-30, -26), (34, -22), (40, 18), (20, 26), (-18, 38))[i]
-        put(f"mosvoet_{f}", mx + dx, stand_y_grond(mx + dx, mz + dz), mz + dz)
-    for i, (a, r) in enumerate(POSTEN):
-        x, z = polar(a, r)
-        put(f"pluimpost_{i + 1}", x, stand_y_grond(x, z), z + 6)
+        a = i * math.pi / 3 + 0.3
+        x, z = mx + 17 * math.cos(a), mz + 17 * math.sin(a)
+        put(f"mosvoet_{f}", x - 5 * math.cos(a), gstand(x - 5 * math.cos(a), z - 5 * math.sin(a)), z - 5 * math.sin(a))
+    for i, deg in enumerate((300, 210, 125, 60)):
+        x, z = pol(math.radians(deg), WORTELWEG_R + 4)
+        put(f"pluimpost_{i + 1}", x, gstand(x, z), z)
     for k in range(6):
-        a = k * 60 + 10
-        x, z = polar(a, WORTELWEG_R + 10)
-        put(f"kampvuur_wortelweg_{k + 1}", x, stand_y_grond(x, z), z)
-    x, z = WORTELGEWELF
-    put("wortelgewelf", x, stand_y_grond(x, z), z)
-    put("kampvuur_wortelgewelf", x + 3, stand_y_grond(x + 3, z + 3), z + 3)
-    put("uitkijk_wortelgewelf", x + 2, 114, z + 2)
-    x, z = WORTELPOORT
-    put("wortelpoort", x, stand_y_grond(x, z + 14), z + 14)
-    for i, (x, z) in enumerate(SCHIMMEL_KETELS):
-        put(f"schimmelketel_{i + 1}", x + 9, stand_y_grond(x + 9, z), z)
-    put("lichtkeverbos", 0, stand_y_grond(0, -460), -460)
-    put("nachtgeheim_zadel", 60, stand_y_grond(60, -520), -520)
-    put("paddenbloesemdal", -360, stand_y_grond(-360, 360), 360)
-    put("honingmoeras", 380, stand_y_grond(380, 300), 300)
-    put("schimmelboerderij", -300, stand_y_grond(-300, -300), -300)
-    put("tijdrit_start", *(lambda p: (p[0], stand_y_grond(*p), p[1] + 3))(polar(270, 520)))
-
-    # ---- Wortelduister + Hart van de Boom (dungeon 2)
-    L = boom._spline(WORTELGANG, 10)
-    for k, i in enumerate((len(L) // 3, 2 * len(L) // 3)):
-        x, y, z = L[i]
-        put(f"kampvuur_wortelgang_{k + 1}", x, y - 8, z)
-    for k, i in enumerate(range(0, len(L), max(1, len(L) // 8))):
-        x, y, z = L[i]
-        put(f"grotlantaarn_{k + 1}", x + 6, y - 8, z)
-    cx, fy, cz, r, h = HARTSLAG
-    put("hartslag_zaal", 0, fy + 1, 30)
-    put("kampvuur_hartslag", 30, fy + 1, 20)
-    put("hart_poort", 0, fy + 1, -50)
+        x, z = pol(math.radians(k * 60 + 30), WORTELWEG_R + 5)
+        put(f"kampvuur_wortelweg_{k + 1}", x, gstand(x, z), z)
+    for i, (x, z, y, seed, lab) in enumerate(kampen[:3]):
+        PP.setdefault("kamp", {})[str(i + 1)] = W(x + 3, gstand(x + 3, z + 3), z + 3)
+    ru = P.ruines()
+    x, z, y, R, seed = ru[0]
+    put("wortelgewelf", x + R + 3, gstand(x + R + 3, z), z)
+    put("kampvuur_wortelgewelf", x + R + 6, gstand(x + R + 6, z + 4), z + 4)
+    put("uitkijk_wortelgewelf", x, gstand(x, z) + 16, z)
+    for i, (deg, r) in enumerate(((205, 150), (195, 168), (215, 172), (185, 155))):
+        x, z = pol(math.radians(deg), r)
+        put(f"schimmelketel_{i + 1}", x + 4, gstand(x + 4, z), z)
+    for key, (deg, r) in (("lichtkeverbos", (270, 150)), ("nachtgeheim_zadel", (250, 190)), ("paddenbloesemdal", (95, 160)),
+                          ("honingmoeras", (340, 165)), ("schimmelboerderij", (200, 160))):
+        x, z = pol(math.radians(deg), r)
+        put(key, x, gstand(x, z), z)
+    # ---------------------------------------------------------------- Wortelduister + Hart van de Boom (dungeon 2)
+    x, z = B.POORT
+    put("wortelpoort", x + 14, gstand(x + 14, z), z)
+    Lg = B.gang_lijn()
+    for k, i in enumerate((len(Lg) // 3, 2 * len(Lg) // 3)):
+        x, y, z = Lg[i]
+        put(f"kampvuur_wortelgang_{k + 1}", x, gang_stand(y), z + 3)
+    for k, i in enumerate(range(2, len(Lg), max(1, len(Lg) // 9))):
+        if k >= 9:
+            break
+        x, y, z = Lg[i]
+        put(f"grotlantaarn_{k + 1}", x, gang_stand(y), z - 3.5)
+    put("hartslag_zaal", 52, hal_stand(52, 0), 0)
+    put("kampvuur_hartslag", 60, hal_stand(60, -14), -14)
+    hx, hz = HART_POORT
+    put("hart_poort", hx + 3, hal_stand(hx + 3, hz), hz)
     for k in range(4):
-        a = k * math.pi / 2 + math.pi / 4 - math.pi / 2
-        put(f"hart_grotlantaarn_{k + 1}", 8 * math.cos(a), fy + 1, -50 + 6 * math.sin(a))
-    put("hart_bord", 6, fy + 1, -46)
-    put("hart_vahoeg_altaar", -6, fy + 1, -46)
-    for (naam, a_deg, kr) in HART_KAMERS:
-        x, z = polar(a_deg, HART_RING_R)
+        a = k * math.pi / 2 + math.pi / 4
+        x, z = hx + 4 + 5 * math.cos(a), hz + 5 * math.sin(a)
+        put(f"hart_grotlantaarn_{k + 1}", x, hal_stand(x, z), z)
+    put("hart_bord", hx + 6, hal_stand(hx + 6, hz + 5), hz + 5)
+    put("hart_vahoeg_altaar", hx + 6, hal_stand(hx + 6, hz - 5), hz - 5)
+    ax, az = pol(math.radians(180), HART_R - 4)
+    put("hart_kamer_aderloop", ax, HART_VLOER + 1, az)
+    for (naam, deg, kr) in HART_KAMERS:
+        x, z = pol(math.radians(deg), HART_R)
         key = f"arena_{naam}" if naam in ("wortelwurger", "nestwachter", "baron_bleu") else f"hart_kamer_{naam}"
         put(key, x, HART_VLOER + 1, z)
-    put("hart_nestkamer", EI[0] + 6, EI[1] - 6, EI[2])
-    put("ei", EI[0], EI[1] - 6, EI[2])
-    put("hartsplinter_5", 95 * math.cos(math.radians(45)) + 4, HART_VLOER + 1, 95 * math.sin(math.radians(45)))
-
-    # ---- wind columns (bottom stand spot; the top landing)
-    for (wid, x, z, y0, y1, rad, lx, lz) in windkolommen():
-        P[f"wind_{wid}_onder"] = W(x, y0, z)
-        P[f"wind_{wid}_boven"] = W(lx, y1, lz)
-
-    # ---- secrets
-    knuffels = [(-300, 70, "zweef"), (200, -120, "kruin"), (-540, 470, "tak_onder"), (-610, -540, "werf"), (120, 300, "kruin"),
-                (300, 360, "moeras"), (0, -540, "lichtkever"), (-430, 420, "padden"), (60, 80, "schorsstad"), (-60, 120, "duister")]
-    for i, (x, z, waar) in enumerate(knuffels):
-        if waar in ("kruin", "zweef"):
-            y = int(round(kruin(x, z))) + 1
-        elif waar == "tak_onder":
-            y = int(boom.tak_top("zuidwest", x, z)) - 30
-        elif waar == "werf":
-            y = WERF[1] + 1
-        elif waar == "schorsstad":
-            x, z, y = (R_BINNEN - 4) * math.cos(2.2), (R_BINNEN - 4) * math.sin(2.2), RINGEN[5] + 1
-        elif waar == "duister":
-            y = 24
-        else:
-            y = stand_y_grond(x, z)
-        put(f"geheim_knuffel_{i + 1}", x, y, z)
-    put("geheim_schat_1", -515, int(boom.tak_top("zuidwest", -515, 465)) - 30, 465)      # under the ZW branch, glide only
-    put("geheim_schat_2", 0, NEST_Y + 6, -78)
-    put("geheim_schat_3", (R_BINNEN - 3) * math.cos(4.0), RINGEN[6] + 1, (R_BINNEN - 3) * math.sin(4.0))
-    put("geheim_schat_4", -140, 22, 180)
-    put("geheim_schat_5", 410, stand_y_grond(410, 270), 270)
-    for i, (x, y, z) in enumerate(((452, DEK_Y + 1, -12), (600, 226, 30), (560, 196, 8), (446, 239, 12), (WONEN[0] + 3, WOON_CEL[1] + 1, 2))):
-        put(f"imker_aanwijzing_{i + 1}", x, y, z)
-
-    # ---- requests (POI_VERZOEKEN_Z3.md)
-    for i, (x, z, rr) in enumerate(VIJVERS):
-        a = 0.8 + i * 1.3
-        kx, kz = x + (rr + 9) * math.cos(a), z + (rr + 9) * math.sin(a)
-        put(f"kuiken_{i + 1}", kx, int(round(kruin(kx, kz))) + 1, kz)
-    zx, zz = ZWEEFPLATFORMS[1]
-    put("kuiken_6", zx - 14, int(round(kruin(zx - 14, zz - 6))) + 1, zz - 6)
-    kx, kz = KALE_KRUIN
-    put("arena_kruinroofvogel_deur", kx + 30, int(round(kruin(kx + 30, kz))) + 1, kz)
-    put("arena_piepvel_deur", 4, PELSZAAL_Y + 1, 13)
-    cx, cy, cz = WERF
-    put("roquefort_wrak", cx, WERF_C - 3 + 1, cz - 17)
-    put("werf_loods_poort", cx - 28, WERF_B + 1, cz + 16 + 8)
     for naam in ("schimmelkwekerij", "ringenzaal"):
-        a_deg = [k for k in HART_KAMERS if k[0] == naam][0][1]
-        x, z = polar(a_deg - 9, HART_RING_R)
-        put(f"hart_{'kwekerij' if naam == 'schimmelkwekerij' else naam}_poort", x, HART_VLOER + 1, z)
-    for i, (dx, dz) in enumerate(((11, 5), (-11, 5), (0, 13), (11, -7), (-11, -7), (0, -14))):
-        put(f"nest_tak_{i + 1}", NEST[0] + dx, NEST_Y, NEST[1] + dz)
+        p, _ = hart_poort_van(naam)
+        put(f"hart_{'kwekerij' if naam == 'schimmelkwekerij' else naam}_poort", p[0], HART_VLOER + 1, p[1])
+    x, z = pol(math.radians(46), HART_R)
+    put("hartsplinter_5", x + 6, HART_VLOER + 1, z - 6)
+    put("ei", 0, B.HART[1] - B.HART[3] * 0.72 + 6, 0)
+    put("hart_nestkamer", 9, int(B.HART[1] - B.HART[3] * 0.72) + 1, 0)
+    # ---------------------------------------------------------------- wind columns
+    for (wid, x, z, y0, y1, rad, lx, lz) in windkolommen():
+        PP[f"wind_{wid}_onder"] = W(x, y0, z)
+        PP[f"wind_{wid}_boven"] = W(lx, y1, lz)
+    # ---------------------------------------------------------------- secrets
+    sec = [("kruin1", pol(math.radians(120), 92)), ("kruin2", pol(math.radians(200), 50)), ("tak", ("Molentak", 120)),
+           ("grond", pol(math.radians(140), 200)), ("kruin1", pol(math.radians(330), 118)), ("grond", pol(math.radians(10), 205)),
+           ("grond", pol(math.radians(265), 200)), ("hal", (30, -40)), ("schors", 3), ("duister", (-40, 30))]
+    for i, (waar, v) in enumerate(sec):
+        if waar.startswith("kruin"):
+            s = int(waar[-1]) - 1
+            x, z = v
+            y = kstand(s, x, z)
+        elif waar == "tak":
+            x, y, z = tak_punt(v[0], v[1], 0.3)
+        elif waar == "schors":
+            y0_, a, h = huizen[v]
+            x, y, z = (B.R_IN + 5.5) * math.cos(a), h + 1, (B.R_IN + 5.5) * math.sin(a)
+        elif waar in ("hal", "duister"):
+            x, z = v
+            y = hal_stand(x, z)
+        else:
+            x, z = v
+            y = gstand(x, z)
+        put(f"geheim_knuffel_{i + 1}", x, y, z)
+    x, y, z = tak_punt("Zuidwesttak", 150)
+    put("geheim_schat_1", x, y, z)
+    put("geheim_schat_2", 4, NEST_STAND, -16)
+    y0_, a, h = huizen[-2]
+    put("geheim_schat_3", (B.R_IN + 5.5) * math.cos(a), h + 1, (B.R_IN + 5.5) * math.sin(a))
+    put("geheim_schat_4", -60, hal_stand(-60, 10), 10)
+    x, z = pol(math.radians(355), 195)
+    put("geheim_schat_5", x, gstand(x, z), z)
+    rt = P.CELLEN["raattros"]
+    rc = pol(math.radians(rt[0]), 55)
+    pts = [(cx + 10, HY + 1, cz - 4), htak_punt("Kruinlifttak", 104), htak_punt("Lifttak", 70),
+           (pol(B.TH_M + 0.9, 50)[0], HY + 1, pol(B.TH_M + 0.9, 50)[1]), (rc[0] + 2, HY - 2 - rt[2] + 1, rc[1] + 2)]
+    for i, (x, y, z) in enumerate(pts):
+        put(f"imker_aanwijzing_{i + 1}", x, y, z)
+    put("landmark_hoogvads_richting", 700, 260, 0)
+    return PP
 
-    # ---- Keizer flash + landmarks
-    put("flash_f2_kijkpunt", KAPEL_CEL[0], KAPEL_CEL[1] + 1, KAPEL_CEL[2] + 4)
-    put("landmark_hoogvads_richting", -700, 260, 0)
-    return P
+
+# ================================================================================================ helpers for spots
+def poort_uit_r(a):
+    """The radius where a ground gate tunnel comes out (the trunk foot ends; the ground is open)."""
+    for r in np.arange(30, 90, 1.0):
+        ro = float(B.r_stam(B.VOET - 2, np.array([a - (B.VOET - 2) / 160.0]))[0])
+        if r > ro + 4:
+            return float(r)
+    return 70.0
+
+
+def pelszaal_trap_hoek():
+    """The angle of the Pelszaal stair (away from the riding-spiral gates and the stair foot)."""
+    a0, _ = B.trap_landing(0)
+    return a0 + math.pi * 0.8
+
+
+def werf_stand(x, z):
+    return int(math.floor(WF.werf_top(x, z))) + 1
+
+
+def gang_stand(yc):
+    """Stand y on the floor of the Wortelpoort tunnel (centre line at yc)."""
+    return int(math.floor(yc - 5.5 + 1.0)) + 1
+
+
+def hal_stand(x, z):
+    """Stand y on the floor of the Wortelduister hall (koepel without noise; the map snaps it)."""
+    r = math.hypot(x, z)
+    q = 0.95 - (r / 86.0) ** 2
+    if q <= 0:
+        return 40
+    return int(math.floor(37 - 20 * math.sqrt(q))) + 2
+
+
+def hart_poort_van(naam):
+    """The gate on the z-running corridor stub after the room 'naam' (bazen fills a 3x4 plane along x there)."""
+    i = [k[0] for k in HART_KAMERS].index(naam)
+    deg, kr = HART_KAMERS[i][1], HART_KAMERS[i][2]
+    x, z = pol(math.radians(deg), HART_R)
+    zs = -1 if math.sin(math.radians(deg)) > 0 else 1        # towards the next room (clockwise -> smaller angle)
+    return (x, z + zs * (kr + 3)), zs
 
 
 # ================================================================================================ areas (y-ranges)
-# (id, shape, params, y0, y1, minLv, maxLv, town). shape "doos": (x1, z1, x2, z2) world; "cilinder": (cx, cz, r0, r1) world,
-# r0 = inner radius (ring) . First match wins (order = priority).
+# (id, shape, params, y0, y1, minLv, maxLv, town). shape "doos": (x1, z1, x2, z2) world; "cilinder": (cx, cz, r0, r1) world.
 def gebieden():
     T = (TX_STAM, 0)
-    hx0, hx1 = sorted((wx(665), wx(285)))
-    werf = sorted((wx(-680), wx(-520)))
+    wc = (TX_STAM + int(WF.C[0]), int(WF.C[1]))
     return [
-        ("z3_honingtak", "doos", (hx0, -100, hx1, 110), 150, 290, 30, 50, True),
-        ("z3_zeppelinwerf", "doos", (werf[0], -660, werf[1], -480), 95, 185, 38, 40, False),
-        ("z3_hart", "cilinder", (T[0], T[1], 0, 120), 40, 74, 49, 50, False),
-        ("z3_schorsstad", "cilinder", (T[0], T[1], 0, 76), 75, 199, 40, 43, False),
-        ("z3_stamspiraal", "cilinder", (T[0], T[1], 76, 132), 66, 205, 40, 43, False),
-        ("z3_kruinzee", "cilinder", (T[0], T[1], 0, 400), 200, 320, 30, 34, False),
-        ("z3_takkenbanen", "cilinder", (T[0], T[1], 0, 820), 120, 320, 34, 38, False),
-        ("z3_wortelduister", "cilinder", (T[0], T[1], 0, 470), 0, 61, 46, 49, False),
-        ("z3_wortelvelden", "cilinder", (T[0], T[1], 0, 900), 0, 320, 43, 46, False),
+        ("z3_zeppelinwerf", "cilinder", (wc[0], wc[1], 0, 95), 60, 290, 38, 40, False),
+        ("z3_hart", "cilinder", (T[0], T[1], 76, 150), 14, 52, 49, 50, False),
+        ("z3_wortelduister", "cilinder", (T[0], T[1], 0, 160), 0, 64, 46, 49, False),
+        ("z3_schorsstad", "cilinder", (T[0], T[1], 0, 26), 55, 165, 40, 43, False),
+        ("z3_honingtak", "cilinder", (T[0], T[1], 0, 160), 145, 200, 30, 50, True),
+        ("z3_stamspiraal", "cilinder", (T[0], T[1], 26, 64), 75, 232, 40, 43, False),
+        ("z3_kruinzee", "cilinder", (T[0], T[1], 0, 200), 212, 320, 30, 34, False),
+        ("z3_takkenbanen", "cilinder", (T[0], T[1], 0, 260), 140, 320, 34, 38, False),
+        ("z3_wortelvelden", "cilinder", (T[0], T[1], 0, 600), 0, 320, 43, 46, False),
     ]
 
 
-# mob zones (wezens slice): (id, shape, params, y0, y1, minLv, maxLv)
 def mobzones():
     T = (TX_STAM, 0)
     return [
-        ("z3_kruinzee_zeppelin", "cilinder", (wx(-190), -200, 0, 60), 230, 300, 31, 34),
-        ("z3_kruinzee_noord", "cilinder", (T[0], -150, 0, 160), 205, 300, 30, 33),
-        ("z3_kruinzee_zuid", "cilinder", (T[0], 140, 0, 170), 205, 300, 30, 34),
-        ("z3_takkenbanen_west", "doos", (wx(-420), -40, wx(-700), 110), 120, 230, 34, 37),
-        ("z3_takkenbanen_noordwest", "doos", (wx(-260), -560, wx(-560), -250), 120, 230, 35, 38),
-        ("z3_takkenbanen_zuidwest", "doos", (wx(-260), 240, wx(-560), 520), 120, 230, 34, 37),
-        ("z3_schorsstad_ringen", "cilinder", (T[0], T[1], 8, 66), 76, 182, 40, 43),
-        ("z3_wortelvelden_lichtkeverbos", "doos", (wx(160), -640, wx(-160), -330), 60, 140, 43, 45),
-        ("z3_wortelvelden_schimmelboerderij", "doos", (wx(-180), -420, wx(-420), -180), 60, 140, 44, 46),
-        ("z3_wortelvelden_paddenbloesemdal", "doos", (wx(-180), 200, wx(-520), 520), 60, 140, 43, 45),
-        ("z3_wortelvelden_honingmoeras", "doos", (wx(520), 150, wx(160), 520), 60, 140, 44, 46),
-        ("z3_wortelduister_gang", "cilinder", (T[0], 160, 0, 140), 10, 62, 46, 47),
-        ("z3_wortelduister_grotten", "cilinder", (T[0], T[1], 70, 450), 6, 60, 47, 49),
+        ("z3_kruinzee_zeppelin", "cilinder", (TX_STAM + 55, -95, 0, 34), 220, 250, 31, 34),
+        ("z3_kruinzee_noord", "doos", (TX_STAM - 130, -130, TX_STAM + 130, -10), 222, 300, 30, 33),
+        ("z3_kruinzee_zuid", "doos", (TX_STAM - 130, 10, TX_STAM + 130, 130), 222, 300, 30, 34),
+        ("z3_takkenbanen_west", "doos", (TX_STAM - 160, -50, TX_STAM - 50, 50), 170, 222, 34, 37),
+        ("z3_takkenbanen_noordwest", "doos", (TX_STAM - 60, -160, TX_STAM + 150, -50), 170, 222, 35, 38),
+        ("z3_takkenbanen_zuidwest", "doos", (TX_STAM - 140, 50, TX_STAM + 40, 160), 170, 222, 34, 37),
+        ("z3_schorsstad_ringen", "cilinder", (T[0], T[1], 0, 24), 172, 228, 40, 43),
+        ("z3_wortelvelden_lichtkeverbos", "doos", (TX_STAM - 80, -215, TX_STAM + 80, -110), 50, 110, 43, 45),
+        ("z3_wortelvelden_schimmelboerderij", "doos", (TX_STAM - 215, -80, TX_STAM - 110, 80), 50, 110, 44, 46),
+        ("z3_wortelvelden_paddenbloesemdal", "doos", (TX_STAM - 80, 110, TX_STAM + 80, 215), 50, 110, 43, 45),
+        ("z3_wortelvelden_honingmoeras", "doos", (TX_STAM + 110, -80, TX_STAM + 215, 40), 50, 110, 44, 46),
+        ("z3_wortelduister_gang", "doos", (TX_STAM + 40, -12, TX_STAM + 150, 16), 18, 72, 46, 47),
+        ("z3_wortelduister_grotten", "cilinder", (T[0], T[1], 24, 86), 14, 58, 47, 49),
     ]
 
 
-# the riding routes (polylines of world x, z): no wild spawns within ~5 blocks
 def paden():
+    """The routes (polylines of world x, z): no wild spawns within ~5 blocks of them."""
     out = {}
-    pts = [kruinring_punt(a) for a in range(0, 361, 15)]
-    out["kruinring"] = [(wx(x), int(z)) for x, z in pts]
-    for naam in ("west", "noordwest", "zuidwest"):
-        L, rr = boom.tak_lijn(naam)
-        out[f"takbaan_{naam}"] = [(wx(L[i, 0]), int(L[i, 2])) for i in range(0, len(L), 6)]
-    out["wortelweg"] = [(wx(x), int(z)) for x, z in (polar(a, WORTELWEG_R) for a in range(0, 361, 10))]
-    L = boom._spline(WORTELGANG, 10)
-    out["wortelgang"] = [(wx(L[i, 0]), int(L[i, 2])) for i in range(0, len(L), 4)]
+    pts = []
+    for k in range(6):
+        for deg in range(0, 360, 20):
+            th = math.radians(deg)
+            lev = B.rij_lev(th, k)
+            if lev <= B.RIJ["eind"]:
+                x, _, z = rij_punt_lev(k, th, 0.5)
+                pts.append((TX_STAM + int(x), int(z)))
+    out["rijpad"] = pts[::2]
+    for tak in ("Bijentak", "Zuidwesttak", "Westtak", "Molentak", "Noordtak"):
+        L, rr = B.tak_van(tak)
+        out[f"takbaan_{tak.lower()}"] = [(TX_STAM + int(L[i, 0]), int(L[i, 2])) for i in range(0, len(L), 6)]
+    out["wortelweg"] = [(TX_STAM + int(x), int(z)) for x, z in (pol(math.radians(a), WORTELWEG_R) for a in range(0, 361, 10))]
+    Lg = B.gang_lijn()
+    out["wortelgang"] = [(TX_STAM + int(Lg[i, 0]), int(Lg[i, 2])) for i in range(0, len(Lg), 4)]
+    b0 = WF.brug_begin()
+    px, pz = WF.poort_pos()
+    out["kabelbrug"] = [(TX_STAM + int(b0[0]), int(b0[2])), (TX_STAM + int(px), int(pz))]
+    return out
+
+
+def liften(alle):
+    """(id, top stand spot, bottom stand spot) for Z3Liften."""
+    l = [(f"lift_{k}", alle[f"lift_{k}_boven"], alle[f"lift_{k}_onder"]) for k in ("cafe", "kapel", "raattros")]
+    l.append(("honinglift", alle["honinglift_boven"], alle["honinglift_onder"]))
+    l.append(("honinglift_kruin", alle["honinglift_kruin_boven"], alle["honinglift_kruin_onder"]))
+    for k in (1, 2):
+        l.append((f"schorslift_{k}", alle[f"schorslift_{k}_boven"], alle[f"schorslift_{k}_onder"]))
+    return l
+
+
+# ================================================================================================ life lists (code side)
+def huis_daken():
+    """(x, z, top y of the roof, chimney x, chimney z) for every house with a chimney (rel)."""
+    out = []
+    for fn, (hx, hz, deur, R, waar, soort) in ring_functies():
+        top = HY + 1 + {0: int(5.2 * 1.9), 1: 7 + 6, 2: 5 + 5}[soort]
+        dx, dz = math.cos(deur), math.sin(deur)
+        out.append((hx, hz, top, hx - dx * 2, hz - dz * 2))
+    for h in P.dorp_huizen():
+        cx, cz, yt, deur = h[3], h[4], h[5], h[6]
+        out.append((cx, cz, yt + 1 + (9 if h[2] != 1 else 13), cx - math.cos(deur) * 2, cz - math.sin(deur) * 2))
+    mx, mz = MOSVOET
+    for i in range(6):
+        a = i * math.pi / 3 + 0.3
+        x, z = mx + 17 * math.cos(a), mz + 17 * math.sin(a)
+        out.append((x, z, gstand(x, z) + 8, x + 1.5 * math.cos(a), z + 1.5 * math.sin(a)))
+    return out
+
+
+def leven_lijsten():
+    out = {"SCHOORSTENEN": [], "BIJENKORVEN": [], "LICHTJES": [], "BRUGGEN": []}
+    for (x, z, top, sx, sz) in huis_daken():
+        out["SCHOORSTENEN"].append(W(sx, top + 2, sz))
+    for h in P.dorp_huizen():
+        x, z = h[10]
+        n, zij, d = h[8], h[9], h[11]
+        out["BIJENKORVEN"].append(W(x - n[0] * zij * 4, h[5] + 2, z - n[2] * zij * 4))
+        out["BRUGGEN"].append(W((h[7][0] + h[3]) / 2, h[5] + 1, (h[7][1] + h[4]) / 2))
+    for (naam, ad, lengte) in P.HTAKKEN:
+        x, y, z = htak_punt(naam, 70)
+        out["BRUGGEN"].append(W(x, y, z))
+    for k in range(0, 40, 2):
+        a = 2 * math.pi * k / 40
+        ra = float(P.dek_rand(np.array([a]))[0]) - 0.6
+        out["LICHTJES"].append(W(ra * math.cos(a), HY + 5, ra * math.sin(a)))
+    for i, y in enumerate(P.TOREN_RINGEN):
+        out["LICHTJES"].append(W(4.8, y - 1, 0))
+    b0 = WF.brug_begin()
+    px, pz = WF.poort_pos()
+    out["BRUGGEN"].append(W((b0[0] + px) / 2, 161, (b0[2] + pz) / 2))
+    for (x, z, y, seed, lab) in P.kampen():
+        out["LICHTJES"].append(W(x + 7, (y or gstand(x, z)) + 4, z - 6))
     return out
