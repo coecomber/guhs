@@ -22,7 +22,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  */
 public final class Reiskaart {
     /** All places in map order. */
-    public static final List<String> PLEKKEN = List.of("knuffelkamp", "zwamzoet", "kandijkom", "schemerwortel", "zone4");
+    public static final List<String> PLEKKEN = List.of("knuffelkamp", "zwamzoet", "kandijkom", "schemerwortel", "lampionkust");   // T-Z4VERHAAL: zone4 -> lampionkust
     /** States: open (click to fly), you are here, not discovered yet (grey "?", reason), a teaser for later (grey "?"). */
     public static final int OPEN = 0, HIER = 1, ONBEKEND = 2, TEASER = 3;
     /** How long after opening the map a choice is accepted (ticks): the map can only be used at an airship NPC. */
@@ -37,6 +37,9 @@ public final class Reiskaart {
         if (!Vadsrijk.in(p)) {
             return "";   // (g-int: outside the dimension you are at none of them; a gametest far at z -7M looked like zone 2)
         }
+        if (nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4VerhaalPlekken.zone4(p.getX(), p.getY(), p.getZ())) {
+            return "lampionkust";   // T-Z4VERHAAL
+        }
         if (nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(p.getX(), p.getZ())) {
             return "schemerwortel";   // [z3-wereld]
         }
@@ -49,7 +52,8 @@ public final class Reiskaart {
                 && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.bereikt(p)) {   // [z3-wereld] a real place once zone 2 is done
             return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
         }
-        if (id.equals("zone4")) {
+        if (id.equals("lampionkust") && !nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcApi.zone3Klaar(p)
+                && !nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4Verhaal.bereikt(p)) {   // T-Z4VERHAAL: a real place once zone 3 is done
             return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
         }
         String slot = QuestMotor.reisSlot(p, id);

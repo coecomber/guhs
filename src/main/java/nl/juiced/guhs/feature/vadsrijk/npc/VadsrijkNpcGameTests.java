@@ -232,7 +232,7 @@ public class VadsrijkNpcGameTests {
             helper.assertTrue(Reiskaart.plek(p, "knuffelkamp").staat() != Reiskaart.ONBEKEND, "the camp is always open");
             helper.assertTrue(Reiskaart.plek(p, "zwamzoet").staat() == Reiskaart.ONBEKEND && Reiskaart.plek(p, "kandijkom").staat() == Reiskaart.ONBEKEND,
                     "Zwamzoet and Kandijkom not discovered yet");
-            helper.assertTrue(Reiskaart.plek(p, "schemerwortel").staat() == Reiskaart.TEASER && Reiskaart.plek(p, "zone4").staat() == Reiskaart.TEASER,
+            helper.assertTrue(Reiskaart.plek(p, "schemerwortel").staat() == Reiskaart.TEASER && Reiskaart.plek(p, "lampionkust").staat() == Reiskaart.TEASER,
                     "zone 3 and 4 are teasers");
             Reiskaart.kiesVoorTest(p, "zwamzoet");
             helper.assertTrue(gevlogen.isEmpty(), "an undiscovered place does not fly");

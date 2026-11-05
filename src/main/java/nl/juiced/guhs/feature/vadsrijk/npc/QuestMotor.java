@@ -351,7 +351,8 @@ public final class QuestMotor {
         List<String> l = new ArrayList<>();
         for (String naar : REIZEN.getOrDefault(npc, List.of())) {
             if ((!naar.equals("kandijkom") || NpcApi.zone1Klaar(p))
-                    && (!naar.equals("schemerwortel") || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p))) {   // [z3-wereld]
+                    && (!naar.equals("schemerwortel") || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p))   // [z3-wereld]
+                    && (!naar.equals("lampionkust") || nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcApi.zone3Klaar(p))) {   // T-Z4VERHAAL
                 l.add(naar);
             }
         }
@@ -367,6 +368,7 @@ public final class QuestMotor {
                     : !NpcApi.zone1Klaar(p) ? "vadsrijk.npc.reis.slot.kandijkom_verhaal"
                     : Spelers.level(p) < 20 ? "vadsrijk.npc.reis.slot.kandijkom_level" : null;
             case "schemerwortel" -> nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.slot(p);   // [z3-wereld] zone2_klaar + lv 30
+            case "lampionkust" -> nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4Verhaal.slot(p);   // T-Z4VERHAAL zone3_klaar + lv 50
             default -> null;
         };
     }
@@ -406,6 +408,7 @@ public final class QuestMotor {
                 doeActie(p, "z2_vlieg:kandijkom", null);
             }
             case "schemerwortel" -> doeActie(p, "z3_vlieg:honingtak", null);   // [z3-wereld] Z3Reizen.naarHoningtak
+            case "lampionkust" -> doeActie(p, "z4_vlieg:lampionhaven", null);   // T-Z4VERHAAL Z4Verhaal.vlieg
             case "zwamzoet" -> {
                 if (van.equals("z2_kapitein") || QuestStap.zone2(p.getZ())) {
                     doeActie(p, "z2_vlieg:haven", null);
