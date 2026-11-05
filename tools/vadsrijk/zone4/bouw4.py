@@ -500,9 +500,13 @@ def pad(o, a, b, blok="guhs:knuffelklinkers", breed=2, grond=None):
     for i in range(len(y) - 2, -1, -1):
         y[i] = max(min(y[i], y[i + 1] + 1), y[i + 1] - 1)
     langs_z = abs(b[1] - a[1]) > abs(b[0] - a[0])
-    for (x, z), yy in zip(cel, y):
-        for j in range(breed):
+    kol = {}
+    for j in range(breed):                 # the main strip first; a column gets ONE height (corner cells overlap)
+        for (x, z), yy in zip(cel, y):
             px, pz = (x + j, z) if langs_z else (x, z + j)
+            kol.setdefault((px, pz), yy)
+    for (px, pz), yy in kol.items():
+        if True:
             gg = grond(px, pz)
             if gg < yy:
                 o.f(px, gg + 1, pz, px, yy - 1, pz, "minecraft:pink_terracotta")
