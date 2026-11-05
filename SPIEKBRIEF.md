@@ -1,6 +1,6 @@
 # Spiekbriefje: alles testen met commando's (zone 3 bovenaan, dan ronde 3, dan ronde 2)
 
-Start de testclient uit `guhs_vadsrijk\j-int\run-client.bat` (ronde 3: ronde 2 + melee + alle fixes van ronde 3) en maak een
+Start de testclient uit `guhs_vadsrijk\r-int\run-client.bat` (ronde 3 + zone 3 op de vernieuwde kaart) en maak een
 **nieuwe** wereld (de saves-map is leeg).
 
 Doorloop het van boven naar beneden: elk blok test één onderdeel. Copy-paste de commando's in de chat.
@@ -17,7 +17,7 @@ Handig tussendoor:
 
 ---
 
-# ZONE 3: DE SCHEMERWORTEL
+# ZONE 3: DE SCHEMERWORTEL (vernieuwde kaart)
 
 ## Z1. Erheen + de openingsfilm
 ```
@@ -25,109 +25,98 @@ Handig tussendoor:
 /guhs vadsrijk npc tp z2_kapitein
 ```
 - Klaarzetten = zone 2 klaar + level 30. Klik Kapitein Poolster: "De Schemerwortel" staat in de keuzes en op de reiskaart.
-- Kies hem: de **openingsfilm** (~26 s): schorswand, wolken, gouden kruin, wortels, twee ogen, "Hij leeft nog... maar niet lang meer."
-  Je landt bij de mast van Honingtak. Hoor je de **honingwals** (stadsmuziek)?
+  De stippellijnen op de reiskaart: Kandijkom → Schemerwortel (lijn B) en Schemerwortel → zone 4 (lijn C, nog "binnenkort").
+- Kies hem: de **openingsfilm** (~26 s). Kijk of de camera nergens in een tak of blad zit. Je landt op de **Weststeiger**.
+  Hoor je de **honingwals**?
 - Nog een keer: `/guhs vadsrijk z3wereld vlieg opnieuw`. Terug: de scheepsbel bij de mast.
-- Ook proberen: zonder klaarzetten in survival krijg je "nog niet" (zone 2 eerst / te laag level).
 
-## Z2. Honingtak + de Pluimguh-starter
+## Z2. Honingtak, de route en de Pluimguh-starter
 ```
 /guhs vadsrijk npc questlog
 ```
-- Volg de questvolger: Raatje (hq01), Wasja in de Nestkapel (hq02: de BAM met de kaaszeppelin), dan **hq03 De Pluimstal**.
-- Veertje: het chocobo-grapje, dan het keuzescherm met 3 Pluimguh-kleuren. X = opstijgen, rijd naar het zweefplatform, spring eraf
-  en **houd spatie** = zweven. Titel "Je eerste rit!".
-- Kijk rond: korfhuisjes (smid, juwelier, winkels, bank, jagershut, woningen) met echte interieurs, deuren vrij, touwbruggen.
+- Raatje staat op het **Bloesemplein** (zuidkant van het ringdek). hq02: de Nestkapel is een honingraatcel ONDER het dek (kapellift).
+  Daarna stuurt Raatje je OMLAAG: binnenhoflift (`schorslift_1`) en de noordpoort naar de **Pluimstal** op de grond.
+- hq03: Veertje rijdt voor je uit het **rijpad** op (4 rondjes), langs het Bloesemplein, door de bladtunnel naar kruin 1. Zweef van
+  het zweefplatform op de zuidrand van kruin 1 (spatie ingedrukt).
+- Kijk rond: korfhuisjes met interieurs, de 3 cellen onder het dek (café, Nestkapel, Raattrossen) met hun liftjes, het marktje.
 
-## Z3. Windkolommen en liften
+## Z3. Rijpad, binnentrap, windkolommen en liften
 ```
+/guhs vadsrijk z3wereld plek rijpad_start
+/guhs vadsrijk z3wereld plek trap_bordes_1
+/guhs vadsrijk z3wereld plek binnenhof
 /guhs vadsrijk z3wereld plek wind_honingtak_onder
-/guhs vadsrijk z3wereld plek wind_spiraal_kruin_onder
+/guhs vadsrijk z3wereld lift schorslift_2 op
 ```
-- Loop in de bloesemring: je zweeft omhoog naar het landingsdek. Op je Pluimguh: omhoog geduwd en op het dek gezet.
-- De spiraal-kolom: van boven in de Stamspiraal naar de kruin; de ladderschacht ernaast is de weg terug.
-- Honinglift: rechtsklik bij een liftstation. De grote Honinglift naar Mosvoet: pas na hq09 (of `/guhs vadsrijk z3wereld lift <id> op`).
+- **Het Rijpad** (gebiedsnaam, was "De Stamspiraal"): rij het van `rijpad_start` tot `rijpad_eind` (kruin 1) op je Pluimguh, zonder te
+  springen. Afslagen naar Honingtak en de takken, balkonnetjes om af te zweven.
+- **De binnentrap**: van `trap_bordes_1` (vloer 80) tot `trap_bordes_6` (nest). Halve stapjes, leuning, deuren naar Honingtak en elke kruin.
+- Windkolommen (zie TESTEN voor alle 7): erin lopen = omhoog naar het landingsdek.
+- Liften: honinglift (pas na hq09), honinglift_kruin, lift_cafe, lift_kapel, lift_raattros, schorslift_1, schorslift_2.
 
 ## Z4. Bazen
 ```
 /guhs vadsrijk level 50
-/guhs vadsrijk z3bazen tp kruinroofvogel
+/guhs vadsrijk z3bazen arenas
+/guhs vadsrijk z3bazen spawn kruinroofvogel
 /guhs vadsrijk z3bazen tp werf
-/guhs vadsrijk z3bazen tp piepvel
+/guhs vadsrijk z3bazen spawn piepvel
 /guhs vadsrijk z3bazen tp hart
 /guhs vadsrijk z3bazen vahoegnir
 ```
-- **Kruinroofvogel**: in fase 3 vliegt hij weg: stap op je rijdier en volg het roze spoor (alleen dan mag je in zijn arena rijden).
-- **Werf**: Taleggio (touwhendel), Brokkel (rechtsklik de dekkanonnen), Roquefort (dek kantelt, ballonnen, spring naar het wrak).
-- **Piepvel**: 4 kooien open, lantaarns aan, grote kooi. Dan **F1**: de lange grijze arm. Piepje als huisdier.
-- **Hart**: Wortelwurger, Nestwachter (wordt roze, buigt), Baron Bleu + Schimmelkolos.
-- **Vahoegnir**: splinters terugzetten (roze cirkel, 3 s), achter de nesttakken schuilen, het ei beschermen. Dan het ei komt uit,
-  de straal naar Hoogvads, en **F2** (de troonzaal). Werkt het verhaal mee? (hq14 klaar, `zone3_klaar`.)
-- **Vahoeg-modus**: `/guhs vadsrijk z3systemen zegel`, dan rechtsklik het altaar bij de werf-ingang of in de Hartslag-zaal.
+- **Kruinroofvogel**: de Kale Kruin (dode mesa aan kruin 1). Fase 3: op je rijdier het roze spoor om de boom volgen.
+- **Werf** (eigen eiland, kabelbrug): Taleggio (Dok 1), Brokkel (Dok 2, toren), Roquefort (Dok 3, masttoren; wrak + trap terug).
+- **Piepvel**: de Pelszaal ligt ONDER de Schorsstad-vloer (trap omlaag). Kijk naar zijn **cape** van muizenvelletjes (oortjes,
+  staartjes; per kooi een lap minder). F1: grijze mist + twee Mika-handlangers. Ga daarna op de Schorsstad-vloer erboven staan:
+  géén bazenbalk/intro.
+- **Hart**: een ring kamers om de Hartslag-zaal; Wortelwurger, Nestwachter, Baron Bleu in looprichting.
+- **Vahoegnir**: de **nieuwe draak** (roze, guh-kop, grote oren, 6 kleurstappen, paarse gloei-ogen, vleugels in een V in rust).
+  `vahoegnir waar` / `vahoegnir reset` als hij zoek is.
 
 ## Z4b. Bazen-testgids (m-bazen): elke zone-3-baas, in kerkervolgorde
+Eerst `/guhs vadsrijk level 50`, `/gamemode survival`, `/guhs vadsrijk vol`.
+- **Eén gevecht tegelijk** ("Je bent nog in gevecht met ...") en **kerkervolgorde** ("Versla eerst ..."). `tp <baas>` en
+  `spawn <baas>` geven de volgorde vrij voor jou; `spawn` zet de baas terug en jou bij zijn bord.
+1. `spawn kruinroofvogel` (geen volgorde).
+2. Werf: `tp werf`, dan `spawn taleggio`, `spawn brokkel`, `spawn roquefort`. Kamers: `tp loods`, `kerkers loods`, `kerkers reset`.
+   Intro-check: vecht Taleggio, loop naar zijn dekrand: geen intro van Brokkel/Roquefort.
+3. `spawn piepvel` (cape bekijken).
+4. Hart: `tp hart` (chat geeft route + bazen), `spawn wortelwurger`, `spawn nestwachter`, `spawn bleu`; kamers `tp aderloop|kwekerij|ringen`.
+5. Vahoegnir: `vahoegnir` (zet je aan de nestrand), `vahoegnir herinnering` (zonder verhaal), `vahoegnir waar|reset`.
+- Fase overslaan: `/guhs vadsrijk z3bazen fase 2|3|4`. Vahoeg-vorm: `/guhs vadsrijk z3bazen vahoeg werf|hart`.
 
-Eerst: `/guhs vadsrijk level 50`, `/gamemode survival`, `/guhs vadsrijk vol`. Overzicht van alle arena's (plek, straal, hoogte,
-wakker/leeg, "na <baas>"): `/guhs vadsrijk z3bazen arenas`.
+## Z5. De roze draak, de beestjes en de naambordjes
+```
+/guhs vadsrijk vriendjes draak nest
+/guhs vadsrijk vriendjes draak bezoek
+/guhs vadsrijk huisdier geef vahoegje
+```
+- `draak nest`: je staat aan de nestrand; de **roze Vahoegnir rust** daar (normaal alleen met `zone3_klaar`). Rechtsklik = aaien
+  (hartjes, spinnen, buiging, een lief zinnetje). Tot 32 **beestjes** komen aanvliegen/huppelen: vinkjes, meesjes (op zijn rug),
+  eekhoorntjes, konijntjes, roze muisjes, vlindertjes. Loop weg: ze vliegen/huppelen weg.
+- `draak bezoek` (in zone 1/2, bij een plein/kampvuur): hij landt in de buurt, blijft 60-90 s, vliegt weer weg.
+- Vahoegje: P, "Meenemen": het nieuwe **chibi-draakje**. Kijk ernaar: naambordje "Vahoegje van <jouw naam>" (weg met F1).
 
-Twee nieuwe regels (door de playtest):
-- **Eén gevecht tegelijk.** Zodra je de intro van een baas krijgt, zit je in zijn gevecht. Een andere baas geeft je dan géén intro,
-  valt je niet aan en jouw klappen doen hem niets ("Je bent nog in gevecht met ..."). Ben je 10 s buiten de arena of is hij
-  verslagen, dan ben je vrij.
-- **Kerkervolgorde.** Een baas wordt pas wakker als de baas ervoor verslagen is (door jou in het afgelopen uur, of hij is nu dood en
-  wacht op zijn respawn). Anders: "Bombardier Brokkel laat zich nog niet zien. Versla eerst Takelmeester Taleggio." In creatief geldt
-  de volgorde niet.
-- **Overrides voor testen:** `tp <baas>` en `spawn <baas>` geven de volgorde vrij voor jou. `spawn <baas>` zet de baas ook meteen
-  terug (volle Vads, fase 1) en zet jou bij zijn bord.
-
-1. **De Kruinroofvogel** (wereldbaas, lv 38, geen volgorde): `/guhs vadsrijk z3bazen spawn kruinroofvogel`
-2. **Kaaszeppelinwerf** (lv 38-40): loop het eerst één keer vanaf de ingang: `/guhs vadsrijk z3bazen tp werf`.
-   - `/guhs vadsrijk z3bazen spawn taleggio` (bovenste dek): touwhendel als hij in fase 2 boven je zwaait.
-   - `/guhs vadsrijk z3bazen spawn brokkel` (middendek): rechtsklik de dekkanonnen.
-   - `/guhs vadsrijk z3bazen spawn roquefort` (onderste dek): dek kantelt, ballonnen, spring in fase 3 naar het wrak.
-   - Controle intro-fix: vecht Taleggio en loop naar de rand van zijn dek. Je mag géén intro van Brokkel of Roquefort krijgen. Pas na
-     Taleggio wordt Brokkel wakker.
-   - De kamers: `/guhs vadsrijk z3bazen tp loods` (`kerkers loods` lost hem op), `kerkers reset`.
-3. **Graaf Piepvel** (lv 42, geen volgorde): `/guhs vadsrijk z3bazen spawn piepvel`.
-   - Kijk naar zijn **cape**: een lappendeken van muizenvelletjes (grijs/paars vachtje, roomkleurige buik, roze oortjes, neusje en
-     staartje, grote steken). Er steken oortjes uit en roze staartjes slepen achter hem.
-   - In fase 2 gaat per opengebroken kooi één capepaneel weg.
-4. **Hart van de Boom** (lv 49-50). **Niet aan een quest gebonden**: de bazen vechten altijd. Ze zitten niet bij de poort maar boven in de
-   ring, ~150 blokken lopen: wortelgang omhoog, dan Aderloop, Schimmelkwekerij en Ringenzaal.
-   - `/guhs vadsrijk z3bazen tp hart`: je staat in de Hartslag-zaal. De chat geeft de route en waar de drie bazen staan. Bij de poort
-     zonder hoofdverhaal "Het Hart van de Boom" krijg je "De wortels slapen nog..." (dan telt je verhaal er nog niet mee).
-   - `/guhs vadsrijk z3bazen spawn wortelwurger`, dan `spawn nestwachter` (wordt roze en buigt), dan `spawn bleu` (+ Schimmelkolos).
-   - De kamers: `tp aderloop`, `tp kwekerij`, `tp ringen` (`kerkers ringen` lost hem op).
-5. **Vahoegnir** (lv 50, het oude nest op de Kruintop):
-   - `/guhs vadsrijk z3bazen vahoegnir`: hij landt en jij staat aan de nestrand. Is hij er al, dan zet het commando je bij het nest en
-     zegt het waar hij is (plek, fase, Vads).
-   - `/guhs vadsrijk z3bazen vahoegnir waar`: alleen zijn plek. Kwijt of vast: `/guhs vadsrijk z3bazen vahoegnir reset` ruimt alles
-     op (ook een verdwaalde), daarna opnieuw `vahoegnir`. Valt hij uit de boom of zit hij vast in blokken, dan zet hij zichzelf
-     binnen 1 s terug in het nest.
-   - Zonder verhaal (herhaalbaar, zonder troonzaal): `/guhs vadsrijk z3bazen vahoegnir herinnering`. Of `spawn vahoegnir` (eerst reset).
-   - Het verhaal (splinters terugzetten) telt alleen tijdens hq14. In creatief mag het altijd.
-- Fase overslaan bij de dichtstbijzijnde baas: `/guhs vadsrijk z3bazen fase 2|3|4`. Vahoeg-vorm: `/guhs vadsrijk z3bazen vahoeg werf|hart`.
-
-## Z5. Premiebord
+## Z6. Premiebord en het Verkenningsboek
 ```
 /guhs vadsrijk z3systemen bord
 /guhs vadsrijk z3systemen penningen 100
-/guhs vadsrijk z3systemen premie 0
-/guhs vadsrijk z3systemen dag
 ```
-- Drie tabs: Premies (3 per dag, 1 gratis ruil), Jachtbord (contracten, lv 45+), Penningwinkel. Of praat met Jagersguh Raap in de Jagershut.
-
-## Z6. Vahoegje en het Verkenningsboek
-```
-/guhs vadsrijk huisdier geef vahoegje
-```
-- P: "Meenemen". Een piepklein roze draakje dat met je meehuppelt.
-- B: de pagina "De Schemerwortel": hoofdverhaal, zijquests, uitkijkpunten, kampvuren, geheimen, knuffels, bazen, huisdieren,
-  Pluimguh, gebieden. Kloppen de gebiedsnamen ("Ergens in De Kruinzee")?
+- Premiebord: drie tabs. B: pagina "De Schemerwortel"; staan "Het Rijpad", de dorpen en de binnentrap goed bij de gebieden?
 
 ## Z7. Lopen (survival)
-- Hartslag-zaal -> Grote Wortelgang -> de trap van de Wortelpoort omhoog. Schorsstad-vloer -> poort 75 -> de helling naar buiten.
-- Overal: kun je uit elk gat, elke vijver en elke grot zelf weer naar boven? (`U` = losknuffelen als het toch misgaat.)
+- Rijpad helemaal op en af, binnentrap van de vloer tot het nest, de Pelszaal-trap, de Wortelgang naar de Hartslag-zaal en terug,
+  de kabelbrug naar de werf en de torentrappen, de imkerdorpjes op de takken (huisjes leeg van blad?).
+- Overal: kun je uit elk gat weer omhoog? (`U` = losknuffelen als het toch misgaat.)
+
+## Z8. Praatscherm-portretten (q-dialoog)
+```
+/guhs vadsrijk npc portrettest
+```
+- Je ziet achter elkaar: een regel van jezelf (jouw eigen portret), Oma Truus als stand-in (zone 1, ver weg), een zone-3-imker als
+  stand-in, de verteller (een boekje), en daarna een echte NPC uit de buurt.
+- Praat daarna met een paar NPC's in Honingtak: staat er bij elke pagina een portret (ook bij jouw antwoorden)?
+- Met F3+H: onderin een grijs regeltje (sleutel | tekst | spreker | bron van het portret).
 
 ---
 
