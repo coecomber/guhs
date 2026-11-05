@@ -167,10 +167,10 @@ public final class Z3Haken {
             return s;
         }
         boolean ik = Z3NpcPlekken.zone3(p.getX(), p.getZ()), doel = Z3NpcPlekken.zone3(d.getX(), d.getZ());
-        if (ik == doel || p.getZ() > 800) {
+        if (ik == doel || nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.inKamp(p.getX(), p.getZ()) || p.getZ() > 800) {
             return s;   // (same side, or on the camp island: zone 1's hop goes first)
         }
-        String piloot = ik ? "z3_kapitein" : p.getZ() < -1700 ? "z2_kapitein" : "luchtschipper";
+        String piloot = ik ? "z3_kapitein" : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.inZone2(p.getX(), p.getZ()) ? "z2_kapitein" : "luchtschipper";
         Component waar = Component.translatable(nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.P + "luchtschip", s.waar(),
                 nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.naam(piloot), nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.npcPlek(piloot));
         return new nl.juiced.guhs.feature.vadsrijk.npc.QuestStap(s.quest(), s.hoofd(), s.titel(), s.wat(), waar,

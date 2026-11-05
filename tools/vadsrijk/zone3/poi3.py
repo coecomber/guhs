@@ -167,9 +167,9 @@ public final class Z3WereldPlekken {{
         return ALLE.get(id);
     }}
 
-    /** Is this x/z inside the zone-3 tile grid (+ a margin)? */
+    /** Is this x/z inside the zone-3 tile grid? (T-WERELD: no margin any more: zone 2 lies west and zone 4 east, edge to edge.) */
     public static boolean inZone3(double x, double z) {{
-        return x > TEGEL_X0 * 64 - 200 && x < TEGEL_X1 * 64 + 264 && z > TEGEL_Z0 * 64 - 200 && z < TEGEL_Z1 * 64 + 264;
+        return x >= TEGEL_X0 * 64 && x < TEGEL_X1 * 64 + 64 && z >= TEGEL_Z0 * 64 && z < TEGEL_Z1 * 64 + 64;
     }}
 
     /** The zone-3 area at this point (by height), or null outside zone 3. */

@@ -20,7 +20,7 @@ section klodderreus
 look -70 15
 wait 60
 waitrender 200
-/summon guhs:vr_klodderreus 54 88 1069
+/summon guhs:vr_klodderreus -330 88 1069
 wait 25
 shot k1_klodderreus_mikt gui
 wait 15

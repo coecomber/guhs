@@ -407,7 +407,7 @@ public final class QuestMotor {
             }
             case "schemerwortel" -> doeActie(p, "z3_vlieg:honingtak", null);   // [z3-wereld] Z3Reizen.naarHoningtak
             case "zwamzoet" -> {
-                if (van.equals("z2_kapitein") || QuestStap.zone2(p.getZ())) {
+                if (van.equals("z2_kapitein") || QuestStap.zone2(p.getX(), p.getZ())) {
                     doeActie(p, "z2_vlieg:haven", null);
                 } else {
                     Verhaal.vlieg(p, "zwamzoet");

@@ -53,7 +53,7 @@ public class VadsrijkNpcGameTests {
         // KAMPVUUR: a campfire inside Knuffelkamp
         Quest q4 = Quests.van("hq04_kampvuur");
         Questlog.neemAan(p, q4);
-        Haken.KAMPVUUR.forEach(h -> h.accept(p, new BlockPos(5, 65, 1020)));
+        Haken.KAMPVUUR.forEach(h -> h.accept(p, nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kamp(5, 65, 1020)));
         helper.assertTrue(Questlog.doelKlaar(p, q4, 0), "a campfire in Knuffelkamp counts");
         // VERSLAGEN: the bestiary counts every kind, area objectives count by area
         ProefKlodder k = KernRegistry.PROEFKLODDER.get().create(helper.getLevel(), EntitySpawnReason.EVENT);

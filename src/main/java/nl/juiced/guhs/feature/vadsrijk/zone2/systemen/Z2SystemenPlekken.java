@@ -24,7 +24,7 @@ public final class Z2SystemenPlekken {
     /** (integration) from z2-wereld's generated spots; the number is only a fallback. */
     private static BlockPos w(String id, int x, int y, int z) {
         BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(x, y, z);   // T-WERELD: local zone-2 fallback
     }
 
     private Z2SystemenPlekken() {

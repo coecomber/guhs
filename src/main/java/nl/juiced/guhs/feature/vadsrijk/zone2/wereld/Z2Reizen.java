@@ -122,7 +122,7 @@ public final class Z2Reizen {
      */
     static void opening(ServerPlayer p, ServerLevel sl, Vec3 a) {
         BlockPos np = Z2WereldPlekken.plek("opening_naald");     // (fix round 2) the needle on the geode rim, from the map
-        Vec3 naald = Vec3.atBottomCenterOf(np != null ? np : BlockPos.containing(46, 140, -2344));
+        Vec3 naald = Vec3.atBottomCenterOf(np != null ? np : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(46, 140, -2344));
         Vec3 storm = a.add(-60, 40, 330);
         RijkScene s = RijkScene.maak("vr_z2_opening", 400)
                 .camera(0, storm, storm.add(30, -6, -120))

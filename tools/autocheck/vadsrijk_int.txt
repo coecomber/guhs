@@ -70,7 +70,7 @@ wait 120
 shot i_bam_2 gui
 wait 120
 shot i_bam_3 gui
-/summon guhs:vr_klodderreus 54 88 1069
+/summon guhs:vr_klodderreus -330 88 1069
 /guhs vadsrijk wereld plek arena_klodderreus.deur
 look 90 10
 wait 60

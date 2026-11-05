@@ -31,7 +31,7 @@ public class StadsMuziekGameTests {
         verwacht(helper, 380, 0, null);       // Klodderweide
         verwacht(helper, -380, 100, null);    // Sporenwoud
         verwacht(helper, -380, -380, null);   // Druipgrotten
-        verwacht(helper, -400, -2500, null);  // Knuffelmeer
+        verwacht(helper, -400 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DX, -2500 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DZ, null);  // Knuffelmeer (T-WERELD: local zone 2)
         helper.assertTrue(StadsMuziek.stadVan("z2_kandijkom_dok").equals("kandijkom") && StadsMuziek.stadVan("zwamtempel") == null
                 && StadsMuziek.stadVan(null) == null, "stadVan");
         // two tunes per town, each a registered sound event, and every town has a bed and day sounds

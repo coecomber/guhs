@@ -110,6 +110,12 @@ public final class VadsrijkZones {
         return zoneVan(x, z);
     }
 
+    /** 1 inside the zone's tile box, fading linearly to 0 at {@code fade} blocks outside it (skies, ambience). */
+    public static float nabij(Zone zo, double x, double z, double fade) {
+        double dx = Math.max(Math.max(zo.minX - x, x - (zo.maxX + 1)), 0), dz = Math.max(Math.max(zo.minZ - z, z - (zo.maxZ + 1)), 0);
+        return (float) Math.max(0, Math.min(1, 1 - Math.hypot(dx, dz) / fade));
+    }
+
     public static boolean in(Zone zo, double x, double z) {
         return zo.inVak(x, z);
     }
@@ -141,6 +147,15 @@ public final class VadsrijkZones {
 
     public static Vec3 kampV(double x, double y, double z) {
         return new Vec3(x + KAMP_DX, y, z + KAMP_DZ);
+    }
+
+    /**
+     * Line 0 (Knuffelkamp <-> De Haven, camera paths over the Zoete Zee): old coordinates bent west with the camp. Full camp shift
+     * at z >= 860 (the island), none at z <= 500 (De Haven), linear between. Same formula as bouwsels.kamp_meng (the map).
+     */
+    public static Vec3 kampMeng(double x, double y, double z) {
+        double m = Math.max(0, Math.min(1, (z - 500) / 360.0));
+        return new Vec3(x + KAMP_DX * m, y, z + KAMP_DZ * m);
     }
 
     /** Old (local) zone-2 coordinates -> world. */

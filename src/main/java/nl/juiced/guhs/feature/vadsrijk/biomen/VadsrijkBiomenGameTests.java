@@ -56,14 +56,15 @@ public class VadsrijkBiomenGameTests {
         verwacht(helper, vb, 0, 280, "tussenland");         // between Zwamzoet and De Haven (zone-1 ring)
         verwacht(helper, vb, 0, 750, "zee");                // between the ring and Knuffelkamp
         verwacht(helper, vb, 0, -1200, "zee");              // between zone 1 and zone 2
-        // zone 2
+        // zone 2 (T-WERELD: local zone-2 coordinates + the zone offset)
+        int DX2 = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DX, DZ2 = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DZ;
         verwacht(helper, vb, Z2WereldPlekken.DOK_LANDING.getX(), Z2WereldPlekken.DOK_LANDING.getZ(), "kandijkom");
-        verwacht(helper, vb, 0, -2400, "kandijkom");
-        verwacht(helper, vb, 170, -2350, "galmhellingen");
-        verwacht(helper, vb, -172, -2378, "knuffelmeer");
-        verwacht(helper, vb, -100, -2545, "splinterkloof");
-        verwacht(helper, vb, 150, -2693, "spiegelburcht");
-        verwacht(helper, vb, 280, -2500, "splinterpieken");   // g-int: g-z2's ring (the cloud sea round the 500x575 island)
+        verwacht(helper, vb, 0 + DX2, -2400 + DZ2, "kandijkom");
+        verwacht(helper, vb, 170 + DX2, -2350 + DZ2, "galmhellingen");
+        verwacht(helper, vb, -172 + DX2, -2378 + DZ2, "knuffelmeer");
+        verwacht(helper, vb, -100 + DX2, -2545 + DZ2, "splinterkloof");
+        verwacht(helper, vb, 150 + DX2, -2693 + DZ2, "spiegelburcht");
+        verwacht(helper, vb, 280 + DX2, -2500 + DZ2, "splinterpieken");   // g-int: g-z2's ring (the cloud sea round the 500x575 island)
         // z3-systemen: zone 3 is LAYERED (same x/z, different height = different biome)
         int X0 = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_X, Z0 = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.STAM_Z;   // (P-VERHUIS) zone 3 can move: everything relative to the trunk
         // (P-VERHUIS) the revamped tree (POI v2, box x 1900..2700, z -400..400)

@@ -13,22 +13,22 @@ waitrender 300
 /gamemode spectator
 
 section trap_top
-/tp @s 0 89 1109
+/tp @s -384 89 1109
 look 180 5
 wait 60
 waitrender 200
 shot g_trap_top gui
-/tp @s 6 104 1112
+/tp @s -378 104 1112
 look 170 30
 wait 60
 waitrender 200
 shot g_aankomstpad_overzicht gui
-/tp @s 2 89 1070
+/tp @s -382 89 1070
 look 180 5
 wait 40
 waitrender 200
 shot g_aankomstpad_naar_kamp gui
-/tp @s 8 92 1040
+/tp @s -376 92 1040
 look 160 20
 wait 40
 waitrender 200
@@ -78,7 +78,7 @@ look 180 15
 wait 60
 waitrender 200
 shot g_oma_truus gui
-/tp @s 62 89 990
+/tp @s -322 89 990
 look 180 15
 wait 60
 waitrender 200

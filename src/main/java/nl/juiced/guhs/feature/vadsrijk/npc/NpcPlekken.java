@@ -77,7 +77,7 @@ public final class NpcPlekken {
         NPC.put("trainer_ridder", w("training", -5, -1));   // (fix round 1: -4 stood inside a dummy's fence arm)
         NPC.put("trainer_jager", w("training", 5, -1));
         NPC.put("trainer_magier", w("training", 0, 6));
-        NPC.put("visser_dobber", p(36, 87, 1072));
+        NPC.put("visser_dobber", nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kamp(36, 87, 1072));   // T-WERELD: local camp coords
         // Zwamzoet: the order, trade and services (POI section 5: inside the buildings)
         NPC.put("grootmeester", w("ordetempel_binnen"));
         NPC.put("smid", w("gebouw.smidse.1.binnen"));
@@ -240,27 +240,27 @@ public final class NpcPlekken {
     // ---- scenes (camera keyframes, world coordinates) ----------------------------------------------------------------------
     /** Opening: low over the sea east of the island at sunrise, gliding to the jetty, then the far Zwamzoet skyline. */
     public static final Vec3[] OPENING = {
-            new Vec3(190, 78, 1260), new Vec3(10, 82, 1110),        // far out at sea south-east, the cliff island ahead
-            new Vec3(70, 72, 1180), new Vec3(0, 74, 1120),          // gliding in towards the south jetty and the cliff stair
-            new Vec3(20, 90, 1150), new Vec3(0, 140, 0),            // turn: the far skyline of Zwamzoet
-            new Vec3(1, 67, 1134), new Vec3(0, 73, 1118)};          // down to the jetty (the player's eyes, looking up the stair)        // down to the jetty (the player's eyes)
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(190, 78, 1260), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(10, 82, 1110),        // far out at sea south-east, the cliff island ahead
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(70, 72, 1180), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(0, 74, 1120),          // gliding in towards the south jetty and the cliff stair
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(20, 90, 1150), new Vec3(0, 140, 0),            // turn: the far skyline of Zwamzoet
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(1, 67, 1134), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(0, 73, 1118)};          // down to the jetty (the player's eyes, looking up the stair)        // down to the jetty (the player's eyes)
     /** The BAM: from the campfire, looking up over the water to the north-east, where the dragon comes over. */
     public static final Vec3[] BAM = {
-            new Vec3(0, 89, 1031), new Vec3(60, 120, 960),
-            new Vec3(-4, 89, 1033), new Vec3(-40, 125, 1060),
-            new Vec3(30, 93, 1045), new Vec3(54, 87, 1069)};
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(0, 89, 1031), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(60, 120, 960),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(-4, 89, 1033), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(-40, 125, 1060),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(30, 93, 1045), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(54, 87, 1069)};
     /** The dragon's flight line over the camp (fallback FX when the wezens DraakVlucht is not in this tree). */
-    public static final Vec3 DRAAK_VAN = new Vec3(260, 140, 880), DRAAK_NAAR = new Vec3(-260, 130, 1180);
+    public static final Vec3 DRAAK_VAN = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(260, 140, 880), DRAAK_NAAR = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(-260, 130, 1180);
     /** The airship flight (fallback when wereld's WereldReizen is not in this tree): jetty -> over the sea -> haven. */
     public static final Vec3[] VLUCHT_NAAR_STAD = {
-            new Vec3(100, 95, 1012), new Vec3(90, 100, 900),
-            new Vec3(95, 120, 820), new Vec3(0, 150, 0),
-            new Vec3(90, 105, 560), new Vec3(86, 90, 488),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(100, 95, 1012), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(90, 100, 900),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(95, 120, 820), new Vec3(0, 150, 0),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(90, 105, 560), new Vec3(86, 90, 488),
             new Vec3(88, 72, 494), new Vec3(60, 67, 470)};
     public static final Vec3[] VLUCHT_NAAR_KAMP = {
-            new Vec3(86, 90, 488), new Vec3(95, 100, 600),
-            new Vec3(95, 110, 760), new Vec3(96, 90, 1015),
-            new Vec3(100, 92, 1010), new Vec3(80, 88, 1020)};
+            new Vec3(86, 90, 488), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(95, 100, 600),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(95, 110, 760), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(96, 90, 1015),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(100, 92, 1010), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(80, 88, 1020)};
     /** The cliffhanger: the Ordetempel on the highest cap, the far horizon where the dragon circles. */
     public static final Vec3[] CLIFFHANGER = {
             new Vec3(4, 184, -18), new Vec3(0, 182, -35),

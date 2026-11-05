@@ -15,12 +15,12 @@ waitrender 300
 /guhs vadsrijk tips reset
 
 section kamp
-/tp @s 0 89 1109
+/tp @s -384 89 1109
 look 180 5
 wait 60
 waitrender 200
 shot gi1_trap_top_pad gui
-/tp @s 6 104 1112
+/tp @s -378 104 1112
 look 170 30
 wait 60
 waitrender 200

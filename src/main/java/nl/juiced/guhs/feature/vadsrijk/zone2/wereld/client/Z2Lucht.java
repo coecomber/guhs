@@ -44,10 +44,9 @@ final class Z2Lucht {
         return Guhs.id("textures/vadsrijk/wereld/" + n + ".png");
     }
 
-    /** 0 outside zone 2, 1 inside (soft over 200 blocks south of its tile range). */
-    static float sterkte(double z) {
-        double rand = -1728;          // south edge of the zone-2 tiles
-        return (float) Mth.clamp((rand + 40 - z) / 200.0, 0, 1);
+    /** 0 outside zone 2, 1 inside (T-WERELD: soft over 120 blocks outside its tile box; zone 1 lies south, zone 3 east). */
+    static float sterkte(double x, double z) {
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.nabij(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.Z2, x, z, 120);
     }
 
     static float nachtFactor(long tijd) {
@@ -68,7 +67,7 @@ final class Z2Lucht {
         if (mc.level == null || mc.player == null) {
             return;
         }
-        float s = sterkte(mc.player.getZ());
+        float s = sterkte(mc.player.getX(), mc.player.getZ());
         if (s <= 0.01f) {
             return;
         }

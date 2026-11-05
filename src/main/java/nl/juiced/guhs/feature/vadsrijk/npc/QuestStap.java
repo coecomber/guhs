@@ -192,7 +192,7 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
             return s;
         }
         // (integration) zone 2 (De Splinterpieken, z < -1700): the airship line Haven <-> Kandijkom
-        boolean ikZone2 = zone2(p.getZ()), doelZone2 = zone2(s.doel().getZ());
+        boolean ikZone2 = zone2(p.getX(), p.getZ()), doelZone2 = zone2(s.doel().getX(), s.doel().getZ());
         if (ikZone2 != doelZone2 && !(doelZone2 && eiland(p.getX(), p.getZ()))) {
             String piloot = ikZone2 ? "z2_kapitein" : "luchtschipper";
             Component waar = Component.translatable(P + "luchtschip", s.waar(), naam(piloot), npcPlek(piloot));
@@ -212,12 +212,13 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
 
     /** The camp island (with its east dock just outside the knuffelkamp area box): everything south of z 800. */
     static boolean eiland(double x, double z) {
-        return z > 800;
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.inKamp(x, z) || z > 800;   // T-WERELD: the camp's tile box (everything south of z 800 is still the camp's sea)
     }
 
     /** Zone 2 (De Splinterpieken): its box starts at z -1800; the sea/cloud gap lies between. */
-    static boolean zone2(double z) {
-        return z < -1700;
+    /** T-WERELD: zone 2 by its tile box (the connected world: zone 2 lies NE of zone 1, x 384..1023, z -1472..-769). */
+    public static boolean zone2(double x, double z) {
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.inZone2(x, z);
     }
 
     @Nullable
