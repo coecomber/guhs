@@ -74,6 +74,7 @@ public final class Z3NpcRegistry {
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Z3Haken.tick(e.getServer());
             Z3Verhaal.tick(e.getServer());
+            Z3Leven.tick(e.getServer());   // (P-VERHUIS) Pluimguh riders on the riding spiral
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.LOW, (ServerStartedEvent e) -> {
             Z3Rollen.koppel();

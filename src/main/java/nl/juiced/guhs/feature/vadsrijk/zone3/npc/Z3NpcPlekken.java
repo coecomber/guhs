@@ -44,6 +44,32 @@ public final class Z3NpcPlekken {
     /** The trunk axis. */
     public static final int TX = 2300, TZ = 0;
 
+    // ---- (P-VERHUIS) the outer riding spiral (boom2.py RIJ: y 82 -> 236, 34 per turn, meets the Honingplein at y 166, south) -----
+    public static final double RIJ_Y0 = 82, RIJ_STIJG = 34, RIJ_EIND = 236, RIJ_STRAAL = 40, HONING_Y = 166;
+
+    /**
+     * The riding spiral as points (stand height) from the ground start up to kruin 1, every ~4 blocks: the map's {@code RIJPAD}
+     * (x, y, z) when it has one, else the spiral of boom2.py (the trunk + 2 blocks + half the path width), y snapped later.
+     */
+    public static java.util.List<Vec3> rijpad() {
+        java.util.List<Vec3> l = new java.util.ArrayList<>();
+        int[][] kaart = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.PADEN.get("rijpad");
+        if (kaart != null && kaart.length > 1 && kaart[0].length >= 3) {
+            for (int[] q : kaart) {
+                l.add(new Vec3(q[0] + 0.5, q[1], q[2] + 0.5));
+            }
+            return l;
+        }
+        double th0 = Math.PI / 2 - 2 * Math.PI * (((HONING_Y - RIJ_Y0) / RIJ_STIJG) % 1.0);
+        double slagen = (RIJ_EIND - RIJ_Y0) / RIJ_STIJG;
+        int n = (int) (slagen * 2 * Math.PI * RIJ_STRAAL / 4);
+        for (int i = 0; i <= n; i++) {
+            double t = slagen * i / n, a = th0 + 2 * Math.PI * t;
+            l.add(new Vec3(TX + 0.5 + RIJ_STRAAL * Math.cos(a), Math.floor(RIJ_Y0 + RIJ_STIJG * t) + 1, TZ + 0.5 + RIJ_STRAAL * Math.sin(a)));
+        }
+        return l;
+    }
+
     /** Is this x in zone 3 (the tracker's airship hop)? */
     public static boolean zone3(double x) {
         return x > 1500;

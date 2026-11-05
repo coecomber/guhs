@@ -39,6 +39,7 @@ public final class Z3SystemenClient {
             }
         };
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> tick());
+        NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> Z3Avondlicht.tick());   // (P-VERHUIS) evening lights + life
     }
 
     private static void tick() {
