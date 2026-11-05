@@ -1,0 +1,39 @@
+# Q-DIALOOG: the talking screen's portrait (player lines, stand-ins for NPCs that are not here, narrator, a live NPC).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_q_dialoog.txt
+
+section setup
+/gamemode creative
+/time set noon
+wait 40
+
+section portrettest
+/guhs vadsrijk proeftuin
+wait 100
+/fill 3095 64 3150 3145 64 3195 minecraft:grass_block
+/tp @s 3120 65 3175 180 10
+waitrender 200
+/guhs vadsrijk npc portrettest
+wait 20
+shot vr_qd_1_speler gui
+press Verder »
+wait 10
+shot vr_qd_2_zone1_standin gui
+press Verder »
+wait 10
+shot vr_qd_3_zone3_standin gui
+press Verder »
+wait 10
+shot vr_qd_4_verteller gui
+gui close
+wait 10
+
+section live
+/guhs vadsrijk npc reset
+/guhs vadsrijk npc rij
+wait 40
+/tp @s 3113 65 3174 180 20
+wait 20
+interact 3113 65 3171 guhs:vr_npc_guh
+wait 20
+shot vr_qd_5_live gui
+gui close

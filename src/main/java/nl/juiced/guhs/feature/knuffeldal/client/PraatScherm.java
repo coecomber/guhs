@@ -57,6 +57,11 @@ public class PraatScherm extends Screen {
         return npcId;
     }
 
+    /** q-dialoog: the sleutel of what this screen shows ("" = none). */
+    public String sleutel() {
+        return data.getStringOr("Sleutel", "");
+    }
+
     public void update(CompoundTag newData) {
         update(npcId, newData);
     }
@@ -123,7 +128,7 @@ public class PraatScherm extends Screen {
         // (as far as the window allows: on a very low window the last lines are cut off, as before)
         extra = Math.max(0, Math.min(meer * REGEL_HOOG, (height - 4 - basis) / REGEL_HOOG * REGEL_HOOG));
         left = (width - W) / 2;
-        top = (height - hoogte()) / 2;
+        top = Math.max(2, (height - hoogte()) / 2);   // (q-dialoog: never above the window on a big GUI scale)
         if (!laatstePagina()) {
             // 3.0: a scene: "Verder »" to the next page (the answers come on the last one)
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.verhaal.verder"), b -> {
@@ -183,15 +188,23 @@ public class PraatScherm extends Screen {
         g.text(font, name.copy().withStyle(ChatFormatting.BOLD), left + 10, top + 8, 0xFFFFB6D8, false);
         // the character
         g.fill(left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, 0x30F7B6CB);
-        if (npc instanceof LivingEntity living) {
-            int kijkY = mouseY;
-            if (npc instanceof nl.juiced.guhs.entity.GuhNpcEntity g2 && nl.juiced.guhs.client.SittingGuhRenderers.kopOpDeGrond(g2.getKind())) {
-                // (its head turns on the ground and is most of the character: looking down at the buttons, it lay on its face)
-                int midden = top + 22 + PIC / 2;
-                kijkY = Math.max(midden - 30, Math.min(midden + 6, mouseY));
-            }
-            InventoryScreen.extractEntityInInventoryFollowsMouse(g, left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, 26, 0.0625f,
-                    mouseX, kijkY, living);
+        LivingEntity portret = portret();
+        if (minecraft.options.advancedItemTooltips) {
+            // q-dialoog dev aid (F3+H): which text, which speaker, where the portrait came from
+            String bron = portret == null ? "geen" : portret == minecraft.player ? "speler" : STAND_INS.containsValue(portret) ? "stand-in" : "entity";
+            String info = data.getStringOr("Sleutel", "-") + " | " + nu().getStringOr("Tekst", "") + " | spreker "
+                    + (nu().contains("Spreker") ? nu().getIntOr("Spreker", 0) : npcId) + " | " + bron;
+            g.text(font, font.plainSubstrByWidth(info, W), left, top + hoogte() + 3, 0xFFB0B0B0, true);
+        }
+        if (portret != null) {
+            tekenPortret(g, portret, left + 10, top + 22, left + 10 + PIC, top + 22 + PIC, mouseX, mouseY, partialTick);
+        } else {
+            // (a narrator, a sign, a note: a little book instead of an empty frame)
+            g.pose().pushMatrix();
+            g.pose().translate(left + 10 + PIC / 2f - 16, top + 22 + PIC / 2f - 16);
+            g.pose().scale(2f, 2f);
+            g.item(new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.WRITABLE_BOOK), 0, 0);
+            g.pose().popMatrix();
         }
         // the speech balloon
         int bx = left + 10 + PIC + 8, by = top + 22, bw = W - (bx - left) - 10;
@@ -208,6 +221,109 @@ public class PraatScherm extends Screen {
         if (data.getStringOr("Scherm", "").equals("burgemeester")) {
             renderLijst(g, top + 22 + PIC + extra + 8, mouseX, mouseY);
         }
+    }
+
+    /** q-dialoog: stand-ins for speakers that are not on this client, by their portrait (built once, kept while in this world). */
+    private static final java.util.Map<String, LivingEntity> STAND_INS = new java.util.HashMap<>();
+
+    /**
+     * q-dialoog: who is drawn for the page shown now. The player's own lines ("Speler"): you. Else the speaker when this
+     * client has it, else a stand-in built from the page's "Portret" (a far NPC, one that was never sent to this client, a
+     * page that only names an NPC). Null: nobody (a narrator).
+     */
+    @javax.annotation.Nullable
+    private LivingEntity portret() {
+        CompoundTag pg = nu();
+        if (pg.getBooleanOr("Speler", false)) {
+            return minecraft.player;
+        }
+        if (spreker() instanceof LivingEntity living && !living.isRemoved()) {
+            return living;
+        }
+        return standIn(pg.getCompoundOrEmpty("Portret"));
+    }
+
+    @javax.annotation.Nullable
+    private LivingEntity standIn(CompoundTag t) {
+        if (t.isEmpty() || minecraft.level == null) {
+            return null;
+        }
+        String sleutel = t.toString();
+        LivingEntity e = STAND_INS.get(sleutel);
+        if (e != null && e.level() == minecraft.level) {
+            return e;
+        }
+        if (STAND_INS.size() > 32 || e != null) {
+            STAND_INS.clear();   // (another world: build them anew)
+        }
+        try {
+            var type = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE
+                    .getOptional(net.minecraft.resources.Identifier.parse(t.getStringOr("Type", ""))).orElse(null);
+            if (type == null || !(type.create(minecraft.level, net.minecraft.world.entity.EntitySpawnReason.LOAD) instanceof LivingEntity living)) {
+                return null;
+            }
+            if (living instanceof nl.juiced.guhs.entity.GuhEntity guh) {
+                guh.setVariant(nl.juiced.guhs.entity.GuhVariant.valueOf(t.getStringOr("Variant", "NORMAL")));
+                for (Tag k : t.getListOrEmpty("Kleren")) {
+                    guh.wear(nl.juiced.guhs.entity.GuhClothes.valueOf(k.asString().orElse("")));
+                }
+                boolean zit = t.getBooleanOr("Zit", false);
+                guh.setOrderedToSit(zit);
+                guh.setInSittingPose(zit);
+            }
+            if (living instanceof nl.juiced.guhs.entity.GuhNpcEntity npc && t.contains("Soort")) {
+                npc.setKind(nl.juiced.guhs.entity.GuhNpcEntity.Kind.valueOf(t.getStringOr("Soort", "")));
+            }
+            living.setYRot(180f);
+            living.yBodyRot = 180f;
+            living.yHeadRot = 180f;
+            STAND_INS.put(sleutel, living);
+            return living;
+        } catch (RuntimeException ex) {
+            return null;   // (an unknown type, clothes or colour from a newer server: no portrait rather than a crash)
+        }
+    }
+
+    /**
+     * q-dialoog: the portrait in its frame. A guh close (its head and body fill the frame), a person from the chest up, the
+     * rest whole; turned a little toward the mouse (not more: following the answer buttons tipped characters over) and
+     * swaying gently.
+     */
+    private void tekenPortret(GuiGraphicsExtractor g, LivingEntity living, int x0, int y0, int x1, int y1, int mouseX, int mouseY, float pt) {
+        if (living instanceof nl.juiced.guhs.entity.GuhNpcEntity g2) {
+            // (the story NPCs keep their tuned framing; one whose head stands on the ground only looks a little down)
+            int kijkY = mouseY;
+            if (nl.juiced.guhs.client.SittingGuhRenderers.kopOpDeGrond(g2.getKind())) {
+                int midden = (y0 + y1) / 2;
+                kijkY = Math.max(midden - 30, Math.min(midden + 6, mouseY));
+            }
+            InventoryScreen.extractEntityInInventoryFollowsMouse(g, x0, y0, x1, y1, 26, 0.0625f, mouseX, kijkY, living);
+            return;
+        }
+        float hoog = living.getBbHeight() / Math.max(0.01f, living.getScale());
+        float breed = living.getBbWidth() / Math.max(0.01f, living.getScale());
+        float vak = y1 - y0;
+        float midden, span;
+        if (living instanceof nl.juiced.guhs.entity.GuhEntity) {
+            midden = 0.62f;   // (the guh model: feet at 0, the head's top at ~0.95, hats up to ~1.4)
+            span = 1.65f;
+        } else if (hoog > 1.2f && breed < hoog * 0.7f) {
+            midden = hoog * 0.68f;   // (upright and tall, like the player: head and chest)
+            span = hoog * 0.68f;
+        } else {
+            midden = hoog * 0.5f;
+            span = Math.max(hoog, breed) * 1.35f;
+        }
+        int maat = Math.max(8, Math.round(vak / span));
+        float tijd = ((minecraft.level == null ? 0 : minecraft.level.getGameTime()) + pt) / 20f;
+        float cx = (x0 + x1) / 2f, cy = (y0 + y1) / 2f;
+        float xHoek = clamp((float) Math.atan((cx - mouseX) / 40f), 0.55f) + (float) Math.sin(tijd * 0.9f) * 0.08f;
+        float yHoek = clamp((float) Math.atan((cy - mouseY) / 40f), 0.35f) + (float) Math.sin(tijd * 0.6f + 1f) * 0.03f;
+        InventoryScreen.renderEntityInInventoryFollowsAngle(g, x0, y0, x1, y1, maat, midden - hoog / 2f, xHoek, yHoek, living);
+    }
+
+    private static float clamp(float v, float max) {
+        return Math.max(-max, Math.min(max, v));
     }
 
     /**
@@ -254,6 +370,9 @@ public class PraatScherm extends Screen {
 
     @Override
     public void tick() {
+        for (LivingEntity e : STAND_INS.values()) {
+            e.tickCount++;   // (q-dialoog: a stand-in is not in the world: its idle animation runs on this)
+        }
         if (npcId < 0) {
             return;   // (3.0: a scene without a speaker in the world)
         }

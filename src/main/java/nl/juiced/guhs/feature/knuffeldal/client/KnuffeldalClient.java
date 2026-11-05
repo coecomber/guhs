@@ -74,7 +74,9 @@ public final class KnuffeldalClient {
     public static void open(KnuffeldalPayloads.Open payload) {
         Minecraft mc = Minecraft.getInstance();
         if (payload.data().getBooleanOr("Sluit", false)) {
-            if (mc.screen instanceof PraatScherm) {
+            // (q-dialoog: a late close for an earlier conversation leaves a newer, different one open)
+            String van = payload.data().getStringOr("Van", "");
+            if (mc.screen instanceof PraatScherm scherm && (van.isEmpty() || van.equals(scherm.sleutel()))) {
                 mc.setScreen(null);
             }
             return;

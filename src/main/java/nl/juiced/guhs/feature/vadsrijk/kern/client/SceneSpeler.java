@@ -92,7 +92,9 @@ public final class SceneSpeler {
         t = 0;
         spelerYaw = mc.player.getYRot();
         spelerPitch = mc.player.getXRot();
-        if (mc.screen != null && !(mc.screen instanceof net.minecraft.client.gui.screens.PauseScreen)) {
+        if (mc.screen instanceof nl.juiced.guhs.feature.knuffeldal.client.PraatScherm praat) {
+            praat.onClose();   // (q-dialoog: so the server hears the conversation ended, instead of waiting for it)
+        } else if (mc.screen != null && !(mc.screen instanceof net.minecraft.client.gui.screens.PauseScreen)) {
             mc.setScreen(null);
         }
         camera = new Camera(mc.level);
