@@ -228,6 +228,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z3_wereld',
             # 1.10 zone 3 "De Schemerwortel": z3-wezens (Java: feature/vadsrijk/zone3/wezens)
             'vadsrijk_z3_wezens',
+            # 1.10 night round T, T-MODELS: showcase models (Grauwe Klodderreus) + showroom texts; model kit v2 = vadsrijk_t_modelkit.py
+            'vadsrijk_t_models',
             ]
 
 

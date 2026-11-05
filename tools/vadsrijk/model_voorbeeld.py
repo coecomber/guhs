@@ -88,6 +88,8 @@ def tegel(ims, labels, titel=None, sky=LUCHT, gat=24):
     lp = 22
     H = max(i.height for i in ims)
     W = sum(i.width for i in ims) + gat * (len(ims) + 1)
+    if titel:
+        W = max(W, int(K.font(28).getlength(titel)) + 2 * gat)
     boven = 44 if titel else 8
     bg = K.gradient(W, H + boven + 34, *sky)
     d = ImageDraw.Draw(bg)

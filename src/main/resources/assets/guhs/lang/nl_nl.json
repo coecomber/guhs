@@ -39428,5 +39428,13 @@
   "vadsrijk.npc.plek.poi.z3_pelstrap": "bij de trap omlaag naar de Pelszaal, op de vloer van de Schorsstad",
   "vadsrijk.npc.plek.poi.z3_kabelbrug": "bij het begin van de kabelbrug naar de Kaaszeppelinwerf, aan de noordoostrand van Honingtak",
   "vadsrijk.npc.plek.gebied.z3_stamspiraal": "op het rijpad, de brede weg die buitenom de stam omhoog draait",
-  "vadsrijk.npc.q.z3_hq02_bezoek.klaar.5": "Neem de lift in de binnenhof van de stam (door de trapdeur hier aan het plein) naar de vloer van de Schorsstad, en ga door de noordpoort naar buiten. En hier: de sleutel van de Honinglift. Daarmee ben je altijd snel weer boven."
+  "vadsrijk.npc.q.z3_hq02_bezoek.klaar.5": "Neem de lift in de binnenhof van de stam (door de trapdeur hier aan het plein) naar de vloer van de Schorsstad, en ga door de noordpoort naar buiten. En hier: de sleutel van de Honinglift. Daarmee ben je altijd snel weer boven.",
+  "vadsrijk.tmodels.cmd.toon": "%s wezens neergezet om te bekijken (stil, onkwetsbaar). Weg: /guhs vadsrijk models weg",
+  "vadsrijk.tmodels.cmd.weg": "%s showroom-wezens opgeruimd.",
+  "vadsrijk.tmodels.cmd.plof": "%s wezens opgevrolijkt: zo zien ze er roze en blij uit.",
+  "vadsrijk.tmodels.cmd.reus": "De Grauwe Klodderreus staat klaar (%s).",
+  "vadsrijk.tmodels.cmd.reus.stil": "stil, om te bekijken",
+  "vadsrijk.tmodels.cmd.reus.vecht": "hij vecht, lv 3",
+  "vadsrijk.tmodels.cmd.anim": "Animatie '%s' gestart bij %s Klodderreus(en).",
+  "vadsrijk.tmodels.cmd.onbekend": "Onbekende groep '%s' (zone1, zone2, zone3, critters, alles)."
 }

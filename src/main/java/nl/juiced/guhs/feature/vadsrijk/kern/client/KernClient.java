@@ -41,9 +41,10 @@ public final class KernClient {
             }
         });
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> {
-            e.registerEntityRenderer(KernRegistry.PROEFKLODDER.get(), KlodderRenderer::new);
-            e.registerEntityRenderer(KernRegistry.PROEFKLODDERTJE.get(), KlodderRenderer::new);
-            e.registerEntityRenderer(KernRegistry.KLODDERREUS.get(), KlodderRenderer::new);
+            // T-MODELS: GeckoLib models instead of the vanilla slime (KlodderRenderer stays as the fallback, unused)
+            e.registerEntityRenderer(KernRegistry.PROEFKLODDER.get(), nl.juiced.guhs.feature.vadsrijk.tmodels.client.KlodderGeoRenderer::klein);
+            e.registerEntityRenderer(KernRegistry.PROEFKLODDERTJE.get(), nl.juiced.guhs.feature.vadsrijk.tmodels.client.KlodderGeoRenderer::klein);
+            e.registerEntityRenderer(KernRegistry.KLODDERREUS.get(), nl.juiced.guhs.feature.vadsrijk.tmodels.client.KlodderGeoRenderer::reus);
         });
         // In the dimension the skill keys win: other Guhs keys on the same key (maag G, snuffel R/V/Z) are swallowed first.
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Pre e) -> {

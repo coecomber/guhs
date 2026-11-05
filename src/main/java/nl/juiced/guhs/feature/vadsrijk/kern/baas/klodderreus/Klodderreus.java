@@ -113,6 +113,7 @@ public class Klodderreus extends VadsrijkBaas {
             return;
         }
         sl.playSound(null, blockPosition(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 2f, 1.4f);
+        nl.juiced.guhs.feature.vadsrijk.tmodels.KlodderGeo.speel(this, "brul");   // T-MODELS
         sl.sendParticles(ParticleTypes.LARGE_SMOKE, getX(), getY() + 2, getZ(), 40, 1.5, 1.5, 1.5, 0.05);
         if (fase == 2) {
             spuug(4);
@@ -139,6 +140,7 @@ public class Klodderreus extends VadsrijkBaas {
             sl.addFreshEntity(k);
         }
         sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2f, 0.5f);
+        nl.juiced.guhs.feature.vadsrijk.tmodels.KlodderGeo.speel(this, "spuug");   // T-MODELS
         sl.sendParticles(ParticleTypes.ITEM_SLIME, getX(), getY() + 2.5, getZ(), 40, 1, 0.5, 1, 0.2);
     }
 
@@ -194,6 +196,7 @@ public class Klodderreus extends VadsrijkBaas {
                     timer = fase() >= 3 ? 20 : fase() >= 2 ? 24 : 30;
                     landing = voetenVan(t);
                     Telegraaf.cirkel(sl, landing, 3.5, timer + 14, Telegraaf.ROOD);
+                    nl.juiced.guhs.feature.vadsrijk.tmodels.KlodderGeo.speel(this, "aanloop");   // T-MODELS
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2f, 0.6f);
                 }
             }
@@ -250,6 +253,7 @@ public class Klodderreus extends VadsrijkBaas {
 
     /** The spit: a grey blob lobbed at a player (red circle where it lands). */
     private void spuugBal(ServerPlayer p) {
+        nl.juiced.guhs.feature.vadsrijk.tmodels.KlodderGeo.speel(this, "spuug");   // T-MODELS
         lob(p, 2.8, 26, 1.1, "spuug", null, 0, new net.minecraft.core.particles.ItemParticleOption(ParticleTypes.ITEM,
                 net.minecraft.world.item.Items.SLIME_BALL), Telegraaf.ROOD);
     }

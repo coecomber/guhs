@@ -39428,5 +39428,13 @@
   "vadsrijk.npc.plek.poi.z3_pelstrap": "bij de trap omlaag naar de Pelszaal, op de vloer van de Schorsstad",
   "vadsrijk.npc.plek.poi.z3_kabelbrug": "bij het begin van de kabelbrug naar de Kaaszeppelinwerf, aan de noordoostrand van Honingtak",
   "vadsrijk.npc.plek.gebied.z3_stamspiraal": "op het rijpad, de brede weg die buitenom de stam omhoog draait",
-  "vadsrijk.npc.q.z3_hq02_bezoek.klaar.5": "Neem de lift in de binnenhof van de stam (door de trapdeur hier aan het plein) naar de vloer van de Schorsstad, en ga door de noordpoort naar buiten. En hier: de sleutel van de Honinglift. Daarmee ben je altijd snel weer boven."
+  "vadsrijk.npc.q.z3_hq02_bezoek.klaar.5": "Neem de lift in de binnenhof van de stam (door de trapdeur hier aan het plein) naar de vloer van de Schorsstad, en ga door de noordpoort naar buiten. En hier: de sleutel van de Honinglift. Daarmee ben je altijd snel weer boven.",
+  "vadsrijk.tmodels.cmd.toon": "%s creatures placed to look at (frozen, invulnerable). Remove: /guhs vadsrijk models weg",
+  "vadsrijk.tmodels.cmd.weg": "%s showroom creatures removed.",
+  "vadsrijk.tmodels.cmd.plof": "%s creatures cheered up: this is their pink, happy look.",
+  "vadsrijk.tmodels.cmd.reus": "The Grey Blob Giant is ready (%s).",
+  "vadsrijk.tmodels.cmd.reus.stil": "frozen, to look at",
+  "vadsrijk.tmodels.cmd.reus.vecht": "he fights, lv 3",
+  "vadsrijk.tmodels.cmd.anim": "Animation '%s' started on %s Blob Giant(s).",
+  "vadsrijk.tmodels.cmd.onbekend": "Unknown group '%s' (zone1, zone2, zone3, critters, alles)."
 }

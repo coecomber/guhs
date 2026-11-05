@@ -46,8 +46,6 @@ def auto_c(rol, size, gezicht):
     if m < 3:
         return 0.0
     c = min(3.0, max(0.5, _half(m * 0.2)))
-    if gezicht:
-        c = max(0.5, _half(c * 0.5))
     return min(c, m * 0.3)
 
 
@@ -68,10 +66,12 @@ def rond_blok(model, raw, bone, rol, origin, size, c, rot=None, pivot=None, infl
     else:
         k = _half(max(0.5, c * 0.29)) if c >= 1.5 else c * 0.5
         stukken.append(bar(k, k, k))
+    # the face is painted in model space over every front of the group (gezichten_wereld), so it can be big and round
+    groep = {"o": tuple(origin), "s": tuple(size), "g": gezicht, "n": len(model.regios)} if gezicht else None
     for o, s, rec, voor in stukken:
         if min(s) <= 0:
             continue
-        raw(bone, rol, o, s, rot, pivot, inflate, gezicht if voor else None, {f: (v / c if c else 0) for f, v in rec.items()})
+        raw(bone, rol, o, s, rot, pivot, inflate, None, {f: (v / c if c else 0) for f, v in rec.items()}, groep)
     return len(stukken)
 
 
@@ -80,9 +80,9 @@ def taps(raw, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0):
     ox, oy, oz = origin
     sx, sy, sz = size
     boven = sy * 0.55
-    raw(bone, rol, (ox, oy + sy - boven, oz), (sx, boven, sz), rot, pivot, inflate, None, None)
+    raw(bone, rol, (ox, oy + sy - boven, oz), (sx, boven, sz), rot, pivot, inflate, None, None, None)
     f = 0.8
-    raw(bone, rol, (ox + sx * (1 - f) / 2, oy, oz + sz * (1 - f) / 2), (sx * f, sy - boven + 0.05, sz * f), rot, pivot, inflate, None, None)
+    raw(bone, rol, (ox + sx * (1 - f) / 2, oy, oz + sz * (1 - f) / 2), (sx * f, sy - boven + 0.05, sz * f), rot, pivot, inflate, None, None, None)
 
 
 def is_taps(rol, size):
@@ -171,7 +171,7 @@ def patroon_v2(blok, naam, kleur2, r, f, L):
     h, w = blok.shape[:2]
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     if naam == "glans":
-        if f in ("north", "up", "west", "east"):
+        if f in ("north", "up", "west", "east") and min(h, w) >= 14:
             cx, cy = w * 0.27, h * 0.24
             d = np.hypot((xx - cx) / max(1.5, w * 0.16), (yy - cy) / max(1.2, h * 0.11))
             _blend(blok, np.exp(-d ** 2 * 1.6), (255, 255, 255), 0.55)
@@ -248,6 +248,49 @@ def supersample(blok, teken, n=4):
     teken(groot)
     klein = np.asarray(Image.fromarray(groot).resize((w, h), Image.BOX))
     blok[..., :3] = klein[..., :3]
+
+
+def gezichten_wereld(model, img, teken, achtergrond=None):
+    """Faces of rounded boxes: drawn once on a canvas the size of the whole (outer) front, then copied onto every north face
+    of that group at its model-space position. The fronts of a rounded box are all centred, so a symmetric face lands right
+    whichever way the texture runs. teken(canvas, gezicht_dict) draws on an opaque canvas filled with the body colour."""
+    S = model.px
+    groepen = {}
+    for reg in model.regios:
+        g = reg.get("groep")
+        if g:
+            groepen.setdefault(g["n"], (g, []))[1].append(reg)
+    for g, regs in groepen.values():
+        O, Z = g["o"], g["s"]
+        W, H = int(round(Z[0] * S)), int(round(Z[1] * S))
+        groot = max(regs, key=lambda r: r["s"][0] * r["s"][1])
+        x, y, w, h = groot["r"]
+        bron = img[y * S:(y + h) * S, x * S:(x + w) * S]
+        if achtergrond is not None:
+            vulkleur = np.array(achtergrond, np.float32)
+        else:
+            hh, ww = bron.shape[:2]
+            vulkleur = bron[hh // 4:hh * 3 // 4, ww // 4:ww * 3 // 4, :3].reshape(-1, 3).mean(0)
+        doek = np.zeros((H, W, 4), np.uint8)
+        doek[..., :3] = vulkleur.astype(np.uint8)
+        doek[..., 3] = 255
+        leeg = doek.copy()
+        supersample(doek, lambda gb: teken(gb, g["g"]))
+        anders = np.abs(doek[..., :3].astype(int) - leeg[..., :3].astype(int)).max(axis=2) > 4
+        for reg in regs:
+            x, y, w, h = reg["r"]
+            o, s = reg["o"], reg["s"]
+            rw, rh = int(round(s[0] * S)), int(round(s[1] * S))
+            c0 = int(round((o[0] - O[0]) * S))
+            r0 = int(round((O[1] + Z[1] - (o[1] + s[1])) * S))
+            if rw <= 0 or rh <= 0:
+                continue
+            blok = img[y * S:y * S + rh, x * S:x * S + rw]
+            stuk = doek[r0:r0 + rh, c0:c0 + rw]
+            m = anders[r0:r0 + rh, c0:c0 + rw]
+            hh, ww = min(blok.shape[0], stuk.shape[0]), min(blok.shape[1], stuk.shape[1])
+            b, st, mm = blok[:hh, :ww], stuk[:hh, :ww], m[:hh, :ww]
+            b[mm, :3] = st[mm, :3]
 
 
 def oogglans(blok, ogen, cy, er):

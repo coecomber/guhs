@@ -97,13 +97,14 @@ class Model:
                 return self
         return self._cube(bone, rol, origin, size, rot, pivot, inflate, gezicht, None)
 
-    def _cube(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0, gezicht=None, rec=None):
+    def _cube(self, bone, rol, origin, size, rot=None, pivot=None, inflate=0.0, gezicht=None, rec=None, groep=None):
         uv = {}
         for f in FACES:
             w, h = _face_dims(f, size)
             x, y, ww, hh = self._neem(w, h)
             self.regios.append({"rol": rol, "f": f, "r": (x, y, ww, hh), "gezicht": gezicht if f == "north" else None,
-                                "o": tuple(float(v) for v in origin), "s": tuple(float(v) for v in size), "rec": rec})
+                                "o": tuple(float(v) for v in origin), "s": tuple(float(v) for v in size), "rec": rec,
+                                "groep": groep if f == "north" else None})
             uv[f] = {"uv": [x, y], "uv_size": [w, h]}
         c = {"origin": [float(v) for v in origin], "size": [float(v) for v in size], "uv": uv}
         if inflate:
@@ -300,16 +301,21 @@ def schilder_v2(model, palet, mood, seed, grauw):
         if reg["rol"] in VACHT_ROLLEN:
             k.vacht_v2(blok, r, 0.7)
         if reg["gezicht"]:
-            g = reg["gezicht"]
-            m = g.get("mood", mood)
-            if grauw and m in ("blij", "o"):
-                m = "boos"
-            ey, sch = g.get("ey", 0.42), g.get("schaal", 1.0) * 1.1
-            k.supersample(blok, lambda gb: gezicht(gb, m, ey, sch))
-            if m in ("blij", "o"):
-                ogen, cy, er = _ogen_van(blok, ey, sch)
-                k.oogglans(blok, ogen, cy, er)
+            k.supersample(blok, lambda gb: _gezicht_v2(gb, reg["gezicht"], mood, grauw, k))
+    k.gezichten_wereld(model, img, lambda gb, g: _gezicht_v2(gb, g, mood, grauw, k))
     return Image.fromarray(img)
+
+
+def _gezicht_v2(gb, g, mood, grauw, k):
+    """One guh face on (a supersampled copy of) a front: the zone-1 face + the extra catchlight."""
+    m = g.get("mood", mood)
+    if grauw and m in ("blij", "o"):
+        m = "boos"
+    ey, sch = g.get("ey", 0.42), g.get("schaal", 1.0) * 1.1
+    gezicht(gb, m, ey, sch)
+    if m in ("blij", "o"):
+        ogen, cy, er = _ogen_van(gb, ey, sch)
+        k.oogglans(gb, ogen, cy, er)
 
 
 def schilder(model, palet, mood, seed, grauw):
@@ -394,7 +400,7 @@ def slijm_basis(naam, hoog=10, lift=0.0, px=4):
     m.bone("root")
     m.bone("lijf", "root", (0, lift, 0))
     if m.stijl >= 2:   # T-MODELS: a round blob, the top cap on its own jiggle bone "wiebel" (new bone, nothing renamed)
-        m.cube("lijf", "slijm", (-6, lift, -6), (12, hoog, 12), gezicht={"ey": 0.40, "schaal": 1.45}, rond=2.5)
+        m.cube("lijf", "slijm", (-6, lift, -6), (12, hoog, 12), gezicht={"ey": 0.42}, rond=3.0)
         m.bone("wiebel", "lijf", (0, lift + hoog * 0.55, 0))
         m.cube("wiebel", "slijm", (-3.5, lift + hoog - 2.2, -3.5), (7, 3.4, 7), rond=1.5)
     else:

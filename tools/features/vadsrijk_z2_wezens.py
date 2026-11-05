@@ -145,17 +145,22 @@ def schilder(model, palet, seed, glow_rollen=None, glow=False):
         if reg["gezicht"]:
             mood, ey = reg["gezicht"].get("mood", "beest"), reg["gezicht"].get("ey", 0.4)
             if v2:
-                if glow:
-                    k.supersample(blok, lambda gb: oog(gb, mood, ey, True))
-                else:
-                    k.supersample(blok, lambda gb: oog(gb, mood, ey, False))
-                    if mood == "lief":
-                        hh, ww = blok.shape[:2]
-                        ss = min(ww, hh)
-                        k.oogglans(blok, (ww * 0.5 - ss * 0.24, ww * 0.5 + ss * 0.24), hh * ey, max(1.2, ss * 0.1))
+                k.supersample(blok, lambda gb: _oog_v2(gb, reg["gezicht"], glow, k))
             else:
                 oog(blok, mood, ey, glow)
+    if v2:
+        k.gezichten_wereld(model, img, lambda gb, g: _oog_v2(gb, g, glow, k))
     return Image.fromarray(img)
+
+
+def _oog_v2(gb, g, glow, k):
+    """T-MODELS: the eyes of kit v2 (drawn supersampled); critters ("lief") get an extra catchlight."""
+    mood, ey = g.get("mood", "beest"), g.get("ey", 0.4)
+    oog(gb, mood, ey, glow)
+    if mood == "lief" and not glow:
+        hh, ww = gb.shape[:2]
+        ss = min(ww, hh)
+        k.oogglans(gb, (ww * 0.5 - ss * 0.24, ww * 0.5 + ss * 0.24), hh * ey, max(1.2, ss * 0.1))
 
 
 # =====================================================================================================================
