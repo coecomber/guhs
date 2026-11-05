@@ -49,7 +49,7 @@ tx 29..42 / tz -7..6). **Integration: zone 4 (tx 27..39, tz -12..-5) overlaps th
 | `wortelgewelf` + `uitkijk_wortelgewelf` | the big ground ruin (north-west) with a lookout |
 | `lichtkeverbos` / `schimmelboerderij` / `paddenbloesemdal` / `honingmoeras` | ground quadrants N / W / S / E of the island |
 | `hart_*`, `arena_wortelwurger/nestwachter/baron_bleu` | the Hart dungeon is a ring of rooms r 112, floor stand 29, round the Wortelduister hall; `hart_poort` in the hall's west wall; walking order = fight order |
-| werf | its own island NE (centre 2551, -251): Dok 1 Taleggio (ground, 168), Dok 2 Brokkel (tower, 192), Dok 3 Roquefort (mast tower, 224) |
+| werf | its own island NE (centre 1655, -827): Dok 1 Taleggio (ground, 168), Dok 2 Brokkel (tower, 192), Dok 3 Roquefort (mast tower, 224) |
 | `valbrug` / `lianenbrug` | where the riding spiral meets the Westtak / Noordtak |
 
 ## Requests to others
@@ -57,5 +57,69 @@ tx 29..42 / tz -7..6). **Integration: zone 4 (tx 27..39, tz -12..-5) overlaps th
   hall air 61..74, the Schorsstad plein stands at 81). With the default 24/24 window players on the plein would be "in" his arena.
   Please register `arena_piepvel` with `.met(16, 6, 14)` (like the dungeon arenas).
 
-## Status
-- WIP: POI v2 + kit published first (the map generator is being finished: see the resume point below).
+## The map (generator)
+- `python tools/vadsrijk/zone3/maak3.py --werkers 3` (or `maak_kaart.py --zone 3 --werkers 3`; `--geen-cache` is accepted by
+  maak_kaart, zone 3 has no cache): ~2.5 min, 154 tiles, ~3.7 M blocks, **~12 MB** (v1 was 72 / 62.5 MB). Writes
+  Z3WereldPlekken.java + POI_Z3.md (snapped onto the tiles) and `_cache/kaart_z3(_klein).png`.
+- `kit/` = the round-20 render generators made real: `boom2.py` (island, roots, Wortelduister, trunk, stair, branches, crown,
+  nest, riding spiral), `plekken2.py` (Honingtak, Schorsstad, lifts, wind, villages, camps, ruins), `werf2.py` (werf island,
+  towers, docks, cable bridge), `schemerkit.py`. Changes are marked `[zone 3 kaart]` / `[wereldindeling]`:
+  - crown r 130/95/60 (tops 232/260/284, more height between storeys, irregular edges: noise + 2 lobe frequencies, a FLAT
+    terrace round the trunk at each storey level so the stair doors come out level);
+  - ONE inner spiral stair (`boom2.wenteltrap`): floor 80 -> nest 292 in HALF steps (plank / birch slab), 8 wide, continuous
+    inner rail (gaps only at bridges), flat landings 80/166/232/260/284/292 with a door through the wall at 166/232/260/284 and
+    a coloured layer board; it comes up through a slot in the nest floor. The Wortels: a passage from the floor east to the
+    Wortelpoort tunnel; the Pelszaal: a spiral ramp under the floor;
+  - riding spiral 9 wide in HALF steps (path block / mud-brick slab), fence rail with lampions, gaps onto Honingtak, onto every
+    big branch (the branches are moved up/down so their top meets the spiral: `_takken_uitlijnen`), onto kruin 1, balconies;
+    a ramp from its start down to the ground;
+  - every rope bridge / boardwalk / cable bridge / tower stair in half steps (`plekken2.trede` / `helling`); Honingtak's
+    branch boardwalks level with the deck (on posts); doors 3 wide (diagonal-safe); werf towers: square stair OUTSIDE the deck
+    ending at the boss gate; Dok 1 a ramp up its podium; the quay a ramp down to the island;
+  - honey ponds flush (honey in a pit = no jump out), sap pools -> glowing sap patches, the Hart basket sealed (the egg
+    chamber is the dungeon's last room: tunnel under the hall floor + a ladder up into the basket).
+- `bouw3.py` = the game parts: interiors per function (ring + branch houses, the 3 hanging cells: cafe / Nestkapel / Raattros
+  with their lift shafts, the Mika-imker hall, Schorsstad wall houses, Mosvoet), chimneys, the piers, market stalls, the
+  binnenhof + 2 trunk lifts + a lantern chain in the hollow, ground gates, the Pelszaal, Kale Kruin (dead mesa with a ramp),
+  grey patches, glide platforms, lookout tower, Mika's mooring, blossom curtains + glowberries under the storey rims, lantern
+  strings from every big branch up to kruin 1, werf halls (bewapeningsloods with the 3x4 gate at +9 z, gieterij, touwwerk),
+  the wreck + a stair back up to Roquefort's deck, the Hart dungeon (rooms first, then corridors; gates on 3-wide z-legs),
+  Mosvoet hamlet, Pluimstal + training track, ground ring path with lantern posts and Pluimposten, kettles, ruin lookout,
+  secrets, campfires (unlit, kern checkpoints; the kit's lit decorative campfires are dropped).
+- `plan3.py` = every coordinate (+ `GEBIEDEN`/`MOBZONES`/`PADEN`/wind/lifts, `leven_lijsten`), `poi3.py` writes the Java + md.
+
+## Checks
+- `python tools/vadsrijk/zone3/poicheck3.py`: every published stand spot standable (except the moored airship prop).
+- **`python tools/vadsrijk/zone3/loopcheck3.py`** (new): loopcheck over the WHOLE zone in ONE window (y 4..316), with the
+  Honingplein respawn as the only seed and the lifts (both ways) + wind columns (up) as edges; VAL = reachable from the
+  respawn but no way back; POI = a published spot not reachable / a trap. loopcheck.py got `--zaden`, `--y0/--y1`, and two
+  class fixes (sea_lantern and weidekristal_* are full blocks; before they counted as holes).
+- Results: see the log at the end.
+
+## Status (end of this session)
+- Map builds (154 tiles, 12.0 MB, ~2.5 min with 3 workers). poicheck3: 423/424 standable (the moored airship prop is not).
+- loopcheck3 (whole zone, one window, respawn seed + lifts + wind): **every arena, room, landing, lift stop, wind landing, pier,
+  house and village spot is reachable from the Honingplein AND you can walk back** (the whole stair floor -> nest, Pelszaal,
+  Hart dungeon to the egg, all 3 werf decks, the crowns, the piers, Mosvoet, Pluimstal). TRAP (stairs leading nowhere) 0.
+  Left over:
+  - 2 POIs without a stand spot: `hangnest_woning_3` (Raatweide house 3, Zuidwesttak s 114: probably cut by the
+    `paddenbloesem_tak` wind column next to it) and `kuiken_6` (crown 1 rim). p-verhuis: use a spot next to them.
+  - VAL 63 regions / ~4250 cells: almost all are ledges UNDER the floating island and the werf island (y 19-46, the cone
+    undersides, hanging roots): you only get there by falling off the edge (no water ring any more; what lies below the
+    islands is the world layout's cloud sea). The few above ground: a 34-cell pocket 2 deep at (1289,163,-531) beside a
+    Kruinlifttak house platform, 9 cells at (1621,164,-483) beside the Oosttaksteiger platform, 5 at (1364,193,-690), and
+    ~8 single cells (1-2 blocks, 1.5-3 up). Not fixed yet (time).
+  - PAD 388: dirt-path cells with a block above them (mostly the ring path under trees / the riding spiral under lamp posts);
+    cosmetic, not a trap.
+  - LEEG 796 = cells where loopcheck falls out of the volume (the island edges): expected for a floating island.
+- Not seen in a client (no AutoCheck). Looks are unjudged; the user judges in the dev client.
+- Java touched: generated `Z3WereldPlekken` (+ new lists `SCHOORSTENEN`, `BIJENKORVEN`, `LICHTJES`, `BRUGGEN`; `STAM_Z` is no
+  longer 0), `client/Z3WereldClient` (layer fog by the new heights), `client/Z3Sfeer` (chimney smoke + bee particles at the
+  map's lists; radii for the smaller island). NOT touched (other agents / integration): `Z3Reizen` opening-film cameras (relative
+  to the trunk, still fine), the zone borders in `QuestStap` / `Z3Haken` / `Z3NpcPlekken.isZone3` (the world layout md says they
+  become `VadsrijkZones.zoneVan`), the travel map / harbour lines B and C (`dok_*` = Weststeiger, `oosttaksteiger_*`).
+
+## Resume point
+- Regenerate: `python tools/vadsrijk/zone3/maak3.py --werkers 3`, then `python tools/vadsrijk/zone3/poicheck3.py` and
+  `python tools/vadsrijk/zone3/loopcheck3.py`. Debug a trap: `loopcheck.py ... --zaden <json> --route x,y,z` (see loopcheck3).
+- Tiles are NOT committed (integration regenerates; the build also deletes the old zone-3 tiles: commit those deletions).

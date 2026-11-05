@@ -64,16 +64,16 @@ def grond_f(x, z):
 # ================================================================================================ init (rail gaps, free spots)
 def init():
     # inner stair: the Honingtak landing opens to the binnenhof deck, the kruin-1 landing to lift 2's top platform, the nest
-    for i in (1, 2, 5):
+    for i, hw in ((1, 0.15), (2, 0.09), (5, B.TRAP_WL / 2 + 0.02)):
         a, L = B.trap_landing(i)
-        B.TRAP_GATEN.append((a % (2 * math.pi), B.TRAP_WL / 2 + 0.02, L - 0.6, L + 0.6))
+        B.TRAP_GATEN.append((a % (2 * math.pi), hw, L - 0.6, L + 0.6))
     a0, _ = B.trap_landing(0)
     B.TRAP_GATEN.append((a0 % (2 * math.pi), math.pi, 70, 81.6))           # the floor landing: the floor itself
     # riding spiral: onto the Honingplein, onto kruin 1 at the end, the balconies, the start
     B.RIJ_GATEN.append((B.TH_M, 0.5, HY - 3, HY + 3))
     th_end = B.RIJ["th0"] + 2 * math.pi * (B.RIJ["eind"] - B.RIJ["y0"]) / B.RIJ["stijg"]
     B.RIJ_GATEN.append((th_end % (2 * math.pi), 1.2, B.RIJ["eind"] - 12, B.RIJ["eind"] + 1))
-    for k, (turn, deg) in enumerate(((0, 200), (2, 30), (3, 250))):
+    for k, (turn, deg) in enumerate(PL.BALKONS):
         th = math.radians(deg)
         lev = B.rij_lev(th, turn)
         B.RIJ_GATEN.append((th, 0.06, lev - 2, lev + 2))
@@ -179,10 +179,11 @@ def interieur(W, x, fy, z, deur, fn, Rh):
         at(0, rug, "guhs:weidekristal_roze")
         at(0, -rug, "guhs:guh_kristal_blok")
     elif fn in ("drankjes", "uitrusting", "algemeen", "bank", "jagershut"):
-        for b in (-1.5, -0.5, 0.5, 1.5):
-            at(0.4, b, "minecraft:stripped_oak_wood" if fn != "bank" else "minecraft:gold_block")
-            op(0.4, b, "minecraft:oak_slab[type=bottom,waterlogged=false]")
-        for b in (-1.5, 1.5):
+        ca = 0.4 if Rh >= 4 else -0.6           # the small half-timbered houses: counter nearer the door
+        for b in ((-1.5, -0.5, 0.5, 1.5) if Rh >= 4 else (-1, 0, 1)):
+            at(ca, b, "minecraft:stripped_oak_wood" if fn != "bank" else "minecraft:gold_block")
+            op(ca, b, "minecraft:oak_slab[type=bottom,waterlogged=false]")
+        for b in ((-1.5, 1.5) if Rh >= 4 else ()):
             at(rug, b, "minecraft:barrel[facing=up,open=false]")
             op(rug, b, "guhs:glimpotje[licht=3]" if fn == "drankjes" else
                ("minecraft:chest[facing=north,type=single,waterlogged=false]" if fn == "bank" else "minecraft:honeycomb_block"))
@@ -217,7 +218,7 @@ def schoorsteen(W, sx, sz, top):
 
 
 def honingtak_extra(W):
-    if not W.raakt(-170, HY - 40, -170, 170, HY + 30, 170):
+    if not W.raakt(-260, HY - 40, -260, 260, HY + 30, 260):
         return
     for fn, (hx, hz, deur, Rr, waar, soort) in PL.ring_functies():
         if not W.raakt(hx - 10, HY - 3, hz - 10, hx + 10, HY + 16, hz + 10):
@@ -282,7 +283,7 @@ def honingtak_extra(W):
             for d in (1, 3):
                 for w_ in (-4, -3, 3, 4):
                     W.wset(cx + ux * d - uz * w_, yb + 1, cz + uz * d + ux * w_,
-                           "minecraft:birch_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]")
+                           "minecraft:birch_slab[type=bottom,waterlogged=false]")
         else:
             W.wset(cx + 2, yb + 1, cz - 2, "minecraft:beehive[facing=south,honey_level=5]")
             W.wset(cx - 2, yb + 1, cz + 2, "minecraft:barrel[facing=up,open=false]")
@@ -475,25 +476,26 @@ def pelszaal(W):
         px, py, pz = R(f"piepvel_lantaarnpaal_{k}")
         W.wfill(px, fy + 1, pz, px, fy + 3, pz, "minecraft:dark_oak_fence")
         W.wset(px, fy + 4, pz, "guhs:lampion_uit")
-    # the stair: from the floor hole (stand 81) along a chord down to the hall edge (stand 61), 1 block per 2 = half steps
+    # the stair: a spiral ramp in the solid trunk foot round the hall (ring r 19..23), from a hole in the Schorsstad floor
+    # (stand 81) down to the hall door (stand 61): 20 down over ~44 blocks = half steps
     pa = PL.pelszaal_trap_hoek()
-    a0 = pa - 0.75
-    top = (21 * math.cos(a0), 21 * math.sin(a0))
-    tx_, tz_ = -math.sin(a0), math.cos(a0)
-    # the stair runs tangentially (+t) for 40 blocks then turns inward to the hall door at angle pa
-    mid = (top[0] + tx_ * 0, top[1] + tz_ * 0)
-    eind = (21 * math.cos(pa), 21 * math.sin(pa))
-    P.helling(W, top, B.VOET + 1, eind, fy + 1 + 4, breed=1.5, vol="minecraft:dark_oak_planks",
-              half="minecraft:dark_oak_slab[type=bottom,waterlogged=false]", hek=None, lucht=4)
-    deur = (12.5 * math.cos(pa), 12.5 * math.sin(pa))
-    P.helling(W, eind, fy + 1 + 4, deur, fy + 1, breed=1.5, vol="minecraft:dark_oak_planks",
-              half="minecraft:dark_oak_slab[type=bottom,waterlogged=false]", hek=None, lucht=4)
-    # the hole in the floor: a rail round it (open on the stair side), lanterns
-    for t in np.linspace(-0.25, 0.25, 9):
-        for s_ in (-1, 1):
-            r = 21 + s_ * 2.4
-            W.wset(r * math.cos(a0 + t), B.VOET + 1, r * math.sin(a0 + t), "minecraft:dark_oak_fence", keep=True)
-    W.wset(top[0], B.VOET + 2, top[1], LUCHT)
+    span = 44.0 / 21.0
+    a_top = pa - span
+    for i in range(0, 89):
+        t = i / 88
+        a = a_top + span * t
+        sh = float(B.stand(B.VOET + (fy - B.VOET) * t))
+        for rr in np.arange(19.0, 23.01, 0.5):
+            P.trede(W, rr * math.cos(a), sh, rr * math.sin(a), "minecraft:dark_oak_planks",
+                    "minecraft:dark_oak_slab[type=bottom,waterlogged=false]", lucht=4)
+        if B.VOET - sh > 2.5:
+            for rr in (18.4, 23.6):     # a rail on the Schorsstad floor along the open slot
+                W.wset(rr * math.cos(a), B.VOET + 1, rr * math.sin(a), "minecraft:dark_oak_fence", keep=True)
+    # the door: from the ramp foot straight into the hall
+    for rr in np.arange(14.0, 19.5, 0.5):
+        for w_ in np.arange(-1.5, 1.51, 0.5):
+            P.trede(W, rr * math.cos(pa) - w_ * math.sin(pa), fy + 1, rr * math.sin(pa) + w_ * math.cos(pa),
+                    "minecraft:dark_oak_planks", "minecraft:dark_oak_slab[type=bottom,waterlogged=false]", lucht=4)
 
 
 def wortelgang_trap(W):
@@ -590,13 +592,12 @@ def kruin_extra(W):
         W.cilinder(x + 0.5, z + 0.5, 4.5, y, y, HEK, hollow=1)
         for (dx, dz) in ((-3, -3), (3, -3), (-3, 3), (3, 3)):
             W.wfill(x + dx, g - 3, z + dz, x + dx, y - 2, z + dz, HOUT)
+        W.wfill(x - 1, g, z - 1, x + 1, g, z + 3, PLANK)
         for yy in range(g + 1, y):
             W.wset(x, yy, z, "minecraft:stripped_spruce_log[axis=y]")
             W.wset(x, yy, z + 1, "minecraft:ladder[facing=south,waterlogged=false]")
             W.wset(x, yy, z + 2, LUCHT)
-        W.wset(x, y - 1, z + 1, LUCHT)
         W.wset(x, y, z + 1, LUCHT)
-        W.wfill(x - 1, g, z - 1, x + 1, g, z + 3, PLANK)
         W.wset(x, y + 4, z, LAMP_R)
     mx, my, mz = R("mika_steiger")
     if W.raakt(mx - 14, my - 4, mz - 14, mx + 14, my + 24, mz + 14):
@@ -693,6 +694,13 @@ def werf_extra(W):
     cx, cz = WF.C
     if not W.raakt(cx - 90, 120, cz - 90, cx + 90, 260, cz + 90):
         return
+    # the harbour quay is 2 above the island: a ramp from the quay towards the island centre
+    px, pz = WF.poort_pos()
+    a = math.atan2(cz - pz, cx - px)
+    P.helling(W, (px + math.cos(a) * 5, pz + math.sin(a) * 5), 160, (px + math.cos(a) * 20, pz + math.sin(a) * 20),
+              int(math.floor(WF.werf_top(px + math.cos(a) * 20, pz + math.sin(a) * 20))) + 1, breed=2.0,
+              vol="minecraft:stone_bricks", half="minecraft:stone_brick_slab[type=bottom,waterlogged=false]", hek=None, lucht=4,
+              grond=lambda x, z: math.floor(WF.werf_top(x, z)))
     # the bewapeningsloods: a hall (inner x -6..6, z -4..8) with the gate (3 x 4, open) in its +z wall at z + 9
     bx, by, bz = R("werf_kamer_bewapening")
     fy = by - 1
@@ -709,6 +717,11 @@ def werf_extra(W):
     for dz_ in (-8, -7, -6, 10, 11, 12):
         W.wfill(bx - 2, fy, bz + dz_, bx + 2, fy, bz + dz_, "minecraft:coarse_dirt")
         W.wfill(bx - 2, fy + 1, bz + dz_, bx + 2, fy + 4, bz + dz_, LUCHT)
+    # from the gate to the tower-3 stair start
+    s3 = WF.toren_trap(WF.DOKKEN[2])[0]
+    P.helling(W, (bx, bz + 11), by, (s3[0] - 2, s3[1]), s3[2], breed=1.5, vol="minecraft:coarse_dirt",
+              half="minecraft:spruce_slab[type=bottom,waterlogged=false]", hek=None, lucht=4,
+              grond=lambda x, z: math.floor(WF.werf_top(x, z)))
     for key, muur, extra in (("werf_kamer_gieterij", "minecraft:bricks", "minecraft:magma_block"),
                              ("werf_kamer_touwwerk", "minecraft:dark_oak_planks", None)):
         x, y, z = R(key)
@@ -916,7 +929,6 @@ def grond_extra(W):
             W.wset(x, yy, z, "minecraft:mossy_stone_bricks")
             W.wset(x, yy, z + 1, "minecraft:ladder[facing=south,waterlogged=false]")
             W.wset(x, yy, z + 2, LUCHT)
-        W.wset(x, y - 1, z + 1, LUCHT)
         W.wset(x, y, z + 1, LUCHT)
         for (dx, dz) in ((-3, -3), (3, -3), (-3, 3), (3, 3)):
             W.wset(x + dx, y, z + dz, HEK)
@@ -1016,6 +1028,11 @@ def pluimstal(W):
             W.wset(sx + ox * 6 + tx * w_, g + h, sz + oz * 6 + tz * w_, LUCHT)
     for d in (-8, 0, 8):
         W.wset(sx + tx * d, g + 4, sz + tz * d, HANGLAMP)
+    for s_ in (-1, 1):
+        a_ = (sx + ox * 6.5 * s_, sz + oz * 6.5 * s_)
+        b_ = (sx + ox * 16 * s_, sz + oz * 16 * s_)
+        P.helling(W, a_, g, b_, PL.gstand(*b_), breed=1.5, vol="minecraft:dirt_path",
+                  half="minecraft:mud_brick_slab[type=bottom,waterlogged=false]", hek=None, lucht=4, grond=lambda x, z: grond_f(x, z))
     # the starter pen and the training track (an oval of fences round a path)
     kx, ky, kz = R("pluimstal_keuze")
     W.cilinder(kx + ox * 6, kz + oz * 6, 10, ky - 1, ky - 1, "minecraft:coarse_dirt")

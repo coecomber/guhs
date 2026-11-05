@@ -40,6 +40,15 @@ def platform(W, cx, y, cz, R, hek=True, steun=8):
         W.buis([p0, p1], [0.8, 0.8], HOUT)
 
 
+def deuropening(W, cx, fy, cz, dx, dz, R):
+    """[zone 3 kaart] A door 2-3 wide and 3 high through a round/hex wall, also on a diagonal (a 1-wide diagonal gap is not
+    passable)."""
+    for d in np.arange(R - 1.6, R + 1.01, 0.25):
+        for w in np.arange(-1.0, 1.01, 0.25):
+            for k in range(3):
+                W.wset(cx + dx * d - dz * w, fy + k, cz + dz * d + dx * w, "minecraft:air")
+
+
 def skep(W, cx, fy, cz, a_deur, soort=0, R=5.0):
     """Bijenkorfhuisje (skep): gestapelde strobanden, ronde deur, honingramen, guh-oortjes, lampion."""
     banden = [("minecraft:hay_block", "minecraft:yellow_terracotta"), ("guhs:roze_hooibaal", "minecraft:pink_terracotta"),
@@ -50,9 +59,7 @@ def skep(W, cx, fy, cz, a_deur, soort=0, R=5.0):
         r = R * math.sqrt(max(0.0, 1 - t ** 2.2)) + 0.4
         W.cilinder(cx, cz, r, fy + k, fy + k, banden[1] if k % 3 == 2 else banden[0], hollow=1.3)
     dx, dz = math.cos(a_deur), math.sin(a_deur)
-    for k in range(3):
-        W.wset(cx + dx * (R - 0.3), fy + k, cz + dz * (R - 0.3), "minecraft:air")
-        W.wset(cx + dx * (R + 0.4), fy + k, cz + dz * (R + 0.4), "minecraft:air")
+    deuropening(W, cx, fy, cz, dx, dz, R)
     W.wset(cx + dx * (R + 0.6), fy + 3, cz + dz * (R + 0.6), LAMP_G)
     for s in (-1, 1):
         W.wset(cx - dz * s * (R - 0.2), fy + 2, cz + dx * s * (R - 0.2), "minecraft:ochre_froglight")
@@ -79,8 +86,7 @@ def raathuis(W, cx, fy, cz, a_deur, R=4.5, h=7, dak="minecraft:pink_wool"):
         m = (dxy <= rr) & (y >= fy + h + k) & (y < fy + h + k + 1)
         v[m] = W.id(dak if k % 2 == 0 else "guhs:pluisdak")
     dx, dz = math.cos(a_deur), math.sin(a_deur)
-    for k in range(3):
-        W.wset(cx + dx * (R - 0.5), fy + k, cz + dz * (R - 0.5), "minecraft:air")
+    deuropening(W, cx, fy, cz, dx, dz, R)
     W.wset(cx + dx * (R + 0.5), fy + 3, cz + dz * (R + 0.5), LAMP_R)
 
 
@@ -322,7 +328,7 @@ def tak_huizen():
 
 
 def honingtak(W):
-    if not W.raakt(-170, HY - 40, -170, 170, HY + 30, 170):
+    if not W.raakt(-260, HY - 40, -260, 260, HY + 30, 260):
         return
     # 1. de takken onder Honingtak; [zone 3 kaart] the boardwalk on top is LEVEL with the deck (166) on posts, so you walk
     #    off the deck onto it without a drop
@@ -491,7 +497,7 @@ TOREN_TOP = 160
 
 def _toren_gaten():
     for y in TOREN_RINGEN:
-        B.TRAP_GATEN.append((B.trap_hoek(y) % (2 * math.pi), 0.09, y - 0.6, y + 0.6))
+        B.TRAP_GATEN.append((B.trap_hoek(y) % (2 * math.pi), 0.07, y - 0.6, y + 0.6))
 
 
 _toren_gaten()
@@ -500,7 +506,7 @@ _toren_gaten()
 def schors_huizen():
     """[zone 3 kaart] Houses in the trunk wall along the stair: (y0 = stair level at the door, door angle, floor block y)."""
     out = []
-    for y0 in np.arange(B.VOET + 6, 158, 4.5):
+    for y0 in np.arange(B.VOET + 10.5, 158, 4.5):
         if any(abs(y0 - yb) < 6 for (yb, _) in B.BORDES):
             continue
         a = B.trap_hoek(y0)
@@ -520,22 +526,23 @@ def schorsstad(W):
         a = k * 2 * math.pi / 10
         p = pol(11, a, B.VOET + 1)
         if k % 2:
-            W.wset(p[0], p[1], p[2], "minecraft:spruce_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]")
+            W.wset(p[0], p[1], p[2], "minecraft:spruce_slab[type=bottom,waterlogged=false]")   # [zone 3 kaart] a bench
         else:
             W.wset(p[0], p[1], p[2], "minecraft:candle[candles=4,lit=true,waterlogged=false]")
     # Lantaarntoren: een zuil in het midden met lichtringen, touwbruggen naar de trap ([zone 3 kaart] 7 rings, every 10)
     for y in range(B.VOET + 1, TOREN_TOP):
         W.cilinder(0, 0, 2.2, y, y, "minecraft:stripped_spruce_wood" if y % 9 else "minecraft:spruce_wood")
     for i, y in enumerate(TOREN_RINGEN):
-        W.cilinder(0, 0, 4.5, y, y, PLANK)
-        W.cilinder(0, 0, 4.5, y + 1, y + 1, HEK, hollow=1)
+        W.cilinder(0, 0, 6.0, y, y, PLANK)
+        W.cilinder(0, 0, 6.0, y + 1, y + 1, HEK, hollow=1)
         for k in range(8):
             a = k * math.pi / 4
             W.wset(4.8 * math.cos(a), y - 1, 4.8 * math.sin(a), LAMP_G if k % 2 else "minecraft:ochre_froglight")
         a = B.trap_hoek(y)
         for w in (-1, 0, 1):
-            W.wset(4.5 * math.cos(a) - w * math.sin(a), y + 1, 4.5 * math.sin(a) + w * math.cos(a), "minecraft:air")
-        touwbrug(W, pol(4.0, a, y), pol(B.TRAP_R0 + 1.5, a, y), zak=1.0)
+            for rr_ in (5.0, 5.5, 6.0):
+                W.wset(rr_ * math.cos(a) - w * math.sin(a), y + 1, rr_ * math.sin(a) + w * math.cos(a), "minecraft:air")
+        touwbrug(W, pol(5.0, a, y), pol(B.TRAP_R0 + 1.5, a, y), zak=0.5)
     # huisjes in de wand langs de trap: elk huisje heeft zijn drempel op de trap
     for (y0, a, h) in schors_huizen():
         ca, sa = math.cos(a), math.sin(a)
@@ -690,6 +697,14 @@ def _op_tak(tak, s_):
     return x, z, int(math.floor(yt))
 
 
+def _land(s, x, z):
+    """The landing level (top block) of a wind column on crown storey s: the crown at the landing point 7 blocks towards the
+    trunk (the column sets you down there), never lower than at the column."""
+    a = math.atan2(z, x)
+    lx, lz = x - 7 * math.cos(a), z - 7 * math.sin(a)
+    return int(math.floor(max(B.kruin_top(s, lx, lz), B.kruin_top(s, x, z))))
+
+
 def windkolommen_plan():
     """[zone 3 kaart] (id, x, z, y0 = top block at the foot, y1 = top block of the landing, naam).
     Branch tips -> kruin 1, kruin 1 -> 2, kruin 2 -> 3, the ground -> Honingtak (deck level)."""
@@ -697,14 +712,14 @@ def windkolommen_plan():
     for (wid, tak, s_) in (("werf_tak", "Westtak", 116), ("hangnest", "Bijentak", 112),
                            ("paddenbloesem_tak", "Zuidwesttak", 112), ("spiraal_kruin", "Molentak", 108)):
         x, z, yt = _op_tak(tak, s_)
-        WIND.append((wid, x, z, yt, int(round(B.kruin_top(0, x, z))), "windkolom: " + tak + " -> kruin 1"))
+        WIND.append((wid, x, z, yt, _land(0, x, z), "windkolom: " + tak + " -> kruin 1"))
     a = math.radians(250)
     x, z = 76 * math.cos(a), 76 * math.sin(a)
-    WIND.append(("mosvoet_kruin", x, z, int(round(B.kruin_top(0, x, z))), int(round(B.kruin_top(1, x, z))),
+    WIND.append(("mosvoet_kruin", x, z, int(round(B.kruin_top(0, x, z))), _land(1, x, z),
                  "windkolom: kruin 1 -> 2"))
     a = math.radians(330)
     x, z = 46 * math.cos(a), 46 * math.sin(a)
-    WIND.append(("lichtkever_kruin", x, z, int(round(B.kruin_top(1, x, z))), int(round(B.kruin_top(2, x, z))),
+    WIND.append(("lichtkever_kruin", x, z, int(round(B.kruin_top(1, x, z))), _land(2, x, z),
                  "windkolom: kruin 2 -> 3"))
     a = math.radians(205)
     x, z = 78 * math.cos(a), 78 * math.sin(a)
@@ -727,8 +742,10 @@ def windkolommen(W):
                 W.wset(x + 5.4 * math.cos(a), y + 1, z + 5.4 * math.sin(a),
                        "minecraft:pink_tulip" if k % 2 else "minecraft:peony[half=lower]")
             if top:
-                # rand van het gat bovenin: bloesemkrans, zodat je ziet waar je uitkomt
+                # rand van het gat bovenin: bloesemkrans, zodat je ziet waar je uitkomt; [zone 3 kaart] the middle stays OPEN
+                # (the wind pushes you up through it and sets you down on the landing beside it)
                 W.cilinder(x, z, 4.6, y, y, "minecraft:cherry_leaves", hollow=1)
+                W.cilinder(x, z, 3.4, y, y + 4, None)
         W.label(x, y1 + 8, z, naam)
         # bloesem die omhoog wervelt
         rng = np.random.default_rng(int(abs(x) + abs(z)))
