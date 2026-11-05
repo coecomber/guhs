@@ -184,7 +184,9 @@ public class VadsrijkZ3WezensGameTests {
                 Z3WezensSpawners.MAX_PER_GEBIED, Z3WezensSpawners.ALLE.size(), Z3WezensPlekken.wereldBekend());
         for (Z3WezensPlekken.Laag l : Z3WezensPlekken.LAGEN) {
             int max = Z3WezensSpawners.MAX_PER_GEBIED.getOrDefault(l.id(), 0);
-            helper.assertTrue(max >= 55 && max <= 105, l.id() + ": max alive " + max);
+            // (P-VERHUIS) the revamped tree is compact: the narrow branches and the dark stair section hold fewer creatures
+            int min = l.id().equals("takkenbanen") || l.id().equals("schorsstad") ? 25 : 55;
+            helper.assertTrue(max >= min && max <= 105, l.id() + ": max alive " + max);
         }
         for (Spawners.Spawner s : Z3WezensSpawners.ALLE) {
             helper.assertTrue(Spawners.van(s.id()) != null, "registered " + s.id());

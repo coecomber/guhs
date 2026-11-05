@@ -251,7 +251,7 @@ public final class Z3WezensPlekken {
 
     static {
         // (P-VERHUIS) Honingtak: the ring town round the trunk (deck 166, houses to ~182, the boardwalk branches to r ~140)
-        VEILIG.add(new Veilig(new BlockPos(TX, 166, TZ), 145, 145, 186));
+        VEILIG.add(new Veilig(new BlockPos(TX, 166, TZ), 145, 145, 180));   // (to the roofs; the big branches above it are mob land)
         veilig(w("dok_mast", 2209, 167, -94), 30, 10, 24);                           // the airship dock at the tip of the Imkerstraat
         // the beekeeper villages on the big branches
         for (String id : List.of("hangnest_plein", "raatweide_plein", "molenhoek_plein")) {
@@ -382,7 +382,9 @@ public final class Z3WezensPlekken {
                 bron.put(n, q);
             });
         }
-        bron.forEach((n, p) -> {
+        bron.forEach((n, p0) -> {
+            // (P-VERHUIS) a branch path starts at the trunk axis: the part inside the trunk (r < 30) is not a path (the dark stair is there)
+            int[][] p = n.startsWith("takbaan") ? java.util.Arrays.stream(p0).filter(q -> Math.hypot(q[0] - TX, q[1] - TZ) >= 30).toArray(int[][]::new) : p0;
             if (p.length > 1) {
                 int[] h = hoogten(n);
                 PADEN.add(new Pad(n, p, h[0], h[1]));
@@ -459,9 +461,9 @@ public final class Z3WezensPlekken {
     public static final List<Tak> TAKKEN = List.of(
             new Tak("takbaan_bijentak", 11, 5.5), new Tak("takbaan_zuidwesttak", 11, 5.5), new Tak("takbaan_westtak", 12, 5.5),
             new Tak("takbaan_molentak", 10, 5.5), new Tak("takbaan_noordtak", 9, 5.5));
-    public static final int TAK_MIN_Y = 170, TAK_MAX_Y = 224;
+    public static final int TAK_MIN_Y = 182, TAK_MAX_Y = 224;
 
     /** The dark stair section of the trunk (Schorsstad mob zone, above Honingtak): spawners on the stair at radius 19, every 12 up. */
-    public static final int[] RINGEN = {176, 188, 200, 212, 222};
+    public static final int[] RINGEN = {184, 192, 200, 208, 216, 224};
     public static final int RING_STRAAL = 19;
 }

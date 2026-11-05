@@ -261,10 +261,13 @@ public final class Z3WezensSpawners {
                     double x = ax + (bx - ax) * f, z = az + (bz - az) * f;
                     double rt = tak.rStam() + (tak.rPunt() - tak.rStam()) * Math.min(1, langs * 1.4);
                     Soort s = kies(mix, r.nextInt(1000));
-                    int straal = (int) Math.max(4, Math.min(s.straal(), rt * 0.55));
-                    double zij = Math.max(Z3WezensPlekken.PAD_BREEDTE / 2 + Z3WezensPlekken.TAK_VRIJ + 1, rt * 0.55);
-                    kant = -kant;
+                    int straal = (int) Math.max(4, Math.min(s.straal(), rt * 0.5));
+                    // the circle just clears the ridge path's narrow margin (TAK_VRIJ): its far half lies on the branch flank
+                    double zij = Z3WezensPlekken.PAD_BREEDTE / 2 + Z3WezensPlekken.TAK_VRIJ + straal + 1.0;
+                    kant = -kant;   // (P-VERHUIS) the narrow branches: a spawner on each flank, so the branch layer is not empty
                     double nx = -(bz - az) / len, nz = (bx - ax) / len;
+                    for (int kk = 0; kk < 2; kk++) {
+                    kant = -kant;
                     int wx = (int) Math.round(x + nx * zij * kant), wz = (int) Math.round(z + nz * zij * kant);
                     Z3WezensPlekken.Zone g = zoneOp(zones, wx, wz);
                     if (g == null) {
@@ -272,11 +275,12 @@ public final class Z3WezensSpawners {
                     }
                     int minY = Z3WezensPlekken.TAK_MIN_Y, maxY = Z3WezensPlekken.TAK_MAX_Y;
                     // the ridge path itself is checked per spawn (TAK_VRIJ, see Z3WezensSpawners' tick); other routes keep their full margin
-                    int st = (int) Math.floor(Math.min(straal, Z3WezensPlekken.padAfstandBuitenTakken(wx, wz, minY, maxY) - Z3WezensPlekken.PAD_VRIJ));
+                    int st = (int) Math.floor(Math.min(straal, Z3WezensPlekken.padAfstand(wx, wz, minY, maxY) - Z3WezensPlekken.PAD_VRIJ));
                     if (st < 4 || veiligInLaag(wx, wz, st, minY, maxY)) {
                         continue;
                     }
                     uit.add(new Plan(wx, wz, s, st, minY, maxY, g.minLevel(), g.maxLevel()));
+                    }
                 }
                 gedaan += len;
             }
@@ -294,8 +298,8 @@ public final class Z3WezensSpawners {
         List<Plan> plan = new ArrayList<>();
         for (int ring = 0; ring < Z3WezensPlekken.RINGEN.length; ring++) {
             int y = Z3WezensPlekken.RINGEN[ring];
-            for (int k = 0; k < 6; k++) {
-                double a = Math.toRadians(k * 60 + ring * 23 + 11);
+            for (int k = 0; k < 8; k++) {
+                double a = Math.toRadians(k * 45 + ring * 23 + 11);
                 int x = (int) Math.round(Z3WezensPlekken.TX + Math.cos(a) * Z3WezensPlekken.RING_STRAAL);
                 int z = (int) Math.round(Z3WezensPlekken.TZ + Math.sin(a) * Z3WezensPlekken.RING_STRAAL);
                 Soort s = kies(mix, r.nextInt(1000));
