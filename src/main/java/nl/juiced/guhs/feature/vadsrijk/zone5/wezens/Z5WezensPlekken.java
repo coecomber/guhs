@@ -143,9 +143,9 @@ public final class Z5WezensPlekken {
     public static final List<Luik> LUIKEN = new ArrayList<>(List.of(
             new Luik("buik_in", BUIK_LUIK, BUIK_AANKOMST), new Luik("buik_uit", BUIK_UITLUIK, BUIK_UIT),
             new Luik("nest_in", NEST_LUIK, NEST_AANKOMST), new Luik("nest_uit", NEST_UITLUIK, NEST_UIT),
-            new Luik("zuidvin_af", LIFT_ZUID_BOVEN, LIFT_ZUID_ONDER), new Luik("zuidvin_op", LIFT_ZUID_ONDER.above(), LIFT_ZUID_BOVEN.above()),
-            new Luik("noordvin_af", LIFT_NOORD_BOVEN, LIFT_NOORD_ONDER), new Luik("noordvin_op", LIFT_NOORD_ONDER.above(), LIFT_NOORD_BOVEN.above()),
-            new Luik("staart_af", LIFT_STAART_BOVEN, LIFT_STAART_ONDER), new Luik("staart_op", LIFT_STAART_ONDER.above(), LIFT_STAART_BOVEN.above())));
+            new Luik("zuidvin_af", LIFT_ZUID_BOVEN, LIFT_ZUID_ONDER), new Luik("zuidvin_op", LIFT_ZUID_ONDER.offset(2, 0, 0), LIFT_ZUID_BOVEN.above()),
+            new Luik("noordvin_af", LIFT_NOORD_BOVEN, LIFT_NOORD_ONDER), new Luik("noordvin_op", LIFT_NOORD_ONDER.offset(2, 0, 0), LIFT_NOORD_BOVEN.above()),
+            new Luik("staart_af", LIFT_STAART_BOVEN, LIFT_STAART_ONDER), new Luik("staart_op", LIFT_STAART_ONDER.offset(2, 0, 0), LIFT_STAART_BOVEN.above())));
 
     // ---- the combat areas (kern areas, put in FRONT of t-z5verhaal's town boxes so the spawners may work here) --------------------
     /** id, box (x/z), y-range, levels. NOT towns. */

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/vadsrijk/zone5/wezens/vr_z5_baas_vermommingsmantel"
+  }
+}
