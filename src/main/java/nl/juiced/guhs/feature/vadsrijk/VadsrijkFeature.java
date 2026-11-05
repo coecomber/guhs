@@ -21,6 +21,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2NpcRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcRegistry.register(modBus);   // Z3-NPC (zone 3 De Schemerwortel)
+        nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5VerhaalRegistry.register(modBus);   // T-Z5VERHAAL (zone 5 Hoogvads: the story)
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2SystemenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone2.wezens.Z2WezensRegistry.register(modBus);   // zone 2 (z2-wezens)

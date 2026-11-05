@@ -30,6 +30,8 @@ public final class Quests {
     public static final String BESTAND_Z2 = "/data/guhs/vadsrijk/npc/quests_z2.json";
     /** Zone 3 (tools/features/vadsrijk_z3_npc.py): read after zone 2, same system. */
     public static final String BESTAND_Z3 = "/data/guhs/vadsrijk/npc/quests_z3.json";
+    /** T-Z5VERHAAL: zone 5 Hoogvads (tools/features/vadsrijk_t_z5verhaal.py): read after EVERY earlier zone (its own loop below). */
+    public static final String BESTAND_Z5 = "/data/guhs/vadsrijk/npc/quests_z5.json";
     private static volatile Map<String, Quest> alle;
 
     private Quests() {
@@ -70,7 +72,25 @@ public final class Quests {
                 LOG.error("Vadsrijk npc: could not read {}", bestand, e);
             }
         }
+        leesNa(m, BESTAND_Z5);   // T-Z5VERHAAL
         return Collections.unmodifiableMap(m);
+    }
+
+    /** T-Z5VERHAAL: one later zone's quest file, after all the others (so its quests come last in the questlog). */
+    private static void leesNa(Map<String, Quest> m, String bestand) {
+        try (InputStream in = Quests.class.getResourceAsStream(bestand)) {
+            if (in == null) {
+                LOG.error("Vadsrijk npc: {} is missing", bestand);
+                return;
+            }
+            JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
+            for (JsonElement e : root.getAsJsonArray("quests")) {
+                Quest q = quest(e.getAsJsonObject());
+                m.put(q.id(), q);
+            }
+        } catch (Exception e) {
+            LOG.error("Vadsrijk npc: could not read {}", bestand, e);
+        }
     }
 
     private static Quest quest(JsonObject o) {
