@@ -39428,5 +39428,17 @@
   "vadsrijk.npc.plek.poi.z3_pelstrap": "bij de trap omlaag naar de Pelszaal, op de vloer van de Schorsstad",
   "vadsrijk.npc.plek.poi.z3_kabelbrug": "bij het begin van de kabelbrug naar de Kaaszeppelinwerf, aan de noordoostrand van Honingtak",
   "vadsrijk.npc.plek.gebied.z3_stamspiraal": "op het rijpad, de brede weg die buitenom de stam omhoog draait",
-  "vadsrijk.npc.q.z3_hq02_bezoek.klaar.5": "Neem de lift in de binnenhof van de stam (door de trapdeur hier aan het plein) naar de vloer van de Schorsstad, en ga door de noordpoort naar buiten. En hier: de sleutel van de Honinglift. Daarmee ben je altijd snel weer boven."
+  "vadsrijk.npc.q.z3_hq02_bezoek.klaar.5": "Neem de lift in de binnenhof van de stam (door de trapdeur hier aan het plein) naar de vloer van de Schorsstad, en ga door de noordpoort naar buiten. En hier: de sleutel van de Honinglift. Daarmee ben je altijd snel weer boven.",
+  "guhs.configuration.gebiedsmuziek": "Vadsrijk: gebiedsmuziek",
+  "guhs.configuration.gebiedsmuziek.tooltip": "Zachte muziek buiten de steden, met lange stiltes ertussen (procent, 0 = uit). Volgt ook de schuif Muziek van Minecraft.",
+  "guhs.configuration.bazenmuziek": "Vadsrijk: bazenmuziek",
+  "guhs.configuration.bazenmuziek.tooltip": "Elke baas heeft een eigen thema tijdens het gevecht (procent, 0 = uit).",
+  "guhs.configuration.stingers": "Vadsrijk: stingers (ta-daa's)",
+  "guhs.configuration.stingers.tooltip": "Korte muzikale ta-daa's: nieuw gebied, quest klaar, level omhoog, baas verslagen, geheim gevonden (procent, 0 = uit).",
+  "guhs.configuration.omgeving": "Vadsrijk: omgevingsgeluid",
+  "guhs.configuration.omgeving.tooltip": "Vogels, water, belletjes, krekels 's nachts, druppels in grotten, bijen, golven (procent, 0 = uit). Volgt ook de schuif Omgeving.",
+  "guhs.configuration.pauze_min": "Vadsrijk: stilte tussen stukken, minstens (s)",
+  "guhs.configuration.pauze_min.tooltip": "Seconden met alleen omgevingsgeluid na een gebiedsstuk.",
+  "guhs.configuration.pauze_max": "Vadsrijk: stilte tussen stukken, hoogstens (s)",
+  "guhs.configuration.pauze_max.tooltip": "Seconden met alleen omgevingsgeluid na een gebiedsstuk."
 }
