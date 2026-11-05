@@ -42,16 +42,20 @@ public class VadsrijkZ3SystemenGameTests {
     public static void gelaagdeGebieden(GameTestHelper helper) {
         Z3Lagen.registreer();
         // same x/z, different heights
+        // (P-VERHUIS) the revamped tree (POI v2): crown 212+, Honingtak ring 145-200, hollow trunk r < 26, roots hall r < 160 with the
+        // Hart's ring of rooms r 76-150 round it, the riding spiral r 26-64 outside the trunk
         verwacht(helper, 2300, 250, 0, "z3_kruinzee");
         verwacht(helper, 2300, 150, 0, "z3_schorsstad");
-        verwacht(helper, 2300, 40, 0, "z3_hart");
-        verwacht(helper, 2500, 30, 0, "z3_wortelduister");
+        verwacht(helper, 2410, 29, 10, "z3_hart");
+        verwacht(helper, 2300, 40, 0, "z3_wortelduister");
+        verwacht(helper, 2250, 30, 0, "z3_wortelduister");
         verwacht(helper, 2500, 80, 0, "z3_wortelvelden");
-        verwacht(helper, 1800, 240, 0, "z3_honingtak");
-        verwacht(helper, 1800, 80, 0, "z3_wortelvelden");
-        verwacht(helper, 1850, 170, 300, "z3_takkenbanen");
-        verwacht(helper, 1620, 150, 690, "z3_ring");
-        verwacht(helper, 2400, 150, 0, "z3_stamspiraal");
+        verwacht(helper, 2300, 170, 100, "z3_honingtak");
+        verwacht(helper, 2450, 80, 150, "z3_wortelvelden");
+        verwacht(helper, 2300, 205, 190, "z3_takkenbanen");
+        verwacht(helper, 2551, 192, -291, "z3_zeppelinwerf");
+        verwacht(helper, 2300, -10, 0, "z3_ring");
+        verwacht(helper, 2345, 120, 0, "z3_stamspiraal");
         // a flat lookup cannot know the layer: it skips the layered areas
         Gebieden.Gebied plat = Gebieden.op(2300, 0);
         helper.assertTrue(plat != null && plat.id().equals("z3_ring"), "flat lookup in zone 3: " + (plat == null ? null : plat.id()));

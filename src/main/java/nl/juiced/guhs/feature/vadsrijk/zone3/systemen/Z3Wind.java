@@ -43,14 +43,10 @@ public final class Z3Wind {
         }
     }
 
-    /** Copied from z3-wereld POI_Z3.md v0 (the integrator may point this at Z3WereldPlekken.WINDKOLOMMEN). */
-    public static volatile List<Kolom> KOLOMMEN = List.of(
-            new Kolom("hangnest", 2807, 56, 66, 195, 3.0, 2807, 40),
-            new Kolom("paddenbloesem_tak", 2715, 349, 69, 198, 3.0, 2705, 361),
-            new Kolom("werf_tak", 2734, -390, 71, 197, 3.0, 2724, -401),
-            new Kolom("mosvoet_kruin", 2094, 195, 73, 258, 3.5, 2101, 188),
-            new Kolom("lichtkever_kruin", 2259, -300, 77, 251, 3.5, 2261, -291),
-            new Kolom("honingtak", 1897, 38, 71, 239, 3.0, 1903, 30));
+    /** (P-VERHUIS) straight from the map (POI v2: the branch -> kruin 1 -> kruin 2 -> kruin 3 columns, ground -> Honingtak, the cloud-sea
+     *  rescue columns); z3-wereld's registry sets it again at start-up. */
+    public static volatile List<Kolom> KOLOMMEN = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.WINDKOLOMMEN.stream()
+            .map(k -> new Kolom(k.id(), k.x(), k.z(), k.y0(), k.y1(), k.r(), k.lx(), k.lz())).toList();
 
     /** Upward speed in blocks per tick (Levitation amplifier 9 = 0.5). */
     public static final double OMHOOG = 0.55;

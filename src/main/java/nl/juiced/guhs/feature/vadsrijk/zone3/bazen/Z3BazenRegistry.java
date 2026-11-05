@@ -161,8 +161,10 @@ public final class Z3BazenRegistry {
                 if (Z3Kerkers.inWerf(p.getX(), p.getY(), p.getZ()) && p.getY() > Z3BazenPlekken.WERF_Y0 - 60 && p.getY() < Z3BazenPlekken.WERF_Y1 + 10) {
                     return Z3BazenPlekken.WERF_INGANG;
                 }
-                double dx = p.getX() - Z3BazenPlekken.STAM.getX(), dz = p.getZ() - Z3BazenPlekken.STAM.getZ();
-                if (dx * dx + dz * dz < Math.pow(Z3BazenPlekken.HART_STRAAL_BOX, 2) && p.getY() >= Z3BazenPlekken.HART_Y0 && p.getY() <= Z3BazenPlekken.HART_Y1) {
+                double dx = p.getX() - Z3BazenPlekken.STAM.getX(), dz = p.getZ() - Z3BazenPlekken.STAM.getZ(), r2 = dx * dx + dz * dz;
+                boolean gang = dx > 40 && Math.abs(dz) < 20;   // (P-VERHUIS) the Wortelgang (east) has its own campfires
+                if (r2 < Math.pow(Z3BazenPlekken.HART_STRAAL_BOX, 2) && r2 >= Math.pow(Z3BazenPlekken.HART_STRAAL_BINNEN, 2) && !gang
+                        && p.getY() >= Z3BazenPlekken.HART_Y0 && p.getY() <= Z3BazenPlekken.HART_Y1) {
                     return Z3BazenPlekken.HART_INGANG;
                 }
             }
@@ -195,6 +197,8 @@ public final class Z3BazenRegistry {
 
     private static void arenas() {
         arenaLijst();
+        // (P-VERHUIS) the Pelszaal lies under the Schorsstad floor: a height window, so the plein above is not in his fight
+        ARENAS.computeIfPresent(ARENA_PIEPVEL, (k, a) -> a.met(a.straal(), Z3BazenPlekken.PIEP_ONDER, Z3BazenPlekken.PIEP_BOVEN));
         for (Arena a : Z3BazenPlekken.indeel(new java.util.ArrayList<>(ARENAS.values()))) {
             ARENAS.put(a.id(), a);
             Function<ServerLevel, ? extends VadsrijkBaas> m = MAKERS.get(a.id());

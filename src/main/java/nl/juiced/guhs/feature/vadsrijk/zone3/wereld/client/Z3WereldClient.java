@@ -34,16 +34,17 @@ public final class Z3WereldClient {
     /** The colour of the layer at this point: {r, g, b} by day and at night. */
     static float[][] laagKleur(double x, double y, double z) {
         double r = Math.hypot(x - Z3WereldPlekken.STAM_X, z - Z3WereldPlekken.STAM_Z);
-        if (y < 62 && r < 470) {
+        // (P-VERHUIS) the revamped narrow tree: roots hall r < 160 under 64, hollow trunk r < 26 from 55 to 232, crown from 212
+        if (y < 64 && r < 160) {
             return new float[][] {{0.12f, 0.07f, 0.17f}, {0.06f, 0.03f, 0.1f}};          // Wortelduister
         }
-        if (r < 72 && y >= 75 && y < 198) {
+        if (r < 26 && y >= 55 && y < 232) {
             return new float[][] {{0.62f, 0.42f, 0.24f}, {0.22f, 0.14f, 0.1f}};          // the hollow trunk (amber)
         }
-        if (y >= 200) {
+        if (y >= 212) {
             return new float[][] {{1.0f, 0.84f, 0.56f}, {0.3f, 0.2f, 0.36f}};            // the crown (honey gold)
         }
-        if (r < 340 && y < 190) {
+        if (r < 140 && y < 150) {
             return new float[][] {{0.5f, 0.46f, 0.52f}, {0.14f, 0.12f, 0.2f}};           // dusk under the crown
         }
         return new float[][] {{0.98f, 0.82f, 0.74f}, {0.2f, 0.16f, 0.3f}};              // sunny edge / branches

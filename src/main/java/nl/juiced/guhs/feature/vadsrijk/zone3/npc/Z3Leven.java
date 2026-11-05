@@ -86,6 +86,7 @@ public final class Z3Leven {
             nieuw(sl, spelers);
         }
         double lengte = cum[cum.length - 1];
+        gidsen(sl, spelers, lengte);
         for (Ruiter r : RUITERS_NU) {
             r.s += SNELHEID * r.richting;
             if (r.s >= lengte || r.s <= 0) {
@@ -174,6 +175,78 @@ public final class Z3Leven {
     static void opruimen() {
         RUITERS_NU.forEach(Z3Leven::weg);
         RUITERS_NU.clear();
+        GIDS.values().forEach(Z3Leven::weg);
+        GIDS.clear();
+    }
+
+    // ---- the guided first ride (z3_hq03): Stalmeester Veertje rides ahead of you up the spiral ----------------------------------
+
+    private static final java.util.Map<java.util.UUID, Ruiter> GIDS = new java.util.HashMap<>();
+    public static final double GIDS_VOOR = 9, GIDS_MAX = 0.42;
+
+    /** Is the player on the guided ride (hq03: mounted, the ride objective open)? */
+    static boolean opRit(ServerPlayer p) {
+        return nl.juiced.guhs.feature.vadsrijk.npc.Questlog.actief(p, Z3Haken.HQ03) && Z3Haken.doelKlaar(p, Z3Haken.HQ03, 1)
+                && !Z3Haken.doelKlaar(p, Z3Haken.HQ03, 2);
+    }
+
+    /** The arc length on the path nearest to v. */
+    static double dichtste(Vec3 v) {
+        double best = Double.MAX_VALUE, s = 0;
+        for (int i = 0; i < pad.size(); i++) {
+            double d = pad.get(i).distanceToSqr(v);
+            if (d < best) {
+                best = d;
+                s = cum[i];
+            }
+        }
+        return s;
+    }
+
+    private static void gidsen(ServerLevel sl, List<ServerPlayer> spelers, double lengte) {
+        java.util.Set<java.util.UUID> nodig = new java.util.HashSet<>();
+        for (ServerPlayer p : spelers) {
+            if (!opRit(p)) {
+                continue;
+            }
+            nodig.add(p.getUUID());
+            double sp = dichtste(p.position());
+            double doel = Math.min(lengte, sp + GIDS_VOOR);
+            Ruiter g = GIDS.get(p.getUUID());
+            if (g == null || g.pluim == null || g.pluim.isRemoved() || g.guh == null || g.guh.isRemoved()) {
+                if (g != null) {
+                    weg(g);
+                }
+                g = new Ruiter();
+                g.s = doel;
+                Vec3 v = vloer(sl, op(doel));
+                g.pluim = Z3Figurant.maak(sl, v, 0, "vr_eco_pluimguh", "textures/entity/vr_eco_pluimguh_roze.png", "vr_eco_pluimguh", "ren", 1.0f);
+                g.guh = Z3Figurant.maak(sl, v.add(0, 1.55, 0), 0, "guh", "textures/entity/guh_bloesemguh.png", "guh", "animation.guh.sit", 0.8f);
+                if (g.pluim == null || g.guh == null) {
+                    weg(g);
+                    continue;
+                }
+                g.pluim.setCustomName(net.minecraft.network.chat.Component.translatable("vadsrijk.npc.naam.z3_veertje"));
+                g.pluim.setCustomNameVisible(true);
+                GIDS.put(p.getUUID(), g);
+                p.sendSystemMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.z3npc.gids.start")
+                        .withStyle(net.minecraft.ChatFormatting.GOLD));
+            }
+            // ride ahead, never more than GIDS_VOOR in front (she waits for you), a little faster than you when you catch up
+            double stap = Math.max(-GIDS_MAX, Math.min(GIDS_MAX, doel - g.s));
+            g.s += stap;
+            Vec3 v = vloer(sl, op(g.s));
+            g.pluim.zet(v);
+            g.guh.zet(v.add(0, 1.55, 0));
+            g.guh.setYRot(g.pluim.getYRot());
+        }
+        GIDS.entrySet().removeIf(e -> {
+            if (!nodig.contains(e.getKey())) {
+                weg(e.getValue());
+                return true;
+            }
+            return false;
+        });
     }
 
     /** For the gametest / dev command: how many riders ride now. */

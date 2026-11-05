@@ -367,7 +367,8 @@ public class Kruinroofvogel extends Z3Baas {
                 int duur = 200;
                 double f = 1 - Math.max(0, (double) actieT / duur);
                 Vec3 m = Vec3.atBottomCenterOf(zit);
-                Vec3 v = van.lerp(m, f).add(0, 22 * Math.sin(Math.PI * f), 0);
+                // (P-VERHUIS) the revamped tree stands between the Kale Kruin and the perches: fly round it (a bend outside the crown)
+                Vec3 v = Kruinroofvogel.omDeBoom(van, m, f);
                 setPos(v.x, v.y, v.z);
                 setDeltaMovement(Vec3.ZERO);
                 if (actieT % 4 == 0) {
@@ -517,5 +518,17 @@ public class Kruinroofvogel extends Z3Baas {
             a.triggerableAnim(n, RawAnimation.begin().thenPlay(n));
         }
         controllers.add(a);
+    }
+
+    /** (P-VERHUIS) The chase flight from a to b round the tree: a quadratic curve through a point outside the crown (r >= 150) at the
+     *  middle angle, high above both ends, so he never flies through the trunk or the crown storeys. */
+    static Vec3 omDeBoom(Vec3 a, Vec3 b, double f) {
+        double sx = nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenPlekken.STAM.getX(), sz = nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenPlekken.STAM.getZ();
+        double aa = Math.atan2(a.z - sz, a.x - sx), ab = Math.atan2(b.z - sz, b.x - sx);
+        double d = Math.atan2(Math.sin(ab - aa), Math.cos(ab - aa));
+        double mid = aa + d / 2, r = Math.max(150, Math.max(Math.hypot(a.x - sx, a.z - sz), Math.hypot(b.x - sx, b.z - sz)) + 20);
+        Vec3 c = new Vec3(sx + Math.cos(mid) * r * 1.3, Math.max(a.y, b.y) + 30, sz + Math.sin(mid) * r * 1.3);
+        double g = 1 - f;
+        return a.scale(g * g).add(c.scale(2 * g * f)).add(b.scale(f * f));
     }
 }

@@ -105,10 +105,13 @@ public final class Z3Reizen {
 
     /** The short flight in: over the cloud sea towards the tree, along the branch to the mast. */
     static void vlucht(ServerPlayer p, ServerLevel sl, Vec3 a) {
+        // (P-VERHUIS) the dock is at the north-west tip of the Honingtak ring (revamp): come in from outside, along the outward line
+        Vec3 uit = new Vec3(a.x - Z3WereldPlekken.STAM_X, 0, a.z - Z3WereldPlekken.STAM_Z).normalize();
+        Vec3 zij = new Vec3(-uit.z, 0, uit.x);
         RijkScene s = RijkScene.maak("vr_z3_luchtschip", 160)
-                .camera(0, a.add(-260, 40, 80), a.add(200, 60, -20))
-                .camera(90, a.add(-70, 18, 30), a.add(60, 10, 0))
-                .camera(158, a.add(-7, 3, 0), a.add(12, 2, 0))
+                .camera(0, a.add(uit.scale(260)).add(zij.scale(60)).add(0, 40, 0), a.add(uit.scale(-200)).add(0, 60, 0))
+                .camera(90, a.add(uit.scale(70)).add(zij.scale(20)).add(0, 18, 0), a.add(uit.scale(-60)).add(0, 10, 0))
+                .camera(158, a.add(uit.scale(7)).add(0, 3, 0), a.add(uit.scale(-12)).add(0, 2, 0))
                 .titel("vadsrijk.wereld.z3.luchtschip.titel", "vadsrijk.wereld.z3.luchtschip.onder", 90, 60, 0xFFD27A)
                 .bouw();
         RijkScenes.speel(p, s);
@@ -123,19 +126,19 @@ public final class Z3Reizen {
         Vec3 hart = Vec3.atBottomCenterOf(Z3WereldPlekken.plek("hartslag_zaal"));
         RijkScene s = RijkScene.maak("vr_z3_opening", 520)
                 // the bark wall: the ship sails along it, ever higher
-                .camera(0, stam.add(-125, 72, 70), stam.add(-90, 110, 10))
-                .camera(80, stam.add(-120, 150, 40), stam.add(-88, 175, -10))
+                .camera(0, stam.add(-125, 96, 70), stam.add(-30, 120, 10))
+                .camera(80, stam.add(-120, 150, 40), stam.add(-30, 175, -10))
                 // through the clouds: the crown in gold, imkerguhs waving
                 .camera(150, stam.add(-180, 250, 90), nest.add(0, 0, 0))
                 .camera(220, stam.add(-60, 305, 160), nest)
                 // down along the trunk into the dusk and deep into the roots
-                .camera(290, stam.add(-150, 175, 10), stam.add(-90, 120, 0))
-                .camera(350, stam.add(-125, 85, 5), stam.add(-95, 70, 0))
+                .camera(290, stam.add(-170, 190, 10), stam.add(-30, 120, 0))
+                .camera(350, stam.add(-125, 100, 5), stam.add(-35, 80, 0))
                 .camera(420, hart.add(-30, 18, 10), hart.add(0, 12, -30))
                 .camera(455, hart.add(-12, 8, 0), hart.add(0, 10, -30))
                 // and back up: the dock on Honingtak
-                .camera(470, a.add(-40, 25, 20), a.add(0, 3, 0))
-                .camera(518, a.add(-7, 3, 0), a.add(12, 2, 0))
+                .camera(470, a.add(new Vec3(a.x - sx, 0, a.z - sz).normalize().scale(40)).add(0, 25, 0), a.add(0, 3, 0))
+                .camera(518, a.add(new Vec3(a.x - sx, 0, a.z - sz).normalize().scale(7)).add(0, 3, 0), stam.add(0, a.y + 2, 0))
                 .titel("vadsrijk.wereld.z3.opening.titel", "vadsrijk.wereld.z3.opening.onder", 160, 80, 0xFFD27A)
                 .bouw();
         RijkScenes.speel(p, s);

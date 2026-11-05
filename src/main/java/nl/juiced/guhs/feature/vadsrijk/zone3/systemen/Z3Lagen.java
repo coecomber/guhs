@@ -10,7 +10,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.Gebied;
 /**
  * z3-systemen: the LAYERED area plan of zone 3 "De Schemerwortel" (ZONE3_PLAN §2, translated east: trunk T = (+2300, 0), box
  * x +1600..+3000, z -700..700; heights from the renders: crown ~y 210-300). Crown, branches, trunk, ground and roots overlap in
- * x/z, so every area has a y-range and most are a cylinder/ring around the trunk ({@link Gebieden.Laag}).
+ * x/z, so every area has a y-range and most are a cylinder/ring around the trunk ({@link Gebieden.Laag}). (Revamp, ronde 20:
+ * box x 1900..2700, z -400..400, the 4 layers roots 4-78 / trunk 80-160 / branches 160-216 / crown 216-312, POI v2.)
  * <p>
  * First match wins (order = this list). These are the systemen defaults until z3-wereld publishes its own list
  * ({@code Z3WereldPlekken.GEBIEDEN}): the integrator points {@link #GEBIEDEN} at that list (same ids) and nothing else changes.
@@ -18,7 +19,11 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.Gebied;
  */
 public final class Z3Lagen {
     public static final int STAM_X = 2300, STAM_Z = 0;
-    public static final int ZONE_MIN_X = 1600, ZONE_MAX_X = 3000, ZONE_MIN_Z = -700, ZONE_MAX_Z = 700;
+    /** (P-VERHUIS) the zone box follows the map (revamp: x 1900..2700, z -400..400). */
+    public static final int ZONE_MIN_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_X,
+            ZONE_MAX_X = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_X,
+            ZONE_MIN_Z = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MIN_Z,
+            ZONE_MAX_Z = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ZONE_MAX_Z;
     /**
      * K-INT: built from z3-wereld's generated {@code Z3WereldPlekken.GEBIEDEN} (same ids, same order, follows every map regen)
      * plus a catch-all {@code z3_ring} (the rest of the zone box, every height: flat 2D lookups in zone 3 land here too).

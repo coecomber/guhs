@@ -23,9 +23,9 @@ import nl.juiced.guhs.world.GuhTime;
  *   <li><b>lantern glow:</b> at dusk/night (and always inside the trunk and the roots) random block samples around you; a lantern,
  *   lampion, candle, shroomlight or glow block gets a soft warm halo of drifting motes, so the lampion strings and windows read as
  *   points of light from afar;</li>
- *   <li><b>chimney smoke:</b> above every zone-3 house roof (the {@code gebouw.*.doos_max} POIs) within 72 blocks, a lazy cosy plume;</li>
+ *   <li><b>chimney smoke:</b> above every zone-3 house roof ({@link Z3WereldPlekken#SCHOORSTENEN}) within 72 blocks, a lazy cosy plume;</li>
  *   <li><b>campfires:</b> a few sparks over every {@link Z3WereldPlekken#KAMPVUREN} within 48 blocks;</li>
- *   <li><b>bee swarms:</b> small yellow clouds circling the {@code bijenzwerm_*} POIs (or, without them, the beekeeper villages and
+ *   <li><b>bee swarms:</b> small yellow clouds circling the {@link Z3WereldPlekken#BIJENKORVEN} (or, without them, the beekeeper villages and
  *   Honingtak) by day;</li>
  *   <li><b>per layer:</b> fireflies + falling blossom in the crown and on the branches at dusk, amber motes in the hollow trunk,
  *   violet sap motes in the roots and the pink pulse of the egg near {@code ei}.</li>
@@ -54,21 +54,23 @@ public final class Z3Avondlicht {
         if (schoorstenen != null) {
             return;
         }
-        List<BlockPos> s = new ArrayList<>(), z = new ArrayList<>();
-        for (Map.Entry<String, BlockPos> e : Z3WereldPlekken.ALLE.entrySet()) {
-            String id = e.getKey();
-            if (id.startsWith("gebouw.") && id.endsWith(".doos_max")) {
-                BlockPos min = Z3WereldPlekken.ALLE.get(id.replace(".doos_max", ".doos_min"));
-                BlockPos max = e.getValue();
-                s.add(min == null ? max.above() : new BlockPos((min.getX() + max.getX()) / 2 + 1, max.getY() + 1, (min.getZ() + max.getZ()) / 2 - 1));
-            } else if (id.startsWith("bijenzwerm_")) {
-                z.add(e.getValue());
+        // POI v2 publishes the chimney tops and the bee hives as lists; the gebouw boxes / villages are only the fallback
+        List<BlockPos> s = new ArrayList<>(Z3WereldPlekken.SCHOORSTENEN), z = new ArrayList<>(Z3WereldPlekken.BIJENKORVEN);
+        if (s.isEmpty()) {
+            for (Map.Entry<String, BlockPos> e : Z3WereldPlekken.ALLE.entrySet()) {
+                String id = e.getKey();
+                if (id.startsWith("gebouw.") && id.endsWith(".doos_max")) {
+                    BlockPos min = Z3WereldPlekken.ALLE.get(id.replace(".doos_max", ".doos_min"));
+                    BlockPos max = e.getValue();
+                    s.add(min == null ? max.above() : new BlockPos((min.getX() + max.getX()) / 2 + 1, max.getY() + 1, (min.getZ() + max.getZ()) / 2 - 1));
+                }
             }
         }
         if (z.isEmpty()) {
-            for (Map.Entry<String, BlockPos> e : Z3WereldPlekken.ALLE.entrySet()) {
-                if (e.getKey().startsWith("imkerdorp_") && !e.getKey().contains(".") || e.getKey().equals("plein")) {
-                    z.add(e.getValue().above(4));
+            for (String id : List.of("hangnest_plein", "raatweide_plein", "molenhoek_plein", "plein")) {
+                BlockPos b = Z3WereldPlekken.plek(id);
+                if (b != null) {
+                    z.add(b.above(4));
                 }
             }
         }
@@ -103,6 +105,18 @@ public final class Z3Avondlicht {
                         || id.equals("ochre_froglight") || id.equals("pearlescent_froglight")) {
                     l.addParticle(id.contains("roze") || id.contains("pearlescent") ? ROZE : WARM, m.getX() + 0.5 + R.nextGaussian() * 0.45,
                             m.getY() + 0.4 + R.nextDouble() * 0.6, m.getZ() + 0.5 + R.nextGaussian() * 0.45, 0, 0.004, 0);
+                }
+            }
+        }
+        // the map's night glow spots (lampion strings, windows, the Lantaarntoren rings)
+        if ((avond || binnen) && teller % 3 == 0) {
+            for (BlockPos b : Z3WereldPlekken.LICHTJES) {
+                if (b.distToCenterSqr(x, y, z) < 64 * 64 && R.nextInt(3) == 0) {
+                    l.addParticle(R.nextInt(4) == 0 ? ROZE : WARM, b.getX() + 0.5 + R.nextGaussian() * 0.8, b.getY() + 0.5 + R.nextDouble(),
+                            b.getZ() + 0.5 + R.nextGaussian() * 0.8, 0, 0.006, 0);
+                    if (avond && R.nextInt(4) == 0) {
+                        l.addParticle(ParticleTypes.FIREFLY, b.getX() + 0.5 + R.nextGaussian() * 3, b.getY() + R.nextDouble() * 3, b.getZ() + 0.5 + R.nextGaussian() * 3, 0, 0, 0);
+                    }
                 }
             }
         }

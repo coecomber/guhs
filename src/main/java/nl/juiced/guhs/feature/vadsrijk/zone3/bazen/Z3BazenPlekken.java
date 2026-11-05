@@ -8,8 +8,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Every coordinate of the zone-3 bazen slice (Z3_BRIEF: one class). Zone 3 lies in the EAST (box x +1600..+3000, z -700..700,
- * trunk axis T = (+2300, 0)). Each spot is looked up first in z3-wereld's generated {@code Z3WereldPlekken.plek(id)} (by
+ * Every coordinate of the zone-3 bazen slice (Z3_BRIEF: one class). Zone 3 lies in the EAST (REVAMP, ronde 20: box x 1900..2700,
+ * z -400..400, trunk axis T = (2300, 0); POI_Z3.md v2: the werf on its own island in the north-east, the Pelszaal under the
+ * Schorsstad floor, the Hart a ring of rooms round the roots hall, the nest on top of the trunk). Each spot is looked up first in z3-wereld's generated {@code Z3WereldPlekken.plek(id)} (by
  * reflection, so this branch compiles without z3-wereld); the numbers are only the fallback, taken from ZONE3_PLAN (mirrored to
  * the east). The POI ids we need are requested in POI_VERZOEKEN_Z3.md (section z3-bazen). Layouts inside an arena (cages, lantern
  * posts, rings...) are offsets from the arena centre, so they follow the arena when wereld moves it.
@@ -25,7 +26,7 @@ public final class Z3BazenPlekken {
         return b != null ? b : new BlockPos(x, y, z);
     }
 
-    public static final BlockPos STAM = new BlockPos(2300, 64, 0);
+    public static final BlockPos STAM = new BlockPos(2300, 64, 0);   // the trunk axis
 
     /** The offset of POI {@code id} from {@code c} (layouts inside an arena follow the arena). */
     static int[] rel(BlockPos c, String id, int x, int y, int z) {
@@ -45,9 +46,10 @@ public final class Z3BazenPlekken {
     public static final BlockPos ROOF_ZIT_2 = w("kruinroofvogel_zit_2", 2549, 247, 110);
     public static final int ZIT_STRAAL = 20;
 
-    // ---- Kerker 1: De Kaaszeppelinwerf (lv 38-40), three decks under the tip of the NW branch -------------------------------
-    /** The dungeon box (z3_zeppelinwerf). */
-    public static final int WERF_X0 = 2819, WERF_X1 = 2979, WERF_Z0 = -660, WERF_Z1 = -480, WERF_Y0 = 95, WERF_Y1 = 185;
+    // ---- Kerker 1: De Kaaszeppelinwerf (lv 38-40): its own island in the north-east, three docks far apart -------------------
+    /** The dungeon box (the z3_zeppelinwerf island, centre ~(2551, -251) r 95): the yard is at ~160, the docks 168 / 192 / 224;
+     *  WERF_Y0 = the island top (the safety net catches falls below it), WERF_Y1 = above the highest deck. */
+    public static final int WERF_X0 = 2456, WERF_X1 = 2646, WERF_Z0 = -346, WERF_Z1 = -156, WERF_Y0 = 156, WERF_Y1 = 242;
     public static final BlockPos WERF_INGANG = w("werf_ingang", 2861, 169, -537);
     public static final BlockPos WERF_ALTAAR = w("werf_vahoeg_altaar", 2864, 169, -540);
     /** De Gieterij (fondue gutters): a box around the room centre; the gutters run along x every 4 blocks. */
@@ -69,10 +71,12 @@ public final class Z3BazenPlekken {
             ROQUEFORT_BORD = ROQUEFORT_CENTRUM.offset(0, 0, -17);
     public static final int D1_STRAAL = 15, ROQUEFORT_STRAAL = 19, D1_RESPAWN = 5 * 60;
 
-    // ---- Graaf Piepvel: De Pelszaal, the crown of the Lantaarntoren (lv 42) ----------------------------------------------------
-    public static final BlockPos PIEP_CENTRUM = w("arena_piepvel", 2299, 184, 0);
+    // ---- Graaf Piepvel: De Pelszaal, UNDER the Schorsstad floor (lv 42; revamp: hall air 61..74, the plein stands at 81) -------
+    public static final BlockPos PIEP_CENTRUM = w("arena_piepvel", 2300, 61, 0);
     public static final int PIEP_STRAAL = 16;
-    public static final BlockPos PIEP_DEUR = w("arena_piepvel_deur", 2299, 184, 14);
+    /** (P-VERHUIS) the Pelszaal's height window: 6 below, 14 above its floor (players on the Schorsstad plein are NOT in it). */
+    public static final int PIEP_ONDER = 6, PIEP_BOVEN = 14;
+    public static final BlockPos PIEP_DEUR = w("arena_piepvel_deur", 2301, 61, -13);
     public static final BlockPos PIEP_BORD = PIEP_DEUR.offset(3, 0, 0);
     public static final int PIEP_RESPAWN = 10 * 60;
     /** The 4 hanging cages (offsets from the centre: different heights) + the big cage by the throne. */
@@ -84,12 +88,22 @@ public final class Z3BazenPlekken {
     public static final int[][] PIEP_PALEN = {rel(PIEP_CENTRUM, "piepvel_lantaarnpaal_1", 2285, 184, 0), rel(PIEP_CENTRUM, "piepvel_lantaarnpaal_2", 2292, 184, 12),
             rel(PIEP_CENTRUM, "piepvel_lantaarnpaal_3", 2306, 184, 12), rel(PIEP_CENTRUM, "piepvel_lantaarnpaal_4", 2313, 184, 0),
             rel(PIEP_CENTRUM, "piepvel_lantaarnpaal_5", 2307, 184, -13), rel(PIEP_CENTRUM, "piepvel_lantaarnpaal_6", 2292, 184, -13)};
-    /** Where the Keizer's arm comes in: toward the knothole in the trunk wall (flash F1). */
-    public static final BlockPos PIEP_KWASTGAT = w("flash_f1_kwastgat", 2234, 178, 23);
+    /**
+     * Where the Keizer's arm comes in (flash F1): a knot hole in the Pelszaal wall, in the direction of the map's
+     * {@code flash_f1_kwastgat} (that one is in the trunk wall higher up, where the grey fingerprint stays), at the hall's height.
+     */
+    public static final BlockPos PIEP_KWASTGAT = kwastgat();
+
+    private static BlockPos kwastgat() {
+        BlockPos k = w("flash_f1_kwastgat", 2319, 128, 8);
+        double dx = k.getX() - PIEP_CENTRUM.getX(), dz = k.getZ() - PIEP_CENTRUM.getZ(), l = Math.max(1, Math.hypot(dx, dz));
+        return PIEP_CENTRUM.offset((int) Math.round(dx / l * (PIEP_STRAAL - 1)), 4, (int) Math.round(dz / l * (PIEP_STRAAL - 1)));
+    }
     public static final Vec3 PIEP_KWASTGAT_RICHTING = Vec3.atCenterOf(PIEP_KWASTGAT).subtract(Vec3.atCenterOf(PIEP_CENTRUM)).normalize();
 
-    // ---- Kerker 2: Het Hart van de Boom (lv 49-50): rooms in a ring at r 95 around the trunk, floor 50 ------------------------
-    public static final int HART_Y0 = 40, HART_Y1 = 74, HART_STRAAL_BOX = 120;
+    // ---- Kerker 2: Het Hart van de Boom (lv 49-50): rooms in a ring at r 112 round the roots hall, floor stand 29 -------------
+    /** The Hart ring (z3_hart: r 76..150, y 14..52); the hall inside it (r < 76) and the Wortelgang (east) are not the dungeon. */
+    public static final int HART_Y0 = 14, HART_Y1 = 52, HART_STRAAL_BOX = 150, HART_STRAAL_BINNEN = 76;
     public static final BlockPos HART_INGANG = w("hart_poort", 2299, 13, -50);
     public static final BlockPos HART_ALTAAR = w("hart_vahoeg_altaar", 2305, 13, -46);
     /** De Aderloop (r 12), De Schimmelkwekerij (r 16, 3 kettles), De Ringenzaal (r 14, 3 rings). */

@@ -56,7 +56,7 @@ public final class Z3NpcRegistry {
     public static final Huisdier VAHOEGJE_PET = nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenRegistry.PET_VAHOEGJE;
 
     public static final List<String> GEBIEDEN_Z3 = List.of("z3_honingtak", "z3_kruinzee", "z3_takkenbanen", "z3_zeppelinwerf", "z3_schorsstad",
-            "z3_wortelvelden", "z3_wortelduister", "z3_hart");
+            "z3_stamspiraal", "z3_wortelvelden", "z3_wortelduister", "z3_hart");
 
     private Z3NpcRegistry() {
     }

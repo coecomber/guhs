@@ -42,7 +42,7 @@ final class Z3Sfeer {
         double rStam = Math.hypot(x - Z3WereldPlekken.STAM_X, z - Z3WereldPlekken.STAM_Z);
         // particles
         switch (id) {
-            case "z3_kruinzee", "z3_honingtak" -> {
+            case "z3_kruinzee", "z3_honingtak", "z3_takkenbanen" -> {
                 if (R.nextInt(2) == 0) {
                     l.addParticle(ParticleTypes.CHERRY_LEAVES, x + R.nextGaussian() * 10, y + 6 + R.nextDouble() * 6, z + R.nextGaussian() * 10, 0, 0, 0);
                 }
@@ -51,14 +51,14 @@ final class Z3Sfeer {
                 }
             }
             case "z3_wortelvelden" -> {
-                if ((nacht || rStam < 330) && R.nextInt(2) == 0) {
+                if ((nacht || rStam < 140) && R.nextInt(2) == 0) {
                     l.addParticle(ParticleTypes.FIREFLY, x + R.nextGaussian() * 12, y + 1 + R.nextDouble() * 4, z + R.nextGaussian() * 12, 0, 0, 0);
                 }
-                if (rStam < 340 && R.nextInt(6) == 0) {
+                if (rStam < 140 && R.nextInt(6) == 0) {
                     l.addParticle(ParticleTypes.FALLING_HONEY, x + R.nextGaussian() * 10, y + 10, z + R.nextGaussian() * 10, 0, 0, 0);
                 }
             }
-            case "z3_schorsstad" -> {
+            case "z3_schorsstad", "z3_stamspiraal" -> {
                 if (R.nextInt(4) == 0) {
                     l.addParticle(ParticleTypes.FALLING_DRIPSTONE_WATER, x + R.nextGaussian() * 10, y + 8, z + R.nextGaussian() * 10, 0, 0, 0);
                 }
@@ -72,9 +72,9 @@ final class Z3Sfeer {
             }
         }
         // the heartbeat in the roots: every ~4 s, louder towards the heart
-        if (y < 66 && rStam < 470 && ++hartslag >= 80) {
+        if (y < 66 && rStam < 160 && ++hartslag >= 80) {
             hartslag = 0;
-            float vol = (float) Math.max(0.15, 1.0 - rStam / 470.0);
+            float vol = (float) Math.max(0.15, 1.0 - rStam / 160.0);
             l.playLocalSound(x, y, z, SoundEvents.WARDEN_HEARTBEAT, SoundSource.AMBIENT, vol, 0.55f, false);
         }
         if (R.nextInt(60) != 0) {

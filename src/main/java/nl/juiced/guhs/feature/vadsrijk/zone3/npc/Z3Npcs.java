@@ -96,6 +96,18 @@ public final class Z3Npcs {
         npc("z3_theeguh", 0, GuhVariant.KIKKERGUH, Gedrag.STAAN, "honingthee", THEEMUTSJE, STRIPED_SWEATER, KNUS_SJAALTJE);
         npc("z3_gloei", 0, GuhVariant.CHOCO, Gedrag.STAAN, "kampwacht", 1.1f, MIJNLAMPJE, STRIPED_SWEATER, KNIGHT_ARMOUR);
         npc("z3_nestwachter", 180, GuhVariant.KORSTGUH, Gedrag.STAAN, null, 1.6f, GUHRIOBELONING_SCHILD, BLOESEMKRANSJE);
+        // --- (P-VERHUIS) visible life: beekeepers in Raatweide + Molenhoek, travellers at the camps, guhs on the bridges -----------
+        npc("z3_imker_raatweide", 180, GuhVariant.GOLDEN, Gedrag.SLENTER, null, BZG_STROHOED, BZG_OVERALL, TUINSCHORTJE);
+        npc("z3_imker_molenhoek", 90, GuhVariant.BEVERGUH, Gedrag.SLENTER, null, BOERDERIJ_HOEDJE, OVERALLS, KNUS_SJAALTJE);
+        npc("z3_reiziger_1", 0, GuhVariant.NORMAL, Gedrag.ZITTEN, null, ZONNEHOEDJE, STRIPED_SWEATER, CAMPINGMARKT_RUGZAK);
+        npc("z3_reiziger_2", 90, GuhVariant.MINT, Gedrag.ZITTEN, null, DETECTIVE_PET, STRIPED_SWEATER, DOOLHOF_KOMPAS);
+        npc("z3_reiziger_3", 270, GuhVariant.CHOCO, Gedrag.ZITTEN, null, TUINHOEDJE, STRIPED_SWEATER, CAMPINGMARKT_RUGZAK);
+        npc("z3_reiziger_4", 180, GuhVariant.BLOESEMGUH, Gedrag.ZITTEN, null, JOCKEY_PET, JOCKEY_JASJE, KNUS_SJAALTJE);
+        GuhVariant[] brugKleur = {GuhVariant.GOLDEN, GuhVariant.NORMAL, GuhVariant.CHOCO, GuhVariant.MINT, GuhVariant.GOLDEN, GuhVariant.NORMAL};
+        for (int i = 1; i <= 6; i++) {
+            npc("z3_brug_" + i, i * 60, brugKleur[i - 1], Gedrag.STAAN, null, i % 2 == 0 ? ZONNEHOEDJE : BZG_STROHOED, STRIPED_SWEATER,
+                    i % 3 == 0 ? KNUS_SJAALTJE : RED_BOWTIE);
+        }
         // --- the Honingwacht: knights in striped jumpers with a blossom wreath on the helmet ----------------------------------------
         GuhVariant[] kleuren = {GuhVariant.GOLDEN, GuhVariant.CHOCO, GuhVariant.NORMAL, GuhVariant.MINT};
         GuhClothes[] extra = {BLOESEMKRANSJE, KNUS_SJAALTJE, RED_BOWTIE};

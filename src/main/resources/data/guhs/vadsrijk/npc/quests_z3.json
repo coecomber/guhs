@@ -103,11 +103,12 @@
         "npc",
         "jij",
         "z3_wasja",
+        "npc",
         "npc"
       ],
       "praat": {},
       "actie_aanname": "z3_bam",
-      "actie_klaar": "",
+      "actie_klaar": "z3_honinglift",
       "start_items": [],
       "auto": false
     },
@@ -139,11 +140,11 @@
         },
         {
           "soort": "gebied",
-          "doel": "poi:z3_zweefplatform",
+          "doel": "poi:z3_rijpad_eind",
           "n": 1,
           "bron": "",
           "kans": 0.0,
-          "plek": "poi:z3_zweefplatform"
+          "plek": "poi:z3_rijpad_eind"
         },
         {
           "soort": "meld",
@@ -534,11 +535,11 @@
       "doelen": [
         {
           "soort": "gebied",
-          "doel": "poi:z3_spiraalpoort",
+          "doel": "poi:z3_honingdeur",
           "n": 1,
           "bron": "",
           "kans": 0.0,
-          "plek": "poi:z3_spiraalpoort"
+          "plek": "poi:z3_honingdeur"
         },
         {
           "soort": "praat",

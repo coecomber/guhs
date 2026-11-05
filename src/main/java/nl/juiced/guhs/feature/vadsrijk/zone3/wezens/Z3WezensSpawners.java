@@ -233,6 +233,8 @@ public final class Z3WezensSpawners {
     }
 
     private static List<Plan> takPlan(List<Soort> mix, int stap) {
+        // (P-VERHUIS) the revamped big branches: narrow (r ~11 at the trunk, ~5.5 at the tip); spawners on the flanks beside the
+        // ridge path, alternately left and right, the floor search over the branch layer finds the branch surface
         List<Z3WezensPlekken.Zone> zones = Z3WezensPlekken.zonesVan(Z3WezensPlekken.TAKKENBANEN);
         Random r = new Random(3002);
         List<Plan> uit = new ArrayList<>();
@@ -243,24 +245,24 @@ public final class Z3WezensSpawners {
                 continue;
             }
             int[][] p = pad.punten();
+            double totaal = 0;
+            for (int i = 0; i + 1 < p.length; i++) {
+                totaal += Math.hypot(p[i + 1][0] - p[i][0], p[i + 1][1] - p[i][1]);
+            }
+            double gedaan = 0;
             for (int i = 0; i + 1 < p.length; i++) {
                 double ax = p[i][0], az = p[i][1], bx = p[i + 1][0], bz = p[i + 1][1];
                 double len = Math.hypot(bx - ax, bz - az);
                 if (len < 1) {
                     continue;
                 }
-                int ti = Math.min(i, tak.top().length - 2);
-                for (double t = 0; t < len; t += stap) {
-                    double f = t / len;
+                for (double t = (i == 0 ? stap / 2.0 : 0); t < len; t += stap) {
+                    double f = t / len, langs = (gedaan + t) / Math.max(1, totaal);
                     double x = ax + (bx - ax) * f, z = az + (bz - az) * f;
-                    double top = tak.top()[ti] + (tak.top()[ti + 1] - tak.top()[ti]) * f;
-                    double rt = tak.stralen()[ti] + (tak.stralen()[ti + 1] - tak.stralen()[ti]) * f;
+                    double rt = tak.rStam() + (tak.rPunt() - tak.rStam()) * Math.min(1, langs * 1.4);
                     Soort s = kies(mix, r.nextInt(1000));
-                    int straal = (int) Math.max(4, Math.min(s.straal(), rt * 0.3));
-                    double zij = Z3WezensPlekken.PAD_BREEDTE / 2 + Z3WezensPlekken.PAD_VRIJ + straal + 0.5;
-                    if (zij + straal * 0.4 > rt * 0.95) {
-                        continue;   // the tip is too narrow beside the path
-                    }
+                    int straal = (int) Math.max(4, Math.min(s.straal(), rt * 0.55));
+                    double zij = Math.max(Z3WezensPlekken.PAD_BREEDTE / 2 + Z3WezensPlekken.TAK_VRIJ + 1, rt * 0.55);
                     kant = -kant;
                     double nx = -(bz - az) / len, nz = (bx - ax) / len;
                     int wx = (int) Math.round(x + nx * zij * kant), wz = (int) Math.round(z + nz * zij * kant);
@@ -268,19 +270,21 @@ public final class Z3WezensSpawners {
                     if (g == null) {
                         continue;
                     }
-                    int minY = (int) Math.round(top - rt * 0.6), maxY = (int) Math.round(top + 6);
-                    int st = (int) Math.floor(Math.min(straal, Z3WezensPlekken.padAfstand(wx, wz, minY, maxY) - Z3WezensPlekken.PAD_VRIJ));
+                    int minY = Z3WezensPlekken.TAK_MIN_Y, maxY = Z3WezensPlekken.TAK_MAX_Y;
+                    // the ridge path itself is checked per spawn (TAK_VRIJ, see Z3WezensSpawners' tick); other routes keep their full margin
+                    int st = (int) Math.floor(Math.min(straal, Z3WezensPlekken.padAfstandBuitenTakken(wx, wz, minY, maxY) - Z3WezensPlekken.PAD_VRIJ));
                     if (st < 4 || veiligInLaag(wx, wz, st, minY, maxY)) {
                         continue;
                     }
                     uit.add(new Plan(wx, wz, s, st, minY, maxY, g.minLevel(), g.maxLevel()));
                 }
+                gedaan += len;
             }
         }
         return uit;
     }
 
-    /** The Schorsstad: per ring terrace 6 spawners along the inner wall (turned a little per ring). */
+    /** The Schorsstad mob zone (the dark stair section above Honingtak): per height step 6 spawners on the stair (turned a little per step). */
     private static void schorsstad() {
         Z3WezensPlekken.Laag laag = Z3WezensPlekken.SCHORSSTAD;
         List<Soort> mix = List.of(s("schorskruiper", Z3WezensRegistry.SCHORSKRUIPER, 3, 2, 800, 7),
@@ -295,7 +299,7 @@ public final class Z3WezensSpawners {
                 int x = (int) Math.round(Z3WezensPlekken.TX + Math.cos(a) * Z3WezensPlekken.RING_STRAAL);
                 int z = (int) Math.round(Z3WezensPlekken.TZ + Math.sin(a) * Z3WezensPlekken.RING_STRAAL);
                 Soort s = kies(mix, r.nextInt(1000));
-                int minY = y - 2, maxY = y + 13;
+                int minY = y - 4, maxY = y + 8;
                 int st = (int) Math.floor(Math.min(s.straal(), Z3WezensPlekken.padAfstand(x, z, minY, maxY) - Z3WezensPlekken.PAD_VRIJ));
                 if (st < 4 || veiligInLaag(x, z, st, minY, maxY)) {
                     continue;

@@ -11,9 +11,9 @@ import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
 
 /**
- * Every coordinate of the zone-3 wezens slice (Z3_BRIEF: one class). Zone 3 "De Schemerwortel" = x +1600..+3000, z -700..700,
- * the trunk axis T at (+2300, 0). The world is the render design MIRRORED in x (POI_Z3.md v1): Honingtak on the WEST branch, the
- * W/NW/ZW riding branches reach EAST.
+ * Every coordinate of the zone-3 wezens slice (Z3_BRIEF: one class). Zone 3 "De Schemerwortel" (REVAMP, ronde 20) = x 1900..2700,
+ * z -400..400, the trunk axis T at (2300, 0): a narrow tall tree in 4 layers (roots 4-78, trunk 80-160, branches 160-216, crown
+ * 216-312), the ground of the floating island round it (y ~60-82), the werf on its own island in the north-east (POI_Z3.md v2).
  * <p><b>Source:</b> z3-wereld's POI_Z3.md v1 / {@code zone3.wereld.Z3WereldPlekken} (mob zones, paths, campfires, arenas, towns).
  * The values below are a COPY of that v1 so this slice works on its own; when Z3WereldPlekken is on the classpath (after
  * integration) its live MOBZONES / PADEN / KAMPVUREN / plek(id) are read by reflection instead (no compile dependency), so a
@@ -26,17 +26,18 @@ public final class Z3WezensPlekken {
     }
 
     public static final int TX = 2300, TZ = 0;
-    public static final int MIN_X = 1600, MAX_X = 3000, MIN_Z = -700, MAX_Z = 700;
+    public static final int MIN_X = 1900, MAX_X = 2700, MIN_Z = -400, MAX_Z = 400;
 
-    /** The five layers (areas) with their levels (ZONE3_PLAN §2) and heights (POI_Z3 v1). */
+    /** The five layers (areas) with their levels (ZONE3_PLAN §2) and heights (POI_Z3 v2 mob zones: the crown storeys from 222, the
+     *  branches 170-222, the dark stair section of the trunk 172-228, the ground 50-110, the roots hall and passage 14-72). */
     public record Laag(String id, int minY, int maxY, int minLevel, int maxLevel) {
     }
 
-    public static final Laag KRUINZEE = new Laag("kruinzee", 200, 320, 30, 34);
-    public static final Laag TAKKENBANEN = new Laag("takkenbanen", 120, 235, 34, 38);
-    public static final Laag SCHORSSTAD = new Laag("schorsstad", 75, 199, 40, 43);
-    public static final Laag WORTELVELDEN = new Laag("wortelvelden", 60, 140, 43, 46);
-    public static final Laag WORTELDUISTER = new Laag("wortelduister", 6, 62, 46, 49);
+    public static final Laag KRUINZEE = new Laag("kruinzee", 212, 320, 30, 34);
+    public static final Laag TAKKENBANEN = new Laag("takkenbanen", 160, 226, 34, 38);
+    public static final Laag SCHORSSTAD = new Laag("schorsstad", 55, 232, 40, 43);
+    public static final Laag WORTELVELDEN = new Laag("wortelvelden", 45, 120, 43, 46);
+    public static final Laag WORTELDUISTER = new Laag("wortelduister", 0, 72, 46, 49);
     public static final List<Laag> LAGEN = List.of(KRUINZEE, TAKKENBANEN, SCHORSSTAD, WORTELVELDEN, WORTELDUISTER);
 
     public static double r(double x, double z) {
@@ -57,7 +58,7 @@ public final class Z3WezensPlekken {
         if (g != null && g.id().startsWith("z3_")) {
             return g.id().equals("z3_wortelduister") || g.id().equals("z3_hart");
         }
-        return y < 62 && r(x, z) <= 470;
+        return y < 64 && r(x, z) <= 160;
     }
 
     // ---- mob zones ------------------------------------------------------------------------------------------------------
@@ -93,21 +94,21 @@ public final class Z3WezensPlekken {
         }
     }
 
-    /** POI_Z3 v1 "Mob zones" (copy; the live list replaces it when z3-wereld is there). */
+    /** POI_Z3 v2 "Mob zones" (copy; the live list replaces it). */
     private static final List<Zone> MOBZONES_V1 = List.of(
-            new Zone("z3_kruinzee_zeppelin", true, 2489, -200, 0, 60, 230, 300, 31, 34),
-            new Zone("z3_kruinzee_noord", true, 2300, -150, 0, 160, 205, 300, 30, 33),
-            new Zone("z3_kruinzee_zuid", true, 2300, 140, 0, 170, 205, 300, 30, 34),
-            new Zone("z3_takkenbanen_west", false, 2719, -40, 2999, 110, 120, 230, 34, 37),
-            new Zone("z3_takkenbanen_noordwest", false, 2559, -560, 2859, -250, 120, 230, 35, 38),
-            new Zone("z3_takkenbanen_zuidwest", false, 2559, 240, 2859, 520, 120, 230, 34, 37),
-            new Zone("z3_schorsstad_ringen", true, 2300, 0, 8, 66, 76, 182, 40, 43),
-            new Zone("z3_wortelvelden_lichtkeverbos", false, 2139, -640, 2459, -330, 60, 140, 43, 45),
-            new Zone("z3_wortelvelden_schimmelboerderij", false, 2479, -420, 2719, -180, 60, 140, 44, 46),
-            new Zone("z3_wortelvelden_paddenbloesemdal", false, 2479, 200, 2819, 520, 60, 140, 43, 45),
-            new Zone("z3_wortelvelden_honingmoeras", false, 1779, 150, 2139, 520, 60, 140, 44, 46),
-            new Zone("z3_wortelduister_gang", true, 2300, 160, 0, 140, 10, 62, 46, 47),
-            new Zone("z3_wortelduister_grotten", true, 2300, 0, 70, 450, 6, 60, 47, 49));
+            new Zone("z3_kruinzee_zeppelin", true, 2355, -95, 0, 34, 220, 250, 31, 34),
+            new Zone("z3_kruinzee_noord", false, 2170, -130, 2430, -10, 222, 300, 30, 33),
+            new Zone("z3_kruinzee_zuid", false, 2170, 10, 2430, 130, 222, 300, 30, 34),
+            new Zone("z3_takkenbanen_west", false, 2140, -50, 2250, 50, 170, 222, 34, 37),
+            new Zone("z3_takkenbanen_noordwest", false, 2240, -160, 2450, -50, 170, 222, 35, 38),
+            new Zone("z3_takkenbanen_zuidwest", false, 2160, 50, 2340, 160, 170, 222, 34, 37),
+            new Zone("z3_schorsstad_ringen", true, 2300, 0, 0, 24, 172, 228, 40, 43),
+            new Zone("z3_wortelvelden_lichtkeverbos", false, 2220, -215, 2380, -110, 50, 110, 43, 45),
+            new Zone("z3_wortelvelden_schimmelboerderij", false, 2085, -80, 2190, 80, 50, 110, 44, 46),
+            new Zone("z3_wortelvelden_paddenbloesemdal", false, 2220, 110, 2380, 215, 50, 110, 43, 45),
+            new Zone("z3_wortelvelden_honingmoeras", false, 2410, -80, 2515, 40, 50, 110, 44, 46),
+            new Zone("z3_wortelduister_gang", false, 2340, -12, 2450, 16, 18, 72, 46, 47),
+            new Zone("z3_wortelduister_grotten", true, 2300, 0, 24, 86, 14, 58, 47, 49));
 
     public static final List<Zone> MOBZONES = new ArrayList<>();
 
@@ -165,26 +166,38 @@ public final class Z3WezensPlekken {
     // ---- spots ----------------------------------------------------------------------------------------------------------
 
     /** Where fleeing Mika's head (their zeppelins): the crown dock, the werf, the mould farm. */
-    public static final BlockPos ZEPPELIN_KRUIN = w("mika_steiger", 2483, 258, -196);
-    public static final BlockPos ZEPPELIN_WERF = w("werf_ingang", 2861, 169, -537);
-    public static final BlockPos ZEPPELIN_BOERDERIJ = w("schimmelboerderij", 2599, 70, -300);
+    public static final BlockPos ZEPPELIN_KRUIN = w("mika_steiger", 2355, 227, -96);
+    public static final BlockPos ZEPPELIN_WERF = w("werf_ingang", 2505, 161, -206);
+    public static final BlockPos ZEPPELIN_BOERDERIJ = w("schimmelboerderij", 2149, 68, -55);
 
+    /** (revamp) the crown from 212, the branches + Honingtak + the werf 120-212, below that the ground (the mould farm). */
     public static BlockPos zeppelin(double x, double y, double z) {
-        if (y >= 200) {
+        if (y >= 212) {
             return ZEPPELIN_KRUIN;
         }
         return y >= 120 ? ZEPPELIN_WERF : ZEPPELIN_BOERDERIJ;
+    }
+
+    /** A spot: its own id when the map has it, else next to an anchor POI of the same place (dx, dy, dz), else the v2 copy. */
+    private static BlockPos wa(String id, String anker, int dx, int dy, int dz, int x, int y, int z) {
+        BlockPos b = wereld(id);
+        if (b != null) {
+            return b;
+        }
+        BlockPos a = wereld(anker);
+        return a != null ? a.offset(dx, dy, dz) : new BlockPos(x, y, z);
     }
 
     /** The named area leaders' landmarks (ZONE3_PLAN §6: "elites staan bij de landmarks"); floor search 24 down / 10 up. */
     public static final Map<String, BlockPos> LEIDERS = new LinkedHashMap<>();
 
     static {
-        LEIDERS.put("rupsenmoeder", w("leider_rupsenmoeder", 2230, 275, 230));            // the Kruinzee south, near the blossom fall
-        LEIDERS.put("kapitein_bladrover", w("leider_kapitein_bladrover", 2489, 262, -216)); // the zeppelin dock (elite camp)
-        LEIDERS.put("harskolos", w("leider_harskolos", 2325, 146, -59));                   // the 5th ring of the Schorsstad
-        LEIDERS.put("wilde_rotkeiler", w("leider_wilde_rotkeiler", 2380, 80, -420));       // the Lichtkeverbos
-        LEIDERS.put("ziener_oudste", w("leider_ziener_oudste", 2420, 36, -150));           // the caves of the Wortelduister
+        // (P-VERHUIS) on the revamped map: each leader by a landmark of its own layer (its own POI when wereld publishes one)
+        LEIDERS.put("rupsenmoeder", wa("leider_rupsenmoeder", "bloesemwaterval_top", 0, 0, -6, 2261, 222, 105));      // kruin 1 south, by the blossom fall
+        LEIDERS.put("kapitein_bladrover", wa("leider_kapitein_bladrover", "mika_steiger", -6, 0, 6, 2349, 227, -90));   // the Mika zeppelin dock (elite camp)
+        LEIDERS.put("harskolos", wa("leider_harskolos", "boomvolk_lichtje_3", -4, 0, 0, 2312, 199, 8));                  // the dark stair above Honingtak
+        LEIDERS.put("wilde_rotkeiler", wa("leider_wilde_rotkeiler", "lichtkeverbos", 0, 0, 0, 2299, 69, -150));         // the Lichtkeverbos (ground north)
+        LEIDERS.put("ziener_oudste", wa("leider_ziener_oudste", "geheim_schat_4", 6, 0, -6, 2246, 30, 4));               // the roots hall
     }
 
     /**
@@ -194,14 +207,14 @@ public final class Z3WezensPlekken {
     public static final Map<String, BlockPos> HOLEN = new LinkedHashMap<>();
 
     static {
-        HOLEN.put("ouwe_rotkeiler", w("hol_ouwe_rotkeiler", 2640, 70, -230));           // the mould farm (pluimpost_2)
-        HOLEN.put("moeder_wesp", w("hol_moeder_wesp", 2700, 205, 380));                  // on the ZW-tak
-        HOLEN.put("de_harsreus", w("hol_de_harsreus", 2325, 76, -30));                   // the Schorsstad floor
-        HOLEN.put("kapitein_kaaskop", w("kaasschutterpost_2", 2620, 219, -314));        // a Kaasschutter post on the NW-tak
-        HOLEN.put("grootvader_rups", w("hol_grootvader_rups", 2250, 265, 180));          // the Kruinzee south
-        HOLEN.put("de_stille_ziener", w("hol_de_stille_ziener", 2420, 30, -230));         // the Wortelduister caves
-        HOLEN.put("slangenkoningin_sapsie", w("hol_slangenkoningin_sapsie", 1960, 67, 250)); // the Honingmoeras (pluimpost_4)
-        HOLEN.put("bramzwijn_de_brede", w("hol_bramzwijn_de_brede", 2720, 70, 440));     // the Paddenbloesemdal (pluimpost_3)
+        HOLEN.put("ouwe_rotkeiler", wa("hol_ouwe_rotkeiler", "schimmelketel_3", 0, 0, -12, 2163, 67, -111));            // the mould farm (pluimpost_2)
+        HOLEN.put("moeder_wesp", wa("hol_moeder_wesp", "kaasschutterpost_3", -10, 0, 8, 2222, 212, 115));              // on the Zuidwesttak
+        HOLEN.put("de_harsreus", wa("hol_de_harsreus", "boomvolk_lichtje_4", 0, 6, 0, 2305, 218, -19));                // the dark stair, high
+        HOLEN.put("kapitein_kaaskop", w("kaasschutterpost_2", 2395, 195, -11));                                        // a Kaasschutter post on the Noordtak
+        HOLEN.put("grootvader_rups", wa("hol_grootvader_rups", "kuiken_3", 0, 0, 10, 2208, 227, -21));                 // kruin 1 west
+        HOLEN.put("de_stille_ziener", wa("hol_de_stille_ziener", "geheim_knuffel_10", 0, 0, 0, 2260, 30, 30));         // the roots hall
+        HOLEN.put("slangenkoningin_sapsie", wa("hol_slangenkoningin_sapsie", "honingmoeras", 10, 0, 6, 2465, 68, -51)); // the Honingmoeras (pluimpost_1)
+        HOLEN.put("bramzwijn_de_brede", wa("hol_bramzwijn_de_brede", "paddenbloesemdal", 12, 0, 0, 2298, 68, 159));    // the Paddenbloesemdal (pluimpost_3)
     }
 
     /** A place no creature may come: a flat circle and a y-range (layers!). */
@@ -212,12 +225,11 @@ public final class Z3WezensPlekken {
         }
     }
 
-    private static final List<BlockPos> KAMPVUREN_V1 = List.of(new BlockPos(2787, 140, 33), new BlockPos(2269, 13, 20), new BlockPos(2044, 255, 147),
-            new BlockPos(2442, 265, 82), new BlockPos(2300, 255, -230), new BlockPos(2265, 282, -10), new BlockPos(2055, 69, 414),
-            new BlockPos(2276, 129, 59), new BlockPos(2273, 76, 34), new BlockPos(2704, 197, -405), new BlockPos(2568, 225, 5),
-            new BlockPos(2760, 201, 20), new BlockPos(2616, 214, 279), new BlockPos(2244, 47, 213), new BlockPos(2207, 31, 126),
-            new BlockPos(1956, 73, -147), new BlockPos(1827, 67, 83), new BlockPos(2135, 67, 451), new BlockPos(2608, 67, 367),
-            new BlockPos(2772, 66, -84), new BlockPos(2464, 68, -452), new BlockPos(1991, 68, -368));
+    private static final List<BlockPos> KAMPVUREN_V1 = List.of(new BlockPos(2342, 197, 59), new BlockPos(2360, 25, -14), new BlockPos(2399, 230, 42),
+            new BlockPos(2256, 261, -50), new BlockPos(2281, 284, 40), new BlockPos(2323, 285, 29), new BlockPos(2422, 67, 97), new BlockPos(2298, 132, 26),
+            new BlockPos(2290, 81, 7), new BlockPos(2287, 185, -77), new BlockPos(2247, 209, -19), new BlockPos(2207, 210, -31), new BlockPos(2250, 204, 59),
+            new BlockPos(2403, 58, 1), new BlockPos(2368, 38, 6), new BlockPos(2261, 66, -163), new BlockPos(2453, 64, 88), new BlockPos(2300, 64, 177),
+            new BlockPos(2146, 66, 88), new BlockPos(2146, 65, -89), new BlockPos(2299, 65, -177), new BlockPos(2453, 66, -89));
 
     public static final List<Veilig> VEILIG = new ArrayList<>();
 
@@ -226,38 +238,59 @@ public final class Z3WezensPlekken {
     }
 
     static {
-        // Honingtak: box (1634,-100)..(2014,110), y 150-290 (the Pluimstal included), covered by circles
-        for (int x = 1660; x <= 2010; x += 70) {
-            VEILIG.add(new Veilig(new BlockPos(x, 220, 5), 112, 145, 295));
-        }
-        veilig(w("hangnest_plein", 2783, 140, 37), 42, 30, 60);                // Hangnest Dauwdrup under the W-tak
-        veilig(w("mosvoet_plein", 2049, 69, 424), 60, 20, 45);                 // Mosvoet
-        veilig(w("arena_vahoegnir", 2299, 280, -40), 48, 40, 40);              // the old nest: Vahoegnir
-        veilig(w("arena_kruinroofvogel", 2129, 238, -170), 48, 40, 50);        // the world boss on the Kale Kruin
-        veilig(w("kruinroofvogel_zit_1", 2037, 258, 42), 26, 30, 30);
-        veilig(w("kruinroofvogel_zit_2", 2339, 248, -292), 26, 30, 30);
-        VEILIG.add(new Veilig(new BlockPos(2899, 140, -570), 118, 90, 190));    // the Kaaszeppelinwerf (dungeon 1)
-        VEILIG.add(new Veilig(new BlockPos(TX, 57, TZ), 122, 38, 76));          // the Hart van de Boom (dungeon 2)
-        veilig(w("hartslag_zaal", 2299, 13, 30), 66, 13, 32);                   // the Hartslag-zaal + the Hart's gate
-        veilig(w("arena_piepvel", 2299, 184, 0), 16, 110, 20);                 // the Lantaarntoren (Pelszaal on top)
-        veilig(w("wortelpoort", 2299, 71, 282), 22, 10, 20);                   // the Grote Wortelpoort
-        for (String id : List.of("pluimpost_1", "pluimpost_2", "pluimpost_3", "pluimpost_4")) {
-            BlockPos p = wereld(id);
-            if (p != null) {
-                veilig(p, 22, 14, 24);
+        // (P-VERHUIS) Honingtak: the ring town round the trunk (deck 166, houses to ~182, the boardwalk branches to r ~140)
+        VEILIG.add(new Veilig(new BlockPos(TX, 166, TZ), 145, 145, 186));
+        veilig(w("dok_mast", 2209, 167, -94), 30, 10, 24);                           // the airship dock at the tip of the Imkerstraat
+        // the beekeeper villages on the big branches
+        for (String id : List.of("hangnest_plein", "raatweide_plein", "molenhoek_plein")) {
+            BlockPos b = wereld(id);
+            if (b != null) {
+                veilig(b, 26, 16, 22);
             }
         }
-        if (wereld("pluimpost_1") == null) {
-            veilig(new BlockPos(2300, 66, -514), 22, 14, 24);
-            veilig(new BlockPos(2667, 68, -362), 22, 14, 24);
-            veilig(new BlockPos(2653, 69, 359), 22, 14, 24);
-            veilig(new BlockPos(1918, 72, 387), 22, 14, 24);
+        veilig(w("mosvoet_plein", 2427, 66, 92), 34, 16, 30);                         // Mosvoet (ground, foot of the Honinglift)
+        veilig(w("gebouw.pluimstal.binnen", 2272, 75, -101), 34, 12, 24);             // the Pluimstal + its yard and training track
+        veilig(w("pluimstal_oefenbaan", 2282, 69, -141), 22, 10, 20);
+        veilig(w("arena_vahoegnir", 2300, 294, 0), 30, 14, 40);                       // the old nest: Vahoegnir
+        veilig(w("arena_kruinroofvogel", 2155, 226, 46), 34, 20, 40);                 // the world boss on the Kale Kruin
+        veilig(w("kruinroofvogel_zit_1", 2367, 210, 124), 20, 20, 24);
+        veilig(w("kruinroofvogel_zit_2", 2426, 202, -11), 20, 20, 24);
+        // the Kaaszeppelinwerf (dungeon 1): its whole island
+        for (var g : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.GEBIEDEN) {
+            if (g.id().equals("z3_zeppelinwerf") && g.cilinder()) {
+                VEILIG.add(new Veilig(new BlockPos(g.a(), (g.minY() + g.maxY()) / 2, g.b()), g.d(), g.minY(), g.maxY()));
+            }
         }
-        veilig(w("pluimpost_westtak", 2690, 210, 36), 20, 14, 24);
+        veilig(w("kabelbrug_begin", 2407, 167, -100), 12, 8, 16);
+        // the Hart van de Boom (dungeon 2): a ring of rooms round the roots hall: each room, not the hall itself
+        for (String id : List.of("hart_kamer_aderloop", "hart_kamer_schimmelkwekerij", "hart_kamer_ringenzaal", "arena_wortelwurger",
+                "arena_nestwachter", "arena_baron_bleu", "hart_poort")) {
+            BlockPos b = wereld(id);
+            if (b != null) {
+                veilig(b, 26, 8, 18);
+            }
+        }
+        veilig(w("hart_nestkamer", 2309, 21, 0), 14, 6, 12);                          // the egg's root basket in the middle of the hall
+        veilig(w("hartslag_zaal", 2352, 23, 0), 20, 8, 16);                           // the Hartslag-zaal (Gloei's campfire)
+        veilig(w("arena_piepvel", 2300, 61, 0), 18, 4, 14);                           // the Pelszaal under the Schorsstad floor
+        VEILIG.add(new Veilig(new BlockPos(TX, 81, TZ), 26, 75, 168));                // the Schorsstad: the town in the hollow trunk (floor -> binnenhof)
+        veilig(w("wortelpoort", 2446, 70, 0), 18, 10, 18);                            // the Wortelpoort
+        for (String id : List.of("pluimpost_1", "pluimpost_2", "pluimpost_3", "pluimpost_4", "pluimpost_westtak")) {
+            BlockPos p = wereld(id);
+            if (p != null) {
+                veilig(p, 18, 12, 20);
+            }
+        }
         for (int i = 1; i <= 4; i++) {                                           // the mould kettles (quest objects)
             BlockPos k = wereld("schimmelketel_" + i);
             if (k != null) {
-                veilig(k, 9, 6, 16);
+                veilig(k, 7, 6, 16);
+            }
+        }
+        for (int i = 1; i <= 6; i++) {                                           // the stair landings (doors): never a mob in a doorway
+            BlockPos b = wereld("trap_bordes_" + i);
+            if (b != null) {
+                veilig(b, 8, 4, 8);
             }
         }
         List<BlockPos> vuren = new ArrayList<>(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.KAMPVUREN);
@@ -265,7 +298,7 @@ public final class Z3WezensPlekken {
             vuren.addAll(KAMPVUREN_V1);
         }
         for (BlockPos b : vuren) {
-            veilig(b, 24, 14, 20);
+            veilig(b, 20, 12, 18);
         }
     }
 
@@ -288,42 +321,41 @@ public final class Z3WezensPlekken {
     public static final List<Pad> PADEN = new ArrayList<>();
     public static final double PAD_BREEDTE = 3.5, PAD_VRIJ = 5;
 
-    /** POI_Z3 v1 paths (copy). */
+    /** POI_Z3 v2 paths (a short copy: only used when the generated list is empty). */
     private static final Map<String, int[][]> PADEN_V1 = Map.of(
-            "kruinring", new int[][] {{1994, 0}, {2007, 78}, {2044, 147}, {2099, 200}, {2166, 231}, {2235, 240}, {2299, 230}, {2354, 203}, {2396, 166},
-                    {2425, 125}, {2442, 82}, {2452, 40}, {2454, 0}, {2452, -40}, {2442, -82}, {2425, -125}, {2396, -166}, {2354, -203}, {2300, -230},
-                    {2235, -240}, {2166, -231}, {2099, -200}, {2044, -147}, {2007, -78}, {1994, 0}},
-            "takbaan_west", new int[][] {{2339, 8}, {2411, 12}, {2499, 18}, {2567, 21}, {2629, 24}, {2690, 27}, {2749, 30}, {2808, 32}, {2864, 34},
-                    {2927, 35}, {2974, 36}},
-            "takbaan_noordwest", new int[][] {{2327, -28}, {2391, -89}, {2469, -165}, {2531, -226}, {2589, -285}, {2650, -342}, {2709, -398},
-                    {2768, -452}, {2819, -500}, {2861, -536}, {2889, -560}},
-            "takbaan_zuidwest", new int[][] {{2327, 28}, {2386, 82}, {2459, 150}, {2521, 207}, {2579, 262}, {2637, 313}, {2691, 360}, {2744, 402},
-                    {2789, 440}, {2827, 471}, {2851, 492}},
-            "wortelweg", new int[][] {{1829, 0}, {1837, 81}, {1858, 160}, {1892, 234}, {1939, 302}, {1997, 360}, {2064, 407}, {2139, 441}, {2218, 462},
-                    {2299, 470}, {2381, 462}, {2460, 441}, {2534, 407}, {2602, 360}, {2660, 302}, {2707, 234}, {2741, 160}, {2762, 81}, {2769, 0},
-                    {2762, -81}, {2741, -160}, {2707, -235}, {2660, -302}, {2602, -360}, {2535, -407}, {2460, -441}, {2381, -462}, {2300, -470},
-                    {2218, -462}, {2139, -441}, {2064, -407}, {1997, -360}, {1939, -302}, {1892, -235}, {1858, -160}, {1837, -81}, {1829, 0}},
-            "wortelgang", new int[][] {{2299, 268}, {2287, 256}, {2269, 239}, {2249, 219}, {2226, 195}, {2209, 170}, {2205, 145}, {2208, 120},
-                    {2217, 99}, {2235, 79}, {2249, 66}});
+            "kabelbrug", new int[][] {{2407, -99}, {2505, -205}},
+            "wortelgang", new int[][] {{2440, 2}, {2430, 0}, {2417, -3}, {2406, -2}, {2396, 2}, {2386, 6}, {2376, 5}, {2366, 2}, {2357, 1}, {2348, 0},
+                    {2342, 0}});
 
     /** The heights a named path runs at (z3-wereld's paths are flat x/z lists). */
     static int[] hoogten(String naam) {
+        // (P-VERHUIS) per height on the revamped tree: a path on one layer never blocks the layers above/below it
+        if (naam.equals("rijpad") || naam.contains("spiraal")) {
+            return new int[] {76, 240};          // the outer riding spiral: ground (82) -> kruin 1 (232)
+        }
         if (naam.startsWith("kruin")) {
-            return new int[] {196, 320};
+            return new int[] {220, 320};
         }
         if (naam.startsWith("takbaan") || naam.startsWith("tak") || naam.contains("lianen") || naam.contains("valbrug")) {
-            return new int[] {120, 250};
+            return new int[] {165, 232};         // the big branches (their ridge is the path)
+        }
+        if (naam.startsWith("kabelbrug")) {
+            return new int[] {150, 180};
         }
         if (naam.startsWith("wortelweg")) {
-            return new int[] {50, 145};
+            return new int[] {50, 110};
         }
         if (naam.startsWith("wortelgang") || naam.contains("duister")) {
-            return new int[] {0, 80};
-        }
-        if (naam.contains("spiraal")) {
-            return new int[] {60, 210};
+            return new int[] {14, 80};
         }
         return new int[] {-64, 320};
+    }
+
+    /** Branch ridge paths are narrow: their no-spawn margin is smaller (mobs live on the flanks of the big branches). */
+    public static final double TAK_VRIJ = 1.5;
+
+    public static double vrij(Pad pad) {
+        return pad.naam().startsWith("takbaan") ? TAK_VRIJ : PAD_VRIJ;
     }
 
     static {
@@ -357,7 +389,7 @@ public final class Z3WezensPlekken {
         double best = Double.MAX_VALUE;
         for (Pad pad : PADEN) {
             if (y >= pad.minY() && y <= pad.maxY()) {
-                best = Math.min(best, afstandTot(pad, x, z));
+                best = Math.min(best, afstandTot(pad, x, z) + PAD_VRIJ - vrij(pad));
             }
         }
         return best;
@@ -368,6 +400,17 @@ public final class Z3WezensPlekken {
         double best = Double.MAX_VALUE;
         for (Pad pad : PADEN) {
             if (pad.maxY() >= minY && pad.minY() <= maxY) {
+                best = Math.min(best, afstandTot(pad, x, z) + PAD_VRIJ - vrij(pad));
+            }
+        }
+        return best;
+    }
+
+    /** Like {@link #padAfstand(double, double, int, int)} but ignoring the branch ridge paths (planning branch-flank spawners). */
+    public static double padAfstandBuitenTakken(double x, double z, int minY, int maxY) {
+        double best = Double.MAX_VALUE;
+        for (Pad pad : PADEN) {
+            if (!pad.naam().startsWith("takbaan") && pad.maxY() >= minY && pad.minY() <= maxY) {
                 best = Math.min(best, afstandTot(pad, x, z));
             }
         }
@@ -388,20 +431,19 @@ public final class Z3WezensPlekken {
     // ---- the branches (Takkenbanen spawners follow them) ---------------------------------------------------------------
 
     /**
-     * A branch: its ride path (the ridge) and, per point, the branch top height and radius (render TAKKEN mirrored to the east:
-     * the top = centre y + radius). The Takkenbanen spawners sit beside the ridge, in the branch mob zones.
+     * A big branch (boom2.py TAKLIJST, after the riding-spiral alignment): its ride path (the ridge, PADEN takbaan_*) and its radius
+     * at the trunk and at the tip. The Takkenbanen spawners sit on the flanks beside the ridge; the floor search covers the branch
+     * layer (170-224), so the exact ridge height is found in the world.
      */
-    public record Tak(String pad, int[] top, int[] stralen) {
+    public record Tak(String pad, double rStam, double rPunt) {
     }
 
     public static final List<Tak> TAKKEN = List.of(
-            new Tak("takbaan_west", new int[] {242, 235, 228, 220, 212, 204, 196, 188, 180, 172, 167}, new int[] {40, 34, 30, 27, 24, 22, 20, 18, 16, 13, 11}),
-            new Tak("takbaan_noordwest", new int[] {240, 236, 232, 226, 218, 210, 201, 192, 184, 172, 163},
-                    new int[] {38, 32, 28, 25, 22, 20, 18, 16, 14, 12, 10}),
-            new Tak("takbaan_zuidwest", new int[] {240, 235, 230, 225, 217, 209, 200, 192, 184, 172, 163},
-                    new int[] {38, 32, 28, 25, 22, 20, 18, 16, 14, 12, 10}));
+            new Tak("takbaan_bijentak", 11, 5.5), new Tak("takbaan_zuidwesttak", 11, 5.5), new Tak("takbaan_westtak", 12, 5.5),
+            new Tak("takbaan_molentak", 10, 5.5), new Tak("takbaan_noordtak", 9, 5.5));
+    public static final int TAK_MIN_Y = 170, TAK_MAX_Y = 224;
 
-    /** The Schorsstad ring terraces (stand y = 81 + 16 i, POI schorsstad_ring_N) at radius ~58 from the axis. */
-    public static final int[] RINGEN = {80, 96, 112, 128, 144, 160, 176};
-    public static final int RING_STRAAL = 58;
+    /** The dark stair section of the trunk (Schorsstad mob zone, above Honingtak): spawners on the stair at radius 19, every 12 up. */
+    public static final int[] RINGEN = {176, 188, 200, 212, 222};
+    public static final int RING_STRAAL = 19;
 }

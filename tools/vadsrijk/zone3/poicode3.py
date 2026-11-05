@@ -2,7 +2,7 @@
 
 The zone-3 slices read spots as w("<id>", fallback...) / wereld("<id>") / Z3WereldPlekken.plek("<id>") / rel(c, "<id>", ...)
 and constants named *_POI* = "<id>". A missing id silently falls back to an OLD (pre-revamp) coordinate, so after the revamp
-every id must exist. Ids built in a loop ("lantaarnring_" + i) are checked as a prefix (some key must start with it).
+every id must exist (wa(own, anchor, ...) only needs the anchor). Ids built in a loop ("lantaarnring_" + i) are checked as a prefix (some key must start with it).
 Also checks that every "poi:<id>" in quests_z3.json is a key of Z3NpcPlekken.POI (poi("<id>", ...) calls).
 
 Run from the project root:  python tools/vadsrijk/zone3/poicode3.py        (exit 1 when something is missing)
@@ -22,6 +22,8 @@ NPCP = os.path.join(SRC, "zone3", "npc", "Z3NpcPlekken.java")
 # calls whose first string argument is a Z3WereldPlekken id
 CALL = re.compile(r'\b(?:w|wo|wereld|wp|Z3WereldPlekken\.plek)\(\s*"([A-Za-z0-9_.]+)"(\s*\+)?')
 REL = re.compile(r'\brel\([^,()]+,\s*"([A-Za-z0-9_.]+)"(\s*\+)?')
+# wa("<optional own id>", "<anchor id>", ...): the own id may be missing (it falls back to the anchor), the anchor must exist
+ANKER = re.compile(r'wa\(\s*"[A-Za-z0-9_.]+",\s*"([A-Za-z0-9_.]+)"')
 CONST = re.compile(r'\b[A-Z0-9_]*POI[A-Z0-9_]*\s*=\s*"([A-Za-z0-9_.]+)"')
 # files whose w()/wereld() is the zone-3 lookup (other zones have their own w())
 BESTANDEN_PREFIX = ("zone3" + os.sep,)
@@ -52,7 +54,7 @@ def main():
         for n, regel in enumerate(open(f, encoding="utf-8"), 1):
             if regel.strip().startswith(("//", "*", "/*")):
                 continue
-            for rx in (CALL, REL, CONST):
+            for rx in (CALL, REL, CONST, ANKER):
                 for m in rx.finditer(regel):
                     id_, plus = m.group(1), (m.group(2) if m.re.groups > 1 else None)
                     gebruikt += 1
