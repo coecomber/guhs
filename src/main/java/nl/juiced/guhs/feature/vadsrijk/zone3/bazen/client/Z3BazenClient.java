@@ -171,7 +171,7 @@ public final class Z3BazenClient {
             public Identifier getAnimationResource(Vahoegnir v) {
                 return Guhs.id("entity/vr_z3_baas_vahoegnir");
             }
-        }, 1.6f, false, false) {
+        }, 1.6f, true, false) {   // o-draak: glowing purple eyes via vahoegnir_<n>_glowmask (step 5 = pink head, no glow)
             @Override
             public void addRenderData(Vahoegnir b, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
                 state.addGeckolibData(GETAL, b.splinters());
