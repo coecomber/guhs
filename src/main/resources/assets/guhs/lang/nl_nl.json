@@ -39344,5 +39344,10 @@
   "vadsrijk.z3npc.imker.scene.3": "De bijtjes zoemen boos om zijn hoofd. Het rookpotje sputtert, hoest één wolkje uit en gaat uit.",
   "vadsrijk.z3npc.imker.scene.4": "\"Oké, oké! Ik ga al! Dit komt in mijn rapport!\"",
   "vadsrijk.z3npc.imker.scene.5": "Hij vlucht met een volle pot honing door het luik. De pot laat hij in zijn haast achter. De bijtjes zijn weer blij.",
-  "vadsrijk.npc.reis.kies.z3_kapitein": "Terug naar beneden? Kies hieronder waarheen of bekijk de reiskaart. (De scheepsbel bij de mast opent de reiskaart ook.)"
+  "vadsrijk.npc.reis.kies.z3_kapitein": "Terug naar beneden? Kies hieronder waarheen of bekijk de reiskaart. (De scheepsbel bij de mast opent de reiskaart ook.)",
+  "vadsrijk.z3bazen.volgorde": "%s laat zich nog niet zien. Versla eerst %s.",
+  "vadsrijk.z3bazen.ander_gevecht": "Je bent nog in gevecht met %s.",
+  "vadsrijk.z3bazen.hart.welkom": "Het Hart van de Boom (lv 49-50). De wortelgang achter deze poort klimt naar de ring. Daar, voorbij de Aderloop, de Schimmelkwekerij en de Ringenzaal, wachten de Wortelwurger, de Oude Nestwachter en Baron Bleu.",
+  "vadsrijk.z3bazen.hart.slaapt": "De wortels slapen nog... Kom terug als Wortelwacht Gloei je naar het Hart stuurt (hoofdverhaal \"Het Hart van de Boom\"). Vechten mag nu al, maar je verhaal telt hier pas mee als die opdracht loopt.",
+  "vadsrijk.z3bazen.hart.slaapt_kort": "De wortels slapen nog..."
 }

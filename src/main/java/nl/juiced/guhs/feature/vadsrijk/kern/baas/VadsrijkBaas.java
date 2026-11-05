@@ -490,6 +490,15 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return super.stil() || inIntro();
     }
 
+    /**
+     * (M-BAZEN) May this player be welcomed into the fight now? false = the arena treats them as not inside yet (no intro, no
+     * boss bar, not counted for the HP scaling) and asks again next tick: a boss whose dungeon predecessor still stands, or a
+     * player who is mid-fight with another boss (no camera theft). Default: always.
+     */
+    public boolean magIntro(ServerPlayer p) {
+        return true;
+    }
+
     /** The intro for one player: a camera swoop + title the first time, else a short title card. */
     public void intro(ServerPlayer p, boolean eersteKeer) {
         Component titel = Component.translatable(titelKey()).withStyle(ChatFormatting.BOLD);

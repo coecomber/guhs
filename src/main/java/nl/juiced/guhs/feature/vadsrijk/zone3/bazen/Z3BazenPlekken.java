@@ -125,6 +125,62 @@ public final class Z3BazenPlekken {
     /** Where the pink beam points: Hoogvads, far east above the clouds. */
     public static final Vec3 HOOGVADS = new Vec3(4600, 330, -120);
 
+    // ---- (M-BAZEN) arena layout: no two arenas share space -------------------------------------------------------------------
+    /** Height window of a dungeon arena (werf decks, Hart rooms): 6 below the floor (a wreck to jump to), 14 above. */
+    public static final int KERKER_ONDER = 6, KERKER_BOVEN = 14;
+    /** Below this height difference two overlapping arenas are not split by height but shrunk (never below MIN_STRAAL). */
+    public static final int MIN_DY = 6, MIN_STRAAL = 8, KIER = 2;
+
+    /**
+     * Makes the arenas disjoint, whatever the map does (POIs move with the zone-3 revamp): two arenas whose discs overlap are split
+     * at the height halfway between their floors (stacked decks), or, when their floors are less than {@link #MIN_DY} apart, both
+     * radii shrink until there is a {@link #KIER}-block gap (logged: ask wereld for more room, POI_VERZOEKEN_Z3.md).
+     */
+    public static List<nl.juiced.guhs.feature.vadsrijk.kern.baas.Arena> indeel(List<nl.juiced.guhs.feature.vadsrijk.kern.baas.Arena> in) {
+        List<nl.juiced.guhs.feature.vadsrijk.kern.baas.Arena> l = new java.util.ArrayList<>(in);
+        for (int ronde = 0; ronde < 6; ronde++) {
+            boolean anders = false;
+            for (int i = 0; i < l.size(); i++) {
+                for (int j = i + 1; j < l.size(); j++) {
+                    var a = l.get(i);
+                    var b = l.get(j);
+                    if (!a.overlapt(b)) {
+                        continue;
+                    }
+                    boolean aLaag = a.centrum().getY() <= b.centrum().getY();
+                    var lo = aLaag ? a : b;
+                    var hi = aLaag ? b : a;
+                    int dy = hi.centrum().getY() - lo.centrum().getY();
+                    if (dy >= MIN_DY) {
+                        int mid = lo.centrum().getY() + dy / 2;
+                        lo = lo.met(lo.straal(), lo.onder(), Math.min(lo.boven(), mid - lo.centrum().getY()));
+                        hi = hi.met(hi.straal(), Math.min(hi.onder(), hi.centrum().getY() - mid), hi.boven());
+                    } else {
+                        double d = Math.sqrt(Math.pow(a.centrum().getX() - b.centrum().getX(), 2) + Math.pow(a.centrum().getZ() - b.centrum().getZ(), 2));
+                        double f = Math.max(0, d - KIER) / (lo.straal() + hi.straal());
+                        int rl = Math.max(MIN_STRAAL, (int) Math.floor(lo.straal() * f)), rh = Math.max(MIN_STRAAL, (int) Math.floor(hi.straal() * f));
+                        if (rl == lo.straal() && rh == hi.straal()) {
+                            org.slf4j.LoggerFactory.getLogger("guhs/z3bazen").warn("arenas {} and {} overlap and cannot shrink further: move them apart (POI_VERZOEKEN_Z3)",
+                                    lo.id(), hi.id());
+                            continue;
+                        }
+                        org.slf4j.LoggerFactory.getLogger("guhs/z3bazen").warn("arenas {} and {} overlap on one floor: radii {} -> {} and {} -> {}", lo.id(),
+                                hi.id(), lo.straal(), rl, hi.straal(), rh);
+                        lo = lo.met(rl, lo.onder(), lo.boven());
+                        hi = hi.met(rh, hi.onder(), hi.boven());
+                    }
+                    anders = true;
+                    l.set(i, aLaag ? lo : hi);
+                    l.set(j, aLaag ? hi : lo);
+                }
+            }
+            if (!anders) {
+                break;
+            }
+        }
+        return l;
+    }
+
     public static BlockPos op(BlockPos c, int[] o) {
         return c.offset(o[0], o[1], o[2]);
     }

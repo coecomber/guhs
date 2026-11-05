@@ -172,9 +172,18 @@ public final class Z3BazenRegistry {
         NeoForge.EVENT_BUS.addListener(Z3BazenRegistry::commando);
     }
 
+    /** (M-BAZEN) The zone-3 arenas as registered (after {@link Z3BazenPlekken#indeel}: no two share space). */
+    public static final java.util.Map<String, Arena> ARENAS = new java.util.LinkedHashMap<>();
+    private static final java.util.Map<String, Function<ServerLevel, ? extends VadsrijkBaas>> MAKERS = new java.util.LinkedHashMap<>();
+
     private static <T extends Z3Baas> void arena(String id, BlockPos c, int r, BlockPos deur, int respawn, BlockPos bord, String titel, int lv, Element e,
             Function<ServerLevel, T> maak) {
-        Arenas.registreer(new Arena(id, c, r, deur, respawn, bord, titel), sl -> {
+        Arena a = new Arena(id, c, r, deur, respawn, bord, titel);
+        if (Z3Toegang.VOLGORDE.values().stream().anyMatch(l -> l.contains(id))) {
+            a = a.met(r, Z3BazenPlekken.KERKER_ONDER, Z3BazenPlekken.KERKER_BOVEN);   // dungeon: a deck/room-high window
+        }
+        ARENAS.put(id, a);
+        MAKERS.put(id, sl -> {
             T b = maak.apply(sl);
             if (b != null) {
                 b.stelIn(lv, e, false, Set.of());
@@ -185,6 +194,15 @@ public final class Z3BazenRegistry {
     }
 
     private static void arenas() {
+        arenaLijst();
+        for (Arena a : Z3BazenPlekken.indeel(new java.util.ArrayList<>(ARENAS.values()))) {
+            ARENAS.put(a.id(), a);
+            Function<ServerLevel, ? extends VadsrijkBaas> m = MAKERS.get(a.id());
+            Arenas.registreer(a, sl -> m.apply(sl));
+        }
+    }
+
+    private static void arenaLijst() {
         arena(ARENA_ROOF, Z3BazenPlekken.ROOF_CENTRUM, Z3BazenPlekken.ROOF_STRAAL, Z3BazenPlekken.ROOF_DEUR, Z3BazenPlekken.ROOF_RESPAWN, Z3BazenPlekken.ROOF_BORD,
                 "vadsrijk.z3bazen.kruinroofvogel", 38, Element.NATUUR, sl -> KRUINROOFVOGEL.get().create(sl, EntitySpawnReason.SPAWNER));
         arena(ARENA_TALEGGIO, Z3BazenPlekken.TALEGGIO_CENTRUM, Z3BazenPlekken.D1_STRAAL, Z3BazenPlekken.TALEGGIO_DEUR, Z3BazenPlekken.D1_RESPAWN,
@@ -202,8 +220,9 @@ public final class Z3BazenRegistry {
         arena(ARENA_BLEU, Z3BazenPlekken.BLEU_CENTRUM, Z3BazenPlekken.BLEU_STRAAL, Z3BazenPlekken.BLEU_DEUR, Z3BazenPlekken.D2_RESPAWN,
                 Z3BazenPlekken.BLEU_BORD, "vadsrijk.z3bazen.bleu", 50, Element.WATER, sl -> BLEU.get().create(sl, EntitySpawnReason.SPAWNER));
         // Vahoegnir: only when the story or the Droomsteen asks (Z3BazenApi.startVahoegnir); the board hangs out of sight
-        Arenas.registreer(new Arena(ARENA_NEST, Z3BazenPlekken.NEST_CENTRUM, Z3BazenPlekken.NEST_STRAAL, Z3BazenPlekken.NEST_DEUR, 10,
-                Z3BazenPlekken.NEST_CENTRUM.below(40), "vadsrijk.z3bazen.vahoegnir"), Z3BazenApi::maakVahoegnir);
+        ARENAS.put(ARENA_NEST, new Arena(ARENA_NEST, Z3BazenPlekken.NEST_CENTRUM, Z3BazenPlekken.NEST_STRAAL, Z3BazenPlekken.NEST_DEUR, 10,
+                Z3BazenPlekken.NEST_CENTRUM.below(40), "vadsrijk.z3bazen.vahoegnir"));
+        MAKERS.put(ARENA_NEST, Z3BazenApi::maakVahoegnir);
     }
 
     private static void tick(ServerTickEvent.Post e) {
@@ -260,12 +279,78 @@ public final class Z3BazenRegistry {
         };
     }
 
+    /** (M-BAZEN) the bosses for {@code spawn}, in play order. */
+    public static final List<String> BAZEN_DEV = List.of("kruinroofvogel", "taleggio", "brokkel", "roquefort", "piepvel", "wortelwurger", "nestwachter",
+            "bleu", "vahoegnir");
+
+    private static String pos(BlockPos b) {
+        return b.getX() + " " + b.getY() + " " + b.getZ();
+    }
+
+    private static int spawn(CommandContext<CommandSourceStack> c, String baas) throws com.mojang.brigadier.exceptions.CommandSyntaxException {
+        ServerPlayer p = c.getSource().getPlayerOrException();
+        ServerLevel sl = rijk(c);
+        if (baas.equals("vahoegnir")) {
+            Z3BazenApi.resetVahoegnir(sl);
+            return zeg(c, Z3BazenApi.devVahoegnir(p, false));
+        }
+        String id = "z3bazen:" + baas;
+        Arena a = ARENAS.get(id);
+        if (a == null) {
+            return zeg(c, "Onbekende baas: " + baas + ". Kies uit " + BAZEN_DEV);
+        }
+        Z3Toegang.vergeet(p);
+        Z3Toegang.geefVrij(p, id);
+        sl.getChunk(a.centrum());
+        Arenas.reset(sl.getServer(), id);
+        naar(p, sl, plek(baas));
+        return zeg(c, baas + " staat zo klaar (volle Vads) in arena " + id + " rond " + pos(a.centrum()) + " (straal " + a.straal() + ", hoogte -" + a.onder()
+                + "/+" + a.boven() + "). De kerkervolgorde is voor jou vrijgegeven.");
+    }
+
+    /** (M-BAZEN) Where the Hart's bosses are (the dungeon runs up the root passage and round the ring). */
+    private static String hartGids(ServerLevel sl) {
+        StringBuilder t = new StringBuilder("Het Hart van de Boom: NIET aan een quest gebonden (de bazen vechten altijd; je verhaal telt alleen mee "
+                + "tijdens hoofdverhaal 'Het Hart van de Boom'). Je staat in de Hartslag-zaal; de bazen zitten boven in de ring, via de wortelgang "
+                + "achter de poort, de Aderloop, de Schimmelkwekerij en de Ringenzaal, in deze volgorde:");
+        for (String id : Z3Toegang.VOLGORDE.get("hart")) {
+            Arena a = ARENAS.get(id);
+            t.append("\n- ").append(id.substring(id.indexOf(':') + 1)).append(" @ ").append(pos(a.centrum()))
+                    .append(sl.isLoaded(a.centrum()) && Arenas.baas(sl, id) != null ? " (wakker)" : "");
+        }
+        return t.append("\nSnel erheen: /guhs vadsrijk z3bazen spawn wortelwurger (of nestwachter, bleu).").toString();
+    }
+
+    private static String arenaLijstTekst(ServerLevel sl) {
+        StringBuilder t = new StringBuilder("Zone-3-arena's:");
+        for (Arena a : ARENAS.values()) {
+            String v = Z3Toegang.voorganger(a.id());
+            t.append("\n- ").append(a.id()).append(" @ ").append(pos(a.centrum())).append(" r").append(a.straal()).append(" y-").append(a.onder()).append("/+")
+                    .append(a.boven()).append(!sl.isLoaded(a.centrum()) ? " (niet geladen)" : Arenas.baas(sl, a.id()) != null ? " wakker" : " leeg")
+                    .append(v != null ? " na " + v.substring(v.indexOf(':') + 1) : "");
+        }
+        return t.toString();
+    }
+
     private static void commando(RegisterCommandsEvent event) {
         LiteralArgumentBuilder<CommandSourceStack> b = Commands.literal("z3bazen");
         b.then(dev("tp").then(Commands.argument("waar", StringArgumentType.word()).suggests((c, s) -> SharedSuggestionProvider.suggest(PLEKKEN, s)).executes(c -> {
-            naar(c.getSource().getPlayerOrException(), rijk(c), plek(StringArgumentType.getString(c, "waar")));
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            String w = StringArgumentType.getString(c, "waar");
+            naar(p, rijk(c), plek(w));
+            if (ARENAS.containsKey("z3bazen:" + w)) {   // (M-BAZEN) a boss tp opens the dungeon order for you
+                Z3Toegang.geefVrij(p, "z3bazen:" + w);
+            }
+            if (w.equals("hart")) {
+                Z3Kerkers.vergeetHartHint(p);
+                return zeg(c, hartGids(rijk(c)));
+            }
             return 1;
         })));
+        // (M-BAZEN) force-spawn a boss for testing: the arena resets now (full HP), you stand at its board, the order is open
+        b.then(dev("spawn").then(Commands.argument("baas", StringArgumentType.word()).suggests((c, s) -> SharedSuggestionProvider.suggest(BAZEN_DEV, s))
+                .executes(c -> spawn(c, StringArgumentType.getString(c, "baas")))));
+        b.then(dev("arenas").executes(c -> zeg(c, arenaLijstTekst(rijk(c)))));
         b.then(dev("bouw").executes(c -> zeg(c, "Noodvloeren: " + Z3Bouw.alles(rijk(c)) + " blokken (alleen in lucht).")));
         b.then(dev("fase").then(Commands.argument("n", IntegerArgumentType.integer(2, 4)).executes(c -> {
             VadsrijkBaas baas = dichtste(c.getSource().getPlayerOrException());
@@ -287,9 +372,11 @@ public final class Z3BazenRegistry {
             }
             return zeg(c, "Fase nu " + z.fase());
         })));
-        b.then(dev("vahoegnir").executes(c -> zeg(c, Z3BazenApi.startVahoegnir(c.getSource().getPlayerOrException(), false) ? "Vahoegnir landt in het oude nest."
-                : "Hij is er al.")).then(Commands.literal("herinnering").executes(c -> zeg(c,
-                        Z3BazenApi.startVahoegnir(c.getSource().getPlayerOrException(), true) ? "Een herinnering aan Vahoegnir..." : "Hij is er al."))));
+        // (M-BAZEN) vahoegnir: start him and take you to the nest; already there = take you to him + where he is; reset = clean up
+        b.then(dev("vahoegnir").executes(c -> zeg(c, Z3BazenApi.devVahoegnir(c.getSource().getPlayerOrException(), false)))
+                .then(Commands.literal("herinnering").executes(c -> zeg(c, Z3BazenApi.devVahoegnir(c.getSource().getPlayerOrException(), true))))
+                .then(Commands.literal("waar").executes(c -> zeg(c, Z3BazenApi.vahoegnirWaar(rijk(c)))))
+                .then(Commands.literal("reset").executes(c -> zeg(c, "Vahoegnir opgeruimd: " + Z3BazenApi.resetVahoegnir(rijk(c)) + " stuk(s). Het nest is leeg."))));
         b.then(dev("vahoeg").then(Commands.argument("kerker", StringArgumentType.word()).suggests((c, s) -> SharedSuggestionProvider.suggest(List.of("werf", "hart"), s))
                 .executes(c -> {
                     String k = StringArgumentType.getString(c, "kerker");

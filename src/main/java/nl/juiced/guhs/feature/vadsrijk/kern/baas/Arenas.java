@@ -171,7 +171,7 @@ public final class Arenas {
             // players inside: intro for newcomers, HP scaling, boss bar
             List<ServerPlayer> binnen = new ArrayList<>();
             for (ServerPlayer p : sl.players()) {
-                if (!p.isSpectator() && a.binnen(p.getX(), p.getY(), p.getZ())) {
+                if (!p.isSpectator() && a.binnen(p.getX(), p.getY(), p.getZ()) && (b == null || b.magIntro(p))) {   // (M-BAZEN) magIntro
                     binnen.add(p);
                 }
             }

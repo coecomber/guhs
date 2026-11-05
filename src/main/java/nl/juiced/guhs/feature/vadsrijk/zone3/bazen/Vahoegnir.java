@@ -593,6 +593,47 @@ public class Vahoegnir extends Z3Baas {
         if (!level().isClientSide() && geplofd()) {
             setDeltaMovement(Vec3.ZERO);
         }
+        if (level() instanceof ServerLevel sl && !geplofd() && !einde && tickCount % 20 == 0) {
+            bewaak(sl);
+        }
+    }
+
+    /** (M-BAZEN) Gametests: times he was brought back to the nest. */
+    public int teruggezet;
+
+    /**
+     * (M-BAZEN) He belongs in the old nest: wandered far off, fallen (out of the tree, into the void) or stuck inside blocks = back to
+     * the first free spot above the nest centre. By POI (the nest centre), so it follows the map.
+     */
+    private void bewaak(ServerLevel sl) {
+        if (sl != nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(sl.getServer())) {
+            return;   // (only the real nest: a gametest Vahoegnir lives elsewhere)
+        }
+        BlockPos nest = Z3BazenPlekken.NEST_CENTRUM;
+        double dx = getX() - (nest.getX() + 0.5), dz = getZ() - (nest.getZ() + 0.5), dy = getY() - nest.getY();
+        boolean weg = dx * dx + dz * dz > Math.pow(Z3BazenPlekken.NEST_STRAAL + 30, 2) || dy < -30 || dy > 40 || getY() < sl.getMinY() + 4;
+        boolean vast = !vliegt() && !sl.noCollision(this);
+        if (!weg && !vast) {
+            return;
+        }
+        Vec3 v = vrijePlek(sl, nest);
+        snapTo(v.x, v.y, v.z, getYRot(), 0);
+        setDeltaMovement(Vec3.ZERO);
+        getNavigation().stop();
+        resetFallDistance();
+        teruggezet++;
+        org.slf4j.LoggerFactory.getLogger("guhs/z3bazen").info("Vahoegnir back to the nest ({}): {}", weg ? "wandered off" : "stuck", BlockPos.containing(v));
+    }
+
+    /** The first spot from the nest centre upward (max 16) where his body fits. */
+    public Vec3 vrijePlek(ServerLevel sl, BlockPos c) {
+        for (int i = 0; i <= 16; i++) {
+            Vec3 v = Vec3.atBottomCenterOf(c.above(i));
+            if (sl.noCollision(this, getDimensions(getPose()).makeBoundingBox(v))) {
+                return v;
+            }
+        }
+        return Vec3.atBottomCenterOf(c.above(2));
     }
 
     @Override

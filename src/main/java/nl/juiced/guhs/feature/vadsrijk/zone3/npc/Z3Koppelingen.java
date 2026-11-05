@@ -58,6 +58,7 @@ public final class Z3Koppelingen {
             Z3BazenApi.MOMENT.add(Z3Koppelingen::moment);
         }
         Z3BazenApi.HEEFT_SPLINTERS = p -> p.getAbilities().instabuild || Questlog.actief(p, Z3Haken.HQ14) || Questlog.klaar(p, Z3Haken.HQ14);
+        Z3BazenApi.HART_VERHAAL = p -> p.getAbilities().instabuild || Questlog.actief(p, Z3Haken.HQ13) || Questlog.klaar(p, Z3Haken.HQ13);   // M-BAZEN
         NpcRollen.koppel("z3_vahoegnir", p -> Z3BazenApi.startVahoegnir(p, false));
         NpcRollen.koppel("z3_imker", Z3Koppelingen::imkerOpen);
         NpcRollen.koppelMet("z3_ring_aan", Z3Koppelingen::ringAan);

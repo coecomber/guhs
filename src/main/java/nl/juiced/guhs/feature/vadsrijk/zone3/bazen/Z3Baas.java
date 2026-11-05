@@ -115,6 +115,7 @@ public abstract class Z3Baas extends Z2Baas {
 
     @Override
     public void intro(ServerPlayer p, boolean eersteKeer) {
+        Z3Toegang.start(p, this);   // (M-BAZEN) this player is in OUR fight now: other bosses leave them alone
         super.intro(p, eersteKeer);
         Tips.toon(p, "vadsrijk.z3bazen.tip." + baasId());
         if (vahoeg) {
@@ -233,6 +234,31 @@ public abstract class Z3Baas extends Z2Baas {
             }
         }
         super.krijgSchade(n, bron);
+    }
+
+    /**
+     * (M-BAZEN) In the arena AND allowed ({@link Z3Toegang}): not mid-fight with another zone-3 boss, and this boss's dungeon
+     * predecessor is beaten. Otherwise it does not target them, and their hits do nothing.
+     */
+    @Override
+    public boolean zDoetMee(net.minecraft.world.entity.player.Player p) {
+        return super.zDoetMee(p) && (!(p instanceof ServerPlayer sp) || Z3Toegang.mag(sp, this));
+    }
+
+    /** (M-BAZEN) kern asks before the intro: only when allowed; else a short "why" overlay, and it asks again next tick. */
+    @Override
+    public boolean magIntro(ServerPlayer p) {
+        if (Z3Toegang.mag(p, this)) {
+            return true;
+        }
+        Z3Toegang.waarschuw(p, this);
+        return false;
+    }
+
+    @Override
+    public void remove(RemovalReason reason) {
+        Z3Toegang.klaar(this);
+        super.remove(reason);
     }
 
     /** Like zone 2's, plus kern's {@link #testFilter} (gametests run side by side: each boss only fights its own mock players). */
@@ -491,6 +517,12 @@ public abstract class Z3Baas extends Z2Baas {
                     KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
                 }
             }
+            for (ServerPlayer p : sl.players()) {   // (M-BAZEN) the dungeon order: the next boss wakes for everyone who helped
+                if (bijdragen().spelers().contains(p.getUUID()) && !arenaId.isEmpty()) {
+                    Z3Toegang.verslagen(p, arenaId, sl.getGameTime());
+                }
+            }
+            Z3Toegang.klaar(this);
             if (vahoeg && eindbaas() && kerker() != null) {
                 VahoegModus.runKlaar(sl, kerker());
             }

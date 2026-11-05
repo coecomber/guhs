@@ -361,11 +361,51 @@ def roquefort(a_dir):
                      "body": {"rotation": {0: [0, 0, 0], 0.15: [0, 15, 0], 0.45: [0, -15, 0], 0.8: [0, 0, 0]}}}, loop=False)})
 
 
-PELS = (220, 216, 222)
+PELS = (120, 110, 132)
+# the pieppiepmuisje look (feature "piep", textures/entity/pieppiepmuisje.png): plum-grey fur, a cream belly, pink ears/nose/tail
+MUIS_VACHTEN = [(150, 142, 162), (98, 86, 112), (176, 170, 184), (120, 108, 134), (196, 190, 200)]
+MUIS_BUIK = (232, 222, 204)
+MUIS_ROZE = (240, 146, 168)
+MUIS_ROZE_DONKER = (206, 104, 132)
+STEEK = (246, 236, 214)
+
+
+def _muisvel(a, cx, cy, w, h, vacht, r):
+    """One shed winter coat of a pieppiepmuisje, laid flat: head up (two round ears, pink inside, a pink nose), an oval body
+    with a cream belly patch, four little paw flaps, and the pink tail curling out at the bottom."""
+    sx, sy = w / 2, h / 2
+    # tail first (under the pelt): a curl from the bottom
+    t0x, t0y = cx + r.uniform(-1, 1), cy + sy * 0.85
+    kr = r.choice([-1, 1])
+    px, py = t0x, t0y
+    for i in range(1, 9):
+        nx, ny = t0x + kr * math.sin(i * 0.45) * w * 0.32, t0y + i * h * 0.05
+        lijn(a, px, py, nx, ny, MUIS_ROZE_DONKER if i > 6 else MUIS_ROZE, dik=max(1.0, w * 0.06))
+        px, py = nx, ny
+    # paws
+    for dx, dy in ((-0.62, -0.25), (0.62, -0.25), (-0.58, 0.45), (0.58, 0.45)):
+        disc(a, cx + dx * sx, cy + dy * sy, sx * 0.2, vacht, ry=sy * 0.12)
+        disc(a, cx + dx * sx * 1.12, cy + dy * sy, sx * 0.09, MUIS_ROZE)
+    # body + belly
+    disc(a, cx, cy + sy * 0.15, sx * 0.62, vacht, ry=sy * 0.62)
+    disc(a, cx, cy + sy * 0.22, sx * 0.34, MUIS_BUIK, ry=sy * 0.38, alpha=0.9)
+    # head + ears (big round mouse ears, pink inside)
+    hy = cy - sy * 0.55
+    for s in (-1, 1):
+        disc(a, cx + s * sx * 0.42, hy - sy * 0.22, sx * 0.3, vacht)
+        disc(a, cx + s * sx * 0.42, hy - sy * 0.2, sx * 0.18, MUIS_ROZE)
+    disc(a, cx, hy, sx * 0.4, vacht, ry=sy * 0.28)
+    disc(a, cx, hy + sy * 0.2, sx * 0.1, MUIS_ROZE)   # the little nose
+    # fluffy fur strokes
+    for _ in range(int(w * h / 40)):
+        x, y = cx + r.uniform(-sx * 0.55, sx * 0.55), cy + r.uniform(-sy * 0.3, sy * 0.7)
+        c = tuple(min(255, v + 34) for v in vacht)
+        lijn(a, x, y, x + r.uniform(-0.8, 0.8), y + 1.6, c, dik=0.6)
 
 
 def _pels(sokken):
-    """The cape: shed winter coats of pieppiepmuisjes (fluffy grey-white with little ears and tails), or knitted socks."""
+    """The cape: patchwork of shed winter coats of pieppiepmuisjes (plum-grey fur, cream bellies, pink ears/noses/tails),
+    sewn together with big cream stitches, or (sokken) knitted socks."""
     if sokken:
         def p(W, H, f):
             a = np.zeros((H, W, 4), np.float32)
@@ -379,16 +419,50 @@ def _pels(sokken):
             return np.clip(a, 0, 255).astype(np.uint8)
         return p
 
-    def extra(a, W, H, f, r):
-        for _ in range(max(2, W * H // 30)):   # fluff
-            x, y = r.uniform(0, W), r.uniform(0, H)
-            lijn(a, x, y, x + r.uniform(-1.5, 1.5), y + 2.5, (250, 248, 252), dik=0.9)
-        for _ in range(max(1, W * H // 220)):   # a pelt: little ears and a tail
-            x, y = r.uniform(4, W - 4), r.uniform(4, H - 4)
-            disc(a, x - 2.5, y, 1.6, (236, 190, 200))
-            disc(a, x + 2.5, y, 1.6, (236, 190, 200))
-            lijn(a, x, y + 2, x + r.uniform(-4, 4), y + 8, (200, 170, 180), dik=0.8)
-    return vlak(PELS, 10, 351, extra=extra, verloop=(176, 172, 184))
+    def p(W, H, f):
+        r = _rng(3510 + W * 7 + H * 13 + sum(map(ord, f)) % 97)
+        a = np.zeros((H, W, 4), np.float32)
+        a[..., :3] = (84, 74, 96)
+        a[..., :3] += r.normal(0, 5, (H, W, 1))
+        a[..., 3] = 255
+        # one pelt per patch (~22 x 26 px = 5.5 x 6.5 texels): even a thin face shows at least one whole mouse
+        pw, ph = 22.0, 26.0
+        nx, ny = max(1, int(round(W / pw))), max(1, int(round(H / ph)))
+        cw, ch = W / nx, H / ny
+        for j in range(ny):
+            for i in range(nx):
+                vacht = MUIS_VACHTEN[(i + j * 2 + int(r.integers(2)) * 2) % len(MUIS_VACHTEN)]   # neighbours differ
+                x0, y0 = i * cw, j * ch
+                a[int(y0):int(y0 + ch) + 1, int(x0):int(x0 + cw) + 1, :3] = np.array(vacht) * 0.55   # the patch ground (darker, so each pelt stands out)
+                if cw >= 8 and ch >= 8:
+                    _muisvel(a, x0 + cw / 2 + r.uniform(-1, 1), y0 + ch / 2, min(cw * 0.95, ch * 0.8), ch * 0.9, vacht, r)
+        # the seams: cream running stitches along every patch edge
+        for i in range(1, nx):
+            x = i * cw
+            for y in np.arange(1, H, 4):
+                lijn(a, x - 1.2, y, x + 1.2, y + 1.6, STEEK, dik=0.8)
+        for j in range(1, ny):
+            y = j * ch
+            for x in np.arange(1, W, 4):
+                lijn(a, x, y - 1.2, x + 1.6, y + 1.2, STEEK, dik=0.8)
+        return np.clip(a, 0, 255).astype(np.uint8)
+    return p
+
+
+def _muisjes_aan_cape(g, bone, punten, oor_naar, staart=True):
+    """3D bits so the cape reads as mouse pelts from every angle: little round ears sticking out (pink inside) and limp pink
+    tails hanging down. punten = (x, y, z) attach points in model space; oor_naar = the outward face direction (x, z)."""
+    vacht = vlak(MUIS_VACHTEN[0], 6, 361)
+    roze = vlak(MUIS_ROZE, 6, 362)
+    for (x, y, z) in punten:
+        ox, oz = oor_naar
+        # two ears: thin discs (1 x 1.5 x 1.5) standing out of the cape surface
+        for s in (-0.9, 0.9):
+            ex, ez = (x, z + s) if ox else (x + s, z)
+            g.cube(bone, (ex - 0.5 + ox * 0.6, y, ez - 0.5 + oz * 0.6), (1 if ox else 1.4, 1.4, 1.4 if ox else 1), vacht,
+                   faces={"east" if ox > 0 else "west" if ox < 0 else "south" if oz > 0 else "north": roze})
+        if staart:
+            g.cube(bone, (x - 0.25 + ox * 0.8, y - 7, z - 0.25 + oz * 0.8), (0.5, 7, 0.5), roze)
 
 
 def piepvel(a_dir, sokken=False):
@@ -422,6 +496,17 @@ def piepvel(a_dir, sokken=False):
     g.cube("cape_4", (-8.5, 10.5, -2), (17, 2, 13.5), pels)
     g.bone("kraag", "cape", (0, 11, -2))
     g.cube("kraag", (-9.5, 9, -4), (19, 6, 3), pels)
+    if not sokken:
+        # (M-BAZEN) mouse ears along the outside of every panel + limp pink tails at the hem: the panels go with their bones
+        _muisjes_aan_cape(g, "cape_1", [(-9, 9, 1), (-9, 9, 7), (-9, 4, 4), (-9, 4, 10)], (-1, 0), staart=False)
+        _muisjes_aan_cape(g, "cape_2", [(9, 9, 1), (9, 9, 7), (9, 4, 4), (9, 4, 10)], (1, 0), staart=False)
+        _muisjes_aan_cape(g, "cape_3", [(-5, 9, 13), (0, 9, 13), (5, 9, 13), (-3, 4, 13), (3, 4, 13)], (0, 1), staart=False)
+        for x in (-6, -2, 2, 6):   # limp pink tails trailing behind the train on the floor
+            g.cube("cape_3", (x - 0.25, 0, 16), (0.5, 0.5, 4), vlak(MUIS_ROZE, 6, 363))
+        for z in (1, 6, 11):   # and sticking out at the hem of the side panels
+            g.cube("cape_1", (-12, 0.2, z), (3, 0.5, 0.5), vlak(MUIS_ROZE, 6, 364))
+            g.cube("cape_2", (9, 0.2, z), (3, 0.5, 0.5), vlak(MUIS_ROZE, 6, 365))
+        _muisjes_aan_cape(g, "kraag", [(-6, 15, -2.5), (0, 15, -2.5), (6, 15, -2.5)], (0, 0), staart=False)
     return g, mika_anims({
         "capezwier": kf({"root": {"rotation": {0: [0, 0, 0], 0.5: [0, 180, 0], 1.0: [0, 360, 0]}},
                          "cape_1": {"rotation": {0: [0, 0, -50], 1.0: [0, 0, -50]}}, "cape_2": {"rotation": {0: [0, 0, 50], 1.0: [0, 0, 50]}},

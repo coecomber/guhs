@@ -31,6 +31,11 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.roofvogel.Kruinroofvogel;
 public final class Z3BazenApi {
     public static final List<BiConsumer<ServerPlayer, String>> MOMENT = new CopyOnWriteArrayList<>();
     public static volatile Predicate<ServerPlayer> HEEFT_SPLINTERS = p -> true;
+    /**
+     * (M-BAZEN) Does the story send this player into the Hart van de Boom yet (npc: hq13 active or done)? The Hart bosses fight
+     * anyone; this only decides the "De wortels slapen nog..." hint at the gate. Default true (no npc slice = no hint).
+     */
+    public static volatile Predicate<ServerPlayer> HART_VERHAAL = p -> true;
 
     private record Aanvraag(boolean herinnering) {
     }
@@ -67,12 +72,83 @@ public final class Z3BazenApi {
      * a Droomsteen memory (repeatable, loot; no story moments like the throne room). Returns false when he is already there.
      */
     public static boolean startVahoegnir(ServerPlayer p, boolean herinnering) {
-        if (!(p.level() instanceof ServerLevel sl) || Arenas.baas(sl, Z3BazenRegistry.ARENA_NEST) != null) {
+        return p.level() instanceof ServerLevel sl && startVahoegnir(herinnering, sl);
+    }
+
+    private static boolean startVahoegnir(boolean herinnering, ServerLevel sl) {
+        if (Arenas.baas(sl, Z3BazenRegistry.ARENA_NEST) != null) {
             return false;
         }
         aanvraag = new Aanvraag(herinnering);
         Arenas.reset(sl.getServer(), Z3BazenRegistry.ARENA_NEST);
         return true;
+    }
+
+    // ---- (M-BAZEN) dev: find him, take the player there, clean up ----------------------------------------------------------
+
+    /** Every Vahoegnir in the loaded level (the arena's own and any orphan: one that wandered off or outlived a reload). */
+    public static List<Vahoegnir> alleVahoegnirs(ServerLevel sl) {
+        List<Vahoegnir> l = new java.util.ArrayList<>();
+        for (net.minecraft.world.entity.Entity e : sl.getAllEntities()) {
+            if (e instanceof Vahoegnir v && !v.isRemoved()) {
+                l.add(v);
+            }
+        }
+        return l;
+    }
+
+    private static String pos(BlockPos b) {
+        return b.getX() + " " + b.getY() + " " + b.getZ();
+    }
+
+    /** Where is he? (dev) */
+    public static String vahoegnirWaar(ServerLevel sl) {
+        List<Vahoegnir> l = alleVahoegnirs(sl);
+        if (l.isEmpty()) {
+            return "Geen Vahoegnir geladen" + (aanvraag != null ? " (hij landt zodra het nest geladen is)" : "") + ". Het nest: "
+                    + pos(Z3BazenPlekken.NEST_CENTRUM) + ".";
+        }
+        StringBuilder t = new StringBuilder();
+        for (Vahoegnir v : l) {
+            t.append(t.isEmpty() ? "" : "\n").append("Vahoegnir @ ").append(pos(v.blockPosition())).append(" (fase ").append(v.fase()).append(", ")
+                    .append((int) v.vads()).append("/").append((int) v.maxVads()).append(" Vads").append(v.geplofd() ? ", in zijn einde" : "")
+                    .append(v.herinnering ? ", herinnering" : "").append(v.arena() == null ? ", ZONDER arena: reset hem" : "").append(")");
+        }
+        return t.toString();
+    }
+
+    /**
+     * {@code /guhs vadsrijk z3bazen vahoegnir [herinnering]}: already there = you go to the nest edge and get his coordinates;
+     * otherwise he is called and you go to the nest edge (he only lands while the nest is loaded, so being there matters).
+     */
+    public static String devVahoegnir(ServerPlayer p, boolean herinnering) {
+        ServerLevel sl = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(p.level().getServer());
+        if (sl == null) {
+            return "Geen Vadsrijk-wereld.";
+        }
+        sl.getChunk(Z3BazenPlekken.NEST_CENTRUM);
+        boolean er = Arenas.baas(sl, Z3BazenRegistry.ARENA_NEST) != null || !alleVahoegnirs(sl).isEmpty();
+        boolean nieuw = !er && startVahoegnir(herinnering, sl);
+        BlockPos d = Z3BazenPlekken.NEST_DEUR;
+        p.teleportTo(sl, d.getX() + 0.5, d.getY() + 0.1, d.getZ() + 0.5, java.util.Set.of(), p.getYRot(), p.getXRot(), true);
+        if (nieuw) {
+            return (herinnering ? "Een herinnering aan Vahoegnir..." : "Vahoegnir landt in het oude nest.") + " Je staat aan de nestrand " + pos(d)
+                    + "; het nest (arena) is " + pos(Z3BazenPlekken.NEST_CENTRUM) + ".";
+        }
+        return "Hij is er al. " + vahoegnirWaar(sl) + "\nJe staat aan de nestrand " + pos(d) + ". Kwijt of vast? /guhs vadsrijk z3bazen vahoegnir reset";
+    }
+
+    /** Dev: every Vahoegnir away (the arena's and orphans; the nest branches go back), no pending landing. Returns how many. */
+    public static int resetVahoegnir(ServerLevel sl) {
+        aanvraag = null;
+        int n = 0;
+        for (Vahoegnir v : alleVahoegnirs(sl)) {
+            v.discard();
+            n++;
+        }
+        Arenas.reset(sl.getServer(), Z3BazenRegistry.ARENA_NEST);   // (no aanvraag: the maker makes nothing)
+        nl.juiced.guhs.feature.vadsrijk.bazen.Herstel.terug(sl, Vahoegnir.H_TAKKEN);
+        return n;
     }
 
     /** The arena's maker: only when asked. */

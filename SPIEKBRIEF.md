@@ -65,6 +65,49 @@ Handig tussendoor:
   de straal naar Hoogvads, en **F2** (de troonzaal). Werkt het verhaal mee? (hq14 klaar, `zone3_klaar`.)
 - **Vahoeg-modus**: `/guhs vadsrijk z3systemen zegel`, dan rechtsklik het altaar bij de werf-ingang of in de Hartslag-zaal.
 
+## Z4b. Bazen-testgids (m-bazen): elke zone-3-baas, in kerkervolgorde
+
+Eerst: `/guhs vadsrijk level 50`, `/gamemode survival`, `/guhs vadsrijk vol`. Overzicht van alle arena's (plek, straal, hoogte,
+wakker/leeg, "na <baas>"): `/guhs vadsrijk z3bazen arenas`.
+
+Twee nieuwe regels (door de playtest):
+- **Eén gevecht tegelijk.** Zodra je de intro van een baas krijgt, zit je in zijn gevecht. Een andere baas geeft je dan géén intro,
+  valt je niet aan en jouw klappen doen hem niets ("Je bent nog in gevecht met ..."). Ben je 10 s buiten de arena of is hij
+  verslagen, dan ben je vrij.
+- **Kerkervolgorde.** Een baas wordt pas wakker als de baas ervoor verslagen is (door jou in het afgelopen uur, of hij is nu dood en
+  wacht op zijn respawn). Anders: "Bombardier Brokkel laat zich nog niet zien. Versla eerst Takelmeester Taleggio." In creatief geldt
+  de volgorde niet.
+- **Overrides voor testen:** `tp <baas>` en `spawn <baas>` geven de volgorde vrij voor jou. `spawn <baas>` zet de baas ook meteen
+  terug (volle Vads, fase 1) en zet jou bij zijn bord.
+
+1. **De Kruinroofvogel** (wereldbaas, lv 38, geen volgorde): `/guhs vadsrijk z3bazen spawn kruinroofvogel`
+2. **Kaaszeppelinwerf** (lv 38-40): loop het eerst één keer vanaf de ingang: `/guhs vadsrijk z3bazen tp werf`.
+   - `/guhs vadsrijk z3bazen spawn taleggio` (bovenste dek): touwhendel als hij in fase 2 boven je zwaait.
+   - `/guhs vadsrijk z3bazen spawn brokkel` (middendek): rechtsklik de dekkanonnen.
+   - `/guhs vadsrijk z3bazen spawn roquefort` (onderste dek): dek kantelt, ballonnen, spring in fase 3 naar het wrak.
+   - Controle intro-fix: vecht Taleggio en loop naar de rand van zijn dek. Je mag géén intro van Brokkel of Roquefort krijgen. Pas na
+     Taleggio wordt Brokkel wakker.
+   - De kamers: `/guhs vadsrijk z3bazen tp loods` (`kerkers loods` lost hem op), `kerkers reset`.
+3. **Graaf Piepvel** (lv 42, geen volgorde): `/guhs vadsrijk z3bazen spawn piepvel`.
+   - Kijk naar zijn **cape**: een lappendeken van muizenvelletjes (grijs/paars vachtje, roomkleurige buik, roze oortjes, neusje en
+     staartje, grote steken). Er steken oortjes uit en roze staartjes slepen achter hem.
+   - In fase 2 gaat per opengebroken kooi één capepaneel weg.
+4. **Hart van de Boom** (lv 49-50). **Niet aan een quest gebonden**: de bazen vechten altijd. Ze zitten niet bij de poort maar boven in de
+   ring, ~150 blokken lopen: wortelgang omhoog, dan Aderloop, Schimmelkwekerij en Ringenzaal.
+   - `/guhs vadsrijk z3bazen tp hart`: je staat in de Hartslag-zaal. De chat geeft de route en waar de drie bazen staan. Bij de poort
+     zonder hoofdverhaal "Het Hart van de Boom" krijg je "De wortels slapen nog..." (dan telt je verhaal er nog niet mee).
+   - `/guhs vadsrijk z3bazen spawn wortelwurger`, dan `spawn nestwachter` (wordt roze en buigt), dan `spawn bleu` (+ Schimmelkolos).
+   - De kamers: `tp aderloop`, `tp kwekerij`, `tp ringen` (`kerkers ringen` lost hem op).
+5. **Vahoegnir** (lv 50, het oude nest op de Kruintop):
+   - `/guhs vadsrijk z3bazen vahoegnir`: hij landt en jij staat aan de nestrand. Is hij er al, dan zet het commando je bij het nest en
+     zegt het waar hij is (plek, fase, Vads).
+   - `/guhs vadsrijk z3bazen vahoegnir waar`: alleen zijn plek. Kwijt of vast: `/guhs vadsrijk z3bazen vahoegnir reset` ruimt alles
+     op (ook een verdwaalde), daarna opnieuw `vahoegnir`. Valt hij uit de boom of zit hij vast in blokken, dan zet hij zichzelf
+     binnen 1 s terug in het nest.
+   - Zonder verhaal (herhaalbaar, zonder troonzaal): `/guhs vadsrijk z3bazen vahoegnir herinnering`. Of `spawn vahoegnir` (eerst reset).
+   - Het verhaal (splinters terugzetten) telt alleen tijdens hq14. In creatief mag het altijd.
+- Fase overslaan bij de dichtstbijzijnde baas: `/guhs vadsrijk z3bazen fase 2|3|4`. Vahoeg-vorm: `/guhs vadsrijk z3bazen vahoeg werf|hart`.
+
 ## Z5. Premiebord
 ```
 /guhs vadsrijk z3systemen bord

@@ -277,6 +277,37 @@ public final class Z3Kerkers {
 
     // ---- Het Hart van de Boom -------------------------------------------------------------------------------------------------
 
+    private static final Map<UUID, Long> HART_HINT = new HashMap<>();
+    public static final int HART_HINT_STRAAL = 10, HART_HINT_CD = 20 * 60 * 5;
+
+    /**
+     * (M-BAZEN) At the gate of the Hart (the Hartslag-zaal): where the bosses are (up the root passage, in the ring) and, without the
+     * story step, "De wortels slapen nog...". Once per 5 minutes per player. Returns true when the hint was shown (gametest).
+     */
+    public static boolean hartPoort(ServerPlayer p) {
+        BlockPos g = Z3BazenPlekken.HART_INGANG;
+        if (!bij(p, g, HART_HINT_STRAAL) || Math.abs(p.getY() - g.getY()) > 6) {
+            return false;
+        }
+        long nu = p.level().getGameTime();
+        Long vorig = HART_HINT.get(p.getUUID());
+        if (vorig != null && nu - vorig < HART_HINT_CD && nu >= vorig) {
+            return false;
+        }
+        HART_HINT.put(p.getUUID(), nu);
+        p.sendSystemMessage(Component.translatable("vadsrijk.z3bazen.hart.welkom").withStyle(ChatFormatting.GOLD));
+        if (!Z3BazenApi.HART_VERHAAL.test(p)) {
+            p.sendSystemMessage(Component.translatable("vadsrijk.z3bazen.hart.slaapt").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC));
+            p.sendOverlayMessage(Component.translatable("vadsrijk.z3bazen.hart.slaapt_kort").withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+        return true;
+    }
+
+    /** Gametests / dev: show the gate hint again on the next visit. */
+    public static void vergeetHartHint(ServerPlayer p) {
+        HART_HINT.remove(p.getUUID());
+    }
+
     private static void hart(ServerLevel sl, List<ServerPlayer> spelers) {
         boolean ader = false, kwekerij = false, ringen = false;
         List<ServerPlayer> inAder = new ArrayList<>();
@@ -288,6 +319,7 @@ public final class Z3Kerkers {
                 ader = true;
                 inAder.add(p);
             }
+            hartPoort(p);
             kwekerij |= bij(p, Z3BazenPlekken.KWEKERIJ, 22);
             ringen |= bij(p, Z3BazenPlekken.RINGEN, 22);
         }

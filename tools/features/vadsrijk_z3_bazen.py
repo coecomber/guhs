@@ -219,6 +219,14 @@ TEKSTEN = {
     Z + "f2.titel": "WORDT VERVOLGD...",
     Z + "f2.onder": "Ver in het oosten strekt iets zijn armen.",
     # dungeons
+    # (M-BAZEN) dungeon order, one fight at a time, the Hart's gate hint
+    Z + "volgorde": "%s laat zich nog niet zien. Versla eerst %s.",
+    Z + "ander_gevecht": "Je bent nog in gevecht met %s.",
+    Z + "hart.welkom": "Het Hart van de Boom (lv 49-50). De wortelgang achter deze poort klimt naar de ring. Daar, voorbij de Aderloop, "
+                       "de Schimmelkwekerij en de Ringenzaal, wachten de Wortelwurger, de Oude Nestwachter en Baron Bleu.",
+    Z + "hart.slaapt": "De wortels slapen nog... Kom terug als Wortelwacht Gloei je naar het Hart stuurt (hoofdverhaal \"Het Hart "
+                       "van de Boom\"). Vechten mag nu al, maar je verhaal telt hier pas mee als die opdracht loopt.",
+    Z + "hart.slaapt_kort": "De wortels slapen nog...",
     Z + "werf.net": "Een vangnet van touw vangt je op en slingert je terug naar de ingang van de werf.",
     Z + "werf.loods_open": "BOEM! De kanonnen blazen de poort open!",
     Z + "hart.bewogen": "Je bewoog in het donker! De wortels voelen het...",
