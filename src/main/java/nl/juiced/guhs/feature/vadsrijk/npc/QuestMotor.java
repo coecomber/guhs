@@ -76,6 +76,14 @@ public final class QuestMotor {
 
     static void init() {
         Praat.luister(SLEUTEL, QuestMotor::antwoord);
+        // q-dialoog: a page that names an NPC who is not here (far away, another zone) still shows that NPC, from its definition
+        Praat.portretBron(naamKey -> {
+            if (!naamKey.startsWith("vadsrijk.npc.naam.")) {
+                return null;
+            }
+            NpcDef d = Npcs.van(naamKey.substring("vadsrijk.npc.naam.".length()));
+            return d == null ? null : Praat.guhPortret(NpcRegistry.GUH.get(), d.variant(), d.kleren(), d.gedrag() == NpcDef.Gedrag.ZITTEN);
+        });
     }
 
     public static void klik(ServerPlayer p, RijkGuh npc) {
@@ -229,7 +237,7 @@ public final class QuestMotor {
             if (s.equals("npc")) {
                 l.add(new Praat.Regel(npc, "", key));
             } else if (s.equals("jij")) {
-                l.add(new Praat.Regel(null, "vadsrijk.npc.jij", key));
+                l.add(new Praat.Regel(p, "vadsrijk.npc.jij", key));   // (q-dialoog: the player, so the portrait shows you)
             } else {
                 RijkGuh ander = p.level() instanceof ServerLevel sl ? Npcs.levend(sl, s) : null;
                 NpcDef d = Npcs.van(s);

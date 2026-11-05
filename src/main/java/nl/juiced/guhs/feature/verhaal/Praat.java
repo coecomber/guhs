@@ -53,6 +53,22 @@ public final class Praat {
     /** bbq2: how long a screen without a sleutel (whose closing is never reported) counts as "still talking" (ticks). */
     private static final int PRAAT_TICKS = 200;
 
+    /**
+     * q-dialoog: where a page's portrait comes from when the page has no speaker in the world (a far NPC, a narrator line
+     * that names someone): a feature maps the page's name key to a {@link #portret} (null: not one of mine).
+     */
+    @FunctionalInterface
+    public interface PortretBron {
+        @Nullable
+        CompoundTag portret(String naamKey);
+    }
+
+    private static final List<PortretBron> PORTRET_BRONNEN = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    public static void portretBron(PortretBron b) {
+        PORTRET_BRONNEN.add(b);
+    }
+
     private static final Map<String, Antwoord> LUISTERAARS = new ConcurrentHashMap<>();
     private static final Map<UUID, Lopend> LOPEND = new ConcurrentHashMap<>();
 
@@ -70,6 +86,14 @@ public final class Praat {
         if (sleutel != null) {
             data.putString("Sleutel", sleutel);
         }
+        if (spreker == p) {
+            data.putBoolean("Speler", true);
+        } else {
+            CompoundTag portret = portret(spreker);
+            if (portret != null) {
+                data.put("Portret", portret);
+            }
+        }
         LOPEND.put(p.getUUID(), new Lopend(p, sleutel, spreker.getId()));
         ModNetworking.sendTo(p, new KnuffeldalPayloads.Open(spreker.getId(), data));
     }
@@ -83,11 +107,21 @@ public final class Praat {
         int eerste = -1;
         for (Regel r : regels) {
             CompoundTag pg = new CompoundTag();
-            int id = r.spreker() == null ? -1 : r.spreker().getId();
+            // q-dialoog: the player's own lines show the player (the reader's own client draws itself, not by id: a
+            // speaker id of the player made the screen "talk to" the player); every other page carries a portrait to fall
+            // back on when its speaker is not (or no longer) on the reader's client
+            boolean speler = r.spreker() == p;
+            int id = r.spreker() == null || speler ? -1 : r.spreker().getId();
             if (eerste < 0) {
                 eerste = id;
             }
             pg.putInt("Spreker", id);
+            CompoundTag portret = speler ? null : r.spreker() != null ? portret(r.spreker()) : portretVan(r.naamKey());
+            if (speler) {
+                pg.putBoolean("Speler", true);
+            } else if (portret != null) {
+                pg.put("Portret", portret);
+            }
             pg.putString("Naam", r.naamKey() == null ? "" : r.naamKey());
             pg.putString("Tekst", r.tekstKey());
             pg.put("Args", args(r.args()));
@@ -106,6 +140,9 @@ public final class Praat {
         Lopend l = LOPEND.remove(p.getUUID());
         CompoundTag data = new CompoundTag();
         data.putBoolean("Sluit", true);
+        if (l != null && l.sleutel() != null) {
+            data.putString("Van", l.sleutel());   // (q-dialoog: the client only closes this conversation)
+        }
         ModNetworking.sendTo(p, new KnuffeldalPayloads.Open(l == null ? -1 : l.spreker(), data));
     }
 
@@ -162,6 +199,68 @@ public final class Praat {
     /** (tests) pretend the screen of this player opened with this sleutel. */
     public static void doeAlsOf(ServerPlayer p, @Nullable String sleutel, @Nullable Entity spreker) {
         LOPEND.put(p.getUUID(), new Lopend(p, sleutel, spreker == null ? -1 : spreker.getId()));
+    }
+
+    /**
+     * q-dialoog: what the talking screen needs to draw this speaker when it is not on the reader's client: its entity type,
+     * and for a guh its colour, clothes and pose, for a story NPC its kind. Null for a player (only drawn when seen) or a
+     * non-living thing.
+     */
+    @Nullable
+    public static CompoundTag portret(Entity e) {
+        if (!(e instanceof net.minecraft.world.entity.LivingEntity) || e instanceof net.minecraft.world.entity.player.Player) {
+            return null;
+        }
+        CompoundTag t = new CompoundTag();
+        t.putString("Type", net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).toString());
+        if (e instanceof nl.juiced.guhs.entity.GuhEntity g) {
+            List<nl.juiced.guhs.entity.GuhClothes> kleren = new java.util.ArrayList<>();
+            for (nl.juiced.guhs.entity.GuhClothes.Slot slot : nl.juiced.guhs.entity.GuhClothes.Slot.values()) {
+                nl.juiced.guhs.entity.GuhClothes c = g.getClothes(slot);
+                if (c != null) {
+                    kleren.add(c);
+                }
+            }
+            vulGuh(t, g.getVariant(), kleren, g.isInSittingPose());
+        }
+        if (e instanceof GuhNpcEntity n) {
+            t.putString("Soort", n.getKind().name());
+        }
+        return t;
+    }
+
+    /** q-dialoog: a guh's portrait without the guh (a far NPC from its definition). */
+    public static CompoundTag guhPortret(net.minecraft.world.entity.EntityType<?> type, nl.juiced.guhs.entity.GuhVariant variant,
+            java.util.Collection<nl.juiced.guhs.entity.GuhClothes> kleren, boolean zit) {
+        CompoundTag t = new CompoundTag();
+        t.putString("Type", net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type).toString());
+        vulGuh(t, variant, kleren, zit);
+        return t;
+    }
+
+    private static void vulGuh(CompoundTag t, nl.juiced.guhs.entity.GuhVariant variant, java.util.Collection<nl.juiced.guhs.entity.GuhClothes> kleren,
+            boolean zit) {
+        t.putString("Variant", variant.name());
+        ListTag l = new ListTag();
+        for (nl.juiced.guhs.entity.GuhClothes c : kleren) {
+            l.add(StringTag.valueOf(c.name()));
+        }
+        t.put("Kleren", l);
+        t.putBoolean("Zit", zit);
+    }
+
+    @Nullable
+    private static CompoundTag portretVan(@Nullable String naamKey) {
+        if (naamKey == null || naamKey.isEmpty()) {
+            return null;
+        }
+        for (PortretBron b : PORTRET_BRONNEN) {
+            CompoundTag t = b.portret(naamKey);
+            if (t != null) {
+                return t;
+            }
+        }
+        return null;
     }
 
     private static ListTag args(Object[] args) {

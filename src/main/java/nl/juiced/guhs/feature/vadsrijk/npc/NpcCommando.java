@@ -157,6 +157,17 @@ public final class NpcCommando {
             c.getSource().sendSuccess(() -> Component.literal(n + " NPC's op een rij."), false);
             return n;
         }));
+        // (q-dialoog, dev/AutoCheck) the portrait cases in one scene: you, a zone-1 and a zone-3 NPC that are not here (stand-ins
+        // from their definitions), and the narrator
+        npc.then(Commands.literal("portrettest").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            nl.juiced.guhs.feature.verhaal.Praat.scene(p, QuestMotor.SLEUTEL + "_portrettest", java.util.List.of(
+                    new nl.juiced.guhs.feature.verhaal.Praat.Regel(p, "vadsrijk.npc.jij", "vadsrijk.npc.praat.oma_truus.1"),
+                    new nl.juiced.guhs.feature.verhaal.Praat.Regel(null, "vadsrijk.npc.naam.oma_truus", "vadsrijk.npc.praat.oma_truus.2"),
+                    new nl.juiced.guhs.feature.verhaal.Praat.Regel(null, "vadsrijk.npc.naam.z3_imker_1", "vadsrijk.npc.praat.z3_imker_1.1"),
+                    new nl.juiced.guhs.feature.verhaal.Praat.Regel(null, "vadsrijk.npc.verteller", "vadsrijk.npc.praat.oma_truus.3")));
+            return 1;
+        }));
         // (fix round 2, dev/AutoCheck) talk to an NPC as if you right-clicked its live guh (it must be loaded near you)
         npc.then(Commands.literal("praat").then(Commands.argument("id", StringArgumentType.word()).executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
