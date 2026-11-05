@@ -20,8 +20,10 @@ import net.minecraft.world.phys.Vec3;
  * wijken.py, markt2.py, kathedraal.py) through export.py's placement {@code gx = 2702 - x, gz = -520 - z, gy = y} (180 degrees:
  * local east = world west). District centres (world): palace/throne room (2816..2833, 253, -520), Raadszaal (2784, 256, -520),
  * market + fountain (2742, 239, -520), Grote Soepkeuken (2724, 239, -535), university (2737, 235, -465), Academie van de Wolkwacht
- * (2737, 235, -575), square (2696, 241, -520), Ordekathedraal (gate 2687, altar 2619, y 245), Luchthaven (2579, 237, -452),
- * Staartpark (2878, 236, -520), Ooggaarde (2551, 240, -580). NPCs hover when no floor is built yet (Npcs.zet).
+ * (2737, 235, -575), square (2696, 241, -520), Ordekathedraal (gate 2687, altar 2619, y 245), Luchthaven (2631, 237, -444),
+ * Staartpark (2878, 236, -520), Ooggaarde (2551, 240, -580; eye balcony 2552, 230, -610). NPCs hover when no floor is built yet (Npcs.zet).
+ * <p>(2026-11-06) Checked against renders-hoogvads/_bron/_export_nieuw/plekken.json (zones, cathedral gate/altar, balkon_oog);
+ * the whale may still be lowered ~20 blocks: t-z5wereld's POI_Z5 / Z5WereldPlekken then wins by id.
  * <p>Ids are checked by tools/features/vadsrijk_t_z5verhaal.py (every NPC/POI needs a name/"where" text there).
  */
 public final class Z5VerhaalPlekken {
@@ -68,8 +70,8 @@ public final class Z5VerhaalPlekken {
 
     // ---- key places ------------------------------------------------------------------------------------------------------------
     /** Where the first airship (and every later one) sets you down: the middle pier of the Luchthaven (north flank). */
-    public static final BlockPos AANKOMST = w("luchthaven_aankomst", 2587, 237, -428);
-    public static final BlockPos STATION = w("luchthaven_station", 2579, 237, -452);
+    public static final BlockPos AANKOMST = w("luchthaven_aankomst", 2631, 237, -424);
+    public static final BlockPos STATION = w("luchthaven_station", 2631, 237, -444);
     public static final BlockPos LAAN = w("zachtmoedlaan", 2696, 241, -520);
     public static final BlockPos MARKT = w("markt_fontein", 2748, 239, -520);
     public static final BlockPos SOEPKEUKEN = w("soepkeuken_ketel", 2724, 239, -535);
@@ -81,7 +83,7 @@ public final class Z5VerhaalPlekken {
     public static final BlockPos KATHEDRAAL_ALTAAR = w("kathedraal_altaar", 2619, 248, -520);
     public static final BlockPos STAARTPARK = w("staartpark_vijver", 2878, 236, -520);
     public static final BlockPos OOGGAARDE = w("ooggaarde_tuin", 2551, 240, -580);
-    public static final BlockPos BALKON_OOG = w("balkon_oog", 2537, 240, -595);
+    public static final BlockPos BALKON_OOG = w("balkon_oog", 2552, 230, -610);
     /** The middle blowhole: the way down into the whale's dream (De Wolkwaldroom, the finale). */
     public static final BlockPos SPUITGAT = w("spuitgat_midden", 2557, 240, -520);
     /** The dream room inside the whale (t-z5wezens's arena; the tracker's target for the finale). */
@@ -104,7 +106,7 @@ public final class Z5VerhaalPlekken {
         // story
         npc("z5_koningin", naast(TROON, -2, 0));
         npc("z5_inspecteur", w("raadszaal_zijkamer", 2776, 256, -530));
-        npc("z5_havenmeester", w("luchthaven_havenmeester", 2585, 237, -455));
+        npc("z5_havenmeester", w("luchthaven_havenmeester", 2635, 237, -447));
         npc("z5_veerkracht", w("academie_kapitein", 2740, 235, -568));
         npc("z5_plukje", w("academie_kazerne", 2726, 235, -586));
         npc("z5_professor", w("universiteit_bibliotheek", 2740, 235, -470));
@@ -131,7 +133,7 @@ public final class Z5VerhaalPlekken {
         npc("z5_smid", w("markt_smid", 2766, 239, -536));
         npc("z5_juwelier", w("markt_juwelier", 2730, 239, -506));
         npc("z5_stalmeester", naast(STATION, 10, 6));
-        npc("z5_kadet_dons", w("luchthaven_pier_west", 2612, 237, -430));
+        npc("z5_kadet_dons", w("luchthaven_pier_west", 2660, 237, -426));
         // the Ambachtsgilde at the university (professions capital, VOORSTEL_PROFESSIONS phase D: hooks only)
         npc("z5_gildemeester", w("gilde_hal", 2712, 235, -460));
         npc("z5_leermeester_koken", w("gilde_keuken", 2708, 235, -455));
@@ -143,12 +145,12 @@ public final class Z5VerhaalPlekken {
         npc("z5_vadszanger", naast(KATHEDRAAL_POORT, 4, 6));
         npc("z5_pluisninja", naast(ACADEMIE, -6, 8));
         // citizens
-        int[][] bv = {{2700, 241, -510}, {2760, 239, -512}, {2690, 241, -530}, {2860, 236, -514}, {2560, 240, -570}, {2600, 237, -460}};
+        int[][] bv = {{2700, 241, -510}, {2760, 239, -512}, {2690, 241, -530}, {2860, 236, -514}, {2560, 240, -570}, {2640, 237, -452}};
         for (int i = 1; i <= bv.length; i++) {
             npc("z5_burger_" + i, w("burger_" + i, bv[i - 1][0], bv[i - 1][1], bv[i - 1][2]));
         }
         // the Wolkwacht at the gates and campfires
-        int[][] wv = {{2742, 253, -504}, {2742, 253, -536}, {2683, 245, -512}, {2597, 237, -462}, {2868, 236, -506}, {2557, 240, -568}};
+        int[][] wv = {{2742, 253, -504}, {2742, 253, -536}, {2683, 245, -512}, {2645, 237, -452}, {2868, 236, -506}, {2557, 240, -568}};
         for (int i = 1; i <= wv.length; i++) {
             npc("z5_wacht_" + i, w("wolkwacht_" + i, wv[i - 1][0], wv[i - 1][1], wv[i - 1][2]));
         }
@@ -171,11 +173,11 @@ public final class Z5VerhaalPlekken {
         poi("z5_lessenaar", naast(RAADSZAAL, -1, 0));
         poi("z5_kastje", w("academie_kastjes", 2730, 235, -588));
         poi("z5_soepkeuken", SOEPKEUKEN);
-        poi("z5_logboek", w("luchthaven_logboek", 2589, 237, -452));
+        poi("z5_logboek", w("luchthaven_logboek", 2639, 237, -447));
         poi("z5_spuitgat", SPUITGAT);
         poi("z5_wolkwaldroom", WOLKWALDROOM);
         poi("z5_ooggaarde_balkon", BALKON_OOG);
-        poi("z5_pier_oost", w("luchthaven_pier_oost", 2562, 237, -422));
+        poi("z5_pier_oost", w("luchthaven_pier_oost", 2600, 237, -424));
         poi("z5_kanselarij", w("paleis_kanselarij_bureau", 2806, 253, -535));
         // side quests
         poi("z5_sterrenwacht", w("universiteit_sterrenwacht", 2772, 250, -440));
@@ -213,9 +215,9 @@ public final class Z5VerhaalPlekken {
     /** Small ones first (they are put in FRONT of the city box in this order reversed: see Z5VerhaalRegistry.gebieden). */
     public static final List<Gebied> GEBIEDEN = List.of(
             new Gebied("z5_hoogvads", 2440, -660, 3150, -380, 200, 320, 56, 60, true),
-            new Gebied("z5_luchthaven", 2540, -480, 2640, -410, 200, 320, 56, 60, true),
+            new Gebied("z5_luchthaven", 2582, -466, 2680, -410, 200, 320, 56, 60, true),
             new Gebied("z5_staartpark", 2850, -580, 3150, -460, 200, 320, 56, 60, true),
-            new Gebied("z5_ooggaarde", 2500, -625, 2580, -555, 200, 320, 56, 60, true),
+            new Gebied("z5_ooggaarde", 2500, -625, 2580, -550, 200, 320, 56, 60, true),
             new Gebied("z5_wolkwaldroom", 2540, -600, 2700, -440, 150, 225, 58, 60, false));
 
     /** Area id -> where the tracker points for "in area x". */
@@ -233,7 +235,7 @@ public final class Z5VerhaalPlekken {
         GEBIED_DOEL.put("z5_staartpark", STAARTPARK);
         GEBIED_DOEL.put("z5_ooggaarde", OOGGAARDE);
         GEBIED_DOEL.put("z5_wolkwaldroom", WOLKWALDROOM);
-        BlockPos vuurHaven = w("kampvuur_luchthaven", 2600, 237, -462);
+        BlockPos vuurHaven = w("kampvuur_luchthaven", 2650, 237, -452);
         BlockPos vuurMarkt = w("kampvuur_markt", 2735, 239, -505);
         BlockPos vuurPark = w("kampvuur_staartpark", 2868, 236, -510);
         BlockPos vuurOog = w("kampvuur_ooggaarde", 2555, 240, -572);
@@ -259,7 +261,7 @@ public final class Z5VerhaalPlekken {
     public static final Map<String, BlockPos> BOL = new LinkedHashMap<>();
 
     static {
-        int[][] kn = {{2690, 290, -505}, {2905, 240, -540}, {2545, 241, -600}, {2615, 236, -418}, {2775, 262, -438}, {2760, 251, -548},
+        int[][] kn = {{2690, 290, -505}, {2905, 240, -540}, {2545, 241, -600}, {2665, 236, -418}, {2775, 262, -438}, {2760, 251, -548},
                 {2835, 260, -520}, {2655, 248, -540}};
         for (int i = 0; i < kn.length; i++) {
             KNUFFEL.put("knuffel_" + (i + 1), w("geheim_knuffel_" + (i + 1), kn[i][0], kn[i][1], kn[i][2]));
@@ -285,8 +287,8 @@ public final class Z5VerhaalPlekken {
     public static final Vec3[] AANKOMST_SCENE = {
             new Vec3(2420, 90, -470), new Vec3(2480, 200, -520),        // 0: low over the sea, the whale's head above
             new Vec3(2470, 215, -455), new Vec3(2560, 230, -520),       // 140: along the flank, the eye with lashes
-            new Vec3(2560, 290, -420), new Vec3(2690, 260, -520),       // 260: over the rim: the cathedral, towers, banners
-            new Vec3(2600, 250, -440), Vec3.atCenterOf(AANKOMST)};      // 380: down to the Luchthaven
+            new Vec3(2580, 290, -400), new Vec3(2690, 260, -520),       // 260: over the rim: the cathedral, towers, banners
+            new Vec3(2640, 250, -405), Vec3.atCenterOf(AANKOMST)};      // 380: down to the Luchthaven
     public static final int[] AANKOMST_T = {0, 140, 260, 380};
     /** The unmasking in the Raadszaal (hq07). */
     public static final Vec3[] ONTMASKER = {
