@@ -123,11 +123,11 @@ public final class Barrieres {
     }
 
     static boolean vrijgesteld(ServerPlayer p) {
-        if (p.isCreative() || p.isSpectator() || RijkScenes.bezig(p) || p.getTags().contains(TAG_VRIJ)) {
+        if (p.isCreative() || p.isSpectator() || RijkScenes.bezig(p) || p.entityTags().contains(TAG_VRIJ)) {
             return true;
         }
         Entity v = p.getRootVehicle();
-        if (v != p && v.getTags().contains(TAG_VRIJ)) {
+        if (v != p && v.entityTags().contains(TAG_VRIJ)) {
             return true;
         }
         for (Predicate<ServerPlayer> f : VRIJSTELLING) {

@@ -141,7 +141,12 @@ coast; the layout changed slightly but controleer_verticaal proves it fully walk
 ## Resume point / status
 - Head: see git log (last commit "t-wereld: ..."). Generated files (tiles, *WereldPlekken.java, POI_*.md, AUDIT, veilige_plekken)
   are NOT committed; integration regenerates with the command above.
-- Gametests: `-Pgt=Indeling,VadsrijkBiomen,StadsMuziek,VadsrijkNpc,VadsrijkZ2Systemen` (result below).
+- Gametests `-Pgt=Indeling,VadsrijkBiomen,StadsMuziek,VadsrijkNpc,VadsrijkZ2Systemen` (16 methods, with the regenerated
+  map): all pass except `StadsMuziekGameTests.gebiedNaarDeuntje` "Honingtak dock: honingtak": the Weststeiger dock (1201,167,-601)
+  lies 204 blocks from the trunk, outside the z3_honingtak cylinder (r <= 200). Identical data in the base (dbf82899d), so this is
+  pre-existing (p-wereld moved the dock to the branch tip), not caused by the shift. Fix for z3: widen the cylinder or test the
+  plaza instead.
+- The worktree still holds the regenerated (uncommitted) tiles/POI files, so it can be used as a test client as is.
 
 ## Open points
 - **Zone 4 (t-z4wereld):** zone 3 now has sea at y 62 to its tile edge (x 1727), so zone 4's tiles meet water. Zone 4 should not
