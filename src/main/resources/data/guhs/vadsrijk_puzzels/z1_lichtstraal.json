@@ -1,0 +1,436 @@
+{
+  "id": "z1_lichtstraal",
+  "zone": 1,
+  "soort": "licht",
+  "anker": {
+    "bron": "z1",
+    "plek": "lichtstralen.1",
+    "dx": 10,
+    "dz": 10
+  },
+  "maat": [
+    9,
+    8
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:moss_block",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      5,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      6,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      4,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      5,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      6,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      0,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      3,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      3,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      3,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      3,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      4,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      4,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      6,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      6,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      6,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      6,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      7,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      7,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      7,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      7,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      4,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      5,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      6,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      0,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      4,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      5,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      6,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      8,
+      1,
+      7,
+      "minecraft:mossy_stone_bricks"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "blok": "lichtbron",
+      "stand": 1
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 1,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 1,
+      "blok": "spiegel",
+      "stand": 1
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 4,
+      "blok": "spiegel",
+      "stand": 1
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 4,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 4,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 6,
+      "blok": "lichtdoel",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 600,
+    "bladzijde": 2
+  },
+  "oplossing": [
+    1,
+    0,
+    0,
+    1,
+    1
+  ]
+}

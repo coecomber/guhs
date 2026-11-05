@@ -1,0 +1,519 @@
+{
+  "id": "z3_wortelschuif",
+  "zone": 3,
+  "soort": "schuif",
+  "anker": {
+    "bron": "z3",
+    "plek": "kampvuur_wortelweg_3",
+    "dx": -12,
+    "dz": 6
+  },
+  "maat": [
+    9,
+    9
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:packed_mud",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      1,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      2,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      3,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      5,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      6,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      7,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      1,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      2,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      3,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      4,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      5,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      6,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      7,
+      "minecraft:spruce_wood"
+    ],
+    [
+      0,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      1,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      1,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      1,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      1,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      2,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      2,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      2,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      2,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      3,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      3,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      3,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      3,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      4,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      4,
+      0,
+      3,
+      "minecraft:spruce_wood"
+    ],
+    [
+      4,
+      0,
+      5,
+      "minecraft:spruce_wood"
+    ],
+    [
+      4,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      4,
+      1,
+      3,
+      "minecraft:spruce_wood"
+    ],
+    [
+      4,
+      1,
+      5,
+      "minecraft:spruce_wood"
+    ],
+    [
+      5,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      5,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      5,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      5,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      6,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      6,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      6,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      6,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      7,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      7,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      7,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      7,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      1,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      2,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      3,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      4,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      5,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      6,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      7,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      0,
+      8,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      0,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      1,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      2,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      3,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      4,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      5,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      6,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      7,
+      "minecraft:spruce_wood"
+    ],
+    [
+      8,
+      1,
+      8,
+      "minecraft:spruce_wood"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "blok": "schuifblok",
+      "stand": 0
+    },
+    {
+      "x": 6,
+      "y": -1,
+      "z": 2,
+      "blok": "doelvloer",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 4,
+      "blok": "doelvloer",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 4,
+      "blok": "schuifblok",
+      "stand": 0
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 5,
+      "blok": "schuifblok",
+      "stand": 0
+    },
+    {
+      "x": 6,
+      "y": -1,
+      "z": 6,
+      "blok": "doelvloer",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 7,
+      "blok": "herstelknop",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 5500,
+    "items": [
+      [
+        "guhs:vr_item_verbetersteentje",
+        4
+      ]
+    ]
+  },
+  "oplossing": [
+    [
+      2,
+      2,
+      1
+    ],
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      4,
+      2,
+      1
+    ],
+    [
+      4,
+      4,
+      3
+    ],
+    [
+      3,
+      4,
+      3
+    ],
+    [
+      5,
+      2,
+      1
+    ],
+    [
+      6,
+      5,
+      2
+    ]
+  ]
+}

@@ -1,0 +1,125 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/vadsrijk/puzzels/hendel_voet",
+    "voet": "guhs:block/vadsrijk/puzzels/hendel_voet",
+    "stok": "minecraft:block/oak_planks",
+    "knop": "guhs:block/vadsrijk/puzzels/knop_roze"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        12,
+        2,
+        12
+      ],
+      "faces": {
+        "down": {
+          "texture": "#voet"
+        },
+        "up": {
+          "texture": "#voet"
+        },
+        "north": {
+          "texture": "#voet"
+        },
+        "south": {
+          "texture": "#voet"
+        },
+        "west": {
+          "texture": "#voet"
+        },
+        "east": {
+          "texture": "#voet"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        1,
+        7
+      ],
+      "to": [
+        9,
+        10,
+        9
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          8,
+          1,
+          8
+        ]
+      },
+      "faces": {
+        "down": {
+          "texture": "#stok"
+        },
+        "up": {
+          "texture": "#stok"
+        },
+        "north": {
+          "texture": "#stok"
+        },
+        "south": {
+          "texture": "#stok"
+        },
+        "west": {
+          "texture": "#stok"
+        },
+        "east": {
+          "texture": "#stok"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        9,
+        6.5
+      ],
+      "to": [
+        9.5,
+        12,
+        9.5
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          8,
+          1,
+          8
+        ]
+      },
+      "faces": {
+        "down": {
+          "texture": "#knop"
+        },
+        "up": {
+          "texture": "#knop"
+        },
+        "north": {
+          "texture": "#knop"
+        },
+        "south": {
+          "texture": "#knop"
+        },
+        "west": {
+          "texture": "#knop"
+        },
+        "east": {
+          "texture": "#knop"
+        }
+      }
+    }
+  ]
+}

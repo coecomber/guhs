@@ -1,0 +1,122 @@
+{
+  "id": "z3_honingfluister",
+  "zone": 3,
+  "soort": "wachtwoord",
+  "anker": {
+    "bron": "z3",
+    "plek": "kampvuur_mosvoet",
+    "dx": -6,
+    "dz": 16
+  },
+  "maat": [
+    5,
+    5
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:packed_mud",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:lantern"
+    ],
+    [
+      1,
+      0,
+      1,
+      "minecraft:allium"
+    ],
+    [
+      1,
+      0,
+      3,
+      "minecraft:allium"
+    ],
+    [
+      3,
+      0,
+      1,
+      "minecraft:allium"
+    ],
+    [
+      3,
+      0,
+      3,
+      "minecraft:allium"
+    ],
+    [
+      4,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      4,
+      0,
+      4,
+      "minecraft:lantern"
+    ]
+  ],
+  "vloerAnders": [
+    [
+      1,
+      1,
+      "minecraft:moss_block"
+    ],
+    [
+      1,
+      3,
+      "minecraft:moss_block"
+    ],
+    [
+      3,
+      1,
+      "minecraft:moss_block"
+    ],
+    [
+      3,
+      3,
+      "minecraft:moss_block"
+    ]
+  ],
+  "elementen": [
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "blok": "fluistersteen",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 4000,
+    "items": [
+      [
+        "guhs:vr_item_herrolknabbel",
+        3
+      ]
+    ]
+  },
+  "woorden": [
+    "bij",
+    "bijtje",
+    "bijen",
+    "de bij",
+    "een bij",
+    "bee",
+    "honingbij"
+  ]
+}

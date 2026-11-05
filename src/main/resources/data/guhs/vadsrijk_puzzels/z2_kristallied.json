@@ -1,0 +1,112 @@
+{
+  "id": "z2_kristallied",
+  "zone": 2,
+  "soort": "volgorde",
+  "anker": {
+    "bron": "z2",
+    "plek": "kampvuur_galmhellingen_1",
+    "dx": 12,
+    "dz": 0
+  },
+  "maat": [
+    9,
+    7
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:snow_block",
+  "vul": "minecraft:snow_block",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:soul_lantern"
+    ],
+    [
+      0,
+      0,
+      6,
+      "minecraft:soul_lantern"
+    ],
+    [
+      8,
+      0,
+      0,
+      "minecraft:soul_lantern"
+    ],
+    [
+      8,
+      0,
+      6,
+      "minecraft:soul_lantern"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 2,
+      "y": 0,
+      "z": 1,
+      "blok": "klanksteen",
+      "stand": 0
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 1,
+      "blok": "klanksteen",
+      "stand": 7
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 3,
+      "blok": "klanksteen",
+      "stand": 2
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 3,
+      "blok": "klanksteen",
+      "stand": 5
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 4,
+      "blok": "klanksteen",
+      "stand": 4
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 5,
+      "blok": "voorspeelsteen",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 2000,
+    "items": [
+      [
+        "guhs:vr_item_verbetersteentje",
+        3
+      ]
+    ]
+  },
+  "oplossing": [
+    4,
+    2,
+    0,
+    3,
+    1,
+    4
+  ],
+  "demo": true
+}

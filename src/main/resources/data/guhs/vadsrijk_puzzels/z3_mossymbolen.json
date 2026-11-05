@@ -1,0 +1,97 @@
+{
+  "id": "z3_mossymbolen",
+  "zone": 3,
+  "soort": "symbool",
+  "anker": {
+    "bron": "z3",
+    "plek": "kampvuur_wortelweg_5",
+    "dx": 12,
+    "dz": -6
+  },
+  "maat": [
+    9,
+    5
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:packed_mud",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:lantern"
+    ],
+    [
+      8,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      8,
+      0,
+      4,
+      "minecraft:lantern"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 1
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 5
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 1
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 4,
+      "blok": "probeerknop",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 5000,
+    "ontgrendel": "pz_cape_mos"
+  },
+  "oplossing": [
+    5,
+    4,
+    3,
+    5
+  ]
+}

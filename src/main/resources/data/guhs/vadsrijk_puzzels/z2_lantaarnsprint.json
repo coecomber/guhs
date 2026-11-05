@@ -1,0 +1,149 @@
+{
+  "id": "z2_lantaarnsprint",
+  "zone": 2,
+  "soort": "tijdrit",
+  "anker": {
+    "bron": "z2",
+    "plek": "kampvuur_galmhellingen_2",
+    "dx": -12,
+    "dz": 8
+  },
+  "maat": [
+    9,
+    9
+  ],
+  "hoogte": 7,
+  "vloer": "minecraft:snow_block",
+  "vul": "minecraft:snow_block",
+  "blokken": [
+    [
+      1,
+      0,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      1,
+      1,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      1,
+      2,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      3,
+      0,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      3,
+      0,
+      7,
+      "minecraft:amethyst_block"
+    ],
+    [
+      3,
+      1,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      3,
+      2,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      5,
+      0,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      5,
+      0,
+      7,
+      "minecraft:amethyst_block"
+    ],
+    [
+      5,
+      1,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      5,
+      2,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      7,
+      0,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      7,
+      0,
+      3,
+      "minecraft:amethyst_block"
+    ],
+    [
+      7,
+      0,
+      5,
+      "minecraft:amethyst_block"
+    ],
+    [
+      7,
+      0,
+      7,
+      "minecraft:amethyst_block"
+    ],
+    [
+      7,
+      1,
+      1,
+      "minecraft:amethyst_block"
+    ],
+    [
+      7,
+      1,
+      3,
+      "minecraft:amethyst_block"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 1,
+      "y": 3,
+      "z": 1,
+      "blok": "eindplaat",
+      "stand": 0
+    },
+    {
+      "x": 1,
+      "y": 0,
+      "z": 7,
+      "blok": "startlantaarn",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 2200,
+    "ontgrendel": "pz_cape_sneeuwvlok"
+  },
+  "tijd": 25
+}
