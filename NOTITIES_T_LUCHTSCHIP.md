@@ -27,7 +27,12 @@ Assets (generator): `geckolib/models|animations/entity/vr_luchtschip.*`, `textur
 - **Ship technique:** an entity puppet (like the existing balloon/Zuka ship), not a moving block structure. Players are passengers standing on the deck (`shouldRiderSit false`), up to 16. There is no collision deck: it is robust in multiplayer, with no desync and no falling through. You board by right-clicking the ship while it lies at the pier, and sneak to get off while it is still there.
 - **Timetable from the game time** (deterministic), not a server-side state machine. A restart is therefore "free": the ships are simply at the right place again. The ship entities are only there near players (cheap).
 - **Two ships per line**, departing from both ends at the same moment every 3 min and passing each other halfway with a 22-block offset. Docked time per ship = 3 min - flight (90-120 s boarding).
-- **Line 0** (Kampsteiger <-> Haven Zwamzoet) is also a real line. The old bell flight stays (it is the luxury map now).
+- **Line 0** (Kampsteiger <-> Haven Zwamzoet) is in the data, but it only flies in the world once its own POIs
+  `haven_kamp_z1_vertrek` / `haven_z1_kamp_vertrek` exist (`Lijn.actief()`). Both old docks carry the anchored block airship of
+  the scene flight, and a real ship there would collide with it. Dev `rij 0` works anyway. The old bell flight stays (it is the
+  luxury map now).
+- **Barrier exemption (t-wereld `Barrieres.TAG_VRIJ`):** the ship entity carries the tag `guhs_luchtschip`.
+- **Departure board position:** t-wereld's POI `<haven>_bord` when it exists, else above the pier spot.
 - **Gates (heenweg):**
   - 0 = `WereldReizen.MAG_VLIEGEN`;
   - A = `QuestMotor.reisSlot(p,"kandijkom")`;

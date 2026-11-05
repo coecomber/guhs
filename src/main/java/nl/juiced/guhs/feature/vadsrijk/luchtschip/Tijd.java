@@ -34,7 +34,15 @@ public final class Tijd {
 
     /** The timetable time of a line on the server. */
     public static double nu(ServerLevel sl, Lijnen.Lijn l) {
-        return sl.getGameTime() + verschuiving(l);
+        return basis(sl, l) + verschuiving(l);
+    }
+
+    /**
+     * The clock a line runs on: the level's game time; test lines use the server's tick count (the gametest server's level
+     * does not advance its game time).
+     */
+    public static long basis(ServerLevel sl, Lijnen.Lijn l) {
+        return l.test() ? sl.getServer().getTickCount() : sl.getGameTime();
     }
 
     /** (dev) the next departure of this line in {@code over} ticks. */

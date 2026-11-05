@@ -12,7 +12,7 @@
 
 | Lijn | Van | Naar | Slot (heenweg) |
 |---|---|---|---|
-| 0 | Kampsteiger (-235, 87, 1008) | Haven Zwamzoet (92, 65, 500) | kampverhaal (zoals de oude bel) |
+| 0 | Kampsteiger (-235, 87, 1008) | Haven Zwamzoet (92, 65, 500) | kampverhaal (zoals de oude bel); vliegt pas vanzelf als t-wereld eigen pieren voor lijn 0 heeft gebouwd (daar ligt nu het oude blok-luchtschip). Testen kan wel: `rij 0` |
 | A | Noordklifhaven (150, 121, -600) | Kandijkom-dok (704, 91, -900) | zelfde als de kapitein naar Kandijkom |
 | B | Galmdok (955, 111, -835) | Weststeiger (1190, 171, -590) | zone2_klaar + lv 30 |
 | C | Oosttaksteiger (1630, 171, -500) | Lampionhaven (1800, 71, -470) | zone3_klaar |

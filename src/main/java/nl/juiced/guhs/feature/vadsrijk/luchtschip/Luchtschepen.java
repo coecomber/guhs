@@ -110,7 +110,7 @@ public final class Luchtschepen {
                 String sleutel = l.id() + ":" + k;
                 Dienstregeling.Stand s = Dienstregeling.stand(l, k, Tijd.nu(sl, l));
                 LuchtschipEntity e = schip(sl, sleutel);
-                boolean nodig = l.test() ? e != null : dichtbij(spelers, s.pos(), DICHTBIJ);
+                boolean nodig = l.test() || !l.actief() ? e != null : dichtbij(spelers, s.pos(), DICHTBIJ);
                 if (e == null && nodig && sl.hasChunkAt(BlockPos.containing(s.pos()))) {
                     e = LuchtschipRegistry.SCHIP.get().create(sl, EntitySpawnReason.EVENT);
                     if (e != null) {
@@ -226,6 +226,10 @@ public final class Luchtschepen {
 
     /** Where the board stands: above the pier spot, a little to the land side. */
     static Vec3 bordPlek(Lijnen.Haven h) {
+        BlockPos b = Lijnen.zoek(h.id() + "_bord");   // t-wereld's board POI, when built
+        if (b != null) {
+            return new Vec3(b.getX() + 0.5, b.getY() + 1.2, b.getZ() + 0.5);
+        }
         BlockPos p = h.plek();
         return new Vec3(p.getX() + 0.5, p.getY() + 2.1, p.getZ() + 0.5).subtract(h.uit().scale(1.5));
     }

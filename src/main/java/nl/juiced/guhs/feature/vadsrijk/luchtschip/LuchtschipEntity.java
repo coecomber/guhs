@@ -74,7 +74,11 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
         super(type, level);
         noPhysics = true;
         setNoGravity(true);
+        addTag(TAG_VRIJ);
     }
+
+    /** t-wereld's barrier push-back (Barrieres.TAG_VRIJ) leaves this vehicle and its passengers alone. */
+    public static final String TAG_VRIJ = "guhs_luchtschip";
 
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
@@ -98,8 +102,10 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
 
     /** The timetable time of this ship (server: game time; client: the soft clock). */
     double tijd(float partial) {
-        double basis = level().isClientSide() && !Double.isNaN(klok) ? klok : level().getGameTime();
-        return basis + partial + Tijd.verschuiving(lijn());
+        Lijnen.Lijn l = lijn();
+        double basis = level().isClientSide() ? (Double.isNaN(klok) ? level().getGameTime() : klok)
+                : l != null ? Tijd.basis((ServerLevel) level(), l) : level().getGameTime();
+        return basis + partial + Tijd.verschuiving(l);
     }
 
     @Nullable

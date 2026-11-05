@@ -79,6 +79,15 @@ public final class Lijnen {
         public String naam() {
             return "vadsrijk.luchtschip.lijn." + id;
         }
+
+        /**
+         * Does it fly in the world? Line 0 only once its two harbour POIs exist: Kampsteiger and De Haven already have the old
+         * anchored block airship of the scene flight, so the real ship waits until t-wereld places its own piers (dev
+         * {@code rij 0} works anyway). All other lines fly at their planned harbours.
+         */
+        public boolean actief() {
+            return !id.equals("kamp_z1") || zoek(a.id()) != null && zoek(b.id()) != null;
+        }
     }
 
     // ------------------------------------------------------------------------------------------------------------ harbours
@@ -179,7 +188,7 @@ public final class Lijnen {
     public static List<Haven> havens() {
         List<Haven> l = new ArrayList<>();
         for (Lijn lijn : ALLE) {
-            if (!lijn.test()) {
+            if (!lijn.test() && lijn.actief()) {
                 l.add(lijn.a());
                 l.add(lijn.b());
             }

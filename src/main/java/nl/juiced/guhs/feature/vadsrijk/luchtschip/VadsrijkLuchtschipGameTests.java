@@ -77,8 +77,8 @@ public class VadsrijkLuchtschipGameTests {
         Lijnen.Haven a = new Lijnen.Haven("haven_t1_t2_vertrek", o.above(3), 270f, "t1");
         Lijnen.Haven b = new Lijnen.Haven("haven_t2_t1_vertrek", o.offset(30, 3, 0), 90f, "t2");
         int periode = 200, duur = 60;
-        int fase = (int) ((sl.getGameTime() + 30) % periode);
-        Lijnen.Lijn l = new Lijnen.Lijn("test_" + sl.getGameTime(), "T", a, b, List.of(new Vec3(o.getX() + 15.5, o.getY() + 8, o.getZ() + 0.5)),
+        int fase = (int) ((sl.getServer().getTickCount() + 30) % periode);
+        Lijnen.Lijn l = new Lijnen.Lijn("test_" + sl.getServer().getTickCount(), "T", a, b, List.of(new Vec3(o.getX() + 15.5, o.getY() + 8, o.getZ() + 0.5)),
                 fase, duur, periode, true);
         Lijnen.ALLE.add(l);
         ServerPlayer p = GuhMockPlayer.of(helper);
@@ -90,7 +90,7 @@ public class VadsrijkLuchtschipGameTests {
         helper.assertTrue(e != null, "ship spawned");
         helper.assertTrue(Luchtschepen.instappen(p, e), "boarded");
         helper.assertTrue(p.getVehicle() == e, "on board");
-        long start = sl.getGameTime();
+        long start = sl.getServer().getTickCount();
         helper.runAfterDelay(45, () -> {
             helper.assertTrue(e.vliegt() && p.getVehicle() == e, "flying with the passenger");
             helper.assertTrue(p.getPersistentData().getStringOr(Luchtschepen.TAG_NAAR, "").equals(b.id()), "destination remembered");
@@ -103,7 +103,7 @@ public class VadsrijkLuchtschipGameTests {
             helper.assertTrue(p.getHealth() == hp, "no damage on board");
         });
         helper.succeedWhen(() -> {
-            helper.assertTrue(sl.getGameTime() - start > 60, "not yet");
+            helper.assertTrue(sl.getServer().getTickCount() - start > 60, "not yet");
             helper.assertTrue(p.getVehicle() == null, "landed: off the ship");
             helper.assertTrue(p.position().distanceTo(Vec3.atBottomCenterOf(b.plek())) < 4, "on the pier of b: " + p.position());
             helper.assertTrue(p.getPersistentData().getStringOr(Luchtschepen.TAG_NAAR, "").isEmpty(), "destination cleared");
@@ -124,8 +124,8 @@ public class VadsrijkLuchtschipGameTests {
         }
         Lijnen.Haven a = new Lijnen.Haven("haven_t3_t4_vertrek", o.above(3), 270f, "t3");
         Lijnen.Haven b = new Lijnen.Haven("haven_t4_t3_vertrek", o.offset(30, 3, 0), 90f, "t4");
-        int fase = (int) ((sl.getGameTime() + 10) % 400);
-        Lijnen.Lijn l = new Lijnen.Lijn("test_uit_" + sl.getGameTime(), "U", a, b, List.of(new Vec3(o.getX() + 15.5, o.getY() + 8, o.getZ() + 0.5)),
+        int fase = (int) ((sl.getServer().getTickCount() + 10) % 400);
+        Lijnen.Lijn l = new Lijnen.Lijn("test_uit_" + sl.getServer().getTickCount(), "U", a, b, List.of(new Vec3(o.getX() + 15.5, o.getY() + 8, o.getZ() + 0.5)),
                 fase, 200, 400, true);
         Lijnen.ALLE.add(l);
         ServerPlayer p = GuhMockPlayer.of(helper);
