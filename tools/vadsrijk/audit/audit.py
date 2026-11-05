@@ -100,6 +100,9 @@ def laad():
         cls[ox + xs, oz + zs, ys] = lut[st, 0]
         mat[ox + xs, oz + zs, ys] = lut[st, 1]
         # stairs + doors with their properties (sparse)
+        # T-WERELD: a stair standing on tent cloth is the ridge of a tent roof (the camp tents), not a stair to walk on
+        doek = {i for i, s in enumerate(pal) if "tentdoek" in s or "dakpan" in s}
+        op_doek = {(int(x), int(y) + 1, int(z)) for x, y, z, q in zip(xs, ys, zs, st) if int(q) in doek} if doek else set()
         for i, s in enumerate(pal):
             n, props = BK.splits(s)
             if lut[i, 1] == BK.M_TRAP and props.get("half") == "bottom":
@@ -108,6 +111,8 @@ def laad():
                 if any(w in n for w in DAK):
                     continue                               # roofs are not stairs to walk on
                 for x, y, z in zip(xs[k], ys[k], zs[k]):
+                    if (int(x), int(y), int(z)) in op_doek:
+                        continue
                     trappen.append((ox + int(x), int(y), oz + int(z), f))
             elif lut[i, 1] == BK.M_DEUR and props.get("half", "lower") == "lower" and "gate" not in n:
                 k = st == i

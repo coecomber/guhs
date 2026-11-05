@@ -1670,7 +1670,6 @@ def splinterwand(W, K, P):
     for st in barriere.stempels(TG.Stempel, doos=(KA.X0, KA.Z0, KA.X0 + KA.NX - 1, KA.Z0 + KA.NZ - 1)):
         W.stempel(st, bezet=False)
         n += 1
-    P["splinterwand_zicht"] = [300, 0, -700]
     print(f"  splinterwand: {n} spitsen in zone 1")
 
 
@@ -1681,7 +1680,7 @@ def noordklifhaven(W, K, P):
     import havens
     cx, cz = KA.NOORDKLIF
     y = K.noordklif_y
-    x0, z0, x1, z1 = havens.doos(cx, cz - KA.NOORDKLIF_R + 2, 0, -1, 26)
+    x0, z0, x1, z1 = havens.doos(cx, cz - KA.NOORDKLIF_R + 2, 0, -1, 34)
     S = WS(x0, 30, z0, x1 - x0 + 1, y - 30 + 20, z1 - z0 + 1)
     # the plaza: a ring of kerb stones, benches, lanterns
     for a in range(0, 360, 30):
@@ -1692,7 +1691,7 @@ def noordklifhaven(W, K, P):
 
     def hoog(x, z):
         return hoogste(W, K, int(x), int(z))
-    havens.pier(S, cx, y, cz - KA.NOORDKLIF_R + 2, 0, -1, 26, hoog, "haven_z1_z2", P, bodem=40)
+    havens.pier(S, cx, y, cz - KA.NOORDKLIF_R + 2, 0, -1, 34, hoog, "haven_z1_z2", P, bodem=40)
     P["haven_z1_z2_plein"] = [cx, y + 1, cz]
     e = P["haven_z1_z2_eind"]
     P["uitkijk_noordkliftop"] = [e[0] + 4, e[1], e[2]]

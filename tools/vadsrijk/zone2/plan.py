@@ -26,7 +26,6 @@ KUST_LOBBEN = [(240, -2196, 55, 0.13),     # the south-east cape with the Galmdo
                (290, -2560, 60, -0.06),     # the crumbling east coast (a bite out of it)
                (-290, -2620, 80, 0.04),
                (-300, -2380, 70, -0.06),    # a bite out of the west coast (by the Knuffelmeer)
-               (-90, -2835, 90, 0.05),      # the north coast bulges out under the plateau
                (-290, -2770, 70, -0.05),    # a north-west bay
                (120, -2160, 60, 0.05)]      # a little south cape east of the dock
 GALMDOK = (236, -2200)        # plaza of the Galmdok (local); the pier runs east towards the Wolkenkloof / zone 3

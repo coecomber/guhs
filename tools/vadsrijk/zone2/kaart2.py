@@ -93,9 +93,11 @@ class Kaart2:
         zx0, zz0, zx1, zz1 = PL.ZONE
         # T-WERELD: organic outline (was the zone box + 40 with a little noise: a near rectangle)
         cx_, cz_ = (zx0 + zx1) / 2, (zz0 + zz1) / 2
-        rx_, rz_ = (zx1 - zx0) / 2 + 44, (zz1 - zz0) / 2 + 44
+        # the written tile box is local x -320..319, z -2816..-2113: the coast stays ~35 blocks inside it (sea at every tile edge)
+        rx_ = 284.0
+        rz_ = np.where(z < cz_, 290.0, (zz1 - zz0) / 2 + 44)
         lo = ruis(43, [(200, 1.0), (80, 0.35)])
-        e = ((np.abs(x - cx_) / rx_) ** 4 + (np.abs(z - cz_) / rz_) ** 4) ** 0.25 + 0.07 * lo + 0.02 * n1
+        e = ((np.abs(x - cx_) / rx_) ** 4 + (np.abs(z - cz_) / rz_) ** 4) ** 0.25 + 0.05 * lo + 0.02 * n1
         e += smooth((x - 150) / 110) * 0.035 * self.fijn          # the east coast crumbles
         for (lx, lz, lr, la) in PL.KUST_LOBBEN:
             e -= la * np.exp(-((x - lx) ** 2 + (z - lz) ** 2) / (lr * lr))

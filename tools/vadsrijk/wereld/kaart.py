@@ -83,7 +83,7 @@ PADEN = {
     "woud2": [(-220, 40), (-300, -40), (-420, 40), (-510, -40)],
     "druip": [(-180, -360), (-100, -510)],
     # T-WERELD: from the mountain path north of the fossil bridge up to the Noordklifhaven on the north cliffs
-    "noordklif": [(140, -270), (118, -330), (104, -400), (112, -470), (132, -530), (146, -580)],
+    "noordklif": [(119, -219), (102, -252), (98, -330), (104, -400), (112, -470), (132, -530), (146, -575), (150, -596)],
 }
 
 # fix round 1: paths that lead to a rock needle stop at the foot of its spiral stair instead of under the rock
@@ -231,7 +231,10 @@ class Kaart:
         # the Noordklifhaven plaza: flat on the cliff top
         dn = np.hypot(x - NOORDKLIF[0], z - NOORDKLIF[1])
         tnk = np.clip((dn - NOORDKLIF_R) / 18, 0, 1)
-        self.noordklif_y = int(round(float(np.median(H[(dn > NOORDKLIF_R) & (dn < NOORDKLIF_R + 6)]))))
+        # the plaza sits at the highest ground of the pier corridor north of it (the cliff edge rises towards the coast), so the
+        # pier runs flush over the cliff top and out over the sea
+        gang = (np.abs(x - NOORDKLIF[0]) <= 5) & (z <= NOORDKLIF[1] - NOORDKLIF_R + 2) & (z >= NOORDKLIF[1] - 80) & self.land
+        self.noordklif_y = int(round(max(float(np.median(H[(dn > NOORDKLIF_R) & (dn < NOORDKLIF_R + 6)])), float(H[gang].max()) + 1)))
         H = self.noordklif_y * (1 - tnk) + H * tnk
         self.noordklif = dn < NOORDKLIF_R
         # coast: gentle beaches down to the water; in the north foreland a narrow beach under steep cliffs
@@ -275,6 +278,7 @@ class Kaart:
         # fix round 1: no path step higher than 1 block: every path (not the mountain ramp, not the Haven road) gets a smooth
         # height profile along its length with a slope of at most 0.7, flat across its width
         H = self.padprofielen(H)
+        H = np.where(self.noordklif, self.noordklif_y, H)   # T-WERELD: the Noordklifhaven plaza stays flat
         # the fossil bridge deck level: both ends get a level landing at the deck height (fix round 1)
         dek = int(round(max(H[idx(*FOSSIEL[0])], H[idx(*FOSSIEL[1])], 70)))
         self.dek = dek
@@ -318,6 +322,8 @@ class Kaart:
                 acc += L
             prof[k:] = prof[k - 1] if k else 64
             prof = ndimage.uniform_filter1d(prof, 9, mode="nearest")
+            if naam == "noordklif":   # T-WERELD: arrive level with the Noordklifhaven plaza (climb at most 0.6 per block)
+                prof = np.maximum(prof, self.noordklif_y - 0.6 * np.maximum(n - 1 - np.arange(n) - (NOORDKLIF_R + 3), 0))
             for _ in range(2):
                 for k in range(1, n):
                     prof[k] = min(max(prof[k], prof[k - 1] - 0.7), prof[k - 1] + 0.7)
