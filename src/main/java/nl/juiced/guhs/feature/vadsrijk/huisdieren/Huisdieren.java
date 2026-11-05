@@ -264,6 +264,17 @@ public final class Huisdieren {
         roep(p, h);
     }
 
+    /** N-EXTRA: the pet's nameplate, "&lt;pet&gt; van &lt;player&gt;" (lang {@code vadsrijk.huisdieren.naam_van}). */
+    public static Component naamVan(Huisdier h, Component speler) {
+        return Component.translatable("vadsrijk.huisdieren.naam_van", Component.translatable(h.naamKey()), speler);
+    }
+
+    /** Gametests (other packages): summon this pet for the player right here. */
+    @Nullable
+    public static HuisdierEntity roepVoorTest(ServerPlayer p, Huisdier h) {
+        return roep(p, h);
+    }
+
     @Nullable
     static HuisdierEntity roep(ServerPlayer p, Huisdier h) {
         ServerLevel sl = p.level();
@@ -274,6 +285,7 @@ public final class Huisdieren {
         Vec3 plek = HuisdierEntity.plekBij(p);
         e.snapTo(plek.x, plek.y, plek.z, p.getYRot(), 0);
         e.zet(h.id(), p.getUUID());
+        e.setCustomName(naamVan(h, p.getName()));   // N-EXTRA: "Mini Koning Klodder van Juiced" (shown when you look at it)
         sl.addFreshEntity(e);
         UIT.put(p.getUUID(), e);
         poefBij(sl, plek.add(0, 0.2, 0), 0.6);

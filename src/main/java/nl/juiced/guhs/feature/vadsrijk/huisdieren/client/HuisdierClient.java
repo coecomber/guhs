@@ -48,15 +48,34 @@ public final class HuisdierClient {
     private HuisdierClient() {
     }
 
+    /** Looked at from up to 8 blocks (the crosshair ray hits its slightly enlarged box), names shown (F1), not invisible. */
+    static boolean bekeken(HuisdierEntity h, float pt) {
+        Minecraft mc = Minecraft.getInstance();
+        net.minecraft.world.entity.Entity cam = mc.getCameraEntity();
+        if (cam == null || !Minecraft.renderNames() || h.isInvisible() || h.level() != cam.level()) {
+            return false;
+        }
+        net.minecraft.world.phys.Vec3 oog = cam.getEyePosition(pt);
+        net.minecraft.world.phys.Vec3 eind = oog.add(cam.getViewVector(pt).scale(8));
+        return h.getBoundingBox().inflate(0.3).clip(oog, eind).isPresent();
+    }
+
     public static void init(IEventBus modBus) {
         modBus.addListener((RegisterKeyMappingsEvent e) -> e.register(SCHERM));
         nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.registreer(TAB, 20, () -> Component.translatable("vadsrijk.huisdieren.titel"),
                 HuisdierClient::open);
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> e.registerEntityRenderer(HuisdierenRegistry.HUISDIER.get(), HuisdierRenderer::new));
-        // (fix round 3) no nameplate above a pet ("entity.guhs.vr_huisdier" showed when looking at it)
+        // N-EXTRA: "<pet> van <player>" while you look at it, like a vanilla named mob (the pet isn't pickable, so we aim ourselves);
+        // never the raw type key (fix round 3): without its server-given name a pet shows nothing
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.client.event.RenderNameTagEvent.CanRender e) -> {
-            if (e.getEntity() instanceof HuisdierEntity) {
-                e.setCanRender(net.minecraft.util.TriState.FALSE);
+            if (e.getEntity() instanceof HuisdierEntity h) {
+                Component naam = h.getCustomName();
+                if (naam != null && !h.voorbeeld && bekeken(h, e.getPartialTick())) {
+                    e.setContent(naam);
+                    e.setCanRender(net.minecraft.util.TriState.TRUE);
+                } else {
+                    e.setCanRender(net.minecraft.util.TriState.FALSE);
+                }
             }
         });
         HuisdierPayloads.schermOntvanger = s -> Minecraft.getInstance().execute(() -> {

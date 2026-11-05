@@ -101,7 +101,7 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
         return h != null ? Component.translatable(h.naamKey()) : super.getTypeName();
     }
 
-    /** No nameplate above a pet (the client also refuses it, see HuisdierClient). */
+    /** No always-on nameplate: the client shows "&lt;pet&gt; van &lt;player&gt;" only while you look at it (vanilla named-mob style, see HuisdierClient). */
     @Override
     public boolean shouldShowName() {
         return false;

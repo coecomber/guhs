@@ -146,6 +146,7 @@ def teksten():
         "vadsrijk.huisdieren.nieuw.chat": "Nieuw huisdier: %s! Druk op %s om je huisdieren te bekijken.",
         "vadsrijk.huisdieren.mee": "%s loopt nu met je mee.",
         "vadsrijk.huisdieren.thuis": "%s blijft lekker thuis.",
+        "vadsrijk.huisdieren.naam_van": "%s van %s",   # N-EXTRA: the nameplate "Mini Koning Klodder van Juiced"
         # the pets
         "vadsrijk.huisdier.klodderreus.naam": "Mini Grauwe Klodderreus",
         "vadsrijk.huisdier.klodderreus.tekst": "Viel ooit met een enorme PLONS in de kampvijver. Nu past hij in je broekzak. Nog steeds een beetje grauw, maar elke knuffel helpt.",
