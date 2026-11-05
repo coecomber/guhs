@@ -20,6 +20,20 @@ UIT = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure"
 JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk", "zone2", "wereld", "Z2WereldPlekken.java")
 
 import plan as PL  # noqa: E402
+sys.path.insert(0, os.path.join(HIER, ".."))
+import indeling as IND  # noqa: E402  (T-WERELD: the zone-2 offset)
+sys.path.pop(0)
+DX, DZ = IND.Z2_DX, IND.Z2_DZ
+DTX, DTZ = DX // 64, DZ // 64
+
+
+def wereld_tegel(tx, tz):
+    """local tile -> world tile index."""
+    return tx + DTX, tz + DTZ
+
+
+def gebieden_w():
+    return [(g[0], g[1] + DX, g[2] + DZ, g[3] + DX, g[4] + DZ) + tuple(g[5:]) for g in PL.GEBIEDEN]
 
 
 def maak(alleen=None):
@@ -40,12 +54,26 @@ def maak(alleen=None):
     mis = __import__("blokken").controleer(W.palet)
     if mis:
         print("zone 2 ONBEKENDE BLOKKEN:", mis)
-    java_plekken(P)
+    Pw = IND.schuif(P, DX, DZ)          # T-WERELD: every POI in world coordinates
+    java_plekken(Pw)
     lut = W.opaak_lut()
-    tegels = [(tx, tz) for tx in range(PL.TX0, PL.TX1 + 1) for tz in range(PL.TZ0, PL.TZ1 + 1)]
-    if alleen:
+    tegels = [(tx, tz) for tx in range(PL.UIT_TX0, PL.UIT_TX1 + 1) for tz in range(PL.UIT_TZ0, PL.UIT_TZ1 + 1)]
+    if alleen:   # --alleen takes WORLD tile indices
         tegels = [tuple(int(v) for v in s.split(",")) for s in alleen.split(";")]
-        tegels = [t for t in tegels if PL.TX0 <= t[0] <= PL.TX1 and PL.TZ0 <= t[1] <= PL.TZ1]
+        tegels = [(t[0] - DTX, t[1] - DTZ) for t in tegels]
+        tegels = [t for t in tegels if PL.UIT_TX0 <= t[0] <= PL.UIT_TX1 and PL.UIT_TZ0 <= t[1] <= PL.UIT_TZ1]
+    else:
+        # T-WERELD: the zone-2 tiles at the OLD place (world tx -11..10, tz -48..-28) go
+        weg = 0
+        for tx in range(PL.TX0, PL.TX1 + 1):
+            for tz in range(PL.TZ0, PL.TZ1 + 1):
+                if IND.van_andere_zone(tx, tz, "z2"):
+                    continue
+                p = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
+                if os.path.exists(p):
+                    os.remove(p)
+                    weg += 1
+        print(f"zone 2: {weg} oude tegels (oude plek) verwijderd")
     totaal, grootte = 0, 0
     beeld = np.zeros((PL.NZ, PL.NX, 3), np.uint8)
     hgt = np.zeros((PL.NZ, PL.NX), np.float32)
@@ -53,7 +81,8 @@ def maak(alleen=None):
     for n, (tx, tz) in enumerate(tegels):
         vol = W.tegel(tx, tz)
         vol = W.hol(vol, lut)
-        pad = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
+        wx, wz = wereld_tegel(tx, tz)
+        pad = os.path.join(UIT, f"t_{wx}_{wz}.nbt")
         nb = W.schrijf(vol, pad)
         totaal += nb
         grootte += os.path.getsize(pad)
@@ -71,7 +100,7 @@ def maak(alleen=None):
             print(f"  z2 tegel {n}/{len(tegels)} ({tx},{tz}): {nb} blokken; {grootte / 1e6:.1f} MB ({time.time() - t0:.0f} s)", flush=True)
     print(f"zone 2: {len(tegels)} tegels, {totaal} blokken, {grootte / 1e6:.1f} MB ({time.time() - t0:.0f} s)")
     with open(os.path.join(CACHE, "plekken_z2.json"), "w", encoding="utf-8") as f:
-        json.dump(P, f, indent=1)
+        json.dump(Pw, f, indent=1)
     if not alleen:
         from PIL import Image
         gz, gx = np.gradient(hgt)
@@ -79,7 +108,7 @@ def maak(alleen=None):
         out = np.clip(beeld * licht[..., None], 0, 255).astype(np.uint8)
         Image.fromarray(out).save(os.path.join(CACHE, "kaart_z2.png"))
         Image.fromarray(out).resize((PL.NX // 2, PL.NZ // 2)).save(os.path.join(CACHE, "kaart_z2_klein.png"))
-    return W, K, P
+    return W, K, Pw
 
 
 # ------------------------------------------------------------------------------------------------ POIs -> Java + POI_Z2.md
@@ -111,9 +140,9 @@ def java_plekken(P):
     zones = (","+chr(10)).join(f'            new Zone("{k}", {v["min"][0]}, {v["min"][2]}, {v["max"][0]}, {v["max"][2]}, {v["level"][0]}, {v["level"][1]})'
                                for k, v in mob.items())
     paden = (","+chr(10)).join("            new int[][] {" + ", ".join("{" + str(a) + ", " + str(b) + "}" for (a, b) in pts) + "}"
-                               for pts in PL.PADEN.values())
+                               for pts in [[(a + DX, b + DZ) for (a, b) in p_] for p_ in PL.PADEN.values()])
     gebieden = (","+chr(10)).join(f'            new Gebieden.Gebied("{g[0]}", {g[1]}, {g[2]}, {g[3]}, {g[4]}, {g[5]}, {g[6]}, {str(g[7]).lower()})'
-                                  for g in PL.GEBIEDEN)
+                                  for g in gebieden_w())
     src = f"""package nl.juiced.guhs.feature.vadsrijk.zone2.wereld;
 
 import java.util.List;
@@ -129,11 +158,11 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
  * {{@link #plek}} gives any of them by id ({{@code /guhs vadsrijk z2wereld plek <id>}} teleports there).
  */
 public final class Z2WereldPlekken {{
-    public static final int TEGEL_X0 = {PL.TX0}, TEGEL_X1 = {PL.TX1}, TEGEL_Z0 = {PL.TZ0}, TEGEL_Z1 = {PL.TZ1};
+    public static final int TEGEL_X0 = {PL.UIT_TX0 + DTX}, TEGEL_X1 = {PL.UIT_TX1 + DTX}, TEGEL_Z0 = {PL.UIT_TZ0 + DTZ}, TEGEL_Z1 = {PL.UIT_TZ1 + DTZ};
     /** The playable zone box (fix round 2: compact, ~500 x 575; the rest of the tile grid is cloud sea). */
-    public static final int ZONE_MIN_X = {PL.ZONE[0]}, ZONE_MIN_Z = {PL.ZONE[1]}, ZONE_MAX_X = {PL.ZONE[2]}, ZONE_MAX_Z = {PL.ZONE[3]};
-    /** The Spiegelburcht was moved as one piece: v1 position + (BURCHT_DX, 0, BURCHT_DZ). */
-    public static final int BURCHT_DX = {PL.BURCHT_DX}, BURCHT_DZ = {PL.BURCHT_DZ};
+    public static final int ZONE_MIN_X = {PL.ZONE[0] + DX}, ZONE_MIN_Z = {PL.ZONE[1] + DZ}, ZONE_MAX_X = {PL.ZONE[2] + DX}, ZONE_MAX_Z = {PL.ZONE[3] + DZ};
+    /** The Spiegelburcht was moved as one piece: v1 position + (BURCHT_DX, 0, BURCHT_DZ) (T-WERELD: incl. the zone-2 offset). */
+    public static final int BURCHT_DX = {PL.BURCHT_DX + DX}, BURCHT_DZ = {PL.BURCHT_DZ + DZ};
     /** The paths (polylines of x, z) — creatures never spawn within ~5 blocks of them. */
     public static final List<int[][]> PADEN = List.of(
 {paden});
@@ -208,7 +237,7 @@ def poi_md(alle, P):
          "corners, door `min/max` = the door's own blocks, `*_straal` = radius in x). Cloud sea level 62; Kandijkom floor stand y 91; "
          "Spiegelburcht floor stand y 176. Dev: `/guhs vadsrijk z2wereld plek <id>` teleports there.", "",
          "## Areas (kern.Gebieden, first match wins)", "", "| id | box (minX, minZ)..(maxX, maxZ) | levels | town |", "|---|---|---|---|"]
-    for g in PL.GEBIEDEN:
+    for g in gebieden_w():
         r.append(f"| `{g[0]}` | ({g[1]},{g[2]})..({g[3]},{g[4]}) | {g[5]}-{g[6]} | {'yes' if g[7] else 'no'} |")
     r += ["", "## Mob zones (boxes for the wezens slice; `Z2WereldPlekken.MOBZONES`)", "", "| id | box | levels |", "|---|---|---|"]
     for k, v in P["mobzones"].items():

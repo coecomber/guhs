@@ -1662,6 +1662,43 @@ def randwolken(W, K, P):
         W.stempel(S.stempel("wolk"), bezet=False)
 
 
+# ================================================================================================ T-WERELD: barriers + harbours
+def splinterwand(W, K, P):
+    """The rock spires of the Splinterwand that stand in the zone-1 grid (the same list as zone 2 and the gap row)."""
+    import barriere
+    n = 0
+    for st in barriere.stempels(TG.Stempel, doos=(KA.X0, KA.Z0, KA.X0 + KA.NX - 1, KA.Z0 + KA.NZ - 1)):
+        W.stempel(st, bezet=False)
+        n += 1
+    P["splinterwand_zicht"] = [300, 0, -700]
+    print(f"  splinterwand: {n} spitsen in zone 1")
+
+
+def noordklifhaven(W, K, P):
+    """haven_z1_z2_vertrek: the Noordklifhaven on the north cliffs (line A to Kandijkom-dok): a plaza (flattened in kaart.py),
+    a pier north over the cliff with the departure platform, mast and board; the platform's far corner is the viewpoint
+    Noordkliftop (U1) towards the Splinterwand and zone 2."""
+    import havens
+    cx, cz = KA.NOORDKLIF
+    y = K.noordklif_y
+    x0, z0, x1, z1 = havens.doos(cx, cz - KA.NOORDKLIF_R + 2, 0, -1, 26)
+    S = WS(x0, 30, z0, x1 - x0 + 1, y - 30 + 20, z1 - z0 + 1)
+    # the plaza: a ring of kerb stones, benches, lanterns
+    for a in range(0, 360, 30):
+        x, z = cx + (KA.NOORDKLIF_R - 1) * math.cos(math.radians(a)), cz + (KA.NOORDKLIF_R - 1) * math.sin(math.radians(a))
+        if -120 < a - 270 < 120 and abs(a - 270) < 25:
+            continue
+        S.set(x, y + 1, z, LANT if a % 60 == 0 else "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+
+    def hoog(x, z):
+        return hoogste(W, K, int(x), int(z))
+    havens.pier(S, cx, y, cz - KA.NOORDKLIF_R + 2, 0, -1, 26, hoog, "haven_z1_z2", P, bodem=40)
+    P["haven_z1_z2_plein"] = [cx, y + 1, cz]
+    e = P["haven_z1_z2_eind"]
+    P["uitkijk_noordkliftop"] = [e[0] + 4, e[1], e[2]]
+    W.stempel(S.stempel("noordklifhaven"))
+
+
 # ================================================================================================ decoration
 _PADAFSTAND = {}
 
@@ -1818,7 +1855,10 @@ def bouw_alles(W, K, kamp_d):
     sporenwoud(W, K, P)
     __import__("hoedenpaden").bouw(W, K, P)  # verticaal: De Hoedenpaden (wereld/hoedenpaden.py)
     __import__("druipschacht").bouw(W, K, P)  # verticaal: De Druipschacht (wereld/druipschacht.py)
-    randwolken(W, K, P)
+    # T-WERELD: randwolken (the clouds along the RECTANGLE of the tile grid) are gone: the coast runs out naturally; the
+    # Splinterwand (zone 1 -> 2) and the Noordklifhaven take their place
+    splinterwand(W, K, P)
+    noordklifhaven(W, K, P)
     terugportalen(W, K, P)
     decoratie(W, K, P)
     npc_wensen(W, K, P, kamp_d)

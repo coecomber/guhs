@@ -68,6 +68,9 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
         BoundingBox chunk = new BoundingBox(x0, level.getMinY(), z0, x0 + 15, level.getMaxY(), z0 + 15);
         StructurePlaceSettings s = new StructurePlaceSettings().setBoundingBox(chunk).setIgnoreEntities(true).setKnownShape(true);
         BlockPos hoek = new BlockPos(tx * TEGEL, 0, tz * TEGEL);
+        if (nl.juiced.guhs.feature.vadsrijk.indeling.ZeeVulling.zeeOnderTegel(cp)) {   // T-WERELD: sea under Hoogvads' tiles
+            nl.juiced.guhs.feature.vadsrijk.indeling.ZeeVulling.vul(level, cp);
+        }
         tegel.placeInWorld(level, hoek, hoek, s, ctx.random(), 2);
         LAATST.put(sleutel, System.currentTimeMillis());
         java.util.Set<Long> klaar = GEPLAATST.computeIfAbsent(sleutel, k -> ConcurrentHashMap.newKeySet());

@@ -52,7 +52,9 @@ final class WereldLucht {
      * castle 116 = Hoogvads, giant tree 91 = zone 3, volcano 148 = Roetfront. K-INT: z3-wereld's layout (the tree stands in the EAST,
      * zone 3 at x 2300, with Hoogvads behind it) replaces j-int's 75/105/140.
      */
-    private static final float[][] VERTE_PLEK = {{350f, 26f, 26f}, {116f, 20f, 20f}, {91f, 24f, 24f}, {148f, 28f, 20f}};
+    private static final float[][] VERTE_PLEK = {{33f, 26f, 26f}, {86f, 20f, 20f}, {68f, 24f, 24f}, {148f, 28f, 20f}};
+    // T-WERELD (W-3): seen from Zwamzoet the real directions: Kandijkom (690,-1058) NNE 33, the Boom (1404,-576) ENE 68,
+    // Hoogvads (2740,-520) beyond it ~80 (drawn at 86 so the two do not overlap), the volcano stays SE.
     /** The dragon: one pass every this many ticks, lasting VLUCHT ticks. */
     private static final int DRAAK_ELKE = 20 * 150, VLUCHT = 20 * 28;
     /** (i-lore) The moon shot of the zone-1 cliffhanger (Verhaal.cliffhanger, 312 ticks): the moon from OOG_VAN, one blink at OOG_KNIPPER. */

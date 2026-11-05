@@ -50,6 +50,14 @@ UITKIJK = {
 }
 
 
+def van_andere_zone(tx, tz, eigen):
+    """Is world tile (tx, tz) inside the tile box of another zone than `eigen` (never delete or write those)?"""
+    for k, (a0, b0, a1, b1) in TEGELS.items():
+        if k != eigen and k != "kamp" and a0 <= tx <= a1 and b0 <= tz <= b1:
+            return True
+    return False
+
+
 def kamp(x, z):
     return x + KAMP_DX, z + KAMP_DZ
 
@@ -62,12 +70,12 @@ def z2_lokaal(x, z):
     return x - Z2_DX, z - Z2_DZ
 
 
-def schuif(o, dx, dz):
-    """Shift every [x, y, z] int triple (and {min,max} boxes) in a nested POI tree by (dx, dz)."""
+def schuif(o, dx, dz, overslaan=("level",)):
+    """Shift every [x, y, z] number triple in a nested POI tree by (dx, dz) (keys in `overslaan` are not positions)."""
     if isinstance(o, list) and len(o) == 3 and all(isinstance(v, (int, float)) for v in o):
         return [type(o[0])(o[0] + dx), o[1], type(o[2])(o[2] + dz)]
     if isinstance(o, dict):
-        return {k: schuif(v, dx, dz) for k, v in o.items()}
+        return {k: (v if k in overslaan else schuif(v, dx, dz, overslaan)) for k, v in o.items()}
     if isinstance(o, list):
-        return [schuif(v, dx, dz) for v in o]
+        return [schuif(v, dx, dz, overslaan) for v in o]
     return o

@@ -228,6 +228,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z3_wereld',
             # 1.10 zone 3 "De Schemerwortel": z3-wezens (Java: feature/vadsrijk/zone3/wezens)
             'vadsrijk_z3_wezens',
+            # 1.10 T-WERELD: the connected world layout W-3 (viewpoints, barrier messages, harbour names; Java: feature/vadsrijk/indeling)
+            'vadsrijk_t_wereld',
             ]
 
 

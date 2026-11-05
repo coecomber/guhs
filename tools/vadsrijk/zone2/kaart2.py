@@ -48,6 +48,20 @@ def idx(x, z):
     return int(x - X0), int(z - Z0)
 
 
+def beschermd():
+    """T-WERELD: spots that must stay land whatever the organic outline does (x, z, radius)."""
+    pts = [(x, z, 26) for v in PL.KAMPVUREN.values() for (x, z) in v]
+    pts += [(x, z, 22) for (x, z) in PL.UITKIJK.values()]
+    pts += [(x, z, 14) for p_ in PL.PADEN.values() for (x, z) in p_]
+    pts += [(x, z, r + 12) for (x, z, r) in PL.NAALD_VELDEN]
+    pts += [(PL.GALMDOK[0], PL.GALMDOK[1], PL.GALMDOK_R + 10), (PL.BURCHT[0], PL.BURCHT[1], 80), (PL.MIKA_FORT[0], PL.MIKA_FORT[1], 40),
+            (PL.DRAKENZADEL[0], PL.DRAKENZADEL[1], 40), (PL.IJSGROT[0], PL.IJSGROT[1], 24), (PL.GALMGROT[0], PL.GALMGROT[1], 24),
+            (PL.WARMWATERBRON[0], PL.WARMWATERBRON[1], 24), (PL.STAL[0], PL.STAL[1], 30), (PL.DOK[0], PL.DOK[1], 30)]
+    pts += [(x, z, r + 10) for (_n, x, z, r) in [(g[0], g[1], g[2], 10) for g in PL.GEHUCHTEN]]
+    pts += [(x, z, r + 8) for (x, z, r, _k) in PL.KRISTALBOSSEN]
+    return pts
+
+
 def smooth(t):
     t = np.clip(t, 0, 1)
     return t * t * (3 - 2 * t)
@@ -77,8 +91,17 @@ class Kaart2:
     def land_hoogte(self):
         x, z, n1, n2, f, rug = XX, ZZ, self.n1, self.n2, self.fijn, self.rug
         zx0, zz0, zx1, zz1 = PL.ZONE
-        rand = np.minimum.reduce([x - (zx0 - 40), (zx1 + 40) - x, z - (zz0 - 40), (zz1 + 40) - z]) + n1 * 14
-        self.land = rand > 0
+        # T-WERELD: organic outline (was the zone box + 40 with a little noise: a near rectangle)
+        cx_, cz_ = (zx0 + zx1) / 2, (zz0 + zz1) / 2
+        rx_, rz_ = (zx1 - zx0) / 2 + 44, (zz1 - zz0) / 2 + 44
+        lo = ruis(43, [(200, 1.0), (80, 0.35)])
+        e = ((np.abs(x - cx_) / rx_) ** 4 + (np.abs(z - cz_) / rz_) ** 4) ** 0.25 + 0.07 * lo + 0.02 * n1
+        e += smooth((x - 150) / 110) * 0.035 * self.fijn          # the east coast crumbles
+        for (lx, lz, lr, la) in PL.KUST_LOBBEN:
+            e -= la * np.exp(-((x - lx) ** 2 + (z - lz) ** 2) / (lr * lr))
+        self.land = e < 1.0
+        for (px, pz, pr) in beschermd():
+            self.land |= np.hypot(x - px, z - pz) < pr
         kustd = ndimage.distance_transform_edt(self.land)
         self.kustd = kustd
         # ---- base massif (compact island: everything within ~300 of Kandijkom)
@@ -218,6 +241,12 @@ class Kaart2:
             ramp = PL.KLOOF_BODEM + np.clip(dx, 0, None) / 1.5
             H = np.where(lane, np.minimum(np.maximum(ramp, PL.KLOOF_BODEM), np.maximum(H, ramp)), H)
             self.kloof_ramp |= lane
+        # T-WERELD: the Galmdok plaza (kept flat; the pier leaves it east)
+        gdx, gdz = PL.GALMDOK
+        dg = np.hypot(x - gdx, z - gdz)
+        ring = (dg > PL.GALMDOK_R) & (dg < PL.GALMDOK_R + 8) & self.land
+        self.galmdok_y = int(round(float(np.median(H[ring])))) if ring.any() else 100
+        H = self.pad(gdx, gdz, PL.GALMDOK_R, self.galmdok_y, 14, H)
         # ---- paths: a road profile along each polyline (smoothed, slope limited), cut/filled into the land
         self.pad_m = np.zeros((NX, NZ), np.float32)
         self.pad_kern = np.zeros_like(self.land)
@@ -239,8 +268,10 @@ class Kaart2:
         H = np.where(self.stad_vloer & ~self.tier, PL.STAD_TOP, H)
         H = np.where(dock, PL.STAD_TOP, H)
         H = np.where(self.stad_vloer, H, self.poort_dal(H))
-        # ---- the coast: cliffs down into the cloud sea
-        kt = smooth(kustd / 40) ** 0.7
+        # ---- the coast: cliffs down into the cloud sea (T-WERELD: steeper ice cliffs in the south, towards the Splinterwand)
+        bij_dok = smooth((60 - np.hypot(x - PL.DOK[0], z - PL.DOK[1])) / 20)
+        wz = smooth((z + 2262) / 50) * (1 - bij_dok)
+        kt = smooth(kustd / (40 - 26 * wz)) ** 0.7
         H = (PL.ZEE + 2) * (1 - kt) + H * kt
         self.Hf = H
         Hi = np.where(self.land, np.round(H), -1).astype(np.int16)
