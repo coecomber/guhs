@@ -324,9 +324,143 @@ def bed(naam, r, sf):
         b.cont = galm(b.cont, 1.2, 0.25, staart=False)
         b.ev = circ_galm(b.ev, 1.2, 0.25)
         db = -35
+    elif naam in ZIJDE_BEDDEN:
+        db = zijde_bed(naam, b, r, sf)
     else:
         raise ValueError(naam)
     return niveau(naadloos(b.cont) + b.ev, db)
+
+
+# ---------------------------------------------------------------- U-Z6MUZIEK: het Zijdeland (zone 6)
+# The user dislikes strong wind: the dunes only get a very soft, high sand hiss in slow swells, never a roar.
+
+def belletje(r):
+    """A bultguh (camel) bell far away: a small clanky bell (inharmonic partials), struck once or twice by the swaying walk."""
+    f0 = r.uniform(520, 760)
+    uit = np.zeros(int(2.2 * SR))
+    for slag in range(int(r.integers(1, 3))):
+        n = int(1.4 * SR)
+        t = np.arange(n) / SR
+        x = sum(g * np.sin(2 * np.pi * f0 * m * t + r.uniform(0, 6)) * np.exp(-t / (0.5 / m ** 0.6))
+                for m, g in ((1, 1.0), (2.32, 0.5), (3.91, 0.3), (5.4, 0.15)))
+        x[: int(0.002 * SR)] *= np.linspace(0, 1, int(0.002 * SR))
+        plak(uit, x * (1.0 if slag == 0 else 0.6), slag * r.uniform(0.35, 0.6), 1.0, lus=False)
+    return uit
+
+
+def sterretje(r, sf):
+    """A star twinkle: two or three very high tinker-bell / celesta notes of a sweet chord."""
+    akk = [[93, 97, 100], [95, 98, 102], [91, 95, 98, 103]][int(r.integers(0, 3))]
+    stem = sf.stem(0, 112 if r.random() < 0.5 else 8)
+    buf = np.zeros(int(2.2 * SR))
+    for i, k in enumerate(r.permutation(akk)):
+        x = stem.note(int(k), int(r.integers(34, 56)), 0.3, SR)
+        if x is not None:
+            plak(buf, x, i * r.uniform(0.1, 0.22), 1.0, lus=False)
+    return buf
+
+
+def zoutzang(r):
+    """A singing salt crystal: a pure glassy tone with a slow beat (two close sines + a soft fifth), swelling in and out."""
+    sec = r.uniform(1.4, 2.4)
+    n = int(sec * SR)
+    t = np.arange(n) / SR
+    f = [880, 987.8, 1046.5, 1174.7, 1318.5][int(r.integers(0, 5))]
+    x = np.sin(2 * np.pi * f * t) + np.sin(2 * np.pi * (f + r.uniform(1.5, 3.5)) * t) + 0.25 * np.sin(2 * np.pi * f * 1.5 * t)
+    return x * np.sin(np.pi * t / sec) ** 2
+
+
+def zandruis(r, n, sterkte):
+    """Sand hiss: high, soft, in slow swells (a gentle breath over the dunes, no low roar)."""
+    x = filt(ruis(r, n, "roze"), (3000, 9000))
+    t = np.arange(n) / SR
+    m = 0.25 + 0.75 * np.clip(np.sin(2 * np.pi * (t / r.uniform(8, 12)) + r.uniform(0, 6)) * 0.5 + 0.5, 0, 1) ** 3
+    return x * m * sterkte
+
+
+def stem_murmel(r, n):
+    """One far-away voice babbling: a soft voiced buzz (pitch 140-320 Hz) through a vowel filter that changes per syllable."""
+    uit = np.zeros(n)
+    t = 0.0
+    sec = n / SR
+    f0 = r.uniform(140, 320)
+    while t < sec - 0.3:
+        if r.random() < 0.25:
+            t += r.uniform(0.3, 1.5)   # a pause between words
+            continue
+        d = r.uniform(0.09, 0.22)
+        m = int(d * SR)
+        tt = np.arange(m) / SR
+        f = f0 * (1 + 0.12 * r.standard_normal()) * (1 + 0.08 * np.sin(np.pi * tt / d))
+        ph = 2 * np.pi * np.cumsum(f) / SR
+        x = sum(np.sin(k * ph) / k for k in range(1, 12))
+        lo = [300, 450, 650, 800][int(r.integers(0, 4))]
+        x = filt(x, (lo, lo * r.uniform(2.2, 3.5)), order=1) * np.sin(np.pi * tt / d) ** 1.5
+        a = int(t * SR)
+        b = min(n, a + m)
+        uit[a:b] += x[: b - a]
+        t += d * r.uniform(0.85, 1.1)
+    return uit
+
+
+def zijde_bed(naam, b, r, sf):
+    n = b.n
+    t = np.arange(n) / SR
+    if naam == "duinen":
+        b += zandruis(r, n, 0.05)
+        b += filt(ruis(r, n, "bruin"), 260) * 0.04 * (0.6 + 0.4 * np.sin(2 * np.pi * t / 11.0))   # a faint warm breath
+        for _ in range(3):
+            plak(b.ev, galm(belletje(r), 1.6, 0.4), r.uniform(0, LUS), r.uniform(0.08, 0.16))
+        vogels(r, b.ev, 2, 0.15)
+        return -36
+    if naam == "oase":
+        x = filt(ruis(r, n, "roze"), (200, 1100))
+        golfjes = np.clip(np.sin(2 * np.pi * t / 3.1) + 0.6 * np.sin(2 * np.pi * t / 2.2 + 1), 0, None) ** 2
+        b += x * golfjes * 0.22
+        b += bladeren(r, n, 0.03)
+        for _ in range(12):
+            plak(b.ev, druppel(r) * 0.5, r.uniform(0, LUS), 0.2)
+        vogels(r, b.ev, 10, 0.35)
+        return -32
+    if naam == "bazaar":
+        stemmen = sum(stem_murmel(r, n) * r.uniform(0.4, 1.0) for _ in range(14))
+        stemmen = filt(stemmen, 2400) * 0.12
+        b += galm(stemmen, 1.4, 0.5, staart=False)
+        for _ in range(6):   # pots and cups clinking somewhere
+            m = int(0.25 * SR)
+            tt = np.arange(m) / SR
+            f = r.uniform(1800, 3200)
+            x = (np.sin(2 * np.pi * f * tt) + 0.5 * np.sin(2 * np.pi * f * 2.7 * tt)) * np.exp(-tt / 0.05)
+            plak(b.ev, galm(x, 1.0, 0.3), r.uniform(0, LUS), r.uniform(0.05, 0.12))
+        for _ in range(2):
+            plak(b.ev, galm(belletje(r), 1.4, 0.4), r.uniform(0, LUS), 0.08)
+        return -32
+    if naam == "sterren":
+        for f in (4400, 4700, 5000):
+            g = r.uniform(0.15, 0.35)
+            t0 = r.uniform(0, 2)
+            while t0 < LUS + 2:
+                x = krekel(r, f * r.uniform(0.99, 1.01), int(r.integers(3, 7)))
+                plak(b.ev, x, t0, g)
+                t0 += len(x) / SR + r.uniform(1.0, 4.0)
+        for _ in range(4):
+            plak(b.ev, galm(sterretje(r, sf), 2.0, 0.5), r.uniform(0, LUS), 0.22)
+        b += zandruis(r, n, 0.015)
+        b.cont = galm(b.cont, 1.4, 0.3, staart=False)
+        b.ev = circ_galm(b.ev, 1.6, 0.35)
+        return -36
+    if naam == "toren":
+        # the grey tower: a low sucking drone that breathes inwards (soft; it is the only grey spot of the zone)
+        zuig = 0.5 + 0.5 * np.sin(2 * np.pi * t / 5.5) ** 2
+        for f, g in ((55, 1.0), (55.3, 0.7), (82.4, 0.4), (110.2, 0.2)):
+            b += np.sin(2 * np.pi * f * t * (1 - 0.004 * zuig)) * g * 0.03 * zuig
+        b += filt(ruis(r, n, "roze"), (400, 1600)) * 0.025 * zuig ** 2   # the inhale
+        b.cont = galm(b.cont, 3.0, 0.5, staart=False)
+        return -35
+    raise ValueError(naam)
+
+
+ZIJDE_BEDDEN = ["duinen", "oase", "bazaar", "sterren", "toren"]
 
 
 LOS = {
@@ -340,18 +474,31 @@ LOS = {
 }
 AANTAL = {"vogel": 4, "druppel": 4, "golf": 2, "bij": 2, "kraak": 2, "glinster": 3, "krekel": 2}
 BEDDEN = ["weide", "bos", "sporen", "grot", "tempel", "meer", "berg", "kloof", "wortel", "kruin", "honing", "kust", "krekels"]
+# U-Z6MUZIEK: the Zijdeland beds + one-shots (appended, so the old seeds stay the same)
+BEDDEN += ZIJDE_BEDDEN
+LOS.update({
+    "belletje": lambda r, sf: galm(belletje(r), 1.6, 0.4),
+    "sterretje": lambda r, sf: galm(sterretje(r, sf), 2.0, 0.5),
+    "zoutzang": lambda r, sf: galm(zoutzang(r), 2.4, 0.5),
+})
+AANTAL.update({"belletje": 3, "sterretje": 3, "zoutzang": 3})
 
 
-def main():
+def main(alleen=()):
+    """alleen (U-Z6MUZIEK): only these beds / one-shot kinds, e.g. the Zijdeland ones; default everything."""
     from maak_muziek import sf2_pad
     from sf2 import SF2
     sf = SF2(sf2_pad())
     os.makedirs(OUT, exist_ok=True)
     totaal = 0
     for i, b in enumerate(BEDDEN):
+        if alleen and b not in alleen:
+            continue
         x = bed(b, np.random.default_rng(500 + i), sf)
         totaal += bewaar_ogg(os.path.join(OUT, f"bed_{b}.ogg"), x, SR, 0.55)
     for j, (soort, maak) in enumerate(LOS.items()):
+        if alleen and soort not in alleen:
+            continue
         for k in range(1, AANTAL[soort] + 1):
             r = np.random.default_rng(900 + j * 10 + k)
             x = maak(r, sf)
@@ -365,4 +512,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main(tuple(sys.argv[1:]))

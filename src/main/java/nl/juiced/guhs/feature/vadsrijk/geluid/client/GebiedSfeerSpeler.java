@@ -77,8 +77,9 @@ final class GebiedSfeerSpeler {
                 bed = s != null && GeluidPlan.binnenBed(s.bed()) ? s.bed() : "grot";
             }
         }
-        String hoofdBed = bed == null ? null : nacht && GeluidPlan.vogelBed(bed) ? "krekels" : bed;
-        String extraBed = bed != null && nacht && !GeluidPlan.vogelBed(bed) && !GeluidPlan.binnenBed(bed) ? "krekels" : null;
+        // (U-Z6MUZIEK: nachtBed = "sterren" in the Zijdeland - crickets + star twinkles + singing salt - else "krekels")
+        String hoofdBed = bed == null ? null : nacht && GeluidPlan.vogelBed(bed) ? GeluidPlan.nachtBed(bed) : bed;
+        String extraBed = bed != null && nacht && !GeluidPlan.vogelBed(bed) && !GeluidPlan.binnenBed(bed) ? GeluidPlan.nachtBed(bed) : null;
         hoofd = slot(mc, hoofd, hoofdBed);
         extra = slot(mc, extra, extraBed);
         huidig = hoofdBed == null ? "-" : hoofdBed + (extraBed != null ? " + " + extraBed : "");
@@ -87,7 +88,7 @@ final class GebiedSfeerSpeler {
             return;
         }
         volgendeOp = klok + 100 + R.nextInt(140);
-        String los = nacht && !GeluidPlan.binnenBed(hoofdBed) ? "krekels" : hoofdBed;
+        String los = nacht && !GeluidPlan.binnenBed(hoofdBed) ? GeluidPlan.nachtBed(bed) : hoofdBed;   // (U-Z6MUZIEK)
         double a = R.nextDouble() * Math.PI * 2, d = 6 + R.nextDouble() * 10;
         l.playLocalSound(p.getX() + Math.cos(a) * d, p.getY() + 1 + R.nextDouble() * 4, p.getZ() + Math.sin(a) * d,
                 GeluidSpeler.event(GeluidPlan.sfeerId(los)), SoundSource.AMBIENT, LOS_VOL * GeluidConfig.omgeving() * (0.75f + R.nextFloat() * 0.25f),

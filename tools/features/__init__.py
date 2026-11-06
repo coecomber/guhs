@@ -308,6 +308,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_v_int',
             # 1.10 round U, U-TAPIJT: the flying carpet (zone 6; Java: feature/vadsrijk/tapijt); after vadsrijk_t_rijdier
             'vadsrijk_u_tapijt',
+            # 1.10 round U, U-AUDIO2: boss phase music + fanfares, world point sounds, NPC voices (Java: feature/vadsrijk/geluid)
+            'vadsrijk_u_audio2',
+            'vadsrijk_u_z6muziek',   # U-Z6MUZIEK: zone-6 music + ambience (after u_audio2)
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

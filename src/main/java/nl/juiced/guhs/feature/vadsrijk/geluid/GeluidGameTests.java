@@ -186,4 +186,64 @@ public class GeluidGameTests {
         helper.assertTrue(StemPlan.toon("Bram") == StemPlan.toon("Bram"), "stable pitch");
         helper.succeed();
     }
+
+    // ------------------------------------------------------------------------------------------------------------- U-Z6MUZIEK
+
+    /** Zone 6: the area ids -> themes + beds, the towns, the tower, the box, day/night, the boss ids, the raid alias, the files. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void zijdeland(GameTestHelper helper) {
+        String[][] verwacht = {{"z6_roze_duinen", "roze_duinen", "duinen"}, {"z6_palmenkloven", "palmenkloven", "oase"},
+                {"z6_zoutvlakte", "zoutvlakte", "duinen"}, {"z6_ruinedal", "ruinedal", "duinen"}, {"z6_moederoase", "moederoase", "oase"}};
+        for (String[] v : verwacht) {
+            GeluidPlan.Streek s = GeluidPlan.streek(v[0], 0, 64, 0);
+            helper.assertTrue(s != null && s.themas().contains(v[1]) && s.bed().equals(v[2]), v[0] + " -> " + v[1] + "/" + v[2] + ", got " + s);
+        }
+        helper.assertTrue(GeluidPlan.streek("z6_zoutvlakte", 0, 64, 0).themas().contains("zoutvlakte_nacht"), "salt flat night theme");
+        GeluidPlan.Streek toren = GeluidPlan.streek("z6_toren", 0, 64, 0);
+        helper.assertTrue(toren != null && toren.themas().isEmpty() && toren.bed().equals("toren"), "tower: drone only");
+        for (String stad : List.of("z6_rozenkloof", "z6_saffraanpoort")) {
+            helper.assertTrue(GeluidPlan.streek(stad, 0, 64, 0) == null, stad + ": a town (town tunes)");
+            helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.muziekVan(
+                    nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.stadVan(stad)).size() == 2, stad + ": two tunes");
+        }
+        helper.assertTrue(GeluidPlan.streek("z6_kerker_iets", 0, 64, 0).bed().equals("duinen"), "other z6 id -> zone streek");
+        helper.assertTrue(GeluidPlan.streek(null, 3700, 70, -700) != null, "zone-6 box");
+        // day / night
+        List<String> zv = GeluidPlan.streek("z6_zoutvlakte", 0, 64, 0).themas();
+        helper.assertTrue("zoutvlakte_nacht".equals(GeluidPlan.dagNacht(zv, true)) && "zoutvlakte".equals(GeluidPlan.dagNacht(zv, false))
+                && GeluidPlan.dagNacht(List.of("hoogvads", "hoogvads_markt"), true) == null, "dagNacht");
+        helper.assertTrue(GeluidPlan.nachtBed("duinen").equals("sterren") && GeluidPlan.nachtBed("oase").equals("sterren")
+                && GeluidPlan.nachtBed("weide").equals("krekels") && GeluidPlan.vogelBed("duinen") && GeluidPlan.binnenBed("toren"), "night beds");
+        // bosses by entity path (u-z6wezens / u-z6raid ids) and the raid's per-phase music ids
+        String[][] bazen = {{"vr_z6_baas_wormelien", "wormelien"}, {"vr_z6_baas_zoutkolos", "zoutkolos"},
+                {"vr_z6_baas_astrolabiumwachter", "sterrenwacht"}, {"vr_z6_baas_glimmertje", "glimmertje"},
+                {"vr_z6_baas_sterrenguh", "verzonken_sterrenguh"}, {"vr_z6raid_baas_zandwachter", "zandwachter"},
+                {"vr_z6raid_baas_spiegelvizier", "spiegelvizier"}, {"vr_z6raid_baas_ster_knuffel", "sterrenbeelden"},
+                {"vr_z6raid_baas_ster_pluis", "sterrenbeelden"}, {"vr_z6raid_baas_ringeling", "ringeling"}};
+        for (String[] v : bazen) {
+            helper.assertTrue(GeluidPlan.baasThema(v[0]).equals(v[1]), v[0] + " -> " + v[1] + ", got " + GeluidPlan.baasThema(v[0]));
+        }
+        GeluidPlan.Alias a1 = GeluidPlan.alias("guhs:vr.z6raid.muziek.ringeling_2"), a2 = GeluidPlan.alias("guhs:vr.z6raid.muziek.ringeling_3"),
+                a3 = GeluidPlan.alias("guhs:vr.z6raid.muziek.zandwachter_2"), a4 = GeluidPlan.alias("guhs:vr.z6raid.muziek.sterrenbeelden");
+        helper.assertTrue(a1 != null && a1.thema().equals("ringeling") && !a1.laatsteFase() && a2 != null && a2.laatsteFase()
+                && a3 != null && a3.laatsteFase() && a4 != null && !a4.laatsteFase(), "raid alias phases");
+        helper.assertTrue(GeluidPlan.alias("guhs:vr.z6raid.muziek.opgevrolijkt") == null && GeluidPlan.alias("guhs:vr.geluid.baas.vahoegnir") == null,
+                "no alias for other ids");
+        helper.assertTrue("spiegelvizier".equals(GeluidPlan.themaVanId("guhs:vr.z6raid.muziek.spiegelvizier_2")), "themaVanId via alias");
+        // the files: town tunes, the zone's one-shots, the raid's extra ids
+        for (String n : List.of("rozenkloof_1", "rozenkloof_2", "saffraanpoort_1", "saffraanpoort_2")) {
+            ogg(helper, "muziek/stad/" + n);
+            helper.assertTrue(BuiltInRegistries.SOUND_EVENT.containsKey(Guhs.id("vr.stad.muziek." + n)), "not registered: " + n);
+        }
+        for (String n : List.of("belletje_1", "sterretje_1", "zoutzang_1")) {
+            ogg(helper, "sfeer/" + n);
+        }
+        // the first visit of De Moederoase plays its own stinger instead of the generic discovery
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        GeluidRegistry.GESTUURD.remove(p.getUUID());
+        Haken.GEBIED_BETREDEN.forEach(h -> h.accept(p, "z6_moederoase"));
+        List<String> l = GeluidRegistry.GESTUURD.getOrDefault(p.getUUID(), List.of());
+        helper.assertTrue(l.contains("moederoase") && !l.contains("ontdekking"), "oasis stinger: " + l);
+        helper.succeed();
+    }
 }

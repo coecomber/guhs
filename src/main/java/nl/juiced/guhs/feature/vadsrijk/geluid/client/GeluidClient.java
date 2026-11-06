@@ -42,7 +42,7 @@ public final class GeluidClient {
     private static void ontvang(String soort, String naam) {
         switch (soort) {
             case "stinger" -> GeluidSpeler.stinger(naam);
-            case "gebied", "baas" -> GeluidSpeler.voorbeeld(soort, naam);
+            case "gebied", "baas", "stad" -> GeluidSpeler.voorbeeld(soort, naam);   // (U-Z6MUZIEK: + stad = a town tune)
             case "bed" -> GebiedSfeerSpeler.voorbeeld(naam);
             case "stop" -> {
                 GeluidSpeler.stopAlles();
