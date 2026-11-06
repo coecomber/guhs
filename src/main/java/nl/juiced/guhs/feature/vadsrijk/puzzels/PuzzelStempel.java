@@ -278,6 +278,7 @@ public final class PuzzelStempel {
             l.setBlock(o.offset(b), deur, flags);
         }
         aansluiten(l, d, o);
+        nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.gebied(l, o.offset(-1, -2, -1), o.offset(d.breed(), d.hoogte(), d.diep()));   // U-HEKKEN: fences/bars/walls connected
         // a player standing inside the new floor goes on top of it
         for (ServerPlayer p : l.getEntitiesOfClass(ServerPlayer.class, new net.minecraft.world.phys.AABB(o.getX() - 1, o.getY() - 4, o.getZ() - 1,
                 o.getX() + d.breed() + 1, o.getY() + d.hoogte(), o.getZ() + d.diep() + 1))) {

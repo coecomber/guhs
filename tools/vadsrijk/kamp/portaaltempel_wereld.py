@@ -35,6 +35,9 @@ def main(uit):
     P = B.Palet()
     lut = P.lut(S.pal)
     g = lut[v]
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    import verbind   # U-HEKKEN: the shared connection pass (also for this separate structure)
+    verbind.verbind_vol(g, P.lijst, P.id)
     xs, ys, zs = np.nonzero(g)
     ids = g[xs, ys, zs]
     gebruikt, inv = np.unique(ids, return_inverse=True)

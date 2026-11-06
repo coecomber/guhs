@@ -53,6 +53,22 @@ def main():
     ap.add_argument("--zone", default="alle", choices=("1", "2", "3", "4", "5", "alle"))   # [zone 2] [zone 3] [T-Z4WERELD] [T-Z5WERELD] which zone(s) to build
     ap.add_argument("--werkers", type=int, default=6)   # [zone 3] parallel tile workers for zone 3
     a = ap.parse_args()
+    _t_verbind = time.time()                    # U-HEKKEN: every tile written from now on gets the connection pass
+    os.environ["GUHS_VERBIND_LATER"] = "1"      # U-HEKKEN: the zone makers leave the pass to us (verbind.py)
+    try:
+        _main(a)
+    finally:
+        os.environ.pop("GUHS_VERBIND_LATER", None)
+    sys.path.insert(0, HIER)
+    import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
+    verbind.na_sinds(_t_verbind)
+    if a.audit and not a.alleen and a.zone in ("1", "alle"):   # (was at the end of zone 1, before the pass)
+        subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
+    if a.audit and not a.alleen:                # U-HEKKEN: the connection check (AUDIT_VERBIND.md), must be ~0
+        subprocess.run([sys.executable, os.path.join(HIER, "audit", "verbindcheck.py")], cwd=ROOT, check=True)
+
+
+def _main(a):
     if a.zone == "2":   # [zone 2] only the zone-2 map (tools/vadsrijk/zone2)
         return zone2(a)
     if a.zone == "3":   # [zone 3] only the zone-3 map (tools/vadsrijk/zone3)
@@ -119,8 +135,7 @@ def main():
         import barriere      # T-WERELD: the Splinterwand tile row between the zone-1 and zone-2 grids (tz -12)
         barriere.maak_tegels()
     # hook (fix round 1, veilig): integration runs this once after the final regen, so the safe spots follow the map
-    if a.audit and not a.alleen:
-        subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
+    # U-HEKKEN: the walkability audit moved to main(), after the connection pass (the pass may raise a fence post)
     if a.zone == "alle":   # [zone 2] then the zone-2 map
         zone2(a)
         zone3(a)          # [zone 3] and the zone-3 map
