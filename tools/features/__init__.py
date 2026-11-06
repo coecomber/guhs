@@ -298,6 +298,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_tabs',
             # 1.10 round U, U-AUDIO2: boss phase music + fanfares, world point sounds, NPC voices (Java: feature/vadsrijk/geluid)
             'vadsrijk_u_audio2',
+            # 1.10 round U, U-SITE: live map opt-out texts (Java: feature/vadsrijk/web)
+            'vadsrijk_u_site',
             # 1.10 round U, U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles - texts (Java: feature/vadsrijk/gilden)
             'vadsrijk_u_gilden',
             # 1.10 round U, U-HUIZEN: player housing, Het Knuffelkwartier (dimension + texts; Java: feature/vadsrijk/huizen)

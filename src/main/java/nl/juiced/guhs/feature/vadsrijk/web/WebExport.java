@@ -99,6 +99,7 @@ public final class WebExport {
     public static final List<java.util.function.Consumer<MinecraftServer>> EXTRA_HISCORES = new java.util.concurrent.CopyOnWriteArrayList<>();
     static Path map = Path.of("web", "live");
     static int statusS = 60, wereldS = 30, hiscoresS = 300, spelersS = 600;
+    static int positiesS = 10;   // U-SITE: posities.json (live map)
     private static long start;
     private static int tick;
     @Nullable
@@ -118,6 +119,7 @@ public final class WebExport {
         p.setProperty("wereld_s", "30");
         p.setProperty("hiscores_s", "300");
         p.setProperty("spelers_s", "600");
+        p.setProperty("posities_s", "10");   // U-SITE
         try {
             if (Files.exists(f)) {
                 try (InputStream in = Files.newInputStream(f)) {
@@ -139,6 +141,7 @@ public final class WebExport {
         wereldS = getal(p, "wereld_s", 30);
         hiscoresS = getal(p, "hiscores_s", 300);
         spelersS = getal(p, "spelers_s", 600);
+        positiesS = getal(p, "posities_s", 10);   // U-SITE
         LOG.info("[vadsrijk web] export {} -> {}", aan ? "AAN" : "uit", map);
     }
 
@@ -210,6 +213,9 @@ public final class WebExport {
         if (tick % (wereldS * 20) == 0) {
             schrijf("wereld.json", wereld(server));
         }
+        if (tick % (positiesS * 20) == 0) {   // U-SITE: the live map
+            schrijf("posities.json", WebPosities.bouw(server));
+        }
         if (tick % (spelersS * 20) == 0) {
             server.getPlayerList().getPlayers().forEach(p -> bewaar(server, p));
         }
@@ -221,6 +227,7 @@ public final class WebExport {
     /** Everything at once (start, dev command). */
     public static void alles(MinecraftServer server) {
         server.getPlayerList().getPlayers().forEach(p -> bewaar(server, p));
+        schrijf("posities.json", WebPosities.bouw(server));   // U-SITE (first, so the profiles get "waar")
         schrijf("status.json", status(server));
         schrijf("wereld.json", wereld(server));
         hiscores(server);
@@ -473,6 +480,10 @@ public final class WebExport {
             o.addProperty(k, t.getIntOr(k, 0));
         }
         o.addProperty("bazen_totaal", bazenTotaal(t));
+        String waar = WebPosities.WAAR.get(t.getStringOr("naam", "").toLowerCase(Locale.ROOT));   // U-SITE: online + not hidden
+        if (waar != null) {
+            o.addProperty("waar", waar);
+        }
         o.add("klassen", GSON.toJsonTree(map(t.getCompoundOrEmpty("klassen"), false)));
         o.add("boek", GSON.toJsonTree(map(t.getCompoundOrEmpty("boek"), false)));
         o.add("bazen", GSON.toJsonTree(map(t.getCompoundOrEmpty("bazen"), false)));

@@ -47,6 +47,21 @@ public final class WebRegistry {
             }
         });
         NeoForge.EVENT_BUS.addListener(WebRegistry::commando);
+        NeoForge.EVENT_BUS.addListener(WebRegistry::kaartCommando);   // U-SITE
+    }
+
+    /** U-SITE: every player can hide from (and come back on) the live map of guhs.nl/vadsrijk. */
+    private static void kaartCommando(RegisterCommandsEvent event) {
+        event.getDispatcher().register(VadsrijkCommando.wortel(Commands.literal("kaart")
+                .then(Commands.literal("verberg").executes(c -> kaart(c.getSource().getPlayerOrException(), true)))
+                .then(Commands.literal("toon").executes(c -> kaart(c.getSource().getPlayerOrException(), false)))));
+    }
+
+    private static int kaart(ServerPlayer p, boolean verberg) {
+        WebStats.get(p.level().getServer()).zetVerborgen(p.getUUID(), verberg);
+        p.sendSystemMessage(Component.translatable(verberg ? "vadsrijk.web.kaart.verborgen" : "vadsrijk.web.kaart.getoond")
+                .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+        return 1;
     }
 
     private static void commando(RegisterCommandsEvent event) {

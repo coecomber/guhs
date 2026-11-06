@@ -20,6 +20,19 @@ public final class WebStats extends SavedData {
     static final SavedDataType<WebStats> TYPE = GuhSavedData.tagType("vadsrijk_web", WebStats::new, WebStats::load, WebStats::save);
 
     final Map<UUID, CompoundTag> spelers = new LinkedHashMap<>();
+    /** U-SITE: players who hid themselves from the live map ({@code /guhs vadsrijk kaart verberg}). */
+    final java.util.Set<UUID> verborgen = new java.util.LinkedHashSet<>();
+
+    public boolean verborgen(UUID id) {
+        return verborgen.contains(id);
+    }
+
+    /** U-SITE: opt out of (true) / back on (false) the live map. */
+    public void zetVerborgen(UUID id, boolean v) {
+        if (v ? verborgen.add(id) : verborgen.remove(id)) {
+            setDirty();
+        }
+    }
 
     public static WebStats get(MinecraftServer server) {
         return GuhSavedData.get(server.overworld(), TYPE, "guhs_vadsrijk_web");
@@ -57,6 +70,15 @@ public final class WebStats extends SavedData {
 
     private static WebStats load(CompoundTag t) {
         WebStats w = new WebStats();
+        for (net.minecraft.nbt.Tag v : t.getListOrEmpty("_verborgen")) {   // U-SITE
+            v.asString().ifPresent(s -> {
+                try {
+                    w.verborgen.add(UUID.fromString(s));
+                } catch (IllegalArgumentException ignored) {
+                    // not a uuid
+                }
+            });
+        }
         for (String k : t.keySet()) {
             try {
                 w.spelers.put(UUID.fromString(k), t.getCompoundOrEmpty(k));
@@ -70,6 +92,9 @@ public final class WebStats extends SavedData {
     private CompoundTag save() {
         CompoundTag t = new CompoundTag();
         spelers.forEach((k, v) -> t.put(k.toString(), v));
+        net.minecraft.nbt.ListTag l = new net.minecraft.nbt.ListTag();   // U-SITE
+        verborgen.forEach(u -> l.add(net.minecraft.nbt.StringTag.valueOf(u.toString())));
+        t.put("_verborgen", l);
         return t;
     }
 }

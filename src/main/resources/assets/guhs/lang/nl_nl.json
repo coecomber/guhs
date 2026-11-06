@@ -44578,5 +44578,7 @@
   "vadsrijk.vint.bond.voet": "Knoppen openen het bondspaneel in de chat (ook: /bond, /bc om te chatten)",
   "vadsrijk.vint.huis.titel": "Mijn huis in het Knuffelkwartier",
   "vadsrijk.vint.huis.intro": "Het Knuffelkwartier is een eigen buurtje met straatjes, buren, een plein en een markt. Je koopt er een kavel met een huisje dat je zelf inricht.",
-  "vadsrijk.vint.huis.waar": "Erheen: praat met de Kwartiermeester op het plein van elke hoofdstad (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads)."
+  "vadsrijk.vint.huis.waar": "Erheen: praat met de Kwartiermeester op het plein van elke hoofdstad (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads).",
+  "vadsrijk.web.kaart.verborgen": "Je staat niet meer op de live kaart van guhs.nl. Terug erop? /guhs vadsrijk kaart toon",
+  "vadsrijk.web.kaart.getoond": "Je staat weer op de live kaart van guhs.nl (niet in kerkers, huisjes en de Bondenvallei). Weg ermee? /guhs vadsrijk kaart verberg"
 }
