@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gold_nugget",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "guhs:kristallen_hanger",
+    "count": 2
+  }
+}

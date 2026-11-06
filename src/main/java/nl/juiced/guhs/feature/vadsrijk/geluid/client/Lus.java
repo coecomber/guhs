@@ -21,6 +21,8 @@ final class Lus extends AbstractTickableSoundInstance {
     /** 1 = normal; the ducking target (e.g. 0.3 while a stinger plays); the real factor glides there. */
     float duikDoel = 1f;
     private float duik = 1f;
+    /** U-AUDIO2: the crossfade share (boss theme vs its last-phase loop): glides linearly to mengDoel in ~2 s. */
+    float meng = 1f, mengDoel = 1f;
     final String naam;
 
     Lus(String naam, SoundEvent event, SoundSource bron, DoubleSupplier doel, int inFade, boolean lus) {
@@ -62,6 +64,7 @@ final class Lus extends AbstractTickableSoundInstance {
     public void tick() {
         leeftijd++;
         duik += (duikDoel - duik) * 0.08f;
+        meng = mengDoel > meng ? Math.min(mengDoel, meng + 0.025f) : Math.max(mengDoel, meng - 0.025f);
         if (uitFade >= 0) {
             uitLeeftijd++;
             volume = Math.max(0.0001f, uitVan * (1f - uitLeeftijd / (float) uitFade));
@@ -70,6 +73,6 @@ final class Lus extends AbstractTickableSoundInstance {
             }
             return;
         }
-        volume = (float) Math.max(0.0001, doel.getAsDouble() * duik * Math.min(1f, leeftijd / (float) inFade));
+        volume = (float) Math.max(0.0001, doel.getAsDouble() * duik * meng * Math.min(1f, leeftijd / (float) inFade));
     }
 }

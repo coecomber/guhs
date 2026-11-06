@@ -27,6 +27,8 @@
     "client.FtbQuestsLocaleMixin",
     "client.GuhrioCameraMixin",
     "client.LevelRendererMixin",
+    "client.UHudEmotePoseMixin",
+    "client.TapijtZitMixin",
     "client.VerhaalEntityRenderMixin",
     "client.WeerNeerslagMixin"
   ]

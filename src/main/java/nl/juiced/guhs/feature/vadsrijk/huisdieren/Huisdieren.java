@@ -285,6 +285,7 @@ public final class Huisdieren {
         Vec3 plek = HuisdierEntity.plekBij(p);
         e.snapTo(plek.x, plek.y, plek.z, p.getYRot(), 0);
         e.zet(h.id(), p.getUUID());
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(e, "huisdier:" + p.getUUID());   // U-DUBBEL: one pet per player (a hidden old one is replaced)
         e.setCustomName(naamVan(h, p.getName()));   // N-EXTRA: "Mini Koning Klodder van Juiced" (shown when you look at it)
         sl.addFreshEntity(e);
         UIT.put(p.getUUID(), e);

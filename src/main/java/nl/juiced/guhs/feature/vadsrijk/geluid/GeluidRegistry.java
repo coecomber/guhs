@@ -15,6 +15,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
@@ -68,6 +69,17 @@ public final class GeluidRegistry {
             geluid(GeluidPlan.bedId(b));
             geluid(GeluidPlan.sfeerId(b));
         }
+        // U-AUDIO2: the last-phase loops, the fanfares, the NPC voices and the world point sounds
+        for (String t : GeluidPlan.BAAS_THEMAS) {
+            geluid(GeluidPlan.faseId(t));
+            geluid(GeluidPlan.fanfareId(t));
+        }
+        for (String st : StemPlan.SOORTEN) {
+            geluid(StemPlan.id(st));
+        }
+        for (String w : WereldBron.SOORTEN) {
+            geluid(WereldBron.id(w));
+        }
     }
 
     private GeluidRegistry() {
@@ -88,8 +100,9 @@ public final class GeluidRegistry {
             }
         });
         Haken.VERSLAGEN.add(v -> {
-            if (v.mob() instanceof VadsrijkBaas) {
-                v.helpers().forEach(p -> stinger(p, "baas_verslagen"));
+            if (v.mob() instanceof VadsrijkBaas b) {
+                String thema = themaVan(b);   // U-AUDIO2: the boss's own fanfare (the client falls back to the shared stinger)
+                v.helpers().forEach(p -> fanfare(p, thema));
             }
         });
         // in FRONT of the Verkenningsboek's own listener, so "not marked yet" still means "first time here"
@@ -118,6 +131,48 @@ public final class GeluidRegistry {
         PacketDistributor.sendToPlayer(p, new GeluidPayloads.Speel("stinger", soort));
     }
 
+    // ------------------------------------------------------------------------------------------------ U-AUDIO2
+
+    /** The boss theme of this boss: its own muziek() id when that is one of ours, else by its entity type. */
+    public static String themaVan(VadsrijkBaas b) {
+        net.minecraft.resources.Identifier m = b.muziek();
+        String t = m == null ? null : GeluidPlan.themaVanId(m.toString());
+        if (t != null) {
+            return t;
+        }
+        return GeluidPlan.baasThema(BuiltInRegistries.ENTITY_TYPE.getKey(b.getType()).getPath());
+    }
+
+    /** A boss beaten: its own victory fanfare for this helper. */
+    public static void fanfare(ServerPlayer p, String thema) {
+        noteer(p, "fanfare:" + thema);
+        PacketDistributor.sendToPlayer(p, new GeluidPayloads.Speel("fanfare", thema));
+    }
+
+    /**
+     * (hook in VadsrijkBaas, U-AUDIO2) A boss reached phase {@code fase} of {@code max}: everyone within 64 blocks hears the
+     * last-phase layer fade in (the client only reacts when that boss's theme is the one playing).
+     */
+    public static void fase(VadsrijkBaas b, int fase, int max) {
+        if (!(b.level() instanceof net.minecraft.server.level.ServerLevel sl)) {
+            return;
+        }
+        String naam = b.getId() + ":" + fase + ":" + max;
+        for (ServerPlayer p : sl.players()) {
+            if (p.distanceToSqr(b) <= 64 * 64) {
+                noteer(p, "fase:" + fase + "/" + max);
+                PacketDistributor.sendToPlayer(p, new GeluidPayloads.Speel("fase", naam));
+            }
+        }
+    }
+
+    private static void noteer(ServerPlayer p, String wat) {
+        List<String> l = GESTUURD.computeIfAbsent(p.getUUID(), u -> new java.util.concurrent.CopyOnWriteArrayList<>());
+        if (l.size() < 64) {
+            l.add(wat);
+        }
+    }
+
     /** The quest hook lives in the npc slice: a tiny holder so this class compiles without touching it. */
     private static final class NpcApiHaak {
         static void koppel() {
@@ -141,6 +196,12 @@ public final class GeluidRegistry {
         g.then(soort("baas", GeluidPlan.BAAS_THEMAS));
         g.then(soort("stinger", GeluidPlan.STINGERS));
         g.then(soort("bed", GeluidPlan.BEDDEN));
+        // U-AUDIO2: a boss theme with its last phase fading in after 12 s, the fanfares, the NPC voices, the world sounds
+        g.then(soort("fase", GeluidPlan.BAAS_THEMAS));
+        g.then(soort("fanfare", GeluidPlan.BAAS_THEMAS));
+        g.then(soort("stem", StemPlan.SOORTEN));
+        g.then(soort("wereld", WereldBron.SOORTEN));
+        g.then(Commands.literal("wereldinfo").executes(c -> stuur(c.getSource(), "wereldinfo", "")));
         event.getDispatcher().register(VadsrijkCommando.wortel(g));
     }
 
@@ -160,7 +221,7 @@ public final class GeluidRegistry {
     private static int stuur(CommandSourceStack src, String soort, String naam) throws CommandSyntaxException {
         ServerPlayer p = src.getPlayerOrException();
         PacketDistributor.sendToPlayer(p, new GeluidPayloads.Speel(soort, naam));
-        if (!soort.equals("info")) {
+        if (!soort.equals("info") && !soort.equals("wereldinfo")) {
             src.sendSuccess(() -> Component.literal("Geluid: " + soort + (naam.isEmpty() ? "" : " " + naam)).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         }
         return 1;
@@ -174,6 +235,10 @@ public final class GeluidRegistry {
         regels.add(regel("baas", GeluidPlan.BAAS_THEMAS));
         regels.add(regel("stinger", GeluidPlan.STINGERS));
         regels.add(regel("bed", GeluidPlan.BEDDEN));
+        regels.add(regel("fase", GeluidPlan.BAAS_THEMAS));
+        regels.add(regel("fanfare", GeluidPlan.BAAS_THEMAS));
+        regels.add(regel("stem", StemPlan.SOORTEN));
+        regels.add(regel("wereld", WereldBron.SOORTEN));
         regels.add(Component.literal("[stop] ").withStyle(st -> st.withColor(ChatFormatting.RED)
                         .withClickEvent(new ClickEvent.RunCommand("/guhs vadsrijk geluid stop")))
                 .append(Component.literal("[nu: gebiedsmuziek zonder stilte] ").withStyle(st -> st.withColor(ChatFormatting.GREEN)

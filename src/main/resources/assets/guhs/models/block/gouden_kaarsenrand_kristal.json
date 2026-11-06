@@ -1,0 +1,229 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "goud": "minecraft:block/gold_block",
+    "kaars": "guhs:block/hoogvads_licht/kaars",
+    "vlam": "guhs:block/hoogvads_licht/vlam",
+    "kristal": "guhs:block/hoogvads_licht/kristal",
+    "particle": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        7.55,
+        -3.0,
+        7.55
+      ],
+      "to": [
+        8.45,
+        0.6,
+        8.45
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.55,
+            6.2,
+            8.45,
+            9.8
+          ],
+          "texture": "#kristal"
+        },
+        "south": {
+          "uv": [
+            7.55,
+            6.2,
+            8.45,
+            9.8
+          ],
+          "texture": "#kristal"
+        },
+        "east": {
+          "uv": [
+            7.55,
+            6.2,
+            8.45,
+            9.8
+          ],
+          "texture": "#kristal"
+        },
+        "west": {
+          "uv": [
+            7.55,
+            6.2,
+            8.45,
+            9.8
+          ],
+          "texture": "#kristal"
+        },
+        "up": {
+          "uv": [
+            7.55,
+            7.55,
+            8.45,
+            8.45
+          ],
+          "texture": "#kristal"
+        },
+        "down": {
+          "uv": [
+            7.55,
+            7.55,
+            8.45,
+            8.45
+          ],
+          "texture": "#kristal"
+        }
+      },
+      "light_emission": 10
+    },
+    {
+      "from": [
+        7.25,
+        -4.6,
+        7.25
+      ],
+      "to": [
+        8.75,
+        -3.0,
+        8.75
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.25,
+            7.2,
+            8.75,
+            8.8
+          ],
+          "texture": "#kristal"
+        },
+        "south": {
+          "uv": [
+            7.25,
+            7.2,
+            8.75,
+            8.8
+          ],
+          "texture": "#kristal"
+        },
+        "east": {
+          "uv": [
+            7.25,
+            7.2,
+            8.75,
+            8.8
+          ],
+          "texture": "#kristal"
+        },
+        "west": {
+          "uv": [
+            7.25,
+            7.2,
+            8.75,
+            8.8
+          ],
+          "texture": "#kristal"
+        },
+        "up": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#kristal"
+        },
+        "down": {
+          "uv": [
+            7.25,
+            7.25,
+            8.75,
+            8.75
+          ],
+          "texture": "#kristal"
+        }
+      },
+      "rotation": {
+        "origin": [
+          8,
+          -3.0,
+          8
+        ],
+        "axis": "y",
+        "angle": 45
+      },
+      "light_emission": 10
+    },
+    {
+      "from": [
+        7.7,
+        -5.4,
+        7.7
+      ],
+      "to": [
+        8.3,
+        -4.6,
+        8.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.7,
+            7.6,
+            8.3,
+            8.4
+          ],
+          "texture": "#kristal"
+        },
+        "south": {
+          "uv": [
+            7.7,
+            7.6,
+            8.3,
+            8.4
+          ],
+          "texture": "#kristal"
+        },
+        "east": {
+          "uv": [
+            7.7,
+            7.6,
+            8.3,
+            8.4
+          ],
+          "texture": "#kristal"
+        },
+        "west": {
+          "uv": [
+            7.7,
+            7.6,
+            8.3,
+            8.4
+          ],
+          "texture": "#kristal"
+        },
+        "up": {
+          "uv": [
+            7.7,
+            7.7,
+            8.3,
+            8.3
+          ],
+          "texture": "#kristal"
+        },
+        "down": {
+          "uv": [
+            7.7,
+            7.7,
+            8.3,
+            8.3
+          ],
+          "texture": "#kristal"
+        }
+      },
+      "light_emission": 10
+    }
+  ]
+}

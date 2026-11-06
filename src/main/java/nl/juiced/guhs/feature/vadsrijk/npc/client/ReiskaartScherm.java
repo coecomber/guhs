@@ -27,7 +27,7 @@ import nl.juiced.guhs.feature.vadsrijk.npc.Reiskaart;
  * reached through the story (and the teasers zone 3 / zone 4) are greyed with a big "?", their silhouette still visible.
  * Clicking an open place sends {@link NpcPayloads.ReisKies}; the server checks and flies (the existing flight scenes).
  */
-public final class ReiskaartScherm extends Screen {
+public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: Geschaald
     static final Identifier KAART = Guhs.id("textures/gui/vadsrijk/reiskaart.png");
     static final int KW = 768, KH = 480;
     /** Place -> its spot on the image (fractions) and the half size of its land (for the grey veil). Keep in sync with the art. */
@@ -51,26 +51,40 @@ public final class ReiskaartScherm extends Screen {
     private String hover;
 
     public ReiskaartScherm(NpcPayloads.Reiskaart kaart) {
+        this(kaart, false);
+    }
+
+    /** U-TABS: in the Vadsrijk-menu (tab Reiskaart): the map in the menu frame, look only (flying = at an airship NPC). */
+    private final boolean menu;
+    private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
+
+    public ReiskaartScherm(NpcPayloads.Reiskaart kaart, boolean menu) {
         super(Component.translatable("vadsrijk.npc.reiskaart.titel"));
         this.kaart = kaart;
+        this.menu = menu;
+    }
+
+    @Override
+    public float menuSchaal() {
+        return menu && kader != null ? kader.schaal() : 1f;
     }
 
     // ---- layout -----------------------------------------------------------------------------------------------------------------
 
     private int vx0() {
-        return 12;
+        return menu ? kader.left() + 4 : 12;
     }
 
     private int vy0() {
-        return 30;
+        return menu ? kader.top() + nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 3 : 30;
     }
 
     private int vx1() {
-        return width - 12;
+        return menu ? kader.left() + kader.w() - 4 : width - 12;
     }
 
     private int vy1() {
-        return height - 30;
+        return menu ? kader.top() + kader.h() - 14 : height - 30;
     }
 
     /** The close button (the ✕, top right in the title band). */
@@ -90,6 +104,11 @@ public final class ReiskaartScherm extends Screen {
 
     @Override
     protected void init() {
+        if (menu) {   // U-TABS
+            kader = nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.kader();
+            width = kader.lw();
+            height = kader.lh();
+        }
         float[] h = PLEKKEN.getOrDefault(kaart.hier(), PLEKKEN.get("zwamzoet"));
         camX = h[0] * KW - (vx1() - vx0()) / 2f;
         camY = h[1] * KH - (vy1() - vy0()) / 2f;
@@ -126,7 +145,11 @@ public final class ReiskaartScherm extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         g.fill(0, 0, width, height, 0xE0281A30);
-        g.fill(vx0() - 3, vy0() - 3, vx1() + 3, vy1() + 3, ROZE);
+        if (menu) {   // U-TABS: the menu frame around the map
+            nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.tekenKader(g, font, kader.left(), kader.top(), kader.w(), kader.h(), title,
+                    "reiskaart", mouseX, mouseY);
+        }
+        g.fill(vx0() - (menu ? 1 : 3), vy0() - (menu ? 1 : 3), vx1() + (menu ? 1 : 3), vy1() + (menu ? 1 : 3), ROZE);
         g.enableScissor(vx0(), vy0(), vx1(), vy1());
         g.blit(RenderPipelines.GUI_TEXTURED, KAART, sx(0), sy(0), 0f, 0f, KW, KH, KW, KH);
         // the grey veil over the places you have not reached (and the teasers): the silhouette stays visible
@@ -190,6 +213,11 @@ public final class ReiskaartScherm extends Screen {
             badge(g, p, x, y, over, t, a);
         }
         g.disableScissor();
+        if (menu) {   // U-TABS: no own title / close button; a hint line: look only
+            g.centeredText(font, Component.translatable("vadsrijk.menu.reiskaart.uitleg"), kader.left() + kader.w() / 2, vy1() + 3, 0xFF8A5A84);
+            hoverKaartje(g, mouseX, mouseY);
+            return;
+        }
         // title and the hint line
         g.centeredText(font, title.copy().withStyle(ChatFormatting.BOLD), width / 2, 11, 0xFFFFE6EE);
         g.centeredText(font, Component.translatable("vadsrijk.npc.reiskaart.uitleg"), width / 2, height - 20, 0xFFE6D6EE);
@@ -202,10 +230,15 @@ public final class ReiskaartScherm extends Screen {
         if (overX) {
             g.setTooltipForNextFrame(font, Component.translatable("vadsrijk.npc.reiskaart.sluit"), mouseX, mouseY);
         }
+        hoverKaartje(g, mouseX, mouseY);
+    }
+
+    private void hoverKaartje(GuiGraphicsExtractor g, int mouseX, int mouseY) {
         if (hover != null) {
             NpcPayloads.ReisPlek p = plek(hover);
             if (p != null) {
-                Component n = naam(p), r = regel(p);
+                Component n = naam(p), r = menu && p.staat() == Reiskaart.OPEN
+                        ? Component.translatable("vadsrijk.menu.reiskaart.open").withStyle(ChatFormatting.LIGHT_PURPLE) : regel(p);
                 int w = Math.max(font.width(n), font.width(r)) + 8;
                 int tx = Math.min(mouseX + 12, width - w - 2), ty = Math.max(2, mouseY - 26);
                 g.fill(tx, ty, tx + w, ty + 23, 0xF0301A26);
@@ -273,7 +306,14 @@ public final class ReiskaartScherm extends Screen {
         if (super.mouseClicked(event, doubleClick)) {
             return true;
         }
-        if (event.button() == 0 && opSluit(event.x(), event.y())) {
+        if (menu && event.button() == 0 && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(), kader.left(), kader.top(),
+                kader.w(), font.width(title.copy().withStyle(ChatFormatting.BOLD)), "reiskaart")) {   // U-TABS
+            return true;
+        }
+        if (menu && (event.x() < vx0() || event.x() >= vx1() || event.y() < vy0() || event.y() >= vy1())) {
+            return false;
+        }
+        if (!menu && event.button() == 0 && opSluit(event.x(), event.y())) {
             Minecraft.getInstance().getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
                     net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1f));
             onClose();
@@ -303,7 +343,7 @@ public final class ReiskaartScherm extends Screen {
     public boolean mouseReleased(MouseButtonEvent event) {
         if (druk) {
             druk = false;
-            if (sleep < 4 && hover != null) {
+            if (sleep < 4 && hover != null && !menu) {   // (U-TABS: the menu's map is look only)
                 NpcPayloads.ReisPlek p = plek(hover);
                 if (p != null && p.staat() == Reiskaart.OPEN) {
                     ClientPacketDistributor.sendToServer(new NpcPayloads.ReisKies(p.id()));
@@ -327,5 +367,14 @@ public final class ReiskaartScherm extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    /** U-TABS: the menu keys (tab keys switch, H closes, Ctrl+Tab). */
+    @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        if (menu && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, "reiskaart")) {
+            return true;
+        }
+        return super.keyPressed(event);
     }
 }

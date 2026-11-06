@@ -785,6 +785,83 @@ def bomen_en_bloemen(I, n_bomen=170):
                 S.set(x, h + 1, z, rng.choice(bloemen))
 
 
+# U-DECO: every path lit at night. Greedy coverage: each path cell needs a light source within LICHT_STRAAL; an unlit
+# cell gets a lamp post on the nearest free grass cell beside the path (never on it, never in front of a door).
+LICHT_STRAAL = 7
+LICHT_DELEN = ("lantaarn", "lantern", "lampion", "torch", "glowstone", "froglight", "campfire", "vadslamp", "lampjes",
+               "glimtegel", "shroomlight")
+
+
+def paden_verlichten(I, straal=LICHT_STRAAL):
+    S = I.S
+    lichten = []
+    licht_ids = [i for i, b in enumerate(S.pal) if any(d in b for d in LICHT_DELEN)]
+    if licht_ids:
+        for x, y, z in zip(*np.nonzero(np.isin(S.v, licht_ids))):
+            lichten.append((int(x), int(y), int(z)))
+    paden = []
+    for x in range(I.X):
+        for z in range(I.Z):
+            h = I.H[x, z]
+            if h >= 0 and S.get(x, h, z) in (PAD, KLINKER):
+                paden.append((x, z))
+    padset = set(paden)
+    rooster = {}
+
+    def voeg(x, y, z):
+        rooster.setdefault((x // 8, z // 8), []).append((x, y, z))
+
+    for l in lichten:
+        voeg(*l)
+
+    def verlicht(x, y, z):
+        for gx in range(x // 8 - 1, x // 8 + 2):
+            for gz in range(z // 8 - 1, z // 8 + 2):
+                for (lx, ly, lz) in rooster.get((gx, gz), ()):
+                    if (lx - x) ** 2 + (lz - z) ** 2 <= straal * straal and abs(ly - y) <= 6:
+                        return True
+        return False
+
+    def vrij(x, z):
+        if not (1 <= x < I.X - 1 and 1 <= z < I.Z - 1) or (x, z) in padset or arena_vrij(x, z):
+            return False
+        h = I.H[x, z]
+        if h < ZEE or S.get(x, h, z) != GRAS or not all(S.is_air(x, h + k, z) for k in (1, 2, 3)):
+            return False
+        for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):        # not against a wall, door or another post
+            b = S.get(x + dx, h + 1, z + dz)
+            if b != "minecraft:air" and not b.startswith(("minecraft:short_grass", "minecraft:tall_grass")):
+                return False
+        return True
+
+    gezet = 0
+    for (x, z) in paden:
+        y = I.H[x, z] + 1
+        if verlicht(x, y, z):
+            continue
+        plek = None
+        for r in (2, 1, 3):
+            for dx in range(-r, r + 1):
+                for dz in range(-r, r + 1):
+                    if max(abs(dx), abs(dz)) == r and vrij(x + dx, z + dz):
+                        plek = (x + dx, z + dz)
+                        break
+                if plek:
+                    break
+            if plek:
+                break
+        if not plek:
+            continue
+        lx, lz = plek
+        ly = I.h(lx, lz)
+        S.set(lx, ly + 1, lz, LAMP_O)
+        S.set(lx, ly + 2, lz, LAMP_B)
+        I.claim(lx, lz, lx, lz, 1)
+        voeg(lx, ly + 2, lz)
+        gezet += 1
+    return gezet
+
+
 def bouw(S):
     """Hele Knuffelkamp in Scene S (minstens KAMP_MAAT). Geeft het Eiland-object terug."""
     I = eiland(S)
@@ -854,6 +931,7 @@ def bouw(S):
     kx, xe = steiger(I)
     luchtschip(S, kx + 2, VLOER - 1, STEIGER_Z + 10)
     guhballon(S, 300, 64, 70)
+    paden_verlichten(I)   # U-DECO
     bomen_en_bloemen(I)
     return I
 

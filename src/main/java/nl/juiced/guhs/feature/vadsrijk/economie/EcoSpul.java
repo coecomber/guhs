@@ -78,7 +78,8 @@ public final class EcoSpul {
                 ZADELS.put(s, ITEMS.registerItem("vr_item_zadel_" + s.id(), p -> new EcoItems.Zadel(p, s),
                         () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
             }
-            RIJDIEREN.put(s, rijdier("vr_eco_" + s.id(), s.breedte, s.hoogte));
+            RIJDIEREN.put(s, rijdier("vr_eco_" + s.id(), s.breedte, s.hoogte, s.glijdt() ? nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtEntity::new   // U-TAPIJT
+                    : RijdierEntity::new));
         }
     }
 
@@ -133,8 +134,8 @@ public final class EcoSpul {
                 () -> BlockBehaviour.Properties.of().mapColor(kleur).strength(0.6f).sound(geluid).noOcclusion());
     }
 
-    private static DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> rijdier(String id, float b, float h) {
-        return ENTITIES.register(id, () -> EntityType.Builder.<RijdierEntity>of(RijdierEntity::new, MobCategory.MISC).sized(b, h).eyeHeight(h * 0.8f)
+    private static DeferredHolder<EntityType<?>, EntityType<RijdierEntity>> rijdier(String id, float b, float h, EntityType.EntityFactory<RijdierEntity> maak) {
+        return ENTITIES.register(id, () -> EntityType.Builder.<RijdierEntity>of(maak, MobCategory.MISC).sized(b, h).eyeHeight(h * 0.8f)
                 .clientTrackingRange(10).updateInterval(1).build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id(id))));
     }
 

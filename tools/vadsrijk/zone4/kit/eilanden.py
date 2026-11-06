@@ -470,21 +470,30 @@ def schildpad(leven=True):
     top = yb + int(H)
     hx, hz = lok(-4, -3)
     BW.huis(P, int(hx) - 3, top + 1, int(hz) - 3, 6, 6, 4, "south", "pleister_roze", "tiki_rietdak", oortjes=True)
+    def boven(x, z):
+        """U-DECO: the stand height on the shell at block (x, z) (the shell is a dome: its top varies per cell; the old code
+        used the dome's peak for everything, so the flowers and lamp posts floated 1 block above the lower cells)."""
+        x, z = int(math.floor(x)), int(math.floor(z))
+        u_ = (x - x0) * fx + (z - z0) * fz
+        v_ = -(x - x0) * fz + (z - z0) * fx
+        d_ = (u_ / R) ** 2 + (v_ / Rz) ** 2
+        return int(yb + H * math.sqrt(max(0.0, 1 - d_))) + 1
+
     for (u, v, b) in ((6, 4, "minecraft:pink_tulip"), (7, 3, "guhs:roze_guhbloem"), (5, 5, "minecraft:allium"),
                       (8, 5, "guhs:roze_hibiscus"), (6, 6, "minecraft:oxeye_daisy")):
         x, z = lok(u, v)
-        P.s(x, top + 1, z, b)
+        P.s(x, boven(x, z), z, b)
     for (u, v) in ((4, -6), (-8, 6)):
         x, z = lok(u, v)
-        BW.lantaarnpaal(P, int(x), top + 1, int(z), u)
+        BW.lantaarnpaal(P, int(x), boven(int(x), int(z)), int(z), u)
     if leven:
         x, z = lok(8, -2)
-        P.guhje(x, top + 1, z, (math.degrees(math.atan2(-fx, -fz))) % 360, "guh_golden")
+        P.guhje(x, boven(x, z), z, (math.degrees(math.atan2(-fx, -fz))) % 360, "guh_golden")
         # golfjes/schuim achter de schildpad
         for i in range(14):
             x, z = lok(-R - 2 - i * 1.6, (i % 3 - 1) * (3 + i * 0.6))
             P.s(x, ZEE + 1, z, "minecraft:white_carpet")
-    P.palm_op = (lok(2, 7), top + 1)
+    P.palm_op = (lok(2, 7), boven(*lok(2, 7)))   # U-DECO: the real shell height
     P.lab.append((x0, top + 16, z0, "Schildpadeiland (zwemt zijn rondje)"))
     return P
 

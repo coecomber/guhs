@@ -31,6 +31,7 @@ public final class LuchtschipClient {
     }
 
     public static void init(IEventBus modBus) {
+        DekLopen.init();   // U-LUCHTSCHIP: walking on the deck
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> {
             event.registerEntityRenderer(LuchtschipRegistry.SCHIP.get(), SchipRenderer::new);
             event.registerEntityRenderer(LuchtschipRegistry.BORD.get(), NoopRenderer::new);

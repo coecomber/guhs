@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "guhs:gouden_kroonlijst",
+    "minecraft:glowstone_dust"
+  ],
+  "result": {
+    "id": "guhs:gouden_lichtlijst",
+    "count": 1
+  }
+}

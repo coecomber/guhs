@@ -17,9 +17,9 @@ import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
 public final class ClientPlekken {
     /** One spot as the server sent it. */
     public record Plek(String id, BlockPos pos, Ambacht ambacht, int tier, boolean leeg, boolean zeldzaam, boolean lvOk, boolean eigen, int raten,
-            List<BlockPos> bloemen, String honing) {
+            List<BlockPos> bloemen, String honing, boolean duik) {
         public AABB doos() {
-            if (ambacht == Ambacht.VISSEN) {
+            if (ambacht == Ambacht.VISSEN && !duik) {
                 return new AABB(pos.getX() - 0.2, pos.getY() + 0.5, pos.getZ() - 0.2, pos.getX() + 1.2, pos.getY() + 1.3, pos.getZ() + 1.2);
             }
             return new AABB(pos.getX() + 0.1, pos.getY(), pos.getZ() + 0.1, pos.getX() + 0.9, pos.getY() + 1.0, pos.getZ() + 0.9);
@@ -48,7 +48,7 @@ public final class ClientPlekken {
             }
             l.add(new Plek(e.getStringOr("id", ""), BlockPos.of(e.getLongOr("pos", 0L)), a == null ? Ambacht.MIJNEN : a, e.getIntOr("tier", 1),
                     e.getBooleanOr("leeg", false), e.getBooleanOr("zeldzaam", false), e.getBooleanOr("lvOk", true), e.getBooleanOr("eigen", false),
-                    e.getIntOr("raten", 0), bl, e.getStringOr("honing", "")));
+                    e.getIntOr("raten", 0), bl, e.getStringOr("honing", ""), e.getBooleanOr("duik", false)));
         }
         PLEKKEN = List.copyOf(l);
         buff = d.getStringOr("buff", "");

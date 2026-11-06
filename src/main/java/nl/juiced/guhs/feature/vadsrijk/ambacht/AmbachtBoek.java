@@ -31,6 +31,7 @@ public final class AmbachtBoek {
             titel(a, "leerling", LEERLING);
             titel(a, "gezel", GEZEL);
         }
+        Meesterschap.registreer();   // U-AMBACHT2: Meester-<ambacht> at the cap, Grootmeester with all nine
     }
 
     public static String titelId(Ambacht a, String soort) {
@@ -47,7 +48,7 @@ public final class AmbachtBoek {
 
     static List<Categorie> bouw() {
         List<Categorie> l = new ArrayList<>();
-        for (int zone = 1; zone <= 3; zone++) {
+        for (int zone = 1; zone <= AmbachtPlekken.maxZone(); zone++) {   // U-AMBACHT2: zones 4 + 5
             List<Ding> d = new ArrayList<>();
             for (AmbachtPlekken.Groep g : AmbachtPlekken.GROEPEN) {
                 if (g.zone() == zone) {
@@ -56,18 +57,23 @@ public final class AmbachtBoek {
                             p -> AmbachtData.heeft(p, "plekken", id) ? Staat.KLAAR : Staat.NIETS, null));
                 }
             }
-            l.add(new Categorie("plekken_" + zone, T + "cat.plekken." + zone, zone == 1 ? "minecraft:iron_pickaxe" : zone == 2 ? "minecraft:amethyst_shard"
-                    : "minecraft:honeycomb", d));
+            l.add(new Categorie("plekken_" + zone, T + "cat.plekken." + zone, switch (zone) {
+                case 1 -> "minecraft:iron_pickaxe";
+                case 2 -> "minecraft:amethyst_shard";
+                case 3 -> "minecraft:honeycomb";
+                case 4 -> "minecraft:brain_coral";
+                default -> "minecraft:feather";
+            }, d));
         }
         List<Ding> vissen = new ArrayList<>(), honing = new ArrayList<>(), recepten = new ArrayList<>();
         for (Materialen.Materiaal m : Materialen.ALLE.values()) {
-            if (m.ambacht() == Ambacht.VISSEN && m.tier() > 0) {
+            if (m.vis()) {
                 String id = m.id();
                 vissen.add(new Ding(id, m.naamKey(), "", T + "hint.vis." + (m.wanneer().isEmpty() ? "altijd" : m.wanneer()), "vadsrijk.ambacht.tier." + m.tier(),
                         false, p -> AmbachtData.heeft(p, "vissen", id) ? Staat.KLAAR : Staat.NIETS, null));
             }
         }
-        for (String h : Recepten.HONING) {
+        for (String h : AmbachtPlekken.honingSoorten()) {
             honing.add(new Ding(h, "item.guhs.vr_amb_" + h, "", T + "hint.honing", "", false,
                     p -> AmbachtData.heeft(p, "honing", h) ? Staat.KLAAR : Staat.NIETS, null));
         }

@@ -32,12 +32,13 @@ public class VadsrijkAmbachtGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void xpCurve(GameTestHelper helper) {
-        helper.assertTrue(AmbachtXp.CAP == 50, "cap 50 in 1.10");
+        helper.assertTrue(AmbachtXp.CAP == 60, "cap 60 with zones 4 + 5 (U-AMBACHT2)");
         for (int l = 1; l <= AmbachtXp.CAP; l++) {
             helper.assertTrue(AmbachtXp.levelVan(AmbachtXp.totaalVoor(l)) == l, "round trip " + l);
         }
         helper.assertTrue(AmbachtXp.levelVan(Long.MAX_VALUE / 4) == AmbachtXp.CAP, "capped");
         helper.assertTrue(AmbachtXp.tierVoor(1) == 1 && AmbachtXp.tierVoor(20) == 2 && AmbachtXp.tierVoor(49) == 3, "tiers follow the zones");
+        helper.assertTrue(AmbachtXp.tierVoor(50) == 4 && AmbachtXp.tierVoor(55) == 5 && AmbachtXp.tierVoor(60) == 5, "T4 50, T5 55 (T6 zone 6 volgt)");
         helper.assertTrue(AmbachtXp.verzamel(1, 10) == 30 && AmbachtXp.verzamel(1, 40) == 15, "half xp far above the tier");
         // pacing: 1 -> 20 on T1 at ~8 actions a minute takes 1-2 h, 35 -> 50 on T3 4-7 h
         double t1 = AmbachtXp.totaalVoor(20) / (double) AmbachtXp.VERZAMEL[1] / 8 / 60;
@@ -64,18 +65,22 @@ public class VadsrijkAmbachtGameTests {
             helper.assertTrue(!Recepten.toon(r).isEmpty(), r.id() + " shows a result");
         }
         for (Maatwerk.Soort s : Maatwerk.SOORTEN.values()) {
-            for (int t = 1; t <= 3; t++) {
+            for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {
                 helper.assertTrue(BasisTypes.van(s.basisId(t)) != null, "base type " + s.basisId(t));
             }
         }
         // every made-ambacht has recipes at every tier, the gatherers have materials at every tier
         for (Ambacht a : Ambacht.values()) {
-            if (a.verzamel && a != Ambacht.IMKEREN) {
-                for (int t = 1; t <= 3; t++) {
+            if (a.verzamel) {
+                for (int t = a == Ambacht.IMKEREN ? 3 : 1; t <= AmbachtXp.MAX_TIER; t++) {
                     helper.assertTrue(!Materialen.van(a, t).isEmpty(), a.id + " T" + t);
                 }
-            } else if (!a.verzamel) {
+            } else {
                 helper.assertTrue(Recepten.van(a).size() >= 6, a.id + " recipes");
+                for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {
+                    int tier = t;
+                    helper.assertTrue(Recepten.van(a).stream().anyMatch(r -> r.tier() == tier), a.id + " has T" + t + " recipes (grows with every zone)");
+                }
             }
         }
         helper.succeed();

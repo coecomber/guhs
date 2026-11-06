@@ -1692,42 +1692,37 @@
       "auto": false
     },
     {
-      "id": "adv10_knuffelridder",
+      "id": "spec17_knuffelridder",
       "soort": "klasse",
       "gever": "grootmeester",
       "inleveren": "grootmeester",
-      "lv": 8,
+      "lv": 16,
       "na": [
-        "hq07_littekens"
+        "hq09_druipgrotten"
       ],
       "doelen": [
         {
           "soort": "level",
           "doel": "*",
-          "n": 10,
-          "bron": "",
-          "kans": 0.0
-        },
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:sporenwoud",
-          "n": 15,
+          "n": 17,
           "bron": "",
           "kans": 0.0
         }
       ],
       "beloning": {
-        "xp": 600,
-        "munten": 500,
+        "xp": 2500,
+        "munten": 2000,
         "items": [],
         "wapen": false,
         "loot": ""
       },
       "aanbod": [
         "npc",
+        "npc",
         "npc"
       ],
       "klaar": [
+        "npc",
         "npc"
       ],
       "praat": {},
@@ -1738,32 +1733,25 @@
       "klasse": "knuffelridder"
     },
     {
-      "id": "adv20_knuffelridder",
+      "id": "spec17_pluisjager",
       "soort": "klasse",
       "gever": "grootmeester",
       "inleveren": "grootmeester",
-      "lv": 18,
+      "lv": 16,
       "na": [
-        "adv10_knuffelridder"
+        "hq09_druipgrotten"
       ],
       "doelen": [
         {
           "soort": "level",
           "doel": "*",
-          "n": 20,
-          "bron": "",
-          "kans": 0.0
-        },
-        {
-          "soort": "baas",
-          "doel": "gebied:zwamtempel",
-          "n": 1,
+          "n": 17,
           "bron": "",
           "kans": 0.0
         }
       ],
       "beloning": {
-        "xp": 2000,
+        "xp": 2500,
         "munten": 2000,
         "items": [],
         "wapen": false,
@@ -1771,55 +1759,11 @@
       },
       "aanbod": [
         "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "advancement:knuffelridder:2",
-      "start_items": [],
-      "auto": false,
-      "klasse": "knuffelridder"
-    },
-    {
-      "id": "adv10_pluisjager",
-      "soort": "klasse",
-      "gever": "grootmeester",
-      "inleveren": "grootmeester",
-      "lv": 8,
-      "na": [
-        "hq07_littekens"
-      ],
-      "doelen": [
-        {
-          "soort": "level",
-          "doel": "*",
-          "n": 10,
-          "bron": "",
-          "kans": 0.0
-        },
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:sporenwoud",
-          "n": 15,
-          "bron": "",
-          "kans": 0.0
-        }
-      ],
-      "beloning": {
-        "xp": 600,
-        "munten": 500,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
         "npc",
         "npc"
       ],
       "klaar": [
+        "npc",
         "npc"
       ],
       "praat": {},
@@ -1830,32 +1774,25 @@
       "klasse": "pluisjager"
     },
     {
-      "id": "adv20_pluisjager",
+      "id": "spec17_vadsmagier",
       "soort": "klasse",
       "gever": "grootmeester",
       "inleveren": "grootmeester",
-      "lv": 18,
+      "lv": 16,
       "na": [
-        "adv10_pluisjager"
+        "hq09_druipgrotten"
       ],
       "doelen": [
         {
           "soort": "level",
           "doel": "*",
-          "n": 20,
-          "bron": "",
-          "kans": 0.0
-        },
-        {
-          "soort": "baas",
-          "doel": "gebied:zwamtempel",
-          "n": 1,
+          "n": 17,
           "bron": "",
           "kans": 0.0
         }
       ],
       "beloning": {
-        "xp": 2000,
+        "xp": 2500,
         "munten": 2000,
         "items": [],
         "wapen": false,
@@ -1863,106 +1800,16 @@
       },
       "aanbod": [
         "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "advancement:pluisjager:2",
-      "start_items": [],
-      "auto": false,
-      "klasse": "pluisjager"
-    },
-    {
-      "id": "adv10_vadsmagier",
-      "soort": "klasse",
-      "gever": "grootmeester",
-      "inleveren": "grootmeester",
-      "lv": 8,
-      "na": [
-        "hq07_littekens"
-      ],
-      "doelen": [
-        {
-          "soort": "level",
-          "doel": "*",
-          "n": 10,
-          "bron": "",
-          "kans": 0.0
-        },
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:sporenwoud",
-          "n": 15,
-          "bron": "",
-          "kans": 0.0
-        }
-      ],
-      "beloning": {
-        "xp": 600,
-        "munten": 500,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
         "npc",
         "npc"
       ],
       "klaar": [
+        "npc",
         "npc"
       ],
       "praat": {},
       "actie_aanname": "",
       "actie_klaar": "advancement:vadsmagier:1",
-      "start_items": [],
-      "auto": false,
-      "klasse": "vadsmagier"
-    },
-    {
-      "id": "adv20_vadsmagier",
-      "soort": "klasse",
-      "gever": "grootmeester",
-      "inleveren": "grootmeester",
-      "lv": 18,
-      "na": [
-        "adv10_vadsmagier"
-      ],
-      "doelen": [
-        {
-          "soort": "level",
-          "doel": "*",
-          "n": 20,
-          "bron": "",
-          "kans": 0.0
-        },
-        {
-          "soort": "baas",
-          "doel": "gebied:zwamtempel",
-          "n": 1,
-          "bron": "",
-          "kans": 0.0
-        }
-      ],
-      "beloning": {
-        "xp": 2000,
-        "munten": 2000,
-        "items": [],
-        "wapen": false,
-        "loot": ""
-      },
-      "aanbod": [
-        "npc",
-        "npc"
-      ],
-      "klaar": [
-        "npc"
-      ],
-      "praat": {},
-      "actie_aanname": "",
-      "actie_klaar": "advancement:vadsmagier:2",
       "start_items": [],
       "auto": false,
       "klasse": "vadsmagier"

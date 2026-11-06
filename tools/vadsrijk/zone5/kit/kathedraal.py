@@ -286,9 +286,7 @@ def interieur(W, figuren=True):
     bx = X_KOOR + 4
     beeld_guh(W, bx, Y0 + 1, 0, 14, "beeld_goud", "west")
     # kroonluchters
-    for x in range(X0 + 18, X_KRUIS[0], 20):
-        luchter(W, x, ytop - 16, 0)
-    luchter(W, cx, ytop - 6, 0, groot=True)
+    # [U-Z5] the nave chandeliers hang from the new rib vaults: kathedraal3.binnen
     # vaandels aan de zuilen
     for x in getattr(W, "_kath_zuilen", [])[::2]:
         for s in (-1, 1):
@@ -300,6 +298,12 @@ def interieur(W, figuren=True):
 
 
 def luchter(W, x, y, z, groot=False):
+    """[U-Z5] a giant chain chandelier (gotiek.kroonluchter; the throne room uses this too)."""
+    import gotiek as G
+    G.kroonluchter(W, x, y + 3, z, r=5.5 if groot else 4.2, lagen=4 if groot else 3, ymax=y + 40)
+
+
+def luchter_oud(W, x, y, z, groot=False):
     r = 4 if groot else 3
     for dy in range(0, 14):
         BH.zet(W, x, y + 4 + dy, z, "minecraft:iron_chain[axis=y,waterlogged=false]")
@@ -334,7 +338,10 @@ def bouw(W, figuren=True):
     transept(W)
     koor(W)
     gevel(W)
+    import kathedraal3 as K3   # [U-Z5] depth: buttresses, portals, tracery, flyers, pinnacles; rib vaults, chandeliers
+    K3.buiten(W)
     interieur(W, figuren)
+    K3.binnen(W)
     W.label(X0 - 2, Y0 + 46, 0, "de Grote Poort")
     W.label(X0 + 6, 316, 20, "geveltorens met oortjes")
     W.label((X_KRUIS[0] + X_KRUIS[1]) / 2, 306, 0, "gouden kruisingskoepel")

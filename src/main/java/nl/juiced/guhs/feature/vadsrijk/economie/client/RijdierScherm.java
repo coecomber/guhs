@@ -107,6 +107,8 @@ public class RijdierScherm extends EcoScherm {
     protected void inhoud(GuiGraphicsExtractor g, int mx, int my, float pt) {
         ListTag l = lijst();
         // ---- the list ------------------------------------------------------------------------------------------------------
+        // U-TAPIJT: rows get a bit lower when there are more than 9 mounts (they must stay above the hint/button at the bottom)
+        int rh = Math.min(RIJ, Math.max(14, (h - 34 - 26) / Math.max(1, l.size()) - 1));
         for (int i = 0; i < l.size(); i++) {
             CompoundTag t = l.getCompoundOrEmpty(i);
             RijdierSoort s = RijdierSoort.van(t.getStringOr("soort", ""));
@@ -114,25 +116,25 @@ public class RijdierScherm extends EcoScherm {
                 continue;
             }
             boolean heeft = t.getBooleanOr("heeft", false), sel = i == gekozen;
-            int x = left + 8, y = top + 22 + i * (RIJ + 1), bw = 122;
-            boolean hover = binnen(mx, my, x, y, bw, RIJ);
-            g.fill(x, y, x + bw, y + RIJ, sel ? 0xFFFF5FAF : hover ? 0xFFFFB8DC : 0xFFF0B8D8);
-            g.fill(x + 1, y + 1, x + bw - 1, y + RIJ - 1, heeft ? (sel ? 0xFFFFE0F0 : 0xFFFFF4FA) : 0xFFE6DCE4);
+            int x = left + 8, y = top + 22 + i * (rh + 1), bw = 122;
+            boolean hover = binnen(mx, my, x, y, bw, rh);
+            g.fill(x, y, x + bw, y + rh, sel ? 0xFFFF5FAF : hover ? 0xFFFFB8DC : 0xFFF0B8D8);
+            g.fill(x + 1, y + 1, x + bw - 1, y + rh - 1, heeft ? (sel ? 0xFFFFE0F0 : 0xFFFFF4FA) : 0xFFE6DCE4);
             ItemStack icoon = EcoSpul.icoon(s, s.kleuren() ? PluimKleur.van(t.getStringOr("kleur", "roze")) : PluimKleur.ROZE);
-            g.item(icoon, x + 4, y + 2);
+            g.item(icoon, x + 4, y + (rh - 16) / 2);
             if (!heeft) {
-                g.fill(x + 3, y + 1, x + 21, y + 19, 0xB0E6DCE4);
-                g.text(font, "?", x + 10, y + 6, 0xFF8A5A84, false);
+                g.fill(x + 3, y + 1, x + 21, y + rh - 1, 0xB0E6DCE4);
+                g.text(font, "?", x + 10, y + rh / 2 - 4, 0xFF8A5A84, false);
             }
             g.text(font, Component.translatable(s.naamKey()).withStyle(ChatFormatting.BOLD), x + 26, y + 1, heeft ? TEKST : ZACHT, false);
             Component sub = heeft ? Component.translatable("vadsrijk.economie.stal.level", t.getIntOr("level", 1), RijdierSoort.MAX_LEVEL)
                     : Component.translatable("vadsrijk.economie.rijdieren.nog_niet");
-            g.text(font, sub, x + 26, y + 11, heeft ? GOUD : ZACHT, false);
+            g.text(font, sub, x + 26, y + rh - 9, heeft ? GOUD : ZACHT, false);
             if (t.getBooleanOr("actief", false)) {
                 g.text(font, "★", x + bw - 12, y + 2, 0xFFFF5FAF, false);
             }
             final int idx = i;
-            klikvlak(x, y, bw, RIJ, () -> {
+            klikvlak(x, y, bw, rh, () -> {
                 gekozen = idx;
                 kleurKeuze = null;
                 paneel.wis();
@@ -255,6 +257,7 @@ public class RijdierScherm extends EcoScherm {
         balkje(g, ix, iy, iw, Component.translatable("vadsrijk.economie.stal.sprong", String.format(Locale.ROOT, "%.1f", RijdierSoort.springHoogte(sp))),
                 sp / 1.05);
         iy += 18;
+        iy = nl.juiced.guhs.feature.vadsrijk.tapijt.client.TapijtClient.statRegels(g, font, s, ix, iy, iw);   // U-TAPIJT: hover + glide
         if (!eigen) {
             String bron = s.kleuren() ? "vadsrijk.economie.pluimkleur.bron." + kleur.id() : "vadsrijk.economie.stal.nog_niet." + s.id();
             for (var line : font.split(Component.translatable(bron), iw)) {

@@ -41,6 +41,11 @@ def _compound_kv(d):
     return out
 
 
+def _nbt_lijf(v):
+    """U-HEKKEN: block-entity nbt as a dict, or as raw compound bytes (body without the end tag, kept as read)."""
+    return bytes(v) if isinstance(v, (bytes, bytearray)) else _compound_kv(v)
+
+
 _BLOK = np.dtype([("t_pos", "u1"), ("n_pos", ">u2"), ("s_pos", "S3"), ("et", "u1"), ("cnt", ">i4"),
                   ("x", ">i4"), ("y", ">i4"), ("z", ">i4"),
                   ("t_st", "u1"), ("n_st", ">u2"), ("s_st", "S5"), ("st", ">i4"), ("end", "u1")])
@@ -71,7 +76,7 @@ def schrijf(pad, size, palette, xs, ys, zs, states, extra_nbt=None, niveau=9):
     for i in np.nonzero(~mask)[0]:
         x, y, z = int(xs[i]), int(ys[i]), int(zs[i])
         slow += (_named(9, "pos") + bytes([3]) + struct.pack(">iiii", 3, x, y, z) + _named(3, "state")
-                 + struct.pack(">i", int(states[i])) + _named(10, "nbt") + _compound_kv(extra_nbt[(x, y, z)]) + b"\x00" + b"\x00")
+                 + struct.pack(">i", int(states[i])) + _named(10, "nbt") + _nbt_lijf(extra_nbt[(x, y, z)]) + b"\x00" + b"\x00")
         nslow += 1
     pal = b""
     for (name, props) in palette:

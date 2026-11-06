@@ -46,7 +46,7 @@ public final class LuchtschipRegistry {
                     .fireImmune().clientTrackingRange(20).updateInterval(20)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_luchtschip"))));
     public static final DeferredHolder<EntityType<?>, EntityType<VertrekbordEntity>> BORD = ENTITY_TYPES.register("vr_luchtschip_bord",
-            () -> EntityType.Builder.<VertrekbordEntity>of(VertrekbordEntity::new, MobCategory.MISC).sized(0.2f, 0.2f).noSummon().noSave()
+            () -> EntityType.Builder.<VertrekbordEntity>of(VertrekbordEntity::new, MobCategory.MISC).sized(2.4f, 0.32f).nameTagOffset(-0.4f).noSummon().noSave()
                     .fireImmune().clientTrackingRange(4).updateInterval(20)
                     .build(ResourceKey.create(Registries.ENTITY_TYPE, Guhs.id("vr_luchtschip_bord"))));
 
@@ -62,9 +62,16 @@ public final class LuchtschipRegistry {
             }
         });
         NeoForge.EVENT_BUS.addListener(Luchtschepen::opMount);
+        NeoForge.EVENT_BUS.addListener(Luchtschepen::opAanval);   // U-LUCHTSCHIP: left-click on the ship / board
+        NeoForge.EVENT_BUS.addListener(Luchtschepen::pierKlik);   // U-LUCHTSCHIP: a closed line explains itself at the pier
         NeoForge.EVENT_BUS.addListener((LivingIncomingDamageEvent e) -> Luchtschepen.opSchade(e));
         NeoForge.EVENT_BUS.addListener((LivingDeathEvent e) -> Luchtschepen.opDood(e));
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> Luchtschepen.opUitloggen(e));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
+            Luchtschepen.opUitloggen(e);
+            if (e.getEntity() instanceof ServerPlayer p) {
+                Luchtschepen.vergeet(p);
+            }
+        });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
             Luchtschepen.opInloggen(e);
             if (e.getEntity() instanceof ServerPlayer p) {
@@ -88,6 +95,13 @@ public final class LuchtschipRegistry {
     public static void payloads(PayloadRegistrar r) {
         r.playToClient(Tijd.Schuif.TYPE, Tijd.Schuif.STREAM_CODEC, (p, c) -> c.enqueueWork(() -> Tijd.schuifOntvanger.accept(p.tag())));
         r.playToClient(Tijd.Schimmen.TYPE, Tijd.Schimmen.STREAM_CODEC, (p, c) -> c.enqueueWork(() -> Tijd.schimmenOntvanger.accept(p.stand())));
+        // U-LUCHTSCHIP: walking on the deck
+        r.playToServer(LuchtschipDek.Stap.TYPE, LuchtschipDek.Stap.STREAM_CODEC, (p, c) -> c.enqueueWork(() -> {
+            if (c.player() instanceof ServerPlayer sp) {
+                LuchtschipDek.stap(sp, p);
+            }
+        }));
+        r.playToClient(LuchtschipDek.Stand.TYPE, LuchtschipDek.Stand.STREAM_CODEC, (p, c) -> c.enqueueWork(() -> LuchtschipDek.ontvang(c.player().level(), p)));
     }
 
     // ------------------------------------------------------------------------------------------------ dev commands

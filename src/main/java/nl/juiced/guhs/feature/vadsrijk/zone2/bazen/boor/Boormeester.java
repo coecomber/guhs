@@ -198,11 +198,20 @@ public class Boormeester extends Z2Baas {
             return m;
         }
         BlockPos c = Z2BazenPlekken.BOOR_CENTRUM;
+        Boormeester gevonden = null;
         for (Boormeester m : sl.getEntitiesOfClass(Boormeester.class, new AABB(c).inflate(80, 40, 80), x -> !x.geplofd())) {
-            huidig = m.getUUID();
-            return m;
+            if (gevonden == null) {
+                gevonden = m;
+            } else if (m.getTarget() == null) {
+                m.discard();   // U-DUBBEL: an old twin
+            }
         }
-        if (!maak) {
+        if (gevonden != null) {
+            huidig = gevonden.getUUID();
+            return nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(gevonden, "baas:boormeester");
+        }
+        // U-DUBBEL: while its chunk's entities are still coming back from disk the saved machine is invisible: no twin then
+        if (!maak || (sl.isLoaded(c) && !nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, c))) {
             return null;
         }
         sl.getChunk(c);
@@ -214,6 +223,7 @@ public class Boormeester extends Z2Baas {
         m.zetOntvadst(false);
         m.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5, 180, 0);
         m.zetThuis(Vec3.atBottomCenterOf(c));
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(m, "baas:boormeester");   // U-DUBBEL
         sl.addFreshEntity(m);
         huidig = m.getUUID();
         return m;

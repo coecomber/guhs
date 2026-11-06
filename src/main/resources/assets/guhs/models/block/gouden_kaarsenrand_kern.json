@@ -1,0 +1,149 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "goud": "minecraft:block/gold_block",
+    "kaars": "guhs:block/hoogvads_licht/kaars",
+    "vlam": "guhs:block/hoogvads_licht/vlam",
+    "kristal": "guhs:block/hoogvads_licht/kristal",
+    "particle": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        6.5,
+        1.4,
+        6.5
+      ],
+      "to": [
+        9.5,
+        3,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.5,
+            7.2,
+            9.5,
+            8.8
+          ],
+          "texture": "#goud"
+        },
+        "south": {
+          "uv": [
+            6.5,
+            7.2,
+            9.5,
+            8.8
+          ],
+          "texture": "#goud"
+        },
+        "east": {
+          "uv": [
+            6.5,
+            7.2,
+            9.5,
+            8.8
+          ],
+          "texture": "#goud"
+        },
+        "west": {
+          "uv": [
+            6.5,
+            7.2,
+            9.5,
+            8.8
+          ],
+          "texture": "#goud"
+        },
+        "up": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#goud"
+        },
+        "down": {
+          "uv": [
+            6.5,
+            6.5,
+            9.5,
+            9.5
+          ],
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        0.4,
+        7
+      ],
+      "to": [
+        9,
+        1.4,
+        9
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.0,
+            7.5,
+            9.0,
+            8.5
+          ],
+          "texture": "#goud"
+        },
+        "south": {
+          "uv": [
+            7.0,
+            7.5,
+            9.0,
+            8.5
+          ],
+          "texture": "#goud"
+        },
+        "east": {
+          "uv": [
+            7.0,
+            7.5,
+            9.0,
+            8.5
+          ],
+          "texture": "#goud"
+        },
+        "west": {
+          "uv": [
+            7.0,
+            7.5,
+            9.0,
+            8.5
+          ],
+          "texture": "#goud"
+        },
+        "up": {
+          "uv": [
+            7.0,
+            7.0,
+            9.0,
+            9.0
+          ],
+          "texture": "#goud"
+        },
+        "down": {
+          "uv": [
+            7.0,
+            7.0,
+            9.0,
+            9.0
+          ],
+          "texture": "#goud"
+        }
+      }
+    }
+  ]
+}

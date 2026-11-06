@@ -651,6 +651,21 @@ Q(HQ[9], "hoofd", "z5_koningin", "De Stormrand",
    ("npc", "Kom terug als de wind gedraaid is. Binnenkort. Tot die tijd: geniet van de stad. Je hebt haar gered.")],
   munten=16000, lv=60, na=[HQ[8]], inleveren="z5_havenmeester")
 
+# ===== job advancement 3 at class level 58 (U-SPECS, ronde 4): at the end of Hoogvads, after the finale ======================
+# Kapitein Veerkracht of the Wolkwacht Academie holds the ceremony (klassen.Advancement step 3; the crystal touch of
+# zone2.systemen.Advancement3 plays on step 3). Title + power per spec (lang vadsrijk.klassen.titel.<spec>.3).
+for _k, _naam in (("knuffelridder", "Knuffelridder"), ("pluisjager", "Pluisjager"), ("vadsmagier", "Vadsmagiër")):
+    Q(f"z5_adv58_{_k}", "klasse", "z5_veerkracht", f"De hoogste titel van de {_naam}",
+      f"Hoogvads is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als {_naam} "
+      "en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie.",
+      [D("level", "*", 58, f"Bereik level 58 als {_naam}", plek="npc:z5_veerkracht")],
+      [("npc", "Een Ridder van Hoogvads met maar twee titels? Dat kan niet. Dat staat niet in het reglement. Ik heb het net nagekeken."),
+       ("npc", f"Bereik level 58 als {_naam}. Dan marcheert de hele Wolkwacht voor je. Links, rechts, links, knuffel.")],
+      f"Level 58 als {_naam}, en dan naar Kapitein Veerkracht op het oefenplein van de Academie.",
+      [("npc", "Wolkwacht, gééf acht! Voor de held van Hoogvads: de hoogste titel van De Knuffelorde!"),
+       ("npc", "Je specialisatie is nu op zijn sterkst. Zeg maar Veer. Nee, zeg maar 'Kapitein'. Nee, toch Veer.")],
+      munten=25000, loot="episch", lv=56, klasse=_k, na=[HQ[8]], actie_klaar=f"advancement:{_k}:3")
+
 # ===== side quests (11): city life, refugees, university research, academy trials ===========================================
 Q("z5_s01_bessen", "zij", "z5_kok", "Een kom voor iedereen",
   "De ketel van de Grote Soepkeuken raakt nooit leeg, maar de wolkbessen wel. Ze groeien in het Staartpark en de Ooggaarde.",

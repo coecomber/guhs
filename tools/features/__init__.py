@@ -259,12 +259,16 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z5verhaal',
             # 1.10 night round T, T-OPSLAG: knapzak, materiaaltas, bank, HUD additions (Java: feature/vadsrijk/opslag)
             'vadsrijk_t_opslag',
+            # 1.10 round U, U-HUD: party frames, emotes, HUD editor (Java: feature/vadsrijk/hud)
+            'vadsrijk_u_hud',
             # 1.10 T-KLEDING: Kledingkast, wings, capes, accessories, effects (Java: feature/vadsrijk/kleding)
             'vadsrijk_t_kleding',
             # 1.10 night round T, T-LUCHTSCHIP: the scheduled airship (model), the far silhouettes, texts (Java: feature/vadsrijk/luchtschip)
             'vadsrijk_t_luchtschip',
             # 1.10 night round T, T-KARAKTER: character slots + game modes texts (Java: feature/vadsrijk/karakter)
             'vadsrijk_t_karakter',
+            # 1.10 round U, U-TOETSEN: key overview in the pause menu (Java: feature/vadsrijk/toetsen)
+            'vadsrijk_u_toetsen',
             # 1.10 night round T: zone 4 "De Lampionkust", the story (Java: feature/vadsrijk/zone4/verhaal)
             'vadsrijk_t_z4verhaal',
             # 1.10 night round T, T-IMKER: the secret zone-3 boss De Mika-imker (Java: feature/vadsrijk/imker)
@@ -273,11 +277,40 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_wolkwal',
             # 1.10 night round T, T-Z4DIEREN: Ouwe Dobber (giant turtle) + guh kites (Java: feature/vadsrijk/zone4/dieren)
             'vadsrijk_t_z4dieren',
+            # 1.10 round U, U-AMBACHT2: the Ambachten grow with zones 4/5 (T4/T5), Gilde story, Knutselwinkel, Opdrachtenbord, Meesterschort; after vadsrijk_t_ambacht + vadsrijk_t_kleding
+            'vadsrijk_u_ambacht2',
             # T-DROOM: zone-5 finale phase DROOM, de Grauwe Droom (Java: feature/vadsrijk/zone5/droom)
             'vadsrijk_t_droom',
+            # 1.10 U-OVERGANG: sea-band biomes between the zones + the epic viewpoint names (Java: biomen.VadsrijkBiomen, indeling.ZeeVulling)
+            'vadsrijk_u_overgang',
+            # 1.10 round U, U-DECO: stair floor boards texts (Java: feature/vadsrijk/udeco)
+            'vadsrijk_u_deco',
+            # 1.10 round U, U-ZICHTBAAR: looks of capes/gloves/jewellery on the player (Java: feature/vadsrijk/zichtbaar)
+            'vadsrijk_u_zichtbaar',
+            # 1.10 round U, U-LUCHTSCHIP: closed-line explanations, may-I-board state, board line (Java: feature/vadsrijk/luchtschip)
+            'vadsrijk_u_luchtschip',
+            # 1.10 round U, U-RUITERS: ambient guhs riding Pluimguhs, texts (Java: feature/vadsrijk/ruiters; routes: tools/vadsrijk/ruiters/routes.py)
+            'vadsrijk_u_ruiters',
+            # 1.10 round U, U-SPECS: specialisations + new job advancements + gear compare texts (Java: feature/vadsrijk/klassen/spec);
+            # after vadsrijk_klassen (it overrides a few of its texts)
+            'vadsrijk_u_specs',
+            # 1.10 round U, U-TABS: Het Vadsrijk-menu (one screen, main tabs; Java: feature/vadsrijk/menu)
+            'vadsrijk_u_tabs',
+            # 1.10 round U, U-AUDIO2: boss phase music + fanfares, world point sounds, NPC voices (Java: feature/vadsrijk/geluid)
+            'vadsrijk_u_audio2',
+            # 1.10 round U, U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles - texts (Java: feature/vadsrijk/gilden)
+            'vadsrijk_u_gilden',
+            # 1.10 round U, U-HUIZEN: player housing, Het Knuffelkwartier (dimension + texts; Java: feature/vadsrijk/huizen)
+            'vadsrijk_u_huizen',
+            # U-GROTTEN: one atmosphere cave per zone (Java: feature/vadsrijk/grotten; the map side is tools/vadsrijk/grotten)
+            'vadsrijk_u_grotten',
+            # 1.10 round U integration, V-INT: texts of the glue between the round-U slices (Java: feature/vadsrijk/vint)
+            'vadsrijk_v_int',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
+            # 1.10 round U, U-TAPIJT: the flying carpet (zone 6; Java: feature/vadsrijk/tapijt); after vadsrijk_t_rijdier
+            'vadsrijk_u_tapijt',
             ]
 
 

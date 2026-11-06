@@ -13,6 +13,7 @@ public final class VadsrijkFeature {
 
     public static void register(IEventBus modBus) {
         nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.dubbel.DubbelRegistry.register(modBus);   // U-DUBBEL: one of every unique boss/NPC (no doubles, no ghosts)
         nl.juiced.guhs.feature.vadsrijk.klassen.KlassenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.wezens.WezensRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry.register(modBus);
@@ -48,14 +49,25 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.tmodels.TModels.register(modBus);   // T-MODELS: kern slimes as GeckoLib models + /guhs vadsrijk models
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.register(modBus);   // T-VFX: VFX kit v1 + boss bouwdoos
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.register(modBus);   // T-Z4BOOT: the zone-4 Zeilbootje
+        nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtRegistry.register(modBus);   // U-TAPIJT: the flying carpet (zone 6)
         nl.juiced.guhs.feature.vadsrijk.web.WebRegistry.register(modBus);   // S-SITE: guhs.nl/vadsrijk live export (off by default) + wiki dump
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.register(modBus);   // T-AMBACHT: the Ambachten (professions)
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.register(modBus);   // T-ITEMS: itemisatie 2.0 (keep last: its loot sees every table)
         nl.juiced.guhs.feature.vadsrijk.puzzels.PuzzelRegistry.register(modBus);   // T-PUZZELS: puzzle toolbox + puzzles/secrets zone 1-3
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.register(modBus);   // T-OPSLAG: knapzak, materiaaltas, bank, HUD additions
+        nl.juiced.guhs.feature.vadsrijk.hud.UHudRegistry.register(modBus);   // U-HUD: party frames, emotes, HUD editor
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.register(modBus);   // T-KLEDING: Kledingkast, wings, effects
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.register(modBus);   // T-LUCHTSCHIP: scheduled airships + view
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
+        nl.juiced.guhs.feature.vadsrijk.udeco.UDeco.register(modBus);   // U-DECO: arrival clearance, Honingtak bees, stair floor boards
+        nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
+        nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
+        nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.register(modBus);   // U-TABS: the Vadsrijk-menu (/guhs vadsrijk menu [tab])
+        nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.register(modBus);   // U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles
+        nl.juiced.guhs.feature.vadsrijk.huizen.HuizenRegistry.register(modBus);   // U-HUIZEN: Het Knuffelkwartier (player housing)
+        nl.juiced.guhs.feature.vadsrijk.grotten.Grotten.register(modBus);   // U-GROTTEN: one atmosphere cave per zone (areas, elite, schat, book)
+        nl.juiced.guhs.feature.vadsrijk.vint.VInt.register(modBus);   // V-INT: round-U glue (spec in the Karakter tab + party frames)
+        nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -76,11 +88,16 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.payloads(registrar);   // T-GELUID
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.payloads(registrar);   // T-VFX
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.payloads(registrar);   // T-Z4BOOT
+        nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtRegistry.payloads(registrar);   // U-TAPIJT
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.payloads(registrar);   // T-AMBACHT
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.payloads(registrar);   // T-ITEMS
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.payloads(registrar);   // T-OPSLAG
+        nl.juiced.guhs.feature.vadsrijk.hud.UHudRegistry.payloads(registrar);   // U-HUD
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.payloads(registrar);   // T-KLEDING
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.payloads(registrar);   // T-LUCHTSCHIP
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.payloads(registrar);   // T-KARAKTER
+        nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.payloads(registrar);   // U-ZICHTBAAR
+        nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.payloads(registrar);   // U-TABS: the Vadsrijk-menu (Karakter tab, Reiskaart to look at)
+        nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.payloads(registrar);   // U-GILDEN
     }
 }

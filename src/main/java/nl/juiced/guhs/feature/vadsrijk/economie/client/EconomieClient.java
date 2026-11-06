@@ -58,6 +58,10 @@ public final class EconomieClient {
                 if (s.water()) {
                     continue;   // T-Z4BOOT: the Zeilbootje has its own renderer (zone4.boot.client.BootClient)
                 }
+                if (s.glijdt()) {   // U-TAPIJT: the flying carpet (banking, bob) on top of the normal mount renderer
+                    e.registerEntityRenderer(EcoSpul.type(s), nl.juiced.guhs.feature.vadsrijk.tapijt.client.TapijtRenderer::new);
+                    continue;
+                }
                 e.registerEntityRenderer(EcoSpul.type(s), c -> new RijdierRenderer(c, s));
             }
         });

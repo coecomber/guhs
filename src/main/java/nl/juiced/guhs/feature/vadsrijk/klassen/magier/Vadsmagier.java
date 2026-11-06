@@ -109,7 +109,7 @@ public final class Vadsmagier implements Klasse {
 
     /** Vadsoverloop: every 3rd skill (not the ult) gives its energy back. Called after a cast. */
     static void overloop(ServerPlayer p, double energie) {
-        if (!Boom.heeft(p, "m_adv2") || energie <= 0) {
+        if (!nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STERRENWEVER, 1) || energie <= 0) {   // U-SPECS: Vadsoverloop = Sterrenwever step 1
             return;
         }
         int n = OVERLOOP.merge(p.getUUID(), 1, Integer::sum);
@@ -218,7 +218,7 @@ public final class Vadsmagier implements Klasse {
             Fx.ring(sl, Fx.stof(Fx.kleur(el), 2f), waar, straal, (int) (straal * 8));
             Fx.geluid(sl, waar, SoundEvents.GENERIC_EXPLODE.value(), 0.6f, 1.5f);
             Fx.geluid(sl, waar, SoundEvents.AMETHYST_BLOCK_BREAK, 1f, 0.8f);
-            if (Boom.heeft(p, "m_adv1")) {
+            if (nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STERRENWEVER, 1)) {   // U-SPECS
                 // Sterrenwever: an element puddle for 3 s
                 Vec3 g = Fx.grond(sl, waar);
                 for (int i = 1; i <= 3; i++) {

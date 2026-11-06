@@ -18,8 +18,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
  * one hour real time (ronde 12). The pure methods take the data so the gametests can check the maths without a world.
  */
 public final class Boom {
-    /** One hour of real time between two free respecs. */
-    public static final long RESPEC_MS = 60L * 60L * 1000L;
+    /** U-SPECS (ronde 4, V3): resetting the tree is ALWAYS free (was: once per real hour). 0 = no cooldown. */
+    public static final long RESPEC_MS = 0L;
     /** z2-systemen: node id -> the class level it needs (the zone-2 rows 4/5 open at lv 20/26). Reason "level". */
     public static final java.util.Map<String, Integer> MIN_LEVEL = new java.util.concurrent.ConcurrentHashMap<>();
 
@@ -115,7 +115,7 @@ public final class Boom {
      *  null when it worked, "cooldown" or "leeg". */
     @Nullable
     public static String respec(SpelerData d, String klasse, long nuMs) {
-        if (nuMs < d.respecKlaar) {
+        if (RESPEC_MS > 0 && nuMs < d.respecKlaar) {
             return "cooldown";
         }
         Klasse k = Klassen.van(klasse);
@@ -133,7 +133,7 @@ public final class Boom {
 
     /** Seconds until the next free respec (0 = now). */
     public static long respecOver(SpelerData d, long nuMs) {
-        return Math.max(0, (d.respecKlaar - nuMs + 999) / 1000);
+        return RESPEC_MS <= 0 ? 0 : Math.max(0, (d.respecKlaar - nuMs + 999) / 1000);
     }
 
     /** Does this player have this node (current class)? Server or client data alike. */

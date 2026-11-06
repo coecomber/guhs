@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:gouden_kroonlijst",
+  "result": {
+    "id": "guhs:gouden_kroonlijst_muur"
+  }
+}

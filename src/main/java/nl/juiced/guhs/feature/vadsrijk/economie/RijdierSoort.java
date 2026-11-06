@@ -44,7 +44,13 @@ public enum RijdierSoort {
      * 300 % = a top speed of 0.6 blocks a tick at level 1 (zone4.boot.BootFysica), no jump; quest "Boot.geef" early in the zone-4
      * story. Its entity + icon live in zone4.boot.BootSpul (EcoSpul skips water species), its looks in its own screen.
      */
-    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest", 2.0f, 1.1f, Eigenschap.WATER);
+    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest", 2.0f, 1.1f, Eigenschap.WATER),
+    /**
+     * U-TAPIJT: the flying carpet (zone 6 Zijdeland, Tapijtweefster Knoopje: {@code tapijt.Tapijt.geef}). Speed 360 % = a top speed of
+     * ~0.76 blocks a tick at level 1 (tapijt.TapijtBalans {@code topfactor}), a small hop; it hovers ~1.25 blocks over ground and
+     * water and glides/drifts (its own entity + physics: tapijt.TapijtEntity, tapijt.TapijtFysica). The rider sits cross-legged.
+     */
+    TAPIJT(0.36, 0.40, 0, 0.30, "quest", 2.0f, 0.5f, Eigenschap.GLIJDT);
 
     /**
      * T-RIJDIER: what a mount can do besides walking and jumping (one place; add a value for a new behaviour, e.g. a water mount).
@@ -58,7 +64,9 @@ public enum RijdierSoort {
     public enum Eigenschap {
         KLEUREN, ZWEEFT, STEVIG,
         /** T-INT (t-z4boot): sails on water instead of walking (own entity, physics, renderer and looks screen). */
-        WATER
+        WATER,
+        /** U-TAPIJT: hovers over ground and water and glides with momentum (the flying carpet: tapijt.TapijtEntity). */
+        GLIJDT
     }
 
     public static final int MAX_LEVEL = 10;
@@ -121,6 +129,11 @@ public enum RijdierSoort {
     /** Hovers: falls slowly and can jump once more in the air. */
     public boolean zweeft() {
         return heeft(Eigenschap.ZWEEFT);
+    }
+
+    /** U-TAPIJT: hovers and glides (the flying carpet). */
+    public boolean glijdt() {
+        return heeft(Eigenschap.GLIJDT);
     }
 
     /** T-RIJDIER: shrugs off the first hit (see {@code Rijdieren.geraakt}). */

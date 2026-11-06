@@ -428,7 +428,16 @@ def raadszaal(W, S, info):
     info["plekken"]["raadszaal_lessenaar"] = (-103, y + 1, 0)
 
 
-def KA_luchter(W, x, y_plafond, z):
+def KA_luchter(W, x, y_plafond, z, groot=True):
+    """[U-Z5] a big chain chandelier (gotiek.kroonluchter) hanging from the ceiling at y_plafond."""
+    import gotiek as G
+    if groot:
+        G.kroonluchter(W, x, y_plafond - 5, z, r=3.6, lagen=3, ymax=y_plafond + 1)
+    else:
+        G.kroonluchter(W, x, y_plafond - 3, z, r=2.6, lagen=2, ymax=y_plafond + 1)
+
+
+def KA_luchter_oud(W, x, y_plafond, z):
     for k in range(3):
         zet(W, x, y_plafond - 1 - k, z, "minecraft:iron_chain[axis=y,waterlogged=false]")
     zet(W, x, y_plafond - 4, z, "goudblok")
@@ -505,7 +514,7 @@ def universiteit(W, S, info):
         zet(W, x + 1, y0 + 2, za + 6, "minecraft:lectern[facing=south,has_book=true,powered=false]")
         zet(W, x, y0 + 2, za + 5, "minecraft:candle[candles=3,lit=true,waterlogged=false]")
     for x in range(-60, -36, 8):
-        KA_luchter(W, x, y0 + 14, za + 6)
+        KA_luchter(W, x + 1, y0 + 14, za + 6, groot=False)
     # archive (west wing, south part) + lecture hall (west wing north part + the south wing's west end)
     for z in range(-66, -54, 2):
         doos(W, -74, y0 + 1, z, -67, y0 + 3, z, "minecraft:bookshelf")
@@ -886,6 +895,10 @@ def wolkplatformen(W, S, info):
             top = b
         else:
             top = nz.max()
+        if "vin" not in pid:
+            # V-INT: the tail fluke has no piers above it: its platforms sit on the skin's real top (the lowest-run rule put them
+            # at y 206 inside/under the lobe while the railed tail path from the lift arrives on top at 212 -> unreachable)
+            top = nz.max()
         ytop = int(W.b[1] + top)
         for x in range(cx - r - 2, cx + r + 3):
             for z in range(cz - r - 2, cz + r + 3):
@@ -998,6 +1011,7 @@ def pad(W, punten, breed=1, blok="steen", hek="minecraft:pale_oak_fence"):
         for i in range(n + 1):
             pts.append((round(a[0] + (b[0] - a[0]) * i / max(n, 1)), round(a[1] + (b[1] - a[1]) * i / max(n, 1))))
     vorig = None
+    pad_naam = None   # V-INT: the path block's real name (for the junction check below)
     for j, (x, z) in enumerate(pts):
         t = _top(W, x, z)
         if t is None:
@@ -1009,7 +1023,10 @@ def pad(W, punten, breed=1, blok="steen", hek="minecraft:pale_oak_fence"):
             if abs(s_) <= breed:
                 doos(W, px, min(h, t) - 1, pz, px, h, pz, blok)
                 leeg(W, px, h + 1, pz, px, h + 3, pz)
+                pad_naam = pad_naam or naam(W, px, h, pz)
             else:
+                if pad_naam and naam(W, px, h, pz) == pad_naam and is_lucht(W, px, h + 1, pz):
+                    continue   # V-INT: already a path here (the junction of the tail path's branches): no railing across it
                 if is_lucht(W, px, h + 1, pz) or naam(W, px, h + 1, pz) == LUCHT:
                     zet(W, px, h, pz, blok)
                     zet(W, px, h + 1, pz, hek)
@@ -1115,6 +1132,8 @@ def trap_hekken(W):
     trap_f = {}
     for i, s in enumerate(W.pal):
         k = s.split("[")[0]
+        if k == "guhs:gouden_kroonlijst_trap" or "dakpan" in k:
+            continue      # [U-Z5] gold crockets of pinnacles/spires (gotiek.py) and roof tiles are no walking stairs
         if (k.endswith("_stairs") or k.endswith("_trap")) and "facing=" in s and "half=bottom" in s:
             trap_f[i] = s.split("facing=")[1].split(",")[0].split("]")[0]
     n = 0
@@ -1222,6 +1241,10 @@ def bouw(W, S, log=print):
     log("grote gebouwen klaar")
     hz = huizen(W, S, info)
     log(f"huizen: {len(hz)} met deur + interieur; bovenverdieping (T-WOLKWAL): {', '.join(BOVEN_KLAAR)}")
+    import hoog3   # [U-Z5] depth on the university, palace, council hall, academy, station; window hoods city-wide
+    hoog3.bouw(W, S, info, log=log)
+    import binnen2   # [U-Z5BINNEN] lighter interiors: round chandeliers, sconces, candelabra, marble floors, light pools
+    binnen2.bouw(W, S, info, log=log)
     nt, mis = terrastrappen(W, S)
     log(f"terrastrappen: {nt} (passen niet: {mis})")
     wolkwaldroom(W, S, info)

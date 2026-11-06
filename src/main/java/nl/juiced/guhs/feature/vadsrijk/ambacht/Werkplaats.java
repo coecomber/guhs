@@ -35,6 +35,18 @@ public final class Werkplaats {
     private Werkplaats() {
     }
 
+    /**
+     * U-AMBACHT2 (Hoogvads is the professions capital): T1-T3 recipes work at every workshop; T4 only in Hoogvads' Ambachtsgilde
+     * (the z5_leermeester_* teachers) or Lampionhaven's workshop ({@code z4_werkplaats}); T5 only at the Gilde. {@code npc} null =
+     * the dev command (anywhere).
+     */
+    public static boolean magHier(@Nullable String npc, Recept r) {
+        if (r.tier() <= 3 || npc == null || npc.startsWith("z5_leermeester") || npc.equals("z5_gildemeester")) {
+            return true;
+        }
+        return r.tier() == 4 && npc.equals("z4_werkplaats");
+    }
+
     public static boolean kent(ServerPlayer p, Recept r) {
         return AmbachtData.level(p, r.ambacht()) >= r.level();
     }

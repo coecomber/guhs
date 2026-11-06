@@ -36,6 +36,31 @@ public final class Z5Bewoners {
         return "textures/entity/" + b.skin() + ".png";
     }
 
+    /**
+     * U-Z5: every skin on the model it was made for. The npc_* skins are sitting-guh characters (their own guh_npc_* model, the
+     * sitting guh's animations), the konijntje has its own model, the uiltje is a bird (a snow guh here); the rest is guh fur on
+     * the guh model (the renderer hides the saddle/armour/outfit bones, see Z3BazenClient.FigurantRenderer).
+     */
+    static String[] vorm(Z5WereldPlekken.Bewoner b) {
+        String s = b.skin();
+        boolean zit = b.soort() == 1;
+        if (s.startsWith("npc_")) {
+            return new String[]{"guh_npc_" + s.substring(4), "textures/entity/" + s + ".png", "guh_sitting", "animation.guh_sitting.idle"};
+        }
+        if (s.startsWith("guh_konijntje")) {
+            return new String[]{"guh_konijntje", "textures/entity/" + s + ".png", "guh_konijntje", zit ? "zit" : "idle"};
+        }
+        if (s.equals("guh_uiltje")) {
+            s = "guh_snow";
+        }
+        return new String[]{"guh", "textures/entity/" + s + ".png", "guh", zit ? "animation.guh.sit" : "animation.guh.idle"};
+    }
+
+    private static Z3Figurant maak(ServerLevel sl, Vec3 v, Z5WereldPlekken.Bewoner b) {
+        String[] m = vorm(b);
+        return Z3Figurant.maak(sl, v, b.yaw(), m[0], m[1], m[2], m[3], b.soort() == 3 ? 1.0f : 0.8f);
+    }
+
     static void tick(ServerLevel sl) {
         if (!aan) {
             return;
@@ -72,14 +97,14 @@ public final class Z5Bewoners {
                     break;
                 }
             }
-            if (!dicht || !sl.isLoaded(net.minecraft.core.BlockPos.containing(v))) {
+            if (!dicht || !nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, net.minecraft.core.BlockPos.containing(v))) {   // U-DUBBEL (was isLoaded)
                 continue;
             }
-            String anim = b.soort() == 1 ? "animation.guh.sit" : "animation.guh.idle";
             Z3Figurant f = b.soort() == 2   // T-WOLKWAL: the knights are Wolkwacht-ridders (own model)
                     ? nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.Wolkwacht.prop(sl, v, b.yaw(), nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.Wolkwacht.vacht(i), false, 0.85f)
-                    : Z3Figurant.maak(sl, v, b.yaw(), "guh", textuur(b), "guh", anim, b.soort() == 3 ? 1.0f : 0.8f);
+                    : maak(sl, v, b);
             if (f != null) {
+                nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(f, "z5:bewoner:" + i);   // U-DUBBEL
                 NU.put(i, f);
             }
         }

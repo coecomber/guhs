@@ -108,29 +108,35 @@ public class VadsrijkZ3SystemenGameTests {
         helper.succeed();
     }
 
+    /** U-SPECS: the old lv-50 step is gone; Schemerwijze (this slice's ult upgrade) is now the Sterrenwever's step 3 (lv 58). */
     @GuhTest(template = "empty", batch = BATCH)
     public static void advancementStap4(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         SpelerData d = Spelers.data(p);
         d.klasse = Klassen.MAGIER;
-        for (int s = 1; s <= 3; s++) {
+        Boom.knopen(d, Klassen.MAGIER).add(nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STERRENWEVER.knoop());
+        for (int s = 1; s <= 2; s++) {
             Boom.knopen(d, Klassen.MAGIER).add("m_adv" + s);
         }
-        d.xp.put(Klassen.MAGIER, Levels.totaalVoor(49));
-        helper.assertTrue(Advancement.stap(p, Klassen.MAGIER) == 3 && !Advancement.kanDoen(p, Klassen.MAGIER), "lv 49: not yet");
-        helper.assertTrue(Advancement.nodigLevel(3) == 50 && Advancement.MAX_STAP == 4, "step 4 at 50");
-        d.xp.put(Klassen.MAGIER, Levels.totaalVoor(50));
-        helper.assertTrue(Advancement.kanDoen(p, Klassen.MAGIER), "lv 50: step 4 is open");
-        double voor = Spelers.stats(p).get(Stat.WIJSHEID);
-        helper.assertTrue(Advancement.doe(p, Klassen.MAGIER), "the ceremony");
-        helper.assertTrue(Advancement.stap(p, Klassen.MAGIER) == 4 && Advancement4.heeft(p, Klassen.MAGIER), "step 4 done");
-        helper.assertTrue(Advancement.titelKey(Klassen.MAGIER, 4).equals("vadsrijk.klassen.titel.vadsmagier.4"), "title Schemerwijze");
-        helper.assertTrue(Spelers.stats(p).get(Stat.WIJSHEID) > voor, "the adv4 node gives its stats");
-        helper.assertTrue(!Advancement.kanDoen(p, Klassen.MAGIER), "no 5th step");
-        Boom.knopen(d, Klassen.MAGIER).add("m_wijs");
-        d.respecKlaar = 0;
-        helper.assertTrue(Boom.respec(d, Klassen.MAGIER, System.currentTimeMillis()) == null && Advancement.stap(p, Klassen.MAGIER) == 4,
-                "a respec keeps the advancement");
+        Advancement.POORTEN = false;
+        try {
+            d.xp.put(Klassen.MAGIER, Levels.totaalVoor(57));
+            helper.assertTrue(Advancement.stap(p, Klassen.MAGIER) == 2 && !Advancement.kanDoen(p, Klassen.MAGIER), "lv 57: not yet");
+            helper.assertTrue(Advancement.nodigLevel(2) == 58 && Advancement.MAX_STAP == 3, "step 3 at 58");
+            d.xp.put(Klassen.MAGIER, Levels.totaalVoor(58));
+            helper.assertTrue(Advancement.kanDoen(p, Klassen.MAGIER), "lv 58: step 3 is open");
+            double voor = Spelers.stats(p).get(Stat.WIJSHEID);
+            helper.assertTrue(Advancement.doe(p, Klassen.MAGIER), "the ceremony");
+            helper.assertTrue(Advancement.stap(p, Klassen.MAGIER) == 3 && Advancement4.heeft(p, Klassen.MAGIER), "step 3 done");
+            helper.assertTrue(Advancement.titelKey(p).equals("vadsrijk.klassen.titel.sterrenwever.3"), "title Schemerwijze: " + Advancement.titelKey(p));
+            helper.assertTrue(Spelers.stats(p).get(Stat.WIJSHEID) > voor, "the adv3 node gives its stats");
+            helper.assertTrue(!Advancement.kanDoen(p, Klassen.MAGIER), "no 4th step");
+            Boom.knopen(d, Klassen.MAGIER).add("m_wijs");
+            helper.assertTrue(Boom.respec(d, Klassen.MAGIER, System.currentTimeMillis()) == null && Advancement.stap(p, Klassen.MAGIER) == 3,
+                    "a respec keeps the advancement");
+        } finally {
+            Advancement.POORTEN = true;
+        }
         helper.succeed();
     }
 
@@ -144,15 +150,17 @@ public class VadsrijkZ3SystemenGameTests {
                     helper.assertTrue(Boom.MIN_LEVEL.getOrDefault(b.id(), 0) >= 40, k.id() + ": zone-3 node without gate " + b.id());
                 }
             }
-            helper.assertTrue(n == 4, k.id() + " has " + n + " zone-3 nodes");
+            helper.assertTrue(n >= 4, k.id() + " has " + n + " zone-3 nodes");   // U-SPECS: + the spec keystones in row 7
         }
+        // U-SPECS: Schorshuid is in the Tank branch (under IJzeren Knuffel), Drakenkussen ends the trunk (under Kristalhart)
         Klasse r = Klassen.van(Klassen.RIDDER);
-        Set<String> heeft = new LinkedHashSet<>(List.of("r_pluisvacht", "r_taai", "r_beschermknuffel", "r_bolwerk", "r_ijspantser", "r_kristalhart"));
+        Set<String> heeft = new LinkedHashSet<>(List.of("r_pluisvacht", "r_doornknuffel", "r_beschermknuffel", "r_bolwerk", "r_onverzettelijk",
+                "r_ijzeren_knuffel", "r_knuffelspier", "r_taai", "r_schokgolf", "r_kussenstorm", "r_ijspantser"));
         helper.assertTrue("level".equals(Boom.waaromNiet(r, heeft, 39, "r_schorshuid")), "row 6 is closed at lv 39");
         helper.assertTrue(Boom.waaromNiet(r, heeft, 40, "r_schorshuid") == null, "row 6 opens at lv 40 (after a row-5 node): "
                 + Boom.waaromNiet(r, heeft, 40, "r_schorshuid"));
-        helper.assertTrue("vereist".equals(Boom.waaromNiet(r, heeft, 50, "r_drakenkussen")), "the keystone needs a row-6 node");
-        heeft.add("r_schorshuid");
+        helper.assertTrue("vereist".equals(Boom.waaromNiet(r, heeft, 50, "r_drakenkussen")), "the keystone needs the trunk node above");
+        heeft.add("r_kristalhart");
         helper.assertTrue("level".equals(Boom.waaromNiet(r, heeft, 47, "r_drakenkussen")), "keystone closed at 47");
         helper.assertTrue(Boom.waaromNiet(r, heeft, 48, "r_drakenkussen") == null, "keystone at 48");
         helper.succeed();

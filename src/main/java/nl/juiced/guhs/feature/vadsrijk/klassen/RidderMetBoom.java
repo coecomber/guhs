@@ -162,7 +162,7 @@ public final class RidderMetBoom implements Klasse {
             switch (v.id()) {
                 case "kussenklap" -> {
                     // (r_kussenstorm: -1.5 s cooldown and 8 energy cheaper, KlassenRegistry.kernHaken via kern's COOLDOWN_MOD/ENERGIE_MOD)
-                    if (Boom.heeft(p, "r_adv1")) {
+                    if (nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHILDRIDDER, 1)) {   // U-SPECS: Dubbelklap = Schildridder step 1
                         Later.na(6, () -> {
                             if (p.isRemoved() || !Vadsrijk.in(p)) {
                                 return;
@@ -291,7 +291,7 @@ public final class RidderMetBoom implements Klasse {
         }
     }
 
-    /** Paladijnsaura (adv 2): every 2 s you and your party within 10 blocks heal 1.5 % of their Vads. */
+    /** Paladijnsaura (U-SPECS: the Tank branch keystone r_paladijnsaura, was adv 2): every 2 s you and your party within 10 blocks heal 1.5 % of their Vads. */
     static void tick(MinecraftServer server) {
         if (server.getTickCount() % 40 != 0) {
             return;
@@ -301,7 +301,7 @@ public final class RidderMetBoom implements Klasse {
             return;
         }
         for (ServerPlayer p : sl.players()) {
-            if (!Spelers.klasse(p).id().equals(Klassen.RIDDER) || !Spelers.heeftKnoop(p, "r_adv2")) {
+            if (!Spelers.klasse(p).id().equals(Klassen.RIDDER) || !Spelers.heeftKnoop(p, "r_paladijnsaura")) {
                 continue;
             }
             for (ServerPlayer l : Fx.party(p, 10)) {

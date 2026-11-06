@@ -943,25 +943,9 @@ Q("z2_s23_gondel", "zij", "z2_gondelier", "Naar de top!",
 ZIJ_HOUDEN = ("z2_s03_knuffels", "z2_s04_schaatsen", "z2_s05_echokoor", "z2_s13_ijsbloemen", "z2_s23_gondel")
 QUESTS[:] = [q for q in QUESTS if q["soort"] != "zij" or q["id"] in ZIJ_HOUDEN]
 
-# ===== job advancement at lv 30 per class (klassen + z2-systemen do the ceremony) ===========================================
-KLASSEN = {
-    "knuffelridder": ("Knuffelridder", "Kristalkampioen"),
-    "pluisjager": ("Pluisjager", "Poolstervalk"),
-    "vadsmagier": ("Vadsmagiër", "Kristalorakel"),
-}
-for k, (naam, t3) in KLASSEN.items():
-    Q(f"z2_adv30_{k}", "klasse", "z2_ordemeester", f"De proef van de {t3}",
-      f"De derde titel van De Knuffelorde: {t3}. Bereik level 30 als {naam} en bewijs je in de Splinterkloof.",
-      [D("level", "*", 30, f"Bereik level 30 als {naam} (vecht op de Galmhellingen, bij het meer en in de kloof)",
-         plek="gebied:z2_splinterkloof"),
-       D("opvrolijk", "gebied:z2_splinterkloof", 20, "Versla 20 wezens in de Splinterkloof, ten noorden van Kandijkom",
-         plek="gebied:z2_splinterkloof")],
-      [("npc", f"Je draagt al twee titels van de Orde. Maar in de bergen wacht een derde: {t3}."),
-       ("npc", "Bereik level 30 en versla twintig wezens in de Splinterkloof. Dan houd ik hier, in de kleinste kapel van het "
-               "rijk, de grootste ceremonie.")],
-      f"Level 30 als {naam}, en twintig wezens in de Splinterkloof.",
-      [("npc", f"De kristallen zingen, de chocomelk dampt. Ik benoem je tot {t3}! Grootmeester Vadsvoet zal trots zijn.")],
-      xp=10000, munten=8000, lv=28, klasse=k, na=["z2_hq02_kandijkom"], actie_klaar=f"advancement:{k}:3")
+# ===== (U-SPECS, ronde 4) the job advancement at lv 30 is gone: the new model has steps at class lv 17 (zone 1, the spec),
+# 35 (zone 3) and 58 (zone 5). Zone 2 has no ceremony any more; the Ordemeester's desk (role "ordetempel") stays for the tree,
+# the respec and the spec switch.
 
 # ===== the secret: the Mika-boormeester (bazen owns the boss: Boormeester.ontgrendel(p)) ===================================
 Q("z2_geheim_boormeester", "geheim", "z2_uitvinder", "Het gebrom in de berg",

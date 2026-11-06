@@ -31,9 +31,30 @@ public class VertrekbordEntity extends Entity {
         return false;
     }
 
+    /**
+     * U-LUCHTSCHIP: the board can be clicked (right or left): "may I fly from here, and if not, why not?". The click box (2.4 x 0.32,
+     * {@code LuchtschipRegistry}) lies over the text line: the entity stands {@link #ONDER} higher than before and its name tag
+     * hangs that much lower (nameTagOffset), so the text did not move.
+     */
     @Override
     public boolean isPickable() {
-        return false;
+        return !isRemoved();
+    }
+
+    /** U-LUCHTSCHIP: how much higher than the old marker the entity stands now (see {@link #isPickable}). */
+    public static final double ONDER = 0.6;
+    /** (server) the harbour of this board line. */
+    @javax.annotation.Nullable
+    public String haven;
+
+    @Override
+    public net.minecraft.world.InteractionResult interact(net.minecraft.world.entity.player.Player player, net.minecraft.world.InteractionHand hand,
+            net.minecraft.world.phys.Vec3 location) {
+        if (!level().isClientSide() && player instanceof net.minecraft.server.level.ServerPlayer sp && hand == net.minecraft.world.InteractionHand.MAIN_HAND
+                && haven != null) {
+            Luchtschepen.bordKlik(sp, haven);
+        }
+        return net.minecraft.world.InteractionResult.SUCCESS;
     }
 
     @Override

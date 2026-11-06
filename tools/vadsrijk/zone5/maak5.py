@@ -171,8 +171,11 @@ def maak(alleen=None, snap=True):
     hgt = np.full((NX, NZ), -1, np.int16)
     nm = np.full((NX, NZ), 0, np.uint16)
     totaal, grootte, n_naad = 0, 0, 0
+    sys.path.insert(0, os.path.join(HIER, "..", "grotten"))
+    import grot as GROT          # U-GROTTEN: the zone-5 cave (Wolkengrotten) in the whale's head
     for (tx, tz) in tegels:
         vol = tegel(W, O, tx, tz)
+        GROT.pas_toe(vol, tx, tz, O.id, O.pal.lijst, 5)
         pad = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
         onder = zone4_onder(O, pad)
         if not vol.any() and onder is None:
@@ -231,4 +234,8 @@ if __name__ == "__main__":
     ap.add_argument("--geen-snap", action="store_true")
     ap.add_argument("--werkers", type=int, default=1)   # (accepted for maak_kaart; zone 5 builds in one process)
     a = ap.parse_args()
+    _t_verbind = time.time()   # U-HEKKEN
     maak(a.alleen, not a.geen_snap)
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))   # U-HEKKEN: connection pass
+    import verbind
+    verbind.na_sinds(_t_verbind)

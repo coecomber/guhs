@@ -25,12 +25,18 @@ public class BoekScherm extends EcoScherm {
     private boolean eerste = true;
 
     public BoekScherm(CompoundTag data) {
-        super("voltooiing", Component.translatable("vadsrijk.voltooiing.titel"), data, List.of(), 380, 232);
+        this(data, Component.translatable("vadsrijk.voltooiing.titel"));
+    }
+
+    /** U-TABS: for panels that show the same book data differently (the menu's Puzzels tab). */
+    protected BoekScherm(CompoundTag data, Component titel) {
+        super("voltooiing", titel, data, List.of(), 380, 232);
     }
 
     @Override
     protected void init() {
         super.init();
+        zoekveld(left + w - 6 - 112, top + 3, 112, () -> scroll = 0);   // U-TABS: search the right page
         if (eerste) {
             eerste = false;
             String hier = data.getStringOr("hier", "");
@@ -49,7 +55,7 @@ public class BoekScherm extends EcoScherm {
         return VoltooiingClient.TAB;
     }
 
-    static net.minecraft.world.item.ItemStack icoon(String id) {
+    public static net.minecraft.world.item.ItemStack icoon(String id) {   // (U-TABS: public)
         try {
             return new net.minecraft.world.item.ItemStack(net.minecraft.core.registries.BuiltInRegistries.ITEM.getValue(net.minecraft.resources.Identifier.parse(id)));
         } catch (RuntimeException e) {
@@ -87,29 +93,35 @@ public class BoekScherm extends EcoScherm {
         if (zl.isEmpty()) {
             return;
         }
-        // ---- zone bookmarks in the title band (right-aligned) ------------------------------------------------------------------
-        int bx = left + w - 6;
-        for (int i = zl.size() - 1; i >= 0; i--) {
+        // ---- zone bookmarks (U-TABS: a row of equal tabs under the title band; they ran off the left edge in the band) ------
+        int rij = top + 21, gat = 3, n = zl.size();
+        int bwElk = Math.max(24, (w - 12 - gat * (n - 1)) / n);
+        int bx = left + 6;
+        for (int i = 0; i < n; i++) {
             CompoundTag zt = zl.getCompoundOrEmpty(i);
             Component naam = Component.translatable(zt.getStringOr("naam", ""));
-            int bw = font.width(naam) + 10;
-            bx -= bw;
-            boolean sel = i == zone, hover = binnen(mx, my, bx, top + 2, bw, 15);
-            g.fill(bx, top + 2, bx + bw, top + 18, sel ? PANEEL : hover ? 0xFFFFB0D8 : 0xFFFF9ACC);
-            g.text(font, naam, bx + 5, top + 6, sel ? TEKST : WIT, !sel);
+            boolean sel = i == zone, hover = binnen(mx, my, bx, rij, bwElk, 14);
+            g.fill(bx, rij, bx + bwElk, rij + 14, sel ? 0xFFFF7FC0 : hover ? 0xFFFFB0D8 : 0xFFFFC8E4);
+            int k = zt.getIntOr("k", 0), t = zt.getIntOr("t", 0), pct = t == 0 ? 100 : (int) Math.floor(k * 100.0 / t);
+            String label = font.plainSubstrByWidth(naam.getString(), bwElk - 8);
+            g.centeredText(font, Component.literal(label), bx + bwElk / 2, rij + 3, sel ? WIT : TEKST);
+            if (hover) {
+                tip(mx, my, bx, rij, bwElk, 14, List.of(naam.copy().withStyle(ChatFormatting.BOLD), Component.translatable("vadsrijk.voltooiing.verkend", k, t)
+                        .append(" (" + pct + "%)").withStyle(ChatFormatting.GRAY)));
+            }
             final int idx = i;
             if (!sel) {
-                klikvlak(bx, top + 2, bw, 16, () -> {
+                klikvlak(bx, rij, bwElk, 14, () -> {
                     zone = idx;
                     categorie = 0;
                     scroll = 0;
                 });
             }
-            bx -= 3;
+            bx += bwElk + gat;
         }
 
         // ---- the open book -----------------------------------------------------------------------------------------------------
-        int bl = left + 6, bt = top + 22, br = left + w - 6, bb = top + h - 6, mid = (bl + br) / 2;
+        int bl = left + 6, bt = top + 38, br = left + w - 6, bb = top + h - 6, mid = (bl + br) / 2;
         g.fill(bl - 1, bt - 1, br + 1, bb + 1, 0xFFE7B9CF);
         g.fill(bl, bt, mid - 2, bb, PAPIER);
         g.fill(mid + 2, bt, br, bb, PAPIER);
@@ -202,7 +214,17 @@ public class BoekScherm extends EcoScherm {
         y += 11;
         g.fill(x, y, x + pw, y + 1, LINT_ZACHT);
         y += 4;
-        ListTag dl = c.getListOrEmpty("d");
+        ListTag dl0 = c.getListOrEmpty("d"), dl = new ListTag();   // U-TABS: filtered by the search box
+        for (int i = 0; i < dl0.size(); i++) {
+            CompoundTag d = dl0.getCompoundOrEmpty(i);
+            boolean geheim0 = d.getBooleanOr("g", false) && d.getByteOr("s", (byte) 0) == 0;
+            if (past((geheim0 ? "???" : naam(d).getString()) + " " + (d.contains("h") ? hint(d).getString() : ""))) {
+                dl.add(d);
+            }
+        }
+        if (dl.isEmpty() && !zoekTekst.isEmpty()) {
+            g.text(font, Component.translatable("vadsrijk.menu.zoek.niks"), x, y, ZACHT, false);
+        }
         int zichtbaar = Math.max(1, (onder - y) / REGEL), max = Math.max(0, dl.size() - zichtbaar);
         scroll = Math.max(0, Math.min(scroll, max));
         int lijstTop = y;
@@ -277,11 +299,11 @@ public class BoekScherm extends EcoScherm {
     }
 
     /** The name: key + optional arg; "key#n" = a lang key and a literal number (campfires: "Kampvuur: Sporenwoud 2"). */
-    static MutableComponent naam(CompoundTag d) {
+    public static MutableComponent naam(CompoundTag d) {   // (U-TABS: public)
         return tekst(d.getStringOr("n", ""), d.getStringOr("na", ""));
     }
 
-    static MutableComponent hint(CompoundTag d) {
+    public static MutableComponent hint(CompoundTag d) {   // (U-TABS: public)
         return tekst(d.getStringOr("h", ""), d.getStringOr("ha", ""));
     }
 
@@ -305,14 +327,5 @@ public class BoekScherm extends EcoScherm {
             scroll = 0;
         }
         return true;
-    }
-
-    @Override
-    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
-        if (VoltooiingClient.BOEK.matches(event)) {
-            onClose();
-            return true;
-        }
-        return super.keyPressed(event);
     }
 }

@@ -60,6 +60,14 @@ PALET = {
 }
 # the floor under a flower must be soil: flowers stand on a grass/moss patch
 BLOEMGROND = {1: "minecraft:moss_block", 2: "minecraft:moss_block", 3: "minecraft:moss_block"}
+# U-GROTTEN: palettes for the zone-4 and zone-5 cave puzzles
+PALET[4] = dict(vloer="minecraft:prismarine_bricks", muur="minecraft:dark_prismarine", platform="minecraft:prismarine",
+                struik="minecraft:azalea_leaves[persistent=true]", bloem="minecraft:blue_orchid", dak="minecraft:dark_prismarine",
+                vul="minecraft:sandstone", lamp="minecraft:lantern")
+PALET[5] = dict(vloer="guhs:wolkmarmer_gepolijst", muur="guhs:wolkmarmer", platform="minecraft:calcite",
+                struik="minecraft:azalea_leaves[persistent=true]", bloem="minecraft:lily_of_the_valley", dak="guhs:wolkmarmer",
+                vul="minecraft:calcite", lamp="minecraft:lantern")
+BLOEMGROND[4] = BLOEMGROND[5] = "minecraft:moss_block"
 
 # the puzzle blocks: soort -> (shape, interactive)
 BLOKKEN = ["drukplaat", "klanksteen", "voorspeelsteen", "symboolsteen", "probeerknop", "herstelknop", "spiegel", "lichtbron",
@@ -525,6 +533,89 @@ SOORTNAAM = {
 # ======================================================================================================================
 # building the json
 # ======================================================================================================================
+# ---- U-GROTTEN: one puzzle per atmosphere cave (anchor = the cave's puzzle hall, tools/vadsrijk/grotten/grotplan.py) ---------
+puzzel("grot_zwamgrot", 1, "volgorde", ("grot", "grot_zwamgrot_puzzel", 0, 0), [
+    "L.......L",
+    ".........",
+    "..a...b..",
+    "....c....",
+    "..d...e..",
+    "....V....",
+    "L.......L",
+], {"a": ("klanksteen", 0), "b": ("klanksteen", 2), "c": ("klanksteen", 4), "d": ("klanksteen", 5), "e": ("klanksteen", 7),
+    "V": ("voorspeelsteen", 0)}, "cadbe",
+    naam="Het Echolied",
+    uitleg="De Zwamgrot zingt terug! Klik op de voorspeelsteen, luister naar de echo en speel het lied na op de zingende stenen.",
+    hint1="Het lied heeft vijf tonen en begint bij de steen in het midden.",
+    hint2="Midden, linksboven, linksonder, rechtsboven, rechtsonder.",
+    aanwijzing="Diep in de Zwamgrot staan stenen die een echo kennen.",
+    beloning=dict(munten=900, items=[["guhs:vr_item_verbetersteentje", 2]]))
+
+puzzel("grot_kristalgrot", 2, "licht", ("grot", "grot_kristalgrot_puzzel", 0, 0), [
+    "#####.####",
+    "#T.m...m.#",
+    "#........#",
+    "#..m..m..#",
+    "#........#",
+    "#.m...m.S#",
+    "##########",
+], {"S": ("lichtbron", RICHTING["W"]), "m": ("spiegel", 0), "T": ("lichtdoel", 0)},
+    naam="De IJsspiegels",
+    uitleg="Draai de ijsspiegels tot de lichtstraal het doel linksboven raakt.",
+    hint1="De straal moet eerst omhoog voordat hij naar links kan. Niet elke spiegel doet mee.",
+    hint2="Omhoog bij de eerste spiegel, links bij de spiegel daarboven, omhoog, en dan helemaal naar links.",
+    aanwijzing="In de Kristalgrot vangen ijsspiegels het licht.",
+    beloning=dict(munten=2600, items=[["guhs:vr_item_verbetersteentje", 3]]))
+
+puzzel("grot_wortelgrot", 3, "schuif", ("grot", "grot_wortelgrot_puzzel", 0, 0), [
+    "#########",
+    "#.......#",
+    "#.x...B.#",
+    "#...#...#",
+    "#...B.x.#",
+    "#.B.#...#",
+    "#.x.....#",
+    "#.....R.#",
+    "####.####",
+], {"B": ("schuifblok", 0), "x": ("doelvloer", 0), "R": ("herstelknop", 0)},
+    naam="De Wortelknopen",
+    uitleg="Duw de wortelknopen (klik erop) naar de vakjes. Vast? De herstelknop zet alles terug.",
+    hint1="Kijk eerst waar je moet STAAN om een knoop de goede kant op te duwen.",
+    hint2="Begin met de knoop linksonder: één keer omlaag.",
+    aanwijzing="In de Wortelgrot liggen wortelknopen in de weg.",
+    beloning=dict(munten=6000, items=[["guhs:vr_item_verbetersteentje", 4]]))
+
+puzzel("grot_koraalgrot", 4, "volgorde", ("grot", "grot_koraalgrot_puzzel", 0, 0), [
+    "L.=====.L",
+    ".........",
+    "..g...r..",
+    ".........",
+    "..b...y..",
+    ".........",
+    "L.=====.L",
+], {"g": ("drukplaat", 3), "r": ("drukplaat", 0), "b": ("drukplaat", 2), "y": ("drukplaat", 1)}, "bgyr",
+    naam="Het Schelpenpad",
+    uitleg="Stap op de platen in de goede volgorde: eerst de zee, dan het zeewier, dan de zon, en als laatste het koraal.",
+    hint1="De zee is blauw, zeewier is groen...",
+    hint2="De volgorde is: blauw, groen, geel, roze.",
+    aanwijzing="In de Koraalgrot liggen vier gekleurde schelpplaten.",
+    beloning=dict(munten=9000, items=[["guhs:vr_item_verbetersteentje", 4], ["guhs:vr_item_herrolknabbel", 1]]))
+
+puzzel("grot_wolkengrot", 5, "symbool", ("grot", "grot_wolkengrot_puzzel", 0, 0), [
+    "L.....L",
+    ".......",
+    ".a.b.c.",
+    ".......",
+    "L..P..L",
+], {"a": ("symboolsteen", 0), "b": ("symboolsteen", 0), "c": ("symboolsteen", 0), "P": ("probeerknop", 0)}, "druppel maan ster",
+    naam="Het Wolkenslot",
+    uitleg="Draai de symboolstenen (klik) en druk op de knop. In de wolk staat geschreven: eerst huilt een wolk, dan slaapt hij, dan droomt hij.",
+    hint1="Een wolk die huilt laat iets vallen. Slapen doe je 's nachts.",
+    hint2="Druppel, maan, ster.",
+    aanwijzing="Diep in de Wolkengrotten zit een wolk met een slot.",
+    beloning=dict(munten=12000, items=[["guhs:vr_item_verbetersteentje", 5], ["guhs:vr_item_herrolknabbel", 1]]))
+
+
 def _zet(blokken, x, y, z, b):
     blokken[(x, y, z)] = b
 

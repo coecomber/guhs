@@ -240,22 +240,15 @@ def zee_z3(vol, tx, tz, palet_id):
             kol[f] = zand if R[i, k] < 260 else grind
         seg = kol[f + 1:ZEE + 1]
         seg[seg == 0] = water
-    # cloud banks on the water (outside the island rim)
-    n = _ruis2(X, Z, 46, 5) * 0.65 + _ruis2(X, Z, 17, 6) * 0.35
-    drempel = np.full(X.shape, 0.52)
-    dk = np.abs(X - kloof_x(Z))
-    drempel = np.where(dk < 40, 0.30, drempel)                        # dense cloud cliffs along the kloof
-    drempel = np.where(dk < 15, 9.0, drempel)                         # the open channel itself
-    oost = np.clip((X - 1620) / 90, 0, 1)
-    drempel = drempel + 0.22 * oost                                   # the Wolkenval: banks break apart towards zone 4
-    dik = np.clip((n - drempel) * 26, 0, 9) * (1 - 0.6 * oost)
-    dik = np.where(dk < 40, dik * 1.6 + 2 * (dik > 0), dik)
-    wkeus = (_ruis2(X, Z, 7, 9) * 4).astype(np.int32) % 4
+    # cloud banks on the water (outside the island rim): U-OVERGANG moved the field into zeenaad.wolk (shared with the seam pass and
+    # the Java sea filler, so the banks continue past the tile box and thin out instead of stopping at its edge)
+    import zeenaad
+    dik, wkeus = zeenaad.wolk(X, Z)
     for i, k in zip(*np.nonzero(zee & (R >= 262) & (dik >= 1))):
         kol = vol[i, :, k]
         if kol[ZEE - 1] != water or kol[ZEE] != water:
             continue                                                  # only over open water (not on a beach or a root)
         t = int(dik[i, k])
-        for y in range(ZEE, ZEE + 1 + t):
+        for y in range(ZEE, ZEE + 1 + t):   # (U-OVERGANG: the same blocks as zeenaad.wolk / ZeeVulling)
             if kol[y] in (0, water):
                 kol[y] = wolk[wkeus[i, k]]

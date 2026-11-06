@@ -104,7 +104,7 @@ public final class KlassenRegistry {
             if (lvl >= 2) {
                 Tips.toon(p, "vadsrijk.klassen.tip.punt");
             }
-            if (Advancement.kanDoen(p, kl) && (lvl == 10 || lvl == 20)) {
+            if (false && Advancement.kanDoen(p, kl) && (lvl == 10 || lvl == 20)) {   // U-SPECS: SpecRegistry tells it at 17/35/58
                 p.sendSystemMessage(Component.translatable("vadsrijk.klassen.adv.klaar", Component.translatable(
                         Advancement.titelKey(kl, Advancement.stap(p, kl) + 1))).withStyle(ChatFormatting.GOLD));
                 Tips.toon(p, "vadsrijk.klassen.tip.adv");
@@ -154,12 +154,12 @@ public final class KlassenRegistry {
                 .executes(c -> KlasseBalie.wissel(c.getSource().getPlayerOrException(), StringArgumentType.getString(c, "klasse")) ? 1 : 0)));
         k.then(dev("klasselevel").then(Commands.argument("klasse", StringArgumentType.word())
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(Klassen.alle().stream().map(Klasse::id), b))
-                .then(Commands.argument("level", IntegerArgumentType.integer(1, 35)).executes(c -> {
+                .then(Commands.argument("level", IntegerArgumentType.integer(1, nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX)).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
                     Spelers.zetKlasseLevel(p, StringArgumentType.getString(c, "klasse"), IntegerArgumentType.getInteger(c, "level"));
                     return 1;
                 }))));
-        k.then(dev("generiek").then(Commands.argument("level", IntegerArgumentType.integer(1, 35)).executes(c -> {
+        k.then(dev("generiek").then(Commands.argument("level", IntegerArgumentType.integer(1, nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX)).executes(c -> {
             Spelers.zetGeneriek(c.getSource().getPlayerOrException(), IntegerArgumentType.getInteger(c, "level"));
             return 1;
         })));
@@ -169,7 +169,7 @@ public final class KlassenRegistry {
             return 1;
         }));
         k.then(dev("adv").executes(c -> Advancement.doe(c.getSource().getPlayerOrException()) ? 1 : 0));
-        k.then(dev("punten").then(Commands.argument("level", IntegerArgumentType.integer(1, 35)).executes(c -> {
+        k.then(dev("punten").then(Commands.argument("level", IntegerArgumentType.integer(1, nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX)).executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             Spelers.zetLevel(p, IntegerArgumentType.getInteger(c, "level"));
             KlasseBalie.boom(p);

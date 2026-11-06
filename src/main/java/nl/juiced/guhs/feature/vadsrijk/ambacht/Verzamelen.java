@@ -181,7 +181,10 @@ public final class Verzamelen {
             boolean leeg = nu < staat(p, s).klaar;
             e.putBoolean("leeg", leeg);
             e.putBoolean("zeldzaam", !leeg && zeldzaam(p, s));
-            e.putBoolean("lvOk", g.ambacht() == Ambacht.IMKEREN || AmbachtData.level(p, g.ambacht()) >= AmbachtXp.tierLevel(g.tier()));
+            e.putBoolean("lvOk", AmbachtData.level(p, g.ambacht()) >= (g.ambacht() == Ambacht.IMKEREN ? Imkeren.korfLevel(g.tier()) : AmbachtXp.tierLevel(g.tier())));
+            if (g.zoek() == AmbachtPlekken.Zoek.KORAAL) {
+                e.putBoolean("duik", true);   // U-AMBACHT2: the client draws coral and an underwater hit box
+            }
             if (g.ambacht() == Ambacht.IMKEREN) {
                 Imkeren.syncInfo(p, s, e);
             }
@@ -260,10 +263,10 @@ public final class Verzamelen {
         Materiaal m = kies(p, sl, g);
         if (m != null) {
             MateriaalTas.geef(p, Materialen.stack(m.id(), q, n));
-            if (g.ambacht() == Ambacht.VISSEN && g.zone() == 4) {
+            if (m.vis() && g.zone() == 4) {   // (U-AMBACHT2: coral finds are not fish)
                 nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.meld(p, "z4_vis", "gevangen");   // T-INT: t-z4verhaal counts zone-4 fish
             }
-            if (g.ambacht() == Ambacht.VISSEN && AmbachtData.voegToe(p, "vissen", m.id())) {
+            if (m.vis() && AmbachtData.voegToe(p, "vissen", m.id())) {
                 p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.vis.nieuw", Component.translatable(m.naamKey())).withStyle(ChatFormatting.AQUA));
             }
         }
@@ -283,6 +286,9 @@ public final class Verzamelen {
         }
         if (g.ambacht() == Ambacht.HOUTHAKKEN && g.tier() == 3 && p.getRandom().nextDouble() < 0.3) {
             MateriaalTas.geef(p, Materialen.stack("roze_hars", q, 1));
+        }
+        if (g.zoek() == AmbachtPlekken.Zoek.KORAAL && p.getRandom().nextDouble() < 0.06) {
+            MateriaalTas.geef(p, Materialen.stack("parelschelp", q, 1));   // U-AMBACHT2: divers sometimes find a pearl shell
         }
         // xp: the tier amount, +10 % per quality step, x3 on a rare spot, halved when AFK
         double xp = AmbachtXp.verzamel(g.tier(), lv) * (1 + 0.1 * q) * (zeld ? 3 : 1) * (afk ? 0.5 : 1);
@@ -315,10 +321,16 @@ public final class Verzamelen {
     @Nullable
     static Materiaal kies(ServerPlayer p, ServerLevel sl, Groep g) {
         List<Materiaal> l = Materialen.van(g.ambacht(), g.tier());
+        if (g.ambacht() == Ambacht.VISSEN) {
+            // U-AMBACHT2: a dive spot gives the diving finds (coral, sponges), a fishing spot only fish
+            boolean duik = g.zoek() == AmbachtPlekken.Zoek.KORAAL;
+            l = new java.util.ArrayList<>(l);
+            l.removeIf(m -> m.duik() != duik);
+        }
         if (l.isEmpty()) {
             return null;
         }
-        if (g.ambacht() == Ambacht.VISSEN) {
+        if (g.ambacht() == Ambacht.VISSEN && g.zoek() != AmbachtPlekken.Zoek.KORAAL) {
             boolean nacht = !sl.isBrightOutside(), regen = sl.isRaining();
             Materiaal gewoon = null, n = null, r = null;
             for (Materiaal m : l) {
@@ -340,7 +352,8 @@ public final class Verzamelen {
     }
 
     private static ItemStack kristal(ServerPlayer p, int tier) {
-        List<String> soorten = tier >= 3 ? nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Kristallen.SOORTEN
+        List<String> soorten = tier >= 4 ? nl.juiced.guhs.feature.vadsrijk.zone4.wezens.loot.Z4Loot.KRISTALLEN   // U-AMBACHT2 (z4/z5 coast + sky)
+                : tier >= 3 ? nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Kristallen.SOORTEN
                 : List.of("rozekwarts", "zonnesteen", "galmkristal", "spiegelkwarts", "vonkkristal", "ijsglans");
         return nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Kristallen.stack(soorten.get(p.getRandom().nextInt(soorten.size())), 0, 1);
     }

@@ -32,7 +32,7 @@ import nl.juiced.guhs.storage.BankContents;
  * material on the cursor (or shift-click one in your inventory) = put it in. Buttons: Alles opbergen, Automatisch aan/uit,
  * Knapzak.
  */
-public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
+public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: in the Vadsrijk-menu
     private static final int RAND = 0xFF3A1F2C, PANEEL = 0xFFF7D4E0, DONKER = 0xFFD99AB2, VAK = 0xFF8B5A6E, VAK_IN = 0xFFB98398, TEKST = 0xFF5A2640;
     private EditBox zoek;
     private Button auto;
@@ -50,6 +50,7 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
     @Override
     protected void init() {
         super.init();
+        menuPlaats();   // U-TABS
         zoek = new EditBox(font, leftPos + 8, topPos + 16, 98, 11, Component.translatable("vadsrijk.opslag.tas.zoek"));
         zoek.setHint(Component.translatable("vadsrijk.opslag.tas.zoek").withStyle(ChatFormatting.GRAY));
         zoek.setMaxLength(40);
@@ -62,6 +63,38 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
         addRenderableWidget(Button.builder(Component.translatable("vadsrijk.opslag.knop.knapzak"), b -> stuur(MateriaalMenu.KNAPZAK, ItemStack.EMPTY, 0, false))
                 .bounds(x, y + 38, 70, 16).build());
         ververs(true);
+    }
+
+
+    // ---- U-TABS: the Vadsrijk-menu (frame around the chest look, tabs on top) --------------------------------------------------
+    private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
+
+    private boolean inMenu() {
+        return true;
+    }
+
+    @Override
+    public float menuSchaal() {
+        return inMenu() && kader != null ? kader.schaal() : 1f;
+    }
+
+    /** Before the buttons: the frame, the logical size, and the chest centred in it (buttons to its right). */
+    private void menuPlaats() {
+        if (!inMenu()) {
+            return;
+        }
+        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
+        int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 18;
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kader(win.getGuiScaledWidth(), win.getGuiScaledHeight(), imageWidth + 2 * 80, imageHeight + boven + 8);
+        width = kader.lw();
+        height = kader.lh();
+        leftPos = kader.left() + (kader.w() - imageWidth) / 2;
+        topPos = kader.top() + boven + Math.max(0, (kader.h() - boven - 8 - imageHeight) / 2);
+    }
+
+    private boolean inKader(double mx, double my) {
+        return kader != null && mx >= kader.left() && mx < kader.left() + kader.w() && my >= kader.top() - nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.TABS_H
+                && my < kader.top() + kader.h();
     }
 
     private Component autoTekst() {
@@ -117,6 +150,9 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mx, int my, float a) {
         super.extractBackground(g, mx, my, a);
+        if (kader != null) {   // U-TABS
+            nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.tekenKader(g, font, kader.left(), kader.top(), kader.w(), kader.h(), Component.translatable("vadsrijk.menu.tab.knapzak"), "materiaaltas", mx, my);
+        }
         int x = leftPos, y = topPos;
         g.fill(x - 1, y - 1, x + imageWidth + 1, y + imageHeight + 1, RAND);
         g.fill(x, y, x + imageWidth, y + imageHeight, PANEEL);
@@ -194,6 +230,10 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (kader != null && event.button() == 0 && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(), kader.left(), kader.top(), kader.w(),
+                font.width(Component.translatable("vadsrijk.menu.tab.knapzak").withStyle(ChatFormatting.BOLD)), "materiaaltas")) {   // U-TABS
+            return true;
+        }
         int i = index(event.x(), event.y());
         if (i != -1 && (event.button() == 0 || event.button() == 1)) {
             if (!menu.getCarried().isEmpty()) {
@@ -210,6 +250,9 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
     protected boolean hasClickedOutside(double mx, double my, int xo, int yo) {
         if (mx >= leftPos + imageWidth && mx < leftPos + imageWidth + 76 && my >= topPos && my < topPos + 60) {
             return false;
+        }
+        if (inKader(mx, my)) {
+            return false;   // U-TABS: (nor anywhere in the menu frame)
         }
         return super.hasClickedOutside(mx, my, xo, yo);
     }
@@ -231,6 +274,9 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> {
         }
         if (OpslagClient.KNAPZAK.matches(event)) {
             stuur(MateriaalMenu.KNAPZAK, ItemStack.EMPTY, 0, false);
+            return true;
+        }
+        if (nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, "materiaaltas")) {   // U-TABS
             return true;
         }
         return super.keyPressed(event);

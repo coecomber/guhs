@@ -32,8 +32,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.Arenas;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 
 /**
- * T-KARAKTER: the server operations on characters: create ({@link #maak}), switch ({@link #wissel}), rename, lower the mode,
- * retire ({@link #pensioen}). Everything runs on the server thread; a switch holds a per-player lock so nothing can happen in
+ * T-KARAKTER: the server operations on characters: create ({@link #maak}), switch ({@link #wissel}), rename, retire
+ * ({@link #pensioen}, then {@link #naRust}). U-KARAKTER: every slot has a fixed mode (left Normaal, middle Knuffelmodus, right
+ * Eénvads); a mode can never be changed. Everything runs on the server thread; a switch holds a per-player lock so nothing can happen in
  * between (no dupes through the account-wide stores).
  * <p>Switching (only in a town, at a campfire, right after entering, or outside the Vadsrijk; never in a boss arena or a scene):
  * <ol>
@@ -86,6 +87,9 @@ public final class Karakters {
         if (Arenas.op(p.getX(), p.getY(), p.getZ()) != null) {
             return "vadsrijk.karakter.niet.arena";
         }
+        if (!Karakter.lijst(p).getBooleanOr("welkom", false)) {
+            return null;   // (U-KARAKTER: the very first choice, before/at the welcome screen, may happen anywhere)
+        }
         Long in = BINNENGEKOMEN.get(p.getUUID());
         if (in != null && p.level().getGameTime() - in <= AANKOMST_TICKS) {
             return null;
@@ -111,7 +115,7 @@ public final class Karakters {
         return false;
     }
 
-    // ---- create / rename / mode -----------------------------------------------------------------------------------------------
+    // ---- create / rename -----------------------------------------------------------------------------------------------------
 
     /** A clean name: trimmed, max {@link #NAAM_MAX}, letters/digits/space/-/_/' only; null when nothing is left. */
     @Nullable
@@ -139,10 +143,14 @@ public final class Karakters {
         return -1;
     }
 
-    /** Creates a character in {@code slot} (must be free). Does not switch. Returns false (+ message) when it can't. */
-    public static boolean maak(ServerPlayer p, int slot, String naam, Modus modus) {
+    /**
+     * Creates a character in {@code slot} (U-KARAKTER: its mode is the slot's fixed mode, {@link Modus#vanSlot}). The slot must be
+     * free, or hold a RETIRED Eénvads knight (he moves to the archive; his statue stays in the hall). Does not switch. Returns
+     * false (+ message) when it can't.
+     */
+    public static boolean maak(ServerPlayer p, int slot, String naam) {
         String n = schoon(naam);
-        if (slot < 0 || slot >= Karakter.SLOTS || Karakter.bestaat(p, slot)) {
+        if (slot < 0 || slot >= Karakter.SLOTS || (Karakter.bestaat(p, slot) && !Karakter.rust(p, slot))) {
             meld(p, "vadsrijk.karakter.fout.slot", ChatFormatting.RED);
             return false;
         }
@@ -150,13 +158,23 @@ public final class Karakters {
             meld(p, "vadsrijk.karakter.fout.naam", ChatFormatting.RED);
             return false;
         }
+        CompoundTag lijst = Karakter.lijst(p);
+        if (Karakter.rust(p, slot)) {
+            if (slot == Karakter.slot(p)) {
+                meld(p, "vadsrijk.karakter.fout.rust_actief", ChatFormatting.RED);   // (switch away first: his data is still live)
+                return false;
+            }
+            Karakter.archiveer(lijst, slot, "pensioen");
+        }
+        Modus modus = Modus.vanSlot(slot);
+        long nu = System.currentTimeMillis();
         CompoundTag s = new CompoundTag();
         s.putString("naam", n);
         s.putString("modus", modus.id);
-        s.putString("begin", modus.id);
-        s.putLong("gemaakt", System.currentTimeMillis());
+        s.putLong("gemaakt", nu);
+        s.putString("opslag", "k" + Long.toString(nu, 36) + slot);
         s.putBoolean("nieuw", true);
-        Karakter.lijst(p).put("s" + slot, s);
+        lijst.put("s" + slot, s);
         p.sendSystemMessage(Component.translatable("vadsrijk.karakter.gemaakt", Component.literal(n).withStyle(ChatFormatting.GOLD),
                 Component.translatable(modus.naamKey())).withStyle(ChatFormatting.LIGHT_PURPLE));
         Badges.ververs(p);
@@ -170,29 +188,6 @@ public final class Karakters {
             return false;
         }
         Karakter.info(p, slot).putString("naam", n);
-        Badges.ververs(p);
-        return true;
-    }
-
-    /** Lowers the mode of a character (only lower: Eénvads -> Normaal -> Knuffelmodus). */
-    public static boolean zetModus(ServerPlayer p, int slot, Modus naar, boolean dev) {
-        if (!Karakter.bestaat(p, slot)) {
-            meld(p, "vadsrijk.karakter.fout.slot", ChatFormatting.RED);
-            return false;
-        }
-        CompoundTag s = Karakter.info(p, slot);
-        Modus nu = Modus.van(s.getStringOr("modus", Modus.NORMAAL.id));
-        if (nu == naar || (!dev && !nu.magNaar(naar))) {
-            meld(p, "vadsrijk.karakter.fout.modus", ChatFormatting.RED);
-            return false;
-        }
-        s.putString("modus", naar.id);
-        if (dev && naar.zwaarte > nu.zwaarte) {
-            s.putString("begin", naar.id);
-            s.remove("pensioen");
-        }
-        p.sendSystemMessage(Component.translatable("vadsrijk.karakter.modus_gezet", Component.literal(s.getStringOr("naam", "?")),
-                Component.translatable(naar.naamKey())).withStyle(ChatFormatting.LIGHT_PURPLE));
         Badges.ververs(p);
         return true;
     }
@@ -211,6 +206,10 @@ public final class Karakters {
         }
         if (!Karakter.bestaat(p, naar)) {
             meld(p, "vadsrijk.karakter.fout.slot", ChatFormatting.RED);
+            return false;
+        }
+        if (Karakter.rust(p, naar)) {
+            meld(p, "vadsrijk.karakter.fout.rust", ChatFormatting.YELLOW);   // (U-KARAKTER: a retired knight is a statue, not played)
             return false;
         }
         String niet = overal ? null : waaromNiet(p);
@@ -306,22 +305,27 @@ public final class Karakters {
 
     // ---- Eénvads: retiring --------------------------------------------------------------------------------------------------
 
+    /** Ticks after retiring before the player is switched to another knight (after the fainting + "Met pensioen!" cards). */
+    public static final int RUST_WISSEL_TICKS = 170;
+
     /**
-     * The Eénvads knight fainted outside a town: it retires. Never deleted: it gets the Rustende Ridder badge, plays on as Normaal,
-     * and its statue + plaque go into the Rustende Ridders-zaal. Returns true when it retired.
+     * The Eénvads knight fainted outside a town: it retires. U-KARAKTER: he is never deleted, but he is not played any more either:
+     * he becomes a statue + plaque in the Rustende Ridders-zaal, stays in the right slot as "resting" (his data is kept, and moves
+     * to the archive when you make a new Eénvads knight there), and a few seconds later you go on with another knight
+     * ({@link #naRust}). Returns true when it retired.
      */
     public static boolean pensioen(ServerPlayer p, String waarom) {
-        CompoundTag s = Karakter.info(p, Karakter.slot(p));
-        if (Modus.van(s.getStringOr("modus", "")) != Modus.EENVADS) {
+        int slot = Karakter.slot(p);
+        CompoundTag s = Karakter.info(p, slot);
+        if (Modus.vanSlot(slot) != Modus.EENVADS || s.getBooleanOr("pensioen", false)) {
             return false;
         }
         SpelerData d = Spelers.data(p);
-        s.putString("modus", Modus.NORMAAL.id);
         s.putBoolean("pensioen", true);
         s.putLong("pensioen_op", System.currentTimeMillis());
         Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
         String gebied = g == null ? "" : g.id();
-        RustendeRidders.voegToe(p.level().getServer(), new RustendeRidders.Ridder(p.getUUID(), Karakter.slot(p), s.getStringOr("naam", "?"),
+        RustendeRidders.voegToe(p.level().getServer(), new RustendeRidders.Ridder(p.getUUID(), slot, s.getStringOr("naam", "?"),
                 p.getGameProfile().name(), d.level(), d.klasse, d.klasseLevel(), gebied, waarom, System.currentTimeMillis()));
         // (after the fainting title card, which comes right after this hook)
         nl.juiced.guhs.feature.vadsrijk.wereld.Later.na(70, () -> {
@@ -330,6 +334,7 @@ public final class Karakters {
                         Component.translatable("vadsrijk.karakter.pensioen.onder"), 90, 0xFFD24A);
             }
         });
+        nl.juiced.guhs.feature.vadsrijk.wereld.Later.na(RUST_WISSEL_TICKS, () -> naRust(p));
         if (p.level().getServer() != null) {
             Component bericht = Component.translatable("vadsrijk.karakter.pensioen.iedereen", Component.literal(s.getStringOr("naam", "?"))
                     .withStyle(ChatFormatting.GOLD), p.getName(), d.level()).withStyle(ChatFormatting.YELLOW);
@@ -340,6 +345,35 @@ public final class Karakters {
         p.level().playSound(null, p.blockPosition(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, SoundSource.PLAYERS, 0.8f, 0.8f);
         Badges.ververs(p);
         return true;
+    }
+
+    /**
+     * After retiring (and on login/entering, when a player still stands as a retired knight): switch to the Normaal knight (left),
+     * else the Knuffelmodus knight (middle), else a brand-new Normaal knight named after the player. Then the screen opens so
+     * you see your statue's slot and can make a new Eénvads knight. Returns true when it switched.
+     */
+    public static boolean naRust(ServerPlayer p) {
+        if (p.isRemoved() || !Karakter.gepensioneerd(p) || bezig(p)) {
+            return false;
+        }
+        int naar = -1;
+        for (int i : new int[] {Modus.NORMAAL.slot, Modus.KNUFFEL.slot}) {
+            if (Karakter.bestaat(p, i) && !Karakter.rust(p, i)) {
+                naar = i;
+                break;
+            }
+        }
+        if (naar < 0) {
+            naar = Modus.NORMAAL.slot;
+            maak(p, naar, p.getGameProfile().name());
+        }
+        boolean ok = wissel(p, naar, true);
+        if (ok) {
+            p.sendSystemMessage(Component.translatable("vadsrijk.karakter.na_rust", Component.literal(Karakter.naam(p)).withStyle(ChatFormatting.GOLD))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
+            KarakterScherm.open(p, false);
+        }
+        return ok;
     }
 
     static void meld(ServerPlayer p, String key, ChatFormatting kleur) {

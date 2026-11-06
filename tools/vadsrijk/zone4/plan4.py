@@ -377,6 +377,10 @@ def plekken():
     put("geheim_knuffel_3", 2350, stand(2350, -585), -585)                  # rotsje between Koraalbaai and the Vuurtoren
     put("geheim_knuffel_4", my[1] + 8, stand(my[1] + 8, my[2] + 4), my[2] + 4)   # behind the grey gate's rubble
     put("geheim_knuffel_5", 1790, stand(1790, -610), -610)                  # the big rock south-west of Lampionhaven
+    # U-DECO: knuffel 6 had no map spot, so the story fell back on (2243, 71, -449) = schildpad_rug, exactly where Kluizenaar
+    # Schelpie sits; now its own spot on the shell, 8 blocks from him (the map puts the knuffel block there)
+    _kx, _kz = schildpad_lok(10, -7)
+    put("geheim_knuffel_6", int(_kx), schildpad_top(int(_kx), int(_kz)) + 1, int(_kz))
     put("geheim_schat_1", px + 4, ZEE + 2, pz + 1)                          # under the Opstijgpier platform (a raft)
     put("geheim_schat_2", 2240, stand(2240, -640), -640)                    # the sandbank south of the Vliegereiland
     put("geheim_schat_3", kb[1] - 2, None or (y_grond(kb[1] - 2, kb[2] - 14) - 6 + 2 - 3), kb[2] - 14)   # grotje 3

@@ -83,10 +83,20 @@ public final class RijdierExtraRegistry {
             this.tuig = tuig;
         }
 
+        /** U-TAPIJT: the wardrobe key: "tuig:<id>", or "tuig:<soort>:<id>" for one species' own tack (the carpet's cushions). */
+        private String sleutel() {
+            for (Variant v : Uiterlijk.alle()) {
+                if (v.as() == As.TUIG && v.id().equals(tuig)) {
+                    return v.sleutel();
+                }
+            }
+            return "tuig:" + tuig;
+        }
+
         @Override
         public InteractionResult use(Level level, Player player, InteractionHand hand) {
             if (player instanceof ServerPlayer sp) {
-                if (Aankleden.geef(sp, "tuig:" + tuig)) {
+                if (Aankleden.geef(sp, sleutel())) {
                     if (!sp.isCreative()) {
                         sp.getItemInHand(hand).shrink(1);
                     }

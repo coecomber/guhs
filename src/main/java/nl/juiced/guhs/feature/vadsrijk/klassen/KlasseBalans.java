@@ -56,6 +56,8 @@ public final class KlasseBalans {
     public static final List<String> RIJDIEREN_SLEUTELS = List.of("snelheid", "sprong", "groei_snelheid", "groei_sprong");
     /** T-ITEMS: the itemisatie-2.0 knobs ({@code [items]}; pushed to {@code items.ItemsBalans}). */
     public static final String ITEMS = "items";
+    /** U-TAPIJT: the flying carpet's feel ({@code [tapijt]}; pushed to tapijt.TapijtBalans, keys: TapijtBalans.SLEUTELS). */
+    public static final String TAPIJT = "tapijt";
 
     private static final Map<String, Map<String, Double>> WAARDEN = new LinkedHashMap<>();
     private static long gelezen = Long.MIN_VALUE;
@@ -70,6 +72,9 @@ public final class KlasseBalans {
     public static double standaard(String klasse, String sleutel) {
         if (ITEMS.equals(klasse)) {
             return nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.standaard(sleutel);   // T-ITEMS
+        }
+        if (TAPIJT.equals(klasse)) {
+            return nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtBalans.standaard(sleutel);   // U-TAPIJT
         }
         return switch (sleutel) {
             case "melee_reductie" -> Klassen.RIDDER.equals(klasse) ? 0.20 : 0;
@@ -87,6 +92,7 @@ public final class KlasseBalans {
         l.add(MOBS);
         l.add(RIJDIEREN);
         l.add(ITEMS);   // T-ITEMS
+        l.add(TAPIJT);   // U-TAPIJT
         for (var k : Klassen.alle()) {
             l.add(k.id());
         }
@@ -96,6 +102,7 @@ public final class KlasseBalans {
     private static List<String> sleutels(String sectie) {
         return ALGEMEEN.equals(sectie) ? ALGEMEEN_SLEUTELS : MOBS.equals(sectie) ? MOBS_SLEUTELS
                 : RIJDIEREN.equals(sectie) ? RIJDIEREN_SLEUTELS
+                : TAPIJT.equals(sectie) ? nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtBalans.SLEUTELS   // U-TAPIJT
                 : ITEMS.equals(sectie) ? nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.SLEUTELS : SLEUTELS;   // T-ITEMS
     }
 
@@ -135,6 +142,7 @@ public final class KlasseBalans {
         nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.Balans.zet(get(RIJDIEREN, "snelheid"), get(RIJDIEREN, "sprong"),
                 get(RIJDIEREN, "groei_snelheid"), get(RIJDIEREN, "groei_sprong"));
         nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.zet(k -> get(ITEMS, k));   // T-ITEMS
+        nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtBalans.zet(k -> get(TAPIJT, k));   // U-TAPIJT
     }
 
     // ---- the file ---------------------------------------------------------------------------------------------------------
@@ -209,6 +217,8 @@ public final class KlasseBalans {
         b.append("# (0.015 = +1,5 %), groei_sprong = extra sprongkracht per rijdierlevel (0.01 = ongeveer +0,07 blok).\n");
         b.append("# [items] = itemisatie 2.0: budget_* = vermenigvuldiger op alles wat een stuk in dat vak geeft; pity, Vertrouwd,\n");   // T-ITEMS
         b.append("# doorgroeien, overvadsen en de maxima van de nieuwe stats. Uitleg: NOTITIES_T_ITEMS.md.\n");
+        b.append("# [tapijt] = het gevoel van het vliegend tapijt (vaart, uitglijden, drift, zweefhoogte...); uitleg per getal in\n");   // U-TAPIJT
+        b.append("# tapijt/TapijtBalans.java. Live: /guhs vadsrijk tapijt tune <sleutel> <waarde>.\n");
         for (String s : secties()) {
             b.append('\n').append('[').append(s).append("]\n");
             for (String k : sleutels(s)) {
