@@ -1,0 +1,264 @@
+{
+  "id": "z1_sterrenveld",
+  "zone": 1,
+  "soort": "patroon",
+  "anker": {
+    "bron": "z1",
+    "plek": "hoedhupperwei",
+    "dx": 0,
+    "dz": -14
+  },
+  "maat": [
+    7,
+    7
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:moss_block",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      0,
+      0,
+      6,
+      "minecraft:lantern"
+    ],
+    [
+      6,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      6,
+      0,
+      6,
+      "minecraft:lantern"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 1,
+      "y": -1,
+      "z": 1,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 1,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 1,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 1,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 1,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 2,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 2,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 2,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 2,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 2,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 3,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 3,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 3,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 3,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 3,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 4,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 4,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 4,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 4,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 4,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 1,
+      "y": -1,
+      "z": 5,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": -1,
+      "z": 5,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": -1,
+      "z": 5,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": -1,
+      "z": 5,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 5,
+      "y": -1,
+      "z": 5,
+      "blok": "sterrensteen",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 6,
+      "blok": "sterrenkaart",
+      "stand": 0
+    },
+    {
+      "x": 4,
+      "y": 0,
+      "z": 6,
+      "blok": "probeerknop",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": true,
+  "stil": false,
+  "beloning": {
+    "munten": 700,
+    "ontgrendel": "pz_vleugels_sterrenstof"
+  },
+  "oplossing": [
+    1,
+    3,
+    5,
+    7,
+    9,
+    10,
+    14,
+    16,
+    18,
+    22
+  ],
+  "kaart": [
+    ".X.X.",
+    "X.X.X",
+    "X...X",
+    ".X.X.",
+    "..X.."
+  ]
+}

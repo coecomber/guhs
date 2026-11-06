@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "aan=false,stand=0": {
+      "model": "guhs:block/vr_pz_fluistersteen"
+    },
+    "aan=false,stand=1": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 90
+    },
+    "aan=false,stand=2": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 180
+    },
+    "aan=false,stand=3": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 270
+    },
+    "aan=false,stand=4": {
+      "model": "guhs:block/vr_pz_fluistersteen"
+    },
+    "aan=false,stand=5": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 90
+    },
+    "aan=false,stand=6": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 180
+    },
+    "aan=false,stand=7": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 270
+    },
+    "aan=true,stand=0": {
+      "model": "guhs:block/vr_pz_fluistersteen"
+    },
+    "aan=true,stand=1": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 90
+    },
+    "aan=true,stand=2": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 180
+    },
+    "aan=true,stand=3": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 270
+    },
+    "aan=true,stand=4": {
+      "model": "guhs:block/vr_pz_fluistersteen"
+    },
+    "aan=true,stand=5": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 90
+    },
+    "aan=true,stand=6": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 180
+    },
+    "aan=true,stand=7": {
+      "model": "guhs:block/vr_pz_fluistersteen",
+      "y": 270
+    }
+  }
+}

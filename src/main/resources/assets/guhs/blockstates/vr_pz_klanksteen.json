@@ -1,0 +1,52 @@
+{
+  "variants": {
+    "aan=false,stand=0": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=1": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=2": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=3": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=4": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=5": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=6": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=false,stand=7": {
+      "model": "guhs:block/vr_pz_klanksteen_0"
+    },
+    "aan=true,stand=0": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=1": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=2": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=3": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=4": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=5": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=6": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    },
+    "aan=true,stand=7": {
+      "model": "guhs:block/vr_pz_klanksteen_1"
+    }
+  }
+}

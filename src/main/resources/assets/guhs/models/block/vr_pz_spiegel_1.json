@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "guhs:block/vadsrijk/puzzels/spiegel_1",
+    "side": "guhs:block/vadsrijk/puzzels/spiegel_zij"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "id": "z1_symboolslot",
+  "zone": 1,
+  "soort": "symbool",
+  "anker": {
+    "bron": "z1",
+    "plek": "kampvuur_zwamtempel_1",
+    "dx": 12,
+    "dz": -4
+  },
+  "maat": [
+    7,
+    5
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:moss_block",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:lantern"
+    ],
+    [
+      6,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      6,
+      0,
+      4,
+      "minecraft:lantern"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 1,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 3
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 3
+    },
+    {
+      "x": 5,
+      "y": 0,
+      "z": 2,
+      "blok": "symboolsteen",
+      "stand": 4
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 4,
+      "blok": "probeerknop",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 800,
+    "items": [
+      [
+        "guhs:vr_item_verbetersteentje",
+        3
+      ]
+    ]
+  },
+  "oplossing": [
+    1,
+    0,
+    2
+  ]
+}

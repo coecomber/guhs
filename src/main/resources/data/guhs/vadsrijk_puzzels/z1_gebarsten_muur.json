@@ -1,0 +1,328 @@
+{
+  "id": "z1_gebarsten_muur",
+  "zone": 1,
+  "soort": "geheim",
+  "anker": {
+    "bron": "z1",
+    "plek": "kampvuur_druipgrotten_3",
+    "dx": 12,
+    "dz": 0
+  },
+  "maat": [
+    7,
+    5
+  ],
+  "hoogte": 5,
+  "vloer": "minecraft:moss_block",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      1,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      0,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      0,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      0,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      1,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      1,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      1,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      1,
+      2,
+      0,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      1,
+      2,
+      1,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      1,
+      2,
+      2,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      1,
+      2,
+      3,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      2,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      0,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      1,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      2,
+      2,
+      0,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      2,
+      2,
+      1,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      2,
+      2,
+      2,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      2,
+      2,
+      3,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      3,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      3,
+      0,
+      2,
+      "minecraft:amethyst_cluster"
+    ],
+    [
+      3,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      3,
+      2,
+      0,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      3,
+      2,
+      1,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      3,
+      2,
+      2,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      3,
+      2,
+      3,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      4,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      4,
+      0,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      4,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      4,
+      1,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      4,
+      2,
+      0,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      4,
+      2,
+      1,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      4,
+      2,
+      2,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      4,
+      2,
+      3,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      5,
+      0,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      0,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      0,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      0,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      1,
+      0,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      1,
+      1,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      1,
+      2,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      1,
+      3,
+      "minecraft:mossy_stone_bricks"
+    ],
+    [
+      5,
+      2,
+      0,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      5,
+      2,
+      1,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      5,
+      2,
+      2,
+      "minecraft:red_mushroom_block"
+    ],
+    [
+      5,
+      2,
+      3,
+      "minecraft:red_mushroom_block"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 3,
+      "y": 0,
+      "z": 3,
+      "blok": "scheur",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": 1,
+      "z": 3,
+      "blok": "scheur",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 600,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": true,
+  "beloning": {
+    "munten": 350,
+    "bladzijde": 3
+  }
+}

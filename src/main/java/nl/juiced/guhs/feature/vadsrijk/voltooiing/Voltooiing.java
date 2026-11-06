@@ -125,7 +125,28 @@ public final class Voltooiing {
     }
 
     public static List<Categorie> categorieen(ZoneBoek z) {
-        return GEBOUWD.computeIfAbsent(z, k -> List.copyOf(z.bouw().get()));   // (by the page itself: a test page may reuse an id)
+        return GEBOUWD.computeIfAbsent(z, k -> {
+            // T-PUZZELS: + the extra categories other slices added for this zone id (add-only hook, see extraCategorie)
+            List<Categorie> l = new ArrayList<>(z.bouw().get());
+            for (Supplier<Categorie> s : EXTRA.getOrDefault(z.id(), List.of())) {
+                l.add(s.get());
+            }
+            return List.copyOf(l);
+        });   // (by the page itself: a test page may reuse an id)
+    }
+
+    // T-PUZZELS: extra categories per zone id (e.g. "Puzzels en geheimpjes"), added by other slices during mod construction
+    private static final Map<String, List<Supplier<Categorie>>> EXTRA = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** T-PUZZELS: adds a category to a zone page (zone1/zone2/zone3...), also when that page registers later. */
+    public static void extraCategorie(String zone, Supplier<Categorie> c) {
+        EXTRA.computeIfAbsent(zone, k -> new java.util.concurrent.CopyOnWriteArrayList<>()).add(c);
+        GEBOUWD.keySet().removeIf(x -> x.id().equals(zone));
+    }
+
+    /** T-PUZZELS: build a zone page again on next use (e.g. after the puzzle data was (re)loaded). */
+    public static void herbouw(String zone) {
+        GEBOUWD.keySet().removeIf(x -> x.id().equals(zone));
     }
 
     // ---- counting ----------------------------------------------------------------------------------------------------------

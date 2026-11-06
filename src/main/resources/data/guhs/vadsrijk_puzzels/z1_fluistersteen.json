@@ -1,0 +1,97 @@
+{
+  "id": "z1_fluistersteen",
+  "zone": 1,
+  "soort": "wachtwoord",
+  "anker": {
+    "bron": "z1",
+    "plek": "kampvuur_klodderweide_3",
+    "dx": 10,
+    "dz": 8
+  },
+  "maat": [
+    5,
+    5
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:moss_block",
+  "vul": "minecraft:dirt",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:lantern"
+    ],
+    [
+      1,
+      0,
+      1,
+      "minecraft:pink_tulip"
+    ],
+    [
+      1,
+      0,
+      3,
+      "minecraft:pink_tulip"
+    ],
+    [
+      3,
+      0,
+      1,
+      "minecraft:pink_tulip"
+    ],
+    [
+      3,
+      0,
+      3,
+      "minecraft:pink_tulip"
+    ],
+    [
+      4,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      4,
+      0,
+      4,
+      "minecraft:lantern"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "blok": "fluistersteen",
+      "stand": 0
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 300,
+    "items": [
+      [
+        "guhs:vr_item_herrolknabbel",
+        1
+      ]
+    ]
+  },
+  "woorden": [
+    "vads",
+    "de vads",
+    "vadsje"
+  ]
+}
