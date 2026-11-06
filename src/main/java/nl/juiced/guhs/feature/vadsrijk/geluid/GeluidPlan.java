@@ -67,7 +67,7 @@ public final class GeluidPlan {
             z4("z4_koraalbaai", "meer"), z4("z4_vliegereiland", "weide"), z4("z4_vuurtoreneiland", "kust"), z4("z4_pierkop", "kust"),
             z4("z4_mysterie", "grot"), z4("z4_wrak", "grot"), z4("z4_schildpad", "kust"), z4("z4_zee", "kust"),
             z5("z5_staartvlakte", "weide"), z5("z5_wolkrand_noord", "weide"), z5("z5_wolkrand_zuid", "weide"), z5("z5_proefarena", "weide"),
-            z5("z5_buikgangen", "grot"), z5("z5_schuilnest", "grot"));
+            z5("z5_buikgangen", "grot"), z5("z5_schuilnest", "grot"), z5("z5d_droom", "weide"));   // (+ t-droom's Droomwolk)
 
     private static Map.Entry<String, Streek> z4(String id, String bed) {
         return Map.entry(id, new Streek(id, List.of("lampionkust_dag", "lampionkust_avond"), bed));

@@ -94,6 +94,9 @@ public final class Z5WereldRegistry {
             Z5WereldPlekken.Wijk k = w.get(i);
             Gebieden.voegVooraan(gebied(k));
         }
+        // T-INT: t-z5wezens' combat areas (Buikgangen, Schuilnest, Wolkrand...) must stay IN FRONT of the districts, whatever order
+        // the two registries run in at server start (voegVooraan replaces by id, so running it again is safe)
+        nl.juiced.guhs.feature.vadsrijk.zone5.wezens.Z5WezensRegistry.gebieden();
     }
 
     static Gebieden.Gebied gebied(Z5WereldPlekken.Wijk k) {
