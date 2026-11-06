@@ -18,6 +18,7 @@ TX0, TZ0, TX1, TZ1 = 27, -12, 39, -5
 _tegels = TL.tegels
 TL.tegels = lambda d: [t for t in _tegels(d) if TX0 <= t[0] <= TX1 and TZ0 <= t[1] <= TZ1]
 A.TL = TL
+A.TEGEL_FILTER = lambda t: True   # (T-INT: TL.tegels above already keeps only the zone-4 box)
 A.PLEKKEN_JAVA = os.path.join(A.ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk", "zone4", "wereld",
                               "Z4WereldPlekken.java")
 A.RAPPORT = os.path.join(A.ROOT, "AUDIT_Z4.md")

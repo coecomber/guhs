@@ -74,10 +74,14 @@ def lees_plekken():
     return alle, kampvuren, deuren, vast
 
 
+# T-INT: which tiles laad() reads (zone 1 + camp by default; audit4/5 set their own box: A.TEGEL_FILTER = lambda t: True)
+TEGEL_FILTER = lambda t: -11 <= t[0] <= 11 and -11 <= t[1] <= 18  # noqa: E731
+
+
 def laad():
     # (integration) zone 1 only: the zone-2 tiles (tz -48..-28) share the folder but are a separate map
     # T-WERELD: zone 2 (tx 6..15, tz -23..-13), zone 3 and zone 4/5 now sit next to zone 1: only the zone-1 grid (+ camp)
-    lijst = [t for t in TL.tegels(TEGELS) if -11 <= t[0] <= 11 and -11 <= t[1] <= 18]
+    lijst = [t for t in TL.tegels(TEGELS) if TEGEL_FILTER(t)]
     txs = [t[0] for t in lijst]
     tzs = [t[1] for t in lijst]
     tx0, tz0 = min(txs), min(tzs)
