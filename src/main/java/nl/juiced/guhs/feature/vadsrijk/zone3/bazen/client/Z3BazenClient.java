@@ -241,10 +241,36 @@ public final class Z3BazenClient {
 
         @Override
         public void adjustModelBonesForRender(RenderPassInfo<EntityRenderState> info, BoneSnapshots bones) {
+            // U-Z5: a prop on the full guh model showed ALL its saddle/armour/variant/outfit bones at once (the "bugged" townsfolk
+            // of Hoogvads, the zone-3 riders): hide them like GuhRenderer does for a plain guh of the texture's variant.
+            if ("guh".equals(info.getOrDefaultGeckolibData(F_MODEL, ""))) {
+                gewoneGuh(info, bones, info.getOrDefaultGeckolibData(F_TEX, ""));
+            }
             String v = info.getOrDefaultGeckolibData(F_VERBORGEN, "");
             if (!v.isEmpty()) {
                 for (String b : v.split(",")) {
                     bones.ifPresent(b.trim(), s -> s.skipRender(true).skipChildrenRender(true));
+                }
+            }
+        }
+
+        /** U-Z5: the guh model as a plain guh of the variant whose fur this texture is (no saddle, armour or clothes). */
+        private static void gewoneGuh(RenderPassInfo<EntityRenderState> info, BoneSnapshots bones, String tex) {
+            nl.juiced.guhs.entity.GuhVariant variant = nl.juiced.guhs.entity.GuhVariant.NORMAL;
+            for (nl.juiced.guhs.entity.GuhVariant g : nl.juiced.guhs.entity.GuhVariant.values()) {
+                if (g != nl.juiced.guhs.entity.GuhVariant.NORMAL && g.texture().getPath().equals(tex)) {
+                    variant = g;
+                    break;
+                }
+            }
+            for (String b : new String[]{"saddle", "armor_iron", "armor_iron_body", "armor_diamond", "armor_diamond_body", "armor_netherite", "armor_netherite_body"}) {
+                bones.ifPresent(b, s -> s.skipRender(true).skipChildrenRender(true));
+            }
+            nl.juiced.guhs.client.GuhBoneMasks.Masks masks = nl.juiced.guhs.client.GuhBoneMasks.of(info.model());
+            boolean[] hidden = masks.hidden(variant, java.util.List.of());
+            for (int i = 0; i < masks.bones.length; i++) {
+                if (masks.variantBone(i) && hidden[i]) {
+                    bones.get(masks.bones[i]).skipRender(true);
                 }
             }
         }
