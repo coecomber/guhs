@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gold_nugget",
+    "minecraft:gold_nugget",
+    "minecraft:candle"
+  ],
+  "result": {
+    "id": "guhs:gouden_kaarsenrand",
+    "count": 2
+  }
+}

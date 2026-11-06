@@ -43342,5 +43342,12 @@
   "vadsrijk.indeling.haven.haven_z4_z3_vertrek": "Lantern Harbour",
   "vadsrijk.indeling.dev.tp": "To %s (%s).",
   "vadsrijk.indeling.dev.onbekend": "Unknown place: %s",
-  "vadsrijk.indeling.dev.barriere": "Barriers: %s"
+  "vadsrijk.indeling.dev.barriere": "Barriers: %s",
+  "block.guhs.kroonluchter": "Chandelier",
+  "block.guhs.gouden_kaarsenrand": "Golden Candle Rail",
+  "block.guhs.kristallen_hanger": "Crystal Pendant",
+  "block.guhs.gouden_wandluchter": "Golden Wall Sconce",
+  "block.guhs.gouden_kandelaar": "Golden Candelabrum",
+  "block.guhs.gouden_kroonlijst_muur": "Golden Cornice Wall",
+  "block.guhs.gouden_lichtlijst": "Glowing Golden Cornice"
 }

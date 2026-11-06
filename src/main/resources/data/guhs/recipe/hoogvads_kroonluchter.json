@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:candle",
+    "minecraft:amethyst_shard"
+  ],
+  "result": {
+    "id": "guhs:kroonluchter",
+    "count": 1
+  }
+}

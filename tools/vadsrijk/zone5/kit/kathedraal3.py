@@ -380,13 +380,13 @@ def binnen(W):
     voor = [x for x in xs if x < xa_k]
     for i, (a, b) in enumerate(zip(voor[:-1], voor[1:])):
         if i % 2 == 0:
-            G.kroonluchter(W, (a + b) // 2, Y0 + 21, 0, r=5.6, lagen=3, ymax=ytop + 2)
+            G.kroonluchter(W, (a + b) // 2, Y0 + 16, 0, r=5.6, lagen=3, ymax=ytop + 2)   # U-Z5BINNEN: lower (was +21)
     na = [xb_k + 1] + [x for x in xs if x > xb_k] + [KA.X_KOOR]
-    G.kroonluchter(W, (na[0] + na[-1]) // 2, Y0 + 21, 0, r=4.6, lagen=3, ymax=ytop + 2)
-    G.kroonluchter(W, cx, Y0 + 26, 0, r=8.5, lagen=4, ymax=yb + ry + 2)
+    G.kroonluchter(W, (na[0] + na[-1]) // 2, Y0 + 16, 0, r=4.6, lagen=3, ymax=ytop + 2)   # U-Z5BINNEN: lower (was +21)
+    G.kroonluchter(W, cx, Y0 + 21, 0, r=8.5, lagen=4, ymax=yb + ry + 2)                   # U-Z5BINNEN: XL, lower (was +26)
     for s in (-1, 1):
         for a, b in zip([x for x in xs if X0 + 15 < x < xa_k][:-1], [x for x in xs if X0 + 15 < x < xa_k][1:]):
-            G.kroonluchter(W, (a + b) // 2, Y0 + 15, s * 22, r=2.2, lagen=2, ymax=Y0 + KA.H_BEUK + 2)
+            G.kroonluchter(W, (a + b) // 2, Y0 + 12, s * 22, r=2.2, lagen=2, ymax=Y0 + KA.H_BEUK + 2)   # U-Z5BINNEN: S
     # ---- kandelaars langs het altaar en het middenpad
     for z in (-8, 8):
         for x in (cx - 8, cx + 8):

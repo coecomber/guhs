@@ -39,7 +39,7 @@ def _repo_zip():
     try:
         sys.path.insert(0, os.path.join(root, "tools", "features"))
         import vadsrijk_t_z5blokken as ZB
-        namen = list(ZB.BLOKKEN)
+        namen = list(ZB.BLOKKEN) + list(getattr(ZB, "LICHT", {}))   # U-Z5BINNEN: + the light blocks
     except Exception:  # noqa
         return None
     gedaan = set()
@@ -55,9 +55,10 @@ def _repo_zip():
                 if os.path.exists(mp) and m not in gedaan:
                     gedaan.add(m)
                     z.write(mp, f"assets/guhs/models/block/{m}.json")
-        td = os.path.join(a, "textures", "block", "hoogvads")
-        for f in os.listdir(td) if os.path.isdir(td) else []:
-            z.write(os.path.join(td, f), f"assets/guhs/textures/block/hoogvads/{f}")
+        for map_ in ("hoogvads", "hoogvads_licht"):      # U-Z5BINNEN: + hoogvads_licht
+            td = os.path.join(a, "textures", "block", map_)
+            for f in os.listdir(td) if os.path.isdir(td) else []:
+                z.write(os.path.join(td, f), f"assets/guhs/textures/block/{map_}/{f}")
     return uit
 
 

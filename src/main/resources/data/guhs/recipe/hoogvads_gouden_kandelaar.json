@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "minecraft:gold_ingot",
+    "minecraft:gold_ingot",
+    "minecraft:candle"
+  ],
+  "result": {
+    "id": "guhs:gouden_kandelaar",
+    "count": 1
+  }
+}

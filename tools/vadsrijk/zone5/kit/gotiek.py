@@ -340,6 +340,13 @@ def plafond(W, x, y, z, ymax):
 
 
 def kroonluchter(W, x, y, z, r=4.0, lagen=3, ymax=330, kristallen=True, hoofdketting=True, ringketting=True):
+    """[U-Z5BINNEN] a ROUND hanging chandelier of the new light blocks (binnen2.kroonluchter), its size by r (S < 3.5 <= M < 5
+    <= L < 8 <= XL); y = the height of its main ring. (The slab-ring version read as wooden scaffolding: kroonluchter_oud.)"""
+    import binnen2
+    binnen2.kroonluchter(W, x, y, z, binnen2.maat_voor_r(r), ymax=ymax)
+
+
+def kroonluchter_oud(W, x, y, z, r=4.0, lagen=3, ymax=330, kristallen=True, hoofdketting=True, ringketting=True):
     """Reuzenkroonluchter met de bovenste ring op hoogte y: een hoofdketting tot het plafond, kettingen van de ring omhoog,
     `lagen` ringen (gouden platen) die naar onder kleiner worden, kaarsen op de ringen, hangende lantaarns eronder en
     kristallen staafjes; onderaan een gouden knop met een lantaarn."""

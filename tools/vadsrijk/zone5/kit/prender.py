@@ -12,6 +12,9 @@ import numpy as np
 import mcrender as R
 
 AIR = R.AIR
+# [U-Z5BINNEN] textures that glow on their own (flames, crystals of the Hoogvads light blocks): those QUADS are emissive,
+# the rest of the model (gold) is lit normally
+EMIS_TEX = {"guhs:block/hoogvads_licht/vlam", "guhs:block/hoogvads_licht/kristal"}
 
 
 # ===================================================================== camera's
@@ -302,7 +305,7 @@ def render(vol, pal, cam, res, bk, extras=(), emissive=(), hide=lambda s: False,
                     continue
                 nrm = nrm / ln
                 q.append((k, P, cu, res.texture(tex), cf, tint, tr, nrm, F.full_opaque or cf is not None,
-                          names[si] in emis))
+                          names[si] in emis or tex in EMIS_TEX))
             qcache[si] = q
         return q
 
@@ -411,8 +414,9 @@ class Zonkaart:
 
 
 # ===================================================================== belichten
-def belicht(B, trans, cam, res, zk=None, P=None, schaduw_k=1.0):
-    """Uitgestelde belichting: kleur = albedo * mcf * ao * (amb + zon * n.L * schaduw * glas)."""
+def belicht(B, trans, cam, res, zk=None, P=None, schaduw_k=1.0, blok=None):
+    """Uitgestelde belichting: kleur = albedo * mcf * ao * (amb + zon * n.L * schaduw * glas [+ bloklicht]).
+    blok: (H, W, 3) extra licht van lichtgevende blokken (U-Z5BINNEN, opname.bloklicht) of None."""
     L = LICHT
     nl = np.clip(B.nl, 0, 1)
     sun = np.ones(B.zb.shape + (3,), np.float32)
@@ -422,6 +426,8 @@ def belicht(B, trans, cam, res, zk=None, P=None, schaduw_k=1.0):
         lit = 1 - (1 - lit) * schaduw_k
         sun = lit[..., None] * gk
     lichtk = L.amb_kl[None, None, :] + L.zon_kl[None, None, :] * (nl[..., None] * sun)
+    if blok is not None:
+        lichtk = lichtk + blok
     rgb = B.alb * (B.mcf * B.ao)[..., None] * lichtk
     em = B.em > 0.5
     rgb[em] = B.alb[em] * 1.05

@@ -1,0 +1,60 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_kern"
+      }
+    },
+    {
+      "when": {
+        "kaars": "true"
+      },
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_kaars"
+      }
+    },
+    {
+      "when": {
+        "kristal": "true"
+      },
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_kristal"
+      }
+    },
+    {
+      "when": {
+        "north": "true"
+      },
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_arm"
+      }
+    },
+    {
+      "when": {
+        "east": "true"
+      },
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_arm",
+        "y": 90
+      }
+    },
+    {
+      "when": {
+        "south": "true"
+      },
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_arm",
+        "y": 180
+      }
+    },
+    {
+      "when": {
+        "west": "true"
+      },
+      "apply": {
+        "model": "guhs:block/gouden_kaarsenrand_arm",
+        "y": 270
+      }
+    }
+  ]
+}
