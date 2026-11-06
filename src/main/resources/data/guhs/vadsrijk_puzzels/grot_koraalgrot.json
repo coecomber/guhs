@@ -1,0 +1,160 @@
+{
+  "id": "grot_koraalgrot",
+  "zone": 4,
+  "soort": "volgorde",
+  "anker": {
+    "bron": "grot",
+    "plek": "grot_koraalgrot_puzzel",
+    "dx": 0,
+    "dz": 0
+  },
+  "maat": [
+    9,
+    7
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:prismarine_bricks",
+  "vul": "minecraft:sandstone",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      0,
+      0,
+      6,
+      "minecraft:lantern"
+    ],
+    [
+      2,
+      0,
+      0,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      2,
+      0,
+      6,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      3,
+      0,
+      0,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      3,
+      0,
+      6,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      4,
+      0,
+      0,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      4,
+      0,
+      6,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      5,
+      0,
+      0,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      5,
+      0,
+      6,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      6,
+      0,
+      0,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      6,
+      0,
+      6,
+      "minecraft:dark_prismarine"
+    ],
+    [
+      8,
+      0,
+      0,
+      "minecraft:lantern"
+    ],
+    [
+      8,
+      0,
+      6,
+      "minecraft:lantern"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 2,
+      "y": 0,
+      "z": 2,
+      "blok": "drukplaat",
+      "stand": 3
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 2,
+      "blok": "drukplaat",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 4,
+      "blok": "drukplaat",
+      "stand": 2
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 4,
+      "blok": "drukplaat",
+      "stand": 1
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 9000,
+    "items": [
+      [
+        "guhs:vr_item_verbetersteentje",
+        4
+      ],
+      [
+        "guhs:vr_item_herrolknabbel",
+        1
+      ]
+    ]
+  },
+  "oplossing": [
+    2,
+    0,
+    3,
+    1
+  ],
+  "demo": false
+}

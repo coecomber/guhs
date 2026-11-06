@@ -1,0 +1,449 @@
+{
+  "id": "grot_kristalgrot",
+  "zone": 2,
+  "soort": "licht",
+  "anker": {
+    "bron": "grot",
+    "plek": "grot_kristalgrot_puzzel",
+    "dx": 0,
+    "dz": 0
+  },
+  "maat": [
+    10,
+    7
+  ],
+  "hoogte": 4,
+  "vloer": "minecraft:snow_block",
+  "vul": "minecraft:snow_block",
+  "blokken": [
+    [
+      0,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      0,
+      1,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      0,
+      2,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      0,
+      3,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      0,
+      4,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      0,
+      5,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      1,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      2,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      3,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      4,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      5,
+      "minecraft:calcite"
+    ],
+    [
+      0,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      1,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      1,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      1,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      1,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      2,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      2,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      2,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      2,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      3,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      3,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      3,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      3,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      4,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      4,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      4,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      4,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      5,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      5,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      6,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      6,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      6,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      6,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      7,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      7,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      7,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      7,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      8,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      8,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      8,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      8,
+      1,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      1,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      2,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      3,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      4,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      5,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      0,
+      6,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      0,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      1,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      2,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      3,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      4,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      5,
+      "minecraft:calcite"
+    ],
+    [
+      9,
+      1,
+      6,
+      "minecraft:calcite"
+    ]
+  ],
+  "vloerAnders": [],
+  "elementen": [
+    {
+      "x": 1,
+      "y": 0,
+      "z": 1,
+      "blok": "lichtdoel",
+      "stand": 0
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 1,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 7,
+      "y": 0,
+      "z": 1,
+      "blok": "spiegel",
+      "stand": 1
+    },
+    {
+      "x": 3,
+      "y": 0,
+      "z": 3,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 3,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "z": 5,
+      "blok": "spiegel",
+      "stand": 1
+    },
+    {
+      "x": 6,
+      "y": 0,
+      "z": 5,
+      "blok": "spiegel",
+      "stand": 0
+    },
+    {
+      "x": 8,
+      "y": 0,
+      "z": 5,
+      "blok": "lichtbron",
+      "stand": 3
+    }
+  ],
+  "deur": [],
+  "reset": 400,
+  "hintNa": 3,
+  "nacht": false,
+  "stil": false,
+  "beloning": {
+    "munten": 2600,
+    "items": [
+      [
+        "guhs:vr_item_verbetersteentje",
+        3
+      ]
+    ]
+  },
+  "oplossing": [
+    1,
+    0,
+    1,
+    1,
+    0,
+    1
+  ]
+}

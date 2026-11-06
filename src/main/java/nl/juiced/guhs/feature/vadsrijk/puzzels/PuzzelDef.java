@@ -42,6 +42,7 @@ public record PuzzelDef(String id, int zone, String soort, Anker anker, int bree
             BlockPos b = switch (bron) {
                 case "z2" -> Z2WereldPlekken.plek(plek);
                 case "z3" -> Z3WereldPlekken.plek(plek);
+                case "grot" -> nl.juiced.guhs.feature.vadsrijk.grotten.Grotten.plek(plek);   // U-GROTTEN: the cave puzzle halls
                 default -> WereldPlekken.plek(plek);
             };
             return b == null ? null : b.offset(dx, 0, dz);

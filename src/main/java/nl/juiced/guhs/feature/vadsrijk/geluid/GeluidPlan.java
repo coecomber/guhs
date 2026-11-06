@@ -72,6 +72,9 @@ public final class GeluidPlan {
             z5("z5_staartvlakte", "weide"), z5("z5_wolkrand_noord", "weide"), z5("z5_wolkrand_zuid", "weide"), z5("z5_proefarena", "weide"),
             z5("z5_buikgangen", "grot"), z5("z5_schuilnest", "grot"), z5("z5d_droom", "weide"));   // (+ t-droom's Droomwolk)
 
+    /** U-GROTTEN: streken other slices add (area id -> streek), looked up before the fixed table (the caves: drip/echo bed). */
+    public static final Map<String, Streek> EXTRA = new java.util.concurrent.ConcurrentHashMap<>();
+
     private static Map.Entry<String, Streek> z4(String id, String bed) {
         return Map.entry(id, new Streek(id, List.of("lampionkust_dag", "lampionkust_avond"), bed));
     }
@@ -91,6 +94,10 @@ public final class GeluidPlan {
     @Nullable
     public static Streek streek(@Nullable String gebied, double x, double y, double z) {
         if (gebied != null) {
+            Streek ex = EXTRA.get(gebied);   // U-GROTTEN
+            if (ex != null) {
+                return ex;
+            }
             Streek s = STREKEN.get(gebied);
             if (s != null) {
                 return s;
