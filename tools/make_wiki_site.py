@@ -7,6 +7,7 @@ Usage (from the project root):
     python tools/wiki_renders.py docs/wiki/img      (only when the renders need to be redrawn)
     python tools/make_wiki_site.py [--base-url https://guhs.nl/wiki/] [--landing docs/site] [--out docs/site/wiki]
     python tools/make_wiki_site.py --no-landing --out docs/site --base-url https://<name>.github.io/guhs/   (only the wiki)
+    python tools/make_wiki_site.py --vadsrijk      (also guhs.nl/vadsrijk/: tools/make_vadsrijk_site.py, live data from live.guhs.nl)
 
 Everything comes from the project itself: the names, lists and numbers from the game data (lang, Java enums, worldgen,
 loot tables, recipes, advancements, FTB quests), the texts from the one-page wiki (tools/make_wiki.py), the pictures from
@@ -41,6 +42,8 @@ def main():
     ap.add_argument("--img", default=None, help="the renders of tools/wiki_renders.py (default: <root>/docs/wiki/img)")
     ap.add_argument("--base-url", default=os.environ.get("GUHS_WIKI_URL", "https://guhs.nl/wiki/"),
                     help="the public address of the site, for sitemap.xml (or set GUHS_WIKI_URL)")
+    ap.add_argument("--vadsrijk", action="store_true", help="also build guhs.nl/vadsrijk/ (tools/make_vadsrijk_site.py) into <landing>/vadsrijk")
+    ap.add_argument("--live-url", default="https://live.guhs.nl/", help="with --vadsrijk: where the server's live JSON is served")
     ap.add_argument("--verbose", action="store_true", help="list the knowledge-base chunks without a page and the leftover version numbers")
     args = ap.parse_args()
     root = os.path.abspath(args.root)
@@ -62,6 +65,9 @@ def main():
         from wiki_site.landing import Landing
         Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/")).write(landing_dir)
     n_img = images.write()
+    if args.vadsrijk and landing_dir:   # S-SITE: the Vadsrijk section (its own pages, assets and link check; checked again below)
+        import make_vadsrijk_site
+        make_vadsrijk_site.bouw(root, os.path.join(landing_dir, "vadsrijk"), args.live_url, echt=True)
     # pages that no longer exist
     stale = 0
     for d, _, files in os.walk(out):

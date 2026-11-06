@@ -68,3 +68,6 @@ desktop.ini
 
 # Vadsrijk map generator cache
 tools/vadsrijk/_cache/
+
+# S-SITE: the local preview of guhs.nl/vadsrijk (tools/make_vadsrijk_site.py)
+site_build/
