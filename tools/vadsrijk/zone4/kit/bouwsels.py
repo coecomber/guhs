@@ -472,6 +472,10 @@ def vlieger(P, anker, pos, grootte=3.0, kleur=(255, 130, 180), kleur2=(255, 255,
 
 
 VLIEGERS = []   # [zone 4 kaart] every flying kite: (anchor, kite centre, size, colour) for code (entities / the race)
+# [T-Z4DIEREN] the kites are entities now (zone4/dieren GuhVlieger, positions via dieren4.py -> Z4DierenPlekken): the map only
+# records them. Fallback to the old static wool kites + rope: environment GUHS_Z4_VLIEGERBLOKKEN=1 when running maak_kaart.
+import os as _os
+VLIEGER_BLOKKEN = _os.environ.get("GUHS_Z4_VLIEGERBLOKKEN", "") == "1"
 _WOL = [((255, 120, 170), "pink"), ((140, 220, 250), "light_blue"), ((255, 230, 120), "yellow"), ((180, 150, 250), "purple"),
         ((130, 230, 170), "lime"), ((255, 170, 120), "orange"), ((255, 255, 255), "white"), ((250, 90, 140), "magenta")]
 
@@ -484,7 +488,9 @@ def vlieger_blokken(P, anker, pos, grootte, kleur, kleur2, wr):
     """[zone 4 kaart] a kite as blocks (the static decor version; code may replace it by entities): a wool diamond facing the
     wind with a white cross, two ear blocks, two eyes, and a rope (vadstouw) down to the guh holding it."""
     VLIEGERS.append((tuple(round(v, 1) for v in anker), tuple(round(float(v), 1) for v in pos), round(float(grootte), 1),
-                     tuple(int(c) for c in kleur)))
+                     tuple(int(c) for c in kleur), tuple(int(c) for c in kleur2)))
+    if not VLIEGER_BLOKKEN:
+        return   # [T-Z4DIEREN] an entity flies here (see VLIEGERS)
     u = np.cross([0, 1, 0], wr)
     u = u / (np.linalg.norm(u) + 1e-9)
     hw = max(1, int(round(grootte / 2)))

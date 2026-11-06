@@ -39453,5 +39453,15 @@
   "vadsrijk.kern.gebied.z4_schildpad": "Het Schildpadeiland",
   "vadsrijk.kern.gebied.z4_wrak": "Het Wrak van de Vliegervanger",
   "vadsrijk.kern.gebied.z4_zee": "De Lampionkust",
-  "vadsrijk.z4wereld.kringstroom": "De Kringstroom duwt je zachtjes terug naar de eilandjes..."
+  "vadsrijk.z4wereld.kringstroom": "De Kringstroom duwt je zachtjes terug naar de eilandjes...",
+  "entity.guhs.vr_z4_ouwe_dobber": "Ouwe Dobber",
+  "entity.guhs.vr_z4_vlieger": "Guh-vlieger",
+  "vadsrijk.z4dieren.dobber.op": "Ouwe Dobber neemt je mee op zijn rondje! (sluipen = afstappen)",
+  "vadsrijk.z4dieren.dobber.vol": "Ouwe Dobber zit vol. Wacht even op het volgende rondje!",
+  "vadsrijk.z4dieren.dobber.af_steiger": "Je stapt af op de steiger van het Schildpadeiland.",
+  "vadsrijk.z4dieren.dobber.af_water": "Plons! Je zwemt naast Ouwe Dobber. Klik op hem om weer op te stappen.",
+  "vadsrijk.z4dieren.dobber.gered": "Ouwe Dobber vist je uit het water. Hè hè, adem maar even uit!",
+  "vadsrijk.z4dieren.dobber.halte": "Ouwe Dobber wacht bij de steiger van het Schildpadeiland. Klik op hem om mee te zwemmen!",
+  "vadsrijk.z4dieren.dobber.vertrek": "Ouwe Dobber zwemt weer weg... dobber, dobber.",
+  "vadsrijk.z4dieren.dobber.terug": "Ouwe Dobber is terug bij de steiger. Stap af als je wilt!"
 }

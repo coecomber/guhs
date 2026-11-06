@@ -4,7 +4,7 @@ Called from tools/vadsrijk/maak_kaart.py (``--zone 4`` = only zone 4; ``alle`` =
 render kit in zone4/kit shares module names with the other zones' kits). Standalone from the project root:
     python tools/vadsrijk/zone4/maak4.py [--alleen "tx,tz;..."] [--werkers N]
 Writes src/main/resources/data/guhs/structure/vadsrijk/tegels/t_<tx>_<tz>.nbt for tx 27..39, tz -12..-5,
-tools/vadsrijk/_cache/plekken_z4.json + kaart_z4.png, Z4WereldPlekken.java and POI_Z4.md (all generated: never commit).
+tools/vadsrijk/_cache/plekken_z4.json + kaart_z4.png, Z4WereldPlekken.java and POI_Z4.md (all generated: never commit); dieren4 adds zone4/dieren/Z4DierenPlekken.java (T-Z4DIEREN).
 
 How: every tile is a window (k=1, y 0..319, world coordinates) of the approved render generators (kit/: kust = the sea and the
 islands, haven = Lampionhaven, eilanden = the island themes; copies of renders-lampionkust/_bron with [zone 4 kaart] marks)
@@ -176,6 +176,8 @@ def maak(alleen=None, werkers=4):
         vervang = poicheck4.snap(poi_alle())
         poi4.schrijf(PL.plekken(), "v2 (map, stand spots snapped onto the tiles)", vervang)
         print(f"zone 4: {len(vervang)} plekken op de echte blokken gezet")
+        import dieren4   # [T-Z4DIEREN] kites + Ouwe Dobber's path -> Z4DierenPlekken.java (generated)
+        dieren4.schrijf()
 
 
 def poi_alle():

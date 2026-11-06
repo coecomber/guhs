@@ -230,6 +230,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z3_wezens',
             # 1.10 night round T, T-Z4WERELD: zone 4 "De Lampionkust" biomes + area names (Java: feature/vadsrijk/zone4/wereld)
             'vadsrijk_t_z4wereld',
+            # 1.10 night round T, T-Z4DIEREN: Ouwe Dobber (giant turtle) + guh kites (Java: feature/vadsrijk/zone4/dieren)
+            'vadsrijk_t_z4dieren',
             ]
 
 
