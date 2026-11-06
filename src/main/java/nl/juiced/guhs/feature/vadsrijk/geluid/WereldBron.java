@@ -66,14 +66,13 @@ public final class WereldBron {
             }
             return h < Waterval.GROOT ? "fontein" : null;
         }
-        if (!b.isAir()) {
-            String pad = BuiltInRegistries.BLOCK.getKey(b.getBlock()).getPath();
-            if (pad.contains("windgong")) {
-                return "windgong";
-            }
+        if (!b.isAir() && WINDGONG.computeIfAbsent(b.getBlock(), k -> BuiltInRegistries.BLOCK.getKey(k).getPath().contains("windgong"))) {
+            return "windgong";   // U-GROOTTE (FPS): the name test once per block type, not per scanned block (700 per tick)
         }
         return null;
     }
+
+    private static final java.util.Map<net.minecraft.world.level.block.Block, Boolean> WINDGONG = new java.util.concurrent.ConcurrentHashMap<>();
 
     private static boolean valt(FluidState f) {
         return !f.isEmpty() && f.is(FluidTags.WATER) && !f.isSource() && f.hasProperty(FlowingFluid.FALLING) && f.getValue(FlowingFluid.FALLING);

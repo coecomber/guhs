@@ -63,6 +63,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
         nl.juiced.guhs.feature.vadsrijk.udeco.UDeco.register(modBus);   // U-DECO: arrival clearance, Honingtak bees, stair floor boards
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
+        nl.juiced.guhs.feature.vadsrijk.grootte.GrootteRegistry.register(modBus);   // U-GROOTTE: /guhs vadsrijk grootte status (map pack)
         nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.register(modBus);   // U-TABS: the Vadsrijk-menu (/guhs vadsrijk menu [tab])
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.register(modBus);   // U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles

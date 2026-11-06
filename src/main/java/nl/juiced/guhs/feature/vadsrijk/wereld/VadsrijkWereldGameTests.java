@@ -24,7 +24,7 @@ public class VadsrijkWereldGameTests {
     public static void kaartTegelsLaden(GameTestHelper helper) {
         var mgr = helper.getLevel().getStructureManager();
         int tx = Math.floorDiv(WereldPlekken.AANKOMST.getX(), KaartFeature.TEGEL), tz = Math.floorDiv(WereldPlekken.AANKOMST.getZ(), KaartFeature.TEGEL);
-        Optional<StructureTemplate> t = mgr.get(KaartFeature.tegelId(tx, tz));
+        Optional<StructureTemplate> t = KaartFeature.tegel(helper.getLevel(), tx, tz);
         helper.assertTrue(t.isPresent(), "tile of the arrival missing");
         Vec3i maat = t.get().getSize();
         helper.assertTrue(maat.getX() == 64 && maat.getY() == 320 && maat.getZ() == 64, "tile size " + maat);
@@ -33,7 +33,7 @@ public class VadsrijkWereldGameTests {
                 .anyMatch(i -> i.pos().equals(plank));
         helper.assertTrue(gevonden, "no jetty plank under the arrival point " + plank);
         // the city and the temple tiles exist too, and the door's hidden copy is in its tile
-        helper.assertTrue(mgr.get(KaartFeature.tegelId(0, 0)).isPresent(), "Zwamzoet tile missing");
+        helper.assertTrue(KaartFeature.tegel(helper.getLevel(), 0, 0).isPresent(), "Zwamzoet tile missing");
         WereldPlekken.Deur d = WereldDeuren.deur("zwamtempel");
         helper.assertTrue(d != null, "door zwamtempel missing");
         // the Guhmension ruin holds a sleeping portal
@@ -52,7 +52,7 @@ public class VadsrijkWereldGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void tegelPlaatsenMetDoos(GameTestHelper helper) {
         int tx = Math.floorDiv(WereldPlekken.AANKOMST.getX(), KaartFeature.TEGEL), tz = Math.floorDiv(WereldPlekken.AANKOMST.getZ(), KaartFeature.TEGEL);
-        StructureTemplate t = helper.getLevel().getStructureManager().get(KaartFeature.tegelId(tx, tz)).orElseThrow();
+        StructureTemplate t = KaartFeature.tegel(helper.getLevel(), tx, tz).orElseThrow();
         BlockPos lokaal = new BlockPos(WereldPlekken.AANKOMST.getX() - tx * 64, WereldPlekken.AANKOMST.getY() - 1, WereldPlekken.AANKOMST.getZ() - tz * 64);
         BlockPos doel = helper.absolutePos(new BlockPos(2, 1, 2));
         BlockPos hoek = doel.subtract(lokaal);
