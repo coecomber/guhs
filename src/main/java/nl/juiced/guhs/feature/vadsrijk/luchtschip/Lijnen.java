@@ -100,8 +100,10 @@ public final class Lijnen {
     public static final Haven WESTSTEIGER = new Haven("haven_z3_z2_vertrek", new BlockPos(1190, 171, -590), 90f, "z3");
     public static final Haven OOSTTAKSTEIGER = new Haven("haven_z3_z4_vertrek", new BlockPos(1630, 171, -500), 270f, "z3");
     public static final Haven LAMPIONHAVEN = new Haven("haven_z4_z3_vertrek", new BlockPos(1800, 71, -470), 90f, "z4");
-    public static final Haven OPSTIJGPIER = new Haven("haven_z4_z5_vertrek", new BlockPos(2515, 73, -565), 180f, "z4");
-    public static final Haven WALVISRUGHAVEN = new Haven("haven_z5_z4_vertrek", new BlockPos(2630, 263, -520), 0f, "z5");
+    // (T-INT: t-z4wereld's ship anchor haven_4_5_luchtschip lies EAST of the pier: the bow points east)
+    public static final Haven OPSTIJGPIER = new Haven("haven_z4_z5_vertrek", new BlockPos(2530, 73, -565), 270f, "z4");
+    // (T-INT: t-z5wereld's real dock, the whale hangs 20 lower)
+    public static final Haven WALVISRUGHAVEN = new Haven("haven_z5_z4_vertrek", new BlockPos(2630, 217, -360), 0f, "z5");
 
     // ------------------------------------------------------------------------------------------------------------ the lines
 
@@ -124,7 +126,7 @@ public final class Lijnen {
             v(1752, 82, -478)), 2100);
     /** Line D: De Opstijgpier -> Walvisrughaven, a spiral up along the head and the eye of Moeder Wolkwal (after the zone-4 finale). */
     public static final Lijn LD = new Lijn("z4_z5", "D", OPSTIJGPIER, WALVISRUGHAVEN, List.of(
-            v(2520, 92, -630), v(2450, 126, -660), v(2384, 168, -570), v(2410, 206, -446), v(2520, 236, -420), v(2620, 262, -470)), 2800);
+            v(2560, 96, -610), v(2500, 126, -680), v(2420, 160, -600), v(2420, 186, -470), v(2530, 205, -330), v(2630, 218, -300)), 2800);   // (T-INT: end lowered ~45 to the real Walvisrughaven, approach from the south)
 
     /** All lines (tests may add a test line). */
     public static final List<Lijn> ALLE = new CopyOnWriteArrayList<>(List.of(L0, LA, LB, LC, LD));
@@ -141,7 +143,28 @@ public final class Lijnen {
     public static final List<Function<String, BlockPos>> ZOEKERS = new CopyOnWriteArrayList<>(List.of(
             id -> veilig(nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken.ALLE, id),
             id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.ALLE, id),
-            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ALLE, id)));
+            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ALLE, id),
+            // T-INT: zone 4 publishes haven_3_4_* / haven_4_5_* (stand spot + ship anchor): the pier spot is the anchor minus UIT
+            Lijnen::zone4Haven,
+            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.ALLE, id),
+            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.ALLE, id)));
+
+    /** T-INT: the zone-4 harbours from t-z4wereld's anchors, so the docked ship floats exactly at haven_*_luchtschip. */
+    @Nullable
+    private static BlockPos zone4Haven(String id) {
+        String anker = id.equals("haven_z4_z3_vertrek") ? "haven_3_4" : id.equals("haven_z4_z5_vertrek") ? "haven_4_5" : null;
+        if (anker == null) {
+            return null;
+        }
+        BlockPos schip = nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.ALLE.get(anker + "_luchtschip");
+        BlockPos land = nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.ALLE.get(anker + "_landing");
+        if (schip == null || land == null) {
+            return null;
+        }
+        Haven h = id.equals("haven_z4_z3_vertrek") ? LAMPIONHAVEN : OPSTIJGPIER;
+        Vec3 u = h.uit().scale(Haven.UIT);
+        return BlockPos.containing(schip.getX() - u.x, land.getY(), schip.getZ() - u.z);
+    }
 
     @Nullable
     private static BlockPos veilig(Map<String, BlockPos> m, String id) {
