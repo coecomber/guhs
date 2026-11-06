@@ -22,6 +22,9 @@ _P = None
 _VRIJ = None
 
 
+STATISCH_LUCHTSCHIP = False   # T-INT: the moving t-luchtschip ship replaces the anchored one
+
+
 def _y(x, z):
     return KU.hoogte(x, z)[0]
 
@@ -211,7 +214,10 @@ def bouw_plek(leven=True):
     P.f(lx + 3, ly + 1, lz, lx + 3, ly + 3, lz, "minecraft:cherry_fence")
     P.f(lx + 2, ly + 4, lz, lx + 4, ly + 5, lz, "guhs:pastelbaksteen_framboos")
     P.lab.append((lx, ly + 18, lz, "luchthaven (lijn C naar de Boom)"))
+    # T-INT: no anchored block ship any more: t-luchtschip's real line-C ship docks here (haven_3_4_luchtschip) on a timetable
     try:
+        if not STATISCH_LUCHTSCHIP:
+            raise RuntimeError("t-luchtschip docks the real ship here")
         import kamp as KP
         import schemerkit as SK
         S = SK.Scene(50, 40, 22)
