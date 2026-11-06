@@ -88,5 +88,19 @@ Nachtronde T (2026-11-05/06). Worktree `guhs_vadsrijk/t-z4wereld`, branch `110-t
   `audit4.py`; de integratie moet audit.py zelf beperken.
 - De veilige plekken van zone 4 (`_cache/veilige_plekken_z4.json`) zijn niet in de gedeelde json gezet.
 
+## Checks (laatste run, 2026-11-06 ~01:30)
+- `maak_kaart.py --zone 4` (via maak4, 4-5 werkers): 104 tegels, ~9,1 M blokken, ~25 MB, ~2,5 min.
+- `loopcheck4.py`: **0 bevindingen** (geen VAL/TRAP/LEEG), alle 371 POI's bereikbaar vanaf het Havenplein (zwemmen telt).
+- `poicheck4.py`: 0 van 371 niet sta-baar (35 plekken op de echte blokken gesnapt).
+- `audit4.py` (AUDIT_Z4.md): 0 kuilen, 0 onder de kaart, 0 trappen, 0 deuren; over: 2 padstappen van 2 op het vuurtorenpad
+  (2376,68,-499 en 2389,85,-495; 2 breed, je kunt eromheen), 59x "gras onder een dak" (dakranden/onder de luchthaven: geen
+  interieurs), 10x diep water in de Koraalbaai (de onderwatergrotjes met bellenkolom + de diepste plekjes van de lagune, >10
+  zwemslagen van de kant: bewust, het is de duikplek), de lampionmast op het plein als "boom op het pad".
+- Gametests `-Pgt=Z4Wereld,VadsrijkBiomen`: **4/4 geslaagd** (Z4WereldGameTests plekkenEnRanden + biomen, VadsrijkBiomen).
+- Geen AutoCheck-client gedraaid (RAM gedeeld met de andere nachtagents).
+
 ## Hervatpunt
-Zie het eindrapport onderaan (tests + wat niet klaar is).
+- Code + generator gecommit (head zie git log). Na een checkout: `python tools/vadsrijk/maak_kaart.py --zone 4` (maakt tegels,
+  Z4WereldPlekken.java, POI_Z4.md) -> dan compileert de Java (Z4WereldPlekken is gegenereerd en niet gecommit).
+- Een vroege versie van POI_Z4.md + Z4WereldPlekken.java staat ook in `guhs_vadsrijk/` (voor t-z4wezens/t-z4verhaal/t-z4boot);
+  de ids zijn stabiel, alleen y-waarden kunnen nog een paar blokken schuiven bij een nieuwe kaart.
