@@ -1011,6 +1011,7 @@ def pad(W, punten, breed=1, blok="steen", hek="minecraft:pale_oak_fence"):
         for i in range(n + 1):
             pts.append((round(a[0] + (b[0] - a[0]) * i / max(n, 1)), round(a[1] + (b[1] - a[1]) * i / max(n, 1))))
     vorig = None
+    pad_naam = None   # V-INT: the path block's real name (for the junction check below)
     for j, (x, z) in enumerate(pts):
         t = _top(W, x, z)
         if t is None:
@@ -1022,7 +1023,10 @@ def pad(W, punten, breed=1, blok="steen", hek="minecraft:pale_oak_fence"):
             if abs(s_) <= breed:
                 doos(W, px, min(h, t) - 1, pz, px, h, pz, blok)
                 leeg(W, px, h + 1, pz, px, h + 3, pz)
+                pad_naam = pad_naam or naam(W, px, h, pz)
             else:
+                if pad_naam and naam(W, px, h, pz) == pad_naam and is_lucht(W, px, h + 1, pz):
+                    continue   # V-INT: already a path here (the junction of the tail path's branches): no railing across it
                 if is_lucht(W, px, h + 1, pz) or naam(W, px, h + 1, pz) == LUCHT:
                     zet(W, px, h, pz, blok)
                     zet(W, px, h + 1, pz, hek)
