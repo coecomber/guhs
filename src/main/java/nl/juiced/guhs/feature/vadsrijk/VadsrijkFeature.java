@@ -13,6 +13,7 @@ public final class VadsrijkFeature {
 
     public static void register(IEventBus modBus) {
         nl.juiced.guhs.feature.vadsrijk.kern.KernRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.dubbel.DubbelRegistry.register(modBus);   // U-DUBBEL: one of every unique boss/NPC (no doubles, no ghosts)
         nl.juiced.guhs.feature.vadsrijk.klassen.KlassenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.wezens.WezensRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.bazen.BazenRegistry.register(modBus);

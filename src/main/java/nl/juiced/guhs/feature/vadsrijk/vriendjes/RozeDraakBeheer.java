@@ -104,7 +104,7 @@ public final class RozeDraakBeheer {
             }
         }
         RozeDraak d = nest();
-        boolean moet = kijkers && sl.isLoaded(b) && !bazInNest(sl, m);
+        boolean moet = kijkers && nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, b) && !bazInNest(sl, m);   // U-DUBBEL (was isLoaded)
         if (d != null && !moet) {
             d.discard();
             nest = null;
@@ -130,6 +130,7 @@ public final class RozeDraakBeheer {
             }
         }
         d.rustYaw = yaw;
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(d, "draak:nest");   // U-DUBBEL
         d.snapTo(m.x, m.y, m.z, yaw, 0);
         sl.addFreshEntity(d);
         DraakVriendjes.volg(d);

@@ -173,6 +173,7 @@ public final class Z4DierenRegistry {
                 nieuw.setVerschuif(verschuif);
                 nieuw.setPos(nu.x, nu.y, nu.z);
                 nieuw.setYRot(OuweDobber.yaw(klok(sl)));
+                nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(nieuw, "z4:ouwe_dobber");   // U-DUBBEL
                 officieel = nieuw.getUUID();
                 sl.addFreshEntity(nieuw);
             }
@@ -195,6 +196,7 @@ public final class Z4DierenRegistry {
                 if (k != null) {
                     k.zet(v);
                     k.index = i;
+                    nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(k, "z4:vlieger:" + i);   // U-DUBBEL
                     VLIEGERS.put(i, k.getUUID());
                     sl.addFreshEntity(k);
                 }

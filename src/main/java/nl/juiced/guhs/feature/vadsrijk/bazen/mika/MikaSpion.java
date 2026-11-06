@@ -246,9 +246,9 @@ public class MikaSpion extends BazenBaas {
         for (MikaSpion m : sl.getEntitiesOfClass(MikaSpion.class, new net.minecraft.world.phys.AABB(BlockPos.containing(k)).inflate(200, 160, 200),
                 x -> !x.geplofd())) {
             huidig = m.getUUID();
-            return m;
+            return nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(m, "baas:mika_spion");   // U-DUBBEL
         }
-        if (!maak || !sl.isLoaded(BazenPlekken.MIKA_KRAAM)) {
+        if (!maak || !nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, BazenPlekken.MIKA_KRAAM)) {   // U-DUBBEL (was isLoaded)
             return null;
         }
         MikaSpion m = BazenRegistry.MIKA_SPION.get().create(sl, EntitySpawnReason.SPAWNER);
@@ -257,6 +257,7 @@ public class MikaSpion extends BazenBaas {
         }
         m.stelIn(15, Element.GEEN, false, Set.of());
         m.zetOntvadst(false);
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(m, "baas:mika_spion");   // U-DUBBEL
         m.snapTo(k.x, k.y, k.z, 180, 0);
         sl.addFreshEntity(m);
         huidig = m.getUUID();

@@ -106,6 +106,16 @@ public final class Arenas {
         return true;
     }
 
+    /** U-DUBBEL: forget a (test) arena again. */
+    public static synchronized void afmelden(String id) {
+        ALLE.remove(id);
+    }
+
+    /** U-DUBBEL: the unique key of an arena's boss. */
+    public static String sleutel(String arenaId) {
+        return "arena:" + arenaId;
+    }
+
     public static List<String> ids() {
         return new ArrayList<>(ALLE.keySet());
     }
@@ -115,12 +125,27 @@ public final class Arenas {
         if (t.baas != null && sl.getEntity(t.baas) instanceof VadsrijkBaas b && !b.isRemoved() && !b.geplofd()) {
             return b;
         }
-        BlockPos c = t.arena.centrum();
-        int r = t.arena.straal() + 8;
-        for (VadsrijkBaas b : sl.getEntitiesOfClass(VadsrijkBaas.class, new AABB(c).inflate(r, 24, r), x -> t.arena.id().equals(x.arenaId) && !x.geplofd())) {
+        // U-DUBBEL: the boss with this arena's unique key wherever it flew to (a Kruinroofvogel leaves the box below)
+        if (nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.zoek(sl, sleutel(t.arena.id())) instanceof VadsrijkBaas b && !b.geplofd()) {
             t.baas = b.getUUID();
             b.zetArena(t.arena);
             return b;
+        }
+        BlockPos c = t.arena.centrum();
+        int r = t.arena.straal() + 8;
+        VadsrijkBaas gevonden = null;
+        for (VadsrijkBaas b : sl.getEntitiesOfClass(VadsrijkBaas.class, new AABB(c).inflate(r, 24, r), x -> t.arena.id().equals(x.arenaId) && !x.geplofd())) {
+            if (gevonden == null) {
+                gevonden = b;
+            } else if (b.getTarget() == null) {
+                b.discard();   // U-DUBBEL: a second boss of one arena (an old double): only one stays
+            }
+        }
+        if (gevonden != null) {
+            t.baas = gevonden.getUUID();
+            gevonden.zetArena(t.arena);
+            nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(gevonden, sleutel(t.arena.id()));
+            return gevonden;
         }
         return null;
     }
@@ -144,6 +169,11 @@ public final class Arenas {
                 t.binnen.clear();
                 continue;
             }
+            // U-DUBBEL: the chunk is there but its entities may not be yet (disk load / visibility a tick later): a boss that
+            // is still coming back would look missing and get a twin. Wait until they are loaded and visible.
+            if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, a.centrum())) {
+                continue;
+            }
             ArenaData data = ArenaData.get(server);
             if (!t.geladen) {
                 t.geladen = true;
@@ -160,6 +190,7 @@ public final class Arenas {
                 b = t.maker.apply(sl);
                 if (b != null) {
                     b.zetArena(a);
+                    nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(b, sleutel(a.id()));   // U-DUBBEL
                     b.snapTo(a.centrum().getX() + 0.5, a.centrum().getY(), a.centrum().getZ() + 0.5, 180, 0);
                     sl.addFreshEntity(b);
                     t.baas = b.getUUID();
