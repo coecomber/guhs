@@ -30,7 +30,9 @@ public final class VadsrijkBiomen {
             "mysterie", "schildpadeiland", "wrak", "lampionkust",
             // T-Z5WERELD: zone 5 "Hoogvads" (above zone 4, by height: Z5WereldRegistry.biome)
             "hoogvads_paleis", "hoogvads_universiteit", "hoogvads_academie", "hoogvads_markt", "hoogvads_kathedraal", "hoogvads_luchthaven",
-            "hoogvads_staartpark", "hoogvads_ooggaarde", "hoogvads", "moeder_wolkwal");
+            "hoogvads_staartpark", "hoogvads_ooggaarde", "hoogvads", "moeder_wolkwal",
+            // U-GROTTEN: the five atmosphere caves (grotten.Grotten.biome, by height: checked first)
+            "grot_zwamgrot", "grot_kristalgrot", "grot_wortelgrot", "grot_koraalgrot", "grot_wolkengrot");
     public static final int ZEE = IDS.indexOf("zee"), KLOOF = IDS.indexOf("kloof"), TUSSENLAND = IDS.indexOf("tussenland");
 
     /** The Kloof ravine (tools/vadsrijk/wereld/kaart.py KLOOF and GebiedMist.KLOOF_LIJN, world coordinates). */
@@ -102,6 +104,10 @@ public final class VadsrijkBiomen {
 
     /** z3-systemen: the biome index at block x/y/z (zone 3 is layered; elsewhere the height does not matter). */
     public static int index(int x, int y, int z) {
+        String grot = nl.juiced.guhs.feature.vadsrijk.grotten.Grotten.biome(x, y, z);   // U-GROTTEN: inside a cave = its own biome
+        if (grot != null) {
+            return IDS.indexOf(grot);
+        }
         String z5 = nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldRegistry.biome(x, y, z);   // T-Z5WERELD: Hoogvads, above zone 4
         if (z5 != null) {   // (T-INT order: zone 5 by height first, then zone 4, then zone 3)
             return IDS.indexOf(z5);

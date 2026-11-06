@@ -140,6 +140,9 @@ public final class AmbachtPlekken {
     /** A POI of zone 1/2/3 (null: not in this map). */
     @Nullable
     public static BlockPos plek(int zone, String id) {
+        if (id.startsWith("grot_")) {
+            return nl.juiced.guhs.feature.vadsrijk.grotten.Grotten.plek(id);   // U-GROTTEN: the cave spots (any zone)
+        }
         return switch (zone) {
             case 1 -> WereldPlekken.plek(id);
             case 2 -> Z2WereldPlekken.plek(id);

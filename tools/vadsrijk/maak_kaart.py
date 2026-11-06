@@ -104,6 +104,9 @@ def _main(a):
     mis = __import__("blokken").controleer(W.palet)
     if mis:
         print("ONBEKENDE BLOKKEN:", mis)
+    GROT = grot_module()                                   # U-GROTTEN: the zone-1 cave (Zwamgrot), states known before the lut
+    for _s in GROT.staten(1):
+        W.palet.id(_s)
     lut = W.opaak_lut()
     tegels = [(tx, tz) for tx in range(KA.TX0, KA.TX1 + 1) for tz in range(KA.TZ0, KA.TZ1 + 1)]
     if a.alleen:
@@ -112,6 +115,7 @@ def _main(a):
     bovenaan = {}
     for n, (tx, tz) in enumerate(tegels):
         vol = W.tegel(tx, tz)
+        GROT.pas_toe(vol, tx, tz, W.palet.id, W.palet.lijst, 1)   # U-GROTTEN
         vol = W.hol(vol, lut)
         pad = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
         nb = W.schrijf(vol, pad, plekken_nbt(plekken, tx, tz))
@@ -168,6 +172,13 @@ def zone5(a):   # T-Z5WERELD: Hoogvads: own process (its render kit shares modul
     if a.alleen:
         cmd += ["--alleen", a.alleen]
     subprocess.run(cmd, cwd=ROOT, check=True)
+
+
+def grot_module():
+    """U-GROTTEN: the cave engine (tools/vadsrijk/grotten): one hand-made cave per zone, applied to the tiles before hollowing."""
+    sys.path.insert(0, os.path.join(HIER, "grotten"))
+    import grot
+    return grot
 
 
 def plekken_nbt(plekken, tx, tz):

@@ -93,7 +93,11 @@ class Werker:
         W.fix_connections()
         pal = [staat(s) for s in W.pal]
         lut = np.array([0 if s in ("minecraft:air", "minecraft:cave_air") else self.palet.id(s) for s in pal], np.uint16)
-        return lut[W.v].copy()
+        vol = lut[W.v].copy()
+        sys.path.insert(0, os.path.join(HIER, "..", "grotten"))
+        import grot              # U-GROTTEN: the zone-4 cave (Koraalgrot) under the Koraalbaai rim
+        grot.pas_toe(vol, tx, tz, self.palet.id, self.palet.lijst, 4)
+        return vol
 
     def hol(self, vol):
         """Hollow: an opaque block with 6 opaque neighbours is never seen (removed)."""

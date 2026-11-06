@@ -56,6 +56,10 @@ def maak(alleen=None):
         print("zone 2 ONBEKENDE BLOKKEN:", mis)
     Pw = IND.schuif(P, DX, DZ)          # T-WERELD: every POI in world coordinates
     java_plekken(Pw)
+    sys.path.insert(0, os.path.join(HIER, "..", "grotten"))
+    import grot as GROT                                    # U-GROTTEN: the zone-2 cave (Kristalgrot), states known before the lut
+    for _s in GROT.staten(2):
+        W.palet.id(_s)
     lut = W.opaak_lut()
     tegels = [(tx, tz) for tx in range(PL.UIT_TX0, PL.UIT_TX1 + 1) for tz in range(PL.UIT_TZ0, PL.UIT_TZ1 + 1)]
     if alleen:   # --alleen takes WORLD tile indices
@@ -80,6 +84,7 @@ def maak(alleen=None):
     kleur = None
     for n, (tx, tz) in enumerate(tegels):
         vol = W.tegel(tx, tz)
+        GROT.pas_toe(vol, *wereld_tegel(tx, tz), W.palet.id, W.palet.lijst, 2)   # U-GROTTEN (world tile)
         vol = W.hol(vol, lut)
         wx, wz = wereld_tegel(tx, tz)
         pad = os.path.join(UIT, f"t_{wx}_{wz}.nbt")

@@ -43,5 +43,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.kleding.client.KledingClient.init(modBus);   // T-KLEDING: Kledingkast (key O), wings, effects
         nl.juiced.guhs.feature.vadsrijk.luchtschip.client.LuchtschipClient.init(modBus);   // T-LUCHTSCHIP: airships + silhouettes
         nl.juiced.guhs.feature.vadsrijk.karakter.client.KarakterClient.init(modBus);   // T-KARAKTER: character screen + badges
+        nl.juiced.guhs.feature.vadsrijk.grotten.client.GrotSfeerClient.init(modBus);   // U-GROTTEN: cave particles + drips
     }
 }

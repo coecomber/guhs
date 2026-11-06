@@ -171,8 +171,11 @@ def maak(alleen=None, snap=True):
     hgt = np.full((NX, NZ), -1, np.int16)
     nm = np.full((NX, NZ), 0, np.uint16)
     totaal, grootte, n_naad = 0, 0, 0
+    sys.path.insert(0, os.path.join(HIER, "..", "grotten"))
+    import grot as GROT          # U-GROTTEN: the zone-5 cave (Wolkengrotten) in the whale's head
     for (tx, tz) in tegels:
         vol = tegel(W, O, tx, tz)
+        GROT.pas_toe(vol, tx, tz, O.id, O.pal.lijst, 5)
         pad = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
         onder = zone4_onder(O, pad)
         if not vol.any() and onder is None:

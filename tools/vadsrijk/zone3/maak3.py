@@ -123,6 +123,9 @@ class Werker:
         vol = lut[W.v].copy()
         import barriere          # T-WERELD: the sea + cloud sea round the island (Wolkenkloof west, Wolkenval east)
         barriere.zee_z3(vol, tx, tz, self.palet.id)
+        sys.path.insert(0, os.path.join(HIER, "..", "grotten"))
+        import grot              # U-GROTTEN: the zone-3 cave (Wortelgrot) under the Wortelvelden
+        grot.pas_toe(vol, tx, tz, self.palet.id, self.palet.lijst, 3)
         return vol
 
     def hol(self, vol):
