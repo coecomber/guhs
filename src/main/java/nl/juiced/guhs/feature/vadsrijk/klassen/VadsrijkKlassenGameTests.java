@@ -371,7 +371,7 @@ public class VadsrijkKlassenGameTests {
             // the weakest normal zone-1 mob (wezens: 30 Vads at lv 1, +30 % per level); neutral element, no crit
             double mob = 30 * (1 + 0.3 * (lv - 1));
             for (BasisType t : BasisTypes.alle()) {
-                if (t.slot() != Slot.WAPEN || t.klasse() == null || t.id().startsWith("baas_") || t.id().matches("z\dbaas_.*")) {   // (named boss weapons: never Gewoon; K-INT + z3baas_; T-INT: every zone)
+                if (t.slot() != Slot.WAPEN || t.klasse() == null || t.id().startsWith("baas_") || (t.id().length() > 6 && t.id().charAt(0) == 'z' && Character.isDigit(t.id().charAt(1)) && t.id().startsWith("baas_", 2))) {   // (named boss weapons: never Gewoon; K-INT + z3baas_; T-INT: every zone)
                     continue;
                 }
                 Klasse k = Klassen.ofRidder(t.klasse());

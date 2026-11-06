@@ -1,18 +1,33 @@
-# Testen: Het Vadsrijk (Guhs 1.10): zone 1 + zone 2 "De Splinterpieken" + zone 3 "De Schemerwortel"
+# Testen: Het Vadsrijk (Guhs 1.10): zone 1 t/m 5 + alle systemen (na de nachtronde T)
 
 Dit is de ENE testgids voor het hele Vadsrijk. Hij vervangt `TESTEN_VADSRIJK_ZONE1.md` en de losse slice-gidsen (die blijven
-alleen als naslag). Gebouwd in `guhs_vadsrijk\r-int` (branch `110-r-int`: ronde 3 + zone 3 op de vernieuwde kaart + bazenfixes, nieuwe draak, beestjes, portretten). Snel alles langs met
-commando's: `SPIEKBRIEF.md` (ronde 3 bovenaan).
+alleen als naslag). Gebouwd in `guhs_vadsrijk\t-int` (branch `110-t-int`: alles van r-int + de nachtronde T: de wereldindeling,
+zone 4 "De Lampionkust", zone 5 "Hoogvads" en alle systemen). Snel alles langs met commando's: `SPIEKBRIEF.md` (lang: start,
+zone 1 → 5, systemen). Wat er 's nachts gebouwd is en wat nog niet af is: `EINDRAPPORT_NACHT.md`.
+
+## Nieuw in de nachtronde T (kort)
+- **De wereld hangt aan elkaar:** Knuffelkamp (westelijker) → zone 1 → zone 2 (noordoost) → zone 3 → zone 4 → zone 5 (boven zone 4).
+  Tussen de zones ligt zee met zachte barrières (je wordt teruggeduwd). Reizen gaat met **luchtschepen op een dienstregeling**
+  (lijnen A, B, C, D; vertrekborden bij elke haven).
+- **Zone 4 "De Lampionkust"** (lv 50-56): eilandjes, je eigen **zeilbootje**, de Kringstroom, Ouwe Dobber de schildpad, vliegers,
+  de Grauwe Zeeslurf en het Wrak van de Vliegervanger, het verhaal "De Grote Knuffeltij".
+- **Zone 5 "Hoogvads"** (lv 56-60) op Moeder Wolkwal: de stad, de detective-hoofdlijn "Verraad in de stad", de Proefarena,
+  de Buikgangen, de Wolkrand, het Schuilnest, en de finale De Grauwe Droom.
+- **Levelplafond 60** (was 50), generiek én klasse.
+- **Systemen:** karakterslots + spelmodi (Eénvads), opslag (knapzak/kluis/materiaaltas) + HUD, kledingkast + vleugels,
+  rijdieren aankleden + 3 nieuwe rijdieren, itemisatie 2.0 (ring 2, armband, handschoenen, cape, Erfstukken, drankjesriem),
+  9 ambachten, puzzels en geheimpjes, de geheime baas Mika de Imker, het nieuwe praatscherm, muziek en geluid, mooiere modellen,
+  bazen-effecten (telegraphs op de grond, cast-balk).
 
 ## Starten
-1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\r-int` (NIET k-int, j-int, h-melee, g-int, f-int of w-poc: dat zijn de oude rondes).
+1. Dubbelklik `run-client.bat` in `guhs_vadsrijk\t-int` (NIET r-int, k-int, j-int, h-melee, g-int, f-int of w-poc: dat zijn de oude rondes).
 2. Maak een **nieuwe** wereld (Creatief, cheats aan). De `saves`-map is leeg: oude werelden kennen de nieuwe kaart (en de nieuwe
    zone 2) niet.
 3. Zet je **weergaveafstand** hoog (32 chunks, minstens 20): het Vadsrijk is met de hand gebouwd en kan dat makkelijk aan.
 4. `/gamemode survival` als je wilt vechten (in creatief vallen de wezens je niet aan; bazen doen hun aanvallen wel, maar raken je niet).
 5. Erin: `/guhs vadsrijk` (of in survival via het portaaltempeltje in de Guhmensie, na een praatje met Werver Wimpel). Nog een keer = terug naar huis. In het Vadsrijk heb je een eigen, lege rugzak.
 
-Je komt aan op het lage steigertje aan de zuidkust van Knuffelkamp. De houten trap loopt nu helemaal door, als een tunnel in de
+Je komt aan op het lage steigertje aan de zuidkust van Knuffelkamp (nu op x -384, z 1130: het kamp schoof 384 blokken naar het westen). De houten trap loopt nu helemaal door, als een tunnel in de
 klif, tot boven op het kampplateau.
 
 ## Toetsen (alleen in het Vadsrijk; Opties > Besturing, categorie Vadsrijk)
@@ -35,6 +50,11 @@ klif, tot boven op het kampplateau.
 | Sluipen + rechtsklik | op een speler: ruilen. Op de **scheepsbel in De Haven**: meteen de lijn naar Kandijkom |
 | Sluipen tijdens een rondvlucht | de luchtschipvlucht overslaan (pas na de eerste keer) |
 | F9 / F10 | (Guhs 1.9, buiten het Vadsrijk) Erfenis-bovenaanzicht / wereldkaart. Waren O/M; een oude O/M-toets wordt één keer vanzelf verhuisd. |
+| **Y** | **Ambachten** (nachtronde): het Ambachtenboek (overzicht, recepten, bestellingen, ranglijst, plekken) |
+| **I** | **Knapzak** (nachtronde): per karakter; tabjes voor de materiaaltas en (bij een bankier) de kluis |
+| **O** | **Kledingkast** (nachtronde): vleugels, capes, hoofddingen, effecten, verf, transmog |
+| **Alt+1 / Alt+2 / Alt+3** | **Drankjesriem** (nachtronde): drink meteen uit vak 1/2/3 (vakjes rechts naast de hotbar met A1/A2/A3). Je hotbar-vakje wisselt hierbij niet. |
+| X op het water (zone 4) | je **zeilbootje** in plaats van een rijdier. W = zeil, S = remmen, A/D = sturen, Shift bij een steiger = aanmeren |
 
 **Questvolger** (rechtsboven, onder de bazenbalk als die er is): wat, bij wie, waar, pijltje + afstand. Een roze lichtstraal
 boven je doel (vastgepinde zijquest: lichtgeel). Werkt nu ook in zone 2 en wijst je de luchtschiplijn aan als je doel aan de
@@ -325,6 +345,30 @@ meer leven, minder wit en meer hoogte. Alles ligt dichter bij elkaar.
 - **Quests**: het hoofdverhaal (12) + **5 korte zijquests** (knuffels onder het ijs, schaatsles, het echokoor, ijsbloemen voor de
   chocomelk, "Naar de top!" met de gondel) + de klassenproeven (klasse nv 30) + het geheim van de boormeester + De verdwaalde Guhwolf.
 - Systemen zoals eerst: sokjes met kristallen, juwelier, Kandijkraam, status **Bevroren**.
+
+## ZONE 4: De Lampionkust (nachtronde, lv 50-56)
+Een keten eilandjes ten oosten van de Schemerwortel (x 1740..2540, z -716..-266). Erheen: lijn C vanaf de Oosttaksteiger, of
+`/guhs vadsrijk z4verhaal klaarzetten` + de reiskaart ("De Lampionkust" opent na zone 3 + lv 50). Alles staat in de SPIEKBRIEF
+(hoofdstuk 4); waar je vooral op let:
+- **Lampionhaven** (de stad, kampvuur, bank, werkplaatsen, de luchthaven waar het schip van lijn C aanlegt), het **Knuffeltij-strand**
+  met de vluchtelingen, het Strandfeest-, Bloemen-, Vlieger-, Vuurtoren- en Mysterie-eiland, de Koraalbaai, de Pierkop met de Opstijgpier.
+- **Je zeilbootje** (krijg je in z4_hq02): X op het water, zeilen met de wind, de Kringstroom duwt je terug aan de rand, aanmeren bij
+  11 steigers. N → tab Zeilbootje voor zeilen/wimpels/boegbeelden.
+- **Ouwe Dobber** zwemt zijn rondje rond Oma Dobber (het schildpadeiland) en legt aan bij de steiger: je kunt meerijden. Vliegers in de lucht.
+- **Bazen:** de Grauwe Zeeslurf (in het diepste grotje van de Koraalbaai, het vlot) en Kootje de Vliegervanger (in het ruim van het Wrak).
+- **Verhaal:** "De Grote Knuffeltij" (7 hoofdquests) + 16 zijquests; de cliffhanger op de Opstijgpier opent lijn D naar Hoogvads.
+- **Lopen:** loopcheck4 0 bevindingen, 371 plekken sta-baar; mist rond het Mysterie-eiland is opzet.
+
+## ZONE 5: Hoogvads (nachtronde, lv 56-60)
+De stad op de rug van Moeder Wolkwal, hoog boven zone 4 (y 200+). Erheen: lijn D vanaf de Opstijgpier (na het zone-4-verhaal), of
+`/guhs vadsrijk z5verhaal klaarzetten`. Alles in de SPIEKBRIEF (hoofdstuk 5); waar je vooral op let:
+- **De stad:** paleis, universiteit, academie, markt, kathedraal, luchthaven met 3 pieren, staartpark, ooggaarde; interieurs en
+  bovenverdiepingen; het **Wolkvangnet** vangt je op als je van de walvis valt.
+- **Verhaal:** "Verraad in de stad" (10 hoofdquests, speuren met aanwijzingen en verhoren) + 11 zijquests; de finale eindigt in
+  **De Grauwe Droom** op de Droomwolk.
+- **Gevechten:** de Proefarena (sparren met de Wolkwacht), de Buikgangen (Opzichter Gorgonzola), de Wolkrand (Donderbuik), het
+  Schuilnest (de spion Kootje Zilverstaart: een collega van de Vliegervanger, een andere Kootje).
+- **Ambachtsgilde:** Hoogvads is de hoofdstad van de ambachten; de leermeesters openen hun werkplaats.
 
 ## Dev-commando's (op nodig)
 **Kern**: `/guhs vadsrijk` (erin/eruit), `proeftuin`, `level <1-35>`, `xp <n>`, `munten <n>`, `loot <zeldzaamheid> [type] [niveau]`,

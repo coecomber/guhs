@@ -507,7 +507,7 @@ public final class Z4WereldPlekken {
             Map.entry("uitkijk_vliegerheuvel", new BlockPos(2301, 91, -663)),
             Map.entry("uitkijk_vuurtoren", new BlockPos(2400, 128, -495)),
             Map.entry("visrestaurant_terras", new BlockPos(1909, 66, -489)),
-            Map.entry("vliegerwedstrijd_finish", new BlockPos(2330, 87, -655)),
+            Map.entry("vliegerwedstrijd_finish", new BlockPos(2335, 75, -660)),
             Map.entry("vliegerwedstrijd_start", new BlockPos(2294, 85, -659)),
             Map.entry("vuurtoren_binnen", new BlockPos(2398, 89, -500)),
             Map.entry("vuurtoren_deur", new BlockPos(2400, 89, -492)),

@@ -327,7 +327,7 @@ def plekken():
     put("wedstrijdpaal", vl[1] + 2, stand(vl[1] + 2, vl[2]), vl[2])
     put("uitkijk_vliegerheuvel", vl[1] + 1, stand(vl[1] + 1, vl[2] + 2), vl[2] + 2)
     put("vliegerwedstrijd_start", vl[1] - 6, stand(vl[1] - 6, vl[2] + 6), vl[2] + 6)
-    put("vliegerwedstrijd_finish", vl[1] + 27, stand(vl[1] + 27, vl[2] + 8), vl[2] + 8)   # (T-INT: off the cherry canopy, ~2327,-657)
+    put("vliegerwedstrijd_finish", vl[1] + 35, stand(vl[1] + 35, vl[2] + 5), vl[2] + 5)   # (T-INT: off the cherry canopy and the hilltop: the meadow at ~2335,-660)
     # --- Vuurtoreneiland: the big lighthouse (door south, spiral stair up to the gallery) + the keeper's house
     vy = max(y_grond(x, z) for x in range(vt[1] - 6, vt[1] + 7, 2) for z in range(vt[2] - 6, vt[2] + 7, 2)) + 1
     put("vuurtoren_deur", vt[1], vy, vt[2] + 8)
