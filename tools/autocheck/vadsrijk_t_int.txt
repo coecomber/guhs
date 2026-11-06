@@ -1,0 +1,80 @@
+# T-INT: one walk over the whole integrated Vadsrijk (zones 1-5 after the night round): does every zone load, look right, no holes.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_t_int.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section kamp
+/guhs vadsrijk wereld plek aankomst
+wait 60
+waitrender 300
+look 0 5
+shot ti_kamp_aankomst
+
+section zone1
+/guhs vadsrijk wereld plek plein
+wait 60
+waitrender 300
+shot ti_z1_zwamzoet_plein
+/guhs vadsrijk wereld plek haven_z1_z2_vertrek
+wait 60
+waitrender 300
+look 180 0
+shot ti_z1_noordklifhaven
+
+section zone2
+/guhs vadsrijk z2wereld plek plein
+wait 60
+waitrender 300
+shot ti_z2_kandijkom
+/guhs vadsrijk z2wereld plek haven_z2_z3_vertrek
+wait 60
+waitrender 300
+look 270 0
+shot ti_z2_galmdok
+
+section zone3
+/guhs vadsrijk z3wereld plek plein
+wait 60
+waitrender 300
+shot ti_z3_bloesemplein
+/guhs vadsrijk z3wereld plek mika_imker_raatzaal
+wait 60
+waitrender 200
+shot ti_z3_raatzaal
+
+section zone4
+/guhs vadsrijk z4wereld plek plein
+wait 60
+waitrender 300
+shot ti_z4_lampionhaven
+/guhs vadsrijk z4wereld plek haven_3_4_landing
+wait 60
+waitrender 300
+look 90 5
+shot ti_z4_luchthaven
+/guhs vadsrijk z4wereld plek boot_dok_lampionhaven
+wait 60
+waitrender 300
+shot ti_z4_steiger
+/guhs vadsrijk z4wereld plek vliegerwedstrijd_finish
+wait 60
+waitrender 300
+shot ti_z4_vliegereiland
+
+section zone5
+/guhs vadsrijk z5wereld plek haven_z5_z4_vertrek
+wait 80
+waitrender 400
+look 180 5
+shot ti_z5_walvisrughaven
+/guhs vadsrijk z5wereld plek z5w_noordvin
+wait 60
+waitrender 300
+shot ti_z5_noordvin
