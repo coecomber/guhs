@@ -146,5 +146,10 @@ plekken, spawners, muziek, opruimen.
 - The 5 boss themes need rendering by u-audio2 (table above). No AutoCheck client run.
 - u-z6verhaal: wire `Bultguh.geef`, `Z6Bazen.start`, the KOMPAS hook and the quest pets (see the request file).
 
-## Test results
-(see the end of this file)
+## Test results (2026-11-06)
+- `runGameTestServer -Pgt=VadsrijkZ6Wezens,VadsrijkTRijdier,VadsrijkRijdieren`: all T-RIJDIER (5) and Rijdieren (6) tests passed with
+  the RijdierEntity/RijdierSoort changes; 1 of mine failed: the kerker test fought three bosses with one player and zone 3's
+  "one boss fight at a time" rule (Z3Toegang) kept the Sterrenguh from fighting. The Sterrenguh got its own test.
+- Rerun `-Pgt=VadsrijkZ6Wezens`: **All 10 required tests passed** (wezens, zout, loot, wormelien, zoutkolos, kerker, sterrenguh,
+  bultguh, muziek, + the batch split).
+- No AutoCheck client run (the looks need the user's eyes in the dev client).

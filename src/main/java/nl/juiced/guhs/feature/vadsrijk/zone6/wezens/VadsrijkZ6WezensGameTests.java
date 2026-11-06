@@ -300,10 +300,20 @@ public class VadsrijkZ6WezensGameTests {
             g.krijgSchade(500, p);
             helper.assertTrue(g.vads() < v, "hittable again");
             g.discard();
+            helper.succeed();
         });
-        Sterrenguh s = zet(sl, Z6WezensRegistry.STERRENGUH.get(), c.add(0, 0, -4), 68);
+    }
+
+    /** The Verzonken Sterrenguh: four telescopes, all aimed = his heart lights (x2), cheered up he gives the Sterrenkompas. */
+    @GuhTest(template = "empty", batch = BATCH + "_sterrenguh", timeoutTicks = 200)
+    public static void sterrenguh(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        vloer(helper, 14);
+        Vec3 c = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(1, 2, 1)));
+        ServerPlayer p = speler(helper, c.add(6, 0, 0), true);
+        Sterrenguh s = zet(sl, Z6WezensRegistry.STERRENGUH.get(), c, 68);
         s.testFilter = q -> q == p;
-        helper.runAfterDelay(160, () -> {
+        helper.runAfterDelay(90, () -> {
             helper.assertTrue(s.telescopen().size() == 4 && s.gericht() == 0, "4 telescopes, none aimed yet");
             for (Z3Doel d : s.telescopen()) {
                 for (int i = 0; i < 4 && !s.hartAan(); i++) {
