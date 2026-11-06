@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "S  ",
+    "SS ",
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:rozenzandsteen"
+  },
+  "result": {
+    "id": "guhs:rozenzandsteen_trap",
+    "count": 4
+  }
+}

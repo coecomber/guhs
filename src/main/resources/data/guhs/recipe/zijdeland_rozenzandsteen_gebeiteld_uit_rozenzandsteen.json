@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:rozenzandsteen",
+  "result": {
+    "id": "guhs:rozenzandsteen_gebeiteld",
+    "count": 1
+  }
+}

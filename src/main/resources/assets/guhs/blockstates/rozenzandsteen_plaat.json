@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/rozenzandsteen_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/rozenzandsteen"
+    },
+    "type=top": {
+      "model": "guhs:block/rozenzandsteen_plaat_top"
+    }
+  }
+}

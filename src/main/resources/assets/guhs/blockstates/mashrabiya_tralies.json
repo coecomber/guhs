@@ -1,0 +1,77 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_post"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_side"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_side",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_side_alt"
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_side_alt",
+        "y": 90
+      },
+      "when": {
+        "west": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_noside"
+      },
+      "when": {
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_noside_alt"
+      },
+      "when": {
+        "east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_noside_alt",
+        "y": 90
+      },
+      "when": {
+        "south": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "guhs:block/mashrabiya_tralies_noside",
+        "y": 270
+      },
+      "when": {
+        "west": "false"
+      }
+    }
+  ]
+}

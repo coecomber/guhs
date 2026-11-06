@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PSP",
+    "PSP"
+  ],
+  "key": {
+    "P": "guhs:dadelpalm_planken",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "guhs:dadelpalm_hek",
+    "count": 3
+  }
+}

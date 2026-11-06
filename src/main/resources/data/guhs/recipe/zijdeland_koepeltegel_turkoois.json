@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:cyan_glazed_terracotta",
+    "minecraft:gold_nugget"
+  ],
+  "result": {
+    "id": "guhs:koepeltegel_turkoois",
+    "count": 2
+  }
+}

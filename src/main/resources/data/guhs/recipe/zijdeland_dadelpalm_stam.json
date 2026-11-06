@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:jungle_log",
+    "minecraft:sand"
+  ],
+  "result": {
+    "id": "guhs:dadelpalm_stam",
+    "count": 1
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/zijdeland/zijden_luifel",
+    "doek": "guhs:block/zijdeland/zijden_luifel"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        16,
+        1,
+        16
+      ],
+      "faces": {
+        "down": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#doek"
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#doek"
+        },
+        "north": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#doek"
+        },
+        "south": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#doek"
+        },
+        "west": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#doek"
+        },
+        "east": {
+          "uv": [
+            0,
+            15,
+            16,
+            16
+          ],
+          "texture": "#doek"
+        }
+      }
+    }
+  ],
+  "render_type": "minecraft:cutout"
+}
