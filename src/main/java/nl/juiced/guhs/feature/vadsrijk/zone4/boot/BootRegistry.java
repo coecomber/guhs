@@ -35,6 +35,7 @@ public final class BootRegistry {
     public static void register(IEventBus modBus) {
         BootSpul.ENTITIES.register(modBus);
         BootSpul.ITEMS.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.rijdier.Uiterlijk.zonderGarderobe(nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.ZEILBOOTJE);   // T-INT: no patterns/tack (own looks screen)
         // (attributes: EconomieRegistry registers them for every RijdierSoort, the boat included)
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> BootCommando.register(e));
         NeoForge.EVENT_BUS.addListener((PlayerTickEvent.Post e) -> {

@@ -23,6 +23,8 @@ import nl.juiced.guhs.feature.vadsrijk.huisdieren.Huisdier;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierEntity;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierPayloads;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.Huisdieren;
+import nl.juiced.guhs.feature.vadsrijk.rijdier.Maatjes;
+import nl.juiced.guhs.feature.vadsrijk.rijdier.Vahoegje;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry;
 
 /**
@@ -37,7 +39,7 @@ public class HuisdierScherm extends EcoScherm {
     private String gekozen;
 
     public HuisdierScherm(CompoundTag data) {
-        super("huisdieren", Component.translatable("vadsrijk.huisdieren.titel"), data, List.of(), 340, 224);
+        super("huisdieren", Component.translatable("vadsrijk.huisdieren.titel"), data, List.of(), 360, 248);   // (T-RIJDIER: + role/ability/level)
     }
 
     /** (fix round 3) The collection tabs (Rijdieren | Huisdieren | ...). */
@@ -135,12 +137,21 @@ public class HuisdierScherm extends EcoScherm {
             klikvlak(x, y, VAK, VAK, () -> gekozen = h.id());
         }
         // the explanation under the grid
-        int uy = top + h - 40;
+        int uy = top + h - 52;
         for (var line : font.split(Component.translatable("vadsrijk.huisdieren.uitleg"), (int) ((KOLOMMEN * (VAK + 3)) / 0.75f))) {
             g.pose().pushMatrix();
             g.pose().translate(gx, uy);
             g.pose().scale(0.75f, 0.75f);
             g.text(font, line, 0, 0, ZACHT, false);
+            g.pose().popMatrix();
+            uy += 7;
+        }
+
+        for (var line : font.split(Component.translatable("vadsrijk.huisdieren.geen_schade"), (int) ((KOLOMMEN * (VAK + 3)) / 0.75f))) {
+            g.pose().pushMatrix();
+            g.pose().translate(gx, uy + 2);
+            g.pose().scale(0.75f, 0.75f);
+            g.text(font, line, 0, 0, 0xFF2E7A5A, false);
             g.pose().popMatrix();
             uy += 7;
         }
@@ -164,31 +175,67 @@ public class HuisdierScherm extends EcoScherm {
             g.centeredText(font, Component.literal("?").withStyle(ChatFormatting.BOLD), px + pw / 2, py + 6, 0xFF8A5A84);
         }
         int iy = py + ph + 5;
+        // T-RIJDIER: name + level, role, ability (what it does for you), the passive, Vahoegje's stage, then flavour and source
+        CompoundTag lv = data.getCompoundOrEmpty("levels").getCompoundOrEmpty(h.id());
+        Maatjes.Kracht kracht = Maatjes.van(h);
         g.text(font, Component.translatable(h.naamKey()).withStyle(ChatFormatting.BOLD), px, iy, heeft ? TEKST : ZACHT, false);
-        iy += 10;
-        Component staat = Component.translatable(loopt ? "vadsrijk.huisdieren.loopt_mee" : heeft ? "vadsrijk.huisdieren.titel" : "vadsrijk.huisdieren.nog_niet");
-        if (loopt || !heeft) {
-            g.text(font, staat, px, iy, loopt ? GROEN : ROOD, false);
-            iy += 10;
+        if (heeft) {
+            Component lvT = Component.translatable("vadsrijk.huisdieren.level", lv.getIntOr("lv", 1), Maatjes.MAX);
+            g.text(font, lvT, px + pw - font.width(lvT), iy, GOUD, false);
         }
-        iy += 1;
-        for (var line : font.split(Component.translatable(h.tekstKey()).withStyle(ChatFormatting.ITALIC), pw)) {
-            if (iy > top + h() - 64) {
+        iy += 10;
+        if (heeft) {
+            long xp = lv.getLongOr("xp", 0), nodig = lv.getLongOr("nodig", 0);
+            g.fill(px, iy, px + pw, iy + 3, 0xFFE8C8DC);
+            g.fill(px, iy, px + (nodig > 0 ? (int) (pw * Math.min(1.0, xp / (double) nodig)) : pw), iy + 3, nodig > 0 ? 0xFFFF5FAF : 0xFFFFC040);
+            iy += 6;
+        }
+        boolean steun = kracht.rol() == Maatjes.Rol.STEUNER;
+        Component rol = Component.translatable(kracht.rol().naamKey());
+        int rw = font.width(rol) + 6;
+        g.fill(px, iy - 1, px + rw, iy + 9, steun ? 0xFFFF9CC8 : 0xFFFFD27A);
+        g.text(font, rol, px + 3, iy, steun ? 0xFF7A1E50 : 0xFF6A4200, false);
+        if (loopt || !heeft) {
+            g.text(font, Component.translatable(loopt ? "vadsrijk.huisdieren.loopt_mee" : "vadsrijk.huisdieren.nog_niet"), px + rw + 4, iy, loopt ? GROEN : ROOD, false);
+        }
+        iy += 12;
+        g.text(font, Component.translatable(kracht.naamKey()).withStyle(ChatFormatting.BOLD), px, iy, GOUD, false);
+        iy += 10;
+        int stop = top + h() - 30;   // (never into the button)
+        for (var line : font.split(Component.translatable(kracht.tekstKey()), pw)) {
+            if (iy > stop - 30) {
                 break;
             }
             g.text(font, line, px, iy, ZACHT, false);
             iy += 9;
         }
-        iy += 3;
-        g.text(font, Component.translatable("vadsrijk.huisdieren.hoe").withStyle(ChatFormatting.BOLD), px, iy, GOUD, false);
-        iy += 10;
-        int stop = top + h() - 34;   // (never into the button)
-        for (var line : font.split(Component.translatable(h.bronKey()), pw)) {
-            if (iy > stop) {
-                break;
-            }
-            g.text(font, line, px, iy, heeft ? ZACHT : 0xFF9A3A7A, false);
+        for (var line : font.split(Component.translatable("vadsrijk.huisdieren.passief", Component.translatable("vadsrijk.huisdier.kracht." + kracht.id() + ".passief")), pw)) {
+            g.text(font, line, px, iy, 0xFF2E7A5A, false);
             iy += 9;
+        }
+        if (h.id().equals(Vahoegje.ID)) {
+            g.text(font, Component.translatable("vadsrijk.huisdieren.stadium." + Math.min(1, data.getIntOr("vahoegje", 0))), px, iy, 0xFFB0307A, false);
+            iy += 9;
+        }
+        iy += 3;
+        if (!heeft) {
+            g.text(font, Component.translatable("vadsrijk.huisdieren.hoe").withStyle(ChatFormatting.BOLD), px, iy, GOUD, false);
+            iy += 10;
+            for (var line : font.split(Component.translatable(h.bronKey()), pw)) {
+                if (iy > stop) {
+                    break;
+                }
+                g.text(font, line, px, iy, 0xFF9A3A7A, false);
+                iy += 9;
+            }
+        } else {
+            for (var line : font.split(Component.translatable(h.tekstKey()).withStyle(ChatFormatting.ITALIC), pw)) {
+                if (iy > stop) {
+                    break;
+                }
+                g.text(font, line, px, iy, ZACHT, false);
+                iy += 9;
+            }
         }
 
         // ---- buttons -----------------------------------------------------------------------------------------------------------------

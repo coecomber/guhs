@@ -3,10 +3,10 @@ package nl.juiced.guhs.feature.vadsrijk.huisdieren;
 import net.minecraft.server.level.ServerPlayer;
 
 /**
- * Extension point (G-PETS, UNUSED for now: pets are purely cosmetic): what an active pet could do for its owner later on
- * (small stats, an attack, a buff, a heal). Give it to a pet via {@link Huisdier#effect}; {@code Huisdieren} would then call
- * {@link #tick} for the owner of an active pet (every second) and could add {@link #extraStats} to kern's
- * {@code Spelers.EXTRA_STATS}. Nothing calls this yet.
+ * Extension point (G-PETS): what an active pet does for its owner (small stats, a buff, a heal; never damage: decision R2).
+ * T-RIJDIER uses it: {@code rijdier.Maatjes} calls {@link #tick} every second for the owner of a pet that walks along in the
+ * Vadsrijk and adds {@link #extraStats} through kern's {@code Spelers.EXTRA_STATS}. Give a pet one via {@link Huisdier#effect}, or
+ * (simpler, with a role and texts) {@code Maatjes.zet(petId, kracht)}.
  */
 public interface HuisdierEffect {
     /** Every second while the pet walks along with its owner in the Vadsrijk (an attack, a heal, a buff...). */

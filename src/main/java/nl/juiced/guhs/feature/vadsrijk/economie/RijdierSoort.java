@@ -25,16 +25,41 @@ import javax.annotation.Nullable;
  * </ul>
  */
 public enum RijdierSoort {
-    // (I-MOUNTS) speed in % of walking: Pluimguh 350, Knuffelhert 320 (jumps highest, ~5 blocks), Guhwolf 370 (the fastest, small
+    // (I-MOUNTS) speed in % of walking: Pluimguh 350, Knuffelhert 320 (jumps high, ~5 blocks), Guhwolf 370 (the fastest, small
     // hop ~2.4 blocks), Wolkenschaapje 300 (+ double jump and slow fall), Slakkie 85 (half of its old 170 %: slow luxury)
-    PLUIMGUH(0.35, 0.72, 0, 2.10, "pluimguh"),
-    KNUFFELHERT(0.32, 0.92, 0, 1.95, "quest"),
-    GUHWOLF(0.37, 0.60, 0, 1.86, "quest"),
-    WOLKENSCHAAPJE(0.30, 0.62, 1200, 1.20, "stal"),
-    SLAKKIE(0.085, 0.45, 2500, 1.45, "stal"),
-    // T-Z4BOOT: the player's own guh sailboat (zone 4, decision W-2): a mount on WATER ({@link #water()}); speed 300 % = a top
-    // speed of 0.6 blocks a tick at level 1 (zone4.boot.BootFysica), no jump; quest "Boot.geef" early in the zone-4 story
-    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest");
+    // (T-RIJDIER) + the entity size (width, height) and the traits; three new land mounts (see the class javadoc)
+    PLUIMGUH(0.35, 0.72, 0, 2.10, "pluimguh", 1.4f, 2.6f, Eigenschap.KLEUREN),
+    KNUFFELHERT(0.32, 0.92, 0, 1.95, "quest", 1.3f, 2.4f),
+    GUHWOLF(0.37, 0.60, 0, 1.86, "quest", 1.3f, 2.0f),
+    WOLKENSCHAAPJE(0.30, 0.62, 1200, 1.20, "stal", 1.2f, 1.2f, Eigenschap.ZWEEFT),
+    SLAKKIE(0.085, 0.45, 2500, 1.45, "stal", 1.1f, 1.5f),
+    /** T-RIJDIER: a springy beach hare: the highest jump (~5.8 blocks), a bit slower. Secret: find 10 hidden knuffels. */
+    DUINHUPPER(0.29, 0.98, 0, 1.15, "geheim", 1.1f, 1.4f),
+    /** T-RIJDIER: a cloud-whale calf that floats a little (slow fall + double jump, like the sheep but faster). 20 Gouden Veren. */
+    WOLKWALKALFJE(0.34, 0.64, 0, 1.30, "veren", 1.4f, 1.6f, Eigenschap.ZWEEFT),
+    /** T-RIJDIER: a sturdy piglet with a mushroom-cap saddle: shrugs off the first hit. First kill of the Opperzwam. */
+    ZWAMZWIJNTJE(0.33, 0.66, 0, 1.10, "baas", 1.2f, 1.4f, Eigenschap.STEVIG),
+    /**
+     * T-Z4BOOT (T-INT: on t-rijdier's species API): the player's own guh sailboat (zone 4, decision W-2), a mount on WATER; speed
+     * 300 % = a top speed of 0.6 blocks a tick at level 1 (zone4.boot.BootFysica), no jump; quest "Boot.geef" early in the zone-4
+     * story. Its entity + icon live in zone4.boot.BootSpul (EcoSpul skips water species), its looks in its own screen.
+     */
+    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest", 2.0f, 1.1f, Eigenschap.WATER);
+
+    /**
+     * T-RIJDIER: what a mount can do besides walking and jumping (one place; add a value for a new behaviour, e.g. a water mount).
+     * <ul>
+     *   <li>{@link #KLEUREN}: has the Pluimguh's own colour enum {@link PluimKleur} (one texture per colour); every other mount
+     *       gets its coat colours from {@code rijdier.Uiterlijk} (a "vacht");</li>
+     *   <li>{@link #ZWEEFT}: falls slowly and can jump once more in the air;</li>
+     *   <li>{@link #STEVIG}: the first hit doesn't scare it (the second within 10 s does).</li>
+     * </ul>
+     */
+    public enum Eigenschap {
+        KLEUREN, ZWEEFT, STEVIG,
+        /** T-INT (t-z4boot): sails on water instead of walking (own entity, physics, renderer and looks screen). */
+        WATER
+    }
 
     public static final int MAX_LEVEL = 10;
     /** Every mount steps up this many blocks while walking (no jump needed): a 2-block ledge, stairs, slabs. */
@@ -49,15 +74,30 @@ public enum RijdierSoort {
     public final long prijs;
     /** Where the rider sits (blocks above the mount's feet). */
     public final double zit;
-    /** Where you get it: "quest", "baas", "stal" or "pluimguh" (per colour, see {@link PluimKleur}). */
+    /** Where you get it: "quest", "baas", "stal", "geheim", "veren" or "pluimguh" (per colour, see {@link PluimKleur}). */
     public final String bron;
+    /** T-RIJDIER: the entity size (blocks), used by EcoSpul's entity registration. */
+    public final float breedte, hoogte;
+    private final java.util.Set<Eigenschap> eigenschappen;
 
+    /** (the old 5-number form: size 1.3 x 2.0, no traits) */
     RijdierSoort(double snelheid, double sprong, long prijs, double zit, String bron) {
+        this(snelheid, sprong, prijs, zit, bron, 1.3f, 2.0f);
+    }
+
+    RijdierSoort(double snelheid, double sprong, long prijs, double zit, String bron, float breedte, float hoogte, Eigenschap... eigenschappen) {
         this.snelheid = snelheid;
         this.sprong = sprong;
         this.prijs = prijs;
         this.zit = zit;
         this.bron = bron;
+        this.breedte = breedte;
+        this.hoogte = hoogte;
+        this.eigenschappen = eigenschappen.length == 0 ? java.util.EnumSet.noneOf(Eigenschap.class) : java.util.EnumSet.copyOf(java.util.Arrays.asList(eigenschappen));
+    }
+
+    public boolean heeft(Eigenschap e) {
+        return eigenschappen.contains(e);
     }
 
     public String id() {
@@ -68,19 +108,24 @@ public enum RijdierSoort {
         return "vadsrijk.economie.rijdier." + id();
     }
 
-    /** Has colour variants (only the Pluimguh for now). */
+    /** Has the Pluimguh colour enum ({@link PluimKleur}); the other mounts get coat colours from {@code rijdier.Uiterlijk}. */
     public boolean kleuren() {
-        return this == PLUIMGUH;
+        return heeft(Eigenschap.KLEUREN);
     }
 
     /** (T-Z4BOOT) Sails on water instead of walking (the Zeilbootje: zone4.boot.BootEntity, its own physics and screen). */
     public boolean water() {
-        return this == ZEILBOOTJE;
+        return heeft(Eigenschap.WATER);
     }
 
     /** Hovers: falls slowly and can jump once more in the air. */
     public boolean zweeft() {
-        return this == WOLKENSCHAAPJE;
+        return heeft(Eigenschap.ZWEEFT);
+    }
+
+    /** T-RIJDIER: shrugs off the first hit (see {@code Rijdieren.geraakt}). */
+    public boolean stevig() {
+        return heeft(Eigenschap.STEVIG);
     }
 
     /** Movement speed at this level (balans: x {@code snelheid}, + {@code groei_snelheid} per level). */
@@ -170,7 +215,11 @@ public enum RijdierSoort {
         HONING(0xFFFFCC66, false, 2000, "stal"),
         WOLKWIT(0xFFF6F4FF, false, 0, "quest"),
         STERRENNACHT(0xFF3A3478, false, 0, "baas"),
-        GOUD(0xFFFFD040, false, 0, "goud");
+        GOUD(0xFFFFD040, false, 0, "goud"),
+        /** T-RIJDIER: ice-blue with a glitter shine; first kill of Spiegelzucht (zone 2, De Spiegelburcht). */
+        KRISTAL(0xFFB8E8FF, false, 0, "baas"),
+        /** T-RIJDIER: warm lantern orange (zone 4 Lampionkust later: {@code Rijdieren.geefKleur}); for now 12 Gouden Veren. */
+        LAMPION(0xFFFFA860, false, 0, "veren");
 
         /** The swatch colour in the screen (ARGB). */
         public final int kleur;

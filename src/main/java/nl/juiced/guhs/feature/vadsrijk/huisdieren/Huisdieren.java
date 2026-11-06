@@ -342,6 +342,7 @@ public final class Huisdieren {
         d.putString("bezit", String.join(",", bezit(p)));
         Huisdier a = actief(p);
         d.putString("actief", a == null ? "" : a.id());
+        nl.juiced.guhs.feature.vadsrijk.rijdier.Maatjes.schermData(p, d);   // T-RIJDIER: pet levels + Vahoegje's stage
         HuisdierPayloads.stuur(p, new HuisdierPayloads.Scherm(d));
     }
 

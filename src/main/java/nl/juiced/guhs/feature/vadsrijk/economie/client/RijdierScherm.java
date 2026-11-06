@@ -33,15 +33,17 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
  * colour swatches, its level/xp/speed/jump or where to get it, and the buttons (ride this one / buy).
  */
 public class RijdierScherm extends EcoScherm {
-    private static final int RIJ = 24;
+    private static final int RIJ = 20;   // (T-RIJDIER: 24 -> 20, room for 8+ mounts)
     private final Map<RijdierSoort, RijdierEntity> voorbeelden = new EnumMap<>(RijdierSoort.class);
     private int gekozen = -1;
     @Nullable
     private PluimKleur kleurKeuze;
+    /** T-RIJDIER: the dress-up panel (Aankleden) instead of the info column, and the look picked in it (try-on in the preview). */
+    private final nl.juiced.guhs.feature.vadsrijk.rijdier.client.AankleedPaneel paneel = new nl.juiced.guhs.feature.vadsrijk.rijdier.client.AankleedPaneel();
 
     public RijdierScherm(CompoundTag data, List<ItemStack> items) {
         super(EcoPayloads.STAL, Component.translatable(data.getBooleanOr("stal", false) ? "vadsrijk.economie.stal.titel" : "vadsrijk.economie.rijdieren.titel"),
-                data, items, 360, 240);
+                data, items, 380, 256);   // (T-RIJDIER: wider/taller for the Aankleden panel)
     }
 
     /** (fix round 3) The collection tabs (Rijdieren | Huisdieren | ...) replace the old "Huisdieren" button; not at the stal. */
@@ -117,22 +119,23 @@ public class RijdierScherm extends EcoScherm {
             g.fill(x, y, x + bw, y + RIJ, sel ? 0xFFFF5FAF : hover ? 0xFFFFB8DC : 0xFFF0B8D8);
             g.fill(x + 1, y + 1, x + bw - 1, y + RIJ - 1, heeft ? (sel ? 0xFFFFE0F0 : 0xFFFFF4FA) : 0xFFE6DCE4);
             ItemStack icoon = EcoSpul.icoon(s, s.kleuren() ? PluimKleur.van(t.getStringOr("kleur", "roze")) : PluimKleur.ROZE);
-            g.item(icoon, x + 5, y + 4);
+            g.item(icoon, x + 4, y + 2);
             if (!heeft) {
-                g.fill(x + 4, y + 3, x + 22, y + 21, 0xB0E6DCE4);
-                g.text(font, "?", x + 11, y + 8, 0xFF8A5A84, false);
+                g.fill(x + 3, y + 1, x + 21, y + 19, 0xB0E6DCE4);
+                g.text(font, "?", x + 10, y + 6, 0xFF8A5A84, false);
             }
-            g.text(font, Component.translatable(s.naamKey()).withStyle(ChatFormatting.BOLD), x + 26, y + 3, heeft ? TEKST : ZACHT, false);
+            g.text(font, Component.translatable(s.naamKey()).withStyle(ChatFormatting.BOLD), x + 26, y + 1, heeft ? TEKST : ZACHT, false);
             Component sub = heeft ? Component.translatable("vadsrijk.economie.stal.level", t.getIntOr("level", 1), RijdierSoort.MAX_LEVEL)
                     : Component.translatable("vadsrijk.economie.rijdieren.nog_niet");
-            g.text(font, sub, x + 26, y + 13, heeft ? GOUD : ZACHT, false);
+            g.text(font, sub, x + 26, y + 11, heeft ? GOUD : ZACHT, false);
             if (t.getBooleanOr("actief", false)) {
-                g.text(font, "★", x + bw - 12, y + 4, 0xFFFF5FAF, false);
+                g.text(font, "★", x + bw - 12, y + 2, 0xFFFF5FAF, false);
             }
             final int idx = i;
             klikvlak(x, y, bw, RIJ, () -> {
                 gekozen = idx;
                 kleurKeuze = null;
+                paneel.wis();
             });
         }
         if (gekozen < 0 || gekozen >= l.size()) {
@@ -149,7 +152,7 @@ public class RijdierScherm extends EcoScherm {
         boolean stal = data.getBooleanOr("stal", false);
 
         // ---- the preview ---------------------------------------------------------------------------------------------------
-        int px = left + 138, py = top + 24, pw = 112, ph = 120;
+        int px = left + 136, py = top + 24, pw = 130, ph = 118;   // (T-RIJDIER: 112 -> 130 wide)
         g.fill(px, py, px + pw, py + ph, 0xFFF0B8D8);
         g.fill(px + 1, py + 1, px + pw - 1, py + ph - 1, eigen ? 0xFFFFF8FC : 0xFFEDE6EE);
         g.fill(px + 1, py + ph - 22, px + pw - 1, py + ph - 1, eigen ? 0xFFFFE6F3 : 0xFFE2DAE4);   // a little floor
@@ -157,6 +160,7 @@ public class RijdierScherm extends EcoScherm {
         if (e != null) {
             e.silhouet = !eigen;
             e.zetKleur(kleur);
+            e.zetUiterlijk(paneel.pasAan(s, t));   // T-RIJDIER: what it wears (+ the look you're trying on)
             teken(g, e, px + 1, py + 1, px + pw - 1, py + ph - 1);
         }
         if (!eigen) {
@@ -173,16 +177,16 @@ public class RijdierScherm extends EcoScherm {
                     continue;
                 }
                 boolean sel = k == kleur;
-                g.fill(sx, sy, sx + 14, sy + 14, sel ? 0xFFFF2F8F : 0xFFB890AC);
-                g.fill(sx + 1, sy + 1, sx + 13, sy + 13, hk ? k.kleur : (k.kleur & 0x00FFFFFF) | 0x50000000);
+                g.fill(sx, sy, sx + 12, sy + 12, sel ? 0xFFFF2F8F : 0xFFB890AC);
+                g.fill(sx + 1, sy + 1, sx + 11, sy + 11, hk ? k.kleur : (k.kleur & 0x00FFFFFF) | 0x50000000);
                 if (!hk) {
-                    g.text(font, "?", sx + 5, sy + 3, 0xFF6A4A64, false);
+                    g.text(font, "?", sx + 3, sy + 2, 0xFF6A4A64, false);
                 }
-                tip(mx, my, sx, sy, 14, 14, List.of(Component.translatable(k.naamKey()).withStyle(ChatFormatting.BOLD),
+                tip(mx, my, sx, sy, 12, 12, List.of(Component.translatable(k.naamKey()).withStyle(ChatFormatting.BOLD),
                         Component.translatable(hk ? "vadsrijk.economie.rijdieren.van_jou" : "vadsrijk.economie.pluimkleur.bron." + k.id())
                                 .withStyle(ChatFormatting.GRAY)));
-                klikvlak(sx, sy, 14, 14, () -> kleurKeuze = k);
-                sx += 16;
+                klikvlak(sx, sy, 12, 12, () -> kleurKeuze = k);
+                sx += 14;   // (T-RIJDIER: 12 px swatches, 9 colours)
             }
         }
 
@@ -200,6 +204,20 @@ public class RijdierScherm extends EcoScherm {
 
         // ---- info -----------------------------------------------------------------------------------------------------------
         int ix = px + pw + 8, iw = left + w - 8 - ix, iy = py;
+        // T-RIJDIER: the Info | Aankleden switch, and the dress-up panel
+        if (heeft && nl.juiced.guhs.feature.vadsrijk.rijdier.Uiterlijk.heeftVarianten(s)) {
+            int hw = Math.max(26, iw - 2 - font.width(Component.translatable("vadsrijk.rijdier.tab.aankleden")) - 8);   // (Info narrower: "Aankleden" fits)
+            boolean ak = paneel.open;
+            knop(g, mx, my, ix, iy - 2, hw, 12, Component.translatable("vadsrijk.rijdier.tab.info"), ak, () -> paneel.open = false);
+            knop(g, mx, my, ix + hw + 2, iy - 2, iw - hw - 2, 12, Component.translatable("vadsrijk.rijdier.tab.aankleden"), !ak, () -> paneel.open = true);
+            iy += 13;
+            if (ak) {
+                paneel.teken(this, g, mx, my, s, t, data, ix, iy, iw, top + h - 16);
+                return;
+            }
+        } else {
+            paneel.open = false;
+        }
         Component naam = Component.translatable(s.naamKey());
         if (s.kleuren()) {
             naam = Component.translatable("vadsrijk.economie.rijdieren.naam_kleur", naam, Component.translatable(kleur.naamKey()));
@@ -243,6 +261,24 @@ public class RijdierScherm extends EcoScherm {
                 g.text(font, line, ix, iy, 0xFF9A3A7A, false);
                 iy += 9;
             }
+            // T-RIJDIER: progress toward a secret/achievement source, and the Gouden Veren trade
+            CompoundTag sb = s.kleuren() ? t.getCompoundOrEmpty("kleurBron").getCompoundOrEmpty(kleur.id()) : t.getCompoundOrEmpty("soortBron");
+            if (sb.getIntOr("nodig", 0) > 0) {
+                g.text(font, Component.translatable("vadsrijk.rijdier.voortgang", sb.getIntOr("heb", 0), sb.getIntOr("nodig", 0)), ix, iy, GOUD, false);
+                iy += 10;
+            }
+            if (sb.getStringOr("bron", "").equals("veren") && (heeft || !s.kleuren())) {
+                long n = sb.getLongOr("waarde", 0);
+                int veren = data.getIntOr("veren", 0);
+                g.text(font, Component.translatable("vadsrijk.rijdier.veren", veren), ix, top + h - 58, GOUD, false);
+                knop(g, mx, my, ix, top + h - 48, iw, 14, Component.translatable("vadsrijk.rijdier.ruil_knop", n), veren >= n, () -> {
+                    CompoundTag a = new CompoundTag();
+                    a.putString("soort", s.id());
+                    a.putString("as", s.kleuren() ? "pluimkleur" : "soort");
+                    a.putString("id", kleur.id());
+                    doe("ruil", a);
+                });
+            }
         }
 
         // ---- buttons --------------------------------------------------------------------------------------------------------
@@ -282,6 +318,28 @@ public class RijdierScherm extends EcoScherm {
                 by += 9;
             }
         }
+    }
+
+    // ---- T-RIJDIER: the dress-up panel draws through these -------------------------------------------------------------------------
+
+    public void paneelKnop(GuiGraphicsExtractor g, int mx, int my, int x, int y, int bw, int bh, Component label, boolean actief, Runnable actie) {
+        knop(g, mx, my, x, y, bw, bh, label, actief, actie);
+    }
+
+    public void paneelKlik(int x, int y, int bw, int bh, Runnable actie) {
+        klikvlak(x, y, bw, bh, actie);
+    }
+
+    public void paneelTip(int mx, int my, int x, int y, int bw, int bh, List<Component> tekst) {
+        tip(mx, my, x, y, bw, bh, tekst);
+    }
+
+    public void paneelDoe(String actie, CompoundTag a) {
+        doe(actie, a);
+    }
+
+    public net.minecraft.client.gui.Font paneelFont() {
+        return font;
     }
 
     private void balkje(GuiGraphicsExtractor g, int x, int y, int bw, Component label, double frac) {

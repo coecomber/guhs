@@ -37,6 +37,7 @@ public final class Stal {
 
     /** The mount key N: the mount screen without the shop. */
     public static void overzicht(ServerPlayer p) {
+        nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.inhalen(p);   // T-RIJDIER: achievements/boss/secret looks first
         if (!Rijdieren.heeftEen(p)) {   // (I-MOUNTS: mounts start with the zone-3 starter)
             EcoUtil.zeg(p, "vadsrijk.economie.rijdier.geen");
             return;
@@ -75,6 +76,7 @@ public final class Stal {
                 }
                 t.put("kleuren", kl);
             }
+            nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.schermData(p, s, t);   // T-RIJDIER: looks + where the new mounts come from
             l.add(t);
         }
         d.put("rijdieren", l);
@@ -82,6 +84,7 @@ public final class Stal {
         d.putBoolean("starter", Rijdieren.heeftStarter(p));
         d.putBoolean("fluitje", EcoUtil.tel(p.getInventory(), EcoSpul.RIJFLUITJE.get()) > 0);
         d.putLong("munten", Spelers.data(p).munten);
+        nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.schermData(p, d);   // T-RIJDIER: Gouden Veren
         return d;
     }
 
@@ -122,6 +125,8 @@ public final class Stal {
                 }
             }
             default -> {
+                String m = nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.doe(p, stal, actie, a);   // T-RIJDIER: looks / feathers
+                melding = m == null ? "" : m;
             }
         }
         stuur(p, ctx, melding);

@@ -429,6 +429,7 @@ public final class Rijdieren {
         }
         r.zetEigenaar(p.getUUID(), level(p, s));   // (+ its speed/jump for that level, synced: the client steers)
         r.zetKleur(kleur(p, s));
+        r.zetUiterlijk(nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.uiterlijk(p, s));   // T-RIJDIER: coat, pattern, tack
         sl.addFreshEntity(r);
         UIT.put(p.getUUID(), r.getUUID());
         p.startRiding(r);
@@ -458,6 +459,10 @@ public final class Rijdieren {
     /** The rider got hit: the mount runs off, and needs a moment before it dares to come back. */
     static void geraakt(ServerPlayer p) {
         if (p.getVehicle() instanceof RijdierEntity r) {
+            if (r.soort().stevig() && r.vangSchrikOp()) {   // T-RIJDIER: the Zwamzwijntje shrugs off the first hit
+                EcoUtil.zeg(p, "vadsrijk.rijdier.stevig");
+                return;
+            }
             poef(r);
             zetCd(p, CD_GESCHROKKEN, true);
             EcoUtil.zeg(p, "vadsrijk.economie.rijdier.geschrokken");
