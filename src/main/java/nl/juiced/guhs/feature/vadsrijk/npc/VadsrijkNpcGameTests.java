@@ -288,7 +288,7 @@ public class VadsrijkNpcGameTests {
         d.klasse = "knuffelridder";
         nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 5);
         helper.assertTrue(NpcVolg.klasseQuest(p) == null, "lv 5, story not there: no advancement line");
-        Quest q = Quests.van("adv10_knuffelridder");
+        Quest q = Quests.van("spec17_knuffelridder");   // U-SPECS: was adv10_ (lv 10)
         for (String na : q.na()) {
             Questlog.neemAan(p, Quests.van(na));
             Questlog.voltooi(p, Quests.van(na));

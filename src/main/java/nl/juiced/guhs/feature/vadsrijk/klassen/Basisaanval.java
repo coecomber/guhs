@@ -176,7 +176,7 @@ public final class Basisaanval {
         Vec3 van = p.getEyePosition().add(richting.scale(0.5)).add(0, -0.12, 0);
         Schoten.Schot sc = Schoten.vuur(p, van, richting.normalize().scale(s.snelheid()));
         sc.zwaartekracht = s.zwaarte();
-        sc.sturen = s.sturen() + (Boom.heeft(p, "j_adv2") && s.schade() == Schade.Soort.AFSTAND ? 0.08 : 0);
+        sc.sturen = s.sturen() + (nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHERPSCHUTTER, 1) && s.schade() == Schade.Soort.AFSTAND ? 0.08 : 0);   // U-SPECS: Valkenblik
         sc.doorboren = s.doorboren() + (Boom.heeft(p, "j_doorboor") ? 1 : 0);
         sc.straal = s.schade() == Schade.Soort.MAGIE ? 0.45 : 0.3;
         sc.maxLeeftijd = (int) Math.ceil(40 / s.snelheid());

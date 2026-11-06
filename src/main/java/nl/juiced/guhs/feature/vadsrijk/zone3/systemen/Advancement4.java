@@ -44,10 +44,12 @@ import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Bomen;
  *   <li>Vadsmagier -> <b>Schemerwijze</b>: Meteoorguh leaves a pink fire field (radius 3.5, 5 s): every second 30 % weapon damage
  *   and Brandend.</li>
  * </ul>
+ * U-SPECS (ronde 4): Nestwachter = Reuzenkussen step 3, Kruinvalk = Scherpschutter step 3, Schemerwijze = Sterrenwever
+ * step 3 (klassen.spec.Specs#heeft); the nest ceremony touch is step 2 (in zone 3).
  * Where: the Nestkapel in Honingtak (z3-npc calls {@link Advancement#doe}) or the ordetempel desk.
  */
 public final class Advancement4 {
-    public static final int LEVEL = 50, STAP = 4;
+    public static final int LEVEL = 50, STAP = 3;   // U-SPECS: the "Nestvorm" ult upgrades are step 3 now (lv 58)
     private static final Map<String, Long> EENMAAL = new ConcurrentHashMap<>();
 
     private Advancement4() {
@@ -74,7 +76,7 @@ public final class Advancement4 {
         Vaardigheden.NA_GEBRUIK.add(Advancement4::naGebruik);
         Haken.LEVEL_OP.add((p, wat) -> {
             String k = wat.substring(0, Math.max(0, wat.lastIndexOf(':')));   // ("<klasse>:N" = the class level)
-            if (Klassen.van(k) != null && wat.equals(k + ":" + LEVEL) && Advancement.kanDoen(p, k)) {
+            if (false && Klassen.van(k) != null && wat.equals(k + ":" + LEVEL) && Advancement.kanDoen(p, k)) {   // U-SPECS: no step at lv 50 any more
                 p.sendSystemMessage(Component.translatable("vadsrijk.z3.systemen.adv4.klaar", Component.translatable(Advancement.titelKey(k, STAP)))
                         .withStyle(ChatFormatting.GOLD));
                 Tips.toon(p, "vadsrijk.z3.systemen.tip.adv4");
@@ -91,10 +93,10 @@ public final class Advancement4 {
             return n;
         }
         String id = k.skillId() == null ? "" : k.skillId();
-        if (id.equals("vahoege_plof") && Spelers.heeftKnoop(p, "r_adv4")) {
+        if (id.equals("vahoege_plof") && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.REUZENKUSSEN, 3)) {
             n *= 1.3;
         }
-        if (id.equals("sterrenschot") && Spelers.heeftKnoop(p, "j_adv4")) {
+        if (id.equals("sterrenschot") && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHERPSCHUTTER, 3)) {
             n *= 1.4;
         }
         return n;
@@ -108,13 +110,13 @@ public final class Advancement4 {
         String id = k.skillId() == null ? "" : k.skillId();
         long nu = sl.getGameTime();
         // Kruinvalk: Sterrenschot pierces shields: a quarter again as true damage
-        if (id.equals("sterrenschot") && Spelers.heeftKnoop(p, "j_adv4") && u.schade() > 0) {
+        if (id.equals("sterrenschot") && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHERPSCHUTTER, 3) && u.schade() > 0) {
             double extra = u.schade() * 0.25;
             Later.na(1, () -> Schade.doe(new Schade.Klap(p, m, extra, Element.ROZE, Schade.Soort.WAAR, false, "z3_kruinvalk")));
             sl.sendParticles(ParticleTypes.FIREWORK, m.getX(), m.getY() + m.getBbHeight() * 0.5, m.getZ(), 10, 0.2, 0.2, 0.2, 0.1);
         }
         // Schemerwijze: Meteoorguh leaves a fire field (once per cast)
-        if (id.equals("meteoorguh") && Spelers.heeftKnoop(p, "m_adv4") && EENMAAL.putIfAbsent(p.getUUID() + ":veld:" + nu, nu) == null) {
+        if (id.equals("meteoorguh") && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STERRENWEVER, 3) && EENMAAL.putIfAbsent(p.getUUID() + ":veld:" + nu, nu) == null) {
             EENMAAL.values().removeIf(t -> t < nu - 100);
             vuurveld(p, sl, m.position());
         }
@@ -141,7 +143,7 @@ public final class Advancement4 {
 
     /** Nestwachter: the winged cushion pulls every foe within 8 blocks to you. */
     static void naGebruik(ServerPlayer p, Vaardigheid v) {
-        if (!"vahoege_plof".equals(v.id()) || !Spelers.heeftKnoop(p, "r_adv4") || !(p.level() instanceof ServerLevel sl)) {
+        if (!"vahoege_plof".equals(v.id()) || !nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.REUZENKUSSEN, 3) || !(p.level() instanceof ServerLevel sl)) {
             return;
         }
         Vec3 c = p.position();
@@ -172,7 +174,7 @@ public final class Advancement4 {
 
     /** The nest touch of step 4: golden feathers spiral down, blossom wind, a wing-beat. */
     static void ceremonie(ServerPlayer p, int stap) {
-        if (stap != STAP || !(p.level() instanceof ServerLevel sl)) {
+        if (stap != 2 || !(p.level() instanceof ServerLevel sl)) {   // U-SPECS: the nest touch = step 2 (zone 3, Nestkapel)
             return;
         }
         Vec3 c = p.position();

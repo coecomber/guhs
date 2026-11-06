@@ -26,6 +26,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.Uitrusting;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom;
+import nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec;
+import nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs;
 
 /**
  * The class desk: what the ordetempel NPC (npc slice) and the klasse-tempeltje in Knuffelkamp call.
@@ -77,6 +79,16 @@ public final class KlasseBalie {
         }
         stuur(p, "kies");
         return true;
+    }
+
+    /**
+     * U-SPECS: the spec screen for {@code klasse} (the first choice after the step-1 quest, or the switch at a class NPC).
+     */
+    public static void vraagSpec(ServerPlayer p, String klasse) {
+        if (Klassen.van(klasse) != null) {
+            TAB.put(p.getUUID(), klasse);
+        }
+        stuur(p, "spec");
     }
 
     /** Key K in the dimension: the tree of your active class (respec/weapons only at the ordetempel). */
@@ -158,7 +170,7 @@ public final class KlasseBalie {
         }
     }
 
-    static boolean aanBalie(ServerPlayer p) {
+    public static boolean aanBalie(ServerPlayer p) {
         Sessie s = SESSIES.get(p.getUUID());
         return s != null && Vadsrijk.in(p) && p.level().getGameTime() - s.tijd() < 12000 && p.position().distanceTo(s.pos()) <= 12;
     }
@@ -237,6 +249,41 @@ public final class KlasseBalie {
                 Later.na(240, () -> nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, "vadsrijk.kern.tip.knuffelsprong"));
                 return;   // (the choice screen closes itself)
             }
+            // U-SPECS: the spec choice / switch
+            case "spec_scherm" -> {
+                stuur(p, "spec");
+                return;
+            }
+            case "spec_kies" -> {
+                Spec sp = Spec.van(arg);
+                if (sp == null || !sp.klasse.equals(bekeken(p))) {
+                    return;
+                }
+                String nee = Specs.kies(p, sp);
+                if (nee != null) {
+                    p.sendOverlayMessage(Component.translatable("vadsrijk.klassen.spec.nee." + nee).withStyle(ChatFormatting.GRAY));
+                    stuur(p, "spec");
+                }
+                return;   // (the screen closes for the ceremony)
+            }
+            case "spec_wissel" -> {
+                String kl = bekeken(p);
+                long nu = System.currentTimeMillis();
+                String nee = Specs.wissel(p, kl, aanBalie(p), nu);
+                if (nee == null) {
+                    Spec sp = Specs.spec(p, kl);
+                    Fx.geluid(sl, p.position(), SoundEvents.BOOK_PAGE_TURN, 1f, 0.8f);
+                    Fx.geluid(sl, p.position(), SoundEvents.BEACON_POWER_SELECT, 0.8f, 1.3f);
+                    sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, p.getX(), p.getY() + 1, p.getZ(), 40, 0.5, 0.8, 0.5, 0.3);
+                    p.sendSystemMessage(Component.translatable("vadsrijk.klassen.spec.gewisseld", Component.translatable(sp.naamKey()))
+                            .withStyle(ChatFormatting.LIGHT_PURPLE));
+                } else {
+                    p.sendOverlayMessage(Component.translatable("vadsrijk.klassen.spec.nee." + nee, tijd(Specs.wisselOver(p, nu)))
+                            .withStyle(ChatFormatting.GRAY));
+                }
+                stuur(p, "spec");
+                return;
+            }
             case "adv" -> {
                 if (!aanBalie(p) || !Advancement.VIA_BALIE || !Advancement.kanDoen(p, bekeken(p))) {
                     return;
@@ -248,7 +295,7 @@ public final class KlasseBalie {
                 return;
             }
         }
-        stuur(p, modus.equals("balie") && aanBalie(p) ? "balie" : modus.equals("kies") ? "kies" : "boom");
+        stuur(p, modus.equals("balie") && aanBalie(p) ? "balie" : modus.equals("kies") ? "kies" : modus.equals("spec") ? "spec" : "boom");
     }
 
     static String tijd(long sec) {
@@ -273,12 +320,24 @@ public final class KlasseBalie {
         t.putInt("generiek", d.level());
         t.putInt("punten", Spelers.skillpunten(p, k.id()));
         t.putString("knopen", String.join(",", Boom.knopen(d, k.id())));
-        t.putString("titel", Advancement.titelKey(k.id(), Advancement.stap(p, k.id())));
+        t.putString("titel", Advancement.titelKey(p, k.id(), Advancement.stap(p, k.id())));
+        // U-SPECS: the spec of the shown class, the choice/switch state, and the step titles of that spec
+        Spec sp = Specs.spec(p, k.id());
+        long nuMs = System.currentTimeMillis();
+        t.putString("spec", sp == null ? "" : sp.id);
+        t.putBoolean("specOpen", Specs.open(p, k.id()));
+        t.putLong("specWissel", Specs.wisselOver(p, nuMs));
+        String wisselNee = Specs.waaromGeenWissel(p, k.id(), aanBalie(p), nuMs);
+        t.putString("specWisselNee", wisselNee == null ? "" : wisselNee);
+        for (int s = 1; s <= Advancement.MAX_STAP; s++) {
+            t.putString("adv_titel_" + s, Advancement.titelKey(p, k.id(), s));
+            t.putString("adv_uitleg_" + s, sp != null ? "vadsrijk.klassen.adv.uitleg." + sp.id + "." + s : "vadsrijk.klassen.adv.uitleg.geen." + s);
+        }
         CompoundTag x = d.extra("klassen");
         for (Klasse kl : Klassen.alle()) {
             t.putInt("lv_" + kl.id(), d.level(kl.id()));
             t.putInt("adv_" + kl.id(), Advancement.stap(p, kl.id()));
-            t.putString("titel_" + kl.id(), Advancement.titelKey(kl.id(), Advancement.stap(p, kl.id())));
+            t.putString("titel_" + kl.id(), Advancement.titelKey(p, kl.id(), Advancement.stap(p, kl.id())));
             t.putBoolean("start_" + kl.id(), x.getBooleanOr("start_" + kl.id(), false));
         }
         t.putLong("prijs", WAPEN_PRIJS);

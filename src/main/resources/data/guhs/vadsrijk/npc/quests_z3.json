@@ -1171,35 +1171,28 @@
       "auto": false
     },
     {
-      "id": "z3_adv50_knuffelridder",
+      "id": "z3_adv35_knuffelridder",
       "soort": "klasse",
       "gever": "z3_wasja",
       "inleveren": "z3_wasja",
-      "lv": 48,
+      "lv": 33,
       "na": [
-        "z3_hq13_hart"
+        "z3_hq08_werf",
+        "z3_hq03_pluimstal"
       ],
       "doelen": [
         {
           "soort": "level",
           "doel": "*",
-          "n": 50,
+          "n": 35,
           "bron": "",
           "kans": 0.0,
-          "plek": "gebied:z3_wortelduister"
-        },
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:z3_wortelduister",
-          "n": 25,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z3_wortelduister"
+          "plek": "npc:z3_wasja"
         }
       ],
       "beloning": {
-        "xp": 5528,
-        "munten": 15000,
+        "xp": 3043,
+        "munten": 9000,
         "items": [],
         "wapen": false,
         "loot": ""
@@ -1213,41 +1206,34 @@
       ],
       "praat": {},
       "actie_aanname": "",
-      "actie_klaar": "advancement:knuffelridder:4",
+      "actie_klaar": "advancement:knuffelridder:2",
       "start_items": [],
       "auto": false,
       "klasse": "knuffelridder"
     },
     {
-      "id": "z3_adv50_pluisjager",
+      "id": "z3_adv35_pluisjager",
       "soort": "klasse",
       "gever": "z3_wasja",
       "inleveren": "z3_wasja",
-      "lv": 48,
+      "lv": 33,
       "na": [
-        "z3_hq13_hart"
+        "z3_hq08_werf",
+        "z3_hq03_pluimstal"
       ],
       "doelen": [
         {
           "soort": "level",
           "doel": "*",
-          "n": 50,
+          "n": 35,
           "bron": "",
           "kans": 0.0,
-          "plek": "gebied:z3_wortelduister"
-        },
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:z3_wortelduister",
-          "n": 25,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z3_wortelduister"
+          "plek": "npc:z3_wasja"
         }
       ],
       "beloning": {
-        "xp": 5528,
-        "munten": 15000,
+        "xp": 3043,
+        "munten": 9000,
         "items": [],
         "wapen": false,
         "loot": ""
@@ -1261,41 +1247,34 @@
       ],
       "praat": {},
       "actie_aanname": "",
-      "actie_klaar": "advancement:pluisjager:4",
+      "actie_klaar": "advancement:pluisjager:2",
       "start_items": [],
       "auto": false,
       "klasse": "pluisjager"
     },
     {
-      "id": "z3_adv50_vadsmagier",
+      "id": "z3_adv35_vadsmagier",
       "soort": "klasse",
       "gever": "z3_wasja",
       "inleveren": "z3_wasja",
-      "lv": 48,
+      "lv": 33,
       "na": [
-        "z3_hq13_hart"
+        "z3_hq08_werf",
+        "z3_hq03_pluimstal"
       ],
       "doelen": [
         {
           "soort": "level",
           "doel": "*",
-          "n": 50,
+          "n": 35,
           "bron": "",
           "kans": 0.0,
-          "plek": "gebied:z3_wortelduister"
-        },
-        {
-          "soort": "opvrolijk",
-          "doel": "gebied:z3_wortelduister",
-          "n": 25,
-          "bron": "",
-          "kans": 0.0,
-          "plek": "gebied:z3_wortelduister"
+          "plek": "npc:z3_wasja"
         }
       ],
       "beloning": {
-        "xp": 5528,
-        "munten": 15000,
+        "xp": 3043,
+        "munten": 9000,
         "items": [],
         "wapen": false,
         "loot": ""
@@ -1309,7 +1288,7 @@
       ],
       "praat": {},
       "actie_aanname": "",
-      "actie_klaar": "advancement:vadsmagier:4",
+      "actie_klaar": "advancement:vadsmagier:2",
       "start_items": [],
       "auto": false,
       "klasse": "vadsmagier"

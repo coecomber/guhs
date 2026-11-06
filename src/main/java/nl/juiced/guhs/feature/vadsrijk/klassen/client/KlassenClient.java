@@ -68,7 +68,13 @@ public final class KlassenClient {
     private static void open(CompoundTag t) {
         Minecraft mc = Minecraft.getInstance();
         String modus = t.getStringOr("modus", "boom");
-        if (modus.equals("kies")) {
+        if (modus.equals("spec")) {   // U-SPECS: the spec choice / switch
+            if (mc.screen instanceof nl.juiced.guhs.feature.vadsrijk.klassen.spec.client.SpecScherm s) {
+                s.zet(t);
+            } else {
+                mc.setScreen(new nl.juiced.guhs.feature.vadsrijk.klassen.spec.client.SpecScherm(t));
+            }
+        } else if (modus.equals("kies")) {
             if (mc.screen instanceof KeuzeScherm k) {
                 k.zet(t);
             } else {

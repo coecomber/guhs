@@ -285,6 +285,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_luchtschip',
             # 1.10 round U, U-RUITERS: ambient guhs riding Pluimguhs, texts (Java: feature/vadsrijk/ruiters; routes: tools/vadsrijk/ruiters/routes.py)
             'vadsrijk_u_ruiters',
+            # 1.10 round U, U-SPECS: specialisations + new job advancements + gear compare texts (Java: feature/vadsrijk/klassen/spec);
+            # after vadsrijk_klassen (it overrides a few of its texts)
+            'vadsrijk_u_specs',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

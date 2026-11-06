@@ -740,29 +740,28 @@ Q("rijdier_knuffelhert", "rijdier", "boswachter_mos", "Het Knuffelhert",
            "geef het af en toe een wortelzwam.")],
   xp=1500, munten=800, lv=10, na=["hq06_zwamzoet", RIJDIER_POORT], actie_klaar="rijdier_geef:knuffelhert")
 
-# ===== job advancements at lv 10 and 20 per class (klassen slice does the ceremony) ========================================
+# ===== job advancement 1 (class lv 17) per class: the SPECIALISATION (U-SPECS, ronde 4) ===================================
+# The old adv10_/adv20_ quests (lv 10/20) are gone: step 1 is now at class lv 17, just before the Zwamtempel (zone 1's end
+# dungeon), after the Druipgrotten. The hand-in opens the spec choice screen; the ceremony follows the choice
+# (klassen.Advancement#doe -> spec.Specs#kies). Steps 2 (zone 3) and 3 (zone 5) live in vadsrijk_z3_npc.py / vadsrijk_t_z5verhaal.py.
 KLASSEN = {
-    "knuffelridder": ("Knuffelridder", "Kussenkampioen", "Vahoege Paladijn", "Meester Kussensloop"),
-    "pluisjager": ("Pluisjager", "Pluizenschutter", "Sterrenjager", "Juf Pijltje"),
-    "vadsmagier": ("Vadsmagiër", "Roze Tovenaar", "Vahoege Aartsmagiër", "Opa Sterrenstof"),
+    "knuffelridder": ("Knuffelridder", "Schildridder", "Reuzenkussen", "Meester Kussensloop"),
+    "pluisjager": ("Pluisjager", "Scherpschutter", "Strikkenzetter", "Juf Pijltje"),
+    "vadsmagier": ("Vadsmagiër", "Sterrenwever", "Zegenzanger", "Opa Sterrenstof"),
 }
-for k, (naam, t1, t2, leraar) in KLASSEN.items():
-    Q(f"adv10_{k}", "klasse", "grootmeester", f"De proef van de {t1}",
-      f"Je bent sterk geworden als {naam}. Bewijs het in het Sporenwoud, dan word je {t1}.",
-      [D("level", "*", 10, f"Bereik level 10 als {naam}"), D("opvrolijk", "gebied:sporenwoud", 15, "Vrolijk wezens op in het Sporenwoud")],
-      [("npc", f"Ik zie het aan je houding: je bent een echte {naam} geworden. Maar een titel moet je verdienen."),
-       ("npc", f"Bereik level 10 en vrolijk vijftien wezens op in het Sporenwoud. Dan word je {t1}. {leraar} zou trots zijn.")],
-      f"Level 10 als {naam}, en vijftien wezens in het Sporenwoud.",
-      [("npc", f"Kniel, avonturier. Nou ja, ga een beetje zitten. Vanaf nu ben je {t1}!")],
-      xp=600, munten=500, lv=8, klasse=k, na=["hq07_littekens"], actie_klaar=f"advancement:{k}:1")
-    Q(f"adv20_{k}", "klasse", "grootmeester", f"De proef van de {t2}",
-      f"De hoogste titel van zone 1: {t2}. Bereik level 20 en vrolijk de Opperzwam op.",
-      [D("level", "*", 20, f"Bereik level 20 als {naam}"), D("baas", "gebied:zwamtempel", 1, "Vrolijk de Opperzwam op")],
-      [("npc", f"Er is één titel die maar weinigen dragen: {t2}. Daarvoor moet je de sterkste zijn van het hele rijk."),
-       ("npc", "Bereik level 20 en vrolijk de Opperzwam op in de Zwamtempel. Dan houd ik de grote ceremonie.")],
-      f"Level 20 als {naam}, en de Opperzwam in de Zwamtempel.",
-      [("npc", f"De klokken luiden, de oortjes wapperen. Ik benoem je tot {t2}! Het hele Vadsrijk is trots op je.")],
-      xp=2000, munten=2000, lv=18, klasse=k, na=[f"adv10_{k}"], actie_klaar=f"advancement:{k}:2")
+for k, (naam, sa, sb, leraar) in KLASSEN.items():
+    Q(f"spec17_{k}", "klasse", "grootmeester", f"De keuze van de {naam}",
+      f"Je bent een echte {naam} geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, "
+      f"{sa} of {sb}. Daarna ben je klaar voor de Zwamtempel.",
+      [D("level", "*", 17, f"Bereik level 17 als {naam} (de Druipgrotten en de Kloof helpen)")],
+      [("npc", f"Ik zie het aan je houding: je bent een echte {naam} geworden. Maar elke {naam} kiest ooit een eigen weg."),
+       ("npc", f"Er zijn er twee: {sa} en {sb}. Allebei sterk, allebei anders. {leraar} koos er ook ooit één. Hij heeft er nooit spijt van gehad."),
+       ("npc", "Bereik level 17 en kom dan terug, hier in de ordetempel. Daarna ben je klaar voor de Zwamtempel.")],
+      f"Level 17 als {naam}, en dan terug naar Grootmeester Vadsvoet in de ordetempel van Zwamzoet.",
+      [("npc", "Kniel, avonturier. Nou ja, ga een beetje zitten. Het is tijd om te kiezen."),
+       ("npc", f"Kijk goed naar allebei de wegen. {sa} of {sb}. Twijfel je later? Dan kun je in elke stad bij de klassemeester "
+               "wisselen. Maar nu: kies met je hart.")],
+      xp=2500, munten=2000, lv=16, klasse=k, na=["hq09_druipgrotten"], actie_klaar=f"advancement:{k}:1")
 
 # ===== the secret: who is Akim de Kaasguh? (bazen owns the spy and his rooftop fight; we run the clues) =====================
 Q("geheim_spion", "geheim", "grootmeester", "Wie is Akim de Kaasguh?",
@@ -859,8 +858,8 @@ GIDS = {
                                              "geen plekje dichtbij is. Het kan elke minuut, maar niet tijdens een bazengevecht. De toets "
                                              "kun je veranderen in Opties > Besturing > Vadsrijk."),
     "klassen": ("Klassen", "Knuffelridder (dichtbij, stevig), Pluisjager (van ver, beweeglijk) en Vadsmagiër (elementen en heling). "
-                           "Elke klasse heeft een eigen level. Wisselen doe je in de ordetempel van Zwamzoet. Op level 10 en 20 krijg "
-                           "je een nieuwe titel bij de Grootmeester."),
+                           "Elke klasse heeft een eigen level. Wisselen doe je in de ordetempel van Zwamzoet. Op level 17 kies je "
+                           "bij de Grootmeester je specialisatie; op 35 en 58 krijg je een nieuwe titel en kracht."),
     "vaardigheden": ("Vaardigheden", "Linkerklik is je gewone aanval; elk wapen heeft zijn eigen aanvalssnelheid (zie de tooltip, het kruisje "
                                      "laat zien wanneer je weer kunt). R, V en G zijn je vaardigheden (ze kosten energie), Z is je "
                                      "ultieme vaardigheid: die laadt op door te vechten. C is de Knuffelsprong: een grote sprong vooruit, elke klasse, "
@@ -1395,7 +1394,7 @@ FTB_SECTIES = [
                                                              "vr_hq09_druipgrotten", "vr_hq10_zwamtempel", "vr_hq11_opperzwam",
                                                              "vr_hq12_schaduw"]),
     ("vr_zwamzoet", "Zwamzoet helpen", "guh:mint", None),
-    ("vr_klassen", "Klassen en rijdieren", "guh:snow", [f"vr_adv10_{k}" for k in KLASSEN] + [f"vr_adv20_{k}" for k in KLASSEN]
+    ("vr_klassen", "Klassen en rijdieren", "guh:snow", [f"vr_spec17_{k}" for k in KLASSEN]
      + ["vr_rijdier_hoedhupper", "vr_rijdier_knuffelhert"]),
     ("vr_geheimen", "Geheimen", "guh:choco", ["vr_geheim_spion", "vr_knuffels_alle", "vr_aanwijzingen_alle"]
      + [f"vr_schat_{s}" for s in SCHATTEN]),
