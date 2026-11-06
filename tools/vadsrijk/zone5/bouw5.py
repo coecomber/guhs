@@ -877,7 +877,16 @@ def wolkplatformen(W, S, info):
         nz = np.nonzero(col)[0]
         if not len(nz):
             continue
-        ytop = int(W.b[1] + nz.max())
+        # T-INT: the top of the LOWEST solid run (the fin/fluke skin), not the column's highest block: the north fin lies under the
+        # airport piers, whose decks made the platform float at y 244
+        top = nz[0]
+        for a, b in zip(nz, nz[1:]):
+            if b - a > 6:
+                break
+            top = b
+        else:
+            top = nz.max()
+        ytop = int(W.b[1] + top)
         for x in range(cx - r - 2, cx + r + 3):
             for z in range(cz - r - 2, cz + r + 3):
                 dd = math.hypot(x - cx, z - cz)

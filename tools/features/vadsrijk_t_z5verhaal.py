@@ -1114,7 +1114,7 @@ def build(h):
         h.w(f"{h.D}/{pad}", obj)
     _assets(h.w, h.A)
     for k, nl in teksten().items():
-        h.lang(k, nl, EN.get(k, nl))
+        h.lang(k, EN.get(k, nl), nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

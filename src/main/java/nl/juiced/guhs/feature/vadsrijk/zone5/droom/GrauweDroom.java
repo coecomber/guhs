@@ -144,7 +144,9 @@ public class GrauweDroom extends Z5Baas {
     /** The music hook (t-geluid): its own id; the client only plays it once a sound with that id exists. */
     @Override
     public Identifier muziek() {
-        return Guhs.id("vr.z5droom.muziek.grauwe_droom");
+        // T-INT: no own track rendered yet: t-geluid's grand Vahoegnir boss theme (the finale's dragon-sized feel). An own dreamy
+        // lullaby-boss loop (guhs:vr.z5droom.muziek.grauwe_droom) can replace this once the sound exists.
+        return Guhs.id(nl.juiced.guhs.feature.vadsrijk.geluid.GeluidPlan.baasId("vahoegnir"));
     }
 
     @Override

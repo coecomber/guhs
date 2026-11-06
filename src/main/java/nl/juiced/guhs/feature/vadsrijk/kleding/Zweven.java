@@ -55,7 +55,7 @@ public final class Zweven {
         GEEN_ZWEEF_GEBIEDEN.addAll(List.of("z2_spiegelburcht", "z3_zeppelinwerf", "z3_hart"));
         // T-INT: zone 4/5 dungeons (the boss arenas themselves are covered by Arenas.op): Het Wrak, the whale's Buikgangen and
         // Schuilnest, the Proefarena (sparring)
-        GEEN_ZWEEF_GEBIEDEN.addAll(List.of("z4_wrak", "z5_buikgangen", "z5_schuilnest", "z5_proefarena"));
+        GEEN_ZWEEF_GEBIEDEN.addAll(List.of("z4_wrak", "z5_buikgangen", "z5_schuilnest", "z5_proefarena", "z5d_droom"));   // (+ t-droom's Droomwolk)
     }
 
     private static final Set<UUID> ZWEEFT = ConcurrentHashMap.newKeySet();
