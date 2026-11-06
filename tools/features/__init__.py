@@ -280,6 +280,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_vfx',
             # 1.10 round U, U-AUDIO2: boss phase music + fanfares, world point sounds, NPC voices (Java: feature/vadsrijk/geluid)
             'vadsrijk_u_audio2',
+            'vadsrijk_u_z6muziek',   # U-Z6MUZIEK: zone-6 music + ambience (after u_audio2)
             ]
 
 

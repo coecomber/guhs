@@ -9048,5 +9048,816 @@
         "attenuation_distance": 12
       }
     ]
+  },
+  "vr.geluid.gebied.roze_duinen": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/gebied/roze_duinen",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.gebied.palmenkloven": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/gebied/palmenkloven",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.gebied.zoutvlakte": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/gebied/zoutvlakte",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.gebied.zoutvlakte_nacht": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/gebied/zoutvlakte_nacht",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.gebied.ruinedal": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/gebied/ruinedal",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.gebied.moederoase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/gebied/moederoase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.wormelien": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/wormelien",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.wormelien_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/wormelien_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.wormelien": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/wormelien"
+      }
+    ]
+  },
+  "vr.geluid.baas.zoutkolos": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/zoutkolos",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.zoutkolos_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/zoutkolos_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.zoutkolos": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/zoutkolos"
+      }
+    ]
+  },
+  "vr.geluid.baas.sterrenwacht": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/sterrenwacht",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.sterrenwacht_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/sterrenwacht_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.sterrenwacht": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/sterrenwacht"
+      }
+    ]
+  },
+  "vr.geluid.baas.glimmertje": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/glimmertje",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.glimmertje_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/glimmertje_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.glimmertje": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/glimmertje"
+      }
+    ]
+  },
+  "vr.geluid.baas.verzonken_sterrenguh": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/verzonken_sterrenguh",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.verzonken_sterrenguh_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/verzonken_sterrenguh_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.verzonken_sterrenguh": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/verzonken_sterrenguh"
+      }
+    ]
+  },
+  "vr.geluid.baas.zandwachter": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/zandwachter",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.zandwachter_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/zandwachter_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.zandwachter": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/zandwachter"
+      }
+    ]
+  },
+  "vr.geluid.baas.spiegelvizier": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/spiegelvizier",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.spiegelvizier_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/spiegelvizier_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.spiegelvizier": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/spiegelvizier"
+      }
+    ]
+  },
+  "vr.geluid.baas.sterrenbeelden": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/sterrenbeelden",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.sterrenbeelden_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/sterrenbeelden_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.sterrenbeelden": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/sterrenbeelden"
+      }
+    ]
+  },
+  "vr.geluid.baas.ringeling": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/ringeling",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.baas.ringeling_fase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/baas/ringeling_fase",
+        "stream": true
+      }
+    ]
+  },
+  "vr.geluid.fanfare.ringeling": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/ringeling"
+      }
+    ]
+  },
+  "vr.geluid.stinger.baken": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/stinger/baken"
+      }
+    ]
+  },
+  "vr.geluid.stinger.moederoase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/stinger/moederoase"
+      }
+    ]
+  },
+  "vr.geluid.bed.duinen": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_duinen"
+      }
+    ]
+  },
+  "vr.geluid.sfeer.duinen": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_1",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_2",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_3",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_1",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_2",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_3",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_4",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/glinster_1",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/glinster_2",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/glinster_3",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.geluid.bed.oase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_oase"
+      }
+    ]
+  },
+  "vr.geluid.sfeer.oase": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_1",
+        "weight": 3,
+        "volume": 0.55,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_2",
+        "weight": 3,
+        "volume": 0.55,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_3",
+        "weight": 3,
+        "volume": 0.55,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_4",
+        "weight": 3,
+        "volume": 0.55,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_1",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_2",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_3",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_4",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      },
+      {
+        "name": "minecraft:entity.frog.ambient",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.3,
+        "pitch": 1.3
+      }
+    ]
+  },
+  "vr.geluid.bed.bazaar": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_bazaar"
+      }
+    ]
+  },
+  "vr.geluid.sfeer.bazaar": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient2",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient5",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient9",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient12",
+        "weight": 2,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient3",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 0.95
+      },
+      {
+        "name": "guhs:guh_ambient7",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 0.95
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_1",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_2",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_3",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.1
+      }
+    ]
+  },
+  "vr.geluid.bed.sterren": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_sterren"
+      }
+    ]
+  },
+  "vr.geluid.sfeer.sterren": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/krekel_1",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/krekel_2",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/sterretje_1",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/sterretje_2",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/sterretje_3",
+        "weight": 3,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/zoutzang_1",
+        "weight": 2,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/zoutzang_2",
+        "weight": 2,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/zoutzang_3",
+        "weight": 2,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vogels.guh_uiltje",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.4,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.geluid.bed.toren": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_toren"
+      }
+    ]
+  },
+  "vr.geluid.sfeer.toren": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_1",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_2",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_3",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_4",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/zoutzang_1",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 0.5
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/zoutzang_2",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 0.5
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/zoutzang_3",
+        "weight": 1,
+        "volume": 0.25,
+        "pitch": 0.5
+      }
+    ]
+  },
+  "vr.stad.muziek.rozenkloof_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/stad/rozenkloof_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.rozenkloof_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/stad/rozenkloof_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.saffraanpoort_1": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/stad/saffraanpoort_1",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.muziek.saffraanpoort_2": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/stad/saffraanpoort_2",
+        "stream": true
+      }
+    ]
+  },
+  "vr.stad.sfeer.rozenkloof": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_1",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_2",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_3",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/vogel_4",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_1",
+        "weight": 2,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_2",
+        "weight": 2,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_3",
+        "weight": 2,
+        "volume": 0.45,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:guh_ambient3",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 1.05
+      },
+      {
+        "name": "guhs:guh_ambient7",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 1.05
+      },
+      {
+        "name": "guhs:guh_ambient10",
+        "weight": 1,
+        "volume": 0.45,
+        "pitch": 1.05
+      },
+      {
+        "name": "minecraft:block.bell.use",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.15,
+        "pitch": 0.8
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 1,
+        "volume": 0.4,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.stad.sfeer.saffraanpoort": {
+    "sounds": [
+      {
+        "name": "guhs:guh_ambient2",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient5",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient9",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:guh_ambient12",
+        "weight": 3,
+        "volume": 0.5,
+        "pitch": 1.15
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_1",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_2",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/belletje_3",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:klaterdal.windgong",
+        "type": "event",
+        "weight": 2,
+        "volume": 0.4,
+        "pitch": 1.1
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/kraak_1",
+        "weight": 1,
+        "volume": 0.35,
+        "pitch": 0.8
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_1",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_2",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_3",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      },
+      {
+        "name": "guhs:vadsrijk/sfeer/druppel_4",
+        "weight": 1,
+        "volume": 0.3,
+        "pitch": 1.0
+      }
+    ]
+  },
+  "vr.stad.bed.bazaar": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_bazaar"
+      }
+    ]
+  },
+  "vr.z6raid.muziek.opgevrolijkt": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/muziek/fanfare/ringeling"
+      }
+    ]
+  },
+  "vr.z6raid.muziek.wachtzaal": {
+    "sounds": [
+      {
+        "name": "guhs:vadsrijk/sfeer/bed_toren"
+      }
+    ]
   }
 }

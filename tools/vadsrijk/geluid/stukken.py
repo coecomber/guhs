@@ -518,4 +518,6 @@ def alle():
     for f in STINGERS:
         n = f.__name__.replace("stinger_", "")
         l.append(("stinger", n, f, {"galm": 2.4, "rms": -21.0, "uitval": 0.4, "kwaliteit": 0.5}))
+    import zijdeland   # U-Z6MUZIEK: zone 6, het Zijdeland (area + town themes, bosses with phases + fanfares, 2 stingers)
+    l += zijdeland.alle()
     return l
