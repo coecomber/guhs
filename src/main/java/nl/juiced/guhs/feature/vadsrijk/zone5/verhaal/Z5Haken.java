@@ -135,6 +135,16 @@ public final class Z5Haken {
         if (!id.startsWith("z5_")) {
             return false;
         }
+        if (id.equals("z5_inspecteur") && wachtOp(p, "z5:inspecteur")) {
+            // hq02: the first meeting (he is also the hand-in NPC, so the shared "talk to" lines would be skipped)
+            NpcApi.meld(p, "z5", "inspecteur");
+            Quest q = Quests.van(HQ02);
+            List<String> sprekers = q == null ? null : q.praat().get(id);
+            if (sprekers != null) {
+                Praat.scene(p, Z5Verhaal.SLEUTEL, QuestMotor.regels(p, g, sprekers, q.sleutel() + ".praat." + id + "."));
+            }
+            return true;
+        }
         Z5Speurwerk.Verhoor v = Z5Speurwerk.open(p, id);
         if (v != null) {
             Z5Speurwerk.verhoor(p, g, v);

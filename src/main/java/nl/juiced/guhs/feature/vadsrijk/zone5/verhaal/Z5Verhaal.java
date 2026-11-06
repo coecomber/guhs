@@ -74,6 +74,9 @@ public final class Z5Verhaal {
             CLIFF_TICKS = 300;
     static final String V = "nl.juiced.guhs.feature.vadsrijk.";
 
+    /** Level for the line: 55 by design, clamped to the kern's level cap (still 50 in this tree: Levels.MAX_GENERIEK). */
+    public static final int MIN_LEVEL = Math.min(55, nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX_GENERIEK);
+
     private record Loopt(String soort, long begin) {
     }
 
@@ -86,7 +89,7 @@ public final class Z5Verhaal {
 
     /** The airship line to Hoogvads: after zone 4 (or once zone 5 started) and from level 55. */
     public static boolean magNaarHoogvads(ServerPlayer p) {
-        return magZien(p) && Spelers.level(p) >= 55;
+        return magZien(p) && Spelers.level(p) >= MIN_LEVEL;
     }
 
     /** Is Hoogvads a destination this player knows about (zone 4 done, or zone 5 already started)? */
@@ -219,7 +222,7 @@ public final class Z5Verhaal {
             deeltjes(p, sl, ParticleTypes.CLOUD, zaal.add(0, 1, 0), 30, 0.6, 0.6, 0.05);
         }
         if (t == 110) {
-            geluid(p, SoundEvents.CAT_HISS, 1.2f, 0.8f);
+            geluid(p, SoundEvents.NOTE_BLOCK_BASS.value(), 1.2f, 0.5f);
         }
         if (t >= 170) {
             Vec3[] v = Z5VerhaalPlekken.VLUCHT_SPION;
@@ -350,7 +353,7 @@ public final class Z5Verhaal {
         // the storm wall: grey mist, lightning flashes; in the flashes the masts and a golden ship with ten glints
         deeltjes(p, sl, new DustParticleOptions(0x5A5A66, 4f), s.add(-60, 10, 0), 40, 30, 25, 0);
         if (t % 40 == 5) {
-            deeltjes(p, sl, ParticleTypes.FLASH, s.add(0, 30, (t % 80) - 40), 1, 0, 0, 0);
+            deeltjes(p, sl, ParticleTypes.ELECTRIC_SPARK, s.add(0, 30, (t % 80) - 40), 1, 0, 0, 0);
             geluid(p, SoundEvents.LIGHTNING_BOLT_THUNDER, 0.6f, 0.6f);
         }
         if (t >= 150 && t < 200 && t % 5 == 0) {

@@ -9,7 +9,7 @@ Alle commando's beginnen met `/guhs vadsrijk z5verhaal`. Je moet in het Vadsrijk
 ## 1. Klaarzetten
 | Commando | Wat er gebeurt |
 |---|---|
-| `/guhs vadsrijk z5verhaal klaarzetten` | Zone 1-4 klaar (alle hoofdquests + vlaggen `zone1..4_klaar`), level 56. **z5_hq01 "De Zwevende Stad"** start vanzelf. |
+| `/guhs vadsrijk z5verhaal klaarzetten` | Zone 1-4 klaar (alle hoofdquests + vlaggen `zone1..4_klaar`), level 56 (zolang de levelgrens nog 50 is: level 50). **z5_hq01 "De Zwevende Stad"** start vanzelf. |
 | `/guhs vadsrijk z5verhaal vlieg` | De vlucht naar Hoogvads. De eerste keer: de **aankomstfilm** (vanaf de Opstijgpier langs de kop van de walvis, haar oog gaat open en lacht, over de rand, de stad in het goud, landing op de Luchthaven). |
 | `/guhs vadsrijk z5verhaal quest <1-10>` | Spring naar hoofdquest 1-10 (alles ervoor wordt afgevinkt, ook de sporen in je boekje). |
 | `/guhs vadsrijk z5verhaal stap` | Vinkt de huidige stap van je zone-5-quest af (overslaan). |

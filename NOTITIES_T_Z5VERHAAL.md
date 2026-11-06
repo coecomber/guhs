@@ -96,13 +96,22 @@ Suggested ids `guhs:vr_z5_baas_zilverstaart`, `guhs:vr_z5_baas_grauwe_droom` (us
 - The board accusation needs the 3 decisive clues (staart, zegel, kaastest); the main line always gives all 10.
 - After the unmasking the Zachtpels NPC stays (NPCs are shared by all players): for that player it is a "cardboard Chancellor".
 - F3 (Mientje's memory) is a narrated camera scene with Darkness, not the playable memory (no empire map yet).
+- Spy naming (lead, 2026-11-06): the spy stays **Kootje Zilverstaart**, a DIFFERENT Kootje of the Ringvinger than zone 4's
+  dungeon boss "Kootje de Vliegervanger" (the Ringvinger has several Kootjes, WERELDVERHAAL 5). The unmasking line names him:
+  "Mijn collega de Vliegervanger mocht de lampionnen van de kust jatten; ik krijg ... deze walvis." No rename needed.
+- t-z5wezens is done: spy boss `guhs:vr_z5_baas_zilverstaart` plugs into `Z5Finale` by reflection and calls
+  `Z5Finale.spionVerslagen(p)` per helper. The flag `zone5_klaar` is set at the end of z5_hq09 (`Z5Verhaal.zone5Klaar`, quest action
+  `z5_klaar`); t-rijdier's Vahoegje stage 2 hangs on it.
 - The finale has a fallback scene so the story never blocks without t-z5wezens.
+- **LEVEL CAP**: kern `Levels.MAX`/`MAX_GENERIEK` is still 50 in this tree (no T-slice raised it). The quest GATES are clamped
+  to `LV_CAP = 50` in the generator and `Z5Verhaal.MIN_LEVEL = min(55, MAX_GENERIEK)`; xp still uses the design levels. When the
+  cap goes up: set `LV_CAP` in the generator (and regenerate); MIN_LEVEL follows by itself. `klaarzetten` asks for lv 56 (gets 50).
 - Levels: hq01 lv 55 (arrival), the rest 56-60; side 56-59; quest xp = the z3 formula extended to lv 60.
 - In-game text Dutch; en_us gets the same Dutch except ~10 cheap English titles.
 - Campfires in a safe city are still checkpoints (the book lists them).
 
 ## Resume point / tests
 - See the final report / `git log` on 110-t-z5verhaal. Gametests: `runGameTestServer -Pgt=Z5VerhaalGameTests` (elkeStapWieEnWaar,
-  hoofdlijnViaApi, finaleHaak, luchtschipNaarHoogvads).
+  hoofdlijnViaApi, finaleHaak, luchtschipNaarHoogvads): **4/4 passed** (2026-11-06 01:41).
 - Not done: real city geometry (t-z5wereld), real fights (t-z5wezens), the playable F3, a proper travel-map art spot for Hoogvads,
   zone 4's quest id/flag (guessed), job advancement at lv 60 (no class step defined for zone 5), wiki pages.

@@ -6,7 +6,7 @@
       "soort": "hoofd",
       "gever": "z5_havenmeester",
       "inleveren": "z5_koningin",
-      "lv": 55,
+      "lv": 50,
       "na": [
         "z3_hq15_hoogvads"
       ],
@@ -78,14 +78,14 @@
       "soort": "hoofd",
       "gever": "z5_koningin",
       "inleveren": "z5_inspecteur",
-      "lv": 56,
+      "lv": 50,
       "na": [
         "z5_hq01_stad"
       ],
       "doelen": [
         {
-          "soort": "praat",
-          "doel": "z5_inspecteur",
+          "soort": "meld",
+          "doel": "z5:inspecteur",
           "n": 1,
           "bron": "",
           "kans": 0.0,
@@ -149,7 +149,7 @@
       "soort": "hoofd",
       "gever": "z5_inspecteur",
       "inleveren": "z5_inspecteur",
-      "lv": 56,
+      "lv": 50,
       "na": [
         "z5_hq02_verraad"
       ],
@@ -212,7 +212,7 @@
       "soort": "hoofd",
       "gever": "z5_inspecteur",
       "inleveren": "z5_inspecteur",
-      "lv": 57,
+      "lv": 50,
       "na": [
         "z5_hq03_mol"
       ],
@@ -277,7 +277,7 @@
       "soort": "hoofd",
       "gever": "z5_inspecteur",
       "inleveren": "z5_inspecteur",
-      "lv": 57,
+      "lv": 50,
       "na": [
         "z5_hq04_soep"
       ],
@@ -339,7 +339,7 @@
       "soort": "hoofd",
       "gever": "z5_inspecteur",
       "inleveren": "z5_inspecteur",
-      "lv": 58,
+      "lv": 50,
       "na": [
         "z5_hq05_logboek"
       ],
@@ -387,7 +387,7 @@
       "soort": "hoofd",
       "gever": "z5_inspecteur",
       "inleveren": "z5_inspecteur",
-      "lv": 58,
+      "lv": 50,
       "na": [
         "z5_hq06_verhoren"
       ],
@@ -436,7 +436,7 @@
       "soort": "hoofd",
       "gever": "z5_inspecteur",
       "inleveren": "z5_koningin",
-      "lv": 59,
+      "lv": 50,
       "na": [
         "z5_hq07_bewijsbord"
       ],
@@ -501,7 +501,7 @@
       "soort": "hoofd",
       "gever": "z5_koningin",
       "inleveren": "z5_koningin",
-      "lv": 59,
+      "lv": 50,
       "na": [
         "z5_hq08_wolkwaldroom"
       ],
@@ -550,7 +550,7 @@
       "soort": "hoofd",
       "gever": "z5_koningin",
       "inleveren": "z5_havenmeester",
-      "lv": 60,
+      "lv": 50,
       "na": [
         "z5_hq09_slaaplied"
       ],
@@ -615,7 +615,7 @@
       "soort": "zij",
       "gever": "z5_kok",
       "inleveren": "z5_kok",
-      "lv": 56,
+      "lv": 50,
       "na": [
         "z5_hq04_soep"
       ],
@@ -654,7 +654,7 @@
       "soort": "zij",
       "gever": "z5_pluisje",
       "inleveren": "z5_pluisje",
-      "lv": 56,
+      "lv": 50,
       "na": [
         "z5_hq02_verraad"
       ],
@@ -702,7 +702,7 @@
       "soort": "zij",
       "gever": "z5_grauwsnor",
       "inleveren": "z5_grauwsnor",
-      "lv": 57,
+      "lv": 50,
       "na": [
         "z5_hq04_soep"
       ],
@@ -772,7 +772,7 @@
       "soort": "zij",
       "gever": "z5_professor",
       "inleveren": "z5_professor",
-      "lv": 57,
+      "lv": 50,
       "na": [
         "z5_hq02_verraad"
       ],
@@ -820,7 +820,7 @@
       "soort": "zij",
       "gever": "z5_professor",
       "inleveren": "z5_professor",
-      "lv": 58,
+      "lv": 50,
       "na": [
         "z5_hq09_slaaplied"
       ],
@@ -875,7 +875,7 @@
       "soort": "zij",
       "gever": "z5_veerkracht",
       "inleveren": "z5_veerkracht",
-      "lv": 57,
+      "lv": 50,
       "na": [
         "z5_hq03_mol"
       ],
@@ -937,7 +937,7 @@
       "soort": "zij",
       "gever": "z5_veerkracht",
       "inleveren": "z5_veerkracht",
-      "lv": 58,
+      "lv": 50,
       "na": [
         "z5_s06_parcours"
       ],
@@ -976,7 +976,7 @@
       "soort": "zij",
       "gever": "z5_lientje",
       "inleveren": "z5_lientje",
-      "lv": 56,
+      "lv": 50,
       "na": [
         "z5_hq01_stad"
       ],
@@ -1040,7 +1040,7 @@
       "soort": "zij",
       "gever": "z5_stekje",
       "inleveren": "z5_stekje",
-      "lv": 57,
+      "lv": 50,
       "na": [
         "z5_hq01_stad"
       ],
@@ -1102,7 +1102,7 @@
       "soort": "zij",
       "gever": "z5_hofdame",
       "inleveren": "z5_hofdame",
-      "lv": 58,
+      "lv": 50,
       "na": [
         "z5_hq02_verraad"
       ],
@@ -1141,7 +1141,7 @@
       "soort": "zij",
       "gever": "z5_zuster",
       "inleveren": "z5_zuster",
-      "lv": 59,
+      "lv": 50,
       "na": [
         "z5_hq09_slaaplied"
       ],

@@ -165,6 +165,9 @@ public class Z5VerhaalGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         schoon(p);
         Questlog.wisAlles(p);
+        for (String vlag : List.of("zone1_klaar", "zone2_klaar", "zone3_klaar")) {
+            Questlog.zetVlag(p, vlag, true);
+        }
         Spelers.zetLevel(p, 56);
         helper.assertTrue(QuestMotor.reisSlot(p, "hoogvads") != null && !QuestMotor.reisDoelen(p, "luchtschipper").contains("hoogvads"),
                 "before zone 4: Hoogvads is locked and not on the captains' lists");
@@ -172,8 +175,8 @@ public class Z5VerhaalGameTests {
         helper.assertTrue(QuestMotor.reisSlot(p, "hoogvads") == null && QuestMotor.reisDoelen(p, "luchtschipper").contains("hoogvads"),
                 "after zone 4 at lv 56: the line is open");
         helper.assertTrue(QuestMotor.reisDoelen(p, "z5_havenmeester").containsAll(Z5VerhaalRegistry.HAVEN_REIZEN), "the havenmeester flies everywhere");
-        Spelers.zetLevel(p, 50);
-        helper.assertTrue(QuestMotor.reisSlot(p, "hoogvads") != null, "below lv 55: locked");
+        Spelers.zetLevel(p, Z5Verhaal.MIN_LEVEL - 5);
+        helper.assertTrue(QuestMotor.reisSlot(p, "hoogvads") != null, "below the line's level: locked");
         schoon(p);
         Questlog.wisAlles(p);
         helper.succeed();
@@ -245,6 +248,12 @@ public class Z5VerhaalGameTests {
             }
             default -> {
                 switch (d.doel()) {
+                    case "z5:inspecteur" -> {
+                        RijkGuh g = guh(helper, "z5_inspecteur", x);
+                        QuestMotor.klik(p, g);
+                        Praat.vergeet(p);
+                        g.discard();
+                    }
                     case "z5:aangekomen" -> {
                         Z5Verhaal.vlieg(p);
                         helper.assertTrue(Z5Verhaal.speelt(p, "aankomst"), "the first flight plays the arrival film");

@@ -507,7 +507,7 @@ Q(HQ[0], "hoofd", "z5_havenmeester", "De Zwevende Stad",
 Q(HQ[1], "hoofd", "z5_koningin", "Verraad in de stad",
   "Uit de Raadszaal is de gescheurde bladzijde gestolen: het oudste verhaal van de Orde. Er zit een verrader in de Hoge Raad. "
   "Inspecteur Snuffelaar helpt je speuren.",
-  [D("praat", "z5_inspecteur", 1, "Meld je bij Inspecteur Snuffelaar in de zijkamer van de Raadszaal, naast het paleis op de paleisheuvel",
+  [D("meld", "z5:inspecteur", 1, "Meld je bij Inspecteur Snuffelaar in de zijkamer van de Raadszaal, naast het paleis op de paleisheuvel",
      plek="npc:z5_inspecteur"),
    D("gebied", "poi:z5_lessenaar", 1, "Onderzoek de lessenaar met de oude boeken, midden in de Raadszaal", plek="poi:z5_lessenaar"),
    D("meld", "z5_verhoor:inktvlek", 1, "Verhoor Raadsvrouwe Inktvlek, de archivaris, in het archief van de universiteit (noordkant van Hoogvads)",
@@ -777,8 +777,12 @@ def z5xp(lv, hoofd):
     return max(1, round(stap * (0.45 if hoofd else 0.18)))
 
 
+# The level cap of this tree is still 50 (kern Levels.MAX / MAX_GENERIEK): a quest above it could never be offered. The design
+# levels (55-60) stay in the xp formula; the GATE is clamped to LV_CAP. Raise LV_CAP together with the kern cap (integration).
+LV_CAP = 50
 for _q in QUESTS:
     _q["beloning"]["xp"] = z5xp(_q["lv"], _q["soort"] != "zij")
+    _q["lv"] = min(_q["lv"], LV_CAP)
 
 # ---------------------------------------------------------------------------------------------------------------------------
 # Secrets: 8 knuffels, 3 treasures (Z5VerhaalPlekken.KNUFFEL / SCHAT)
@@ -874,7 +878,8 @@ OVERIG = {
     Z + "scene.ontmasker.onder": "Kootje Zilverstaart, van de Ringvinger",
     Z + "scene.ontmasker.0": "Inspecteur Snuffelaar trekt aan de cape. Er komt een rits. Een RITS. In een guh.",
     Z + "scene.ontmasker.1": "Het guh-pak zakt op de grond. Daar staat een magere, zilvergrijze Mika met een monocle en een staart zo lang als een sjaal.",
-    Z + "scene.ontmasker.2": "\"Kootje Zilverstaart, tot uw dienst. Van de Ringvinger. Die wil deze walvis. Met stad en al. Als lampion voor haar vloot.\"",
+    Z + "scene.ontmasker.2": "\"Kootje Zilverstaart, tot uw dienst. Van de Ringvinger. Mijn collega de Vliegervanger mocht de lampionnen van de kust jatten. "
+                                 "Ik krijg het grootste lampionnetje van allemaal: deze walvis. Met stad en al.\"",
     Z + "scene.ontmasker.3": "\"En deze bladzijde neem ik mee!\" Hij springt door het raam, over de daken, naar het spuitgat!",
     Z + "scene.herinnering.titel": "Herinnering",
     Z + "scene.herinnering.onder": "De vlucht van Mager Mientje",
