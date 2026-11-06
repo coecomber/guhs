@@ -785,91 +785,207 @@ def schatkamer(W):
     V = Vlak(W, (-1, 0), X1)                     # first rock cell x 3479, rock towards +x
     if not raakt(W, X1 - 6, y - 3, cz - 16, X1 + 40, y + 48, cz + 16):
         return
-    hw = 13
-    # make sure the end wall is solid rock over the facade's width and height
-    for u in range(cz - hw - 2, cz + hw + 3):
-        for d in range(0, 8):
-            xw0, _, zw0 = V.pos(u, d, 0)
-            for yy in range(y - 1, min(y + 44, _nat_h(xw0, zw0) + 1)):
+    # [u-z6afronding] rebuilt as a truly deep Al-Khazneh: the whole facade sits FD blocks back in a rough rock frame with a
+    # shadow slot around it; a recessed portico with free-standing ROUND columns, a projecting multi-layer entablature + a
+    # projecting pediment with a guh medallion; above it two projecting pavilions with half pediments (the broken pediment)
+    # and a round tholos with free columns, a cone and an urn, recessed into the rock under the plateau.
+    hw = 15                                      # half width of the facade field
+    FD = 3                                       # facade plane depth (the frame recess)
+    y0 = y + 2                                   # portico floor stand
+    yb = y0 + 22                                 # upper order floor stand (geheimen(): the hidden stair arrives here)
+    ytop = yb + 17                               # top of the field (the rock is built up over it where the plateau is lower)
+    # make sure the end wall is solid rock over the facade's width, depth and height
+    for u in range(cz - hw - 4, cz + hw + 5):
+        for d in range(0, 30):              # a rock crown over the facade where the plateau is lower (the tholos needs a
+            # canopy): full height up to d 14 and over the field width, then falling off in rough steps
+            du_ = max(0, abs(u - cz) - hw - 1)
+            kroon = ytop + 4 - int(max(0, d - 14) * 1.3 + du_ * 2.5 + SK.hash3(u, d, cz, 23) * 2.5)
+            for yy in range(y - 1, max(kroon, min(ytop + 4, _nat_h(*V.wereld(u, d)) + 1))):
                 xw, _, zw = V.pos(u, d, yy)
                 if W.wget(xw, yy, zw) == LUCHT:
                     zet(W, xw, yy, zw, PT.strata(xw, yy, zw))
-    # podium: 3 steps over the whole width in front
+    # ---- the rock frame: field set back FD, a deeper shadow slot around it, weathered irregular frame edge
+    V.lucht(cz - hw, cz + hw, 0, FD - 1, y0, ytop)
+    for yy in range(y0, ytop + 1):
+        for u in (cz - hw - 1, cz + hw + 1):
+            V.lucht(u, u, 0, FD + 1, yy, yy)
+        for k_ in (2, 3):                        # weathering: the frame edge eaten away irregularly
+            for u in (cz - hw - k_, cz + hw + k_):
+                dd = int(SK.hash3(u, yy, cz, 17) * 3.2) - (k_ - 2)
+                if dd > 0:
+                    V.lucht(u, u, 0, dd - 1, yy, yy)
+    V.lucht(cz - hw - 1, cz + hw + 1, 0, FD + 1, ytop + 1, ytop + 1)
+    for u in range(cz - hw - 3, cz + hw + 4):
+        dd = int(SK.hash3(u, ytop, cz, 19) * 3.0)
+        if dd > 0:
+            V.lucht(u, u, 0, dd - 1, ytop + 2, ytop + 2)
+    for (eu, ey, er) in ((cz - hw - 3, y0 + 9, 1.6), (cz + hw + 3, y0 + 20, 1.8), (cz - hw - 2, ytop - 5, 1.4)):
+        PT.erosie(V, eu, 0, ey, er, seed=eu)
+    # podium: 3 steps over the whole width in front, floor into the frame
     for u in range(cz - hw, cz + hw + 1):
         for i, d in enumerate((-3, -2, -1)):
-            V.P(u, d, y + i - 1, trap("marmer_glad", V.inn) if True else None)
+            V.P(u, d, y + i - 1, trap("marmer_glad", V.inn))
             for q in range(0, i):
                 V.P(u, d, y + q - 1, "marmer_glad")
-    y0 = y + 2                                   # portico floor
-    # ---- lower order: recess 4 deep, 6 columns, side bays with two-storey statue niches
-    V.lucht(cz - hw, cz + hw, 0, 3, y0, y0 + 16)
-    for u in range(cz - hw, cz + hw + 1):
-        for d in range(0, 5):
-            V.P(u, d, y0 - 1, "marmer_glad" if (u + d) % 2 else "mozaiek_ster")
-    cols = [cz - 12, cz - 8, cz - 3, cz + 3, cz + 8, cz + 12]
-    for u in cols:
-        PT.zuil(V, u, 1, y0, y0 + 15)
-        PT.zuil(V, u, 0, y0, y0 + 15) if abs(u - cz) == 3 else None
-    for u in range(cz - hw, cz + hw + 1):
-        V.P(u, 0, y0 + 16, "goud")
-        V.P(u, 1, y0 + 16, "goud")
-        V.P(u, 0, y0 + 17, "zs_beitel" if (u - cz) % 3 == 0 else "marmer_glad")
-        V.P(u, -1, y0 + 18, trap("zs", V.inn, half="top"))
-        V.P(u, 0, y0 + 18, "zs")
-    PT.fronton(V, cz, 6, y0 + 19, d=0)
-    for side in (-1, 1):                         # side bays: niches with statues on two levels
-        u = cz + side * 10
-        for yy in (y0 + 1, y0 + 8):
-            for du in (-1, 0, 1):
-                for q in range(0, 5):
-                    V.P(u + du, 4, yy + q, LUCHT)
-            V.P(u, 4, yy + 5, "zs_beitel")
-            PT.guhbeeld(V, u, 5, yy)
-            V.P(u, 4, yy - 1, "marmer_glad")
-    # door 5 x 9 into the hall
-    V.lucht(cz - 2, cz + 2, 4, 6, y0, y0 + 8)
+        for d in range(0, FD):
+            V.P(u, d, y0 - 1, "marmer_glad")
+            V.P(u, d, y0 - 2, "marmer_glad")
+
+    def zuil_rond(u, d, y1, y2):
+        """A free-standing ROUND column (plus-shaped shaft, 3 wide) with a square base, torus and a flared capital."""
+        for du in (-1, 0, 1):
+            for dd in (-1, 0, 1):
+                V.P(u + du, d + dd, y1, "marmer_glad")
+                V.P(u + du, d + dd, y2, "goud")
+        for (du, dd) in ((0, 0), (1, 0), (-1, 0), (0, 1), (0, -1)):
+            V.P(u + du, d + dd, y1 + 1, "rots_marmer")
+            for yy in range(y1 + 2, y2 - 1):
+                V.P(u + du, d + dd, yy, "zuil")
+            V.P(u + du, d + dd, y2 - 1, "zuilkop")
+        for (du, dd) in ((1, 1), (-1, 1), (1, -1), (-1, -1)):
+            V.P(u + du, d + dd, y2 - 1, trap("goud", V.out, half="top") if dd < 0 else plaat("goud", "top"))
+            V.P(u + du, d + dd, y1 + 1, plaat("marmer_glad"))
+
+    # ---- LOWER ORDER: portico (4 deep behind the columns), 6 free-standing round columns
+    PH = 13                                       # portico clear height (y0 .. y0+12)
+    PB = FD + 6                                   # portico back wall depth
+    V.lucht(cz - 13, cz + 13, 0, PB - 1, y0, y0 + PH - 1)
+    for u in range(cz - 13, cz + 14):
+        for d in range(0, PB):
+            V.P(u, d, y0 - 1, "marmer_glad" if (u + d) % 2 else ("mozaiek_ster" if abs(u - cz) < 3 else "tegel_parel"))
+            V.P(u, d, y0 - 2, "marmer_glad")
+    for u in (cz - 11, cz - 7, cz - 3, cz + 3, cz + 7, cz + 11):
+        zuil_rond(u, FD + 1, y0, y0 + PH - 1)
+    for u in range(cz - 14, cz + 15):            # portico ceiling + side walls
+        for d in range(FD, PB + 1):
+            V.P(u, d, y0 + PH, "rots_marmer" if (u + d) % 3 else "marmer_glad")
+    for u in (cz - 14, cz + 14):
+        for d in range(FD, PB + 1):
+            for yy in range(y0, y0 + PH):
+                V.P(u, d, yy, "zs" if (yy - y0) % 4 else "rots_roze")
+    # back wall: door 5 x 8 with a gold lintel + guh keystone, two-storey statue niches in the side bays
+    for u in range(cz - 13, cz + 14):
+        for yy in range(y0, y0 + PH):
+            V.P(u, PB, yy, "rots_roze" if (yy - y0) % 5 == 4 else "zs")
+    V.lucht(cz - 2, cz + 2, PB, PB + 1, y0, y0 + 7)
     for u in range(cz - 3, cz + 4):
-        V.P(u, 4, y0 + 9, "goud")
-    V.P(cz, 4, y0 + 10, "zs_beitel")
-    for yy in range(y0, y0 + 9):
-        V.P(cz - 3, 4, yy, "zuil")
-        V.P(cz + 3, 4, yy, "zuil")
-    # ---- upper order: tholos in a deep recess between two pavilions with half pediments
-    yb = y0 + 22
-    yt = min(yb + 18, _nat_h(X1 + 3, cz) - 2)
-    V.lucht(cz - 7, cz + 7, 0, 7, yb, yt)
+        V.P(u, PB - 1, y0 + 8, trap("goud", V.inn, half="top"))
+    V.P(cz, PB - 1, y0 + 9, "zs_beitel")
+    for yy in range(y0, y0 + 8):
+        V.P(cz - 3, PB - 1, yy, "zuil")
+        V.P(cz + 3, PB - 1, yy, "zuil")
+    for side in (-1, 1):
+        u = cz + side * 9
+        for yy in (y0 + 1, y0 + 7):
+            V.lucht(u - 1, u + 1, PB, PB + 1, yy, yy + 4)
+            V.P(u, PB, yy + 5, "zs_beitel")
+            for du in (-1, 1):
+                V.P(u + du, PB, yy + 5, trap("zs", V.up if du < 0 else V.um, half="top"))
+            V.doos(u - 1, u + 1, PB, PB + 1, yy - 1, yy - 1, "marmer_glad")
+            PT.guhbeeld(V, u, PB + 1, yy)
+            V.P(u, PB - 1, yy - 1, plaat("goud", "top"))
+    lx_, _, lz_ = V.pos(cz, FD + 4, 0)
+    PT.hanglampring(W, lx_ + 0.5, y0 + PH, lz_ + 0.5, r=2.6, n=8, lengte=2)
+    for side in (-1, 1):
+        x_, _, z_ = V.pos(cz + side * 9, FD + 3, 0)
+        PT.hanglamp(W, x_, y0 + PH, z_, lengte=2)
+    # ---- ENTABLATURE: architrave, carved frieze, 2-step projecting cornice
+    ye = y0 + PH
+    for u in range(cz - hw, cz + hw + 1):
+        V.P(u, FD, ye, "marmer_glad")                                   # architrave
+        V.P(u, FD - 1, ye, trap("marmer_glad", V.inn, half="top"))
+        V.P(u, FD, ye + 1, "zs_beitel" if (u - cz) % 3 == 0 else "rots_roze")   # frieze of carved guhs
+        V.P(u, FD - 1, ye + 1, plaat("goud", "top") if (u - cz) % 3 == 0 else LUCHT)
+        V.P(u, FD, ye + 2, "goud")                                       # cornice
+        V.P(u, FD - 1, ye + 2, "zs")
+        V.P(u, FD - 2, ye + 2, trap("zs", V.inn, half="top"))
+        for d in range(FD + 1, PB + 1):
+            V.P(u, d, ye + 1, "zs")
+            V.P(u, d, ye + 2, "zs")
+    # ---- PEDIMENT: projects in front of the cornice line, tympanum with a round guh medallion, acroteria
+    yp = ye + 3
+    for u in range(cz - hw, cz + hw + 1):        # attic behind it over the whole width
+        for yy in range(yp, yb - 1):
+            V.P(u, FD, yy, "zs" if (yy - yp) % 3 else "rots_perzik")
+    PT.fronton(V, cz, 9, yp, d=FD - 2, vul="rots_roze", motief=False)
+    for (du, dy, k) in ((0, 1, PT.GEZICHT), (-1, 1, "goud"), (1, 1, "goud"), (0, 0, "goud"), (0, 2, "goud")):
+        V.P(cz + du, FD - 1, yp + dy, k)          # the medallion: a guh face in a gold ring
+    for u in (cz - 9, cz + 9):                    # acroteria: little guhs on the pediment corners + an urn on the apex
+        PT.guhbeeld(V, u, FD - 2, yp + 2, sokkel="goud")
+    V.P(cz, FD - 2, yp + 7, "minecraft:decorated_pot[facing=west,waterlogged=false,cracked=false]")
+    for u in range(cz - hw, cz + hw + 1):
+        V.P(u, FD, yb - 2, "goud")
+        V.P(u, FD - 1, yb - 2, trap("zs", V.inn, half="top"))
+    # ---- UPPER ORDER: central tholos recess (deep), two projecting pavilions with half pediments (broken pediment)
+    V.lucht(cz - 7, cz + 7, 0, 13, yb, ytop)
     for u in range(cz - 7, cz + 8):
-        for d in range(0, 8):
-            V.P(u, d, yb - 1, "marmer_glad")
-    tx, tz = X1 + 4, cz
-    th = max(6, yt - yb - 7)
-    for kq in range(8):
-        a = kq * math.pi / 4
-        px_, pz_ = tx + round(math.cos(a) * 3), tz + round(math.sin(a) * 3)
-        for yy in range(yb, yb + th):
-            zet(W, px_, yy, pz_, "zuil")
-        zet(W, px_, yb + th, pz_, "zuilkop")
+        for d in range(0, 14):
+            V.P(u, d, yb - 1, "marmer_glad" if (u + d) % 2 else "tegel_parel")
+    tx_, _, tz_ = V.pos(cz, FD + 5, 0)
+    tx_, tz_ = int(tx_), int(tz_)
+    th = max(5, min(8, ytop - yb - 9))
     for dx in range(-4, 5):
         for dz in range(-4, 5):
-            if math.hypot(dx, dz) <= 4.2:
-                zet(W, tx + dx, yb + th + 1, tz + dz, "goud" if math.hypot(dx, dz) > 3.2 else "marmer_glad")
-    zet(W, tx, yb, tz, "marmer_glad")
-    zet(W, tx, yb + 1, tz, "minecraft:decorated_pot[facing=west,waterlogged=false,cracked=false]")
-    ZB.koepel(W, tx, yb + th + 2, tz, 3.4, k_dak="rots_marmer", vorm="spits", ribben=8, rib="goud", oortjes=True)
-    for side in (-1, 1):
-        ua, ub = cz + side * 8, cz + side * 12
-        for u in (ua, ub, (ua + ub) // 2):
-            PT.zuil(V, u, 0, yb, yb + 10)
-        for u in range(min(ua, ub), max(ua, ub) + 1):
-            V.P(u, 0, yb + 11, "goud")
-            V.P(u, 1, yb + 11, "zs")
-        V.lucht(min(ua, ub) + 1, max(ua, ub) - 1, 1, 2, yb, yb + 10)
-        PT.guhbeeld(V, (ua + ub) // 2 + side * -1, 2, yb)
-        for q in range(4):                           # half pediment rising towards the outside
-            for u in range(min(ua, ub), max(ua, ub) + 1):
-                if (u - ua) * side >= q:
-                    V.P(u, 0, yb + 12 + q, "zs" if (u - ua) * side > q else trap("zs", V.up if side > 0 else V.um))
-    W.label(X1, yt + 8, cz, "De Schatkamer (hal van Kloofmoeder Roosje)")
+            r_ = math.hypot(dx, dz)
+            if r_ <= 4.3:
+                zet(W, tx_ + dx, yb - 1, tz_ + dz, "goud" if r_ > 3.4 else "mozaiek_ster")        # round podium
+            if r_ <= 2.3:                                                                        # the drum (cella)
+                for yy in range(yb, yb + th):
+                    zet(W, tx_ + dx, yy, tz_ + dz, "rots_roze" if (yy - yb) % 3 else "marmer_glad")
+    zet(W, tx_ - 2, yb, tz_, LUCHT)                               # a little doorway in the drum (faces the canyon)
+    zet(W, tx_ - 2, yb + 1, tz_, LUCHT)
+    zet(W, tx_ - 2, yb + 3, tz_, PT.GEZICHT)
+    for kq in range(10):                                          # free-standing columns round the drum
+        a_ = kq * 2 * math.pi / 10
+        px_, pz_ = tx_ + round(math.cos(a_) * 3.6), tz_ + round(math.sin(a_) * 3.6)
+        zet(W, px_, yb, pz_, "marmer_glad")
+        for yy in range(yb + 1, yb + th):
+            zet(W, px_, yy, pz_, "zuil")
+        zet(W, px_, yb + th, pz_, "zuilkop")
+    for dx in range(-5, 6):                                       # entablature ring
+        for dz in range(-5, 6):
+            r_ = math.hypot(dx, dz)
+            if r_ <= 4.6:
+                zet(W, tx_ + dx, yb + th + 1, tz_ + dz, "goud" if r_ > 3.6 else "marmer_glad")
+            if 3.6 < r_ <= 4.6 and (dx * 7 + dz * 3) % 3 == 0:
+                zet(W, tx_ + dx, yb + th + 2, tz_ + dz, plaat("goud"))
+    kh = min(4.6, max(2.0, ytop - (yb + th + 2) - 3))
+    ZB.koepel(W, tx_ + 0.0, yb + th + 2, tz_ + 0.0, 3.4, k_dak="rots_marmer", vorm="spits", ribben=8, rib="goud",
+              oortjes=False, hoogte=kh)
+    yu = min(ytop, yb + th + 3 + int(math.ceil(kh)) + 1)
+    zet(W, tx_, yu - 1, tz_, "goudblok")                          # the urn (finial)
+    zet(W, tx_, yu, tz_, "minecraft:decorated_pot[facing=west,waterlogged=false,cracked=false]")
+    for side in (-1, 1):                                          # the pavilions
+        ua, ub = cz + side * 8, cz + side * 14
+        lo, hi = min(ua, ub), max(ua, ub)
+        V.doos(lo, hi, 0, FD - 1, yb - 1, yb - 1, "marmer_glad")  # the projecting pavilion plinth
+        for u in range(lo, hi + 1):
+            V.P(u, -1, yb - 1, trap("marmer_glad", V.inn, half="top"))
+        V.lucht(lo + 1, hi - 1, 1, FD + 2, yb, yb + 9)            # the pavilion's own deep niche behind its columns
+        for u in range(lo + 1, hi):
+            for d in range(1, FD + 3):
+                V.P(u, d, yb - 1, "marmer_glad")
+        for u in (ua, ub):
+            PT.zuil(V, u, 0, yb, yb + 9)
+            PT.zuil(V, u, 1, yb, yb + 9)
+        PT.guhbeeld(V, (ua + ub) // 2, FD + 1, yb, sokkel="goud")
+        V.P((ua + ub) // 2, FD + 3, yb + 4, "zs_beitel")
+        for u in range(lo, hi + 1):                               # pavilion entablature
+            V.P(u, 0, yb + 10, "goud")
+            V.P(u, 1, yb + 10, "goud")
+            V.P(u, 0, yb + 11, "zs_beitel" if (u - ua) % 2 == 0 else "rots_roze")
+            V.P(u, -1, yb + 11, trap("zs", V.inn, half="top"))
+            for d in range(1, FD + 3):
+                V.P(u, d, yb + 10, "zs")
+        for q in range(4):                                        # half pediment rising towards the centre (broken)
+            for u in range(lo, hi + 1):
+                k = (u - ub) * -side                              # 0 at the outer end, growing towards the tholos
+                if k >= 2 * q:
+                    V.P(u, 0, yb + 12 + q, "zs" if k > 2 * q else trap("zs", V.um if side > 0 else V.up))
+                    V.P(u, 1, yb + 12 + q, "rots_roze")
+        PT.guhbeeld(V, ub, 0, yb + 12, sokkel="goud")           # acroterion on the outer corner
+    W.label(X1, ytop + 3, cz, "De Schatkamer (hal van Kloofmoeder Roosje)")
+    yt = ytop
     # the forecourt: paved, with a star of mosaic and four lamp posts
     for x in range(3452, X1 - 3):
         for z in range(cz - 11, cz + 12):
@@ -880,11 +996,11 @@ def schatkamer(W):
         lantaarnpaal(W, lx, y, lz)
     ZB.plek(W, "rozenkloof_schatkamer", X1 - 5, y, cz)
     # ---- the hall
-    hx1, hx2 = X1 + 7, X1 + 34
+    hx1, hx2 = X1 + 12, X1 + 39                     # [u-z6afronding] behind the deeper portico (back wall X1 + 9)
     hz1, hz2 = cz - 12, cz + 12
     hy = y0
     H_ = 14
-    for x in range(X1 + 5, X1 + 7):                  # passage
+    for x in range(X1 + 9, X1 + 12):                 # passage
         for z in range(cz - 2, cz + 3):
             for yy in range(hy, hy + 9):
                 zet(W, x, yy, z, LUCHT)
@@ -944,7 +1060,7 @@ def schatkamer(W):
         zet(W, hx2 - 2, hy + 1, z, "minecraft:pink_candle[candles=4,lit=true,waterlogged=false]")
     ZB.plek(W, "rozenkloof_schatkamer_hal", hx1 + 3, hy, cz + 2)
     ZB.plek(W, "rozenkloof_kloofmoeder", hx2 - 5, hy, cz + 2)
-    W._schatkamer_huis = ("hal", (X1 + 4, y0, cz), (hx1 + 3, hy, cz + 2))
+    W._schatkamer_huis = ("hal", (X1 + 8, y0, cz), (hx1 + 3, hy, cz + 2))
 
 
 # ============================================================================================ Siq, Zeemond, lookout
@@ -1317,14 +1433,15 @@ def geheimen(W):
     y2 = B.L[2]
     yb_ = B.L0 + 2 + 22                                     # tholos recess floor stand (schatkamer: y0 + 22)
     z0 = B.z(S, B.c[1] + 3)
-    pad = [(X1 - 1, z0), (X1, z0), (X1 + 1, z0), (X1 + 2, z0), (X1 + 3, z0)]
+    XS = X1 + 7                     # [u-z6afronding] behind the pavilion niches of the deeper facade (they reach X1 + 5)
+    pad = [(x, z0) for x in range(X1 - 1, XS + 1)]
     for z in range(z0 - 1, cz + 7, -1):
-        pad.append((X1 + 3, z))
+        pad.append((XS, z))
     y = y2
-    if raakt(W, X1 - 2, yb_ - 2, cz, X1 + 6, y2 + 4, z0 + 2):
+    if raakt(W, X1 - 2, yb_ - 2, cz, XS + 3, y2 + 4, z0 + 2):
         for i, (x, z) in enumerate(pad):
             richting = None
-            if i >= 5 and y > yb_:
+            if i >= len(pad) - (z0 - cz - 8) and y > yb_:
                 y -= 1
                 richting = "south"                          # descending northwards: the stair rises to the south
             zet(W, x, y - 1, z, "zs")
@@ -1335,11 +1452,11 @@ def geheimen(W):
                 zet(W, x, y + q, z, LUCHT)
             if i % 6 == 3:
                 zet(W, x, y + 2, z, mlamp(True)) if False else None
-        zet(W, X1 + 4, y2 + 1, z0, mlamp(False))
-        zet(W, X1 + 4, y2, z0, "zs")
+        zet(W, XS + 1, y2 + 1, z0, mlamp(False))
+        zet(W, XS + 1, y2, z0, "zs")
         for z in range(cz + 6, cz + 8):
             for q in range(0, 3):
-                zet(W, X1 + 3, yb_ + q, z, LUCHT)
+                zet(W, XS, yb_ + q, z, LUCHT)
         # the entrance is half hidden behind hanging blossom
         zet(W, X1 - 1, y2 + 2, z0 + 1, "minecraft:flowering_azalea_leaves")
         ZB.plek(W, "schatkamer_koepeltje", X1 + 2, yb_, cz + 4)

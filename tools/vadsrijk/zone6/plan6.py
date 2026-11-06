@@ -48,7 +48,7 @@ for k, v in {
     "rozenkloof_kloofmoeder": (3488, 75, -699), "rozenkloof_stal": (3436, 71, -720), "rozenkloof_stalmeester": (3433, 71, -716),
     "rozenkloof_oma_dadel": (3412, 70, -720), "rozenkloof_bobbel": (3414, 70, -722),
     "rozenkloof_tapijtwinkel": (3384, 70, -708), "rozenkloof_tuinguh": (3372, 70, -712),
-    "rozenkloof_postguh": (3390, 70, -722), "rozenkloof_zeemond": (3270, 64, -745),
+    "rozenkloof_postguh": (3390, 70, -722), "rozenkloof_zeemond": (3272, 64, -745),
     "rozenkloof_siq_onder": (3456, 73, -718), "rozenkloof_siq_boven": (3564, None, -794),
     "rozenkloof_richel_1": (3380, 85, -738), "rozenkloof_richel_2": (3380, 101, -742), "rozenkloof_richel_3": (3380, 119, -748),
     "rozenkloof_brug_1": (3352, None, -726), "rozenkloof_brug_2": (3446, None, -705),
@@ -106,7 +106,7 @@ for k, v in {"duinguh_rimpel": (3646, None, -548), "wormelien_arena": (3700, Non
     _p(k, *v)
 for i, (x, z) in enumerate([(3566, -794), (3596, -806), (3622, -826), (3640, -846), (3700, -530), (3716, -580), (3738, -672),
                             (3758, -744)], 1):
-    _p(f"karavaan_weg_{i}", x, None, z)           # escort waypoints (hq02/hq03): Siq top -> Westpoort, and the Duinroute
+    _p(f"karavaan_weg_{i}", x, 71 if i == 8 else None, z)   # [u-z6afronding] 8 = in the Zuidpoort (not on its roof)           # escort waypoints (hq02/hq03): Siq top -> Westpoort, and the Duinroute
 
 # De Palmenkloven
 for k, v in {"palmguh_dadelpit": (3486, None, -902), "palmbaken_spiegel_1": (3470, None, -896),

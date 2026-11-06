@@ -197,10 +197,12 @@ def wegen(W):
     W.wegen["zoutbaken"] = pad(W, [(3940, -660), (3934, -632), (3930, -603)], breed=1, naam="zoutbaken")
     W.wegen["oostroute"] = pad(W, [(4090, -730), (4130, -740), (4160, -736), (4190, -730)], breed=2, naam="oostroute")
     # 4. Oostpoort -> Ruinedal (dungeon) and the oasis from the north
-    W.wegen["ruineweg"] = pad(W, [(op[0] + 12, op[1] - 4), (3910, -900), (3940, -925), (3966, -940), (3985, -946)], breed=2,
-                              y_begin=Y, naam="ruineweg")
-    W.wegen["oaseweg"] = pad(W, [(op[0] + 12, op[1] - 4), (3940, -880), (4000, -860), (4040, -846), (4058, -830)], breed=2,
-                             y_begin=Y, naam="oaseweg")
+    #    [u-z6afronding] both roads go AROUND the rock mesa east of the gate (x 3896..3956, z -930..-882); they used to climb
+    #    over it in a stair tunnel through the rock up to y ~101
+    W.wegen["oaseweg"] = pad(W, [(op[0] + 12, op[1] - 4), (3890, -878), (3902, -870), (3940, -868), (4000, -860), (4040, -846),
+                                 (4058, -830)], breed=2, y_begin=Y, naam="oaseweg")
+    W.wegen["ruineweg"] = pad(W, [(3940, -868), (3966, -878), (3968, -910), (3970, -935), (3985, -946)], breed=2,
+                              naam="ruineweg")
     # 5. Westpoort -> along the river into the Palmenkloven; the climb to the plateau is the waterfall stair (palmenkloven())
     W.wegen["rivierpad"] = pad(W, [(wp[0] - 6, wp[1] - 18), (3622, -860), (3600, -900), (3576, -926), (3552, -946),
                                    (3530, -958), (3500, -962), (3470, -966)], breed=1, naam="rivierpad")
@@ -299,11 +301,23 @@ def toren(W):
     y0 = ZW.hoogte(W, tx, tz)
     gx = tx - 21
     # stair from the rock to the gate threshold (y0 + 1), the doorway itself stays open air 2 deep, then a dark "seal"
-    for i in range(6):
+    # [u-z6afronding] real stairs (a tread per block, facing the gate) all the way down to the rock/ground: the old 6 full
+    #   blocks were 1-block jumps and stopped ~10 blocks above the ground where the torenpad ends
+    for dz in range(-2, 3):
+        g = grond(W, gx, tz + dz, y0 + 3)
+        doos(W, gx, min(g, y0), tz + dz, gx, y0, tz + dz, "grauw_steen")
+        leeg(W, gx, y0 + 1, tz + dz, gx, y0 + 4, tz + dz)
+    for i in range(1, 40):
+        ys = y0 - i + 1                      # tread block y (its top = the stand level of the cell above)
+        laag = True
         for dz in range(-2, 3):
             g = grond(W, gx - i, tz + dz, y0 + 3)
-            doos(W, gx - i, min(g, y0 - i), tz + dz, gx - i, y0 - i, tz + dz, "grauw_steen")
-            leeg(W, gx - i, y0 - i + 1, tz + dz, gx - i, y0 - i + 4, tz + dz)
+            doos(W, gx - i, min(g, ys - 1), tz + dz, gx - i, ys - 1, tz + dz, "grauw_steen")
+            zet(W, gx - i, ys, tz + dz, trap("grauw_steen", "east"))
+            leeg(W, gx - i, ys + 1, tz + dz, gx - i, ys + 4, tz + dz)
+            laag = laag and g >= ys - 1
+        if laag:
+            break
     doos(W, tx - 16, y0 + 1, tz - 2, tx - 16, y0 + 7, tz + 2, "minecraft:black_stained_glass")
     LS.ring(W, tx - 16.5, y0 + 4.5, tz + 0.5, 3.4, kanteling=1.5707, rond_as=0.0, dik=0.0, k="goudblok")
     plek(W, "toren_poort", tx - 18, y0 + 1, tz)
@@ -340,11 +354,12 @@ def kerker(W):
         zet(W, x + 3, yy, z + 9, "zuil")
     doos(W, x - 3, y + 6, z + 9, x + 3, y + 6, z + 9, "goud")
     # stair down (north side) to the gate
-    for i in range(5):
+    # [u-z6afronding] 6 treads y-1..y-6 (was 5 treads y-2..y-6: a 1-block jump at the top and 1.5 at the bottom)
+    for i in range(6):
         for dx in range(-1, 2):
-            leeg(W, x + dx, y - 1 - i, z - 5 - i, x + dx, y + 3 - i, z - 5 - i)
-            zet(W, x + dx, y - 2 - i, z - 5 - i, trap("vloer_zand", "south"))
-            doos(W, x + dx, y - 6 - i, z - 5 - i, x + dx, y - 3 - i, z - 5 - i, "rots")
+            leeg(W, x + dx, y - i, z - 5 - i, x + dx, y + 3 - i, z - 5 - i)
+            zet(W, x + dx, y - 1 - i, z - 5 - i, trap("vloer_zand", "south"))
+            doos(W, x + dx, y - 6 - i, z - 5 - i, x + dx, y - 2 - i, z - 5 - i, "rots")
     gy = y - 6
     doos(W, x - 3, gy - 1, z - 14, x + 3, gy - 1, z - 10, "vloer_dambord")
     leeg(W, x - 3, gy, z - 14, x + 3, gy + 5, z - 10)
@@ -382,6 +397,7 @@ def zoutgrot(W):
                     zet(W, ex + dx, g + 1 + dy, ez + dz, "zoutkristal" if (dx * 3 + dz + dy) % 4 else "zout")
     for k in range(7):
         zet(W, ex - 3 + k, y0 + 4, ez + 3, "zoutkristalletjes")
+    leeg(W, ex - 1, y0, ez + 5, ex + 1, y0 + 6, ez + 8)   # [u-z6afronding] the mound in front of the stair top made a 1.5 step
     FL = 49                              # hall floor top block y (stand 50)
     # stair: from (ex, y0, ez + 4) north/down to (ex, FL + 1, ez - (y0 - FL))
     n = y0 - FL - 1

@@ -244,9 +244,63 @@ BANDEN = ["rots", "rots", "rots_rood", "rots", "rots_perzik", "rots", "rots_marm
           "rots", "rots_perzik", "rots", "rots_roze", "rots_rood", "rots", "rots_marmer", "rots", "rots_perzik", "rots"]
 
 
+def vul_kuilen(H, wat):
+    """[u-z6afronding] walkability: raise every dry terrain cell you could fall into but never walk out of (an enclosed
+    terrace basin behind cliffs) to 1 below its lowest rim, so you can always step out (step up <= 1, falls are fine).
+    Priority flood from the window edge + all water (you swim up and climb out 1). Returns the filled H (+ count)."""
+    from collections import deque
+    hk = np.floor(H)
+    nat = ~np.isnan(wat)
+    h = np.where(nat, np.floor(np.nan_to_num(wat)) - 1, hk)
+    NX, NZ = h.shape
+    # 1. who can walk out as is: BFS from the seeds, n joins via a neighbour c already out when h[c] <= h[n] + 1
+    uit = np.zeros(h.shape, bool)
+    uit[0, :] = uit[-1, :] = uit[:, 0] = uit[:, -1] = True
+    uit |= nat
+    q = deque(zip(*np.nonzero(uit)))
+    while q:
+        a, c = q.popleft()
+        for da, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            n1, n2 = a + da, c + dc
+            if 0 <= n1 < NX and 0 <= n2 < NZ and not uit[n1, n2] and h[a, c] <= h[n1, n2] + 1:
+                uit[n1, n2] = True
+                q.append((n1, n2))
+    lvl = h.copy()
+    if not uit.all():
+        # 2. the trapped cells: filled flat to 1 below their lowest rim (priority flood, grounded on the `uit` cells: from the
+        #    flat you step up 1 onto the rim and walk out)
+        import heapq
+        lvl = np.where(uit, h, np.inf)
+        q = []
+        for a, c in zip(*np.nonzero(~uit)):
+            for da, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n1, n2 = a + da, c + dc
+                if 0 <= n1 < NX and 0 <= n2 < NZ and uit[n1, n2]:
+                    k = max(h[a, c], h[n1, n2] - 1)
+                    if k < lvl[a, c]:
+                        lvl[a, c] = k
+        q = [(float(lvl[a, c]), int(a), int(c)) for a, c in zip(*np.nonzero(~uit & np.isfinite(lvl)))]
+        heapq.heapify(q)
+        while q:
+            L, a, c = heapq.heappop(q)
+            if L > lvl[a, c]:
+                continue
+            for da, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                n1, n2 = a + da, c + dc
+                if 0 <= n1 < NX and 0 <= n2 < NZ and not uit[n1, n2]:
+                    k = max(h[n1, n2], L)
+                    if k < lvl[n1, n2]:
+                        lvl[n1, n2] = k
+                        heapq.heappush(q, (float(k), n1, n2))
+    op = (~nat) & (lvl > hk)
+    return np.where(op, lvl + 0.01, H), int(op.sum())
+
+
 def bouw_land(W):
     """Vult het venster met het landschap (kolommen, gevectoriseerd)."""
     H, wat, mat = velden(W.XX, W.ZZ)
+    H, n_vul = vul_kuilen(H, wat)        # [u-z6afronding] no terrace basins you cannot leave
+    print(f"  [land] kuilen gevuld: {n_vul} kolommen", flush=True)
     W.H, W.wat, W.mat = H, wat, mat
     x1, y1 = W.b[0], W.b[1]
     bodem = np.full(H.shape, float(y1))

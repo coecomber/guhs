@@ -35,7 +35,12 @@ class Klassen:
                 k.append(LC.klasse(naam, props))
         self.k = np.array(k, np.int8)
         self.water = np.array([s.startswith("minecraft:water") for s in W.pal], bool)
+        # [u-z6afronding] a door cell is never a stand spot (z6_wacht_3 used to land inside a closed cherry door)
+        self.water |= np.array(["_door[" in s for s in W.pal], bool)
         self.W = W
+        # [u-z6afronding] a y-less spot must land on the ground, not on a palm crown / tent roof / awning
+        self.geen_grond = np.array([any(w in s for w in ("_blad", "leaves", "_stam", "_log", "wool", "zijde", "luifel"))
+                                    for s in W.pal], bool)
 
     def staan(self, x, y, z):
         W, LC = self.W, self.LC
@@ -57,7 +62,7 @@ class Klassen:
         hi = Y - 2 if ymax is None else min(Y - 2, W.vy(ymax))
         col = W.v[i, :, k]
         for j in range(hi, 0, -1):
-            if col[j - 1] != 0 and self.staan(x, W.b[1] + j, z):
+            if col[j - 1] != 0 and not self.geen_grond[col[j - 1]] and self.staan(x, W.b[1] + j, z):
                 return int(W.b[1] + j)
         return None
 
@@ -100,6 +105,8 @@ def verzamel(W, info, snap_=True):
         p = (x, y, z)
         if snap_ and not pid.startswith(PL.GEEN_SNAP):
             q = snap(K, x, y, z)
+            if q is None:   # [u-z6afronding] planned in water / a dip: look wider (shore of the oasis, river mouth, ...)
+                q = snap(K, x, y, z, r=16, dy=10)
             if q is None:
                 mis.append(pid)
                 if y is None:

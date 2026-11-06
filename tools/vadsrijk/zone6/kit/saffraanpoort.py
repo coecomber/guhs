@@ -305,8 +305,8 @@ def paleis(W, figuren=True, spiegels=False):
     # brede trap van het terras naar de tuin (op de as)
     for i in range(2):
         for x in range(CX - 12, CX + 13):
-            zet(W, x, yt - 2 - i, z2 + 1 + i, trap("wit_glad", "north"))
-            for y in range(yt - 1 - i, yt + 3):
+            zet(W, x, yt - 1 - i, z2 + 1 + i, trap("wit_glad", "north"))   # [u-z6afronding] 1 higher: no jump at the top
+            for y in range(yt - i, yt + 3):
                 zet(W, x, y, z2 + 1 + i, "minecraft:air")
     for x in range(CX - 12, CX + 13):
         zet(W, x, yt, z2, "minecraft:air")
@@ -867,14 +867,14 @@ def karavanserai(W, figuren=True):
         zet(W, x - kant[0], Y + 9, z - kant[1], KK.ml(True))
     # trap naar de galerij (zuidwest, in de benedenring, oplopend naar het oosten)
     tz_ = (cz2 + 2, cz2 + 3)
-    for i in range(6):
+    for i in range(7):
         x = cx1 + 1 + i
         for z in tz_:
-            if i < 5:
+            if i < 6:   # [u-z6afronding] 6 treads: the gallery floor is Y+5 (stand Y+6), 5 treads left a 1-block jump
                 zet(W, x, Y + i, z, trap("zs", "east"))
                 for y in range(Y, Y + i):
                     zet(W, x, y, z, "zs")
-            leeg(W, x, Y + i + 1, z, x, Y + i + 3, z) if i < 5 else None
+            leeg(W, x, Y + i + 1, z, x, Y + i + 3, z) if i < 6 else None
     for x in range(cx1 + 1, cx1 + 7):
         zet(W, x, Y + 6, cz2 + 4, ZB.muurtje("zs"))
     # stal (zuidring): hooi, troggen, bultguhs
@@ -974,7 +974,7 @@ def sterrenwacht(W, figuren=True):
         px, pz = ring[i % 24]
         qx, qz = ring[(i + 1) % 24]
         f = FACE[(int(np.sign(qx - px)), int(np.sign(qz - pz)))]
-        if i < h:
+        if i <= h:      # [u-z6afronding] tread h too: the platform (stand yt + 1) was 1 block above the last tread
             zet(W, px, Y + i, pz, trap("zs", f) if i > 0 else "zs")
         for y in range(Y + i + 1, Y + i + 4):
             zet(W, px, y, pz, "minecraft:air")
@@ -988,7 +988,7 @@ def sterrenwacht(W, figuren=True):
         for y in range(yt, yt + 3):
             if y > Y + i:
                 zet(W, px, y, pz, "minecraft:air")
-    px, pz = ring[h % 24]
+    px, pz = ring[(h + 1) % 24]           # [u-z6afronding] the landing after the last tread
     zet(W, px, yt, pz, "muur_lavendel")
     ZB.koepel(W, x + 0.5, yt + 1, z + 0.5, 7, k_dak="koepel_lavendel", vorm="rond", ribben=12, rib="goud", oortjes=True)
     for dx in range(-5, 6):
