@@ -1,0 +1,92 @@
+# Het Vadsrijk, T-KLEDING: wardrobe screen, wings (folded / in the air), capes, head accessories, a cheer-up effect.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_t_kleding.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/tp @s 0 66 1140
+wait 40
+waitrender 200
+/guhs vadsrijk kleding alles
+wait 20
+
+section scherm
+gui keep
+/guhs vadsrijk kleding kast
+wait 30
+shot tk_scherm_rug gui
+gui close
+wait 10
+
+section vleugels
+perspective back
+look 0 10
+/guhs vadsrijk kleding kies vleugel:vahoegveertjes
+wait 30
+shot tk_vahoeg_achter
+perspective front
+wait 10
+shot tk_vahoeg_voor
+perspective back
+/guhs vadsrijk kleding kies vleugel:kristal
+wait 30
+shot tk_kristal
+/guhs vadsrijk kleding kies vleugel:honingbij
+wait 30
+shot tk_honingbij
+/guhs vadsrijk kleding kies vleugel:goudveer
+wait 30
+shot tk_goudveer
+/guhs vadsrijk kleding kies vleugel:schemer
+wait 30
+shot tk_schemer
+/guhs vadsrijk kleding kies vleugel:pluis
+wait 30
+shot tk_pluis
+/guhs vadsrijk kleding kies vleugel:lampion
+wait 30
+shot tk_lampion
+/guhs vadsrijk kleding kies vleugel:vahoegveertjes
+/tp @s 0 76 1140
+wait 6
+shot tk_vahoeg_lucht
+wait 60
+
+section kapen
+/guhs vadsrijk kleding kies kaap:knuffelorde
+wait 30
+shot tk_kaap_knuffelorde
+/guhs vadsrijk kleding kies kaap:sterren
+wait 30
+shot tk_kaap_sterren
+
+section hoofd
+perspective front
+/guhs vadsrijk kleding kies accessoire:oortjes
+wait 30
+shot tk_oortjes
+/guhs vadsrijk kleding kies accessoire:feestmuts
+wait 30
+shot tk_feestmuts
+/guhs vadsrijk kleding kies accessoire:paddenhoedje
+wait 30
+shot tk_paddenhoedje
+/guhs vadsrijk kleding kies accessoire:honingkroon
+wait 30
+shot tk_honingkroon
+
+section plof
+perspective first
+look 0 10
+/guhs vadsrijk kleding plof plof:njeg
+wait 4
+shot tk_plof_njeg
+/guhs vadsrijk kleding plof plof:regenboog
+wait 4
+shot tk_plof_regenboog
+quit

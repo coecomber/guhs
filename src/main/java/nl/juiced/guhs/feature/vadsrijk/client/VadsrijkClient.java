@@ -38,5 +38,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.client.BootClient.init(modBus);   // T-Z4BOOT: the Zeilbootje (renderer, screen, tab, wind HUD)
         nl.juiced.guhs.feature.vadsrijk.ambacht.client.AmbachtClient.init(modBus);   // T-AMBACHT: the Ambachten (key Y, spots, screens)
         nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagClient.init(modBus);   // T-OPSLAG: knapzak/tas/bank screens + HUD additions
+        nl.juiced.guhs.feature.vadsrijk.kleding.client.KledingClient.init(modBus);   // T-KLEDING: Kledingkast (key O), wings, effects
     }
 }

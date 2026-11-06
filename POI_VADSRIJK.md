@@ -8,23 +8,23 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `aankomst` | 0, 65, 1130 |
-| `aankomst_trap_top` | 0, 88, 1102 |
+| `aankomst` | -384, 65, 1130 |
+| `aankomst_trap_top` | -384, 88, 1102 |
 | `lift_oost_top` | 52, 151, -42 |
 | `lift_oost_voet` | 50, 64, -42 |
 | `lift_tempel_top` | 0, 171, -20 |
 | `lift_tempel_voet` | 0, 64, -18 |
 | `lift_west_top` | -52, 141, -33 |
 | `lift_west_voet` | -50, 64, -33 |
-| `luchtschip_bel` | 149, 87, 1008 |
+| `luchtschip_bel` | -235, 87, 1008 |
 | `luchtschip_haven_bel` | 86, 65, 488 |
 | `luchtschip_haven_kapitein` | 86, 65, 491 |
 | `luchtschip_haven_landing` | 92, 65, 484 |
 | `luchtschip_haven_mast_top` | 92, 115, 500 |
-| `luchtschip_kapitein` | 149, 87, 1010 |
-| `steiger_eind` | 151, 87, 1015 |
+| `luchtschip_kapitein` | -235, 87, 1010 |
+| `steiger_eind` | -233, 87, 1015 |
 | `terugportaal_haven` | 111, 65, 474 |
-| `terugportaal_kamp` | 0, 65, 1155 |
+| `terugportaal_kamp` | -384, 65, 1155 |
 | `terugportaal_zwamzoet` | -43, 64, 30 |
 
 ## Campfires (unlit `minecraft:campfire[lit=false]`, kern checkpoints) + ridder-guh spots
@@ -35,16 +35,16 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kampvuur_druipgrotten_2` | -468, 99, -460 |
 | `kampvuur_druipgrotten_3` | -180, 74, -488 |
 | `kampvuur_haven` | 100, 65, 452 |
-| `kampvuur_kamp` | 0, 87, 1025 |
+| `kampvuur_kamp` | -384, 87, 1025 |
 | `kampvuur_klodderweide_1` | 240, 69, -126 |
 | `kampvuur_klodderweide_2` | 418, 73, 198 |
 | `kampvuur_klodderweide_3` | 489, 65, -81 |
 | `kampvuur_sporenwoud_1` | -228, 65, 17 |
 | `kampvuur_sporenwoud_2` | -436, 72, 224 |
 | `kampvuur_sporenwoud_3` | -300, 72, 348 |
-| `kampvuur_vuurtoren` | -73, 92, 946 |
+| `kampvuur_vuurtoren` | -457, 92, 946 |
 | `kampvuur_zwamtempel_1` | 138, 79, -236 |
-| `kampvuur_zwamtempel_2` | 226, 85, -347 |
+| `kampvuur_zwamtempel_2` | 225, 85, -346 |
 | `kampvuur_zwamtempel_trap` | 318, 152, -381 |
 | `kampvuur_zwamzoet` | -14, 64, 58 |
 | `ridder_druipgrotten_1` | -258, 98, -309 |
@@ -57,15 +57,15 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridder_sporenwoud_2` | -434, 72, 226 |
 | `ridder_sporenwoud_3` | -298, 72, 350 |
 | `ridder_zwamtempel_1` | 140, 79, -234 |
-| `ridder_zwamtempel_2` | 228, 85, -345 |
+| `ridder_zwamtempel_2` | 227, 85, -344 |
 
 ## Arenas (centre / straal / deur = stand outside the door / bord = respawn board)
 
 | id | x, y, z |
 |---|---|
-| `arena_klodderreus.bord` | 23, 88, 1059 |
-| `arena_klodderreus.centrum` | 54, 87, 1069 |
-| `arena_klodderreus.deur` | 24, 87, 1061 |
+| `arena_klodderreus.bord` | -361, 88, 1059 |
+| `arena_klodderreus.centrum` | -330, 87, 1069 |
+| `arena_klodderreus.deur` | -360, 87, 1061 |
 | `arena_koning_klodder.bord` | 375, 69, 85 |
 | `arena_koning_klodder.centrum` | 410, 69, 90 |
 | `arena_koning_klodder.deur` | 374, 69, 90 |
@@ -169,11 +169,11 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `ordetent` | 0, 87, 991 |
-| `tempeltje` | -52, 94, 1065 |
-| `training` | 62, 87, 981 |
-| `vijver` | 54, 87, 1069 |
-| `vuurtoren_top` | -84, 125, 932 |
+| `ordetent` | -384, 87, 991 |
+| `tempeltje` | -436, 94, 1065 |
+| `training` | -322, 87, 981 |
+| `vijver` | -330, 87, 1069 |
+| `vuurtoren_top` | -468, 125, 932 |
 
 ## De Haven + Stal
 
@@ -181,6 +181,11 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 |---|---|
 | `haven_pakhuis` | 103, 65, 520 |
 | `haven_plein` | 90, 65, 470 |
+| `haven_z1_z2_bord` | 147, 127, -647 |
+| `haven_z1_z2_eind` | 150, 127, -656 |
+| `haven_z1_z2_mast` | 155, 139, -656 |
+| `haven_z1_z2_plein` | 150, 127, -598 |
+| `haven_z1_z2_vertrek` | 150, 127, -653 |
 | `stal.binnen` | -149, 65, -4 |
 | `stal.deur` | -143, 65, -4 |
 | `stal.wei` | -146, 65, 25 |
@@ -192,6 +197,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `uitkijk_druipspits` | -100, 190, -510 |
 | `uitkijk_haventand` | 160, 134, 380 |
 | `uitkijk_klodderkijk` | 520, 147, -240 |
+| `uitkijk_noordkliftop` | 154, 127, -656 |
 | `uitkijk_slijmnaald` | 460, 142, 380 |
 | `uitkijk_zwamnaald` | -510, 153, -40 |
 
@@ -199,11 +205,11 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `geheim_hoedenschat` | -359, 95, 159 |
+| `geheim_hoedenschat` | -318, 96, 59 |
 | `geheim_schildpad` | 524, 76, 722 |
 | `geheim_slaapheuvel` | 300, 69, 296 |
 | `geheim_slaapheuvel_ingang` | 300, 69, 266 |
-| `geheim_vuurtorenkelder` | -86, 87, 935 |
+| `geheim_vuurtorenkelder` | -470, 87, 935 |
 | `geheim_waterval` | -470, 71, 0 |
 | `mika_aanwijzing_1` | -28, 64, 50 |
 | `mika_aanwijzing_2` | 108, 65, 520 |
@@ -216,8 +222,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `fossielbrug.naar` | 119, 78, -219 |
-| `fossielbrug.van` | 151, 78, -181 |
+| `fossielbrug.naar` | 119, 79, -219 |
+| `fossielbrug.van` | 151, 79, -181 |
 | `grot_ingangen.1` | -300, 90, -220 |
 | `grot_ingangen.2` | -420, 83, -300 |
 | `grot_ingangen.3` | -180, 111, -360 |
@@ -240,24 +246,24 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `druipschacht_balkon` | -504, 85, -484 |
-| `druipschacht_bodem` | -499, 32, -484 |
-| `druipschacht_ingang` | -463, 41, -470 |
-| `druipschacht_lichtschacht` | -498, 119, -474 |
-| `druipschacht_meer` | -498, 31, -474 |
-| `druipschacht_plafond_1` | -485, 93, -475 |
-| `druipschacht_plafond_2` | -505, 102, -469 |
-| `druipschacht_plafond_3` | -508, 85, -484 |
-| `druipschacht_plafond_4` | -496, 65, -489 |
-| `druipschacht_plafond_5` | -506, 102, -477 |
-| `druipschacht_plafond_6` | -489, 101, -477 |
-| `druipschacht_richel_1` | -487, 42, -471 |
-| `druipschacht_richel_2` | -510, 55, -475 |
-| `druipschacht_richel_3` | -486, 67, -475 |
-| `druipschacht_richel_4` | -509, 80, -472 |
-| `druipschacht_waterval_1` | -492, 32, -472 |
-| `druipschacht_waterval_2` | -503, 32, -470 |
-| `druipschacht_waterval_3` | -499, 32, -480 |
+| `druipschacht_balkon` | -500, 85, -487 |
+| `druipschacht_bodem` | -496, 32, -487 |
+| `druipschacht_ingang` | -463, 41, -471 |
+| `druipschacht_lichtschacht` | -495, 121, -477 |
+| `druipschacht_meer` | -495, 31, -477 |
+| `druipschacht_plafond_1` | -507, 92, -483 |
+| `druipschacht_plafond_2` | -504, 102, -477 |
+| `druipschacht_plafond_3` | -497, 96, -465 |
+| `druipschacht_plafond_4` | -488, 103, -481 |
+| `druipschacht_plafond_5` | -484, 97, -481 |
+| `druipschacht_plafond_6` | -485, 99, -474 |
+| `druipschacht_richel_1` | -484, 42, -473 |
+| `druipschacht_richel_2` | -507, 55, -479 |
+| `druipschacht_richel_3` | -483, 67, -477 |
+| `druipschacht_richel_4` | -507, 80, -476 |
+| `druipschacht_waterval_1` | -489, 32, -475 |
+| `druipschacht_waterval_2` | -500, 32, -473 |
+| `druipschacht_waterval_3` | -496, 32, -483 |
 | `hendelkamer.centrum` | 330, 152, -436 |
 | `hendelkamer.hendels.1` | 322, 152, -441 |
 | `hendelkamer.hendels.2` | 326, 152, -441 |
@@ -268,51 +274,51 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `hendelkamer.hints.3` | 326, 157, -446 |
 | `hendelkamer.hints.4` | 322, 157, -446 |
 | `hendelkamer.plaat` | 330, 152, -444 |
-| `hoedenpad_elitenest` | -462, 121, 197 |
-| `hoedenpad_netwerk.hoeden.1` | -428, 108, 165 |
-| `hoedenpad_netwerk.hoeden.10` | -496, 117, 211 |
-| `hoedenpad_netwerk.hoeden.11` | -352, 115, 201 |
-| `hoedenpad_netwerk.hoeden.12` | -472, 113, 133 |
-| `hoedenpad_netwerk.hoeden.13` | -465, 117, 170 |
-| `hoedenpad_netwerk.hoeden.14` | -462, 121, 197 |
-| `hoedenpad_netwerk.hoeden.2` | -409, 108, 180 |
-| `hoedenpad_netwerk.hoeden.3` | -545, 112, 141 |
-| `hoedenpad_netwerk.hoeden.4` | -392, 103, 151 |
-| `hoedenpad_netwerk.hoeden.5` | -389, 119, 212 |
-| `hoedenpad_netwerk.hoeden.6` | -376, 112, 191 |
-| `hoedenpad_netwerk.hoeden.7` | -523, 114, 157 |
-| `hoedenpad_netwerk.hoeden.8` | -506, 119, 180 |
-| `hoedenpad_netwerk.hoeden.9` | -368, 108, 228 |
-| `hoedenpad_schat_kist` | -358, 95, 159 |
-| `hoedenpad_top_holle_steel` | -341, 108, 228 |
-| `hoedenpad_top_wenteltrap` | -421, 119, 199 |
-| `hoedenpad_top_wortelpad` | -393, 103, 130 |
-| `hoedenpad_trap_holle_steel` | -342, 72, 228 |
-| `hoedenpad_trap_wenteltrap` | -428, 71, 202 |
-| `hoedenpad_trap_wortelpad` | -395, 69, 125 |
-| `hoedenpad_uitkijkhut_1` | -409, 108, 180 |
-| `hoedenpad_uitkijkhut_2` | -472, 113, 133 |
-| `hoedenpad_uitkijkhut_3` | -496, 117, 211 |
-| `hoedenpad_wezen_1` | -426, 108, 165 |
-| `hoedenpad_wezen_10` | -463, 117, 170 |
-| `hoedenpad_wezen_2` | -543, 112, 141 |
-| `hoedenpad_wezen_3` | -390, 103, 151 |
-| `hoedenpad_wezen_4` | -387, 119, 212 |
-| `hoedenpad_wezen_5` | -374, 112, 191 |
-| `hoedenpad_wezen_6` | -521, 114, 157 |
-| `hoedenpad_wezen_7` | -504, 119, 180 |
-| `hoedenpad_wezen_8` | -366, 108, 228 |
-| `hoedenpad_wezen_9` | -350, 115, 201 |
+| `hoedenpad_elitenest` | -409, 115, 180 |
+| `hoedenpad_netwerk.hoeden.1` | -428, 106, 165 |
+| `hoedenpad_netwerk.hoeden.10` | -352, 111, 201 |
+| `hoedenpad_netwerk.hoeden.11` | -351, 104, 105 |
+| `hoedenpad_netwerk.hoeden.12` | -343, 114, 142 |
+| `hoedenpad_netwerk.hoeden.13` | -343, 96, 54 |
+| `hoedenpad_netwerk.hoeden.14` | -332, 112, 166 |
+| `hoedenpad_netwerk.hoeden.2` | -409, 115, 180 |
+| `hoedenpad_netwerk.hoeden.3` | -392, 100, 151 |
+| `hoedenpad_netwerk.hoeden.4` | -389, 110, 212 |
+| `hoedenpad_netwerk.hoeden.5` | -377, 107, 191 |
+| `hoedenpad_netwerk.hoeden.6` | -373, 113, 120 |
+| `hoedenpad_netwerk.hoeden.7` | -369, 102, 82 |
+| `hoedenpad_netwerk.hoeden.8` | -368, 111, 228 |
+| `hoedenpad_netwerk.hoeden.9` | -360, 102, 159 |
+| `hoedenpad_schat_kist` | -317, 96, 59 |
+| `hoedenpad_top_holle_steel` | -314, 112, 131 |
+| `hoedenpad_top_wenteltrap` | -421, 110, 199 |
+| `hoedenpad_top_wortelpad` | -393, 100, 130 |
+| `hoedenpad_trap_holle_steel` | -319, 66, 127 |
+| `hoedenpad_trap_wenteltrap` | -428, 71, 196 |
+| `hoedenpad_trap_wortelpad` | -395, 69, 135 |
+| `hoedenpad_uitkijkhut_1` | -389, 110, 212 |
+| `hoedenpad_uitkijkhut_2` | -373, 113, 120 |
+| `hoedenpad_uitkijkhut_3` | -332, 112, 166 |
+| `hoedenpad_wezen_1` | -426, 106, 165 |
+| `hoedenpad_wezen_10` | -341, 96, 54 |
+| `hoedenpad_wezen_2` | -390, 100, 151 |
+| `hoedenpad_wezen_3` | -375, 107, 191 |
+| `hoedenpad_wezen_4` | -367, 102, 82 |
+| `hoedenpad_wezen_5` | -366, 111, 228 |
+| `hoedenpad_wezen_6` | -358, 102, 159 |
+| `hoedenpad_wezen_7` | -350, 111, 201 |
+| `hoedenpad_wezen_8` | -349, 104, 105 |
+| `hoedenpad_wezen_9` | -341, 114, 142 |
 | `hoedhupperwei` | 520, 73, 300 |
-| `knuffel_1` | -68, 89, 952 |
+| `knuffel_1` | -452, 89, 952 |
 | `knuffel_10` | 326, 150, -374 |
-| `knuffel_2` | 30, 86, 1040 |
+| `knuffel_2` | -354, 86, 1040 |
 | `knuffel_3` | -36, 64, 33 |
 | `knuffel_4` | 70, 64, -70 |
 | `knuffel_5` | 116, 65, 466 |
 | `knuffel_6` | 300, 69, 250 |
 | `knuffel_7` | 470, 75, 185 |
-| `knuffel_8` | -400, 125, -100 |
+| `knuffel_8` | -400, 108, -100 |
 | `knuffel_9` | -300, 90, -226 |
 | `lichtzwamkamer.centrum` | 330, 152, -415 |
 | `lichtzwamkamer.lichtzwammen.1` | 322, 152, -421 |
@@ -330,7 +336,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `poorten.2` | 328, 152, -426 |
 | `poorten.3` | 328, 152, -447 |
 | `poorten.4` | 328, 152, -474 |
-| `quest_dobber_hoed` | -60, 87, 955 |
+| `quest_dobber_hoed` | -444, 87, 955 |
 | `quest_tuba` | -467, 68, 330 |
 | `ridderzaal.centrum` | 330, 152, -460 |
 | `ridderzaal.spawns.1` | 320, 152, -469 |
@@ -338,7 +344,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridderzaal.spawns.3` | 340, 152, -469 |
 | `ridderzaal.spawns.4` | 318, 152, -458 |
 | `ridderzaal.spawns.5` | 342, 152, -458 |
-| `rondvlucht_schip` | 40, 106, 763 |
+| `rondvlucht_schip` | -237, 106, 763 |
 
 ## Moving doors (`WereldDeuren`)
 | id | blocks | open with | notes |
