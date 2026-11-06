@@ -36,8 +36,9 @@ lantaarns). Merged: `110-u-hekken` (the central connection pass `verbind.py`).
 ### What I built
 - `tools/vadsrijk/zeenaad.py` + `ZeeVulling` (Java): the shared open sea.
   - Floor 47..51 (smooth value noise round 49), floor block light-blue terracotta / sand / gravel in patches.
-  - The zone-3 cloud field moved here (`wolk`): identical inside the zone-3 box (verified: 0 of 130 862 columns differ), and
-    outside it the threshold rises and the banks thin out over ~70 blocks, following the noise. So the Wolkenkloof's west bank
+  - The zone-3 cloud field moved here (`wolk`): the same field inside the zone-3 box, except that the outer edge of the
+    Wolkenkloof's cloud cliffs now wobbles (24..56 blocks from the channel instead of a parallel line at 40); outside the box
+    the threshold rises and the banks thin out over ~70 blocks, following the noise. So the Wolkenkloof's west bank
     now continues into zone 2's tiles and the open sea and frays out instead of ending on a line.
   - Scattered rock stacks (r 3..8, 1..8 blocks out of the water) in the open sea 30..260 blocks from a zone's land, never within
     r + 6 of a tile box. ~200 of them; they break up the empty sea round the coasts.
@@ -58,7 +59,7 @@ lantaarns). Merged: `110-u-hekken` (the central connection pass `verbind.py`).
   (zone 1 `tussenland`, zone 2 `splinterpieken`, zone 3 `schemerwortel`, zone 4 `lampionkust`). A column inside a shape that
   no area claims gets its zone's anchor (was "De Zee"). 42 new biomes, all named "Het Vadsrijk - De Zee".
   Zone 3's sea is no longer teal; zone 3's island (r <= 205 from the trunk, the crown r <= 275 from y 100) keeps its layers.
-  Zone 5 (above y 150) is unchanged (asked first).
+  Zone 5 (above y 150) is unchanged (its lookup still runs first).
 
 ### Decisions made myself
 - Tiles are pulled onto the shared sea (not the other way round): the sea is one function, every zone just needs its edge to
@@ -101,5 +102,29 @@ lantaarns). Merged: `110-u-hekken` (the central connection pass `verbind.py`).
   removed), `zone3/kit/boom2.py` (nest railing/lanterns), `stad/stad_wereld.py` (Reuzenhoed balcony),
   `tools/features/__init__.py` (+ `vadsrijk_u_overgang`).
 
+## Fixed in u-hekken's code (merged)
+- `verbind.na()` passed `--alleen <list>`; a list starting with a negative tile ("-10,-1;...") is read by argparse as an
+  option, so `maak_kaart --zone 1` crashed at the end. Now `--alleen=<list>` (marked U-OVERGANG).
+
+## Regen + checks (2026-11-06)
+- `maak_kaart.py --zone 1`, `--zone 2`, `--zone 3` (all 154 tiles), each followed by overgang + verbind; zone 4/5 tiles only
+  got the seam pass (their makers did not change). Last pass: `overgang: 434 randtegels` (0 changes on a rerun = idempotent).
+- Gametests `-Pgt=Indeling,VadsrijkBiomen,Z5Wereld,VadsrijkVoltooiing`: 11/11 pass; after the kloof-wobble change
+  `-Pgt=Indeling,VadsrijkBiomen` again: 5/5 pass.
+- `verbindcheck`: los 2, fout 0, as 0, gat 1 (u-hekken's baseline ~0).
+- `audit.py` (zone 1 + camp): stap 5 (= baseline), kuil 7 (baseline 4: the 3 new ones are in the Sporenwoud / Hoedenpaden
+  area, -374 103 82, -336 97 56, -331 97 57, far from anything this slice built; probably the regenerated Hoedenpaden network
+  or the connection pass raising a post; NOT checked further), water 20 (= baseline), zee 1.
+- `loopcheck.py --box=-60,-60,40,0` (Zwamzoet incl. the Reuzenhoed): no VAL; 2 TRAP at the town square (y 64), old.
+- `loopcheck3.py`: no VAL/TRAP; PAD 462 (t-wereld's baseline 388..396; the extra ones are fence posts/blocks on the zone-3
+  paths, likely from the connection pass; not inspected).
+- Floor jumps of 4+ across a tile-box line (my `naden.py`): x 1024 613 -> 0, x 384 528 -> 0, x 1728 512 -> 0,
+  z -768 1611 -> 0, z -1472 490 -> 0, x 2560 128 -> 0; what is left are short internal zone-4 steps and rock/spire feet.
+
 ## Resume point
-See the end of this file (filled in at wrap-up).
+- Head: see `git log` (branch 110-u-overgang). Generated files (tiles, *WereldPlekken.java, POI_*.md, AUDIT_*.md,
+  veilige_plekken.json) are NOT committed; the worktree holds the regenerated ones. Integration: regenerate with
+  `python tools/vadsrijk/maak_kaart.py --zone alle --geen-cache --audit` (overgang + verbind run at the end by themselves),
+  then the FEATURES generators (incl. `vadsrijk_u_overgang`).
+- Renders for my own checks: scratchpad `kijk/` (topo.py = top-down from the tiles + the procedural sea; naden.py = floor-jump
+  counter; band.py = Python mirror of the sea band).
