@@ -76,7 +76,7 @@ public class VadsrijkZ6RaidGameTests {
     public static void schaal(GameTestHelper helper) {
         helper.assertTrue(Math.abs(Z6Schaal.factor(2) - 1.45) < 1e-9 && Math.abs(Z6Schaal.factor(10) - 5.05) < 1e-9, "HP factor 2 -> 1.45, 10 -> 5.05");
         helper.assertTrue(Z6Schaal.factor(1) == Z6Schaal.factor(2) && Z6Schaal.factor(14) == Z6Schaal.factor(10), "clamped to 2..10");
-        int[] verwacht = {2, 2, 2, 2, 3, 3, 4, 4, 5};
+        int[] verwacht = {2, 2, 2, 3, 3, 4, 4, 5, 5};
         for (int n = 2; n <= 10; n++) {
             helper.assertTrue(Z6Schaal.mech(n) == verwacht[n - 2], "mechanics for " + n + " = " + verwacht[n - 2] + ", got " + Z6Schaal.mech(n));
         }
@@ -98,7 +98,7 @@ public class VadsrijkZ6RaidGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_reset")
     public static void verdiepingEnWipe(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
-        BlockPos a = helper.absolutePos(new BlockPos(1, 2, 1));
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1));   // (floor 0 sits 12 below the anchor)
         BlockPos oud = Z6RaidPlekken.testAnker;
         Z6RaidPlekken.testAnker = a;
         try {

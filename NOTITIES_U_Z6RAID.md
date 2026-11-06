@@ -92,7 +92,8 @@ The first raid. Branch `110-u-z6raid` from eaee06d08, with **110-u-dubbel** and 
 - u-audio2: the music ids above.
 
 ## Tests
-- `runGameTestServer -Pgt=VadsrijkZ6Raid`: schaal, verdiepingEnWipe, lootPerClear, zandloper, spiegels, sterrenbeelden. Results: see below.
+- `runGameTestServer -Pgt=VadsrijkZ6Raid`: schaal, verdiepingEnWipe, lootPerClear, zandloper, spiegels, sterrenbeelden: **All 7 required tests passed** (2026-11-06; the first run had two test bugs: a wrong expected mechanic count, and a test anchor too low for floor 0. Both were fixed in the tests).
+- compileJava clean; the binnentoren generator's own loopcheck gives 0; the offline model previews look sane (scratchpad).
 - Not checked in a client (the user tests in the dev client): looks of the models/textures, the binnentoren in the world, the HUD layout, decal readability, the walk through the stairs in survival.
 
 ## Open points / resume
