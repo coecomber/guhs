@@ -619,6 +619,18 @@ public final class Luchtschepen {
      * Before a travel-map / captain flight: true when it may fly (creative, the first time to this place, or paid
      * {@link Lijnen#LUXE_PRIJS}); false (with a message) when the player cannot pay. {@code test}: always free.
      */
+    /** U-GILDEN: price factors for the luxury flight (the Knuffelbond travel discount), all multiplied. */
+    public static final java.util.List<java.util.function.ToDoubleFunction<ServerPlayer>> PRIJS_FACTOR = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    /** U-GILDEN: the luxury flight's price for this player (after {@link #PRIJS_FACTOR}). */
+    public static long luxePrijs(ServerPlayer p) {
+        double f = 1;
+        for (java.util.function.ToDoubleFunction<ServerPlayer> x : PRIJS_FACTOR) {
+            f *= x.applyAsDouble(p);
+        }
+        return Math.max(0, Math.round(Lijnen.LUXE_PRIJS * f));
+    }
+
     public static boolean luxe(ServerPlayer p, String naar, boolean test) {
         if (test || p.getAbilities().instabuild) {
             return true;
@@ -629,11 +641,12 @@ public final class Luchtschepen {
             p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.luxe.gratis").withStyle(ChatFormatting.LIGHT_PURPLE));
             return true;
         }
-        if (!Spelers.neemMunten(p, Lijnen.LUXE_PRIJS)) {
-            p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.luxe.te_duur", Lijnen.LUXE_PRIJS).withStyle(ChatFormatting.GOLD));
+        long prijs = luxePrijs(p);   // U-GILDEN: Knuffelbond travel discount
+        if (!Spelers.neemMunten(p, prijs)) {
+            p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.luxe.te_duur", prijs).withStyle(ChatFormatting.GOLD));
             return false;
         }
-        p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.luxe.betaald", Lijnen.LUXE_PRIJS).withStyle(ChatFormatting.LIGHT_PURPLE));
+        p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.luxe.betaald", prijs).withStyle(ChatFormatting.LIGHT_PURPLE));
         return true;
     }
 

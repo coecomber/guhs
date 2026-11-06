@@ -49,5 +49,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.client.SpecClient.init(modBus);   // U-SPECS: gear compare arrows (after kern: wraps its jewellery receiver)
         nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.init(modBus);   // U-TABS: the Vadsrijk-menu (key H, all tabs in one frame; keep last)
         nl.juiced.guhs.feature.vadsrijk.toetsen.client.ToetsenClient.init(modBus);   // U-TOETSEN: key overview in the pause menu (+ /toetsen)
+        nl.juiced.guhs.feature.vadsrijk.gilden.client.BondClient.init(modBus);   // U-GILDEN: bond tags above the head + the ⚑ inventory button
     }
 }

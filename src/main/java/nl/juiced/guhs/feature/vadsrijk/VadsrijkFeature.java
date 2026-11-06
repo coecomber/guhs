@@ -63,6 +63,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.register(modBus);   // U-TABS: the Vadsrijk-menu (/guhs vadsrijk menu [tab])
+        nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.register(modBus);   // U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -92,5 +93,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.payloads(registrar);   // T-KARAKTER
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.payloads(registrar);   // U-ZICHTBAAR
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.payloads(registrar);   // U-TABS: the Vadsrijk-menu (Karakter tab, Reiskaart to look at)
+        nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.payloads(registrar);   // U-GILDEN
     }
 }
