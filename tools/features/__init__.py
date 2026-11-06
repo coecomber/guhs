@@ -283,6 +283,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_zichtbaar',
             # 1.10 round U, U-LUCHTSCHIP: closed-line explanations, may-I-board state, board line (Java: feature/vadsrijk/luchtschip)
             'vadsrijk_u_luchtschip',
+            # 1.10 round U, U-RUITERS: ambient guhs riding Pluimguhs, texts (Java: feature/vadsrijk/ruiters; routes: tools/vadsrijk/ruiters/routes.py)
+            'vadsrijk_u_ruiters',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

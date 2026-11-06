@@ -59,6 +59,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
         nl.juiced.guhs.feature.vadsrijk.udeco.UDeco.register(modBus);   // U-DECO: arrival clearance, Honingtak bees, stair floor boards
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
+        nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
     }
 
     public static void payloads(PayloadRegistrar registrar) {
