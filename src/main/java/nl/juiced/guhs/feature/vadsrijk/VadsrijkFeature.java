@@ -35,6 +35,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.zone4.wezens.Z4WezensRegistry.register(modBus);   // T-Z4WEZENS: zone 4 creatures + loot
         nl.juiced.guhs.feature.vadsrijk.zone4.bazen.Z4BazenRegistry.register(modBus);   // T-Z4WEZENS: Zeeslurf + Wrak
+        nl.juiced.guhs.feature.vadsrijk.zone5.wezens.Z5WezensRegistry.register(modBus);   // T-Z5WEZENS: zone-5 combat
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
         nl.juiced.guhs.feature.vadsrijk.indeling.IndelingRegistry.register(modBus);   // T-WERELD: world layout W-3 (barriers, dev tp)
         nl.juiced.guhs.feature.vadsrijk.dialoog.RijkDialoog.register(modBus);   // T-DIALOOG: the Vadsrijk talking screen
