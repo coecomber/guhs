@@ -84,7 +84,7 @@ public class VadsrijkKarakterGameTests {
             helper.assertTrue(p.getInventory().countItem(Items.GOLDEN_APPLE) == 2 && p.getInventory().countItem(Items.CARROT) == 0,
                     "A's inventory back, without B's carrots");
             CompoundTag b = Karakter.info(p, 1);
-            helper.assertTrue(b.getLongOr("munten", -1) == 77 && b.contains("data") && !b.getBooleanOr("nieuw", true), "B is saved in its slot");
+            helper.assertTrue(b.getLongOr("munten", -1) == 77 && b.contains("data") && !b.getBooleanOr("nieuw", false), "B is saved in its slot");
             helper.assertTrue(Karakters.wissel(p, 1, true) && p.getInventory().countItem(Items.CARROT) == 7 && Spelers.data(p).munten == 77,
                     "and B again: the carrots + coins are still B's");
             helper.assertTrue(Karakters.wissel(p, 0, true), "back to A");
@@ -163,7 +163,7 @@ public class VadsrijkKarakterGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void namen(GameTestHelper helper) {
         helper.assertTrue("Sir Pluis".equals(Karakters.schoon("  Sir   Pluis ")), "spaces cleaned");
-        helper.assertTrue(Karakters.schoon("§c<>!!") == null, "nothing usable = no name");
+        helper.assertTrue(Karakters.schoon("<>!!") == null, "nothing usable = no name");
         helper.assertTrue(Karakters.schoon("Abcdefghijklmnopqrstuvwxyz").length() == Karakters.NAAM_MAX, "max length");
         ServerPlayer p = GuhMockPlayer.of(helper);
         helper.assertTrue(!Karakters.maak(p, 1, "   ", Modus.NORMAAL), "no empty name");

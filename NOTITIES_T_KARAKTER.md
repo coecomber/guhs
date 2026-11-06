@@ -86,4 +86,12 @@ Alles in 1 servertick, in player.dat: geen dupe via accountopslag (een wissel-lo
   `QuestMotor.EXTRA`).
 
 ## Hervatpunt / open
-(wordt aangevuld)
+- Status: alles gebouwd, compileert, gametests `-Pgt=VadsrijkKern,VadsrijkHuisdieren,VadsrijkRijdieren,VadsrijkKarakter` 21/21 groen.
+- NIET in een client getest (geen AutoCheck-run gedaan): het scherm (layout van 3 kaarten in 368x214, het naamveld), de zaal
+  (gebouwd op het echte Zwamzoet-grasveld? de `vrij`-check bepaalt het; anders `zaal bouw hier`), de badges boven het hoofd.
+- Integratie let op: als de nieuwe wereldindeling Zwamzoet's grasveld west van het plein (x -32..-22, z 66..79) bebouwt, bouwt
+  de zaal zich niet (1 waarschuwing in de log) -> `RustendeRidders.ANKER` verplaatsen.
+- Andere nieuwe stores (t-opslag, t-kleding, t-ambacht, ...): accountbreed = `Karakter.account(p, slice)`; per karakter =
+  gewoon `Spelers.data(p).extra(slice)`. Een SavedData per speler: sleutel `Karakter.sleutel(p).tekst()` (per karakter).
+- Open/later: rijdier-/huisdierlevels per karakter (nu accountbreed, zie keuzes); de zaal toont max 11 beelden (de nieuwste);
+  website-koppeling van de zaal (WEBSITE) niet gedaan; seizoensslots niet gedaan (≥1.14).

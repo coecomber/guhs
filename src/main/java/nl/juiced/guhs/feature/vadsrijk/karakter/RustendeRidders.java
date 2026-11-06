@@ -155,7 +155,7 @@ public final class RustendeRidders extends SavedData {
         if (d.gebouwd < BOUW_VERSIE) {
             if (d.gebouwd == 0 && !vrij(sl, a)) {
                 if (d.gebouwd != -1) {
-                    Guhs.LOGGER.warn("[T-KARAKTER] Rustende Ridders-zaal: the lawn at {} is not free (map changed?); not built. "
+                    com.mojang.logging.LogUtils.getLogger().warn("[T-KARAKTER] Rustende Ridders-zaal: the lawn at {} is not free (map changed?); not built. "
                             + "Use /guhs vadsrijk karakter zaal bouw hier", a);
                 }
                 d.gebouwd = -1;   // (warn once; a dev build "hier" sets it)
