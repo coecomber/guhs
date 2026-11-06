@@ -311,6 +311,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_z6muziek',   # U-Z6MUZIEK: zone-6 music + ambience (after u_audio2)
             # U-Z6VERHAAL: 1.10 zone 6 "Het Zijdeland", the story (Java: feature/vadsrijk/zone6/verhaal)
             'vadsrijk_u_z6verhaal',
+            # U-Z6WEZENS: zone-6 creatures, bosses, dungeon, loot, the Bultguh (Java: feature/vadsrijk/zone6/{wezens,bultguh}); after
+            # vadsrijk_t_rijdier (tack texture) and BEFORE vadsrijk_t_vfx (it merges the vfx_* anims into our vr_z6_baas_* files)
+            'vadsrijk_u_z6wezens',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
