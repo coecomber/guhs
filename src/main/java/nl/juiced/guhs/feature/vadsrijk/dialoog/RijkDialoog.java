@@ -61,8 +61,7 @@ public final class RijkDialoog {
 
     public static void register(IEventBus modBus) {
         Praat.versierder(RijkDialoog::versier);
-        // (q-dialoog's open point) the Mika-imker scene names a Mika without an entity: draw a Mika, not the book
-        Praat.portretBron(naamKey -> naamKey.equals("vadsrijk.z3npc.imker.naam") ? soort("guhs:mika") : null);
+        // (T-INT: the Mika-imker portrait is t-imker's own resolver now, ImkerVerhaal.portret: the boss model)
         emotiesStandaard();
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> DialoogCommando.register(e));
     }
