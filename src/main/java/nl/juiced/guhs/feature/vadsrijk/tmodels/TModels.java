@@ -138,7 +138,7 @@ public final class TModels {
     }
 
     private static List<Entity> showroom(ServerLevel sl, ServerPlayer p) {
-        return new ArrayList<>(sl.getEntities((Entity) null, p.getBoundingBox().inflate(96), e -> e.getTags().contains(TAG)));
+        return new ArrayList<>(sl.getEntities((Entity) null, p.getBoundingBox().inflate(96), e -> e.entityTags().contains(TAG)));
     }
 
     private static int weg(CommandContext<CommandSourceStack> c) throws com.mojang.brigadier.exceptions.CommandSyntaxException {

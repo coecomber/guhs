@@ -126,7 +126,11 @@ Klodderreus: 39 cubes, 128x? units. Vahoegnir: unchanged.
 | **totaal (50 mobs)** | **685** | **1161** |
 
 ## Tests
-(see the end of this file: filled in after the gradle run)
+- `runGameTestServer -Pgt=TModelsGameTests,VadsrijkWezensGameTests`: **All 9 required tests passed** (2 new + 7 zone-1).
+  compileJava covers the client classes (KlodderGeoRenderer) too.
+- **No client/AutoCheck run.** The GeoReplacedEntity renderer of the Klodderreus/kloddertjes is therefore not yet seen in a
+  running client: first thing to check in the dev client (`/guhs vadsrijk models reus`, `reus vecht`). If it misbehaves,
+  revert the 3 lines in KernClient to `KlodderRenderer::new` (the old look) and everything else keeps working.
 
 ## Open / resume point
 - The look is judged by the user in the dev client ("goed is goed"): I did not do extra tuning rounds from renders.
