@@ -78,6 +78,12 @@ public final class IndelingRegistry {
         if (b == null) {
             b = nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.plek(id);
         }
+        if (b == null) {
+            b = nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.plek(id);   // U-OVERGANG: zone 4/5 POIs too
+        }
+        if (b == null) {
+            b = nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.plek(id);
+        }
         if (b == null && HAVENS.containsKey(id)) {
             b = BlockPos.containing(HAVENS.get(id));
         }
@@ -111,8 +117,8 @@ public final class IndelingRegistry {
         // /guhs vadsrijk indeling plek <id>   (any POI of zone 1-3, incl. haven_* and uitkijk_*)
         w.then(dev("plek").then(Commands.argument("id", StringArgumentType.string()).suggests((c, b) -> {
             HAVENS.keySet().forEach(b::suggest);
-            for (String s : new String[] {"uitkijk_noordkliftop", "uitkijk_kandijkom_balkon", "uitkijk_galmkam", "uitkijk_westtak",
-                    "uitkijk_oosttak", "uitkijk_nest", "aankomst", "steiger_eind", "dok_landing", "haven_z1_z2_plein", "haven_z2_z3_plein"}) {
+            for (String s : new String[] {"uitkijk_hoedtop", "uitkijk_galmtop", "uitkijk_nest", "uitkijk_kroon",   // U-OVERGANG: epic viewpoints
+                    "uitkijk_vuurtoren", "aankomst", "steiger_eind", "dok_landing", "haven_z1_z2_plein", "haven_z2_z3_plein"}) {
                 b.suggest(s);
             }
             return b.buildFuture();
