@@ -31,6 +31,8 @@ def teksten():
         V + "bond.uitleg.3": ("Elke bond krijgt een kasteel in de Bondenvallei, dat jullie samen uitbouwen (niveau 1 t/m 5), met een kluis, trofeeënzaal en werkplaatsen.",
                               "Every bond gets a castle in the Bondenvallei that you build up together (level 1 to 5), with a vault, trophy hall and workshops."),
         V + "bond.voet": ("Knoppen openen het bondspaneel in de chat (ook: /bond, /bc om te chatten)", "Buttons open the bond panel in the chat (also: /bond, /bc to chat)"),
+        V + "buit.raak": ("Rijdier-drop: %s is van jou! (na %s keer proberen)", "Mount drop: %s is yours! (after %s tries)"),
+        V + "buit.mis": ("Geen %s deze keer (10%%). Uiterlijk over %s keer is hij zeker van jou.", "No %s this time (10%%). At most %s more tries and it is yours."),
         V + "huis.titel": ("Mijn huis in het Knuffelkwartier", "My house in the Knuffelkwartier"),
         V + "huis.intro": ("Het Knuffelkwartier is een eigen buurtje met straatjes, buren, een plein en een markt. Je koopt er een kavel met een huisje dat je zelf inricht.",
                            "The Knuffelkwartier is a neighbourhood of its own with streets, neighbours, a square and a market. You buy a plot with a house you furnish yourself."),

@@ -44667,5 +44667,7 @@
   "vadsrijk.vint.bond.voet": "Buttons open the bond panel in the chat (also: /bond, /bc to chat)",
   "vadsrijk.vint.huis.titel": "My house in the Knuffelkwartier",
   "vadsrijk.vint.huis.intro": "The Knuffelkwartier is a neighbourhood of its own with streets, neighbours, a square and a market. You buy a plot with a house you furnish yourself.",
-  "vadsrijk.vint.huis.waar": "Getting there: talk to the Kwartiermeester on the square of every main town (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads)."
+  "vadsrijk.vint.huis.waar": "Getting there: talk to the Kwartiermeester on the square of every main town (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads).",
+  "vadsrijk.vint.buit.raak": "Mount drop: %s is yours! (after %s tries)",
+  "vadsrijk.vint.buit.mis": "No %s this time (10%%). At most %s more tries and it is yours."
 }

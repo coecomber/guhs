@@ -34,7 +34,7 @@ public final class WereldPlekken {
             new Uitkijk("druipspits", new BlockPos(-100, 190, -510)),
             new Uitkijk("haventand", new BlockPos(160, 134, 380)),
             new Uitkijk("slijmnaald", new BlockPos(460, 142, 380)),
-            new Uitkijk("noordkliftop", new BlockPos(154, 127, -656)));
+            new Uitkijk("hoedtop", new BlockPos(-10, 174, -16)));
 
     /** The light beams of the Sporenwoud (the client draws them). */
     public static final List<BlockPos> LICHTSTRALEN = List.of(
@@ -324,6 +324,8 @@ public final class WereldPlekken {
             Map.entry("ridderzaal.spawns.4", new BlockPos(318, 152, -458)),
             Map.entry("ridderzaal.spawns.5", new BlockPos(342, 152, -458)),
             Map.entry("rondvlucht_schip", new BlockPos(-237, 106, 763)),
+            Map.entry("rustende_ridders", new BlockPos(-27, 64, 79)),
+            Map.entry("rustende_ridders_binnen", new BlockPos(-27, 64, 73)),
             Map.entry("schildpad_eiland", new BlockPos(520, 76, 720)),
             Map.entry("slaapheuvel", new BlockPos(300, 96, 300)),
             Map.entry("stal.binnen", new BlockPos(-149, 65, -4)),
@@ -337,8 +339,8 @@ public final class WereldPlekken {
             Map.entry("training", new BlockPos(-322, 87, 981)),
             Map.entry("uitkijk_druipspits", new BlockPos(-100, 190, -510)),
             Map.entry("uitkijk_haventand", new BlockPos(160, 134, 380)),
+            Map.entry("uitkijk_hoedtop", new BlockPos(-10, 174, -16)),
             Map.entry("uitkijk_klodderkijk", new BlockPos(520, 147, -240)),
-            Map.entry("uitkijk_noordkliftop", new BlockPos(154, 127, -656)),
             Map.entry("uitkijk_slijmnaald", new BlockPos(460, 142, 380)),
             Map.entry("uitkijk_zwamnaald", new BlockPos(-510, 153, -40)),
             Map.entry("vijver", new BlockPos(-330, 87, 1069)),

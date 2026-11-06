@@ -63,9 +63,7 @@ public final class Z2WereldPlekken {
     public static final List<WereldPlekken.Uitkijk> UITKIJKEN = List.of(
             new WereldPlekken.Uitkijk("galmtop", new BlockPos(928, 195, -1106)),
             new WereldPlekken.Uitkijk("meerkijk", new BlockPos(468, 142, -936)),
-            new WereldPlekken.Uitkijk("kloofkijk", new BlockPos(616, 170, -1356)),
-            new WereldPlekken.Uitkijk("galmkam", new BlockPos(983, 117, -860)),
-            new WereldPlekken.Uitkijk("kandijkom_balkon", new BlockPos(704, 91, -882)));
+            new WereldPlekken.Uitkijk("kloofkijk", new BlockPos(616, 170, -1356)));
 
     public static final List<BlockPos> KAMPVUREN = List.of(
             new BlockPos(814, 100, -1046),
@@ -483,9 +481,7 @@ public final class Z2WereldPlekken {
             Map.entry("spiegelzucht_spiegel_4", new BlockPos(837, 176, -1397)),
             Map.entry("spiegelzucht_spiegel_5", new BlockPos(845, 176, -1412)),
             Map.entry("spiegelzucht_spiegel_6", new BlockPos(863, 176, -1412)),
-            Map.entry("uitkijk_galmkam", new BlockPos(983, 117, -860)),
             Map.entry("uitkijk_galmtop", new BlockPos(928, 195, -1106)),
-            Map.entry("uitkijk_kandijkom_balkon", new BlockPos(704, 91, -882)),
             Map.entry("uitkijk_kloofkijk", new BlockPos(616, 170, -1356)),
             Map.entry("uitkijk_meerkijk", new BlockPos(468, 142, -936)),
             Map.entry("warmwaterbron", new BlockPos(900, 120, -908)));

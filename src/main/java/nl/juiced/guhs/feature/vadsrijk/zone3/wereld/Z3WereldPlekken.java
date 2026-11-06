@@ -150,9 +150,7 @@ public final class Z3WereldPlekken {
     public static final List<WereldPlekken.Uitkijk> UITKIJKEN = List.of(
             new WereldPlekken.Uitkijk("kroon", new BlockPos(1469, 270, -530)),
             new WereldPlekken.Uitkijk("nest", new BlockPos(1406, 293, -559)),
-            new WereldPlekken.Uitkijk("oosttak", new BlockPos(1620, 167, -486)),
             new WereldPlekken.Uitkijk("takpunt", new BlockPos(1295, 213, -619)),
-            new WereldPlekken.Uitkijk("westtak", new BlockPos(1189, 167, -600)),
             new WereldPlekken.Uitkijk("wortelgewelf", new BlockPos(1350, 81, -743)));
 
     /** Chimney tops (smoke particles: code side; never a campfire there, a campfire is a checkpoint). */
@@ -655,9 +653,7 @@ public final class Z3WereldPlekken {
             Map.entry("trap_bordes_6", new BlockPos(1391, 293, -592)),
             Map.entry("uitkijk_kroon", new BlockPos(1469, 270, -530)),
             Map.entry("uitkijk_nest", new BlockPos(1406, 293, -559)),
-            Map.entry("uitkijk_oosttak", new BlockPos(1620, 167, -486)),
             Map.entry("uitkijk_takpunt", new BlockPos(1295, 213, -619)),
-            Map.entry("uitkijk_westtak", new BlockPos(1189, 167, -600)),
             Map.entry("uitkijk_wortelgewelf", new BlockPos(1350, 81, -743)),
             Map.entry("valbrug", new BlockPos(1355, 210, -589)),
             Map.entry("vingerafdruk", new BlockPos(1423, 130, -564)),

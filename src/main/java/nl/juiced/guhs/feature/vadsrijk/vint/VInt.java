@@ -20,6 +20,7 @@ public final class VInt {
     }
 
     public static void register(IEventBus modBus) {
+        RijdierBuit.register();   // the user's mount-drop rule: 10 % per player per kill/clear, sure after 15 misses
         // u-dubbel's heuristic scan: u-ruiters (one pair per route#k, own join guard + sweep) and everything in the Knuffelkwartier
         // (u-huizen's figures + one Mollie per ward share an npc id on purpose) are not doubles.
         nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.NIET_HEURISTISCH.add(e -> e instanceof nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterGuh

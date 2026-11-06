@@ -44667,5 +44667,7 @@
   "vadsrijk.vint.bond.voet": "Knoppen openen het bondspaneel in de chat (ook: /bond, /bc om te chatten)",
   "vadsrijk.vint.huis.titel": "Mijn huis in het Knuffelkwartier",
   "vadsrijk.vint.huis.intro": "Het Knuffelkwartier is een eigen buurtje met straatjes, buren, een plein en een markt. Je koopt er een kavel met een huisje dat je zelf inricht.",
-  "vadsrijk.vint.huis.waar": "Erheen: praat met de Kwartiermeester op het plein van elke hoofdstad (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads)."
+  "vadsrijk.vint.huis.waar": "Erheen: praat met de Kwartiermeester op het plein van elke hoofdstad (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads).",
+  "vadsrijk.vint.buit.raak": "Rijdier-drop: %s is van jou! (na %s keer proberen)",
+  "vadsrijk.vint.buit.mis": "Geen %s deze keer (10%%). Uiterlijk over %s keer is hij zeker van jou."
 }
