@@ -106,7 +106,10 @@ Mapping in game: `/guhs vadsrijk z6wezens muziek`. The phase crossfade/fanfare o
 
 ### Places (`Z6WezensPlekken`)
 All placeholders `w("<poi id>", x, y, z)`; `zone6.wereld.Z6WereldPlekken.plek(id)` wins by reflection. Ids + the volume to keep
-free: `guhs_vadsrijk/POI_VERZOEKEN_Z6_WEZENS.md`. u-z6wereld's POI_Z6.md did not exist yet when I finished.
+free: `guhs_vadsrijk/POI_VERZOEKEN_Z6_WEZENS.md`. **u-z6wereld's POI_Z6.md (late on 2026-11-06) has ALL my `z6w_*` ids** and the
+`zone6.wereld.Z6WereldPlekken.plek` class I reflect on, so after integration every spot is real with no code change. Check at
+integration: their `kerker_poort` (3985,64,-974, "the instance teleport") vs my hatch at `z6w_sterrenwacht_ingang`
+(3985,70,-950): my right-click hatch only listens at the latter; my rooms sit underground at y 27..46 under their mesa.
 
 ### Dev command `/guhs vadsrijk z6wezens ...`
 spawn, alle, tp, baas, fase, mechaniek (duik, duinspuug, korst, zoutgolf, kristallen, zing, ringzwaai, lijn, doof, hart, spiegel,
