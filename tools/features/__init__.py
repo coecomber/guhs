@@ -281,6 +281,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_deco',
             # 1.10 round U, U-ZICHTBAAR: looks of capes/gloves/jewellery on the player (Java: feature/vadsrijk/zichtbaar)
             'vadsrijk_u_zichtbaar',
+            # 1.10 round U, U-LUCHTSCHIP: closed-line explanations, may-I-board state, board line (Java: feature/vadsrijk/luchtschip)
+            'vadsrijk_u_luchtschip',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

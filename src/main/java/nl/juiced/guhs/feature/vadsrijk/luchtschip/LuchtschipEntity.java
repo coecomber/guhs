@@ -1,5 +1,8 @@
 package nl.juiced.guhs.feature.vadsrijk.luchtschip;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.core.particles.ParticleTypes;
@@ -57,6 +60,29 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
         }
     }
 
+    /**
+     * U-LUCHTSCHIP: the walkable deck in the ship frame (blocks; a player's middle stays this far inside the railing, in front of
+     * the stern cabin and behind the bow railing).
+     */
+    public static final double DEK_X = 2.95, DEK_ACHTER = -4.2, DEK_VOOR = 8.6;
+    /** U-LUCHTSCHIP: walking speed on the deck (blocks per tick; sprinting a bit faster), the same as on the ground. */
+    public static final double DEK_LOOP = 0.2, DEK_REN = 0.28;
+
+    /**
+     * U-LUCHTSCHIP: the click boxes (ship frame z of the middle, y of the bottom, width, height), following the model at scale 4:
+     * four along the hull (incl. the railing), the bow, the cabin, three along the balloon, its nose with the face, the tail fins
+     * and the ears.
+     */
+    static final double[][] DELEN = {
+            {-6.5, -3.25, 6.5, 4.25}, {-2.2, -3.25, 6.5, 4.25}, {2.2, -3.25, 6.5, 4.25}, {6.5, -3.25, 6.5, 4.25},
+            {10.5, -2.5, 4, 3},
+            {-6.5, 0, 5.5, 4.25},
+            {-6, 8.5, 9, 9}, {0, 8.5, 9, 9}, {6, 8.5, 9, 9},
+            {11.5, 10, 6, 6.5},
+            {-12.5, 11, 5, 5},
+            {6.75, 17.5, 7, 2.5},
+    };
+
     private static final EntityDataAccessor<String> DATA_LIJN = SynchedEntityData.defineId(LuchtschipEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Integer> DATA_SCHIP = SynchedEntityData.defineId(LuchtschipEntity.class, EntityDataSerializers.INT);
     private static final RawAnimation VAAR = RawAnimation.begin().thenLoop("vaar");
@@ -69,12 +95,63 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
     private Dienstregeling.Fase laatsteFase;
     /** Server: only while true may passengers get off (landing / at the pier). */
     boolean uitstappen;
+    /** U-LUCHTSCHIP: the click boxes ({@link #DELEN}). */
+    private final SchipDeel[] delen;
+    /** U-LUCHTSCHIP: where each passenger stands on the deck (entity id -&gt; ship frame x, 0, z); both sides. */
+    final Map<Integer, Vec3> dek = new HashMap<>();
+    /** (client) the synced places of the other passengers, walked to softly; (server) unused. */
+    final Map<Integer, Vec3> dekDoel = new HashMap<>();
+    /** (client) last tick's places, for the walk animation. */
+    private final Map<Integer, Vec3> dekVorig = new HashMap<>();
+    /** (server) a place changed: {@link Luchtschepen} sends the deck to the clients. */
+    boolean dekVuil;
 
     public LuchtschipEntity(EntityType<? extends LuchtschipEntity> type, Level level) {
         super(type, level);
         noPhysics = true;
         setNoGravity(true);
         addTag(TAG_VRIJ);
+        delen = new SchipDeel[DELEN.length];
+        for (int i = 0; i < DELEN.length; i++) {
+            double[] d = DELEN[i];
+            delen[i] = new SchipDeel(this, new Vec3(0, d[1], d[0]), (float) d[2], (float) d[3]);
+        }
+        setId(ENTITY_COUNTER.getAndAdd(delen.length + 1) + 1);   // (the parts' ids follow the ship's, as the dragon's do)
+    }
+
+    @Override
+    public void setId(int id) {
+        super.setId(id);
+        if (delen != null) {
+            for (int i = 0; i < delen.length; i++) {
+                delen[i].setId(id + i + 1);
+            }
+        }
+    }
+
+    @Override
+    public boolean isMultipartEntity() {
+        return true;
+    }
+
+    @Override
+    public net.neoforged.neoforge.entity.PartEntity<?>[] getParts() {
+        return delen;
+    }
+
+    /** (tests/dev) the click boxes. */
+    public SchipDeel[] delen() {
+        return delen;
+    }
+
+    /** Move the click boxes with the ship (both sides). */
+    private void zetDelen() {
+        float r = -getYRot() * Mth.DEG_TO_RAD;
+        for (SchipDeel d : delen) {
+            Vec3 p = position().add(d.plek.yRot(r));
+            d.setOldPosAndRot();
+            d.setPos(p);
+        }
     }
 
     /** t-wereld's barrier push-back (Barrieres.TAG_VRIJ) leaves this vehicle and its passengers alone. */
@@ -135,8 +212,74 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
         volg();
         if (level().isClientSide()) {
             effecten();
+            dekVolgen();
         }
     }
+
+    // --- U-LUCHTSCHIP: the walkable deck ----------------------------------------------------------------------------------------
+
+    /** Keep a place on the deck (ship frame) inside the railing and in front of the cabin. */
+    public static Vec3 klem(double x, double z) {
+        return new Vec3(Mth.clamp(x, -DEK_X, DEK_X), 0, Mth.clamp(z, DEK_ACHTER, DEK_VOOR));
+    }
+
+    /** Where this passenger stands on the deck (ship frame): its walked place, else its fixed starting place. */
+    public Vec3 dekPlek(Entity passenger) {
+        Vec3 v = dek.get(passenger.getId());
+        if (v != null) {
+            return v;
+        }
+        return PLEKKEN[Math.max(0, getPassengers().indexOf(passenger)) % PLEKKEN.length];
+    }
+
+    /** (server) a free starting place for a new passenger: the first of {@link #PLEKKEN} with nobody within a block. */
+    Vec3 vrijePlek(Entity nieuw) {
+        for (Vec3 v : PLEKKEN) {
+            boolean vrij = true;
+            for (Entity q : getPassengers()) {
+                if (q != nieuw && dekPlek(q).distanceToSqr(v) < 1) {
+                    vrij = false;
+                    break;
+                }
+            }
+            if (vrij) {
+                return v;
+            }
+        }
+        return PLEKKEN[getPassengers().size() % PLEKKEN.length];
+    }
+
+    /** (server) put a passenger on a deck place (clamped) and let the clients know. */
+    void zetDek(Entity passenger, Vec3 plek) {
+        dek.put(passenger.getId(), klem(plek.x, plek.z));
+        dekVuil = true;
+    }
+
+    /** (client) the synced places of the other passengers: walk there softly; and the walk animation of everybody on board. */
+    private void dekVolgen() {
+        int eigen = LuchtschipDek.eigenId();
+        for (Map.Entry<Integer, Vec3> d : dekDoel.entrySet()) {
+            if (d.getKey() == eigen) {
+                continue;
+            }
+            Vec3 nu = dek.get(d.getKey());
+            Vec3 doel = d.getValue();
+            if (nu == null || nu.distanceToSqr(doel) > 36) {
+                dek.put(d.getKey(), doel);
+                continue;
+            }
+            double afstand = nu.distanceTo(doel);
+            double stap = Math.min(afstand, Math.max(0.3, afstand * 0.5));
+            dek.put(d.getKey(), afstand < 1e-4 ? doel : nu.add(doel.subtract(nu).scale(stap / afstand)));
+        }
+        for (Entity q : getPassengers()) {
+            Vec3 nu = dekPlek(q);
+            Vec3 oud = dekVorig.put(q.getId(), nu);
+            LuchtschipDek.loopAnimatie(q, oud == null ? 0 : (float) nu.distanceTo(oud));
+        }
+        dekVorig.keySet().removeIf(id -> getPassengers().stream().noneMatch(q -> q.getId() == id));
+    }
+
 
     /** Put the ship where the timetable says (both sides); the server reports phase changes to {@link Luchtschepen}. */
     void volg() {
@@ -153,6 +296,7 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
             yRotO = s.yaw();
         }
         setYRot(s.yaw());
+        zetDelen();
         if (!level().isClientSide() && laatsteFase != s.fase()) {
             Dienstregeling.Fase oud = laatsteFase;
             laatsteFase = s.fase();
@@ -207,6 +351,9 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
 
     @Override
     public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
+        if (player.getVehicle() == this) {
+            return InteractionResult.PASS;   // (U-LUCHTSCHIP: on board a click on the deck is just a click: eating, items)
+        }
         if (!level().isClientSide() && player instanceof ServerPlayer sp && hand == InteractionHand.MAIN_HAND) {
             Luchtschepen.instappen(sp, this);
         }
@@ -220,8 +367,7 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, EntityDimensions dimensions, float partialTick) {
-        int i = Math.max(0, getPassengers().indexOf(passenger)) % PLEKKEN.length;
-        return PLEKKEN[i].add(0, 0.6, 0).yRot(-getYRot() * Mth.DEG_TO_RAD);
+        return dekPlek(passenger).add(0, 0.6, 0).yRot(-getYRot() * Mth.DEG_TO_RAD);
     }
 
     @Override
@@ -236,6 +382,9 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
             }
         }
         passenger.resetFallDistance();
+        if (level().isClientSide()) {
+            LuchtschipDek.zetLoop(passenger);   // U-LUCHTSCHIP: legs swing while walking on the deck
+        }
     }
 
     @Override
@@ -247,6 +396,10 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
         passenger.removeTag(TAG_VRIJ);
+        dek.remove(passenger.getId());
+        dekDoel.remove(passenger.getId());
+        dekVorig.remove(passenger.getId());
+        dekVuil = true;
         if (!level().isClientSide()) {
             Luchtschepen.uitgestapt(this, passenger);
         }
@@ -259,9 +412,10 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
         return false;
     }
 
+    /** U-LUCHTSCHIP: the click boxes ({@link SchipDeel}) take the clicks; the ship's own small box would only be in the way. */
     @Override
     public boolean isPickable() {
-        return !isRemoved();
+        return false;
     }
 
     @Override
