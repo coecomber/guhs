@@ -264,9 +264,11 @@ def _familie(L, a, b):
     return False
 
 
-def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=None):
+def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=None, vrij=None):
     """Fix all connection states in vol (in place). Only cells with rand <= x < X-rand and rand <= z < Z-rand change
-    (the rest is halo). Returns the number of changed cells. lijst: collects (x, y, z, old state, new state, why)."""
+    (the rest is halo). Returns the number of changed cells. lijst: collects (x, y, z, old state, new state, why).
+    vrij: cells (vol coords) the gap fill must never use (POI stand spots, lift doors, ...)."""
+    vrij = vrij or set()
     R = R or regels()
     L = _Lut(R, pal)
     X, Y, Z = vol.shape
@@ -321,6 +323,13 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
                             if b and _familie(L, a, b):
                                 n += 1
                 return n
+            def staanbaar(i):
+                """Can a player stand on this block? (floor, slab, stair, carpet, ...; not air/water/a fence top)"""
+                if is_lucht(i) or L.soort[i] in (HEK, MUUR, RUIT, KETTING, LIJN):
+                    return False
+                n = L.basis[i]
+                return not any(w in n for w in ("water", "lava", "bubble_column", "leaves", "bladeren"))
+
             def poort(c, a):
                 """Line pieces on both sides of c (along x or along z): c is a deliberate opening."""
                 for (ex, ez) in ((1, 0), (0, 1)):
@@ -353,7 +362,10 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
                                     continue
                                 if poort(c, a):
                                     continue    # a 1-wide gap in a straight line = a doorway: never close it
-                                vloer = bool(L.vlak[get(c[0], c[1] - 1, c[2]), 4])
+                                if staanbaar(get(c[0], c[1] - 1, c[2])):
+                                    continue    # walkability: never a fence ON a floor/slab/stair (paths stay free);
+                                                # the corner goes over the void, or the step stays as it is
+                                vloer = False
                                 rond = sum(1 for ex in (-1, 0, 1) for ez in (-1, 0, 1)
                                            if (ex or ez) and get(c[0] + ex, c[1], c[2] + ez)
                                            and _familie(L, a, get(c[0] + ex, c[1], c[2] + ez)))
@@ -380,7 +392,7 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
             gedaan = False
             for (c, a) in sorted(set(vul)):
                 x, y, z = c
-                if not (0 <= y < Y) or not binnen(x, z) or not is_lucht(get(x, y, z)):
+                if not (0 <= y < Y) or not binnen(x, z) or not is_lucht(get(x, y, z)) or (x, y, z) in vrij:
                     continue
                 naam, props = splits(pal[a])
                 if "waterlogged" in props:
@@ -513,13 +525,46 @@ class _Tegels:
             del self.cache[next(iter(self.cache))]
         return v
 
-    def heeft_nbt(self, t):
-        """True when a tile has block-entity nbt (we never rewrite those: the reader drops the nbt)."""
-        p = self.pad(t)
+    def nbt(self, t):
+        """Block-entity nbt of a tile (signs, ...) as {(x, y, z): raw compound bytes}: written back unchanged."""
         import gzip
-        return b"\x0a\x00\x03nbt" in gzip.decompress(open(p, "rb").read())
+        data = gzip.decompress(open(self.pad(t), "rb").read())
+        if b"\x0a\x00\x03nbt" not in data:
+            return {}
+        P = self.TL._P(data)
+        P.rd(">B")
+        P.rstr()
+        uit = {}
+        while True:
+            tt = P.rd(">B")
+            if tt == 0:
+                break
+            k = P.rstr()
+            if k != "blocks" or tt != 9:
+                P.payload(tt)
+                continue
+            P.rd(">B")
+            n = P.rd(">i")
+            for _ in range(n):
+                pos, raw = None, None
+                while True:
+                    t2 = P.rd(">B")
+                    if t2 == 0:
+                        break
+                    k2 = P.rstr()
+                    if k2 == "nbt" and t2 == 10:
+                        a = P.p
+                        P.payload(10)
+                        raw = data[a:P.p - 1]
+                    else:
+                        v = P.payload(t2)
+                        if k2 == "pos":
+                            pos = tuple(int(i) for i in v)
+                if raw is not None and pos is not None:
+                    uit[pos] = raw
+        return uit
 
-    def schrijf(self, t, v, achtervoegsel=""):
+    def schrijf(self, t, v, achtervoegsel="", extra=None):
         sys.path.insert(0, os.path.join(HIER, "wereld"))
         import nbtsnel
         xs, ys, zs = np.nonzero(v)
@@ -527,7 +572,7 @@ class _Tegels:
         gebruikt, inv = np.unique(ids, return_inverse=True)
         palette = [splits(self.pal[i]) for i in gebruikt]
         nbtsnel.schrijf(self.pad(t) + achtervoegsel, (T, HOOG, T), palette, xs.astype(np.int32), ys.astype(np.int32), zs.astype(np.int32),
-                        inv.astype(np.int32), None)
+                        inv.astype(np.int32), extra or None)
 
 
 def venster(TG, t, H=HALO):
@@ -549,6 +594,40 @@ def venster(TG, t, H=HALO):
 
 
 _TG = None
+_POI = None
+
+
+def poi_cellen():
+    """Every published stand spot (POI_*.md + _cache/*plekken*.json) and the 2 cells of a player standing there (+ the
+    cells around it): the gap fill never puts a post there (lift doors, stair exits, NPC spots, campfires, ...)."""
+    global _POI
+    if _POI is not None:
+        return _POI
+    import glob
+    import re
+    punten = set()
+    for p in glob.glob(os.path.join(ROOT, "POI_*.md")):
+        with open(p, encoding="utf-8") as f:
+            for m in re.finditer(r"\|\s*(-?\d+),\s*(-?\d+),\s*(-?\d+)\s*\|", f.read()):
+                punten.add(tuple(int(v) for v in m.groups()))
+
+    def loop(o):
+        if isinstance(o, list) and len(o) == 3 and all(isinstance(v, int) for v in o):
+            punten.add(tuple(o))
+        elif isinstance(o, dict):
+            for v in o.values():
+                loop(v)
+        elif isinstance(o, list):
+            for v in o:
+                loop(v)
+    for p in glob.glob(os.path.join(HIER, "_cache", "plekken*.json")):
+        try:
+            with open(p, encoding="utf-8") as f:
+                loop(json.load(f))
+        except (OSError, ValueError):
+            pass
+    _POI = {(x + dx, y + dy, z + dz) for (x, y, z) in punten for dx in (-1, 0, 1) for dz in (-1, 0, 1) for dy in (0, 1)}
+    return _POI
 
 
 def _werk(arg):
@@ -565,7 +644,10 @@ def _werk(arg):
     w = venster(TG, t, H)
     oud = w[H:H + T, :, H:H + T].copy()
     lijst = [] if monsters else None
-    n = verbind_vol(w, TG.pal, TG.id, rand=H, lijst=lijst)
+    x0, z0 = t[0] * T - H, t[1] * T - H
+    vrij = {(x - x0, y, z - z0) for (x, y, z) in poi_cellen()
+            if x0 <= x < x0 + T + 2 * H and z0 <= z < z0 + T + 2 * H}
+    n = verbind_vol(w, TG.pal, TG.id, rand=H, lijst=lijst, vrij=vrij)
     proef = []
     if lijst:
         for (x, y, z, o, nw, why) in lijst:
@@ -587,10 +669,8 @@ def _werk(arg):
             if (okx & okz).any():
                 rand.append((t[0] + ex, t[1] + ez))
     if schrijf:
-        if TG.heeft_nbt(t):
-            print(f"verbind: tegel {t} heeft blok-nbt: overgeslagen", flush=True)
-            return t, 0, (), proef
-        TG.schrijf(t, nieuw.copy(), achtervoegsel=".verbind")
+        extra = {k: v for k, v in TG.nbt(t).items() if nieuw[k] == oud[k] and nieuw[k]}   # signs etc. kept as they were
+        TG.schrijf(t, nieuw.copy(), achtervoegsel=".verbind", extra=extra)
     return t, int(diff.sum()), tuple(rand), proef
 
 
