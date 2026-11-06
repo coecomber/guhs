@@ -230,6 +230,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z3_wezens',
             # T-Z5WEZENS: zone-5 combat (Java: feature/vadsrijk/zone5/wezens)
             'vadsrijk_t_z5wezens',
+            # T-Z5VERHAAL: 1.10 zone 5 "Hoogvads", the story (Java: feature/vadsrijk/zone5/verhaal)
+            'vadsrijk_t_z5verhaal',
             ]
 
 
