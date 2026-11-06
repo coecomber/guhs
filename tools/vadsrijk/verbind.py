@@ -308,13 +308,14 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
             if not len(pos):
                 break
 
-            def buren(x, y, z, a):
-                """Line neighbours of a (8 around, y-1..y+1)."""
+            def buren(x, y, z, a, zonder):
+                """Line neighbours of a (8 around, y-1..y+1), not counting the partner's column `zonder` (x, z): two
+                lone posts (lamp posts!) diagonal to each other have 0 each and are never joined."""
                 n = 0
                 for dy in (-1, 0, 1):
                     for dx in (-1, 0, 1):
                         for dz in (-1, 0, 1):
-                            if dx == dy == dz == 0 or (dx == 0 and dz == 0):
+                            if dx == dy == dz == 0 or (dx == 0 and dz == 0) or (x + dx, z + dz) == zonder:
                                 continue
                             b = get(x + dx, y + dy, z + dz)
                             if b and _familie(L, a, b):
@@ -337,7 +338,7 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
                             hoog1, hoog2 = (x + dx, y + dy, z), (x, y + dy, z + dz)
                             if any(get(*c) and _familie(L, a, get(*c)) for c in (c1, c2, hoog1, hoog2)):
                                 continue        # already joined via a corner
-                            if buren(x, y, z, a) + buren(x + dx, y + dy, z + dz, b) < 3:
+                            if buren(x, y, z, a, (x + dx, z + dz)) + buren(x + dx, y + dy, z + dz, b, (x, z)) < 1:
                                 continue        # two lone posts: leave them (a line has >= 3 pieces)
                             keus = []
                             for c in (c1, c2):
@@ -364,7 +365,7 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
                     boven = get(x, y + 1, z)
                     if not is_lucht(boven):
                         continue
-                    if buren(x, y, z, a) + buren(nx, y + 1, nz, b) < 3:
+                    if buren(x, y, z, a, (nx, nz)) + buren(nx, y + 1, nz, b, (x, z)) < 1:
                         continue
                     vul.append(((x, y + 1, z), a))
             gedaan = False
