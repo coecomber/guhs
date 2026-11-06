@@ -42,9 +42,9 @@ public final class Z4WereldClient {
         }
         float doel = (float) Z4WereldPlekken.mist(mc.player.getX(), mc.player.getZ());
         mist += (doel - mist) * 0.05f;
-        if (mist > 0.2f && mc.level.random.nextFloat() < mist * 0.8f) {
-            double a = mc.level.random.nextDouble() * Math.PI * 2, r = 4 + mc.level.random.nextDouble() * 14;
-            mc.level.addParticle(ParticleTypes.CLOUD, mc.player.getX() + Math.cos(a) * r, mc.player.getY() + mc.level.random.nextDouble() * 4 - 1,
+        if (mist > 0.2f && mc.level.getRandom().nextFloat() < mist * 0.8f) {
+            double a = mc.level.getRandom().nextDouble() * Math.PI * 2, r = 4 + mc.level.getRandom().nextDouble() * 14;
+            mc.level.addParticle(ParticleTypes.CLOUD, mc.player.getX() + Math.cos(a) * r, mc.player.getY() + mc.level.getRandom().nextDouble() * 4 - 1,
                     mc.player.getZ() + Math.sin(a) * r, 0.02, 0, 0.01);
         }
     }
