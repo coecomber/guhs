@@ -44,6 +44,15 @@ public final class KarakterRegistry {
         Spelers.XP_FACTOR.add(p -> Karakter.modus(p).xpFactor);
         Schade.VOOR_KLAP.add((k, n) -> k.doel() instanceof ServerPlayer p && Vadsrijk.in(p) ? n * Karakter.modus(p).schadeFactor : n);
         Haken.FLAUW.add(KarakterRegistry::flauw);
+        // T-INT wiring with the other night slices:
+        // t-opslag: the knapzak is per character (its own attachment, keyed by slot; bank + materiaaltas stay account-wide),
+        // close every storage screen before a switch
+        nl.juiced.guhs.feature.vadsrijk.opslag.Opslag.KARAKTER = p -> String.valueOf(Karakter.slot(p) + 1);   // (slot 0 = "1" = old saves)
+        Karakter.VOOR_WISSEL.add(nl.juiced.guhs.feature.vadsrijk.opslag.Opslag::sluit);
+        // t-rijdier's patterns/tack wardrobe + t-z4boot's boat (looks, level) are account-wide like the mounts
+        Karakter.accountBreed("economie", "garderobe");
+        Karakter.accountBreed("boot");
+        // (t-kleding's KledingData is SavedData keyed by UUID: account-wide and never swapped)
         // entering / leaving
         Haken.BINNEN.add((p, binnen) -> {
             if (Karakters.bezig(p)) {
@@ -96,14 +105,33 @@ public final class KarakterRegistry {
         return n;
     }
 
-    /** Eénvads: fainting outside a town = retiring (never in creative/spectator). */
+    /**
+     * T-INT: places where fainting is "mild" in Eénvads (practice, not a real fight): sparring in Hoogvads' Proefarena. Zone 5's
+     * Wolkvangnet catches you BEFORE you faint, so it never counts. Other slices may add area ids or predicates.
+     */
+    public static final java.util.Set<String> ZACHT = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    public static final java.util.List<java.util.function.Predicate<ServerPlayer>> ZACHT_ALS = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    static {
+        ZACHT.add("z5_proefarena");
+    }
+
+        /** Eénvads: fainting outside a town = retiring (never in creative/spectator). */
     static void flauw(ServerPlayer p) {
         if (p.isCreative() || p.isSpectator() || Karakter.modus(p) != Modus.EENVADS) {
             return;
         }
+        if (nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.bezig(p)) {
+            return;   // (T-INT: a scripted scene never retires you)
+        }
         Gebieden.Gebied g = Gebieden.op(p.getX(), p.getY(), p.getZ());
-        if (g != null && g.stad()) {
+        if (g != null && (g.stad() || ZACHT.contains(g.id()))) {
             return;
+        }
+        for (java.util.function.Predicate<ServerPlayer> z : ZACHT_ALS) {
+            if (z.test(p)) {
+                return;
+            }
         }
         Karakters.pensioen(p, "flauw");
     }
