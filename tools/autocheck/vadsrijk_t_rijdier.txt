@@ -1,0 +1,118 @@
+# Night round T, T-RIJDIER: mount looks (coat / pattern / tack) on every land mount, the 3 new mounts, the N screen with the
+# Aankleden panel, and the P screen with roles + Vahoegje grown.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_t_rijdier.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+/guhs vadsrijk munten 500000
+/guhs vadsrijk mount alle
+/guhs vadsrijk rijdier garderobe alles
+/guhs vadsrijk huisdier alle
+/tp @s -14 64 66
+look 180 5
+wait 40
+waitrender 200
+
+section looks
+perspective front
+/guhs vadsrijk rijdier look knuffelhert vacht nacht
+/guhs vadsrijk rijdier look knuffelhert patroon sterretjes
+/guhs vadsrijk rijdier look knuffelhert tuig hoedje
+/guhs vadsrijk mount rijd knuffelhert
+wait 30
+shot t_hert_nacht_sterren_hoed gui
+/guhs vadsrijk rijdier look guhwolf vacht zon
+/guhs vadsrijk rijdier look guhwolf tuig lampionnetjes
+/guhs vadsrijk mount rijd guhwolf
+wait 30
+shot t_wolf_zon_lampion gui
+/guhs vadsrijk rijdier look pluimguh patroon glitter
+/guhs vadsrijk rijdier look pluimguh tuig bloemenkrans
+/guhs vadsrijk mount rijd pluimguh kristal
+wait 30
+shot t_pluimguh_kristal_glitter_krans gui
+/guhs vadsrijk rijdier look wolkenschaapje vacht suikerspin
+/guhs vadsrijk rijdier look wolkenschaapje patroon hartjes
+/guhs vadsrijk rijdier look wolkenschaapje tuig belletjes
+/guhs vadsrijk mount rijd wolkenschaapje
+wait 30
+shot t_schaap_suikerspin_hartjes_bel gui
+/guhs vadsrijk rijdier look slakkie vacht mint
+/guhs vadsrijk rijdier look slakkie tuig kroontje
+/guhs vadsrijk mount rijd slakkie
+wait 30
+shot t_slakkie_mint_kroon gui
+/guhs vadsrijk rijdier look duinhupper tuig dekje
+/guhs vadsrijk mount rijd duinhupper
+wait 30
+shot t_duinhupper_dekje gui
+/guhs vadsrijk rijdier look wolkwalkalfje patroon streepjes
+/guhs vadsrijk rijdier look wolkwalkalfje tuig hoedje
+/guhs vadsrijk mount rijd wolkwalkalfje
+wait 30
+shot t_walvis_strepen_hoed gui
+/guhs vadsrijk rijdier look zwamzwijntje vacht glimzwam
+/guhs vadsrijk rijdier look zwamzwijntje patroon vlekjes
+/guhs vadsrijk rijdier look zwamzwijntje tuig belletjes
+/guhs vadsrijk mount rijd zwamzwijntje
+wait 30
+shot t_zwijn_glim_vlekjes_bel gui
+perspective back
+key up on
+wait 25
+shot t_zwijn_loop gui
+key all off
+wait 10
+
+section scherm
+gui keep
+/guhs vadsrijk mount scherm
+wait 30
+shot t_scherm_info gui
+click 190 108
+wait 5
+click 478 84
+wait 10
+shot t_scherm_aankleden gui
+gui close
+/guhs vadsrijk mount reset
+/guhs vadsrijk mount geef pluimguh roze
+gui keep
+/guhs vadsrijk mount scherm
+wait 30
+shot t_scherm_silhouetten_nieuw gui
+gui close
+/guhs vadsrijk mount alle
+wait 10
+
+section huisdieren
+/guhs vadsrijk maatje test vahoegje
+/guhs vadsrijk maatje level 6
+gui keep
+/guhs vadsrijk huisdier scherm
+wait 30
+shot t_p_vahoegje gui
+gui close
+/guhs vadsrijk maatje vahoegje middel
+perspective front
+wait 40
+shot t_vahoegje_middel gui
+/guhs vadsrijk maatje laag
+wait 30
+shot t_vahoegje_vlam gui
+/guhs vadsrijk maatje vahoegje auto
+/guhs vadsrijk maatje test piepje
+gui keep
+/guhs vadsrijk huisdier scherm
+wait 30
+shot t_p_piepje gui
+gui close
+/guhs vadsrijk maatje strooi
+wait 60
+shot t_piepje_raapt gui

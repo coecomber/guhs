@@ -108,3 +108,27 @@ Built on G-PETS' `HuisdierEffect` (tick every second + a passive via `Spelers.EX
 
 ## Tests / resume point
 See the end of this file.
+
+## Test results (2026-11-06)
+- `runGameTestServer -Pgt=VadsrijkTRijdier,VadsrijkRijdieren,VadsrijkHuisdieren,VadsrijkEconomie`: **all 18 passed**.
+  Mine (`VadsrijkTRijdierGameTests`, 5): roosterEnBestanden (new species registered, traits, every coat/pattern/tack/Pluimguh file on
+  the classpath), aankledenEnKopen (own/wear, stal-only buying, Gouden Veren trades incl. the Wolkwalkalfje, the synced look on the
+  summoned mount + live change), bronnen (boss / Rijdiermeester / 10-knuffels sources, once), stevigZwijntje (first hit shrugged
+  off, second runs), huisdierRollen (every pet an ability, levels, regen/shield/energy/Vahoegje small+grown, Piepje picks up loot,
+  sniffing announced once, pets never hurt).
+- AutoCheck `tools/autocheck/vadsrijk_t_rijdier.txt` (screenshots `run/screenshots/autocheck/t_*.png`): see below.
+- AutoCheck (one run, 0 problems; log findings only the known foreign ones: droombed, onweerswolkje, entity icons, boss music):
+  every look renders (Nachthert with stars + hat, Zonnewolf, glitter Kristal-Pluimguh, Suikerspin sheep with hearts + bells, mint
+  Slakkie with crown, Duinhupper, Wolkwalkalfje, Glimzwam piglet with spots, walking), the N screen with the Aankleden panel (swatches,
+  green border = worn), the P screen (Level 6/10, Steuner badge, Drakenwarmte, "Altijd: ...", Klein draakje), grown Vahoegje +
+  "grote roze vlam: genezen en beschermd!". Fixed after the run (compiled, not re-run): the "Aankleden" switch button was a bit
+  narrow for its label.
+- Not judged by me (the user judges looks in the dev client): tack positions per mount (`UiterlijkLaag.ANKERS`), the lanterns on the
+  sides (not visible from the front shot), the new models' proportions, pattern density.
+
+## Resume point / open
+Done and committed on 110-t-rijdier. Open:
+- t-z5verhaal: set the flag `zone5_klaar` at the end of zone 5 (Vahoegje grows).
+- t-z4boot: see the species API at the top; `Uiterlijk.zonderGarderobe(BOOT)` for a boat.
+- Optional later: a HUD pet portrait with the cooldown (roadmap §8), talent choices at pet lv 10/20 (roadmap; skipped: light model),
+  zone-4 sources (Lampion Pluimguh / Duinhupper quest) via `Rijdieren.geefKleur` / `Rijdieren.geef`.

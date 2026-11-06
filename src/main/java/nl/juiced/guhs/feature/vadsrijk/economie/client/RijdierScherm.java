@@ -206,10 +206,10 @@ public class RijdierScherm extends EcoScherm {
         int ix = px + pw + 8, iw = left + w - 8 - ix, iy = py;
         // T-RIJDIER: the Info | Aankleden switch, and the dress-up panel
         if (heeft && nl.juiced.guhs.feature.vadsrijk.rijdier.Uiterlijk.heeftVarianten(s)) {
-            int hw = (iw - 2) / 2;
+            int hw = Math.max(26, iw - 2 - font.width(Component.translatable("vadsrijk.rijdier.tab.aankleden")) - 8);   // (Info narrower: "Aankleden" fits)
             boolean ak = paneel.open;
             knop(g, mx, my, ix, iy - 2, hw, 12, Component.translatable("vadsrijk.rijdier.tab.info"), ak, () -> paneel.open = false);
-            knop(g, mx, my, ix + hw + 2, iy - 2, hw, 12, Component.translatable("vadsrijk.rijdier.tab.aankleden"), !ak, () -> paneel.open = true);
+            knop(g, mx, my, ix + hw + 2, iy - 2, iw - hw - 2, 12, Component.translatable("vadsrijk.rijdier.tab.aankleden"), !ak, () -> paneel.open = true);
             iy += 13;
             if (ak) {
                 paneel.teken(this, g, mx, my, s, t, data, ix, iy, iw, top + h - 16);
