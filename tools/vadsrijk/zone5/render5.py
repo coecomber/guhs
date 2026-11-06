@@ -67,11 +67,35 @@ def main():
                                    titel="Academie van de Wolkwacht", zon_box=(-90, 225, 10, 30, 321, 100)),
         "station": lambda: schoot("station", (60, 270, -10), (66, 245, -70), 60, O.NAMIDDAG, nevel=(0.2, 1800),
                                   titel="De luchthaven", zon_box=(20, 225, -110, 120, 321, -40)),
+        # [U-Z5BINNEN] interiors with block light (lamps as point lights, like in the game)
+        "b_kathedraal": lambda: schoot("kathedraal_schip", (26, 251, -3), (96, 266, 1), 74, binnen, binnen=True,
+                                       achtergrond=(40, 30, 50), gloed=0.9, titel="In de kathedraal", blok_licht=True,
+                                       zon_box=(12, 240, -52, 130, 341, 52)),
+        "b_kruising": lambda: schoot("kathedraal_kruising", (62, 250, 6), (86, 262, -1), 80, binnen, binnen=True,
+                                     achtergrond=(40, 30, 50), gloed=0.9, titel="De kruising en het altaar", blok_licht=True,
+                                     zon_box=(12, 240, -52, 130, 341, 52)),
+        "b_bibliotheek": lambda: schoot("bibliotheek", (-37.5, 238.2, -71.2), (-62, 241.5, -76), 78, binnen, binnen=True,
+                                        achtergrond=(40, 30, 50), gloed=0.9, titel="De bibliotheek", blok_licht=True,
+                                        zon_box=(-80, 230, -90, -30, 260, -60)),
+        "b_raadszaal": lambda: schoot("raadszaal", (-91, 259, 10), (-108, 262, -2), 72, binnen, binnen=True,
+                                      achtergrond=(40, 30, 50), gloed=0.9, titel="De Raadszaal", blok_licht=True,
+                                      zon_box=(-115, 250, -20, -85, 290, 20)),
+        "b_troonzaal": lambda: schoot("troonzaal", (-127.5, 257, -1.5), (-148, 264, 0.5), 76, binnen, binnen=True,
+                                      achtergrond=(40, 30, 50), gloed=0.9, titel="De troonzaal", blok_licht=True,
+                                      zon_box=(-158, 245, -50, -103, 300, 50)),
+        "b_kanselarij": lambda: schoot("kanselarij", (-129.5, 256, 26.5), (-144, 254, 40), 78, binnen, binnen=True,
+                                       achtergrond=(40, 30, 50), gloed=0.9, titel="De kanselarij (paleis)", blok_licht=True,
+                                       zon_box=(-150, 245, 10, -124, 265, 46)),
+        "b_academie": lambda: schoot("academiehal", (-23.5, 238, 69.5), (-46, 237, 74), 78, binnen, binnen=True,
+                                     achtergrond=(40, 30, 50), gloed=0.9, titel="De academiehal", blok_licht=True,
+                                     zon_box=(-52, 230, 62, -18, 250, 82)),
         "overzicht": lambda: schoot("overzicht", (420, 360, 380), (-20, 225, -10), 40, zon_zuid, nevel=(0.3, 2600),
                                     titel="Hoogvads", zon_box=(-200, 180, -120, 200, 341, 205)),
     }
     if shots == ["alles"]:
-        shots = list(SHOTS)
+        shots = [k for k in SHOTS if not k.startswith("b_")]
+    elif shots == ["binnen"]:
+        shots = [k for k in SHOTS if k.startswith("b_")]
     for s in shots:
         log("shot", s)
         SHOTS[s]()

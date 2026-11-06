@@ -1239,6 +1239,8 @@ def bouw(W, S, log=print):
     log(f"huizen: {len(hz)} met deur + interieur; bovenverdieping (T-WOLKWAL): {', '.join(BOVEN_KLAAR)}")
     import hoog3   # [U-Z5] depth on the university, palace, council hall, academy, station; window hoods city-wide
     hoog3.bouw(W, S, info, log=log)
+    import binnen2   # [U-Z5BINNEN] lighter interiors: round chandeliers, sconces, candelabra, marble floors, light pools
+    binnen2.bouw(W, S, info, log=log)
     nt, mis = terrastrappen(W, S)
     log(f"terrastrappen: {nt} (passen niet: {mis})")
     wolkwaldroom(W, S, info)

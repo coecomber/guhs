@@ -167,10 +167,8 @@ def raadszaal(W, S, info):
             for yy in range(y + 1, y + 17):
                 G.zet_lucht(W, x, yy, s * 16, G.muurtje("wit_muur"))
             G.zet_lucht(W, x, y + 17, s * 16, G.trede("goud_trap", "south" if s > 0 else "north", "top"))
-    for x in range(-112, -89):
-        for z in range(-16, 17):
-            if (x % 4 == 1 or z % 4 == 0) and _l(W, x, y + 19, z) and not _l(W, x, y + 20, z):
-                BH.zet(W, x, y + 19, z, plaat("goud_plaat", "top"))
+    # (U-Z5BINNEN: no hanging gold-slab grid any more, it read as wooden scaffolding; binnen2.raadszaal sets glowing gold flush
+    #  into the ceiling instead)
 
 
 # =============================================================================================== academy

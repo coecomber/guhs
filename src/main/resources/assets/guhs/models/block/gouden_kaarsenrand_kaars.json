@@ -1,0 +1,218 @@
+{
+  "parent": "minecraft:block/block",
+  "ambientocclusion": false,
+  "textures": {
+    "goud": "minecraft:block/gold_block",
+    "kaars": "guhs:block/hoogvads_licht/kaars",
+    "vlam": "guhs:block/hoogvads_licht/vlam",
+    "kristal": "guhs:block/hoogvads_licht/kristal",
+    "particle": "minecraft:block/gold_block"
+  },
+  "elements": [
+    {
+      "from": [
+        6.7,
+        3,
+        6.7
+      ],
+      "to": [
+        9.3,
+        3.6,
+        9.3
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            6.7,
+            7.7,
+            9.3,
+            8.3
+          ],
+          "texture": "#goud"
+        },
+        "south": {
+          "uv": [
+            6.7,
+            7.7,
+            9.3,
+            8.3
+          ],
+          "texture": "#goud"
+        },
+        "east": {
+          "uv": [
+            6.7,
+            7.7,
+            9.3,
+            8.3
+          ],
+          "texture": "#goud"
+        },
+        "west": {
+          "uv": [
+            6.7,
+            7.7,
+            9.3,
+            8.3
+          ],
+          "texture": "#goud"
+        },
+        "up": {
+          "uv": [
+            6.7,
+            6.7,
+            9.3,
+            9.3
+          ],
+          "texture": "#goud"
+        },
+        "down": {
+          "uv": [
+            6.7,
+            6.7,
+            9.3,
+            9.3
+          ],
+          "texture": "#goud"
+        }
+      }
+    },
+    {
+      "from": [
+        7.2,
+        3.6,
+        7.2
+      ],
+      "to": [
+        8.8,
+        8.8,
+        8.8
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.2,
+            5.4,
+            8.8,
+            10.6
+          ],
+          "texture": "#kaars"
+        },
+        "south": {
+          "uv": [
+            7.2,
+            5.4,
+            8.8,
+            10.6
+          ],
+          "texture": "#kaars"
+        },
+        "east": {
+          "uv": [
+            7.2,
+            5.4,
+            8.8,
+            10.6
+          ],
+          "texture": "#kaars"
+        },
+        "west": {
+          "uv": [
+            7.2,
+            5.4,
+            8.8,
+            10.6
+          ],
+          "texture": "#kaars"
+        },
+        "up": {
+          "uv": [
+            7.2,
+            7.2,
+            8.8,
+            8.8
+          ],
+          "texture": "#kaars"
+        },
+        "down": {
+          "uv": [
+            7.2,
+            7.2,
+            8.8,
+            8.8
+          ],
+          "texture": "#kaars"
+        }
+      }
+    },
+    {
+      "from": [
+        7.6,
+        8.8,
+        7.6
+      ],
+      "to": [
+        8.4,
+        10.4,
+        8.4
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            7.6,
+            7.2,
+            8.4,
+            8.8
+          ],
+          "texture": "#vlam"
+        },
+        "south": {
+          "uv": [
+            7.6,
+            7.2,
+            8.4,
+            8.8
+          ],
+          "texture": "#vlam"
+        },
+        "east": {
+          "uv": [
+            7.6,
+            7.2,
+            8.4,
+            8.8
+          ],
+          "texture": "#vlam"
+        },
+        "west": {
+          "uv": [
+            7.6,
+            7.2,
+            8.4,
+            8.8
+          ],
+          "texture": "#vlam"
+        },
+        "up": {
+          "uv": [
+            7.6,
+            7.6,
+            8.4,
+            8.4
+          ],
+          "texture": "#vlam"
+        },
+        "down": {
+          "uv": [
+            7.6,
+            7.6,
+            8.4,
+            8.4
+          ],
+          "texture": "#vlam"
+        }
+      },
+      "light_emission": 15
+    }
+  ]
+}

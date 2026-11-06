@@ -26,8 +26,94 @@ EMISSIVE = set(SK.EMISSIVE) | {"guhs:wolkenlamp", "guhs:park_lantaarn", "guhs:gu
                                "minecraft:end_rod", "minecraft:campfire"}
 
 
+EMISSIVE |= {"guhs:gouden_lichtlijst"}   # U-Z5BINNEN
+
+
 def log(*a):
     print(time.strftime("%H:%M:%S"), *a, flush=True)
+
+
+# ------------------------------------------------------------------ [U-Z5BINNEN] bloklicht (puntlichten van lichtgevende blokken)
+NIVEAU = {"minecraft:lantern": 15, "minecraft:soul_lantern": 10, "minecraft:end_rod": 14, "minecraft:glowstone": 15,
+          "minecraft:sea_lantern": 15, "minecraft:shroomlight": 15, "minecraft:pearlescent_froglight": 15,
+          "minecraft:ochre_froglight": 15, "minecraft:verdant_froglight": 15, "minecraft:torch": 14, "minecraft:wall_torch": 14,
+          "minecraft:jack_o_lantern": 15, "minecraft:beacon": 15, "minecraft:campfire": 15, "minecraft:lava": 15,
+          "guhs:kroonluchter": 15, "guhs:kristallen_hanger": 9, "guhs:gouden_wandluchter": 14, "guhs:gouden_kandelaar": 14,
+          "guhs:gouden_lichtlijst": 15, "guhs:wolkenlamp": 15, "guhs:park_lantaarn": 15, "guhs:guh_lantaarnpaal": 15,
+          "guhs:lampion_roze": 15, "guhs:lampion_geel": 15, "guhs:lampion_mint": 15, "guhs:sterrenlantaarn": 15}
+
+
+def licht_niveau(s):
+    """Het bloklicht-niveau (0..15) dat een blockstate uitstraalt, zoals in het spel."""
+    n = s.split("[")[0]
+    if n in NIVEAU:
+        if n == "minecraft:campfire" and "lit=false" in s:
+            return 0
+        return NIVEAU[n]
+    if n.endswith("candle") and "lit=true" in s:
+        for k in ("candles=4", "candles=3", "candles=2"):
+            if k in s:
+                return 3 * int(k[-1])
+        return 3
+    if n == "guhs:gouden_kaarsenrand":
+        return 13 if "kaars=true" in s else (7 if "kristal=true" in s else 0)
+    if n == "minecraft:light":
+        import re
+        m = re.search(r"level=(\d+)", s)
+        return int(m.group(1)) if m else 15
+    if "kathedraalglas" in n:
+        return 2
+    return 0
+
+
+def bloklicht(vol, pal, bk, a, b):
+    """Bloklicht in de doos a..b (voxels): vanaf elke lichtbron 1 minder per stap, door alles wat geen vol blok is (zoals
+    het spel). Geeft (L (sub-vol, float32 0..15), a)."""
+    sub = vol[a[0]:b[0], a[1]:b[1], a[2]:b[2]]
+    n = len(pal)
+    em = np.zeros(n, np.float32)
+    pas = np.zeros(n, bool)
+    for i, s in enumerate(pal):
+        em[i] = licht_niveau(s)
+        nm = s.split("[")[0]
+        if nm in PR.AIR:
+            pas[i] = True
+            continue
+        try:
+            pas[i] = not bk.bake(s).full_opaque
+        except Exception:  # noqa
+            pas[i] = True
+    L = em[sub]
+    if not L.any():
+        return L, a
+    door = pas[sub]
+    for _ in range(14):
+        m = L.copy()
+        np.maximum(m[1:], L[:-1] - 1, out=m[1:])
+        np.maximum(m[:-1], L[1:] - 1, out=m[:-1])
+        np.maximum(m[:, 1:], L[:, :-1] - 1, out=m[:, 1:])
+        np.maximum(m[:, :-1], L[:, 1:] - 1, out=m[:, :-1])
+        np.maximum(m[:, :, 1:], L[:, :, :-1] - 1, out=m[:, :, 1:])
+        np.maximum(m[:, :, :-1], L[:, :, 1:] - 1, out=m[:, :, :-1])
+        L = np.where(door, m, L)
+    return L, a
+
+
+BLOK_KL = np.array((1.0, 0.80, 0.55), np.float32)   # warm kaarslicht
+
+
+def bloklicht_pixels(L, a, P, nrm, alpha, sterkte=1.25):
+    """Per pixel: het licht van het blok vóór het vlak (P + n/2), met de lichtcurve van Minecraft."""
+    Q = P + nrm.astype(np.float32) * 0.5 - np.array(a, np.float32)
+    idx = np.floor(Q).astype(np.int32)
+    X, Y, Z = L.shape
+    ok = (idx[..., 0] >= 0) & (idx[..., 0] < X) & (idx[..., 1] >= 0) & (idx[..., 1] < Y) & (idx[..., 2] >= 0) &         (idx[..., 2] < Z) & (alpha > 0.5)
+    lv = np.zeros(P.shape[:-1], np.float32)
+    ix, iy, iz = (np.clip(idx[..., i], 0, s - 1) for i, s in enumerate((X, Y, Z)))
+    lv[ok] = L[ix[ok], iy[ok], iz[ok]]
+    f = lv / 15.0
+    b = f / (4 - 3 * f)          # de lichtcurve van het spel
+    return (b * sterkte)[..., None] * BLOK_KL[None, None, :]
 
 
 GOUDEN_UUR = dict(zon=(-0.62, 0.20, 0.42), zon_kl=(1.0, 0.80, 0.56), amb_kl=(0.50, 0.47, 0.62), zon_k=0.95, mc=0.30,
@@ -304,7 +390,7 @@ def _deeltjes(img, W, cam, zb, ss):
 def opname(W, naam, pos, kijk, fov=50, breed=1600, hoog=900, ss=2, licht=GOUDEN_UUR, schaduw=True,
            zon_box=None, zon_px=2.5, wolken=True, wolk_y=40.0, nevel=(0.0, 3000.0), stralen=None, gloed=0.6,
            titel=None, onderschrift=None, extra=(), hol=True, binnen=False, belichting=1.0, verberg=None,
-           kleur=None, achtergrond=None, rol=0.0, deeltjes=True):
+           kleur=None, achtergrond=None, rol=0.0, deeltjes=True, blok_licht=None):
     """Perspectief-opname van Wereld W. pos/kijk in WERELDcoördinaten. Schrijft OUT/<naam>.png (+ _namen.png).
     nevel = (sterkte 0..1, afstand) luchtperspectief. stralen = dict(sterkte, max, n, box) lichtbundels.
     zon_box = (x1,y1,z1,x2,y2,z2) wereld: alleen dit deel werpt schaduw (sneller).
@@ -337,7 +423,15 @@ def opname(W, naam, pos, kijk, fov=50, breed=1600, hoog=900, ss=2, licht=GOUDEN_
     B, trans = PR.render(vol, W.pal, cam, r, bk, extras=ext, emissive=EMISSIVE, hide=lambda s: s in hide,
                          tol=0.02, log=lambda s: log(naam, s))
     P, _ = cam.wereldpos(B.zb)
-    rgb = PR.belicht(B, trans, cam, r, zk, P) * belichting
+    blok = None
+    if blok_licht:      # [U-Z5BINNEN] (x1,y1,z1,x2,y2,z2) wereld, of True = de zon_box: lichtgevende blokken als puntlichten
+        bx = zon_box if blok_licht is True else blok_licht
+        a = [max(0, W.vx(bx[0]) - 16), max(0, W.vy(bx[1]) - 16), max(0, W.vz(bx[2]) - 16)]
+        b_ = [min(W.v.shape[0], W.vx(bx[3]) + 16), min(W.v.shape[1], W.vy(bx[4]) + 16), min(W.v.shape[2], W.vz(bx[5]) + 16)]
+        Lb, a = bloklicht(vol, W.pal, bk, a, b_)
+        blok = bloklicht_pixels(Lb, a, P, B.nrm, B.alpha)
+        log(naam, "bloklicht %.0fs" % (time.time() - t0))
+    rgb = PR.belicht(B, trans, cam, r, zk, P, blok=blok) * belichting
     log(naam, "belicht %.0fs" % (time.time() - t0))
     Hs, Ws = B.zb.shape
     d = cam.straal(Hs, Ws).reshape(-1, 3)
