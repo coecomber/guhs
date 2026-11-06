@@ -707,7 +707,7 @@ def plein(W, figuren=True):
     ZB.plek(W, "rozenkloof_plein", px - 8, yb, pz)
     ZB.plek(W, "rozenkloof_fontein", fx, yb, pz + 7)
     for i, (mx, mz, kk) in enumerate(((3384, -706, (0, -1)), (3392, -705, (0, -1)), (3414, -705, (0, -1)),
-                                      (3421, -707, (0, -1)), (3388, -723, (0, 1)), (3420, -722, (0, 1)))):
+                                      (3421, -707, (0, -1)), (3373, -723, (0, 1)), (3420, -722, (0, 1)))):
         ZB.kraam(W, mx, yb, mz, kant=kk, seed=i)
     for (lx, lz) in ((px - 16, pz - 9), (px - 16, pz + 9), (px + 18, pz - 8), (px + 18, pz + 8), (px - 2, pz - 10),
                      (px - 2, pz + 10)):
