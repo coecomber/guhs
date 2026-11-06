@@ -348,6 +348,7 @@ public class Vahoegnir extends Z3Baas {
             huilT = HUIL_TICKS;
             Telegraaf.cirkel(sl, zMidden(), zStraal(), tg(HUIL_TICKS), PAARS);
             speel("brul");
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "grauwe_huil", tg(HUIL_TICKS));   // T-VFX
             zeg("vadsrijk.z3bazen.vn.huil", ChatFormatting.LIGHT_PURPLE);
             sl.playSound(null, blockPosition(), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 3f, 0.8f);
             huilCd = 260;
@@ -379,11 +380,15 @@ public class Vahoegnir extends Z3Baas {
         }
         if (windCd <= 0 && getRandom().nextInt(3) == 0) {
             Telegraaf.cirkel(sl, position(), 12, tg(30), PAARS);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(30));   // T-VFX: wings back, the cast bar names it
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "vleugelwind", tg(30));
             later(tg(30), () -> {
                 for (ServerPlayer p : inCirkel(position(), 12)) {
                     mech(p, 0.15, "vleugelwind");
                     duw(p, position(), 2.2);
                 }
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.treffer(this, position(), 12, 0xE8E0D0);   // T-VFX: a feather shockwave
+                nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.deeltjes(sl, nl.juiced.guhs.feature.vadsrijk.vfx.Deeltje.VEER, position().add(0, 1, 0), 40, 0xE8E0D0, 5, 0.4);
                 sl.sendParticles(ParticleTypes.CLOUD, getX(), getY() + 1, getZ(), 80, 6, 0.5, 6, 0.3);
                 sl.playSound(null, blockPosition(), SoundEvents.ENDER_DRAGON_FLAP, SoundSource.HOSTILE, 3f, 0.7f);
             });
@@ -401,7 +406,11 @@ public class Vahoegnir extends Z3Baas {
                 Vec3 naar = voetVan(van.add(r.scale(18)));
                 Telegraaf.lijn(sl, van, naar, 3, tg(28), ROOD);
                 speel("adem");
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(28));   // T-VFX: he breathes in (held), the cast bar names it
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "grauw_vuur", tg(28));
                 later(tg(28), () -> {
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.treffer(this, naar, 2.5, 0x8A8AA0);   // T-VFX: a grey-fire beam along the strip
+                    nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.straal(sl, van.add(0, 1, 0), naar.add(0, 1, 0), 2.4, 0xA0A0C8, 14);
                     for (double s = 0; s <= van.distanceTo(naar); s += 1) {
                         Vec3 p = van.add(naar.subtract(van).normalize().scale(s));
                         sl.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, p.x, p.y + 0.8, p.z, 4, 0.5, 0.3, 0.5, 0.02);
@@ -523,6 +532,7 @@ public class Vahoegnir extends Z3Baas {
         Vec3 e = eiPlek();
         zeg("vadsrijk.z3bazen.vn.duik", ChatFormatting.YELLOW);
         speel("duik");
+        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.spoor(sl, this, 0xFFE0A0, 70, 2.0);   // T-VFX: a golden trail through the dive
         stapel(e, 3.5, 70, 0.6, 0.3, 2, "duik", ok -> {
             duiken++;
             Vec3 boven = e.add(0, 6, 0);

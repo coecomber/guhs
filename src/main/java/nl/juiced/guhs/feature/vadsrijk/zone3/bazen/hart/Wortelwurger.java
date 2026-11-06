@@ -146,6 +146,7 @@ public class Wortelwurger extends Z3Baas {
                 Vec3 muur = m.add(r.scale(zStraal() - 0.5));
                 Vec3 eind = doel.subtract(r.scale(3));
                 Telegraaf.lijn(sl, muur, eind, 2.4, tg(30), ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(30));   // T-VFX: wind-up animation (held until the hit / auto-release)
                 later(tg(30), () -> {
                     for (ServerPlayer q : strijders()) {
                         if (inStrook(q.position(), muur, eind, 1.3) && !Z3Vast.vast(q)) {

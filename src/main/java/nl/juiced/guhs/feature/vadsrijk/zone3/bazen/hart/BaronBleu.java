@@ -270,6 +270,7 @@ public class BaronBleu extends Z3Baas {
                     r = r.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : r.normalize();
                     naar = voetVan(van.add(r.scale(Math.max(7, voetVan(v).distanceTo(van) + 2))));
                     Telegraaf.lijn(sl, van, naar, 2.4, tg(22), ROOD);
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(22));   // T-VFX: wind-up animation (held until the hit / auto-release)
                     lungeT = tg(22) + 8;
                     speel("slag");
                 }

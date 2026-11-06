@@ -236,6 +236,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_geluid',
             # 1.10 night round T, T-MODELS: showcase models (Grauwe Klodderreus) + showroom texts; model kit v2 = vadsrijk_t_modelkit.py
             'vadsrijk_t_models',
+            # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
+            # so it must stay AFTER every boss/model slice (t-models too)
+            'vadsrijk_t_vfx',
             ]
 
 

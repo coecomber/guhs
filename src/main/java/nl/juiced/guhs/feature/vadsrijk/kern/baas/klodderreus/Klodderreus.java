@@ -154,7 +154,7 @@ public class Klodderreus extends VadsrijkBaas {
             spuug(2);
             spuugTimer = 240;
         }
-        if (inSprong()) {
+        if (inSprong() || nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.loopt(this)) {   // (T-VFX: a bouwdoos attack runs: wait)
             return;
         }
         timer--;
@@ -171,6 +171,11 @@ public class Klodderreus extends VadsrijkBaas {
                     timer = 10;
                     break;
                 }
+                int vfx = nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.probeer(this, sl);   // T-VFX: sometimes a bouwdoos attack (slime rain, the wave)
+                if (vfx > 0) {
+                    timer = vfx;
+                    break;
+                }
                 zet++;
                 ServerPlayer ver = afstandsSpeler();
                 if (fase() >= 3 && zet % 3 == 0) {
@@ -184,6 +189,8 @@ public class Klodderreus extends VadsrijkBaas {
                     d = d.lengthSqr() < 0.01 ? new Vec3(1, 0, 0) : d.normalize();
                     landing = binnenArena(position().add(d.scale(position().distanceTo(voetenVan(t)) + 6)));
                     Telegraaf.lijn(sl, position(), landing, 3.4, timer, Telegraaf.ROOD);
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, timer);   // T-VFX: crouch + cast bar
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "rolaanval", timer);
                     sl.playSound(null, blockPosition(), SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 1.2f, 1.8f);
                 } else if (fase() >= 2 && ver != null && zet % 2 == 0) {
                     spuugBal(ver);   // spit at whoever keeps their distance
@@ -197,12 +204,17 @@ public class Klodderreus extends VadsrijkBaas {
                     landing = voetenVan(t);
                     Telegraaf.cirkel(sl, landing, 3.5, timer + 14, Telegraaf.ROOD);
                     nl.juiced.guhs.feature.vadsrijk.tmodels.KlodderGeo.speel(this, "aanloop");   // T-MODELS
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, timer);   // T-VFX: he crouches for the jump (held), the cast bar names it
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "plettersprong", timer + 14);
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_SQUISH, SoundSource.HOSTILE, 2f, 0.6f);
                 }
             }
             case MIKT -> {
                 if (timer <= 0) {   // (he lands where the circle was shown: dodge it)
                     springNaar(landing, 14, 5);
+                    nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.spoor(sl, this, 0xB8C0B0, 14, 1.6);   // T-VFX: a trail through the air
+                    nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.pose(sl, this, "treffer", 10);
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.speel(this, "vfx_treffer");   // T-INT: end the held GeckoLib wind-up (KlodderGeo)
                     doet = Doet.SPRINGT;
                     sl.playSound(null, blockPosition(), SoundEvents.SLIME_JUMP, SoundSource.HOSTILE, 3f, 0.5f);
                 }
@@ -246,6 +258,10 @@ public class Klodderreus extends VadsrijkBaas {
                 }
                 move(net.minecraft.world.entity.MoverType.SELF, v.normalize());
                 sl.sendParticles(ParticleTypes.ITEM_SLIME, getX(), getY() + 0.3, getZ(), 6, 1, 0.2, 1, 0.05);
+                if (timer == -1) {
+                    nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.spoor(sl, this, 0x9AD86A, 30, 2.2);   // T-VFX: the rolling trail
+                    nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.speel(this, "vfx_treffer");   // T-INT: end the held GeckoLib wind-up (KlodderGeo)
+                }
                 rolRaak(sl);
             }
         }
@@ -303,6 +319,8 @@ public class Klodderreus extends VadsrijkBaas {
             sl.sendParticles(ParticleTypes.CLOUD, getX() + Math.cos(a) * 3, getY() + 0.2, getZ() + Math.sin(a) * 3, 1, 0, 0, 0, 0.03);
         }
         raakRond(position(), 3.6, 1.7, "plet", null, 0, 1.0);   // (fix round 1: 34 raw at lv 3, ~1/4 of a lv-3 player)
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.treffer(this, position(), 4.2, 0x9AD86A);   // T-VFX: the pop, a slime shockwave, slime splats
+        nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.deeltjes(sl, nl.juiced.guhs.feature.vadsrijk.vfx.Deeltje.SLIJM, position().add(0, 0.4, 0), 30, 0x9AD86A, 2.5, 0.3);
     }
 
     @Override

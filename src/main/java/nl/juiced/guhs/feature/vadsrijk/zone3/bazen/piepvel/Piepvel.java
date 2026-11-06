@@ -352,6 +352,7 @@ public class Piepvel extends Z3Baas {
             if (v != null) {
                 Vec3 doel = voetVan(v);
                 Telegraaf.cirkel(sl, doel, 3.5, tg(24), ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(24));   // T-VFX: wind-up animation (held until the hit / auto-release)
                 speel("sprong");
                 later(tg(24), () -> zSpring(doel, 14, 5));
                 spreek("vadsrijk.z3bazen.pv.entree");
@@ -378,6 +379,7 @@ public class Piepvel extends Z3Baas {
         }
         if (fase() == 2 && windCd <= 0) {
             Telegraaf.cirkel(sl, position(), 6, tg(30), PAARS);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, tg(30));   // T-VFX: wind-up animation (held until the hit / auto-release)
             later(tg(30), () -> {
                 for (ServerPlayer p : inCirkel(position(), 6)) {
                     mech(p, 0.15, "kille_wind");

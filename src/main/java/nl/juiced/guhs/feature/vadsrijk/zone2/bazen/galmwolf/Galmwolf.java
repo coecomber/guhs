@@ -353,6 +353,7 @@ public class Galmwolf extends Z2Baas {
             if (v != null) {
                 doelPlek = voetVan(v);
                 Telegraaf.cirkel(sl, doelPlek, 3.5, 25, ROOD);
+                nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, 25);   // T-VFX: wind-up animation (held until the hit / auto-release)
                 start(Actie.SPRONG, 25);
                 sprongCd = 140;
                 speel("sprong");
@@ -366,6 +367,7 @@ public class Galmwolf extends Z2Baas {
             r = r.lengthSqr() < 0.01 ? new Vec3(0, 0, 1) : r.normalize();
             doelPlek = van.add(r.scale(13));
             Telegraaf.lijn(sl, van, doelPlek, 3.5, 25, ROOD);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.windup(this, 25);   // T-VFX: wind-up animation (held until the hit / auto-release)
             start(Actie.ADEM, 25);
             ademCd = 160;
             speel("adem");
@@ -381,6 +383,7 @@ public class Galmwolf extends Z2Baas {
         galmSchade = 0;
         speel("galm");
         Telegraaf.cirkel(sl, zMidden(), zStraal(), GALM_TICKS, PAARS);
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "galm", GALM_TICKS);   // T-VFX: cast bar
         sl.playSound(null, blockPosition(), SoundEvents.WARDEN_SONIC_CHARGE, SoundSource.HOSTILE, 3f, 0.7f);
         zeg("vadsrijk.z2bazen.gw.galm", ChatFormatting.LIGHT_PURPLE);
         laatsteAanval = "galm";

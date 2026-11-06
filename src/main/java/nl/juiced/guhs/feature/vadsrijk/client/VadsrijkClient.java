@@ -30,5 +30,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.vriendjes.client.VriendjesClient.init(modBus);   // N-EXTRA: the pink dragon + critters
         nl.juiced.guhs.feature.vadsrijk.dialoog.client.DialoogClient.init(modBus);   // T-DIALOOG: the Vadsrijk talking screen
         nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidClient.init(modBus);   // T-GELUID (after kern: wraps its title receiver)
+        nl.juiced.guhs.feature.vadsrijk.vfx.client.VfxClient.init(modBus);   // T-VFX: decals, particles, cast bar, VFX level
     }
 }

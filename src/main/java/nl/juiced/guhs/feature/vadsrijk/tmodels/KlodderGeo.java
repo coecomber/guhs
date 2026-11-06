@@ -32,8 +32,11 @@ public final class KlodderGeo implements GeoReplacedEntity {
     public static final DataTicket<Boolean> LAND = DataTicket.create("guhs_tm_land", Boolean.class);
     public static final DataTicket<Boolean> ROLT = DataTicket.create("guhs_tm_rolt", Boolean.class);
 
-    /** The trigger animations of the Klodderreus (controller "actie"). */
-    public static final String[] ACTIES = {"spuug", "brul", "aanloop"};
+    /**
+     * The trigger animations of the Klodderreus: controller "actie" (spuug, brul, aanloop) + the T-VFX boss moments vfx_* on
+     * controller "vfx" ({@code BaasAnims}; T-INT).
+     */
+    public static final String[] ACTIES = {"spuug", "brul", "aanloop", "vfx_windup", "vfx_treffer", "vfx_geraakt", "vfx_fase", "vfx_woede", "vfx_juich"};
 
     private static final RawAnimation IDLE = RawAnimation.begin().thenLoop("idle");
     private static final RawAnimation SPRONG = RawAnimation.begin().thenLoop("sprong");
@@ -57,7 +60,7 @@ public final class KlodderGeo implements GeoReplacedEntity {
     /** Server side: play a trigger animation ({@link #ACTIES}) on a Klodderreus for everyone who sees him. */
     public static void speel(Entity reus, String actie) {
         if (!reus.level().isClientSide()) {
-            REUS.triggerAnim(reus, "actie", actie);
+            REUS.triggerAnim(reus, actie.startsWith("vfx_") ? nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.CONTROLLER : "actie", actie);   // (T-INT: vfx_* on the vfx controller)
         }
     }
 
@@ -86,10 +89,14 @@ public final class KlodderGeo implements GeoReplacedEntity {
         if (reus) {
             AnimationController<KlodderGeo> actie = new AnimationController<>("actie", 0, test -> PlayState.STOP);
             for (String a : ACTIES) {
+                if (a.startsWith("vfx_")) {
+                    continue;   // (T-INT: these live on the "vfx" controller below)
+                }
                 actie.triggerableAnim(a, "aanloop".equals(a) ? RawAnimation.begin().thenPlay(a).thenPlay(a).thenPlay(a)
                         : RawAnimation.begin().thenPlay(a));
             }
             controllers.add(actie);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.controllers(controllers);   // T-INT: the T-VFX boss moments (vfx_windup, ...)
         }
     }
 

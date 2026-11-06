@@ -75,6 +75,7 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         super.tick();
         if (!level().isClientSide() && level() instanceof ServerLevel sl0) {
             vechtTick(sl0);
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.tick(this, sl0);   // T-VFX: the bouwdoos attack, soft enrage
         }
         if (level().isClientSide() || tickCount % 5 != 0 || !(level() instanceof ServerLevel sl)) {
             return;
@@ -475,12 +476,15 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         if (bron instanceof ServerPlayer p) {
             bijdragen.schade(p.getUUID(), Math.min(n, vads()));
         }
+        double voor = vads();   // T-VFX
         super.krijgSchade(n, bron);
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.geraakt(this, voor - vads());   // T-VFX: interrupt meter + hit flinch
         double[] f = fases();
         double frac = vads() / Math.max(1, maxVads());
         while (!geplofd() && fase - 1 < f.length && frac <= f[fase - 1]) {
             fase++;
             nl.juiced.guhs.feature.vadsrijk.kern.beleving.Beleving.faseMoment(this, fase);   // BELEVING (fix round 1): the phase mini-moment
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.fase(this, fase);   // T-VFX: rear up, shockwave, light
             opFase(fase);
         }
     }
@@ -548,8 +552,14 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return "baaskill:" + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType());
     }
 
+    /** T-VFX: the boss's base hit (the bouwdoos multiplies it per attack step). */
+    public double tVfxSlag() {
+        return basisSchade(mobLevel());
+    }
+
     @Override
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.verslagen(this);   // T-VFX: the cheer-up finale
         int kist = 0;
         for (java.util.UUID id : bijdragen.spelers()) {
             if (!(sl.getEntity(id) instanceof ServerPlayer p) || p.distanceTo(this) > 64) {

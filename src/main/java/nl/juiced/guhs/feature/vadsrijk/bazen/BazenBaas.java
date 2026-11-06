@@ -101,6 +101,7 @@ public abstract class BazenBaas extends VadsrijkBaas implements GeoEntity {
             actie.triggerableAnim(a, RawAnimation.begin().thenPlay(a));
         }
         controllers.add(actie);
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.controllers(controllers);   // T-VFX: wind-up/hit/flinch/phase/cheer
     }
 
     protected void speel(String anim) {

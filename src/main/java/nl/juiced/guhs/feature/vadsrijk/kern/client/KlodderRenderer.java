@@ -39,6 +39,9 @@ public class KlodderRenderer extends MobRenderer<VadsrijkMob, KlodderRenderer.St
         super.extractRenderState(e, s, pt);
         s.size = e instanceof Klodderreus k ? k.grootte() : e instanceof ProefKlodder p ? p.grootte() : 2;
         s.squish = (float) Mth.clamp(-e.getDeltaMovement().y * 1.5, -0.6, 0.6);
+        if (e instanceof Klodderreus) {   // T-VFX: wind-up crouch / hit pop / flinch / phase wobble / cheer (no GeckoLib here)
+            s.squish = Mth.clamp(s.squish + nl.juiced.guhs.feature.vadsrijk.vfx.client.VfxPose.squish(e.getId(), pt), -0.8f, 0.8f);
+        }
         s.geplofd = e.geplofd();
     }
 
