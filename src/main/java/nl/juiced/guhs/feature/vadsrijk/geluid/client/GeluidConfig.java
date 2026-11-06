@@ -10,6 +10,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class GeluidConfig {
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.IntValue GEBIEDSMUZIEK, BAZENMUZIEK, STINGERS, OMGEVING, PAUZE_MIN, PAUZE_MAX;
+    /** U-AUDIO2: the world point sounds and the NPC voices. */
+    public static final ModConfigSpec.IntValue WERELDGELUIDEN, STEMMEN;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -22,6 +24,11 @@ public final class GeluidConfig {
                 "bijen in Honingtak, golven en meeuwen aan de kust (procent; 0 = uit). Volgt ook de schuif Omgeving.").defineInRange("omgeving", 70, 0, 100);
         PAUZE_MIN = b.comment("Stilte tussen twee gebiedsstukken: minstens zoveel seconden (alleen omgevingsgeluid).").defineInRange("pauze_min", 60, 0, 240);
         PAUZE_MAX = b.comment("Stilte tussen twee gebiedsstukken: hoogstens zoveel seconden.").defineInRange("pauze_max", 180, 0, 240);
+        WERELDGELUIDEN = b.comment("Het Vadsrijk: zachte geluiden van plekken dichtbij: fonteintjes, bijenkorven, de smidshamer, marktgeroezemoes,",
+                "windgongen, kampvuren, krakende liften, echo van je voetstappen in grotten (procent; 0 = uit). Volgt ook de schuif Omgeving.")
+                .defineInRange("wereldgeluiden", 60, 0, 100);
+        STEMMEN = b.comment("Het Vadsrijk: de guh-stemmetjes van NPC's (een 'guh!' als je ze aanspreekt, een vraagje, een bedankje) (procent; 0 = uit).",
+                "Volgt ook de schuif Vriendelijke wezens.").defineInRange("stemmen", 70, 0, 100);
         SPEC = b.build();
     }
 
@@ -46,6 +53,14 @@ public final class GeluidConfig {
 
     public static float omgeving() {
         return procent(OMGEVING, 70);
+    }
+
+    public static float wereld() {
+        return procent(WERELDGELUIDEN, 60);
+    }
+
+    public static float stemmen() {
+        return procent(STEMMEN, 70);
     }
 
     /** The silence after an area piece, in ticks (random between the two sliders). */

@@ -137,7 +137,9 @@ def _leid(st, m, start, vel):
     st.leidmotief("melodie_" + instr, start + 4 * st.maat, v + vel + 4, rond)
 
 
-def baas(spec):
+def baas(spec, fase=False):
+    """fase=True (U-AUDIO2): the same piece note for note (same seed, same loop length) plus the last-phase layers on top
+    (fase_lagen), so the client can crossfade from the normal loop into this one at the same spot."""
     st = Stuk(spec["naam"], spec["toon"], spec["modus"], spec["bpm"], spec["maat"], spec.get("samengesteld", False), spec["seed"], lus=True)
     B = st.maat
     A, Bp = _rij(spec["A"]), _rij(spec["B"])
@@ -169,4 +171,98 @@ def baas(spec):
             if spec.get("verdubbel"):
                 d = spec["verdubbel"]
                 echo(st, "melodie_" + spec["melodie"][0], "dubbel_" + d[0], d[0], 0, d[3] / 100.0, d[1], *_mix(d), van=a, tot=e)
+    if fase:
+        _fase(st, spec, secties)
+    return st
+
+
+# ---------------------------------------------------------------------------------------------------- U-AUDIO2: the last phase
+DUBBEL_TIJD = [(0, 36, 66), (0.5, 42, 40), (1, 38, 58), (1.5, 42, 40), (2, 36, 62), (2.5, 36, 48), (3, 38, 60), (3.25, 38, 40),
+               (3.5, 38, 50), (3.75, 38, 56)]
+DUBBEL_TIJD3 = [(0, 36, 66), (0.5, 42, 40), (1, 38, 56), (1.5, 42, 40), (2, 38, 54), (2.5, 38, 46)]
+
+
+def fase_lagen(spec):
+    """The extra layers of the last phase: spec["fase"] or, by default, driving drums, a timpani pulse, a high string
+    tremolo-ostinato, a choir pad and the melody doubled an octave up on brass (the "everything at once" feel)."""
+    if spec.get("fase"):
+        return spec["fase"]
+    drie = spec["maat"] == 3
+    lagen = [
+        ("slag", "slagwerk", DUBBEL_TIJD3 if drie else DUBBEL_TIJD, {"gain": 0.6, "galm": 0.2}),
+        ("slag", "pauk", [(0, 41, 62), (2, 36, 56)] if drie else [(0, 41, 64), (2, 36, 58), (3.5, 36, 50)], {"gain": 0.6, "galm": 0.3}),
+        ("ostinato", "tremolo", 67, 50, {"gain": 0.5, "galm": 0.4, "figuur": (0, 7, 12, 7) if not drie else (0, 7, 12), "stap": 0.25}),
+        ("pad", "koor", 62, 52, {"gain": 0.5, "galm": 0.5, "n": 4}),
+    ]
+    return lagen
+
+
+def _fase(st, spec, secties):
+    dyn = {"intro": 0, "A": 4, "B": 6, "A2": 8, "brug": 4}
+    for naam, a, e in secties:
+        _begeleiding(st, fase_lagen(spec), a, e, dyn[naam])
+    # the melody an octave up on brass (or the boss's own choice) through the whole loop
+    d = spec.get("fase_dubbel", ("koper", 12, 0, 62, 0.55, 0.35))
+    for m in (spec["melodie"], spec.get("melodie2")):
+        if m and ("melodie_" + m[0]) in st.sporen:
+            echo(st, "melodie_" + m[0], "fase_" + d[0] + "_" + m[0], d[0], 0, d[3] / 100.0, d[1], *_mix(d))
+
+
+def fanfare(spec):
+    """U-AUDIO2: the boss's own short victory fanfare (~4-6 s): its key turned major (a happy ending: the boss is cheered up),
+    its own lead instrument, a rising figure picked by its seed, then a big held tonic with timpani, cymbal and bells."""
+    f = dict(spec.get("fanfare", {}))
+    bpm = min(spec["bpm"], f.get("bpm", 120))
+    st = Stuk(spec["naam"] + "_fanfare", spec["toon"], "majeur", bpm, 4, seed=spec["seed"] + 7)
+    st.zet_akkoorden(0, "5 5 1 1")
+    lead = f.get("lead", spec["melodie"][0])
+    lo, hi = spec["melodie"][1], spec["melodie"][2]
+    if hi - lo < 12:
+        hi = lo + 12
+    zacht = f.get("zacht", False)
+    st.spoor("lead", lead, f.get("gain", 0.95), 0.45)
+    st.spoor("koper", f.get("koper", "koper"), 0.75, 0.45)
+    st.spoor("str", "tremolo" if not zacht else "strijkers", 0.55, 0.5)
+    st.spoor("bas", "contrabas", 0.65, 0.35)
+    st.spoor("glo", f.get("glans", "glocken"), 0.45, 0.6)
+    if not zacht:
+        st.spoor("pauk", "pauk", 0.7, 0.4)
+        st.spoor("bek", "slagwerk", 0.4, 0.6)
+    g = st.grond
+    ton = st.dichtstbij((lo + hi) // 2, [g])
+    vijf = st.dichtstbij(ton - 5, [(g + 7) % 12])
+    figuren = [
+        [(0, 0.33, vijf), (0.33, 0.33, vijf), (0.67, 0.33, vijf), (1, 3, ton)],                                   # ta-ta-ta TAAA
+        [(0, 0.5, ton - 12), (0.5, 0.5, ton - 8), (1, 0.5, ton - 5), (1.5, 2.5, ton)],                             # arpeggio up
+        [(0, 0.5, vijf), (0.5, 0.5, vijf + 2), (1, 0.5, vijf + 4), (1.5, 0.5, vijf + 5), (2, 2, ton)],             # a run up
+        [(0, 0.75, ton - 5), (0.75, 0.25, ton - 3), (1, 1, ton - 1), (2, 2, ton)],                                 # a march
+        [(0, 0.5, ton + 4), (0.5, 0.5, ton + 2), (1, 0.5, vijf + 4 if vijf + 4 < ton else vijf), (1.5, 2.5, ton)],  # down then home
+    ]
+    fig = figuren[f.get("figuur", spec["seed"] % len(figuren))]
+    # the major third (raised for minor keys: a Picardy-style happy end)
+    terts = st.dichtstbij(ton + 4, [(g + 4) % 12])
+    for t, d, k in fig:
+        k = max(lo - 5, min(hi + 5, k))
+        st.noot("lead", 4 + t, d * 0.95, k, 92 if t == 0 else 84)
+        st.noot("koper", 4 + t, d * 0.95, k - 12, 70)
+    eind = 4 + fig[-1][0]
+    st.noot("lead", eind, 4.5, ton, 96)
+    st.noot("lead", eind, 4.5, terts, 80)
+    for k in (g + 48, g + 52, g + 55, g + 60):
+        st.noot("koper", eind, 4.5, k, 76 if not zacht else 52)
+        st.noot("str", eind, 5, k + 12, 60)
+    for k in (g + 55, g + 59, g + 62):
+        st.noot("str", 4, eind - 4, k, 46)   # the V chord under the figure
+    st.noot("bas", 4, eind - 4, (g + 7) % 12 + 36, 66)
+    st.noot("bas", eind, 4.5, g + 36, 76)
+    if not zacht:
+        for i in range(8):
+            st.noot("pauk", eind - 1 + i * 0.125, 0.15, (g + 7) % 12 + 36, 40 + i * 5)
+        st.noot("pauk", eind, 2, g % 12 + 36, 92)
+        st.noot("bek", eind, 1, 49, 70)
+    for i, k in enumerate((84, 88, 91, 96)):
+        st.noot("glo", eind + i * 0.125, 1.5, st.dichtstbij(k, [g, (g + 4) % 12, (g + 7) % 12]), 54)
+    # shift everything back by 4 beats (the chord list started at 0 for the V-V-I-I harmony lookups)
+    for v in st.sporen.values():
+        v[3][:] = [(s - 4, d, k, vv) for s, d, k, vv in v[3]]
     return st

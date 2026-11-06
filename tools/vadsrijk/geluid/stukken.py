@@ -12,7 +12,7 @@ Entries of 'begeleiding' / 'vol' / 'intro':
 Melodies: (instr, lowest, highest, vel[, gain, reverb]).
 """
 from componist import Stuk
-from vormen import baas, gebied
+from vormen import baas, fanfare, gebied
 
 ZACHT = {"gain": 0.8, "galm": 0.45}
 
@@ -308,6 +308,58 @@ BAZEN = [
                       ("bas", "contrabas", 40, "kwart", 62, _g(gain=0.8))],
          vol=[("pad", "koper", 60, 50, _g(gain=0.55)), ("slag", "taiko", TAIKO, _g(gain=0.6))],
          verdubbel=("piccolo", 12, 0, 52, 0.5, 0.35)),
+    # ---- U-AUDIO2: the bosses that had no own theme yet
+    # zone 3, secret: De Mika-imker (honey, bees, a sneaky beekeeper): a buzzing 16th string ostinato, bassoon + clarinet
+    dict(naam="mika_imker", toon="F", modus="harm", bpm=134, maat=4, seed=1310,
+         A="1 1 6 6 | 4 4 5M 5M", B="6 7 3 6 | 4 2d 5M 5M",
+         melodie=("fagot", 50, 67, 90, 1.0, 0.3), melodie2=("klarinet", 65, 82, 84),
+         begeleiding=[("ostinato", "snelstrijk", 65, 52, _g(gain=0.6, figuur=(0, 1, 0, 1, 0, 1, 0, -1), stap=0.25)),
+                      ("slag", "slagwerk", [(0, 36, 62), (1, 38, 48), (1.75, 36, 44), (2, 36, 58), (3, 38, 54), (3.5, 76, 40)], _g(gain=0.6, galm=0.2)),
+                      ("bas", "contrabas", 41, "kwart", 62, _g(gain=0.8))],
+         vol=[("arp", "marimba", 77, 0.5, "neer", 44, _g(gain=0.45)), ("wals", "pizz", 60, 50, _g(gain=0.6))],
+         verdubbel=("xylofoon", 12, 0, 48, 0.45, 0.3),
+         fase_dubbel=("klarinet", 12, 0, 60, 0.55, 0.35)),
+    # zone 5 finale: De Grauwe Droom: a dreamy LULLABY boss (a music box waltz that went grey), its last phase a dark choir
+    dict(naam="grauwe_droom", toon="D", modus="harm", bpm=84, maat=3, seed=1501,
+         A="1 6 4 5M | 1 6 2d 5M", B="6 3 4 1 | 6 4 5M 5M",
+         melodie=("speeldoos", 72, 88, 84, 1.0, 0.55), melodie2=("oohs", 62, 79, 72, 0.8, 0.6),
+         begeleiding=[("bas", "contrabas", 38, "wals", 54, _g(gain=0.7)), ("wals", "harp", 62, 48, _g()),
+                      ("pad", "glaspad", 62, 42, _g(gain=0.5)), ("slag", "pauk", [(0, 38, 44)], _g(gain=0.5, galm=0.6))],
+         vol=[("arp", "celesta", 74, 0.5, "golf", 42, _g(gain=0.5)), ("tegen", "cello", 55, 50, _g(gain=0.6))],
+         verdubbel=("glocken", 12, 0, 40, 0.4, 0.6),
+         fase=[("pad", "koor", 57, 54, _g(gain=0.6, n=4)), ("slag", "taiko", [(0, 38, 70), (2, 38, 52)], _g(gain=0.7, galm=0.5)),
+               ("pad", "tremolo", 50, 50, _g(gain=0.5)), ("ostinato", "contrabas", 38, 56, _g(gain=0.6, figuur=(0, 0, 1), stap=1.0)),
+               ("slag", "pauk", [(0, 38, 60), (2, 33, 50), (2.5, 33, 44)], _g(gain=0.55))],
+         fase_dubbel=("halopad", -12, 0, 56, 0.5, 0.6),
+         fanfare=dict(lead="speeldoos", koper="hoorn", glans="celesta", zacht=True, figuur=1, bpm=84)),
+    # zone 5: Donderbuik, de Grauwe Onweerswolk (grumpy, heavy, raindrops): tuba + horn, taiko thunder, harp/kalimba drops
+    dict(naam="donderbuik", toon="C", modus="mineur", bpm=108, maat=4, seed=1502,
+         A="1 1 6 7 | 1 1 4 5M", B="6 3 7 1 | 6 4 5M 5M",
+         melodie=("tuba", 46, 62, 92, 1.0, 0.35), melodie2=("hoorn", 58, 74, 88),
+         begeleiding=[("ostinato", "contrabas", 36, 64, _g(gain=0.85, figuur=(0, 0, 0, 3, 0, 0, 7, 6))),
+                      ("slag", "taiko", [(0, 43, 80), (0.75, 43, 50), (1.5, 43, 64), (3, 45, 70), (3.5, 43, 56)], _g(gain=0.9, galm=0.45)),
+                      ("pad", "tremolo", 55, 46, _g(gain=0.55))],
+         vol=[("arp", "kalimba", 79, 0.25, "golf", 40, _g(gain=0.4)), ("pad", "koor", 60, 48, _g(gain=0.5)),
+              ("slag", "pauk", [(0, 36, 60), (3.5, 31, 50)], _g(gain=0.6))],
+         verdubbel=("trombone", 0, 0, 70, 0.7, 0.3)),
+    # zone 5: Opzichter Gorgonzola (Ketelkamer, a big wrench, valves): a grumpy-comic boiler-room polka, bassoon + trombone
+    dict(naam="gorgonzola", toon="Bb", modus="mineur", bpm=152, maat=4, seed=1503,
+         A="1 5M 1 5M | 1 4 5M 1", B="4 1 5M 1 | 6 4 5M 5M",
+         melodie=("fagot", 46, 63, 92, 1.0, 0.3), melodie2=("trombone", 53, 70, 88),
+         begeleiding=[("bas", "tuba", 34, "kwart", 66, _g(gain=0.85)),
+                      ("slag", "slagwerk", [(0, 36, 66), (1, 76, 50), (2, 36, 60), (3, 77, 50), (3.5, 81, 36)], _g(gain=0.65, galm=0.2)),
+                      ("wals", "pizz", 58, 54, _g(gain=0.7))],
+         vol=[("arp", "xylofoon", 77, 0.5, "op", 42, _g(gain=0.4)), ("pad", "accordeon", 58, 46, _g(gain=0.45))],
+         verdubbel=("piccolo", 24, 0, 46, 0.45, 0.3)),
+    # zone 5: Kootje Zilverstaart (the spy finale of "Verraad in de stad"): a sly tango, violin + accordion, staccato strings
+    dict(naam="zilverstaart", toon="A", modus="harm", bpm=118, maat=4, seed=1504,
+         A="1 1 4 4 | 6 2d 5M 5M", B="4 4 1 1 | 6 2d 5M 1",
+         melodie=("viool", 67, 88, 90), melodie2=("accordeon", 64, 81, 86),
+         begeleiding=[("ostinato", "pizz", 45, 62, _g(figuur=(0, 0, 7, 0, 12, 0, 7, 0), stap=0.5)),
+                      ("slag", "slagwerk", [(0, 36, 66), (1.5, 36, 50), (2, 38, 60), (3, 36, 54), (3.5, 38, 44)], _g(gain=0.6, galm=0.2)),
+                      ("bas", "contrabas", 45, "kwart", 62, _g(gain=0.8))],
+         vol=[("arp", "klavecimbel", 72, 0.5, "golf", 46, _g(gain=0.45)), ("pad", "koper", 57, 48, _g(gain=0.5))],
+         verdubbel=("glocken", 12, 0, 42, 0.4, 0.4)),
     # fallback for any boss without its own theme (new bosses from later slices)
     dict(naam="algemeen", toon="E", modus="mineur", bpm=126, maat=4, seed=1001,
          A="1 6 7 1 | 1 6 4 5M", B="6 7 3 6 | 4 1 5M 5M",
@@ -459,6 +511,10 @@ def alle():
         l.append(("gebied", s["naam"], (lambda s=s: gebied(s)), {"galm": galm, "rms": -25.0, "uitval": 2.0}))
     for s in BAZEN:
         l.append(("baas", s["naam"], (lambda s=s: baas(s)), {"lus": True, "galm": 1.8, "rms": -21.0, "helder": 6500}))
+        # U-AUDIO2: the last-phase loop (same notes + the fase layers, same length) and the boss's own victory fanfare
+        l.append(("baas", s["naam"] + "_fase", (lambda s=s: baas(s, fase=True)),
+                  {"lus": True, "galm": 1.8, "rms": -20.0, "helder": 7000, "kwaliteit": 0.8}))
+        l.append(("fanfare", s["naam"], (lambda s=s: fanfare(s)), {"galm": 2.0, "rms": -21.0, "uitval": 0.6, "kwaliteit": 0.6}))
     for f in STINGERS:
         n = f.__name__.replace("stinger_", "")
         l.append(("stinger", n, f, {"galm": 2.4, "rms": -21.0, "uitval": 0.4, "kwaliteit": 0.5}))

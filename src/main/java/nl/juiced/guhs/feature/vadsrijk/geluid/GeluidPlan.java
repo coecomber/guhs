@@ -38,7 +38,10 @@ public final class GeluidPlan {
             "klodderreus", "koning_klodder", "opperzwam", "mika_spion",
             "boormeester", "galmwolf", "spiegelzucht",
             "baron_bleu", "nestwachter", "wortelwurger", "piepvel", "kruinroofvogel", "vahoegnir", "brokkel", "roquefort", "taleggio",
-            "zeeslurf", "vliegervanger", "algemeen");
+            "zeeslurf", "vliegervanger",
+            // U-AUDIO2: the bosses that borrowed a theme (or got "algemeen") now have their own
+            "mika_imker", "grauwe_droom", "donderbuik", "gorgonzola", "zilverstaart",
+            "algemeen");
 
     /** The stingers (after {@code vr.geluid.stinger.}). */
     public static final List<String> STINGERS = List.of("ontdekking", "quest_klaar", "level_op", "baas_verslagen", "geheim");
@@ -148,6 +151,9 @@ public final class GeluidPlan {
         if (p.contains("vliegervanger")) {
             return "vliegervanger";
         }
+        if (p.contains("imker_mika") || p.equals("vr_z3_imker")) {   // U-AUDIO2: vr_z3_imker_mika
+            return "mika_imker";
+        }
         for (String pre : new String[] {"vr_z5_baas_", "vr_z4_baas_", "vr_z3_baas_", "vr_z2_baas_", "vr_baas_", "vr_"}) {
             if (p.startsWith(pre)) {
                 p = p.substring(pre.length());
@@ -185,6 +191,30 @@ public final class GeluidPlan {
 
     public static String baasId(String thema) {
         return "vr.geluid.baas." + thema;
+    }
+
+    /** U-AUDIO2: the last-phase loop of a boss theme (same notes + the intensified layers, same length: crossfaded in). */
+    public static String faseId(String thema) {
+        return "vr.geluid.baas." + thema + "_fase";
+    }
+
+    /** U-AUDIO2: the boss's own short victory fanfare. */
+    public static String fanfareId(String thema) {
+        return "vr.geluid.fanfare." + thema;
+    }
+
+    /** U-AUDIO2: the theme name inside a boss sound id ("guhs:vr.geluid.baas.zeeslurf" -> "zeeslurf"), or null for a foreign id. */
+    @Nullable
+    public static String themaVanId(@Nullable String id) {
+        if (id == null) {
+            return null;
+        }
+        int i = id.indexOf("vr.geluid.baas.");
+        if (i < 0) {
+            return null;
+        }
+        String t = id.substring(i + "vr.geluid.baas.".length());
+        return BAAS_THEMAS.contains(t) ? t : null;
     }
 
     public static String stingerId(String soort) {

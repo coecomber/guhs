@@ -486,6 +486,7 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
             nl.juiced.guhs.feature.vadsrijk.kern.beleving.Beleving.faseMoment(this, fase);   // BELEVING (fix round 1): the phase mini-moment
             nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.fase(this, fase);   // T-VFX: rear up, shockwave, light
             opFase(fase);
+            nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.fase(this, fase, f.length + 1);   // U-AUDIO2: the last-phase music layer
         }
     }
 
