@@ -212,6 +212,7 @@ public final class Z6Puzzels {
         Z6Verhaal.geluid(p, SoundEvents.PLAYER_LEVELUP, 0.8f, 1.4f);
         NpcApi.meld(p, "z6_puzzel", id);
         if (!o.baken().isEmpty()) {
+            nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.stinger(p, "baken");   // V-INT: u-z6muziek's beacon stinger
             steekAan(p, o.baken());
         } else if (id.equals("oefen")) {
             Z6Verhaal.visioen(p, 0, Z6VerhaalPlekken.KIJKER);   // (the first whisper of Moeder Bron, in the water of Twinkel's basin)
