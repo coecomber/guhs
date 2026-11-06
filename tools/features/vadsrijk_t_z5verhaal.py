@@ -779,7 +779,7 @@ def z5xp(lv, hoofd):
 
 # The level cap of this tree is still 50 (kern Levels.MAX / MAX_GENERIEK): a quest above it could never be offered. The design
 # levels (55-60) stay in the xp formula; the GATE is clamped to LV_CAP. Raise LV_CAP together with the kern cap (integration).
-LV_CAP = 50
+LV_CAP = 60   # (T-INT: kern cap raised to 60)
 for _q in QUESTS:
     _q["beloning"]["xp"] = z5xp(_q["lv"], _q["soort"] != "zij")
     _q["lv"] = min(_q["lv"], LV_CAP)

@@ -75,7 +75,7 @@ public final class Z5Verhaal {
     static final String V = "nl.juiced.guhs.feature.vadsrijk.";
 
     /** Level for the line: 55 by design, clamped to the kern's level cap (still 50 in this tree: Levels.MAX_GENERIEK). */
-    public static final int MIN_LEVEL = Math.min(55, nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX_GENERIEK);
+    public static final int MIN_LEVEL = 55;   // (T-INT: the kern cap is 60 now)
 
     private record Loopt(String soort, long begin) {
     }

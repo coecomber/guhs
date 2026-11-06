@@ -81,7 +81,7 @@ public class VadsrijkZ3SystemenGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void levelCap50(GameTestHelper helper) {
-        helper.assertTrue(Levels.MAX == 50 && Levels.MAX_GENERIEK == 50, "cap 50, is " + Levels.MAX);
+        helper.assertTrue(Levels.MAX >= 50 && Levels.MAX_GENERIEK >= 50, "cap at least 50 (T-INT: 60), is " + Levels.MAX);
         for (int l = 1; l <= Levels.MAX; l++) {
             helper.assertTrue(Levels.levelVan(Levels.totaalVoor(l)) == l, "level " + l + " round trip");
             helper.assertTrue(Levels.generiekVan(Levels.totaalVoorGeneriek(l)) == l, "generic level " + l + " round trip");

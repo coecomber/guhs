@@ -60,7 +60,7 @@ public final class ItemsCommando {
                 .executes(c -> geef(c, Zeldzaamheid.ZELDZAAM, -1))
                 .then(Commands.argument("zeldzaamheid", StringArgumentType.word()).suggests(ItemsCommando::zeldzaamheden)
                         .executes(c -> geef(c, Zeldzaamheid.van(StringArgumentType.getString(c, "zeldzaamheid")), -1))
-                        .then(Commands.argument("level", IntegerArgumentType.integer(1, 50))
+                        .then(Commands.argument("level", IntegerArgumentType.integer(1, nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX))
                                 .executes(c -> geef(c, Zeldzaamheid.van(StringArgumentType.getString(c, "zeldzaamheid")),
                                         IntegerArgumentType.getInteger(c, "level")))))));
         k.then(Commands.literal("nieuwe").executes(c -> nieuwe(c, Zeldzaamheid.ZELDZAAM))
