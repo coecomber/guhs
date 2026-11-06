@@ -33,6 +33,8 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.register(modBus);   // I-AUDIO: town music + town ambience
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.register(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
+        nl.juiced.guhs.feature.vadsrijk.zone4.wezens.Z4WezensRegistry.register(modBus);   // T-Z4WEZENS: zone 4 creatures + loot
+        nl.juiced.guhs.feature.vadsrijk.zone4.bazen.Z4BazenRegistry.register(modBus);   // T-Z4WEZENS: Zeeslurf + Wrak
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
         nl.juiced.guhs.feature.vadsrijk.indeling.IndelingRegistry.register(modBus);   // T-WERELD: world layout W-3 (barriers, dev tp)
         nl.juiced.guhs.feature.vadsrijk.dialoog.RijkDialoog.register(modBus);   // T-DIALOOG: the Vadsrijk talking screen
