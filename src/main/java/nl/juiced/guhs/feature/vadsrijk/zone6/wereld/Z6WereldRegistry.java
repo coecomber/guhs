@@ -12,5 +12,6 @@ public final class Z6WereldRegistry {
 
     public static void register(IEventBus modBus) {
         Z6Blokken.register(modBus);
+        Z6Wereld.register();   // areas, biomes, townsfolk + mounts, dev commands
     }
 }

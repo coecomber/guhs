@@ -66,11 +66,12 @@ public final class Barrieres {
             new Vrij("z3_werf", 1655, -827, 115, 115, -64),
             new Vrij("z4", 2184, -491, 426, 270, -64),           // (T-INT: fitted to t-z4wereld's real islands, clouds excluded: max 0.947; the Wolkenval stays a barrier)
             new Vrij("z5", 2795, -520, 420, 200, 150),
+            new Vrij("z6", 3730, -760, 470, 330, -64),            // U-Z6WERELD: Het Zijdeland (the mainland west coast x ~3292; De Roze Kliffen + de Zijdewind across the strait)
             new Vrij("proeftuin", 3096, 3096, 140, 140, -64));
 
     /** The whole island sea: outside it nothing is pushed (far dev spots, gametests). */
     public static boolean inZeegebied(double x, double z) {
-        return x > -1300 && x < 3500 && z > -1900 && z < 1700;
+        return x > -1300 && x < 4700 && z > -1900 && z < 1700;   // U-Z6WERELD: x 3500 -> 4700 (zone 6 + its sea)
     }
 
     private static final Map<UUID, Vec3> LAATST_VRIJ = new ConcurrentHashMap<>();
@@ -104,6 +105,12 @@ public final class Barrieres {
 
     /** Which barrier you are in (for the message): by the two nearest zones and the height. */
     public static String soort(double x, double y, double z, boolean inWater) {
+        if (x > 4150 && z > -1250 && z < -300) {          // U-Z6WERELD: east of the Zijdeland (zone 7 later)
+            return "oostgrens";
+        }
+        if (x > 3060 && x < 3330 && z > -1150 && z < -360) {   // U-Z6WERELD: the strait between Hoogvads and the Roze Kliffen
+            return "zijdewind";
+        }
         if (!inWater && y > 100) {
             return "wind";
         }
@@ -196,7 +203,10 @@ public final class Barrieres {
             if (p.isInWater()) {
                 sl.sendParticles(ParticleTypes.BUBBLE_COLUMN_UP, x, y + 0.3, z, 14, 0.8, 0.4, 0.8, 0.05);
                 sl.sendParticles(ParticleTypes.SPLASH, x, y + 1, z, 10, 0.8, 0.2, 0.8, 0.1);
-            } else if (s.equals("mist")) {
+            } else if (s.equals("zijdewind")) {               // U-Z6WERELD: warm wind with blossom and silk threads
+                sl.sendParticles(ParticleTypes.CHERRY_LEAVES, x, y + 1, z, 12, 1.4, 0.8, 1.4, 0.02);
+                sl.sendParticles(ParticleTypes.END_ROD, x, y + 1.2, z, 2, 1.0, 0.5, 1.0, 0.01);
+            } else if (s.equals("mist") || s.equals("oostgrens")) {
                 sl.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE, x, y + 1, z, 6, 1.5, 0.6, 1.5, 0.01);
             } else {
                 sl.sendParticles(ParticleTypes.CLOUD, x, y + 1, z, 8, 1.0, 0.5, 1.0, 0.05);

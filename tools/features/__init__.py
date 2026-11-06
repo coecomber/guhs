@@ -255,6 +255,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z5wereld',
             # U-Z6WERELD: zone 6 "Het Zijdeland": the Zijdeland building blocks (Java: feature/vadsrijk/zone6/wereld/Z6Blokken)
             'vadsrijk_u_z6blokken',
+            'vadsrijk_u_z6wereld',   # U-Z6WERELD: zone 6 biomes + area names + barrier texts
             # 1.10 night round T: puzzles + secrets zone 1-3 (T-PUZZELS; Java: feature/vadsrijk/puzzels)
             'vadsrijk_t_puzzels',
             # T-Z5VERHAAL: 1.10 zone 5 "Hoogvads", the story (Java: feature/vadsrijk/zone5/verhaal)

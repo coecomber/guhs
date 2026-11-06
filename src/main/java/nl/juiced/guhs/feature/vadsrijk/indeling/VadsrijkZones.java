@@ -33,15 +33,18 @@ public final class VadsrijkZones {
     public static final int Z3_DX = 1404, Z3_DZ = -576;
     public static final int Z4_DX = 0, Z4_DZ = 0;
     public static final int Z5_DX = 0, Z5_DZ = 0;
+    public static final int Z6_DX = 0, Z6_DZ = 0;   // U-Z6WERELD
 
-    /** The zones of the island sea (zone 1-5). */
+    /** The zones of the island sea (zone 1-5) and the mainland (zone 6, U-Z6WERELD). */
     public enum Zone {
         KAMP("kamp", KAMP_DX, KAMP_DZ, -512, 832, -193, 1215),
         Z1("z1", Z1_DX, Z1_DZ, -704, -704, 767, 639),
         Z2("z2", Z2_DX, Z2_DZ, 384, -1472, 1023, -769),
         Z3("z3", Z3_DX, Z3_DZ, 1024, -1024, 1727, -129),
         Z4("z4", Z4_DX, Z4_DZ, 1728, -768, 2559, -257),
-        Z5("z5", Z5_DX, Z5_DZ, 2432, -768, 3199, -257);
+        Z5("z5", Z5_DX, Z5_DZ, 2432, -768, 3199, -257),
+        /** U-Z6WERELD: Het Zijdeland, the first part of the mainland (zone box x 3280..4180, z -1060..-460 + a coast margin). */
+        Z6("z6", Z6_DX, Z6_DZ, 3264, -1152, 4287, -385);
 
         public final String id;
         public final int dx, dz;
@@ -88,6 +91,7 @@ public final class VadsrijkZones {
     public static final int[] LAND_Z3 = {1166, -897, 1725, -338};
     public static final int[] LAND_Z4 = {1740, -716, 2540, -266};
     public static final int[] LAND_Z5 = {2440, -660, 3150, -380};
+    public static final int[] LAND_Z6 = {3280, -1060, 4180, -460};   // U-Z6WERELD
 
     // ------------------------------------------------------------------------------------------------ helpers
     /** The zone whose tile box holds x/z (zone 4 wins the zone-4/5 overlap: use {@link #zoneVan(double, double, double)}). */
@@ -138,6 +142,10 @@ public final class VadsrijkZones {
 
     public static boolean inZone4(double x, double z) {
         return Zone.Z4.inVak(x, z);
+    }
+
+    public static boolean inZone6(double x, double z) {   // U-Z6WERELD
+        return Zone.Z6.inVak(x, z);
     }
 
     /** Old camp coordinates -> world. */
