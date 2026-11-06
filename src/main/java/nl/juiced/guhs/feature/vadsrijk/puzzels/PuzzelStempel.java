@@ -329,10 +329,7 @@ public final class PuzzelStempel {
     }
 
     static void trap(ServerLevel l, int zone, BlockPos rand, int dx, int dz) {
-        Direction naarBuiten = Direction.fromDelta(dx, 0, dz);
-        if (naarBuiten == null) {
-            return;
-        }
+        Direction naarBuiten = dx > 0 ? Direction.EAST : dx < 0 ? Direction.WEST : dz > 0 ? Direction.SOUTH : Direction.NORTH;
         BlockState trede = blok(TRAP.getOrDefault(zone, "minecraft:mossy_stone_brick_stairs"));
         BlockState vul = Blocks.DIRT.defaultBlockState(), lucht = Blocks.AIR.defaultBlockState();
         int c = rand.getY();
