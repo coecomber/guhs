@@ -510,7 +510,7 @@ def gevel_woning(V, u1, u2, y, h, seed=0, rol="woning"):
     V.P(um, 2, y + 2, "zs_beitel")
     V.P(um - 1, 1, y + 2, mlamp(False)) if False else None
     x, _, z = V.pos(um, 1, 0)
-    hanglamp(V.W, x, y + 4, z, lengte=0)
+    hanglamp(V.W, x, y + hh - 1, z, lengte=max(0, hh - 6))
     # windows with flower boxes
     for u in (um - 2, um + 2):
         if u1 < u < u2:
