@@ -1848,6 +1848,71 @@ UITLEG = {
            "Leg de roze nerf van alle drie de ringen in één lijn en de zaal schuift open.",
         en="A year-ring knob in the Ring Hall of the Heart of the Tree. Each knob turns two year rings a little further. Line "
            "up the pink vein of all three rings and the hall slides open."),
+    # <T-INT: puzzle blocks of t-puzzels (ids built in PuzzelRegistry: vr_pz_<soort>) + 2 older Vadsrijk blocks>
+    "vr_pz_drukplaat": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Stap op de gekleurde platen in de goede volgorde. Een goede plaat licht op; fout = alles gaat uit met een bromtoon.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Step on the coloured plates in the right order. A right plate lights up; wrong = they all go out with a hum.'),
+    "vr_pz_klanksteen": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: de steen speelt zijn eigen toon. Speel het lied na dat de voorspeelsteen liet horen.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the stone plays its own note. Play back the tune the preview stone played.'),
+    "vr_pz_voorspeelsteen": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: hij speelt het lied voor en laat de klankstenen één voor één oplichten.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: it plays the tune and lights up the sound stones one by one.'),
+    "vr_pz_symboolsteen": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: het symbool draait door (hart, ster, maan, blad...). Zet alle stenen goed en druk dan op de knop.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the symbol turns to the next one (heart, star, moon, leaf...). Set every stone right, then press the button.'),
+    "vr_pz_probeerknop": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: probeer je oplossing (symboolslot of sterrenveld). Fout = een bromtoon; na 3 en 6 foute pogingen krijg je een tip.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: try your answer (symbol lock or star field). Wrong = a hum; after 3 and 6 wrong tries you get a hint.'),
+    "vr_pz_herstelknop": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. De gele knop: rechtsklik zet de puzzel terug in het begin (handig als een schuifblok vastzit).',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. The yellow button: right-click puts the puzzle back to the start (handy when a sliding block is stuck).'),
+    "vr_pz_spiegel": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: de spiegel draait een kwartslag. Een geel lichtspoor laat zien waar de straal nu loopt.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the mirror turns a quarter. A yellow light trail shows where the beam goes now.'),
+    "vr_pz_lichtbron": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Hier begint de lichtstraal. Draai de spiegels zo dat de straal het doel raakt.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. The light beam starts here. Turn the mirrors so the beam hits the target.'),
+    "vr_pz_lichtdoel": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Het doel van de lichtstraal: raakt de straal hem, dan licht hij roze op en is de puzzel opgelost.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. The target of the light beam: when the beam hits it, it lights up pink and the puzzle is solved.'),
+    "vr_pz_schuifblok": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: het blok schuift één vakje van je af. Schuif alle blokken op hun roze vakje.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the block slides one square away from you. Slide every block onto its pink square.'),
+    "vr_pz_doelvloer": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Het roze vakje waar een schuifblok op moet. Het licht op als er een blok op staat.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. The pink square a sliding block has to go on. It lights up when a block stands on it.'),
+    "vr_pz_startlantaarn": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: de tijdrit begint (de lantaarn wordt goud en onderaan telt de tijd af). Haal de eindplaat op tijd.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the time trial starts (the lantern turns gold and the time counts down at the bottom). Reach the end plate in time.'),
+    "vr_pz_eindplaat": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. De gouden eindplaat van een tijdrit: stap erop voordat de tijd om is.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. The golden end plate of a time trial: step on it before the time is up.'),
+    "vr_pz_scheur": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Een geheimpje: de barst glinstert heel zachtjes. Rechtsklik erop en de muur zakt even in.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. A secret: the crack glitters very softly. Right-click it and the wall sinks away for a while.'),
+    "vr_pz_geheimdeur": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Een verborgen deur of muurtje. Hij gaat ongeveer 30 seconden open als je het geheimpje vindt.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. A hidden door or wall. It opens for about 30 seconds when you find the secret.'),
+    "vr_pz_hendel": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Een verstopt hendeltje (vaak achter een schuurtje). Rechtsklik: de deur van het geheimpje gaat open.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. A hidden little lever (often behind a shed). Right-click: the door of the secret opens.'),
+    "vr_pz_fluistersteen": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: de steen fluistert een raadsel. Typ je antwoord in de chat (andere spelers zien het niet).',
+        en="Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the stone whispers a riddle. Type your answer in chat (other players don't see it)."),
+    "vr_pz_sterrensteen": dict(
+        nl="Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Alleen 's nachts: rechtsklik zet de ster aan of uit. Leg het sterrenbeeld van de sterrenkaart en druk op de knop.",
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. At night only: right-click turns the star on or off. Lay out the constellation from the star map and press the button.'),
+    "vr_pz_sterrenkaart": dict(
+        nl='Hoort bij een puzzel of geheimpje in het Vadsrijk (zone 1-3). Je vindt hem vlak bij een kampvuur; de puzzeltip staat onderaan je scherm. Rechtsklik: het sterrenbeeld dat je moet leggen staat als sterretjes in de chat.',
+        en='Part of a puzzle or secret in the Vadsrijk (zones 1-3). You find it near a campfire; the puzzle tip stays at the bottom of your screen. Right-click: the constellation you have to lay out appears as little stars in chat.'),
+    "vr_baas_lichtzwam": dict(
+        nl='Hoort bij het gevecht met de Opperzwam in het Vadsrijk: rechtsklik een lichtzwam om hem aan te steken als het donker wordt.',
+        en='Part of the Opperzwam fight in the Vadsrijk: right-click a light mushroom to light it when it goes dark.'),
+    "vr_baaskist": dict(
+        nl='De kist die verschijnt als je een baas in het Vadsrijk hebt opgevrolijkt. Rechtsklik: je eigen buit (iedereen krijgt zijn eigen).',
+        en='The chest that appears when you have cheered up a boss in the Vadsrijk. Right-click: your own loot (everyone gets their own).'),
+    # </T-INT>
 }
 
 LINK = {
