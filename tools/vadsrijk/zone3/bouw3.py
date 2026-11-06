@@ -622,10 +622,7 @@ def kale_kruin(W):
     if not W.raakt(x - 45, y - 30, z - 45, x + 45, y + 30, z + 45):
         return
     # a dead flat top (r KALE_R) on a stepped skirt that comes down to kruin 1 on the trunk side (1 block per 2 = no jumps)
-    for yy in range(y - 2, y - 26, -1):
-        rr = PL.KALE_R + (y - 2 - yy) * 1.6
-        W.cilinder(x + 0.5, z + 0.5, rr, yy, yy, None, keep=True, mixfn=lambda xx, y_, zz, m: W.kies(
-            ["minecraft:pale_oak_leaves", "minecraft:pale_moss_block", "minecraft:stripped_pale_oak_wood"], [3, 2, 1], xx, y_, zz, 3811))
+    kale_onderkant(W, x, y, z)
     W.cilinder(x + 0.5, z + 0.5, PL.KALE_R + 1, y - 1, y - 1, None, mixfn=lambda xx, y_, zz, m: W.kies(
         ["minecraft:pale_moss_block", "minecraft:light_gray_terracotta", "minecraft:stripped_pale_oak_wood", "minecraft:gravel"],
         [4, 2, 1, 1], xx, y_, zz, 3812))
@@ -654,6 +651,64 @@ def kale_kruin(W):
             W.buis([(px - 5, py - 1, pz), (px - 7, py + 10, pz + 2)], [1.4, 0.7], "minecraft:pale_oak_wood")
             W.buis([(px + 5, py - 1, pz), (px + 6, py + 8, pz - 3)], [1.4, 0.7], "minecraft:pale_oak_wood")
 
+
+
+# U-DECO: the skirt used to be stacked full discs down to y - 25, so seen from Honingtak its underside was ONE flat plate (r ~60).
+# Now each column of the skirt keeps its stepped top but gets an organic bottom: a deep, tapering nest/branch bowl in the middle
+# (down to ~y - 39), thin (3-5 blocks) at the rim, with a noisy edge; under it twisted pale-oak twigs converge to a tip, and
+# pale hanging moss, hanging roots, glow-berry vines and honeycomb drips hang from it.
+KALE_RMAX = PL.KALE_R + 23 * 1.6
+
+
+def kale_dikte(D, ruis):
+    t = np.clip(1.0 - D / 46.0, 0.0, 1.0)
+    return np.maximum(2.0, 3.0 + 34.0 * t ** 1.5 + 2.5 * ruis)
+
+
+def kale_onderkant(W, x, y, z):
+    xc, zc = x + 0.5, z + 0.5
+    D = np.hypot(W.XX - xc, W.ZZ - zc)
+    lx, lz, *_ = P.lift_b()
+    inn = (D <= KALE_RMAX) & (np.hypot(W.XX - lx, W.ZZ - lz) > 5.5)     # (keep Honinglift B's shaft free)
+    if not inn.any():
+        return
+    top = np.floor(y - 2 - np.maximum(0.0, D - PL.KALE_R) / 1.6)
+    ruis = vnoise(W.XX, W.ZZ, cell=9, seed=3815)
+    bot = np.floor(top - kale_dikte(D, ruis) + 1)
+    def laag(yy, m):
+        boven = W.kies(["minecraft:pale_oak_leaves", "minecraft:pale_moss_block", "minecraft:stripped_pale_oak_wood"], [3, 2, 1],
+                       W.XX, yy, W.ZZ, 3811)
+        onder = W.kies(["minecraft:pale_oak_wood", "minecraft:stripped_pale_oak_wood", "minecraft:pale_moss_block",
+                        "minecraft:honeycomb_block", "minecraft:pale_oak_leaves"], [4, 2, 2, 1, 2], W.XX, yy, W.ZZ, 3816)
+        return np.where(yy < bot + 2, onder, boven)
+    W.kolom(bot, top, None, mask=inn, keep=True, laagfn=laag)
+    # twigs: from the underside ring towards a tip under the middle (only below the bowl: keep)
+    for k in range(9):
+        a = k * 2 * math.pi / 9 + 0.17
+        d0 = 30 + 6 * (k % 3)
+        t0 = float(np.floor(y - 2 - max(0.0, d0 - PL.KALE_R) / 1.6)) - float(kale_dikte(np.array(d0), 0.0))
+        p0 = (xc + d0 * math.cos(a), t0 + 1, zc + d0 * math.sin(a))
+        p1 = (xc + 12 * math.cos(a + 0.5), y - 33.0, zc + 12 * math.sin(a + 0.5))
+        p2 = (xc + 1.5 * math.cos(a + 1.0), y - 43.0, zc + 1.5 * math.sin(a + 1.0))
+        W.buis([p0, p1, p2], [1.5, 1.0, 0.45], "minecraft:pale_oak_wood", keep=True)
+    # hanging things: per column a hash decides (moss strands, hanging roots, glow berries, honey drips)
+    h = hash3(W.XX, 5, W.ZZ, 3817)
+    for (i, j) in np.argwhere(inn & (h < 0.085)):
+        wx, wz, hb = float(W.xs[i]), float(W.zs[j]), float(h[i, j])
+        y0 = int(bot[i, j]) - 1
+        if W.wget(wx, y0 + 1, wz) == "minecraft:air":
+            continue        # (that column kept another block: no anchor)
+        n = 2 + int(float(hash3(wx, 6, wz, 3818)) * 5)
+        if hb < 0.035:
+            soort = ["minecraft:pale_hanging_moss[tip=false]"] * (n - 1) + ["minecraft:pale_hanging_moss[tip=true]"]
+        elif hb < 0.055:
+            soort = ["minecraft:hanging_roots[waterlogged=false]"]
+        elif hb < 0.07:
+            soort = ["minecraft:cave_vines_plant[berries=true]"] * n + ["minecraft:cave_vines[age=25,berries=true]"]
+        else:
+            soort = ["minecraft:honeycomb_block", "minecraft:honey_block"][:1 + int(n > 3)]
+        for k, b in enumerate(soort):
+            W.wset(wx, y0 - k, wz, b, keep=True)
 
 def kruin_leven(W):
     """Blossom curtains under the storey rims, glowberry strands, lantern strings from the branches up to kruin 1."""
@@ -694,7 +749,7 @@ def kruin_leven(W):
             y = y0 + 3 + (y1 - y0 - 3) * tt - 3 * math.sin(math.pi * tt)
             W.wset(x, y, z, "minecraft:iron_chain[axis=y]", keep=True)
             if i % 4 == 0:
-                W.wset(x, y - 1, z, [LAMP_R, LAMP_G, LAMP_M][i // 4 % 3], keep=True)
+                W.wset(x, y - 1, z, [LAMP_R, LAMP_G, LAMP_M][i // 4 % 3] + "[hanging=true]", keep=True)   # U-DECO: hangs
 
 
 # ================================================================================================ werf rooms
@@ -1232,6 +1287,222 @@ def dichten(W):
             W.wset(x, y + dy, z, s)
 
 
+# ================================================================================================ U-DECO (round U)
+PAAL_O, PAAL_B = "guhs:guh_lantaarnpaal[half=lower]", "guhs:guh_lantaarnpaal[half=upper]"
+BANK, BAK = "guhs:guh_bankje_hout", "guhs:park_prullenbak"
+BLOEMBAK_BLOEMEN = ["minecraft:flowering_azalea", "minecraft:pink_tulip", "minecraft:allium", "minecraft:cornflower",
+                    "minecraft:oxeye_daisy", "minecraft:azure_bluet"]
+
+
+def _naar(a):
+    """Cardinal facing name of the direction angle a (x east, z south)."""
+    c, s_ = math.cos(a), math.sin(a)
+    if abs(c) >= abs(s_):
+        return "east" if c > 0 else "west"
+    return "south" if s_ > 0 else "north"
+
+
+@functools.lru_cache(maxsize=1)
+def _dek_vrij():
+    """Spots on the Honingtak deck that street furniture must keep clear of: (x, z, radius) in rel blocks."""
+    vrij = []
+    for k, (x, y, z) in FL().items():
+        rx, rz = x - PL.TX_STAM, z - PL.TZ_STAM
+        if abs(y - (HY + 1)) <= 1 and math.hypot(rx, rz) < 90:
+            vrij.append((rx, rz, 2.6))
+    for (k, a, cx, cz, soort) in P.ring_huizen():          # the house doors (facing the trunk) + their door line
+        for d in np.arange(4.0, 10.5, 1.0):
+            vrij.append((cx - d * math.cos(a), cz - d * math.sin(a), 2.6))
+    for (i, kant, a, r) in PL.KRAMEN:                       # market stalls (3x3 + the stall keeper)
+        vrij.append((r * math.cos(a), r * math.sin(a), 4.0))
+    for da in (-0.38, -0.2, 0.2, 0.38):                     # the plaza stalls of the kit
+        vrij.append((60 * math.cos(B.TH_M + da), 60 * math.sin(B.TH_M + da), 4.0))
+    cx, cz = PL.pol(B.TH_M, 52)
+    vrij.append((cx, cz, 6.0))                              # the fountain
+    for (wid, x, z, y0, y1, rad, lx, lz) in PL.windkolommen():
+        vrij.append((lx, lz, 4.5))
+    for naam, (ad, Rc, hc) in P.CELLEN.items():             # the lift shafts through the deck
+        a = math.radians(ad)
+        rs = 55 + Rc + 3.5
+        vrij.append((rs * math.cos(a), rs * math.sin(a), 4.5))
+    return tuple(vrij)
+
+
+def _dek_ok(W, x, z, marge=0.0):
+    """A free deck cell: deck block at HY, 3 air above, away from doors/stalls/POIs; (x, z) must be in this window."""
+    if not W.binnen(x, HY, z):
+        return False
+    for (vx, vz, r) in _dek_vrij():
+        if math.hypot(x - vx, z - vz) < r + marge:
+            return False
+    onder = W.wget(x, HY, z)
+    if onder == "minecraft:air" or "fence" in onder or "slab" in onder or "stairs" in onder or "honey_block" in onder:
+        return False
+    if any(W.wget(x, HY + h, z) != "minecraft:air" for h in (1, 2, 3)):
+        return False
+    # not right against a wall/fence/stall (the post would block a 1-wide gap)
+    buren = 0
+    for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        if W.wget(x + dx, HY + 1, z + dz) != "minecraft:air":
+            buren += 1
+    return buren <= 1
+
+
+def _paal(W, x, z):
+    if _dek_ok(W, x, z):
+        W.wset(x, HY + 1, z, PAAL_O)
+        W.wset(x, HY + 2, z, PAAL_B)
+
+
+def honingtak_straat(W):
+    """U-DECO (feedback: Honingtak is dark under the tree, needs street furniture): on the ring street (r 47.5) a guh lamp post
+    every ~10 blocks, between them alternately a bench and a bin + flower planter; posts on the outer promenade where it is wide
+    enough; on the Honingplein a ring of posts and benches round the fountain."""
+    if not W.raakt(-90, HY - 2, -90, 90, HY + 6, 90):
+        return
+    r = 47.5
+    n = int(round(2 * math.pi * r / 10.0))
+    for k in range(n):
+        a = 2 * math.pi * k / n + 0.03
+        plein = abs(B.wrap(a - B.TH_M)) < 0.5
+        _paal(W, r * math.cos(a), r * math.sin(a))
+        if plein:
+            continue
+        b = a + math.pi / n                     # halfway to the next post
+        bx, bz = 44.0 * math.cos(b), 44.0 * math.sin(b)
+        if k % 2 == 0:                          # a bench at the inner edge, looking out over the street at the houses
+            if _dek_ok(W, bx, bz):
+                W.wset(bx, HY + 1, bz, f"{BANK}[facing={_naar(b + math.pi)}]")
+        else:                                   # a bin + a flower planter (the bees like it)
+            if _dek_ok(W, bx, bz):
+                W.wset(bx, HY + 1, bz, f"{BAK}[facing={_naar(b)}]")
+            px, pz = 51.0 * math.cos(b), 51.0 * math.sin(b)
+            if _dek_ok(W, px, pz):
+                W.wset(px, HY + 1, pz, "minecraft:moss_block")
+                W.wset(px, HY + 2, pz, BLOEMBAK_BLOEMEN[k % len(BLOEMBAK_BLOEMEN)])
+    m = int(2 * math.pi * 66 / 10)
+    for k in range(m):
+        a = 2 * math.pi * k / m + 0.08
+        ra = float(P.dek_rand(np.array([a]))[0])
+        if ra - 63.5 < 5.5 or any(abs(B.wrap(a - math.radians(t[1]))) < 0.12 for t in P.HTAKKEN):
+            continue
+        rr = (63.5 + ra - 1.0) / 2
+        _paal(W, rr * math.cos(a), rr * math.sin(a))
+    cx, cz = PL.pol(B.TH_M, 52)
+    for k in range(8):
+        a = k * math.pi / 4 + math.pi / 8
+        if k % 2 == 0:
+            _paal(W, cx + 9.5 * math.cos(a), cz + 9.5 * math.sin(a))
+        else:
+            x, z = cx + 8.0 * math.cos(a), cz + 8.0 * math.sin(a)
+            if _dek_ok(W, x, z):
+                W.wset(x, HY + 1, z, f"{BANK}[facing={_naar(a)}]")     # (facing = the backrest side: you look at the fountain)
+    for da in (-0.45, 0.45):
+        for rr in (42.0, 56.0):
+            x, z = PL.pol(B.TH_M + da, rr)
+            _paal(W, x, z)
+            x2, z2 = PL.pol(B.TH_M + da * 0.92, rr)
+            if _dek_ok(W, x2, z2):
+                W.wset(x2, HY + 1, z2, f"{BAK}[facing={_naar(B.TH_M + da)}]")
+
+
+TRAP_KLEUREN = ["brown", "orange", "pink", "magenta", "purple", "white"]   # per floor: Schorsstad .. the nest
+
+
+def trap_verdiepingen(W):
+    """U-DECO (feedback: a clearer floor indication on the spiral stair): a coloured band along the trunk wall just above head
+    height following the stair (the colour of the floor you climb to), 2 rows high along every landing (the floor's own
+    colour), a banner of that colour at both ends of every landing and a lantern hanging from a bracket. The name boards over
+    the landings are text displays (Java: udeco.Verdiepingborden)."""
+    if not W.raakt(-30, B.VOET - 2, -30, 30, B.NEST_Y + 8, 30):
+        return
+    X, Y, Z = W.v.shape
+    sx = slice(max(0, W.vx(-30)), min(X, W.vx(30) + 1))
+    sz = slice(max(0, W.vz(-30)), min(Z, W.vz(30) + 1))
+    XX, ZZ = W.XX[sx, sz], W.ZZ[sx, sz]
+    RR, TH = np.hypot(XX, ZZ), np.arctan2(ZZ, XX)
+    wand = (RR > B.TRAP_R1) & (RR <= B.TRAP_R1 + 1.2)
+    landingen = list(B.TRAP_LANDINGEN)
+    ids = np.array([W.id(f"minecraft:{k}_concrete") for k in TRAP_KLEUREN], np.uint16)
+    for lev in B.trap_hoogtes(TH):
+        ok = wand & ~np.isnan(lev)
+        if not ok.any():
+            continue
+        lv = np.nan_to_num(lev, nan=-100)
+        sh = B.stand(lv)
+        ytop = np.where((sh % 1) == 0, sh - 1, np.floor(sh)).astype(int)
+        vloer = np.zeros(lv.shape, int)          # the floor the stair climbs to; on a landing: that floor itself
+        op_landing = np.zeros(lv.shape, bool)
+        for i, L in enumerate(landingen):
+            vloer = np.where(lv > L + 1e-6, i + 1, vloer)
+            op_landing |= np.abs(lv - L) < 1e-6
+        kleur = ids[np.clip(vloer, 0, len(ids) - 1)]
+        for j in range(Y):
+            y = int(math.floor(W.ys[j]))
+            if y < B.VOET or y > B.NEST_Y + 6:
+                continue
+            sl = W.v[sx, j, sz]
+            m = ok & ((y == ytop + 3) | (op_landing & (y == ytop + 4))) & (sl != 0)
+            sl[m] = kleur[m]
+    for i, L in enumerate(landingen[:-1]):
+        a, _ = B.trap_landing(i)
+        for s_ in (-1, 1):
+            aa = a + s_ * (B.TRAP_WL / 2 - 0.04)
+            # a banner on the wall at the landing's end (its block at L + 4, it hangs down over L + 3)
+            bx, bz = (B.R_IN + 0.5) * math.cos(aa), (B.R_IN + 0.5) * math.sin(aa)
+            if W.binnen(bx, L + 4, bz):
+                naar = _naar(aa + math.pi)               # facing into the trunk
+                dx, dz = {"east": (1, 0), "west": (-1, 0), "south": (0, 1), "north": (0, -1)}[naar]
+                if W.wget(bx, L + 4, bz) == "minecraft:air" and W.wget(bx - dx, L + 4, bz - dz) != "minecraft:air":
+                    W.wset(bx, L + 4, bz, f"minecraft:{TRAP_KLEUREN[i]}_wall_banner[facing={naar}]")
+            # a lantern hanging from a plank bracket, a bit further along the landing
+            ab = a + s_ * (B.TRAP_WL / 2 - 0.16)
+            lx, lz = (B.R_IN - 0.6) * math.cos(ab), (B.R_IN - 0.6) * math.sin(ab)
+            if W.binnen(lx, L + 5, lz) and W.wget(lx, L + 4, lz) == "minecraft:air":
+                W.wset(lx, L + 5, lz, "minecraft:stripped_spruce_wood")
+                W.wset(lx, L + 4, lz, HANGLAMP)
+
+
+ZWEEF_PLANT = ("_tulip", "allium", "oxeye_daisy", "cornflower", "azure_bluet", "short_grass", "fern", "pink_petals", "dandelion",
+               "poppy", "guhbloem")
+
+
+def zwevend_weg(W):
+    """U-DECO: the last step of the zone-3 deco layer, per tile: a standing lantern/lampion with air under it hangs when there is
+    a block above it (hanging=true), else gets a spruce post down to a floor 1-2 blocks below, else goes; a plant/flower with
+    air under it goes (tools/vadsrijk/zweefcheck.py lists what is left)."""
+    v = W.v
+    pal = W.pal
+    licht = np.array([(p.startswith("minecraft:lantern") or p.startswith("minecraft:soul_lantern") or p.startswith("guhs:lampion_"))
+                      and "hanging=true" not in p for p in pal], bool)
+    plant = np.array([any(d in p for d in ZWEEF_PLANT) and "potted" not in p for p in pal], bool)
+    m = (licht | plant)[v[:, 1:-1, :]] & (v[:, :-2, :] == 0)
+    if not m.any():
+        return
+    paal = W.id("minecraft:spruce_fence")
+    for (i, j, k) in np.argwhere(m):
+        y = j + 1
+        s_ = pal[v[i, y, k]]
+        if plant[v[i, y, k]]:
+            v[i, y, k] = 0
+        elif v[i, y + 1, k] != 0:
+            if "[" in s_:
+                v[i, y, k] = W.id(s_.replace("hanging=false", "hanging=true"))
+            else:
+                v[i, y, k] = W.id(s_ + "[hanging=true]")
+        else:
+            onder = next((d for d in range(2, 4) if y - d >= 0 and v[i, y - d, k] != 0), None)
+            if onder is None:
+                v[i, y, k] = 0
+            else:
+                v[i, y - onder + 1:y, k] = paal
+
+
+def udeco(W):
+    honingtak_straat(W)
+    trap_verdiepingen(W)
+    zwevend_weg(W)
+
 def bouw(W):
     windkolommen(W)
     honingtak_extra(W)
@@ -1246,6 +1517,7 @@ def bouw(W):
     kampvuren(W)
     dorp_vrij(W)
     dichten(W)
+    udeco(W)   # U-DECO: Honingtak street furniture + lamp posts, stair floor bands/banners
 
 
 init()

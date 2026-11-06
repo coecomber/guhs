@@ -430,6 +430,8 @@ def bordes(W, i):
         for s in (-1, 1):   # door frame in the outer wall + lanterns
             x, z = ro * d[0] - s * 2.8 * d[1], ro * d[1] + s * 2.8 * d[0]
             W.wfill(x, y + 1, z, x, y + 4, z, "minecraft:stripped_spruce_log[axis=y]")
+            # (U-DECO: the lantern stood in the air beside the frame; now on a 2-high post outside the door)
+            W.wfill(x + d[0] * 0.9, y + 1, z + d[1] * 0.9, x + d[0] * 0.9, y + 2, z + d[1] * 0.9, "minecraft:spruce_fence")
             W.wset(x + d[0] * 0.9, y + 3, z + d[1] * 0.9, LANTAARN)
     # layer board beside the door, inside: colour per layer + lantern
     kl = {"STAM": "minecraft:brown_wool", "TAKKEN": "minecraft:orange_wool", "KRUIN": "minecraft:pink_wool"}
@@ -935,13 +937,14 @@ def nest(W):
         "minecraft:moss_block"], [3, 2, 2, 1, 1.5, 1], 91))
     # [zone 3 kaart] the stair comes up through a slot in the nest floor (wenteltrap() runs again after this and clears the
     # slot); a fence on the nest floor along the inner side of the slot, open at the arrival (the last landing)
+    # (U-DECO: on the nest floor = stand y0 + 1; they were at y0 + 2 and floated one block above the floor)
     for phi in np.arange(_KNOPEN[4][0] + TRAP_WL, _KNOPEN[5][0] - 0.05, 0.02):
         a = TRAP_TH0 + phi
-        W.wset((TRAP_R0 - 0.6) * math.cos(a), y0 + 2, (TRAP_R0 - 0.6) * math.sin(a), HEK)
+        W.wset((TRAP_R0 - 0.6) * math.cos(a), y0 + 1, (TRAP_R0 - 0.6) * math.sin(a), HEK)
     a, _ = trap_landing(5)
     for s in (-1, 1):
         aa = a + s * (TRAP_WL / 2 + 0.05)
-        W.wset((TRAP_R0 - 1.6) * math.cos(aa), y0 + 2, (TRAP_R0 - 1.6) * math.sin(aa), LANTAARN)
+        W.wset((TRAP_R0 - 1.6) * math.cos(aa), y0 + 1, (TRAP_R0 - 1.6) * math.sin(aa), LANTAARN)
     # grote losse veren (roze, wit, goud)
     for k, (a, kl) in enumerate(((0.3, "minecraft:pink_wool"), (1.3, "minecraft:white_wool"),
                                  (2.4, "minecraft:pink_concrete"), (3.4, "minecraft:yellow_wool"),

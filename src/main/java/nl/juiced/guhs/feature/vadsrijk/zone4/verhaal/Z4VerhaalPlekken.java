@@ -371,8 +371,9 @@ public final class Z4VerhaalPlekken {
         vul(LAMPIONHAKEN, "lampionhaak_", "lampionhaak_", new int[][] {{1868, 67, -478}, {1868, 67, -451}, {1862, 67, -490}, {1840, 67, -462},
                 {1856, 67, -470}});
         vul(MISTBRIEVEN, "mistbrief_", "mistbrief_", new int[][] {{2465, 78, -340}, {2495, 78, -320}, {2485, 76, -345}});
+        // (U-DECO: knuffel 6's fallback was schildpad_rug = Schelpie's own spot; now the map's geheim_knuffel_6 on the shell)
         vul(KNUFFEL, "knuffel_", "geheim_knuffel_", new int[][] {{1830, 66, -500}, {1870, 85, -525}, {2210, 52, -560}, {2310, 86, -675},
-                {2100, 70, -420}, {2243, 71, -449}, {2490, 78, -335}, {2475, 72, -570}});
+                {2100, 70, -420}, {2241, 69, -457}, {2490, 78, -335}, {2475, 72, -570}});
         vul(FLESSENPOST, "fles_", "flessenpost_", new int[][] {{1975, 66, -330}, {1960, 66, -588}, {2040, 66, -412}, {1885, 66, -430},
                 {2385, 66, -515}, {2460, 66, -315}});
         String[] sc = {"duintop", "lagune", "vliegertop", "mist"};

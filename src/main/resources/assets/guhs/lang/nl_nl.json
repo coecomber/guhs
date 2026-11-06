@@ -43342,5 +43342,18 @@
   "vadsrijk.indeling.haven.haven_z4_z3_vertrek": "Lampionhaven",
   "vadsrijk.indeling.dev.tp": "Naar %s (%s).",
   "vadsrijk.indeling.dev.onbekend": "Onbekende plek: %s",
-  "vadsrijk.indeling.dev.barriere": "Barrières: %s"
+  "vadsrijk.indeling.dev.barriere": "Barrières: %s",
+  "vadsrijk.udeco.verdieping.nummer": "Verdieping %s van %s",
+  "vadsrijk.udeco.verdieping.1.naam": "Schorsstad",
+  "vadsrijk.udeco.verdieping.1.richting": "↑ Honingtak",
+  "vadsrijk.udeco.verdieping.2.naam": "Honingtak",
+  "vadsrijk.udeco.verdieping.2.richting": "↑ Kruin 1    ↓ Schorsstad",
+  "vadsrijk.udeco.verdieping.3.naam": "Kruin 1",
+  "vadsrijk.udeco.verdieping.3.richting": "↑ Kruin 2    ↓ Honingtak",
+  "vadsrijk.udeco.verdieping.4.naam": "Kruin 2",
+  "vadsrijk.udeco.verdieping.4.richting": "↑ Kruin 3    ↓ Kruin 1",
+  "vadsrijk.udeco.verdieping.5.naam": "Kruin 3",
+  "vadsrijk.udeco.verdieping.5.richting": "↑ Het Nest    ↓ Kruin 2",
+  "vadsrijk.udeco.verdieping.6.naam": "Het Nest",
+  "vadsrijk.udeco.verdieping.6.richting": "↓ Kruin 3 (de trap af)"
 }
