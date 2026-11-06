@@ -204,6 +204,80 @@ def toren():
 
 SHOTS = dict(karavaan=karavaan, zoutvlakte=zoutvlakte, toren=toren, bazaar=bazaar_binnen, spiegelzaal=spiegelzaal, kloof_overzicht=kloof_overzicht, kloof_straat=kloof_straat, skyline=skyline, stad_lucht=stad_lucht)
 
+
+# ---- [rozenkloof fork] extra shots of the canyon city (round 2)
+def kloof_richel():
+    W = venster(3330, 55, -790, 3480, 150, -640)
+    return schoot(W, "01c_rozenkloof_richels", (3404, 75, -700), (3384, 88, -742), 70, ZON_KLOOF,
+                  nevel=(0.12, 900), titel="De Richels",
+                  onderschrift="uitgehouwen tempelgevels, rotswoningen met erkers, galerijen en trappen in de rots; "
+                               "overhangende rotsranden en hangende tuinen",
+                  zon_box=(3330, 55, -790, 3480, 150, -640))
+
+
+def schatkamer_gevel():
+    W = venster(3380, 55, -760, 3540, 140, -640)
+    return schoot(W, "01d_schatkamer", (3432, 80, -699), (3480, 100, -698), 58, ZON_KLOOF,
+                  nevel=(0.1, 900), titel="De Schatkamer",
+                  onderschrift="de grote gevel in de eindwand: zuilenportiek, fronton, beeldnissen en de tholos met "
+                               "guh-oortjes", zon_box=(3380, 55, -760, 3540, 140, -640))
+
+
+def schatkamer_hal():
+    import rozenkloof as RK
+    W = venster(3470, 60, -730, 3530, 110, -670, delen=("land", "rozenkloof"), figuren=False)
+    B = RK.BAYLIST[-1]
+    y = B.L0 + 2
+    return schoot(W, "01e_schatkamer_hal", (3487.5, y + 3.2, B.czr + 0.5), (3515, y + 5, B.czr + 0.5), 70, BINNEN,
+                  binnen=True, achtergrond=(90, 60, 70), gloed=1.0, titel="De hal van Kloofmoeder Roosje",
+                  onderschrift="uitgehouwen in de rots: zuilenrijen, ronde messing lampen aan kettingen, mozaiek en de "
+                               "zetel onder de apsis", zon_box=(3470, 60, -730, 3530, 110, -670), schaduw_snel=True)
+
+
+def luchthaven_shot():
+    W = venster(3340, 60, -830, 3460, 200, -690)
+    return schoot(W, "01f_luchthaven_rozenkloof", (3428, 150, -748), (3398, 140, -784), 60, ZON_KLOOF,
+                  nevel=(0.1, 900), titel="Luchthaven Rozenkloof",
+                  onderschrift="de meertoren met wenteltrap, het dek en de pier over de kloofrand (lijn E naar Hoogvads)",
+                  zon_box=(3340, 60, -830, 3460, 200, -690))
+
+
+SHOTS.update(kloof_richel=kloof_richel, schatkamer_gevel=schatkamer_gevel, schatkamer_hal=schatkamer_hal,
+             luchthaven=luchthaven_shot)
+
+
+# ---- Saffraanpoort (U-Z6WERELD, Saffraanpoort fork): close-ups of the city with depth
+def sp_straat():
+    W = venster(3735, 55, -830, 3840, 140, -735, delen=("land", "saffraanpoort"))
+    return schoot(W, "02d_saffraanpoort_straat", (3789.5, 77.0, -768.5), (3835, 80, -770.5), 70, ZON_NAMIDDAG, nevel=(0.12, 700),
+                  titel="Saffraanpoort: een straat", onderschrift="rijhuizen met uitkragende bovenverdiepingen, erkers met mashrabiya, "
+                  "balkons, raamnissen, luifels, messing lantaarns en dakkamers met koepeltjes",
+                  zon_box=(3735, 55, -830, 3840, 140, -735))
+
+
+def sp_karavanserai():
+    W = venster(3640, 55, -835, 3715, 120, -765, delen=("land", "saffraanpoort"))
+    return schoot(W, "02e_karavanserai_hof", (3673.5, 79.5, -791.5), (3686, 72, -804), 72, ZON_NAMIDDAG, nevel=(0.1, 500),
+                  titel="De Karavanserai", onderschrift="het hof met arcaden in twee lagen, fontein, bultguhs, tapijt en pluimguh",
+                  zon_box=(3640, 55, -835, 3715, 120, -765))
+
+
+def sp_kanaal():
+    W = venster(3680, 55, -800, 3770, 120, -745, delen=("land", "saffraanpoort"))
+    return schoot(W, "02f_kanaalwijk", (3700.5, 74.0, -771.5), (3745, 73, -768.5), 66, ZON_WEST, nevel=(0.1, 500),
+                  titel="De Kanaalwijk", onderschrift="kanalen met kades, bruggetjes en huizen met erkers en balkons",
+                  zon_box=(3680, 55, -800, 3770, 120, -745))
+
+
+def sp_paleis_tuin():
+    W = venster(3690, 55, -965, 3840, 190, -815, delen=("land", "saffraanpoort"))
+    return schoot(W, "02g_paleis_vanaf_de_brug", (3762.5, 75.5, -853.5), (3762, 92, -910), 62, ZON_WEST, nevel=(0.12, 900),
+                  titel="Het Rozijnenpaleis", onderschrift="vanaf de Saffraanbrug: de Paradijstuin, het iwan-portaal, de gouden koepel "
+                  "en de minaretten met guh-oortjes", zon_box=(3690, 55, -965, 3840, 190, -815))
+
+
+SHOTS.update(sp_straat=sp_straat, sp_karavanserai=sp_karavanserai, sp_kanaal=sp_kanaal, sp_paleis_tuin=sp_paleis_tuin)
+
 if __name__ == "__main__":
     namen = [a for a in sys.argv[1:] if a not in ("snel", "mid")]
     if "alles" in namen:

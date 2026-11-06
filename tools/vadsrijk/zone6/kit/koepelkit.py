@@ -116,8 +116,9 @@ def nis(W, kant, c, u, y, breed=3, h_recht=2, diep=2, achter="mozaiek_bloem", ka
         V(W, kant, c, -(diep - 2), u, y, inhoud)
 
 
-def raamnis(W, kant, c, u, y, rng, soort=None, glas="glas"):
-    """A window with REAL depth: a 2-deep arched reveal with glass at the back, a sill (stair) and sometimes a planter or shutters."""
+def raamnis(W, kant, c, u, y, rng, soort=None, glas="glas", grond=False):
+    """A window with REAL depth: a 2-deep arched reveal with glass at the back, a sill (stair) and sometimes a planter or shutters.
+    grond=True (ground floor on a street): nothing sticks out at foot height (no sill, no planter)."""
     soort = soort or ["boog", "boog", "luik", "rond", "dubbel", "trali"][rng.randint(6)]
     if soort in ("boog", "dubbel", "trali"):
         n = 2 if soort == "dubbel" else 1
@@ -127,8 +128,9 @@ def raamnis(W, kant, c, u, y, rng, soort=None, glas="glas"):
                 V(W, kant, c, 0, uu, y_, b("mashrabiya") if soort == "trali" else LUCHT)
                 V(W, kant, c, -1, uu, y_, glas)
             V(W, kant, c, 0, uu, y + 2, trap("zs", FACE[tegen(kant)], half="top"))
-            V(W, kant, c, 1, uu, y - 1, trap("zs", FACE[tegen(kant)], half="top"))
-        if rng.rand() < 0.55:
+            if not grond:
+                V(W, kant, c, 1, uu, y - 1, trap("zs", FACE[tegen(kant)], half="top"))
+        if rng.rand() < 0.55 and not grond:
             ZB.bloembak(W, kant, c, u, y - 1)
     elif soort == "luik":
         for y_ in (y, y + 1):
@@ -136,7 +138,8 @@ def raamnis(W, kant, c, u, y, rng, soort=None, glas="glas"):
             V(W, kant, c, -1, u, y_, glas)
             for side in (-1, 1):
                 V(W, kant, c, 1, u + side, y_, f"minecraft:cherry_trapdoor[facing={FACE[kant]},half=top,open=true,powered=false,waterlogged=false]")
-        ZB.bloembak(W, kant, c, u, y - 1)
+        if not grond:
+            ZB.bloembak(W, kant, c, u, y - 1)
     else:   # rond: a round guh window in a mosaic disc
         V(W, kant, c, 0, u, y + 1, "glas_guh")
         V(W, kant, c, 0, u, y, "mozaiek_guh")
@@ -145,24 +148,23 @@ def raamnis(W, kant, c, u, y, rng, soort=None, glas="glas"):
 
 
 def erker(W, kant, c, u, y, breed=3, hoog=3, dak="koepel_tegel"):
-    """Mashrabiya oriel: 1-2 out on corbels, lattice panes front and sides, a little tiled roof with a gold knob."""
+    """Mashrabiya oriel: 1 out on corbels (the window glass 1 into the wall), lattice panes front and sides, a little tiled roof
+    with a gold knob."""
     hb = breed // 2
     for du in range(-hb, hb + 1):
         V(W, kant, c, 1, u + du, y - 1, trap("palm_planken", FACE[tegen(kant)], half="top"))
-        V(W, kant, c, 2, u + du, y - 1, trap("palm_planken", FACE[tegen(kant)], half="top"))
-        V(W, kant, c, 1, u + du, y - 2, trap("zs", FACE[tegen(kant)], half="top"))
-        for dy in range(hoog):
-            V(W, kant, c, 2, u + du, y + dy, "mashrabiya")
-            V(W, kant, c, 1, u + du, y + dy, LUCHT)
-            V(W, kant, c, 0, u + du, y + dy, "glas")
-        V(W, kant, c, 1, u + du, y + hoog, plaat("koepel_tegel") if dak == "koepel_tegel" else plaat("palm_planken"))
-        V(W, kant, c, 2, u + du, y + hoog, trap("koepel_tegel", FACE[tegen(kant)]) if dak == "koepel_tegel" else plaat("palm_planken"))
-    for du in (-hb - 1, hb + 1):
+        V(W, kant, c, 0, u + du, y - 1, "palm_planken")
         for dy in range(hoog):
             V(W, kant, c, 1, u + du, y + dy, "mashrabiya")
-            V(W, kant, c, 2, u + du, y + dy, "palm_stam")
-        V(W, kant, c, 2, u + du, y - 1, trap("palm_planken", FACE[tegen(kant)], half="top"))
-        V(W, kant, c, 2, u + du, y + hoog, "goud")
+            V(W, kant, c, 0, u + du, y + dy, LUCHT)
+            V(W, kant, c, -1, u + du, y + dy, "glas")
+        V(W, kant, c, 1, u + du, y + hoog, trap("koepel_tegel", FACE[tegen(kant)]) if dak == "koepel_tegel" else plaat("palm_planken"))
+        V(W, kant, c, 0, u + du, y + hoog, "goud")
+    for du in (-hb - 1, hb + 1):
+        for dy in range(hoog):
+            V(W, kant, c, 1, u + du, y + dy, "palm_stam")
+        V(W, kant, c, 1, u + du, y - 1, trap("zs", FACE[tegen(kant)], half="top"))
+        V(W, kant, c, 1, u + du, y + hoog, "goud")
 
 
 def balkon(W, kant, c, u1, u2, y, k_rail="palm_hek", bloemen=True, seed=0):
@@ -193,15 +195,15 @@ def luifel(W, kant, c, u1, u2, y, diep=2):
         V(W, kant, c, 0, u, y, "goud")
 
 
-def deur(W, kant, c, u, y0, open_=True, kader="tegel_turkoois", achter="mozaiek_bloem"):
+def deur(W, kant, c, u, y0, open_=True, kader="goud", achter="mozaiek_bloem"):
     """Door in an arched niche 2 deep: the real door at d = -1 (only the middle column), mosaic beside it, a silk awning, two brass
     wall lanterns and a stoop. open_ = the room behind is hollow (enterable); else the door stays closed against the wall."""
-    ZB.boog(W, kant, c, u + 0.5, y0, 3, 3, diep=2, kader=kader, achter=achter)
+    ZB.boog(W, kant, c, u + 0.5, y0, 3, 2, diep=2, kader=kader, achter=achter)
     f = FACE[kant]
     V(W, kant, c, -1, u, y0, f"{DEUR}[facing={f},half=lower,hinge=left,open=false,powered=false]")
     V(W, kant, c, -1, u, y0 + 1, f"{DEUR}[facing={f},half=upper,hinge=left,open=false,powered=false]")
     V(W, kant, c, -1, u, y0 + 2, achter)
-    luifel(W, kant, c, u - 1, u + 1, y0 + 5)
+    luifel(W, kant, c, u - 1, u + 1, y0 + 4)
     for du in (-2, 2):
         V(W, kant, c, 1, u + du, y0 + 3, ml(False)) if False else wandlamp(W, kant, c, u + du, y0 + 2)
     for du in (-1, 0, 1):
@@ -263,7 +265,7 @@ def interieur(W, x1, z1, x2, z2, y0, h, rol="woning", seed=0, deur_p=None):
 GEVELS = ["muur_vanille", "muur_roze", "muur_perzik", "zs", "muur_boter", "muur_roze", "muur_lavendel", "zs"]
 
 
-def huis2(W, x1, z1, x2, z2, y0, kant, verd=2, seed=0, gevel=None, open_=False, rol=None, hid=None):
+def huis2(W, x1, z1, x2, z2, y0, kant, verd=2, seed=0, gevel=None, open_=False, rol=None, hid=None, dakluik=None):
     """Town house with depth, its front facing 'kant'. Ground floor (5 high) in the footprint; the upper storeys overhang the street by 1
     on corbels; door niche, window reveals, an oriel or a balcony, muqarnas cornice, crenellation, a set-back roof room with a small
     dome (with guh ears) or a wind tower, roof garden. open_: the ground floor is hollow + furnished (zijbouw.huis_rol records it).
@@ -302,14 +304,14 @@ def huis2(W, x1, z1, x2, z2, y0, kant, verd=2, seed=0, gevel=None, open_=False, 
     # ground floor: corner pilasters (in the wall plane: quoins) + door + windows/niches
     for u in (u1, u2):
         for y in range(y0, y0 + 4):
-            V(W, kant, c, 0, u, y, "zs" if y % 2 else "zs_beitel")
+            V(W, kant, c, 0, u, y, "zs_beitel" if y == y0 + 1 else "zs")
     deur(W, kant, c, um, y0, open_=open_)
     for u in range(u1 + 2, u2 - 1):
         if abs(u - um) < 3:
             continue
         if (u - um) % 3 == 0:
             if open_ or rng.rand() < 0.6:
-                raamnis(W, kant, c, u, y0 + 1, rng, soort=["boog", "trali", "luik"][rng.randint(3)])
+                raamnis(W, kant, c, u, y0 + 1, rng, soort=["boog", "trali", "luik"][rng.randint(3)], grond=True)
             else:
                 nis(W, kant, c, u, y0, breed=1, h_recht=2, achter="mozaiek_bloem", kader=None,
                     inhoud=ZB.PLANTEN[rng.randint(len(ZB.PLANTEN))])
@@ -342,8 +344,26 @@ def huis2(W, x1, z1, x2, z2, y0, kant, verd=2, seed=0, gevel=None, open_=False, 
             sc = z2 if sk[1] > 0 else z1
             su1, su2 = x1, x2
         if Vget(W, sk, sc, 1, (su1 + su2) // 2, y0 + 6) == LUCHT and su2 - su1 >= 5:
-            for v in range(1, verd):
-                raamnis(W, sk, sc, (su1 + su2) // 2, y0 + v * 5 + 2, rng, soort="rond" if v % 2 else "luik")
+            # a free side (a street or a square): the same depth as the front, never a flat wall
+            L = su2 - su1
+            us = [(su1 + su2) // 2] if L < 8 else [su1 + 3, su2 - 3]
+            if sk[0] + sk[1] > 0:
+                pass
+            for v in range(verd):
+                for uu in us:
+                    if v == 0:
+                        nis(W, sk, sc, uu, y0, breed=1, h_recht=2, achter="mozaiek_bloem", kader=None,
+                            inhoud=ZB.PLANTEN[rng.randint(len(ZB.PLANTEN))])
+                    else:
+                        raamnis(W, sk, sc, uu, y0 + v * 5 + 2, rng, soort=["rond", "luik", "boog", "trali"][(v + uu) % 4])
+            for uu in (su1, su2):
+                for y in range(y0 + 5, y0 + hgt - 2):
+                    V(W, sk, sc, 1, uu, y, "zs" if (y - y0) % 5 else "zs_beitel")
+                V(W, sk, sc, 1, uu, y0 + 4, trap("zs", FACE[tegen(sk)], half="top"))
+            if verd >= 2 and L >= 8:
+                um2 = (su1 + su2) // 2
+                balkon(W, sk, sc, um2, um2, y0 + 6, seed=seed + 3) if rng.rand() < 0.4 else                     erker(W, sk, sc, um2, y0 + 6, breed=1, hoog=2)
+            muqarnas(W, sk, sc, su1 + 1, su2 - 1, y0 + hgt - 3, band="mozaiek_ster")
     # cornice + roof
     yd = y0 + hgt
     muqarnas(W, kant, cc, u1, u2, yd - 3, band=["mozaiek_ster", "mozaiek_bloem", "mozaiek_guh"][rng.randint(3)])
@@ -412,4 +432,14 @@ def huis2(W, x1, z1, x2, z2, y0, kant, verd=2, seed=0, gevel=None, open_=False, 
         if hid:
             dpos = (c - s * 1, y0, um) if dx else (um, y0, c - s * 1)
             ZB.huis_rol(W, hid, rol or "woning", dpos, binnen)
+        if dakluik and dx == 0:
+            # a ladder shaft in the back corner up through the closed storeys to a roof hatch; dakluik = the POI id of the roof
+            ax, az = x2 - 1, (z2 - 1 if dz < 0 else z1 + 1)
+            for y in range(y0, yd + 1):
+                zet(W, ax, y, az, "minecraft:ladder[facing=west,waterlogged=false]")
+            for (px, pz) in ((ax, az), (ax - 1, az), (ax - 2, az)):
+                leeg(W, px, yd + 1, pz, px, yd + 3, pz)
+            zet(W, ax - 1, yd, az, "steen_vanille")
+            zet(W, ax - 2, yd, az, "steen_vanille")
+            ZB.plek(W, dakluik, ax - 2, yd + 1, az)
     return (c + s, y0, um) if dx else (um, y0, c + s)
