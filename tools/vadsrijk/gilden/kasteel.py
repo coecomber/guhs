@@ -165,8 +165,41 @@ def verbind(v):
 
 # ---- writing ---------------------------------------------------------------------------------------------------------------
 
+def centraal(v):
+    """V-INT: u-hekken's shared connection pass (tools/vadsrijk/verbind.py) over the whole template, after the own pass: the same
+    rules as the map tiles (wall heights, chains, garlands, gap fill on diagonal steps). Returns the number of changed cells."""
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+    import verbind
+    pal, idx = ["minecraft:air"], {"minecraft:air": 0}
+
+    def sid(bn, props):
+        return bn + ("[" + ",".join(f"{k}={w}" for k, w in sorted(props.items())) + "]" if props else "")
+
+    def id_fn(st):
+        if st not in idx:
+            idx[st] = len(pal)
+            pal.append(st)
+        return idx[st]
+
+    g = np.zeros(v.s, np.int32)
+    for (x, y, z), (bn, props) in v.b.items():
+        g[x, y, z] = id_fn(sid(bn, props))
+    oud = g.copy()
+    n = verbind.verbind_vol(g, pal, id_fn)
+    for x, y, z in zip(*np.nonzero(g != oud)):
+        st = pal[int(g[x, y, z])]
+        if "[" in st:
+            bn, rest = st[:-1].split("[", 1)
+            props = dict(kv.split("=", 1) for kv in rest.split(",") if kv)
+        else:
+            bn, props = st, {}
+        v.b[(int(x), int(y), int(z))] = (bn, props)
+    return n
+
+
 def schrijf(v, naam):
     verbind(v)
+    print(f"  {naam}: central verbind pass changed {centraal(v)} cells")   # V-INT
     pal = []
     idx = {}
     xs, ys, zs, st = [], [], [], []

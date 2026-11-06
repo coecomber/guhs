@@ -71,6 +71,14 @@ public final class WijkBouw {
         }
 
         void lantaarnpaal(int x, int z) {
+            // V-INT: u-deco's guhlantaarnpaal (2 blocks) instead of the cherry fence + lantern (fallback when the block is missing)
+            Block paal = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(nl.juiced.guhs.Guhs.id("guh_lantaarnpaal"));
+            if (paal instanceof nl.juiced.guhs.feature.bouwhulp.blokken.DetailBlokken.Lantaarnpaal) {
+                var half = nl.juiced.guhs.feature.bouwhulp.blokken.DetailBlokken.Lantaarnpaal.HALF;
+                zet(x, WijkPlan.VLOER, z, paal.defaultBlockState().setValue(half, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER));
+                zet(x, WijkPlan.VLOER + 1, z, paal.defaultBlockState().setValue(half, net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER));
+                return;
+            }
             for (int y = WijkPlan.VLOER; y < WijkPlan.VLOER + 3; y++) {
                 zet(x, y, z, Blocks.CHERRY_FENCE);
             }

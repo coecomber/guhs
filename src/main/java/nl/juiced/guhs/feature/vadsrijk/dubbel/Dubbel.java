@@ -224,6 +224,9 @@ public final class Dubbel {
      * Every double among the visible entities of this level: same unique key (strict), or (heuristic, not keyed) an NPC guh with
      * the same NPC id, or a named Vadsrijk non-mob with the same type + name within 2 blocks.
      */
+    /** V-INT: entities the heuristic scan leaves alone (own managers with their own one-per-spot rule: u-ruiters, u-huizen figures). */
+    public static final List<java.util.function.Predicate<Entity>> NIET_HEURISTISCH = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     public static List<Groep> scan(ServerLevel sl) {
         Map<String, List<Entity>> per = new LinkedHashMap<>();
         Map<String, Boolean> streng = new HashMap<>();
@@ -238,6 +241,9 @@ public final class Dubbel {
                 continue;
             }
             String h = null;
+            if (NIET_HEURISTISCH.stream().anyMatch(f -> f.test(e))) {
+                continue;   // V-INT
+            }
             if (e instanceof RijkGuh g && !g.npcId().isEmpty()) {
                 h = "npc?:" + g.npcId();
             } else if (e.hasCustomName() && e.getClass().getName().startsWith("nl.juiced.guhs.feature.vadsrijk.") && !(e instanceof VadsrijkMob m && !(m instanceof VadsrijkBaas))) {

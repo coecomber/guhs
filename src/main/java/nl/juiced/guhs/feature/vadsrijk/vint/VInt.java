@@ -11,7 +11,8 @@ import nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs;
  * V-INT (round U integration): the server-side glue between round-U slices that were built apart.
  * <ul>
  * <li>u-specs -> u-tabs: the specialisation line in the Karakter tab ({@code MenuServer.KARAKTER_EXTRA});</li>
- * <li>u-specs -> u-hud: the spec name under a party member's name ({@code PartyFrames.SPEC_BRON}).</li>
+ * <li>u-specs -> u-hud: the spec name under a party member's name ({@code PartyFrames.SPEC_BRON});</li>
+ * <li>u-dubbel: u-ruiters' riders and the Knuffelkwartier are left out of the heuristic double scan.</li>
  * </ul>
  */
 public final class VInt {
@@ -19,6 +20,11 @@ public final class VInt {
     }
 
     public static void register(IEventBus modBus) {
+        // u-dubbel's heuristic scan: u-ruiters (one pair per route#k, own join guard + sweep) and everything in the Knuffelkwartier
+        // (u-huizen's figures + one Mollie per ward share an npc id on purpose) are not doubles.
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.NIET_HEURISTISCH.add(e -> e instanceof nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterGuh
+                || e instanceof nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterPluim);
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.NIET_HEURISTISCH.add(e -> "knuffelkwartier".equals(e.level().dimension().identifier().getPath()));
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.KARAKTER_EXTRA.add((p, data) -> {
             ListTag extra = data.getListOrEmpty("extra");
             CompoundTag regel = new CompoundTag();
