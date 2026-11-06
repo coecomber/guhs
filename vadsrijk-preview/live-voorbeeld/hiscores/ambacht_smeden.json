@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_smeden",
- "tijd": "2026-11-06T11:39:44Z",
+ "tijd": "2026-11-06T15:42:23Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Honingbeer",
+   "naam": "Knuffelkoning",
    "waarde": 94,
    "xp": 112800
   },
   {
    "plek": 2,
-   "naam": "Njeggie",
+   "naam": "Lieke",
    "waarde": 81,
    "xp": 97200
   },
   {
    "plek": 3,
-   "naam": "Sjokkel",
+   "naam": "Vadsvos",
    "waarde": 81,
    "xp": 97200
   },
   {
    "plek": 4,
-   "naam": "Vadsvos",
-   "waarde": 78,
-   "xp": 93600
+   "naam": "Sjokkel",
+   "waarde": 79,
+   "xp": 94800
   },
   {
    "plek": 5,
-   "naam": "Pluimpje",
+   "naam": "Zwamzoetje",
    "waarde": 71,
    "xp": 85200
   },
   {
    "plek": 6,
-   "naam": "Klodderkid",
+   "naam": "Wolwinter",
+   "waarde": 70,
+   "xp": 84000
+  },
+  {
+   "plek": 7,
+   "naam": "PluisPiet",
    "waarde": 52,
    "xp": 62400
   },
   {
-   "plek": 7,
-   "naam": "Juiced",
+   "plek": 8,
+   "naam": "Pluimpje",
    "waarde": 49,
    "xp": 58800
   },
   {
-   "plek": 8,
-   "naam": "Lieke",
-   "waarde": 45,
-   "xp": 54000
-  },
-  {
    "plek": 9,
-   "naam": "Kaasknabbel",
+   "naam": "Honingbeer",
    "waarde": 42,
    "xp": 50400
   },
   {
    "plek": 10,
-   "naam": "PluisPiet",
-   "waarde": 33,
-   "xp": 39600
-  },
-  {
-   "plek": 11,
-   "naam": "Zwamzoetje",
+   "naam": "Juiced",
    "waarde": 30,
    "xp": 36000
   },
   {
-   "plek": 12,
-   "naam": "Knuffelkoning",
-   "waarde": 28,
-   "xp": 33600
+   "plek": 11,
+   "naam": "Klodderkid",
+   "waarde": 24,
+   "xp": 28800
   },
   {
-   "plek": 13,
-   "naam": "Wolwinter",
+   "plek": 12,
+   "naam": "Kaasknabbel",
    "waarde": 16,
    "xp": 19200
   },
   {
-   "plek": 14,
-   "naam": "MikaMepper",
+   "plek": 13,
+   "naam": "Njeggie",
    "waarde": 13,
    "xp": 15600
+  },
+  {
+   "plek": 14,
+   "naam": "MikaMepper",
+   "waarde": 2,
+   "xp": 2400
   }
  ]
 }

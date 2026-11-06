@@ -1,0 +1,43 @@
+{
+ "tijd": 1793979743000,
+ "spelers": [
+  {
+   "naam": "Lieke",
+   "x": 104,
+   "z": 449,
+   "klasse": "pluisjager",
+   "level": 50,
+   "zone": "zone1"
+  },
+  {
+   "naam": "Juiced",
+   "x": -298,
+   "z": 343,
+   "klasse": "pluisjager",
+   "level": 45,
+   "zone": "zone1"
+  },
+  {
+   "naam": "PluisPiet",
+   "x": 843,
+   "z": -912,
+   "klasse": "vadsmagier",
+   "level": 41,
+   "zone": "zone2"
+  }
+ ],
+ "status": [
+  {
+   "naam": "Knuffelkoning",
+   "waar": "in een kerker"
+  }
+ ],
+ "schepen": [
+  {
+   "id": "lijn_c",
+   "x": 1439,
+   "z": -547,
+   "naar": "lampionhaven"
+  }
+ ]
+}

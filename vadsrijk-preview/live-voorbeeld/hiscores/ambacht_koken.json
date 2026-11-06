@@ -1,88 +1,88 @@
 {
  "lijst": "ambacht_koken",
- "tijd": "2026-11-06T11:39:44Z",
+ "tijd": "2026-11-06T15:42:23Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Klodderkid",
+   "naam": "PluisPiet",
    "waarde": 88,
    "xp": 105600
   },
   {
    "plek": 2,
-   "naam": "Wolwinter",
+   "naam": "Kaasknabbel",
    "waarde": 82,
    "xp": 98400
   },
   {
    "plek": 3,
    "naam": "MikaMepper",
+   "waarde": 79,
+   "xp": 94800
+  },
+  {
+   "plek": 4,
+   "naam": "Pluimpje",
+   "waarde": 78,
+   "xp": 93600
+  },
+  {
+   "plek": 5,
+   "naam": "Njeggie",
    "waarde": 69,
    "xp": 82800
   },
   {
-   "plek": 4,
-   "naam": "Kaasknabbel",
-   "waarde": 61,
-   "xp": 73200
-  },
-  {
-   "plek": 5,
-   "naam": "Juiced",
-   "waarde": 47,
-   "xp": 56400
-  },
-  {
    "plek": 6,
-   "naam": "Zwamzoetje",
+   "naam": "Sjokkel",
+   "waarde": 51,
+   "xp": 61200
+  },
+  {
+   "plek": 7,
+   "naam": "Klodderkid",
+   "waarde": 49,
+   "xp": 58800
+  },
+  {
+   "plek": 8,
+   "naam": "Juiced",
    "waarde": 46,
    "xp": 55200
   },
   {
-   "plek": 7,
-   "naam": "Knuffelkoning",
-   "waarde": 42,
-   "xp": 50400
-  },
-  {
-   "plek": 8,
-   "naam": "Sjokkel",
+   "plek": 9,
+   "naam": "Vadsvos",
    "waarde": 39,
    "xp": 46800
   },
   {
-   "plek": 9,
-   "naam": "Vadsvos",
-   "waarde": 35,
-   "xp": 42000
-  },
-  {
    "plek": 10,
-   "naam": "Lieke",
+   "naam": "Honingbeer",
    "waarde": 31,
    "xp": 37200
   },
   {
    "plek": 11,
-   "naam": "PluisPiet",
-   "waarde": 26,
-   "xp": 31200
+   "naam": "Wolwinter",
+   "waarde": 25,
+   "xp": 30000
   },
   {
    "plek": 12,
-   "naam": "Honingbeer",
+   "naam": "Knuffelkoning",
    "waarde": 21,
    "xp": 25200
   },
   {
    "plek": 13,
-   "naam": "Njeggie",
+   "naam": "Lieke",
    "waarde": 14,
    "xp": 16800
   },
   {
    "plek": 14,
-   "naam": "Pluimpje",
+   "naam": "Zwamzoetje",
    "waarde": 7,
    "xp": 8400
   }

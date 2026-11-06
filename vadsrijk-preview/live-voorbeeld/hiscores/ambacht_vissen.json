@@ -1,88 +1,88 @@
 {
  "lijst": "ambacht_vissen",
- "tijd": "2026-11-06T11:39:44Z",
+ "tijd": "2026-11-06T15:42:23Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Klodderkid",
+   "naam": "Pluimpje",
+   "waarde": 94,
+   "xp": 112800
+  },
+  {
+   "plek": 2,
+   "naam": "PluisPiet",
    "waarde": 89,
    "xp": 106800
   },
   {
-   "plek": 2,
-   "naam": "Wolwinter",
+   "plek": 3,
+   "naam": "Kaasknabbel",
    "waarde": 87,
    "xp": 104400
   },
   {
-   "plek": 3,
-   "naam": "Kaasknabbel",
-   "waarde": 84,
-   "xp": 100800
-  },
-  {
    "plek": 4,
-   "naam": "Knuffelkoning",
-   "waarde": 83,
-   "xp": 99600
+   "naam": "Honingbeer",
+   "waarde": 75,
+   "xp": 90000
   },
   {
    "plek": 5,
-   "naam": "PluisPiet",
-   "waarde": 81,
-   "xp": 97200
-  },
-  {
-   "plek": 6,
-   "naam": "Sjokkel",
+   "naam": "Vadsvos",
    "waarde": 70,
    "xp": 84000
   },
   {
-   "plek": 7,
-   "naam": "Vadsvos",
-   "waarde": 67,
-   "xp": 80400
+   "plek": 6,
+   "naam": "MikaMepper",
+   "waarde": 63,
+   "xp": 75600
   },
   {
-   "plek": 8,
-   "naam": "MikaMepper",
+   "plek": 7,
+   "naam": "Njeggie",
    "waarde": 62,
    "xp": 74400
   },
   {
-   "plek": 9,
-   "naam": "Juiced",
-   "waarde": 49,
-   "xp": 58800
-  },
-  {
-   "plek": 10,
-   "naam": "Njeggie",
+   "plek": 8,
+   "naam": "Lieke",
    "waarde": 43,
    "xp": 51600
   },
   {
-   "plek": 11,
-   "naam": "Lieke",
-   "waarde": 32,
-   "xp": 38400
-  },
-  {
-   "plek": 12,
-   "naam": "Pluimpje",
+   "plek": 9,
+   "naam": "Zwamzoetje",
    "waarde": 29,
    "xp": 34800
   },
   {
-   "plek": 13,
-   "naam": "Honingbeer",
+   "plek": 10,
+   "naam": "Knuffelkoning",
    "waarde": 26,
    "xp": 31200
   },
   {
+   "plek": 11,
+   "naam": "Sjokkel",
+   "waarde": 21,
+   "xp": 25200
+  },
+  {
+   "plek": 12,
+   "naam": "Wolwinter",
+   "waarde": 20,
+   "xp": 24000
+  },
+  {
+   "plek": 13,
+   "naam": "Klodderkid",
+   "waarde": 10,
+   "xp": 12000
+  },
+  {
    "plek": 14,
-   "naam": "Zwamzoetje",
+   "naam": "Juiced",
    "waarde": 4,
    "xp": 4800
   }

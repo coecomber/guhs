@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_naaien",
- "tijd": "2026-11-06T11:39:44Z",
+ "tijd": "2026-11-06T15:42:23Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Zwamzoetje",
+   "naam": "Juiced",
    "waarde": 99,
    "xp": 118800
   },
   {
    "plek": 2,
-   "naam": "Sjokkel",
+   "naam": "Vadsvos",
    "waarde": 90,
    "xp": 108000
   },
   {
    "plek": 3,
-   "naam": "PluisPiet",
-   "waarde": 79,
-   "xp": 94800
-  },
-  {
-   "plek": 4,
-   "naam": "Honingbeer",
+   "naam": "Knuffelkoning",
    "waarde": 76,
    "xp": 91200
   },
   {
-   "plek": 5,
-   "naam": "Knuffelkoning",
-   "waarde": 70,
-   "xp": 84000
+   "plek": 4,
+   "naam": "Pluimpje",
+   "waarde": 61,
+   "xp": 73200
   },
   {
-   "plek": 6,
-   "naam": "Pluimpje",
+   "plek": 5,
+   "naam": "Zwamzoetje",
    "waarde": 59,
    "xp": 70800
   },
   {
-   "plek": 7,
-   "naam": "MikaMepper",
+   "plek": 6,
+   "naam": "Njeggie",
    "waarde": 50,
    "xp": 60000
   },
   {
-   "plek": 8,
-   "naam": "Kaasknabbel",
-   "waarde": 49,
-   "xp": 58800
+   "plek": 7,
+   "naam": "Honingbeer",
+   "waarde": 47,
+   "xp": 56400
   },
   {
-   "plek": 9,
-   "naam": "Juiced",
+   "plek": 8,
+   "naam": "Wolwinter",
    "waarde": 42,
    "xp": 50400
   },
   {
+   "plek": 9,
+   "naam": "MikaMepper",
+   "waarde": 35,
+   "xp": 42000
+  },
+  {
    "plek": 10,
-   "naam": "Klodderkid",
+   "naam": "PluisPiet",
    "waarde": 33,
    "xp": 39600
   },
   {
    "plek": 11,
-   "naam": "Lieke",
-   "waarde": 24,
-   "xp": 28800
+   "naam": "Klodderkid",
+   "waarde": 31,
+   "xp": 37200
   },
   {
    "plek": 12,
-   "naam": "Wolwinter",
+   "naam": "Sjokkel",
+   "waarde": 26,
+   "xp": 31200
+  },
+  {
+   "plek": 13,
+   "naam": "Kaasknabbel",
    "waarde": 23,
    "xp": 27600
   },
   {
-   "plek": 13,
-   "naam": "Njeggie",
+   "plek": 14,
+   "naam": "Lieke",
    "waarde": 16,
    "xp": 19200
-  },
-  {
-   "plek": 14,
-   "naam": "Vadsvos",
-   "waarde": 2,
-   "xp": 2400
   }
  ]
 }

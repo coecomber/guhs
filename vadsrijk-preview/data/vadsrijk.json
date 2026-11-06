@@ -2092,7 +2092,7 @@
     293,
     -559
    ],
-   "naam": "Uitkijkpunt Nest",
+   "naam": "Uitkijkpunt Het Kruinnest",
    "gebied": "z3_kruinzee"
   },
   {
@@ -2296,7 +2296,7 @@
     90,
     -517
    ],
-   "naam": "Uitkijkpunt Lampionduin",
+   "naam": "Uitkijkpunt De Lampionduin",
    "gebied": "z4_lampionhaven"
   },
   {
@@ -2308,7 +2308,7 @@
     73,
     -559
    ],
-   "naam": "Uitkijkpunt Pierkop",
+   "naam": "Uitkijkpunt De Pierkop",
    "gebied": "z4_pierkop"
   },
   {
@@ -2320,7 +2320,7 @@
     91,
     -663
    ],
-   "naam": "Uitkijkpunt Vliegerheuvel",
+   "naam": "Uitkijkpunt De Vliegerheuvel",
    "gebied": "z4_vliegereiland"
   },
   {
@@ -2332,7 +2332,7 @@
     128,
     -495
    ],
-   "naam": "Uitkijkpunt Vuurtoren",
+   "naam": "Uitkijkpunt De Vuurtorengalerij",
    "gebied": "z4_vuurtoreneiland"
   },
   {
@@ -2839,12 +2839,9 @@
     "hq07_littekens",
     "hq08_sporenwoud",
     "hq12_schaduw",
-    "adv10_knuffelridder",
-    "adv20_knuffelridder",
-    "adv10_pluisjager",
-    "adv20_pluisjager",
-    "adv10_vadsmagier",
-    "adv20_vadsmagier",
+    "spec17_knuffelridder",
+    "spec17_pluisjager",
+    "spec17_vadsmagier",
     "geheim_spion"
    ]
   },
@@ -3776,10 +3773,7 @@
     "Kristal onthoudt alles. Licht, warmte, liedjes. Daarom luister ik er graag naar."
    ],
    "quests": [
-    "z2_hq12_hartsplinter",
-    "z2_adv30_knuffelridder",
-    "z2_adv30_pluisjager",
-    "z2_adv30_vadsmagier"
+    "z2_hq12_hartsplinter"
    ]
   },
   {
@@ -4918,9 +4912,9 @@
     "z3_hq11_wortel",
     "z3_hq14_vahoegnir",
     "z3_hq15_hoogvads",
-    "z3_adv50_knuffelridder",
-    "z3_adv50_pluisjager",
-    "z3_adv50_vadsmagier",
+    "z3_adv35_knuffelridder",
+    "z3_adv35_pluisjager",
+    "z3_adv35_vadsmagier",
     "z4_hq01_lampionkust"
    ]
   },
@@ -6001,286 +5995,6 @@
    "quests": []
   },
   {
-   "id": "amb_smid_z1",
-   "naam": "Smidguh Hamertje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Klink, klonk, klunk!",
-    "Een goed zwaard is als een knuffel: stevig maar lief.",
-    "Wie een bazenkern heeft, maakt een Meesterwerk!"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_naai_z1",
-   "naam": "Naaiguh Vingerhoedje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Steek, steek, knoop!",
-    "Vingerhoedje op, daar gaan we.",
-    "Pluiskatoen is het zachtste wat er is."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_kok_z1",
-   "naam": "Kok Kruimeltje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Proeven mag, snoepen niet!",
-    "Een feestmaal is pas lekker met je hele party.",
-    "Oma Truus zegt: altijd een snufje vads."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_brouw_z1",
-   "naam": "Brouwguh Bubbel",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Bubbel, bubbel, borrel...",
-    "Niet aan de ketel zitten, die is heet!",
-    "Waarom worden de kristallen toch grauw?"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_mijn_z1",
-   "naam": "Mijnguh Bonk",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Bonk! Bonk! Bonk!",
-    "Glinstert daar iets?",
-    "Een helm op je hoofd is geen overbodige luxe."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_hout_z1",
-   "naam": "Houtguh Spaan",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Njeg-njeg, hak-hak!",
-    "Een boom die je knuffelt, groeit harder.",
-    "Spaan voor spaan."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_pluk_z1",
-   "naam": "Kruidenguh Madelief",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Zachtjes, zachtjes...",
-    "Een gouden klaver? Dan heb je geluk!",
-    "Ruik eens aan de klodderklaver."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_vis_z1",
-   "naam": "Visguh Dobbertje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Stil... stil... beet!",
-    "De grootste vis zwemt altijd net weg.",
-    "Ooit vis ik in de Lampionkust."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_bord_z1",
-   "naam": "Klerk Krabbel",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Drie bestellingen per dag, niet meer en niet minder.",
-    "Kijk eens wie er bovenaan staat!",
-    "Bestellen, leveren, blij maken."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_smid_z2",
-   "naam": "Smidguh IJzerpootje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Klink, klonk, klunk!",
-    "Een goed zwaard is als een knuffel: stevig maar lief.",
-    "Wie een bazenkern heeft, maakt een Meesterwerk!"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_naai_z2",
-   "naam": "Naaiguh Wolwantje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Steek, steek, knoop!",
-    "Vingerhoedje op, daar gaan we.",
-    "Pluiskatoen is het zachtste wat er is."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_kok_z2",
-   "naam": "Kok Kandijkoek",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Proeven mag, snoepen niet!",
-    "Een feestmaal is pas lekker met je hele party.",
-    "Oma Truus zegt: altijd een snufje vads."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_brouw_z2",
-   "naam": "Brouwguh Bruisje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Bubbel, bubbel, borrel...",
-    "Niet aan de ketel zitten, die is heet!",
-    "Waarom worden de kristallen toch grauw?"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_bord_z2",
-   "naam": "Klerk Kriebel",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Drie bestellingen per dag, niet meer en niet minder.",
-    "Kijk eens wie er bovenaan staat!",
-    "Bestellen, leveren, blij maken."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_smid_z3",
-   "naam": "Hamerhoning",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Klink, klonk, klunk!",
-    "Een goed zwaard is als een knuffel: stevig maar lief.",
-    "Wie een bazenkern heeft, maakt een Meesterwerk!"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_naai_z3",
-   "naam": "Naaiguh Zijdezoem",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Steek, steek, knoop!",
-    "Vingerhoedje op, daar gaan we.",
-    "Pluiskatoen is het zachtste wat er is."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_kok_z3",
-   "naam": "Kok Honingtaartje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Proeven mag, snoepen niet!",
-    "Een feestmaal is pas lekker met je hele party.",
-    "Oma Truus zegt: altijd een snufje vads."
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_brouw_z3",
-   "naam": "Brouwguh Nectarine",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Bubbel, bubbel, borrel...",
-    "Niet aan de ketel zitten, die is heet!",
-    "Waarom worden de kristallen toch grauw?"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_imker_z3",
-   "naam": "Imkerguh Zoemie",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Zzzoem zzzoem.",
-    "Bijen zijn guhs met vleugeltjes, zeg ik altijd.",
-    "Pas op, die Mika-imker zuigt alles leeg!"
-   ],
-   "quests": []
-  },
-  {
-   "id": "amb_bord_z3",
-   "naam": "Klerk Kraaltje",
-   "zone": "zone1",
-   "waar": "",
-   "pos": null,
-   "rol": null,
-   "praat": [
-    "Drie bestellingen per dag, niet meer en niet minder.",
-    "Kijk eens wie er bovenaan staat!",
-    "Bestellen, leveren, blij maken."
-   ],
-   "quests": []
-  },
-  {
    "id": "z5_koningin",
    "naam": "Koningin Zachtmoed de Derde",
    "zone": "zone5",
@@ -6368,6 +6082,9 @@
     "Een ridder van de Orde in mijn Academie? Wat een eer. Zeg maar Veer."
    ],
    "quests": [
+    "z5_adv58_knuffelridder",
+    "z5_adv58_pluisjager",
+    "z5_adv58_vadsmagier",
     "z5_s06_parcours",
     "z5_s07_kadet"
    ]
@@ -8088,6 +7805,198 @@
     "Steek het kampvuur aan: hier word je wakker als je flauwvalt. Warm, veilig, en je verliest niks.",
     "De Kustwacht houdt de lampions brandend en de bootjes heel. En we delen onze koekjes.",
     "De wezens aan de kust zijn grauw en verdrietig. Vrolijk ze op, avonturier. Een roze plof en ze zijn weer blij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "kk_poort",
+   "naam": "Kwartiermeester",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [],
+   "quests": []
+  },
+  {
+   "id": "kk_mollie",
+   "naam": "Meubelmeester Mollie",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Een huis is pas een thuis met een zitzak erin!",
+    "Alles handgemaakt, met heel veel knuffels.",
+    "Roze past overal bij. Echt overal."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_klerk",
+   "naam": "Bondsklerk Zegeltje",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Stempeltje hier, stempeltje daar!",
+    "Een bond zonder tag is als een guh zonder oortjes.",
+    "Ik heb al meer bonden ingeschreven dan er wolkjes zijn. Bijna."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_poortwachter",
+   "naam": "Poortwachter Wolkenpoort",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "De poort is altijd open voor vrienden.",
+    "Daarachter staan de mooiste kastelen van het hele Vadsrijk.",
+    "Wolkje erin, wolkje eruit!"
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_pleinwachter",
+   "naam": "Pleinwachter Pluim",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Elke kavel een kasteel, elk kasteel een bond.",
+    "Niet over de rand leunen, hè!",
+    "Het mooiste kasteel? Dat bouwen jullie samen."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_vallei",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_knuffelkamp",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_zwamzoet",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_kandijkom",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_honingtak",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_lampionhaven",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "bond_bord_hoogvads",
+   "naam": "Bondenbord",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Nieuwe briefjes! Wie zoekt er leden?",
+    "Samen ben je sterker, en vrolijker.",
+    "Een bond vind je hier, vriendjes erbij."
+   ],
+   "quests": []
+  },
+  {
+   "id": "amb_bord_z4",
+   "naam": "Klerk Kwastje",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Bestellingen, opdrachten en penningen!",
+    "Wie maakt er iets moois voor een ander?",
+    "Knutselpenningen? Die verdien je hier!"
+   ],
+   "quests": []
+  },
+  {
+   "id": "amb_bord_z5",
+   "naam": "Klerk Kroontje",
+   "zone": "zone1",
+   "waar": "",
+   "pos": null,
+   "rol": null,
+   "praat": [
+    "Bestellingen, opdrachten en penningen!",
+    "Wie maakt er iets moois voor een ander?",
+    "Knutselpenningen? Die verdien je hier!"
    ],
    "quests": []
   }
@@ -10648,38 +10557,31 @@
    ]
   },
   {
-   "id": "adv10_knuffelridder",
+   "id": "spec17_knuffelridder",
    "zone": "zone1",
    "volgorde": 37,
    "soort": "klasse",
-   "titel": "De proef van de Kussenkampioen",
-   "tekst": "Je bent sterk geworden als Knuffelridder. Bewijs het in het Sporenwoud, dan word je Kussenkampioen.",
-   "bezig": "Level 10 als Knuffelridder, en vijftien wezens in het Sporenwoud.",
-   "lv": 8,
+   "titel": "De keuze van de Knuffelridder",
+   "tekst": "Je bent een echte Knuffelridder geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, Schildridder of Reuzenkussen. Daarna ben je klaar voor de Zwamtempel.",
+   "bezig": "Level 17 als Knuffelridder, en dan terug naar Grootmeester Vadsvoet in de ordetempel van Zwamzoet.",
+   "lv": 16,
    "na": [
-    "hq07_littekens"
+    "hq09_druipgrotten"
    ],
    "gever": "grootmeester",
    "inleveren": "grootmeester",
    "doelen": [
     {
-     "tekst": "Bereik level 10 als Knuffelridder",
+     "tekst": "Bereik level 17 als Knuffelridder (de Druipgrotten en de Kloof helpen)",
      "soort": "level",
-     "n": 10,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Vrolijk wezens op in het Sporenwoud",
-     "soort": "opvrolijk",
-     "n": 15,
+     "n": 17,
      "pos": null,
      "geheim": false
     }
    ],
    "beloning": {
-    "xp": 600,
-    "munten": 500,
+    "xp": 2500,
+    "munten": 2000,
     "wapen": false,
     "loot": "",
     "items": []
@@ -10688,19 +10590,29 @@
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Ik zie het aan je houding: je bent een echte Knuffelridder geworden. Maar een titel moet je verdienen."
+     "Ik zie het aan je houding: je bent een echte Knuffelridder geworden. Maar elke Knuffelridder kiest ooit een eigen weg."
     ],
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Bereik level 10 en vrolijk vijftien wezens op in het Sporenwoud. Dan word je Kussenkampioen. Meester Kussensloop zou trots zijn."
+     "Er zijn er twee: Schildridder en Reuzenkussen. Allebei sterk, allebei anders. Meester Kussensloop koos er ook ooit één. Hij heeft er nooit spijt van gehad."
+    ],
+    [
+     "npc",
+     "Grootmeester Vadsvoet",
+     "Bereik level 17 en kom dan terug, hier in de ordetempel. Daarna ben je klaar voor de Zwamtempel."
     ]
    ],
    "klaar": [
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Kniel, avonturier. Nou ja, ga een beetje zitten. Vanaf nu ben je Kussenkampioen!"
+     "Kniel, avonturier. Nou ja, ga een beetje zitten. Het is tijd om te kiezen."
+    ],
+    [
+     "npc",
+     "Grootmeester Vadsvoet",
+     "Kijk goed naar allebei de wegen. Schildridder of Reuzenkussen. Twijfel je later? Dan kun je in elke stad bij de klassemeester wisselen. Maar nu: kies met je hart."
     ]
    ],
    "gever_pos": [
@@ -10710,37 +10622,30 @@
    ]
   },
   {
-   "id": "adv20_knuffelridder",
+   "id": "spec17_pluisjager",
    "zone": "zone1",
    "volgorde": 38,
    "soort": "klasse",
-   "titel": "De proef van de Vahoege Paladijn",
-   "tekst": "De hoogste titel van zone 1: Vahoege Paladijn. Bereik level 20 en vrolijk de Opperzwam op.",
-   "bezig": "Level 20 als Knuffelridder, en de Opperzwam in de Zwamtempel.",
-   "lv": 18,
+   "titel": "De keuze van de Pluisjager",
+   "tekst": "Je bent een echte Pluisjager geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, Scherpschutter of Strikkenzetter. Daarna ben je klaar voor de Zwamtempel.",
+   "bezig": "Level 17 als Pluisjager, en dan terug naar Grootmeester Vadsvoet in de ordetempel van Zwamzoet.",
+   "lv": 16,
    "na": [
-    "adv10_knuffelridder"
+    "hq09_druipgrotten"
    ],
    "gever": "grootmeester",
    "inleveren": "grootmeester",
    "doelen": [
     {
-     "tekst": "Bereik level 20 als Knuffelridder",
+     "tekst": "Bereik level 17 als Pluisjager (de Druipgrotten en de Kloof helpen)",
      "soort": "level",
-     "n": 20,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Vrolijk de Opperzwam op",
-     "soort": "baas",
-     "n": 1,
+     "n": 17,
      "pos": null,
      "geheim": false
     }
    ],
    "beloning": {
-    "xp": 2000,
+    "xp": 2500,
     "munten": 2000,
     "wapen": false,
     "loot": "",
@@ -10750,19 +10655,29 @@
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Er is één titel die maar weinigen dragen: Vahoege Paladijn. Daarvoor moet je de sterkste zijn van het hele rijk."
+     "Ik zie het aan je houding: je bent een echte Pluisjager geworden. Maar elke Pluisjager kiest ooit een eigen weg."
     ],
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Bereik level 20 en vrolijk de Opperzwam op in de Zwamtempel. Dan houd ik de grote ceremonie."
+     "Er zijn er twee: Scherpschutter en Strikkenzetter. Allebei sterk, allebei anders. Juf Pijltje koos er ook ooit één. Hij heeft er nooit spijt van gehad."
+    ],
+    [
+     "npc",
+     "Grootmeester Vadsvoet",
+     "Bereik level 17 en kom dan terug, hier in de ordetempel. Daarna ben je klaar voor de Zwamtempel."
     ]
    ],
    "klaar": [
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "De klokken luiden, de oortjes wapperen. Ik benoem je tot Vahoege Paladijn! Het hele Vadsrijk is trots op je."
+     "Kniel, avonturier. Nou ja, ga een beetje zitten. Het is tijd om te kiezen."
+    ],
+    [
+     "npc",
+     "Grootmeester Vadsvoet",
+     "Kijk goed naar allebei de wegen. Scherpschutter of Strikkenzetter. Twijfel je later? Dan kun je in elke stad bij de klassemeester wisselen. Maar nu: kies met je hart."
     ]
    ],
    "gever_pos": [
@@ -10772,99 +10687,30 @@
    ]
   },
   {
-   "id": "adv10_pluisjager",
+   "id": "spec17_vadsmagier",
    "zone": "zone1",
    "volgorde": 39,
    "soort": "klasse",
-   "titel": "De proef van de Pluizenschutter",
-   "tekst": "Je bent sterk geworden als Pluisjager. Bewijs het in het Sporenwoud, dan word je Pluizenschutter.",
-   "bezig": "Level 10 als Pluisjager, en vijftien wezens in het Sporenwoud.",
-   "lv": 8,
+   "titel": "De keuze van de Vadsmagiër",
+   "tekst": "Je bent een echte Vadsmagiër geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, Sterrenwever of Zegenzanger. Daarna ben je klaar voor de Zwamtempel.",
+   "bezig": "Level 17 als Vadsmagiër, en dan terug naar Grootmeester Vadsvoet in de ordetempel van Zwamzoet.",
+   "lv": 16,
    "na": [
-    "hq07_littekens"
+    "hq09_druipgrotten"
    ],
    "gever": "grootmeester",
    "inleveren": "grootmeester",
    "doelen": [
     {
-     "tekst": "Bereik level 10 als Pluisjager",
+     "tekst": "Bereik level 17 als Vadsmagiër (de Druipgrotten en de Kloof helpen)",
      "soort": "level",
-     "n": 10,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Vrolijk wezens op in het Sporenwoud",
-     "soort": "opvrolijk",
-     "n": 15,
+     "n": 17,
      "pos": null,
      "geheim": false
     }
    ],
    "beloning": {
-    "xp": 600,
-    "munten": 500,
-    "wapen": false,
-    "loot": "",
-    "items": []
-   },
-   "aanbod": [
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Ik zie het aan je houding: je bent een echte Pluisjager geworden. Maar een titel moet je verdienen."
-    ],
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Bereik level 10 en vrolijk vijftien wezens op in het Sporenwoud. Dan word je Pluizenschutter. Juf Pijltje zou trots zijn."
-    ]
-   ],
-   "klaar": [
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Kniel, avonturier. Nou ja, ga een beetje zitten. Vanaf nu ben je Pluizenschutter!"
-    ]
-   ],
-   "gever_pos": [
-    0,
-    177,
-    -44
-   ]
-  },
-  {
-   "id": "adv20_pluisjager",
-   "zone": "zone1",
-   "volgorde": 40,
-   "soort": "klasse",
-   "titel": "De proef van de Sterrenjager",
-   "tekst": "De hoogste titel van zone 1: Sterrenjager. Bereik level 20 en vrolijk de Opperzwam op.",
-   "bezig": "Level 20 als Pluisjager, en de Opperzwam in de Zwamtempel.",
-   "lv": 18,
-   "na": [
-    "adv10_pluisjager"
-   ],
-   "gever": "grootmeester",
-   "inleveren": "grootmeester",
-   "doelen": [
-    {
-     "tekst": "Bereik level 20 als Pluisjager",
-     "soort": "level",
-     "n": 20,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Vrolijk de Opperzwam op",
-     "soort": "baas",
-     "n": 1,
-     "pos": null,
-     "geheim": false
-    }
-   ],
-   "beloning": {
-    "xp": 2000,
+    "xp": 2500,
     "munten": 2000,
     "wapen": false,
     "loot": "",
@@ -10874,143 +10720,29 @@
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Er is één titel die maar weinigen dragen: Sterrenjager. Daarvoor moet je de sterkste zijn van het hele rijk."
+     "Ik zie het aan je houding: je bent een echte Vadsmagiër geworden. Maar elke Vadsmagiër kiest ooit een eigen weg."
     ],
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Bereik level 20 en vrolijk de Opperzwam op in de Zwamtempel. Dan houd ik de grote ceremonie."
+     "Er zijn er twee: Sterrenwever en Zegenzanger. Allebei sterk, allebei anders. Opa Sterrenstof koos er ook ooit één. Hij heeft er nooit spijt van gehad."
+    ],
+    [
+     "npc",
+     "Grootmeester Vadsvoet",
+     "Bereik level 17 en kom dan terug, hier in de ordetempel. Daarna ben je klaar voor de Zwamtempel."
     ]
    ],
    "klaar": [
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "De klokken luiden, de oortjes wapperen. Ik benoem je tot Sterrenjager! Het hele Vadsrijk is trots op je."
-    ]
-   ],
-   "gever_pos": [
-    0,
-    177,
-    -44
-   ]
-  },
-  {
-   "id": "adv10_vadsmagier",
-   "zone": "zone1",
-   "volgorde": 41,
-   "soort": "klasse",
-   "titel": "De proef van de Roze Tovenaar",
-   "tekst": "Je bent sterk geworden als Vadsmagiër. Bewijs het in het Sporenwoud, dan word je Roze Tovenaar.",
-   "bezig": "Level 10 als Vadsmagiër, en vijftien wezens in het Sporenwoud.",
-   "lv": 8,
-   "na": [
-    "hq07_littekens"
-   ],
-   "gever": "grootmeester",
-   "inleveren": "grootmeester",
-   "doelen": [
-    {
-     "tekst": "Bereik level 10 als Vadsmagiër",
-     "soort": "level",
-     "n": 10,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Vrolijk wezens op in het Sporenwoud",
-     "soort": "opvrolijk",
-     "n": 15,
-     "pos": null,
-     "geheim": false
-    }
-   ],
-   "beloning": {
-    "xp": 600,
-    "munten": 500,
-    "wapen": false,
-    "loot": "",
-    "items": []
-   },
-   "aanbod": [
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Ik zie het aan je houding: je bent een echte Vadsmagiër geworden. Maar een titel moet je verdienen."
+     "Kniel, avonturier. Nou ja, ga een beetje zitten. Het is tijd om te kiezen."
     ],
     [
      "npc",
      "Grootmeester Vadsvoet",
-     "Bereik level 10 en vrolijk vijftien wezens op in het Sporenwoud. Dan word je Roze Tovenaar. Opa Sterrenstof zou trots zijn."
-    ]
-   ],
-   "klaar": [
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Kniel, avonturier. Nou ja, ga een beetje zitten. Vanaf nu ben je Roze Tovenaar!"
-    ]
-   ],
-   "gever_pos": [
-    0,
-    177,
-    -44
-   ]
-  },
-  {
-   "id": "adv20_vadsmagier",
-   "zone": "zone1",
-   "volgorde": 42,
-   "soort": "klasse",
-   "titel": "De proef van de Vahoege Aartsmagiër",
-   "tekst": "De hoogste titel van zone 1: Vahoege Aartsmagiër. Bereik level 20 en vrolijk de Opperzwam op.",
-   "bezig": "Level 20 als Vadsmagiër, en de Opperzwam in de Zwamtempel.",
-   "lv": 18,
-   "na": [
-    "adv10_vadsmagier"
-   ],
-   "gever": "grootmeester",
-   "inleveren": "grootmeester",
-   "doelen": [
-    {
-     "tekst": "Bereik level 20 als Vadsmagiër",
-     "soort": "level",
-     "n": 20,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Vrolijk de Opperzwam op",
-     "soort": "baas",
-     "n": 1,
-     "pos": null,
-     "geheim": false
-    }
-   ],
-   "beloning": {
-    "xp": 2000,
-    "munten": 2000,
-    "wapen": false,
-    "loot": "",
-    "items": []
-   },
-   "aanbod": [
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Er is één titel die maar weinigen dragen: Vahoege Aartsmagiër. Daarvoor moet je de sterkste zijn van het hele rijk."
-    ],
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "Bereik level 20 en vrolijk de Opperzwam op in de Zwamtempel. Dan houd ik de grote ceremonie."
-    ]
-   ],
-   "klaar": [
-    [
-     "npc",
-     "Grootmeester Vadsvoet",
-     "De klokken luiden, de oortjes wapperen. Ik benoem je tot Vahoege Aartsmagiër! Het hele Vadsrijk is trots op je."
+     "Kijk goed naar allebei de wegen. Sterrenwever of Zegenzanger. Twijfel je later? Dan kun je in elke stad bij de klassemeester wisselen. Maar nu: kies met je hart."
     ]
    ],
    "gever_pos": [
@@ -11022,7 +10754,7 @@
   {
    "id": "geheim_spion",
    "zone": "zone1",
-   "volgorde": 43,
+   "volgorde": 40,
    "soort": "geheim",
    "titel": "Wie is Akim de Kaasguh?",
    "tekst": "Er klopt iets niet in Zwamzoet. Overal in het rijk liggen vreemde aanwijzingen: zwarte pluis, pootafdrukken, een gescheurde vermomming... Vind ze alle vijf. Dan weet je wie de verrader is, en kun je hem ontmaskeren.",
@@ -12574,195 +12306,9 @@
    ]
   },
   {
-   "id": "z2_adv30_knuffelridder",
-   "zone": "zone2",
-   "volgorde": 18,
-   "soort": "klasse",
-   "titel": "De proef van de Kristalkampioen",
-   "tekst": "De derde titel van De Knuffelorde: Kristalkampioen. Bereik level 30 als Knuffelridder en bewijs je in de Splinterkloof.",
-   "bezig": "Level 30 als Knuffelridder, en twintig wezens in de Splinterkloof.",
-   "lv": 28,
-   "na": [
-    "z2_hq02_kandijkom"
-   ],
-   "gever": "z2_ordemeester",
-   "inleveren": "z2_ordemeester",
-   "doelen": [
-    {
-     "tekst": "Bereik level 30 als Knuffelridder (vecht op de Galmhellingen, bij het meer en in de kloof)",
-     "soort": "level",
-     "n": 30,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Versla 20 wezens in de Splinterkloof, ten noorden van Kandijkom",
-     "soort": "opvrolijk",
-     "n": 20,
-     "pos": null,
-     "geheim": false
-    }
-   ],
-   "beloning": {
-    "xp": 10000,
-    "munten": 8000,
-    "wapen": false,
-    "loot": "",
-    "items": []
-   },
-   "aanbod": [
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "Je draagt al twee titels van de Orde. Maar in de bergen wacht een derde: Kristalkampioen."
-    ],
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "Bereik level 30 en versla twintig wezens in de Splinterkloof. Dan houd ik hier, in de kleinste kapel van het rijk, de grootste ceremonie."
-    ]
-   ],
-   "klaar": [
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "De kristallen zingen, de chocomelk dampt. Ik benoem je tot Kristalkampioen! Grootmeester Vadsvoet zal trots zijn."
-    ]
-   ],
-   "gever_pos": [
-    674,
-    101,
-    -1109
-   ]
-  },
-  {
-   "id": "z2_adv30_pluisjager",
-   "zone": "zone2",
-   "volgorde": 19,
-   "soort": "klasse",
-   "titel": "De proef van de Poolstervalk",
-   "tekst": "De derde titel van De Knuffelorde: Poolstervalk. Bereik level 30 als Pluisjager en bewijs je in de Splinterkloof.",
-   "bezig": "Level 30 als Pluisjager, en twintig wezens in de Splinterkloof.",
-   "lv": 28,
-   "na": [
-    "z2_hq02_kandijkom"
-   ],
-   "gever": "z2_ordemeester",
-   "inleveren": "z2_ordemeester",
-   "doelen": [
-    {
-     "tekst": "Bereik level 30 als Pluisjager (vecht op de Galmhellingen, bij het meer en in de kloof)",
-     "soort": "level",
-     "n": 30,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Versla 20 wezens in de Splinterkloof, ten noorden van Kandijkom",
-     "soort": "opvrolijk",
-     "n": 20,
-     "pos": null,
-     "geheim": false
-    }
-   ],
-   "beloning": {
-    "xp": 10000,
-    "munten": 8000,
-    "wapen": false,
-    "loot": "",
-    "items": []
-   },
-   "aanbod": [
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "Je draagt al twee titels van de Orde. Maar in de bergen wacht een derde: Poolstervalk."
-    ],
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "Bereik level 30 en versla twintig wezens in de Splinterkloof. Dan houd ik hier, in de kleinste kapel van het rijk, de grootste ceremonie."
-    ]
-   ],
-   "klaar": [
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "De kristallen zingen, de chocomelk dampt. Ik benoem je tot Poolstervalk! Grootmeester Vadsvoet zal trots zijn."
-    ]
-   ],
-   "gever_pos": [
-    674,
-    101,
-    -1109
-   ]
-  },
-  {
-   "id": "z2_adv30_vadsmagier",
-   "zone": "zone2",
-   "volgorde": 20,
-   "soort": "klasse",
-   "titel": "De proef van de Kristalorakel",
-   "tekst": "De derde titel van De Knuffelorde: Kristalorakel. Bereik level 30 als Vadsmagiër en bewijs je in de Splinterkloof.",
-   "bezig": "Level 30 als Vadsmagiër, en twintig wezens in de Splinterkloof.",
-   "lv": 28,
-   "na": [
-    "z2_hq02_kandijkom"
-   ],
-   "gever": "z2_ordemeester",
-   "inleveren": "z2_ordemeester",
-   "doelen": [
-    {
-     "tekst": "Bereik level 30 als Vadsmagiër (vecht op de Galmhellingen, bij het meer en in de kloof)",
-     "soort": "level",
-     "n": 30,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Versla 20 wezens in de Splinterkloof, ten noorden van Kandijkom",
-     "soort": "opvrolijk",
-     "n": 20,
-     "pos": null,
-     "geheim": false
-    }
-   ],
-   "beloning": {
-    "xp": 10000,
-    "munten": 8000,
-    "wapen": false,
-    "loot": "",
-    "items": []
-   },
-   "aanbod": [
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "Je draagt al twee titels van de Orde. Maar in de bergen wacht een derde: Kristalorakel."
-    ],
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "Bereik level 30 en versla twintig wezens in de Splinterkloof. Dan houd ik hier, in de kleinste kapel van het rijk, de grootste ceremonie."
-    ]
-   ],
-   "klaar": [
-    [
-     "npc",
-     "Ordemeester Kristalijn",
-     "De kristallen zingen, de chocomelk dampt. Ik benoem je tot Kristalorakel! Grootmeester Vadsvoet zal trots zijn."
-    ]
-   ],
-   "gever_pos": [
-    674,
-    101,
-    -1109
-   ]
-  },
-  {
    "id": "z2_geheim_boormeester",
    "zone": "zone2",
-   "volgorde": 21,
+   "volgorde": 18,
    "soort": "geheim",
    "titel": "Het gebrom in de berg",
    "tekst": "Overal in de Splinterpieken liggen sporen van een enorme Mika-machine. Vind ze alle vijf: dan weet je waar hij staat, en hoe je zijn drie boorkoppen moet laten oververhitten.",
@@ -14665,38 +14211,36 @@
    ]
   },
   {
-   "id": "z3_adv50_knuffelridder",
+   "id": "z3_adv35_knuffelridder",
    "zone": "zone3",
    "volgorde": 20,
    "soort": "klasse",
-   "titel": "De proef van de Nestwachter",
-   "tekst": "De vierde titel van De Knuffelorde: Nestwachter. Bereik klasse-level 50 als Knuffelridder en bewijs je in het Wortelduister.",
-   "bezig": "Level 50 als Knuffelridder, en vijfentwintig wezens in het Wortelduister.",
-   "lv": 48,
+   "titel": "Het nest van de Knuffelridder",
+   "tekst": "Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als Knuffelridder en kom terug bij Ordemeester Wasja in de Nestkapel: dan wordt je specialisatie sterker.",
+   "bezig": "Level 35 als Knuffelridder, en dan terug naar Ordemeester Wasja in de Nestkapel.",
+   "lv": 33,
    "na": [
-    "z3_hq13_hart"
+    "z3_hq08_werf",
+    "z3_hq03_pluimstal"
    ],
    "gever": "z3_wasja",
    "inleveren": "z3_wasja",
    "doelen": [
     {
-     "tekst": "Bereik level 50 als Knuffelridder (premies, het Hart van de Boom en het Wortelduister helpen)",
+     "tekst": "Bereik level 35 als Knuffelridder (de Kruinzee, de werf en de premies helpen)",
      "soort": "level",
-     "n": 50,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Versla 25 wezens in het Wortelduister, onder de boom",
-     "soort": "opvrolijk",
-     "n": 25,
-     "pos": null,
+     "n": 35,
+     "pos": [
+      1396,
+      152,
+      -628
+     ],
      "geheim": false
     }
    ],
    "beloning": {
-    "xp": 5528,
-    "munten": 15000,
+    "xp": 3043,
+    "munten": 9000,
     "wapen": false,
     "loot": "",
     "items": []
@@ -14705,19 +14249,19 @@
     [
      "npc",
      "Ordemeester Wasja",
-     "Drie titels draag je al. Maar diep in de boom wacht een vierde: Nestwachter."
+     "Je hebt de werf van de Mika's leeggeveegd, en je Pluimguh kent de boom al beter dan ik. Dat heb ik gezien."
     ],
     [
      "npc",
      "Ordemeester Wasja",
-     "Bereik level 50 en versla vijfentwintig wezens in het Wortelduister. Dan dansen de imkers in de Nestkapel. Voor jou."
+     "Wie zo ver komt, verdient de tweede titel van de Orde. Bereik level 35 als Knuffelridder, dan dansen de imkers in de Nestkapel. Voor jou."
     ]
    ],
    "klaar": [
     [
      "npc",
      "Ordemeester Wasja",
-     "De bijen zoemen, de bloesem valt, de imkers dansen. Ik benoem je tot Nestwachter! De hele boom is trots op je."
+     "De bijen zoemen, de bloesem valt, de imkers dansen. Je specialisatie groeit mee met de boom!"
     ]
    ],
    "gever_pos": [
@@ -14727,38 +14271,36 @@
    ]
   },
   {
-   "id": "z3_adv50_pluisjager",
+   "id": "z3_adv35_pluisjager",
    "zone": "zone3",
    "volgorde": 21,
    "soort": "klasse",
-   "titel": "De proef van de Kruinvalk",
-   "tekst": "De vierde titel van De Knuffelorde: Kruinvalk. Bereik klasse-level 50 als Pluisjager en bewijs je in het Wortelduister.",
-   "bezig": "Level 50 als Pluisjager, en vijfentwintig wezens in het Wortelduister.",
-   "lv": 48,
+   "titel": "Het nest van de Pluisjager",
+   "tekst": "Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als Pluisjager en kom terug bij Ordemeester Wasja in de Nestkapel: dan wordt je specialisatie sterker.",
+   "bezig": "Level 35 als Pluisjager, en dan terug naar Ordemeester Wasja in de Nestkapel.",
+   "lv": 33,
    "na": [
-    "z3_hq13_hart"
+    "z3_hq08_werf",
+    "z3_hq03_pluimstal"
    ],
    "gever": "z3_wasja",
    "inleveren": "z3_wasja",
    "doelen": [
     {
-     "tekst": "Bereik level 50 als Pluisjager (premies, het Hart van de Boom en het Wortelduister helpen)",
+     "tekst": "Bereik level 35 als Pluisjager (de Kruinzee, de werf en de premies helpen)",
      "soort": "level",
-     "n": 50,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Versla 25 wezens in het Wortelduister, onder de boom",
-     "soort": "opvrolijk",
-     "n": 25,
-     "pos": null,
+     "n": 35,
+     "pos": [
+      1396,
+      152,
+      -628
+     ],
      "geheim": false
     }
    ],
    "beloning": {
-    "xp": 5528,
-    "munten": 15000,
+    "xp": 3043,
+    "munten": 9000,
     "wapen": false,
     "loot": "",
     "items": []
@@ -14767,19 +14309,19 @@
     [
      "npc",
      "Ordemeester Wasja",
-     "Drie titels draag je al. Maar diep in de boom wacht een vierde: Kruinvalk."
+     "Je hebt de werf van de Mika's leeggeveegd, en je Pluimguh kent de boom al beter dan ik. Dat heb ik gezien."
     ],
     [
      "npc",
      "Ordemeester Wasja",
-     "Bereik level 50 en versla vijfentwintig wezens in het Wortelduister. Dan dansen de imkers in de Nestkapel. Voor jou."
+     "Wie zo ver komt, verdient de tweede titel van de Orde. Bereik level 35 als Pluisjager, dan dansen de imkers in de Nestkapel. Voor jou."
     ]
    ],
    "klaar": [
     [
      "npc",
      "Ordemeester Wasja",
-     "De bijen zoemen, de bloesem valt, de imkers dansen. Ik benoem je tot Kruinvalk! De hele boom is trots op je."
+     "De bijen zoemen, de bloesem valt, de imkers dansen. Je specialisatie groeit mee met de boom!"
     ]
    ],
    "gever_pos": [
@@ -14789,38 +14331,36 @@
    ]
   },
   {
-   "id": "z3_adv50_vadsmagier",
+   "id": "z3_adv35_vadsmagier",
    "zone": "zone3",
    "volgorde": 22,
    "soort": "klasse",
-   "titel": "De proef van de Schemerwijze",
-   "tekst": "De vierde titel van De Knuffelorde: Schemerwijze. Bereik klasse-level 50 als Vadsmagiër en bewijs je in het Wortelduister.",
-   "bezig": "Level 50 als Vadsmagiër, en vijfentwintig wezens in het Wortelduister.",
-   "lv": 48,
+   "titel": "Het nest van de Vadsmagiër",
+   "tekst": "Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als Vadsmagiër en kom terug bij Ordemeester Wasja in de Nestkapel: dan wordt je specialisatie sterker.",
+   "bezig": "Level 35 als Vadsmagiër, en dan terug naar Ordemeester Wasja in de Nestkapel.",
+   "lv": 33,
    "na": [
-    "z3_hq13_hart"
+    "z3_hq08_werf",
+    "z3_hq03_pluimstal"
    ],
    "gever": "z3_wasja",
    "inleveren": "z3_wasja",
    "doelen": [
     {
-     "tekst": "Bereik level 50 als Vadsmagiër (premies, het Hart van de Boom en het Wortelduister helpen)",
+     "tekst": "Bereik level 35 als Vadsmagiër (de Kruinzee, de werf en de premies helpen)",
      "soort": "level",
-     "n": 50,
-     "pos": null,
-     "geheim": false
-    },
-    {
-     "tekst": "Versla 25 wezens in het Wortelduister, onder de boom",
-     "soort": "opvrolijk",
-     "n": 25,
-     "pos": null,
+     "n": 35,
+     "pos": [
+      1396,
+      152,
+      -628
+     ],
      "geheim": false
     }
    ],
    "beloning": {
-    "xp": 5528,
-    "munten": 15000,
+    "xp": 3043,
+    "munten": 9000,
     "wapen": false,
     "loot": "",
     "items": []
@@ -14829,19 +14369,19 @@
     [
      "npc",
      "Ordemeester Wasja",
-     "Drie titels draag je al. Maar diep in de boom wacht een vierde: Schemerwijze."
+     "Je hebt de werf van de Mika's leeggeveegd, en je Pluimguh kent de boom al beter dan ik. Dat heb ik gezien."
     ],
     [
      "npc",
      "Ordemeester Wasja",
-     "Bereik level 50 en versla vijfentwintig wezens in het Wortelduister. Dan dansen de imkers in de Nestkapel. Voor jou."
+     "Wie zo ver komt, verdient de tweede titel van de Orde. Bereik level 35 als Vadsmagiër, dan dansen de imkers in de Nestkapel. Voor jou."
     ]
    ],
    "klaar": [
     [
      "npc",
      "Ordemeester Wasja",
-     "De bijen zoemen, de bloesem valt, de imkers dansen. Ik benoem je tot Schemerwijze! De hele boom is trots op je."
+     "De bijen zoemen, de bloesem valt, de imkers dansen. Je specialisatie groeit mee met de boom!"
     ]
    ],
    "gever_pos": [
@@ -17711,9 +17251,201 @@
    ]
   },
   {
-   "id": "z5_s01_bessen",
+   "id": "z5_adv58_knuffelridder",
    "zone": "zone5",
    "volgorde": 10,
+   "soort": "klasse",
+   "titel": "De hoogste titel van de Knuffelridder",
+   "tekst": "Hoogvads is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als Knuffelridder en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie.",
+   "bezig": "Level 58 als Knuffelridder, en dan naar Kapitein Veerkracht op het oefenplein van de Academie.",
+   "lv": 56,
+   "na": [
+    "z5_hq09_slaaplied"
+   ],
+   "gever": "z5_veerkracht",
+   "inleveren": "z5_veerkracht",
+   "doelen": [
+    {
+     "tekst": "Bereik level 58 als Knuffelridder",
+     "soort": "level",
+     "n": 58,
+     "pos": [
+      2737,
+      215,
+      -591
+     ],
+     "geheim": false
+    }
+   ],
+   "beloning": {
+    "xp": 7069,
+    "munten": 25000,
+    "wapen": false,
+    "loot": "episch",
+    "items": []
+   },
+   "aanbod": [
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Een Ridder van Hoogvads met maar twee titels? Dat kan niet. Dat staat niet in het reglement. Ik heb het net nagekeken."
+    ],
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Bereik level 58 als Knuffelridder. Dan marcheert de hele Wolkwacht voor je. Links, rechts, links, knuffel."
+    ]
+   ],
+   "klaar": [
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Wolkwacht, gééf acht! Voor de held van Hoogvads: de hoogste titel van De Knuffelorde!"
+    ],
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Je specialisatie is nu op zijn sterkst. Zeg maar Veer. Nee, zeg maar 'Kapitein'. Nee, toch Veer."
+    ]
+   ],
+   "gever_pos": [
+    2737,
+    215,
+    -591
+   ]
+  },
+  {
+   "id": "z5_adv58_pluisjager",
+   "zone": "zone5",
+   "volgorde": 11,
+   "soort": "klasse",
+   "titel": "De hoogste titel van de Pluisjager",
+   "tekst": "Hoogvads is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als Pluisjager en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie.",
+   "bezig": "Level 58 als Pluisjager, en dan naar Kapitein Veerkracht op het oefenplein van de Academie.",
+   "lv": 56,
+   "na": [
+    "z5_hq09_slaaplied"
+   ],
+   "gever": "z5_veerkracht",
+   "inleveren": "z5_veerkracht",
+   "doelen": [
+    {
+     "tekst": "Bereik level 58 als Pluisjager",
+     "soort": "level",
+     "n": 58,
+     "pos": [
+      2737,
+      215,
+      -591
+     ],
+     "geheim": false
+    }
+   ],
+   "beloning": {
+    "xp": 7069,
+    "munten": 25000,
+    "wapen": false,
+    "loot": "episch",
+    "items": []
+   },
+   "aanbod": [
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Een Ridder van Hoogvads met maar twee titels? Dat kan niet. Dat staat niet in het reglement. Ik heb het net nagekeken."
+    ],
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Bereik level 58 als Pluisjager. Dan marcheert de hele Wolkwacht voor je. Links, rechts, links, knuffel."
+    ]
+   ],
+   "klaar": [
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Wolkwacht, gééf acht! Voor de held van Hoogvads: de hoogste titel van De Knuffelorde!"
+    ],
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Je specialisatie is nu op zijn sterkst. Zeg maar Veer. Nee, zeg maar 'Kapitein'. Nee, toch Veer."
+    ]
+   ],
+   "gever_pos": [
+    2737,
+    215,
+    -591
+   ]
+  },
+  {
+   "id": "z5_adv58_vadsmagier",
+   "zone": "zone5",
+   "volgorde": 12,
+   "soort": "klasse",
+   "titel": "De hoogste titel van de Vadsmagiër",
+   "tekst": "Hoogvads is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als Vadsmagiër en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie.",
+   "bezig": "Level 58 als Vadsmagiër, en dan naar Kapitein Veerkracht op het oefenplein van de Academie.",
+   "lv": 56,
+   "na": [
+    "z5_hq09_slaaplied"
+   ],
+   "gever": "z5_veerkracht",
+   "inleveren": "z5_veerkracht",
+   "doelen": [
+    {
+     "tekst": "Bereik level 58 als Vadsmagiër",
+     "soort": "level",
+     "n": 58,
+     "pos": [
+      2737,
+      215,
+      -591
+     ],
+     "geheim": false
+    }
+   ],
+   "beloning": {
+    "xp": 7069,
+    "munten": 25000,
+    "wapen": false,
+    "loot": "episch",
+    "items": []
+   },
+   "aanbod": [
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Een Ridder van Hoogvads met maar twee titels? Dat kan niet. Dat staat niet in het reglement. Ik heb het net nagekeken."
+    ],
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Bereik level 58 als Vadsmagiër. Dan marcheert de hele Wolkwacht voor je. Links, rechts, links, knuffel."
+    ]
+   ],
+   "klaar": [
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Wolkwacht, gééf acht! Voor de held van Hoogvads: de hoogste titel van De Knuffelorde!"
+    ],
+    [
+     "npc",
+     "Kapitein Veerkracht",
+     "Je specialisatie is nu op zijn sterkst. Zeg maar Veer. Nee, zeg maar 'Kapitein'. Nee, toch Veer."
+    ]
+   ],
+   "gever_pos": [
+    2737,
+    215,
+    -591
+   ]
+  },
+  {
+   "id": "z5_s01_bessen",
+   "zone": "zone5",
+   "volgorde": 13,
    "soort": "zij",
    "titel": "Een kom voor iedereen",
    "tekst": "De ketel van de Grote Soepkeuken raakt nooit leeg, maar de wolkbessen wel. Ze groeien in het Staartpark en de Ooggaarde.",
@@ -17768,7 +17500,7 @@
   {
    "id": "z5_s02_flap",
    "zone": "zone5",
-   "volgorde": 11,
+   "volgorde": 14,
    "soort": "zij",
    "titel": "Pluisje's knuffel",
    "tekst": "Pluisje is haar knuffelkonijn Flap kwijt. Ze was in de kathedraal om naar het licht te kijken.",
@@ -17843,7 +17575,7 @@
   {
    "id": "z5_s03_brieven",
    "zone": "zone5",
-   "volgorde": 12,
+   "volgorde": 15,
    "soort": "zij",
    "titel": "Brieven naar huis",
    "tekst": "Opa Grauwsnor schrijft elke dag brieven. Ze moeten naar de juiste guhs in Hoogvads: die kunnen ze verder sturen.",
@@ -17924,7 +17656,7 @@
   {
    "id": "z5_s04_oog",
    "zone": "zone5",
-   "volgorde": 13,
+   "volgorde": 16,
    "soort": "zij",
    "titel": "Het Oog meten",
    "tekst": "Professor Brilsma wil weten hoe groot de tweede maan, het Oog, aan de hemel staat. Vanaf de sterrenwacht kun je hem meten.",
@@ -17999,7 +17731,7 @@
   {
    "id": "z5_s05_adem",
    "zone": "zone5",
-   "volgorde": 14,
+   "volgorde": 17,
    "soort": "zij",
    "titel": "De adem van Moeder Wolkwal",
    "tekst": "Moeder Wolkwal ademt door drie spuitgaten. Professor Brilsma wil weten of ze nog gezond ademt.",
@@ -18080,7 +17812,7 @@
   {
    "id": "z5_s06_parcours",
    "zone": "zone5",
-   "volgorde": 15,
+   "volgorde": 18,
    "soort": "zij",
    "titel": "Proef van de Wolkwacht: het Wolkenparcours",
    "tekst": "Elke kadet van de Wolkwacht rent het Wolkenparcours: vier palen op het oefenplein. Kapitein Veerkracht wil zien of jij het kunt.",
@@ -18167,7 +17899,7 @@
   {
    "id": "z5_s07_kadet",
    "zone": "zone5",
-   "volgorde": 16,
+   "volgorde": 19,
    "soort": "zij",
    "titel": "Proef van de Wolkwacht: de verdwaalde kadet",
    "tekst": "Kadet Dons is weer verdwaald. Hij staat op een pier van de Luchthaven. Breng hem terug naar de Academie.",
@@ -18226,7 +17958,7 @@
   {
    "id": "z5_s08_markt",
    "zone": "zone5",
-   "volgorde": 17,
+   "volgorde": 20,
    "soort": "zij",
    "titel": "Marktdrukte",
    "tekst": "Het is druk op de markt van Hoogvads. Kraamguh Lientje heeft pakjes voor drie andere kramen.",
@@ -18302,7 +18034,7 @@
   {
    "id": "z5_s09_bloesem",
    "zone": "zone5",
-   "volgorde": 18,
+   "volgorde": 21,
    "soort": "zij",
    "titel": "Water voor het Staartpark",
    "tekst": "De bloesembomen in het Staartpark hebben dorst. Tuinguh Stekje heeft één gieter en vier bomen.",
@@ -18389,7 +18121,7 @@
   {
    "id": "z5_s10_wol",
    "zone": "zone5",
-   "volgorde": 19,
+   "volgorde": 22,
    "soort": "zij",
    "titel": "De kroon van wol",
    "tekst": "Uit de gebreide kroon van de Koningin zijn drie bolletjes roze wol gerold. Hofdame Breinaald wil ze terug voor de Koningin het merkt.",
@@ -18444,7 +18176,7 @@
   {
    "id": "z5_s11_knuffellied",
    "zone": "zone5",
-   "volgorde": 20,
+   "volgorde": 23,
    "soort": "zij",
    "titel": "Het lied van de Eerste Knuffel",
    "tekst": "In de Ordekathedraal zingen ze elke avond het lied van de Eerste Knuffel. Zuster Zachtzang wil dat je het licht ziet zoals de eerste ridders het zagen.",
@@ -33559,6 +33291,27 @@
     "knuffelknots",
     "kussenzwaard",
     "pluishamer"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Mini Grauwe Klodderreus",
+     "Versla de Grauwe Klodderreus bij de kampvijver van Knuffelkamp voor het eerst.",
+     null
+    ],
+    [
+     "kern",
+     "Zwamkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33605,6 +33358,59 @@
     "baas_klodderknots",
     "baas_pluisboog",
     "slijmboek"
+   ],
+   "kist": {
+    "rollen": 2,
+    "kans": 1.0,
+    "geluk": 2.5,
+    "munten_min": 150,
+    "munten_max": 400,
+    "regels": {
+     "klodderkling": 3,
+     "druppelboog": 3,
+     "slijmboek": 3,
+     "knuffelknots": 2,
+     "klodderkapje": 3,
+     "klodderhesje": 3,
+     "klodderbroek": 3,
+     "klodderstuiters": 3,
+     "bubbelvest": 1,
+     "slijmmutsje": 1,
+     "roze_ring": 1,
+     "knuffelketting": 1,
+     "pluisoorbel": 1,
+     "pluiswantjes": 1,
+     "knuffelcapeje": 1,
+     "pluisarmband": 1,
+     "rozenarmbandje": 1,
+     "kloddergrijpers": 3
+    }
+   },
+   "extra": [
+    [
+     "huisdier",
+     "Mini Koning Klodder",
+     "Versla Koning Klodder voor het eerst.",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: Koning Klodder",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Zwamkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33661,6 +33467,60 @@
     "snoepkruisboog",
     "vlammenstaf",
     "zwamstokje"
+   ],
+   "kist": {
+    "rollen": 2,
+    "kans": 1.0,
+    "geluk": 2.8,
+    "munten_min": 250,
+    "munten_max": 600,
+    "regels": {
+     "kussenzwaard": 2,
+     "knuffelknots": 2,
+     "pluishamer": 2,
+     "klodderkling": 2,
+     "pluisboog": 2,
+     "druppelboog": 2,
+     "snoepkruisboog": 2,
+     "eikelkatapult": 2,
+     "rozenstaf": 2,
+     "vlammenstaf": 2,
+     "zwamstokje": 2,
+     "slijmboek": 2,
+     "pluishelm": 2,
+     "knuffelharnas": 2,
+     "slijmmutsje": 2,
+     "bubbelvest": 2,
+     "plakpantoffels": 2,
+     "steelbroek": 2,
+     "knaagvachtje": 2,
+     "kristalhelmpje": 2,
+     "klodderkapje": 2,
+     "klodderhesje": 2,
+     "klodderbroek": 2,
+     "klodderstuiters": 2,
+     "zwamhoed": 2,
+     "sporenmantel": 2,
+     "zwambroek": 2,
+     "mossloffen": 2,
+     "roze_ring": 1,
+     "knuffelketting": 1,
+     "pluisoorbel": 1,
+     "pluiswantjes": 1,
+     "knuffelcapeje": 1,
+     "pluisarmband": 1,
+     "rozenarmbandje": 1,
+     "kloddergrijpers": 2,
+     "sporencape": 2
+    }
+   },
+   "extra": [
+    [
+     "trofee",
+     "Trofee: De Mika-spion",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ]
    ]
   },
   {
@@ -33708,6 +33568,60 @@
     "baas_sporenstaf",
     "vlammenstaf",
     "zwamstokje"
+   ],
+   "kist": {
+    "rollen": 3,
+    "kans": 1.0,
+    "geluk": 3.0,
+    "munten_min": 300,
+    "munten_max": 700,
+    "regels": {
+     "vlammenstaf": 3,
+     "zwamstokje": 3,
+     "eikelkatapult": 3,
+     "snoepkruisboog": 2,
+     "pluishamer": 3,
+     "zwamhoed": 3,
+     "sporenmantel": 3,
+     "zwambroek": 3,
+     "mossloffen": 3,
+     "kristalhelmpje": 2,
+     "knaagvachtje": 2,
+     "roze_ring": 1,
+     "knuffelketting": 1,
+     "pluisoorbel": 1,
+     "pluiswantjes": 1,
+     "knuffelcapeje": 1,
+     "pluisarmband": 1,
+     "rozenarmbandje": 1,
+     "sporencape": 3
+    }
+   },
+   "extra": [
+    [
+     "rijdier",
+     "Zwamzwijntje",
+     "10% per speler per overwinning; zeker na 15 keer (geduldteller)",
+     "10% per player per win; guaranteed after 15 tries (pity counter)"
+    ],
+    [
+     "trofee",
+     "Trofee: De Opperzwam",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Zwamkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33735,6 +33649,33 @@
    "buit": [
     "z2baas_ijspelsmantel",
     "z2baas_galmklauw"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Mini Galmwolf",
+     "Versla de Galmwolf in de Galmhellingen voor het eerst.",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: De Galmwolf",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Splinterkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33755,6 +33696,27 @@
     "z2baas_boorbril",
     "z2baas_stoomlaarzen",
     "z2baas_boorhamer"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: De Mika-boormeester",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Splinterkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33783,6 +33745,39 @@
     "z2baas_spiegelkroon",
     "z2baas_schaduwloze",
     "z2baas_spiegelstaf"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "vacht",
+     "Middernacht (Guhwolf)",
+     "de eerste keer dat je hem verslaat",
+     "the first time you beat it"
+    ],
+    [
+     "rijdier",
+     "Pluimguh Kristal",
+     "10% per speler per overwinning; zeker na 15 keer (geduldteller)",
+     "10% per player per win; guaranteed after 15 tries (pity counter)"
+    ],
+    [
+     "trofee",
+     "Trofee: Vrouwe Spiegelzucht",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Splinterkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33810,6 +33805,39 @@
    "buit": [
     "z3baas_kruinveren",
     "z3baas_roofklauw"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "vacht",
+     "Onweerswolkje (Wolkenschaapje)",
+     "de eerste keer dat je hem verslaat",
+     "the first time you beat it"
+    ],
+    [
+     "huisdier",
+     "Kruinroofvogeltje",
+     "Versla de Kruinroofvogel op de Kale Kruin",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: De Kruinroofvogel",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -33836,6 +33864,39 @@
    "vahoeg": true,
    "buit": [
     "z3baas_touwknots"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: Takelmeester Taleggio",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ],
+    [
+     "veer",
+     "Gouden Veren",
+     "in Vahoeg-vorm",
+     "in Vahoeg form"
+    ],
+    [
+     "kleding",
+     "Schemervleugels",
+     "3% in Vahoeg-vorm (laatste baas van de kerker 8%)",
+     "3% in Vahoeg form (last boss of the dungeon 8%)"
+    ]
    ]
   },
   {
@@ -33862,6 +33923,39 @@
    "vahoeg": true,
    "buit": [
     "z3baas_lontstaf"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: Bombardier Brokkel",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ],
+    [
+     "veer",
+     "Gouden Veren",
+     "in Vahoeg-vorm",
+     "in Vahoeg form"
+    ],
+    [
+     "kleding",
+     "Schemervleugels",
+     "3% in Vahoeg-vorm (laatste baas van de kerker 8%)",
+     "3% in Vahoeg form (last boss of the dungeon 8%)"
+    ]
    ]
   },
   {
@@ -33889,6 +33983,39 @@
    "buit": [
     "z3baas_paraplu",
     "z3baas_roquefortsabel"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: Kapitein Roquefort",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ],
+    [
+     "veer",
+     "Gouden Veren",
+     "in Vahoeg-vorm",
+     "in Vahoeg form"
+    ],
+    [
+     "kleding",
+     "Schemervleugels",
+     "3% in Vahoeg-vorm (laatste baas van de kerker 8%)",
+     "3% in Vahoeg form (last boss of the dungeon 8%)"
+    ]
    ]
   },
   {
@@ -33916,6 +34043,21 @@
    "buit": [
     "z3baas_sokkencape",
     "z3baas_kooisleutel"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Piepje",
+     "Versla Graaf Piepvel in de Pelszaal",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: Graaf Piepvel",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ]
    ]
   },
   {
@@ -33942,6 +34084,39 @@
    "vahoeg": true,
    "buit": [
     "z3baas_hartwortel"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: De Wortelwurger",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ],
+    [
+     "veer",
+     "Gouden Veren",
+     "in Vahoeg-vorm",
+     "in Vahoeg form"
+    ],
+    [
+     "kleding",
+     "Schemervleugels",
+     "3% in Vahoeg-vorm (laatste baas van de kerker 8%)",
+     "3% in Vahoeg form (last boss of the dungeon 8%)"
+    ]
    ]
   },
   {
@@ -33968,6 +34143,39 @@
    "vahoeg": true,
    "buit": [
     "z3baas_lantaarnstaf"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: De Oude Nestwachter",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ],
+    [
+     "veer",
+     "Gouden Veren",
+     "in Vahoeg-vorm",
+     "in Vahoeg form"
+    ],
+    [
+     "kleding",
+     "Schemervleugels",
+     "3% in Vahoeg-vorm (laatste baas van de kerker 8%)",
+     "3% in Vahoeg form (last boss of the dungeon 8%)"
+    ]
    ]
   },
   {
@@ -33995,6 +34203,39 @@
    "buit": [
     "z3baas_bleumonocle",
     "z3baas_schimmelbreker"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "trofee",
+     "Trofee: Baron Bleu",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "kern",
+     "Wortelkern",
+     "15% per helper",
+     "15% per helper"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ],
+    [
+     "veer",
+     "Gouden Veren",
+     "in Vahoeg-vorm",
+     "in Vahoeg form"
+    ],
+    [
+     "kleding",
+     "Schemervleugels",
+     "3% in Vahoeg-vorm (laatste baas van de kerker 8%)",
+     "3% in Vahoeg form (last boss of the dungeon 8%)"
+    ]
    ]
   },
   {
@@ -34021,6 +34262,27 @@
    "vahoeg": false,
    "buit": [
     "z3baas_eierwarmer"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "patroon",
+     "Glitter",
+     "de eerste keer dat je hem verslaat",
+     "the first time you beat it"
+    ],
+    [
+     "huisdier",
+     "Vahoegje",
+     "Vrolijk Vahoegnir op in het oude nest",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: Vahoegnir",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ]
    ]
   },
   {
@@ -34049,6 +34311,27 @@
     "z4baas_zeekoeienhuid",
     "z4baas_lagunelampion",
     "z4baas_slurfstaf"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Zeeslurfje",
+     "Vrolijk De Grauwe Zeeslurf op in de Koraalbaai",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: De Grauwe Zeeslurf",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -34077,6 +34360,27 @@
     "z4baas_kaasdoek",
     "z4baas_enterhaak",
     "z4baas_oorlogsvliegerboog"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Vliegertje",
+     "Versla Kootje in het Wrak van de Vliegervanger",
+     null
+    ],
+    [
+     "trofee",
+     "Trofee: Kootje de Vliegervanger",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -34104,6 +34408,51 @@
    "buit": [
     "z5baas_moersleutel",
     "z5baas_kleppenstaf"
+   ],
+   "kist": {
+    "rollen": 2,
+    "kans": 1.0,
+    "geluk": 4.0,
+    "munten_min": 900,
+    "munten_max": 1600,
+    "regels": {
+     "wolkwachthelm": 2,
+     "wolkwachtkuras": 2,
+     "wolkwachtbeenstukken": 2,
+     "wolkwachtlaarzen": 2,
+     "wolkwachthandschoenen": 2,
+     "wolkwachtcape": 2,
+     "wolkring": 2,
+     "walvisketting": 2,
+     "regendruppeloorbel": 2,
+     "stormarmband": 2,
+     "wolkwachtzwaard": 1,
+     "walvisbotknots": 1,
+     "stormboog": 1,
+     "harpoenkruisboog": 1,
+     "wolkenstaf": 1,
+     "bliksemstaf": 1
+    }
+   },
+   "extra": [
+    [
+     "huisdier",
+     "Warmpje",
+     "Versla Opzichter Gorgonzola in de Buikgangen.",
+     null
+    ],
+    [
+     "trofee",
+     "Gouden Kleppenwiel",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -34132,6 +34481,51 @@
     "z5baas_regenjasje",
     "z5baas_donderboog",
     "z5baas_onweerstaf"
+   ],
+   "kist": {
+    "rollen": 2,
+    "kans": 1.0,
+    "geluk": 4.0,
+    "munten_min": 900,
+    "munten_max": 1600,
+    "regels": {
+     "wolkwachthelm": 2,
+     "wolkwachtkuras": 2,
+     "wolkwachtbeenstukken": 2,
+     "wolkwachtlaarzen": 2,
+     "wolkwachthandschoenen": 2,
+     "wolkwachtcape": 2,
+     "wolkring": 2,
+     "walvisketting": 2,
+     "regendruppeloorbel": 2,
+     "stormarmband": 2,
+     "wolkwachtzwaard": 1,
+     "walvisbotknots": 1,
+     "stormboog": 1,
+     "harpoenkruisboog": 1,
+     "wolkenstaf": 1,
+     "bliksemstaf": 1
+    }
+   },
+   "extra": [
+    [
+     "huisdier",
+     "Donderbuikje",
+     "Versla Donderbuik op de Staartvlakte.",
+     null
+    ],
+    [
+     "trofee",
+     "Ingemaakt Onweertje",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ],
+    [
+     "groei",
+     "Groeipluis",
+     "1 per helper, elke overwinning",
+     "1 per helper, every win"
+    ]
    ]
   },
   {
@@ -34159,6 +34553,21 @@
    "buit": [
     "z5baas_vermommingsmantel",
     "z5baas_hoedenspeld"
+   ],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Lokpopje",
+     "Versla Kootje Zilverstaart.",
+     null
+    ],
+    [
+     "trofee",
+     "Zilveren Staartpunt",
+     "zeker, bij je eerste overwinning (deco voor thuis)",
+     "sure, on your first win (decoration for home)"
+    ]
    ]
   },
   {
@@ -34175,7 +34584,16 @@
    "gebied": null,
    "huisdier": "droomwalvisje",
    "vahoeg": false,
-   "buit": []
+   "buit": [],
+   "kist": null,
+   "extra": [
+    [
+     "huisdier",
+     "Droomwalvisje",
+     "Vrolijk de Grauwe Droom op in de droom van Moeder Wolkwal.",
+     null
+    ]
+   ]
   }
  ],
  "kristallen": [
@@ -34981,7 +35399,7 @@
   {
    "id": "klassen",
    "titel": "Klassen",
-   "tekst": "Knuffelridder (dichtbij, stevig), Pluisjager (van ver, beweeglijk) en Vadsmagiër (elementen en heling). Elke klasse heeft een eigen level. Wisselen doe je in de ordetempel van Zwamzoet. Op level 10 en 20 krijg je een nieuwe titel bij de Grootmeester."
+   "tekst": "Knuffelridder (dichtbij, stevig), Pluisjager (van ver, beweeglijk) en Vadsmagiër (elementen en heling). Elke klasse heeft een eigen level. Wisselen doe je in de ordetempel van Zwamzoet. Op level 17 kies je bij de Grootmeester je specialisatie; op 35 en 58 krijg je een nieuwe titel en kracht."
   },
   {
    "id": "vaardigheden",
@@ -35341,6 +35759,110 @@
     ]
    },
    {
+    "id": "zee_vadsdrank",
+    "ambacht": "brouwen",
+    "level": 50,
+    "tier": 4,
+    "soort": "drank",
+    "doel": "zee_vadsdrank",
+    "aantal": 2,
+    "naam": "Zee-Vadsdrank",
+    "in_": [
+     [
+      2,
+      "Zeekraal"
+     ],
+     [
+      1,
+      "Zeesponsje"
+     ]
+    ]
+   },
+   {
+    "id": "zee_energiedrank",
+    "ambacht": "brouwen",
+    "level": 52,
+    "tier": 4,
+    "soort": "drank",
+    "doel": "zee_energiedrank",
+    "aantal": 2,
+    "naam": "Zee-Energiedrank",
+    "in_": [
+     [
+      1,
+      "Zeekraal"
+     ],
+     [
+      1,
+      "honing4"
+     ]
+    ]
+   },
+   {
+    "id": "wolken_vadsdrank",
+    "ambacht": "brouwen",
+    "level": 55,
+    "tier": 5,
+    "soort": "drank",
+    "doel": "wolken_vadsdrank",
+    "aantal": 2,
+    "naam": "Wolken-Vadsdrank",
+    "in_": [
+     [
+      2,
+      "Wolkbes"
+     ],
+     [
+      1,
+      "honing5"
+     ]
+    ]
+   },
+   {
+    "id": "wolken_energiedrank",
+    "ambacht": "brouwen",
+    "level": 57,
+    "tier": 5,
+    "soort": "drank",
+    "doel": "wolken_energiedrank",
+    "aantal": 2,
+    "naam": "Wolken-Energiedrank",
+    "in_": [
+     [
+      1,
+      "Wolkbes"
+     ],
+     [
+      1,
+      "vis5"
+     ]
+    ]
+   },
+   {
+    "id": "hemelelixer",
+    "ambacht": "brouwen",
+    "level": 60,
+    "tier": 5,
+    "soort": "drank",
+    "doel": "hemelelixer",
+    "aantal": 2,
+    "naam": "Hemelelixer",
+    "in_": [
+     [
+      1,
+      "Koninginnengelei"
+     ],
+     [
+      2,
+      "honing5"
+     ],
+     [
+      1,
+      "Wolkbes"
+     ]
+    ]
+   },
+   {
     "id": "klodderpudding",
     "ambacht": "koken",
     "level": 1,
@@ -35541,6 +36063,170 @@
      [
       1,
       "Schemerhout"
+     ]
+    ]
+   },
+   {
+    "id": "zeekraalsalade",
+    "ambacht": "koken",
+    "level": 50,
+    "tier": 4,
+    "soort": "eten",
+    "doel": "zeekraalsalade",
+    "aantal": 2,
+    "naam": "Zeekraalsalade",
+    "in_": [
+     [
+      2,
+      "Zeekraal"
+     ],
+     [
+      1,
+      "vis4"
+     ]
+    ]
+   },
+   {
+    "id": "koraalvissoep",
+    "ambacht": "koken",
+    "level": 51,
+    "tier": 4,
+    "soort": "eten",
+    "doel": "koraalvissoep",
+    "aantal": 2,
+    "naam": "Koraalvissoep",
+    "in_": [
+     [
+      2,
+      "vis4"
+     ],
+     [
+      1,
+      "Zeekraal"
+     ],
+     [
+      1,
+      "Roze Koraal"
+     ]
+    ]
+   },
+   {
+    "id": "zeemanshapje",
+    "ambacht": "koken",
+    "level": 53,
+    "tier": 4,
+    "soort": "eten",
+    "doel": "zeemanshapje",
+    "aantal": 2,
+    "naam": "Zeemanshapje",
+    "in_": [
+     [
+      2,
+      "Zeekraal"
+     ],
+     [
+      1,
+      "honing4"
+     ],
+     [
+      1,
+      "vis4"
+     ]
+    ]
+   },
+   {
+    "id": "lampionspiesjes",
+    "ambacht": "koken",
+    "level": 54,
+    "tier": 4,
+    "soort": "eten",
+    "doel": "lampionspiesjes",
+    "aantal": 2,
+    "naam": "Lampionspiesjes",
+    "in_": [
+     [
+      2,
+      "Koraalbaars"
+     ],
+     [
+      1,
+      "honing4"
+     ],
+     [
+      1,
+      "Vliegerbamboe"
+     ]
+    ]
+   },
+   {
+    "id": "wolkbessentaart",
+    "ambacht": "koken",
+    "level": 55,
+    "tier": 5,
+    "soort": "eten",
+    "doel": "wolkbessentaart",
+    "aantal": 2,
+    "naam": "Wolkbessentaart",
+    "in_": [
+     [
+      3,
+      "Wolkbes"
+     ],
+     [
+      1,
+      "honing5"
+     ]
+    ]
+   },
+   {
+    "id": "donderstoofpot",
+    "ambacht": "koken",
+    "level": 57,
+    "tier": 5,
+    "soort": "eten",
+    "doel": "donderstoofpot",
+    "aantal": 2,
+    "naam": "Donderstoofpot",
+    "in_": [
+     [
+      2,
+      "Donderforel"
+     ],
+     [
+      1,
+      "Wolkbes"
+     ],
+     [
+      1,
+      "Wolkenhout"
+     ]
+    ]
+   },
+   {
+    "id": "hemelfeestmaal",
+    "ambacht": "koken",
+    "level": 59,
+    "tier": 5,
+    "soort": "eten",
+    "doel": "hemelfeestmaal",
+    "aantal": 1,
+    "naam": "Hemelfeestmaal",
+    "in_": [
+     [
+      2,
+      "vis5"
+     ],
+     [
+      2,
+      "honing5"
+     ],
+     [
+      2,
+      "Wolkbes"
+     ],
+     [
+      1,
+      "Wolkenhout"
      ]
     ]
    },
@@ -35789,6 +36475,122 @@
      [
       1,
       "Gouden Klaver"
+     ]
+    ]
+   },
+   {
+    "id": "broek_t4",
+    "ambacht": "naaien",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "broek",
+    "aantal": 1,
+    "naam": "Zeegaren Broek",
+    "in_": [
+     [
+      6,
+      "Zeegaren"
+     ],
+     [
+      1,
+      "Lampionbrons"
+     ],
+     [
+      1,
+      "Zeesponsje"
+     ]
+    ]
+   },
+   {
+    "id": "schoentjes_t4",
+    "ambacht": "naaien",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "schoentjes",
+    "aantal": 1,
+    "naam": "Zeegaren Schoentjes",
+    "in_": [
+     [
+      6,
+      "Zeegaren"
+     ],
+     [
+      1,
+      "Lampionbrons"
+     ],
+     [
+      1,
+      "Zeesponsje"
+     ]
+    ]
+   },
+   {
+    "id": "post_vlieger",
+    "ambacht": "naaien",
+    "level": 52,
+    "tier": 4,
+    "soort": "post",
+    "doel": "vlieger",
+    "aantal": 1,
+    "naam": "Guh-vlieger (naar huis)",
+    "in_": [
+     [
+      3,
+      "Zeegaren"
+     ],
+     [
+      2,
+      "Vliegerbamboe"
+     ]
+    ]
+   },
+   {
+    "id": "broek_t5",
+    "ambacht": "naaien",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "broek",
+    "aantal": 1,
+    "naam": "Wolkenwollen Broek",
+    "in_": [
+     [
+      6,
+      "Wolkenwol"
+     ],
+     [
+      1,
+      "Hemelzilver"
+     ],
+     [
+      1,
+      "Bijenwas"
+     ]
+    ]
+   },
+   {
+    "id": "schoentjes_t5",
+    "ambacht": "naaien",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "schoentjes",
+    "aantal": 1,
+    "naam": "Wolkenwollen Schoentjes",
+    "in_": [
+     [
+      6,
+      "Wolkenwol"
+     ],
+     [
+      1,
+      "Hemelzilver"
+     ],
+     [
+      1,
+      "Bijenwas"
      ]
     ]
    },
@@ -36435,6 +37237,434 @@
       "wortelkern"
      ]
     ]
+   },
+   {
+    "id": "boog_t4",
+    "ambacht": "smeden",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "boog",
+    "aantal": 1,
+    "naam": "Lampionbronzen Boog",
+    "in_": [
+     [
+      6,
+      "Lampionbrons"
+     ],
+     [
+      2,
+      "Drijfhout"
+     ],
+     [
+      1,
+      "Roze Koraal"
+     ]
+    ]
+   },
+   {
+    "id": "borstplaat_t4",
+    "ambacht": "smeden",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "borstplaat",
+    "aantal": 1,
+    "naam": "Lampionbronzen Borstplaat",
+    "in_": [
+     [
+      6,
+      "Lampionbrons"
+     ],
+     [
+      2,
+      "Drijfhout"
+     ],
+     [
+      1,
+      "Roze Koraal"
+     ]
+    ]
+   },
+   {
+    "id": "helm_t4",
+    "ambacht": "smeden",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "helm",
+    "aantal": 1,
+    "naam": "Lampionbronzen Helm",
+    "in_": [
+     [
+      6,
+      "Lampionbrons"
+     ],
+     [
+      2,
+      "Drijfhout"
+     ],
+     [
+      1,
+      "Roze Koraal"
+     ]
+    ]
+   },
+   {
+    "id": "staf_t4",
+    "ambacht": "smeden",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "staf",
+    "aantal": 1,
+    "naam": "Lampionbronzen Staf",
+    "in_": [
+     [
+      6,
+      "Lampionbrons"
+     ],
+     [
+      2,
+      "Drijfhout"
+     ],
+     [
+      1,
+      "Roze Koraal"
+     ]
+    ]
+   },
+   {
+    "id": "zwaard_t4",
+    "ambacht": "smeden",
+    "level": 50,
+    "tier": 4,
+    "soort": "gear",
+    "doel": "zwaard",
+    "aantal": 1,
+    "naam": "Lampionbronzen Zwaard",
+    "in_": [
+     [
+      6,
+      "Lampionbrons"
+     ],
+     [
+      2,
+      "Drijfhout"
+     ],
+     [
+      1,
+      "Roze Koraal"
+     ]
+    ]
+   },
+   {
+    "id": "kern_lampion",
+    "ambacht": "smeden",
+    "level": 54,
+    "tier": 4,
+    "soort": "kern",
+    "doel": "lampionkern",
+    "aantal": 1,
+    "naam": "Lampionkern (uit splinters)",
+    "in_": [
+     [
+      5,
+      "Kernsplinter"
+     ]
+    ]
+   },
+   {
+    "id": "ketting_t4",
+    "ambacht": "smeden",
+    "level": 54,
+    "tier": 4,
+    "soort": "meester",
+    "doel": "ketting",
+    "aantal": 1,
+    "naam": "Lampionkern-Meesterketting",
+    "in_": [
+     [
+      4,
+      "Lampionbrons"
+     ],
+     [
+      3,
+      "Glinstergruis"
+     ],
+     [
+      2,
+      "Roze Koraal"
+     ],
+     [
+      1,
+      "lampionkern"
+     ]
+    ]
+   },
+   {
+    "id": "oorbel_t4",
+    "ambacht": "smeden",
+    "level": 54,
+    "tier": 4,
+    "soort": "meester",
+    "doel": "oorbel",
+    "aantal": 1,
+    "naam": "Lampionkern-Meesteroorbel",
+    "in_": [
+     [
+      4,
+      "Lampionbrons"
+     ],
+     [
+      3,
+      "Glinstergruis"
+     ],
+     [
+      2,
+      "Roze Koraal"
+     ],
+     [
+      1,
+      "lampionkern"
+     ]
+    ]
+   },
+   {
+    "id": "ring_t4",
+    "ambacht": "smeden",
+    "level": 54,
+    "tier": 4,
+    "soort": "meester",
+    "doel": "ring",
+    "aantal": 1,
+    "naam": "Lampionkern-Meesterring",
+    "in_": [
+     [
+      4,
+      "Lampionbrons"
+     ],
+     [
+      3,
+      "Glinstergruis"
+     ],
+     [
+      2,
+      "Roze Koraal"
+     ],
+     [
+      1,
+      "lampionkern"
+     ]
+    ]
+   },
+   {
+    "id": "boog_t5",
+    "ambacht": "smeden",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "boog",
+    "aantal": 1,
+    "naam": "Hemelzilveren Boog",
+    "in_": [
+     [
+      6,
+      "Hemelzilver"
+     ],
+     [
+      2,
+      "Wolkenhout"
+     ],
+     [
+      1,
+      "Glinstergruis"
+     ]
+    ]
+   },
+   {
+    "id": "borstplaat_t5",
+    "ambacht": "smeden",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "borstplaat",
+    "aantal": 1,
+    "naam": "Hemelzilveren Borstplaat",
+    "in_": [
+     [
+      6,
+      "Hemelzilver"
+     ],
+     [
+      2,
+      "Wolkenhout"
+     ],
+     [
+      1,
+      "Glinstergruis"
+     ]
+    ]
+   },
+   {
+    "id": "helm_t5",
+    "ambacht": "smeden",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "helm",
+    "aantal": 1,
+    "naam": "Hemelzilveren Helm",
+    "in_": [
+     [
+      6,
+      "Hemelzilver"
+     ],
+     [
+      2,
+      "Wolkenhout"
+     ],
+     [
+      1,
+      "Glinstergruis"
+     ]
+    ]
+   },
+   {
+    "id": "staf_t5",
+    "ambacht": "smeden",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "staf",
+    "aantal": 1,
+    "naam": "Hemelzilveren Staf",
+    "in_": [
+     [
+      6,
+      "Hemelzilver"
+     ],
+     [
+      2,
+      "Wolkenhout"
+     ],
+     [
+      1,
+      "Glinstergruis"
+     ]
+    ]
+   },
+   {
+    "id": "zwaard_t5",
+    "ambacht": "smeden",
+    "level": 56,
+    "tier": 5,
+    "soort": "gear",
+    "doel": "zwaard",
+    "aantal": 1,
+    "naam": "Hemelzilveren Zwaard",
+    "in_": [
+     [
+      6,
+      "Hemelzilver"
+     ],
+     [
+      2,
+      "Wolkenhout"
+     ],
+     [
+      1,
+      "Glinstergruis"
+     ]
+    ]
+   },
+   {
+    "id": "kern_wolk",
+    "ambacht": "smeden",
+    "level": 59,
+    "tier": 5,
+    "soort": "kern",
+    "doel": "wolkkern",
+    "aantal": 1,
+    "naam": "Wolkkern (uit splinters)",
+    "in_": [
+     [
+      5,
+      "Kernsplinter"
+     ]
+    ]
+   },
+   {
+    "id": "ketting_t5",
+    "ambacht": "smeden",
+    "level": 59,
+    "tier": 5,
+    "soort": "meester",
+    "doel": "ketting",
+    "aantal": 1,
+    "naam": "Wolkkern-Meesterketting",
+    "in_": [
+     [
+      4,
+      "Hemelzilver"
+     ],
+     [
+      4,
+      "Glinstergruis"
+     ],
+     [
+      1,
+      "wolkkern"
+     ]
+    ]
+   },
+   {
+    "id": "oorbel_t5",
+    "ambacht": "smeden",
+    "level": 59,
+    "tier": 5,
+    "soort": "meester",
+    "doel": "oorbel",
+    "aantal": 1,
+    "naam": "Wolkkern-Meesteroorbel",
+    "in_": [
+     [
+      4,
+      "Hemelzilver"
+     ],
+     [
+      4,
+      "Glinstergruis"
+     ],
+     [
+      1,
+      "wolkkern"
+     ]
+    ]
+   },
+   {
+    "id": "ring_t5",
+    "ambacht": "smeden",
+    "level": 59,
+    "tier": 5,
+    "soort": "meester",
+    "doel": "ring",
+    "aantal": 1,
+    "naam": "Wolkkern-Meesterring",
+    "in_": [
+     [
+      4,
+      "Hemelzilver"
+     ],
+     [
+      4,
+      "Glinstergruis"
+     ],
+     [
+      1,
+      "wolkkern"
+     ]
+    ]
    }
   ],
   "plekken": {
@@ -36454,6 +37684,16 @@
      "het Lichtkeverbos",
      "het Paddenbloesemdal",
      "de velden bij Mosvoet"
+    ],
+    "4": [
+     "het Bloemeneiland",
+     "het eiland van het Knuffeltij",
+     "de duinen bij het Strandfeest"
+    ],
+    "5": [
+     "het Staartpark",
+     "de Ooggaarde",
+     "de wolkbessenstruiken"
     ]
    },
    "houthakken": {
@@ -36471,6 +37711,16 @@
      "het Lichtkeverbos",
      "langs de Wortelweg",
      "het Paddenbloesemdal"
+    ],
+    "4": [
+     "het Vliegereiland",
+     "het Vuurtoreneiland",
+     "het Mysterie-eiland"
+    ],
+    "5": [
+     "de bomen van het Staartpark (zuid)",
+     "de bomen van het Staartpark (noord)",
+     "de bomen van de Ooggaarde"
     ]
    },
    "mijnen": {
@@ -36490,6 +37740,16 @@
      "het Wortelgewelf",
      "de Wortelgang (voor)",
      "de Wortelgang (achter)"
+    ],
+    "4": [
+     "de kliffen van Pierkop",
+     "de rotsen van het Vuurtoreneiland",
+     "het strand van het Mysterie-eiland"
+    ],
+    "5": [
+     "de noordvin van Moeder Wolkwal",
+     "de zuidvin van Moeder Wolkwal",
+     "de staartvin van Moeder Wolkwal"
     ]
    },
    "vissen": {
@@ -36512,7 +37772,14 @@
     "4": [
      "de visplek van Lampionhaven",
      "de steigers van Lampionhaven",
-     "de Koraalbaai"
+     "de Koraalbaai",
+     "bij het wrak",
+     "de steiger van het Vuurtoreneiland"
+    ],
+    "5": [
+     "de vijver in het Staartpark",
+     "de fontein op de Marktlaan",
+     "het spuitgat van Moeder Wolkwal"
     ]
    },
    "imkeren": {
@@ -36520,12 +37787,91 @@
      "de bijenwei in het Paddenbloesemdal",
      "de Raatweide",
      "de bijenwei in het Lichtkeverbos"
+    ],
+    "4": [
+     "de Bijenboerderij op het Bloemeneiland",
+     "de duinbloemen bij het Strandfeest"
+    ],
+    "5": [
+     "de bijenwei in het Staartpark",
+     "de bijenwei in de Ooggaarde"
+    ]
+   },
+   "duik": {
+    "4": [
+     "duiken bij de duiksteiger (Koraalbaai)",
+     "duiken rond de Koraalbaai"
     ]
    }
   }
  },
  "puzzels": {
   "lijst": [
+   {
+    "id": "grot_koraalgrot",
+    "zone": "zone4",
+    "soort": "volgorde",
+    "geheim": false,
+    "naam": "Het Schelpenpad",
+    "uitleg": "Stap op de platen in de goede volgorde: eerst de zee, dan het zeewier, dan de zon, en als laatste het koraal.",
+    "nacht": false,
+    "tijd": null,
+    "munten": 9000,
+    "ontgrendel": null,
+    "bladzijde": null
+   },
+   {
+    "id": "grot_kristalgrot",
+    "zone": "zone2",
+    "soort": "licht",
+    "geheim": false,
+    "naam": "De IJsspiegels",
+    "uitleg": "Draai de ijsspiegels tot de lichtstraal het doel linksboven raakt.",
+    "nacht": false,
+    "tijd": null,
+    "munten": 2600,
+    "ontgrendel": null,
+    "bladzijde": null
+   },
+   {
+    "id": "grot_wolkengrot",
+    "zone": "zone5",
+    "soort": "symbool",
+    "geheim": false,
+    "naam": "Het Wolkenslot",
+    "uitleg": "Draai de symboolstenen (klik) en druk op de knop. In de wolk staat geschreven: eerst huilt een wolk, dan slaapt hij, dan droomt hij.",
+    "nacht": false,
+    "tijd": null,
+    "munten": 12000,
+    "ontgrendel": null,
+    "bladzijde": null
+   },
+   {
+    "id": "grot_wortelgrot",
+    "zone": "zone3",
+    "soort": "schuif",
+    "geheim": false,
+    "naam": "De Wortelknopen",
+    "uitleg": "Duw de wortelknopen (klik erop) naar de vakjes. Vast? De herstelknop zet alles terug.",
+    "nacht": false,
+    "tijd": null,
+    "munten": 6000,
+    "ontgrendel": null,
+    "bladzijde": null
+   },
+   {
+    "id": "grot_zwamgrot",
+    "zone": "zone1",
+    "soort": "volgorde",
+    "geheim": false,
+    "naam": "Het Echolied",
+    "uitleg": "De Zwamgrot zingt terug! Klik op de voorspeelsteen, luister naar de echo en speel het lied na op de zingende stenen.",
+    "nacht": false,
+    "tijd": null,
+    "munten": 900,
+    "ontgrendel": null,
+    "bladzijde": null
+   },
    {
     "id": "z1_fluistersteen",
     "zone": "zone1",
@@ -37162,6 +38508,12 @@
     "id": "mos",
     "naam": "Moscape",
     "bron": "Een puzzelbeloning... diep in het groen."
+   },
+   {
+    "soort": "kaap",
+    "id": "meesterschort",
+    "naam": "Meesterschort",
+    "bron": "Haal het hoogste niveau in een ambacht."
    }
   ]
  },
@@ -37212,6 +38564,23 @@
     "Blauwe zwam",
     "Dooierzwam",
     "Glimzwam"
+   ],
+   "tapijt": [
+    "Rozensaffraan",
+    "Turkoois",
+    "Granaatappel",
+    "Zandroos",
+    "Sterrennacht",
+    "Eerste Karavaan",
+    "Gouden kwastjes",
+    "Roze kwastjes",
+    "Turkooise kwastjes",
+    "Witte kwastjes",
+    "Regenboogkwastjes",
+    "Roze kussentje",
+    "Saffraankussentje",
+    "Turkoois kussentje",
+    "Paars kussentje"
    ]
   },
   "patroon": [
@@ -37237,7 +38606,8 @@
    "Prestatie: verzamel 4 huisdieren.",
    "Prestatie: verzamel 6 huisdieren.",
    "Prestatie: het Verkenningsboek van zone 1 op 75%.",
-   "Prestatie: het Verkenningsboek van zone 2 op 75%."
+   "Prestatie: het Verkenningsboek van zone 2 op 75%.",
+   "Prestatie: je vliegend tapijt op level 10."
   ]
  },
  "krachten": [

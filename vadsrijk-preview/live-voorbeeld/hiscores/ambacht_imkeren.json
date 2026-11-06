@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_imkeren",
- "tijd": "2026-11-06T11:39:44Z",
+ "tijd": "2026-11-06T15:42:23Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Kaasknabbel",
-   "waarde": 94,
-   "xp": 112800
+   "naam": "MikaMepper",
+   "waarde": 78,
+   "xp": 93600
   },
   {
    "plek": 2,
-   "naam": "Juiced",
-   "waarde": 75,
-   "xp": 90000
-  },
-  {
-   "plek": 3,
-   "naam": "Njeggie",
+   "naam": "Lieke",
    "waarde": 70,
    "xp": 84000
   },
   {
+   "plek": 3,
+   "naam": "Juiced",
+   "waarde": 68,
+   "xp": 81600
+  },
+  {
    "plek": 4,
-   "naam": "Sjokkel",
+   "naam": "Vadsvos",
    "waarde": 68,
    "xp": 81600
   },
   {
    "plek": 5,
-   "naam": "Zwamzoetje",
-   "waarde": 68,
-   "xp": 81600
+   "naam": "Njeggie",
+   "waarde": 61,
+   "xp": 73200
   },
   {
    "plek": 6,
-   "naam": "Vadsvos",
-   "waarde": 63,
-   "xp": 75600
+   "naam": "Zwamzoetje",
+   "waarde": 61,
+   "xp": 73200
   },
   {
    "plek": 7,
-   "naam": "MikaMepper",
-   "waarde": 61,
-   "xp": 73200
+   "naam": "Honingbeer",
+   "waarde": 49,
+   "xp": 58800
   },
   {
    "plek": 8,
-   "naam": "Pluimpje",
-   "waarde": 61,
-   "xp": 73200
-  },
-  {
-   "plek": 9,
-   "naam": "Klodderkid",
+   "naam": "PluisPiet",
    "waarde": 47,
    "xp": 56400
   },
   {
+   "plek": 9,
+   "naam": "Klodderkid",
+   "waarde": 45,
+   "xp": 54000
+  },
+  {
    "plek": 10,
-   "naam": "Wolwinter",
+   "naam": "Pluimpje",
+   "waarde": 42,
+   "xp": 50400
+  },
+  {
+   "plek": 11,
+   "naam": "Sjokkel",
+   "waarde": 33,
+   "xp": 39600
+  },
+  {
+   "plek": 12,
+   "naam": "Kaasknabbel",
    "waarde": 31,
    "xp": 37200
   },
   {
-   "plek": 11,
-   "naam": "PluisPiet",
-   "waarde": 21,
-   "xp": 25200
-  },
-  {
-   "plek": 12,
-   "naam": "Knuffelkoning",
-   "waarde": 20,
-   "xp": 24000
-  },
-  {
    "plek": 13,
-   "naam": "Honingbeer",
-   "waarde": 14,
-   "xp": 16800
+   "naam": "Wolwinter",
+   "waarde": 28,
+   "xp": 33600
   },
   {
    "plek": 14,
-   "naam": "Lieke",
-   "waarde": 10,
-   "xp": 12000
+   "naam": "Knuffelkoning",
+   "waarde": 14,
+   "xp": 16800
   }
  ]
 }

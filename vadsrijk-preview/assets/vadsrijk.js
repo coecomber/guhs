@@ -31,8 +31,9 @@
         controls.forEach(function(c){var v=(c.value||'').toLowerCase().trim();if(!v)return;
           var col=c.getAttribute('data-filter-col');var txt=(col?(r.cells[+col].getAttribute('data-v')||r.cells[+col].textContent):r.textContent).toLowerCase();
           if(col?txt.split('|').indexOf(v)<0&&txt!==v:txt.indexOf(v)<0)ok=false;});
-        r.hidden=!ok;if(ok)n++;}
-      var cnt=document.querySelector(el.getAttribute('data-filter')+'-n');if(cnt)cnt.textContent=n;}
+        r._uit=!ok;r.hidden=!ok;if(ok)n++;}
+      tab._p=0;var m=pageer(tab);
+      var cnt=document.querySelector(el.getAttribute('data-filter')+'-n');if(cnt)cnt.textContent=(m==null?n:m);}
     el.addEventListener('input',run);el.addEventListener('change',run);});
   // sortable tables
   document.querySelectorAll('table.sort th').forEach(function(th,ci){th.style.cursor='pointer';th.addEventListener('click',function(){
@@ -41,7 +42,22 @@
     th.setAttribute('aria-sort',asc?'ascending':'descending');
     rows.sort(function(a,b){var x=a.cells[idx].getAttribute('data-s')||a.cells[idx].textContent,y=b.cells[idx].getAttribute('data-s')||b.cells[idx].textContent;
       var nx=parseFloat(x),ny=parseFloat(y);var c=(!isNaN(nx)&&!isNaN(ny))?nx-ny:x.localeCompare(y,'nl');return asc?c:-c;});
-    rows.forEach(function(r){tab.tBodies[0].appendChild(r);});});});
+    rows.forEach(function(r){tab.tBodies[0].appendChild(r);});pageer(tab);});});
+  // U-SITE: pagination for <table data-pagina="N"> (respects the filters and the spoiler switch)
+  function pageer(tab){var per=+(tab.getAttribute('data-pagina')||0);if(!per)return null;var rows=tab.tBodies[0].rows,z=VR.zone(),zicht=[];
+    for(var i=0;i<rows.length;i++){var r=rows[i];if(!r._uit&&+(r.getAttribute('data-zone')||1)<=z)zicht.push(r);r.hidden=true;}
+    var pag=Math.max(1,Math.ceil(zicht.length/per));tab._p=Math.min(Math.max(0,tab._p||0),pag-1);
+    zicht.forEach(function(r,i){r.hidden=Math.floor(i/per)!==tab._p;});
+    var pg=tab._pager;if(!pg){pg=document.createElement('div');pg.className='pager';var w=tab.closest('.tscroll')||tab;w.parentNode.insertBefore(pg,w.nextSibling);tab._pager=pg;
+      pg.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b){tab._p=+b.getAttribute('data-p');pageer(tab);tab.scrollIntoView({block:'nearest'});}});}
+    var h='<button type="button" data-p="'+(tab._p-1)+'"'+(tab._p<=0?' disabled':'')+' aria-label="'+VR.t('Previous','Vorige')+'">&lsaquo;</button>';
+    for(var k=0;k<pag;k++){if(pag>9&&k>1&&k<pag-2&&Math.abs(k-tab._p)>2){if(k===2||k===pag-3)h+='<span class="muted">&hellip;</span>';continue;}
+      h+='<button type="button" data-p="'+k+'"'+(k===tab._p?' aria-current="page"':'')+'>'+(k+1)+'</button>';}
+    h+='<button type="button" data-p="'+(tab._p+1)+'"'+(tab._p>=pag-1?' disabled':'')+' aria-label="'+VR.t('Next','Volgende')+'">&rsaquo;</button>';
+    var a=zicht.length?tab._p*per+1:0,b2=Math.min(zicht.length,(tab._p+1)*per);
+    h+='<span class="muted">'+a+'-'+b2+' '+VR.t('of','van')+' '+zicht.length+'</span>';pg.innerHTML=h;return zicht.length;}
+  document.querySelectorAll('table[data-pagina]').forEach(function(tab){pageer(tab);});
+  document.addEventListener('vr-zone',function(){document.querySelectorAll('table[data-pagina]').forEach(function(tab){pageer(tab);});});
 
   // ---- live data ----
   function haal(naam){var url=VR.live+naam;return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
@@ -107,7 +123,7 @@
           '<h2>'+VR.t('Exploration book','Verkenningsboek')+'</h2><dl class="feiten">'+boek+'</dl></div>'+
           '<aside class="zij"><div class="kaartje"><dl class="feiten">'+kl+'<div><dt>'+VR.t('Cheered up','Opgevrolijkt')+'</dt><dd>'+p.opgevrolijkt+'</dd></div><div><dt>'+VR.t('Bosses','Bazen')+'</dt><dd>'+p.bazen_totaal+'</dd></div>'+
           '<div><dt>'+VR.t('Pets','Huisdieren')+'</dt><dd>'+p.huisdieren+' / '+p.huisdieren_max+'</dd></div><div><dt>'+VR.t('Mounts','Rijdieren')+'</dt><dd>'+p.rijdieren+' / '+p.rijdieren_max+'</dd></div>'+
-          '<div><dt>'+VR.t('Last seen','Laatst gezien')+'</dt><dd>'+esc(p.gezien)+'</dd></div>'+(p.eerste_50?'<div><dt>Lv 50</dt><dd>'+esc(p.eerste_50)+'</dd></div>':'')+'</dl></div></aside></div>';
+          (p.waar?'<div><dt>'+VR.t('Now','Nu')+'</dt><dd>'+esc(p.waar)+'</dd></div>':'')+'<div><dt>'+VR.t('Last seen','Laatst gezien')+'</dt><dd>'+esc(p.gezien)+'</dd></div>'+(p.eerste_50?'<div><dt>Lv 50</dt><dd>'+esc(p.eerste_50)+'</dd></div>':'')+'</dl></div></aside></div>';
         document.title=p.naam+' - Het Vadsrijk';},function(){uit.innerHTML='<p class="leeg">'+VR.t('No player with this name (yet).','(Nog) geen speler met deze naam.')+'</p>';});}
     window.addEventListener('hashchange',laadP);laadP();document.addEventListener('vr-lang',laadP);})(document.querySelector('[data-profiel]'));
 })();

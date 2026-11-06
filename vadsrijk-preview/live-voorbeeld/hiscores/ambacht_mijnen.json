@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_mijnen",
- "tijd": "2026-11-06T11:39:44Z",
+ "tijd": "2026-11-06T15:42:23Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Kaasknabbel",
+   "naam": "PluisPiet",
    "waarde": 98,
    "xp": 117600
   },
   {
    "plek": 2,
-   "naam": "Klodderkid",
-   "waarde": 98,
-   "xp": 117600
-  },
-  {
-   "plek": 3,
-   "naam": "Njeggie",
+   "naam": "Lieke",
    "waarde": 94,
    "xp": 112800
   },
   {
+   "plek": 3,
+   "naam": "Honingbeer",
+   "waarde": 86,
+   "xp": 103200
+  },
+  {
    "plek": 4,
-   "naam": "Lieke",
-   "waarde": 82,
-   "xp": 98400
+   "naam": "Pluimpje",
+   "waarde": 77,
+   "xp": 92400
   },
   {
    "plek": 5,
-   "naam": "Zwamzoetje",
+   "naam": "Juiced",
    "waarde": 70,
    "xp": 84000
   },
   {
    "plek": 6,
-   "naam": "PluisPiet",
-   "waarde": 69,
-   "xp": 82800
+   "naam": "MikaMepper",
+   "waarde": 63,
+   "xp": 75600
   },
   {
    "plek": 7,
    "naam": "Wolwinter",
+   "waarde": 60,
+   "xp": 72000
+  },
+  {
+   "plek": 8,
+   "naam": "Klodderkid",
+   "waarde": 53,
+   "xp": 63600
+  },
+  {
+   "plek": 9,
+   "naam": "Kaasknabbel",
    "waarde": 51,
    "xp": 61200
   },
   {
-   "plek": 8,
-   "naam": "Pluimpje",
-   "waarde": 42,
-   "xp": 50400
-  },
-  {
-   "plek": 9,
-   "naam": "Sjokkel",
-   "waarde": 42,
-   "xp": 50400
-  },
-  {
    "plek": 10,
-   "naam": "Honingbeer",
+   "naam": "Vadsvos",
+   "waarde": 42,
+   "xp": 50400
+  },
+  {
+   "plek": 11,
+   "naam": "Zwamzoetje",
+   "waarde": 42,
+   "xp": 50400
+  },
+  {
+   "plek": 12,
+   "naam": "Knuffelkoning",
    "waarde": 32,
    "xp": 38400
   },
   {
-   "plek": 11,
-   "naam": "Juiced",
-   "waarde": 26,
-   "xp": 31200
-  },
-  {
-   "plek": 12,
-   "naam": "Vadsvos",
-   "waarde": 26,
-   "xp": 31200
-  },
-  {
    "plek": 13,
-   "naam": "MikaMepper",
+   "naam": "Njeggie",
    "waarde": 15,
    "xp": 18000
   },
   {
    "plek": 14,
-   "naam": "Knuffelkoning",
-   "waarde": 12,
-   "xp": 14400
+   "naam": "Sjokkel",
+   "waarde": 6,
+   "xp": 7200
   }
  ]
 }

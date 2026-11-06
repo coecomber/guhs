@@ -12,7 +12,8 @@
   function laag(id,en,nl,aan){var g=L.layerGroup();lagen[id]={g:g,en:en,nl:nl};if(aan)g.addTo(map);return g;}
   var Lzones=laag('zones','Zones and areas','Zones en gebieden',true),Lst=laag('steden','Towns','Steden',true),Lvuur=laag('kampvuur','Campfires','Kampvuren',true),
     Luit=laag('uitkijk','Viewpoints','Uitkijkpunten',true),Lreis=laag('reizen','Airships, portals, lifts','Luchtschepen, portalen, liften',true),
-    Lbaas=laag('bazen','Bosses','Bazen',true),Lquest=laag('quests','Quest givers','Questgevers',false),Lkar=laag('karavaan','Caravan (live)','Karavaan (live)',true);
+    Lbaas=laag('bazen','Bosses','Bazen',true),Lquest=laag('quests','Quest givers','Questgevers',false),Lkar=laag('karavaan','Caravan (live)','Karavaan (live)',true),
+    Lspel=laag('spelers','Show players (live)','Spelers tonen (live)',true);
   function pin(soort,teken,x,z,titel,html,zone,id){var m=L.marker(ll(x,z),{icon:L.divIcon({className:'',html:'<span class="vr-pin '+soort+'">'+teken+'</span>',iconSize:[22,22],iconAnchor:[11,11]}),title:titel,keyboard:true});
     m.bindPopup('<h4>'+VR.esc(titel)+'</h4>'+(html||'')+'<div class="muted" style="font:12px var(--mono)">x '+x+' &middot; z '+z+'</div>');m._vrZone=zoneNr(zone);m._vrId=id;alle.push({id:id,naam:titel,m:m,zone:m._vrZone,soort:soort});return m;}
   // areas: outlines + level labels
@@ -64,4 +65,24 @@
       kar.setLatLng(ll(kv.x,kv.z));kar.setPopupContent('<h4>'+T('The caravan','De karavaan')+'</h4>'+(kv.fase==='stop'?T('At a stop','Bij een halte'):kv.fase==='aanval'?T('Under attack!','Wordt aangevallen!'):T('On the road','Onderweg')));}
     w.bazen.forEach(function(b){document.querySelectorAll('[data-baas="'+b.arena+'"]').forEach(function(d){d.innerHTML=b.terug_over_s>0?T('Back in ','Terug over ')+VR.duur(b.terug_over_s):T('Waiting for you now','Wacht nu op je');});});},function(){});}
   live();setInterval(live,30000);
+  // U-SITE: live player positions + airships in flight (posities.json, ~10 s); markers glide to their new spot
+  var spelersM={},schipM={},pnote=document.getElementById('spelersnoot');
+  var KI={knuffelridder:'&#9876;',pluisjager:'&#127993;',vadsmagier:'&#10024;'};
+  function glij(m,naar){var van=m.getLatLng(),t0=performance.now(),d=1800;cancelAnimationFrame(m._raf);
+    (function stap(t){var f=Math.min(1,(t-t0)/d);f=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;m.setLatLng(L.latLng(van.lat+(naar.lat-van.lat)*f,van.lng+(naar.lng-van.lng)*f));if(f<1)m._raf=requestAnimationFrame(stap);})(t0);}
+  function posities(){VR.haal('posities.json').then(function(P){var zien={},sz={};
+      (P.spelers||[]).forEach(function(s){var id=s.naam;zien[id]=1;var to=ll(s.x,s.z),m=spelersM[id];
+        var html='<span class="vr-speler"><img src="https://mc-heads.net/avatar/'+encodeURIComponent(s.naam)+'/20" alt="" width="20" height="20"><b>'+VR.esc(s.naam)+'</b><i>'+(KI[s.klasse]||'')+' '+(s.level||'')+'</i></span>';
+        if(!m){m=L.marker(to,{icon:L.divIcon({className:'',html:html,iconSize:null,iconAnchor:[10,10]}),title:s.naam,zIndexOffset:1000});
+          m.bindPopup('<h4>'+VR.esc(s.naam)+'</h4>'+VR.t('Level ','Level ')+(s.level||'?')+(s.klasse?' &middot; '+VR.esc(VR.vt?VR.vt('klasse:'+s.klasse):s.klasse):'')+'<br><a href="'+VR.root+'speler.html#'+encodeURIComponent(s.naam)+'">'+VR.t('Profile','Profiel')+'</a>');
+          m._vrZone=+String(s.zone||'zone1').replace('zone','')||1;m.addTo(Lspel);spelersM[id]=m;}else{glij(m,to);}});
+      Object.keys(spelersM).forEach(function(id){if(!zien[id]){Lspel.removeLayer(spelersM[id]);delete spelersM[id];}});
+      (P.schepen||[]).forEach(function(s){sz[s.id]=1;var to=ll(s.x,s.z),m=schipM[s.id];
+        if(!m){m=L.marker(to,{icon:L.divIcon({className:'',html:'<span class="vr-pin luchtschip vliegt">&#9992;</span>',iconSize:[24,24],iconAnchor:[12,12]}),title:VR.t('Airship','Luchtschip')});
+          m.bindPopup('<h4>'+VR.t('Airship in flight','Luchtschip onderweg')+'</h4>'+(s.naar?VR.t('to ','naar ')+VR.esc(s.naar):''));m.addTo(Lspel);schipM[s.id]=m;}else{glij(m,to);}});
+      Object.keys(schipM).forEach(function(id){if(!sz[id]){Lspel.removeLayer(schipM[id]);delete schipM[id];}});
+      if(pnote){var n=(P.spelers||[]).length,st=(P.status||[]).length;
+        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon or house)',' (+'+st+' in een kerker of huisje)'):''):VR.t('No players online','Geen spelers online');}
+      setTimeout(zoneFilter,30);},function(){if(pnote)pnote.textContent=VR.t('No players online','Geen spelers online');});}
+  posities();setInterval(posities,10000);
 })();
