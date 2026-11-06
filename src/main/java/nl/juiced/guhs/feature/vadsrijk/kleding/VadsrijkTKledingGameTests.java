@@ -148,6 +148,10 @@ public class VadsrijkTKledingGameTests {
         helper.assertTrue(!Kledingkast.heeft(p, Cosmetica.KAAP_REIS.id()), "two tailors: not yet");
         Kledingkast.open(p, "z3_kleermaker");
         helper.assertTrue(Kledingkast.heeft(p, Cosmetica.KAAP_REIS.id()), "all three tailors: the travel cape");
+        // t-puzzels rewards (the hook gives "puzzel:<id>"); without t-puzzels in the tree the check pass finds nothing
+        helper.assertTrue(!Bronnen.gehaald(p, "puzzel:pz_cape_mos", new java.util.HashMap<>()) || KledingRegistry.puzzels(), "no puzzles here");
+        helper.assertTrue(Kledingkast.geefBron(p, "puzzel:pz_vleugels_poollicht") && Kledingkast.heeft(p, Cosmetica.POOLLICHT.id()), "puzzle wings");
+        helper.assertTrue(Cosmetica.POOLLICHT.kracht() == Cosmetica.Kracht.LANGER_ZWEVEN && Cosmetica.KAAP_MOS.geheim(), "movement trick; hidden name");
         helper.succeed();
     }
 

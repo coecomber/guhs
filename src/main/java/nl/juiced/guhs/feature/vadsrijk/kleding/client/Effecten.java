@@ -204,7 +204,7 @@ public final class Effecten {
         }
         naar = naar.normalize();
         Vec3 rechts = new Vec3(-naar.z, 0, naar.x);
-        double px = 0.14;
+        double px = 0.16;
         int breedte = 4 + 1 + 4 + 1 + 4 + 1 + 4 + 1 + 1;
         double start = -breedte * px / 2;
         int kol = 0;
@@ -213,7 +213,7 @@ public final class Effecten {
                 for (int c = 0; c < g[rij].length(); c++) {
                     if (g[rij].charAt(c) == '1' && (veel == 1 || (rij + c) % 2 == 0)) {
                         double off = start + (kol + c) * px;
-                        deeltje(l, new DustParticleOptions(0xFF5FAF, 0.9f), x + rechts.x * off, y + (4 - rij) * px, z + rechts.z * off, 0, 0.01, 0);
+                        deeltje(l, new DustParticleOptions(0xFF3F9F, 0.45f), x + rechts.x * off, y + (4 - rij) * px, z + rechts.z * off, 0, 0, 0);
                     }
                 }
             }

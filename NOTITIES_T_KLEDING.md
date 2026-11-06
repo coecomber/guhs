@@ -4,7 +4,7 @@ Branch `110-t-kleding` from dbf82899d. Package `nl.juiced.guhs.feature.vadsrijk.
 `tools/features/vadsrijk_t_kleding.py`. Design: VOORSTEL_ROADMAP §4.2/§4.3/§4.4 + R3/R4/R5 (§13). Cheat sheet: `SPIEK_T_KLEDING.md`.
 
 ## What is built
-- **Cosmetica** (catalogue, common code): 7 wings, 5 cosmetic capes, 7 head accessories, 5 name colours, 8 dyes, 7 cheer-up
+- **Cosmetica** (catalogue, common code): 10 wings (3 from t-puzzels), 8 cosmetic capes (3 from t-puzzels), 7 head accessories, 5 name colours, 8 dyes, 7 cheer-up
   effects, 5 trails, 3 auras. Id = `<soort>:<naam>` = unlock key. Each has a source spec (see `Bronnen`). `Cosmetica.registreer`
   lets another slice add one (its own lang/model).
 - **KledingData** = the ACCOUNT store: overworld SavedData `guhs:vr_kleding`, one CompoundTag per player UUID. Not in
@@ -39,9 +39,8 @@ Branch `110-t-kleding` from dbf82899d. Package `nl.juiced.guhs.feature.vadsrijk.
 
 ## Decisions made alone
 - **Wings render without GeckoLib geo.** A GeckoLib render layer needs a GeoRenderer parent; the player renderer is vanilla. The
-  wings are two item models (cuboid feathers, Python-generated) on a vanilla `RenderLayer`, posed in code like bones (yaw + roll per
-  half): folded / spread / soft flap, lerped per frame; static beyond 24 blocks (LOD). Cheap, tintable, no extra entity. If the
-  user wants real GeckoLib animation later, the pose code is the single place to swap.
+  wings are baked item models (cuboid feathers, Python-generated, 3 poses per wing) on a vanilla `RenderLayer`: folded / spread /
+  flap; static beyond 24 blocks (LOD). Cheap, tintable, no extra entity. Real GeckoLib animation = a later swap in `KledingLaag`.
 - **Gliding needs the Vahoegveertjes** (the story unlock) AND any wings on. Tricks that don't need gliding (double jump, dash, soft
   landing) work with those wings even before the unlock. Every wing type glides once gliding is unlocked.
 - **Double jump** was explicitly on the R4 list, so a single small hop (~1.4 blocks) is allowed; nothing ever keeps you rising.
@@ -59,7 +58,7 @@ Branch `110-t-kleding` from dbf82899d. Package `nl.juiced.guhs.feature.vadsrijk.
 - `feature/vadsrijk/VadsrijkFeature.java`: `KledingRegistry.register(modBus)` + `KledingRegistry.payloads(registrar)`.
 - `feature/vadsrijk/client/VadsrijkClient.java`: `KledingClient.init(modBus)`.
 - `tools/features/__init__.py`: `'vadsrijk_t_kleding'` in FEATURES.
-- `assets/guhs/lang/nl_nl.json` + `en_us.json`: 162 keys `vadsrijk.kleding.*` + `key.guhs.vr_kledingkast` (via the generator).
+- `assets/guhs/lang/nl_nl.json` + `en_us.json`: 174 keys `vadsrijk.kleding.*` + `key.guhs.vr_kledingkast` (via the generator).
 - Uses (no edits): `QuestMotor.EXTRA`, `Z3BazenApi.MOMENT`, `Haken.VERSLAGEN/LOOT/BINNEN`, `Schade.NA_KLAP`,
   `Knuffelsprong.beschermTot`, `Arenas.op`, `Gebieden.op`, `Titels.behaald/actief/kies`, `CollectieTabs`, `EcoScherm`.
 
@@ -74,3 +73,33 @@ Branch `110-t-kleding` from dbf82899d. Package `nl.juiced.guhs.feature.vadsrijk.
 
 ## Resume point / open
 See the bottom of this file (updated at the end of the run).
+
+## t-puzzels coupling (added at the lead's request)
+- 3 wings + 3 capes with source `puzzel:<t-puzzels id>`: `vleugel:sterrenstof` (pz_vleugels_sterrenstof, double jump),
+  `vleugel:poollicht` (pz_vleugels_poollicht, longer glide), `vleugel:lantaarnmot` (pz_vleugels_lantaarnmot, soft landing),
+  `kaap:sneeuwvlok` (pz_cape_sneeuwvlok), `kaap:honingraat` (pz_cape_honingraat), `kaap:mos` (pz_cape_mos). Names hidden ("???") until unlocked.
+- Soft dependency by reflection (compiles without 110-t-puzzels): `KledingRegistry.puzzels()` adds a listener to
+  `Puzzels.ONTGRENDEL_HAAK` at start-up; the 10 s check pass also asks `PuzzelSpeler.ontgrendeld(p, id)` (covers older unlocks).
+  Integration may replace both with direct calls. Dev: `/guhs vadsrijk kleding puzzel <pz_id>`.
+
+## Wing rendering, as it ended
+- First version posed two halves per frame in code; in the AutoCheck client only one half showed. Now each wing has three
+  BAKED pair models (`_dicht` folded 45 deg back, `_open` 22.5 deg, `_op` tips up 22.5 deg); gliding alternates open/op every
+  4 ticks (= the flap), LOD > 24 blocks: no flap. Verified in the AutoCheck client (screenshots run/screenshots/autocheck/tk_*.png):
+  both halves visible, capes, ears on the head, the wardrobe screen. Looks are for the user to judge in the dev client.
+
+## Tests
+- `runGameTestServer -Pgt=VadsrijkTKleding`: 8/8 green (see the final report for the last run).
+- AutoCheck script: `tools/autocheck/vadsrijk_t_kleding.txt` (screen, every wing, capes, hats, two cheer-up effects).
+
+## Open / not done
+- Real gliding was NOT tested in a client (AutoCheck can't hold space): the client logic is the Pluimguh glide on foot; check in
+  the dev client: jump off something in the Vadsrijk and hold space; double jump / dash = tap space again in the air.
+- No new NPC entities (hub tailors got the choice); no armour dye (assets not dyeable); the lantern kite + hairpin wait for a
+  zone-4 Verkenningsboek (`later:zone4`).
+- Transmog only draws over a piece really worn (by design) and only in the Vadsrijk.
+- The "Njeg!" letters are dust particles; readable but rough. The effects are vanilla particles (t-vfx could swap them).
+- en_us texts are real English; NL is the main text.
+
+## Resume point
+All committed on 110-t-kleding. Next for integration: wire `KledingData.BRON` to t-karakter's account store; t-items cape: see above.

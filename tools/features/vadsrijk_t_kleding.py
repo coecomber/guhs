@@ -41,7 +41,13 @@ DINGEN = {
                       "A secret... something about very high and very long gliding."),
     "vleugel.lampion": ("Lampionvlieger", "Lantern Kite", "Verken De Lampionkust voor 100% (komt later).",
                         "Explore De Lampionkust to 100% (coming later)."),
+    "vleugel.sterrenstof": ("Sterrenstofvleugels", "Stardust Wings", "Een puzzelbeloning... ergens schittert iets.", "A puzzle reward... something sparkles somewhere."),
+    "vleugel.poollicht": ("Poollichtvleugels", "Aurora Wings", "Een puzzelbeloning... ergens in de kou.", "A puzzle reward... somewhere in the cold."),
+    "vleugel.lantaarnmot": ("Lantaarnmotvleugels", "Lantern Moth Wings", "Een puzzelbeloning... motjes houden van licht.", "A puzzle reward... moths love light."),
     # capes
+    "kaap.sneeuwvlok": ("Sneeuwvlokcape", "Snowflake Cape", "Een puzzelbeloning... ergens in de sneeuw.", "A puzzle reward... somewhere in the snow."),
+    "kaap.honingraat": ("Honingraatcape", "Honeycomb Cape", "Een puzzelbeloning... iets met bijtjes.", "A puzzle reward... something with bees."),
+    "kaap.mos": ("Moscape", "Moss Cape", "Een puzzelbeloning... diep in het groen.", "A puzzle reward... deep in the green."),
     "kaap.knuffelorde": ("Knuffelorde-cape", "Cuddle Order Cape", "Speel het verhaal van De Knuffelzwammen uit.",
                          "Finish the story of De Knuffelzwammen."),
     "kaap.roze": ("Roze Pluiscape", "Pink Fluff Cape", "Verken De Knuffelzwammen voor 50%.", "Explore De Knuffelzwammen to 50%."),
@@ -125,8 +131,8 @@ TEKSTEN = {
     "slot": ("Zo krijg je dit: %s", "How to get it: %s"),
     "later": ("Komt later: %s", "Coming later: %s"),
     "later.kort": ("Later", "Later"),
-    "rug.zweven": ("Met vleugels zweef je in het Vadsrijk: houd spatie in de lucht.", "With wings you glide in the Vadsrijk: hold space in the air."),
-    "rug.nogniet": ("Zweven leer je aan het einde van De Schemerwortel...", "You learn to glide at the end of De Schemerwortel..."),
+    "rug.zweven": ("Zweven: spatie vasthouden in de lucht.", "Glide: hold space in the air."),
+    "rug.nogniet": ("Zweven leer je later in het verhaal...", "You learn to glide later in the story..."),
     "harnas.uitleg": ("Elk harnas dat je ooit had, wordt een uiterlijk. Alleen in het Vadsrijk.",
                       "Every armour you ever had becomes a look. Only in the Vadsrijk."),
     "harnas.thuis": ("(Je bent thuis: je harnas-uiterlijk zie je in het Vadsrijk.)", "(You are home: armour looks show in the Vadsrijk.)"),
@@ -234,7 +240,7 @@ def vleugel_elementen(naam):
         el.append(_plaat(0, 10, 7.5, 9, d=1))
         for i, (ln, up) in enumerate([(5, 3), (7, 4), (6, 5), (4, 3)]):
             x = 1 + i * 2.4
-            el.append(_plaat(x, x + 1.8, 8 - ln, 8 + up, d=0.8, rot={"angle": -22.5, "axis": "z", "origin": [x, 8, 8]}))
+            el.append(_plaat(x, x + 1.8, 8 - ln, 8 + up, d=0.8))
     elif naam == "honingbij":
         el.append(_plaat(0, 12, 8.5, 14, d=0.4))
         el.append(_plaat(0, 9, 3, 8, d=0.4))
@@ -248,15 +254,51 @@ def vleugel_elementen(naam):
         for i, ln in enumerate([6, 4, 6, 4, 5]):
             x = i * 2.4
             el.append(_plaat(x, x + 2.4, 8.5 - ln, 8.5, d=0.4))
+    elif naam == "sterrenstof":
+        el.append(_plaat(0, 12, 8, 9.5, d=0.6))
+        for i, ln in enumerate([7, 5, 7, 5, 6]):
+            x = i * 2.4
+            el.append(_plaat(x, x + 2.2, 8.5 - ln, 8.5, d=0.4))
+    elif naam == "poollicht":
+        el.append(_plaat(0, 11, 7.5, 9, d=0.8))
+        for i, (ln, up) in enumerate([(4, 5), (6, 6), (7, 5), (5, 3)]):
+            x = 1 + i * 2.4
+            el.append(_plaat(x, x + 2.0, 8 - ln, 8 + up, d=0.5))
+    elif naam == "lantaarnmot":
+        el.append(_plaat(0, 11, 8.5, 14.5, d=0.4))
+        el.append(_plaat(0, 8, 2.5, 8.5, d=0.4))
+        el.append(_box([9, 11, 7.6], [11, 13, 8.4]))
     elif naam == "pluis":
         el.append(_box([0, 6, 7], [5, 10, 9]))
         el.append(_box([4, 5, 7.2], [9, 9.5, 8.8]))
         el.append(_box([7.5, 4.5, 7.4], [11, 8, 8.6]))
     elif naam == "lampion":
         el.append(_plaat(0, 9, 7.5, 8.5, d=0.6))
-        el.append(_plaat(3, 11, 5, 13, d=0.4, rot={"angle": 45, "axis": "z", "origin": [7, 9, 8]}))
+        el.append(_plaat(3, 11, 5, 12, d=0.4))
         el.append(_box([6, 1, 7.25], [7.5, 4, 8.75]))
     return el
+
+
+# The pair of wings as ONE model per pose, posed here (Java only switches models; element rotations are one axis, 22.5 deg
+# steps). Item space = the BODY (like the head accessories): px (8, 0, 8) = the neck, y up, the back at z 10, front = north.
+VLEUGEL_POSES = {"dicht": ("y", 45.0), "open": ("y", 22.5), "op": ("z", 22.5)}
+VL_SCHAAL, VL_Y, VL_Z = 0.85, -3.0, 10.6
+
+
+def vleugel_paar(naam, pose):
+    as_, hoek = VLEUGEL_POSES[pose]
+    uit = []
+    for kant in (1, -1):   # +1 = the player's left (+x), -1 = right
+        for e in vleugel_elementen(naam):
+            (x0, y0, z0), (x1, y1, z1) = e["from"], e["to"]
+            xa, xb = 8 + kant * (1 + x0 * VL_SCHAAL), 8 + kant * (1 + x1 * VL_SCHAAL)
+            fr = [round(min(xa, xb), 3), round((y0 - 8) * VL_SCHAAL + VL_Y, 3), round((z0 - 8) * VL_SCHAAL + VL_Z, 3)]
+            to = [round(max(xa, xb), 3), round((y1 - 8) * VL_SCHAAL + VL_Y, 3), round((z1 - 8) * VL_SCHAAL + VL_Z, 3)]
+            # "y": tips swing back (+z) on both sides; "z": tips up on both sides
+            hk = -kant * hoek if as_ == "y" else kant * hoek
+            rot = {"angle": hk, "axis": as_, "origin": [8 + kant, VL_Y, VL_Z]}
+            uit.append(_box(fr, to, rot=rot))
+    return uit
 
 
 def accessoire_elementen(naam):
@@ -301,9 +343,9 @@ def accessoire_elementen(naam):
     return el
 
 
-VLEUGELS = ["vahoegveertjes", "kristal", "honingbij", "goudveer", "schemer", "pluis", "lampion"]
+VLEUGELS = ["vahoegveertjes", "kristal", "honingbij", "goudveer", "schemer", "pluis", "lampion", "sterrenstof", "poollicht", "lantaarnmot"]
 ACCESSOIRES = ["oortjes", "strikje", "paddenhoedje", "kristaltiara", "honingkroon", "feestmuts", "lampionspeld"]
-KAPEN = ["knuffelorde", "roze", "sterren", "bloesem", "reis"]
+KAPEN = ["knuffelorde", "roze", "sterren", "bloesem", "reis", "sneeuwvlok", "honingraat", "mos"]
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -341,6 +383,16 @@ def tex_vleugel(naam):
                     c = 0xFFF4A0
             elif naam == "pluis":
                 c = 0xFFFFFF if rnd.random() < 0.7 else 0xF0F0FA
+            elif naam == "sterrenstof":
+                c = 0x3A3A8A if (x + y) % 5 else 0x5A5AC0
+                if rnd.random() < 0.12:
+                    c = 0xFFFFFF if rnd.random() < 0.5 else 0xFFF0A0
+            elif naam == "poollicht":
+                c = [0x8CFFC8, 0x8CDCFF, 0xC8A8FF, 0xFF9FD0][(y // 4 + x // 6) % 4]
+            elif naam == "lantaarnmot":
+                c = 0xF0E0C0 if (x + y) % 4 else 0xD8C8A0
+                if 5 <= x <= 9 and 5 <= y <= 9:
+                    c = 0xFFD870
             else:  # lampion
                 c = 0xFF9A5A if (y // 4) % 2 else 0xFFC870
                 if x in (0, 15):
@@ -380,8 +432,10 @@ def tex_kaap(naam):
     """64x32, vanilla cape layout: the outside at (1,1)-(11,17), the inside at (12,1)-(22,17), edges around."""
     im = Image.new("RGBA", (64, 32), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    basis = {"knuffelorde": 0xFF7FC0, "roze": 0xFFB8DC, "sterren": 0x2A2A6A, "bloesem": 0xFFF4FA, "reis": 0x4A8A8A}[naam]
-    rand = {"knuffelorde": 0xC0287C, "roze": 0xFFFFFF, "sterren": 0xFFD24A, "bloesem": 0xFF8CC8, "reis": 0x8A5A3A}[naam]
+    basis = {"knuffelorde": 0xFF7FC0, "roze": 0xFFB8DC, "sterren": 0x2A2A6A, "bloesem": 0xFFF4FA, "reis": 0x4A8A8A,
+             "sneeuwvlok": 0xA8D8FF, "honingraat": 0xFFC83A, "mos": 0x5A8A3A}[naam]
+    rand = {"knuffelorde": 0xC0287C, "roze": 0xFFFFFF, "sterren": 0xFFD24A, "bloesem": 0xFF8CC8, "reis": 0x8A5A3A,
+            "sneeuwvlok": 0xFFFFFF, "honingraat": 0xB07800, "mos": 0x3A5A2A}[naam]
     d.rectangle([0, 0, 22, 17], fill=_rgb(basis))
     d.rectangle([12, 1, 21, 16], fill=_rgb(rand))   # inside
     for x in range(1, 11):
@@ -412,6 +466,22 @@ def tex_kaap(naam):
             for (dx, dy) in [(0, -1), (1, 0), (0, 1), (-1, 0)]:
                 im.putpixel((cx + dx, cy + dy), _rgb(0xFF8CC8))
             im.putpixel((cx, cy), _rgb(0xFFE04A))
+    elif naam == "sneeuwvlok":
+        for (cx, cy) in [(5, 5), (4, 11)]:
+            for d in range(-2, 3):
+                im.putpixel((cx + d, cy), _rgb(0xFFFFFF))
+                im.putpixel((cx, cy + d), _rgb(0xFFFFFF))
+    elif naam == "honingraat":
+        for y in range(1, 17):
+            for x in range(2, 10):
+                if (x + (y // 3) % 2 * 2) % 4 == 0 or y % 3 == 0:
+                    im.putpixel((x, y), _rgb(0xE0A020))
+    elif naam == "mos":
+        rnd = random.Random("mos")
+        for y in range(1, 17):
+            for x in range(2, 10):
+                if rnd.random() < 0.35:
+                    im.putpixel((x, y), _rgb(0x7AAA4A if rnd.random() < 0.6 else 0x4A6A2A))
     elif naam == "reis":
         for y in range(1, 17):
             for x in range(2, 10):
@@ -432,8 +502,8 @@ def _schrijf_json(pad, obj):
         f.write("\n")
 
 
-def _model(soort, naam, elementen, root):
-    tex = f"guhs:item/vr_t_kleding/{soort}_{naam}"
+def _model(soort, naam, elementen, root, tex=None):
+    tex = f"guhs:item/vr_t_kleding/{tex or soort + '_' + naam}"
     _schrijf_json(os.path.join(root, "models", "item", "vr_t_kleding", f"{soort}_{naam}.json"),
                   {"textures": {"t": tex, "particle": tex}, "elements": elementen})
     _schrijf_json(os.path.join(root, "items", f"vr_t_kleding_{soort}_{naam}.json"),
@@ -443,7 +513,8 @@ def _model(soort, naam, elementen, root):
 
 def assets(root=A):
     for v in VLEUGELS:
-        _model("vleugel", v, vleugel_elementen(v), root)
+        for pose in VLEUGEL_POSES:
+            _model("vleugel", f"{v}_{pose}", vleugel_paar(v, pose), root, tex=f"vleugel_{v}")
     for a in ACCESSOIRES:
         _model("accessoire", a, accessoire_elementen(a), root)
     if Image is None:

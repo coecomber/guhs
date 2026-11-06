@@ -88,7 +88,7 @@ public final class Cosmetica {
         }
 
         public boolean geheim() {
-            return bron.startsWith("geheim:");
+            return bron.startsWith("geheim:") || bron.startsWith("puzzel:");
         }
     }
 
@@ -102,6 +102,10 @@ public final class Cosmetica {
     public static final Ding SCHEMER = vleugel("schemer", "vahoeg", Kracht.LUCHTDASH, 3);
     public static final Ding PLUIS = vleugel("pluis", "geheim:zweefvlucht", Kracht.ZACHTE_LANDING, 0);
     public static final Ding LAMPION = vleugel("lampion", "later:zone4", Kracht.LANGER_ZWEVEN, 4);
+    // (t-puzzels: puzzle rewards; source "puzzel:<t-puzzels unlock id>", see Bronnen + KledingRegistry.puzzels)
+    public static final Ding STERRENSTOF = vleugel("sterrenstof", "puzzel:pz_vleugels_sterrenstof", Kracht.DUBBELE_SPRONG, 0);
+    public static final Ding POOLLICHT = vleugel("poollicht", "puzzel:pz_vleugels_poollicht", Kracht.LANGER_ZWEVEN, 0);
+    public static final Ding LANTAARNMOT = vleugel("lantaarnmot", "puzzel:pz_vleugels_lantaarnmot", Kracht.ZACHTE_LANDING, 0);
 
     // ---- cosmetic capes (rug, over the gear cape of t-items) ------------------------------------------------------------------
     public static final Ding KAAP_KNUFFELORDE = ding("kaap:knuffelorde", Soort.KAAP, "vlag:zone1_klaar", 0, 1);
@@ -109,6 +113,9 @@ public final class Cosmetica {
     public static final Ding KAAP_STERREN = ding("kaap:sterren", Soort.KAAP, "boek:zone2:50", 0, 2);
     public static final Ding KAAP_BLOESEM = ding("kaap:bloesem", Soort.KAAP, "boek:zone3:50", 0, 3);
     public static final Ding KAAP_REIS = ding("kaap:reis", Soort.KAAP, "geheim:kleermakers", 0, 0);
+    public static final Ding KAAP_SNEEUWVLOK = ding("kaap:sneeuwvlok", Soort.KAAP, "puzzel:pz_cape_sneeuwvlok", 0, 0);
+    public static final Ding KAAP_HONINGRAAT = ding("kaap:honingraat", Soort.KAAP, "puzzel:pz_cape_honingraat", 0, 0);
+    public static final Ding KAAP_MOS = ding("kaap:mos", Soort.KAAP, "puzzel:pz_cape_mos", 0, 0);
 
     // ---- head accessories (on top of / instead of nothing; the helmet can be hidden separately) ---------------------------------
     public static final Ding OORTJES = ding("accessoire:oortjes", Soort.ACCESSOIRE, "binnen", 0, 0);

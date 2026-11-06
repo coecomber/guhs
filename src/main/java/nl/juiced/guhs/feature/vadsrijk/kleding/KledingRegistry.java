@@ -100,6 +100,23 @@ public final class KledingRegistry {
             KAART_LATER.remove(e.getEntity().getUUID());
         });
         NeoForge.EVENT_BUS.addListener(KledingRegistry::commando);
+        puzzels();
+    }
+
+    /**
+     * t-puzzels' unlock hook {@code Puzzels.ONTGRENDEL_HAAK} (a {@code List<BiConsumer<ServerPlayer, String>>}), by reflection so this
+     * tree compiles without 110-t-puzzels: a puzzle unlock "pz_..." gives every cosmetic with source "puzzel:pz_...".
+     */
+    @SuppressWarnings("unchecked")
+    static boolean puzzels() {
+        try {
+            Class<?> c = Class.forName("nl.juiced.guhs.feature.vadsrijk.puzzels.Puzzels");
+            Object lijst = c.getField("ONTGRENDEL_HAAK").get(null);
+            ((List<java.util.function.BiConsumer<ServerPlayer, String>>) lijst).add((p, id) -> Kledingkast.geefBron(p, "puzzel:" + id));
+            return true;
+        } catch (ReflectiveOperationException | LinkageError | ClassCastException e) {
+            return false;   // (no t-puzzels in this tree: the check pass still asks PuzzelSpeler when it shows up)
+        }
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -245,6 +262,13 @@ public final class KledingRegistry {
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("zweefvlucht", "kleermakers"), b)).executes(c -> {
                     boolean ok = Kledingkast.geheim(c.getSource().getPlayerOrException(), StringArgumentType.getString(c, "id"));
                     c.getSource().sendSuccess(() -> Component.literal(ok ? "geheim gevonden" : "niets nieuws"), false);
+                    return 1;
+                })));
+        k.then(Commands.literal("puzzel").then(Commands.argument("id", StringArgumentType.word())
+                .suggests((c, b) -> SharedSuggestionProvider.suggest(Cosmetica.alle().stream().filter(d -> d.bron().startsWith("puzzel:"))
+                        .map(d -> d.bron().substring(7)), b)).executes(c -> {
+                    boolean ok = Kledingkast.geefBron(c.getSource().getPlayerOrException(), "puzzel:" + StringArgumentType.getString(c, "id"));
+                    c.getSource().sendSuccess(() -> Component.literal(ok ? "puzzelbeloning gegeven (zoals de t-puzzels-haak)" : "niets nieuws"), false);
                     return 1;
                 })));
         k.then(Commands.literal("vahoegnir").executes(c -> {

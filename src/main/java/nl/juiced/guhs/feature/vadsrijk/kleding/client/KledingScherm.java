@@ -90,14 +90,14 @@ public class KledingScherm extends EcoScherm {
             boolean aan = t.equals(tab);
             int y = top + 24 + i * 20;
             if (aan) {
-                g.fill(tx - 1, y - 1, tx + 75, y + 18, 0xFFFF4FA8);
-            }
-            knop(g, mx, my, tx, y, 74, 17, Component.translatable("vadsrijk.kleding.tab." + t), !aan, () -> {
-                tab = t;
-                scroll = 0;
-            });
-            if (aan) {
+                g.fill(tx - 1, y - 1, tx + 75, y + 18, 0xFFC0287C);
+                g.fill(tx, y, tx + 74, y + 17, 0xFFFF4FA8);
                 g.centeredText(font, Component.translatable("vadsrijk.kleding.tab." + t).withStyle(ChatFormatting.BOLD), tx + 37, y + 5, WIT);
+            } else {
+                knop(g, mx, my, tx, y, 74, 17, Component.translatable("vadsrijk.kleding.tab." + t), true, () -> {
+                    tab = t;
+                    scroll = 0;
+                });
             }
         }
         // ---- right: the list

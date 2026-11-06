@@ -65,6 +65,8 @@ public final class Bronnen {
                 case "veren":
                     return nl.juiced.guhs.feature.vadsrijk.zone3.systemen.GoudenVeren.aantal(p) >= Integer.parseInt(t[1])
                             || nl.juiced.guhs.feature.vadsrijk.zone3.systemen.GoudenVeren.heeftGoud(p);
+                case "puzzel":
+                    return puzzelGedaan(p, t[1]);
                 case "kills":
                     return Kledingkast.kills(p) >= Integer.parseInt(t[1]);
                 case "alleboeken": {
@@ -84,6 +86,19 @@ public final class Bronnen {
             }
         } catch (RuntimeException e) {
             return false;   // (a slice that isn't there or broke never crashes the wardrobe)
+        }
+    }
+
+    /**
+     * t-puzzels (soft dependency, by reflection: this tree compiles without it): {@code PuzzelSpeler.ontgrendeld(p, id)}. Covers
+     * unlocks from before the hook was listening.
+     */
+    static boolean puzzelGedaan(ServerPlayer p, String id) {
+        try {
+            Class<?> c = Class.forName("nl.juiced.guhs.feature.vadsrijk.puzzels.PuzzelSpeler");
+            return Boolean.TRUE.equals(c.getMethod("ontgrendeld", ServerPlayer.class, String.class).invoke(null, p, id));
+        } catch (ReflectiveOperationException | LinkageError e) {
+            return false;
         }
     }
 

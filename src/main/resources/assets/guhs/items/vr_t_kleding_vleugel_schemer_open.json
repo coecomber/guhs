@@ -1,7 +1,7 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "guhs:item/vr_t_kleding/vleugel_goudveer",
+    "model": "guhs:item/vr_t_kleding/vleugel_schemer_open",
     "tints": [
       {
         "type": "minecraft:dye",

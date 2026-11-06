@@ -36,8 +36,11 @@ Elke vleugel één eigen beweeg-trucje (geen gevechtsstats). Test met `kleding k
 | Schemervleugels | `vleugel:schemer` | luchtdash | in de lucht nog eens spatie tikken: zwiepje vooruit |
 | Pluisvleugeltjes | `vleugel:pluis` | zachte landing | spring van hoog zónder zweven: geen schade + roze plofje |
 | Lampionvlieger | `vleugel:lampion` | langer zweven | (zone 4, komt later) |
+| Sterrenstofvleugels | `vleugel:sterrenstof` | dubbele sprong | puzzelbeloning (t-puzzels) |
+| Poollichtvleugels | `vleugel:poollicht` | langer zweven | puzzelbeloning |
+| Lantaarnmotvleugels | `vleugel:lantaarnmot` | zachte landing | puzzelbeloning |
 
-**Wat je moet zien aan de vleugels:** stilstaan/lopen = ingeklapt op je rug (ademen zachtjes), springen = uitgeklapt, zweven = zacht klapperen. Verder dan 24 blokken: stilstaand model (LOD). Verf (tab Verf) kleurt vleugels + hoofdding.
+**Wat je moet zien aan de vleugels:** stilstaan/lopen = schuin naar achteren op je rug, springen/vallen = verder uitgeklapt, zweven = klapperen (op en neer). Verder dan 24 blokken: stilstaand model (LOD). Verf (tab Verf) kleurt vleugels + hoofdding.
 
 **Waar komen ze vandaan (echt spelen):** Vahoegveertjes = Vahoegnir roze; Kristal = Splinterpieken 100% (B-boek); Honingbij = Schemerwortel 100%; Goudveren = 25 Gouden Veren verzameld; Schemer = zeldzaam (3%, laatste baas 8%) van een baas in Vahoeg-vorm; Pluis = geheim (één zweefvlucht van 100+ blokken omlaag, bv. van de kruin van de Schemerwortel naar beneden); Lampion = zone 4.
 
@@ -48,8 +51,15 @@ Elke vleugel één eigen beweeg-trucje (geen gevechtsstats). Test met `kleding k
 ```
 → Pluisvleugeltjes / Reiscape. Echt: Reiscape = de Kledingkast openen bij alle drie de kleermakers (Zwamzoet, Kandijkom, zone 3).
 
+### Puzzelbeloningen (van t-puzzels)
+```
+/guhs vadsrijk kleding puzzel pz_vleugels_sterrenstof
+/guhs vadsrijk kleding puzzel pz_cape_mos
+```
+→ doet hetzelfde als het oplossen van die puzzel. In de Kledingkast staan ze als "???" tot je ze hebt.
+
 ### Cape (rug-vak, over de stat-cape heen)
-`kleding kies kaap:knuffelorde` (ook `roze`, `sterren`, `bloesem`, `reis`) → in F5 een cape op je rug. Vleugels én cape tegelijk kan niet (één rugvak). Met vleugels om wordt een gewone cape verborgen.
+`kleding kies kaap:knuffelorde` (ook `roze`, `sterren`, `bloesem`, `reis`, `sneeuwvlok`, `honingraat`, `mos`) → in F5 een cape op je rug. Vleugels én cape tegelijk kan niet (één rugvak). Met vleugels om wordt een gewone cape verborgen.
 
 ### Hoofd, harnas, naam, titel
 - **Hoofd:** `accessoire:oortjes`, `strikje`, `paddenhoedje`, `kristaltiara`, `honingkroon`, `feestmuts` (+ `lampionspeld` later). Zit ook netjes bovenop een helm.

@@ -1,7 +1,7 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "guhs:item/vr_t_kleding/vleugel_pluis",
+    "model": "guhs:item/vr_t_kleding/vleugel_pluis_op",
     "tints": [
       {
         "type": "minecraft:dye",

@@ -40,24 +40,22 @@ import nl.juiced.guhs.feature.vadsrijk.kleding.Kledingkast;
  *   <li>{@link #extract} (render-state modifier, every rendered player): the transmog (the armour render state gets the chosen look's
  *   item, or nothing when hidden; Vadsrijk only), the cosmetic cape (the skin's cape texture swapped for ours; with wings on the cape
  *   is hidden: wings and capes share the back), and the item render states of the wings + head accessory (with the dye);</li>
- *   <li>{@link #submit}: draws the two wing halves on the upper back and the accessory on the head.</li>
+ *   <li>{@link #submit}: draws the wings on the upper back and the accessory on the head.</li>
  * </ul>
- * <b>Wings</b> are two item models ({@code assets/guhs/items/vr_t_kleding_vleugel_<naam>.json}, cuboid feathers, tinted by the dye),
- * animated in code like GeckoLib bones would be: folded while walking/standing, spread while in the air, a soft flap while gliding
- * (slow sinking), lerped per frame. LOD: further than {@link #LOD} blocks from the camera the pose is static (no flap, no lerp).
- * (Decision: no GeckoLib geo on the player: a GeckoLib render layer needs a GeoRenderer parent, and the avatar renderer is vanilla;
- * the "bones" here are the two halves with a yaw + roll each, which is all the three poses need.)
+ * <b>Wings</b>: per wing three posed item models ({@code assets/guhs/items/vr_t_kleding_vleugel_<naam>_<dicht|open|op>.json}, both
+ * halves posed in the generator, cuboid feathers, tinted by the dye): folded while standing/walking, spread in the air, and while
+ * gliding "open"/"op" in turn = a soft flap. LOD: further than {@link #LOD} blocks no flap. One submit per player per frame.
+ * (Decision: no GeckoLib geo on the player: a GeckoLib render layer needs a GeoRenderer parent and the avatar renderer is vanilla;
+ * a first version posed two halves in code per frame, but only one half ever showed in the dev client, so the poses are baked.)
  */
 public class KledingLaag extends RenderLayer<AvatarRenderState, PlayerModel> {
     public static final double LOD = 24;
     static final ContextKey<Teken> TEKEN = new ContextKey<>(Guhs.id("vr_t_kleding_teken"));
 
     /** What to draw for one player this frame. */
-    record Teken(ItemStackRenderState vleugel, ItemStackRenderState hoofd, float spreid, float rol, boolean helm) {
+    record Teken(ItemStackRenderState vleugel, ItemStackRenderState hoofd, boolean helm) {
     }
 
-    /** Per player: the current spread/roll (lerped towards the target pose). */
-    private static final Map<UUID, float[]> POSE = new ConcurrentHashMap<>();
     private static final Map<String, ItemStack> STAPELS = new ConcurrentHashMap<>();
 
     public KledingLaag(RenderLayerParent<AvatarRenderState, PlayerModel> parent) {
@@ -117,13 +115,13 @@ public class KledingLaag extends RenderLayer<AvatarRenderState, PlayerModel> {
         Minecraft mc = Minecraft.getInstance();
         ItemStackRenderState vl = new ItemStackRenderState(), hd = new ItemStackRenderState();
         if (vleugel != null) {
-            mc.getItemModelResolver().updateForLiving(vl, stapel("vr_t_kleding_vleugel_" + vleugel.naam(), verf), ItemDisplayContext.NONE, player);
+            mc.getItemModelResolver().updateForLiving(vl, stapel("vr_t_kleding_vleugel_" + vleugel.naam() + "_" + pose(player, mc), verf),
+                    ItemDisplayContext.NONE, player);
         }
         if (hoofd != null) {
             mc.getItemModelResolver().updateForLiving(hd, stapel("vr_t_kleding_accessoire_" + hoofd.naam(), verf), ItemDisplayContext.NONE, player);
         }
-        float[] pose = pose(player, mc);
-        state.setRenderData(TEKEN, new Teken(vl, hd, pose[0], pose[1], !state.headEquipment.isEmpty()));
+        state.setRenderData(TEKEN, new Teken(vl, hd, !state.headEquipment.isEmpty()));
     }
 
     private static ItemStack tm(CompoundTag uit, EquipmentSlot slot, ItemStack echt) {
@@ -138,35 +136,19 @@ public class KledingLaag extends RenderLayer<AvatarRenderState, PlayerModel> {
         return l.isEmpty() ? echt : l;
     }
 
-    /** Target pose: {spread yaw (deg, 0 = straight out sideways, 75 = folded on the back), roll (deg, + = tips down)}. */
-    private static float[] pose(Player p, Minecraft mc) {
-        float t = p.tickCount + mc.getDeltaTracker().getGameTimeDeltaPartialTick(false);
-        boolean ver = mc.gameRenderer.getMainCamera().position().distanceToSqr(p.position()) > LOD * LOD;
+    /**
+     * The wing pose = which of the three posed models: "dicht" (folded on the back: standing, walking, riding), "open" (in the air),
+     * gliding: "open" / "op" in turn (a soft flap, 3 per second). Beyond {@link #LOD} blocks: never the flap (static model).
+     */
+    private static String pose(Player p, Minecraft mc) {
         boolean lucht = !p.onGround() && !p.isPassenger() && !p.isInWater() && !p.onClimbable();
-        double dy = p.getY() - p.yo;
-        boolean zweeft = p == mc.player ? KledingClient.zweeftNu() : lucht && dy < -0.02 && dy > -0.17;
-        float spreid, rol;
         if (!lucht) {
-            spreid = 72f;
-            rol = 18f + (ver ? 0 : (float) Math.sin(t * 0.08f) * 2f);   // (a little breathing)
-        } else if (zweeft) {
-            spreid = 8f;
-            rol = ver ? -6f : -6f + (float) Math.sin(t * 0.35f) * 14f;   // (a soft flap)
-        } else {
-            spreid = 18f;
-            rol = -14f;
+            return "dicht";
         }
-        if (ver) {
-            POSE.remove(p.getUUID());
-            return new float[] {spreid, rol};
-        }
-        float[] nu = POSE.computeIfAbsent(p.getUUID(), k -> new float[] {spreid, rol});
-        nu[0] += (spreid - nu[0]) * 0.2f;
-        nu[1] += (rol - nu[1]) * 0.25f;
-        if (POSE.size() > 256) {
-            POSE.clear();
-        }
-        return new float[] {nu[0], nu[1]};
+        double dy = p.getY() - p.yo;
+        boolean zweeft = p == mc.player ? KledingClient.zweeftNu() : dy < -0.02 && dy > -0.17;
+        boolean ver = mc.gameRenderer.getMainCamera().position().distanceToSqr(p.position()) > LOD * LOD;
+        return zweeft && !ver && (p.tickCount / 4) % 2 == 0 ? "op" : "open";
     }
 
     @Override
@@ -177,24 +159,14 @@ public class KledingLaag extends RenderLayer<AvatarRenderState, PlayerModel> {
         }
         PlayerModel model = getParentModel();
         if (!t.vleugel().isEmpty()) {
-            for (int kant : new int[] {1, -1}) {
-                ps.pushPose();
-                model.root().translateAndRotate(ps);
-                model.body.translateAndRotate(ps);
-                // body space (blocks, y down, +z = back): the hinge on the upper back, just off the middle
-                ps.translate(kant * 0.06, 0.18, 0.16);
-                if (kant < 0) {
-                    ps.mulPose(Axis.YP.rotationDegrees(180));   // (the right half: the same model turned round)
-                }
-                ps.mulPose(Axis.YP.rotationDegrees(-kant * t.spreid()));   // (both tips swing to the back: +z)
-                ps.mulPose(Axis.ZP.rotationDegrees(t.rol()));
-                // item space (y up, hinge at (0, 8, 8) px) onto the hinge
-                ps.mulPose(Axis.XP.rotationDegrees(180));
-                ps.scale(0.85f, 0.85f, 0.85f);
-                ps.translate(0, -0.5, -0.5);
-                t.vleugel().submit(ps, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
-                ps.popPose();
-            }
+            ps.pushPose();
+            model.root().translateAndRotate(ps);
+            model.body.translateAndRotate(ps);
+            // body space (y down, +z = the back): item space with the neck at (8, 0, 8) px, y up (as the head accessories)
+            ps.mulPose(Axis.ZP.rotationDegrees(180));
+            ps.translate(0, 0.5, 0);
+            t.vleugel().submit(ps, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
+            ps.popPose();
         }
         if (!t.hoofd().isEmpty()) {
             ps.pushPose();
@@ -206,7 +178,7 @@ public class KledingLaag extends RenderLayer<AvatarRenderState, PlayerModel> {
             }
             // head space (y down, head cube y -8..0 px, x/z -4..4): item space (y up) with the head as px (4..12, 0..8, 4..12)
             ps.mulPose(Axis.ZP.rotationDegrees(180));
-            ps.translate(-0.5, 0, -0.5);
+            ps.translate(0, 0.5, 0);   // (item models are drawn centred: the head's bottom centre (8, 0, 8) px is at (0, -0.5, 0))
             t.hoofd().submit(ps, collector, light, OverlayTexture.NO_OVERLAY, state.outlineColor);
             ps.popPose();
         }

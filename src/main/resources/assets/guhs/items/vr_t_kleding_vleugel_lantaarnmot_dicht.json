@@ -1,7 +1,7 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "guhs:item/vr_t_kleding/vleugel_honingbij",
+    "model": "guhs:item/vr_t_kleding/vleugel_lantaarnmot_dicht",
     "tints": [
       {
         "type": "minecraft:dye",
