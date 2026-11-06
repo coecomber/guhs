@@ -49,7 +49,7 @@ public final class Z5Bouw {
         if (!sl.getBlockState(p).isAir()) {
             return 0;
         }
-        sl.setBlock(p, s, Block.UPDATE_CLIENTS);
+        sl.setBlock(p, nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.vorm(sl, p, s), Block.UPDATE_CLIENTS);   // U-HEKKEN
         return 1;
     }
 
@@ -57,7 +57,7 @@ public final class Z5Bouw {
     private static void eigen(ServerLevel sl, BlockPos p, BlockState s) {
         BlockState nu = sl.getBlockState(p);
         if (nu.isAir() || nu.is(Blocks.PINK_TERRACOTTA) || nu.is(Blocks.PEARLESCENT_FROGLIGHT)) {
-            sl.setBlock(p, s, Block.UPDATE_CLIENTS);
+            sl.setBlock(p, nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.vorm(sl, p, s), Block.UPDATE_CLIENTS);   // U-HEKKEN
         }
     }
 
@@ -193,12 +193,22 @@ public final class Z5Bouw {
         n += schijf(sl, pa.below(), Z5WezensPlekken.PROEF_STRAAL + 1, Blocks.SMOOTH_SANDSTONE.defaultBlockState());
         // a low fence ring with four wide gaps (no fence ever on a path)
         int r = Z5WezensPlekken.PROEF_STRAAL + 1;
+        int[] vorige = null;
         for (int i = 0; i < 96; i++) {
             double a = i * Math.PI * 2 / 96;
             if (Math.abs(Math.sin(a * 2)) < 0.3) {
+                vorige = null;
                 continue;
             }
-            n += zet(sl, pa.offset((int) Math.round(Math.cos(a) * r), 0, (int) Math.round(Math.sin(a) * r)), Blocks.SPRUCE_FENCE.defaultBlockState());
+            int dx = (int) Math.round(Math.cos(a) * r), dz = (int) Math.round(Math.sin(a) * r);
+            // U-HEKKEN: a diagonal step gets its outer corner, so the ring is one connected line (no loose posts)
+            if (vorige != null && Math.abs(dx - vorige[0]) == 1 && Math.abs(dz - vorige[1]) == 1) {
+                int[] c1 = {dx, vorige[1]}, c2 = {vorige[0], dz};
+                int[] c = c1[0] * c1[0] + c1[1] * c1[1] >= c2[0] * c2[0] + c2[1] * c2[1] ? c1 : c2;
+                n += zet(sl, pa.offset(c[0], 0, c[1]), Blocks.SPRUCE_FENCE.defaultBlockState());
+            }
+            vorige = new int[] {dx, dz};
+            n += zet(sl, pa.offset(dx, 0, dz), Blocks.SPRUCE_FENCE.defaultBlockState());
         }
         for (BlockPos v : List.of(Z5WezensPlekken.ZUIDVIN, Z5WezensPlekken.NOORDVIN)) {
             n += schijf(sl, v.below(), 13, wolk);

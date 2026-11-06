@@ -17,7 +17,7 @@ public final class Z2Bouw {
 
     private static int zet(ServerLevel sl, BlockPos p, BlockState s) {
         if (sl.getBlockState(p).isAir()) {
-            sl.setBlock(p, s, 2);
+            sl.setBlock(p, nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.vorm(sl, p, s), 2);   // U-HEKKEN: fences/walls connected
             return 1;
         }
         return 0;
