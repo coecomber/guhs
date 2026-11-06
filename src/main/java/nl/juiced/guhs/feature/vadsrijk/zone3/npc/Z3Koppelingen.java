@@ -1,6 +1,5 @@
 package nl.juiced.guhs.feature.vadsrijk.zone3.npc;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,19 +11,14 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcApi;
-import nl.juiced.guhs.feature.vadsrijk.npc.NpcHaken;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen;
 import nl.juiced.guhs.feature.vadsrijk.npc.Questlog;
 import nl.juiced.guhs.feature.vadsrijk.wereld.Later;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenApi;
 import nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen;
 import nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken;
-import nl.juiced.guhs.feature.verhaal.Praat;
 
 /**
  * K-INT (zone-3 integration): the glue between the zone-3 slices now that they are in one tree.
@@ -32,8 +26,8 @@ import nl.juiced.guhs.feature.verhaal.Praat;
  *   <li>z3-bazen's story moments ({@link Z3BazenApi#MOMENT}) become the npc quest events ({@code NpcApi.meld}).</li>
  *   <li>Flash F1, the Vahoegnir ending and flash F2 are z3-bazen's scenes ({@code Z3Scenes}); the npc steps wait for them and only play
  *       their own version as a fallback for a player who was not there (see {@link #f1Gezien}, {@link #f2Gezien}).</li>
- *   <li>The bindings z3-npc asks for: {@code z3_vahoegnir} (bazen's fight), {@code z3_imker} (the secret ends in a short lore scene in
- *       the Mika-imker's raatzaal: the boss itself is not built), {@code z3_ring_aan}, {@code z3_ketel_uit}, {@code z3_terugkleur}
+ *   <li>The bindings z3-npc asks for: {@code z3_vahoegnir} (bazen's fight), {@code z3_imker} (opens the hatch; T-IMKER: the intro, the
+ *       boss fight and the follow-up are in feature/vadsrijk/imker), {@code z3_ring_aan}, {@code z3_ketel_uit}, {@code z3_terugkleur}
  *       (small per-player particle effects).</li>
  *   <li>The opening: z3-wereld's film ({@code Z3Reizen.opening}) is THE zone-3 opening; {@code EERSTE_AANKOMST} stays null.</li>
  * </ul>
@@ -126,39 +120,20 @@ public final class Z3Koppelingen {
         return true;
     }
 
-    // ---- the Mika-imker secret (lore scene; the boss itself is not built) -----------------------------------------------------
+    // ---- the Mika-imker secret (T-IMKER: the boss lives in feature/vadsrijk/imker) ------------------------------------------
 
     static void imkerOpen(ServerPlayer p) {
         Questlog.zetVlag(p, IMKER_OPEN, true);
         p.sendSystemMessage(Component.translatable("vadsrijk.z3npc.imker.open").withStyle(ChatFormatting.DARK_PURPLE, ChatFormatting.ITALIC));
     }
 
-    /** Called from Z3Haken's tick: in the raatzaal under the Raattros with all 5 clues: the scene, and the quest step is done. */
+    /**
+     * Called from Z3Haken's tick. T-IMKER: the boss is built now (feature/vadsrijk/imker): in the raatzaal with the hatch open the
+     * intro scene plays and then De Mika-imker wakes; his defeat reports z3_imker:verslagen through the "baas:imker" moment above.
+     * (The old lore scene that ended the quest here is gone.)
+     */
     static void imkerTik(ServerPlayer p) {
-        if (!Questlog.vlag(p, IMKER_OPEN) || !Questlog.actief(p, "z3_geheim_imker") || !Z3Haken.eenmaligNog(p, "imker_scene")) {
-            return;
-        }
-        BlockPos zaal = Z3WereldPlekken.plek("mika_imker_raatzaal");
-        if (zaal == null || !NpcHaken.bij(p, zaal, 7, 5)) {
-            return;
-        }
-        Z3Haken.eenmalig(p, "imker_scene");
-        String Z = "vadsrijk.z3npc.imker.";
-        String mika = Z + "naam", verteller = "vadsrijk.npc.verteller";
-        Praat.scene(p, Z3Verhaal.SLEUTEL, List.of(new Praat.Regel(null, verteller, Z + "scene.0"), new Praat.Regel(null, mika, Z + "scene.1"),
-                new Praat.Regel(null, mika, Z + "scene.2"), new Praat.Regel(null, verteller, Z + "scene.3"), new Praat.Regel(null, mika, Z + "scene.4"),
-                new Praat.Regel(null, verteller, Z + "scene.5")));
-        if (p.level() instanceof ServerLevel sl) {
-            Vec3 c = Vec3.atCenterOf(zaal);
-            sl.sendParticles(p, ParticleTypes.LARGE_SMOKE, true, true, c.x, c.y + 1, c.z, 60, 3, 1.5, 3, 0.02);
-            sl.sendParticles(p, new DustParticleOptions(0xFFC23A, 1.6f), true, true, c.x, c.y + 1.5, c.z, 80, 4, 2, 4, 0);
-            sl.playSound(null, zaal, SoundEvents.BEEHIVE_EXIT, SoundSource.PLAYERS, 1.5f, 0.8f);
-        }
-        Later.na(20 * 14, () -> {
-            if (!p.isRemoved()) {
-                NpcApi.meld(p, "z3_imker", "verslagen");
-            }
-        });
+        nl.juiced.guhs.feature.vadsrijk.imker.ImkerVerhaal.tik(p);   // T-IMKER
     }
 
     // ---- small per-player effects ---------------------------------------------------------------------------------------------

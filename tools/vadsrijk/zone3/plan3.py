@@ -217,7 +217,7 @@ def plekken():
         put(f"lift_{lid}_onder", (55 + Rc - 2.5) * ux_, yb + 1, (55 + Rc - 2.5) * uz_)
         if naam == "raattros":
             put("mika_imker_luik", ccx - uz_ * 2, yb + 1, ccz + ux_ * 2)
-            put("mika_imker_raatzaal", ccx, yb - 11, ccz)
+            put("mika_imker_raatzaal", ccx + uz_ * 6, yb - 11, ccz - ux_ * 6)   # T-IMKER: the boss room, ladder at its south edge
         if naam == "nestkapel":
             put("flash_f2_kijkpunt", ccx - ux_ * 1, yb + 1, ccz - uz_ * 1)
     # the Pluimstal (ground, near the foot of the riding spiral)

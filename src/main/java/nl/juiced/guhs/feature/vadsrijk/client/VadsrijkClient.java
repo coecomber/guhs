@@ -21,6 +21,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.momenten.client.MomentenClient.init(modBus);   // MOMENTEN-HOOK (fix round 1: wave + caravan)
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.client.Z2BazenClient.init(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone3.bazen.client.Z3BazenClient.init(modBus);
+        nl.juiced.guhs.feature.vadsrijk.imker.client.ImkerClient.init(modBus);   // T-IMKER
         UitrustingTips.init();   // fix round 2 (g-ui): jewellery how-to, "Los stuk", set piece lists
         nl.juiced.guhs.feature.vadsrijk.huisdieren.client.HuisdierClient.init(modBus);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.client.VoltooiingClient.init(modBus);   // I-VOLTOOIING (Verkenningsboek, key B)

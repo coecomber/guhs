@@ -228,6 +228,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_z3_wereld',
             # 1.10 zone 3 "De Schemerwortel": z3-wezens (Java: feature/vadsrijk/zone3/wezens)
             'vadsrijk_z3_wezens',
+            # 1.10 night round T, T-IMKER: the secret zone-3 boss De Mika-imker (Java: feature/vadsrijk/imker)
+            'vadsrijk_t_imker',
             ]
 
 
