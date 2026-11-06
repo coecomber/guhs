@@ -88,6 +88,13 @@ def feiten(rijen):
     return '<dl class="feiten">' + "".join(f"<div><dt>{k}</dt><dd>{v}</dd></div>" for k, v in rijen if v not in (None, "", [])) + "</dl>"
 
 
+
+# T-INT: t-ambacht's hiscore lists (id, English, Dutch), in the order of the mod's Ambacht enum + the total
+AMBACHT_LIJSTEN = [("mijnen", "Mining", "Mijnen"), ("houthakken", "Woodcutting", "Houthakken"), ("plukken", "Picking", "Plukken"),
+                   ("vissen", "Fishing", "Vissen"), ("imkeren", "Beekeeping", "Imkeren"), ("smeden", "Smithing", "Smeden"),
+                   ("naaien", "Sewing", "Naaien"), ("koken", "Cooking", "Koken"), ("brouwen", "Brewing", "Brouwen"),
+                   ("totaal", "Crafts total", "Ambachten totaal")]
+
 class Bouwer:
     NAV = [("index.html", "Start", "Start"), ("kaart.html", "Map", "Kaart"), ("gids.html", "Guide", "Gids"),
            ("zones/index.html", "Zones", "Zones"), ("quests/index.html", "Quests", "Quests"), ("wezens/index.html", "Creatures", "Wezens"),
@@ -868,7 +875,7 @@ class Bouwer:
                 f'<figure><img src="img/reiskaart.webp" alt="De reiskaart uit het spel" style="max-width:100%;border-radius:14px"><figcaption class="muted">{t("The travel map from the game.", "De reiskaart uit het spel.")}</figcaption></figure>{blok}')
         self.schrijf(P, "Verhaal", "Lore", main, P)
 
-    def highscores(self):
+    def highscores(self):  # (T-INT: + AMBACHT_LIJSTEN)
         lijsten = [dict(id="generiek", en="Level", nl="Level", k_en="Level", k_nl="Level"),
                    dict(id="knuffelridder", en="Knuffelridder", nl="Knuffelridder", k_en="Class level", k_nl="Klasse-level"),
                    dict(id="pluisjager", en="Pluisjager", nl="Pluisjager", k_en="Class level", k_nl="Klasse-level"),
@@ -876,6 +883,8 @@ class Bouwer:
                    dict(id="opgevrolijkt", en="Cheered up", nl="Opgevrolijkt", k_en="Creatures", k_nl="Wezens"),
                    dict(id="bazen", en="Bosses", nl="Bazen", k_en="Bosses beaten", k_nl="Bazen opgevrolijkt"),
                    dict(id="verkenning", en="Exploration book", nl="Verkenningsboek", k_en="% explored", k_nl="% verkend")]
+        # T-INT: the Ambachten lists of t-ambacht (hiscores/ambacht_<id>.json, written by the mod's WebExport)
+        lijsten += [dict(id="ambacht_" + i, en=en, nl=nl, k_en="Level", k_nl="Level") for i, en, nl in AMBACHT_LIJSTEN]
         vb = f'<span class="voorbeeld">{t("Preview: sample data", "Voorbeeld: proefgegevens")}</span>' if self.voorbeeld else ""
         main = (f'<h1>Highscores</h1>{vb}<p>{t("Everyone is on the lists (name + number); ties go to whoever got there first. Click a name for the profile.", "Iedereen staat op de lijsten (naam + getal); bij gelijkspel wint wie er het eerst was. Klik op een naam voor het profiel.")}</p>'
                 f"<div data-hiscores='{ESC(json.dumps(lijsten, ensure_ascii=False))}'><div class=\"hs-tabs\" role=\"group\"></div>"

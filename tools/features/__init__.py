@@ -240,6 +240,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z4boot',
             # 1.10 zone 4 "De Lampionkust": t-z4wezens (Java: feature/vadsrijk/zone4/{wezens,bazen})
             'vadsrijk_t_z4wezens',
+            # 1.10 night round T, t-ambacht: the Ambachten / professions (Java: feature/vadsrijk/ambacht)
+            'vadsrijk_t_ambacht',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

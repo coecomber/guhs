@@ -1,0 +1,90 @@
+package nl.juiced.guhs.feature.vadsrijk.ambacht;
+
+import net.minecraft.server.level.ServerPlayer;
+import nl.juiced.guhs.feature.vadsrijk.kern.Levels;
+import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
+
+/**
+ * The Ambachten xp curve and pacing (VOORSTEL_PROFESSIONS §5.1, A1/A2):
+ * <ul>
+ *   <li>same shape as combat ({@code 40 + 25 lv^1.6}), own scale {@link #SCHAAL}; cap {@link #CAP} (50 in 1.10, +5 per zone later);</li>
+ *   <li>a gathering action gives a fixed amount per resource tier ({@link #VERZAMEL}), sized for ~8 actions a minute:
+ *   1 -> 20 in ~1.5 h on T1, 20 -> 35 in ~3 h on T2, 35 -> 50 in ~5 h on T3 (crafting and orders on top make it a bit quicker).
+ *   Far above the tier ({@link #TE_HOOG} levels over its top) it gives half: you rise fastest on your own tier;</li>
+ *   <li>generic (main-level) xp: a little, ~20 % of what fighting gives in the same time ({@link #generiek});</li>
+ *   <li>Uitgerust (rested): offline you build up to 2 h of double ambacht-xp (1 s per 6 s offline); every action uses 7 s.</li>
+ * </ul>
+ */
+public final class AmbachtXp {
+    /** The level cap of 1.10 (A1: grows +5 per zone later, to 100). */
+    public static volatile int CAP = 50;
+    public static volatile double SCHAAL = 1;
+    /** Xp of one gathering action per tier (index = tier 1..5). */
+    public static final int[] VERZAMEL = {0, 30, 52, 62, 75, 90};
+    /** The level band of each tier (index = tier): T1 1-20, T2 20-35, T3 35-50, T4 50-60. */
+    public static final int[] TIER_MIN = {0, 1, 20, 35, 50, 60}, TIER_MAX = {0, 20, 35, 50, 60, 70};
+    public static final int TE_HOOG = 8;
+    /** Generic xp per action: this part of a generic level (fighting: ~1/22 of a level a minute; 20 % of that over ~8 actions). */
+    public static final double GENERIEK_DEEL = 1.0 / 900;
+    public static final long UITGERUST_MAX = 7200, UITGERUST_PER_ACTIE = 7;
+    public static final int OFFLINE_FACTOR = 6;
+
+    private AmbachtXp() {
+    }
+
+    public static int xpVoor(int level) {
+        return (int) Math.max(1, Math.round((40 + 25 * Math.pow(Math.max(1, level), 1.6)) * SCHAAL));
+    }
+
+    public static long totaalVoor(int level) {
+        long t = 0;
+        for (int l = 1; l < level; l++) {
+            t += xpVoor(l);
+        }
+        return t;
+    }
+
+    /** The level this much total xp gives (1..CAP). */
+    public static int levelVan(long xp) {
+        int l = 1;
+        while (l < CAP && xp >= xpVoor(l)) {
+            xp -= xpVoor(l);
+            l++;
+        }
+        return l;
+    }
+
+    /** Xp into the current level (for the bar). */
+    public static long inLevel(long xp) {
+        int l = levelVan(xp);
+        return xp - totaalVoor(l);
+    }
+
+    /** Which tier a level works on (1..3 in 1.10). */
+    public static int tierVoor(int level) {
+        for (int t = TIER_MIN.length - 1; t >= 1; t--) {
+            if (level >= TIER_MIN[t]) {
+                return t;
+            }
+        }
+        return 1;
+    }
+
+    /** The level a tier needs. */
+    public static int tierLevel(int tier) {
+        return TIER_MIN[Math.max(1, Math.min(TIER_MIN.length - 1, tier))];
+    }
+
+    /** Xp of one gathering action on a tier for a player of this ambacht level. */
+    public static int verzamel(int tier, int level) {
+        int t = Math.max(1, Math.min(VERZAMEL.length - 1, tier));
+        int xp = VERZAMEL[t];
+        return level > TIER_MAX[t] + TE_HOOG ? xp / 2 : xp;
+    }
+
+    /** Generic xp of one action for this player (only the generic level, never the class). */
+    public static long generiek(ServerPlayer p) {
+        int lv = Math.max(1, Math.min(Levels.MAX_GENERIEK - 1, Spelers.level(p)));
+        return Math.max(1, Math.round(Levels.xpVoorGeneriek(lv) * GENERIEK_DEEL));
+    }
+}

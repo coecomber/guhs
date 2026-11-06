@@ -91,6 +91,12 @@ public final class WebExport {
             "verkenning");
 
     static boolean aan;
+    /**
+     * T-INT: extra hiscore lists of other slices (e.g. t-ambacht's {@code hiscores/ambacht_<id>.json}), written with the hiscores
+     * (every {@code hiscores_s} and by {@code /guhs vadsrijk web nu}) via {@link #schrijf}, same format: {lijst, tijd, rijen[plek, naam,
+     * waarde, xp?]}.
+     */
+    public static final List<java.util.function.Consumer<MinecraftServer>> EXTRA_HISCORES = new java.util.concurrent.CopyOnWriteArrayList<>();
     static Path map = Path.of("web", "live");
     static int statusS = 60, wereldS = 30, hiscoresS = 300, spelersS = 600;
     private static long start;
@@ -403,6 +409,18 @@ public final class WebExport {
         idx.addProperty("tijd", tijd);
         idx.add("spelers", index);
         schrijf("spelers/index.json", idx);
+        for (java.util.function.Consumer<MinecraftServer> extra : EXTRA_HISCORES) {   // T-INT
+            try {
+                extra.accept(server);
+            } catch (RuntimeException e) {
+                LOG.warn("[vadsrijk web] extra hiscores: {}", e.toString());
+            }
+        }
+    }
+
+    /** T-INT: the live folder (config {@code map}). */
+    public static Path map() {
+        return map;
     }
 
     private static long bazenTotaal(CompoundTag t) {
@@ -496,7 +514,8 @@ public final class WebExport {
 
     // ---- writing (background thread, atomic) -------------------------------------------------------------------------------
 
-    static void schrijf(String naam, JsonObject o) {
+    /** Writes one live file (atomic, on the writer thread); nothing while the export is off (T-INT: public for extra lists). */
+    public static void schrijf(String naam, JsonObject o) {
         ExecutorService s = schrijver;
         if (s == null) {
             return;

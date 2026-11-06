@@ -34,5 +34,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidClient.init(modBus);   // T-GELUID (after kern: wraps its title receiver)
         nl.juiced.guhs.feature.vadsrijk.vfx.client.VfxClient.init(modBus);   // T-VFX: decals, particles, cast bar, VFX level
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.client.BootClient.init(modBus);   // T-Z4BOOT: the Zeilbootje (renderer, screen, tab, wind HUD)
+        nl.juiced.guhs.feature.vadsrijk.ambacht.client.AmbachtClient.init(modBus);   // T-AMBACHT: the Ambachten (key Y, spots, screens)
     }
 }

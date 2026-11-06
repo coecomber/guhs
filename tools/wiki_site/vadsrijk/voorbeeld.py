@@ -73,3 +73,7 @@ def schrijf(uit, data):
     lijst("opgevrolijkt", lambda s: s["opgevrolijkt"], lambda s: s["opgevrolijkt"], False)
     lijst("bazen", lambda s: s["bazen_totaal"], lambda s: s["bazen_totaal"], False)
     lijst("verkenning", lambda s: s["boek_totaal"], lambda s: s["boek_totaal"], False)
+    # T-INT: t-ambacht's lists (made-up levels 1..99, xp grows with the level)
+    for i_, a in enumerate(["mijnen", "houthakken", "plukken", "vissen", "imkeren", "smeden", "naaien", "koken", "brouwen", "totaal"]):
+        lv_ = {s["naam"]: (r.randint(1, 99) if a != "totaal" else r.randint(9, 891)) for s in spelers}
+        lijst("ambacht_" + a, lambda s, lv_=lv_: lv_[s["naam"]] * 1200, lambda s, lv_=lv_: lv_[s["naam"]])
