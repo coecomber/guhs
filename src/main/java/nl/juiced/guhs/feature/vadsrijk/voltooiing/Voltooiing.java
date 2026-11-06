@@ -193,6 +193,11 @@ public final class Voltooiing {
         return map(p, "gebieden").getBooleanOr(gebied, false) || gebied.equals(Spelers.data(p).gebied);
     }
 
+    /** T-GELUID: was this area already marked (true from the second visit on)? The discovery stinger asks before marking. */
+    public static boolean gemarkeerd(ServerPlayer p, String gebied) {
+        return map(p, "gebieden").getBooleanOr(gebied, false);
+    }
+
     public static void markeerGebied(ServerPlayer p, String gebied) {
         map(p, "gebieden").putBoolean(gebied, true);
     }

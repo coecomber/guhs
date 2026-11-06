@@ -29,5 +29,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.client.Z3WezensClient.init(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.vriendjes.client.VriendjesClient.init(modBus);   // N-EXTRA: the pink dragon + critters
         nl.juiced.guhs.feature.vadsrijk.dialoog.client.DialoogClient.init(modBus);   // T-DIALOOG: the Vadsrijk talking screen
+        nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidClient.init(modBus);   // T-GELUID (after kern: wraps its title receiver)
     }
 }

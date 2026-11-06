@@ -39479,5 +39479,17 @@
   "guhs.configuration.vadsrijkTekstSnelheid": "Vadsrijk: talking text speed (0 = instant, 3 = fast)",
   "guhs.configuration.vadsrijkTekstSnelheid.tooltip": "How fast the text in the talking screen appears. A click always shows all of it at once.",
   "guhs.configuration.vadsrijkStemmen": "Vadsrijk: little voices in the talking screen (%)",
-  "guhs.configuration.vadsrijkStemmen.tooltip": "How loud the soft blip per word is (guh, Mika, narrator). 0 = off."
+  "guhs.configuration.vadsrijkStemmen.tooltip": "How loud the soft blip per word is (guh, Mika, narrator). 0 = off.",
+  "guhs.configuration.gebiedsmuziek": "Vadsrijk: area music",
+  "guhs.configuration.gebiedsmuziek.tooltip": "Soft music outside the towns, with long silences in between (percent, 0 = off). Also follows Minecraft's Music slider.",
+  "guhs.configuration.bazenmuziek": "Vadsrijk: boss music",
+  "guhs.configuration.bazenmuziek.tooltip": "Every boss has its own theme during the fight (percent, 0 = off).",
+  "guhs.configuration.stingers": "Vadsrijk: stingers",
+  "guhs.configuration.stingers.tooltip": "Short musical ta-daas: a new area, a quest done, a level up, a boss beaten, a secret found (percent, 0 = off).",
+  "guhs.configuration.omgeving": "Vadsrijk: ambience",
+  "guhs.configuration.omgeving.tooltip": "Birds, water, chimes, crickets at night, drips in caves, bees, waves (percent, 0 = off). Also follows the Ambient slider.",
+  "guhs.configuration.pauze_min": "Vadsrijk: silence between pieces, at least (s)",
+  "guhs.configuration.pauze_min.tooltip": "Seconds of only ambience after an area piece.",
+  "guhs.configuration.pauze_max": "Vadsrijk: silence between pieces, at most (s)",
+  "guhs.configuration.pauze_max.tooltip": "Seconds of only ambience after an area piece."
 }

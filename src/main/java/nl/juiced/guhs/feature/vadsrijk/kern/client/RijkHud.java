@@ -74,7 +74,9 @@ public final class RijkHud {
         };
         KernPayloads.baasOntvanger = b -> {
             baas = b.entityId() < 0 ? null : b;
-            BaasMuziek.zet(baas == null ? "" : b.muziek());
+            if (!nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidSpeler.zet(baas == null ? -1 : b.entityId(), baas == null ? "" : b.muziek())) {   // T-GELUID: boss themes
+                BaasMuziek.zet(baas == null ? "" : b.muziek());
+            }
         };
         KernPayloads.partyOntvanger = p -> {
             party = p.leden();

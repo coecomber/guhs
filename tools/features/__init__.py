@@ -232,6 +232,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_wereld',
             # 1.10 T-DIALOOG: the Vadsrijk talking screen (Java: feature/vadsrijk/dialoog)
             'vadsrijk_t_dialoog',
+            # 1.10 T-GELUID: area music, boss themes, stingers, ambience (Java: feature/vadsrijk/geluid; OGGs from tools/vadsrijk/geluid)
+            'vadsrijk_t_geluid',
             ]
 
 

@@ -36,6 +36,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
         nl.juiced.guhs.feature.vadsrijk.indeling.IndelingRegistry.register(modBus);   // T-WERELD: world layout W-3 (barriers, dev tp)
         nl.juiced.guhs.feature.vadsrijk.dialoog.RijkDialoog.register(modBus);   // T-DIALOOG: the Vadsrijk talking screen
+        nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.register(modBus);   // T-GELUID: area music, boss themes, stingers, ambience
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -53,5 +54,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.payloads(registrar);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.voltooiing.VoltooiingRegistry.payloads(registrar);   // I-VOLTOOIING
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.payloads(registrar);   // zone 3 (z3-systemen)
+        nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.payloads(registrar);   // T-GELUID
     }
 }

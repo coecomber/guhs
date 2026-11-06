@@ -91,6 +91,11 @@ final class Z2Sfeer {
                 pitch = 0.9f;
             }
         }
+        if (s == BaltoFeature.WIND.get()) {   // T-GELUID: no strong wind (user wish): a soft chime instead
+            s = SoundEvents.AMETHYST_BLOCK_CHIME;
+            pitch = 1.1f + R.nextFloat() * 0.5f;
+            vol = 0.25f;
+        }
         if (binnen && s == BaltoFeature.WIND.get()) {
             vol *= 0.4f;
         }
