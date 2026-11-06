@@ -330,6 +330,7 @@ public final class Luchtschepen {
         if (!p.startRiding(e, true, true)) {
             return false;
         }
+        p.addTag(LuchtschipEntity.TAG_VRIJ);   // t-wereld Barrieres: riders are exempt too
         p.level().playSound(null, e.blockPosition(), SoundEvents.WOOD_STEP, SoundSource.PLAYERS, 1f, 0.9f);
         p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.welkom", Component.translatable(naar.naam()), klok((int) s.rest()))
                 .withStyle(ChatFormatting.LIGHT_PURPLE));

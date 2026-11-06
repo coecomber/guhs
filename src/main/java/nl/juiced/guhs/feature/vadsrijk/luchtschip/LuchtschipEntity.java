@@ -234,6 +234,7 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
     @Override
     protected void removePassenger(Entity passenger) {
         super.removePassenger(passenger);
+        passenger.removeTag(TAG_VRIJ);
         if (!level().isClientSide()) {
             Luchtschepen.uitgestapt(this, passenger);
         }

@@ -31,7 +31,7 @@ Assets (generator): `geckolib/models|animations/entity/vr_luchtschip.*`, `textur
   `haven_kamp_z1_vertrek` / `haven_z1_kamp_vertrek` exist (`Lijn.actief()`). Both old docks carry the anchored block airship of
   the scene flight, and a real ship there would collide with it. Dev `rij 0` works anyway. The old bell flight stays (it is the
   luxury map now).
-- **Barrier exemption (t-wereld `Barrieres.TAG_VRIJ`):** the ship entity carries the tag `guhs_luchtschip`.
+- **Barrier exemption (t-wereld `Barrieres.TAG_VRIJ`):** the ship entity carries the tag `guhs_luchtschip`, and so does every rider (added on boarding, removed when they get off). No compile dependency on t-wereld: integration merges 110-t-wereld (4f4ce8d50); the harbour + `_bord` POIs are then found by `Lijnen.ZOEKERS` (WereldPlekken/Z2/Z3).
 - **Departure board position:** t-wereld's POI `<haven>_bord` when it exists, else above the pier spot.
 - **Gates (heenweg):**
   - 0 = `WereldReizen.MAG_VLIEGEN`;

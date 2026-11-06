@@ -77,7 +77,7 @@ public class VadsrijkLuchtschipGameTests {
         Lijnen.Haven a = new Lijnen.Haven("haven_t1_t2_vertrek", o.above(3), 270f, "t1");
         Lijnen.Haven b = new Lijnen.Haven("haven_t2_t1_vertrek", o.offset(30, 3, 0), 90f, "t2");
         int periode = 200, duur = 60;
-        int fase = (int) ((sl.getServer().getTickCount() + 30) % periode);
+        int fase = (int) ((sl.getServer().getTickCount() + 30) % (2 * periode));   // (mod 2P: ship 0 is the one at a)
         Lijnen.Lijn l = new Lijnen.Lijn("test_" + sl.getServer().getTickCount(), "T", a, b, List.of(new Vec3(o.getX() + 15.5, o.getY() + 8, o.getZ() + 0.5)),
                 fase, duur, periode, true);
         Lijnen.ALLE.add(l);
@@ -124,7 +124,7 @@ public class VadsrijkLuchtschipGameTests {
         }
         Lijnen.Haven a = new Lijnen.Haven("haven_t3_t4_vertrek", o.above(3), 270f, "t3");
         Lijnen.Haven b = new Lijnen.Haven("haven_t4_t3_vertrek", o.offset(30, 3, 0), 90f, "t4");
-        int fase = (int) ((sl.getServer().getTickCount() + 10) % 400);
+        int fase = (int) ((sl.getServer().getTickCount() + 10) % 800);
         Lijnen.Lijn l = new Lijnen.Lijn("test_uit_" + sl.getServer().getTickCount(), "U", a, b, List.of(new Vec3(o.getX() + 15.5, o.getY() + 8, o.getZ() + 0.5)),
                 fase, 200, 400, true);
         Lijnen.ALLE.add(l);
