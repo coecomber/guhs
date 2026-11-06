@@ -271,6 +271,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_imker',
             # T-WOLKWAL: zone-5 leftovers (Wolkwacht-ridder model, moving whale tips, panoramas; Java: feature/vadsrijk/zone5/wolkwal)
             'vadsrijk_t_wolkwal',
+            # 1.10 night round T, T-Z4DIEREN: Ouwe Dobber (giant turtle) + guh kites (Java: feature/vadsrijk/zone4/dieren)
+            'vadsrijk_t_z4dieren',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

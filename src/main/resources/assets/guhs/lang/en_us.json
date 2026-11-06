@@ -43252,5 +43252,15 @@
   "vadsrijk.wolkwal.uitzicht.z5_ooggaarde": "The Eye Garden",
   "vadsrijk.wolkwal.uitzicht.z5_ooggaarde.onder": "Here Mother Cloudwhale looks ahead, into the clouds.",
   "vadsrijk.wolkwal.uitzicht.z5_staartpark": "Tail Park",
-  "vadsrijk.wolkwal.uitzicht.z5_staartpark.onder": "Her tail waves softly: all of Hoogvads swims along with her."
+  "vadsrijk.wolkwal.uitzicht.z5_staartpark.onder": "Her tail waves softly: all of Hoogvads swims along with her.",
+  "entity.guhs.vr_z4_ouwe_dobber": "Old Bobber",
+  "entity.guhs.vr_z4_vlieger": "Guh Kite",
+  "vadsrijk.z4dieren.dobber.op": "Old Bobber takes you along on his round! (sneak = get off)",
+  "vadsrijk.z4dieren.dobber.vol": "Old Bobber is full. Wait for the next round!",
+  "vadsrijk.z4dieren.dobber.af_steiger": "You step off onto the Turtle Island jetty.",
+  "vadsrijk.z4dieren.dobber.af_water": "Splash! You swim next to Old Bobber. Click him to climb back on.",
+  "vadsrijk.z4dieren.dobber.gered": "Old Bobber scoops you out of the water. Phew, catch your breath!",
+  "vadsrijk.z4dieren.dobber.halte": "Old Bobber waits at the Turtle Island jetty. Click him to swim along!",
+  "vadsrijk.z4dieren.dobber.vertrek": "Old Bobber swims off again... bob, bob.",
+  "vadsrijk.z4dieren.dobber.terug": "Old Bobber is back at the jetty. Get off if you like!"
 }

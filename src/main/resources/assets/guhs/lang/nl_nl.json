@@ -43252,5 +43252,15 @@
   "vadsrijk.wolkwal.uitzicht.z5_ooggaarde": "De Ooggaarde",
   "vadsrijk.wolkwal.uitzicht.z5_ooggaarde.onder": "Hier kijkt Moeder Wolkwal vooruit, de wolken in.",
   "vadsrijk.wolkwal.uitzicht.z5_staartpark": "Het Staartpark",
-  "vadsrijk.wolkwal.uitzicht.z5_staartpark.onder": "Haar staart wuift zacht: heel Hoogvads zwemt met haar mee."
+  "vadsrijk.wolkwal.uitzicht.z5_staartpark.onder": "Haar staart wuift zacht: heel Hoogvads zwemt met haar mee.",
+  "entity.guhs.vr_z4_ouwe_dobber": "Ouwe Dobber",
+  "entity.guhs.vr_z4_vlieger": "Guh-vlieger",
+  "vadsrijk.z4dieren.dobber.op": "Ouwe Dobber neemt je mee op zijn rondje! (sluipen = afstappen)",
+  "vadsrijk.z4dieren.dobber.vol": "Ouwe Dobber zit vol. Wacht even op het volgende rondje!",
+  "vadsrijk.z4dieren.dobber.af_steiger": "Je stapt af op de steiger van het Schildpadeiland.",
+  "vadsrijk.z4dieren.dobber.af_water": "Plons! Je zwemt naast Ouwe Dobber. Klik op hem om weer op te stappen.",
+  "vadsrijk.z4dieren.dobber.gered": "Ouwe Dobber vist je uit het water. Hè hè, adem maar even uit!",
+  "vadsrijk.z4dieren.dobber.halte": "Ouwe Dobber wacht bij de steiger van het Schildpadeiland. Klik op hem om mee te zwemmen!",
+  "vadsrijk.z4dieren.dobber.vertrek": "Ouwe Dobber zwemt weer weg... dobber, dobber.",
+  "vadsrijk.z4dieren.dobber.terug": "Ouwe Dobber is terug bij de steiger. Stap af als je wilt!"
 }
