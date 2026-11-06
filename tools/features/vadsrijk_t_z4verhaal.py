@@ -682,7 +682,9 @@ Q("z4_s10_kransen", "zij", "z4_madelief", "Kransen voor het feest",
 Q("z4_s11_schildpad", "zij", "z4_schelpie", "Een snack voor Ouwe Dobber",
   "Kluizenaar Schelpie woont op de slapende Oma Dobber; haar man Ouwe Dobber zwemt rondjes om haar heen. Ouwe Dobber heeft honger: hij lust alleen het lekkerste zeewier, "
   "en dat hebben de grauwe wezens aan de kust.",
-  [D("verzamel", item("zeewier"), 5, "Verzamel 5 lekker zeewier van de grauwe wezens aan De Lampionkust (vrolijk ze op)", "gebied:z4_lampionkust", 0.4,
+  [D("verzamel", item("zeewier"), 5, "Verzamel 5 lekker zeewier van de grauwe wezens aan De Lampionkust (vrolijk ze op)",
+     # U-QUESTROBOT: "z4_lampionkust" is no area (Gebieden): it never dropped; now any zone-4 area (pastMob takes a|b|c)
+     "gebied:z4_lampionhaven|z4_knuffeltij|z4_strandfeest|z4_bloemeneiland|z4_koraalbaai|z4_vliegereiland|z4_vuurtoreneiland|z4_pierkop|z4_mysterie|z4_wrak|z4_schildpad|z4_zee", 0.4,
      plek="gebied:z4_lampionkust")],
   [("npc", "Ouwe Dobber heeft honger. Hoor je zijn maag? Dat gerommel? Nee, dat is geen onweer."),
    ("npc", "Hij lust alleen het lekkerste zeewier. De grauwe wezens aan de kust hebben het vaak aan zich hangen. Vrolijk ze op, dan laten ze het vallen.")],

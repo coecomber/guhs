@@ -50,6 +50,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.register(modBus);   // T-VFX: VFX kit v1 + boss bouwdoos
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.register(modBus);   // T-Z4BOOT: the zone-4 Zeilbootje
         nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtRegistry.register(modBus);   // U-TAPIJT: the flying carpet (zone 6)
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobotRegistry.register(modBus);   // U-QUESTROBOT: /guhs vadsrijk questrobot
         nl.juiced.guhs.feature.vadsrijk.web.WebRegistry.register(modBus);   // S-SITE: guhs.nl/vadsrijk live export (off by default) + wiki dump
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.register(modBus);   // T-AMBACHT: the Ambachten (professions)
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.register(modBus);   // T-ITEMS: itemisatie 2.0 (keep last: its loot sees every table)

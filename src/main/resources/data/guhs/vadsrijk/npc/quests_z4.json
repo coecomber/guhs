@@ -953,7 +953,7 @@
           "soort": "verzamel",
           "doel": "guhs:vr_z4_npc_zeewier",
           "n": 5,
-          "bron": "gebied:z4_lampionkust",
+          "bron": "gebied:z4_lampionhaven|z4_knuffeltij|z4_strandfeest|z4_bloemeneiland|z4_koraalbaai|z4_vliegereiland|z4_vuurtoreneiland|z4_pierkop|z4_mysterie|z4_wrak|z4_schildpad|z4_zee",
           "kans": 0.4,
           "plek": "gebied:z4_lampionkust"
         }

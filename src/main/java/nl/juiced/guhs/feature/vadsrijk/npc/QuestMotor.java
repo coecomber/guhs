@@ -108,7 +108,11 @@ public final class QuestMotor {
                 Quest.Doel d = q.doelen().get(i);
                 if (d.type() == Quest.Doel.Type.ESCORTE && d.doel().equals(id) && !Questlog.doelKlaar(p, q, i)) {
                     npc.volg(p);
-                    regels.addAll(regels(p, npc, q.praat().getOrDefault(id, List.of("npc")), q.sleutel() + ".praat." + id + "."));
+                    if (q.praat().containsKey(id)) {
+                        regels.addAll(regels(p, npc, q.praat().get(id), q.sleutel() + ".praat." + id + "."));
+                    } else {   // U-QUESTROBOT: no own lines for this escort (z10_rammel, z3_s02, z5_s07): the generic one, not a missing key
+                        regels.add(new nl.juiced.guhs.feature.verhaal.Praat.Regel(npc, "", "vadsrijk.npc.escorte.volgt", npc.getDisplayName()));
+                    }
                     open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
                     return;
                 }
@@ -439,6 +443,8 @@ public final class QuestMotor {
     }
 
     public static final int REIS_OPTIE = REIS;
+    /** U-QUESTROBOT: the "yes, I'll do it" choice of a quest offer (for {@link #kiesVoorTest}). */
+    public static final int AANNEMEN_OPTIE = AANNEMEN;
 
     /** The klasse-tempeltje: the klassen slice's screen when it is there, else a choice between the registered classes. */
     static void klasseKeuze(ServerPlayer p, Entity npc) {
