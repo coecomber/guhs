@@ -120,6 +120,25 @@ public final class Z4DierenRegistry {
         return sl.getEntity(officieel) instanceof OuweDobber d && !d.isRemoved() ? d : null;
     }
 
+    /**
+     * For the story/tracker (t-z4verhaal): where Ouwe Dobber is now (also when he is not loaded: his place is a function of the
+     * time). His halte next to the Schildpadeiland jetty is {@link #dobberHalte()}; he waits there 30 s every round.
+     */
+    public static Vec3 dobberPlek(ServerLevel sl) {
+        return OuweDobber.plek(klok(sl));
+    }
+
+    /** His halte (water surface) next to the end of the Schildpadeiland jetty. */
+    public static Vec3 dobberHalte() {
+        Vec3 h = DobberRoute.get().halte();
+        return new Vec3(h.x, OuweDobber.OPPERVLAK, h.z);
+    }
+
+    /** True while he waits at the halte (good moment to hop on / feed him). */
+    public static boolean dobberWacht(ServerLevel sl) {
+        return DobberRoute.get().wacht(klok(sl));
+    }
+
     static double klok(ServerLevel sl) {
         return sl.getGameTime() + verschuif;
     }

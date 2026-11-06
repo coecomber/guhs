@@ -54,9 +54,10 @@ public class GuhVlieger extends Entity {
         entityData.set(DATA_KLEUR, v.kleur());
         entityData.set(DATA_KLEUR2, v.kleur2());
         entityData.set(DATA_GROOTTE, v.grootte());
-        entityData.set(DATA_AX, (float) v.ax());
-        entityData.set(DATA_AY, (float) v.ay());
-        entityData.set(DATA_AZ, (float) v.az());
+        // the anchor as an offset from the kite (floats stay precise far from 0, e.g. in gametests)
+        entityData.set(DATA_AX, (float) (v.ax() - v.x()));
+        entityData.set(DATA_AY, (float) (v.ay() - v.y()));
+        entityData.set(DATA_AZ, (float) (v.az() - v.z()));
     }
 
     public int kleur() {
@@ -73,7 +74,7 @@ public class GuhVlieger extends Entity {
 
     /** Where the string is tied (world position). */
     public Vec3 anker() {
-        return new Vec3(entityData.get(DATA_AX), entityData.get(DATA_AY), entityData.get(DATA_AZ));
+        return position().add(entityData.get(DATA_AX), entityData.get(DATA_AY), entityData.get(DATA_AZ));
     }
 
     @Override

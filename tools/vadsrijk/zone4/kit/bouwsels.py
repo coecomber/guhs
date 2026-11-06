@@ -489,8 +489,16 @@ def vlieger_blokken(P, anker, pos, grootte, kleur, kleur2, wr):
     wind with a white cross, two ear blocks, two eyes, and a rope (vadstouw) down to the guh holding it."""
     VLIEGERS.append((tuple(round(v, 1) for v in anker), tuple(round(float(v), 1) for v in pos), round(float(grootte), 1),
                      tuple(int(c) for c in kleur), tuple(int(c) for c in kleur2)))
+    zet = P.s
     if not VLIEGER_BLOKKEN:
-        return   # [T-Z4DIEREN] an entity flies here (see VLIEGERS)
+        # [T-Z4DIEREN] an entity flies here (see VLIEGERS): no blocks, but the columns stay "taken" exactly as before, so the
+        # vegetation (trees, plants) around the kites is the same as with the block kites
+        def zet(x, y, z, b, keep=False):
+            ax, ay, az = P.anker
+            X, Y, Z = P.v.shape
+            i, j, k = int(math.floor(x)) - ax, int(math.floor(y)) - ay, int(math.floor(z)) - az
+            if 0 <= i < X and 0 <= j < Y and 0 <= k < Z and math.floor(y) >= ZEE + 2:
+                P.ankers.append((int(math.floor(x)), int(math.floor(z))))
     u = np.cross([0, 1, 0], wr)
     u = u / (np.linalg.norm(u) + 1e-9)
     hw = max(1, int(round(grootte / 2)))
@@ -504,17 +512,17 @@ def vlieger_blokken(P, anker, pos, grootte, kleur, kleur2, wr):
             blok = w2 if (a == 0 or b == 0) else w1
             if b == 1 and abs(a) == max(1, hw // 2):
                 blok = "minecraft:black_wool"
-            P.s(q[0], q[1], q[2], blok)
+            zet(q[0], q[1], q[2], blok)
     for sgn in (-1, 1):
         q = pos + u * sgn * max(1, hw // 2) + np.array([0, hv, 0])
-        P.s(q[0], q[1], q[2], "guhs:knuffelblok_roze")
+        zet(q[0], q[1], q[2], "guhs:knuffelblok_roze")
     # the line: straight from the bottom of the kite to the anchor, one block per step along the longest axis
     a = np.asarray(anker, float) + np.array([0, 1.0, 0])
     b = pos + np.array([0, -hv - 1, 0])
     n = int(max(abs(b - a))) + 1
     for i in range(n + 1):
         q = a + (b - a) * i / n
-        P.s(q[0], q[1], q[2], "guhs:vadstouw[axis=y]", keep=True)
+        zet(q[0], q[1], q[2], "guhs:vadstouw[axis=y]", keep=True)
 
 
 # ============================================================================================= feestspul

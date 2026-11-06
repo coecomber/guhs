@@ -33,6 +33,8 @@ def vliegers():
     import haven as HV
     import eilanden as EI
     BW.VLIEGERS.clear()
+    HV._P = None                     # (maak4 may have built them already in this process: build again to record the kites)
+    EI._CACHE.pop("vlieger", None)
     HV._plek(False)
     EI.plek("vlieger", False)
     uit, gezien = [], set()

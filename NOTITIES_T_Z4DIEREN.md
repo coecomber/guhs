@@ -68,6 +68,22 @@ Nachtronde T (2026-11-06). Worktree `guhs_vadsrijk/t-z4dieren`, branch `110-t-z4
 - Vliegerwinkel-dakvliegers zijn ook entities geworden (zelfde lijst). De muurvliegers van de werkplaats bestonden al niet.
 - Bij de vliegers geen vasthoudende guh (de kaart heeft geen guhs): het touw eindigt aan een paaltje.
 
+## Afstemming met t-z4verhaal (110-t-z4verhaal 4685a7bf7)
+- Hun vaste punten (`npc_schildpad` Schelpie 2237,71,-447; `grote_knuffel_schildpad` = groot_4 2243,71,-442;
+  `schildpad_rug` 2239,71,-445; gebied `z4_schildpadeiland`) liggen op het **statische eiland, en dat blijft staan**. Het
+  verhaal, de hoofdquest-stap 3 (knuffel), de zijquest s11 "Een snack voor Ouwe Dobber" (inleveren bij Schelpie) en de
+  tracker werken dus ongewijzigd: niets hoeft mee te rijden.
+- Gekozen variant van de lead: **de schildpad rust periodiek bij die plek**: elk rondje (~3,2 min) ligt Ouwe Dobber 30 s
+  naast de steiger van het eiland, 33 blok van Schelpie. Geen NPC/knuffel als passagier (die zouden bij elke chunk-unload,
+  respawn en dialoog-trigger extra werk en risico geven).
+- API voor een tracker/quest die naar de bewegende schildpad zelf wil wijzen: `Z4DierenRegistry.dobberPlek(level)` (nu,
+  ook als hij niet geladen is), `dobberHalte()`, `dobberWacht(level)`, `dobber(level)` (de entity of null).
+- **Tekst-voorstel voor de integratie** (hun bestand, niet door mij aangepast): Schelpie zegt nu "Ik woon op een schildpad.
+  Hij heet Ouwe Dobber. Hij zwemt rondjes." en s11 "woont op de rug van de reuzenschildpad Ouwe Dobber". Met het blijvende
+  eiland klopt dat beter als: "Ik woon op Oma Dobber. Die slaapt al honderd jaar. Haar man, Ouwe Dobber, zwemt rondjes om
+  haar heen en komt elk rondje even bij de steiger liggen." (s11: "woont op de slapende Oma Dobber; haar man Ouwe Dobber
+  ..."). Zonder die aanpassing werkt alles ook, alleen is het eiland dan "ook" een schildpad.
+
 ## Gedeelde bestanden (add-only, gemarkeerd `T-Z4DIEREN`)
 - `wereld/WereldRegistry.java`: 1 regel `Z4DierenRegistry.register(modBus)`.
 - `wereld/client/WereldClient.java`: 1 regel `Z4DierenClient.init(modBus)`.
@@ -89,6 +105,16 @@ Nachtronde T (2026-11-06). Worktree `guhs_vadsrijk/t-z4dieren`, branch `110-t-z4
   de entity heeft geen dialoog.
 - Als iemand het statische eiland of de steiger verplaatst: `dieren4.py` opnieuw draaien (doet `maak_kaart --zone 4` vanzelf)
   en kijken of CHECK_FOUTEN 0 blijft.
+
+## Checks (2026-11-06 ~02:20)
+- Gametests `-Pgt=Z4Dieren`: **alle 4 geslaagd** (mijn 3: dobberRoute, dobberZitjes, vliegers).
+- `dieren4.py`: 17 vliegers, route 20 punten / 319 blokken, **0 botsingen**.
+- `maak_kaart.py --zone 4` zonder blokvliegers: de begroeiing blijft gelijk (de vliegerkolommen blijven "bezet", zie
+  bouwsels), POI_Z4.md identiek aan die van t-z4wereld. `poicheck4`: 0 van 371 niet sta-baar.
+- `loopcheck4`: 0 VAL; 1 POI: `vliegerwedstrijd_finish` (2330,87,-655) "niet bereikbaar". Die plek staat op de kruin van
+  een kersenboom; met de blokvliegers terug (`GUHS_Z4_VLIEGERBLOKKEN=1`) gaf dezelfde check hetzelfde resultaat, dus niet
+  door de vliegers. Voor t-z4wereld/integratie: finish een paar blokken naar het westen (2327,-657 is knuffelgras).
+- Geen AutoCheck-client gedraaid (RAM gedeeld).
 
 ## Hervatpunt
 - Na een checkout: `python tools/vadsrijk/maak_kaart.py --zone 4` (maakt ook Z4DierenPlekken.java), dan compileert alles.

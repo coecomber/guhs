@@ -3,7 +3,8 @@
 ### Ouwe Dobber, de reuzenschildpad
 Een grote, lieve schildpad (schild van 14 blokken, guh-oortjes, bloemetjes op zijn rug) die langzaam zijn rondje zwemt
 langs het Schildpadeiland. Bij de steiger van het eiland wacht hij steeds 30 seconden, daarna zwemt hij een rondje van
-ongeveer 2,5 minuut. Het eiland zelf (met het hutje en Schelpie) blijft gewoon liggen: dat is Oma Dobber, die slaapt.
+ongeveer 2,5 minuut. Het eiland zelf (met het hutje en Schelpie) blijft gewoon liggen (dat is Oma Dobber, die slaapt).
+Schelpie, de grote knuffel en de zeewier-quest blijven op het eiland; Ouwe Dobber komt elk rondje 30 s naast de steiger liggen.
 
 | Commando | Wat er gebeurt |
 |---|---|
