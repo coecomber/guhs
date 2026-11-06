@@ -51,6 +51,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.puzzels.PuzzelRegistry.register(modBus);   // T-PUZZELS: puzzle toolbox + puzzles/secrets zone 1-3
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.register(modBus);   // T-OPSLAG: knapzak, materiaaltas, bank, HUD additions
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.register(modBus);   // T-KLEDING: Kledingkast, wings, effects
+        nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.register(modBus);   // T-LUCHTSCHIP: scheduled airships + view
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -75,5 +76,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.payloads(registrar);   // T-ITEMS
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.payloads(registrar);   // T-OPSLAG
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.payloads(registrar);   // T-KLEDING
+        nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.payloads(registrar);   // T-LUCHTSCHIP
     }
 }

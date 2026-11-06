@@ -261,6 +261,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_opslag',
             # 1.10 T-KLEDING: Kledingkast, wings, capes, accessories, effects (Java: feature/vadsrijk/kleding)
             'vadsrijk_t_kleding',
+            # 1.10 night round T, T-LUCHTSCHIP: the scheduled airship (model), the far silhouettes, texts (Java: feature/vadsrijk/luchtschip)
+            'vadsrijk_t_luchtschip',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

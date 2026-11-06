@@ -120,6 +120,9 @@ final class WereldLucht {
         boolean zone2 = mc.player != null && (nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.inZone2(mc.player.getX(), mc.player.getZ())
                 || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(mc.player.getX(), mc.player.getZ()));   // [zone 3] own horizon too
         for (int i = 0; i < VERTE.length && !zone2; i++) {
+            if (i < 3 && nl.juiced.guhs.feature.vadsrijk.luchtschip.client.Schimmen.vervangt("verte")) {
+                continue;   // T-LUCHTSCHIP: spires/Hoogvads/tree are real-position silhouettes now (the volcano stays)
+            }
             float[] v = VERTE_PLEK[i];
             float a = 0.42f + 0.25f * dag;
             SkyDraw.drawNow("Vadsrijk landmark " + i, SkyDraw.CELESTIAL_TRANSLUCENT, horizon(v[0], v[1], v[2]), SkyDraw.texture(VERTE[i]),

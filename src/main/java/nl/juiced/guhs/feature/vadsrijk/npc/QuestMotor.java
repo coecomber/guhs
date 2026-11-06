@@ -552,6 +552,9 @@ public final class QuestMotor {
                 }
                 Praat.sluit(p);
                 afronden(p);
+                if (!nl.juiced.guhs.feature.vadsrijk.luchtschip.Luchtschepen.luxe(p, naar, VLIEG_TEST != null)) {   // T-LUCHTSCHIP: luxury ticket
+                    return;
+                }
                 vliegNaar(p, g.npc(), naar);
             }
         } else if (optie >= EXTRA_OPTIE && optie < EXTRA_OPTIE + 10) {

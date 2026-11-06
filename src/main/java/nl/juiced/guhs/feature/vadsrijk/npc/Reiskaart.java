@@ -92,6 +92,9 @@ public final class Reiskaart {
             }
             return;
         }
+        if (!nl.juiced.guhs.feature.vadsrijk.luchtschip.Luchtschepen.luxe(p, id, QuestMotor.VLIEG_TEST != null)) {   // T-LUCHTSCHIP: luxury ticket
+            return;
+        }
         QuestMotor.vliegNaar(p, "kaart", id);
     }
 
