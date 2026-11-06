@@ -302,7 +302,7 @@ public final class Questlog {
                 n += st.getCount();
             }
         }
-        return n;
+        return (int) Math.min(Integer.MAX_VALUE, n + nl.juiced.guhs.feature.vadsrijk.opslag.Materiaaltas.tel(p, item));   // T-OPSLAG: + the materiaaltas
     }
 
     static void neemItems(ServerPlayer p, Item item, int n) {
@@ -313,6 +313,9 @@ public final class Questlog {
                 st.shrink(weg);
                 n -= weg;
             }
+        }
+        if (n > 0) {
+            nl.juiced.guhs.feature.vadsrijk.opslag.Materiaaltas.neem(p, item, n);   // T-OPSLAG: the rest from the materiaaltas
         }
     }
 

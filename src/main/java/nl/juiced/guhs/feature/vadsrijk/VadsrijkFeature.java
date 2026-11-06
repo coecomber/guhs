@@ -49,6 +49,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.register(modBus);   // T-AMBACHT: the Ambachten (professions)
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.register(modBus);   // T-ITEMS: itemisatie 2.0 (keep last: its loot sees every table)
         nl.juiced.guhs.feature.vadsrijk.puzzels.PuzzelRegistry.register(modBus);   // T-PUZZELS: puzzle toolbox + puzzles/secrets zone 1-3
+        nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.register(modBus);   // T-OPSLAG: knapzak, materiaaltas, bank, HUD additions
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -71,5 +72,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.payloads(registrar);   // T-Z4BOOT
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.payloads(registrar);   // T-AMBACHT
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.payloads(registrar);   // T-ITEMS
+        nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.payloads(registrar);   // T-OPSLAG
     }
 }

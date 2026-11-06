@@ -173,7 +173,57 @@ public final class RijkHud {
 
     /** (npc's quest tracker, top right) Where the top of the screen is free: below the boss bar while one shows, else 0. */
     public static int bovenVrij() {
-        return baas != null ? 46 : 0;
+        return baas != null ? 46 + BOVEN_EXTRA.getAsInt() : 0;   // (T-OPSLAG: + the boss cast bar)
+    }
+
+    // ---- T-OPSLAG: the HUD API for every slice (NOTITIES_T_OPSLAG.md) ------------------------------------------------------
+
+    /** An extra HUD element; drawn in the dimension with the HUD on, after kern's own parts, by {@link #voegToe} order. */
+    public interface Element {
+        void teken(GuiGraphicsExtractor g, Font f, int w, int h, float pt);
+    }
+
+    private record Extra(String id, int volgorde, Element element) {
+    }
+
+    private static final List<Extra> EXTRA = new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** Extra pixels taken below the boss bar (T-OPSLAG's boss cast bar), so {@link #bovenVrij} moves the quest tracker down. */
+    public static java.util.function.IntSupplier BOVEN_EXTRA = () -> 0;
+
+    /**
+     * Adds (or replaces, same id) a HUD element. volgorde: lower draws first (T-OPSLAG uses 100-130; leave room).
+     * Example (t-items, the drankjesriem): {@code RijkHud.voegToe("drankjesriem", 200, (g, f, w, h, pt) -> { int[] p =
+     * RijkHud.plek("drankjesriem", w, h); ... });}
+     */
+    public static synchronized void voegToe(String id, int volgorde, Element e) {
+        List<Extra> l = new java.util.ArrayList<>(EXTRA);
+        l.removeIf(x -> x.id().equals(id));
+        l.add(new Extra(id, volgorde, e));
+        l.sort(java.util.Comparator.comparingInt(Extra::volgorde));
+        EXTRA.clear();
+        EXTRA.addAll(l);
+    }
+
+    /**
+     * Reserved HUD spots on a gui of w x h (all GUI scales; nothing of kern's is there):
+     * <ul>
+     *   <li>"drankjesriem": {x, y, vak, stap}: 3 slots of vak x vak, the first at (x, y), the next at x + stap (above the skills);</li>
+     *   <li>"buffs": {xLinks, y, xRechts, vak}: buffs from xLinks to the right, debuffs from xRechts to the left (above the bars);</li>
+     *   <li>"doelframe": {x, y, breed, hoog} (top centre, below the boss bar);</li>
+     *   <li>"gietbalk": {x, y, breed, hoog} (your own cast bar, centre, above the buff row);</li>
+     *   <li>"baasgiet": {x, y, breed, hoog} (the boss's cast bar, under the boss bar).</li>
+     * </ul>
+     */
+    public static int[] plek(String id, int w, int h) {
+        int c = w / 2;
+        return switch (id) {
+            case "drankjesriem" -> new int[] {c + 98, h - 42, 16, 19};
+            case "buffs" -> new int[] {c - 91, h - 56, c + 91, 12};
+            case "doelframe" -> new int[] {c - 75, 4 + bovenVrij(), 150, 28};
+            case "gietbalk" -> new int[] {c - 60, h - 72, 120, 9};
+            case "baasgiet" -> new int[] {c - 80, 45, 160, 9};
+            default -> new int[] {0, 0, 0, 0};
+        };
     }
 
     static boolean binnen() {
@@ -261,6 +311,9 @@ public final class RijkHud {
         bossBalk(g, f, w, dt.getGameTimeDeltaPartialTick(false));
         party(g, f, hh);
         tip(g, f, w);
+        for (Extra x : EXTRA) {   // (T-OPSLAG: the HUD API)
+            x.element().teken(g, f, w, hh, dt.getGameTimeDeltaPartialTick(false));
+        }
     }
 
     private static void balk(GuiGraphicsExtractor g, Font f, int x, int y, int bw, int bh, float frac, int kleur, int licht, Component tekst) {
