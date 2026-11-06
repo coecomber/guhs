@@ -105,3 +105,35 @@ All of these are marked `U-HEKKEN`:
   `cwd`.
 - **Tile lists starting with '-':** `verbind.na` passes `--alleen=...`, because argparse saw the tile list `-1,1` as an
   option. Fixed in a215bb28a.
+
+## Results (full regen `maak_kaart --zone alle --geen-cache --audit`, 2026-11-06 ~13:50)
+
+**The pass:** 187 tiles rewritten, about 19.7k blocks changed.
+
+**verbindcheck:**
+- before (t-int tiles): 24,136 open (los 14,684, fout 4,973, as 145, gat 4,334);
+- after: **0**. A second run of the pass changes 0, so it is idempotent.
+
+**Zone 3, measured on a fresh maak3:**
+
+| Check | Without the pass | With the pass |
+|---|---|---|
+| loopcheck3 PAD | 396 | 396 |
+| loopcheck3 VAL | 1 | 1 |
+| poicheck3 | 0/430 | 0/430 |
+
+This is after the fix for u-deco's report: the fills used to land on the Rijpad and at the lift door `lift_kapel_boven`.
+
+**Walkability audit (AUDIT_VADSRIJK) against t-int:**
+- POI, stap, water, boom and gras are equal or better.
+- **Open point:** pits went from 4 to 5. The new one is the hat platform at `-374 103 82` (`hoedenpad_netwerk.hoeden.7` / `hoedenpad_wezen_4`).
+  - In t-int that platform was ALREADY "niet bereikbaar vanaf het netwerk" (the hat path has no real entrance). Its fence
+    ring had diagonal gaps you could squeeze through.
+  - The pass closes those gaps over the void, so the audit now calls it "je komt er niet meer weg".
+  - Fix belongs in the hat-path generator (`wereld/hoedenpaden.py`): give the platform a real entrance in the ring. I
+    did not touch it.
+
+**Gametest:** `-Pgt=VadsrijkVerbind`: all required tests passed (13:36).
+
+**Not committed:** the generated tiles, `AUDIT_VADSRIJK.md`, `veilige_plekken.json` and `AUDIT_VERBIND.md` (integration
+regenerates them).

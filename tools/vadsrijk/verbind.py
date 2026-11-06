@@ -304,7 +304,7 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
 
     # ---------------------------------------------------------------- 1. gaps (lines only, >= 3 pieces)
     if vullen:
-        for ronde in range(2):
+        for ronde in range(4):
             m = np.isin(vol, np.nonzero((L.soort == HEK) | (L.soort == MUUR) | (L.soort == RUIT) | (L.soort == LIJN))[0])
             pos = np.argwhere(m)
             if not len(pos):
@@ -709,6 +709,7 @@ def naloop(tegels=None, map_=UIT, praat=True, werkers=6):
             geschreven.add(t)
             cellen += n
             volgende |= {r for r in rand if r in alle}
+            volgende.add(t)   # and the tile itself once more: a fill can enable the next one (converges)
         rij = sorted(volgende)
     if praat:
         print(f"verbind: {len(doel)} tegels bekeken, {len(geschreven)} herschreven, {cellen} blokken aangepast, "
