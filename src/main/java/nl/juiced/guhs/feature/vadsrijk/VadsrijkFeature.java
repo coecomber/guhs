@@ -48,6 +48,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.tmodels.TModels.register(modBus);   // T-MODELS: kern slimes as GeckoLib models + /guhs vadsrijk models
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.register(modBus);   // T-VFX: VFX kit v1 + boss bouwdoos
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.register(modBus);   // T-Z4BOOT: the zone-4 Zeilbootje
+        nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtRegistry.register(modBus);   // U-TAPIJT: the flying carpet (zone 6)
         nl.juiced.guhs.feature.vadsrijk.web.WebRegistry.register(modBus);   // S-SITE: guhs.nl/vadsrijk live export (off by default) + wiki dump
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.register(modBus);   // T-AMBACHT: the Ambachten (professions)
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.register(modBus);   // T-ITEMS: itemisatie 2.0 (keep last: its loot sees every table)
@@ -76,6 +77,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.payloads(registrar);   // T-GELUID
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.payloads(registrar);   // T-VFX
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.payloads(registrar);   // T-Z4BOOT
+        nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtRegistry.payloads(registrar);   // U-TAPIJT
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.payloads(registrar);   // T-AMBACHT
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.payloads(registrar);   // T-ITEMS
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.payloads(registrar);   // T-OPSLAG

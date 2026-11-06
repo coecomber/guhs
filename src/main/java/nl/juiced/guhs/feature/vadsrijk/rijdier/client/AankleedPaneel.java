@@ -87,7 +87,11 @@ public final class AankleedPaneel {
             if (l.isEmpty()) {
                 continue;
             }
-            g.text(font, Component.translatable("vadsrijk.rijdier.as." + as.id()).withStyle(ChatFormatting.BOLD), x, y, EcoScherm.TEKST, false);
+            String asKey = "vadsrijk.rijdier.as." + as.id();   // U-TAPIJT: a species may name its axes ("Weefsel", "Kwastjes", "Kussen")
+            if (net.minecraft.client.resources.language.I18n.exists(asKey + "." + s.id())) {
+                asKey += "." + s.id();
+            }
+            g.text(font, Component.translatable(asKey).withStyle(ChatFormatting.BOLD), x, y, EcoScherm.TEKST, false);
             y += 10;
             int kol = Math.max(1, bw / STAP), i = 0;
             if (as != As.VACHT) {   // "geen": take it off
@@ -209,7 +213,7 @@ public final class AankleedPaneel {
             case "sterretjes" -> "★";
             case "hartjes" -> "♥";
             case "glitter" -> "✦";
-            default -> "?";
+            default -> patroon.startsWith("kwast_") ? "¥" : "?";   // U-TAPIJT: the carpet's tassels
         };
     }
 }

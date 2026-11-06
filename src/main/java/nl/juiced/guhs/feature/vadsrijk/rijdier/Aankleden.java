@@ -88,7 +88,8 @@ public final class Aankleden {
         eco(p).putString("garderobe", String.join(",", g));
         if (melden) {
             Component naam = Component.translatable(v.naamKey()).withStyle(ChatFormatting.GOLD);
-            p.sendSystemMessage(Component.translatable(v.soort() == null ? "vadsrijk.rijdier.nieuw." + v.as().id() : "vadsrijk.rijdier.nieuw.vacht_van",
+            p.sendSystemMessage(Component.translatable(v.soort() == null ? "vadsrijk.rijdier.nieuw." + v.as().id()
+                    : v.as() == As.VACHT ? "vadsrijk.rijdier.nieuw.vacht_van" : "vadsrijk.rijdier.nieuw." + v.as().id() + "_van",   // U-TAPIJT
                     naam, v.soort() == null ? Component.empty() : Component.translatable(v.soort().naamKey()),
                     Component.keybind("key.guhs.vr_rijdieren").withStyle(ChatFormatting.YELLOW)).withStyle(ChatFormatting.LIGHT_PURPLE));
             p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 0.9f, 1.5f);
