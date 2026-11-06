@@ -293,6 +293,7 @@ class Bron:
         # boss loot: named boss items by prefix
         for b in data["bazen"]:
             b["buit"] = [i["id"] for i in data["items"] if b["id"] in i.get("bronnen_baas", [])]
+        self._baas_extra(data, rt)   # U-SITE: every other drop with its chance
         data["kristallen"] = self._kristallen(rt)
         data["sterren"] = rt.get("sterren")
         data["zeldzaamheden"] = [dict(r, naam=self.t("vadsrijk.kern.zeldzaamheid." + r["id"], r["id"])) for r in rt.get("zeldzaamheden", [])] \
@@ -603,6 +604,60 @@ class Bron:
                 if sid in per:
                     per[sid]["stukken"].append([kop, tekst])
         return out
+
+    # ---- U-SITE: all boss drops ------------------------------------------------------------------------------------------
+    def _baas_extra(self, data, rt):
+        """Per boss: b["kist"] (its chest loot table, if the dump has one) and b["extra"] = [[kind, name, chance text NL, EN]]."""
+        lt = rt.get("loottabellen", {})
+        uit = self._java(os.path.join("rijdier", "Uiterlijk.java")) + self._java(os.path.join("rijdier", "Aankleden.java"))
+        looks = collections.defaultdict(list)   # entity -> [(kind, name)]
+        soort = None
+        for regel in uit.splitlines():
+            m = re.search(r"vacht\(RijdierSoort\.([A-Z_]+)", regel)
+            if m:
+                soort = m[1].lower()
+            for m in re.finditer(r'\{"([a-z_]+)", 0x[0-9A-Fa-f]+, Bron\.baas\("guhs:([a-z0-9_]+)"\)\}', regel):
+                rnaam = self.t("vadsrijk.economie.rijdier." + (soort or ""), soort or "")
+                looks[m[2]].append(("vacht", f'{self.t(f"vadsrijk.rijdier.vacht.{soort}.{m[1]}", m[1])} ({rnaam})'))
+            m = re.search(r'new Variant\(As\.(PATROON|TUIG), "([a-z_]+)".*Bron\.baas\("guhs:([a-z0-9_]+)"\)', regel)
+            if m:
+                looks[m[3]].append((m[1].lower(), self.t(f"vadsrijk.rijdier.{m[1].lower()}.{m[2]}", m[2])))
+            m = re.search(r'SOORT_BRON\.put\(RijdierSoort\.([A-Z_]+), Bron\.baas\("guhs:([a-z0-9_]+)"\)', regel)
+            if m:
+                looks[m[2]].append(("rijdier", self.t("vadsrijk.economie.rijdier." + m[1].lower(), m[1].lower())))
+            m = re.search(r'PLUIM_BRON\.put\(PluimKleur\.([A-Z_]+), Bron\.baas\("guhs:([a-z0-9_]+)"\)', regel)
+            if m:
+                looks[m[2]].append(("rijdier", "Pluimguh " + self.t("vadsrijk.economie.pluimkleur." + m[1].lower(), m[1].lower())))
+        kern = {"zone1": "Zwamkern", "zone2": "Splinterkern", "zone3": "Wortelkern"}
+        huisdier = {h["id"]: h for h in data.get("huisdieren", [])} if data.get("huisdieren") else {}
+        for b in data["bazen"]:
+            eid = b["entity"]
+            tabel = lt.get(f"economie:baas_{b['id']}") or lt.get(f"{b['zone'][0]}{b['zone'][-1]}bazen:{b['id']}")
+            if not tabel and b["zone"] == "zone5" and b["soort"] != "verhaal":
+                tabel = lt.get("z5wezens:baas")
+            b["kist"] = tabel
+            ex = []
+            for kind, naam in looks.get(eid, []):
+                if kind == "rijdier":
+                    ex.append(["rijdier", naam, "10% per speler per overwinning; zeker na 15 keer (geduldteller)",
+                               "10% per player per win; guaranteed after 15 tries (pity counter)"])
+                else:
+                    ex.append([kind, naam, "de eerste keer dat je hem verslaat", "the first time you beat it"])
+            if b.get("huisdier"):
+                ex.append(["huisdier", self.t(f"vadsrijk.huisdier.{b['huisdier']}.naam", b["huisdier"]),
+                           self.t(f"vadsrijk.huisdier.{b['huisdier']}.bron", "") or "eerste overwinning", None])
+            zp = {"zone1": "", "zone2": "z2_", "zone3": "z3_", "zone4": "z4_", "zone5": "z5_"}[b["zone"]]
+            trofee = self.t(f"item.guhs.vr_{zp}baas_trofee_{b['id']}")
+            if trofee:
+                ex.append(["trofee", trofee, "zeker, bij je eerste overwinning (deco voor thuis)", "sure, on your first win (decoration for home)"])
+            if b["soort"] != "verhaal" or b["id"] in ("klodderreus",):
+                if b["zone"] in kern:
+                    ex.append(["kern", kern[b["zone"]], "15% per helper", "15% per helper"])
+                ex.append(["groei", "Groeipluis", "1 per helper, elke overwinning", "1 per helper, every win"])
+            if b.get("vahoeg"):
+                ex.append(["veer", "Gouden Veren", "in Vahoeg-vorm", "in Vahoeg form"])
+                ex.append(["kleding", "Schemervleugels", "3% in Vahoeg-vorm (laatste baas van de kerker 8%)", "3% in Vahoeg form (last boss of the dungeon 8%)"])
+            b["extra"] = ex
 
     # ---- U-SITE: the new systems ------------------------------------------------------------------------------------------
     def _java(self, rel):

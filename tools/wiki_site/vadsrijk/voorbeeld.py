@@ -59,6 +59,23 @@ def schrijf(uit, data):
                             opgevrolijkt=r.randint(50, 4000) // (i + 1), boek_totaal=sum(boek.values()) // len(boek), huisdieren=r.randint(0, 6), huisdieren_max=6,
                             rijdieren=r.randint(0, 5), rijdieren_max=5, bazen_totaal=sum(bz.values()), klassen=kl, boek=boek, bazen=bz, gear=gear,
                             **({"eerste_50": "2026-11-21"} if lv >= 50 else {})))
+    # U-SITE: live positions (sample): 3 players at public spots, 1 in a dungeon (status only), 1 airship in flight
+    vuren = [p for p in data["punten"] if p["soort"] == "kampvuur"]
+    pos = []
+    for i, naam in enumerate(online[:3]):
+        v = vuren[(i * 7 + 3) % len(vuren)] if vuren else dict(pos=[0, 64, 0], zone="zone1")
+        s_ = next(x for x in spelers if x["naam"] == naam)
+        pos.append(dict(naam=naam, x=v["pos"][0] + r.randint(-6, 6), z=v["pos"][2] + r.randint(-6, 6), klasse=s_["klasse"], level=s_["lv"], zone=v["zone"]))
+    status = [dict(naam=online[3], waar="in een kerker")]
+    schepen = []
+    for rt_ in data["routes"][:6]:
+        if rt_["van"] == "honingtak":
+            f = 0.4
+            schepen.append(dict(id="lijn_c", x=round(rt_["a"][0] + (rt_["b"][0] - rt_["a"][0]) * f), z=round(rt_["a"][2] + (rt_["b"][2] - rt_["a"][2]) * f), naar=rt_["naar"]))
+    put("posities.json", dict(tijd=int(nu.timestamp() * 1000), spelers=pos, status=status, schepen=schepen))
+    for s in spelers:
+        if s["naam"] == online[3]:
+            s["waar"] = "in een kerker"
     for s in spelers:
         put(f"spelers/{s['naam'].lower()}.json", {k: v for k, v in s.items() if k != "xp"})
     put("spelers/index.json", dict(tijd=iso(nu), spelers=[dict(naam=s["naam"], lv=s["lv"]) for s in spelers]))
