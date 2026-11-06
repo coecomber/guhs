@@ -271,4 +271,8 @@ if __name__ == "__main__":
     ap.add_argument("--alleen", default=None)
     ap.add_argument("--werkers", type=int, default=4)
     a = ap.parse_args()
+    _t_verbind = time.time()   # U-HEKKEN
     maak(a.alleen, a.werkers)
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))   # U-HEKKEN: connection pass
+    import verbind
+    verbind.na_sinds(_t_verbind)

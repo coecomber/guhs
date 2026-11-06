@@ -333,7 +333,7 @@ public final class RustendeRidders extends SavedData {
     }
 
     private static void zet(ServerLevel sl, BlockPos b, BlockState s) {
-        sl.setBlock(b, s, Block.UPDATE_CLIENTS);
+        sl.setBlock(b, nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.vorm(sl, b, s), Block.UPDATE_CLIENTS);   // U-HEKKEN: walls/panes connected
     }
 
     private static void ruimTekst(ServerLevel sl, BlockPos a) {

@@ -42,7 +42,8 @@ public final class Herstel extends SavedData {
         Map<BlockPos, BlockState> m = h.sets.computeIfAbsent(key, k -> new LinkedHashMap<>());
         m.putIfAbsent(pos.immutable(), oud);
         h.setDirty();
-        sl.setBlock(pos, nieuw, 2 | 16);
+        sl.setBlock(pos, nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.vorm(sl, pos, nieuw), 2 | 16);   // U-HEKKEN: fences/walls connected
+        nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.buren(sl, pos);
     }
 
     public static boolean heeft(ServerLevel sl, String key) {
@@ -59,6 +60,9 @@ public final class Herstel extends SavedData {
         }
         for (Map.Entry<BlockPos, BlockState> e : m.entrySet()) {
             sl.setBlock(e.getKey(), e.getValue(), 2 | 16);
+        }
+        for (BlockPos p : m.keySet()) {   // U-HEKKEN: the restored fences/walls connect again
+            nl.juiced.guhs.feature.vadsrijk.verbind.Verbind.buren(sl, p);
         }
         h.setDirty();
         return m.size();
