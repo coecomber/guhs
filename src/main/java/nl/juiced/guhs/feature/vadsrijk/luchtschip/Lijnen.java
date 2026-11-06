@@ -114,19 +114,20 @@ public final class Lijnen {
     /** Line 0 (existed as a scene flight): Kampsteiger -> Haven Zwamzoet, over the Zoete Zee. */
     public static final Lijn L0 = new Lijn("kamp_z1", "0", KAMPSTEIGER, HAVEN_ZWAMZOET, List.of(
             v(-150, 100, 990), v(-60, 118, 900), v(20, 128, 790), v(80, 118, 680), v(100, 98, 590)), 0);
-    /** Line A: Noordklifhaven -> Kandijkom-dok, climbing along the Splinterwand and round the spires. */
+    // (T-INT: via points checked against the regenerated map with tools/vadsrijk/luchtschip_check.py: >= 10 blocks clear)
+    /** Line A: Noordklifhaven -> Kandijkom-dok, climbing steeply and crossing HIGH over the Splinterwand spires (up to y 205). */
     public static final Lijn LA = new Lijn("z1_z2", "A", NOORDKLIFHAVEN, KANDIJKOM_DOK, List.of(
-            v(160, 132, -660), v(250, 158, -730), v(390, 176, -800), v(520, 168, -870), v(640, 140, -820), v(700, 112, -862)), 700);
+            v(170, 175, -668), v(240, 212, -700), v(390, 214, -760), v(500, 170, -830), v(620, 135, -850), v(700, 112, -862)), 700);
     /** Line B: Galmdok -> Weststeiger, diving into the Wolkenkloof and climbing along the hanging roots. */
     public static final Lijn LB = new Lijn("z2_z3", "B", GALMDOK, WESTSTEIGER, List.of(
-            v(1010, 104, -836), v(1062, 74, -790), v(1100, 88, -716), v(1124, 128, -650), v(1150, 168, -598)), 1400);
+            v(1010, 104, -836), v(1062, 92, -790), v(1100, 100, -716), v(1124, 130, -650), v(1150, 168, -598)), 1400);
     /** Line C: Oosttaksteiger -> Lampionhaven, a round past the crown and the werf, then down through the Wolkenval. */
     public static final Lijn LC = new Lijn("z3_z4", "C", OOSTTAKSTEIGER, LAMPIONHAVEN, List.of(
             v(1690, 190, -540), v(1712, 208, -680), v(1640, 222, -830), v(1730, 200, -850), v(1800, 160, -700), v(1770, 112, -560),
             v(1752, 82, -478)), 2100);
     /** Line D: De Opstijgpier -> Walvisrughaven, a spiral up along the head and the eye of Moeder Wolkwal (after the zone-4 finale). */
     public static final Lijn LD = new Lijn("z4_z5", "D", OPSTIJGPIER, WALVISRUGHAVEN, List.of(
-            v(2560, 96, -610), v(2500, 126, -680), v(2420, 160, -600), v(2420, 186, -470), v(2530, 205, -330), v(2630, 218, -300)), 2800);   // (T-INT: end lowered ~45 to the real Walvisrughaven, approach from the south)
+            v(2560, 96, -610), v(2490, 126, -690), v(2400, 160, -610), v(2390, 190, -470), v(2530, 205, -330), v(2630, 218, -300)), 2800);   // (T-INT: end lowered ~45 to the real Walvisrughaven, approach from the south)
 
     /** All lines (tests may add a test line). */
     public static final List<Lijn> ALLE = new CopyOnWriteArrayList<>(List.of(L0, LA, LB, LC, LD));

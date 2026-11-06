@@ -254,7 +254,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kruinroofvogel_zit_1` | 1471, 210, -452 |
 | `kruinroofvogel_zit_2` | 1530, 200, -587 |
 | `mika_imker_luik` | 1457, 157, -565 |
-| `mika_imker_raatzaal` | 1458, 145, -567 |
+| `mika_imker_raatzaal` | 1459, 145, -573 |
 | `nest_eierkuil` | 1404, 293, -576 |
 | `nest_rand` | 1396, 293, -587 |
 | `nest_tak_1` | 1415, 293, -571 |

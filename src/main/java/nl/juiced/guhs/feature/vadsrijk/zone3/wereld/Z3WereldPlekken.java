@@ -520,7 +520,7 @@ public final class Z3WereldPlekken {
             Map.entry("markt", new BlockPos(1404, 167, -516)),
             Map.entry("mika_bevel", new BlockPos(1453, 229, -668)),
             Map.entry("mika_imker_luik", new BlockPos(1457, 157, -565)),
-            Map.entry("mika_imker_raatzaal", new BlockPos(1458, 145, -567)),
+            Map.entry("mika_imker_raatzaal", new BlockPos(1459, 145, -573)),
             Map.entry("mika_steiger", new BlockPos(1459, 227, -672)),
             Map.entry("molenhoek_plein", new BlockPos(1384, 187, -662)),
             Map.entry("mosvoet_burgemeester", new BlockPos(1543, 67, -480)),
