@@ -52,7 +52,8 @@ public final class Werver {
     /** The first-time tip about the view distance (on arrival in the Vadsrijk). */
     public static final String TIP = "vadsrijk.npc.tip.weergave";
     /** Who says what (QuestMotor.regels): "npc" = Wimpel, "jij" = the player. Keys vadsrijk.npc.werver.gesprek.0.. */
-    static final List<String> GESPREK = List.of("npc", "jij", "npc", "npc", "npc", "npc", "jij", "npc");
+    // U-KARAKTER: + pages 8..10 (texts in tools/features/vadsrijk_t_karakter.py): the three knights with their fixed modes
+    static final List<String> GESPREK = List.of("npc", "jij", "npc", "npc", "npc", "npc", "jij", "npc", "npc", "jij", "npc");
 
     /** Temple (its bounding box, packed) -> the portal spot found in it (empty: no portal there). */
     private static final Map<Long, Optional<Plek>> TEMPELS = new HashMap<>();

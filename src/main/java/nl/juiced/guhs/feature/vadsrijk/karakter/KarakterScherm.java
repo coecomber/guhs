@@ -8,7 +8,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 
 /**
  * T-KARAKTER, server side of the character screen: what it shows ({@link #data}) and what its buttons do ({@link #doe}).
- * The server checks everything again (free slot, name, only lowering the mode, the place rule).
+ * The server checks everything again (free slot, name, the place rule). U-KARAKTER: three fixed slots (left Normaal, middle
+ * Knuffelmodus, right Eénvads), no mode changes; the first-entry welcome ({@code welkom}).
  */
 public final class KarakterScherm {
     private KarakterScherm() {
@@ -16,8 +17,14 @@ public final class KarakterScherm {
 
     /** Opens (or refreshes) the screen. {@code aankomst} = shown on entering the Vadsrijk ("Verder als ..."). */
     public static void open(ServerPlayer p, boolean aankomst) {
+        open(p, aankomst, false);
+    }
+
+    /** {@code welkom} = the first time in the Vadsrijk: a welcome text over the cards ("choose how you want to play"). */
+    public static void open(ServerPlayer p, boolean aankomst, boolean welkom) {
         CompoundTag d = data(p);
-        d.putBoolean("aankomst", aankomst);
+        d.putBoolean("aankomst", aankomst || welkom);
+        d.putBoolean("welkom", welkom);
         KarakterPayloads.stuur(p, d);
     }
 
@@ -33,6 +40,7 @@ public final class KarakterScherm {
         for (int i = 0; i < Karakter.SLOTS; i++) {
             CompoundTag s = new CompoundTag();
             s.putInt("slot", i);
+            s.putString("modus", Modus.vanSlot(i).id);
             if (!Karakter.bestaat(p, i)) {
                 s.putBoolean("leeg", true);
                 l.add(s);
@@ -40,8 +48,6 @@ public final class KarakterScherm {
             }
             CompoundTag info = Karakter.info(p, i);
             s.putString("naam", info.getStringOr("naam", "?"));
-            s.putString("modus", info.getStringOr("modus", Modus.NORMAAL.id));
-            s.putString("begin", info.getStringOr("begin", Modus.NORMAAL.id));
             s.putBoolean("pensioen", info.getBooleanOr("pensioen", false));
             s.putBoolean("nieuw", info.getBooleanOr("nieuw", false));
             if (i == actief) {
@@ -55,8 +61,9 @@ public final class KarakterScherm {
                 s.putString("klasse", info.getStringOr("klasse", "knuffelridder"));
                 s.putLong("munten", info.getLongOr("munten", 0));
             }
-            s.putString("badge", (s.getBooleanOr("pensioen", false) ? "p" : "") + (Modus.van(s.getStringOr("modus", "")).badge.isEmpty() ? ""
-                    : s.getStringOr("modus", "")));
+            boolean rust = s.getBooleanOr("pensioen", false);
+            Modus m = Modus.vanSlot(i);
+            s.putString("badge", (rust ? "p" : "") + (rust || m.badge.isEmpty() ? "" : m.id));
             l.add(s);
         }
         t.put("slots", l);
@@ -69,24 +76,20 @@ public final class KarakterScherm {
             case "open" -> open(p, false);
             case "wissel" -> {
                 if (Karakters.wissel(p, slot, false)) {
-                    p.closeContainer();
+                    p.closeContainer();   // (switched: the screen closes, you play)
+                } else {
+                    open(p, false);
                 }
-                open(p, false);
             }
             case "maak" -> {
-                if (Karakters.maak(p, slot, a.getStringOr("naam", ""), Modus.van(a.getStringOr("modus", Modus.NORMAAL.id)))) {
-                    if (a.getBooleanOr("spelen", false)) {
-                        Karakters.wissel(p, slot, false);
-                    }
+                if (Karakters.maak(p, slot, a.getStringOr("naam", "")) && a.getBooleanOr("spelen", false) && Karakters.wissel(p, slot, false)) {
+                    p.closeContainer();   // (made + switched: the screen closes, the new adventure starts)
+                } else {
+                    open(p, false);
                 }
-                open(p, false);
             }
             case "naam" -> {
                 Karakters.hernoem(p, slot, a.getStringOr("naam", ""));
-                open(p, false);
-            }
-            case "modus" -> {
-                Karakters.zetModus(p, slot, Modus.van(a.getStringOr("modus", "")), false);
                 open(p, false);
             }
             default -> {

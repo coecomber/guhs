@@ -43,10 +43,11 @@ import nl.juiced.guhs.storage.GuhSavedData;
 /**
  * T-KARAKTER: the Rustende Ridders-zaal, the hall of fame of retired Eénvads knights. The list is server-wide SavedData
  * {@code guhs:vr_rustende_ridders} (with the overworld); the hall is a small building in ZWAMZOET, west of the plaza, on the
- * open lawn between the Kruidenier and the houses north of the harbour promenade ({@link #ANKER}, entrance to the south onto the
- * promenade). It is a STRUCTURE PIECE built by code (not a map tile), once, as soon as its chunk is loaded ({@link #tick}), and only
- * when the lawn is still free (else it logs and waits for {@code /guhs vadsrijk karakter zaal bouw hier}). The statues (armour
- * stands with the knight's own head, pink armour, a name plate) are rebuilt from the list after every retirement.
+ * open lawn between the Kruidenier and the boulevard stalls ({@link #ANKER}, entrance to the south onto the harbour promenade).
+ * U-KARAKTER: the hall is part of the MAP (the zone-1 generator, {@code tools/vadsrijk/stad/stad_wereld.py rustende_ridders};
+ * keep {@link #ANKER} and the pedestal spots in step with it). Code only places the statues (armour stands with the knight's own
+ * head, pink armour, a name plate) and the name signs, and rebuilds them after every retirement ({@link #tick}). {@link #bouw}
+ * is a dev fallback for worlds generated before.
  */
 public final class RustendeRidders extends SavedData {
     public static final SavedDataType<RustendeRidders> TYPE = GuhSavedData.tagType("vr_rustende_ridders", RustendeRidders::new,
@@ -141,7 +142,15 @@ public final class RustendeRidders extends SavedData {
 
     // ---- the building -------------------------------------------------------------------------------------------------------
 
-    /** Every 5 s: build the hall once its chunk is loaded; refresh the statues when the list changed. */
+    /** Statues placed since this server start (the armour stands are saved with the chunk; once per start they are rebuilt). */
+    private transient boolean geplaatst;
+    private transient boolean gewaarschuwd;
+
+    /**
+     * Every 5 s. U-KARAKTER: the hall itself is part of the MAP now (zone-1 generator, tools/vadsrijk/stad/stad_wereld.py
+     * {@code rustende_ridders}); this only places the statues + name plates once its chunks are loaded, and again after every
+     * retirement. A world whose Zwamzoet was generated before has no hall: one log line, and {@code zaal bouw} builds it by code.
+     */
     static void tick(MinecraftServer s) {
         ServerLevel sl = Vadsrijk.level(s);
         if (sl == null) {
@@ -152,45 +161,30 @@ public final class RustendeRidders extends SavedData {
         if (!sl.isLoaded(a) || !sl.isLoaded(a.offset(HALF_X + 1, 0, HALF_Z + 4)) || !sl.isLoaded(a.offset(-HALF_X - 1, 0, -HALF_Z - 1))) {
             return;
         }
-        if (d.gebouwd < BOUW_VERSIE) {
-            if (d.gebouwd == 0 && !vrij(sl, a)) {
-                if (d.gebouwd != -1) {
-                    com.mojang.logging.LogUtils.getLogger().warn("[T-KARAKTER] Rustende Ridders-zaal: the lawn at {} is not free (map changed?); not built. "
-                            + "Use /guhs vadsrijk karakter zaal bouw hier", a);
-                }
-                d.gebouwd = -1;   // (warn once; a dev build "hier" sets it)
-                d.setDirty();
-                return;
-            }
-            if (d.gebouwd >= 0) {
-                bouw(sl, a);
-                d.gebouwd = BOUW_VERSIE;
-                d.vies = true;
-                d.setDirty();
-            }
+        if (d.geplaatst && !d.vies) {
+            return;
         }
-        if (d.vies && d.gebouwd > 0) {
-            d.beelden(sl);
+        if (!staat(sl, a)) {
+            if (!d.gewaarschuwd) {
+                d.gewaarschuwd = true;
+                com.mojang.logging.LogUtils.getLogger().warn("[U-KARAKTER] Rustende Ridders-zaal: no hall at {} (map generated before round U?). "
+                        + "Use /guhs vadsrijk karakter zaal bouw", a);
+            }
+            return;
         }
+        d.beelden(sl);
+        d.geplaatst = true;
     }
 
-    /** Is the lawn still free: floor level solid at y, air above for the whole footprint (+ the path)? */
-    static boolean vrij(ServerLevel sl, BlockPos a) {
-        for (int x = -HALF_X; x <= HALF_X; x++) {
-            for (int z = -HALF_Z; z <= HALF_Z + 3; z++) {
-                BlockPos b = a.offset(x, 0, z);
-                if (sl.getBlockState(b).isAir()) {
-                    return false;
-                }
-                for (int y = 1; y <= HOOGTE + 1; y++) {
-                    BlockState s = sl.getBlockState(b.above(y));
-                    if (!s.isAir() && !s.canBeReplaced()) {
-                        return false;
-                    }
-                }
+    /** Does the hall stand at {@code a} (at least 8 of its 11 pedestals)? */
+    static boolean staat(ServerLevel sl, BlockPos a) {
+        int n = 0;
+        for (BlockPos b : sokkels(a)) {
+            if (sl.getBlockState(b).is(Blocks.QUARTZ_PILLAR)) {
+                n++;
             }
         }
-        return true;
+        return n >= 8;
     }
 
     /** (dev) Build the hall here (floor = the block under your feet) and remember the spot. */
@@ -198,17 +192,19 @@ public final class RustendeRidders extends SavedData {
         RustendeRidders d = get(sl.getServer());
         d.plek = voeten.below();
         bouw(sl, d.plek);
+        d.geplaatst = false;
         d.gebouwd = BOUW_VERSIE;
         d.vies = true;
         d.setDirty();
         d.beelden(sl);
     }
 
-    /** (dev) Build at the configured spot now, even when not free. */
+    /** (dev, only for a world whose Zwamzoet was generated before the hall was in the map) Build it by code at the fixed spot. */
     public static void bouwAnker(ServerLevel sl) {
         RustendeRidders d = get(sl.getServer());
         d.plek = null;
         bouw(sl, ANKER);
+        d.geplaatst = false;
         d.gebouwd = BOUW_VERSIE;
         d.vies = true;
         d.setDirty();
@@ -311,11 +307,14 @@ public final class RustendeRidders extends SavedData {
         }
         zet(sl, a.offset(-2, 1, z1 + 1), Blocks.LANTERN.defaultBlockState());
         zet(sl, a.offset(2, 1, z1 + 1), Blocks.LANTERN.defaultBlockState());
-        // the name above the entrance (outside) and inside over the door
+    }
+
+    /** The name above the entrance (outside) and inside over the door (text displays, placed with the statues). */
+    static void borden(ServerLevel sl, BlockPos a) {
         ruimTekst(sl, a);
-        tekst(sl, a.getX() + 0.5, a.getY() + 4.6, a.getZ() + z1 + 1.3,
+        tekst(sl, a.getX() + 0.5, a.getY() + 5.7, a.getZ() + HALF_Z + 1.3,
                 Component.translatable("vadsrijk.karakter.zaal.naam").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD), 1.1f);
-        tekst(sl, a.getX() + 0.5, a.getY() + 4.5, a.getZ() + z1 - 0.6,
+        tekst(sl, a.getX() + 0.5, a.getY() + 4.5, a.getZ() + HALF_Z - 0.6,
                 Component.translatable("vadsrijk.karakter.zaal.onder").withStyle(ChatFormatting.LIGHT_PURPLE), 0.8f);
     }
 
@@ -379,10 +378,11 @@ public final class RustendeRidders extends SavedData {
     /** Rebuilds the statues from the list (newest first, as many as there are pedestals). */
     void beelden(ServerLevel sl) {
         BlockPos a = plek();
-        if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, a) || gebouwd <= 0) {   // U-DUBBEL (was isLoaded: the saved statues were not back yet -> rebuilt twice)
+        if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, a)) {   // U-DUBBEL + V-INT (was isLoaded: the saved statues were not back yet -> rebuilt twice; the hall is map-built now, so no 'gebouwd' gate)
             vies = true;
             return;
         }
+        borden(sl, a);
         AABB box = new AABB(a).inflate(HALF_X + 2, HOOGTE + 2, HALF_Z + 2);
         for (Entity e : sl.getEntitiesOfClass(Entity.class, box, e -> e.entityTags().contains(TAG))) {
             e.discard();
