@@ -291,6 +291,7 @@ public class VadsrijkItemsGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void drankjesriem(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);   // (creative never uses up a potion)
         try {
             for (int i = 0; i < Drankjesriem.VAKKEN; i++) {
                 Drankjesriem.zet(p, i, ItemStack.EMPTY);

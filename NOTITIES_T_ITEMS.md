@@ -148,7 +148,7 @@ So when t-karakter re-keys/splits SpelerData per `Karakter.sleutel`, my data fol
 Y / I / O = drankjesriem 1/2/3 (category Vadsrijk). Other T-slices may pick the same free keys: check at integration.
 
 ## Resume point / open
-- Head: see the git log. Gametests: see the report.
+- Gametests: VadsrijkItems (6) + VadsrijkKern (8) all pass; VadsrijkEconomie + VadsrijkBalans passed too (20/21 run before the belt test fix).
 - No AutoCheck client run (not needed for this slice's logic; the screen layout is untested in a client: **check the smid tabs and the inventory columns in the dev client**, especially at a large GUI scale; the star tab is ~124 px tall under the anvil).
 - Open:
   - iNv ("Kracht") not built;
