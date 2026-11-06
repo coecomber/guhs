@@ -300,6 +300,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_audio2',
             # 1.10 round U, U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles - texts (Java: feature/vadsrijk/gilden)
             'vadsrijk_u_gilden',
+            # 1.10 round U, U-HUIZEN: player housing, Het Knuffelkwartier (dimension + texts; Java: feature/vadsrijk/huizen)
+            'vadsrijk_u_huizen',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

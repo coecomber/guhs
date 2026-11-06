@@ -347,6 +347,8 @@ public final class Spelers {
 
     /** BELEVING hook (fix round 1): xp factors per player (the Vrolijke reeks gives +10 %), all multiplied. */
     public static final List<java.util.function.ToDoubleFunction<ServerPlayer>> XP_FACTOR = new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** U-HUIZEN: extra xp on top of a gain (after the factors), e.g. rested xp from the own house; each returns what it adds. */
+    public static final List<java.util.function.ToLongBiFunction<ServerPlayer, Long>> XP_EXTRA = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     /**
      * g-klassen: while a defeat hands out xp ({@code VadsrijkMob.verslagen}), the damage per player per class on that mob: the
@@ -400,6 +402,10 @@ public final class Spelers {
             factor *= f.applyAsDouble(p);
         }
         n = Math.round(n * factor);
+        long basisN = n;
+        for (java.util.function.ToLongBiFunction<ServerPlayer, Long> f : XP_EXTRA) {   // U-HUIZEN
+            n += f.applyAsLong(p, basisN);
+        }
         SpelerData d = data(p);
         int gVoor = d.level();
         d.generiekXp = Math.min(Levels.totaalVoorGeneriek(Levels.MAX_GENERIEK), d.generiekXp + n);
