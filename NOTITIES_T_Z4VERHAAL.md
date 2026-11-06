@@ -100,4 +100,6 @@
 - **The Gids "z4_zeilboot" text** assumes the boat is called with the boat slice's own key. Adjust it at integration if the boat has a key/command.
 
 ## Resume point / tests
-See `git log` on 110-t-z4verhaal. The status at the end of the night is filled in below.
+- `compileJava` is green.
+- `runGameTestServer -Pgt=Z4VerhaalGameTests,VadsrijkNpcGameTests`: **all 10 required tests passed** (3 new + 7 zone-1 NPC tests, incl. the renamed travel-map teaser).
+- **Level cap:** kern `Levels.MAX` is **50** in this tree. The quests_z4.json level requirement is therefore capped at 50 (`LV_CAP` in the generator). Xp still uses the design levels 50-55. Raise `LV_CAP` when the cap goes up (someone else's slice).

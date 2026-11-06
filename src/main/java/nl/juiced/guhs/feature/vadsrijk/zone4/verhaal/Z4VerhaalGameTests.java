@@ -90,6 +90,7 @@ public class Z4VerhaalGameTests {
         Z4Haken.vergeet(p);
         Z4VerhaalRegistry.gebieden();
         Z4VerhaalRegistry.klaarzetten(p);
+        Spelers.zetLevel(p, 56);   // (capped by Levels.MAX; the quests ask at most that)
         Spelers.data(p).gezien.removeIf(s -> s.startsWith("npc:z4_"));
         List<Quest> hoofd = z4().stream().filter(Quest::hoofd).toList();
         String vorige = "z3_hq15_hoogvads";

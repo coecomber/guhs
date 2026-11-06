@@ -1036,6 +1036,7 @@ def teksten():
 
 
 _PLEK_SOORTEN = ("npc:", "poi:", "gebied:", "baas:")
+LV_CAP = 50
 
 
 def quests_json():
@@ -1065,7 +1066,9 @@ def quests_json():
         for groep in (q["aanbod"], q["klaar"], *q["praat"].values()):
             for wie, _x in groep:
                 assert wie in ("npc", "jij", "verteller") or wie in alle_npc, f"{q['id']}: unknown speaker {wie}"
-        o = dict(id=q["id"], soort=q["soort"], gever=q["gever"], inleveren=q["inleveren"], lv=q["lv"], na=q["na"],
+        # (kern Levels.MAX is 50 in this tree: a zone-4 quest asks at most lv 50, else it could never be offered; the design level
+        # (50-55) still sets its xp. Raise LV_CAP when the level cap goes up.)
+        o = dict(id=q["id"], soort=q["soort"], gever=q["gever"], inleveren=q["inleveren"], lv=min(q["lv"], LV_CAP), na=q["na"],
                  doelen=[dict(soort=d["soort"], doel=d["doel"], n=d["n"], bron=d["bron"], kans=d["kans"], plek=d["plek"])
                          for d in q["doelen"]],
                  beloning=q["beloning"], aanbod=[w for w, _x in q["aanbod"]], klaar=[w for w, _x in q["klaar"]],
