@@ -439,7 +439,9 @@ public final class Rijdieren {
         sl.sendParticles(ParticleTypes.HEART, r.getX(), r.getY() + 1.6, r.getZ(), 3, 0.4, 0.2, 0.4, 0);
         EcoUtil.geluid(p, SoundEvents.NOTE_BLOCK_FLUTE.value(), 0.9f, 1.6f);
         EcoUtil.geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f, 1.4f);
-        Tips.toon(p, "vadsrijk.economie.tip.rijden");
+        if (!s.glijdt()) {   // V-INT: the flying carpet has its own first-ride tip (Tapijt), no "Spatie = een grote hup"
+            Tips.toon(p, "vadsrijk.economie.tip.rijden");
+        }
         return r;
     }
 
