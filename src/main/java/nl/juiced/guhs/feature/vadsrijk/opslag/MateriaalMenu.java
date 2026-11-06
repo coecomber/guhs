@@ -115,7 +115,7 @@ public final class MateriaalMenu extends AbstractContainerMenu {
                 int n = knop == 1 ? (int) Math.max(1, (Math.min(heeft, max) + 1) / 2) : max;
                 ItemStack uit = Materiaaltas.haalUit(data, soort, n);
                 if (shift) {
-                    p.getInventory().add(uit);
+                    Opslag.inInventaris(p.getInventory(), uit);
                     if (!uit.isEmpty()) {
                         Materiaaltas.terug(data, uit);   // (no room: straight back)
                     }

@@ -175,7 +175,7 @@ public final class Materiaaltas {
             stop(d, s);
             return;
         }
-        p.getInventory().add(s);
+        Opslag.inInventaris(p.getInventory(), s);
         if (!s.isEmpty()) {
             nl.juiced.guhs.feature.vadsrijk.kern.Inventaris.bewaar(p, s);
         }

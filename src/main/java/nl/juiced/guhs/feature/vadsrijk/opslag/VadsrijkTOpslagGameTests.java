@@ -245,7 +245,7 @@ public class VadsrijkTOpslagGameTests {
         m.setCarried(ItemStack.EMPTY);
         // shift-click a material from the inventory
         p.getInventory().setItem(5, new ItemStack(EcoSpul.PLUISDRAAD.get(), 12));
-        m.quickMoveStack(p, 5);
+        m.quickMoveStack(p, 27 + 5);   // (menu slots: 27 main inventory, then the hotbar)
         helper.assertTrue(p.getInventory().getItem(5).isEmpty() && Materiaaltas.tel(p, EcoSpul.PLUISDRAAD.get()) == 12, "shift-click stores");
         // crystal qualities stay apart
         String soort = Kristallen.SOORTEN.keySet().iterator().next();

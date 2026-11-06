@@ -88,6 +88,27 @@ public final class Opslag {
         return true;
     }
 
+    /**
+     * Puts as much of the stack as fits into the main inventory (36 slots: first onto equal stacks, then empty slots); the stack
+     * keeps the rest. Unlike {@code Inventory.add} it never "eats" a stack that does not fit for a creative player.
+     */
+    public static void inInventaris(Inventory inv, ItemStack s) {
+        for (int i = 0; i < 36 && !s.isEmpty(); i++) {
+            ItemStack x = inv.getItem(i);
+            if (!x.isEmpty() && ItemStack.isSameItemSameComponents(x, s) && x.getCount() < x.getMaxStackSize()) {
+                int k = Math.min(s.getCount(), x.getMaxStackSize() - x.getCount());
+                x.grow(k);
+                s.shrink(k);
+            }
+        }
+        for (int i = 0; i < 36 && !s.isEmpty(); i++) {
+            if (inv.getItem(i).isEmpty()) {
+                inv.setItem(i, s.split(Math.min(s.getCount(), s.getMaxStackSize())));
+            }
+        }
+        inv.setChanged();
+    }
+
     /** Helpers for the shared-file hooks (EcoUtil / Questlog): bag count for an inventory's owner (0 when not a server player). */
     public static long tasVoor(Inventory inv, Item item) {
         return inv.player instanceof ServerPlayer sp ? Materiaaltas.tel(sp, item) : 0;
