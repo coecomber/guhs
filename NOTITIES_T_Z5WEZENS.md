@@ -84,3 +84,9 @@ z5w_leider_{strobaal,mistmoeder,meestervermommer}.
 
 ## Resume point
 See `git log -1` and the test results below.
+
+## Test results (2026-11-06)
+- `runGameTestServer -Pgt=VadsrijkZ5Wezens`: "All 9 required tests passed" (creatures spawn/defeat, loot + boss chest, sparring,
+  Gorgonzola valves, Zilverstaart disguise + escape, Donderbuik pull + pink end, places/spawners/hatches, Buikgangen build).
+  First run: 1 fail in my own test (Gorgonzola: a still-shut valve reduced the hit, so fase 3 was not reached); fixed in the test.
+- AutoCheck NOT run (gradle slots were full all night; no client memory to spare).

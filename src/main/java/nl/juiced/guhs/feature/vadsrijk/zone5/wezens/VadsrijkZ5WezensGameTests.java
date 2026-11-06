@@ -205,6 +205,11 @@ public class VadsrijkZ5WezensGameTests {
                 g.doelGebruikt(k0, p);
             }
             helper.assertTrue(!g.dicht(0) && g.dichtAantal() == 1, "three clicks open valve 0");
+            Z3Doel k1 = kleppen.stream().filter(d -> d.nummer == 1).findFirst().orElseThrow();
+            for (int i = 0; i < Gorgonzola.KLIKS; i++) {
+                g.doelGebruikt(k1, p);
+            }
+            helper.assertTrue(g.dichtAantal() == 0, "all open again");
             g.krijgSchade(g.vads() - g.maxVads() * 0.24, p);
             helper.assertTrue(g.fase() == 3 && g.dichtAantal() == 4, "fase 3: everything shut");
             g.krijgSchade(g.maxVads(), p);
