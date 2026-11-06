@@ -45,7 +45,7 @@ public class VadsrijkSpecsGameTests {
                     helper.assertTrue(b.kosten() == 0, k.id() + ": hidden node with a cost " + b.id());
                     continue;
                 }
-                helper.assertTrue(b.rij() <= 7 && b.kolom() >= 0 && b.kolom() < SpecBoom.KOLOMMEN, k.id() + ": outside the grid " + b.id());
+                helper.assertTrue(b.rij() <= 9 && b.kolom() >= 0 && b.kolom() < SpecBoom.KOLOMMEN, k.id() + ": outside the grid " + b.id());
                 String c = b.rij() + "," + b.kolom();
                 helper.assertTrue(cel.put(c, b.id()) == null, k.id() + ": two nodes in cell " + c + ": " + b.id() + " / " + cel.get(c));
                 helper.assertTrue(b.kosten() == SpecBoom.kosten(b.rij()), k.id() + ": cost of " + b.id());

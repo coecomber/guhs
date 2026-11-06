@@ -196,8 +196,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 |---|---|
 | `uitkijk_druipspits` | -100, 190, -510 |
 | `uitkijk_haventand` | 160, 134, 380 |
+| `uitkijk_hoedtop` | -10, 174, -16 |
 | `uitkijk_klodderkijk` | 520, 147, -240 |
-| `uitkijk_noordkliftop` | 154, 127, -656 |
 | `uitkijk_slijmnaald` | 460, 142, 380 |
 | `uitkijk_zwamnaald` | -510, 153, -40 |
 
@@ -345,6 +345,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `ridderzaal.spawns.4` | 318, 152, -458 |
 | `ridderzaal.spawns.5` | 342, 152, -458 |
 | `rondvlucht_schip` | -237, 106, 763 |
+| `rustende_ridders` | -27, 64, 79 |
+| `rustende_ridders_binnen` | -27, 64, 73 |
 
 ## Moving doors (`WereldDeuren`)
 | id | blocks | open with | notes |

@@ -357,9 +357,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 |---|---|
 | `uitkijk_kroon` | 1469, 270, -530 |
 | `uitkijk_nest` | 1406, 293, -559 |
-| `uitkijk_oosttak` | 1620, 167, -486 |
 | `uitkijk_takpunt` | 1295, 213, -619 |
-| `uitkijk_westtak` | 1189, 167, -600 |
 | `uitkijk_wortelgewelf` | 1350, 81, -743 |
 
 ## Kruinzee
