@@ -1960,14 +1960,14 @@ def galmdok(W, K, P):
                 bodem=40, wol="minecraft:light_blue_wool")
     P["haven_z2_z3_plein"] = [cx, y + 1, cz]
     e = P["haven_z2_z3_eind"]
-    P["uitkijk_galmkam"] = [e[0], e[1], e[2] - 4]
+    # U-OVERGANG: no viewpoint at the harbour (the Galmtop needle right behind it is the epic one)
     W.stempel(S.stempel("galmdok"))
     # the Kandijkom dock = the zone-2 end of line A (Noordklifhaven <-> Kandijkom-dok)
     P["haven_z2_z1_vertrek"] = list(P["dok_landing"])
     S = BZ.WS(-12, FY - 2, -2240, 10, 12, 16)
     P["haven_z2_z1_bord"] = havens.bord(S, -9, FY, -2232, 0, 1, 1, 0)
     W.stempel(S.stempel("dok_bord"))
-    P["uitkijk_kandijkom_balkon"] = list(P["dok_eind"])
+    # U-OVERGANG: the dock end is no viewpoint any more
 
 
 # ================================================================================================ decoration

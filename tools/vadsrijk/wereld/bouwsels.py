@@ -1694,7 +1694,7 @@ def noordklifhaven(W, K, P):
     havens.pier(S, cx, y, cz - KA.NOORDKLIF_R + 2, 0, -1, 34, hoog, "haven_z1_z2", P, bodem=40)
     P["haven_z1_z2_plein"] = [cx, y + 1, cz]
     e = P["haven_z1_z2_eind"]
-    P["uitkijk_noordkliftop"] = [e[0] + 4, e[1], e[2]]
+    # U-OVERGANG: no viewpoint at the harbour any more (feedback ronde 4: epic spots instead, see stad_wereld.hoedbalkon)
     W.stempel(S.stempel("noordklifhaven"))
 
 

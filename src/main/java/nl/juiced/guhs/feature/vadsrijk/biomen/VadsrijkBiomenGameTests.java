@@ -54,8 +54,12 @@ public class VadsrijkBiomenGameTests {
         verwacht(helper, vb, -499, -484, "druipgrotten");   // the Druipschacht
         verwacht(helper, vb, 240, -300, "kloof");           // on the ravine line
         verwacht(helper, vb, 0, 280, "tussenland");         // between Zwamzoet and De Haven (zone-1 ring)
-        verwacht(helper, vb, 0, 750, "zee");                // between the ring and Knuffelkamp
-        verwacht(helper, vb, 0, -1200, "zee");              // between zone 1 and zone 2
+        verwacht(helper, vb, 0, 750, "tussenland");         // between the ring and Knuffelkamp (U-OVERGANG: zone 1's sea colour)
+        verwacht(helper, vb, 0, -1200, "zeeband_z1_z2_5");  // between zone 1 and zone 2 (U-OVERGANG: the sea band, closer to zone 2)
+        // U-OVERGANG: the sea band drifts across the Wolkenkloof (zone 2 -> zone 3) instead of jumping at x 1004 / 1024
+        verwacht(helper, vb, 1012, -1000, "splinterpieken");
+        verwacht(helper, vb, 1060, -1000, "zeeband_z2_z3_1");
+        verwacht(helper, vb, 1290, -900, "zeeband_z2_z3_6");
         // zone 2 (T-WERELD: local zone-2 coordinates + the zone offset)
         int DX2 = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DX, DZ2 = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DZ;
         verwacht(helper, vb, Z2WereldPlekken.DOK_LANDING.getX(), Z2WereldPlekken.DOK_LANDING.getZ(), "kandijkom");
@@ -79,6 +83,7 @@ public class VadsrijkBiomenGameTests {
         verwacht3(helper, vb, X0 + 0, 80, Z0 + 120, "wortelvelden");   // under Honingtak
         verwacht3(helper, vb, X0 + 251, 192, Z0 + -291, "zeppelinwerf");
         verwacht3(helper, vb, X0 + 0, -10, Z0 + 0, "schemerwortel");  // below everything: the catch-all
+        verwacht3(helper, vb, X0 + 230, 62, Z0, "zeeband_z3_z4_2");   // zone 3's own sea (was the teal root-field water)
         // every biome is a possible biome, and places the map
         var kaart = server.registryAccess().lookupOrThrow(Registries.PLACED_FEATURE).getOrThrow(
                 net.minecraft.resources.ResourceKey.create(Registries.PLACED_FEATURE, Guhs.id("vr_kaart")));

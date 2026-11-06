@@ -60,6 +60,8 @@ def main():
     finally:
         os.environ.pop("GUHS_VERBIND_LATER", None)
     sys.path.insert(0, HIER)
+    import overgang                             # U-OVERGANG: zone edges onto the shared open sea (floor, floor block, clouds)
+    overgang.main()
     import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
     verbind.na_sinds(_t_verbind)
     if a.audit and not a.alleen and a.zone in ("1", "alle"):   # (was at the end of zone 1, before the pass)
@@ -212,6 +214,8 @@ def java_plekken(plekken):
     regels = []
     for id_, d in deuren(plekken).items():
         regels.append(f'            new Deur("{id_}", {bp(d["min"])}, {bp(d["max"])}, {bp(d["voor"])}, {d["kopie_y"]}, {str(d.get("as_", "x") == "x").lower()})')
+    W_ = dict(W_)
+    W_.update({k: v for k, v in plekken["stad"]["poi"].items() if k.startswith("uitkijk_")})   # U-OVERGANG: Zwamzoet's Reuzenhoed
     uit = [k for k in W_ if k.startswith("uitkijk_")]
     kv = [k for k in kort if "kampvuur" in k and not k.endswith(("_trap",))]
     src = f"""package nl.juiced.guhs.feature.vadsrijk.wereld;

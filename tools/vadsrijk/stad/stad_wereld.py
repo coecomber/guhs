@@ -103,6 +103,62 @@ def zwemtrappen(S):
     zwemtrap(S, 34, 242, (0, 1), steun="knuffelsteen")
 
 
+def hoedbalkon(S):
+    """U-OVERGANG (W3): De Reuzenhoed, the viewpoint on the giant temple mushroom. From the temple forecourt (where the tempel
+    lift's ramp arrives on the plateau) a 3-wide plank walkway runs out over the cap rim to a round railed balcony on log
+    struts, ~110 blocks above the town: the whole of Zwamzoet, the harbour and the sea below. Flush with the plateau (no step),
+    railings on both sides of the walkway, lanterns standing on fence posts."""
+    cx, cz, T, r, _, _, p, _ = Z.ZWAMMEN["tempel"]
+    a = math.radians(112)
+    ux, uz = math.cos(a), math.sin(a)
+    d0, d1, R = 18.5, 27.0, 3.6
+    bx, bz = cx + ux * d1, cz + uz * d1
+
+    def vrij(x, y, z):
+        return not S.get(int(x), int(y), int(z)).startswith(("guhs:knuffelsteen", "guhs:roze_knuffelsteen", "guhs:pastel", "minecraft:gold"))
+
+    # walkway (+ headroom); railings where it leaves the plateau
+    d = d0
+    while d <= d1:
+        for w_ in np.arange(-1.5, 1.51, 0.5):
+            x, z = cx + ux * d - uz * w_, cz + uz * d + ux * w_
+            S.set(x, T, z, Z.PLANK)
+            for hy in (1, 2, 3):
+                if vrij(x, T + hy, z):
+                    S.set(x, T + hy, z, "minecraft:air")
+        if d > p * r - 0.5 and d < d1 - R + 0.6:
+            for s in (-1, 1):
+                x, z = cx + ux * d - uz * 2.2 * s, cz + uz * d + ux * 2.2 * s
+                S.set(x, T, z, Z.PLANK)
+                S.set(x, T + 1, z, Z.HEK)
+        d += 0.4
+    # the round balcony: floor, railing (open towards the walkway), struts down to the cap
+    for x in range(int(bx - R - 3), int(bx + R + 4)):
+        for z in range(int(bz - R - 3), int(bz + R + 4)):
+            dd = math.hypot(x + 0.5 - bx, z + 0.5 - bz)
+            if dd > R + 1.3:
+                continue
+            S.set(x, T, z, Z.PLANK)
+            for hy in (1, 2, 3):
+                S.set(x, T + hy, z, "minecraft:air")
+            if dd > R + 0.3:
+                hoek = math.atan2(z + 0.5 - bz, x + 0.5 - bx)
+                naar = math.atan2(-uz, -ux)
+                if abs((hoek - naar + math.pi) % (2 * math.pi) - math.pi) > math.radians(34):
+                    S.set(x, T + 1, z, Z.HEK)
+    for k in range(3):
+        h = math.radians(30 + k * 120) + math.atan2(uz, ux)
+        x, z = bx + (R + 0.8) * math.cos(h), bz + (R + 0.8) * math.sin(h)
+        if S.get(int(x), T + 1, int(z)) == Z.HEK:
+            S.set(x, T + 2, z, Z.LANT)
+        sx, sz = bx + (R - 1) * math.cos(h), bz + (R - 1) * math.sin(h)
+        y = T - 1
+        while y > G and S.is_air(int(sx), y, int(sz)):
+            S.set(sx, y, sz, "minecraft:stripped_cherry_log[axis=y]")
+            y -= 1
+    POI["uitkijk_hoedtop"] = w(bx, T + 1, bz)
+
+
 def lift(S, naam, hoek, zw):
     """Wolkenlift: open shaft with an up column (wolkenlift + wolkenstroom) and a down column next to it.
     Top: a roofed station flush with the cap, the puff drops you on it facing the plateau, and a stair ramp (3 wide,
@@ -371,6 +427,7 @@ def main(uit):
     POI["mika_aanwijzing_5"] = w(ux, T + 1, cz)
     for naam, z_ in Z.ZWAMMEN.items():
         POI[f"hoed_{naam}"] = w(z_[0], z_[2] + 1, z_[1])
+    hoedbalkon(S)   # U-OVERGANG: the viewpoint on the giant mushroom (W3, feedback ronde 4)
     tuintjes(S, __import__("random").Random(5))
     S.fix_connections()
     terrein_weg(S)

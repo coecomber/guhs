@@ -82,9 +82,19 @@ public class IndelingGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void zeeVulling(GameTestHelper helper) {
         helper.assertTrue(ZeeVulling.inZee(1200, -200) && !ZeeVulling.inZee(3100, 3100), "sea area");
-        int diep = ZeeVulling.vloer(-900, 0), ondiep = ZeeVulling.vloer(700, -1500);
+        int diep = ZeeVulling.vloer(-900, 0);
         helper.assertTrue(diep <= 51 && diep >= 47, "open sea deep: " + diep);
-        helper.assertTrue(ondiep >= 58, "cloud sea round zone 2 shallow: " + ondiep);
+        // U-OVERGANG: the Java sea must equal tools/vadsrijk/zeenaad.py exactly (the seam pass pulls the tiles onto it);
+        // reference values printed by zeenaad.py
+        int[][] ref = {{-900, 0, 51, 0}, {700, -1500, 50, 0}, {1100, -1100, 50, 0}, {1000, -900, 49, 1}, {1780, -500, 48, 0},
+                {-1200, -1800, 51, 0}, {2900, -100, 49, 0}};
+        for (int[] r : ref) {
+            helper.assertTrue(ZeeVulling.vloer(r[0], r[1]) == r[2] && ZeeVulling.materiaal(r[0], r[1]) == r[3],
+                    "zeenaad floor at " + r[0] + "," + r[1] + ": " + ZeeVulling.vloer(r[0], r[1]) + "/" + ZeeVulling.materiaal(r[0], r[1]));
+        }
+        helper.assertTrue(ZeeVulling.wolkDikte(1001, -737) == 3 && ZeeVulling.wolkSoort(1001, -737) == 2 && ZeeVulling.wolkDikte(-900, 0) == 0,
+                "zone-3 cloud banks continue past the box: " + ZeeVulling.wolkDikte(1001, -737));
+        helper.assertTrue(ZeeVulling.rots(905, -1540) == 66 && ZeeVulling.rots(168, -1279) == 51, "rock stacks: " + ZeeVulling.rots(905, -1540));
         helper.assertTrue(ZeeVulling.zeeOnderTegel(new net.minecraft.world.level.ChunkPos(3000 >> 4, -520 >> 4))
                 && !ZeeVulling.zeeOnderTegel(new net.minecraft.world.level.ChunkPos(2100 >> 4, -520 >> 4)), "sea under zone-5-only tiles");
         helper.succeed();

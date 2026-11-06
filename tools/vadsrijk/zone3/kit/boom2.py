@@ -937,11 +937,11 @@ def nest(W):
     # slot); a fence on the nest floor along the inner side of the slot, open at the arrival (the last landing)
     for phi in np.arange(_KNOPEN[4][0] + TRAP_WL, _KNOPEN[5][0] - 0.05, 0.02):
         a = TRAP_TH0 + phi
-        W.wset((TRAP_R0 - 0.6) * math.cos(a), y0 + 2, (TRAP_R0 - 0.6) * math.sin(a), HEK)
+        W.wset((TRAP_R0 - 0.6) * math.cos(a), y0 + 1, (TRAP_R0 - 0.6) * math.sin(a), HEK)   # U-OVERGANG: ON the floor (top block y0)
     a, _ = trap_landing(5)
     for s in (-1, 1):
         aa = a + s * (TRAP_WL / 2 + 0.05)
-        W.wset((TRAP_R0 - 1.6) * math.cos(aa), y0 + 2, (TRAP_R0 - 1.6) * math.sin(aa), LANTAARN)
+        W.wset((TRAP_R0 - 1.6) * math.cos(aa), y0 + 1, (TRAP_R0 - 1.6) * math.sin(aa), LANTAARN)   # (was y0 + 2: floating)
     # grote losse veren (roze, wit, goud)
     for k, (a, kl) in enumerate(((0.3, "minecraft:pink_wool"), (1.3, "minecraft:white_wool"),
                                  (2.4, "minecraft:pink_concrete"), (3.4, "minecraft:yellow_wool"),

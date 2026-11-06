@@ -172,7 +172,8 @@ def plekken():
         put(f"{pre}_bel", mx - ux * 4 - uz * 2, HY + 1, mz - uz * 4 + ux * 2)
         put(f"{pre}_kapitein", mx - ux * 6 + uz * 2, HY + 1, mz - uz * 6 - ux * 2)
         put(f"{pre}_luchtschip", mx + ux * 24, HY - 1, mz + uz * 24)
-        put(f"uitkijk_{'westtak' if pre == 'dok' else 'oosttak'}", mx + ux * 4 + uz * 3, HY + 1, mz + uz * 4 - ux * 3)
+        # U-OVERGANG: the viewpoints at the two piers are gone (feedback ronde 4: "ze liggen allemaal bij de ballonpunten");
+        # zone 3's viewpoints are the Kruinnest (top of the tree), the Kroon, the Takpunt and the Wortelgewelf
     put("uitkijk_nest", 0, NEST_STAND, 17)
     # T-WERELD: the shared harbour ids of the world layout (t-luchtschip): line B (Galmdok <-> Weststeiger), line C
     # (Oosttaksteiger <-> Lampionhaven); the bell stands where the departure board goes

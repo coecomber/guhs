@@ -634,7 +634,7 @@ def na(tegels=None, map_=UIT):
         tegels = list(tegels)
         if not tegels:
             return
-        cmd += ["--alleen", ";".join(f"{a},{b}" for a, b in tegels)]
+        cmd += ["--alleen=" + ";".join(f"{a},{b}" for a, b in tegels)]   # U-OVERGANG: "=" (a tile list starting "-10,..." is no option)
     subprocess.run(cmd, cwd=ROOT, check=True)
 
 
