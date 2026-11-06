@@ -54,7 +54,7 @@ def main():
                                             stralen=dict(sterkte=1.5, max=110.0, n=64, box=(18, 244, -30, 124, 320, 30), buiten=0.0)),
         "universiteit": lambda: schoot("universiteit", (-128, 300, -150), (-36, 240, -55), 50, O.NAMIDDAG, nevel=(0.2, 2000),
                                        titel="De Universiteit", zon_box=(-100, 225, -110, 30, 321, 10)),
-        "uni_binnen": lambda: schoot("universiteit_bibliotheek", (-37.5, 242.5, -72.5), (-62, 240, -75), 80, binnen, binnen=True,
+        "uni_binnen": lambda: schoot("universiteit_bibliotheek", (-37.5, 238.2, -71.2), (-62, 241.5, -76), 78, binnen, binnen=True,
                                      achtergrond=(40, 30, 50), gloed=0.9, titel="De bibliotheek",
                                      zon_box=(-80, 230, -90, -30, 260, -60)),
         "paleis": lambda: schoot("paleis_raadszaal", (24, 302, 66), (-118, 268, -2), 48, zon_west, nevel=(0.2, 1800),
