@@ -42,6 +42,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagClient.init(modBus);   // T-OPSLAG: knapzak/tas/bank screens + HUD additions
         nl.juiced.guhs.feature.vadsrijk.kleding.client.KledingClient.init(modBus);   // T-KLEDING: Kledingkast (key O), wings, effects
         nl.juiced.guhs.feature.vadsrijk.luchtschip.client.LuchtschipClient.init(modBus);   // T-LUCHTSCHIP: airships + silhouettes
+        nl.juiced.guhs.feature.vadsrijk.zone6.raid.client.Z6RaidClient.init(modBus);   // U-Z6RAID: raid renderers + raid frames
         nl.juiced.guhs.feature.vadsrijk.karakter.client.KarakterClient.init(modBus);   // T-KARAKTER: character screen + badges
     }
 }
