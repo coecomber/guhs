@@ -278,6 +278,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
+            # 1.10 round U, U-TABS: Het Vadsrijk-menu (one screen, main tabs; Java: feature/vadsrijk/menu)
+            'vadsrijk_u_tabs',
             ]
 
 

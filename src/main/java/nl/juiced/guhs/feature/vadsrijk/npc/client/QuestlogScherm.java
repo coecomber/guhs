@@ -26,9 +26,12 @@ import nl.juiced.guhs.feature.vadsrijk.npc.NpcPayloads;
  * </ul>
  * Everything comes from the server ({@code NpcLog}); texts are lang keys (tools/features/vadsrijk_npc.py).
  */
-public class QuestlogScherm extends Screen {
-    private static final int W = 360, H = 240, LIJST = 120, RIJ = 14, PER_PAGINA = 11;
-    private static final int PANEL = 0xF0301A26, RAND = 0xFFF7B6CB, TEKST = 0xFFFFE6EE, ZACHT = 0xFFB8A0B0, GOUD = 0xFFFFC94A, GROEN = 0xFF7EE08A;
+public class QuestlogScherm extends Screen implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: in the Vadsrijk-menu
+    private static final int RIJ = 14;
+    /** U-TABS: the size follows the Vadsrijk-menu frame (was a fixed 360x240); the colours follow its pink theme (was dark). */
+    private int W = 360, H = 240, LIJST = 120, PER_PAGINA = 11;
+    private static final int RAND = 0xFFF7B6CB, TEKST = 0xFF4A1E46, ZACHT = 0xFF8A5A84, GOUD = 0xFFB07800, GROEN = 0xFF2E9E5A;
+    private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
     /** The Avonturiersgids topics (lang vadsrijk.npc.gids.&lt;id&gt;.titel / .tekst). */
     static final String[] GIDS = {"begin", "vastzitten", "weergave", "klassen", "vaardigheden", "loot", "sterren", "kampvuren", "flauw", "elementen", "statussen", "party",
             "quests", "munten", "markt", "rijdieren", "geheimen",
@@ -95,18 +98,25 @@ public class QuestlogScherm extends Screen {
 
     @Override
     protected void init() {
-        left = (width - W) / 2;
-        top = (height - H) / 2;
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.kader();   // U-TABS
+        width = kader.lw();
+        height = kader.lh();
+        left = kader.left();
+        top = kader.top() + nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND;
+        W = kader.w();
+        H = kader.h() - nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND;
+        LIJST = 120 + (W - 360) / 3;
+        PER_PAGINA = Math.max(6, (H - 58) / RIJ);
         int bw = (W - 20) / TABS.length;
         for (int i = 0; i < TABS.length; i++) {
             int t = i;
             Component naam = Component.translatable("vadsrijk.npc.log.tab." + TABS[i]);
-            addRenderableWidget(Button.builder(i == tab ? naam.copy().withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.UNDERLINE) : naam, b -> {
+            addRenderableWidget(Button.builder(i == tab ? naam.copy().withStyle(ChatFormatting.BOLD, ChatFormatting.UNDERLINE) : naam, b -> {
                 tab = t;
                 keuze = 0;
                 pagina = 0;
                 rebuildWidgets();
-            }).bounds(left + 10 + i * bw, top + 6, bw - 4, 18).build());
+            }).bounds(left + 10 + i * bw, top + 6, bw - 4, 18).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
         }
         List<CompoundTag> rijen = rijen();
         int van = pagina * PER_PAGINA;
@@ -115,37 +125,37 @@ public class QuestlogScherm extends Screen {
             addRenderableWidget(Button.builder(rijNaam(rijen.get(i), i == keuze), b -> {
                 keuze = r;
                 rebuildWidgets();
-            }).bounds(left + 10, top + 30 + (i - van) * RIJ, LIJST, RIJ - 1).build());
+            }).bounds(left + 10, top + 30 + (i - van) * RIJ, LIJST, RIJ - 1).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
         }
         if (rijen.size() > PER_PAGINA) {
             if (pagina > 0) {
                 addRenderableWidget(Button.builder(Component.literal("◀"), b -> {
                     pagina--;
                     rebuildWidgets();
-                }).bounds(left + 10, top + H - 24, 20, 16).build());
+                }).bounds(left + 10, top + H - 24, 20, 16).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
             }
             if ((pagina + 1) * PER_PAGINA < rijen.size()) {
                 addRenderableWidget(Button.builder(Component.literal("▶"), b -> {
                     pagina++;
                     rebuildWidgets();
-                }).bounds(left + 10 + LIJST - 20, top + H - 24, 20, 16).build());
+                }).bounds(left + 10 + LIJST - 20, top + H - 24, 20, 16).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
             }
         }
-        addRenderableWidget(Button.builder(Component.translatable("gui.guhs.knuffeldal.doei"), b -> onClose()).bounds(left + W - 70, top + H - 24, 60, 16).build());
+        addRenderableWidget(Button.builder(Component.translatable("gui.guhs.knuffeldal.doei"), b -> onClose()).bounds(left + W - 70, top + H - 24, 60, 16).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
         if (tab == 0) {
             // tracker + beam on/off, and pin/unpin the chosen side quest
             int bx = left + 10 + LIJST + 10;
             addRenderableWidget(Button.builder(Component.translatable("vadsrijk.npc.log.volger." + (data.getBooleanOr("VolgUit", false) ? "uit" : "aan")),
-                    b -> kies(NpcPayloads.VolgKeuze.TRACKER, "")).bounds(bx, top + H - 24, 70, 16).build());
+                    b -> kies(NpcPayloads.VolgKeuze.TRACKER, "")).bounds(bx, top + H - 24, 70, 16).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
             addRenderableWidget(Button.builder(Component.translatable("vadsrijk.npc.log.straal." + (data.getBooleanOr("StraalUit", false) ? "uit" : "aan")),
-                    b -> kies(NpcPayloads.VolgKeuze.STRAAL, "")).bounds(bx + 74, top + H - 24, 70, 16).build());
+                    b -> kies(NpcPayloads.VolgKeuze.STRAAL, "")).bounds(bx + 74, top + H - 24, 70, 16).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
             if (!rijen.isEmpty()) {
                 CompoundTag q = rijen.get(Math.min(keuze, rijen.size() - 1));
                 if (!q.getStringOr("Soort", "").equals("HOOFD") && !q.getBooleanOr("Volgende", false)) {
                     String id = q.getStringOr("Id", "");
                     boolean vast = id.equals(data.getStringOr("Pin", ""));
                     addRenderableWidget(Button.builder(Component.translatable(vast ? "vadsrijk.npc.log.pin.los" : "vadsrijk.npc.log.pin.vast"),
-                            b -> kies(NpcPayloads.VolgKeuze.PIN, id)).bounds(left + W - 110, top + 28, 100, 14).build());
+                            b -> kies(NpcPayloads.VolgKeuze.PIN, id)).bounds(left + W - 110, top + 28, 100, 14).build(nl.juiced.guhs.feature.vadsrijk.menu.client.RozeKnop::new));
                 }
             }
         }
@@ -162,7 +172,7 @@ public class QuestlogScherm extends Screen {
                 boolean pin = r.getStringOr("Id", "").equals(data.getStringOr("Pin", ""));
                 MutableComponent m = Component.literal(r.getBooleanOr("Klaar", false) ? "✔ " : hoofd ? "★ " : pin ? "◆ " : "• ")
                         .append(Component.translatable("vadsrijk.npc.q." + r.getStringOr("Id", "") + ".titel"));
-                yield m.withStyle(hoofd ? ChatFormatting.GOLD : ChatFormatting.YELLOW);
+                yield hoofd ? m.withStyle(ChatFormatting.BOLD) : m;   // (U-TABS: white on the pink buttons)
             }
             case 2 -> Component.literal(r.getIntOr("N", 0) + "× ").append(wezenNaam(r.getStringOr("T", "")));
             default -> Component.translatable("vadsrijk.npc.gids." + r.getStringOr("Id", "") + ".titel");
@@ -183,8 +193,8 @@ public class QuestlogScherm extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(g, mouseX, mouseY, partialTick);
-        g.fill(left - 1, top - 1, left + W + 1, top + H + 1, RAND);
-        g.fill(left, top, left + W, top + H, PANEL);
+        nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.tekenKader(g, font, kader.left(), kader.top(), kader.w(), kader.h(), title, "questlog",
+                mouseX, mouseY);   // U-TABS: the menu frame
         int x = left + 10 + LIJST + 10, y = top + 32, w = W - (x - left) - 10;
         g.fill(x - 5, top + 28, x - 4, top + H - 28, 0x60F7B6CB);
         switch (tab) {
@@ -229,10 +239,10 @@ public class QuestlogScherm extends Screen {
         if (wat != null) {
             int y0 = y;
             y = alinea(g, Component.translatable("vadsrijk.npc.log.nu").append(wat), x + 4, y + 2, w - 6, GOUD, onder);
-            y = alinea(g, nl.juiced.guhs.taal.Tekst.get(stap, "Waar"), x + 4, y, w - 6, 0xFFFFD9A8, onder);
+            y = alinea(g, nl.juiced.guhs.taal.Tekst.get(stap, "Waar"), x + 4, y, w - 6, 0xFFB0602A, onder);
             Component extra = nl.juiced.guhs.taal.Tekst.read(stap, "Extra").orElse(null);
             if (extra != null) {
-                y = alinea(g, extra, x + 4, y, w - 6, 0xFFFF9AD5, onder);
+                y = alinea(g, extra, x + 4, y, w - 6, 0xFFD0307A, onder);
             }
             g.fill(x, y0, x + 2, y + 1, 0xFFFFC94A);
             y += 5;
@@ -266,11 +276,11 @@ public class QuestlogScherm extends Screen {
 
     private void geheimen(GuiGraphicsExtractor g, int x, int y, int w) {
         y = alinea(g, Component.translatable("vadsrijk.npc.log.knuffels", data.getIntOr("Knuffels", 0), data.getIntOr("KnuffelsMax", 10))
-                .withStyle(ChatFormatting.BOLD), x, y, w, 0xFFFF9AD5, top + H) + 2;
+                .withStyle(ChatFormatting.BOLD), x, y, w, 0xFFD0307A, top + H) + 2;
         y = alinea(g, Component.translatable("vadsrijk.npc.log.knuffels.uitleg"), x, y, w, ZACHT, top + H) + 8;
         var aanw = data.getListOrEmpty("Aanwijzingen");
         y = alinea(g, Component.translatable("vadsrijk.npc.log.aanwijzingen", aanw.size(), data.getIntOr("AanwijzingenMax", 5))
-                .withStyle(ChatFormatting.BOLD), x, y, w, 0xFFC9A0FF, top + H) + 2;
+                .withStyle(ChatFormatting.BOLD), x, y, w, 0xFF7A4AC0, top + H) + 2;
         for (Tag t : aanw) {
             y = alinea(g, Component.literal("• ").append(Component.translatable("vadsrijk.npc.aanwijzing.titel." + t.asString().orElse(""))), x + 6, y, w - 6, TEKST,
                     top + H);
@@ -299,7 +309,7 @@ public class QuestlogScherm extends Screen {
         }
         CompoundTag r = rijen.get(Math.min(keuze, rijen.size() - 1));
         String type = r.getStringOr("T", "");
-        y = alinea(g, wezenNaam(type).copy().withStyle(ChatFormatting.BOLD), x, y, w, 0xFFFF9AD5, top + H) + 2;
+        y = alinea(g, wezenNaam(type).copy().withStyle(ChatFormatting.BOLD), x, y, w, 0xFFD0307A, top + H) + 2;
         y = alinea(g, Component.translatable("vadsrijk.npc.log.wezens.teller", r.getIntOr("N", 0)), x, y, w, ZACHT, top + H) + 6;
         String pad = type.substring(type.indexOf(':') + 1);
         String key = "vadsrijk.npc.wezen." + pad;
@@ -308,7 +318,7 @@ public class QuestlogScherm extends Screen {
 
     private void gids(GuiGraphicsExtractor g, int x, int y, int w) {
         String id = GIDS[Math.min(keuze, GIDS.length - 1)];
-        y = alinea(g, Component.translatable("vadsrijk.npc.gids." + id + ".titel").withStyle(ChatFormatting.BOLD), x, y, w, 0xFFFF9AD5, top + H) + 4;
+        y = alinea(g, Component.translatable("vadsrijk.npc.gids." + id + ".titel").withStyle(ChatFormatting.BOLD), x, y, w, 0xFFD0307A, top + H) + 4;
         boolean driehoek = id.equals("elementen");
         alinea(g, Component.translatable("vadsrijk.npc.gids." + id + ".tekst"), x, y, w, TEKST, driehoek ? top + H - 122 : top + H - 30);
         if (driehoek) {
@@ -349,5 +359,29 @@ public class QuestlogScherm extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    // ---- U-TABS: the Vadsrijk-menu -------------------------------------------------------------------------------------------------
+
+    @Override
+    public float menuSchaal() {
+        return kader == null ? 1f : kader.schaal();
+    }
+
+    @Override
+    public boolean mouseClicked(net.minecraft.client.input.MouseButtonEvent event, boolean doubleClick) {
+        if (event.button() == 0 && kader != null && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(), kader.left(),
+                kader.top(), kader.w(), font.width(title.copy().withStyle(ChatFormatting.BOLD)), "questlog")) {
+            return true;
+        }
+        return super.mouseClicked(event, doubleClick);
+    }
+
+    @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        if (nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, "questlog")) {
+            return true;
+        }
+        return super.keyPressed(event);
     }
 }

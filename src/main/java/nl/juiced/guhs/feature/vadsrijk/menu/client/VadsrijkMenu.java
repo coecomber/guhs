@@ -1,7 +1,6 @@
 package nl.juiced.guhs.feature.vadsrijk.menu.client;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -17,6 +16,9 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
+import nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling;
+import nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader;
+import nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Tab;
 
 /**
  * U-TABS: "Het Vadsrijk-menu", ONE big screen with main tabs on top (Karakter, Skillboom, Questlog, Verkenningsboek, Rijdieren,
@@ -37,22 +39,13 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class VadsrijkMenu {
     /** Height of the main tab row above the frame. */
-    public static final int TABS_H = 20;
+    public static final int TABS_H = MenuIndeling.TABS_H;
     /** Height of the title band (and of the sub-tab row inside it). */
-    public static final int BAND = 18;
+    public static final int BAND = MenuIndeling.BAND;
     /** The smallest logical frame every panel can count on (the screen scales down below this) and the largest it grows to. */
-    public static final int MIN_W = 430, MIN_H = 250, MAX_W = 560, MAX_H = 330;
-    private static final int MARGE = 6;
+    public static final int MIN_W = MenuIndeling.MIN_W, MIN_H = MenuIndeling.MIN_H, MAX_W = MenuIndeling.MAX_W, MAX_H = MenuIndeling.MAX_H;
     static final int RAND = 0xFFFF5FAF, BAND_KLEUR = 0xFFFF7FC0, UIT = 0xFFFFC8E4, UIT_HOVER = 0xFFFFDDEE, TEKST_UIT = 0xFF8A5A84;
 
-    /**
-     * One tab. {@code ouder} = null for a main tab, else the main tab it belongs under. {@code open} shows its panel (often:
-     * ask the server, which sends the data that opens the screen).
-     */
-    public record Tab(String id, Supplier<ItemStack> icoon, Supplier<Component> naam, Runnable open, int volgorde, @Nullable String ouder) {
-    }
-
-    private static final List<Tab> TABS = new ArrayList<>();
     private static final java.util.Map<String, KeyMapping> TOETSEN = new java.util.HashMap<>();
     /** The main tab shown last (so the menu key opens where you were). */
     private static String laatste = "karakter";
@@ -79,7 +72,7 @@ public final class VadsrijkMenu {
 
     /** A sub-tab under main tab {@code ouder} (the main tab itself is always the first sub-tab). */
     public static synchronized Tab subtab(String ouder, String id, Supplier<Component> naam, Runnable open, int volgorde) {
-        return zet(new Tab(id, ItemStack::empty, naam, open, volgorde, ouder));
+        return zet(new Tab(id, () -> ItemStack.EMPTY, naam, open, volgorde, ouder));
     }
 
     /** The key that opens this tab (shown in its tooltip). */
@@ -88,59 +81,35 @@ public final class VadsrijkMenu {
     }
 
     /** (fix round 3 shim, {@code CollectieTabs.registreer}) adds a main tab only when the id is not there yet. */
-    public static synchronized void alsNieuw(String id, int volgorde, Supplier<Component> naam, Runnable open) {
-        if (vind(id) == null) {
-            zet(new Tab(id, () -> new ItemStack(net.minecraft.world.item.Items.BOOK), naam, open, volgorde, null));
-        }
+    public static void alsNieuw(String id, int volgorde, Supplier<Component> naam, Runnable open) {
+        MenuIndeling.alsNieuw(id, volgorde, naam, open);
     }
 
     private static Tab zet(Tab t) {
-        TABS.removeIf(o -> o.id().equals(t.id()));
-        TABS.add(t);
-        TABS.sort(Comparator.comparingInt(Tab::volgorde));
-        return t;
+        return MenuIndeling.zet(t);
     }
 
-    public static synchronized List<Tab> alle() {
-        return List.copyOf(TABS);
+    public static List<Tab> alle() {
+        return MenuIndeling.alle();
     }
 
-    public static synchronized List<Tab> hoofdtabs() {
-        return TABS.stream().filter(t -> t.ouder() == null).toList();
+    public static List<Tab> hoofdtabs() {
+        return MenuIndeling.hoofdtabs();
     }
 
     /** The sub-tabs of a main tab (empty = none; else the main tab first, then its sub-tabs). */
-    public static synchronized List<Tab> subtabs(String hoofd) {
-        List<Tab> l = new ArrayList<>();
-        for (Tab t : TABS) {
-            if (hoofd.equals(t.ouder())) {
-                l.add(t);
-            }
-        }
-        if (l.isEmpty()) {
-            return l;
-        }
-        Tab h = vind(hoofd);
-        if (h != null) {
-            l.add(0, h);
-        }
-        return l;
+    public static List<Tab> subtabs(String hoofd) {
+        return MenuIndeling.subtabs(hoofd);
     }
 
     @Nullable
-    public static synchronized Tab vind(String id) {
-        for (Tab t : TABS) {
-            if (t.id().equals(id)) {
-                return t;
-            }
-        }
-        return null;
+    public static Tab vind(String id) {
+        return MenuIndeling.vind(id);
     }
 
     /** The main tab a (sub-)tab id belongs to. */
     public static String hoofdVan(String id) {
-        Tab t = vind(id);
-        return t != null && t.ouder() != null ? t.ouder() : id;
+        return MenuIndeling.hoofdVan(id);
     }
 
     @Nullable
@@ -169,23 +138,14 @@ public final class VadsrijkMenu {
 
     // ---- geometry -------------------------------------------------------------------------------------------------------------
 
-    /**
-     * The frame on a screen of (gui-scaled) size sw x sh. {@code schaal} &lt; 1 when even the smallest frame does not fit: the
-     * panel then works in a LOGICAL screen of {@code lw x lh} (= sw/schaal x sh/schaal) and is drawn scaled down.
-     * left/top/w/h = the panel (title band included); the main tab row sits above top.
-     */
-    public record Kader(float schaal, int lw, int lh, int left, int top, int w, int h) {
+    /** The frame on a screen of (gui-scaled) size sw x sh (see {@link MenuIndeling#kader}). */
+    public static Kader kader(int sw, int sh) {
+        return MenuIndeling.kader(sw, sh);
     }
 
-    public static Kader kader(int sw, int sh) {
-        int nodigW = MIN_W + 2 * MARGE, nodigH = MIN_H + TABS_H + 2 * MARGE + 4;
-        float s = Math.min(1f, Math.min(sw / (float) nodigW, sh / (float) nodigH));
-        int lw = (int) Math.floor(sw / s), lh = (int) Math.floor(sh / s);
-        int w = Math.max(MIN_W, Math.min(MAX_W, lw - 2 * MARGE - 8));
-        int h = Math.max(MIN_H, Math.min(MAX_H, lh - 2 * MARGE - TABS_H - 4));
-        int left = (lw - w) / 2;
-        int top = Math.max(MARGE + TABS_H + 2, (lh - h + TABS_H) / 2);
-        return new Kader(s, lw, lh, left, top, w, h);
+    /** The frame for a panel that needs at least minW x minH (e.g. a tall skill tree). */
+    public static Kader kader(int sw, int sh, int minW, int minH) {
+        return MenuIndeling.kader(sw, sh, minW, minH);
     }
 
     // ---- drawing --------------------------------------------------------------------------------------------------------------
@@ -213,21 +173,38 @@ public final class VadsrijkMenu {
         return l;
     }
 
-    /** The sub-tab row, right-aligned inside the title band (shrinks names to fit; never past the title). */
+    /** The sub-tab row inside the title band, right after the title (shrinks names to fit; leaves the right third free for coins). */
     private static List<Vlak> subIndeling(Font font, String actief, int left, int top, int w, int titelBreed) {
         List<Vlak> l = new ArrayList<>();
         List<Tab> subs = subtabs(hoofdVan(actief));
         if (subs.isEmpty()) {
             return l;
         }
-        int ruimte = w - titelBreed - 24, gat = 2;
-        int elk = Math.max(30, Math.min(110, (ruimte - gat * (subs.size() - 1)) / subs.size()));
-        int x = left + w - 6 - subs.size() * elk - gat * (subs.size() - 1);
+        int x = left + 8 + titelBreed + 10, gat = 2;
+        int ruimte = left + w * 2 / 3 - x;
+        int elk = Math.max(30, Math.min(100, (ruimte - gat * (subs.size() - 1)) / subs.size()));
         for (Tab t : subs) {
             l.add(new Vlak(t, x, top + 2, elk, BAND - 2));
             x += elk + gat;
         }
         return l;
+    }
+
+    /**
+     * The whole frame of a menu panel: border, light pink panel, the hot-pink title band with the title, the main tab row above
+     * and the sub-tab row in the band. Returns the width taken by the title (for screens that draw more in the band).
+     */
+    public static int tekenKader(GuiGraphicsExtractor g, Font font, int left, int top, int w, int h, Component titel, String actief, int mx, int my) {
+        g.fill(left - 3, top - 3, left + w + 3, top + h + 3, RAND);
+        g.fill(left - 1, top - 1, left + w + 1, top + h + 1, 0xFFFFB0D8);
+        g.fill(left, top, left + w, top + h, 0xFFFFE6F3);
+        g.fill(left, top, left + w, top + BAND, BAND_KLEUR);
+        Component t = titel.copy().withStyle(ChatFormatting.BOLD);
+        g.text(font, t, left + 8, top + 5, 0xFFFFFFFF, true);
+        int tb = font.width(t);
+        tekenTabs(g, font, left, top, w, actief, mx, my);
+        tekenSubtabs(g, font, left, top, w, tb, actief, mx, my);
+        return tb;
     }
 
     /** Draws the main tabs above the panel at (left, top, w); {@code actief} = the (sub-)tab id of this panel. */
@@ -300,7 +277,7 @@ public final class VadsrijkMenu {
             if (v.binnen(mx, my)) {
                 if (!v.tab().id().equals(hoofd)) {
                     klikGeluid();
-                    v.tab().open().run();
+                    wissel(v.tab());
                 }
                 return true;
             }
@@ -309,7 +286,7 @@ public final class VadsrijkMenu {
             if (v.binnen(mx, my)) {
                 if (!v.tab().id().equals(actief)) {
                     klikGeluid();
-                    v.tab().open().run();
+                    wissel(v.tab());
                 }
                 return true;
             }
@@ -324,10 +301,50 @@ public final class VadsrijkMenu {
         for (int i = 0; i < l.size(); i++) {
             if (l.get(i).id().equals(hoofd)) {
                 klikGeluid();
-                l.get(Math.floorMod(i + richting, l.size())).open().run();
+                wissel(l.get(Math.floorMod(i + richting, l.size())));
                 return;
             }
         }
+    }
+
+    /**
+     * Keys inside a menu panel (skip this while a text field has focus): the menu key (H) or the key of the shown tab closes the
+     * menu, the key of another tab switches to it, Ctrl+Tab / Ctrl+Shift+Tab walks through the main tabs. True = handled.
+     */
+    public static boolean toetsInMenu(Screen s, net.minecraft.client.input.KeyEvent e, String actief) {
+        if (e.key() == org.lwjgl.glfw.GLFW.GLFW_KEY_TAB && e.hasControlDown()) {
+            volgende(actief, e.hasShiftDown() ? -1 : 1);
+            return true;
+        }
+        String hoofd = hoofdVan(actief);
+        KeyMapping eigen = TOETSEN.get(hoofd), eigenSub = TOETSEN.get(actief);
+        if (MenuClient.MENU.matches(e) || (eigen != null && eigen.matches(e)) || (eigenSub != null && eigenSub.matches(e))) {
+            s.onClose();
+            return true;
+        }
+        for (var en : java.util.Map.copyOf(TOETSEN).entrySet()) {
+            Tab t = vind(en.getKey());
+            if (t != null && en.getValue().matches(e)) {
+                klikGeluid();
+                wissel(t);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** Does a text field of this screen have focus (then letters are typing, not shortcuts)? */
+    public static boolean typt(Screen s) {
+        return s.getFocused() instanceof net.minecraft.client.gui.components.EditBox b && b.isFocused();
+    }
+
+    /** Switches to a tab: an open container (Knapzak, Materiaaltas) is closed properly first (the server forgets its menu). */
+    public static void wissel(Tab t) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.screen instanceof net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?> && mc.player != null) {
+            mc.player.closeContainer();
+        }
+        t.open().run();
     }
 
     static void klikGeluid() {

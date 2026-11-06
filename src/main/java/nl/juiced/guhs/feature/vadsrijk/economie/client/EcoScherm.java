@@ -26,7 +26,7 @@ import nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul;
  * drawn by hand ({@link #knop}), item slots with tooltips, the wallet with coin icons, a message line. The server sends the
  * data; actions go back with {@link #doe}. Subclasses draw in {@link #inhoud}.
  */
-public abstract class EcoScherm extends Screen {
+public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: Geschaald
     public static final int RAND = 0xFFFF5FAF, KOP = 0xFFFF7FC0, PANEEL = 0xFFFFE6F3, RIJ_A = 0xFFFFD6EB, RIJ_B = 0xFFFFEEF7, HOVER = 0xFFFFB8DC,
             TEKST = 0xFF4A1E46, ZACHT = 0xFF8A5A84, GOUD = 0xFFB07800, ROOD = 0xFFD0306A, GROEN = 0xFF2E9E5A, WIT = 0xFFFFFFFF;
 
@@ -34,11 +34,15 @@ public abstract class EcoScherm extends Screen {
     protected CompoundTag data;
     protected List<ItemStack> items;
     protected int left, top, w, h;
+    /** U-TABS: the scale of the Vadsrijk-menu frame (1 = none; below 1 the screen works in a logical size, see Geschaald). */
+    protected float menuSchaal = 1f;
 
     private record Knop(int x, int y, int w, int h, Runnable actie) {
     }
 
     private final List<Knop> knoppen = new ArrayList<>();
+    /** U-TABS: width of the title in the band (the sub-tabs start after it). */
+    protected int titelBreed;
     @Nullable
     private ItemStack hoverItem;
     @Nullable
@@ -65,11 +69,26 @@ public abstract class EcoScherm extends Screen {
 
     @Override
     protected void init() {
+        if (heeftTabs()) {
+            // U-TABS: a tab of the Vadsrijk-menu: the shared frame (same size for every tab, grows with the window, scales down)
+            nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader k = nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.kader();
+            menuSchaal = k.schaal();
+            width = k.lw();
+            height = k.lh();
+            left = k.left();
+            top = k.top();
+            w = k.w();
+            h = k.h();
+            return;
+        }
+        menuSchaal = 1f;
         left = (width - w) / 2;
         top = (height - h) / 2;
-        if (heeftTabs()) {
-            top = (height - h + nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.HOOGTE) / 2;   // (panel + tabs centred together)
-        }
+    }
+
+    @Override
+    public float menuSchaal() {
+        return menuSchaal;
     }
 
     /**
@@ -81,8 +100,9 @@ public abstract class EcoScherm extends Screen {
         return null;
     }
 
-    private boolean heeftTabs() {
-        return collectieTab() != null && nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.zichtbaar();
+    /** U-TABS: is this screen a tab of the Vadsrijk-menu (then it gets the shared frame + the tab rows)? */
+    protected boolean heeftTabs() {
+        return collectieTab() != null;
     }
 
     protected ItemStack item(int i) {
@@ -121,6 +141,13 @@ public abstract class EcoScherm extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mouseX, int mouseY, float partialTick) {
         super.extractBackground(g, mouseX, mouseY, partialTick);
+        if (heeftTabs()) {   // U-TABS: the menu frame (tabs on top, sub-tabs in the band)
+            titelBreed = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.tekenKader(g, font, left, top, w, h, title, collectieTab(), mouseX, mouseY);
+            if (data.contains("munten")) {
+                munten(g, left + w - 8, top + 5, data.getLongOr("munten", 0), true, true);
+            }
+            return;
+        }
         g.fill(left - 3, top - 3, left + w + 3, top + h + 3, RAND);
         g.fill(left - 1, top - 1, left + w + 1, top + h + 1, 0xFFFFB0D8);
         g.fill(left, top, left + w, top + h, PANEEL);
@@ -131,9 +158,6 @@ public abstract class EcoScherm extends Screen {
         g.fill(left + 8, top - 5, left + 12, top, 0xFFFFC8E4);
         g.fill(left + w - 12, top - 5, left + w - 8, top, 0xFFFFC8E4);
         g.text(font, title.copy().withStyle(ChatFormatting.BOLD), left + 8, top + 5, WIT, true);
-        if (heeftTabs()) {
-            nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.teken(g, font, left, top, w, collectieTab(), mouseX, mouseY);
-        }
         if (data.contains("munten")) {
             munten(g, left + w - 8, top + 5, data.getLongOr("munten", 0), true, true);
         }
@@ -232,8 +256,47 @@ public abstract class EcoScherm extends Screen {
         return breed;
     }
 
+    // ---- U-TABS: a search box for long lists ----------------------------------------------------------------------------------
+    /** The text typed in the search box (lower case; empty = show everything). */
+    protected String zoekTekst = "";
+    @Nullable
+    protected net.minecraft.client.gui.components.EditBox zoekVeld;
+
+    /**
+     * Adds a small search box (call in init, after super.init()); {@code klaar} runs on every change (reset your scroll). The typed
+     * text survives a re-init (window resize). Filter your rows with {@link #past}.
+     */
+    protected net.minecraft.client.gui.components.EditBox zoekveld(int x, int y, int bw, Runnable klaar) {
+        net.minecraft.client.gui.components.EditBox e = new net.minecraft.client.gui.components.EditBox(font, x, y, bw, 12,
+                Component.translatable("vadsrijk.menu.zoek"));
+        e.setHint(Component.translatable("vadsrijk.menu.zoek").withStyle(ChatFormatting.GRAY));
+        e.setMaxLength(40);
+        e.setValue(zoekTekst);
+        e.setResponder(t -> {
+            zoekTekst = t.toLowerCase(java.util.Locale.ROOT).trim();
+            klaar.run();
+        });
+        zoekVeld = addRenderableWidget(e);
+        return e;
+    }
+
+    /** Does this text match the search box (always true when it is empty)? */
+    protected boolean past(String tekst) {
+        return zoekTekst.isEmpty() || tekst.toLowerCase(java.util.Locale.ROOT).contains(zoekTekst);
+    }
+
     protected void kop(GuiGraphicsExtractor g, Component c, int x, int y) {
         g.text(font, c.copy().withStyle(ChatFormatting.BOLD), x, y, TEKST, false);
+    }
+
+    /** U-TABS: in the Vadsrijk-menu the tab keys switch tabs, the menu key / own key closes, Ctrl+Tab walks the tabs. */
+    @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        if (heeftTabs() && !nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.typt(this)
+                && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, collectieTab())) {
+            return true;
+        }
+        return super.keyPressed(event);
     }
 
     @Override
@@ -242,7 +305,7 @@ public abstract class EcoScherm extends Screen {
             return true;
         }
         if (event.button() == 0 && heeftTabs()
-                && nl.juiced.guhs.feature.vadsrijk.client.CollectieTabs.klik(event.x(), event.y(), left, top, w, collectieTab())) {
+                && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(), left, top, w, titelBreed, collectieTab())) {
             return true;
         }
         if (event.button() == 0) {

@@ -34,6 +34,12 @@ public class KarakterSchermClient extends EcoScherm {
         super("karakter", Component.translatable("vadsrijk.karakter.scherm.titel"), data, List.of(), 3 * KAART_W + 4 * 8, 214);
     }
 
+    /** U-TABS: the Ridders tab of the Vadsrijk-menu. */
+    @Override
+    protected String collectieTab() {
+        return "ridders";
+    }
+
     @Override
     protected void init() {
         super.init();
@@ -96,7 +102,7 @@ public class KarakterSchermClient extends EcoScherm {
         int actief = data.getIntOr("actief", 0);
         List<CompoundTag> slots = slots();
         for (int i = 0; i < slots.size(); i++) {
-            kaart(g, mx, my, left + 8 + i * (KAART_W + 8), top + 24, slots.get(i), i == actief, mag);
+            kaart(g, mx, my, left + (w - 3 * KAART_W - 16) / 2 + i * (KAART_W + 8), top + 24, slots.get(i), i == actief, mag);
         }
         int y = top + 24 + KAART_H + 6;
         if (!mag) {

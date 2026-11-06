@@ -25,7 +25,7 @@ import nl.juiced.guhs.feature.vadsrijk.opslag.OpslagMenu;
  * T-OPSLAG: the knapzak / bank screen: the familiar chest look, tab flaps above it (1..5; a locked one shows how to unlock it,
  * a buyable one asks for a second click), and three buttons to the right: Sorteren, Materialen naar de tas, Materiaaltas.
  */
-public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
+public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: in the Vadsrijk-menu (knapzak only)
     private static final Identifier ACHTERGROND = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
     private static final int FLAP_B = 26, FLAP_H = 15, FLAP_STAP = 28;
     private static final int TAB_AAN = 0xFFC6C6C6, TAB_UIT = 0xFF8B8B8B, TAB_DICHT = 0xFF5A4A55, RAND = 0xFF373737, ROZE = 0xFFFF7FC0;
@@ -39,6 +39,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
     @Override
     protected void init() {
         super.init();
+        menuPlaats();   // U-TABS
         int x = leftPos + imageWidth + 3, y = topPos + 4;
         addRenderableWidget(Button.builder(Component.translatable("vadsrijk.opslag.knop.sorteer"), b -> knop(OpslagMenu.KNOP_SORTEER))
                 .bounds(x, y, 66, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.sorteer.uitleg"))).build());
@@ -46,6 +47,38 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
                 .bounds(x, y + 19, 66, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.materialen.uitleg"))).build());
         addRenderableWidget(Button.builder(Component.translatable("vadsrijk.opslag.knop.tas"), b -> knop(OpslagMenu.KNOP_TAS))
                 .bounds(x, y + 38, 66, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.tas.uitleg"))).build());
+    }
+
+
+    // ---- U-TABS: the Vadsrijk-menu (frame around the chest look, tabs on top) --------------------------------------------------
+    private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
+
+    private boolean inMenu() {
+        return menu.soort == OpslagMenu.KNAPZAK;
+    }
+
+    @Override
+    public float menuSchaal() {
+        return inMenu() && kader != null ? kader.schaal() : 1f;
+    }
+
+    /** Before the buttons: the frame, the logical size, and the chest centred in it (buttons to its right). */
+    private void menuPlaats() {
+        if (!inMenu()) {
+            return;
+        }
+        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
+        int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 18;
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kader(win.getGuiScaledWidth(), win.getGuiScaledHeight(), imageWidth + 2 * 80, imageHeight + boven + 8);
+        width = kader.lw();
+        height = kader.lh();
+        leftPos = kader.left() + (kader.w() - imageWidth) / 2;
+        topPos = kader.top() + boven + Math.max(0, (kader.h() - boven - 8 - imageHeight) / 2);
+    }
+
+    private boolean inKader(double mx, double my) {
+        return kader != null && mx >= kader.left() && mx < kader.left() + kader.w() && my >= kader.top() - nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.TABS_H
+                && my < kader.top() + kader.h();
     }
 
     private void knop(int id) {
@@ -60,6 +93,9 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mx, int my, float a) {
         super.extractBackground(g, mx, my, a);
+        if (inMenu() && kader != null) {   // U-TABS
+            nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.tekenKader(g, font, kader.left(), kader.top(), kader.w(), kader.h(), net.minecraft.network.chat.Component.translatable("vadsrijk.menu.tab.knapzak"), "knapzak", mx, my);
+        }
         int x = leftPos, y = topPos, rijen = menu.rijen;
         // the tab flaps (behind the panel's top edge, the active one joined to it)
         for (int i = 0; i < menu.maxTabs; i++) {
@@ -161,6 +197,10 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (inMenu() && kader != null && event.button() == 0 && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(), kader.left(), kader.top(), kader.w(),
+                font.width(net.minecraft.network.chat.Component.translatable("vadsrijk.menu.tab.knapzak").withStyle(ChatFormatting.BOLD)), "knapzak")) {   // U-TABS
+            return true;
+        }
         int i = flapOnder(event.x(), event.y());
         if (i >= 0 && event.button() == 0) {
             if (i < menu.openTabs()) {
@@ -187,6 +227,9 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
         if (flapOnder(mx, my) >= 0) {
             return false;   // (a flap is not "outside": never drop the carried item there)
         }
+        if (inMenu() && inKader(mx, my)) {
+            return false;   // U-TABS: (nor anywhere in the menu frame)
+        }
         if (mx >= leftPos + imageWidth && mx < leftPos + imageWidth + 72 && my >= topPos && my < topPos + 60) {
             return false;   // (nor next to the buttons)
         }
@@ -195,6 +238,9 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> {
 
     @Override
     public boolean keyPressed(KeyEvent event) {
+        if (inMenu() && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, "knapzak")) {   // U-TABS
+            return true;
+        }
         if (OpslagClient.KNAPZAK.matches(event) && menu.soort == OpslagMenu.KNAPZAK) {
             onClose();
             return true;
