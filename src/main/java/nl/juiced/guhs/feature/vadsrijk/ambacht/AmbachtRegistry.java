@@ -81,6 +81,7 @@ public final class AmbachtRegistry {
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 AmbachtData.ingelogd(p);
+                Meesterschap.check(p);   // U-AMBACHT2: who reached the cap before the Meesterschort existed
             }
         });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
@@ -104,14 +105,16 @@ public final class AmbachtRegistry {
         AmbachtPayloads.register(registrar);
     }
 
-    /** Boss cores (Meesterwerk): every boss 15 % per helper, by its level's zone; elites 3 % a kernsplinter. */
+    /**
+     * Boss cores (Meesterwerk): every boss 15 % per helper, by its zone (U-AMBACHT2: zone 4 = Lampionkern, zone 5 = Wolkkern, by
+     * where it falls; zones 1-3 by level); elites 3 % a kernsplinter.
+     */
     static void kernDrop(Haken.Verslagen v) {
         boolean baas = v.mob() instanceof VadsrijkBaas;
         if (!baas && !v.mob().elite()) {
             return;
         }
-        int lv = v.mob().mobLevel();
-        String kern = lv <= 20 ? "zwamkern" : lv <= 35 ? "splinterkern" : "wortelkern";
+        String kern = kernVoor(v.mob().mobLevel(), v.mob().getX(), v.mob().getY(), v.mob().getZ());
         for (ServerPlayer p : v.helpers()) {
             ItemStack s = baas ? (p.getRandom().nextDouble() < 0.15 ? new ItemStack(Materialen.KERN.get(kern).get()) : ItemStack.EMPTY)
                     : (p.getRandom().nextDouble() < 0.03 ? new ItemStack(Materialen.KERNSPLINTER.get()) : ItemStack.EMPTY);
@@ -121,12 +124,23 @@ public final class AmbachtRegistry {
         }
     }
 
+    /** The boss core of a boss at this level and place (zone 5 above zone 4: same x/z, from y 118 up). */
+    static String kernVoor(int lv, double x, double y, double z) {
+        if (nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.inZone5(x, y, z)) {
+            return "wolkkern";
+        }
+        if (nl.juiced.guhs.feature.vadsrijk.zone4.wezens.Z4WezensPlekken.inZone(x, z)) {
+            return "lampionkern";
+        }
+        return lv <= 20 ? "zwamkern" : lv <= 35 ? "splinterkern" : lv <= 49 ? "wortelkern" : lv <= 55 ? "lampionkern" : "wolkkern";
+    }
+
     /** Shop value of one (economie Waarde.EXTRA): materials by tier and quality, dishes/potions by tier. */
     static long waarde(ItemStack s) {
         Materialen.Materiaal m = Materialen.van(s);
         if (m != null) {
-            long[] t = {60, 3, 8, 15, 25};
-            return Math.round(t[Math.min(4, m.tier())] * (1 + 0.5 * Materialen.kwaliteit(s)));
+            long[] t = {60, 3, 8, 15, 25, 38, 52};   // (rare, T1..T5, T6 zone 6 volgt)
+            return Math.round(t[Math.min(t.length - 1, m.tier())] * (1 + 0.5 * Materialen.kwaliteit(s)));
         }
         if (s.getItem() instanceof Eten.EtenItem e) {
             return 8L * e.gerecht.tier() * e.gerecht.tier();
@@ -204,7 +218,19 @@ public final class AmbachtRegistry {
                 EcoUtil.geefOfBewaar(p, new ItemStack(Materialen.KERN.get(kern).get(), 2));
             }
             return 1;
-        })).then(Commands.argument("materiaal", StringArgumentType.word()).suggests((c, b) -> SharedSuggestionProvider.suggest(materiaalIds(), b)).executes(c -> {
+        })).then(Commands.literal("tier").then(Commands.argument("t", IntegerArgumentType.integer(1, AmbachtXp.MAX_TIER)).executes(c -> {
+            // U-AMBACHT2: 16 of everything of one tier + the rare ones + its boss core
+            ServerPlayer p = speler(c);
+            int t = IntegerArgumentType.getInteger(c, "t");
+            for (Materialen.Materiaal m : Materialen.ALLE.values()) {
+                if (m.tier() == t || m.tier() == 0) {
+                    MateriaalTas.geef(p, Materialen.stack(m.id(), 1, m.zeldzaam() ? 4 : 16));
+                }
+            }
+            MateriaalTas.geef(p, Materialen.stack("bijenwas", 1, 8));
+            EcoUtil.geefOfBewaar(p, new ItemStack(Materialen.KERN.get(Materialen.KERNEN.get(t - 1)).get(), 2));
+            return 1;
+        }))).then(Commands.argument("materiaal", StringArgumentType.word()).suggests((c, b) -> SharedSuggestionProvider.suggest(materiaalIds(), b)).executes(c -> {
             MateriaalTas.geef(speler(c), Materialen.stack(StringArgumentType.getString(c, "materiaal"), 0, 16));
             return 1;
         }).then(Commands.argument("kwaliteit", IntegerArgumentType.integer(0, 2)).then(Commands.argument("n", IntegerArgumentType.integer(1, 999)).executes(c -> {
@@ -352,7 +378,7 @@ public final class AmbachtRegistry {
                 })));
         k.then(Commands.literal("maatwerk").then(Commands.argument("soort", StringArgumentType.word())
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(Maatwerk.SOORTEN.keySet(), b))
-                .then(Commands.argument("tier", IntegerArgumentType.integer(1, 3)).executes(c -> {
+                .then(Commands.argument("tier", IntegerArgumentType.integer(1, AmbachtXp.MAX_TIER)).executes(c -> {
                     ServerPlayer p = speler(c);
                     Maatwerk.Soort s = Maatwerk.SOORTEN.get(StringArgumentType.getString(c, "soort"));
                     if (s != null) {
@@ -379,6 +405,52 @@ public final class AmbachtRegistry {
             zeg(c, "Ranglijsten -> " + map.toAbsolutePath() + ", recepten -> " + recepten.toAbsolutePath());
             return 1;
         }));
+        // ---- U-AMBACHT2 -----------------------------------------------------------------------------------------------------------
+        k.then(Commands.literal("penningen").executes(c -> {
+            zeg(c, "Knutselpenningen: " + Knutselwinkel.penningen(speler(c)));
+            return 1;
+        }).then(Commands.argument("n", IntegerArgumentType.integer(0, 100000)).executes(c -> {
+            Knutselwinkel.zet(speler(c), IntegerArgumentType.getInteger(c, "n"));
+            AmbachtSchermen.boek(speler(c), "winkel", null);
+            return 1;
+        })));
+        k.then(Commands.literal("winkel").executes(c -> {
+            AmbachtSchermen.boek(speler(c), "winkel", null);
+            return 1;
+        }));
+        k.then(Commands.literal("opdracht").executes(c -> {
+            AmbachtSchermen.boek(speler(c), "opdracht", null);
+            return 1;
+        }).then(Commands.literal("nep").then(Commands.argument("recept", StringArgumentType.word())
+                .suggests((c, b) -> SharedSuggestionProvider.suggest(Opdrachten.vraagbaar().stream().map(Recepten.Recept::id), b))
+                .executes(c -> {
+                    // a test order from a made-up asker (to try delivering alone); its escrow is free
+                    zeg(c, Opdrachten.nep(c.getSource().getServer(), StringArgumentType.getString(c, "recept")));
+                    AmbachtSchermen.boek(speler(c), "opdracht", null);
+                    return 1;
+                }))));
+        k.then(Commands.literal("gilde").then(Commands.argument("ambacht", StringArgumentType.word()).suggests((c, b) -> SharedSuggestionProvider.suggest(ambachten(), b))
+                .executes(c -> {
+                    Ambacht a = Ambacht.van(StringArgumentType.getString(c, "ambacht"));
+                    if (a != null) {
+                        ServerPlayer p = speler(c);
+                        if (AmbachtData.verhaal(p, a) < AmbachtNpcs.VERHAAL_LEVELS.length) {
+                            AmbachtData.zetVerhaal(p, a, AmbachtNpcs.VERHAAL_LEVELS.length);
+                        }
+                        HoogvadsGilde.verhaal(p, a.verzamel && a != Ambacht.IMKEREN ? "z5_gildemeester" : "z5_leermeester_" + a.id, List.of(a));
+                    }
+                    return 1;
+                })));
+        k.then(Commands.literal("meester").then(Commands.argument("ambacht", StringArgumentType.word()).suggests((c, b) -> SharedSuggestionProvider.suggest(ambachten(), b))
+                .executes(c -> {
+                    Ambacht a = Ambacht.van(StringArgumentType.getString(c, "ambacht"));
+                    if (a != null) {
+                        ServerPlayer p = speler(c);
+                        AmbachtData.zetLevel(p, a, AmbachtXp.CAP - 1);
+                        AmbachtData.geefXp(p, a, AmbachtXp.xpVoor(AmbachtXp.CAP - 1), false);   // (a real level-up: the Meester moment)
+                    }
+                    return 1;
+                })));
         k.then(Commands.literal("reset").executes(c -> {
             ServerPlayer p = speler(c);
             AmbachtData.reset(p);

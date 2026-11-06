@@ -33,8 +33,9 @@ import nl.juiced.guhs.Guhs;
 /**
  * The gathered materials (items {@code guhs:vr_amb_<id>}, stack 64, so they sell as stacks on the market) with a quality
  * (component {@code guhs:vr_amb_kwaliteit}: 0 gewoon, 1 vadsig, 2 extra vadsig; only equal qualities stack), the boss cores
- * ({@code vr_amb_kern_<zone>} + the kernsplinter) and the weekly Ambachtskist. Tiers follow the zones (T1 zone 1, T2 zone 2,
- * T3 zone 3); tier 0 = a rare one from a glittering spot. Names/flavour: {@code item.guhs.vr_amb_<id>(.uitleg)}.
+ * ({@code vr_amb_kern_<zone>} + the kernsplinter) and the weekly Ambachtskist. Tiers follow the zones (T1 zone 1 ... T5 zone 5;
+ * T6 = zone 6 volgt, {@link Zone6Haken}); tier 0 = a rare one from a glittering spot. Fish "wanneer": "" always, "nacht", "regen",
+ * "duik" (coral diving spots only, not a fish). Names/flavour: {@code item.guhs.vr_amb_<id>(.uitleg)}.
  */
 public final class Materialen {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
@@ -57,6 +58,16 @@ public final class Materialen {
 
         public boolean zeldzaam() {
             return tier == 0;
+        }
+
+        /** A coral-diving find (not a fish: not in the fish collection). */
+        public boolean duik() {
+            return "duik".equals(wanneer);
+        }
+
+        /** A real fish (the fish collection). */
+        public boolean vis() {
+            return ambacht == Ambacht.VISSEN && tier > 0 && !duik();
         }
     }
 
@@ -100,13 +111,40 @@ public final class Materialen {
         m("wortelhoning", Ambacht.IMKEREN, 3, 0xA86A2A);
         m("bijenwas", Ambacht.IMKEREN, 3, 0xFFE8A0);
         m("koninginnengelei", Ambacht.IMKEREN, 0, 0xFFF8E0);
+        // ---- U-AMBACHT2: zone 4 (T4, De Lampionkust) and zone 5 (T5, Hoogvads); the professions grow with every zone ----------
+        m("lampionbrons", Ambacht.MIJNEN, 4, 0xF0A050);
+        m("hemelzilver", Ambacht.MIJNEN, 5, 0xE8F0FF);
+        m("drijfhout", Ambacht.HOUTHAKKEN, 4, 0xC8B49A);
+        m("vliegerbamboe", Ambacht.HOUTHAKKEN, 4, 0xB8D86A);
+        m("wolkenhout", Ambacht.HOUTHAKKEN, 5, 0xF0EAF8);
+        m("zeekraal", Ambacht.PLUKKEN, 4, 0x5AB87A);
+        m("zeegaren", Ambacht.PLUKKEN, 4, 0x9AE0E0);
+        m("wolkbes", Ambacht.PLUKKEN, 5, 0xB8C8FF);
+        m("wolkenwol", Ambacht.PLUKKEN, 5, 0xFAFAFF);
+        v("koraalbaars", 4, 0xFF7A8A, "");
+        v("maanrog", 4, 0x8A8AE0, "nacht");
+        v("regenboogmakreel", 4, 0x7AE0C8, "regen");
+        v("roze_koraal", 4, 0xFF6FA8, "duik");     // (coral diving only)
+        v("zeesponsje", 4, 0xFFD87A, "duik");      // (coral diving only)
+        v("wolkenvis", 5, 0xE8F4FF, "");
+        v("sterrenspiering", 5, 0xFFF0A0, "nacht");
+        v("donderforel", 5, 0x8AA0D8, "regen");
+        m("lampionhoning", Ambacht.IMKEREN, 4, 0xFF9A3A);
+        m("duinhoning", Ambacht.IMKEREN, 4, 0xF0D8A0);
+        m("wolkenhoning", Ambacht.IMKEREN, 5, 0xFFF8F0);
+        m("hemelhoning", Ambacht.IMKEREN, 5, 0xFFE070);
     }
 
-    /** The boss cores (Meesterwerk) and their splinter (5 = 1 core at the smidse). */
-    public static final List<String> KERNEN = List.of("zwamkern", "splinterkern", "wortelkern");
+    /**
+     * The boss cores (Meesterwerk, index = tier - 1) and their splinter (5 = 1 core at the smidse). U-AMBACHT2: Lampionkern (zone-4
+     * bosses), Wolkkern (zone-5 bosses); zone 6 volgt ({@link Zone6Haken#KERN}).
+     */
+    public static final List<String> KERNEN = List.of("zwamkern", "splinterkern", "wortelkern", "lampionkern", "wolkkern");
     public static final Map<String, DeferredItem<Item>> KERN = new LinkedHashMap<>();
     public static final DeferredItem<Item> KERNSPLINTER;
     public static final DeferredItem<Ambachtskist> AMBACHTSKIST;
+    /** U-AMBACHT2: the guh-kite (Naaien, zone 4): decoration for home (A2), comes by the Post. */
+    public static final DeferredItem<Item> VLIEGER;
 
     static {
         for (String k : KERNEN) {
@@ -114,6 +152,7 @@ public final class Materialen {
         }
         KERNSPLINTER = ITEMS.registerItem("vr_amb_kernsplinter", Uitleg::new, () -> new Item.Properties().stacksTo(64).rarity(Rarity.RARE));
         AMBACHTSKIST = ITEMS.registerItem("vr_amb_ambachtskist", Ambachtskist::new, () -> new Item.Properties().stacksTo(16).rarity(Rarity.EPIC));
+        VLIEGER = ITEMS.registerItem("vr_amb_vlieger", Uitleg::new, () -> new Item.Properties().stacksTo(16).rarity(Rarity.UNCOMMON));
     }
 
     private Materialen() {

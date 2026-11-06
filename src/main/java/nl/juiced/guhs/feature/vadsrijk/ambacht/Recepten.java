@@ -86,6 +86,9 @@ public final class Recepten {
     public static final Map<String, Supplier<ItemStack>> POST = new LinkedHashMap<>();
     static final List<String> VIS1 = List.of("kloddervisje", "maanbaarsje", "plonsguppie"), VIS2 = List.of("spiegelforel", "sterrenzalm", "sneeuwsnoek"),
             VIS3 = List.of("wortelpaling", "lantaarnvis", "honingkarper"), HONING = List.of("bloesemhoning", "schemerhoning", "wortelhoning");
+    /** U-AMBACHT2: the zone-4/5 fish and honey (any kind of the tier). */
+    static final List<String> VIS4 = List.of("koraalbaars", "maanrog", "regenboogmakreel"), VIS5 = List.of("wolkenvis", "sterrenspiering", "donderforel"),
+            HONING4 = List.of("lampionhoning", "duinhoning"), HONING5 = List.of("wolkenhoning", "hemelhoning");
 
     static {
         POST.put("kokschort", () -> new ItemStack(ModItems.clothingItem(GuhClothes.GRILL_SCHORT)));
@@ -97,6 +100,7 @@ public final class Recepten {
         POST.put("klodderknuffel", () -> new ItemStack(EcoSpul.KLODDERREUS_KNUFFEL.get()));
         POST.put("opperzwambeeld", () -> new ItemStack(EcoSpul.OPPERZWAM_BEELD.get()));
         POST.put("mini_koning", () -> new ItemStack(EcoSpul.MINI_KONING_KLODDER.get()));
+        POST.put("vlieger", () -> new ItemStack(Materialen.VLIEGER.get()));   // U-AMBACHT2
 
         // ---- Koken ----------------------------------------------------------------------------------------------------------
         r("klodderpudding", Ambacht.KOKEN, 1, 1, "eten:klodderpudding", 2, i(2, "klodderklaver"), i(1, VIS1));
@@ -147,6 +151,37 @@ public final class Recepten {
         r("post_tuinhoedje", Ambacht.NAAIEN, 24, 2, "post:tuinhoedje", 1, i(4, "kristalvlas"), i(1, "ijsbloem"));
         r("post_imkershoed", Ambacht.NAAIEN, 36, 3, "post:imkershoed", 1, i(4, "schemerzijde"), i(2, "bijenwas"));
         r("post_klodderknuffel", Ambacht.NAAIEN, 44, 3, "post:klodderknuffel", 1, i(6, "schemerzijde"), i(4, "pluiskatoen"), i(1, "gouden_klaver"));
+
+        // ---- U-AMBACHT2: T4 (zone 4, De Lampionkust, lv 50-55) and T5 (zone 5, Hoogvads, lv 55-60) ---------------------------------
+        // (T4/T5 are made in Hoogvads' Ambachtsgilde; T4 also in Lampionhaven's workshop: see Werkplaats.magHier)
+        r("zeekraalsalade", Ambacht.KOKEN, 50, 4, "eten:zeekraalsalade", 2, i(2, "zeekraal"), i(1, VIS4));
+        r("koraalvissoep", Ambacht.KOKEN, 51, 4, "eten:koraalvissoep", 2, i(2, VIS4), i(1, "zeekraal"), i(1, "roze_koraal"));
+        r("zeemanshapje", Ambacht.KOKEN, 53, 4, "eten:zeemanshapje", 2, i(2, "zeekraal"), i(1, HONING4), i(1, VIS4));
+        r("lampionspiesjes", Ambacht.KOKEN, 54, 4, "eten:lampionspiesjes", 2, i(2, "koraalbaars"), i(1, HONING4), i(1, "vliegerbamboe"));
+        r("wolkbessentaart", Ambacht.KOKEN, 55, 5, "eten:wolkbessentaart", 2, i(3, "wolkbes"), i(1, HONING5));
+        r("donderstoofpot", Ambacht.KOKEN, 57, 5, "eten:donderstoofpot", 2, i(2, "donderforel"), i(1, "wolkbes"), i(1, "wolkenhout"));
+        r("hemelfeestmaal", Ambacht.KOKEN, 59, 5, "eten:hemelfeestmaal", 1, i(2, VIS5), i(2, HONING5), i(2, "wolkbes"), i(1, "wolkenhout"));
+        r("zee_vadsdrank", Ambacht.BROUWEN, 50, 4, "drank:zee_vadsdrank", 2, i(2, "zeekraal"), i(1, "zeesponsje"));
+        r("zee_energiedrank", Ambacht.BROUWEN, 52, 4, "drank:zee_energiedrank", 2, i(1, "zeekraal"), i(1, HONING4));
+        r("wolken_vadsdrank", Ambacht.BROUWEN, 55, 5, "drank:wolken_vadsdrank", 2, i(2, "wolkbes"), i(1, HONING5));
+        r("wolken_energiedrank", Ambacht.BROUWEN, 57, 5, "drank:wolken_energiedrank", 2, i(1, "wolkbes"), i(1, VIS5));
+        r("hemelelixer", Ambacht.BROUWEN, 60, 5, "drank:hemelelixer", 2, i(1, "koninginnengelei"), i(2, HONING5), i(1, "wolkbes"));
+        for (String s : List.of("zwaard", "boog", "staf", "helm", "borstplaat")) {
+            r(s + "_t4", Ambacht.SMEDEN, 50, 4, "gear:" + s, 1, i(6, "lampionbrons"), i(2, "drijfhout"), i(1, "roze_koraal"));
+            r(s + "_t5", Ambacht.SMEDEN, 56, 5, "gear:" + s, 1, i(6, "hemelzilver"), i(2, "wolkenhout"), i(1, "glinstergruis"));
+        }
+        for (String s : List.of("ring", "ketting", "oorbel")) {
+            r(s + "_t4", Ambacht.SMEDEN, 54, 4, "meester:" + s, 1, i(4, "lampionbrons"), i(3, "glinstergruis"), i(2, "roze_koraal"), i(1, "lampionkern"));
+            r(s + "_t5", Ambacht.SMEDEN, 59, 5, "meester:" + s, 1, i(4, "hemelzilver"), i(4, "glinstergruis"), i(1, "wolkkern"));
+        }
+        r("kern_lampion", Ambacht.SMEDEN, 54, 4, "kern:lampionkern", 1, i(5, "kernsplinter"));
+        r("kern_wolk", Ambacht.SMEDEN, 59, 5, "kern:wolkkern", 1, i(5, "kernsplinter"));
+        for (String s : List.of("broek", "schoentjes")) {
+            r(s + "_t4", Ambacht.NAAIEN, 50, 4, "gear:" + s, 1, i(6, "zeegaren"), i(1, "lampionbrons"), i(1, "zeesponsje"));
+            r(s + "_t5", Ambacht.NAAIEN, 56, 5, "gear:" + s, 1, i(6, "wolkenwol"), i(1, "hemelzilver"), i(1, "bijenwas"));
+        }
+        // kite building (zone 4's Vliegereiland): a guh-kite for home, sewn on kite bamboe
+        r("post_vlieger", Ambacht.NAAIEN, 52, 4, "post:vlieger", 1, i(3, "zeegaren"), i(2, "vliegerbamboe"));
     }
 
     private Recepten() {

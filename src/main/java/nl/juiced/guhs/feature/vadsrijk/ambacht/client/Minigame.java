@@ -51,7 +51,15 @@ public final class Minigame {
         return spot != null;
     }
 
+    /** U-AMBACHT2: the current one is a coral dive (gently loosen the coral: the hold-release game). */
+    private static boolean duik;
+
     static void start(String id, Ambacht a) {
+        start(id, a, false);
+    }
+
+    static void start(String id, Ambacht a, boolean duiken) {
+        duik = duiken;
         spot = id;
         ambacht = a;
         start = System.currentTimeMillis();
@@ -59,7 +67,7 @@ public final class Minigame {
         punten = 0;
         vast = false;
         fase = R.nextDouble() * Math.PI * 2;
-        switch (a) {
+        switch (duik ? Ambacht.PLUKKEN : a) {
             case MIJNEN -> {
                 soort = Soort.TIKKEN;
                 nodig = 3;
@@ -199,7 +207,7 @@ public final class Minigame {
             return;
         }
         int w = 120, x0 = cx - w / 2;
-        g.centeredText(font, Component.translatable("vadsrijk.ambacht.mini." + ambacht.id).withStyle(ChatFormatting.BOLD), cx, y - 11, 0xFFFFFFFF);
+        g.centeredText(font, Component.translatable("vadsrijk.ambacht.mini." + (duik ? "duiken" : ambacht.id)).withStyle(ChatFormatting.BOLD), cx, y - 11, 0xFFFFFFFF);
         g.fill(x0 - 2, y - 2, x0 + w + 2, y + 10, 0xC0402040);
         g.fill(x0, y, x0 + w, y + 8, 0xFF5A3A5A);
         if (soort == Soort.BEET) {

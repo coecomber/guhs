@@ -51,6 +51,12 @@ public final class Brouwsels {
         d("reuzen_vadsdrank", 3, 1500, 0, false);
         d("reuzen_energiedrank", 3, 0, 200, false);
         d("honingelixer", 3, 800, 100, true);
+        // U-AMBACHT2: zone 4 (T4) and zone 5 (T5)
+        d("zee_vadsdrank", 4, 1900, 0, false);
+        d("zee_energiedrank", 4, 0, 250, false);
+        d("wolken_vadsdrank", 5, 2400, 0, false);
+        d("wolken_energiedrank", 5, 0, 300, false);
+        d("hemelelixer", 5, 1100, 140, true);
     }
 
     private Brouwsels() {

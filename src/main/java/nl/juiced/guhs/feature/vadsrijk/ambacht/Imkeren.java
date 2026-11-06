@@ -27,9 +27,17 @@ public final class Imkeren {
     private Imkeren() {
     }
 
-    /** How many hives this Imkeren level may keep. */
+    /** How many hives this Imkeren level may keep (U-AMBACHT2: a fifth at 55, with the zone-4/5 meadows). */
     public static int max(int level) {
-        return level >= 45 ? 4 : level >= 30 ? 3 : level >= 15 ? 2 : 1;
+        return level >= 55 ? 5 : level >= 45 ? 4 : level >= 30 ? 3 : level >= 15 ? 2 : 1;
+    }
+
+    /**
+     * U-AMBACHT2: the Imkeren level a meadow of this tier needs. Imkeren starts in zone 3 for everyone (A3), so its gates are softer
+     * than the other gatherers': zone 3 = 1, zone 4 = 20, zone 5 = 35 (zone 6 volgt: 45).
+     */
+    public static int korfLevel(int tier) {
+        return tier <= 3 ? 1 : tier == 4 ? 20 : tier == 5 ? 35 : 45;
     }
 
     static CompoundTag korven(ServerPlayer p) {
@@ -81,6 +89,11 @@ public final class Imkeren {
     /** A click on a hive stand (see class doc). */
     static String klik(ServerPlayer p, Spot s, int score) {
         int lv = AmbachtData.level(p, Ambacht.IMKEREN);
+        if (!eigen(p, s) && lv < korfLevel(s.groep().tier())) {
+            p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.oogst.te_laag", Component.translatable(Ambacht.IMKEREN.naamKey()),
+                    korfLevel(s.groep().tier())).withStyle(ChatFormatting.RED));
+            return "vadsrijk.ambacht.oogst.te_laag";
+        }
         if (!eigen(p, s)) {
             int n = korven(p).keySet().size();
             if (n >= max(lv)) {

@@ -39,7 +39,10 @@ import nl.juiced.guhs.storage.GuhSavedData;
  *   <li>STEEN: a rock floor (stone kinds, dripstone, calcite...), caves included;</li>
  *   <li>BOOM: a natural floor right beside a trunk;</li>
  *   <li>WATER: a still water surface with land within 2 blocks (fished from the shore);</li>
- *   <li>BLOEM: a natural floor with flowers within 6 blocks (the hives; the flowers are kept: the bees fly to them).</li>
+ *   <li>BLOEM: a natural floor with flowers within 6 blocks (the hives; the flowers are kept: the bees fly to them);</li>
+ *   <li>KORAAL (U-AMBACHT2, coral diving): a sea floor block with still water above it and the surface 2-{@link #DUIK_DIEP} blocks
+ *   up (walkability: a diver always comes up within a few blocks; never in a cave without air above). The spot is the water
+ *   block on the floor.</li>
  * </ul>
  * A strict pass first; if it finds too little (an unusual zone), a relaxed pass (any solid non-building floor) fills up.
  */
@@ -158,6 +161,9 @@ public final class PlekWereld extends SavedData {
         return false;
     }
 
+    /** Coral diving: the deepest a dive spot lies under the surface. */
+    public static final int DUIK_DIEP = 8;
+
     /** The position of a spot in this column near {@code ankerY} (the free block above the floor; WATER: the water block). */
     @Nullable
     static BlockPos zoekY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng) {
@@ -165,6 +171,16 @@ public final class PlekWereld extends SavedData {
         for (int y = ankerY + 20; y >= ankerY - 30; y--) {
             m.set(x, y, z);
             BlockState onder = l.getBlockState(m.below());
+            if (zoek == Zoek.KORAAL) {
+                if (l.getBlockState(m).is(Blocks.WATER) && l.getFluidState(m).isSource() && onder.isCollisionShapeFullBlock(l, m.below())
+                        && onder.getFluidState().isEmpty() && (!streng || natuur(onder))) {
+                    int diep = oppervlak(l, m);
+                    if (diep >= 2 && diep <= DUIK_DIEP) {
+                        return m.immutable();
+                    }
+                }
+                continue;
+            }
             if (zoek == Zoek.WATER) {
                 FluidState f = l.getFluidState(m);
                 if (f.is(FluidTags.WATER) && f.isSource() && l.getBlockState(m.above()).isAir() && l.getBlockState(m).is(Blocks.WATER) && oever(l, m)) {
@@ -235,6 +251,21 @@ public final class PlekWereld extends SavedData {
             }
         }
         return false;
+    }
+
+    /** How many water blocks are above this water block until air (0: none / no open surface within DUIK_DIEP + 2). */
+    static int oppervlak(Level l, BlockPos p) {
+        for (int dy = 1; dy <= DUIK_DIEP + 2; dy++) {
+            BlockPos q = p.above(dy);
+            BlockState s = l.getBlockState(q);
+            if (s.isAir()) {
+                return dy;
+            }
+            if (!s.is(Blocks.WATER)) {
+                return 0;
+            }
+        }
+        return 0;
     }
 
     private static boolean oever(Level l, BlockPos p) {

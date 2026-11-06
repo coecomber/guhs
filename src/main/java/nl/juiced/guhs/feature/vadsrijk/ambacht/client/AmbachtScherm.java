@@ -22,11 +22,15 @@ import nl.juiced.guhs.feature.vadsrijk.economie.client.EcoScherm;
  * Ambachtsbord: top 10 + your place) and Plekken (found spots per zone, fish, honey, recipes made).
  */
 public class AmbachtScherm extends EcoScherm {
-    private static final String[] TABS = {"overzicht", "recepten", "bestel", "rang", "plekken"};
+    private static final String[] TABS = {"overzicht", "recepten", "bestel", "opdracht", "winkel", "rang", "plekken"};
     private int scroll;
+    /** U-AMBACHT2: the new-order panel of the Opdrachten tab (client-side until "Plaats"). */
+    private int kies, aantal = 1;
+    private long beloning = -1;
 
     public AmbachtScherm(CompoundTag data, List<ItemStack> items) {
-        super("ambacht_boek", Component.translatable("vadsrijk.ambacht.titel"), data, items, 330, 228);
+        // (U-AMBACHT2: bigger, 7 tabs: + Opdrachten and the Knutselwinkel)
+        super("ambacht_boek", Component.translatable("vadsrijk.ambacht.titel"), data, items, 400, 250);
     }
 
     @Override
@@ -59,11 +63,15 @@ public class AmbachtScherm extends EcoScherm {
 
     @Override
     protected void inhoud(GuiGraphicsExtractor g, int mx, int my, float pt) {
-        int tx = left + 8;
+        int tx = left + 8, som = 0;
+        for (String t : TABS) {
+            som += font.width(Component.translatable("vadsrijk.ambacht.tab." + t)) + 3;
+        }
+        int pad = Math.max(4, Math.min(12, (w - 16 - som) / TABS.length));   // (all tabs always fit)
         for (String t : TABS) {
             boolean nu = t.equals(tab());
             Component naam = Component.translatable("vadsrijk.ambacht.tab." + t);
-            int bw = font.width(naam) + 12;
+            int bw = font.width(naam) + pad;
             knop(g, mx, my, tx, top + 22, bw, 14, nu ? naam.copy().withStyle(ChatFormatting.UNDERLINE) : naam, !nu,
                     () -> open(t, data.getStringOr("ambacht", "mijnen"), ""));
             tx += bw + 3;
@@ -73,6 +81,8 @@ public class AmbachtScherm extends EcoScherm {
             case "bestel" -> bestel(g, mx, my);
             case "rang" -> rang(g, mx, my);
             case "plekken" -> plekken(g);
+            case "opdracht" -> opdracht(g, mx, my);
+            case "winkel" -> winkel(g, mx, my);
             default -> overzicht(g, mx, my);
         }
     }
@@ -88,7 +98,11 @@ public class AmbachtScherm extends EcoScherm {
             String id = t.getStringOr("id", "");
             g.text(font, Component.translatable("vadsrijk.ambacht.naam." + id).withStyle(ChatFormatting.BOLD), x + 24, y + 4, TEKST, false);
             int lv = t.getIntOr("level", 1);
-            g.text(font, Component.translatable("vadsrijk.ambacht.lv", lv, data.getIntOr("cap", 50)), x + 24, y + 15, ZACHT, false);
+            g.text(font, Component.translatable("vadsrijk.ambacht.lv", lv, data.getIntOr("cap", 60)), x + 24, y + 15, ZACHT, false);
+            if (t.getBooleanOr("meester", false)) {
+                Component m = Component.translatable("vadsrijk.ambacht.meester.kort").withStyle(ChatFormatting.BOLD);
+                g.text(font, m, x + bw - 8 - font.width(m), y + 4, 0xFFB040C8, false);
+            }
             long in = t.getLongOr("in", 0), nodig = t.getLongOr("nodig", 1);
             int bx = x + 4, bbw = bw - 12;
             g.fill(bx, y + 30, bx + bbw, y + 36, 0xFFE8C8DC);
@@ -103,6 +117,7 @@ public class AmbachtScherm extends EcoScherm {
         g.text(font, b, left + 8, y, TEKST, false);
         long u = data.getLongOr("uitgerust", 0);
         g.text(font, Component.translatable("vadsrijk.ambacht.boek.uitgerust", u / 60, 120), left + 8, y + 11, ZACHT, false);
+        g.text(font, Component.translatable("vadsrijk.ambacht.penning.stand", data.getIntOr("penningen", 0)), left + 8, y + 22, GOUD, false);
     }
 
     private void ambachtKeuze(GuiGraphicsExtractor g, int mx, int my, String tab, boolean totaal) {
@@ -217,16 +232,17 @@ public class AmbachtScherm extends EcoScherm {
     }
 
     private void plekken(GuiGraphicsExtractor g) {
+        // (U-AMBACHT2: every zone, 3 columns x 2 rows; the zone-4 fishing spots were missing here)
         ListTag l = data.getListOrEmpty("plekken");
-        int y = top + 42;
-        int zone = 0, x = left + 8;
+        int kolom = (w - 16) / 3, rijH = 64;
+        int zone = 0, x = left + 8, y = top + 42;
         for (int i = 0; i < l.size(); i++) {
             CompoundTag e = l.getCompoundOrEmpty(i);
             int z = e.getIntOr("zone", 1);
             if (z != zone) {
                 zone = z;
-                x = left + 8 + (z - 1) * ((w - 16) / 3);
-                y = top + 42;
+                x = left + 8 + ((z - 1) % 3) * kolom;
+                y = top + 42 + ((z - 1) / 3) * rijH;
                 g.text(font, Component.translatable("vadsrijk.ambacht.boek.zone", z).withStyle(ChatFormatting.BOLD), x, y, TEKST, false);
                 y += 12;
             }
@@ -235,12 +251,154 @@ public class AmbachtScherm extends EcoScherm {
                     gev >= tot ? GROEN : TEKST, false);
             y += 10;
         }
-        int b = top + 130;
+        int b = top + 42 + 2 * rijH + 4;
         g.text(font, Component.translatable("vadsrijk.ambacht.boek.vissen", data.getIntOr("vissen", 0), data.getIntOr("vissenTot", 9)), left + 8, b, TEKST, false);
         g.text(font, Component.translatable("vadsrijk.ambacht.boek.honing", data.getIntOr("honing", 0), data.getIntOr("honingTot", 3)), left + 8, b + 11, TEKST, false);
         g.text(font, Component.translatable("vadsrijk.ambacht.boek.recepten", data.getIntOr("recepten", 0), data.getIntOr("receptenTot", 1)), left + 8, b + 22, TEKST,
                 false);
-        g.text(font, Component.translatable("vadsrijk.ambacht.boek.meer"), left + 8, b + 40, ZACHT, false);
+        g.text(font, Component.translatable("vadsrijk.ambacht.boek.meer"), left + 8, b + 36, ZACHT, false);
+    }
+
+    // ---- U-AMBACHT2: the Opdrachtenbord (player crafting orders) -------------------------------------------------------------------
+
+    private void opdracht(GuiGraphicsExtractor g, int mx, int my) {
+        ListTag l = data.getListOrEmpty("opdrachten");
+        int lw = 250, y = top + 40, max = 8;
+        kop(g, Component.translatable("vadsrijk.ambacht.opdracht.kop"), left + 8, y);
+        y += 12;
+        if (l.isEmpty()) {
+            g.text(font, Component.translatable("vadsrijk.ambacht.opdracht.leeg"), left + 8, y + 4, ZACHT, false);
+        }
+        scroll = Math.max(0, Math.min(scroll, Math.max(0, l.size() - max)));
+        for (int i = scroll, rij = 0; i < l.size() && rij < max; i++, rij++) {
+            CompoundTag e = l.getCompoundOrEmpty(i);
+            boolean eigen = e.getBooleanOr("eigen", false), geleverd = e.getBooleanOr("geleverd", false);
+            int n = e.getIntOr("aantal", 1), heeft = e.getIntOr("heeft", 0);
+            long id = e.getLongOr("id", -1L);
+            g.fill(left + 6, y, left + 6 + lw, y + 20, eigen ? HOVER : rij % 2 == 0 ? RIJ_A : RIJ_B);
+            slot(g, mx, my, left + 7, y + 1, item(e.getIntOr("item", -1)), false);
+            Component naam = Component.translatable(e.getStringOr("naam", "")).append(" x" + n);
+            g.text(font, font.plainSubstrByWidth(naam.getString(), 128), left + 28, y + 2, TEKST, false);
+            Component wie = geleverd ? Component.translatable("vadsrijk.ambacht.opdracht.door", e.getStringOr("maker", ""))
+                    : Component.translatable("vadsrijk.ambacht.opdracht.van", eigen ? Component.translatable("vadsrijk.ambacht.opdracht.jij")
+                            : Component.literal(e.getStringOr("vrager", "?")));
+            g.text(font, font.plainSubstrByWidth(wie.getString(), 128), left + 28, y + 11, ZACHT, false);
+            munten(g, left + 6 + lw - 64, y + 6, e.getLongOr("beloning", 0), true, false);
+            int bx = left + 6 + lw - 60;
+            if (eigen && geleverd) {
+                g.text(font, Component.translatable("vadsrijk.ambacht.opdracht.klaar"), bx + 4, y + 6, GROEN, false);
+            } else if (eigen) {
+                knop(g, mx, my, bx, y + 3, 56, 14, Component.translatable("vadsrijk.ambacht.opdracht.trek"), true, () -> {
+                    CompoundTag a = new CompoundTag();
+                    a.putLong("id", id);
+                    doe("opdracht_trek", a);
+                });
+            } else {
+                boolean kent = e.getBooleanOr("kent", false);
+                knop(g, mx, my, bx, y + 3, 56, 14, Component.translatable("vadsrijk.ambacht.opdracht.lever"), kent && heeft >= n, () -> {
+                    CompoundTag a = new CompoundTag();
+                    a.putLong("id", id);
+                    doe("opdracht_lever", a);
+                });
+                tip(mx, my, bx, y + 3, 56, 14, List.of(Component.translatable(kent ? "vadsrijk.ambacht.opdracht.heeft" : "vadsrijk.ambacht.opdracht.kent_niet_tip",
+                        heeft, n)));
+            }
+            y += 21;
+        }
+        if (l.size() > max) {
+            g.text(font, (scroll + 1) + "-" + Math.min(l.size(), scroll + max) + " / " + l.size(), left + 8, top + h - 26, ZACHT, false);
+        }
+        nieuweOpdracht(g, mx, my, left + 266, top + 40);
+    }
+
+    private void nieuweOpdracht(GuiGraphicsExtractor g, int mx, int my, int x, int y) {
+        int pw = left + w - 8 - x;
+        g.fill(x - 4, y - 2, x + pw, top + h - 16, 0xFFFFF4FA);
+        kop(g, Component.translatable("vadsrijk.ambacht.opdracht.nieuw"), x, y);
+        ListTag k = data.getListOrEmpty("kiesbaar");
+        if (k.isEmpty()) {
+            return;
+        }
+        kies = Math.floorMod(kies, k.size());
+        CompoundTag r = k.getCompoundOrEmpty(kies);
+        int max = r.getIntOr("max", 1);
+        aantal = Math.max(1, Math.min(max, aantal));
+        long min = data.getLongOr("minPerStuk", 25) * aantal;
+        if (beloning < min) {
+            beloning = min;
+        }
+        y += 13;
+        knop(g, mx, my, x, y + 2, 12, 14, Component.literal("<"), true, () -> kies--);
+        slot(g, mx, my, x + 15, y, item(r.getIntOr("item", -1)), true);
+        knop(g, mx, my, x + 36, y + 2, 12, 14, Component.literal(">"), true, () -> kies++);
+        y += 21;
+        int regels = 0;
+        for (var regel : font.split(Component.translatable(r.getStringOr("naam", "")), pw - 4)) {
+            if (regels++ < 2) {
+                g.text(font, regel, x, y, TEKST, false);
+                y += 9;
+            }
+        }
+        g.text(font, Component.translatable("vadsrijk.ambacht.opdracht.kan_maken", Component.translatable("vadsrijk.ambacht.naam." + r.getStringOr("ambacht", "")),
+                r.getIntOr("level", 1)), x, y, ZACHT, false);
+        y += 12;
+        g.text(font, Component.translatable("vadsrijk.ambacht.opdracht.aantal_n", aantal), x, y + 3, TEKST, false);
+        knop(g, mx, my, x + pw - 34, y, 14, 14, Component.literal("-"), aantal > 1, () -> aantal = aantal > 8 ? aantal - 8 : aantal - 1);
+        knop(g, mx, my, x + pw - 18, y, 14, 14, Component.literal("+"), aantal < max, () -> aantal = aantal >= 8 ? aantal + 8 : aantal + 1);
+        y += 16;
+        g.text(font, Component.translatable("vadsrijk.ambacht.opdracht.beloning_label"), x, y + 3, TEKST, false);
+        y += 12;
+        munten(g, x, y + 3, beloning, false, false);
+        long stap = beloning < 500 ? 25 : beloning < 5000 ? 250 : 2500;
+        knop(g, mx, my, x + pw - 34, y, 14, 14, Component.literal("-"), beloning - stap >= min, () -> beloning -= stap);
+        knop(g, mx, my, x + pw - 18, y, 14, 14, Component.literal("+"), true, () -> beloning += stap);
+        y += 18;
+        boolean vrij = data.getIntOr("mijnOpen", 0) < data.getIntOr("maxOpen", 5);
+        String id = r.getStringOr("id", "");
+        knop(g, mx, my, x, y, pw - 4, 15, Component.translatable("vadsrijk.ambacht.opdracht.plaats"), vrij && data.getLongOr("munten", 0) >= beloning, () -> {
+            CompoundTag a = new CompoundTag();
+            a.putString("recept", id);
+            a.putInt("aantal", aantal);
+            a.putLong("beloning", beloning);
+            doe("opdracht_plaats", a);
+        });
+        y += 18;
+        g.text(font, Component.translatable("vadsrijk.ambacht.opdracht.open_n", data.getIntOr("mijnOpen", 0), data.getIntOr("maxOpen", 5)), x, y, ZACHT, false);
+        y += 11;
+        int op = data.getIntOr("ophalen", 0);
+        knop(g, mx, my, x, y, pw - 4, 15, Component.translatable("vadsrijk.ambacht.opdracht.ophalen", op), op > 0, () -> doe("opdracht_haal", new CompoundTag()));
+    }
+
+    // ---- U-AMBACHT2: the Knutselwinkel ------------------------------------------------------------------------------------------
+
+    private void winkel(GuiGraphicsExtractor g, int mx, int my) {
+        int y = top + 40;
+        kop(g, Component.translatable("vadsrijk.ambacht.winkel.kop"), left + 8, y);
+        Component stand = Component.translatable("vadsrijk.ambacht.penning.stand", data.getIntOr("penningen", 0));
+        g.text(font, stand, left + w - 8 - font.width(stand), y, GOUD, false);
+        y += 11;
+        g.text(font, Component.translatable("vadsrijk.ambacht.winkel.uitleg"), left + 8, y, ZACHT, false);
+        y += 12;
+        ListTag l = data.getListOrEmpty("winkel");
+        int kolom = (w - 16) / 2;
+        for (int i = 0; i < l.size(); i++) {
+            CompoundTag e = l.getCompoundOrEmpty(i);
+            int x = left + 8 + (i % 2) * kolom, ry = y + (i / 2) * 21;
+            g.fill(x, ry, x + kolom - 4, ry + 20, (i / 2) % 2 == 0 ? RIJ_A : RIJ_B);
+            slot(g, mx, my, x + 1, ry + 1, item(e.getIntOr("item", -1)), false);
+            Component naam = Component.translatable(e.getStringOr("naam", ""));
+            if (e.getStringOr("soort", "").equals("post")) {
+                naam = naam.copy().append(Component.translatable("vadsrijk.ambacht.winkel.naar_huis"));
+            }
+            g.text(font, font.plainSubstrByWidth(naam.getString(), kolom - 74), x + 22, ry + 2, TEKST, false);
+            g.text(font, Component.translatable("vadsrijk.ambacht.winkel.prijs", e.getIntOr("prijs", 0)), x + 22, ry + 11, GOUD, false);
+            String id = e.getStringOr("id", "");
+            knop(g, mx, my, x + kolom - 48, ry + 3, 40, 14, Component.translatable("vadsrijk.ambacht.winkel.koop"), e.getBooleanOr("kan", false), () -> {
+                CompoundTag a = new CompoundTag();
+                a.putString("id", id);
+                doe("koop", a);
+            });
+        }
     }
 
     @Override

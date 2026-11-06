@@ -110,6 +110,11 @@ public class WerkplaatsScherm extends EcoScherm {
             g.text(font, heeft < 0 ? "3x" : heeft + "/" + nodig, x + 22, y + 10, heeft >= nodig || heeft < 0 ? GROEN : ROOD, false);
             y += 20;
         }
+        if (!r.getBooleanOr("hier", true)) {
+            // U-AMBACHT2: T4/T5 recipes are made in Hoogvads' Ambachtsgilde (T4 also in Lampionhaven)
+            g.text(font, Component.translatable(r.getIntOr("tier", 1) >= 5 ? "vadsrijk.ambacht.werk.gilde" : "vadsrijk.ambacht.werk.gilde4"), x, y + 1, ROOD, false);
+            y += 11;
+        }
         String soort = r.getStringOr("soort", "");
         int keuzes = r.getIntOr("keuzes", 0);
         if (keuzes > 0) {

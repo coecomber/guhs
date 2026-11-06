@@ -7,7 +7,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 /**
  * The Ambachten xp curve and pacing (VOORSTEL_PROFESSIONS §5.1, A1/A2):
  * <ul>
- *   <li>same shape as combat ({@code 40 + 25 lv^1.6}), own scale {@link #SCHAAL}; cap {@link #CAP} (50 in 1.10, +5 per zone later);</li>
+ *   <li>same shape as combat ({@code 40 + 25 lv^1.6}), own scale {@link #SCHAAL}; cap {@link #CAP} (60 with zones 4 + 5, +5 per zone);</li>
  *   <li>a gathering action gives a fixed amount per resource tier ({@link #VERZAMEL}), sized for ~8 actions a minute:
  *   1 -> 20 in ~1.5 h on T1, 20 -> 35 in ~3 h on T2, 35 -> 50 in ~5 h on T3 (crafting and orders on top make it a bit quicker).
  *   Far above the tier ({@link #TE_HOOG} levels over its top) it gives half: you rise fastest on your own tier;</li>
@@ -16,13 +16,26 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
  * </ul>
  */
 public final class AmbachtXp {
-    /** The level cap of 1.10 (A1: grows +5 per zone later, to 100). */
-    public static volatile int CAP = 50;
+    /**
+     * The level cap (A1 + the user rule "de ambachten groeien ALTIJD mee met elke zone"): +5 per zone. U-AMBACHT2: zone 4 (55) and
+     * zone 5 (60) are in, so 60. Zone 6 (Zijdeland, lv 60-70) raises it to {@link #CAP_ZONE6} once its tier is switched on
+     * ({@link Zone6Haken}, "zone 6 volgt").
+     */
+    public static volatile int CAP = 60;
+    /** The cap per zone that is in the game (index = zone): the cap is the one of the highest zone that exists. */
+    public static final int[] CAP_PER_ZONE = {0, 30, 40, 50, 55, 60, 70};
+    /** Zone 6 volgt: the cap once zone 6's tier is switched on. */
+    public static final int CAP_ZONE6 = 70;
+    /** The highest tier that exists now (T6 = zone 6 volgt). */
+    public static final int MAX_TIER = 5;
     public static volatile double SCHAAL = 1;
-    /** Xp of one gathering action per tier (index = tier 1..5). */
-    public static final int[] VERZAMEL = {0, 30, 52, 62, 75, 90};
-    /** The level band of each tier (index = tier): T1 1-20, T2 20-35, T3 35-50, T4 50-60. */
-    public static final int[] TIER_MIN = {0, 1, 20, 35, 50, 60}, TIER_MAX = {0, 20, 35, 50, 60, 70};
+    /** Xp of one gathering action per tier (index = tier 1..6; T6 = zone 6 volgt). */
+    public static final int[] VERZAMEL = {0, 30, 52, 62, 75, 90, 105};
+    /**
+     * The level band of each tier (index = tier): T1 1-20, T2 20-35, T3 35-50, T4 50-55 (zone 4, Lampionkust), T5 55-60 (zone 5,
+     * Hoogvads), T6 60-70 (zone 6 volgt: only used once {@link #MAX_TIER} goes to 6).
+     */
+    public static final int[] TIER_MIN = {0, 1, 20, 35, 50, 55, 60}, TIER_MAX = {0, 20, 35, 50, 55, 60, 70};
     public static final int TE_HOOG = 8;
     /** Generic xp per action: this part of a generic level (fighting: ~1/22 of a level a minute; 20 % of that over ~8 actions). */
     public static final double GENERIEK_DEEL = 1.0 / 900;
@@ -60,9 +73,9 @@ public final class AmbachtXp {
         return xp - totaalVoor(l);
     }
 
-    /** Which tier a level works on (1..3 in 1.10). */
+    /** Which tier a level works on (1..{@link #MAX_TIER}). */
     public static int tierVoor(int level) {
-        for (int t = TIER_MIN.length - 1; t >= 1; t--) {
+        for (int t = MAX_TIER; t >= 1; t--) {
             if (level >= TIER_MIN[t]) {
                 return t;
             }
