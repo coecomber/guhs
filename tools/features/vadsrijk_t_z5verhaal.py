@@ -481,7 +481,7 @@ def item(id):
 HQ = ["z5_hq01_stad", "z5_hq02_verraad", "z5_hq03_mol", "z5_hq04_soep", "z5_hq05_logboek", "z5_hq06_verhoren", "z5_hq07_bewijsbord",
       "z5_hq08_wolkwaldroom", "z5_hq09_slaaplied", "z5_hq10_stormrand"]
 # (the previous zone: zone 4's last main quest is not known in this tree; Z5Haken also starts hq01 on the flag zone4_klaar)
-VORIGE = "z3_hq15_hoogvads"
+VORIGE = "z4_hq07_opstijgpier"   # (T-INT: zone 4's last main quest, t-z4verhaal)
 
 # ===== the main story of zone 5: "Verraad in de stad" (10) ===================================================================
 Q(HQ[0], "hoofd", "z5_havenmeester", "De Zwevende Stad",

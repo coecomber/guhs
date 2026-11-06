@@ -37,6 +37,9 @@ public final class BootRegistry {
         BootSpul.ITEMS.register(modBus);
         // T-INT: t-z4wereld's Kringstroom hook: the sailboat does its own current (BootZee = plan4.STROOM), so the world's push skips it
         nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4Stroming.EIGEN = e -> e instanceof BootEntity;
+        // T-INT: t-z4verhaal's roles: z4_hq02 gives the boat, Botenguh Zeiltje (the dock NPC) opens the boat's own screen
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppel("z4_zeilboot_geef", Boot::geef);
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppel("z4_zeilboot", p -> Boot.scherm(p, ""));
         nl.juiced.guhs.feature.vadsrijk.rijdier.Uiterlijk.zonderGarderobe(nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.ZEILBOOTJE);   // T-INT: no patterns/tack (own looks screen)
         // (attributes: EconomieRegistry registers them for every RijdierSoort, the boat included)
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> BootCommando.register(e));

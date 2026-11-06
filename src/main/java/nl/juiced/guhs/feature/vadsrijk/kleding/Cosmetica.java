@@ -101,7 +101,7 @@ public final class Cosmetica {
     public static final Ding GOUDVEER = vleugel("goudveer", "veren:25", Kracht.LANGER_ZWEVEN, 3);
     public static final Ding SCHEMER = vleugel("schemer", "vahoeg", Kracht.LUCHTDASH, 3);
     public static final Ding PLUIS = vleugel("pluis", "geheim:zweefvlucht", Kracht.ZACHTE_LANDING, 0);
-    public static final Ding LAMPION = vleugel("lampion", "later:zone4", Kracht.LANGER_ZWEVEN, 4);
+    public static final Ding LAMPION = vleugel("lampion", "boek:zone4:100", Kracht.LANGER_ZWEVEN, 4);   // (T-INT: the zone-4 Verkenningsboek of t-z4verhaal)
     // (t-puzzels: puzzle rewards; source "puzzel:<t-puzzels unlock id>", see Bronnen + KledingRegistry.puzzels)
     public static final Ding STERRENSTOF = vleugel("sterrenstof", "puzzel:pz_vleugels_sterrenstof", Kracht.DUBBELE_SPRONG, 0);
     public static final Ding POOLLICHT = vleugel("poollicht", "puzzel:pz_vleugels_poollicht", Kracht.LANGER_ZWEVEN, 0);
@@ -124,7 +124,7 @@ public final class Cosmetica {
     public static final Ding KRISTALTIARA = ding("accessoire:kristaltiara", Soort.ACCESSOIRE, "vlag:zone2_klaar", 0, 2);
     public static final Ding HONINGKROON = ding("accessoire:honingkroon", Soort.ACCESSOIRE, "boek:zone3:25", 0, 3);
     public static final Ding FEESTMUTS = ding("accessoire:feestmuts", Soort.ACCESSOIRE, "level:20", 0, 0);
-    public static final Ding LAMPIONSPELD = ding("accessoire:lampionspeld", Soort.ACCESSOIRE, "later:zone4", 0, 4);
+    public static final Ding LAMPIONSPELD = ding("accessoire:lampionspeld", Soort.ACCESSOIRE, "boek:zone4:50", 0, 4);   // (T-INT: the zone-4 Verkenningsboek)
 
     // ---- name colours ------------------------------------------------------------------------------------------------------------
     public static final Ding NAAM_ROZE = ding("naamkleur:roze", Soort.NAAMKLEUR, "vlag:zone1_klaar", 0xFF8CC8, 1);

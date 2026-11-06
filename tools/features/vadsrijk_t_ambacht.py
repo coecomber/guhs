@@ -122,7 +122,8 @@ GROEPEN = {
     "z3_pluk_mosvoet": "de velden bij Mosvoet", "z3_hout_kever": "het Lichtkeverbos", "z3_hout_wortelweg": "langs de Wortelweg",
     "z3_hout_bloesemdal": "het Paddenbloesemdal", "z3_mijn_gewelf": "het Wortelgewelf", "z3_mijn_wortelgang_1": "de Wortelgang (voor)",
     "z3_mijn_wortelgang_2": "de Wortelgang (achter)", "z3_vis_moeras": "het Honingmoeras", "z3_vis_waterrad": "het waterrad van Mosvoet",
-    "z3_vis_honingvijver": "de honingvijvers in de kruin", "z3_korf_bloesemdal": "de bijenwei in het Paddenbloesemdal",
+    "z3_vis_honingvijver": "de honingvijvers in de kruin",
+    "z4_vis_haven": "de visplek van Lampionhaven", "z4_vis_kade": "de steigers van Lampionhaven", "z4_vis_koraal": "de Koraalbaai", "z3_korf_bloesemdal": "de bijenwei in het Paddenbloesemdal",
     "z3_korf_raatweide": "de Raatweide", "z3_korf_kever": "de bijenwei in het Lichtkeverbos",
 }
 

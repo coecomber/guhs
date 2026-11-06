@@ -54,14 +54,96 @@ public final class Z4VerhaalPlekken {
         }
     }
 
-    static BlockPos w(String id, int x, int y, int z) {
+    /** T-INT: a story id t-z4wereld does not publish -> the nearest real POI (+ a small offset; NPCs snap to the floor). */
+    private record Alias(String id, int dx, int dz) {
+    }
+
+    private static final Map<String, Alias> ALIAS = Map.ofEntries(
+            Map.entry("havenplein", new Alias("plein", 0, 0)),
+            Map.entry("luchthaven_landing", new Alias("haven_3_4_landing", 0, 0)),
+            Map.entry("kade_midden", new Alias("kade", 0, 0)),
+            Map.entry("npc_havenmeester", new Alias("kade", 2, 0)),
+            Map.entry("npc_zeilverhuur", new Alias("steiger_2", 0, 1)),
+            Map.entry("npc_luchthaven", new Alias("haven_3_4_kapitein", 0, 0)),
+            Map.entry("npc_lampionwerkplaats", new Alias("werkplaats_lampion", 0, 0)),
+            Map.entry("npc_bank", new Alias("bank_kluis", 0, 0)),
+            Map.entry("npc_werkplaats", new Alias("werkplaats_kookvuur", 1, 1)),
+            Map.entry("npc_winkel", new Alias("plein", 4, 3)),
+            Map.entry("npc_smid", new Alias("plein", -4, 3)),
+            Map.entry("npc_uitrusting", new Alias("plein", 4, -3)),
+            Map.entry("npc_kleermaker", new Alias("plein", -4, -3)),
+            Map.entry("npc_markt", new Alias("plein_fontein", 3, 0)),
+            Map.entry("npc_visrestaurant", new Alias("visrestaurant_terras", 0, 0)),
+            Map.entry("npc_visser", new Alias("werkplaats_visplek", 1, 0)),
+            Map.entry("kampvuur_lampionduin", new Alias("lampionduin_top", 0, 0)),
+            Map.entry("npc_burger_1", new Alias("plein", -6, 1)),
+            Map.entry("npc_burger_2", new Alias("plein", 6, -1)),
+            Map.entry("npc_burger_3", new Alias("plein_fontein", -2, 3)),
+            Map.entry("npc_burger_4", new Alias("questbord", 2, 0)),
+            Map.entry("npc_burger_5", new Alias("picknick_1", 1, 0)),
+            Map.entry("npc_burger_6", new Alias("steiger_3", 0, 1)),
+            Map.entry("npc_opvangcentrum", new Alias("npc_opvangleider", 0, 0)),
+            Map.entry("npc_knuffelwas", new Alias("knuffelwas", 0, 0)),
+            Map.entry("npc_soepkraam", new Alias("soepkraam", 0, 0)),
+            Map.entry("npc_vluchteling_1", new Alias("npc_opvangleider", 3, 1)),
+            Map.entry("npc_vluchteling_2", new Alias("soepkraam", 2, 2)),
+            Map.entry("npc_vluchteling_3", new Alias("knuffelwas", -2, 2)),
+            Map.entry("npc_vluchteling_4", new Alias("npc_opvangleider", -3, -1)),
+            Map.entry("npc_limonadebar", new Alias("npc_limonadeguh", 0, 0)),
+            Map.entry("npc_volleybal", new Alias("strandfeest_volleybal", 0, 0)),
+            Map.entry("npc_strandfeest", new Alias("strandfeest_dansvloer", 0, 0)),
+            Map.entry("npc_vliegerwerkplaats", new Alias("werkplaats_vlieger", 0, 0)),
+            Map.entry("npc_wedstrijdpaal", new Alias("wedstrijdpaal", 1, 0)),
+            Map.entry("npc_duiksteiger", new Alias("npc_duikmeester", 0, 0)),
+            Map.entry("npc_vuurtorenwachter", new Alias("vuurtoren_deur", 2, 0)),
+            Map.entry("npc_bijenboerderij", new Alias("npc_imker", 0, 0)),
+            Map.entry("npc_bloemenvelden", new Alias("eiland_bloemeneiland", 0, 0)),
+            Map.entry("npc_schildpad", new Alias("schildpad_rug", 0, 0)),
+            Map.entry("npc_mysterie", new Alias("mysterie_strand", 0, 0)),
+            Map.entry("npc_pierwachter", new Alias("opstijgpier_begin", 0, 0)),
+            Map.entry("npc_hemelkapitein", new Alias("haven_4_5_kapitein", 0, 0)),
+            Map.entry("kampvuur_havenplein", new Alias("kampvuur_lampionhaven", 0, 0)),
+            Map.entry("steiger_noord", new Alias("steiger_1", 0, 0)),
+            Map.entry("knuffeltij_strand", new Alias("eiland_knuffeltij", 0, 0)),
+            Map.entry("opvangcentrum", new Alias("npc_opvangleider", 0, 0)),
+            Map.entry("droogwaslijn", new Alias("droogveld", 0, 0)),
+            Map.entry("knuffeltij_feestplek", new Alias("knuffeltij_feest", 0, 0)),
+            Map.entry("grote_knuffel_strandfeest", new Alias("strandfeest_dansvloer", 3, 3)),
+            Map.entry("grote_knuffel_bloemeneiland", new Alias("eiland_bloemeneiland", 4, 0)),
+            Map.entry("grote_knuffel_koraalbaai", new Alias("eiland_koraalbaai", 4, 0)),
+            Map.entry("grote_knuffel_schildpad", new Alias("schildpad_rug", 2, 0)),
+            Map.entry("wrak", new Alias("wrak_ingang", 0, 0)),
+            Map.entry("vliegerwerkplaats", new Alias("werkplaats_vlieger", 0, 0)),
+            Map.entry("koraal_grotje_1", new Alias("grotje_1", 0, 0)),
+            Map.entry("koraal_grotje_2", new Alias("grotje_2", 0, 0)),
+            Map.entry("koraal_grotje_3", new Alias("grotje_3", 0, 0)),
+            Map.entry("vuurtoren_top", new Alias("vuurtoren_lamp", 0, 0)),
+            Map.entry("bijenboerderij", new Alias("bijenkorven", 0, 0)),
+            Map.entry("limonadebar", new Alias("strandfeest_bar", 0, 0)),
+            Map.entry("volleybalveld", new Alias("strandfeest_volleybal", 0, 0)),
+            Map.entry("pierkop", new Alias("eiland_pierkop", 0, 0)),
+            Map.entry("opstijgpier_eind", new Alias("opstijgpier", 0, 0)),
+            Map.entry("vuurtoren_huisje", new Alias("vuurtoren_deur", 0, 0)));
+
+    @Nullable
+    private static BlockPos echt(String id) {
         BlockPos b = wereld(id);
+        if (b == null && ALIAS.containsKey(id)) {
+            Alias a = ALIAS.get(id);
+            BlockPos c = wereld(a.id());
+            b = c == null ? null : c.offset(a.dx(), 0, a.dz());
+        }
+        return b;
+    }
+
+    static BlockPos w(String id, int x, int y, int z) {
+        BlockPos b = echt(id);
         return b != null ? b : new BlockPos(x, y, z);
     }
 
     /** A t-z4wereld spot moved a little (an NPC next to a campfire, not in it). */
     static BlockPos wo(String id, int dx, int dz, int x, int y, int z) {
-        BlockPos b = wereld(id);
+        BlockPos b = echt(id);
         return b != null ? b.offset(dx, 0, dz) : new BlockPos(x, y, z);
     }
 

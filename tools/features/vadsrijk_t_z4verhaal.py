@@ -982,8 +982,14 @@ def teksten():
     assert set(PLEK_POI) == poi_ids, f"POI ids differ from Z4VerhaalPlekken: {set(PLEK_POI) ^ poi_ids}"
     for id, x in PLEK_GEBIED.items():
         t[P + "plek.gebied." + id] = x
+    try:   # T-INT: t-z4wereld owns the area names; only fill ids it does not name
+        from features import vadsrijk_t_z4wereld as _z4w
+        _eigen = set(_z4w.GEBIEDEN)
+    except Exception:  # noqa: BLE001
+        _eigen = set()
     for id, x in GEBIED_NAMEN.items():
-        t["vadsrijk.kern.gebied." + id] = x
+        if id not in _eigen:
+            t["vadsrijk.kern.gebied." + id] = x
     for id, x in PLEK_KAMPVUUR.items():
         t[P + "plek.kampvuur." + id] = x
     for id, x in PLEK_BAAS.items():
@@ -1036,7 +1042,7 @@ def teksten():
 
 
 _PLEK_SOORTEN = ("npc:", "poi:", "gebied:", "baas:")
-LV_CAP = 50
+LV_CAP = 60   # (T-INT: kern cap raised to 60)
 
 
 def quests_json():

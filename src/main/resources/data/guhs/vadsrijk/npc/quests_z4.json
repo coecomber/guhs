@@ -140,7 +140,7 @@
       "soort": "hoofd",
       "gever": "z4_opvang",
       "inleveren": "z4_wachter",
-      "lv": 50,
+      "lv": 51,
       "na": [
         "z4_hq02_knuffeltij"
       ],
@@ -215,7 +215,7 @@
       "soort": "hoofd",
       "gever": "z4_wachter",
       "inleveren": "z4_opvang",
-      "lv": 50,
+      "lv": 52,
       "na": [
         "z4_hq03_waarvandaan"
       ],
@@ -290,7 +290,7 @@
       "soort": "hoofd",
       "gever": "z4_opvang",
       "inleveren": "z4_opvang",
-      "lv": 50,
+      "lv": 53,
       "na": [
         "z4_hq04_mist"
       ],
@@ -357,7 +357,7 @@
       "soort": "hoofd",
       "gever": "z4_opvang",
       "inleveren": "z4_havenmeester",
-      "lv": 50,
+      "lv": 54,
       "na": [
         "z4_hq05_vliegervanger"
       ],
@@ -451,7 +451,7 @@
       "soort": "hoofd",
       "gever": "z4_havenmeester",
       "inleveren": "z4_hemelkapitein",
-      "lv": 50,
+      "lv": 55,
       "na": [
         "z4_hq06_feest"
       ],
@@ -560,7 +560,7 @@
       "soort": "zij",
       "gever": "z4_windmeester",
       "inleveren": "z4_windmeester",
-      "lv": 50,
+      "lv": 51,
       "na": [
         "z4_s01_vlieger"
       ],
@@ -645,7 +645,7 @@
       "soort": "zij",
       "gever": "z4_duikmeester",
       "inleveren": "z4_duikmeester",
-      "lv": 50,
+      "lv": 51,
       "na": [
         "z4_hq02_knuffeltij"
       ],
@@ -684,7 +684,7 @@
       "soort": "zij",
       "gever": "z4_duikmeester",
       "inleveren": "z4_duikmeester",
-      "lv": 50,
+      "lv": 54,
       "na": [
         "z4_s04_parels"
       ],
@@ -812,7 +812,7 @@
       "soort": "zij",
       "gever": "z4_wachter",
       "inleveren": "z4_wachter",
-      "lv": 50,
+      "lv": 52,
       "na": [
         "z4_hq03_waarvandaan"
       ],
@@ -861,7 +861,7 @@
       "soort": "zij",
       "gever": "z4_imker",
       "inleveren": "z4_imker",
-      "lv": 50,
+      "lv": 51,
       "na": [
         "z4_hq02_knuffeltij"
       ],
@@ -900,7 +900,7 @@
       "soort": "zij",
       "gever": "z4_madelief",
       "inleveren": "z4_madelief",
-      "lv": 50,
+      "lv": 51,
       "na": [
         "z4_hq02_knuffeltij"
       ],
@@ -944,7 +944,7 @@
       "soort": "zij",
       "gever": "z4_schelpie",
       "inleveren": "z4_schelpie",
-      "lv": 50,
+      "lv": 52,
       "na": [
         "z4_hq03_waarvandaan"
       ],
@@ -984,7 +984,7 @@
       "soort": "zij",
       "gever": "z4_nevel",
       "inleveren": "z4_nevel",
-      "lv": 50,
+      "lv": 53,
       "na": [
         "z4_hq04_mist"
       ],
@@ -1200,7 +1200,7 @@
       "soort": "zij",
       "gever": "z4_grijsje",
       "inleveren": "z4_grijsje",
-      "lv": 50,
+      "lv": 52,
       "na": [
         "z4_hq05_vliegervanger"
       ],

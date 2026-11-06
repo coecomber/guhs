@@ -260,6 +260,9 @@ public final class Verzamelen {
         Materiaal m = kies(p, sl, g);
         if (m != null) {
             MateriaalTas.geef(p, Materialen.stack(m.id(), q, n));
+            if (g.ambacht() == Ambacht.VISSEN && g.zone() == 4) {
+                nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.meld(p, "z4_vis", "gevangen");   // T-INT: t-z4verhaal counts zone-4 fish
+            }
             if (g.ambacht() == Ambacht.VISSEN && AmbachtData.voegToe(p, "vissen", m.id())) {
                 p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.vis.nieuw", Component.translatable(m.naamKey())).withStyle(ChatFormatting.AQUA));
             }

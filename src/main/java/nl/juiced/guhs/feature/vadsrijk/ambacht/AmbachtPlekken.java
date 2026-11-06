@@ -90,6 +90,10 @@ public final class AmbachtPlekken {
         g("z3_vis_moeras", 3, "honingmoeras", Ambacht.VISSEN, 3, 6, 40, Zoek.WATER);
         g("z3_vis_waterrad", 3, "mosvoet_waterrad", Ambacht.VISSEN, 3, 5, 32, Zoek.WATER);
         g("z3_vis_honingvijver", 3, "honingvijver_1", Ambacht.VISSEN, 3, 4, 24, Zoek.WATER);
+        // T-INT: zone 4 (De Lampionkust, t-z4wereld POIs): fishing for the zone-4 story (every catch reports z4_vis/gevangen)
+        g("z4_vis_haven", 4, "werkplaats_visplek", Ambacht.VISSEN, 3, 6, 32, Zoek.WATER);
+        g("z4_vis_kade", 4, "steiger_2_eind", Ambacht.VISSEN, 3, 5, 28, Zoek.WATER);
+        g("z4_vis_koraal", 4, "kampvuur_koraalbaai", Ambacht.VISSEN, 3, 6, 40, Zoek.WATER);
         // Imkeren (A3: own hives in the zones from zone 3 on; the bees fetch nectar from the flowers round them)
         korf("z3_korf_bloesemdal", "paddenbloesemdal", "bloesemhoning");
         korf("z3_korf_raatweide", "raatweide_plein", "schemerhoning");
@@ -140,6 +144,7 @@ public final class AmbachtPlekken {
             case 1 -> WereldPlekken.plek(id);
             case 2 -> Z2WereldPlekken.plek(id);
             case 3 -> Z3WereldPlekken.plek(id);
+            case 4 -> nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.plek(id);   // T-INT
             default -> null;
         };
     }

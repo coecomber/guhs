@@ -17,6 +17,8 @@ public final class HoogvadsGilde {
     }
 
     static void koppel() {
+        // T-INT: t-z4verhaal's Lampionhaven workshop NPC (role "werkplaats", a carpenter with a tool belt) = the smithy
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppel("werkplaats", p -> AmbachtSchermen.werkplaats(p, Ambacht.SMEDEN, "z4_werkplaats"));
         LEERMEESTERS.forEach((npc, a) -> optie(npc, new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.werk", p -> true,
                 p -> AmbachtSchermen.werkplaats(p, a, npc))));
         optie("z5_gildemeester", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.boek", p -> true,
