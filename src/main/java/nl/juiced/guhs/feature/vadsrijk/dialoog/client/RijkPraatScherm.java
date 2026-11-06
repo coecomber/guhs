@@ -135,6 +135,7 @@ public class RijkPraatScherm extends PraatScherm {
             getoondPagina = pagina;
             getoondDoel = doelOpen;
             kenmerken();
+            nl.juiced.guhs.feature.vadsrijk.geluid.client.StemSpeler.pagina(npcId, nieuw, stem, nu().getStringOr("Factie", "z1"), emotie.id(), tekst(nu()).getString());   // U-AUDIO2: NPC voice
         }
         layout();
         if (andere) {

@@ -66,6 +66,11 @@ public final class GeluidSpeler {
     @Nullable
     private static String baasThema;
     private static int wachtEntity = -1;
+    // U-AUDIO2: the last-phase loop (runs in sync with 'baas' from the start, silent until the boss reaches its last phase)
+    @Nullable
+    private static Lus baasFase;
+    private static int baasEntity = -1, faseVoorbeeldOp = -1;
+    private static final java.util.Set<Integer> LAATSTE_FASE = new java.util.HashSet<>();
     private static String wachtId = "";
     // stingers + the dev preview
     @Nullable
@@ -101,6 +106,13 @@ public final class GeluidSpeler {
         }
         if (baas != null && baas.klaar()) {
             baas = null;   // (baasThema stays until the bar goes: a missing file is not retried every bar update)
+        }
+        if (baasFase != null && baasFase.klaar()) {
+            baasFase = null;
+        }
+        if (faseVoorbeeldOp >= 0 && klok >= faseVoorbeeldOp) {   // dev: the phase preview switches now
+            faseVoorbeeldOp = -1;
+            naarLaatsteFase();
         }
         if (voorbeeld != null && voorbeeld.klaar()) {
             voorbeeld = null;
@@ -209,7 +221,11 @@ public final class GeluidSpeler {
             if (baas != null) {
                 baas.uit(50);
             }
+            if (baasFase != null) {
+                baasFase.uit(50);
+            }
             baasThema = null;
+            baasEntity = -1;
             return true;
         }
         String thema = baasThemaVoor(mc, entityId, muziek);
@@ -220,6 +236,7 @@ public final class GeluidSpeler {
             return true;
         }
         wachtEntity = -1;
+        baasEntity = entityId;
         if (thema.equals(baasThema) && (baas == null || !baas.gaatUit())) {
             return true;
         }
@@ -247,6 +264,10 @@ public final class GeluidSpeler {
         if (baas != null) {
             baas.uit(30);
         }
+        if (baasFase != null) {
+            baasFase.uit(30);
+            baasFase = null;
+        }
         if (gebied != null) {
             gebied.uit(20);
         }
@@ -262,13 +283,73 @@ public final class GeluidSpeler {
         mc.getMusicManager().stopPlaying();
         String kort = id.getPath().substring(id.getPath().lastIndexOf('.') + 1);
         baas = new Lus(kort, SoundEvent.createVariableRangeEvent(id), SoundSource.MUSIC, () -> BAAS_VOL * GeluidConfig.bazen(), 30, true);
+        // U-AUDIO2: its last-phase loop starts at the same moment (silent), so the crossfade later lands on the same spot
+        String t = GeluidPlan.themaVanId(volId);
+        if (t != null) {
+            baasFase = new Lus(t + "_fase", event(GeluidPlan.faseId(t)), SoundSource.MUSIC, () -> BAAS_VOL * GeluidConfig.bazen(), 30, true);
+            baasFase.meng = baasFase.mengDoel = 0f;
+            if (LAATSTE_FASE.contains(baasEntity)) {   // (joined the fight late, already in the last phase)
+                baasFase.meng = baasFase.mengDoel = 1f;
+                baas.meng = baas.mengDoel = 0f;
+            }
+        }
         mc.getSoundManager().play(baas);
+        if (baasFase != null) {
+            mc.getSoundManager().play(baasFase);
+        }
+    }
+
+    /** U-AUDIO2 (server: the VadsrijkBaas phase hook): boss entityId reached phase fase of max; the last one = the intense loop. */
+    static void fase(int entityId, int fase, int max) {
+        if (fase < max) {
+            return;
+        }
+        if (LAATSTE_FASE.size() > 64) {
+            LAATSTE_FASE.clear();
+        }
+        LAATSTE_FASE.add(entityId);
+        if (entityId == baasEntity) {
+            naarLaatsteFase();
+        }
+    }
+
+    /** Crossfade (2 s) from the boss theme into its last-phase loop (the base keeps running silent, in sync). */
+    private static void naarLaatsteFase() {
+        if (baas != null && baasFase != null) {
+            baas.mengDoel = 0f;
+            baasFase.mengDoel = 1f;
+        }
+    }
+
+    /** U-AUDIO2: the boss is beaten: its music makes room and its own fanfare plays (the shared stinger for an unknown boss). */
+    static void fanfare(String thema) {
+        if (baas != null) {
+            baas.uit(20);
+        }
+        if (baasFase != null) {
+            baasFase.uit(20);
+        }
+        stinger(GeluidPlan.BAAS_THEMAS.contains(thema) ? "fanfare." + thema : "baas_verslagen");
+    }
+
+    /** Dev: a boss theme, and after 12 s its last phase fades in (stop with /guhs vadsrijk geluid stop). */
+    static void faseVoorbeeld(String thema) {
+        Minecraft mc = Minecraft.getInstance();
+        stopVoorbeeld();
+        if (gebied != null) {
+            gebied.uit(20);
+        }
+        baasEntity = -2;
+        LAATSTE_FASE.remove(-2);
+        baasThema = Guhs.MODID + ":" + GeluidPlan.baasId(thema);
+        speelBaas(mc, baasThema);
+        faseVoorbeeldOp = klok + 240;
     }
 
     // ---- stingers ---------------------------------------------------------------------------------------------------------
 
     public static void stinger(String soort) {
-        if (GeluidConfig.stingers() <= 0 || !GeluidPlan.STINGERS.contains(soort)) {
+        if (GeluidConfig.stingers() <= 0 || !GeluidPlan.STINGERS.contains(soort) && !soort.startsWith("fanfare.")) {
             return;
         }
         if (stinger != null && !stinger.klaar()) {
@@ -282,7 +363,8 @@ public final class GeluidSpeler {
 
     private static void speelStinger(String soort) {
         Minecraft mc = Minecraft.getInstance();
-        stinger = new Lus(soort, event(GeluidPlan.stingerId(soort)), SoundSource.MUSIC, () -> STINGER_VOL * GeluidConfig.stingers(), 1, false);
+        String id = soort.startsWith("fanfare.") ? GeluidPlan.fanfareId(soort.substring(8)) : GeluidPlan.stingerId(soort);   // U-AUDIO2
+        stinger = new Lus(soort, event(id), SoundSource.MUSIC, () -> STINGER_VOL * GeluidConfig.stingers(), 1, false);
         mc.getSoundManager().play(stinger);
     }
 
@@ -295,6 +377,9 @@ public final class GeluidSpeler {
         }
         if (baas != null) {
             baas.duikDoel = stinger != null ? 0.5f : 1f;
+        }
+        if (baasFase != null) {
+            baasFase.duikDoel = stinger != null ? 0.5f : 1f;
         }
     }
 
@@ -326,12 +411,14 @@ public final class GeluidSpeler {
     static void stopAlles() {
         Minecraft mc = Minecraft.getInstance();
         stopVoorbeeld();
-        for (Lus l : new Lus[] {gebied, stinger}) {
+        for (Lus l : new Lus[] {gebied, stinger, baas, baasFase}) {
             if (l != null) {
                 mc.getSoundManager().stop(l);
             }
         }
-        gebied = stinger = null;
+        gebied = stinger = baas = baasFase = null;
+        baasThema = null;
+        faseVoorbeeldOp = -1;
         RIJ.clear();
         volgendeOp = klok + GeluidConfig.pauze(R);
     }
@@ -359,7 +446,8 @@ public final class GeluidSpeler {
                 : "stilte, nog " + Math.max(0, (volgendeOp - klok) / 20) + " s";
         p.sendSystemMessage(Component.literal("Gebied: " + (g == null ? "-" : g.id()) + "  streek: " + (s == null ? "-" : s.id())
                 + "  thema's: " + (s == null ? "-" : String.join(", ", s.themas())) + "  bed: " + GebiedSfeerSpeler.huidig()).withStyle(ChatFormatting.AQUA));
-        p.sendSystemMessage(Component.literal("Muziek: " + nu + (baasThema != null ? "  |  baas: " + baasThema : "")
+        p.sendSystemMessage(Component.literal("Muziek: " + nu + (baasThema != null ? "  |  baas: " + baasThema
+                + (baasFase != null && baasFase.mengDoel > 0.5f ? " (laatste fase)" : "") : "")
                 + "  |  schuifjes: gebied " + pct(GeluidConfig.gebied()) + " bazen " + pct(GeluidConfig.bazen()) + " stingers "
                 + pct(GeluidConfig.stingers()) + " omgeving " + pct(GeluidConfig.omgeving())).withStyle(ChatFormatting.AQUA));
     }
@@ -371,12 +459,15 @@ public final class GeluidSpeler {
     /** Leaving a world or a server: everything off at once. */
     private static void wis() {
         Minecraft mc = Minecraft.getInstance();
-        for (Lus l : new Lus[] {gebied, baas, stinger, voorbeeld}) {
+        for (Lus l : new Lus[] {gebied, baas, baasFase, stinger, voorbeeld}) {
             if (l != null) {
                 mc.getSoundManager().stop(l);
             }
         }
-        gebied = baas = stinger = voorbeeld = null;
+        gebied = baas = baasFase = stinger = voorbeeld = null;
+        LAATSTE_FASE.clear();
+        baasEntity = -1;
+        faseVoorbeeldOp = -1;
         baasThema = null;
         laatsteStreek = null;
         wachtEntity = -1;

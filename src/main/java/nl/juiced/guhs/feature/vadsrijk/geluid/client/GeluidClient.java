@@ -23,6 +23,8 @@ public final class GeluidClient {
         ModList.get().getModContainerById(Guhs.MODID).ifPresent(c -> c.registerConfig(ModConfig.Type.CLIENT, GeluidConfig.SPEC, "guhs-vadsrijk-geluid.toml"));
         GeluidSpeler.init();
         GebiedSfeerSpeler.init();
+        WereldGeluiden.init();   // U-AUDIO2
+        StemSpeler.init();   // U-AUDIO2
         GeluidPayloads.speel = s -> Minecraft.getInstance().execute(() -> ontvang(s.soort(), s.naam()));
         var oud = KernPayloads.titelOntvanger;
         KernPayloads.titelOntvanger = t -> {
@@ -48,6 +50,23 @@ public final class GeluidClient {
             }
             case "nu" -> GeluidSpeler.nu();
             case "info" -> GeluidSpeler.info();
+            // U-AUDIO2
+            case "fase" -> {
+                String[] d = naam.split(":");
+                if (d.length == 3) {   // from the server: entityId:fase:max
+                    try {
+                        GeluidSpeler.fase(Integer.parseInt(d[0]), Integer.parseInt(d[1]), Integer.parseInt(d[2]));
+                    } catch (NumberFormatException ignored) {
+                        // (a broken packet: no phase music)
+                    }
+                } else {   // dev preview: the theme, its last phase after 12 s
+                    GeluidSpeler.faseVoorbeeld(naam);
+                }
+            }
+            case "fanfare" -> GeluidSpeler.fanfare(naam);
+            case "stem" -> StemSpeler.voorbeeld(naam);
+            case "wereld" -> WereldGeluiden.voorbeeld(naam);
+            case "wereldinfo" -> WereldGeluiden.info();
             default -> {
             }
         }

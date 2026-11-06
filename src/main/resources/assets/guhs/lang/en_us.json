@@ -43342,5 +43342,9 @@
   "vadsrijk.indeling.haven.haven_z4_z3_vertrek": "Lantern Harbour",
   "vadsrijk.indeling.dev.tp": "To %s (%s).",
   "vadsrijk.indeling.dev.onbekend": "Unknown place: %s",
-  "vadsrijk.indeling.dev.barriere": "Barriers: %s"
+  "vadsrijk.indeling.dev.barriere": "Barriers: %s",
+  "guhs.configuration.wereldgeluiden": "Vadsrijk: world sounds",
+  "guhs.configuration.wereldgeluiden.tooltip": "Soft little sounds of places close by: fountains, beehives, the smithy hammer, market murmur, wind chimes, campfires, creaking lifts, an echo of your steps in caves (percent, 0 = off). Also follows the Ambient slider.",
+  "guhs.configuration.stemmen": "Vadsrijk: NPC voices",
+  "guhs.configuration.stemmen.tooltip": "The little guh voices of NPCs: a 'guh!' when you talk to them, a question, a thank-you (percent, 0 = off). Also follows the Friendly Creatures slider."
 }
