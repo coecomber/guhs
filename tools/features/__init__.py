@@ -277,6 +277,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_droom',
             # 1.10 U-OVERGANG: sea-band biomes between the zones + the epic viewpoint names (Java: biomen.VadsrijkBiomen, indeling.ZeeVulling)
             'vadsrijk_u_overgang',
+            # 1.10 round U, U-DECO: stair floor boards texts (Java: feature/vadsrijk/udeco)
+            'vadsrijk_u_deco',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

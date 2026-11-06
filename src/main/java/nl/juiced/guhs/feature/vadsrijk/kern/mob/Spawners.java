@@ -165,6 +165,8 @@ public final class Spawners {
     public static final List<BlockPos> VEILIGE_PLEKKEN = new CopyOnWriteArrayList<>();
     /** Extra "not here" tests (true = forbidden), e.g. an NPC nearby. */
     public static final List<BiPredicate<ServerLevel, BlockPos>> VERBODEN = new CopyOnWriteArrayList<>();
+    /** U-DECO: extra "not here for THIS spawner" tests (true = forbidden): the arrival clearance (udeco.Aankomstvrij). */
+    public static final List<BiPredicate<Spawner, BlockPos>> VERBODEN_VOOR = new CopyOnWriteArrayList<>();
 
     /** The numbers of the last tick (dev command / notes). */
     public static int laatstActief, laatstLevend, laatstGespawnd, laatstWeg;
@@ -362,7 +364,7 @@ public final class Spawners {
                 continue;
             }
             BlockPos plek = new BlockPos(x, y, z);
-            if (!magHier(sl, plek)) {
+            if (!magHier(sl, plek) || VERBODEN_VOOR.stream().anyMatch(t -> t.test(s, plek))) {   // U-DECO: + VERBODEN_VOOR
                 continue;
             }
             VadsrijkMob m = s.type().get().create(sl, EntitySpawnReason.SPAWNER);

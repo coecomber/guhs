@@ -56,6 +56,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.register(modBus);   // T-KLEDING: Kledingkast, wings, effects
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.register(modBus);   // T-LUCHTSCHIP: scheduled airships + view
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
+        nl.juiced.guhs.feature.vadsrijk.udeco.UDeco.register(modBus);   // U-DECO: arrival clearance, Honingtak bees, stair floor boards
     }
 
     public static void payloads(PayloadRegistrar registrar) {

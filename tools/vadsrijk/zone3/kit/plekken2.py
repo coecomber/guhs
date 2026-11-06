@@ -188,7 +188,7 @@ def lampionsnoer(W, p0, p1, zak=2.5, elke=3):
         W.wset(x, y, z, "minecraft:iron_chain[axis=x]" if abs(p1[0] - p0[0]) > abs(p1[2] - p0[2]) else
                "minecraft:iron_chain[axis=z]", keep=True)
         if i % elke == 0:
-            W.wset(x, y - 1, z, [LAMP_R, LAMP_G, "guhs:lampion_mint"][i // elke % 3], keep=True)
+            W.wset(x, y - 1, z, [LAMP_R, LAMP_G, "guhs:lampion_mint"][i // elke % 3] + "[hanging=true]", keep=True)   # U-DECO: hangs
 
 
 def kampvuur(W, x, y, z):

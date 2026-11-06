@@ -19,6 +19,8 @@ import math
 import os
 import sys
 
+import numpy as np
+
 HIER = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(HIER, "kit"))
 sys.path.insert(0, HIER)
@@ -136,7 +138,7 @@ def interieur(o, h):
             o.s(rechts[0], y, rechts[1], "minecraft:lectern[facing=%s]" % f)
         elif soort == "opvangcentrum":
             for (cx, cz) in achter[1:-1:2]:
-                o.s(cx, y + 1, cz, "guhs:knuffel_mager[facing=%s]" % f)
+                o.s(cx, y, cz, "guhs:knuffel_mager[facing=%s]" % f)   # U-DECO: on the floor (y = stand), not 1 above it
         else:
             o.s(rechts[0], y, rechts[1], "minecraft:chest[facing=%s]" % f)
         return
@@ -587,3 +589,19 @@ def bouw(W):
         if d < x1 or a >= x2 or f < z1 or c >= z2:
             continue
         W.wfill(a, b, c, d, e, f, s)
+    zwevende_plantjes_weg(W)
+
+
+PLANT_DELEN = ("_tulip", "allium", "oxeye_daisy", "cornflower", "lily_of_the_valley", "guhbloem", "hibiscus", "short_grass",
+               "_gras", "fern", "dead_bush", "schelpje", "pink_petals", "dandelion", "poppy")
+
+
+def zwevende_plantjes_weg(W):
+    """U-DECO: a plant/flower whose ground was dug away later (a path cut into a slope, a house floor, a dock) floated in the
+    air; remove every plant with air right under it (the last step of the deco layer, per tile)."""
+    plant = np.array([any(d in p for d in PLANT_DELEN) and "potted" not in p and "_block" not in p for p in W.pal], bool)
+    if not plant.any():
+        return
+    v = W.v
+    m = plant[v[:, 1:, :]] & (v[:, :-1, :] == 0)
+    v[:, 1:, :][m] = 0
