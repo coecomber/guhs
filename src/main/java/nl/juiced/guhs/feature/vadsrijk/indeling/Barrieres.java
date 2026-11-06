@@ -64,7 +64,7 @@ public final class Barrieres {
             new Vrij("z2", 704, -1143, 330, 395, -64),
             new Vrij("z3", 1404, -576, 300, 300, -64),
             new Vrij("z3_werf", 1655, -827, 115, 115, -64),
-            new Vrij("z4", 2152, -491, 390, 262, -64),
+            new Vrij("z4", 2170, -491, 440, 270, -64),           // (T-INT: fitted to t-z4wereld's real islands + airship docks: max 0.955)
             new Vrij("z5", 2795, -520, 420, 200, 150),
             new Vrij("proeftuin", 3096, 3096, 140, 140, -64));
 

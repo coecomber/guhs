@@ -43,7 +43,9 @@ final class Z3Lucht {
 
     /** 0 outside zone 3, 1 inside (T-WERELD: soft over 120 blocks around its tile box; zone 2 lies west, zone 4 east). */
     static float sterkte(double x, double z) {
-        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.nabij(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.Z3, x, z, 120);
+        // (T-INT: never over zone 4 / Lampionhaven: fade out over the last 40 blocks before zone 4's box)
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.nabij(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.Z3, x, z, 120)
+                * (1f - nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.nabij(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.Z4, x, z, 40));
     }
 
     static float nachtFactor(long tijd) {

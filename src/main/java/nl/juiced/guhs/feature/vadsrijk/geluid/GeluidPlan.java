@@ -60,7 +60,22 @@ public final class GeluidPlan {
             s("z3_hart", "tempel", "hart"), s("z3_schorsstad", "bos", "schorsstad"), s("z3_stamspiraal", "bos", "stamspiraal"),
             s("z3_takkenbanen", "kruin", "takkenbanen"), s("z3_kruinzee", "kruin", "kruinzee"), s("z3_zeppelinwerf", "kruin", "zeppelinwerf"),
             // the towns: no area theme (their town tunes play), but zone 3's Honingtak gets the honey buzz on top of its town bed
-            s("z3_honingtak", "honing"));
+            s("z3_honingtak", "honing"),
+            // T-INT: the real zone-4 areas (t-z4wereld plan4.gebieden: z4_<island>, z4_wrak, z4_schildpad, z4_zee) and zone-5 areas
+            // (t-z5wereld/t-z5wezens): own beds, the zone themes (day/evening resp. Hoogvads + the market waltz)
+            z4("z4_lampionhaven", "kust"), z4("z4_knuffeltij", "kust"), z4("z4_strandfeest", "kust"), z4("z4_bloemeneiland", "weide"),
+            z4("z4_koraalbaai", "meer"), z4("z4_vliegereiland", "weide"), z4("z4_vuurtoreneiland", "kust"), z4("z4_pierkop", "kust"),
+            z4("z4_mysterie", "grot"), z4("z4_wrak", "grot"), z4("z4_schildpad", "kust"), z4("z4_zee", "kust"),
+            z5("z5_staartvlakte", "weide"), z5("z5_wolkrand_noord", "weide"), z5("z5_wolkrand_zuid", "weide"), z5("z5_proefarena", "weide"),
+            z5("z5_buikgangen", "grot"), z5("z5_schuilnest", "grot"));
+
+    private static Map.Entry<String, Streek> z4(String id, String bed) {
+        return Map.entry(id, new Streek(id, List.of("lampionkust_dag", "lampionkust_avond"), bed));
+    }
+
+    private static Map.Entry<String, Streek> z5(String id, String bed) {
+        return Map.entry(id, new Streek(id, List.of("hoogvads", "hoogvads_markt"), bed));
+    }
 
     private static final Streek ZONE4 = new Streek("z4", List.of("lampionkust_dag", "lampionkust_avond"), "kust");
     private static final Streek ZONE5 = new Streek("z5", List.of("hoogvads", "hoogvads_markt"), "weide");

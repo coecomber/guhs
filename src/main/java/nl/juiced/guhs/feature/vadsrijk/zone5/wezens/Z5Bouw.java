@@ -29,7 +29,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 /**
  * The places of the zone-5 combat slice that it builds ITSELF (stand-ins; t-z5wereld builds the city and may replace any of them):
  * <ul>
- *   <li>{@link #buikgangen}: the small dungeon inside the hollow whale (x 2704..2808, y 185..196, z -530..-508): an entrance hall, the
+ *   <li>{@link #buikgangen}: the small dungeon inside the hollow whale (x 2704..2808, y 165..176 (T-INT: the whale hangs 20 lower), z -530..-508): an entrance hall, the
  *       Ribbengang (bone ribs every 5 blocks), the Kleppenzaal (copper pipes), a short passage and the round Ketelkamer (r 14);
  *       walkways of birch planks over whale flesh (pink terracotta), froglights in the ceiling. Real floors, 5 high (the
  *       Ketelkamer 8), no steps, no pits.</li>

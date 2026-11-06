@@ -84,7 +84,7 @@ public final class Z5WezensPlekken {
     public static final int PROEF_STRAAL = 11;
 
     // ---- 2. De Buikgangen (own rooms, floor y 186; x 2706..2806 under the market) ----------------------------------------------
-    public static final int BUIK_Y = 186;
+    public static final int BUIK_Y = 166;   // (T-INT: t-z5wereld hangs the whale 20 lower: was 186)
     /** The hatch in the cellar of the Grote Soepkeuken (right-click: down) and where you land inside. */
     public static final BlockPos BUIK_LUIK = w("z5w_buik_luik", 2716, 239, -540);
     public static final BlockPos BUIK_AANKOMST = w("z5w_buik_aankomst", 2711, BUIK_Y, -520);
@@ -114,7 +114,7 @@ public final class Z5WezensPlekken {
     public static final int DONDER_STRAAL = 20;
 
     // ---- 4. Het Schuilnest (own room under the Luchthaven, floor y 208) -------------------------------------------------------------
-    public static final int NEST_Y = 208;
+    public static final int NEST_Y = 188;   // (T-INT: the whale is 20 lower: was 208)
     public static final BlockPos NEST_LUIK = w("z5w_schuilnest_luik", 2612, 237, -446);
     public static final BlockPos NEST_AANKOMST = w("z5w_schuilnest_aankomst", 2594, NEST_Y, -427);
     public static final BlockPos NEST_UITLUIK = w("z5w_schuilnest_uitluik", 2591, NEST_Y, -430);
@@ -154,9 +154,9 @@ public final class Z5WezensPlekken {
                     PROEFARENA.getZ() + PROEF_STRAAL + 2, 56, 57, false).metY(PROEFARENA.getY() - 6, PROEFARENA.getY() + 10),
             new Gebieden.Gebied("z5_buikgangen", 2700, -545, 2810, -495, 57, 59, false).metY(BUIK_Y - 6, BUIK_Y + 14),
             new Gebieden.Gebied("z5_schuilnest", 2586, -440, 2624, -414, 58, 60, false).metY(NEST_Y - 4, NEST_Y + 10),
-            new Gebieden.Gebied("z5_wolkrand_zuid", 2560, -700, 2670, -615, 58, 60, false).metY(145, 205),
-            new Gebieden.Gebied("z5_wolkrand_noord", 2560, -425, 2670, -340, 58, 60, false).metY(145, 205),
-            new Gebieden.Gebied("z5_staartvlakte", 2932, -655, 3025, -385, 58, 60, false).metY(205, 250));
+            new Gebieden.Gebied("z5_wolkrand_zuid", 2560, -700, 2670, -615, 58, 60, false).metY(125, 185),   // (T-INT: the whale is 20 lower: was 145..205)
+            new Gebieden.Gebied("z5_wolkrand_noord", 2560, -425, 2670, -340, 58, 60, false).metY(125, 185),   // (T-INT: the whale is 20 lower: was 145..205)
+            new Gebieden.Gebied("z5_staartvlakte", 2932, -655, 3025, -385, 58, 60, false).metY(185, 230));   // (T-INT: the whale is 20 lower: was 205..250)
 
     /** The Wolkrand areas with the spot a falling player is caught back to (Z5Vangnet). */
     public static final Map<String, BlockPos> VANGNET = new LinkedHashMap<>();

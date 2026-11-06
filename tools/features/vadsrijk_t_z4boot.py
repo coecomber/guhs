@@ -257,7 +257,9 @@ def fles():
 Z = "vadsrijk.z4boot."
 STEIGERS = {"lampionhaven": "Lampionhaven", "knuffeltij": "Knuffeltij-strand", "bloemeneiland": "Bloemeneiland", "strandfeest": "Strandfeesteiland",
             "koraalbaai": "Koraalbaai", "vliegereiland": "Vliegereiland", "vuurtoren": "Vuurtoreneiland", "mysterie": "Mysterie-eiland",
-            "opstijgpier": "Opstijgpier"}
+            "opstijgpier": "Opstijgpier",
+            # T-INT: the real dock ids of t-z4wereld (boot_dok_<id>)
+            "vuurtoreneiland": "Vuurtoreneiland", "pierkop": "Pierkop", "schildpad": "Schildpadeiland", "wrak": "Het Wrak"}
 VARIANTEN = {
     "zeil_roze": ("Roze zeil", "Pink sail"), "zeil_mint": ("Muntgroen zeil", "Mint sail"), "zeil_lavendel": ("Lavendel zeil", "Lavender sail"),
     "zeil_zeeblauw": ("Zeeblauw zeil", "Sea-blue sail"), "zeil_honing": ("Honingzeil", "Honey sail"),

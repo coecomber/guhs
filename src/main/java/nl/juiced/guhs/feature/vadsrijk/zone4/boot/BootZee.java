@@ -20,13 +20,14 @@ import net.minecraft.core.BlockPos;
  * of a dock is where you stand on its planks after mooring.
  */
 public final class BootZee {
-    public static final double CX = 2140, CZ = -491, A = 470, B = 290, BINNEN = 0.93, BUITEN = 1.0;
+    // (T-INT: = t-z4wereld's real current, tools/vadsrijk/zone4/plan4.py STROOM (2150, -470, 470, 255) + STROOM_D 0.93)
+    public static final double CX = 2150, CZ = -470, A = 470, B = 255, BINNEN = 0.93, BUITEN = 1.0;
     /** Beyond this fraction of the ellipse there is no current at all (a dev test boat elsewhere in the dimension sails freely). */
     public static final double STROOM_TOT = 1.4;
     /** How close (blocks, horizontally) the boat must be to a dock's spot to moor there. */
     public static final double AANLEG_AFSTAND = 10;
     /** The POI id prefix of a boat dock in the zone-4 POI list. */
-    public static final String POI_PREFIX = "boot_steiger_";
+    public static final String POI_PREFIX = "boot_dok_";   // (T-INT: t-z4wereld publishes boot_dok_<island> + _water/_wal helper spots)
     /** The dock you come back to when no other is known (and where the story hands you the boat). */
     public static final String THUIS = "lampionhaven";
 
@@ -128,7 +129,8 @@ public final class BootZee {
                 Object o = f.get(null);
                 if (o instanceof Map<?, ?> m) {
                     for (Map.Entry<?, ?> e : ((Map<Object, Object>) m).entrySet()) {
-                        if (e.getKey() instanceof String id && id.startsWith(POI_PREFIX) && e.getValue() instanceof BlockPos p) {
+                        if (e.getKey() instanceof String id && id.startsWith(POI_PREFIX) && !id.endsWith("_water") && !id.endsWith("_wal")
+                                && e.getValue() instanceof BlockPos p) {
                             l.add(new Steiger(id.substring(POI_PREFIX.length()), p, false));
                         }
                     }
