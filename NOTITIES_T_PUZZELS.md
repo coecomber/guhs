@@ -111,7 +111,10 @@ Branch `110-t-puzzels` from dbf82899d. Brief: T_BRIEF.md + the agent prompt (VOO
 - The generator validates every light puzzle (brute force: solvable, start state not solved) and push puzzle (BFS). The solution pushes are in the json.
 
 ## Resume point / status
-See the bottom of this file (filled in at the end of the run).
+- Done and green: `runGameTestServer -Pgt=VadsrijkPuzzels`, 10/10 (+ the framework's own), 2026-11-06 01:30. Also `-Pgt=VadsrijkVoltooiing` 3/3 green (the book hook).
+- NOT tested in a client: the look of the 19 generated textures, the stair connections on real terrain, and whether every anchor has a decent flat spot.
+  - First in-world check: `/guhs vadsrijk puzzel tp <id>` for each id in SPIEK_T_PUZZELS.md.
+- After t-wereld's shift: nothing to do unless a POI id was renamed. The `data` gametest will say so.
 
 ## Open points
 - No hand-made models: the blocks are 16x16 generated pixel art (cube/plate/small box models; lanterns reuse the vanilla lantern template).
