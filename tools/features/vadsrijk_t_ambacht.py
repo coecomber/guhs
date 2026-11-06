@@ -774,7 +774,7 @@ def _assets():
 def build(h):
     _assets()
     for k, nl in TEKSTEN.items():
-        h.lang(k, nl, EN.get(k, nl))
+        h.lang(k, EN.get(k, nl), nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 def _direct():

@@ -94,7 +94,7 @@ def _tag(root):
 
 def build(h):
     for k, (nl, en) in teksten().items():
-        h.lang(k, nl, en)
+        h.lang(k, en, nl)   # (T-INT: make_v2.lang(key, en, nl))
     _tag(os.path.join("src", "main", "resources"))
 
 

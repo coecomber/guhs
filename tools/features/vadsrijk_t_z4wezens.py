@@ -927,7 +927,7 @@ def build(h):
     assets(h.A, h.w)
     uiterlijken(h.A, h.w)
     for k, (nl, en) in teksten().items():
-        h.lang(k, nl, en)
+        h.lang(k, en, nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 def _direct():

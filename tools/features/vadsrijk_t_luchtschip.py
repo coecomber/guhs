@@ -392,7 +392,7 @@ def alles(w, a_dir, png):
 def build(h):
     alles(h.w, h.A, _png)
     for k, (nl, en) in TEKSTEN.items():
-        h.lang(k, nl, en)
+        h.lang(k, en, nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 def _png(pad, im):

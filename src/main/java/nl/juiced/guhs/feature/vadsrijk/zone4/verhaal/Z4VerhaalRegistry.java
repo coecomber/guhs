@@ -76,7 +76,7 @@ public final class Z4VerhaalRegistry {
     }
 
     public static final List<String> GEBIEDEN_Z4 = List.of("z4_lampionhaven", "z4_knuffeltij", "z4_strandfeest", "z4_bloemeneiland", "z4_koraalbaai",
-            "z4_vliegereiland", "z4_vuurtoreneiland", "z4_schildpadeiland", "z4_mysterie", "z4_pierkop");
+            "z4_vliegereiland", "z4_vuurtoreneiland", "z4_schildpad", "z4_mysterie", "z4_pierkop");   // (T-INT: t-z4wereld's ids)
     /** The travel-map place of zone 4 (npc/Reiskaart.PLEKKEN). */
     public static final String REISKAART = "lampionkust";
 
@@ -158,6 +158,9 @@ public final class Z4VerhaalRegistry {
 
     /** Our fallback areas, only when t-z4wereld did not register them: added in reverse so the islands come before the coast. */
     static void gebieden() {
+        if (true) {
+            return;   // T-INT: t-z4wereld is in the tree and registers the real zone-4 areas (z4_*): no fallbacks (they shadowed them)
+        }
         List<Z4VerhaalPlekken.Gebied> l = new ArrayList<>(Z4VerhaalPlekken.GEBIEDEN);
         java.util.Collections.reverse(l);
         for (Z4VerhaalPlekken.Gebied g : l) {
@@ -186,7 +189,8 @@ public final class Z4VerhaalRegistry {
                 ZoneBoeken.geheimen(Z4Haken.UITZICHTEN, Z4VerhaalPlekken.UITZICHT, Z + "uitzicht.titel.", GEBIEDEN_Z4)));
         l.add(new Categorie("baas", T + "cat.baas", "guhs:vr_kussenzwaard", List.of(
                 ZoneBoeken.baas("zeeslurf", Z + "baas.zeeslurf", "z4_koraalbaai", false, Z4Haken.S05, "guhs:vr_z4_baas_zeeslurf", "guhs:vr_z4_zeeslurf"),
-                ZoneBoeken.baas("vliegervanger", Z + "baas.vliegervanger", "z4_lampionkust", false, Z4Haken.HQ05, "guhs:vr_z4_baas_vliegervanger",
+                ZoneBoeken.baas("vliegervanger", Z + "baas.vliegervanger", "z4_wrak",   // (T-INT: his arena is in Het Wrak)
+                false, Z4Haken.HQ05, "guhs:vr_z4_baas_vliegervanger",
                         "guhs:vr_z4_vliegervanger"))));
         l.add(new Categorie("kampvuur", T + "cat.kampvuur", "minecraft:campfire",
                 ZoneBoeken.kampvuren(List.copyOf(Z4VerhaalPlekken.KAMPVUUR.values()), GEBIEDEN_Z4)));

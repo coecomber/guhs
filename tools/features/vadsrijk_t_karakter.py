@@ -106,7 +106,7 @@ def _engels():
 def build(h):
     _engels()
     for k, (nl, en) in TEKSTEN.items():
-        h.lang(k, nl, en)
+        h.lang(k, en, nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 def _direct():

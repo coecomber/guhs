@@ -87,7 +87,7 @@ public class VadsrijkZ3SystemenGameTests {
             helper.assertTrue(Levels.generiekVan(Levels.totaalVoorGeneriek(l)) == l, "generic level " + l + " round trip");
             helper.assertTrue(l == Levels.MAX || Levels.xpVoor(l + 1) > Levels.xpVoor(l), "the curve rises at " + l);
         }
-        helper.assertTrue(Levels.levelVan(Long.MAX_VALUE / 4) == 50, "capped at 50");
+        helper.assertTrue(Levels.levelVan(Long.MAX_VALUE / 4) == Levels.MAX, "capped at " + Levels.MAX);   // (T-INT: 60 now)
         helper.assertTrue(Levels.skillpunten(50) - Levels.skillpunten(35) == 15, "lv 36-50 gives 15 points");
         // pacing: 30 -> 50 needs the plan's ~185k xp; a mob is ~1/55 of a level, a bounty 5 %
         long nodig = Levels.totaalVoor(50) - Levels.totaalVoor(30);

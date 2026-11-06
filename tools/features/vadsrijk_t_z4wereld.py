@@ -57,7 +57,7 @@ def build(h):
     for k, v in BIOMEN.items():
         h.w(f"{h.D}/worldgen/biome/vadsrijk_{k}.json", VB.biome(*v[2:]))
     for k, (nl, en) in teksten().items():
-        h.lang(k, nl, en)
+        h.lang(k, en, nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 def _direct():

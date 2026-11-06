@@ -291,7 +291,7 @@ public final class Z4VerhaalPlekken {
         GEBIED_DOEL.put("z4_koraalbaai", POI.get("z4_duiksteiger"));
         GEBIED_DOEL.put("z4_vliegereiland", POI.get("z4_vliegerwerkplaats"));
         GEBIED_DOEL.put("z4_vuurtoreneiland", w("vuurtoren_huisje", 2404, 87, -494));
-        GEBIED_DOEL.put("z4_schildpadeiland", POI.get("z4_schildpad"));
+        GEBIED_DOEL.put("z4_schildpad", POI.get("z4_schildpad"));   // (T-INT: t-z4wereld's area id)
         GEBIED_DOEL.put("z4_mysterie", POI.get("z4_mysterie_poort"));
         GEBIED_DOEL.put("z4_pierkop", POI.get("z4_pierkop"));
         GEBIED_DOEL.put("z4_lampionkust", PLEIN);

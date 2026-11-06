@@ -535,7 +535,7 @@ def assets(root=A):
 def build(h):
     nl, en = teksten()
     for k in nl:
-        h.lang(k, nl[k], en[k])
+        h.lang(k, en[k], nl[k])   # (T-INT: make_v2.lang(key, en, nl))
     assets()
 
 

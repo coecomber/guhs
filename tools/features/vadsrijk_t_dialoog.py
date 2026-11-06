@@ -95,7 +95,7 @@ TEKSTEN = {
 
 def build(h):
     for k, (nl, en) in TEKSTEN.items():
-        h.lang(k, nl, en)
+        h.lang(k, en, nl)   # (T-INT: make_v2.lang(key, en, nl))
 
 
 def _schrijf(pad, obj):
