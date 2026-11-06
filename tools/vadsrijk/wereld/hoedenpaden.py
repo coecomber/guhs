@@ -114,7 +114,9 @@ def dek(B, m):
 
 def naast_laan(B, x, z):
     lanen = getattr(B, "laan", set())
-    return any((x + dx, z + dz) in lanen for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)))
+    # V-INT: also the diagonal neighbours. A bridge lane that met the round rim only diagonally left a diagonal gap in the fence
+    # ring, which u-hekken's gap fill (rightly) closes -> the cap had no way in (hoedenpad_netwerk.hoeden.7, -374 103 82).
+    return any((x + dx, z + dz) in lanen for dx in (-1, 0, 1) for dz in (-1, 0, 1) if dx or dz)
 
 
 def dek_rand(B, m):

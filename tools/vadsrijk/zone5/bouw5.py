@@ -895,6 +895,10 @@ def wolkplatformen(W, S, info):
             top = b
         else:
             top = nz.max()
+        if "vin" not in pid:
+            # V-INT: the tail fluke has no piers above it: its platforms sit on the skin's real top (the lowest-run rule put them
+            # at y 206 inside/under the lobe while the railed tail path from the lift arrives on top at 212 -> unreachable)
+            top = nz.max()
         ytop = int(W.b[1] + top)
         for x in range(cx - r - 2, cx + r + 3):
             for z in range(cz - r - 2, cz + r + 3):

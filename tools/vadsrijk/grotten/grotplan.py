@@ -96,8 +96,22 @@ def plantjes(g, rng, lijst, kans, eigen=None):
             g.zet(x, y, z, g._kies(lijst, x, z, y + 3))
 
 
+def nisje(g, x, y, z):
+    """V-INT: would a post here leave a 1-wide nook between itself and a wall (post, one free cell, wall)? (grotcheck/loopcheck
+    found one at the Kristalgrot lake, 904 111 -1130)"""
+    for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        if g.is_lucht(x + dx, y, z + dz) and g.is_lucht(x + dx, y + 1, z + dz):
+            muur = not g.is_lucht(x + 2 * dx, y, z + 2 * dz) or not g.is_lucht(x + 2 * dx, y + 1, z + 2 * dz)
+            zij = sum(1 for ex, ez in ((dz, dx), (-dz, -dx)) if not g.is_lucht(x + dx + ex, y, z + dz + ez))
+            if muur and zij >= 1:
+                return True
+    return False
+
+
 def lantaarnpalen(g, hek, lamp, stap=7.0):
     for (x, y, z, _) in g.langs_gangen(stap):
+        if nisje(g, x, y, z):
+            continue
         if g.is_lucht(x, y, z) and g.is_lucht(x, y + 1, z) and g.is_lucht(x, y + 2, z) and not g.bezet_vrij(x, z):
             g.zet(x, y, z, hek)
             g.zet(x, y + 1, z, lamp)
@@ -109,7 +123,7 @@ def ring_palen(g, k, r, n, hek, lamp, hoog=2, start=0.3):
         a = start + 2 * math.pi * i / n
         x, z = round(k["cx"] + math.cos(a) * k["rx"] * r), round(k["cz"] + math.sin(a) * k["rz"] * r)
         y = g.stand(x, z)
-        if y is None or g.is_halfje(x, z) or not all(g.is_lucht(x, y + d, z) for d in range(hoog + 2)):
+        if y is None or g.is_halfje(x, z) or not all(g.is_lucht(x, y + d, z) for d in range(hoog + 2)) or nisje(g, x, y, z):
             continue
         for d in range(hoog):
             g.zet(x, y + d, z, hek)
