@@ -78,6 +78,14 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
                 npcPos(p, q.gever()), null));
     }
 
+    /** T-DIALOOG: the first step of a quest you have not taken yet (the talking screen's "if you say yes" line). */
+    public static QuestStap eerste(ServerPlayer p, Quest q) {
+        if (q.doelen().isEmpty()) {
+            return van(p, q);
+        }
+        return reis(p, doel(p, q, 0, Component.translatable(q.titelKey()), null));
+    }
+
     private static QuestStap doel(ServerPlayer p, Quest q, int i, Component titel, @Nullable Component extra) {
         Quest.Doel d = q.doelen().get(i);
         MutableComponent wat = Component.translatable(q.doelKey(i)).copy();
