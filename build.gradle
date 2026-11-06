@@ -269,6 +269,40 @@ tasks.named('jar', Jar).configure {
     // bbq2 (PHASE3 H02): the walker's routes are test data that only GuhrioRouteGameTests reads
     // (data/guhs/guhrio_kasteel/hallen.json is production data and ships).
     exclude 'data/guhs/guhrio_route/**'
+    // U-GROOTTE: every guhs structure ships packed (task kaartPak): the Vadsrijk map tiles as data/guhs/vadsrijk/kaart.gpak
+    // (~130 MB of .nbt -> ~6 MB), all other structures as data/guhs/structuren.gpak (~70 MB -> ~4 MB). Dev runs and game tests
+    // still have the .nbt (map tiles: the pack wins; other structures: the .nbt wins, the pack is used only without it).
+    exclude 'data/guhs/structure/**/*.nbt'
+}
+
+// U-GROOTTE: packs the structures into build/generated/kaartpak: data/guhs/vadsrijk/kaart.gpak (the Vadsrijk map tiles, the
+// generators' .nbt output) + data/guhs/structuren.gpak (all other guhs structures). KaartPak: palette table + dense y-z-x grid
+// cut to the used layers, deflate 9, identical entries once; anything odd is stored verbatim. Pure Java, so it runs right after
+// compileJava; it only reruns when a structure or the packer changes. `gradlew kaartPakControle` compares every entry.
+def structuurMap = file('src/main/resources/data/guhs/structure')
+def kaartPakMap = layout.buildDirectory.dir('generated/kaartpak')
+def kaartPakKlassen = sourceSets.main.java.classesDirectory
+tasks.register('kaartPak', JavaExec) {
+    dependsOn 'compileJava'
+    classpath = files(kaartPakKlassen)
+    mainClass = 'nl.juiced.guhs.feature.vadsrijk.grootte.KaartPak'
+    maxHeapSize = '2g'
+    inputs.dir(structuurMap).withPathSensitivity(PathSensitivity.RELATIVE)
+    inputs.files(kaartPakKlassen.map { it.asFileTree.matching { include 'nl/juiced/guhs/feature/vadsrijk/grootte/KaartPak*.class' } })
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+    outputs.dir(kaartPakMap)
+    args 'beide', structuurMap.absolutePath, kaartPakMap.get().asFile.absolutePath
+}
+tasks.register('kaartPakControle', JavaExec) {
+    dependsOn 'kaartPak'
+    classpath = files(kaartPakKlassen)
+    mainClass = 'nl.juiced.guhs.feature.vadsrijk.grootte.KaartPak'
+    maxHeapSize = '2g'
+    args 'controleerBeide', structuurMap.absolutePath, kaartPakMap.get().asFile.absolutePath
+}
+tasks.named('processResources', ProcessResources).configure {
+    from(kaartPakMap)
+    dependsOn 'kaartPak'
 }
 
 // Let `gradlew runServer` read console commands (e.g. "/test runall", "stop") from the terminal.

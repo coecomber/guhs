@@ -129,18 +129,20 @@ public final class WolkwalBeweging {
             }
             double kracht = k < 10 ? 1.0 : 1.0 - (k - 10) / 50.0;   // a strong burst, then it calms down
             for (ServerPlayer p : wie) {
-                for (int i = 0; i < 10; i++) {
+                // U-GROOTTE (FPS): forced particles skip the client's particle setting; a far viewer gets half (it is still a plume)
+                boolean ver = p.position().distanceToSqr(g) > 96 * 96;
+                for (int i = 0; i < (ver ? 5 : 10); i++) {
                     double a = r.nextDouble() * Math.PI * 2, rr = 2 + r.nextDouble() * 3;
                     Vec3 v = g.add(Math.cos(a) * rr, r.nextDouble() * 24, Math.sin(a) * rr);
                     deeltje(sl, p, ParticleTypes.CLOUD, v, Math.cos(a) * 0.08, (0.5 + r.nextDouble() * 0.5) * kracht, Math.sin(a) * 0.08);
                 }
                 if (k % 4 == 0) {
-                    for (int i = 0; i < 14; i++) {
+                    for (int i = 0; i < (ver ? 7 : 14); i++) {
                         Vec3 v = g.add(r.nextGaussian() * 6, 30 + r.nextDouble() * 18, r.nextGaussian() * 6);
                         deeltje(sl, p, ParticleTypes.CLOUD, v, r.nextGaussian() * 0.12, 0.05, r.nextGaussian() * 0.12);
                     }
                 }
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < (ver ? 1 : 3); i++) {
                     Vec3 v = g.add(r.nextGaussian() * 5, 10 + r.nextDouble() * 25, r.nextGaussian() * 5);
                     sl.sendParticles(p, ParticleTypes.FALLING_WATER, true, false, v.x, v.y, v.z, 1, 0, 0, 0, 0);
                 }

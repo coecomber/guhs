@@ -181,7 +181,10 @@ public class Z3Figurant extends Entity implements GeoEntity {
 
     @Override
     public boolean shouldRenderAtSqrDistance(double d) {
-        return d < 256 * 256;
+        // U-GROOTTE (FPS): only the giant props (Wolkwal fin tips, statues: scale >= 2) are seen from afar; the townsfolk
+        // (hundreds in Hoogvads, each a full animated guh model) only within 96 blocks (the server removes them at 80 anyway).
+        double grens = schaal() >= 2 ? 256 : 96;
+        return d < grens * grens;
     }
 
     public AABB getBoundingBoxForCulling() {

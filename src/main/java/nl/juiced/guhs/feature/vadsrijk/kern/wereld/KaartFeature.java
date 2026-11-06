@@ -44,6 +44,21 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
         return Guhs.id("vadsrijk/tegels/t_" + tx + "_" + tz);
     }
 
+    /**
+     * U-GROOTTE: the tile at (tx, tz): from the compact pack {@code data/guhs/vadsrijk/kaart.gpak} (the jar ships only that),
+     * else (no pack, e.g. a tree built without the kaartPak task) from the structure manager's .nbt. Empty = no tile there.
+     */
+    public static Optional<StructureTemplate> tegel(ServerLevel sl, int tx, int tz) {
+        Optional<StructureTemplate> t = nl.juiced.guhs.feature.vadsrijk.grootte.KaartPakLader.tegel(sl.getServer(), tx, tz);
+        return t != null ? t : sl.getStructureManager().get(tegelId(tx, tz));
+    }
+
+    /** U-GROOTTE: drops a tile from memory (pack cache and structure manager). */
+    public static void vergeet(ServerLevel sl, int tx, int tz) {
+        nl.juiced.guhs.feature.vadsrijk.grootte.KaartPakLader.vergeet(tx, tz);
+        sl.getStructureManager().remove(tegelId(tx, tz));
+    }
+
     @Override
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> ctx) {
         WorldGenLevel level = ctx.level();
@@ -54,7 +69,7 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
         StructureTemplate tegel = null;
         if (!GEEN.containsKey(sleutel)) {
             ServerLevel sl = level.getLevel();
-            Optional<StructureTemplate> t = sl.getStructureManager().get(tegelId(tx, tz));
+            Optional<StructureTemplate> t = tegel(sl, tx, tz);   // U-GROOTTE: from the compact pack (or the .nbt)
             if (t.isPresent()) {
                 tegel = t.get();
             } else {
@@ -78,7 +93,7 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
         if (klaar.size() >= (TEGEL / 16) * (TEGEL / 16)) {
             GEPLAATST.remove(sleutel);
             LAATST.remove(sleutel);
-            level.getLevel().getStructureManager().remove(tegelId(tx, tz));
+            vergeet(level.getLevel(), tx, tz);
         }
         return true;
     }
@@ -90,7 +105,7 @@ public class KaartFeature extends Feature<NoneFeatureConfiguration> {
             if (e.getValue() < grens) {
                 long k = e.getKey();
                 LAATST.remove(k);
-                sl.getStructureManager().remove(tegelId((int) (k >> 32), (int) k));
+                vergeet(sl, (int) (k >> 32), (int) k);
             }
         }
     }
