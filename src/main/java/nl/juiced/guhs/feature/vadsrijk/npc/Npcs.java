@@ -120,7 +120,20 @@ public final class Npcs {
     @Nullable
     public static RijkGuh levend(ServerLevel sl, String id) {
         UUID u = LEVEND.get(id);
-        return u != null && sl.getEntity(u) instanceof RijkGuh g && g.isAlive() ? g : null;
+        if (u != null && sl.getEntity(u) instanceof RijkGuh g && g.isAlive()) {
+            return g;
+        }
+        // U-DUBBEL: the one with this NPC's unique key (e.g. after a reload the map lost it): adopt it instead of spawning a second
+        if (nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.zoek(sl, sleutel(id)) instanceof RijkGuh g && g.isAlive()) {
+            LEVEND.put(id, g.getUUID());
+            return g;
+        }
+        return null;
+    }
+
+    /** U-DUBBEL: the unique key of an NPC's guh. */
+    public static String sleutel(String id) {
+        return "npc:" + id;
     }
 
     // ---- keeping them in the world -------------------------------------------------------------------------------------------
@@ -134,7 +147,8 @@ public final class Npcs {
             return;
         }
         for (NpcDef d : ALLE.values()) {
-            if (!sl.isLoaded(d.plek()) || (d.id().equals("akim_kaasguh") && NpcRollen.bestaat("mika_spion"))) {
+            // U-DUBBEL: not only "chunk loaded" but its entities loaded + visible, or a guh that is still coming back looks missing
+            if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, d.plek()) || (d.id().equals("akim_kaasguh") && NpcRollen.bestaat("mika_spion"))) {
                 continue;
             }
             RijkGuh g = levend(sl, d.id());
@@ -174,6 +188,7 @@ public final class Npcs {
         g.setYHeadRot(d.yaw());
         g.setYBodyRot(d.yaw());
         g.stelIn(d);
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(g, sleutel(d.id()));   // U-DUBBEL
         if (!staanOp(sl, s) && Double.isNaN(vloerOfNaN(sl, d.plek()))) {
             g.setNoGravity(true);   // (no floor built here yet: hover instead of falling into the void)
         }

@@ -245,7 +245,8 @@ public final class Spawners {
         List<Spawner> wakker = new ArrayList<>();
         Map<String, List<VadsrijkMob>> levendPer = new HashMap<>();
         for (Spawner s : ALLE.values()) {
-            if (!sl.isLoaded(s.centrum())) {
+            // U-DUBBEL: entities loaded + visible, not just the blocks (or the old mobs that are still loading are not counted)
+            if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, s.centrum())) {
                 continue;
             }
             boolean wakkerNu = spelerInBuurt(sl, s);
@@ -354,7 +355,7 @@ public final class Spawners {
         for (int poging = 0; poging < 12; poging++) {
             double a = r.nextDouble() * Math.PI * 2, d = Math.sqrt(r.nextDouble()) * s.straal();
             int x = s.centrum().getX() + (int) Math.round(Math.cos(a) * d), z = s.centrum().getZ() + (int) Math.round(Math.sin(a) * d);
-            if (!sl.isLoaded(new BlockPos(x, 0, z))) {
+            if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, new BlockPos(x, 0, z))) {   // U-DUBBEL (was isLoaded)
                 continue;
             }
             int y = s.grot() ? vloer(sl, x, z, s.minY(), s.maxY()) : grond(sl, x, z);

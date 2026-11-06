@@ -120,10 +120,11 @@ public final class Luchtschepen {
                 Dienstregeling.Stand s = Dienstregeling.stand(l, k, Tijd.nu(sl, l));
                 LuchtschipEntity e = schip(sl, sleutel);
                 boolean nodig = l.test() || !l.actief() ? e != null : dichtbij(spelers, s.pos(), DICHTBIJ);
-                if (e == null && nodig && sl.hasChunkAt(BlockPos.containing(s.pos()))) {
+                if (e == null && nodig && nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, BlockPos.containing(s.pos()))) {   // U-DUBBEL (was hasChunkAt)
                     e = LuchtschipRegistry.SCHIP.get().create(sl, EntitySpawnReason.EVENT);
                     if (e != null) {
                         e.zet(l.id(), k);
+                        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(e, "luchtschip:" + sleutel);   // U-DUBBEL
                         e.snapTo(s.pos().x, s.pos().y, s.pos().z, s.yaw(), 0f);
                         sl.addFreshEntity(e);
                         SCHEPEN.put(sleutel, e.getUUID());
@@ -156,6 +157,7 @@ public final class Luchtschepen {
             e = LuchtschipRegistry.SCHIP.get().create(sl, EntitySpawnReason.EVENT);
             if (e != null) {
                 e.zet(l.id(), k);
+                nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(e, "luchtschip:" + sleutel);   // U-DUBBEL
                 e.snapTo(s.pos().x, s.pos().y, s.pos().z, s.yaw(), 0f);
                 sl.addFreshEntity(e);
                 SCHEPEN.put(sleutel, e.getUUID());
@@ -211,7 +213,7 @@ public final class Luchtschepen {
                 }
                 continue;
             }
-            if (!sl.hasChunkAt(BlockPos.containing(voet))) {
+            if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, BlockPos.containing(voet))) {   // U-DUBBEL (was hasChunkAt: boards spawned while the old ones were hidden)
                 continue;
             }
             List<Component> regels = bordTekst(sl, l, h);
@@ -224,6 +226,7 @@ public final class Luchtschepen {
                         continue;
                     }
                     e.snapTo(voet.x, voet.y + 0.32 * (regels.size() - 1 - i), voet.z, 0f, 0f);
+                    nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(e, "luchtschip_bord:" + h.id() + ":" + i);   // U-DUBBEL
                     sl.addFreshEntity(e);
                 }
                 e.setCustomName(regels.get(i));

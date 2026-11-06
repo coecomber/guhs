@@ -429,6 +429,7 @@ public final class Rijdieren {
         }
         r.zetEigenaar(p.getUUID(), level(p, s));   // (+ its speed/jump for that level, synced: the client steers)
         r.zetKleur(kleur(p, s));
+        nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(r, "rijdier:" + p.getUUID());   // U-DUBBEL: one mount per player
         r.zetUiterlijk(nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.uiterlijk(p, s));   // T-RIJDIER: coat, pattern, tack
         sl.addFreshEntity(r);
         UIT.put(p.getUUID(), r.getUUID());

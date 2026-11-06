@@ -379,7 +379,7 @@ public final class RustendeRidders extends SavedData {
     /** Rebuilds the statues from the list (newest first, as many as there are pedestals). */
     void beelden(ServerLevel sl) {
         BlockPos a = plek();
-        if (!sl.isLoaded(a) || gebouwd <= 0) {
+        if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, a) || gebouwd <= 0) {   // U-DUBBEL (was isLoaded: the saved statues were not back yet -> rebuilt twice)
             vies = true;
             return;
         }

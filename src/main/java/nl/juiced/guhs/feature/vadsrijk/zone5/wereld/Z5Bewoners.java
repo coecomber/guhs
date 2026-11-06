@@ -72,7 +72,7 @@ public final class Z5Bewoners {
                     break;
                 }
             }
-            if (!dicht || !sl.isLoaded(net.minecraft.core.BlockPos.containing(v))) {
+            if (!dicht || !nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, net.minecraft.core.BlockPos.containing(v))) {   // U-DUBBEL (was isLoaded)
                 continue;
             }
             String anim = b.soort() == 1 ? "animation.guh.sit" : "animation.guh.idle";
@@ -80,6 +80,7 @@ public final class Z5Bewoners {
                     ? nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.Wolkwacht.prop(sl, v, b.yaw(), nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.Wolkwacht.vacht(i), false, 0.85f)
                     : Z3Figurant.maak(sl, v, b.yaw(), "guh", textuur(b), "guh", anim, b.soort() == 3 ? 1.0f : 0.8f);
             if (f != null) {
+                nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(f, "z5:bewoner:" + i);   // U-DUBBEL
                 NU.put(i, f);
             }
         }

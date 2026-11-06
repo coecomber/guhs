@@ -161,10 +161,11 @@ public final class WolkwalBeweging {
             }
             Z3Figurant f = NU.get(s.id());
             boolean er = f != null && !f.isRemoved();
-            if (!er && best < ZICHT * ZICHT && sl.isLoaded(BlockPos.containing(s.pos()))) {
+            if (!er && best < ZICHT * ZICHT && nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, BlockPos.containing(s.pos()))) {   // U-DUBBEL (was isLoaded)
                 Z3Figurant n = Z3Figurant.maak(sl, s.pos(), s.yaw(), "vadsrijk/zone5/wolkwal/" + s.model(),
                         "textures/vadsrijk/zone5/wolkwal/" + s.model() + ".png", "vadsrijk/zone5/wolkwal/wolkwal", s.anim(), SCHAAL);
                 if (n != null) {
+                    nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(n, "z5:wolkwal:" + s.id());   // U-DUBBEL
                     NU.put(s.id(), n);
                 }
             } else if (er && best > WEG * WEG) {
