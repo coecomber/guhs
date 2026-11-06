@@ -54,6 +54,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.register(modBus);   // T-ITEMS: itemisatie 2.0 (keep last: its loot sees every table)
         nl.juiced.guhs.feature.vadsrijk.puzzels.PuzzelRegistry.register(modBus);   // T-PUZZELS: puzzle toolbox + puzzles/secrets zone 1-3
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.register(modBus);   // T-OPSLAG: knapzak, materiaaltas, bank, HUD additions
+        nl.juiced.guhs.feature.vadsrijk.hud.UHudRegistry.register(modBus);   // U-HUD: party frames, emotes, HUD editor
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.register(modBus);   // T-KLEDING: Kledingkast, wings, effects
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.register(modBus);   // T-LUCHTSCHIP: scheduled airships + view
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
@@ -84,6 +85,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.payloads(registrar);   // T-AMBACHT
         nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.payloads(registrar);   // T-ITEMS
         nl.juiced.guhs.feature.vadsrijk.opslag.OpslagRegistry.payloads(registrar);   // T-OPSLAG
+        nl.juiced.guhs.feature.vadsrijk.hud.UHudRegistry.payloads(registrar);   // U-HUD
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.payloads(registrar);   // T-KLEDING
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.payloads(registrar);   // T-LUCHTSCHIP
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.payloads(registrar);   // T-KARAKTER

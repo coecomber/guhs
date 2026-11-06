@@ -91,7 +91,7 @@ public final class HudBron {
     }
 
     /** Dev: make this entity the player's target now. */
-    static void zetDoel(ServerPlayer p, Entity e) {
+    public static void zetDoel(ServerPlayer p, Entity e) {   // (U-HUD: public, party click-to-target)
         DOEL.put(p.getUUID(), new Doel(e.getId(), p.level().getGameTime()));
     }
 }
