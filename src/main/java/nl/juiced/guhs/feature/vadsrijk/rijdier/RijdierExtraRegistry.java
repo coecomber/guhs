@@ -104,6 +104,15 @@ public final class RijdierExtraRegistry {
     }
 
     public static void register(IEventBus modBus) {
+        // T-INT: zone-4 rewards (t-z4verhaal side quests): the lantern quest gives the Lampion Pluimguh colour, the beach evening the
+        // Duinhupper (its secret 10-knuffels source stays)
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.QUEST_KLAAR.add((p, q) -> {
+            if (q.equals("z4_s14_lampionnen")) {
+                nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.geefKleur(p, nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.PluimKleur.LAMPION);
+            } else if (q.equals("z4_s15_strandavond")) {
+                nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.geef(p, nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.DUINHUPPER);
+            }
+        });
         ITEMS.register(modBus);
         Spelers.EXTRA_STATS.add(Maatjes::stats);
         Schade.NA_KLAP.add(Maatjes::klap);
