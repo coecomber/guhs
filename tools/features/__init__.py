@@ -255,6 +255,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z5wereld',
             # 1.10 night round T: puzzles + secrets zone 1-3 (T-PUZZELS; Java: feature/vadsrijk/puzzels)
             'vadsrijk_t_puzzels',
+            # T-Z5VERHAAL: 1.10 zone 5 "Hoogvads", the story (Java: feature/vadsrijk/zone5/verhaal)
+            'vadsrijk_t_z5verhaal',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
