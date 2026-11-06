@@ -1247,6 +1247,10 @@ def bouw(W, S, log=print):
     nt = huid_detail(W, S)
     log(f"watervalroosters {n}, huid-plukjes {nt}")
     log(f"hekken boven trappen weg: {trap_hekken(W)}")
+    import tuin   # [U-Z5TUIN] one calm lawn + designed gardens on every open grass patch
+    tuin.bouw(W, S, info, log=log)
+    import binnenlicht   # [U-Z5TUIN] wall sconces + small chandeliers in every enterable room
+    binnenlicht.bouw(W, S, info, log=log)
     bewoners(W, info)
     # viewpoints + catch spots (local -> game in poi5 via the plekken ids)
     if getattr(W, "balkon_oog", None):
