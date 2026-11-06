@@ -345,6 +345,105 @@ def ordetempel_binnen(S, info):
                                 voor=w(cx, y0, fz1 + 5))
 
 
+# ------------------------------------------------------------------------------------------------ U-KARAKTER
+# The Rustende Ridders-zaal (hall of the retired Eénvads knights) is part of the map now (was: built by code on chunk load).
+# Floor centre = RustendeRidders.ANKER in Java: world (-27, 63, 71) = scene (101, G, 199). Keep the two in step.
+ZAAL = (101, 199)
+ZAAL_HX, ZAAL_HZ, ZAAL_H = 4, 5, 5
+LUCHT, RAAM, GLIM, PLANK, LANT, LANT_H, HEK, KLINK = Z.LUCHT, Z.RAAM, Z.GLIM, Z.PLANK, Z.LANT, Z.LANT_H, Z.HEK, Z.KLINK
+
+
+def rustende_ridders(S):
+    """A pink brick hall (9 x 11, walls 5 high) on the lawn between the Kruidenier and the boulevard stalls, door to the south
+    onto the harbour promenade: cherry corner posts, stained glass, a cherry stair gable roof, a heart-tile floor flush with
+    the lawn, quartz pedestals along the walls (the statues are spawned on them by code: RustendeRidders.sokkels), hanging
+    lanterns, a 3-wide entrance with a clinker path to the promenade and a guh banner on each side."""
+    cx, cz = ZAAL
+    x0, x1, z0, z1 = cx - ZAAL_HX, cx + ZAAL_HX, cz - ZAAL_HZ, cz + ZAAL_HZ
+    # clear the lot (+1 around, + the path) of trees/flowers/whatever, also carving any map terrain
+    for x in range(x0 - 2, x1 + 3):
+        for z in range(z0 - 2, z1 + 4):
+            for y in range(G + 1, G + ZAAL_H + ZAAL_HX + 5):
+                S.set(x, y, z, LUCHT)
+            if S.get(x, G, z) in ("minecraft:air", "minecraft:cave_air"):
+                S.set(x, G, z, "guhs:knuffelgras")
+    S.fill(x0, G, z0, x1, G, z1, "tegel_hartjes")
+    S.fill(cx - 1, G, z0 + 1, cx + 1, G, z1, "minecraft:pink_concrete")     # the aisle
+    for x in range(x0, x1 + 1):
+        for z in range(z0, z1 + 1):
+            zij, achter, voor = x in (x0, x1), z == z0, z == z1
+            if not (zij or achter or voor):
+                continue
+            hoek = zij and (achter or voor)
+            deur = voor and abs(x - cx) <= 1
+            raam = (abs(z - cz) in (1, 3)) if zij else abs(x - cx) == (3 if voor else 2)
+            for y in range(G + 1, G + ZAAL_H + 1):
+                if deur and y <= G + 3:
+                    S.set(x, y, z, LUCHT)
+                    continue
+                if hoek:
+                    b = "minecraft:stripped_cherry_log[axis=y]"
+                elif raam and y in (G + 2, G + 3):
+                    b = RAAM
+                elif y == G + 1:
+                    b = "roze_knuffelsteen"                                  # a plinth course
+                else:
+                    b = "pastelbaksteen_roze"
+                S.set(x, y, z, b)
+    # the door arch: a cherry log lintel over the 3-wide opening
+    for x in range(cx - 2, cx + 3):
+        S.set(x, G + 4, z1, "minecraft:stripped_cherry_log[axis=x]")
+    # ceiling with froglights, then a cherry stair gable roof (ridge north-south), overhanging 1, with a slab ridge
+    for x in range(x0, x1 + 1):
+        for z in range(z0, z1 + 1):
+            licht = x == cx and (z - cz) in (-3, 0, 3)
+            S.set(x, G + ZAAL_H + 1, z, GLIM if licht else PLANK)
+    for z in range(z0 - 1, z1 + 2):
+        for i in range(ZAAL_HX + 1):
+            y = G + ZAAL_H + 1 + i
+            S.set(x0 - 1 + i, y, z, SK.stairs("minecraft:cherry_stairs", "east"))
+            S.set(x1 + 1 - i, y, z, SK.stairs("minecraft:cherry_stairs", "west"))
+            for yy in range(G + ZAAL_H + 2, y):
+                S.set(x0 - 1 + i, yy, z, PLANK)
+                S.set(x1 + 1 - i, yy, z, PLANK)
+        for yy in range(G + ZAAL_H + 2, G + ZAAL_H + 2 + ZAAL_HX):
+            S.set(cx, yy, z, PLANK)
+        S.set(cx, G + ZAAL_H + 2 + ZAAL_HX, z, "minecraft:cherry_slab[type=bottom,waterlogged=false]")
+    # gable ends: close the triangle above the walls (north + south) with pink brick, a round window in the south gable
+    for z in (z0, z1):
+        for i in range(ZAAL_HX):
+            for x in range(x0 + i, x1 - i + 1):
+                y = G + ZAAL_H + 2 + i
+                if S.get(x, y, z) in ("minecraft:air", "minecraft:cave_air", PLANK, "guhs:" + PLANK):
+                    S.set(x, y, z, "pastelbaksteen_roze")
+    S.set(cx, G + ZAAL_H + 3, z1, RAAM)
+    # pedestals (= RustendeRidders.sokkels: 4 along each long wall, 3 along the back wall) + a gold rim
+    sokkels = [(x0 + 1, z) for z in (cz - 3, cz - 1, cz + 1, cz + 3)] + [(x1 - 1, z) for z in (cz - 3, cz - 1, cz + 1, cz + 3)] + \
+              [(cx + dx, z0 + 1) for dx in (-2, 0, 2)]
+    for (x, z) in sokkels:
+        S.set(x, G + 1, z, "minecraft:quartz_pillar[axis=y]")
+    # hanging lanterns under the ceiling, a little altar of flowers at the back between the pedestals
+    for dz in (-2, 2):
+        for dx in (-2, 2):
+            S.set(cx + dx, G + ZAAL_H, cz + dz, LANT_H)
+    for dx in (-1, 1):
+        S.set(cx + dx, G + 1, z0 + 1, "minecraft:potted_pink_tulip" if dx < 0 else "minecraft:potted_allium")
+    # outside: the 3-wide clinker path to the promenade, lanterns on posts beside the entrance, a guh banner each side
+    for z in range(z1 + 1, z1 + 4):
+        for x in range(cx - 1, cx + 2):
+            S.set(x, G, z, KLINK)
+        S.set(cx - 2, G, z, "tegel_hartjes")
+        S.set(cx + 2, G, z, "tegel_hartjes")
+    for dx in (-3, 3):
+        S.set(cx + dx, G + 1, z1 + 1, HEK)
+        S.set(cx + dx, G + 2, z1 + 1, LANT)
+    vaandel = Z.vaandel
+    vaandel(S, x0 - 1, G + 1, z1 + 2, "x", ("minecraft:pink_wool", "minecraft:yellow_wool"))
+    vaandel(S, x1 + 1, G + 1, z1 + 2, "x", ("minecraft:pink_wool", "minecraft:yellow_wool"))
+    POI["rustende_ridders"] = w(cx, G + 1, z1 + 3)
+    POI["rustende_ridders_binnen"] = w(cx, G + 1, cz + 2)
+
+
 def main(uit):
     Z.terrein, Z.haven, Z.lift, Z.grondhuisjes = terrein, haven, lift, grondhuisjes
     Z.KLEIN[0] = (70, 128, 30, 8, "rood")
@@ -371,6 +470,7 @@ def main(uit):
     POI["mika_aanwijzing_5"] = w(ux, T + 1, cz)
     for naam, z_ in Z.ZWAMMEN.items():
         POI[f"hoed_{naam}"] = w(z_[0], z_[2] + 1, z_[1])
+    rustende_ridders(S)   # U-KARAKTER: the hall is part of the map now
     tuintjes(S, __import__("random").Random(5))
     S.fix_connections()
     terrein_weg(S)

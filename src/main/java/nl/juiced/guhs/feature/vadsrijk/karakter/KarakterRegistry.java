@@ -47,7 +47,8 @@ public final class KarakterRegistry {
         // T-INT wiring with the other night slices:
         // t-opslag: the knapzak is per character (its own attachment, keyed by slot; bank + materiaaltas stay account-wide),
         // close every storage screen before a switch
-        nl.juiced.guhs.feature.vadsrijk.opslag.Opslag.KARAKTER = p -> String.valueOf(Karakter.slot(p) + 1);   // (slot 0 = "1" = old saves)
+        // U-KARAKTER: the stable per-character key (survives the fixed-slot re-ordering; old knapzakken keep "1".."3")
+        nl.juiced.guhs.feature.vadsrijk.opslag.Opslag.KARAKTER = Karakter::opslagSleutel;
         Karakter.VOOR_WISSEL.add(nl.juiced.guhs.feature.vadsrijk.opslag.Opslag::sluit);
         // t-rijdier's patterns/tack wardrobe + t-z4boot's boat (looks, level) are account-wide like the mounts
         Karakter.accountBreed("economie", "garderobe");
@@ -58,17 +59,32 @@ public final class KarakterRegistry {
             if (Karakters.bezig(p)) {
                 return;   // (our own switch: not a real entry)
             }
-            Karakter.lijst(p);   // (migration of an old save: slot 0)
+            CompoundTag lijst = Karakter.lijst(p);   // (migration of an old save: slot 0; a v1 list: re-ordered by mode)
             Badges.ververs(p);
-            if (binnen) {
-                Karakters.binnengekomen(p);
-                if (aantal(p) > 1) {
-                    KarakterScherm.open(p, true);
-                } else {
-                    nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, "vadsrijk.karakter.tip.slots");
-                }
+            if (!binnen) {
+                WELKOM.remove(p.getUUID());
+                return;
+            }
+            Karakters.binnengekomen(p);
+            if (Karakter.gepensioneerd(p)) {   // (U-KARAKTER: still standing as a retired knight, e.g. logged out right after)
+                nl.juiced.guhs.feature.vadsrijk.wereld.Later.na(40, () -> Karakters.naRust(p));
+            } else if (!lijst.getBooleanOr("welkom", false)) {
+                WELKOM.put(p.getUUID(), p.level().getGameTime());   // the welcome screen, once the intro is over
+            } else if (aantal(p) > 1) {
+                KarakterScherm.open(p, true);
             }
         });
+        // U-KARAKTER: findable without commands: sneak + right-click any campfire = the character screen (before kern's
+        // checkpoint click, which then doesn't run), and a one-time hint the first time you light / rest at one
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGH, (net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock e) -> {
+            if (e.getEntity() instanceof ServerPlayer p && p.isShiftKeyDown() && Vadsrijk.in(p)
+                    && e.getLevel().getBlockState(e.getPos()).getBlock() instanceof net.minecraft.world.level.block.CampfireBlock) {
+                e.setCanceled(true);
+                e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                KarakterScherm.open(p, false);
+            }
+        });
+        Haken.KAMPVUUR.add((p, pos) -> nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, "vadsrijk.karakter.tip.kampvuur"));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 Karakter.lijst(p);
@@ -86,6 +102,9 @@ public final class KarakterRegistry {
             if (e.getServer().getTickCount() % 100 == 37) {
                 RustendeRidders.tick(e.getServer());
             }
+            if (e.getServer().getTickCount() % 10 == 3) {
+                welkomTick(e.getServer());
+            }
         });
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> npcOpties());
         NeoForge.EVENT_BUS.addListener(KarakterRegistry::commando);
@@ -93,6 +112,51 @@ public final class KarakterRegistry {
 
     public static void payloads(PayloadRegistrar registrar) {
         KarakterPayloads.register(registrar);
+    }
+
+    /** U-KARAKTER: players waiting for the first-entry welcome screen (uuid -> game time they came in). */
+    static final java.util.Map<java.util.UUID, Long> WELKOM = new java.util.concurrent.ConcurrentHashMap<>();
+    /** Ticks of quiet (no scene) after the intro before the welcome screen opens. */
+    static final int WELKOM_RUST = 40;
+    private static final java.util.Map<java.util.UUID, Long> RUSTIG_SINDS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
+     * U-KARAKTER, the first-creation flow: the first time in the Vadsrijk (per account), after the opening scene, the character
+     * screen opens by itself with a welcome text ("choose how you want to play"), plus a chat line on where to find it again.
+     * While waiting: no scene running for {@link #WELKOM_RUST} ticks, and the opening was seen (or 15 s passed without one, e.g.
+     * entering elsewhere than the camp).
+     */
+    static void welkomTick(net.minecraft.server.MinecraftServer server) {
+        for (var it = WELKOM.entrySet().iterator(); it.hasNext(); ) {
+            var en = it.next();
+            ServerPlayer p = server.getPlayerList().getPlayer(en.getKey());
+            if (p == null || !Vadsrijk.in(p)) {
+                it.remove();
+                RUSTIG_SINDS.remove(en.getKey());
+                continue;
+            }
+            long nu = p.level().getGameTime();
+            if (nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.bezig(p) || Karakters.bezig(p)) {
+                RUSTIG_SINDS.remove(p.getUUID());
+                continue;
+            }
+            long rustig = RUSTIG_SINDS.computeIfAbsent(p.getUUID(), k -> nu);
+            boolean opening = Spelers.data(p).gezien.contains("npc:opening");
+            if (nu - rustig < WELKOM_RUST || (!opening && nu - en.getValue() < 300)) {
+                continue;
+            }
+            it.remove();
+            RUSTIG_SINDS.remove(p.getUUID());
+            welkom(p);
+        }
+    }
+
+    /** Opens the welcome screen now (also {@code /guhs vadsrijk karakter welkom}). */
+    static void welkom(ServerPlayer p) {
+        Karakter.lijst(p).putBoolean("welkom", true);
+        Karakters.binnengekomen(p);   // (the arrival window: choosing + playing is allowed right here)
+        KarakterScherm.open(p, true, true);
+        p.sendSystemMessage(Component.translatable("vadsrijk.karakter.welkom.chat").withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
     }
 
     static int aantal(ServerPlayer p) {
@@ -116,7 +180,7 @@ public final class KarakterRegistry {
         ZACHT.add("z5_proefarena");
     }
 
-        /** Eénvads: fainting outside a town = retiring (never in creative/spectator). */
+    /** Eénvads: fainting outside a town = retiring (never in creative/spectator). */
     static void flauw(ServerPlayer p) {
         if (p.isCreative() || p.isSpectator() || Karakter.modus(p) != Modus.EENVADS) {
             return;
@@ -147,7 +211,8 @@ public final class KarakterRegistry {
         for (var d : nl.juiced.guhs.feature.vadsrijk.npc.Npcs.alle()) {
             if (d.id().equals("grootmeester") || d.id().equals("rekruteerder") || "kampwacht".equals(d.rol())) {
                 nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.EXTRA.computeIfAbsent(d.id(), k -> new java.util.concurrent.CopyOnWriteArrayList<>())
-                        .add(new nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.ExtraOptie("vadsrijk.karakter.optie", p -> true,
+                        .add(new nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.ExtraOptie(d.id().equals("rekruteerder") ? "vadsrijk.karakter.optie.rekruteerder"
+                                : "vadsrijk.karakter.optie", p -> true,
                                 p -> KarakterScherm.open(p, false)));
             }
         }
@@ -161,6 +226,11 @@ public final class KarakterRegistry {
 
     private static void zeg(CommandSourceStack s, String tekst) {
         s.sendSuccess(() -> Component.literal(tekst), false);
+    }
+
+    private static java.util.concurrent.CompletableFuture<com.mojang.brigadier.suggestion.Suggestions> slotSuggesties(
+            com.mojang.brigadier.context.CommandContext<CommandSourceStack> c, com.mojang.brigadier.suggestion.SuggestionsBuilder b) {
+        return SharedSuggestionProvider.suggest(java.util.Arrays.stream(Modus.values()).map(m -> m.id), b);
     }
 
     private static void commando(RegisterCommandsEvent event) {
@@ -188,30 +258,50 @@ public final class KarakterRegistry {
             zeg(c.getSource(), "versie " + l.getIntOr("versie", 0));
             return 1;
         }));
-        k.then(dev("maak").then(Commands.argument("slot", IntegerArgumentType.integer(0, Karakter.SLOTS - 1))
-                .then(Commands.argument("modus", StringArgumentType.word()).suggests((c, b) -> SharedSuggestionProvider.suggest(
-                        java.util.Arrays.stream(Modus.values()).map(m -> m.id), b))
-                        .then(Commands.argument("naam", StringArgumentType.greedyString()).executes(c -> {
-                            ServerPlayer p = c.getSource().getPlayerOrException();
-                            return Karakters.maak(p, IntegerArgumentType.getInteger(c, "slot"), StringArgumentType.getString(c, "naam"),
-                                    Modus.van(StringArgumentType.getString(c, "modus"))) ? 1 : 0;
-                        })))));
-        k.then(dev("wissel").then(Commands.argument("slot", IntegerArgumentType.integer(0, Karakter.SLOTS - 1)).executes(c -> {
-            ServerPlayer p = c.getSource().getPlayerOrException();
-            return Karakters.wissel(p, IntegerArgumentType.getInteger(c, "slot"), true) ? 1 : 0;
-        })));
-        k.then(dev("naam").then(Commands.argument("slot", IntegerArgumentType.integer(0, Karakter.SLOTS - 1))
+        // U-KARAKTER: slots have fixed modes: give the slot as "normaal" / "knuffel" / "eenvads" (or 0 / 1 / 2)
+        k.then(dev("maak").then(Commands.argument("slot", StringArgumentType.word()).suggests(KarakterRegistry::slotSuggesties)
                 .then(Commands.argument("naam", StringArgumentType.greedyString()).executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
-                    return Karakters.hernoem(p, IntegerArgumentType.getInteger(c, "slot"), StringArgumentType.getString(c, "naam")) ? 1 : 0;
+                    int slot = Modus.slotVan(StringArgumentType.getString(c, "slot"));
+                    return slot >= 0 && Karakters.maak(p, slot, StringArgumentType.getString(c, "naam")) ? 1 : 0;
                 }))));
-        k.then(dev("modus").then(Commands.argument("slot", IntegerArgumentType.integer(0, Karakter.SLOTS - 1))
-                .then(Commands.argument("modus", StringArgumentType.word()).suggests((c, b) -> SharedSuggestionProvider.suggest(
-                        java.util.Arrays.stream(Modus.values()).map(m -> m.id), b)).executes(c -> {
-                            ServerPlayer p = c.getSource().getPlayerOrException();
-                            return Karakters.zetModus(p, IntegerArgumentType.getInteger(c, "slot"), Modus.van(StringArgumentType.getString(c, "modus")),
-                                    true) ? 1 : 0;
-                        }))));
+        k.then(dev("wissel").then(Commands.argument("slot", StringArgumentType.word()).suggests(KarakterRegistry::slotSuggesties).executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            int slot = Modus.slotVan(StringArgumentType.getString(c, "slot"));
+            return slot >= 0 && Karakters.wissel(p, slot, true) ? 1 : 0;
+        })));
+        k.then(dev("naam").then(Commands.argument("slot", StringArgumentType.word()).suggests(KarakterRegistry::slotSuggesties)
+                .then(Commands.argument("naam", StringArgumentType.greedyString()).executes(c -> {
+                    ServerPlayer p = c.getSource().getPlayerOrException();
+                    int slot = Modus.slotVan(StringArgumentType.getString(c, "slot"));
+                    return slot >= 0 && Karakters.hernoem(p, slot, StringArgumentType.getString(c, "naam")) ? 1 : 0;
+                }))));
+        k.then(dev("archief").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            var archief = Karakter.lijst(p).getListOrEmpty("archief");
+            zeg(c.getSource(), "Archief: " + archief.size() + " ridder(s)");
+            for (int i = 0; i < archief.size(); i++) {
+                CompoundTag a = archief.getCompoundOrEmpty(i);
+                zeg(c.getSource(), " " + i + ": " + a.getStringOr("naam", "?") + " [" + a.getStringOr("modus", "?") + "] level " + a.getIntOr("glevel", 1)
+                        + " - " + a.getStringOr("archief_reden", "?") + (a.contains("data") ? " (met data)" : " (alleen snapshot)"));
+            }
+            return 1;
+        }));
+        k.then(dev("welkom").executes(c -> {
+            welkom(c.getSource().getPlayerOrException());
+            return 1;
+        }).then(Commands.literal("vergeet").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            Karakter.lijst(p).remove("welkom");
+            zeg(c.getSource(), "Welkomstscherm vergeten: komt weer na de volgende binnenkomst (na het filmpje)");
+            return 1;
+        })));
+        k.then(dev("v1-test").executes(c -> {
+            for (String r : KarakterTest.herschik()) {
+                zeg(c.getSource(), r);
+            }
+            return 1;
+        }));
         k.then(dev("sterf-test").executes(c -> {
             ServerPlayer p = c.getSource().getPlayerOrException();
             if (Karakter.modus(p) != Modus.EENVADS) {
@@ -242,7 +332,8 @@ public final class KarakterRegistry {
                         return 0;
                     }
                     RustendeRidders.bouwAnker(sl);
-                    zeg(c.getSource(), "Rustende Ridders-zaal gebouwd op " + RustendeRidders.ANKER.toShortString());
+                    zeg(c.getSource(), "Rustende Ridders-zaal gebouwd op " + RustendeRidders.ANKER.toShortString()
+                            + " (alleen nodig in een wereld van voor ronde U: de zaal zit nu in de kaart)");
                     return 1;
                 }).then(Commands.literal("hier").executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
@@ -261,7 +352,8 @@ public final class KarakterRegistry {
                         return 0;
                     }
                     var a = RustendeRidders.get(c.getSource().getServer()).plek();
-                    p.teleport(new TeleportTransition(sl, new Vec3(a.getX() + 0.5, a.getY() + 1, a.getZ() + RustendeRidders.HALF_Z + 3.5), Vec3.ZERO, 180f, 0f,
+                    // U-KARAKTER: inside the hall, in the aisle by the door, looking at the statues along the back wall
+                    p.teleport(new TeleportTransition(sl, new Vec3(a.getX() + 0.5, a.getY() + 1, a.getZ() + RustendeRidders.HALF_Z - 1.5), Vec3.ZERO, 180f, 0f,
                             java.util.Set.<Relative>of(), TeleportTransition.DO_NOTHING));
                     return 1;
                 }))
