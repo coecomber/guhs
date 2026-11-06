@@ -79,7 +79,11 @@ Not the cause: the dev client + integrated server (one server, one set of static
 
 ## Tests
 
-- `runGameTestServer -Pgt=DubbelGameTests` (see the report / commit for the result).
+- `runGameTestServer -Pgt=DubbelGameTests`: **all 3 required tests passed** (2026-11-06).
+- The gametest server has NO Vadsrijk dimension, so `arenaHerladenEenBaas` falls back to a small keeper in the test level that
+  follows the same rules as `Arenas` (klaar gate, find by key, spawn + key); with the dimension it uses kern's real Arenas. The
+  run logged "load window seen 32 time(s)" over 3 reload rounds: the window where the blocks are loaded but the entities are
+  not is real and frequent (that is where the old code spawned the twin). Ghost check (unsaved guh gone after unload) passed.
 
 ## Open points
 

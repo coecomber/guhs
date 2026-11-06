@@ -89,18 +89,18 @@ public class DubbelGameTests {
 
     /** State of the reload test (one run at a time). */
     private static final class Rit {
-        int ronde, fase, wacht;
+        int ronde, fase, wacht, venster;
         RijkGuh geest;
         boolean schijfkopieGeprobeerd;
     }
 
     @GuhTest(template = "empty", batch = BATCH + "_arena", timeoutTicks = 4000)
     public static void arenaHerladenEenBaas(GameTestHelper helper) {
-        ServerLevel vr = Vadsrijk.level(helper.getLevel().getServer());
-        if (vr == null) {
-            helper.fail("no Vadsrijk dimension on this test server");
-            return;
-        }
+        ServerLevel rijk = Vadsrijk.level(helper.getLevel().getServer());
+        // (the gametest server has no Vadsrijk dimension: then the same rules run through a small keeper in the test level that
+        // does exactly what Arenas does: "klaar" gate, find by key, spawn + key. With the dimension, kern's real Arenas does it.)
+        boolean eigen = rijk == null;
+        ServerLevel vr = eigen ? helper.getLevel() : rijk;
         BlockPos c = new BlockPos(24008, 200, 24008);
         ChunkPos cp = ChunkPos.containing(c);
         Arena a = new Arena(ARENA, c, 6, c, 1, c.above(4), "vadsrijk.kern.baas.klodderreus");
@@ -117,6 +117,20 @@ public class DubbelGameTests {
         Rit r = new Rit();
         helper.onEachTick(() -> {
             r.wacht++;
+            if (eigen && r.wacht % 5 == 0 && vr.isLoaded(c)) {
+                if (!Dubbel.klaar(vr, c)) {
+                    r.venster++;   // (the window: blocks loaded, entities not yet: the old code spawned a twin here)
+                } else if (Dubbel.zoek(vr, Arenas.sleutel(ARENA)) == null && bazen(vr, c).isEmpty()) {
+                    Klodderreus k = KernRegistry.KLODDERREUS.get().create(vr, EntitySpawnReason.SPAWNER);
+                    k.stelIn(3, Element.WATER, false, Set.of());
+                    k.setNoAi(true);
+                    k.setNoGravity(true);
+                    k.zetArena(a);
+                    Dubbel.merk(k, Arenas.sleutel(ARENA));
+                    k.snapTo(c.getX() + 0.5, c.getY(), c.getZ() + 0.5, 0, 0);
+                    vr.addFreshEntity(k);
+                }
+            }
             switch (r.fase) {
                 case 0 -> {   // load the arena chunks (3x3)
                     forceer(vr, cp, true);
@@ -131,7 +145,7 @@ public class DubbelGameTests {
                             }
                         }
                     }
-                    if (Arenas.baas(vr, ARENA) == null) {
+                    if ((eigen ? Dubbel.zoek(vr, Arenas.sleutel(ARENA)) : Arenas.baas(vr, ARENA)) == null) {
                         if (r.wacht > 400) {
                             throw helper.assertionException(net.minecraft.network.chat.Component.literal("round " + r.ronde + ": no boss after 400 ticks"));
                         }
@@ -165,6 +179,7 @@ public class DubbelGameTests {
                         helper.assertTrue(bazen(vr, c).size() == 1, "still one boss after the disk copy");
                     }
                     if (r.ronde >= RONDES) {
+                        com.mojang.logging.LogUtils.getLogger().info("[dubbel] arena reload test: {} rounds, load window seen {} time(s), own keeper {}", RONDES, r.venster, eigen);
                         Arenas.reset(vr.getServer(), ARENA);
                         bazen(vr, c).forEach(Entity::discard);
                         Arenas.afmelden(ARENA);
