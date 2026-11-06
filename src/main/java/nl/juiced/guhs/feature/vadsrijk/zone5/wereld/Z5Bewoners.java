@@ -15,7 +15,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Figurant;
  * Marktlaan, refugees at the Grote Soepkeuken, students in the courtyard, knights of the Wolkwacht drilling on the oefenplein,
  * churchgoers in the pews...) becomes a passive guh prop ({@link Z3Figurant}: no physics, no hitbox, never saved) while a player is
  * within {@link #ZICHT} blocks; they vanish again when nobody is near. At most {@link #MAX} at once. They are decoration, not NPCs
- * (the story's NPCs are t-z5verhaal's); sitting figures sit, knights stand guard in the guard texture.
+ * (the story's NPCs are t-z5verhaal's); sitting figures sit, knights stand guard as Wolkwacht-ridders (T-WOLKWAL: {@code Wolkwacht}).
  */
 public final class Z5Bewoners {
     public static final int ZICHT = 56, WEG = 80, MAX = 160;
@@ -76,7 +76,9 @@ public final class Z5Bewoners {
                 continue;
             }
             String anim = b.soort() == 1 ? "animation.guh.sit" : "animation.guh.idle";
-            Z3Figurant f = Z3Figurant.maak(sl, v, b.yaw(), "guh", textuur(b), "guh", anim, b.soort() == 3 ? 1.0f : 0.8f);
+            Z3Figurant f = b.soort() == 2   // T-WOLKWAL: the knights are Wolkwacht-ridders (own model)
+                    ? nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.Wolkwacht.prop(sl, v, b.yaw(), nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.Wolkwacht.vacht(i), false, 0.85f)
+                    : Z3Figurant.maak(sl, v, b.yaw(), "guh", textuur(b), "guh", anim, b.soort() == 3 ? 1.0f : 0.8f);
             if (f != null) {
                 NU.put(i, f);
             }
