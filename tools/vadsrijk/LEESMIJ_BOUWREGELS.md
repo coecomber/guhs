@@ -35,8 +35,10 @@ Walls also get their side heights (`low`, or `tall` under a covering block) and 
 | `vlaggetjes` and `feestslingers` | the horizontal axis along their garland, or between the posts they hang from |
 
 **Gaps:**
-- A line of at least 3 pieces with a diagonal step gets the corner filled, on the outside of the curve and preferably
-  over the void, so the walkway stays free.
+- A line of at least 3 pieces with a diagonal step gets the corner filled, on the outside of the curve.
+- The pass NEVER puts a piece on a standable floor (a walkway): the corner goes over the void. A ground-level ring with
+  floor on both sides keeps its diagonal step.
+- A 1-wide doorway between two line pieces is never closed.
 - A step of 1 up gets the lower post raised by one block.
 - Two lone posts are never joined.
 
@@ -47,8 +49,8 @@ block with a full-cube model is handled automatically.
 
 1. **Nothing special for tiles.** Write the block in any state (`minecraft:oak_fence` is fine) and the pass sets the
    states. Writing correct states yourself is fine too: the pass recomputes them anyway.
-2. **Draw lines orthogonally where you can.** A ring or curve is fine because the pass fills the diagonal steps. But
-   decide which side is the walkway: the pass fills the side without floor first.
+2. **Draw lines orthogonally (4-connected).** The pass can only bridge diagonal steps over the void. A fence ring on the
+   ground must be drawn 4-connected by the generator itself.
 3. **New connecting mod block?**
    - Fences go in `data/minecraft/tags/block/fences.json`, plus `wooden_fences.json` if it is wood.
    - Walls go in `walls.json`.
