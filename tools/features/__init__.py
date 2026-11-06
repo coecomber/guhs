@@ -231,6 +231,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 night round T, T-Z5WERELD: zone 5 Hoogvads: the building blocks + biomes/area names (Java: feature/vadsrijk/zone5/wereld)
             'vadsrijk_t_z5blokken',
             'vadsrijk_t_z5wereld',
+            # T-WOLKWAL: zone-5 leftovers (Wolkwacht-ridder model, moving whale tips, panoramas; Java: feature/vadsrijk/zone5/wolkwal)
+            'vadsrijk_t_wolkwal',
             ]
 
 

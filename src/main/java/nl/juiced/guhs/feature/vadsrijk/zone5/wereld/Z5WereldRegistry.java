@@ -62,6 +62,7 @@ public final class Z5WereldRegistry {
 
     public static void register(IEventBus modBus) {
         Z5Blokken.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.WolkwalRegistry.register();   // T-WOLKWAL: knight model, moving whale, panoramas
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> gebieden());
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());

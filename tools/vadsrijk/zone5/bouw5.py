@@ -159,6 +159,7 @@ def huizen(W, S, info):
     rng = np.random.RandomState(51)
     # roles: the nearest unclaimed house (shops: one with a shop front)
     rol_van = {}
+    BOVEN_KLAAR.clear()
     for (rol, hid, (px, _, pz), groot) in ROLLEN:
         best, bi = 1e9, None
         for i, h in enumerate(HUIZEN):
@@ -178,6 +179,8 @@ def huizen(W, S, info):
             rol_van[bi] = (rol, hid)
     out = []
     n_woning = 0
+    hid_huis = {hid: HUIZEN[i] for i, (_, hid) in rol_van.items()}
+    gekozen = [k for k in BOVEN_GEWENST if k in hid_huis and boven_past(hid_huis[k])][:BOVEN_MAX]
     for i, h in enumerate(HUIZEN):
         rol, hid = rol_van.get(i, ("woning", None))
         if hid is None:
@@ -187,6 +190,12 @@ def huizen(W, S, info):
         if r is None:
             continue
         deur_p, binnen_p, toon_p = r
+        # [T-WOLKWAL] the inn, the bank and four shops get an enterable upper floor with a staircase
+        if hid in gekozen:
+            b_ = bovenverdieping(W, h, rol, rng)
+            if b_ is not None:
+                info["plekken"][f"{hid}_boven"] = b_
+                BOVEN_KLAAR.append(hid)
         out.append(dict(id=hid, rol=rol, deur=deur_p, binnen=binnen_p, toon=toon_p))
         info["plekken"][f"huis_{hid}"] = binnen_p
         if rol != "woning":
@@ -270,6 +279,117 @@ def huis_binnen(W, S, h, rol, rng):
         if rol == "bank":
             z_(1, y0 + 2, vb, "minecraft:lantern[hanging=false,waterlogged=false]")
     return [int(dx_), int(dy_), int(dz_)], [int(v) for v in binnen], [int(v) for v in toon]
+
+
+# [T-WOLKWAL] enterable upper floors: the inn and the bank, then the first shops in this order that fit (now: smid, bakker, wapens,
+# kruiden; kleding is too small). Keep WolkwalRegistry.BOVEN (Java) in step.
+BOVEN_GEWENST = ["herberg_hemelbed", "bank_hoogvads", "winkel_kleding", "winkel_smid", "winkel_bakker", "winkel_wapens",
+                 "winkel_kruiden", "winkel_juwelen", "winkel_kaarten", "winkel_speelgoed"]
+BOVEN_MAX = 6
+BOVEN_KLAAR = []
+
+
+def boven_trap(w, d, hv):
+    """[T-WOLKWAL] Where the staircase goes: "A" along the back wall (v = d - 2) going +u, "B" along the side wall (u = 1) going to
+    the back, behind the counter (v >= 4); None when neither fits (a straight run of hv steps)."""
+    if w >= hv + 3 and d >= 7:
+        return "A"
+    if d >= hv + 6 and w >= 5:
+        return "B"
+    return None
+
+
+def boven_past(h):
+    import huizen2 as H2
+    K = H2.Kavel(h["x1"], h["z1"], h["x2"], h["z2"], h["voor"])
+    return h["verd"] >= 2 and boven_trap(K.w, K.d, h["hv"]) is not None
+
+
+def bovenverdieping(W, h, rol, rng):
+    """[T-WOLKWAL] The first upper floor of a house becomes a real room: hollow (the fake window backs go, so the windows are real),
+    a plank floor, a lamp, furniture by role (inn: guest beds; bank: the vault; shop: storage + the keeper's bed) and a straight
+    staircase in the ground floor (see boven_trap): foot, hv steps (the last one lies in the band itself, so its top is flush with
+    the floor upstairs), the landing beside the last step, a railing round the stairwell upstairs. Returns the local spot
+    upstairs (the landing), or None."""
+    import huizen2 as H2
+    K = H2.Kavel(h["x1"], h["z1"], h["x2"], h["z2"], h["voor"])
+    w, d, y0, hv = K.w, K.d, h["y0"], h["hv"]
+    soort = boven_trap(w, d, hv) if h["verd"] >= 2 else None
+    if soort is None:
+        return None
+    yb = y0 + hv                 # the band = the upper floor
+    yc = y0 + 2 * hv             # the next band / the roof band = its ceiling
+
+    def z_(u, y, v, b):
+        x, yy, z = K.p(u, y, v)
+        zet(W, x, yy, z, b)
+
+    def richting(du, dv):
+        a, b = K.p(0, 0, 0), K.p(du, 0, dv)
+        return _richting((a[0], a[2]), (b[0], b[2]))
+    # upper room: hollow, plank floor (overhanging upper floors: their front wall is one further out, so v = 0 is inside too)
+    xo, _, zo = K.p(0, yb, -1)
+    over = naam(W, xo, yb, zo).endswith(("_stairs", "_trap"))
+    for u in range(1, w - 1):
+        for v in range(0 if over else 1, d - 1):
+            for y in range(yb + 1, yc):
+                z_(u, y, v, LUCHT)
+            z_(u, yb, v, "minecraft:cherry_planks" if (u + v) % 2 else "minecraft:pale_oak_planks")
+    if rol == "herberg":               # (the ground-floor bed corner of the inn stood at the back: the beds are upstairs now)
+        z_(1, y0 + 1, d - 3, LUCHT)
+        z_(1, y0 + 1, d - 2, LUCHT)
+    vt = d - 2
+    if soort == "A":                   # along the back wall, going +u
+        stap = [(k + 1, vt) for k in range(hv + 1)]          # [0] = the foot
+        op = richting(1, 0)
+        gat = [(hv - 1, vt), (hv, vt)]
+        reling = [(hv - 1, vt - 1), (hv, vt - 1), (hv - 2, vt)]
+        bordes = (hv + 1, vt - 1)
+    else:                              # along the side wall u = 1, going to the back
+        f = d - 2 - hv
+        stap = [(1, f + k) for k in range(hv + 1)]
+        op = richting(0, 1)
+        gat = [(1, f + hv - 2), (1, f + hv - 1)]
+        reling = [(2, f + hv - 2), (2, f + hv - 1), (1, f + hv - 3)]
+        bordes = (2, f + hv)
+    fu, fv = stap[0]
+    for y in (y0 + 1, y0 + 2, y0 + 3):
+        z_(fu, y, fv, LUCHT)
+    for k in range(1, hv + 1):
+        u, v = stap[k]
+        z_(u, y0 + k, v, f"minecraft:cherry_stairs[facing={op},half=bottom,shape=straight,waterlogged=false]")
+        for y in (y0 + k + 1, y0 + k + 2):
+            z_(u, y, v, LUCHT)
+        for y in range(y0 + 1, y0 + k):  # under the steps: solid (no little holes under the stairs)
+            z_(u, y, v, "minecraft:cherry_planks")
+    for (u, v) in gat:                   # (cleared above already: the steps' headroom)
+        z_(u, yb, v, LUCHT)
+    for (u, v) in reling:
+        z_(u, yb + 1, v, "minecraft:cherry_fence")
+    # a lamp in the middle of the ceiling
+    cx = (w - 1) // 2
+    x, _, z = K.p(cx, 0, 2)
+    hanglamp(W, x, yc, z, keten=0 if hv <= 4 else 1)
+    # furniture along the front wall (v = 1, 2) + one piece at v = 3: the stairwell stays free
+    if rol == "herberg":
+        kleuren = ["pink", "light_blue", "white", "magenta", "yellow"]
+        for i, u in enumerate(range(1, w - 1, 2)):
+            bed(W, *K.p(u, yb + 1, 2), facing=_dir(K, "voor"), kleur=kleuren[i % len(kleuren)])
+        z_(w - 2, yb + 1, 3, "minecraft:chest[facing=north,type=single,waterlogged=false]") if d >= 8 else None
+    elif rol == "bank":
+        for u in range(1, w - 1):
+            z_(u, yb + 1, 1, "minecraft:gold_block" if u % 2 else "minecraft:chest[facing=north,type=single,waterlogged=false]")
+            if u % 2:
+                z_(u, yb + 2, 1, "minecraft:raw_gold_block" if u % 4 == 1 else "minecraft:gold_block")
+        z_(cx, yb + 1, 3, "minecraft:lectern[facing=north,has_book=true,powered=false]")
+    else:
+        for u in range(1, w - 2):
+            z_(u, yb + 1, 1, ["minecraft:barrel[facing=up,open=false]", "minecraft:chest[facing=north,type=single,waterlogged=false]",
+                              "minecraft:bookshelf"][u % 3])
+        bed(W, *K.p(w - 2, yb + 1, 2), facing=_dir(K, "voor"), kleur=["pink", "white", "light_blue"][rng.randint(3)])
+        z_(1, yb + 1, 2, "minecraft:crafting_table")
+        z_(cx, yb + 1, 3, "minecraft:pink_carpet")
+    return list(K.p(bordes[0], yb + 1, bordes[1]))
 
 
 def _dir(K, kant):
@@ -1092,7 +1212,7 @@ def bouw(W, S, log=print):
     kathedraal(W, S, info)
     log("grote gebouwen klaar")
     hz = huizen(W, S, info)
-    log(f"huizen: {len(hz)} met deur + interieur")
+    log(f"huizen: {len(hz)} met deur + interieur; bovenverdieping (T-WOLKWAL): {', '.join(BOVEN_KLAAR)}")
     nt, mis = terrastrappen(W, S)
     log(f"terrastrappen: {nt} (passen niet: {mis})")
     wolkwaldroom(W, S, info)

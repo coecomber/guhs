@@ -39,7 +39,8 @@ public final class NpcClient {
     }
 
     public static void init(IEventBus modBus) {
-        modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> e.registerEntityRenderer(NpcRegistry.GUH.get(), GuhRenderer::new));
+        modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> e.registerEntityRenderer(NpcRegistry.GUH.get(),
+                nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.client.WolkwachtGuhRenderer::new));   // T-WOLKWAL: GuhRenderer + the Wolkwacht knights
         modBus.addListener((RegisterKeyMappingsEvent e) -> e.register(QUESTLOG));
         VolgHud.init(modBus);
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> {
