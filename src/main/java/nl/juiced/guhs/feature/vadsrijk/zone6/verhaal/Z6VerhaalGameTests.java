@@ -263,6 +263,15 @@ public class Z6VerhaalGameTests {
             case "z6_bron:opgevrolijkt" -> {
                 klik(helper, p, "z6_bron", x);
             }
+            case "z6_sterrenwacht:kompas" -> {
+                // V-INT: with u-z6wezens merged the dungeon is real (the hook starts it instead of the fallback scene), so the
+                // compass comes from the dungeon's end; here that end is called directly
+                op(helper, p, Z6VerhaalPlekken.KERKER);
+                Z6Verhaal.spoel(p);
+                if (!Questlog.doelKlaar(p, q, q.doelen().indexOf(d))) {
+                    Z6Verhaal.kompas(p);
+                }
+            }
             default -> {
                 if (s[0].equals("z6_baken") || s[0].equals("z6_puzzel") && !s[1].startsWith("afdingen")) {
                     // a puzzle at its spot: it opens by itself, a wrong star restarts it, the right ones solve it
