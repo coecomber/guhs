@@ -58,6 +58,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.register(modBus);   // T-LUCHTSCHIP: scheduled airships + view
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
         nl.juiced.guhs.feature.vadsrijk.udeco.UDeco.register(modBus);   // U-DECO: arrival clearance, Honingtak bees, stair floor boards
+        nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -84,5 +85,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.kleding.KledingRegistry.payloads(registrar);   // T-KLEDING
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.payloads(registrar);   // T-LUCHTSCHIP
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.payloads(registrar);   // T-KARAKTER
+        nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.payloads(registrar);   // U-ZICHTBAAR
     }
 }
