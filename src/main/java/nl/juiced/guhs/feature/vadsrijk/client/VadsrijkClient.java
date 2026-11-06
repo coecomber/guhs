@@ -47,5 +47,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.client.ZichtbaarClient.init(modBus);   // U-ZICHTBAAR: cape/gloves/jewellery on the player model
         nl.juiced.guhs.feature.vadsrijk.ruiters.client.RuitersClient.init(modBus);   // U-RUITERS: riding guhs renderers
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.client.SpecClient.init(modBus);   // U-SPECS: gear compare arrows (after kern: wraps its jewellery receiver)
+        nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.init(modBus);   // U-TABS: the Vadsrijk-menu (key H, all tabs in one frame; keep last)
     }
 }

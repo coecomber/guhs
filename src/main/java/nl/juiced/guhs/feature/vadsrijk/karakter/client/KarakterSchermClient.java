@@ -132,7 +132,7 @@ public class KarakterSchermClient extends EcoScherm {
         }
         List<CompoundTag> slots = slots();
         for (int i = 0; i < slots.size(); i++) {
-            kaart(g, mx, my, left + MARGE + i * (KAART_W + MARGE), kaartTop(), slots.get(i), i == actief, mag);
+            kaart(g, mx, my, left + (w - 3 * KAART_W - 2 * MARGE) / 2 + i * (KAART_W + MARGE), kaartTop(), slots.get(i), i == actief, mag);   // V-INT: u-karakter's cards, centred (u-tabs: the menu frame can be wider)
         }
         int y = kaartTop() + KAART_H + 5;
         if (!mag) {

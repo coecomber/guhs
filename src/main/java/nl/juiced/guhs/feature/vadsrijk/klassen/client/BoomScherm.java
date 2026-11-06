@@ -37,7 +37,7 @@ import org.lwjgl.glfw.GLFW;
  * the advancement ceremony). Pink, readable: a 4x3 grid of nodes with their item icons, lines to what they need, a cost
  * badge, and a tooltip with what the node really does. Click a node once to select it, again to learn it.
  */
-public final class BoomScherm extends Screen {
+public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: in the Vadsrijk-menu
     private static final int W = 384;
     /** z2-systemen: the height and row distance depend on the rows of the tree (4 in zone 1, 6 with the zone-2 rows). */
     private int H = 240, DY = 38;
@@ -46,6 +46,8 @@ public final class BoomScherm extends Screen {
     private static final int KNOOP = 26, DX = 44;
     private CompoundTag t;
     private int left, top;
+    /** U-TABS: the Vadsrijk-menu frame around the tree (taller than the others only for a tall tree). */
+    private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
     @Nullable
     private String gekozen;
 
@@ -98,8 +100,14 @@ public final class BoomScherm extends Screen {
         int rijen = rijen();
         DY = rijen <= Bomen.RIJEN ? 38 : rijen <= 6 ? 32 : 29;   // (z3-systemen: 8 rows with the zone-3 rows 6/7)
         H = rijen <= Bomen.RIJEN ? 240 : 46 + (rijen - 1) * DY + KNOOP + 20 + 22 + 26 + 8;
-        left = (width - W) / 2;
-        top = Math.max(24, (height - H) / 2);   // (g-klassen: room for the class tabs above)
+        // U-TABS: inside the menu frame: band, then the class tabs (21 px), then the tree panel; scales down when it does not fit
+        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
+        int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 24;
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kader(win.getGuiScaledWidth(), win.getGuiScaledHeight(), W + 16, H + boven + 8);
+        width = kader.lw();
+        height = kader.lh();
+        left = kader.left() + (kader.w() - W) / 2;
+        top = kader.top() + boven + Math.max(0, (kader.h() - boven - 8 - H) / 2);
         int rx = left + 214, rw = W - 214 - 10;
         // g-klassen: a tab per class (you are always all three; the active one = the weapon you last attacked with)
         int tx = left;
@@ -161,6 +169,7 @@ public final class BoomScherm extends Screen {
     @Override
     public void extractBackground(GuiGraphicsExtractor g, int mx, int my, float pt) {
         super.extractBackground(g, mx, my, pt);
+        nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.tekenKader(g, font, kader.left(), kader.top(), kader.w(), kader.h(), title, "skillboom", mx, my);   // U-TABS
         g.fill(left - 3, top - 3, left + W + 3, top + H + 3, ROZE);
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, LICHT);
         g.fill(left, top, left + W, top + H, PANEEL);
@@ -445,6 +454,10 @@ public final class BoomScherm extends Screen {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT && kader != null && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(),
+                kader.left(), kader.top(), kader.w(), font.width(title.copy().withStyle(ChatFormatting.BOLD)), "skillboom")) {   // U-TABS
+            return true;
+        }
         if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
             double mx = event.x(), my = event.y();
             Klasse k = klasse();
@@ -475,5 +488,20 @@ public final class BoomScherm extends Screen {
     @Override
     public boolean isPauseScreen() {
         return false;
+    }
+
+    // ---- U-TABS: the Vadsrijk-menu -----------------------------------------------------------------------------------------------
+
+    @Override
+    public float menuSchaal() {
+        return kader == null ? 1f : kader.schaal();
+    }
+
+    @Override
+    public boolean keyPressed(net.minecraft.client.input.KeyEvent event) {
+        if (nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, "skillboom")) {
+            return true;
+        }
+        return super.keyPressed(event);
     }
 }

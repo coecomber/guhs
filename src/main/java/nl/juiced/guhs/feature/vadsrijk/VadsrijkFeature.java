@@ -62,6 +62,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
         nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
+        nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.register(modBus);   // U-TABS: the Vadsrijk-menu (/guhs vadsrijk menu [tab])
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -90,5 +91,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipRegistry.payloads(registrar);   // T-LUCHTSCHIP
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.payloads(registrar);   // T-KARAKTER
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.payloads(registrar);   // U-ZICHTBAAR
+        nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.payloads(registrar);   // U-TABS: the Vadsrijk-menu (Karakter tab, Reiskaart to look at)
     }
 }
