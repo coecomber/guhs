@@ -53,9 +53,43 @@ The user gave a full GO (2026-11-06) to test the website as realistically as pos
 - Map tiles regenerated with `kaart.py` (all 5 zones, from this tree's committed .nbt tiles): identical tiles, only kaart.json's
   timestamp changed.
 
+## Round 2 (lead's new requirements, same day)
+- **Merged 110-v-int** into 110-u-site (latest models + zone code; zone 6 has no site data yet).
+- **Renders:** `tools/wiki_site/vadsrijk/renders.py` renders every creature + boss (GeckoLib model + texture + glow, idle pose, 3/4)
+  with t-models' `tools/vadsrijk/model_voorbeeld.py` into `docs/wiki/vadsrijk_renders/<wezen_|baas_><id>.webp` (committed, ~0.8 MB,
+  89 renders; hash cache in index.json, so a re-run only redoes what changed; `--alles` = everything). Needs the render pipeline
+  outside the repo (renders-mounts/_bron + base-ontwerpen/_bron), so CI only copies the committed files. No render: Kloddertje,
+  Honingbij (no own model), Mika-spion (player-like NPC model).
+- **Bosses:** a render on every boss page and a preview per boss card; the index has every zone COLLAPSED (`<details>`, open per zone).
+  "Alle buit": the boss chest table (rolls, luck, coins, % per item, where the dump has the table: Koning Klodder, Opperzwam,
+  Mika-spion, zone-5 bosses), named items with drop % + fixed rarity, and an "Ook" table: mounts (10% per player per win, sure after
+  15 = the user's pity decision), mount coats/patterns (first win), pet, trophy, boss core 15% per helper (zones 1-3), Groeipluis,
+  Gouden Veren + Schemervleugels 3%/8% in Vahoeg form. Parsed from rijdier/Uiterlijk.java + Aankleden.java (bron.py `_baas_extra`).
+- **Creatures:** render on the detail page; the index table has thumbnails, sorting, zone filter, search and pagination (20/page).
+- **Items:** + a Zeldzaamheid column/filter (fixed rarity of named items, else "willekeurig"), pagination (25/page). Pagination is
+  generic: `<table data-pagina="N">` (respects filters and the spoiler switch).
+- **Quests:** every zone collapsed (open per zone).
+- **Story page:** `tools/wiki_site/vadsrijk/verhaal.py` (new; replaces the wall of text + old travel map): world map with the new
+  layout (zone 6 = Het Zijdeland; regenerated from guhs1100-avontuur/wereldkaart/_bron with a copy in the scratchpad, original untouched),
+  parts I-VI, Vads + the 5 steps of grauwheid, a timeline, character cards (Vahoegnir, Piepvel, Moeder Wolkwal, Zachtmoed, de Grauwe
+  Keizer-Mika, Ringeling, Moeder Bron) + the Vingers table behind spoilers, chapters per zone with concept renders. Pictures in
+  `docs/wiki/vadsrijk_verhaal/` (16 webp, 0.9 MB). Zone-6+ content is gated at data-zone 5. Keizer card gated at zone 5 (my reading).
+- **Live positions (user decision, replaces "never live positions"):**
+  - Mod (`web/WebPosities.java` new; WebExport/WebStats/WebRegistry/VadsrijkWebGameTests add-only, `// U-SITE`; lang via
+    `tools/features/vadsrijk_u_site.py` + one FEATURES line in `tools/features/__init__.py`): `posities.json` every `posities_s`
+    (default 10) only when `aan=true` (or once with `/guhs vadsrijk web nu`); format
+    `{"tijd": ms, "interval_s": 10, "spelers": [{naam,x,z,klasse,level,zone,gebied}], "status": [{naam,waar}], "schepen": [{id,lijn,x,z,richting,naar}]}`.
+    Opt-out `/guhs vadsrijk kaart verberg` / `kaart toon` (any player; stored per account in WebStats). Hidden players appear nowhere.
+    Dungeons/arenas (the wings' no-glide list + boss arenas), Knuffelkwartier houses, Bondenvallei = status row only ("in een kerker" ...),
+    also as `waar` in the profile. No raid exists yet (hook `WebPosities.VERBORGEN_PLEKKEN`). Gametest `posities`: VadsrijkWeb 4/4 green.
+  - Site: map layer "Spelers tonen (live)" (on by default, Leaflet layer toggle), skin head + name + class icon + level, markers glide
+    to the new spot, airships as floating icons, note "Geen spelers online" / "Spelers op de kaart: N (+M in een kerker of huisje)",
+    profile shows "Nu: ...". Preview = sample `live-voorbeeld/posities.json` (static, so nothing moves there).
+  - Still needed on the server (not done, no OK asked): `aan=true` + live.guhs.nl (see s-site's notes).
+
 ## Numbers (local build)
-753 pages; 134 quests, 292 characters, 70 creatures, 22 bosses, 203 items (195 with an icon), 115 map points, 79 secrets counted;
-link check: 0 broken (20.2k links + 3.1k pictures); 8.0 MB.
+Round 2 (after the v-int merge): 744 pages; 131 quests, 286 characters, 70 creatures, 22 bosses, 203 items, 115 map points;
+link check: 0 broken (20,221 links + 3,442 pictures); 9.6 MB.
 
 ## Open
 - Item icons: 8 items without an icon (mostly mw_* / new slots without their own item model).

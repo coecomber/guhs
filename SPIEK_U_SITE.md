@@ -13,6 +13,15 @@
 - rechtsboven "Toon tot zone 5": zet hem op zone 3 en zone 4/5 verdwijnen (ook van de kaart);
 - de kaart: De Lampionkust (eilandjes) en Hoogvads (de walvis) rechts, met kampvuren, bazen, luchtschiplijnen C en D.
 
+## Ronde 2: kijk ook naar
+- Bazen: https://guhs.nl/vadsrijk-preview/bazen/index.html — alle zones dicht, klik er een open; elke baas heeft een plaatje.
+  Een baaspagina (bijv. bazen/opperzwam.html): onderaan "Alle buit" met kansen (rijdier 10%, zeker na 15 keer).
+- Wezens/Items: tabel met bladzijdes (onderaan 1 2 3 ...), klik op een kolomkop = sorteren, filters + zoeken.
+- Quests: alle zones dicht, klik er een open.
+- Verhaal: https://guhs.nl/vadsrijk-preview/verhaal.html — wereldkaart, tijdlijn, personages, hoofdstukken per zone.
+- Kaart: laag "Spelers tonen (live)" rechtsboven; 3 nep-spelers + een luchtschip (voorbeelddata, beweegt niet).
+- In het spel (mod): `/guhs vadsrijk kaart verberg` = jij staat niet meer op de kaart, `/guhs vadsrijk kaart toon` = weer wel.
+
 ## Lokaal
 ```
 cd C:\Users\Juiced\Documents\MineScapeStory\guhs_vadsrijk\u-site
