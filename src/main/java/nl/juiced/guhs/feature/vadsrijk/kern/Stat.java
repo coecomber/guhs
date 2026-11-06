@@ -6,7 +6,10 @@ import java.util.Locale;
 public enum Stat {
     VADS(false), KRACHT(false), BEHENDIGHEID(false), WIJSHEID(false), VERDEDIGING(false),
     KRITIEK(true), KRITIEKSCHADE(true), AANVALSSNELHEID(true), LOOPSNELHEID(true), COOLDOWNREDUCTIE(true),
-    ELEMENTSCHADE(true), ELEMENTWEERSTAND(true), LEVENSROOF(true), HEALKRACHT(true);
+    ELEMENTSCHADE(true), ELEMENTWEERSTAND(true), LEVENSROOF(true), HEALKRACHT(true),
+    // T-ITEMS (itemisatie 2.0, R4: clear names): "Verdediging negeren %", "Schade tegen bazen %", "Leven per treffer" (flat Vads),
+    // "Kans op effect %". The combat side lives in feature/vadsrijk/items/NieuweStats.
+    VERDEDIGING_NEGEREN(true), BAZENSCHADE(true), LEVEN_PER_TREFFER(false), KANS_OP_EFFECT(true);
 
     /** Shown as a percentage (the value is in percent points: 5 = 5 %). */
     public final boolean procent;

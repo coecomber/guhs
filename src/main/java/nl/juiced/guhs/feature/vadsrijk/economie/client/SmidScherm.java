@@ -31,6 +31,58 @@ public class SmidScherm extends EcoScherm {
     private int anim = -1, vorigeSterren = -1;
     private String uitkomst = "";
     private final RandomSource rng = RandomSource.create();
+    /** T-ITEMS: the tab (Sterren / Bonussen / Doorgroeien / Overvadsen) and the bridge to the items slice's tab drawing. */
+    private static int tab = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.STERREN;
+    private final nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.Brug brug = new nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.Brug() {
+        @Override
+        public net.minecraft.client.gui.Font font() {
+            return font;
+        }
+
+        @Override
+        public CompoundTag data() {
+            return data;
+        }
+
+        @Override
+        public ItemStack item(int i) {
+            return SmidScherm.this.item(i);
+        }
+
+        @Override
+        public int kies() {
+            return kies;
+        }
+
+        @Override
+        public void knop(GuiGraphicsExtractor g, int mx, int my, int x, int y, int w, int h, Component label, boolean actief, Runnable actie) {
+            SmidScherm.this.knop(g, mx, my, x, y, w, h, label, actief, () -> {
+                Uitrusting u = stuk();
+                vorigeSterren = u == null ? -1 : u.sterren();
+                actie.run();
+            });
+        }
+
+        @Override
+        public void klikvlak(int x, int y, int w, int h, Runnable actie) {
+            SmidScherm.this.klikvlak(x, y, w, h, actie);
+        }
+
+        @Override
+        public void slot(GuiGraphicsExtractor g, int mx, int my, int x, int y, ItemStack s, boolean gekozen) {
+            SmidScherm.this.slot(g, mx, my, x, y, s, gekozen);
+        }
+
+        @Override
+        public int munten(GuiGraphicsExtractor g, int x, int y, long brons) {
+            return SmidScherm.this.munten(g, x, y, brons, true, false);
+        }
+
+        @Override
+        public void doe(String actie, CompoundTag args) {
+            SmidScherm.this.doe(actie, args);
+        }
+    };
 
     public SmidScherm(CompoundTag data, List<ItemStack> items) {
         super(EcoPayloads.SMID, Component.translatable("vadsrijk.economie.smid.titel"), data, items, 330, 232);
@@ -102,6 +154,8 @@ public class SmidScherm extends EcoScherm {
             case "MISLUKT" -> geluid(SoundEvents.SLIME_SQUISH, 1.1f);
             case "HERROLD" -> geluid(SoundEvents.ENCHANTMENT_TABLE_USE, 1.3f);
             case "GEREPAREERD" -> geluid(SoundEvents.ANVIL_USE, 1.8f);
+            case "GEPOLIJST", "OVERGEVADST", "LIEF" -> geluid(SoundEvents.AMETHYST_BLOCK_CHIME, 1.4f);   // T-ITEMS
+            case "DOORGEGROEID" -> geluid(SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 0.9f);   // T-ITEMS
             default -> {
             }
         }
@@ -195,8 +249,14 @@ public class SmidScherm extends EcoScherm {
         g.pose().scale(1.3f, 1.3f);
         g.text(font, Component.literal(rij.toString()), 0, 0, u.verpluisd() ? 0xFFB0A0B0 : 0xFFF0A800, false);
         g.pose().popMatrix();
-        int y = top + 70;
-        if (u.verpluisd() && !bezig) {
+        int y = top + 64;
+        // T-ITEMS: tabs (Sterren · Bonussen · Doorgroeien · Overvadsen); the old star and reroll parts are tabs 1 and 2
+        y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.tabRij(brug, g, mx, my, rx + 6, y, rw - 12, tab, t -> tab = t);
+        if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.DOORGROEIEN) {
+            nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.doorgroei(brug, g, mx, my, rx + 8, y, rw - 16, u);
+        } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.OVERVADSEN) {
+            nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.overvads(brug, g, mx, my, rx + 8, y, rw - 16, u);
+        } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.STERREN && u.verpluisd() && !bezig) {
             g.text(font, Component.translatable("vadsrijk.economie.smid.is_verpluisd").withStyle(ChatFormatting.BOLD), rx + 8, y, ROOD, false);
             y += 12;
             long prijs = SterRegels.reparatiePrijs(u.level(), u.sterren());
@@ -207,10 +267,10 @@ public class SmidScherm extends EcoScherm {
             knop(g, mx, my, rx + 8, y, rw - 16, 18, Component.translatable("vadsrijk.economie.smid.knop.repareer"),
                     data.getLongOr("munten", 0) >= prijs && data.getIntOr("draad", 0) >= draad, () -> actie("repareer"));
             y += 26;
-        } else if (u.sterren() < SterRegels.MAX) {
+        } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.STERREN && u.sterren() < SterRegels.MAX) {
             double[] risico = SterRegels.risico(u.sterren());
-            g.text(font, Component.translatable("vadsrijk.economie.smid.kans", pct(SterRegels.KANS[u.sterren()])), rx + 8, y, GROEN, false);
-            y += 10;
+            // T-ITEMS: the chance with the smid's patience, the patience meter, the talisman switch (replaces the plain chance line)
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.sterBoven(brug, g, mx, my, rx + 8, y, rw - 16, u);
             if (risico[0] > 0 || risico[1] > 0) {
                 g.text(font, Component.translatable("vadsrijk.economie.smid.risico", pct(risico[0]), pct(risico[1])), rx + 8, y, ROOD, false);
                 y += 10;
@@ -225,13 +285,14 @@ public class SmidScherm extends EcoScherm {
             y += 14;
             knop(g, mx, my, rx + 8, y, rw - 16, 18, Component.translatable("vadsrijk.economie.smid.knop.ster").withStyle(ChatFormatting.BOLD),
                     !bezig && data.getLongOr("munten", 0) >= prijs && data.getIntOr("steentjes", 0) >= steen, () -> actie("ster"));
-            y += 24;
-        } else {
+            y += 22;
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.sterVoorbeeld(brug, g, rx + 8, y, rw - 16, u);   // T-ITEMS: preview
+        } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.STERREN) {
             g.text(font, Component.translatable("vadsrijk.economie.smid.max_uitleg"), rx + 8, y, GOUD, false);
             y += 14;
         }
-        // the bonuses (click one to keep it while rerolling)
-        if (!u.bonussen().isEmpty() && !u.verpluisd()) {
+        // the bonuses (click one to keep it while rerolling; T-ITEMS: its own tab, + polijsten)
+        if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.BONUSSEN && !u.bonussen().isEmpty() && !u.verpluisd()) {
             kop(g, Component.translatable("vadsrijk.economie.smid.bonussen"), rx + 8, y);
             y += 11;
             for (int i = 0; i < u.bonussen().size(); i++) {
@@ -241,7 +302,8 @@ public class SmidScherm extends EcoScherm {
                 if (binnen(mx, my, rx + 6, by - 1, rw - 12, 11)) {
                     g.fill(rx + 6, by - 1, rx + rw - 6, by + 10, HOVER);
                 }
-                String w = b.stat().procent ? String.format(Locale.ROOT, "+%.1f%%", b.waarde()) : String.format(Locale.ROOT, "+%.0f", b.waarde());
+                double bw = b.waarde() * Rollen.budget(u);   // T-ITEMS: the slot budget, as in the tooltip
+                String w = b.stat().procent ? String.format(Locale.ROOT, "+%.1f%%", bw) : String.format(Locale.ROOT, "+%.0f", bw);
                 g.text(font, Component.literal(vast ? "♥ " : "• ").append(Component.translatable(b.stat().key())).append(" " + w), rx + 10, by,
                         vast ? GOUD : TEKST, false);
                 final int idx = i;
@@ -257,6 +319,11 @@ public class SmidScherm extends EcoScherm {
             y += 15;
             knop(g, mx, my, rx + 8, y, rw - 16, 16, Component.translatable("vadsrijk.economie.smid.knop.herrol"),
                     !bezig && data.getLongOr("munten", 0) >= prijs && data.getIntOr("knabbels", 0) >= kn, () -> actie("herrol"));
+            y += 20;
+            nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.polijst(brug, g, mx, my, rx + 8, y, rw - 16, u, houd);   // T-ITEMS
+        } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.BONUSSEN) {
+            g.text(font, Component.translatable(u.verpluisd() ? "vadsrijk.economie.smid.eerst_repareren" : "vadsrijk.economie.smid.geen_bonussen"),
+                    rx + 8, y, ZACHT, false);   // T-ITEMS
         }
         // the result card
         if (anim >= ANIM) {
@@ -294,6 +361,10 @@ public class SmidScherm extends EcoScherm {
             case "GEREPAREERD" -> {
                 kleur = 0x40C080;
                 key = "vadsrijk.economie.smid.groot.gerepareerd";
+            }
+            case "GEPOLIJST", "DOORGEGROEID", "OVERGEVADST", "LIEF" -> {   // T-ITEMS
+                kleur = uitkomst.equals("LIEF") ? 0xFF90C0 : 0xD0A000;
+                key = "vadsrijk.items.smid.groot." + uitkomst.toLowerCase(Locale.ROOT);
             }
             default -> {
                 kleur = 0xFF90C0;

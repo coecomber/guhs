@@ -139,6 +139,7 @@ public final class Schade {
         double n = k.basis();
         boolean krit = false;
         double ef = Element.factor(k.element(), doelEl, ontvadst);
+        double negeren = 0;   // T-ITEMS: "Verdediging negeren %" of the attacker (0..max), only player -> mob
         if (k.soort() != Soort.WAAR) {
             Stats s = bron instanceof ServerPlayer bp ? Spelers.stats(bp) : new Stats();
             krit = k.zekerKritiek() || (k.kanKritiek() && bron != null && bron.getRandom().nextDouble() * 100 < s.get(Stat.KRITIEK));
@@ -146,9 +147,17 @@ public final class Schade {
             if (bron != null && Statussen.heeft(bron, Status.VAHOEG)) {
                 n *= 1 + Math.max(0.1, Statussen.sterkte(bron, Status.VAHOEG));
             }
+            if (bron instanceof ServerPlayer && doel instanceof VadsrijkMob) {   // T-ITEMS: Schade tegen bazen + the element part of negeren
+                negeren = nl.juiced.guhs.feature.vadsrijk.items.NieuweStats.negeren(s);
+                n = nl.juiced.guhs.feature.vadsrijk.items.NieuweStats.naAanval(n, s, doel, ef, negeren);
+            }
         }
+        double voorAanpassers = n;   // T-ITEMS
         for (Aanpasser a : VOOR_KLAP) {
             n = a.pas(k, n);
+        }
+        if (negeren > 0 && n > 0 && n < voorAanpassers) {
+            n += (voorAanpassers - n) * negeren;   // T-ITEMS: negeren takes back part of what blocks/shields took off (never a full dodge)
         }
         if (doel instanceof ServerPlayer && bron instanceof VadsrijkMob && !(bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas)) {
             n *= Balans.mobSchade();   // (balans 2026-11) normal zone mobs + elites hit harder; bosses unchanged
@@ -158,7 +167,7 @@ public final class Schade {
         }
         Statussen.Actief schild = Statussen.actief(doel, Status.KNUFFELSCHILD);
         if (schild != null && n > 0) {
-            double weg = Math.min(n, schild.sterkte);
+            double weg = Math.min(n * (1 - negeren), schild.sterkte);   // T-ITEMS: negeren also goes partly through a Knuffelschild
             schild.sterkte -= weg;
             n -= weg;
         }

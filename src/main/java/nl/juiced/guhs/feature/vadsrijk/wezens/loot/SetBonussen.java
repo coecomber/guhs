@@ -50,7 +50,7 @@ public final class SetBonussen {
                 n++;
             }
         }
-        return n;
+        return Math.min(4, n + nl.juiced.guhs.feature.vadsrijk.items.Sets.extraStukken(e, set));   // T-ITEMS: set gloves/capes
     }
 
     /** The stat part of the set bonuses (for kern: {@code s.plus(SetBonussen.stats(p))} in Spelers.stats). */

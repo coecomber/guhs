@@ -46,6 +46,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.register(modBus);   // T-Z4BOOT: the zone-4 Zeilbootje
         nl.juiced.guhs.feature.vadsrijk.web.WebRegistry.register(modBus);   // S-SITE: guhs.nl/vadsrijk live export (off by default) + wiki dump
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.register(modBus);   // T-AMBACHT: the Ambachten (professions)
+        nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.register(modBus);   // T-ITEMS: itemisatie 2.0 (keep last: its loot sees every table)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -67,5 +68,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.payloads(registrar);   // T-VFX
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.payloads(registrar);   // T-Z4BOOT
         nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtRegistry.payloads(registrar);   // T-AMBACHT
+        nl.juiced.guhs.feature.vadsrijk.items.ItemsRegistry.payloads(registrar);   // T-ITEMS
     }
 }

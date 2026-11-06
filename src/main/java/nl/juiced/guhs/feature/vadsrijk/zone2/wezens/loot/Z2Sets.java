@@ -52,7 +52,7 @@ public final class Z2Sets {
                 n++;
             }
         }
-        return n;
+        return Math.min(4, n + nl.juiced.guhs.feature.vadsrijk.items.Sets.extraStukken(e, set));   // T-ITEMS: set gloves/capes
     }
 
     public static Stats stats(Player p) {

@@ -246,6 +246,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z5wezens',
             # 1.10 night round T, T-RIJDIER: mount looks, 3 new land mounts, pet roles (Java: feature/vadsrijk/rijdier); after vadsrijk_rijdieren
             'vadsrijk_t_rijdier',
+            # 1.10 night round T, T-ITEMS: itemisatie 2.0 (Java: feature/vadsrijk/items); keep after vadsrijk_kern (it renames the stats)
+            'vadsrijk_t_items',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

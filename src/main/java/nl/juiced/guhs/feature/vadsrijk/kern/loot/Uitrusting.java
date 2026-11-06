@@ -21,7 +21,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Element;
  * The 10-argument constructor (no sockets) stays for every existing caller.
  */
 public record Uitrusting(String type, Zeldzaamheid zeldzaamheid, int level, List<Bonus> bonussen, Element element, int flavour, int sterren,
-        boolean verpluisd, boolean gebonden, long seed, List<String> sokjes) {
+        boolean verpluisd, boolean gebonden, long seed, List<String> sokjes, Erfstuk erf) {
     public static final Codec<Uitrusting> CODEC = RecordCodecBuilder.create(i -> i.group(
             Codec.STRING.fieldOf("type").forGetter(Uitrusting::type),
             Codec.STRING.xmap(Zeldzaamheid::van, z -> z.name().toLowerCase(Locale.ROOT)).fieldOf("zeldzaamheid").forGetter(Uitrusting::zeldzaamheid),
@@ -33,12 +33,30 @@ public record Uitrusting(String type, Zeldzaamheid zeldzaamheid, int level, List
             Codec.BOOL.optionalFieldOf("verpluisd", false).forGetter(Uitrusting::verpluisd),
             Codec.BOOL.optionalFieldOf("gebonden", false).forGetter(Uitrusting::gebonden),
             Codec.LONG.optionalFieldOf("seed", 0L).forGetter(Uitrusting::seed),
-            Codec.STRING.listOf().optionalFieldOf("sokjes", List.of()).forGetter(Uitrusting::sokjes)).apply(i, Uitrusting::new));
+            Codec.STRING.listOf().optionalFieldOf("sokjes", List.of()).forGetter(Uitrusting::sokjes),
+            Erfstuk.CODEC.optionalFieldOf("erf", Erfstuk.LEEG).forGetter(Uitrusting::erf)).apply(i, Uitrusting::new));   // T-ITEMS
     public static final StreamCodec<RegistryFriendlyByteBuf, Uitrusting> STREAM_CODEC = ByteBufCodecs.fromCodecWithRegistries(CODEC);
 
     public Uitrusting {
         bonussen = List.copyOf(bonussen);
         sokjes = sokjes == null ? List.of() : List.copyOf(sokjes);
+        erf = erf == null ? Erfstuk.LEEG : erf;   // T-ITEMS
+    }
+
+    /** T-ITEMS: without the Erfstuk part (every caller from before itemisatie 2.0). */
+    public Uitrusting(String type, Zeldzaamheid zeldzaamheid, int level, List<Bonus> bonussen, Element element, int flavour, int sterren,
+            boolean verpluisd, boolean gebonden, long seed, List<String> sokjes) {
+        this(type, zeldzaamheid, level, bonussen, element, flavour, sterren, verpluisd, gebonden, seed, sokjes, Erfstuk.LEEG);
+    }
+
+    /** T-ITEMS: the same piece with this Erfstuk part (Vertrouwd xp, doorgroei count, star pity). */
+    public Uitrusting metErf(Erfstuk e) {
+        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, verpluisd, gebonden, seed, sokjes, e);
+    }
+
+    /** T-ITEMS (doorgroeien): the same piece at another level. */
+    public Uitrusting metLevel(int l) {
+        return new Uitrusting(type, zeldzaamheid, l, bonussen, element, flavour, sterren, verpluisd, gebonden, seed, sokjes, erf);
     }
 
     /** Without sockets (every zone-1 caller). */
@@ -49,23 +67,23 @@ public record Uitrusting(String type, Zeldzaamheid zeldzaamheid, int level, List
 
     /** z2-systemen: the same piece with these sockets (same size = same number of sockets). */
     public Uitrusting metSokjes(List<String> s) {
-        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, verpluisd, gebonden, seed, s);
+        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, verpluisd, gebonden, seed, s, erf);
     }
 
     public Uitrusting metSterren(int s) {
-        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, s, verpluisd, gebonden, seed, sokjes);
+        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, s, verpluisd, gebonden, seed, sokjes, erf);
     }
 
     public Uitrusting metVerpluisd(boolean v) {
-        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, v, gebonden, seed, sokjes);
+        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, v, gebonden, seed, sokjes, erf);
     }
 
     public Uitrusting metBonussen(List<Bonus> b) {
-        return new Uitrusting(type, zeldzaamheid, level, b, element, flavour, sterren, verpluisd, gebonden, seed, sokjes);
+        return new Uitrusting(type, zeldzaamheid, level, b, element, flavour, sterren, verpluisd, gebonden, seed, sokjes, erf);
     }
 
     public Uitrusting metGebonden(boolean g) {
-        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, verpluisd, g, seed, sokjes);
+        return new Uitrusting(type, zeldzaamheid, level, bonussen, element, flavour, sterren, verpluisd, g, seed, sokjes, erf);
     }
 
     @Nullable

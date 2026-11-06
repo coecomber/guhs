@@ -292,8 +292,14 @@ public class VadsrijkKernGameTests {
             helper.assertTrue(Sieraden.wisselMetInventaris(p, 5), "shift-click wears the ring");
             helper.assertTrue(inv.getItem(5).isEmpty(), "the ring left the inventory slot");
             helper.assertTrue(ItemStack.isSameItemSameComponents(Sieraden.get(p, RING), a), "the ring is worn");
+            // T-ITEMS: a second ring first fills the 2nd ring slot; a third one swaps with the first
+            ItemStack c2 = Rollen.stack(Rollen.rol(ring, 1, Zeldzaamheid.GEWOON, RandomSource.create(6)));
+            inv.setItem(6, c2.copy());
+            helper.assertTrue(Sieraden.wisselMetInventaris(p, 6), "a second ring goes into the 2nd ring slot");
+            helper.assertTrue(ItemStack.isSameItemSameComponents(Sieraden.get(p, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING2), c2),
+                    "the 2nd ring slot holds it");
             inv.setItem(7, b.copy());
-            helper.assertTrue(Sieraden.wisselMetInventaris(p, 7), "a second ring swaps");
+            helper.assertTrue(Sieraden.wisselMetInventaris(p, 7), "a third ring swaps");
             helper.assertTrue(ItemStack.isSameItemSameComponents(Sieraden.get(p, RING), b), "the new ring is worn");
             helper.assertTrue(ItemStack.isSameItemSameComponents(inv.getItem(7), a), "the old ring took its inventory slot");
             ItemStack hoog = Rollen.stack(Rollen.rol(ring, 9, Zeldzaamheid.GEWOON, RandomSource.create(5)));
@@ -314,6 +320,7 @@ public class VadsrijkKernGameTests {
             helper.assertTrue(terug, "the ring is back in the inventory");
         } finally {
             Sieraden.zet(p, RING, ItemStack.EMPTY);
+            Sieraden.zet(p, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING2, ItemStack.EMPTY);   // T-ITEMS
         }
         helper.succeed();
     }

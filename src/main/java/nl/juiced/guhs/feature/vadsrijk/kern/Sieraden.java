@@ -40,7 +40,19 @@ public final class Sieraden {
         return c;
     }
 
-    static void zet(ServerPlayer p, Slot slot, ItemStack s) {
+    /**
+     * T-ITEMS: the slot a piece goes into: its own slot, except a ring when the first ring slot is taken and the second is free
+     * (then it goes to RING2; with both full it swaps with the first).
+     */
+    public static Slot doelSlot(ServerPlayer p, Slot s) {
+        if (s == Slot.RING && !get(p, Slot.RING).isEmpty() && get(p, Slot.RING2).isEmpty()) {
+            return Slot.RING2;
+        }
+        return s;
+    }
+
+    /** Sets a worn piece (T-ITEMS: public, for the Vertrouwd xp and the dev commands). Call {@link #stuur} after. */
+    public static void zet(ServerPlayer p, Slot slot, ItemStack s) {
         SpelerData d = Spelers.data(p);
         if (s.isEmpty()) {
             d.sieraden.remove(slot.name());
@@ -62,8 +74,9 @@ public final class Sieraden {
             p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.te_hoog", u.level()).withStyle(ChatFormatting.GRAY));
             return true;
         }
-        ItemStack oud = get(p, t.slot());
-        zet(p, t.slot(), inHand.copyWithCount(1));
+        Slot doel = doelSlot(p, t.slot());   // T-ITEMS
+        ItemStack oud = get(p, doel);
+        zet(p, doel, inHand.copyWithCount(1));
         inHand.shrink(1);
         if (!oud.isEmpty()) {
             if (inHand.isEmpty()) {
@@ -73,7 +86,7 @@ public final class Sieraden {
             }
         }
         p.level().playSound(null, p.blockPosition(), SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.PLAYERS, 1f, 1.3f);
-        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.om", inHand.isEmpty() ? get(p, t.slot()).getHoverName() : get(p, t.slot()).getHoverName())
+        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.om", get(p, doel).getHoverName())
                 .withStyle(ChatFormatting.LIGHT_PURPLE));
         stuur(p);
         Spelers.sync(p);
@@ -89,7 +102,7 @@ public final class Sieraden {
      * The shift-click logic without the dimension check (gametest): the piece in inventory slot {@code index} (0..35) goes
      * into its jewellery slot; a piece that was worn there goes back into that inventory slot. Returns whether it moved.
      */
-    static boolean wisselMetInventaris(ServerPlayer p, int index) {
+    public static boolean wisselMetInventaris(ServerPlayer p, int index) {   // (T-ITEMS: public for the items tests)
         Inventory inv = p.getInventory();
         if (index < 0 || index >= Inventory.INVENTORY_SIZE) {
             return false;
@@ -104,8 +117,9 @@ public final class Sieraden {
             p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.te_hoog", u.level()).withStyle(ChatFormatting.GRAY));
             return false;
         }
-        ItemStack oud = get(p, t.slot());
-        zet(p, t.slot(), s.copyWithCount(1));
+        Slot doel = doelSlot(p, t.slot());   // T-ITEMS
+        ItemStack oud = get(p, doel);
+        zet(p, doel, s.copyWithCount(1));
         s.shrink(1);
         if (s.isEmpty()) {
             inv.setItem(index, oud.isEmpty() ? ItemStack.EMPTY : oud.copy());
@@ -114,7 +128,7 @@ public final class Sieraden {
         }
         inv.setChanged();
         p.level().playSound(null, p.blockPosition(), SoundEvents.ARMOR_EQUIP_GOLD.value(), SoundSource.PLAYERS, 1f, 1.3f);
-        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.om", get(p, t.slot()).getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.sieraad.om", get(p, doel).getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         stuur(p);
         Spelers.sync(p);
         return true;
@@ -128,7 +142,7 @@ public final class Sieraden {
     }
 
     /** {@link #af} without the dimension check (gametest). Returns whether it came off. */
-    static boolean afZonderCheck(ServerPlayer p, Slot slot) {
+    public static boolean afZonderCheck(ServerPlayer p, Slot slot) {   // (T-ITEMS: public for the items tests)
         if (!slot.sieraad()) {
             return false;
         }

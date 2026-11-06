@@ -17,21 +17,26 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot;
 
 /**
- * The 3 jewellery slots (Ring, Ketting, Oorbel) as a small column on the right of the inventory screen, only in the dimension.
+ * The virtual slots (T-ITEMS: Ring, Ring 2, Ketting, Oorbel, Armband, Handschoenen, Cape) as a small column on the right of the inventory screen, only in the dimension.
  * Hover = the item's full tooltip; click = take it off (the server checks). Putting one on = right-click it with the item in hand,
  * or shift-click it in the inventory ({@link KernPayloads.SieraadShift}). (Right side: the Maagwand tongue already sits on the left.)
  * <p>Fix round 2: drawn in {@link ScreenEvent.Render.Foreground} (inside the screen's own render, before the deferred tooltip is
  * drawn): a tooltip set from {@code Render.Post} came after the deferred elements and so never showed.
  */
 final class SieradenScherm {
-    private static List<ItemStack> items = new ArrayList<>(List.of(ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY));
+    private static List<ItemStack> items = leeg();   // T-ITEMS: one per Slot.SIERADEN (7 since itemisatie 2.0)
     private static final int MAAT = 18;
 
     private SieradenScherm() {
     }
 
     static void init() {
-        KernPayloads.sieradenOntvanger = s -> items = new ArrayList<>(s.items());
+        KernPayloads.sieradenOntvanger = s -> {
+            items = new ArrayList<>(s.items());
+            while (items.size() < Slot.SIERADEN.length) {
+                items.add(ItemStack.EMPTY);
+            }
+        };
         NeoForge.EVENT_BUS.addListener((ScreenEvent.Render.Foreground e) -> teken(e));
         NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre e) -> {
             if (!(e.getScreen() instanceof InventoryScreen s) || !binnen()) {
@@ -53,8 +58,16 @@ final class SieradenScherm {
                 e.setCanceled(true);
             }
         });
-        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> items = new ArrayList<>(List.of(ItemStack.EMPTY, ItemStack.EMPTY,
-                ItemStack.EMPTY)));
+        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> items = leeg());
+    }
+
+    private static List<ItemStack> leeg() {
+        return new ArrayList<>(java.util.Collections.nCopies(Slot.SIERADEN.length, ItemStack.EMPTY));
+    }
+
+    /** T-ITEMS: the x of the column (the items slice draws the drankjesriem next to it). */
+    public static int kolomX(InventoryScreen s) {
+        return x(s);
     }
 
     private static boolean isSieraad(ItemStack s) {
@@ -104,7 +117,7 @@ final class SieradenScherm {
             if (!it.isEmpty()) {
                 g.item(it, x + 1, y + 1);
             } else {
-                String l = Component.translatable(Slot.SIERADEN[i].key()).getString().substring(0, 1);
+                String l = Component.translatable(Slot.SIERADEN[i].key() + ".kort").getString();   // T-ITEMS: R, R2, K, O, A, H, C
                 g.centeredText(Minecraft.getInstance().font, l, x + MAAT / 2, y + 5, 0xFF9A7A8E);
             }
         }

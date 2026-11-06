@@ -94,15 +94,16 @@ public class RijkItem extends Item {
                     .withStyle(ChatFormatting.GRAY));
         }
         if (bt != null) {
-            Stats basis = bt.statsOp(u.level()).maal(z.factor);
+            Stats basis = bt.statsOp(u.level()).maal(z.factor * Rollen.ERF_FACTOR.applyAsDouble(u) * Rollen.budget(u));   // T-ITEMS
             basis.alles().forEach((st, v) -> {
                 if (Math.abs(v) >= 0.5) {
                     t.accept(regel(st, v, ChatFormatting.WHITE));
                 }
             });
         }
+        double budget = Rollen.budget(u);   // T-ITEMS: the slot budget (virtual slots give a bit less per piece)
         for (Bonus b : u.bonussen()) {
-            t.accept(regel(b.stat(), b.waarde(), ChatFormatting.GREEN));
+            t.accept(regel(b.stat(), b.waarde() * budget, ChatFormatting.GREEN));
         }
         TOOLTIP_EXTRA.forEach(f -> f.accept(u, t));   // z2-systemen
         if (u.gebonden()) {
@@ -119,7 +120,7 @@ public class RijkItem extends Item {
         }
     }
 
-    static Component regel(Stat s, double v, ChatFormatting kleur) {
+    public static Component regel(Stat s, double v, ChatFormatting kleur) {   // (T-ITEMS: public for the smid previews)
         String getal = s.procent ? String.format(Locale.ROOT, "%+.1f%%", v) : String.format(Locale.ROOT, "%+.0f", v);
         return Component.literal(getal + " ").withStyle(kleur).append(Component.translatable(s.key()).withStyle(ChatFormatting.GRAY));
     }

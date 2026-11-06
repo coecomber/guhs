@@ -252,7 +252,7 @@ public final class Spelers {
         if (p instanceof ServerPlayer sp) {
             for (nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot slot : nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.SIERADEN) {
                 Uitrusting u = Rollen.van(Sieraden.get(sp, slot));
-                if (u != null && u.basisType() != null && u.basisType().slot() == slot && u.level() <= lvl) {
+                if (u != null && u.basisType() != null && slot.past(u.basisType().slot()) && u.level() <= lvl) {   // T-ITEMS: past (RING2)
                     s.plus(Rollen.stats(u));
                 }
             }
