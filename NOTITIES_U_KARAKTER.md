@@ -83,7 +83,15 @@ Ongewijzigd: in een stad, binnen 8 blokken van een kampvuur, of de eerste minuut
 
 ## Tests
 `-Pgt=VadsrijkKarakter`: migratie, slotIsolatie, accountBreed, vasteModi, pensioenEnNieuweEenvads, migratieV1, eersteKeer, namen.
-Plus `VadsrijkTOpslag` (knapzak-sleutel).
+Plus `VadsrijkTOpslag` (knapzak-sleutel). Resultaat: 14/14 groen (`-Pgt=VadsrijkKarakter,VadsrijkTOpslag`).
+
+## Gecontroleerd
+- `maak_kaart.py --zone 1 --alleen=-1,1` (tegel x -64..-1, z 64..127): de zaal staat in de tegel (sokkel -30,64,68 = kwarts,
+  vloer -27,63,71 = roze loper), render van de tegel ziet er goed uit op het grasveld; daarna `verbind.py` op die tegel
+  (13 blokken verbonden). Tegel + WereldPlekken + POI daarna teruggezet (niet gecommit).
+- **Gevonden bug van u-hekken (gemerged):** maak_kaart roept `verbind.py --alleen -1,1` aan; argparse leest een negatieve
+  tegel als optie -> "expected one argument" en maak_kaart breekt af. Fix voor hen: `f"--alleen={...}"` doorgeven.
+  (Ook maak_kaart zelf: gebruik `--alleen=-1,1` met `=`.)
 
 ## Open / niet gedaan
 - Niet in een client geklikt (scherm-layout 380x226 met welkomsttekst, de ⚔-knop, het tabblad); geen AutoCheck gedaan.

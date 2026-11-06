@@ -247,7 +247,7 @@ public class VadsrijkKarakterGameTests {
         CompoundTag d = KarakterScherm.data(p);
         var slots = d.getListOrEmpty("slots");
         helper.assertTrue(slots.size() == 3, "three cards");
-        helper.assertTrue(slots.getCompoundOrEmpty(0).getStringOr("modus", "").equals("normaal") && !slots.getCompoundOrEmpty(0).getBooleanOr("leeg", true),
+        helper.assertTrue(slots.getCompoundOrEmpty(0).getStringOr("modus", "").equals("normaal") && !slots.getCompoundOrEmpty(0).getBooleanOr("leeg", false),
                 "left: your own knight, Normaal");
         helper.assertTrue(slots.getCompoundOrEmpty(1).getStringOr("modus", "").equals("knuffel") && slots.getCompoundOrEmpty(1).getBooleanOr("leeg", false)
                 && slots.getCompoundOrEmpty(2).getStringOr("modus", "").equals("eenvads") && slots.getCompoundOrEmpty(2).getBooleanOr("leeg", false),
