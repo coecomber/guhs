@@ -557,6 +557,12 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
+| `haven_z3_z2_bord` | 1196, 167, -604 |
+| `haven_z3_z2_mast` | 1193, 167, -602 |
+| `haven_z3_z2_vertrek` | 1201, 167, -601 |
+| `haven_z3_z4_bord` | 1609, 167, -485 |
+| `haven_z3_z4_mast` | 1615, 167, -485 |
+| `haven_z3_z4_vertrek` | 1607, 165, -488 |
 | `kuiken_1` | 1467, 226, -489 |
 | `kuiken_2` | 1374, 228, -476 |
 | `kuiken_3` | 1297, 213, -605 |

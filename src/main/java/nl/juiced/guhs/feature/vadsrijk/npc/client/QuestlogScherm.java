@@ -36,6 +36,8 @@ public class QuestlogScherm extends Screen {
             "z2_splinterpieken", "z2_kristalwezens", "z2_bevroren", "z2_edelstenen", "z2_reizen", "z2_titel",
             // zone 3 (tools/features/vadsrijk_z3_npc.py GIDS)
             "z3_schemerwortel", "z3_pluimguh", "z3_lantaarn", "z3_premiebord", "z3_reizen", "z3_titel",
+            // zone 4 (tools/features/vadsrijk_t_z4verhaal.py GIDS)  T-Z4VERHAAL
+            "z4_lampionkust", "z4_zeilboot", "z4_knuffeltij", "z4_reizen",
             // T-Z5VERHAAL: zone 5 (tools/features/vadsrijk_t_z5verhaal.py GIDS)
             "z5_hoogvads", "z5_speuren", "z5_soepkeuken", "z5_ambachten", "z5_reizen"};
     private static final String[] TABS = {"quests", "geheimen", "wezens", "gids"};

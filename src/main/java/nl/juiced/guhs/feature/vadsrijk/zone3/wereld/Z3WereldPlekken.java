@@ -434,6 +434,12 @@ public final class Z3WereldPlekken {
             Map.entry("hartsplinter_3", new BlockPos(1697, 224, -827)),
             Map.entry("hartsplinter_4", new BlockPos(1407, 61, -572)),
             Map.entry("hartsplinter_5", new BlockPos(1487, 29, -502)),
+            Map.entry("haven_z3_z2_bord", new BlockPos(1196, 167, -604)),
+            Map.entry("haven_z3_z2_mast", new BlockPos(1193, 167, -602)),
+            Map.entry("haven_z3_z2_vertrek", new BlockPos(1201, 167, -601)),
+            Map.entry("haven_z3_z4_bord", new BlockPos(1609, 167, -485)),
+            Map.entry("haven_z3_z4_mast", new BlockPos(1615, 167, -485)),
+            Map.entry("haven_z3_z4_vertrek", new BlockPos(1607, 165, -488)),
             Map.entry("honinglift_boven", new BlockPos(1509, 167, -523)),
             Map.entry("honinglift_kruin_boven", new BlockPos(1316, 231, -540)),
             Map.entry("honinglift_kruin_onder", new BlockPos(1316, 167, -534)),
@@ -690,9 +696,9 @@ public final class Z3WereldPlekken {
         return ALLE.get(id);
     }
 
-    /** Is this x/z inside the zone-3 tile grid (+ a margin)? */
+    /** Is this x/z inside the zone-3 tile grid? (T-WERELD: no margin any more: zone 2 lies west and zone 4 east, edge to edge.) */
     public static boolean inZone3(double x, double z) {
-        return x > TEGEL_X0 * 64 - 200 && x < TEGEL_X1 * 64 + 264 && z > TEGEL_Z0 * 64 - 200 && z < TEGEL_Z1 * 64 + 264;
+        return x >= TEGEL_X0 * 64 && x < TEGEL_X1 * 64 + 64 && z >= TEGEL_Z0 * 64 && z < TEGEL_Z1 * 64 + 64;
     }
 
     /** The zone-3 area at this point (by height), or null outside zone 3. */
