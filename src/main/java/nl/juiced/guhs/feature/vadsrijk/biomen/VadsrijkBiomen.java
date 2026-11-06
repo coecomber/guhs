@@ -24,7 +24,10 @@ public final class VadsrijkBiomen {
     public static final List<String> IDS = List.of("knuffelkamp", "zwamzoet", "haven", "klodderweide", "sporenwoud", "druipgrotten", "kloof",
             "zwamtempel", "tussenland", "zee", "kandijkom", "galmhellingen", "knuffelmeer", "splinterkloof", "spiegelburcht", "splinterpieken",
             // z3-systemen: zone 3 "De Schemerwortel", one biome per layer
-            "honingtak", "kruinzee", "takkenbanen", "schorsstad", "wortelvelden", "wortelduister", "zeppelinwerf", "hart", "schemerwortel");
+            "honingtak", "kruinzee", "takkenbanen", "schorsstad", "wortelvelden", "wortelduister", "zeppelinwerf", "hart", "schemerwortel",
+            // T-Z4WERELD: zone 4 "De Lampionkust", one biome per island (Z4WereldRegistry.biome)
+            "lampionhaven", "knuffeltij", "strandfeest", "bloemeneiland", "koraalbaai", "vliegereiland", "vuurtoreneiland", "pierkop",
+            "mysterie", "schildpadeiland", "wrak", "lampionkust");
     public static final int ZEE = IDS.indexOf("zee"), KLOOF = IDS.indexOf("kloof"), TUSSENLAND = IDS.indexOf("tussenland");
 
     /** The Kloof ravine (tools/vadsrijk/wereld/kaart.py KLOOF and GebiedMist.KLOOF_LIJN, world coordinates). */
@@ -96,7 +99,7 @@ public final class VadsrijkBiomen {
 
     /** z3-systemen: the biome index at block x/y/z (zone 3 is layered; elsewhere the height does not matter). */
     public static int index(int x, int y, int z) {
-        if (Z3Lagen.inZone3(x, z)) {
+        if (Z3Lagen.inZone3(x, z) && !nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.inZone4(x, z)) {   // T-Z4WERELD: zone 4 wins
             for (Gebieden.Gebied g : Z3Lagen.GEBIEDEN) {
                 if (g.bevat(x + 0.5, y, z + 0.5)) {
                     return IDS.indexOf(zone3Biome(g.id()));
@@ -114,6 +117,10 @@ public final class VadsrijkBiomen {
 
     /** The biome index ({@link #IDS}) at block x/z (flat: zone 3 gives its ground layer). */
     public static int index(int x, int z) {
+        String z4 = nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldRegistry.biome(x, z);   // T-Z4WERELD (before zone 3: its margin reaches x 1991)
+        if (z4 != null) {
+            return IDS.indexOf(z4);
+        }
         if (Z3Lagen.inZone3(x, z)) {
             return index(x, 64, z);
         }
