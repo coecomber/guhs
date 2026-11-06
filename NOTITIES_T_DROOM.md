@@ -83,3 +83,12 @@ No kern edits. Reused read-only: t-z5wezens `Z5Baas`, `Z5WezensPlekken.wereld`, 
 
 ## Resume point / tests
 See the bottom (test results) and `git log -1`.
+
+## Test results (2026-11-06)
+- `runGameTestServer -Pgt=Z5DroomGameTests,Z5VerhaalGameTests`: **"All 11 required tests passed"** (first run). Ours: haakEnWolk
+  (hook false outside Het Vadsrijk, cloud only into air, invert + back), slaapliedjeTroost (wrong note = start over, right order =
+  getroost + stunned + exactly x1.5), slaapliedjeTeLaat (nightmare 30 %, heals), grauweRanken (3 tendrils = x0.55, cut one), samenNeurienEnRoze
+  (fase 3 holds at 30 %, hum meter fills in the circle, lilac, plof pink, replay flag), droomKist (named Legendary + trophy).
+  The story's own 4 tests still pass with this slice merged in.
+- Resume point: everything above is committed; nothing half-done. Next = integration (t-vfx decals, t-geluid music id, t-z5wereld may
+  publish `z5d_droomwolk`), then the user looks at it in the dev client.
