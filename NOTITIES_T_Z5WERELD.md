@@ -109,7 +109,7 @@ Niet toegevoegd (palet gebruikt bestaande blokken): marmertegels, goudrand, damb
 - `loopcheck5.py`: **alle gepubliceerde plekken bereikbaar en terug** (behalve bewuste props: troon, luchtschip, mast, de
   teleportkamers). VAL-gebieden liggen allemaal ONDER de stad (y < 190: van de rand/vin vallen) = Wolkvangnet. TRAP ~470 = zitbanken
   (kathedraal, raadszaal, collegezaal, station) en dakranden; TRAP- ~355 = dakrandtrappen (daken zijn via erkers/steunberen te beklimmen).
-- Gametests: zie eindrapport.
+- Gametests: `-Pgt=Z5WereldGameTests` 4/4 groen (blokken, gevraagde ids, wijken/biomen op hoogte, Wolkvangnet).
 
 ## Hervatpunt
 Alles staat; regen = `python tools/vadsrijk/maak_kaart.py --zone 5` (~45 s) en daarna `python tools/vadsrijk/zone5/loopcheck5.py`.
