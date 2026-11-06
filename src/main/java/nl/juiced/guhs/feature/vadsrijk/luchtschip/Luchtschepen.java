@@ -71,6 +71,8 @@ public final class Luchtschepen {
     public static BiConsumer<ServerPlayer, Lijnen.Haven> AANKOMST = Luchtschepen::eersteAankomst;
 
     private static final Map<String, UUID> SCHEPEN = new HashMap<>();
+    /** Every ship entity in any level (also the gametests' lines), checked every tick: one that is not ticked is moved anyway. */
+    private static final java.util.Set<LuchtschipEntity> LEVEND = java.util.Collections.newSetFromMap(new java.util.WeakHashMap<>());
     private static final Map<String, List<UUID>> BORDEN = new HashMap<>();
 
     static {
@@ -88,6 +90,13 @@ public final class Luchtschepen {
     // ------------------------------------------------------------------------------------------------ the world: ships + boards
 
     static void tick(MinecraftServer server) {
+        for (LuchtschipEntity e : List.copyOf(LEVEND)) {
+            if (e.isRemoved()) {
+                LEVEND.remove(e);
+            } else if (e.level() instanceof ServerLevel el && !el.isPositionEntityTicking(e.blockPosition())) {
+                e.volgExtern();
+            }
+        }
         ServerLevel sl = Vadsrijk.level(server);
         if (sl == null) {
             return;
@@ -118,13 +127,12 @@ public final class Luchtschepen {
                         e.snapTo(s.pos().x, s.pos().y, s.pos().z, s.yaw(), 0f);
                         sl.addFreshEntity(e);
                         SCHEPEN.put(sleutel, e.getUUID());
+                        LEVEND.add(e);
                     }
                 } else if (e != null) {
                     if (!l.test() && e.getPassengers().isEmpty() && !dichtbij(spelers, s.pos(), WEG)) {
                         e.discard();
                         SCHEPEN.remove(sleutel);
-                    } else if (!sl.isPositionEntityTicking(e.blockPosition())) {
-                        e.volg();   // (far from everyone's simulation distance: keep it on time anyway)
                     }
                 }
             }
@@ -151,6 +159,7 @@ public final class Luchtschepen {
                 e.snapTo(s.pos().x, s.pos().y, s.pos().z, s.yaw(), 0f);
                 sl.addFreshEntity(e);
                 SCHEPEN.put(sleutel, e.getUUID());
+                LEVEND.add(e);
             }
         }
         return e;

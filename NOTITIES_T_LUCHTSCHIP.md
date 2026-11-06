@@ -74,7 +74,16 @@ Assets (generator): `geckolib/models|animations/entity/vr_luchtschip.*`, `textur
 - **When the control points change** (better routes once the harbours are built): edit `Lijnen` (the `via` lists). The gametest checks 60-90 s, no jumps > 0.75/tick, and never below y 60.
 
 ## Resume point / status
-See the bottom of this file (filled in at the end of the session).
+- DONE and committed on `110-t-luchtschip`. `compileJava` is clean, and `runGameTestServer -Pgt=VadsrijkLuchtschip` passes all 5 of my tests (+1 vanilla), twice in a row.
+- Not tried in a client: the AutoCheck run was skipped, and the user tests in the morning (SPIEK_T_LUCHTSCHIP.md).
+- Things to look at first in the client:
+  - the model orientation (bow forward);
+  - passengers standing on the deck (y offset);
+  - the board text;
+  - the silhouette positions and fading;
+  - the view-distance packet.
+- **Ships outside every simulation distance:** they are moved from the server tick (`Luchtschepen.LEVEND` -> `volgExtern`), so they stay on time and carry their passengers. This was found through the gametests.
+- **Gradle note:** the shared `.gradle/configuration-cache` in this worktree pointed at t-dialoog, so the first test run started from t-dialoog's run dir. I deleted it. Concurrent runs can still mix up args (one run started t-vfx's classes): check the "Got mod coordinates" line.
 
 ## Open points
 - The zone-3 opening film is not played on the first line-B arrival (only the flag is set).

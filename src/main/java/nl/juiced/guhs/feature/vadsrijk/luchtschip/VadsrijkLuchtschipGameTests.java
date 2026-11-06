@@ -64,7 +64,8 @@ public class VadsrijkLuchtschipGameTests {
     }
 
     /** A test line in the test area: board, depart (locked in, no damage, no sneaking off), land on the other pier. */
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 400)
+    // (own batch: the ship flies outside the tiny test area, and neighbouring tests clear the entities in their area)
+    @GuhTest(template = "empty", batch = BATCH + "_vlucht", timeoutTicks = 400)
     public static void vlucht(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = helper.absolutePos(new BlockPos(1, 1, 1));
@@ -92,8 +93,10 @@ public class VadsrijkLuchtschipGameTests {
         helper.assertTrue(p.getVehicle() == e, "on board");
         long start = sl.getServer().getTickCount();
         helper.runAfterDelay(45, () -> {
-            helper.assertTrue(e.vliegt() && p.getVehicle() == e, "flying with the passenger");
-            helper.assertTrue(p.getPersistentData().getStringOr(Luchtschepen.TAG_NAAR, "").equals(b.id()), "destination remembered");
+            helper.assertTrue(e.vliegt(), "flying: " + e.stand() + " t=" + Tijd.nu(sl, l) + " fase=" + l.fase());
+            helper.assertTrue(p.getVehicle() == e, "passenger still on board: vehicle " + p.getVehicle() + ", removed " + e.isRemoved()
+                    + ", alive " + p.isAlive() + ", pos " + p.position() + ", ship " + e.position());
+            helper.assertTrue(p.getPersistentData().getStringOr(Luchtschepen.TAG_NAAR, "").equals(b.id()), "destination remembered (ship ticks " + e.tickCount + ", entity-ticking " + sl.isPositionEntityTicking(e.blockPosition()) + ")");
             p.setShiftKeyDown(true);
             p.stopRiding();
             p.setShiftKeyDown(false);
@@ -113,7 +116,7 @@ public class VadsrijkLuchtschipGameTests {
     }
 
     /** Logout in flight: you are put on the destination pier (and the ship goes on without you). */
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
+    @GuhTest(template = "empty", batch = BATCH + "_uit", timeoutTicks = 200)
     public static void uitloggenInVlucht(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = helper.absolutePos(new BlockPos(1, 1, 1));

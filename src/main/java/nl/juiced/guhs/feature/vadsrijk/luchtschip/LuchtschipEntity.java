@@ -162,6 +162,18 @@ public class LuchtschipEntity extends Entity implements GeoEntity {
         }
     }
 
+    /**
+     * (server) The level does not tick it (its chunk is outside every simulation distance, e.g. it flew past the edge): keep it
+     * on time and carry the passengers along anyway.
+     */
+    void volgExtern() {
+        setOldPosAndRot();
+        volg();
+        for (Entity q : getPassengers()) {
+            positionRider(q, Entity::setPos);
+        }
+    }
+
     /** (client) smoke from the propellers in flight, a puff of steam now and then at the pier. */
     private void effecten() {
         boolean vliegt = vliegt();
