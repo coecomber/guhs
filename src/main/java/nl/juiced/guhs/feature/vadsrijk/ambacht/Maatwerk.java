@@ -147,8 +147,9 @@ public final class Maatwerk {
      * armour {verdediging, vads}; weapons {damage, per level} from the zone weapons; jewellery = Meesterwerk, ABOVE the drops.
      */
     static void basisTypes() {
-        double[][] helm = {{}, {3, 10}, {9, 28}, {15, 46}}, borst = {{}, {5, 16}, {15, 46}, {24, 74}}, broek = {{}, {4, 13}, {12, 37}, {20, 63}},
-                voet = {{}, {2, 9}, {6, 23}, {13, 40}};
+        // (the set's own Verdediging/Vads extras counted in: schorspantser 26 + 8 Verdediging = 34, ...)
+        double[][] helm = {{}, {4, 10}, {9, 28}, {21, 46}}, borst = {{}, {6, 16}, {18, 46}, {34, 76}}, broek = {{}, {5, 13}, {12, 46}, {22, 64}},
+                voet = {{}, {3, 9}, {6, 24}, {19, 60}};
         double[][] wapen = {{}, {5.5, 1.1}, {5.95, 1.19}, {6.35, 1.27}};
         for (int t = 1; t <= 3; t++) {
             String r = Klassen.RIDDER, j = Klassen.JAGER, m = Klassen.MAGIER;

@@ -135,3 +135,11 @@ Design: `guhs1100-avontuur/VOORSTEL_PROFESSIONS.md` with decisions A1-A3. The us
   - whether the scans find good spots in every group (`/guhs vadsrijk ambacht plekken` per area);
   - the workshop guhs' places.
 - Possible tuning: `Verzamelen.LEEG_MIN/MAX`, `ZELDZAAM_KANS`, `AmbachtXp.VERZAMEL`, `Imkeren.RAAT_MINUTEN`.
+
+## Test status (2026-11-06 01:02)
+- `compileJava` clean; `runGameTestServer -Pgt=VadsrijkAmbacht`: **11/11 pass**.
+  - Tests: xpCurve, dataKlopt (all POI anchors + recipes + base types), xpEnUitgerust, scanTerrein (grass/stone/water/hive rules + deterministic), oogstPerSpeler (per player, moves, quality, tier gate, rare 3x), imkeren, kokenEnBrouwen (Vadsigheid, buff, crystal cutting), maatwerkEnMeesterwerk (~90 % of the set, top 20 % at 100 %, BiS ring, no set), bestelbord, ranglijstEnWaarde.
+- NOT run: an AutoCheck client run.
+  - The 3 gradle slots were busy for most of the night, so I skipped it.
+  - The client side (spot rendering, minigame HUD, screens) compiles but is unseen.
+  - First thing to check in the dev client: SPIEK_T_AMBACHT.md §1 and §3.
