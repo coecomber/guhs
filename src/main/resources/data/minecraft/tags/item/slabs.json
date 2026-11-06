@@ -86,6 +86,10 @@
     "guhs:kegelbaanhout_plaat",
     "guhs:zeegroen_steen_plaat",
     "guhs:zeegroen_bakstenen_plaat",
-    "guhs:gepolijste_zeegroen_steen_plaat"
+    "guhs:gepolijste_zeegroen_steen_plaat",
+    "guhs:roze_marmer_gepolijst_plaat",
+    "guhs:wolkmarmer_gepolijst_plaat",
+    "guhs:gouden_kroonlijst_plaat",
+    "guhs:gouden_dakpan_plaat"
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "GGG",
+    "GOG",
+    "GGG"
+  ],
+  "key": {
+    "G": "minecraft:purple_stained_glass",
+    "O": "minecraft:gold_nugget"
+  },
+  "result": {
+    "id": "guhs:kathedraalglas_roos",
+    "count": 8
+  }
+}

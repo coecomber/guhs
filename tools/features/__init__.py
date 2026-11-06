@@ -250,6 +250,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_items',
             # 1.10 night round T, T-Z4WERELD: zone 4 "De Lampionkust" biomes + area names (Java: feature/vadsrijk/zone4/wereld)
             'vadsrijk_t_z4wereld',
+            # 1.10 night round T, T-Z5WERELD: zone 5 Hoogvads: the building blocks + biomes/area names (Java: feature/vadsrijk/zone5/wereld)
+            'vadsrijk_t_z5blokken',
+            'vadsrijk_t_z5wereld',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

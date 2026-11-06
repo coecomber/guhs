@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/roze_marmer_gepolijst_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/roze_marmer_gepolijst"
+    },
+    "type=top": {
+      "model": "guhs:block/roze_marmer_gepolijst_plaat_top"
+    }
+  }
+}

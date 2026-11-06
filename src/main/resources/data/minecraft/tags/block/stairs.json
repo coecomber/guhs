@@ -82,6 +82,10 @@
     "guhs:kegelbaanhout_trap",
     "guhs:zeegroen_steen_trap",
     "guhs:zeegroen_bakstenen_trap",
-    "guhs:gepolijste_zeegroen_steen_trap"
+    "guhs:gepolijste_zeegroen_steen_trap",
+    "guhs:roze_marmer_gepolijst_trap",
+    "guhs:wolkmarmer_gepolijst_trap",
+    "guhs:gouden_kroonlijst_trap",
+    "guhs:gouden_dakpan_trap"
   ]
 }

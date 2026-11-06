@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:pink_terracotta",
+    "minecraft:quartz_block"
+  ],
+  "result": {
+    "id": "guhs:roze_marmer",
+    "count": 2
+  }
+}

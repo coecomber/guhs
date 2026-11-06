@@ -1,0 +1,7 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:gouden_dakpan",
+  "result": {
+    "id": "guhs:gouden_dakpan_trap"
+  }
+}

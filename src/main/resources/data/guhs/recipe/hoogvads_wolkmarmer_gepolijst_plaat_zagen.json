@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:wolkmarmer",
+  "result": {
+    "id": "guhs:wolkmarmer_gepolijst_plaat",
+    "count": 2
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "guhs:block/wolkmarmer_zuil"
+    },
+    "axis=x": {
+      "model": "guhs:block/wolkmarmer_zuil_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=z": {
+      "model": "guhs:block/wolkmarmer_zuil_horizontal",
+      "x": 90
+    }
+  }
+}

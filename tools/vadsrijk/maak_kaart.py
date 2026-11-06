@@ -50,7 +50,7 @@ def main():
     ap.add_argument("--zonder-bouwsels", action="store_true")
     ap.add_argument("--audit", action="store_true", help="afterwards: walkability audit (AUDIT_VADSRIJK.md) + the safe spots json for "
                     "the unstuck key (tools/vadsrijk/audit/audit.py, ~80 s)")
-    ap.add_argument("--zone", default="alle", choices=("1", "2", "3", "4", "alle"))   # [zone 2] [zone 3] [T-Z4WERELD] which zone(s) to build
+    ap.add_argument("--zone", default="alle", choices=("1", "2", "3", "4", "5", "alle"))   # [zone 2] [zone 3] [T-Z4WERELD] [T-Z5WERELD] which zone(s) to build
     ap.add_argument("--werkers", type=int, default=6)   # [zone 3] parallel tile workers for zone 3
     a = ap.parse_args()
     if a.zone == "2":   # [zone 2] only the zone-2 map (tools/vadsrijk/zone2)
@@ -59,6 +59,8 @@ def main():
         return zone3(a)
     if a.zone == "4":   # [T-Z4WERELD] only the zone-4 map (tools/vadsrijk/zone4)
         return zone4(a)
+    if a.zone == "5":   # T-Z5WERELD: only the zone-5 map (tools/vadsrijk/zone5, Hoogvads on Moeder Wolkwal; build zone 4 first)
+        return zone5(a)
     os.makedirs(CACHE, exist_ok=True)
     os.makedirs(UIT, exist_ok=True)
     t0 = time.time()
@@ -123,6 +125,7 @@ def main():
         zone2(a)
         zone3(a)          # [zone 3] and the zone-3 map
         zone4(a)          # [T-Z4WERELD] and the zone-4 map
+        zone5(a)          # T-Z5WERELD: and zone 5 LAST (its tiles tx 38..39 keep zone 4's blocks below y 118)
 
 
 def zone2(a):   # [zone 2] De Splinterpieken: own grid (local), written at world tiles tx 6..15, tz -23..-13 (T-WERELD), POI_Z2.md, Z2WereldPlekken.java
@@ -140,6 +143,13 @@ def zone3(a):   # [zone 3] De Schemerwortel: own process (its render kit shares 
 
 def zone4(a):   # [T-Z4WERELD] De Lampionkust: own process (its render kit shares module names), tiles tx 27..39, tz -12..-5
     cmd = [sys.executable, os.path.join(HIER, "zone4", "maak4.py"), "--werkers", str(min(a.werkers, 5))]
+    if a.alleen:
+        cmd += ["--alleen", a.alleen]
+    subprocess.run(cmd, cwd=ROOT, check=True)
+
+
+def zone5(a):   # T-Z5WERELD: Hoogvads: own process (its render kit shares module names), tiles tx 38..48, tz -12..-5 (shared with zone 4)
+    cmd = [sys.executable, os.path.join(HIER, "zone5", "maak5.py")]
     if a.alleen:
         cmd += ["--alleen", a.alleen]
     subprocess.run(cmd, cwd=ROOT, check=True)

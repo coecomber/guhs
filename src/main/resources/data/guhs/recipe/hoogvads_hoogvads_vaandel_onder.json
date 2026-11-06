@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:pink_wool",
+    "minecraft:gold_ingot"
+  ],
+  "result": {
+    "id": "guhs:hoogvads_vaandel_onder",
+    "count": 1
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:white_terracotta",
+    "minecraft:quartz_block"
+  ],
+  "result": {
+    "id": "guhs:wolkmarmer",
+    "count": 2
+  }
+}

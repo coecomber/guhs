@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/wolkmarmer_gepolijst_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/wolkmarmer_gepolijst"
+    },
+    "type=top": {
+      "model": "guhs:block/wolkmarmer_gepolijst_plaat_top"
+    }
+  }
+}

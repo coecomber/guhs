@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:gold_ingot",
+    "minecraft:quartz_block"
+  ],
+  "result": {
+    "id": "guhs:gouden_kroonlijst",
+    "count": 2
+  }
+}
