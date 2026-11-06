@@ -321,6 +321,13 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
                             if b and _familie(L, a, b):
                                 n += 1
                 return n
+            def poort(c, a):
+                """Line pieces on both sides of c (along x or along z): c is a deliberate opening."""
+                for (ex, ez) in ((1, 0), (0, 1)):
+                    b1, b2 = get(c[0] + ex, c[1], c[2] + ez), get(c[0] - ex, c[1], c[2] - ez)
+                    if b1 and b2 and _familie(L, a, b1) and _familie(L, a, b2):
+                        return True
+                return False
             vul = []
             for (x, y, z) in pos:
                 x, y, z = int(x), int(y), int(z)
@@ -344,6 +351,8 @@ def verbind_vol(vol, pal, id_fn, rand=0, vullen=True, R=None, log=None, lijst=No
                             for c in (c1, c2):
                                 if not is_lucht(get(*c)):
                                     continue
+                                if poort(c, a):
+                                    continue    # a 1-wide gap in a straight line = a doorway: never close it
                                 vloer = bool(L.vlak[get(c[0], c[1] - 1, c[2]), 4])
                                 rond = sum(1 for ex in (-1, 0, 1) for ez in (-1, 0, 1)
                                            if (ex or ez) and get(c[0] + ex, c[1], c[2] + ez)
@@ -608,7 +617,7 @@ def naloop(tegels=None, map_=UIT, praat=True, werkers=6):
     doel = sorted(alle if tegels is None else {tuple(t) for t in tegels} & alle)
     rij = list(doel)
     geschreven, cellen, rondes = set(), 0, 0
-    while rij and rondes < 4:
+    while rij and rondes < 8:
         rondes += 1
         uit = _ronde(map_, rij, True, werkers)
         volgende = set()
@@ -634,7 +643,9 @@ def na(tegels=None, map_=UIT):
         tegels = list(tegels)
         if not tegels:
             return
-        cmd += ["--alleen", ";".join(f"{a},{b}" for a, b in tegels)]
+        cmd.append("--alleen=" + ";".join(f"{a},{b}" for a, b in tegels))   # '=' form: a tile list may start with '-'
+        if len(cmd[-1]) > 20000:
+            cmd.pop()   # (Windows command-line limit) -> all tiles; the pass is idempotent
     subprocess.run(cmd, cwd=ROOT, check=True)
 
 
