@@ -1,0 +1,71 @@
+{
+ "naam": "Klodderkid",
+ "uuid": "",
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.vadsmagier.1",
+ "gezien": "2026-10-28",
+ "lv": 26,
+ "opgevrolijkt": 229,
+ "boek_totaal": 11,
+ "huisdieren": 0,
+ "huisdieren_max": 6,
+ "rijdieren": 5,
+ "rijdieren_max": 5,
+ "bazen_totaal": 55,
+ "klassen": {
+  "knuffelridder": 21,
+  "pluisjager": 26,
+  "vadsmagier": 24
+ },
+ "boek": {
+  "zone1": 33,
+  "zone2": 22,
+  "zone3": 0,
+  "zone4": 0,
+  "zone5": 0
+ },
+ "bazen": {
+  "bazen:koning_klodder": 9,
+  "bazen:opperzwam": 0,
+  "z2bazen:galmwolf": 2,
+  "z2bazen:spiegelzucht": 7,
+  "z3bazen:kruinroofvogel": 4,
+  "z3bazen:taleggio": 2,
+  "z3bazen:brokkel": 7,
+  "z3bazen:piepvel": 7,
+  "z3bazen:nestwachter": 3,
+  "z3bazen:bleu": 3,
+  "z4bazen:vliegervanger": 4,
+  "z5wezens:gorgonzola": 7
+ },
+ "gear": {
+  "hoofd": {
+   "type": "klodderkapje",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 21,
+   "sterren": 1,
+   "sokjes": 1
+  },
+  "borst": {
+   "type": "lampionjurk",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 25,
+   "sterren": 3,
+   "sokjes": 0
+  },
+  "voeten": {
+   "type": "kristalschoentjes",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 23,
+   "sterren": 2,
+   "sokjes": 1
+  },
+  "ring": {
+   "type": "parelring",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 25,
+   "sterren": 2,
+   "sokjes": 0
+  }
+ }
+}

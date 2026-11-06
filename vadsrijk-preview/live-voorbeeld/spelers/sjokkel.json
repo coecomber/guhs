@@ -1,0 +1,76 @@
+{
+ "naam": "Sjokkel",
+ "uuid": "",
+ "klasse": "knuffelridder",
+ "titel": "vadsrijk.klassen.titel.pluisjager.1",
+ "gezien": "2026-10-31",
+ "lv": 17,
+ "opgevrolijkt": 25,
+ "boek_totaal": 3,
+ "huisdieren": 2,
+ "huisdieren_max": 6,
+ "rijdieren": 3,
+ "rijdieren_max": 5,
+ "bazen_totaal": 46,
+ "klassen": {
+  "knuffelridder": 17,
+  "pluisjager": 8,
+  "vadsmagier": 15
+ },
+ "boek": {
+  "zone1": 12,
+  "zone2": 4,
+  "zone3": 0,
+  "zone4": 0,
+  "zone5": 0
+ },
+ "bazen": {
+  "bazen:koning_klodder": 5,
+  "bazen:opperzwam": 7,
+  "z2bazen:spiegelzucht": 6,
+  "z3bazen:taleggio": 2,
+  "z3bazen:brokkel": 8,
+  "z3bazen:wortelwurger": 1,
+  "z4bazen:vliegervanger": 6,
+  "z5wezens:gorgonzola": 5,
+  "z5wezens:donderbuik": 3,
+  "z5wezens:zilverstaart": 3
+ },
+ "gear": {
+  "wapen": {
+   "type": "galmhamer",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 15,
+   "sterren": 3,
+   "sokjes": 0
+  },
+  "hoofd": {
+   "type": "mw_t1_helm",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 14,
+   "sterren": 2,
+   "sokjes": 0
+  },
+  "borst": {
+   "type": "buitvest",
+   "zeldzaamheid": "ongewoon",
+   "lv": 12,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "boorbroek",
+   "zeldzaamheid": "ongewoon",
+   "lv": 13,
+   "sterren": 0,
+   "sokjes": 2
+  },
+  "ring": {
+   "type": "roze_ring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 16,
+   "sterren": 2,
+   "sokjes": 2
+  }
+ }
+}

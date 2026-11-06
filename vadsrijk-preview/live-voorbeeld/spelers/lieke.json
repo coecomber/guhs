@@ -1,0 +1,76 @@
+{
+ "naam": "Lieke",
+ "uuid": "",
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.pluisjager.1",
+ "gezien": "2026-10-28",
+ "lv": 50,
+ "opgevrolijkt": 235,
+ "boek_totaal": 59,
+ "huisdieren": 1,
+ "huisdieren_max": 6,
+ "rijdieren": 4,
+ "rijdieren_max": 5,
+ "bazen_totaal": 31,
+ "klassen": {
+  "knuffelridder": 39,
+  "pluisjager": 40,
+  "vadsmagier": 43
+ },
+ "boek": {
+  "zone1": 71,
+  "zone2": 80,
+  "zone3": 59,
+  "zone4": 50,
+  "zone5": 36
+ },
+ "bazen": {
+  "z2bazen:galmwolf": 0,
+  "z2bazen:spiegelzucht": 5,
+  "z3bazen:kruinroofvogel": 2,
+  "z3bazen:taleggio": 8,
+  "z3bazen:piepvel": 8,
+  "z3bazen:nestwachter": 0,
+  "z3bazen:bleu": 4,
+  "z5wezens:gorgonzola": 2,
+  "z5wezens:zilverstaart": 2
+ },
+ "gear": {
+  "wapen": {
+   "type": "z5droom_dromenzwaard",
+   "zeldzaamheid": "episch",
+   "lv": 46,
+   "sterren": 7,
+   "sokjes": 1
+  },
+  "hoofd": {
+   "type": "schorshelm",
+   "zeldzaamheid": "gewoon",
+   "lv": 47,
+   "sterren": 4,
+   "sokjes": 0
+  },
+  "borst": {
+   "type": "baas_wortelwambuis",
+   "zeldzaamheid": "legendarisch",
+   "lv": 48,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "mw_t1_broek",
+   "zeldzaamheid": "gewoon",
+   "lv": 49,
+   "sterren": 7,
+   "sokjes": 0
+  },
+  "ring": {
+   "type": "wolkring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 48,
+   "sterren": 3,
+   "sokjes": 2
+  }
+ },
+ "eerste_50": "2026-11-21"
+}

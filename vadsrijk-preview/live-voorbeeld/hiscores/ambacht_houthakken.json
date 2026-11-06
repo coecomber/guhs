@@ -1,0 +1,90 @@
+{
+ "lijst": "ambacht_houthakken",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Pluimpje",
+   "waarde": 98,
+   "xp": 117600
+  },
+  {
+   "plek": 2,
+   "naam": "Juiced",
+   "waarde": 86,
+   "xp": 103200
+  },
+  {
+   "plek": 3,
+   "naam": "Kaasknabbel",
+   "waarde": 77,
+   "xp": 92400
+  },
+  {
+   "plek": 4,
+   "naam": "Zwamzoetje",
+   "waarde": 71,
+   "xp": 85200
+  },
+  {
+   "plek": 5,
+   "naam": "Honingbeer",
+   "waarde": 63,
+   "xp": 75600
+  },
+  {
+   "plek": 6,
+   "naam": "Vadsvos",
+   "waarde": 63,
+   "xp": 75600
+  },
+  {
+   "plek": 7,
+   "naam": "Knuffelkoning",
+   "waarde": 60,
+   "xp": 72000
+  },
+  {
+   "plek": 8,
+   "naam": "Lieke",
+   "waarde": 53,
+   "xp": 63600
+  },
+  {
+   "plek": 9,
+   "naam": "MikaMepper",
+   "waarde": 39,
+   "xp": 46800
+  },
+  {
+   "plek": 10,
+   "naam": "Wolwinter",
+   "waarde": 28,
+   "xp": 33600
+  },
+  {
+   "plek": 11,
+   "naam": "Klodderkid",
+   "waarde": 24,
+   "xp": 28800
+  },
+  {
+   "plek": 12,
+   "naam": "Sjokkel",
+   "waarde": 17,
+   "xp": 20400
+  },
+  {
+   "plek": 13,
+   "naam": "Njeggie",
+   "waarde": 8,
+   "xp": 9600
+  },
+  {
+   "plek": 14,
+   "naam": "PluisPiet",
+   "waarde": 6,
+   "xp": 7200
+  }
+ ]
+}

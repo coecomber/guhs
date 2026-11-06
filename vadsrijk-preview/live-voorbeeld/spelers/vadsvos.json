@@ -1,0 +1,80 @@
+{
+ "naam": "Vadsvos",
+ "uuid": "",
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-10-29",
+ "lv": 36,
+ "opgevrolijkt": 50,
+ "boek_totaal": 29,
+ "huisdieren": 2,
+ "huisdieren_max": 6,
+ "rijdieren": 4,
+ "rijdieren_max": 5,
+ "bazen_totaal": 69,
+ "klassen": {
+  "knuffelridder": 31,
+  "pluisjager": 31,
+  "vadsmagier": 27
+ },
+ "boek": {
+  "zone1": 53,
+  "zone2": 42,
+  "zone3": 32,
+  "zone4": 13,
+  "zone5": 9
+ },
+ "bazen": {
+  "bazen:koning_klodder": 4,
+  "z2bazen:galmwolf": 3,
+  "z2bazen:spiegelzucht": 9,
+  "z3bazen:kruinroofvogel": 9,
+  "z3bazen:taleggio": 8,
+  "z3bazen:brokkel": 1,
+  "z3bazen:roquefort": 1,
+  "z3bazen:piepvel": 2,
+  "z3bazen:nestwachter": 9,
+  "z3bazen:bleu": 1,
+  "z4bazen:zeeslurf": 9,
+  "z4bazen:vliegervanger": 5,
+  "z5wezens:gorgonzola": 6,
+  "z5wezens:donderbuik": 2
+ },
+ "gear": {
+  "wapen": {
+   "type": "stormboog",
+   "zeldzaamheid": "gewoon",
+   "lv": 34,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "borst": {
+   "type": "bubbelvest",
+   "zeldzaamheid": "legendarisch",
+   "lv": 31,
+   "sterren": 1,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "kristalbeenstukken",
+   "zeldzaamheid": "gewoon",
+   "lv": 34,
+   "sterren": 3,
+   "sokjes": 2
+  },
+  "voeten": {
+   "type": "lampionslofjes",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 35,
+   "sterren": 1,
+   "sokjes": 0
+  },
+  "ring": {
+   "type": "kristalring",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 32,
+   "sterren": 2,
+   "sokjes": 1
+  }
+ }
+}

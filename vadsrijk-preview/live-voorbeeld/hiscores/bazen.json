@@ -1,0 +1,76 @@
+{
+ "lijst": "bazen",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Juiced",
+   "waarde": 82
+  },
+  {
+   "plek": 2,
+   "naam": "Honingbeer",
+   "waarde": 71
+  },
+  {
+   "plek": 3,
+   "naam": "Vadsvos",
+   "waarde": 69
+  },
+  {
+   "plek": 4,
+   "naam": "Zwamzoetje",
+   "waarde": 62
+  },
+  {
+   "plek": 5,
+   "naam": "MikaMepper",
+   "waarde": 56
+  },
+  {
+   "plek": 6,
+   "naam": "Klodderkid",
+   "waarde": 55
+  },
+  {
+   "plek": 7,
+   "naam": "PluisPiet",
+   "waarde": 52
+  },
+  {
+   "plek": 8,
+   "naam": "Knuffelkoning",
+   "waarde": 51
+  },
+  {
+   "plek": 9,
+   "naam": "Pluimpje",
+   "waarde": 51
+  },
+  {
+   "plek": 10,
+   "naam": "Njeggie",
+   "waarde": 50
+  },
+  {
+   "plek": 11,
+   "naam": "Kaasknabbel",
+   "waarde": 47
+  },
+  {
+   "plek": 12,
+   "naam": "Sjokkel",
+   "waarde": 46
+  },
+  {
+   "plek": 13,
+   "naam": "Wolwinter",
+   "waarde": 46
+  },
+  {
+   "plek": 14,
+   "naam": "Lieke",
+   "waarde": 31
+  }
+ ]
+}

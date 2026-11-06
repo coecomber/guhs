@@ -1,0 +1,84 @@
+{
+ "naam": "Wolwinter",
+ "uuid": "",
+ "klasse": "vadsmagier",
+ "titel": "vadsrijk.klassen.titel.pluisjager.1",
+ "gezien": "2026-11-02",
+ "lv": 17,
+ "opgevrolijkt": 317,
+ "boek_totaal": 0,
+ "huisdieren": 0,
+ "huisdieren_max": 6,
+ "rijdieren": 5,
+ "rijdieren_max": 5,
+ "bazen_totaal": 46,
+ "klassen": {
+  "knuffelridder": 13,
+  "pluisjager": 13,
+  "vadsmagier": 6
+ },
+ "boek": {
+  "zone1": 0,
+  "zone2": 0,
+  "zone3": 0,
+  "zone4": 0,
+  "zone5": 0
+ },
+ "bazen": {
+  "z2bazen:galmwolf": 1,
+  "z2bazen:spiegelzucht": 5,
+  "z3bazen:taleggio": 1,
+  "z3bazen:roquefort": 2,
+  "z3bazen:wortelwurger": 8,
+  "z3bazen:nestwachter": 3,
+  "z3bazen:vahoegnir": 9,
+  "z4bazen:zeeslurf": 7,
+  "z4bazen:vliegervanger": 7,
+  "z5wezens:gorgonzola": 0,
+  "z5wezens:donderbuik": 3
+ },
+ "gear": {
+  "wapen": {
+   "type": "pluishamer",
+   "zeldzaamheid": "ongewoon",
+   "lv": 14,
+   "sterren": 3,
+   "sokjes": 2
+  },
+  "hoofd": {
+   "type": "baas_lichtzwamhelm",
+   "zeldzaamheid": "ongewoon",
+   "lv": 16,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "borst": {
+   "type": "mw_t1_borstplaat",
+   "zeldzaamheid": "gewoon",
+   "lv": 12,
+   "sterren": 3,
+   "sokjes": 2
+  },
+  "benen": {
+   "type": "klodderbroek",
+   "zeldzaamheid": "ongewoon",
+   "lv": 12,
+   "sterren": 3,
+   "sokjes": 0
+  },
+  "voeten": {
+   "type": "mw_t1_schoentjes",
+   "zeldzaamheid": "ongewoon",
+   "lv": 14,
+   "sterren": 1,
+   "sokjes": 2
+  },
+  "ring": {
+   "type": "mw_t2_ring",
+   "zeldzaamheid": "gewoon",
+   "lv": 13,
+   "sterren": 0,
+   "sokjes": 0
+  }
+ }
+}

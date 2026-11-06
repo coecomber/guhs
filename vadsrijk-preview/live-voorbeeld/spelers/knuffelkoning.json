@@ -1,0 +1,69 @@
+{
+ "naam": "Knuffelkoning",
+ "uuid": "",
+ "klasse": "knuffelridder",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-10-28",
+ "lv": 41,
+ "opgevrolijkt": 754,
+ "boek_totaal": 40,
+ "huisdieren": 4,
+ "huisdieren_max": 6,
+ "rijdieren": 1,
+ "rijdieren_max": 5,
+ "bazen_totaal": 51,
+ "klassen": {
+  "knuffelridder": 32,
+  "pluisjager": 39,
+  "vadsmagier": 31
+ },
+ "boek": {
+  "zone1": 69,
+  "zone2": 49,
+  "zone3": 45,
+  "zone4": 30,
+  "zone5": 10
+ },
+ "bazen": {
+  "bazen:koning_klodder": 5,
+  "bazen:opperzwam": 8,
+  "z2bazen:galmwolf": 0,
+  "z2bazen:spiegelzucht": 8,
+  "z3bazen:taleggio": 5,
+  "z3bazen:brokkel": 2,
+  "z3bazen:bleu": 6,
+  "z3bazen:vahoegnir": 8,
+  "z4bazen:vliegervanger": 9,
+  "z5wezens:donderbuik": 0
+ },
+ "gear": {
+  "wapen": {
+   "type": "kristalstaf",
+   "zeldzaamheid": "guhddelijk",
+   "lv": 36,
+   "sterren": 2,
+   "sokjes": 1
+  },
+  "hoofd": {
+   "type": "klodderkapje",
+   "zeldzaamheid": "legendarisch",
+   "lv": 40,
+   "sterren": 2,
+   "sokjes": 0
+  },
+  "voeten": {
+   "type": "schorslaarzen",
+   "zeldzaamheid": "legendarisch",
+   "lv": 39,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "ring": {
+   "type": "wolkring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 37,
+   "sterren": 6,
+   "sokjes": 2
+  }
+ }
+}

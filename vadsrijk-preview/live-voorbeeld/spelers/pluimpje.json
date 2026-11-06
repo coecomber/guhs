@@ -1,0 +1,78 @@
+{
+ "naam": "Pluimpje",
+ "uuid": "",
+ "klasse": "knuffelridder",
+ "titel": "vadsrijk.klassen.titel.pluisjager.1",
+ "gezien": "2026-11-01",
+ "lv": 11,
+ "opgevrolijkt": 151,
+ "boek_totaal": 0,
+ "huisdieren": 6,
+ "huisdieren_max": 6,
+ "rijdieren": 3,
+ "rijdieren_max": 5,
+ "bazen_totaal": 51,
+ "klassen": {
+  "knuffelridder": 1,
+  "pluisjager": 5,
+  "vadsmagier": 2
+ },
+ "boek": {
+  "zone1": 0,
+  "zone2": 0,
+  "zone3": 0,
+  "zone4": 0,
+  "zone5": 0
+ },
+ "bazen": {
+  "bazen:koning_klodder": 3,
+  "bazen:opperzwam": 2,
+  "z2bazen:galmwolf": 4,
+  "z3bazen:kruinroofvogel": 5,
+  "z3bazen:taleggio": 3,
+  "z3bazen:brokkel": 8,
+  "z3bazen:roquefort": 6,
+  "z3bazen:piepvel": 3,
+  "z3bazen:nestwachter": 3,
+  "z3bazen:bleu": 0,
+  "z4bazen:zeeslurf": 7,
+  "z5wezens:donderbuik": 7
+ },
+ "gear": {
+  "wapen": {
+   "type": "z5droom_sterrenboog",
+   "zeldzaamheid": "ongewoon",
+   "lv": 7,
+   "sterren": 3,
+   "sokjes": 1
+  },
+  "borst": {
+   "type": "mw_t3_borstplaat",
+   "zeldzaamheid": "gewoon",
+   "lv": 7,
+   "sterren": 0,
+   "sokjes": 2
+  },
+  "benen": {
+   "type": "bloesembroek",
+   "zeldzaamheid": "gewoon",
+   "lv": 6,
+   "sterren": 1,
+   "sokjes": 2
+  },
+  "voeten": {
+   "type": "kristalschoentjes",
+   "zeldzaamheid": "ongewoon",
+   "lv": 9,
+   "sterren": 0,
+   "sokjes": 0
+  },
+  "ring": {
+   "type": "kristalring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 10,
+   "sterren": 1,
+   "sokjes": 0
+  }
+ }
+}

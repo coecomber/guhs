@@ -1,0 +1,94 @@
+# Hidden preview of the Vadsrijk website section (Guhs 1.10.0, not released) on https://guhs.nl/vadsrijk-preview/
+#
+# Why this lives on gh-pages and not on main:
+#   guhs.nl is ONE GitHub Pages site (source: GitHub Actions), deployed by main's .github/workflows/pages.yml. A Pages deploy
+#   always replaces the whole site, so this workflow rebuilds the normal site from main EXACTLY like pages.yml does, then adds the
+#   static preview folder vadsrijk-preview/ (committed on this branch, built by tools/make_vadsrijk_site.py on branch 110-u-site)
+#   and deploys that. main's code, the mod release and the existing pages stay untouched. The github-pages environment allows
+#   deploys from main and gh-pages.
+#
+# Lifetime: the next deploy from main (any push to main touching docs/tools, or a manual run of "Wiki (GitHub Pages)") replaces
+#   the site WITHOUT the preview. To bring it back: push any commit to gh-pages (or re-run this workflow's last run in Actions).
+# Remove for good: delete vadsrijk-preview/ and this file from gh-pages (one commit), then run "Wiki (GitHub Pages)" on main.
+name: Vadsrijk preview (GitHub Pages)
+
+on:
+  push:
+    branches: [ gh-pages ]
+    paths:
+      - 'vadsrijk-preview/**'
+      - '.github/workflows/vadsrijk-preview.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout main (the normal site)
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: site
+
+      - name: Checkout gh-pages (the preview files)
+        uses: actions/checkout@v4
+        with:
+          path: preview
+          sparse-checkout: vadsrijk-preview
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install wiki dependencies
+        run: pip install -r site/tools/requirements-wiki.txt
+
+      - name: Build the landing page + wiki (same command as main's pages.yml)
+        working-directory: site
+        run: python tools/make_wiki_site.py --base-url https://guhs.nl/wiki/ --landing docs/site --out docs/site/wiki
+
+      - name: Check the site exists (same checks as main's pages.yml)
+        working-directory: site
+        run: |
+          for f in index.html 404.html CNAME wiki/index.html wiki/server.html wiki/aan-de-slag.html; do
+            test -f "docs/site/$f" || { echo "docs/site/$f is missing"; exit 1; }
+          done
+          grep -qx 'guhs.nl' docs/site/CNAME || { echo "docs/site/CNAME must say guhs.nl"; exit 1; }
+          touch docs/site/.nojekyll
+
+      - name: Add the Vadsrijk preview
+        run: |
+          test -f preview/vadsrijk-preview/index.html || { echo "preview missing"; exit 1; }
+          test ! -e site/docs/site/vadsrijk-preview || { echo "main already has a vadsrijk-preview folder"; exit 1; }
+          cp -r preview/vadsrijk-preview site/docs/site/vadsrijk-preview
+          grep -q 'name="robots" content="noindex' site/docs/site/vadsrijk-preview/index.html || { echo "preview must be noindex"; exit 1; }
+          du -sh site/docs/site site/docs/site/vadsrijk-preview
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/docs/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

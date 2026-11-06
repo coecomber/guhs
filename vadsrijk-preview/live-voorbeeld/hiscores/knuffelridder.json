@@ -1,0 +1,90 @@
+{
+ "lijst": "knuffelridder",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Juiced",
+   "waarde": 43,
+   "xp": 387000
+  },
+  {
+   "plek": 2,
+   "naam": "PluisPiet",
+   "waarde": 41,
+   "xp": 369000
+  },
+  {
+   "plek": 3,
+   "naam": "Lieke",
+   "waarde": 39,
+   "xp": 351000
+  },
+  {
+   "plek": 4,
+   "naam": "Knuffelkoning",
+   "waarde": 32,
+   "xp": 288000
+  },
+  {
+   "plek": 5,
+   "naam": "Vadsvos",
+   "waarde": 31,
+   "xp": 279000
+  },
+  {
+   "plek": 6,
+   "naam": "Njeggie",
+   "waarde": 29,
+   "xp": 261000
+  },
+  {
+   "plek": 7,
+   "naam": "Kaasknabbel",
+   "waarde": 27,
+   "xp": 243000
+  },
+  {
+   "plek": 8,
+   "naam": "Zwamzoetje",
+   "waarde": 27,
+   "xp": 243000
+  },
+  {
+   "plek": 9,
+   "naam": "Klodderkid",
+   "waarde": 21,
+   "xp": 189000
+  },
+  {
+   "plek": 10,
+   "naam": "Honingbeer",
+   "waarde": 20,
+   "xp": 180000
+  },
+  {
+   "plek": 11,
+   "naam": "Sjokkel",
+   "waarde": 17,
+   "xp": 153000
+  },
+  {
+   "plek": 12,
+   "naam": "Wolwinter",
+   "waarde": 13,
+   "xp": 117000
+  },
+  {
+   "plek": 13,
+   "naam": "MikaMepper",
+   "waarde": 3,
+   "xp": 27000
+  },
+  {
+   "plek": 14,
+   "naam": "Pluimpje",
+   "waarde": 1,
+   "xp": 9000
+  }
+ ]
+}

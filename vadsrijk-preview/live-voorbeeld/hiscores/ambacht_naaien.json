@@ -1,0 +1,90 @@
+{
+ "lijst": "ambacht_naaien",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Zwamzoetje",
+   "waarde": 99,
+   "xp": 118800
+  },
+  {
+   "plek": 2,
+   "naam": "Sjokkel",
+   "waarde": 90,
+   "xp": 108000
+  },
+  {
+   "plek": 3,
+   "naam": "PluisPiet",
+   "waarde": 79,
+   "xp": 94800
+  },
+  {
+   "plek": 4,
+   "naam": "Honingbeer",
+   "waarde": 76,
+   "xp": 91200
+  },
+  {
+   "plek": 5,
+   "naam": "Knuffelkoning",
+   "waarde": 70,
+   "xp": 84000
+  },
+  {
+   "plek": 6,
+   "naam": "Pluimpje",
+   "waarde": 59,
+   "xp": 70800
+  },
+  {
+   "plek": 7,
+   "naam": "MikaMepper",
+   "waarde": 50,
+   "xp": 60000
+  },
+  {
+   "plek": 8,
+   "naam": "Kaasknabbel",
+   "waarde": 49,
+   "xp": 58800
+  },
+  {
+   "plek": 9,
+   "naam": "Juiced",
+   "waarde": 42,
+   "xp": 50400
+  },
+  {
+   "plek": 10,
+   "naam": "Klodderkid",
+   "waarde": 33,
+   "xp": 39600
+  },
+  {
+   "plek": 11,
+   "naam": "Lieke",
+   "waarde": 24,
+   "xp": 28800
+  },
+  {
+   "plek": 12,
+   "naam": "Wolwinter",
+   "waarde": 23,
+   "xp": 27600
+  },
+  {
+   "plek": 13,
+   "naam": "Njeggie",
+   "waarde": 16,
+   "xp": 19200
+  },
+  {
+   "plek": 14,
+   "naam": "Vadsvos",
+   "waarde": 2,
+   "xp": 2400
+  }
+ ]
+}

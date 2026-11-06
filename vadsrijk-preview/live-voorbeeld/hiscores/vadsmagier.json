@@ -1,0 +1,90 @@
+{
+ "lijst": "vadsmagier",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Lieke",
+   "waarde": 43,
+   "xp": 387000
+  },
+  {
+   "plek": 2,
+   "naam": "Juiced",
+   "waarde": 40,
+   "xp": 360000
+  },
+  {
+   "plek": 3,
+   "naam": "PluisPiet",
+   "waarde": 35,
+   "xp": 315000
+  },
+  {
+   "plek": 4,
+   "naam": "Knuffelkoning",
+   "waarde": 31,
+   "xp": 279000
+  },
+  {
+   "plek": 5,
+   "naam": "Vadsvos",
+   "waarde": 27,
+   "xp": 243000
+  },
+  {
+   "plek": 6,
+   "naam": "Kaasknabbel",
+   "waarde": 25,
+   "xp": 225000
+  },
+  {
+   "plek": 7,
+   "naam": "Njeggie",
+   "waarde": 25,
+   "xp": 225000
+  },
+  {
+   "plek": 8,
+   "naam": "Klodderkid",
+   "waarde": 24,
+   "xp": 216000
+  },
+  {
+   "plek": 9,
+   "naam": "Zwamzoetje",
+   "waarde": 17,
+   "xp": 153000
+  },
+  {
+   "plek": 10,
+   "naam": "Honingbeer",
+   "waarde": 15,
+   "xp": 135000
+  },
+  {
+   "plek": 11,
+   "naam": "Sjokkel",
+   "waarde": 15,
+   "xp": 135000
+  },
+  {
+   "plek": 12,
+   "naam": "Wolwinter",
+   "waarde": 6,
+   "xp": 54000
+  },
+  {
+   "plek": 13,
+   "naam": "MikaMepper",
+   "waarde": 5,
+   "xp": 45000
+  },
+  {
+   "plek": 14,
+   "naam": "Pluimpje",
+   "waarde": 2,
+   "xp": 18000
+  }
+ ]
+}

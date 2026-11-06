@@ -1,0 +1,147 @@
+{
+ "tijd": "2026-11-06T11:39:44Z",
+ "dagreset": "2026-11-06T18:51:44Z",
+ "weekzegel": "vadsrijk.z3bazen.zegel.haastig",
+ "contracten": [
+  "vadsrijk.z3.systemen.contract.de_harsreus",
+  "vadsrijk.z3.systemen.contract.moeder_wesp"
+ ],
+ "bazen": [
+  {
+   "arena": "bazen:koning_klodder",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 1200,
+   "zone": 1
+  },
+  {
+   "arena": "bazen:opperzwam",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 1
+  },
+  {
+   "arena": "z2bazen:galmwolf",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 1200,
+   "zone": 2
+  },
+  {
+   "arena": "z2bazen:spiegelzucht",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 2
+  },
+  {
+   "arena": "z3bazen:kruinroofvogel",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 1500,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:taleggio",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:brokkel",
+   "titel": "",
+   "terug_over_s": 257,
+   "staat": "verslagen",
+   "respawn_s": 300,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:roquefort",
+   "titel": "",
+   "terug_over_s": 89,
+   "staat": "verslagen",
+   "respawn_s": 300,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:piepvel",
+   "titel": "",
+   "terug_over_s": 52,
+   "staat": "verslagen",
+   "respawn_s": 600,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:wortelwurger",
+   "titel": "",
+   "terug_over_s": 229,
+   "staat": "verslagen",
+   "respawn_s": 300,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:nestwachter",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 3
+  },
+  {
+   "arena": "z3bazen:bleu",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 3
+  },
+  {
+   "arena": "z4bazen:zeeslurf",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 1200,
+   "zone": 4
+  },
+  {
+   "arena": "z4bazen:vliegervanger",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 600,
+   "zone": 4
+  },
+  {
+   "arena": "z5wezens:gorgonzola",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 5
+  },
+  {
+   "arena": "z5wezens:donderbuik",
+   "titel": "",
+   "terug_over_s": 285,
+   "staat": "verslagen",
+   "respawn_s": 1200,
+   "zone": 5
+  }
+ ],
+ "karavaan": {
+  "fase": "rijden",
+  "stop": "",
+  "richting": 1,
+  "route_fractie": 0.42,
+  "x": 240,
+  "z": -126
+ }
+}

@@ -1,0 +1,84 @@
+{
+ "naam": "Kaasknabbel",
+ "uuid": "",
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-10-30",
+ "lv": 33,
+ "opgevrolijkt": 177,
+ "boek_totaal": 28,
+ "huisdieren": 1,
+ "huisdieren_max": 6,
+ "rijdieren": 0,
+ "rijdieren_max": 5,
+ "bazen_totaal": 47,
+ "klassen": {
+  "knuffelridder": 27,
+  "pluisjager": 23,
+  "vadsmagier": 25
+ },
+ "boek": {
+  "zone1": 52,
+  "zone2": 42,
+  "zone3": 27,
+  "zone4": 21,
+  "zone5": 0
+ },
+ "bazen": {
+  "bazen:koning_klodder": 5,
+  "z2bazen:galmwolf": 7,
+  "z2bazen:spiegelzucht": 9,
+  "z3bazen:taleggio": 0,
+  "z3bazen:brokkel": 0,
+  "z3bazen:piepvel": 3,
+  "z3bazen:wortelwurger": 1,
+  "z3bazen:vahoegnir": 2,
+  "z4bazen:zeeslurf": 9,
+  "z5wezens:gorgonzola": 5,
+  "z5wezens:zilverstaart": 6
+ },
+ "gear": {
+  "wapen": {
+   "type": "takkenknots",
+   "zeldzaamheid": "gewoon",
+   "lv": 30,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "hoofd": {
+   "type": "baas_lichtzwamhelm",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 29,
+   "sterren": 1,
+   "sokjes": 0
+  },
+  "borst": {
+   "type": "mw_t1_borstplaat",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 30,
+   "sterren": 1,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "boorbroek",
+   "zeldzaamheid": "gewoon",
+   "lv": 29,
+   "sterren": 1,
+   "sokjes": 1
+  },
+  "voeten": {
+   "type": "mw_t1_schoentjes",
+   "zeldzaamheid": "ongewoon",
+   "lv": 32,
+   "sterren": 0,
+   "sokjes": 2
+  },
+  "ring": {
+   "type": "wolkring",
+   "zeldzaamheid": "gewoon",
+   "lv": 33,
+   "sterren": 2,
+   "sokjes": 2
+  }
+ }
+}

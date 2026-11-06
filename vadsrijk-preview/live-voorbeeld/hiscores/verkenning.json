@@ -1,0 +1,66 @@
+{
+ "lijst": "verkenning",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Lieke",
+   "waarde": 59
+  },
+  {
+   "plek": 2,
+   "naam": "Juiced",
+   "waarde": 48
+  },
+  {
+   "plek": 3,
+   "naam": "PluisPiet",
+   "waarde": 48
+  },
+  {
+   "plek": 4,
+   "naam": "Knuffelkoning",
+   "waarde": 40
+  },
+  {
+   "plek": 5,
+   "naam": "Vadsvos",
+   "waarde": 29
+  },
+  {
+   "plek": 6,
+   "naam": "Kaasknabbel",
+   "waarde": 28
+  },
+  {
+   "plek": 7,
+   "naam": "Njeggie",
+   "waarde": 20
+  },
+  {
+   "plek": 8,
+   "naam": "Klodderkid",
+   "waarde": 11
+  },
+  {
+   "plek": 9,
+   "naam": "Zwamzoetje",
+   "waarde": 11
+  },
+  {
+   "plek": 10,
+   "naam": "Honingbeer",
+   "waarde": 3
+  },
+  {
+   "plek": 11,
+   "naam": "Sjokkel",
+   "waarde": 3
+  },
+  {
+   "plek": 12,
+   "naam": "MikaMepper",
+   "waarde": 1
+  }
+ ]
+}

@@ -1,0 +1,71 @@
+{
+ "naam": "Juiced",
+ "uuid": "",
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.vadsmagier.1",
+ "gezien": "2026-10-29",
+ "lv": 45,
+ "opgevrolijkt": 630,
+ "boek_totaal": 48,
+ "huisdieren": 1,
+ "huisdieren_max": 6,
+ "rijdieren": 1,
+ "rijdieren_max": 5,
+ "bazen_totaal": 82,
+ "klassen": {
+  "knuffelridder": 43,
+  "pluisjager": 43,
+  "vadsmagier": 40
+ },
+ "boek": {
+  "zone1": 68,
+  "zone2": 57,
+  "zone3": 45,
+  "zone4": 43,
+  "zone5": 28
+ },
+ "bazen": {
+  "z2bazen:galmwolf": 1,
+  "z2bazen:spiegelzucht": 9,
+  "z3bazen:taleggio": 6,
+  "z3bazen:brokkel": 8,
+  "z3bazen:roquefort": 3,
+  "z3bazen:wortelwurger": 9,
+  "z3bazen:nestwachter": 6,
+  "z3bazen:vahoegnir": 9,
+  "z4bazen:zeeslurf": 9,
+  "z4bazen:vliegervanger": 8,
+  "z5wezens:donderbuik": 7,
+  "z5wezens:zilverstaart": 7
+ },
+ "gear": {
+  "hoofd": {
+   "type": "sneeuwmuts",
+   "zeldzaamheid": "guhddelijk",
+   "lv": 42,
+   "sterren": 2,
+   "sokjes": 0
+  },
+  "borst": {
+   "type": "z5baas_regenjasje",
+   "zeldzaamheid": "ongewoon",
+   "lv": 45,
+   "sterren": 2,
+   "sokjes": 2
+  },
+  "benen": {
+   "type": "schelpenbroek",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 42,
+   "sterren": 7,
+   "sokjes": 2
+  },
+  "voeten": {
+   "type": "klodderstuiters",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 44,
+   "sterren": 0,
+   "sokjes": 0
+  }
+ }
+}

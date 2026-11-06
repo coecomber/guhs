@@ -1,0 +1,87 @@
+{
+ "naam": "Zwamzoetje",
+ "uuid": "",
+ "klasse": "vadsmagier",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-11-06",
+ "lv": 29,
+ "opgevrolijkt": 435,
+ "boek_totaal": 11,
+ "huisdieren": 0,
+ "huisdieren_max": 6,
+ "rijdieren": 2,
+ "rijdieren_max": 5,
+ "bazen_totaal": 62,
+ "klassen": {
+  "knuffelridder": 27,
+  "pluisjager": 21,
+  "vadsmagier": 17
+ },
+ "boek": {
+  "zone1": 36,
+  "zone2": 18,
+  "zone3": 5,
+  "zone4": 0,
+  "zone5": 0
+ },
+ "bazen": {
+  "bazen:koning_klodder": 6,
+  "bazen:opperzwam": 8,
+  "z2bazen:galmwolf": 6,
+  "z2bazen:spiegelzucht": 6,
+  "z3bazen:kruinroofvogel": 8,
+  "z3bazen:taleggio": 3,
+  "z3bazen:roquefort": 3,
+  "z3bazen:wortelwurger": 2,
+  "z3bazen:nestwachter": 5,
+  "z3bazen:bleu": 5,
+  "z3bazen:vahoegnir": 5,
+  "z4bazen:vliegervanger": 3,
+  "z5wezens:gorgonzola": 2,
+  "z5wezens:donderbuik": 0
+ },
+ "gear": {
+  "wapen": {
+   "type": "takkenknots",
+   "zeldzaamheid": "ongewoon",
+   "lv": 28,
+   "sterren": 0,
+   "sokjes": 2
+  },
+  "hoofd": {
+   "type": "z4baas_kaasdoek",
+   "zeldzaamheid": "ongewoon",
+   "lv": 24,
+   "sterren": 3,
+   "sokjes": 2
+  },
+  "borst": {
+   "type": "knuffelharnas",
+   "zeldzaamheid": "gewoon",
+   "lv": 28,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "boorbroek",
+   "zeldzaamheid": "ongewoon",
+   "lv": 27,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "voeten": {
+   "type": "kaaslaarzen",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 29,
+   "sterren": 0,
+   "sokjes": 0
+  },
+  "ring": {
+   "type": "mw_t1_ring",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 26,
+   "sterren": 0,
+   "sokjes": 2
+  }
+ }
+}

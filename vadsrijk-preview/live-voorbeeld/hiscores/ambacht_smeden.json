@@ -1,0 +1,90 @@
+{
+ "lijst": "ambacht_smeden",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Honingbeer",
+   "waarde": 94,
+   "xp": 112800
+  },
+  {
+   "plek": 2,
+   "naam": "Njeggie",
+   "waarde": 81,
+   "xp": 97200
+  },
+  {
+   "plek": 3,
+   "naam": "Sjokkel",
+   "waarde": 81,
+   "xp": 97200
+  },
+  {
+   "plek": 4,
+   "naam": "Vadsvos",
+   "waarde": 78,
+   "xp": 93600
+  },
+  {
+   "plek": 5,
+   "naam": "Pluimpje",
+   "waarde": 71,
+   "xp": 85200
+  },
+  {
+   "plek": 6,
+   "naam": "Klodderkid",
+   "waarde": 52,
+   "xp": 62400
+  },
+  {
+   "plek": 7,
+   "naam": "Juiced",
+   "waarde": 49,
+   "xp": 58800
+  },
+  {
+   "plek": 8,
+   "naam": "Lieke",
+   "waarde": 45,
+   "xp": 54000
+  },
+  {
+   "plek": 9,
+   "naam": "Kaasknabbel",
+   "waarde": 42,
+   "xp": 50400
+  },
+  {
+   "plek": 10,
+   "naam": "PluisPiet",
+   "waarde": 33,
+   "xp": 39600
+  },
+  {
+   "plek": 11,
+   "naam": "Zwamzoetje",
+   "waarde": 30,
+   "xp": 36000
+  },
+  {
+   "plek": 12,
+   "naam": "Knuffelkoning",
+   "waarde": 28,
+   "xp": 33600
+  },
+  {
+   "plek": 13,
+   "naam": "Wolwinter",
+   "waarde": 16,
+   "xp": 19200
+  },
+  {
+   "plek": 14,
+   "naam": "MikaMepper",
+   "waarde": 13,
+   "xp": 15600
+  }
+ ]
+}

@@ -1,0 +1,82 @@
+{
+ "naam": "PluisPiet",
+ "uuid": "",
+ "klasse": "vadsmagier",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-11-02",
+ "lv": 41,
+ "opgevrolijkt": 413,
+ "boek_totaal": 48,
+ "huisdieren": 5,
+ "huisdieren_max": 6,
+ "rijdieren": 5,
+ "rijdieren_max": 5,
+ "bazen_totaal": 52,
+ "klassen": {
+  "knuffelridder": 41,
+  "pluisjager": 29,
+  "vadsmagier": 35
+ },
+ "boek": {
+  "zone1": 60,
+  "zone2": 65,
+  "zone3": 54,
+  "zone4": 40,
+  "zone5": 23
+ },
+ "bazen": {
+  "bazen:koning_klodder": 1,
+  "z2bazen:galmwolf": 9,
+  "z3bazen:brokkel": 9,
+  "z3bazen:wortelwurger": 9,
+  "z3bazen:nestwachter": 9,
+  "z4bazen:zeeslurf": 8,
+  "z5wezens:gorgonzola": 1,
+  "z5wezens:donderbuik": 4,
+  "z5wezens:zilverstaart": 2
+ },
+ "gear": {
+  "wapen": {
+   "type": "schorshamer",
+   "zeldzaamheid": "ongewoon",
+   "lv": 36,
+   "sterren": 6,
+   "sokjes": 2
+  },
+  "hoofd": {
+   "type": "kristalhelmpje",
+   "zeldzaamheid": "guhddelijk",
+   "lv": 37,
+   "sterren": 1,
+   "sokjes": 0
+  },
+  "borst": {
+   "type": "z4baas_zeekoeienhuid",
+   "zeldzaamheid": "episch",
+   "lv": 36,
+   "sterren": 6,
+   "sokjes": 2
+  },
+  "benen": {
+   "type": "kristalbeenstukken",
+   "zeldzaamheid": "legendarisch",
+   "lv": 41,
+   "sterren": 7,
+   "sokjes": 0
+  },
+  "voeten": {
+   "type": "bloesemtrippers",
+   "zeldzaamheid": "episch",
+   "lv": 41,
+   "sterren": 7,
+   "sokjes": 2
+  },
+  "ring": {
+   "type": "wolkring",
+   "zeldzaamheid": "episch",
+   "lv": 36,
+   "sterren": 2,
+   "sokjes": 0
+  }
+ }
+}

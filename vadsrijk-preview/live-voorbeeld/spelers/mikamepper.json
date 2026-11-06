@@ -1,0 +1,85 @@
+{
+ "naam": "MikaMepper",
+ "uuid": "",
+ "klasse": "knuffelridder",
+ "titel": "vadsrijk.klassen.titel.pluisjager.1",
+ "gezien": "2026-11-05",
+ "lv": 13,
+ "opgevrolijkt": 256,
+ "boek_totaal": 1,
+ "huisdieren": 1,
+ "huisdieren_max": 6,
+ "rijdieren": 3,
+ "rijdieren_max": 5,
+ "bazen_totaal": 56,
+ "klassen": {
+  "knuffelridder": 3,
+  "pluisjager": 2,
+  "vadsmagier": 5
+ },
+ "boek": {
+  "zone1": 6,
+  "zone2": 0,
+  "zone3": 0,
+  "zone4": 0,
+  "zone5": 0
+ },
+ "bazen": {
+  "bazen:koning_klodder": 8,
+  "bazen:opperzwam": 7,
+  "z2bazen:spiegelzucht": 1,
+  "z3bazen:kruinroofvogel": 0,
+  "z3bazen:taleggio": 4,
+  "z3bazen:brokkel": 6,
+  "z3bazen:piepvel": 7,
+  "z3bazen:bleu": 5,
+  "z3bazen:vahoegnir": 7,
+  "z4bazen:vliegervanger": 3,
+  "z5wezens:donderbuik": 2,
+  "z5wezens:zilverstaart": 6
+ },
+ "gear": {
+  "wapen": {
+   "type": "vlammenstaf",
+   "zeldzaamheid": "gewoon",
+   "lv": 9,
+   "sterren": 3,
+   "sokjes": 1
+  },
+  "hoofd": {
+   "type": "zwamhoed",
+   "zeldzaamheid": "ongewoon",
+   "lv": 11,
+   "sterren": 1,
+   "sokjes": 1
+  },
+  "borst": {
+   "type": "baas_wortelwambuis",
+   "zeldzaamheid": "gewoon",
+   "lv": 10,
+   "sterren": 3,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "zwambroek",
+   "zeldzaamheid": "ongewoon",
+   "lv": 12,
+   "sterren": 2,
+   "sokjes": 1
+  },
+  "voeten": {
+   "type": "baas_rookbomlaarzen",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 11,
+   "sterren": 1,
+   "sokjes": 2
+  },
+  "ring": {
+   "type": "honingring",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 9,
+   "sterren": 0,
+   "sokjes": 0
+  }
+ }
+}

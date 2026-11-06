@@ -1,0 +1,76 @@
+{
+ "lijst": "opgevrolijkt",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Knuffelkoning",
+   "waarde": 754
+  },
+  {
+   "plek": 2,
+   "naam": "Juiced",
+   "waarde": 630
+  },
+  {
+   "plek": 3,
+   "naam": "Njeggie",
+   "waarde": 520
+  },
+  {
+   "plek": 4,
+   "naam": "Zwamzoetje",
+   "waarde": 435
+  },
+  {
+   "plek": 5,
+   "naam": "PluisPiet",
+   "waarde": 413
+  },
+  {
+   "plek": 6,
+   "naam": "Wolwinter",
+   "waarde": 317
+  },
+  {
+   "plek": 7,
+   "naam": "MikaMepper",
+   "waarde": 256
+  },
+  {
+   "plek": 8,
+   "naam": "Lieke",
+   "waarde": 235
+  },
+  {
+   "plek": 9,
+   "naam": "Klodderkid",
+   "waarde": 229
+  },
+  {
+   "plek": 10,
+   "naam": "Kaasknabbel",
+   "waarde": 177
+  },
+  {
+   "plek": 11,
+   "naam": "Pluimpje",
+   "waarde": 151
+  },
+  {
+   "plek": 12,
+   "naam": "Vadsvos",
+   "waarde": 50
+  },
+  {
+   "plek": 13,
+   "naam": "Sjokkel",
+   "waarde": 25
+  },
+  {
+   "plek": 14,
+   "naam": "Honingbeer",
+   "waarde": 15
+  }
+ ]
+}

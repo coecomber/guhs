@@ -1,0 +1,90 @@
+{
+ "lijst": "generiek",
+ "tijd": "2026-11-06T11:39:44Z",
+ "rijen": [
+  {
+   "plek": 1,
+   "naam": "Lieke",
+   "waarde": 50,
+   "xp": 454684
+  },
+  {
+   "plek": 2,
+   "naam": "Juiced",
+   "waarde": 45,
+   "xp": 406236
+  },
+  {
+   "plek": 3,
+   "naam": "Knuffelkoning",
+   "waarde": 41,
+   "xp": 373341
+  },
+  {
+   "plek": 4,
+   "naam": "PluisPiet",
+   "waarde": 41,
+   "xp": 371680
+  },
+  {
+   "plek": 5,
+   "naam": "Vadsvos",
+   "waarde": 36,
+   "xp": 326727
+  },
+  {
+   "plek": 6,
+   "naam": "Kaasknabbel",
+   "waarde": 33,
+   "xp": 301423
+  },
+  {
+   "plek": 7,
+   "naam": "Njeggie",
+   "waarde": 30,
+   "xp": 271167
+  },
+  {
+   "plek": 8,
+   "naam": "Zwamzoetje",
+   "waarde": 29,
+   "xp": 268676
+  },
+  {
+   "plek": 9,
+   "naam": "Klodderkid",
+   "waarde": 26,
+   "xp": 236287
+  },
+  {
+   "plek": 10,
+   "naam": "Honingbeer",
+   "waarde": 22,
+   "xp": 201738
+  },
+  {
+   "plek": 11,
+   "naam": "Wolwinter",
+   "waarde": 17,
+   "xp": 159536
+  },
+  {
+   "plek": 12,
+   "naam": "Sjokkel",
+   "waarde": 17,
+   "xp": 154207
+  },
+  {
+   "plek": 13,
+   "naam": "MikaMepper",
+   "waarde": 13,
+   "xp": 119242
+  },
+  {
+   "plek": 14,
+   "naam": "Pluimpje",
+   "waarde": 11,
+   "xp": 101928
+  }
+ ]
+}

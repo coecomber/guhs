@@ -1,0 +1,61 @@
+{
+ "tijd": "2026-11-06T11:39:44Z",
+ "spelers": [
+  {
+   "naam": "Lieke",
+   "lv": 50
+  },
+  {
+   "naam": "Juiced",
+   "lv": 45
+  },
+  {
+   "naam": "PluisPiet",
+   "lv": 41
+  },
+  {
+   "naam": "Knuffelkoning",
+   "lv": 41
+  },
+  {
+   "naam": "Vadsvos",
+   "lv": 36
+  },
+  {
+   "naam": "Kaasknabbel",
+   "lv": 33
+  },
+  {
+   "naam": "Njeggie",
+   "lv": 30
+  },
+  {
+   "naam": "Zwamzoetje",
+   "lv": 29
+  },
+  {
+   "naam": "Klodderkid",
+   "lv": 26
+  },
+  {
+   "naam": "Honingbeer",
+   "lv": 22
+  },
+  {
+   "naam": "Sjokkel",
+   "lv": 17
+  },
+  {
+   "naam": "Wolwinter",
+   "lv": 17
+  },
+  {
+   "naam": "MikaMepper",
+   "lv": 13
+  },
+  {
+   "naam": "Pluimpje",
+   "lv": 11
+  }
+ ]
+}
