@@ -510,8 +510,9 @@ def wenteltrap(W, cx, cz, y1, y_vloer, r_wand=4, wand="marmer", kern="marmer_gla
     y, i = y1, 1
     laatst = []
     while y <= y_vloer:
-        a, b = ring[(i - 1) % 16], ring[i % 16]
-        f = _richting(a, b)
+        a, b, c = ring[(i - 1) % 16], ring[i % 16], ring[(i + 1) % 16]
+        # the step faces where you go NEXT (at a corner: the new side), so its high side always leads on to the next step
+        f = _richting(b, c) if y < y_vloer else _richting(a, b)
         px, pz = cx + b[0], cz + b[1]
         zet(W, px, y, pz, _trede(trede, f))
         if y > y1:
@@ -640,8 +641,6 @@ def station(W, S, info):
     for (x, z) in ((92, -76), (93, -76), (93, -75), (92, -74), (93, -74)):
         zet(W, x, y0 + 1, z, "minecraft:barrel[facing=up,open=false]")
     zet(W, 93, y0 + 2, -76, "minecraft:barrel[facing=up,open=false]")
-    zet(W, 91, y0 + 1, -76, "minecraft:spruce_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]")
-    info["plekken"]["z5w_schuilnest_luik"] = (91, y0 + 1, -76)
     # departure boards: a dark board with lanterns at each pier head (the text is t-luchtschip's)
     for (px, bid) in ((52, "haven_5_1_vertrekbord"), (72, "haven_5_4_vertrekbord"), (92, "haven_5_6_vertrekbord")):
         bx, bz = px + 4, -80
@@ -688,8 +687,6 @@ def pieren(W, S, info):
 
 def soepkeuken(W, S, info):
     y0 = 238
-    zet(W, -31, y0 + 1, 21, "minecraft:spruce_trapdoor[facing=north,half=bottom,open=false,powered=false,waterlogged=false]")
-    info["plekken"]["z5w_buik_luik"] = (-31, y0 + 1, 21)
     # the open front had a lit campfire under the kettle: keep it (it is inside the copper ring), make the tables walkable
 
 
@@ -780,6 +777,114 @@ def wolkplatformen(W, S, info):
                     zet(W, x, ytop, z, "guhs:wolkenblok_wit")
                     zet(W, x, ytop + 1, z, "guhs:wolkenblok_wit")
         info["plekken"][pid] = (cx, ytop + 1, cz)
+
+
+# =============================================================================================== t-z5wezens: rooms + real access
+# their volumes inside the whale (LOCAL, = their render-y placeholders; the game lowers everything by DY like the rest)
+BUIKGANGEN = (-106, 184, -12, -2, 196, 10)
+SCHUILNEST = (78, 206, -106, 114, 214, -80)
+
+
+def ladderschacht(W, x, z, y_onder, y_boven, steun="north"):
+    """A 1x1 shaft from y_onder up to y_boven with a ladder on its 'steun' side (the block there is made solid)."""
+    dx, dz = RICHTING[steun]
+    f = TEGEN[steun]
+    leeg(W, x, y_onder, z, x, y_boven, z)
+    for y in range(y_onder, y_boven + 1):
+        if is_lucht(W, x + dx, y, z + dz):
+            zet(W, x + dx, y, z + dz, P["steen_bak"])
+        zet(W, x, y, z, f"minecraft:ladder[facing={f},waterlogged=false]")
+
+
+def tunnel(W, x1, z1, x2, z2, y_vloer, h=3, vloer="steen_bak"):
+    leeg(W, min(x1, x2), y_vloer + 1, min(z1, z2), max(x1, x2), y_vloer + h, max(z1, z2))
+    doos(W, min(x1, x2), y_vloer, min(z1, z2), max(x1, x2), y_vloer, max(z1, z2), vloer)
+
+
+def wezens_toegang(W, S, info):
+    """The rooms of t-z5wezens stay free (carved to air: they build their stand-ins in there), with REAL access next to the
+    teleport hatches: a ladder shaft from the soup kitchen hatch to the Buikgangen and from the loose plank in the station to
+    the Schuilnest; ladder shafts from the city rim through the whale's flank onto both fins; a railed path over the tail
+    stalk to the fluke (both lobes)."""
+    for (x1, y1, z1, x2, y2, z2) in (BUIKGANGEN, SCHUILNEST):
+        leeg(W, x1, y1, z1, x2, y2, z2)
+        doos(W, x1, y1 - 1, z1, x2, y1 - 1, z2, P["steen_bak"])
+    # soup kitchen: the hatch (in the floor at y 238) -> a ladder down to y 185, a tunnel north into the Buikgangen (z 10)
+    hx, hz = -31, 21
+    ladderschacht(W, hx, hz, 185, 238, steun="north")
+    zet(W, hx, 239, hz + 1, "minecraft:spruce_trapdoor[facing=south,half=bottom,open=true,powered=false,waterlogged=false]")
+    tunnel(W, hx - 1, 10, hx + 1, hz - 1, 184)
+    info["plekken"]["z5w_buik_luik"] = (hx, 239, hz + 1) if False else (hx + 1, 239, hz)
+    info["plekken"]["z5w_buik_ladder_onder"] = (hx, 185, hz - 2)
+    # station: the loose plank (floor y 236) -> a ladder down to y 207, a tunnel south into the Schuilnest (z -80)
+    sx, sz = 91, -76
+    ladderschacht(W, sx, sz, 207, 236, steun="east")
+    zet(W, sx - 1, 237, sz, "minecraft:spruce_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]")
+    tunnel(W, sx - 1, -81, sx + 1, sz - 1, 206)
+    info["plekken"]["z5w_schuilnest_luik"] = (sx, 237, sz)
+    info["plekken"]["z5w_schuilnest_ladder_onder"] = (sx, 207, -79)
+    # fins: from inside the city wall a ladder down through the flank to the fin's top, then a tunnel out onto it
+    import plan5 as PL
+    for (k, kant) in (("zuidvin", 1), ("noordvin", -1)):
+        fx, fz, _ = PL.PLATFORMS[f"z5w_{k}"]
+        top = info["plekken"].get(f"z5w_{k}")
+        if not top:
+            continue
+        yf = top[1] - 1                       # the platform's floor block
+        zs = kant * 88                        # shaft inside the wall
+        g = S.g(fx, zs)
+        if g is None:
+            for zz in range(80, 96):
+                g = S.g(fx, kant * zz)
+                if g is not None:
+                    zs = kant * zz
+        if g is None:
+            continue
+        ladderschacht(W, fx, zs, yf + 1, g, steun="east")
+        zet(W, fx, g + 1, zs, "minecraft:spruce_trapdoor[facing=west,half=bottom,open=true,powered=false,waterlogged=false]")
+        z_a, z_b = sorted((zs, fz))
+        tunnel(W, fx - 1, z_a, fx + 1, z_b, yf)
+        info["plekken"][f"z5w_lift_{k}_boven"] = (fx + 1, g + 1, zs)
+        info["plekken"][f"z5w_lift_{k}_onder"] = (fx, yf + 1, zs + kant * 3)
+    # the tail: a railed path from the west end of the Staartpark over the tail stalk to the fluke and on to both lobes
+    pad(W, [(-196, 0), (-262, 0)])
+    for zl in (-62, 62):
+        pad(W, [(-262, 0), (-266, zl)])
+    info["plekken"]["z5w_lift_staart_boven"] = (-194, None, 2)
+    info["plekken"]["z5w_lift_staart_onder"] = (-250, None, 0)
+
+
+def _top(W, x, z, ymax=330):
+    i, k = W.vx(x), W.vz(z)
+    col = W.v[i, :W.vy(ymax), k]
+    nz = np.nonzero(col)[0]
+    return int(W.b[1] + nz.max()) if len(nz) else None
+
+
+def pad(W, punten, breed=1, blok="steen", hek="minecraft:pale_oak_fence"):
+    """A path (3 wide) along the whale's top surface between the points, steps of at most 1, railings both sides, 3 free above."""
+    pts = []
+    for (a, b) in zip(punten, punten[1:]):
+        n = int(max(abs(b[0] - a[0]), abs(b[1] - a[1])))
+        for i in range(n + 1):
+            pts.append((round(a[0] + (b[0] - a[0]) * i / max(n, 1)), round(a[1] + (b[1] - a[1]) * i / max(n, 1))))
+    vorig = None
+    for j, (x, z) in enumerate(pts):
+        t = _top(W, x, z)
+        if t is None:
+            t = vorig if vorig is not None else 220
+        h = t if vorig is None else max(vorig - 1, min(vorig + 1, t))
+        langs_x = j + 1 < len(pts) and pts[j + 1][1] == z or j > 0 and pts[j - 1][1] == z
+        for s_ in range(-breed - 1, breed + 2):
+            px, pz = (x, z + s_) if langs_x else (x + s_, z)
+            if abs(s_) <= breed:
+                doos(W, px, min(h, t) - 1, pz, px, h, pz, blok)
+                leeg(W, px, h + 1, pz, px, h + 3, pz)
+            else:
+                if is_lucht(W, px, h + 1, pz) or naam(W, px, h + 1, pz) == LUCHT:
+                    zet(W, px, h, pz, blok)
+                    zet(W, px, h + 1, pz, hek)
+        vorig = h
 
 
 # =============================================================================================== edges, falls, waterfalls
@@ -965,6 +1070,11 @@ def bewoners(W, info):
     for (soort, x, y, z, yaw) in NPCS:
         skin = "npc_" + soort[len("guh_npc_"):] if soort.startswith("guh_npc_") else soort
         out.append((PL.GX0 - x, y + PL.DY, PL.GZ0 - z, (yaw + 180) % 360, skin, 3))
+    # only skins that exist as an entity texture in the mod (else a plain guh)
+    import os
+    tex = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "src", "main", "resources", "assets", "guhs",
+                       "textures", "entity")
+    out = [(a, b_, c, d, s_ if os.path.exists(os.path.join(tex, s_ + ".png")) else "guh", e) for (a, b_, c, d, s_, e) in out]
     info["bewoners"] = out
 
 
@@ -987,6 +1097,7 @@ def bouw(W, S, log=print):
     log(f"terrastrappen: {nt} (passen niet: {mis})")
     wolkwaldroom(W, S, info)
     wolkplatformen(W, S, info)
+    wezens_toegang(W, S, info)
     n = watervallen(W, S)
     kampvuren(W, S, info)
     nt = huid_detail(W, S)
@@ -1002,6 +1113,12 @@ def bouw(W, S, log=print):
     for k in ("kathedraal_plein", "markt_fontein", "luchthaven_station", "paleis_hof", "academie_oefenplein",
               "universiteit_binnenhof", "staartpark_prieel", "ooggaarde_tuin"):
         info["vangnet_ids"] = info.get("vangnet_ids", []) + [k]
+    # planned spots without a height that lie in the city: on the city ground (not on a roof or a dome)
+    for k, (x, y, z) in PL.plekken().items():
+        if y is None and k not in info["plekken"]:
+            g = S.g(x, z)
+            if g is not None:
+                info["plekken"][k] = (x, g + 1, z)
     # the house list in game coordinates
     for h in info.get("huizen_lokaal", []):
         info["huizen"].append(dict(id=h["id"], rol=h["rol"], deur=list(PL.spel(*h["deur"])), binnen=list(PL.spel(*h["binnen"]))))

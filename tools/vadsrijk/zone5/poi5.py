@@ -114,6 +114,9 @@ def verzamel(W, S, info, snap_=True):
         elif y is None:
             p = (x, K.top(x, z) or 240, z)
         alle[pid] = list(PL.spel(*p))
+    for a_, b_ in PL.ALIAS.items():
+        if b_ in alle:
+            alle[a_] = list(alle[b_])
     # t-z5wezens' rooms inside the whale: their placeholder boxes, lowered with the whale
     for kid, (a, b, c, d, e, f) in PL.WEZENS_KAMERS.items():
         alle[kid + "_min"] = [a, b + PL.DY, c]

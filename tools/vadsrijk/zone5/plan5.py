@@ -45,7 +45,7 @@ WIJKEN = [
     ("z5_staartpark", (-202, -64, -153, 64), "hoogvads_staartpark", "Hoogvads - het Staartpark", "Hoogvads - Tail Park"),
     ("z5_ooggaarde", (126, 26, 176, 100), "hoogvads_ooggaarde", "Hoogvads - de Ooggaarde", "Hoogvads - the Eye Garden"),
     ("z5_hoogvads", (-205, -105, 176, 105), "hoogvads", "Hoogvads", "Hoogvads"),
-    ("z5_moeder_wolkwal", (-320, -140, 270, 140), "moeder_wolkwal", "Moeder Wolkwal", "Mother Cloudwhale"),
+    ("z5_moeder_wolkwal", (-320, -182, 270, 182), "moeder_wolkwal", "Moeder Wolkwal", "Mother Cloudwhale"),
 ]
 
 
@@ -166,7 +166,7 @@ def plekken():
     P["staartpark_vijver"] = (-174, None, 4)
     P["staartpark_prieel"] = (-178, None, -18)
     P["kampvuur_staartpark"] = (-166, None, -10)
-    P["staartvin_uitkijk"] = (-198, None, 0)
+    P["staartpark_westeinde"] = (-194, None, 0)
     P["ooggaarde_tuin"] = (150, None, 60)
     P["kampvuur_ooggaarde"] = (146, None, 52)
     P["spuitgat_midden"] = (150, None, 0)
@@ -183,8 +183,32 @@ def plekken():
     P["z5w_leider_mistmoeder"] = (-268, None, -70)
     P["z5w_donderbuik_arena"] = (-266, None, 62)
     P["z5w_donderbuik_deur"] = (-248, None, 50)
+    P.update(VERHAAL)
     # ---- the inn, the bank and the shops: houses of the map get these roles (bouw5.ROLLEN); filled in by bouw5
     return P
+
+
+# t-z5verhaal's numbered spots (their placeholders, GAME x/z + render y = local y): snapped onto the real blocks
+_V = {
+    "soepkeuken_rij": [(2718, 239, -527), (2720, 239, -527), (2722, 239, -527), (2724, 239, -527)],
+    "burger": [(2700, 241, -510), (2760, 239, -512), (2690, 241, -530), (2860, 236, -514), (2560, 240, -570), (2640, 237, -452)],
+    "wolkwacht": [(2742, 253, -504), (2742, 253, -536), (2683, 245, -512), (2645, 237, -452), (2868, 236, -506), (2557, 240, -568)],
+    "academie_parcours": [(2722, 235, -565), (2752, 235, -565), (2752, 235, -590), (2722, 235, -590)],
+    "staartpark_boom": [(2870, 236, -540), (2890, 236, -535), (2890, 236, -505), (2870, 236, -500)],
+    "geheim_knuffel": [(2690, 290, -505), (2905, 240, -540), (2545, 241, -600), (2665, 236, -418), (2775, 262, -438), (2760, 251, -548),
+                       (2835, 260, -520), (2655, 248, -540)],
+    "geheim_schat": [(2912, 236, -520), (2838, 253, -530), (2540, 241, -560)],
+    "wolkbes": [(2860, 236, -545), (2885, 236, -548), (2900, 236, -520), (2884, 236, -492), (2862, 236, -495), (2540, 240, -575),
+                (2548, 240, -590), (2565, 240, -585)],
+    "wolbol": [(2745, 239, -528), (2818, 253, -512), (2735, 235, -472)],
+}
+# (their render y is ignored: in the city the spot goes on the city ground, outside onto the whale's top; then snapped)
+VERHAAL = {f"{k}_{i + 1}": (GX0 - gx, None, GZ0 - gz) for k, lijst in _V.items() for i, (gx, gy, gz) in enumerate(lijst)}
+VERHAAL["staartvin_top"] = (-203, None, 0)
+VERHAAL["geheim_knuffel_5"] = (-60, 235, -72)     # (placeholder lay on the university roof: now in the library)
+VERHAAL["geheim_knuffel_6"] = (-70, 235, 72)      # (placeholder lay in the academy wall: now in a corner of the yard)
+# the same spot under a second id (the story's name -> the map's)
+ALIAS = {"bank_balie": "bank_hoogvads_balie", "luchthaven_vertrekbord": "haven_5_4_vertrekbord"}
 
 
 # cloud platforms (bouw5.wolkplatformen): id -> (x, z, r) local; the top is the whale's skin height at the centre

@@ -21,8 +21,8 @@ TEGELS = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structu
 import plan5 as PL  # noqa: E402
 
 # spots that are props, block positions or only reachable by a teleport (lift/hatch/story)
-SLA = ("haven_5_4_luchtschip", "haven_5_4_mast", "spuitgat_", "wolkwaldroom", "z5w_wolkwaldroom", "z5w_buikgangen_", "z5w_schuilnest_m",
-       "z5w_zuidvin", "z5w_noordvin", "z5w_staartvlakte", "z5w_donderbuik", "z5w_leider_mistmoeder", "z5w_lift_", "staartvin_uitkijk")
+SLA = ("haven_5_4_luchtschip", "haven_5_4_mast", "spuitgat_", "wolkwaldroom", "z5w_wolkwaldroom", "z5w_buikgangen_", "z5w_schuilnest_m", "troonzaal_troon",
+       "staartvin_uitkijk")
 
 
 def main():
