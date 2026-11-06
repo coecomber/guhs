@@ -43342,5 +43342,20 @@
   "vadsrijk.indeling.haven.haven_z4_z3_vertrek": "Lantern Harbour",
   "vadsrijk.indeling.dev.tp": "To %s (%s).",
   "vadsrijk.indeling.dev.onbekend": "Unknown place: %s",
-  "vadsrijk.indeling.dev.barriere": "Barriers: %s"
+  "vadsrijk.indeling.dev.barriere": "Barriers: %s",
+  "vadsrijk.luchtschip.dicht.kop": "Line %s is still closed for you.",
+  "vadsrijk.luchtschip.dicht.verhaal": "Follow the main quest first: after %s you can fly from here. Your tracker (top right) shows the way.",
+  "vadsrijk.luchtschip.dicht.nu": "You are now at: %s.",
+  "vadsrijk.luchtschip.dicht.ook_level": "And you need to be level %s (you: level %s).",
+  "vadsrijk.luchtschip.dicht.level": "You have done the story, but this line is only from level %s (you: level %s). Practise a little more!",
+  "vadsrijk.luchtschip.kort.verhaal": "still closed for you: follow the main quest until after %s",
+  "vadsrijk.luchtschip.kort.level": "still closed for you: only from level %s",
+  "vadsrijk.luchtschip.kort.dicht": "still closed for you: follow the main quest first",
+  "vadsrijk.luchtschip.pier.kop": "Line %s:",
+  "vadsrijk.luchtschip.pier.open": "Line %s to %s: departs in %s. ✔ You may board: click anywhere on the ship!",
+  "vadsrijk.luchtschip.pier.dicht": "Line %s to %s: departs in %s. ✖ %s",
+  "vadsrijk.luchtschip.bord.voor": "Board after the main quest \"%s\"",
+  "vadsrijk.luchtschip.bord.voor_level": "Board after the main quest \"%s\", from level %s",
+  "vadsrijk.luchtschip.bord.terug": "Flying back is always allowed",
+  "vadsrijk.luchtschip.mag": "Line %s to %s: you may board! Departs in %s. Click anywhere on the ship to board; on board you can walk around freely."
 }

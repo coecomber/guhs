@@ -43342,5 +43342,20 @@
   "vadsrijk.indeling.haven.haven_z4_z3_vertrek": "Lampionhaven",
   "vadsrijk.indeling.dev.tp": "Naar %s (%s).",
   "vadsrijk.indeling.dev.onbekend": "Onbekende plek: %s",
-  "vadsrijk.indeling.dev.barriere": "Barrières: %s"
+  "vadsrijk.indeling.dev.barriere": "Barrières: %s",
+  "vadsrijk.luchtschip.dicht.kop": "Lijn %s is nog dicht voor jou.",
+  "vadsrijk.luchtschip.dicht.verhaal": "Volg eerst de hoofdquest: na %s kun je hier vliegen. Je tracker rechtsboven wijst de weg.",
+  "vadsrijk.luchtschip.dicht.nu": "Je bent nu bij: %s.",
+  "vadsrijk.luchtschip.dicht.ook_level": "En je moet level %s zijn (jij: level %s).",
+  "vadsrijk.luchtschip.dicht.level": "Het verhaal heb je al gedaan, maar deze lijn is pas vanaf level %s (jij: level %s). Nog even oefenen!",
+  "vadsrijk.luchtschip.kort.verhaal": "nog dicht voor jou: volg eerst de hoofdquest tot na %s",
+  "vadsrijk.luchtschip.kort.level": "nog dicht voor jou: pas vanaf level %s",
+  "vadsrijk.luchtschip.kort.dicht": "nog dicht voor jou: volg eerst de hoofdquest",
+  "vadsrijk.luchtschip.pier.kop": "Lijn %s:",
+  "vadsrijk.luchtschip.pier.open": "Lijn %s naar %s: vertrek over %s. ✔ Jij mag mee: klik ergens op het schip!",
+  "vadsrijk.luchtschip.pier.dicht": "Lijn %s naar %s: vertrek over %s. ✖ %s",
+  "vadsrijk.luchtschip.bord.voor": "Mee na de hoofdquest \"%s\"",
+  "vadsrijk.luchtschip.bord.voor_level": "Mee na de hoofdquest \"%s\", vanaf level %s",
+  "vadsrijk.luchtschip.bord.terug": "Terugvliegen mag altijd",
+  "vadsrijk.luchtschip.mag": "Lijn %s naar %s: jij mag mee! Vertrek over %s. Klik ergens op het schip om in te stappen; aan boord kun je vrij rondlopen."
 }

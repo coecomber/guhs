@@ -80,8 +80,9 @@ public final class Luchtschepen {
                 ? null : "vadsrijk.luchtschip.slot.kamp");
         SLOT.put("z1_z2", (p, heen) -> !heen ? null : nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.reisSlot(p, "kandijkom"));
         SLOT.put("z2_z3", (p, heen) -> !heen ? null : nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.slot(p));
-        SLOT.put("z3_z4", (p, heen) -> !heen || Questlog.vlag(p, "zone3_klaar") ? null : "vadsrijk.luchtschip.slot.z4");
-        SLOT.put("z4_z5", (p, heen) -> !heen || Questlog.vlag(p, Lijnen.VLAG_Z4_FINALE) ? null : "vadsrijk.luchtschip.slot.z5");
+        // U-LUCHTSCHIP: lines C and D use the same gates as the captains' travel choices (story + level), see Poorten
+        SLOT.put("z3_z4", (p, heen) -> !heen ? null : nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4Verhaal.slot(p));
+        SLOT.put("z4_z5", (p, heen) -> !heen ? null : nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5Verhaal.slot(p));
     }
 
     private Luchtschepen() {
@@ -93,8 +94,13 @@ public final class Luchtschepen {
         for (LuchtschipEntity e : List.copyOf(LEVEND)) {
             if (e.isRemoved()) {
                 LEVEND.remove(e);
-            } else if (e.level() instanceof ServerLevel el && !el.isPositionEntityTicking(e.blockPosition())) {
-                e.volgExtern();
+            } else {
+                if (e.level() instanceof ServerLevel el && !el.isPositionEntityTicking(e.blockPosition())) {
+                    e.volgExtern();
+                }
+                if (e.tickCount % 2 == 0) {
+                    LuchtschipDek.stuur(e, e.tickCount % 20 == 0);   // U-LUCHTSCHIP: who stands where on the deck
+                }
             }
         }
         ServerLevel sl = Vadsrijk.level(server);
@@ -223,7 +229,8 @@ public final class Luchtschepen {
                     if (e == null) {
                         continue;
                     }
-                    e.snapTo(voet.x, voet.y + 0.32 * (regels.size() - 1 - i), voet.z, 0f, 0f);
+                    ((VertrekbordEntity) e).haven = h.id();
+                    e.snapTo(voet.x, voet.y + VertrekbordEntity.ONDER + 0.32 * (regels.size() - 1 - i), voet.z, 0f, 0f);
                     sl.addFreshEntity(e);
                 }
                 e.setCustomName(regels.get(i));
@@ -255,6 +262,16 @@ public final class Luchtschepen {
                 : Component.translatable("vadsrijk.luchtschip.bord.over", klok(over)).withStyle(ChatFormatting.WHITE));
         r.add(Component.translatable(ligt ? "vadsrijk.luchtschip.bord.instappen" : "vadsrijk.luchtschip.bord.onderweg",
                 klok(Dienstregeling.duur(l))).withStyle(ChatFormatting.GRAY));
+        // U-LUCHTSCHIP: who may fly from here (the same for everybody; whether YOU may is in your action bar)
+        Poorten.Poort g = Poorten.POORTEN.get(l.id());
+        if (g != null && h == l.a()) {
+            nl.juiced.guhs.feature.vadsrijk.npc.Quest q = nl.juiced.guhs.feature.vadsrijk.npc.Quests.van(g.naQuest());
+            Component naam = q != null ? Component.translatable(q.titelKey()) : Component.literal(g.naQuest());
+            r.add((g.minLevel() > 0 ? Component.translatable("vadsrijk.luchtschip.bord.voor_level", naam, g.minLevel())
+                    : Component.translatable("vadsrijk.luchtschip.bord.voor", naam)).withStyle(ChatFormatting.DARK_AQUA));
+        } else if (g != null) {
+            r.add(Component.translatable("vadsrijk.luchtschip.bord.terug").withStyle(ChatFormatting.DARK_AQUA));
+        }
         return r;
     }
 
@@ -290,8 +307,13 @@ public final class Luchtschepen {
                     Lijnen.Lijn l = Lijnen.lijnVan(h);
                     if (l != null) {
                         int over = Dienstregeling.totVertrek(l, (long) Tijd.nu(sl, l));
-                        p.sendOverlayMessage(Component.translatable("vadsrijk.luchtschip.pier", l.letter(), Component.translatable(l.ander(h).naam()),
-                                klok(over)).withStyle(ChatFormatting.GOLD));
+                        // U-LUCHTSCHIP: and whether YOU may board
+                        String dicht = Poorten.dicht(p, l, h == l.a());
+                        p.sendOverlayMessage(dicht == null
+                                ? Component.translatable("vadsrijk.luchtschip.pier.open", l.letter(), Component.translatable(l.ander(h).naam()), klok(over))
+                                        .withStyle(ChatFormatting.GREEN)
+                                : Component.translatable("vadsrijk.luchtschip.pier.dicht", l.letter(), Component.translatable(l.ander(h).naam()), klok(over),
+                                        Poorten.kort(p, l)).withStyle(ChatFormatting.GOLD));
                     }
                     break;
                 }
@@ -324,9 +346,9 @@ public final class Luchtschepen {
         }
         Lijnen.Haven van = s.van(l), naar = s.naar(l);
         boolean heen = van == l.a();
-        String slot = dev || p.getAbilities().instabuild || l.test() ? null : SLOT.getOrDefault(l.id(), (q, h) -> null).apply(p, heen);
+        String slot = dev ? null : Poorten.dicht(p, l, heen);
         if (slot != null) {
-            p.sendOverlayMessage(Component.translatable(slot, Spelers.level(p)).withStyle(ChatFormatting.GOLD));
+            Poorten.meld(p, l, slot);   // U-LUCHTSCHIP: what to do first, and why
             return false;
         }
         if (e.getPassengers().size() >= LuchtschipEntity.PLEKKEN.length) {
@@ -339,6 +361,7 @@ public final class Luchtschepen {
         if (!p.startRiding(e, true, true)) {
             return false;
         }
+        e.zetDek(p, e.vrijePlek(p));   // U-LUCHTSCHIP: your starting place on the deck (from there you walk)
         p.addTag(LuchtschipEntity.TAG_VRIJ);   // t-wereld Barrieres: riders are exempt too
         p.level().playSound(null, e.blockPosition(), SoundEvents.WOOD_STEP, SoundSource.PLAYERS, 1f, 0.9f);
         p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.welkom", Component.translatable(naar.naam()), klok((int) s.rest()))
@@ -453,6 +476,62 @@ public final class Luchtschepen {
         });
     }
 
+    // ------------------------------------------------------------------------------------------------ U-LUCHTSCHIP: clicks
+
+    /** The departure board was clicked: may I fly from here? (yes: where to board; no: why not). */
+    static void bordKlik(ServerPlayer p, String havenId) {
+        Lijnen.Haven h = Lijnen.haven(havenId);
+        Lijnen.Lijn l = h == null ? null : Lijnen.lijnVan(h);
+        if (l == null || !(p.level() instanceof ServerLevel sl)) {
+            return;
+        }
+        String dicht = Poorten.dicht(p, l, h == l.a());
+        if (dicht != null) {
+            Poorten.meld(p, l, dicht);
+            return;
+        }
+        p.sendSystemMessage(Component.translatable("vadsrijk.luchtschip.mag", l.letter(), Component.translatable(l.ander(h).naam()),
+                klok(Dienstregeling.totVertrek(l, (long) Tijd.nu(sl, l)))).withStyle(ChatFormatting.GREEN));
+    }
+
+    /** A block was clicked near a pier whose line is closed for you: say why (not cancelled; at most every 3 s). */
+    static void pierKlik(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        if (!(event.getEntity() instanceof ServerPlayer p) || event.getHand() != net.minecraft.world.InteractionHand.MAIN_HAND || p.isPassenger()
+                || !(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl)) {
+            return;
+        }
+        BlockPos k = event.getPos();
+        for (Lijnen.Haven h : Lijnen.havens()) {
+            BlockPos b = h.plek();
+            int dx = k.getX() - b.getX(), dz = k.getZ() - b.getZ();
+            if (Math.abs(k.getY() - b.getY()) <= 4 && dx * dx + dz * dz <= 49) {
+                Lijnen.Lijn l = Lijnen.lijnVan(h);
+                String dicht = l == null ? null : Poorten.dicht(p, l, h == l.a());
+                if (dicht != null) {
+                    Poorten.meld(p, l, dicht);
+                }
+                return;
+            }
+        }
+    }
+
+    /** Left-click on the ship = board too (never a hit); on the board = the same as a right-click. */
+    static void opAanval(net.neoforged.neoforge.event.entity.player.AttackEntityEvent event) {
+        Entity doel = event.getTarget();
+        LuchtschipEntity schip = doel instanceof SchipDeel d ? d.getParent() : doel instanceof LuchtschipEntity e ? e : null;
+        if (schip != null) {
+            event.setCanceled(true);
+            if (event.getEntity() instanceof ServerPlayer p && p.getVehicle() != schip) {
+                instappen(p, schip);
+            }
+        } else if (doel instanceof VertrekbordEntity bord) {
+            event.setCanceled(true);
+            if (event.getEntity() instanceof ServerPlayer p && bord.haven != null) {
+                bordKlik(p, bord.haven);
+            }
+        }
+    }
+
     // ------------------------------------------------------------------------------------------------ events
 
     /** No sneaking off in flight ("Blijf lekker aan boord"); creative / spectator may. */
@@ -477,6 +556,12 @@ public final class Luchtschepen {
         if (event.getEntity() instanceof ServerPlayer p) {
             p.getPersistentData().remove(TAG_NAAR);
         }
+    }
+
+    /** (U-LUCHTSCHIP) a player left the server: forget the deck step / message timers. */
+    static void vergeet(ServerPlayer p) {
+        LuchtschipDek.vergeet(p);
+        Poorten.vergeet(p);
     }
 
     /** Logout on board: land at once (in flight: the destination; at the pier: that pier). */
