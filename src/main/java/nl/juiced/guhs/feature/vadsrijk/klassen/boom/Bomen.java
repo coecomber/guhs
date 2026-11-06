@@ -26,7 +26,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
  * <p>{@code vereist} entries may hold alternatives "a|b" (one of them is enough).
  */
 public final class Bomen {
-    public static final int RIJEN = 4, KOLOMMEN = 3;
+    /** U-SPECS: 4 columns (spec A, trunk, spec B, side branch; see klassen.spec.SpecBoom, which re-lays these nodes). */
+    public static final int RIJEN = 4, KOLOMMEN = 4;
 
     /** Node id -> the node ids it excludes (the two R variants). */
     static final Map<String, Set<String>> UITGESLOTEN = new HashMap<>();
@@ -117,6 +118,17 @@ public final class Bomen {
     private static void sluitUit(String a, String b) {
         UITGESLOTEN.computeIfAbsent(a, x -> new java.util.HashSet<>()).add(b);
         UITGESLOTEN.computeIfAbsent(b, x -> new java.util.HashSet<>()).add(a);
+    }
+
+    /** U-SPECS: two nodes no longer exclude each other (they sit in different branches now). */
+    public static void nietUitgesloten(String a, String b) {
+        Set<String> x = UITGESLOTEN.get(a), y = UITGESLOTEN.get(b);
+        if (x != null) {
+            x.remove(b);
+        }
+        if (y != null) {
+            y.remove(a);
+        }
     }
 
     public static Set<String> uitgesloten(String id) {

@@ -105,27 +105,35 @@ public class VadsrijkZ2SystemenGameTests {
         helper.succeed();
     }
 
+    /** U-SPECS: the old lv-30 step is gone; IJsster (this slice's effect) is now the Strikkenzetter's step 2, step 3 is at lv 58. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void advancementStap3(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         SpelerData d = Spelers.data(p);
         d.klasse = Klassen.JAGER;
-        d.xp.put(Klassen.JAGER, Levels.totaalVoor(29));
+        d.xp.put(Klassen.JAGER, Levels.totaalVoor(57));
+        Boom.knopen(d, Klassen.JAGER).add(nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STRIKKENZETTER.knoop());
         Boom.knopen(d, Klassen.JAGER).add("j_adv1");
         Boom.knopen(d, Klassen.JAGER).add("j_adv2");
-        helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 2 && !Advancement.kanDoen(p), "lv 29: not yet");
-        d.xp.put(Klassen.JAGER, Levels.totaalVoor(30));
-        helper.assertTrue(Advancement.kanDoen(p), "lv 30: step 3 is open");
-        double kritVoor = Spelers.stats(p).get(Stat.KRITIEK);
-        helper.assertTrue(Advancement.doe(p), "the ceremony");
-        helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 3, "step 3 done");
-        helper.assertTrue(Advancement.titelKey(p).equals("vadsrijk.klassen.titel.pluisjager.3"), "new title " + Advancement.titelKey(p));
-        helper.assertTrue(Spelers.stats(p).get(Stat.KRITIEK) > kritVoor, "the adv3 node gives its stats");
-        helper.assertTrue(!Advancement.kanDoen(p) && !Advancement.doe(p), "no 4th step before lv 50");   // (z3-systemen: step 4 at 50)
-        Boom.knopen(d, Klassen.JAGER).add("j_scherpoog");
-        d.respecKlaar = 0;
-        helper.assertTrue(Boom.respec(d, Klassen.JAGER, System.currentTimeMillis()) == null, "respec");
-        helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 3, "a respec keeps the advancement");
+        Advancement.POORTEN = false;
+        try {
+            helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 2 && !Advancement.kanDoen(p), "lv 57: not yet");
+            helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STRIKKENZETTER, 2),
+                    "IJsster belongs to the Strikkenzetter's step 2");
+            d.xp.put(Klassen.JAGER, Levels.totaalVoor(58));
+            helper.assertTrue(Advancement.kanDoen(p), "lv 58: step 3 is open");
+            double kritVoor = Spelers.stats(p).get(Stat.KRITIEK);
+            helper.assertTrue(Advancement.doe(p), "the ceremony");
+            helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 3, "step 3 done");
+            helper.assertTrue(Advancement.titelKey(p).equals("vadsrijk.klassen.titel.strikkenzetter.3"), "new title " + Advancement.titelKey(p));
+            helper.assertTrue(Spelers.stats(p).get(Stat.KRITIEK) > kritVoor, "the adv3 node gives its stats");
+            helper.assertTrue(!Advancement.kanDoen(p) && !Advancement.doe(p), "no 4th step");
+            Boom.knopen(d, Klassen.JAGER).add("j_snelle_pees");
+            helper.assertTrue(Boom.respec(d, Klassen.JAGER, System.currentTimeMillis()) == null, "respec");
+            helper.assertTrue(Advancement.stap(p, Klassen.JAGER) == 3, "a respec keeps the advancement");
+        } finally {
+            Advancement.POORTEN = true;
+        }
         helper.succeed();
     }
 
@@ -140,7 +148,7 @@ public class VadsrijkZ2SystemenGameTests {
                     helper.assertTrue(Boom.MIN_LEVEL.getOrDefault(b.id(), 0) >= 20, k.id() + ": zone-2 node without level gate " + b.id());
                 }
             }
-            helper.assertTrue(nieuw == 6, k.id() + " should have 6 zone-2 nodes, has " + nieuw);
+            helper.assertTrue(nieuw >= 6, k.id() + " should have 6+ zone-2 nodes, has " + nieuw);   // U-SPECS: + spec stat nodes
             // greedy at lv 35: never everything
             Set<String> heeft = new LinkedHashSet<>();
             boolean meer = true;
@@ -157,8 +165,9 @@ public class VadsrijkZ2SystemenGameTests {
             helper.assertTrue(heeft.size() < 18, k.id() + ": everything fits in 34 points?");
         }
         Klasse r = Klassen.van(Klassen.RIDDER);
-        Set<String> heeft = new LinkedHashSet<>(List.of("r_pluisvacht", "r_taai", "r_beschermknuffel", "r_bolwerk"));
-        helper.assertTrue("vereist".equals(Boom.waaromNiet(r, Set.of("r_pluisvacht"), 35, "r_ijspantser")), "needs a capstone first");
+        // U-SPECS: Ijspantser sits in the trunk now, under Kussenstorm
+        Set<String> heeft = new LinkedHashSet<>(List.of("r_knuffelspier", "r_taai", "r_schokgolf", "r_kussenstorm"));
+        helper.assertTrue("vereist".equals(Boom.waaromNiet(r, Set.of("r_pluisvacht"), 35, "r_ijspantser")), "needs the trunk node above first");
         helper.assertTrue("level".equals(Boom.waaromNiet(r, heeft, 19, "r_ijspantser")), "row 4 is closed at lv 19");
         helper.assertTrue(Boom.waaromNiet(r, heeft, 20, "r_ijspantser") == null, "row 4 opens at lv 20");
         heeft.add("r_ijspantser");

@@ -16,32 +16,42 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScene;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Bomen;
 import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom;
+import nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec;
+import nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs;
 
 /**
- * Job advancement (ronde 2/8): at lv 10 and lv 20 each class gets a new title in a ceremony in the ordetempel (a non-click
- * RijkScene: the camera circles you, light beams rise, a big title card with the new title). Each step unlocks something real:
+ * Job advancement. U-SPECS (ronde 4, V2/V3): the NEW model replaces the old steps at class lv 10/20/30/50:
  * <ul>
- *   <li>Knuffelridder: 1 Kussenkampioen = Dubbelklap (Kussenklap swings a second time at 60 %); 2 Vahoege Paladijn =
- *   Paladijnsaura (you and your party within 10 blocks heal 1.5 % every 2 s).</li>
- *   <li>Pluisjager: 1 Sterrenschutter = Saltosalvo (Rolsalto fires 3 arrows at the nearest enemy mid-flip); 2 Vahoege
- *   Hemelvalk = Valkenblik (arrows curve towards enemies, +8 % crit, +15 % crit damage).</li>
- *   <li>Vadsmagier: 1 Sterrenwever = the Roze Vuurbal leaves an element puddle for 3 s; 2 Vahoege Aartsmagier = Vadsoverloop
- *   (every 3rd skill costs no energy, +10 % cooldown reduction, +8 % element damage).</li>
+ *   <li>lv 1: the first job right away (the weapon in your hand, free switching between the 3 classes, as before);</li>
+ *   <li>step 1 at class lv {@value #LV1}, just before the Zwamtempel (zone 1's end dungeon): here, and only here, you pick a
+ *   SPECIALISATION ({@link Spec}, two per class); the ceremony asks for the choice ({@link Specs#kies});</li>
+ *   <li>step 2 at class lv {@value #LV2}: zone 3, after the first boss (the Kaaszeppelinwerf) and the Pluimguh;</li>
+ *   <li>step 3 at class lv {@value #LV3}: the end of Hoogvads (after the zone-5 finale).</li>
  * </ul>
- * z2-systemen: a 3rd step at lv 30 (Kristalkampioen / Poolstervalk / Kristalorakel, see {@code zone2.systemen.Advancement3}); its
- * hidden node {@code <x>_adv3} is added to the trees by that class. {@link #MAX_STAP} = 3.
- * Each step is a hidden tree node ({@code <x>_adv1/2/3}, cost 0) that a respec never removes and that carries a stat bonus.
- * API for the npc slice's advancement quests: {@link #kanDoen} / {@link #doe}.
+ * After step 1 you keep "speccing through": every step deepens your spec (a new effect or an ult upgrade, and a title per spec;
+ * see {@code SpecEffecten} and the lang keys {@code vadsrijk.klassen.titel.<spec>.<step>}).
+ * Each step is still a hidden tree node ({@code <x>_adv1/2/3}, cost 0) that a respec never removes and that carries a stat
+ * bonus; the old {@code <x>_adv4} node is no longer granted (the migration in {@link Specs#migreer} maps old saves).
+ * API for the quests (npc role "advancement"): {@link #kanDoen} / {@link #doe}.
  */
 public final class Advancement {
     /** True until the npc slice's advancement quests are live: the ordetempel desk then shows a "Ceremonie" button. */
     public static boolean VIA_BALIE = true;
+    /** U-SPECS: the class levels of the three steps. */
+    public static final int LV1 = 17, LV2 = 35, LV3 = 58;
 
     private Advancement() {
     }
 
-    /** z2-systemen: the number of steps (was 2); z3-systemen: 4 (the 4th at class lv 50, see zone3.systemen.Advancement4). */
-    public static final int MAX_STAP = 4;
+    /**
+     * U-SPECS: story gates per step (2 = zone 3 after the Kaaszeppelinwerf, 3 = zone 5 after the finale; filled by
+     * spec.SpecRegistry). {@link #POORTEN} = false (tests) ignores them.
+     */
+    public static final java.util.Map<Integer, java.util.function.Predicate<ServerPlayer>> POORT = new java.util.concurrent.ConcurrentHashMap<>();
+    public static boolean POORTEN = true;
+
+    /** U-SPECS: 3 steps (was 4). */
+    public static final int MAX_STAP = 3;
     /** z2-systemen: extra ceremony effects per step (player, step), right after the ceremony starts. */
     public static final java.util.List<java.util.function.BiConsumer<ServerPlayer, Integer>> CEREMONIE = new java.util.concurrent.CopyOnWriteArrayList<>();
 
@@ -59,9 +69,9 @@ public final class Advancement {
         return 0;
     }
 
-    /** The level the next step needs (10, 20, 30, 50) or 0 when all are done. */
+    /** The level the next step needs (17, 35, 58) or 0 when all are done. */
     public static int nodigLevel(int stap) {
-        return stap == 0 ? 10 : stap == 1 ? 20 : stap == 2 ? 30 : stap == 3 ? 50 : 0;
+        return stap == 0 ? LV1 : stap == 1 ? LV2 : stap == 2 ? LV3 : 0;
     }
 
     /** The level of step {@code s} (1..MAX_STAP). */
@@ -74,12 +84,21 @@ public final class Advancement {
         return kanDoen(p, Spelers.klasse(p).id());
     }
 
-    /** g-klassen: can this player do the next advancement of this class (its CLASS level counts)? */
+    /**
+     * g-klassen: can this player do the next advancement of this class (its CLASS level counts)? U-SPECS: steps 2 and 3 need
+     * the spec of step 1 (a migrated save without one first picks it).
+     */
     public static boolean kanDoen(ServerPlayer p, String klasse) {
         if (Klassen.van(klasse) == null) {
             return false;
         }
         int s = stap(p, klasse);
+        if (s >= 1 && Specs.spec(p, klasse) == null) {
+            return false;
+        }
+        if (POORTEN && s < MAX_STAP && POORT.containsKey(s + 1) && !POORT.get(s + 1).test(p)) {
+            return false;
+        }
         return s < MAX_STAP && Spelers.level(p, klasse) >= nodigLevel(s);
     }
 
@@ -88,21 +107,50 @@ public final class Advancement {
         return doe(p, Spelers.klasse(p).id());
     }
 
-    /** Does the next advancement of this class (with the ceremony). Returns false when it can't. */
+    /**
+     * Does the next advancement of this class (with the ceremony). Returns false when it can't. U-SPECS: step 1 first opens
+     * the spec choice (the screen); the ceremony follows the choice ({@link Specs#kies}).
+     */
     public static boolean doe(ServerPlayer p, String klasse) {
+        if (Klassen.van(klasse) != null && stap(p, klasse) >= 1 && Specs.spec(p, klasse) == null) {
+            Specs.zetOpen(Spelers.data(p), klasse, true);   // (a migrated save: pick the spec first)
+            KlasseBalie.vraagSpec(p, klasse);
+            return true;
+        }
         if (!kanDoen(p, klasse)) {
             return false;
         }
         Klasse k = Klassen.van(klasse);
         int s = stap(p, k.id()) + 1;
-        SpelerData d = Spelers.data(p);
-        Boom.knopen(d, k.id()).add(Bomen.advKnoop(k.id(), s));
-        Spelers.sync(p);
-        ceremonie(p, k.id(), s);
+        if (s == 1) {
+            Specs.zetOpen(Spelers.data(p), k.id(), true);
+            KlasseBalie.vraagSpec(p, k.id());
+            return true;
+        }
+        voltooi(p, k.id(), s);
         return true;
     }
 
-    /** The title lang key of a class at an advancement step. */
+    /** Tests/dev: step 1 with this spec right away (no screen). */
+    public static boolean doe(ServerPlayer p, Spec spec) {
+        if (stap(p, spec.klasse) == 0 && !kanDoen(p, spec.klasse)) {
+            return false;
+        }
+        Specs.zetOpen(Spelers.data(p), spec.klasse, true);
+        return Specs.kies(p, spec) == null;
+    }
+
+    /** U-SPECS: grants step {@code s} (its hidden node and the ones before it) and plays the ceremony. */
+    public static void voltooi(ServerPlayer p, String klasse, int s) {
+        SpelerData d = Spelers.data(p);
+        for (int i = 1; i <= s; i++) {
+            Boom.knopen(d, klasse).add(Bomen.advKnoop(klasse, i));
+        }
+        Spelers.sync(p);
+        ceremonie(p, klasse, s);
+    }
+
+    /** The title lang key of a class at an advancement step without a spec (the class name, or the old class title). */
     public static String titelKey(String klasse, int stap) {
         if (stap <= 0) {
             Klasse k = Klassen.van(klasse);
@@ -111,13 +159,26 @@ public final class Advancement {
         return "vadsrijk.klassen.titel." + klasse + "." + stap;
     }
 
+    /** U-SPECS: the title of a player's class at a step: the spec's title (e.g. "Schildridder"), else {@link #titelKey(String, int)}. */
+    public static String titelKey(Player p, String klasse, int stap) {
+        Spec sp = Specs.spec(p, klasse);
+        return stap >= 1 && sp != null ? sp.titelKey(stap) : titelKey(klasse, stap);
+    }
+
     /** The current title of this player (class + advancement). */
     public static String titelKey(Player p) {
         String k = Spelers.klasse(p).id();
-        return titelKey(k, stap(p, k));
+        return titelKey(p, k, stap(p, k));
     }
 
-    private static void ceremonie(ServerPlayer p, String klasse, int stap) {
+    /** U-SPECS: the lang key of the line under the title card (per spec when there is one). */
+    static String onderKey(ServerPlayer p, String klasse, int stap) {
+        Spec sp = Specs.spec(p, klasse);
+        return sp != null ? "vadsrijk.klassen.adv.onder." + sp.id + "." + stap : "vadsrijk.klassen.adv.onder." + klasse + "." + stap;
+    }
+
+    /** The ceremony scene of a step (the camera circles you, light beams, the title card). */
+    public static void ceremonie(ServerPlayer p, String klasse, int stap) {
         ServerLevel sl = (ServerLevel) p.level();
         Vec3 c = p.position();
         Vec3 hoofd = c.add(0, 1.6, 0);
@@ -129,7 +190,7 @@ public final class Advancement {
                 .camera(45, hoofd.add(voor.scale(4)).add(zij.scale(-6)).add(0, 3, 0), hoofd)
                 .camera(90, hoofd.add(voor.scale(-3)).add(zij.scale(-4)).add(0, 7, 0), hoofd.add(0, 2, 0))
                 .camera(150, hoofd.add(voor.scale(3.2)).add(0, 0.3, 0), hoofd)
-                .titel(titelKey(klasse, stap), "vadsrijk.klassen.adv.onder." + klasse + "." + stap, 60, 80, Fx.ROZE)
+                .titel(titelKey(p, klasse, stap), onderKey(p, klasse, stap), 60, 80, Fx.ROZE)
                 .bouw();
         RijkScenes.speel(p, scene);
         CEREMONIE.forEach(f -> f.accept(p, stap));   // z2-systemen
@@ -162,7 +223,7 @@ public final class Advancement {
             Fx.geluid(sl, c, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 1.2f, 1f);
             Fx.geluid(sl, c, SoundEvents.PLAYER_LEVELUP, 1f, 0.7f);
         });
-        Later.na(150, () -> p.sendSystemMessage(Component.translatable("vadsrijk.klassen.adv.chat", Component.translatable(titelKey(klasse, stap)),
-                Component.translatable("vadsrijk.klassen.adv.onder." + klasse + "." + stap)).withStyle(ChatFormatting.LIGHT_PURPLE)));
+        Later.na(150, () -> p.sendSystemMessage(Component.translatable("vadsrijk.klassen.adv.chat", Component.translatable(titelKey(p, klasse, stap)),
+                Component.translatable(onderKey(p, klasse, stap))).withStyle(ChatFormatting.LIGHT_PURPLE)));
     }
 }

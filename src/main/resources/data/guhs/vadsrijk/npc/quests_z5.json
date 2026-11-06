@@ -611,6 +611,129 @@
       "auto": false
     },
     {
+      "id": "z5_adv58_knuffelridder",
+      "soort": "klasse",
+      "gever": "z5_veerkracht",
+      "inleveren": "z5_veerkracht",
+      "lv": 56,
+      "na": [
+        "z5_hq09_slaaplied"
+      ],
+      "doelen": [
+        {
+          "soort": "level",
+          "doel": "*",
+          "n": 58,
+          "bron": "",
+          "kans": 0.0,
+          "plek": "npc:z5_veerkracht"
+        }
+      ],
+      "beloning": {
+        "xp": 7069,
+        "munten": 25000,
+        "items": [],
+        "wapen": false,
+        "loot": "episch"
+      },
+      "aanbod": [
+        "npc",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "",
+      "actie_klaar": "advancement:knuffelridder:3",
+      "start_items": [],
+      "auto": false,
+      "klasse": "knuffelridder"
+    },
+    {
+      "id": "z5_adv58_pluisjager",
+      "soort": "klasse",
+      "gever": "z5_veerkracht",
+      "inleveren": "z5_veerkracht",
+      "lv": 56,
+      "na": [
+        "z5_hq09_slaaplied"
+      ],
+      "doelen": [
+        {
+          "soort": "level",
+          "doel": "*",
+          "n": 58,
+          "bron": "",
+          "kans": 0.0,
+          "plek": "npc:z5_veerkracht"
+        }
+      ],
+      "beloning": {
+        "xp": 7069,
+        "munten": 25000,
+        "items": [],
+        "wapen": false,
+        "loot": "episch"
+      },
+      "aanbod": [
+        "npc",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "",
+      "actie_klaar": "advancement:pluisjager:3",
+      "start_items": [],
+      "auto": false,
+      "klasse": "pluisjager"
+    },
+    {
+      "id": "z5_adv58_vadsmagier",
+      "soort": "klasse",
+      "gever": "z5_veerkracht",
+      "inleveren": "z5_veerkracht",
+      "lv": 56,
+      "na": [
+        "z5_hq09_slaaplied"
+      ],
+      "doelen": [
+        {
+          "soort": "level",
+          "doel": "*",
+          "n": 58,
+          "bron": "",
+          "kans": 0.0,
+          "plek": "npc:z5_veerkracht"
+        }
+      ],
+      "beloning": {
+        "xp": 7069,
+        "munten": 25000,
+        "items": [],
+        "wapen": false,
+        "loot": "episch"
+      },
+      "aanbod": [
+        "npc",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "",
+      "actie_klaar": "advancement:vadsmagier:3",
+      "start_items": [],
+      "auto": false,
+      "klasse": "vadsmagier"
+    },
+    {
       "id": "z5_s01_bessen",
       "soort": "zij",
       "gever": "z5_kok",

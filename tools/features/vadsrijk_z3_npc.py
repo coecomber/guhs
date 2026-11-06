@@ -804,23 +804,26 @@ Q("z3_s05_kaartjes", "zij", "z3_lusje", "Lusje's kaartjes",
   [("npc", "Alle vijf! Kijk, mijn kaart is af. Met een tekeningetje van jou erop. Op een Pluimguh. Heel klein.")],
   xp=10000, munten=8000, loot="zeldzaam", lv=36, na=["z3_hq07_hangnest"])
 
-# ===== job advancement at class level 50 (klassen + z3-systemen do the ceremony; Advancement step 4) ==========================
+# ===== job advancement 2 at class level 35 (U-SPECS, ronde 4: was step 4 at lv 50) ===========================================
+# In zone 3, after the first boss (the Kaaszeppelinwerf, z3_hq08_werf, lv 37-40) and the Pluimguh (z3_hq03_pluimstal). The
+# ceremony + the nest touch: klassen.Advancement (step 2) + zone3.systemen.Advancement4 (ceremony touch on step 2). The title
+# and the new power depend on the spec (lang vadsrijk.klassen.titel.<spec>.2).
 KLASSEN = {
-    "knuffelridder": ("Knuffelridder", "Nestwachter"),
-    "pluisjager": ("Pluisjager", "Kruinvalk"),
-    "vadsmagier": ("Vadsmagiër", "Schemerwijze"),
+    "knuffelridder": "Knuffelridder",
+    "pluisjager": "Pluisjager",
+    "vadsmagier": "Vadsmagiër",
 }
-for k, (naam, t4) in KLASSEN.items():
-    Q(f"z3_adv50_{k}", "klasse", "z3_wasja", f"De proef van de {t4}",
-      f"De vierde titel van De Knuffelorde: {t4}. Bereik klasse-level 50 als {naam} en bewijs je in het Wortelduister.",
-      [D("level", "*", 50, f"Bereik level 50 als {naam} (premies, het Hart van de Boom en het Wortelduister helpen)",
-         plek="gebied:z3_wortelduister"),
-       D("opvrolijk", "gebied:z3_wortelduister", 25, "Versla 25 wezens in het Wortelduister, onder de boom", plek="gebied:z3_wortelduister")],
-      [("npc", f"Drie titels draag je al. Maar diep in de boom wacht een vierde: {t4}."),
-       ("npc", "Bereik level 50 en versla vijfentwintig wezens in het Wortelduister. Dan dansen de imkers in de Nestkapel. Voor jou.")],
-      f"Level 50 als {naam}, en vijfentwintig wezens in het Wortelduister.",
-      [("npc", f"De bijen zoemen, de bloesem valt, de imkers dansen. Ik benoem je tot {t4}! De hele boom is trots op je.")],
-      xp=20000, munten=15000, lv=48, klasse=k, na=["z3_hq13_hart"], actie_klaar=f"advancement:{k}:4")
+for k, naam in KLASSEN.items():
+    Q(f"z3_adv35_{k}", "klasse", "z3_wasja", f"Het nest van de {naam}",
+      f"Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als {naam} en kom terug bij Ordemeester Wasja in de Nestkapel: "
+      "dan wordt je specialisatie sterker.",
+      [D("level", "*", 35, f"Bereik level 35 als {naam} (de Kruinzee, de werf en de premies helpen)", plek="npc:z3_wasja")],
+      [("npc", "Je hebt de werf van de Mika's leeggeveegd, en je Pluimguh kent de boom al beter dan ik. Dat heb ik gezien."),
+       ("npc", f"Wie zo ver komt, verdient de tweede titel van de Orde. Bereik level 35 als {naam}, dan dansen de imkers in de "
+               "Nestkapel. Voor jou.")],
+      f"Level 35 als {naam}, en dan terug naar Ordemeester Wasja in de Nestkapel.",
+      [("npc", "De bijen zoemen, de bloesem valt, de imkers dansen. Je specialisatie groeit mee met de boom!")],
+      xp=12000, munten=9000, lv=33, klasse=k, na=["z3_hq08_werf", "z3_hq03_pluimstal"], actie_klaar=f"advancement:{k}:2")
 
 # ===== the secret: the Mika-imker (z3-bazen owns the boss: MikaImker.ontgrendel(p) / binding z3_imker) =====================
 Q("z3_geheim_imker", "geheim", "z3_raatwever", "De grauwe honing",
@@ -921,7 +924,7 @@ OVERIG = {
     P + "optie.z3_jacht": "Het jachtbord bekijken",
     P + "optie.z3_penningwinkel": "Naar de penningwinkel",
     P + "optie.z3_gouden_veren": "25 Gouden Veren ruilen voor de Gouden Pluimguh",
-    P + "optie.z3_advancement": "Ik ben klaar voor mijn vierde titel!",
+    P + "optie.z3_advancement": "Ik ben klaar voor mijn tweede titel!",
     P + "optie.rol.honinglift": "Met de Honinglift",
     P + "optie.rol.honingthee": "Een kopje honingthee, graag!",
     P + "adv.knuffelridder.4": "Nestwachter", P + "adv.pluisjager.4": "Kruinvalk", P + "adv.vadsmagier.4": "Schemerwijze",

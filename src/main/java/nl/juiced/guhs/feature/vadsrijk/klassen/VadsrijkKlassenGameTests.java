@@ -41,25 +41,32 @@ import nl.juiced.guhs.gametest.GuhTest;
 public class VadsrijkKlassenGameTests {
     private static final String BATCH = "vadsrijk_klassen";
 
+    /**
+     * U-SPECS: the re-laid zone-1 rows (0-3): 16 nodes per class in 4 columns; without a spec only the trunk + side branch are
+     * open (exactly 16 points = lv 17); the spec column needs the spec node; advancement/spec nodes are free and never bought.
+     */
     @GuhTest(template = "empty", batch = BATCH)
     public static void skillboomPuntenRekenen(GameTestHelper helper) {
         helper.assertTrue(Levels.skillpunten(20) == 19, "lv 20 should give 19 points, got " + Levels.skillpunten(20));
         for (Klasse k : Klassen.alle()) {
-            int zichtbaar = 0, totaal = 0;
+            int zichtbaar = 0, zonderSpec = 0;
             for (BoomKnoop b : k.boom()) {
                 if (b.rij() >= Bomen.RIJEN) {
-                    continue;   // z2-systemen: the zone-2 rows 4/5 are tested in VadsrijkZ2SystemenGameTests
+                    continue;   // (zone-2/3 rows: VadsrijkZ2/Z3SystemenGameTests, the layout: VadsrijkSpecsGameTests)
                 }
                 if (b.rij() >= 0) {
                     zichtbaar++;
-                    totaal += b.kosten();
-                    helper.assertTrue(b.rij() < Bomen.RIJEN && b.kolom() < Bomen.KOLOMMEN, k.id() + ": node outside the grid " + b.id());
+                    helper.assertTrue(b.kolom() < Bomen.KOLOMMEN, k.id() + ": node outside the grid " + b.id());
+                    if (b.kolom() == 1 || b.kolom() == 3) {
+                        zonderSpec += b.kosten();
+                    }
                 } else {
-                    helper.assertTrue(b.kosten() == 0, k.id() + ": an advancement node must be free: " + b.id());
+                    helper.assertTrue(b.kosten() == 0, k.id() + ": an advancement/spec node must be free: " + b.id());
                 }
             }
-            helper.assertTrue(zichtbaar == 12, k.id() + " should have 12 nodes, has " + zichtbaar);
-            // greedily learn everything that can be learned at lv 20: never everything (the variant pair + not enough points)
+            helper.assertTrue(zichtbaar == 16, k.id() + " should have 16 zone-1 nodes, has " + zichtbaar);
+            helper.assertTrue(zonderSpec == Levels.skillpunten(Advancement.LV1), k.id() + ": trunk + side cost " + zonderSpec + ", not 16");
+            // greedy at lv 20 without a spec: never a spec-column node
             Set<String> heeft = new LinkedHashSet<>();
             boolean meer = true;
             while (meer) {
@@ -71,10 +78,11 @@ public class VadsrijkKlassenGameTests {
                     }
                 }
             }
-            helper.assertTrue(heeft.size() < 12, k.id() + ": everything fits in 19 points?");
+            for (String id : heeft) {
+                int kol = Boom.knoop(k, id).kolom();
+                helper.assertTrue(kol == 1 || kol == 3, k.id() + ": " + id + " (spec column) without a spec");
+            }
             helper.assertTrue(Boom.vrij(k, heeft, 20) >= 0, k.id() + ": overspent " + Boom.vrij(k, heeft, 20));
-            helper.assertTrue(totaal > 19 + 2, k.id() + ": the tree costs only " + totaal);
-            // advancement nodes cost nothing and are not in the spent points
             Set<String> metAdv = new HashSet<>(heeft);
             metAdv.add(Bomen.advKnoop(k.id(), 1));
             metAdv.add(Bomen.advKnoop(k.id(), 2));
@@ -83,22 +91,21 @@ public class VadsrijkKlassenGameTests {
         }
         Klasse j = Klassen.van(Klassen.JAGER);
         helper.assertTrue(j != null, "no Pluisjager");
-        helper.assertTrue("punten".equals(Boom.waaromNiet(j, Set.of(), 1, "j_scherpoog")), "lv 1 has no points");
-        helper.assertTrue(Boom.waaromNiet(j, Set.of(), 2, "j_scherpoog") == null, "lv 2 can learn a row-0 node");
-        helper.assertTrue("vereist".equals(Boom.waaromNiet(j, Set.of(), 20, "j_vuurregen")), "row 1 needs its row-0 node");
-        helper.assertTrue("punten".equals(Boom.waaromNiet(j, Set.of("j_scherpoog"), 2, "j_vuurregen")), "2-point node with 0 left");
-        helper.assertTrue(Boom.waaromNiet(j, Set.of("j_scherpoog"), 4, "j_vuurregen") == null, "1 + 2 points at lv 4");
-        helper.assertTrue("uitgesloten".equals(Boom.waaromNiet(j, Set.of("j_scherpoog", "j_vuurregen"), 20, "j_kleefregen")), "variants exclude each other");
-        helper.assertTrue("al".equals(Boom.waaromNiet(j, Set.of("j_scherpoog"), 20, "j_scherpoog")), "twice");
-        Klasse r = Klassen.van(Klassen.RIDDER);
-        helper.assertTrue(r != null && r.boom().stream().filter(b -> b.rij() < Bomen.RIJEN && !b.id().endsWith("_adv3") && !b.id().endsWith("_adv4")).count() == 14,   // z2-systemen: zone-2 rows + adv3 not counted
-                "the Knuffelridder adapter has no tree");
-        helper.assertTrue(Boom.waaromNiet(r, Set.of("r_knuffelspier", "r_slijmkussen"), 20, "r_kussenstorm") == null, "a|b requirement (b)");
-        helper.assertTrue(Boom.waaromNiet(r, Set.of("r_knuffelspier", "r_vuurkussen"), 20, "r_kussenstorm") == null, "a|b requirement (a)");
-        helper.assertTrue("vereist".equals(Boom.waaromNiet(r, Set.of("r_knuffelspier"), 20, "r_kussenstorm")), "a|b requirement (none)");
+        helper.assertTrue("punten".equals(Boom.waaromNiet(j, Set.of(), 1, "j_snelle_pees")), "lv 1 has no points");
+        helper.assertTrue(Boom.waaromNiet(j, Set.of(), 2, "j_snelle_pees") == null, "lv 2 can learn a row-0 trunk node");
+        helper.assertTrue("vereist".equals(Boom.waaromNiet(j, Set.of(), 20, "j_scherpoog")), "a spec node needs the spec");
+        helper.assertTrue(Boom.waaromNiet(j, Set.of("j_spec_scherpschutter"), 20, "j_scherpoog") == null, "with the spec it opens");
+        helper.assertTrue("vereist".equals(Boom.waaromNiet(j, Set.of("j_spec_scherpschutter"), 20, "j_strikdraad")), "the other spec stays shut");
+        helper.assertTrue("vereist".equals(Boom.waaromNiet(j, Set.of(), 20, "j_doorboor")), "row 1 needs its row-0 node");
+        helper.assertTrue("punten".equals(Boom.waaromNiet(j, Set.of("j_snelle_pees"), 2, "j_doorboor")), "2-point node with 0 left");
+        helper.assertTrue(Boom.waaromNiet(j, Set.of("j_snelle_pees"), 4, "j_doorboor") == null, "1 + 2 points at lv 4");
+        helper.assertTrue(Boom.waaromNiet(j, Set.of("j_spec_strikkenzetter", "j_strikdraad", "j_vuurregen", "j_lichtvoetig"), 20, "j_kleefregen") == null,
+                "a Strikkenzetter may take both rains now");
+        helper.assertTrue("al".equals(Boom.waaromNiet(j, Set.of("j_snelle_pees"), 20, "j_snelle_pees")), "twice");
         helper.succeed();
     }
 
+    /** U-SPECS: resetting the tree is always free (no cooldown); the spec and the advancements stay. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void respecAfkoeltijd(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
@@ -106,19 +113,17 @@ public class VadsrijkKlassenGameTests {
         String k = Klassen.MAGIER;
         Set<String> knopen = Boom.knopen(d, k);
         helper.assertTrue("leeg".equals(Boom.respec(d, k, 1000)), "nothing to respec");
-        helper.assertTrue(d.respecKlaar == 0, "an empty respec must not start the cooldown");
         knopen.add("m_wijs");
         knopen.add("m_glitterblink");
         knopen.add("m_adv1");
+        knopen.add("m_spec_zegenzanger");
         long t = 5_000_000L;
         helper.assertTrue(Boom.respec(d, k, t) == null, "first respec");
-        helper.assertTrue(knopen.size() == 1 && knopen.contains("m_adv1"), "respec keeps only the advancement: " + knopen);
-        helper.assertTrue(d.respecKlaar == t + Boom.RESPEC_MS, "cooldown = 1 hour");
+        helper.assertTrue(knopen.size() == 2 && knopen.contains("m_adv1") && knopen.contains("m_spec_zegenzanger"),
+                "respec keeps only the advancement and the spec: " + knopen);
         knopen.add("m_wijs");
-        helper.assertTrue("cooldown".equals(Boom.respec(d, k, t + 10 * 60 * 1000)), "10 min later: still waiting");
-        helper.assertTrue(Boom.respecOver(d, t + 10 * 60 * 1000) == 50 * 60, "50 min left");
-        helper.assertTrue(knopen.contains("m_wijs"), "a refused respec changed the tree");
-        helper.assertTrue(Boom.respec(d, k, t + Boom.RESPEC_MS) == null, "after an hour: free again");
+        helper.assertTrue(Boom.respec(d, k, t + 1) == null, "right after: free again (no cooldown)");
+        helper.assertTrue(Boom.respecOver(d, t + 1) == 0, "never a wait");
         helper.assertTrue(!knopen.contains("m_wijs") && knopen.contains("m_adv1"), "second respec");
         helper.succeed();
     }
@@ -367,6 +372,21 @@ public class VadsrijkKlassenGameTests {
             double j = Balans.dps(Klassen.JAGER, Wapens.PLUISBOOG, lv);
             double m = Balans.dps(Klassen.MAGIER, Wapens.ROZENSTAF, lv);
             helper.assertTrue(j / r > 0.65 && j / r < 0.75, "lv " + lv + ": ranged/melee = " + j / r);
+            // U-SPECS: the two specs of a class stay within 10 % of each other at every advancement step
+            for (var kl : new String[] {Klassen.RIDDER, Klassen.JAGER, Klassen.MAGIER}) {
+                var specs = nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.vanKlasse(kl);
+                for (int stap = 1; stap <= 3; stap++) {
+                    double a = nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecBalans.factor(specs.get(0), stap);
+                    double b2 = nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecBalans.factor(specs.get(1), stap);
+                    helper.assertTrue(a > 1.05 && b2 > 1.05, kl + " step " + stap + ": a spec adds too little (" + a + ", " + b2 + ")");
+                    helper.assertTrue(Math.abs(a / b2 - 1) <= 0.10, kl + " step " + stap + ": " + specs.get(0).id + " " + a + " vs "
+                            + specs.get(1).id + " " + b2);
+                    if (stap > 1) {
+                        helper.assertTrue(a > nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecBalans.factor(specs.get(0), stap - 1)
+                                && b2 > nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecBalans.factor(specs.get(1), stap - 1), kl + ": step " + stap + " adds nothing");
+                    }
+                }
+            }
             helper.assertTrue(m / r > 0.80 && m / r < 0.90, "lv " + lv + ": magic/melee = " + m / r);
             // the weakest normal zone-1 mob (wezens: 30 Vads at lv 1, +30 % per level); neutral element, no crit
             double mob = 30 * (1 + 0.3 * (lv - 1));

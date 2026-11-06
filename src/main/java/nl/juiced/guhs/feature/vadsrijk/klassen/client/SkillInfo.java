@@ -43,17 +43,17 @@ public final class SkillInfo {
 
     static {
         // Knuffelridder
-        v("kussenklap", "r_vuurkussen", "r_slijmkussen", "r_kussenstorm", "r_ijsklap", "r_adv1", "r_adv3");
+        v("kussenklap", "r_vuurkussen", "r_slijmkussen", "r_kussenstorm", "r_ijsklap");   // U-SPECS: the advancement steps depend on the spec now (see the badges)
         v("stormsprong", "r_aanloop", "r_schokgolf", "r_galmstoot");
-        v("knuffelschild", "r_doornknuffel", "r_beschermknuffel", "r_bolwerk", "r_adv3");
-        v("vahoege_plof", "r_reuzenkussen");
+        v("knuffelschild", "r_doornknuffel", "r_beschermknuffel", "r_bolwerk", "r_onbreekbaar");
+        v("vahoege_plof", "r_reuzenkussen", "r_drakenkussen");
         // Pluisjager
         v("pluizenregen", "j_vuurregen", "j_kleefregen", "j_splinterregen");
-        v("rolsalto", "j_plakbom", "j_pluizenmantel", "j_windloper", "j_adv1");
+        v("rolsalto", "j_plakbom", "j_pluizenmantel", "j_windloper");
         v("knuffelpijl", "j_hartjespijl");
-        v("sterrenschot", "j_vallende_ster", "j_adv3");
+        v("sterrenschot", "j_vallende_ster", "j_sterrenzwerm");
         // Vadsmagier
-        v("roze_vuurbal", "m_reuzenbal", "m_drievuur", "m_tijdsprong", "m_adv1", "m_adv3");
+        v("roze_vuurbal", "m_reuzenbal", "m_drievuur", "m_tijdsprong", "m_lantaarnvlam");
         v("blink", "m_glitterblink", "m_tijdsprong");
         v("vadsbron", "m_grote_bron", "m_bronschild");
         v("meteoorguh", "m_meteoorregen", "m_ijsnova");

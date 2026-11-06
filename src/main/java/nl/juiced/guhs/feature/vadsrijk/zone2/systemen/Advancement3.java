@@ -38,6 +38,8 @@ import nl.juiced.guhs.feature.vadsrijk.klassen.ridder.Knuffelridder;
  *   <li>Vadsmagier -> <b>Kristalorakel</b>, Spiegelecho: Roze Vuurbal freezes for 1.5 s, and when it hits an enemy that was already
  *   frozen, the ice shatters in a second explosion (1.2x weapon damage, radius 3, once per cast).</li>
  * </ul>
+ * U-SPECS (ronde 4): these effects now belong to a spec at step 2: Kristalwal = Schildridder, IJsster = Strikkenzetter,
+ * Spiegelecho = Sterrenwever (klassen.spec.Specs#heeft); the crystal ceremony touch stays on step 3.
  * Where: the ordetempel desk in Zwamzoet (kern of the klassen slice) or the kristalkapel altar in Kandijkom (z2-npc calls
  * {@link Advancement#doe}).
  */
@@ -69,7 +71,7 @@ public final class Advancement3 {
         Schade.NA_KLAP.add(Advancement3::naKlap);
         Haken.LEVEL_OP.add((p, wat) -> {
             String k = wat.substring(0, Math.max(0, wat.lastIndexOf(':')));   // (g-klassen: "<klasse>:N", the class level)
-            if (Klassen.van(k) != null && wat.equals(k + ":" + LEVEL) && Advancement.kanDoen(p, k)) {
+            if (false && Klassen.van(k) != null && wat.equals(k + ":" + LEVEL) && Advancement.kanDoen(p, k)) {   // U-SPECS: no step at lv 30 any more
                 p.sendSystemMessage(Component.translatable("vadsrijk.z2.systemen.adv3.klaar", Component.translatable(Advancement.titelKey(k, 3)))
                         .withStyle(ChatFormatting.GOLD));
                 Tips.toon(p, "vadsrijk.z2.systemen.tip.adv3");
@@ -83,10 +85,10 @@ public final class Advancement3 {
 
     /** Kristalwal (freeze who hits your shield) and the Kussenklap bonus on frozen enemies. */
     static double voorKlap(Schade.Klap k, double n) {
-        if (k.doel() instanceof ServerPlayer p && k.bron() instanceof VadsrijkMob m && heeft(p, "r_adv3") && Knuffelridder.blokt(p)) {
+        if (k.doel() instanceof ServerPlayer p && k.bron() instanceof VadsrijkMob m && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHILDRIDDER, 2) && Knuffelridder.blokt(p)) {
             Bevroren.geef(m, 60, p);
         }
-        if (k.bron() instanceof ServerPlayer p && "kussenklap".equals(k.skillId()) && Bevroren.heeft(k.doel()) && heeft(p, "r_adv3")) {
+        if (k.bron() instanceof ServerPlayer p && "kussenklap".equals(k.skillId()) && Bevroren.heeft(k.doel()) && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHILDRIDDER, 2)) {
             n *= 1.4;
         }
         return n;
@@ -98,17 +100,17 @@ public final class Advancement3 {
             return;
         }
         String id = k.skillId() == null ? "" : k.skillId();
-        if (id.equals("basis") && k.soort() == Schade.Soort.AFSTAND && heeft(p, "j_adv3")) {
+        if (id.equals("basis") && k.soort() == Schade.Soort.AFSTAND && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STRIKKENZETTER, 2)) {
             int n = SCHOTEN.merge(p.getUUID(), 1, Integer::sum);
             if (n >= 5) {
                 SCHOTEN.put(p.getUUID(), 0);
                 ijsster(p, m);
             }
         }
-        if (id.equals("sterrenschot") && heeft(p, "j_adv3")) {
+        if (id.equals("sterrenschot") && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STRIKKENZETTER, 2)) {
             Bevroren.geef(m, 80, p);
         }
-        if (id.equals("roze_vuurbal") && heeft(p, "m_adv3")) {
+        if (id.equals("roze_vuurbal") && nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STERRENWEVER, 2)) {
             boolean was = Bevroren.heeft(m);
             Bevroren.geef(m, 30, p);
             long nu = p.level().getGameTime();

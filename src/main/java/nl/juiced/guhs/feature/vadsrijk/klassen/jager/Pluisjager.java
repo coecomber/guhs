@@ -218,7 +218,7 @@ public final class Pluisjager implements Klasse {
                 Statussen.geef(p, Status.KNUFFELSCHILD, 80, Spelers.maxVads(p) * 0.2, p);
                 sl.sendParticles(ParticleTypes.END_ROD, p.getX(), p.getY() + 1, p.getZ(), 16, 0.5, 0.6, 0.5, 0.02);
             }
-            if (Boom.heeft(p, "j_adv1")) {
+            if (nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.STRIKKENZETTER, 1)) {   // U-SPECS: Saltosalvo = Strikkenzetter step 1
                 // Saltosalvo: mid-flip, 3 arrows at the nearest enemy
                 for (int i = 0; i < 3; i++) {
                     Later.na(4 + 3 * i, () -> salvo(p, c));
