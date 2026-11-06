@@ -38,6 +38,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidClient.init(modBus);   // T-GELUID (after kern: wraps its title receiver)
         nl.juiced.guhs.feature.vadsrijk.vfx.client.VfxClient.init(modBus);   // T-VFX: decals, particles, cast bar, VFX level
         nl.juiced.guhs.feature.vadsrijk.zone4.boot.client.BootClient.init(modBus);   // T-Z4BOOT: the Zeilbootje (renderer, screen, tab, wind HUD)
+        nl.juiced.guhs.feature.vadsrijk.tapijt.client.TapijtClient.init(modBus);   // U-TAPIJT: the flying carpet (rider pose, tilt, anchors)
         nl.juiced.guhs.feature.vadsrijk.ambacht.client.AmbachtClient.init(modBus);   // T-AMBACHT: the Ambachten (key Y, spots, screens)
         nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagClient.init(modBus);   // T-OPSLAG: knapzak/tas/bank screens + HUD additions
         nl.juiced.guhs.feature.vadsrijk.hud.client.UHudClient.init(modBus);   // U-HUD: party frames, emote wheel + poses, HUD editor (after T-OPSLAG)

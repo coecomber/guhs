@@ -155,6 +155,7 @@ public final class Uiterlijk {
         vacht(RijdierSoort.ZWAMZWIJNTJE, 0xFFF6B6C4, new Object[][] {
                 {"blauwzwam", 0xFF8CB4F0, Bron.stal(1500)}, {"dooier", 0xFFF6D66A, Bron.prestatie("verkenner_zone1_75")},
                 {"glimzwam", 0xFF6A4AA6, Bron.geheim("aanwijzingen_10")}});
+        nl.juiced.guhs.feature.vadsrijk.tapijt.Tapijt.registreerUiterlijk();   // U-TAPIJT: the flying carpet's weave / tassels / cushion
     }
 
     private Uiterlijk() {

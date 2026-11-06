@@ -309,6 +309,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
+            # 1.10 round U, U-TAPIJT: the flying carpet (zone 6; Java: feature/vadsrijk/tapijt); after vadsrijk_t_rijdier
+            'vadsrijk_u_tapijt',
             ]
 
 
