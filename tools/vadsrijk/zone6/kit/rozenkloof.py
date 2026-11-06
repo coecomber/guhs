@@ -1005,7 +1005,7 @@ def zeemond(W, figuren=True):
                 for y in range(ZW.ZEE - 4, ZW.ZEE + 3):
                     zet(W, xx, y, zz, "palm_stam")
                 zet(W, xx, ZW.ZEE + 3, zz, mlamp(False))
-    ZB.plek(W, "rozenkloof_zeemond", 3250, ZW.ZEE + 2, -745)
+    ZB.plek(W, "rozenkloof_zeemond", 3272, ZW.ZEE + 2, -745)   # [u-z6afronding] x < 3264 is outside the tiles
     W.label(3270, 82, -745, "De Zeemond")
     # the colossi in bay 1, in front of face 0
     B = BAYLIST[1]
