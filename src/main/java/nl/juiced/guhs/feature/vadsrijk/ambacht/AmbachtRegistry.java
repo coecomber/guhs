@@ -96,7 +96,8 @@ public final class AmbachtRegistry {
             }
         });
         NeoForge.EVENT_BUS.addListener(AmbachtRegistry::commando);
-        nl.juiced.guhs.feature.vadsrijk.web.WebExport.EXTRA_HISCORES.add(Ranglijst::exporteer);   // T-INT: the ambacht hiscores ride along with s-site's live export
+        nl.juiced.guhs.feature.vadsrijk.web.WebExport.EXTRA_HISCORES.add(Ranglijst::exporteer);
+        HoogvadsGilde.koppel();   // T-INT: the Hoogvads Ambachtsgilde teachers open the workshops   // T-INT: the ambacht hiscores ride along with s-site's live export
     }
 
     public static void payloads(PayloadRegistrar registrar) {

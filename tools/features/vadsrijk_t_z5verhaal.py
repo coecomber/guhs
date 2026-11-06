@@ -177,31 +177,31 @@ NPCS = {
         "Weet jij waar de Academie is? Ik moet om twaalf uur salueren.",
         "Ik ben heel dapper. Alleen niet als ik verdwaald ben."],
         "op de westelijke pier van de Luchthaven, aan de noordflank van Hoogvads"),
-    # --- the Ambachtsgilde (professions capital; hooks only) --------------------------------------------------------------------
+    # --- the Ambachtsgilde (professions capital; T-INT: the teachers open t-ambacht's workshops, HoogvadsGilde) --------------------------------------------------------------------
     "z5_gildemeester": ("Gildemeester Duimdop", [
         "Welkom in het Ambachtsgilde! Hoogvads is de hoofdstad van alle ambachten. Hier leer je de Meesterwerken.",
         "Mijnen, houthakken, plukken, vissen, imkeren, smeden, naaien, koken en brouwen. Negen ambachten, één gilde.",
-        "De werkplaatsen gaan binnenkort helemaal open. Ik ben de vloer nog aan het vegen."],
+        "De werkplaatsen zijn open! Praat met een leermeester en je staat zo aan de werkbank."],
         _GILDE + ", in de grote hal"),
     "z5_leermeester_koken": ("Leermeester Kookguh Peper", [
         "Koken is liefde in een pan. Met zout. Niet te veel zout.",
         "De recepten van Hoogvads zijn de lekkerste van de wereld. Dat zeg ik, en ik ben eerlijk.",
-        "Binnenkort leer ik je de Meesterrecepten."], _GILDE + ", in de keuken"),
+        "Kom maar mee naar de keuken. Daar leer ik je de Meesterrecepten."], _GILDE + ", in de keuken"),
     "z5_leermeester_brouwen": ("Leermeester Brouwguh Bubbel", [
         "Een drankje brouwen is als een liedje zingen. Als het borrelt, zit je goed.",
         "Mijn ketel doet 'plop'. Dat betekent dat hij blij is.",
-        "Binnenkort leer ik je de Meesterdrankjes."], _GILDE + ", in de brouwerij"),
+        "Kom maar mee naar de brouwerij. Daar leer ik je de Meesterdrankjes."], _GILDE + ", in de brouwerij"),
     "z5_leermeester_smeden": ("Leermeester Smidguh Vonk", [
         "Een goed zwaard is zacht voor guhs en hard voor grauw.",
         "Maatwerk! Zelfgemaakte uitrusting met je eigen bonussen. Daar draait het om.",
-        "Binnenkort leer ik je het Meestersmeden."], _GILDE + ", in de smidse"),
+        "Kom maar mee naar de smidse. Daar leer ik je het Meestersmeden."], _GILDE + ", in de smidse"),
     "z5_leermeester_naaien": ("Leermeester Naaiguh Vingerhoedje", [
         "Ik naai een reuzenquilt van alle zones. Elke zone een lapje. Hoogvads wordt het roze lapje.",
         "Een steek, een knoop, een knuffel. Zo naai je.",
-        "Binnenkort leer ik je het Meesternaaien."], _GILDE + ", in het naaiatelier"),
+        "Kom maar mee naar het atelier. Daar leer ik je het Meesternaaien."], _GILDE + ", in het naaiatelier"),
     "z5_leermeester_imkeren": ("Leermeester Imker Zoemzoet", [
         "Ik kom uit Honingtak. De bijen van Hoogvads maken wolkenhoning. Die is zo licht dat hij omhoog druppelt.",
-        "Een eigen bijenkorf? Dat kan! Bijna. Binnenkort.",
+        "Een eigen bijenkorf? Dat kan! Kom maar mee naar de bijenstal.",
         "Bijen zijn de hardste werkers van de wereld. Na Kok Pollepel."], _GILDE + ", bij de bijenstal"),
     # --- the 4th-class teasers (not playable) -----------------------------------------------------------------------------------
     "z5_vadszanger": ("Vadszanger Lieflied", [
