@@ -40,14 +40,15 @@ import nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh;
  *   hub's square (free, standable floor), once a player is near; they join the npc slice's keeper ({@link Npcs#voegToe}).</li>
  *   <li>A click (npc's {@code QuestMotor.KLIK_VOOR}): a talking screen with the choices Werkplaats / Receptenboek / Verhaal / Dag
  *   (gathering masters: Waar? instead of the workshop; the board guh: Bestelbord / Ambachtsbord).</li>
- *   <li>The story: 5 steps per ambacht at ambacht level {@link #VERHAAL_LEVELS}; 3 pages each ({@code vadsrijk.ambacht.verhaal.<a>.<step>.<0-2>});
+ *   <li>The story: 5 steps per ambacht at ambacht level {@link #VERHAAL_LEVELS} (U-AMBACHT2: then more at Hoogvads' Ambachtsgilde,
+ *   {@link HoogvadsGilde}); 3 pages each ({@code vadsrijk.ambacht.verhaal.<a>.<step>.<0-2>});
  *   rewards: munten + a bit of xp, and on the last step (lv 50) a keepsake for home by the Post (decoration only).</li>
  * </ul>
  */
 public final class AmbachtNpcs {
     public static final String SLEUTEL = "vr_amb";
     public static final int[] VERHAAL_LEVELS = {1, 10, 20, 35, 50};
-    static final int WERK = 1, BOEK = 2, VERHAAL = 3, DAG = 4, WAAR = 5, BESTEL = 6, RANG = 7;
+    static final int WERK = 1, BOEK = 2, VERHAAL = 3, DAG = 4, WAAR = 5, BESTEL = 6, RANG = 7, OPDRACHT = 8, WINKEL = 9;
     private static final Map<String, BlockPos> GEZET = new ConcurrentHashMap<>();
     /** Who a player is talking to. */
     private static final Map<UUID, String> PRAAT = new ConcurrentHashMap<>();
@@ -194,6 +195,8 @@ public final class AmbachtNpcs {
         List<Praat.Optie> opties = new ArrayList<>();
         if (w.ambacht() == null) {
             opties.add(new Praat.Optie(BESTEL, "vadsrijk.ambacht.optie.bestel"));
+            opties.add(new Praat.Optie(OPDRACHT, "vadsrijk.ambacht.optie.opdracht"));   // U-AMBACHT2
+            opties.add(new Praat.Optie(WINKEL, "vadsrijk.ambacht.optie.winkel"));       // U-AMBACHT2
             opties.add(new Praat.Optie(RANG, "vadsrijk.ambacht.optie.rang"));
         } else {
             opties.add(new Praat.Optie(w.ambacht().verzamel ? WAAR : WERK, w.ambacht().verzamel ? "vadsrijk.ambacht.optie.waar" : "vadsrijk.ambacht.optie.werk"));
@@ -215,6 +218,8 @@ public final class AmbachtNpcs {
             case BOEK -> AmbachtSchermen.boek(p, "recepten", w.ambacht());
             case BESTEL -> AmbachtSchermen.boek(p, "bestel", null);
             case RANG -> AmbachtSchermen.boek(p, "rang", null);
+            case OPDRACHT -> AmbachtSchermen.boek(p, "opdracht", null);
+            case WINKEL -> AmbachtSchermen.boek(p, "winkel", null);
             case WAAR -> waar(p, spreker, w);
             case VERHAAL -> verhaal(p, spreker, w);
             default -> Praat.sluit(p);
@@ -228,7 +233,8 @@ public final class AmbachtNpcs {
         int tier = AmbachtXp.tierVoor(AmbachtData.level(p, w.ambacht()));
         for (AmbachtPlekken.Groep g : AmbachtPlekken.GROEPEN) {
             BlockPos a = g.anker();
-            if (g.ambacht() != w.ambacht() || a == null || g.tier() > Math.max(tier, w.ambacht() == Ambacht.IMKEREN ? 3 : 1)) {
+            boolean kan = w.ambacht() == Ambacht.IMKEREN ? AmbachtData.level(p, Ambacht.IMKEREN) >= Imkeren.korfLevel(g.tier()) : g.tier() <= Math.max(tier, 1);
+            if (g.ambacht() != w.ambacht() || a == null || !kan) {
                 continue;
             }
             double d = a.distSqr(p.blockPosition()) - (g.tier() == tier ? 1e7 : 0);   // (your own tier first)
@@ -254,7 +260,8 @@ public final class AmbachtNpcs {
         String naam = spreker == null ? "vadsrijk.npc.naam." + w.npc() : "";
         List<Praat.Regel> regels = new ArrayList<>();
         if (stap >= VERHAAL_LEVELS.length) {
-            regels.add(new Praat.Regel(spreker, naam, "vadsrijk.ambacht.verhaal.uit"));
+            // U-AMBACHT2: the story goes on at Hoogvads' Ambachtsgilde
+            regels.add(new Praat.Regel(spreker, naam, stap < HoogvadsGilde.totaal() ? "vadsrijk.ambacht.verhaal.naar_gilde" : "vadsrijk.ambacht.verhaal.uit"));
             Praat.scene(p, SLEUTEL, regels);
             return;
         }
@@ -287,8 +294,9 @@ public final class AmbachtNpcs {
             Post.stuur(p, aandenken);
             p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.verhaal.post", aandenken.getHoverName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
-        p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.verhaal.stap", Component.translatable(a.naamKey()), stap + 1, VERHAAL_LEVELS.length)
+        p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.verhaal.stap", Component.translatable(a.naamKey()), stap + 1, HoogvadsGilde.totaal())
                 .withStyle(ChatFormatting.GOLD));
+        Knutselwinkel.geef(p, Knutselwinkel.VERHAAL);   // U-AMBACHT2
         EcoUtil.geluid(p, net.minecraft.sounds.SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 0.6f, 1.3f);
     }
 

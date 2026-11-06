@@ -68,6 +68,14 @@ public final class Eten {
         g("honingpannenkoek", 3, Stats.van(Stat.HEALKRACHT, 5, Stat.WIJSHEID, 10, Stat.VADS, 150), 1, 0, 1, false);
         g("wortelstamppot", 3, Stats.van(Stat.VERDEDIGING, 14, Stat.VADS, 200), 1, 0, 1, false);
         g("feestmaal", 3, Stats.van(Stat.VADS, 150, Stat.KRACHT, 6, Stat.BEHENDIGHEID, 6, Stat.WIJSHEID, 6), 1, 0, 1, true);
+        // U-AMBACHT2: zone 4 (T4, De Lampionkust) and zone 5 (T5, Hoogvads)
+        g("zeekraalsalade", 4, Stats.van(Stat.ELEMENTWEERSTAND, 8, Stat.VADS, 260), 1, 0, 1, false);
+        g("koraalvissoep", 4, Stats.van(Stat.VERDEDIGING, 18, Stat.VADS, 280), 1, 0, 1, false);
+        g("zeemanshapje", 4, new Stats(), 1.15, 0.15, 1, false);
+        g("lampionspiesjes", 4, Stats.van(Stat.KRITIEK, 4, Stat.KRACHT, 9), 1, 0, 1, false);
+        g("wolkbessentaart", 5, Stats.van(Stat.HEALKRACHT, 7, Stat.WIJSHEID, 14, Stat.VADS, 320), 1, 0, 1, false);
+        g("donderstoofpot", 5, Stats.van(Stat.VERDEDIGING, 22, Stat.VADS, 360), 1, 0, 1, false);
+        g("hemelfeestmaal", 5, Stats.van(Stat.VADS, 300, Stat.KRACHT, 9, Stat.BEHENDIGHEID, 9, Stat.WIJSHEID, 9), 1, 0, 1, true);
     }
 
     private Eten() {

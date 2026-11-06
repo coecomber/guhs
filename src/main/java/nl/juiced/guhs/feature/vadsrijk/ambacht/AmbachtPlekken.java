@@ -20,7 +20,9 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken;
 public final class AmbachtPlekken {
     /** How a group's spots are found in the terrain. */
     public enum Zoek {
-        GROND, STEEN, BOOM, WATER, BLOEM
+        GROND, STEEN, BOOM, WATER, BLOEM,
+        /** U-AMBACHT2: coral diving (zone 4): a sea floor under 2-8 blocks of water (the diver reaches it, and comes up again). */
+        KORAAL
     }
 
     /**
@@ -90,14 +92,47 @@ public final class AmbachtPlekken {
         g("z3_vis_moeras", 3, "honingmoeras", Ambacht.VISSEN, 3, 6, 40, Zoek.WATER);
         g("z3_vis_waterrad", 3, "mosvoet_waterrad", Ambacht.VISSEN, 3, 5, 32, Zoek.WATER);
         g("z3_vis_honingvijver", 3, "honingvijver_1", Ambacht.VISSEN, 3, 4, 24, Zoek.WATER);
-        // T-INT: zone 4 (De Lampionkust, t-z4wereld POIs): fishing for the zone-4 story (every catch reports z4_vis/gevangen)
-        g("z4_vis_haven", 4, "werkplaats_visplek", Ambacht.VISSEN, 3, 6, 32, Zoek.WATER);
-        g("z4_vis_kade", 4, "steiger_2_eind", Ambacht.VISSEN, 3, 5, 28, Zoek.WATER);
-        g("z4_vis_koraal", 4, "kampvuur_koraalbaai", Ambacht.VISSEN, 3, 6, 40, Zoek.WATER);
+        // ---- zone 4 (T4, De Lampionkust, t-z4wereld POIs; U-AMBACHT2): the islands' meadows, driftwood + kite bamboo, the cliffs;
+        // fishing everywhere round the islands (every zone-4 catch also reports z4_vis/gevangen, T-INT) + coral diving in the Koraalbaai
+        g("z4_pluk_bloemeneiland", 4, "kampvuur_bloemeneiland", Ambacht.PLUKKEN, 4, 8, 40, Zoek.GROND);
+        g("z4_pluk_knuffeltij", 4, "kampvuur_knuffeltij", Ambacht.PLUKKEN, 4, 8, 40, Zoek.GROND);
+        g("z4_pluk_strandfeest", 4, "kampvuur_strandfeest", Ambacht.PLUKKEN, 4, 6, 36, Zoek.GROND);
+        g("z4_hout_vliegereiland", 4, "kampvuur_vliegereiland", Ambacht.HOUTHAKKEN, 4, 8, 44, Zoek.BOOM);
+        g("z4_hout_vuurtoren", 4, "kampvuur_vuurtoreneiland", Ambacht.HOUTHAKKEN, 4, 6, 40, Zoek.BOOM);
+        g("z4_hout_mysterie", 4, "kampvuur_mysterie", Ambacht.HOUTHAKKEN, 4, 6, 40, Zoek.BOOM);
+        g("z4_mijn_pierkop", 4, "kampvuur_pierkop", Ambacht.MIJNEN, 4, 8, 36, Zoek.STEEN);
+        g("z4_mijn_vuurtoren", 4, "eiland_vuurtoreneiland", Ambacht.MIJNEN, 4, 8, 40, Zoek.STEEN);
+        g("z4_mijn_mysterie", 4, "mysterie_strand", Ambacht.MIJNEN, 4, 6, 36, Zoek.STEEN);
+        g("z4_vis_haven", 4, "werkplaats_visplek", Ambacht.VISSEN, 4, 6, 32, Zoek.WATER);
+        g("z4_vis_kade", 4, "steiger_2_eind", Ambacht.VISSEN, 4, 5, 28, Zoek.WATER);
+        g("z4_vis_koraal", 4, "kampvuur_koraalbaai", Ambacht.VISSEN, 4, 6, 40, Zoek.WATER);
+        g("z4_vis_wrak", 4, "boot_dok_wrak", Ambacht.VISSEN, 4, 5, 32, Zoek.WATER);
+        g("z4_vis_vuurtoren", 4, "boot_dok_vuurtoreneiland", Ambacht.VISSEN, 4, 5, 32, Zoek.WATER);
+        g("z4_duik_koraalbaai", 4, "duiksteiger", Ambacht.VISSEN, 4, 6, 30, Zoek.KORAAL);
+        g("z4_duik_grotjes", 4, "eiland_koraalbaai", Ambacht.VISSEN, 4, 5, 36, Zoek.KORAAL);
+        // ---- zone 5 (T5, Hoogvads on Moeder Wolkwal, t-z5wereld POIs; U-AMBACHT2): the gardens, the park trees, the whale's fins
+        // (rock-hard skin), the pond, the market fountain and the blowhole
+        g("z5_pluk_staartpark", 5, "staartpark_prieel", Ambacht.PLUKKEN, 5, 8, 36, Zoek.GROND);
+        g("z5_pluk_ooggaarde", 5, "ooggaarde_tuin", Ambacht.PLUKKEN, 5, 8, 30, Zoek.GROND);
+        g("z5_pluk_wolkbessen", 5, "wolkbes_3", Ambacht.PLUKKEN, 5, 6, 30, Zoek.GROND);
+        g("z5_hout_staartpark_1", 5, "staartpark_boom_1", Ambacht.HOUTHAKKEN, 5, 6, 26, Zoek.BOOM);
+        g("z5_hout_staartpark_2", 5, "staartpark_boom_3", Ambacht.HOUTHAKKEN, 5, 6, 26, Zoek.BOOM);
+        g("z5_hout_ooggaarde", 5, "kampvuur_ooggaarde", Ambacht.HOUTHAKKEN, 5, 6, 30, Zoek.BOOM);
+        g("z5_mijn_noordvin", 5, "z5w_noordvin", Ambacht.MIJNEN, 5, 8, 30, Zoek.STEEN);
+        g("z5_mijn_zuidvin", 5, "z5w_zuidvin", Ambacht.MIJNEN, 5, 8, 30, Zoek.STEEN);
+        g("z5_mijn_staartvin", 5, "staartvin_top", Ambacht.MIJNEN, 5, 6, 26, Zoek.STEEN);
+        g("z5_vis_staartvijver", 5, "staartpark_vijver", Ambacht.VISSEN, 5, 5, 20, Zoek.WATER);
+        g("z5_vis_fontein", 5, "markt_fontein", Ambacht.VISSEN, 5, 3, 12, Zoek.WATER);
+        g("z5_vis_spuitgat", 5, "spuitgat_midden", Ambacht.VISSEN, 5, 4, 20, Zoek.WATER);
         // Imkeren (A3: own hives in the zones from zone 3 on; the bees fetch nectar from the flowers round them)
         korf("z3_korf_bloesemdal", "paddenbloesemdal", "bloesemhoning");
         korf("z3_korf_raatweide", "raatweide_plein", "schemerhoning");
         korf("z3_korf_kever", "lichtkeverbos", "wortelhoning");
+        // U-AMBACHT2: zone 4 (the Bijenboerderij on the Bloemeneiland, the dunes by the beach party) and zone 5 (the Staartpark, the Ooggaarde)
+        korf("z4_korf_bloemeneiland", 4, "bijenkorven", "lampionhoning");
+        korf("z4_korf_duinen", 4, "kampvuur_strandfeest", "duinhoning");
+        korf("z5_korf_staartpark", 5, "staartpark_prieel", "wolkenhoning");
+        korf("z5_korf_ooggaarde", 5, "ooggaarde_tuin", "hemelhoning");
 
         // ---- the workshops (A3: smidse, naaiatelier, keuken, brouwerij, bijenstal) + the masters of the gathering ambachten
         w("amb_smid_z1", 1, "plein", Ambacht.SMEDEN);
@@ -120,6 +155,9 @@ public final class AmbachtPlekken {
         w("amb_brouw_z3", 3, "markt", Ambacht.BROUWEN);
         w("amb_imker_z3", 3, "raatweide_plein", Ambacht.IMKEREN);
         w("amb_bord_z3", 3, "markt", null);
+        // U-AMBACHT2: a board guh in Lampionhaven and in Hoogvads (by the Ambachtsgilde): Bestelbord, Opdrachtenbord, Knutselwinkel
+        w("amb_bord_z4", 4, "plein", null);
+        w("amb_bord_z5", 5, "gilde_ingang", null);
     }
 
     private AmbachtPlekken() {
@@ -130,14 +168,39 @@ public final class AmbachtPlekken {
     }
 
     private static void korf(String id, String poi, String honing) {
-        GROEPEN.add(new Groep(id, 3, poi, Ambacht.IMKEREN, 3, 4, 36, Zoek.BLOEM, honing));
+        korf(id, 3, poi, honing);
+    }
+
+    /** A bee meadow of zone {@code zone} (tier = the zone: the hive level gate is {@link Imkeren#korfLevel}). */
+    private static void korf(String id, int zone, String poi, String honing) {
+        GROEPEN.add(new Groep(id, zone, poi, Ambacht.IMKEREN, zone, 4, 36, Zoek.BLOEM, honing));
+    }
+
+    /** The honey kinds that exist now (one per bee meadow, in order). */
+    public static List<String> honingSoorten() {
+        List<String> l = new ArrayList<>();
+        for (Groep g : GROEPEN) {
+            if (g.ambacht() == Ambacht.IMKEREN && !l.contains(g.honing())) {
+                l.add(g.honing());
+            }
+        }
+        return l;
+    }
+
+    /** The highest zone with gathering spots (the book pages loop to here). */
+    public static int maxZone() {
+        int z = 1;
+        for (Groep g : GROEPEN) {
+            z = Math.max(z, g.zone());
+        }
+        return z;
     }
 
     private static void w(String npc, int zone, String poi, @Nullable Ambacht a) {
         WERKPLAATSEN.add(new Werkplaats(npc, zone, poi, a));
     }
 
-    /** A POI of zone 1/2/3 (null: not in this map). */
+    /** A POI of zone 1..5 (null: not in this map). */
     @Nullable
     public static BlockPos plek(int zone, String id) {
         return switch (zone) {
@@ -145,7 +208,8 @@ public final class AmbachtPlekken {
             case 2 -> Z2WereldPlekken.plek(id);
             case 3 -> Z3WereldPlekken.plek(id);
             case 4 -> nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.plek(id);   // T-INT
-            default -> null;
+            case 5 -> nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.plek(id);   // U-AMBACHT2
+            default -> null;   // (zone 6 volgt: Zone6Haken)
         };
     }
 

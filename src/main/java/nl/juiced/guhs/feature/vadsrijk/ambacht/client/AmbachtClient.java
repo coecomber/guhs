@@ -118,7 +118,7 @@ public final class AmbachtClient {
         if (mc.player.isShiftKeyDown() || korfZonderOogst) {
             Minigame.stuur(p.id(), 0, true);
         } else {
-            Minigame.start(p.id(), p.ambacht());
+            Minigame.start(p.id(), p.ambacht(), p.duik());   // (U-AMBACHT2: coral dives)
         }
     }
 

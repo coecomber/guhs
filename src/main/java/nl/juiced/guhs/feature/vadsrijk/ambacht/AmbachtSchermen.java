@@ -27,9 +27,9 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Kristallen;
  * what comes in the data; every action comes back through {@link #doe}.
  */
 public final class AmbachtSchermen {
-    public static final List<String> TABS = List.of("overzicht", "recepten", "bestel", "rang", "plekken");
+    public static final List<String> TABS = List.of("overzicht", "recepten", "bestel", "opdracht", "winkel", "rang", "plekken");
     /** The workshop a player may use now: ambacht + where its guh stands (null pos = the dev command: anywhere). */
-    private record Open(Ambacht ambacht, @Nullable BlockPos bij) {
+    private record Open(Ambacht ambacht, @Nullable BlockPos bij, @Nullable String npc) {
     }
 
     private static final Map<UUID, Open> WERK = new ConcurrentHashMap<>();
@@ -52,6 +52,12 @@ public final class AmbachtSchermen {
             case "boek" -> boek(p, a.getStringOr("tab", "overzicht"), Ambacht.van(a.getStringOr("ambacht", "mijnen")), a.getStringOr("lijst", ""), "");
             case "claim" -> boek(p, "bestel", null, "", Bestelbord.claim(p, a.getIntOr("slot", -1)));
             case "ruil" -> boek(p, "bestel", null, "", Bestelbord.ruil(p, a.getIntOr("slot", -1)));
+            case "koop" -> boek(p, "winkel", null, "", Knutselwinkel.koop(p, a.getStringOr("id", "")));   // U-AMBACHT2
+            case "opdracht_plaats" -> boek(p, "opdracht", null, "", Opdrachten.plaats(p, a.getStringOr("recept", ""), a.getIntOr("aantal", 1),
+                    a.getLongOr("beloning", 0L)));
+            case "opdracht_lever" -> boek(p, "opdracht", null, "", Opdrachten.lever(p, a.getLongOr("id", -1L)));
+            case "opdracht_trek" -> boek(p, "opdracht", null, "", Opdrachten.trekIn(p, a.getLongOr("id", -1L)));
+            case "opdracht_haal" -> boek(p, "opdracht", null, "", Opdrachten.haalOp(p));
             case "maak" -> {
                 Open o = WERK.get(p.getUUID());
                 Recept r = Recepten.van(a.getStringOr("recept", ""));
@@ -60,6 +66,8 @@ public final class AmbachtSchermen {
                     m = "vadsrijk.ambacht.werk.niet_hier";
                 } else if (o.bij() != null && o.bij().distSqr(p.blockPosition()) > 12 * 12) {
                     m = "vadsrijk.ambacht.werk.te_ver";
+                } else if (!Werkplaats.magHier(o.npc(), r)) {
+                    m = r.tier() >= 5 ? "vadsrijk.ambacht.werk.gilde" : "vadsrijk.ambacht.werk.gilde4";   // U-AMBACHT2
                 } else {
                     List<Stat> keuzes = new ArrayList<>();
                     for (String s : a.getStringOr("keuzes", "").split(",")) {
@@ -107,6 +115,7 @@ public final class AmbachtSchermen {
         d.putLong("munten", Spelers.data(p).munten);
         d.putLong("uitgerust", AmbachtData.uitgerust(p));
         d.putInt("cap", AmbachtXp.CAP);
+        d.putInt("penningen", Knutselwinkel.penningen(p));   // U-AMBACHT2
         ListTag tegels = new ListTag();
         for (Ambacht x : Ambacht.values()) {
             CompoundTag t = new CompoundTag();
@@ -119,6 +128,7 @@ public final class AmbachtSchermen {
             t.putInt("verhaal", AmbachtData.verhaal(p, x));
             t.putString("icoon", x.icoon);
             t.putInt("kleur", x.kleur);
+            t.putBoolean("meester", lv >= AmbachtXp.CAP);   // U-AMBACHT2: the Meesterschort path
             tegels.add(t);
         }
         d.put("tegels", tegels);
@@ -128,6 +138,8 @@ public final class AmbachtSchermen {
             case "bestel" -> bestel(p, d);
             case "rang" -> rang(p, d, lijst.isEmpty() ? a.id : lijst);
             case "plekken" -> plekken(p, d);
+            case "opdracht" -> Opdrachten.scherm(p, d, items);   // U-AMBACHT2
+            case "winkel" -> Knutselwinkel.scherm(p, d, items);   // U-AMBACHT2
             default -> {
             }
         }
@@ -171,6 +183,8 @@ public final class AmbachtSchermen {
             e.put("in", in);
             if (werk) {
                 e.putInt("kan", Werkplaats.kan(p, r, null));
+                Open o = WERK.get(p.getUUID());
+                e.putBoolean("hier", o == null || Werkplaats.magHier(o.npc(), r));   // U-AMBACHT2: T4/T5 in Hoogvads' Ambachtsgilde
             }
             l.add(e);
         }
@@ -236,9 +250,9 @@ public final class AmbachtSchermen {
         d.putInt("aantal", l.size());
     }
 
-    private static void plekken(ServerPlayer p, CompoundTag d) {
+    static void plekken(ServerPlayer p, CompoundTag d) {
         ListTag l = new ListTag();
-        for (int zone = 1; zone <= 3; zone++) {
+        for (int zone = 1; zone <= AmbachtPlekken.maxZone(); zone++) {   // U-AMBACHT2: zones 4 and 5 too (the zone-4 fishing spots were missing)
             for (Ambacht a : Ambacht.values()) {
                 if (!a.verzamel) {
                     continue;
@@ -265,7 +279,7 @@ public final class AmbachtSchermen {
         d.put("plekken", l);
         int vis = 0, visTot = 0;
         for (Materialen.Materiaal m : Materialen.ALLE.values()) {
-            if (m.ambacht() == Ambacht.VISSEN && m.tier() > 0) {
+            if (m.vis()) {
                 visTot++;
                 if (AmbachtData.heeft(p, "vissen", m.id())) {
                     vis++;
@@ -275,7 +289,7 @@ public final class AmbachtSchermen {
         d.putInt("vissen", vis);
         d.putInt("vissenTot", visTot);
         d.putInt("honing", AmbachtData.lijst(p, "honing").size());
-        d.putInt("honingTot", Recepten.HONING.size());
+        d.putInt("honingTot", AmbachtPlekken.honingSoorten().size());
         d.putInt("recepten", AmbachtData.lijst(p, "gemaakt").size());
         d.putInt("receptenTot", Recepten.ALLE.size());
     }
@@ -285,7 +299,7 @@ public final class AmbachtSchermen {
     /** Opens the workshop of this ambacht (from its guh: {@code npc} is its id, the player must stay near; null = dev, anywhere). */
     public static void werkplaats(ServerPlayer p, Ambacht a, @Nullable String npc) {
         BlockPos bij = npc == null ? null : AmbachtNpcs.waar(npc);
-        WERK.put(p.getUUID(), new Open(a, npc == null ? null : bij != null ? bij : p.blockPosition()));
+        WERK.put(p.getUUID(), new Open(a, npc == null ? null : bij != null ? bij : p.blockPosition(), npc));
         stuurWerk(p, a, "", "");
     }
 

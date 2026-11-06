@@ -45,7 +45,8 @@ public final class Bestelbord {
     static {
         for (Materialen.Materiaal m : Materialen.ALLE.values()) {
             if (m.tier() > 0) {
-                b("breng_" + m.id(), "breng", m.ambacht(), m.ambacht() == Ambacht.IMKEREN ? 1 : AmbachtXp.tierLevel(m.tier()), m.id(), m.ambacht() == Ambacht.IMKEREN ? 4 : 10);
+                b("breng_" + m.id(), "breng", m.ambacht(), m.ambacht() == Ambacht.IMKEREN ? Imkeren.korfLevel(m.tier()) : AmbachtXp.tierLevel(m.tier()), m.id(),
+                        m.ambacht() == Ambacht.IMKEREN ? 4 : 10);
             }
         }
         for (Recept r : Recepten.ALLE.values()) {
@@ -55,13 +56,13 @@ public final class Bestelbord {
         }
         for (Ambacht a : Ambacht.values()) {
             if (a.verzamel) {
-                for (int t = 1; t <= 3; t++) {
+                for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {   // U-AMBACHT2: tiers 4 + 5
                     if (a != Ambacht.IMKEREN || t == 1) {
                         b("verzamel_" + a.id + "_" + t, "verzamel", a, AmbachtXp.tierLevel(t), "", a == Ambacht.IMKEREN ? 6 : 12 + 4 * t);
                     }
                 }
             } else {
-                for (int t = 1; t <= 3; t++) {
+                for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {
                     b("maak_" + a.id + "_" + t, "maak", a, AmbachtXp.tierLevel(t), "", 3);
                 }
             }
@@ -246,6 +247,7 @@ public final class Bestelbord {
         AmbachtData.geefXp(p, b.ambacht(), Math.round(AmbachtXp.xpVoor(lv) * XP_DEEL), false);
         int tier = AmbachtXp.tierVoor(b.level());
         Spelers.geefMunten(p, 60L * tier * tier);
+        Knutselwinkel.geef(p, 1 + tier);   // U-AMBACHT2: Knutselpenningen for every order
         if (kist) {
             EcoUtil.geefOfBewaar(p, new ItemStack(Materialen.AMBACHTSKIST.get()));
             p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.bestel.weekkist").withStyle(ChatFormatting.GOLD));
@@ -293,6 +295,7 @@ public final class Bestelbord {
         Materialen.Materiaal m = zeld.get(r.nextInt(zeld.size()));
         MateriaalTas.geef(p, Materialen.stack(m.id(), 1, 1));
         Spelers.geefMunten(p, 500);
+        Knutselwinkel.geef(p, Knutselwinkel.WEEKKIST);   // U-AMBACHT2
         p.level().playSound(null, p.blockPosition(), SoundEvents.CHEST_OPEN, SoundSource.PLAYERS, 0.7f, 1.2f);
         p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.bestel.kist_open").withStyle(ChatFormatting.GOLD));
     }
