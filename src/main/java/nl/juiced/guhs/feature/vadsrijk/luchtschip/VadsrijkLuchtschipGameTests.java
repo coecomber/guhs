@@ -22,7 +22,7 @@ public class VadsrijkLuchtschipGameTests {
     /** Every line: 60-90 s, both directions start and end at the docks, smooth (no jumps), never below the sea; departures every 3 min. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void dienstregeling(GameTestHelper helper) {
-        helper.assertTrue(Lijnen.ALLE.stream().filter(l -> !l.test()).count() == 5, "five lines: 0, A, B, C, D");
+        helper.assertTrue(Lijnen.ALLE.stream().filter(l -> !l.test()).count() == 6, "six lines: 0, A, B, C, D, E");   // U-Z6VERHAAL: + line E (zone6.verhaal.Z6Lijn)
         for (Lijnen.Lijn l : Lijnen.ALLE) {
             if (l.test()) {
                 continue;

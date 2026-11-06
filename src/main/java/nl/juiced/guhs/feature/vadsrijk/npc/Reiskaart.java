@@ -22,7 +22,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  */
 public final class Reiskaart {
     /** All places in map order. */
-    public static final List<String> PLEKKEN = List.of("knuffelkamp", "zwamzoet", "kandijkom", "schemerwortel", "lampionkust", "hoogvads");   // T-Z4VERHAAL: zone4 -> lampionkust; T-Z5VERHAAL: + hoogvads
+    public static final List<String> PLEKKEN = List.of("knuffelkamp", "zwamzoet", "kandijkom", "schemerwortel", "lampionkust", "hoogvads", "zijdeland");   // T-Z4VERHAAL: zone4 -> lampionkust; T-Z5VERHAAL: + hoogvads; U-Z6VERHAAL: + zijdeland
     /** States: open (click to fly), you are here, not discovered yet (grey "?", reason), a teaser for later (grey "?"). */
     public static final int OPEN = 0, HIER = 1, ONBEKEND = 2, TEASER = 3;
     /** How long after opening the map a choice is accepted (ticks): the map can only be used at an airship NPC. */
@@ -40,6 +40,9 @@ public final class Reiskaart {
         if (nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5VerhaalPlekken.zone5(p.getX(), p.getY(), p.getZ())) {
             return "hoogvads";   // T-Z5VERHAAL
         }
+        if (nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6VerhaalPlekken.zone6(p.getX(), p.getY(), p.getZ())) {
+            return "zijdeland";   // U-Z6VERHAAL
+        }
         if (nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4VerhaalPlekken.zone4(p.getX(), p.getY(), p.getZ())) {
             return "lampionkust";   // T-Z4VERHAAL
         }
@@ -53,6 +56,9 @@ public final class Reiskaart {
     public static NpcPayloads.ReisPlek plek(ServerPlayer p, String id) {
         if (id.equals("schemerwortel") && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p)
                 && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.bereikt(p)) {   // [z3-wereld] a real place once zone 2 is done
+            return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
+        }
+        if (id.equals("zijdeland") && !nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6Verhaal.magZien(p)) {   // U-Z6VERHAAL: a teaser until the great swim
             return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
         }
         if (id.equals("hoogvads") && !nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5Verhaal.magZien(p)) {   // T-Z5VERHAAL: a teaser until zone 4 is done

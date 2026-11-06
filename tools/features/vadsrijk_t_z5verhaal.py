@@ -353,7 +353,7 @@ BEWIJS = {   # id: (title, text, where found)
     "kaasvoorraad": ("De verdwenen kaas", "Kok Pollepel: uit de voorraad verdwijnt elke nacht kaas. Alleen kaas. Zoveel kaas eet geen guh."),
     "staart": ("Een guh met een staart", "Mager Mientje zag 's nachts een deftige guh in een lange cape uit de voorraadkamer sluipen. Onder de cape "
                                           "zwiepte een lange, grijze staart."),
-    "logboek": ("Het nachtlogboek", "In het logboek van de Luchthaven: elke donderdagnacht vertrekt een stil bootje naar de Stormrand. Geboekt door "
+    "logboek": ("Het nachtlogboek", "In het logboek van de Luchthaven: elke donderdagnacht vertrekt een stil bootje naar het oosten, over de Wolkenzee. Geboekt door "
                                     "'Z.P.'. Geen naam, alleen letters."),
     "zegel": ("Het zegel van de Kanselarij", "Raadsheer Gouddraad vliegt elke week op zijn eigen naam naar zijn moeder in Lampionhaven. Maar de "
                                              "Z.P.-boeking draagt het zegel van de Kanselarij. Dat zegel gebruikt maar één guh."),
@@ -571,12 +571,12 @@ Q(HQ[4], "hoofd", "z5_inspecteur", "Wie vertrekt er stiekem?",
    ("npc", "En Raadsheer Gouddraad vliegt vaak weg. Heel vaak. Verhoor hem daarna, bij de bank op de markt.")],
   "Havenmeester Windvaan, het nachtlogboek, en Raadsheer Gouddraad bij de bank.",
   [("npc", "Gouddraad bezoekt zijn moeder. Wat een lieve penningmeester. Die kunnen we van de lijst halen."),
-   ("npc", "Maar het zegel van de Kanselarij... op een stiekeme boeking naar de Stormrand. Daar ligt de Grauwe Vloot."),
+   ("npc", "Maar het zegel van de Kanselarij... op een stiekeme boeking naar het oosten. Over de Wolkenzee. Waar niemand heen vliegt."),
    ("npc", "Nog twee raadsleden over: Generaal Donsveer en Kanselier Zachtpels. We verhoren ze allebei.")],
   munten=14000, lv=57, na=[HQ[3]],
   praat={"z5_havenmeester": [
       ("npc", "Het nachtlogboek? Natuurlijk. Alles staat erin. Wie, wanneer, waarheen. Het ligt op de balie."),
-      ("npc", "Al is er één boeking die ik nooit snapte. Elke donderdagnacht. Naar de Stormrand. Daar wil niemand heen. Kijk zelf maar.")]})
+      ("npc", "Al is er één boeking die ik nooit snapte. Elke donderdagnacht. Naar het oosten, over de Wolkenzee. Daar wil niemand heen. Kijk zelf maar.")]})
 
 Q(HQ[5], "hoofd", "z5_inspecteur", "De laatste twee verhoren",
   "Twee raadsleden over. Generaal Donsveer was 's nachts nergens te vinden. Kanselier Zachtpels heeft het zegel van de Kanselarij.",
@@ -636,19 +636,19 @@ Q(HQ[8], "hoofd", "z5_koningin", "Het slaaplied van Moeder Wolkwal",
    ("npc", "Bij deze ben je Ridder van Hoogvads. Met een knuffel. Die is verplicht.")],
   munten=24000, loot="episch", lv=59, na=[HQ[7]], actie_klaar="z5_klaar")
 
-Q(HQ[9], "hoofd", "z5_koningin", "De Stormrand",
+Q(HQ[9], "hoofd", "z5_koningin", "Sterren in het oosten",   # U-Z6VERHAAL: was "De Stormrand" (zone 6 is now Het Zijdeland)
   "Zilverstaart werkte voor de Ringvinger, een generaal van de Keizer. In zijn Kanselarij ligt nog post. En in het oosten, achter "
-  "de Wolkenzee, rommelt een storm.",
+  "de Wolkenzee, gaan sterren uit.",
   [D("gebied", "poi:z5_kanselarij", 1, "Doorzoek het bureau in de Kanselarij, naast de troonzaal", plek="poi:z5_kanselarij"),
    D("gebied", "poi:z5_pier_oost", 1, "Kijk naar het oosten vanaf het eind van de oostelijke pier van de Luchthaven", plek="poi:z5_pier_oost"),
-   D("meld", "z5:cliffhanger", 1, "Kijk goed naar de storm in het oosten", plek="poi:z5_pier_oost"),
-   D("praat", "z5_havenmeester", 1, "Vraag Havenmeester Windvaan naar een luchtschip naar de Stormrand", plek="npc:z5_havenmeester")],
+   D("meld", "z5:cliffhanger", 1, "Kijk goed naar de sterren in het oosten", plek="poi:z5_pier_oost"),
+   D("praat", "z5_havenmeester", 1, "Vraag Havenmeester Windvaan naar een luchtschip naar het oosten", plek="npc:z5_havenmeester")],
   [("npc", "Zilverstaart had een bureau in de Kanselarij. Daar ligt vast nog post van zijn baas. Kijk er even in."),
-   ("npc", "En kijk daarna eens naar het oosten, vanaf de pieren van de Luchthaven. Er hangt al dagen een storm. Hij komt dichterbij.")],
+   ("npc", "En kijk daarna eens naar het oosten, vanaf de pieren van de Luchthaven. Daar gaan al dagen sterren uit. Eén voor één.")],
   "Het bureau in de Kanselarij, de oostelijke pier, en Havenmeester Windvaan.",
-  [("npc", "Naar de Stormrand? Daar vliegt niemand heen. Bliksem, mist, en een vloot van grauwe schepen."),
-   ("npc", "...Maar voor een Ridder van Hoogvads maak ik een schip klaar. Het laatste luchtschip naar het vasteland. Het is nog niet af."),
-   ("npc", "Kom terug als de wind gedraaid is. Binnenkort. Tot die tijd: geniet van de stad. Je hebt haar gered.")],
+  [("npc", "Naar het oosten? Daar vliegt niemand heen. Te ver voor een luchtschip. Daar ligt het Grote Vasteland."),
+   ("npc", "...Tenzij Moeder Wolkwal er zelf naartoe zwemt. Ze heeft het gevoeld, zegt de Koningin. Die sterren. Ze wil helpen."),
+   ("npc", "Voel je dat? De straten trillen. Ze gaat zwemmen. Hou je vast!")],   # U-Z6VERHAAL: the great swim follows (Z6Verhaal.wolkwaltocht)
   munten=16000, lv=60, na=[HQ[8]], inleveren="z5_havenmeester")
 
 # ===== side quests (11): city life, refugees, university research, academy trials ===========================================
@@ -813,7 +813,7 @@ GIDS = {
     "z5_ambachten": ("Het Ambachtsgilde", "Hoogvads is de hoofdstad van alle ambachten. In het Ambachtsgilde naast de universiteit staan de "
                      "leermeesters van koken, brouwen, smeden, naaien en imkeren. De Meesterwerken komen binnenkort."),
     "z5_reizen": ("Reizen vanaf Hoogvads", "Havenmeester Windvaan op de Luchthaven vliegt je naar alle eilanden van de Eilandzee: klik op hem "
-                  "voor de reiskaart. De lijn naar de Stormrand (zone 6) gaat binnenkort open."),
+                  "voor de reiskaart. Na het verhaal van Hoogvads gaat lijn E naar het Zijdeland (zone 6) open, vanaf de Staarthaven."),
 }
 TIPS = {
     "z5_veilig": ("Veilig!", "Hoogvads is veilig: in de stad vallen geen monsters aan. Kampvuren werken wel als rustpunt."),
@@ -905,17 +905,17 @@ OVERIG = {
     Z + "zone5.klaar.onder": "Moeder Wolkwal zwemt weer",
     Z + "zone5.klaar": "Hoogvads is gered! Koningin Zachtmoed noemt je Ridder van Hoogvads. Het Staartpark bloeit, de Uitgevadsten zingen mee.",
     Z + "brief.0": "In de la van Zilverstaarts bureau ligt een grauwe envelop met een zegel: een ring.",
-    Z + "brief.1": "\"Aan de Ringvinger, Hertogin Ringeling, aan boord van De Gouden Greep. Mevrouw. De walvis is bijna rijp. Het lampionnetje "
+    Z + "brief.1": "\"Aan de Ringvinger, Hertogin Ringeling, De Sterrendovende Toren, het Zijdeland. Mevrouw. De walvis is bijna rijp. Het lampionnetje "
                    "is van u. Uw dienaar, Z.\"",
     Z + "brief.2": "Op de achterkant, in een ander handschrift, heel klein: \"Uitstekend. Ik wil ALLE lampionnen. - R.\"",
     Z + "brief.naam": "Een grauwe brief",
     Z + "brief.naam.ringvinger": "Aan de Ringvinger",
     Z + "scene.cliff.titel": "Wordt vervolgd...",
-    Z + "scene.cliff.onder": "De Stormrand",
-    Z + "scene.cliff.0": "In het oosten, achter de Wolkenzee, staat een muur van bliksem. De Grauwe Mistbank kruipt naar het westen.",
-    Z + "scene.cliff.1": "In de flitsen: masten. Tientallen. Grauwe zeilen. En voorop een schip van goud, met een ring als boegbeeld.",
-    Z + "scene.cliff.2": "Aan de reling glinsteren tien ringen. Aan tien tenen.",
-    Z + "scene.cliff.3": "Een stem over het water, zoet als stroop: \"Wat een mooi lampionnetje, die walvis. Die wil ik.\"",
+    Z + "scene.cliff.onder": "Het Zijdeland",
+    Z + "scene.cliff.0": "In het oosten, achter de Wolkenzee, ligt een roze streep land. Daarboven staan vijf sterren laag aan de hemel.",
+    Z + "scene.cliff.1": "Terwijl je kijkt, gaat er één uit. Floep. Alsof iemand hem uitblaast. Er blijven er vier over.",
+    Z + "scene.cliff.2": "Naast de gedoofde ster glinstert iets. Tien kleine ringetjes. Aan tien tenen.",
+    Z + "scene.cliff.3": "Een stem over de wolken, zoet als stroop: \"Wat een mooie sterren. Die wil ik. Allemaal.\"",
     Z + "oog.gemeten": "Je kijkt door de telescoop. Het Oog vult de lens: grauw, rond, en het kijkt... terug. Twaalf duim.",
     Z + "spuitgat.adem": "Uit het spuitgat komt een zachte zucht. Als een kussen dat je opschudt.",
     Z + "bloesem.water": "Je geeft de bloesemboom water. Er dwarrelen roze blaadjes over je heen.",
