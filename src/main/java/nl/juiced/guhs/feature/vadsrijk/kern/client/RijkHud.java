@@ -141,7 +141,8 @@ public final class RijkHud {
     /** Slot {@code i} (0..3 = R/V/G/Z, 4 = the Knuffelsprong) on a gui of w x h: {x, y, size}. */
     public static int[] skillVak(int i, int w, int h) {
         int sx = w / 2 + 98, sy = h - 22;
-        return i < 4 ? new int[] {sx + i * 23, sy, 20} : new int[] {sx + 4 * 23 + 1, sy + 4, 16};
+        int[] r = i < 4 ? new int[] {sx + i * 23, sy, 20} : new int[] {sx + 4 * 23 + 1, sy + 4, 16};
+        return PLAATSER == null ? r : PLAATSER.vak("skills", r, w, h);   // U-HUD: moved/scaled by the HUD editor
     }
 
     /** The skill id in HUD slot {@code i} (from its lang key), or null. */
@@ -190,6 +191,43 @@ public final class RijkHud {
     /** Extra pixels taken below the boss bar (T-OPSLAG's boss cast bar), so {@link #bovenVrij} moves the quest tracker down. */
     public static java.util.function.IntSupplier BOVEN_EXTRA = () -> 0;
 
+    // ---- U-HUD: the HUD editor (feature/vadsrijk/hud, NOTITIES_U_HUD.md) -------------------------------------------------------
+
+    /** U-HUD: moves/scales HUD parts (the player's own layout). Null = everything at its default spot. */
+    public interface Plaatser {
+        /** {@link #plek} goes through here: inside a part that is already moved, the default; else the moved spot. */
+        int[] plek(String id, int[] standaard, int w, int h);
+
+        /** Before drawing kern's part {@code id}: pushes its move/scale on the pose. Always pair with {@link #eind}. */
+        void begin(GuiGraphicsExtractor g, String id, int w, int h);
+
+        void eind(GuiGraphicsExtractor g);
+
+        /** Around each {@link #voegToe} element: a {@link #plek} call inside it moves the element along. */
+        void extraBegin(GuiGraphicsExtractor g, String extraId, int w, int h);
+
+        void extraEind(GuiGraphicsExtractor g);
+
+        /** A square {x, y, size} inside part {@code id} on screen (hover tests). */
+        int[] vak(String id, int[] xyz, int w, int h);
+    }
+
+    public static volatile Plaatser PLAATSER = null;
+    /** U-HUD: true = the party is drawn by the party frames (feature/vadsrijk/hud), so kern's simple list stays away. */
+    public static java.util.function.BooleanSupplier EIGEN_PARTY = () -> false;
+
+    private static void deel(GuiGraphicsExtractor g, String id, int w, int h) {
+        if (PLAATSER != null) {
+            PLAATSER.begin(g, id, w, h);
+        }
+    }
+
+    private static void deelUit(GuiGraphicsExtractor g) {
+        if (PLAATSER != null) {
+            PLAATSER.eind(g);
+        }
+    }
+
     /**
      * Adds (or replaces, same id) a HUD element. volgorde: lower draws first (T-OPSLAG uses 100-130; leave room).
      * Example (t-items, the drankjesriem): {@code RijkHud.voegToe("drankjesriem", 200, (g, f, w, h, pt) -> { int[] p =
@@ -215,6 +253,12 @@ public final class RijkHud {
      * </ul>
      */
     public static int[] plek(String id, int w, int h) {
+        int[] d = standaardPlek(id, w, h);
+        return PLAATSER == null ? d : PLAATSER.plek(id, d, w, h);   // U-HUD: the HUD editor's layout
+    }
+
+    /** U-HUD: the default spot of {@link #plek} (without the player's own layout). */
+    public static int[] standaardPlek(String id, int w, int h) {
         int c = w / 2;
         return switch (id) {
             case "drankjesriem" -> new int[] {c + 98, h - 42, 16, 19};
@@ -222,6 +266,7 @@ public final class RijkHud {
             case "doelframe" -> new int[] {c - 75, 4 + bovenVrij(), 150, 28};
             case "gietbalk" -> new int[] {c - 60, h - 72, 120, 9};
             case "baasgiet" -> new int[] {c - 80, 45, 160, 9};
+            case "party" -> new int[] {4, h / 2 - 62, 114, 124};   // U-HUD: party frames {x, y, breed, hoog}
             default -> new int[] {0, 0, 0, 0};
         };
     }
@@ -269,18 +314,23 @@ public final class RijkHud {
         Font f = mc.font;
         int w = g.guiWidth(), hh = g.guiHeight(), c = w / 2;
         // Vads and energy above the hotbar
+        deel(g, "balken", w, hh);   // (U-HUD: every part below can be moved/scaled in the HUD editor)
         balk(g, f, c - 91, hh - 41, 88, 8, h.vads() / Math.max(1, h.maxVads()), 0xFFE0457A, 0xFFFF8FB8,
                 Component.literal((int) Math.ceil(h.vads()) + " / " + (int) h.maxVads()));
         balk(g, f, c + 3, hh - 41, 88, 8, h.energie() / Math.max(1, h.maxEnergie()), 0xFF3C7DE0, 0xFF8CC4FF,
                 Component.literal((int) h.energie() + " / " + (int) h.maxEnergie()));
+        deelUit(g);
         // xp in the vanilla spot
+        deel(g, "xp", w, hh);
         int xpY = hh - 29;
         g.fill(c - 91, xpY, c + 91, xpY + 3, 0xC0202020);
         float xp = h.gXpNodig() <= 0 ? 1 : (float) h.gXpIn() / h.gXpNodig();   // (g-klassen: gold = generic, pink line = class)
         g.fill(c - 91, xpY, c - 91 + (int) (182 * Mth.clamp(xp, 0, 1)), xpY + 2, 0xFFFFD24A);
         float kxp = h.xpNodig() <= 0 ? 1 : (float) h.xpIn() / h.xpNodig();
         g.fill(c - 91, xpY + 2, c - 91 + (int) (182 * Mth.clamp(kxp, 0, 1)), xpY + 3, h.grijs() ? 0xFF8A7A84 : 0xFFFF7AC8);
+        deelUit(g);
         // skills right of the hotbar
+        deel(g, "skills", w, hh);
         int sx = c + 98, sy = hh - 22;
         for (int i = 0; i < 4; i++) {
             slot(g, f, sx + i * 23, sy, i, h);
@@ -288,6 +338,8 @@ public final class RijkHud {
         if (h.cd().length > 4) {
             sprong(g, f, sx + 4 * 23 + 1, sy + 4, h);
         }
+        deelUit(g);
+        deel(g, "info", w, hh);
         // small info: duizelig, opgevrolijkt, munten (left of the hotbar)
         int ly = hh - 22;
         // g-klassen: two levels. "Generiek nv X" (Vads, Verdediging, areas, quests) and "<class/title> nv Y" (the weapon in
@@ -300,6 +352,7 @@ public final class RijkHud {
         g.text(f, munten, c - 98 - f.width(munten), ly + 2, 0xFFFFD86B, true);
         String opg = Component.translatable("vadsrijk.kern.hud.opgevrolijkt", h.opgevrolijkt()).getString();
         g.text(f, opg, c - 98 - f.width(opg), ly + 12, 0xFFFF9AD5, true);
+        deelUit(g);
         if (h.duizelig() > 0) {
             String d = Component.translatable("vadsrijk.kern.hud.duizelig", (h.duizelig() + 19) / 20).getString();
             g.text(f, d, c - f.width(d) / 2, hh - 52, 0xFFB98CFF, true);
@@ -308,11 +361,27 @@ public final class RijkHud {
             String b = Component.translatable("vadsrijk.kern.hud.bevroren", (h.bevroren() + 19) / 20).getString();
             g.text(f, b, c - f.width(b) / 2, hh - (h.duizelig() > 0 ? 62 : 52), 0xFF9EE3FF, true);
         }
+        deel(g, "baasbalk", w, hh);
         bossBalk(g, f, w, dt.getGameTimeDeltaPartialTick(false));
-        party(g, f, hh);
+        deelUit(g);
+        if (!EIGEN_PARTY.getAsBoolean()) {   // (U-HUD: the party frames draw the party)
+            party(g, f, hh);
+        }
+        deel(g, "tip", w, hh);
         tip(g, f, w);
+        deelUit(g);
         for (Extra x : EXTRA) {   // (T-OPSLAG: the HUD API)
-            x.element().teken(g, f, w, hh, dt.getGameTimeDeltaPartialTick(false));
+            Plaatser pl = PLAATSER;   // (U-HUD: a plek() call inside the element moves it along)
+            if (pl != null) {
+                pl.extraBegin(g, x.id(), w, hh);
+            }
+            try {
+                x.element().teken(g, f, w, hh, dt.getGameTimeDeltaPartialTick(false));
+            } finally {
+                if (pl != null) {
+                    pl.extraEind(g);
+                }
+            }
         }
     }
 
