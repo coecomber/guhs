@@ -39,6 +39,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.register(modBus);   // T-GELUID: area music, boss themes, stingers, ambience
         nl.juiced.guhs.feature.vadsrijk.tmodels.TModels.register(modBus);   // T-MODELS: kern slimes as GeckoLib models + /guhs vadsrijk models
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.register(modBus);   // T-VFX: VFX kit v1 + boss bouwdoos
+        nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.register(modBus);   // T-Z4BOOT: the zone-4 Zeilbootje
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -58,5 +59,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.payloads(registrar);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.payloads(registrar);   // T-GELUID
         nl.juiced.guhs.feature.vadsrijk.vfx.VfxRegistry.payloads(registrar);   // T-VFX
+        nl.juiced.guhs.feature.vadsrijk.zone4.boot.BootRegistry.payloads(registrar);   // T-Z4BOOT
     }
 }

@@ -387,6 +387,13 @@ public final class Rijdieren {
             return;
         }
         RijdierSoort s = actief(p);
+        RijdierSoort plek = nl.juiced.guhs.feature.vadsrijk.zone4.boot.Boot.kiesSoort(p, s);   // T-Z4BOOT: on water the boat, on land a land mount
+        if (plek != s) {
+            if (plek == null) {
+                return;   // (Boot said why)
+            }
+            s = plek;
+        }
         if (s == null) {
             EcoUtil.zeg(p, "vadsrijk.economie.rijdier.geen");
             return;
@@ -417,6 +424,9 @@ public final class Rijdieren {
             return null;
         }
         r.snapTo(p.getX(), p.getY(), p.getZ(), p.getYRot(), 0);
+        if (s.water() && !nl.juiced.guhs.feature.vadsrijk.zone4.boot.Boot.plaats(p, r)) {   // T-Z4BOOT: the boat goes on the water
+            return null;
+        }
         r.zetEigenaar(p.getUUID(), level(p, s));   // (+ its speed/jump for that level, synced: the client steers)
         r.zetKleur(kleur(p, s));
         sl.addFreshEntity(r);

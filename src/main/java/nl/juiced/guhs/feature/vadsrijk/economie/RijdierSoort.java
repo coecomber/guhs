@@ -31,7 +31,10 @@ public enum RijdierSoort {
     KNUFFELHERT(0.32, 0.92, 0, 1.95, "quest"),
     GUHWOLF(0.37, 0.60, 0, 1.86, "quest"),
     WOLKENSCHAAPJE(0.30, 0.62, 1200, 1.20, "stal"),
-    SLAKKIE(0.085, 0.45, 2500, 1.45, "stal");
+    SLAKKIE(0.085, 0.45, 2500, 1.45, "stal"),
+    // T-Z4BOOT: the player's own guh sailboat (zone 4, decision W-2): a mount on WATER ({@link #water()}); speed 300 % = a top
+    // speed of 0.6 blocks a tick at level 1 (zone4.boot.BootFysica), no jump; quest "Boot.geef" early in the zone-4 story
+    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest");
 
     public static final int MAX_LEVEL = 10;
     /** Every mount steps up this many blocks while walking (no jump needed): a 2-block ledge, stairs, slabs. */
@@ -68,6 +71,11 @@ public enum RijdierSoort {
     /** Has colour variants (only the Pluimguh for now). */
     public boolean kleuren() {
         return this == PLUIMGUH;
+    }
+
+    /** (T-Z4BOOT) Sails on water instead of walking (the Zeilbootje: zone4.boot.BootEntity, its own physics and screen). */
+    public boolean water() {
+        return this == ZEILBOOTJE;
     }
 
     /** Hovers: falls slowly and can jump once more in the air. */

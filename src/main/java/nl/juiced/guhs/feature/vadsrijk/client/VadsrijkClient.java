@@ -31,5 +31,6 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.dialoog.client.DialoogClient.init(modBus);   // T-DIALOOG: the Vadsrijk talking screen
         nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidClient.init(modBus);   // T-GELUID (after kern: wraps its title receiver)
         nl.juiced.guhs.feature.vadsrijk.vfx.client.VfxClient.init(modBus);   // T-VFX: decals, particles, cast bar, VFX level
+        nl.juiced.guhs.feature.vadsrijk.zone4.boot.client.BootClient.init(modBus);   // T-Z4BOOT: the Zeilbootje (renderer, screen, tab, wind HUD)
     }
 }
