@@ -2,7 +2,7 @@
 
 CSS = r"""
 /* ---- Het Vadsrijk (S-SITE): on top of the wiki stylesheet ---- */
-:root{--vr:#c2577f;--vr-goud:#c8955a;--vr-soft:#f8e4ea;--zone1:#e0559a;--zone2:#5aa9e6;--zone3:#e8a33a;--ok:#2f9e5b;--uit:#c0392b}
+:root{--vr:#c2577f;--vr-goud:#c8955a;--vr-soft:#f8e4ea;--zone1:#e0559a;--zone2:#5aa9e6;--zone3:#e8a33a;--zone4:#2bb3a3;--zone5:#9b7be0;--ok:#2f9e5b;--uit:#c0392b}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--vr:#f08cb0;--vr-goud:#e6b67a;--vr-soft:#3a2230}}
 :root[data-theme="dark"]{--vr:#f08cb0;--vr-goud:#e6b67a;--vr-soft:#3a2230}
 .brand .word small{font:600 13px var(--body);color:var(--vr-goud);margin-left:6px;letter-spacing:.04em}
@@ -33,6 +33,10 @@ a.kaartje:hover{border-color:var(--vr)}
 .badge.z1{background:color-mix(in srgb,var(--zone1) 20%,transparent);color:var(--zone1)}
 .badge.z2{background:color-mix(in srgb,var(--zone2) 22%,transparent);color:var(--zone2)}
 .badge.z3{background:color-mix(in srgb,var(--zone3) 22%,transparent);color:#b0700c}
+.badge.z4{background:color-mix(in srgb,var(--zone4) 22%,transparent);color:#1b7f74}
+.badge.z5{background:color-mix(in srgb,var(--zone5) 22%,transparent);color:#6a4fc0}
+.voorbeeldbalk{background:#fff3c4;color:#5a4300;border-bottom:2px dashed #e0b400;font:600 14px/1.4 var(--body);padding:8px 16px;text-align:center}
+:root[data-theme="dark"] .voorbeeldbalk{background:#3a3214;color:#ffe9a6}
 .el{display:inline-block;font:700 12px/1.6 var(--body);padding:0 8px;border-radius:999px;color:#fff}
 .el.roze{background:#e05aa8}.el.vuur{background:#e2572a}.el.natuur{background:#3fa83a}.el.water{background:#2f8fdf}.el.geen{background:#8a8a8a}
 .zz{font-weight:700}
@@ -54,9 +58,9 @@ details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
 .verstopt-zone{border:1.5px dashed var(--line2);border-radius:14px;padding:10px 14px;color:var(--muted);margin:10px 0}
-html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone){display:none!important}
+html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone){display:none!important}
 .verstopt-zone{display:none}
-html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .verstopt-zone[data-zone="3"],html[data-zonetot="2"] .verstopt-zone[data-zone="3"]{display:block}
+html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .verstopt-zone[data-zone="3"],html[data-zonetot="1"] .verstopt-zone[data-zone="4"],html[data-zonetot="1"] .verstopt-zone[data-zone="5"],html[data-zonetot="2"] .verstopt-zone[data-zone="3"],html[data-zonetot="2"] .verstopt-zone[data-zone="4"],html[data-zonetot="2"] .verstopt-zone[data-zone="5"],html[data-zonetot="3"] .verstopt-zone[data-zone="4"],html[data-zonetot="3"] .verstopt-zone[data-zone="5"],html[data-zonetot="4"] .verstopt-zone[data-zone="5"]{display:block}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
 .filters input,.filters select{font:15px var(--body);border:1.5px solid var(--line2);border-radius:999px;background:var(--card);color:var(--ink);padding:7px 12px}
 .filters input{flex:1;min-width:180px}
@@ -268,7 +272,7 @@ KAART_JS = r"""
     m.bindPopup('<h4>'+VR.esc(titel)+'</h4>'+(html||'')+'<div class="muted" style="font:12px var(--mono)">x '+x+' &middot; z '+z+'</div>');m._vrZone=zoneNr(zone);m._vrId=id;alle.push({id:id,naam:titel,m:m,zone:m._vrZone,soort:soort});return m;}
   // areas: outlines + level labels
   var rond={};
-  D.gebieden.forEach(function(g){if(g.id==='ring'||/_ring$/.test(g.id))return;var zn=zoneNr(g.zone),kleur=D.zonekleur[g.zone]||'#fff',vorm;
+  D.gebieden.forEach(function(g){if(g.id==='ring'||/_ring$/.test(g.id)||g.ring)return;var zn=zoneNr(g.zone),kleur=D.zonekleur[g.zone]||'#fff',vorm;
     if(g.laag&&g.laag.r_max){if(g.laag.r_max>500)return;vorm=L.circle(ll(g.laag.cx,g.laag.cz),{radius:g.laag.r_max,color:kleur,weight:1,opacity:.7,fill:false,dashArray:'4 8'});}
     else{vorm=L.rectangle(L.latLngBounds(ll(g.doos[0],g.doos[3]),ll(g.doos[2],g.doos[1])),{color:kleur,weight:1.5,fillOpacity:0.04,dashArray:g.stad?null:'6 6'});}
     vorm._vrZone=zn;vorm.addTo(Lzones);

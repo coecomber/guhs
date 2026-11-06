@@ -29,7 +29,7 @@ from wiki_site.vadsrijk.pages import Bouwer  # noqa: E402
 from wiki_site.vadsrijk import voorbeeld  # noqa: E402
 
 
-def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/", stil=False):
+def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/", stil=False, noindex=None):
     """Builds the section into `out`; returns (pages written, notes). Used by make_wiki_site.py too."""
     t0 = time.time()
     root = os.path.abspath(root)
@@ -37,6 +37,12 @@ def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/",
     bron = Bron(root)
     data = bron.build()
     from wiki_site.site import MOD_VERSION
+    if not echt:   # U-SITE: a preview shows the newest (draft) patch-note version, e.g. 1.10.0
+        import re as _re
+        pn = os.path.join(root, "docs", "patchnotes")
+        vs = [f[:-3] for f in (os.listdir(pn) if os.path.isdir(pn) else []) if _re.fullmatch(r"\d+(\.\d+)+\.md", f)]
+        if vs:
+            MOD_VERSION = max(vs + [MOD_VERSION], key=lambda v: tuple(int(x) for x in _re.findall(r"\d+", v)))
     if os.path.isdir(out):
         for _ in range(5):   # (Windows: a file indexer/AV can hold a folder for a moment)
             shutil.rmtree(out, ignore_errors=True)
@@ -52,7 +58,8 @@ def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/",
     else:
         bron.notes.append("no map tiles (docs/wiki/vadsrijk_kaart): run python tools/wiki_site/vadsrijk/kaart.py")
     voorbeeld_aan = not echt and not live_url
-    b = Bouwer(data, root, out, live_url or "@live-voorbeeld/", voorbeeld_aan, wiki_url, site_url, kaart_bron, concepten=not echt, versie=MOD_VERSION)
+    b = Bouwer(data, root, out, live_url or "@live-voorbeeld/", voorbeeld_aan, wiki_url, site_url, kaart_bron, concepten=not echt, versie=MOD_VERSION,
+               noindex=(not echt) if noindex is None else noindex)   # U-SITE: previews are noindex + carry a banner
     b.kaart = kaart
     pages = b.alles()
     if voorbeeld_aan:

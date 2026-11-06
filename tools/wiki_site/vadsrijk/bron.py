@@ -21,7 +21,17 @@ ZONES = [
          extra_gebieden=()),
     dict(id="zone3", nr=3, boek="zone3", ring="z3_ring", hub="z3_honingtak", quests="quests_z3.json", lv=(30, 50), kleur="#e8a33a",
          extra_gebieden=()),
+    # U-SITE: zone 4 (De Lampionkust, an archipelago) + zone 5 (Hoogvads, the town on Moeder Wolkwal)
+    dict(id="zone4", nr=4, boek="zone4", ring="z4_zee", hub="z4_lampionhaven", quests="quests_z4.json", lv=(50, 56), kleur="#2bb3a3",
+         extra_gebieden=()),
+    dict(id="zone5", nr=5, boek="zone5", ring="z5_moeder_wolkwal", hub="z5_hoogvads", quests="quests_z5.json", lv=(56, 60), kleur="#9b7be0",
+         extra_gebieden=()),
 ]
+ZONE_PREFIX = (("z5d_", "zone5"), ("z5_", "zone5"), ("z4_", "zone4"), ("z3_", "zone3"), ("z2_", "zone2"))
+# U-SITE: zone-5 places without a vadsrijk.kern.gebied.* key (the districts also come from POI_Z5.md's table)
+GEBIED_NAAM = {"z5_moeder_wolkwal": "Moeder Wolkwal", "z5_proefarena": "De Proefarena", "z5_buikgangen": "De Buikgangen",
+               "z5_schuilnest": "Het Schuilnest", "z5_wolkrand_zuid": "De Wolkrand (zuid)", "z5_wolkrand_noord": "De Wolkrand (noord)",
+               "z5_staartvlakte": "De Staartvlakte"}
 NIET_OP_SITE = {"proeftuin"}                   # dev areas
 CRITTERS = {"sneeuwhaas", "ijsvogel", "kristalmot", "honingbij", "sporenmot", "lantaarnkever", "wortelmuis"}
 NIET_WEZENS = {"vr_proefklodder", "vr_proefkloddertje", "vr_npc_guh", "vr_huisdier", "vr_draakvriendje", "vr_roze_draak",
@@ -44,24 +54,39 @@ BAZEN = [
     ("zone3", "vr_z3_baas_nestwachter", "nestwachter", "vadsrijk.z3bazen.tip.nestwachter", "vadsrijk.z3bazen.tip.ringen"),
     ("zone3", "vr_z3_baas_bleu", "bleu", "vadsrijk.z3bazen.tip.bleu", None),
     ("zone3", "vr_z3_baas_vahoegnir", "vahoegnir", "vadsrijk.z3bazen.tip.vahoegnir", None),
+    # U-SITE: zones 4 + 5 (their tip cards sit in the z2bazen/z3bazen/z4bazen tip namespaces)
+    ("zone4", "vr_z4_baas_zeeslurf", "zeeslurf", "vadsrijk.z4bazen.tip.zeeslurf", "vadsrijk.z3bazen.tip.zeeslurf"),
+    ("zone4", "vr_z4_baas_vliegervanger", "vliegervanger", "vadsrijk.z4bazen.tip.vliegervanger", None),
+    ("zone5", "vr_z5_baas_gorgonzola", "gorgonzola", "vadsrijk.z2bazen.tip.gorgonzola", "vadsrijk.z3bazen.tip.gorgonzola"),
+    ("zone5", "vr_z5_baas_donderbuik", "donderbuik", "vadsrijk.z2bazen.tip.donderbuik", "vadsrijk.z3bazen.tip.donderbuik"),
+    ("zone5", "vr_z5_baas_zilverstaart", "zilverstaart", "vadsrijk.z2bazen.tip.zilverstaart", "vadsrijk.z3bazen.tip.zilverstaart"),
+    ("zone5", "vr_z5_baas_grauwe_droom", "grauwe_droom", "vadsrijk.z2bazen.tip.grauwe_droom", "vadsrijk.z3bazen.tip.grauwe_droom"),
 ]
-VERHAAL_BAZEN = {"vahoegnir", "mika_spion"}     # story twists: behind the spoiler button
+VERHAAL_BAZEN = {"vahoegnir", "mika_spion", "zilverstaart", "grauwe_droom"}     # story twists: behind the spoiler button
 SOORT_BAAS = {"klodderreus": "verhaal", "koning_klodder": "wereldbaas", "mika_spion": "verhaal", "opperzwam": "kerker",
               "galmwolf": "wereldbaas", "boormeester": "arena", "spiegelzucht": "kerker", "kruinroofvogel": "wereldbaas",
               "taleggio": "kerker", "brokkel": "kerker", "roquefort": "kerker", "piepvel": "verhaal", "wortelwurger": "kerker",
-              "nestwachter": "kerker", "bleu": "kerker", "vahoegnir": "verhaal"}
+              "nestwachter": "kerker", "bleu": "kerker", "vahoegnir": "verhaal",
+              "zeeslurf": "wereldbaas", "vliegervanger": "kerker", "gorgonzola": "kerker", "donderbuik": "wereldbaas",
+              "zilverstaart": "verhaal", "grauwe_droom": "verhaal"}
 # airship lines (the in-game travel map): stop -> (npc id of the captain, zone)
 LUCHTSCHIP = {"knuffelkamp": ("kapitein", "zone1"), "dehaven": ("luchtschipper", "zone1"), "kandijkom": ("z2_kapitein", "zone2"),
-              "honingtak": ("z3_kapitein", "zone3")}
-LIJNEN = [("knuffelkamp", "dehaven"), ("dehaven", "kandijkom"), ("dehaven", "honingtak"), ("kandijkom", "honingtak")]
+              "honingtak": ("z3_kapitein", "zone3"),
+              # U-SITE: line C (zone 3 -> Lampionhaven) and line D (the Opstijgpier -> Hoogvads); "poi:" = a POI position
+              "lampionhaven": ("poi:haven_3_4_kapitein", "zone4"), "opstijgpier": ("poi:haven_4_5_kapitein", "zone4"),
+              "hoogvads": ("poi:haven_5_4_kapitein", "zone5")}
+STOP_NAAM = {"lampionhaven": "Lampionhaven", "opstijgpier": "De Opstijgpier", "hoogvads": "Hoogvads (Luchthaven)"}
+LIJNEN = [("knuffelkamp", "dehaven"), ("dehaven", "kandijkom"), ("dehaven", "honingtak"), ("kandijkom", "honingtak"),
+          ("honingtak", "lampionhaven"), ("opstijgpier", "hoogvads")]
 
 GEHEIM = re.compile(r"^(geheim_(?!.*ingang$)|knuffel_\d|knuffel_ijs|.*aanwijzing_\d|.*_schat(_|$)|schat_\d|relief_|.*_relief_\d|imkerspoor)")
 PUBLIEK = [  # (regex on the POI id, kind)
     (re.compile(r"^kampvuur_"), "kampvuur"),
     (re.compile(r"^uitkijk"), "uitkijk"),
-    (re.compile(r"^(luchtschip_kapitein|luchtschip_haven_kapitein|dok_kapitein)$"), "luchtschip"),
+    (re.compile(r"^(luchtschip_kapitein|luchtschip_haven_kapitein|dok_kapitein|haven_3_4_kapitein|haven_4_5_kapitein|haven_5_4_kapitein)$"), "luchtschip"),
     (re.compile(r"^terugportaal_"), "portaal"),
-    (re.compile(r"^(deur_spiegelburcht_voor|werf_ingang|hart_poort)$"), "kerker"),
+    (re.compile(r"^(deur_spiegelburcht_voor|werf_ingang|hart_poort|wrak_ingang|z5w_buik_luik)$"), "kerker"),
+    (re.compile(r"^z5w_lift_[a-z]+_(boven|onder)$"), "lift"),
     (re.compile(r"^gondel_(berg|dal)$"), "gondel"),
     (re.compile(r"^(honinglift_boven|honinglift_onder)$"), "lift"),
 ]
@@ -141,7 +166,7 @@ class Bron:
     def poi_bestanden(self):
         """Every `id` | x, y, z row of POI_VADSRIJK.md / POI_Z2.md / POI_Z3.md -> {id: (zone, section, (x, y, z))}."""
         out = {}
-        for zone, f in (("zone1", "POI_VADSRIJK.md"), ("zone2", "POI_Z2.md"), ("zone3", "POI_Z3.md")):
+        for zone, f in (("zone1", "POI_VADSRIJK.md"), ("zone2", "POI_Z2.md"), ("zone3", "POI_Z3.md"), ("zone4", "POI_Z4.md"), ("zone5", "POI_Z5.md")):
             try:
                 tekst = open(os.path.join(self.root, f), encoding="utf-8").read()
             except OSError:
@@ -158,11 +183,28 @@ class Bron:
 
     # ---- the pieces ------------------------------------------------------------------------------------------------------
     def zone_van_gebied(self, gid):
-        if gid.startswith("z3_"):
-            return "zone3"
-        if gid.startswith("z2_"):
-            return "zone2"
+        for pre, zone in ZONE_PREFIX:
+            if gid.startswith(pre):
+                return zone
         return "zone1"
+
+    def gebied_naam(self, gid):
+        """(nl, en) of an area: the kern lang key, else POI_Z5.md's district table, else GEBIED_NAAM."""
+        k = "vadsrijk.kern.gebied." + gid
+        if k in self.nl:
+            return self.tx(k, gid)
+        if not hasattr(self, "_wijken"):
+            self._wijken = {}
+            try:
+                tekst = open(os.path.join(self.root, "POI_Z5.md"), encoding="utf-8").read()
+                for m in re.finditer(r"^\| `(z5_[a-z_]+)` \| [^|]+\| [a-z_]+ \| ([^|]+?) \|", tekst, re.M):
+                    self._wijken[m[1]] = m[2].replace("Hoogvads - ", "").strip()
+            except OSError:
+                pass
+        nl = GEBIED_NAAM.get(gid) or self._wijken.get(gid) or gid.split("_", 1)[-1].replace("_", " ").capitalize()
+        if nl[:1].islower():
+            nl = nl[0].upper() + nl[1:]
+        return nl, nl
 
     @staticmethod
     def in_gebied(g, x, y, z):
@@ -181,14 +223,20 @@ class Bron:
         return True
 
     def gebied_op(self, gebieden, x, y, z):
+        # U-SITE: the SMALLEST matching area (zone 5's rooms/arenas lie inside the big districts; zones 1-3 are unchanged by this)
+        beste, opp = None, None
         for g in gebieden:
             if self.in_gebied(g, x, y, z):
-                return g
-        return None
+                b = g["doos"]
+                a = (b[2] - b[0] + 1) * (b[3] - b[1] + 1)
+                if beste is None or a < opp:
+                    beste, opp = g, a
+        return beste
 
     def build(self):
         gebieden = self.gebieden()
         pois = self.poi_bestanden()
+        self._pois = pois
         rt = self.rt or {}
         npc_plek = {k: v for k, v in (rt.get("npcs", {}).get("plek", {}) or {}).items()}
         poi_plek = {k: v for k, v in (rt.get("npcs", {}).get("poi", {}) or {}).items()}
@@ -199,7 +247,7 @@ class Bron:
         # areas -> zones
         gb_out = []
         for g in gebieden:
-            nl, en = self.tx("vadsrijk.kern.gebied." + g["id"], g["id"])
+            nl, en = self.gebied_naam(g["id"])
             gb_out.append(dict(id=g["id"], naam=nl, naam_en=en, zone=self.zone_van_gebied(g["id"]), lv=[g["min_lv"], g["max_lv"]],
                                stad=g["stad"], doos=g["doos"], laag=g.get("laag")))
         data["gebieden"] = gb_out
@@ -256,6 +304,12 @@ class Bron:
         data["rijdieren"] = self._rijdieren(rt)
         data["routes"] = self._routes(npc_plek)
         data["gids"] = self._gids()
+        # U-SITE: the systems of the night round (t-ambacht, t-puzzels, t-kleding, t-rijdier)
+        data["ambachten"] = self._ambachten()
+        data["puzzels"] = self._puzzels()
+        data["kleding"] = self._kleding()
+        data["rij_uiterlijk"] = self._rij_uiterlijk()
+        data["krachten"] = self._krachten()
         data["lore"] = self._lore()
         data["vertaal"] = self._vertaal(data)
         if not self.rt:
@@ -264,7 +318,7 @@ class Bron:
         return data
 
     def _poi_naam(self, pid, soort, g):
-        gnaam = self.t("vadsrijk.kern.gebied." + g["id"], g["id"]) if g else ""
+        gnaam = self.gebied_naam(g["id"])[0] if g else ""
         if soort == "kampvuur":
             return "Kampvuur" + (f" ({gnaam})" if gnaam else "")
         if soort == "uitkijk":
@@ -276,10 +330,13 @@ class Bron:
         if soort == "portaal":
             return "Terugportaal" + (f" ({gnaam})" if gnaam else "")
         if soort == "kerker":
-            return {"deur_spiegelburcht_voor": "De Spiegelburcht", "werf_ingang": "De Kaaszeppelinwerf", "hart_poort": "Het Hart van de Boom"}.get(pid, pid)
+            return {"deur_spiegelburcht_voor": "De Spiegelburcht", "werf_ingang": "De Kaaszeppelinwerf", "hart_poort": "Het Hart van de Boom",
+                    "wrak_ingang": "Het Wrak van de Vliegervanger", "z5w_buik_luik": "De Buikgangen (luik)"}.get(pid, pid)
         if soort == "gondel":
             return "Gondel (" + ("berg" if "berg" in pid else "dal") + ")"
         if soort == "lift":
+            if pid.startswith("z5w_lift_"):
+                return "Wolklift " + pid.split("_")[2] + " (" + ("boven" if "boven" in pid else "beneden") + ")"
             return "Honinglift (" + ("boven" if "boven" in pid else "beneden") + ")"
         return pid
 
@@ -290,7 +347,7 @@ class Bron:
             if not k.startswith("vadsrijk.npc.naam."):
                 continue
             nid = k[len("vadsrijk.npc.naam."):]
-            zone = "zone3" if nid.startswith("z3_") else "zone2" if nid.startswith("z2_") else "zone1"
+            zone = self.zone_van_gebied(nid)
             zone_van[nid] = zone
             out.append(dict(id=nid, naam=v, zone=zone, waar=self.t("vadsrijk.npc.plek.npc." + nid, ""), pos=plek.get(nid),
                             rol=rol.get(nid), praat=[self.nl[f"vadsrijk.npc.praat.{nid}.{i}"] for i in range(1, 9)
@@ -356,12 +413,13 @@ class Bron:
             eid = k[len("entity.guhs."):]
             if eid in NIET_WEZENS or "_baas" in eid or eid.startswith(("vr_eco_", "vr_baas", "vr_klodderreus")):
                 continue
-            m = re.match(r"vr_(?:(z2|z3)_)?mob_(.+)$", eid)
+            m = re.match(r"vr_(?:(z2|z3|z4|z5)_)?mob_(.+)$", eid)
             if not m:
                 continue
-            zone = {"z2": "zone2", "z3": "zone3"}.get(m[1], "zone1")
+            zone = {"z2": "zone2", "z3": "zone3", "z4": "zone4", "z5": "zone5"}.get(m[1], "zone1")
             kort = m[2]
-            tip_pre = {"zone1": "vadsrijk.wezens.tip.", "zone2": "vadsrijk.z2wezens.tip.", "zone3": "vadsrijk.z3wezens.tip."}[zone]
+            tip_pre = {"zone1": "vadsrijk.wezens.tip.", "zone2": "vadsrijk.z2wezens.tip.", "zone3": "vadsrijk.z3wezens.tip.",
+                       "zone4": "vadsrijk.z4wezens.tip.", "zone5": "vadsrijk.z5wezens.tip."}[zone]
             sps = sp_per.get(eid, [])
             lvs = [s["min_lv"] for s in sps] + [s["max_lv"] for s in sps]
             gebied_ids = []
@@ -371,7 +429,7 @@ class Bron:
                 if g and g["id"] not in gebied_ids:
                     gebied_ids.append(g["id"])
             tabel = None
-            for key in (f"wezens:{kort}", f"z2wezens:{kort}", f"z3wezens:{kort}"):
+            for key in (f"wezens:{kort}", f"z2wezens:{kort}", f"z3wezens:{kort}", f"z4wezens:{kort}", f"z5wezens:{kort}"):
                 if key in lt:
                     tabel = dict(lt[key], id=key)
             elems = sorted({s["element"] for s in sps if s["element"] != "geen"})
@@ -383,6 +441,7 @@ class Bron:
 
     def _bazen(self, rt, gebieden):
         arenas = {a["id"]: a for a in rt.get("arenas", [])}
+        huisdier_van = {h.get("baas"): h["id"] for h in rt.get("huisdieren", []) if h.get("baas")}
         out = []
         for zone, eid, kort, tip, tip2 in BAZEN:
             naam = self.t("entity.guhs." + eid, kort)
@@ -394,7 +453,7 @@ class Bron:
                             tip2_titel=self.t(tip2 + ".titel", "") if tip2 else "", spoiler=kort in VERHAAL_BAZEN,
                             arena=dict(id=arena["id"], pos=arena["centrum"], respawn_s=arena["respawn_s"]) if arena else None,
                             gebied=g["id"] if g else None,
-                            huisdier=next((h for h in ("klodderreus", "koning_klodder", "galmwolf", "kruinroofvogel", "piepje", "vahoegje")
+                            huisdier=huisdier_van.get("guhs:" + eid) or next((h for h in ("klodderreus", "koning_klodder", "galmwolf", "kruinroofvogel", "piepje", "vahoegje")
                                            if (h == kort) or (h == "piepje" and kort == "piepvel") or (h == "vahoegje" and kort == "vahoegnir")), None),
                             vahoeg=zone == "zone3" and SOORT_BAAS.get(kort) == "kerker"))
         return out
@@ -413,6 +472,16 @@ class Bron:
         for sid, stukken in (rt.get("sets") or {}).items():
             key = {"klodder": "vadsrijk.wezens.set.", "zwam": "vadsrijk.wezens.set.", "kristal": "vadsrijk.z2wezens.set.",
                    "mika": "vadsrijk.z2wezens.set."}.get(sid, "vadsrijk.z3wezens.set.")
+            for kk in (key, "vadsrijk.z4wezens.set.", "vadsrijk.items.set."):   # U-SITE: zone-4 sets + the items 2.0 names
+                if kk + sid in self.nl:
+                    key = kk
+                    break
+            if sid == "wolkwacht":   # U-SITE: zone 5's set: keys without the set id, bonuses at 2/4/6 pieces
+                k5 = "vadsrijk.z5wezens.set."
+                sets[sid] = dict(id=sid, naam=self.t(k5 + "stukken", "Wolkwachtset").split(" (")[0], stukken=stukken,
+                                 bonus2=self.schoon(self.t(k5 + "2", "")), bonus4=self.schoon(self.t(k5 + "4", "")),
+                                 bonus6=self.schoon(self.t(k5 + "6", "")))
+                continue
             sets[sid] = dict(id=sid, naam=self.t(key + sid, sid), stukken=stukken,
                              bonus2=self.schoon(self.t(key + sid + ".2", "")), bonus4=self.schoon(self.t(key + sid + ".4", "")))
         set_van = {s: sid for sid, d in sets.items() for s in d["stukken"]}
@@ -423,13 +492,14 @@ class Bron:
             iid = bt["id"]
             naam = self.t("vadsrijk.loot." + iid) or (self._itemnaam(bt["item"]) if bt.get("item") else None) or iid.replace("_", " ").capitalize()
             flav = [self.nl[f"vadsrijk.loot.{iid}.flavour.{i}"] for i in range(8) if f"vadsrijk.loot.{iid}.flavour.{i}" in self.nl]
-            zone = "zone3" if iid.startswith("z3baas_") else "zone2" if iid.startswith("z2baas_") else None
+            zm = re.match(r"z([2-5])(?:baas|droom)_", iid)
+            zone = f"zone{zm[1]}" if zm else ("zone5" if iid.startswith("mw_") else None)
             tabellen = bronnen.get(iid, [])
             if zone is None:
-                zs = {("zone3" if t.startswith("z3") else "zone2" if t.startswith("z2") else "zone1") for t in tabellen}
-                zone = sorted(zs)[0] if zs else ("zone1" if iid.startswith("baas_") else "zone1")
+                zs = {(f"zone{t[1]}" if re.match(r"z[2-5]", t) else "zone1") for t in tabellen}
+                zone = sorted(zs)[0] if zs else "zone1"
             baas = None
-            m = re.match(r"(?:z[23])?baas_(.+)$", iid)
+            m = re.match(r"(?:z[2-5])?baas_(.+)$", iid)
             bron_baas = []
             for tid in tabellen:
                 kort = tid.split(":")[-1]
@@ -495,10 +565,14 @@ class Bron:
 
     def _routes(self, npc_plek):
         stops = {}
+        pois = getattr(self, "_pois", {})
         for sid, (npc, zone) in LUCHTSCHIP.items():
-            if npc in npc_plek:
+            if npc.startswith("poi:") and (zone, npc[4:]) in pois:
+                stops[sid] = dict(id=sid, zone=zone, pos=list(pois[(zone, npc[4:])][2]), naam=STOP_NAAM.get(sid, sid))
+            elif npc in npc_plek:
                 stops[sid] = dict(id=sid, zone=zone, pos=npc_plek[npc], naam=self.t("vadsrijk.npc.naam." + npc, npc))
-        return [dict(van=a, naar=b, a=stops[a]["pos"], b=stops[b]["pos"]) for a, b in LIJNEN if a in stops and b in stops]
+        return [dict(van=a, naar=b, a=stops[a]["pos"], b=stops[b]["pos"], za=stops[a]["zone"], zb=stops[b]["zone"])
+                for a, b in LIJNEN if a in stops and b in stops]
 
     def _gids(self):
         out = []
@@ -520,7 +594,7 @@ class Bron:
                 self.notes.append(f"lore: {os.path.basename(f)}: {e}")
                 continue
             w = ns.get("WIKI", {})
-            zone = "zone3" if "z3" in f else "zone2" if "z2" in f else "zone1"
+            zone = "zone5" if "z5" in f else "zone4" if "z4" in f else "zone3" if "z3" in f else "zone2" if "z2" in f else "zone1"
             for sid, v in (w.get("systemen") or {}).items():
                 out.append(dict(id=sid, zone=zone, titel=v[0], tekst=v[2], stukken=[]))
             per = {o["id"]: o for o in out}
@@ -528,6 +602,113 @@ class Bron:
                 sid = pid.split("/", 1)[-1]
                 if sid in per:
                     per[sid]["stukken"].append([kop, tekst])
+        return out
+
+    # ---- U-SITE: the new systems ------------------------------------------------------------------------------------------
+    def _java(self, rel):
+        try:
+            return open(os.path.join(self.root, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk", rel), encoding="utf-8").read()
+        except OSError:
+            self.notes.append(f"{rel} missing")
+            return ""
+
+    def _ambachten(self):
+        """The 9 crafts: names, gathering spots per zone (lang groups) and every recipe of ambacht/Recepten.java (its loops expanded)."""
+        tekst = self._java(os.path.join("ambacht", "Recepten.java"))
+        lijsten = {m[1]: re.findall(r'"([a-z_]+)"', m[2]) for m in re.finditer(r"\b([A-Z0-9]+) = List\.of\(([^)]*)\)", tekst)}
+        lijsten.update({m[1]: re.findall(r'"([a-z_]+)"', m[2]) for m in re.finditer(r",\s*([A-Z0-9]+) = List\.of\(([^)]*)\)", tekst)})
+        regels = []
+        lus = re.compile(r"for \(String s : List\.of\(([^)]*)\)\) \{(.*?)\n\s*\}", re.S)
+        for m in lus.finditer(tekst):
+            for naam in re.findall(r'"([a-z_]+)"', m[1]):
+                regels.append(m[2].replace('s + "_', f'"{naam}_').replace('" + s', f'{naam}"'))
+        regels.append(lus.sub("", tekst))
+        rx = re.compile(r'r\("([a-z0-9_]+)", Ambacht\.([A-Z]+), (\d+), (\d+), "([a-z]+:[a-z0-9_]+)", (\d+)((?:, i\([^)]*\))*)\);')
+        recepten = []
+        for blok in regels:
+            for m in rx.finditer(blok):
+                ingr = []
+                for im in re.finditer(r"i\((\d+), ([^)]*)\)", m[7] or ""):
+                    opties = re.findall(r'"([a-z_]+)"', im[2])
+                    if not opties:
+                        lijst = im[2].strip()
+                        naam = {"VIS1": "vis (tier 1)", "VIS2": "vis (tier 2)", "VIS3": "vis (tier 3)", "HONING": "honing"}.get(lijst, lijst.lower())
+                    else:
+                        naam = " / ".join(self.t("item.guhs.vr_amb_" + o) or self.t("item.guhs.vr_" + o) or o.replace("_", " ") for o in opties)
+                    ingr.append([int(im[1]), naam])
+                soort, _, doel = m[5].partition(":")
+                recepten.append(dict(id=m[1], ambacht=m[2].lower(), level=int(m[3]), tier=int(m[4]), soort=soort, doel=doel,
+                                     aantal=int(m[6]), naam=self.t("vadsrijk.ambacht.recept." + m[1], m[1]), in_=ingr))
+        recepten.sort(key=lambda r: (r["ambacht"], r["level"], r["naam"]))
+        plekken = collections.defaultdict(list)
+        for k, v in self.nl.items():
+            m = re.match(r"vadsrijk\.ambacht\.groep\.(z(\d)_([a-z]+)_[a-z0-9_]+)$", k)
+            if m:
+                plekken[(m[3], int(m[2]))].append(v)
+        soort_van = {"pluk": "plukken", "mijn": "mijnen", "hout": "houthakken", "vis": "vissen", "korf": "imkeren"}
+        verzamel = collections.defaultdict(dict)
+        for (s_, z), lijst in plekken.items():
+            verzamel[soort_van.get(s_, s_)][z] = lijst
+        namen = {}
+        for k, v in self.nl.items():
+            mm = re.match(r"vadsrijk\.ambacht\.naam\.([a-z]+)$", k)
+            if mm:
+                namen[mm[1]] = v
+        if not recepten:
+            self.notes.append("ambachten: no recipes parsed from Recepten.java")
+        return dict(namen=namen, recepten=recepten, plekken={k: dict(v) for k, v in verzamel.items()})
+
+    def _puzzels(self):
+        """data/guhs/vadsrijk_puzzels/*.json: name, kind, zone, reward. Never the solution or the exact spot; geheimpjes only counted."""
+        out = []
+        for f in sorted(glob.glob(os.path.join(self.root, "src", "main", "resources", "data", "guhs", "vadsrijk_puzzels", "*.json"))):
+            d = _lees_json(f, {})
+            pid = d.get("id")
+            if not pid:
+                continue
+            bel = d.get("beloning") or {}
+            ontgr = bel.get("ontgrendel")
+            out.append(dict(id=pid, zone=f"zone{d.get('zone', 1)}", soort=d.get("soort"), geheim=d.get("soort") == "geheim",
+                            naam=self.t(f"vadsrijk.puzzels.p.{pid}.naam", pid), uitleg=self.t(f"vadsrijk.puzzels.p.{pid}.uitleg", ""),
+                            nacht=bool(d.get("nacht")), tijd=d.get("tijd"),
+                            munten=bel.get("munten", 0), ontgrendel=self.t("vadsrijk.puzzels.ontgrendel." + ontgr, ontgr) if ontgr else None,
+                            bladzijde=bel.get("bladzijde")))
+        soorten = {k[len("vadsrijk.puzzels.soort."):]: v for k, v in self.nl.items() if k.startswith("vadsrijk.puzzels.soort.")}
+        return dict(lijst=out, soorten=soorten)
+
+    def _kleding(self):
+        """The Kledingkast (t-kleding): every cosmetic by kind with its name and how you get it."""
+        soorten = {k[len("vadsrijk.kleding.soort."):]: v for k, v in self.nl.items() if k.startswith("vadsrijk.kleding.soort.")}
+        krachten = {k[len("vadsrijk.kleding.kracht."):]: v for k, v in self.nl.items() if k.startswith("vadsrijk.kleding.kracht.")}
+        dingen = []
+        for k, v in self.nl.items():
+            m = re.match(r"vadsrijk\.kleding\.ding\.([a-z]+)\.([a-z_]+)$", k)
+            if m:
+                dingen.append(dict(soort=m[1], id=m[2], naam=v, bron=self.t(k + ".bron", "")))
+        return dict(soorten=soorten, krachten=krachten, dingen=dingen)
+
+    def _rij_uiterlijk(self):
+        """Mount looks (t-rijdier): coats per mount, patterns, tack; names only (where they come from = the game's own N screen)."""
+        vacht = collections.defaultdict(list)
+        patroon, tuig = [], []
+        for k, v in self.nl.items():
+            m = re.match(r"vadsrijk\.rijdier\.vacht\.([a-z_]+)\.([a-z_]+)$", k)
+            if m:
+                vacht[m[1]].append(v)
+            elif re.match(r"vadsrijk\.rijdier\.patroon\.[a-z_]+$", k):
+                patroon.append(v)
+            elif re.match(r"vadsrijk\.rijdier\.tuig\.[a-z_]+$", k):
+                tuig.append(v)
+        bronnen = [v for k, v in self.nl.items() if k.startswith("vadsrijk.rijdier.bron.prestatie.")]
+        return dict(vacht=dict(vacht), patroon=patroon, tuig=tuig, prestaties=bronnen)
+
+    def _krachten(self):
+        """Pet powers (t-rijdier's Maatjes): name, role (Steuner/Snuffelaar), what it does."""
+        tekst = self._java(os.path.join("rijdier", "Maatjes.java"))
+        out = []
+        for m in re.finditer(r'new Kracht\("([a-z_]+)", Rol\.([A-Z]+)', tekst):
+            out.append(dict(id=m[1], rol=m[2].lower(), naam=self.t(f"vadsrijk.huisdier.kracht.{m[1]}.naam", m[1]),
+                            tekst=self.t(f"vadsrijk.huisdier.kracht.{m[1]}.tekst", "")))
         return out
 
     def _vertaal(self, data):

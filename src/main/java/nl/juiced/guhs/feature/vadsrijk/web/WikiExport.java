@@ -318,6 +318,10 @@ public final class WikiExport {
         m.put("bloesem", nl.juiced.guhs.feature.vadsrijk.zone3.wezens.loot.Z3Loot.BLOESEM);
         m.put("schors", nl.juiced.guhs.feature.vadsrijk.zone3.wezens.loot.Z3Loot.SCHORS);
         m.put("wortel", nl.juiced.guhs.feature.vadsrijk.zone3.wezens.loot.Z3Loot.WORTEL);
+        // U-SITE: the zone-4 and zone-5 sets
+        m.put("schelpen", nl.juiced.guhs.feature.vadsrijk.zone4.wezens.loot.Z4Loot.SCHELPEN);
+        m.put("lampion", nl.juiced.guhs.feature.vadsrijk.zone4.wezens.loot.Z4Loot.LAMPION);
+        m.put("wolkwacht", nl.juiced.guhs.feature.vadsrijk.zone5.wezens.loot.Z5Loot.WOLKWACHT);
         m.forEach((k, v) -> {
             JsonArray a = new JsonArray();
             v.forEach(a::add);
