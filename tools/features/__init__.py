@@ -311,6 +311,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 round U, U-AUDIO2: boss phase music + fanfares, world point sounds, NPC voices (Java: feature/vadsrijk/geluid)
             'vadsrijk_u_audio2',
             'vadsrijk_u_z6muziek',   # U-Z6MUZIEK: zone-6 music + ambience (after u_audio2)
+            # U-Z6VERHAAL: 1.10 zone 6 "Het Zijdeland", the story (Java: feature/vadsrijk/zone6/verhaal)
+            'vadsrijk_u_z6verhaal',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

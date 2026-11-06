@@ -37,10 +37,11 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
             "kandijkom", new float[] {0.52f, 0.22f, 104, 72},
             "schemerwortel", new float[] {0.77f, 0.56f, 150, 108},
             "lampionkust", new float[] {0.93f, 0.14f, 52, 30},   // T-Z4VERHAAL: was "zone4"
-            "hoogvads", new float[] {0.97f, 0.05f, 36, 22});   // T-Z5VERHAAL (no art yet: a marker in the top-right corner)
+            "hoogvads", new float[] {0.97f, 0.05f, 36, 22},   // T-Z5VERHAAL (no art yet: a marker in the top-right corner)
+            "zijdeland", new float[] {0.97f, 0.30f, 36, 22});   // U-Z6VERHAAL (no art yet: a marker on the right edge, below Hoogvads)
     /** The airship routes (dotted). (R-INT, WERELDINDELING §4) line 0 camp-Haven, A Zwamzoet-Kandijkom, B Galmdok (zone 2) -> Weststeiger
      *  (zone 3), C Oosttaksteiger (zone 3) -> Lampionhaven (zone 4), D Opstijgpier (zone 4) -> Hoogvads. */
-    static final String[][] ROUTES = {{"knuffelkamp", "zwamzoet"}, {"zwamzoet", "kandijkom"}, {"kandijkom", "schemerwortel"}, {"schemerwortel", "lampionkust"}, {"lampionkust", "hoogvads"}};
+    static final String[][] ROUTES = {{"knuffelkamp", "zwamzoet"}, {"zwamzoet", "kandijkom"}, {"kandijkom", "schemerwortel"}, {"schemerwortel", "lampionkust"}, {"lampionkust", "hoogvads"}, {"hoogvads", "zijdeland"}};   // U-Z6VERHAAL: + line E
     private static final int INKT = 0xFF4A3A55, PAPIER = 0xF2FFF6EC, ROZE = 0xFFF2A9C4, GRIJS = 0xFF9A93A2, GOUD = 0xFFFFD54A;
 
     private final NpcPayloads.Reiskaart kaart;

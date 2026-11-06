@@ -358,6 +358,7 @@ public final class QuestMotor {
             if ((!naar.equals("kandijkom") || NpcApi.zone1Klaar(p))
                     && (!naar.equals("schemerwortel") || nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p))   // [z3-wereld]
                     && (!naar.equals("hoogvads") || nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5Verhaal.magZien(p))
+                    && (!naar.equals("zijdeland") || nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6Verhaal.magZien(p))   // U-Z6VERHAAL
                     && (!naar.equals("lampionkust") || nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcApi.zone3Klaar(p))) {   // T-Z5VERHAAL + T-Z4VERHAAL
                 l.add(naar);
             }
@@ -376,6 +377,7 @@ public final class QuestMotor {
             case "schemerwortel" -> nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.slot(p);   // [z3-wereld] zone2_klaar + lv 30
             case "lampionkust" -> nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4Verhaal.slot(p);   // T-Z4VERHAAL zone3_klaar + lv 50
             case "hoogvads" -> nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5Verhaal.slot(p);   // T-Z5VERHAAL: zone4_klaar + lv 55
+            case "zijdeland" -> nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6Verhaal.slot(p);   // U-Z6VERHAAL: the great swim seen + lv 60
             default -> null;
         };
     }
@@ -417,6 +419,7 @@ public final class QuestMotor {
             case "schemerwortel" -> doeActie(p, "z3_vlieg:honingtak", null);   // [z3-wereld] Z3Reizen.naarHoningtak
             case "lampionkust" -> doeActie(p, "z4_vlieg:lampionhaven", null);   // T-Z4VERHAAL Z4Verhaal.vlieg
             case "hoogvads" -> doeActie(p, "z5_vlieg", null);   // T-Z5VERHAAL: Z5Verhaal.vlieg (the first time the arrival film)
+            case "zijdeland" -> doeActie(p, "z6_vlieg", null);   // U-Z6VERHAAL: Z6Verhaal.vlieg (the first time the arrival film)
             case "zwamzoet" -> {
                 if (van.equals("z2_kapitein") || QuestStap.zone2(p.getX(), p.getZ())) {
                     doeActie(p, "z2_vlieg:haven", null);
