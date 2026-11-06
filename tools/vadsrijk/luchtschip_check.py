@@ -19,6 +19,7 @@ import tegellezer as TL  # noqa: E402
 
 T = 64
 MIN = 10
+FIX = "--fix" in sys.argv
 JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk")
 TEGELS = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure", "vadsrijk", "tegels")
 GEEN = ("air", "barrier", "light", "structure_void")
@@ -101,11 +102,48 @@ class Wereld:
         return bool(g[x % T, lo:hi, z % T].any())
 
 
+def meet(w, pts):
+    """Lowest clearance along the route: (free blocks, segment index, sample point)."""
+    laagst = (1e9, 0, None)
+    for s, (p, q) in enumerate(zip(pts, pts[1:])):
+        n = max(1, int(math.dist(p, q) / 2))
+        for i in range(n + 1):
+            t = i / n
+            x, y, z = (p[k] + (q[k] - p[k]) * t for k in range(3))
+            xi, yi, zi = int(math.floor(x)), int(math.floor(y)), int(math.floor(z))
+            vrij = min(w.onder(xi + dx, yi, zi + dz) for dx in range(-3, 4, 3) for dz in range(-3, 4, 3))
+            if any(w.boven(xi + dx, yi, zi + dz, 8) for dx in range(-3, 4, 3) for dz in range(-3, 4, 3)):
+                vrij = -1
+            if vrij < laagst[0]:
+                laagst = (vrij, s, (x, y, z))
+    return laagst
+
+
+def herstel(w, pts):
+    """Raises the nearest via point (or inserts one at the low spot) until the whole route clears MIN; the end points stay."""
+    pts = [list(p) for p in pts]
+    for _ in range(60):
+        vrij, s, (x, y, z) = meet(w, [tuple(p) for p in pts])
+        if vrij >= MIN:
+            break
+        nodig = MIN - max(vrij, -8) + 4
+        kand = [i for i in (s, s + 1) if 0 < i < len(pts) - 1]
+        kand.sort(key=lambda i: math.dist((pts[i][0], pts[i][2]), (x, z)))
+        if kand and math.dist((pts[kand[0]][0], pts[kand[0]][2]), (x, z)) < 30:
+            pts[kand[0]][1] += nodig
+        else:
+            pts.insert(s + 1, [round(x), round(y + nodig), round(z)])
+    return [tuple(p) for p in pts]
+
+
 def main():
     alle = pois()
     w = Wereld()
     slecht = 0
     for letter, lid, a, b, via in lijnen():
+        if lid == "kamp_z1" and not (a[0] in alle and b[0] in alle):
+            print(f"lijn {letter} ({lid}): inactief (Lijn.actief: de havens {a[0]} / {b[0]} bestaan niet als POI), overgeslagen")
+            continue
         (pa, ua), (pb, ub) = plek(a, alle), plek(b, alle)
         da = (pa[0] + 0.5 + ua[0] * 9, pa[1], pa[2] + 0.5 + ua[1] * 9)
         db = (pb[0] + 0.5 + ub[0] * 9, pb[1], pb[2] + 0.5 + ub[1] * 9)
@@ -122,6 +160,9 @@ def main():
                     vrij = -1   # (something in the ship's own box)
                 if vrij < laagst:
                     laagst, waar = vrij, (round(x), round(y), round(z), yi - vrij)
+        if FIX and laagst < MIN and len(sys.argv) > 1:
+            nieuw = herstel(w, pts)
+            print("  voorstel via: " + ", ".join(f"v({p[0]:.0f}, {p[1]:.0f}, {p[2]:.0f})" for p in nieuw[1:-1]))
         ok = laagst >= MIN
         slecht += not ok
         print(f"lijn {letter} ({lid}): {a[0]} {pa} -> {b[0]} {pb}: laagste vrije ruimte {laagst:.0f} blokken bij {waar[:3]} "

@@ -287,25 +287,33 @@ def honingtak_extra(W):
         else:
             W.wset(cx + 2, yb + 1, cz - 2, "minecraft:beehive[facing=south,honey_level=5]")
             W.wset(cx - 2, yb + 1, cz + 2, "minecraft:barrel[facing=up,open=false]")
-            # the secret hatch + ladder down to the Mika-imker raatzaal
+            # the secret hatch + ladder down to the Mika-imker raatzaal (T-IMKER: his boss arena now: R 11, 10 high, the room
+            # shifted so the ladder comes down at its south edge; the Java offsets in feature/vadsrijk/imker/MikaImker: hive
+            # (0,-2), smoke pots (-7,-3) (7,-3) (4,6), perches round the hive: keep those spots free)
             hx, hy, hz = R("mika_imker_luik")
             zx, zy, zz = R("mika_imker_raatzaal")
-            Rz, hh = 8, 8
-            for x in range(zx - 10, zx + 11):
-                for z in range(zz - 10, zz + 11):
+            Rz, hh = 11, 10
+            for x in range(zx - 13, zx + 14):
+                for z in range(zz - 13, zz + 14):
                     d = max(abs(x - zx) * 0.5 + abs(z - zz) * 0.866, abs(x - zx))
                     if d <= Rz:
                         for y in range(zy - 1, zy + hh):
                             rand = d > Rz - 1.2 or y in (zy - 1, zy + hh - 1)
                             W.wset(x, y, z, ("minecraft:honeycomb_block" if (y + x) % 3 else "minecraft:light_gray_terracotta")
                                    if rand else LUCHT)
-            for (ddx, ddz) in ((-3, -3), (3, 3), (0, 4)):
-                W.wset(zx + ddx, zy, zz + ddz, "minecraft:beehive[facing=south,honey_level=2]")
+                    if 5.5 < d <= 6.2 and (x + z) % 4 == 0:
+                        W.wset(x, zy - 1, z, "minecraft:ochre_froglight")       # a ring of floor lights
+            for (ddx, ddz) in ((9, 1), (-9, 1), (5, -8), (6, 7)):               # hives against the wall (no bees)
+                W.wset(zx + ddx, zy, zz + ddz, "minecraft:beehive[facing=south,honey_level=5]")
+            # the spy's desk against the west wall: a lectern with his report and a barrel of grey honey
+            W.wset(zx - 8, zy, zz + 4, "minecraft:lectern[facing=east,has_book=false,powered=false]")
+            W.wset(zx - 8, zy, zz + 5, "minecraft:barrel[facing=up,open=false]")
             for y in range(zy, hy - 1):
                 W.wset(hx, y, hz, "minecraft:ladder[facing=north,waterlogged=false]")
                 W.wset(hx, y, hz + 1, "minecraft:honeycomb_block")
             W.wset(hx, hy - 1, hz, "minecraft:spruce_trapdoor[facing=north,half=top,open=false,powered=false,waterlogged=false]")
-            W.wset(zx + 2, zy + hh - 2, zz, HANGLAMP)
+            for (ddx, ddz) in ((5, 4), (-5, 4), (5, -5), (-5, -5), (0, 2)):
+                W.wset(zx + ddx, zy + hh - 2, zz + ddz, HANGLAMP)
         W.wset(cx, yb + hc - 3, cz, HANGLAMP)
     dok(W)
     kramen(W)

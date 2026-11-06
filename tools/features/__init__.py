@@ -267,6 +267,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_karakter',
             # 1.10 night round T: zone 4 "De Lampionkust", the story (Java: feature/vadsrijk/zone4/verhaal)
             'vadsrijk_t_z4verhaal',
+            # 1.10 night round T, T-IMKER: the secret zone-3 boss De Mika-imker (Java: feature/vadsrijk/imker)
+            'vadsrijk_t_imker',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

@@ -29,6 +29,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.momenten.MomentenRegistry.register(modBus);   // MOMENTEN-HOOK (fix round 1: wave + caravan)
         nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2BazenRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenRegistry.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.imker.ImkerRegistry.register(modBus);   // T-IMKER: the secret zone-3 boss De Mika-imker
         nl.juiced.guhs.feature.vadsrijk.biomen.BiomenRegistry.register(modBus);   // fix round 2: one biome per area
         nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry.register(modBus);   // G-PETS
         nl.juiced.guhs.feature.vadsrijk.rijdier.RijdierExtraRegistry.register(modBus);   // T-RIJDIER: mount looks + new mounts + pet abilities
