@@ -170,5 +170,5 @@ public final class WezensPlekken {
     public static final BlockPos[] SPORENPRIESTER = {w("zwamtempel_voorhal", 0, -3)};
 
     // ---- Knuffelkamp: the Kampklodder's home at the rim of the camp pond (the Klodderreus arena ~(54,87,1069) r18) ------------
-    public static final BlockPos KAMPKLODDER = new BlockPos(70, 87, 1052);
+    public static final BlockPos KAMPKLODDER = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kamp(70, 87, 1052);   // T-WERELD
 }

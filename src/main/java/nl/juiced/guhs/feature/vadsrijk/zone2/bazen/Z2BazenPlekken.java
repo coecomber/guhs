@@ -18,7 +18,7 @@ public final class Z2BazenPlekken {
     /** (integration) The spot from z2-wereld's generated Z2WereldPlekken; the numbers are only the fallback. */
     private static BlockPos w(String id, int x, int y, int z) {
         BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(x, y, z);   // T-WERELD: local zone-2 fallback
     }
 
     // ---- De Galmwolf (world boss): the flat snow bowl in the Galmhellingen ------------------------------------------------

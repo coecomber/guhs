@@ -21,7 +21,7 @@ wait 60
 waitrender 300
 look 160 15
 shot w_kamp_plein gui
-/tp @s 30 110 1100
+/tp @s -354 110 1100
 look 200 25
 wait 60
 waitrender 300

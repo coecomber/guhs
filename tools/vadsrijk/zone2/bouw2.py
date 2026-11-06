@@ -1880,39 +1880,55 @@ def spiegelburcht(W, K, Pw):
 
 # ================================================================================================ the edge: cloud sea, landmarks
 def rand(W, K, P):
+    """T-WERELD: the cloud rim follows the real (organic) coast instead of the rectangle of the tile grid: irregular banks with
+    gaps, clusters and noisy height; towards the east they become a low broken rim that 'falls' into the Wolkenkloof (zone 2 ->
+    3). The rectangle of puffs along the grid edge and the far landmark spires at the old grid corners are gone; the
+    Splinterwand (zone 1 -> 2) is stamped from the shared barrier list."""
     rng = random.Random(8)
-    pts = []
-    for x in range(PL.X0 + 12, PL.X0 + PL.NX - 12, 44):
-        pts += [(x, PL.Z0 + 16), (x, PL.Z0 + PL.NZ - 16)]
-    for z in range(PL.Z0 + 12, PL.Z0 + PL.NZ - 12, 44):
-        pts += [(PL.X0 + 16, z), (PL.X0 + PL.NX - 16, z)]
-    for (x, z) in pts:
-        y = rng.randint(64, 92)
-        S = Vol(x - 24, y - 8, z - 24, x + 24, y + 10, z + 24)
-        for _ in range(4):
-            S.ell(x + rng.uniform(-10, 10), y + rng.uniform(-2, 3), z + rng.uniform(-10, 10), rng.uniform(7, 14),
-                  rng.uniform(3, 6), rng.uniform(7, 14), rng.choice(["wolkenblok_wit", "wolkenblok_wit", "minecraft:white_wool"]))
-        W.stempel(S.stempel("wolk"), bezet=False)
-    # cloud banks hugging the island's coast (it floats in the cloud sea)
-    for k in range(36):
-        a = k * 2 * math.pi / 36 + rng.uniform(-0.05, 0.05)
-        x, z = round(PL.STAD[0] + 370 * math.cos(a)), round(-2487 + 400 * math.sin(a))
-        y = rng.randint(58, 74)
-        S = Vol(x - 28, y - 8, z - 28, x + 28, y + 10, z + 28)
-        for _ in range(5):
-            S.ell(x + rng.uniform(-14, 14), y + rng.uniform(-2, 3), z + rng.uniform(-14, 14), rng.uniform(8, 15),
-                  rng.uniform(3, 6), rng.uniform(8, 15), rng.choice(["wolkenblok_wit", "wolkenblok_wit", "minecraft:white_wool"]))
+    ux0, uz0 = PL.UIT_TX0 * 64, PL.UIT_TZ0 * 64
+    ux1, uz1 = (PL.UIT_TX1 + 1) * 64 - 1, (PL.UIT_TZ1 + 1) * 64 - 1
+    zd = K.zeed
+    kand = np.argwhere((zd > 18) & (zd < 46))
+    rng_np = np.random.default_rng(81)
+    rng_np.shuffle(kand)
+    gekozen = []
+    for (i, j) in kand:
+        x, z = int(i + PL.X0), int(j + PL.Z0)
+        if not (ux0 + 20 <= x <= ux1 - 20 and uz0 + 20 <= z <= uz1 - 20):
+            continue
+        if any((x - a) ** 2 + (z - b) ** 2 < 34 ** 2 for (a, b) in gekozen):
+            continue
+        if rng.random() < 0.18:
+            continue                                       # a gap
+        gekozen.append((x, z))
+        oost = min(max((x - 140) / 120, 0), 1)
+        y = int(rng.randint(60, 74) - 6 * oost)
+        n = 4 + int(3 * oost) + rng.randint(0, 2)
+        S = Vol(x - 30, y - 12, z - 30, x + 30, y + 10, z + 30)
+        for k in range(n):
+            S.ell(x + rng.uniform(-15, 15), y + rng.uniform(-2, 3) - k * oost * 1.5, z + rng.uniform(-15, 15), rng.uniform(7, 14),
+                  rng.uniform(2.5, 5.5), rng.uniform(7, 14), rng.choice(["wolkenblok_wit", "wolkenblok_wit", "minecraft:white_wool"]))
         W.stempel(S.stempel("wolk_kust"), bezet=False)
-    # ice floes on the sea
-    S = Vol(PL.X0, PL.ZEE - 1, PL.Z0, PL.X0 + PL.NX - 1, PL.ZEE + 2, PL.Z0 + PL.NZ - 1)
-    for _ in range(260):
-        x, z = rng.randint(PL.X0 + 4, PL.X0 + PL.NX - 5), rng.randint(PL.Z0 + 4, PL.Z0 + PL.NZ - 5)
+    print(f"  zone 2: {len(gekozen)} wolkenbanken langs de kust")
+    # ice floes on the sea (only in the written part of the grid)
+    S = Vol(ux0, PL.ZEE - 1, uz0, ux1, PL.ZEE + 2, uz1)
+    for _ in range(140):
+        x, z = rng.randint(ux0 + 4, ux1 - 4), rng.randint(uz0 + 4, uz1 - 4)
         if K.H[K2.idx(x, z)] >= 0:
             continue
         S.cyl(x, z, rng.uniform(1.5, 4.5), PL.ZEE, PL.ZEE, "minecraft:packed_ice")
     W.stempel(S.stempel("schotsen"), bezet=False)
-    # far crystal spires rising out of the sea (landmarks)
-    for i, (x, z, h) in enumerate(((-668, -1790, 96), (664, -2940, 120), (-662, -2980, 84), (670, -1850, 70))):
+    # the Splinterwand spires in this grid (world -> local frame)
+    import os as _os
+    import sys as _sys
+    _sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
+    import barriere
+    import indeling as IND
+    import tegels as TG
+    for st in barriere.stempels(TG.Stempel, doos=(ux0 + IND.Z2_DX, uz0 + IND.Z2_DZ, ux1 + IND.Z2_DX, uz1 + IND.Z2_DZ),
+                                dx=IND.Z2_DX, dz=IND.Z2_DZ):
+        W.stempel(st, bezet=False)
+    for i, (x, z, h) in enumerate(()):
         S = Vol(x - 30, 40, z - 30, x + 30, 62 + h + 4, z + 30)
         S.kegel(x, z, 50, h + 12, 10, 0.5, "minecraft:light_blue_stained_glass")
         S.kegel(x, z, 50, h, 5, 0.3, "minecraft:blue_ice")
@@ -1922,6 +1938,36 @@ def rand(W, K, P):
                     scheef=(6 * math.cos(a), 6 * math.sin(a)))
         P[f"landmark_spits_{i + 1}"] = [x, 62 + h, z]
         W.stempel(S.stempel(f"spits_{i}"), bezet=False)
+
+
+# ================================================================================================ T-WERELD: harbours
+def galmdok(W, K, P):
+    """haven_z2_z3_vertrek: the Galmdok on the south-east cape (line B over the Wolkenkloof to the Weststeiger of zone 3); the
+    platform's far corner is the viewpoint Galmkam (U3). Also the shared ids of the existing Kandijkom dock (line A, the other
+    end of the Noordklifhaven) and its balcony viewpoint (U2)."""
+    import bouwsels as BZ
+    import havens
+    cx, cz = PL.GALMDOK
+    y = K.galmdok_y
+    x0, z0, x1, z1 = havens.doos(cx + PL.GALMDOK_R - 2, cz, 1, 0, 24)
+    S = BZ.WS(x0, 30, z0, x1 - x0 + 1, y - 30 + 20, z1 - z0 + 1)
+    for a in range(0, 360, 36):
+        x, z = cx + (PL.GALMDOK_R - 1) * math.cos(math.radians(a)), cz + (PL.GALMDOK_R - 1) * math.sin(math.radians(a))
+        if a in (0, 36, 324):
+            continue          # the pier leaves east
+        S.set(x, y + 1, z, LANT if a % 72 == 0 else "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+    havens.pier(S, cx + PL.GALMDOK_R - 2, y, cz, 1, 0, 24, lambda x, z: hoogste(W, int(x), int(z)), "haven_z2_z3", P,
+                bodem=40, wol="minecraft:light_blue_wool")
+    P["haven_z2_z3_plein"] = [cx, y + 1, cz]
+    e = P["haven_z2_z3_eind"]
+    P["uitkijk_galmkam"] = [e[0], e[1], e[2] - 4]
+    W.stempel(S.stempel("galmdok"))
+    # the Kandijkom dock = the zone-2 end of line A (Noordklifhaven <-> Kandijkom-dok)
+    P["haven_z2_z1_vertrek"] = list(P["dok_landing"])
+    S = BZ.WS(-12, FY - 2, -2240, 10, 12, 16)
+    P["haven_z2_z1_bord"] = havens.bord(S, -9, FY, -2232, 0, 1, 1, 0)
+    W.stempel(S.stempel("dok_bord"))
+    P["uitkijk_kandijkom_balkon"] = list(P["dok_eind"])
 
 
 # ================================================================================================ decoration
@@ -2337,6 +2383,7 @@ def bouw_alles(W, K):
     kristalbossen(W, K, P)
     padlampen(W, K, P)
     rand(W, K, P)
+    galmdok(W, K, P)      # T-WERELD
     decoratie(W, K, P)
     npc_plekken(W, K, P)
     P["mobzones"] = {k: {"min": [a[0], 0, a[1]], "max": [b[0], 0, b[1]], "level": [lv[0], lv[1], 0]} for k, (a, b, lv) in MOBZONES.items()}

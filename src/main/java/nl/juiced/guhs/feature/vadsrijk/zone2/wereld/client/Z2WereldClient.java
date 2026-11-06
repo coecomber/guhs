@@ -35,7 +35,7 @@ public final class Z2WereldClient {
         if (mc.level == null || mc.player == null || !Vadsrijk.in(mc.level)) {
             return;
         }
-        float s = Z2Lucht.sterkte(mc.player.getZ());
+        float s = Z2Lucht.sterkte(mc.player.getX(), mc.player.getZ());
         if (s <= 0.01f) {
             return;
         }

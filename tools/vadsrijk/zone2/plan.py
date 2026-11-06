@@ -16,6 +16,20 @@ T = 64
 X0, Z0 = TX0 * T, TZ0 * T
 NX, NZ = (TX1 - TX0 + 1) * T, (TZ1 - TZ0 + 1) * T
 ZEE = 62                      # sea surface (the cloud sea around the massif)
+# T-WERELD (wereldindeling W-3): this plan stays in LOCAL coordinates (the old frame); the map is written at
+# world = local + (indeling.Z2_DX, indeling.Z2_DZ) = (+704, +1344). Only these local tiles are written (the island + its cloud
+# rim; world tiles tx 6..15, tz -23..-13); the rest of the local grid is only there so the noise stays identical.
+UIT_TX0, UIT_TX1, UIT_TZ0, UIT_TZ1 = -5, 4, -44, -34
+# T-WERELD: organic island outline (superellipse p 4 round the zone box + 40, low noise) + lobes (x, z, r, amount; > 0 = cape)
+KUST_LOBBEN = [(240, -2196, 55, 0.13),     # the south-east cape with the Galmdok (haven_z2_z3_vertrek)
+               (-150, -2172, 70, -0.05),    # a bay south-west
+               (290, -2560, 60, -0.06),     # the crumbling east coast (a bite out of it)
+               (-290, -2620, 80, 0.04),
+               (-300, -2380, 70, -0.06),    # a bite out of the west coast (by the Knuffelmeer)
+               (-290, -2770, 70, -0.05),    # a north-west bay
+               (120, -2160, 60, 0.05)]      # a little south cape east of the dock
+GALMDOK = (236, -2200)        # plaza of the Galmdok (local); the pier runs east towards the Wolkenkloof / zone 3
+GALMDOK_R = 10
 ZONE = (-250, -2775, 250, -2200)
 
 # ------------------------------------------------------------------------------------------------ areas (kern.Gebieden boxes)
@@ -191,4 +205,6 @@ PADEN = {
                 (138, -2578)],
     "plateau_fort": [(-160, -2600), (-170, -2630)],
     "plateau_kijk": [(-60, -2600), (-72, -2650), (-78, -2684)],
+    # T-WERELD: from the end of oost_zuid (the hot spring path) down to the Galmdok
+    "galmdok": [(190, -2246), (210, -2228), (226, -2210)],
 }

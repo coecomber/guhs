@@ -27,6 +27,8 @@ CACHE = os.path.join(HIER, "..", "_cache")
 UIT = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure", "vadsrijk", "tegels")
 
 import plan3 as PL  # noqa: E402
+sys.path.append(os.path.join(HIER, ".."))
+import indeling as IND  # noqa: E402  (T-WERELD; barriere.py lives there too)
 
 T, HOOG = 64, 320
 
@@ -118,7 +120,10 @@ class Werker:
             s = s.replace(",z3kv=1", "").replace("z3kv=1,", "")
             pal.append(s)
         lut = np.array([0 if s in ("minecraft:air", "minecraft:cave_air") else self.palet.id(s) for s in pal], np.uint16)
-        return lut[W.v].copy()
+        vol = lut[W.v].copy()
+        import barriere          # T-WERELD: the sea + cloud sea round the island (Wolkenkloof west, Wolkenval east)
+        barriere.zee_z3(vol, tx, tz, self.palet.id)
+        return vol
 
     def hol(self, vol):
         """Hollow: an opaque block with 6 opaque neighbours is never seen (removed); a LEAF block deeper than 2 blocks inside a
@@ -188,6 +193,8 @@ def maak(alleen=None, werkers=6):
         for (tx, tz) in sorted(oud):
             if PL.TX0 <= tx <= PL.TX1 and PL.TZ0 <= tz <= PL.TZ1:
                 continue
+            if IND.van_andere_zone(tx, tz, "z3"):
+                continue   # T-WERELD: zone 4 / zone 5 tiles live in the old zone-3 raster now: never delete them
             if True:
                 p = os.path.join(UIT, f"t_{tx}_{tz}.nbt")
                 if os.path.exists(p):

@@ -49,7 +49,7 @@ public final class Z2WereldRegistry {
 
     /** Is this x/z in zone 2 (the tile range of its map)? */
     public static boolean inZone2(double x, double z) {
-        return z < Z2WereldPlekken.TEGEL_Z1 * 64 + 64 + 200 && z > Z2WereldPlekken.TEGEL_Z0 * 64 - 200;
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.inZone2(x, z);   // T-WERELD: the zone-2 tile box (it no longer owns a whole z band)
     }
 
     public static void register(IEventBus modBus) {

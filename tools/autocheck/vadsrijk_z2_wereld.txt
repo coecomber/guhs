@@ -23,7 +23,7 @@ look 0 -5
 shot z2_dok gui
 
 section kandijkom
-/tp @s 0 150 -2200
+/tp @s 704 150 -856
 look 180 30
 wait 80
 waitrender 500
@@ -67,7 +67,7 @@ waitrender 300
 shot z2_gondel_berg gui
 
 section galm
-/tp @s 330 175 -2200
+/tp @s 1034 175 -856
 look 90 25
 wait 80
 waitrender 500
@@ -81,7 +81,7 @@ waitrender 300
 shot z2_galmwolf_arena gui
 
 section meer
-/tp @s -260 130 -2120
+/tp @s 444 130 -776
 look 120 25
 wait 80
 waitrender 500
@@ -98,7 +98,7 @@ waitrender 300
 shot z2_drakenzadel gui
 
 section kloof
-/tp @s -160 170 -2700
+/tp @s 544 170 -1356
 look 0 30
 wait 80
 waitrender 500
@@ -125,7 +125,7 @@ look 180 -10
 wait 60
 waitrender 400
 shot z2_brug_burcht gui
-/tp @s 0 200 -2790
+/tp @s 704 200 -1446
 look 180 20
 wait 80
 waitrender 400

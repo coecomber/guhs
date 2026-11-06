@@ -111,6 +111,9 @@ def main():
     if not a.alleen:
         import kaartbeeld
         kaartbeeld.teken(W, bovenaan, os.path.join(CACHE, "kaart_bovenaanzicht.png"))
+        sys.path.insert(0, HIER)
+        import barriere      # T-WERELD: the Splinterwand tile row between the zone-1 and zone-2 grids (tz -12)
+        barriere.maak_tegels()
     # hook (fix round 1, veilig): integration runs this once after the final regen, so the safe spots follow the map
     if a.audit and not a.alleen:
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
@@ -119,7 +122,7 @@ def main():
         zone3(a)          # [zone 3] and the zone-3 map
 
 
-def zone2(a):   # [zone 2] De Splinterpieken: own grid/tiles (tx -11..10, tz -48..-28), POI_Z2.md, Z2WereldPlekken.java
+def zone2(a):   # [zone 2] De Splinterpieken: own grid (local), written at world tiles tx 6..15, tz -23..-13 (T-WERELD), POI_Z2.md, Z2WereldPlekken.java
     sys.path.insert(0, os.path.join(HIER, "zone2"))
     import maak2
     maak2.maak(a.alleen)

@@ -124,6 +124,13 @@ class Wereld:
         steen = np.array([P.id(GESTEENTE[k][0]) for k in GESTEENTE], np.uint16)
         top = np.where(steil & (H > 70), steen[soort], top)
         sub = np.where(steil & (H > 70), steen[soort], sub)
+        # T-WERELD: the north foreland: grass gives way to bare rock, scree and snow towards the Splinterwand cliffs
+        wn = K.w_noord
+        zet((wn > 0.3) & (f > -0.35 + 0.6 * (1 - wn)), "minecraft:stone", "minecraft:stone", "steen")
+        zet((wn > 0.3) & (rnd < 0.06 * wn), "minecraft:gravel")
+        zet((wn > 0.3) & (rnd > 1 - 0.05 * wn), "minecraft:tuff")
+        zet((wn > 0.55) & (H > 100) & (f > -0.1), "minecraft:snow_block", "minecraft:stone")
+        zet(K.noordklif, "guhs:knuffelklinkers", "minecraft:stone")
         # beaches, pond and stream beds
         strand = (H <= 65) & (K.kustd < 7)
         zet(strand, "minecraft:sand", "minecraft:sandstone")
@@ -247,14 +254,8 @@ class Wereld:
         vol[m] = self.ids["minecraft:sandstone"]
         m = zee[:, None, :] & (y > vlc) & (y <= KA.ZEE)
         vol[m] = self.ids["minecraft:water"]
-        # the very edge of the map: an invisible wall so the sea never runs into the void
-        rand = np.zeros((T, T), bool)
-        if tx == KA.TX0: rand[0, :] = True
-        if tx == KA.TX1: rand[-1, :] = True
-        if tz == KA.TZ0: rand[:, 0] = True
-        if tz == KA.TZ1: rand[:, -1] = True
-        m = rand[:, None, :] & (y >= 50) & (y <= KA.ZEE + 2)
-        vol[m] = self.ids["minecraft:barrier"]
+        # T-WERELD: no invisible wall at the map edge any more: the sea runs on (procedural sea, kern Ondergrond / zee
+        # vulling) and the zone barriers push swimmers back softly (indeling.Barrieres)
         # stamps
         for st in self.stempels:
             ox, oy, oz = st.off

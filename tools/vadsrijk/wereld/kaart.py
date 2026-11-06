@@ -46,6 +46,22 @@ GROT_INGANGEN = [(-300, -220), (-420, -300), (-180, -360)]
 KRISTALKAMER = (-490, 52, -520)
 LICHTSTRALEN = [(-340, 120), (-420, 40), (-240, 220), (-480, 160), (-300, -40), (-360, 300)]
 SCHILDPAD = (520, 720)
+# T-WERELD (wereldindeling W-3 §6): the organic coast. Superellipse (p 4) + low noise + fixed lobes: (x, z, radius, amount);
+# amount > 0 = a cape (more land), < 0 = an inlet. Everything that already stands near the coast is protected (BESCHERMD).
+KUST_R = (630, 625)
+KUST_LOBBEN = [(150, -640, 70, 0.075),      # the north cape with the Noordklifhaven
+               (520, -560, 90, 0.05),       # NE cape under the Zwamtempel
+               (660, 110, 85, -0.07),       # the inlet east at the Klodderweide
+               (-575, 585, 115, 0.09),      # the south-west peninsula towards Knuffelkamp
+               (-640, 200, 70, -0.05),      # a small bay west of the Sporenwoud
+               (-690, -260, 110, 0.06),     # a rocky cape west of the Druipgrotten
+               (-660, 420, 90, -0.06),      # a bay south-west
+               (330, 650, 95, -0.05),       # a bay south, east of the Haven bay
+               (690, -330, 85, 0.06),       # a cape east under the Klodderkijk
+               (-300, 690, 120, 0.05)]      # the south coast bulges towards the camp strait
+NOORDKLIF = (150, -598)          # the Noordklifhaven (haven_z1_z2_vertrek): a plaza on the cliff top
+NOORDKLIF_R = 15
+NOORD_Z0, NOORD_Z1 = -520, -640  # the north foreland rises from z -520 to the cliffs (x -60..620)
 HAVEN_DORP = (56, 418, 120, 564)
 VIJVERS = [(330, -70, 30, 18), (470, 160, 25, 16), (250, 260, 22, 14), (520, 40, 20, 13), (300, 120, 14, 10)]
 PADEN = {
@@ -66,6 +82,8 @@ PADEN = {
     "slijm2": [(410, 200), (330, 260), (300, 262)],
     "woud2": [(-220, 40), (-300, -40), (-420, 40), (-510, -40)],
     "druip": [(-180, -360), (-100, -510)],
+    # T-WERELD: from the mountain path north of the fossil bridge up to the Noordklifhaven on the north cliffs
+    "noordklif": [(119, -219), (102, -252), (98, -330), (104, -400), (112, -470), (132, -530), (146, -575), (150, -596)],
 }
 
 # fix round 1: paths that lead to a rock needle stop at the foot of its spiral stair instead of under the rock
@@ -116,6 +134,18 @@ def idx(x, z):
     return int(x - X0), int(z - Z0)
 
 
+def beschermd():
+    """T-WERELD: spots near the old coast that must stay land (x, z, radius) whatever the organic coast does."""
+    pts = [(x, z, 34) for v in KAMPVUREN.values() for (x, z) in v]
+    pts += [(x, z, 30) for (x, z) in UITKIJK.values()]
+    pts += [(-490, -520, 46), (-499, -484, 40), (-460, -470, 36), (330, -470, 60), (410, 90, 50), (300, 300, 60),
+            (-320, -300, 40), (-400, -380, 44), (-260, -420, 40), (-460, -470, 44), (-470, 330, 30), (520, 300, 30),
+            (NOORDKLIF[0], NOORDKLIF[1], NOORDKLIF_R + 16)]
+    pts += [(x, z, 14) for pts_ in PADEN.values() for (x, z) in pts_]
+    pts += [(x, z, 22) for (x, z, *_r) in VIJVERS]
+    return pts
+
+
 class Kaart:
     def __init__(self):
         self.n1 = ruis(2, [(160, 1.0), (60, 0.5), (24, 0.25), (9, 0.12)])
@@ -128,9 +158,14 @@ class Kaart:
     # ------------------------------------------------------------ land + areas
     def land_en_gebieden(self):
         x, z, n1 = XX, ZZ, self.n1
-        q = np.maximum(np.abs(x), np.abs(z)) / 600
-        rond = np.hypot(np.maximum(np.abs(x) - 420, 0), np.maximum(np.abs(z) - 420, 0)) / 180
-        land = np.maximum(q, rond) + n1 * 0.06 < 0.985
+        # T-WERELD: organic coast (was a rounded square: max(|x|,|z|)/600 with r180 corners)
+        lo = ruis(41, [(220, 1.0), (90, 0.35)])
+        e = ((np.abs(x) / KUST_R[0]) ** 4 + (np.abs(z) / KUST_R[1]) ** 4) ** 0.25 + 0.065 * lo + 0.02 * n1
+        for (lx, lz, lr, la) in KUST_LOBBEN:
+            e -= la * np.exp(-((x - lx) ** 2 + (z - lz) ** 2) / (lr * lr))
+        land = e < 1.0
+        for (px, pz, pr) in beschermd():
+            land |= np.hypot(x - px, z - pz) < pr
         # the bay from the city harbour down to the open sea (contract: De Haven at its mouth)
         xoff = 30 * np.sin(z / 90)
         breed = np.where(z < 130, 128, np.where(z < 190, 128 - (z - 130) * 0.9, 74 + (z - 190) * 0.05)) + n1 * 10
@@ -187,10 +222,26 @@ class Kaart:
         da = np.hypot(x - ARENA[0], z - ARENA[1])
         ta = np.clip((da - ARENA[2] - 6) / 20, 0, 1)
         H = 68 * (1 - ta) + H * ta
-        # coast: gentle beaches down to the water
+        # T-WERELD: the north foreland (x -60..620): the land rises towards the Splinterwand and ends in cliffs
+        wx = np.clip((x + 60) / 70, 0, 1) * np.clip((620 - x) / 70, 0, 1)
+        tn = np.clip((NOORD_Z0 - z) / (NOORD_Z0 - NOORD_Z1), 0, 1)
+        self.w_noord = (tn * tn * (3 - 2 * tn)) * wx
+        H = H + self.w_noord * (34 + 22 * np.clip(rug, 0, 1) + 6 * n1)
+        H = np.minimum(H, np.where(self.w_noord > 0.05, 150, 1000))
+        # the Noordklifhaven plaza: flat on the cliff top
+        dn = np.hypot(x - NOORDKLIF[0], z - NOORDKLIF[1])
+        tnk = np.clip((dn - NOORDKLIF_R) / 18, 0, 1)
+        # the plaza sits at the highest ground of the pier corridor north of it (the cliff edge rises towards the coast), so the
+        # pier runs flush over the cliff top and out over the sea
+        gang = (np.abs(x - NOORDKLIF[0]) <= 5) & (z <= NOORDKLIF[1] - NOORDKLIF_R + 2) & (z >= NOORDKLIF[1] - 80) & self.land
+        self.noordklif_y = int(round(max(float(np.median(H[(dn > NOORDKLIF_R) & (dn < NOORDKLIF_R + 6)])), float(H[gang].max()) + 1)))
+        H = self.noordklif_y * (1 - tnk) + H * tnk
+        self.noordklif = dn < NOORDKLIF_R
+        # coast: gentle beaches down to the water; in the north foreland a narrow beach under steep cliffs
         kustd = ndimage.distance_transform_edt(self.land)
         self.kustd = kustd
-        kt = np.clip(kustd / 28, 0, 1) ** 0.8
+        breed = 28 * (1 - 0.75 * self.w_noord)
+        kt = np.clip((kustd - 3 * self.w_noord) / breed, 0, 1) ** 0.8
         H = (ZEE + 1) * (1 - kt) + H * kt
         # the Kloof: a deep ravine with a stream
         dk, _ = polyafstand(KLOOF)
@@ -227,6 +278,7 @@ class Kaart:
         # fix round 1: no path step higher than 1 block: every path (not the mountain ramp, not the Haven road) gets a smooth
         # height profile along its length with a slope of at most 0.7, flat across its width
         H = self.padprofielen(H)
+        H = np.where(self.noordklif, self.noordklif_y, H)   # T-WERELD: the Noordklifhaven plaza stays flat
         # the fossil bridge deck level: both ends get a level landing at the deck height (fix round 1)
         dek = int(round(max(H[idx(*FOSSIEL[0])], H[idx(*FOSSIEL[1])], 70)))
         self.dek = dek
@@ -270,6 +322,8 @@ class Kaart:
                 acc += L
             prof[k:] = prof[k - 1] if k else 64
             prof = ndimage.uniform_filter1d(prof, 9, mode="nearest")
+            if naam == "noordklif":   # T-WERELD: arrive level with the Noordklifhaven plaza (climb at most 0.6 per block)
+                prof = np.maximum(prof, self.noordklif_y - 0.6 * np.maximum(n - 1 - np.arange(n) - (NOORDKLIF_R + 3), 0))
             for _ in range(2):
                 for k in range(1, n):
                     prof[k] = min(max(prof[k], prof[k - 1] - 0.7), prof[k - 1] + 0.7)
@@ -376,7 +430,7 @@ class Kaart:
     def zee(self):
         d = ndimage.distance_transform_edt(~self.land)
         self.zeed = d
-        vloer = ZEE - 1 - np.clip(d / 7, 0, 3)
+        vloer = ZEE - 1 - np.clip(d / 7, 0, 12)   # T-WERELD: deeper towards the open sea (was 3), matches the filler sea
         # the bay is a bit deeper (boats), the Kloof stream is its own thing
         vloer = np.where(self.baai, np.minimum(vloer, ZEE - 3), vloer)
         self.vloer = np.round(vloer).astype(np.int16)

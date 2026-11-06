@@ -208,13 +208,7 @@ class Wereld2(TG.Wereld):
         vol[m] = self.ids["minecraft:stone"]
         m = zee[:, None, :] & (y > vlc) & (y <= PL.ZEE)
         vol[m] = self.ids["minecraft:water"]
-        rand = np.zeros((T, T), bool)
-        if tx == PL.TX0: rand[0, :] = True
-        if tx == PL.TX1: rand[-1, :] = True
-        if tz == PL.TZ0: rand[:, 0] = True
-        if tz == PL.TZ1: rand[:, -1] = True
-        m = rand[:, None, :] & (y >= 50) & (y <= PL.ZEE + 2)
-        vol[m] = self.ids["minecraft:barrier"]
+        # T-WERELD: no invisible wall at the grid edge (only the inner part of the grid is written now; the sea runs on)
         for st in self.stempels:
             ox, oy, oz = st.off
             X, Y, Z = st.v.shape

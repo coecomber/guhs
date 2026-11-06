@@ -57,8 +57,8 @@ public final class Z2WezensPlekken {
 
     /** No creatures here: Kandijkom + the dock, every zone-2 campfire, the boss arenas (all from Z2WereldPlekken). */
     public static final List<Veilig> VEILIG = new ArrayList<>(List.of(
-            new Veilig(new BlockPos(0, 0, -2400), 92),           // Kandijkom (geode r ~80) + a margin
-            new Veilig(new BlockPos(0, 0, -2262), 48),           // the dock road, the stable and the airship dock
+            new Veilig(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(0, 0, -2400), 92),           // Kandijkom (geode r ~80) + a margin
+            new Veilig(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(0, 0, -2262), 48),           // the dock road, the stable and the airship dock
             new Veilig(w("arena_galmwolf", 430, -2280, 121), 55),
             new Veilig(w("arena_spiegelzucht", 0, -2963, 176), 40),
             new Veilig(w("arena_boormeester", -500, -2836, 66), 40)));
@@ -93,7 +93,7 @@ public final class Z2WezensPlekken {
 
     private static BlockPos w(String id, int x, int z, int y) {
         BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(x, y, z);   // T-WERELD: local zone-2 fallback
     }
 
     /** Is (x, z) inside a safe spot (extra = an added margin)? */

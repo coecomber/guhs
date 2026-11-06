@@ -238,7 +238,7 @@ public final class Z2Haken {
             beelden(sl);
         }
         for (ServerPlayer p : sl.players()) {
-            if (p.isSpectator() || RijkScenes.bezig(p) || p.getZ() > Z2NpcPlekken.PLEIN.getZ() + 700) {
+            if (p.isSpectator() || RijkScenes.bezig(p) || !nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.inZone2(p.getX(), p.getZ())) {
                 continue;   // (zone 1 players skip all of this)
             }
             hogePlekken(p);

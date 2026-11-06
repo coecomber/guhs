@@ -105,8 +105,8 @@ public final class Z2Commando {
             }
             BlockState roze = Blocks.PINK_CONCRETE.defaultBlockState(), sneeuw = Blocks.SNOW_BLOCK.defaultBlockState();
             int n = 0;
-            for (int x = -150; x <= 150; x++) {
-                for (int zz = -2550; zz <= -2236; zz++) {
+            for (int x = -150 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DX; x <= 150 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DX; x++) {
+                for (int zz = -2550 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DZ; zz <= -2236 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DZ; zz++) {
                     sl.setBlock(new BlockPos(x, Z2NpcPlekken.KK - 1, zz), (Math.floorMod(x, 16) == 0 || Math.floorMod(zz, 16) == 0) ? sneeuw : roze, 2);
                     n++;
                 }

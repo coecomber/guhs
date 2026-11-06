@@ -40,7 +40,7 @@ public final class Reiskaart {
         if (nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.inZone3(p.getX(), p.getZ())) {
             return "schemerwortel";   // [z3-wereld]
         }
-        return QuestStap.zone2(p.getZ()) ? "kandijkom" : QuestStap.eiland(p.getX(), p.getZ()) ? "knuffelkamp" : "zwamzoet";
+        return QuestStap.zone2(p.getX(), p.getZ()) ? "kandijkom" : QuestStap.eiland(p.getX(), p.getZ()) ? "knuffelkamp" : "zwamzoet";
     }
 
     /** One place for this player: its state, the reason key (ONBEKEND/TEASER) and its argument (the player's level). */

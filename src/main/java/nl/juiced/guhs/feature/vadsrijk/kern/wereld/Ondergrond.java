@@ -30,6 +30,9 @@ public final class Ondergrond {
     }
 
     public static void vul(WorldGenLevel level, ChunkPos cp) {
+        if (nl.juiced.guhs.feature.vadsrijk.indeling.ZeeVulling.vul(level, cp)) {   // T-WERELD: the sea between the zones
+            return;
+        }
         int x0 = cp.getMinBlockX(), z0 = cp.getMinBlockZ();
         if (!inProeftuin(x0, z0) && !inProeftuin(x0 + 15, z0 + 15)) {
             return;

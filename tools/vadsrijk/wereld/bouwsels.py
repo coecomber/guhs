@@ -13,6 +13,30 @@ import kaart as KA
 import stadkit as SK
 import tegels as TG
 import zwamzoet as Z
+import os as _os
+import sys as _sys
+_sys.path.insert(0, _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
+import indeling as IND  # noqa: E402  (T-WERELD: zone offsets)
+
+KDX, KDZ = IND.KAMP_DX, IND.KAMP_DZ   # Knuffelkamp pieces are drawn in the old (local) camp coordinates, then shifted
+
+
+def kamp_stempel(S, naam):
+    """T-WERELD: a stamp drawn in local camp coordinates, moved to the camp's world place."""
+    st = S.stempel(naam)
+    st.off = (st.off[0] + KDX, st.off[1], st.off[2] + KDZ)
+    return st
+
+
+def kamp_p(v):
+    return [v[0] + KDX, v[1], v[2] + KDZ]
+
+
+def kamp_meng(x, z):
+    """T-WERELD: line 0 (Knuffelkamp <-> De Haven) bends west with the camp: full camp shift at z >= 860, none at z <= 500.
+    Same formula as VadsrijkZones.kampMeng (WereldReizen's route)."""
+    m = min(max((z - 500) / 360.0, 0.0), 1.0)
+    return int(round(x + KDX * m)), z
 
 ST = SK.stairs
 SLAB = SK.slab
@@ -617,7 +641,8 @@ def haven(W, K, P):
 def rondvlucht(W, K, P):
     """Set pieces for the sightseeing flight Knuffelkamp <-> De Haven (WereldReizen): an airship at anchor in the sky over the
     sea (the flight passes it; guhs wave from its balcony, code-spawned) and cloud banks on both sides of the route."""
-    cx, cy, cz = 40, 118, 760          # = WereldReizen.SCHIP
+    cx, cy, cz = 40, 118, 760          # = WereldReizen.SCHIP (T-WERELD: bent with the camp shift)
+    cx, cz = kamp_meng(cx, cz)
     S = WS(cx - 30, cy - 20, cz - 14, 62, 40, 28)
     luchtschip(S, cx, cz, cy)
     gy = cy - 8 - 5
@@ -631,6 +656,7 @@ def rondvlucht(W, K, P):
     W.stempel(S.stempel("rondvlucht_schip"), bezet=False)
     rng = random.Random(77)
     for (x, y, z) in ((68, 128, 690), (140, 134, 650), (70, 136, 610), (150, 140, 700), (58, 132, 650)):
+        x, z = kamp_meng(x, z)
         S = WS(x - 24, y - 10, z - 24, 49, 22, 49)
         for _ in range(5):
             S.ellipsoid(x + rng.uniform(-10, 10), y + rng.uniform(-2, 3), z + rng.uniform(-10, 10), rng.uniform(6, 12),
@@ -1212,7 +1238,7 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
     ox, oy, oz = [int(v) for v in kamp_d["off"]]
 
     def kh(x, z):
-        i, j = x - ox, z - oz
+        i, j = x + KDX - ox, z + KDZ - oz
         if 0 <= i < hoog.shape[0] and 0 <= j < hoog.shape[1]:
             return int(hoog[i, j])
         return -1
@@ -1226,7 +1252,7 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
             S.set(3, 66, z, LANT)
     S.fill(-5, 64, 1146, 5, 64, 1156, "minecraft:spruce_planks")
     S.set(-4, 65, 1147, "guhs:ballonsteiger")
-    P["aankomst"] = [0, 65, 1130]
+    P["aankomst"] = kamp_p([0, 65, 1130])
     # ways out of the water onto the jetty: both sides halfway, both sides of the platform, the far end
     for (x, z, uit) in ((3, 1130, (1, 0)), (-3, 1130, (-1, 0)), (3, 1138, (1, 0)), (-3, 1138, (-1, 0)), (6, 1150, (1, 0)), (-6, 1150, (-1, 0)), (2, 1157, (0, 1)),
                         (-2, 1157, (0, 1))):
@@ -1278,8 +1304,8 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
                 S.set(x, yy, zz, CARVE)
             for yy in range(max(58, min(g, y) - 3), y + 1):
                 S.set(x, yy, zz, "minecraft:dirt_path" if yy == y else "minecraft:dirt")
-    P["aankomst_trap_top"] = [0, y + 1, z - 2]
-    W.stempel(S.stempel("kamp_zuidsteiger"))
+    P["aankomst_trap_top"] = kamp_p([0, y + 1, z - 2])
+    W.stempel(kamp_stempel(S, "kamp_zuidsteiger"))
 
 
 def kamp_arena(P, kamp_poi):
@@ -1636,6 +1662,42 @@ def randwolken(W, K, P):
         W.stempel(S.stempel("wolk"), bezet=False)
 
 
+# ================================================================================================ T-WERELD: barriers + harbours
+def splinterwand(W, K, P):
+    """The rock spires of the Splinterwand that stand in the zone-1 grid (the same list as zone 2 and the gap row)."""
+    import barriere
+    n = 0
+    for st in barriere.stempels(TG.Stempel, doos=(KA.X0, KA.Z0, KA.X0 + KA.NX - 1, KA.Z0 + KA.NZ - 1)):
+        W.stempel(st, bezet=False)
+        n += 1
+    print(f"  splinterwand: {n} spitsen in zone 1")
+
+
+def noordklifhaven(W, K, P):
+    """haven_z1_z2_vertrek: the Noordklifhaven on the north cliffs (line A to Kandijkom-dok): a plaza (flattened in kaart.py),
+    a pier north over the cliff with the departure platform, mast and board; the platform's far corner is the viewpoint
+    Noordkliftop (U1) towards the Splinterwand and zone 2."""
+    import havens
+    cx, cz = KA.NOORDKLIF
+    y = K.noordklif_y
+    x0, z0, x1, z1 = havens.doos(cx, cz - KA.NOORDKLIF_R + 2, 0, -1, 34)
+    S = WS(x0, 30, z0, x1 - x0 + 1, y - 30 + 20, z1 - z0 + 1)
+    # the plaza: a ring of kerb stones, benches, lanterns
+    for a in range(0, 360, 30):
+        x, z = cx + (KA.NOORDKLIF_R - 1) * math.cos(math.radians(a)), cz + (KA.NOORDKLIF_R - 1) * math.sin(math.radians(a))
+        if -120 < a - 270 < 120 and abs(a - 270) < 25:
+            continue
+        S.set(x, y + 1, z, LANT if a % 60 == 0 else "minecraft:spruce_slab[type=bottom,waterlogged=false]")
+
+    def hoog(x, z):
+        return hoogste(W, K, int(x), int(z))
+    havens.pier(S, cx, y, cz - KA.NOORDKLIF_R + 2, 0, -1, 34, hoog, "haven_z1_z2", P, bodem=40)
+    P["haven_z1_z2_plein"] = [cx, y + 1, cz]
+    e = P["haven_z1_z2_eind"]
+    P["uitkijk_noordkliftop"] = [e[0] + 4, e[1], e[2]]
+    W.stempel(S.stempel("noordklifhaven"))
+
+
 # ================================================================================================ decoration
 _PADAFSTAND = {}
 
@@ -1792,7 +1854,10 @@ def bouw_alles(W, K, kamp_d):
     sporenwoud(W, K, P)
     __import__("hoedenpaden").bouw(W, K, P)  # verticaal: De Hoedenpaden (wereld/hoedenpaden.py)
     __import__("druipschacht").bouw(W, K, P)  # verticaal: De Druipschacht (wereld/druipschacht.py)
-    randwolken(W, K, P)
+    # T-WERELD: randwolken (the clouds along the RECTANGLE of the tile grid) are gone: the coast runs out naturally; the
+    # Splinterwand (zone 1 -> 2) and the Noordklifhaven take their place
+    splinterwand(W, K, P)
+    noordklifhaven(W, K, P)
     terugportalen(W, K, P)
     decoratie(W, K, P)
     npc_wensen(W, K, P, kamp_d)
@@ -1815,13 +1880,13 @@ def npc_wensen(W, K, P, kamp_d):
     """POI_VERZOEKEN (npc): the 10 lost knuffels, the quest decorations, Mopje's cave spot."""
     knuffels = ["knuffel_normal", "knuffel_mint", "knuffel_starry", "knuffel_pinguh", "knuffel_wolk", "knuffel_choco",
                 "knuffel_rainbow", "knuffel_snow", "knuffel_glitter", "knuffel_teckel"]
-    spots = [(-68, 952), (30, 1040), (-36, 33), (70, -70), (116, 466), (300, 250), (470, 185), (-400, -100), (-300, -226), (326, -374)]
+    spots = [(-68 + KDX, 952 + KDZ), (30 + KDX, 1040 + KDZ), (-36, 33), (70, -70), (116, 466), (300, 250), (470, 185), (-400, -100), (-300, -226), (326, -374)]
     for i, ((x, z), k) in enumerate(zip(spots, knuffels)):
         y = hoogste(W, K, x, z) + 1
         W.punten.set(x, y, z, "guhs:" + k)
         P[f"knuffel_{i + 1}"] = [x, y, z]
     # Dobber's lost hat near the lighthouse: a straw hat on the grass
-    x, z = -60, 955
+    x, z = -60 + KDX, 955 + KDZ
     y = hoogste(W, K, x, z) + 1
     W.punten.set(x, y, z, "minecraft:hay_block[axis=y]")
     for (dx, dz) in ((1, 0), (-1, 0), (0, 1), (0, -1)):
@@ -1869,6 +1934,10 @@ def terugportalen(W, K, P):
         S = WS(cx - 8, y - 3, z - 4, 17, 16, 9)
         S.fill(cx - 4, y - 1, z - 2, cx + 4, y - 1, z + 2, "minecraft:spruce_planks" if naam == "kamp" else "tegel_hartjes")
         poortje(S, cx, y, z)
+        if naam == "kamp":
+            P[f"terugportaal_{naam}"] = kamp_p([cx, y, z + 2])
+            W.stempel(kamp_stempel(S, "terugportaal_" + naam))
+            continue
         P[f"terugportaal_{naam}"] = [cx, y, z + 2]
         W.stempel(S.stempel("terugportaal_" + naam))
 

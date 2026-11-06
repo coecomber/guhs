@@ -15,7 +15,10 @@ from vrkit import stairs, slab
 
 ROZESTEEN = "guhs:roze_knuffelsteen"
 
-OX, OY, OZ = -150, 52, 865
+sys.path.insert(0, __import__("os").path.join(__import__("os").path.dirname(__import__("os").path.abspath(__file__)), ".."))
+import indeling as IND  # noqa: E402  (T-WERELD: the camp's world offset)
+
+OX, OY, OZ = -150 + IND.KAMP_DX, 52, 865 + IND.KAMP_DZ
 
 
 def w(x, y, z):

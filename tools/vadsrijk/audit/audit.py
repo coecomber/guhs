@@ -51,7 +51,7 @@ DAK = ("dakpan", "tentdoek")   # stairs of these are roofs
 # kern Gebieden (order = Gebieden.op: first match wins)
 GEBIEDEN = [("zwamzoet", -160, -160, 160, 160), ("haven", -120, 400, 120, 600), ("klodderweide", 160, -300, 600, 400),
             ("sporenwoud", -600, -160, -160, 400), ("druipgrotten", -600, -600, -160, -160), ("zwamtempel", 160, -600, 600, -300),
-            ("knuffelkamp", -128, 900, 128, 1150), ("ring", -600, -600, 600, 600)]
+            ("knuffelkamp", -128 - 384, 900, 128 - 384, 1150), ("ring", -660, -660, 660, 660)]   # T-WERELD: camp moved (-384, 0)
 
 
 def gebied(x, z):
@@ -76,7 +76,8 @@ def lees_plekken():
 
 def laad():
     # (integration) zone 1 only: the zone-2 tiles (tz -48..-28) share the folder but are a separate map
-    lijst = [t for t in TL.tegels(TEGELS) if t[1] > -20]
+    # T-WERELD: zone 2 (tx 6..15, tz -23..-13), zone 3 and zone 4/5 now sit next to zone 1: only the zone-1 grid (+ camp)
+    lijst = [t for t in TL.tegels(TEGELS) if -11 <= t[0] <= 11 and -11 <= t[1] <= 18]
     txs = [t[0] for t in lijst]
     tzs = [t[1] for t in lijst]
     tx0, tz0 = min(txs), min(tzs)
@@ -99,6 +100,9 @@ def laad():
         cls[ox + xs, oz + zs, ys] = lut[st, 0]
         mat[ox + xs, oz + zs, ys] = lut[st, 1]
         # stairs + doors with their properties (sparse)
+        # T-WERELD: a stair standing on tent cloth is the ridge of a tent roof (the camp tents), not a stair to walk on
+        doek = {i for i, s in enumerate(pal) if "tentdoek" in s or "dakpan" in s}
+        op_doek = {(int(x), int(y) + 1, int(z)) for x, y, z, q in zip(xs, ys, zs, st) if int(q) in doek} if doek else set()
         for i, s in enumerate(pal):
             n, props = BK.splits(s)
             if lut[i, 1] == BK.M_TRAP and props.get("half") == "bottom":
@@ -107,6 +111,8 @@ def laad():
                 if any(w in n for w in DAK):
                     continue                               # roofs are not stairs to walk on
                 for x, y, z in zip(xs[k], ys[k], zs[k]):
+                    if (int(x), int(y), int(z)) in op_doek:
+                        continue
                     trappen.append((ox + int(x), int(y), oz + int(z), f))
             elif lut[i, 1] == BK.M_DEUR and props.get("half", "lower") == "lower" and "gate" not in n:
                 k = st == i

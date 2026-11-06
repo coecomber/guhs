@@ -174,6 +174,12 @@ def plekken():
         put(f"{pre}_luchtschip", mx + ux * 24, HY - 1, mz + uz * 24)
         put(f"uitkijk_{'westtak' if pre == 'dok' else 'oosttak'}", mx + ux * 4 + uz * 3, HY + 1, mz + uz * 4 - ux * 3)
     put("uitkijk_nest", 0, NEST_STAND, 17)
+    # T-WERELD: the shared harbour ids of the world layout (t-luchtschip): line B (Galmdok <-> Weststeiger), line C
+    # (Oosttaksteiger <-> Lampionhaven); the bell stands where the departure board goes
+    for pre, hid in (("dok", "haven_z3_z2"), ("oosttaksteiger", "haven_z3_z4")):
+        PP[hid + "_vertrek"] = list(PP[pre + "_landing"])
+        PP[hid + "_bord"] = list(PP[pre + "_bel"])
+        PP[hid + "_mast"] = list(PP[pre + "_mast"])
     # ---------------------------------------------------------------- Honingtak: the Honingplein + the ring
     cx, cz = pol(B.TH_M, 52)
     put("knuffelbeeld", cx, HY + 1, cz)

@@ -13,7 +13,7 @@ wait 400
 waitrender 300
 
 section steiger
-/tp @s 0 66 1140
+/tp @s -384 66 1140
 look 180 -10
 wait 60
 waitrender 200

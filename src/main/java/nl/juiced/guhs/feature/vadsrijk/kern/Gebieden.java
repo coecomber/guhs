@@ -102,7 +102,7 @@ public final class Gebieden {
     }
 
     /** Where a player arrives the first time (Knuffelkamp dock). */
-    public static final BlockPos AANKOMST = new BlockPos(0, 65, 1130);
+    public static final BlockPos AANKOMST = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kamp(0, 65, 1130);   // T-WERELD: local camp coords
 
     private static final List<Gebied> ALLE = new ArrayList<>(List.of(
             new Gebied("zwamzoet", -160, -160, 160, 160, 1, 20, true),
@@ -111,9 +111,9 @@ public final class Gebieden {
             new Gebied("sporenwoud", -600, -160, -160, 400, 6, 13, false),
             new Gebied("druipgrotten", -600, -600, -160, -160, 12, 18, false),
             new Gebied("zwamtempel", 160, -600, 600, -300, 18, 20, false),
-            new Gebied("knuffelkamp", -128, 900, 128, 1150, 1, 3, true),
+            new Gebied("knuffelkamp", -128 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.KAMP_DX, 900, 128 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.KAMP_DX, 1150, 1, 3, true),   // T-WERELD
             new Gebied("proeftuin", 3000, 3000, 3192, 3192, 1, 20, false),
-            new Gebied("ring", -600, -600, 600, 600, 1, 20, false)));
+            new Gebied("ring", -660, -660, 660, 660, 1, 20, false)));   // T-WERELD: the organic coast reaches ~640
 
     private Gebieden() {
     }

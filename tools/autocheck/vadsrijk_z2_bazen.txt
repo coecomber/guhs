@@ -20,10 +20,10 @@ waitrender 300
 wait 40
 
 section galmwolf
-/tp @s 430 135 -2264
+/tp @s 1134 135 -920
 /guhs vadsrijk z2bazen bouw galmwolf
 wait 20
-/tp @s 430 121 -2264
+/tp @s 1134 121 -920
 look 180 12
 wait 60
 waitrender 200
@@ -44,20 +44,20 @@ shot g6_galmwolf_sneeuwjacht gui
 /guhs vadsrijk baas reset z2bazen:galmwolf
 
 section burcht
-/tp @s 0 176 -2862
+/tp @s 704 176 -1518
 look 180 15
 wait 60
 waitrender 200
 wait 40
 shot b1_burcht_voorhal gui
-/tp @s -3 176 -2883
+/tp @s 701 176 -1539
 look 180 20
 wait 40
 shot b2_burcht_lichtkamer gui
 /guhs vadsrijk z2bazen burcht los
 wait 30
 shot b3_burcht_opgelost gui
-/tp @s 0 176 -2903
+/tp @s 704 176 -1559
 look 180 10
 wait 80
 shot b4_spiegelgang gui
@@ -65,7 +65,7 @@ wait 60
 shot b5_spiegelgang_golf gui
 
 section spiegelzucht
-/tp @s 0 176 -2945
+/tp @s 704 176 -1601
 look 180 10
 wait 60
 waitrender 200
@@ -89,7 +89,7 @@ shot s7_spiegelzucht_zaal gui
 /guhs vadsrijk baas reset z2bazen:spiegelzucht
 
 section boor
-/tp @s -500 66 -2820
+/tp @s 204 66 -1476
 look 180 10
 wait 60
 waitrender 200

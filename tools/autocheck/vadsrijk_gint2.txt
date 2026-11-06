@@ -22,7 +22,7 @@ look 0 -5
 shot gi2_dok gui
 
 section kandijkom
-/tp @s 0 140 -2270
+/tp @s 704 140 -926
 look 180 22
 wait 80
 waitrender 500
@@ -44,24 +44,24 @@ waitrender 200
 shot gi2_huis_binnen gui
 
 section poorten
-/tp @s 40 91 -2400
+/tp @s 744 91 -1056
 look 270 5
 wait 40
 waitrender 300
 shot gi2_oostpoort gui
-/tp @s -40 91 -2400
+/tp @s 664 91 -1056
 look 90 5
 wait 40
 waitrender 300
 shot gi2_westpoort gui
 
 section meer
-/tp @s -172 85 -2330
+/tp @s 532 85 -986
 look 180 5
 wait 60
 waitrender 300
 shot gi2_meer_ijs gui
-/tp @s -172 86 -2300
+/tp @s 532 86 -956
 look 0 15
 wait 40
 waitrender 300
@@ -83,7 +83,7 @@ look 180 10
 wait 60
 waitrender 300
 shot gi2_kloofrand gui
-/tp @s 150 190 -2600
+/tp @s 854 190 -1256
 look 0 20
 wait 80
 waitrender 400

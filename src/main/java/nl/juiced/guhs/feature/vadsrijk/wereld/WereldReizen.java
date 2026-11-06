@@ -82,7 +82,7 @@ public final class WereldReizen {
     public static final String GEZIEN = "vr_w_rondvlucht";
     static final int DUUR = 720;
     /** The airship that passes on the way (built by tools/vadsrijk/wereld/bouwsels.rondvlucht): its balcony with the guhs. */
-    static final Vec3 SCHIP = new Vec3(40, 118, 760);
+    static final Vec3 SCHIP = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(40, 118, 760);
     static final Vec3 SKYLINE = new Vec3(0, 165, 0);
 
     private record Vlucht(long start, Dok naar, Vec3 landing, List<Vec3> pad, boolean overslaanbaar, List<UUID> zwaaiers) {
@@ -136,8 +136,8 @@ public final class WereldReizen {
     /** Control points of the flight (positions only; the look direction follows the path and glances at the sights). */
     private static List<Vec3> route(Dok van, Dok naar, Vec3 landing) {
         List<Vec3> heen = new ArrayList<>(List.of(
-                new Vec3(140, 100, 985), new Vec3(122, 118, 905), new Vec3(96, 124, 805), new Vec3(98, 130, 700),
-                new Vec3(112, 138, 600), new Vec3(126, 146, 450), new Vec3(118, 150, 300), new Vec3(104, 148, 175),
+                nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(140, 100, 985), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(122, 118, 905), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(96, 124, 805), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(98, 130, 700),
+                nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(112, 138, 600), new Vec3(126, 146, 450), new Vec3(118, 150, 300), new Vec3(104, 148, 175),
                 new Vec3(150, 138, 230), new Vec3(150, 120, 340), new Vec3(122, 98, 430), new Vec3(98, 78, 468)));
         Vec3 a = Vec3.atBottomCenterOf(van.aankomst()).add(0, 1.62, 0);
         Vec3 eind = landing.add(0, 1.62, 0);
@@ -149,8 +149,8 @@ public final class WereldReizen {
         } else {
             List<Vec3> terug = new ArrayList<>(List.of(
                     new Vec3(98, 82, 470), new Vec3(130, 104, 420), new Vec3(150, 128, 330), new Vec3(140, 145, 210),
-                    new Vec3(100, 150, 180), new Vec3(112, 148, 300), new Vec3(126, 142, 450), new Vec3(112, 136, 600),
-                    new Vec3(98, 128, 700), new Vec3(96, 122, 805), new Vec3(122, 112, 910), new Vec3(160, 98, 1000)));
+                    new Vec3(100, 150, 180), new Vec3(112, 148, 300), new Vec3(126, 142, 450), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(112, 136, 600),
+                    nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(98, 128, 700), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(96, 122, 805), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(122, 112, 910), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kampMeng(160, 98, 1000)));
             pad.addAll(terug);
             pad.add(eind.add(3, 0.6, 0));
         }

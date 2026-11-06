@@ -24,12 +24,12 @@ look 0 -5
 shot gz2_dok gui
 
 section kandijkom
-/tp @s 0 140 -2270
+/tp @s 704 140 -926
 look 180 22
 wait 80
 waitrender 500
 shot gz2_skyline gui
-/tp @s -60 128 -2470
+/tp @s 644 128 -1126
 look 135 25
 wait 60
 waitrender 400
@@ -66,17 +66,17 @@ waitrender 200
 shot gz2_kapel_binnen gui
 
 section poorten
-/tp @s 40 91 -2400
+/tp @s 744 91 -1056
 look 270 5
 wait 40
 waitrender 300
 shot gz2_oostpoort gui
-/tp @s 96 101 -2399
+/tp @s 800 101 -1055
 look 90 10
 wait 40
 waitrender 300
 shot gz2_oostpoort_buiten gui
-/tp @s 0 91 -2440
+/tp @s 704 91 -1096
 look 180 0
 wait 40
 waitrender 300

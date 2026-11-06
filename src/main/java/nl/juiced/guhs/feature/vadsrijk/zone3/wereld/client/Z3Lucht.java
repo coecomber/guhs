@@ -41,10 +41,9 @@ final class Z3Lucht {
         return Guhs.id("textures/vadsrijk/wereld/" + n + ".png");
     }
 
-    /** 0 outside zone 3, 1 inside (soft over 200 blocks west of its tile range). */
+    /** 0 outside zone 3, 1 inside (T-WERELD: soft over 120 blocks around its tile box; zone 2 lies west, zone 4 east). */
     static float sterkte(double x, double z) {
-        double rand = Z3WereldPlekken.TEGEL_X0 * 64;
-        return (float) Mth.clamp((x - rand + 120) / 200.0, 0, 1) * (Math.abs(z) < 1100 ? 1f : 0f);
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.nabij(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.Z3, x, z, 120);
     }
 
     static float nachtFactor(long tijd) {

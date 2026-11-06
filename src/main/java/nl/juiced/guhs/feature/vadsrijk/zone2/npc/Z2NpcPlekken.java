@@ -21,14 +21,15 @@ public final class Z2NpcPlekken {
     private Z2NpcPlekken() {
     }
 
+    /** (T-WERELD) literals are LOCAL zone-2 coordinates (the old frame); the world place = + VadsrijkZones.Z2_DX/DZ. */
     static BlockPos p(int x, int y, int z) {
-        return new BlockPos(x, y, z);
+        return nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(x, y, z);
     }
 
     /** (integration) The spot from z2-wereld's generated Z2WereldPlekken; the numbers are only the fallback. */
     static BlockPos w(String id, int x, int y, int z) {
         BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
-        return b != null ? b : new BlockPos(x, y, z);
+        return b != null ? b : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2(x, y, z);
     }
 
     /** (fix round 2) The map generator publishes a stand spot for every literal below (npcplek.&lt;npc&gt;, poiplek.&lt;poi&gt;,
@@ -44,7 +45,7 @@ public final class Z2NpcPlekken {
 
     static Vec3 v(String id, double x, double y, double z) {
         BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.plek(id);
-        return b != null ? Vec3.atBottomCenterOf(b) : new Vec3(x, y, z);
+        return b != null ? Vec3.atBottomCenterOf(b) : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(x, y, z);
     }
 
     /** The Spiegelburcht's move (v1 layout + this offset). */
@@ -62,7 +63,7 @@ public final class Z2NpcPlekken {
     /** (fix round 2) The geode: its middle and inner radius, and the inner mouths of its gates (plan.py POORTEN; the tracker
      *  points there first when you are in town and the target is outside). g-int: g-z2's smaller geode (plan.py GEODE_R 66, the
      *  gate streets run flat through the wall at y 90, so the old x +-128 walls are gone). */
-    public static final BlockPos GEODE_MIDDEN = new BlockPos(0, KK, -2400);
+    public static final BlockPos GEODE_MIDDEN = p(0, KK, -2400);
     public static final int GEODE_BINNEN = 66;
     public static final BlockPos POORT_OOST = p(62, KK, -2400), POORT_WEST = p(-62, KK, -2400), POORT_NOORD = p(0, KK, -2462);
     /** The gondola stations (POI:gondel_dal / gondel_berg). */
@@ -206,14 +207,16 @@ public final class Z2NpcPlekken {
     public record Gebied(String id, int minX, int minZ, int maxX, int maxZ, int minLv, int maxLv, boolean stad) {
     }
 
+    private static final int DX = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DX, DZ = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z2_DZ;
+
     public static final Gebied[] GEBIEDEN = {
-            new Gebied("z2_ring", -600, -3000, 600, -1800, 20, 35, false),
-            new Gebied("z2_splinterkloof", -600, -3000, 600, -2701, 30, 34, false),
-            new Gebied("z2_knuffelmeer", -600, -2700, -151, -1800, 25, 30, false),
-            new Gebied("z2_galmhellingen", 151, -2700, 600, -1800, 20, 25, false),
-            new Gebied("z2_kandijkom", -150, -2550, 150, -2250, 20, 35, true),
-            new Gebied("z2_kandijkom_dok", -40, -2249, 40, -2200, 20, 35, true),
-            new Gebied("z2_spiegelburcht", -70, -2995, 70, -2850, 33, 35, false)};
+            new Gebied("z2_ring", -600 + DX, -3000 + DZ, 600 + DX, -1800 + DZ, 20, 35, false),
+            new Gebied("z2_splinterkloof", -600 + DX, -3000 + DZ, 600 + DX, -2701 + DZ, 30, 34, false),
+            new Gebied("z2_knuffelmeer", -600 + DX, -2700 + DZ, -151 + DX, -1800 + DZ, 25, 30, false),
+            new Gebied("z2_galmhellingen", 151 + DX, -2700 + DZ, 600 + DX, -1800 + DZ, 20, 25, false),
+            new Gebied("z2_kandijkom", -150 + DX, -2550 + DZ, 150 + DX, -2250 + DZ, 20, 35, true),
+            new Gebied("z2_kandijkom_dok", -40 + DX, -2249 + DZ, 40 + DX, -2200 + DZ, 20, 35, true),
+            new Gebied("z2_spiegelburcht", -70 + DX, -2995 + DZ, 70 + DX, -2850 + DZ, 33, 35, false)};
 
     // ---- secrets ----------------------------------------------------------------------------------------------------------------
     /** The 10 knuffels frozen under the lake ice (POI:knuffel_ijs_1..10 = stand on the ice above one; Kleine Vlokje's quest). */
@@ -266,14 +269,14 @@ public final class Z2NpcPlekken {
      * chunks around the camera are loaded); the camera stays within ~140 blocks of it.
      */
     public static final Vec3[] OPENING = {
-            new Vec3(-8, 138, -2110), new Vec3(10, 132, -2300),       // 0: from the deck, in the storm, Kandijkom ahead (unseen)
-            new Vec3(4, 134, -2140), new Vec3(30, 128, -2240),        // 100: the floes hit, lights out
-            new Vec3(20, 140, -2165), OPENING_NAALD,                   // 180: turn to the needle: the wolf
-            new Vec3(26, 142, -2180), OPENING_NAALD.add(0, 2, 0),      // 250: the howl, the needle bursts
-            new Vec3(0, 120, -2205), new Vec3(0, 98, -2400),           // 310: diving into the geode, the pink glow
-            new Vec3(0, 96, -2236), v("npc_cafe", 59, 92, -2344)};          // 400: at the dock, looking at the cafe
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(-8, 138, -2110), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(10, 132, -2300),       // 0: from the deck, in the storm, Kandijkom ahead (unseen)
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(4, 134, -2140), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(30, 128, -2240),        // 100: the floes hit, lights out
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(20, 140, -2165), OPENING_NAALD,                   // 180: turn to the needle: the wolf
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(26, 142, -2180), OPENING_NAALD.add(0, 2, 0),      // 250: the howl, the needle bursts
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 120, -2205), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 98, -2400),           // 310: diving into the geode, the pink glow
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 96, -2236), v("npc_cafe", 59, 92, -2344)};          // 400: at the dock, looking at the cafe
     /** The ship's path in the opening (the effects follow it). */
-    public static final Vec3 SCHIP_VAN = new Vec3(0, 132, -2150), SCHIP_NAAR = new Vec3(0, 93, -2242);
+    public static final Vec3 SCHIP_VAN = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 132, -2150), SCHIP_NAAR = nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 93, -2242);
 
     /** The wounded dragon (z2_hq09) on the col north of the lake (POI:draak_zadel), seen from POI:draak_zadel_kijk. */
     public static final Vec3 DRAAK_RUST = v("draak_zadel", -330, 126, -2610).add(0, 2, 0);
@@ -302,8 +305,8 @@ public final class Z2NpcPlekken {
     private static final Vec3 ALTAAR = v("kristalkapel_altaar", 0, 91, -2476);
     public static final Vec3[] CLIFFHANGER = {
             ALTAAR.add(4, 2, 8), ALTAAR.add(0, 1, 0),            // in the Kristalkapel
-            ALTAAR.add(10, 39, 6), new Vec3(900, 190, -2240),
-            ALTAAR.add(30, 59, 26), new Vec3(1000, 220, -2210)};
+            ALTAAR.add(10, 39, 6), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(900, 190, -2240),
+            ALTAAR.add(30, 59, 26), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(1000, 220, -2210)};
 
     /** The gondola ride (fallback when z2-wereld's own gondola is not in this tree). */
     public static final Vec3[] GONDEL = {
@@ -312,7 +315,7 @@ public final class Z2NpcPlekken {
             v("gondel_berg", 306, 151, -2616).add(-10, 5, 10), v("arena_galmwolf", 420, 165, -2480).add(0, 40, 0)};     // the top: over the Galmhellingen
     /** The airship between De Haven and Kandijkom (fallback when z2-wereld has no line of its own). */
     public static final Vec3[] VLUCHT_KANDIJKOM = {
-            new Vec3(0, 140, -2120), new Vec3(0, 120, -2300),
-            new Vec3(0, 116, -2200), new Vec3(0, 98, -2400),
-            new Vec3(0, 97, -2236), new Vec3(59, 92, -2344)};
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 140, -2120), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 120, -2300),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 116, -2200), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 98, -2400),
+            nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(0, 97, -2236), nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.z2V(59, 92, -2344)};
 }

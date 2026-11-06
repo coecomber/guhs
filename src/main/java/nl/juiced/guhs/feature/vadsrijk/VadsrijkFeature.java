@@ -34,6 +34,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.register(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
+        nl.juiced.guhs.feature.vadsrijk.indeling.IndelingRegistry.register(modBus);   // T-WERELD: world layout W-3 (barriers, dev tp)
     }
 
     public static void payloads(PayloadRegistrar registrar) {

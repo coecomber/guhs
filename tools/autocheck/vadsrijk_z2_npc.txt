@@ -17,7 +17,7 @@ waitrender 300
 wait 40
 /guhs vadsrijk npc reset
 /guhs vadsrijk z2npc reset
-/tp @s 0 91 -2400
+/tp @s 704 91 -1056
 wait 100
 waitrender 300
 
@@ -38,24 +38,24 @@ shot z2_opening_titel gui
 wait 60
 
 section kandijkom
-/tp @s 0 92 -2380 180 10
+/tp @s 704 92 -1036 180 10
 wait 60
 waitrender 200
 shot z2_plein gui
-/tp @s 40 92 -2360 135 10
+/tp @s 744 92 -1016 135 10
 wait 40
 shot z2_cafe_kant gui
-/tp @s -40 92 -2425 -90 10
+/tp @s 664 92 -1081 -90 10
 wait 40
 shot z2_juwelier_kant gui
 
 section rij
-/tp @s 0 91 -2300 180 12
+/tp @s 704 91 -956 180 12
 wait 40
 /guhs vadsrijk z2npc rij
 wait 60
 shot z2_rij gui
-/tp @s 0 91 -2305 180 18
+/tp @s 704 91 -961 180 18
 wait 30
 shot z2_rij_dichtbij gui
 
@@ -63,7 +63,7 @@ section dialoog
 /guhs vadsrijk npc quest start hq12_schaduw
 /guhs vadsrijk npc quest klaar hq12_schaduw
 /guhs vadsrijk npc quest start z2_hq02_kandijkom
-/tp @s 0 91 -2414 180 10
+/tp @s 704 91 -1070 180 10
 wait 60
 interact 0 91 -2418 guhs:vr_npc_guh
 wait 20
