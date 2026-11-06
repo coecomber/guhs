@@ -16,7 +16,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.client.RijkHud;
  * attack hits, and for an interruptible cast a purple break meter under it ("Onderbreek!"). When it is stopped: "ONDERBROKEN!"
  * for a moment. Only one cast at a time (the newest).
  */
-final class CastBalk {
+public final class CastBalk {   // (T-INT: public for RijkHud.BOVEN_EXTRA)
     private static final class Cast {
         int id, ticks;
         String baas = "", naam = "";
@@ -60,6 +60,11 @@ final class CastBalk {
         }
     }
 
+    /** T-INT: the pixels this bar takes under the boss bar (RijkHud.BOVEN_EXTRA: the quest tracker moves down by it). */
+    public static int hoogte() {
+        return cast != null ? 20 : 0;
+    }
+
     static void wis() {
         cast = null;
     }
@@ -81,7 +86,8 @@ final class CastBalk {
         long klok = VfxClient.klok();
         Font f = mc.font;
         int w = g.guiWidth(), bw = Math.min(200, w - 60), x = w / 2 - bw / 2;
-        int y = RijkHud.bovenVrij() > 0 ? RijkHud.bovenVrij() + 2 : 8;
+        int boven = RijkHud.bovenVrij() - hoogte();   // (T-INT: bovenVrij counts this bar too)
+        int y = RijkHud.bovenVrij() > 0 ? boven + 2 : 8;
         float vol = c.stop >= 0 ? (c.onderbroken ? (klok - c.start) / (float) c.ticks : 1f) : Math.min(1f, (klok - c.start + pt) / c.ticks);
         float alfa = c.stop >= 0 && !c.onderbroken ? Math.max(0, 1 - (klok - c.stop + pt) / 10f) : 1f;
         int a = (int) (alfa * 255) << 24;

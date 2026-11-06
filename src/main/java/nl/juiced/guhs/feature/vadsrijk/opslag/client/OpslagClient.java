@@ -52,7 +52,8 @@ public final class OpslagClient {
         RijkHud.voegToe("t_opslag_buffs", 100, OpslagHud::tekenBuffs);
         RijkHud.voegToe("t_opslag_doel", 110, OpslagHud::tekenDoel);
         RijkHud.voegToe("t_opslag_giet", 120, OpslagHud::tekenGiet);
-        RijkHud.BOVEN_EXTRA = OpslagHud::bovenExtra;
+        // T-INT: + t-vfx's boss cast bar (THE boss cast bar: Gietbalk.baas routes bosses there)
+        RijkHud.BOVEN_EXTRA = () -> OpslagHud.bovenExtra() + nl.juiced.guhs.feature.vadsrijk.vfx.client.CastBalk.hoogte();
         NeoForge.EVENT_BUS.addListener((ClientTickEvent.Post e) -> {
             OpslagHud.tick();
             Minecraft mc = Minecraft.getInstance();

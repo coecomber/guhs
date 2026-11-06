@@ -56,6 +56,7 @@ public final class Bank {
 
     static void init() {
         STANDAARD.forEach(Bank::bankier);
+        bankier("z5_gouddraad");   // T-INT: Hoogvads (t-z5verhaal: Raadsheer Gouddraad stands at the bank counter on the market)
         NpcRollen.koppel("bank", Bank::open);
     }
 

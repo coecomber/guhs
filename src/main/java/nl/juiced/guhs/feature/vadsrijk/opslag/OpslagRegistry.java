@@ -48,6 +48,7 @@ public final class OpslagRegistry {
         Materiaaltas.regel(s -> s.is(EcoSpul.VERBETERSTEENTJE.get()) || s.is(EcoSpul.HERROLKNABBEL.get()) || s.is(EcoSpul.PLUISDRAAD.get()));
         Materiaaltas.regel(s -> s.getItem() instanceof Kristallen.KristalItem);
         Bank.init();
+        AmbachtTas.koppel();   // T-INT: t-ambacht's MateriaalTas.BRON -> this materiaaltas
         HudBron.init();
         Gietbalk.BRONNEN.add(p -> {   // kern's Losknuffelen (U): its 3 s channel gets a cast bar
             long b = nl.juiced.guhs.feature.vadsrijk.kern.veilig.Losknuffelen.kanaalBegin(p.getUUID());

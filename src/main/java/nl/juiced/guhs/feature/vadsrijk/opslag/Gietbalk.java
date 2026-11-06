@@ -49,11 +49,19 @@ public final class Gietbalk {
     }
 
     public static void baas(LivingEntity baas, String naamKey, int ticks, int kleur, boolean onderbreekbaar, double straal) {
+        if (baas instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas vb) {   // T-INT: ONE boss cast bar on screen: t-vfx's
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.cast(vb, naamKey, ticks, onderbreekbaar);
+            return;
+        }
         stuurRond(baas, new OpslagPayloads.Giet(baas.getId(), naamKey, Math.max(1, ticks), kleur,
                 OpslagPayloads.Giet.BAAS | (onderbreekbaar ? OpslagPayloads.Giet.ONDERBREEKBAAR : 0)), straal);
     }
 
     public static void stopBaas(LivingEntity baas, boolean onderbroken, double straal) {
+        if (baas instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas vb) {   // T-INT: t-vfx's bar
+            nl.juiced.guhs.feature.vadsrijk.vfx.Vfx.castStop(vb, onderbroken);
+            return;
+        }
         stuurRond(baas, new OpslagPayloads.Giet(baas.getId(), "", 0, 0, OpslagPayloads.Giet.BAAS | (onderbroken ? OpslagPayloads.Giet.ONDERBROKEN : 0)), straal);
     }
 

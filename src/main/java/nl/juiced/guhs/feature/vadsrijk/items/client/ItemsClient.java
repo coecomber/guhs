@@ -93,6 +93,24 @@ public final class ItemsClient {
         NeoForge.EVENT_BUS.addListener((ScreenEvent.MouseButtonPressed.Pre e) -> klik(e));
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> riem = leeg());
         RijkItem.TOOLTIP_EXTRA.add(ItemsClient::tooltip);
+        // T-INT: the drink cooldowns also show in t-opslag's buff row (one icon per potion kind on cooldown)
+        nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagHud.EXTRA.add(() -> {
+            Minecraft mc = Minecraft.getInstance();
+            List<nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagHud.ExtraIcoon> l = new ArrayList<>();
+            if (mc.player == null) {
+                return l;
+            }
+            java.util.Set<net.minecraft.world.item.Item> gezien = new java.util.HashSet<>();
+            for (ItemStack s : riem) {
+                if (!s.isEmpty() && gezien.add(s.getItem())) {
+                    float cd = mc.player.getCooldowns().getCooldownPercent(s, 0f);
+                    if (cd > 0) {
+                        l.add(new nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagHud.ExtraIcoon(s, cd, (int) Math.ceil(cd * 10), false));
+                    }
+                }
+            }
+            return l;
+        });
     }
 
     // ---- HUD ----------------------------------------------------------------------------------------------------------------
@@ -103,19 +121,21 @@ public final class ItemsClient {
             return;
         }
         Font f = mc.font;
-        int x0 = g.guiWidth() / 2 - 91 - 32 - Drankjesriem.VAKKEN * 21, y = g.guiHeight() - 21;
+        // T-INT: t-opslag's reserved HUD spot {x, y, vak, stap} (right of the hotbar, above the skills)
+        int[] plek = nl.juiced.guhs.feature.vadsrijk.kern.client.RijkHud.plek("drankjesriem", g.guiWidth(), g.guiHeight());
+        int x0 = plek[0], y = plek[1], vak = plek[2], stap = plek[3];
         for (int i = 0; i < Drankjesriem.VAKKEN; i++) {
-            int x = x0 + i * 21;
+            int x = x0 + i * stap;
             ItemStack s = riem.get(i);
-            g.fill(x - 1, y - 1, x + 19, y + 19, 0xFF6A3A5A);
-            g.fill(x, y, x + 18, y + 18, 0xE0281A24);
+            g.fill(x - 1, y - 1, x + vak + 1, y + vak + 1, 0xFF6A3A5A);
+            g.fill(x, y, x + vak, y + vak, 0xE0281A24);
             if (!s.isEmpty()) {
-                g.item(s, x + 1, y + 1);
-                g.itemDecorations(f, s, x + 1, y + 1);
+                g.item(s, x + (vak - 16) / 2, y + (vak - 16) / 2);
+                g.itemDecorations(f, s, x + (vak - 16) / 2, y + (vak - 16) / 2);
                 float cd = mc.player.getCooldowns().getCooldownPercent(s, dt.getGameTimeDeltaPartialTick(true));
                 if (cd > 0) {
-                    int h = (int) Math.ceil(18 * cd);
-                    g.fill(x, y + 18 - h, x + 18, y + 18, 0xA0000000);
+                    int h = (int) Math.ceil(vak * cd);
+                    g.fill(x, y + vak - h, x + vak, y + vak, 0xA0000000);
                 }
             }
             String toets = RIEM[i].getKey().getDisplayName().getString();   // (T-INT: modifier as one letter: "A1" = Alt+1)
