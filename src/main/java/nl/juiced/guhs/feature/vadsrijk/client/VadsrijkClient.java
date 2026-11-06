@@ -47,9 +47,10 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.client.ZichtbaarClient.init(modBus);   // U-ZICHTBAAR: cape/gloves/jewellery on the player model
         nl.juiced.guhs.feature.vadsrijk.ruiters.client.RuitersClient.init(modBus);   // U-RUITERS: riding guhs renderers
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.client.SpecClient.init(modBus);   // U-SPECS: gear compare arrows (after kern: wraps its jewellery receiver)
-        nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.init(modBus);   // U-TABS: the Vadsrijk-menu (key H, all tabs in one frame; keep last)
         nl.juiced.guhs.feature.vadsrijk.toetsen.client.ToetsenClient.init(modBus);   // U-TOETSEN: key overview in the pause menu (+ /toetsen)
         nl.juiced.guhs.feature.vadsrijk.gilden.client.BondClient.init(modBus);   // U-GILDEN: bond tags above the head + the ⚑ inventory button
         nl.juiced.guhs.feature.vadsrijk.grotten.client.GrotSfeerClient.init(modBus);   // U-GROTTEN: cave particles + drips
+        nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.init(modBus);   // U-TABS: the Vadsrijk-menu (key H, all tabs in one frame; keep last)
+        nl.juiced.guhs.feature.vadsrijk.vint.client.VIntClient.init(modBus);   // V-INT: key H contexts (menu in the Vadsrijk, einde2 power elsewhere), bond/house/hud/spec tabs
     }
 }

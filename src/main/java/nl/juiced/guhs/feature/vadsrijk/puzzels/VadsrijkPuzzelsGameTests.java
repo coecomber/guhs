@@ -318,10 +318,10 @@ public class VadsrijkPuzzelsGameTests {
                 }
             }
             int zone = z;
-            long aantal = Puzzels.defs().stream().filter(d -> d.zone() == zone).count();
+            long aantal = Puzzels.defs().stream().filter(d -> d.zone() == zone && !d.id().startsWith("grot_")).count();   // V-INT: cave puzzles count in "Grotten"
             helper.assertTrue(cat != null && cat.dingen().size() == aantal && !cat.later(), "zone " + z + " counts its " + aantal + " puzzles");
             helper.assertTrue(Voltooiing.tel(p, cat).klaar() == 0, "nothing done yet");
-            PuzzelDef d = Puzzels.defs().stream().filter(x -> x.zone() == zone).findFirst().orElseThrow();
+            PuzzelDef d = Puzzels.defs().stream().filter(x -> x.zone() == zone && !x.id().startsWith("grot_")).findFirst().orElseThrow();
             PuzzelSpeler.map(p, "opgelost").putBoolean(d.id(), true);
             helper.assertTrue(Voltooiing.tel(p, cat).klaar() == 1, "one solved = one ticked");
         }

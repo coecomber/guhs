@@ -37,7 +37,7 @@ public final class PuzzelBoek {
     static Categorie categorie(int zone) {
         List<Ding> l = new ArrayList<>();
         for (PuzzelDef d : Puzzels.defs()) {
-            if (d.zone() != zone) {
+            if (d.zone() != zone || d.id().startsWith("grot_")) {   // V-INT: a cave puzzle counts once, in the cave's own "Grotten" category
                 continue;
             }
             BlockPos plek = d.anker().punt();

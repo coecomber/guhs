@@ -44517,5 +44517,22 @@
   "vadsrijk.wereld.uitkijk.vuurtoren": "De Vuurtorengalerij",
   "vadsrijk.wereld.uitkijk.lampionduin": "De Lampionduin",
   "vadsrijk.wereld.uitkijk.pierkop": "De Pierkop",
-  "vadsrijk.wereld.uitkijk.vliegerheuvel": "De Vliegerheuvel"
+  "vadsrijk.wereld.uitkijk.vliegerheuvel": "De Vliegerheuvel",
+  "vadsrijk.menu.tab.bond": "Knuffelbond",
+  "vadsrijk.menu.tab.bond.uitleg": "Je bond (guild): leden, weektaken, perks en jullie kasteel",
+  "vadsrijk.menu.tab.huis": "Mijn huis",
+  "vadsrijk.menu.tab.huis.uitleg": "Het Knuffelkwartier: je eigen huis in een buurtje",
+  "vadsrijk.vint.tab.hud": "HUD aanpassen",
+  "vadsrijk.vint.tab.specs": "Specialisatie",
+  "vadsrijk.vint.karakter.spec": "Specialisatie: %s",
+  "vadsrijk.vint.karakter.spec.geen": "Specialisatie: nog niet gekozen (vanaf level 17)",
+  "vadsrijk.vint.toets.menu": "Vadsrijk-menu (alle tabbladen)",
+  "vadsrijk.vint.bond.titel": "Je Knuffelbond",
+  "vadsrijk.vint.bond.uitleg.1": "Een Knuffelbond is een club van spelers. Samen verdien je bondsxp met alles wat je toch al doet: monsters, quests, levels en ambachten.",
+  "vadsrijk.vint.bond.uitleg.2": "Lid worden kan al vanaf zone 1: kijk op een Bondenbord in elke stad. Zelf een bond oprichten kan pas in Hoogvads, bij Bondsklerk Zegeltje.",
+  "vadsrijk.vint.bond.uitleg.3": "Elke bond krijgt een kasteel in de Bondenvallei, dat jullie samen uitbouwen (niveau 1 t/m 5), met een kluis, trofeeënzaal en werkplaatsen.",
+  "vadsrijk.vint.bond.voet": "Knoppen openen het bondspaneel in de chat (ook: /bond, /bc om te chatten)",
+  "vadsrijk.vint.huis.titel": "Mijn huis in het Knuffelkwartier",
+  "vadsrijk.vint.huis.intro": "Het Knuffelkwartier is een eigen buurtje met straatjes, buren, een plein en een markt. Je koopt er een kavel met een huisje dat je zelf inricht.",
+  "vadsrijk.vint.huis.waar": "Erheen: praat met de Kwartiermeester op het plein van elke hoofdstad (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads)."
 }

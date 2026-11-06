@@ -44517,5 +44517,22 @@
   "vadsrijk.wereld.uitkijk.vuurtoren": "The Lighthouse Gallery",
   "vadsrijk.wereld.uitkijk.lampionduin": "The Lantern Dune",
   "vadsrijk.wereld.uitkijk.pierkop": "The Pier Head",
-  "vadsrijk.wereld.uitkijk.vliegerheuvel": "The Kite Hill"
+  "vadsrijk.wereld.uitkijk.vliegerheuvel": "The Kite Hill",
+  "vadsrijk.menu.tab.bond": "Knuffelbond",
+  "vadsrijk.menu.tab.bond.uitleg": "Your bond (guild): members, weekly tasks, perks and your castle",
+  "vadsrijk.menu.tab.huis": "My house",
+  "vadsrijk.menu.tab.huis.uitleg": "The Knuffelkwartier: your own house in a neighbourhood",
+  "vadsrijk.vint.tab.hud": "Edit HUD",
+  "vadsrijk.vint.tab.specs": "Specialisation",
+  "vadsrijk.vint.karakter.spec": "Specialisation: %s",
+  "vadsrijk.vint.karakter.spec.geen": "Specialisation: not chosen yet (from level 17)",
+  "vadsrijk.vint.toets.menu": "Vadsrijk menu (all tabs)",
+  "vadsrijk.vint.bond.titel": "Your Knuffelbond",
+  "vadsrijk.vint.bond.uitleg.1": "A Knuffelbond is a club of players. Together you earn bond xp with everything you already do: monsters, quests, levels and professions.",
+  "vadsrijk.vint.bond.uitleg.2": "You can join from zone 1: look at a bond board in every town. Founding your own bond is only possible in Hoogvads, at clerk Zegeltje.",
+  "vadsrijk.vint.bond.uitleg.3": "Every bond gets a castle in the Bondenvallei that you build up together (level 1 to 5), with a vault, trophy hall and workshops.",
+  "vadsrijk.vint.bond.voet": "Buttons open the bond panel in the chat (also: /bond, /bc to chat)",
+  "vadsrijk.vint.huis.titel": "My house in the Knuffelkwartier",
+  "vadsrijk.vint.huis.intro": "The Knuffelkwartier is a neighbourhood of its own with streets, neighbours, a square and a market. You buy a plot with a house you furnish yourself.",
+  "vadsrijk.vint.huis.waar": "Getting there: talk to the Kwartiermeester on the square of every main town (Zwamzoet, Kandijkom, Honingtak, Lampionhaven, Hoogvads)."
 }

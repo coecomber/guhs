@@ -17,7 +17,7 @@ import nl.juiced.guhs.feature.vadsrijk.voltooiing.client.BoekScherm;
  * and the search box. Done = green tick + name; not found yet = "???" + its hint.
  */
 public class PuzzelPaneel extends BoekScherm {
-    private static final Set<String> CATS = Set.of("puzzel", "geheim", "knuffel");
+    private static final Set<String> CATS = Set.of("puzzel", "geheim", "knuffel", "grotten");   // V-INT: + u-grotten (only its puzzle lines, below)
     private static final int REGEL = 12;
     private int scroll, filter;   // filter: 0 all, 1 still open, 2 done
 
@@ -50,6 +50,9 @@ public class PuzzelPaneel extends BoekScherm {
                 ListTag dl = ct.getListOrEmpty("d");
                 for (int i = 0; i < dl.size(); i++) {
                     CompoundTag d = dl.getCompoundOrEmpty(i);
+                    if ("grotten".equals(ct.getStringOr("id", "")) && !d.getStringOr("n", "").startsWith("vadsrijk.grotten.boek.puzzel.")) {
+                        continue;   // V-INT: of a cave only its puzzle (discovery/elite/treasure stay in the book)
+                    }
                     boolean af = d.getByteOr("s", (byte) 0) == 2;
                     totaal++;
                     klaar += af ? 1 : 0;
