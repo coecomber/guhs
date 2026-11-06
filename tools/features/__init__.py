@@ -267,6 +267,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_luchtschip',
             # 1.10 night round T, T-KARAKTER: character slots + game modes texts (Java: feature/vadsrijk/karakter)
             'vadsrijk_t_karakter',
+            # 1.10 round U, U-TOETSEN: key overview in the pause menu (Java: feature/vadsrijk/toetsen)
+            'vadsrijk_u_toetsen',
             # 1.10 night round T: zone 4 "De Lampionkust", the story (Java: feature/vadsrijk/zone4/verhaal)
             'vadsrijk_t_z4verhaal',
             # 1.10 night round T, T-IMKER: the secret zone-3 boss De Mika-imker (Java: feature/vadsrijk/imker)
