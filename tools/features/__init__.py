@@ -234,6 +234,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_dialoog',
             # 1.10 T-GELUID: area music, boss themes, stingers, ambience (Java: feature/vadsrijk/geluid; OGGs from tools/vadsrijk/geluid)
             'vadsrijk_t_geluid',
+            # 1.10 night round T, T-MODELS: showcase models (Grauwe Klodderreus) + showroom texts; model kit v2 = vadsrijk_t_modelkit.py
+            'vadsrijk_t_models',
             ]
 
 

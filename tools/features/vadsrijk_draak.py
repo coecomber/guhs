@@ -901,11 +901,41 @@ STAPPEN = [[], ["wing_l_3", "wing_r_3"], ["wing_l", "wing_r", "wing_l_2", "wing_
            ["head", "jaw", "ear_l", "ear_r"]]
 
 
+def _licht_wereld(t, geo):
+    """T-MODELS polish (same design, more volume): light from above over the whole model height (wing tips and back a bit
+    brighter, belly and legs a bit darker), up faces lit, down faces in shade. Rotated cubes use their unrotated height."""
+    k = t.shape[1] / geo["description"]["texture_width"]
+    ys = [(c["origin"][1], c["origin"][1] + c["size"][1]) for b in geo["bones"] for c in b.get("cubes", [])]
+    y0, y1 = min(a for a, _ in ys), max(b for _, b in ys)
+    span = max(1.0, y1 - y0)
+    uit = t.copy()
+    for b in geo["bones"]:
+        for c in b.get("cubes", []):
+            oy, sy = c["origin"][1], c["size"][1]
+            for f, fu in c["uv"].items():
+                u, v = fu["uv"]
+                du, dv = fu["uv_size"]
+                r0, r1 = int(round(v * k)), int(round((v + dv) * k))
+                c0, c1 = int(round(u * k)), int(round((u + du) * k))
+                if r1 <= r0 or c1 <= c0:
+                    continue
+                if f in ("up", "down"):
+                    yn = (((oy + sy) if f == "up" else oy) - y0) / span
+                    fac = np.full((r1 - r0, 1), (1.05 if f == "up" else 0.84) * (0.92 + 0.12 * yn), np.float32)
+                else:
+                    y = (oy + sy) - (np.arange(r1 - r0, dtype=np.float32) + 0.5) / k
+                    fac = (0.88 + 0.2 * np.clip((y - y0) / span, 0, 1))[:, None]
+                blok = uit[r0:r1, c0:c1]
+                blok[..., :3] = np.clip(blok[..., :3] * fac[..., None], 0, 255)
+    return uit
+
+
 def texturen():
     """-> (geo, {naam: PIL image}) for the big dragon."""
     mg, mr, mgl = bouw("grijs"), bouw("roze"), bouw("gloed")
     geo = mg.geo()["minecraft:geometry"][0]
     grijs, roze, gloed = mg.textuur(), mr.textuur(), mgl.textuur()
+    grijs, roze = _licht_wereld(grijs, geo), _licht_wereld(roze, geo)    # T-MODELS: more volume, same design
     assert grijs.shape == roze.shape == gloed.shape
     uit = {"draak": _beeld(grijs), "draak_gloed": _beeld(gloed)}
     maskers = _bone_maskers(geo, grijs.shape)
@@ -1043,8 +1073,18 @@ def boss_anims():
         "land": kf(_spiegel(land), loop=False), "buig": kf(_spiegel(buig), loop=False)}}
 
 
+def _oren_wiebel(a, t, amp):
+    """T-MODELS: secondary motion, the big round ears trail the wing beat (only in animations that leave the ears alone)."""
+    for kant, sg in (("ear_l", 1), ("ear_r", -1)):
+        if kant not in a["bones"]:
+            a["bones"][kant] = {"rotation": {f"{t * i / 8:g}": [round(amp * 0.5 * math.sin(2 * math.pi * (i / 8 - 0.3)), 2), 0,
+                                                                   round(sg * amp * math.sin(2 * math.pi * (i / 8 - 0.3)), 2)]
+                                             for i in range(9)}}
+    return a
+
+
 def vlucht_anims():
-    return {"animations": {"vlieg": anim_vlieg(), "zweef": anim_zweef(), "brul": anim_brul()}}
+    return {"animations": {"vlieg": _oren_wiebel(anim_vlieg(), 1.6, 7), "zweef": _oren_wiebel(anim_zweef(), 4.0, 4), "brul": anim_brul()}}
 
 
 # =====================================================================================================================

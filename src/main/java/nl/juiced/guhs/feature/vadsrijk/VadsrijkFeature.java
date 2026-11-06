@@ -37,6 +37,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.indeling.IndelingRegistry.register(modBus);   // T-WERELD: world layout W-3 (barriers, dev tp)
         nl.juiced.guhs.feature.vadsrijk.dialoog.RijkDialoog.register(modBus);   // T-DIALOOG: the Vadsrijk talking screen
         nl.juiced.guhs.feature.vadsrijk.geluid.GeluidRegistry.register(modBus);   // T-GELUID: area music, boss themes, stingers, ambience
+        nl.juiced.guhs.feature.vadsrijk.tmodels.TModels.register(modBus);   // T-MODELS: kern slimes as GeckoLib models + /guhs vadsrijk models
     }
 
     public static void payloads(PayloadRegistrar registrar) {

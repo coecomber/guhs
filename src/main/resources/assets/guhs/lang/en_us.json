@@ -39491,5 +39491,13 @@
   "guhs.configuration.pauze_min": "Vadsrijk: silence between pieces, at least (s)",
   "guhs.configuration.pauze_min.tooltip": "Seconds of only ambience after an area piece.",
   "guhs.configuration.pauze_max": "Vadsrijk: silence between pieces, at most (s)",
-  "guhs.configuration.pauze_max.tooltip": "Seconds of only ambience after an area piece."
+  "guhs.configuration.pauze_max.tooltip": "Seconds of only ambience after an area piece.",
+  "vadsrijk.tmodels.cmd.toon": "%s creatures placed to look at (frozen, invulnerable). Remove: /guhs vadsrijk models weg",
+  "vadsrijk.tmodels.cmd.weg": "%s showroom creatures removed.",
+  "vadsrijk.tmodels.cmd.plof": "%s creatures cheered up: this is their pink, happy look.",
+  "vadsrijk.tmodels.cmd.reus": "The Grey Blob Giant is ready (%s).",
+  "vadsrijk.tmodels.cmd.reus.stil": "frozen, to look at",
+  "vadsrijk.tmodels.cmd.reus.vecht": "he fights, lv 3",
+  "vadsrijk.tmodels.cmd.anim": "Animation '%s' started on %s Blob Giant(s).",
+  "vadsrijk.tmodels.cmd.onbekend": "Unknown group '%s' (zone1, zone2, zone3, critters, alles)."
 }

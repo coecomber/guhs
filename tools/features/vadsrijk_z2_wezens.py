@@ -115,12 +115,26 @@ def schilder(model, palet, seed, glow_rollen=None, glow=False):
     img = np.zeros((model.hoogte() * S, model.W * S, 4), np.uint8)
     img[..., 3] = 255 if glow else 0
     r = vw._rng(seed)
+    v2 = getattr(model, "stijl", 1) >= 2            # T-MODELS: model kit v2 painting
+    if v2:
+        k = vw._kit()
+        model._yb = k.model_hoogte(model)
     for reg in model.regios:
         x, y, w, h = reg["r"]
         blok = img[y * S:(y + h) * S, x * S:(x + w) * S]
         if glow:
             if glow_rollen and reg["rol"] in glow_rollen:
-                vw._vul(blok, glow_rollen[reg["rol"]], r, 8)
+                if v2:
+                    k.gloed_v2(blok, glow_rollen[reg["rol"]], r)
+                else:
+                    vw._vul(blok, glow_rollen[reg["rol"]], r, 8)
+        elif v2:
+            kleur, pat, k2 = palet.get(reg["rol"], ((255, 0, 255), None, None))
+            L = k.vul_v2(model, reg, blok, kleur, r)
+            if pat:
+                k.patroon_v2(blok, pat, k2, r, reg["f"], L)
+            if reg["rol"] in vw.VACHT_ROLLEN:
+                k.vacht_v2(blok, r, 0.7)
         else:
             kleur, pat, k2 = palet.get(reg["rol"], ((255, 0, 255), None, None))
             f = reg["f"]
@@ -129,8 +143,24 @@ def schilder(model, palet, seed, glow_rollen=None, glow=False):
             if pat:
                 vw._patroon(blok, pat, k2, r, f)
         if reg["gezicht"]:
-            oog(blok, reg["gezicht"].get("mood", "beest"), reg["gezicht"].get("ey", 0.4), glow)
+            mood, ey = reg["gezicht"].get("mood", "beest"), reg["gezicht"].get("ey", 0.4)
+            if v2:
+                k.supersample(blok, lambda gb: _oog_v2(gb, reg["gezicht"], glow, k))
+            else:
+                oog(blok, mood, ey, glow)
+    if v2:
+        k.gezichten_wereld(model, img, lambda gb, g: _oog_v2(gb, g, glow, k))
     return Image.fromarray(img)
+
+
+def _oog_v2(gb, g, glow, k):
+    """T-MODELS: the eyes of kit v2 (drawn supersampled); critters ("lief") get an extra catchlight."""
+    mood, ey = g.get("mood", "beest"), g.get("ey", 0.4)
+    oog(gb, mood, ey, glow)
+    if mood == "lief" and not glow:
+        hh, ww = gb.shape[:2]
+        ss = min(ww, hh)
+        k.oogglans(gb, (ww * 0.5 - ss * 0.24, ww * 0.5 + ss * 0.24), hh * ey, max(1.2, ss * 0.1))
 
 
 # =====================================================================================================================
@@ -815,9 +845,11 @@ def assets(a, w=vw._schrijf_json):
     tex_dir = os.path.join(a, "textures", *SUB.split("/"))
     n = 0
     for i, (naam, maak) in enumerate(WEZENS + CRITTERS):
-        m, anims, pal, glow = maak()
+        with vw.stijl(2):                              # T-MODELS: zone 2 is built with model kit v2
+            m, anims, pal, glow = maak()
         if (naam, maak) in WEZENS:
             anims = leg_anims(m, anims)
+        vw._kit().naloop(m, anims)
         controleer(naam, m, anims)
         w(os.path.join(geo_dir, naam + ".geo.json"), m.geo())
         w(os.path.join(anim_dir, naam + ".animation.json"), anim_bestand(anims))

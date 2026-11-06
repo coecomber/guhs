@@ -608,9 +608,11 @@ def assets(a, w=vw._schrijf_json):
     n = 0
     makers = dict(WEZENS + CRITTERS)
     for i, (naam, maak) in enumerate(WEZENS + CRITTERS):
-        m, anims, pal, glow = maak()
+        with vw.stijl(2):                              # T-MODELS: zone 3 is built with model kit v2
+            m, anims, pal, glow = maak()
         if (naam, maak) in WEZENS:
             anims = z2.leg_anims(m, anims)
+        vw._kit().naloop(m, anims)
         controleer(naam, m, anims)
         w(os.path.join(geo_dir, naam + ".geo.json"), m.geo())
         w(os.path.join(anim_dir, naam + ".animation.json"), anim_bestand(anims))
@@ -621,7 +623,8 @@ def assets(a, w=vw._schrijf_json):
             vw._png(os.path.join(tex_dir, naam + "_elite.png"), vw.elite_gloed(tex))
         n += 1
     for j, (cid, (basis, extra)) in enumerate(CONTRACT.items()):
-        m, anims, pal, glow = makers[basis]()
+        with vw.stijl(2):
+            m, anims, pal, glow = makers[basis]()
         p2 = dict(pal)
         p2.update(extra)
         vw._png(os.path.join(tex_dir, "contract_" + cid + ".png"), z2.schilder(m, p2, 3400 + j))
