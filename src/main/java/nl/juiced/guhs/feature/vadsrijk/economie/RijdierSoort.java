@@ -44,7 +44,13 @@ public enum RijdierSoort {
      * 300 % = a top speed of 0.6 blocks a tick at level 1 (zone4.boot.BootFysica), no jump; quest "Boot.geef" early in the zone-4
      * story. Its entity + icon live in zone4.boot.BootSpul (EcoSpul skips water species), its looks in its own screen.
      */
-    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest", 2.0f, 1.1f, Eigenschap.WATER);
+    ZEILBOOTJE(0.30, 0.0, 0, 0.40, "quest", 2.0f, 1.1f, Eigenschap.WATER),
+    /**
+     * U-Z6WEZENS: the Bultguh (camel-guh, zone 6 Zijdeland): speed 330 %, +30 % on sand ({@link Eigenschap#ZANDLOPER}), and TWO seats:
+     * a second player can ride along behind ({@link Eigenschap#TANDEM}). Quest (the stal of Rozenkloof, u-z6verhaal:
+     * {@code zone6.bultguh.Bultguh.geef}); looks/coats in zone6.bultguh.Bultguh.
+     */
+    BULTGUH(0.33, 0.60, 0, 1.95, "quest", 1.6f, 2.5f, Eigenschap.TANDEM, Eigenschap.ZANDLOPER);
 
     /**
      * T-RIJDIER: what a mount can do besides walking and jumping (one place; add a value for a new behaviour, e.g. a water mount).
@@ -58,7 +64,11 @@ public enum RijdierSoort {
     public enum Eigenschap {
         KLEUREN, ZWEEFT, STEVIG,
         /** T-INT (t-z4boot): sails on water instead of walking (own entity, physics, renderer and looks screen). */
-        WATER
+        WATER,
+        /** U-Z6WEZENS: two seats, a second player can ride along behind the owner (the Bultguh). */
+        TANDEM,
+        /** U-Z6WEZENS: +30 % speed on sand (the Bultguh). */
+        ZANDLOPER
     }
 
     public static final int MAX_LEVEL = 10;
@@ -121,6 +131,11 @@ public enum RijdierSoort {
     /** Hovers: falls slowly and can jump once more in the air. */
     public boolean zweeft() {
         return heeft(Eigenschap.ZWEEFT);
+    }
+
+    /** U-Z6WEZENS: how many players may ride it (the owner + a passenger behind with TANDEM). */
+    public int zitplaatsen() {
+        return heeft(Eigenschap.TANDEM) ? 2 : 1;
     }
 
     /** T-RIJDIER: shrugs off the first hit (see {@code Rijdieren.geraakt}). */

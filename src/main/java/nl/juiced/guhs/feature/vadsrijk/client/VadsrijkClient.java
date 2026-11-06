@@ -33,6 +33,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zone4.bazen.client.Z4BazenClient.init(modBus);   // T-Z4WEZENS
         nl.juiced.guhs.feature.vadsrijk.zone5.wezens.client.Z5WezensClient.init(modBus);   // T-Z5WEZENS: zone-5 combat
         nl.juiced.guhs.feature.vadsrijk.zone5.droom.client.Z5DroomClient.init(modBus);   // T-DROOM: the Grauwe Droom
+        nl.juiced.guhs.feature.vadsrijk.zone6.wezens.client.Z6WezensClient.init(modBus);   // U-Z6WEZENS: zone-6 combat + Bultguh anchors
         nl.juiced.guhs.feature.vadsrijk.vriendjes.client.VriendjesClient.init(modBus);   // N-EXTRA: the pink dragon + critters
         nl.juiced.guhs.feature.vadsrijk.dialoog.client.DialoogClient.init(modBus);   // T-DIALOOG: the Vadsrijk talking screen
         nl.juiced.guhs.feature.vadsrijk.geluid.client.GeluidClient.init(modBus);   // T-GELUID (after kern: wraps its title receiver)

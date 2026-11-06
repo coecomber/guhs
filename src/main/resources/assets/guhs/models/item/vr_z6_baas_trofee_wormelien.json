@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "guhs:item/vadsrijk/zone6/bazen/trofee_wormelien"
+  }
+}

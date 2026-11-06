@@ -275,6 +275,9 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z4dieren',
             # T-DROOM: zone-5 finale phase DROOM, de Grauwe Droom (Java: feature/vadsrijk/zone5/droom)
             'vadsrijk_t_droom',
+            # U-Z6WEZENS: zone-6 creatures, bosses, dungeon, loot, the Bultguh (Java: feature/vadsrijk/zone6/{wezens,bultguh}); after
+            # vadsrijk_t_rijdier (tack texture) and BEFORE vadsrijk_t_vfx (it merges the vfx_* anims into our vr_z6_baas_* files)
+            'vadsrijk_u_z6wezens',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

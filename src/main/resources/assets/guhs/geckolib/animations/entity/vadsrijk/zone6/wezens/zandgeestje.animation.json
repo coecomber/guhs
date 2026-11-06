@@ -1,0 +1,131 @@
+{
+  "format_version": "1.8.0",
+  "animations": {
+    "idle": {
+      "animation_length": 1.0,
+      "bones": {
+        "werveling": {
+          "rotation": {
+            "0": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "1": [
+              0.0,
+              360.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "loop": true
+    },
+    "zweef": {
+      "animation_length": 0.6,
+      "bones": {
+        "werveling": {
+          "rotation": {
+            "0": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "0.6": [
+              0.0,
+              360.0,
+              0.0
+            ]
+          }
+        },
+        "kop": {
+          "position": {
+            "0": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "0.3": [
+              0.0,
+              0.6,
+              0.0
+            ],
+            "0.6": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "loop": true
+    },
+    "speciaal": {
+      "animation_length": 1.0,
+      "bones": {
+        "werveling": {
+          "rotation": {
+            "0": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "1": [
+              0.0,
+              1080.0,
+              0.0
+            ]
+          },
+          "scale": {
+            "0": [
+              1.0,
+              1.0,
+              1.0
+            ],
+            "0.5": [
+              1.4,
+              1.0,
+              1.4
+            ],
+            "1": [
+              1.0,
+              1.0,
+              1.0
+            ]
+          }
+        }
+      },
+      "loop": false
+    },
+    "blij": {
+      "animation_length": 1.0,
+      "bones": {
+        "root": {
+          "rotation": {
+            "0": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "loop": true
+    },
+    "aanval": {
+      "animation_length": 0.4,
+      "bones": {
+        "root": {
+          "rotation": {
+            "0": [
+              0.0,
+              0.0,
+              0.0
+            ]
+          }
+        }
+      },
+      "loop": false
+    }
+  }
+}
