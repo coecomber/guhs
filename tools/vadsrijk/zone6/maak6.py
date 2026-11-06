@@ -154,7 +154,7 @@ def schrijf(O, vol, pad):
 
 
 # ------------------------------------------------------------------------------------------------ main
-def maak(alleen=None, snap=True):
+def maak(alleen=None, snap=True, tegels_schrijven=True):
     import poi6
     t0 = time.time()
     os.makedirs(CACHE, exist_ok=True)
@@ -175,7 +175,7 @@ def maak(alleen=None, snap=True):
     nm = np.full((NX, NZ), 0, np.uint16)
     totaal, grootte = 0, 0
     import indeling
-    for (tx, tz) in tegels:
+    for (tx, tz) in (tegels if tegels_schrijven else []):
         if indeling.van_andere_zone(tx, tz, "z6"):
             log(f"tegel {tx},{tz} hoort bij een andere zone: overgeslagen")
             continue
@@ -197,7 +197,7 @@ def maak(alleen=None, snap=True):
         totaal += nb
         grootte += os.path.getsize(pad)
     log(f"{len(tegels)} tegels, {totaal} blokken, {grootte / 1e6:.1f} MB ({time.time() - t0:.0f} s)")
-    if not alleen:
+    if not alleen and tegels_schrijven:
         kaartbeeld(hgt, nm, O)
     bewaar(W)
     info = dict(plekken=getattr(W, "plekken", {}), huizen=getattr(W, "huizen", []))
@@ -232,6 +232,7 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--alleen", default=None)
     ap.add_argument("--geen-snap", action="store_true")
+    ap.add_argument("--alleen-plekken", action="store_true", help="only the POIs (no tiles): quick")
     ap.add_argument("--werkers", type=int, default=1)   # (accepted for maak_kaart; zone 6 builds in one process)
     a = ap.parse_args()
-    maak(a.alleen, not a.geen_snap)
+    maak(a.alleen, not a.geen_snap, not a.alleen_plekken)

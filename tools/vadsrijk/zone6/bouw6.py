@@ -195,7 +195,7 @@ def wegen(W):
     W.wegen["zoutweg"] = pad(W, [(zp[0] + 4, zp[1] + 8), (3800, -724), (3850, -708), (3900, -690), (3940, -660), (3990, -640),
                                  (4040, -670), (4076, -706), (4090, -730)], breed=2, y_begin=Y, naam="zoutweg")
     W.wegen["zoutbaken"] = pad(W, [(3940, -660), (3934, -632), (3930, -603)], breed=1, naam="zoutbaken")
-    W.wegen["oostroute"] = pad(W, [(4090, -730), (4130, -740), (4170, -735), (4210, -728)], breed=2, naam="oostroute")
+    W.wegen["oostroute"] = pad(W, [(4090, -730), (4130, -740), (4160, -736), (4190, -730)], breed=2, naam="oostroute")
     # 4. Oostpoort -> Ruinedal (dungeon) and the oasis from the north
     W.wegen["ruineweg"] = pad(W, [(op[0] + 12, op[1] - 4), (3910, -900), (3940, -925), (3966, -940), (3985, -946)], breed=2,
                               y_begin=Y, naam="ruineweg")
@@ -734,19 +734,57 @@ def karavanen(W):
 
 
 def uitkijken_en_geheimen(W):
+    import plan6
     for pid in ("uitkijk_duinkam", "uitkijk_palmwaterval", "uitkijk_zoutrots", "uitkijk_mesa", "uitkijk_oase"):
         x, _, z = _plan(pid)
         uitkijk(W, pid, x, z)
-    for i in range(8):
-        pid = f"geheim_z6_knuffel_{i + 1}"
+    for i in range(1, len(plan6.GEHEIM_KNUFFEL) + 1):
+        if i in plan6.GEHEIM_IN_STAD:
+            continue                       # the city builders place these
+        pid = f"geheim_knuffel_{i}"
         x, _, z = _plan(pid)
         geheim(W, pid, x, z, seed=i)
-    for i in range(3):
-        pid = f"geheim_z6_schat_{i + 1}"
-        x, _, z = _plan(pid)
-        geheim(W, pid, x, z, seed=i + 20)
-        y = stand(W, x, z)
-        zet(W, x, y, z - 1, "minecraft:chest[facing=south,type=single,waterlogged=false]")
+    # the mesa treasure (geheim_schat_3) + the Tafelmesa lookout: a narrow hidden rock-cut stair up the mesa
+    x, _, z = _plan("geheim_schat_3")
+    top = grond(W, x, z, 200)
+    if top > ZW.LAAG + 12:
+        W.wegen["tafelmesa"] = pad(W, [(x - 34, z + 26), (x - 22, z + 16), (x - 12, z + 8), (x - 4, z + 2), (x, z)], breed=0,
+                                   schouder=1, y_eind=top + 1, naam="tafelmesa", lampen=99)
+    y = stand(W, x, z)
+    zet(W, x, y, z - 1, "minecraft:chest[facing=south,type=single,waterlogged=false]")
+    plek(W, "geheim_schat_3", x, y, z)
+    plek(W, "ruinedal_tafelmesa", x - 2, y, z + 2)
+
+
+def extra_plekken(W):
+    """Small builds for spots the story slice asked for: Duinguh Rimpel's tent, the dune rest stop + ridge, the Mika camp on the
+    salt (grey tents, a doused lamp), the river mouth landing, the mirage spot on the Oostroute."""
+    import landschap as LS
+    x, z = 3640, -620
+    LS.tent(W, x, stand(W, x, z - 4), z - 4, r=3, h=5, kl=("oranje", "wit"), seed=12)
+    plek(W, "duinen_tent", x, None, z + 1)
+    x, z = 3598, -742
+    for dx in (-2, 2):
+        zet(W, x + dx, stand(W, x + dx, z), z, plaat("palm_planken"))
+    doos(W, x, stand(W, x, z), z - 2, x, stand(W, x, z) + 2, z - 2, "palm_hek")
+    zet(W, x, stand(W, x, z) + 3, z - 2, "messing_lantaarn")
+    plek(W, "duinen_rustplek", x, None, z)
+    plek(W, "duinen_kam", 3622, None, -690)
+    x, z = 3972, -582
+    for i, (dx, dz) in enumerate(((0, 0), (8, 5), (-7, 6))):
+        LS.tent(W, x + dx, stand(W, x + dx, z + dz), z + dz, r=3, h=5, kl=("wit", "lila"), seed=i + 30)
+    for (dx, dz) in ((4, -4), (-4, -4)):
+        doos(W, x + dx, stand(W, x + dx, z + dz), z + dz, x + dx, stand(W, x + dx, z + dz) + 2, z + dz, "minecraft:tuff_brick_wall")
+    plek(W, "zoutvlakte_mikakamp", x, None, z - 6)
+    x, z = 3306, -1000
+    plek(W, "palmenkloven_monding", x, None, z)
+    plek(W, "palmenkloven_palmenbos", 3450, None, -972)
+    plek(W, "oostroute_luchtspiegeling", 4020, None, -662)
+    for i in range(1, 4):
+        plek(W, f"oase_tent_{i}", 4140 + 4 * i, None, -762)
+    if getattr(W, "toren_top", None):
+        tx, ty, tz = W.toren_top
+        plek(W, "toren_top", tx, ty + 7, tz)
 
 
 def _plan(pid):
@@ -769,5 +807,6 @@ def landmarks(W, log=print):
     ruines(W)
     log("  gebieden")
     uitkijken_en_geheimen(W)
+    extra_plekken(W)
     karavanen(W)
     log("  uitkijken, geheimen, karavanen")

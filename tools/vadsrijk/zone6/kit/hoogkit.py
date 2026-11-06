@@ -38,7 +38,15 @@ os.makedirs(RENDER_OUT, exist_ok=True)
 def _repo_zip():
     """The repo's own zone-5 + zone-6 blocks (blockstates, models, textures) as a zip for the kit's asset reader."""
     a = os.path.join(ROOT, "src", "main", "resources", "assets", "guhs")
-    uit = os.path.join(ROOT, "tools", "vadsrijk", "_cache", "z6", "repo-assets.zip")
+    # one zip per process (several renders/builds run at once and would rewrite a shared zip under each other); removed at exit
+    uit = os.path.join(ROOT, "tools", "vadsrijk", "_cache", "z6", f"repo-assets-{os.getpid()}.zip")
+    import atexit
+    def _weg():
+        try:
+            os.remove(uit)
+        except OSError:
+            pass
+    atexit.register(_weg)
     os.makedirs(os.path.dirname(uit), exist_ok=True)
     sys.path.insert(0, os.path.join(ROOT, "tools", "features"))
     namen = []

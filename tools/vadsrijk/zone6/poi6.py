@@ -143,7 +143,7 @@ def schrijf(alle, info, W):
     rij = info.get("rijdieren", [])
     rpak = _pak(rij, lambda e: f"{soorten.index(e[0])},{int(round(e[1] * 2))},{int(round(e[2] * 2))},{int(round(e[3] * 2))},"
                                f"{int((e[4] + 180) % 360) // 2},{e[5]},{1 if e[6] else 0},{skins.index(e[7])}")
-    kampvuren = sorted(k for k in alle if k.startswith("kampvuur_"))
+    kampvuren = sorted(k for k in alle if k.startswith("kampvuur_") and k not in PL.ALIAS)
     uitkijk = [alle[k] for k in PL.UITKIJKEN if k in alle]
     regels = [f'            Map.entry("{k}", {_bp(alle[k])})' for k in sorted(alle)]
     geb = [f'            new Gebied("{g[0]}", {g[1]}, {g[2]}, {g[3]}, {g[4]}, "{g[5]}", {g[7][0]}, {g[7][1]}, {str(g[8]).lower()})'

@@ -48,7 +48,7 @@ for k, v in {
     "rozenkloof_kloofmoeder": (3488, 75, -699), "rozenkloof_stal": (3436, 71, -720), "rozenkloof_stalmeester": (3433, 71, -716),
     "rozenkloof_oma_dadel": (3412, 70, -720), "rozenkloof_bobbel": (3414, 70, -722),
     "rozenkloof_tapijtwinkel": (3384, 70, -708), "rozenkloof_tuinguh": (3372, 70, -712),
-    "rozenkloof_postguh": (3390, 70, -722), "rozenkloof_zeemond": (3262, 64, -745),
+    "rozenkloof_postguh": (3390, 70, -722), "rozenkloof_zeemond": (3270, 64, -745),
     "rozenkloof_siq_onder": (3456, 73, -718), "rozenkloof_siq_boven": (3564, None, -794),
     "rozenkloof_richel_1": (3380, 85, -738), "rozenkloof_richel_2": (3380, 101, -742), "rozenkloof_richel_3": (3380, 119, -748),
     "rozenkloof_brug_1": (3352, None, -726), "rozenkloof_brug_2": (3446, None, -705),
@@ -143,16 +143,81 @@ for k, v in {"moederoase": (4060, None, -790), "moederpalm": (4080, None, -812),
              "uitkijk_oase": (4040, None, -720)}.items():
     _p(k, *v)
 
-# secrets
-for i, (x, z) in enumerate([(3300, -820), (3540, -1040), (3610, -470), (3840, -470), (4170, -1050), (4176, -620),
-                            (3760, -950), (3470, -660)], 1):
-    _p(f"geheim_z6_knuffel_{i}", x, None, z)
-for i, (x, z) in enumerate([(3520, -1012), (3990, -470), (4150, -930)], 1):
-    _p(f"geheim_z6_schat_{i}", x, None, z)
+# secrets (u-z6verhaal's ids + their themed spots; the city ones are recorded by the city builders)
+GEHEIM_KNUFFEL = [(3436, None, -684), (3612, None, -660), (3480, None, -986), (3770, None, -872), (3950, None, -540),
+                  (3826, None, -910), (3754, None, -894), (4090, None, -800)]
+GEHEIM_SCHAT = [(3476, None, -708), (3740, None, -892), (4012, None, -928)]      # schatkamer, minaret, mesa
+GEHEIM_IN_STAD = {1, 4, 6, 7}           # knuffels the city builders place (no rock nook)
+for i, (x, y, z) in enumerate(GEHEIM_KNUFFEL, 1):
+    _p(f"geheim_knuffel_{i}", x, y, z)
+for i, (x, y, z) in enumerate(GEHEIM_SCHAT, 1):
+    _p(f"geheim_schat_{i}", x, y, z)
+
+# ------------------------------------------------------------------------------------------------ ids of the other zone-6 slices
+# u-z6verhaal (Z6VerhaalPlekken placeholders): new spots
+for k, v in {
+    "palmenkloven_monding": (3306, None, -1000), "palmenkloven_palmenbos": (3450, None, -972),
+    "zoutvlakte_mikakamp": (3972, None, -582), "oostroute_luchtspiegeling": (4020, None, -662),
+    "duinen_tent": (3640, None, -620), "duinen_rustplek": (3598, None, -742), "duinen_kam": (3622, None, -690),
+    "ruinedal_tafelmesa": (4010, None, -930), "duinen": (3660, None, -640), "palmenkloven": (3460, None, -960),
+    "zoutvlakte": (3945, None, -598), "ruinedal": (3985, None, -975), "dak_2": (3800, None, -820),
+    "toren_top": (4140, 236, -688),
+}.items():
+    _p(k, *v)
+for i in range(1, 4):
+    _p(f"oase_tent_{i}", 4140 + 4 * i, None, -762)                       # the refugees (z6_vluchteling_i)
+for i, (x, y, z) in enumerate([(3396, 70, -708), (3372, 86, -744), (3746, 71, -818), (3780, 71, -852), (3768, 71, -908),
+                               (3664, 71, -834)], 1):
+    _p(f"z6_burger_{i}", x, y, z)
+for i, (x, y, z) in enumerate([(3404, 70, -710), (3400, None, -778), (3646, 71, -840), (3768, 71, -842), (3924, None, -646),
+                               (4064, None, -778)], 1):
+    _p(f"z6_wacht_{i}", x, y, z)
+# u-z6wezens (Z6WezensPlekken placeholders): mob regions, leaders, safe spots, field bosses, the dungeon hatch, the cave elite
+for gebied, pts in {
+    "duinen": [(3640, -700), (3690, -520), (3760, -560), (3600, -600)],
+    "palmenkloven": [(3470, -985), (3560, -948), (3420, -990)],
+    "zoutvlakte": [(3880, -640), (3990, -610), (3940, -520)],
+    "ruinedal": [(3920, -960), (4020, -1010), (4090, -1020)],
+    "moederoase": [(4040, -760), (4110, -820), (4060, -720)],
+}.items():
+    for i, (x, z) in enumerate(pts, 1):
+        _p(f"z6w_mobs_{gebied}_{i}", x, None, z)
+for k, v in {
+    "z6w_zout_nacht": (3860, None, -620), "z6w_leider_oorschelp": (3620, None, -560), "z6w_leider_pitje": (3520, None, -962),
+    "z6w_leider_korstje": (3960, None, -560), "z6w_leider_oudstewachter": (4040, None, -1000), "z6w_leider_brie": (4110, None, -790),
+    "z6w_veilig_rozenkloof": (3400, 70, -714), "z6w_veilig_saffraanpoort": (3762, 71, -846), "z6w_veilig_karavaankamp": (3906, None, -580),
+    "z6w_veilig_toren": (4100, None, -690),
+    "z6w_wormelien": (3640, None, -610), "z6w_wormelien_deur": (3640, None, -582), "z6w_wormelien_bord": (3637, None, -580),
+    "z6w_zoutkolos": (3995, None, -560), "z6w_zoutkolos_deur": (3995, None, -586), "z6w_zoutkolos_bord": (3992, None, -588),
+    "z6w_test": (3762, 71, -846),
+}.items():
+    _p(k, *v)
+# u-z6raid: the pocket anchor under the tower (their template, y 2..68; keep caves/water out of x 4115..4174, z -713..-663)
+_p("raid_toren_binnen", 4140, 16, -688)
 
 GEEN_SNAP = ("haven_6_5_luchtschip", "haven_6_5_mast", "palmbaken_ster", "duinbaken_ster", "zoutbaken_ster", "ruinebaken_ster",
-             "oasebaken_ster")
-ALIAS = {"luchthaven_rozenkloof": "haven_z6_z5_vertrek", "zoutgrot_ingang_buiten": "zoutgrot_ingang"}
+             "oasebaken_ster", "toren_top", "raid_toren_binnen", "zoutgrot_kristalwand")
+# alias -> id (the other slices' names for the same spot)
+ALIAS = {"luchthaven_rozenkloof": "haven_z6_z5_vertrek", "zoutgrot_ingang_buiten": "zoutgrot_ingang",
+         # u-z6verhaal
+         "rozenkloof_luchthaven": "haven_z6_z5_vertrek", "rozenkloof_siq_top": "rozenkloof_siq_boven", "rozenkloof_karavaan": "rozenkloof_oma_dadel",
+         "rozenkloof_post": "rozenkloof_postguh", "rozenkloof_tuin_richel1": "rozenkloof_tuin_1",
+         "saffraanpoort_plein": "saffraanpoort_paleisplein", "saffraanpoort_paleis": "paleis_poort", "saffraanpoort_spiegelzaal": "paleis_spiegelzaal",
+         "spiegelzaal_troon": "paleis_troon", "saffraanpoort_bazaar": "bazaar_kruising", "saffraanpoort_poort_west": "saffraanpoort_westpoort",
+         "saffraanpoort_poort_oost": "saffraanpoort_oostpoort", "saffraanpoort_karavanserai": "karavanserai",
+         "saffraanpoort_sterrenwacht": "sterrenwacht", "saffraanpoort_sterrenwacht_kijker": "sterrenwacht_top",
+         "saffraanpoort_paradijstuin": "paleis_tuin", "saffraanpoort_saffraanbrug": "saffraanbrug", "bazaar_atelier": "bazaar_naaiatelier",
+         "dak_1": "bazaar_dak", "examen_1": "sterrenwacht_top", "examen_2": "saffraanbrug_paviljoen", "examen_3": "paleis_minaret",
+         "verzonken_sterrenwacht": "kerker_ingang", "wormelien": "wormelien_arena", "palmenkloven_waterval_onder": "watervallen_voet",
+         "palmenkloven_moerbei": "moerbei_1", "zoutvlakte_ziedershuisje": "zoutzieder_korrel", "zoutvlakte_ziedershuisje_huis": "zoutziedershuisje",
+         "zoutvlakte_kamp": "karavaankamp", "zoutgrot_kristallen": "zoutgrot_puzzel", "duinen_bobbeltje": "bobbeltje_duin",
+         "oase_tenten": "mager_mientje",
+         "kampvuur_rozenkloof": "kampvuur_rozenkloof_plein", "kampvuur_saffraanpoort": "kampvuur_saffraanpoort_paleis",
+         "kampvuur_duinen": "kampvuur_duinput", "kampvuur_zoutvlakte": "kampvuur_karavaankamp",
+         # u-z6wezens
+         "z6w_sterrenwacht_ingang": "kerker_ingang", "z6w_zoutgrot_elite": "zoutgrot_elite",
+         # u-z6raid
+         "raid_toren_poort": "toren_raid_ingang", "raid_toren_buiten": "toren_poort"}
 UITKIJKEN = ["uitkijk_zeemond", "uitkijk_duinkam", "uitkijk_palmwaterval", "uitkijk_zoutrots", "uitkijk_mesa", "uitkijk_oase"]
 
 
