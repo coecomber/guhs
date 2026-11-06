@@ -72,6 +72,9 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
                 .add(Attributes.FOLLOW_RANGE, 32).add(Attributes.SAFE_FALL_DISTANCE, 256).add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
     }
 
+    /** U-HUIZEN: other code that drives a pet itself (true = handled, skip the follow-the-owner logic and the "no owner" cleanup). */
+    public static final java.util.List<java.util.function.Predicate<HuisdierEntity>> ZELFSTANDIG = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(0, new FloatGoal(this));
@@ -162,6 +165,11 @@ public class HuisdierEntity extends PathfinderMob implements GeoEntity {
         super.tick();
         if (level().isClientSide()) {
             return;
+        }
+        for (java.util.function.Predicate<HuisdierEntity> z : ZELFSTANDIG) {   // U-HUIZEN: a pet that roams a house garden on its own
+            if (z.test(this)) {
+                return;
+            }
         }
         ServerPlayer p = baas();
         if (p == null || Huisdieren.uit(p) != this) {
