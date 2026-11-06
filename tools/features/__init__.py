@@ -232,6 +232,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z5wezens',
             # T-Z5VERHAAL: 1.10 zone 5 "Hoogvads", the story (Java: feature/vadsrijk/zone5/verhaal)
             'vadsrijk_t_z5verhaal',
+            # T-DROOM: zone-5 finale phase DROOM, de Grauwe Droom (Java: feature/vadsrijk/zone5/droom)
+            'vadsrijk_t_droom',
             ]
 
 

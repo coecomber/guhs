@@ -28,6 +28,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.client.Z3SystemenClient.init(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.client.Z3WezensClient.init(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.zone5.wezens.client.Z5WezensClient.init(modBus);   // T-Z5WEZENS: zone-5 combat
+        nl.juiced.guhs.feature.vadsrijk.zone5.droom.client.Z5DroomClient.init(modBus);   // T-DROOM: the Grauwe Droom
         nl.juiced.guhs.feature.vadsrijk.vriendjes.client.VriendjesClient.init(modBus);   // N-EXTRA: the pink dragon + critters
     }
 }

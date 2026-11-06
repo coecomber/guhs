@@ -35,6 +35,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3SystemenRegistry.register(modBus);   // zone 3 (z3-systemen)
         nl.juiced.guhs.feature.vadsrijk.zone3.wezens.Z3WezensRegistry.register(modBus);   // zone 3 (z3-wezens)
         nl.juiced.guhs.feature.vadsrijk.zone5.wezens.Z5WezensRegistry.register(modBus);   // T-Z5WEZENS: zone-5 combat
+        nl.juiced.guhs.feature.vadsrijk.zone5.droom.Z5DroomRegistry.register(modBus);   // T-DROOM: the Grauwe Droom (finale phase DROOM)
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
     }
 
