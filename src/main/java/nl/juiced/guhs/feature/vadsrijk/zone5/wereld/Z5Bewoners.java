@@ -25,6 +25,31 @@ public final class Z5Bewoners {
     private Z5Bewoners() {
     }
 
+    /**
+     * W-LEVEN: the user wanted "iets minder figuranten, vooral in de kathedraal". The share of the plain townsfolk (walking/standing
+     * and sitting; knights in formation and the named-looking figures always stay) that shows: {@link #DICHTHEID} everywhere,
+     * {@link #DICHTHEID_KATHEDRAAL} inside the cathedral. Which ones stay is fixed per position (no flicker, the same for everybody).
+     */
+    public static final double DICHTHEID = 0.75, DICHTHEID_KATHEDRAAL = 0.4;
+
+    /** W-LEVEN: inside the cathedral (nave, crossing and choir: from the apse to the great door, the width of the transept)? */
+    static boolean inKathedraal(double x, double y, double z) {
+        net.minecraft.core.BlockPos apsis = Z5WereldPlekken.plek("kathedraal_apsis"), poort = Z5WereldPlekken.plek("kathedraal_poort");
+        if (apsis == null || poort == null) {
+            return false;
+        }
+        return x >= apsis.getX() - 6 && x <= poort.getX() + 1 && Math.abs(z - poort.getZ()) <= 34 && y >= poort.getY() - 4
+                && y <= poort.getY() + 60;
+    }
+
+    /** W-LEVEN: does this figure show (see {@link #DICHTHEID})? */
+    public static boolean blijft(Z5WereldPlekken.Bewoner b) {
+        if (b.soort() == 2 || b.soort() == 3) {
+            return true;
+        }
+        return Dichtheid.blijft(b.x(), b.y(), b.z(), inKathedraal(b.x(), b.y(), b.z()) ? DICHTHEID_KATHEDRAAL : DICHTHEID);
+    }
+
     public static int aantal() {
         return NU.size();
     }
@@ -89,6 +114,9 @@ public final class Z5Bewoners {
                 continue;
             }
             Z5WereldPlekken.Bewoner b = lijst.get(i);
+            if (!blijft(b)) {   // W-LEVEN
+                continue;
+            }
             Vec3 v = new Vec3(b.x(), b.y(), b.z());
             boolean dicht = false;
             for (ServerPlayer p : spelers) {

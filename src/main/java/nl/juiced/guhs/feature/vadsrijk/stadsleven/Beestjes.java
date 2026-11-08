@@ -36,6 +36,33 @@ final class Beestjes {
     private Beestjes() {
     }
 
+    /**
+     * W-LEVEN: the critter cap split in two. Blobs keep their old share ({@link #BLOB_KANS} of the DIERTJE cap: 3 at VOL); mice get
+     * the rest times the town's multiplier ({@link Steden.Stad#muizen}: 0.3 -> 2 at VOL, Kandijkom 1.0 -> 6, as before).
+     */
+    static int blobMax(Steden.Stad stad, StadsLeven.Niveau n) {
+        return Math.round(Groep.Soort.DIERTJE.max(n) * BLOB_KANS);
+    }
+
+    static int muisMax(Steden.Stad stad, StadsLeven.Niveau n) {
+        int max = Groep.Soort.DIERTJE.max(n);
+        return Math.min(max - blobMax(stad, n), (int) Math.round(max * (1 - BLOB_KANS) * stad.muizen()));
+    }
+
+    /** W-LEVEN: the next town critter: a blob, a mouse, or none (both at their cap). */
+    @Nullable
+    static Boolean volgendeIsBlob(Steden.Stad stad, StadsLeven.Niveau n, int blobs, int muizen, RandomSource r) {
+        boolean blobMag = blobs < blobMax(stad, n), muisMag = muizen < muisMax(stad, n);
+        if (!blobMag && !muisMag) {
+            return null;
+        }
+        if (blobMag != muisMag) {
+            return blobMag;
+        }
+        int bOver = blobMax(stad, n) - blobs, mOver = muisMax(stad, n) - muizen;
+        return r.nextInt(bOver + mOver) < bOver;
+    }
+
     static SoundEvent geluid(String id) {
         return SoundEvent.createVariableRangeEvent(Guhs.id(id));
     }

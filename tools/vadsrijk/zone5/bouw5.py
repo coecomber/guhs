@@ -1206,6 +1206,14 @@ def huid_detail(W, S):
 
 
 # =============================================================================================== townsfolk
+def spel_yaw(yaw):
+    """W-LEVEN: kit yaw -> Minecraft yaw. The kit draws a figure with yaw a facing (-sin a, -cos a) (0 = north, 90 = WEST:
+    mcextra.affine turns counter-clockwise seen from above), and the game is the kit turned 180 degrees (x -> GX0 - x and
+    z -> GZ0 - z), so the figure must face (sin a, cos a) in the game. Minecraft yaw Y faces (-sin Y, cos Y), so Y = -a.
+    The old (a + 180) was only right for east/west-facing figures: everything facing north/south stood the wrong way round."""
+    return (360 - float(yaw)) % 360
+
+
 def bewoners(W, info):
     """Every render guh (W.guhs) and kit NPC as a spawn: (gx, gy, gz, yaw, skin, kind) in GAME coordinates."""
     import plan5 as PL
@@ -1214,10 +1222,10 @@ def bewoners(W, info):
     for i, (x, y, z, yaw, skin, zit) in enumerate(W.guhs):
         gx, gy, gz = PL.GX0 - (x / W.k + x1), y / W.k + y1 + PL.DY, PL.GZ0 - (z / W.k + z1)
         soort = 2 if i in RIDDERS else (1 if zit else 0)
-        out.append((gx, gy, gz, (yaw + 180) % 360, skin, soort))
+        out.append((gx, gy, gz, spel_yaw(yaw), skin, soort))
     for (soort, x, y, z, yaw) in NPCS:
         skin = "npc_" + soort[len("guh_npc_"):] if soort.startswith("guh_npc_") else soort
-        out.append((PL.GX0 - x, y + PL.DY, PL.GZ0 - z, (yaw + 180) % 360, skin, 3))
+        out.append((PL.GX0 - x, y + PL.DY, PL.GZ0 - z, spel_yaw(yaw), skin, 3))
     # only skins that exist as an entity texture in the mod (else a plain guh)
     import os
     tex = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "src", "main", "resources", "assets", "guhs",

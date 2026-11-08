@@ -213,7 +213,7 @@ def paleis_figuren(W):
     for x in range(-122, -108, 4):
         for s in (-1, 1):
             FG.ridder(W, x + 0.5, y0 + 1, s * 6.5, yaw=0 if s > 0 else 180)
-    FG.menigte(W, -118, -4, -110, 4, y0 + 1, 6, seed=3, kijk=270)
+    FG.menigte(W, -118, -4, -110, 4, y0 + 1, 6, seed=3, kijk=90)   # W-LEVEN: the crowd faces the throne (-x; 270 = east)
     BH.npc(W, "guh_npc_burgemeesterguh", -122.5, y0 + 1, 5.5, yaw=300)
     BH.npc(W, "guh_npc_professor_zei_guh", -122.5, y0 + 1, -5.5, yaw=240)
     # raadsleden en bezoekers op het plein
@@ -523,7 +523,7 @@ def kazerne_figuren(W):
     BH.npc(W, "guh_npc_wachterguh", xa + 44.5, y0 + 1, za + 19, yaw=90)
     FG.ridder(W, xa + 44.5, y0 + 1, za + 16, yaw=90, pluim=(255, 220, 90), cape=(255, 220, 90))
     # duel in een cirkel
-    for (x, z, yw) in ((xb - 16, zb - 26, 90), (xb - 13, zb - 26, 270)):
+    for (x, z, yw) in ((xb - 16, zb - 26, 270), (xb - 13, zb - 26, 90)):   # W-LEVEN: face each other (270 = +x, 90 = -x)
         FG.ridder(W, x, y0 + 1, z, yaw=yw)
     FG.menigte(W, xb - 20, zb - 31, xb - 9, zb - 21, y0 + 1, 10, seed=12,
                vrij=lambda x, z: math.hypot(x - (xb - 14.5), z - (zb - 26)) > 3.5)
