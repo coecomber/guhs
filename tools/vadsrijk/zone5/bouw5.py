@@ -803,13 +803,12 @@ def pieren(W, S, info):
         doos(W, px - 2, y0, z, px + 2, y0, z, "minecraft:stripped_cherry_wood[axis=y]" if z % 4 else P["goud"])
         zet(W, px - 3, y0 + 1, z, "minecraft:pale_oak_fence")
         zet(W, px + 3, y0 + 1, z, "minecraft:pale_oak_fence")
-    # mooring masts at the end, a gate across the end
+    # mooring masts at the end; W-SCHEPEN: no gate across the end any more (the line-D airship lies flush against this open tip)
+    # and the masts stop under the docked ship's balloon (it hangs half a block over the tip from deck + 9)
     for s in (-3, 3):
-        doos(W, px + s, y0 + 1, -168, px + s, y0 + 10, -168, P["wit_glad"])
-        zet(W, px + s, y0 + 11, -168, P["goud"])
-        zet(W, px + s, y0 + 12, -168, "minecraft:lantern[hanging=false,waterlogged=false]")
-    for x in range(px - 2, px + 3):
-        zet(W, x, y0 + 1, -168, "minecraft:pale_oak_fence_gate[facing=north,in_wall=false,open=false,powered=false]")
+        doos(W, px + s, y0 + 1, -168, px + s, y0 + 7, -168, P["wit_glad"])
+        zet(W, px + s, y0 + 8, -168, P["goud"])
+        zet(W, px + s, y0 + 9, -168, "minecraft:lantern[hanging=false,waterlogged=false]")
     zet(W, px - 1, y0 + 1, -161, "minecraft:bell[attachment=floor,facing=east,powered=false]")
     info["plekken"]["haven_5_4_bel"] = (px - 1, y0 + 1, -161)
 
@@ -994,6 +993,24 @@ def wezens_toegang(W, S, info):
         pad(W, [(-262, 0), (-266, zl)])
     info["plekken"]["z5w_lift_staart_boven"] = (-194, None, 2)
     info["plekken"]["z5w_lift_staart_onder"] = (-250, None, 0)
+    staarthaven(W, info)
+
+
+def staarthaven(W, info):
+    """W-SCHEPEN: the Staarthaven (line E to Rozenkloof): the tail path runs out east between the two fluke bridges and ended in
+    a railing; that railing goes (3 wide, deck under it) and the end is the harbour POI haven_z5_z6_vertrek. The airship lies
+    flush beyond it, over the open sky east of the tail (Lijnen.Haven.UIT)."""
+    x0 = -262                                   # the last cell of the tail path (world x 2964), on its axis z 0
+    t = next((y for y in range(320, 150, -1) if not is_lucht(W, x0, y, 0)), None)
+    if t is None:
+        return
+    for x in (x0 - 1, x0 - 2):
+        for z in (-1, 0, 1):
+            if "fence" in naam(W, x, t + 1, z):
+                leeg(W, x, t + 1, z, x, t + 1, z)
+            if is_lucht(W, x, t, z):
+                zet(W, x, t, z, W.wget(x0, t, z))
+    info["plekken"]["haven_z5_z6_vertrek"] = (x0 - 2, t + 1, 0)
 
 
 def _top(W, x, z, ymax=330):

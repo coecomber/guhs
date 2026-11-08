@@ -68,7 +68,13 @@ public final class Z6VerhaalPlekken {
 
     // ---- key places ------------------------------------------------------------------------------------------------------------
     /** Line E's harbour on Hoogvads: the Staarthaven at the end of the whale's tail (east; t-z5wereld's POI haven_z5_z6_vertrek wins). */
-    public static final BlockPos STAARTHAVEN = w("staarthaven", 2910, 205, -520);
+    public static final BlockPos STAARTHAVEN = staarthaven();
+
+    /** W-SCHEPEN: zone 5 builds the Staarthaven now (the open east end of the tail path, POI haven_z5_z6_vertrek): use it. */
+    private static BlockPos staarthaven() {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.ALLE.get("haven_z5_z6_vertrek");
+        return b != null ? b : w("staarthaven", 2966, 210, -520);
+    }
     /** Line E's harbour in Rozenkloof: the Luchthaven on the north rim of the gorge (POI haven_z6_z5_vertrek). */
     public static final BlockPos LUCHTHAVEN = w("haven_z6_z5_vertrek", 3398, 120, -768);
     /** Where the first flight (and every short flight) sets you down: on the deck of the Luchthaven. */

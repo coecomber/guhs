@@ -46353,12 +46353,12 @@
   "vadsrijk.luchtschip.kort.level": "still closed for you: only from level %s",
   "vadsrijk.luchtschip.kort.dicht": "still closed for you: follow the main quest first",
   "vadsrijk.luchtschip.pier.kop": "Line %s:",
-  "vadsrijk.luchtschip.pier.open": "Line %s to %s: departs in %s. ✔ You may board: click anywhere on the ship!",
+  "vadsrijk.luchtschip.pier.open": "Line %s to %s: departs in %s. ✔ You may board: walk onto the ship or click it!",
   "vadsrijk.luchtschip.pier.dicht": "Line %s to %s: departs in %s. ✖ %s",
   "vadsrijk.luchtschip.bord.voor": "Board after the main quest \"%s\"",
   "vadsrijk.luchtschip.bord.voor_level": "Board after the main quest \"%s\", from level %s",
   "vadsrijk.luchtschip.bord.terug": "Flying back is always allowed",
-  "vadsrijk.luchtschip.mag": "Line %s to %s: you may board! Departs in %s. Click anywhere on the ship to board; on board you can walk around freely.",
+  "vadsrijk.luchtschip.mag": "Line %s to %s: you may board! Departs in %s. Walk onto the ship at the end of the pier (or click it); on board you can walk around freely.",
   "vadsrijk.karakter.modus.normaal.regel": "The normal adventure",
   "vadsrijk.karakter.modus.knuffel.regel": "Half damage, 10% less xp",
   "vadsrijk.karakter.modus.eenvads.regel": "One life, 10% more xp",
@@ -47341,5 +47341,6 @@
   "vadsrijk.dungeon.msg.leeg": "Jullie groep is weg: de dungeon gaat weer dicht.",
   "vadsrijk.dungeon.msg.klaar.ja": "%s is klaar.",
   "vadsrijk.dungeon.msg.rij.groep": "%s zet jullie groepje in de wachtrij voor dungeon %s.",
-  "vadsrijk.dungeon.klaar.popup": "Dungeon uitgespeeld!"
+  "vadsrijk.dungeon.klaar.popup": "Dungeon uitgespeeld!",
+  "vadsrijk.luchtschip.loopplank.nog_niet": "The airship is not here yet. Next departure in %s: wait on the pier for a moment!"
 }

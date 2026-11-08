@@ -197,7 +197,8 @@ _p("raid_toren_binnen", 4140, 16, -688)
 
 GEEN_SNAP = ("haven_6_5_luchtschip", "haven_6_5_mast", "palmbaken_ster", "duinbaken_ster", "zoutbaken_ster", "ruinebaken_ster",
              "oasebaken_ster", "toren_top", "raid_toren_binnen", "zoutgrot_kristalwand",
-             "rozenkloof_zeemond")   # [u-z6afronding] the pier is a 1-thick deck over the sea: keep the recorded spot
+             "rozenkloof_zeemond",   # [u-z6afronding] the pier is a 1-thick deck over the sea: keep the recorded spot
+             "haven_z6_z5_vertrek", "haven_6_5_kapitein")   # W-SCHEPEN: the Luchthaven pier is a 1-thick deck too (they snapped onto its railing)
 # alias -> id (the other slices' names for the same spot)
 ALIAS = {"luchthaven_rozenkloof": "haven_z6_z5_vertrek", "zoutgrot_ingang_buiten": "zoutgrot_ingang",
          # u-z6verhaal

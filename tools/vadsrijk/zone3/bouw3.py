@@ -327,6 +327,7 @@ def dok(W):
         if not W.raakt(mx - 30, HY - 20, mz - 30, mx + 30, HY + 30, mz + 30):
             continue
         ua = math.atan2(uz, ux)
+        _, (ax, az) = PL.steiger_tip(naam)   # W-SCHEPEN: the cardinal side where the airship docks
         W.cilinder(mx, mz, 7.5, HY, HY, None, mixfn=lambda x, y, z, m: W.kies([PLANK, "minecraft:stripped_spruce_wood"], [4, 1],
                                                                                x, y, z, 3601))
         W.cilinder(mx, mz, 7.5, HY + 1, HY + 5, LUCHT)
@@ -334,6 +335,9 @@ def dok(W):
             b = k * 2 * math.pi / 30
             if math.cos(b - (ua + math.pi)) > 0.8:
                 continue        # open towards the boardwalk
+            vooruit, opzij = 7.2 * (math.cos(b) * ax + math.sin(b) * az), 7.2 * (math.sin(b) * ax - math.cos(b) * az)
+            if vooruit > 0 and abs(opzij) <= 4:
+                continue        # W-SCHEPEN: open at the tip, where the airship lies flush (its hull is 7 wide)
             W.wset(mx + 7.2 * math.cos(b), HY + 1, mz + 7.2 * math.sin(b), HEK)
         W.wfill(mx, HY + 1, mz, mx, HY + 22, mz, "minecraft:stripped_spruce_log[axis=y]")
         W.wfill(mx - 3, HY + 20, mz, mx + 3, HY + 20, mz, "minecraft:stripped_spruce_log[axis=x]")

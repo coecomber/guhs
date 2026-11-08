@@ -103,6 +103,7 @@ public final class Luchtschepen {
                 }
             }
         }
+        Loopplank.tik(server);   // W-SCHEPEN: step off a pier tip onto a docked ship / the safety net at open tips
         ServerLevel sl = Vadsrijk.level(server);
         if (sl == null) {
             return;
@@ -499,6 +500,11 @@ public final class Luchtschepen {
 
     /** A block was clicked near a pier whose line is closed for you: say why (not cancelled; at most every 3 s). */
     static void pierKlik(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock event) {
+        if (event.getEntity() instanceof ServerPlayer q && event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND
+                && Loopplank.klik(q, event.getPos())) {
+            event.setCanceled(true);   // W-SCHEPEN: a click on the pier tip boards the docked ship
+            return;
+        }
         if (!(event.getEntity() instanceof ServerPlayer p) || event.getHand() != net.minecraft.world.InteractionHand.MAIN_HAND || p.isPassenger()
                 || !(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl)) {
             return;
@@ -563,6 +569,7 @@ public final class Luchtschepen {
 
     /** (U-LUCHTSCHIP) a player left the server: forget the deck step / message timers. */
     static void vergeet(ServerPlayer p) {
+        Loopplank.vergeet(p);   // W-SCHEPEN
         LuchtschipDek.vergeet(p);
         Poorten.vergeet(p);
     }

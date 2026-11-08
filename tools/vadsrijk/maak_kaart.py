@@ -112,6 +112,7 @@ def _main(a):
         import bouwsels
         plekken.update(bouwsels.bouw_alles(W, K, kamp_d))
         bouwsels.kamp_arena(plekken["wereld"], kamp_poi)
+        bouwsels.lijn0_kampsteiger(W, plekken["wereld"], kamp_poi)   # W-SCHEPEN: line 0's camp tip
         for d in deuren(plekken).values():
             bouwsels.deurkopie(W, d)
         java_plekken(plekken)

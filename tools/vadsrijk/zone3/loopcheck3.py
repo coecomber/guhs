@@ -34,7 +34,7 @@ def main():
         links.append([alle[f"wind_{w[0]}_onder"], alle[f"wind_{w[0]}_boven"], False])
     # blocks on purpose (props, cages, lanterns, masts, airships) and the boss's fly-only perches
     sla = ("kampvuur_", "piepvel_kooi", "piepvel_lantaarnpaal", "landmark_", "ei", "knuffelbeeld", "dok_luchtschip",
-           "dok_mast", "oosttaksteiger_luchtschip", "oosttaksteiger_mast", "mika_imker_raatzaal", "mika_imker_luik",
+           "oosttaksteiger_luchtschip", "mika_imker_raatzaal", "mika_imker_luik",
            "grotlantaarn_", "hart_grotlantaarn_", "kruinroofvogel_zit_", "gebouw.nestkapel.eiersokkel",
            "gebouw.nestkapel.droomsteen", "gebouw.jagershut.premiebord", "gebouw.jagershut.jachtbord")
     pois = {k: v for k, v in alle.items() if not k.startswith(sla) and not k.endswith(("doos_min", "doos_max", "_kooi"))}
