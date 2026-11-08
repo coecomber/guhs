@@ -758,11 +758,17 @@ Q("z4_s16_flessenpost", "zij", "z4_grijsje", "Een briefje naar oma",
   munten=6000, loot="zeldzaam", lv=52, na=["z4_hq05_vliegervanger"], start_items=[(item("flesje"), 1)])
 
 
-# ===== quest xp: a main step = 45 % of a level, a side quest = 18 % (the curve of kern Levels.xpVoor, as Z3Xp) ====================
+# ===== quest xp: the curve of kern Levels.xpVoor, as Z3Xp ======================================================================
+# W-BALANS: a main step = 65 % of a level (was 45 %), a side quest = 22 % (was 18 %). Zone 4 has only 7 main steps for the band
+# 50 -> 56 and its gates climb a level per step; with 45 % a main-only player had to grind ~50 min between steps. Now main+side
+# ends at ~58.5 from lv 50 (56 even when half the side quests are skipped). See tools/vadsrijk/xpbalans.py and XP_BALANS.md.
+Z4_HOOFD, Z4_ZIJ = 0.65, 0.22
+
+
 def z4xp(lv, hoofd):
     l = max(1, min(99, lv))
     stap = max(1, round(40 + 25 * l ** 1.6))
-    return max(1, round(stap * (0.45 if hoofd else 0.18)))
+    return max(1, round(stap * (Z4_HOOFD if hoofd else Z4_ZIJ)))
 
 
 for _q in QUESTS:
