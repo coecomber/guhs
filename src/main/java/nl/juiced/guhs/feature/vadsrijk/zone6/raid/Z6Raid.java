@@ -235,6 +235,36 @@ public final class Z6Raid {
         }
     }
 
+    /**
+     * W-PARTY: the party leader queues the whole party from the Party tab (players only; nep-spelers never join the raid). Returns
+     * null when queued, else a lang key why not. When the tower is free and nobody waits, the group is called at once and whoever of
+     * it stands in the Wachtzaal within a minute goes up (at least 2), exactly like a queued circle group.
+     */
+    public static String partyInRij(List<ServerPlayer> leden) {   // W-PARTY
+        if (leden.size() < Z6Schaal.MIN) {
+            return "vadsrijk.party.raid.te_klein";
+        }
+        List<UUID> wie = new ArrayList<>();
+        for (ServerPlayer p : leden) {
+            if (inGroep(p)) {
+                return "vadsrijk.party.raid.al_bezig";
+            }
+            if (wie.size() < Z6Schaal.MAX) {
+                wie.add(p.getUUID());
+            }
+        }
+        for (List<UUID> r : RIJ) {
+            if (r.contains(wie.get(0))) {
+                return "vadsrijk.party.raid.al_in_rij";
+            }
+        }
+        RIJ.add(wie);
+        for (ServerPlayer p : leden) {
+            p.sendSystemMessage(Component.translatable("vadsrijk.z6raid.rij.erin", RIJ.size()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+        return null;
+    }
+
     /** The players on the circle + their party members in the Wachtzaal, max 10, in that order. */
     private static List<UUID> metParty(ServerLevel sl, List<ServerPlayer> op) {
         LinkedHashSet<UUID> wie = new LinkedHashSet<>();

@@ -32,6 +32,8 @@ public final class PartyFrames {
     public static final int FLAUW_TICKS = 100;
     /** The spec line under the name: first non-null lang key wins (u-specs can add its spec here); default = kern's class title. */
     public static final List<Function<ServerPlayer, String>> SPEC_BRON = new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** W-PARTY: extra frames after the members (nep-speler companions, tagged [NPC]); also keeps the frames on without a party. */
+    public static final List<Function<ServerPlayer, List<UHudPayloads.Frame>>> EXTRA = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     private static final Map<UUID, String> NAMEN = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> FLAUW = new ConcurrentHashMap<>();
@@ -85,7 +87,7 @@ public final class PartyFrames {
                 NEP.remove(p.getUUID());
                 nep = null;
             }
-            boolean party = Partijen.party(p) != null;
+            boolean party = Partijen.party(p) != null || !extra(p).isEmpty();   // W-PARTY
             if (!party && nep == null) {
                 if (HAD_PARTY.remove(p.getUUID()) != null) {
                     PacketDistributor.sendToPlayer(p, new UHudPayloads.Party(List.of(), false));
@@ -106,6 +108,7 @@ public final class PartyFrames {
         List<UHudPayloads.Frame> uit = new ArrayList<>();
         Partijen.Party party = Partijen.party(p);
         if (party == null) {
+            uit.addAll(extra(p));   // W-PARTY
             return uit;
         }
         for (UUID id : party.leden) {
@@ -120,6 +123,19 @@ public final class PartyFrames {
             } else {
                 uit.add(frame(m, leider));
             }
+        }
+        uit.addAll(extra(p));   // W-PARTY
+        return uit;
+    }
+
+    /** W-PARTY: the frames of {@link #EXTRA}. */
+    static List<UHudPayloads.Frame> extra(ServerPlayer p) {
+        if (EXTRA.isEmpty()) {
+            return List.of();
+        }
+        List<UHudPayloads.Frame> uit = new ArrayList<>();
+        for (Function<ServerPlayer, List<UHudPayloads.Frame>> f : EXTRA) {
+            uit.addAll(f.apply(p));
         }
         return uit;
     }
@@ -138,7 +154,7 @@ public final class PartyFrames {
                 (float) m.getY(), (float) m.getZ(), isFlauw ? UHudPayloads.STAAT_FLAUW : UHudPayloads.STAAT_OK, leider);
     }
 
-    static String spec(ServerPlayer m) {
+    public static String spec(ServerPlayer m) {   // W-PARTY: public (the party tab)
         for (Function<ServerPlayer, String> f : SPEC_BRON) {
             String s = f.apply(m);
             if (s != null) {

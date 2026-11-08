@@ -134,6 +134,7 @@ public class InstellingenPaneel extends MenuPaneel {
         opties.add(new Schuif("weer", nl.juiced.guhs.feature.vadsrijk.ritme.client.RitmeConfig.WEER, 0, 100, 70, true));   // U-LEVEN-RITME
         opties.add(new Keuze<>("stadsleven", nl.juiced.guhs.feature.vadsrijk.stadsleven.client.StadslevenConfig.NIVEAU,   // U-LEVEN-STAD
                 nl.juiced.guhs.feature.vadsrijk.stadsleven.client.StadslevenConfig.Niveau.VOL));
+        opties.add(new AanUit("nepspelers", nl.juiced.guhs.feature.vadsrijk.party.client.NepClientConfig.AAN, true));   // W-PARTY
         opties.add(new Schuif("schermschud", BelevingConfig.SCHUD, 0, 100, 100, true));
         opties.add(new Schuif("tekstsnelheid", DialoogConfig.SNELHEID, 0, 3, 2, false));
     }
