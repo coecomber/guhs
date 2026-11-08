@@ -2,7 +2,7 @@
 
 CSS = r"""
 /* ---- Het Vadsrijk (S-SITE): on top of the wiki stylesheet ---- */
-:root{--vr:#c2577f;--vr-goud:#c8955a;--vr-soft:#f8e4ea;--zone1:#e0559a;--zone2:#5aa9e6;--zone3:#e8a33a;--ok:#2f9e5b;--uit:#c0392b}
+:root{--vr:#c2577f;--vr-goud:#c8955a;--vr-soft:#f8e4ea;--zone1:#e0559a;--zone2:#5aa9e6;--zone3:#e8a33a;--zone4:#2bb3a3;--zone5:#9b7be0;--zone6:#e07a5f;--ok:#2f9e5b;--uit:#c0392b}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--vr:#f08cb0;--vr-goud:#e6b67a;--vr-soft:#3a2230}}
 :root[data-theme="dark"]{--vr:#f08cb0;--vr-goud:#e6b67a;--vr-soft:#3a2230}
 .brand .word small{font:600 13px var(--body);color:var(--vr-goud);margin-left:6px;letter-spacing:.04em}
@@ -33,6 +33,11 @@ a.kaartje:hover{border-color:var(--vr)}
 .badge.z1{background:color-mix(in srgb,var(--zone1) 20%,transparent);color:var(--zone1)}
 .badge.z2{background:color-mix(in srgb,var(--zone2) 22%,transparent);color:var(--zone2)}
 .badge.z3{background:color-mix(in srgb,var(--zone3) 22%,transparent);color:#b0700c}
+.badge.z4{background:color-mix(in srgb,var(--zone4) 22%,transparent);color:#1b7f74}
+.badge.z5{background:color-mix(in srgb,var(--zone5) 22%,transparent);color:#6a4fc0}
+.badge.z6{background:color-mix(in srgb,var(--zone6) 22%,transparent);color:#b0472c}
+.voorbeeldbalk{background:#fff3c4;color:#5a4300;border-bottom:2px dashed #e0b400;font:600 14px/1.4 var(--body);padding:8px 16px;text-align:center}
+:root[data-theme="dark"] .voorbeeldbalk{background:#3a3214;color:#ffe9a6}
 .el{display:inline-block;font:700 12px/1.6 var(--body);padding:0 8px;border-radius:999px;color:#fff}
 .el.roze{background:#e05aa8}.el.vuur{background:#e2572a}.el.natuur{background:#3fa83a}.el.water{background:#2f8fdf}.el.geen{background:#8a8a8a}
 .zz{font-weight:700}
@@ -54,9 +59,27 @@ details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
 .verstopt-zone{border:1.5px dashed var(--line2);border-radius:14px;padding:10px 14px;color:var(--muted);margin:10px 0}
-html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone){display:none!important}
+html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="5"] [data-zone="6"]:not(.verstopt-zone){display:none!important}
 .verstopt-zone{display:none}
-html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .verstopt-zone[data-zone="3"],html[data-zonetot="2"] .verstopt-zone[data-zone="3"]{display:block}
+html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .verstopt-zone[data-zone="3"],html[data-zonetot="1"] .verstopt-zone[data-zone="4"],html[data-zonetot="1"] .verstopt-zone[data-zone="5"],html[data-zonetot="1"] .verstopt-zone[data-zone="6"],html[data-zonetot="2"] .verstopt-zone[data-zone="3"],html[data-zonetot="2"] .verstopt-zone[data-zone="4"],html[data-zonetot="2"] .verstopt-zone[data-zone="5"],html[data-zonetot="2"] .verstopt-zone[data-zone="6"],html[data-zonetot="3"] .verstopt-zone[data-zone="4"],html[data-zonetot="3"] .verstopt-zone[data-zone="5"],html[data-zonetot="3"] .verstopt-zone[data-zone="6"],html[data-zonetot="4"] .verstopt-zone[data-zone="5"],html[data-zonetot="4"] .verstopt-zone[data-zone="6"],html[data-zonetot="5"] .verstopt-zone[data-zone="6"]{display:block}
+.zonevak{border:1px solid var(--line);border-left:6px solid var(--zk,var(--vr));border-radius:14px;background:var(--card);margin:10px 0;box-shadow:var(--shadow)}
+.zonevak>summary{cursor:pointer;padding:12px 16px;font:700 19px/1.3 var(--display,inherit);list-style:none}
+.zonevak>summary::-webkit-details-marker{display:none}
+.zonevak>summary::before{content:"\25B8";display:inline-block;width:1.1em;transition:transform .15s;color:var(--zk,var(--vr))}
+.zonevak[open]>summary::before{transform:rotate(90deg)}
+.zonevak .zv-in{padding:0 16px 14px}
+img.render{display:block;image-rendering:auto}
+img.render.groot{max-width:min(320px,100%);max-height:320px;margin:4px 0 14px;filter:drop-shadow(0 8px 10px rgba(60,40,80,.25));
+  background:radial-gradient(ellipse at 50% 85%,color-mix(in srgb,var(--vr-soft) 80%,transparent),transparent 70%);border-radius:18px;padding:10px}
+img.render.klein{max-width:100%;height:120px;object-fit:contain;margin:0 auto 6px;filter:drop-shadow(0 5px 6px rgba(60,40,80,.22))}
+img.render.mini{width:34px;height:34px;object-fit:contain;vertical-align:middle;margin-right:6px;display:inline-block}
+a.baasfoto{display:block;text-align:center}
+td.tipcel{min-width:220px;font-size:14px}
+.pager{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 14px}
+.pager button{font:600 14px var(--body);border:1.5px solid var(--line2);border-radius:999px;background:var(--card);color:var(--ink);padding:4px 11px;cursor:pointer}
+.pager button[aria-current="page"]{background:var(--vr);border-color:var(--vr);color:#fff}
+.pager button:disabled{opacity:.4;cursor:default}
+.pager .muted{margin-left:6px}
 .filters{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
 .filters input,.filters select{font:15px var(--body);border:1.5px solid var(--line2);border-radius:999px;background:var(--card);color:var(--ink);padding:7px 12px}
 .filters input{flex:1;min-width:180px}
@@ -115,8 +138,15 @@ html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .ver
 .vr-label .lvr{display:block;font:700 11px var(--mono);color:#ffd98a;text-align:center}
 .vr-pin{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:2px solid #fff;color:#fff;
   font:800 12px/1 var(--body);box-shadow:0 1px 4px rgba(0,0,0,.6)}
+.vr-speler{display:inline-flex;align-items:center;gap:4px;background:rgba(255,255,255,.92);border:2px solid #c2577f;border-radius:999px;padding:1px 7px 1px 1px;
+  font:700 12px/1.2 var(--body);color:#3a1d33;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.vr-speler img{border-radius:50%;image-rendering:pixelated}.vr-speler i{font-style:normal;font-weight:600;color:#7a4a6a}
+.vr-pin.vliegt{animation:vrzweef 2.4s ease-in-out infinite}@keyframes vrzweef{50%{transform:translateY(-3px)}}
+.kaart-info.spelers{margin-left:6px}
+table.data td.num{white-space:nowrap}
 .vr-pin.kampvuur{background:#e2572a}.vr-pin.uitkijk{background:#2b8f8f}.vr-pin.luchtschip{background:#6b5bd6}.vr-pin.portaal{background:#c2577f}
-.vr-pin.kerker{background:#3d3d3d}.vr-pin.baas{background:#b0182c;width:26px;height:26px}.vr-pin.quest{background:#e0a800;color:#2a1a00}
+.vr-pin.kerker{background:#3d3d3d}.raidfotos{display:flex;flex-wrap:wrap;gap:8px}.raidfotos img{flex:1 1 160px;max-width:100%}
+.vr-pin.geheim{background:#e0559a;border:2px dashed #fff}.vr-pin.raid{background:#6b2fa8;width:28px;height:28px}.vr-pin.baas{background:#b0182c;width:26px;height:26px}.vr-pin.quest{background:#e0a800;color:#2a1a00}
 .vr-pin.questzij{background:#f2d36b;color:#2a1a00}.vr-pin.stad{background:#fff;color:#2a1830;border-color:#2a1830}.vr-pin.gondel,.vr-pin.lift{background:#55708a}
 .vr-pin.karavaan{background:#8a5a2b;width:28px;height:28px}
 .leaflet-popup-content{font:14px/1.45 var(--body)}
@@ -162,8 +192,9 @@ JS = r"""
         controls.forEach(function(c){var v=(c.value||'').toLowerCase().trim();if(!v)return;
           var col=c.getAttribute('data-filter-col');var txt=(col?(r.cells[+col].getAttribute('data-v')||r.cells[+col].textContent):r.textContent).toLowerCase();
           if(col?txt.split('|').indexOf(v)<0&&txt!==v:txt.indexOf(v)<0)ok=false;});
-        r.hidden=!ok;if(ok)n++;}
-      var cnt=document.querySelector(el.getAttribute('data-filter')+'-n');if(cnt)cnt.textContent=n;}
+        r._uit=!ok;r.hidden=!ok;if(ok)n++;}
+      tab._p=0;var m=pageer(tab);
+      var cnt=document.querySelector(el.getAttribute('data-filter')+'-n');if(cnt)cnt.textContent=(m==null?n:m);}
     el.addEventListener('input',run);el.addEventListener('change',run);});
   // sortable tables
   document.querySelectorAll('table.sort th').forEach(function(th,ci){th.style.cursor='pointer';th.addEventListener('click',function(){
@@ -172,7 +203,22 @@ JS = r"""
     th.setAttribute('aria-sort',asc?'ascending':'descending');
     rows.sort(function(a,b){var x=a.cells[idx].getAttribute('data-s')||a.cells[idx].textContent,y=b.cells[idx].getAttribute('data-s')||b.cells[idx].textContent;
       var nx=parseFloat(x),ny=parseFloat(y);var c=(!isNaN(nx)&&!isNaN(ny))?nx-ny:x.localeCompare(y,'nl');return asc?c:-c;});
-    rows.forEach(function(r){tab.tBodies[0].appendChild(r);});});});
+    rows.forEach(function(r){tab.tBodies[0].appendChild(r);});pageer(tab);});});
+  // U-SITE: pagination for <table data-pagina="N"> (respects the filters and the spoiler switch)
+  function pageer(tab){var per=+(tab.getAttribute('data-pagina')||0);if(!per)return null;var rows=tab.tBodies[0].rows,z=VR.zone(),zicht=[];
+    for(var i=0;i<rows.length;i++){var r=rows[i];if(!r._uit&&+(r.getAttribute('data-zone')||1)<=z)zicht.push(r);r.hidden=true;}
+    var pag=Math.max(1,Math.ceil(zicht.length/per));tab._p=Math.min(Math.max(0,tab._p||0),pag-1);
+    zicht.forEach(function(r,i){r.hidden=Math.floor(i/per)!==tab._p;});
+    var pg=tab._pager;if(!pg){pg=document.createElement('div');pg.className='pager';var w=tab.closest('.tscroll')||tab;w.parentNode.insertBefore(pg,w.nextSibling);tab._pager=pg;
+      pg.addEventListener('click',function(e){var b=e.target.closest('button[data-p]');if(b){tab._p=+b.getAttribute('data-p');pageer(tab);tab.scrollIntoView({block:'nearest'});}});}
+    var h='<button type="button" data-p="'+(tab._p-1)+'"'+(tab._p<=0?' disabled':'')+' aria-label="'+VR.t('Previous','Vorige')+'">&lsaquo;</button>';
+    for(var k=0;k<pag;k++){if(pag>9&&k>1&&k<pag-2&&Math.abs(k-tab._p)>2){if(k===2||k===pag-3)h+='<span class="muted">&hellip;</span>';continue;}
+      h+='<button type="button" data-p="'+k+'"'+(k===tab._p?' aria-current="page"':'')+'>'+(k+1)+'</button>';}
+    h+='<button type="button" data-p="'+(tab._p+1)+'"'+(tab._p>=pag-1?' disabled':'')+' aria-label="'+VR.t('Next','Volgende')+'">&rsaquo;</button>';
+    var a=zicht.length?tab._p*per+1:0,b2=Math.min(zicht.length,(tab._p+1)*per);
+    h+='<span class="muted">'+a+'-'+b2+' '+VR.t('of','van')+' '+zicht.length+'</span>';pg.innerHTML=h;return zicht.length;}
+  document.querySelectorAll('table[data-pagina]').forEach(function(tab){pageer(tab);});
+  document.addEventListener('vr-zone',function(){document.querySelectorAll('table[data-pagina]').forEach(function(tab){pageer(tab);});});
 
   // ---- live data ----
   function haal(naam){var url=VR.live+naam;return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
@@ -238,7 +284,7 @@ JS = r"""
           '<h2>'+VR.t('Exploration book','Verkenningsboek')+'</h2><dl class="feiten">'+boek+'</dl></div>'+
           '<aside class="zij"><div class="kaartje"><dl class="feiten">'+kl+'<div><dt>'+VR.t('Cheered up','Opgevrolijkt')+'</dt><dd>'+p.opgevrolijkt+'</dd></div><div><dt>'+VR.t('Bosses','Bazen')+'</dt><dd>'+p.bazen_totaal+'</dd></div>'+
           '<div><dt>'+VR.t('Pets','Huisdieren')+'</dt><dd>'+p.huisdieren+' / '+p.huisdieren_max+'</dd></div><div><dt>'+VR.t('Mounts','Rijdieren')+'</dt><dd>'+p.rijdieren+' / '+p.rijdieren_max+'</dd></div>'+
-          '<div><dt>'+VR.t('Last seen','Laatst gezien')+'</dt><dd>'+esc(p.gezien)+'</dd></div>'+(p.eerste_50?'<div><dt>Lv 50</dt><dd>'+esc(p.eerste_50)+'</dd></div>':'')+'</dl></div></aside></div>';
+          (p.waar?'<div><dt>'+VR.t('Now','Nu')+'</dt><dd>'+esc(p.waar)+'</dd></div>':'')+'<div><dt>'+VR.t('Last seen','Laatst gezien')+'</dt><dd>'+esc(p.gezien)+'</dd></div>'+(p.eerste_50?'<div><dt>Lv 50</dt><dd>'+esc(p.eerste_50)+'</dd></div>':'')+'</dl></div></aside></div>';
         document.title=p.naam+' - Het Vadsrijk';},function(){uit.innerHTML='<p class="leeg">'+VR.t('No player with this name (yet).','(Nog) geen speler met deze naam.')+'</p>';});}
     window.addEventListener('hashchange',laadP);laadP();document.addEventListener('vr-lang',laadP);})(document.querySelector('[data-profiel]'));
 })();
@@ -263,12 +309,19 @@ KAART_JS = r"""
   function laag(id,en,nl,aan){var g=L.layerGroup();lagen[id]={g:g,en:en,nl:nl};if(aan)g.addTo(map);return g;}
   var Lzones=laag('zones','Zones and areas','Zones en gebieden',true),Lst=laag('steden','Towns','Steden',true),Lvuur=laag('kampvuur','Campfires','Kampvuren',true),
     Luit=laag('uitkijk','Viewpoints','Uitkijkpunten',true),Lreis=laag('reizen','Airships, portals, lifts','Luchtschepen, portalen, liften',true),
-    Lbaas=laag('bazen','Bosses','Bazen',true),Lquest=laag('quests','Quest givers','Questgevers',false),Lkar=laag('karavaan','Caravan (live)','Karavaan (live)',true);
+    Lbaas=laag('bazen','Bosses','Bazen',true),Lquest=laag('quests','Quest givers','Questgevers',false),Lkar=laag('karavaan','Caravan (live)','Karavaan (live)',true),
+    Lspel=laag('spelers','Show players (live)','Spelers tonen (live)',true),
+    Lgeheim=laag('geheimen','Show secrets (spoilers!)','Geheimen tonen (spoilers!)',false);
+  // U-SITE round 3: every secret with its spot, OFF by default and never in the search (pin() would add it to the search list)
+  (D.geheimpunten||[]).forEach(function(g){var m=L.marker(ll(g.pos[0],g.pos[2]),{icon:L.divIcon({className:'',html:'<span class="vr-pin geheim">?</span>',iconSize:[20,20],iconAnchor:[10,10]})});
+    m.bindPopup('<h4>'+VR.esc(g.naam)+'</h4><div>'+VR.esc(g.beloning||'')+'</div><div class="muted" style="font:12px var(--mono)">x '+g.pos[0]+' &middot; y '+g.pos[1]+' &middot; z '+g.pos[2]+'</div><a href="'+VR.root+'geheimen/index.html#'+g.id+'">'+VR.t('On the secrets page','Op de geheimenpagina')+'</a>');
+    m._vrZone=zoneNr(g.zone);m.addTo(Lgeheim);});
+  if(new URLSearchParams(location.search).get('geheim')==='1')Lgeheim.addTo(map);
   function pin(soort,teken,x,z,titel,html,zone,id){var m=L.marker(ll(x,z),{icon:L.divIcon({className:'',html:'<span class="vr-pin '+soort+'">'+teken+'</span>',iconSize:[22,22],iconAnchor:[11,11]}),title:titel,keyboard:true});
     m.bindPopup('<h4>'+VR.esc(titel)+'</h4>'+(html||'')+'<div class="muted" style="font:12px var(--mono)">x '+x+' &middot; z '+z+'</div>');m._vrZone=zoneNr(zone);m._vrId=id;alle.push({id:id,naam:titel,m:m,zone:m._vrZone,soort:soort});return m;}
   // areas: outlines + level labels
   var rond={};
-  D.gebieden.forEach(function(g){if(g.id==='ring'||/_ring$/.test(g.id))return;var zn=zoneNr(g.zone),kleur=D.zonekleur[g.zone]||'#fff',vorm;
+  D.gebieden.forEach(function(g){if(g.id==='ring'||/_ring$/.test(g.id)||g.ring)return;var zn=zoneNr(g.zone),kleur=D.zonekleur[g.zone]||'#fff',vorm;
     if(g.laag&&g.laag.r_max){if(g.laag.r_max>500)return;vorm=L.circle(ll(g.laag.cx,g.laag.cz),{radius:g.laag.r_max,color:kleur,weight:1,opacity:.7,fill:false,dashArray:'4 8'});}
     else{vorm=L.rectangle(L.latLngBounds(ll(g.doos[0],g.doos[3]),ll(g.doos[2],g.doos[1])),{color:kleur,weight:1.5,fillOpacity:0.04,dashArray:g.stad?null:'6 6'});}
     vorm._vrZone=zn;vorm.addTo(Lzones);
@@ -279,9 +332,9 @@ KAART_JS = r"""
     alle.push({id:g.id,naam:g.naam,m:lab,zone:zn,soort:'gebied',ll:ll(c[0],c[1])});});
   D.zones.forEach(function(z){if(!z.mid)return;var lab=L.marker(ll(z.mid[0],z.mid[1]),{icon:L.divIcon({className:'vr-label zone',html:VR.esc(z.naam)+'<span class="lvr">lv '+z.lv[0]+'-'+z.lv[1]+'</span>',iconSize:null}),interactive:false});lab._vrZone=z.nr;lab._vrMax=-2;lab.addTo(Lzones);});
   D.steden.forEach(function(s){pin('stad','&#9873;',s.pos[0],s.pos[2],s.naam,'<a href="'+VR.root+s.url+'">'+T('Zone page','Zonepagina')+'</a>',s.zone,s.id).addTo(Lst);});
-  var tekens={kampvuur:'&#128293;',uitkijk:'&#128065;',luchtschip:'&#9992;',portaal:'&#10022;',kerker:'&#9876;',gondel:'&#8597;',lift:'&#8597;'};
-  D.punten.forEach(function(p){var L2=p.soort==='kampvuur'?Lvuur:p.soort==='uitkijk'?Luit:p.soort==='kerker'?Lbaas:Lreis;
-    var m=pin(p.soort,tekens[p.soort]||'&#8226;',p.pos[0],p.pos[2],p.naam,'',p.zone,p.id);m._vrMin=p.soort==='kerker'?-2:-0.5;m.addTo(L2);});
+  var tekens={kampvuur:'&#128293;',uitkijk:'&#128065;',luchtschip:'&#9992;',portaal:'&#10022;',kerker:'&#9876;',raid:'&#9733;',gondel:'&#8597;',lift:'&#8597;'};
+  D.punten.forEach(function(p){var L2=p.soort==='kampvuur'?Lvuur:p.soort==='uitkijk'?Luit:(p.soort==='kerker'||p.soort==='raid')?Lbaas:Lreis;
+    var m=pin(p.soort,tekens[p.soort]||'&#8226;',p.pos[0],p.pos[2],p.naam,'',p.zone,p.id);m._vrMin=(p.soort==='kerker'||p.soort==='raid')?-2:-0.5;if(p.soort==='raid')m.bindPopup('<h4>'+VR.esc(p.naam)+'</h4><a href="'+VR.root+'raid/index.html">'+VR.t('Raid page','Raidpagina')+'</a>');m.addTo(L2);});
   D.bazen.forEach(function(b){if(!b.pos)return;var m=pin('baas','&#9760;',b.pos[0],b.pos[2],b.naam,'<span class="badge lv">'+VR.esc(b.soort)+'</span> '+T('Respawn ','Komt terug na ')+VR.duur(b.respawn_s)+
     '<div data-baas="'+b.arena+'"></div><a href="'+VR.root+b.url+'">'+T('Boss page','Bazenpagina')+'</a>',b.zone,'baas-'+b.id);m._vrMin=-2;m.addTo(Lbaas);});
   D.questgevers.forEach(function(q){var m=pin(q.hoofd?'quest':'questzij',q.hoofd?'!':'?',q.pos[0],q.pos[2],q.naam,q.quests.map(function(x){return '<a href="'+VR.root+x.url+'">'+VR.esc(x.titel)+'</a>';}).join('<br>'),q.zone,'npc-'+q.id);m._vrMin=-0.5;m.addTo(Lquest);});
@@ -315,5 +368,25 @@ KAART_JS = r"""
       kar.setLatLng(ll(kv.x,kv.z));kar.setPopupContent('<h4>'+T('The caravan','De karavaan')+'</h4>'+(kv.fase==='stop'?T('At a stop','Bij een halte'):kv.fase==='aanval'?T('Under attack!','Wordt aangevallen!'):T('On the road','Onderweg')));}
     w.bazen.forEach(function(b){document.querySelectorAll('[data-baas="'+b.arena+'"]').forEach(function(d){d.innerHTML=b.terug_over_s>0?T('Back in ','Terug over ')+VR.duur(b.terug_over_s):T('Waiting for you now','Wacht nu op je');});});},function(){});}
   live();setInterval(live,30000);
+  // U-SITE: live player positions + airships in flight (posities.json, ~10 s); markers glide to their new spot
+  var spelersM={},schipM={},pnote=document.getElementById('spelersnoot');
+  var KI={knuffelridder:'&#9876;',pluisjager:'&#127993;',vadsmagier:'&#10024;'};
+  function glij(m,naar){var van=m.getLatLng(),t0=performance.now(),d=1800;cancelAnimationFrame(m._raf);
+    (function stap(t){var f=Math.min(1,(t-t0)/d);f=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;m.setLatLng(L.latLng(van.lat+(naar.lat-van.lat)*f,van.lng+(naar.lng-van.lng)*f));if(f<1)m._raf=requestAnimationFrame(stap);})(t0);}
+  function posities(){VR.haal('posities.json').then(function(P){var zien={},sz={};
+      (P.spelers||[]).forEach(function(s){var id=s.naam;zien[id]=1;var to=ll(s.x,s.z),m=spelersM[id];
+        var html='<span class="vr-speler"><img src="https://mc-heads.net/avatar/'+encodeURIComponent(s.naam)+'/20" alt="" width="20" height="20"><b>'+VR.esc(s.naam)+'</b><i>'+(KI[s.klasse]||'')+' '+(s.level||'')+'</i></span>';
+        if(!m){m=L.marker(to,{icon:L.divIcon({className:'',html:html,iconSize:null,iconAnchor:[10,10]}),title:s.naam,zIndexOffset:1000});
+          m.bindPopup('<h4>'+VR.esc(s.naam)+'</h4>'+VR.t('Level ','Level ')+(s.level||'?')+(s.klasse?' &middot; '+VR.esc(VR.vt?VR.vt('klasse:'+s.klasse):s.klasse):'')+'<br><a href="'+VR.root+'speler.html#'+encodeURIComponent(s.naam)+'">'+VR.t('Profile','Profiel')+'</a>');
+          m._vrZone=+String(s.zone||'zone1').replace('zone','')||1;m.addTo(Lspel);spelersM[id]=m;}else{glij(m,to);}});
+      Object.keys(spelersM).forEach(function(id){if(!zien[id]){Lspel.removeLayer(spelersM[id]);delete spelersM[id];}});
+      (P.schepen||[]).forEach(function(s){sz[s.id]=1;var to=ll(s.x,s.z),m=schipM[s.id];
+        if(!m){m=L.marker(to,{icon:L.divIcon({className:'',html:'<span class="vr-pin luchtschip vliegt">&#9992;</span>',iconSize:[24,24],iconAnchor:[12,12]}),title:VR.t('Airship','Luchtschip')});
+          m.bindPopup('<h4>'+VR.t('Airship in flight','Luchtschip onderweg')+'</h4>'+(s.naar?VR.t('to ','naar ')+VR.esc(s.naar):''));m.addTo(Lspel);schipM[s.id]=m;}else{glij(m,to);}});
+      Object.keys(schipM).forEach(function(id){if(!sz[id]){Lspel.removeLayer(schipM[id]);delete schipM[id];}});
+      if(pnote){var n=(P.spelers||[]).length,st=(P.status||[]).length;
+        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):VR.t('No players online','Geen spelers online');}
+      setTimeout(zoneFilter,30);},function(){if(pnote)pnote.textContent=VR.t('No players online','Geen spelers online');});}
+  posities();setInterval(posities,10000);
 })();
 """

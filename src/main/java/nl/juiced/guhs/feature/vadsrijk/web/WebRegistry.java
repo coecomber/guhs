@@ -47,6 +47,25 @@ public final class WebRegistry {
             }
         });
         NeoForge.EVENT_BUS.addListener(WebRegistry::commando);
+        NeoForge.EVENT_BUS.addListener(WebRegistry::kaartCommando);   // U-SITE
+        // U-SITE: zone 6 hidden places for the live map: the raid tower (De Sterrendovende Toren) and the underground dungeon
+        // De Verzonken Sterrenwacht (z6wezens' own rooms: x 3940..4061, z -983..-959, floor y 30); status only, never a position
+        WebPosities.VERBORGEN_PLEKKEN.add(p -> nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6Raid.inToren(p) ? WebPosities.RAID : null);
+        WebPosities.VERBORGEN_PLEKKEN.add(p -> WebPosities.inZ6Kerker(p.getX(), p.getY(), p.getZ()) ? WebPosities.KERKER : null);
+    }
+
+    /** U-SITE: every player can hide from (and come back on) the live map of guhs.nl/vadsrijk. */
+    private static void kaartCommando(RegisterCommandsEvent event) {
+        event.getDispatcher().register(VadsrijkCommando.wortel(Commands.literal("kaart")
+                .then(Commands.literal("verberg").executes(c -> kaart(c.getSource().getPlayerOrException(), true)))
+                .then(Commands.literal("toon").executes(c -> kaart(c.getSource().getPlayerOrException(), false)))));
+    }
+
+    private static int kaart(ServerPlayer p, boolean verberg) {
+        WebStats.get(p.level().getServer()).zetVerborgen(p.getUUID(), verberg);
+        p.sendSystemMessage(Component.translatable(verberg ? "vadsrijk.web.kaart.verborgen" : "vadsrijk.web.kaart.getoond")
+                .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+        return 1;
     }
 
     private static void commando(RegisterCommandsEvent event) {

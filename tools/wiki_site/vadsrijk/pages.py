@@ -16,7 +16,7 @@ from . import stijl
 
 ESC = lambda s: html.escape(str(s if s is not None else ""), quote=True)  # noqa: E731
 
-ZONE_NR = {"zone1": 1, "zone2": 2, "zone3": 3}
+ZONE_NR = {"zone1": 1, "zone2": 2, "zone3": 3, "zone4": 4, "zone5": 5, "zone6": 6}   # U-SITE: + zones 4, 5, 6
 SLOT = {"wapen": ("Weapon", "Wapen"), "hoofd": ("Head", "Hoofd"), "borst": ("Chest", "Borst"), "benen": ("Legs", "Benen"),
         "voeten": ("Feet", "Voeten"), "ring": ("Ring", "Ring"), "ketting": ("Necklace", "Ketting"), "oorbel": ("Earring", "Oorbel")}
 STAT = {"vads": ("Vads", "Vads"), "kracht": ("Strength", "Kracht"), "behendigheid": ("Agility", "Behendigheid"),
@@ -99,17 +99,18 @@ class Bouwer:
     NAV = [("index.html", "Start", "Start"), ("kaart.html", "Map", "Kaart"), ("gids.html", "Guide", "Gids"),
            ("zones/index.html", "Zones", "Zones"), ("quests/index.html", "Quests", "Quests"), ("wezens/index.html", "Creatures", "Wezens"),
            ("bazen/index.html", "Bosses", "Bazen"), ("items/index.html", "Items", "Items"), ("systemen/index.html", "Mechanics", "Systemen"),
-           ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
+           ("geheimen/index.html", "Secrets", "Geheimen"), ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
            ("patchnotes/index.html", "Patch notes", "Patch notes")]
 
     def __init__(self, data, root, out, live_url, voorbeeld, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
-                 kaart_bron=None, concepten=False, versie="?"):
+                 kaart_bron=None, concepten=False, versie="?", noindex=False):
         self.d, self.root, self.out = data, root, out
         self.live_url, self.voorbeeld = live_url, voorbeeld
         self.wiki_url, self.site_url = wiki_url, site_url
         self.kaart_bron = kaart_bron
         self.concepten = concepten
         self.versie = versie
+        self.noindex = noindex   # U-SITE: a hidden preview (robots noindex + a banner)
         self.geschreven = []
         self.z = {z["id"]: z for z in data["zones"]}
         self.npc = {n["id"]: n for n in data["npcs"]}
@@ -118,6 +119,7 @@ class Bouwer:
         self.wezen = {w["id"]: w for w in data["wezens"]}
         self.gebied = {g["id"]: g for g in data["gebieden"]}
         self.iconen = {}
+        self.renders = {}   # U-SITE: render id -> file in img/renders
         self.kaart = None
         self.notities = []
 
@@ -139,12 +141,13 @@ class Bouwer:
                   f'<a href="{r}privacy.html">{t("Privacy", "Privacy")}</a></div></footer>')
         live = ESC(self.live_url if not self.live_url.startswith("@") else r + self.live_url[1:])
         doc = f"""<!doctype html>
-<html lang="nl" data-lang="nl" data-zonetot="3">
+<html lang="nl" data-lang="nl" data-zonetot="{max(z["nr"] for z in self.d["zones"])}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{ESC(titel_nl)} - Het Vadsrijk</title>
 <meta name="description" content="{ESC(beschrijving or titel_nl)}">
+{'<meta name="robots" content="noindex, nofollow">' if self.noindex else ''}
 <meta name="theme-color" content="#c2577f">
 <script>{EARLY_JS}</script>
 <link rel="icon" type="image/png" sizes="32x32" href="{r}img/favicon-32.png">
@@ -156,6 +159,7 @@ class Bouwer:
 <body data-root="{r}" data-live="{live}" data-voorbeeld="{1 if self.voorbeeld else 0}"{(' class="' + body_klasse + '"') if body_klasse else ''}{body_attr}>
 <a class="skip" href="#main">{t("Skip to content", "Naar de inhoud")}</a>
 {header}
+{self._voorbeeldbalk()}
 <main id="main" class="vr-shell">
 {main}
 </main>
@@ -173,6 +177,26 @@ class Bouwer:
 
     def r(self, path):
         return "../" * path.count("/")
+
+    def render(self, rid, van, klasse="render", alt=""):
+        """U-SITE: <img> of a committed 3/4 render (docs/wiki/vadsrijk_renders), or "" when there is none."""
+        f = self.renders.get(rid)
+        if not f:
+            return ""
+        return f'<img class="{klasse}" src="{self.r(van)}img/renders/{f}" alt="{ESC(alt)}" loading="lazy">'
+
+    def zonevak(self, z, inner, extra=""):
+        """U-SITE: one zone as a closed <details> (opens per zone)."""
+        return (f'<details class="zonevak" data-zone="{z["nr"]}" id="{z["id"]}" style="--zk:{z["kleur"]}"><summary><span class="zv-titel">{ESC(z["naam"])}</span> '
+                f'{lv(z["lv"])} <small class="muted">{extra}</small></summary><div class="zv-in">{inner}</div></details>'
+                f'<div class="verstopt-zone" data-zone="{z["nr"]}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>')
+
+    def _voorbeeldbalk(self):
+        """U-SITE: the preview banner (not released yet; live parts = voorbeelddata)."""
+        if not self.noindex:
+            return ""
+        return ('<div class="voorbeeldbalk" role="note">' + t("Preview of Guhs 1.10.0 \"Het Vadsrijk\": not released yet. Server, highscores and live parts show sample data (voorbeelddata).",
+                                                             "Voorbeeld van Guhs 1.10.0 \"Het Vadsrijk\": nog niet uit. Server, highscores en live-delen tonen voorbeelddata.") + "</div>")
 
     # ---- links -------------------------------------------------------------------------------------------------------------
     def zone_naam(self, zid):
@@ -244,6 +268,7 @@ class Bouwer:
         for bron, doel in (("ftbquests/guhs_vadsrijk/title.png", "titel.png"), ("ftbquests/guhs_vadsrijk/welkom.png", "welkom.png"),
                            ("ftbquests/guhs_vadsrijk/kop_vr_zwamzoet.png", "kop_zone1.png"), ("ftbquests/guhs_vadsrijk/kop_vr_kamp.png", "kop_kamp.png"),
                            ("ftbquests/guhs_vadsrijk/kop_vr_z2_kandijkom.png", "kop_zone2.png"), ("ftbquests/guhs_vadsrijk/kop_vr_z3_honingtak.png", "kop_zone3.png"),
+                           ("ftbquests/guhs_vadsrijk/kop_vr_z4_kust.png", "kop_zone4.png"), ("ftbquests/guhs_vadsrijk/kop_vr_z5_stad.png", "kop_zone5.png"),
                            ("ftbquests/guhs_vadsrijk/kop_vr_verhaal.png", "kop_verhaal.png"), ("ftbquests/guhs_vadsrijk/kop_vr_klassen.png", "kop_klassen.png"),
                            ("gui/vadsrijk/reiskaart.png", "reiskaart.png")):
             s = os.path.join(tex, bron)
@@ -251,6 +276,14 @@ class Bouwer:
                 _webp(s, os.path.join(img, doel.replace(".png", ".webp")))
         # favicon: the guh face coin / the wiki's own guh picture
         from PIL import Image
+        # U-SITE round 3: zone 6 has no FTB header yet -> a 1024x160 band cut from the story concept picture (Rozenkloof)
+        kop6, bron6 = os.path.join(img, "kop_zone6.webp"), os.path.join(self.root, "docs", "wiki", "vadsrijk_verhaal", "zijdeland.webp")
+        if not os.path.exists(kop6) and os.path.exists(bron6):
+            im = Image.open(bron6).convert("RGB")
+            w = 1024
+            im = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
+            top = max(0, (im.height - 160) // 2)
+            im.crop((0, top, w, top + 160)).save(kop6, "WEBP", quality=82)
         fav = None
         for c in (os.path.join(tex, "item", "vadsrijk", "economie", "vadsmunt_goud.png"), os.path.join(self.root, "docs", "wiki", "img", "icon_picked_up_guh.png"),
                   os.path.join(self.root, "docs", "wiki", "img", "guh.png")):
@@ -280,7 +313,11 @@ class Bouwer:
             kandidaten = [iid.split(":")[-1]] if iid else []
             kandidaten += ["vr_" + i["id"], "vr_baas_" + i["id"].replace("baas_", ""), "vr_mob_" + i["id"], "vr_z2_" + i["id"],
                            "vr_z2_mob_" + i["id"], "vr_z3_" + i["id"], "vr_z3_mob_" + i["id"], "vr_kl_" + i["id"], "vr_item_" + i["id"],
-                           "vr_z2_" + i["id"].replace("z2baas_", "baas_"), "vr_z3_" + i["id"].replace("z3baas_", "baas_")]
+                           "vr_z2_" + i["id"].replace("z2baas_", "baas_"), "vr_z3_" + i["id"].replace("z3baas_", "baas_"),
+                           "vr_z4_" + i["id"], "vr_z4_mob_" + i["id"], "vr_z4_" + i["id"].replace("z4baas_", "baas_"),
+                           "vr_z5_" + i["id"], "vr_z5_mob_" + i["id"], "vr_z5_" + i["id"].replace("z5baas_", "baas_"),
+                           "vr_z5_" + i["id"].replace("z5droom_", "droom_"), "vr_" + i["id"].replace("mw_", "mw_"),
+                           "vr_z6_" + i["id"], "vr_z6_mob_" + i["id"], "vr_z6_" + i["id"].replace("z6baas_", "baas_"), "vr_" + i["id"]]   # U-SITE: zone 6 + raid
             for k in kandidaten:
                 png = self._item_textuur(k)
                 if png:
@@ -288,6 +325,15 @@ class Bouwer:
                     shutil.copyfile(png, os.path.join(img, "items", naam))
                     self.iconen[i["id"]] = naam
                     break
+        rb = os.path.join(self.root, "docs", "wiki", "vadsrijk_renders")   # U-SITE: committed creature/boss renders
+        if os.path.isdir(rb):
+            os.makedirs(os.path.join(img, "renders"), exist_ok=True)
+            for f in os.listdir(rb):
+                if f.endswith(".webp"):
+                    shutil.copyfile(os.path.join(rb, f), os.path.join(img, "renders", f))
+                    self.renders[f[:-5]] = f
+        else:
+            self.notities.append("no renders (docs/wiki/vadsrijk_renders): run python tools/wiki_site/vadsrijk/renders.py")
         if len(self.iconen) < len(self.d["items"]) * 0.6:
             self.notities.append(f"item icons: {len(self.iconen)}/{len(self.d['items'])} found")
 
@@ -349,11 +395,14 @@ class Bouwer:
             e = qg.setdefault(q["gever"], dict(id=q["gever"], naam=n["naam"] if n else q["gever"], pos=q["gever_pos"], zone=q["zone"], hoofd=False, quests=[]))
             e["hoofd"] = e["hoofd"] or q["soort"] == "hoofd"
             e["quests"].append(dict(titel=q["titel"], url=f"quests/{slug(q['id'])}.html"))
-        routes = [dict(r, za=next((s for s in ("zone1",) if r["van"] in ("knuffelkamp", "dehaven")), "zone2" if r["van"] == "kandijkom" else "zone1"),
-                       zb="zone3" if r["naar"] == "honingtak" else "zone2" if r["naar"] == "kandijkom" else "zone1") for r in d["routes"]]
-        kaart = dict(kaart=self.kaart or dict(x0=-700, z0=-3100, x1=3000, z1=1200), gebieden=[dict(g, laag=g.get("laag")) for g in d["gebieden"]],
+        routes = d["routes"]   # U-SITE: bron.py gives each stop's zone (za/zb)
+        ringen = {z["ring"] for z in d["zones"]}
+        kaart = dict(kaart=self.kaart or dict(x0=-700, z0=-3100, x1=3000, z1=1200), gebieden=[dict(g, laag=g.get("laag"), ring=g["id"] in ringen) for g in d["gebieden"]],
                      zones=zones, zonekleur={z["id"]: z["kleur"] for z in d["zones"]}, steden=steden, punten=d["punten"], bazen=bazen,
-                     questgevers=list(qg.values()), routes=routes, geheimen=d["geheimen"])
+                     questgevers=list(qg.values()), routes=routes, geheimen=d["geheimen"],
+                     # U-SITE round 3: the secrets layer (off by default, not searchable)
+                     geheimpunten=[dict(id=g["id"].replace(":", "-"), soort=g["soort"], naam=g["naam"], pos=g["pos"], zone=g["zone"], beloning=g["beloning"])
+                                   for g in d.get("geheimen_lijst", [])])
         with open(os.path.join(dmap, "kaart.js"), "w", encoding="utf-8", newline="\n") as f:
             f.write("window.VR_KAART=" + json.dumps(kaart, ensure_ascii=False, separators=(",", ":")) + ";\n")
         vt = dict(d["vertaal"])
@@ -381,6 +430,10 @@ class Bouwer:
         self.npcs()
         self.wezens()
         self.bazen()
+        from . import raid   # U-SITE round 3: De Sterrendovende Toren
+        raid.paginas(self)
+        from . import geheimen
+        geheimen.pagina(self)
         self.items_()
         self.systemen()
         self.verhaal()
@@ -413,8 +466,8 @@ class Bouwer:
 <section class="vr-hero">
 <img class="kop" src="img/titel.webp" alt="Het Vadsrijk" width="1024" height="256">
 <h1>{t("The Vadsrijk", "Het Vadsrijk")}</h1>
-{p("The RPG dimension of Guhs: three classes, coloured loot, bosses with real mechanics, an airship and a whole lot of grumpy creatures that only need a cuddle. Everything below comes straight from the game.",
-   "De RPG-dimensie van Guhs: drie klassen, buit met kleurtjes, bazen met echte mechanics, een luchtschip en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.")}
+{p("The RPG dimension of Guhs: six zones, three classes, a raid, coloured loot, bosses with real mechanics, an airship and a whole lot of grumpy creatures that only need a cuddle. Everything below comes straight from the game.",
+   "De RPG-dimensie van Guhs: zes zones, drie klassen, een raid, buit met kleurtjes, bazen met echte mechanics, een luchtschip en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.")}
 <div class="knoppen"><a class="knop" href="gids.html">{t("Start here", "Begin hier")}</a><a class="knop licht" href="kaart.html">{t("World map", "Wereldkaart")}</a><a class="knop licht" href="https://guhs.nl/">{t("Play on the server", "Speel op de server")}</a></div>
 </section>
 <h2>{t("Right now", "Nu")}</h2>
@@ -429,7 +482,7 @@ class Bouwer:
         self.schrijf(P, "Het Vadsrijk", "The Vadsrijk", main, "index.html", beschrijving="Het Vadsrijk: wiki, wereldkaart, highscores en live info van de RPG-dimensie van Guhs.")
 
     def _status_tegels(self):
-        vb = f'<span class="voorbeeld">{t("Preview: sample data", "Voorbeeld: proefgegevens")}</span>' if self.voorbeeld else ""
+        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
         return (f'{vb}<div class="live-rij" data-live-status>'
                 f'<div class="live-tegel"><div class="k">{t("Server", "Server")}</div><div class="v" data-k="status">...</div><div class="s">play.guhs.nl</div></div>'
                 f'<div class="live-tegel"><div class="k">{t("Players online", "Spelers online")}</div><div class="v" data-k="spelers">-</div><div class="s" data-k="namen"></div></div>'
@@ -441,9 +494,9 @@ class Bouwer:
         main = f"""<h1 class="sr">{t("World map", "Wereldkaart")}</h1>
 <div style="position:relative"><div id="kaart" role="application" aria-label="Wereldkaart / World map"></div>
 <div class="kaart-paneel"><div class="kaart-zoek"><input id="kzoek" type="search" autocomplete="off" placeholder="Zoek een plek, baas of NPC..." aria-label="Zoeken / Search"><div class="res" id="kres"></div></div>
-<span class="kaart-info" id="coords">x - z -</span></div></div>
-<div class="vr-shell"><p class="muted">{t("A top-down of the real map tiles. Secrets are not on the map; a dotted area tells how many there are. Click a marker for details; every place has its own link (e.g. kaart.html?plek=zwamzoet).",
-  "Een bovenaanzicht van de echte kaarttegels. Geheimen staan niet op de kaart; een gestippeld gebied vertelt hoeveel er liggen. Klik op een markering voor details; elke plek heeft een eigen link (bijv. kaart.html?plek=zwamzoet).")}</p></div>"""
+<span class="kaart-info" id="coords">x - z -</span><span class="kaart-info spelers" id="spelersnoot">...</span></div></div>
+<div class="vr-shell"><p class="muted">{t("A top-down of the real map tiles. Secrets are in the layer Show secrets (spoilers!) (off by default; every secret with its spot is on the Secrets page, behind a click). Click a marker for details; every place has its own link (e.g. kaart.html?plek=zwamzoet).",
+  "Een bovenaanzicht van de echte kaarttegels. Geheimen staan in de laag Geheimen tonen (spoilers!) (standaard uit; elk geheim met zijn plek staat op de pagina Geheimen, achter een klik). Klik op een markering voor details; elke plek heeft een eigen link (bijv. kaart.html?plek=zwamzoet).")}</p></div>"""
         script = f'<script src="{stijl.LEAFLET_JS}"></script><script src="data/kaart.js"></script><script src="assets/kaart.js"></script>'
         self.schrijf("kaart.html", "Wereldkaart", "World map", main, "kaart.html", head=head, script=script, body_klasse="kaart-pagina",
                      beschrijving="De interactieve wereldkaart van Het Vadsrijk.")
@@ -469,12 +522,15 @@ class Bouwer:
         stappen_h = '<ol class="stappen">' + "".join(f"<li>{t(en, nl)}</li>" for en, nl in stappen) + "</ol>"
         toetsen = [("J", "Quest log", "Questlog"), ("B", "Exploration book", "Verkenningsboek"), ("R / V / G", "Skills 1-3", "Vaardigheden 1-3"),
                    ("Z", "Ultimate skill", "Ultieme vaardigheid"), ("C", "Knuffelsprong (dodge jump)", "Knuffelsprong"), ("U", "Unstuck (Losknuffelen)", "Losknuffelen"),
-                   ("X", "Mount: get on / off", "Rijdier: op- en afstappen"), ("N", "Mounts screen", "Rijdierscherm")]
+                   ("X", "Mount: get on / off (on zone 4's water: your sailboat)", "Rijdier: op- en afstappen (op het water van zone 4: je zeilbootje)"),
+                   ("N", "Mounts screen (dress up)", "Rijdierscherm (aankleden)"), ("P", "Pets", "Huisdieren"), ("K", "Skill tree", "Skillboom"),
+                   ("Y", "Crafts book", "Ambachtenboek"), ("I", "Knapsack", "Knapzak"), ("O", "Wardrobe", "Kledingkast"),
+                   ("Alt+1/2/3", "Potion belt", "Drankjesriem")]
         toets_h = '<div class="tscroll"><table class="data"><thead><tr><th>' + t("Key", "Toets") + "</th><th>" + t("What", "Wat") + "</th></tr></thead><tbody>" + "".join(
             f"<tr><td><kbd>{ESC(k)}</kbd></td><td>{t(en, nl)}</td></tr>" for k, en, nl in toetsen) + "</tbody></table></div>"
         rijen = []
         for g in sorted(self.d["gebieden"], key=lambda g: (g["lv"][0], g["lv"][1])):
-            if g["id"].endswith("ring") or g["id"].endswith("_dok"):
+            if g["id"].endswith("ring") or g["id"].endswith("_dok") or g["id"] in {z["ring"] for z in self.d["zones"]}:
                 continue
             n = ZONE_NR[g["zone"]]
             rijen.append(f'<tr data-zone="{n}"><td class="num" data-s="{g["lv"][0]}">{g["lv"][0]}-{g["lv"][1]}</td><td>{zbadge(g["zone"], self.zone_naam(g["zone"]))}</td>'
@@ -482,7 +538,7 @@ class Bouwer:
                          f'<td>{t("town: shops, quests, safe", "stad: winkels, quests, veilig") if g["stad"] else t("adventure", "avontuur")}</td></tr>')
         waar = ('<div class="tscroll"><table class="data sort"><thead><tr><th class="num">' + t("Level", "Level") + "</th><th>Zone</th><th>"
                 + t("Area", "Gebied") + "</th><th>" + t("What", "Wat") + "</th></tr></thead><tbody>" + "".join(rijen) + "</tbody></table></div>")
-        topics = "".join(f'<div class="kaartje" data-zone="{3 if g["id"].startswith("z3_") else 2 if g["id"].startswith("z2_") else 1}"><h3>{ESC(g["titel"])}</h3><p>{ESC(g["tekst"])}</p></div>'
+        topics = "".join(f'<div class="kaartje" data-zone="{int(g["id"][1]) if re.match(r"z[2-6]_", g["id"]) else 1}"><h3>{ESC(g["titel"])}</h3><p>{ESC(g["tekst"])}</p></div>'
                          for g in self.d["gids"])
         elem = (f'<p>{t("Fire beats Mushroom beats Slime beats Fire: x1.5 on a weakness, x0.7 the other way round. Pink (vads) is extra strong against everything that lost its vads.", "Vuur wint van Zwam, Zwam van Slijm, Slijm van Vuur: x1,5 op een zwakte en x0,7 andersom. Roze (vads) is extra sterk tegen alles wat ontvadst is.")}</p>')
         main = f"""<h1>{t("Guide for new adventurers", "Gids voor nieuwe avonturiers")}</h1>
@@ -512,6 +568,9 @@ class Bouwer:
             gtab = ('<div class="tscroll"><table class="data sort"><thead><tr><th>' + t("Area", "Gebied") + '</th><th class="num">Level</th><th class="num">'
                     + t("Secrets", "Geheimen") + '</th><th class="num">' + t("Campfires", "Kampvuren") + "</th></tr></thead><tbody>" + gr + "</tbody></table></div>")
             bz = "".join(self._baas_kaartje(b, P) for b in self.d["bazen"] if b["zone"] == z["id"])
+            if z["id"] == "zone6":   # U-SITE round 3
+                from . import raid
+                bz += raid.kaartje(self, P)
             wz = ", ".join(self.l_wezen(w["id"], P) for w in self.d["wezens"] if w["zone"] == z["id"] and not w["critter"])
             hq = [q for q in self.d["quests"] if q["zone"] == z["id"] and q["soort"] == "hoofd"]
             zq = [q for q in self.d["quests"] if q["zone"] == z["id"] and q["soort"] in ("zij", "klasse", "rijdier")]
@@ -541,7 +600,8 @@ class Bouwer:
 
     def _baas_kaartje(self, b, P):
         n = ZONE_NR[b["zone"]]
-        inner = f'<h3><a href="{self.r(P)}bazen/{slug(b["id"])}.html">{ESC(b["naam"])}</a></h3><p><span class="badge">{t(*SOORT_B.get(b["soort"], SOORT_B["baas"]))}</span></p>'
+        img = self.render("baas_" + b["id"], P, "render klein")
+        inner = (f'<a class="baasfoto" href="{self.r(P)}bazen/{slug(b["id"])}.html">{img}</a>' if img else "") + f'<h3><a href="{self.r(P)}bazen/{slug(b["id"])}.html">{ESC(b["naam"])}</a></h3><p><span class="badge">{t(*SOORT_B.get(b["soort"], SOORT_B["baas"]))}</span></p>'
         if b.get("spoiler"):
             inner = spoiler(inner, "Story boss: click to show", "Verhaalbaas: klik om te kijken")
         return f'<div class="kaartje" data-zone="{n}">{inner}</div>'
@@ -563,9 +623,9 @@ class Bouwer:
                        + '</th><th class="num">XP</th></tr></thead><tbody>' + lijst + "</tbody></table></div>")
                 kop = f"<h3>{t(*SOORT_Q[soort])} ({len(qs)})</h3>"
                 rijen.append(kop + (spoiler(tab, "Secret quests: click to show", "Geheime quests: klik om te kijken") if soort == "geheim" else tab))
-            delen.append(f'<section data-zone="{n}"><h2 id="{z["id"]}">{ESC(z["naam"])} {lv(z["lv"])}</h2>{"".join(rijen)}</section>'
-                         f'<div class="verstopt-zone" data-zone="{n}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>')
-        main = (f'<h1>Quests</h1><p class="lead">{t("Every quest of the Vadsrijk. Each quest page has the steps with places on the map (walkthrough) and the dialogue, both behind a spoiler button.", "Elke quest van het Vadsrijk. Elke questpagina heeft de stappen met plekken op de kaart (walkthrough) en de dialoog, allebei achter een spoilerknop.")}</p>'
+            nq = len([q for q in self.d["quests"] if q["zone"] == z["id"] and q["soort"] != "geheim"])
+            delen.append(self.zonevak(z, "".join(rijen), f"{nq} quests"))
+        main = (f'<h1>Quests</h1><p class="lead">{t("Every quest of the Vadsrijk. Each quest page has the steps with places on the map (walkthrough) and the dialogue, both behind a spoiler button.", "Elke quest van het Vadsrijk. Elke questpagina heeft de stappen met plekken op de kaart (walkthrough) en de dialoog, allebei achter een spoilerknop.")} {t("Click a zone to open it.", "Klik op een zone om hem open te klappen.")}</p>'
                 + "".join(delen))
         self.schrijf(P, "Quests", "Quests", main, P)
         per_zone = {}
@@ -644,20 +704,20 @@ class Bouwer:
         P = "wezens/index.html"
         def rij(w):
             n = ZONE_NR[w["zone"]]
-            return (f'<tr data-zone="{n}"><td><a href="{slug(w["kort"])}.html">{ESC(w["naam"])}</a></td><td data-v="{w["zone"]}">{zbadge(w["zone"], self.zone_naam(w["zone"]))}</td>'
+            return (f'<tr data-zone="{n}"><td><a class="metfoto" href="{slug(w["kort"])}.html">{self.render("wezen_" + w["kort"], P, "render mini")}{ESC(w["naam"])}</a></td><td data-v="{w["zone"]}">{zbadge(w["zone"], self.zone_naam(w["zone"]))}</td>'
                     f'<td class="num" data-s="{(w["lv"] or [0])[0]}">{(str(w["lv"][0]) + "-" + str(w["lv"][1])) if w["lv"] else ""}</td>'
                     f'<td>{elems(w["elementen"])}</td>'
-                    f'<td>{", ".join(ESC(self.gebied.get(g, {}).get("naam", g)) for g in w["gebieden"][:3])}</td><td>{ESC(w["tip"])}</td></tr>')
+                    f'<td>{", ".join(ESC(self.gebied.get(g, {}).get("naam", g)) for g in w["gebieden"][:3])}</td><td class="tipcel">{ESC(w["tip"])}</td></tr>')
         vecht = [w for w in self.d["wezens"] if not w["critter"]]
         crit = [w for w in self.d["wezens"] if w["critter"]]
         filt = (f'<div class="filters"><input type="search" data-filter="#wz" placeholder="Zoek / search..." aria-label="Zoek">'
-                f'<select data-filter="#wz" data-filter-col="1" aria-label="Zone"><option value="">{t("All zones", "Alle zones")}</option>'
+                f'<select data-filter="#wz" data-filter-col="1" aria-label="Zone"><option value="">Alle zones / all zones</option>'
                 + "".join(f'<option value="{z["id"]}">{ESC(z["naam"])}</option>' for z in self.d["zones"]) + '</select><span class="muted"><span id="wz-n">'
                 + str(len(vecht)) + "</span> " + t("creatures", "wezens") + "</span></div>")
         kop = ("<thead><tr><th>" + t("Name", "Naam") + "</th><th>Zone</th><th class='num'>Level</th><th>" + t("Element", "Element") + "</th><th>"
                + t("Where", "Waar") + "</th><th>" + t("Tip", "Tip") + "</th></tr></thead>")
         main = (f'<h1>{t("Creatures", "Wezens")}</h1><p class="lead">{t("Every grumpy creature you can cheer up, with its levels, element, where it lives and how to beat it. Bosses have their own pages.", "Elk chagrijnig wezen dat je kunt opvrolijken, met levels, element, waar het woont en hoe je het verslaat. Bazen hebben een eigen pagina.")} '
-                f'<a href="../bazen/index.html">{t("Bosses", "Bazen")}</a>.</p>{filt}<div class="tscroll"><table class="data sort" id="wz">{kop}<tbody>'
+                f'<a href="../bazen/index.html">{t("Bosses", "Bazen")}</a>.</p>{filt}<div class="tscroll"><table class="data sort" id="wz" data-pagina="20">{kop}<tbody>'
                 + "".join(rij(w) for w in vecht) + "</tbody></table></div>"
                 + f'<h2>{t("Peaceful critters", "Vredige diertjes")}</h2><div class="tscroll"><table class="data">{kop}<tbody>' + "".join(rij(w) for w in crit) + "</tbody></table></div>")
         self.schrijf(P, "Wezens", "Creatures", main, P)
@@ -680,6 +740,7 @@ class Bouwer:
                            (t("Respawn", "Respawn"), f'{w["respawn_s"]} s' if w.get("respawn_s") else ""),
                            (t("Where", "Waar"), ", ".join(self.l_gebied(g, P) for g in w["gebieden"]))])
             main = (f'<div data-zone="{n}"><nav class="crumbs"><a href="index.html">{t("Creatures", "Wezens")}</a></nav><h1>{ESC(w["naam"])}</h1><div class="tw"><div>'
+                    + self.render("wezen_" + w["kort"], P, "render groot", w["naam"])
                     + (f'<h2>{t("How to beat it", "Zo versla je hem")}</h2><p class="note">{ESC(w["tip"])}</p>' if w["tip"] else "")
                     + (f'<p>{t("A peaceful critter: it never attacks.", "Een vredig diertje: het valt nooit aan.")}</p>' if w["critter"] else "")
                     + loot + f'</div><aside class="zij"><div class="kaartje">{info}</div></aside></div></div><div class="verstopt-zone" data-zone="{n}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>')
@@ -689,10 +750,13 @@ class Bouwer:
         P = "bazen/index.html"
         delen = []
         for z in self.d["zones"]:
-            delen.append(f'<section data-zone="{z["nr"]}"><h2>{ESC(z["naam"])}</h2><div class="grid">' + "".join(self._baas_kaartje(b, P) for b in self.d["bazen"] if b["zone"] == z["id"]) + "</div></section>")
+            bz = [b for b in self.d["bazen"] if b["zone"] == z["id"]]
+            from . import raid
+            rk = raid.kaartje(self, P) if z["id"] == "zone6" else ""   # U-SITE round 3: the raid card
+            delen.append(self.zonevak(z, '<div class="grid">' + "".join(self._baas_kaartje(b, P) for b in bz) + rk + "</div>", f'{len(bz)} {t("bosses", "bazen")}' + (" + raid" if rk else "")))
         regels = p("Every boss: a fight for everyone nearby. Your loot is personal: everyone who did at least 5% of the work gets their own chest. Fainted? You wake up at the arena door. Bosses get stronger with more players.",
                    "Elke baas: een gevecht voor iedereen in de buurt. Buit is persoonlijk: iedereen die minstens 5% van het werk deed krijgt een eigen kist. Flauwgevallen? Je wordt wakker bij de arenadeur. Bazen worden sterker met meer spelers.")
-        self.schrijf(P, "Bazen", "Bosses", f'<h1>{t("Bosses", "Bazen")}</h1>{regels}' + "".join(delen), P)
+        self.schrijf(P, "Bazen", "Bosses", f'<h1>{t("Bosses", "Bazen")}</h1>{regels}<p class="muted">{t("Click a zone to open it.", "Klik op een zone om hem open te klappen.")}</p>' + "".join(delen), P)
         for b in self.d["bazen"]:
             P = f"bazen/{slug(b['id'])}.html"
             n = ZONE_NR[b["zone"]]
@@ -703,15 +767,16 @@ class Bouwer:
                 mech += f'<h3>{ESC(b["tip2_titel"])}</h3><p class="note">{ESC(b["tip2"])}</p>'
             vahoeg = (f'<h2>{t("Vahoeg mode", "Vahoeg-modus")}</h2>' + p("Put a Vahoeg seal on the altar at the dungeon door (from lv 50): for 30 minutes every boss of the dungeon is in its Vahoeg form: lv 52, x1.5 HP, x1.25 damage, one extra mechanic and the week seal. They drop Golden Feathers.",
                                                                           "Leg een Vahoegzegel op het altaar bij de kerkerdeur (vanaf lv 50): 30 minuten lang is elke baas van de kerker in zijn Vahoeg-vorm: lv 52, x1,5 levens, x1,25 schade, één extra mechanic en het weekzegel. Ze laten Gouden Veren vallen.")) if b["vahoeg"] else ""
-            buit = "".join(f"<li>{self.l_item(i, P)}</li>" for i in b["buit"])
+            buit = "".join(f"<li>{self.l_item(i, P)}{self._kans_named(i)}</li>" for i in b["buit"])
+            alle_buit = self._alle_buit(b, P)
             huisdier = next((h for h in self.d["huisdieren"] if h["id"] == b["huisdier"]), None)
             info = feiten([("Zone", zbadge(b["zone"], self.zone_naam(b["zone"]))), (t("Kind", "Soort"), t(*SOORT_B.get(b["soort"], SOORT_B["baas"]))),
                            (t("Where", "Waar"), self.l_gebied(b["gebied"], P) if b["gebied"] else ""),
                            (t("Respawn", "Respawn"), f'{b["arena"]["respawn_s"] // 60} min' if b.get("arena") and b["arena"]["respawn_s"] >= 60 else (f'{b["arena"]["respawn_s"]} s' if b.get("arena") else "")),
                            (t("Map", "Kaart"), self.l_kaart(b["arena"]["pos"], P) if b.get("arena") and not b["spoiler"] else ""),
                            (t("Pet", "Huisdier"), ESC(huisdier["naam"]) if huisdier else "")])
-            body = (f'<h2>{t("Mechanics", "Mechanics")}</h2>{mech or "<p class=leeg>-</p>"}{vahoeg}'
-                    + (f'<h2>{t("Named loot", "Benoemde buit")}</h2><ul>{buit}</ul>' if buit else "")
+            body = (self.render("baas_" + b["id"], P, "render groot", b["naam"]) + f'<h2>{t("Mechanics", "Mechanics")}</h2>{mech or "<p class=leeg>-</p>"}{vahoeg}'
+                    + (f'<h2>{t("Named loot", "Benoemde buit")}</h2><ul>{buit}</ul>' if buit else "") + alle_buit
                     + (f'<h2>{t("Pet", "Huisdier")}</h2><p><b>{ESC(huisdier["naam"])}</b>: {ESC(huisdier["tekst"])} <i>{ESC(huisdier["bron"])}</i></p>' if huisdier else ""))
             if b["spoiler"]:
                 body = spoiler(body, "A story boss: click to show", "Een verhaalbaas: klik om te kijken")
@@ -719,6 +784,45 @@ class Bouwer:
             main = (f'<div data-zone="{n}"><nav class="crumbs"><a href="index.html">{t("Bosses", "Bazen")}</a></nav><h1>{ESC(titel) if not b["spoiler"] else t("Story boss", "Verhaalbaas")}</h1><div class="tw"><div>{body}</div>'
                     f'<aside class="zij">{"" if b["spoiler"] else "<div class=kaartje>" + info + "</div>"}</aside></div></div><div class="verstopt-zone" data-zone="{n}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>')
             self.schrijf(P, titel if not b["spoiler"] else "Verhaalbaas", titel, main, "bazen/index.html")
+
+    def _zz(self, i):
+        z = i.get("vaste_zeldzaamheid")
+        return f'<span class="zz {z}">{ESC(z)}</span>' if z else t("rolled", "willekeurig")
+
+    def _kans_named(self, iid):
+        i = self.items.get(iid) or {}
+        if not i.get("baaskans"):
+            return ""
+        zz = i.get("vaste_zeldzaamheid") or ""
+        return f' <span class="badge lv">{i["baaskans"] * 100:g}%</span> <span class="zz {zz}">{ESC(zz)}</span>'
+
+    def _loot_tabel(self, L, P):
+        som = sum(L["regels"].values()) or 1
+        rijen = "".join(f'<tr><td>{self.l_item(b, P)}</td><td class="num">{L["kans"] * v / som * 100:.1f}%</td></tr>'
+                        for b, v in sorted(L["regels"].items(), key=lambda kv: -kv[1]))
+        return ('<div class="tscroll"><table class="data"><thead><tr><th>Item</th><th class="num">' + t("Chance per roll", "Kans per rol")
+                + "</th></tr></thead><tbody>" + rijen + "</tbody></table></div>")
+
+    def _alle_buit(self, b, P):
+        """U-SITE: every drop of a boss with its chance: the chest table, named items (above) and the extras."""
+        uit = f'<h2>{t("All drops", "Alle buit")}</h2>'
+        uit += p("Every helper (at least 5% of the work) gets their own chest; the chances below are per player.", "Elke helper (minstens 5% van het werk) krijgt een eigen kist; de kansen hieronder zijn per speler.")
+        L = b.get("kist")
+        if L:
+            ro, ge = L["rollen"], L["geluk"]
+            uit += (f'<h3>{t("The boss chest", "De baaskist")}</h3><p>{t(f"{ro} rolls, rarity rolled with luck {ge}.", f"{ro} keer rollen, de zeldzaamheid met geluk {ge}.")} '
+                    f'{t("Coins", "Munten")}: {L["munten_min"]}-{L["munten_max"]} {t("bronze", "brons")}.</p>' + self._loot_tabel(L, P))
+        soort = {"rijdier": ("Mount", "Rijdier"), "vacht": ("Mount coat", "Rijdiervacht"), "patroon": ("Mount pattern", "Rijdierpatroon"),
+                 "tuig": ("Mount tack", "Rijdiertuig"), "huisdier": ("Pet", "Huisdier"), "trofee": ("Trophy", "Trofee"), "kern": ("Boss core", "Bazenkern"),
+                 "groei": ("Growth fluff", "Groeipluis"), "veer": ("Feathers", "Veren"), "kleding": ("Wardrobe", "Kledingkast"),
+                 "stof": ("Star dust", "Sterrenstof")}
+        ex = b.get("extra") or []
+        if ex:
+            uit += (f'<h3>{t("Also", "Ook")}</h3><div class="tscroll"><table class="data"><thead><tr><th>{t("Kind", "Soort")}</th><th>{t("What", "Wat")}</th><th>'
+                    + t("Chance", "Kans") + "</th></tr></thead><tbody>"
+                    + "".join(f'<tr><td>{t(*soort.get(k, (k, k)))}</td><td>{ESC(n)}</td><td>{t(en or nl, nl)}</td></tr>' for k, n, nl, en in ex)
+                    + "</tbody></table></div>")
+        return uit
 
     # items
     def _stats(self, per_level, lvl):
@@ -734,17 +838,20 @@ class Bouwer:
             kl = self.d_klasse(i["klasse"])
             rijen.append(f'<tr data-zone="{n}"><td>{self.l_item(i["id"], P)}{" &#9733;" if i["benoemd"] else ""}</td><td data-v="{i["slot"] or ""}">{t(*sl)}</td>'
                          f'<td data-v="{i["klasse"] or "alle"}">{ESC(kl)}</td><td data-v="{i["zone"]}">{zbadge(i["zone"], self.zone_naam(i["zone"]))}</td>'
+                         f'<td data-v="{i.get("vaste_zeldzaamheid") or "willekeurig"}">{self._zz(i)}</td>'
                          f'<td>{ESC(next((s["naam"] for s in self.d["sets"] if s["id"] == i["set"]), ""))}</td><td>{self._stats(i["per_level"], 10)}</td></tr>')
         opties = lambda pairs: "".join(f'<option value="{v}">{l}</option>' for v, l in pairs)  # noqa: E731
         filt = (f'<div class="filters"><input type="search" data-filter="#it" placeholder="Zoek / search..." aria-label="Zoek">'
-                f'<select data-filter="#it" data-filter-col="1" aria-label="Slot"><option value="">{t("All slots", "Alle slots")}</option>{opties((k, t(*v)) for k, v in SLOT.items())}</select>'
-                f'<select data-filter="#it" data-filter-col="2" aria-label="Klasse"><option value="">{t("All classes", "Alle klassen")}</option>{opties([(k["id"], ESC(k["naam"])) for k in self.d["klassen"]] + [("alle", t("Every class", "Alle klassen"))])}</select>'
-                f'<select data-filter="#it" data-filter-col="3" aria-label="Zone"><option value="">{t("All zones", "Alle zones")}</option>{opties((z["id"], ESC(z["naam"])) for z in self.d["zones"])}</select>'
+                f'<select data-filter="#it" data-filter-col="1" aria-label="Slot"><option value="">Alle slots / all slots</option>{opties((k, v[1]) for k, v in SLOT.items())}</select>'
+                f'<select data-filter="#it" data-filter-col="2" aria-label="Klasse"><option value="">Alle klassen / all classes</option>{opties([(k["id"], ESC(k["naam"])) for k in self.d["klassen"]] + [("alle", "Elke klasse / every class")])}</select>'
+                f'<select data-filter="#it" data-filter-col="3" aria-label="Zone"><option value="">Alle zones / all zones</option>{opties((z["id"], ESC(z["naam"])) for z in self.d["zones"])}</select>'
+                f'<select data-filter="#it" data-filter-col="4" aria-label="Zeldzaamheid"><option value="">Alle zeldzaamheden / all rarities</option>'
+                f'{opties([("willekeurig", "Willekeurig / rolled")] + [(z["id"], ESC(z["naam"])) for z in self.d["zeldzaamheden"]])}</select>'
                 f'<span class="muted"><span id="it-n">{len(rijen)}</span> items</span></div>')
         uitleg = p("Every base type of gear. The real item rolls a rarity (more bonuses and x1.10..x1.75 base stats), a level and random bonuses; the stats below are the base at level 10. &#9733; = a named boss item.",
                    "Elk basistype uitrusting. Het echte item rolt een zeldzaamheid (meer bonussen en x1,10..x1,75 basisstats), een level en willekeurige bonussen; de stats hieronder zijn de basis op level 10. &#9733; = een benoemd baasitem.")
-        main = (f'<h1>{t("Item database", "Itemdatabase")}</h1>{uitleg}{filt}<div class="tscroll"><table class="data sort" id="it"><thead><tr><th>Item</th><th>Slot</th><th>'
-                + t("Class", "Klasse") + "</th><th>Zone</th><th>Set</th><th>" + t("Base stats (lv 10)", "Basisstats (lv 10)") + "</th></tr></thead><tbody>" + "".join(rijen) + "</tbody></table></div>")
+        main = (f'<h1>{t("Item database", "Itemdatabase")}</h1>{uitleg}{filt}<div class="tscroll"><table class="data sort" id="it" data-pagina="25"><thead><tr><th>Item</th><th>Slot</th><th>'
+                + t("Class", "Klasse") + "</th><th>Zone</th><th>" + t("Rarity", "Zeldzaamheid") + "</th><th>Set</th><th>" + t("Base stats (lv 10)", "Basisstats (lv 10)") + "</th></tr></thead><tbody>" + "".join(rijen) + "</tbody></table></div>")
         self.schrijf(P, "Itemdatabase", "Item database", main, P)
         for i in self.d["items"]:
             P = f"items/{slug(i['id'])}.html"
@@ -763,6 +870,8 @@ class Bouwer:
             setd = next((s for s in self.d["sets"] if s["id"] == i["set"]), None)
             bronnen = [self.l_wezen(b, P) for b in i["bronnen"]] + [f'<a href="../bazen/{slug(b)}.html">{ESC(next((x["naam"] for x in self.d["bazen"] if x["id"] == b), b))}</a>' for b in i["bronnen_baas"]
                                                                        if any(x["id"] == b and not x["spoiler"] for x in self.d["bazen"])]
+            if i["id"].startswith("z6raid_") and self.d.get("raid"):   # U-SITE round 3
+                bronnen.append(f'<a href="../raid/index.html#buit">{ESC(self.d["raid"]["naam"])}</a>')
             if i.get("baaskans"):
                 bronnen[-1:] = [bronnen[-1] + f' ({i["baaskans"] * 100:g}%, <span class="zz {i["vaste_zeldzaamheid"]}">{ESC(i["vaste_zeldzaamheid"])}</span>)'] if bronnen else []
             flav = "".join(f'<li class="game-text">{ESC(f)}</li>' for f in i["flavour"])
@@ -774,10 +883,14 @@ class Bouwer:
             main = (f'<div data-zone="{n}"><nav class="crumbs"><a href="index.html">Items</a></nav><h1>{grootico(ic)}{ESC(i["naam"])}</h1><div class="tw"><div>'
                     + (f'<ul class="dialoog">{flav}</ul>' if flav else "")
                     + (f'<h2>{t("Base stats per level", "Basisstats per level")}</h2>{stab}<p class="muted">{t("Times the rarity factor (Gewoon x1.00 ... Guhddelijk x1.75), plus the rolled bonuses, stars and sockets.", "Maal de zeldzaamheidsfactor (Gewoon x1,00 ... Guhddelijk x1,75), plus de gerolde bonussen, sterren en sokjes.")}</p>' if stab else "")
-                    + (f'<h2>Set: {ESC(setd["naam"])}</h2><p>{ESC(setd["bonus2"])}<br>{ESC(setd["bonus4"])}</p>' if setd else "")
+                    + (f'<h2>Set: {ESC(setd["naam"])}</h2><p>{ESC(setd["bonus2"])}<br>{ESC(setd["bonus4"])}{("<br>" + ESC(setd["bonus6"])) if setd.get("bonus6") else ""}</p>' if setd else "")
                     + f'<h2>{t("Where to get it", "Waar te krijgen")}</h2><p>{", ".join(bronnen) if bronnen else t("Shops, quests or a boss chest.", "Winkels, quests of een baaskist.")}</p>'
                     + f'</div><aside class="zij"><div class="kaartje">{info}</div></aside></div></div><div class="verstopt-zone" data-zone="{n}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>')
             self.schrijf(P, i["naam"], i["naam"], main, "items/index.html")
+
+    def t_rijdier(self, rid):
+        r = next((x for x in self.d["rijdieren"] if x["id"] == rid), None)
+        return r["naam"] if r else rid.capitalize()
 
     def d_klasse(self, k):
         if not k:
@@ -795,6 +908,8 @@ class Bouwer:
                    ("klassen.html", "Classes", "Klassen", "Knuffelridder, Pluisjager, Vadsmagiër.", "Knuffelridder, Pluisjager, Vadsmagiër."),
                    ("rijdieren.html", "Mounts and pets", "Rijdieren en huisdieren", "How to get every mount and pet.", "Hoe je elk rijdier en huisdier krijgt."),
                    ("../npcs/index.html", "Characters", "Personages", "Everyone who lives in the Vadsrijk.", "Iedereen die in het Vadsrijk woont.")]
+        from . import systemen2   # U-SITE: the night round's systems
+        kaarten = kaarten[:4] + systemen2.KAARTEN + kaarten[4:]
         main = f'<h1>{t("Mechanics", "Systemen")}</h1><div class="grid">' + "".join(f'<a class="kaartje" href="{u}"><h3>{t(a, b)}</h3><p>{t(c, d)}</p></a>' for u, a, b, c, d in kaarten) + "</div>"
         self.schrijf(P, "Systemen", "Mechanics", main, P)
         # sets
@@ -803,7 +918,7 @@ class Bouwer:
         for s in self.d["sets"]:
             z = next((self.items[x]["zone"] for x in s["stukken"] if x in self.items), "zone1")
             blok += (f'<section data-zone="{ZONE_NR[z]}" class="kaartje" style="margin:12px 0"><h2 id="{s["id"]}" style="margin-top:0">{ESC(s["naam"])} {zbadge(z, self.zone_naam(z))}</h2>'
-                     f'<p>{" &middot; ".join(self.l_item(x, P) for x in s["stukken"])}</p><p>{ESC(s["bonus2"])}<br>{ESC(s["bonus4"])}</p></section>')
+                     f'<p>{" &middot; ".join(self.l_item(x, P) for x in s["stukken"])}</p><p>{ESC(s["bonus2"])}<br>{ESC(s["bonus4"])}{("<br>" + ESC(s["bonus6"])) if s.get("bonus6") else ""}</p></section>')
         self.schrijf(P, "Sets", "Sets", f'<h1>Sets</h1>{blok or "<p class=leeg>-</p>"}', "systemen/index.html")
         # rarities, stars, crystals
         P = "systemen/kristallen.html"
@@ -851,29 +966,36 @@ class Bouwer:
         # mounts + pets
         P = "systemen/rijdieren.html"
         bron = {"pluimguh": ("Your first mount, chosen in the Pluimstal (zone 3).", "Je eerste rijdier, gekozen in de Pluimstal (zone 3)."), "quest": ("A quest reward.", "Een questbeloning."),
-                "stal": ("Bought at a stable.", "Te koop bij een stal.")}
+                "stal": ("Bought at a stable.", "Te koop bij een stal."),
+                "geheim": ("Secret: find hidden cuddly toys in every zone.", "Geheim: vind verstopte knuffels in alle zones."),
+                "veren": ("Trade Golden Feathers (N screen).", "Ruil Gouden Veren (N-scherm)."), "baas": ("Beat a boss for the first time.", "Versla een baas voor het eerst.")}
         rt = "".join(f'<tr><td>{ESC(r["naam"])}</td><td>{ESC(r["tekst"])}</td><td>{t(*bron.get(r["bron"] or "", ("", "")))}{(" (" + str(r["prijs"]) + " " + t("bronze", "brons") + ")") if r.get("prijs") else ""}</td></tr>' for r in self.d["rijdieren"])
         ht = "".join(f'<tr><td>{ESC(h["naam"])}</td><td>{ESC(h["tekst"])}</td><td>{spoiler("<p>" + ESC(h["bron"]) + "</p>", "How to get it", "Hoe krijg je hem")}</td></tr>' for h in self.d["huisdieren"])
         main = (f'<h1>{t("Mounts and pets", "Rijdieren en huisdieren")}</h1><h2>{t("Mounts", "Rijdieren")}</h2><div class="tscroll"><table class="data"><thead><tr><th>'
                 + t("Mount", "Rijdier") + "</th><th>" + t("What", "Wat") + "</th><th>" + t("How", "Hoe") + "</th></tr></thead><tbody>" + rt + "</tbody></table></div>"
                 + f'<h2>{t("Pets", "Huisdieren")}</h2><div class="tscroll"><table class="data"><thead><tr><th>' + t("Pet", "Huisdier") + "</th><th>" + t("What", "Wat") + "</th><th>"
                 + t("How", "Hoe") + "</th></tr></thead><tbody>" + ht + "</tbody></table></div>")
+        # U-SITE: dressing up mounts + pet powers (t-rijdier)
+        ru = self.d.get("rij_uiterlijk") or {}
+        if ru:
+            vacht = "".join(f'<li><b>{ESC(self.t_rijdier(r))}</b>: {ESC(", ".join(v))}</li>' for r, v in ru.get("vacht", {}).items())
+            main += (f'<h2>{t("Dressing up", "Aankleden")}</h2>' + p("Press N, choose a mount and click Aankleden: coat, pattern and tack. Looks never change speed or jump. Get them at the stable, with Golden Feathers, from achievements, bosses and secrets.",
+                                                                   "Druk N, kies een rijdier en klik Aankleden: vacht, patroon en tuig. Uiterlijk verandert nooit de snelheid of sprong. Je krijgt ze bij de stal, met Gouden Veren, van prestaties, bazen en geheimen.")
+                     + f'<ul><li><b>{t("Patterns", "Patronen")}</b>: {ESC(", ".join(ru.get("patroon", [])))}</li><li><b>{t("Tack", "Tuig")}</b>: {ESC(", ".join(ru.get("tuig", [])))}</li></ul>'
+                     + f'<h3>{t("Coats", "Vachten")}</h3><ul>{vacht}</ul>')
+        kr = self.d.get("krachten") or []
+        if kr:
+            main += (f'<h2>{t("Pet powers", "Krachten van huisdieren")}</h2>' + p("Pets never fight and are never hit. Each one is a Steuner (helps you) or a Snuffelaar (finds things), with its own power, and grows to level 10 by fighting along.",
+                                                                                 "Huisdieren vechten nooit mee en worden nooit geraakt. Elk is een Steuner (helpt jou) of een Snuffelaar (vindt dingen), met een eigen kracht, en groeit tot level 10 door mee te gaan in gevechten.")
+                     + '<div class="tscroll"><table class="data"><thead><tr><th>' + t("Power", "Kracht") + "</th><th>" + t("Role", "Rol") + "</th><th>" + t("What", "Wat")
+                     + "</th></tr></thead><tbody>" + "".join(f'<tr><td>{ESC(k["naam"])}</td><td>{t("Supporter", "Steuner") if k["rol"] == "steuner" else t("Sniffer", "Snuffelaar")}</td><td>{ESC(k["tekst"])}</td></tr>' for k in kr)
+                     + "</tbody></table></div>")
         self.schrijf(P, "Rijdieren en huisdieren", "Mounts and pets", main, "systemen/index.html")
+        systemen2.alles(self)
 
     def verhaal(self):
-        P = "verhaal.html"
-        blok = ""
-        for z in self.d["zones"]:
-            stukken = [l for l in self.d["lore"] if l["zone"] == z["id"]]
-            if not stukken:
-                continue
-            blok += f'<section data-zone="{z["nr"]}"><h2>{ESC(z["naam"])}</h2>' + "".join(
-                f'<h3>{ESC(l["titel"])}</h3><p>{ESC(l["tekst"])}</p>' + "".join(f"<h4>{ESC(k)}</h4><p>{ESC(v)}</p>" for k, v in l["stukken"]) for l in stukken) + "</section>"
-            blok += f'<div class="verstopt-zone" data-zone="{z["nr"]}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>'
-        main = (f'<img src="img/kop_verhaal.webp" alt="" style="width:100%;border-radius:16px"><h1>{t("The story of the Vadsrijk", "Het verhaal van het Vadsrijk")}</h1>'
-                f'<p class="lead">{t("The world, its towns and how each story begins; never how it ends. The rest you discover in the game.", "De wereld, de steden en hoe elk verhaal begint; nooit hoe het afloopt. De rest ontdek je in het spel.")}</p>'
-                f'<figure><img src="img/reiskaart.webp" alt="De reiskaart uit het spel" style="max-width:100%;border-radius:14px"><figcaption class="muted">{t("The travel map from the game.", "De reiskaart uit het spel.")}</figcaption></figure>{blok}')
-        self.schrijf(P, "Verhaal", "Lore", main, P)
+        from . import verhaal as _vh   # U-SITE: the story page overhaul (chapters, cards, timeline, world map)
+        _vh.verhaal(self)
 
     def highscores(self):  # (T-INT: + AMBACHT_LIJSTEN)
         lijsten = [dict(id="generiek", en="Level", nl="Level", k_en="Level", k_nl="Level"),
@@ -885,7 +1007,7 @@ class Bouwer:
                    dict(id="verkenning", en="Exploration book", nl="Verkenningsboek", k_en="% explored", k_nl="% verkend")]
         # T-INT: the Ambachten lists of t-ambacht (hiscores/ambacht_<id>.json, written by the mod's WebExport)
         lijsten += [dict(id="ambacht_" + i, en=en, nl=nl, k_en="Level", k_nl="Level") for i, en, nl in AMBACHT_LIJSTEN]
-        vb = f'<span class="voorbeeld">{t("Preview: sample data", "Voorbeeld: proefgegevens")}</span>' if self.voorbeeld else ""
+        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
         main = (f'<h1>Highscores</h1>{vb}<p>{t("Everyone is on the lists (name + number); ties go to whoever got there first. Click a name for the profile.", "Iedereen staat op de lijsten (naam + getal); bij gelijkspel wint wie er het eerst was. Klik op een naam voor het profiel.")}</p>'
                 f"<div data-hiscores='{ESC(json.dumps(lijsten, ensure_ascii=False))}'><div class=\"hs-tabs\" role=\"group\"></div>"
                 f'<div class="filters"><input type="search" placeholder="Zoek een speler / find a player..." aria-label="Zoek"></div>'
@@ -894,12 +1016,12 @@ class Bouwer:
         self.schrijf("highscores.html", "Highscores", "Highscores", main, "highscores.html")
 
     def speler(self):
-        vb = f'<span class="voorbeeld">{t("Preview: sample data", "Voorbeeld: proefgegevens")}</span>' if self.voorbeeld else ""
+        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
         main = f'{vb}<div data-profiel><div data-k="uit"><p class="leeg">...</p></div></div><noscript>{t("This page needs JavaScript.", "Deze pagina heeft JavaScript nodig.")}</noscript>'
         self.schrijf("speler.html", "Speler", "Player", main, "highscores.html")
 
     def live(self):
-        vb = f'<span class="voorbeeld">{t("Preview: sample data", "Voorbeeld: proefgegevens")}</span>' if self.voorbeeld else ""
+        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
         main = (f'<h1>Live</h1>{self._status_tegels()}<div data-live-wereld>'
                 f'<h2>{t("Event of the day", "Event van vandaag")}</h2><p data-k="event"></p>'
                 f'<div class="live-rij"><div class="live-tegel"><div class="k">{t("Daily reset (06:00)", "Dagreset (06:00)")}</div><div class="v" data-k="reset">-</div></div>'
