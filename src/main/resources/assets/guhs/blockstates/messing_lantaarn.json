@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "guhs:block/messing_lantaarn"
+    },
+    "hanging=true": {
+      "model": "guhs:block/messing_lantaarn_hanging"
+    }
+  }
+}

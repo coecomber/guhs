@@ -52,7 +52,7 @@ def main():
     ap.add_argument("--zonder-bouwsels", action="store_true")
     ap.add_argument("--audit", action="store_true", help="afterwards: walkability audit (AUDIT_VADSRIJK.md) + the safe spots json for "
                     "the unstuck key (tools/vadsrijk/audit/audit.py, ~80 s)")
-    ap.add_argument("--zone", default="alle", choices=("1", "2", "3", "4", "5", "alle"))   # [zone 2] [zone 3] [T-Z4WERELD] [T-Z5WERELD] which zone(s) to build
+    ap.add_argument("--zone", default="alle", choices=("1", "2", "3", "4", "5", "6", "alle"))   # [zone 2] [zone 3] [T-Z4WERELD] [T-Z5WERELD] [U-Z6WERELD] which zone(s) to build
     ap.add_argument("--werkers", type=int, default=6)   # [zone 3] parallel tile workers for zone 3
     ap.add_argument("--geen-pak", action="store_true", help="U-GROOTTE: skip packing + verifying the tiles into kaart.gpak "
                     "(gradlew kaartPak does it anyway before every build)")
@@ -85,6 +85,8 @@ def _main(a):
         return zone4(a)
     if a.zone == "5":   # T-Z5WERELD: only the zone-5 map (tools/vadsrijk/zone5, Hoogvads on Moeder Wolkwal; build zone 4 first)
         return zone5(a)
+    if a.zone == "6":   # U-Z6WERELD: only the zone-6 map (tools/vadsrijk/zone6, Het Zijdeland)
+        return zone6(a)
     os.makedirs(CACHE, exist_ok=True)
     os.makedirs(UIT, exist_ok=True)
     t0 = time.time()
@@ -153,6 +155,7 @@ def _main(a):
         zone3(a)          # [zone 3] and the zone-3 map
         zone4(a)          # [T-Z4WERELD] and the zone-4 map
         zone5(a)          # T-Z5WERELD: and zone 5 LAST (its tiles tx 38..39 keep zone 4's blocks below y 118)
+        zone6(a)          # U-Z6WERELD: Het Zijdeland (own tiles tx 51..66, no overlap)
 
 
 def zone2(a):   # [zone 2] De Splinterpieken: own grid (local), written at world tiles tx 6..15, tz -23..-13 (T-WERELD), POI_Z2.md, Z2WereldPlekken.java
@@ -187,6 +190,13 @@ def grot_module():
     sys.path.insert(0, os.path.join(HIER, "grotten"))
     import grot
     return grot
+
+
+def zone6(a):   # U-Z6WERELD: Het Zijdeland: own process (its render kit shares module names), tiles tx 51..66, tz -18..-7
+    cmd = [sys.executable, os.path.join(HIER, "zone6", "maak6.py")]
+    if a.alleen:
+        cmd += ["--alleen", a.alleen]
+    subprocess.run(cmd, cwd=ROOT, check=True)
 
 
 def plekken_nbt(plekken, tx, tz):

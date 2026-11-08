@@ -32,7 +32,10 @@ public final class VadsrijkBiomen {
             "hoogvads_paleis", "hoogvads_universiteit", "hoogvads_academie", "hoogvads_markt", "hoogvads_kathedraal", "hoogvads_luchthaven",
             "hoogvads_staartpark", "hoogvads_ooggaarde", "hoogvads", "moeder_wolkwal",
             // U-GROTTEN: the five atmosphere caves (grotten.Grotten.biome, by height: checked first)
-            "grot_zwamgrot", "grot_kristalgrot", "grot_wortelgrot", "grot_koraalgrot", "grot_wolkengrot");
+            "grot_zwamgrot", "grot_kristalgrot", "grot_wortelgrot", "grot_koraalgrot", "grot_wolkengrot",
+            // U-Z6WERELD: zone 6 "Het Zijdeland", one biome per area (Z6Wereld.biome)
+            "zijdeland_rozenkloof", "zijdeland_saffraanpoort", "zijdeland_toren", "zijdeland_moederoase", "zijdeland_ruinedal",
+            "zijdeland_zoutvlakte", "zijdeland_palmenkloven", "zijdeland_roze_duinen", "zijdeland");
     /** U-OVERGANG: every id incl. the sea-band biomes (tools/features/vadsrijk_u_overgang.py band_ids(), same order). */
     public static final List<String> IDS = metZeeband(BASIS);
     public static final int ZEE = IDS.indexOf("zee"), KLOOF = IDS.indexOf("kloof"), TUSSENLAND = IDS.indexOf("tussenland");
@@ -114,6 +117,10 @@ public final class VadsrijkBiomen {
         if (z5 != null) {   // (T-INT order: zone 5 by height first, then zone 4, then zone 3)
             return IDS.indexOf(z5);
         }
+        String z6 = nl.juiced.guhs.feature.vadsrijk.zone6.wereld.Z6Wereld.biome(x, z);   // U-Z6WERELD: Het Zijdeland (its tile box)
+        if (z6 != null) {
+            return IDS.indexOf(z6);
+        }
         int zee = zeeband(x, y, z);   // U-OVERGANG: the open sea between the zones = a colour band, not area boxes
         if (zee != GEEN_BAND) {
             return zee;
@@ -136,6 +143,10 @@ public final class VadsrijkBiomen {
 
     /** The biome index ({@link #IDS}) at block x/z (flat: zone 3 gives its ground layer). */
     public static int index(int x, int z) {
+        String z6 = nl.juiced.guhs.feature.vadsrijk.zone6.wereld.Z6Wereld.biome(x, z);   // U-Z6WERELD
+        if (z6 != null) {
+            return IDS.indexOf(z6);
+        }
         int zee = zeeband(x, 64, z);   // U-OVERGANG
         if (zee != GEEN_BAND) {
             return zee;

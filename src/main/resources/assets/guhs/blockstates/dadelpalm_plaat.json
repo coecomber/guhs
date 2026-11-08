@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "guhs:block/dadelpalm_plaat"
+    },
+    "type=double": {
+      "model": "guhs:block/dadelpalm_planken"
+    },
+    "type=top": {
+      "model": "guhs:block/dadelpalm_plaat_top"
+    }
+  }
+}

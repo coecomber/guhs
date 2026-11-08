@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "guhs:block/zijdeland/dadelpalm_planken",
+    "top": "guhs:block/zijdeland/dadelpalm_planken",
+    "side": "guhs:block/zijdeland/dadelpalm_planken"
+  }
+}

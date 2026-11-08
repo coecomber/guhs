@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/zijdeland/rozenzandsteen",
+    "top": "guhs:block/zijdeland/rozenzandsteen",
+    "side": "guhs:block/zijdeland/rozenzandsteen"
+  }
+}

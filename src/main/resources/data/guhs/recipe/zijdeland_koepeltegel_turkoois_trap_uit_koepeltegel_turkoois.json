@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:koepeltegel_turkoois",
+  "result": {
+    "id": "guhs:koepeltegel_turkoois_trap",
+    "count": 1
+  }
+}

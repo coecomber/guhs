@@ -47,6 +47,7 @@ GROEPEN = {
     "z2": (6, -23, 15, -13),
     "z3": (16, -16, 26, -3),
     "z4": (27, -12, 39, -5),         # zone 4 (+ zone 4's sea under the shared zone-5 tiles tx 38..39)
+    "z6": (51, -18, 66, -7),         # U-Z6WERELD: Het Zijdeland (its coast margin runs into the open sea)
 }
 WOLK_NAMEN = set(ZN.WOLK) | {"guhs:wolkenblok_wit"}
 VAST_NIET = {"minecraft:air", "minecraft:cave_air", "minecraft:structure_void"}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "NNN",
+    "NTN",
+    "NNN"
+  ],
+  "key": {
+    "N": "minecraft:gold_nugget",
+    "T": "minecraft:torch"
+  },
+  "result": {
+    "id": "guhs:messing_lantaarn",
+    "count": 1
+  }
+}

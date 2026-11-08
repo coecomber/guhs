@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "guhs:mozaiek_bloem",
+  "result": {
+    "id": "guhs:mozaiek_ster",
+    "count": 1
+  }
+}
