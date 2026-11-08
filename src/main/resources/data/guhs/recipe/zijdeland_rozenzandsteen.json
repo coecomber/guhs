@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:sandstone",
+    "minecraft:pink_terracotta"
+  ],
+  "result": {
+    "id": "guhs:rozenzandsteen",
+    "count": 2
+  }
+}

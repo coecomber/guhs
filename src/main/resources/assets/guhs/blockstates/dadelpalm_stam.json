@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "guhs:block/dadelpalm_stam_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "guhs:block/dadelpalm_stam"
+    },
+    "axis=z": {
+      "model": "guhs:block/dadelpalm_stam_horizontal",
+      "x": 90
+    }
+  }
+}

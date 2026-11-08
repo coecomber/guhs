@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_hanging_lantern",
+  "textures": {
+    "lantern": "guhs:block/zijdeland/messing_lantaarn"
+  },
+  "render_type": "minecraft:cutout"
+}

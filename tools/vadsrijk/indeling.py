@@ -7,7 +7,7 @@ Every zone keeps building in its own LOCAL coordinates;   world = local + (dx, d
 
 TEGEL = 64
 
-# zone -> (dx, dz); local = world for zone 1, 4, 5
+# zone -> (dx, dz); local = world for zone 1, 4, 5, 6
 KAMP_DX, KAMP_DZ = -384, 0          # Knuffelkamp: local = the old camp coordinates (island around (0, 1000))
 Z2_DX, Z2_DZ = 704, 1344            # zone 2: local = the old zone-2 frame (Kandijkom (0, -2400), zone2/plan.py)
 Z3_DX, Z3_DZ = 1404, -576           # zone 3: local = relative to the trunk axis (zone3/plan3.py TX_STAM/TZ_STAM)
@@ -20,6 +20,7 @@ TEGELS = {
     "z3": (16, -16, 26, -3),
     "z4": (27, -12, 39, -5),
     "z5": (38, -12, 49, -5),
+    "z6": (51, -18, 66, -7),        # U-Z6WERELD: Het Zijdeland (the zone box x 3280..4180, z -1060..-460 + a coast margin)
 }
 # land (content) boxes, WORLD: minx, minz, maxx, maxz
 LAND = {
@@ -29,6 +30,7 @@ LAND = {
     "z3": (1166, -897, 1725, -338),
     "z4": (1740, -716, 2540, -266),
     "z5": (2440, -660, 3150, -380),
+    "z6": (3280, -1060, 4180, -460),   # U-Z6WERELD
 }
 
 # airship harbours of the transitions (W-3 §4): id -> (name, x, y-stand, z, zone). POI ids: haven_<van>_<naar>_vertrek

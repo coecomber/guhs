@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "PPP"
+  ],
+  "key": {
+    "P": "guhs:dadelpalm_planken"
+  },
+  "result": {
+    "id": "guhs:dadelpalm_plaat",
+    "count": 6
+  }
+}

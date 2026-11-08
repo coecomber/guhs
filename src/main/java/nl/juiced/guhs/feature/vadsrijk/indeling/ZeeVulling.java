@@ -24,7 +24,7 @@ public final class ZeeVulling {
     }
 
     /** The island sea (zone 1-5 + margin): outside it a chunk without a tile stays void (proeftuin, far tests). */
-    public static final int MIN_X = -1280, MAX_X = 3600, MIN_Z = -1920, MAX_Z = 1728;
+    public static final int MIN_X = -1280, MAX_X = 4672, MIN_Z = -1920, MAX_Z = 1728;   // U-Z6WERELD: MAX_X 3600 -> 4672 (zone 6 + its sea)
     public static final int ZEE = 62, DIEP = 49;
 
     public static boolean inZee(int x, int z) {

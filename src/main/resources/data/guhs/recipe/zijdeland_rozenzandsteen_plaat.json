@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "SSS"
+  ],
+  "key": {
+    "S": "guhs:rozenzandsteen"
+  },
+  "result": {
+    "id": "guhs:rozenzandsteen_plaat",
+    "count": 6
+  }
+}

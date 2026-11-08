@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "guhs:dadelpalm_stam"
+  ],
+  "result": {
+    "id": "guhs:dadelpalm_planken",
+    "count": 4
+  }
+}

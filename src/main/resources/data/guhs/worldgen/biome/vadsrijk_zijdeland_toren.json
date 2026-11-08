@@ -1,0 +1,33 @@
+{
+  "attributes": {
+    "minecraft:visual/fog_color": "#b8a8c8",
+    "minecraft:visual/sky_color": "#a89cc0",
+    "minecraft:visual/water_fog_color": "#586880"
+  },
+  "has_precipitation": false,
+  "temperature": 0.8,
+  "downfall": 0.0,
+  "effects": {
+    "water_color": "#7890a8",
+    "foliage_color": "#8c9488",
+    "grass_color": "#a0a49c"
+  },
+  "spawners": {},
+  "spawn_costs": {},
+  "carvers": [],
+  "features": [
+    [
+      "guhs:vr_kaart"
+    ],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    []
+  ]
+}

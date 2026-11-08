@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "guhs:block/zijdeland/koepeltegel_turkoois",
+    "top": "guhs:block/zijdeland/koepeltegel_turkoois",
+    "side": "guhs:block/zijdeland/koepeltegel_turkoois"
+  }
+}

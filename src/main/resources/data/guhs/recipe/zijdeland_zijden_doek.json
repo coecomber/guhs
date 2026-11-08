@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:pink_wool",
+    "minecraft:string",
+    "minecraft:gold_nugget"
+  ],
+  "result": {
+    "id": "guhs:zijden_doek",
+    "count": 2
+  }
+}

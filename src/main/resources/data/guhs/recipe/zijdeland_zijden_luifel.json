@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "DD"
+  ],
+  "key": {
+    "D": "guhs:zijden_doek"
+  },
+  "result": {
+    "id": "guhs:zijden_luifel",
+    "count": 6
+  }
+}

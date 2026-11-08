@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "minecraft:cyan_terracotta",
+    "minecraft:white_terracotta",
+    "minecraft:gold_nugget"
+  ],
+  "result": {
+    "id": "guhs:mozaiek_ster",
+    "count": 4
+  }
+}
