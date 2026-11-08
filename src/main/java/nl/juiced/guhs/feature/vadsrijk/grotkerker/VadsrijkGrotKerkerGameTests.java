@@ -105,9 +105,11 @@ public class VadsrijkGrotKerkerGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         Spelers.data(p).extra.remove(GrotKerker.DATA);
         GrotKerker.TEST_KLAAR = true;
+        GrotRij.wisAlles();
         helper.runAfterDelay(5, () -> {
             try {
-                // start: the packs, exactly once
+                // start: the packs, exactly once (W-GROT: only for the cave's group: the player is its group)
+                GrotRij.devToegang(p, k.id());
                 GrotKerker.tick(sl, k, r);
                 helper.assertTrue(r.staat == Staat.BEZIG, "the run started when a player stood in the cave: " + r.staat);
                 int plan = r.plan.size();
@@ -151,8 +153,12 @@ public class VadsrijkGrotKerkerGameTests {
                 GrotKerker.tick(sl, k, r);
                 helper.assertTrue(r.staat == Staat.SLAAPT, "asleep again after 10 min: " + r.staat);
                 helper.assertTrue(runWezens(sl, k).isEmpty(), "no run creature left");
-                // and a new run starts again (repeatable), with a new nonce
+                // and a new run starts again (repeatable), with a new nonce (W-GROT: for a new group: the cleared one does not restart)
                 long oudNonce = 0;
+                GrotKerker.tick(sl, k, r);
+                helper.assertTrue(r.staat == Staat.SLAAPT, "the cleared group's cave does not start a second run by itself");
+                GrotRij.wisAlles();
+                GrotRij.devToegang(p, k.id());
                 GrotKerker.tick(sl, k, r);
                 helper.assertTrue(r.staat == Staat.BEZIG && r.nonce != oudNonce && runWezens(sl, k).size() == plan, "the next run");
                 helper.assertTrue(r.dicht, "the gate re-closed for the next run");
@@ -162,6 +168,7 @@ public class VadsrijkGrotKerkerGameTests {
             } finally {
                 GrotKerker.reset(sl, k, r, null);
                 GrotKerker.TEST_KLAAR = false;
+                GrotRij.wisAlles();
                 Kerkers.TEST.remove(k.id());
                 Spelers.data(p).extra.remove(GrotKerker.DATA);
             }

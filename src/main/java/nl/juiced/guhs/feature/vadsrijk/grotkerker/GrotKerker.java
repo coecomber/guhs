@@ -77,6 +77,10 @@ import nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing;
  * waits, there is never a second copy of a cave. <b>No doubles:</b> every run creature has a U-DUBBEL key
  * {@code grotkerker:<cave>:<slot>} and a run tag {@code guhs_gk_<cave>_<nonce>}; a creature from an older run (a chunk saved
  * mid-run, a restart) is refused when it loads.
+ * <p><b>W-GROT (round W, user request):</b> the shared-world model above is replaced by a CLOSED door per cave ({@link GrotDeur}) and
+ * one group per cave ({@link GrotRij}): a run only starts for the cave's group (solo / party / queue, through the door), once per
+ * group; the run scales with the group's size; nobody else can be in the cave; a clear gives a cooldown per player instead of the
+ * 10-min shared wait, and the cave closes when the group left.
  * <p>Dev: {@code /guhs vadsrijk grot run [id] | reset <id> | baas <id> | kist [id]}.
  */
 public final class GrotKerker {
@@ -134,6 +138,8 @@ public final class GrotKerker {
 
     public static void register(IEventBus modBus) {
         GrotBazen.register(modBus);
+        GrotDeur.register(modBus);   // W-GROT: the closed cave doors
+        GrotRij.register();          // W-GROT: the group per cave, the queue, the ready check
         Haken.VERSLAGEN.add(GrotKerker::verslagen);
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
             RUNS.clear();
@@ -230,8 +236,11 @@ public final class GrotKerker {
         }
         switch (r.staat) {
             case SLAAPT -> {
-                if (!binnen.isEmpty() && klaar(sl, k.kamers().get(0).pos()) && klaar(sl, k.baas().pos())) {
-                    start(sl, k, r, binnen);
+                // W-GROT: the run only starts for the cave's group (through the door), once per group
+                List<ServerPlayer> leden = binnen.stream().filter(p -> GrotRij.lid(p, k.id())).toList();
+                if (!leden.isEmpty() && GrotRij.magStarten(k.id()) && klaar(sl, k.kamers().get(0).pos()) && klaar(sl, k.baas().pos())) {
+                    start(sl, k, r, leden);
+                    GrotRij.gestart(k.id());
                 }
             }
             case BEZIG -> {
@@ -268,7 +277,8 @@ public final class GrotKerker {
     static void start(ServerLevel sl, Kerker k, Run r, List<ServerPlayer> binnen) {
         r.staat = Staat.BEZIG;
         r.nonce = (sessie << 20) + (++teller);
-        r.spelers = Math.max(1, binnen.size());
+        GrotRij.Instantie gi = GrotRij.instantie(k.id());   // W-GROT: the group's size scales the run (not who happens to be in the box)
+        r.spelers = Math.max(1, gi != null && !gi.leden.isEmpty() ? gi.leden.size() : binnen.size());
         r.start = sl.getGameTime();
         r.klaarOp = -1;
         r.plan.clear();
@@ -554,8 +564,8 @@ public final class GrotKerker {
                     .withStyle(ChatFormatting.GOLD));
             RijkScenes.titel(p, Component.translatable("vadsrijk.grotkerker.titel.klaar").withStyle(ChatFormatting.GOLD),
                     Component.translatable("vadsrijk.grotkerker.titel.klaar.onder", n), 70, 0xFFD24A);
-            p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.reset.straks", tijd(RESET_NA)).withStyle(ChatFormatting.GRAY));
         }
+        GrotRij.klaar(sl, k.id(), iedereen);   // W-GROT: the cooldown, "out through the door", the window
     }
 
     static String tijd(long ticks) {
@@ -607,6 +617,7 @@ public final class GrotKerker {
         r.baas = null;
         r.klaarOp = -1;
         r.leegSinds = -1;
+        GrotRij.runGereset(k.id());   // W-GROT: an unfinished run of a group that is still in may start again
         if (melding != null) {
             for (ServerPlayer p : inGrot(sl, k)) {
                 p.sendSystemMessage(Component.translatable(melding).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -784,7 +795,7 @@ public final class GrotKerker {
             case BEZIG -> r.dicht ? Component.translatable("vadsrijk.grotkerker.poort.nog", over(r)).withStyle(ChatFormatting.LIGHT_PURPLE)
                     : Component.translatable("vadsrijk.grotkerker.poort.wacht").withStyle(ChatFormatting.GRAY);
             case BAAS -> Component.translatable("vadsrijk.grotkerker.poort.open").withStyle(ChatFormatting.GOLD);
-            default -> Component.translatable("vadsrijk.grotkerker.poort.klaar", tijd(RESET_NA - (nu - r.klaarOp))).withStyle(ChatFormatting.GREEN);
+            default -> Component.translatable("vadsrijk.grotdeur.klaar.popup").withStyle(ChatFormatting.GREEN);   // W-GROT: no "next run in" (the door decides)
         };
         Component tekst = Component.empty().append(Component.translatable("vadsrijk.grotkerker.poort.dicht").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                 .append("\n").append(regel);
@@ -846,10 +857,11 @@ public final class GrotKerker {
             if (k == null) {
                 return 0;
             }
-            naar(p, k.kamers().get(0).pos());
-            p.sendSystemMessage(Component.literal("Naar grotkamer 1 van " + k.id() + ": de run start zodra je in de grot staat ("
-                    + run(k.id()).staat + ")").withStyle(ChatFormatting.GRAY));
-            return 1;
+            // W-GROT: a solo start through the door (rules + cooldown skipped); the run starts when you walk into the cave
+            boolean ok = GrotRij.solo(p, k.id(), true);
+            p.sendSystemMessage(Component.literal(ok ? "Solo naar binnen in " + k.id() + " (dev: geen wachttijd/regels). De run start zodra je in de grot staat."
+                    : "Kon niet naar binnen (bezet door een andere groep?)").withStyle(ChatFormatting.GRAY));
+            return ok ? 1 : 0;
         })));
         g.then(Commands.literal("reset").then(Commands.argument("id", StringArgumentType.word()).suggests(ids).executes(c -> {
             Kerker k = kerkerVan(c.getSource(), StringArgumentType.getString(c, "id"));
@@ -858,7 +870,10 @@ public final class GrotKerker {
                 return 0;
             }
             reset(sl, k, run(k.id()), "vadsrijk.grotkerker.reset");
-            c.getSource().sendSuccess(() -> Component.literal("Grotkerker " + k.id() + " gereset (slaapt; de run start weer zodra iemand in de grot staat)"), false);
+            if (GrotRij.instantie(k.id()) != null) {
+                GrotRij.sluit(c.getSource().getServer(), k.id(), "vadsrijk.grotdeur.msg.gesloten");   // W-GROT: the group's cave closes too
+            }
+            c.getSource().sendSuccess(() -> Component.literal("Grotkerker " + k.id() + " gereset (dicht; start hem weer via de deur of /guhs vadsrijk grot run " + k.id() + ")"), false);
             return 1;
         })));
         g.then(Commands.literal("baas").then(Commands.argument("id", StringArgumentType.word()).suggests(ids).executes(c -> {
@@ -879,12 +894,16 @@ public final class GrotKerker {
 
     /** Dev: skip the packs (the run starts if needed, every pack creature away), open the gate, the boss wakes up. */
     public static int devBaas(ServerLevel sl, Kerker k, @Nullable ServerPlayer p) {
+        if (p != null) {
+            GrotRij.devToegang(p, k.id());   // W-GROT: the dev is the cave's group (else the box would put them outside)
+        }
         Run r = run(k.id());
         if (r.staat == Staat.KLAAR) {
             reset(sl, k, r, null);
         }
         if (r.staat == Staat.SLAAPT) {
             start(sl, k, r, p == null ? List.of() : List.of(p));
+            GrotRij.gestart(k.id());
         }
         for (UUID u : r.levend.values()) {
             Entity e = sl.getEntity(u);

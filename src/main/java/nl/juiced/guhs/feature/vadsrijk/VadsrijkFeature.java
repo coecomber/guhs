@@ -110,6 +110,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.payloads(registrar);   // U-GILDEN
         nl.juiced.guhs.feature.vadsrijk.questlopen.QuestLopenRegistry.payloads(registrar);   // U-QUESTLOPEN
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.payloads(registrar);   // U-Z6RAID
+        nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotNet.payloads(registrar);   // W-GROT: the cave door window + ready check
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.payloads(registrar);   // U-LEVEN-RITME
         nl.juiced.guhs.feature.vadsrijk.stadsleven.StadslevenRegistry.payloads(registrar);   // U-LEVEN-STAD: the Stadsleven setting
     }

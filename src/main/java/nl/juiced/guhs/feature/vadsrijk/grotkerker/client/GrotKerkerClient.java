@@ -25,6 +25,8 @@ public final class GrotKerkerClient {
     }
 
     public static void init(IEventBus modBus) {
+        nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotNet.ontvanger =
+                sch -> net.minecraft.client.Minecraft.getInstance().execute(() -> GrotScherm.ontvang(sch));   // W-GROT: the door window
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> {
             for (var en : GrotBazen.TYPES.entrySet()) {
                 GrotBazen.Def d = GrotBazen.def(en.getKey());
