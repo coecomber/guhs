@@ -34,6 +34,8 @@ public final class Emotes {
 
     private static final Map<UUID, Actief> ACTIEF = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> LAATST = new ConcurrentHashMap<>();
+    /** U-LEVEN-RITME: after an emote started (guhs nearby react); true = a guh hugged back (no "you hug the air"). */
+    public static final java.util.List<java.util.function.BiPredicate<ServerPlayer, Emote>> NA_EMOTE = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     private Emotes() {
     }
@@ -62,6 +64,10 @@ public final class Emotes {
         }
         LAATST.put(p.getUUID(), nu);
         start(p, e, nu);
+        boolean guhKnuffel = false;   // U-LEVEN-RITME
+        for (java.util.function.BiPredicate<ServerPlayer, Emote> h : NA_EMOTE) {
+            guhKnuffel |= h.test(p, e);
+        }
         String melding = null;
         if (e == Emote.KNUFFEL) {
             ServerPlayer ander = knuffelMaatje(p);
@@ -73,7 +79,7 @@ public final class Emotes {
                     Vec3 m = p.position().add(ander.position()).scale(0.5);
                     sl.sendParticles(ParticleTypes.HEART, m.x, m.y + 1.9, m.z, 6, 0.4, 0.3, 0.4, 0.02);
                 }
-            } else {
+            } else if (!guhKnuffel) {   // U-LEVEN-RITME: a guh hugged back
                 melding = "vadsrijk.uhud.emote.knuffel.niemand";
                 if (melden) {
                     p.sendSystemMessage(Component.translatable(melding), true);

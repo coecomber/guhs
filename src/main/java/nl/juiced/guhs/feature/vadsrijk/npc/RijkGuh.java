@@ -49,6 +49,8 @@ public class RijkGuh extends GuhEntity {
     @Nullable
     BlockPos rustPlek;
     private int zwaaiPauze;
+    /** U-LEVEN-RITME: true = this guh is asleep (night schedule): no waving, idle emotes or strolling. */
+    public static java.util.function.Predicate<RijkGuh> STIL = g -> false;
 
     public RijkGuh(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
@@ -128,6 +130,9 @@ public class RijkGuh extends GuhEntity {
         if (zwaaiPauze > 0) {
             zwaaiPauze--;
         }
+        if (STIL.test(this)) {
+            return;   // U-LEVEN-RITME: asleep
+        }
         if (this.tickCount % 20 == 7 && zwaaiPauze == 0 && volgt == null) {
             Player p = sl.getNearestPlayer(this, 5);
             if (p != null && getRandom().nextInt(4) == 0) {
@@ -188,7 +193,7 @@ public class RijkGuh extends GuhEntity {
 
         @Override
         public boolean canUse() {
-            if (thuis == null || volgt != null || isInSittingPose()) {
+            if (thuis == null || volgt != null || isInSittingPose() || STIL.test(RijkGuh.this)) {   // U-LEVEN-RITME: + asleep
                 return false;
             }
             if (--pauze > 0) {

@@ -74,6 +74,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.vint.VInt.register(modBus);   // V-INT: round-U glue (spec in the Karakter tab + party frames)
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.register(modBus);   // U-Z6RAID: the raid De Sterrendovende Toren
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
+        nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.register(modBus);   // U-LEVEN-RITME: day/night in towns, weather, emote reactions, Pluizenblaadje
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -106,5 +107,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.payloads(registrar);   // U-TABS: the Vadsrijk-menu (Karakter tab, Reiskaart to look at)
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.payloads(registrar);   // U-GILDEN
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.payloads(registrar);   // U-Z6RAID
+        nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.payloads(registrar);   // U-LEVEN-RITME
     }
 }

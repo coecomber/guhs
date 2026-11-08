@@ -131,6 +131,7 @@ public class InstellingenPaneel extends MenuPaneel {
         opties.add(new Kop("kop.beeld"));
         opties.add(new Keuze<>("effecten", VfxConfig.NIVEAU, VfxConfig.Niveau.VOL));
         opties.add(new Keuze<>("sfeer", SfeerConfig.NIVEAU, SfeerConfig.Niveau.VOL));
+        opties.add(new Schuif("weer", nl.juiced.guhs.feature.vadsrijk.ritme.client.RitmeConfig.WEER, 0, 100, 70, true));   // U-LEVEN-RITME
         opties.add(new Schuif("schermschud", BelevingConfig.SCHUD, 0, 100, 100, true));
         opties.add(new Schuif("tekstsnelheid", DialoogConfig.SNELHEID, 0, 3, 2, false));
     }

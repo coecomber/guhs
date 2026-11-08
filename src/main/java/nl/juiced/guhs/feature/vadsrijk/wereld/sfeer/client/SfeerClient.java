@@ -21,6 +21,17 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.sfeer.SfeerPayloads;
  */
 public final class SfeerClient {
     private static ClientLevel vorig;
+    /** U-LEVEN-RITME hook: an extra rainbow strength 0..1 (the zone 2-4 showers), drawn with the zone-1 rainbow. */
+    public static volatile java.util.function.DoubleSupplier U_REGENBOOG = () -> 0;
+
+    /** U-LEVEN-RITME hook: the square of ANOTHER town at x/y/z (y = NaN: any height), or null; its lights join the dusk wave. */
+    @FunctionalInterface
+    public interface StadPlein {
+        @javax.annotation.Nullable
+        net.minecraft.core.BlockPos plein(double x, double y, double z);
+    }
+
+    public static volatile StadPlein U_STADPLEIN = (x, y, z) -> null;
 
     private SfeerClient() {
     }

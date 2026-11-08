@@ -53,7 +53,7 @@ final class SfeerLucht {
             Teken.klaar("Vadsrijk sfeer lucht", b, false, mv);
         }
         BufferBuilder g = Teken.begin();
-        float boog = Momenten.regenboog(l) * Math.max(GebiedMist.wWeide, 0.0f);
+        float boog = Math.max(Momenten.regenboog(l) * Math.max(GebiedMist.wWeide, 0.0f), (float) SfeerClient.U_REGENBOOG.getAsDouble());   // U-LEVEN-RITME: + zone 2-4
         if (boog > 0.01f) {
             regenboog(g, boog * SfeerConfig.sterkte() + 0.25f * boog, l);
         }

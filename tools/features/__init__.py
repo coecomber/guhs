@@ -261,6 +261,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_opslag',
             # 1.10 round U, U-HUD: party frames, emotes, HUD editor (Java: feature/vadsrijk/hud)
             'vadsrijk_u_hud',
+            # 1.10 round U, U-LEVEN-RITME: day/night in towns, weather, emote reactions, Pluizenblaadje (Java: feature/vadsrijk/ritme)
+            'vadsrijk_u_leven_ritme',
             # 1.10 T-KLEDING: Kledingkast, wings, capes, accessories, effects (Java: feature/vadsrijk/kleding)
             'vadsrijk_t_kleding',
             # 1.10 night round T, T-LUCHTSCHIP: the scheduled airship (model), the far silhouettes, texts (Java: feature/vadsrijk/luchtschip)
