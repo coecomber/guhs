@@ -578,6 +578,20 @@ public final class GrotKerker {
         for (VadsrijkMob m : sl.getEntitiesOfClass(VadsrijkMob.class, doos, m -> m.entityTags().contains(TAG))) {
             m.discard();
         }
+        // V-INT: unopened end chests of the old run go too (the next run places fresh ones)
+        for (int cx = k.minX() >> 4; cx <= k.maxX() >> 4; cx++) {
+            for (int cz = k.minZ() >> 4; cz <= k.maxZ() >> 4; cz++) {
+                net.minecraft.world.level.chunk.LevelChunk ch = sl.getChunkSource().getChunkNow(cx, cz);
+                if (ch == null) {
+                    continue;
+                }
+                for (net.minecraft.core.BlockPos bp : new java.util.ArrayList<>(ch.getBlockEntities().keySet())) {
+                    if (doos.contains(bp.getX() + 0.5, bp.getY() + 0.5, bp.getZ() + 0.5) && ch.getBlockEntity(bp) instanceof BaasKist.Inhoud) {
+                        sl.removeBlock(bp, false);
+                    }
+                }
+            }
+        }
         if (r.dicht) {
             open(sl, r);
         }
