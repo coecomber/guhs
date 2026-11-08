@@ -86,7 +86,10 @@ public final class NepVulling {
             }
             erbij += vul(server, rij, d, e.getValue(), echt);
         }
-        WACHTEND.keySet().removeIf(id -> rijen.values().stream().noneMatch(l -> l.contains(id)));
+        // W-INT: a FRESH look at the queues (the snapshot above predates this tick's fillers, which were dropped right away, so
+        // nobody spawned at the start)
+        Map<String, List<UUID>> nuRijen = rij.rijen();
+        WACHTEND.keySet().removeIf(id -> nuRijen.values().stream().noneMatch(l -> l.contains(id)));
         return erbij;
     }
 

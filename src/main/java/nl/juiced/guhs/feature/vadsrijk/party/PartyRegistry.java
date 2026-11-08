@@ -85,6 +85,7 @@ public final class PartyRegistry {
             PartyDienst.vergeet(e.getEntity().getUUID());
         });
         NeoForge.EVENT_BUS.addListener(PartyRegistry::commando);
+        DungeonRijBrug.koppel();   // W-INT: the party tab + nep-spelers on w-grot's dungeon finder
     }
 
     public static void payloads(PayloadRegistrar registrar) {

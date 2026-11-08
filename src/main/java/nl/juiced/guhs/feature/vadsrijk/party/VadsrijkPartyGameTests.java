@@ -115,7 +115,7 @@ public class VadsrijkPartyGameTests {
         }
         NepSpelers.allemaalWeg(false);
         NepVulling.wisAlles();
-        Wachtrijen.DUNGEON = null;
+        DungeonRijBrug.herstel();   // W-INT: back to the real dungeon queue (was null: left the server uncoupled after this test)
         Wachtrijen.TEST = false;
         NepSpelers.TEST = false;
         NepConfig.TEST = null;

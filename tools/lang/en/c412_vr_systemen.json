@@ -1053,7 +1053,7 @@
   "vadsrijk.kern.party.erbij": "You joined the party. Stronger together, chonkier together!",
   "vadsrijk.kern.party.geen_uitnodiging": "Nobody has invited you. Not yet!",
   "vadsrijk.kern.party.uitgenodigd": "%s has been invited!",
-  "vadsrijk.kern.party.uitnodiging": "%s invites you to a party! Type /guhs vadsrijk party accepteer",
+  "vadsrijk.kern.party.uitnodiging": "%s invites you to a party! Open the Party tab (H) or type /guhs vadsrijk party accepteer",
   "vadsrijk.kern.party.vol": "Your party is full (5 guh buddies).",
   "vadsrijk.kern.party.weg": "You left the party.",
   "vadsrijk.kern.party.zelf": "Invite yourself? Just give yourself a cuddle instead.",
