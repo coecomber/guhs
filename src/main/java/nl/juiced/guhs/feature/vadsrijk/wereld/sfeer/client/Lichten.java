@@ -68,7 +68,8 @@ final class Lichten {
     private static boolean interessant(int cx, int cz) {
         int x = (cx << 4) + 8, z = (cz << 4) + 8;
         Gebieden.Gebied stad = Gebieden.van("zwamzoet"), woud = Gebieden.van("sporenwoud");
-        return stad != null && GebiedMist.gewicht(stad, x, z) > 0 || woud != null && GebiedMist.gewicht(woud, x, z) > 0;
+        return stad != null && GebiedMist.gewicht(stad, x, z) > 0 || woud != null && GebiedMist.gewicht(woud, x, z) > 0
+                || SfeerClient.U_STADPLEIN.plein(x, Double.NaN, z) != null;   // U-LEVEN-RITME: the other towns
     }
 
     private static boolean lamp(BlockState s) {
@@ -152,8 +153,16 @@ final class Lichten {
                             continue;
                         }
                         boolean stad = Gebieden.van("zwamzoet") != null && Gebieden.van("zwamzoet").bevat(wx, wz);
-                        double hd = Math.sqrt((wx - PLEIN.getX()) * (double) (wx - PLEIN.getX()) + (wz - PLEIN.getZ()) * (double) (wz - PLEIN.getZ()));
-                        int v = (int) Mth.clamp((hd * 0.9 + Math.max(0, wy - 64) * 1.5) * 0.85, 0, BAKEN_VERTRAGING - 30);
+                        BlockPos plein = PLEIN;   // U-LEVEN-RITME: another town's lights wave out from its own square
+                        if (!stad) {
+                            BlockPos ander = SfeerClient.U_STADPLEIN.plein(wx + 0.5, wy, wz + 0.5);
+                            if (ander != null) {
+                                stad = true;
+                                plein = ander;
+                            }
+                        }
+                        double hd = Math.sqrt((wx - plein.getX()) * (double) (wx - plein.getX()) + (wz - plein.getZ()) * (double) (wz - plein.getZ()));
+                        int v = (int) Mth.clamp((hd * 0.9 + Math.max(0, wy - plein.getY()) * 1.5) * 0.85, 0, BAKEN_VERTRAGING - 30);
                         lijst.add(new Licht(wx + 0.5f, wy + 0.5f, wz + 0.5f, v, stad, R.nextFloat() * 6.28f));
                     }
                 }
@@ -200,13 +209,14 @@ final class Lichten {
         }
         Vec3 p = mc.player.position();
         double totStad = Math.sqrt(p.distanceToSqr(PLEIN.getX(), p.y, PLEIN.getZ()));
-        if (totStad > 320) {
+        BlockPos ander = SfeerClient.U_STADPLEIN.plein(p.x, p.y, p.z);   // U-LEVEN-RITME: in another town: its own horn, no beacon
+        if (totStad > 320 && ander == null) {
             return;
         }
         if (vorig < 0) {
-            hoorn(mc, l, PLEIN, 0.75f);
+            hoorn(mc, l, ander != null ? ander : PLEIN, 0.75f);
         }
-        if (vorig < BAKEN_VERTRAGING && fase >= BAKEN_VERTRAGING) {
+        if (ander == null && vorig < BAKEN_VERTRAGING && fase >= BAKEN_VERTRAGING) {
             hoorn(mc, l, TEMPEL, 0.95f);
             if (p.distanceToSqr(TEMPEL.getX(), p.y, TEMPEL.getZ()) < 200 * 200) {
                 for (int i = 0; i < 40; i++) {
