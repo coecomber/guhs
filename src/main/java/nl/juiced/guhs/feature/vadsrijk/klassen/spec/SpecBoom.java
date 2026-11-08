@@ -127,7 +127,7 @@ public final class SpecBoom {
         return switch (rij) {
             case 0 -> 1;
             case 3, 5 -> 3;
-            case 6, 7 -> 4;
+            case 6, 7, 8, 9 -> 4;   // (V-INT: rows 8/9 = the zone-6 rows)
             default -> 2;
         };
     }
@@ -235,7 +235,7 @@ public final class SpecBoom {
                     Object[] waarden = kolom == 1 && t[0] == Stat.VADS
                             ? new Object[] {hoofd, 4 + 2 * n, Stat.VADS, 60 + 30 * n}
                             : new Object[] {hoofd, 4 + 2 * n, t[0], ((Stat) t[0]) == Stat.KRITIEK ? 2 + n : 8 + 4 * n, t[1], 4 + 2 * n};
-                    int kosten = rij >= 8 ? 4 : kosten(rij);
+                    int kosten = kosten(rij);
                     boom.add(new BoomKnoop(id, klasse, kosten, List.of(onder.id()), rij, kolom, Stats.van(waarden), null));
                     Bomen.ICOON.put(id, rij >= 8 ? "minecraft:amethyst_cluster" : "minecraft:glow_berries");
                     Boom.MIN_LEVEL.put(id, switch (rij) {
