@@ -1,4 +1,4 @@
-package nl.juiced.guhs.feature.vadsrijk.grotkerker;
+package nl.juiced.guhs.feature.vadsrijk.dungeon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +18,9 @@ import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.Guhs;
 
 /**
- * W-GROT network: server -> client {@link Scherm}(meta, texts) = the dungeon window (the door's interface, or the ready check),
- * client -> server {@link Actie}(wat, grot) = a button. The server builds every text (translatable, so the client's language
- * shows), the client only lays it out ({@code client/GrotScherm}):
+ * W-GROT network (dungeons): server -> client {@link Scherm}(meta, texts) = the dungeon window (the door's interface, or the ready check),
+ * client -> server {@link Actie}(wat, dungeon) = a button. The server builds every text (translatable, so the client's language
+ * shows), the client only lays it out ({@code client/DungeonScherm}):
  * <ul>
  *   <li>{@code meta.soort}: "deur" or "klaar"; {@code meta.open}: open the window (else only update one that is open);
  *       {@code meta.sluit}: close it;</li>
@@ -29,11 +29,11 @@ import nl.juiced.guhs.Guhs;
  *   <li>{@code meta.tijd}/{@code meta.duur}: ticks left of the ready check (a bar).</li>
  * </ul>
  */
-public final class GrotNet {
-    public record Actie(String wat, String grot) implements CustomPacketPayload {
-        public static final Type<Actie> TYPE = new Type<>(Guhs.id("vr_grotdeur_actie"));
+public final class DungeonNet {
+    public record Actie(String wat, String dungeon) implements CustomPacketPayload {
+        public static final Type<Actie> TYPE = new Type<>(Guhs.id("vr_dungeon_actie"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Actie> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, Actie::wat,
-                ByteBufCodecs.STRING_UTF8, Actie::grot, Actie::new);
+                ByteBufCodecs.STRING_UTF8, Actie::dungeon, Actie::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {
@@ -42,7 +42,7 @@ public final class GrotNet {
     }
 
     public record Scherm(CompoundTag meta, List<Component> teksten) implements CustomPacketPayload {
-        public static final Type<Scherm> TYPE = new Type<>(Guhs.id("vr_grotdeur_scherm"));
+        public static final Type<Scherm> TYPE = new Type<>(Guhs.id("vr_dungeon_scherm"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Scherm> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.COMPOUND_TAG, Scherm::meta,
                 ComponentSerialization.TRUSTED_STREAM_CODEC.apply(ByteBufCodecs.list()), Scherm::teksten, Scherm::new);
 
@@ -58,13 +58,13 @@ public final class GrotNet {
     /** Gametests: the last window sent per player name (meta + texts). */
     public static final java.util.Map<java.util.UUID, Scherm> LAATSTE = new java.util.concurrent.ConcurrentHashMap<>();
 
-    private GrotNet() {
+    private DungeonNet() {
     }
 
     public static void payloads(PayloadRegistrar r) {
         r.playToServer(Actie.TYPE, Actie.STREAM_CODEC, (m, c) -> {
             if (c.player() instanceof ServerPlayer sp) {
-                c.enqueueWork(() -> GrotRij.actie(sp, m.wat(), m.grot()));
+                c.enqueueWork(() -> DungeonRij.actie(sp, m.wat(), m.dungeon()));
             }
         });
         r.playToClient(Scherm.TYPE, Scherm.STREAM_CODEC, (m, c) -> ontvanger.accept(m));
@@ -82,33 +82,33 @@ public final class GrotNet {
     }
 
     /** A small builder for a window. */
-    static final class Bouw {
-        final CompoundTag meta = new CompoundTag();
+    public static final class Bouw {
+        public final CompoundTag meta = new CompoundTag();
         final List<Component> teksten = new ArrayList<>();
         final ListTag lijnen = new ListTag(), knoppen = new ListTag();
 
-        Bouw(String soort, String grot, boolean open, Component titel, Component onder) {
+        Bouw(String soort, String dungeon, boolean open, Component titel, Component onder) {
             meta.putString("soort", soort);
-            meta.putString("grot", grot);
+            meta.putString("dungeon", dungeon);
             meta.putBoolean("open", open);
             teksten.add(titel);
             teksten.add(onder);
         }
 
-        int tekst(Component c) {
+        public int tekst(Component c) {
             teksten.add(c);
             return teksten.size() - 1;
         }
 
-        Bouw lijn(Component c, int kleur) {
+        public Bouw lijn(Component c, int kleur) {
             return lijn(c, kleur, false, false);
         }
 
-        Bouw kop(Component c) {
+        public Bouw kop(Component c) {
             return lijn(c, 0xFFC0287C, true, true);
         }
 
-        Bouw lijn(Component c, int kleur, boolean vet, boolean kop) {
+        public Bouw lijn(Component c, int kleur, boolean vet, boolean kop) {
             CompoundTag t = new CompoundTag();
             t.putInt("t", tekst(c));
             t.putInt("k", kleur);
@@ -118,7 +118,7 @@ public final class GrotNet {
             return this;
         }
 
-        Bouw knop(String id, Component c, boolean aan, Component tip) {
+        public Bouw knop(String id, Component c, boolean aan, Component tip) {
             CompoundTag t = new CompoundTag();
             t.putString("id", id);
             t.putInt("t", tekst(c));
@@ -128,7 +128,7 @@ public final class GrotNet {
             return this;
         }
 
-        Scherm klaar() {
+        public Scherm klaar() {
             meta.put("lijnen", lijnen);
             meta.put("knoppen", knoppen);
             return new Scherm(meta, List.copyOf(teksten));

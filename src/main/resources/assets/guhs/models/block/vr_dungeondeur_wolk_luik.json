@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cube_all",
   "textures": {
-    "all": "guhs:block/vadsrijk/grotdeur/zout_paneel"
+    "all": "guhs:block/vadsrijk/dungeondeur/wolk_luik"
   }
 }

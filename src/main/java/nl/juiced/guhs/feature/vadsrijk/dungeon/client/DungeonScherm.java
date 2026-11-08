@@ -1,4 +1,4 @@
-package nl.juiced.guhs.feature.vadsrijk.grotkerker.client;
+package nl.juiced.guhs.feature.vadsrijk.dungeon.client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +12,25 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotNet;
+import nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonNet;
 
 /**
- * W-GROT, client: the cave door's window and the ready check, in the pink panel style of the Vadsrijk windows (QuestLopenScherm,
- * RozeKnop): a pink title bar with the cave name and the zone, the lines the server sent (headings in dark pink), the buttons in
+ * W-GROT, client: the dungeon door's window and the ready check, in the pink panel style of the Vadsrijk windows (QuestLopenScherm,
+ * RozeKnop): a pink title bar with "Dungeon: name", the lines the server sent (headings in dark pink), the buttons in
  * rows of two at the bottom (a tooltip on hover), a time bar for the ready check. The game does not pause; Esc closes (and tells
- * the server, which then stops sending updates). All texts come from the server ({@link GrotNet}).
+ * the server, which then stops sending updates). All texts come from the server ({@link DungeonNet}).
  */
-public final class GrotScherm extends Screen {
+public final class DungeonScherm extends Screen {
     private static final int ROZE = 0xFFFF5FAF, ROZE_DONKER = 0xFFC0287C, PANEEL = 0xF0FFF4FA;
 
     private record Vlak(int x, int y, int w, int h, Runnable doe) {
     }
 
-    private GrotNet.Scherm data;
+    private DungeonNet.Scherm data;
     private final List<Vlak> vlakken = new ArrayList<>();
 
-    GrotScherm(GrotNet.Scherm data) {
-        super(Component.translatable("vadsrijk.grotdeur.titel"));
+    DungeonScherm(DungeonNet.Scherm data) {
+        super(Component.translatable("vadsrijk.dungeon.titel"));
         this.data = data;
     }
 
@@ -38,16 +38,21 @@ public final class GrotScherm extends Screen {
         return data.meta().getStringOr("soort", "deur");
     }
 
-    void zet(GrotNet.Scherm d) {
+    void zet(DungeonNet.Scherm d) {
         this.data = d;
     }
 
+    /** Client setup: the window receives the server's state. */
+    public static void installeer() {
+        DungeonNet.ontvanger = sch -> Minecraft.getInstance().execute(() -> ontvang(sch));
+    }
+
     /** Client hook: open / update / close. */
-    static void ontvang(GrotNet.Scherm s) {
+    static void ontvang(DungeonNet.Scherm s) {
         Minecraft mc = Minecraft.getInstance();
         CompoundTag m = s.meta();
         String soort = m.getStringOr("soort", "deur");
-        if (mc.screen instanceof GrotScherm g && g.soort().equals(soort)) {
+        if (mc.screen instanceof DungeonScherm g && g.soort().equals(soort)) {
             if (m.getBooleanOr("sluit", false)) {
                 g.stil = true;
                 mc.setScreen(null);
@@ -60,7 +65,7 @@ public final class GrotScherm extends Screen {
             return;
         }
         if (m.getBooleanOr("open", false) || soort.equals("klaar") && mc.screen == null) {
-            mc.setScreen(new GrotScherm(s));
+            mc.setScreen(new DungeonScherm(s));
         }
     }
 
@@ -85,7 +90,7 @@ public final class GrotScherm extends Screen {
     }
 
     void doe(String wat) {
-        ClientPacketDistributor.sendToServer(new GrotNet.Actie(wat, data.meta().getStringOr("grot", "")));
+        ClientPacketDistributor.sendToServer(new DungeonNet.Actie(wat, data.meta().getStringOr("dungeon", "")));
     }
 
     @Override
@@ -152,7 +157,7 @@ public final class GrotScherm extends Screen {
             int by = bodem - 9;
             g.fill(x + 7, by, x + pw - 7, by + 5, 0xFFE8C8DC);
             g.fill(x + 7, by, x + 7 + (pw - 14) * tijd / duur, by + 5, tijd < duur / 4 ? 0xFFE04848 : ROZE);
-            Component t = Component.translatable("vadsrijk.grotdeur.klaar.tijd", (tijd + 19) / 20);
+            Component t = Component.translatable("vadsrijk.dungeon.klaar.tijd", (tijd + 19) / 20);
             g.text(font, t, x + pw - 7 - font.width(t), by - 10, 0xFF9A8094, false);
         }
         // the buttons, two per row

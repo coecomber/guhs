@@ -2,7 +2,7 @@
 W-GROT (round W, user request): "Caves hebben echt een dichte deur en een interface om de 'dungeon' te starten, te queuen met andere
 spelers etc."
 
-Every cave dungeon (grotkerker, U-GROTKERKER) gets a real, CLOSED door at its entrance. You cannot walk in: right-clicking the door
+Every dungeon (the cave runs of U-GROTKERKER are the first type, "Dungeon" with type GROT) gets a real, CLOSED door at its entrance. You cannot walk in: right-clicking the door
 opens the dungeon interface (solo / with your party / the queue), and the group is teleported in. This generator:
   - computes the door cells per cave from the cave plan (tools/vadsrijk/grotten/grotplan.py: the exact openings the entrance
     structures carve) and zone 6's stair (tools/vadsrijk/zone6/bouw6.py zoutgrot()), plus the stand spot in front of the door
@@ -10,8 +10,8 @@ opens the dungeon interface (solo / with your party / the queue), and the group 
   - verifies them against the generated map tiles when they are there (every door cell is open now, both stand spots are walkable:
     a floor + 2 free cells, and with the door shut the inside is not reachable through the air from the stand spot in a window
     round the door); ``--check`` only prints that report;
-  - writes src/main/java/.../vadsrijk/grotkerker/GrotDeurData.java (GENERATED);
-  - paints the door textures (6 themes x panel / knocker / hatch) + block models + the blockstate of guhs:vr_grotdeur;
+  - writes src/main/java/.../vadsrijk/dungeon/DungeonDeurData.java (GENERATED);
+  - paints the door textures (6 themes x panel / knocker / hatch) + block models + the blockstate of guhs:vr_dungeondeur;
   - lang (nl; en copies the Dutch for the later English pass, as the round-W brief allows).
 
 The doors are placed by the GAME (GrotDeur, the first time a door's chunk is loaded), only in open cells, so no map regen is needed.
@@ -26,8 +26,8 @@ import sys
 HIER = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HIER, "..", ".."))
 A = os.path.join(ROOT, "src", "main", "resources", "assets", "guhs")
-JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk", "grotkerker", "GrotDeurData.java")
-BLOK = "vr_grotdeur"
+JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk", "dungeon", "DungeonDeurData.java")
+BLOK = "vr_dungeondeur"
 THEMAS = ["zwam", "kristal", "wortel", "koraal", "wolk", "zout"]
 
 
@@ -138,28 +138,28 @@ def deuren():
     """Every door: cave, main door?, theme, cells, voor (stand spot outside), binnen (spot just inside), luik (a hatch)."""
     D = []
     # zone 1, De Zwamgrot: the giant toadstool's door (east), 3 wide x 3 high, in the stem wall
-    D.append(dict(grot="zwamgrot", hoofd=True, thema="zwam", cellen=_ring(-419, 148, 3.6, 4.7, 0.0, 69, 71),
+    D.append(dict(dungeon="zwamgrot", hoofd=True, thema="zwam", cellen=_ring(-419, 148, 3.6, 4.7, 0.0, 69, 71),
                   voor=(-412, 69, 148), binnen=(-417, 69, 148)))
     # zone 2, De Kristalgrot: the tunnel behind the crystal arch on the west flank of the Galmtop. Not IN the arch: the mouth is a
     # roofless notch in the cliff for its first blocks (you could climb round an arch door); 6 blocks in, the tunnel is closed
-    D.append(dict(grot="kristalgrot", hoofd=True, thema="kristal", cellen=_vlak(872, (872, 120, -1106), 5, 117, 124,
+    D.append(dict(dungeon="kristalgrot", hoofd=True, thema="kristal", cellen=_vlak(872, (872, 120, -1106), 5, 117, 124,
                                                                                   _muur2(872, -1108, -1104, 118, 122)),
                   voor=(869, 119, -1104), binnen=(876, 117, -1107)))
     # zone 3, De Wortelgrot: the hollow root stump's door (north), the inner ring (the outer ring stays a 1-deep frame)
-    D.append(dict(grot="wortelgrot", hoofd=True, thema="wortel", cellen=_ring(1410, -731, 3.6, 4.7, -math.pi / 2, 69, 71),
+    D.append(dict(dungeon="wortelgrot", hoofd=True, thema="wortel", cellen=_ring(1410, -731, 3.6, 4.7, -math.pi / 2, 69, 71),
                   voor=(1410, 69, -737), binnen=(1410, 69, -733)))
     # zone 4, De Koraalgrot: the dry way (the coral chimney on the atoll rim, door to the south-west) = the main door; the
     # flooded mouth on the sea floor gets a door too (the cave has two ways in)
-    D.append(dict(grot="koraalgrot", hoofd=True, thema="koraal", cellen=_ring(2234, -600, 3.6, 4.8, math.radians(135), 71, 73),
+    D.append(dict(dungeon="koraalgrot", hoofd=True, thema="koraal", cellen=_ring(2234, -600, 3.6, 4.8, math.radians(135), 71, 73),
                   voor=(2230, 71, -596), binnen=(2232, 71, -598)))
-    D.append(dict(grot="koraalgrot", hoofd=False, thema="koraal", cellen=_vlak(2267, (2267, 52, -572), 5, 50, 56, _boog(2268, -572, (-1, 0), 51, 3, 3, 1)),
+    D.append(dict(dungeon="koraalgrot", hoofd=False, thema="koraal", cellen=_vlak(2267, (2267, 52, -572), 5, 50, 56, _boog(2268, -572, (-1, 0), 51, 3, 3, 1)),
                   voor=(2270, 51, -572), binnen=(2232, 71, -598)))
     # zone 5, De Wolkengrotten: the blowhole on the whale's head is a hole with a spiral down: a cloud HATCH in the shaft
-    D.append(dict(grot="wolkengrot", hoofd=True, thema="wolk", cellen=_luik(2492, -520, 204, 3.6), luik=True,
+    D.append(dict(dungeon="wolkengrot", hoofd=True, thema="wolk", cellen=_luik(2492, -520, 204, 3.6), luik=True,
                   voor=(2494, 205, -520), binnen=(2492, 199, -517), ingang=(2498, 209, -520)))   # (a flying whale: no walkable window edge)
     # zone 6, De Zingende Zoutgrot: across the rock-cut stair where it reaches the hall passage (3 wide x 4 high); the game moves it
     # with u-z6wereld's POI "zoutgrot" (3874, 50, -534) like the rest of the zone-6 cave entry
-    D.append(dict(grot="zoutgrot", hoofd=True, thema="zout", cellen=_muur(3873, 3875, 50, 53, -523),
+    D.append(dict(dungeon="zoutgrot", hoofd=True, thema="zout", cellen=_muur(3873, 3875, 50, 53, -523),
                   voor=(3874, 50, -521), binnen=(3874, 50, -526)))
     for d in D:
         d.setdefault("luik", False)
@@ -231,7 +231,7 @@ def controle(D, stil=False):
     fout = []
     for d in D:
         deurcel = set(d["cellen"])
-        naam = f"{d['grot']}{'' if d['hoofd'] else ' (2e deur)'}"
+        naam = f"{d['dungeon']}{'' if d['hoofd'] else ' (2e deur)'}"
         if info(*d["cellen"][0]) is None:
             fout.append(f"{naam}: geen tegels hier (controle overgeslagen)")
             continue
@@ -240,7 +240,7 @@ def controle(D, stil=False):
             fout.append(f"{naam}: {len(dicht)} deurcellen zijn nu niet open (worden overgeslagen): {[(c, info(*c)[0]) for c in dicht[:4]]}")
         for k in ("voor", "binnen"):
             v = d[k]
-            if d["grot"] == "koraalgrot" and not d["hoofd"] and k == "voor":
+            if d["dungeon"] == "koraalgrot" and not d["hoofd"] and k == "voor":
                 ok = open_(*v)                       # (under water: just open)
             else:
                 ok = vloer(*v) and open_(*v) and open_(v[0], v[1] + 1, v[2])
@@ -248,14 +248,14 @@ def controle(D, stil=False):
                 fout.append(f"{naam}: {k} {v} is geen goede staanplek (vloer {info(v[0], v[1] - 1, v[2])}, {info(*v)}, {info(v[0], v[1] + 1, v[2])})")
         # the seal (the walkability standard's movement model, tools/vadsrijk/loopcheck.py): with the door cells solid, the spot
         # inside must NOT be reachable by walking/jumping/falling from the stand spot in front of the door (a window of tiles round it)
-        if d["grot"] == "zoutgrot":
+        if d["dungeon"] == "zoutgrot":
             continue      # (zone 6's tiles leave the rock under the surface out: the movement graph says nothing there)
-        lek = _lek(L, d, [c for e in D if e["grot"] == d["grot"] for c in e["cellen"]])
+        lek = _lek(L, d, [c for e in D if e["dungeon"] == d["dungeon"] for c in e["cellen"]])
         if lek:
             fout.append(f"{naam}: LEK: {lek}")
     if not stil:
         for d in D:
-            print(f"  {d['grot']:12s} {'hoofd' if d['hoofd'] else '2e   '} {d['thema']:8s} {len(d['cellen']):2d} cellen  voor {d['voor']}  binnen {d['binnen']}")
+            print(f"  {d['dungeon']:12s} {'hoofd' if d['hoofd'] else '2e   '} {d['thema']:8s} {len(d['cellen']):2d} cellen  voor {d['voor']}  binnen {d['binnen']}")
         print("  controle: " + ("alles goed" if not fout else ""))
         for f in fout:
             print("   - " + f)
@@ -291,7 +291,7 @@ def _lek(L, d, alle):
             L.analyse(V, (V.x0, V.z0, V.x0 + (tx1 - tx0 + 1) * 64, V.z0 + (tz1 - tz0 + 1) * 64))
     finally:
         L.SEEDS, L.POIS, L.LINKS = oud
-    if not (d["grot"] == "koraalgrot" and not d["hoofd"]):
+    if not (d["dungeon"] == "koraalgrot" and not d["hoofd"]):
         for r in buf2.getvalue().splitlines():
             if r.startswith("POI") and "voor" in r:
                 return "de staanplek voor de deur is zelf niet te bereiken: " + r.strip()
@@ -312,31 +312,31 @@ def java(D):
         v, b = d["voor"], d["binnen"]
         mid = (sum(c[0] for c in d["cellen"]) / len(d["cellen"]), 0, sum(c[2] for c in d["cellen"]) / len(d["cellen"]))
         yv, yb = _yaw(v, mid), _yaw(mid, b) if (b[0], b[2]) != (round(mid[0]), round(mid[2])) else 0.0
-        regels.append(f'            new Deur("{d["grot"]}", {str(d["hoofd"]).lower()}, "{d["thema"]}", {str(d["luik"]).lower()},\n'
+        regels.append(f'            new Deur("{d["dungeon"]}", {str(d["hoofd"]).lower()}, "{d["thema"]}", {str(d["luik"]).lower()},\n'
                       f'                    List.of({cel}),\n'
                       f'                    new BlockPos({v[0]}, {v[1]}, {v[2]}), {yv}f, new BlockPos({b[0]}, {b[1]}, {b[2]}), {yb}f)')
-    src = f"""package nl.juiced.guhs.feature.vadsrijk.grotkerker;
+    src = f"""package nl.juiced.guhs.feature.vadsrijk.dungeon;
 
 import java.util.List;
 
 import net.minecraft.core.BlockPos;
 
 /**
- * GENERATED by tools/features/vadsrijk_w_grot.py (do not edit by hand). W-GROT: the closed door of every cave dungeon: its cells
+ * GENERATED by tools/features/vadsrijk_w_grot.py (do not edit by hand). W-GROT: the closed door of every dungeon (the caves are the first type): its cells
  * ({{x, y, z, look}}: look 0 panel, 1 panel with the knocker, 2 hatch), the stand spot in front of it ({{@code voor}}, where you come out,
  * with the yaw that looks at the door) and the spot just inside ({{@code binnen}}, where the group is teleported in). {{@code hoofd}} =
  * the main door (De Koraalgrot also has one on its flooded sea-floor mouth). Zone 6 is moved with u-z6wereld's POI "zoutgrot" in
- * {{@link GrotDeur#deuren()}}.
+ * {{@link Dungeon#pasAan}}.
  */
-public final class GrotDeurData {{
-    public record Deur(String grot, boolean hoofd, String thema, boolean luik, List<int[]> cellen, BlockPos voor, float yawVoor, BlockPos binnen,
+public final class DungeonDeurData {{
+    public record Deur(String dungeon, boolean hoofd, String thema, boolean luik, List<int[]> cellen, BlockPos voor, float yawVoor, BlockPos binnen,
             float yawBinnen) {{
     }}
 
     public static final List<Deur> ALLE = List.of(
 {("," + chr(10)).join(regels)});
 
-    private GrotDeurData() {{
+    private DungeonDeurData() {{
     }}
 }}
 """
@@ -402,7 +402,7 @@ def _tex(thema, deel):
 
 
 def assets():
-    tex = os.path.join(A, "textures", "block", "vadsrijk", "grotdeur")
+    tex = os.path.join(A, "textures", "block", "vadsrijk", "dungeondeur")
     os.makedirs(tex, exist_ok=True)
     varianten = {}
     for t in THEMAS:
@@ -410,7 +410,7 @@ def assets():
             _tex(t, deel).save(os.path.join(tex, f"{t}_{naam}.png"))
             m = f"{BLOK}_{t}_{naam}"
             _schrijf(os.path.join(A, "models", "block", f"{m}.json"),
-                     {"parent": "minecraft:block/cube_all", "textures": {"all": f"guhs:block/vadsrijk/grotdeur/{t}_{naam}"}})
+                     {"parent": "minecraft:block/cube_all", "textures": {"all": f"guhs:block/vadsrijk/dungeondeur/{t}_{naam}"}})
             varianten[f"deel={deel},thema={t}"] = {"model": f"guhs:block/{m}"}
     _schrijf(os.path.join(A, "blockstates", f"{BLOK}.json"), {"variants": varianten})
     return len(varianten)
@@ -425,15 +425,19 @@ def _schrijf(pad, obj):
 
 # ===================================================================================================================== texts
 def teksten():
-    K = "vadsrijk.grotdeur."
+    K = "vadsrijk.dungeon."
     t = {
-        f"block.guhs.{BLOK}": "Grotdeur",
-        K + "titel": "Grotkerker",
-        K + "zone": "Zone %s",
+        f"block.guhs.{BLOK}": "Dungeondeur",
+        K + "titel": "Dungeon: %s",
+        K + "type": "Type: %s · zone %s",
+        K + "type.grot": "Grot",
+        K + "type.bovengronds": "Bovengronds",
+        K + "type.gebouw": "Gebouw",
+        K + "type.lucht": "In de lucht",
         K + "aanbevolen": "Aanbevolen: level %s-%s · %s",
         K + "spelers.solo": "1-4 spelers (alleen goed te doen)",
         K + "spelers.groep": "2-4 spelers (alleen is pittig)",
-        K + "baas": "Grotbaas: %s",
+        K + "baas": "Eindbaas: %s",
         K + "buit": "Buit bij elke clear",
         K + "buit.munten": "• %s brons",
         K + "buit.stuk.eerste": "• 1 uitrustingsstuk (lv %s): je eerste clear is Episch!",
@@ -450,11 +454,11 @@ def teksten():
         K + "jij": "Jij: %s keer uitgespeeld",
         K + "wachttijd": "Wachttijd: nog %s",
         K + "wachttijd.geen": "Geen wachttijd: je kunt naar binnen",
-        K + "status.vrij": "De grot is vrij.",
+        K + "status.vrij": "De dungeon is vrij.",
         K + "status.bezet": "Bezet: een groep van %s is binnen (%s).",
         K + "status.binnen": "Jouw groep is binnen (%s).",
         K + "status.rij": "Jij staat in de wachtrij: %s/%s",
-        K + "status.rij.bezet": "Jij staat in de wachtrij: %s/%s (wacht tot de grot vrij is)",
+        K + "status.rij.bezet": "Jij staat in de wachtrij: %s/%s (wacht tot de dungeon vrij is)",
         K + "status.check": "Klaar-check loopt...",
         K + "knop.solo": "Solo starten",
         K + "knop.groep": "Starten met groep (%s)",
@@ -463,58 +467,56 @@ def teksten():
         K + "knop.rij.uit": "Uit de wachtrij",
         K + "knop.nu": "Nu starten (%s/%s)",
         K + "knop.terug": "Terug naar binnen",
-        K + "knop.verlaat": "Grot verlaten",
+        K + "knop.verlaat": "Dungeon verlaten",
         K + "knop.blijf": "Nog even blijven",
-        K + "tip.solo": "Alleen naar binnen. De grot is dan helemaal van jou.",
+        K + "tip.solo": "Alleen naar binnen. De dungeon is dan helemaal van jou.",
         K + "tip.groep": "Met je groepje (party). Iedereen krijgt eerst een klaar-check.",
-        K + "tip.groep.geen": "Je zit niet in een groepje. Nodig iemand uit via het Vadsrijk-menu of /guhs party.",
-        K + "tip.rij": "Zoek medespelers voor deze grot. Bij 4 (of als jullie eerder starten) krijgt iedereen een klaar-check.",
+        K + "tip.groep.geen": "Je zit niet in een groepje. Nodig iemand uit met /guhs vadsrijk party uitnodigen <naam>.",
+        K + "tip.rij": "Zoek medespelers voor deze dungeon. Bij 4 (of als jullie eerder starten) krijgt iedereen een klaar-check.",
         K + "tip.nu": "Start nu met wie er in de wachtrij staat (ook als het er minder dan 4 zijn).",
-        # ready check
         K + "klaar.titel": "Klaar voor %s?",
         K + "klaar.uitleg": "Iedereen moet op Klaar! drukken. Dan gaan jullie samen naar binnen.",
         K + "klaar.ja": "Klaar!",
         K + "klaar.nee": "Nee",
         K + "klaar.tijd": "Nog %s s",
         K + "klaar.wacht": "Je bent klaar. Wachten op de rest...",
-        # chat / overlay
-        K + "msg.rij.erin": "Je staat in de wachtrij voor %s (%s/%s). Je mag rondlopen; uitloggen of een andere wereld = uit de rij.",
-        K + "msg.rij.uit": "Je staat niet meer in de wachtrij voor %s.",
-        K + "msg.rij.status": "Wachtrij %s: %s/%s",
-        K + "msg.rij.status.bezet": "Wachtrij %s: %s/%s · grot bezet",
-        K + "msg.rij.weg.dim": "Je bent uit de wachtrij voor %s (andere wereld).",
-        K + "msg.check.start": "Klaar-check voor %s! Druk op Klaar! (%s s).",
+        K + "msg.rij.erin": "Je staat in de wachtrij voor dungeon %s (%s/%s). Je mag rondlopen; uitloggen of een andere wereld = uit de rij.",
+        K + "msg.rij.uit": "Je staat niet meer in de wachtrij voor dungeon %s.",
+        K + "msg.rij.status": "Wachtrij dungeon %s %s/%s",
+        K + "msg.rij.status.bezet": "Wachtrij dungeon %s %s/%s · bezet",
+        K + "msg.rij.weg.dim": "Je bent uit de wachtrij voor dungeon %s (andere wereld).",
+        K + "msg.check.start": "Klaar-check voor dungeon %s! Druk op Klaar! (%s s).",
         K + "msg.check.nee": "%s doet (nog) niet mee. De anderen blijven in de wachtrij.",
         K + "msg.check.nee.groep": "%s doet (nog) niet mee. Starten gaat niet door.",
         K + "msg.check.tijd": "Niet iedereen was op tijd klaar. Wie niet antwoordde, staat niet meer in de rij.",
         K + "msg.check.tijd.groep": "Niet iedereen was op tijd klaar. Starten gaat niet door.",
-        K + "msg.binnen": "Jullie gaan %s binnen! (%s %s)",
+        K + "msg.binnen": "Jullie gaan dungeon %s binnen! (%s %s)",
         K + "msg.binnen.speler": "speler",
         K + "msg.binnen.spelers": "spelers",
         K + "msg.nep.buiten": "(%s is een nep-testspeler en blijft buiten)",
         K + "msg.niet.vadsrijk": "Dat kan alleen in Het Vadsrijk.",
-        K + "msg.al.kerker": "Je zit al in een grotkerker (%s). Ga daar eerst naar buiten.",
+        K + "msg.al.kerker": "Je zit al in dungeon %s. Ga daar eerst naar buiten.",
         K + "msg.al.raid": "Je zit al in de raid. Eerst die afmaken of verlaten.",
-        K + "msg.al.rij": "Je staat al in de wachtrij voor %s.",
-        K + "msg.cooldown": "Je moet nog %s wachten voor %s.",
-        K + "msg.cooldown.ander": "%s moet nog %s wachten voor deze grot.",
-        K + "msg.bezet.ander": "%s zit al in een grotkerker of de raid.",
-        K + "msg.bezet": "De grot is bezet door een andere groep. Ga in de wachtrij: jullie zijn daarna aan de beurt.",
+        K + "msg.al.rij": "Je staat al in de wachtrij voor dungeon %s.",
+        K + "msg.cooldown": "Je moet nog %s wachten voor dungeon %s.",
+        K + "msg.cooldown.ander": "%s moet nog %s wachten voor deze dungeon.",
+        K + "msg.bezet.ander": "%s zit al in een dungeon of de raid.",
+        K + "msg.bezet": "Deze dungeon is bezet door een andere groep. Ga in de wachtrij: jullie zijn daarna aan de beurt.",
         K + "msg.geen.groep": "Je zit niet in een groepje.",
         K + "msg.groep.leider": "Alleen de leider van je groepje kan starten.",
-        K + "msg.groep.te.groot": "Je groepje is te groot voor een grot (max %s).",
-        K + "msg.check.bezig": "Er loopt al een klaar-check voor deze grot. Even wachten.",
-        K + "msg.dicht": "De deur zit dicht. Rechtsklik erop om de grotkerker te starten.",
-        K + "msg.niet.van.jou": "De grot is van een andere groep. Je staat weer buiten.",
-        K + "msg.niet.gestart": "Deze grot is dicht. Start hem via de deur.",
-        K + "msg.uit": "Je bent weer buiten bij de deur van %s.",
-        K + "msg.klaar.uit": "Grot uitgespeeld! Rechtsklik op de deur (of gebruik het venster) om naar buiten te gaan.",
-        K + "msg.sluit.straks": "Er wacht een andere groep: de grot gaat over %s dicht en jullie staan dan buiten.",
-        K + "msg.gesloten": "De grot is gesloten. Bedankt voor het spelen!",
-        K + "msg.wachttijd.gezet": "Wachttijd voor %s: %s (dan kun je opnieuw).",
-        K + "msg.leeg": "Jullie groep is weg: de grot gaat weer dicht.",
+        K + "msg.groep.te.groot": "Je groepje is te groot voor deze dungeon (max %s).",
+        K + "msg.check.bezig": "Er loopt al een klaar-check voor deze dungeon. Even wachten.",
+        K + "msg.niet.van.jou": "Deze dungeon is van een andere groep. Je staat weer buiten.",
+        K + "msg.niet.gestart": "Deze dungeon is dicht. Start hem via de deur.",
+        K + "msg.uit": "Je bent weer buiten bij de deur van dungeon %s.",
+        K + "msg.klaar.uit": "Dungeon uitgespeeld! Rechtsklik op de deur (of gebruik het venster) om naar buiten te gaan.",
+        K + "msg.sluit.straks": "Er wacht een andere groep: de dungeon gaat over %s dicht en jullie staan dan buiten.",
+        K + "msg.gesloten": "De dungeon is gesloten. Bedankt voor het spelen!",
+        K + "msg.wachttijd.gezet": "Wachttijd voor dungeon %s: %s (dan kun je opnieuw).",
+        K + "msg.leeg": "Jullie groep is weg: de dungeon gaat weer dicht.",
         K + "msg.klaar.ja": "%s is klaar.",
-        K + "klaar.popup": "Grot uitgespeeld!",
+        K + "msg.rij.groep": "%s zet jullie groepje in de wachtrij voor dungeon %s.",
+        K + "klaar.popup": "Dungeon uitgespeeld!",
     }
     return t
 
@@ -541,7 +543,7 @@ def _lang_direct(tk):
             s = r.strip()
             if s.startswith('"') and '":' in s:
                 k = json.loads(s.split('":', 1)[0] + '"')
-                if k in bestaand:
+                if k in bestaand or k.startswith("vadsrijk.grotdeur.") or k == "block.guhs.vr_grotdeur":   # (keys before the "dungeon" rename)
                     continue
             uit.append(r)
         while uit and uit[-1].strip() == "":
