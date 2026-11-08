@@ -302,7 +302,9 @@ def randen(K, blok=4_000_000):
             dh = FB - HA
             op = gB & (dh > 0) & (dh <= 2) & (CB >= FB + 4) & (CA >= FB + 4)
             op &= (dh <= 1) | (CA >= HA + 6)
-            ok = neer | op
+            # off the HIGH half of a stair (stairs count as half blocks above): a jump of 1 from there reaches +1.5
+            trap = gB & (dh == 3) & (K.fc[Ar] == STAIR) & (HA == FA) & (CB >= FB + 4) & (CA >= HA + 7)
+            ok = neer | op | trap
             src_all.append(Ar[ok].astype(np.int32))
             dst_all.append(B[ok].astype(np.int32))
     return np.concatenate(src_all), np.concatenate(dst_all)
@@ -625,6 +627,21 @@ def verzamel_doelen(D, quests):
 
 
 # ------------------------------------------------------------------ links (transport edges)
+# Areas the Java code builds at runtime (not in the map tiles): their targets are listed, not checked.
+RUNTIME_GEBIEDEN = [
+    ("De Verzonken Sterrenwacht (Z6Bouw.sterrenwacht: rooms under the Ruinedal, entered by the hatch link)", 3930, 15, -995, 4075, 48, -945),
+    ("Raid binnentoren (Z6RaidBouw: the template raid_binnentoren, placed at runtime)", 4100, 0, -730, 4190, 66, -645),
+    ("Raid binnentoren top (Z6RaidBouw)", 4100, 100, -730, 4190, 320, -645),
+]
+
+
+def runtime_gebied(x, y, z):
+    for _, x0, y0, z0, x1, y1, z1 in RUNTIME_GEBIEDEN:
+        if x0 <= x <= x1 and y0 <= y <= y1 and z0 <= z <= z1:
+            return True
+    return False
+
+
 def poi_tabellen():
     """All `id` | x, y, z rows of the POI_*.md tables."""
     uit = {}
@@ -731,7 +748,7 @@ def analyseer(K=None):
         d["ok"] = False
         if d["pos"] is None:
             continue
-        if not (xs0 <= d["pos"][0] <= xs1 and zs0 <= d["pos"][2] <= zs1):
+        if not (xs0 <= d["pos"][0] <= xs1 and zs0 <= d["pos"][2] <= zs1) or runtime_gebied(*d["pos"]):
             d["buiten_kaart"] = True        # a runtime-built area (e.g. the guild valley at -12000, 12000): not in the tiles
             continue
         x, y, z = d["pos"]
@@ -783,6 +800,8 @@ def arena_uitgangen(U):
     uit = []
     for a in U.arenas.values():
         cx, cy, cz = a["centrum"]
+        if runtime_gebied(cx, cy, cz):
+            continue
         r = a["straal"]
         x0, x1 = cx - r, cx + r
         sel = (K.x >= x0) & (K.x <= x1) & (K.z >= cz - r) & (K.z <= cz + r) & K.geldig & ~K.bodem
@@ -974,6 +993,8 @@ def schrijf_rapport(U, extra, zone_filter=None):
                + (": " + ", ".join(f"`{d['id']}`" for d in sprong[:40]) if sprong else "")]
     onbekend = [d for d in U.doelen if d["pos"] is None]
     buiten = [d for d in U.doelen if d.get("buiten_kaart")]
+    regels += ["", "Runtime-built areas (not in the tiles, not checked here): the guild valley (-12000, 12000), "
+               + "; ".join(g[0] for g in RUNTIME_GEBIEDEN) + "."]
     regels += ["", f"Targets outside the map tiles (areas built at runtime, e.g. the guild valley; not checked): "
                + ", ".join(f"`{d['id']}`" for d in buiten)]
     regels += ["", f"Quest targets the game cannot place (no NPC/POI with that id): {len(onbekend)}"]

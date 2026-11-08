@@ -1525,6 +1525,7 @@ def bouw(W):
     dorp_vrij(W)
     dichten(W)
     udeco(W)   # U-DECO: Honingtak street furniture + lamp posts, stair floor bands/banners
+    WF.trappen_vrij(W)   # W-BEREIK: head room over the werf dock-tower stairs (last: hulls/rock are drawn before)
 
 
 init()

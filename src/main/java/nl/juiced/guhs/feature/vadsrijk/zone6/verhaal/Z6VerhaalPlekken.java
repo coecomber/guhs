@@ -333,12 +333,12 @@ public final class Z6VerhaalPlekken {
         int[][] kn = {{3436, 101, -684}, {3612, 98, -660}, {3480, 66, -986}, {3770, 96, -872}, {3950, 69, -540}, {3826, 104, -910},
                 {3754, 72, -894}, {4090, 67, -800}};
         for (int i = 0; i < kn.length; i++) {
-            KNUFFEL.put("knuffel_" + (i + 1), w("geheim_z6_knuffel_" + (i + 1), kn[i][0], kn[i][1], kn[i][2]));
+            KNUFFEL.put("knuffel_" + (i + 1), w("geheim_knuffel_" + (i + 1), kn[i][0], kn[i][1], kn[i][2]));
         }
         int[][] sc = {{3476, 73, -708}, {3740, 120, -892}, {4012, 122, -928}};
         String[] scId = {"schatkamer", "minaret", "mesa"};
         for (int i = 0; i < sc.length; i++) {
-            SCHAT.put(scId[i], w("geheim_z6_schat_" + (i + 1), sc[i][0], sc[i][1], sc[i][2]));
+            SCHAT.put(scId[i], w("geheim_schat_" + (i + 1), sc[i][0], sc[i][1], sc[i][2]));
         }
         vondst("z6_taart", "z6_s01_verjaardag", "z6_taart_", new int[][] {{3394, 69, -716}, {3410, 69, -704}, {3388, 69, -724}});
         vondst("z6_post", "z6_s03_post", "rozenkloof_post_", new int[][] {{3350, 85, -752}, {3378, 85, -754}, {3412, 85, -676}, {3366, 101, -678},

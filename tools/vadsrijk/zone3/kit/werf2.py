@@ -228,17 +228,6 @@ def dek(W, d):
     # de zeppelin van dit dok
     zp = d["zep"]
     zeppelin(W, (x + zp["off"][0], y + zp["off"][1], z + zp["off"][2]), zp["L"], zp["as_"], zp["af"], d["kleur"])
-    if d["toren"]:
-        # W-BEREIK: the zeppelin hull (cheese stone / concrete) cut through the tower stair: 2 blocks over a +0.5 step, so a
-        # 1.8-high player bumped his head and could not get up to the boss deck (Roquefort, z3_hq08_werf). Head room again.
-        for (px, pz, sh, nx, nz) in toren_trap(d):
-            a0 = int(math.ceil(sh))
-            for w in np.arange(-1.5, 1.51, 0.5):
-                qx, qz = px + nx * w, pz + nz * w
-                for yy in range(a0, a0 + 3):
-                    b = W.wget(qx, yy, qz)
-                    if b and "dark_oak" not in b and "air" not in b:
-                        W.wset(qx, yy, qz, "minecraft:air")
     W.label(x, y + 24, z, d["naam"])
 
 
@@ -377,6 +366,26 @@ def kabelbrug(W):
                 W.wfill(p[0], yd + 2, p[2], p[0], y - 1, p[2], "minecraft:iron_chain[axis=y]")
     m = a + d * 0.5
     W.label(m[0], m[1] + 12, m[2], "kabelbrug (Werftak -> werf)")
+
+
+def trappen_vrij(W):
+    """W-BEREIK: head room over the dock-tower stairs, run at the very END of the zone-3 build (bouw3.bouw): the zeppelin hulls
+    and the cheese rock (gatenkaas / concrete) cut through the stair: 2 blocks over a +0.5 step, so a 1.8-high player bumped his
+    head and could not get up to the Roquefort deck and its cabin (z3_hq08_werf)."""
+    for d in DOKKEN:
+        if not d["toren"]:
+            continue
+        x, y, z = dok_pos(d)
+        if not W.raakt(x - 60, y - 80, z - 60, x + 60, y + 50, z + 60):
+            continue
+        for (px, pz, sh, nx, nz) in toren_trap(d):
+            a0 = int(math.ceil(sh))
+            for w in np.arange(-1.5, 1.51, 0.5):
+                qx, qz = px + nx * w, pz + nz * w
+                for yy in range(a0, a0 + 3):
+                    b = W.wget(qx, yy, qz)
+                    if b and "dark_oak" not in b and "air" not in b:
+                        W.wset(qx, yy, qz, "minecraft:air")
 
 
 def bouw(W):
