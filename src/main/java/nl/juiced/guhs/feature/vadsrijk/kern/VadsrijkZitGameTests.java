@@ -53,7 +53,7 @@ public class VadsrijkZitGameTests {
         p.stopRiding();
         helper.assertTrue(!p.isPassenger(), "stood up");
         helper.assertTrue(p.getY() >= kussen.getY(), "stood up at or above the cushion (y " + p.getY() + " vs " + kussen.getY() + ")");
-        helper.assertTrue(level.noCollision(p, p.getBoundingBox().deflate(0.01)), "standing in free space");
+        helper.assertTrue(vrij(level, p), "standing in free space at " + p.position() + " (cushion " + kussen + ")");
 
         // a low ceiling right above the cushion: stand up next to it, still not inside or under the floor
         level.setBlockAndUpdate(kussen.above(), Blocks.STONE.defaultBlockState());
@@ -63,7 +63,7 @@ public class VadsrijkZitGameTests {
         helper.assertTrue(p.isPassenger(), "sat down again");
         p.stopRiding();
         helper.assertTrue(p.getY() >= vloer.getY() + 1 - 1e-3, "under a ceiling: still on the floor (y " + p.getY() + ")");
-        helper.assertTrue(level.noCollision(p, p.getBoundingBox().deflate(0.01)), "under a ceiling: in free space");
+        helper.assertTrue(vrij(level, p), "under a ceiling: in free space at " + p.position());
         helper.succeed();
     }
 
@@ -95,5 +95,16 @@ public class VadsrijkZitGameTests {
             vr.setBlockAndUpdate(vloer, oudVloer);
         }
         helper.succeed();
+    }
+
+    /** No block collides with the standing player (entities do not count). */
+    private static boolean vrij(ServerLevel level, ServerPlayer p) {
+        net.minecraft.world.phys.AABB box = p.getType().getDimensions().makeBoundingBox(p.position()).deflate(0.01);
+        for (net.minecraft.world.phys.shapes.VoxelShape s : level.getBlockCollisions(null, box)) {
+            if (!s.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

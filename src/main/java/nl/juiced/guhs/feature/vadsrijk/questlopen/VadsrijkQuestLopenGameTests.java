@@ -146,7 +146,9 @@ public class VadsrijkQuestLopenGameTests {
         List<String> fout = new ArrayList<>();
         for (String x : r) {
             QuestLoper.LOG.info("questlopen-alles: {}", x);
-            if (x.startsWith("VAST") || x.contains("ARENA:")) {
+            // (an ARENA note is information only: after some fights the next NPC stands in the opened arena, e.g. the hand-in at
+            // the Zeppelinwerf; the way out of an arena is w-bereik's; Questlopen itself no longer leaves you in one, see naStap)
+            if (x.startsWith("VAST")) {
                 fout.add(x);
             } else if (x.endsWith(": echt")) {
                 echt++;
