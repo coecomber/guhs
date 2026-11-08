@@ -77,6 +77,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.vint.VInt.register(modBus);   // V-INT: round-U glue (spec in the Karakter tab + party frames)
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.register(modBus);   // U-LEVEN-RITME: day/night in towns, weather, emote reactions, Pluizenblaadje
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.register(modBus);   // U-Z6RAID: the raid De Sterrendovende Toren
+        nl.juiced.guhs.feature.vadsrijk.party.PartyRegistry.register(modBus);   // W-PARTY: Party tab (saved parties, group queue) + nep-spelers
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
     }
 
@@ -114,5 +115,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonNet.payloads(registrar);   // W-GROT: the dungeon door window + ready check
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.payloads(registrar);   // U-LEVEN-RITME
         nl.juiced.guhs.feature.vadsrijk.stadsleven.StadslevenRegistry.payloads(registrar);   // U-LEVEN-STAD: the Stadsleven setting
+        nl.juiced.guhs.feature.vadsrijk.party.PartyRegistry.payloads(registrar);   // W-PARTY
     }
 }

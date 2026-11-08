@@ -56,7 +56,9 @@ final class KernEvents {
         });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             java.util.UUID id = e.getEntity().getUUID();
-            Partijen.verlaat(id);
+            if (e.getEntity().level().getServer() != null) {   // W-PARTY: parties are saved; logging out no longer leaves
+                Partijen.uitgelogd(e.getEntity().level().getServer(), id);
+            }
             AANVALSSNELHEID.remove(id);
             Schade.VOLGENDE_KLAP.remove(id);
             Schade.WACHTEND.remove(id);

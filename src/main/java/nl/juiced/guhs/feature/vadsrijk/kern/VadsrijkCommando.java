@@ -7,11 +7,9 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -29,7 +27,6 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
-import nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen;
 import nl.juiced.guhs.feature.vadsrijk.kern.wereld.KaartFeature;
 import nl.juiced.guhs.feature.vadsrijk.kern.wereld.Ondergrond;
 
@@ -64,26 +61,7 @@ public final class VadsrijkCommando {
             c.getSource().sendSuccess(() -> Component.translatable("vadsrijk.kern.cmd.kist", n, Inventaris.gevondenAantal(p, Vadsrijk.in(p))), false);
             return n;
         }));
-        v.then(Commands.literal("party")
-                .then(Commands.literal("uitnodigen").then(Commands.argument("speler", EntityArgument.player()).executes(c -> {
-                    ServerPlayer p = c.getSource().getPlayerOrException(), doel = EntityArgument.getPlayer(c, "speler");
-                    String r = Partijen.nodigUit(p, doel);
-                    c.getSource().sendSuccess(() -> Component.translatable(r, doel.getGameProfile().name()), false);
-                    if (r.endsWith("uitgenodigd")) {
-                        doel.sendSystemMessage(Component.translatable("vadsrijk.kern.party.uitnodiging", p.getGameProfile().name()).withStyle(ChatFormatting.LIGHT_PURPLE));
-                    }
-                    return 1;
-                })))
-                .then(Commands.literal("accepteer").executes(c -> {
-                    String r = Partijen.accepteer(c.getSource().getPlayerOrException());
-                    c.getSource().sendSuccess(() -> Component.translatable(r), false);
-                    return 1;
-                }))
-                .then(Commands.literal("verlaat").executes(c -> {
-                    Partijen.verlaat(c.getSource().getPlayerOrException().getUUID());
-                    c.getSource().sendSuccess(() -> Component.translatable("vadsrijk.kern.party.weg"), false);
-                    return 1;
-                })));
+        v.then(nl.juiced.guhs.feature.vadsrijk.party.PartyDienst.commando());   // W-PARTY: invite/accept/decline/leave/remove/lead/queue + nep-spelers (party tab)
         v.then(dev("proeftuin").executes(c -> {
             naarBinnen(c.getSource().getPlayerOrException(), true);
             return 1;
