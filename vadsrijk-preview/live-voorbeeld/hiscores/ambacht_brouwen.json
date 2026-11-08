@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_brouwen",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Lieke",
-   "waarde": 87,
-   "xp": 104400
+   "naam": "Pluimpje",
+   "waarde": 79,
+   "xp": 94800
   },
   {
    "plek": 2,
-   "naam": "Klodderkid",
-   "waarde": 73,
-   "xp": 87600
+   "naam": "MikaMepper",
+   "waarde": 78,
+   "xp": 93600
   },
   {
    "plek": 3,
-   "naam": "MikaMepper",
+   "naam": "Lieke",
+   "waarde": 76,
+   "xp": 91200
+  },
+  {
+   "plek": 4,
+   "naam": "Zwamzoetje",
    "waarde": 73,
    "xp": 87600
   },
   {
-   "plek": 4,
-   "naam": "Pluimpje",
-   "waarde": 49,
-   "xp": 58800
-  },
-  {
    "plek": 5,
-   "naam": "Vadsvos",
-   "waarde": 47,
-   "xp": 56400
+   "naam": "PluisPiet",
+   "waarde": 64,
+   "xp": 76800
   },
   {
    "plek": 6,
+   "naam": "Njeggie",
+   "waarde": 63,
+   "xp": 75600
+  },
+  {
+   "plek": 7,
+   "naam": "Knuffelkoning",
+   "waarde": 58,
+   "xp": 69600
+  },
+  {
+   "plek": 8,
+   "naam": "Juiced",
+   "waarde": 55,
+   "xp": 66000
+  },
+  {
+   "plek": 9,
+   "naam": "Klodderkid",
+   "waarde": 52,
+   "xp": 62400
+  },
+  {
+   "plek": 10,
    "naam": "Sjokkel",
    "waarde": 45,
    "xp": 54000
   },
   {
-   "plek": 7,
+   "plek": 11,
    "naam": "Honingbeer",
    "waarde": 43,
    "xp": 51600
   },
   {
-   "plek": 8,
-   "naam": "Njeggie",
-   "waarde": 36,
-   "xp": 43200
-  },
-  {
-   "plek": 9,
-   "naam": "Knuffelkoning",
-   "waarde": 35,
-   "xp": 42000
-  },
-  {
-   "plek": 10,
-   "naam": "PluisPiet",
-   "waarde": 26,
-   "xp": 31200
-  },
-  {
-   "plek": 11,
-   "naam": "Wolwinter",
-   "waarde": 20,
-   "xp": 24000
-  },
-  {
    "plek": 12,
-   "naam": "Juiced",
-   "waarde": 18,
-   "xp": 21600
+   "naam": "Wolwinter",
+   "waarde": 40,
+   "xp": 48000
   },
   {
    "plek": 13,
-   "naam": "Zwamzoetje",
-   "waarde": 13,
-   "xp": 15600
+   "naam": "Vadsvos",
+   "waarde": 37,
+   "xp": 44400
   },
   {
    "plek": 14,
    "naam": "Kaasknabbel",
-   "waarde": 11,
-   "xp": 13200
+   "waarde": 31,
+   "xp": 37200
   }
  ]
 }

@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_houthakken",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Zwamzoetje",
-   "waarde": 98,
-   "xp": 117600
+   "naam": "Juiced",
+   "waarde": 95,
+   "xp": 114000
   },
   {
    "plek": 2,
-   "naam": "MikaMepper",
-   "waarde": 92,
-   "xp": 110400
+   "naam": "Sjokkel",
+   "waarde": 85,
+   "xp": 102000
   },
   {
    "plek": 3,
-   "naam": "Klodderkid",
-   "waarde": 82,
-   "xp": 98400
+   "naam": "PluisPiet",
+   "waarde": 84,
+   "xp": 100800
   },
   {
    "plek": 4,
-   "naam": "Pluimpje",
-   "waarde": 72,
-   "xp": 86400
+   "naam": "Klodderkid",
+   "waarde": 77,
+   "xp": 92400
   },
   {
    "plek": 5,
-   "naam": "Juiced",
-   "waarde": 71,
-   "xp": 85200
+   "naam": "Vadsvos",
+   "waarde": 59,
+   "xp": 70800
   },
   {
    "plek": 6,
-   "naam": "Knuffelkoning",
-   "waarde": 63,
-   "xp": 75600
+   "naam": "Wolwinter",
+   "waarde": 58,
+   "xp": 69600
   },
   {
    "plek": 7,
    "naam": "Honingbeer",
-   "waarde": 56,
-   "xp": 67200
+   "waarde": 57,
+   "xp": 68400
   },
   {
    "plek": 8,
-   "naam": "Wolwinter",
-   "waarde": 42,
-   "xp": 50400
+   "naam": "Pluimpje",
+   "waarde": 57,
+   "xp": 68400
   },
   {
    "plek": 9,
-   "naam": "Njeggie",
-   "waarde": 39,
-   "xp": 46800
+   "naam": "Lieke",
+   "waarde": 53,
+   "xp": 63600
   },
   {
    "plek": 10,
-   "naam": "Kaasknabbel",
-   "waarde": 28,
-   "xp": 33600
+   "naam": "Zwamzoetje",
+   "waarde": 53,
+   "xp": 63600
   },
   {
    "plek": 11,
-   "naam": "PluisPiet",
-   "waarde": 24,
-   "xp": 28800
+   "naam": "MikaMepper",
+   "waarde": 40,
+   "xp": 48000
   },
   {
    "plek": 12,
-   "naam": "Vadsvos",
-   "waarde": 17,
-   "xp": 20400
+   "naam": "Kaasknabbel",
+   "waarde": 5,
+   "xp": 6000
   },
   {
    "plek": 13,
-   "naam": "Lieke",
-   "waarde": 8,
-   "xp": 9600
+   "naam": "Knuffelkoning",
+   "waarde": 5,
+   "xp": 6000
   },
   {
    "plek": 14,
-   "naam": "Sjokkel",
-   "waarde": 2,
-   "xp": 2400
+   "naam": "Njeggie",
+   "waarde": 4,
+   "xp": 4800
   }
  ]
 }

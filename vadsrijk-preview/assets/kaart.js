@@ -13,7 +13,13 @@
   var Lzones=laag('zones','Zones and areas','Zones en gebieden',true),Lst=laag('steden','Towns','Steden',true),Lvuur=laag('kampvuur','Campfires','Kampvuren',true),
     Luit=laag('uitkijk','Viewpoints','Uitkijkpunten',true),Lreis=laag('reizen','Airships, portals, lifts','Luchtschepen, portalen, liften',true),
     Lbaas=laag('bazen','Bosses','Bazen',true),Lquest=laag('quests','Quest givers','Questgevers',false),Lkar=laag('karavaan','Caravan (live)','Karavaan (live)',true),
-    Lspel=laag('spelers','Show players (live)','Spelers tonen (live)',true);
+    Lspel=laag('spelers','Show players (live)','Spelers tonen (live)',true),
+    Lgeheim=laag('geheimen','Show secrets (spoilers!)','Geheimen tonen (spoilers!)',false);
+  // U-SITE round 3: every secret with its spot, OFF by default and never in the search (pin() would add it to the search list)
+  (D.geheimpunten||[]).forEach(function(g){var m=L.marker(ll(g.pos[0],g.pos[2]),{icon:L.divIcon({className:'',html:'<span class="vr-pin geheim">?</span>',iconSize:[20,20],iconAnchor:[10,10]})});
+    m.bindPopup('<h4>'+VR.esc(g.naam)+'</h4><div>'+VR.esc(g.beloning||'')+'</div><div class="muted" style="font:12px var(--mono)">x '+g.pos[0]+' &middot; y '+g.pos[1]+' &middot; z '+g.pos[2]+'</div><a href="'+VR.root+'geheimen/index.html#'+g.id+'">'+VR.t('On the secrets page','Op de geheimenpagina')+'</a>');
+    m._vrZone=zoneNr(g.zone);m.addTo(Lgeheim);});
+  if(new URLSearchParams(location.search).get('geheim')==='1')Lgeheim.addTo(map);
   function pin(soort,teken,x,z,titel,html,zone,id){var m=L.marker(ll(x,z),{icon:L.divIcon({className:'',html:'<span class="vr-pin '+soort+'">'+teken+'</span>',iconSize:[22,22],iconAnchor:[11,11]}),title:titel,keyboard:true});
     m.bindPopup('<h4>'+VR.esc(titel)+'</h4>'+(html||'')+'<div class="muted" style="font:12px var(--mono)">x '+x+' &middot; z '+z+'</div>');m._vrZone=zoneNr(zone);m._vrId=id;alle.push({id:id,naam:titel,m:m,zone:m._vrZone,soort:soort});return m;}
   // areas: outlines + level labels
@@ -29,9 +35,9 @@
     alle.push({id:g.id,naam:g.naam,m:lab,zone:zn,soort:'gebied',ll:ll(c[0],c[1])});});
   D.zones.forEach(function(z){if(!z.mid)return;var lab=L.marker(ll(z.mid[0],z.mid[1]),{icon:L.divIcon({className:'vr-label zone',html:VR.esc(z.naam)+'<span class="lvr">lv '+z.lv[0]+'-'+z.lv[1]+'</span>',iconSize:null}),interactive:false});lab._vrZone=z.nr;lab._vrMax=-2;lab.addTo(Lzones);});
   D.steden.forEach(function(s){pin('stad','&#9873;',s.pos[0],s.pos[2],s.naam,'<a href="'+VR.root+s.url+'">'+T('Zone page','Zonepagina')+'</a>',s.zone,s.id).addTo(Lst);});
-  var tekens={kampvuur:'&#128293;',uitkijk:'&#128065;',luchtschip:'&#9992;',portaal:'&#10022;',kerker:'&#9876;',gondel:'&#8597;',lift:'&#8597;'};
-  D.punten.forEach(function(p){var L2=p.soort==='kampvuur'?Lvuur:p.soort==='uitkijk'?Luit:p.soort==='kerker'?Lbaas:Lreis;
-    var m=pin(p.soort,tekens[p.soort]||'&#8226;',p.pos[0],p.pos[2],p.naam,'',p.zone,p.id);m._vrMin=p.soort==='kerker'?-2:-0.5;m.addTo(L2);});
+  var tekens={kampvuur:'&#128293;',uitkijk:'&#128065;',luchtschip:'&#9992;',portaal:'&#10022;',kerker:'&#9876;',raid:'&#9733;',gondel:'&#8597;',lift:'&#8597;'};
+  D.punten.forEach(function(p){var L2=p.soort==='kampvuur'?Lvuur:p.soort==='uitkijk'?Luit:(p.soort==='kerker'||p.soort==='raid')?Lbaas:Lreis;
+    var m=pin(p.soort,tekens[p.soort]||'&#8226;',p.pos[0],p.pos[2],p.naam,'',p.zone,p.id);m._vrMin=(p.soort==='kerker'||p.soort==='raid')?-2:-0.5;if(p.soort==='raid')m.bindPopup('<h4>'+VR.esc(p.naam)+'</h4><a href="'+VR.root+'raid/index.html">'+VR.t('Raid page','Raidpagina')+'</a>');m.addTo(L2);});
   D.bazen.forEach(function(b){if(!b.pos)return;var m=pin('baas','&#9760;',b.pos[0],b.pos[2],b.naam,'<span class="badge lv">'+VR.esc(b.soort)+'</span> '+T('Respawn ','Komt terug na ')+VR.duur(b.respawn_s)+
     '<div data-baas="'+b.arena+'"></div><a href="'+VR.root+b.url+'">'+T('Boss page','Bazenpagina')+'</a>',b.zone,'baas-'+b.id);m._vrMin=-2;m.addTo(Lbaas);});
   D.questgevers.forEach(function(q){var m=pin(q.hoofd?'quest':'questzij',q.hoofd?'!':'?',q.pos[0],q.pos[2],q.naam,q.quests.map(function(x){return '<a href="'+VR.root+x.url+'">'+VR.esc(x.titel)+'</a>';}).join('<br>'),q.zone,'npc-'+q.id);m._vrMin=-0.5;m.addTo(Lquest);});
@@ -82,7 +88,7 @@
           m.bindPopup('<h4>'+VR.t('Airship in flight','Luchtschip onderweg')+'</h4>'+(s.naar?VR.t('to ','naar ')+VR.esc(s.naar):''));m.addTo(Lspel);schipM[s.id]=m;}else{glij(m,to);}});
       Object.keys(schipM).forEach(function(id){if(!sz[id]){Lspel.removeLayer(schipM[id]);delete schipM[id];}});
       if(pnote){var n=(P.spelers||[]).length,st=(P.status||[]).length;
-        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon or house)',' (+'+st+' in een kerker of huisje)'):''):VR.t('No players online','Geen spelers online');}
+        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):VR.t('No players online','Geen spelers online');}
       setTimeout(zoneFilter,30);},function(){if(pnote)pnote.textContent=VR.t('No players online','Geen spelers online');});}
   posities();setInterval(posities,10000);
 })();

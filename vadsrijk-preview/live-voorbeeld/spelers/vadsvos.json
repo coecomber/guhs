@@ -1,79 +1,88 @@
 {
  "naam": "Vadsvos",
  "uuid": "",
- "klasse": "pluisjager",
- "titel": "vadsrijk.klassen.titel.knuffelridder.1",
- "gezien": "2026-10-29",
- "lv": 36,
- "opgevrolijkt": 50,
- "boek_totaal": 29,
- "huisdieren": 2,
+ "klasse": "knuffelridder",
+ "titel": "vadsrijk.klassen.titel.vadsmagier.1",
+ "gezien": "2026-11-01",
+ "lv": 35,
+ "opgevrolijkt": 152,
+ "boek_totaal": 23,
+ "huisdieren": 0,
  "huisdieren_max": 6,
  "rijdieren": 4,
  "rijdieren_max": 5,
- "bazen_totaal": 69,
+ "bazen_totaal": 53,
  "klassen": {
-  "knuffelridder": 31,
+  "knuffelridder": 27,
   "pluisjager": 31,
-  "vadsmagier": 27
+  "vadsmagier": 35
  },
  "boek": {
-  "zone1": 53,
-  "zone2": 42,
-  "zone3": 32,
+  "zone1": 51,
+  "zone2": 39,
+  "zone3": 22,
   "zone4": 13,
-  "zone5": 9
+  "zone5": 11,
+  "zone6": 3
  },
  "bazen": {
-  "bazen:koning_klodder": 4,
-  "z2bazen:galmwolf": 3,
-  "z2bazen:spiegelzucht": 9,
-  "z3bazen:kruinroofvogel": 9,
-  "z3bazen:taleggio": 8,
-  "z3bazen:brokkel": 1,
-  "z3bazen:roquefort": 1,
-  "z3bazen:piepvel": 2,
-  "z3bazen:nestwachter": 9,
-  "z3bazen:bleu": 1,
-  "z4bazen:zeeslurf": 9,
-  "z4bazen:vliegervanger": 5,
-  "z5wezens:gorgonzola": 6,
-  "z5wezens:donderbuik": 2
+  "bazen:koning_klodder": 2,
+  "bazen:opperzwam": 1,
+  "z2bazen:galmwolf": 5,
+  "z2bazen:spiegelzucht": 2,
+  "z3bazen:taleggio": 4,
+  "z3bazen:roquefort": 6,
+  "z3bazen:wortelwurger": 4,
+  "z3bazen:nestwachter": 4,
+  "z3bazen:bleu": 5,
+  "z4bazen:zeeslurf": 7,
+  "z4bazen:vliegervanger": 9,
+  "z5wezens:donderbuik": 0,
+  "z5wezens:zilverstaart": 0,
+  "z6wezens:zoutkolos": 3,
+  "z6wezens:astrolabiumwachter": 1
  },
  "gear": {
   "wapen": {
-   "type": "stormboog",
+   "type": "z2baas_boorhamer",
    "zeldzaamheid": "gewoon",
-   "lv": 34,
-   "sterren": 0,
+   "lv": 33,
+   "sterren": 2,
+   "sokjes": 2
+  },
+  "hoofd": {
+   "type": "bloesemkap",
+   "zeldzaamheid": "episch",
+   "lv": 32,
+   "sterren": 2,
    "sokjes": 1
   },
   "borst": {
    "type": "bubbelvest",
-   "zeldzaamheid": "legendarisch",
-   "lv": 31,
-   "sterren": 1,
-   "sokjes": 1
+   "zeldzaamheid": "episch",
+   "lv": 35,
+   "sterren": 3,
+   "sokjes": 0
   },
   "benen": {
    "type": "kristalbeenstukken",
-   "zeldzaamheid": "gewoon",
-   "lv": 34,
-   "sterren": 3,
-   "sokjes": 2
-  },
-  "voeten": {
-   "type": "lampionslofjes",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 35,
+   "zeldzaamheid": "legendarisch",
+   "lv": 31,
    "sterren": 1,
    "sokjes": 0
   },
-  "ring": {
-   "type": "kristalring",
-   "zeldzaamheid": "zeldzaam",
+  "voeten": {
+   "type": "karavaanwachtlaarzen",
+   "zeldzaamheid": "guhddelijk",
    "lv": 32,
-   "sterren": 2,
+   "sterren": 1,
+   "sokjes": 1
+  },
+  "ring": {
+   "type": "parelring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 31,
+   "sterren": 1,
    "sokjes": 1
   }
  }

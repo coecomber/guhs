@@ -1,6 +1,6 @@
 {
- "tijd": "2026-11-06T15:42:23Z",
- "dagreset": "2026-11-06T22:54:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
+ "dagreset": "2026-11-08T22:23:56Z",
  "weekzegel": "vadsrijk.z3bazen.zegel.haastig",
  "contracten": [
   "vadsrijk.z3.systemen.contract.de_harsreus",
@@ -134,6 +134,46 @@
    "staat": "verslagen",
    "respawn_s": 1200,
    "zone": 5
+  },
+  {
+   "arena": "z6wezens:wormelien",
+   "titel": "",
+   "terug_over_s": 179,
+   "staat": "verslagen",
+   "respawn_s": 1200,
+   "zone": 6
+  },
+  {
+   "arena": "z6wezens:zoutkolos",
+   "titel": "",
+   "terug_over_s": 974,
+   "staat": "verslagen",
+   "respawn_s": 1200,
+   "zone": 6
+  },
+  {
+   "arena": "z6wezens:astrolabiumwachter",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 6
+  },
+  {
+   "arena": "z6wezens:glimmertje",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 6
+  },
+  {
+   "arena": "z6wezens:sterrenguh",
+   "titel": "",
+   "terug_over_s": 0,
+   "staat": "wacht",
+   "respawn_s": 300,
+   "zone": 6
   }
  ],
  "karavaan": {

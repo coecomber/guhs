@@ -1,76 +1,76 @@
 {
  "lijst": "opgevrolijkt",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Knuffelkoning",
-   "waarde": 754
+   "naam": "Juiced",
+   "waarde": 1833
   },
   {
    "plek": 2,
-   "naam": "Juiced",
-   "waarde": 630
+   "naam": "Lieke",
+   "waarde": 1695
   },
   {
    "plek": 3,
-   "naam": "Njeggie",
-   "waarde": 520
+   "naam": "Knuffelkoning",
+   "waarde": 762
   },
   {
    "plek": 4,
-   "naam": "Zwamzoetje",
-   "waarde": 435
+   "naam": "Kaasknabbel",
+   "waarde": 410
   },
   {
    "plek": 5,
-   "naam": "PluisPiet",
-   "waarde": 413
+   "naam": "Pluimpje",
+   "waarde": 239
   },
   {
    "plek": 6,
    "naam": "Wolwinter",
-   "waarde": 317
+   "waarde": 222
   },
   {
    "plek": 7,
-   "naam": "MikaMepper",
-   "waarde": 256
+   "naam": "Njeggie",
+   "waarde": 214
   },
   {
    "plek": 8,
-   "naam": "Lieke",
-   "waarde": 235
+   "naam": "Honingbeer",
+   "waarde": 205
   },
   {
    "plek": 9,
    "naam": "Klodderkid",
-   "waarde": 229
+   "waarde": 183
   },
   {
    "plek": 10,
-   "naam": "Kaasknabbel",
-   "waarde": 177
+   "naam": "Sjokkel",
+   "waarde": 157
   },
   {
    "plek": 11,
-   "naam": "Pluimpje",
-   "waarde": 151
+   "naam": "Vadsvos",
+   "waarde": 152
   },
   {
    "plek": 12,
-   "naam": "Vadsvos",
-   "waarde": 50
+   "naam": "Zwamzoetje",
+   "waarde": 148
   },
   {
    "plek": 13,
-   "naam": "Sjokkel",
-   "waarde": 25
+   "naam": "MikaMepper",
+   "waarde": 106
   },
   {
    "plek": 14,
-   "naam": "Honingbeer",
-   "waarde": 15
+   "naam": "PluisPiet",
+   "waarde": 21
   }
  ]
 }

@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_imkeren",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "MikaMepper",
+   "naam": "Njeggie",
+   "waarde": 95,
+   "xp": 114000
+  },
+  {
+   "plek": 2,
+   "naam": "Honingbeer",
    "waarde": 78,
    "xp": 93600
   },
   {
-   "plek": 2,
-   "naam": "Lieke",
-   "waarde": 70,
-   "xp": 84000
-  },
-  {
    "plek": 3,
-   "naam": "Juiced",
-   "waarde": 68,
-   "xp": 81600
+   "naam": "Kaasknabbel",
+   "waarde": 78,
+   "xp": 93600
   },
   {
    "plek": 4,
-   "naam": "Vadsvos",
-   "waarde": 68,
-   "xp": 81600
+   "naam": "Pluimpje",
+   "waarde": 74,
+   "xp": 88800
   },
   {
    "plek": 5,
-   "naam": "Njeggie",
-   "waarde": 61,
-   "xp": 73200
+   "naam": "PluisPiet",
+   "waarde": 69,
+   "xp": 82800
   },
   {
    "plek": 6,
-   "naam": "Zwamzoetje",
-   "waarde": 61,
-   "xp": 73200
+   "naam": "Lieke",
+   "waarde": 65,
+   "xp": 78000
   },
   {
    "plek": 7,
-   "naam": "Honingbeer",
-   "waarde": 49,
-   "xp": 58800
+   "naam": "Juiced",
+   "waarde": 62,
+   "xp": 74400
   },
   {
    "plek": 8,
-   "naam": "PluisPiet",
-   "waarde": 47,
-   "xp": 56400
+   "naam": "Wolwinter",
+   "waarde": 51,
+   "xp": 61200
   },
   {
    "plek": 9,
-   "naam": "Klodderkid",
-   "waarde": 45,
-   "xp": 54000
+   "naam": "Sjokkel",
+   "waarde": 48,
+   "xp": 57600
   },
   {
    "plek": 10,
-   "naam": "Pluimpje",
-   "waarde": 42,
-   "xp": 50400
+   "naam": "Klodderkid",
+   "waarde": 34,
+   "xp": 40800
   },
   {
    "plek": 11,
-   "naam": "Sjokkel",
-   "waarde": 33,
-   "xp": 39600
+   "naam": "Vadsvos",
+   "waarde": 11,
+   "xp": 13200
   },
   {
    "plek": 12,
-   "naam": "Kaasknabbel",
-   "waarde": 31,
-   "xp": 37200
+   "naam": "Knuffelkoning",
+   "waarde": 8,
+   "xp": 9600
   },
   {
    "plek": 13,
-   "naam": "Wolwinter",
-   "waarde": 28,
-   "xp": 33600
+   "naam": "MikaMepper",
+   "waarde": 4,
+   "xp": 4800
   },
   {
    "plek": 14,
-   "naam": "Knuffelkoning",
-   "waarde": 14,
-   "xp": 16800
+   "naam": "Zwamzoetje",
+   "waarde": 3,
+   "xp": 3600
   }
  ]
 }

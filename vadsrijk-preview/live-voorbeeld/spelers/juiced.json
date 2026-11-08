@@ -1,70 +1,88 @@
 {
  "naam": "Juiced",
  "uuid": "",
- "klasse": "pluisjager",
- "titel": "vadsrijk.klassen.titel.vadsmagier.1",
- "gezien": "2026-10-29",
+ "klasse": "knuffelridder",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-11-04",
  "lv": 45,
- "opgevrolijkt": 630,
- "boek_totaal": 48,
+ "opgevrolijkt": 1833,
+ "boek_totaal": 44,
  "huisdieren": 1,
  "huisdieren_max": 6,
- "rijdieren": 1,
+ "rijdieren": 4,
  "rijdieren_max": 5,
- "bazen_totaal": 82,
+ "bazen_totaal": 80,
  "klassen": {
-  "knuffelridder": 43,
-  "pluisjager": 43,
+  "knuffelridder": 42,
+  "pluisjager": 34,
   "vadsmagier": 40
  },
  "boek": {
-  "zone1": 68,
-  "zone2": 57,
+  "zone1": 66,
+  "zone2": 56,
   "zone3": 45,
-  "zone4": 43,
-  "zone5": 28
+  "zone4": 38,
+  "zone5": 39,
+  "zone6": 20
  },
  "bazen": {
-  "z2bazen:galmwolf": 1,
-  "z2bazen:spiegelzucht": 9,
-  "z3bazen:taleggio": 6,
-  "z3bazen:brokkel": 8,
-  "z3bazen:roquefort": 3,
-  "z3bazen:wortelwurger": 9,
-  "z3bazen:nestwachter": 6,
-  "z3bazen:vahoegnir": 9,
-  "z4bazen:zeeslurf": 9,
-  "z4bazen:vliegervanger": 8,
-  "z5wezens:donderbuik": 7,
-  "z5wezens:zilverstaart": 7
+  "bazen:opperzwam": 9,
+  "z2bazen:galmwolf": 9,
+  "z2bazen:spiegelzucht": 8,
+  "z3bazen:taleggio": 7,
+  "z3bazen:brokkel": 7,
+  "z3bazen:piepvel": 5,
+  "z3bazen:nestwachter": 3,
+  "z4bazen:zeeslurf": 2,
+  "z5wezens:gorgonzola": 4,
+  "z5wezens:donderbuik": 9,
+  "z5wezens:zilverstaart": 0,
+  "z6wezens:wormelien": 3,
+  "z6wezens:zoutkolos": 3,
+  "z6wezens:glimmertje": 8,
+  "z6wezens:sterrenguh": 3
  },
  "gear": {
-  "hoofd": {
-   "type": "sneeuwmuts",
-   "zeldzaamheid": "guhddelijk",
-   "lv": 42,
-   "sterren": 2,
+  "wapen": {
+   "type": "knuffelknots",
+   "zeldzaamheid": "episch",
+   "lv": 41,
+   "sterren": 0,
    "sokjes": 0
   },
-  "borst": {
-   "type": "z5baas_regenjasje",
-   "zeldzaamheid": "ongewoon",
-   "lv": 45,
-   "sterren": 2,
-   "sokjes": 2
-  },
-  "benen": {
-   "type": "schelpenbroek",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 42,
-   "sterren": 7,
-   "sokjes": 2
-  },
-  "voeten": {
-   "type": "klodderstuiters",
+  "hoofd": {
+   "type": "duinwandelaarstulband",
    "zeldzaamheid": "zeldzaam",
    "lv": 44,
+   "sterren": 1,
+   "sokjes": 2
+  },
+  "borst": {
+   "type": "z3baas_kruinveren",
+   "zeldzaamheid": "legendarisch",
+   "lv": 41,
+   "sterren": 7,
+   "sokjes": 1
+  },
+  "benen": {
+   "type": "z6raid_sterrenzijde_pofbroek",
+   "zeldzaamheid": "episch",
+   "lv": 44,
+   "sterren": 4,
+   "sokjes": 1
+  },
+  "voeten": {
+   "type": "sterrenwachtlaarzen",
+   "zeldzaamheid": "legendarisch",
+   "lv": 40,
    "sterren": 0,
+   "sokjes": 2
+  },
+  "ring": {
+   "type": "mw_t1_ring",
+   "zeldzaamheid": "legendarisch",
+   "lv": 41,
+   "sterren": 6,
    "sokjes": 0
   }
  }

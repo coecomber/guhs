@@ -1,26 +1,26 @@
 {
- "tijd": 1793979743000,
+ "tijd": 1794150716000,
  "spelers": [
   {
    "naam": "Lieke",
-   "x": 104,
-   "z": 449,
-   "klasse": "pluisjager",
+   "x": 102,
+   "z": 457,
+   "klasse": "vadsmagier",
    "level": 50,
    "zone": "zone1"
   },
   {
    "naam": "Juiced",
-   "x": -298,
-   "z": 343,
-   "klasse": "pluisjager",
+   "x": -301,
+   "z": 352,
+   "klasse": "knuffelridder",
    "level": 45,
    "zone": "zone1"
   },
   {
    "naam": "PluisPiet",
-   "x": 843,
-   "z": -912,
+   "x": 851,
+   "z": -913,
    "klasse": "vadsmagier",
    "level": 41,
    "zone": "zone2"

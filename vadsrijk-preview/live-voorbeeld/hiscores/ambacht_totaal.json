@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_totaal",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Lieke",
-   "waarde": 759,
-   "xp": 910800
+   "naam": "Kaasknabbel",
+   "waarde": 866,
+   "xp": 1039200
   },
   {
    "plek": 2,
-   "naam": "Pluimpje",
-   "waarde": 691,
-   "xp": 829200
+   "naam": "PluisPiet",
+   "waarde": 812,
+   "xp": 974400
   },
   {
    "plek": 3,
-   "naam": "PluisPiet",
-   "waarde": 624,
-   "xp": 748800
+   "naam": "Zwamzoetje",
+   "waarde": 761,
+   "xp": 913200
   },
   {
    "plek": 4,
-   "naam": "Njeggie",
-   "waarde": 568,
-   "xp": 681600
+   "naam": "MikaMepper",
+   "waarde": 734,
+   "xp": 880800
   },
   {
    "plek": 5,
-   "naam": "Knuffelkoning",
-   "waarde": 457,
-   "xp": 548400
+   "naam": "Lieke",
+   "waarde": 658,
+   "xp": 789600
   },
   {
    "plek": 6,
    "naam": "Honingbeer",
-   "waarde": 424,
-   "xp": 508800
+   "waarde": 648,
+   "xp": 777600
   },
   {
    "plek": 7,
-   "naam": "Kaasknabbel",
-   "waarde": 328,
-   "xp": 393600
+   "naam": "Wolwinter",
+   "waarde": 611,
+   "xp": 733200
   },
   {
    "plek": 8,
-   "naam": "Wolwinter",
-   "waarde": 284,
-   "xp": 340800
+   "naam": "Klodderkid",
+   "waarde": 450,
+   "xp": 540000
   },
   {
    "plek": 9,
-   "naam": "Klodderkid",
-   "waarde": 173,
-   "xp": 207600
+   "naam": "Vadsvos",
+   "waarde": 437,
+   "xp": 524400
   },
   {
    "plek": 10,
-   "naam": "Sjokkel",
-   "waarde": 162,
-   "xp": 194400
+   "naam": "Juiced",
+   "waarde": 427,
+   "xp": 512400
   },
   {
    "plek": 11,
-   "naam": "Juiced",
-   "waarde": 122,
-   "xp": 146400
+   "naam": "Knuffelkoning",
+   "waarde": 329,
+   "xp": 394800
   },
   {
    "plek": 12,
-   "naam": "Zwamzoetje",
-   "waarde": 89,
-   "xp": 106800
+   "naam": "Njeggie",
+   "waarde": 294,
+   "xp": 352800
   },
   {
    "plek": 13,
-   "naam": "Vadsvos",
-   "waarde": 57,
-   "xp": 68400
+   "naam": "Pluimpje",
+   "waarde": 150,
+   "xp": 180000
   },
   {
    "plek": 14,
-   "naam": "MikaMepper",
-   "waarde": 27,
-   "xp": 32400
+   "naam": "Sjokkel",
+   "waarde": 49,
+   "xp": 58800
   }
  ]
 }

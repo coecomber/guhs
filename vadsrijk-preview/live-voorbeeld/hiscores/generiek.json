@@ -1,90 +1,90 @@
 {
  "lijst": "generiek",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
    "naam": "Lieke",
    "waarde": 50,
-   "xp": 454684
+   "xp": 457378
   },
   {
    "plek": 2,
    "naam": "Juiced",
    "waarde": 45,
-   "xp": 406236
+   "xp": 408176
   },
   {
    "plek": 3,
-   "naam": "Knuffelkoning",
+   "naam": "PluisPiet",
    "waarde": 41,
-   "xp": 373341
+   "xp": 372647
   },
   {
    "plek": 4,
-   "naam": "PluisPiet",
-   "waarde": 41,
-   "xp": 371680
+   "naam": "Knuffelkoning",
+   "waarde": 38,
+   "xp": 346794
   },
   {
    "plek": 5,
    "naam": "Vadsvos",
-   "waarde": 36,
-   "xp": 326727
+   "waarde": 35,
+   "xp": 318973
   },
   {
    "plek": 6,
    "naam": "Kaasknabbel",
-   "waarde": 33,
-   "xp": 301423
+   "waarde": 35,
+   "xp": 317067
   },
   {
    "plek": 7,
    "naam": "Njeggie",
-   "waarde": 30,
-   "xp": 271167
+   "waarde": 29,
+   "xp": 268270
   },
   {
    "plek": 8,
    "naam": "Zwamzoetje",
    "waarde": 29,
-   "xp": 268676
+   "xp": 266039
   },
   {
    "plek": 9,
    "naam": "Klodderkid",
-   "waarde": 26,
-   "xp": 236287
+   "waarde": 23,
+   "xp": 209650
   },
   {
    "plek": 10,
    "naam": "Honingbeer",
-   "waarde": 22,
-   "xp": 201738
+   "waarde": 21,
+   "xp": 196207
   },
   {
    "plek": 11,
-   "naam": "Wolwinter",
-   "waarde": 17,
-   "xp": 159536
+   "naam": "Sjokkel",
+   "waarde": 18,
+   "xp": 163435
   },
   {
    "plek": 12,
-   "naam": "Sjokkel",
-   "waarde": 17,
-   "xp": 154207
+   "naam": "MikaMepper",
+   "waarde": 14,
+   "xp": 127661
   },
   {
    "plek": 13,
-   "naam": "MikaMepper",
-   "waarde": 13,
-   "xp": 119242
+   "naam": "Wolwinter",
+   "waarde": 14,
+   "xp": 127656
   },
   {
    "plek": 14,
    "naam": "Pluimpje",
    "waarde": 11,
-   "xp": 101928
+   "xp": 103683
   }
  ]
 }

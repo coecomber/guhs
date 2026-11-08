@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_smeden",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Knuffelkoning",
-   "waarde": 94,
-   "xp": 112800
+   "naam": "Klodderkid",
+   "waarde": 97,
+   "xp": 116400
   },
   {
    "plek": 2,
-   "naam": "Lieke",
-   "waarde": 81,
-   "xp": 97200
+   "naam": "Juiced",
+   "waarde": 95,
+   "xp": 114000
   },
   {
    "plek": 3,
-   "naam": "Vadsvos",
-   "waarde": 81,
-   "xp": 97200
+   "naam": "Honingbeer",
+   "waarde": 89,
+   "xp": 106800
   },
   {
    "plek": 4,
-   "naam": "Sjokkel",
-   "waarde": 79,
-   "xp": 94800
+   "naam": "Lieke",
+   "waarde": 86,
+   "xp": 103200
   },
   {
    "plek": 5,
-   "naam": "Zwamzoetje",
-   "waarde": 71,
-   "xp": 85200
+   "naam": "Njeggie",
+   "waarde": 72,
+   "xp": 86400
   },
   {
    "plek": 6,
-   "naam": "Wolwinter",
-   "waarde": 70,
-   "xp": 84000
+   "naam": "Vadsvos",
+   "waarde": 69,
+   "xp": 82800
   },
   {
    "plek": 7,
-   "naam": "PluisPiet",
-   "waarde": 52,
-   "xp": 62400
+   "naam": "Sjokkel",
+   "waarde": 66,
+   "xp": 79200
   },
   {
    "plek": 8,
    "naam": "Pluimpje",
-   "waarde": 49,
-   "xp": 58800
+   "waarde": 65,
+   "xp": 78000
   },
   {
    "plek": 9,
-   "naam": "Honingbeer",
-   "waarde": 42,
-   "xp": 50400
+   "naam": "Zwamzoetje",
+   "waarde": 63,
+   "xp": 75600
   },
   {
    "plek": 10,
-   "naam": "Juiced",
-   "waarde": 30,
-   "xp": 36000
+   "naam": "Kaasknabbel",
+   "waarde": 62,
+   "xp": 74400
   },
   {
    "plek": 11,
-   "naam": "Klodderkid",
-   "waarde": 24,
-   "xp": 28800
+   "naam": "PluisPiet",
+   "waarde": 58,
+   "xp": 69600
   },
   {
    "plek": 12,
-   "naam": "Kaasknabbel",
-   "waarde": 16,
-   "xp": 19200
+   "naam": "Knuffelkoning",
+   "waarde": 47,
+   "xp": 56400
   },
   {
    "plek": 13,
-   "naam": "Njeggie",
-   "waarde": 13,
-   "xp": 15600
+   "naam": "MikaMepper",
+   "waarde": 40,
+   "xp": 48000
   },
   {
    "plek": 14,
-   "naam": "MikaMepper",
-   "waarde": 2,
-   "xp": 2400
+   "naam": "Wolwinter",
+   "waarde": 16,
+   "xp": 19200
   }
  ]
 }

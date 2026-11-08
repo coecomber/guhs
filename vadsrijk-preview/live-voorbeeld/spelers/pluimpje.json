@@ -1,77 +1,73 @@
 {
  "naam": "Pluimpje",
  "uuid": "",
- "klasse": "knuffelridder",
- "titel": "vadsrijk.klassen.titel.pluisjager.1",
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
  "gezien": "2026-11-01",
  "lv": 11,
- "opgevrolijkt": 151,
+ "opgevrolijkt": 239,
  "boek_totaal": 0,
  "huisdieren": 6,
  "huisdieren_max": 6,
- "rijdieren": 3,
+ "rijdieren": 4,
  "rijdieren_max": 5,
- "bazen_totaal": 51,
+ "bazen_totaal": 58,
  "klassen": {
-  "knuffelridder": 1,
-  "pluisjager": 5,
-  "vadsmagier": 2
+  "knuffelridder": 6,
+  "pluisjager": 1,
+  "vadsmagier": 9
  },
  "boek": {
   "zone1": 0,
   "zone2": 0,
   "zone3": 0,
   "zone4": 0,
-  "zone5": 0
+  "zone5": 0,
+  "zone6": 0
  },
  "bazen": {
-  "bazen:koning_klodder": 3,
-  "bazen:opperzwam": 2,
-  "z2bazen:galmwolf": 4,
-  "z3bazen:kruinroofvogel": 5,
-  "z3bazen:taleggio": 3,
-  "z3bazen:brokkel": 8,
-  "z3bazen:roquefort": 6,
-  "z3bazen:piepvel": 3,
-  "z3bazen:nestwachter": 3,
-  "z3bazen:bleu": 0,
-  "z4bazen:zeeslurf": 7,
-  "z5wezens:donderbuik": 7
+  "bazen:opperzwam": 9,
+  "z2bazen:spiegelzucht": 4,
+  "z3bazen:kruinroofvogel": 4,
+  "z3bazen:brokkel": 5,
+  "z3bazen:roquefort": 9,
+  "z3bazen:wortelwurger": 1,
+  "z3bazen:bleu": 8,
+  "z3bazen:vahoegnir": 6,
+  "z4bazen:zeeslurf": 0,
+  "z5wezens:zilverstaart": 0,
+  "z6wezens:zoutkolos": 1,
+  "z6wezens:astrolabiumwachter": 0,
+  "z6wezens:glimmertje": 6,
+  "z6wezens:sterrenguh": 5
  },
  "gear": {
-  "wapen": {
-   "type": "z5droom_sterrenboog",
-   "zeldzaamheid": "ongewoon",
-   "lv": 7,
-   "sterren": 3,
+  "hoofd": {
+   "type": "mw_t1_helm",
+   "zeldzaamheid": "gewoon",
+   "lv": 11,
+   "sterren": 2,
    "sokjes": 1
   },
   "borst": {
-   "type": "mw_t3_borstplaat",
-   "zeldzaamheid": "gewoon",
-   "lv": 7,
+   "type": "zijdegewaad",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 11,
    "sterren": 0,
-   "sokjes": 2
+   "sokjes": 1
   },
   "benen": {
-   "type": "bloesembroek",
-   "zeldzaamheid": "gewoon",
-   "lv": 6,
-   "sterren": 1,
-   "sokjes": 2
-  },
-  "voeten": {
-   "type": "kristalschoentjes",
+   "type": "klodderbroek",
    "zeldzaamheid": "ongewoon",
    "lv": 9,
    "sterren": 0,
    "sokjes": 0
   },
   "ring": {
-   "type": "kristalring",
-   "zeldzaamheid": "ongewoon",
+   "type": "roze_ring",
+   "zeldzaamheid": "zeldzaam",
    "lv": 10,
-   "sterren": 1,
+   "sterren": 0,
    "sokjes": 0
   }
  }

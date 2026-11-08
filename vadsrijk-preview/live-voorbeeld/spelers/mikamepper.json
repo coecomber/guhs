@@ -1,85 +1,89 @@
 {
  "naam": "MikaMepper",
  "uuid": "",
- "klasse": "knuffelridder",
- "titel": "vadsrijk.klassen.titel.pluisjager.1",
- "gezien": "2026-11-05",
- "lv": 13,
- "opgevrolijkt": 256,
- "boek_totaal": 1,
- "huisdieren": 1,
+ "klasse": "pluisjager",
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-11-03",
+ "lv": 14,
+ "opgevrolijkt": 106,
+ "boek_totaal": 0,
+ "huisdieren": 2,
  "huisdieren_max": 6,
  "rijdieren": 3,
  "rijdieren_max": 5,
- "bazen_totaal": 56,
+ "bazen_totaal": 69,
  "klassen": {
-  "knuffelridder": 3,
-  "pluisjager": 2,
-  "vadsmagier": 5
+  "knuffelridder": 11,
+  "pluisjager": 8,
+  "vadsmagier": 10
  },
  "boek": {
-  "zone1": 6,
+  "zone1": 4,
   "zone2": 0,
   "zone3": 0,
   "zone4": 0,
-  "zone5": 0
+  "zone5": 0,
+  "zone6": 0
  },
  "bazen": {
-  "bazen:koning_klodder": 8,
-  "bazen:opperzwam": 7,
-  "z2bazen:spiegelzucht": 1,
-  "z3bazen:kruinroofvogel": 0,
-  "z3bazen:taleggio": 4,
-  "z3bazen:brokkel": 6,
-  "z3bazen:piepvel": 7,
-  "z3bazen:bleu": 5,
-  "z3bazen:vahoegnir": 7,
-  "z4bazen:vliegervanger": 3,
-  "z5wezens:donderbuik": 2,
-  "z5wezens:zilverstaart": 6
+  "z2bazen:galmwolf": 2,
+  "z2bazen:spiegelzucht": 5,
+  "z3bazen:kruinroofvogel": 6,
+  "z3bazen:roquefort": 8,
+  "z3bazen:wortelwurger": 1,
+  "z3bazen:nestwachter": 0,
+  "z3bazen:bleu": 9,
+  "z3bazen:vahoegnir": 2,
+  "z4bazen:zeeslurf": 3,
+  "z4bazen:vliegervanger": 6,
+  "z5wezens:donderbuik": 8,
+  "z6wezens:wormelien": 8,
+  "z6wezens:zoutkolos": 0,
+  "z6wezens:astrolabiumwachter": 8,
+  "z6wezens:sterrenguh": 3
  },
  "gear": {
   "wapen": {
-   "type": "vlammenstaf",
+   "type": "z5baas_kleppenstaf",
    "zeldzaamheid": "gewoon",
-   "lv": 9,
-   "sterren": 3,
-   "sokjes": 1
+   "lv": 14,
+   "sterren": 1,
+   "sokjes": 0
   },
   "hoofd": {
-   "type": "zwamhoed",
-   "zeldzaamheid": "ongewoon",
-   "lv": 11,
+   "type": "mw_t4_helm",
+   "zeldzaamheid": "gewoon",
+   "lv": 10,
    "sterren": 1,
    "sokjes": 1
   },
   "borst": {
-   "type": "baas_wortelwambuis",
-   "zeldzaamheid": "gewoon",
-   "lv": 10,
-   "sterren": 3,
-   "sokjes": 1
-  },
-  "benen": {
-   "type": "zwambroek",
+   "type": "z3baas_kruinveren",
    "zeldzaamheid": "ongewoon",
-   "lv": 12,
+   "lv": 13,
    "sterren": 2,
-   "sokjes": 1
-  },
-  "voeten": {
-   "type": "baas_rookbomlaarzen",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 11,
-   "sterren": 1,
    "sokjes": 2
   },
-  "ring": {
-   "type": "honingring",
+  "benen": {
+   "type": "mw_t1_broek",
    "zeldzaamheid": "zeldzaam",
    "lv": 9,
    "sterren": 0,
    "sokjes": 0
+  },
+  "voeten": {
+   "type": "wortelstappers",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 10,
+   "sterren": 0,
+   "sokjes": 1
+  },
+  "ring": {
+   "type": "saffraanring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 10,
+   "sterren": 1,
+   "sokjes": 1
   }
  }
 }

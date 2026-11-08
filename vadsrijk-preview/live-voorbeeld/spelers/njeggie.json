@@ -3,80 +3,81 @@
  "uuid": "",
  "klasse": "knuffelridder",
  "titel": "vadsrijk.klassen.titel.pluisjager.1",
- "gezien": "2026-10-28",
- "lv": 30,
- "opgevrolijkt": 520,
- "boek_totaal": 20,
- "huisdieren": 3,
+ "gezien": "2026-11-08",
+ "lv": 29,
+ "opgevrolijkt": 214,
+ "boek_totaal": 14,
+ "huisdieren": 0,
  "huisdieren_max": 6,
- "rijdieren": 3,
+ "rijdieren": 1,
  "rijdieren_max": 5,
- "bazen_totaal": 50,
+ "bazen_totaal": 74,
  "klassen": {
-  "knuffelridder": 29,
-  "pluisjager": 22,
-  "vadsmagier": 25
+  "knuffelridder": 28,
+  "pluisjager": 27,
+  "vadsmagier": 21
  },
  "boek": {
-  "zone1": 39,
-  "zone2": 33,
-  "zone3": 21,
-  "zone4": 9,
-  "zone5": 0
+  "zone1": 43,
+  "zone2": 25,
+  "zone3": 12,
+  "zone4": 3,
+  "zone5": 2,
+  "zone6": 0
  },
  "bazen": {
-  "bazen:koning_klodder": 2,
+  "bazen:koning_klodder": 6,
+  "bazen:opperzwam": 8,
   "z2bazen:galmwolf": 6,
-  "z2bazen:spiegelzucht": 2,
-  "z3bazen:kruinroofvogel": 5,
-  "z3bazen:taleggio": 5,
+  "z2bazen:spiegelzucht": 6,
+  "z3bazen:kruinroofvogel": 8,
+  "z3bazen:taleggio": 3,
   "z3bazen:roquefort": 3,
-  "z3bazen:bleu": 9,
-  "z3bazen:vahoegnir": 7,
-  "z4bazen:zeeslurf": 7,
-  "z5wezens:donderbuik": 4
+  "z3bazen:wortelwurger": 2,
+  "z3bazen:nestwachter": 5,
+  "z3bazen:bleu": 5,
+  "z3bazen:vahoegnir": 5,
+  "z4bazen:vliegervanger": 3,
+  "z5wezens:gorgonzola": 2,
+  "z5wezens:donderbuik": 0,
+  "z6wezens:wormelien": 4,
+  "z6wezens:zoutkolos": 0,
+  "z6wezens:sterrenguh": 8
  },
  "gear": {
   "wapen": {
-   "type": "z5baas_moersleutel",
-   "zeldzaamheid": "ongewoon",
-   "lv": 28,
-   "sterren": 2,
-   "sokjes": 1
+   "type": "dadelpalmknots",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 29,
+   "sterren": 1,
+   "sokjes": 0
   },
   "hoofd": {
-   "type": "kristalkroon",
+   "type": "wolkwachthelm",
    "zeldzaamheid": "gewoon",
-   "lv": 26,
-   "sterren": 0,
-   "sokjes": 1
-  },
-  "borst": {
-   "type": "schelpenpantser",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 26,
-   "sterren": 0,
-   "sokjes": 1
-  },
-  "benen": {
-   "type": "lampionbroek",
-   "zeldzaamheid": "ongewoon",
-   "lv": 26,
+   "lv": 27,
    "sterren": 1,
    "sokjes": 1
   },
-  "voeten": {
-   "type": "mw_t1_schoentjes",
+  "borst": {
+   "type": "bloesemjak",
    "zeldzaamheid": "gewoon",
    "lv": 28,
    "sterren": 1,
    "sokjes": 2
   },
-  "ring": {
-   "type": "mw_t3_ring",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 28,
-   "sterren": 2,
+  "benen": {
+   "type": "steelbroek",
+   "zeldzaamheid": "gewoon",
+   "lv": 29,
+   "sterren": 3,
+   "sokjes": 2
+  },
+  "voeten": {
+   "type": "mw_t5_schoentjes",
+   "zeldzaamheid": "gewoon",
+   "lv": 24,
+   "sterren": 0,
    "sokjes": 0
   }
  }

@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_plukken",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Juiced",
-   "waarde": 93,
-   "xp": 111600
+   "naam": "Klodderkid",
+   "waarde": 94,
+   "xp": 112800
   },
   {
    "plek": 2,
-   "naam": "Lieke",
+   "naam": "Wolwinter",
    "waarde": 92,
    "xp": 110400
   },
   {
    "plek": 3,
-   "naam": "Pluimpje",
-   "waarde": 84,
-   "xp": 100800
+   "naam": "Honingbeer",
+   "waarde": 87,
+   "xp": 104400
   },
   {
    "plek": 4,
-   "naam": "Wolwinter",
+   "naam": "Njeggie",
    "waarde": 83,
    "xp": 99600
   },
   {
    "plek": 5,
    "naam": "Sjokkel",
-   "waarde": 81,
-   "xp": 97200
+   "waarde": 65,
+   "xp": 78000
   },
   {
    "plek": 6,
-   "naam": "Njeggie",
-   "waarde": 76,
-   "xp": 91200
+   "naam": "Knuffelkoning",
+   "waarde": 61,
+   "xp": 73200
   },
   {
    "plek": 7,
-   "naam": "Vadsvos",
-   "waarde": 69,
-   "xp": 82800
+   "naam": "Juiced",
+   "waarde": 52,
+   "xp": 62400
   },
   {
    "plek": 8,
-   "naam": "MikaMepper",
-   "waarde": 67,
-   "xp": 80400
+   "naam": "Vadsvos",
+   "waarde": 51,
+   "xp": 61200
   },
   {
    "plek": 9,
-   "naam": "PluisPiet",
-   "waarde": 58,
-   "xp": 69600
+   "naam": "Zwamzoetje",
+   "waarde": 50,
+   "xp": 60000
   },
   {
    "plek": 10,
-   "naam": "Honingbeer",
-   "waarde": 49,
-   "xp": 58800
+   "naam": "PluisPiet",
+   "waarde": 45,
+   "xp": 54000
   },
   {
    "plek": 11,
-   "naam": "Knuffelkoning",
-   "waarde": 35,
-   "xp": 42000
+   "naam": "Lieke",
+   "waarde": 41,
+   "xp": 49200
   },
   {
    "plek": 12,
-   "naam": "Klodderkid",
-   "waarde": 32,
-   "xp": 38400
+   "naam": "MikaMepper",
+   "waarde": 29,
+   "xp": 34800
   },
   {
    "plek": 13,
    "naam": "Kaasknabbel",
-   "waarde": 7,
-   "xp": 8400
+   "waarde": 25,
+   "xp": 30000
   },
   {
    "plek": 14,
-   "naam": "Zwamzoetje",
-   "waarde": 3,
-   "xp": 3600
+   "naam": "Pluimpje",
+   "waarde": 8,
+   "xp": 9600
   }
  ]
 }

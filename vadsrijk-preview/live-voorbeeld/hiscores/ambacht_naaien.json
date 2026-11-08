@@ -1,90 +1,90 @@
 {
  "lijst": "ambacht_naaien",
- "tijd": "2026-11-06T15:42:23Z",
+ "tijd": "2026-11-08T15:11:56Z",
  "rijen": [
   {
    "plek": 1,
-   "naam": "Juiced",
-   "waarde": 99,
-   "xp": 118800
+   "naam": "PluisPiet",
+   "waarde": 87,
+   "xp": 104400
   },
   {
    "plek": 2,
-   "naam": "Vadsvos",
-   "waarde": 90,
-   "xp": 108000
+   "naam": "MikaMepper",
+   "waarde": 85,
+   "xp": 102000
   },
   {
    "plek": 3,
-   "naam": "Knuffelkoning",
-   "waarde": 76,
-   "xp": 91200
+   "naam": "Kaasknabbel",
+   "waarde": 65,
+   "xp": 78000
   },
   {
    "plek": 4,
-   "naam": "Pluimpje",
-   "waarde": 61,
-   "xp": 73200
+   "naam": "Njeggie",
+   "waarde": 62,
+   "xp": 74400
   },
   {
    "plek": 5,
-   "naam": "Zwamzoetje",
-   "waarde": 59,
-   "xp": 70800
+   "naam": "Wolwinter",
+   "waarde": 62,
+   "xp": 74400
   },
   {
    "plek": 6,
-   "naam": "Njeggie",
-   "waarde": 50,
-   "xp": 60000
+   "naam": "Vadsvos",
+   "waarde": 60,
+   "xp": 72000
   },
   {
    "plek": 7,
-   "naam": "Honingbeer",
-   "waarde": 47,
-   "xp": 56400
+   "naam": "Klodderkid",
+   "waarde": 58,
+   "xp": 69600
   },
   {
    "plek": 8,
-   "naam": "Wolwinter",
-   "waarde": 42,
-   "xp": 50400
+   "naam": "Juiced",
+   "waarde": 43,
+   "xp": 51600
   },
   {
    "plek": 9,
-   "naam": "MikaMepper",
-   "waarde": 35,
-   "xp": 42000
+   "naam": "Knuffelkoning",
+   "waarde": 37,
+   "xp": 44400
   },
   {
    "plek": 10,
-   "naam": "PluisPiet",
-   "waarde": 33,
-   "xp": 39600
+   "naam": "Pluimpje",
+   "waarde": 37,
+   "xp": 44400
   },
   {
    "plek": 11,
-   "naam": "Klodderkid",
-   "waarde": 31,
-   "xp": 37200
-  },
-  {
-   "plek": 12,
-   "naam": "Sjokkel",
-   "waarde": 26,
-   "xp": 31200
-  },
-  {
-   "plek": 13,
-   "naam": "Kaasknabbel",
+   "naam": "Zwamzoetje",
    "waarde": 23,
    "xp": 27600
   },
   {
+   "plek": 12,
+   "naam": "Sjokkel",
+   "waarde": 13,
+   "xp": 15600
+  },
+  {
+   "plek": 13,
+   "naam": "Honingbeer",
+   "waarde": 12,
+   "xp": 14400
+  },
+  {
    "plek": 14,
    "naam": "Lieke",
-   "waarde": 16,
-   "xp": 19200
+   "waarde": 9,
+   "xp": 10800
   }
  ]
 }

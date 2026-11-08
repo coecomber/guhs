@@ -3,80 +3,84 @@
  "uuid": "",
  "klasse": "pluisjager",
  "titel": "vadsrijk.klassen.titel.knuffelridder.1",
- "gezien": "2026-10-30",
- "lv": 33,
- "opgevrolijkt": 177,
- "boek_totaal": 28,
+ "gezien": "2026-11-08",
+ "lv": 35,
+ "opgevrolijkt": 410,
+ "boek_totaal": 22,
  "huisdieren": 1,
  "huisdieren_max": 6,
- "rijdieren": 0,
+ "rijdieren": 3,
  "rijdieren_max": 5,
- "bazen_totaal": 47,
+ "bazen_totaal": 62,
  "klassen": {
   "knuffelridder": 27,
-  "pluisjager": 23,
-  "vadsmagier": 25
+  "pluisjager": 30,
+  "vadsmagier": 35
  },
  "boek": {
   "zone1": 52,
-  "zone2": 42,
-  "zone3": 27,
-  "zone4": 21,
-  "zone5": 0
+  "zone2": 37,
+  "zone3": 18,
+  "zone4": 17,
+  "zone5": 12,
+  "zone6": 0
  },
  "bazen": {
-  "bazen:koning_klodder": 5,
-  "z2bazen:galmwolf": 7,
-  "z2bazen:spiegelzucht": 9,
-  "z3bazen:taleggio": 0,
-  "z3bazen:brokkel": 0,
-  "z3bazen:piepvel": 3,
-  "z3bazen:wortelwurger": 1,
-  "z3bazen:vahoegnir": 2,
-  "z4bazen:zeeslurf": 9,
-  "z5wezens:gorgonzola": 5,
-  "z5wezens:zilverstaart": 6
+  "bazen:koning_klodder": 2,
+  "bazen:opperzwam": 1,
+  "z2bazen:galmwolf": 4,
+  "z3bazen:taleggio": 5,
+  "z3bazen:brokkel": 2,
+  "z3bazen:piepvel": 6,
+  "z3bazen:wortelwurger": 2,
+  "z3bazen:nestwachter": 5,
+  "z3bazen:bleu": 5,
+  "z4bazen:zeeslurf": 3,
+  "z5wezens:zilverstaart": 9,
+  "z6wezens:wormelien": 7,
+  "z6wezens:zoutkolos": 7,
+  "z6wezens:sterrenguh": 4
  },
  "gear": {
   "wapen": {
-   "type": "takkenknots",
-   "zeldzaamheid": "gewoon",
+   "type": "harpoenkruisboog",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 30,
+   "sterren": 3,
+   "sokjes": 1
+  },
+  "hoofd": {
+   "type": "mw_t1_helm",
+   "zeldzaamheid": "zeldzaam",
+   "lv": 32,
+   "sterren": 2,
+   "sokjes": 0
+  },
+  "borst": {
+   "type": "knaagvachtje",
+   "zeldzaamheid": "ongewoon",
    "lv": 30,
    "sterren": 0,
    "sokjes": 1
   },
-  "hoofd": {
-   "type": "baas_lichtzwamhelm",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 29,
-   "sterren": 1,
-   "sokjes": 0
-  },
-  "borst": {
-   "type": "mw_t1_borstplaat",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 30,
-   "sterren": 1,
-   "sokjes": 1
-  },
   "benen": {
-   "type": "boorbroek",
-   "zeldzaamheid": "gewoon",
-   "lv": 29,
+   "type": "sterrenwachtbroek",
+   "zeldzaamheid": "ongewoon",
+   "lv": 31,
    "sterren": 1,
    "sokjes": 1
   },
   "voeten": {
-   "type": "mw_t1_schoentjes",
-   "zeldzaamheid": "ongewoon",
+   "type": "duinwandelaarslaarzen",
+   "zeldzaamheid": "zeldzaam",
    "lv": 32,
-   "sterren": 0,
-   "sokjes": 2
+   "sterren": 1,
+   "sokjes": 1
   },
   "ring": {
-   "type": "wolkring",
-   "zeldzaamheid": "gewoon",
-   "lv": 33,
+   "type": "woestijnroosring",
+   "zeldzaamheid": "ongewoon",
+   "lv": 32,
    "sterren": 2,
    "sokjes": 2
   }

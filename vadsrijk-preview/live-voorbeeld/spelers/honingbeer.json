@@ -2,78 +2,81 @@
  "naam": "Honingbeer",
  "uuid": "",
  "klasse": "vadsmagier",
- "titel": "vadsrijk.klassen.titel.vadsmagier.1",
- "gezien": "2026-10-30",
- "lv": 22,
- "opgevrolijkt": 15,
+ "titel": "vadsrijk.klassen.titel.knuffelridder.1",
+ "gezien": "2026-11-01",
+ "lv": 21,
+ "opgevrolijkt": 205,
  "boek_totaal": 3,
- "huisdieren": 6,
+ "huisdieren": 4,
  "huisdieren_max": 6,
- "rijdieren": 1,
+ "rijdieren": 3,
  "rijdieren_max": 5,
- "bazen_totaal": 71,
+ "bazen_totaal": 84,
  "klassen": {
-  "knuffelridder": 20,
-  "pluisjager": 21,
-  "vadsmagier": 15
+  "knuffelridder": 12,
+  "pluisjager": 13,
+  "vadsmagier": 18
  },
  "boek": {
-  "zone1": 14,
-  "zone2": 4,
-  "zone3": 0,
+  "zone1": 9,
+  "zone2": 11,
+  "zone3": 3,
   "zone4": 0,
-  "zone5": 0
+  "zone5": 0,
+  "zone6": 0
  },
  "bazen": {
-  "bazen:koning_klodder": 7,
-  "z2bazen:spiegelzucht": 8,
-  "z3bazen:kruinroofvogel": 9,
-  "z3bazen:taleggio": 3,
+  "bazen:koning_klodder": 9,
+  "z3bazen:kruinroofvogel": 3,
+  "z3bazen:taleggio": 8,
+  "z3bazen:roquefort": 5,
   "z3bazen:piepvel": 8,
   "z3bazen:wortelwurger": 8,
-  "z3bazen:nestwachter": 3,
-  "z3bazen:bleu": 2,
-  "z3bazen:vahoegnir": 8,
-  "z4bazen:vliegervanger": 7,
-  "z5wezens:gorgonzola": 3,
-  "z5wezens:donderbuik": 5,
-  "z5wezens:zilverstaart": 0
+  "z3bazen:vahoegnir": 0,
+  "z4bazen:vliegervanger": 9,
+  "z5wezens:donderbuik": 1,
+  "z5wezens:zilverstaart": 6,
+  "z6wezens:wormelien": 5,
+  "z6wezens:zoutkolos": 4,
+  "z6wezens:astrolabiumwachter": 7,
+  "z6wezens:glimmertje": 6,
+  "z6wezens:sterrenguh": 5
  },
  "gear": {
   "wapen": {
-   "type": "takkenknots",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 22,
-   "sterren": 3,
-   "sokjes": 2
+   "type": "pluishamer",
+   "zeldzaamheid": "gewoon",
+   "lv": 20,
+   "sterren": 1,
+   "sokjes": 1
   },
   "hoofd": {
-   "type": "wolkwachthelm",
-   "zeldzaamheid": "ongewoon",
-   "lv": 17,
-   "sterren": 3,
+   "type": "pluishelm",
+   "zeldzaamheid": "gewoon",
+   "lv": 19,
+   "sterren": 1,
    "sokjes": 0
   },
   "borst": {
-   "type": "z4baas_zeekoeienhuid",
+   "type": "z2baas_ijspelsmantel",
    "zeldzaamheid": "ongewoon",
-   "lv": 17,
-   "sterren": 0,
-   "sokjes": 2
+   "lv": 20,
+   "sterren": 1,
+   "sokjes": 1
   },
   "voeten": {
-   "type": "mw_t1_schoentjes",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 17,
+   "type": "karavaanwachtlaarzen",
+   "zeldzaamheid": "ongewoon",
+   "lv": 19,
    "sterren": 3,
    "sokjes": 1
   },
   "ring": {
-   "type": "kristalring",
-   "zeldzaamheid": "zeldzaam",
-   "lv": 17,
-   "sterren": 1,
-   "sokjes": 2
+   "type": "mw_t4_ring",
+   "zeldzaamheid": "gewoon",
+   "lv": 20,
+   "sterren": 0,
+   "sokjes": 1
   }
  }
 }
