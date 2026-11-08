@@ -122,3 +122,18 @@ vastlopen in Questlopen bij Kootje Zilverstaart, en door de grond zakken op een 
 - Flash F4 (zone 6, `Z6VerhaalPlekken.CAMERA "f4"`) kijkt in zijn eerste helft naar (4900, 200, -700): oostelijk van de kaart,
   waar nog niks is (zone 7). Dat is hetzelfde soort lege shot, maar niet gemeld en niet aangepast.
 - Server-tijdlijn en client-wachttijd lopen bij een eerste verre scene tot ~3 s uiteen (zie punt 2).
+
+## Testresultaten (2026-11-08)
+- `compileJava`: OK.
+- `runGameTestServer -Pgt=VadsrijkTaal,SceneLaden`: alles groen.
+- `-Pgt=VadsrijkQuestLopen` (4 tests): alles groen.
+  - `alleStappenZone1tot6`: 323 stappen; echt 75, haak 239, dwing 6, VAST 0.
+  - Kootje (z5_hq08 doel 1) telt via de haak.
+  - Stappen die headless alleen via de teller (dwing) tellen: 9 hq03_poppen d0, 85+86 z2_hq08_splinterkloof d1/d2,
+    188 z4_hq02_knuffeltij d3, 205 z4_hq05_vliegervanger d2, 301 z6_hq06_tapijt d0. Dat zijn minigames, trainingspoppen en
+    escortes die de robot niet echt kan spelen. In het spel telt de echte actie. Questlopen valt terug op de teller.
+  - ARENA-meldingen (informatief, geen fout): na z3_hq08_werf, z3_hq10_piepvel en z3_hq14_vahoegnir ligt de volgende stap (een
+    POI: kajuit / flash F1 / finale) in de dan geopende arena. Zo is het verhaal bedoeld.
+- `-Pgt=VadsrijkZit` (3 tests): alles groen.
+  - Extra fix: een leeg zitje dat nog niet weg is (zelfde tick) blokkeert opnieuw gaan zitten niet meer.
+  - `kussenInHetVadsrijk` slaagt meteen als de testserver geen Vadsrijk-dimensie heeft. Of hij die heeft, is niet in de log gecontroleerd.

@@ -87,7 +87,7 @@ public class GuhFurnitureBlock extends HorizontalDirectionalBlock {
             return InteractionResult.PASS;
         }
         if (!level.isClientSide()) {
-            if (!level.getEntitiesOfClass(GuhSeatEntity.class, new AABB(pos)).isEmpty()) {
+            if (!level.getEntitiesOfClass(GuhSeatEntity.class, new AABB(pos), GuhSeatEntity::isVehicle).isEmpty()) {   // W-SPEL: an empty seat is leaving
                 return InteractionResult.CONSUME; // someone is already sitting here
             }
             GuhSeatEntity seat = ModEntities.GUH_SEAT.get().create(level, EntitySpawnReason.TRIGGERED);

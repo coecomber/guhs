@@ -38,10 +38,10 @@ public class VadsrijkZitGameTests {
     }
 
     /** Sit on a magenta cushion on a one-block floor above air (like Roosje's dais) and stand up: never below the cushion. */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
     public static void kussenZitEnOpstaan(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        BlockPos vloer = helper.absolutePos(new BlockPos(2, 3, 2));
+        BlockPos vloer = helper.absolutePos(new BlockPos(2, 0, 2));   // (guhs:empty is 5x4x5: room for the player above)
         level.setBlockAndUpdate(vloer, Blocks.SMOOTH_QUARTZ.defaultBlockState());
         BlockPos kussen = vloer.above();
         BlockState s = ModBlocks.KUSSENS.get(DyeColor.MAGENTA).get().defaultBlockState();
@@ -55,16 +55,18 @@ public class VadsrijkZitGameTests {
         helper.assertTrue(p.getY() >= kussen.getY(), "stood up at or above the cushion (y " + p.getY() + " vs " + kussen.getY() + ")");
         helper.assertTrue(vrij(level, p), "standing in free space at " + p.position() + " (cushion " + kussen + ")");
 
-        // a low ceiling right above the cushion: stand up next to it, still not inside or under the floor
-        level.setBlockAndUpdate(kussen.above(), Blocks.STONE.defaultBlockState());
-        level.setBlockAndUpdate(kussen.east(), Blocks.AIR.defaultBlockState());
-        level.setBlockAndUpdate(vloer.east(), Blocks.SMOOTH_QUARTZ.defaultBlockState());
-        s.useWithoutItem(level, p, new BlockHitResult(Vec3.atCenterOf(kussen), Direction.UP, kussen, false));
-        helper.assertTrue(p.isPassenger(), "sat down again");
-        p.stopRiding();
-        helper.assertTrue(p.getY() >= vloer.getY() + 1 - 1e-3, "under a ceiling: still on the floor (y " + p.getY() + ")");
-        helper.assertTrue(vrij(level, p), "under a ceiling: in free space at " + p.position());
-        helper.succeed();
+        // a low ceiling right above the cushion: stand up next to it, still not inside or under the floor (after the 3 s boarding cooldown)
+        helper.runAfterDelay(70, () -> {
+            level.setBlockAndUpdate(kussen.above(), Blocks.STONE.defaultBlockState());
+            level.setBlockAndUpdate(kussen.east(), Blocks.AIR.defaultBlockState());
+            level.setBlockAndUpdate(vloer.east(), Blocks.SMOOTH_QUARTZ.defaultBlockState());
+            s.useWithoutItem(level, p, new BlockHitResult(Vec3.atCenterOf(kussen), Direction.UP, kussen, false));
+            helper.assertTrue(p.isPassenger(), "sat down again");
+            p.stopRiding();
+            helper.assertTrue(p.getY() >= vloer.getY() + 1 - 1e-3, "under a ceiling: still on the floor (y " + p.getY() + ")");
+            helper.assertTrue(vrij(level, p), "under a ceiling: in free space at " + p.position());
+            helper.succeed();
+        });
     }
 
     /** The same in the real Vadsrijk dimension, when this server has it: the seat joins the level there. */
