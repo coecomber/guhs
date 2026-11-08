@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "guhs:vr_z6raid_sterrenzijde"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "guhs:vr_z6raid_sterrenzijde"
+      }
+    ]
+  }
+}

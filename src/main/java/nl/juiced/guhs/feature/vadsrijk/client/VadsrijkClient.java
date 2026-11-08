@@ -45,6 +45,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.hud.client.UHudClient.init(modBus);   // U-HUD: party frames, emote wheel + poses, HUD editor (after T-OPSLAG)
         nl.juiced.guhs.feature.vadsrijk.kleding.client.KledingClient.init(modBus);   // T-KLEDING: Kledingkast (key O), wings, effects
         nl.juiced.guhs.feature.vadsrijk.luchtschip.client.LuchtschipClient.init(modBus);   // T-LUCHTSCHIP: airships + silhouettes
+        nl.juiced.guhs.feature.vadsrijk.zone6.raid.client.Z6RaidClient.init(modBus);   // U-Z6RAID: raid renderers + raid frames
         nl.juiced.guhs.feature.vadsrijk.karakter.client.KarakterClient.init(modBus);   // T-KARAKTER: character screen + badges
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.client.ZichtbaarClient.init(modBus);   // U-ZICHTBAAR: cape/gloves/jewellery on the player model
         nl.juiced.guhs.feature.vadsrijk.ruiters.client.RuitersClient.init(modBus);   // U-RUITERS: riding guhs renderers
