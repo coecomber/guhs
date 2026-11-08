@@ -66,7 +66,7 @@ Het Verkenningsboek heeft per zone een categorie **Grotten** met 4 vinkjes per g
 ### Testen per onderdeel
 - **Ontdekkingskaart.** De eerste keer dat je een grot inloopt, zie je eerst de normale gebiedstitel. Een tel later komt een gouden titelkaart (naam + "Grot ontdekt!"), met een belletje en een chatregel. Opnieuw zien:
   ```
-  /guhs vadsrijk grot reset zwamgrot
+  /guhs vadsrijk grot wis zwamgrot
   ```
   Of alleen de kaart tonen:
   ```

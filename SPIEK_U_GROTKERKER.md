@@ -80,7 +80,7 @@ Elke grot even proberen (snel naar binnen):
 ```
 /guhs vadsrijk grot reset zwamgrot
 ```
-- De grot valt meteen in slaap: alle grotbewoners en de baas weg, poort open. Sta je nog in de grot, dan start er meteen een nieuwe run (nieuwe grotbewoners, poort weer dicht).
+- De grot valt meteen in slaap: alle grotbewoners en de baas weg, ongeopende eindkisten weg, poort open. Sta je nog in de grot, dan start er meteen een nieuwe run (nieuwe grotbewoners, poort weer dicht).
 - Regels zonder commando:
   - **10 minuten** na een clear: de grot slaapt weer in (alleen als niemand meer achter de poort staat, anders wacht hij).
   - Een **onafgemaakte run** reset **1 minuut** nadat de laatste speler de grot uit is.
