@@ -80,7 +80,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone5.wezens.Z5WezensRegistry;
  * <li>a <b>sound streek</b> for t-geluid ({@link GeluidPlan#EXTRA}: drip/echo cave bed + a fitting theme); the client adds the
  * particles and the drips ({@code client/GrotSfeerClient}).</li>
  * </ul>
- * Dev: {@code /guhs vadsrijk grot lijst | tp <id> [plek] | reset <id> | elite <id>}.
+ * Dev: {@code /guhs vadsrijk grot lijst | tp <id> [plek] | wis <id> | elite <id>} (U-GROTKERKER adds run | reset | baas | kist).
  */
 public final class Grotten {
     public static final String DATA = "grotten";
@@ -152,7 +152,8 @@ public final class Grotten {
         }
         for (GrotData.Grot g : GrotData.ALLE) {
             GeluidPlan.EXTRA.put(gebiedId(g), new GeluidPlan.Streek(gebiedId(g), List.of(thema(g)), g.id().equals("wortelgrot") ? "wortel" : "grot"));
-            spawners(g);
+            // U-GROTKERKER: no more free elite/mob spawners: the cave run (grotkerker.GrotKerker) spawns the packs + the mid-elite
+            // (spawner id "grot:<id>#elite" stays, so the elite bonus + book entry below keep working)
         }
         for (int zone = 1; zone <= 5; zone++) {
             int z = zone;
@@ -393,6 +394,7 @@ public final class Grotten {
                     false, p -> PuzzelSpeler.opgelost(p, puzzelId(g)) ? Staat.KLAAR : Staat.NIETS, g.plek("puzzel")));
             l.add(new Ding("grot_" + g.id() + "_schat", "vadsrijk.grotten.boek.schat." + g.id(), "", "vadsrijk.grotten.boek.hint.schat", naam,
                     false, p -> heeft(p, g, "schat") ? Staat.KLAAR : PuzzelSpeler.opgelost(p, puzzelId(g)) ? Staat.BEZIG : Staat.NIETS, g.plek("schat")));
+            l.add(nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotKerker.boekDing(g.id(), g.plek("elite")));   // U-GROTKERKER: "grotbaas verslagen"
         }
         return new Categorie("grotten", "vadsrijk.grotten.boek.cat", "minecraft:glow_lichen", l);
     }
@@ -431,7 +433,8 @@ public final class Grotten {
                         .suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("ingang", "binnen", "hal", "puzzel", "elite", "schat", "amb_1", "amb_2",
                                 "uitgang"), b))
                         .executes(c -> tp(c.getSource().getPlayerOrException(), StringArgumentType.getString(c, "id"), StringArgumentType.getString(c, "plek"))))));
-        k.then(Commands.literal("reset").then(Commands.argument("id", StringArgumentType.word())
+        // U-GROTKERKER: was "reset" (that is the cave run now: grotkerker.GrotKerker)
+        k.then(Commands.literal("wis").then(Commands.argument("id", StringArgumentType.word())
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(GrotData.ALLE.stream().map(GrotData.Grot::id), b))
                 .executes(c -> {
                     ServerPlayer p = c.getSource().getPlayerOrException();
@@ -455,8 +458,8 @@ public final class Grotten {
                     if (g == null || sl == null) {
                         return 0;
                     }
-                    VadsrijkMob m = Spawners.spawn(sl, Spawners.van("grot:" + g.id() + "#elite"));
-                    p.sendSystemMessage(Component.literal(m == null ? "Geen plek gevonden (sta je te dichtbij? min. 12 blokken)" : "Elite gespawnd in " + g.id())
+                    VadsrijkMob m = nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotKerker.devElite(sl, g.id());   // U-GROTKERKER: the run's elite
+                    p.sendSystemMessage(Component.literal(m == null ? "Geen plek gevonden (is de grot geladen?)" : "Elite gespawnd in " + g.id())
                             .withStyle(ChatFormatting.GRAY));
                     return 1;
                 })));

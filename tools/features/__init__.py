@@ -304,6 +304,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_huizen',
             # U-GROTTEN: one atmosphere cave per zone (Java: feature/vadsrijk/grotten; the map side is tools/vadsrijk/grotten)
             'vadsrijk_u_grotten',
+            # U-GROTKERKER: every cave a repeatable mini-dungeon (Java: feature/vadsrijk/grotkerker); after vadsrijk_u_grotten + vadsrijk_t_rijdier
+            'vadsrijk_u_grotkerker',
             # 1.10 round U integration, V-INT: texts of the glue between the round-U slices (Java: feature/vadsrijk/vint)
             'vadsrijk_v_int',
             # 1.10 round U, U-TAPIJT: the flying carpet (zone 6; Java: feature/vadsrijk/tapijt); after vadsrijk_t_rijdier

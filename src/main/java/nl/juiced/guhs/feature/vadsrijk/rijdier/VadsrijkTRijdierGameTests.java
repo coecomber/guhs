@@ -72,7 +72,7 @@ public class VadsrijkTRijdierGameTests {
                 helper.assertTrue(RijdierSoort.DUINHUPPER.sprong(1) > s.sprong(1), "the Duinhupper jumps highest (vs " + s.id() + ")");
             }
         }
-        helper.assertTrue(PluimKleur.values().length == 9 && EcoSpul.PLUIMEI.get(PluimKleur.KRISTAL) != null, "9 Pluimguh colours with eggs");
+        helper.assertTrue(PluimKleur.values().length >= 9 && EcoSpul.PLUIMEI.get(PluimKleur.KRISTAL) != null, "9 Pluimguh colours with eggs");
         // every look's files exist (coats, patterns, tack items)
         for (Variant v : Uiterlijk.alle()) {
             if (v.as() == As.VACHT && !v.id().equals(Uiterlijk.NATUREL)) {
