@@ -84,7 +84,6 @@ public class TModelsGameTests {
         // (paths as in KlodderRenderer.GRIJS / ROZE: a client class, not loaded on the test server)
         bestaat("textures/vadsrijk/kern/grauwe_klodder.png");
         bestaat("textures/entity/guh_slime.png");
-        }
         for (String s : List.of("hoedjesbol", "sporenpuffer", "zwamwachter", "glimzwam", "tempelridder", "sporenpriester", "mosgeest", "knaag")) {
             controleer("vadsrijk/wezens/" + s, List.of("idle", "blij"));
         }
