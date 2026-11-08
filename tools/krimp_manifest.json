@@ -2927,6 +2927,24 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/geroezemoes/bed_druk.ogg": {
+"sha1": "068db47a420bd06e1b29d955408610539e768648",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/geroezemoes/bed_markt.ogg": {
+"sha1": "59d5db8d7b23701464ff10e1cc54734c618b113a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/geroezemoes/bed_rustig.ogg": {
+"sha1": "c68007aaf11470f0e1347bd4aa78f733ee70489c",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/baas/algemeen.ogg": {
 "sha1": "9ec7f9e67680bf5ed08195144d829860b72e5a30",
 "stappen": [
@@ -2995,6 +3013,18 @@
 },
 "assets/guhs/sounds/vadsrijk/muziek/baas/galmwolf_fase.ogg": {
 "sha1": "157eb077b7d2a0f6d7501c84a764c6bae9b674af",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/glimmertje.ogg": {
+"sha1": "9c1050018361ae803fc540645a039afaa3cf6dd4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/glimmertje_fase.ogg": {
+"sha1": "41874b5e2524b82a87ffc32fc0c8296547091242",
 "stappen": [
 "ogg"
 ]
@@ -3119,6 +3149,18 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/baas/ringeling.ogg": {
+"sha1": "22a9f0957504d88ab7ea6dd505ed5c3cb8f5aea6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/ringeling_fase.ogg": {
+"sha1": "c659b70e2ee079b937f479376550c5e45cb81815",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/baas/roquefort.ogg": {
 "sha1": "cbc2881c85c369d73ad364887cd4a4f9277a28de",
 "stappen": [
@@ -3131,6 +3173,18 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/baas/spiegelvizier.ogg": {
+"sha1": "ce2831e513b79e079145e1fb2c750b66960f05e4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/spiegelvizier_fase.ogg": {
+"sha1": "1abbccbcc9d6449b9013ef39c1b5770ae2105ba4",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/baas/spiegelzucht.ogg": {
 "sha1": "ad473c56a2312f36d510abf2168fcf22b9e572ed",
 "stappen": [
@@ -3139,6 +3193,30 @@
 },
 "assets/guhs/sounds/vadsrijk/muziek/baas/spiegelzucht_fase.ogg": {
 "sha1": "ad47b169e12a0a442280240a3d655174efa971bd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/sterrenbeelden.ogg": {
+"sha1": "2b8e8c72ad5fd1b616aed19db924bc0c4221c5c9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/sterrenbeelden_fase.ogg": {
+"sha1": "aa648383c51aad5c5b60d35afa781525eb9f7d8f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/sterrenwacht.ogg": {
+"sha1": "fa23f6c98063a953f3c3813bec3d7166c4397fe5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/sterrenwacht_fase.ogg": {
+"sha1": "202d050e9375403610783343c262ba8fd0b0b153",
 "stappen": [
 "ogg"
 ]
@@ -3167,6 +3245,18 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/baas/verzonken_sterrenguh.ogg": {
+"sha1": "e040fb78f387edbf8ad30f44a507c205750a7279",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/verzonken_sterrenguh_fase.ogg": {
+"sha1": "98d90a978d03702c521b2780065f84bed9e43007",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/baas/vliegervanger.ogg": {
 "sha1": "8a7ad69e56dc6fe68e9391fb9fd4a7ac66806fbc",
 "stappen": [
@@ -3179,6 +3269,18 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/baas/wormelien.ogg": {
+"sha1": "11121246734c2d520c4c60e400e8e4a9bb3a89ac",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/wormelien_fase.ogg": {
+"sha1": "2df689840588c4bd9349728b7197d9c7a7c87a1f",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/baas/wortelwurger.ogg": {
 "sha1": "766d38f5f5c45d5ca63a64fa4fb54eb2557d8e36",
 "stappen": [
@@ -3187,6 +3289,18 @@
 },
 "assets/guhs/sounds/vadsrijk/muziek/baas/wortelwurger_fase.ogg": {
 "sha1": "eb1e24be2fa0da967803ddc473ed542e5ad19cba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zandwachter.ogg": {
+"sha1": "166fc146d4e481f45632c0379cdf78cc4102cc94",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zandwachter_fase.ogg": {
+"sha1": "419ed08e2668bf306dc425f1db11e1755f4d0058",
 "stappen": [
 "ogg"
 ]
@@ -3211,6 +3325,18 @@
 },
 "assets/guhs/sounds/vadsrijk/muziek/baas/zilverstaart_fase.ogg": {
 "sha1": "da53284a83fc4d068e9fefd67dbaa31a3a9a8742",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zoutkolos.ogg": {
+"sha1": "d6b7235bb279de3608b839f6ee00a8ae9340cfe1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zoutkolos_fase.ogg": {
+"sha1": "a413dcddc1162d5618758e005112da0237a044a9",
 "stappen": [
 "ogg"
 ]
@@ -3247,6 +3373,12 @@
 },
 "assets/guhs/sounds/vadsrijk/muziek/fanfare/galmwolf.ogg": {
 "sha1": "5e30be3d41763a1003bbb2ed6d3e39f50d690021",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/glimmertje.ogg": {
+"sha1": "1fb95c201b1bcd75280289789de50d9a8c551170",
 "stappen": [
 "ogg"
 ]
@@ -3311,14 +3443,38 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/ringeling.ogg": {
+"sha1": "a99183885e23d1cabd3882dc4c06b8a845cb5ca6",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/fanfare/roquefort.ogg": {
 "sha1": "d1281249629ed06f08928b082b6115cee600c092",
 "stappen": [
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/spiegelvizier.ogg": {
+"sha1": "45922968e21640cdb7055c1a8c783cb5b6fccd36",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/fanfare/spiegelzucht.ogg": {
 "sha1": "49ae899169e09cfc7d0ccf49f23d335a5531f4d6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/sterrenbeelden.ogg": {
+"sha1": "830b4c7c2076d12e558f011b2880b2c602d2cb83",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/sterrenwacht.ogg": {
+"sha1": "c62ef128c9acf334a28e81c1dcff58cc0984acd6",
 "stappen": [
 "ogg"
 ]
@@ -3335,14 +3491,32 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/verzonken_sterrenguh.ogg": {
+"sha1": "91fee52ce6388915a5d4df9f1746b62ab1008848",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/fanfare/vliegervanger.ogg": {
 "sha1": "5997bb39fd757c136a52ebc44dedaa4c593c2608",
 "stappen": [
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/wormelien.ogg": {
+"sha1": "763c40470e9b52354205b7e45713b14541e54c8d",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/fanfare/wortelwurger.ogg": {
 "sha1": "81f55fc98547ccba8525f55a082f274b2e3f5daf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/zandwachter.ogg": {
+"sha1": "8aef19b78e852381d85fffff398df967737f2cb5",
 "stappen": [
 "ogg"
 ]
@@ -3355,6 +3529,12 @@
 },
 "assets/guhs/sounds/vadsrijk/muziek/fanfare/zilverstaart.ogg": {
 "sha1": "c996790a2c8c3ad5d7d94b4b70ec3c96aa25b1a0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/zoutkolos.ogg": {
+"sha1": "6045ff80043078071b787c1000656d8d5988d298",
 "stappen": [
 "ogg"
 ]
@@ -3419,6 +3599,30 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/gebied/moederoase.ogg": {
+"sha1": "cdf59a550d6b91f38ce6c716c93fbf24fe677e33",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/palmenkloven.ogg": {
+"sha1": "1eb0f32d5a4815dafb61f56933bd49a378e225aa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/roze_duinen.ogg": {
+"sha1": "6bfac83d2e08812f5abb7cafcb9c079eb597664f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/ruinedal.ogg": {
+"sha1": "8ef397a8377a276fc2a38aa96802b06a60ebfeff",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/gebied/schorsstad.ogg": {
 "sha1": "94cfd09ccbf64904db2d385b21da48cc5f02e26e",
 "stappen": [
@@ -3473,14 +3677,56 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/gebied/zoutvlakte.ogg": {
+"sha1": "b24bd5dc243fd15eed6116f707950dd0cab4671b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/zoutvlakte_nacht.ogg": {
+"sha1": "5a6f896faaac0f2e421203c09fd5536a828e0bb8",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/gebied/zwamtempel.ogg": {
 "sha1": "4e8791fad6f5b518d128b7e49ebed5056ba752a9",
 "stappen": [
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/stad/rozenkloof_1.ogg": {
+"sha1": "eb8b455ab93df66ea2f8b1f2033ec9c3c761f009",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stad/rozenkloof_2.ogg": {
+"sha1": "23489fbfe24bccffba09c15eb7b7c78c899e682a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stad/saffraanpoort_1.ogg": {
+"sha1": "e0938248f79ec6691bf14d4ad588c9c993eef33d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stad/saffraanpoort_2.ogg": {
+"sha1": "782f2dd198ce83b52aae60b139b6ed94510936ff",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/stinger/baas_verslagen.ogg": {
 "sha1": "7ae4a33f61ef4df664f9f8f36d1ce5b8295935ae",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stinger/baken.ogg": {
+"sha1": "1e06f15d8c74f24410a9a49759413471e08ac259",
 "stappen": [
 "ogg"
 ]
@@ -3497,6 +3743,12 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/muziek/stinger/moederoase.ogg": {
+"sha1": "91469196422ac361bacf0010028241ba0c4b2036",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/muziek/stinger/ontdekking.ogg": {
 "sha1": "68572b9e2ee1c3b6238645b2de4455565d482cd1",
 "stappen": [
@@ -3509,6 +3761,12 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/sfeer/bed_bazaar.ogg": {
+"sha1": "58b76d851daa393940d7b1e493fadef573736a01",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/sfeer/bed_berg.ogg": {
 "sha1": "5fdf4e2d79bfcd4c38b49723812f0f12c5396480",
 "stappen": [
@@ -3517,6 +3775,12 @@
 },
 "assets/guhs/sounds/vadsrijk/sfeer/bed_bos.ogg": {
 "sha1": "484d079f980770b43f9311742db3731fe9d79a94",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_duinen.ogg": {
+"sha1": "93feff1212fd97e2582791f4010fd8c2bd2d1aaa",
 "stappen": [
 "ogg"
 ]
@@ -3563,14 +3827,32 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/sfeer/bed_oase.ogg": {
+"sha1": "420a46b38d92cfc8ea2d636e4c86bef5e2785cc9",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/sfeer/bed_sporen.ogg": {
 "sha1": "4083f04ca088ea5dcda12de9164ad41558281176",
 "stappen": [
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/sfeer/bed_sterren.ogg": {
+"sha1": "ab3e2631b9cb129389c6c21acecbe802f9bc0659",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/sfeer/bed_tempel.ogg": {
 "sha1": "b26e1f7417c3897db3358c3a29b21950b8f48366",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_toren.ogg": {
+"sha1": "e68c68121d974196463e4ed1310cf393107429d4",
 "stappen": [
 "ogg"
 ]
@@ -3583,6 +3865,24 @@
 },
 "assets/guhs/sounds/vadsrijk/sfeer/bed_wortel.ogg": {
 "sha1": "8dd18193584cd61ded9064f802832023c97af7df",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/belletje_1.ogg": {
+"sha1": "4a315c565434c31450b3e46144866eb50d9a43f5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/belletje_2.ogg": {
+"sha1": "5b71f90aed7312fe05cc4c743360ab1742ac4fef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/belletje_3.ogg": {
+"sha1": "89bf3a7750414675c0ed1f148133845cc1a7017c",
 "stappen": [
 "ogg"
 ]
@@ -3677,6 +3977,24 @@
 "ogg"
 ]
 },
+"assets/guhs/sounds/vadsrijk/sfeer/sterretje_1.ogg": {
+"sha1": "70be485715a13d6845fe3dec8b2b0bdcee6ff734",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/sterretje_2.ogg": {
+"sha1": "ee5278b59cc0969913fa7e662223a915df8d63c1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/sterretje_3.ogg": {
+"sha1": "52f93d4a851e88baef0656801fee6a2bc56d4b5d",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/sounds/vadsrijk/sfeer/vogel_1.ogg": {
 "sha1": "4cc92e3f82f431bf4b87c6fde695afe7fc04dd9b",
 "stappen": [
@@ -3697,6 +4015,24 @@
 },
 "assets/guhs/sounds/vadsrijk/sfeer/vogel_4.ogg": {
 "sha1": "296cb2dbc15a890bf8fc2cd429c26ccdfa161d6e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/zoutzang_1.ogg": {
+"sha1": "96e9ccd2e7dbf11d4ddf734d5e2db8930365a83f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/zoutzang_2.ogg": {
+"sha1": "41b48fce872d505d3c9042d07a381dd7a3b1ad95",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/zoutzang_3.ogg": {
+"sha1": "d26eaed5809dca14cb9f126d1a71750389e5c14e",
 "stappen": [
 "ogg"
 ]
@@ -20245,6 +20581,90 @@
 "png"
 ]
 },
+"assets/guhs/textures/block/zijdeland/dadelpalm_planken.png": {
+"sha1": "37c103392e8590af4ca1e426e66abb6ff757d401",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/dadelpalm_stam.png": {
+"sha1": "56d3984a4c1827dd9761a0966f456d1be4c92fde",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/dadelpalm_stam_top.png": {
+"sha1": "2d8db5fadc4806b3cef1c624863f04e2ccdfb638",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/koepeltegel_turkoois.png": {
+"sha1": "53cc76789673bf1d6571bcd58787562b689e45fe",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/mashrabiya_tralies.png": {
+"sha1": "e27d59d248fee4d07f375b8b33b6f566b9847cb1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/mashrabiya_tralies_rand.png": {
+"sha1": "5c8300f0bc323e9e3778ab0a1b98f2efb55603c4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/messing_lantaarn.png": {
+"sha1": "5dab408fb75a464e7a6b0676a5d3f56e61bbb369",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/mozaiek_bloem.png": {
+"sha1": "06b4fa31f8a75ea82b841435fdef8f09ac06c2f1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/mozaiek_guh.png": {
+"sha1": "b0f7418f7d7520c0474706383a87b12072b8c536",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/mozaiek_ster.png": {
+"sha1": "9439aa9d7805aef376c9cd7f33e27f5b6781498f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/rozenzandsteen.png": {
+"sha1": "decb2f33466cd477c39944235f0797cc126bbc6e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/rozenzandsteen_gebeiteld.png": {
+"sha1": "35285d4daf4d8382cc0c9498054383408bb30c4a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/zijden_doek.png": {
+"sha1": "4acafc437c8b27a05d0ebdae5ef8618e2a08af0b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/block/zijdeland/zijden_luifel.png": {
+"sha1": "d01ae7e710c294a08dc643cc7aa46fbbda6810cf",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/block/zingbloemetje_blauw.png": {
 "sha1": "0d7463978020743a7edbaf7e5a78ecf3b394921e",
 "stappen": [
@@ -22760,6 +23180,90 @@
 "png"
 ]
 },
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_duinwandelaarsbroek.png": {
+"sha1": "3843554e0656fe120d11b2f3dab26c7c380d19bf",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_duinwandelaarslaarzen.png": {
+"sha1": "bbcb4ee605c7507b831a347544b4b40efc4ce4a7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_duinwandelaarsmantel.png": {
+"sha1": "c57dd8651800bfcf519f41e9f7ba195b52b411de",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_duinwandelaarstulband.png": {
+"sha1": "cd95f6e29d1ea01e320f7183a8ec3310b343254f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_karavaanwachtlaarzen.png": {
+"sha1": "426e38ec12c7190e9de439ba2e80dbf18b7cc460",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_sterrenkaartmantel.png": {
+"sha1": "1710c11580a24ff9a65fa360cdea71a0f363de74",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_sterrenwachtbroek.png": {
+"sha1": "89c3311861714c552c3a81653a620d81baacd2d9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_sterrenwachtkap.png": {
+"sha1": "9ac960c234072a178e009b36962e6e7b69c5560b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_sterrenwachtlaarzen.png": {
+"sha1": "dde01f7c320ce20bd9c95570f7549707b0530808",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_zijdegewaad.png": {
+"sha1": "ce06433bd51ca26781fe939da51f86b1c8df5a00",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_zijdepofbroek.png": {
+"sha1": "cff521a8490c6466d28b6fe3ec7212897cf63b1e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_zijdeslofjes.png": {
+"sha1": "35d833ad918590b3bd9151a3db2fc9c3f2e29c66",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6_mob_zijdetulband.png": {
+"sha1": "1e803f85610d0d3b0acbfe5552ffbc39887f7ac1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid/vr_z6raid_sterrenzijde.png": {
+"sha1": "3b72ab9d59645a03ac7856e426cb13b4d409d913",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/entity/equipment/humanoid_leggings/droompyjama.png": {
 "sha1": "51312241f6a472dd4a5906aa41b6c9920ef31747",
 "stappen": [
@@ -23092,6 +23596,90 @@
 },
 "assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z5_mob_wolkwachtlaarzen.png": {
 "sha1": "4d63be3ec3f0a7e180b4ca009d1ca4eb24bf9c17",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_duinwandelaarsbroek.png": {
+"sha1": "24008204295f5d0040ba46c62a51c8b1902c3086",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_duinwandelaarslaarzen.png": {
+"sha1": "18dd26e2880a544e111bf69006226eaf0e8edd2a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_duinwandelaarsmantel.png": {
+"sha1": "54d42a348f4a611306146111a3671b3da4696830",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_duinwandelaarstulband.png": {
+"sha1": "d528a48a53b759228e55c5e73edb34bc3c7c1f89",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_karavaanwachtlaarzen.png": {
+"sha1": "be54de2983fc792da6bda39ac54cc8a990de4366",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_sterrenkaartmantel.png": {
+"sha1": "7d93ca4558bb9fb025144c380a2ced5644447e9c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_sterrenwachtbroek.png": {
+"sha1": "4c8755560ec8b3f8c9be6004569f8f31e3fa4707",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_sterrenwachtkap.png": {
+"sha1": "62dd0c1326f8818420ce1cbe08d106347de48684",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_sterrenwachtlaarzen.png": {
+"sha1": "0860409862f4b0f114a85f97bd104a14151c2c1d",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_zijdegewaad.png": {
+"sha1": "aefbfc628acf5f160556ceabfada221d5c57393f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_zijdepofbroek.png": {
+"sha1": "028abd5b128f424eea99c55a7f1ab192ad8a6e65",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_zijdeslofjes.png": {
+"sha1": "e9f65cf10faf30caaede9f886b8d7b917a5bfa14",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6_mob_zijdetulband.png": {
+"sha1": "fe7b90752d9a6430c76e69fa4de78d26669128fd",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/equipment/humanoid_leggings/vr_z6raid_sterrenzijde.png": {
+"sha1": "79c6a2ae912e331c0dfdf7da06f3ac9faaa2d1c2",
 "stappen": [
 "png"
 ]
@@ -32698,6 +33286,36 @@
 "png"
 ]
 },
+"assets/guhs/textures/entity/vr_eco_bultguh.png": {
+"sha1": "76b542fb0cf407d37e90132fd3b29ef4bac9b34e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_bultguh_kaneel.png": {
+"sha1": "a7f14f99784b6c0b6163e4bea721f1390925060b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_bultguh_saffraan.png": {
+"sha1": "6cba18b5ba78d78464b383bab9f363dd03572896",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_bultguh_sterrennacht.png": {
+"sha1": "fc6971932fa12e5376f76e96dd539787ba144d7a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_bultguh_wolkwit.png": {
+"sha1": "ace118ea6d3b53ce6fc27cff816810890e4cc6aa",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/entity/vr_eco_duinhupper.png": {
 "sha1": "1de961c82b1ef57b1c63def820011e08a7819fdc",
 "stappen": [
@@ -32782,6 +33400,18 @@
 "png"
 ]
 },
+"assets/guhs/textures/entity/vr_eco_pluimguh_amethist.png": {
+"sha1": "0ac9d15cda69481938899a26130646c1bce80bbb",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_pluimguh_glimzwam.png": {
+"sha1": "653290ec99f8496636fd14ae38fa7a99ba281854",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/entity/vr_eco_pluimguh_goud.png": {
 "sha1": "1fd9ff14bcfb4dbdd85bb64621e556e88c334cb6",
 "stappen": [
@@ -32790,6 +33420,12 @@
 },
 "assets/guhs/textures/entity/vr_eco_pluimguh_honing.png": {
 "sha1": "d70c9cf7bee314780b0b920657ee7eb8112aaa68",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_pluimguh_koraal.png": {
+"sha1": "26078e80c4f90e4d32e5d00e3506c1611507d781",
 "stappen": [
 "png"
 ]
@@ -32818,6 +33454,12 @@
 "png"
 ]
 },
+"assets/guhs/textures/entity/vr_eco_pluimguh_onweer.png": {
+"sha1": "d05e4a56e547cb5eb601c3f56358d716e690f102",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/entity/vr_eco_pluimguh_roze.png": {
 "sha1": "ab15475d73705c604bfd6bce4c94de676c3abade",
 "stappen": [
@@ -32832,6 +33474,18 @@
 },
 "assets/guhs/textures/entity/vr_eco_pluimguh_wolkwit.png": {
 "sha1": "ac9b3d4629c4bd985d77944099da49c228f5f230",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_pluimguh_wortelhout.png": {
+"sha1": "cfb80db8436d3cd989752bc5a8376731d418d8f6",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_eco_pluimguh_zoutroze.png": {
+"sha1": "f480a9cb6a65fc2fc6343864f2c3dd1ce7891283",
 "stappen": [
 "png"
 ]
@@ -33036,6 +33690,36 @@
 },
 "assets/guhs/textures/entity/vr_luchtschip_glowmask.png": {
 "sha1": "1327c33c9f1bbd1ca491a6a697b86720a9222b06",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_rijpatroon_bultguh_glitter.png": {
+"sha1": "bf24a72fc6ffacb69034240eb16f69d5516be0b9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_rijpatroon_bultguh_hartjes.png": {
+"sha1": "1c3076ade0ce09299d430f30619675b3ba6624e7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_rijpatroon_bultguh_sterretjes.png": {
+"sha1": "5b31dd633fd6c6cf9461a1be1092bc1ba0e253e4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_rijpatroon_bultguh_streepjes.png": {
+"sha1": "1bec71723a8efd2dfcdb5d85e4ce7ebfe3ae20f7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/entity/vr_rijpatroon_bultguh_vlekjes.png": {
+"sha1": "ffb0ee9660f2bfa11651a7b593a6d2dad05cd4da",
 "stappen": [
 "png"
 ]
@@ -41788,6 +42472,12 @@
 "png"
 ]
 },
+"assets/guhs/textures/item/messing_lantaarn.png": {
+"sha1": "d8c0f91b1adc5cffe7e918a2dac3b45a9a3b116c",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/item/mew_ballonnetje.png": {
 "sha1": "81ddd7aa51a7478792a620e536d50f9713264602",
 "stappen": [
@@ -44992,6 +45682,18 @@
 "png"
 ]
 },
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_amethist.png": {
+"sha1": "c254f1888abd496903c73358bb2848af29b9f8f1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_glimzwam.png": {
+"sha1": "6da4ef55a5c97dcd65599fdfc2cbbb8fcc761bbd",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_goud.png": {
 "sha1": "e96aaf4b30f9951634b8d1eebc287beeb91a43ac",
 "stappen": [
@@ -45000,6 +45702,12 @@
 },
 "assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_honing.png": {
 "sha1": "d517496e37219db067781b064deddc94727962e6",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_koraal.png": {
+"sha1": "404f41835ae10fa737421d7c641300a17c3f2f9c",
 "stappen": [
 "png"
 ]
@@ -45028,6 +45736,12 @@
 "png"
 ]
 },
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_onweer.png": {
+"sha1": "a3b4bd78eae60dd4752eda7d3e33d5f66824ba46",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_roze.png": {
 "sha1": "3c845c0b424bae12babf379bbc8e79427e3c546a",
 "stappen": [
@@ -45042,6 +45756,18 @@
 },
 "assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_wolkwit.png": {
 "sha1": "37392569f591e4934ed3b2274a58378a6e31a4cd",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_wortelhout.png": {
+"sha1": "724aee0cfdc9e77ba6dd4cc21a3ffc325138472a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_pluimei_zoutroze.png": {
+"sha1": "b81254b06b645a32aa8bfc1b9e76fd069d5383c9",
 "stappen": [
 "png"
 ]
@@ -45078,6 +45804,12 @@
 },
 "assets/guhs/textures/item/vadsrijk/economie/vr_item_verbetersteentje.png": {
 "sha1": "690dd5dff9308e80527e9b0c84f1c977be63533a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/economie/vr_item_zadel_bultguh.png": {
+"sha1": "231d7b8b16ae55eafe2e0b613b7dbeb8dfe16e4d",
 "stappen": [
 "png"
 ]
@@ -45474,6 +46206,66 @@
 },
 "assets/guhs/textures/item/vadsrijk/z4bazen/zeekoeienhuid.png": {
 "sha1": "c3c2ec8e0ac12d718585a8241901f4509faf437e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/halster.png": {
+"sha1": "655669c98b80b88ae83dfa2da812b4aaf93afbb1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/komeetboog.png": {
+"sha1": "8e0e95315c7e29b0176b52dff1ab29205c4e83ec",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/ringbreker.png": {
+"sha1": "8f5d60a6acfe52ebfa622054f3b236226c924b7d",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/ringreplica.png": {
+"sha1": "916e00201e188c3986532b8e87de46676f7c3512",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/sterrenstaf.png": {
+"sha1": "f45b268d6b3824590af8f80177c4357f36c263a4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/sterrenzijde_mantel.png": {
+"sha1": "c44bc79a1ea19c7413cdeb087e4dc991fd0aa88e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/sterrenzijde_pofbroek.png": {
+"sha1": "56a2132c2781ff7499233a72a30769b6365d1952",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/sterrenzijde_teenslofjes.png": {
+"sha1": "f6791a05ec0dade3cedb7f27f3d03c8b8e9cf04f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/sterrenzijde_tulband.png": {
+"sha1": "d3aa45e773e74efa6d5972491660c41c692c9a97",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/z6raid/teenring.png": {
+"sha1": "8a7d02e10f0557ef71938498224e04dde2c4d82e",
 "stappen": [
 "png"
 ]
@@ -46228,6 +47020,306 @@
 "png"
 ]
 },
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/astrolabiumring.png": {
+"sha1": "d806aea965f58696b2d407d2b7e726fb4c72693a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/duinzwemmerslaarzen.png": {
+"sha1": "deb92f133567e506dd44d7ff9c1d330a0476da29",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/glimmertjes_dover.png": {
+"sha1": "74c02fbbdae2d66036071e681dfcd3e50c8d5602",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/sterrenhartamulet.png": {
+"sha1": "00c0db6e81dd2748e0c06c5402a9349c963c4306",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/sterrenkijkerkruisboog.png": {
+"sha1": "1606a2455388ae062daf9f90e6257ee20fde3c2e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/trofee_sterrenguh.png": {
+"sha1": "3b9e43fec486fcea551ad6acb2fac96a309e7500",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/trofee_wormelien.png": {
+"sha1": "afdf4ea77dfd2e9ee7d6bd1073a8c4ee997e6125",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/trofee_zoutkolos.png": {
+"sha1": "813d64016741c920cc6d1f8effc5775cd9217b33",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/wimperwaaier.png": {
+"sha1": "8705dbeacb435c64f436c82201d58016d7b5f5fa",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/wormelientand.png": {
+"sha1": "26abba353638e80db166144a24efe6cc3ffe767a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/zingend_zoutzwaard.png": {
+"sha1": "1692801e90419e71f5fb6b63a323f3c77c263854",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/zoutkristalkroon.png": {
+"sha1": "a9a08f07429dbba93187c9406ac576e986bf9439",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/bazen/zoutsplinterboog.png": {
+"sha1": "33251084c197f44a89cf814b7296f9effe5c5e6f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/dadelpalmknots.png": {
+"sha1": "d4586354c1a9778e1b790cb983fb654ffaea4e17",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinvalkboog.png": {
+"sha1": "b20da4065e3f75592f81c1b3e656be575ee47f0e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinwandelaarsbroek.png": {
+"sha1": "331df5402fb911dbd8d31bb36172ecf6f3a7cf15",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinwandelaarscape.png": {
+"sha1": "d882f359c7bb4b184d890b5d67d97e154e5df782",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinwandelaarslaarzen.png": {
+"sha1": "9b25bfd98617e8353a1ddee94c2605ff225e0e6b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinwandelaarsmantel.png": {
+"sha1": "3f78d00df58a42bc4c29cc9a0d45be4ffcd7cf62",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinwandelaarstulband.png": {
+"sha1": "4ed09a0a6e40089a5a08dd23e3cd68f85a650f73",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/duinwandelaarswanten.png": {
+"sha1": "8ea6376b3e310f342644b02a480cc54e1b44185b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/karavaankruisboog.png": {
+"sha1": "d6a501109dd1a662d0f17fa6e6f6b8d57234c7d9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/karavaanwachtarmband.png": {
+"sha1": "c618f1e2235770f1036e0183670b81b7306c45ba",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/karavaanwachtcape.png": {
+"sha1": "b2f0ec9299eb35c3ca17341d3f1463cc01018043",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/karavaanwachtlaarzen.png": {
+"sha1": "7ef523a1f3c33c0e9cf1a02c7fdc364dffbe2356",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/karavaanwachtwanten.png": {
+"sha1": "cde1cc1453e687ce8bfc2e6ecafafa6adf898d72",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/kristal_rozenkwarts.png": {
+"sha1": "830e2440dd4186fd84eef5d04511e648cc8ae764",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/kristal_sterrenzout.png": {
+"sha1": "96ae3080207b19ae808798a33a72588f76e38af0",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/messinghandschoenen.png": {
+"sha1": "1ff0f041c9c0b711072b3902d1e9e4b6e34af4df",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/oasefluit.png": {
+"sha1": "0e90656ea3b42def0ff51e14287cc3659d72dfc6",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/rozenketting.png": {
+"sha1": "315b87716cba6cb7a084a3f40bf2d61ee612bae2",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/rozenkromzwaard.png": {
+"sha1": "a04014197d6b9de9332f637ef71547c0dfc7f5e5",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/saffraanring.png": {
+"sha1": "9bc497d82027a168f2e852db139d62e5b5e4fd8f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/saffraanstaf.png": {
+"sha1": "7d68d650b6e74cb276733af5f4aa345c054a5b31",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenkaartcape.png": {
+"sha1": "72e1de1dfcde43ac2960aa8812c234f2d65a536a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenkaartmantel.png": {
+"sha1": "205e0e34eb8b7fbc05d5af549b606127659613d8",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenkompas.png": {
+"sha1": "59c8bb6bb0ac01ee84a348fc40605ff7445cd99e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenoorbel.png": {
+"sha1": "f6c36d9124c7ed4ea4189fba2f5c45a7676b6def",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenstof.png": {
+"sha1": "51fff41347b1e388c8500e402e56b54753f638c6",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenwachtbroek.png": {
+"sha1": "ebe15401adf8ac6391c652fdfa809e301b839062",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenwachtkap.png": {
+"sha1": "4ecd3e733fb1f705a7703d61fbf6f85c3e4a89e6",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/sterrenwachtlaarzen.png": {
+"sha1": "8a5670ba7a33f6a2f0c277dd56cbc0174688171c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/woestijnroosring.png": {
+"sha1": "0bb860720c863c14ad8d41aef991bc778e3c1ab5",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zijdegewaad.png": {
+"sha1": "455d82b805521a8560c4669c40e17e0978260893",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zijdehandschoentjes.png": {
+"sha1": "610f8e860ffed2bc8eb7c59f7bb8e3c17f34c3d8",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zijdepofbroek.png": {
+"sha1": "cfbee71865100744f7e6cb3f3aade663ec7e2414",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zijdeslofjes.png": {
+"sha1": "352d7ea597c8fc9f90f13e9ce8e9124e48fe084b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zijdesluier.png": {
+"sha1": "ccb9a5ab12a4c39e9fc9ebf9bdab0cb4602770ff",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zijdetulband.png": {
+"sha1": "997e35a8944fd3762cb23f3779f62a7a4328b446",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vadsrijk/zone6/wezens/zoutkristalarmband.png": {
+"sha1": "13f1d8bfb9a610bb6d8530e7cdd08403459c58df",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/item/vadstouw.png": {
 "sha1": "a774066bece4717e977d2c4e85663aef2322e539",
 "stappen": [
@@ -46836,6 +47928,12 @@
 },
 "assets/guhs/textures/item/vr_t_kleding/vleugel_schemer.png": {
 "sha1": "871667a58c0e8e856698f5189538943bff9c25b9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/item/vr_t_kleding/vleugel_sterrenring.png": {
+"sha1": "6de0be0ee5538ff77c5e6582e88bc925c4c580d3",
 "stappen": [
 "png"
 ]
@@ -49324,6 +50422,24 @@
 "png"
 ]
 },
+"assets/guhs/textures/vadsrijk/stadsleven/blauwe_klodder.png": {
+"sha1": "60c3e40d2e336012b0f3644c92cbc336ad7815d7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/stadsleven/sl_kleed.png": {
+"sha1": "2b725ff8aae1387dfc71ecb9a147a25f5df96133",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/stadsleven/sl_speeltoestel.png": {
+"sha1": "f4149a47509c64c477962130234ab8df830b214d",
+"stappen": [
+"png"
+]
+},
 "assets/guhs/textures/vadsrijk/tmodels/grauwe_klodderreus.png": {
 "sha1": "74a23681b6229251cc121ed0a94701d6a33c90ef",
 "stappen": [
@@ -50229,6 +51345,216 @@
 },
 "assets/guhs/textures/vadsrijk/z4bazen/zeeslurf_glowmask.png": {
 "sha1": "0e0f9afffefa73cf4311750bebd67039e89b4a20",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/draaispiegel.png": {
+"sha1": "c8d2375132d00fe35154b9c0766fc8329017e138",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/draaispiegel_glowmask.png": {
+"sha1": "b9a64eef544fcf2d3aa1bfd10616fce19d19308e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ringeling.png": {
+"sha1": "2584860f419a0fbf5d70952d0d8f99954a5b69e1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ringeling_blij.png": {
+"sha1": "2584860f419a0fbf5d70952d0d8f99954a5b69e1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ringeling_blij_glowmask.png": {
+"sha1": "66d7bfc843894126412b4cf80978d654c8d93586",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ringeling_glowmask.png": {
+"sha1": "66d7bfc843894126412b4cf80978d654c8d93586",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/spiegelkloon.png": {
+"sha1": "5b6d047839f06465914db86a202f53f3efff86d0",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/spiegelkloon_glowmask.png": {
+"sha1": "00f6c79b4f7b66fcb802bacd2a53f8ce6ea6c6ba",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/spiegelvizier.png": {
+"sha1": "41c7ebc38e7cafdb0d6dd848558f5a74584d6a23",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/spiegelvizier_blij.png": {
+"sha1": "41c7ebc38e7cafdb0d6dd848558f5a74584d6a23",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/spiegelvizier_blij_glowmask.png": {
+"sha1": "00f6c79b4f7b66fcb802bacd2a53f8ce6ea6c6ba",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/spiegelvizier_glowmask.png": {
+"sha1": "00f6c79b4f7b66fcb802bacd2a53f8ce6ea6c6ba",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_bultguh.png": {
+"sha1": "3c4194ecc647644378b21464125dde5b07b01829",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_bultguh_blij.png": {
+"sha1": "62310869f10b542954f101f717e47fc803ea54bf",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_bultguh_blij_glowmask.png": {
+"sha1": "4f956915cce0384af34b07f6f97723c4caaf4de0",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_bultguh_glowmask.png": {
+"sha1": "3c326222f3126c4adbf6f3cfb3fac15e28a4682b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_knuffel.png": {
+"sha1": "43420f813fc3d2ab200fdbda9cbfb97313455d7e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_knuffel_blij.png": {
+"sha1": "206ca0bff0251081ef7646f3063280308fcc1d54",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_knuffel_blij_glowmask.png": {
+"sha1": "d57dcb35d87fa5c4acbd153fd7b37b0103264e41",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_knuffel_glowmask.png": {
+"sha1": "e3c37bf50ca026b6723fdc5ce77dfe71c1a74c38",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_pluis.png": {
+"sha1": "47be051177f546809e0879afcb2ad0bea5c18245",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_pluis_blij.png": {
+"sha1": "7de250f60e90d429c17a340ce6e45f64165181f9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_pluis_blij_glowmask.png": {
+"sha1": "08342b5e586e43a7da63611718df6398b8381927",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/ster_pluis_glowmask.png": {
+"sha1": "6151caef4a7fd68e29f6deee5932f689ced25f61",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/sterrenbaken.png": {
+"sha1": "e0676481596afe6720c8c133cead9832a3db42de",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/sterrenbaken_aan.png": {
+"sha1": "e5d53d974a2ce6291923dbd800002803d7fa9c26",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/sterrenbaken_aan_glowmask.png": {
+"sha1": "14ccda93c1a9f6012a3f840e356ba70a3c037061",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/sterrenbaken_glowmask.png": {
+"sha1": "4ed11f217f30e47d9f7a9178303d0a6f882584d3",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/sterrenscherf.png": {
+"sha1": "518ef053bb57a21fb416791b26fd03442193df6a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/sterrenscherf_glowmask.png": {
+"sha1": "f05908241f4983d537e2a0a4d492a2aa50e05eea",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/zandpilaar.png": {
+"sha1": "a1c043a551208f2a34bcb1abd9ca42575ddb7f93",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/zandwachter.png": {
+"sha1": "af940ffda3c95c9b2b6d28f713ba966743db63d2",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/zandwachter_blij.png": {
+"sha1": "af940ffda3c95c9b2b6d28f713ba966743db63d2",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/zandwachter_blij_glowmask.png": {
+"sha1": "4883b79f7131946cc2a593f6d998ae70fc159f13",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/z6raid/zandwachter_glowmask.png": {
+"sha1": "4883b79f7131946cc2a593f6d998ae70fc159f13",
 "stappen": [
 "png"
 ]
@@ -51618,6 +52944,510 @@
 "sha1": "6c1b6b4c34f680deb882711dcc4f970fd0274698",
 "stappen": [
 "groot",
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/astrolabiumwachter.png": {
+"sha1": "6ae521289b9f2259dc9345a906e8c2f5aed574f7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/astrolabiumwachter_blij.png": {
+"sha1": "6ae521289b9f2259dc9345a906e8c2f5aed574f7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/astrolabiumwachter_blij_glowmask.png": {
+"sha1": "ae63d122082a5be09eb464ea3a2d159b3446d6f1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/astrolabiumwachter_glowmask.png": {
+"sha1": "9ce4fc764d266043f44971980a99baf9d9370025",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/glimmertje.png": {
+"sha1": "a140c465b31f8e456826ef5fe4ece8d616d2db6b",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/glimmertje_glowmask.png": {
+"sha1": "f2192e0dd01d64aceb19bf89c6ec57be22c50fa9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/sterrenguh.png": {
+"sha1": "12b0ebd60717914a88033f6740b429961c8c96e5",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/sterrenguh_blij.png": {
+"sha1": "b7367c19f3b7f4732a7c0acc8f1356f10493a774",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/sterrenguh_blij_glowmask.png": {
+"sha1": "3ac88db8b1377e23d94b1a996db1ef39ec21843c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/sterrenguh_glowmask.png": {
+"sha1": "70c801eef17440ba8de5d43d31ea057810f1c800",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/telescoop.png": {
+"sha1": "d5982425e736f67099e7d1d742509a53556ea6b3",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/vuurschaal.png": {
+"sha1": "e7b95e962654092b42f2e13371b646a42733b19a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/vuurschaal_glowmask.png": {
+"sha1": "d49979d752c0c582d9fd1855438bd9ec3f4ac488",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/wormelien.png": {
+"sha1": "e190681e60991c300ab300df8df809707ee4fb60",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/wormelien_blij.png": {
+"sha1": "75b6f9037c2c471ed42bea35b9030e5b2550cfe5",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/wormelien_blij_glowmask.png": {
+"sha1": "c1262b4f45abd18774f9a19f6f225fd14fd0a619",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/wormelien_glowmask.png": {
+"sha1": "63bd7237308b2bf8055d8daac9b720e17135503d",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zingkristal.png": {
+"sha1": "eea3ccc2fa01efe5a7802c76d82fdab7e26d62ce",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zingkristal_glowmask.png": {
+"sha1": "78619fc71da277f83502177548b2508709442e5c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zoutkolos.png": {
+"sha1": "5a04cf724534d7c15207de8cc7de54c54c3b496f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zoutkolos_blij.png": {
+"sha1": "5a04cf724534d7c15207de8cc7de54c54c3b496f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zoutkolos_blij_glowmask.png": {
+"sha1": "c5187748eeaf5e83476f43ea03bfb0eafa201975",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zoutkolos_glowmask.png": {
+"sha1": "2f3594a771122d43eaa3a1f85e6daa57eff5fc09",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/bazen/zoutkorst.png": {
+"sha1": "3ed0742e255ccef07a27c4b082d1247f15805b2c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/bobbeltje.png": {
+"sha1": "4ac86f6bb6ad601085f9462bf31ad2f745e1d5f2",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/dadelaapje.png": {
+"sha1": "58a1436a40444279a15a8e33f78957dba35bed06",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/dadelaapje_blij.png": {
+"sha1": "c37372a5a09f26dacb133e59a21a37e875fee640",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/dadelaapje_elite.png": {
+"sha1": "aa0f32b215b097a7e7f3c06df5fdbc93bae363ad",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/dadelaapje_gloed.png": {
+"sha1": "924ddb1ffa9c427488ad6fe9dea22895ec12c3cc",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/duinkruiper.png": {
+"sha1": "3687d802f75139efae6ace3e5fab5323f201c0b0",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/duinkruiper_blij.png": {
+"sha1": "1148b4fa618163186f25ccf8426c72ea53f0d0d3",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/duinkruiper_elite.png": {
+"sha1": "c721909fe9af3ca8f0ab41778779c309c95db2cb",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/duinkruiper_gloed.png": {
+"sha1": "0cd5e510d050e98bd4a112d2635c0dd7300863a7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/fennekguh.png": {
+"sha1": "a4b77b23808773ec803c1d3cf2be7993b0e15f5c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/fennekguh_blij.png": {
+"sha1": "4e489940fe25e1efb8043e847d4e7ce54e27f887",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/fennekguh_elite.png": {
+"sha1": "ad158901f6aa7817932b86bee9a51aab0163b4ed",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/fennekguh_gloed.png": {
+"sha1": "7e56857cb859056d570ddfa1c25deefb47b475cb",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gedoofd_sterretje.png": {
+"sha1": "55411493f09982b62eafe1b0740dce15e1ce5924",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gedoofd_sterretje_blij.png": {
+"sha1": "fd81e3ec42df6a837a2a1cd3d0e1450221c884f0",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gedoofd_sterretje_elite.png": {
+"sha1": "60b509bae3e81e960f44299c9b5b2c29e959ce00",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gedoofd_sterretje_gloed.png": {
+"sha1": "f798fd7a5d9401c44b5b68344c301123672a0f26",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gierguh.png": {
+"sha1": "a0f0d7e0ed8d0be162484340721acfaf565cd184",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gierguh_blij.png": {
+"sha1": "8d53de23ddd4f5f08b5f01dd89342018ceca4464",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gierguh_elite.png": {
+"sha1": "f4b307b93c41a6e9eaacb5013788373556a785f3",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/gierguh_gloed.png": {
+"sha1": "c7fcc25728b5fc4da3108d33f89737391023c2b6",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_lampendover.png": {
+"sha1": "44c53495e8175a9f2f364ed20c3274c73a9b8945",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_lampendover_blij.png": {
+"sha1": "44c53495e8175a9f2f364ed20c3274c73a9b8945",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_lampendover_elite.png": {
+"sha1": "5e7ec3806784518b7a5f59fab4ea0c5aef6ccd33",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_lampendover_gloed.png": {
+"sha1": "59ca12d6f33fd02b6f297118a860bc952ce82e63",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_ringdrager.png": {
+"sha1": "56ad305be7e41a150477c2d107dd8754f6effcad",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_ringdrager_blij.png": {
+"sha1": "56ad305be7e41a150477c2d107dd8754f6effcad",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_ringdrager_elite.png": {
+"sha1": "5af162714944fe9073620dffcf5786e3c9f5032e",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/mika_ringdrager_gloed.png": {
+"sha1": "f6d3e76ef45a22ad46fb2dc038403524304c27b1",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/ruinewachter.png": {
+"sha1": "b21f0f6f994595608e72399672febd69adc7289a",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/ruinewachter_blij.png": {
+"sha1": "ae40f0b0d1dc2e4444930eb9e7efa39356fb01c8",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/ruinewachter_elite.png": {
+"sha1": "fcf713c449da761366f24b8a3a89189a28b31efc",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/ruinewachter_gloed.png": {
+"sha1": "e62799570cb8364b8ff6bb65d30c0319be2b617f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/spiegelslang.png": {
+"sha1": "4fd1429729a31af4e9d78e18f00d4f5fa3597dde",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/spiegelslang_blij.png": {
+"sha1": "4fd1429729a31af4e9d78e18f00d4f5fa3597dde",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/spiegelslang_elite.png": {
+"sha1": "69de082f167a8ac19b4d4c7f64c73a2200f3bfe7",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/spiegelslang_gloed.png": {
+"sha1": "f9658d1caa5dd7219463d5bc2004fe758b3f602f",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/springpiep.png": {
+"sha1": "4dcdeb2c5233d03d881707f323d74d0aeadfca95",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/springpiep_blij.png": {
+"sha1": "2961e360e4774106496d5094b2e947f861138974",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/springpiep_elite.png": {
+"sha1": "080b0d9fae6f07b1c3aa4016b90e7c8024212cbd",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/springpiep_gloed.png": {
+"sha1": "c69ed0f425b6d09d6469995e0bd85dbc5ddf2d42",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/sterrenguhtje.png": {
+"sha1": "e69785eb13bbe77e18f3eacb87014ccd378f3e42",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/wormelientje.png": {
+"sha1": "e63a3ea6145947c8fae088cd1f362894d72d38f4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandgeestje.png": {
+"sha1": "fce8d844cab2153d15aaaad2063ebb75db39f6cd",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandgeestje_blij.png": {
+"sha1": "fce8d844cab2153d15aaaad2063ebb75db39f6cd",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandgeestje_elite.png": {
+"sha1": "6f61a7cfca55979cecbc120e8294bb77278ebe8c",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandgeestje_gloed.png": {
+"sha1": "965ccd44898dc032e61d2de4574e2e7bddf68378",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandvlooi.png": {
+"sha1": "14a0846aa60f1c2bff99f1216d32eb0deb35fbe4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandvlooi_blij.png": {
+"sha1": "14a0846aa60f1c2bff99f1216d32eb0deb35fbe4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandvlooi_elite.png": {
+"sha1": "c6ffe6af3e7a24e9c8ef4748089bb5126228a62d",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zandvlooi_gloed.png": {
+"sha1": "20f503626f651d29a69083ada747f6973a5eb685",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutklontje.png": {
+"sha1": "0246d5b0114a005abf5219f1ba1e422b82ceb905",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutkreeft.png": {
+"sha1": "9226f968b5916aa71dfc9e016479c587a7ddedc4",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutkreeft_blij.png": {
+"sha1": "2c872d2846b66ed1fa459b6dc90fc4cc0ae247ba",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutkreeft_elite.png": {
+"sha1": "d5c96681fae167f97e3e56d296e49a283e181912",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutkreeft_gloed.png": {
+"sha1": "3f3132df604665d0b73ee326e9f4b7362c6cf3b9",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutslang.png": {
+"sha1": "cf59ad9460755d9a031ddc55992825a2c2a84432",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutslang_blij.png": {
+"sha1": "cf59ad9460755d9a031ddc55992825a2c2a84432",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutslang_elite.png": {
+"sha1": "11b61854b8eb35c87fdebbb04b844a7f7f8c8604",
+"stappen": [
+"png"
+]
+},
+"assets/guhs/textures/vadsrijk/zone6/wezens/zoutslang_gloed.png": {
+"sha1": "874534247974939edb541b22c47ba6071c5d9efb",
+"stappen": [
 "png"
 ]
 }
