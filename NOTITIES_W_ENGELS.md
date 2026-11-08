@@ -79,7 +79,10 @@ Expected top-ups from round W: area labels, the cave-dungeon GUI, the Questlopen
 - `src/main/resources/assets/guhs/lang/en_us.json`: rebuilt by apply_en.py.
 
 ## Tests
-- `runGameTestServer -Pgt=TaalsleutelsGameTests,TaalGameTests`: see the final report for the result.
+- `runGameTestServer -Pgt=TaalsleutelsGameTests,TaalGameTests`: TaalGameTests is green. Two Taalsleutels tests FAIL, and they fail the same way on base 0f00119f2. They are not caused by this slice: the keys are missing from nl_nl.json too, because no generator writes them.
+  - `registrynamen`: biome.guhs.knuffelkwartier, item.guhs.vr_eco_klodderreus_knuffel, item.guhs.vr_eco_mini_koning_klodder, item.guhs.vr_eco_opperzwam_beeld, item.guhs.vr_eco_vadsrijk_vaandel.
+  - `tooltips`: the same 4 vr_eco items, plus 11 vadsrijk.bazen.effect.z5baas_* / z5droom_* keys.
+  - Whoever owns those features (economie, zone-5 bosses/dream, Knuffelkwartier biome) must add the Dutch. Then `engelscheck.py --todo` picks them up for English.
 - I did not look at anything in a client (user rule: English is only checked for completeness).
 
 ## Open points / doubts
