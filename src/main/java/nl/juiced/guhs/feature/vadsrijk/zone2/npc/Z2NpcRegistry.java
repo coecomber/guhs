@@ -46,6 +46,7 @@ public final class Z2NpcRegistry {
         Z2Npcs.init();
         Z2Verhaal.init();
         Z2Haken.registreer();
+        nl.juiced.guhs.feature.vadsrijk.questlopen.QlHaken.SCENE.add(Z2Verhaal::bezig);   // U-QUESTLOPEN
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Z2Haken.tick(e.getServer());
             Z2Verhaal.tick(e.getServer());

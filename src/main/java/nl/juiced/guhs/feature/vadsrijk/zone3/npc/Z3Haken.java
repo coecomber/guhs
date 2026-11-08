@@ -98,6 +98,7 @@ public final class Z3Haken {
         nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.ROUTES.add(Z3Haken::route);
         nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.PLEK_HAKEN.add((p, sl) -> stap(p, sl, 0));   // U-QUESTROBOT: the spot triggers
         nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.SPOEL.add(p -> Z3Verhaal.spoel(p, p.level().getServer()));   // U-QUESTROBOT
+        nl.juiced.guhs.feature.vadsrijk.questlopen.QlHaken.SCENE.add(Z3Verhaal::bezig);   // U-QUESTLOPEN
     }
 
     // ---- NPC clicks ----------------------------------------------------------------------------------------------------------------

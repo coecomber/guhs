@@ -323,6 +323,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_z6raid',
             # 1.10 round U, U-OPSLAGVIP: "Binnenkort!" storage tabs + the WORD GUH VIP++ parody (Java: feature/vadsrijk/opslag)
             'vadsrijk_u_opslagvip',
+            # 1.10 round U, U-QUESTLOPEN: the admin main-line walker (texts only)
+            'vadsrijk_u_questlopen',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
