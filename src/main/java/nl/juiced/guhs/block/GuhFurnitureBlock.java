@@ -93,8 +93,13 @@ public class GuhFurnitureBlock extends HorizontalDirectionalBlock {
             GuhSeatEntity seat = ModEntities.GUH_SEAT.get().create(level, EntitySpawnReason.TRIGGERED);
             if (seat != null) {
                 seat.snapTo(pos.getX() + 0.5, pos.getY() + seatHeight, pos.getZ() + 0.5, state.getValue(FACING).toYRot(), 0);
-                level.addFreshEntity(seat);
-                player.startRiding(seat);
+                // W-SPEL (1.10.0): only sit down when the seat really joined the level (a refused seat, e.g. by the Vadsrijk's
+                // Buitenstaanders, left the player riding a ghost: put into the floor on the client, falling through the map)
+                if (level.addFreshEntity(seat) && !seat.isRemoved()) {
+                    player.startRiding(seat);
+                } else {
+                    seat.discard();
+                }
             }
         }
         return InteractionResult.SUCCESS;
