@@ -64,7 +64,6 @@ public class VadsrijkZitGameTests {
         p.stopRiding();
         helper.assertTrue(p.getY() >= vloer.getY() + 1 - 1e-3, "under a ceiling: still on the floor (y " + p.getY() + ")");
         helper.assertTrue(level.noCollision(p, p.getBoundingBox().deflate(0.01)), "under a ceiling: in free space");
-        p.discard();
         helper.succeed();
     }
 
@@ -92,7 +91,6 @@ public class VadsrijkZitGameTests {
             helper.assertTrue(p.getY() >= vloer.getY() + 1, "stood up on the cushion, not below the floor (y " + p.getY() + ")");
         } finally {
             p.stopRiding();
-            p.discard();
             vr.setBlockAndUpdate(vloer.above(), oudKussen);
             vr.setBlockAndUpdate(vloer, oudVloer);
         }

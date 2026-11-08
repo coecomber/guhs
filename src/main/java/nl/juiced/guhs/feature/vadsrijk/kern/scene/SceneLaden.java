@@ -125,7 +125,7 @@ public final class SceneLaden {
         int vd = normaal(p);
         ChunkPos speler = p.chunkPosition();
         for (Vec3 v : pad(s)) {
-            if (afstand(speler, ChunkPos.containing(net.minecraft.core.BlockPos.containing(v))) > vd - 3) {
+            if (afstand(speler, ChunkPos.containing(net.minecraft.core.BlockPos.containing(v))) > Math.max(1, vd - 2)) {
                 return true;
             }
         }
