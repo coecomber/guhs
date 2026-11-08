@@ -228,6 +228,17 @@ def dek(W, d):
     # de zeppelin van dit dok
     zp = d["zep"]
     zeppelin(W, (x + zp["off"][0], y + zp["off"][1], z + zp["off"][2]), zp["L"], zp["as_"], zp["af"], d["kleur"])
+    if d["toren"]:
+        # W-BEREIK: the zeppelin hull (cheese stone / concrete) cut through the tower stair: 2 blocks over a +0.5 step, so a
+        # 1.8-high player bumped his head and could not get up to the boss deck (Roquefort, z3_hq08_werf). Head room again.
+        for (px, pz, sh, nx, nz) in toren_trap(d):
+            a0 = int(math.ceil(sh))
+            for w in np.arange(-1.5, 1.51, 0.5):
+                qx, qz = px + nx * w, pz + nz * w
+                for yy in range(a0, a0 + 3):
+                    b = W.wget(qx, yy, qz)
+                    if b and "dark_oak" not in b and "air" not in b:
+                        W.wset(qx, yy, qz, "minecraft:air")
     W.label(x, y + 24, z, d["naam"])
 
 

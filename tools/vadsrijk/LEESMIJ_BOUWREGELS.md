@@ -75,3 +75,26 @@ block with a full-cube model is handled automatically.
 After a regen, all four must be about 0.
 
 Run the pass by hand with `python tools/vadsrijk/verbind.py [--alleen tx,tz;...]`.
+
+## 2. Walking lines stay free, and everything must be reachable on foot (W-BEREIK, round W 2026-11-08)
+
+**The rule (W_BRIEF walkability standard):** a survival player (1.8 high) must reach every NPC, quest spot, secret and arena on
+foot: 2 air blocks per cell, 3 air above the lower floor for a 1-block step up, drops of at most 3 (any depth into water), no
+lanterns/chains/rails in the walking space, no balustrades floating in the air, no wooden door against a wall (a fake door is an
+IRON door).
+
+**The shared pass** `tools/vadsrijk/vrijpad.py` runs in `maak_kaart.py` right after the connection pass (`vrijpad.na_sinds`), on
+every tile written in that run. It removes lanterns/chains hanging into the walking space (the chain above becomes a hanging
+lantern), lanterns/chains standing on stair steps or in open walkways, loose chains on floors and floating fences/walls/bars over
+walkable floors. By hand: `python tools/vadsrijk/vrijpad.py [--alleen tx,tz;...]` (idempotent).
+
+**The check** `python tools/vadsrijk/bereikcheck.py` (~3 min, ~2-3 GB; also part of `maak_kaart --audit`) floods the whole map from
+the start spawn (airship lines, lifts, hatches, gondola as edges) and writes `BEREIK_RAPPORT.md`: per zone the reached / total
+counts (main quest, side quest, NPC, secrets, arenas, spawners, puzzles, other spots) and every unreached target with the nearest
+reached cell, arenas without an exit, airship boarding distances, one-way areas, doors, deco on walking lines.
+- `--zone N` limits the details to one zone, `--punt x,y,z` explains one spot, `--strikt` exits 1 when a main-quest target or an
+  NPC is not reached (for CI / integration).
+- The targets come from the game code: `tools/vadsrijk/bereik_doelen.json`, dumped by the gametest
+  `gradle_slot.sh <tree> runGameTestServer -Pgt=BereikDoelenGameTests` (every `*Plekken` field, NPCs, arenas, spawners,
+  airship lines, puzzles, teleport links). Rerun it after changing NPC/POI/quest/link code, then rerun the check.
+- Release bar: main-quest targets and NPCs 100 %, side quests and secrets ~99 %; explain every exception in the NOTITIES.
