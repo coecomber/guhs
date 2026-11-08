@@ -86,6 +86,13 @@ public final class GeluidPlan {
 
     /** U-GROTTEN: streken other slices add (area id -> streek), looked up before the fixed table (the caves: drip/echo bed). */
     public static final Map<String, Streek> EXTRA = new java.util.concurrent.ConcurrentHashMap<>();
+    /** V-INT: a streek by position, asked before the area id (add-only; e.g. u-z6raid's tower pocket = the tower drone, no area music). */
+    public interface Plekstreek {
+        @Nullable
+        Streek streek(double x, double y, double z);
+    }
+
+    public static final List<Plekstreek> PLEK_STREKEN = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     private static Map.Entry<String, Streek> z4(String id, String bed) {
         return Map.entry(id, new Streek(id, List.of("lampionkust_dag", "lampionkust_avond"), bed));
@@ -107,6 +114,12 @@ public final class GeluidPlan {
     /** The streek of an area id (+ position, for the zone-4/5 fallback boxes); null = no music, no extra ambience. */
     @Nullable
     public static Streek streek(@Nullable String gebied, double x, double y, double z) {
+        for (Plekstreek ps : PLEK_STREKEN) {   // V-INT: places without an area of their own (the raid tower's pocket)
+            Streek s = ps.streek(x, y, z);
+            if (s != null) {
+                return s;
+            }
+        }
         if (gebied != null) {
             Streek ex = EXTRA.get(gebied);   // U-GROTTEN
             if (ex != null) {

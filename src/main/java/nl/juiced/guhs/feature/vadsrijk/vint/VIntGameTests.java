@@ -45,4 +45,26 @@ public class VIntGameTests {
                 "Zwamzwijntje is a drop, not a first-kill gift");
         helper.succeed();
     }
+
+    /** V-INT: u-z6raid's wiring: the Sterrennacht-Bultguh as a mount drop, the raid frames' HUD spot, the tower soundscape. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void raidKoppelingen(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        helper.assertTrue(RijdierBuit.BRONNEN.containsKey(VInt.Z6RAID_BRON), "raid mount source registered");
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHaken.OPGEVROLIJKT.size() >= 1, "raid clear hook wired");
+        helper.assertTrue(!nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHalster.heeftSterrennacht(p), "fresh: no Sterrennacht");
+        RijdierBuit.testRol = 0.05;
+        helper.assertTrue(RijdierBuit.rol(p, VInt.Z6RAID_BRON), "a 5 % roll drops it");
+        helper.assertTrue(Rijdieren.heeft(p, RijdierSoort.BULTGUH) && nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHalster.heeftSterrennacht(p),
+                "Bultguh + Sterrennacht coat given");
+        RijdierBuit.testRol = 0.0;
+        helper.assertTrue(!RijdierBuit.rol(p, VInt.Z6RAID_BRON), "owned: no more rolls");
+        RijdierBuit.testRol = null;
+        net.minecraft.core.BlockPos a = nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidPlekken.midden(0);
+        nl.juiced.guhs.feature.vadsrijk.geluid.GeluidPlan.Streek s = nl.juiced.guhs.feature.vadsrijk.geluid.GeluidPlan.streek(null, a.getX() + 0.5, a.getY(), a.getZ() + 0.5);
+        helper.assertTrue(s == VInt.RAID_STREEK && s.themas().isEmpty() && "toren".equals(s.bed()), "Wachtzaal = the tower drone, no area music");
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.geluid.GeluidPlan.themaVanId("guhs:vr.z6raid.muziek.ringeling") != null,
+                "Ringeling's theme known (her fanfare follows Haken.VERSLAGEN)");
+        helper.succeed();
+    }
 }

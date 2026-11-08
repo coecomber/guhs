@@ -55,10 +55,17 @@ public final class Z6RaidHud {
 
     static void teken(GuiGraphicsExtractor g, Font f, int w, int h, float pt) {
         CompoundTag t = staat;
+        boolean bewerken = Minecraft.getInstance().screen instanceof nl.juiced.guhs.feature.vadsrijk.hud.client.HudBewerker;   // V-INT
+        int[] plek = nl.juiced.guhs.feature.vadsrijk.kern.client.RijkHud.plek("z6raid", w, h);   // V-INT: movable in the HUD editor
         if (t == null || System.currentTimeMillis() - ontvangen > 2500 || Minecraft.getInstance().options.hideGui) {
+            if (bewerken) {   // V-INT: a placeholder so the frames can be placed outside the raid
+                g.fill(plek[0] - 3, plek[1] - 3, plek[0] + plek[2] + 3, plek[1] + 40, 0xA0180E1C);
+                g.fill(plek[0] - 3, plek[1] - 3, plek[0] + plek[2] + 3, plek[1] - 2, 0xFFC080FF);
+                g.text(f, Component.translatable("vadsrijk.vint.z6raid.hud.voorbeeld"), plek[0], plek[1], 0xFFFFE27A, true);
+            }
             return;
         }
-        int breed = 118, x = w - breed - 4, y = 58;
+        int breed = 118, x = plek[0], y = plek[1];
         int verd = t.getIntOr("verdieping", 1);
         ListTag leden = t.getListOrEmpty("leden");
         ListTag extra = t.getListOrEmpty("extra");

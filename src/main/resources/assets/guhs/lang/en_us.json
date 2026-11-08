@@ -46533,5 +46533,10 @@
   "vadsrijk.klassen.knoop.m_z6_3_8": "Star Silk (Heel)",
   "vadsrijk.klassen.knoop.m_z6_3_8.uitleg": "A Zijdeland node for the Heel branch: more of your main stat and this branch's stats. From level 62.",
   "vadsrijk.klassen.knoop.m_z6_3_9": "Mother Oasis (Heel)",
-  "vadsrijk.klassen.knoop.m_z6_3_9.uitleg": "A Zijdeland node for the Heel branch: more of your main stat and this branch's stats. From level 66."
+  "vadsrijk.klassen.knoop.m_z6_3_9.uitleg": "A Zijdeland node for the Heel branch: more of your main stat and this branch's stats. From level 66.",
+  "vadsrijk.vint.z6raid.halster.al": "You already have the Starry Night humpguh.",
+  "vadsrijk.vint.z6raid.halster.ok": "The Humpguh in Starry Night coat is yours! (N = mounts)",
+  "vadsrijk.vint.z6raid.halster.uitleg": "Right-click: the Humpguh in Starry Night coat (mount + coat).",
+  "vadsrijk.uhud.deel.z6raid": "Raid frames (Star-Dousing Tower)",
+  "vadsrijk.vint.z6raid.hud.voorbeeld": "Raid frames (only in the raid)"
 }

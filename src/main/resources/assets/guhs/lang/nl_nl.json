@@ -46533,5 +46533,10 @@
   "vadsrijk.klassen.knoop.m_z6_3_8": "Sterrenzijde (Heel)",
   "vadsrijk.klassen.knoop.m_z6_3_8.uitleg": "Een Zijdeland-knoop voor de tak Heel: meer van je hoofdstat en de stats van deze tak. Vanaf level 62.",
   "vadsrijk.klassen.knoop.m_z6_3_9": "Moederoase (Heel)",
-  "vadsrijk.klassen.knoop.m_z6_3_9.uitleg": "Een Zijdeland-knoop voor de tak Heel: meer van je hoofdstat en de stats van deze tak. Vanaf level 66."
+  "vadsrijk.klassen.knoop.m_z6_3_9.uitleg": "Een Zijdeland-knoop voor de tak Heel: meer van je hoofdstat en de stats van deze tak. Vanaf level 66.",
+  "vadsrijk.vint.z6raid.halster.al": "Je hebt de Sterrennacht-bultguh al.",
+  "vadsrijk.vint.z6raid.halster.ok": "De Bultguh in Sterrennacht-vacht is van jou! (N = rijdieren)",
+  "vadsrijk.vint.z6raid.halster.uitleg": "Rechtsklik: de Bultguh in Sterrennacht-vacht (rijdier + vacht).",
+  "vadsrijk.uhud.deel.z6raid": "Raid-frames (Sterrendovende Toren)",
+  "vadsrijk.vint.z6raid.hud.voorbeeld": "Raid-frames (alleen in de raid)"
 }

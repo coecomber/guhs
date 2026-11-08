@@ -267,6 +267,7 @@ public final class RijkHud {
             case "gietbalk" -> new int[] {c - 60, h - 72, 120, 9};
             case "baasgiet" -> new int[] {c - 80, 45, 160, 9};
             case "party" -> new int[] {4, h / 2 - 62, 114, 124};   // U-HUD: party frames {x, y, breed, hoog}
+            case "z6raid" -> new int[] {w - 118 - 4, 58, 118, 150};   // V-INT: u-z6raid's raid frames {x, y, breed, hoog} (right edge)
             default -> new int[] {0, 0, 0, 0};
         };
     }

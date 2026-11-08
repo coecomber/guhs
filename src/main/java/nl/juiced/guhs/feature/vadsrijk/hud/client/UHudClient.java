@@ -110,7 +110,7 @@ public final class UHudClient {
             return new int[] {w / 2 - bw / 2 - 2, 4, bw + 4, 38};
         });
         HudIndeling.registreer("tip", n + "tip", (w, h) -> new int[] {8, 8, 190, 56});
-        for (String plek : new String[] {"party", "buffs", "doelframe", "gietbalk", "baasgiet", "drankjesriem"}) {
+        for (String plek : new String[] {"party", "buffs", "doelframe", "gietbalk", "baasgiet", "drankjesriem", "z6raid"}) {
             HudIndeling.registreer(plek, n + plek, (w, h) -> HudIndeling.plekBox(plek, w, h));
         }
         // other slices' own layers, moved as a whole

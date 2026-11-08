@@ -205,9 +205,8 @@ public final class Z6RaidLoot {
                         .withStyle(ChatFormatting.LIGHT_PURPLE), false);
             }
         }
-        if (r.nextDouble() < KANS_HALSTER) {
-            items.add(new ItemStack(HALSTER.get()));
-        }
+        // V-INT: the Sterrennacht-Bultguh is a mount drop now: RijdierBuit "z6raid_sterrennacht" (10 % per clear + pity 15), rolled in
+        // the Z6RaidHaken.OPGEVROLIJKT hook (vint.VInt); the halter item stays for the dev command
         if (r.nextDouble() < KANS_VLEUGELS) {
             vleugels(p);
         }
