@@ -144,12 +144,12 @@ def alle_blokken(W, pal=None):
 
 
 def figuren(W):
-    """Guh-figuurtjes (render-only) als spawnlijst in spelcoördinaten: yaw 180 graden gedraaid."""
+    """Guh-figuurtjes (render-only) als spawnlijst in spelcoördinaten (W-LEVEN: yaw gespiegeld, zie bouw5.spel_yaw)."""
     out = []
     x1, y1, z1 = W.b[:3]
     for (x, y, z, yaw, skin, zit) in W.guhs:
         gx, gy, gz = naar_spel(x / W.k + x1, y / W.k + y1, z / W.k + z1)
-        out.append(dict(x=round(gx, 2), y=round(gy, 2), z=round(gz, 2), yaw=(yaw + 180) % 360, skin=skin, zit=bool(zit)))
+        out.append(dict(x=round(gx, 2), y=round(gy, 2), z=round(gz, 2), yaw=(360 - yaw) % 360, skin=skin, zit=bool(zit)))
     return out
 
 
