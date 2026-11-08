@@ -149,8 +149,20 @@ Mechanieken testen:
 ```
 - `loot`: een clear-kist.
 - `loot baas`: een kleine kist (zoals bij baas 1-3).
-- `loot zeldzaam`: de Sterrenring-vleugels (in je Kledingkast, toets O; luchtdash), het huisdier Sterrenpluisje, het Sterrennacht-halster en Ringelings Teenring.
+- `loot zeldzaam`: de Sterrenring-vleugels (in je Kledingkast, toets O; luchtdash), het huisdier Sterrenpluisje, het Sterrennacht-halster (= het rijdier, zie hieronder) en Ringelings Teenring.
 - `items`: de hele Sterrenzijde-set, de 3 raidwapens en de Ringreplica.
+- **Rijdier (V-INT, jouw loot-regel):** de **Bultguh in Sterrennacht-vacht** valt bij elke clear met **10 % per speler**, en is
+  zeker na 15 keer mis. Heb je de Bultguh nog niet, dan krijg je hem erbij. Het halster uit `loot zeldzaam` geeft precies
+  hetzelfde (rechtsklik).
+```
+/guhs vadsrijk loot pech z6raid_sterrennacht 15
+/guhs vadsrijk loot rol z6raid_sterrennacht
+```
+  Daarna: N (rijdieren) > Bultguh > vacht Sterrennacht staat aan.
+- **Knuffelbond:** een clear geeft elk lid in de toren **200 bondsxp** (plus 40 per verslagen baas, binnen de dagcap van 600).
+- **HUD:** de raid-frames rechts zijn te verschuiven en te schalen in Instellingen > HUD aanpassen ("Raid-frames"), ook buiten de raid.
+- **Geluid:** in de Wachtzaal en op de verdiepingen hoor je de zachte torendrone (geen gebiedsmuziek); in een gevecht de
+  bazenmuziek met fases; na Ringeling haar eigen fanfare.
 - Wat je moet zien:
   - de **Sterrenzijde-set** (lv 70, legendarisch):
     - 2 stuks = +15 Verdediging en +150 Vads;
