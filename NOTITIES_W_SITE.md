@@ -76,3 +76,29 @@ None in mod code. Only the site tooling (`tools/wiki_site/vadsrijk/*`, `tools/ma
 - live.guhs.nl server + DNS (phase A of LIVE_DATA_PLAN.md): needs someone with SSH/Cloudflare access, or a permission rule.
 - At release: phase B (mod `aan=true`) + phase C (pages.yml `--vadsrijk`, remove the preview from gh-pages).
 - After round W's blob revert: `python tools/regen_vadsrijk_site.py` in the integration tree.
+
+## 7. Spoiler switch always starts at zone 1 (user request, later in round W)
+- `stijl.py` JS: every page load does `setZone('1')`. The choice is never stored, and the old `guhs-vr-zonetot` localStorage key
+  is removed. The HTML itself also says `data-zonetot="1"`, so nothing beyond zone 1 flashes before the script runs.
+- A note on load (fixed card at the bottom, NL + EN): "Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer
+  informatie? Kies rechtsboven bij Toon tot tot welke zone je alles wilt zien." It has an OK button and a "Niet meer tonen" box
+  (localStorage `guhs-vr-spoileruitleg-weg`). That box only hides the NOTE next time; the switch still starts at zone 1. Changing
+  the switch also closes the note.
+- Content gating:
+  - `pages.py` link helpers (`l_npc`, `l_quest`, `l_item`, `l_wezen`, `l_gebied`) wrap a link to anything of zone > 1 in
+    `<span data-zone=N>`.
+  - Item "Waar te krijgen" is a comma list (`ul.komma`) sorted by zone.
+  - The zone filter `<option>`s carry their zone.
+  - Rows of the recipe/wardrobe/mount/pet/pet-power/coat tables get `data-zone` = the highest zone named in their text
+    (`Bouwer.tekst_zone`).
+  - The guide topic "rijdieren" is zone 3. The story page's world-map caption and its part II/"verder" nav links are gated.
+  - The ambachten workshop sentence is split, so the town list is gated.
+  - NPCs named after a later town (bond_bord_rozenkloof, kk_poort_saffraanpoort, ...) get that town's zone (`bron._npcs`).
+- The map (kaart.js) already filtered markers, layers, the search and routes with `VR.zone()`, so it now starts at zone 1 too.
+- New check `python tools/wiki_site/vadsrijk/zone1check.py [site_build/vadsrijk]`: it works out the visible text at zone 1 and
+  looks for names of zone 2-6 things. Result: **0 leaks on 937 pages**.
+  - Allowed on purpose: "Vahoegnir" (the zone-1 story premise in zone-1 quests and lore), "De Schemerwortel" (Stalmeester Hoefje's
+    own zone-1 line), and "Bolletje" (a name clash with a zone-1 knuffel).
+  - Skipped: the 1.10.0 patch notes, which summarise the whole update on purpose.
+  - Every page whose subject is beyond zone 1 shows only "Verborgen door je spoilerinstelling."
+- Checked in headless Edge: bazen/index at zone 1 = only De Knuffelzwammen + hidden notes + the note card.
