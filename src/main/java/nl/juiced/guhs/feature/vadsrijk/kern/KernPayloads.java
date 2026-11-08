@@ -257,11 +257,13 @@ public final class KernPayloads {
     /** U-QUESTLOPEN: may swallow a payload (the muted "Spring naar") and records scenes for "Herhaal scène". */
     public static java.util.function.BiPredicate<ServerPlayer, CustomPacketPayload> VOOR_STUUR = (p, x) -> false;
 
-    public static void stuur(ServerPlayer p, CustomPacketPayload payload) {
+    /** Sends a payload; false when it was swallowed (U-QUESTLOPEN's muted fast-forward). (W-SPEL: returns whether it went out) */
+    public static boolean stuur(ServerPlayer p, CustomPacketPayload payload) {
         if (VOOR_STUUR.test(p, payload)) {   // U-QUESTLOPEN
-            return;
+            return false;
         }
         PacketDistributor.sendToPlayer(p, payload);
+        return true;
     }
 
     public static void stuurHud(ServerPlayer p) {

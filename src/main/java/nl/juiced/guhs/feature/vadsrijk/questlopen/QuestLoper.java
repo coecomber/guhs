@@ -27,6 +27,7 @@ import net.minecraft.world.phys.AABB;
 import nl.juiced.guhs.feature.vadsrijk.karakter.Karakter;
 import nl.juiced.guhs.feature.vadsrijk.kern.KernPayloads;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
+import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.kern.baas.Arena;
 import nl.juiced.guhs.feature.vadsrijk.kern.baas.Arenas;
 import nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas;
@@ -84,6 +85,11 @@ public final class QuestLoper {
         int herhaal;
         long herhaalOp;
         int gespoeld;
+        /** W-SPEL: the last spot where the player stood quietly outside any arena (for "Naar veilige plek"). */
+        @Nullable
+        net.minecraft.world.phys.Vec3 veilig;
+        /** W-SPEL: since when the boss of a VECHT step is gone without the step counting. */
+        long baasWeg = -1;
     }
 
     private static final Map<UUID, Sessie> SESSIES = new ConcurrentHashMap<>();
@@ -183,6 +189,15 @@ public final class QuestLoper {
         if (!s.begrepen) {
             return;
         }
+        if (s.fase != Fase.SPOEL && (wat.equals("overslaan") || wat.equals("veilig"))) {   // W-SPEL: always, also mid-fight/-wait
+            s.melding = null;
+            if (wat.equals("overslaan")) {
+                overslaan(p, s);
+            } else {
+                naarVeilig(p, s, true);
+            }
+            return;
+        }
         boolean bezig = s.fase != Fase.RUST && s.fase != Fase.VECHT;
         if (bezig && !wat.equals("stop")) {
             s.melding = Component.translatable(K + "melding.wacht");
@@ -277,6 +292,8 @@ public final class QuestLoper {
         s.slagen = 0;
         s.baasPlek = QlPlek.baasPos(st);
         s.sinds = nu(p);
+        s.baasWeg = -1;
+        onthoudVeilig(p, s);   // W-SPEL
         sluit(p);
         if (s.baasPlek == null) {
             s.melding = Component.translatable(K + "melding.geen_baas");
@@ -395,6 +412,87 @@ public final class QuestLoper {
         int lv = s.verwacht ? st.verwachtLv() : st.minLv();
         Quest q = st.q();
         QlDoe.zetLevel(p, st.klasseLv() && q != null ? q.klasse() : null, lv);
+    }
+
+    // ---- W-SPEL: skip a step, back to safety ------------------------------------------------------------------------------------
+
+    /** Is the player standing inside a boss arena? */
+    static boolean inArena(ServerPlayer p) {
+        return Vadsrijk.in(p) && Arenas.op(p.getX(), p.getY(), p.getZ()) != null;
+    }
+
+    /** Remembers where the player stands now as the safe spot, when that is a quiet floor outside every arena. */
+    static void onthoudVeilig(ServerPlayer p, Sessie s) {
+        ServerLevel sl = QlPlek.level(p);
+        if (sl == null || p.level() != sl || p.isPassenger() || inArena(p)) {
+            return;
+        }
+        if (QlPlek.staanOp(sl, p.blockPosition())) {
+            s.veilig = p.position();
+        }
+    }
+
+    /** "Sla deze stap over": the step counts through the hook, else the counter; then on to the next step's spot. */
+    static void overslaan(ServerPlayer p, Sessie s) {
+        List<QlStap> l = lijst(p, s);
+        QlStap st = QlStappen.huidig(p, l);
+        if (st == null) {
+            s.fase = Fase.RUST;
+            stuur(p, s, true);
+            return;
+        }
+        s.stap = st.nr();
+        RijkScenes.vergeet(p);
+        Praat.sluit(p);
+        try {
+            if (!QlStappen.klaar(p, st)) {
+                QlDoe.haak(p, st);
+                QlDoe.spoel(p);
+            }
+            if (!QlStappen.klaar(p, st)) {
+                QlDoe.dwing(p, st);
+            }
+        } catch (RuntimeException e) {
+            LOG.warn("questlopen: skip step {}", st, e);
+        }
+        QuestMotor.afronden(p);
+        Praat.vergeet(p);
+        if (!QlStappen.klaar(p, st)) {
+            s.melding = Component.translatable(K + "melding.vast");
+            s.fase = Fase.RUST;
+            stuur(p, s, true);
+            return;
+        }
+        s.melding = Component.translatable(K + "melding.overgeslagen");
+        sluit(p);
+        naStap(p, s, l);
+    }
+
+    /** "Naar veilige plek": stop what runs and stand on the last safe spot (else the current step's spot, else the Knuffelkamp). */
+    static void naarVeilig(ServerPlayer p, Sessie s, boolean knop) {
+        ServerLevel sl = QlPlek.level(p);
+        if (sl == null) {
+            return;
+        }
+        if (knop) {
+            RijkScenes.vergeet(p);
+            Praat.sluit(p);
+            s.fase = Fase.RUST;
+            s.versla = false;
+        }
+        BlockPos doel;
+        if (s.veilig != null) {
+            doel = BlockPos.containing(s.veilig);
+        } else {
+            QlStap st = QlStappen.huidig(p, lijst(p, s));
+            BlockPos b = st == null || st.baas() ? null : QlPlek.van(p, st);
+            doel = b != null ? b : nl.juiced.guhs.feature.vadsrijk.npc.NpcPlekken.KAMPPLEIN;
+        }
+        QlPlek.naar(p, doel, 0);
+        if (knop) {
+            s.melding = Component.translatable(K + "melding.veilig");
+            stuur(p, s, true);
+        }
     }
 
     // ---- the tick -------------------------------------------------------------------------------------------------------------------
@@ -539,6 +637,17 @@ public final class QuestLoper {
             case VECHT -> {
                 if (st == null || QlStappen.klaar(p, st)) {
                     naarWacht(p, s, 0);
+                    return;
+                }
+                // W-SPEL: the boss is beaten (or gone) but the step did not count: after 5 quiet s the hook, then the counter
+                VadsrijkBaas b = vindBaas(p, s, st);
+                if (b != null && !b.geplofd()) {
+                    s.baasWeg = -1;
+                } else if (s.baasWeg < 0) {
+                    s.baasWeg = nu;
+                } else if (nu - s.baasWeg > 100 && rustig(p)) {
+                    s.baasWeg = -1;
+                    naarWacht(p, s, 0);
                 }
             }
             case SPOEL -> spoelTik(p, s, l);
@@ -576,12 +685,17 @@ public final class QuestLoper {
     /** The step is done: level + teleport for the next one, then back when quiet. */
     static void naStap(ServerPlayer p, Sessie s, List<QlStap> l) {
         QlStap nxt = QlStappen.huidig(p, l);
+        boolean weg = false;
         if (nxt != null) {
             zetLevelVoor(p, s, nxt);
             BlockPos b = QlPlek.van(p, nxt);
-            if (b != null && (!nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p) || QlPlek.afstand(p, b) > 6)) {
-                QlPlek.naar(p, b, afstand(nxt));
+            if (b != null && (!nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p) || QlPlek.afstand(p, b) > 6 || inArena(p))) {
+                QlPlek.naar(p, b, nxt.baas() ? 6 : afstand(nxt));
+                weg = true;
             }
+        }
+        if (!weg && inArena(p)) {   // W-SPEL: a boss step is done and the next one has no spot: out of the arena, to safety
+            naarVeilig(p, s, false);
         }
         s.fase = Fase.AANKOMST;
         s.sinds = nu(p);
@@ -718,6 +832,80 @@ public final class QuestLoper {
         }
     }
 
+    /**
+     * W-SPEL (tests): plays EVERY step of the list (zones 1-6) silently, tier by tier, and reports per step which tier made it count
+     * ("echt", "haak", "dwing") or "VAST" (no tier did: the walk would stall there). Boss steps: also whether the spot of the
+     * following step lies outside every arena (so the player is never left in a closed fight area).
+     */
+    public static List<String> loopAlles(ServerPlayer p) {
+        Sessie s = sessie(p);
+        s.stil = true;
+        List<String> r = new ArrayList<>();
+        try {
+            List<QlStap> l = lijst(p, s);
+            int vorige = -1;
+            for (int n = 0; n < l.size() + 5; n++) {
+                QlStap cur = QlStappen.huidig(p, l);
+                if (cur == null) {
+                    break;
+                }
+                if (cur.nr() == vorige) {
+                    r.add("VAST " + cur.nr() + " " + cur.quest() + " " + cur.soort() + " " + cur.doel());
+                    QlStappen.zetStand(p, l, cur.nr() + 1);   // (go on, to find every stalling step in one run)
+                    vorige = -1;
+                    continue;
+                }
+                vorige = cur.nr();
+                zetLevelVoor(p, s, cur);
+                String tier = "VAST";
+                try {
+                    if (!cur.baas()) {
+                        QlDoe.echt(p, cur, true);
+                        QlDoe.spoel(p);
+                    }
+                    if (QlStappen.klaar(p, cur)) {
+                        tier = "echt";
+                    } else {
+                        QlDoe.haak(p, cur);
+                        QlDoe.spoel(p);
+                        if (QlStappen.klaar(p, cur)) {
+                            tier = "haak";
+                        } else {
+                            QlDoe.dwing(p, cur);
+                            QlDoe.spoel(p);
+                            if (QlStappen.klaar(p, cur)) {
+                                tier = "dwing";
+                            }
+                        }
+                    }
+                } catch (RuntimeException e) {
+                    tier = "FOUT " + e;
+                    LOG.warn("questlopen loopAlles: step {}", cur, e);
+                }
+                QuestMotor.afronden(p);
+                Praat.vergeet(p);
+                RijkScenes.vergeet(p);
+                String regel = cur.nr() + " z" + cur.zone() + " " + cur.quest() + " " + cur.soort() + (cur.soort() == QlStap.Soort.DOEL ? " " + cur.doel() : "")
+                        + (cur.baas() ? " [baas]" : "") + ": " + tier;
+                if (cur.baas()) {
+                    QlStap nxt = QlStappen.huidig(p, l);
+                    BlockPos b = nxt == null ? null : QlPlek.van(p, nxt);
+                    if (nxt != null && !nxt.baas() && b != null && Arenas.op(b.getX() + 0.5, b.getY() + 0.5, b.getZ() + 0.5) != null) {
+                        regel += "  ARENA: de volgende stap ligt in een arena";
+                    }
+                }
+                r.add(regel);
+                if (tier.equals("VAST") || tier.startsWith("FOUT")) {
+                    r.add("VAST " + regel);
+                }
+            }
+        } finally {
+            s.stil = false;
+            s.fase = Fase.RUST;
+        }
+        return r;
+    }
+
     // ---- payload hook (KernPayloads.VOOR_STUUR) ------------------------------------------------------------------------------------
 
     /** true = swallow (muted fast-forward); records the scenes and title cards of the current step for "Herhaal scène". */
@@ -744,6 +932,9 @@ public final class QuestLoper {
     }
 
     static void stuur(ServerPlayer p, Sessie s, boolean open) {
+        if (open && s.fase == Fase.RUST) {
+            onthoudVeilig(p, s);   // W-SPEL
+        }
         List<Component> t = new ArrayList<>();
         CompoundTag m = new CompoundTag();
         m.putBoolean("open", open);

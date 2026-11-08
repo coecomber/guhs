@@ -150,6 +150,14 @@ public final class QuestLopenScherm extends Screen {
         tipNa(g, mx, my, x + 8 + bw3, by, bw3, 14, K + "tip.adv");
         tipNa(g, mx, my, x + 12 + 2 * bw3, by, bw3, 14, K + "tip.rijdier");
         by -= 17;
+        // W-SPEL: the way out of any stuck step (also while a fight or a scene wait runs): skip it, or back to the last safe spot
+        int bw2 = (pw - 12) / 2;
+        boolean nietSpoel = !fase.equals("SPOEL");
+        knop(g, mx, my, x + 4, by, bw2, 14, Component.translatable(K + "knop.overslaan"), nietSpoel && huidig >= 0, () -> QuestLopenClient.doe("overslaan", 0));
+        knop(g, mx, my, x + 8 + bw2, by, bw2, 14, Component.translatable(K + "knop.veilig"), nietSpoel, () -> QuestLopenClient.doe("veilig", 0));
+        tipNa(g, mx, my, x + 4, by, bw2, 14, K + "tip.overslaan");
+        tipNa(g, mx, my, x + 8 + bw2, by, bw2, 14, K + "tip.veilig");
+        by -= 17;
         boolean rust = fase.equals("RUST") || fase.equals("VECHT");
         if (resetZeker && System.currentTimeMillis() > resetTot) {
             resetZeker = false;

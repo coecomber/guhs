@@ -130,4 +130,38 @@ public class VadsrijkQuestLopenGameTests {
         Spelers.zetLevel(p, 1);
         helper.succeed();
     }
+
+    /**
+     * W-SPEL: Questlopen through EVERY step of zones 1-6 (the user got stuck at the Kootje Zilverstaart fight): each step must count
+     * through one of the three tiers, and after a boss step the next step's spot is never inside an arena. The report (which tier
+     * every step needed) goes to the log: grep "questlopen-alles".
+     */
+    @GuhTest(template = "empty", batch = "vadsrijk_questlopen_alles", timeoutTicks = 6000)
+    public static void alleStappenZone1tot6(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Questlog.wisAlles(p);
+        Spelers.zetLevel(p, 1);
+        List<String> r = QuestLoper.loopAlles(p);
+        int echt = 0, haak = 0, dwing = 0;
+        List<String> fout = new ArrayList<>();
+        for (String x : r) {
+            QuestLoper.LOG.info("questlopen-alles: {}", x);
+            if (x.startsWith("VAST") || x.contains("ARENA:")) {
+                fout.add(x);
+            } else if (x.endsWith(": echt")) {
+                echt++;
+            } else if (x.endsWith(": haak")) {
+                haak++;
+            } else if (x.endsWith(": dwing")) {
+                dwing++;
+            }
+        }
+        QuestLoper.LOG.info("questlopen-alles: {} steps, echt {}, haak {}, dwing {}, problemen {}", r.size(), echt, haak, dwing, fout.size());
+        List<QlStap> l = QlStappen.lijst(Spelers.data(p).klasse, false, false);
+        helper.assertTrue(fout.isEmpty(), "stappen die vastlopen: " + fout);
+        helper.assertTrue(QlStappen.huidig(p, l) == null, "every step done, the main line is finished: " + QlStappen.huidig(p, l));
+        Questlog.wisAlles(p);
+        Spelers.zetLevel(p, 1);
+        helper.succeed();
+    }
 }
