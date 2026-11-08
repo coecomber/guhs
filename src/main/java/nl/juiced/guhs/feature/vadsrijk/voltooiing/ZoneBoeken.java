@@ -110,6 +110,9 @@ public final class ZoneBoeken {
         if (id.length() > 3 && id.charAt(0) == 'z' && id.charAt(1) >= '2' && id.charAt(1) <= '9' && id.charAt(2) == '_') {
             return id.charAt(1) - '0';
         }
+        if (id.startsWith("z6raid")) {   // V-INT: u-z6raid's ids (vr_z6raid_*)
+            return 6;
+        }
         return 1;
     }
 
@@ -198,13 +201,25 @@ public final class ZoneBoeken {
         List<Ding> l = new ArrayList<>();
         for (Huisdier h : Huisdieren.alle()) {
             String pad = h.baas().contains(":") ? h.baas().substring(h.baas().indexOf(':') + 1) : h.baas();
-            int z = pad.startsWith("vr_") ? zoneVan(pad.substring(3)) : 1;
+            int z = pad.startsWith("vr_") ? zoneVan(pad.substring(3)) : pad.startsWith("grotpet_") ? grotZone(pad.substring(8)) : 1;
             if (z == zone) {
                 l.add(new Ding("huisdier_" + h.id(), h.naamKey(), "", h.bronKey(), "", false, p -> Huisdieren.heeft(p, h.id()) ? Staat.KLAAR : Staat.NIETS,
                         null));
             }
         }
         return l;
+    }
+
+    /** V-INT: u-grotkerker's cave pets ("guhs:grotpet_<grot>") count in their cave's zone. */
+    static int grotZone(String grot) {
+        return switch (grot) {
+            case "kristalgrot" -> 2;
+            case "wortelgrot" -> 3;
+            case "koraalgrot" -> 4;
+            case "wolkengrot" -> 5;
+            case "zoutgrot" -> 6;
+            default -> 1;
+        };
     }
 
     public static List<Ding> rijdieren(RijdierSoort... soorten) {

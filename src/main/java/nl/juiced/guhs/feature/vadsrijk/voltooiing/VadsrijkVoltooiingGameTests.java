@@ -83,7 +83,9 @@ public class VadsrijkVoltooiingGameTests {
                 }
             }
             helper.assertTrue(Voltooiing.tel(p, z1).totaal() == zonderLater, "later categories are not counted in the zone total");
-            helper.assertTrue(totaal(z1, "huisdier") == 2 && totaal(z2, "huisdier") == 1, "pets by their boss's zone");
+            // V-INT: + u-grotkerker's cave pets (one chibi per cave boss, counted in its zone): zone 1 = 2 + Zwamgrot, zone 2 = 1 + Kristalgrot
+            helper.assertTrue(totaal(z1, "huisdier") == 3 && totaal(z2, "huisdier") == 2, "pets by their boss's zone: "
+                    + totaal(z1, "huisdier") + "/" + totaal(z2, "huisdier"));
             helper.assertTrue(ZoneBoeken.zoneVan("z2_hq01_x") == 2 && ZoneBoeken.zoneVan("z3_a") == 3 && ZoneBoeken.zoneVan("zij_x") == 1
                     && ZoneBoeken.zoneVan("z17_koning") == 1 && ZoneBoeken.zoneVan("z01_wolletjes") == 1, "zone ids (zone 1's z01..z20 stay zone 1)");
 

@@ -158,6 +158,9 @@ public final class Z6Raid {
         }
     }
 
+    /** V-INT: players just sent out of the tower; the door ignores them until they step out of its box. */
+    private static final java.util.Set<java.util.UUID> NET_BUITEN = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
     /** The tower door outside -> the Wachtzaal; the exit in the Wachtzaal -> outside; the light on the roof after a clear. */
     private static void poorten(ServerLevel sl) {
         BlockPos poort = Z6RaidPlekken.poort(), uit = Z6RaidPlekken.uitgang();
@@ -165,14 +168,19 @@ public final class Z6Raid {
             if (p.isSpectator() || RijkScenes.bezig(p)) {
                 continue;
             }
-            if (Math.abs(p.getX() - (poort.getX() + 0.5)) < 2 && Math.abs(p.getZ() - (poort.getZ() + 0.5)) < 2 && p.getY() >= poort.getY() - 1
-                    && p.getY() < poort.getY() + 3) {
+            boolean bijPoort = Math.abs(p.getX() - (poort.getX() + 0.5)) < 2 && Math.abs(p.getZ() - (poort.getZ() + 0.5)) < 2
+                    && p.getY() >= poort.getY() - 1 && p.getY() < poort.getY() + 3;
+            if (!bijPoort) {
+                NET_BUITEN.remove(p.getUUID());   // V-INT: walked away from the door after coming out: it works again
+            }
+            if (bijPoort && !NET_BUITEN.contains(p.getUUID())) {
                 naar(p, Vec3.atBottomCenterOf(Z6RaidPlekken.midden(0).offset(8, 0, 0)), -90);
                 p.sendSystemMessage(Component.translatable("vadsrijk.z6raid.wachtzaal.welkom").withStyle(ChatFormatting.LIGHT_PURPLE));
                 continue;
             }
             if (p.blockPosition().closerThan(uit, 1.6) || (groep != null && groep.klaar() && p.blockPosition().closerThan(Z6RaidPlekken.midden(4), 1.5))) {
                 naar(p, Vec3.atBottomCenterOf(Z6RaidPlekken.buiten()), 90);
+                NET_BUITEN.add(p.getUUID());   // V-INT: u-z6wereld's "buiten" spot lies right at the door: no bounce straight back in
             }
         }
     }

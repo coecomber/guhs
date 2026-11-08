@@ -31,7 +31,8 @@ public class VadsrijkNpcGameTests {
             helper.assertTrue(Npcs.van(q.gever()) != null && Npcs.van(q.inleveren()) != null, q.id() + ": its NPCs exist");
             for (Quest.Doel d : q.doelen()) {
                 if (d.doel().startsWith("poi:")) {
-                    helper.assertTrue(NpcPlekken.poi(d.doel().substring(4)) != null, q.id() + ": poi " + d.doel());
+                    helper.assertTrue(NpcPlekken.poi(d.doel().substring(4)) != null || QuestPlek.POI.containsKey(d.doel().substring(4)),   // V-INT: zone 6 keeps its POIs in QuestPlek
+                            q.id() + ": poi " + d.doel());
                 }
                 if (d.type() == Quest.Doel.Type.VERZAMEL) {
                     helper.assertTrue(Questlog.item(d.doel()) != net.minecraft.world.item.Items.AIR, q.id() + ": item " + d.doel());
