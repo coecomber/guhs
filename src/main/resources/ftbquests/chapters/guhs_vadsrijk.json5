@@ -234,6 +234,54 @@
         "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
       ],
     },
+    {
+      height: 1.5625,
+      id: "475548127AA671BD",
+      image: "guhs:textures/ftbquests/guhs_vadsrijk/kop_vr_z6_verhaal.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 52.98124999999999,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548E4CA215A6B",
+      image: "guhs:textures/ftbquests/guhs_vadsrijk/kop_vr_z6_land.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 58.44374999999999,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "475548E05F8925F3",
+      image: "guhs:textures/ftbquests/guhs_vadsrijk/kop_vr_z6_geheimen.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 16.0,
+      y: 58.44374999999999,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
+    {
+      height: 1.5625,
+      id: "4755488CB36B2021",
+      image: "guhs:textures/ftbquests/guhs_vadsrijk/kop_extra_vadsrijk_t_z5verhaal.png",
+      rotation: 0.0,
+      width: 10.0,
+      x: 4.5,
+      y: 65.40624999999999,
+      hover: [
+        "Komt na: Welkom in de Guhmensie! (De Guhmensie)",
+      ],
+    },
   ],
   order_index: 18,
   progression_mode: "flexible",
@@ -1443,21 +1491,21 @@
       y: 15.025,
     },
     {
-      id: "4755486DD1CCD55C",
+      id: "475548BE1E2DE5D0",
       icon: {
         id: "minecraft:enchanted_book",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vr_adv10_knuffelridder",
-          id: "47554804696E7194",
+          advancement: "guhs:quest/vr_spec17_knuffelridder",
+          id: "47554834BD19DBFE",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548176AFF0A9A",
+          id: "4755487752823FE0",
           type: "item",
           item: {
             count: 1,
@@ -1466,7 +1514,7 @@
           count: 16,
         },
         {
-          id: "47554873871D29EF",
+          id: "4755481591B94327",
           type: "xp",
           xp: 50,
         },
@@ -1476,21 +1524,21 @@
       shape: "hexagon",
     },
     {
-      id: "475548A2783A7ED0",
+      id: "4755489C6F8774B4",
       icon: {
         id: "minecraft:enchanted_book",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vr_adv10_pluisjager",
-          id: "4755483AC9E1B89A",
+          advancement: "guhs:quest/vr_spec17_pluisjager",
+          id: "4755489C41EBD10A",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "47554876B492A608",
+          id: "475548B7ACCB6E48",
           type: "item",
           item: {
             count: 1,
@@ -1499,7 +1547,7 @@
           count: 16,
         },
         {
-          id: "475548D1EBA9591A",
+          id: "475548FDEE00A573",
           type: "xp",
           xp: 50,
         },
@@ -1509,21 +1557,21 @@
       shape: "hexagon",
     },
     {
-      id: "4755483632E08727",
+      id: "475548FC81917398",
       icon: {
         id: "minecraft:enchanted_book",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vr_adv10_vadsmagier",
-          id: "475548F2084BFDCB",
+          advancement: "guhs:quest/vr_spec17_vadsmagier",
+          id: "475548CF60103A0B",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548D41A5C0380",
+          id: "4755481F13F1DBB9",
           type: "item",
           item: {
             count: 1,
@@ -1532,111 +1580,12 @@
           count: 16,
         },
         {
-          id: "4755484DFFE73908",
+          id: "47554855CE7C18D5",
           type: "xp",
           xp: 50,
         },
       ],
       x: 14.5,
-      y: 12.025,
-      shape: "hexagon",
-    },
-    {
-      id: "47554847ED9BECD9",
-      icon: {
-        id: "minecraft:enchanted_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_adv20_knuffelridder",
-          id: "4755488E1EBD2D2E",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "47554855A6D2629D",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-        {
-          id: "475548926D08910B",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 16.0,
-      y: 12.025,
-      shape: "hexagon",
-    },
-    {
-      id: "4755485893732877",
-      icon: {
-        id: "minecraft:enchanted_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_adv20_pluisjager",
-          id: "475548136BF91AA8",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548520039634A",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-        {
-          id: "475548A14F2B92D7",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 17.5,
-      y: 12.025,
-      shape: "hexagon",
-    },
-    {
-      id: "475548856767862C",
-      icon: {
-        id: "minecraft:enchanted_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_adv20_vadsmagier",
-          id: "4755486E8F424EBF",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548610D05D23F",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-        {
-          id: "475548483EF88741",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 19.0,
       y: 12.025,
       shape: "hexagon",
     },
@@ -1669,7 +1618,7 @@
           xp: 50,
         },
       ],
-      x: 20.5,
+      x: 16.0,
       y: 12.025,
     },
     {
@@ -1701,8 +1650,8 @@
           xp: 50,
         },
       ],
-      x: 20.5,
-      y: 13.525,
+      x: 17.5,
+      y: 12.025,
     },
     {
       id: "47554865956A583A",
@@ -2542,105 +2491,6 @@
       ],
       x: 7.5,
       y: 24.45,
-    },
-    {
-      id: "475548198C92C119",
-      icon: {
-        id: "minecraft:enchanted_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_adv30_knuffelridder",
-          id: "475548D487DBD4D0",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548542D0D770B",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-        {
-          id: "475548BB5E751D65",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 9.0,
-      y: 24.45,
-      shape: "hexagon",
-    },
-    {
-      id: "4755485DB82C52D6",
-      icon: {
-        id: "minecraft:enchanted_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_adv30_pluisjager",
-          id: "4755481DA6875470",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548652A001147",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-        {
-          id: "47554840CF7E8047",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 9.0,
-      y: 25.95,
-      shape: "hexagon",
-    },
-    {
-      id: "475548DB0D1862B5",
-      icon: {
-        id: "minecraft:enchanted_book",
-      },
-      tasks: [
-        {
-          type: "advancement",
-          advancement: "guhs:quest/vr_z2_adv30_vadsmagier",
-          id: "475548696D6DDC4D",
-          criterion: "",
-        },
-      ],
-      rewards: [
-        {
-          id: "475548B68D9A4F79",
-          type: "item",
-          item: {
-            count: 1,
-            id: "guhs:kaas_knabbels",
-          },
-          count: 16,
-        },
-        {
-          id: "475548EFA646460C",
-          type: "xp",
-          xp: 50,
-        },
-      ],
-      x: 7.5,
-      y: 25.95,
-      shape: "hexagon",
     },
     {
       id: "475548980E8C19B5",
@@ -3522,21 +3372,21 @@
       y: 29.912499999999998,
     },
     {
-      id: "4755485BE591BC3C",
+      id: "475548547C86697C",
       icon: {
         id: "minecraft:enchanted_book",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vr_z3_adv50_knuffelridder",
-          id: "475548DA736D26CE",
+          advancement: "guhs:quest/vr_z3_adv35_knuffelridder",
+          id: "475548765458CD08",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548DF538CE718",
+          id: "4755480495E320BB",
           type: "item",
           item: {
             count: 1,
@@ -3545,7 +3395,7 @@
           count: 16,
         },
         {
-          id: "4755480E36F5C889",
+          id: "47554819FD1A3650",
           type: "xp",
           xp: 50,
         },
@@ -3555,21 +3405,21 @@
       shape: "hexagon",
     },
     {
-      id: "475548B8D6114C2E",
+      id: "4755485357496A6A",
       icon: {
         id: "minecraft:enchanted_book",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vr_z3_adv50_pluisjager",
-          id: "47554891B7182A38",
+          advancement: "guhs:quest/vr_z3_adv35_pluisjager",
+          id: "4755488CCB683B04",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "47554802CAB88CE4",
+          id: "4755483C5CCE7578",
           type: "item",
           item: {
             count: 1,
@@ -3578,7 +3428,7 @@
           count: 16,
         },
         {
-          id: "475548B179F072A6",
+          id: "475548B29E0F59A8",
           type: "xp",
           xp: 50,
         },
@@ -3588,21 +3438,21 @@
       shape: "hexagon",
     },
     {
-      id: "4755480DE4D48A8F",
+      id: "475548E7E2B282A1",
       icon: {
         id: "minecraft:enchanted_book",
       },
       tasks: [
         {
           type: "advancement",
-          advancement: "guhs:quest/vr_z3_adv50_vadsmagier",
-          id: "475548265824990A",
+          advancement: "guhs:quest/vr_z3_adv35_vadsmagier",
+          id: "4755483727821968",
           criterion: "",
         },
       ],
       rewards: [
         {
-          id: "475548BE8118EB12",
+          id: "47554849C06F5910",
           type: "item",
           item: {
             count: 1,
@@ -3611,7 +3461,7 @@
           count: 16,
         },
         {
-          id: "47554868742FA2B2",
+          id: "4755487DE24FBDF2",
           type: "xp",
           xp: 50,
         },
@@ -5706,6 +5556,1132 @@
       ],
       x: 9.0,
       y: 56.26249999999999,
+    },
+    {
+      id: "475548F60CDDC3EF",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq01_land",
+          id: "47554870B6C83455",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484719D359F8",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548546CC00196",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 11.5,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "475548FF960335EC",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq02_karavaan",
+          id: "47554895C168E0CA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554861704E5751",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554880B915E6A8",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 13.0,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "4755489C8BDEC873",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq03_duinen",
+          id: "4755486C3B30F675",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548346851C12C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755485A93CA7286",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 14.5,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "47554888235B78EB",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq04_sultane",
+          id: "475548889E8DFA39",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554886F456ED9B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "47554839A24BA68E",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 16.0,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "47554853DB6F476A",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq05_palmbaken",
+          id: "4755484AB126B400",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489219AD8B62",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548218E41620D",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "4755483061474679",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq06_tapijt",
+          id: "4755487145A79539",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E2A58EB6AA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755482CF2E961B4",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "4755483D1DA31CA7",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq07_zoutvlakte",
+          id: "4755484370E37617",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B939CA90D1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548CF15A23C59",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 54.76249999999999,
+      shape: "gear",
+    },
+    {
+      id: "4755489319B06762",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq08_sterrenwacht",
+          id: "475548B67E9A2105",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B81DDBBE01",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755485FF52A5AC8",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 20.5,
+      y: 56.26249999999999,
+      shape: "gear",
+    },
+    {
+      id: "4755489F9AD3C489",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq09_spiegelzaal",
+          id: "475548FCFFF6FEF1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EF8AE2C065",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755480D0FF6EAAC",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 19.0,
+      y: 56.26249999999999,
+      shape: "gear",
+    },
+    {
+      id: "475548C58641DF2B",
+      icon: {
+        id: "minecraft:writable_book",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_hq10_moederoase",
+          id: "475548990069BA97",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554854653B1178",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548B907AAD1EE",
+          type: "xp",
+          xp: 100,
+        },
+      ],
+      x: 17.5,
+      y: 56.26249999999999,
+      shape: "gear",
+    },
+    {
+      id: "4755488A7DAE0F69",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s01_verjaardag",
+          id: "475548F80C63D780",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BC7986DD1F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D5F944E35C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 60.22499999999999,
+    },
+    {
+      id: "475548AD22158405",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s02_tuinen",
+          id: "475548FC087D7C6C",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554816AA5410C0",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755485C10ED5CEA",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 60.22499999999999,
+    },
+    {
+      id: "475548E88C91DAEF",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s03_post",
+          id: "475548593CAA3D94",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554803D63C63D6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548FAF386D38C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 60.22499999999999,
+    },
+    {
+      id: "4755489C2AE52E9E",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s04_kwastjes",
+          id: "47554812834902F3",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755484CE9B9CE12",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755487D796FF144",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 60.22499999999999,
+    },
+    {
+      id: "47554807E11717C4",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s05_afdingen",
+          id: "475548D8409AFD61",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755486DF1B05847",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548E1499D6E9D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 6.0,
+      y: 60.22499999999999,
+    },
+    {
+      id: "475548304CFA5C05",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s06_norias",
+          id: "475548F4EFDE8732",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548EF06510A7D",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554873BA7533F2",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 60.22499999999999,
+    },
+    {
+      id: "475548F1F93B1EDA",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s07_eendjes",
+          id: "47554865475EFED5",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548164370AE0F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548D06570CB87",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 60.22499999999999,
+    },
+    {
+      id: "4755480AFB523ADB",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s08_examen",
+          id: "47554895E66365BB",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548547AC854FA",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548170901177F",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 9.0,
+      y: 61.72499999999999,
+    },
+    {
+      id: "47554836B48565CC",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s09_dadelapen",
+          id: "475548DD350FD9B0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548AA765BE008",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755488DB70CF663",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 7.5,
+      y: 61.72499999999999,
+    },
+    {
+      id: "475548B802F74582",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s10_koerier",
+          id: "47554849F3081463",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548D958BE8266",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "4755486AE6364AAD",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 6.0,
+      y: 61.72499999999999,
+    },
+    {
+      id: "47554891DACE7B8E",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s11_zoutkreeft",
+          id: "475548586E006763",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548468A3208A5",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548A63EC68C77",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 4.5,
+      y: 61.72499999999999,
+    },
+    {
+      id: "47554839071A82B3",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s12_zoutgrot",
+          id: "47554833130B2F96",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B07CDDBF73",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548BD6D99039D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 61.72499999999999,
+    },
+    {
+      id: "47554835B852B586",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s13_wormelien",
+          id: "4755487D1C54AB4D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554819F7DFE2B1",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554844862FB643",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 61.72499999999999,
+    },
+    {
+      id: "4755489A533C0588",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s14_tabletten",
+          id: "475548D50B6F512A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548DFC048523A",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554856E6D20179",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 61.72499999999999,
+    },
+    {
+      id: "4755483CC97EA465",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_s15_oostroute",
+          id: "4755481642D980F1",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554821B5FB94ED",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "47554847855A592D",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 63.22499999999999,
+    },
+    {
+      id: "475548EDEBF2E657",
+      icon: {
+        id: "guhs:knuffel_golden",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_knuffels_alle",
+          id: "475548D85B903FD0",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BA439B65E9",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 11.5,
+      y: 60.22499999999999,
+      shape: "hexagon",
+    },
+    {
+      id: "475548F5F741EEA4",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_grauwe_brief",
+          id: "47554851C013CC9D",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548FD2CEEE855",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 13.0,
+      y: 60.22499999999999,
+    },
+    {
+      id: "4755484744E42F70",
+      icon: {
+        id: "minecraft:spyglass",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_uitkijken_alle",
+          id: "475548447EEA55B7",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755485EA9FD2D1B",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 14.5,
+      y: 60.22499999999999,
+      shape: "hexagon",
+    },
+    {
+      id: "475548FE0F22F3C1",
+      icon: {
+        id: "minecraft:beacon",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_bakens_alle",
+          id: "4755480AB96174AA",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548E2BF6E6923",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+      ],
+      x: 16.0,
+      y: 60.22499999999999,
+      shape: "hexagon",
+    },
+    {
+      id: "475548D5DC318FBB",
+      icon: {
+        id: "minecraft:gold_nugget",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_ringeling",
+          id: "47554891374B6201",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548B07AAA0A4C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 32,
+        },
+      ],
+      x: 17.5,
+      y: 60.22499999999999,
+      shape: "hexagon",
+    },
+    {
+      id: "4755488A55023BD4",
+      icon: {
+        id: "minecraft:chest",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_schat_schatkamer",
+          id: "4755481866243E59",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548C1AEB59087",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 19.0,
+      y: 60.22499999999999,
+    },
+    {
+      id: "475548CE75ADFF2A",
+      icon: {
+        id: "minecraft:chest",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_schat_minaret",
+          id: "475548F3D1BC8E6B",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755489671B4488C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 60.22499999999999,
+    },
+    {
+      id: "4755486E5A5B2F13",
+      icon: {
+        id: "minecraft:chest",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z6_schat_mesa",
+          id: "47554810E07C509A",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554849D2255F6E",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+      ],
+      x: 20.5,
+      y: 61.72499999999999,
+    },
+    {
+      id: "475548BC14B2C2CB",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z5_adv58_knuffelridder",
+          id: "475548C19E843C97",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "475548BF24D3A77F",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755481BC6A4921C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 0.0,
+      y: 67.18749999999999,
+    },
+    {
+      id: "4755482C54075993",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z5_adv58_pluisjager",
+          id: "4755483EFE490C41",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482824A88030",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "475548301AB99FD3",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 1.5,
+      y: 67.18749999999999,
+    },
+    {
+      id: "4755487BF0868219",
+      icon: {
+        id: "minecraft:paper",
+      },
+      tasks: [
+        {
+          type: "advancement",
+          advancement: "guhs:quest/vr_z5_adv58_vadsmagier",
+          id: "475548671EB6F523",
+          criterion: "",
+        },
+      ],
+      rewards: [
+        {
+          id: "47554854496E73C6",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 16,
+        },
+        {
+          id: "4755487B8E07E938",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 3.0,
+      y: 67.18749999999999,
     },
   ],
 }
