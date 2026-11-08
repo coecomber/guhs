@@ -16,10 +16,24 @@
   showTheme();
   // spoiler switch: show everything up to zone X
   var zs=document.getElementById('zonetot');
-  function setZone(z){html.setAttribute('data-zonetot',z);store('guhs-vr-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
-  if(zs){zs.addEventListener('change',function(){setZone(zs.value);});}
-  setZone(read('guhs-vr-zonetot')||html.getAttribute('data-zonetot')||'3');
-  window.VR={lang:function(){return html.getAttribute('data-lang')||'nl';},zone:function(){return +(html.getAttribute('data-zonetot')||3);},
+  // W-SITE (user request): EVERY page load starts at zone 1 (tutorial + zone 1); a higher choice is never remembered
+  function setZone(z){html.setAttribute('data-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
+  try{localStorage.removeItem('guhs-vr-zonetot');}catch(e){}
+  setZone('1');
+  // W-SITE: a friendly note on load; "niet meer tonen" only hides the NOTE next time (the switch still starts at zone 1)
+  var uitleg=null;
+  function sluitUitleg(){if(uitleg){uitleg.remove();uitleg=null;}}
+  if(zs){zs.addEventListener('change',function(){setZone(zs.value);sluitUitleg();});}
+  if(read('guhs-vr-spoileruitleg-weg')!=='1'){
+    uitleg=document.createElement('div');uitleg.className='spoileruitleg';uitleg.setAttribute('role','dialog');uitleg.setAttribute('aria-live','polite');
+    uitleg.setAttribute('aria-label','Spoilers');
+    uitleg.innerHTML='<p><span lang="nl">Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij <b>Toon tot</b> tot welke zone je alles wilt zien.</span>'+
+      '<span lang="en">Everything shows only the tutorial and the first zone. Want spoilers or more information? Pick up to which zone you want to see everything at <b>Show up to</b> (top right).</span></p>'+
+      '<div class="su-knoppen"><label><input type="checkbox" id="su-weg"> <span lang="nl">Niet meer tonen</span><span lang="en">Don&#39;t show again</span></label>'+
+      '<button type="button" class="knop" id="su-ok">OK</button></div>';
+    body.appendChild(uitleg);
+    uitleg.querySelector('#su-ok').addEventListener('click',function(){if(uitleg.querySelector('#su-weg').checked)store('guhs-vr-spoileruitleg-weg','1');sluitUitleg();});}
+  window.VR={lang:function(){return html.getAttribute('data-lang')||'nl';},zone:function(){return +(html.getAttribute('data-zonetot')||1);},
     t:function(en,nl){return (html.getAttribute('data-lang')==='en')?en:nl;},root:body.getAttribute('data-root')||'',
     live:body.getAttribute('data-live')||''};
   // filter tables: <input data-filter="#id">, <select data-filter-col="n" data-filter="#id">

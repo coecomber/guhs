@@ -8796,7 +8796,7 @@
   {
    "id": "kk_poort_rozenkloof",
    "naam": "Kwartiermeester Rotsdak",
-   "zone": "zone1",
+   "zone": "zone6",
    "waar": "op het Rozenplein, de bodem van de Rozenkloof bij de stervormige fontein, naast de fontein",
    "pos": [
     3386,
@@ -8814,7 +8814,7 @@
   {
    "id": "bond_bord_rozenkloof",
    "naam": "Bondenbord-guh Spijker",
-   "zone": "zone1",
+   "zone": "zone6",
    "waar": "op het Rozenplein, de bodem van de Rozenkloof bij de stervormige fontein, bij het prikbord naast de bank",
    "pos": [
     3426,
@@ -9107,7 +9107,7 @@
   {
    "id": "kk_poort_saffraanpoort",
    "naam": "Kwartiermeester Koepeltje",
-   "zone": "zone1",
+   "zone": "zone6",
    "waar": "op het paleisplein van Saffraanpoort, bij de stenen bank onder de palmen",
    "pos": [
     3748,
@@ -9125,7 +9125,7 @@
   {
    "id": "bond_bord_saffraanpoort",
    "naam": "Bondenbord-guh Punaise",
-   "zone": "zone1",
+   "zone": "zone6",
    "waar": "in de Karavanserai bij de Westpoort van Saffraanpoort (het vierkante hof met de arcaden), bij het guild-karavaanbord onder de arcade",
    "pos": [
     3654,
@@ -9768,7 +9768,7 @@
   {
    "id": "bond_bord_kandijkom",
    "naam": "Bondenbord",
-   "zone": "zone1",
+   "zone": "zone2",
    "waar": "",
    "pos": null,
    "rol": null,
@@ -9782,7 +9782,7 @@
   {
    "id": "bond_bord_honingtak",
    "naam": "Bondenbord",
-   "zone": "zone1",
+   "zone": "zone3",
    "waar": "",
    "pos": null,
    "rol": null,
@@ -9796,7 +9796,7 @@
   {
    "id": "bond_bord_lampionhaven",
    "naam": "Bondenbord",
-   "zone": "zone1",
+   "zone": "zone4",
    "waar": "",
    "pos": null,
    "rol": null,
@@ -9810,7 +9810,7 @@
   {
    "id": "bond_bord_hoogvads",
    "naam": "Bondenbord",
-   "zone": "zone1",
+   "zone": "zone5",
    "waar": "",
    "pos": null,
    "rol": null,

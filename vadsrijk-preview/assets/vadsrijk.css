@@ -55,6 +55,12 @@ details.spoiler{border:1.5px dashed var(--vr);border-radius:12px;padding:6px 12p
 details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
+.komma{list-style:none;padding:0;margin:0 0 1em}.komma li{display:inline}.komma li+li::before{content:", "}
+.spoileruitleg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:2000;width:min(560px,calc(100vw - 32px));background:var(--card);color:var(--ink);border:2px solid var(--vr);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:14px 16px;font:15px/1.45 var(--body)}
+.spoileruitleg p{margin:0 0 10px}
+.spoileruitleg .su-knoppen{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.spoileruitleg label{font-size:14px;color:var(--muted);cursor:pointer}
+.spoileruitleg .knop{min-width:80px;cursor:pointer}
 .verstopt-zone{border:1.5px dashed var(--line2);border-radius:14px;padding:10px 14px;color:var(--muted);margin:10px 0}
 html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="5"] [data-zone="6"]:not(.verstopt-zone){display:none!important}
 .verstopt-zone{display:none}
