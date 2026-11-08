@@ -77,7 +77,7 @@ with every scene playing for real and bosses shown (not silently skipped).
   steps consecutive and in order, zones never go back, `na` first, min levels; toggles add spec17 of your class after hq09 and the
   mount quests after the first mount), `levelZetten`, `springNaarMetVlaggen` (fast-forward to zone 2: all zone-1 main quests
   handed in through the hooks + `zone1_klaar`; then back to hq06).
-- See the commit message / resume point below for the run result.
+- Run 2026-11-08: `compileJava` OK; `runGameTestServer -Pgt=VadsrijkQuestLopen`: all 4 required tests passed (3 own + framework).
 
 ## Open points
 - Not played in a real client (no client run in this slice): pacing of the reopen, the panel layout at big GUI scales, and the
