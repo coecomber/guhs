@@ -12,6 +12,8 @@ public final class GeluidConfig {
     public static final ModConfigSpec.IntValue GEBIEDSMUZIEK, BAZENMUZIEK, STINGERS, OMGEVING, PAUZE_MIN, PAUZE_MAX;
     /** U-AUDIO2: the world point sounds and the NPC voices. */
     public static final ModConfigSpec.IntValue WERELDGELUIDEN, STEMMEN;
+    /** U-GEROEZEMOES: the guh crowd murmur in busy places. */
+    public static final ModConfigSpec.IntValue GEROEZEMOES;
 
     static {
         ModConfigSpec.Builder b = new ModConfigSpec.Builder();
@@ -29,6 +31,9 @@ public final class GeluidConfig {
                 .defineInRange("wereldgeluiden", 60, 0, 100);
         STEMMEN = b.comment("Het Vadsrijk: de guh-stemmetjes van NPC's (een 'guh!' als je ze aanspreekt, een vraagje, een bedankje) (procent; 0 = uit).",
                 "Volgt ook de schuif Vriendelijke wezens.").defineInRange("stemmen", 70, 0, 100);
+        GEROEZEMOES = b.comment("Het Vadsrijk: zacht guh-geroezemoes op drukke plekken (Hoogvads, de bazaar van Saffraanpoort, de markt van Kandijkom, ...),",
+                "met af en toe een 'njeg', een giechel, een piepje of een blub (procent; 0 = uit). Volgt ook de schuif Omgeving.")
+                .defineInRange("geroezemoes", 60, 0, 100);   // U-GEROEZEMOES
         SPEC = b.build();
     }
 
@@ -57,6 +62,10 @@ public final class GeluidConfig {
 
     public static float wereld() {
         return procent(WERELDGELUIDEN, 60);
+    }
+
+    public static float geroezemoes() {   // U-GEROEZEMOES
+        return procent(GEROEZEMOES, 60);
     }
 
     public static float stemmen() {

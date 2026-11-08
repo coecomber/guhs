@@ -46538,5 +46538,7 @@
   "vadsrijk.vint.z6raid.halster.ok": "The Humpguh in Starry Night coat is yours! (N = mounts)",
   "vadsrijk.vint.z6raid.halster.uitleg": "Right-click: the Humpguh in Starry Night coat (mount + coat).",
   "vadsrijk.uhud.deel.z6raid": "Raid frames (Star-Dousing Tower)",
-  "vadsrijk.vint.z6raid.hud.voorbeeld": "Raid frames (only in the raid)"
+  "vadsrijk.vint.z6raid.hud.voorbeeld": "Raid frames (only in the raid)",
+  "guhs.configuration.geroezemoes": "Vadsrijk: crowd murmur",
+  "guhs.configuration.geroezemoes.tooltip": "A soft guh crowd murmur in busy places (Hoogvads, the Saffraanpoort bazaar, the Kandijkom market, ...), now and then a 'njeg', a giggle, a squeak or a blub. Quieter at night (percent, 0 = off). Also follows the Ambient slider."
 }

@@ -25,6 +25,7 @@ public final class GeluidClient {
         GebiedSfeerSpeler.init();
         WereldGeluiden.init();   // U-AUDIO2
         StemSpeler.init();   // U-AUDIO2
+        GeroezemoesSpeler.init();   // U-GEROEZEMOES
         GeluidPayloads.speel = s -> Minecraft.getInstance().execute(() -> ontvang(s.soort(), s.naam()));
         var oud = KernPayloads.titelOntvanger;
         KernPayloads.titelOntvanger = t -> {
@@ -67,6 +68,7 @@ public final class GeluidClient {
             case "stem" -> StemSpeler.voorbeeld(naam);
             case "wereld" -> WereldGeluiden.voorbeeld(naam);
             case "wereldinfo" -> WereldGeluiden.info();
+            case "geroezemoes" -> GeroezemoesSpeler.dev(naam);   // U-GEROEZEMOES
             default -> {
             }
         }

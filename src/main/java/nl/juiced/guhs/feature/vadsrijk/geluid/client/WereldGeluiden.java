@@ -99,7 +99,7 @@ public final class WereldGeluiden {
         }
         scan(l, p);
         if (klok % 40 == 0) {
-            markt = zoekMarkt(l, p);
+            markt = null;   // U-GEROEZEMOES: the market murmur is GeroezemoesSpeler's now (zoekMarkt kept for reference)
         }
         echoTick(l, p, vol);
         // the nearest sources within range, one per kind per 6 blocks, at most MAX_BRONNEN
@@ -220,6 +220,16 @@ public final class WereldGeluiden {
             }
         }
         return uit;
+    }
+
+    // U-GEROEZEMOES: the crowd murmur's one-shots share this global pause (the budget: never two little sounds on top of each other)
+    static boolean losVrij() {
+        Minecraft mc = Minecraft.getInstance();
+        return klok >= volgendeLos || GeluidConfig.wereld() <= 0 || mc.level == null || !Vadsrijk.in(mc.level);
+    }
+
+    static void losGebruikt() {
+        volgendeLos = klok + MIN_PAUZE + R.nextInt(40);
     }
 
     // ---- playing -----------------------------------------------------------------------------------------------------------
