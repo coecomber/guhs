@@ -76,7 +76,7 @@
   var KI={knuffelridder:'&#9876;',pluisjager:'&#127993;',vadsmagier:'&#10024;'};
   function glij(m,naar){var van=m.getLatLng(),t0=performance.now(),d=1800;cancelAnimationFrame(m._raf);
     (function stap(t){var f=Math.min(1,(t-t0)/d);f=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;m.setLatLng(L.latLng(van.lat+(naar.lat-van.lat)*f,van.lng+(naar.lng-van.lng)*f));if(f<1)m._raf=requestAnimationFrame(stap);})(t0);}
-  function posities(){VR.haal('posities.json').then(function(P){var zien={},sz={};
+  function posities(){VR.haal('posities.json').then(function(P){var zien={},sz={};if(P.tijd&&Date.now()-P.tijd>120000)P={spelers:[],status:[],schepen:[]};   // W-SITE: an old file (server stopped) = nobody
       (P.spelers||[]).forEach(function(s){var id=s.naam;zien[id]=1;var to=ll(s.x,s.z),m=spelersM[id];
         var html='<span class="vr-speler"><img src="https://mc-heads.net/avatar/'+encodeURIComponent(s.naam)+'/20" alt="" width="20" height="20"><b>'+VR.esc(s.naam)+'</b><i>'+(KI[s.klasse]||'')+' '+(s.level||'')+'</i></span>';
         if(!m){m=L.marker(to,{icon:L.divIcon({className:'',html:html,iconSize:null,iconAnchor:[10,10]}),title:s.naam,zIndexOffset:1000});
@@ -88,7 +88,8 @@
           m.bindPopup('<h4>'+VR.t('Airship in flight','Luchtschip onderweg')+'</h4>'+(s.naar?VR.t('to ','naar ')+VR.esc(s.naar):''));m.addTo(Lspel);schipM[s.id]=m;}else{glij(m,to);}});
       Object.keys(schipM).forEach(function(id){if(!sz[id]){Lspel.removeLayer(schipM[id]);delete schipM[id];}});
       if(pnote){var n=(P.spelers||[]).length,st=(P.status||[]).length;
-        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):VR.t('No players online','Geen spelers online');}
-      setTimeout(zoneFilter,30);},function(){if(pnote)pnote.textContent=VR.t('No players online','Geen spelers online');});}
-  posities();setInterval(posities,10000);
+        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):(st?VR.t(st+' in a dungeon, raid or house',st+' in een kerker, raid of huisje'):VR.leeg());}
+      pfout=0;setTimeout(zoneFilter,30);},function(){pfout++;if(pnote)pnote.textContent=VR.nietLive();});}
+  // W-SITE: unreachable -> back off (10 s, then every 60 s) instead of hammering a missing endpoint
+  var pfout=0,ptik=0;posities();setInterval(function(){ptik++;if(pfout<2||ptik%6===0)posities();},10000);
 })();

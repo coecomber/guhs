@@ -2777,9 +2777,9 @@
    "soort": "luchtschip",
    "zone": "zone6",
    "pos": [
-    3397,
-    142,
-    -742
+    3400,
+    143,
+    -741
    ],
    "naam": "Luchtschip (Rozenkloof)",
    "gebied": "z6_rozenkloof"
@@ -2813,9 +2813,9 @@
    "soort": "kampvuur",
    "zone": "zone6",
    "pos": [
-    3908,
-    74,
-    -580
+    3903,
+    69,
+    -583
    ],
    "naam": "Kampvuur (De Zoutvlakte)",
    "gebied": "z6_zoutvlakte"
@@ -2825,9 +2825,9 @@
    "soort": "kampvuur",
    "zone": "zone6",
    "pos": [
-    4054,
-    81,
-    -824
+    4057,
+    66,
+    -830
    ],
    "naam": "Kampvuur (De Moederoase)",
    "gebied": "z6_moederoase"
@@ -2837,9 +2837,9 @@
    "soort": "kampvuur",
    "zone": "zone6",
    "pos": [
-    4049,
-    68,
-    -832
+    4051,
+    67,
+    -835
    ],
    "naam": "Kampvuur (De Moederoase)",
    "gebied": "z6_moederoase"
@@ -2861,7 +2861,7 @@
    "soort": "kampvuur",
    "zone": "zone6",
    "pos": [
-    3499,
+    3497,
     60,
     -964
    ],
@@ -8645,7 +8645,7 @@
    "zone": "zone6",
    "waar": "op de Luchthaven van Rozenkloof, de ronde stenen meertoren op de noordrand van de kloof, bij de balie onder de mast met de vaandels",
    "pos": [
-    3392,
+    3391,
     142,
     -784
    ],
@@ -8663,7 +8663,7 @@
    "zone": "zone6",
    "waar": "in de Schatkamer, de grote uitgehouwen gevel in de eindwand aan de oostkant van de Rozenkloof",
    "pos": [
-    3508,
+    3513,
     76,
     -697
    ],
@@ -9358,7 +9358,7 @@
    "waar": "bij de vluchtelingententen aan de oostkant van de Moederoase, waar de Oostroute begint",
    "pos": [
     4149,
-    79,
+    66,
     -761
    ],
    "rol": null,
@@ -18105,7 +18105,7 @@
      "pos": [
       1960,
       63,
-      -248
+      -270
      ],
      "geheim": false
     }
@@ -18172,9 +18172,9 @@
      "soort": "meld",
      "n": 1,
      "pos": [
-      2452,
-      66,
-      -520
+      2511,
+      73,
+      -565
      ],
      "geheim": false
     },
@@ -20142,7 +20142,7 @@
      "soort": "praat",
      "n": 1,
      "pos": [
-      3392,
+      3391,
       142,
       -784
      ],
@@ -20153,7 +20153,7 @@
      "soort": "praat",
      "n": 1,
      "pos": [
-      3508,
+      3513,
       76,
       -697
      ],
@@ -22191,7 +22191,7 @@
    ],
    "gever_pos": [
     4149,
-    79,
+    66,
     -761
    ]
   }
@@ -22613,7 +22613,7 @@
     "grot_zwamgrot"
    ],
    "respawn_s": 11,
-   "aantal_spawners": 28,
+   "aantal_spawners": 27,
    "loot": {
     "rollen": 1,
     "kans": 0.26,
@@ -22650,63 +22650,6 @@
      "sporencape": 2
     },
     "id": "wezens:zwamwachter"
-   }
-  },
-  {
-   "id": "vr_mob_glimzwam",
-   "kort": "glimzwam",
-   "naam": "Glimzwam",
-   "zone": "zone1",
-   "tip": "De Glimzwam heelt de wezens om hem heen. Vrolijk hem als eerste op!",
-   "critter": false,
-   "lv": [
-    11,
-    18
-   ],
-   "elementen": [
-    "natuur"
-   ],
-   "elite": 6.0,
-   "gebieden": [
-    "druipgrotten",
-    "grot_zwamgrot"
-   ],
-   "respawn_s": 13,
-   "aantal_spawners": 18,
-   "loot": {
-    "rollen": 1,
-    "kans": 0.28,
-    "geluk": 1.0,
-    "munten_min": 10,
-    "munten_max": 24,
-    "regels": {
-     "knaagvachtje": 3,
-     "kristalhelmpje": 3,
-     "steelbroek": 2,
-     "klodderhesje": 1,
-     "klodderbroek": 1,
-     "zwamhoed": 1,
-     "sporenmantel": 1,
-     "kussenzwaard": 1,
-     "knuffelknots": 1,
-     "pluishamer": 1,
-     "klodderkling": 1,
-     "pluisboog": 1,
-     "druppelboog": 1,
-     "snoepkruisboog": 1,
-     "eikelkatapult": 1,
-     "rozenstaf": 1,
-     "vlammenstaf": 1,
-     "zwamstokje": 1,
-     "slijmboek": 1,
-     "pluiswantjes": 1,
-     "knuffelcapeje": 1,
-     "pluisarmband": 1,
-     "rozenarmbandje": 1,
-     "kloddergrijpers": 1,
-     "sporencape": 1
-    },
-    "id": "wezens:glimzwam"
    }
   },
   {
@@ -22817,6 +22760,62 @@
      "sporencape": 1
     },
     "id": "wezens:knaag"
+   }
+  },
+  {
+   "id": "vr_mob_glimzwam",
+   "kort": "glimzwam",
+   "naam": "Glimzwam",
+   "zone": "zone1",
+   "tip": "De Glimzwam heelt de wezens om hem heen. Vrolijk hem als eerste op!",
+   "critter": false,
+   "lv": [
+    13,
+    18
+   ],
+   "elementen": [
+    "natuur"
+   ],
+   "elite": 6.0,
+   "gebieden": [
+    "druipgrotten"
+   ],
+   "respawn_s": 13,
+   "aantal_spawners": 17,
+   "loot": {
+    "rollen": 1,
+    "kans": 0.28,
+    "geluk": 1.0,
+    "munten_min": 10,
+    "munten_max": 24,
+    "regels": {
+     "knaagvachtje": 3,
+     "kristalhelmpje": 3,
+     "steelbroek": 2,
+     "klodderhesje": 1,
+     "klodderbroek": 1,
+     "zwamhoed": 1,
+     "sporenmantel": 1,
+     "kussenzwaard": 1,
+     "knuffelknots": 1,
+     "pluishamer": 1,
+     "klodderkling": 1,
+     "pluisboog": 1,
+     "druppelboog": 1,
+     "snoepkruisboog": 1,
+     "eikelkatapult": 1,
+     "rozenstaf": 1,
+     "vlammenstaf": 1,
+     "zwamstokje": 1,
+     "slijmboek": 1,
+     "pluiswantjes": 1,
+     "knuffelcapeje": 1,
+     "pluisarmband": 1,
+     "rozenarmbandje": 1,
+     "kloddergrijpers": 1,
+     "sporencape": 1
+    },
+    "id": "wezens:glimzwam"
    }
   },
   {
@@ -23060,16 +23059,15 @@
    "critter": false,
    "lv": [
     20,
-    24
+    23
    ],
    "elementen": [],
    "elite": 6.0,
    "gebieden": [
-    "z2_galmhellingen",
-    "grot_kristalgrot"
+    "z2_galmhellingen"
    ],
-   "respawn_s": 30,
-   "aantal_spawners": 8,
+   "respawn_s": 35,
+   "aantal_spawners": 7,
    "loot": {
     "rollen": 1,
     "kans": 0.2,
@@ -23379,13 +23377,12 @@
     26
    ],
    "elementen": [],
-   "elite": 100.0,
+   "elite": 6.0,
    "gebieden": [
-    "z2_knuffelmeer",
-    "grot_kristalgrot"
+    "z2_knuffelmeer"
    ],
    "respawn_s": 45,
-   "aantal_spawners": 12,
+   "aantal_spawners": 11,
    "loot": {
     "rollen": 1,
     "kans": 0.3,
@@ -24249,16 +24246,15 @@
    "critter": false,
    "lv": [
     43,
-    47
+    46
    ],
    "elementen": [],
-   "elite": 100.0,
+   "elite": 6.0,
    "gebieden": [
-    "z3_wortelvelden",
-    "grot_wortelgrot"
+    "z3_wortelvelden"
    ],
    "respawn_s": 40,
-   "aantal_spawners": 15,
+   "aantal_spawners": 14,
    "loot": {
     "rollen": 1,
     "kans": 0.24,
@@ -24338,53 +24334,6 @@
    }
   },
   {
-   "id": "vr_z3_mob_wortelschim",
-   "kort": "wortelschim",
-   "naam": "Wortelschim",
-   "zone": "zone3",
-   "tip": "In het donker sluipt hij achter je. Blijf in het licht, dan zie je hem en raak je hem goed.",
-   "critter": false,
-   "lv": [
-    44,
-    49
-   ],
-   "elementen": [],
-   "elite": 6.0,
-   "gebieden": [
-    "z3_wortelduister",
-    "z3_hart",
-    "grot_wortelgrot"
-   ],
-   "respawn_s": 30,
-   "aantal_spawners": 20,
-   "loot": {
-    "rollen": 1,
-    "kans": 0.24,
-    "geluk": 1.3,
-    "munten_min": 56,
-    "munten_max": 104,
-    "regels": {
-     "wortelkroon": 3,
-     "wortelmantel": 3,
-     "wortelbroek": 3,
-     "wortelstappers": 3,
-     "sporenoorbel": 1,
-     "harsketting": 1,
-     "takkenknots": 1,
-     "schorshamer": 1,
-     "liaanboog": 1,
-     "raatkruisboog": 1,
-     "bloesemstaf": 1,
-     "lantaarnstaf": 1,
-     "schemercape": 1,
-     "honingarmband": 1,
-     "harsarmband": 1,
-     "wortelcape": 3
-    },
-    "id": "z3wezens:wortelschim"
-   }
-  },
-  {
    "id": "vr_z3_mob_dove_ziener",
    "kort": "dove_ziener",
    "naam": "De Dove Ziener",
@@ -24427,6 +24376,52 @@
      "wortelcape": 3
     },
     "id": "z3wezens:dove_ziener"
+   }
+  },
+  {
+   "id": "vr_z3_mob_wortelschim",
+   "kort": "wortelschim",
+   "naam": "Wortelschim",
+   "zone": "zone3",
+   "tip": "In het donker sluipt hij achter je. Blijf in het licht, dan zie je hem en raak je hem goed.",
+   "critter": false,
+   "lv": [
+    47,
+    49
+   ],
+   "elementen": [],
+   "elite": 6.0,
+   "gebieden": [
+    "z3_wortelduister",
+    "z3_hart"
+   ],
+   "respawn_s": 35,
+   "aantal_spawners": 19,
+   "loot": {
+    "rollen": 1,
+    "kans": 0.24,
+    "geluk": 1.3,
+    "munten_min": 56,
+    "munten_max": 104,
+    "regels": {
+     "wortelkroon": 3,
+     "wortelmantel": 3,
+     "wortelbroek": 3,
+     "wortelstappers": 3,
+     "sporenoorbel": 1,
+     "harsketting": 1,
+     "takkenknots": 1,
+     "schorshamer": 1,
+     "liaanboog": 1,
+     "raatkruisboog": 1,
+     "bloesemstaf": 1,
+     "lantaarnstaf": 1,
+     "schemercape": 1,
+     "honingarmband": 1,
+     "harsarmband": 1,
+     "wortelcape": 3
+    },
+    "id": "z3wezens:wortelschim"
    }
   },
   {
@@ -24513,16 +24508,16 @@
    "critter": false,
    "lv": [
     50,
-    55
+    54
    ],
    "elementen": [],
-   "elite": 100.0,
+   "elite": 4.0,
    "gebieden": [
     "grot_koraalgrot",
     "z4_zee"
    ],
    "respawn_s": 45,
-   "aantal_spawners": 3,
+   "aantal_spawners": 2,
    "loot": {
     "rollen": 1,
     "kans": 0.3,
@@ -24846,16 +24841,15 @@
    "critter": false,
    "lv": [
     53,
-    55
+    54
    ],
    "elementen": [],
    "elite": 4.0,
    "gebieden": [
-    "z4_koraalbaai",
-    "grot_koraalgrot"
+    "z4_koraalbaai"
    ],
-   "respawn_s": 30,
-   "aantal_spawners": 2,
+   "respawn_s": 40,
+   "aantal_spawners": 1,
    "loot": {
     "rollen": 1,
     "kans": 0.28,
@@ -25138,15 +25132,14 @@
     60
    ],
    "elementen": [],
-   "elite": 100.0,
+   "elite": 6.0,
    "gebieden": [
     "z5_wolkrand_zuid",
     "z5_wolkrand_noord",
-    "z5_staartvlakte",
-    "grot_wolkengrot"
+    "z5_staartvlakte"
    ],
    "respawn_s": 45,
-   "aantal_spawners": 4,
+   "aantal_spawners": 3,
    "loot": {
     "rollen": 1,
     "kans": 0.24,
@@ -25267,11 +25260,10 @@
    "gebieden": [
     "z5_wolkrand_zuid",
     "z5_wolkrand_noord",
-    "z5_staartvlakte",
-    "grot_wolkengrot"
+    "z5_staartvlakte"
    ],
-   "respawn_s": 30,
-   "aantal_spawners": 5,
+   "respawn_s": 45,
+   "aantal_spawners": 4,
    "loot": {
     "rollen": 1,
     "kans": 0.26,
@@ -43951,9 +43943,9 @@
    "naam": "Knuffelridder",
    "naam_en": "Knuffelridder",
    "wapens": [
-    "knots",
     "zwaard",
-    "hamer"
+    "hamer",
+    "knots"
    ],
    "per_level": {
     "1": {
@@ -44012,9 +44004,9 @@
    "naam": "Pluisjager",
    "naam_en": "Pluisjager",
    "wapens": [
-    "katapult",
     "boog",
-    "kruisboog"
+    "kruisboog",
+    "katapult"
    ],
    "per_level": {
     "1": {
@@ -44234,6 +44226,12 @@
    "bron": "Vrolijk de Grauwe Droom op in de droom van Moeder Wolkwal."
   },
   {
+   "id": "sterrenpluisje",
+   "naam": "Sterrenpluisje",
+   "tekst": "De Kleine Pluis, opgevrolijkt en piepklein. Gloeit 's nachts.",
+   "bron": "Zeldzaam uit de kist van De Sterrendovende Toren."
+  },
+  {
    "id": "fennekje",
    "naam": "Fennekje",
    "tekst": "Een fennekguhtje met oren groter dan zijn hoofd. Hij hoort alles.",
@@ -44282,10 +44280,40 @@
    "bron": "Vrolijk De Verzonken Sterrenguh op (eerste keer)."
   },
   {
-   "id": "sterrenpluisje",
-   "naam": "Sterrenpluisje",
-   "tekst": "De Kleine Pluis, opgevrolijkt en piepklein. Gloeit 's nachts.",
-   "bron": "Zeldzaam uit de kist van De Sterrendovende Toren."
+   "id": "glimhoedje",
+   "naam": "Glimhoedje",
+   "tekst": "Een piepklein Moeder Glimhoedje dat zachtjes licht geeft.",
+   "bron": "Zeldzaam uit de eindkist van de Zwamgrot."
+  },
+  {
+   "id": "tinkeltje",
+   "naam": "Tinkeltje",
+   "tekst": "Een kristalspinnetje dat bij elke stap tinkelt.",
+   "bron": "Zeldzaam uit de eindkist van de Kristalgrot."
+  },
+  {
+   "id": "knoestje",
+   "naam": "Knoestje",
+   "tekst": "Een mini-Knoestbuik. Slaapt het liefst.",
+   "bron": "Zeldzaam uit de eindkist van de Wortelgrot."
+  },
+  {
+   "id": "zeurtje",
+   "naam": "Zeurtje",
+   "tekst": "Een slakje dat zeurt, maar wel heel schattig.",
+   "bron": "Zeldzaam uit de eindkist van de Koraalgrot."
+  },
+  {
+   "id": "pluisje",
+   "naam": "Pluisje",
+   "tekst": "Een pluismijtje dat je jas knuffelt.",
+   "bron": "Zeldzaam uit de eindkist van de Wolkengrotten."
+  },
+  {
+   "id": "galmpje",
+   "naam": "Galmpje",
+   "tekst": "Een zoutkreeftje dat zachtjes meezingt.",
+   "bron": "Zeldzaam uit de eindkist van de Zingende Zoutgrot."
   }
  ],
  "rijdieren": [
@@ -44528,9 +44556,9 @@
     -441
    ],
    "b": [
-    3397,
-    142,
-    -742
+    3400,
+    143,
+    -741
    ],
    "za": "zone5",
    "zb": "zone6"
@@ -50841,9 +50869,9 @@
    "naam": "Duinbolletje",
    "tekst": "Een verloren knuffel in De Roze Duinen. Hij glinstert een beetje; loop ertegenaan of rechtsklik.",
    "pos": [
-    3612,
+    3611,
     77,
-    -660
+    -662
    ],
    "gebied": "z6_roze_duinen",
    "gebied_naam": "De Roze Duinen",
@@ -51261,9 +51289,9 @@
    "naam": "Kampvuur (De Moederoase)",
    "tekst": "",
    "pos": [
-    4054,
-    81,
-    -824
+    4057,
+    66,
+    -830
    ],
    "gebied": "z6_moederoase",
    "gebied_naam": "De Moederoase",
@@ -51276,9 +51304,9 @@
    "naam": "Kampvuur (De Moederoase)",
    "tekst": "",
    "pos": [
-    4049,
-    68,
-    -832
+    4051,
+    67,
+    -835
    ],
    "gebied": "z6_moederoase",
    "gebied_naam": "De Moederoase",
@@ -51306,7 +51334,7 @@
    "naam": "Kampvuur (De Palmenkloven)",
    "tekst": "",
    "pos": [
-    3499,
+    3497,
     60,
     -964
    ],
@@ -51351,9 +51379,9 @@
    "naam": "Kampvuur (De Zoutvlakte)",
    "tekst": "",
    "pos": [
-    3908,
-    74,
-    -580
+    3903,
+    69,
+    -583
    ],
    "gebied": "z6_zoutvlakte",
    "gebied_naam": "De Zoutvlakte",
@@ -51805,16 +51833,16 @@
     "bron": "Een puzzelbeloning... diep in het groen."
    },
    {
-    "soort": "kaap",
-    "id": "meesterschort",
-    "naam": "Meesterschort",
-    "bron": "Haal het hoogste niveau in een ambacht."
-   },
-   {
     "soort": "vleugel",
     "id": "sterrenring",
     "naam": "Sterrenring-vleugels",
     "bron": "Een zeldzame vondst in de kist van De Sterrendovende Toren."
+   },
+   {
+    "soort": "kaap",
+    "id": "meesterschort",
+    "naam": "Meesterschort",
+    "bron": "Haal het hoogste niveau in een ambacht."
    }
   ]
  },
