@@ -200,8 +200,11 @@ def deur(W, kant, c, u, y0, open_=True, kader="goud", achter="mozaiek_bloem"):
     wall lanterns and a stoop. open_ = the room behind is hollow (enterable); else the door stays closed against the wall."""
     ZB.boog(W, kant, c, u + 0.5, y0, 3, 2, diep=2, kader=kader, achter=achter)
     f = FACE[kant]
-    V(W, kant, c, -1, u, y0, f"{DEUR}[facing={f},half=lower,hinge=left,open=false,powered=false]")
-    V(W, kant, c, -1, u, y0 + 1, f"{DEUR}[facing={f},half=upper,hinge=left,open=false,powered=false]")
+    # W-BEREIK: a door with no room behind it is a locked IRON door (it can't be opened by hand: clearly not a way in); the 33
+    # wooden doors of Saffraanpoort opened onto a wall
+    d = DEUR if open_ else "minecraft:iron_door"
+    V(W, kant, c, -1, u, y0, f"{d}[facing={f},half=lower,hinge=left,open=false,powered=false]")
+    V(W, kant, c, -1, u, y0 + 1, f"{d}[facing={f},half=upper,hinge=left,open=false,powered=false]")
     V(W, kant, c, -1, u, y0 + 2, achter)
     luifel(W, kant, c, u - 1, u + 1, y0 + 4)
     for du in (-2, 2):

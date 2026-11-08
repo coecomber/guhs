@@ -125,6 +125,10 @@ public final class Z5WezensPlekken {
     public static final BlockPos WOLKWALDROOM = w("wolkwaldroom_arena", 2600, 200, -520);
     public static final BlockPos WOLKWALDROOM_DEUR = w("z5w_wolkwaldroom_deur", 2585, 200, -520);
     public static final int DROOM_STRAAL = 16;
+    // W-BEREIK: the way OUT of the Wolkwaldroom (the story only teleports you in; after Questlopen, fainting or a skipped dream you
+    // were stuck): a ladder on the chamber wall next to the door, right-click = up to the middle blowhole
+    public static final BlockPos WOLKWALDROOM_UITLUIK = w("z5w_wolkwaldroom_uitluik", 2585, 167, -520);
+    public static final BlockPos WOLKWALDROOM_UIT = w("spuitgat_midden", 2552, 223, -520).offset(6, 1, 0);
 
     // ---- the named area leaders -------------------------------------------------------------------------------------------------
     public static final Map<String, BlockPos> LEIDERS = new LinkedHashMap<>();
@@ -145,7 +149,8 @@ public final class Z5WezensPlekken {
             new Luik("nest_in", NEST_LUIK, NEST_AANKOMST), new Luik("nest_uit", NEST_UITLUIK, NEST_UIT),
             new Luik("zuidvin_af", LIFT_ZUID_BOVEN, LIFT_ZUID_ONDER), new Luik("zuidvin_op", LIFT_ZUID_ONDER.offset(2, 0, 0), LIFT_ZUID_BOVEN.above()),
             new Luik("noordvin_af", LIFT_NOORD_BOVEN, LIFT_NOORD_ONDER), new Luik("noordvin_op", LIFT_NOORD_ONDER.offset(2, 0, 0), LIFT_NOORD_BOVEN.above()),
-            new Luik("staart_af", LIFT_STAART_BOVEN, LIFT_STAART_ONDER), new Luik("staart_op", LIFT_STAART_ONDER.offset(2, 0, 0), LIFT_STAART_BOVEN.above())));
+            new Luik("staart_af", LIFT_STAART_BOVEN, LIFT_STAART_ONDER), new Luik("staart_op", LIFT_STAART_ONDER.offset(2, 0, 0), LIFT_STAART_BOVEN.above()),
+            new Luik("wolkwaldroom_uit", WOLKWALDROOM_UITLUIK, WOLKWALDROOM_UIT)));   // W-BEREIK
 
     // ---- the combat areas (kern areas, put in FRONT of t-z5verhaal's town boxes so the spawners may work here) --------------------
     /** id, box (x/z), y-range, levels. NOT towns. */

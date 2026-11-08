@@ -630,7 +630,7 @@ def opstijgpier(leven=True):
             d = math.hypot(x - px, z - pz)
             if d <= 9.4:
                 P.s(x, py, z, "guhs:pastelbaksteen_wolkje" if d > 7.5 else "guhs:pastelbaksteen_roze")
-                if d > 8.5:
+                if d > 8.5 and not (x < px and abs(z - pz) <= 2):   # W-BEREIK: open where the pier walkway comes in (west)
                     P.s(x, py + 1, z, "guhs:guh_hekje_wit")
             if d <= 9.4 and (round(math.degrees(math.atan2(z - pz, x - px))) % 45 == 0) and d > 8:
                 BW.palen(P, x, z, py - 1, "guhs:pastelbaksteen_wolkje")

@@ -277,7 +277,7 @@ public final class Z2Haken {
                 if ((d.type() == Quest.Doel.Type.GEBIED || d.type() == Quest.Doel.Type.GEHEIM) && d.doel().startsWith("poi:z2_") && !Questlog.doelKlaar(p, q, i)) {
                     String poi = d.doel().substring(4);
                     BlockPos b = Z2NpcPlekken.poi(poi);
-                    if (b != null && NpcHaken.bij(p, b, Z2NpcPlekken.POI_STRAAL, Z2NpcPlekken.hoogteVan(poi))) {
+                    if (b != null && NpcHaken.bij(p, b, Z2NpcPlekken.straalVan(poi), Z2NpcPlekken.hoogteVan(poi))   // W-BEREIK: straalVan) {
                         Questlog.tel(p, d.type(), x -> x == d, 1);
                     }
                 }

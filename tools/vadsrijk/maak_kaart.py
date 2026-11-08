@@ -73,10 +73,14 @@ def main():
     os.environ.pop("GUHS_VERBIND_LATER", None)
     import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
     verbind.na_sinds(_t_verbind)
+    import vrijpad                              # W-BEREIK: lanterns/chains/floating rails out of the walking lines (all zones)
+    vrijpad.na_sinds(_t_verbind)
     if a.audit and not a.alleen and a.zone in ("1", "alle"):   # (was at the end of zone 1, before the pass)
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
     if a.audit and not a.alleen:                # U-HEKKEN: the connection check (AUDIT_VERBIND.md), must be ~0
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "verbindcheck.py")], cwd=ROOT, check=True)
+    if a.audit and not a.alleen:                # W-BEREIK: the global survival reachability check (BEREIK_RAPPORT.md)
+        subprocess.run([sys.executable, os.path.join(HIER, "bereikcheck.py")], cwd=ROOT, check=True)
     if not a.geen_pak:                          # U-GROOTTE: the compact map pack the jar ships (data/guhs/vadsrijk/kaart.gpak)
         subprocess.run([sys.executable, os.path.join(HIER, "kaartpak.py")], cwd=ROOT, check=True)
 
