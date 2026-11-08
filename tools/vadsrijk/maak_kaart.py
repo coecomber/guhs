@@ -66,6 +66,11 @@ def main():
     sys.path.insert(0, HIER)
     import overgang                             # U-OVERGANG: zone edges onto the shared open sea (floor, floor block, clouds)
     overgang.main()
+    sys.path.insert(0, os.path.join(HIER, "stadsleven"))   # U-LEVEN-STAD: a pink playground in every hub town (before the
+    import speeltuin                                         # connection pass: its fences come out connected)
+    os.environ["GUHS_VERBIND_LATER"] = "1"                   # (the pass below covers its tiles)
+    speeltuin.main([])
+    os.environ.pop("GUHS_VERBIND_LATER", None)
     import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
     verbind.na_sinds(_t_verbind)
     if a.audit and not a.alleen and a.zone in ("1", "alle"):   # (was at the end of zone 1, before the pass)

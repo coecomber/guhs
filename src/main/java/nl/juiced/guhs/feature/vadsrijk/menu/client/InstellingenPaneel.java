@@ -131,6 +131,8 @@ public class InstellingenPaneel extends MenuPaneel {
         opties.add(new Kop("kop.beeld"));
         opties.add(new Keuze<>("effecten", VfxConfig.NIVEAU, VfxConfig.Niveau.VOL));
         opties.add(new Keuze<>("sfeer", SfeerConfig.NIVEAU, SfeerConfig.Niveau.VOL));
+        opties.add(new Keuze<>("stadsleven", nl.juiced.guhs.feature.vadsrijk.stadsleven.client.StadslevenConfig.NIVEAU,   // U-LEVEN-STAD
+                nl.juiced.guhs.feature.vadsrijk.stadsleven.client.StadslevenConfig.Niveau.VOL));
         opties.add(new Schuif("schermschud", BelevingConfig.SCHUD, 0, 100, 100, true));
         opties.add(new Schuif("tekstsnelheid", DialoogConfig.SNELHEID, 0, 3, 2, false));
     }

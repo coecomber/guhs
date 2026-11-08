@@ -65,6 +65,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
         nl.juiced.guhs.feature.vadsrijk.grootte.GrootteRegistry.register(modBus);   // U-GROOTTE: /guhs vadsrijk grootte status (map pack)
         nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
+        nl.juiced.guhs.feature.vadsrijk.stadsleven.StadslevenRegistry.register(modBus);   // U-LEVEN-STAD: town life (critters, pets, street life, playgrounds, terraces)
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.register(modBus);   // U-TABS: the Vadsrijk-menu (/guhs vadsrijk menu [tab])
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.register(modBus);   // U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles
         nl.juiced.guhs.feature.vadsrijk.huizen.HuizenRegistry.register(modBus);   // U-HUIZEN: Het Knuffelkwartier (player housing)
@@ -104,5 +105,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.payloads(registrar);   // U-TABS: the Vadsrijk-menu (Karakter tab, Reiskaart to look at)
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.payloads(registrar);   // U-GILDEN
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.payloads(registrar);   // U-Z6RAID
+        nl.juiced.guhs.feature.vadsrijk.stadsleven.StadslevenRegistry.payloads(registrar);   // U-LEVEN-STAD: the Stadsleven setting
     }
 }
