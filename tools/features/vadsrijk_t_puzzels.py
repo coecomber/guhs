@@ -168,7 +168,7 @@ puzzel("z1_fluistersteen", 1, "wachtwoord", ("z1", "kampvuur_klodderweide_3", 10
     "..F..",
     ".f.f.",
     "L...L",
-], {"F": ("fluistersteen", 0)}, woorden=["vads", "de vads", "vadsje"],
+], {"F": ("fluistersteen", 0)}, woorden=["vads", "de vads", "vadsje", "chonk", "the chonk", "chonky"],   # W-ENGELS: + the English answer
     naam="De Fluistersteen",
     uitleg="Klik op de steen en fluister het antwoord in de chat.",
     vraag="Ik word niet minder als je me weggeeft, ik word juist méér. Wat ben ik?",
