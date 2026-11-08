@@ -164,3 +164,34 @@
 - **Job-advancement 3 (lv 58):** bij Kapitein Veerkracht (Academie), na de finale.
 
 @@ZONE 6
+## Zone 6 in één oogopslag (nieuw in ronde U)
+Het Zijdeland is het eerste stuk van het grote continent: lv 60-70, roze duinen, oases, karavanen, bazaars en zwevende koepels.
+Het verhaal is **De Sterrenkaravaan**: Hertogin Ringeling (de Ringvinger) dooft de sterrenbakens; jij steekt ze weer aan, vindt de
+Moederoase en beklimt de raid **De Sterrendovende Toren**. Het levelplafond is nu **70**.
+
+**Snel rondkijken:**
+```
+/guhs vadsrijk level 65
+/guhs vadsrijk z6wereld plek haven_z6_z5_vertrek
+/guhs vadsrijk z6wereld plek rozenkloof_schatkamer
+/guhs vadsrijk z6wereld plek bazaar_kruising
+/guhs vadsrijk z6wereld plek moederpalm
+/guhs vadsrijk z6wereld plek toren_voet
+```
+**Hoe kom je er (verhaal):** zone 5 afmaken → Havenmeester Windvaan → de film "De grote zwemtocht" (Moeder Wolkwal zwemt met heel
+Hoogvads naar het oosten) → lijn E (Staarthaven ↔ Rozenkloof) gaat open → quest "Land in zicht!".
+
+**Wat er is (elk heeft hieronder een eigen blok):**
+- **De kaart** (u-z6wereld): Rozenkloof (kloofstad, aankomst), Saffraanpoort (hoofdstad), 5 gebieden met elk een sterrenbaken,
+  De Zingende Zoutgrot, De Verzonken Sterrenwacht (kerker), de toren. De Schatkamer is opnieuw gebouwd als diepe
+  Petra/Al-Khazneh-gevel (vrijstaande zuilen, verdiept portiek, gebroken fronton, ronde tholos) en de kloofwanden hebben reliëf.
+- **Het verhaal** (u-z6verhaal): 10 hoofdstappen, 15 zijquests, Ringeling wordt opgevrolijkt en bondgenoot.
+- **Wezens en bazen** (u-z6wezens): 13 wezens, 2 veldbazen (Koningin Wormelien, de Zoutkolos), de kerker met 3 bazen,
+  de **Bultguh** (rijdier met 2 zitplekken) en het **vliegende tapijt** (u-tapijt, zweverig en glijderig).
+- **De raid** (u-z6raid): 2-10 spelers, 4 verdiepingen, schaalt mee; zie het raid-blok en de loot-tabel bovenaan.
+- **Muziek en sfeer** (u-z6muziek, u-geroezemoes): eigen gebiedsthema's, stadsmuziek, bazenmuziek met fases, bazaar-geroezemoes.
+- **Leven in de stad** (u-leven-stad, u-leven-ritme): ook in Saffraanpoort een speeltuin, terrassen, beestjes en een dag/nacht-ritme.
+- **De grotkerker** (u-grotkerker): ook de Zoutgrot is een herhaalbare mini-kerker met eindbaas.
+
+**Controleren dat het klopt:** `/guhs vadsrijk z6wereld gebied` (gebied, biome en levelband), en in survival van de luchthaven via de
+Siq naar Saffraanpoort lopen: geen sprongen hoger dan 1 blok, geen gaten.

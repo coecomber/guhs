@@ -166,7 +166,9 @@ Per punt uit je feedback: wat er veranderd is, de commando's en waar je op let. 
   - bazenmuziek met een laatste fase (crossfade);
   - een eigen overwinningsfanfare per baas;
   - 5 nieuwe thema's: imker, Grauwe Droom, Donderbuik, Gorgonzola, Zilverstaart;
-  - zachte wereldgeluiden (korven, aambeelden, fonteintjes, kampvuren, marktgeroezemoes);
+  - zachte wereldgeluiden (korven, aambeelden, fonteintjes, kampvuren);
+  - NIEUW (u-geroezemoes): zacht guh-geroezemoes op drukke plekken (Hoogvads, de bazaar van Saffraanpoort, de markt van
+    Kandijkom), met een eigen schuif "geroezemoes"; in Saffraanpoort speelt het bazaar-bed nu op half volume eronder;
   - een grot-echo;
   - NPC-stemmetjes uit de bestaande guh/piep/blub-geluiden;
   - schuifjes "wereldgeluiden" en "stemmen".
@@ -179,8 +181,13 @@ Per punt uit je feedback: wat er veranderd is, de commando's en waar je op let. 
 - **Let op:** of de wereldgeluiden nu subtiel genoeg zijn.
 
 ## 8.18 Website: volledig testen (u-site)
-- **Status:** zie §7 (u-site). Lokaal te bekijken, en publiceren op een eigen sub-url. Staat het er nog niet, dan
-  meldt het EINDRAPPORT de status.
+- **Gedaan (u-site, 3 rondes):** de wiki staat als verborgen voorbeeld op **https://guhs.nl/vadsrijk-preview/** (noindex,
+  nergens gelinkt). Erbij: zone 6 + de raid, bazen met alle drops en kansen, renders van bazen en wezens, ingeklapte zones op de
+  bazen- en questpagina, tabellen met pagina's/sorteren/filteren voor wezens en items, een nieuwe verhaalpagina, een
+  geheimenpagina, en live spelersposities op de kaart.
+- **Live posities (je besluit):** standaard aan, ververst elke ~10 s, nooit in kerkers, de raid, huizen of de Bondenvallei.
+  Zelf uit: `/guhs vadsrijk kaart verberg` (weer aan: `kaart toon`).
+- **Let op:** de kaarttegels op de site worden na de laatste regen opnieuw gemaakt; het publiceren doet de hoofdagent (zie EINDRAPPORT).
 
 ## 8.19 Besluiten V1-V5 die nu gebouwd zijn
 - **Knuffelbond (guilds):**
@@ -206,3 +213,26 @@ Per punt uit je feedback: wat er veranderd is, de commando's en waar je op let. 
 - **Ambachten groeien mee:** T4/T5, cap 60, koraalduiken, Hoogvads als ambachtshoofdstad.
 - **Collectiescherm:** alles zit in één Vadsrijk-menu (H) met even grote hoofdtabs, en de overflow is gefixt.
 - **Pauzemenu:** rechts staat een overzicht van alle Vadsrijk-toetsen.
+
+## 8.20 Nieuw verzoek ronde 4 + vraagrondes: wat er verder gebouwd is
+- **Zone 6 "Het Zijdeland" (lv 60-70)** met De Sterrenkaravaan, Rozenkloof + Saffraanpoort, 5 gebieden, kerker en de raid: zie
+  hoofdstuk 6. Toon: lief en vrolijk, alleen de toren is grauw.
+- **De raid De Sterrendovende Toren:** 2-10 spelers, schaalt, een eigen kist per speler per clear. Zie het raid-blok in hoofdstuk 6.
+- **Schatkamer te vlak:** diepe Al-Khazneh-gevel + reliëf in de kloofwanden. `/guhs vadsrijk z6wereld plek rozenkloof_schatkamer`
+  en loop terug over het plein; kijk omhoog.
+- **Vliegend tapijt zweverig/glijderig:** acceleratie en uitglijden, drift, momentum los van je kijkrichting (SPIEK_U_TAPIJT).
+- **Rijdieren: tapijt + bultguh** naast de Pluimguh, bij NPC's, stalls en structures.
+- **Loot (V6):** alles persoonlijk; rijdier-drops overal 10 % per speler per kill/clear met een pech-teller (zeker na 15 keer mis).
+  Tabel bovenaan deze spiekbrief. `/guhs vadsrijk loot kansen`.
+- **Grotten als kerkers (u-grotkerker):** elke grot (zone 1 t/m 6) is nu een herhaalbare mini-kerker met een eindbaas en een eigen
+  kist per clear, en zeldzaam een grot-kleur Pluimguh (10 % + pech). `/guhs vadsrijk grot run`.
+- **Leven in de stad (u-leven-stad + u-leven-ritme):** beestjes, guh-huisdieren, straatleven, speeltuinen, terrassen met kletsende
+  guhs; winkels sluiten 's nachts (quest-NPC's blijven bereikbaar), weer per zone, emote-reacties + knuffelmeter, het Pluizenblaadje.
+- **Opslag (u-opslagvip):** alleen het eerste extra knapzak/kluis-vak is te koop, de rest zegt "Binnenkort"; vóór je eerste koop
+  een eenmalige grap. `/guhs vadsrijk opslag vipgrap`.
+- **Questrobot + Questlopen:** de robot speelt alle quests van zone 1-6 automatisch (41/19/24/23/24/25, 0 vast); Questlopen
+  (hoofdstuk 0) laat jou de hoofdlijn zelf doorklikken.
+- **Dialoogkeuzes:** zijn er bewust NIET (je besluit); gesprekken lopen recht door.
+- **Kleinere jar (u-grootte + u-krimp):** structuren gepakt, muziek/geluid compacter (mono ~48 kbps), grote textures gehalveerd,
+  PNG verliesvrij: de mod-jar is ruim 60 MB kleiner.
+

@@ -6,3 +6,4 @@ speeltuin kandijkom 697 90 -1036
 speeltuin honingtak 1350 166 -557
 speeltuin lampionhaven 1806 66 -468
 speeltuin hoogvads 2695 220 -507
+speeltuin saffraanpoort 3720 70 -881

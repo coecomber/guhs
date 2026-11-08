@@ -26,4 +26,14 @@ De commando's per punt staan in SPIEKBRIEF.md, hoofdstuk 8. Hieronder staat per 
 | U19 | Huizen | Kwartiermeester op een plein, een huis kopen, inrichten, de brievenbus. | Lantaarnpalen = guh-lantaarnpaal; de rechten kloppen; 1 huis per account. |
 | U20 | Zone 5 | De kathedraal, universiteit, troonzaal, staartvin en Wolkengrotten. | Diepte, kroonluchters, licht; de 4 staartvinplekken zijn te belopen. |
 | U21 | Vliegend tapijt | SPIEK_U_TAPIJT | Glijden werkt; de eerste rit toont alleen de tapijt-tip. |
-| U22 | Zone 6 | SPIEKBRIEF hoofdstuk 6 | Zie de zone-6-blokken (als die in deze build zitten). |
+| U22 | Zone 6 rondkijken | SPIEKBRIEF hoofdstuk 6: luchthaven → Siq → Saffraanpoort lopen in survival; Schatkamer van het plein af bekijken. | Geen sprongen > 1 blok, diepe Schatkamer-gevel met vrijstaande zuilen, reliëf in de kloof. |
+| U23 | Zone-6-verhaal | Questlopen (hoofdstuk 0) of zelf: zone 5 af → zwemfilm → lijn E → "Land in zicht!" … tot Ringeling. | Alle films spelen, bakens gaan aan, Ringeling wordt opgevrolijkt en staat daarna als NPC in Saffraanpoort. |
+| U24 | Raid | `/guhs vadsrijk z6raid tp wachtzaal`, `z6raid start 2` (met nep-leden), de 4 bazen. | Raid-frames rechts (verschuifbaar in HUD aanpassen), torendrone in de Wachtzaal, bazenmuziek met fases, kist per clear. |
+| U25 | Rijdier-drops | `/guhs vadsrijk loot kansen`, `loot pech <bron> 15`, `loot rol <bron>`. | 10 % per worp; na 15 keer mis zeker. Sterrennacht-Bultguh krijgt ook de Bultguh erbij. |
+| U26 | Questlopen | `/guhs vadsrijk questlopen` (of H › Instellingen › Questlopen). Reset hoofdlijn, dan Volgende… | Je loopt de hele hoofdlijn zone 1 → 6 door met echte gesprekken/films; bazen zelf of laten verslaan. |
+| U27 | Grotkerkers | `/guhs vadsrijk grot run`, ga een grot in, versla de eindbaas. | Poort dicht tijdens de run, eindbaas + eigen kist, na 10 min reset (ongeopende kisten weg). |
+| U28 | Stadsleven | `/guhs vadsrijk leven tp <stad>`, `leven speeltuin <stad>`, overdag en 's nachts. | Speeltuin met verbonden hekjes, terrassen, beestjes; 's nachts winkels dicht maar quest-NPC's op hun plek. |
+| U29 | Ritme + weer | `/guhs vadsrijk ritme status`, een emote (`;`) bij een guh, het Pluizenblaadje. | Reacties + knuffelmeter, weer met charme, nachtbel. Werkt ook in Rozenkloof/Saffraanpoort. |
+| U30 | Geroezemoes | Loop over de Marktlaan in Hoogvads en door de bazaar van Saffraanpoort. | Zacht guh-geroezemoes, schuif "geroezemoes" in Instellingen. Niet te aanwezig. |
+| U31 | Opslag | Probeer het eerste extra knapzak-vak te kopen; kijk naar de andere vakken. | Eerst de VIP++-grap (eenmalig), dan de koop. Andere vakken: "Binnenkort". |
+| U32 | Website | https://guhs.nl/vadsrijk-preview/ | Zone 6, raid, kansen, renders, tabellen, live posities. |

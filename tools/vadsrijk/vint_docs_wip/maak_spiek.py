@@ -43,13 +43,18 @@ WERELD_U = ["SPIEK_U_OVERGANG.md", "SPIEK_U_HEKKEN.md", "SPIEK_U_LUCHTSCHIP.md",
             "SPIEK_U_TOETSEN.md", "SPIEK_U_DUBBEL.md", "SPIEK_U_DECO.md"]
 SYSTEEM_U = ["SPIEK_U_SPECS.md", "SPIEK_U_ZICHTBAAR.md", "SPIEK_U_HUD.md", "SPIEK_U_AUDIO2.md", "SPIEK_U_AMBACHT2.md",
              "SPIEK_U_GROTTEN.md", "SPIEK_U_RUITERS.md", "SPIEK_U_TAPIJT.md", "SPIEK_U_GILDEN.md", "SPIEK_U_HUIZEN.md",
-             "SPIEK_U_QUESTROBOT.md", "SPIEK_U_GROOTTE.md", "SPIEK_U_SITE.md"]
+             "SPIEK_U_GROTKERKER.md", "SPIEK_U_LEVEN_STAD.md", "SPIEK_U_LEVEN_RITME.md", "SPIEK_U_GEROEZEMOES.md",
+             "SPIEK_U_OPSLAGVIP.md", "SPIEK_U_QUESTROBOT.md", "SPIEK_U_GROOTTE.md", "SPIEK_U_KRIMP.md", "SPIEK_U_SITE.md"]
 ZONE5_U = ["SPIEK_U_Z5.md", "SPIEK_U_Z5BINNEN.md", "SPIEK_U_Z5TUIN.md"]
 ZONE6_U = ["SPIEK_U_Z6WERELD.md", "SPIEK_U_Z6VERHAAL.md", "SPIEK_U_Z6WEZENS.md", "SPIEK_U_Z6RAID.md", "SPIEK_U_Z6MUZIEK.md"]
-gebruikt = set(WERELD_U + SYSTEEM_U + ZONE5_U + ZONE6_U)
+gebruikt = set(WERELD_U + SYSTEEM_U + ZONE5_U + ZONE6_U + ["SPIEK_U_QUESTLOPEN.md"])
 rest = sorted(f for f in os.listdir(boom) if f.startswith("SPIEK_U_") and f.endswith(".md") and f not in gebruikt)
 
 out = [kop.strip(), ""]
+out += ["# 0. QUESTLOPEN: HET HELE VERHAAL DOORKLIKKEN (voor je verhaal-playtest)", "",
+        "Dit is het nieuwe admin-paneel waarmee je de hoofdlijn van zone 1 t/m 6 op volgorde doorloopt: teleport, stap afronden, "
+        "level goed zetten, elke film zien, bazen zelf doen of laten verslaan. Begin je verhaaltest hier.", "",
+        spiek("SPIEK_U_QUESTLOPEN.md"), ""]
 out += ["# 1. START EN DE NIEUWE WERELD", "",
         "Eerst hoe alles aan elkaar hangt (zee, overgangen, havens, hekken), dan de luchtschepen, je karakters, het nieuwe "
         "Vadsrijk-menu (H) en de toetsen. Ronde U staat bovenaan, de blokken van de nachtronde daaronder (die gelden nog steeds).", ""]

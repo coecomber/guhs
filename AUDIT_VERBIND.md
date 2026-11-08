@@ -2,7 +2,7 @@
 
 **GENERATED** by `tools/vadsrijk/audit/verbindcheck.py` (runs with `maak_kaart --audit`). Counts what the connection pass `tools/vadsrijk/verbind.py` would still change; after a regen everything must be ~0. Rules: `tools/vadsrijk/LEESMIJ_BOUWREGELS.md`.
 
-Tiles: 1116. Total open: **8**.
+Tiles: 1308. Total open: **8**.
 
 | kind | count | meaning |
 |---|---|---|

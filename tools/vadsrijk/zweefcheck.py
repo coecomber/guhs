@@ -5,7 +5,7 @@ blocks, standing signs) with AIR directly under it, i.e. something placed 1 bloc
 Hanging lanterns/lampions, wall signs/banners and vines are skipped (they hang). Fences/walls are NOT listed (railings and
 lamp masts stand on purpose on edges; their own check is the connection pass).
 
-    python tools/vadsrijk/zweefcheck.py [--zone 1|3|4|5|alle] [--max N]
+    python tools/vadsrijk/zweefcheck.py [--zone 1|2|3|4|5|6|alle] [--max N]
 Exit code 1 when anything floats (so it can gate a regen).
 """
 import argparse
@@ -21,7 +21,7 @@ import tegellezer as TL  # noqa: E402
 
 ROOT = os.path.abspath(os.path.join(HIER, "..", ".."))
 TEGELS = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure", "vadsrijk", "tegels")
-ZONES = {"1": (-20, -16, 15, 20), "2": (6, -23, 15, -13), "3": (16, -16, 26, -3), "4": (27, -12, 39, -5), "5": (38, -12, 48, -5)}
+ZONES = {"1": (-20, -16, 15, 20), "2": (6, -23, 15, -13), "3": (16, -16, 26, -3), "4": (27, -12, 39, -5), "5": (38, -12, 48, -5), "6": (51, -18, 66, -7)}   # V-INT: + zone 6 (u-z6wereld)
 
 DECO_NAAM = ("_tulip", "allium", "oxeye_daisy", "cornflower", "dandelion", "poppy", "orchid", "azure_bluet", "lily_of_the_valley",
              "_flower", "guhbloem", "hibiscus", "guhoortjes", "short_grass", "fern", "_sapling", "_carpet", "flower_pot",
