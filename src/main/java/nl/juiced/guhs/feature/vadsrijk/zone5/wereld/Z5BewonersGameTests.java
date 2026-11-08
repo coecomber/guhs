@@ -39,4 +39,30 @@ public class Z5BewonersGameTests {
         helper.assertTrue(n > 5, "several kinds of townsfolk: " + n);
         helper.succeed();
     }
+
+    /** W-LEVEN: fewer figures, clearly fewer in the cathedral; knights and named-looking figures always stay. */
+    @GuhTest(template = "empty", batch = B)
+    public static void dichtheid(GameTestHelper helper) {
+        int kath = 0, kathBlijft = 0, rest = 0, restBlijft = 0;
+        for (Z5WereldPlekken.Bewoner b : Z5WereldPlekken.BEWONERS) {
+            boolean blijft = Z5Bewoners.blijft(b);
+            if (b.soort() == 2 || b.soort() == 3) {
+                helper.assertTrue(blijft, "knights and named figures always show");
+                continue;
+            }
+            helper.assertTrue(blijft == Z5Bewoners.blijft(b), "the choice is fixed");
+            if (Z5Bewoners.inKathedraal(b.x(), b.y(), b.z())) {
+                kath++;
+                kathBlijft += blijft ? 1 : 0;
+            } else {
+                rest++;
+                restBlijft += blijft ? 1 : 0;
+            }
+        }
+        helper.assertTrue(kath >= 40, "the cathedral has its churchgoers: " + kath);
+        double fk = kathBlijft / (double) kath, fr = restBlijft / (double) rest;
+        helper.assertTrue(fk > 0.25 && fk < 0.55, "cathedral: about 40% stay: " + kathBlijft + "/" + kath);
+        helper.assertTrue(fr > 0.65 && fr < 0.85, "elsewhere: about 75% stay: " + restBlijft + "/" + rest);
+        helper.succeed();
+    }
 }
