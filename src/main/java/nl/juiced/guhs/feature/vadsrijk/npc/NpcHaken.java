@@ -108,7 +108,7 @@ public final class NpcHaken {
             return true;
         }
         if (doel.startsWith("gebied:")) {
-            return doel.substring(7).equals(gebied);
+            return List.of(doel.substring(7).split("\\|")).contains(gebied);   // U-QUESTROBOT: "gebied:a|b" = any of these areas
         }
         return doel.equals(type) || ("guhs:" + doel).equals(type);
     }
@@ -332,6 +332,17 @@ public final class NpcHaken {
         }
         NpcFtb.geheim(p, soort, id, n);
         Questlog.kijkLive(p);
+    }
+
+    // U-QUESTROBOT: the quest robot drives the same code the ticker runs (no state set by hand)
+    /** U-QUESTROBOT: the poi check of the ticker for one player (you stand there now: GEBIED/GEHEIM "poi:x" count). */
+    public static void robotPlekken(ServerPlayer p) {
+        plekken(p);
+    }
+
+    /** U-QUESTROBOT: finding one secret (knuffels / aanwijzingen / schatten), as walking up to it does. */
+    public static void robotVind(ServerPlayer p, ServerLevel sl, String soort, String id, BlockPos b) {
+        vind(p, sl, soort, id, b);
     }
 
     public static boolean bij(net.minecraft.world.entity.Entity e, BlockPos b, double straal, double hoogte) {

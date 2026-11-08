@@ -268,7 +268,9 @@ public final class Z4VerhaalPlekken {
         poi("z4_schildpad", w("schildpad_rug", 2239, 71, -445));
         poi("z4_pierkop", w("pierkop", 2470, 72, -565));
         poi("z4_opstijgpier", w("opstijgpier_eind", 2512, 72, -565));
-        poi("z4_kringstroom", w("kringstroom_zuid", 1960, 63, -248));
+        // U-QUESTROBOT: was 1960,63,-248: 9 blocks outside the zone-4 tile box (z <= -257, no map there, the current pushes you back),
+        // so z4_s16 could never count; now on the water inside the box, in the edge current
+        poi("z4_kringstroom", w("kringstroom_zuid", 1960, 63, -270));
     }
 
     @Nullable

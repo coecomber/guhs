@@ -96,6 +96,8 @@ public final class Z3Haken {
         QuestMotor.ACTIES.put("z3_cliffhanger", (p, a) -> Z3Verhaal.cliffhanger(p));
         nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren.STARTER_GEKOZEN.add((p, k) -> NpcApi.meld(p, "rijdier", "starter"));
         nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.ROUTES.add(Z3Haken::route);
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.PLEK_HAKEN.add((p, sl) -> stap(p, sl, 0));   // U-QUESTROBOT: the spot triggers
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.SPOEL.add(p -> Z3Verhaal.spoel(p, p.level().getServer()));   // U-QUESTROBOT
     }
 
     // ---- NPC clicks ----------------------------------------------------------------------------------------------------------------
