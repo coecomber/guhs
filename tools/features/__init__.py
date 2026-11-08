@@ -309,6 +309,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 round U, U-TAPIJT: the flying carpet (zone 6; Java: feature/vadsrijk/tapijt); after vadsrijk_t_rijdier
             'vadsrijk_u_tapijt',
             'vadsrijk_u_z6muziek',   # U-Z6MUZIEK: zone-6 music + ambience (after u_audio2)
+            'vadsrijk_u_geroezemoes',   # U-GEROEZEMOES: guh crowd murmur beds + one-shots (Java: feature/vadsrijk/geluid)
             # U-Z6VERHAAL: 1.10 zone 6 "Het Zijdeland", the story (Java: feature/vadsrijk/zone6/verhaal)
             'vadsrijk_u_z6verhaal',
             # U-Z6WEZENS: zone-6 creatures, bosses, dungeon, loot, the Bultguh (Java: feature/vadsrijk/zone6/{wezens,bultguh}); after

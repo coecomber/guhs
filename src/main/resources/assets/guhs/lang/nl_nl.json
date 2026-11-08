@@ -46642,5 +46642,7 @@
   "vadsrijk.vint.z6raid.halster.ok": "De Bultguh in Sterrennacht-vacht is van jou! (N = rijdieren)",
   "vadsrijk.vint.z6raid.halster.uitleg": "Rechtsklik: de Bultguh in Sterrennacht-vacht (rijdier + vacht).",
   "vadsrijk.uhud.deel.z6raid": "Raid-frames (Sterrendovende Toren)",
-  "vadsrijk.vint.z6raid.hud.voorbeeld": "Raid-frames (alleen in de raid)"
+  "vadsrijk.vint.z6raid.hud.voorbeeld": "Raid-frames (alleen in de raid)",
+  "guhs.configuration.geroezemoes": "Vadsrijk: geroezemoes",
+  "guhs.configuration.geroezemoes.tooltip": "Zacht guh-geroezemoes op drukke plekken (Hoogvads, de bazaar van Saffraanpoort, de markt van Kandijkom, ...), met af en toe een 'njeg', een giechel, een piepje of een blub. 's Nachts stiller (procent, 0 = uit). Volgt ook de schuif Omgeving."
 }

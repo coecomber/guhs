@@ -80,6 +80,13 @@ public final class GeluidRegistry {
         for (String w : WereldBron.SOORTEN) {
             geluid(WereldBron.id(w));
         }
+        // U-GEROEZEMOES: the murmur beds + the clear one-shots
+        for (String b : Geroezemoes.BEDDEN) {
+            geluid(Geroezemoes.bedId(b));
+        }
+        for (String s : Geroezemoes.LOS) {
+            geluid(Geroezemoes.losId(s));
+        }
     }
 
     private GeluidRegistry() {
@@ -206,8 +213,15 @@ public final class GeluidRegistry {
         g.then(soort("wereld", WereldBron.SOORTEN));
         g.then(Commands.literal("wereldinfo").executes(c -> stuur(c.getSource(), "wereldinfo", "")));
         g.then(soort("stad", stadDeuntjes()));   // U-Z6MUZIEK: every town tune (rozenkloof_1, saffraanpoort_2, ...)
+        // U-GEROEZEMOES: force a bed / an intensity, one voice, back to auto, info
+        g.then(soort("geroezemoes", GEROEZEMOES_DEV).then(Commands.literal("kracht").then(Commands.argument("procent",
+                com.mojang.brigadier.arguments.IntegerArgumentType.integer(0, 100)).executes(c -> stuur(c.getSource(), "geroezemoes",
+                "kracht:" + com.mojang.brigadier.arguments.IntegerArgumentType.getInteger(c, "procent"))))));
         event.getDispatcher().register(VadsrijkCommando.wortel(g));
     }
+
+    /** U-GEROEZEMOES: the dev names of /guhs vadsrijk geluid geroezemoes. */
+    static final List<String> GEROEZEMOES_DEV = List.of("info", "auto", "rustig", "druk", "markt", "njeg", "lach", "guh", "oeh", "piep", "blub");
 
     /** U-Z6MUZIEK: the town tunes by name ("zwamzoet_1", ..., "saffraanpoort_2"). */
     static List<String> stadDeuntjes() {
@@ -236,7 +250,7 @@ public final class GeluidRegistry {
     private static int stuur(CommandSourceStack src, String soort, String naam) throws CommandSyntaxException {
         ServerPlayer p = src.getPlayerOrException();
         PacketDistributor.sendToPlayer(p, new GeluidPayloads.Speel(soort, naam));
-        if (!soort.equals("info") && !soort.equals("wereldinfo")) {
+        if (!soort.equals("info") && !soort.equals("wereldinfo") && !naam.equals("info")) {
             src.sendSuccess(() -> Component.literal("Geluid: " + soort + (naam.isEmpty() ? "" : " " + naam)).withStyle(ChatFormatting.LIGHT_PURPLE), false);
         }
         return 1;
@@ -255,6 +269,7 @@ public final class GeluidRegistry {
         regels.add(regel("stem", StemPlan.SOORTEN));
         regels.add(regel("wereld", WereldBron.SOORTEN));
         regels.add(regel("stad", stadDeuntjes()));
+        regels.add(regel("geroezemoes", GEROEZEMOES_DEV));   // U-GEROEZEMOES
         regels.add(Component.literal("[stop] ").withStyle(st -> st.withColor(ChatFormatting.RED)
                         .withClickEvent(new ClickEvent.RunCommand("/guhs vadsrijk geluid stop")))
                 .append(Component.literal("[nu: gebiedsmuziek zonder stilte] ").withStyle(st -> st.withColor(ChatFormatting.GREEN)
