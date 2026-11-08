@@ -391,8 +391,11 @@ public final class Z6VerhaalPlekken {
                 Vec3.atCenterOf(TORENVOET).add(-20, 30, 20), Vec3.atCenterOf(TOREN_TOP)});
         CAMERA.put("ringeling", new Vec3[] {Vec3.atCenterOf(TOREN_TOP).add(8, 3, 8), Vec3.atCenterOf(TOREN_TOP), Vec3.atCenterOf(TOREN_TOP).add(-5, 2, 6),
                 Vec3.atCenterOf(TOREN_TOP)});
-        // F4: far east, the Keizer's throne room is not built: a slow drift from the tower to the grey horizon, then the Oog turning west
-        CAMERA.put("f4", new Vec3[] {Vec3.atCenterOf(TOREN_TOP).add(0, 20, 0), new Vec3(4900, 200, -700), new Vec3(4300, 300, -700), new Vec3(2700, 330, -520)});
+        // F4: far east, the Keizer's throne room is not built. W-INT: the first half looked at (4900, 200, -700), empty sky east of
+        // the map; it now starts on the grey Sterrendovende Toren itself (built zone-6 terrain, the Vinger's tower) seen from the
+        // east, and the look then sweeps west over the Zijdeland towards Hoogvads (the Oog turning west), as before.
+        CAMERA.put("f4", new Vec3[] {Vec3.atCenterOf(TOREN_TOP).add(36, 18, 22), Vec3.atCenterOf(TOREN_TOP).add(0, -40, 0), new Vec3(4300, 300, -700),
+                new Vec3(2700, 330, -520)});
     }
 
     /** The vision camera at a beacon (or anywhere): a slow lift above the spot towards the east. */
