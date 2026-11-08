@@ -191,6 +191,9 @@ def laad(tegel_filter=None):
         cls = np.zeros((T, T, NY), np.uint8)
         ok = (ys >= 0) & (ys < NY)
         cls[xs[ok], zs[ok], ys[ok]] = lut[st[ok]]
+        # a (trap)door right above a ladder/vine is climbed through (an open trapdoor on a ladder counts as a ladder in Minecraft)
+        boven_klim = (cls[:, :, 1:] == DOOR) & (cls[:, :, :-1] == CLIMB)
+        cls[:, :, 1:][boven_klim] = CLIMB
         bed = cls[:, :, 0] == AIR
         cls[:, :, 0][bed] = SOLID                       # the flat generator's bedrock
         X0, Z0 = tx * T, tz * T
@@ -293,7 +296,7 @@ def randen(K, blok=4_000_000):
             h = np.maximum(FA, FB)
             neer = gB & (FB <= HA) & (CB >= h + 4) & (CA >= h + 4)
             val = h - FB
-            geen_val = h <= HB
+            geen_val = (h <= HB + MAX_VAL) & (HB > FB)      # you land on the water/ladder/vine column and hold on
             neer &= (val <= MAX_VAL) | K.water[B] | geen_val
             # up: FB above A's highest feet
             dh = FB - HA
@@ -302,6 +305,61 @@ def randen(K, blok=4_000_000):
             ok = neer | op
             src_all.append(Ar[ok].astype(np.int32))
             dst_all.append(B[ok].astype(np.int32))
+    return np.concatenate(src_all), np.concatenate(dst_all)
+
+
+def _paren(K, A, j):
+    """All (A run, run in column index j[A]) pairs."""
+    jj = j[A]
+    n = K.aantal[jj]
+    Ar = np.repeat(A, n)
+    off = np.arange(len(Ar)) - np.repeat(np.cumsum(n) - n, n)
+    return Ar, np.repeat(K.start[jj], n) + off
+
+
+def sprongen(K, blok=3_000_000):
+    """Gap jumps over 1 or 2 open columns (straight, 4 directions), landing at the same height or up to 3 blocks lower (any depth
+    into water): take-off needs 3 air blocks over the feet, every column in between must be open from the feet up to 3 blocks
+    (no fence/wall/roof in the way), the landing needs room for the arc. This is ordinary survival movement (the hat paths, the
+    gaps between rooftops); the report counts targets that are ONLY reached thanks to a jump separately."""
+    src_all, dst_all = [], []
+    for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+        for k in (2, 3):
+            ncol = K.col + k * (dx * 100000 + dz)
+            j = np.minimum(np.searchsorted(K.ucol, ncol), len(K.ucol) - 1)
+            heeft = (K.ucol[j] == ncol) & K.geldig & ~K.water & (K.C - K.F >= 6)
+            mids = []
+            for m in range(1, k):
+                mc = K.col + m * (dx * 100000 + dz)
+                jm = np.minimum(np.searchsorted(K.ucol, mc), len(K.ucol) - 1)
+                heeft &= K.ucol[jm] == mc
+                mids.append(jm)
+            A_all = np.nonzero(heeft)[0]
+            for s in range(0, len(A_all), blok):
+                A = A_all[s:s + blok]
+                Ar, B = _paren(K, A, j)
+                FA, CA = K.F[Ar], K.C[Ar]
+                FB, CB = K.F[B], K.C[B]
+                ok = K.geldig[B] & (FB <= FA) & ((FA - FB <= MAX_VAL) | K.water[B]) & (CB >= np.maximum(FB + 4, FA + 5))
+                Ar, B, FA = Ar[ok], B[ok], FA[ok]
+                gat = np.zeros(len(Ar), bool)
+                for jm in mids:                       # every column in between open over [FA, FA + 6]
+                    if not len(Ar):
+                        break
+                    idx = np.arange(len(Ar))
+                    P_, R_ = _paren(K, idx, jm[Ar])
+                    open_ = (2 * K.b[R_] <= FA[P_]) & (K.C[R_] >= FA[P_] + 6)
+                    goed = np.zeros(len(Ar), bool)
+                    goed[P_[open_]] = True
+                    g2 = np.zeros(len(Ar), bool)       # a real gap: no floor near the feet in between
+                    g2[P_[open_ & (K.F[R_] < FA[P_] - 2)]] = True
+                    gat |= g2
+                    Ar, B, FA, gat = Ar[goed], B[goed], FA[goed], gat[goed]
+                Ar, B = Ar[gat], B[gat]
+                src_all.append(Ar.astype(np.int32))
+                dst_all.append(B.astype(np.int32))
+    if not src_all:
+        return np.zeros(0, np.int32), np.zeros(0, np.int32)
     return np.concatenate(src_all), np.concatenate(dst_all)
 
 
@@ -340,7 +398,8 @@ class Zoeker:
             if alleen_geldig and not K.geldig[i]:
                 continue
             if K.b[i] - marge <= y <= K.t[i] + 1:
-                d = abs(K.F[i] / 2 - y) if y <= K.H[i] / 2 else 0
+                f, h = K.F[i] / 2, K.H[i] / 2
+                d = f - y if y < f else (y - h if y > h else 0)
                 if d < bd:
                     beste, bd = i, d
         return beste
@@ -536,7 +595,9 @@ def verzamel_doelen(D, quests):
     for a in arenas.values():
         voeg("arena:" + a["id"], "arena", a["deur"], 3.0, 3)
     for s in D.get("spawners", []):
-        voeg("mobs:" + s["id"], "mobs", s["centrum"], max(4.0, float(s["straal"])), 10, bron=s.get("type", ""))
+        # (an open-air spawner puts its mobs on the surface inside its radius: its centre y is nominal; cave spawners keep y)
+        voeg("mobs:" + s["id"], "mobs", s["centrum"], max(4.0, float(s["straal"])), 10 if s.get("grot") else 400,
+             bron=s.get("type", ""))
     # 4. puzzles / secrets
     for p in D.get("puzzels", []):
         if "pos" in p:
@@ -553,7 +614,9 @@ def verzamel_doelen(D, quests):
             if any(w in naam for w in _NIET_LOPEN):
                 continue
             soort = "geheim" if any(w in naam for w in _GEHEIM_WOORDEN) else "overig"
-            voeg("plek:" + veld + ("." + k if k != "_" else ""), soort, p, 4.0, 4, bron=veld)
+            # secrets/collectables are clicked (block reach ~4.5 from the eye) or found by walking up (VIND_STRAAL 3, VIND_HOOGTE 4)
+            voeg("plek:" + veld + ("." + k if k != "_" else ""), soort, p, 4.5 if soort == "geheim" else 4.0,
+                 5 if soort == "geheim" else 4, bron=veld)
     zones = Zones(D)
     for d in doelen.values():
         if d["zone"] is None:
@@ -598,7 +661,12 @@ def analyseer(K=None):
     if K is None:
         K = laad()
     src, dst = randen(K)
-    print(f"  randen: {len(src)} ({time.time() - t0:.0f} s)", flush=True)
+    js, jd = sprongen(K)
+    print(f"  randen: {len(src)} lopen + {len(js)} sprongen ({time.time() - t0:.0f} s)", flush=True)
+    n_lopen = len(src)
+    src = np.concatenate([src, js])
+    dst = np.concatenate([dst, jd])
+    del js, jd
     Z = Zoeker(K)
     L = links(D, poi)
     extra_s, extra_d, link_info = [], [], []
@@ -615,7 +683,10 @@ def analyseer(K=None):
     src = np.concatenate([src, np.array(extra_s, np.int32)])
     dst = np.concatenate([dst, np.array(extra_d, np.int32)])
     G = sparse.csr_matrix((np.ones(len(src), np.int8), (src, dst)), shape=(K.N, K.N))
-    del src, dst
+    zonder = np.ones(len(src), bool)
+    zonder[n_lopen:n_lopen + (len(src) - n_lopen - len(extra_s))] = False      # walking only (no gap jumps), links kept
+    G0 = sparse.csr_matrix((np.ones(int(zonder.sum()), np.int8), (src[zonder], dst[zonder])), shape=(K.N, K.N))
+    del src, dst, zonder
     GT = G.T.tocsr()
     # zone entries: the start + every airship pier (+ the dump's extra entries)
     ingangen = {"start (aankomst)": poi.get("aankomst", (-384, 65, 1130))}
@@ -635,22 +706,26 @@ def analyseer(K=None):
         zaden[naam] = r[0] if r else -1
     start = zaden["start (aankomst)"]
     FR = bfs(G, [start])
+    FR0 = bfs(G0, [start])
+    del G0
     BR = bfs(GT, [r for r in zaden.values() if r >= 0])
     print(f"  bereikt vanaf de start: {int(FR.sum())} runs, terug naar een ingang: {int((FR & BR).sum())} ({time.time() - t0:.0f} s)",
           flush=True)
-    per_ingang = {}
-    for naam, r in zaden.items():
-        if r >= 0 and naam != "start (aankomst)":
-            per_ingang[naam] = bfs(G, [r])
+    per_ingang = {}                 # (one BFS per entry costs ~10 s each on the full graph: off; the start reaches everything)
     U = Uitslag()
     U.K, U.Z, U.G, U.GT, U.FR, U.BR, U.zaden, U.per_ingang, U.links, U.D, U.poi = K, Z, G, GT, FR, BR, zaden, per_ingang, link_info, D, poi
     U.doelen, U.arenas = verzamel_doelen(D, quests)
-    # stand points of reached runs (feet at F/2)
+    # stand points of reached runs: feet at F/2, and for water/ladder runs also at the top of the swim/climb (H/2)
     staan = FR & K.geldig & ~K.bodem
     ids = np.nonzero(staan)[0]
-    U.staan_ids = ids
-    U.boom = cKDTree(np.c_[K.x[ids] + 0.5, K.F[ids] / 2.0, K.z[ids] + 0.5])
-    alle = np.nonzero(K.geldig & ~K.bodem)[0]
+    hoog = ids[K.H[ids] > K.F[ids] + 1]
+    U.pid = np.concatenate([ids, hoog])
+    U.py = np.concatenate([K.F[ids] / 2.0, K.H[hoog] / 2.0])
+    U.staan_ids = U.pid
+    px, pz = K.x[U.pid] + 0.5, K.z[U.pid] + 0.5
+    U.boom = cKDTree(np.c_[px, U.py, pz])
+    boom2 = cKDTree(np.c_[px, pz])
+    zonder = FR0[U.pid]
     xs0, xs1, zs0, zs1 = int(K.x.min()), int(K.x.max()), int(K.z.min()), int(K.z.max())
     for d in U.doelen:
         d["ok"] = False
@@ -660,19 +735,19 @@ def analyseer(K=None):
             d["buiten_kaart"] = True        # a runtime-built area (e.g. the guild valley at -12000, 12000): not in the tiles
             continue
         x, y, z = d["pos"]
-        r = d["straal"]
-        kand = U.boom.query_ball_point([x + 0.5, y, z + 0.5], r + d["dy"])
-        ok = [ids[i] for i in kand if (K.x[ids[i]] + 0.5 - x - 0.5) ** 2 + (K.z[ids[i]] + 0.5 - z - 0.5) ** 2 <= r * r
-              and abs(K.F[ids[i]] / 2.0 - y) <= d["dy"]]
-        if ok:
+        kand = np.array(boom2.query_ball_point([x + 0.5, z + 0.5], d["straal"]), np.int64)
+        if len(kand):
+            kand = kand[np.abs(U.py[kand] - y) <= d["dy"]]
+        if len(kand):
             d["ok"] = True
-            i = min(ok, key=lambda i: (K.x[i] - x) ** 2 + (K.z[i] - z) ** 2 + (K.F[i] / 2 - y) ** 2)
-            d["via"] = [n for n, m in per_ingang.items() if m[i]][:3] or ["start"]
-            d["terug"] = bool(BR[i])
+            q = kand[np.argmin((px[kand] - x) ** 2 + (pz[kand] - z) ** 2 + (U.py[kand] - y) ** 2)]
+            d["via"] = ["start"]
+            d["sprong"] = not bool(zonder[kand].any())
+            d["terug"] = bool(BR[U.pid[q]])
         else:
-            dist, i = U.boom.query([x + 0.5, y, z + 0.5])
-            j = ids[i]
-            d["dichtst"] = (int(K.x[j]), int(K.F[j] // 2), int(K.z[j]), round(float(dist), 1))
+            dist, q = U.boom.query([x + 0.5, y, z + 0.5])
+            j = U.pid[q]
+            d["dichtst"] = (int(K.x[j]), int(U.py[q]), int(K.z[j]), round(float(dist), 1))
     U.t = time.time() - t0
     return U
 
@@ -746,7 +821,7 @@ def instappen(U):
             beste = None
             for i in kand:
                 j = U.staan_ids[i]
-                px, py, pz = K.x[j] + 0.5 - dx, K.F[j] / 2.0 + 1.6, K.z[j] + 0.5 - dz
+                px, py, pz = K.x[j] + 0.5 - dx, U.py[i] + 1.6, K.z[j] + 0.5 - dz
                 lang = px * ux + pz * uz
                 breed = -px * uz + pz * ux
                 hl = max(abs(lang) - 7, 0)
@@ -754,7 +829,7 @@ def instappen(U):
                 hy = max(dy - py, 0, py - (dy + 6))
                 d = (hl * hl + hb * hb + hy * hy) ** 0.5
                 if beste is None or d < beste[0]:
-                    beste = (d, (int(K.x[j]), int(K.F[j] // 2), int(K.z[j])))
+                    beste = (d, (int(K.x[j]), int(U.py[i]), int(K.z[j])))
             uit.append({"lijn": l["id"], "haven": h["id"], "plek": tuple(h["plek"]), "dok": (dx, dy, dz),
                         "afstand": None if beste is None else round(beste[0], 1), "cel": None if beste is None else beste[1]})
     return uit
@@ -894,6 +969,9 @@ def schrijf_rapport(U, extra, zone_filter=None):
             n, ok = tellers.get((zn, g), [0, 0])
             cel.append("-" if n == 0 else (f"**{ok}/{n}**" if ok < n else f"{ok}/{n}"))
         regels.append(f"| {zn} | " + " | ".join(cel) + " |")
+    sprong = [d for d in U.doelen if d.get("ok") and d.get("sprong") and groep(d) in ("hoofd", "zij", "npc", "geheim")]
+    regels += ["", f"Reached ONLY with a gap jump (1-2 blocks, the hat paths / rooftops): {len(sprong)} quest/NPC/secret targets"
+               + (": " + ", ".join(f"`{d['id']}`" for d in sprong[:40]) if sprong else "")]
     onbekend = [d for d in U.doelen if d["pos"] is None]
     buiten = [d for d in U.doelen if d.get("buiten_kaart")]
     regels += ["", f"Targets outside the map tiles (areas built at runtime, e.g. the guild valley; not checked): "

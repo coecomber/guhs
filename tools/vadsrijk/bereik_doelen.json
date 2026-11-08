@@ -662,8 +662,8 @@
         -1068
       ],
       "z2_wacht_plein_oost": [
-        718,
-        95,
+        716,
+        91,
         -1068
       ],
       "z2_ordemeester": [
@@ -763,7 +763,7 @@
       ],
       "z2_gondel_boven": [
         884,
-        162,
+        151,
         -1131
       ],
       "z2_berggids": [
@@ -2693,12 +2693,12 @@
       "z5_roosvenster_noord": [
         2619,
         225,
-        -478
+        -482
       ],
       "z5_roosvenster_zuid": [
         2619,
         225,
-        -562
+        -558
       ],
       "z5_eerste_knuffel": [
         2624,
@@ -3614,7 +3614,7 @@
       "z5_roosvenster_noord": [
         2619,
         225,
-        -478
+        -482
       ],
       "z3_uitkijk_takpunt": [
         1295,
@@ -3754,7 +3754,7 @@
       "z5_roosvenster_zuid": [
         2619,
         225,
-        -562
+        -558
       ],
       "z3_hangnest": [
         1455,
@@ -4896,366 +4896,6 @@
       ]
     },
     "wereld.WereldPlekken.ALLE": {
-      "kampvuur_zwamzoet": [
-        -14,
-        64,
-        58
-      ],
-      "arena_opperzwam.bord": [
-        334,
-        152,
-        -469
-      ],
-      "hoedenpad_wezen_10": [
-        -341,
-        96,
-        54
-      ],
-      "naaldtrap_klodderkijk": [
-        508,
-        74,
-        -234
-      ],
-      "gebouw.huis.5.binnen": [
-        17,
-        64,
-        -69
-      ],
-      "hoedenpad_netwerk.hoeden.1": [
-        -428,
-        106,
-        165
-      ],
-      "hoedenpad_netwerk.hoeden.2": [
-        -409,
-        115,
-        180
-      ],
-      "hoed_oost": [
-        66,
-        154,
-        -36
-      ],
-      "grot_ingangen.1": [
-        -300,
-        90,
-        -220
-      ],
-      "grot_ingangen.2": [
-        -420,
-        83,
-        -300
-      ],
-      "grot_ingangen.3": [
-        -180,
-        111,
-        -360
-      ],
-      "hoedenpad_netwerk.hoeden.3": [
-        -392,
-        100,
-        151
-      ],
-      "hoedenpad_netwerk.hoeden.4": [
-        -389,
-        110,
-        212
-      ],
-      "hoed_zuido": [
-        78,
-        130,
-        32
-      ],
-      "hoedenpad_netwerk.hoeden.5": [
-        -377,
-        107,
-        191
-      ],
-      "hoedenpad_netwerk.hoeden.6": [
-        -373,
-        113,
-        120
-      ],
-      "hoedenpad_netwerk.hoeden.7": [
-        -369,
-        102,
-        82
-      ],
-      "hoedenpad_netwerk.hoeden.8": [
-        -368,
-        111,
-        228
-      ],
-      "hoedenpad_netwerk.hoeden.9": [
-        -360,
-        102,
-        159
-      ],
-      "naaldtrap_slijmnaald": [
-        450,
-        72,
-        372
-      ],
-      "ridder_druipgrotten_1": [
-        -258,
-        98,
-        -309
-      ],
-      "hoed_zuidw": [
-        -78,
-        122,
-        32
-      ],
-      "gebouw.huis.3.binnen": [
-        63,
-        64,
-        -9
-      ],
-      "ridder_druipgrotten_2": [
-        -466,
-        99,
-        -458
-      ],
-      "ridder_druipgrotten_3": [
-        -178,
-        74,
-        -486
-      ],
-      "lichtzwamkamer.centrum": [
-        330,
-        152,
-        -415
-      ],
-      "rustende_ridders_binnen": [
-        -27,
-        64,
-        73
-      ],
-      "kampvuur_druipgrotten_1": [
-        -260,
-        98,
-        -311
-      ],
-      "kampvuur_druipgrotten_2": [
-        -468,
-        99,
-        -460
-      ],
-      "kampvuur_druipgrotten_3": [
-        -180,
-        74,
-        -488
-      ],
-      "arena_koning_klodder.centrum": [
-        410,
-        69,
-        90
-      ],
-      "gebouw.huis.1.binnen": [
-        -89,
-        64,
-        51
-      ],
-      "terugportaal_kamp": [
-        -384,
-        65,
-        1155
-      ],
-      "hoedenpad_netwerk.hoeden.10": [
-        -352,
-        111,
-        201
-      ],
-      "geheim_schildpad": [
-        524,
-        76,
-        722
-      ],
-      "hoedenpad_netwerk.hoeden.11": [
-        -351,
-        104,
-        105
-      ],
-      "hoedenpad_netwerk.hoeden.12": [
-        -343,
-        114,
-        142
-      ],
-      "gebouw.veilinghuis.1.binnen": [
-        41,
-        64,
-        47
-      ],
-      "hoedenpad_netwerk.hoeden.13": [
-        -343,
-        96,
-        54
-      ],
-      "hoedenpad_netwerk.hoeden.14": [
-        -332,
-        112,
-        166
-      ],
-      "gebouw.huis.4.binnen": [
-        -19,
-        64,
-        -69
-      ],
-      "hoedhupperwei": [
-        520,
-        73,
-        300
-      ],
-      "ordetempel_zijdeur": [
-        14,
-        177,
-        -44
-      ],
-      "questbord": [
-        -7,
-        64,
-        31
-      ],
-      "hendelkamer.plaat": [
-        330,
-        152,
-        -444
-      ],
-      "tempeltje": [
-        -436,
-        94,
-        1065
-      ],
-      "gebouw.huis.2.deur": [
-        83,
-        64,
-        51
-      ],
-      "arena_opperzwam.centrum": [
-        330,
-        152,
-        -497
-      ],
-      "gebouw.huis.2.binnen": [
-        87,
-        64,
-        51
-      ],
-      "gebouw.uitrusting.1.doos.1": [
-        -30,
-        63,
-        8
-      ],
-      "gebouw.havenmeester.1.doos.1": [
-        -72,
-        63,
-        68
-      ],
-      "gebouw.havenmeester.1.doos.2": [
-        -64,
-        74,
-        76
-      ],
-      "gebouw.uitrusting.1.doos.2": [
-        -20,
-        76,
-        16
-      ],
-      "poorten.1": [
-        328,
-        152,
-        -405
-      ],
-      "poorten.2": [
-        328,
-        152,
-        -426
-      ],
-      "poorten.3": [
-        328,
-        152,
-        -447
-      ],
-      "gebouw.kleermaker.1.deur": [
-        35,
-        64,
-        68
-      ],
-      "poorten.4": [
-        328,
-        152,
-        -474
-      ],
-      "haven_z1_z2_eind": [
-        150,
-        127,
-        -656
-      ],
-      "quest_tuba": [
-        -467,
-        68,
-        330
-      ],
-      "arena_opperzwam.deur": [
-        330,
-        152,
-        -470
-      ],
-      "druipschacht_ingang": [
-        -463,
-        41,
-        -471
-      ],
-      "druipschacht_plafond_1": [
-        -507,
-        92,
-        -483
-      ],
-      "druipschacht_plafond_2": [
-        -504,
-        102,
-        -477
-      ],
-      "druipschacht_plafond_3": [
-        -497,
-        96,
-        -465
-      ],
-      "druipschacht_plafond_4": [
-        -488,
-        103,
-        -481
-      ],
-      "druipschacht_plafond_5": [
-        -484,
-        97,
-        -481
-      ],
-      "druipschacht_plafond_6": [
-        -485,
-        99,
-        -474
-      ],
-      "haven_z1_z2_bord": [
-        147,
-        127,
-        -647
-      ],
-      "stal.deur": [
-        -143,
-        65,
-        -4
-      ],
-      "gebouw.huis.5.doos.1": [
-        14,
-        63,
-        -72
-      ],
-      "gebouw.huis.5.doos.2": [
-        20,
-        73,
-        -66
-      ],
       "waterval": [
         -470,
         71,
@@ -6315,6 +5955,366 @@
         25,
         64,
         17
+      ],
+      "kampvuur_zwamzoet": [
+        -14,
+        64,
+        58
+      ],
+      "arena_opperzwam.bord": [
+        334,
+        152,
+        -469
+      ],
+      "hoedenpad_wezen_10": [
+        -341,
+        96,
+        54
+      ],
+      "naaldtrap_klodderkijk": [
+        508,
+        74,
+        -234
+      ],
+      "gebouw.huis.5.binnen": [
+        17,
+        64,
+        -69
+      ],
+      "hoedenpad_netwerk.hoeden.1": [
+        -428,
+        106,
+        165
+      ],
+      "hoedenpad_netwerk.hoeden.2": [
+        -409,
+        115,
+        180
+      ],
+      "hoed_oost": [
+        66,
+        154,
+        -36
+      ],
+      "grot_ingangen.1": [
+        -300,
+        90,
+        -220
+      ],
+      "grot_ingangen.2": [
+        -420,
+        83,
+        -300
+      ],
+      "grot_ingangen.3": [
+        -180,
+        111,
+        -360
+      ],
+      "hoedenpad_netwerk.hoeden.3": [
+        -392,
+        100,
+        151
+      ],
+      "hoedenpad_netwerk.hoeden.4": [
+        -389,
+        110,
+        212
+      ],
+      "hoed_zuido": [
+        78,
+        130,
+        32
+      ],
+      "hoedenpad_netwerk.hoeden.5": [
+        -377,
+        107,
+        191
+      ],
+      "hoedenpad_netwerk.hoeden.6": [
+        -373,
+        113,
+        120
+      ],
+      "hoedenpad_netwerk.hoeden.7": [
+        -369,
+        102,
+        82
+      ],
+      "hoedenpad_netwerk.hoeden.8": [
+        -368,
+        111,
+        228
+      ],
+      "hoedenpad_netwerk.hoeden.9": [
+        -360,
+        102,
+        159
+      ],
+      "naaldtrap_slijmnaald": [
+        450,
+        72,
+        372
+      ],
+      "ridder_druipgrotten_1": [
+        -258,
+        98,
+        -309
+      ],
+      "hoed_zuidw": [
+        -78,
+        122,
+        32
+      ],
+      "gebouw.huis.3.binnen": [
+        63,
+        64,
+        -9
+      ],
+      "ridder_druipgrotten_2": [
+        -466,
+        99,
+        -458
+      ],
+      "ridder_druipgrotten_3": [
+        -178,
+        74,
+        -486
+      ],
+      "lichtzwamkamer.centrum": [
+        330,
+        152,
+        -415
+      ],
+      "rustende_ridders_binnen": [
+        -27,
+        64,
+        73
+      ],
+      "kampvuur_druipgrotten_1": [
+        -260,
+        98,
+        -311
+      ],
+      "kampvuur_druipgrotten_2": [
+        -468,
+        99,
+        -460
+      ],
+      "kampvuur_druipgrotten_3": [
+        -180,
+        74,
+        -488
+      ],
+      "arena_koning_klodder.centrum": [
+        410,
+        69,
+        90
+      ],
+      "gebouw.huis.1.binnen": [
+        -89,
+        64,
+        51
+      ],
+      "terugportaal_kamp": [
+        -384,
+        65,
+        1155
+      ],
+      "hoedenpad_netwerk.hoeden.10": [
+        -352,
+        111,
+        201
+      ],
+      "geheim_schildpad": [
+        524,
+        76,
+        722
+      ],
+      "hoedenpad_netwerk.hoeden.11": [
+        -351,
+        104,
+        105
+      ],
+      "hoedenpad_netwerk.hoeden.12": [
+        -343,
+        114,
+        142
+      ],
+      "gebouw.veilinghuis.1.binnen": [
+        41,
+        64,
+        47
+      ],
+      "hoedenpad_netwerk.hoeden.13": [
+        -343,
+        96,
+        54
+      ],
+      "hoedenpad_netwerk.hoeden.14": [
+        -332,
+        112,
+        166
+      ],
+      "gebouw.huis.4.binnen": [
+        -19,
+        64,
+        -69
+      ],
+      "hoedhupperwei": [
+        520,
+        73,
+        300
+      ],
+      "ordetempel_zijdeur": [
+        14,
+        177,
+        -44
+      ],
+      "questbord": [
+        -7,
+        64,
+        31
+      ],
+      "hendelkamer.plaat": [
+        330,
+        152,
+        -444
+      ],
+      "tempeltje": [
+        -436,
+        94,
+        1065
+      ],
+      "gebouw.huis.2.deur": [
+        83,
+        64,
+        51
+      ],
+      "arena_opperzwam.centrum": [
+        330,
+        152,
+        -497
+      ],
+      "gebouw.huis.2.binnen": [
+        87,
+        64,
+        51
+      ],
+      "gebouw.uitrusting.1.doos.1": [
+        -30,
+        63,
+        8
+      ],
+      "gebouw.havenmeester.1.doos.1": [
+        -72,
+        63,
+        68
+      ],
+      "gebouw.havenmeester.1.doos.2": [
+        -64,
+        74,
+        76
+      ],
+      "gebouw.uitrusting.1.doos.2": [
+        -20,
+        76,
+        16
+      ],
+      "poorten.1": [
+        328,
+        152,
+        -405
+      ],
+      "poorten.2": [
+        328,
+        152,
+        -426
+      ],
+      "poorten.3": [
+        328,
+        152,
+        -447
+      ],
+      "gebouw.kleermaker.1.deur": [
+        35,
+        64,
+        68
+      ],
+      "poorten.4": [
+        328,
+        152,
+        -474
+      ],
+      "haven_z1_z2_eind": [
+        150,
+        127,
+        -656
+      ],
+      "quest_tuba": [
+        -467,
+        68,
+        330
+      ],
+      "arena_opperzwam.deur": [
+        330,
+        152,
+        -470
+      ],
+      "druipschacht_ingang": [
+        -463,
+        41,
+        -471
+      ],
+      "druipschacht_plafond_1": [
+        -507,
+        92,
+        -483
+      ],
+      "druipschacht_plafond_2": [
+        -504,
+        102,
+        -477
+      ],
+      "druipschacht_plafond_3": [
+        -497,
+        96,
+        -465
+      ],
+      "druipschacht_plafond_4": [
+        -488,
+        103,
+        -481
+      ],
+      "druipschacht_plafond_5": [
+        -484,
+        97,
+        -481
+      ],
+      "druipschacht_plafond_6": [
+        -485,
+        99,
+        -474
+      ],
+      "haven_z1_z2_bord": [
+        147,
+        127,
+        -647
+      ],
+      "stal.deur": [
+        -143,
+        65,
+        -4
+      ],
+      "gebouw.huis.5.doos.1": [
+        14,
+        63,
+        -72
+      ],
+      "gebouw.huis.5.doos.2": [
+        20,
+        73,
+        -66
       ]
     },
     "wezens.WezensPlekken.KAMPKLODDER": {
@@ -6484,8 +6484,8 @@
         -1068
       ],
       "z2_wacht_plein_oost": [
-        718,
-        95,
+        716,
+        91,
         -1068
       ],
       "z2_ordemeester": [
@@ -6585,7 +6585,7 @@
       ],
       "z2_gondel_boven": [
         884,
-        162,
+        151,
         -1131
       ],
       "z2_berggids": [
@@ -7238,376 +7238,6 @@
       ]
     },
     "zone2.wereld.Z2WereldPlekken.ALLE": {
-      "gebouw.stal.wei": [
-        730,
-        91,
-        -940
-      ],
-      "gebouw.huis_2.binnen": [
-        682,
-        96,
-        -1094
-      ],
-      "cafe_terras": [
-        680,
-        91,
-        -1042
-      ],
-      "spiegelzucht_spiegel_1": [
-        871,
-        176,
-        -1397
-      ],
-      "spiegelzucht_spiegel_2": [
-        863,
-        176,
-        -1382
-      ],
-      "burcht_prismazaal": [
-        854,
-        176,
-        -1362
-      ],
-      "npc_bank": [
-        727,
-        91,
-        -1030
-      ],
-      "spiegelzucht_spiegel_3": [
-        846,
-        176,
-        -1382
-      ],
-      "spiegelzucht_spiegel_4": [
-        837,
-        176,
-        -1397
-      ],
-      "brug_5_zuid": [
-        805,
-        122,
-        -1170
-      ],
-      "spiegelzucht_spiegel_5": [
-        845,
-        176,
-        -1412
-      ],
-      "npcplek.z2_opa_sneeuwbal": [
-        682,
-        91,
-        -1041
-      ],
-      "npcplek.z2_wacht_plein_west": [
-        690,
-        91,
-        -1068
-      ],
-      "spiegelzucht_spiegel_6": [
-        863,
-        176,
-        -1412
-      ],
-      "geheim_burchtdak": [
-        864,
-        195,
-        -1337
-      ],
-      "gondel_kabel_berg": [
-        886,
-        159,
-        -1134
-      ],
-      "kristalbos_1": [
-        854,
-        105,
-        -884
-      ],
-      "kristalbos_2": [
-        594,
-        94,
-        -918
-      ],
-      "kristalbos_3": [
-        644,
-        128,
-        -1306
-      ],
-      "kristalbos_4": [
-        936,
-        123,
-        -1036
-      ],
-      "kristalbos_5": [
-        468,
-        115,
-        -1106
-      ],
-      "kristalbos_6": [
-        784,
-        152,
-        -1296
-      ],
-      "kristalbos_7": [
-        504,
-        134,
-        -1296
-      ],
-      "kristalbos_8": [
-        904,
-        138,
-        -1076
-      ],
-      "kristalbos_9": [
-        554,
-        132,
-        -1356
-      ],
-      "npcplek.z2_gondel_boven": [
-        884,
-        162,
-        -1131
-      ],
-      "npcplek.z2_prisma": [
-        858,
-        176,
-        -1267
-      ],
-      "ridder_splinterkloof_1": [
-        510,
-        114,
-        -1166
-      ],
-      "ridder_splinterkloof_2": [
-        834,
-        123,
-        -1162
-      ],
-      "gebouw.huis_4.doos.1": [
-        677,
-        95,
-        -1022
-      ],
-      "gebouw.huis_4.doos.2": [
-        687,
-        101,
-        -1014
-      ],
-      "meer_schotsen": [
-        554,
-        85,
-        -978
-      ],
-      "ridder_splinterkloof_3": [
-        714,
-        115,
-        -1158
-      ],
-      "mika_fort_poort": [
-        534,
-        135,
-        -1290
-      ],
-      "ridder_splinterkloof_4": [
-        610,
-        65,
-        -1200
-      ],
-      "ridder_splinterkloof_5": [
-        570,
-        131,
-        -1258
-      ],
-      "gebouw.juwelier.deur": [
-        681,
-        91,
-        -1073
-      ],
-      "gehucht_plateaukamp": [
-        764,
-        130,
-        -1256
-      ],
-      "haven_z2_z1_vertrek": [
-        704,
-        91,
-        -900
-      ],
-      "gebouw.winkel_wantjes.binnen": [
-        666,
-        96,
-        -1078
-      ],
-      "arena_galmwolf_bord": [
-        851,
-        117,
-        -970
-      ],
-      "puzzel_lichtkamer_bron": [
-        840,
-        178,
-        -1324
-      ],
-      "gondel_berg_knop": [
-        889,
-        151,
-        -1131
-      ],
-      "gebouw.bank.doos.1": [
-        722,
-        90,
-        -1038
-      ],
-      "gebouw.bank.doos.2": [
-        732,
-        97,
-        -1028
-      ],
-      "gebouw.huis_2.deur": [
-        682,
-        96,
-        -1088
-      ],
-      "boormeester_kop_1": [
-        674,
-        66,
-        -1258
-      ],
-      "boormeester_kop_2": [
-        664,
-        66,
-        -1276
-      ],
-      "boormeester_kop_3": [
-        684,
-        66,
-        -1276
-      ],
-      "gebouw.huis_8.deur": [
-        660,
-        101,
-        -1086
-      ],
-      "gebouw.huis_11.binnen": [
-        755,
-        101,
-        -1026
-      ],
-      "poiplek.z2_uitkijk_poollicht": [
-        616,
-        170,
-        -1356
-      ],
-      "arena_galmwolf_deur": [
-        850,
-        115,
-        -974
-      ],
-      "mika_fort_toren": [
-        544,
-        150,
-        -1317
-      ],
-      "gebouw.smid.npc": [
-        727,
-        91,
-        -1083
-      ],
-      "meer_midden": [
-        532,
-        85,
-        -1034
-      ],
-      "burcht_splinter": [
-        854,
-        176,
-        -1412
-      ],
-      "geheim_galmgrot_ingang": [
-        929,
-        118,
-        -1002
-      ],
-      "gebouw.bank.npc": [
-        727,
-        91,
-        -1030
-      ],
-      "npcplek.z2_versteend_zwier": [
-        532,
-        85,
-        -1034
-      ],
-      "gebouw.huis_2.doos.1": [
-        677,
-        95,
-        -1098
-      ],
-      "gebouw.huis_2.doos.2": [
-        687,
-        101,
-        -1090
-      ],
-      "plein": [
-        704,
-        91,
-        -1068
-      ],
-      "npcplek.z2_touwtje": [
-        857,
-        129,
-        -1184
-      ],
-      "sneeuwguhspar": [
-        688,
-        91,
-        -1061
-      ],
-      "npcplek.z2_postguh": [
-        735,
-        96,
-        -1033
-      ],
-      "mika_fort": [
-        534,
-        135,
-        -1305
-      ],
-      "puzzel_lichtkamer_1": [
-        847,
-        176,
-        -1328
-      ],
-      "puzzel_lichtkamer_2": [
-        861,
-        176,
-        -1328
-      ],
-      "puzzel_lichtkamer_3": [
-        847,
-        176,
-        -1319
-      ],
-      "puzzel_lichtkamer_4": [
-        861,
-        176,
-        -1319
-      ],
-      "npc_smid": [
-        727,
-        91,
-        -1083
-      ],
-      "puzzel_lichtkamer_5": [
-        854,
-        176,
-        -1324
-      ],
-      "puzzel_lichtkamer_doel": [
-        854,
-        182,
-        -1333
-      ],
       "npcplek.z2_kasguh": [
         673,
         105,
@@ -8289,8 +7919,8 @@
         -1048
       ],
       "npcplek.z2_wacht_plein_oost": [
-        718,
-        95,
+        716,
+        91,
         -1068
       ],
       "gebouw.huis_9.doos.1": [
@@ -9192,6 +8822,376 @@
         870,
         115,
         -874
+      ],
+      "gebouw.stal.wei": [
+        730,
+        91,
+        -940
+      ],
+      "gebouw.huis_2.binnen": [
+        682,
+        96,
+        -1094
+      ],
+      "cafe_terras": [
+        680,
+        91,
+        -1042
+      ],
+      "spiegelzucht_spiegel_1": [
+        871,
+        176,
+        -1397
+      ],
+      "spiegelzucht_spiegel_2": [
+        863,
+        176,
+        -1382
+      ],
+      "burcht_prismazaal": [
+        854,
+        176,
+        -1362
+      ],
+      "npc_bank": [
+        727,
+        91,
+        -1030
+      ],
+      "spiegelzucht_spiegel_3": [
+        846,
+        176,
+        -1382
+      ],
+      "spiegelzucht_spiegel_4": [
+        837,
+        176,
+        -1397
+      ],
+      "brug_5_zuid": [
+        805,
+        122,
+        -1170
+      ],
+      "spiegelzucht_spiegel_5": [
+        845,
+        176,
+        -1412
+      ],
+      "npcplek.z2_opa_sneeuwbal": [
+        682,
+        91,
+        -1041
+      ],
+      "npcplek.z2_wacht_plein_west": [
+        690,
+        91,
+        -1068
+      ],
+      "spiegelzucht_spiegel_6": [
+        863,
+        176,
+        -1412
+      ],
+      "geheim_burchtdak": [
+        864,
+        195,
+        -1337
+      ],
+      "gondel_kabel_berg": [
+        886,
+        159,
+        -1134
+      ],
+      "kristalbos_1": [
+        854,
+        105,
+        -884
+      ],
+      "kristalbos_2": [
+        594,
+        94,
+        -918
+      ],
+      "kristalbos_3": [
+        644,
+        128,
+        -1306
+      ],
+      "kristalbos_4": [
+        936,
+        123,
+        -1036
+      ],
+      "kristalbos_5": [
+        468,
+        115,
+        -1106
+      ],
+      "kristalbos_6": [
+        784,
+        152,
+        -1296
+      ],
+      "kristalbos_7": [
+        504,
+        134,
+        -1296
+      ],
+      "kristalbos_8": [
+        904,
+        138,
+        -1076
+      ],
+      "kristalbos_9": [
+        554,
+        132,
+        -1356
+      ],
+      "npcplek.z2_gondel_boven": [
+        884,
+        151,
+        -1131
+      ],
+      "npcplek.z2_prisma": [
+        858,
+        176,
+        -1267
+      ],
+      "ridder_splinterkloof_1": [
+        510,
+        114,
+        -1166
+      ],
+      "ridder_splinterkloof_2": [
+        834,
+        123,
+        -1162
+      ],
+      "gebouw.huis_4.doos.1": [
+        677,
+        95,
+        -1022
+      ],
+      "gebouw.huis_4.doos.2": [
+        687,
+        101,
+        -1014
+      ],
+      "meer_schotsen": [
+        554,
+        85,
+        -978
+      ],
+      "ridder_splinterkloof_3": [
+        714,
+        115,
+        -1158
+      ],
+      "mika_fort_poort": [
+        534,
+        135,
+        -1290
+      ],
+      "ridder_splinterkloof_4": [
+        610,
+        65,
+        -1200
+      ],
+      "ridder_splinterkloof_5": [
+        570,
+        131,
+        -1258
+      ],
+      "gebouw.juwelier.deur": [
+        681,
+        91,
+        -1073
+      ],
+      "gehucht_plateaukamp": [
+        764,
+        130,
+        -1256
+      ],
+      "haven_z2_z1_vertrek": [
+        704,
+        91,
+        -900
+      ],
+      "gebouw.winkel_wantjes.binnen": [
+        666,
+        96,
+        -1078
+      ],
+      "arena_galmwolf_bord": [
+        851,
+        117,
+        -970
+      ],
+      "puzzel_lichtkamer_bron": [
+        840,
+        178,
+        -1324
+      ],
+      "gondel_berg_knop": [
+        889,
+        151,
+        -1131
+      ],
+      "gebouw.bank.doos.1": [
+        722,
+        90,
+        -1038
+      ],
+      "gebouw.bank.doos.2": [
+        732,
+        97,
+        -1028
+      ],
+      "gebouw.huis_2.deur": [
+        682,
+        96,
+        -1088
+      ],
+      "boormeester_kop_1": [
+        674,
+        66,
+        -1258
+      ],
+      "boormeester_kop_2": [
+        664,
+        66,
+        -1276
+      ],
+      "boormeester_kop_3": [
+        684,
+        66,
+        -1276
+      ],
+      "gebouw.huis_8.deur": [
+        660,
+        101,
+        -1086
+      ],
+      "gebouw.huis_11.binnen": [
+        755,
+        101,
+        -1026
+      ],
+      "poiplek.z2_uitkijk_poollicht": [
+        616,
+        170,
+        -1356
+      ],
+      "arena_galmwolf_deur": [
+        850,
+        115,
+        -974
+      ],
+      "mika_fort_toren": [
+        544,
+        150,
+        -1317
+      ],
+      "gebouw.smid.npc": [
+        727,
+        91,
+        -1083
+      ],
+      "meer_midden": [
+        532,
+        85,
+        -1034
+      ],
+      "burcht_splinter": [
+        854,
+        176,
+        -1412
+      ],
+      "geheim_galmgrot_ingang": [
+        929,
+        118,
+        -1002
+      ],
+      "gebouw.bank.npc": [
+        727,
+        91,
+        -1030
+      ],
+      "npcplek.z2_versteend_zwier": [
+        532,
+        85,
+        -1034
+      ],
+      "gebouw.huis_2.doos.1": [
+        677,
+        95,
+        -1098
+      ],
+      "gebouw.huis_2.doos.2": [
+        687,
+        101,
+        -1090
+      ],
+      "plein": [
+        704,
+        91,
+        -1068
+      ],
+      "npcplek.z2_touwtje": [
+        857,
+        129,
+        -1184
+      ],
+      "sneeuwguhspar": [
+        688,
+        91,
+        -1061
+      ],
+      "npcplek.z2_postguh": [
+        735,
+        96,
+        -1033
+      ],
+      "mika_fort": [
+        534,
+        135,
+        -1305
+      ],
+      "puzzel_lichtkamer_1": [
+        847,
+        176,
+        -1328
+      ],
+      "puzzel_lichtkamer_2": [
+        861,
+        176,
+        -1328
+      ],
+      "puzzel_lichtkamer_3": [
+        847,
+        176,
+        -1319
+      ],
+      "puzzel_lichtkamer_4": [
+        861,
+        176,
+        -1319
+      ],
+      "npc_smid": [
+        727,
+        91,
+        -1083
+      ],
+      "puzzel_lichtkamer_5": [
+        854,
+        176,
+        -1324
+      ],
+      "puzzel_lichtkamer_doel": [
+        854,
+        182,
+        -1333
       ]
     },
     "zone2.wezens.Z2WezensPlekken.BURCHT_MIDDEN": {
@@ -11009,491 +11009,6 @@
       ]
     },
     "zone3.wereld.Z3WereldPlekken.ALLE": {
-      "pluimstal_oefenbaan": [
-        1386,
-        69,
-        -717
-      ],
-      "oosttaksteiger_luchtschip": [
-        1637,
-        165,
-        -476
-      ],
-      "hangnest_herberg": [
-        1444,
-        200,
-        -503
-      ],
-      "gebouw.woning_6.binnen": [
-        1319,
-        167,
-        -647
-      ],
-      "gebouw.woning_6.doos_min": [
-        1311,
-        166,
-        -652
-      ],
-      "gebouw.drankjes.binnen": [
-        1384,
-        167,
-        -629
-      ],
-      "pluimstal_kruinring_start": [
-        1423,
-        84,
-        -618
-      ],
-      "arena_piepvel": [
-        1404,
-        61,
-        -576
-      ],
-      "piepvel_kooi_1": [
-        1411,
-        63,
-        -569
-      ],
-      "piepvel_kooi_2": [
-        1396,
-        65,
-        -569
-      ],
-      "piepvel_kooi_3": [
-        1396,
-        67,
-        -584
-      ],
-      "gebouw.cafe.npc": [
-        1352,
-        155,
-        -586
-      ],
-      "gebouw.smid.npc": [
-        1366,
-        167,
-        -531
-      ],
-      "kampvuur_tak_west_30": [
-        1351,
-        209,
-        -595
-      ],
-      "npc_oude_knoest": [
-        1405,
-        123,
-        -603
-      ],
-      "piepvel_kooi_4": [
-        1411,
-        69,
-        -584
-      ],
-      "werf_kamer_gieterij": [
-        1636,
-        157,
-        -884
-      ],
-      "gebouw.jagershut.npc": [
-        1462,
-        167,
-        -582
-      ],
-      "lianenbrug": [
-        1454,
-        191,
-        -581
-      ],
-      "gebouw.woning_6.npc": [
-        1316,
-        168,
-        -644
-      ],
-      "hart_kamer_schimmelkwekerij": [
-        1305,
-        29,
-        -524
-      ],
-      "honingvijver_1": [
-        1448,
-        224,
-        -478
-      ],
-      "honingvijver_2": [
-        1356,
-        228,
-        -484
-      ],
-      "honingvijver_3": [
-        1305,
-        226,
-        -626
-      ],
-      "honingvijver_4": [
-        1428,
-        229,
-        -680
-      ],
-      "honingvijver_5": [
-        1503,
-        227,
-        -624
-      ],
-      "piepvel_grote_kooi": [
-        1410,
-        61,
-        -587
-      ],
-      "pluimstal_keuze": [
-        1372,
-        74,
-        -692
-      ],
-      "vingerafdruk": [
-        1423,
-        130,
-        -564
-      ],
-      "piepvel_lantaarnpaal_1": [
-        1417,
-        61,
-        -576
-      ],
-      "gebouw.pluimstal.deur": [
-        1379,
-        75,
-        -668
-      ],
-      "piepvel_lantaarnpaal_2": [
-        1410,
-        61,
-        -565
-      ],
-      "piepvel_lantaarnpaal_3": [
-        1397,
-        61,
-        -565
-      ],
-      "piepvel_lantaarnpaal_4": [
-        1390,
-        61,
-        -576
-      ],
-      "piepvel_lantaarnpaal_5": [
-        1397,
-        61,
-        -588
-      ],
-      "piepvel_lantaarnpaal_6": [
-        1410,
-        61,
-        -588
-      ],
-      "spiraal_poort_128": [
-        1403,
-        80,
-        -616
-      ],
-      "gebouw.smid.doos_max": [
-        1373,
-        178,
-        -525
-      ],
-      "gebouw.woning_1.deur": [
-        1483,
-        167,
-        -539
-      ],
-      "hangnest_ladder_top": [
-        1433,
-        197,
-        -541
-      ],
-      "rijpad_honingplein": [
-        1404,
-        167,
-        -539
-      ],
-      "wind_lichtkever_kruin_onder": [
-        1443,
-        261,
-        -600
-      ],
-      "mika_steiger": [
-        1459,
-        227,
-        -672
-      ],
-      "gebouw.bank.npc": [
-        1460,
-        167,
-        -597
-      ],
-      "lift_raattros_onder": [
-        1461,
-        157,
-        -566
-      ],
-      "gebouw.drankjes.doos_min": [
-        1376,
-        166,
-        -638
-      ],
-      "gebouw.nestkapel.eiersokkel": [
-        1397,
-        154,
-        -625
-      ],
-      "schimmelketel_1": [
-        1272,
-        69,
-        -640
-      ],
-      "lift_cafe_onder": [
-        1343,
-        155,
-        -587
-      ],
-      "schimmelketel_2": [
-        1245,
-        69,
-        -620
-      ],
-      "schimmelketel_3": [
-        1267,
-        68,
-        -675
-      ],
-      "schimmelketel_4": [
-        1253,
-        68,
-        -590
-      ],
-      "lift_kapel_boven": [
-        1394,
-        167,
-        -642
-      ],
-      "mosvoet_waterrad": [
-        1529,
-        67,
-        -495
-      ],
-      "schorsstad_ring_1": [
-        1410,
-        95,
-        -557
-      ],
-      "schorsstad_ring_2": [
-        1404,
-        105,
-        -597
-      ],
-      "gebouw.juwelier.npc": [
-        1349,
-        167,
-        -602
-      ],
-      "markt": [
-        1404,
-        167,
-        -516
-      ],
-      "gebouw.algemeen.deur": [
-        1425,
-        167,
-        -623
-      ],
-      "gebouw.juwelier.binnen": [
-        1352,
-        167,
-        -600
-      ],
-      "honinglift_boven": [
-        1509,
-        167,
-        -523
-      ],
-      "landmark_hoogvads_richting": [
-        2104,
-        260,
-        -576
-      ],
-      "lantaarnring_1_kooi": [
-        1400,
-        93,
-        -576
-      ],
-      "mosvoet_burgemeester": [
-        1543,
-        67,
-        -480
-      ],
-      "schorsstad_ring_3": [
-        1396,
-        115,
-        -558
-      ],
-      "schorsstad_ring_4": [
-        1417,
-        125,
-        -592
-      ],
-      "mosvoet_theehuis": [
-        1534,
-        67,
-        -472
-      ],
-      "grauwe_brief_1": [
-        1694,
-        224,
-        -829
-      ],
-      "hart_bord": [
-        1330,
-        29,
-        -571
-      ],
-      "dok_mast": [
-        1193,
-        167,
-        -602
-      ],
-      "schorsstad_ring_5": [
-        1385,
-        135,
-        -567
-      ],
-      "schorsstad_ring_6": [
-        1424,
-        145,
-        -579
-      ],
-      "schorsstad_ring_7": [
-        1383,
-        155,
-        -581
-      ],
-      "wind_spiraal_kruin_boven": [
-        1379,
-        228,
-        -673
-      ],
-      "bloesemwaterval_top": [
-        1365,
-        222,
-        -465
-      ],
-      "werf_ingang": [
-        1609,
-        160,
-        -782
-      ],
-      "gebouw.pluimstal.binnen": [
-        1376,
-        75,
-        -677
-      ],
-      "kabelbrug_begin": [
-        1511,
-        167,
-        -676
-      ],
-      "paddenbloesemdal": [
-        1390,
-        69,
-        -417
-      ],
-      "kampvuur_tak_west_62": [
-        1311,
-        210,
-        -607
-      ],
-      "gebouw.woning_2.doos_max": [
-        1498,
-        178,
-        -502
-      ],
-      "gebouw.woning_5.deur": [
-        1347,
-        167,
-        -644
-      ],
-      "gebouw.pluimstal.voer": [
-        1383,
-        75,
-        -679
-      ],
-      "wortelgewelf": [
-        1362,
-        65,
-        -743
-      ],
-      "ei": [
-        1404,
-        26,
-        -576
-      ],
-      "honingmoeras": [
-        1559,
-        69,
-        -633
-      ],
-      "gebouw.woning_5.npc": [
-        1353,
-        167,
-        -650
-      ],
-      "haven_z3_z2_bord": [
-        1196,
-        167,
-        -604
-      ],
-      "gebouw.cafe.podium": [
-        1354,
-        155,
-        -582
-      ],
-      "gebouw.drankjes.npc": [
-        1383,
-        167,
-        -633
-      ],
-      "gebouw.cafe.binnen": [
-        1349,
-        155,
-        -586
-      ],
-      "wind_hangnest_boven": [
-        1459,
-        226,
-        -487
-      ],
-      "gebouw.woning_3.binnen": [
-        1333,
-        167,
-        -523
-      ],
-      "flash_f2_kijkpunt": [
-        1396,
-        152,
-        -630
-      ],
-      "geheim_knuffel_10": [
-        1364,
-        23,
-        -546
-      ],
-      "hangnest_lusje": [
-        1453,
-        198,
-        -535
-      ],
-      "oosttaksteiger_mast": [
-        1614,
-        167,
-        -485
-      ],
       "hart_grotlantaarn_1": [
         1331,
         29,
@@ -13148,6 +12663,491 @@
         1493,
         178,
         -538
+      ],
+      "pluimstal_oefenbaan": [
+        1386,
+        69,
+        -717
+      ],
+      "oosttaksteiger_luchtschip": [
+        1637,
+        165,
+        -476
+      ],
+      "hangnest_herberg": [
+        1444,
+        200,
+        -503
+      ],
+      "gebouw.woning_6.binnen": [
+        1319,
+        167,
+        -647
+      ],
+      "gebouw.woning_6.doos_min": [
+        1311,
+        166,
+        -652
+      ],
+      "gebouw.drankjes.binnen": [
+        1384,
+        167,
+        -629
+      ],
+      "pluimstal_kruinring_start": [
+        1423,
+        84,
+        -618
+      ],
+      "arena_piepvel": [
+        1404,
+        61,
+        -576
+      ],
+      "piepvel_kooi_1": [
+        1411,
+        63,
+        -569
+      ],
+      "piepvel_kooi_2": [
+        1396,
+        65,
+        -569
+      ],
+      "piepvel_kooi_3": [
+        1396,
+        67,
+        -584
+      ],
+      "gebouw.cafe.npc": [
+        1352,
+        155,
+        -586
+      ],
+      "gebouw.smid.npc": [
+        1366,
+        167,
+        -531
+      ],
+      "kampvuur_tak_west_30": [
+        1351,
+        209,
+        -595
+      ],
+      "npc_oude_knoest": [
+        1405,
+        123,
+        -603
+      ],
+      "piepvel_kooi_4": [
+        1411,
+        69,
+        -584
+      ],
+      "werf_kamer_gieterij": [
+        1636,
+        157,
+        -884
+      ],
+      "gebouw.jagershut.npc": [
+        1462,
+        167,
+        -582
+      ],
+      "lianenbrug": [
+        1454,
+        191,
+        -581
+      ],
+      "gebouw.woning_6.npc": [
+        1316,
+        168,
+        -644
+      ],
+      "hart_kamer_schimmelkwekerij": [
+        1305,
+        29,
+        -524
+      ],
+      "honingvijver_1": [
+        1448,
+        224,
+        -478
+      ],
+      "honingvijver_2": [
+        1356,
+        228,
+        -484
+      ],
+      "honingvijver_3": [
+        1305,
+        226,
+        -626
+      ],
+      "honingvijver_4": [
+        1428,
+        229,
+        -680
+      ],
+      "honingvijver_5": [
+        1503,
+        227,
+        -624
+      ],
+      "piepvel_grote_kooi": [
+        1410,
+        61,
+        -587
+      ],
+      "pluimstal_keuze": [
+        1372,
+        74,
+        -692
+      ],
+      "vingerafdruk": [
+        1423,
+        130,
+        -564
+      ],
+      "piepvel_lantaarnpaal_1": [
+        1417,
+        61,
+        -576
+      ],
+      "gebouw.pluimstal.deur": [
+        1379,
+        75,
+        -668
+      ],
+      "piepvel_lantaarnpaal_2": [
+        1410,
+        61,
+        -565
+      ],
+      "piepvel_lantaarnpaal_3": [
+        1397,
+        61,
+        -565
+      ],
+      "piepvel_lantaarnpaal_4": [
+        1390,
+        61,
+        -576
+      ],
+      "piepvel_lantaarnpaal_5": [
+        1397,
+        61,
+        -588
+      ],
+      "piepvel_lantaarnpaal_6": [
+        1410,
+        61,
+        -588
+      ],
+      "spiraal_poort_128": [
+        1403,
+        80,
+        -616
+      ],
+      "gebouw.smid.doos_max": [
+        1373,
+        178,
+        -525
+      ],
+      "gebouw.woning_1.deur": [
+        1483,
+        167,
+        -539
+      ],
+      "hangnest_ladder_top": [
+        1433,
+        197,
+        -541
+      ],
+      "rijpad_honingplein": [
+        1404,
+        167,
+        -539
+      ],
+      "wind_lichtkever_kruin_onder": [
+        1443,
+        261,
+        -600
+      ],
+      "mika_steiger": [
+        1459,
+        227,
+        -672
+      ],
+      "gebouw.bank.npc": [
+        1460,
+        167,
+        -597
+      ],
+      "lift_raattros_onder": [
+        1461,
+        157,
+        -566
+      ],
+      "gebouw.drankjes.doos_min": [
+        1376,
+        166,
+        -638
+      ],
+      "gebouw.nestkapel.eiersokkel": [
+        1397,
+        154,
+        -625
+      ],
+      "schimmelketel_1": [
+        1272,
+        69,
+        -640
+      ],
+      "lift_cafe_onder": [
+        1343,
+        155,
+        -587
+      ],
+      "schimmelketel_2": [
+        1245,
+        69,
+        -620
+      ],
+      "schimmelketel_3": [
+        1267,
+        68,
+        -675
+      ],
+      "schimmelketel_4": [
+        1253,
+        68,
+        -590
+      ],
+      "lift_kapel_boven": [
+        1394,
+        167,
+        -641
+      ],
+      "mosvoet_waterrad": [
+        1529,
+        67,
+        -495
+      ],
+      "schorsstad_ring_1": [
+        1410,
+        95,
+        -557
+      ],
+      "schorsstad_ring_2": [
+        1404,
+        105,
+        -597
+      ],
+      "gebouw.juwelier.npc": [
+        1349,
+        167,
+        -602
+      ],
+      "markt": [
+        1404,
+        167,
+        -516
+      ],
+      "gebouw.algemeen.deur": [
+        1425,
+        167,
+        -623
+      ],
+      "gebouw.juwelier.binnen": [
+        1352,
+        167,
+        -600
+      ],
+      "honinglift_boven": [
+        1509,
+        167,
+        -523
+      ],
+      "landmark_hoogvads_richting": [
+        2104,
+        260,
+        -576
+      ],
+      "lantaarnring_1_kooi": [
+        1400,
+        93,
+        -576
+      ],
+      "mosvoet_burgemeester": [
+        1543,
+        67,
+        -480
+      ],
+      "schorsstad_ring_3": [
+        1396,
+        115,
+        -558
+      ],
+      "schorsstad_ring_4": [
+        1417,
+        125,
+        -592
+      ],
+      "mosvoet_theehuis": [
+        1534,
+        67,
+        -472
+      ],
+      "grauwe_brief_1": [
+        1694,
+        224,
+        -829
+      ],
+      "hart_bord": [
+        1330,
+        29,
+        -571
+      ],
+      "dok_mast": [
+        1193,
+        167,
+        -602
+      ],
+      "schorsstad_ring_5": [
+        1385,
+        135,
+        -567
+      ],
+      "schorsstad_ring_6": [
+        1424,
+        145,
+        -579
+      ],
+      "schorsstad_ring_7": [
+        1383,
+        155,
+        -581
+      ],
+      "wind_spiraal_kruin_boven": [
+        1379,
+        228,
+        -673
+      ],
+      "bloesemwaterval_top": [
+        1365,
+        222,
+        -465
+      ],
+      "werf_ingang": [
+        1609,
+        160,
+        -782
+      ],
+      "gebouw.pluimstal.binnen": [
+        1376,
+        75,
+        -677
+      ],
+      "kabelbrug_begin": [
+        1511,
+        167,
+        -676
+      ],
+      "paddenbloesemdal": [
+        1390,
+        69,
+        -417
+      ],
+      "kampvuur_tak_west_62": [
+        1311,
+        210,
+        -607
+      ],
+      "gebouw.woning_2.doos_max": [
+        1498,
+        178,
+        -502
+      ],
+      "gebouw.woning_5.deur": [
+        1347,
+        167,
+        -644
+      ],
+      "gebouw.pluimstal.voer": [
+        1383,
+        75,
+        -679
+      ],
+      "wortelgewelf": [
+        1362,
+        65,
+        -743
+      ],
+      "ei": [
+        1404,
+        26,
+        -576
+      ],
+      "honingmoeras": [
+        1559,
+        69,
+        -633
+      ],
+      "gebouw.woning_5.npc": [
+        1353,
+        167,
+        -650
+      ],
+      "haven_z3_z2_bord": [
+        1196,
+        167,
+        -604
+      ],
+      "gebouw.cafe.podium": [
+        1354,
+        155,
+        -582
+      ],
+      "gebouw.drankjes.npc": [
+        1383,
+        167,
+        -633
+      ],
+      "gebouw.cafe.binnen": [
+        1349,
+        155,
+        -586
+      ],
+      "wind_hangnest_boven": [
+        1459,
+        226,
+        -487
+      ],
+      "gebouw.woning_3.binnen": [
+        1333,
+        167,
+        -523
+      ],
+      "flash_f2_kijkpunt": [
+        1396,
+        152,
+        -630
+      ],
+      "geheim_knuffel_10": [
+        1364,
+        23,
+        -546
+      ],
+      "hangnest_lusje": [
+        1453,
+        198,
+        -535
+      ],
+      "oosttaksteiger_mast": [
+        1614,
+        167,
+        -485
       ]
     },
     "zone3.wezens.Z3WezensPlekken.ZEPPELIN_KRUIN": {
@@ -14455,346 +14455,6 @@
       ]
     },
     "zone4.wereld.Z4WereldPlekken.ALLE": {
-      "gebouw.woning_4.npc": [
-        1819,
-        80,
-        -514
-      ],
-      "gebouw.woning_27.doos_max": [
-        1905,
-        77,
-        -435
-      ],
-      "gebouw.woning_9.deur": [
-        1835,
-        86,
-        -499
-      ],
-      "gebouw.vliegerwerkplaats.doos_max": [
-        2291,
-        86,
-        -647
-      ],
-      "gebouw.woning_25.deur": [
-        1896,
-        66,
-        -442
-      ],
-      "boot_dok_koraalbaai_wal": [
-        2124,
-        64,
-        -565
-      ],
-      "gebouw.woning_8.doos_max": [
-        1836,
-        96,
-        -515
-      ],
-      "gebouw.woning_17.doos_min": [
-        1872,
-        86,
-        -508
-      ],
-      "vliegerwedstrijd_start": [
-        2294,
-        85,
-        -659
-      ],
-      "boot_dok_strandfeest_water": [
-        1997,
-        63,
-        -556
-      ],
-      "gebouw.woning_19.npc": [
-        1877,
-        66,
-        -437
-      ],
-      "gebouw.woning_1.binnen": [
-        1809,
-        70,
-        -485
-      ],
-      "gebouw.woning_11.doos_max": [
-        1842,
-        76,
-        -410
-      ],
-      "gebouw.woning_20.binnen": [
-        1879,
-        86,
-        -517
-      ],
-      "gebouw.woning_22.npc": [
-        1883,
-        66,
-        -437
-      ],
-      "boot_dok_vliegereiland_water": [
-        2302,
-        63,
-        -619
-      ],
-      "gebouw.woning_2.binnen": [
-        1814,
-        66,
-        -437
-      ],
-      "gebouw.woning_3.binnen": [
-        1815,
-        75,
-        -497
-      ],
-      "gebouw.woning_26.deur": [
-        1898,
-        66,
-        -490
-      ],
-      "gebouw.botenverhuur.binnen": [
-        1870,
-        66,
-        -494
-      ],
-      "gebouw.woning_24.binnen": [
-        1891,
-        66,
-        -494
-      ],
-      "gebouw.schildpadhutje.npc": [
-        2234,
-        72,
-        -445
-      ],
-      "gebouw.woning_26.doos_max": [
-        1900,
-        76,
-        -491
-      ],
-      "gebouw.woning_25.binnen": [
-        1896,
-        66,
-        -438
-      ],
-      "gebouw.woning_6.binnen": [
-        1825,
-        82,
-        -499
-      ],
-      "gebouw.woning_7.doos_max": [
-        1830,
-        79,
-        -430
-      ],
-      "eiland_mysterie": [
-        2480,
-        79,
-        -330
-      ],
-      "mysterie_flash": [
-        2480,
-        79,
-        -332
-      ],
-      "gebouw.woning_16.doos_min": [
-        1864,
-        66,
-        -432
-      ],
-      "gebouw.woning_7.binnen": [
-        1827,
-        67,
-        -433
-      ],
-      "gebouw.winkel.deur": [
-        1843,
-        67,
-        -445
-      ],
-      "gebouw.woning_8.binnen": [
-        1833,
-        87,
-        -517
-      ],
-      "gebouw.woning_10.doos_max": [
-        1843,
-        76,
-        -424
-      ],
-      "vuurtorentje": [
-        1912,
-        64,
-        -436
-      ],
-      "gebouw.lampionwerkplaats.npc": [
-        1828,
-        67,
-        -448
-      ],
-      "gebouw.woning_27.deur": [
-        1903,
-        66,
-        -442
-      ],
-      "gebouw.winkel.npc": [
-        1843,
-        68,
-        -440
-      ],
-      "boot_dok_knuffeltij_wal": [
-        1992,
-        65,
-        -345
-      ],
-      "lampionmast": [
-        1849,
-        67,
-        -457
-      ],
-      "arena_zeeslurf_deur": [
-        2185,
-        65,
-        -585
-      ],
-      "gebouw.herberg.deur": [
-        1829,
-        68,
-        -466
-      ],
-      "vuurtoren_deur": [
-        2400,
-        89,
-        -492
-      ],
-      "gebouw.woning_25.doos_max": [
-        1898,
-        76,
-        -435
-      ],
-      "kampvuur_koraalbaai": [
-        2177,
-        71,
-        -615
-      ],
-      "werkplaats_kookvuur": [
-        1853,
-        68,
-        -440
-      ],
-      "gebouw.woning_1.npc": [
-        1809,
-        70,
-        -486
-      ],
-      "gebouw.kookhuis.binnen": [
-        1852,
-        67,
-        -441
-      ],
-      "gebouw.woning_6.doos_max": [
-        1828,
-        91,
-        -497
-      ],
-      "kampvuur_vliegereiland": [
-        2278,
-        64,
-        -641
-      ],
-      "gebouw.vliegerwerkplaats.deur": [
-        2287,
-        77,
-        -646
-      ],
-      "boot_dok_pierkop_water": [
-        2472,
-        63,
-        -528
-      ],
-      "gebouw.vuurtorenwachter.npc": [
-        2411,
-        85,
-        -496
-      ],
-      "gebouw.woning_15.doos_min": [
-        1862,
-        84,
-        -500
-      ],
-      "gebouw.woning_28.deur": [
-        1905,
-        66,
-        -490
-      ],
-      "gebouw.opvangcentrum.npc": [
-        1933,
-        68,
-        -363
-      ],
-      "gebouw.stal.doos_min": [
-        1812,
-        66,
-        -456
-      ],
-      "uitkijk_vuurtoren": [
-        2400,
-        128,
-        -495
-      ],
-      "boot_dok_vliegereiland": [
-        2300,
-        65,
-        -621
-      ],
-      "gebouw.havenmeester.binnen": [
-        1860,
-        66,
-        -443
-      ],
-      "gebouw.woning_16.npc": [
-        1867,
-        67,
-        -428
-      ],
-      "arena_vliegervanger_bord": [
-        2178,
-        67,
-        -697
-      ],
-      "mysterie_strand": [
-        2454,
-        66,
-        -326
-      ],
-      "gebouw.woning_8.npc": [
-        1833,
-        87,
-        -518
-      ],
-      "gebouw.woning_24.doos_max": [
-        1893,
-        77,
-        -491
-      ],
-      "boot_dok_wrak": [
-        2192,
-        64,
-        -700
-      ],
-      "mysterie_poort": [
-        2480,
-        80,
-        -327
-      ],
-      "gebouw.visrestaurant.doos_max": [
-        1914,
-        76,
-        -493
-      ],
-      "gebouw.woning_5.doos_max": [
-        1826,
-        78,
-        -414
-      ],
       "gebouw.woning_14.doos_min": [
         1852,
         66,
@@ -16314,6 +15974,346 @@
         1853,
         67,
         -428
+      ],
+      "gebouw.woning_4.npc": [
+        1819,
+        80,
+        -514
+      ],
+      "gebouw.woning_27.doos_max": [
+        1905,
+        77,
+        -435
+      ],
+      "gebouw.woning_9.deur": [
+        1835,
+        86,
+        -499
+      ],
+      "gebouw.vliegerwerkplaats.doos_max": [
+        2291,
+        86,
+        -647
+      ],
+      "gebouw.woning_25.deur": [
+        1896,
+        66,
+        -442
+      ],
+      "boot_dok_koraalbaai_wal": [
+        2124,
+        64,
+        -565
+      ],
+      "gebouw.woning_8.doos_max": [
+        1836,
+        96,
+        -515
+      ],
+      "gebouw.woning_17.doos_min": [
+        1872,
+        86,
+        -508
+      ],
+      "vliegerwedstrijd_start": [
+        2294,
+        85,
+        -659
+      ],
+      "boot_dok_strandfeest_water": [
+        1997,
+        63,
+        -556
+      ],
+      "gebouw.woning_19.npc": [
+        1877,
+        66,
+        -437
+      ],
+      "gebouw.woning_1.binnen": [
+        1809,
+        70,
+        -485
+      ],
+      "gebouw.woning_11.doos_max": [
+        1842,
+        76,
+        -410
+      ],
+      "gebouw.woning_20.binnen": [
+        1879,
+        86,
+        -517
+      ],
+      "gebouw.woning_22.npc": [
+        1883,
+        66,
+        -437
+      ],
+      "boot_dok_vliegereiland_water": [
+        2302,
+        63,
+        -619
+      ],
+      "gebouw.woning_2.binnen": [
+        1814,
+        66,
+        -437
+      ],
+      "gebouw.woning_3.binnen": [
+        1815,
+        75,
+        -497
+      ],
+      "gebouw.woning_26.deur": [
+        1898,
+        66,
+        -490
+      ],
+      "gebouw.botenverhuur.binnen": [
+        1870,
+        66,
+        -494
+      ],
+      "gebouw.woning_24.binnen": [
+        1891,
+        66,
+        -494
+      ],
+      "gebouw.schildpadhutje.npc": [
+        2234,
+        72,
+        -445
+      ],
+      "gebouw.woning_26.doos_max": [
+        1900,
+        76,
+        -491
+      ],
+      "gebouw.woning_25.binnen": [
+        1896,
+        66,
+        -438
+      ],
+      "gebouw.woning_6.binnen": [
+        1825,
+        82,
+        -499
+      ],
+      "gebouw.woning_7.doos_max": [
+        1830,
+        79,
+        -430
+      ],
+      "eiland_mysterie": [
+        2480,
+        79,
+        -330
+      ],
+      "mysterie_flash": [
+        2480,
+        79,
+        -332
+      ],
+      "gebouw.woning_16.doos_min": [
+        1864,
+        66,
+        -432
+      ],
+      "gebouw.woning_7.binnen": [
+        1827,
+        67,
+        -433
+      ],
+      "gebouw.winkel.deur": [
+        1843,
+        67,
+        -445
+      ],
+      "gebouw.woning_8.binnen": [
+        1833,
+        87,
+        -517
+      ],
+      "gebouw.woning_10.doos_max": [
+        1843,
+        76,
+        -424
+      ],
+      "vuurtorentje": [
+        1912,
+        64,
+        -436
+      ],
+      "gebouw.lampionwerkplaats.npc": [
+        1828,
+        67,
+        -448
+      ],
+      "gebouw.woning_27.deur": [
+        1903,
+        66,
+        -442
+      ],
+      "gebouw.winkel.npc": [
+        1843,
+        68,
+        -440
+      ],
+      "boot_dok_knuffeltij_wal": [
+        1992,
+        65,
+        -345
+      ],
+      "lampionmast": [
+        1849,
+        67,
+        -457
+      ],
+      "arena_zeeslurf_deur": [
+        2185,
+        65,
+        -585
+      ],
+      "gebouw.herberg.deur": [
+        1829,
+        68,
+        -466
+      ],
+      "vuurtoren_deur": [
+        2400,
+        89,
+        -492
+      ],
+      "gebouw.woning_25.doos_max": [
+        1898,
+        76,
+        -435
+      ],
+      "kampvuur_koraalbaai": [
+        2177,
+        71,
+        -615
+      ],
+      "werkplaats_kookvuur": [
+        1853,
+        68,
+        -440
+      ],
+      "gebouw.woning_1.npc": [
+        1809,
+        70,
+        -486
+      ],
+      "gebouw.kookhuis.binnen": [
+        1852,
+        67,
+        -441
+      ],
+      "gebouw.woning_6.doos_max": [
+        1828,
+        91,
+        -497
+      ],
+      "kampvuur_vliegereiland": [
+        2278,
+        64,
+        -641
+      ],
+      "gebouw.vliegerwerkplaats.deur": [
+        2287,
+        77,
+        -646
+      ],
+      "boot_dok_pierkop_water": [
+        2472,
+        63,
+        -528
+      ],
+      "gebouw.vuurtorenwachter.npc": [
+        2411,
+        85,
+        -496
+      ],
+      "gebouw.woning_15.doos_min": [
+        1862,
+        84,
+        -500
+      ],
+      "gebouw.woning_28.deur": [
+        1905,
+        66,
+        -490
+      ],
+      "gebouw.opvangcentrum.npc": [
+        1933,
+        68,
+        -363
+      ],
+      "gebouw.stal.doos_min": [
+        1812,
+        66,
+        -456
+      ],
+      "uitkijk_vuurtoren": [
+        2400,
+        128,
+        -495
+      ],
+      "boot_dok_vliegereiland": [
+        2300,
+        65,
+        -621
+      ],
+      "gebouw.havenmeester.binnen": [
+        1860,
+        66,
+        -443
+      ],
+      "gebouw.woning_16.npc": [
+        1867,
+        67,
+        -428
+      ],
+      "arena_vliegervanger_bord": [
+        2178,
+        67,
+        -697
+      ],
+      "mysterie_strand": [
+        2454,
+        66,
+        -326
+      ],
+      "gebouw.woning_8.npc": [
+        1833,
+        87,
+        -518
+      ],
+      "gebouw.woning_24.doos_max": [
+        1893,
+        77,
+        -491
+      ],
+      "boot_dok_wrak": [
+        2192,
+        64,
+        -700
+      ],
+      "mysterie_poort": [
+        2480,
+        80,
+        -327
+      ],
+      "gebouw.visrestaurant.doos_max": [
+        1914,
+        76,
+        -493
+      ],
+      "gebouw.woning_5.doos_max": [
+        1826,
+        78,
+        -414
       ]
     },
     "zone5.verhaal.Z5VerhaalPlekken.AANKOMST": {
@@ -16816,12 +16816,12 @@
       "z5_roosvenster_noord": [
         2619,
         225,
-        -478
+        -482
       ],
       "z5_roosvenster_zuid": [
         2619,
         225,
-        -562
+        -558
       ],
       "z5_eerste_knuffel": [
         2624,
@@ -17046,35 +17046,15 @@
       ]
     },
     "zone5.wereld.Z5WereldPlekken.ALLE": {
-      "gilde_bijenstal": [
-        2702,
-        215,
-        -454
-      ],
-      "kampvuur_academie": [
-        2762,
-        215,
-        -556
-      ],
-      "luchthaven_havenmeester": [
-        2623,
+      "haven_5_4_vertrekbord": [
+        2626,
         217,
-        -446
+        -441
       ],
-      "huis_winkel_kleding": [
-        2677,
-        218,
-        -474
-      ],
-      "staartpark_westeinde": [
-        2896,
-        205,
-        -520
-      ],
-      "spuitgat_midden": [
-        2552,
-        223,
-        -520
+      "haven_5_1_vertrekbord": [
+        2646,
+        217,
+        -441
       ],
       "huis_woning_1": [
         2659,
@@ -17111,6 +17091,11 @@
         220,
         -570
       ],
+      "huis_winkel_bakker": [
+        2563,
+        224,
+        -494
+      ],
       "huis_woning_8": [
         2577,
         215,
@@ -17121,275 +17106,80 @@
         213,
         -601
       ],
-      "luchthaven_balie": [
-        2623,
-        217,
-        -449
-      ],
-      "spuitgat_noord": [
-        2563,
-        224,
-        -495
-      ],
-      "winkel_kruiden_balie": [
-        2639,
-        215,
-        -600
-      ],
-      "raadszaal_zaal": [
+      "kampvuur_paleis": [
         2798,
-        237,
-        -528
-      ],
-      "winkel_kruiden_boven": [
-        2638,
-        220,
-        -593
-      ],
-      "z5w_buikgangen_min": [
-        2704,
-        164,
-        -530
-      ],
-      "z5w_lift_zuidvin_onder": [
-        2610,
-        154,
-        -611
-      ],
-      "winkel_bakker_deur": [
-        2559,
-        224,
-        -495
-      ],
-      "ooggaarde_tuin": [
-        2552,
-        219,
-        -580
-      ],
-      "paleis_kanselarij": [
-        2839,
         233,
-        -550
+        -494
       ],
-      "huis_winkel_speelgoed": [
-        2569,
-        224,
-        -541
+      "luchthaven_vertrekbord": [
+        2626,
+        217,
+        -441
+      ],
+      "paleis_poort": [
+        2822,
+        233,
+        -520
       ],
       "soepkeuken_ingang": [
         2724,
         219,
         -524
       ],
+      "universiteit_archief": [
+        2772,
+        215,
+        -459
+      ],
       "winkel_juwelen_balie": [
         2617,
         214,
         -604
-      ],
-      "universiteit_sterrenwacht_top": [
-        2702,
-        260,
-        -446
-      ],
-      "winkel_kruiden_deur": [
-        2639,
-        215,
-        -602
-      ],
-      "z5w_schuilnest_max": [
-        2624,
-        194,
-        -414
-      ],
-      "universiteit_collegezaal": [
-        2773,
-        215,
-        -480
-      ],
-      "haven_5_6_vertrekbord": [
-        2606,
-        217,
-        -441
-      ],
-      "academie_kastjes": [
-        2728,
-        215,
-        -595
-      ],
-      "z5w_buik_luik": [
-        2732,
-        219,
-        -541
-      ],
-      "winkel_kaarten_deur": [
-        2544,
-        220,
-        -465
-      ],
-      "herberg_hemelbed_deur": [
-        2689,
-        218,
-        -574
-      ],
-      "markt_bakker": [
-        2764,
-        219,
-        -508
-      ],
-      "luchthaven_pier_oost": [
-        2610,
-        217,
-        -400
-      ],
-      "z5w_donderbuik_deur": [
-        2951,
-        207,
-        -569
-      ],
-      "kathedraal_roos_zuid": [
-        2619,
-        225,
-        -562
-      ],
-      "paleis_kanselarij_bureau": [
-        2843,
-        233,
-        -557
-      ],
-      "winkel_smid_boven": [
-        2678,
-        223,
-        -565
-      ],
-      "winkel_smid_balie": [
-        2681,
-        218,
-        -570
-      ],
-      "haven_5_4_kapitein": [
-        2632,
-        217,
-        -370
-      ],
-      "academie_toren": [
-        2723,
-        248,
-        -581
-      ],
-      "kathedraal_altaar": [
-        2624,
-        228,
-        -520
-      ],
-      "paleis_hof": [
-        2802,
-        233,
-        -546
-      ],
-      "troonzaal_troon": [
-        2847,
-        238,
-        -520
-      ],
-      "winkel_smid_deur": [
-        2680,
-        218,
-        -572
-      ],
-      "winkel_speelgoed_deur": [
-        2569,
-        224,
-        -545
-      ],
-      "huis_winkel_wapens": [
-        2681,
-        215,
-        -589
-      ],
-      "raadszaal_ingang": [
-        2788,
-        236,
-        -520
-      ],
-      "z5w_lift_noordvin_boven": [
-        2609,
-        217,
-        -432
-      ],
-      "huis_winkel_smid": [
-        2681,
-        218,
-        -568
-      ],
-      "z5w_buik_uit": [
-        2731,
-        219,
-        -539
-      ],
-      "kampvuur_luchthaven": [
-        2668,
-        217,
-        -454
-      ],
-      "luchthaven_logboek": [
-        2618,
-        217,
-        -448
       ],
       "z5w_zuidvin": [
         2610,
         154,
         -648
       ],
-      "huis_winkel_kaarten": [
-        2543,
-        220,
-        -469
+      "z5w_schuilnest_min": [
+        2588,
+        186,
+        -440
       ],
-      "spuitgat_zuid": [
-        2563,
-        223,
-        -545
+      "z5w_schuilnest_ladder_onder": [
+        2611,
+        187,
+        -441
       ],
-      "z5w_lift_staart_onder": [
-        2952,
-        212,
+      "haven_5_4_mast": [
+        2633,
+        227,
+        -354
+      ],
+      "luchthaven_pier_oost": [
+        2610,
+        217,
+        -400
+      ],
+      "winkel_smid_balie": [
+        2681,
+        218,
+        -570
+      ],
+      "staartpark_westeinde": [
+        2896,
+        205,
         -520
       ],
-      "luchthaven_klokkentoren": [
-        2635,
+      "paleis_trap": [
+        2762,
+        219,
+        -520
+      ],
+      "haven_5_4_bel": [
+        2631,
         217,
-        -457
-      ],
-      "kathedraal_geveltoren": [
-        2682,
-        270,
-        -544
-      ],
-      "balkon_oog": [
-        2552,
-        214,
-        -614
-      ],
-      "kampvuur_kathedraal": [
-        2694,
-        221,
-        -534
-      ],
-      "gilde_keuken": [
-        2702,
-        215,
-        -474
-      ],
-      "huis_winkel_kruiden": [
-        2639,
-        215,
-        -598
-      ],
-      "z5w_leider_strobaal": [
-        2714,
-        215,
-        -578
+        -359
       ],
       "soepkeuken_rij_1": [
         2719,
@@ -17411,93 +17201,133 @@
         219,
         -527
       ],
-      "markt_kleermaker": [
-        2756,
-        219,
-        -532
+      "z5w_lift_staart_boven": [
+        2896,
+        205,
+        -522
       ],
-      "z5w_leider_mistmoeder": [
-        2970,
-        206,
-        -450
+      "gilde_ingang": [
+        2695,
+        215,
+        -483
       ],
-      "herberg_hemelbed_boven": [
-        2690,
-        223,
-        -564
+      "academie_toren_voet": [
+        2723,
+        215,
+        -582
       ],
-      "herberg_hemelbed_balie": [
-        2690,
+      "huis_winkel_wapens": [
+        2681,
+        215,
+        -589
+      ],
+      "universiteit_collegezaal": [
+        2773,
+        215,
+        -480
+      ],
+      "herberg_hemelbed_deur": [
+        2689,
         218,
-        -572
-      ],
-      "haven_5_pier_1": [
-        2650,
-        217,
-        -365
-      ],
-      "haven_5_pier_2": [
-        2630,
-        217,
-        -365
-      ],
-      "haven_5_pier_3": [
-        2610,
-        217,
-        -365
-      ],
-      "universiteit_binnenhof": [
-        2737,
-        215,
-        -471
-      ],
-      "winkel_kaarten_balie": [
-        2543,
-        220,
-        -467
-      ],
-      "winkel_speelgoed_balie": [
-        2569,
-        224,
-        -543
-      ],
-      "huis_winkel_bakker": [
-        2563,
-        224,
-        -494
-      ],
-      "academie_oefenplein": [
-        2752,
-        215,
-        -568
-      ],
-      "universiteit_archief": [
-        2772,
-        215,
-        -459
+        -574
       ],
       "gilde_brouwerij": [
         2702,
         215,
         -469
       ],
+      "soepkeuken_bank": [
+        2731,
+        219,
+        -532
+      ],
+      "paleis_kanselarij": [
+        2839,
+        233,
+        -550
+      ],
+      "winkel_bakker_balie": [
+        2561,
+        224,
+        -494
+      ],
+      "winkel_smid_boven": [
+        2678,
+        223,
+        -565
+      ],
+      "paleis_kanselarij_bureau": [
+        2843,
+        233,
+        -557
+      ],
+      "z5w_lift_noordvin_onder": [
+        2610,
+        154,
+        -429
+      ],
+      "bank_balie": [
+        2662,
+        219,
+        -474
+      ],
       "kathedraal_geveltoren_voet": [
         2669,
         225,
         -540
       ],
-      "soepkeuken_ketel": [
-        2724,
+      "geheim_knuffel_1": [
+        2690,
+        221,
+        -505
+      ],
+      "geheim_knuffel_2": [
+        2905,
+        203,
+        -540
+      ],
+      "geheim_knuffel_3": [
+        2545,
+        212,
+        -600
+      ],
+      "geheim_knuffel_4": [
+        2665,
+        204,
+        -418
+      ],
+      "geheim_knuffel_5": [
+        2762,
+        215,
+        -448
+      ],
+      "geheim_knuffel_6": [
+        2772,
+        215,
+        -591
+      ],
+      "geheim_knuffel_7": [
+        2835,
+        233,
+        -520
+      ],
+      "geheim_knuffel_8": [
+        2655,
+        225,
+        -540
+      ],
+      "luchthaven_balie": [
+        2623,
+        217,
+        -449
+      ],
+      "markt_smid": [
+        2741,
         219,
-        -532
+        -508
       ],
-      "z5w_buik_ladder_onder": [
-        2733,
-        165,
-        -539
-      ],
-      "z5w_wolkwaldroom_deur": [
-        2587,
+      "z5w_wolkwaldroom_uitluik": [
+        2586,
         167,
         -520
       ],
@@ -17505,11 +17335,6 @@
         2742,
         219,
         -504
-      ],
-      "markt_fontein": [
-        2748,
-        219,
-        -529
       ],
       "wolkwacht_2": [
         2742,
@@ -17536,155 +17361,195 @@
         221,
         -568
       ],
-      "haven_5_4_mast": [
-        2633,
-        227,
-        -354
-      ],
-      "staartvin_top": [
-        2905,
-        206,
-        -520
+      "gilde_hal": [
+        2702,
+        215,
+        -484
       ],
       "soepkeuken_tafel": [
         2729,
         219,
         -528
       ],
-      "winkel_juwelen_deur": [
-        2617,
-        214,
-        -606
-      ],
-      "z5w_donderbuik_arena": [
-        2968,
-        206,
-        -582
-      ],
-      "staartpark_prieel": [
-        2880,
-        203,
-        -502
-      ],
-      "huis_bank_hoogvads": [
-        2662,
-        219,
-        -476
-      ],
-      "z5w_lift_zuidvin_boven": [
-        2609,
-        210,
-        -608
-      ],
-      "paleis_poort": [
-        2822,
-        233,
+      "wolkwaldroom_arena": [
+        2602,
+        167,
         -520
-      ],
-      "raadszaal_zijkamer": [
-        2811,
-        237,
-        -509
-      ],
-      "staartpark_vijver": [
-        2876,
-        204,
-        -524
-      ],
-      "soepkeuken_bank": [
-        2731,
-        219,
-        -532
-      ],
-      "haven_5_4_bel": [
-        2631,
-        217,
-        -359
-      ],
-      "z5w_schuilnest_ladder_onder": [
-        2611,
-        187,
-        -441
       ],
       "kathedraal_roos_noord": [
         2619,
         225,
         -478
       ],
-      "universiteit_sterrenwacht": [
-        2706,
-        215,
-        -444
+      "winkel_kaarten_balie": [
+        2543,
+        220,
+        -467
       ],
-      "z5w_noordvin": [
-        2610,
-        154,
-        -392
+      "z5w_lift_zuidvin_boven": [
+        2609,
+        210,
+        -608
       ],
-      "raadszaal_lessenaar": [
-        2805,
-        237,
+      "winkel_bakker_boven": [
+        2566,
+        229,
+        -495
+      ],
+      "troonzaal_audientie": [
+        2840,
+        233,
         -520
       ],
-      "wolbol_1": [
-        2745,
-        219,
-        -528
+      "academie_kapitein": [
+        2737,
+        215,
+        -591
       ],
-      "wolbol_2": [
-        2820,
+      "troonzaal_ingang": [
+        2831,
         233,
+        -520
+      ],
+      "bank_hoogvads_balie": [
+        2662,
+        219,
+        -474
+      ],
+      "spuitgat_zuid": [
+        2563,
+        223,
+        -545
+      ],
+      "kathedraal_roos_zuid": [
+        2619,
+        225,
+        -562
+      ],
+      "gilde_keuken": [
+        2702,
+        215,
+        -474
+      ],
+      "huis_winkel_kaarten": [
+        2543,
+        220,
+        -469
+      ],
+      "burger_1": [
+        2700,
+        221,
+        -510
+      ],
+      "burger_2": [
+        2760,
+        219,
         -512
       ],
-      "wolbol_3": [
-        2735,
-        215,
-        -472
+      "burger_3": [
+        2690,
+        221,
+        -530
       ],
-      "z5w_buikgangen_max": [
-        2808,
-        176,
-        -508
+      "burger_4": [
+        2860,
+        204,
+        -514
       ],
-      "z5w_schuilnest_uit": [
-        2613,
+      "burger_5": [
+        2560,
+        222,
+        -570
+      ],
+      "burger_6": [
+        2640,
         217,
-        -445
+        -452
       ],
-      "staartpark_boom_1": [
-        2866,
-        203,
-        -542
+      "kampvuur_kathedraal": [
+        2694,
+        221,
+        -534
       ],
-      "staartpark_boom_2": [
-        2890,
-        204,
-        -535
+      "kathedraal_poort": [
+        2683,
+        225,
+        -520
       ],
-      "staartpark_boom_3": [
-        2890,
-        204,
-        -505
+      "staarttrap_boven": [
+        2856,
+        233,
+        -523
       ],
-      "staartpark_boom_4": [
-        2870,
-        203,
-        -500
+      "universiteit_bibliotheek": [
+        2751,
+        215,
+        -446
       ],
-      "z5w_schuilnest_min": [
-        2588,
-        186,
-        -440
+      "haven_5_4_landing": [
+        2630,
+        217,
+        -362
       ],
-      "z5w_staartvlakte_noord": [
+      "winkel_kruiden_balie": [
+        2639,
+        215,
+        -600
+      ],
+      "kampvuur_ooggaarde": [
+        2556,
+        220,
+        -572
+      ],
+      "gilde_smidse": [
+        2702,
+        215,
+        -464
+      ],
+      "z5w_donderbuik_arena": [
         2968,
         206,
-        -458
+        -582
+      ],
+      "z5w_buikgangen_min": [
+        2704,
+        164,
+        -530
+      ],
+      "soepkeuken_hoek": [
+        2716,
+        219,
+        -540
+      ],
+      "kampvuur_markt": [
+        2760,
+        219,
+        -516
+      ],
+      "spuitgat_midden": [
+        2552,
+        223,
+        -520
+      ],
+      "bank_hoogvads_boven": [
+        2665,
+        224,
+        -478
+      ],
+      "winkel_smid_deur": [
+        2680,
+        218,
+        -572
       ],
       "wolkbes_1": [
         2860,
         202,
         -545
+      ],
+      "luchthaven_havenmeester": [
+        2623,
+        217,
+        -446
       ],
       "wolkbes_2": [
         2885,
@@ -17696,11 +17561,6 @@
         205,
         -520
       ],
-      "universiteit_bibliotheek": [
-        2751,
-        215,
-        -446
-      ],
       "wolkbes_4": [
         2884,
         200,
@@ -17711,25 +17571,10 @@
         203,
         -495
       ],
-      "kampvuur_markt": [
-        2760,
-        219,
-        -516
-      ],
       "wolkbes_6": [
         2540,
         218,
         -575
-      ],
-      "kampvuur_staartpark": [
-        2868,
-        204,
-        -510
-      ],
-      "gilde_ingang": [
-        2695,
-        215,
-        -484
       ],
       "wolkbes_7": [
         2548,
@@ -17746,90 +17591,125 @@
         215,
         -590
       ],
-      "academie_kapitein": [
+      "kampvuur_luchthaven": [
+        2668,
+        217,
+        -454
+      ],
+      "kampvuur_academie": [
+        2762,
+        215,
+        -556
+      ],
+      "winkel_kruiden_boven": [
+        2638,
+        220,
+        -593
+      ],
+      "huis_winkel_speelgoed": [
+        2569,
+        224,
+        -541
+      ],
+      "luchthaven_station": [
+        2635,
+        217,
+        -452
+      ],
+      "universiteit_sterrenwacht": [
+        2706,
+        215,
+        -444
+      ],
+      "academie_oefenplein": [
+        2752,
+        215,
+        -568
+      ],
+      "markt_juwelier": [
+        2764,
+        219,
+        -532
+      ],
+      "paleis_hof": [
+        2802,
+        233,
+        -546
+      ],
+      "winkel_kleding_balie": [
+        2677,
+        218,
+        -472
+      ],
+      "luchthaven_logboek": [
+        2618,
+        217,
+        -448
+      ],
+      "universiteit_poort": [
         2737,
         215,
-        -591
+        -492
       ],
-      "academie_parcours_1": [
-        2722,
+      "z5w_schuilnest_max": [
+        2624,
+        194,
+        -414
+      ],
+      "zachtmoedlaan": [
+        2704,
+        221,
+        -520
+      ],
+      "herberg_hemelbed_balie": [
+        2690,
+        218,
+        -572
+      ],
+      "gilde_bijenstal": [
+        2702,
         215,
-        -565
+        -454
       ],
-      "academie_parcours_2": [
-        2752,
-        215,
-        -565
+      "kampvuur_staartpark": [
+        2868,
+        204,
+        -510
       ],
-      "academie_parcours_3": [
-        2752,
-        215,
-        -590
-      ],
-      "academie_parcours_4": [
-        2722,
-        215,
-        -590
-      ],
-      "bank_balie": [
-        2662,
-        219,
-        -474
-      ],
-      "winkel_bakker_balie": [
-        2561,
+      "winkel_bakker_deur": [
+        2559,
         224,
-        -494
-      ],
-      "winkel_bakker_boven": [
-        2566,
-        229,
         -495
       ],
-      "soepkeuken_hoek": [
-        2716,
-        219,
-        -540
-      ],
-      "luchthaven_pier_west": [
-        2650,
+      "z5w_schuilnest_luik": [
+        2612,
         217,
-        -400
+        -444
       ],
-      "academie_toren_voet": [
-        2723,
-        215,
-        -582
-      ],
-      "z5w_lift_staart_boven": [
-        2896,
-        205,
-        -522
-      ],
-      "paleis_trap": [
-        2762,
-        219,
+      "raadszaal_ingang": [
+        2788,
+        236,
         -520
+      ],
+      "haven_5_4_luchtschip": [
+        2630,
+        216,
+        -350
+      ],
+      "winkel_wapens_balie": [
+        2681,
+        215,
+        -587
+      ],
+      "winkel_wapens_deur": [
+        2682,
+        215,
+        -585
       ],
       "huis_woning_10": [
         2655,
         219,
         -566
-      ],
-      "geheim_schat_1": [
-        2912,
-        206,
-        -520
-      ],
-      "geheim_schat_2": [
-        2838,
-        233,
-        -530
-      ],
-      "geheim_schat_3": [
-        2540,
-        220,
-        -560
       ],
       "huis_woning_11": [
         2583,
@@ -17840,11 +17720,6 @@
         2669,
         214,
         -597
-      ],
-      "huis_herberg_hemelbed": [
-        2690,
-        218,
-        -570
       ],
       "huis_woning_13": [
         2592,
@@ -17881,115 +17756,65 @@
         219,
         -477
       ],
-      "kampvuur_ooggaarde": [
-        2556,
-        220,
-        -572
-      ],
-      "kathedraal_schip": [
-        2664,
-        225,
-        -520
-      ],
-      "troonzaal_audientie": [
-        2840,
-        233,
-        -520
-      ],
-      "winkel_kleding_deur": [
-        2678,
-        218,
-        -470
-      ],
-      "burger_1": [
-        2700,
-        221,
-        -510
-      ],
-      "burger_2": [
-        2760,
+      "markt_fontein": [
+        2748,
         219,
-        -512
+        -529
       ],
-      "burger_3": [
-        2690,
-        221,
-        -530
+      "spuitgat_noord": [
+        2563,
+        224,
+        -495
       ],
-      "burger_4": [
-        2860,
-        204,
-        -514
+      "z5w_buik_luik": [
+        2732,
+        219,
+        -541
       ],
-      "burger_5": [
-        2560,
-        222,
+      "z5w_lift_staart_onder": [
+        2952,
+        212,
+        -520
+      ],
+      "z5w_proefarena": [
+        2714,
+        215,
         -570
-      ],
-      "burger_6": [
-        2640,
-        217,
-        -452
-      ],
-      "geheim_knuffel_1": [
-        2690,
-        221,
-        -505
-      ],
-      "geheim_knuffel_2": [
-        2905,
-        203,
-        -540
       ],
       "bank_hoogvads_deur": [
         2663,
         219,
         -472
       ],
-      "geheim_knuffel_3": [
-        2545,
-        212,
-        -600
-      ],
-      "geheim_knuffel_4": [
-        2665,
-        204,
-        -418
-      ],
-      "geheim_knuffel_5": [
-        2762,
-        215,
-        -448
-      ],
-      "geheim_knuffel_6": [
-        2772,
-        215,
-        -591
-      ],
-      "geheim_knuffel_7": [
-        2835,
-        233,
-        -520
-      ],
-      "geheim_knuffel_8": [
-        2655,
-        225,
-        -540
-      ],
-      "gilde_smidse": [
-        2702,
-        215,
-        -464
-      ],
-      "haven_5_1_vertrekbord": [
-        2646,
+      "haven_5_6_vertrekbord": [
+        2606,
         217,
         -441
       ],
-      "haven_5_4_luchtschip": [
+      "huis_winkel_kruiden": [
+        2639,
+        215,
+        -598
+      ],
+      "luchthaven_aankomst": [
         2630,
-        216,
-        -350
+        217,
+        -420
+      ],
+      "z5w_buik_uit": [
+        2731,
+        219,
+        -539
+      ],
+      "kathedraal_altaar": [
+        2624,
+        228,
+        -520
+      ],
+      "huis_winkel_kleding": [
+        2677,
+        218,
+        -474
       ],
       "huis_woning_20": [
         2560,
@@ -18016,6 +17841,11 @@
         218,
         -591
       ],
+      "herberg_hemelbed_boven": [
+        2690,
+        223,
+        -564
+      ],
       "huis_woning_25": [
         2560,
         223,
@@ -18031,6 +17861,11 @@
         223,
         -494
       ],
+      "academie_kastjes": [
+        2728,
+        215,
+        -595
+      ],
       "huis_woning_28": [
         2544,
         221,
@@ -18041,40 +17876,45 @@
         223,
         -530
       ],
-      "kathedraal_apsis": [
-        2600,
-        225,
-        -520
+      "winkel_kaarten_deur": [
+        2544,
+        220,
+        -465
       ],
-      "luchthaven_station": [
-        2635,
+      "universiteit_bibliotheek_galerij": [
+        2752,
+        221,
+        -443
+      ],
+      "winkel_speelgoed_balie": [
+        2569,
+        224,
+        -543
+      ],
+      "z5w_donderbuik_deur": [
+        2951,
+        207,
+        -569
+      ],
+      "z5w_lift_noordvin_boven": [
+        2609,
         217,
-        -452
+        -432
       ],
-      "winkel_wapens_balie": [
-        2681,
-        215,
-        -587
+      "z5w_noordvin": [
+        2610,
+        154,
+        -392
       ],
       "winkel_wapens_boven": [
         2683,
         220,
         -592
       ],
-      "wolkwaldroom_arena": [
-        2602,
-        167,
-        -520
-      ],
-      "z5w_lift_noordvin_onder": [
-        2610,
-        154,
-        -429
-      ],
-      "z5w_proefarena": [
-        2714,
-        215,
-        -570
+      "raadszaal_zaal": [
+        2798,
+        237,
+        -528
       ],
       "huis_woning_30": [
         2543,
@@ -18096,11 +17936,6 @@
         216,
         -596
       ],
-      "gilde_atelier": [
-        2702,
-        215,
-        -459
-      ],
       "huis_woning_34": [
         2544,
         216,
@@ -18110,11 +17945,6 @@
         2569,
         224,
         -531
-      ],
-      "huis_winkel_juwelen": [
-        2617,
-        214,
-        -602
       ],
       "huis_woning_36": [
         2571,
@@ -18136,30 +17966,85 @@
         216,
         -461
       ],
-      "luchthaven_vertrekbord": [
-        2626,
-        217,
-        -441
+      "academie_toren": [
+        2723,
+        248,
+        -581
       ],
-      "universiteit_poort": [
+      "staartpark_prieel": [
+        2880,
+        203,
+        -502
+      ],
+      "huis_herberg_hemelbed": [
+        2690,
+        218,
+        -570
+      ],
+      "winkel_kruiden_deur": [
+        2639,
+        215,
+        -602
+      ],
+      "huis_winkel_smid": [
+        2681,
+        218,
+        -568
+      ],
+      "wolbol_1": [
+        2745,
+        219,
+        -528
+      ],
+      "wolbol_2": [
+        2820,
+        233,
+        -512
+      ],
+      "luchthaven_pier_west": [
+        2650,
+        217,
+        -400
+      ],
+      "wolbol_3": [
+        2735,
+        215,
+        -472
+      ],
+      "z5w_leider_strobaal": [
+        2714,
+        215,
+        -578
+      ],
+      "geheim_schat_1": [
+        2912,
+        206,
+        -520
+      ],
+      "geheim_schat_2": [
+        2838,
+        233,
+        -530
+      ],
+      "geheim_schat_3": [
+        2540,
+        220,
+        -560
+      ],
+      "haven_5_4_kapitein": [
+        2632,
+        217,
+        -370
+      ],
+      "troonzaal_troon": [
+        2847,
+        238,
+        -520
+      ],
+      "universiteit_binnenhof": [
         2737,
         215,
-        -492
-      ],
-      "kampvuur_paleis": [
-        2798,
-        233,
-        -494
-      ],
-      "z5w_schuilnest_luik": [
-        2612,
-        217,
-        -444
-      ],
-      "kathedraal_poort": [
-        2683,
-        225,
-        -520
+        -471
       ],
       "huis_woning_40": [
         2687,
@@ -18171,84 +18056,214 @@
         215,
         -449
       ],
-      "gilde_hal": [
-        2702,
-        215,
-        -484
+      "staartpark_boom_1": [
+        2866,
+        203,
+        -542
       ],
-      "haven_z5_z4_vertrek": [
-        2630,
+      "kathedraal_apsis": [
+        2600,
+        225,
+        -520
+      ],
+      "staartpark_boom_2": [
+        2890,
+        204,
+        -535
+      ],
+      "staartpark_boom_3": [
+        2890,
+        204,
+        -505
+      ],
+      "staartpark_boom_4": [
+        2870,
+        203,
+        -500
+      ],
+      "winkel_speelgoed_deur": [
+        2569,
+        224,
+        -545
+      ],
+      "z5w_leider_mistmoeder": [
+        2970,
+        206,
+        -450
+      ],
+      "z5w_schuilnest_uit": [
+        2613,
         217,
-        -360
+        -445
       ],
-      "markt_juwelier": [
-        2764,
+      "kathedraal_schip": [
+        2664,
+        225,
+        -520
+      ],
+      "huis_bank_hoogvads": [
+        2662,
+        219,
+        -476
+      ],
+      "balkon_oog": [
+        2552,
+        214,
+        -614
+      ],
+      "markt_kleermaker": [
+        2756,
         219,
         -532
       ],
-      "kathedraal_plein": [
-        2696,
-        221,
+      "staartvin_top": [
+        2905,
+        206,
         -520
       ],
-      "haven_5_4_landing": [
-        2630,
-        217,
-        -362
+      "z5w_lift_zuidvin_onder": [
+        2610,
+        154,
+        -611
       ],
-      "luchthaven_aankomst": [
-        2630,
-        217,
-        -420
-      ],
-      "troonzaal_ingang": [
-        2831,
-        233,
-        -520
-      ],
-      "zachtmoedlaan": [
-        2704,
-        221,
-        -520
-      ],
-      "universiteit_bibliotheek_galerij": [
-        2752,
-        221,
-        -443
+      "z5w_staartvlakte_noord": [
+        2968,
+        206,
+        -458
       ],
       "academie_poort": [
         2737,
         215,
         -548
       ],
-      "haven_5_4_vertrekbord": [
-        2626,
+      "markt_bakker": [
+        2764,
+        219,
+        -508
+      ],
+      "z5w_wolkwaldroom_deur": [
+        2587,
+        167,
+        -520
+      ],
+      "luchthaven_klokkentoren": [
+        2635,
         217,
-        -441
+        -457
       ],
-      "winkel_kleding_balie": [
-        2677,
-        218,
-        -472
-      ],
-      "winkel_wapens_deur": [
-        2682,
+      "academie_parcours_1": [
+        2722,
         215,
-        -585
+        -565
       ],
-      "bank_hoogvads_boven": [
-        2665,
-        224,
-        -478
+      "academie_parcours_2": [
+        2752,
+        215,
+        -565
       ],
-      "bank_hoogvads_balie": [
-        2662,
+      "academie_parcours_3": [
+        2752,
+        215,
+        -590
+      ],
+      "academie_parcours_4": [
+        2722,
+        215,
+        -590
+      ],
+      "staarttrap_onder": [
+        2860,
+        204,
+        -524
+      ],
+      "haven_z5_z4_vertrek": [
+        2630,
+        217,
+        -360
+      ],
+      "staartpark_vijver": [
+        2876,
+        204,
+        -524
+      ],
+      "soepkeuken_ketel": [
+        2724,
         219,
-        -474
+        -532
       ],
-      "markt_smid": [
-        2741,
+      "raadszaal_lessenaar": [
+        2805,
+        237,
+        -520
+      ],
+      "kathedraal_geveltoren": [
+        2682,
+        270,
+        -544
+      ],
+      "winkel_juwelen_deur": [
+        2617,
+        214,
+        -606
+      ],
+      "huis_winkel_juwelen": [
+        2617,
+        214,
+        -602
+      ],
+      "z5w_buik_ladder_onder": [
+        2733,
+        165,
+        -539
+      ],
+      "raadszaal_zijkamer": [
+        2811,
+        237,
+        -509
+      ],
+      "winkel_kleding_deur": [
+        2678,
+        218,
+        -470
+      ],
+      "gilde_atelier": [
+        2702,
+        215,
+        -459
+      ],
+      "universiteit_sterrenwacht_top": [
+        2702,
+        260,
+        -446
+      ],
+      "kathedraal_plein": [
+        2696,
+        221,
+        -520
+      ],
+      "haven_5_pier_1": [
+        2650,
+        217,
+        -365
+      ],
+      "haven_5_pier_2": [
+        2630,
+        217,
+        -365
+      ],
+      "haven_5_pier_3": [
+        2610,
+        217,
+        -365
+      ],
+      "ooggaarde_tuin": [
+        2552,
         219,
+        -580
+      ],
+      "z5w_buikgangen_max": [
+        2808,
+        176,
         -508
       ]
     },
@@ -18450,6 +18465,16 @@
       "z5w_wolkwaldroom_deur": [
         2587,
         167,
+        -520
+      ],
+      "z5w_wolkwaldroom_uitluik": [
+        2586,
+        167,
+        -520
+      ],
+      "spuitgat_midden": [
+        2552,
+        223,
         -520
       ],
       "z5w_leider_strobaal": [
@@ -18654,6 +18679,20 @@
       "_": [
         2587,
         167,
+        -520
+      ]
+    },
+    "zone5.wezens.Z5WezensPlekken.WOLKWALDROOM_UITLUIK": {
+      "_": [
+        2586,
+        167,
+        -520
+      ]
+    },
+    "zone5.wezens.Z5WezensPlekken.WOLKWALDROOM_UIT": {
+      "_": [
+        2558,
+        224,
         -520
       ]
     },
@@ -19641,336 +19680,6 @@
       ]
     },
     "zone6.wereld.Z6WereldPlekken.ALLE": {
-      "rozenkloof_siq_boven": [
-        3566,
-        118,
-        -794
-      ],
-      "z6w_veilig_saffraanpoort": [
-        3762,
-        71,
-        -846
-      ],
-      "duinbaken_ster": [
-        3655,
-        105,
-        -560
-      ],
-      "ruinedal": [
-        3985,
-        64,
-        -975
-      ],
-      "zoutbaken": [
-        3930,
-        71,
-        -604
-      ],
-      "geheim_schat_1": [
-        3475,
-        74,
-        -716
-      ],
-      "geheim_schat_2": [
-        3797,
-        99,
-        -890
-      ],
-      "geheim_schat_3": [
-        4012,
-        69,
-        -928
-      ],
-      "kerker_hal": [
-        3985,
-        70,
-        -959
-      ],
-      "saffraanpoort_paleisplein": [
-        3756,
-        71,
-        -863
-      ],
-      "saffraanpoort_poort_oost": [
-        3881,
-        71,
-        -884
-      ],
-      "zoutgrot_kristal_1": [
-        3844,
-        50,
-        -544
-      ],
-      "z6w_zoutgrot_elite": [
-        3917,
-        50,
-        -542
-      ],
-      "paleis_grootvizier": [
-        3778,
-        74,
-        -909
-      ],
-      "zoutgrot_kristal_2": [
-        3846,
-        50,
-        -544
-      ],
-      "zoutgrot_kristal_3": [
-        3848,
-        50,
-        -544
-      ],
-      "zoutgrot_kristal_4": [
-        3850,
-        50,
-        -544
-      ],
-      "kampvuur_duinen": [
-        3616,
-        74,
-        -665
-      ],
-      "zoutgrot_kristal_5": [
-        3852,
-        50,
-        -544
-      ],
-      "bazaar_knoopje": [
-        3743,
-        71,
-        -804
-      ],
-      "z6w_sterrenwacht_ingang": [
-        3985,
-        70,
-        -950
-      ],
-      "palmenkloven": [
-        3460,
-        67,
-        -960
-      ],
-      "bazaar_smidse_leermeester": [
-        3715,
-        71,
-        -804
-      ],
-      "rozenkloof_havenmeester": [
-        3391,
-        142,
-        -784
-      ],
-      "zoutgrot_ingang": [
-        3874,
-        69,
-        -499
-      ],
-      "kampvuur_palmenkloven": [
-        3497,
-        60,
-        -964
-      ],
-      "duinen_kam": [
-        3622,
-        75,
-        -690
-      ],
-      "sterrenwacht_twinkel": [
-        3846,
-        71,
-        -906
-      ],
-      "uitkijk_zoutrots": [
-        4030,
-        69,
-        -640
-      ],
-      "z6w_wormelien_deur": [
-        3640,
-        71,
-        -582
-      ],
-      "paleis_glans": [
-        3747,
-        74,
-        -909
-      ],
-      "rozenkloof_bank": [
-        3414,
-        70,
-        -684
-      ],
-      "oasebaken_voet": [
-        4062,
-        67,
-        -828
-      ],
-      "rozenkloof_post_1": [
-        3350,
-        67,
-        -705
-      ],
-      "rozenkloof_post_2": [
-        3366,
-        84,
-        -743
-      ],
-      "rozenkloof_post_3": [
-        3379,
-        84,
-        -692
-      ],
-      "rozenkloof_post_4": [
-        3333,
-        98,
-        -757
-      ],
-      "rozenkloof_post_5": [
-        3426,
-        103,
-        -740
-      ],
-      "rozenkloof_post_6": [
-        3366,
-        116,
-        -752
-      ],
-      "kampvuur_palmbaken": [
-        3465,
-        106,
-        -896
-      ],
-      "ruinedal_tafelmesa": [
-        4010,
-        69,
-        -926
-      ],
-      "bazaar_kruiden": [
-        3753,
-        71,
-        -821
-      ],
-      "z6w_wormelien_bord": [
-        3637,
-        71,
-        -580
-      ],
-      "zoutkolos_arena": [
-        3995,
-        69,
-        -560
-      ],
-      "kampvuur_zoutvlakte": [
-        3903,
-        69,
-        -583
-      ],
-      "bazaar_atelier": [
-        3733,
-        71,
-        -821
-      ],
-      "spiegelzaal_troon": [
-        3782,
-        76,
-        -905
-      ],
-      "kampvuur_ruinebaken": [
-        4032,
-        70,
-        -990
-      ],
-      "rozenkloof_kloofmoeder": [
-        3513,
-        76,
-        -697
-      ],
-      "z6_wacht_1": [
-        3404,
-        70,
-        -710
-      ],
-      "z6_wacht_2": [
-        3400,
-        142,
-        -778
-      ],
-      "z6_wacht_3": [
-        3641,
-        71,
-        -840
-      ],
-      "z6_wacht_4": [
-        3768,
-        71,
-        -842
-      ],
-      "z6_wacht_5": [
-        3924,
-        69,
-        -646
-      ],
-      "z6_wacht_6": [
-        4051,
-        66,
-        -767
-      ],
-      "rozenkloof_plein": [
-        3392,
-        69,
-        -714
-      ],
-      "saffraanpoort_saffraanbrug": [
-        3764,
-        71,
-        -851
-      ],
-      "rozenkloof_richel_1": [
-        3383,
-        84,
-        -737
-      ],
-      "rozenkloof_richel_2": [
-        3383,
-        100,
-        -744
-      ],
-      "rozenkloof_richel_3": [
-        3384,
-        115,
-        -752
-      ],
-      "zoutbaken_puzzel": [
-        3948,
-        69,
-        -612
-      ],
-      "z6w_zoutkolos_deur": [
-        3995,
-        69,
-        -586
-      ],
-      "luchthaven_rozenkloof": [
-        3400,
-        143,
-        -741
-      ],
-      "haven_6_5_landing": [
-        3398,
-        142,
-        -758
-      ],
-      "zoutgrot_vis": [
-        3878,
-        50,
-        -542
-      ],
-      "uitkijk_mesa": [
-        3920,
-        71,
-        -1010
-      ],
       "rozenkloof_stalmeester": [
         3439,
         72,
@@ -21310,6 +21019,336 @@
         3426,
         103,
         -709
+      ],
+      "rozenkloof_siq_boven": [
+        3566,
+        118,
+        -794
+      ],
+      "z6w_veilig_saffraanpoort": [
+        3762,
+        71,
+        -846
+      ],
+      "duinbaken_ster": [
+        3655,
+        105,
+        -560
+      ],
+      "ruinedal": [
+        3985,
+        64,
+        -975
+      ],
+      "zoutbaken": [
+        3930,
+        71,
+        -604
+      ],
+      "geheim_schat_1": [
+        3475,
+        74,
+        -716
+      ],
+      "geheim_schat_2": [
+        3797,
+        99,
+        -890
+      ],
+      "geheim_schat_3": [
+        4012,
+        69,
+        -928
+      ],
+      "kerker_hal": [
+        3985,
+        70,
+        -959
+      ],
+      "saffraanpoort_paleisplein": [
+        3756,
+        71,
+        -863
+      ],
+      "saffraanpoort_poort_oost": [
+        3881,
+        71,
+        -884
+      ],
+      "zoutgrot_kristal_1": [
+        3844,
+        50,
+        -544
+      ],
+      "z6w_zoutgrot_elite": [
+        3917,
+        50,
+        -542
+      ],
+      "paleis_grootvizier": [
+        3778,
+        74,
+        -909
+      ],
+      "zoutgrot_kristal_2": [
+        3846,
+        50,
+        -544
+      ],
+      "zoutgrot_kristal_3": [
+        3848,
+        50,
+        -544
+      ],
+      "zoutgrot_kristal_4": [
+        3850,
+        50,
+        -544
+      ],
+      "kampvuur_duinen": [
+        3616,
+        74,
+        -665
+      ],
+      "zoutgrot_kristal_5": [
+        3852,
+        50,
+        -544
+      ],
+      "bazaar_knoopje": [
+        3743,
+        71,
+        -804
+      ],
+      "z6w_sterrenwacht_ingang": [
+        3985,
+        70,
+        -950
+      ],
+      "palmenkloven": [
+        3460,
+        67,
+        -960
+      ],
+      "bazaar_smidse_leermeester": [
+        3715,
+        71,
+        -804
+      ],
+      "rozenkloof_havenmeester": [
+        3391,
+        142,
+        -784
+      ],
+      "zoutgrot_ingang": [
+        3874,
+        69,
+        -499
+      ],
+      "kampvuur_palmenkloven": [
+        3497,
+        60,
+        -964
+      ],
+      "duinen_kam": [
+        3622,
+        75,
+        -690
+      ],
+      "sterrenwacht_twinkel": [
+        3846,
+        71,
+        -906
+      ],
+      "uitkijk_zoutrots": [
+        4030,
+        69,
+        -640
+      ],
+      "z6w_wormelien_deur": [
+        3640,
+        71,
+        -582
+      ],
+      "paleis_glans": [
+        3747,
+        74,
+        -909
+      ],
+      "rozenkloof_bank": [
+        3414,
+        70,
+        -684
+      ],
+      "oasebaken_voet": [
+        4062,
+        67,
+        -828
+      ],
+      "rozenkloof_post_1": [
+        3350,
+        67,
+        -705
+      ],
+      "rozenkloof_post_2": [
+        3366,
+        84,
+        -743
+      ],
+      "rozenkloof_post_3": [
+        3379,
+        84,
+        -692
+      ],
+      "rozenkloof_post_4": [
+        3333,
+        98,
+        -757
+      ],
+      "rozenkloof_post_5": [
+        3426,
+        103,
+        -740
+      ],
+      "rozenkloof_post_6": [
+        3366,
+        116,
+        -752
+      ],
+      "kampvuur_palmbaken": [
+        3465,
+        106,
+        -896
+      ],
+      "ruinedal_tafelmesa": [
+        4010,
+        69,
+        -926
+      ],
+      "bazaar_kruiden": [
+        3753,
+        71,
+        -821
+      ],
+      "z6w_wormelien_bord": [
+        3637,
+        71,
+        -580
+      ],
+      "zoutkolos_arena": [
+        3995,
+        69,
+        -560
+      ],
+      "kampvuur_zoutvlakte": [
+        3903,
+        69,
+        -583
+      ],
+      "bazaar_atelier": [
+        3733,
+        71,
+        -821
+      ],
+      "spiegelzaal_troon": [
+        3782,
+        76,
+        -905
+      ],
+      "kampvuur_ruinebaken": [
+        4032,
+        70,
+        -990
+      ],
+      "rozenkloof_kloofmoeder": [
+        3513,
+        76,
+        -697
+      ],
+      "z6_wacht_1": [
+        3404,
+        70,
+        -710
+      ],
+      "z6_wacht_2": [
+        3400,
+        142,
+        -778
+      ],
+      "z6_wacht_3": [
+        3641,
+        71,
+        -840
+      ],
+      "z6_wacht_4": [
+        3768,
+        71,
+        -842
+      ],
+      "z6_wacht_5": [
+        3924,
+        69,
+        -646
+      ],
+      "z6_wacht_6": [
+        4051,
+        66,
+        -767
+      ],
+      "rozenkloof_plein": [
+        3392,
+        69,
+        -714
+      ],
+      "saffraanpoort_saffraanbrug": [
+        3764,
+        71,
+        -851
+      ],
+      "rozenkloof_richel_1": [
+        3383,
+        84,
+        -737
+      ],
+      "rozenkloof_richel_2": [
+        3383,
+        100,
+        -744
+      ],
+      "rozenkloof_richel_3": [
+        3384,
+        115,
+        -752
+      ],
+      "zoutbaken_puzzel": [
+        3948,
+        69,
+        -612
+      ],
+      "z6w_zoutkolos_deur": [
+        3995,
+        69,
+        -586
+      ],
+      "luchthaven_rozenkloof": [
+        3400,
+        143,
+        -741
+      ],
+      "haven_6_5_landing": [
+        3398,
+        142,
+        -758
+      ],
+      "zoutgrot_vis": [
+        3878,
+        50,
+        -542
+      ],
+      "uitkijk_mesa": [
+        3920,
+        71,
+        -1010
       ]
     },
     "zone6.wereld.Z6WereldPlekken.UITKIJKEN": {
@@ -22531,7 +22570,7 @@
       "id": "z2_gondel_boven",
       "pos": [
         884,
-        162,
+        151,
         -1131
       ],
       "rol": "gondel_terug",
@@ -22600,8 +22639,8 @@
     {
       "id": "z2_wacht_plein_oost",
       "pos": [
-        718,
-        95,
+        716,
+        91,
         -1068
       ],
       "rol": "kampwacht",
@@ -36815,22 +36854,6 @@
   ],
   "gebieden": [
     {
-      "id": "z5_wolkwaldroom",
-      "doos": [
-        2540,
-        -600,
-        2700,
-        -440
-      ],
-      "min_lv": 58,
-      "max_lv": 60,
-      "stad": false,
-      "laag": {
-        "min_y": 150,
-        "max_y": 225
-      }
-    },
-    {
       "id": "grot_wolkengrot",
       "doos": [
         2477,
@@ -36908,6 +36931,22 @@
       "laag": {
         "min_y": 43,
         "max_y": 62
+      }
+    },
+    {
+      "id": "z5_wolkwaldroom",
+      "doos": [
+        2540,
+        -600,
+        2700,
+        -440
+      ],
+      "min_lv": 58,
+      "max_lv": 60,
+      "stad": false,
+      "laag": {
+        "min_y": 150,
+        "max_y": 225
       }
     },
     {
@@ -38411,7 +38450,7 @@
       "naar": [
         1394,
         167,
-        -642
+        -641
       ],
       "beide": true
     },
@@ -38622,6 +38661,20 @@
         2896,
         206,
         -522
+      ],
+      "beide": false
+    },
+    {
+      "naam": "luik z5 wolkwaldroom_uit",
+      "van": [
+        2586,
+        167,
+        -520
+      ],
+      "naar": [
+        2558,
+        224,
+        -520
       ],
       "beide": false
     },

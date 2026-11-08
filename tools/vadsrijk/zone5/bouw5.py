@@ -1263,7 +1263,11 @@ def staarttrap(W, S, info):
 
     yv = 252                           # palace terrace floor (local)
     doos(W, -155, yv, 2, -152, yv, 4, "vloer")
-    leeg(W, -155, yv + 1, 2, -152, yv + 4, 4)
+    leeg(W, -155, yv + 1, 2, -150, yv + 4, 4)        # (through the palace's 2-high east parapet at game x 2852..2853)
+    for x in (-151, -150):
+        for z in (2, 3, 4):
+            if is_lucht(W, x, yv, z):
+                zet(W, x, yv, z, "vloer")
     for x in range(-155, -151):
         for z in (2, 3, 4):
             steun(x, yv, z)

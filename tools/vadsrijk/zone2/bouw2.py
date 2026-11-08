@@ -2290,8 +2290,16 @@ def npc_plekken(W, K, P):
         return stand(W, d[0] + dx, d[2] + dz)
     N = {}
     N["z2_kwarts"] = plus("questbord", 3, 1)
-    N["z2_wacht_plein_west"] = plus("plein", -14, 0)
-    N["z2_wacht_plein_oost"] = plus("plein", 14, 0)
+    # W-BEREIK: the guards stand ON the square: the topmost-block stand put the east guard on a 4-high wall (out of reach)
+    def op_plein(dxs):
+        pl = P["plein"]
+        for dx in dxs:
+            st = stand(W, pl[0] + dx, pl[2])
+            if st[1] <= pl[1] + 1:
+                return st
+        return stand(W, pl[0] + dxs[0], pl[2])
+    N["z2_wacht_plein_west"] = op_plein(range(-14, -7))
+    N["z2_wacht_plein_oost"] = op_plein(range(14, 7, -1))
     N["z2_wapenhandelaar"] = list(P["gebouw"]["smid"]["binnen"])
     N["z2_opa_sneeuwbal"] = plus("cafe_terras", 2, 1)
     N["z2_bakker"] = huisdeur("huis_4", 1)
@@ -2304,7 +2312,7 @@ def npc_plekken(W, K, P):
     N["z2_winterslaap"] = huisdeur("huis_2", 1)
     N["z2_poollicht"] = huisdeur("huis_1", 1)
     gb = P["gondel_berg"]
-    N["z2_gondel_boven"] = stand(W, gb[0] - 2, gb[2] + 1)
+    N["z2_gondel_boven"] = [gb[0] - 2, gb[1], gb[2] + 1]   # W-BEREIK: inside the top station, not on its roof (y + 11)
     k1 = P["kampvuur_galmhellingen_1"]
     N["z2_berggids"] = stand(W, k1[0] - 3, k1[2] + 1)
     k3 = P["kampvuur_knuffelmeer_3"]
