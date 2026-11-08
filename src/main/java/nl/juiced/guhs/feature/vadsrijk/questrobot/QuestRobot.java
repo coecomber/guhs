@@ -85,6 +85,8 @@ public final class QuestRobot {
     public static final List<java.util.function.BiConsumer<ServerPlayer, ServerLevel>> PLEK_HAKEN = new java.util.concurrent.CopyOnWriteArrayList<>();
     /** The zones' "finish the scene that runs now" (ZxVerhaal.spoel): run after every spot, click and hand-in. */
     public static final List<java.util.function.Consumer<ServerPlayer>> SPOEL = new java.util.concurrent.CopyOnWriteArrayList<>();
+    /** Zones with puzzles in dialogue: solve an open one with the right answers (true when one was open). The real puzzle path. */
+    public static final List<java.util.function.Predicate<ServerPlayer>> LOS_OP = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     /** One quest's outcome. */
     public static final class Uitslag {
@@ -527,7 +529,14 @@ public final class QuestRobot {
         BlockPos b = NpcPlekken.poi(poi);
         if (b == null) {
             BlockPos qp = QuestPlek.POI.get(poi);
-            vast(u, u.stap, "poi '" + poi + "' staat niet in NpcPlekken.POI" + (qp != null ? " (wel in QuestPlek.POI: de tracker wijst ernaar maar de aankomst telt nooit)" : " (nergens bekend)"));
+            if (qp == null) {
+                vast(u, u.stap, "poi '" + poi + "' staat niet in NpcPlekken.POI en niet in QuestPlek.POI (nergens bekend)");
+                return;
+            }
+            // (zone 6: its pois are only for the tracker; Z6Haken counts the arrival itself, in story order: its PLEK_HAKEN do that)
+            // (not counted afterwards = "telt niet mee na de haak" in speelStappen)
+            doel(q, "poi", poi, qp);
+            opPlek(qp);
             return;
         }
         doel(q, "poi", poi, b);
@@ -549,13 +558,23 @@ public final class QuestRobot {
                     }
                 }
             }
+            losOp(bezig);
             spoel();
         } finally {
             p.setPos(was.x, was.y, was.z);
         }
     }
 
+    private void losOp(Uitslag u) {
+        for (var l : LOS_OP) {
+            if (l.test(p) && u != null) {
+                u.notities.add("puzzel in de dialoog opgelost (de goede antwoorden gekozen)");
+            }
+        }
+    }
+
     private void spoel() {
+        nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes.vergeet(p);   // (time-based "in a scene": the robot does not wait)
         for (var s : SPOEL) {
             try {
                 s.accept(p);
@@ -580,6 +599,7 @@ public final class QuestRobot {
             int voor = Questlog.waarde(p, q, i);
             if (plek.startsWith("npc:")) {
                 klik(plek.substring(4), u);
+                losOp(u);
                 QuestMotor.afronden(p);
                 spoel();
             } else {
@@ -878,7 +898,7 @@ public final class QuestRobot {
             2, new String[] {"zone2_klaar", "schemerwortel"},
             3, new String[] {"zone3_klaar", "lampionkust"},
             4, new String[] {"zone4_klaar", "hoogvads"},
-            5, new String[] {"zone5_klaar", ""},
+            5, new String[] {"zone5_klaar", "zijdeland"},
             6, new String[] {"zone6_klaar", ""});
 
     private void zoneVlaggen(List<Quest> lijst, Set<Integer> gemeld) {
@@ -902,6 +922,7 @@ public final class QuestRobot {
             r.algemeen.add("zone " + z + " hoofdverhaal klaar: vlag " + v[0] + " = " + vlag + (vlag ? "" : "  << FOUT: de vlag is niet gezet"));
             if (z == 5 && Quests.alle().keySet().stream().anyMatch(id -> ZoneBoeken.zoneVan(id) == 6)) {
                 // (zone 6: line E to the Zijdeland opens after the great swim, u-z6verhaal Z6Verhaal.VLAG_LIJN_E)
+                spoel();   // (a quiet moment after the last zone-5 quest: the great swim plays to its end)
                 boolean e = Questlog.vlag(p, "z6_lijn_e_open");
                 r.algemeen.add("  vlag z6_lijn_e_open (lijn E naar het Zijdeland) = " + e + (e ? "" : "  << FOUT: zone 6 blijft dicht"));
             }
@@ -921,7 +942,8 @@ public final class QuestRobot {
                 String slot = QuestMotor.reisSlot(p, v[1]);
                 r.algemeen.add("  luchtschip naar " + v[1] + " (lv " + Spelers.level(p) + "): " + (slot == null ? "open" : "DICHT: " + slot + "  << FOUT"));
                 boolean zichtbaar = QuestMotor.reisDoelen(p, "luchtschipper").contains(v[1]) || QuestMotor.reisDoelen(p, "kapitein").contains(v[1])
-                        || QuestMotor.reisDoelen(p, "z2_kapitein").contains(v[1]) || QuestMotor.reisDoelen(p, "z3_kapitein").contains(v[1]);
+                        || QuestMotor.reisDoelen(p, "z2_kapitein").contains(v[1]) || QuestMotor.reisDoelen(p, "z3_kapitein").contains(v[1])
+                        || QuestMotor.reisDoelen(p, "z5_havenmeester").contains(v[1]);
                 if (!zichtbaar) {
                     r.algemeen.add("  (bestemming " + v[1] + " staat bij geen enkele kapitein in de dialoogkeuzes; alleen via reiskaart/eigen dok)");
                 }

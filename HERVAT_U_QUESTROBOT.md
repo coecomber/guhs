@@ -1,4 +1,4 @@
-# HERVAT U-QUESTROBOT (paused 2026-11-06, the PC was shut down)
+# HERVAT U-QUESTROBOT: DONE 2026-11-08 (see NOTITIES "Session 2"; the rest below is history)
 
 Branch 110-u-questrobot (from 110-v-int 16206e964). For what is built, see NOTITIES_U_QUESTROBOT.md; for the test steps, see SPIEK_U_QUESTROBOT.md.
 

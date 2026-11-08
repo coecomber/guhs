@@ -25,6 +25,11 @@ public final class RijkScenes {
         return t != null && p.level().getGameTime() < t;
     }
 
+    /** U-QUESTROBOT: the scene is over for this player (the robot plays a whole quest chain in one tick: "a quiet moment later"). */
+    public static void vergeet(ServerPlayer p) {
+        BEZIG_TOT.remove(p.getUUID());
+    }
+
     /** A big title card (Souls/Dungeons style) for this many ticks; kleur = the accent line's RGB. */
     public static void titel(ServerPlayer p, Component titel, Component onder, int ticks, int kleur) {
         KernPayloads.stuur(p, new KernPayloads.Titel(titel, onder, ticks, kleur));

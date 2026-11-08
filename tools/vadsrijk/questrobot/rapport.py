@@ -152,6 +152,10 @@ def flood(x, y, z, r=12, max_n=400):
     return len(seen)
 
 
+# targets you reach by boat (the Lampionkust bootje): water under the spot is right, not "nowhere to stand"
+OP_HET_WATER = {"z4_kringstroom"}
+
+
 def staanbaar(d):
     """None = ok, else (ernst, why)."""
     x, y, z = d["x"], d["y"], d["z"]
@@ -161,6 +165,10 @@ def staanbaar(d):
         heeft_zone = zone <= 5 or os.path.exists(os.path.join(ROOT, f"POI_Z{zone}.md"))
         return ("fout" if heeft_zone else "info", "ligt buiten de gegenereerde kaarttegels (geen kaart hier)")
     straal = 3 if d["wat"] in ("poi", "plek", "escorte") else 1
+    if d.get("id", "").split(":")[-1] in OP_HET_WATER:
+        if any("water" in (blok(x, y + dy, z) or "") for dy in (0, -1, -2)):
+            return None   # (a spot you reach by boat: water is right)
+        return ("fout", "hoort op het water te liggen (per bootje) maar daar is geen water")
     v = vloer(x, y, z, straal=straal, dy_max=10 if d["wat"] != "npc" else 4)
     if v is None:
         return ("fout", f"geen plek om te staan binnen {straal} blokken / {10 if d['wat'] != 'npc' else 4} hoog")
@@ -184,15 +192,23 @@ GEREPAREERD = [
     "'De Lampionkust', de luchtschip-keuzes/slot-teksten naar Lampionhaven, de rol-knoppen werkplaats/luchtschip_z4. 89 sleutels "
     "teruggezet in nl_nl + en_us (de oude adv-quests en de door u-karakter geschrapte karakter-teksten bewust niet). Hierdoor faalde "
     "ook de bestaande gametest Z4VerhaalGameTests.elkeStapWieEnWaar.",
+    "**Zone 6 in de robot** (na de merge van 110-v-int + 110-u-z6raid): de zone-6-pois staan alleen in QuestPlek.POI (Z6Haken telt de "
+    "aankomst zelf, in verhaalvolgorde), dus de robot liep daar 14x vast. Geen spelfout: Z6Haken hangt nu aan de robot-haken "
+    "(PLEK_HAKEN/SPOEL/LOS_OP) en de robot staat ook op QuestPlek-pois. De grote zwemfilm (lijn E open) wachtte op een rustig moment dat in "
+    "de robot nooit kwam (RijkScenes.bezig is tijd-gebaseerd): nu `RijkScenes.vergeet` in de robot.",
+    "**z6_s05_afdingen**: de melding 'geen melder' kwam uit de statische controle van de toen nog niet gecommitte u-z6verhaal-boom. De "
+    "afdingpuzzel bestaat (Z6Haken.klikVoor -> Z6Puzzels.open; Z6Puzzels.kies meldt `z6_puzzel:<id>`). statisch.py kent die generieke "
+    "melder nu (uit puzzels.json) en de robot speelt het afdingen echt (de goede antwoorden via Z6Puzzels.losOp): alle 3 stappen tellen.",
 ]
 VOOR_LEAD = [
-    "**Zone 6** (110-u-z6verhaal) was nog niet gecommit: de robot leest `Quests.alle()`, dus zodra `quests_z6.json` in Quests staat "
-    "speelt `/guhs vadsrijk questrobot alles` zone 6 mee (vlaggen zone6_klaar + z6_lijn_e_open worden dan ook gecontroleerd). "
-    "Statische controle van de werkboom u-z6verhaal (QR_ROOT): 28 quests, alles in orde behalve **z6_s05_afdingen**: de 3 stappen "
-    "`z6_puzzel:afdingen_kardemom|pistache|lokum` worden door geen enkele code gemeld (de afdingpuzzel bestaat nog niet).",
+    "**Zone 6**: alle 25 quests (10 hoofd + 15 zij) gehaald door de echte motor, vlaggen zone6_klaar + z6_lijn_e_open gezet, lijn E "
+    "open op lv 60+. Puzzels (sterbakens, examen, afdingen, lied) worden echt opgelost; 10 tellers (verzamelen) en de "
+    "meldingen z6:aangekomen (landing van lijn E), z6_baas:wormelien (gevecht), z6_sterrenwacht:kompas (kerker) en z6_soep:kom zijn alleen via de haak gemeld.",
+    "**z6_s15_oostroute**: de tracker wijst voor alle 3 kommen soep naar vluchteling_1 (plek `npc:z6_vluchteling_1`); de andere twee moet je "
+    "zelf zoeken (de doel-tekst noemt wel de tenten aan de oostkant van de Moederoase). Klein UX-puntje: de tracker zou naar de volgende vluchteling zonder soep kunnen wijzen.",
     "**Rijdier-terugbrengquests van zone 1** (rijdier_hoedhupper lv 8, rijdier_knuffelhert lv 10) komen pas vrij als je een rijdier hebt "
     "(`@rijdier`): het eerste rijdier is de zone-3-starter (of kopen bij de stal). Bedoeld? Dan staan ze lang 'onzichtbaar' in zone 1.",
-    "Niet echt gespeeld (alleen via de haak gemeld, zie Robot-notities): 39 minigame/moment-meldingen (o.a. de zone-5-verhoren en "
+    "Niet echt gespeeld in zones 1-5 (alleen via de haak gemeld, zie Robot-notities): 39 minigame/moment-meldingen (o.a. de zone-5-verhoren en "
     "bewijsbord, vliegerwedstrijd, volleybal, vissen, de zone-3-bazen), 14 tellers (verzamelplekjes per zone: of er genoeg plekjes "
     "in de wereld liggen is niet gecontroleerd), 4 escortes (lopen) en de gevechten.",
     "Karakter-slots: queststaat zit per karakter in `extra(\"npc\")` (u-karakter wisselt die mee); de robot speelt met een verse speler en "

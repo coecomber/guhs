@@ -106,8 +106,21 @@ def controleer():
         if f"item.guhs.{pad}" not in nl:
             fout(q, "waarschuwing", "item", f"{wat}: item {iid} heeft geen naam (item.guhs.{pad})")
 
+    # data-driven emitters: a puzzle engine that melds ("<soort>", id) for every puzzle id in its puzzels.json
+    # (zone 6: Z6Puzzels.kies -> NpcApi.meld(p, "z6_puzzel", id)); the id must also be opened somewhere ("<prefix>_" + ... or literally)
+    data_meld = set()
+    for pf in glob.glob(os.path.join(RES, "data", "guhs", "vadsrijk", "*", "puzzels.json")):
+        with open(pf, encoding="utf-8") as h:
+            pj = json.load(h)
+        via_baken = {b.get("puzzel") for b in pj.get("bakens", {}).values()}
+        for m in re.finditer(r'NpcApi\.meld\(p, "([a-z0-9_]+)", id\)', alle_java):
+            for pid in pj.get("puzzels", {}):
+                pre = pid.split("_")[0] + "_"
+                if pid in via_baken or '"' + pid + '"' in alle_java or '"' + pre + '" +' in alle_java:
+                    data_meld.add(m.group(1) + ":" + pid)
+
     def meld_bron(sleutel):
-        if '"' + sleutel + '"' in alle_java:
+        if '"' + sleutel + '"' in alle_java or sleutel in data_meld:
             return True
         soort, _, doel = sleutel.partition(":")
         for f, t in bron.items():
