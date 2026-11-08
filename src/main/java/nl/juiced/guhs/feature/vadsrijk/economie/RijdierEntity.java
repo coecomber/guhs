@@ -154,7 +154,27 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
     @Nullable
     @Override
     public LivingEntity getControllingPassenger() {
-        return getFirstPassenger() instanceof Player p ? p : null;
+        return eigenRuiter();
+    }
+
+    /**
+     * U-Z6WEZENS (tandem): the rider who steers = the owner when the owner rides (a passenger behind never steers); without a known
+     * owner (client side before the sync, a dev mount) the first passenger.
+     */
+    @Nullable
+    public Player eigenRuiter() {
+        for (Entity e : getPassengers()) {
+            if (e instanceof Player p && eigenaar != null && p.getUUID().equals(eigenaar)) {
+                return p;
+            }
+        }
+        if (eigenaar == null && getFirstPassenger() instanceof Player p) {
+            return p;
+        }
+        if (level().isClientSide() && getFirstPassenger() instanceof Player p) {
+            return p;   // (the client does not know the owner: the first passenger is the one who called it)
+        }
+        return null;
     }
 
     @Override
@@ -173,7 +193,21 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected float getRiddenSpeed(Player player) {
-        return (float) rijSnelheid();
+        double v = rijSnelheid();
+        if (soort().heeft(RijdierSoort.Eigenschap.ZANDLOPER) && opZand()) {
+            v *= 1.3;   // U-Z6WEZENS: the Bultguh on sand
+        }
+        return (float) v;
+    }
+
+    /** U-Z6WEZENS: on sand (vanilla sand / red sand / sandstone or a modded "zand" block)? */
+    public boolean opZand() {
+        net.minecraft.world.level.block.state.BlockState b = level().getBlockState(getBlockPosBelowThatAffectsMyMovement());
+        if (b.is(net.minecraft.tags.BlockTags.SAND)) {
+            return true;
+        }
+        String id = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(b.getBlock()).getPath();
+        return id.contains("sand") || id.contains("zand");
     }
 
     @Override
@@ -216,18 +250,28 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     protected Vec3 getPassengerAttachmentPoint(Entity passenger, net.minecraft.world.entity.EntityDimensions dimensions, float partialTick) {
-        return new Vec3(0, soort().zit, soort() == RijdierSoort.SLAKKIE ? -0.28 : 0).yRot(-getYRot() * Mth.DEG_TO_RAD);
+        if (soort().zitplaatsen() > 1 && passenger != getControllingPassenger() && getPassengers().size() > 1) {
+            return new Vec3(0, soort().zit - 0.12, 0.85).yRot(-getYRot() * Mth.DEG_TO_RAD);   // U-Z6WEZENS: the seat behind (tandem)
+        }
+        return new Vec3(0, soort().zit, soort() == RijdierSoort.SLAKKIE ? -0.28 : soort().zitplaatsen() > 1 ? -0.25 : 0).yRot(-getYRot() * Mth.DEG_TO_RAD);
     }
 
     @Override
     protected boolean canAddPassenger(Entity passenger) {
-        return getPassengers().isEmpty() && passenger instanceof Player;
+        return getPassengers().size() < soort().zitplaatsen() && passenger instanceof Player;   // U-Z6WEZENS: tandem = 2 seats
     }
 
     @Override
     protected InteractionResult mobInteract(Player player, InteractionHand hand) {
         if (!level().isClientSide() && player instanceof ServerPlayer sp && sp.getUUID().equals(eigenaar) && !isVehicle()) {
             sp.startRiding(this);
+        } else if (!level().isClientSide() && player instanceof ServerPlayer sp && !sp.getUUID().equals(eigenaar) && !sp.isPassenger()
+                && soort().zitplaatsen() > 1 && eigenRuiter() != null && getPassengers().size() < soort().zitplaatsen()) {
+            sp.startRiding(this);   // U-Z6WEZENS: hop on behind the owner (tandem)
+            if (eigenRuiter() instanceof ServerPlayer baas) {
+                baas.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.rijdier.tandem.erbij", sp.getDisplayName()));
+            }
+            sp.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.rijdier.tandem.achterop"));
         }
         return InteractionResult.SUCCESS;
     }
@@ -247,7 +291,7 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
             Rijdieren.poef(this);
             return;
         }
-        if (getFirstPassenger() instanceof ServerPlayer p) {
+        if (eigenRuiter() instanceof ServerPlayer p) {   // U-Z6WEZENS: the owner (a passenger behind alone does not keep it)
             zonderRuiter = 0;
             if (tickCount % 5 == 0 && "arena".equals(Rijdieren.afReden(true, getX(), getY(), getZ()))) {
                 Rijdieren.arena(p, this);   // no mounts in a boss arena
@@ -267,7 +311,7 @@ public class RijdierEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean hurtServer(ServerLevel level, DamageSource source, float amount) {
-        if (getFirstPassenger() instanceof ServerPlayer p) {
+        if (eigenRuiter() instanceof ServerPlayer p) {
             Rijdieren.geraakt(p);
         } else {
             Rijdieren.poef(this);

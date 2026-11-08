@@ -489,6 +489,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `geheim_knuffel_3` | 2350, 70, -585 |
 | `geheim_knuffel_4` | 2488, 81, -326 |
 | `geheim_knuffel_5` | 1790, 69, -610 |
+| `geheim_knuffel_6` | 2241, 69, -457 |
 | `geheim_schat_1` | 2519, 64, -564 |
 | `geheim_schat_2` | 2240, 64, -640 |
 | `geheim_schat_3` | 2183, 46, -579 |

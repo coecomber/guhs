@@ -204,21 +204,27 @@ public final class Z3BazenClient {
 
     /** Any model with any texture/animation (synced from the server), scaled, with hidden bones. */
     static class FigurantRenderer extends GeoEntityRenderer<Z3Figurant, EntityRenderState> {
+        /** U-GROOTTE (FPS): per-frame work of up to 160 props was ~5 string/Identifier builds + a split + a variant scan each. */
+        private static final java.util.Map<String, Identifier> ID = new java.util.concurrent.ConcurrentHashMap<>();
+        private static final java.util.Map<String, String[]> VERBORGEN = new java.util.concurrent.ConcurrentHashMap<>();
+        private static final java.util.Map<String, nl.juiced.guhs.entity.GuhVariant> VARIANT = new java.util.concurrent.ConcurrentHashMap<>();
+        private static final String[] ZADEL = {"saddle", "armor_iron", "armor_iron_body", "armor_diamond", "armor_diamond_body", "armor_netherite", "armor_netherite_body"};
+
         FigurantRenderer(EntityRendererProvider.Context ctx) {
             super(ctx, new DefaultedEntityGeoModel<Z3Figurant>(Guhs.id("pieppiepmuisje")) {
                 @Override
                 public Identifier getModelResource(GeoRenderState state) {
-                    return Guhs.id("entity/" + state.getOrDefaultGeckolibData(F_MODEL, "pieppiepmuisje"));
+                    return ID.computeIfAbsent("entity/" + state.getOrDefaultGeckolibData(F_MODEL, "pieppiepmuisje"), Guhs::id);   // U-GROOTTE: cached
                 }
 
                 @Override
                 public Identifier getTextureResource(GeoRenderState state) {
-                    return Guhs.id(state.getOrDefaultGeckolibData(F_TEX, "textures/entity/pieppiepmuisje.png"));
+                    return ID.computeIfAbsent(state.getOrDefaultGeckolibData(F_TEX, "textures/entity/pieppiepmuisje.png"), Guhs::id);
                 }
 
                 @Override
                 public Identifier getAnimationResource(Z3Figurant f) {
-                    return Guhs.id("entity/" + f.animBestand());
+                    return ID.computeIfAbsent("entity/" + f.animBestand(), Guhs::id);
                 }
             });
             this.shadowRadius = 0.2f;
@@ -248,22 +254,21 @@ public final class Z3BazenClient {
             }
             String v = info.getOrDefaultGeckolibData(F_VERBORGEN, "");
             if (!v.isEmpty()) {
-                for (String b : v.split(",")) {
-                    bones.ifPresent(b.trim(), s -> s.skipRender(true).skipChildrenRender(true));
+                for (String b : VERBORGEN.computeIfAbsent(v, k -> java.util.Arrays.stream(k.split(",")).map(String::trim).toArray(String[]::new))) {
+                    bones.ifPresent(b, s -> s.skipRender(true).skipChildrenRender(true));
                 }
             }
         }
 
         /** U-Z5: the guh model as a plain guh of the variant whose fur this texture is (no saddle, armour or clothes). */
         private static void gewoneGuh(RenderPassInfo<EntityRenderState> info, BoneSnapshots bones, String tex) {
-            nl.juiced.guhs.entity.GuhVariant variant = nl.juiced.guhs.entity.GuhVariant.NORMAL;
-            for (nl.juiced.guhs.entity.GuhVariant g : nl.juiced.guhs.entity.GuhVariant.values()) {
-                if (g != nl.juiced.guhs.entity.GuhVariant.NORMAL && g.texture().getPath().equals(tex)) {
-                    variant = g;
-                    break;
+            nl.juiced.guhs.entity.GuhVariant variant = VARIANT.computeIfAbsent(tex, t -> {
+                for (nl.juiced.guhs.entity.GuhVariant g : nl.juiced.guhs.entity.GuhVariant.values()) {
+                    if (g != nl.juiced.guhs.entity.GuhVariant.NORMAL && g.texture().getPath().equals(t)) return g;
                 }
-            }
-            for (String b : new String[]{"saddle", "armor_iron", "armor_iron_body", "armor_diamond", "armor_diamond_body", "armor_netherite", "armor_netherite_body"}) {
+                return nl.juiced.guhs.entity.GuhVariant.NORMAL;
+            });
+            for (String b : ZADEL) {
                 bones.ifPresent(b, s -> s.skipRender(true).skipChildrenRender(true));
             }
             nl.juiced.guhs.client.GuhBoneMasks.Masks masks = nl.juiced.guhs.client.GuhBoneMasks.of(info.model());

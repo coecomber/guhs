@@ -286,9 +286,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
-| `uitkijk_galmkam` | 983, 117, -860 |
 | `uitkijk_galmtop` | 928, 195, -1106 |
-| `uitkijk_kandijkom_balkon` | 704, 91, -882 |
 | `uitkijk_kloofkijk` | 616, 170, -1356 |
 | `uitkijk_meerkijk` | 468, 142, -936 |
 

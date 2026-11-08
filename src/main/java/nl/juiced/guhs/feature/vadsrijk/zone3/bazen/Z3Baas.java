@@ -612,6 +612,7 @@ public abstract class Z3Baas extends Z2Baas {
             actie.triggerableAnim(a, RawAnimation.begin().thenPlay(a));
         }
         controllers.add(actie);
+        nl.juiced.guhs.feature.vadsrijk.vfx.BaasAnims.controllers(controllers);   // V-INT: T-VFX's boss moments (vfx_windup, ...), like Z2Baas/BazenBaas
     }
 
     @Override

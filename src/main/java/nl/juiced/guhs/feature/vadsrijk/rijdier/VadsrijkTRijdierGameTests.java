@@ -171,11 +171,12 @@ public class VadsrijkTRijdierGameTests {
             Spelers.data(p).gezien.add("baaskill:guhs:vr_z2_baas_spiegelzucht");
             Spelers.data(p).gezien.add("baaskill:guhs:vr_z3_baas_vahoegnir");
             int n = Aankleden.inhalen(p);
-            helper.assertTrue(Rijdieren.heeft(p, RijdierSoort.ZWAMZWIJNTJE), "the Opperzwam gives the Zwamzwijntje");
-            helper.assertTrue(Rijdieren.heeftKleur(p, PluimKleur.KRISTAL), "Spiegelzucht gives the crystal Pluimguh");
+            // V-INT (user's loot rule): these two mounts are 10 % drops with pity now (vint.RijdierBuit), not first-kill gifts
+            helper.assertTrue(!Rijdieren.heeft(p, RijdierSoort.ZWAMZWIJNTJE), "the Opperzwam's Zwamzwijntje is a drop now");
+            helper.assertTrue(!Rijdieren.heeftKleur(p, PluimKleur.KRISTAL), "Spiegelzucht's crystal Pluimguh is a drop now");
             helper.assertTrue(Aankleden.heeft(p, Uiterlijk.van(RijdierSoort.GUHWOLF, As.VACHT, "middernacht")), "and the midnight Guhwolf coat");
             helper.assertTrue(Aankleden.heeft(p, Uiterlijk.GLITTER), "Vahoegnir gives glitter");
-            helper.assertTrue(n >= 4 && Aankleden.inhalen(p) == 0, "only once (" + n + ")");
+            helper.assertTrue(n >= 2 && Aankleden.inhalen(p) == 0, "only once (" + n + ")");   // V-INT: 2 mounts became drops
             // an achievement: a mount at level 10
             helper.assertTrue(!Aankleden.heeft(p, Uiterlijk.KROONTJE), "no crown yet");
             Rijdieren.geefXp(p, RijdierSoort.GUHWOLF, 100000);

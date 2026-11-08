@@ -23,6 +23,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone2.npc.Z2NpcRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone3.npc.Z3NpcRegistry.register(modBus);   // Z3-NPC (zone 3 De Schemerwortel)
         nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5VerhaalRegistry.register(modBus);   // T-Z5VERHAAL (zone 5 Hoogvads: the story)
+        nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6VerhaalRegistry.register(modBus);   // U-Z6VERHAAL (zone 6 Het Zijdeland: the story)
         nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4VerhaalRegistry.register(modBus);   // T-Z4VERHAAL (zone 4 De Lampionkust, story)
         nl.juiced.guhs.feature.vadsrijk.economie.EconomieRegistry.register(modBus);
         nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2SystemenRegistry.register(modBus);
@@ -42,6 +43,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone4.bazen.Z4BazenRegistry.register(modBus);   // T-Z4WEZENS: Zeeslurf + Wrak
         nl.juiced.guhs.feature.vadsrijk.zone5.wezens.Z5WezensRegistry.register(modBus);   // T-Z5WEZENS: zone-5 combat
         nl.juiced.guhs.feature.vadsrijk.zone5.droom.Z5DroomRegistry.register(modBus);   // T-DROOM: the Grauwe Droom (finale phase DROOM)
+        nl.juiced.guhs.feature.vadsrijk.zone6.wezens.Z6WezensRegistry.register(modBus);   // U-Z6WEZENS: zone-6 creatures, bosses, dungeon, loot, Bultguh
         nl.juiced.guhs.feature.vadsrijk.vriendjes.DraakVriendjes.register(modBus);   // N-EXTRA: critters around the pink dragon
         nl.juiced.guhs.feature.vadsrijk.indeling.IndelingRegistry.register(modBus);   // T-WERELD: world layout W-3 (barriers, dev tp)
         nl.juiced.guhs.feature.vadsrijk.dialoog.RijkDialoog.register(modBus);   // T-DIALOOG: the Vadsrijk talking screen
@@ -61,6 +63,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.karakter.KarakterRegistry.register(modBus);   // T-KARAKTER: character slots + game modes
         nl.juiced.guhs.feature.vadsrijk.udeco.UDeco.register(modBus);   // U-DECO: arrival clearance, Honingtak bees, stair floor boards
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.ZichtbaarRegistry.register(modBus);   // U-ZICHTBAAR: worn gear visible on the player (sync)
+        nl.juiced.guhs.feature.vadsrijk.grootte.GrootteRegistry.register(modBus);   // U-GROOTTE: /guhs vadsrijk grootte status (map pack)
         nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterRegistry.register(modBus);   // U-RUITERS: ambient guhs riding Pluimguhs
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.register(modBus);   // U-TABS: the Vadsrijk-menu (/guhs vadsrijk menu [tab])
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.register(modBus);   // U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles

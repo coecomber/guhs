@@ -17,6 +17,7 @@
     "RingSluierGeluidMixin",
     "RingZichtMixin",
     "ServerLevelMixin",
+    "StructuurPakMixin",
     "VillagerMixin"
   ],
   "injectors": {

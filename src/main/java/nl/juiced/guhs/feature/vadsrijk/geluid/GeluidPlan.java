@@ -31,7 +31,9 @@ public final class GeluidPlan {
             "klodderweide", "sporenwoud", "druipgrotten", "zwamtempel",
             "knuffelmeer", "galmhellingen", "splinterkloof", "spiegelburcht",
             "wortelvelden", "wortelduister", "hart", "schorsstad", "stamspiraal", "takkenbanen", "kruinzee", "zeppelinwerf",
-            "lampionkust_dag", "lampionkust_avond", "hoogvads", "hoogvads_markt");
+            "lampionkust_dag", "lampionkust_avond", "hoogvads", "hoogvads_markt",
+            // U-Z6MUZIEK: zone 6, het Zijdeland (De Zoutvlakte has a night version)
+            "roze_duinen", "palmenkloven", "zoutvlakte", "zoutvlakte_nacht", "ruinedal", "moederoase");
 
     /** Every boss theme (after {@code vr.geluid.baas.}). */
     public static final List<String> BAAS_THEMAS = List.of(
@@ -41,14 +43,19 @@ public final class GeluidPlan {
             "zeeslurf", "vliegervanger",
             // U-AUDIO2: the bosses that borrowed a theme (or got "algemeen") now have their own
             "mika_imker", "grauwe_droom", "donderbuik", "gorgonzola", "zilverstaart",
+            // U-Z6MUZIEK: zone 6 - field bosses, the dungeon (De Verzonken Sterrenwacht), the raid (De Sterrendovende Toren)
+            "wormelien", "zoutkolos", "sterrenwacht", "glimmertje", "verzonken_sterrenguh",
+            "zandwachter", "spiegelvizier", "sterrenbeelden", "ringeling",
             "algemeen");
 
     /** The stingers (after {@code vr.geluid.stinger.}). */
-    public static final List<String> STINGERS = List.of("ontdekking", "quest_klaar", "level_op", "baas_verslagen", "geheim");
+    public static final List<String> STINGERS = List.of("ontdekking", "quest_klaar", "level_op", "baas_verslagen", "geheim",
+            "baken", "moederoase");   // U-Z6MUZIEK: a star beacon lit, De Moederoase found
 
     /** The ambience beds (after {@code vr.geluid.bed.}); their now-and-then sounds are {@code vr.geluid.sfeer.<same name>}. */
     public static final List<String> BEDDEN = List.of("weide", "bos", "sporen", "grot", "tempel", "meer", "berg", "kloof", "wortel", "kruin",
-            "honing", "kust", "krekels");
+            "honing", "kust", "krekels",
+            "duinen", "oase", "bazaar", "sterren", "toren");   // U-Z6MUZIEK (soft: the dunes have only a sand hiss, no wind)
 
     /** An area "streek": which theme(s) play there and which ambience bed it has. */
     public record Streek(String id, List<String> themas, String bed) {
@@ -70,7 +77,12 @@ public final class GeluidPlan {
             z4("z4_koraalbaai", "meer"), z4("z4_vliegereiland", "weide"), z4("z4_vuurtoreneiland", "kust"), z4("z4_pierkop", "kust"),
             z4("z4_mysterie", "grot"), z4("z4_wrak", "grot"), z4("z4_schildpad", "kust"), z4("z4_zee", "kust"),
             z5("z5_staartvlakte", "weide"), z5("z5_wolkrand_noord", "weide"), z5("z5_wolkrand_zuid", "weide"), z5("z5_proefarena", "weide"),
-            z5("z5_buikgangen", "grot"), z5("z5_schuilnest", "grot"), z5("z5d_droom", "weide"));   // (+ t-droom's Droomwolk)
+            z5("z5_buikgangen", "grot"), z5("z5_schuilnest", "grot"), z5("z5d_droom", "weide"),   // (+ t-droom's Droomwolk)
+            // U-Z6MUZIEK: zone 6, het Zijdeland (the ids of u-z6wereld Z6WereldPlekken.GEBIEDEN; the towns Rozenkloof and
+            // Saffraanpoort play their town tunes via stadsmuziek; the grey tower has no music, only its drone)
+            s("z6_roze_duinen", "duinen", "roze_duinen"), s("z6_palmenkloven", "oase", "palmenkloven"),
+            s("z6_zoutvlakte", "duinen", "zoutvlakte", "zoutvlakte_nacht"), s("z6_ruinedal", "duinen", "ruinedal"),
+            s("z6_moederoase", "oase", "moederoase"), s("z6_toren", "toren"), s("z6_zijdeland", "duinen", "roze_duinen"));
 
     /** U-GROTTEN: streken other slices add (area id -> streek), looked up before the fixed table (the caves: drip/echo bed). */
     public static final Map<String, Streek> EXTRA = new java.util.concurrent.ConcurrentHashMap<>();
@@ -85,6 +97,8 @@ public final class GeluidPlan {
 
     private static final Streek ZONE4 = new Streek("z4", List.of("lampionkust_dag", "lampionkust_avond"), "kust");
     private static final Streek ZONE5 = new Streek("z5", List.of("hoogvads", "hoogvads_markt"), "weide");
+    /** U-Z6MUZIEK: any other zone-6 id (a dungeon, a cave, a map regen) and the zone-6 box. */
+    private static final Streek ZONE6 = new Streek("z6", List.of("roze_duinen"), "duinen");
 
     private static Map.Entry<String, Streek> s(String id, String bed, String... themas) {
         return Map.entry(id, new Streek(id, List.of(themas), bed));
@@ -108,6 +122,9 @@ public final class GeluidPlan {
             if (gebied.startsWith("z5_")) {
                 return ZONE5;
             }
+            if (gebied.startsWith("z6") && StadsMuziek.stadVan(gebied) == null) {   // U-Z6MUZIEK (z6_, z6raid_, ...)
+                return ZONE6;
+            }
             if (StadsMuziek.stadVan(gebied) != null) {
                 return null;
             }
@@ -122,6 +139,9 @@ public final class GeluidPlan {
         }
         if (inZone4(x, z)) {
             return ZONE4;
+        }
+        if (inZone6(x, z)) {
+            return ZONE6;
         }
         return null;
     }
@@ -146,6 +166,11 @@ public final class GeluidPlan {
         return y >= 150 && x >= 2432 && x < 3200 && z >= -768 && z < -256;
     }
 
+    /** U-Z6MUZIEK: the Zijdeland box (u-z6wereld z6_zijdeland: x 3264..4287, z -1152..-385, widened to the coast at x 3236). */
+    public static boolean inZone6(double x, double z) {
+        return x >= 3236 && x < 4288 && z >= -1152 && z < -384;
+    }
+
     /** The boss theme for a boss entity type path ("vr_z3_baas_bleu" -> "baron_bleu"); "algemeen" for unknown bosses. */
     public static String baasThema(@Nullable String typePad) {
         if (typePad == null || typePad.isEmpty()) {
@@ -161,7 +186,10 @@ public final class GeluidPlan {
         if (p.contains("imker_mika") || p.equals("vr_z3_imker")) {   // U-AUDIO2: vr_z3_imker_mika
             return "mika_imker";
         }
-        for (String pre : new String[] {"vr_z5_baas_", "vr_z4_baas_", "vr_z3_baas_", "vr_z2_baas_", "vr_baas_", "vr_"}) {
+        if (p.startsWith("vr_z6raid_baas_ster_")) {   // U-Z6MUZIEK: the three constellations share one theme
+            return "sterrenbeelden";
+        }
+        for (String pre : new String[] {"vr_z6raid_baas_", "vr_z6_baas_", "vr_z5_baas_", "vr_z4_baas_", "vr_z3_baas_", "vr_z2_baas_", "vr_baas_", "vr_"}) {
             if (p.startsWith(pre)) {
                 p = p.substring(pre.length());
                 break;
@@ -171,6 +199,8 @@ public final class GeluidPlan {
             case "bleu" -> "baron_bleu";
             case "spiegelbeeld" -> "spiegelzucht";
             case "kk_klodder" -> "koning_klodder";
+            case "astrolabiumwachter" -> "sterrenwacht";   // U-Z6MUZIEK (u-z6wezens Z6Muziek uses the same names)
+            case "sterrenguh" -> "verzonken_sterrenguh";
             default -> BAAS_THEMAS.contains(p) ? p : "algemeen";
         };
     }
@@ -178,7 +208,7 @@ public final class GeluidPlan {
     /** Is this bed one with birds (at night it gives way to the crickets)? */
     public static boolean vogelBed(String bed) {
         return switch (bed) {
-            case "weide", "bos", "sporen", "kruin", "berg", "honing" -> true;
+            case "weide", "bos", "sporen", "kruin", "berg", "honing", "duinen" -> true;   // (U-Z6MUZIEK: the dunes' day bed too)
             default -> false;
         };
     }
@@ -186,9 +216,66 @@ public final class GeluidPlan {
     /** Is this a bed under the ground / indoors (no crickets, no birds)? */
     public static boolean binnenBed(String bed) {
         return switch (bed) {
-            case "grot", "wortel", "tempel" -> true;
+            case "grot", "wortel", "tempel", "toren" -> true;   // (U-Z6MUZIEK: the grey tower: only its drone, day and night)
             default -> false;
         };
+    }
+
+    /** U-Z6MUZIEK: the night bed for this bed: the Zijdeland gets crickets + star twinkles + singing salt, the rest crickets. */
+    public static String nachtBed(@Nullable String bed) {
+        return bed != null && switch (bed) {
+            case "duinen", "oase", "sterren" -> true;
+            default -> false;
+        } ? "sterren" : "krekels";
+    }
+
+    /**
+     * U-Z6MUZIEK: area themes with a night version ("x" + "x_nacht", De Zoutvlakte): which one plays at this time of day.
+     * Returns null when the list has no night pair.
+     */
+    @Nullable
+    public static String dagNacht(List<String> themas, boolean nacht) {
+        for (String t : themas) {
+            if (t.endsWith("_nacht") && themas.contains(t.substring(0, t.length() - 6))) {
+                return nacht ? t : t.substring(0, t.length() - 6);
+            }
+        }
+        return null;
+    }
+
+    // ---- U-Z6MUZIEK: boss music ids of other slices that map onto our themes ---------------------------------------------
+
+    /** A foreign boss music id read as one of our themes + whether it names the boss's last (intense) phase. */
+    public record Alias(String thema, boolean laatsteFase) {
+    }
+
+    /**
+     * u-z6raid's {@code Z6RaidMuziek} ids: {@code guhs:vr.z6raid.muziek.<baas>} (phase 1) and {@code <baas>_2} / Ringeling's
+     * {@code _3}: they all play our {@code vr.geluid.baas.<baas>} theme; the last numbered phase (Ringeling 3, the others 2;
+     * for the constellations "_2" = their re-light window) crossfades into its {@code _fase} loop, a lower one back out.
+     * Null for anything else.
+     */
+    @Nullable
+    public static Alias alias(@Nullable String id) {
+        if (id == null) {
+            return null;
+        }
+        int i = id.indexOf("vr.z6raid.muziek.");
+        if (i < 0) {
+            return null;
+        }
+        String r = id.substring(i + "vr.z6raid.muziek.".length());
+        int fase = 1;
+        int u = r.lastIndexOf('_');
+        if (u > 0 && r.substring(u + 1).chars().allMatch(Character::isDigit) && u + 1 < r.length()) {
+            fase = Integer.parseInt(r.substring(u + 1));
+            r = r.substring(0, u);
+        }
+        if (!BAAS_THEMAS.contains(r) || r.equals("algemeen")) {
+            return null;
+        }
+        int laatste = r.equals("ringeling") ? 3 : 2;
+        return new Alias(r, fase >= laatste);
     }
 
     // ---- sound ids
@@ -218,7 +305,8 @@ public final class GeluidPlan {
         }
         int i = id.indexOf("vr.geluid.baas.");
         if (i < 0) {
-            return null;
+            Alias a = alias(id);   // U-Z6MUZIEK: the raid's own ids
+            return a == null ? null : a.thema();
         }
         String t = id.substring(i + "vr.geluid.baas.".length());
         return BAAS_THEMAS.contains(t) ? t : null;

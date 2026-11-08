@@ -34,6 +34,8 @@ public final class Quests {
     public static final String BESTAND_Z4 = "/data/guhs/vadsrijk/npc/quests_z4.json";   // T-Z4VERHAAL
     /** T-Z5VERHAAL: zone 5 Hoogvads (tools/features/vadsrijk_t_z5verhaal.py): read after EVERY earlier zone (its own loop below). */
     public static final String BESTAND_Z5 = "/data/guhs/vadsrijk/npc/quests_z5.json";
+    /** U-Z6VERHAAL: zone 6 Het Zijdeland (tools/features/vadsrijk_u_z6verhaal.py): read after zone 5. */
+    public static final String BESTAND_Z6 = "/data/guhs/vadsrijk/npc/quests_z6.json";
     private static volatile Map<String, Quest> alle;
 
     private Quests() {
@@ -75,6 +77,7 @@ public final class Quests {
             }
         }
         leesNa(m, BESTAND_Z5);   // T-Z5VERHAAL
+        leesNa(m, BESTAND_Z6);   // U-Z6VERHAAL
         return Collections.unmodifiableMap(m);
     }
 

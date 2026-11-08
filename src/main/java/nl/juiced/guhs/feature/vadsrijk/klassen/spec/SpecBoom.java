@@ -182,9 +182,71 @@ public final class SpecBoom {
                 boom.set(boom.indexOf(oud), nieuw);
             }
         }
+        zijdeRijen();   // V-INT
         // the old either/or pairs now sit in different branches: only the Pluisjager's pair could meet (Vuurregen in
         // Strikkenzetter, Kleefregen in the Steun branch), and a Strikkenzetter may take both
         Bomen.nietUitgesloten("j_vuurregen", "j_kleefregen");
+    }
+
+    /**
+     * V-INT (cap 70, u-z6verhaal): room for the 69 points of level 70. Every column gets its gaps in rows 6-7 filled with a stat
+     * node, plus row 8 (lv 62) and row 9 (lv 66), 4 points each, so a spec + trunk + side branch hold more than 69 points (a real
+     * choice up to the cap, nothing left unspent). Ids {@code <p>_z6_<kolom>_<rij>}; names from tools/features/vadsrijk_v_int.py.
+     */
+    private static void zijdeRijen() {
+        Object[][] thema = {   // per column: the stat pair of its theme (spec A, trunk, spec B, side)
+                {Stat.KRITIEK, Stat.KRITIEKSCHADE}, {Stat.VADS, Stat.AANVALSSNELHEID}, {Stat.KRITIEKSCHADE, Stat.AANVALSSNELHEID},
+                {Stat.VERDEDIGING, Stat.HEALKRACHT}};
+        for (String klasse : List.of(Klassen.RIDDER, Klassen.JAGER, Klassen.MAGIER)) {
+            Klasse k = Klassen.van(klasse);
+            if (k == null) {
+                continue;
+            }
+            String pre = Spec.prefix(klasse);
+            Stat hoofd = switch (klasse) {
+                case Klassen.JAGER -> Stat.BEHENDIGHEID;
+                case Klassen.MAGIER -> Stat.WIJSHEID;
+                default -> Stat.KRACHT;
+            };
+            List<BoomKnoop> boom = k.boom();
+            for (int kolom = 0; kolom < KOLOMMEN; kolom++) {
+                for (int rij = 6; rij <= 9; rij++) {
+                    BoomKnoop al = null;
+                    for (BoomKnoop b : boom) {
+                        if (b.rij() == rij && b.kolom() == kolom) {
+                            al = b;
+                        }
+                    }
+                    if (al != null) {
+                        continue;
+                    }
+                    BoomKnoop onder = null;   // the node right below in this column (the requirement)
+                    for (BoomKnoop b : boom) {
+                        if (b.kolom() == kolom && b.rij() >= 0 && b.rij() < rij && (onder == null || b.rij() > onder.rij())) {
+                            onder = b;
+                        }
+                    }
+                    if (onder == null) {
+                        continue;
+                    }
+                    String id = pre + "_z6_" + kolom + "_" + rij;
+                    int n = rij - 5;   // 1..4: a bit more per row
+                    Object[] t = thema[kolom];
+                    Object[] waarden = kolom == 1 && t[0] == Stat.VADS
+                            ? new Object[] {hoofd, 4 + 2 * n, Stat.VADS, 60 + 30 * n}
+                            : new Object[] {hoofd, 4 + 2 * n, t[0], ((Stat) t[0]) == Stat.KRITIEK ? 2 + n : 8 + 4 * n, t[1], 4 + 2 * n};
+                    int kosten = rij >= 8 ? 4 : kosten(rij);
+                    boom.add(new BoomKnoop(id, klasse, kosten, List.of(onder.id()), rij, kolom, Stats.van(waarden), null));
+                    Bomen.ICOON.put(id, rij >= 8 ? "minecraft:amethyst_cluster" : "minecraft:glow_berries");
+                    Boom.MIN_LEVEL.put(id, switch (rij) {
+                        case 6 -> 42;
+                        case 7 -> 48;
+                        case 8 -> 62;
+                        default -> 66;
+                    });
+                }
+            }
+        }
     }
 
     /** Which column a node is in (-1 = hidden or unknown). */

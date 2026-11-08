@@ -50,7 +50,13 @@ public enum RijdierSoort {
      * ~0.76 blocks a tick at level 1 (tapijt.TapijtBalans {@code topfactor}), a small hop; it hovers ~1.25 blocks over ground and
      * water and glides/drifts (its own entity + physics: tapijt.TapijtEntity, tapijt.TapijtFysica). The rider sits cross-legged.
      */
-    TAPIJT(0.36, 0.40, 0, 0.30, "quest", 2.0f, 0.5f, Eigenschap.GLIJDT);
+    TAPIJT(0.36, 0.40, 0, 0.30, "quest", 2.0f, 0.5f, Eigenschap.GLIJDT),
+    /**
+     * U-Z6WEZENS: the Bultguh (camel-guh, zone 6 Zijdeland): speed 330 %, +30 % on sand ({@link Eigenschap#ZANDLOPER}), and TWO seats:
+     * a second player can ride along behind ({@link Eigenschap#TANDEM}). Quest (the stal of Rozenkloof, u-z6verhaal:
+     * {@code zone6.bultguh.Bultguh.geef}); looks/coats in zone6.bultguh.Bultguh.
+     */
+    BULTGUH(0.33, 0.60, 0, 1.95, "quest", 1.6f, 2.5f, Eigenschap.TANDEM, Eigenschap.ZANDLOPER);
 
     /**
      * T-RIJDIER: what a mount can do besides walking and jumping (one place; add a value for a new behaviour, e.g. a water mount).
@@ -66,7 +72,11 @@ public enum RijdierSoort {
         /** T-INT (t-z4boot): sails on water instead of walking (own entity, physics, renderer and looks screen). */
         WATER,
         /** U-TAPIJT: hovers over ground and water and glides with momentum (the flying carpet: tapijt.TapijtEntity). */
-        GLIJDT
+        GLIJDT,
+        /** U-Z6WEZENS: two seats, a second player can ride along behind the owner (the Bultguh). */
+        TANDEM,
+        /** U-Z6WEZENS: +30 % speed on sand (the Bultguh). */
+        ZANDLOPER
     }
 
     public static final int MAX_LEVEL = 10;
@@ -134,6 +144,11 @@ public enum RijdierSoort {
     /** U-TAPIJT: hovers and glides (the flying carpet). */
     public boolean glijdt() {
         return heeft(Eigenschap.GLIJDT);
+    }
+
+    /** U-Z6WEZENS: how many players may ride it (the owner + a passenger behind with TANDEM). */
+    public int zitplaatsen() {
+        return heeft(Eigenschap.TANDEM) ? 2 : 1;
     }
 
     /** T-RIJDIER: shrugs off the first hit (see {@code Rijdieren.geraakt}). */

@@ -89,11 +89,24 @@ def main():
         "b_academie": lambda: schoot("academiehal", (-23.5, 238, 69.5), (-46, 237, 74), 78, binnen, binnen=True,
                                      achtergrond=(40, 30, 50), gloed=0.9, titel="De academiehal", blok_licht=True,
                                      zon_box=(-52, 230, 62, -18, 250, 82)),
+        # [U-Z5TUIN] the palace gardens (same camera as "paleis" + a closer one) and two house interiors with block light
+        "t_paleis": lambda: schoot("paleis_raadszaal", (24, 302, 66), (-118, 268, -2), 48, zon_west, nevel=(0.2, 1800),
+                                   titel="Raadszaal en paleis", zon_box=(-170, 225, -70, -20, 341, 70)),
+        "t_tuin": lambda: schoot("paleistuin", (-74, 272, 60), (-104, 252, 36), 62, zon_zuid, nevel=(0.2, 1800),
+                                 titel="De paleistuin", zon_box=(-130, 245, 10, -70, 280, 60)),
+        "t_woning": lambda: schoot("woning", (43.5, 235.6, 79.6), (43.5, 235.0, 73.0), 86, binnen, binnen=True,
+                                   achtergrond=(40, 30, 50), gloed=0.9, titel="Een woning (woning_1)", blok_licht=True,
+                                   zon_box=(38, 230, 71, 49, 245, 83)),
+        "t_herberg": lambda: schoot("herberg", (12.5, 239.6, 52.6), (12.5, 239.0, 44.0), 86, binnen, binnen=True,
+                                    achtergrond=(40, 30, 50), gloed=0.9, titel="De herberg Hemelbed", blok_licht=True,
+                                    zon_box=(8, 234, 41, 17, 250, 56)),
         "overzicht": lambda: schoot("overzicht", (420, 360, 380), (-20, 225, -10), 40, zon_zuid, nevel=(0.3, 2600),
                                     titel="Hoogvads", zon_box=(-200, 180, -120, 200, 341, 205)),
     }
     if shots == ["alles"]:
-        shots = [k for k in SHOTS if not k.startswith("b_")]
+        shots = [k for k in SHOTS if not k.startswith(("b_", "t_"))]
+    elif shots == ["tuin"]:
+        shots = [k for k in SHOTS if k.startswith("t_")]
     elif shots == ["binnen"]:
         shots = [k for k in SHOTS if k.startswith("b_")]
     for s in shots:

@@ -426,6 +426,7 @@ public final class Z4WereldPlekken {
             Map.entry("geheim_knuffel_3", new BlockPos(2350, 70, -585)),
             Map.entry("geheim_knuffel_4", new BlockPos(2488, 81, -326)),
             Map.entry("geheim_knuffel_5", new BlockPos(1790, 69, -610)),
+            Map.entry("geheim_knuffel_6", new BlockPos(2241, 69, -457)),
             Map.entry("geheim_schat_1", new BlockPos(2519, 64, -564)),
             Map.entry("geheim_schat_2", new BlockPos(2240, 64, -640)),
             Map.entry("geheim_schat_3", new BlockPos(2183, 46, -579)),

@@ -105,12 +105,18 @@ public final class UiterlijkLaag extends GeoRenderLayer<RijdierEntity, Void, Liv
 
     /** The coat texture of a species (the Pluimguh is not handled here: it keeps its colour textures). */
     public static Identifier textuur(RijdierSoort s, String look) {
-        String vacht = Uiterlijk.delen(look)[0];
-        if (vacht.isEmpty() || vacht.equals(Uiterlijk.NATUREL)) {
-            return Guhs.id("textures/entity/vr_eco_" + s.id() + ".png");
-        }
-        return Guhs.id("textures/entity/vr_eco_" + s.id() + "_" + vacht + ".png");
+        return TEX.computeIfAbsent(s.id() + "|" + look, k -> {   // U-GROOTTE (FPS): per look once, not per frame
+            String vacht = Uiterlijk.delen(look)[0];
+            if (vacht.isEmpty() || vacht.equals(Uiterlijk.NATUREL)) {
+                return Guhs.id("textures/entity/vr_eco_" + s.id() + ".png");
+            }
+            return Guhs.id("textures/entity/vr_eco_" + s.id() + "_" + vacht + ".png");
+        });
     }
+
+    /** U-GROOTTE (FPS): texture ids by key (coat, pattern, Pluimguh colour), built once. */
+    public static final java.util.Map<String, Identifier> TEX = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final java.util.function.Predicate<String> ALLE_BOTTEN = b -> true;
 
     @Override
     public void addRenderData(RijdierEntity r, @Nullable Void related, LivingEntityRenderState state, float partialTick) {
@@ -152,11 +158,14 @@ public final class UiterlijkLaag extends GeoRenderLayer<RijdierEntity, Void, Liv
         if (l == null || l.donker() || l.patroon().isEmpty() || !info.willRender()) {
             return;
         }
-        Identifier tex = Guhs.id("textures/entity/vr_rijpatroon_" + l.soort() + "_" + l.patroon() + ".png");
+        if (info.renderState().distanceToCameraSq > GuhRenderer.VER_SQ) {
+            return;   // U-GROOTTE (FPS): the pattern is a second full model pass; not beyond 64 blocks
+        }
+        Identifier tex = TEX.computeIfAbsent("patroon|" + l.soort() + "_" + l.patroon(), k -> Guhs.id("textures/entity/vr_rijpatroon_" + k.substring(8) + ".png"));
         if (l.patroon().equals("glitter")) {
             getRenderer().submitRenderTasks(info, collector.order(1), GuhRenderTypes.eyes(tex));
         } else {
-            GuhRenderer.submitPass(info, collector.order(1), RenderTypes.entityCutout(tex), info.packedLight(), tint(l), b -> true);
+            GuhRenderer.submitPass(info, collector.order(1), RenderTypes.entityCutout(tex), info.packedLight(), tint(l), ALLE_BOTTEN);
         }
     }
 

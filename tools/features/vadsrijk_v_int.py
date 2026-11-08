@@ -31,6 +31,8 @@ def teksten():
         V + "bond.uitleg.3": ("Elke bond krijgt een kasteel in de Bondenvallei, dat jullie samen uitbouwen (niveau 1 t/m 5), met een kluis, trofeeënzaal en werkplaatsen.",
                               "Every bond gets a castle in the Bondenvallei that you build up together (level 1 to 5), with a vault, trophy hall and workshops."),
         V + "bond.voet": ("Knoppen openen het bondspaneel in de chat (ook: /bond, /bc om te chatten)", "Buttons open the bond panel in the chat (also: /bond, /bc to chat)"),
+        V + "buit.raak": ("Rijdier-drop: %s is van jou! (na %s keer proberen)", "Mount drop: %s is yours! (after %s tries)"),
+        V + "buit.mis": ("Geen %s deze keer (10%%). Uiterlijk over %s keer is hij zeker van jou.", "No %s this time (10%%). At most %s more tries and it is yours."),
         V + "huis.titel": ("Mijn huis in het Knuffelkwartier", "My house in the Knuffelkwartier"),
         V + "huis.intro": ("Het Knuffelkwartier is een eigen buurtje met straatjes, buren, een plein en een markt. Je koopt er een kavel met een huisje dat je zelf inricht.",
                            "The Knuffelkwartier is a neighbourhood of its own with streets, neighbours, a square and a market. You buy a plot with a house you furnish yourself."),
@@ -39,14 +41,33 @@ def teksten():
     }
 
 
+# V-INT: the zone-6 rows of the skill tree (klassen.spec.SpecBoom.zijdeRijen): <p>_z6_<kolom>_<rij>, rows 6-7 fill gaps, 8-9 are new
+_KOLOM = {"r": ("Schildridder", "Stam", "Reuzenkussen", "Tank"), "j": ("Scherpschutter", "Stam", "Strikkenzetter", "Steun"),
+          "m": ("Sterrenwever", "Stam", "Zegenzanger", "Heel")}
+_RIJ = {6: ("Rozenzand", "Rose Sand"), 7: ("Palmwind", "Palm Wind"), 8: ("Sterrenzijde", "Star Silk"), 9: ("Moederoase", "Mother Oasis")}
+
+
+def boom_teksten():
+    t = {}
+    for pre, kol in _KOLOM.items():
+        for k, tak in enumerate(kol):
+            for rij, (nl, en) in _RIJ.items():
+                key = f"vadsrijk.klassen.knoop.{pre}_z6_{k}_{rij}"
+                t[key] = (f"{nl} ({tak})", f"{en} ({tak})")
+                lv = {6: 42, 7: 48, 8: 62, 9: 66}[rij]
+                t[key + ".uitleg"] = (f"Een Zijdeland-knoop voor de tak {tak}: meer van je hoofdstat en de stats van deze tak. Vanaf level {lv}.",
+                                      f"A Zijdeland node for the {tak} branch: more of your main stat and this branch's stats. From level {lv}.")
+    return t
+
+
 def build(h):
-    for k, (nl, en) in teksten().items():
+    for k, (nl, en) in {**teksten(), **boom_teksten()}.items():
         h.lang(k, en, nl)
 
 
 def _direct():
     a = os.path.join("src", "main", "resources", "assets", "guhs", "lang")
-    t = teksten()
+    t = {**teksten(), **boom_teksten()}
     for taal, i in (("nl_nl", 0), ("en_us", 1)):
         p = os.path.join(a, f"{taal}.json")
         with open(p, encoding="utf-8") as f:
