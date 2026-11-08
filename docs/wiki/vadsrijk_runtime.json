@@ -12396,8 +12396,8 @@
       "id": "z6wezens:leider_oudstewachter",
       "type": "guhs:vr_z6_mob_ruinewachter",
       "centrum": [
-        4040,
-        122,
+        4034,
+        70,
         -1000
       ],
       "straal": 3,
@@ -12425,176 +12425,6 @@
       "element": "geen",
       "elite_kans": 1.0,
       "grot": false
-    },
-    {
-      "id": "grot:zwamgrot#mob",
-      "type": "guhs:vr_mob_glimzwam",
-      "centrum": [
-        -482,
-        47,
-        130
-      ],
-      "straal": 9,
-      "max": 3,
-      "respawn_s": 30,
-      "min_lv": 11,
-      "max_lv": 13,
-      "element": "geen",
-      "elite_kans": 0.03,
-      "grot": true
-    },
-    {
-      "id": "grot:zwamgrot#elite",
-      "type": "guhs:vr_mob_zwamwachter",
-      "centrum": [
-        -517,
-        45,
-        167
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 300,
-      "min_lv": 13,
-      "max_lv": 13,
-      "element": "geen",
-      "elite_kans": 1.0,
-      "grot": true
-    },
-    {
-      "id": "grot:kristalgrot#mob",
-      "type": "guhs:vr_z2_mob_kristalnaaldkruiper",
-      "centrum": [
-        906,
-        112,
-        -1127
-      ],
-      "straal": 9,
-      "max": 3,
-      "respawn_s": 30,
-      "min_lv": 22,
-      "max_lv": 24,
-      "element": "geen",
-      "elite_kans": 0.03,
-      "grot": true
-    },
-    {
-      "id": "grot:kristalgrot#elite",
-      "type": "guhs:vr_z2_mob_versteende_wacht",
-      "centrum": [
-        940,
-        112,
-        -1151
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 300,
-      "min_lv": 24,
-      "max_lv": 24,
-      "element": "geen",
-      "elite_kans": 1.0,
-      "grot": true
-    },
-    {
-      "id": "grot:wortelgrot#mob",
-      "type": "guhs:vr_z3_mob_wortelschim",
-      "centrum": [
-        1380,
-        44,
-        -716
-      ],
-      "straal": 9,
-      "max": 3,
-      "respawn_s": 30,
-      "min_lv": 44,
-      "max_lv": 46,
-      "element": "geen",
-      "elite_kans": 0.03,
-      "grot": true
-    },
-    {
-      "id": "grot:wortelgrot#elite",
-      "type": "guhs:vr_z3_mob_wortelslang",
-      "centrum": [
-        1430,
-        41,
-        -709
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 300,
-      "min_lv": 47,
-      "max_lv": 47,
-      "element": "geen",
-      "elite_kans": 1.0,
-      "grot": true
-    },
-    {
-      "id": "grot:koraalgrot#mob",
-      "type": "guhs:vr_z4_mob_koraalkobold",
-      "centrum": [
-        2224,
-        44,
-        -596
-      ],
-      "straal": 9,
-      "max": 3,
-      "respawn_s": 30,
-      "min_lv": 53,
-      "max_lv": 55,
-      "element": "geen",
-      "elite_kans": 0.03,
-      "grot": true
-    },
-    {
-      "id": "grot:koraalgrot#elite",
-      "type": "guhs:vr_z4_mob_mopperkrab",
-      "centrum": [
-        2212,
-        44,
-        -611
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 300,
-      "min_lv": 55,
-      "max_lv": 55,
-      "element": "geen",
-      "elite_kans": 1.0,
-      "grot": true
-    },
-    {
-      "id": "grot:wolkengrot#mob",
-      "type": "guhs:vr_z5_mob_mistslier",
-      "centrum": [
-        2512,
-        181,
-        -548
-      ],
-      "straal": 9,
-      "max": 3,
-      "respawn_s": 30,
-      "min_lv": 58,
-      "max_lv": 60,
-      "element": "geen",
-      "elite_kans": 0.03,
-      "grot": true
-    },
-    {
-      "id": "grot:wolkengrot#elite",
-      "type": "guhs:vr_z5_mob_grauwe_wolkduivel",
-      "centrum": [
-        2537,
-        179,
-        -506
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 300,
-      "min_lv": 60,
-      "max_lv": 60,
-      "element": "geen",
-      "elite_kans": 1.0,
-      "grot": true
     }
   ],
   "arenas": [
@@ -28875,9 +28705,9 @@
       "id": "knuffelridder",
       "naam_key": "vadsrijk.kern.klasse.knuffelridder",
       "wapens": [
-        "knots",
         "zwaard",
-        "hamer"
+        "hamer",
+        "knots"
       ],
       "per_level": {
         "1": {
@@ -28934,9 +28764,9 @@
       "id": "pluisjager",
       "naam_key": "vadsrijk.klassen.klasse.pluisjager",
       "wapens": [
-        "katapult",
         "boog",
-        "kruisboog"
+        "kruisboog",
+        "katapult"
       ],
       "per_level": {
         "1": {
@@ -29178,6 +29008,36 @@
       "id": "sterrenguhtje",
       "baas": "guhs:vr_z6_baas_sterrenguh",
       "naam_key": "vadsrijk.huisdier.sterrenguhtje.naam"
+    },
+    {
+      "id": "glimhoedje",
+      "baas": "guhs:grotpet_zwamgrot",
+      "naam_key": "vadsrijk.huisdier.glimhoedje.naam"
+    },
+    {
+      "id": "tinkeltje",
+      "baas": "guhs:grotpet_kristalgrot",
+      "naam_key": "vadsrijk.huisdier.tinkeltje.naam"
+    },
+    {
+      "id": "knoestje",
+      "baas": "guhs:grotpet_wortelgrot",
+      "naam_key": "vadsrijk.huisdier.knoestje.naam"
+    },
+    {
+      "id": "zeurtje",
+      "baas": "guhs:grotpet_koraalgrot",
+      "naam_key": "vadsrijk.huisdier.zeurtje.naam"
+    },
+    {
+      "id": "pluisje",
+      "baas": "guhs:grotpet_wolkengrot",
+      "naam_key": "vadsrijk.huisdier.pluisje.naam"
+    },
+    {
+      "id": "galmpje",
+      "baas": "guhs:grotpet_zoutgrot",
+      "naam_key": "vadsrijk.huisdier.galmpje.naam"
     },
     {
       "id": "sterrenpluisje",
@@ -30415,12 +30275,12 @@
         -568
       ],
       "z6_zandloper": [
-        3392,
+        3391,
         142,
         -784
       ],
       "z6_roosje": [
-        3508,
+        3513,
         76,
         -697
       ],
@@ -30601,7 +30461,7 @@
       ],
       "z6_mientje": [
         4149,
-        79,
+        66,
         -761
       ],
       "z6_vluchteling_1": [
@@ -31437,9 +31297,9 @@
         -602
       ],
       "z5_opstijgpier": [
-        2452,
-        66,
-        -520
+        2511,
+        73,
+        -565
       ],
       "z5_aankomst": [
         2630,
@@ -31759,7 +31619,7 @@
       "z4_kringstroom": [
         1960,
         63,
-        -248
+        -270
       ]
     },
     "rol": {
