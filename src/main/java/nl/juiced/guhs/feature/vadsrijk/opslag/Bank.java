@@ -27,8 +27,26 @@ import nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor;
  */
 public final class Bank {
     public static final int VAKKEN = 54, MAX_TABS = 5;
-    /** Price of tab 2, 3, 4, 5 (brons): 10 zilver, 50 zilver, 2 goud, 5 goud. */
-    public static long[] PRIJZEN = {1000, 5000, 20000, 50000};
+    // U-OPSLAGVIP: the old fixed PRIJZEN {1000, 5000, 20000, 50000} became the curve in OpslagBalans (bank_basis x bank_factor^n,
+    // default 1000 x 4^n) and only max_koopbaar (default 1) can be bought; the rest shows "Binnenkort!". Players who already
+    // bought more tabs keep them.
+
+    /** U-OPSLAGVIP: can one more bank tab be bought now? */
+    public static boolean koopbaar(ServerPlayer p) {
+        int g = Opslag.data(p).bankGekocht;
+        return g < OpslagBalans.maxKoopbaar() && tabs(p) < MAX_TABS;
+    }
+
+    /** U-OPSLAGVIP: the price of the next bank tab (0 = none can be bought now). */
+    public static long prijs(ServerPlayer p) {
+        return koopbaar(p) ? OpslagBalans.bankPrijs(Opslag.data(p).bankGekocht) : 0;
+    }
+
+    /** U-OPSLAGVIP: the first tab index shown as "Binnenkort!" (open tabs + purchases still allowed). */
+    public static int binnenkortVanaf(ServerPlayer p) {
+        int nog = Math.max(0, OpslagBalans.maxKoopbaar() - Opslag.data(p).bankGekocht);
+        return Math.min(MAX_TABS, tabs(p) + nog);
+    }
     /** How far you may walk from where you opened the vault before it closes. */
     public static final double BEREIK = 8;
     /**
@@ -86,17 +104,23 @@ public final class Bank {
     static CompoundTag info(ServerPlayer p) {
         CompoundTag t = new CompoundTag();
         int g = Opslag.data(p).bankGekocht;
-        t.putLong("prijs", g < PRIJZEN.length ? PRIJZEN[g] : 0);
+        t.putLong("prijs", prijs(p));
+        t.putLong("koop_prijs", OpslagBalans.bankPrijs(Math.max(0, Math.min(g, OpslagBalans.maxKoopbaar() - 1))));   // U-OPSLAGVIP
+        t.putInt("binnenkort", binnenkortVanaf(p));   // U-OPSLAGVIP
+        t.putBoolean("vip", Opslag.data(p).vipGrapGezien);   // U-OPSLAGVIP
+        if (VipGrap.pakMeteen(p)) {
+            t.putBoolean("vip_nu", true);   // U-OPSLAGVIP (dev: start the joke at once)
+        }
         return t;
     }
 
     static void koop(ServerPlayer p, Vec3 waar) {
         OpslagData d = Opslag.data(p);
         int tab = p.containerMenu instanceof OpslagMenu m ? m.huidigeTab() : 0;
-        if (d.bankGekocht >= PRIJZEN.length) {
+        if (!koopbaar(p)) {
             return;
         }
-        long prijs = PRIJZEN[d.bankGekocht];
+        long prijs = prijs(p);
         if (!Spelers.neemMunten(p, prijs)) {
             p.sendOverlayMessage(Component.translatable("vadsrijk.opslag.te_weinig", Spelers.munten(prijs)).withStyle(ChatFormatting.RED));
             return;

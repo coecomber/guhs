@@ -22,14 +22,38 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Tips;
  * <ol>
  *   <li>the zone-1 story done ({@code zone1_klaar});</li>
  *   <li>the zone-2 story done ({@code zone2_klaar});</li>
- *   <li>bought for {@link #PRIJS} brons (click the locked tab, then again to confirm);</li>
+ *   <li>bought with coins (click the locked tab, then again to confirm). U-OPSLAGVIP: the price curve and how many can be bought
+ *   live in {@link OpslagBalans} ({@code [opslag]} in the balance file; default only the FIRST one, 2500 brons); further tabs
+ *   that nothing can unlock yet show as "Binnenkort!";</li>
  *   <li>any other source through {@link #ontgrendel}(p, bron) (quest rewards of later zones, achievements).</li>
  * </ol>
  */
 public final class Knapzak {
     public static final int VAKKEN = 27, MAX_TABS = 5;
-    /** The coin price of the bought tab (2500 brons = 25 zilver). */
-    public static long PRIJS = 2500;
+    /** U-OPSLAGVIP: the price of the NEXT bought tab for this character (0 = none can be bought now). */
+    public static long prijs(ServerPlayer p) {
+        return koopbaar(p) ? OpslagBalans.knapzakPrijs(zak(p).gekochtAantal()) : 0;
+    }
+
+    /** U-OPSLAGVIP: can this character buy one more tab now? (under {@code max_koopbaar} and below {@link #MAX_TABS}) */
+    public static boolean koopbaar(ServerPlayer p) {
+        return zak(p).gekochtAantal() < OpslagBalans.maxKoopbaar() && tabs(p) < MAX_TABS;
+    }
+
+    /**
+     * U-OPSLAGVIP: the first tab index that nothing can unlock yet ("Binnenkort!"): open tabs + story sources still to come +
+     * purchases still allowed. (Later quest rewards through {@link #ontgrendel} don't exist yet, so they are "binnenkort" too.)
+     */
+    public static int binnenkortVanaf(ServerPlayer p) {
+        OpslagData.Zak z = zak(p);
+        int nog = Math.max(0, OpslagBalans.maxKoopbaar() - z.gekochtAantal());
+        for (Bron b : BRONNEN) {
+            if (!z.bronnen.contains(b.id()) && !b.heeft().test(p)) {
+                nog++;
+            }
+        }
+        return Math.min(MAX_TABS, tabs(p) + nog);
+    }
     /** The built-in unlock conditions (each counts once); later zones add theirs with {@link #ontgrendel}. */
     public record Bron(String id, Predicate<ServerPlayer> heeft) {
     }
@@ -48,7 +72,7 @@ public final class Knapzak {
     /** How many tabs this character has open (1..MAX_TABS). */
     public static int tabs(ServerPlayer p) {
         OpslagData.Zak z = zak(p);
-        int n = 1 + (z.gekocht ? 1 : 0) + z.bronnen.size();
+        int n = 1 + z.gekochtAantal() + z.bronnen.size();
         for (Bron b : BRONNEN) {
             if (!z.bronnen.contains(b.id()) && b.heeft().test(p)) {
                 n++;
@@ -94,10 +118,16 @@ public final class Knapzak {
         for (Bron b : BRONNEN) {
             regels.add(StringTag.valueOf((b.heeft().test(p) || z.bronnen.contains(b.id()) ? "1" : "0") + "vadsrijk.opslag.knapzak.bron." + b.id()));
         }
-        regels.add(StringTag.valueOf((z.gekocht ? "1" : "0") + "vadsrijk.opslag.knapzak.bron.kopen"));
+        regels.add(StringTag.valueOf((z.gekochtAantal() > 0 ? "1" : "0") + "vadsrijk.opslag.knapzak.bron.kopen"));
         regels.add(StringTag.valueOf((z.bronnen.isEmpty() ? "0" : "1") + "vadsrijk.opslag.knapzak.bron.later"));
         t.put("regels", regels);
-        t.putLong("prijs", z.gekocht ? 0 : PRIJS);
+        t.putLong("prijs", prijs(p));
+        t.putLong("koop_prijs", OpslagBalans.knapzakPrijs(Math.max(0, Math.min(z.gekochtAantal(), OpslagBalans.maxKoopbaar() - 1))));   // U-OPSLAGVIP
+        t.putInt("binnenkort", binnenkortVanaf(p));   // U-OPSLAGVIP
+        t.putBoolean("vip", Opslag.data(p).vipGrapGezien);   // U-OPSLAGVIP
+        if (VipGrap.pakMeteen(p)) {
+            t.putBoolean("vip_nu", true);   // U-OPSLAGVIP (dev: start the joke at once)
+        }
         return t;
     }
 
@@ -105,13 +135,15 @@ public final class Knapzak {
     static void koop(ServerPlayer p) {
         OpslagData.Zak z = zak(p);
         int tab = p.containerMenu instanceof OpslagMenu m ? m.huidigeTab() : 0;
-        if (z.gekocht || tabs(p) >= MAX_TABS) {
+        if (!koopbaar(p)) {
             return;
         }
-        if (!Spelers.neemMunten(p, PRIJS)) {
-            p.sendOverlayMessage(Component.translatable("vadsrijk.opslag.te_weinig", Spelers.munten(PRIJS)).withStyle(ChatFormatting.RED));
+        long prijs = prijs(p);
+        if (!Spelers.neemMunten(p, prijs)) {
+            p.sendOverlayMessage(Component.translatable("vadsrijk.opslag.te_weinig", Spelers.munten(prijs)).withStyle(ChatFormatting.RED));
             return;
         }
+        z.gekochtN = z.gekochtAantal() + 1;   // U-OPSLAGVIP
         z.gekocht = true;
         p.level().playSound(null, p.blockPosition(), SoundEvents.VILLAGER_YES, SoundSource.PLAYERS, 0.6f, 1.4f);
         p.sendSystemMessage(Component.translatable("vadsrijk.opslag.knapzak.gekocht").withStyle(ChatFormatting.LIGHT_PURPLE));

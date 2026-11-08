@@ -34,6 +34,8 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Kristallen;
  *   <li>{@code knapzak [tab]}, {@code tas}, {@code bank}: open (bank here = as if at a banker);</li>
  *   <li>{@code stand}: what is in your knapzak / bank / bag;</li>
  *   <li>{@code knapzak ontgrendel <bron>}, {@code knapzak reset}, {@code bank tabs <0-4>}: unlocks;</li>
+ *   <li>U-OPSLAGVIP: {@code vipgrap [reset|stand]} (the VIP joke), {@code prijzen [sleutel waarde]} (the price curve),
+ *   {@code knapzak gekocht <n>};</li>
  *   <li>{@code strooi}: drops materials around you (auto-pickup test); {@code materiaal <n>}: n Verbetersteentjes into the bag;</li>
  *   <li>{@code hud buff <status> <sec>}, {@code hud alles}: statuses for the buff row; {@code hud doel}: the nearest mob is your
  *   target; {@code hud giet [sec]}: your cast bar; {@code hud baasgiet [sec]}: a boss cast bar from the nearest mob.</li>
@@ -46,6 +48,14 @@ public final class OpslagCommando {
     static void register(RegisterCommandsEvent event) {
         LiteralArgumentBuilder<CommandSourceStack> k = Commands.literal("opslag").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
         k.then(Commands.literal("knapzak").executes(c -> Knapzak.open(speler(c)) ? 1 : 0)
+                .then(Commands.literal("gekocht").then(Commands.argument("n", IntegerArgumentType.integer(0, Knapzak.MAX_TABS - 1)).executes(c -> {   // U-OPSLAGVIP
+                    ServerPlayer p = speler(c);
+                    OpslagData.Zak z = Knapzak.zak(p);
+                    z.gekochtN = IntegerArgumentType.getInteger(c, "n");
+                    z.gekocht = z.gekochtN > 0;
+                    zeg(c, "knapzak: " + z.gekochtAantal() + " gekocht, " + Knapzak.tabs(p) + " tabs");
+                    return 1;
+                })))
                 .then(Commands.argument("tab", IntegerArgumentType.integer(1, Knapzak.MAX_TABS))
                         .executes(c -> Knapzak.open(speler(c), IntegerArgumentType.getInteger(c, "tab") - 1) ? 1 : 0))
                 .then(Commands.literal("ontgrendel").then(Commands.argument("bron", StringArgumentType.word()).executes(c -> {
@@ -58,10 +68,57 @@ public final class OpslagCommando {
                     ServerPlayer p = speler(c);
                     OpslagData.Zak z = Knapzak.zak(p);
                     z.gekocht = false;
+                    z.gekochtN = 0;   // U-OPSLAGVIP
                     z.bronnen.clear();
                     zeg(c, "knapzak-ontgrendelingen gewist (spullen blijven); nu " + Knapzak.tabs(p) + " tabs");
                     return 1;
                 })));
+        // U-OPSLAGVIP: the VIP joke + the price curve
+        k.then(Commands.literal("vipgrap").executes(c -> {
+            ServerPlayer p = speler(c);
+            VipGrap.reset(p);
+            VipGrap.meteen(p);
+            if (!Knapzak.open(p)) {
+                zeg(c, "vipgrap: vlag gewist; de knapzak opent alleen in het Vadsrijk. Klik daar op een koopbaar '+'-vak.");
+            }
+            return 1;
+        }).then(Commands.literal("reset").executes(c -> {
+            VipGrap.reset(speler(c));
+            zeg(c, "vipgrap: vlag gewist. Klik op een koopbaar '+'-vak (knapzak of bank) om de grap weer te zien.");
+            return 1;
+        })).then(Commands.literal("stand").executes(c -> {
+            zeg(c, "vipgrap al gezien: " + (VipGrap.gezien(speler(c)) ? "ja" : "nee"));
+            return 1;
+        })));
+        k.then(Commands.literal("prijzen").executes(c -> {
+            ServerPlayer p = speler(c);
+            int max = OpslagBalans.maxKoopbaar();
+            zeg(c, "[opslag] max_koopbaar=" + max + " | knapzak " + (long) OpslagBalans.get("knapzak_basis") + " x " + OpslagBalans.get("knapzak_factor")
+                    + "^n | bank " + (long) OpslagBalans.get("bank_basis") + " x " + OpslagBalans.get("bank_factor") + "^n");
+            for (int n = 0; n < 5; n++) {
+                String st = n < max ? "te koop" : "Binnenkort!";
+                zeg(c, "  uitbreiding " + (n + 1) + ": knapzak " + nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(OpslagBalans.knapzakPrijs(n))
+                        + ", bank " + nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(OpslagBalans.bankPrijs(n)) + "  (" + st + ")");
+            }
+            zeg(c, "jij: knapzak " + Knapzak.tabs(p) + " tabs, " + Knapzak.zak(p).gekochtAantal() + " gekocht, nu kopen: "
+                    + (Knapzak.koopbaar(p) ? nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(Knapzak.prijs(p)) : "nee") + ", Binnenkort vanaf vak "
+                    + (Knapzak.binnenkortVanaf(p) + 1) + " | bank " + Bank.tabs(p) + " tabs, " + Opslag.data(p).bankGekocht + " gekocht, nu kopen: "
+                    + (Bank.koopbaar(p) ? nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(Bank.prijs(p)) : "nee") + ", Binnenkort vanaf vak "
+                    + (Bank.binnenkortVanaf(p) + 1));
+            return 1;
+        }).then(Commands.argument("sleutel", StringArgumentType.word())
+                .suggests((c, b) -> SharedSuggestionProvider.suggest(OpslagBalans.SLEUTELS, b))
+                .then(Commands.argument("waarde", com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg(0, 1e12)).executes(c -> {
+                    String sl = StringArgumentType.getString(c, "sleutel");
+                    double v = com.mojang.brigadier.arguments.DoubleArgumentType.getDouble(c, "waarde");
+                    String nee = nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalans.zet(nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalans.OPSLAG, sl, v, true);
+                    if (nee != null) {
+                        c.getSource().sendFailure(Component.literal(nee));
+                        return 0;
+                    }
+                    zeg(c, "[opslag] " + sl + " = " + OpslagBalans.get(sl) + " (in guhs-vadsrijk-balans.toml gezet). Open het scherm opnieuw.");
+                    return 1;
+                }))));
         k.then(Commands.literal("tas").executes(c -> MateriaalMenu.open(speler(c)) ? 1 : 0));
         k.then(Commands.literal("bank").executes(c -> Bank.open(speler(c)) ? 1 : 0)
                 .then(Commands.literal("tabs").then(Commands.argument("gekocht", IntegerArgumentType.integer(0, Bank.MAX_TABS - 1)).executes(c -> {

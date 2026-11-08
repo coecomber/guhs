@@ -50,8 +50,15 @@ public final class OpslagData implements ValueIOSerializable {
         public final List<Vak> tabs = new ArrayList<>();
         /** Extra unlock sources given through {@link Knapzak#ontgrendel} (quest/achievement ids). */
         public final Set<String> bronnen = new LinkedHashSet<>();
-        /** Bought with Vadsmunten. */
+        /** Bought with Vadsmunten (T-OPSLAG: one tab; kept as "at least one" for old saves). */
         public boolean gekocht;
+        /** U-OPSLAGVIP: how many tabs were bought (price curve OpslagBalans); read through {@link #gekochtAantal}. */
+        public int gekochtN;
+
+        /** U-OPSLAGVIP: tabs bought with coins (an old save's {@code gekocht} counts as 1). */
+        public int gekochtAantal() {
+            return Math.max(gekochtN, gekocht ? 1 : 0);
+        }
 
         public Vak tab(int i) {
             while (tabs.size() <= i) {
@@ -75,6 +82,8 @@ public final class OpslagData implements ValueIOSerializable {
     public final Map<String, Zak> knapzakken = new LinkedHashMap<>();
     public final List<Vak> bank = new ArrayList<>();
     public int bankGekocht;
+    /** U-OPSLAGVIP: the "WORD GUH VIP++" joke was shown (once per account, on the first try to buy an expansion). */
+    public boolean vipGrapGezien;
     public final List<Materiaal> materialen = new ArrayList<>();
     /** The player switched off "materials go into the bag on pickup" (default: on). */
     public boolean autoUit;
@@ -123,6 +132,7 @@ public final class OpslagData implements ValueIOSerializable {
             t.putInt("tabs", z.tabs.size());
             t.putString("bronnen", String.join(",", z.bronnen));
             t.putBoolean("gekocht", z.gekocht);
+            t.putInt("gekocht_n", z.gekochtAantal());   // U-OPSLAGVIP
             zakken.put(k, t);
         });
         out.store("knapzakken", CompoundTag.CODEC, zakken);
@@ -134,6 +144,7 @@ public final class OpslagData implements ValueIOSerializable {
         out.store("bank", CompoundTag.CODEC, b);
         out.putInt("bank_gekocht", bankGekocht);
         out.putBoolean("auto_uit", autoUit);
+        out.putBoolean("vip_grap", vipGrapGezien);   // U-OPSLAGVIP
         List<CompoundTag> tas = new ArrayList<>();
         for (Materiaal m : materialen) {
             if (m.aantal <= 0) {
@@ -194,6 +205,7 @@ public final class OpslagData implements ValueIOSerializable {
                 z.bronnen.addAll(List.of(br.split(",")));
             }
             z.gekocht = t.getBooleanOr("gekocht", false);
+            z.gekochtN = t.getIntOr("gekocht_n", z.gekocht ? 1 : 0);   // U-OPSLAGVIP
         }
         CompoundTag b = in.read("bank", CompoundTag.CODEC).orElse(new CompoundTag());
         int n = b.getIntOr("tabs", 0);
@@ -202,6 +214,7 @@ public final class OpslagData implements ValueIOSerializable {
         }
         bankGekocht = in.getIntOr("bank_gekocht", 0);
         autoUit = in.getBooleanOr("auto_uit", false);
+        vipGrapGezien = in.getBooleanOr("vip_grap", false);   // U-OPSLAGVIP
         for (CompoundTag e : in.read("tas", TAGS).orElse(List.of())) {
             Optional<ItemStack> s = e.getCompound("item").flatMap(c -> ItemStack.CODEC.parse(ops, c).result());
             long aantal = e.getLongOr("n", 0);

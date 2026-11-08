@@ -30,6 +30,9 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
     private static final int FLAP_B = 26, FLAP_H = 15, FLAP_STAP = 28;
     private static final int TAB_AAN = 0xFFC6C6C6, TAB_UIT = 0xFF8B8B8B, TAB_DICHT = 0xFF5A4A55, RAND = 0xFF373737, ROZE = 0xFFFF7FC0;
     private long bevestigTot;
+    /** U-OPSLAGVIP: the "WORD GUH VIP++" joke on top of this screen (null = not running). */
+    @javax.annotation.Nullable
+    private VipGrapOverlay vip;
 
     public OpslagScherm(OpslagMenu menu, Inventory inv, Component title) {
         super(menu, inv, title, 176, 114 + menu.rijen * 18);
@@ -40,6 +43,10 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
     protected void init() {
         super.init();
         menuPlaats();   // U-TABS
+        if (vip == null && menu.info.getBooleanOr("vip_nu", false)) {   // U-OPSLAGVIP (dev command: the joke at once)
+            menu.info.remove("vip_nu");
+            startVip();
+        }
         int x = leftPos + imageWidth + 3, y = topPos + 4;
         addRenderableWidget(Button.builder(Component.translatable("vadsrijk.opslag.knop.sorteer"), b -> knop(OpslagMenu.KNOP_SORTEER))
                 .bounds(x, y, 66, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.sorteer.uitleg"))).build());
@@ -81,6 +88,34 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
                 && my < kader.top() + kader.h();
     }
 
+    // ---- U-OPSLAGVIP: the VIP joke --------------------------------------------------------------------------------------------
+
+    private boolean vipActief() {
+        return vip != null && vip.actief();
+    }
+
+    /** Starts the joke and tells the server at once (once per account, even if the game closes mid-joke). */
+    private void startVip() {
+        menu.info.putBoolean("vip", true);
+        knop(OpslagMenu.KNOP_VIP_GEZIEN);
+        long p = prijs() > 0 ? prijs() : menu.info.getLongOr("koop_prijs", 0);
+        vip = new VipGrapOverlay(p, () -> knop(OpslagMenu.KNOP_KOOP));
+    }
+
+    /** Is tab i one that nothing can unlock yet ("Binnenkort!")? */
+    private boolean binnenkort(int i) {
+        return i >= menu.openTabs() && i >= menu.info.getIntOr("binnenkort", menu.maxTabs) && !koopbaar(i);
+    }
+
+    /** A small padlock centred on (cx, y). */
+    private static void slotje(GuiGraphicsExtractor g, int cx, int y, int kleur) {
+        g.fill(cx - 2, y, cx + 3, y + 1, kleur);
+        g.fill(cx - 3, y + 1, cx - 2, y + 4, kleur);
+        g.fill(cx + 3, y + 1, cx + 4, y + 4, kleur);
+        g.fill(cx - 4, y + 4, cx + 5, y + 10, kleur);
+        g.fill(cx, y + 6, cx + 1, y + 8, 0xFF3A3A3A);
+    }
+
     private void knop(int id) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.gameMode != null) {
@@ -101,7 +136,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
         for (int i = 0; i < menu.maxTabs; i++) {
             int fx = flapX(i), fy = topPos - FLAP_H + 2;
             boolean actief = i == menu.huidigeTab(), open = i < menu.openTabs();
-            int kleur = actief ? TAB_AAN : open ? TAB_UIT : TAB_DICHT;
+            int kleur = actief ? TAB_AAN : open ? TAB_UIT : binnenkort(i) ? 0xFF4A4448 : TAB_DICHT;   // U-OPSLAGVIP: greyed "Binnenkort!"
             g.fill(fx - 1, fy - 1, fx + FLAP_B + 1, fy + FLAP_H + (actief ? 2 : 0), RAND);
             g.fill(fx, fy, fx + FLAP_B, fy + FLAP_H + (actief ? 2 : 0), kleur);
             if (actief) {
@@ -113,6 +148,13 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
         for (int i = 0; i < menu.maxTabs; i++) {   // the flap labels on top
             int fx = flapX(i), fy = topPos - FLAP_H + 2;
             boolean open = i < menu.openTabs();
+            if (binnenkort(i)) {   // U-OPSLAGVIP: a little lock instead of "?"
+                slotje(g, fx + FLAP_B / 2, fy + 2, 0xFF9A9498);
+                if (isHovering(fx - leftPos, fy - topPos, FLAP_B, FLAP_H, mx, my)) {
+                    g.fill(fx, fy, fx + FLAP_B, fy + FLAP_H, 0x20FFFFFF);
+                }
+                continue;
+            }
             String s = open ? String.valueOf(i + 1) : koopbaar(i) ? "+" : "?";
             int kleur = open ? (i == menu.huidigeTab() ? 0xFF404040 : 0xFF2A2A2A) : koopbaar(i) ? 0xFFFFD86B : 0xFFB8A8B0;
             g.text(font, s, fx + FLAP_B / 2 - font.width(s) / 2, fy + 4, kleur, false);
@@ -131,6 +173,11 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
 
     @Override
     public void extractRenderState(GuiGraphicsExtractor g, int mx, int my, float a) {
+        if (vipActief()) {   // U-OPSLAGVIP: the joke covers everything (no hover, no tooltips underneath)
+            super.extractRenderState(g, -10000, -10000, a);
+            vip.teken(g, font, width, height, mx, my);
+            return;
+        }
         super.extractRenderState(g, mx, my, a);
         int i = flapOnder(mx, my);
         if (i >= 0 && menu.getCarried().isEmpty()) {
@@ -144,6 +191,11 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
             l.add(Component.translatable("vadsrijk.opslag.tab.naar", i + 1, i + 1));
             return l;
         }
+        if (binnenkort(i)) {   // U-OPSLAGVIP
+            l.add(Component.translatable("vadsrijk.opslag.tab.binnenkort").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+            l.add(Component.translatable("vadsrijk.opslag.tab.binnenkort.uitleg").withStyle(ChatFormatting.GRAY));
+            return l;
+        }
         l.add(Component.translatable("vadsrijk.opslag.tab.dicht").withStyle(ChatFormatting.GOLD));
         if (menu.soort == OpslagMenu.KNAPZAK && menu.info.getList("regels").isPresent()) {
             for (Tag t : menu.info.getList("regels").get()) {
@@ -151,7 +203,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
                 boolean klaar = s.startsWith("1");
                 String key = s.substring(1);
                 Component regel = key.endsWith(".kopen")
-                        ? Component.translatable(key, Spelers.munten(Math.max(prijs(), nl.juiced.guhs.feature.vadsrijk.opslag.Knapzak.PRIJS)))
+                        ? Component.translatable(key, Spelers.munten(menu.info.getLongOr("koop_prijs", prijs())))
                         : Component.translatable(key);
                 l.add(Component.literal(klaar ? "✔ " : "• ").append(regel).withStyle(klaar ? ChatFormatting.GREEN : ChatFormatting.GRAY));
             }
@@ -197,6 +249,12 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
 
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
+        if (vipActief()) {   // U-OPSLAGVIP
+            if (event.button() == 0) {
+                vip.klik(event.x(), event.y());
+            }
+            return true;
+        }
         if (inMenu() && kader != null && event.button() == 0 && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(), kader.left(), kader.top(), kader.w(),
                 font.width(net.minecraft.network.chat.Component.translatable("vadsrijk.menu.tab.knapzak").withStyle(ChatFormatting.BOLD)), "knapzak")) {   // U-TABS
             return true;
@@ -210,6 +268,10 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
                             net.minecraft.sounds.SoundEvents.BOOK_PAGE_TURN, 1.2f));
                 }
             } else if (koopbaar(i)) {
+                if (!menu.info.getBooleanOr("vip", true)) {   // U-OPSLAGVIP: the very first buy attempt of this account
+                    startVip();
+                    return true;
+                }
                 if (Util.getMillis() < bevestigTot) {
                     bevestigTot = 0;
                     knop(OpslagMenu.KNOP_KOOP);
@@ -220,6 +282,21 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
             return true;
         }
         return super.mouseClicked(event, doubleClick);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        return vipActief() || super.mouseReleased(event);   // U-OPSLAGVIP
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+        return vipActief() || super.mouseDragged(event, dragX, dragY);   // U-OPSLAGVIP
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        return vipActief() || super.mouseScrolled(mouseX, mouseY, scrollX, scrollY);   // U-OPSLAGVIP
     }
 
     @Override
@@ -238,6 +315,10 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
 
     @Override
     public boolean keyPressed(KeyEvent event) {
+        if (vipActief()) {   // U-OPSLAGVIP: swallow every key (Esc skips the joke / says no)
+            vip.toets(event.key());
+            return true;
+        }
         if (inMenu() && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.toetsInMenu(this, event, "knapzak")) {   // U-TABS
             return true;
         }
