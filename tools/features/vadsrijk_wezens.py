@@ -1052,7 +1052,8 @@ def _assets(a, w=_schrijf_json):
     for i, naam in enumerate(SLIJM):
         if naam == "kloddertje":
             continue
-        m, anims = model_slijm(naam)
+        with stijl(1):   # W-MODELLEN: the slimes keep their old square look (user, round W); the rest of zone 1 stays kit v2
+            m, anims = model_slijm(naam)
         kleur, oor, pat, k2 = SLIJM[naam]
         pal = {"slijm": (kleur, pat, k2), "oor": (oor, None, None), "bel": ((210, 236, 255), "glans", None), "veer": ((200, 200, 214), None, None),
                "strik": ((255, 110, 170), None, None), "bloem": ((255, 250, 240), None, None), "bloemhart": ((255, 214, 90), None, None),
