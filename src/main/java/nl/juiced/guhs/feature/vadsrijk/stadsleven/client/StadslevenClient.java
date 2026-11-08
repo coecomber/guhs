@@ -145,6 +145,16 @@ public final class StadslevenClient {
         protected AABB getBoundingBoxForCulling(LevenProp f) {
             return f.cullDoos();
         }
+
+        /** W-MODELLEN: a town blob on the Blub-guh model only shows the blue Blub's body, ears and feet. */
+        @Override
+        public void adjustModelBonesForRender(RenderPassInfo<EntityRenderState> info, com.geckolib.renderer.base.BoneSnapshots bones) {
+            if (nl.juiced.guhs.feature.vadsrijk.stadsleven.BlubLook.MODEL.equals(info.getOrDefaultGeckolibData(MODEL, ""))) {
+                for (String b : nl.juiced.guhs.feature.vadsrijk.stadsleven.BlubLook.VERBORGEN) {
+                    bones.ifPresent(b, sn -> sn.skipRender(true).skipChildrenRender(true));
+                }
+            }
+        }
     }
 
     /** The guh renderer, with the town-life LOD. */

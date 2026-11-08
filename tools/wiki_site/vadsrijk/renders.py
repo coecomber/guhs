@@ -21,9 +21,12 @@ ZONEDIR = {"zone1": ["wezens", "bazen", "tmodels"], "zone2": ["zone2", "z2bazen"
 
 
 # kort -> (geo below geckolib/models/entity/vadsrijk, texture below textures/vadsrijk) where the names differ
-OVERRIDE = {"klodderreus": ("tmodels/grauwe_klodderreus", "tmodels/grauwe_klodderreus"), "vahoegnir": ("wezens/draak", "z3bazen/vahoegnir_0")}
+OVERRIDE = {"vahoegnir": ("wezens/draak", "z3bazen/vahoegnir_0")}
 # U-SITE round 3: entities whose renderer borrows another model: kort -> (geo, texture, animation) relative to assets/guhs
-GELEEND = {"mika_spion": ("geckolib/models/entity/mika.geo.json", "textures/vadsrijk/bazen/mika_spion.png", "geckolib/animations/entity/guh.animation.json"),
+# W-MODELLEN: the Grauwe Klodderreus is the vanilla slime model again (kern/client/KlodderRenderer, grey until the plof): a copy
+# of that model as geo for the renderer lives next to this script (paths starting with "tools/" are relative to the repo root).
+GELEEND = {"klodderreus": ("tools/wiki_site/vadsrijk/vanilla_slime.geo.json", "textures/vadsrijk/kern/grauwe_klodder.png", "-"),
+           "mika_spion": ("geckolib/models/entity/mika.geo.json", "textures/vadsrijk/bazen/mika_spion.png", "geckolib/animations/entity/guh.animation.json"),
            "kloddertje": ("geckolib/models/entity/vadsrijk/wezens/klodder.geo.json", "textures/vadsrijk/wezens/kloddertje.png",
                           "geckolib/animations/entity/vadsrijk/wezens/klodder.animation.json"),
            "honingbij": ("geckolib/models/entity/guh_bee.geo.json", "textures/entity/guh_bee.png", "geckolib/animations/entity/guh_bee.animation.json")}
@@ -40,7 +43,7 @@ def vind(root, eid, kort, zone):
     """(geo, texture, glow or None, animation or None) for an entity, or None."""
     a = os.path.join(root, "src", "main", "resources", "assets", "guhs")
     if kort in GELEEND:
-        geo, tex, an = (os.path.join(a, *x.split("/")) for x in GELEEND[kort])
+        geo, tex, an = (os.path.join(root if x.startswith("tools/") else a, *x.split("/")) for x in GELEEND[kort])   # (W-MODELLEN: tools/)
         if os.path.exists(geo) and os.path.exists(tex):
             gl = next((x for x in (tex[:-4] + "_gloed.png", tex[:-4] + "_glowmask.png") if os.path.exists(x)), None)
             return geo, tex, gl, an if os.path.exists(an) else None

@@ -83,7 +83,7 @@ final class Straat {
                 {"pieppiepmuisje", "textures/entity/pieppiepmuisje.png", "pieppiepmuisje", "zit", "walk", "1.0"},
                 {"guh_konijntje", "textures/entity/guh_konijntje_roze.png", "guh_konijntje", "idle", "walk", "0.8"},
                 {"guh_konijntje", "textures/entity/guh_konijntje_wit.png", "guh_konijntje", "idle", "walk", "0.8"},
-                {Beestjes.BLOB_MODEL, Beestjes.BLOB_TEX, Beestjes.BLOB_MODEL, "idle", "hop", "0.42"},
+                {BlubLook.MODEL, BlubLook.TEX, BlubLook.ANIM, BlubLook.IDLE, BlubLook.HOP, "" + BlubLook.SCHAAL_HUISDIER},   // W-MODELLEN
                 {"guh_eendje", "textures/entity/guh_eendje.png", "guh_eendje", "idle", "walk", "0.8"}};
         final LevenGuh guh;
         final LevenProp dier;
@@ -164,7 +164,7 @@ final class Straat {
             spoor(spoor, guh.position());
             Vec3 p = achter(spoor, guh.position(), 1.2);
             boolean loopt = p.distanceToSqr(dier.position()) > 0.0009;
-            Vec3 zet = soort[4].equals("hop") && loopt ? p.add(0, Math.abs(Math.sin(t * 0.35)) * 0.25, 0) : p;
+            Vec3 zet = (soort[4].equals("hop") || soort[0].equals(BlubLook.MODEL)) && loopt ? p.add(0, Math.abs(Math.sin(t * 0.35)) * 0.25, 0) : p;
             if (loopt) {
                 dier.zet(zet);
             }
