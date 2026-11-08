@@ -65,8 +65,9 @@ public class VadsrijkGrottenGameTests {
                 }
             }
             helper.assertTrue(groepen == 2, g.id() + ": two Ambacht groups, got " + groepen);
-            helper.assertTrue(Spawners.van("grot:" + g.id() + "#elite") != null && Spawners.van("grot:" + g.id() + "#mob") != null, g.id() + ": spawners");
-            helper.assertTrue(Spawners.van("grot:" + g.id() + "#elite").eliteKans() >= 1.0, g.id() + ": the elite is always an elite");
+            // U-GROTKERKER: no free spawners any more, the cave run spawns the packs + the elite
+            helper.assertTrue(Spawners.van("grot:" + g.id() + "#elite") == null, g.id() + ": no free elite spawner (the run spawns it)");
+            helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.grotkerker.Kerkers.van(g.id()) != null, g.id() + ": a cave run");
             BlockPos h = g.plek("hal");
             GeluidPlan.Streek s = GeluidPlan.streekOp(h.getX() + 0.5, h.getY() + 0.5, h.getZ() + 0.5);
             helper.assertTrue(s != null && (s.bed().equals("grot") || s.bed().equals("wortel")), g.id() + ": the cave sound bed");
@@ -101,8 +102,8 @@ public class VadsrijkGrottenGameTests {
         helper.assertTrue(Grotten.heeft(p, g, "elite"), "elite marked");
         // the book: 4 entries per cave, all 4 done now
         Voltooiing.Categorie c = Grotten.categorie(1);
-        helper.assertTrue(c.dingen().size() == 4, "4 entries for the zone-1 cave");
-        helper.assertTrue(Voltooiing.tel(p, c).klaar() == 4, "all 4 counted, got " + Voltooiing.tel(p, c).klaar());
+        helper.assertTrue(c.dingen().size() == 5, "5 entries for the zone-1 cave (U-GROTKERKER: + grotbaas verslagen)");
+        helper.assertTrue(Voltooiing.tel(p, c).klaar() == 4, "4 counted (the boss not yet), got " + Voltooiing.tel(p, c).klaar());
         Spelers.data(p).extra.remove(Grotten.DATA);
         Spelers.data(p).extra("puzzels").remove("opgelost");
         helper.succeed();

@@ -247,7 +247,15 @@ public enum RijdierSoort {
         /** T-RIJDIER: ice-blue with a glitter shine; first kill of Spiegelzucht (zone 2, De Spiegelburcht). */
         KRISTAL(0xFFB8E8FF, false, 0, "baas"),
         /** T-RIJDIER: warm lantern orange (zone 4 Lampionkust later: {@code Rijdieren.geefKleur}); for now 12 Gouden Veren. */
-        LAMPION(0xFFFFA860, false, 0, "veren");
+        LAMPION(0xFFFFA860, false, 0, "veren"),
+        // U-GROTKERKER: the six cave colours, rare from a cave dungeon's end chest (10 % per clear, sure after 15: vint.RijdierBuit);
+        // hidden in the colour row until you own them (verborgen)
+        GLIMZWAM(0xFF96E8B0, false, 0, "grot"),
+        AMETHIST(0xFFBC96F2, false, 0, "grot"),
+        WORTELHOUT(0xFFC69060, false, 0, "grot"),
+        KORAAL(0xFFFF847A, false, 0, "grot"),
+        ONWEER(0xFF848EB2, false, 0, "grot"),
+        ZOUTROZE(0xFFFFD6DE, false, 0, "grot");
 
         /** The swatch colour in the screen (ARGB). */
         public final int kleur;
@@ -272,7 +280,7 @@ public enum RijdierSoort {
         }
 
         public boolean verborgen() {
-            return this == GOUD;
+            return this == GOUD || "grot".equals(bron);   // (U-GROTKERKER: the cave colours too)
         }
 
         public static PluimKleur van(String id) {

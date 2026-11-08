@@ -189,6 +189,10 @@ public class RijdierScherm extends EcoScherm {
                                 .withStyle(ChatFormatting.GRAY)));
                 klikvlak(sx, sy, 12, 12, () -> kleurKeuze = k);
                 sx += 14;   // (T-RIJDIER: 12 px swatches, 9 colours)
+                if (sx + 12 > px + pw) {   // U-GROTKERKER: more colours (the cave ones) wrap to a second row
+                    sx = px;
+                    sy += 14;
+                }
             }
         }
 
