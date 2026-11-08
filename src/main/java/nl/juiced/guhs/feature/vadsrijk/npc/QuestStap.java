@@ -86,6 +86,10 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         return reis(p, doel(p, q, 0, Component.translatable(q.titelKey()), null));
     }
 
+    /** V-INT: may swap an objective's explicit target for this player (add-only), e.g. the next refugee without soup (z6_s15). */
+    public static final java.util.List<java.util.function.BiFunction<ServerPlayer, String, String>> PLEK_KIEZER =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
+
     private static QuestStap doel(ServerPlayer p, Quest q, int i, Component titel, @Nullable Component extra) {
         Quest.Doel d = q.doelen().get(i);
         MutableComponent wat = Component.translatable(q.doelKey(i)).copy();
@@ -96,9 +100,13 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         BlockPos pos;
         // (integration, zone 2) an explicit target on the objective wins (QuestPlek: "npc:"/"poi:"/"gebied:"/"baas:")
         if (d.plek() != null && !d.plek().isEmpty()) {
-            BlockPos b = QuestPlek.pos(p.level() instanceof ServerLevel sl ? sl : null, d.plek());
+            String plek = d.plek();
+            for (java.util.function.BiFunction<ServerPlayer, String, String> k : PLEK_KIEZER) {   // V-INT
+                plek = k.apply(p, plek);
+            }
+            BlockPos b = QuestPlek.pos(p.level() instanceof ServerLevel sl ? sl : null, plek);
             if (b != null) {
-                return new QuestStap(q.id(), q.hoofd(), titel, wat, Component.translatable(QuestPlek.tekstKey(d.plek())), b, extra);
+                return new QuestStap(q.id(), q.hoofd(), titel, wat, Component.translatable(QuestPlek.tekstKey(plek)), b, extra);
             }
         }
         switch (d.type()) {

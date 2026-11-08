@@ -53,6 +53,19 @@ public final class VInt {
         // Ringeling's victory fanfare (= vr.z6raid.muziek.opgevrolijkt, fanfare/ringeling) comes from u-audio2's Haken.VERSLAGEN hook.
         nl.juiced.guhs.feature.vadsrijk.geluid.GeluidPlan.PLEK_STREKEN.add((x, y, z) ->
                 nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidPlekken.verdieping(x, y, z) >= 0 ? RAID_STREEK : null);
+        // u-questrobot's find (z6_s15_oostroute): the tracker pointed every soup bowl at refugee 1; now at the next one without soup
+        nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.PLEK_KIEZER.add((p, plek) -> {
+            if (!"npc:z6_vluchteling_1".equals(plek)) {
+                return plek;
+            }
+            CompoundTag soep = nl.juiced.guhs.feature.vadsrijk.npc.Questlog.map(p, "z6_soep");
+            for (int i = 1; i <= 3; i++) {
+                if (!soep.getBooleanOr("z6_vluchteling_" + i, false)) {
+                    return "npc:z6_vluchteling_" + i;
+                }
+            }
+            return plek;
+        });
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.KARAKTER_EXTRA.add((p, data) -> {
             ListTag extra = data.getListOrEmpty("extra");
             CompoundTag regel = new CompoundTag();
