@@ -1245,6 +1245,19 @@ def bewoners(W, info):
 
 
 # =============================================================================================== all
+def hofdeuren_vrij(W):
+    """W-BEREIK: the university's courtyard doors (universiteit()) got a facade column (hoog3) or a shelf right in front of them
+    later in the build: 3 doors opened onto a column. Run after hoog3/binnen2: 1 cell free on both sides of every courtyard door."""
+    y0 = 234
+    xa, xb, za, zb, d = -76, 6, -80, -30, 12
+    ia, ib, ja, jb = xa + d + 1, xb - d - 1, za + d + 1, zb - d - 1
+    for (x, z, f) in ((-50, ja - 1, "south"), (-20, ja - 1, "south"), (-50, jb + 1, "north"), (-20, jb + 1, "north"),
+                      (ia - 1, -55, "east"), (ib + 1, -55, "east")):
+        dx, dz = RICHTING[f]
+        for k in (-1, 1):
+            leeg(W, x + dx * k, y0 + 1, z + dz * k, x + dx * k, y0 + 2, z + dz * k)
+
+
 def staarttrap(W, S, info):
     """W-BEREIK: the palace hill (floor game y 232) ends in a 29-high cliff above the Staartpark (floor game y 203). Without a way
     down, the park, the tail, the Staarthaven (airship line E to zone 6) and all their quests were unreachable on foot. A
@@ -1334,6 +1347,7 @@ def bouw(W, S, log=print):
     hoog3.bouw(W, S, info, log=log)
     import binnen2   # [U-Z5BINNEN] lighter interiors: round chandeliers, sconces, candelabra, marble floors, light pools
     binnen2.bouw(W, S, info, log=log)
+    hofdeuren_vrij(W)   # W-BEREIK
     nt, mis = terrastrappen(W, S)
     log(f"terrastrappen: {nt} (passen niet: {mis})")
     wolkwaldroom(W, S, info)

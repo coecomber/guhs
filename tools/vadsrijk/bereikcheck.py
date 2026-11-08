@@ -660,6 +660,8 @@ def links(D, poi):
         for a, b in (("_voet", "_top"), ("_onder", "_boven")):
             if k.endswith(a) and "lift" in k and k[:-len(a)] + b in poi:
                 uit.append(("lift " + k[:-len(a)], v, poi[k[:-len(a)] + b], True))
+        if k.startswith("wind_") and k.endswith("_onder") and k[:-6] + "_boven" in poi:   # zone-3 wind columns (Z3Wind): up
+            uit.append(("windkolom " + k[5:-6], v, poi[k[:-6] + "_boven"], False))
     for l in D.get("links", []):
         uit.append((l["naam"], tuple(l["van"]), tuple(l["naar"]), bool(l.get("beide", False))))
     return uit
@@ -895,6 +897,8 @@ def deco_op_pad(U):
     for x, y, z, n, _ in K.los:
         ys.setdefault((x, z), set()).add(y)
     for x, y, z, n, cl_onder in K.los:
+        if any(w in n for w in ("lantaarnpaal", "vadstouw", "bell", "iron_bars")):
+            continue                                   # lamp posts / ropes / bells / bars are placed on purpose
         if y - 1 in ys.get((x, z), ()):
             continue                                   # (a chain/lantern under another one: judge the lowest only)
         onder = None                                   # the run directly under the block (ends at y - 1)
@@ -914,7 +918,7 @@ def deco_op_pad(U):
         buren = 0
         for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             r = U.Z.run(x + dx, voet, z + dz, 1)
-            if r >= 0 and U.FR[r] and abs(K.F[r] / 2 - voet) <= 1:
+            if r >= 0 and U.FR[r] and abs(K.F[r] / 2 - voet) <= (0.5 if soort == "hangt" else 1):
                 buren += 1
         keten = n.split(":")[-1] in ("iron_chain", "chain")
         if soort == "hangt":
@@ -1124,8 +1128,10 @@ def main():
                 s.append(f"{g} {ok}/{tot}")
         print(f"  zone {zn}: " + ", ".join(s))
     if a.strikt:
-        slecht = [d for d in U.doelen if d["pos"] is not None and not d["ok"] and (d["hoofd"] or d["soort"] == "npc")]
+        slecht = [d for d in U.doelen if d["pos"] is not None and not d["ok"] and not d.get("buiten_kaart")
+                  and (d["hoofd"] or d["soort"] == "npc")]
         if slecht:
+            print("  STRIKT: niet bereikt: " + ", ".join(d["id"] for d in slecht[:20]))
             sys.exit(1)
 
 
