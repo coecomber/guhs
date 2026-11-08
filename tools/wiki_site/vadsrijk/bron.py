@@ -4,8 +4,10 @@ docs/wiki/vadsrijk_runtime.json when it exists: run `gradlew runGameTestServer -
 wikiexport` and copy vadsrijk_runtime.json there). Re-runnable: when the world layout moves (guhs1100-avontuur/wereldindeling),
 regenerate the map + POI files and the runtime dump, and the site follows.
 
-Privacy/spoiler rules live HERE (an allowlist): secrets (knuffels, treasures, clues, reliefs, secret quest goals) never get a
-position in the output; only a count per area. Only static game content; never player data.
+Privacy/spoiler rules live HERE (an allowlist): the public map layers only get the PUBLIEK kinds; secrets (knuffels, treasures,
+clues, reliefs, letters, puzzles, cave treasures) get their positions ONLY in geheimen.py's list (user decision 2026-11-08), which the
+site shows behind a spoiler click per entry and in a map layer that is off by default. Secret quest goals stay without a position.
+Only static game content; never player data.
 """
 import collections
 import glob
@@ -26,13 +28,19 @@ ZONES = [
          extra_gebieden=()),
     dict(id="zone5", nr=5, boek="zone5", ring="z5_moeder_wolkwal", hub="z5_hoogvads", quests="quests_z5.json", lv=(56, 60), kleur="#9b7be0",
          extra_gebieden=()),
+    # U-SITE round 3: zone 6 (Het Zijdeland, the rose desert; the first raid De Sterrendovende Toren)
+    dict(id="zone6", nr=6, boek="zone6", ring="z6_zijdeland", hub="z6_rozenkloof", quests="quests_z6.json", lv=(60, 70), kleur="#e07a5f",
+         extra_gebieden=()),
 ]
-ZONE_PREFIX = (("z5d_", "zone5"), ("z5_", "zone5"), ("z4_", "zone4"), ("z3_", "zone3"), ("z2_", "zone2"))
+ZONE_PREFIX = (("z6raid_", "zone6"), ("z6w_", "zone6"), ("z6_", "zone6"), ("z5d_", "zone5"), ("z5_", "zone5"), ("z4_", "zone4"), ("z3_", "zone3"), ("z2_", "zone2"))
 # U-SITE: zone-5 places without a vadsrijk.kern.gebied.* key (the districts also come from POI_Z5.md's table)
 GEBIED_NAAM = {"z5_moeder_wolkwal": "Moeder Wolkwal", "z5_proefarena": "De Proefarena", "z5_buikgangen": "De Buikgangen",
                "z5_schuilnest": "Het Schuilnest", "z5_wolkrand_zuid": "De Wolkrand (zuid)", "z5_wolkrand_noord": "De Wolkrand (noord)",
                "z5_staartvlakte": "De Staartvlakte"}
-NIET_OP_SITE = {"proeftuin"}                   # dev areas
+NIET_OP_SITE = {"proeftuin"}
+# U-SITE round 3: the zone-6 sets (+ the raid's Sterrenzijde) -> a fallback name
+Z6_SETS = {"duinwandelaar": "Duinwandelaarset", "duinzijde": "Duinzijdeset", "karavaanwacht": "Karavaanwachtset", "sterrenwacht": "Sterrenwachtset",
+           "sterrenzijde": "Sterrenzijdeset"}                   # dev areas
 CRITTERS = {"sneeuwhaas", "ijsvogel", "kristalmot", "honingbij", "sporenmot", "lantaarnkever", "wortelmuis"}
 NIET_WEZENS = {"vr_proefklodder", "vr_proefkloddertje", "vr_npc_guh", "vr_huisdier", "vr_draakvriendje", "vr_roze_draak",
                "vr_mom_karavaan", "vr_mom_handelaar", "vr_mob_kampklodder", "vr_mob_draak"}
@@ -61,6 +69,12 @@ BAZEN = [
     ("zone5", "vr_z5_baas_donderbuik", "donderbuik", "vadsrijk.z2bazen.tip.donderbuik", "vadsrijk.z3bazen.tip.donderbuik"),
     ("zone5", "vr_z5_baas_zilverstaart", "zilverstaart", "vadsrijk.z2bazen.tip.zilverstaart", "vadsrijk.z3bazen.tip.zilverstaart"),
     ("zone5", "vr_z5_baas_grauwe_droom", "grauwe_droom", "vadsrijk.z2bazen.tip.grauwe_droom", "vadsrijk.z3bazen.tip.grauwe_droom"),
+    # U-SITE round 3: zone 6 (two field bosses + the three bosses of De Verzonken Sterrenwacht); the raid has its own pages (raid.py)
+    ("zone6", "vr_z6_baas_wormelien", "wormelien", "vadsrijk.z6wezens.tip.baas_wormelien", None),
+    ("zone6", "vr_z6_baas_zoutkolos", "zoutkolos", "vadsrijk.z6wezens.tip.baas_zoutkolos", None),
+    ("zone6", "vr_z6_baas_astrolabiumwachter", "astrolabiumwachter", "vadsrijk.z6wezens.tip.baas_astrolabiumwachter", None),
+    ("zone6", "vr_z6_baas_glimmertje", "glimmertje", "vadsrijk.z6wezens.tip.baas_glimmertje", None),
+    ("zone6", "vr_z6_baas_sterrenguh", "sterrenguh", "vadsrijk.z6wezens.tip.baas_sterrenguh", None),
 ]
 VERHAAL_BAZEN = {"vahoegnir", "mika_spion", "zilverstaart", "grauwe_droom"}     # story twists: behind the spoiler button
 SOORT_BAAS = {"klodderreus": "verhaal", "koning_klodder": "wereldbaas", "mika_spion": "verhaal", "opperzwam": "kerker",
@@ -68,24 +82,29 @@ SOORT_BAAS = {"klodderreus": "verhaal", "koning_klodder": "wereldbaas", "mika_sp
               "taleggio": "kerker", "brokkel": "kerker", "roquefort": "kerker", "piepvel": "verhaal", "wortelwurger": "kerker",
               "nestwachter": "kerker", "bleu": "kerker", "vahoegnir": "verhaal",
               "zeeslurf": "wereldbaas", "vliegervanger": "kerker", "gorgonzola": "kerker", "donderbuik": "wereldbaas",
-              "zilverstaart": "verhaal", "grauwe_droom": "verhaal"}
+              "zilverstaart": "verhaal", "grauwe_droom": "verhaal",
+              "wormelien": "wereldbaas", "zoutkolos": "wereldbaas", "astrolabiumwachter": "kerker", "glimmertje": "kerker", "sterrenguh": "kerker"}
 # airship lines (the in-game travel map): stop -> (npc id of the captain, zone)
 LUCHTSCHIP = {"knuffelkamp": ("kapitein", "zone1"), "dehaven": ("luchtschipper", "zone1"), "kandijkom": ("z2_kapitein", "zone2"),
               "honingtak": ("z3_kapitein", "zone3"),
               # U-SITE: line C (zone 3 -> Lampionhaven) and line D (the Opstijgpier -> Hoogvads); "poi:" = a POI position
               "lampionhaven": ("poi:haven_3_4_kapitein", "zone4"), "opstijgpier": ("poi:haven_4_5_kapitein", "zone4"),
-              "hoogvads": ("poi:haven_5_4_kapitein", "zone5")}
-STOP_NAAM = {"lampionhaven": "Lampionhaven", "opstijgpier": "De Opstijgpier", "hoogvads": "Hoogvads (Luchthaven)"}
+              "hoogvads": ("poi:haven_5_4_kapitein", "zone5"),
+              # U-SITE round 3: line E (Hoogvads' Staarthaven -> the Luchthaven of Rozenkloof)
+              "staarthaven": ("poi:haven_5_6_vertrekbord", "zone5"), "rozenkloof": ("poi:haven_6_5_kapitein", "zone6")}
+STOP_NAAM = {"lampionhaven": "Lampionhaven", "opstijgpier": "De Opstijgpier", "hoogvads": "Hoogvads (Luchthaven)",
+             "staarthaven": "Hoogvads (Staarthaven)", "rozenkloof": "Rozenkloof (Luchthaven)"}
 LIJNEN = [("knuffelkamp", "dehaven"), ("dehaven", "kandijkom"), ("dehaven", "honingtak"), ("kandijkom", "honingtak"),
-          ("honingtak", "lampionhaven"), ("opstijgpier", "hoogvads")]
+          ("honingtak", "lampionhaven"), ("opstijgpier", "hoogvads"), ("staarthaven", "rozenkloof")]
 
 GEHEIM = re.compile(r"^(geheim_(?!.*ingang$)|knuffel_\d|knuffel_ijs|.*aanwijzing_\d|.*_schat(_|$)|schat_\d|relief_|.*_relief_\d|imkerspoor)")
 PUBLIEK = [  # (regex on the POI id, kind)
     (re.compile(r"^kampvuur_"), "kampvuur"),
     (re.compile(r"^uitkijk"), "uitkijk"),
-    (re.compile(r"^(luchtschip_kapitein|luchtschip_haven_kapitein|dok_kapitein|haven_3_4_kapitein|haven_4_5_kapitein|haven_5_4_kapitein)$"), "luchtschip"),
+    (re.compile(r"^(luchtschip_kapitein|luchtschip_haven_kapitein|dok_kapitein|haven_3_4_kapitein|haven_4_5_kapitein|haven_5_4_kapitein|haven_6_5_kapitein)$"), "luchtschip"),
     (re.compile(r"^terugportaal_"), "portaal"),
-    (re.compile(r"^(deur_spiegelburcht_voor|werf_ingang|hart_poort|wrak_ingang|z5w_buik_luik)$"), "kerker"),
+    (re.compile(r"^(deur_spiegelburcht_voor|werf_ingang|hart_poort|wrak_ingang|z5w_buik_luik|z6w_sterrenwacht_ingang)$"), "kerker"),
+    (re.compile(r"^raid_toren_poort$"), "raid"),   # U-SITE round 3: the raid tower door
     (re.compile(r"^z5w_lift_[a-z]+_(boven|onder)$"), "lift"),
     (re.compile(r"^gondel_(berg|dal)$"), "gondel"),
     (re.compile(r"^(honinglift_boven|honinglift_onder)$"), "lift"),
@@ -132,6 +151,8 @@ class Bron:
                     continue
                 seen.add(g["id"])
                 out.append(g)
+            if not any(g["id"].startswith("z6_") for g in out):   # U-SITE: an older dump without zone 6
+                out += [g for g in self._z6_gebieden() if g["id"] not in seen]
             return out
         return self._gebieden_uit_bron()
 
@@ -159,6 +180,7 @@ class Bron:
             cx, cz, r0, r1 = int(m[2]), int(m[3]), int(m[4]), int(m[5])
             out.append(dict(id=m[1], doos=[cx - r1, cz - r1, cx + r1, cz + r1], min_lv=int(m[8]), max_lv=int(m[9]), stad=m[10] == "yes",
                             laag=dict(min_y=int(m[6]), max_y=int(m[7]), cx=cx, cz=cz, r_min=r0, r_max=r1)))
+        out += self._z6_gebieden()
         if out:
             self.notes.append("no runtime dump: areas read from the Java/POI sources")
         return out
@@ -166,7 +188,11 @@ class Bron:
     def poi_bestanden(self):
         """Every `id` | x, y, z row of POI_VADSRIJK.md / POI_Z2.md / POI_Z3.md -> {id: (zone, section, (x, y, z))}."""
         out = {}
-        for zone, f in (("zone1", "POI_VADSRIJK.md"), ("zone2", "POI_Z2.md"), ("zone3", "POI_Z3.md"), ("zone4", "POI_Z4.md"), ("zone5", "POI_Z5.md")):
+        for zone, f in (("zone1", "POI_VADSRIJK.md"), ("zone2", "POI_Z2.md"), ("zone3", "POI_Z3.md"), ("zone4", "POI_Z4.md"), ("zone5", "POI_Z5.md"),
+                        ("zone6", "POI_Z6.md")):
+            if zone == "zone6" and not os.path.exists(os.path.join(self.root, f)):
+                out.update(self._z6_plekken())   # U-SITE: the same list, from the committed generated Java
+                continue
             try:
                 tekst = open(os.path.join(self.root, f), encoding="utf-8").read()
             except OSError:
@@ -179,6 +205,28 @@ class Bron:
                 m = re.match(r"\| `([^`]+)` \| (-?\d+), (-?\d+), (-?\d+) \|", regel)
                 if m:
                     out[(zone, m[1])] = (zone, sec, (int(m[2]), int(m[3]), int(m[4])))
+        return out
+
+    def _z6_java(self):
+        p = os.path.join(self.root, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk", "zone6", "wereld", "Z6WereldPlekken.java")
+        try:
+            return open(p, encoding="utf-8").read()
+        except OSError:
+            self.notes.append("Z6WereldPlekken.java missing: no zone-6 places")
+            return ""
+
+    def _z6_plekken(self):
+        """U-SITE: zone 6's POIs from Z6WereldPlekken.ALLE (generated by poi6.py; POI_Z6.md is the same list, not committed)."""
+        out = {}
+        for m in re.finditer(r'Map\.entry\("([a-z0-9_]+)", new BlockPos\((-?\d+), (-?\d+), (-?\d+)\)\)', self._z6_java()):
+            out[("zone6", m[1])] = ("zone6", "Z6WereldPlekken", (int(m[2]), int(m[3]), int(m[4])))
+        return out
+
+    def _z6_gebieden(self):
+        """U-SITE: zone 6's areas from Z6WereldPlekken.GEBIEDEN (when the runtime dump has none)."""
+        out = []
+        for m in re.finditer(r'new Gebied\("([a-z0-9_]+)", (-?\d+), (-?\d+), (-?\d+), (-?\d+), "[a-z_]+", (\d+), (\d+), (true|false)\)', self._z6_java()):
+            out.append(dict(id=m[1], doos=[int(m[2]), int(m[3]), int(m[4]), int(m[5])], min_lv=int(m[6]), max_lv=int(m[7]), stad=m[8] == "true"))
         return out
 
     # ---- the pieces ------------------------------------------------------------------------------------------------------
@@ -269,6 +317,8 @@ class Bron:
                 if rx.match(pid):
                     g = self.gebied_op(gebieden, x, y, z)
                     naam = self._poi_naam(pid, soort, g)
+                    if any(q["soort"] == soort and q["pos"] == [x, y, z] for q in punten):
+                        break   # U-SITE: zone 6 has alias ids on one spot (kampvuur_duinen = kampvuur_duinput)
                     punten.append(dict(id=f"{zone}:{pid}", soort=soort, zone=zone, pos=[x, y, z], naam=naam,
                                        gebied=g["id"] if g else None))
                     break
@@ -294,6 +344,8 @@ class Bron:
         for b in data["bazen"]:
             b["buit"] = [i["id"] for i in data["items"] if b["id"] in i.get("bronnen_baas", [])]
         self._baas_extra(data, rt)   # U-SITE: every other drop with its chance
+        from . import raid   # U-SITE round 3: the raid (zone 6)
+        data["raid"] = raid.data(self)
         data["kristallen"] = self._kristallen(rt)
         data["sterren"] = rt.get("sterren")
         data["zeldzaamheden"] = [dict(r, naam=self.t("vadsrijk.kern.zeldzaamheid." + r["id"], r["id"])) for r in rt.get("zeldzaamheden", [])] \
@@ -308,6 +360,8 @@ class Bron:
         # U-SITE: the systems of the night round (t-ambacht, t-puzzels, t-kleding, t-rijdier)
         data["ambachten"] = self._ambachten()
         data["puzzels"] = self._puzzels()
+        from . import geheimen   # U-SITE round 3: every secret WITH its location (behind spoiler clicks on the page + an off-by-default map layer)
+        data["geheimen_lijst"] = geheimen.data(self, pois, gebieden, punten, data["puzzels"]["lijst"])
         data["kleding"] = self._kleding()
         data["rij_uiterlijk"] = self._rij_uiterlijk()
         data["krachten"] = self._krachten()
@@ -324,7 +378,7 @@ class Bron:
             return "Kampvuur" + (f" ({gnaam})" if gnaam else "")
         if soort == "uitkijk":
             kaal = pid.replace("uitkijk_", "").replace("uitkijkpunt_", "")
-            nl = self.t(f"vadsrijk.wereld.uitkijk.{kaal}") or self.t(f"vadsrijk.wereld.uitkijk.{kaal}.titel")
+            nl = self.t(f"vadsrijk.wereld.uitkijk.{kaal}") or self.t(f"vadsrijk.wereld.uitkijk.{kaal}.titel") or self.t(f"vadsrijk.wereld.uitkijk.z6_{pid}")
             return "Uitkijkpunt " + (nl or kaal.replace("_", " ").title())
         if soort == "luchtschip":
             return "Luchtschip" + (f" ({gnaam})" if gnaam else "")
@@ -332,7 +386,10 @@ class Bron:
             return "Terugportaal" + (f" ({gnaam})" if gnaam else "")
         if soort == "kerker":
             return {"deur_spiegelburcht_voor": "De Spiegelburcht", "werf_ingang": "De Kaaszeppelinwerf", "hart_poort": "Het Hart van de Boom",
-                    "wrak_ingang": "Het Wrak van de Vliegervanger", "z5w_buik_luik": "De Buikgangen (luik)"}.get(pid, pid)
+                    "wrak_ingang": "Het Wrak van de Vliegervanger", "z5w_buik_luik": "De Buikgangen (luik)",
+                    "z6w_sterrenwacht_ingang": "De Verzonken Sterrenwacht (luik)"}.get(pid, pid)
+        if soort == "raid":
+            return "De Sterrendovende Toren (raid)"
         if soort == "gondel":
             return "Gondel (" + ("berg" if "berg" in pid else "dal") + ")"
         if soort == "lift":
@@ -414,13 +471,13 @@ class Bron:
             eid = k[len("entity.guhs."):]
             if eid in NIET_WEZENS or "_baas" in eid or eid.startswith(("vr_eco_", "vr_baas", "vr_klodderreus")):
                 continue
-            m = re.match(r"vr_(?:(z2|z3|z4|z5)_)?mob_(.+)$", eid)
+            m = re.match(r"vr_(?:(z2|z3|z4|z5|z6)_)?mob_(.+)$", eid)
             if not m:
                 continue
-            zone = {"z2": "zone2", "z3": "zone3", "z4": "zone4", "z5": "zone5"}.get(m[1], "zone1")
+            zone = {"z2": "zone2", "z3": "zone3", "z4": "zone4", "z5": "zone5", "z6": "zone6"}.get(m[1], "zone1")
             kort = m[2]
             tip_pre = {"zone1": "vadsrijk.wezens.tip.", "zone2": "vadsrijk.z2wezens.tip.", "zone3": "vadsrijk.z3wezens.tip.",
-                       "zone4": "vadsrijk.z4wezens.tip.", "zone5": "vadsrijk.z5wezens.tip."}[zone]
+                       "zone4": "vadsrijk.z4wezens.tip.", "zone5": "vadsrijk.z5wezens.tip.", "zone6": "vadsrijk.z6wezens.tip."}[zone]
             sps = sp_per.get(eid, [])
             lvs = [s["min_lv"] for s in sps] + [s["max_lv"] for s in sps]
             gebied_ids = []
@@ -430,7 +487,7 @@ class Bron:
                 if g and g["id"] not in gebied_ids:
                     gebied_ids.append(g["id"])
             tabel = None
-            for key in (f"wezens:{kort}", f"z2wezens:{kort}", f"z3wezens:{kort}", f"z4wezens:{kort}", f"z5wezens:{kort}"):
+            for key in (f"wezens:{kort}", f"z2wezens:{kort}", f"z3wezens:{kort}", f"z4wezens:{kort}", f"z5wezens:{kort}", f"z6wezens:{kort}"):
                 if key in lt:
                     tabel = dict(lt[key], id=key)
             elems = sorted({s["element"] for s in sps if s["element"] != "geen"})
@@ -473,6 +530,14 @@ class Bron:
         for sid, stukken in (rt.get("sets") or {}).items():
             key = {"klodder": "vadsrijk.wezens.set.", "zwam": "vadsrijk.wezens.set.", "kristal": "vadsrijk.z2wezens.set.",
                    "mika": "vadsrijk.z2wezens.set."}.get(sid, "vadsrijk.z3wezens.set.")
+            if sid in Z6_SETS:   # U-SITE round 3: the zone-6 sets (bonuses at 2/4/6) + the raid set
+                k6 = "vadsrijk.z6wezens.set." if sid != "sterrenzijde" else "vadsrijk.z6raid.set."
+                naam = self.t(k6 + sid) or self.t(k6 + sid + ".naam") or Z6_SETS[sid]
+                sets[sid] = dict(id=sid, naam=naam, stukken=stukken, bonus2=self.schoon(self.t(k6 + sid + ".2", "")),
+                                 bonus4=self.schoon(self.t(k6 + sid + ".4", "")), bonus6=self.schoon(self.t(k6 + sid + ".6", "")))
+                if sid == "sterrenzijde" and not sets[sid]["bonus2"]:   # the raid set: its bonus text is one effect line
+                    sets[sid].update(bonus2="(2) Verdediging +15 en Vads +150", bonus4="(4) Schade tegen bazen +10%")
+                continue
             for kk in (key, "vadsrijk.z4wezens.set.", "vadsrijk.items.set."):   # U-SITE: zone-4 sets + the items 2.0 names
                 if kk + sid in self.nl:
                     key = kk
@@ -493,14 +558,14 @@ class Bron:
             iid = bt["id"]
             naam = self.t("vadsrijk.loot." + iid) or (self._itemnaam(bt["item"]) if bt.get("item") else None) or iid.replace("_", " ").capitalize()
             flav = [self.nl[f"vadsrijk.loot.{iid}.flavour.{i}"] for i in range(8) if f"vadsrijk.loot.{iid}.flavour.{i}" in self.nl]
-            zm = re.match(r"z([2-5])(?:baas|droom)_", iid)
-            zone = f"zone{zm[1]}" if zm else ("zone5" if iid.startswith("mw_") else None)
+            zm = re.match(r"z([2-6])(?:baas|droom|raid)_", iid)
+            zone = f"zone{zm[1]}" if zm else ("zone5" if iid.startswith("mw_") else "zone6" if set_van.get(iid) in Z6_SETS else None)
             tabellen = bronnen.get(iid, [])
             if zone is None:
-                zs = {(f"zone{t[1]}" if re.match(r"z[2-5]", t) else "zone1") for t in tabellen}
+                zs = {(f"zone{t[1]}" if re.match(r"z[2-6]", t) else "zone1") for t in tabellen}
                 zone = sorted(zs)[0] if zs else "zone1"
             baas = None
-            m = re.match(r"(?:z[2-5])?baas_(.+)$", iid)
+            m = re.match(r"(?:z[2-6])?baas_(.+)$", iid)
             bron_baas = []
             for tid in tabellen:
                 kort = tid.split(":")[-1]
@@ -510,6 +575,8 @@ class Bron:
             bn = benoemd.get(iid)
             if bn:
                 bron_baas = [bn["baas"]]
+            if iid.startswith("z6raid_"):   # U-SITE: the raid's own loot (raid.py lists it)
+                bron_baas, m = [], None
             elif m and not bron_baas:
                 baas = m[1]
             out.append(dict(id=iid, naam=naam, zone=zone, slot=bt.get("slot"), soort=bt.get("soort"), klasse=bt.get("klasse"),
@@ -595,7 +662,7 @@ class Bron:
                 self.notes.append(f"lore: {os.path.basename(f)}: {e}")
                 continue
             w = ns.get("WIKI", {})
-            zone = "zone5" if "z5" in f else "zone4" if "z4" in f else "zone3" if "z3" in f else "zone2" if "z2" in f else "zone1"
+            zone = "zone6" if "z6" in f else "zone5" if "z5" in f else "zone4" if "z4" in f else "zone3" if "z3" in f else "zone2" if "z2" in f else "zone1"
             for sid, v in (w.get("systemen") or {}).items():
                 out.append(dict(id=sid, zone=zone, titel=v[0], tekst=v[2], stukken=[]))
             per = {o["id"]: o for o in out}
@@ -646,7 +713,7 @@ class Bron:
             if b.get("huisdier"):
                 ex.append(["huisdier", self.t(f"vadsrijk.huisdier.{b['huisdier']}.naam", b["huisdier"]),
                            self.t(f"vadsrijk.huisdier.{b['huisdier']}.bron", "") or "eerste overwinning", None])
-            zp = {"zone1": "", "zone2": "z2_", "zone3": "z3_", "zone4": "z4_", "zone5": "z5_"}[b["zone"]]
+            zp = {"zone1": "", "zone2": "z2_", "zone3": "z3_", "zone4": "z4_", "zone5": "z5_", "zone6": "z6_"}[b["zone"]]
             trofee = self.t(f"item.guhs.vr_{zp}baas_trofee_{b['id']}")
             if trofee:
                 ex.append(["trofee", trofee, "zeker, bij je eerste overwinning (deco voor thuis)", "sure, on your first win (decoration for home)"])
@@ -657,6 +724,12 @@ class Bron:
             if b.get("vahoeg"):
                 ex.append(["veer", "Gouden Veren", "in Vahoeg-vorm", "in Vahoeg form"])
                 ex.append(["kleding", "Schemervleugels", "3% in Vahoeg-vorm (laatste baas van de kerker 8%)", "3% in Vahoeg form (last boss of the dungeon 8%)"])
+            if b["zone"] == "zone6":   # U-SITE round 3: u-z6wezens' extras (Z6BazenLoot)
+                if b["id"] in ("wormelien", "zoutkolos"):
+                    ex.append(["veer", "Gouden Veren", "2 bij je eerste overwinning, daarna 25% kans op 1", "2 on your first win, then a 25% chance of 1"])
+                elif b["id"] == "sterrenguh":
+                    ex.append(["veer", "Gouden Veer", "1, elke overwinning", "1, every win"])
+                ex.append(["stof", "Sterrenstof", "3-6, elke overwinning", "3-6, every win"])
             b["extra"] = ex
 
     # ---- U-SITE: the new systems ------------------------------------------------------------------------------------------
@@ -727,7 +800,7 @@ class Bron:
                             naam=self.t(f"vadsrijk.puzzels.p.{pid}.naam", pid), uitleg=self.t(f"vadsrijk.puzzels.p.{pid}.uitleg", ""),
                             nacht=bool(d.get("nacht")), tijd=d.get("tijd"),
                             munten=bel.get("munten", 0), ontgrendel=self.t("vadsrijk.puzzels.ontgrendel." + ontgr, ontgr) if ontgr else None,
-                            bladzijde=bel.get("bladzijde")))
+                            bladzijde=bel.get("bladzijde"), _anker=d.get("anker")))
         soorten = {k[len("vadsrijk.puzzels.soort."):]: v for k, v in self.nl.items() if k.startswith("vadsrijk.puzzels.soort.")}
         return dict(lijst=out, soorten=soorten)
 

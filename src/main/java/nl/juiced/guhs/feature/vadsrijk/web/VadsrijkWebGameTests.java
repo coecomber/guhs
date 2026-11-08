@@ -98,4 +98,17 @@ public class VadsrijkWebGameTests {
         }
         helper.succeed();
     }
+
+    /** U-SITE: zone 6's hidden places: the raid tower + the underground dungeon are hooked in (status only, never a position). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void positiesZone6(GameTestHelper helper) {
+        helper.assertTrue(WebPosities.VERBORGEN_PLEKKEN.size() >= 2, "the raid + the zone-6 dungeon hooks are registered");
+        helper.assertTrue(WebPosities.inZ6Kerker(4000.5, 31, -970.5), "the Verzonken Sterrenwacht rooms are a hidden place");
+        helper.assertTrue(!WebPosities.inZ6Kerker(4000.5, 75, -970.5), "the desert above the dungeon is not hidden");
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidPlekken.inToren(
+                nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidPlekken.anker().getX() + 0.5,
+                nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidPlekken.anker().getY() + 1,
+                nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidPlekken.anker().getZ() + 0.5), "the raid tower anchor is inside the tower");
+        helper.succeed();
+    }
 }

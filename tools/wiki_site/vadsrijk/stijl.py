@@ -2,7 +2,7 @@
 
 CSS = r"""
 /* ---- Het Vadsrijk (S-SITE): on top of the wiki stylesheet ---- */
-:root{--vr:#c2577f;--vr-goud:#c8955a;--vr-soft:#f8e4ea;--zone1:#e0559a;--zone2:#5aa9e6;--zone3:#e8a33a;--zone4:#2bb3a3;--zone5:#9b7be0;--ok:#2f9e5b;--uit:#c0392b}
+:root{--vr:#c2577f;--vr-goud:#c8955a;--vr-soft:#f8e4ea;--zone1:#e0559a;--zone2:#5aa9e6;--zone3:#e8a33a;--zone4:#2bb3a3;--zone5:#9b7be0;--zone6:#e07a5f;--ok:#2f9e5b;--uit:#c0392b}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--vr:#f08cb0;--vr-goud:#e6b67a;--vr-soft:#3a2230}}
 :root[data-theme="dark"]{--vr:#f08cb0;--vr-goud:#e6b67a;--vr-soft:#3a2230}
 .brand .word small{font:600 13px var(--body);color:var(--vr-goud);margin-left:6px;letter-spacing:.04em}
@@ -35,6 +35,7 @@ a.kaartje:hover{border-color:var(--vr)}
 .badge.z3{background:color-mix(in srgb,var(--zone3) 22%,transparent);color:#b0700c}
 .badge.z4{background:color-mix(in srgb,var(--zone4) 22%,transparent);color:#1b7f74}
 .badge.z5{background:color-mix(in srgb,var(--zone5) 22%,transparent);color:#6a4fc0}
+.badge.z6{background:color-mix(in srgb,var(--zone6) 22%,transparent);color:#b0472c}
 .voorbeeldbalk{background:#fff3c4;color:#5a4300;border-bottom:2px dashed #e0b400;font:600 14px/1.4 var(--body);padding:8px 16px;text-align:center}
 :root[data-theme="dark"] .voorbeeldbalk{background:#3a3214;color:#ffe9a6}
 .el{display:inline-block;font:700 12px/1.6 var(--body);padding:0 8px;border-radius:999px;color:#fff}
@@ -58,9 +59,9 @@ details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
 .verstopt-zone{border:1.5px dashed var(--line2);border-radius:14px;padding:10px 14px;color:var(--muted);margin:10px 0}
-html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone){display:none!important}
+html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="5"] [data-zone="6"]:not(.verstopt-zone){display:none!important}
 .verstopt-zone{display:none}
-html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .verstopt-zone[data-zone="3"],html[data-zonetot="1"] .verstopt-zone[data-zone="4"],html[data-zonetot="1"] .verstopt-zone[data-zone="5"],html[data-zonetot="2"] .verstopt-zone[data-zone="3"],html[data-zonetot="2"] .verstopt-zone[data-zone="4"],html[data-zonetot="2"] .verstopt-zone[data-zone="5"],html[data-zonetot="3"] .verstopt-zone[data-zone="4"],html[data-zonetot="3"] .verstopt-zone[data-zone="5"],html[data-zonetot="4"] .verstopt-zone[data-zone="5"]{display:block}
+html[data-zonetot="1"] .verstopt-zone[data-zone="2"],html[data-zonetot="1"] .verstopt-zone[data-zone="3"],html[data-zonetot="1"] .verstopt-zone[data-zone="4"],html[data-zonetot="1"] .verstopt-zone[data-zone="5"],html[data-zonetot="1"] .verstopt-zone[data-zone="6"],html[data-zonetot="2"] .verstopt-zone[data-zone="3"],html[data-zonetot="2"] .verstopt-zone[data-zone="4"],html[data-zonetot="2"] .verstopt-zone[data-zone="5"],html[data-zonetot="2"] .verstopt-zone[data-zone="6"],html[data-zonetot="3"] .verstopt-zone[data-zone="4"],html[data-zonetot="3"] .verstopt-zone[data-zone="5"],html[data-zonetot="3"] .verstopt-zone[data-zone="6"],html[data-zonetot="4"] .verstopt-zone[data-zone="5"],html[data-zonetot="4"] .verstopt-zone[data-zone="6"],html[data-zonetot="5"] .verstopt-zone[data-zone="6"]{display:block}
 .zonevak{border:1px solid var(--line);border-left:6px solid var(--zk,var(--vr));border-radius:14px;background:var(--card);margin:10px 0;box-shadow:var(--shadow)}
 .zonevak>summary{cursor:pointer;padding:12px 16px;font:700 19px/1.3 var(--display,inherit);list-style:none}
 .zonevak>summary::-webkit-details-marker{display:none}
@@ -144,7 +145,8 @@ td.tipcel{min-width:220px;font-size:14px}
 .kaart-info.spelers{margin-left:6px}
 table.data td.num{white-space:nowrap}
 .vr-pin.kampvuur{background:#e2572a}.vr-pin.uitkijk{background:#2b8f8f}.vr-pin.luchtschip{background:#6b5bd6}.vr-pin.portaal{background:#c2577f}
-.vr-pin.kerker{background:#3d3d3d}.vr-pin.baas{background:#b0182c;width:26px;height:26px}.vr-pin.quest{background:#e0a800;color:#2a1a00}
+.vr-pin.kerker{background:#3d3d3d}.raidfotos{display:flex;flex-wrap:wrap;gap:8px}.raidfotos img{flex:1 1 160px;max-width:100%}
+.vr-pin.geheim{background:#e0559a;border:2px dashed #fff}.vr-pin.raid{background:#6b2fa8;width:28px;height:28px}.vr-pin.baas{background:#b0182c;width:26px;height:26px}.vr-pin.quest{background:#e0a800;color:#2a1a00}
 .vr-pin.questzij{background:#f2d36b;color:#2a1a00}.vr-pin.stad{background:#fff;color:#2a1830;border-color:#2a1830}.vr-pin.gondel,.vr-pin.lift{background:#55708a}
 .vr-pin.karavaan{background:#8a5a2b;width:28px;height:28px}
 .leaflet-popup-content{font:14px/1.45 var(--body)}
@@ -308,7 +310,13 @@ KAART_JS = r"""
   var Lzones=laag('zones','Zones and areas','Zones en gebieden',true),Lst=laag('steden','Towns','Steden',true),Lvuur=laag('kampvuur','Campfires','Kampvuren',true),
     Luit=laag('uitkijk','Viewpoints','Uitkijkpunten',true),Lreis=laag('reizen','Airships, portals, lifts','Luchtschepen, portalen, liften',true),
     Lbaas=laag('bazen','Bosses','Bazen',true),Lquest=laag('quests','Quest givers','Questgevers',false),Lkar=laag('karavaan','Caravan (live)','Karavaan (live)',true),
-    Lspel=laag('spelers','Show players (live)','Spelers tonen (live)',true);
+    Lspel=laag('spelers','Show players (live)','Spelers tonen (live)',true),
+    Lgeheim=laag('geheimen','Show secrets (spoilers!)','Geheimen tonen (spoilers!)',false);
+  // U-SITE round 3: every secret with its spot, OFF by default and never in the search (pin() would add it to the search list)
+  (D.geheimpunten||[]).forEach(function(g){var m=L.marker(ll(g.pos[0],g.pos[2]),{icon:L.divIcon({className:'',html:'<span class="vr-pin geheim">?</span>',iconSize:[20,20],iconAnchor:[10,10]})});
+    m.bindPopup('<h4>'+VR.esc(g.naam)+'</h4><div>'+VR.esc(g.beloning||'')+'</div><div class="muted" style="font:12px var(--mono)">x '+g.pos[0]+' &middot; y '+g.pos[1]+' &middot; z '+g.pos[2]+'</div><a href="'+VR.root+'geheimen/index.html#'+g.id+'">'+VR.t('On the secrets page','Op de geheimenpagina')+'</a>');
+    m._vrZone=zoneNr(g.zone);m.addTo(Lgeheim);});
+  if(new URLSearchParams(location.search).get('geheim')==='1')Lgeheim.addTo(map);
   function pin(soort,teken,x,z,titel,html,zone,id){var m=L.marker(ll(x,z),{icon:L.divIcon({className:'',html:'<span class="vr-pin '+soort+'">'+teken+'</span>',iconSize:[22,22],iconAnchor:[11,11]}),title:titel,keyboard:true});
     m.bindPopup('<h4>'+VR.esc(titel)+'</h4>'+(html||'')+'<div class="muted" style="font:12px var(--mono)">x '+x+' &middot; z '+z+'</div>');m._vrZone=zoneNr(zone);m._vrId=id;alle.push({id:id,naam:titel,m:m,zone:m._vrZone,soort:soort});return m;}
   // areas: outlines + level labels
@@ -324,9 +332,9 @@ KAART_JS = r"""
     alle.push({id:g.id,naam:g.naam,m:lab,zone:zn,soort:'gebied',ll:ll(c[0],c[1])});});
   D.zones.forEach(function(z){if(!z.mid)return;var lab=L.marker(ll(z.mid[0],z.mid[1]),{icon:L.divIcon({className:'vr-label zone',html:VR.esc(z.naam)+'<span class="lvr">lv '+z.lv[0]+'-'+z.lv[1]+'</span>',iconSize:null}),interactive:false});lab._vrZone=z.nr;lab._vrMax=-2;lab.addTo(Lzones);});
   D.steden.forEach(function(s){pin('stad','&#9873;',s.pos[0],s.pos[2],s.naam,'<a href="'+VR.root+s.url+'">'+T('Zone page','Zonepagina')+'</a>',s.zone,s.id).addTo(Lst);});
-  var tekens={kampvuur:'&#128293;',uitkijk:'&#128065;',luchtschip:'&#9992;',portaal:'&#10022;',kerker:'&#9876;',gondel:'&#8597;',lift:'&#8597;'};
-  D.punten.forEach(function(p){var L2=p.soort==='kampvuur'?Lvuur:p.soort==='uitkijk'?Luit:p.soort==='kerker'?Lbaas:Lreis;
-    var m=pin(p.soort,tekens[p.soort]||'&#8226;',p.pos[0],p.pos[2],p.naam,'',p.zone,p.id);m._vrMin=p.soort==='kerker'?-2:-0.5;m.addTo(L2);});
+  var tekens={kampvuur:'&#128293;',uitkijk:'&#128065;',luchtschip:'&#9992;',portaal:'&#10022;',kerker:'&#9876;',raid:'&#9733;',gondel:'&#8597;',lift:'&#8597;'};
+  D.punten.forEach(function(p){var L2=p.soort==='kampvuur'?Lvuur:p.soort==='uitkijk'?Luit:(p.soort==='kerker'||p.soort==='raid')?Lbaas:Lreis;
+    var m=pin(p.soort,tekens[p.soort]||'&#8226;',p.pos[0],p.pos[2],p.naam,'',p.zone,p.id);m._vrMin=(p.soort==='kerker'||p.soort==='raid')?-2:-0.5;if(p.soort==='raid')m.bindPopup('<h4>'+VR.esc(p.naam)+'</h4><a href="'+VR.root+'raid/index.html">'+VR.t('Raid page','Raidpagina')+'</a>');m.addTo(L2);});
   D.bazen.forEach(function(b){if(!b.pos)return;var m=pin('baas','&#9760;',b.pos[0],b.pos[2],b.naam,'<span class="badge lv">'+VR.esc(b.soort)+'</span> '+T('Respawn ','Komt terug na ')+VR.duur(b.respawn_s)+
     '<div data-baas="'+b.arena+'"></div><a href="'+VR.root+b.url+'">'+T('Boss page','Bazenpagina')+'</a>',b.zone,'baas-'+b.id);m._vrMin=-2;m.addTo(Lbaas);});
   D.questgevers.forEach(function(q){var m=pin(q.hoofd?'quest':'questzij',q.hoofd?'!':'?',q.pos[0],q.pos[2],q.naam,q.quests.map(function(x){return '<a href="'+VR.root+x.url+'">'+VR.esc(x.titel)+'</a>';}).join('<br>'),q.zone,'npc-'+q.id);m._vrMin=-0.5;m.addTo(Lquest);});
@@ -377,7 +385,7 @@ KAART_JS = r"""
           m.bindPopup('<h4>'+VR.t('Airship in flight','Luchtschip onderweg')+'</h4>'+(s.naar?VR.t('to ','naar ')+VR.esc(s.naar):''));m.addTo(Lspel);schipM[s.id]=m;}else{glij(m,to);}});
       Object.keys(schipM).forEach(function(id){if(!sz[id]){Lspel.removeLayer(schipM[id]);delete schipM[id];}});
       if(pnote){var n=(P.spelers||[]).length,st=(P.status||[]).length;
-        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon or house)',' (+'+st+' in een kerker of huisje)'):''):VR.t('No players online','Geen spelers online');}
+        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):VR.t('No players online','Geen spelers online');}
       setTimeout(zoneFilter,30);},function(){if(pnote)pnote.textContent=VR.t('No players online','Geen spelers online');});}
   posities();setInterval(posities,10000);
 })();

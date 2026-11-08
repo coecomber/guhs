@@ -97,3 +97,44 @@ link check: 0 broken (20,221 links + 3,442 pictures); 9.6 MB.
 - Puzzles exist only in zones 1-3 (t-puzzels).
 - Gathering spot names can mention a place that is itself a secret in-game ("de geheime IJsgrot"); harmless, but could be filtered.
 - At release: drop `vadsrijk-preview/` + its workflow from gh-pages and follow s-site's plan (pages.yml `--vadsrijk --live-url`).
+
+## Round 3 (2026-11-08, after the PC restart): zone 6, the raid, all secrets with their spots
+- **Round-2 deploy:** it had FAILED (run 42245737994: build ok, the `deploy-pages` step hit "Timeout reached, aborting!", a GitHub-side
+  timeout). Nothing to fix in the workflow; the round-3 push redeploys the same way.
+- **Merged** 110-v-int (ab254bad1: z6verhaal + z6wezens + cap 70 + the mount pity rule), 110-u-z6raid (1dcbf2527) and 110-u-z6wereld
+  (91f4c0358, its committed WIP state). 110-u-tapijt was already in. Conflicts were unions (lang tail, VadsrijkFeature register lines with
+  SpecRegistry kept LAST, biome id list, block/item tags, maak_kaart.py). The lang union left 8 duplicate `vadsrijk.kern.gebied.z6_*`
+  keys (z6verhaal + z6wereld both write them): removed the earlier copies (z6wereld's wins). v-int will hit the same on its merge.
+- **Mod (my package + add-only):**
+  - `WikiExport.sets()`: + the 4 zone-6 sets + the raid set (`// U-SITE`). Runtime dump regenerated (`-Pgt=VadsrijkWeb`) and copied.
+  - Live map: `WebPosities.RAID = "in de raid"` + `inZ6Kerker()`; `WebRegistry.register` hooks `VERBORGEN_PLEKKEN` with the raid
+    (`Z6Raid.inToren`) and the underground dungeon De Verzonken Sterrenwacht (z6wezens' rooms). `STAD` + "z6" -> rozenkloof (line E).
+    New gametest `positiesZone6`.
+- **Site (tools/wiki_site/vadsrijk/):**
+  - `bron.py`: ZONES + zone6 (Het Zijdeland, lv 60-70, hub z6_rozenkloof, colour #e07a5f); POIs/areas of zone 6 from the committed
+    `Z6WereldPlekken.java` when POI_Z6.md is absent (it is generated, not committed); 5 zone-6 bosses (Wormelien, Zoutkolos,
+    Astrolabiumwachter, Glimmertje, Verzonken Sterrenguh) with their extras (Gouden Veren, Sterrenstof); creatures `vr_z6_mob_*`;
+    sets incl. 6-piece bonuses; line E on the map (Staarthaven -> Rozenkloof); dungeon hatch + raid door as map points.
+  - `raid.py` (new): `raid/index.html` + one page per floor (Zandwachter, Spiegelvizier, Gedoofde Sterrenbeelden, Ringeling): mechanics
+    (player prose from SPIEK_U_Z6RAID), tips from lang, HP per boss at 1/2/10 players + enrage (parsed from the Java), the clear chest
+    with every chance (parsed from Z6RaidLoot), the floor chests, titles. Who the Spiegelvizier is and Ringeling's ending = spoilers.
+  - **Mount rule shown = the user's decision** (10% per player per clear, sure after 15 misses). NOTE: `Z6RaidLoot.KANS_HALSTER` is
+    still 0.02 in code and not yet wired to `vint.RijdierBuit` -> for v-int (register a source "z6raid_sterrennacht").
+  - `geheimen.py` (new, user request of 2026-11-08 that replaces "secrets never on the map"): `geheimen/index.html` lists EVERY hidden
+    thing of zones 1-6 with its spot, each in its own spoiler (`<kind> #n: klik om te onthullen`): name, area, the game's own hint text,
+    coordinates, reward, "Toon op kaart" (kaart.html?x&z&geheim=1). 264 entries: knuffels, treasures (coins per zone + the Episch chest),
+    clues/boorsporen/imkersporen, reliefs, letters (mistbrieven, flessenpost, zone-6 tablets), puzzles (anchor POI + the cave puzzles +
+    the 5 star beacons), cave treasures (GrotData + the Zingende Zoutgrot), viewpoints, campfires. Mapping POI -> secret comes from the
+    *Plekken.java maps (parsed). Map layer "Geheimen tonen (spoilers!)" is OFF by default, not in the map search, respects the zone switch.
+    Puzzle SOLUTIONS are still never on the site. Nav got "Geheimen".
+  - `verhaal.py`: part II now holds zone 6 (chapter Het Zijdeland + the raid), Ringeling/Moeder Bron cards are zone 6 (Ringeling's card
+    shows her raid render; the ending stays a spoiler), a timeline entry, captions "zone 1-6".
+  - `renders.py`: zone 6 + raid bosses (`raid_<id>`) + borrowed models for **Mika-spion** (mika model + revealed texture), **Kloddertje**
+    (klodder model) and **Honingbij** (guh_bee). 28 new renders (117 total). Every creature (84) and boss (27) + the 6 raid bosses have
+    a render on their page and in the overviews (checked by script).
+  - `stijl.py`: spoiler switch up to zone 6, zone-6 badge colour, raid + secret map pins. `pages.py`: zone-6 header cut from the story
+    concept picture (no FTB header exists yet), raid card on the bosses index + zone-6 page, raid items link to the raid.
+  - **Map tiles:** regenerated with zone 6 from a SNAPSHOT of u-z6wereld's generated (uncommitted) tiles (2026-11-08 ~15:56; 192 tiles,
+    copied to the scratchpad, u-z6wereld untouched). When u-z6wereld finishes: rerun `kaart.py --tegels <folder with all tiles>`.
+- **Numbers:** 939 pages; 156 quests, 359 characters, 84 creatures, 27 bosses + the raid, 274 items, 264 secrets; 0 broken links
+  (26.5k links + 4.3k pictures); 12.2 MB.

@@ -16,7 +16,7 @@ from . import stijl
 
 ESC = lambda s: html.escape(str(s if s is not None else ""), quote=True)  # noqa: E731
 
-ZONE_NR = {"zone1": 1, "zone2": 2, "zone3": 3, "zone4": 4, "zone5": 5}   # U-SITE: + zones 4, 5
+ZONE_NR = {"zone1": 1, "zone2": 2, "zone3": 3, "zone4": 4, "zone5": 5, "zone6": 6}   # U-SITE: + zones 4, 5, 6
 SLOT = {"wapen": ("Weapon", "Wapen"), "hoofd": ("Head", "Hoofd"), "borst": ("Chest", "Borst"), "benen": ("Legs", "Benen"),
         "voeten": ("Feet", "Voeten"), "ring": ("Ring", "Ring"), "ketting": ("Necklace", "Ketting"), "oorbel": ("Earring", "Oorbel")}
 STAT = {"vads": ("Vads", "Vads"), "kracht": ("Strength", "Kracht"), "behendigheid": ("Agility", "Behendigheid"),
@@ -99,7 +99,7 @@ class Bouwer:
     NAV = [("index.html", "Start", "Start"), ("kaart.html", "Map", "Kaart"), ("gids.html", "Guide", "Gids"),
            ("zones/index.html", "Zones", "Zones"), ("quests/index.html", "Quests", "Quests"), ("wezens/index.html", "Creatures", "Wezens"),
            ("bazen/index.html", "Bosses", "Bazen"), ("items/index.html", "Items", "Items"), ("systemen/index.html", "Mechanics", "Systemen"),
-           ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
+           ("geheimen/index.html", "Secrets", "Geheimen"), ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
            ("patchnotes/index.html", "Patch notes", "Patch notes")]
 
     def __init__(self, data, root, out, live_url, voorbeeld, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
@@ -276,6 +276,14 @@ class Bouwer:
                 _webp(s, os.path.join(img, doel.replace(".png", ".webp")))
         # favicon: the guh face coin / the wiki's own guh picture
         from PIL import Image
+        # U-SITE round 3: zone 6 has no FTB header yet -> a 1024x160 band cut from the story concept picture (Rozenkloof)
+        kop6, bron6 = os.path.join(img, "kop_zone6.webp"), os.path.join(self.root, "docs", "wiki", "vadsrijk_verhaal", "zijdeland.webp")
+        if not os.path.exists(kop6) and os.path.exists(bron6):
+            im = Image.open(bron6).convert("RGB")
+            w = 1024
+            im = im.resize((w, round(im.height * w / im.width)), Image.LANCZOS)
+            top = max(0, (im.height - 160) // 2)
+            im.crop((0, top, w, top + 160)).save(kop6, "WEBP", quality=82)
         fav = None
         for c in (os.path.join(tex, "item", "vadsrijk", "economie", "vadsmunt_goud.png"), os.path.join(self.root, "docs", "wiki", "img", "icon_picked_up_guh.png"),
                   os.path.join(self.root, "docs", "wiki", "img", "guh.png")):
@@ -308,7 +316,8 @@ class Bouwer:
                            "vr_z2_" + i["id"].replace("z2baas_", "baas_"), "vr_z3_" + i["id"].replace("z3baas_", "baas_"),
                            "vr_z4_" + i["id"], "vr_z4_mob_" + i["id"], "vr_z4_" + i["id"].replace("z4baas_", "baas_"),
                            "vr_z5_" + i["id"], "vr_z5_mob_" + i["id"], "vr_z5_" + i["id"].replace("z5baas_", "baas_"),
-                           "vr_z5_" + i["id"].replace("z5droom_", "droom_"), "vr_" + i["id"].replace("mw_", "mw_")]
+                           "vr_z5_" + i["id"].replace("z5droom_", "droom_"), "vr_" + i["id"].replace("mw_", "mw_"),
+                           "vr_z6_" + i["id"], "vr_z6_mob_" + i["id"], "vr_z6_" + i["id"].replace("z6baas_", "baas_"), "vr_" + i["id"]]   # U-SITE: zone 6 + raid
             for k in kandidaten:
                 png = self._item_textuur(k)
                 if png:
@@ -390,7 +399,10 @@ class Bouwer:
         ringen = {z["ring"] for z in d["zones"]}
         kaart = dict(kaart=self.kaart or dict(x0=-700, z0=-3100, x1=3000, z1=1200), gebieden=[dict(g, laag=g.get("laag"), ring=g["id"] in ringen) for g in d["gebieden"]],
                      zones=zones, zonekleur={z["id"]: z["kleur"] for z in d["zones"]}, steden=steden, punten=d["punten"], bazen=bazen,
-                     questgevers=list(qg.values()), routes=routes, geheimen=d["geheimen"])
+                     questgevers=list(qg.values()), routes=routes, geheimen=d["geheimen"],
+                     # U-SITE round 3: the secrets layer (off by default, not searchable)
+                     geheimpunten=[dict(id=g["id"].replace(":", "-"), soort=g["soort"], naam=g["naam"], pos=g["pos"], zone=g["zone"], beloning=g["beloning"])
+                                   for g in d.get("geheimen_lijst", [])])
         with open(os.path.join(dmap, "kaart.js"), "w", encoding="utf-8", newline="\n") as f:
             f.write("window.VR_KAART=" + json.dumps(kaart, ensure_ascii=False, separators=(",", ":")) + ";\n")
         vt = dict(d["vertaal"])
@@ -418,6 +430,10 @@ class Bouwer:
         self.npcs()
         self.wezens()
         self.bazen()
+        from . import raid   # U-SITE round 3: De Sterrendovende Toren
+        raid.paginas(self)
+        from . import geheimen
+        geheimen.pagina(self)
         self.items_()
         self.systemen()
         self.verhaal()
@@ -450,8 +466,8 @@ class Bouwer:
 <section class="vr-hero">
 <img class="kop" src="img/titel.webp" alt="Het Vadsrijk" width="1024" height="256">
 <h1>{t("The Vadsrijk", "Het Vadsrijk")}</h1>
-{p("The RPG dimension of Guhs: five zones, three classes, coloured loot, bosses with real mechanics, an airship and a whole lot of grumpy creatures that only need a cuddle. Everything below comes straight from the game.",
-   "De RPG-dimensie van Guhs: vijf zones, drie klassen, buit met kleurtjes, bazen met echte mechanics, een luchtschip en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.")}
+{p("The RPG dimension of Guhs: six zones, three classes, a raid, coloured loot, bosses with real mechanics, an airship and a whole lot of grumpy creatures that only need a cuddle. Everything below comes straight from the game.",
+   "De RPG-dimensie van Guhs: zes zones, drie klassen, een raid, buit met kleurtjes, bazen met echte mechanics, een luchtschip en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.")}
 <div class="knoppen"><a class="knop" href="gids.html">{t("Start here", "Begin hier")}</a><a class="knop licht" href="kaart.html">{t("World map", "Wereldkaart")}</a><a class="knop licht" href="https://guhs.nl/">{t("Play on the server", "Speel op de server")}</a></div>
 </section>
 <h2>{t("Right now", "Nu")}</h2>
@@ -479,8 +495,8 @@ class Bouwer:
 <div style="position:relative"><div id="kaart" role="application" aria-label="Wereldkaart / World map"></div>
 <div class="kaart-paneel"><div class="kaart-zoek"><input id="kzoek" type="search" autocomplete="off" placeholder="Zoek een plek, baas of NPC..." aria-label="Zoeken / Search"><div class="res" id="kres"></div></div>
 <span class="kaart-info" id="coords">x - z -</span><span class="kaart-info spelers" id="spelersnoot">...</span></div></div>
-<div class="vr-shell"><p class="muted">{t("A top-down of the real map tiles. Secrets are not on the map; a dotted area tells how many there are. Click a marker for details; every place has its own link (e.g. kaart.html?plek=zwamzoet).",
-  "Een bovenaanzicht van de echte kaarttegels. Geheimen staan niet op de kaart; een gestippeld gebied vertelt hoeveel er liggen. Klik op een markering voor details; elke plek heeft een eigen link (bijv. kaart.html?plek=zwamzoet).")}</p></div>"""
+<div class="vr-shell"><p class="muted">{t("A top-down of the real map tiles. Secrets are in the layer Show secrets (spoilers!) (off by default; every secret with its spot is on the Secrets page, behind a click). Click a marker for details; every place has its own link (e.g. kaart.html?plek=zwamzoet).",
+  "Een bovenaanzicht van de echte kaarttegels. Geheimen staan in de laag Geheimen tonen (spoilers!) (standaard uit; elk geheim met zijn plek staat op de pagina Geheimen, achter een klik). Klik op een markering voor details; elke plek heeft een eigen link (bijv. kaart.html?plek=zwamzoet).")}</p></div>"""
         script = f'<script src="{stijl.LEAFLET_JS}"></script><script src="data/kaart.js"></script><script src="assets/kaart.js"></script>'
         self.schrijf("kaart.html", "Wereldkaart", "World map", main, "kaart.html", head=head, script=script, body_klasse="kaart-pagina",
                      beschrijving="De interactieve wereldkaart van Het Vadsrijk.")
@@ -522,7 +538,7 @@ class Bouwer:
                          f'<td>{t("town: shops, quests, safe", "stad: winkels, quests, veilig") if g["stad"] else t("adventure", "avontuur")}</td></tr>')
         waar = ('<div class="tscroll"><table class="data sort"><thead><tr><th class="num">' + t("Level", "Level") + "</th><th>Zone</th><th>"
                 + t("Area", "Gebied") + "</th><th>" + t("What", "Wat") + "</th></tr></thead><tbody>" + "".join(rijen) + "</tbody></table></div>")
-        topics = "".join(f'<div class="kaartje" data-zone="{int(g["id"][1]) if re.match(r"z[2-5]_", g["id"]) else 1}"><h3>{ESC(g["titel"])}</h3><p>{ESC(g["tekst"])}</p></div>'
+        topics = "".join(f'<div class="kaartje" data-zone="{int(g["id"][1]) if re.match(r"z[2-6]_", g["id"]) else 1}"><h3>{ESC(g["titel"])}</h3><p>{ESC(g["tekst"])}</p></div>'
                          for g in self.d["gids"])
         elem = (f'<p>{t("Fire beats Mushroom beats Slime beats Fire: x1.5 on a weakness, x0.7 the other way round. Pink (vads) is extra strong against everything that lost its vads.", "Vuur wint van Zwam, Zwam van Slijm, Slijm van Vuur: x1,5 op een zwakte en x0,7 andersom. Roze (vads) is extra sterk tegen alles wat ontvadst is.")}</p>')
         main = f"""<h1>{t("Guide for new adventurers", "Gids voor nieuwe avonturiers")}</h1>
@@ -552,6 +568,9 @@ class Bouwer:
             gtab = ('<div class="tscroll"><table class="data sort"><thead><tr><th>' + t("Area", "Gebied") + '</th><th class="num">Level</th><th class="num">'
                     + t("Secrets", "Geheimen") + '</th><th class="num">' + t("Campfires", "Kampvuren") + "</th></tr></thead><tbody>" + gr + "</tbody></table></div>")
             bz = "".join(self._baas_kaartje(b, P) for b in self.d["bazen"] if b["zone"] == z["id"])
+            if z["id"] == "zone6":   # U-SITE round 3
+                from . import raid
+                bz += raid.kaartje(self, P)
             wz = ", ".join(self.l_wezen(w["id"], P) for w in self.d["wezens"] if w["zone"] == z["id"] and not w["critter"])
             hq = [q for q in self.d["quests"] if q["zone"] == z["id"] and q["soort"] == "hoofd"]
             zq = [q for q in self.d["quests"] if q["zone"] == z["id"] and q["soort"] in ("zij", "klasse", "rijdier")]
@@ -732,7 +751,9 @@ class Bouwer:
         delen = []
         for z in self.d["zones"]:
             bz = [b for b in self.d["bazen"] if b["zone"] == z["id"]]
-            delen.append(self.zonevak(z, '<div class="grid">' + "".join(self._baas_kaartje(b, P) for b in bz) + "</div>", f'{len(bz)} {t("bosses", "bazen")}'))
+            from . import raid
+            rk = raid.kaartje(self, P) if z["id"] == "zone6" else ""   # U-SITE round 3: the raid card
+            delen.append(self.zonevak(z, '<div class="grid">' + "".join(self._baas_kaartje(b, P) for b in bz) + rk + "</div>", f'{len(bz)} {t("bosses", "bazen")}' + (" + raid" if rk else "")))
         regels = p("Every boss: a fight for everyone nearby. Your loot is personal: everyone who did at least 5% of the work gets their own chest. Fainted? You wake up at the arena door. Bosses get stronger with more players.",
                    "Elke baas: een gevecht voor iedereen in de buurt. Buit is persoonlijk: iedereen die minstens 5% van het werk deed krijgt een eigen kist. Flauwgevallen? Je wordt wakker bij de arenadeur. Bazen worden sterker met meer spelers.")
         self.schrijf(P, "Bazen", "Bosses", f'<h1>{t("Bosses", "Bazen")}</h1>{regels}<p class="muted">{t("Click a zone to open it.", "Klik op een zone om hem open te klappen.")}</p>' + "".join(delen), P)
@@ -793,7 +814,8 @@ class Bouwer:
                     f'{t("Coins", "Munten")}: {L["munten_min"]}-{L["munten_max"]} {t("bronze", "brons")}.</p>' + self._loot_tabel(L, P))
         soort = {"rijdier": ("Mount", "Rijdier"), "vacht": ("Mount coat", "Rijdiervacht"), "patroon": ("Mount pattern", "Rijdierpatroon"),
                  "tuig": ("Mount tack", "Rijdiertuig"), "huisdier": ("Pet", "Huisdier"), "trofee": ("Trophy", "Trofee"), "kern": ("Boss core", "Bazenkern"),
-                 "groei": ("Growth fluff", "Groeipluis"), "veer": ("Feathers", "Veren"), "kleding": ("Wardrobe", "Kledingkast")}
+                 "groei": ("Growth fluff", "Groeipluis"), "veer": ("Feathers", "Veren"), "kleding": ("Wardrobe", "Kledingkast"),
+                 "stof": ("Star dust", "Sterrenstof")}
         ex = b.get("extra") or []
         if ex:
             uit += (f'<h3>{t("Also", "Ook")}</h3><div class="tscroll"><table class="data"><thead><tr><th>{t("Kind", "Soort")}</th><th>{t("What", "Wat")}</th><th>'
@@ -848,6 +870,8 @@ class Bouwer:
             setd = next((s for s in self.d["sets"] if s["id"] == i["set"]), None)
             bronnen = [self.l_wezen(b, P) for b in i["bronnen"]] + [f'<a href="../bazen/{slug(b)}.html">{ESC(next((x["naam"] for x in self.d["bazen"] if x["id"] == b), b))}</a>' for b in i["bronnen_baas"]
                                                                        if any(x["id"] == b and not x["spoiler"] for x in self.d["bazen"])]
+            if i["id"].startswith("z6raid_") and self.d.get("raid"):   # U-SITE round 3
+                bronnen.append(f'<a href="../raid/index.html#buit">{ESC(self.d["raid"]["naam"])}</a>')
             if i.get("baaskans"):
                 bronnen[-1:] = [bronnen[-1] + f' ({i["baaskans"] * 100:g}%, <span class="zz {i["vaste_zeldzaamheid"]}">{ESC(i["vaste_zeldzaamheid"])}</span>)'] if bronnen else []
             flav = "".join(f'<li class="game-text">{ESC(f)}</li>' for f in i["flavour"])

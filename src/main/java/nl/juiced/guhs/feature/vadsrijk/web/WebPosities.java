@@ -49,10 +49,17 @@ public final class WebPosities {
     static final Map<String, String> WAAR = new ConcurrentHashMap<>();
 
     public static final String KERKER = "in een kerker", HUISJE = "in een huisje", VALLEI = "in de Bondenvallei", RIJK = "in het Vadsrijk";
+    /** U-SITE: a player in the raid tower (zone 6, hooked in by WebRegistry). */
+    public static final String RAID = "in de raid";
+
+    /** U-SITE: inside z6wezens' underground dungeon rooms (De Verzonken Sterrenwacht)? */
+    public static boolean inZ6Kerker(double x, double y, double z) {
+        return x >= 3936 && x < 4066 && z >= -988 && z < -954 && y >= 24 && y < 50;
+    }
 
     /** The harbour zone code of Lijnen.Haven -> the town the ship flies to. */
     private static final Map<String, String> STAD = Map.of("kamp", "knuffelkamp", "z1", "zwamzoet", "z2", "kandijkom", "z3", "honingtak",
-            "z4", "lampionhaven", "z5", "hoogvads");
+            "z4", "lampionhaven", "z5", "hoogvads", "z6", "rozenkloof");   // U-SITE: + line E
 
     private WebPosities() {
     }

@@ -7,8 +7,8 @@ Sources: guhs1100-avontuur/WERELDVERHAAL.md + ZONE6_PLAN.md (written out by hand
 regenerated with zone 6 = Het Zijdeland; copied here as .webp). Boss renders (img/renders/<id>.webp) are used when the build made them.
 
 Spoilers: every block carries data-zone="N" (the "toon tot zone X" switch hides it); twists (who the victims really are, the Keizer,
-what the Vingers do) sit behind spoiler buttons as well. Zone 6 (Het Zijdeland) is not in the game yet: it is shown as "komt nog"
-with data-zone="5" (it starts from Hoogvads).
+what the Vingers do) sit behind spoiler buttons as well. Zone 6 (Het Zijdeland) is in the game since round 3 of the preview: its
+chapter, Ringeling and Moeder Bron carry data-zone="6" (Ringeling's ending in the raid is a spoiler).
 """
 import os
 import shutil
@@ -57,7 +57,7 @@ CSS = """<style>
 # (part nr, en, nl, level range, colour, zone nrs on the site, the part's "victim" boss id)
 DELEN = [
     (1, "Part I: The Dragon", "Deel I: De Draak", "lv 1-50", "#e0559a", (1, 2, 3)),
-    (2, "Part II: The Floating City", "Deel II: De Zwevende Stad", "lv 50-70", "#d9a03a", (4, 5)),
+    (2, "Part II: The Floating City", "Deel II: De Zwevende Stad", "lv 50-70", "#d9a03a", (4, 5, 6)),
 ]
 LATER = [("Part III: The Soot Front", "Deel III: Het Roetfront", "lv 62-72"), ("Part IV: The Silent Land", "Deel IV: Het Stille Land", "lv 72-80"),
          ("Part V: The Occupied Lands", "Deel V: De Bezette Landen", "lv 80-90"), ("Part VI: The Grey Empire", "Deel VI: Het Grauwe Keizerrijk", "lv 90-100")]
@@ -93,6 +93,13 @@ HOOFDSTUKKEN = [
      "Het zwevende kasteel dat je al vanaf zone 1 aan de horizon zag, is geen drakenkasteel: het is Hoogvads, de hoofdstad van het verzet, op de rug van Moeder Wolkwal, een reusachtige luchtwalvis. Roze torens, wolkenbruggen, de kathedraal van de Orde, de Grote Soepkeuken en de Hoge Raad. Koningin Zachtmoed de Derde zegt weinig en knuffelt veel.",
      "Because vads is light, the grey could never reach the whale. Until now: Moeder Wolkwal is having a bad dream, and in the Council Hall lies a torn page from the oldest books of the Order.",
      "Omdat vads licht is, kon de grauwheid de walvis nooit bereiken. Tot nu: Moeder Wolkwal heeft een nare droom, en in de Raadszaal ligt een gescheurde bladzijde uit de oudste boeken van de Orde."),
+    # U-SITE round 3: zone 6 (u-z6verhaal's "De Sterrenkaravaan")
+    (6, "zijdeland", "Rozenkloof, the canyon town of rose sandstone", "Rozenkloof, de kloofstad van roze zandsteen",
+     "Het Zijdeland", "Het Zijdeland", "lv 60-70",
+     "Moeder Wolkwal swims you east over the Cloud Sea to the pink cliffs, and from Hoogvads' Staarthaven airship line E flies to Rozenkloof: a town carved into a canyon of rose sandstone. Oma Dadel's caravan gives you a bultguh, Knoopje in Saffraanpoort weaves you a flying carpet of star silk, and together you follow the dunes, the palm canyons and the salt flat by night. The five star beacons that guide the caravans have gone out: light them again with the star puzzles, and the voice of Moeder Bron, the spirit of the Mother Oasis, grows from a drip to a fountain.",
+     "Moeder Wolkwal zwemt je naar het oosten over de Wolkenzee naar de roze kliffen, en vanaf de Staarthaven van Hoogvads vliegt luchtschiplijn E naar Rozenkloof: een stad uitgehakt in een kloof van roze zandsteen. De karavaan van Oma Dadel geeft je een bultguh, Knoopje in Saffraanpoort weeft je een vliegend tapijt van sterrenzijde, en samen volg je de duinen, de palmenkloven en de zoutvlakte bij nacht. De vijf sterrenbakens die de karavanen de weg wijzen, zijn gedoofd: steek ze weer aan met de sterrenpuzzels, en de stem van Moeder Bron, de geest van de Moederoase, groeit van een druppel tot een fontein.",
+     "The Grand Vizier in the palace is not who he seems: in every mirror of the Mirror Hall sits a bit of Meester Glans, a Mika illusionist. And at the foot of De Sterrendovende Toren, Hertogin Ringeling, the Ring Finger of the Keizer, flees upward and seals the door. Behind it waits the first raid.",
+     "De Grootvizier in het paleis is niet wie hij lijkt: in elke spiegel van de Spiegelzaal zit een stukje van Meester Glans, een Mika-illusionist. En aan de voet van De Sterrendovende Toren vlucht Hertogin Ringeling, de Ringvinger van de Keizer, naar boven en verzegelt de deur. Daarachter wacht de eerste raid."),
 ]
 
 # character cards: (id, name, role en, role nl, zone nr, picture (verhaal picture or "render:<boss id>"), intro en, intro nl, twist en, twist nl, later)
@@ -120,16 +127,16 @@ PERSONEN = [
      "Mika's maken elkaar 's nachts bang met een oude legende: als je je knabbel deelt, komt de Keizer je halen.",
      "At the far edge of the world sits a lean grey cat as long as a mountain range, in his castle Nooitgenoeg. He spreads the Vadsloosheid on purpose: what goes grey leaks its vads, and his Mika's carry it east to the Empty Bowl. The second moon is his Eye. Five generals, his Fingers, do his work.",
      "Aan de verste rand van de wereld zit een magere grauwe kat zo lang als een bergketen, in zijn burcht Nooitgenoeg. Hij verspreidt de Vadsloosheid expres: wat grauw wordt, lekt zijn vads, en zijn Mika's brengen die naar het oosten, naar de Lege Schaal. De tweede maan is zijn Oog. Vijf generaals, zijn Vingers, doen zijn werk.", False),
-    ("ringeling", "Hertogin Ringeling", "The Ring Finger (zone 6, coming)", "De Ringvinger (zone 6, komt nog)", 5, "verhaal:sterrentoren",
+    ("ringeling", "Hertogin Ringeling", "The Ring Finger", "De Ringvinger", 6, "raid:ringeling",
      "The treasurer of the Keizer, with his rings on all ten of her toes.",
      "De schatbewaarder van de Keizer, met zijn ringen om alle tien haar tenen.",
-     "In Het Zijdeland she puts out the star beacons and catches the starlight in her rings, from the Sterrendovende Toren (the first raid). Kootje Zilverstaart in Hoogvads was her spy.",
-     "In Het Zijdeland dooft ze de sterrenbakens en vangt ze het sterrenlicht in haar ringen, vanuit De Sterrendovende Toren (de eerste raid). Kootje Zilverstaart in Hoogvads was haar spion.", True),
-    ("moeder_bron", "Moeder Bron", "The spirit of the Mother Oasis (zone 6, coming)", "De geest van de Moederoase (zone 6, komt nog)", 5, "verhaal:zijdeland",
+     "In Het Zijdeland she puts out the star beacons and catches the starlight in her rings, from the Sterrendovende Toren (the first raid). Kootje Zilverstaart in Hoogvads was her spy. At the top of the tower she is not beaten but cheered up: she writes the Keizer that she quits ('I have seen stars') and leaves his ring with you.",
+     "In Het Zijdeland dooft ze de sterrenbakens en vangt ze het sterrenlicht in haar ringen, vanuit De Sterrendovende Toren (de eerste raid). Kootje Zilverstaart in Hoogvads was haar spion. Boven in de toren wordt ze niet verslagen maar opgevrolijkt: ze schrijft de Keizer dat ze stopt ('Ik heb sterren gezien') en laat zijn ring bij jou achter.", False),
+    ("moeder_bron", "Moeder Bron", "The spirit of the Mother Oasis", "De geest van de Moederoase", 6, "verhaal:zijdeland",
      "Somewhere in the rose sand of Het Zijdeland lies a hidden oasis that gives the caravans their water.",
      "Ergens in het roze zand van Het Zijdeland ligt een verborgen oase die de karavanen hun water geeft.",
      "The oasis is being pumped empty towards the east. Cheer up Moeder Bron and she shows the star road again.",
-     "De oase wordt leeggepompt naar het oosten. Vrolijk Moeder Bron op en ze wijst de sterrenweg weer.", True),
+     "De oase wordt leeggepompt naar het oosten. Vrolijk Moeder Bron op en ze wijst de sterrenweg weer.", False),
 ]
 VINGERS = [("De Pink", "Graaf Piepvel", "zone 3"), ("De Ringvinger", "Hertogin Ringeling", "zone 6"), ("De Lange Vinger", "Generaal Brie van Bluf", "zone 9"),
            ("De Wijsvinger", "Kanselier Wijsneus", "zone 12"), ("De Duim", "Maarschalk Drukduim", "zone 16")]
@@ -144,6 +151,8 @@ TIJD = [
      "The great dragon leaves its nest at the top of the world tree, grey and angry.", "De grote draak verlaat zijn nest boven in de wereldboom, grauw en boos.", False),
     (5, "Recently", "Kort geleden", "A bad dream", "Een nare droom",
      "Moeder Wolkwal, who has always been safe above the clouds, starts to dream grey.", "Moeder Wolkwal, die boven de wolken altijd veilig was, begint grauw te dromen.", False),
+    (6, "Lately", "Onlangs", "The stars go out", "De sterren doven",
+     "Over Het Zijdeland the star beacons go out one by one, and the caravans lose their way in the rose sand.", "Boven Het Zijdeland gaan de sterrenbakens een voor een uit, en de karavanen raken de weg kwijt in het roze zand.", False),
     (5, "The legend", "De legende", "The Empty Bowl", "De Lege Schaal",
      "A small, hungry Mika stole his first snack and felt something warm: vads. Then it was gone. He took more, and more, reached further and further, and built a castle around a bowl as big as a lake that has never been full. What every guh knows: vads only grows when you share it.",
      "Een kleine, hongerige Mika stal zijn eerste knabbel en voelde iets warms: vads. Toen was het weg. Hij pakte er meer, en meer, reikte steeds verder, en bouwde een burcht om een schaal zo groot als een meer die nog nooit vol is geweest. Wat elke guh weet: vads groeit alleen als je hem deelt.", True),
@@ -173,6 +182,10 @@ def _beeld(b, namen, ref, alt=""):
     soort, _, naam = ref.partition(":")
     if soort == "render" and os.path.exists(os.path.join(b.out, "img", "renders", "baas_" + naam + ".webp")):
         return f'<img src="img/renders/baas_{ESC(naam)}.webp" alt="{ESC(alt)}" loading="lazy">'
+    if soort == "raid" and os.path.exists(os.path.join(b.out, "img", "renders", "raid_" + naam + ".webp")):
+        return f'<img src="img/renders/raid_{ESC(naam)}.webp" alt="{ESC(alt)}" loading="lazy">'
+    if soort == "raid":
+        naam, soort = "sterrentoren", "verhaal"
     if soort == "render":
         naam, soort = {"piepvel": "nest"}.get(naam, ""), "verhaal"
     if soort == "verhaal" and naam in namen:
@@ -194,8 +207,8 @@ def verhaal(b):
     kaart = ""
     if "wereldkaart" in namen:
         kaart = (f'<figure class="vh-hero"><a href="img/verhaal/wereldkaart.webp"><img src="img/verhaal/wereldkaart.webp" alt="De Lange Reis: de wereldkaart van De Knuffelorde" width="1600" height="853"></a>'
-                 f'<figcaption>{t("The Long Journey: the world map of De Knuffelorde. From Knuffelkamp (left) through the Island Sea and the Floating City to the Great Mainland and Burcht Nooitgenoeg (right). Zones 1-5 are in the game; zone 6 (Het Zijdeland) and further are still coming.", "De Lange Reis: de wereldkaart van De Knuffelorde. Van Knuffelkamp (links) via de Eilandzee en de Zwevende Stad naar het Grote Vasteland en Burcht Nooitgenoeg (rechts). Zone 1-5 zitten in het spel; zone 6 (Het Zijdeland) en verder komen nog.")} '
-                 f'<a href="kaart.html" style="color:#ffd3e6">{t("The real map of zones 1-5", "De echte kaart van zone 1-5")}</a></figcaption></figure>')
+                 f'<figcaption>{t("The Long Journey: the world map of De Knuffelorde. From Knuffelkamp (left) through the Island Sea and the Floating City to the Great Mainland and Burcht Nooitgenoeg (right). Zones 1-6 are in the game (up to Het Zijdeland); further east is still coming.", "De Lange Reis: de wereldkaart van De Knuffelorde. Van Knuffelkamp (links) via de Eilandzee en de Zwevende Stad naar het Grote Vasteland en Burcht Nooitgenoeg (rechts). Zone 1-6 zitten in het spel (tot en met Het Zijdeland); verder naar het oosten komt nog.")} '
+                 f'<a href="kaart.html" style="color:#ffd3e6">{t("The real map of zones 1-6", "De echte kaart van zone 1-6")}</a></figcaption></figure>')
 
     # part navigation
     nav = "".join(f'<a href="#deel{d[0]}" style="--dk:{d[4]}">{t(d[1], d[2])}<small>{d[3]}</small></a>' for d in DELEN)
@@ -222,18 +235,17 @@ def verhaal(b):
                       f'{spoiler(p(ESC(twen), ESC(twnl)), "What is really going on? (spoiler)", "Wat is er echt aan de hand? (spoiler)")}'
                       f'<p><a href="zones/zone{zn}.html">{t("Zone page", "Zonepagina")}: {ESC(zonenaam.get(zn, ""))}</a></p>{meer}</div></article>'
                       + verstopt(zn))
-        if nr == 2:   # Het Zijdeland: zone 6 is planned
-            beeld = '<figure class="vh-beeld"><img src="img/verhaal/zijdeland.webp" alt="Rozenkloof" loading="lazy"><figcaption>' + t("Concept: Rozenkloof, the canyon town", "Concept: Rozenkloof, de kloofstad") + "</figcaption></figure>" if "zijdeland" in namen else ""
-            delen += (f'<article class="vh-hoofdstuk vh-komt" data-zone="5">{beeld}<div><span class="nr" style="background:#8d8892">{t("Zone 6 · coming", "Zone 6 · komt nog")} &middot; lv 60-70</span>'
-                      f'<h3>{t("Het Zijdeland", "Het Zijdeland")}</h3>'
-                      + p("From Hoogvads an airship flies to the west coast of the Great Mainland: Het Zijdeland, a land of rose sandstone, dunes, oases, caravans, bazaars and flying carpets. The star beacons that guide the caravans have gone out.",
-                          "Vanaf Hoogvads vliegt een luchtschip naar de westkust van het Grote Vasteland: Het Zijdeland, een land van roze zandsteen, duinen, oases, karavanen, bazaars en vliegende tapijten. De sterrenbakens die de karavanen de weg wijzen, zijn gedoofd.")
-                      + "</div></article>" + verstopt(5))
+        if nr == 2 and b.d.get("raid"):   # U-SITE round 3: the raid closes part II
+            delen += (f'<article class="vh-hoofdstuk" data-zone="6" style="--zk:{zonekleur.get(6, "#e07a5f")}"><div><span class="nr">{t("Zone 6 · raid", "Zone 6 · raid")} &middot; lv 70</span>'
+                      f'<h3>{ESC(b.d["raid"]["naam"])}</h3>'
+                      + p("The tower at the Mother Oasis where the stars were put out: four floors for 2 to 10 players, with the Sand Guard, the Mirror Vizier, the Dimmed Constellations and, on the roof, Duchess Ringeling.",
+                          "De toren bij de Moederoase waar de sterren zijn gedoofd: vier verdiepingen voor 2 tot 10 spelers, met de Zandwachter, de Spiegelvizier, de Gedoofde Sterrenbeelden en op het dak Hertogin Ringeling.")
+                      + f'<p><a href="raid/index.html">{t("The raid page", "De raidpagina")}</a></p></div></article>' + verstopt(6))
         delen += "</section>" + verstopt(zones[0])
-    later = ('<section id="later" data-zone="5"><div class="vh-deel" style="--dk:#7d7884"><h2>' + t("And further east...", "En verder naar het oosten...") + "</h2>"
+    later = ('<section id="later" data-zone="6"><div class="vh-deel" style="--dk:#7d7884"><h2>' + t("And further east...", "En verder naar het oosten...") + "</h2>"
              + p("After Het Zijdeland the Great Mainland goes on, greyer and leaner the further east you go: the Soot Front, the Silent Land, the Occupied Lands and finally the Grey Empire. Twenty zones, up to level 100. Coming later.",
                  "Na Het Zijdeland loopt het Grote Vasteland door, grauwer en magerder hoe verder naar het oosten: het Roetfront, het Stille Land, de Bezette Landen en tot slot het Grauwe Keizerrijk. Twintig zones, tot level 100. Komt later.")
-             + "</div></section>" + verstopt(5))
+             + "</div></section>" + verstopt(6))
 
     # what is vads
     vads = (f'<section data-zone="1"><h2 id="vads">{t("Vads and the grey", "Vads en de grauwheid")}</h2>'
@@ -249,7 +261,7 @@ def verhaal(b):
     for pid, naam, ren, rnl, zn, pic, ien, inl, twen, twnl, later_ in PERSONEN:
         tw = spoiler(p(ESC(twen), ESC(twnl)), "Spoiler: click to show", "Spoiler: klik om te kijken") if twen else ""
         kaarten += (f'<div class="vh-kaart" data-zone="{zn}"><div class="pic">{_beeld(b, namen, pic, naam)}</div><div class="tx"><h4>{ESC(naam)}</h4>'
-                    f'<div class="rol">{t(ren, rnl)} &middot; {t("zone", "zone")} {zn if not later_ else 6}</div>{p(ESC(ien), ESC(inl))}{tw}</div></div>')
+                    f'<div class="rol">{t(ren, rnl)} &middot; {t("zone", "zone")} {zn}</div>{p(ESC(ien), ESC(inl))}{tw}</div></div>')
     vingers = ('<div data-zone="5">' + spoiler('<p>' + t("Waar mijn armen niet reiken, reiken mijn Vingers. (The Keizer's five generals; 'Finger' is only a nickname.)",
                                                           "Waar mijn armen niet reiken, reiken mijn Vingers. (De vijf generaals van de Keizer; 'Vinger' is alleen een bijnaam.)") + "</p>"
                                               + '<div class="tscroll"><table class="data"><thead><tr><th>' + t("Finger", "Vinger") + "</th><th>" + t("Name", "Naam") + "</th><th>Zone</th></tr></thead><tbody>"

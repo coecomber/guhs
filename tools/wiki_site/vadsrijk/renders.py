@@ -17,11 +17,16 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
 ZONEDIR = {"zone1": ["wezens", "bazen", "tmodels"], "zone2": ["zone2", "z2bazen"], "zone3": ["zone3", "z3bazen", "z3imker"],
-           "zone4": ["zone4", "z4bazen"], "zone5": ["zone5"]}
+           "zone4": ["zone4", "z4bazen"], "zone5": ["zone5"], "zone6": ["zone6", "z6raid"]}
 
 
 # kort -> (geo below geckolib/models/entity/vadsrijk, texture below textures/vadsrijk) where the names differ
 OVERRIDE = {"klodderreus": ("tmodels/grauwe_klodderreus", "tmodels/grauwe_klodderreus"), "vahoegnir": ("wezens/draak", "z3bazen/vahoegnir_0")}
+# U-SITE round 3: entities whose renderer borrows another model: kort -> (geo, texture, animation) relative to assets/guhs
+GELEEND = {"mika_spion": ("geckolib/models/entity/mika.geo.json", "textures/vadsrijk/bazen/mika_spion.png", "geckolib/animations/entity/guh.animation.json"),
+           "kloddertje": ("geckolib/models/entity/vadsrijk/wezens/klodder.geo.json", "textures/vadsrijk/wezens/kloddertje.png",
+                          "geckolib/animations/entity/vadsrijk/wezens/klodder.animation.json"),
+           "honingbij": ("geckolib/models/entity/guh_bee.geo.json", "textures/entity/guh_bee.png", "geckolib/animations/entity/guh_bee.animation.json")}
 
 
 def _alle(root, sub, ext):
@@ -34,6 +39,11 @@ def _alle(root, sub, ext):
 def vind(root, eid, kort, zone):
     """(geo, texture, glow or None, animation or None) for an entity, or None."""
     a = os.path.join(root, "src", "main", "resources", "assets", "guhs")
+    if kort in GELEEND:
+        geo, tex, an = (os.path.join(a, *x.split("/")) for x in GELEEND[kort])
+        if os.path.exists(geo) and os.path.exists(tex):
+            gl = next((x for x in (tex[:-4] + "_gloed.png", tex[:-4] + "_glowmask.png") if os.path.exists(x)), None)
+            return geo, tex, gl, an if os.path.exists(an) else None
     if kort in OVERRIDE:
         g, tx = OVERRIDE[kort]
         geo = os.path.join(a, "geckolib", "models", "entity", "vadsrijk", *g.split("/")) + ".geo.json"
@@ -126,6 +136,8 @@ def maak(root, doelen, uit, alles=False):
 def doelen_van(data):
     out = [("wezen_" + w["kort"], w["id"], w["kort"], w["zone"]) for w in data["wezens"]]
     out += [("baas_" + b["id"], b["entity"], b["id"], b["zone"]) for b in data["bazen"]]
+    for v in (data.get("raid") or {}).get("verdiepingen", []):   # U-SITE round 3: the raid bosses
+        out += [("raid_" + w["id"], w["entity"], w["id"], "zone6") for w in v["bazen"]]
     return out
 
 

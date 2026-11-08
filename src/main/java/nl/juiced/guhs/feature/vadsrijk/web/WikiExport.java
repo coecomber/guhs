@@ -322,6 +322,12 @@ public final class WikiExport {
         m.put("schelpen", nl.juiced.guhs.feature.vadsrijk.zone4.wezens.loot.Z4Loot.SCHELPEN);
         m.put("lampion", nl.juiced.guhs.feature.vadsrijk.zone4.wezens.loot.Z4Loot.LAMPION);
         m.put("wolkwacht", nl.juiced.guhs.feature.vadsrijk.zone5.wezens.loot.Z5Loot.WOLKWACHT);
+        // U-SITE: the zone-6 sets + the raid set
+        for (String s : nl.juiced.guhs.feature.vadsrijk.zone6.wezens.loot.Z6Sets.SETS) {
+            m.put(s, nl.juiced.guhs.feature.vadsrijk.zone6.wezens.loot.Z6Sets.stukkenVan(s));
+        }
+        m.put(nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidLoot.SET, nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidLoot.STUKKEN.stream()
+                .map(s -> "z6raid_" + s).toList());
         m.forEach((k, v) -> {
             JsonArray a = new JsonArray();
             v.forEach(a::add);
