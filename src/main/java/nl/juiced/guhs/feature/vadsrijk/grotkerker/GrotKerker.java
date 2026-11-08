@@ -237,7 +237,7 @@ public final class GrotKerker {
         switch (r.staat) {
             case SLAAPT -> {
                 // W-GROT: the run only starts for the cave's group (through the door), once per group
-                List<ServerPlayer> leden = binnen.stream().filter(p -> DungeonRij.lid(p, k.id())).toList();
+                List<ServerPlayer> leden = binnen.stream().filter(p -> DungeonRij.lid(p, k.id()) && new GrotDungeon(k.id()).bevat(p.getX(), p.getY(), p.getZ())).toList();
                 if (!leden.isEmpty() && DungeonRij.magStarten(k.id()) && klaar(sl, k.kamers().get(0).pos()) && klaar(sl, k.baas().pos())) {
                     start(sl, k, r, leden);
                     DungeonRij.gestart(k.id());

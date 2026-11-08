@@ -74,7 +74,16 @@ public record GrotDungeon(String id) implements Dungeon {
     @Override
     public boolean bevat(double x, double y, double z) {
         Kerker k = k();
-        return k != null && k.bevat(x, y, z);
+        if (k == null || !k.bevat(x, y, z)) {
+            return false;
+        }
+        // the cave box can reach out past a door (De Kristalgrot's mouth tunnel): the outer side of a door is outside the dungeon
+        for (Deur d : DungeonDeur.van(id)) {
+            if (DungeonDeur.midden(d).distToCenterSqr(x, y, z) <= 12 * 12 && !DungeonDeur.binnenKant(d, x, y, z)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override

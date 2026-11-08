@@ -576,7 +576,10 @@ public final class DungeonRij {
 
     /** All answered (or time up): in together, or the decliners / silent ones out. */
     public static void verwerk(MinecraftServer s, Check c) {
-        long nu = s.getTickCount();
+        verwerk(s, c, s.getTickCount());
+    }
+
+    public static void verwerk(MinecraftServer s, Check c, long nu) {
         boolean nee = c.antwoord.containsValue(false);
         boolean alle = c.leden.stream().allMatch(id -> Boolean.TRUE.equals(c.antwoord.get(id)));
         boolean tijd = nu >= c.tot;
@@ -917,7 +920,7 @@ public final class DungeonRij {
                     }
                 }
             }
-            verwerk(s, c);
+            verwerk(s, c, nu);
         }
         // the queue: gone players out, the action bar status, matchmaking
         for (var e : new ArrayList<>(RIJ.entrySet())) {

@@ -21,7 +21,8 @@ Later the user decided on the wording: **the concept is "Dungeon"**. Caves are t
   RozeKnop; the game does not pause).
 
 ### The caves as dungeons (`grotkerker/`)
-- `GrotDungeon` = a cave run as a `Dungeon` (type GROT). The boss, loot and rare-roll lines of the window live here.
+- `GrotDungeon` = a cave run as a `Dungeon` (type GROT). The boss, loot and rare-roll lines of the window live here. Its `bevat`
+  = the cave box minus the outer side of its doors (De Kristalgrot's box reaches out into the mouth tunnel).
 - `GrotKerker` (u-grotkerker's run): the run only starts for the cave's group (`DungeonRij.lid` + `magStarten`), once per group; it
   scales with the group size (+ companions); the clear reports to `DungeonRij.klaar` (cooldown + "out through the door" + the
   window 3 s later). The gate board says "Dungeon uitgespeeld!" instead of "next run in". `grot run <id>` = a solo start through
@@ -139,7 +140,20 @@ All in `nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonRij` (public static), ser
 - New assets: `blockstates/vr_dungeondeur.json`, 18 models `models/block/vr_dungeondeur_*`, 18 textures `textures/block/vadsrijk/dungeondeur/`.
 
 ## Tests
-See the final section (filled in after the run).
+- `runGameTestServer -Pgt=VadsrijkDungeon,VadsrijkGrotKerker,VadsrijkGrotten`: **All 11 required tests passed** (2026-11-08).
+  - `VadsrijkDungeonGameTests` (new): `data` (every cave has a main door, the stand spot is OUTSIDE the dungeon, the inside spot not
+    cut off), `rijVultEnStart` (you + 3 made-up = 4 -> ready check -> all yes -> you are teleported in together, the run starts for
+    the group of 1, queue empty), `weigerEnVerlaten` (a "no", leaving the queue, the logout path, the time-out, "Nu starten" with
+    2/4, no queueing while inside), `uitgangGeenLus` (exit = stand spot outside, the instance closes, 10 more ticks: still outside,
+    a door click right after is ignored and later only opens the window; cooldown blocks and the reset lifts it; no start while in
+    another dungeon), `deurBlokkeert` (only open cells become door, full solid unbreakable block, knocker in the middle, a non-member
+    in the cave is put outside, the member stays, the door does not let the non-member start while taken).
+  - `VadsrijkGrotKerkerGameTests` (changed: the player is the cave's group; a cleared group does not restart by itself) + `VadsrijkGrotten`.
+- First run had 2 failures, both fixed: the ready-check time-out used the server tick instead of the tick passed by the test; and
+  De Kristalgrot's stand spot lay inside the cave box (the box covers the mouth tunnel): the outer side of a door now counts as
+  outside the dungeon (`GrotDungeon.bevat`), so eject/presence/run start never act on the stand spot.
+- Generator: `python tools/features/vadsrijk_w_grot.py --check`: no leaks, all stand spots fine (only the info line that 6 hatch
+  cells of De Wolkengrotten are stair treads already).
 
 ## Open points
 - Not seen in a client: the door textures (procedural 16x16, the user judges), the window layout at GUI scale 4, the hatch walk.

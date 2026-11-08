@@ -111,7 +111,10 @@ public class VadsrijkDungeonGameTests {
         for (Kerker k : Kerkers.alle()) {
             Deur d = DungeonDeur.hoofd(k.id());
             helper.assertTrue(d != null, k.id() + ": a main door");
-            helper.assertFalse(k.bevat(d.voor().getX() + 0.5, d.voor().getY() + 0.5, d.voor().getZ() + 0.5), k.id() + ": the stand spot is OUTSIDE the cave box");
+            helper.assertFalse(Dungeons.van(k.id()).bevat(d.voor().getX() + 0.5, d.voor().getY() + 0.5, d.voor().getZ() + 0.5),
+                    k.id() + ": the stand spot is OUTSIDE the dungeon");
+            helper.assertTrue(Dungeons.van(k.id()).bevat(d.binnen().getX() + 0.5, d.binnen().getY() + 0.5, d.binnen().getZ() + 0.5)
+                    || !k.bevat(d.binnen().getX() + 0.5, d.binnen().getY() + 0.5, d.binnen().getZ() + 0.5), k.id() + ": the inside spot is not cut off");
             helper.assertTrue(d.cellen().size() >= 6, k.id() + ": a real door (" + d.cellen().size() + " blocks)");
             BlockPos m = DungeonDeur.midden(d);
             helper.assertTrue(m.distSqr(d.voor()) <= 12 * 12, k.id() + ": the stand spot is in front of the door");

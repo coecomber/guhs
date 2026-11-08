@@ -222,12 +222,21 @@ public final class DungeonDeur {
 
     /** Is the player on the INSIDE of this door (closer to "binnen" than to "voor"; under a hatch)? */
     public static boolean binnenKant(ServerPlayer p, Deur d) {
+        return binnenKant(d, p.getX(), p.getY(), p.getZ());
+    }
+
+    /** The same for a position. */
+    public static boolean binnenKant(Deur d, double x, double y, double z) {
         if (d.luik()) {
-            return p.getY() < d.cellen().get(0)[1];
+            return y < d.cellen().get(0)[1];
         }
-        double a = p.distanceToSqr(d.binnen().getX() + 0.5, d.binnen().getY(), d.binnen().getZ() + 0.5);
-        double b = p.distanceToSqr(d.voor().getX() + 0.5, d.voor().getY(), d.voor().getZ() + 0.5);
+        double a = sq(x - d.binnen().getX() - 0.5) + sq(y - d.binnen().getY()) + sq(z - d.binnen().getZ() - 0.5);
+        double b = sq(x - d.voor().getX() - 0.5) + sq(y - d.voor().getY()) + sq(z - d.voor().getZ() - 0.5);
         return a < b;
+    }
+
+    private static double sq(double v) {
+        return v * v;
     }
 
     // ---- placing ---------------------------------------------------------------------------------------------------------------
