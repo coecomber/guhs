@@ -49,6 +49,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.karakter.client.KarakterClient.init(modBus);   // T-KARAKTER: character screen + badges
         nl.juiced.guhs.feature.vadsrijk.zichtbaar.client.ZichtbaarClient.init(modBus);   // U-ZICHTBAAR: cape/gloves/jewellery on the player model
         nl.juiced.guhs.feature.vadsrijk.ruiters.client.RuitersClient.init(modBus);   // U-RUITERS: riding guhs renderers
+        nl.juiced.guhs.feature.vadsrijk.stadsleven.client.StadslevenClient.init(modBus);   // U-LEVEN-STAD: town life renderers + the Stadsleven setting
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.client.SpecClient.init(modBus);   // U-SPECS: gear compare arrows (after kern: wraps its jewellery receiver)
         nl.juiced.guhs.feature.vadsrijk.toetsen.client.ToetsenClient.init(modBus);   // U-TOETSEN: key overview in the pause menu (+ /toetsen)
         nl.juiced.guhs.feature.vadsrijk.gilden.client.BondClient.init(modBus);   // U-GILDEN: bond tags above the head + the ⚑ inventory button

@@ -325,6 +325,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_opslagvip',
             # 1.10 round U, U-QUESTLOPEN: the admin main-line walker (texts only)
             'vadsrijk_u_questlopen',
+            # 1.10 round U, U-LEVEN-STAD: town life zones 1-6 (texts, blue blob texture, playground props; Java: feature/vadsrijk/stadsleven)
+            'vadsrijk_u_leven_stad',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
