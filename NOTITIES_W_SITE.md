@@ -60,8 +60,11 @@ changed geo/texture hashes. Then commit `docs/wiki/vadsrijk_*`. `--echt --out do
 
 ## 6. Preview
 - Republished on gh-pages (scratch worktree `<scratchpad>/ghpages`, branch u-site-ghpages -> origin/gh-pages):
-  `vadsrijk-preview/` replaced with the clean build. main and the normal site were not touched. See the final report for the
-  commit and the HTTP checks.
+  `vadsrijk-preview/` replaced with the clean build: **gh-pages 85aba1b31** (fast-forward on 9fc738168). The deploy is live: 200 on
+  /, kaart, live, highscores, speler, privacy, bazen, quests, items, wezens, geheimen, raid, zone6, verhaal, data/*.json/js;
+  `live-voorbeeld/posities.json` is 404 now. A grep of the published HTML/JSON/JS for voorbeelddata/sample data/live-voorbeeld/
+  the made-up names/VR_EVENTS/lorem finds nothing. `data-live="https://live.guhs.nl/"`, noindex is still there.
+  guhs.nl/ and /wiki/ are 200 and unchanged. main and the normal site were not touched.
 - Rollback: unchanged (Actions -> "Wiki (GitHub Pages)" -> run on main).
 
 ## Shared-file changes
