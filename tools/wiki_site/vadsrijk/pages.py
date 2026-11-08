@@ -29,15 +29,7 @@ SOORT_Q = {"hoofd": ("Main story", "Hoofdverhaal"), "zij": ("Side quest", "Zijqu
            "rijdier": ("Mount", "Rijdier"), "geheim": ("Secret", "Geheim")}
 SOORT_B = {"wereldbaas": ("World boss", "Wereldbaas"), "kerker": ("Dungeon boss", "Kerkerbaas"), "arena": ("Arena boss", "Arenabaas"),
            "verhaal": ("Story boss", "Verhaalbaas"), "baas": ("Boss", "Baas")}
-EVENTS = [  # the "event of the day": a fixed week rhythm (no server needed); index = JS getDay()
-    dict(nl="Zondag: Knuffeldag.", en="Sunday: Cuddle day.", uit_nl="Rustig rondlopen, uitkijkpunten en geheimen zoeken.", uit_en="Stroll around, find viewpoints and secrets."),
-    dict(nl="Maandag: nieuwe weekzegel.", en="Monday: new week seal.", uit_nl="De Vahoeg-kerkers hebben een nieuw zegel (zone 3).", uit_en="The Vahoeg dungeons have a new seal (zone 3)."),
-    dict(nl="Dinsdag: bazendag.", en="Tuesday: boss day.", uit_nl="Spreek af en vrolijk samen de wereldbazen op.", uit_en="Meet up and cheer up the world bosses together."),
-    dict(nl="Woensdag: karavaandag.", en="Wednesday: caravan day.", uit_nl="Bescherm de karavaan tegen de klodders.", uit_en="Protect the caravan from the klodders."),
-    dict(nl="Donderdag: premiedag.", en="Thursday: bounty day.", uit_nl="Het premiebord in Honingtak (lv 40+).", uit_en="The bounty board in Honingtak (lv 40+)."),
-    dict(nl="Vrijdag: kerkeravond.", en="Friday: dungeon night.", uit_nl="Met z'n vijven een kerker in.", uit_en="Five of you into a dungeon."),
-    dict(nl="Zaterdag: verkendag.", en="Saturday: exploring day.", uit_nl="Kampvuren aansteken en je Verkenningsboek vullen.", uit_en="Light campfires and fill your Exploration book."),
-]
+# W-SITE: the old "event of the day" week rhythm was made up by the site (not game data) and is gone.
 
 
 def t(en, nl):
@@ -102,10 +94,10 @@ class Bouwer:
            ("geheimen/index.html", "Secrets", "Geheimen"), ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
            ("patchnotes/index.html", "Patch notes", "Patch notes")]
 
-    def __init__(self, data, root, out, live_url, voorbeeld, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
+    def __init__(self, data, root, out, live_url, voorbeeld=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
                  kaart_bron=None, concepten=False, versie="?", noindex=False):
         self.d, self.root, self.out = data, root, out
-        self.live_url, self.voorbeeld = live_url, voorbeeld
+        self.live_url, self.voorbeeld = live_url, False   # W-SITE: sample data is gone; the live parts always read live_url
         self.wiki_url, self.site_url = wiki_url, site_url
         self.kaart_bron = kaart_bron
         self.concepten = concepten
@@ -156,7 +148,7 @@ class Bouwer:
 <link rel="stylesheet" href="{r}assets/site.css">
 <link rel="stylesheet" href="{r}assets/vadsrijk.css">
 {head}</head>
-<body data-root="{r}" data-live="{live}" data-voorbeeld="{1 if self.voorbeeld else 0}"{(' class="' + body_klasse + '"') if body_klasse else ''}{body_attr}>
+<body data-root="{r}" data-live="{live}"{(' class="' + body_klasse + '"') if body_klasse else ''}{body_attr}>
 <a class="skip" href="#main">{t("Skip to content", "Naar de inhoud")}</a>
 {header}
 {self._voorbeeldbalk()}
@@ -192,11 +184,11 @@ class Bouwer:
                 f'<div class="verstopt-zone" data-zone="{z["nr"]}">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>')
 
     def _voorbeeldbalk(self):
-        """U-SITE: the preview banner (not released yet; live parts = voorbeelddata)."""
+        """U-SITE: the preview banner (not released yet; live parts start once the server runs the update). W-SITE: no sample data any more."""
         if not self.noindex:
             return ""
-        return ('<div class="voorbeeldbalk" role="note">' + t("Preview of Guhs 1.10.0 \"Het Vadsrijk\": not released yet. Server, highscores and live parts show sample data (voorbeelddata).",
-                                                             "Voorbeeld van Guhs 1.10.0 \"Het Vadsrijk\": nog niet uit. Server, highscores en live-delen tonen voorbeelddata.") + "</div>")
+        return ('<div class="voorbeeldbalk" role="note">' + t("Preview of Guhs 1.10.0 \"Het Vadsrijk\": not released yet. The live parts (server, highscores, players on the map) start once the server runs the update.",
+                                                             "Voorbeeld van Guhs 1.10.0 \"Het Vadsrijk\": nog niet uit. De live-delen (server, highscores, spelers op de kaart) starten zodra de server de update draait.") + "</div>")
 
     # ---- links -------------------------------------------------------------------------------------------------------------
     def zone_naam(self, zid):
@@ -355,7 +347,9 @@ class Bouwer:
                 if ns == "guhs":
                     f = os.path.join(res, "textures", pth + ".png")
                     return f if os.path.exists(f) else None
-                return None
+                # W-SITE: items that reuse a vanilla texture -> the committed copy in docs/wiki/vadsrijk_vanilla (vanilla_iconen.py)
+                f = os.path.join(self.root, "docs", "wiki", "vadsrijk_vanilla", pth.replace("/", "_") + ".png")
+                return f if os.path.exists(f) else None
             par = d.get("parent", "")
             if par.startswith("guhs:item/"):
                 m = os.path.join(res, "models", "item", par.split("/", 1)[1] + ".json")
@@ -413,8 +407,7 @@ class Bouwer:
         for k in ("kamp", "haven", "zwamzoet", "weide", "woud", "plein", "markt"):
             vt.setdefault("stop:" + k, k.capitalize())
         with open(os.path.join(dmap, "vertaal.js"), "w", encoding="utf-8", newline="\n") as f:
-            f.write("window.VR_VERTAAL=" + json.dumps(vt, ensure_ascii=False, separators=(",", ":")) + ";\nwindow.VR_EVENTS="
-                    + json.dumps(EVENTS, ensure_ascii=False) + ";\n")
+            f.write("window.VR_VERTAAL=" + json.dumps(vt, ensure_ascii=False, separators=(",", ":")) + ";\n")
         with open(os.path.join(dmap, "vadsrijk.json"), "w", encoding="utf-8", newline="\n") as f:
             json.dump({k: v for k, v in d.items() if k != "vertaal"}, f, ensure_ascii=False, indent=1)
 
@@ -459,7 +452,7 @@ class Bouwer:
                 ("quests/index.html", "Quests", "Quests", "Every quest with a walkthrough (spoiler button).", "Elke quest met een walkthrough (spoilerknop)."),
                 ("items/index.html", "Item database", "Itemdatabase", "Stats, sets and where it drops.", "Stats, sets en waar het valt."),
                 ("highscores.html", "Highscores", "Highscores", "Who is the most vahoeg?", "Wie is het meest vahoeg?"),
-                ("live.html", "Live", "Live", "Boss timers, the caravan, today's event.", "Baastimers, de karavaan, het event van vandaag.")]
+                ("live.html", "Live", "Live", "Boss timers, the caravan, the week seal.", "Baastimers, de karavaan, het weekzegel.")]
         snelh = "".join(f'<a class="kaartje" href="{u}"><h3>{t(a, b)}</h3><p>{t(c, d)}</p></a>' for u, a, b, c, d in snel)
         n_q = len([q for q in self.d["quests"] if q["soort"] != "geheim"])
         main = f"""
@@ -482,8 +475,7 @@ class Bouwer:
         self.schrijf(P, "Het Vadsrijk", "The Vadsrijk", main, "index.html", beschrijving="Het Vadsrijk: wiki, wereldkaart, highscores en live info van de RPG-dimensie van Guhs.")
 
     def _status_tegels(self):
-        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
-        return (f'{vb}<div class="live-rij" data-live-status>'
+        return (f'<div class="live-rij" data-live-status>'
                 f'<div class="live-tegel"><div class="k">{t("Server", "Server")}</div><div class="v" data-k="status">...</div><div class="s">play.guhs.nl</div></div>'
                 f'<div class="live-tegel"><div class="k">{t("Players online", "Spelers online")}</div><div class="v" data-k="spelers">-</div><div class="s" data-k="namen"></div></div>'
                 f'<div class="live-tegel"><div class="k">{t("In the Vadsrijk", "In het Vadsrijk")}</div><div class="v" data-k="rijk">-</div><div class="s">{t("adventurers", "avonturiers")}</div></div>'
@@ -1007,8 +999,7 @@ class Bouwer:
                    dict(id="verkenning", en="Exploration book", nl="Verkenningsboek", k_en="% explored", k_nl="% verkend")]
         # T-INT: the Ambachten lists of t-ambacht (hiscores/ambacht_<id>.json, written by the mod's WebExport)
         lijsten += [dict(id="ambacht_" + i, en=en, nl=nl, k_en="Level", k_nl="Level") for i, en, nl in AMBACHT_LIJSTEN]
-        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
-        main = (f'<h1>Highscores</h1>{vb}<p>{t("Everyone is on the lists (name + number); ties go to whoever got there first. Click a name for the profile.", "Iedereen staat op de lijsten (naam + getal); bij gelijkspel wint wie er het eerst was. Klik op een naam voor het profiel.")}</p>'
+        main = (f'<h1>Highscores</h1><p>{t("Everyone is on the lists (name + number); ties go to whoever got there first. Click a name for the profile.", "Iedereen staat op de lijsten (naam + getal); bij gelijkspel wint wie er het eerst was. Klik op een naam voor het profiel.")}</p>'
                 f"<div data-hiscores='{ESC(json.dumps(lijsten, ensure_ascii=False))}'><div class=\"hs-tabs\" role=\"group\"></div>"
                 f'<div class="filters"><input type="search" placeholder="Zoek een speler / find a player..." aria-label="Zoek"></div>'
                 f'<div class="tscroll"><table class="data"><thead><tr><th class="num">#</th><th>{t("Player", "Speler")}</th><th class="num" data-k="kop">Level</th><th class="num">XP</th></tr></thead><tbody></tbody></table></div>'
@@ -1016,21 +1007,18 @@ class Bouwer:
         self.schrijf("highscores.html", "Highscores", "Highscores", main, "highscores.html")
 
     def speler(self):
-        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
-        main = f'{vb}<div data-profiel><div data-k="uit"><p class="leeg">...</p></div></div><noscript>{t("This page needs JavaScript.", "Deze pagina heeft JavaScript nodig.")}</noscript>'
+        main = f'<div data-profiel><div data-k="uit"><p class="leeg">...</p></div></div><noscript>{t("This page needs JavaScript.", "Deze pagina heeft JavaScript nodig.")}</noscript>'
         self.schrijf("speler.html", "Speler", "Player", main, "highscores.html")
 
     def live(self):
-        vb = f'<span class="voorbeeld">{t("Sample data (preview, not real players)", "Voorbeelddata (voorbeeld, geen echte spelers)")}</span>' if self.voorbeeld else ""
         main = (f'<h1>Live</h1>{self._status_tegels()}<div data-live-wereld>'
-                f'<h2>{t("Event of the day", "Event van vandaag")}</h2><p data-k="event"></p>'
                 f'<div class="live-rij"><div class="live-tegel"><div class="k">{t("Daily reset (06:00)", "Dagreset (06:00)")}</div><div class="v" data-k="reset">-</div></div>'
                 f'<div class="live-tegel" data-zone="3"><div class="k">{t("Vahoeg week seal", "Vahoeg-weekzegel")}</div><div class="v" style="font-size:20px" data-k="zegel">-</div><div class="s">{t("changes every Monday", "wisselt elke maandag")}</div></div>'
                 f'<div class="live-tegel" data-zone="3"><div class="k">{t("Contracts today", "Contracten vandaag")}</div><div class="s" data-k="contracten">-</div></div></div>'
                 f'<h2>{t("The caravan", "De karavaan")}</h2><p data-k="karavaan">-</p>'
                 f'<h2>{t("Boss timers", "Baastimers")}</h2><div class="tscroll"><table class="data timers"><thead><tr><th>{t("Boss", "Baas")}</th><th>{t("Now", "Nu")}</th>'
                 f'<th class="num">{t("Back in", "Terug over")}</th><th class="num">Respawn</th></tr></thead><tbody data-k="bazen"></tbody></table></div></div>'
-                f'<p class="muted">{t("Read from live.guhs.nl (refreshes by itself). Never a position of a player.", "Gelezen van live.guhs.nl (ververst vanzelf). Nooit een positie van een speler.")}</p>')
+                f'<p class="muted">{t("Read from live.guhs.nl (refreshes by itself). Player positions are only on the world map (layer Show players), and you can hide yourself with /guhs vadsrijk kaart verberg.", "Gelezen van live.guhs.nl (ververst vanzelf). Spelersposities staan alleen op de wereldkaart (laag Spelers tonen), en je kunt jezelf verbergen met /guhs vadsrijk kaart verberg.")}</p>')
         self.schrijf("live.html", "Live", "Live", main, "live.html")
 
     def patchnotes(self):
@@ -1055,8 +1043,10 @@ class Bouwer:
     def privacy(self):
         main = (f'<h1>Privacy</h1>' + p("What the Vadsrijk pages show about players: your Minecraft name, your levels and class levels, how many creatures and bosses you cheered up, your Exploration book %, your gear (type, rarity, level, stars), how many pets and mounts you have, your title and the DAY you were last seen. Your skin head comes from mc-heads.net.",
                                          "Wat de Vadsrijk-pagina's over spelers laten zien: je Minecraft-naam, je levels en klasse-levels, hoeveel wezens en bazen je opvrolijkte, je Verkenningsboek-%, je uitrusting (soort, zeldzaamheid, level, sterren), hoeveel huisdieren en rijdieren je hebt, je titel en de DAG dat je het laatst gezien bent. Je skinhoofdje komt van mc-heads.net.")
-                + p("Never: your IP address, where you are in the world, your chat, your coins or who you traded with. The server writes these files itself; this site only reads them.",
-                    "Nooit: je IP-adres, waar je in de wereld bent, je chat, je munten of met wie je handelde. De server schrijft deze bestanden zelf; deze site leest ze alleen.")
+                + p("The world map can show where you are in the Vadsrijk while you are online (about every 10 seconds; never inside dungeons, the raid or houses, there it only says \"in a dungeon\"). Don't want that? Type /guhs vadsrijk kaart verberg in game (and /guhs vadsrijk kaart toon to be visible again).",
+                    "De wereldkaart kan laten zien waar je in het Vadsrijk bent terwijl je online bent (ongeveer elke 10 seconden; nooit in kerkers, de raid of huisjes, daar staat alleen \"in een kerker\"). Liever niet? Typ in het spel /guhs vadsrijk kaart verberg (en /guhs vadsrijk kaart toon om weer zichtbaar te zijn).")
+                + p("Never: your IP address, your chat, your coins or who you traded with. The server writes these files itself; this site only reads them.",
+                    "Nooit: je IP-adres, je chat, je munten of met wie je handelde. De server schrijft deze bestanden zelf; deze site leest ze alleen.")
                 + p("Want to be left out? Ask the server admin on Discord.", "Wil je er niet op? Vraag het de serverbeheerder op Discord."))
         self.schrijf("privacy.html", "Privacy", "Privacy", main, "")
 

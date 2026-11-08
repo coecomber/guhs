@@ -8,5 +8,5 @@ part of tools/make_wiki_site.py (--vadsrijk). Static, NL + EN, link-checked; the
   kaart.py   the map tiles: top-down from the .nbt map tiles (technical/satellite style), cut into Leaflet zoom tiles
   pages.py   the HTML pages (wiki, map, highscores, profiles, live, guide, patch notes)
   stijl.py   the stylesheet + scripts of the section
-  live_voorbeeld/  sample live JSON (the shape WebExport writes), used by local previews
+  (W-SITE: no sample live data any more; previews read live.guhs.nl too and show an empty state when it is not there)
 """
