@@ -32,6 +32,8 @@ import net.minecraft.world.item.ItemStack;
 public final class OpslagMenu extends AbstractContainerMenu {
     public static final int KNAPZAK = 0, BANK = 1;
     public static final int KNOP_TAB = 0, KNOP_KOOP = 20, KNOP_SORTEER = 40, KNOP_MATERIALEN = 41, KNOP_TAS = 42;
+    /** U-OPSLAGVIP: the client showed the "WORD GUH VIP++" joke: remember it for the account (the joke never comes back). */
+    public static final int KNOP_VIP_GEZIEN = 43;
 
     public final int soort, rijen, maxTabs;
     /** Client: what the screen shows about locked tabs (price, ways to unlock). Server: the same, sent once. */
@@ -140,6 +142,10 @@ public final class OpslagMenu extends AbstractContainerMenu {
             sp.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.opslag.tas.opgeborgen", n)
                     .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
             broadcastChanges();
+            return true;
+        }
+        if (knop == KNOP_VIP_GEZIEN) {   // U-OPSLAGVIP
+            VipGrap.markeer(sp);
             return true;
         }
         if (knop == KNOP_TAS) {

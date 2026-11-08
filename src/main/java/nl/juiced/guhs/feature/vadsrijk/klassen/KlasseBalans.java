@@ -58,6 +58,8 @@ public final class KlasseBalans {
     public static final String ITEMS = "items";
     /** U-TAPIJT: the flying carpet's feel ({@code [tapijt]}; pushed to tapijt.TapijtBalans, keys: TapijtBalans.SLEUTELS). */
     public static final String TAPIJT = "tapijt";
+    /** U-OPSLAGVIP: the price curve of bought storage expansions ({@code [opslag]}; pushed to opslag.OpslagBalans). */
+    public static final String OPSLAG = "opslag";
 
     private static final Map<String, Map<String, Double>> WAARDEN = new LinkedHashMap<>();
     private static long gelezen = Long.MIN_VALUE;
@@ -76,6 +78,9 @@ public final class KlasseBalans {
         if (TAPIJT.equals(klasse)) {
             return nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtBalans.standaard(sleutel);   // U-TAPIJT
         }
+        if (OPSLAG.equals(klasse)) {
+            return nl.juiced.guhs.feature.vadsrijk.opslag.OpslagBalans.standaard(sleutel);   // U-OPSLAGVIP
+        }
         return switch (sleutel) {
             case "melee_reductie" -> Klassen.RIDDER.equals(klasse) ? 0.20 : 0;
             case "vads_per_klasselevel" -> Klassen.RIDDER.equals(klasse) ? 4 : 0;
@@ -93,6 +98,7 @@ public final class KlasseBalans {
         l.add(RIJDIEREN);
         l.add(ITEMS);   // T-ITEMS
         l.add(TAPIJT);   // U-TAPIJT
+        l.add(OPSLAG);   // U-OPSLAGVIP
         for (var k : Klassen.alle()) {
             l.add(k.id());
         }
@@ -103,6 +109,7 @@ public final class KlasseBalans {
         return ALGEMEEN.equals(sectie) ? ALGEMEEN_SLEUTELS : MOBS.equals(sectie) ? MOBS_SLEUTELS
                 : RIJDIEREN.equals(sectie) ? RIJDIEREN_SLEUTELS
                 : TAPIJT.equals(sectie) ? nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtBalans.SLEUTELS   // U-TAPIJT
+                : OPSLAG.equals(sectie) ? nl.juiced.guhs.feature.vadsrijk.opslag.OpslagBalans.SLEUTELS   // U-OPSLAGVIP
                 : ITEMS.equals(sectie) ? nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.SLEUTELS : SLEUTELS;   // T-ITEMS
     }
 
@@ -143,6 +150,7 @@ public final class KlasseBalans {
                 get(RIJDIEREN, "groei_snelheid"), get(RIJDIEREN, "groei_sprong"));
         nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.zet(k -> get(ITEMS, k));   // T-ITEMS
         nl.juiced.guhs.feature.vadsrijk.tapijt.TapijtBalans.zet(k -> get(TAPIJT, k));   // U-TAPIJT
+        nl.juiced.guhs.feature.vadsrijk.opslag.OpslagBalans.zet(k -> get(OPSLAG, k));   // U-OPSLAGVIP
     }
 
     // ---- the file ---------------------------------------------------------------------------------------------------------
@@ -219,6 +227,8 @@ public final class KlasseBalans {
         b.append("# doorgroeien, overvadsen en de maxima van de nieuwe stats. Uitleg: NOTITIES_T_ITEMS.md.\n");
         b.append("# [tapijt] = het gevoel van het vliegend tapijt (vaart, uitglijden, drift, zweefhoogte...); uitleg per getal in\n");   // U-TAPIJT
         b.append("# tapijt/TapijtBalans.java. Live: /guhs vadsrijk tapijt tune <sleutel> <waarde>.\n");
+        b.append("# [opslag] = gekochte opslag-uitbreidingen: max_koopbaar = hoeveel per opslag te koop zijn (rest = Binnenkort!),\n");   // U-OPSLAGVIP
+        b.append("# prijs van de n-de (n = 0, 1, ...) = <knapzak|bank>_basis x <knapzak|bank>_factor^n brons.\n");
         for (String s : secties()) {
             b.append('\n').append('[').append(s).append("]\n");
             for (String k : sleutels(s)) {
