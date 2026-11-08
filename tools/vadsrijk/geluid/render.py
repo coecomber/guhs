@@ -165,8 +165,14 @@ def master(x, sr, rms_db=-24.0, piek=0.8, inval=0.01, uitval=0.0, hoog=45, lus=F
     return x.astype(np.float32)
 
 
+# U-KRIMP: libsndfile's compression_level (0 = best quality, 1 = smallest; Vorbis quality = 1 - level). Every render is at least
+# this compact (~48 kbps mono at 32 kHz; user OK 2026-11-06). GUHS_OGG_COMPRESSIE overrides it (e.g. 0 = the per-piece values).
+OGG_MIN_COMPRESSIE = 0.85
+
+
 def bewaar_ogg(pad, x, sr, kwaliteit=0.6):
     import os
+    kwaliteit = max(kwaliteit, float(os.environ.get("GUHS_OGG_COMPRESSIE", OGG_MIN_COMPRESSIE)))
 
     import soundfile as sf
     os.makedirs(os.path.dirname(pad), exist_ok=True)
