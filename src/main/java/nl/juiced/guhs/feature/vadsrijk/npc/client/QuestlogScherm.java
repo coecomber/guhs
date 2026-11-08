@@ -42,7 +42,9 @@ public class QuestlogScherm extends Screen implements nl.juiced.guhs.feature.vad
             // zone 4 (tools/features/vadsrijk_t_z4verhaal.py GIDS)  T-Z4VERHAAL
             "z4_lampionkust", "z4_zeilboot", "z4_knuffeltij", "z4_reizen",
             // T-Z5VERHAAL: zone 5 (tools/features/vadsrijk_t_z5verhaal.py GIDS)
-            "z5_hoogvads", "z5_speuren", "z5_soepkeuken", "z5_ambachten", "z5_reizen"};
+            "z5_hoogvads", "z5_speuren", "z5_soepkeuken", "z5_ambachten", "z5_reizen",
+            // U-Z6VERHAAL: zone 6 (tools/features/vadsrijk_u_z6verhaal.py GIDS)
+            "z6_zijdeland", "z6_bakens", "z6_rijdieren", "z6_steden", "z6_toren"};
     private static final String[] TABS = {"quests", "geheimen", "wezens", "gids"};
 
     private CompoundTag data;

@@ -133,8 +133,21 @@ public final class GuhBoneMasks {
             });
         }
 
-        /** A pass with its own bone test (feature hooks): tested once per bone, not cached. */
+        /** U-GROOTTE (FPS): masks per bone test; lambdas compare by identity, so a hook's constant test is built once (weak keys:
+         *  a capturing lambda made anew each frame just falls out again). */
+        private final Map<Predicate<String>, Mask> perTest = java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
+
+        /** A pass with its own bone test (feature hooks): tested once per bone, cached per test object. */
         public Mask of(Predicate<String> shows) {
+            Mask m = perTest.get(shows);
+            if (m == null) {
+                m = bouw(shows);
+                perTest.put(shows, m);
+            }
+            return m;
+        }
+
+        private Mask bouw(Predicate<String> shows) {
             boolean[] own = new boolean[bones.length];
             for (int i = 0; i < bones.length; i++) {
                 own[i] = shows.test(bones[i].name());

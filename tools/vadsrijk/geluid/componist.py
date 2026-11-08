@@ -19,6 +19,7 @@ MODI = {
     "lydisch": [0, 2, 4, 6, 7, 9, 11],
     "mixo": [0, 2, 4, 5, 7, 9, 10],
     "harm": [0, 2, 3, 5, 7, 8, 11],
+    "hijaz": [0, 1, 4, 5, 7, 8, 10],   # U-Z6MUZIEK: maqam hijaz (phrygian dominant), the Zijdeland's flavour
 }
 NOOT = {"C": 0, "C#": 1, "Db": 1, "D": 2, "D#": 3, "Eb": 3, "E": 4, "F": 5, "F#": 6, "Gb": 6, "G": 7, "G#": 8, "Ab": 8, "A": 9,
         "A#": 10, "Bb": 10, "B": 11}
@@ -35,6 +36,8 @@ INSTR = {
     "halopad": (0, 94), "pauk": (0, 47), "taiko": (0, 116), "orgel": (0, 19), "klavecimbel": (0, 6), "piano": (0, 0),
     "akbas": (0, 32), "steeldrum": (0, 114), "druppels": (0, 102), "kristal": (0, 98), "klokken": (8, 14),
     "slagwerk": (128, 0), "orkestslag": (128, 48),
+    # U-Z6MUZIEK (het Zijdeland): oud = nylon guitar, buzuq-like tremolo = mandolin, qanun = dulcimer, ney = shakuhachi
+    "oed": (0, 24), "mandoline": (16, 25), "kanun": (0, 15), "ney": (0, 77), "tinkel": (0, 112),
 }
 
 

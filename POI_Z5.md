@@ -64,7 +64,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `gilde_bijenstal` | 2702, 215, -454 |
 | `gilde_brouwerij` | 2702, 215, -469 |
 | `gilde_hal` | 2702, 215, -484 |
-| `gilde_ingang` | 2696, 215, -483 |
+| `gilde_ingang` | 2695, 215, -484 |
 | `gilde_keuken` | 2702, 215, -474 |
 | `gilde_smidse` | 2702, 215, -464 |
 | `haven_5_1_vertrekbord` | 2646, 217, -441 |
@@ -198,6 +198,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `troonzaal_troon` | 2847, 238, -520 |
 | `universiteit_archief` | 2772, 215, -459 |
 | `universiteit_bibliotheek` | 2751, 215, -446 |
+| `universiteit_bibliotheek_galerij` | 2752, 221, -443 |
 | `universiteit_binnenhof` | 2737, 215, -471 |
 | `universiteit_collegezaal` | 2773, 215, -480 |
 | `universiteit_poort` | 2737, 215, -492 |

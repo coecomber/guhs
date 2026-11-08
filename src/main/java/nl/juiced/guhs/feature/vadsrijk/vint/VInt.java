@@ -20,6 +20,12 @@ public final class VInt {
     }
 
     public static void register(IEventBus modBus) {
+        RijdierBuit.register();
+        // u-z6verhaal's airship line E (Hoogvads Staarthaven <-> Rozenkloof) in u-luchtschip's "why closed" explanations: after the
+        // swim film (flag z6_lijn_e_open) and from level 60; flying back is always open (Z6Lijn's own gate)
+        nl.juiced.guhs.feature.vadsrijk.luchtschip.Poorten.POORTEN.put(nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6Lijn.ID,
+                new nl.juiced.guhs.feature.vadsrijk.luchtschip.Poorten.Poort("z5_hq10_stormrand", 60,
+                        p -> nl.juiced.guhs.feature.vadsrijk.npc.Questlog.vlag(p, "z6_lijn_e_open")));   // the user's mount-drop rule: 10 % per player per kill/clear, sure after 15 misses
         // u-dubbel's heuristic scan: u-ruiters (one pair per route#k, own join guard + sweep) and everything in the Knuffelkwartier
         // (u-huizen's figures + one Mollie per ward share an npc id on purpose) are not doubles.
         nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.NIET_HEURISTISCH.add(e -> e instanceof nl.juiced.guhs.feature.vadsrijk.ruiters.RuiterGuh

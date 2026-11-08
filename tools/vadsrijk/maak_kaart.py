@@ -3,6 +3,8 @@
 Run from the project root:  python tools/vadsrijk/maak_kaart.py [--alleen tx,tz ...] [--geen-cache] [--kaartbeeld]
 Output: src/main/resources/data/guhs/structure/vadsrijk/tegels/t_<tx>_<tz>.nbt, tools/vadsrijk/_cache/kaart_bovenaanzicht.png,
 tools/vadsrijk/_cache/plekken.json (all POIs, mirrored in WereldPlekken.java / POI_VADSRIJK.md).
+  U-GROOTTE: afterwards kaartpak.py packs all tiles into build/generated/kaartpak/data/guhs/vadsrijk/kaart.gpak (what the jar ships;
+  gradlew kaartPak does the same before every build) and verifies them tile by tile.
 Pipeline:
   1. kamp/kamp_wereld.py and stad/stad_wereld.py build Knuffelkamp and Zwamzoet (render generators) -> _cache/*.npz
      (separate processes: the two kit folders share module names);
@@ -52,6 +54,8 @@ def main():
                     "the unstuck key (tools/vadsrijk/audit/audit.py, ~80 s)")
     ap.add_argument("--zone", default="alle", choices=("1", "2", "3", "4", "5", "alle"))   # [zone 2] [zone 3] [T-Z4WERELD] [T-Z5WERELD] which zone(s) to build
     ap.add_argument("--werkers", type=int, default=6)   # [zone 3] parallel tile workers for zone 3
+    ap.add_argument("--geen-pak", action="store_true", help="U-GROOTTE: skip packing + verifying the tiles into kaart.gpak "
+                    "(gradlew kaartPak does it anyway before every build)")
     a = ap.parse_args()
     _t_verbind = time.time()                    # U-HEKKEN: every tile written from now on gets the connection pass
     os.environ["GUHS_VERBIND_LATER"] = "1"      # U-HEKKEN: the zone makers leave the pass to us (verbind.py)
@@ -68,6 +72,8 @@ def main():
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
     if a.audit and not a.alleen:                # U-HEKKEN: the connection check (AUDIT_VERBIND.md), must be ~0
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "verbindcheck.py")], cwd=ROOT, check=True)
+    if not a.geen_pak:                          # U-GROOTTE: the compact map pack the jar ships (data/guhs/vadsrijk/kaart.gpak)
+        subprocess.run([sys.executable, os.path.join(HIER, "kaartpak.py")], cwd=ROOT, check=True)
 
 
 def _main(a):

@@ -151,7 +151,9 @@ public final class EconomieClient {
                     }
                     RijdierSoort.PluimKleur[] k = RijdierSoort.PluimKleur.values();
                     int i = state.getOrDefaultGeckolibData(KLEUR, 0);
-                    return Guhs.id("textures/entity/vr_eco_" + soort.id() + "_" + k[Math.floorMod(i, k.length)].id() + ".png");
+                    String sleutel = soort.id() + "_" + k[Math.floorMod(i, k.length)].id();   // U-GROOTTE (FPS): cached id
+                    return nl.juiced.guhs.feature.vadsrijk.rijdier.client.UiterlijkLaag.TEX.computeIfAbsent("kleur|" + sleutel,
+                            kk -> Guhs.id("textures/entity/vr_eco_" + sleutel + ".png"));
                 }
             });
             this.soort = soort;

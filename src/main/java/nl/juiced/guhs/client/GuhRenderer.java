@@ -324,6 +324,9 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
 
     // --- layers ------------------------------------------------------------------------------------------------------
 
+    /** U-GROOTTE (FPS): beyond this (64 blocks) clothes and the hooks' extra model passes are not drawn (each one walks the model). */
+    public static final double VER_SQ = 64 * 64;
+
     /**
      * The clothes a guh wears (from the Guh kleermaker): for each worn piece, the model again with only that piece's bones
      * visible and the piece's own texture, so clothes look the same on every guh variant.
@@ -336,8 +339,8 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
         @Override
         public void submitRenderTask(RenderPassInfo<LivingEntityRenderState> info, SubmitNodeCollector collector) {
             GuhRenderFrame frame = frame(info.renderState());
-            if (frame == null || frame.clothes.isEmpty()) {
-                return;
+            if (frame == null || frame.clothes.isEmpty() || info.renderState().distanceToCameraSq > VER_SQ) {
+                return;   // U-GROOTTE (FPS): every piece is a full model walk; beyond 64 blocks a piece is a pixel or two
             }
             for (Map.Entry<GuhClothes.Slot, GuhClothes> e : frame.clothes.entrySet()) {
                 GuhClothes worn = e.getValue();
@@ -431,7 +434,7 @@ public class GuhRenderer extends GeoEntityRenderer<GuhEntity, LivingEntityRender
             if (frame == null) {
                 return;
             }
-            for (GuhRenderFrame.ModelPass pass : frame.passes) {
+            for (GuhRenderFrame.ModelPass pass : info.renderState().distanceToCameraSq > VER_SQ ? java.util.List.<GuhRenderFrame.ModelPass>of() : frame.passes) {
                 submitPass(info, collector.order(1), pass.type(), pass.fullBright() ? LightCoordsUtil.FULL_BRIGHT : info.packedLight(),
                         pass.colour(), pass.shows());
             }

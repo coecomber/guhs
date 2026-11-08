@@ -10,9 +10,11 @@ public final class Levels {
     /** z2-systemen: 20 -> 35; z3-systemen: 35 -> 50 (zone 3 "De Schemerwortel" is lv 30-50; the curve simply continues). */
     // T-INT: zone 4 (lv 50-56) and zone 5 Hoogvads (56-60): the cap goes to 60; the same curve simply continues (lv 50->60 = ~150k
     // xp, about as much as 30->50; the zone-4/5 mobs give xp by their level, so that is ~4-6 h over zones 4+5)
-    public static final int MAX = 60;
+    // U-Z6VERHAAL: zone 6 Het Zijdeland (lv 60-70): the cap goes to 70; the same curve simply continues (lv 60->70 = ~190k xp,
+    // a bit more than 50->60; zone-6 mobs give xp by their level, the story ~45 % of a level per main step)
+    public static final int MAX = 70;
     /** The generic level cap (the same as the class cap). */
-    public static final int MAX_GENERIEK = 60;
+    public static final int MAX_GENERIEK = 70;   // U-Z6VERHAAL: was 60
     /** Xp curve scales (1 = the zone-1 curve); tunable separately in the balans config. */
     public static volatile double SCHAAL_KLASSE = 1, SCHAAL_GENERIEK = 1;
 

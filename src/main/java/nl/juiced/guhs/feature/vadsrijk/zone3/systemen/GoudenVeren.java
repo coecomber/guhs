@@ -23,7 +23,7 @@ import nl.juiced.guhs.feature.vadsrijk.economie.Rijdieren;
  */
 public final class GoudenVeren {
     public static final int NODIG = 25;
-    public static final double DROPKANS = 0.02;
+    public static final double DROPKANS = 0.10;   // V-INT: was 0.02; the roll itself is vint.RijdierBuit (+ pity)
 
     private GoudenVeren() {
     }
@@ -78,11 +78,13 @@ public final class GoudenVeren {
 
     /** The 2 % roll (true = it dropped and was given). */
     public static boolean rolGoudenPluimguh(ServerPlayer p) {
-        if (heeftGoud(p) || p.getRandom().nextDouble() >= DROPKANS) {
-            return false;
-        }
+        // V-INT (user's loot rule): 10 % per player + pity after 15 misses, through the shared mount-drop roll
+        return nl.juiced.guhs.feature.vadsrijk.vint.RijdierBuit.rol(p, "vahoeg_goud");
+    }
+
+    /** V-INT: the gift itself, for the shared mount-drop roll. */
+    public static void geefGoudPubliek(ServerPlayer p) {
         geefGoud(p);
-        return true;
     }
 
     static void geefGoud(ServerPlayer p) {

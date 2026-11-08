@@ -98,7 +98,7 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
     @Override
     protected void init() {
         int rijen = rijen();
-        DY = rijen <= Bomen.RIJEN ? 38 : rijen <= 6 ? 32 : 29;   // (z3-systemen: 8 rows with the zone-3 rows 6/7)
+        DY = rijen <= Bomen.RIJEN ? 38 : rijen <= 6 ? 32 : rijen <= 8 ? 29 : 25;   // (z3-systemen: 8 rows with the zone-3 rows 6/7; V-INT: 10 with the zone-6 rows)
         H = rijen <= Bomen.RIJEN ? 240 : 46 + (rijen - 1) * DY + KNOOP + 20 + 22 + 26 + 8;
         // U-TABS: inside the menu frame: band, then the class tabs (21 px), then the tree panel; scales down when it does not fit
         var win = net.minecraft.client.Minecraft.getInstance().getWindow();

@@ -108,7 +108,7 @@ public final class GeluidRegistry {
         // in FRONT of the Verkenningsboek's own listener, so "not marked yet" still means "first time here"
         Haken.GEBIED_BETREDEN.add(0, (p, gebied) -> {
             if (!GEEN_ONTDEKKING.contains(gebied) && !nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.gemarkeerd(p, gebied)) {
-                stinger(p, "ontdekking");
+                stinger(p, "z6_moederoase".equals(gebied) ? "moederoase" : "ontdekking");   // U-Z6MUZIEK: the oasis' own stinger
             }
         });
         NeoForge.EVENT_BUS.addListener(GeluidRegistry::commandos);
@@ -122,7 +122,10 @@ public final class GeluidRegistry {
         registrar.playToClient(GeluidPayloads.Speel.TYPE, GeluidPayloads.Speel.STREAM_CODEC, (s, c) -> GeluidPayloads.speel.accept(s));
     }
 
-    /** Play a stinger for this player (the client applies its own Stingers slider). */
+    /**
+     * Play a stinger for this player (the client applies its own Stingers slider). U-Z6MUZIEK: zone 6 calls
+     * {@code stinger(p, "baken")} when a star beacon is lit; "moederoase" plays by itself on the first visit of z6_moederoase.
+     */
     public static void stinger(ServerPlayer p, String soort) {
         List<String> l = GESTUURD.computeIfAbsent(p.getUUID(), u -> new java.util.concurrent.CopyOnWriteArrayList<>());
         if (l.size() < 64) {
@@ -202,7 +205,19 @@ public final class GeluidRegistry {
         g.then(soort("stem", StemPlan.SOORTEN));
         g.then(soort("wereld", WereldBron.SOORTEN));
         g.then(Commands.literal("wereldinfo").executes(c -> stuur(c.getSource(), "wereldinfo", "")));
+        g.then(soort("stad", stadDeuntjes()));   // U-Z6MUZIEK: every town tune (rozenkloof_1, saffraanpoort_2, ...)
         event.getDispatcher().register(VadsrijkCommando.wortel(g));
+    }
+
+    /** U-Z6MUZIEK: the town tunes by name ("zwamzoet_1", ..., "saffraanpoort_2"). */
+    static List<String> stadDeuntjes() {
+        List<String> l = new ArrayList<>();
+        for (String stad : nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.STEDEN) {
+            for (int i = 1; i <= nl.juiced.guhs.feature.vadsrijk.stadsmuziek.StadsMuziek.muziekVan(stad).size(); i++) {
+                l.add(stad + "_" + i);
+            }
+        }
+        return l;
     }
 
     private static LiteralArgumentBuilder<CommandSourceStack> soort(String soort, List<String> namen) {
@@ -239,6 +254,7 @@ public final class GeluidRegistry {
         regels.add(regel("fanfare", GeluidPlan.BAAS_THEMAS));
         regels.add(regel("stem", StemPlan.SOORTEN));
         regels.add(regel("wereld", WereldBron.SOORTEN));
+        regels.add(regel("stad", stadDeuntjes()));
         regels.add(Component.literal("[stop] ").withStyle(st -> st.withColor(ChatFormatting.RED)
                         .withClickEvent(new ClickEvent.RunCommand("/guhs vadsrijk geluid stop")))
                 .append(Component.literal("[nu: gebiedsmuziek zonder stilte] ").withStyle(st -> st.withColor(ChatFormatting.GREEN)

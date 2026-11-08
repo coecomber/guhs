@@ -31,6 +31,9 @@ import nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh;
 
 /** Het Vadsrijk, slice "npc", the client: the NPC guh renderer (the guh model + clothes), the "!"/"?" markers, the questlog (J). */
 public final class NpcClient {
+    /** U-GROOTTE: the quest marker texts "!" and "?" (made on first use, client thread). */
+    private static final FormattedCharSequence[] MARKER_TEKST = new FormattedCharSequence[2];
+
     public static final KeyMapping QUESTLOG = new KeyMapping("key.guhs.vr_questlog", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_J, KernClient.CATEGORIE);
     /** entity id -> marker (NpcMarkers.*), for the NPCs near you. */
     private static final Map<Integer, Byte> MARKERS = new HashMap<>();
@@ -83,7 +86,11 @@ public final class NpcClient {
                 case NpcMarkers.PRATEN -> 0xFFE8E0FF;
                 default -> 0xFFFFF27A;
             };
-            FormattedCharSequence t = Component.literal(vraag ? "?" : "!").withStyle(ChatFormatting.BOLD).getVisualOrderText();
+            if (MARKER_TEKST[0] == null) {   // U-GROOTTE (FPS): built once, not per NPC per frame
+                MARKER_TEKST[0] = Component.literal("!").withStyle(ChatFormatting.BOLD).getVisualOrderText();
+                MARKER_TEKST[1] = Component.literal("?").withStyle(ChatFormatting.BOLD).getVisualOrderText();
+            }
+            FormattedCharSequence t = MARKER_TEKST[vraag ? 1 : 0];
             float w = mc.font.width(t);
             float hoog = guh.getBbHeight() + 1.05f + (float) Math.sin((guh.tickCount + partialTick) * 0.12f) * 0.07f;
             frame.extra((pose, collector, light) -> {

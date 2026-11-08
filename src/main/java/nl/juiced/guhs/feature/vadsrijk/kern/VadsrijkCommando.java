@@ -195,8 +195,8 @@ public final class VadsrijkCommando {
             t.putFloat("pitch", p.getXRot());
             d.terug = t;
         }
-        boolean kaart = !proeftuin && sl.getStructureManager().get(KaartFeature.tegelId(Math.floorDiv(Gebieden.AANKOMST.getX(), KaartFeature.TEGEL),
-                Math.floorDiv(Gebieden.AANKOMST.getZ(), KaartFeature.TEGEL))).isPresent();
+        boolean kaart = !proeftuin && KaartFeature.tegel(sl, Math.floorDiv(Gebieden.AANKOMST.getX(), KaartFeature.TEGEL),
+                Math.floorDiv(Gebieden.AANKOMST.getZ(), KaartFeature.TEGEL)).isPresent();   // U-GROOTTE: pack-aware
         net.minecraft.core.BlockPos a = kaart ? Gebieden.AANKOMST : (d.checkpoint != null && Ondergrond.proeftuin(d.checkpoint) ? d.checkpoint : Ondergrond.KAMP);
         p.teleport(new TeleportTransition(sl, Vec3.atBottomCenterOf(a), Vec3.ZERO, 180f, 0f, TeleportTransition.DO_NOTHING));
         p.resetFallDistance();

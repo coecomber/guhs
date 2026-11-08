@@ -54,7 +54,7 @@ def echo(st, bron, doel, instr, vertraging, factor, transpose=0, gain=0.8, galm=
 
 
 def gebied(spec):
-    st = Stuk(spec["naam"], spec["toon"], spec["modus"], spec["bpm"], spec["maat"], spec.get("samengesteld", False), spec["seed"])
+    st = spec.get("klasse", Stuk)(spec["naam"], spec["toon"], spec["modus"], spec["bpm"], spec["maat"], spec.get("samengesteld", False), spec["seed"])   # (U-Z6MUZIEK: klasse)
     B = st.maat
     rustig = spec.get("rustig", False)
     A, Bp = _rij(spec["A"]), _rij(spec["B"])
@@ -140,7 +140,8 @@ def _leid(st, m, start, vel):
 def baas(spec, fase=False):
     """fase=True (U-AUDIO2): the same piece note for note (same seed, same loop length) plus the last-phase layers on top
     (fase_lagen), so the client can crossfade from the normal loop into this one at the same spot."""
-    st = Stuk(spec["naam"], spec["toon"], spec["modus"], spec["bpm"], spec["maat"], spec.get("samengesteld", False), spec["seed"], lus=True)
+    st = spec.get("klasse", Stuk)(spec["naam"], spec["toon"], spec["modus"], spec["bpm"], spec["maat"], spec.get("samengesteld", False), spec["seed"],
+                                   lus=True)   # (U-Z6MUZIEK: klasse)
     B = st.maat
     A, Bp = _rij(spec["A"]), _rij(spec["B"])
     brug = _rij(spec.get("brug", " ".join(A.split()[:4])))
@@ -213,7 +214,7 @@ def fanfare(spec):
     its own lead instrument, a rising figure picked by its seed, then a big held tonic with timpani, cymbal and bells."""
     f = dict(spec.get("fanfare", {}))
     bpm = min(spec["bpm"], f.get("bpm", 120))
-    st = Stuk(spec["naam"] + "_fanfare", spec["toon"], "majeur", bpm, 4, seed=spec["seed"] + 7)
+    st = spec.get("klasse", Stuk)(spec["naam"] + "_fanfare", spec["toon"], "majeur", bpm, 4, seed=spec["seed"] + 7)   # (U-Z6MUZIEK: klasse)
     st.zet_akkoorden(0, "5 5 1 1")
     lead = f.get("lead", spec["melodie"][0])
     lo, hi = spec["melodie"][1], spec["melodie"][2]

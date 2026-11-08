@@ -29,7 +29,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
 public final class StadsMuziek {
     public static final DeferredRegister<SoundEvent> SOUNDS = DeferredRegister.create(Registries.SOUND_EVENT, Guhs.MODID);
     /** The towns, in a fixed order. */
-    public static final List<String> STEDEN = List.of("zwamzoet", "knuffelkamp", "haven", "kandijkom", "honingtak");   // (K-INT: + Honingtak, zone 3)
+    public static final List<String> STEDEN = List.of("zwamzoet", "knuffelkamp", "haven", "kandijkom", "honingtak",   // (K-INT: + Honingtak, zone 3)
+            "rozenkloof", "saffraanpoort");   // U-Z6MUZIEK: zone 6 (tunes rendered by tools/vadsrijk/geluid/zijdeland.py)
     /** Tunes per town (at least two each, played one after the other). */
     public static final Map<String, List<DeferredHolder<SoundEvent, SoundEvent>>> MUZIEK = new LinkedHashMap<>();
     /** The ambience bed of each town (a seamless 20 s loop). */
@@ -43,12 +44,14 @@ public final class StadsMuziek {
         DeferredHolder<SoundEvent, SoundEvent> briesje = geluid("vr.stad.bed.briesje");
         DeferredHolder<SoundEvent, SoundEvent> golfjes = geluid("vr.stad.bed.golfjes");
         DeferredHolder<SoundEvent, SoundEvent> haardvuur = geluid("vr.stad.bed.haardvuur");
+        DeferredHolder<SoundEvent, SoundEvent> bazaar = geluid("vr.stad.bed.bazaar");   // U-Z6MUZIEK: Saffraanpoort's murmur
         for (String stad : STEDEN) {
             MUZIEK.put(stad, List.of(geluid("vr.stad.muziek." + stad + "_1"), geluid("vr.stad.muziek." + stad + "_2")));
             SFEER.put(stad, geluid("vr.stad.sfeer." + stad));
             BED.put(stad, switch (stad) {
                 case "haven" -> golfjes;
                 case "kandijkom" -> haardvuur;
+                case "saffraanpoort" -> bazaar;
                 default -> briesje;
             });
         }
@@ -74,7 +77,9 @@ public final class StadsMuziek {
         return switch (gebied) {
             case "zwamzoet", "knuffelkamp", "haven" -> gebied;
             case "z2_kandijkom", "z2_kandijkom_dok" -> "kandijkom";
-            case "z3_honingtak" -> "honingtak";   // (K-INT: the beekeepers' town on the branch; a layer, so use stadOp(x, y, z))
+            case "z3_honingtak" -> "honingtak";
+            case "z6_rozenkloof" -> "rozenkloof";   // U-Z6MUZIEK: the zone-6 towns (u-z6wereld area ids)
+            case "z6_saffraanpoort" -> "saffraanpoort";   // (K-INT: the beekeepers' town on the branch; a layer, so use stadOp(x, y, z))
             default -> null;
         };
     }

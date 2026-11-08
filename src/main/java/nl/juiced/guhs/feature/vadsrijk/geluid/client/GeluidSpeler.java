@@ -185,9 +185,18 @@ public final class GeluidSpeler {
             long t = GuhTime.timeOfDay(mc.level);
             return t > 11500 && t < 23500 ? "lampionkust_avond" : "lampionkust_dag";
         }
+        String dn = GeluidPlan.dagNacht(themas, nacht(mc));   // U-Z6MUZIEK: De Zoutvlakte by day / by night
+        if (dn != null) {
+            return dn;
+        }
         int i = AFWISSEL.getOrDefault(s.id(), R.nextInt(themas.size()));
         AFWISSEL.put(s.id(), i + 1);
         return themas.get(i % themas.size());
+    }
+
+    private static boolean nacht(Minecraft mc) {
+        long t = GuhTime.timeOfDay(mc.level);
+        return t > 12500 && t < 23500;
     }
 
     private static void start(Minecraft mc, String thema) {
@@ -216,6 +225,11 @@ public final class GeluidSpeler {
      */
     public static boolean zet(int entityId, String muziek) {
         Minecraft mc = Minecraft.getInstance();
+        // U-Z6MUZIEK: u-z6raid names its music per phase (vr.z6raid.muziek.<baas>[_n]): one theme, the phase = its fase loop
+        GeluidPlan.Alias alias = GeluidPlan.alias(muziek);
+        if (alias != null) {
+            muziek = Guhs.MODID + ":" + GeluidPlan.baasId(alias.thema());
+        }
         if (entityId < 0) {
             wachtEntity = -1;
             if (baas != null) {
@@ -237,10 +251,18 @@ public final class GeluidSpeler {
         }
         wachtEntity = -1;
         baasEntity = entityId;
-        if (thema.equals(baasThema) && (baas == null || !baas.gaatUit())) {
-            return true;
+        if (!(thema.equals(baasThema) && (baas == null || !baas.gaatUit()))) {
+            speelBaas(mc, thema);
         }
-        speelBaas(mc, thema);
+        if (alias != null) {   // U-Z6MUZIEK: the raid's phase id says intense or not (the constellations' window goes both ways)
+            if (alias.laatsteFase()) {
+                LAATSTE_FASE.add(entityId);
+                naarLaatsteFase();
+            } else if (LAATSTE_FASE.remove(entityId) && baas != null && baasFase != null) {
+                baas.mengDoel = 1f;
+                baasFase.mengDoel = 0f;
+            }
+        }
         return true;
     }
 
@@ -395,7 +417,8 @@ public final class GeluidSpeler {
         if (baas != null) {
             baas.uit(20);
         }
-        String id = soort.equals("gebied") ? GeluidPlan.gebiedId(naam) : GeluidPlan.baasId(naam);
+        String id = soort.equals("gebied") ? GeluidPlan.gebiedId(naam) : soort.equals("stad") ? "vr.stad.muziek." + naam   // (U-Z6MUZIEK)
+                : GeluidPlan.baasId(naam);
         voorbeeld = new Lus(naam, event(id), SoundSource.MUSIC, () -> 0.9, 10, false);
         mc.getSoundManager().play(voorbeeld);
     }
