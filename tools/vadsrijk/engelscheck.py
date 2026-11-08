@@ -64,6 +64,9 @@ ENGELS_OK = {"die", "had", "hand", "is", "in", "over", "mist", "rug", "arm", "be
              "guh", "guhs", "mika", "mikas", "guhdex", "guhmension", "nyeg", "wahoog"}
 
 
+COMMANDO = re.compile(r"/(?:guhs|bond)\b[^.,;:!?)\n(]*")
+
+
 def lees(pad):
     with open(pad, encoding="utf-8") as f:
         return json.load(f)
@@ -83,6 +86,7 @@ def h(tekst):
 
 
 def nederlands(en, allow_woorden):
+    en = COMMANDO.sub(" ", en)   # command text (/guhs vadsrijk party accepteer) stays as typed
     tekst = C._STRIP.sub(" ", en)
     woorden = {w.lower().strip("'") for w in C._WORD.findall(tekst)}
     hits = set(C.dutch_leftovers(en, allow_woorden))
@@ -127,7 +131,7 @@ def main(argv):
         if en.strip() == dutch.strip() and k not in allow_sleutels and dutch not in allow_waarden:
             cat["GELIJK AAN NL"].append(f"{k}  | {en[:70]}")
             todo.setdefault(k, {"nl": dutch})
-        hits = nederlands(en, allow_woorden)
+        hits = [] if k in allow_sleutels else nederlands(en, allow_woorden)
         if hits and dutch.strip() != en.strip():
             cat["NEDERLANDS?"].append(f"{k}  [{', '.join(hits)}]  | {en[:70]}  ({waar[k]})")
         for p in C.format_problems(dutch, en, k.startswith("ftb.")):
