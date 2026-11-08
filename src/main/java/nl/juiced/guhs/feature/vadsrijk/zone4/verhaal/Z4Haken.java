@@ -89,6 +89,8 @@ public final class Z4Haken {
         QuestMotor.ACTIES.put("z4_vlieg", (p, a) -> Z4Verhaal.vlieg(p));
         QuestMotor.ACTIES.put("z4_cliffhanger", (p, a) -> Z4Verhaal.cliffhanger(p));
         QuestStap.ROUTES.add(Z4Haken::route);
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.PLEK_HAKEN.add((p, sl) -> stap(p, sl, 0));   // U-QUESTROBOT: the spot triggers
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.SPOEL.add(Z4Verhaal::spoel);   // U-QUESTROBOT
         Praat.luister(Z4Verhaal.SLEUTEL, Z4Haken::antwoord);
     }
 

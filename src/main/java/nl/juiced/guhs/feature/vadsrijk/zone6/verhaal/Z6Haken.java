@@ -97,6 +97,16 @@ public final class Z6Haken {
         Haken.VERSLAGEN.add(Z6Haken::verslagen);
         Haken.GEBIED_BETREDEN.add(Z6Haken::gebied);
         QuestMotor.KLIK_VOOR.add(Z6Haken::klikVoor);
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.PLEK_HAKEN.add((p, sl) -> {   // U-QUESTROBOT: the spot triggers
+            vergeetBij(p);
+            stap(p, sl);
+        });
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.LOS_OP.add(Z6Puzzels::losOp);   // U-QUESTROBOT: haggling + star puzzles
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.SPOEL.add(p -> {   // U-QUESTROBOT: films to their end, then the delayed ones
+            Z6Verhaal.spoel(p);
+            uitgesteld(p);
+            Z6Verhaal.spoel(p);
+        });
         QuestMotor.ACTIES.put("z6_vlieg", (p, a) -> Z6Verhaal.vlieg(p));
         QuestMotor.ACTIES.put("z6_klaar", (p, a) -> Z6Verhaal.zone6Klaar(p));
         QuestMotor.ACTIES.put("z6_tapijt", (p, a) -> Z6Verhaal.tapijt(p));

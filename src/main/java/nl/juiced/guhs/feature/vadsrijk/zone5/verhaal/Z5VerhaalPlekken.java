@@ -89,7 +89,10 @@ public final class Z5VerhaalPlekken {
     /** The dream room inside the whale (t-z5wezens's arena; the tracker's target for the finale). */
     public static final BlockPos WOLKWALDROOM = w("wolkwaldroom_arena", 2600, 200, -520);
     /** Zone 4: the Opstijgpier of Lampionhaven under the whale's head (zone 4's id; a placeholder at sea level). */
-    public static final BlockPos OPSTIJGPIER = w("opstijgpier", 2452, 66, -520);
+    // U-QUESTROBOT: "opstijgpier" is zone 4's map id, not on the zone-5 map, so this was the placeholder 2452,66,-520 (open sea, ~75
+    // blocks from the real pier: the tracker sent you into the water and the zone-5 ticker never ran on the pier); now zone 4's spot
+    public static final BlockPos OPSTIJGPIER = wereld("opstijgpier") != null ? wereld("opstijgpier")
+            : nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4VerhaalPlekken.POI.getOrDefault("z4_opstijgpier", new BlockPos(2512, 72, -565));
 
     // ---- the NPCs (id -> stand spot; they snap to the nearest floor within 12 blocks, or hover) ----------------------------------
     public static final Map<String, BlockPos> NPC = new LinkedHashMap<>();

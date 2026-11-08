@@ -75,6 +75,8 @@ public final class Z5Haken {
         QuestMotor.ACTIES.put("z5_cliffhanger", (p, a) -> Z5Verhaal.cliffhanger(p));
         QuestMotor.ACTIES.put("z5_ontmasker", (p, a) -> Z5Verhaal.ontmasker(p));
         QuestStap.ROUTES.add(Z5Haken::route);
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.PLEK_HAKEN.add(Z5Haken::stap);   // U-QUESTROBOT: the spot triggers
+        nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.SPOEL.add(Z5Verhaal::spoel);   // U-QUESTROBOT
     }
 
     // ---- quest helpers -------------------------------------------------------------------------------------------------------------
