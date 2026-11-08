@@ -217,6 +217,19 @@ def wegen(W):
 
 # ------------------------------------------------------------------------------------------------ small pieces
 def kampvuur(W, pid, x, z, banken=True):
+    # [u-z6afronding] never on a tent roof or a palm crown (the karavaankamp fire sat on a tent, the Moederoase fire on a
+    #   palm): if the column is not the land itself, take the nearest free ground column within 8
+    def op_grond(px, pz):
+        yy = stand(W, px, pz)
+        return abs(yy - int(math.floor(ZW.hoogte(W, px, pz)))) <= 1 and all(
+            W.wget(px, yy + q, pz) == LUCHT for q in range(0, 3))
+    if not op_grond(x, z):
+        for r in range(1, 9):
+            ring = [(x + dx, z + dz) for dx in range(-r, r + 1) for dz in range(-r, r + 1) if max(abs(dx), abs(dz)) == r]
+            vrij = [p for p in ring if op_grond(*p)]
+            if vrij:
+                x, z = vrij[0]
+                break
     y = stand(W, x, z)
     zet(W, x, y - 1, z, "vloer_zand")
     zet(W, x, y, z, KAMPVUUR)
@@ -236,6 +249,7 @@ def uitkijk(W, pid, x, z, k="zs"):
                 g = grond(W, x + dx, z + dz)
                 doos(W, x + dx, min(g, y - 1), z + dz, x + dx, y - 1, z + dz, k)
                 leeg(W, x + dx, y, z + dz, x + dx, y + 3, z + dz)
+                zet_h(W, x + dx, z + dz, y - 1)    # [u-z6afronding] else groen() put a flower 1 above the platform (floating)
     zet(W, x - 1, y, z - 2, trap("palm_planken", "north"))
     zet(W, x + 1, y, z - 2, trap("palm_planken", "north"))
     doos(W, x + 2, y, z + 2, x + 2, y + 1, z + 2, "palm_hek")
@@ -318,6 +332,25 @@ def toren(W):
             laag = laag and g >= ys - 1
         if laag:
             break
+    # [u-z6afronding] the doorway between the threshold and the seal had a 1-block hole (x gx+1) down to the rock
+    for xx in range(gx + 1, tx - 16):
+        for dz in range(-2, 3):
+            if W.wget(xx, y0, tz + dz) == "minecraft:air":
+                zet(W, xx, y0, tz + dz, "grauw_steen")
+    # [u-z6afronding] beside the stair the cut left grass overhangs with a 2-high void under them (loopcheck VAL at
+    #   4116 70 -694): fill the voids under the top in the strips next to the stair
+    for xx in range(gx - 40, gx + 1):
+        for dz in list(range(-8, -2)) + list(range(3, 9)):
+            t = None
+            for yy in range(y0 + 3, y0 - 30, -1):         # the real top (the cached ground grid is stale here)
+                if W.wget(xx, yy, tz + dz) != LUCHT:
+                    t = yy
+                    break
+            if t is None:
+                continue
+            for yy in range(t - 6, t):
+                if W.wget(xx, yy, tz + dz) == "minecraft:air":
+                    zet(W, xx, yy, tz + dz, "rots")
     doos(W, tx - 16, y0 + 1, tz - 2, tx - 16, y0 + 7, tz + 2, "minecraft:black_stained_glass")
     LS.ring(W, tx - 16.5, y0 + 4.5, tz + 0.5, 3.4, kanteling=1.5707, rond_as=0.0, dik=0.0, k="goudblok")
     plek(W, "toren_poort", tx - 18, y0 + 1, tz)
@@ -373,6 +406,9 @@ def kerker(W):
         lx, lz = x + round(math.cos(a) * 5), z + round(math.sin(a) * 5)
         zet(W, lx, y + 5, lz, "minecraft:chain[axis=y,waterlogged=false]")
         zet(W, lx, y + 4, lz, "messing_lantaarn[hanging=true,waterlogged=false]")
+    # [u-z6afronding] the gate room cleared the last tread (z - 10, y gy): put it back, else the way up is a 1.5 step
+    for dx in range(-1, 2):
+        zet(W, x + dx, gy, z - 10, trap("vloer_zand", "south"))
     zet(W, x - 2, gy + 3, z - 11, "messing_lantaarn[hanging=false,waterlogged=false]")
     plek(W, "kerker_ingang", x, y, z + 12)
     plek(W, "kerker_hal", x, y, z + 3)
@@ -434,8 +470,8 @@ def zoutgrot(W):
                 q = (dx / 23.0) ** 2 + ((dy - 5) / 10.0) ** 2 + (dz / 16.0) ** 2
                 if 0.86 < q < 1.12:
                     p = (ex + dx, FL + dy, hz + dz)
-                    if W.wget(*p) == LUCHT:
-                        continue
+                    if W.wget(*p) == LUCHT or "stairs" in W.wget(*p) or "trap" in W.wget(*p):
+                        continue        # [u-z6afronding] the shell used to turn 2 entrance treads into full blocks (1.5 step)
                     r = rng.rand()
                     zet(W, *p, "zoutkristal" if r < 0.45 else ("minecraft:pink_stained_glass" if r < 0.5 else
                                                                ("minecraft:pearlescent_froglight" if r < 0.53 else "zout")))
@@ -448,11 +484,20 @@ def zoutgrot(W):
         else:
             top = FL + 6 + int(9 * math.sqrt(max(0, 1 - rr * rr)))
             zet(W, px, top, pz, "zoutkristalletjes", keep=True)
+    # [u-z6afronding] the stair corridor stopped 2-3 blocks short of the hall and the shell above turned that rock into
+    #   crystal: the whole cave was unreachable. Cut the passage through to the hall floor (3 wide, 4 high).
+    z_eind = ez + 4 - (n + 5)
+    for zz in range(hz + 6, z_eind + 1):
+        for dx in range(-1, 2):
+            zet(W, ex + dx, FL, zz, "zout")
+            leeg(W, ex + dx, FL + 1, zz, ex + dx, FL + 4, zz)
     # pillars of salt (stalagmites with a glow)
     for k in range(9):
         a = k * 2 * math.pi / 9 + 0.3
         px, pz = ex + math.cos(a) * 15, hz + math.sin(a) * 9
         h = 3 + int(rng.randint(0, 5))
+        if abs(px - ex) < 4 and pz > hz + 4:
+            continue                      # [u-z6afronding] keep the way in from the stair free
         doos(W, px, FL + 1, pz, px, FL + h, pz, "zoutkristal")
         zet(W, px, FL + h + 1, pz, "minecraft:pearlescent_froglight" if k % 3 == 0 else "zoutkristalletjes")
     # the lake (west-south of the hall centre): glowing floor, shore steps
@@ -503,7 +548,7 @@ def zoutgrot(W):
     plek(W, "zoutgrot_schat", wx, FL + 1, wz + 9)
     # the elite's round chamber (east), through a short tunnel
     tx0 = ex + 23
-    for i in range(10):
+    for i in range(-8, 15):     # [u-z6afronding] ex+15..ex+37: the tunnel used to stop short at both ends (hall + chamber walls)
         leeg(W, tx0 + i, FL + 1, hz - 1, tx0 + i, FL + 4, hz + 1)
         doos(W, tx0 + i, FL - 1, hz - 1, tx0 + i, FL, hz + 1, "zout")
     ec = (tx0 + 20, hz)
@@ -826,3 +871,91 @@ def landmarks(W, log=print):
     extra_plekken(W)
     karavanen(W)
     log("  uitkijken, geheimen, karavanen")
+
+
+# (x, y_from, z, y_to, block): Saffraanpoort, the 2-wide slot between the zellige house and the mosaic wall under a lintel
+# (VAL 3816 72 -800); the 1x1 water shaft beside the canal at 3754 -860 (VAL, 6.5 up)
+VASTE_PUTJES = [(3816, 72, -800, 77, "zs"), (3817, 72, -800, 77, "zs"), (3754, 61, -860, 68, "zs")]
+
+
+def vul_putjes(W, y_lo=40, y_hi=200, log=print):
+    """[u-z6afronding] Walkability post-pass over the whole zone-6 window (after the cities, landmarks, palms and figures):
+    small sky-open pits of 1 or 2 columns whose rims are all 2+ higher (a gap between two houses, a coconut hole in a palm
+    crown, a 1x1 shaft in the canyon rock, a water hole between canal walls) are filled up to 1 below the lowest rim with
+    the pit's own floor block. You used to fall in from a roof/cliff and never get out (loopcheck VAL). Stair floors,
+    fences and anything that is not air/water in the fill range are left alone (stair openings, doors, wells with decor)."""
+    import poi6
+    import loopcheck as LC
+    K = poi6.Klassen(W)
+    vast = np.isin(K.k, [LC.SOLID, LC.HALF, LC.STAIR, LC.DIRT_PATH, LC.FENCE])
+    water = np.array([p.startswith("minecraft:water") for p in W.pal], bool)
+    X, Y, Z = W.v.shape
+    j0, j1 = max(1, W.vy(y_lo)), min(Y - 1, W.vy(y_hi))
+    H = np.full((X, Z), -1, np.int32)
+    for i0 in range(0, X, 64):
+        sl = vast[W.v[i0:i0 + 64, j0:j1, :]]                      # (x, y, z)
+        heeft = sl.any(axis=1)
+        top = (j1 - j0 - 1) - np.argmax(sl[:, ::-1, :], axis=1)
+        H[i0:i0 + 64] = np.where(heeft, top + j0, -1)
+    P = np.pad(H, 1, mode="edge")
+    nb = np.stack([P[2:, 1:-1], P[:-2, 1:-1], P[1:-1, 2:], P[1:-1, :-2]])     # +x, -x, +z, -z
+    hoog = nb >= (H + 2)[None]
+    enkel = hoog.all(axis=0)
+    # pairs: exactly one rim side open, onto a neighbour at the same height that is itself closed on its other 3 sides
+    paar = np.zeros_like(enkel)
+    een_open = hoog.sum(axis=0) == 3
+    for d, (dx, dz) in enumerate(((1, 0), (-1, 0), (0, 1), (0, -1))):
+        kand = een_open & ~hoog[d] & (np.abs(nb[d] - H) <= 1)
+        ii, kk = np.nonzero(kand)
+        for i, k in zip(ii, kk):
+            i2, k2 = i + dx, k + dz
+            if 0 <= i2 < X and 0 <= k2 < Z and een_open[i2, k2] and not hoog[d ^ 1, i2, k2]:
+                paar[i, k] = True
+    gevuld = 0
+    plekken = []
+    stair_ids = K.k == LC.STAIR
+    fence_ids = K.k == LC.FENCE
+    def muur(i2, k2, h):
+        """Height of the contiguous solid wall in column (i2, k2) right above level h (0 = no wall)."""
+        if not (0 <= i2 < X and 0 <= k2 < Z):
+            return 0
+        n = 0
+        while n < 10 and h + 1 + n < Y and vast[W.v[i2, h + 1 + n, k2]]:
+            n += 1
+        return n
+
+    for i, k in zip(*np.nonzero((enkel | paar) & (H > 0))):
+        h = H[i, k]
+        # the rim must be real walls touching the pit (not a roof/awning high above an open neighbour)
+        wanden = []
+        for d, (dx, dz) in enumerate(((1, 0), (-1, 0), (0, 1), (0, -1))):
+            if hoog[d, i, k]:
+                wanden.append(muur(i + dx, k + dz, h))
+        if not wanden or min(wanden) < 2:
+            continue
+        rim = h + 1 + min(wanden)
+        if rim - h > 9:
+            continue
+        vloer = W.v[i, h, k]
+        if stair_ids[vloer] or fence_ids[vloer] or water[W.v[i, h + 1, k]]:
+            continue
+        kol = W.v[i, h + 1:rim, k]
+        if not all(c == 0 for c in kol):
+            continue
+        W.v[i, h + 1:rim, k] = vloer
+        gevuld += 1
+        plekken.append((int(W.b[0] + i), int(W.b[1] + h + 1), int(W.b[2] + k)))
+    try:
+        import json, os
+        with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "_cache", "putjes_z6.json"), "w") as fh:
+            json.dump(plekken, fh)
+    except OSError:
+        pass
+    # two spots the column rule can't see (under a lintel / a water shaft between canal walls), checked by hand
+    for (x, y, z, y2, k) in VASTE_PUTJES:
+        for yy in range(y, y2 + 1):
+            if W.wget(x, yy, z) == LUCHT or W.wget(x, yy, z).startswith("minecraft:water"):
+                zet(W, x, yy, z, k)
+                gevuld += 1
+    log(f"  putjes gevuld: {gevuld} kolommen" + (f" (bv. {plekken[:6]})" if plekken else ""))
+    return plekken

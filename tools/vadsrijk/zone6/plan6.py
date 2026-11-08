@@ -184,7 +184,7 @@ for gebied, pts in {
         _p(f"z6w_mobs_{gebied}_{i}", x, None, z)
 for k, v in {
     "z6w_zout_nacht": (3860, None, -620), "z6w_leider_oorschelp": (3620, None, -560), "z6w_leider_pitje": (3520, None, -962),
-    "z6w_leider_korstje": (3960, None, -560), "z6w_leider_oudstewachter": (4040, None, -1000), "z6w_leider_brie": (4110, None, -790),
+    "z6w_leider_korstje": (3960, None, -560), "z6w_leider_oudstewachter": (4034, None, -1000), "z6w_leider_brie": (4110, None, -790),  # [u-z6afronding] oudstewachter was on the baken roof (4040)
     "z6w_veilig_rozenkloof": (3400, 70, -714), "z6w_veilig_saffraanpoort": (3762, 71, -846), "z6w_veilig_karavaankamp": (3906, None, -580),
     "z6w_veilig_toren": (4100, None, -690),
     "z6w_wormelien": (3640, None, -610), "z6w_wormelien_deur": (3640, None, -582), "z6w_wormelien_bord": (3637, None, -580),
@@ -196,7 +196,8 @@ for k, v in {
 _p("raid_toren_binnen", 4140, 16, -688)
 
 GEEN_SNAP = ("haven_6_5_luchtschip", "haven_6_5_mast", "palmbaken_ster", "duinbaken_ster", "zoutbaken_ster", "ruinebaken_ster",
-             "oasebaken_ster", "toren_top", "raid_toren_binnen", "zoutgrot_kristalwand")
+             "oasebaken_ster", "toren_top", "raid_toren_binnen", "zoutgrot_kristalwand",
+             "rozenkloof_zeemond")   # [u-z6afronding] the pier is a 1-thick deck over the sea: keep the recorded spot
 # alias -> id (the other slices' names for the same spot)
 ALIAS = {"luchthaven_rozenkloof": "haven_z6_z5_vertrek", "zoutgrot_ingang_buiten": "zoutgrot_ingang",
          # u-z6verhaal

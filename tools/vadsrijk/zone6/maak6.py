@@ -80,6 +80,7 @@ def bouw_wereld(figuren=True):
         import zijfiguren as ZF
         ZF.bevolk(W)
     log(f"groen + figuren ({time.time() - t0:.0f} s), palet {len(W.pal)}")
+    bouw6.vul_putjes(W, log=lambda *a: log(*a))         # [u-z6afronding] small pits you can't get out of
     return W
 
 

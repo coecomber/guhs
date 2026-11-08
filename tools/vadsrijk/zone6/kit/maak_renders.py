@@ -217,7 +217,7 @@ def kloof_richel():
 
 def schatkamer_gevel():
     W = venster(3380, 55, -760, 3540, 140, -640)
-    return schoot(W, "01d_schatkamer", (3432, 80, -699), (3480, 100, -698), 58, ZON_KLOOF,
+    return schoot(W, "01d_schatkamer", (3402, 84, -700), (3480, 94, -698), 60, ZON_KLOOF,
                   nevel=(0.1, 900), titel="De Schatkamer",
                   onderschrift="de grote gevel in de eindwand: zuilenportiek, fronton, beeldnissen en de tholos met "
                                "guh-oortjes", zon_box=(3380, 55, -760, 3540, 140, -640))

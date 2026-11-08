@@ -347,6 +347,82 @@ def facades(W, log=None):
     return huizen
 
 
+def _relief_vrij(B, side, k, x):
+    """[u-z6afronding] False where relief would get in the way: stair runs, bridge heads, the rope bridge, the Siq."""
+    for (bi, s, kk) in TRAPPEN:
+        if s == side and kk == k:
+            S0 = BAYLIST[bi]
+            n = S0.U(side, k) - S0.L[k]
+            if S0.x1 - 3 <= x <= S0.x1 + n + 6:
+                return False
+    if k == 1 and any(abs(x - bx) <= 5 for bx, _ in BRUGGEN):
+        return False
+    if k == 2 and abs(x - TOUWBRUG_X) <= 4:
+        return False
+    if side == N and B.i in SIQ_BAYS_N:
+        return False
+    return x < X1 - 1
+
+
+def relief(W):
+    """[u-z6afronding] More relief on the canyon walls, readable from a distance: 2-wide carved pilasters at every bay
+    boundary (base, fluted shaft, gold capital, a projecting impost block under the lip) and a projecting cornice band
+    under the lip of every face, plus a thinner string course over the facades. Only placed into air, never on a stair,
+    bridge head or the Siq (trappen()/bruggen() run after this and win)."""
+    for bi, B in enumerate(BAYLIST[1:], start=1):
+        for side in (N, S):
+            for k in range(3):
+                V = B.vlak(W, side, k)
+                y = B.L[k]
+                U = B.U(side, k)
+                if not raakt(W, B.x1 - 2, y - 2, V.c - 8, B.x2 + 2, U + 2, V.c + 8):
+                    continue
+
+                def leeg_(u, d, yy):
+                    return V.G(u, d, yy) == LUCHT
+
+                def rows(x):
+                    lp = _lip_c(x, side, k, B.i)
+                    return min(4, 1 + lp) if lp else 0
+                # cornice band right under the lip (or 2 under the next ledge), the full bay
+                for x in range(B.x1, B.x2):
+                    if not _relief_vrij(B, side, k, x):
+                        continue
+                    r = rows(x)
+                    yc = U - r - 1 if r else U - 2
+                    if yc - y >= 8 and leeg_(x, -1, yc):
+                        V.P(x, -1, yc, trap("zs", V.inn, half="top"))
+                        if r == 0 and leeg_(x, -1, yc + 1):
+                            V.P(x, -1, yc + 1, "zs")
+                    ys = y + 11                          # string course over the facade crowns
+                    if yc - ys >= 3 and leeg_(x, -1, ys) and leeg_(x, -1, ys - 1):
+                        V.P(x, -1, ys, plaat("zs", "top"))
+                # pilasters at the boundary with the next bay (2 wide: the last column of this bay + the first of
+                # the next), so every bay reads as a framed bay from across the canyon
+                if bi == len(BAYLIST) - 1:
+                    continue
+                xb = B.x2
+                if not (_relief_vrij(B, side, k, xb - 1) and _relief_vrij(B, side, k, xb)):
+                    continue
+                for x in (xb - 1, xb):
+                    r = rows(x)
+                    ytop = U - r - 1 if r else U - 1
+                    if ytop - y < 6 or not leeg_(x, -1, y):
+                        continue
+                    V.P(x, -1, y, "marmer_glad")
+                    if leeg_(x, -2, y) and k == 0:
+                        V.P(x, -2, y, trap("marmer_glad", V.inn))
+                    for yy in range(y + 1, ytop - 1):
+                        if leeg_(x, -1, yy):
+                            V.P(x, -1, yy, "zuil")
+                    if leeg_(x, -1, ytop - 1):
+                        V.P(x, -1, ytop - 1, "zuilkop")
+                    if leeg_(x, -1, ytop):
+                        V.P(x, -1, ytop, "zs_beitel")
+                    if leeg_(x, -2, ytop):
+                        V.P(x, -2, ytop, trap("zs", V.inn, half="top"))
+
+
 # ---- the special houses on the canyon floor
 def huis_herberg(V, u1, u2, y, h, seed):
     """Herberg "De Bultguh": an open arcade of three arches, a big hall with a counter (balie), tables, cushions,
@@ -797,9 +873,9 @@ def schatkamer(W):
     # make sure the end wall is solid rock over the facade's width, depth and height
     for u in range(cz - hw - 4, cz + hw + 5):
         for d in range(0, 30):              # a rock crown over the facade where the plateau is lower (the tholos needs a
-            # canopy): full height up to d 14 and over the field width, then falling off in rough steps
+            # canopy; [u-z6afronding] roughness max 1 per column, 2 made pits): full height up to d 14 and over the field width, then falling off in rough steps
             du_ = max(0, abs(u - cz) - hw - 1)
-            kroon = ytop + 4 - int(max(0, d - 14) * 1.3 + du_ * 2.5 + SK.hash3(u, d, cz, 23) * 2.5)
+            kroon = ytop + 4 - int(max(0, d - 14) * 1.3 + du_ * 2.5 + SK.hash3(u, d, cz, 23) * 1.9)
             for yy in range(y - 1, max(kroon, min(ytop + 4, _nat_h(*V.wereld(u, d)) + 1))):
                 xw, _, zw = V.pos(u, d, yy)
                 if W.wget(xw, yy, zw) == LUCHT:
@@ -1531,6 +1607,7 @@ def bouw(W, figuren=True):
     herbouw(W)
     # 2. architecture
     huizen = facades(W)
+    relief(W)
     trappen(W)
     schatkamer(W)
     siq(W)

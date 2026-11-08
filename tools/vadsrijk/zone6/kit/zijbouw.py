@@ -385,6 +385,8 @@ def palm(W, x, y, z, h=None, seed=0, kroon="guhs:guhwaii_palm_blad", stam="guhs:
         for k in range(3):
             b_ = rng.uniform(0, 2 * math.pi)
             zet(W, tx + math.cos(b_), ty - 1, tz + math.sin(b_), "minecraft:orange_terracotta")
+            # [zone 6 kaart][u-z6afronding] a leaf over the date cluster: else the cluster top was a 1x1 pit in the crown
+            zet(W, tx + math.cos(b_), ty, tz + math.sin(b_), kroon, keep=True)
 
 
 def struik(W, x, y, z, seed=0, soort=None):

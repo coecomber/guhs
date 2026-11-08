@@ -43,3 +43,19 @@ De volledige lijst staat in `POI_Z6.md`. Speel in survival om de beloopbaarheid 
 - Zwem of vlieg (zonder luchtschip) vanaf de kust de zeestraat in: `/tp @s 3250 64 -760` → je wordt zachtjes teruggeduwd met bloesemblaadjes; melding "De warme Zijdewind waait je zachtjes terug...".
 - Ten oosten van de oase (`/tp @s 4220 70 -735`): terugduw met "Verder naar het oosten wordt het grauw en gevaarlijk..." (zone 7 komt later).
 - Let op de randen van de kaart: het land loopt aan de noord-, zuid- en oostrand af in de open zee, geen afgesneden chunks.
+
+## 6. Ronde afronding (nieuw om te testen)
+- **De Schatkamer** (diepe gevel): `/guhs vadsrijk z6wereld plek rozenkloof_schatkamer`. Loop een stuk terug op het plein en kijk
+  omhoog: vrijstaande ronde zuilen in een diepe portiek, fronton met guh-medaillon, twee paviljoens met halve frontons en de ronde
+  tholos in een diepe nis onder de rotskroon. Loop tussen de zuilen door de portiek in.
+- **Reliëf op de kloofwanden**: `/guhs vadsrijk z6wereld plek rozenkloof_richel_2` en `... haven_z6_z5_vertrek` (van boven):
+  pilasters op elke vakgrens, kroonlijsten onder de overhangen. Loop over de richels: niets mag in de weg staan op trappen/bruggen.
+- **Zoutgrot** (was helemaal onbereikbaar): `/guhs vadsrijk z6wereld plek zoutgrot_ingang`, loop in survival de trap af tot in de
+  hal, dan oostwaarts door de tunnel naar de elitekamer (`zoutgrot_elite`), en weer terug naar boven.
+- **Kerker**: `/guhs vadsrijk z6wereld plek kerker_ingang` → trap af naar de poort (`kerker_poort`) en weer omhoog zonder springen.
+- **Toren**: `/guhs vadsrijk z6wereld plek toren_voet` → de trap op naar de poort; de drempel heeft geen gat meer.
+- **Oostpoort-wegen**: `/guhs vadsrijk z6wereld plek saffraanpoort_paleisplein`, loop de Oostpoort uit: de wegen naar de oase en
+  het Ruïnedal gaan nu om de rotsmesa heen (geen tunneltrap meer).
+- **Kampvuren**: `/guhs vadsrijk z6wereld plek kampvuur_karavaankamp` en `... kampvuur_moederoase`: je staat op de grond naast het
+  vuur, niet op een tent of palm.
+- **Oudste Wachter**: `/guhs vadsrijk z6wereld plek z6w_leider_oudstewachter`: naast het Ruïnebaken op de grond (stond op het dak).

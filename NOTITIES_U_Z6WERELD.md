@@ -66,3 +66,61 @@ steenzaag), loot, tags (hek in #fences/#wooden_fences, muur in #walls), NL + EN.
 - `zoutgrot` = de hal ONDER de grond (u-z6verhaal gebruikte het als oppervlakte-ingang: dat is `zoutgrot_ingang`).
 - Geheimen: de namen + plekken van u-z6verhaal overgenomen (`geheim_knuffel_1..8`, `geheim_schat_1..3`).
 - Raid-pocket (u-z6raid, x 4115..4174, z -713..-663, y 2..68): geen grot/water gebouwd in die doos.
+
+## Ronde U-Z6AFRONDING (2026-11-06 + 2026-11-08, na de pc-herstart)
+
+### Beloopbaarheid (alles in `tools/vadsrijk/zone6/`, gemarkeerd `[u-z6afronding]`)
+- `bouw6.vul_putjes()` (nieuw, draait als laatste stap van `maak6.bouw_wereld`): kleine putjes van 1-2 kolommen die open naar de
+  lucht zijn en aan alle kanten ECHTE muren van 2+ hoog hebben (gat tussen twee huizen, 1x1 schacht in de kloofrots) worden
+  opgevuld tot 1 onder de laagste rand, met het eigen vloerblok. Trapvloeren, hekken, water en alles wat geen lucht is blijven
+  staan. Plus `VASTE_PUTJES` (2 plekken die de kolomregel niet ziet: de spleet onder een latei in Saffraanpoort 3816/3817 -800 en de
+  waterschacht naast het kanaal 3754 -860). Laatste run: 24 kolommen. De lijst komt in `_cache/putjes_z6.json`.
+  (Eerste versie keek alleen naar kolomtoppen en vulde 587 kolommen, o.a. daken onder luifels en een fontein: daarom nu de
+  muurcontrole + nooit water.)
+- Zoutgrot: de kristalschil maakte 2 traptreden van de ingangstrap tot volle blokken (1,5 stap) en de gang stopte 2-3 blokken vóór
+  de hal (schil eroverheen = dicht); nu: schil slaat traptreden over, gang doorgehakt tot de hal, zuil voor de ingang overgeslagen,
+  de tunnel naar de elitekamer begint/eindigt nu ín de hal en de kamer (was aan beide kanten dicht). De hele grot was onbereikbaar.
+- Kerker: de poortkamer wiste de onderste trede (1,5 stap omhoog = vast in de kamer); trede teruggezet.
+- Toren: gat van 1 blok in de drempel (x 4120) gevuld; holtes onder graszoden naast de trap gevuld (eigen kolomtop, de gecachete
+  grondkaart was daar verouderd).
+- Kampvuren: nooit op een tent of palmkroon (karavaankamp-vuur stond óp een tent, Moederoase-vuur op een palm): zoekt de dichtstbijzijnde
+  vrije grondkolom binnen 8.
+- Uitkijkpunten: hoogteveld bijgewerkt (groen() zette een bloem zwevend boven het platform: de zweefcheck-vondst 4038 68 -719).
+- Palmen (`kit/zijbouw.palm`): een blad boven elk dadeltrosje (de tros was een 1x1-putje in de kroon).
+- Schatkamer-rotskroon: ruwheid max 1 per kolom (2 gaf putjes op het plateau erboven).
+- `poi6.py`: een plek met y snapt eerst op ECHTE grond (niet op blad/stam/wol/zijde/luifel en niet op een los blok boven lucht,
+  zoals een kokos of een dakpan), pas daarna op alles. `plan6.py`: `rozenkloof_zeemond` in GEEN_SNAP (de pier is een dek van 1 dik
+  boven zee), `z6w_leider_oudstewachter` 4040 -> 4034 (stond op het dak van het Ruïnebaken).
+
+### Checkresultaten (laatste volledige regen, 2026-11-08 16:43)
+| check | eerst (06-11) | nu |
+|---|---|---|
+| poicheck6 | 11/334 niet sta-baar | 0/334 |
+| zweefcheck (`_zweefcheck_tmp.py --zone 6`) | 1 zwevende bloem | 0 |
+| loopcheck6 VAL | 21 | 0 |
+| loopcheck6 POI onbereikbaar | ~67 | 1: `toren_top` (anker van de raid, verwacht) |
+| audit6 | kuil 20, poi 41, trap 101, deur 33 | kuil 0, poi 9, trap 70, deur 33 |
+| verbindcheck (zone-6-tegels) | - | los 0, fout 0, as 0, gat 0 |
+- audit poi 9 = alleen ankers/props (bakensterren, mast, kristalwand, schat achter de verhaalwand, raid-binnen): verwacht.
+- audit trap 70 / loopcheck TRAP 336 + TRAP- 111: kroonlijsten, frontons en dakranden (sierstenen trappen), geen looproutes.
+- Bekend, NIET opgelost: audit deur 33 = cherry-deuren in Saffraanpoort met direct een muur erachter (siergevels van rijhuizen
+  zonder kamer; al zo sinds de stad gebouwd is). Zou per huis een kamer vragen; meegenomen als restpunt.
+
+### De Schatkamer (gebruiker: "te plat") + reliëf op de kloofwanden
+- Schatkamer (`rozenkloof.schatkamer()` + `geheimen()`): diepe Al-Khazneh: gevel 3 terug in een ruw rotskader met schaduwsleuf,
+  portiek 6 diep met 6 vrijstaande ronde zuilen, hoofdgestel met guh-fries en kroonlijst, uitspringend fronton met guh-medaillon,
+  attiek, boven twee uitspringende paviljoens met halve frontons (gebroken fronton), daartussen een diepe nis met een ronde tholos
+  (10 vrije zuilen, kegeldak, urn), rotskroon erboven. De hal ligt verder naar achteren; de geheime trap komt op de tholosvloer uit.
+- Kloofwanden (`rozenkloof.relief()`, nieuw, na `facades()` en vóór `trappen()`): op elke vakgrens 2 brede uitgehouwen pilasters
+  (basis, gecanneleerde schacht, gouden kapiteel, kämpferblok onder de overhang), een uitspringende kroonlijst onder de overhang van
+  elke wand en een dunne lijst boven de gevels. Alleen in lucht; nooit op trappen, brughoofden, de touwbrug of de Siq.
+  Van een afstand lees je nu ritmische vakken (render 01a).
+- `rozenkloof_check.py` groen (51 plekken, geen ontbrekend/onbereikbaar/niet terug).
+- Renders in `renders-zijdeland/ronde2`: oude 01a/01c/01d (+ _namen) hernoemd naar `*_oud`; nieuw: 01a overzicht, 01b straat
+  (Rozenplein), 01c richels, 01d Schatkamer (camera verder terug: de hele gevel in beeld).
+
+### Overig
+- `tools/vadsrijk/_zweefcheck_tmp.py` = kopie van de zweefcheck van 110-u-deco met zone 6 erbij: NIET gecommit (komt via de
+  integratie).
+- Gametests: zie de commit (Z6WereldGameTests + Z6BlokkenGameTests).
+- `POI_Z6.md` + `Z6WereldPlekken.java` gekopieerd naar `guhs_vadsrijk/`.

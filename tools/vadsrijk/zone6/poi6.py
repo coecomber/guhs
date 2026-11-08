@@ -42,6 +42,15 @@ class Klassen:
         self.geen_grond = np.array([any(w in s for w in ("_blad", "leaves", "_stam", "_log", "wool", "zijde", "luifel"))
                                     for s in W.pal], bool)
 
+    def grond(self, x, y, z):
+        """[u-z6afronding] the floor under a stand spot is real ground: not a palm crown / tent roof / awning and not a
+        lone decoration block floating over air (a coconut, a roof tile over a room)."""
+        W = self.W
+        i, j, k = W.vx(x), W.vy(y), W.vz(z)
+        if j < 2:
+            return False
+        return not self.geen_grond[W.v[i, j - 1, k]] and W.v[i, j - 2, k] != 0
+
     def staan(self, x, y, z):
         W, LC = self.W, self.LC
         i, j, k = W.vx(x), W.vy(y), W.vz(z)
@@ -62,7 +71,7 @@ class Klassen:
         hi = Y - 2 if ymax is None else min(Y - 2, W.vy(ymax))
         col = W.v[i, :, k]
         for j in range(hi, 0, -1):
-            if col[j - 1] != 0 and not self.geen_grond[col[j - 1]] and self.staan(x, W.b[1] + j, z):
+            if col[j - 1] != 0 and not self.geen_grond[col[j - 1]] and col[j - 2] != 0 and self.staan(x, W.b[1] + j, z):
                 return int(W.b[1] + j)
         return None
 
@@ -89,6 +98,9 @@ def snap(K, x, y, z, r=6, dy=4):
                     if t is not None:
                         return (x + dx, t, z + dz)
         return None
+    for (dx, ddy, dz) in _offsets(r, dy):
+        if K.staan(x + dx, y + ddy, z + dz) and K.grond(x + dx, y + ddy, z + dz):
+            return (x + dx, y + ddy, z + dz)
     for (dx, ddy, dz) in _offsets(r, dy):
         if K.staan(x + dx, y + ddy, z + dz):
             return (x + dx, y + ddy, z + dz)
