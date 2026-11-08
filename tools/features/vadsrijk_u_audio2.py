@@ -67,10 +67,10 @@ WERELD = {
 TEKSTEN = {  # key: (en, nl)
     "guhs.configuration.wereldgeluiden": ("Vadsrijk: world sounds", "Vadsrijk: wereldgeluiden"),
     "guhs.configuration.wereldgeluiden.tooltip": (
-        "Soft little sounds of places close by: fountains, beehives, the smithy hammer, market murmur, wind chimes, campfires, "
-        "creaking lifts, an echo of your steps in caves (percent, 0 = off). Also follows the Ambient slider.",
-        "Zachte geluidjes van plekken dichtbij: fonteintjes, bijenkorven, de smidshamer, marktgeroezemoes, windgongen, kampvuren, "
-        "krakende liften, echo van je voetstappen in grotten (procent, 0 = uit). Volgt ook de schuif Omgeving."),
+        "Soft little sounds of places close by: fountains, beehives, the smithy hammer, wind chimes, campfires, "
+        "creaking lifts, an echo of your steps in caves (percent, 0 = off). Also follows the Ambient slider. (Crowd murmur has its own slider.)",
+        "Zachte geluidjes van plekken dichtbij: fonteintjes, bijenkorven, de smidshamer, windgongen, kampvuren, "
+        "krakende liften, echo van je voetstappen in grotten (procent, 0 = uit). Volgt ook de schuif Omgeving. (Geroezemoes heeft een eigen schuif.)"),
     "guhs.configuration.stemmen": ("Vadsrijk: NPC voices", "Vadsrijk: NPC-stemmetjes"),
     "guhs.configuration.stemmen.tooltip": (
         "The little guh voices of NPCs: a 'guh!' when you talk to them, a question, a thank-you (percent, 0 = off). "

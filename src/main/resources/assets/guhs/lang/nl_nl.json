@@ -46098,7 +46098,7 @@
   "item.guhs.vr_amb_kern_sterrenkern": "Sterrenkern",
   "item.guhs.vr_amb_kern_sterrenkern.uitleg": "Een bazenkern uit zone 6. Nodig voor Meesterwerk-sieraden (T6).",
   "guhs.configuration.wereldgeluiden": "Vadsrijk: wereldgeluiden",
-  "guhs.configuration.wereldgeluiden.tooltip": "Zachte geluidjes van plekken dichtbij: fonteintjes, bijenkorven, de smidshamer, marktgeroezemoes, windgongen, kampvuren, krakende liften, echo van je voetstappen in grotten (procent, 0 = uit). Volgt ook de schuif Omgeving.",
+  "guhs.configuration.wereldgeluiden.tooltip": "Zachte geluidjes van plekken dichtbij: fonteintjes, bijenkorven, de smidshamer, windgongen, kampvuren, krakende liften, echo van je voetstappen in grotten (procent, 0 = uit). Volgt ook de schuif Omgeving. (Geroezemoes heeft een eigen schuif.)",
   "guhs.configuration.stemmen": "Vadsrijk: NPC-stemmetjes",
   "guhs.configuration.stemmen.tooltip": "De guh-stemmetjes van NPC's: een 'guh!' als je ze aanspreekt, een vraagje, een bedankje (procent, 0 = uit). Volgt ook de schuif Vriendelijke wezens.",
   "vadsrijk.toetsen.titel": "Toetsen in het Vadsrijk",

@@ -46098,7 +46098,7 @@
   "item.guhs.vr_amb_kern_sterrenkern": "Sterrenkern",
   "item.guhs.vr_amb_kern_sterrenkern.uitleg": "Een bazenkern uit zone 6. Nodig voor Meesterwerk-sieraden (T6).",
   "guhs.configuration.wereldgeluiden": "Vadsrijk: world sounds",
-  "guhs.configuration.wereldgeluiden.tooltip": "Soft little sounds of places close by: fountains, beehives, the smithy hammer, market murmur, wind chimes, campfires, creaking lifts, an echo of your steps in caves (percent, 0 = off). Also follows the Ambient slider.",
+  "guhs.configuration.wereldgeluiden.tooltip": "Soft little sounds of places close by: fountains, beehives, the smithy hammer, wind chimes, campfires, creaking lifts, an echo of your steps in caves (percent, 0 = off). Also follows the Ambient slider. (Crowd murmur has its own slider.)",
   "guhs.configuration.stemmen": "Vadsrijk: NPC voices",
   "guhs.configuration.stemmen.tooltip": "The little guh voices of NPCs: a 'guh!' when you talk to them, a question, a thank-you (percent, 0 = off). Also follows the Friendly Creatures slider.",
   "vadsrijk.toetsen.titel": "Keys in the Vadsrijk",

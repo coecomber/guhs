@@ -166,7 +166,8 @@ public final class StadsMuziekSpeler {
         }
         if (bed == null && stad != null) {
             bedStad = bedVoor;
-            bed = new Lus(StadsMuziek.BED.get(stad).get(), SoundSource.AMBIENT, BED_VOLUME, FADE_IN, true);
+            bed = new Lus(StadsMuziek.BED.get(stad).get(), SoundSource.AMBIENT,
+                    "saffraanpoort".equals(stad) ? BED_VOLUME * 0.5f : BED_VOLUME, FADE_IN, true);   // V-INT: the bazaar bed at half, u-geroezemoes' murmur carries it
             mc.getSoundManager().play(bed);
         }
         if (stad != null && klok % 50 == 0) {
