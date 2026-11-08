@@ -164,7 +164,7 @@ public final class PartyFrames {
         float x = (float) p.getX(), y = (float) p.getY(), z = (float) p.getZ();
         double t = p.level().getGameTime() / 20.0;
         List<UHudPayloads.Frame> l = new ArrayList<>();
-        l.add(new UHudPayloads.Frame(new UUID(0, 1), "Knuffelaar", "knuffelridder", "vadsrijk.klassen.klasse.knuffelridder", 42, 900, 1000,
+        l.add(new UHudPayloads.Frame(new UUID(0, 1), "Knuffelaar", "knuffelridder", "vadsrijk.kern.klasse.knuffelridder" /* W-SPEL: was a key without text */, 42, 900, 1000,
                 List.of(Status.VAHOEG.ordinal()), dim, x + 4, y, z + 3, UHudPayloads.STAAT_OK, true));
         l.add(new UHudPayloads.Frame(new UUID(0, 2), "Pluisje", "pluisjager", "vadsrijk.klassen.klasse.pluisjager", 38,
                 (float) (300 + 250 * Math.sin(t)), 800, List.of(Status.SNELPOOTJES.ordinal(), Status.BRANDEND.ordinal()), dim,

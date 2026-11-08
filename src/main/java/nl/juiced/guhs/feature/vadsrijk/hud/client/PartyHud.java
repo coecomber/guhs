@@ -85,7 +85,7 @@ public final class PartyHud {
     static List<UHudPayloads.Frame> voorbeeld() {
         UUID a = new UUID(0, 11), b = new UUID(0, 12);
         return List.of(
-                new UHudPayloads.Frame(a, "Knuffelaar", "knuffelridder", "vadsrijk.klassen.klasse.knuffelridder", 42, 820, 1000,
+                new UHudPayloads.Frame(a, "Knuffelaar", "knuffelridder", "vadsrijk.kern.klasse.knuffelridder" /* W-SPEL: was a key without text */, 42, 820, 1000,
                         List.of(Status.VAHOEG.ordinal(), Status.KNUFFELSCHILD.ordinal()), "", 0, 0, 0, UHudPayloads.STAAT_OK, true),
                 new UHudPayloads.Frame(b, "Pluisje", "pluisjager", "vadsrijk.klassen.klasse.pluisjager", 38, 260, 800,
                         List.of(Status.BRANDEND.ordinal()), "", 0, 0, 0, UHudPayloads.STAAT_OK, false),
