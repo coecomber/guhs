@@ -71,7 +71,6 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.huizen.HuizenRegistry.register(modBus);   // U-HUIZEN: Het Knuffelkwartier (player housing)
         nl.juiced.guhs.feature.vadsrijk.grotten.Grotten.register(modBus);   // U-GROTTEN: one atmosphere cave per zone (areas, elite, schat, book)
         nl.juiced.guhs.feature.vadsrijk.vint.VInt.register(modBus);   // V-INT: round-U glue (spec in the Karakter tab + party frames)
-        nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.register(modBus);   // U-Z6RAID: the raid De Sterrendovende Toren
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.register(modBus);   // U-Z6RAID: the raid De Sterrendovende Toren
     }
