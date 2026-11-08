@@ -207,12 +207,13 @@ def verhaal(b):
     kaart = ""
     if "wereldkaart" in namen:
         kaart = (f'<figure class="vh-hero"><a href="img/verhaal/wereldkaart.webp"><img src="img/verhaal/wereldkaart.webp" alt="De Lange Reis: de wereldkaart van De Knuffelorde" width="1600" height="853"></a>'
-                 f'<figcaption>{t("The Long Journey: the world map of De Knuffelorde. From Knuffelkamp (left) through the Island Sea and the Floating City to the Great Mainland and Burcht Nooitgenoeg (right). Zones 1-6 are in the game (up to Het Zijdeland); further east is still coming.", "De Lange Reis: de wereldkaart van De Knuffelorde. Van Knuffelkamp (links) via de Eilandzee en de Zwevende Stad naar het Grote Vasteland en Burcht Nooitgenoeg (rechts). Zone 1-6 zitten in het spel (tot en met Het Zijdeland); verder naar het oosten komt nog.")} '
+                 f'<figcaption><span data-zone="6">' + f'{t("The Long Journey: the world map of De Knuffelorde. From Knuffelkamp (left) through the Island Sea and the Floating City to the Great Mainland and Burcht Nooitgenoeg (right). Zones 1-6 are in the game (up to Het Zijdeland); further east is still coming.", "De Lange Reis: de wereldkaart van De Knuffelorde. Van Knuffelkamp (links) via de Eilandzee en de Zwevende Stad naar het Grote Vasteland en Burcht Nooitgenoeg (rechts). Zone 1-6 zitten in het spel (tot en met Het Zijdeland); verder naar het oosten komt nog.")} ' + '</span>'
+                 f'<span class="verstopt-zone" data-zone="6">{t("The Long Journey: the world map of De Knuffelorde. Pick a higher zone at the top right to read where it all goes.", "De Lange Reis: de wereldkaart van De Knuffelorde. Kies rechtsboven een hogere zone om te lezen waar het allemaal heen gaat.")}</span>'
                  f'<a href="kaart.html" style="color:#ffd3e6">{t("The real map of zones 1-6", "De echte kaart van zone 1-6")}</a></figcaption></figure>')
 
     # part navigation
-    nav = "".join(f'<a href="#deel{d[0]}" style="--dk:{d[4]}">{t(d[1], d[2])}<small>{d[3]}</small></a>' for d in DELEN)
-    nav += "".join(f'<a class="later" href="#later">{t(en, nl)}<small>{lv} &middot; {t("coming", "komt nog")}</small></a>' for en, nl, lv in LATER)
+    nav = "".join(f'<a href="#deel{d[0]}" data-zone="{d[5][0]}" style="--dk:{d[4]}">{t(d[1], d[2])}<small>{d[3]}</small></a>' for d in DELEN)
+    nav += "".join(f'<a class="later" data-zone="6" href="#later">{t(en, nl)}<small>{lv} &middot; {t("coming", "komt nog")}</small></a>' for en, nl, lv in LATER)
 
     # chapters
     delen = ""

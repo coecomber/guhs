@@ -58,7 +58,7 @@ def ambachten(b):
         rec.setdefault(r["ambacht"], []).append(r)
     blok = ""
     for k in maak:
-        rijen = [f'<tr><td class="num">{r["level"]}</td><td>{ESC(r["naam"])}</td><td>{t(*UIT_EN.get(r["soort"], (r["soort"], r["soort"])))}</td>'
+        rijen = [f'<tr data-zone="{b.tekst_zone(r["naam"], " ".join(x for _, x in r["in_"]))}"><td class="num">{r["level"]}</td><td>{ESC(r["naam"])}</td><td>{t(*UIT_EN.get(r["soort"], (r["soort"], r["soort"])))}</td>'
                  f'<td class="num">{r["tier"]}</td><td>{ESC(", ".join(f"{n}x {x}" for n, x in r["in_"]) or "-")}</td></tr>' for r in rec.get(k, [])]
         blok += (f'<h3 id="{k}">{t(AMBACHT_EN.get(k, k), namen[k])} <small class="muted">({len(rijen)})</small></h3>'
                  + tabel([(t("Level", "Niveau"), 1), (t("Recipe", "Recept"), 0), (t("Makes", "Maakt"), 0), ("Tier", 1), (t("Needs", "Nodig"), 0)], rijen))
@@ -81,8 +81,9 @@ def ambachten(b):
 </ul>
 <h3>{t("Where", "Waar")}</h3>{tabel([(t("Craft", "Ambacht"), 0), ("Zone", 0), (t("Spots", "Plekken"), 0)], plek_rijen)}
 <h2>{t("Workshops", "Werkplaatsen")}</h2>
-{p("The master guhs stand in a ring around the town squares (Zwamzoet, Kandijkom, Honingtak, Lampionhaven and the guild in Hoogvads). Click one: Workshop, Recipe book, Tell me... (a little story in 5 steps, with a keepsake sent home at the end).",
-   "De leermeester-guhs staan in een ring rond de stadspleinen (Zwamzoet, Kandijkom, Honingtak, Lampionhaven en het gilde in Hoogvads). Klik er een: Werkplaats, Receptenboek, Vertel eens... (een verhaaltje in 5 stapjes, met aan het eind een aandenken met de Post naar huis).")}
+{p("The master guhs stand in a ring around the town squares (first in Zwamzoet). Click one: Workshop, Recipe book, Tell me... (a little story in 5 steps, with a keepsake sent home at the end).",
+   "De leermeester-guhs staan in een ring rond de stadspleinen (eerst in Zwamzoet). Klik er een: Werkplaats, Receptenboek, Vertel eens... (een verhaaltje in 5 stapjes, met aan het eind een aandenken met de Post naar huis).")}
+<div data-zone="5">{p("Every town has them: Zwamzoet, Kandijkom, Honingtak, Lampionhaven and the guild in Hoogvads.", "Elke stad heeft ze: Zwamzoet, Kandijkom, Honingtak, Lampionhaven en het gilde in Hoogvads.")}</div>
 <ul>
 <li>{t("Making something is a little timing game: stop the bar in the pink for a higher Vadsigheid (better food, stronger potions). Make 10x skips the game (always 60%).",
        "Iets maken is een timingspelletje: stop het streepje in het roze voor een hogere Vadsigheid (beter eten, sterkere drankjes). Maak 10x slaat het spelletje over (altijd 60%).")}</li>
@@ -161,7 +162,7 @@ def kledingkast(b):
     for s, (en, nl) in SOORT_KLEDING.items():
         if s not in per:
             continue
-        rijen = [f'<tr><td>{ESC(d["naam"])}</td><td>{spoiler("<p>" + ESC(d["bron"]) + "</p>", "How to get it", "Hoe krijg je het") if d["bron"] else ""}</td></tr>' for d in per[s]]
+        rijen = [f'<tr data-zone="{b.tekst_zone(d["naam"], d["bron"] or "")}"><td>{ESC(d["naam"])}</td><td>{spoiler("<p>" + ESC(d["bron"]) + "</p>", "How to get it", "Hoe krijg je het") if d["bron"] else ""}</td></tr>' for d in per[s]]
         blok += f'<h3 id="{s}">{t(en, nl)} <small class="muted">({len(rijen)})</small></h3>' + tabel([(t("Name", "Naam"), 0), (t("How", "Hoe"), 0)], rijen)
     kr = "".join(f"<li>{ESC(v)}</li>" for kk, v in k.get("krachten", {}).items() if kk != "alleen_rijk")
     main = f"""<h1>{t("Wardrobe", "Kledingkast")}</h1>

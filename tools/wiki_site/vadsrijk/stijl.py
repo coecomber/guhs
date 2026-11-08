@@ -58,6 +58,12 @@ details.spoiler{border:1.5px dashed var(--vr);border-radius:12px;padding:6px 12p
 details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
+.komma{list-style:none;padding:0;margin:0 0 1em}.komma li{display:inline}.komma li+li::before{content:", "}
+.spoileruitleg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:2000;width:min(560px,calc(100vw - 32px));background:var(--card);color:var(--ink);border:2px solid var(--vr);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:14px 16px;font:15px/1.45 var(--body)}
+.spoileruitleg p{margin:0 0 10px}
+.spoileruitleg .su-knoppen{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.spoileruitleg label{font-size:14px;color:var(--muted);cursor:pointer}
+.spoileruitleg .knop{min-width:80px;cursor:pointer}
 .verstopt-zone{border:1.5px dashed var(--line2);border-radius:14px;padding:10px 14px;color:var(--muted);margin:10px 0}
 html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="5"] [data-zone="6"]:not(.verstopt-zone){display:none!important}
 .verstopt-zone{display:none}
@@ -177,10 +183,24 @@ JS = r"""
   showTheme();
   // spoiler switch: show everything up to zone X
   var zs=document.getElementById('zonetot');
-  function setZone(z){html.setAttribute('data-zonetot',z);store('guhs-vr-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
-  if(zs){zs.addEventListener('change',function(){setZone(zs.value);});}
-  setZone(read('guhs-vr-zonetot')||html.getAttribute('data-zonetot')||'3');
-  window.VR={lang:function(){return html.getAttribute('data-lang')||'nl';},zone:function(){return +(html.getAttribute('data-zonetot')||3);},
+  // W-SITE (user request): EVERY page load starts at zone 1 (tutorial + zone 1); a higher choice is never remembered
+  function setZone(z){html.setAttribute('data-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
+  try{localStorage.removeItem('guhs-vr-zonetot');}catch(e){}
+  setZone('1');
+  // W-SITE: a friendly note on load; "niet meer tonen" only hides the NOTE next time (the switch still starts at zone 1)
+  var uitleg=null;
+  function sluitUitleg(){if(uitleg){uitleg.remove();uitleg=null;}}
+  if(zs){zs.addEventListener('change',function(){setZone(zs.value);sluitUitleg();});}
+  if(read('guhs-vr-spoileruitleg-weg')!=='1'){
+    uitleg=document.createElement('div');uitleg.className='spoileruitleg';uitleg.setAttribute('role','dialog');uitleg.setAttribute('aria-live','polite');
+    uitleg.setAttribute('aria-label','Spoilers');
+    uitleg.innerHTML='<p><span lang="nl">Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij <b>Toon tot</b> tot welke zone je alles wilt zien.</span>'+
+      '<span lang="en">Everything shows only the tutorial and the first zone. Want spoilers or more information? Pick up to which zone you want to see everything at <b>Show up to</b> (top right).</span></p>'+
+      '<div class="su-knoppen"><label><input type="checkbox" id="su-weg"> <span lang="nl">Niet meer tonen</span><span lang="en">Don&#39;t show again</span></label>'+
+      '<button type="button" class="knop" id="su-ok">OK</button></div>';
+    body.appendChild(uitleg);
+    uitleg.querySelector('#su-ok').addEventListener('click',function(){if(uitleg.querySelector('#su-weg').checked)store('guhs-vr-spoileruitleg-weg','1');sluitUitleg();});}
+  window.VR={lang:function(){return html.getAttribute('data-lang')||'nl';},zone:function(){return +(html.getAttribute('data-zonetot')||1);},
     t:function(en,nl){return (html.getAttribute('data-lang')==='en')?en:nl;},root:body.getAttribute('data-root')||'',
     live:body.getAttribute('data-live')||''};
   // filter tables: <input data-filter="#id">, <select data-filter-col="n" data-filter="#id">
