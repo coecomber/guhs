@@ -37,6 +37,7 @@ OGG_MAX_KBPS = 52.0       # above this a file is re-encoded
 OGG_DOEL_KBPS = 50.0      # first compression level that lands at or under this wins
 OGG_NIVEAUS = (0.85, 0.92, 0.97)   # libsndfile compression_level (Vorbis quality = 1 - level)
 OGG_MIN_WINST = 0.05
+BEKEND = {"--dry", "--rapport", "--alleen", "--opnieuw", "--proc"}   # anything else (e.g. --help) only prints the help
 PNG_SIG = bytes([137, 80, 78, 71, 13, 10, 26, 10])
 
 
@@ -283,6 +284,9 @@ def rapport():
 
 
 def main(argv):
+    if "--help" in argv or "-h" in argv or any(a.startswith("-") and a not in BEKEND for a in argv):
+        print(__doc__)
+        return
     dry = "--dry" in argv
     if "--rapport" in argv:
         rapport()

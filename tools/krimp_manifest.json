@@ -1,4 +1,4000 @@
 {
+"assets/guhs/sounds/balto/belletjes.ogg": {
+"sha1": "7fde4950fcf5530490ba65b11db0e6d6f01aef04",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/gak1.ogg": {
+"sha1": "04228bbf78232b8700d2e37bc6ebcf00197270e7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/gak2.ogg": {
+"sha1": "1d284ae6b30bf5ff9044cb249a50d3e429de683f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/gak3.ogg": {
+"sha1": "b47f0b6c787f39d369b79edaa1735be0e64fed44",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/hatsjoe1.ogg": {
+"sha1": "6f7f1e4e6dc6850a9539432fc7e3b0e6a375b86a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/hatsjoe2.ogg": {
+"sha1": "ee357048ed145876fef229d78efb672b8121213a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/huil1.ogg": {
+"sha1": "8cfe2a1c8fc2ff490ad862ff7595253a470fa791",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/huil2.ogg": {
+"sha1": "5022921ba9aca89ae64ab2e2e4fa7e555167bedc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/snuffel.ogg": {
+"sha1": "32847da7ffd91b1a39e44cdcc230218f0b5033c1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/wind1.ogg": {
+"sha1": "cf851e0d2527a15a945489175e65abff24e61755",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/balto/wind2.ogg": {
+"sha1": "c9fd35f794ea437bd9f81ee5247f204544bbb3ca",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/bellen1.ogg": {
+"sha1": "99b93ac4fec02114b606810bf255774c96e79537",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/bellen2.ogg": {
+"sha1": "bbe34f564ebd03cbd079a75767a8066b332a3307",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/bellen3.ogg": {
+"sha1": "e1f01501ce60748a7d4fa6ab8a86208defc2b7e8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/fanfare.ogg": {
+"sha1": "b5c2816ba96b05355c63cacea792174a096134eb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/glijden1.ogg": {
+"sha1": "0c59b6235d990e52be93b36b5f60839bde279081",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/glijden2.ogg": {
+"sha1": "6598abe3ebcbce9636ecab2b9395e52c521318a6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/ijs1.ogg": {
+"sha1": "8fad1b321c90aae70b212a5efb565a16d6904b55",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/ijs2.ogg": {
+"sha1": "3ee3d0e6105080f7c9f722ec5faf7f42f465313c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/lawine.ogg": {
+"sha1": "befed6fa1acd92bbe3783391feb7c9dfe3319eaa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/plof1.ogg": {
+"sha1": "49f5cc300a43fa52ad23a63df8555b0151cfc48c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/plof2.ogg": {
+"sha1": "616611c7ed964b00f2563e8669b6cfa32800380e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/vuurkorf.ogg": {
+"sha1": "60230e3430b685487073e63169137256965bddec",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/windvlaag1.ogg": {
+"sha1": "8a92cd023bd6c32f02fb06ef2578fa32295d82ec",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/windvlaag2.ogg": {
+"sha1": "a9a71c537cedb8158203fe6ac10b0520c4eae3f8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/woef1.ogg": {
+"sha1": "879d74e98bd8b15ac4f48c4ee7fc80e0242fc3e1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/woef2.ogg": {
+"sha1": "315bfb7884c7d71cc31b200f9d56f40dbdc303d2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/baltoslee/woef3.ogg": {
+"sha1": "a217031534cf3139bb2cac3277570aadeb5e5e5d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/bubbel.ogg": {
+"sha1": "7a2f9cc39374550ef46119828b5f4bd49858f92e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/hamer1.ogg": {
+"sha1": "d0291d1040523171756be1008b7dfaee896133a0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/hamer2.ogg": {
+"sha1": "a65efc59206e1f6c337382e1f8c78214897eacb5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/hatsjoe1.ogg": {
+"sha1": "3b0d110725b6642c8078e6f597d3bec8a5c8f816",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/hatsjoe2.ogg": {
+"sha1": "de7c026f974134a9a88fbc1342f0b40c98feae29",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/sirene.ogg": {
+"sha1": "160a0d6301e8b3a6dacf6a02a7e6f895d0cf2783",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/sissen.ogg": {
+"sha1": "7556e8f2ba7dcb93aaed5637d4e0abd97f5ce11e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/beroepen/spuiten.ogg": {
+"sha1": "b6a53aaa9759191168935311a7f59210f43225fd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/grom1.ogg": {
+"sha1": "1827f67653efbee6ad1d64166dbdb8c6c202c341",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/grom2.ogg": {
+"sha1": "0081da21dbe96f2c823e8567287d073f66affda9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/hamer1.ogg": {
+"sha1": "a21161763b2359daadd36e54cbbb3fd98e330d67",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/hamer2.ogg": {
+"sha1": "11d0b69c87180854699f7c8fae87d7445bc808f1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/nies1.ogg": {
+"sha1": "6f60c2285d90bcb4fd25a37b6c44bc00ab32593a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/nies2.ogg": {
+"sha1": "659d449fdfc3b08a16c1216322af0cef766f8b38",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/rommel1.ogg": {
+"sha1": "ea5b12f9f80d52d5001b67668b72a49732cf1c67",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/rommel2.ogg": {
+"sha1": "0df335c867941dcc750b0ad006c935a2b12288a3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/rommel3.ogg": {
+"sha1": "83ed41317e58fe708cb933c23209c016e28b2345",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/snurk1.ogg": {
+"sha1": "1df73d4ca86d72ccb53ab52caf9847457fc60c38",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/snurk2.ogg": {
+"sha1": "29f8c8c66648264dcb1575dc9bd88f0f631b10cd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_bouw_wolk2/snurk3.ogg": {
+"sha1": "b3cc0d7f14ec79c2f7be2b0394b03fd5ae71fc8f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/koi_hap1.ogg": {
+"sha1": "b9d15f2ee2bf456d336d962b49114a5e4eb2e4c3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/koi_hap2.ogg": {
+"sha1": "2d6008a20f9ad7583cf605cddd2a3dcf9ef2b464",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/koi_hap3.ogg": {
+"sha1": "5848bddc634127bff7e77ffd5905d0f4034c2c85",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/koi_strooi1.ogg": {
+"sha1": "55cc93a002482ca859914c7ba1e926348935b61a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/koi_strooi2.ogg": {
+"sha1": "5068eacbfdcff491bed65afffc50cca2276997a1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/schaapje_bleh1.ogg": {
+"sha1": "5a4ca53e7b7e8ae66fc47e26333038fad17269aa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/schaapje_bleh2.ogg": {
+"sha1": "4510df4cfc2739396c48659c23199c1d26b92da4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/schaapje_bleh3.ogg": {
+"sha1": "53761ced83e9b5b0bb609e01580a73561d00719e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/schaapje_pluis1.ogg": {
+"sha1": "ac620e32e2f3fb6ee47c23496e292faf4d250156",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bio_dieren/schaapje_pluis2.ogg": {
+"sha1": "43f5269af712735b768270dfd6df56967b7094fa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bloesemmeertje/ambient.ogg": {
+"sha1": "5316db3f11e7a0413eea139977f6430e573c3a05",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bloesemmeertje/muziek1.ogg": {
+"sha1": "55fd7b7360033f9b55c04af3f06eb3365cb85849",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bloesemmeertje/muziek2.ogg": {
+"sha1": "cd61b7a565abe53278bb838f93ada0d4d4ff74dd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/baby/blub_babyblubje.ogg": {
+"sha1": "55bb6576a726c3405d00fbafefa512c19eceb738",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/baby/placeholder_1_small2.ogg": {
+"sha1": "c93cd5e5bf17e13bf7d11a591c97352058b3bac5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/bellen/placeholder_1_bubble1.ogg": {
+"sha1": "b0b02272ead9c49dfcc3d2ec63b36ccb7d2929ef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/bellen/placeholder_2_bubble2.ogg": {
+"sha1": "c35e53ad3aee23b5c63336cf53c1874c83eb492c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/bellen/placeholder_3_bubble3.ogg": {
+"sha1": "f336bbc3cb2c1d5de10dce6877a0afad415ed9c3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/blij/blub_blij.ogg": {
+"sha1": "a6d1f156e14a0a4d29e47d3c8d3fb81dd94d138e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/blij/whatsapp_ptt_2026_10_27_at_12_11_20.ogg": {
+"sha1": "494185e26d8a0d02cc20db5b36bffc6ce7cafeea",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/blij/whatsapp_ptt_2026_10_27_at_12_11_31.ogg": {
+"sha1": "9f0d1798fe0b18beffe89e3042fba3ccf1c60ec7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/blij/whatsapp_ptt_2026_10_27_at_12_11_58.ogg": {
+"sha1": "89dade91c7b02a9f94e63cf78d3ea8ad65cfe57d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/delen/placeholder_1_eat2.ogg": {
+"sha1": "c1bb8a7df83dac6cf0b7bd61a0acf218da7a2f8d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/delen/placeholder_2_eat3.ogg": {
+"sha1": "dc65b9da4e3f668c496379bf6307b304b2b55491",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/eten/placeholder_1_eat1.ogg": {
+"sha1": "7a4edeb8296391f29afd4a121d61ecc6d2843408",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/eten/placeholder_2_eat2.ogg": {
+"sha1": "4ba6e0a579e23f05403dbf13d01a83ef812bebbd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/eten/placeholder_3_eat3.ogg": {
+"sha1": "cb845ba5ee9c317aa0f3df1d6a43f955cd70eb6a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/getemd/blub_getemd.ogg": {
+"sha1": "fa2b643eef7844498d72c16fe527de3ebbaa5557",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/gevonden/blub_gevonden.ogg": {
+"sha1": "14755480f355130cf10da5e9fd57cac66eb893ef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/glinster/placeholder_1_shimmer.ogg": {
+"sha1": "813259e0706a9815191da43ceb342322b5db8ff9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/huppelen/placeholder_1_small1.ogg": {
+"sha1": "cd7e4b2d21a3b5bc8d3fef80782511bda89d3edb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/huppelen/placeholder_2_small2.ogg": {
+"sha1": "05a6fd8867cb6f25e8474b342aa034f491cc3aef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/huppelen/placeholder_3_small3.ogg": {
+"sha1": "0272a0953320808738f854b6bdb8aae7c7d3c110",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/hupsen/placeholder_1_hop3.ogg": {
+"sha1": "823a1f54aa7e7033575fa6774d7a31f5f4d182af",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/hupsen/placeholder_2_hop4.ogg": {
+"sha1": "96fbaa77fb31e60713d72bccbd583b615e73f4f7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/blub.ogg": {
+"sha1": "0f24942918edb3c9b83e691dcd7d56b238fc030f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_10_34.ogg": {
+"sha1": "d7d64d0f2a65ce28d50e4972d3d8bb054ae716a0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_10_38.ogg": {
+"sha1": "1d0166b8ff81b675fe07c0f72f949d45187018fe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_10_47.ogg": {
+"sha1": "3d00a56ae4506ff1f73969f5e1e9789166b40acf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_13.ogg": {
+"sha1": "4bf153cd22e269c67a5cc68fade166d2f8ef4421",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_20.ogg": {
+"sha1": "8e9d7edbe39802258a96ca9ba0a371634fb67e37",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_26.ogg": {
+"sha1": "fa9e0190b8994ec0829d746d80438049a71a32e5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_31.ogg": {
+"sha1": "d43dc61f42536b9fdecb6c19694484407b627dbd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/idle/whatsapp_ptt_2026_10_27_at_12_11_58.ogg": {
+"sha1": "95a96be7a8ba223a601351167d3414bfd16231bf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_badderen/placeholder_1_splash.ogg": {
+"sha1": "30c7eddfb06a073533557f11688bf6d9ffca53ca",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_badderen/placeholder_2_bubble1.ogg": {
+"sha1": "8341ebc4a1e154cd95cd63633891cf57a6d51611",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_besproeien/placeholder_1_bubble2.ogg": {
+"sha1": "7df2ce921897b66015ea06bb05150dcc6efb15e5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_besproeien/placeholder_2_bubble3.ogg": {
+"sha1": "091ff780d0ecd5492f1a877f72d7445870e15a21",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_bezorgen/blub_alsjeblieft.ogg": {
+"sha1": "9c095fc00f3eb9e623da1d234a500c0252e3dbf5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_bezorgen/blub_hier.ogg": {
+"sha1": "43c72e54d3adbb1bd05909dfe7bc7940b358fc10",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/klus_zingen/slaapliedje.ogg": {
+"sha1": "ed7486c3bb4a351c3a07c87aee74f745e16289db",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/knuffel_guh/blub_knuffel.ogg": {
+"sha1": "55cd37421c9dc0c68f11992631fd4b174dc84488",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/knuffel_guh/placeholder_1_small3.ogg": {
+"sha1": "27af0b4e8605536770e264356cd84cc0f7bbc3a0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/landen/placeholder_1_small4.ogg": {
+"sha1": "ff29dfd2ac08bdbc8664201ed98932cb33c6d851",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/landen/placeholder_2_small5.ogg": {
+"sha1": "e6b9e0a4d9f76180f89f501b72743987f81a2d91",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/liedje/slaapliedje.ogg": {
+"sha1": "9c2b770487ea434b253839f4150302a95d08962d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/neerzetten/placeholder_1_small2.ogg": {
+"sha1": "170235572e9b3a6669e3bd0c9760a3e5792e4117",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/nieuwsgierig/blub_vraagtoon.ogg": {
+"sha1": "d2a5cea1ddba93add6c3be9f0f6aa68a6424ac21",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/nieuwsgierig/whatsapp_ptt_2026_10_27_at_12_11_26_vraagtoon.ogg": {
+"sha1": "7fb3f941f3fe163d8e22f3f62843bcb57d403f23",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/nieuwsgierig/whatsapp_ptt_2026_10_27_at_12_11_58_vraagtoon.ogg": {
+"sha1": "aecee23ed27346b883f1879dd80df5677740cdad",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/oppakken/placeholder_1_small4.ogg": {
+"sha1": "bce812b31454e26c76a70da91f439ab72f3f6cc2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/plas/placeholder_1_splash.ogg": {
+"sha1": "abcae261f8b326d7c5c16d8d912dbcf6aaa9b006",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/plas/placeholder_2_splash2.ogg": {
+"sha1": "7338f928be88b9671da947b540547cdaf0059192",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/schouder_af/blub_hup_af.ogg": {
+"sha1": "bd9fa12e191fc2f1fc3ca2660e6614d69e3732a3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/schouder_op/blub_hup_op.ogg": {
+"sha1": "b9a6f13e627bd5af3f4ed62a24177da7ddd5f38d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/schrik/blub_schrik.ogg": {
+"sha1": "27b8c33e3dba0a4d71c2926d9f23c4514ad8b339",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/slapen/droom_blubje.ogg": {
+"sha1": "de8a6f4ae1c5ea285040d79d35ad481089b2d9d0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/slapen/slaapzuchtje.ogg": {
+"sha1": "00352091d06b380fb0d1c75b71b2e88efea19d2a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/slapen/snurkje.ogg": {
+"sha1": "5e4c8a3c1edddb8a329665d06ed20e4aac80acb8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/squish/placeholder_1_small1.ogg": {
+"sha1": "e1cd8299e844558a0dfd6de2497e20d5bb007555",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/squish/placeholder_2_small3.ogg": {
+"sha1": "4807e54002ccad84577cadc77f97095b838615dd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/squish/placeholder_3_small5.ogg": {
+"sha1": "d4191171204174d5f7baed8f5e108459f3cc5a39",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/strikje/placeholder_1_equip_leather1.ogg": {
+"sha1": "2d5fe6a60499ae5e97e7c3a3bb28d0ea7a8e784e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/strikje/placeholder_2_equip_leather2.ogg": {
+"sha1": "c20002f1c617d60c9de511e445d2efed22f1f887",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/tikkertje/blub_tik.ogg": {
+"sha1": "33af9e45e7a77fac3b85ddea099cd77877e307b5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/tikkertje/blub_tikkertje.ogg": {
+"sha1": "3fe0cdff64484b96eb3b60ec012b3cb673232952",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/truc_dood/placeholder_1_big1.ogg": {
+"sha1": "bcdd0bf1d5692bc780000033148f3cea5ce4ea26",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/truc_op/blub_tada.ogg": {
+"sha1": "87530308ff761a21c847a3c834e73f3ef9c6eb55",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/truc_rondje/blub_rondje.ogg": {
+"sha1": "72b94f3abceead247abdaa11fff350a915c9cf0d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/truc_sprong/placeholder_1_hop1.ogg": {
+"sha1": "2a6b9173d3b8ac134a0d5989b83e8e2a49c699ec",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/truc_sprong/placeholder_2_hop2.ogg": {
+"sha1": "28ef66e5bacefb4c84bdb246f793de37bfc3668c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/truc_zit/placeholder_1_small2.ogg": {
+"sha1": "bb2bdeffdad811774d66a94039940f53a5d0ac7c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/uitschudden/placeholder_1_shake.ogg": {
+"sha1": "36183295e49ac32c8d34f1557db4884f4c7f4a8a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/verstoppen/blub_wegrennen.ogg": {
+"sha1": "02e21bd56c23454fcd86418f603463acc76466aa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/verstopt_piep/blub_hint.ogg": {
+"sha1": "0ec69b6ae8a36c0c7d6180cdfa470b296ab7f44b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/verstopt_piep/whatsapp_ptt_2026_10_27_at_12_11_13.ogg": {
+"sha1": "e00e7cbb613ab7bf2af3778fd8f2cc99978cf088",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/wakker/blub_goedemorgen.ogg": {
+"sha1": "a9c63c955b6916e7192ce06771971cee9f955859",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/wakker/blub_wakker.ogg": {
+"sha1": "3b2f6fa561843e21dfcb9efad9f617001d5d05d6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/blubguh/weg/blub_weg.ogg": {
+"sha1": "44eb53b6b76dfb7c6d8e03a960a1edc547274f65",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/feest.ogg": {
+"sha1": "513df47b9fa1d2a0ae83cbac1739d686579aa5ea",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/fluit1.ogg": {
+"sha1": "1ea30291786c6a5aee0ff7e712f77cd47cec4e30",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/fluit2.ogg": {
+"sha1": "869c47771bc5ade2594ae6aa890da6d10f51513c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/fluit3.ogg": {
+"sha1": "140cdd5d5a94a45b5c862b96f18c141bc678b4f3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/graaf1.ogg": {
+"sha1": "ed53edf112a28df672ccad2cd44b1b79814fffcc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/graaf2.ogg": {
+"sha1": "f6cdc66781d9983fb52041ef4af156238ff71f3f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/graaf3.ogg": {
+"sha1": "5f3d7dc202dd8e45d0b2f61319eb7a081ecd1356",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/knaag1.ogg": {
+"sha1": "0f7212da81edb702b6387ec2da014839c890787c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/knaag2.ogg": {
+"sha1": "b95794263ddb4a5354d3c6d4e659efac3b9eeda6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/knaag3.ogg": {
+"sha1": "702f5efebe6e16b9d2da56d39ef2815735afcaad",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/kraan.ogg": {
+"sha1": "96d09c5a9a94fde9e5e767ad1ba8a695d07e343d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/papier.ogg": {
+"sha1": "dadd20d7a51e93e108da9af191cac71c52b429ae",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/plonk1.ogg": {
+"sha1": "7ca51f56eeb193430920ddc0bd9cdeb30a4fae1d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/plonk2.ogg": {
+"sha1": "9696be122fe097028af2575c95120fb2940d4f19",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/plonk3.ogg": {
+"sha1": "92666f4d93da51bae6ef56c2e5e391c70a62f18d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/pof.ogg": {
+"sha1": "69d1a839f25f4bcf70f87af99ad4c2bce5192cdf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/spook.ogg": {
+"sha1": "cac8aa6c62d5936bb87c12e3dc26bbaf4cbbf18d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/zwiep1.ogg": {
+"sha1": "5b2fe75656697483e0143ea25bde7950e8c0f3c8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/bouwhulp/zwiep2.ogg": {
+"sha1": "6d47b00bf1c6a1516471d61a361fc4f3eaeb7531",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/disco/mika_mambo.ogg": {
+"sha1": "667689063edc7145dd97da5dd7dfcb9fd59093d1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/disco/njeg_njeg_boogie.ogg": {
+"sha1": "937642fcea4466a58eb9c06ca3898e37149cc895",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/disco/vadsige_tango.ogg": {
+"sha1": "5cbbb6b9671a4729ca4314c83ee8bdb5f5dedd83",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/disco/ze_hangen_disco70.ogg": {
+"sha1": "8b596fdbdc32edd82afc1032b2cbef189102b75a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/badmeester/placeholder_1_guh_ambient1.ogg": {
+"sha1": "364c3a33bb58dbfe333cecff79c4597c3dcef7eb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/badmeester/placeholder_2_guh_ambient5.ogg": {
+"sha1": "9b1f13460ce32d406f3f1443858700db34c272f4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/kussengevecht/placeholder_1_guh_ambient1.ogg": {
+"sha1": "c76f98d434f80c96af62c0f437c1ec5c019f8318",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/kussengevecht/placeholder_2_guh_ambient5.ogg": {
+"sha1": "37c1c0ce9c0237e6a4bbd6eea1113f1d8ba0e57c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_badje/placeholder_1_muziek.ogg": {
+"sha1": "0916969789ae33e4765d50d4917a9ad03ada3a0c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_herinnering/placeholder_1_muziek.ogg": {
+"sha1": "ab1672438f060b6987c922f8d25e0c0a50f18081",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_liedjes/placeholder_1_muziek.ogg": {
+"sha1": "84ddd2201ff5d93e2185d671c9d86dea8dce8c92",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_molentje/placeholder_1_muziek.ogg": {
+"sha1": "e794327cc48210873cc8ca09da256984d7a2d087",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_plein/placeholder_1_muziek.ogg": {
+"sha1": "199bcf39e31cae18553247e9da518953fae08e86",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_sterren/placeholder_1_muziek.ogg": {
+"sha1": "00f7806874bbfe878a98d80edb6c965449bfd033",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/muziek_vlieg/placeholder_1_muziek.ogg": {
+"sha1": "9fc69418d437b805e674d1e11ca158d41b692c4f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/oma/placeholder_1_guh_ambient1.ogg": {
+"sha1": "98440911df8ed07d0b78d275cc132672fbd77a82",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/oma/placeholder_2_guh_ambient5.ogg": {
+"sha1": "ff8c8c52887d0b69cb607b3f96b5ad609f92106c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/rommelguh/placeholder_1_guh_ambient1.ogg": {
+"sha1": "eb0d51b79d2470c6ddc8cfc60cbb8fb5a195958d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/rommelguh/placeholder_2_guh_ambient5.ogg": {
+"sha1": "b59f5e071b92e5ee207c85bc96d227b1e3bd54c2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/snoes_blij/placeholder_1_guh_ambient1.ogg": {
+"sha1": "3f71467f6cc0f783fa006230b5914c80fa213473",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/snoes_blij/placeholder_2_guh_ambient5.ogg": {
+"sha1": "19055f234623226d1fae509f5793705d145bc81b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/snoes_geeuw/placeholder_1_guh_ambient1.ogg": {
+"sha1": "495ea53d7c82b2840fa7e83b28fc17bd906cb199",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/snoes_praat/placeholder_1_guh_ambient1.ogg": {
+"sha1": "0bedce487795f8731eeba6b84ab6b86d7a65defe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/snoes_praat/placeholder_2_guh_ambient5.ogg": {
+"sha1": "2a4eaddce4bb57d6e710dff05b0b438d23868d99",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/sterrenvisje/placeholder_1_shimmer.ogg": {
+"sha1": "b51eb852b0482d5db7691e7e911442e6c521bce8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/wekkerguh/placeholder_1_guh_ambient1.ogg": {
+"sha1": "842ff8f099642eecd1e1786212dbdcef39cd7771",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/wekkerguh/placeholder_2_guh_ambient5.ogg": {
+"sha1": "c5b340b725c6b1308c0fcb4b0b3f0037e0c7857d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/zandguh/placeholder_1_guh_ambient1.ogg": {
+"sha1": "4ad470707d5ce5dfe9c445cfdc0a55ab2f153cdb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/dromen/zandguh/placeholder_2_guh_ambient5.ogg": {
+"sha1": "cdf9f1626ad1a9c617220e00f53020f6573710b7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_dansfeest.ogg": {
+"sha1": "be8d3a6d048d633b6b0aa236304c431bb0bb2629",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_glijbaan.ogg": {
+"sha1": "597b11160f9e48249bd39d2923414cacac6888b0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_luchtscooter.ogg": {
+"sha1": "2ab26a908178c6847b66613a1041bd00e7d97f0c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_momo.ogg": {
+"sha1": "048f84dc73835c1a3416e61177fa2327078b66ce",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_monorail.ogg": {
+"sha1": "b8fda1dd12d3053ce2a75684c25b8e399af6712b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_pai_sho.ogg": {
+"sha1": "fbf7f87b5ea40cb3b3b7343927222d1f64c33207",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_ritmeduel.ogg": {
+"sha1": "adcc388482b038a2e7776cd0abcdf7c439efba3b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_slee.ogg": {
+"sha1": "cec4036621c86e73f734739aa4a267fdd0610a68",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_thee_ting.ogg": {
+"sha1": "4eac5a5d0a7e2785e4f36a2b08834ba884a6a688",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_theehuis.ogg": {
+"sha1": "f38e13b4d2c2e0dbd43c43e4b555522dcc527e80",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/deuntje_waaierdans.ogg": {
+"sha1": "cef5e185d3f612eb31eb224dd6f944b5d222dc85",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_geestentij.ogg": {
+"sha1": "5a2219e7dbd0f4527d7589e9bc8780e3f5dda170",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_klok.ogg": {
+"sha1": "b96b2511bfccccff06f2ff63048eb85a9b1d94fc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_koh_kraak.ogg": {
+"sha1": "4ba6509d8b9e640ebb31214fde526f45b0d1f380",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_koh_stilte.ogg": {
+"sha1": "719354049e35a0273b38ebe922a1d39165268e8e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_koi_zang.ogg": {
+"sha1": "df8146feb083cf3d45b215a9566981b0b405c9f2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_lantaarn_tinkel.ogg": {
+"sha1": "e7a8a0cb68355186c206070ad1c6697673f2cad0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_maannacht.ogg": {
+"sha1": "e41dc9a82aec57dfca0d15bc01ff98a14eae7b0d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/geest_reiger.ogg": {
+"sha1": "bb9671f06ce2cf7796af9d42a6364138f5cbf34d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_aftiteling.ogg": {
+"sha1": "437cd2e933ee5555c25b8dec17c85abb1f813ba7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_agni_kai.ogg": {
+"sha1": "5c6ecc012eea1378d491bdeb2475a2935323064e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_appa.ogg": {
+"sha1": "c05cfb090c08e431bb509a13b8cee3c1f867687a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_appa_achtervolging.ogg": {
+"sha1": "8d37e570ee75e959d6bb4f8f9cc0ec0f7ee8a995",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_appa_verloren.ogg": {
+"sha1": "9a9e36f33dce0f6492a128500b1cd4a3cadf72bc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_duel.ogg": {
+"sha1": "197632c526fb71dfaa18be20b5a462ca55cffdd5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_duel_koor.ogg": {
+"sha1": "00a27e036c90627776befa30adf26f3ef25d3cd8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_golf.ogg": {
+"sha1": "3aaa4197dd500a9553a83d7ca6bfe93c7eb38960",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_intro.ogg": {
+"sha1": "a4b8643e4bd3ef4fb4935d5c57c44b8fe4c01d0e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_kroning.ogg": {
+"sha1": "4fae12fa6dd6b1a1283b4541172c7d96b8cb609b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_lu_ten.ogg": {
+"sha1": "027bdd31305c428b9acf609dd64b4d519ded9248",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_luchtvloot.ogg": {
+"sha1": "606e0d85d9157931f4a1671aa245d1e3fcb858a8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_tent.ogg": {
+"sha1": "c7c0d489bab6bd2968bd3ebd89deec0f04673b6e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_val.ogg": {
+"sha1": "a050b4cf80c5fb4885eaf337c22a3ffface2a330",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_yue_maan.ogg": {
+"sha1": "3f60c79f12aa6d95125ea759921f13970bddcfbe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/moment_zwarte_zon.ogg": {
+"sha1": "5073745b79a3af48652659ba89122a18e910c25d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_aarde_1.ogg": {
+"sha1": "27940231884e8da38b917458a4cd92d77527a6ef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_aarde_2.ogg": {
+"sha1": "13ad252ec37a38ff48a061aae25a9b2abae36fe9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_geest_1.ogg": {
+"sha1": "72f1fe7bb587a797d2a35defeacf1c89406048ea",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_geest_2.ogg": {
+"sha1": "be3e45e9991197849b5be09d65bdc6f0de1a00ab",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_lucht_1.ogg": {
+"sha1": "ed9617884073fd2afcd8687d823dbd474d5e43d1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_lucht_2.ogg": {
+"sha1": "8d03274cac98d3e375a914ba448c2c8f4a06099c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_vuur_1.ogg": {
+"sha1": "ece612e1d2a41a050a6690359996db486e77ed06",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_vuur_2.ogg": {
+"sha1": "61b734ab548dc40b68ecc488fa2d29ad092137e6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_water_1.ogg": {
+"sha1": "df3e6301ba2074a63cb61f5ddc2bbcfe4a0a9cff",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/muziek_water_2.ogg": {
+"sha1": "9e13cf08820c3b143969261ccff6606a9a7a72fd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/stinger_feestje.ogg": {
+"sha1": "d146a078967fb859ae052b8685ad9b1ab4fa4a51",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/stinger_kolen.ogg": {
+"sha1": "f7e007520a845bf309599285805ed03d7caf91d7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/stinger_mijn_eer.ogg": {
+"sha1": "78908b2cd8e479dde79d6410cc979fbf8641a07e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/stinger_opgelost.ogg": {
+"sha1": "1e27cf3c96fab580c122a5391e434025f8ab6671",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/stinger_tegel.ogg": {
+"sha1": "e8d708ebaa3176f8db8cef39dd8f1bf9fe6bfe62",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_audio/stinger_toneel_fanfare.ogg": {
+"sha1": "4873d96d90be944feee056b126d061e826f5c3cc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_biomes/flits.ogg": {
+"sha1": "50861d78ba8c090f18b7a3749f822da97737dff5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_biomes/plof1.ogg": {
+"sha1": "3b122f3b54fea134d23870674d2e079245387db1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_biomes/plof2.ogg": {
+"sha1": "1037f4ef1fa5e752d0a13cada94d4ce396fab9a9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_biomes/zing1.ogg": {
+"sha1": "51c0f283871b9eae4d70e0d09f8798c622277b1e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_biomes/zing2.ogg": {
+"sha1": "5cfe247196a2af4c49a2870933bb66cbefbf886d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_biomes/zing3.ogg": {
+"sha1": "4ff73a80d05f3d3fdb1c09a1239a399f8a999069",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_geestenwereld/gefluister1.ogg": {
+"sha1": "ed38462da94ac28dd1efbd8fea63932fa9655993",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_geestenwereld/gefluister2.ogg": {
+"sha1": "c28926e2c1a3bd045cc435df59bdb90eb4f49b15",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_geestenwereld/gefluister3.ogg": {
+"sha1": "00af73afb695957e429c38d61e2e8cbd14569f93",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_geestenwereld/meditatie.ogg": {
+"sha1": "9b0fef400d3f483c569afba37e84c7fa52363fd7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_geestenwereld/sfeer.ogg": {
+"sha1": "a7dfc3af2f616f895d3b12f657246064f024b4da",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_geestenwereld/tegel.ogg": {
+"sha1": "7f2e9df1a49064857337b6652d65944d4f64e1d0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_bakken.ogg": {
+"sha1": "3aa95526e6bfcbf88841ea9309ffe55f363622fd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_emmers.ogg": {
+"sha1": "478598edda4b55b472f23ed8735059419ce1fe8b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_examen.ogg": {
+"sha1": "7f739555a22d2fafb01592a8cc9330c016a931fa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_ijssalon.ogg": {
+"sha1": "8be1635fbe83f6dda572ac34234e9f1383df8a7b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_kroeg.ogg": {
+"sha1": "fe72c2e7c88661a343cadfdfe6a2cc5deac6e79d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_kwallen.ogg": {
+"sha1": "33b934d7961e4bba82437a1c41d834ed4f0b6ad3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_sluipen.ogg": {
+"sha1": "493ebe06e42a49c7e9fe3d1fb4b1d12b42866614",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/deuntje_trommel.ogg": {
+"sha1": "1f51faa167c89d9125313694357c09d15255d8fb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_bevroren.ogg": {
+"sha1": "c5f55fc88e1817b2aef49af7da6c45391033868e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_cycloop.ogg": {
+"sha1": "9b22eab2a13dbc2eb479831da269435dd3d2cc37",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_dennis.ogg": {
+"sha1": "3cbd89914c8dc50a7230e2b593656a5a4b50ec57",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_guhfy_guhber.ogg": {
+"sha1": "c208e0609e84fd2ba32ceaeb680f37a90063e544",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_hasselguh.ogg": {
+"sha1": "380d8c3b0cef7b25fb6980119b7ab8664a55df1d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_monsters.ogg": {
+"sha1": "753c13c9ff56269df18a4df8d775d3254e623840",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_plan_z.ogg": {
+"sha1": "9a54a18cc9a01df7900b315ae5eef34af8ce612a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/moment_zoete_zege.ogg": {
+"sha1": "8c4fc17b632b1a7d5cb2bd8b5eb6d9ef0280256a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/muziek_bikinibodem_1.ogg": {
+"sha1": "905da45d573a892a4de902b438d9a7fa873f717b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/muziek_bikinibodem_2.ogg": {
+"sha1": "e367a52ae9be2a1ca7a17c2964e5c7fd3c419810",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/muziek_loopgraaf.ogg": {
+"sha1": "ca0387f07fbe73d3f9392750374d486da87a9754",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/muziek_schelpenstad.ogg": {
+"sha1": "702d09bf4811d1c2adb4c0f1b3236a2177bb0996",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_bevries.ogg": {
+"sha1": "1860f9129f5deaa192644db1f188f9d6332c12fe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_karen.ogg": {
+"sha1": "1a0d26699664a841bc2c08390057a64df4705539",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_klarinet.ogg": {
+"sha1": "d2c89fdbd408ee18a8ae0fd2686266be3bb167a4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_lach.ogg": {
+"sha1": "ae9e6eaf648684030c536e401d412306ab509fa6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_mislukt.ogg": {
+"sha1": "5e56e8187f96d956cc21faf1bc036a493e4bcf96",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_opgelost.ogg": {
+"sha1": "cbcebab6889db70f29d78bcd2af547ed3d12f966",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_snor.ogg": {
+"sha1": "961bc3d8dca01a6b2d87d0e2a95eadaedeb918af",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_sp_audio/stinger_verteller.ogg": {
+"sha1": "61d3010da12cc2122f7d20483e74b6b7347913ef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/aankomst.ogg": {
+"sha1": "70107956fd3739b737590aac2972c46ebc12178a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/brander1.ogg": {
+"sha1": "5b5eda78a30f6f506f80442c6ae88f57c9a73df2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/brander2.ogg": {
+"sha1": "72b7cf50193bc317adf581385871a077e27dd96e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/fluitje1.ogg": {
+"sha1": "f57b69e698a2481764aa72aaad0083b245d34697",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/fluitje2.ogg": {
+"sha1": "a9624c0a41df57466d9929d99f0018ba1b065837",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/kraak1.ogg": {
+"sha1": "c3db97f71c431552150b6ad3ab57984a366b9f0a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/kraak2.ogg": {
+"sha1": "be2dc8d091ba5f585241f77e0bf2f756d0421561",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/verf.ogg": {
+"sha1": "e697c1c4edc94c4c7e50e6973e7f4c12a061d10f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/vouw1.ogg": {
+"sha1": "e13c31612b3af0fecfa1716174ff6cb7de006f4b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/einde2_vetbootje/vouw2.ogg": {
+"sha1": "cd67943b8a652c3ad57f0e3c32d9b9fa6c777872",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/finish.ogg": {
+"sha1": "8ba24093ede692265305b37cdb6cb7adcd7602c5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/fluit.ogg": {
+"sha1": "f17f160a2b6176c6b53917a688669e2f2d4a7d01",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/glij.ogg": {
+"sha1": "00daff11ad5a2733e1ab818d3d1d1711d95e0a70",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/juich1.ogg": {
+"sha1": "4b090438cce8a354406799664a875567536fbe72",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/juich2.ogg": {
+"sha1": "5c0cbf6819ff892e56ae3fe173459965fd27a935",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/juich3.ogg": {
+"sha1": "ac53c25c7655553554b195ad63e00d2cdb9d7a78",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/kras1.ogg": {
+"sha1": "61a8ac39d4e59bef478f4232eb5ae2c8f6cf19d3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/kras2.ogg": {
+"sha1": "ee3ff99291d141be40cd79286b77b06918f29b9a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/kras3.ogg": {
+"sha1": "02dc62667326c738b8f5ce4f9903d996e11f0cc8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/plof1.ogg": {
+"sha1": "3cf217aeb889b8e3d6e559ec133b7aa76bd5158a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/elftocht/plof2.ogg": {
+"sha1": "ac825e5e0b840b7bb3fb5455e7707cebdc58d38d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient1.ogg": {
+"sha1": "4cd45fa7366f2960811308485455fb560ce3a5e2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient10.ogg": {
+"sha1": "b3f032a4abf8cf60e035c9aab9097e5d35c3fd11",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient11.ogg": {
+"sha1": "3a30226fbc28705b0ac9974e85c9c6cf169916b2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient12.ogg": {
+"sha1": "561c143172fc32c1eb0e68f3dbc4606df7ecf7d4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient13.ogg": {
+"sha1": "929643385ccf9184d387658f3be76cd6efe25935",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient14.ogg": {
+"sha1": "12477a2c33d1a2250c88d5e3b0967c60d1cc82e8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient15.ogg": {
+"sha1": "5b4fc3095f7e1d2cc46ce0d98664931875217946",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient16.ogg": {
+"sha1": "5c3883ca02eda27aa973c49210daf9fb4d7f126a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient2.ogg": {
+"sha1": "b4b6d13e6f55e6a0e8afc47f834cf1d59cdbc9e4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient3.ogg": {
+"sha1": "30ca8e39c713519491ad3d4982fdce2ed80b9043",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient4.ogg": {
+"sha1": "4a2af7efd5d5d1f710a69d5d3475325516d78661",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient5.ogg": {
+"sha1": "70a68478bfb7d4b5144a71c481b697c1f9466bba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient6.ogg": {
+"sha1": "aaae49b77411cb2c5f8aac5abc60e86e170bc05d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient7.ogg": {
+"sha1": "631afad1549f5c9695868daf128c39b72d80e90e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient8.ogg": {
+"sha1": "1e68c3fcba1085357836af58d820fe4285a76c49",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_ambient9.ogg": {
+"sha1": "60fab4250fd150a9a128b89fe4421abbf8973bd8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_death.ogg": {
+"sha1": "55300425311caa4b717114ae5f549ec3263bcc22",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_eat.ogg": {
+"sha1": "452c88db0d6a9b49db0963f28fb130f45322dc3c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_hurt1.ogg": {
+"sha1": "e89a595e59d6750992747b816a72c9f3bc4d19bd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guh_hurt2.ogg": {
+"sha1": "256334f9aa6b8a79b70c65e917e3fd381c26801d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/aloha.ogg": {
+"sha1": "a4578b99d69c9eaa7babc327db63711e6e4f5366",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/aloha_njeg.ogg": {
+"sha1": "cffaa54a6cb24738ac596d0e17d6d3892a0278ee",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/golf_breekt.ogg": {
+"sha1": "b6560706bdade36fe3a966d4b4af89f4407d4b8a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/guhla_hula_rock.ogg": {
+"sha1": "4304b28ba9189c9294c69b8bc2c322f9641eefa3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/plons.ogg": {
+"sha1": "0cc8c442c5d468411d23e8195146dd3575a8a985",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/schelpje.ogg": {
+"sha1": "dec285acbb0fc75d959865a2ede9fe4b1371b09e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/ukelele_tokkel.ogg": {
+"sha1": "0b1b443fe04da9a2d062d80e4039e70329ff118c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/guhwaiispellen/vahoeg_hula_hop.ogg": {
+"sha1": "6f59ac93409e9eb5391ef5a3686ba5be28d8eda7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/hemel/hartklop.ogg": {
+"sha1": "ca4244ecc76beed441c0b7958b8d4a872e543a4e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/hemel/muziek.ogg": {
+"sha1": "3951ed04fcf9a2f7f6d5d799662eca3091f0c70c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/hemel/ster.ogg": {
+"sha1": "e9c9f9ea2515946fd0281259dcf4b79a86fb47a2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/hemel/terug.ogg": {
+"sha1": "369aa09be18cf60b80ec663e3dbe9397e0550108",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/klaterdal/muziek.ogg": {
+"sha1": "e1a63960566b7b97b4436dedd2404a8797259a77",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/klaterdal/sfeer.ogg": {
+"sha1": "edc022615fb4a69649cb4d2c628e8463180722e7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/klaterdal/windgong1.ogg": {
+"sha1": "8861e83cdc5c9daa719b8c108a2618f680933b68",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/klaterdal/windgong2.ogg": {
+"sha1": "e7b62bec44debcc2dd119d1d396ca1bfa13af3f1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/klaterdal/windgong3.ogg": {
+"sha1": "451ecc1f32c805ec70cc61878ab01f18e54c58e6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/kleding/ontgrendel.ogg": {
+"sha1": "fa689c91e0fcdd5f2e9a1d1ae760eb4367e90330",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/fluit.ogg": {
+"sha1": "508a6432ae46e3187844c5b900703facf9862e7f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/fohn.ogg": {
+"sha1": "16562c72a0db21e3e3068f21d5164812c0ac089a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/glijden.ogg": {
+"sha1": "251584781d6b7b2669e4c3dd9bbcb507da1f15d1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/piep1.ogg": {
+"sha1": "72e004ac409185434d139138678a2e4b684170d6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/piep2.ogg": {
+"sha1": "e814b510b249a580b2d5663a1809735c4ac897af",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/piep3.ogg": {
+"sha1": "aca191b285e9b2e7e3139d6a691fa97638c793ba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/plons1.ogg": {
+"sha1": "0d2f449f5e1940f0d60b958aee795f2713a8ec76",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/plons2.ogg": {
+"sha1": "84247c335d1345e04abde74956bb83e1e143a9dc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/schuim1.ogg": {
+"sha1": "e18db8d3ddbe7b52886fdb1dae6ab2d071bf7029",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/schuim2.ogg": {
+"sha1": "3faa6deed327e376fa0c2b29a806ddb7a477e9e4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/spetter1.ogg": {
+"sha1": "7a6729a5e09c6f9ec1841715acf527e259ed7c3b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/knuffelbad/spetter2.ogg": {
+"sha1": "9e3a503883f52a869f4aaca3e8de393f531543f3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient1.ogg": {
+"sha1": "b62fd5769548407184d0ff47e4120527ad8aedfe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient10.ogg": {
+"sha1": "19b186e35491b3644be725500c9095101f22d146",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient11.ogg": {
+"sha1": "7399d7fdfce6a0918d27c434c6838521a545ec63",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient12.ogg": {
+"sha1": "d1003b75690363eaa2314df35f00e2ddde72776c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient13.ogg": {
+"sha1": "6b46b082d1788824153696f693238d5fc02267ba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient14.ogg": {
+"sha1": "bee130f09fc7c9a72b834b93b338d38fb120efc3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient15.ogg": {
+"sha1": "7aab69a542f61aef6ef57876bfea2c778c1ce84a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient16.ogg": {
+"sha1": "5fd93a2e4a4d3e3c22887ee00ea314fcbaa7e119",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient2.ogg": {
+"sha1": "6585589528940fd61c9a7f71b021f84626d832f2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient3.ogg": {
+"sha1": "d276833944763e162a62acb29134c97246ae5d51",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient4.ogg": {
+"sha1": "97b2e6331bfdb1ff6e2472023f150aeeceac3c25",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient5.ogg": {
+"sha1": "26659fdbff51ff3683b592d69ea33ff417b90efc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient6.ogg": {
+"sha1": "80ea3640c1c8b772a1b51b42d7b9a99e91aa709e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient7.ogg": {
+"sha1": "d8df082717506cb14b5007d94a7e8c81726dc48c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient8.ogg": {
+"sha1": "27d7e0d23f20bfb9f1ecbe707b8d140d69ec946a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_ambient9.ogg": {
+"sha1": "4aa546e0dd1e6eb4897850ed8c9e8724f1346f3c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_death.ogg": {
+"sha1": "46e0bca278f0c5c93900476ff112a5dd4b70b332",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_hurt1.ogg": {
+"sha1": "73662923cf3de864b43e7a31226aa7db19269a51",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/mika_hurt2.ogg": {
+"sha1": "96dcbe78f4e97a9ac4e809bc02b148e6e68541b1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/music_disc_snuffeleiland.ogg": {
+"sha1": "59cc7f862ea562987a0dacb39381fbab7c627d91",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/music_disc_ze_hangen.ogg": {
+"sha1": "cf86f4884dcc58406a71519fae217f0fe946bebb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_belletjesgrot.ogg": {
+"sha1": "9d02acbfa8e52c027341ad50ed1f6ab04aa52b40",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_gatenkaasgrotten.ogg": {
+"sha1": "7f390f779e0f7a6d06e3d38eb54f02988acb7c0a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_glitterspelonk.ogg": {
+"sha1": "33612161750cd855102605dedbe33f65a6ec4900",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_guh_kristalmijn.ogg": {
+"sha1": "87cb6c883b9acf3a9a7a308f53982e482f5e1b52",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_knuffelwortelgrot.ogg": {
+"sha1": "2a11b04b23f90f256d39eb1f99ed0543abe10f3d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_kristalpegelgrot.ogg": {
+"sha1": "0a9be779805eea101d39d24f77b3ec92eabe0f46",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_pluisgrot.ogg": {
+"sha1": "43646b41c6715dd3345511ea23455afe1d3b3e2d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/muziek_slaapgrot.ogg": {
+"sha1": "199af19c6e7c6e2e04be29f1a38b103e368caf70",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/plink1.ogg": {
+"sha1": "ab3bd55a65aa9556749c38cb742199396ee73f97",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/plink2.ogg": {
+"sha1": "0c6a9ddfdc061871041c92c3e7c4e17b93274cdf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/plink3.ogg": {
+"sha1": "226dd9c84ec40f8a1229ab885eae1f783349c388",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/plink4.ogg": {
+"sha1": "75b627e554bea7af86604659373dbcce7f09b024",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/sfeer_belletjes.ogg": {
+"sha1": "6492297dacdf651312d8f664686b3caaa6b6d681",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/sfeer_druppels.ogg": {
+"sha1": "e3f09bb2eacafdce8eb341775ae2c61ae7469ae1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/sfeer_slaap.ogg": {
+"sha1": "529e027f184e5c561d7d8ac6da047c6923f767b2",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/sfeer_zacht.ogg": {
+"sha1": "f1befbd9f2bede5b29bac9fb94ddce9d59d5d601",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/tingel1.ogg": {
+"sha1": "77d5af01acf365ec0d099d5c546f60ef9abe2d16",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/tingel2.ogg": {
+"sha1": "a09cbf459fa0de8e2486e2b8c344386a2023a56b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/onderwol/tingel3.ogg": {
+"sha1": "e479648920b3d73ee641c0025f631963df581568",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/piep_ambient1.ogg": {
+"sha1": "031ca57e9f7a206ab213dce6c8bedf3ba7d1cae4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/piep_ambient2.ogg": {
+"sha1": "7b713e77b5d195660d15e3ae051fbfd0899c5532",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/piep_ambient3.ogg": {
+"sha1": "1695863b196036098ca88252e8c7f83e5d2d02bf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/piep_ambient4.ogg": {
+"sha1": "c01ea3bec61bfef6735f1018b89111a844780e2f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/piep_ambient5.ogg": {
+"sha1": "50dcdf0a552fa78d212c48c5f4cf45d8a902ef95",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/piep_hurt.ogg": {
+"sha1": "a2ed4b138b79b89642dbf754d552c21d68551852",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/reisguh_tuut.ogg": {
+"sha1": "a568aefb131427f32bec6a52056fb253d6cd7e98",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/beverbeek_knaag1.ogg": {
+"sha1": "37e39e20cf4c88ff89701ef706dffb16f932f132",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/beverbeek_knaag2.ogg": {
+"sha1": "96d484747002d962c7f281b44956f8d5b8a611ad",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/beverbeek_knaag3.ogg": {
+"sha1": "27112bf88db4548cc0bba1c22ee0434dcfbc8b39",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/beverbeek_sfeer.ogg": {
+"sha1": "3fe502e22bfdd596d0c1545b31823f59f6311972",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/camera.ogg": {
+"sha1": "81683845ef726d68902fab8c682fe8f4936ffc4a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/aap1.ogg": {
+"sha1": "9075c1617cc58cd0d6070e5efd994f29840f67fe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/aap2.ogg": {
+"sha1": "9934a363ee75be303bc8779bb471bcea70105933",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/aap3.ogg": {
+"sha1": "a2754593d7030eec68edda15fb0ebe4b7f2590aa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/beer1.ogg": {
+"sha1": "4da0e4b7a272228eca8dbf0a4bb382f98a625ba7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/beer2.ogg": {
+"sha1": "47bf28cf48477eda0a5076cda97796409ca4e326",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/beer3.ogg": {
+"sha1": "c497d7eff0b293bf0123b919b1d41ab4dc80bab1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/cavia1.ogg": {
+"sha1": "be4b06f5c27e4603ced8d6a2f9bb7514f9400b24",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/cavia2.ogg": {
+"sha1": "ebf1cbcc26f96e9f44fb1a58ddb10e3c4bbb1dce",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/cavia3.ogg": {
+"sha1": "ff1c59a6a969c7f8e251240d7468550e9dff9ba3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/ezel1.ogg": {
+"sha1": "3bf476daf8bae5ba2c1d0f2f87639925b206ae83",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/ezel2.ogg": {
+"sha1": "37b8eba1e283df6875a9fa04e5f95b453e9b2f16",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/ezel3.ogg": {
+"sha1": "b43294902781ac8816ae4a2d38516f8813626dc3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/geit1.ogg": {
+"sha1": "aeb995352059176c3316fda30e1180c414c07f0c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/geit2.ogg": {
+"sha1": "1d961ddf8adb0de2b45a90be931b0269aa481c78",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/geit3.ogg": {
+"sha1": "cedae433776117f8964ca74fc0392897e93dcd28",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/grazer1.ogg": {
+"sha1": "c38a39cf64cb1b86afc9b6245bbad3f853191acb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/grazer2.ogg": {
+"sha1": "d9aa941458b94dc5d849c931c8be3bea52780df8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/grazer3.ogg": {
+"sha1": "8a142f54e67c7f092132228e003a5e8c8c2ea64f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/groot_vogel1.ogg": {
+"sha1": "a0917026f88ffcd7ebba0dc9b726a8249addbdaf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/groot_vogel2.ogg": {
+"sha1": "e28b352fc39265cc941cef0af7fff8ccd2fe6b1f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/groot_vogel3.ogg": {
+"sha1": "a3b81fc9eb1a3d74507274fd8b265b191b9ddb93",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/grote_kat1.ogg": {
+"sha1": "2f00cc0267d9157fa2388584dd64492f08dea3df",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/grote_kat2.ogg": {
+"sha1": "8700598f4c04092fd2e2756aca11a1ad3f92b0f8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/grote_kat3.ogg": {
+"sha1": "505848e459c9d772e1bdf7feb6eb0d72d73d8705",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/hommel1.ogg": {
+"sha1": "a4452ddea46d29f572fdc68269119f9391ae4b17",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/hommel2.ogg": {
+"sha1": "35331e046a15f4e0e1a1d2640639f823a467221f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/hommel3.ogg": {
+"sha1": "142b92fc8f6faf0002c72587da36da01cbfb03a6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/kikker1.ogg": {
+"sha1": "6b99707238f2e63e7a0940306efc933e2dec5453",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/kikker2.ogg": {
+"sha1": "946c20328cd28a8eb58e8450c290f558459ab3bd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/kikker3.ogg": {
+"sha1": "b946b7f990d22815c750e9eade750e1490e80838",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/klein1.ogg": {
+"sha1": "0a617fadcd1a847490ac8b3b05ce0690eef917a8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/klein2.ogg": {
+"sha1": "a826fd9df8f3531a13295e371e4a073cf2c4972f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/klein3.ogg": {
+"sha1": "1f1b39add15c2ee7c99534e9081ef5597aa9628c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/kriebel1.ogg": {
+"sha1": "2d8849859220db02cc8b2a0c980db626734eae5f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/kriebel2.ogg": {
+"sha1": "de585760d9fc32a054393790fd7451477290cafd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/kriebel3.ogg": {
+"sha1": "9a55375d08459352ac6a790f3b5090a2bfc42d0f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/nijlpaard1.ogg": {
+"sha1": "384849ca6fa78367f107909ad23be7f3e36fffab",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/nijlpaard2.ogg": {
+"sha1": "aaa04d9b370e3a57c7b9db6157fd7de621952283",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/nijlpaard3.ogg": {
+"sha1": "f048be3b69360a87cf069481da4339c9d734c2be",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/olifant1.ogg": {
+"sha1": "a5d672e628e17384bc447c5c568a5c3963acfa1c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/olifant2.ogg": {
+"sha1": "b28756c3279f9bfb5fd740cef065b511d6992782",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/olifant3.ogg": {
+"sha1": "73c75888a6086f4188e0ce598377f53f6c0d84fe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/pinguin1.ogg": {
+"sha1": "ef8937b95d88fbb9d11396e94f532c2e9bfce9b5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/pinguin2.ogg": {
+"sha1": "5381dfe96e123b6432c30c10d9deca86bd497507",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/pinguin3.ogg": {
+"sha1": "fea8f1695763f31228b9de644dabe4ec5e8bc408",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/reptiel1.ogg": {
+"sha1": "efd480a367ef5ad03bc5913e1a17d22cb47bfc5d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/reptiel2.ogg": {
+"sha1": "3edfd91b3cec3edc813a4944491b1be9dc1c3a15",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/reptiel3.ogg": {
+"sha1": "7c3b05e6e7c3965fba03cd08df84c84b5ea2e09e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vis1.ogg": {
+"sha1": "a28e72b20f0034bb87b2e2befbbab98da87eee4c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vis2.ogg": {
+"sha1": "16aa7dd58c7ed859a112b5e70b4ffd65e547b83c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vis3.ogg": {
+"sha1": "2335a7ff67b2aabb8aec16aa714f4381a4ef410b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vleermuis1.ogg": {
+"sha1": "114a7409332e3c195d79b2496c8e5fe72d1501a5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vleermuis2.ogg": {
+"sha1": "57ba5681a8c8378ecf63aec08b2ad7c0bf6431f5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vleermuis3.ogg": {
+"sha1": "c2b71c3086730e3e70b376c21802292c044f51e3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vogel1.ogg": {
+"sha1": "58409dbda507164d5458b6c193da8293b2963f00",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vogel2.ogg": {
+"sha1": "064c3bdad9c9d8c1bc69c4bf20258ebbcaafbfc8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/vogel3.ogg": {
+"sha1": "44f04a6955bcae3fb8f4c9baef51d61bcd9c12ba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/zee1.ogg": {
+"sha1": "f3eb8c00a2ce82f9b5ca0f4961ba6663863814c7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/zee2.ogg": {
+"sha1": "e7fe8b9ffbc08290fcf42e67b7ddb76457c0de60",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/dier/zee3.ogg": {
+"sha1": "1667be592a1b151b9fc44d790f81a1021b7576d9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/fm_1.ogg": {
+"sha1": "a19a02802fac11b27d03520ef2630d71c8c259f4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/fm_2.ogg": {
+"sha1": "823324013d1ed81df4495fabe7bf58504e4c9b88",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/fm_3.ogg": {
+"sha1": "dd325f7176efe5488bab10fec0293b73dea8e867",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/kano.ogg": {
+"sha1": "f6c055860fea5d8a37360ff3be5af2a987cfb87b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/knabbelvelden_sfeer.ogg": {
+"sha1": "dfaa7f9510f004244175202995b14f4ca8dd454a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/munt.ogg": {
+"sha1": "c1d989382d184c2d648abcd02700a8c7662b04c6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/muziek_lobby.ogg": {
+"sha1": "c847a221544d8ebd52e4418274d85ea6edb21255",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/parade/parade1.ogg": {
+"sha1": "7b9b01d7ad94664a7747442582d3e1fd87da3d37",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/parade/parade2.ogg": {
+"sha1": "b0b3d557ecec2c5c8bf26f5c1592a10dffa15e22",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/parade/parade3.ogg": {
+"sha1": "1a029b847b773f6cb8278029964196a2349af743",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/parade/parade4.ogg": {
+"sha1": "bd722f585453d3875d9d9f140638738fd77e5073",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/australie.ogg": {
+"sha1": "51788fec1b7cdc2554c4f5ca78ef9cb975628165",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/bamboe.ogg": {
+"sha1": "156156e49864cb5c4dfd18673931cf5968f5fbf6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/delta.ogg": {
+"sha1": "46146f242695d987ccae7d826ec9d24e87981805",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/entree.ogg": {
+"sha1": "d15c6fae8c16ea738a69bd4cf892bad8261ed6f3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/europa.ogg": {
+"sha1": "42143fea4b784f8115acab1d7fbf74f6b0998db1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/ijskust.ogg": {
+"sha1": "e1bf247f3650c9d3d37a42967a37aef83d6363a5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/kriebelhuis_diepzee.ogg": {
+"sha1": "b9f2b98662870e6de528c5973bac6165b1019c71",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/kriebelhuis_kriebel.ogg": {
+"sha1": "f683e7d933b3ac7b99616d1947197957ac15f120",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/kriebelhuis_nacht.ogg": {
+"sha1": "0b8481160b8edc0c718c2d9dbc612cf3da98d405",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/oertijd.ogg": {
+"sha1": "e57b20eab455702aa7865dfa50922855ce785cd8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/regenwoud.ogg": {
+"sha1": "532eb86274c8d0e7176c614bbbdb85a4282ef2c6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/sfeer/savanne.ogg": {
+"sha1": "7f31edae3c0dfb55dbcc9a4290b9b9c110ac64cc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/truck_motor.ogg": {
+"sha1": "8cf7338fcfe744fbf564b268929e4054521889e8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/safari/truck_toeter.ogg": {
+"sha1": "e4f648599085340a30d9eaa9ca5f432b86850cb5",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/samen/bff.ogg": {
+"sha1": "a4ef331c76a252a55cbba5cf4025104638254e01",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/samen/juich.ogg": {
+"sha1": "aae1a8d376fdb3c9d762d8bad0286e1db3736b3b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/samen/ooh.ogg": {
+"sha1": "158b3def6b411f0fbaa7fbae7c7d0d55f9aa5f13",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/samen/welkom.ogg": {
+"sha1": "4a505618ff5f071731175ed573c4d65e01cbdf0f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/algemeen.ogg": {
+"sha1": "9ec7f9e67680bf5ed08195144d829860b72e5a30",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/algemeen_fase.ogg": {
+"sha1": "a42a102a3cb72f0f45df98622a93fa35f1c01086",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/baron_bleu.ogg": {
+"sha1": "4e96d7d98b79e95c9d56db6a58b72489ec38a1d0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/baron_bleu_fase.ogg": {
+"sha1": "6c97a6f4c21baf90560e1ac7bb615b9f1549ae5b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/boormeester.ogg": {
+"sha1": "339767951a0e8fd94da6a4d29a892d843fdd213e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/boormeester_fase.ogg": {
+"sha1": "b9d7d089ce0c7b3ddf6360881632e783c4345190",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/brokkel.ogg": {
+"sha1": "aab06f5cb5d716c4dcc785f2f5094d91b65f3e25",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/brokkel_fase.ogg": {
+"sha1": "a85d5ed6f3dec55798d87bbb304de5aa8fb866e4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/donderbuik.ogg": {
+"sha1": "41a63a5557d97792a16406df3615208ac948457f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/donderbuik_fase.ogg": {
+"sha1": "206d22bb0938828576485b1d6c2bac823fae62e4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/galmwolf.ogg": {
+"sha1": "4ece4ec6c76dab9f56cb3026aab0b5721e2d4c97",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/galmwolf_fase.ogg": {
+"sha1": "157eb077b7d2a0f6d7501c84a764c6bae9b674af",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/gorgonzola.ogg": {
+"sha1": "e95b94d46a4a64c0b2cf58c447096859b7a62692",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/gorgonzola_fase.ogg": {
+"sha1": "fd6c75be4da7032ea3f3bc5c31e86d5ebcca0de8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/grauwe_droom.ogg": {
+"sha1": "13ee78f1445c414cfd0ad4c4426bae664daf86b3",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/grauwe_droom_fase.ogg": {
+"sha1": "7545e3fac917decd4eda488cf3540ee69e0dc80e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/klodderreus.ogg": {
+"sha1": "327cd9921bf19471df059d9bd3985501ff35a89e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/klodderreus_fase.ogg": {
+"sha1": "c46fae0db38f9c82e39397161ba42430dc0c833f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/koning_klodder.ogg": {
+"sha1": "0a18dc2fbb5cff715d475c6bb860af0f6d215408",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/koning_klodder_fase.ogg": {
+"sha1": "0f1d45375ed1ba6c01543ad0eb283a7906e7635a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/kruinroofvogel.ogg": {
+"sha1": "65b680d633466987be2a40afcd5fc64af27222c7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/kruinroofvogel_fase.ogg": {
+"sha1": "82125dce06292af54c17b888bf317e443a42cb81",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/mika_imker.ogg": {
+"sha1": "84530a91d92754e383129fd114d64f82c1997f60",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/mika_imker_fase.ogg": {
+"sha1": "487ff87d87b47f4728187c66a9f1d2fce4589996",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/mika_spion.ogg": {
+"sha1": "411ea985f594708712713e731f9168aa47e520ec",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/mika_spion_fase.ogg": {
+"sha1": "189a2f28142c7394d6062559162d6d78f68980eb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/nestwachter.ogg": {
+"sha1": "364eafa9b3cd7106560bd42d24b2ac326d1ded74",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/nestwachter_fase.ogg": {
+"sha1": "7c1a061831336bfd3e4f2800667349d643a0bf55",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/opperzwam.ogg": {
+"sha1": "fa2d3a971df5bf14f089eb711f0510f329e66d41",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/opperzwam_fase.ogg": {
+"sha1": "4872000f4a01e954496824ed983e51cac6b75c0f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/piepvel.ogg": {
+"sha1": "2aa22c892c6d83aefc0243a1f7ab93052fae128c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/piepvel_fase.ogg": {
+"sha1": "1903049ef48b3614bbaaea61a0fbb3696050cf8f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/roquefort.ogg": {
+"sha1": "cbc2881c85c369d73ad364887cd4a4f9277a28de",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/roquefort_fase.ogg": {
+"sha1": "ee65a64e607b25e6bc299ac8654aa260a2b37756",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/spiegelzucht.ogg": {
+"sha1": "ad473c56a2312f36d510abf2168fcf22b9e572ed",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/spiegelzucht_fase.ogg": {
+"sha1": "ad47b169e12a0a442280240a3d655174efa971bd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/taleggio.ogg": {
+"sha1": "51d0a29c233e6ea6422a7a420f6dc085c3dc8278",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/taleggio_fase.ogg": {
+"sha1": "0d3e1109a4ef90cd0443edfedea39cfd0d7bbd0f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/vahoegnir.ogg": {
+"sha1": "4360c43d450b8b16fd9e07ea00bfd1df7f703d47",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/vahoegnir_fase.ogg": {
+"sha1": "e9b23adf29374911253806c1b5ae527a5cb862af",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/vliegervanger.ogg": {
+"sha1": "8a7ad69e56dc6fe68e9391fb9fd4a7ac66806fbc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/vliegervanger_fase.ogg": {
+"sha1": "4cec786e2d3a4554847213ca666e76605bb23833",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/wortelwurger.ogg": {
+"sha1": "766d38f5f5c45d5ca63a64fa4fb54eb2557d8e36",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/wortelwurger_fase.ogg": {
+"sha1": "eb1e24be2fa0da967803ddc473ed542e5ad19cba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zeeslurf.ogg": {
+"sha1": "54591c1c946c9a733ff9bdc2a9f83f279b1121ac",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zeeslurf_fase.ogg": {
+"sha1": "fb3c188e1175b454d87b4a01441550cca6d61e97",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zilverstaart.ogg": {
+"sha1": "7b40ca91d35a569e8766cc54994ce9fa1567138e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/baas/zilverstaart_fase.ogg": {
+"sha1": "da53284a83fc4d068e9fefd67dbaa31a3a9a8742",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/algemeen.ogg": {
+"sha1": "3c7941dd356c1068bccc3eafc24eb5e518c41a6f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/baron_bleu.ogg": {
+"sha1": "ef4e11b5eedde45a2b875206028690c86d10fbaa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/boormeester.ogg": {
+"sha1": "4eefc67d8e6ac6540d5f6384f241841ff4bffd87",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/brokkel.ogg": {
+"sha1": "b185ca759f21770d7b8e2f323519b9775fb07ff6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/donderbuik.ogg": {
+"sha1": "56357213375ddf086a0911f137373aa87275cb1c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/galmwolf.ogg": {
+"sha1": "5e30be3d41763a1003bbb2ed6d3e39f50d690021",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/gorgonzola.ogg": {
+"sha1": "f41cd12f4c2022fb363fce3c8756b530baba800a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/grauwe_droom.ogg": {
+"sha1": "50cae15b7056eb50d42ece9a557958926008101c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/klodderreus.ogg": {
+"sha1": "7575a319d1ded95598db85e8fc0b7d4e7c2b57de",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/koning_klodder.ogg": {
+"sha1": "a1ab20b74d865ba32428b964f38cee3439ef2c3b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/kruinroofvogel.ogg": {
+"sha1": "ad698e5953b0813be21a8900d22c7ae099aba5d4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/mika_imker.ogg": {
+"sha1": "b92f655ab8768e421b9a655b9fd165f28d79e5f0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/mika_spion.ogg": {
+"sha1": "95ceebfb28e71c9f1609554b48483e620e130b15",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/nestwachter.ogg": {
+"sha1": "4068ef798571071a126f04b521a06145bf8e2aa0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/opperzwam.ogg": {
+"sha1": "22669dff4b4dc00942f7e140db464918cbfb3d50",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/piepvel.ogg": {
+"sha1": "03028f847e198ba89dff8cb167b8f0c110de80e7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/roquefort.ogg": {
+"sha1": "d1281249629ed06f08928b082b6115cee600c092",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/spiegelzucht.ogg": {
+"sha1": "49ae899169e09cfc7d0ccf49f23d335a5531f4d6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/taleggio.ogg": {
+"sha1": "b4c7196eba03454bb9693aaf87c017226e0faf5b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/vahoegnir.ogg": {
+"sha1": "15cafaccbc310e9dc33917016e652dd3b4c398aa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/vliegervanger.ogg": {
+"sha1": "5997bb39fd757c136a52ebc44dedaa4c593c2608",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/wortelwurger.ogg": {
+"sha1": "81f55fc98547ccba8525f55a082f274b2e3f5daf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/zeeslurf.ogg": {
+"sha1": "1c0369edfbfee0f3bef10b3565f5384602386243",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/fanfare/zilverstaart.ogg": {
+"sha1": "c996790a2c8c3ad5d7d94b4b70ec3c96aa25b1a0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/druipgrotten.ogg": {
+"sha1": "ff6e71d9da0afe2d5711132690995e30356a199f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/galmhellingen.ogg": {
+"sha1": "e9ccff7e4adcfefedcca64c1c1a77f4d590624a4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/hart.ogg": {
+"sha1": "9737c6dc13d22d86cec0f8700160d293572a4e32",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/hoogvads.ogg": {
+"sha1": "6d39877d48ed3b23e66bb65529903e4387789843",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/hoogvads_markt.ogg": {
+"sha1": "8299b5e0742e18af1e7621b8ef4af16db185488b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/klodderweide.ogg": {
+"sha1": "c970086c6d16437e483b7c57d943491e4e864a42",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/knuffelmeer.ogg": {
+"sha1": "075a5d071b459b1ace6c90e9c55a798eee52d0c1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/kruinzee.ogg": {
+"sha1": "ca434491647c915ac7051bd7e7cae9fe4d218bc9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/lampionkust_avond.ogg": {
+"sha1": "68df8a6af842923c7da740ea9fc7edee595f0fda",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/lampionkust_dag.ogg": {
+"sha1": "c8137f8991910b26f38f3efbbe5967926a73f83a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/schorsstad.ogg": {
+"sha1": "94cfd09ccbf64904db2d385b21da48cc5f02e26e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/spiegelburcht.ogg": {
+"sha1": "12f750ef0bf678ddaaccaf68a6933e2fd887b3be",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/splinterkloof.ogg": {
+"sha1": "a12c1afaee78d697e3c53509b9f8430e7610bcea",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/sporenwoud.ogg": {
+"sha1": "271854acfc6fc85c642992bfee7134cb5eed4d6f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/stamspiraal.ogg": {
+"sha1": "86415e113cabb1e50d0ff99d1f1544248c93f4e7",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/takkenbanen.ogg": {
+"sha1": "8b38f0d1cfb883c494573fb54a093cef71ba3137",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/wortelduister.ogg": {
+"sha1": "6da07b5860f206f63fdb02b6cccbd734ce284df1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/wortelvelden.ogg": {
+"sha1": "4eda02a13fad41b896c9858fca574aa1169553b0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/zeppelinwerf.ogg": {
+"sha1": "9fd5314e1a6c4495111bd4ed004c6c9a495770ba",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/gebied/zwamtempel.ogg": {
+"sha1": "4e8791fad6f5b518d128b7e49ebed5056ba752a9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stinger/baas_verslagen.ogg": {
+"sha1": "7ae4a33f61ef4df664f9f8f36d1ce5b8295935ae",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stinger/geheim.ogg": {
+"sha1": "71e70a29faf787927ec71b37d5ea9405dd5a4740",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stinger/level_op.ogg": {
+"sha1": "775926d7595bc5765206598f08f0c1ba08e174a9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stinger/ontdekking.ogg": {
+"sha1": "68572b9e2ee1c3b6238645b2de4455565d482cd1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/muziek/stinger/quest_klaar.ogg": {
+"sha1": "d8f4efe8fecfc3bcc359853098a684f62e43bc1c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_berg.ogg": {
+"sha1": "5fdf4e2d79bfcd4c38b49723812f0f12c5396480",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_bos.ogg": {
+"sha1": "484d079f980770b43f9311742db3731fe9d79a94",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_grot.ogg": {
+"sha1": "86229c92ec1ea1b732d1e37f6351df3f65eedbfe",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_honing.ogg": {
+"sha1": "196981d51cce30bcba6ed39227d3f538288ce57a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_kloof.ogg": {
+"sha1": "aa9671ec68f645ccbd01ed4d2ea44bd53fe54a7e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_krekels.ogg": {
+"sha1": "a3c529c8bcc297f8b7763f9771b4d5ddd310860d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_kruin.ogg": {
+"sha1": "2ca0ad9e4a7434c199d415306fe3dbd96dedee79",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_kust.ogg": {
+"sha1": "a30f6757d680722b51f80a423d3c42e236134c92",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_meer.ogg": {
+"sha1": "94650c1edc1265147313e51736a8a27bf2703c41",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_sporen.ogg": {
+"sha1": "4083f04ca088ea5dcda12de9164ad41558281176",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_tempel.ogg": {
+"sha1": "b26e1f7417c3897db3358c3a29b21950b8f48366",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_weide.ogg": {
+"sha1": "2befafbea906d39f2df6720bbd20932f6edb8583",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bed_wortel.ogg": {
+"sha1": "8dd18193584cd61ded9064f802832023c97af7df",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bij_1.ogg": {
+"sha1": "8630826dfa5184b6f32e9bb2acc468540fcd50aa",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/bij_2.ogg": {
+"sha1": "27e6f73fe2ccd0710e321cf3b84cd1ce335ccfab",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/druppel_1.ogg": {
+"sha1": "907e7fc23232d6c717c6f7b51a0319c4b5ab260f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/druppel_2.ogg": {
+"sha1": "687621960aed33f06b5577758043d2c2c1b66bef",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/druppel_3.ogg": {
+"sha1": "f5567f093fcf3c2642a9369d6db48f44cc5abcbc",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/druppel_4.ogg": {
+"sha1": "0f42dcc0e83ad2662260a680422f61fad5c9d3f8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/glinster_1.ogg": {
+"sha1": "930dd43210510ed076063b138f64d680c2eeee30",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/glinster_2.ogg": {
+"sha1": "d15d31c9c36e9ec3e5f0845a697fbd343a7036e1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/glinster_3.ogg": {
+"sha1": "9c86a6538e58b536a99699eb7194c44aed092c6d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/golf_1.ogg": {
+"sha1": "e4edab8f19ee10a85634d939672c76577e38314c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/golf_2.ogg": {
+"sha1": "e8a83b93fab12092ebfca697767c958e2c803598",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/kraak_1.ogg": {
+"sha1": "abbad5c6abd91a01bcffa45429a8558c237e6c2a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/kraak_2.ogg": {
+"sha1": "443b6ecadac00efee1f688d8080a6d8653d05958",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/krekel_1.ogg": {
+"sha1": "98ed4f7d6c6525356074a908ac05849f65d9ac48",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/krekel_2.ogg": {
+"sha1": "ab1f344aad2f495d5b7665253aeb34fc9d82068c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/vogel_1.ogg": {
+"sha1": "4cc92e3f82f431bf4b87c6fde695afe7fc04dd9b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/vogel_2.ogg": {
+"sha1": "20bf7c85e8cc970df637f74b4838b0c2cc06c1bf",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/vogel_3.ogg": {
+"sha1": "af218f16aa543befdfcc41bad410c31e2d1ff688",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/sfeer/vogel_4.ogg": {
+"sha1": "296cb2dbc15a890bf8fc2cd429c26ccdfa161d6e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/bed_briesje.ogg": {
+"sha1": "8ca2c367caca8bf588a5e5e6e0133fe40aa3dacd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/bed_golfjes.ogg": {
+"sha1": "5ebe5136bc4bb4b53fc92baefa3f004bc0e0e403",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/bed_haardvuur.ogg": {
+"sha1": "400127688651afd92a97d1ce96ad21efe5574e4a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/haven_1.ogg": {
+"sha1": "884d8ec8116450de3dea4d9a7418ab6c3fcba00e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/haven_2.ogg": {
+"sha1": "08dcfb277dc807c7c762ac1139ad67e62f1e325e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/honingtak_1.ogg": {
+"sha1": "f2d7cd4ba8d74bca01ffaa3947feeec3625c45d0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/honingtak_2.ogg": {
+"sha1": "24a4dd9c0ed5b471a82ffc9b5266fc2261f2be4e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/kandijkom_1.ogg": {
+"sha1": "5cdf4d12565dcc29e81a97db94dd2e643d7e6683",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/kandijkom_2.ogg": {
+"sha1": "2184518b4af9391d720dc2f01c4c0769eea4a077",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/knuffelkamp_1.ogg": {
+"sha1": "f9dad82a82d73866b05ea5efd8180552fbf66d51",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/knuffelkamp_2.ogg": {
+"sha1": "15191a987b8f79c5fef9978b4e1539cdd2f2a823",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/zwamzoet_1.ogg": {
+"sha1": "e62233df05240294f0aaefd026d23a41fbdb411c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vadsrijk/stad/zwamzoet_2.ogg": {
+"sha1": "6a1cc1b51febbb3efb477e26b8a5986372417d85",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/fladder1.ogg": {
+"sha1": "90407cb5c88594e752544a094cfdb2aa19d82323",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/fladder2.ogg": {
+"sha1": "239d81c9dd4c65454cb81aa8c5a27ca56aaea2f6",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/guh_uiltje1.ogg": {
+"sha1": "3aa090b96d8fbd3a1b822a5237e11d4def3358fb",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/guh_uiltje2.ogg": {
+"sha1": "45111f37a15613e41f92fe753d3fc6dc2d005c7a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/kaasmeesje1.ogg": {
+"sha1": "db1ef3b237a1eaa5751461146df3cefc8c6695f0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/kaasmeesje2.ogg": {
+"sha1": "55ce2aac0af50a35817383c3b14340b32fd7617c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/mijn_mijn1.ogg": {
+"sha1": "c9350442766f513a0b00acce47e91ee46c9aa41d",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/mijn_mijn2.ogg": {
+"sha1": "1ba2ee90ceda4b4b644a031c54e51efaceacf741",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/pluisvinkje1.ogg": {
+"sha1": "cb281e5e59709868c33c96343251e19605b7820b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/pluisvinkje2.ogg": {
+"sha1": "7eee3dc7160024cec8a18f7b1cd95bed0f30964b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/pluisvinkje3.ogg": {
+"sha1": "3d0b0fb3f403b2a99691c51a9889595f45889695",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/zeemeeuwtje1.ogg": {
+"sha1": "98b3b4e43cdeec02a49d90c3a63581a416fd9073",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/vogels/zeemeeuwtje2.ogg": {
+"sha1": "0b3a772344d501c793cbc9e7a671a078fa38ec17",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/blub1.ogg": {
+"sha1": "4c0f6c290d5d2a875399307a1b932cabda327267",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/blub2.ogg": {
+"sha1": "2591746d27519381d7bea9fa483a9b0751c3c42e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/blub3.ogg": {
+"sha1": "01e23c20fc0b6a3d115ead1bf9b4df6abbc12c93",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/kwak1.ogg": {
+"sha1": "79f274e727edc5f8049c37e05aa5a658c4bf063c",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/kwak2.ogg": {
+"sha1": "fc2b868b33802f40f14e3084a60d6507046e437f",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/kwak3.ogg": {
+"sha1": "bb5797a14dee74527cf2e861ade2ee3bdc1c8da8",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/piep1.ogg": {
+"sha1": "52d1f37ee317464d48d3723e438ab45efbf393bd",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/piep2.ogg": {
+"sha1": "c4624866f589176fee59149019ed346687660b46",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/piep3.ogg": {
+"sha1": "a86fcddd274ec8a250f3c77a6af17d1ad704fd8a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/ting1.ogg": {
+"sha1": "17f57ae0c79b5f44ed8965f66343b27a0c8d6935",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/ting2.ogg": {
+"sha1": "27615f4b6803b2333c0c70808e626d2618cf3d6b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterdiertjes/zoem.ogg": {
+"sha1": "0700a2ac9f9dab383f90721357e7edae676bfe98",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/waterval/ruis.ogg": {
+"sha1": "2d5798e8a1da523107e704fb44ec1cfeadee71f4",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/breek1.ogg": {
+"sha1": "d4796291ffa1f8e2d83d5fe15eff83862aed58d9",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/breek2.ogg": {
+"sha1": "c664e0cb2b90cc249f4953be1434cf0c0314440b",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/plaats1.ogg": {
+"sha1": "397b4d7bc34aa57ced400bf888c9c3123c9744b0",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/plaats2.ogg": {
+"sha1": "024c5d8b04352007532fa13268921c009c21590e",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/stap1.ogg": {
+"sha1": "6ee9220a071f06191e68cf102b470cac6b4e8380",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/stap2.ogg": {
+"sha1": "c7f66218c59a02d7df2608eead1987ceb266c414",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/stap3.ogg": {
+"sha1": "2e08f2f0145f1ace43f36c10f6816333c8e06036",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenblok/stap4.ogg": {
+"sha1": "601767ec4209e7f267217f307a3c44c8134b54d1",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenweide/muziek.ogg": {
+"sha1": "ca8806f8c033f79bd7f6ef8305bb1d8165f5963a",
+"stappen": [
+"ogg"
+]
+},
+"assets/guhs/sounds/wolkenweide/sfeer.ogg": {
+"sha1": "20c9e8fae305465ab08e1577aec96f8cff119def",
+"stappen": [
+"ogg"
+]
+},
 "assets/guhs/textures/block/aangevreten_kaaskorst_stenen.png": {
 "sha1": "82256b09c6899a799061bcaabb7e7c1c26607029",
 "stappen": [
