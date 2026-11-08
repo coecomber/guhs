@@ -427,7 +427,16 @@ public final class Z3NpcPlekken {
             NEST.add(-8, 16, 4), NEST.add(400, 120, 40)};
     public static final Vec3 HOOGVADS = Vec3.atCenterOf(w("landmark_hoogvads_richting", 3000, 260, 0)).add(300, 60, 0);
 
-    /** Flash F2 (z3_hq15): the throne room, far away (a private set high above the far north-east, outside the zone, never walked). */
+    /**
+     * W-SPEL: flash F2's first shot, "ver in het oosten": towards the Sterrendovende Toren, the grey tower at the east edge of the
+     * Zijdeland (zone 6, built terrain), from the south-west and up to its top. (The throne room itself is z3-bazen's set.)
+     */
+    private static final Vec3 OOST_TOREN = Vec3.atCenterOf(nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6VerhaalPlekken.TOREN_TOP);
+    public static final Vec3[] F2_OOST = {
+            OOST_TOREN.add(-120, -50, 50), OOST_TOREN.add(0, -20, 0),
+            OOST_TOREN.add(-48, -5, 22), OOST_TOREN.add(0, 4, 0)};
+
+    /** (unused since W-SPEL: nothing was ever built here, the shot showed an empty sky; F2 now uses F2_OOST + z3-bazen's set) */
     public static final Vec3 TROON = v2(2990.0, 300, -680);
     public static final Vec3[] FLASH_F2 = {
             TROON.add(0, 3, 14), TROON.add(0, 2, 0),

@@ -33,6 +33,9 @@ public final class Buitenstaanders {
 
     static {
         TOEGESTAAN.add("guh_vis");   // (wezens/Sfeer: ambient fish at the ponds)
+        // W-SPEL: the invisible seat of guh furniture (kussens, zitzakken, stoelen in the Vadsrijk maps). Refused, the seat never
+        // joined the level while the player still "rode" it: the client was put 0.4 into the floor and fell through the map.
+        TOEGESTAAN.add("guh_seat");
     }
 
     private Buitenstaanders() {

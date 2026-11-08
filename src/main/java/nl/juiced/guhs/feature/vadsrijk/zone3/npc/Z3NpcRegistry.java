@@ -129,7 +129,7 @@ public final class Z3NpcRegistry {
 
     static void commando(RegisterCommandsEvent event) {
         LiteralArgumentBuilder<CommandSourceStack> z = Commands.literal("z3npc").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
-        String[] scenes = {"opening", "bam", "nest", "f1", "ei", "rit", "finale", "cliffhanger"};
+        String[] scenes = {"opening", "bam", "nest", "f1", "ei", "rit", "finale", "cliffhanger", "f2"};   // W-SPEL: + f2 (replay the flash)
         for (String s : scenes) {
             z.then(Commands.literal(s).executes(c -> {
                 ServerPlayer p = c.getSource().getPlayerOrException();
@@ -141,6 +141,7 @@ public final class Z3NpcRegistry {
                     case "ei" -> Z3Verhaal.ei(p);
                     case "rit" -> Z3Verhaal.rit(p);
                     case "finale" -> Z3Verhaal.finale(p);
+                    case "f2" -> Z3Verhaal.flashF2(p);
                     default -> Z3Verhaal.cliffhanger(p);
                 }
                 return 1;

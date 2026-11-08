@@ -138,6 +138,7 @@ public final class KernRegistry {
         ENTITIES.register(modBus);
         FEATURES.register(modBus);
         SOUNDS.register(modBus);
+        nl.juiced.guhs.feature.vadsrijk.kern.scene.SceneLaden.register(modBus);   // W-SPEL: chunks for far cutscene cameras
         modBus.addListener((EntityAttributeCreationEvent e) -> {
             e.put(PROEFKLODDER.get(), VadsrijkMob.basisAttributen().build());
             e.put(PROEFKLODDERTJE.get(), VadsrijkMob.basisAttributen().build());

@@ -17,7 +17,11 @@ public final class RijkScenes {
 
     public static void speel(ServerPlayer p, RijkScene s) {
         BEZIG_TOT.put(p.getUUID(), p.level().getGameTime() + s.duur());
-        KernPayloads.stuur(p, new KernPayloads.Scene(s));
+        if (KernPayloads.stuur(p, new KernPayloads.Scene(s))) {
+            SceneLaden.begin(p, s);   // W-SPEL: a far camera gets its chunks (server sends them; the client waits for them)
+        } else {
+            SceneLaden.stop(p);
+        }
     }
 
     public static boolean bezig(ServerPlayer p) {
@@ -28,6 +32,7 @@ public final class RijkScenes {
     /** U-QUESTROBOT: the scene is over for this player (the robot plays a whole quest chain in one tick: "a quiet moment later"). */
     public static void vergeet(ServerPlayer p) {
         BEZIG_TOT.remove(p.getUUID());
+        SceneLaden.stop(p);   // W-SPEL
     }
 
     /** A big title card (Souls/Dungeons style) for this many ticks; kleur = the accent line's RGB. */
