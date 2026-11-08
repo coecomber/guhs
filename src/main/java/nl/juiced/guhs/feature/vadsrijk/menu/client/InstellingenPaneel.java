@@ -167,6 +167,14 @@ public class InstellingenPaneel extends MenuPaneel {
         if (hud != null) {
             knop(g, mx, my, left + 126, by, 110, 16, Component.translatable(K + "hud"), true, () -> VadsrijkMenu.wissel(hud));
         }
+        if (mc.player != null && mc.player.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER)
+                && mc.getConnection() != null) {   // U-QUESTLOPEN: the admin main-line walker (OP only; the command checks again)
+            knop(g, mx, my, left + 10, by - 20, 110, 16, Component.translatable("vadsrijk.questlopen.knop.menu"), true,
+                    () -> {
+                        mc.setScreen(null);
+                        mc.getConnection().sendCommand("guhs vadsrijk questlopen");
+                    });
+        }
         for (var regel : font.split(Component.translatable(K + "meer"), w - 260)) {
             g.text(font, regel, left + 246, by - 2, ZACHT, false);
             by += 10;

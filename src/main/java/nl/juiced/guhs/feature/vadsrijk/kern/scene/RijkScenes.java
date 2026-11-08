@@ -25,6 +25,11 @@ public final class RijkScenes {
         return t != null && p.level().getGameTime() < t;
     }
 
+    /** U-QUESTLOPEN: forget that this player is in a scene (the muted fast-forward). */
+    public static void vergeet(ServerPlayer p) {
+        BEZIG_TOT.remove(p.getUUID());
+    }
+
     /** A big title card (Souls/Dungeons style) for this many ticks; kleur = the accent line's RGB. */
     public static void titel(ServerPlayer p, Component titel, Component onder, int ticks, int kleur) {
         KernPayloads.stuur(p, new KernPayloads.Titel(titel, onder, ticks, kleur));

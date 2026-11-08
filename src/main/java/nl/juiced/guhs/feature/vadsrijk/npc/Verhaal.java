@@ -63,6 +63,11 @@ public final class Verhaal {
     private Verhaal() {
     }
 
+    /** U-QUESTLOPEN: is one of zone 1's scenes (opening, BAM, flight, cliffhanger...) running for this player? */
+    public static boolean bezig(ServerPlayer p) {
+        return LOOPT.containsKey(p.getUUID());
+    }
+
     // ---- the opening ----------------------------------------------------------------------------------------------------------
 
     /** (Haken.BINNEN) the first time in the dimension, at the camp: the opening scene. */

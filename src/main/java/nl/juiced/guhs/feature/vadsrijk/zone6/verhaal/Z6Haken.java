@@ -98,6 +98,7 @@ public final class Z6Haken {
         Haken.GEBIED_BETREDEN.add(Z6Haken::gebied);
         QuestMotor.KLIK_VOOR.add(Z6Haken::klikVoor);
         QuestMotor.ACTIES.put("z6_vlieg", (p, a) -> Z6Verhaal.vlieg(p));
+        nl.juiced.guhs.feature.vadsrijk.questlopen.QlHaken.SCENE.add(Z6Verhaal::bezig);   // U-QUESTLOPEN
         QuestMotor.ACTIES.put("z6_klaar", (p, a) -> Z6Verhaal.zone6Klaar(p));
         QuestMotor.ACTIES.put("z6_tapijt", (p, a) -> Z6Verhaal.tapijt(p));
         QuestMotor.ACTIES.put("z6_kwastjes", (p, a) -> Z6Verhaal.uiterlijk(p, "z6_kwastjes"));

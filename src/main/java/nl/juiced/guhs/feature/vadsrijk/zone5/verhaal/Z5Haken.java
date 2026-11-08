@@ -77,6 +77,8 @@ public final class Z5Haken {
         QuestStap.ROUTES.add(Z5Haken::route);
         nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.PLEK_HAKEN.add(Z5Haken::stap);   // U-QUESTROBOT: the spot triggers
         nl.juiced.guhs.feature.vadsrijk.questrobot.QuestRobot.SPOEL.add(Z5Verhaal::spoel);   // U-QUESTROBOT
+        nl.juiced.guhs.feature.vadsrijk.questlopen.QlHaken.SCENE.add(Z5Verhaal::bezig);   // U-QUESTLOPEN
+        nl.juiced.guhs.feature.vadsrijk.questlopen.QlHaken.SCENE.add(Z5Finale::bezig);   // U-QUESTLOPEN
     }
 
     // ---- quest helpers -------------------------------------------------------------------------------------------------------------
