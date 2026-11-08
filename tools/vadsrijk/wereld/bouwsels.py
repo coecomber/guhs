@@ -520,11 +520,13 @@ def haven(W, K, P):
             for z in (467, 473):
                 S.fill(x, 57, z, x, g, z, "minecraft:cherry_log[axis=y]")
                 S.set(x, g + 1, z, LANT if x % 10 == 0 else "minecraft:cherry_fence")
-    zwemtrap(S, 29, 470, (-1, 0), g, steun="minecraft:cherry_log[axis=y]")
+    # W-SCHEPEN: no swim ladder at the very tip any more (line 0's airship docks there; the ladders at x 37/42/52/62 stay)
     zwemtrap(S, 42, 467, (0, -1), g, steun="minecraft:cherry_log[axis=y]")
     for x in (37, 52, 62):
         zwemtrap(S, x, 473 if x != 52 else 467, (0, 1) if x != 52 else (0, -1), g, steun="minecraft:cherry_log[axis=y]")
     guhvlag(S, 30, g + 1, 473, "z", 7)             # (fix L) on the end post, not on the deck (was (31, 468): a pole on the pier)
+    # W-SCHEPEN: line 0 (Kampsteiger <-> De Haven) docks at the open west tip of this pier, flush over the bay (Lijnen.Haven.UIT)
+    P["haven_z1_kamp_vertrek"] = [30, g + 1, 470]
     for z in range(468, 473):                      # (fix L) the quay railing ran across the pier's start: keep it open
         if z in oevers:
             S.set(oevers[z], g + 1, z, CARVE)
@@ -1306,6 +1308,22 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
                 S.set(x, yy, zz, "minecraft:dirt_path" if yy == y else "minecraft:dirt")
     P["aankomst_trap_top"] = kamp_p([0, y + 1, z - 2])
     W.stempel(kamp_stempel(S, "kamp_zuidsteiger"))
+
+
+def lijn0_kampsteiger(W, P, kamp_poi):
+    """W-SCHEPEN: line 0's camp end. The north arm of the camp dock (kamp scene) ends 6 east of the bell in a railing: that
+    railing goes (the 4 rails south of the flag pole; the airship lies flush against the tip) and the tip is the harbour POI
+    haven_kamp_z1_vertrek. The pole's flag loses its top row (it reached into the docked ship's balloon)."""
+    bx, by, bz = kamp_poi["luchtschip_bel"]
+    tx, tz = bx + 6, bz
+    S = WS(tx - 1, by - 1, tz - 3, 3, 12, 7)
+    for z in range(tz - 1, tz + 3):
+        S.set(tx, by, z, CARVE)
+    for z in range(tz - 2, tz + 2):
+        S.set(tx, by + 9, z, CARVE)
+    S.set(tx + 1, by - 1, tz + 3, CARVE)   # (the top rung of the swim ladder beside the tip: in the docked ship's propeller)
+    W.stempel(S.stempel("w_kampsteiger_tip"))
+    P["haven_kamp_z1_vertrek"] = [tx, by, tz]
 
 
 def kamp_arena(P, kamp_poi):

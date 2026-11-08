@@ -889,7 +889,8 @@ def dok(W, K, P):
         if not (-2241 <= z <= -2235):
             S.set(x1, g + 1, z, HEK_Z)
     for x in range(x0, x1 + 1):
-        S.set(x, g + 1, z1, HEK_X)
+        if abs(x) > 3:   # W-SCHEPEN: the south tip in front of the line-A airship stays open (7 wide: its hull)
+            S.set(x, g + 1, z1, HEK_X)
     for z in range(z0, z1 + 1, 7):
         S.set(x0, g + 2, z, LANT)
     # mooring post + the moored airship (east of the pier)
@@ -902,6 +903,7 @@ def dok(W, K, P):
     P["dok_landing"] = [0, g + 1, -2244]
     P["dok_kapitein"] = [-4, g + 1, -2240]
     P["dok_eind"] = [0, g + 1, -2226]
+    P["dok_instap"] = [0, g + 1, z1]   # W-SCHEPEN: the open south tip, where the line-A airship lies flush (Lijnen.Haven.UIT)
     W.stempel(S.stempel("dok"))
 
 
@@ -1963,7 +1965,7 @@ def galmdok(W, K, P):
     # U-OVERGANG: no viewpoint at the harbour (the Galmtop needle right behind it is the epic one)
     W.stempel(S.stempel("galmdok"))
     # the Kandijkom dock = the zone-2 end of line A (Noordklifhaven <-> Kandijkom-dok)
-    P["haven_z2_z1_vertrek"] = list(P["dok_landing"])
+    P["haven_z2_z1_vertrek"] = list(P["dok_instap"])   # W-SCHEPEN: the tip (was dok_landing, 20 blocks inside the dock)
     S = BZ.WS(-12, FY - 2, -2240, 10, 12, 16)
     P["haven_z2_z1_bord"] = havens.bord(S, -9, FY, -2232, 0, 1, 1, 0)
     W.stempel(S.stempel("dok_bord"))

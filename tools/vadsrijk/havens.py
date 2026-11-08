@@ -2,7 +2,8 @@
 railings, lanterns, a mooring mast with a guh flag and a departure board. The FLIGHT itself is t-luchtschip's; this only builds
 the place and publishes the shared POI ids:
 
-    haven_<van>_<naar>_vertrek   stand spot on the departure platform (where the airship docks / you board)
+    haven_<van>_<naar>_vertrek   stand spot on the departure platform (where the airship docks / you board); W-SCHEPEN: the open
+                                 tip of the platform, the ship lies flush beyond it
     haven_<van>_<naar>_bord      stand spot in front of the departure board (t-luchtschip puts the timetable there)
     haven_<van>_<naar>_mast      top of the mooring mast (rope anchor for the ship)
 
@@ -52,7 +53,9 @@ def pier(S, cx, y, cz, ux, uz, lengte, hoogste, prefix, P, breed=3, kop=6, bodem
             rand = max(abs(a), abs(b)) == kop
             terug = pt(lengte, 0)
             aansluiting = abs((x - terug[0]) * vx + (z - terug[1]) * vz) <= breed and ((x - mx) * ux + (z - mz) * uz) <= -kop
-            if rand and not aansluiting:
+            # W-SCHEPEN: the far edge in front of the docked airship stays open (its hull is 7 wide: 3 either side of the axis)
+            instap = abs((x - mx) * vx + (z - mz) * vz) <= 3 and ((x - mx) * ux + (z - mz) * uz) >= kop
+            if rand and not aansluiting and not instap:
                 S.set(x, y + 1, z, HEK)
             if rand and (a + b) % 4 == 0:
                 g = hoogste(x, z)
@@ -66,12 +69,13 @@ def pier(S, cx, y, cz, ux, uz, lengte, hoogste, prefix, P, breed=3, kop=6, bodem
         S.set(gx, yy, gz, LOG)
     S.set(gx, y + 13, gz, "minecraft:shroomlight")
     for i in range(4):
-        for j in range(3 - i // 2):
-            S.set(gx - vx * (i + 1), y + 11 - j, gz - vz * (i + 1), wol)
+        for j in range(3 - i // 2):   # W-SCHEPEN: the flag flies outward (it hung inside the docked ship's balloon)
+            S.set(gx + vx * (i + 1), y + 11 - j, gz + vz * (i + 1), wol)
     # the departure board at the right-hand front corner of the platform
     bx, bz = mx - ux * (kop - 2) - vx * (kop - 1), mz - uz * (kop - 2) - vz * (kop - 1)
     P[prefix + "_bord"] = bord(S, bx, y, bz, ux, uz, vx, vz)
-    P[prefix + "_vertrek"] = [int(mx + ux * 2), y + 1, int(mz + uz * 2)]
+    # W-SCHEPEN: the stand spot is the open tip of the platform (the airship's stern lies flush against it, Lijnen.Haven.UIT)
+    P[prefix + "_vertrek"] = [int(mx + ux * kop), y + 1, int(mz + uz * kop)]
     P[prefix + "_mast"] = [int(gx), y + 13, int(gz)]
     P[prefix + "_eind"] = [int(mx + ux * (kop - 1)), y + 1, int(mz + uz * (kop - 1))]
     return mx, mz

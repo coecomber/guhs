@@ -21,7 +21,9 @@ import nl.juiced.guhs.feature.vadsrijk.npc.NpcApi;
 public final class Z6Lijn {
     public static final String ID = "z5_z6";
     public static final Lijnen.Haven STAARTHAVEN = new Lijnen.Haven("haven_z5_z6_vertrek", Z6VerhaalPlekken.STAARTHAVEN, 270f, "z5");
-    public static final Lijnen.Haven ROZENKLOOF = new Lijnen.Haven("haven_z6_z5_vertrek", Z6VerhaalPlekken.LUCHTHAVEN, 180f, "z6");
+    // W-SCHEPEN: the Luchthaven's pier runs SOUTH over the gorge rim and is open at its south end: the ship docks south (0), not
+    // north (180: it lay over the pier and the tower)
+    public static final Lijnen.Haven ROZENKLOOF = new Lijnen.Haven("haven_z6_z5_vertrek", Z6VerhaalPlekken.LUCHTHAVEN, 0f, "z6");
     public static final Lijnen.Lijn LE = new Lijnen.Lijn(ID, "E", STAARTHAVEN, ROZENKLOOF, Z6VerhaalPlekken.LIJN_E_VIA, 3300);
     private static boolean klaar;
 

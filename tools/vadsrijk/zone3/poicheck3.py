@@ -15,7 +15,7 @@ ROOT = os.path.abspath(os.path.join(HIER, "..", "..", ".."))
 TEGELS = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure", "vadsrijk", "tegels")
 import tegellezer as TL  # noqa: E402
 
-SLA_EXACT = {"ei", "dok_mast", "knuffelbeeld", "dok_luchtschip", "oosttaksteiger_luchtschip", "haven_z3_z2_mast", "haven_z3_z4_mast", "bloesemboompje", "flash_f1_kwastgat", "vingerafdruk"}
+SLA_EXACT = {"ei", "knuffelbeeld", "dok_luchtschip", "oosttaksteiger_luchtschip", "bloesemboompje", "flash_f1_kwastgat", "vingerafdruk"}   # (W-SCHEPEN: the *_mast spots are stand spots now)
 SLA_PREFIX = ("landmark_", "piepvel_lantaarnpaal", "piepvel_kooi", "grotlantaarn", "hart_grotlantaarn")
 DOOR = ("air", "carpet", "petals", "lantern", "chain", "ladder", "short_grass", "fern", "flower", "torch", "campfire", "water",
         "lily_pad", "moss_carpet", "glimpaddenstoel", "glimplant", "cave_vines", "hanging_moss", "vine", "button", "lever", "slab[type=bottom",

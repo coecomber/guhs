@@ -46339,12 +46339,12 @@
   "vadsrijk.luchtschip.kort.level": "nog dicht voor jou: pas vanaf level %s",
   "vadsrijk.luchtschip.kort.dicht": "nog dicht voor jou: volg eerst de hoofdquest",
   "vadsrijk.luchtschip.pier.kop": "Lijn %s:",
-  "vadsrijk.luchtschip.pier.open": "Lijn %s naar %s: vertrek over %s. ✔ Jij mag mee: klik ergens op het schip!",
+  "vadsrijk.luchtschip.pier.open": "Lijn %s naar %s: vertrek over %s. ✔ Jij mag mee: loop het schip op of klik erop!",
   "vadsrijk.luchtschip.pier.dicht": "Lijn %s naar %s: vertrek over %s. ✖ %s",
   "vadsrijk.luchtschip.bord.voor": "Mee na de hoofdquest \"%s\"",
   "vadsrijk.luchtschip.bord.voor_level": "Mee na de hoofdquest \"%s\", vanaf level %s",
   "vadsrijk.luchtschip.bord.terug": "Terugvliegen mag altijd",
-  "vadsrijk.luchtschip.mag": "Lijn %s naar %s: jij mag mee! Vertrek over %s. Klik ergens op het schip om in te stappen; aan boord kun je vrij rondlopen.",
+  "vadsrijk.luchtschip.mag": "Lijn %s naar %s: jij mag mee! Vertrek over %s. Loop aan het eind van de pier het schip op (of klik erop); aan boord kun je vrij rondlopen.",
   "vadsrijk.karakter.modus.normaal.regel": "Het gewone avontuur",
   "vadsrijk.karakter.modus.knuffel.regel": "Halve schade, 10% minder xp",
   "vadsrijk.karakter.modus.eenvads.regel": "Eén leven, 10% meer xp",
@@ -47231,5 +47231,6 @@
   "vadsrijk.opslag.vip.kopen": "Kopen",
   "vadsrijk.opslag.vip.nee_dank": "Nee, dank je",
   "guhs.configuration.geroezemoes": "Vadsrijk: geroezemoes",
-  "guhs.configuration.geroezemoes.tooltip": "Zacht guh-geroezemoes op drukke plekken (Hoogvads, de bazaar van Saffraanpoort, de markt van Kandijkom, ...), met af en toe een 'njeg', een giechel, een piepje of een blub. 's Nachts stiller (procent, 0 = uit). Volgt ook de schuif Omgeving."
+  "guhs.configuration.geroezemoes.tooltip": "Zacht guh-geroezemoes op drukke plekken (Hoogvads, de bazaar van Saffraanpoort, de markt van Kandijkom, ...), met af en toe een 'njeg', een giechel, een piepje of een blub. 's Nachts stiller (procent, 0 = uit). Volgt ook de schuif Omgeving.",
+  "vadsrijk.luchtschip.loopplank.nog_niet": "Het luchtschip ligt hier nog niet aan. Volgende vertrek over %s: wacht even op de pier!"
 }

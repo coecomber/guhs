@@ -332,6 +332,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_questlopen',
             # 1.10 round U, U-LEVEN-STAD: town life zones 1-6 (texts, blue blob texture, playground props; Java: feature/vadsrijk/stadsleven)
             'vadsrijk_u_leven_stad',
+            # 1.10 round W, W-SCHEPEN: boarding on foot (walk on / click the pier tip / the safety net); after vadsrijk_u_luchtschip
+            'vadsrijk_w_schepen',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
