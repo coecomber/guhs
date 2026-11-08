@@ -4,6 +4,10 @@ Dit is de lange spiekbrief van ronde U (2026-11-06 t/m 11-08): alles wat je in j
 "Het Zijdeland" met de eerste raid. Alles zit in één nieuwe testclient:
 **`guhs_vadsrijk\v-int\run-client.bat`** (de oude t-int-client heb je niet meer nodig).
 
+> **Het verhaal testen? Begin bij hoofdstuk 0: QUESTLOPEN.** Typ `/guhs vadsrijk questlopen` (alleen als OP) en klik de hele
+> hoofdlijn van zone 1 t/m 6 op volgorde door: met teleport, het juiste level, alle films, en bazen zelf vechten of laten verslaan.
+> Gebruik er een apart testkarakter voor.
+
 **Volgorde van deze spiekbrief:** eerst starten, de toetsen en de loot-regels, dan de nieuwe wereld, dan zone 1 → 6, dan de
 systemen, en helemaal achteraan (hoofdstuk 8) **elk feedbackpunt** met wat er gedaan is en hoe je het controleert.
 Elk blok test één onderdeel: copy-paste de commando's in de chat en kijk of gebeurt wat erbij staat.
@@ -72,6 +76,10 @@ pauzemenu (Esc). Een rode **!** daar = de toets botst met een andere.
 | Raid-clear | Ringreplica (Knuffelbond-trofee) | 12 % (1e clear zeker) |
 | Raid-clear | Ringelings Teenring (Guhddelijk) | 1,5 % |
 | Raid-bazen 1-3 | kleine kist: munten + 30 % een setstuk | elke kill |
+| Grotkerker-eindkist (elke grot, zone 1-6) | Pluimguh in de grotkleur (Glimzwam, Amethist, Wortelhout, Koraal, Onweer, Zoutroze; als je een Pluimguh hebt) | 10 % + pech 15 |
+| Grotkerker-eindkist | huisdier (chibi van de grotbaas) | 6 % per clear, zeker na 25 keer mis |
+| Grotkerker-eindkist | uitrusting EPISCH (anders ZELDZAAM) | 1e clear zeker episch, daarna 12 % |
+| Grotkerker-eindkist | bazenkern van de zone | 25 % |
 | Zone-4-zijquests z4_s14 / z4_s15 | Lampion-Pluimguh / Duinhupper | vaste beloning |
 
 Testen:
