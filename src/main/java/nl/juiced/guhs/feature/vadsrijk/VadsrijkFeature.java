@@ -112,6 +112,5 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.payloads(registrar);   // U-Z6RAID
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.payloads(registrar);   // U-LEVEN-RITME
         nl.juiced.guhs.feature.vadsrijk.stadsleven.StadslevenRegistry.payloads(registrar);   // U-LEVEN-STAD: the Stadsleven setting
-        nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.payloads(registrar);   // U-Z6RAID
     }
 }
