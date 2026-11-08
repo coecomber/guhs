@@ -35,7 +35,7 @@ halen zonder terug te moeten naar zone 3?
 - Integratie: als een andere slice deze generators ook draait, komen mijn xp-waarden vanzelf mee (ze staan in de generator).
 
 ## Tests
-- Gametests `-Pgt=Z4VerhaalGameTests,Z6VerhaalGameTests,VadsrijkQuestRobotGameTests`: zie eindrapport/log `../w-balans-gt.log`.
+- Gametests `-Pgt=Z4VerhaalGameTests,Z6VerhaalGameTests,VadsrijkQuestRobotGameTests`: **alle 10 geslaagd** (log `../w-balans-gt.log`).
 - De questrobot kijkt niet naar xp-bedragen (alleen of quests te doen zijn); levelpoorten (`lv`) zijn ongewijzigd.
 
 ## Open punten (voor de gebruiker)
