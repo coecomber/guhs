@@ -67,7 +67,8 @@ public final class GeroezemoesSpeler {
     /** A guh that makes the crowd: a Vadsrijk NPC, a townsfolk prop (figurant), a rider. */
     static boolean guh(Entity e) {
         String p = BuiltInRegistries.ENTITY_TYPE.getKey(e.getType()).getPath();
-        return p.startsWith("vr_npc") || p.equals("vr_z3_baas_figurant") || p.equals("vr_ruiter_guh");
+        return p.startsWith("vr_npc") || p.equals("vr_z3_baas_figurant") || p.equals("vr_ruiter_guh")
+                || p.equals("vr_sl_guh");   // V-INT: u-leven-stad's town guhs (children, walkers, terrace chatters)
     }
 
     private static void tick() {

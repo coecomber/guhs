@@ -277,8 +277,7 @@ public final class StadsLeven {
         if (testNacht != null) {
             return testNacht;
         }
-        long d = Math.floorMod(sl.getDefaultClockTime(), 24000L);
-        return d > 12800 && d < 23200;
+        return nl.juiced.guhs.feature.vadsrijk.ritme.Rooster.nacht(sl);   // V-INT: one day/night switch for the towns (u-leven-ritme)
     }
 
     /** No other town-life entity within r of p (scenes do not pile up on one spot). */
