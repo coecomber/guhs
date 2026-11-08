@@ -83,6 +83,7 @@ BIOOM = {
 
 # key -> (Dutch, English)
 TEKSTEN = {
+    "biome.guhs.knuffelkwartier": ("Het Knuffelkwartier", "The Snuggle Quarter"),   # W-INT: the dimension's biome name
     # NPCs
     N + "naam.kk_poort": ("Kwartiermeester", "Quartermaster"),
     N + "naam.kk_mollie": ("Meubelmeester Mollie", "Furniture Maker Mollie"),

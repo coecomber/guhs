@@ -703,6 +703,11 @@ TEKSTEN = {
     "block.guhs.vr_eco_opperzwam_beeld": "Opperzwam-beeldje",
     "block.guhs.vr_eco_klodderreus_knuffel": "Klodderreus-knuffel",
     "block.guhs.vr_eco_vadsrijk_vaandel": "Vadsrijk-vaandel",
+    # W-INT: the block items register without the block description prefix (26.1), so they need their own item.* name
+    "item.guhs.vr_eco_mini_koning_klodder": "Mini Koning Klodder",
+    "item.guhs.vr_eco_opperzwam_beeld": "Opperzwam-beeldje",
+    "item.guhs.vr_eco_klodderreus_knuffel": "Klodderreus-knuffel",
+    "item.guhs.vr_eco_vadsrijk_vaandel": "Vadsrijk-vaandel",
     "item.guhs.vr_item_ridderhelmpje": "Ridderhelmpje",
     "item.guhs.vr_item_zwammenhoedje": "Zwammenhoedje",
     "item.guhs.vr_item_klodderkroontje": "Klodderkroontje",

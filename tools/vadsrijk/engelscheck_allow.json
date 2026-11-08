@@ -74,7 +74,9 @@
     "vadsrijk.z3npc.baas.bleu",
     "vadsrijk.z3wezens.ziener.brul",
     "vadsrijk.z4boot.wind",
-    "vadsrijk.z6raid.wipe"
+    "vadsrijk.z6raid.wipe",
+    "vadsrijk.dungeon.titel",
+    "vadsrijk.dungeon.type"
   ],
   "waarden": [
     "Guhdex",

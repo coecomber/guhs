@@ -442,6 +442,17 @@ BAAS_ITEMS = {
     "vr_z5_baas_regenjasje": ("z5baas_regenjasje", "Donderbuiks Regenjasje", "Thunderbelly's Raincoat", lambda: jas_icoon((255, 170, 210)),
                               "Het regent alleen nog maar roze druppeltjes. En alleen op jou."),
 }
+# W-INT: the "Effect:" line under each named boss item (BazenLoot.BaasItem). Zone 5 has no extra mechanic, so the line names
+# the item's real bonus stats (Z5BazenLoot.typen). (nl, en)
+BAAS_EFFECTEN = {
+    "z5baas_hoedenspeld": ("prikt raak: extra kracht en kritieke klappen (vuur)", "pricks true: extra strength and critical hits (fire)"),
+    "z5baas_vermommingsmantel": ("extra vads, behendigheid en loopsnelheid", "extra chonk, agility and walking speed"),
+    "z5baas_moersleutel": ("extra kracht en verdediging (vuur)", "extra strength and defense (fire)"),
+    "z5baas_kleppenstaf": ("warme heals: extra wijsheid en healkracht (roze)", "warm heals: extra wisdom and healing power (pink)"),
+    "z5baas_donderboog": ("rommelt raak: extra behendigheid en kritieke schade (water)", "rumbles true: extra agility and critical damage (water)"),
+    "z5baas_onweerstaf": ("extra wijsheid en elementschade (water)", "extra wisdom and element damage (water)"),
+    "z5baas_regenjasje": ("veel vads, healkracht en elementweerstand (roze)", "lots of chonk, healing power and element resistance (pink)"),
+}
 TROFEEEN = {
     "zilverstaart": ("Zilveren Staartpunt", "Silver Tail Tip", (220, 226, 240)),
     "gorgonzola": ("Gouden Kleppenwiel", "Golden Valve Wheel", (255, 170, 210)),
@@ -690,6 +701,7 @@ def teksten():
         t["item.guhs." + item] = (nl, en)
         t["vadsrijk.loot." + typ] = (nl, en)
         t[f"vadsrijk.loot.{typ}.flavour.0"] = ("\"" + fl + "\"",) * 2
+        t["vadsrijk.bazen.effect." + typ] = BAAS_EFFECTEN[typ]   # W-INT
     for b, (nl, en, _k) in TROFEEEN.items():
         t["item.guhs.vr_z5_baas_trofee_" + b] = (nl, en)
     for g, (nl, en) in GEBIEDEN.items():
