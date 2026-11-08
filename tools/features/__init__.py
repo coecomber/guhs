@@ -314,6 +314,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # U-Z6WEZENS: zone-6 creatures, bosses, dungeon, loot, the Bultguh (Java: feature/vadsrijk/zone6/{wezens,bultguh}); after
             # vadsrijk_t_rijdier (tack texture) and BEFORE vadsrijk_t_vfx (it merges the vfx_* anims into our vr_z6_baas_* files)
             'vadsrijk_u_z6wezens',
+            # 1.10 round U, U-Z6RAID: the raid De Sterrendovende Toren (Java: feature/vadsrijk/zone6/raid); after t_vfx + t_kleding (uses their helpers)
+            'vadsrijk_u_z6raid',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
