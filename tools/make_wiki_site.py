@@ -46,7 +46,7 @@ def main():
     ap.add_argument("--vadsrijk", action="store_true", help="also build guhs.nl/vadsrijk/ (tools/make_vadsrijk_site.py) into <landing>/vadsrijk")
     ap.add_argument("--live-url", default="https://live.guhs.nl/", help="with --vadsrijk: where the server's live JSON is served")
     ap.add_argument("--open-zones", type=int, default=1,   # X-SITE: the public release opens the tutorial + zone 1 only
-                    help="with --vadsrijk: publish only the tutorial + Vadsrijk zones 1..N (default 1, like the server's zone gate; 6 = all)")
+                    help="the wiki AND (with --vadsrijk) guhs.nl/vadsrijk publish only the tutorial + Vadsrijk zones 1..N (default 1, like the server's zone gate; 6 = all)")
     ap.add_argument("--verbose", action="store_true", help="list the knowledge-base chunks without a page and the leftover version numbers")
     args = ap.parse_args()
     root = os.path.abspath(args.root)
@@ -61,6 +61,13 @@ def main():
     images = Images(img_src, game.assets, os.path.join(out, "img"))
     builder = Builder(game, chunks, images)
     site = builder.build()
+    from wiki_site.vadsrijk import poort   # X-SITE: no wiki pages of Vadsrijk zones that are not open yet (see --open-zones)
+    dropped = poort.filter_wiki(site, root, args.open_zones)
+    if dropped:
+        print(f"  Vadsrijk zone gate (open zones 1..{args.open_zones}): {len(dropped)} wiki pages of later zones left out")
+        anders = [p for p in dropped if "vr_" not in p and "vadsrijk" not in p]
+        if anders:
+            print("    (not vr_/vadsrijk ids:", ", ".join(sorted(anders)) + ")")
     os.makedirs(out, exist_ok=True)
     renderer = Renderer(site, builder, images, game, out, args.base_url)
     written = set(renderer.render_all())

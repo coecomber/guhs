@@ -28,6 +28,9 @@ Nothing below has been done on main yet. Every step on main waits for the user's
    python tools/make_wiki_site.py --vadsrijk --open-zones 1
    python tools/wiki_site/vadsrijk/zone1check.py --release --open-zones 1 --dir docs/site/vadsrijk
    ```
+   Also run `zone1check.py --release --open-zones 1 --dir docs/site/wiki`. The main wiki filters its own Vadsrijk pages with
+   the same `--open-zones` (poort.filter_wiki). Its remaining hits are older Guhs words that also exist as later-zone names,
+   such as Sneeuwmuts, Pluisje and Sterretje. Those were already on the live wiki before 1.10.
    The first command builds into `site_build/vadsrijk-release`. The release check greps EVERY published file for zone 2-6
    names: html (attributes and the English half too), js, json, css, xml and txt, plus every file and picture name.
 5. Look at the hidden preview of exactly this build: https://guhs.nl/vadsrijk-preview-zone1/

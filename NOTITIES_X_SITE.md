@@ -60,6 +60,28 @@ Worktree `guhs_vadsrijk/u-site`, branch `110-u-site`, as the coordinator asked. 
   "zones 1-3" in the story part header, and "on zone 4's water: your sailboat" in the key table. These are not names, so I
   left them.
 
+## 2b. The main wiki (/wiki/) leaked too: now gated
+The main Guhs wiki is built from the mod's lang + assets, so with 1.10 on main it would make its own pages for every vr_
+item/creature/block and every Vadsrijk biome: 412 files with zone 2-6 names, including the search index.
+- `make_wiki_site.py` now calls `poort.filter_wiki(site, root, --open-zones)` before rendering.
+- **What it drops:**
+  - pages with vr_/vadsrijk in the id whose zone is > N. The zone comes from vr_zN in the id, a later name in the title or
+    text, a later id/slug in the id, or the recipe tier for crafting things;
+  - pages whose id names a later area (the Hoogvads banner blocks).
+- **What it cleans:** links to dropped pages are removed from the pages that stay (e.g. the biome list on the Guhmension
+  page).
+- The index pages, search index and sitemap follow automatically.
+- The dry run drops 495 of 4335 pages. The only non-vr ones are `blokken/hoogvads_vaandel_boven` and `_onder`.
+- **Full build result** (`make_wiki_site.py --vadsrijk`, defaults):
+  - 549 wiki pages of later zones left out; 0 broken links over the whole site (138k links).
+  - `/vadsrijk/` itself: 0 leaks. The landing page has the "Nieuw: Het Vadsrijk" line and the sitemap has `/vadsrijk/`.
+  - `zone1check --release --dir docs/site/wiki`: from 412 files down to 33 files + 8 file names. Every one of those is an
+    OLDER Guhs word that is a namesake of a later-zone thing. Examples: Sneeuwmuts/Wantje (Balto clothes), Sterretje,
+    Pluisje, Zandkasteeltje (Reisbureau), Bevroren (deco), Glimmertje (item), Schildpadje, Sneeuwbal, "De Grote Knuffel" and
+    "Speuren" (ftb-erfenis).
+  - I checked them with curl: they are all on today's live guhs.nl/wiki already. They are not leaks, so the CI step only
+    checks `docs/site/vadsrijk`.
+
 ## 3. The real publish path (NOT applied: waits for the release OK)
 - `RELEASE_SITE.md`: the exact steps (regen, patch notes, local check, server, pages.yml, verification, removing the
   previews, Discord, opening zone 2 later, rollback).

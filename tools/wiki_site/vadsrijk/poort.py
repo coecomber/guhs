@@ -400,3 +400,89 @@ def teaser(t, klasse="kaartje"):
 def lees_json(pad):
     with open(pad, encoding="utf-8") as f:
         return json.load(f)
+
+
+# ---- the main Guhs wiki (/wiki/) -------------------------------------------------------------------------------------------
+def _sl(x):
+    return re.sub(r"[^a-z0-9]+", "_", x.lower()).strip("_")
+
+
+def filter_wiki(site, root, n):
+    """X-SITE: the main wiki makes its own pages for every vr_ item/block/creature and every Vadsrijk area (from the mod's lang +
+    assets). With n < 6 the pages of Vadsrijk things beyond zone n are dropped before rendering; index pages, the search index
+    and the sitemap follow, and links to dropped pages are removed from the pages that stay. Checked by
+    zone1check --release --dir docs/site/wiki. Returns the dropped page ids.
+    Which pages: id with vr_/vadsrijk (zone = vr_zN, a later name in the title/text, or a later slug in the id), or any page
+    whose id names a later zone/area ("hoogvads_vaandel")."""
+    if n >= MAX_ZONE:
+        return []
+    from .bron import Bron
+    full = Bron(root).build()
+    nz = {x: znr(z) for x, z in later_namen(full, n).items()}
+    for x in OOK_IN_ZONE1:   # a page ABOUT the Schemerwortel is a zone-3 page, even if zone-1 text may name it
+        for k, z in _namen(full)[0].items():
+            if (k == x or x.endswith(" " + k)) and z > n and x != "Vahoegnir" and x != "Bolletje":
+                nz[k] = z
+    pat = patroon(nz)
+    slugs = {}
+    for x, z in nz.items():
+        if len(_sl(x)) >= 6:
+            slugs[_sl(x)] = z
+    for k in ("bazen", "wezens", "items", "npcs", "quests", "gebieden"):
+        for x in full.get(k, []):
+            zx = znr(x.get("zone"))
+            if zx > n:
+                for i in (x.get("id"), x.get("kort")):
+                    if i and len(i) >= 6:
+                        slugs.setdefault(_sl(re.sub(r"^z[2-6]_", "", i)), zx)
+    plek = {}
+    plek.update({_sl(re.sub(r"^(de|het|the) ", "", (g.get("naam") or "").lower())): znr(g["zone"]) for g in full["gebieden"] if znr(g["zone"]) > n})
+    plek.update({_sl(re.sub(r"^(de|het|the) ", "", (z.get(k) or "").lower())): z["nr"] for z in full["zones"] if z["nr"] > n for k in ("naam", "naam_en")})
+    plek = {k: v for k, v in plek.items() if len(k) >= 6}
+
+    amb = {}   # crafting things: the lowest recipe tier (tier = zone) that makes or uses them
+    for r in (full.get("ambachten") or {}).get("recepten", []):
+        for x in [r.get("naam"), r.get("doel")] + [i[1] for i in r.get("in_", [])]:
+            if x:
+                amb[_sl(str(x))] = min(amb.get(_sl(str(x)), 99), int(r.get("tier") or 1))
+
+    def in_id(tabel, low):
+        return [z for k, z in tabel.items() if re.search(r"(^|_)" + re.escape(k) + r"(_|$)", low)]
+    weg = []
+    for pid, pg in list(site.pages.items()):
+        low = _sl(pid.split("/", 1)[-1])
+        z = max(in_id(plek, low) or [0])
+        if "vr_" in pid.lower() or "vadsrijk" in pid.lower():
+            m = re.search(r"vr_z([2-6])", pid.lower())
+            z = max(z, int(m[1]) if m else 1, max(in_id(slugs, low) or [1]))
+            tekst = " ".join([pg.title or "", pg.title_en or "", pg.lead_nl or "", pg.lead_en or ""]
+                             + [str(v) for _, _, v in pg.infobox] + [x[3] for x in pg.sections])
+            if pat:
+                z = max([z] + [nz[x] for x in pat.findall(tekst)])
+            if "vr_amb_" in pid.lower():
+                ta = [amb[k] for k in (_sl(pg.title or ""), re.sub(r"^(drank|eten)_", "", low.replace("vr_amb_", ""))) if k in amb]
+                if ta:
+                    z = max(z, min(ta))
+        if z > n:
+            weg.append(pid)
+    for pid in weg:
+        del site.pages[pid]
+    if weg:
+        alt = "|".join(re.escape(p) for p in weg)
+        rx_li = re.compile(r'<li[^>]*>\s*<a href="@@(?:' + alt + r')@@"[^>]*>.*?</a>[^<]*</li>', re.S)
+        rx_a = re.compile(r'(?:,\s*)?<a href="@@(?:' + alt + r')@@"[^>]*>.*?</a>', re.S)
+
+        def schoon(h):
+            if not h or "@@" not in h:
+                return h
+            h = rx_a.sub("", rx_li.sub("", h))
+            return re.sub(r"^\s*,\s*", "", h)
+        for pg in site.pages.values():
+            pg.related = [r for r in pg.related if r not in weg]
+            if pg.parent in weg:
+                pg.parent = None
+            pg.lead_nl, pg.lead_en = schoon(pg.lead_nl), schoon(pg.lead_en)
+            pg.infobox = [(a, b, schoon(v) if isinstance(v, str) else v) for a, b, v in pg.infobox]
+            pg.infobox = [x for x in pg.infobox if x[2] not in ("", None)]
+            pg.sections = [(k, a, b, schoon(h)) for k, a, b, h in pg.sections]
+    return weg
