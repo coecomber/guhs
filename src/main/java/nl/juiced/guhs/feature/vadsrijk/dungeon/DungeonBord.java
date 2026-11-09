@@ -47,11 +47,11 @@ import nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonDeurData.Deur;
  */
 public final class DungeonBord {
     /** Entity tag of every board (also how a disk copy is recognised). */
-    public static final String TAG = "guhs_vr_dungeonbord";
+    public static final String TAG = "guhs_vr_dungeonbord";   // (X-INT: also on the raid's name texts, Z6RaidHeraut)
     /** Scale of the name line and of the small line. */
-    static final float SCHAAL_NAAM = 1.7f, SCHAAL_ONDER = 0.95f;
+    public static final float SCHAAL_NAAM = 1.7f, SCHAAL_ONDER = 0.95f;   // (X-INT: public for Z6RaidHeraut)
     /** Height of the small line's block (with background) in blocks, so the name sits right on top. */
-    static final double HOOG_ONDER = 0.32;
+    public static final double HOOG_ONDER = 0.32;
     /** Sparks only when a player is this close. */
     static final double VONK_AFSTAND = 24;
 
@@ -238,7 +238,7 @@ public final class DungeonBord {
     }
 
     /** One board line: a text display, full bright, dark background, shadow, turning with the viewer around the vertical axis. */
-    static Display.TextDisplay maak(ServerLevel sl, Vec3 p, Component tekst, float schaal, String sleutel) {
+    public static Display.TextDisplay maak(ServerLevel sl, Vec3 p, Component tekst, float schaal, String sleutel) {
         Display.TextDisplay d = EntityType.TEXT_DISPLAY.create(sl, EntitySpawnReason.TRIGGERED);
         if (d == null) {
             return null;

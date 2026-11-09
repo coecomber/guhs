@@ -6920,6 +6920,48 @@
       "prefixes": [
         "vadsrijk.zonepoort."
       ]
+    },
+    {
+      "id": "c418_vr_x_kaart",
+      "title": "1.10 round X (X-KAART): the whale-stair signs in zone 5",
+      "prefixes": [
+        "vadsrijk.z5.bord.staarttrap.1",
+        "vadsrijk.z5.bord.staarttrap.2",
+        "vadsrijk.z5.bord.staarttrap.3",
+        "vadsrijk.z5.bord.staarttrap.4"
+      ]
+    },
+    {
+      "id": "c430_vr_x_raid",
+      "title": "1.10 round X (X-RAID): raid herald, hall keeper, tower name texts, tracker line",
+      "prefixes": [
+        "vadsrijk.npc.naam.z6raid_heraut",
+        "vadsrijk.npc.naam.z6raid_zaalwachter",
+        "vadsrijk.npc.plek.npc.z6raid_heraut",
+        "vadsrijk.npc.plek.npc.z6raid_zaalwachter",
+        "vadsrijk.npc.praat.z6raid_heraut.1",
+        "vadsrijk.npc.praat.z6raid_heraut.2",
+        "vadsrijk.npc.praat.z6raid_heraut.3",
+        "vadsrijk.npc.praat.z6raid_zaalwachter.1",
+        "vadsrijk.npc.praat.z6raid_zaalwachter.2",
+        "vadsrijk.npc.praat.z6raid_zaalwachter.3",
+        "vadsrijk.z6raid.bord.cirkel.1",
+        "vadsrijk.z6raid.bord.cirkel.titel",
+        "vadsrijk.z6raid.bord.poort.1",
+        "vadsrijk.z6raid.bord.poort.2",
+        "vadsrijk.z6raid.bord.poort.titel",
+        "vadsrijk.z6raid.bord.uitgang.titel",
+        "vadsrijk.z6raid.heraut.1",
+        "vadsrijk.z6raid.heraut.2",
+        "vadsrijk.z6raid.heraut.3",
+        "vadsrijk.z6raid.heraut.4",
+        "vadsrijk.z6raid.volg.extra",
+        "vadsrijk.z6raid.volg.titel",
+        "vadsrijk.z6raid.volg.waar.poort",
+        "vadsrijk.z6raid.volg.waar.zaal",
+        "vadsrijk.z6raid.volg.wat.poort",
+        "vadsrijk.z6raid.volg.wat.zaal"
+      ]
     }
   ]
 }
