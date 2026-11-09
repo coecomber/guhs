@@ -199,8 +199,16 @@ def sterrendovende_toren(W):
                     if y == y0 + 12:
                         k = "goud"
                     zet(W, tx + dx, y, tz + dz, k)
-                if y == y0 + 13 and 16.6 < d <= 18.4:
+                # [x-raid] the voet is SOLID inside (the iwan below carves the door niche out of it): its hollow inside was
+                #   open to the niche at the sides and above the arch, a second way into the empty tower
+                elif y0 + 1 <= y < y0 + 13 and d <= 16.6:
+                    zet(W, tx + dx, y, tz + dz, "grauw_steen")
+                if y == y0 + 13 and 16.6 < d <= 18:   # [x-raid] (was 18.4: the outer crenels hung over the wall edge)
                     zet(W, tx + dx, y + 1, tz + dz, "grauw_steen" if (dx + dz) % 3 else "minecraft:air")
+                # [x-raid] the voet's roof: a closed deck over the whole octagon. It was open, so the shaft stood on nothing
+                #   and the voet was the bottom of one ~150-block hollow tube (the user walked into it: "er gebeurt niks").
+                if y == y0 + 13 and d <= 16.6:
+                    zet(W, tx + dx, y, tz + dz, "grauw_steen")
     ZB.iwan(W, (-1, 0), tx - 17, tz + 0.5, y0 + 1, 9, 9, 4, buiten="grauw_steen", kader="koepel_lavendel",
             vak="grauw2", deur="minecraft:air", muqarnas="goud")
     # de schacht: 4 verdiepingen, steeds smaller, gedraaid (achthoek die per blok een beetje roteert)
@@ -222,16 +230,25 @@ def sterrendovende_toren(W):
                         if dy % 8 == 0:
                             k = accent
                         zet(W, tx + dx, y + dy, tz + dz, k)
+                    # [x-raid] Ringeling's gold rings: a band of 2 ON the wall halfway up every section (they used to
+                    #   float 4-10 blocks off the shaft, tilted, and read as loose pieces); a magenta jewel now and then
+                    elif dy in (h // 2, h // 2 + 1) and r < d <= r + 1.0:
+                        a = math.atan2(dz, dx)
+                        zet(W, tx + dx, y + dy, tz + dz, "minecraft:magenta_stained_glass"
+                            if dy == h // 2 and int((a + math.pi) * r) % 9 == 0 else "goudblok")
         y += h
         # rondgang met kantelen tussen de verdiepingen
+        # [x-raid] the deck is CLOSED over the whole section. It was a ring r-1..r+2.4 only: the next, narrower section stood
+        #   1.5-2 blocks inside its inner edge, so every joint had an open slit into the hollow shaft. The gold corbel under
+        #   the balcony now steps out to r+1.4 (was r+1), so the 2.4 balcony sits on it.
         for dx in range(-int(r) - 3, int(r) + 4):
             for dz in range(-int(r) - 3, int(r) + 4):
                 d = okt(dx, dz, rot)
-                if r - 1 < d <= r + 2.4:
+                if d <= r + 2.4:
                     zet(W, tx + dx, y, tz + dz, "goud" if d > r + 1.4 else "grauw_steen")
                     if d > r + 1.4 and (dx + dz) % 2 == 0:
                         zet(W, tx + dx, y + 1, tz + dz, "grauw_steen")
-                if r - 0.2 < d <= r + 1:
+                if r - 0.2 < d <= r + 1.4:
                     zet(W, tx + dx, y - 1, tz + dz, "goud")
         # grauwe Mika-vaandels
         for k in range(4):
@@ -245,9 +262,13 @@ def sterrendovende_toren(W):
     for k in range(10):
         a = k * 2 * math.pi / 10 + rot
         px, pz = tx + math.cos(a) * r, tz + math.sin(a) * r
-        for dy in range(0, 12 - (k % 2) * 4):
+        for dy in range(0, 12):              # [x-raid] all 10 spires reach the lens ring (half stopped 4 short)
             zet(W, px, y + dy, pz, "goud" if dy > 8 else "grauw_steen")
-    lens_y = y + 14
+    # [x-raid] the Lege Lens rests ON the crown: its spokes + ring (lens_y) touch the spire tops (y + 11); it floated 3 blocks
+    #   above them. A slim pedestal from the deck carries the glass ball (its bottom is at lens_y - 4).
+    lens_y = y + 11
+    for dy in range(0, 10):              # (up through the lens shell to its purple core)
+        zet(W, tx, y + dy, tz, "grauw_steen" if dy < 6 else "goud")
     W.bol((tx + 0.5, lens_y + 0.5, tz + 0.5), 6.2, "minecraft:tinted_glass", ry=4.5, hollow=1.2)
     W.bol((tx + 0.5, lens_y + 0.5, tz + 0.5), 2.0, "minecraft:purple_stained_glass")
     ring(W, tx + 0.5, lens_y + 0.5, tz + 0.5, 8.5, kanteling=0.0, dik=0.6, k="goudblok")
@@ -255,11 +276,7 @@ def sterrendovende_toren(W):
         a = k * 2 * math.pi / 5
         for s in np.arange(6.2, 8.5, 0.5):
             zet(W, tx + math.cos(a) * s, lens_y, tz + math.sin(a) * s, "goud")
-    # zwevende gouden ringen (Ringelings ringen) om de toren
-    for (hy, R, kan, ra) in ((y0 + 40, 26, 0.32, 0.2), (y0 + 78, 22, -0.4, 1.1), (y0 + 112, 17, 0.5, 2.0),
-                             (lens_y + 3, 13, -0.25, 0.7)):
-        ring(W, tx + 0.5, hy, tz + 0.5, R, kanteling=kan, rond_as=ra, dik=0.8, k="goudblok",
-             juweel="minecraft:magenta_stained_glass")
+    # [x-raid] (the four free-floating tilted rings are gone: they are the gold bands on the shaft wall now, see the sections)
     # sterrenlicht dat naar de lens wordt gezogen (deeltjes, in spiralen)
     rng = np.random.RandomState(5)
     for s in range(14):
