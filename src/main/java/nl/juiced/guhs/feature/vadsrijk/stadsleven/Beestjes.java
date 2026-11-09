@@ -20,8 +20,8 @@ import nl.juiced.guhs.Guhs;
 /**
  * U-LEVEN-STAD: the little animals of a guh town:
  * <ul>
- *   <li>{@link Diertje}: a pieppiepmuisje scurrying about, or (~30 %) a light-blue guh-blob bouncing (the klodder model with a
- *       happy guh face and ears, light blue);</li>
+ *   <li>{@link Diertje}: a pieppiepmuisje scurrying about, or (~30 %) a light-blue guh-blob bouncing (W-MODELLEN: the Blub-guh
+ *       model of the dream and the tamable Blubs, see {@link BlubLook});</li>
  *   <li>{@link Kat}: a guh's cat on a roof (pink collar);</li>
  *   <li>{@link Eendjes}: a mother duck with three ducklings swimming in a line in a pond, canal or harbour;</li>
  *   <li>{@link Vogel}: a little bird landing on a lantern or a bench, pecking, and flying on.</li>
@@ -30,12 +30,37 @@ import nl.juiced.guhs.Guhs;
 final class Beestjes {
     static final String MUIS_MODEL = "pieppiepmuisje", MUIS_TEX = "textures/entity/pieppiepmuisje.png",
             MUIS_ROZE = "textures/vadsrijk/vriendjes/muisje_roze.png";
-    static final String BLOB_MODEL = "vadsrijk/wezens/klodder", BLOB_TEX = "textures/vadsrijk/stadsleven/blauwe_klodder.png";
-    static final float BLOB_SCHAAL = 0.5f;
     /** Share of blobs among the town critters. */
     static final float BLOB_KANS = 0.3f;
 
     private Beestjes() {
+    }
+
+    /**
+     * W-LEVEN: the critter cap split in two. Blobs keep their old share ({@link #BLOB_KANS} of the DIERTJE cap: 3 at VOL); mice get
+     * the rest times the town's multiplier ({@link Steden.Stad#muizen}: 0.3 -> 2 at VOL, Kandijkom 1.0 -> 6, as before).
+     */
+    static int blobMax(Steden.Stad stad, StadsLeven.Niveau n) {
+        return Math.round(Groep.Soort.DIERTJE.max(n) * BLOB_KANS);
+    }
+
+    static int muisMax(Steden.Stad stad, StadsLeven.Niveau n) {
+        int max = Groep.Soort.DIERTJE.max(n);
+        return Math.min(max - blobMax(stad, n), (int) Math.round(max * (1 - BLOB_KANS) * stad.muizen()));
+    }
+
+    /** W-LEVEN: the next town critter: a blob, a mouse, or none (both at their cap). */
+    @Nullable
+    static Boolean volgendeIsBlob(Steden.Stad stad, StadsLeven.Niveau n, int blobs, int muizen, RandomSource r) {
+        boolean blobMag = blobs < blobMax(stad, n), muisMag = muizen < muisMax(stad, n);
+        if (!blobMag && !muisMag) {
+            return null;
+        }
+        if (blobMag != muisMag) {
+            return blobMag;
+        }
+        int bOver = blobMax(stad, n) - blobs, mOver = muisMax(stad, n) - muizen;
+        return r.nextInt(bOver + mOver) < bOver;
     }
 
     static SoundEvent geluid(String id) {
@@ -71,7 +96,8 @@ final class Beestjes {
                     continue;
                 }
                 LevenProp f = blob
-                        ? LevenProp.maak(sl, p.midden(), r.nextFloat() * 360, BLOB_MODEL, BLOB_TEX, BLOB_MODEL, "idle", BLOB_SCHAAL, false)
+                        ? LevenProp.maak(sl, p.midden(), r.nextFloat() * 360, BlubLook.MODEL, BlubLook.textuur(r), BlubLook.ANIM, BlubLook.IDLE,   // W-MODELLEN
+                                BlubLook.SCHAAL, false)
                         : LevenProp.maak(sl, p.midden(), r.nextFloat() * 360, MUIS_MODEL, r.nextInt(4) == 0 ? MUIS_ROZE : MUIS_TEX, MUIS_MODEL, "idle",
                                 0.9f + r.nextFloat() * 0.2f, false);
                 if (f == null) {
@@ -96,7 +122,7 @@ final class Beestjes {
                 f.zet(loper.stap(sl));
                 if (!loper.beweegt()) {
                     pauze = blob ? 30 + r.nextInt(70) : 15 + r.nextInt(60);
-                    f.anim(blob ? (r.nextInt(3) == 0 ? "blij" : "idle") : pick(r, "idle", "eet", "zit", "piep", "blij"));
+                    f.anim(blob ? (r.nextInt(3) == 0 ? BlubLook.BLIJ : BlubLook.IDLE) : pick(r, "idle", "eet", "zit", "piep", "blij"));
                 }
                 return true;
             }
@@ -115,7 +141,7 @@ final class Beestjes {
                 naar = new Vec3(naar.x, g, naar.z);
                 if (Steden.op(naar) == stad && Plekken.loopbaar(sl, van, naar, 1.0)) {
                     loper.naar(naar);
-                    f.anim(blob ? "hop" : "walk");
+                    f.anim(blob ? BlubLook.HOP : "walk");   // W-MODELLEN
                     if (r.nextInt(blob ? 5 : 4) == 0 && Babbels.iemandHoort(sl, f.position())) {
                         sl.playSound(null, f.getX(), f.getY(), f.getZ(), blob ? geluid("blubguh.huppelen") : geluid("entity.pieppiepmuisje.ambient"),
                                 SoundSource.NEUTRAL, 0.18f, blob ? 1.3f + r.nextFloat() * 0.3f : 1.1f + r.nextFloat() * 0.3f);

@@ -242,7 +242,53 @@ public final class Plekken {
             }
         }
         Collections.shuffle(uit, new java.util.Random(r.nextLong()));
+        if (s == Soort.GROND || s == Soort.GRAS || s == Soort.ZIT) {   // W-LEVEN: no crowds on piers, jetties and in narrow alleys
+            List<Plek> ruim = new ArrayList<>();
+            for (Plek pl : uit) {
+                if (magDruk(sl, pl, r)) {
+                    ruim.add(pl);
+                    if (ruim.size() >= MAX_KANDIDATEN) {
+                        break;
+                    }
+                }
+            }
+            return ruim;
+        }
         return uit;
+    }
+
+    // ---- W-LEVEN: crowding ----------------------------------------------------------------------------------------------------
+
+    /** At most this many spots are handed out per search (the scenes only take the first ones that fit). */
+    static final int MAX_KANDIDATEN = 64;
+    /** A narrow spot (a pier, a jetty, an alley): no other town life within this radius, and only this share of the tries. */
+    static final double SMAL_VRIJ = 10, SMAL_KANS = 0.35;
+    /** Anywhere: at most {@link #DRUK_MAX} town-life entities within {@link #DRUK_STRAAL} of a new scene. */
+    static final double DRUK_STRAAL = 6;
+    static final int DRUK_MAX = 4;
+
+    /**
+     * Narrow: of the 8 points 3 blocks round the spot (4 straight, 4 diagonal) at most 3 are walkable ground at about the same
+     * height. The middle of a 3- or 5-wide pier has 2 (along the pier), a square or a 7-wide street 8.
+     */
+    static boolean smal(ServerLevel sl, BlockPos p) {
+        int open = 0;
+        for (int[] o : new int[][] {{3, 0}, {-3, 0}, {0, 3}, {0, -3}, {3, 3}, {3, -3}, {-3, 3}, {-3, -3}}) {
+            double g = grondY(sl, p.getX() + o[0] + 0.5, p.getY(), p.getZ() + o[1] + 0.5);
+            if (!Double.isNaN(g) && Math.abs(g - p.getY()) <= 1.05) {
+                open++;
+            }
+        }
+        return open <= 3;
+    }
+
+    static boolean magDruk(ServerLevel sl, Plek pl, RandomSource r) {
+        Vec3 m = pl.midden();
+        if (StadsLeven.druk(m, DRUK_STRAAL) >= DRUK_MAX) {
+            return false;
+        }
+        BlockPos vloer = pl.pos();
+        return !smal(sl, vloer) || (r.nextDouble() < SMAL_KANS && StadsLeven.vrij(m, SMAL_VRIJ));
     }
 
     // ---- walking on the ground ------------------------------------------------------------------------------------------------

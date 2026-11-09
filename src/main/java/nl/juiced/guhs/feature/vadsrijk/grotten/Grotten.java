@@ -487,6 +487,9 @@ public final class Grotten {
         } else if (plek.startsWith("amb_")) {
             b = b.above(3);
         }
+        if (!plek.equals("ingang") && !plek.equals("uitgang")) {
+            nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonRij.devToegang(p, id);   // W-GROT: inside the closed cave = the dev is its group
+        }
         naar(p, b);
         return 1;
     }

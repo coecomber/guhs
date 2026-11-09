@@ -957,11 +957,17 @@ Q("z6_s15_oostroute", "zij", "z6_mientje", "Vluchtelingen langs de Oostroute",
    ("npc", "Er komen er nog meer. Ik blijf hier. Iemand moet de soep roeren. En ik ben er goed in.")],
   munten=16000, lv=69, na=[HQ[9]])
 
-# ===== quest xp (the same curve as zones 3-5: a main step = 45 % of a level, a side quest = 18 %; lv up to 70) ==============
+# ===== quest xp (the same curve as zones 3-5; lv up to 70) =====================================================================
+# W-BALANS: a main step = 80 % of a level (was 45 %), a side quest = 22 % (was 18 %). Zone 6 spans 9 levels (60 -> 69) with 10
+# main steps whose gates climb ~1 level per step; with 45 % a main-only player ground ~2 h and even main+side ~45 min between
+# steps. See tools/vadsrijk/xpbalans.py and XP_BALANS.md.
+Z6_HOOFD, Z6_ZIJ = 0.80, 0.22
+
+
 def z6xp(lv, hoofd):
     l = max(1, min(99, lv))
     stap = max(1, round(40 + 25 * l ** 1.6))
-    return max(1, round(stap * (0.45 if hoofd else 0.18)))
+    return max(1, round(stap * (Z6_HOOFD if hoofd else Z6_ZIJ)))
 
 
 LV_CAP = 70   # (U-Z6VERHAAL: kern Levels.MAX / MAX_GENERIEK raised to 70)

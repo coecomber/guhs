@@ -281,7 +281,7 @@ def _schrijf_json(pad, obj):
 def assets(a, w=_schrijf_json):
     tex = os.path.join(a, "textures", "vadsrijk", "stadsleven")
     os.makedirs(tex, exist_ok=True)
-    blauwe_klodder(os.path.join(a, "textures", "vadsrijk", "wezens", "klodder_blij.png")).save(os.path.join(tex, "blauwe_klodder.png"))
+    # W-MODELLEN: the town blobs wear the Blub-guh model now (stadsleven/BlubLook.java): blauwe_klodder.png is no longer made
     stalen().save(os.path.join(tex, "sl_speeltoestel.png"))
     kleed_textuur().save(os.path.join(tex, "sl_kleed.png"))
     for naam, m in modellen().items():

@@ -39,6 +39,16 @@ public final class SceneSpeler {
     private static Camera camera;
     private static CameraType oudeCamera = CameraType.FIRST_PERSON;
     private static float spelerYaw, spelerPitch;
+    /**
+     * W-SPEL: waiting for the world before the shot starts (-1 = not waiting; else ticks waited). The camera stands at the first
+     * keyframe behind a black screen until the chunks where it looks are received and built, at most {@link #MAX_LADEN} ticks.
+     */
+    private static int laden = -1;
+    /** W-SPEL: after a far scene: black until the surroundings of the player are back (-1 = not waiting). */
+    private static int naLaden = -1;
+    /** W-SPEL: the black screen fades out over this many ticks once the world is there. */
+    private static int uitfade;
+    static final int MAX_LADEN = nl.juiced.guhs.feature.vadsrijk.kern.scene.SceneLaden.MARGE, FADE = 8;
 
     private SceneSpeler() {
     }
@@ -54,7 +64,11 @@ public final class SceneSpeler {
                 e.setCanceled(true);
             }
         });
-        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> stop());
+        NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> {
+            stop();
+            naLaden = -1;   // W-SPEL
+            uitfade = 0;
+        });
     }
 
     public static boolean actief() {
@@ -102,9 +116,74 @@ public final class SceneSpeler {
         oudeCamera = mc.options.getCameraType();
         mc.options.setCameraType(CameraType.FIRST_PERSON);
         mc.setCameraEntity(camera);
+        naLaden = -1;
+        if (wereldKlaar(camera.getEyePosition(), op(0)[1])) {
+            laden = -1;
+            begin(s);
+        } else {
+            laden = 0;   // W-SPEL: first the world (tick() starts the shot)
+        }
+    }
+
+    /** The shot really starts (the title card is timed from here). */
+    private static void begin(RijkScene s) {
         if (!s.titelKey().isEmpty()) {
             RijkHud.titelLater(Component.translatable(s.titelKey()), Component.translatable(s.ondertitelKey()), s.titelDuur(), s.kleur(), s.titelOp());
         }
+    }
+
+    /**
+     * W-SPEL: are the chunks where this camera looks received and built? Points: the camera, the look target (at most 96 blocks
+     * away) and two between, each in a loaded chunk with a compiled render section; plus the chunks right around the look point.
+     * Points beyond what this client renders, or outside the build height, do not count.
+     */
+    static boolean wereldKlaar(Vec3 cam, Vec3 kijk) {
+        Minecraft mc = Minecraft.getInstance();
+        net.minecraft.client.multiplayer.ClientLevel lv = mc.level;
+        if (lv == null || mc.levelRenderer == null) {
+            return true;
+        }
+        int rd = Math.max(2, mc.options.getEffectiveRenderDistance() - 1);
+        int ccx = Mth.floor(cam.x) >> 4, ccz = Mth.floor(cam.z) >> 4;
+        Vec3 d = kijk.subtract(cam);
+        double len = d.length();
+        Vec3 eind = len < 1e-3 ? cam : cam.add(d.scale(Math.min(len, 96) / len));
+        Vec3[] punten = {cam, cam.lerp(eind, 0.33), cam.lerp(eind, 0.66), eind};
+        for (Vec3 v : punten) {
+            net.minecraft.core.BlockPos b = net.minecraft.core.BlockPos.containing(v);
+            int cx = b.getX() >> 4, cz = b.getZ() >> 4;
+            if (Math.max(Math.abs(cx - ccx), Math.abs(cz - ccz)) > rd) {
+                continue;
+            }
+            if (!lv.getChunkSource().hasChunk(cx, cz)) {
+                return false;
+            }
+            if (!lv.isOutsideBuildHeight(b.getY()) && !mc.levelRenderer.isSectionCompiledAndVisible(b)) {
+                return false;
+            }
+        }
+        int ex = Mth.floor(eind.x) >> 4, ez = Mth.floor(eind.z) >> 4;
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (Math.max(Math.abs(ex + dx - ccx), Math.abs(ez + dz - ccz)) <= rd && !lv.getChunkSource().hasChunk(ex + dx, ez + dz)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /** W-SPEL: 0..1 how black the screen is (waiting for the world before/after a shot, then a short fade). */
+    public static float zwart(float pt) {
+        if (laden >= 0 || naLaden >= 0) {
+            return 1f;
+        }
+        return uitfade > 0 ? Mth.clamp((uitfade - pt) / FADE, 0, 1) : 0f;
+    }
+
+    /** W-SPEL: show the "laden..." text (only when the black screen stays a moment). */
+    public static boolean ladenTekst() {
+        return Math.max(laden, naLaden) >= 10;
     }
 
     static void stop() {
@@ -113,6 +192,7 @@ public final class SceneSpeler {
             return;
         }
         scene = null;
+        laden = -1;
         if (camera != null) {
             camera = null;
             mc.options.setCameraType(oudeCamera);
@@ -120,6 +200,9 @@ public final class SceneSpeler {
                 mc.player.setYRot(spelerYaw);
                 mc.player.setXRot(spelerPitch);
                 mc.setCameraEntity(mc.player);
+                // W-SPEL: after a far scene the chunks around the player come back from the server: black until they are built
+                Vec3 oog = mc.player.getEyePosition();
+                naLaden = wereldKlaar(oog, oog.add(mc.player.getLookAngle().scale(16))) ? -1 : 0;
             }
         }
     }
@@ -141,6 +224,21 @@ public final class SceneSpeler {
     }
 
     private static void tick() {
+        if (uitfade > 0) {
+            uitfade--;
+        }
+        if (naLaden >= 0) {   // W-SPEL: back to the player: wait for the surroundings (max MAX_LADEN)
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player == null || mc.level == null) {
+                naLaden = -1;
+            } else {
+                Vec3 oog = mc.player.getEyePosition();
+                if (++naLaden >= MAX_LADEN || wereldKlaar(oog, oog.add(mc.player.getLookAngle().scale(16)))) {
+                    naLaden = -1;
+                    uitfade = FADE;
+                }
+            }
+        }
         RijkScene s = scene;
         if (s == null) {
             return;
@@ -148,6 +246,15 @@ public final class SceneSpeler {
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || camera == null || camera.level() != mc.level) {
             stop();
+            return;
+        }
+        if (laden >= 0) {   // W-SPEL: the world first; the camera waits on its first keyframe
+            zet(0, true);
+            if (++laden >= MAX_LADEN || wereldKlaar(camera.getEyePosition(), op(0)[1])) {
+                laden = -1;
+                uitfade = FADE;
+                begin(s);
+            }
             return;
         }
         t++;

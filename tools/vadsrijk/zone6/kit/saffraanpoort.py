@@ -177,7 +177,7 @@ def spiegelzaal_inhoud(W, figuren=True):
         zet(W, x2 - 5, yv + 1, zm + dz, ZB.muurtje("zs"))
         zet(W, x2 - 5, yv + 2, zm + dz, KK.ml(False))
     if figuren:
-        W.wguh(x2 - 2.5, yv + 2, zm + 0.5, 270, skin="guh_golden")
+        W.wguh(x2 - 2.5, yv + 2, zm + 0.5, 90, skin="guh_golden")   # W-LEVEN: on the throne, facing the hall (-x; 270 = east)
         for i, x in enumerate(range(x1 + 8, x2 - 8, 7)):
             W.wguh(x + 0.5, yv, zm - 4.5, 180, skin=["guh", "guh_mint", "guh_bloesemguh", "guh_wolk"][i % 4])
             W.wguh(x + 2.5, yv, zm + 4.5, 0, skin=["guh_snow", "guh", "guh_konijntje_roze", "guh_pluisguh"][i % 4])

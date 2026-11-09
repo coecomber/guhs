@@ -72,12 +72,12 @@
 | `geheim_schat_2` | 3797, 99, -890 | z6_saffraanpoort |
 | `geheim_schat_3` | 4012, 69, -928 | z6_ruinedal |
 | `haven_6_5_bel` | 3398, 142, -772 | z6_rozenkloof |
-| `haven_6_5_kapitein` | 3400, 143, -741 | z6_rozenkloof |
+| `haven_6_5_kapitein` | 3397, 142, -742 | z6_rozenkloof |
 | `haven_6_5_landing` | 3398, 142, -758 | z6_rozenkloof |
-| `haven_6_5_luchtschip` | 3398, 146, -728 | z6_rozenkloof |
-| `haven_6_5_mast` | 3401, 153, -741 | z6_rozenkloof |
+| `haven_6_5_luchtschip` | 3398, 142, -730 | z6_rozenkloof |
+| `haven_6_5_mast` | 3401, 149, -741 | z6_rozenkloof |
 | `haven_6_5_vertrekbord` | 3404, 142, -779 | z6_rozenkloof |
-| `haven_z6_z5_vertrek` | 3400, 143, -741 | z6_rozenkloof |
+| `haven_z6_z5_vertrek` | 3398, 142, -740 | z6_rozenkloof |
 | `kampvuur_duinbaken` | 3642, 69, -550 | z6_roze_duinen |
 | `kampvuur_duinen` | 3616, 74, -665 | z6_roze_duinen |
 | `kampvuur_duinput` | 3616, 74, -665 | z6_roze_duinen |
@@ -132,7 +132,7 @@
 | `kwastje_3` | 3718, 71, -765 | z6_saffraanpoort |
 | `kwastje_4` | 3750, 71, -880 | z6_saffraanpoort |
 | `kwastje_5` | 3687, 77, -806 | z6_saffraanpoort |
-| `luchthaven_rozenkloof` | 3400, 143, -741 | z6_rozenkloof |
+| `luchthaven_rozenkloof` | 3398, 142, -740 | z6_rozenkloof |
 | `mager_mientje` | 4149, 66, -761 | z6_moederoase |
 | `moeder_bron` | 4069, 66, -809 | z6_moederoase |
 | `moederoase` | 4050, 66, -781 | z6_moederoase |
@@ -193,7 +193,7 @@
 | `rozenkloof_herberg_balie` | 3364, 68, -693 | z6_rozenkloof |
 | `rozenkloof_karavaan` | 3412, 69, -718 | z6_rozenkloof |
 | `rozenkloof_kloofmoeder` | 3513, 76, -697 | z6_roze_duinen |
-| `rozenkloof_luchthaven` | 3400, 143, -741 | z6_rozenkloof |
+| `rozenkloof_luchthaven` | 3398, 142, -740 | z6_rozenkloof |
 | `rozenkloof_oma_dadel` | 3412, 69, -718 | z6_rozenkloof |
 | `rozenkloof_plein` | 3392, 69, -714 | z6_rozenkloof |
 | `rozenkloof_post` | 3414, 70, -737 | z6_rozenkloof |

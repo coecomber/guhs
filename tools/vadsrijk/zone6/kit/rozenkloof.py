@@ -1437,14 +1437,13 @@ def luchthaven(W, figuren=True):
         if (zz - zp1) % 7 == 3 and zz < zrand - 2:
             for yy in range(LB - 1, yd - 1):
                 zet(W, x, yy, zz, "steen_roze" if yy % 5 else "tegel_turkoois")
-    for xx in range(x - 1, x + 2):
-        zet(W, xx, yd, zp2 + 1, "minecraft:cherry_fence_gate[facing=south,in_wall=false,open=false,powered=false]")
-    # mooring mast at the pier end
+    # W-SCHEPEN: no gate across the end (the line-E airship lies flush against this open tip, haven_z6_z5_vertrek); the mooring
+    # mast stops under the docked ship's balloon tail (it hangs 1.5 blocks over the pier end from deck + 10)
     mx, mz = x + 3, zp2 - 1
-    for yy in range(yd - 1, yd + 11):
+    for yy in range(yd - 1, yd + 7):
         zet(W, mx, yy, mz, "palm_stam")
-    zet(W, mx, yd + 11, mz, "goudblok")
-    zet(W, mx, yd + 12, mz, mlamp(False))
+    zet(W, mx, yd + 7, mz, "goudblok")
+    zet(W, mx, yd + 8, mz, mlamp(False))
     zet(W, mx - 1, yd - 1, mz, "palm_planken")
     zet(W, x + 2, yd - 1, mz, "palm_planken")
     # bell, departure board
@@ -1463,8 +1462,8 @@ def luchthaven(W, figuren=True):
     ZB.plek(W, "haven_6_5_bel", x, yd, z + 14)
     ZB.plek(W, "haven_6_5_vertrekbord", x + 6, yd, z + 7)
     ZB.plek(W, "haven_6_5_kapitein", x - 1, yd, zp2 - 2)
-    ZB.plek(W, "haven_6_5_luchtschip", x, yd + 4, zp2 + 12)
-    ZB.plek(W, "haven_6_5_mast", mx, yd + 11, mz)
+    ZB.plek(W, "haven_6_5_luchtschip", x, yd, zp2 + 10)   # (W-SCHEPEN: the docked ship's middle, tip + UIT)
+    ZB.plek(W, "haven_6_5_mast", mx, yd + 7, mz)
     ZB.plek(W, "rozenkloof_aankomst", x - 4, yd, z + 7)
     ZB.plek(W, "rozenkloof_havenmeester", x - 6, yd, z + 2)
     # campfire at the tower foot

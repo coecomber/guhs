@@ -356,10 +356,10 @@ def figuren(W, rng=None):
         for s in (-1, 1):
             for z in range(4, NB):
                 if rng.rand() < 0.35:
-                    BH.guh(W, x + 0.5, Y0 + 1.5, s * z + 0.5, yaw=90, skin=skins[rng.randint(len(skins))], zit=True)
+                    BH.guh(W, x + 0.5, Y0 + 1.5, s * z + 0.5, yaw=270, skin=skins[rng.randint(len(skins))], zit=True)   # W-LEVEN: face the altar (+x; 90 = west)
     for k in range(8):
         BH.guh(W, X0 + 10 + rng.uniform(0, 50), Y0 + 1, rng.uniform(-1.5, 1.5), yaw=rng.choice([90, 270]),
                skin=skins[rng.randint(len(skins))])
     cx = (X_KRUIS[0] + X_KRUIS[1]) // 2
     for z in range(-6, 7, 2):
-        BH.guh(W, cx + 5.5, Y0 + 3, z + 0.5, yaw=270, skin="guh_wolk")
+        BH.guh(W, cx + 5.5, Y0 + 3, z + 0.5, yaw=90, skin="guh_wolk")   # W-LEVEN: the choir faces the nave (-x)

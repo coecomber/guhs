@@ -79,13 +79,13 @@ def plekken():
     for i, px in enumerate((52, 72, 92), 1):
         P[f"haven_5_pier_{i}"] = (px, hy, -155)
     # line D (zone 4 <-> 5): pier 2 is free (no anchored ship), the moving airship docks off its end
-    P["haven_z5_z4_vertrek"] = (72, hy, -160)
+    P["haven_z5_z4_vertrek"] = (72, hy, -168)              # W-SCHEPEN: the open tip of pier 2 (the ship lies flush beyond it)
     P["haven_5_4_landing"] = (72, hy, -158)
     P["haven_5_4_bel"] = (70, hy, -161)
     P["haven_5_4_vertrekbord"] = (74, hy, -152)
     P["haven_5_4_kapitein"] = (70, hy, -150)
-    P["haven_5_4_luchtschip"] = (72, hy - 1, -170)         # middle of the docked ship (deck height)
-    P["haven_5_4_mast"] = (69, hy + 10, -166)
+    P["haven_5_4_luchtschip"] = (72, hy - 1, -178)         # middle of the docked ship (deck height; W-SCHEPEN: tip + UIT)
+    P["haven_5_4_mast"] = (69, hy + 8, -168)               # (W-SCHEPEN: the lowered mast's top)
     # pier 3: future line E (zone 5 -> 6 Stormrand), board only
     P["haven_5_6_vertrekbord"] = (94, hy, -152)
     P["kampvuur_luchthaven"] = (34, hy, -66)

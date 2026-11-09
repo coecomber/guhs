@@ -889,7 +889,8 @@ def dok(W, K, P):
         if not (-2241 <= z <= -2235):
             S.set(x1, g + 1, z, HEK_Z)
     for x in range(x0, x1 + 1):
-        S.set(x, g + 1, z1, HEK_X)
+        if abs(x) > 3:   # W-SCHEPEN: the south tip in front of the line-A airship stays open (7 wide: its hull)
+            S.set(x, g + 1, z1, HEK_X)
     for z in range(z0, z1 + 1, 7):
         S.set(x0, g + 2, z, LANT)
     # mooring post + the moored airship (east of the pier)
@@ -902,6 +903,7 @@ def dok(W, K, P):
     P["dok_landing"] = [0, g + 1, -2244]
     P["dok_kapitein"] = [-4, g + 1, -2240]
     P["dok_eind"] = [0, g + 1, -2226]
+    P["dok_instap"] = [0, g + 1, z1]   # W-SCHEPEN: the open south tip, where the line-A airship lies flush (Lijnen.Haven.UIT)
     W.stempel(S.stempel("dok"))
 
 
@@ -1104,16 +1106,33 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
             mk = m & (((y + (2 * np.sin(a * 2)).astype(int)) // 3) % len(lagen) == k)
             S.masker(x - 11, y, z - 11, mk[:, None, :], b)
     ang = 0.0
+    # W-INT: first the head room over every tread (the slope buried the lowest treads of uitkijk_galmtop: unreachable), then
+    # the treads themselves (so a carve never eats a tread)
     for y in range(g + 1, top + 1):
         t = (y - g) / hoogte
         r = 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
         for k in range(3):
             aa = ang + k * 0.5 / r
             for dr in (0.0, 0.9, 1.8):
-                S.set(x + (r + dr) * math.cos(aa), y, z + (r + dr) * math.sin(aa), "minecraft:spruce_slab[type=top,waterlogged=false]", keep=True)
-            S.set(x + (r + 2.7) * math.cos(aa), y + 1, z + (r + 2.7) * math.sin(aa), STAAF, keep=True)
+                for dy in (1, 2, 3):
+                    S.set(x + (r + dr) * math.cos(aa), y + dy, z + (r + dr) * math.sin(aa), CARVE, keep=True)
+        ang += 1.3 / r
+    ang = 0.0
+
+    def zet(px, py, pz, st):   # (like keep=True, but over the head-room carve too)
+        fx, fy, fz = math.floor(px), math.floor(py), math.floor(pz)
+        if S.get(fx, fy, fz) in ("minecraft:air", CARVE):
+            S.set(fx, fy, fz, st)
+    for y in range(g + 1, top + 1):
+        t = (y - g) / hoogte
+        r = 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
+        for k in range(3):
+            aa = ang + k * 0.5 / r
+            for dr in (0.0, 0.9, 1.8):
+                zet(x + (r + dr) * math.cos(aa), y, z + (r + dr) * math.sin(aa), "minecraft:spruce_slab[type=top,waterlogged=false]")
+            zet(x + (r + 2.7) * math.cos(aa), y + 1, z + (r + 2.7) * math.sin(aa), STAAF)
         if (y - g) % 12 == 0:
-            S.set(x + (r + 2.7) * math.cos(ang), y + 2, z + (r + 2.7) * math.sin(ang), LANT, keep=True)
+            zet(x + (r + 2.7) * math.cos(ang), y + 2, z + (r + 2.7) * math.sin(ang), LANT)
         ang += 1.3 / r
     S.cyl(x, z, 6.5, top + 1, top + 1, "minecraft:spruce_planks")
     S.cyl(x, z, 6.5, top + 2, top + 2, STAAF, hollow=1)
@@ -1241,7 +1260,7 @@ def galmhellingen(W, K, P):
 def grotje(W, K, P, naam, x, z, soort):
     """A small secret cave: an icy dome on the ground, the entrance behind a frozen waterfall (with a 1-wide gap)."""
     g = K.h(x, z)
-    S = Vol(x - 12, g - 6, z - 12, x + 12, g + 16, z + 12)
+    S = Vol(x - 24, g - 14, z - 12, x + 12, g + 16, z + 12)   # W-INT: west + down for the step ramp
     S.cyl(x, z, 9, g - 5, g, "minecraft:stone")
     S.ell(x, g + 1, z, 9, 8, 9, "minecraft:packed_ice" if soort == "galm" else SNEEUW, ymin=g + 1)
     S.ell(x, g + 1, z, 9.3, 8.3, 9.3, "minecraft:snow_block", hollow=0.6, ymin=g + 5)
@@ -1273,9 +1292,29 @@ def grotje(W, K, P, naam, x, z, soort):
         S.set(x + 3, g + 2, z, "guhs:sneeuwpopguh[facing=west,half=upper]")
         S.set(x + 2, g + 1, z + 2, "minecraft:white_carpet")
     S.set(x, g + 5, z, LANT_H)
+    # W-INT: the tunnel floor (g) often sits 3-8 above the real ground west of the mouth (the dome stands on K.h of its centre):
+    # a 3-wide snow step ramp down to the ground, 1 per block, with free head room (w-bereik: the cave was unreachable on foot)
+    trede = 0
+    for k in range(1, 14 if soort == "galm" else 1):   # (the ice cave sits on a steep lake bank: a roof shaft instead, below)
+        xx = x - 10 - k
+        top = g - k
+        gronden = {zz: hoogste(W, xx, zz) for zz in (z - 1, z, z + 1)}
+        if min(gronden.values()) >= top:
+            break
+        for zz, gr in gronden.items():
+            if gr < top:
+                S.box(xx, gr + 1, zz, xx, top, zz, "minecraft:snow_block")
+        S.box(xx, top + 1, z - 1, xx, top + 4, z + 1, CARVE)
+        trede = k
+    if soort != "galm":
+        # W-INT: the ice cave's tunnel mouth hangs 30 above the lake (steep bank); the dome TOP is walkable: a 1x1 hole in the
+        # roof with a scaffolding column down to the floor (climb: jump up / sneak down)
+        hx, hz = x + 2, z + 2
+        S.box(hx, g + 1, hz, hx, g + 12, hz, CARVE)
+        S.box(hx, g + 1, hz, hx, g + 8, hz, "minecraft:scaffolding[bottom=false,distance=0,waterlogged=false]")
     P[naam] = [x, g + 1, z]
     W.stempel(S.stempel(naam))
-    P[naam + "_ingang"] = [x - 11, hoogste(W, x - 11, z) + 1, z]
+    P[naam + "_ingang"] = [x - 11 - trede, hoogste(W, x - 11 - trede, z) + 1, z]
 
 
 # ================================================================================================ Het Bevroren Knuffelmeer
@@ -1963,7 +2002,7 @@ def galmdok(W, K, P):
     # U-OVERGANG: no viewpoint at the harbour (the Galmtop needle right behind it is the epic one)
     W.stempel(S.stempel("galmdok"))
     # the Kandijkom dock = the zone-2 end of line A (Noordklifhaven <-> Kandijkom-dok)
-    P["haven_z2_z1_vertrek"] = list(P["dok_landing"])
+    P["haven_z2_z1_vertrek"] = list(P["dok_instap"])   # W-SCHEPEN: the tip (was dok_landing, 20 blocks inside the dock)
     S = BZ.WS(-12, FY - 2, -2240, 10, 12, 16)
     P["haven_z2_z1_bord"] = havens.bord(S, -9, FY, -2232, 0, 1, 1, 0)
     W.stempel(S.stempel("dok_bord"))
@@ -2290,8 +2329,16 @@ def npc_plekken(W, K, P):
         return stand(W, d[0] + dx, d[2] + dz)
     N = {}
     N["z2_kwarts"] = plus("questbord", 3, 1)
-    N["z2_wacht_plein_west"] = plus("plein", -14, 0)
-    N["z2_wacht_plein_oost"] = plus("plein", 14, 0)
+    # W-BEREIK: the guards stand ON the square: the topmost-block stand put the east guard on a 4-high wall (out of reach)
+    def op_plein(dxs):
+        pl = P["plein"]
+        for dx in dxs:
+            st = stand(W, pl[0] + dx, pl[2])
+            if st[1] <= pl[1] + 1:
+                return st
+        return stand(W, pl[0] + dxs[0], pl[2])
+    N["z2_wacht_plein_west"] = op_plein(range(-14, -7))
+    N["z2_wacht_plein_oost"] = op_plein(range(14, 7, -1))
     N["z2_wapenhandelaar"] = list(P["gebouw"]["smid"]["binnen"])
     N["z2_opa_sneeuwbal"] = plus("cafe_terras", 2, 1)
     N["z2_bakker"] = huisdeur("huis_4", 1)
@@ -2304,7 +2351,7 @@ def npc_plekken(W, K, P):
     N["z2_winterslaap"] = huisdeur("huis_2", 1)
     N["z2_poollicht"] = huisdeur("huis_1", 1)
     gb = P["gondel_berg"]
-    N["z2_gondel_boven"] = stand(W, gb[0] - 2, gb[2] + 1)
+    N["z2_gondel_boven"] = [gb[0] - 2, gb[1], gb[2] + 1]   # W-BEREIK: inside the top station, not on its roof (y + 11)
     k1 = P["kampvuur_galmhellingen_1"]
     N["z2_berggids"] = stand(W, k1[0] - 3, k1[2] + 1)
     k3 = P["kampvuur_knuffelmeer_3"]
@@ -2344,7 +2391,7 @@ def npc_plekken(W, K, P):
          "z2_uitkijk_poollicht": list(P["uitkijk_kloofkijk"])}
     for k, v in Q.items():
         P[f"poiplek.{k}"] = v
-    A = {"olievlek": plus("boortoren_3", 4, 4), "bouwtekening": plus("boortoren_1", 4, 4), "boorgaten": plus("galm_lawine_1_voet", 4, 3),
+    A = {"olievlek": plus("boortoren_3", 4, 4), "bouwtekening": plus("boortoren_1", 4, 4), "boorgaten": plus("galm_lawine_1_voet", 6, 2),
          "boorschema": huisdeur("huis_8", 0, 3), "warme_spleet": list(P["geheim_boorplaats"])}
     for k, v in A.items():
         P[f"aanwijzing.{k}"] = v

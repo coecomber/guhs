@@ -62,7 +62,7 @@ public final class Z3Verhaal {
     public static final String VLAG_ZONE3 = "zone3_klaar";
     static final String Z = "vadsrijk.z3npc.";
     static final int OPENING_TICKS = 480, VLIEG_TICKS = 160, BAM_TICKS = 200, NEST_TICKS = 260, F1_TICKS = 240, EI_TICKS = 140, RIT_TICKS = 400,
-            FINALE_TICKS = 520, CLIFF_TICKS = 120, F2_TICKS = 400;
+            FINALE_TICKS = 520, CLIFF_TICKS = 120, F2_TICKS = 140;
 
     private record Loopt(String soort, long begin, String arg) {
     }
@@ -494,37 +494,28 @@ public final class Z3Verhaal {
         loopt(p, "cliff", "");
     }
 
+    /**
+     * Flash F2 for a player who did not see z3-bazen's throne room after Vahoegnir. W-SPEL: it used to film an empty sky ("toont
+     * helemaal niks": a set that was never built, under DARKNESS). Now: "ver in het oosten" = a shot of the one grey thing in the
+     * pink east, the Sterrendovende Toren of zone 6 (built terrain; the chunks come through SceneLaden), then the same throne room
+     * set as z3-bazen's F2 ({@link nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Scenes#troonzaal}, with its title card).
+     */
     static void flashF2(ServerPlayer p) {
         Spelers.data(p).gezien.add("npc:z3_flash_f2");
-        Vec3[] k = Z3NpcPlekken.FLASH_F2;
-        p.addEffect(new MobEffectInstance(MobEffects.DARKNESS, F2_TICKS, 0, false, false));
-        RijkScenes.speel(p, RijkScene.maak("npc:z3_flash_f2", F2_TICKS).camera(0, k[0], k[1]).camera(160, k[2], k[3]).camera(F2_TICKS, k[4], k[5])
-                .titel(Z + "scene.f2.titel", Z + "scene.f2.onder", F2_TICKS - 100, 100, 0x9A86B0).bouw());
+        Vec3[] k = Z3NpcPlekken.F2_OOST;
+        RijkScenes.speel(p, RijkScene.maak("npc:z3_flash_f2", F2_TICKS).camera(0, k[0], k[1]).camera(F2_TICKS, k[2], k[3]).bouw());
+        zeg(p, "scene.f2.oosten", ChatFormatting.GRAY);
         loopt(p, "f2", "");
     }
 
-    private static void f2Tik(ServerPlayer p, ServerLevel sl, int t) {
-        Vec3 troon = Z3NpcPlekken.TROON;
-        deeltjes(p, sl, new DustParticleOptions(0x5A5664, 1.6f), troon.add(0, 2, 0), 10, 6, 3, 0);
-        String[] regels = {"scene.f2.zaal", "scene.f2.krabbel_1", "scene.f2.krabbel_2", "scene.f2.krabbel_3", "scene.f2.krabbel_4"};
-        int[] op = {10, 50, 90, 120, 150};
-        for (int i = 0; i < op.length; i++) {
-            if (t == op[i]) {
-                zeg(p, regels[i], i == 0 ? ChatFormatting.DARK_GRAY : ChatFormatting.GRAY);
-            }
-        }
-        if (t >= 180 && t < 230 && t % 10 == 0) {
-            geluid(p, SoundEvents.WOODEN_BUTTON_CLICK_ON, 1.5f, 0.5f);   // tik-tik-tik-tik-tik
-            if (t == 180) {
-                zeg(p, "scene.f2.tik", ChatFormatting.DARK_GRAY);
-            }
-        }
-        if (t == 250) {
-            geluid(p, SoundEvents.WARDEN_AMBIENT, 1.2f, 0.4f);
-            zeg(p, "scene.f2.stem", ChatFormatting.DARK_PURPLE);
-        }
-        if (t >= 270 && t < 300) {
-            deeltjes(p, sl, new DustParticleOptions(0x3A3644, 2.4f), troon.add(-6 + (t - 270) * 0.3, 1, -6), 6, 0.3, 0.1, 0);
+    /** W-SPEL: F2 part 2, the throne room (z3-bazen's set + figures + lines + title); "f2zaal" ends zone 3 when it is over. */
+    private static void f2Zaal(ServerPlayer p) {
+        if (p.level() instanceof ServerLevel sl && Vadsrijk.in(sl)) {
+            Spelers.data(p).gezien.add(Z3Koppelingen.BAZEN_F2);
+            nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Scenes.troonzaal(sl, p);
+            loopt(p, "f2zaal", "");
+        } else {
+            einde(p, "f2zaal");
         }
     }
 
@@ -559,6 +550,7 @@ public final class Z3Verhaal {
                 case "finale" -> FINALE_TICKS;
                 case "cliff" -> CLIFF_TICKS;
                 case "f2" -> F2_TICKS;
+                case "f2zaal" -> nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Scenes.TROON_TICKS + 10;
                 default -> 0;
             };
             switch (l.soort()) {
@@ -569,7 +561,6 @@ public final class Z3Verhaal {
                 case "ei" -> eiTik(p, sl, t);
                 case "rit" -> ritTik(p, sl, t);
                 case "finale" -> finaleTik(p, sl, t);
-                case "f2" -> f2Tik(p, sl, t);
                 default -> {
                 }
             }
@@ -618,7 +609,8 @@ public final class Z3Verhaal {
                     flashF2(p);
                 }
             }
-            case "f2" -> {
+            case "f2" -> f2Zaal(p);   // W-SPEL: after the east shot, the throne room
+            case "f2zaal" -> {
                 zeg(p, "zone3.klaar", ChatFormatting.LIGHT_PURPLE);
                 NpcApi.meld(p, "z3", "cliffhanger");
             }

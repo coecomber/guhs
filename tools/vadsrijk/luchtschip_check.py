@@ -19,16 +19,19 @@ import tegellezer as TL  # noqa: E402
 
 T = 64
 MIN = 10
+MIN_DOK = 4
 FIX = "--fix" in sys.argv
 JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk")
 TEGELS = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure", "vadsrijk", "tegels")
 GEEN = ("air", "barrier", "light", "structure_void")
+# W-SCHEPEN: Lijnen.Haven.UIT (from the source: the docked ship's middle, measured from the pier tip POI)
+UIT = float(re.search(r"double UIT = ([\d.]+)", open(os.path.join(JAVA, "luchtschip", "Lijnen.java"), encoding="utf-8").read()).group(1))
 
 
 def pois():
     alle = {}
     for f in ("wereld/WereldPlekken.java", "zone2/wereld/Z2WereldPlekken.java", "zone3/wereld/Z3WereldPlekken.java",
-              "zone4/wereld/Z4WereldPlekken.java", "zone5/wereld/Z5WereldPlekken.java"):
+              "zone4/wereld/Z4WereldPlekken.java", "zone5/wereld/Z5WereldPlekken.java", "zone6/wereld/Z6WereldPlekken.java"):
         p = os.path.join(JAVA, f)
         if os.path.exists(p):
             src = open(p, encoding="utf-8").read()
@@ -45,6 +48,19 @@ def lijnen():
     for m in re.finditer(r'Lijn (L\w+) = new Lijn\("([a-z0-9_]+)", "(\w)", (\w+), (\w+), List\.of\((.*?)\), \d+\);', src, re.S):
         via = [tuple(float(v) for v in t) for t in re.findall(r"v\((-?[\d.]+), (-?[\d.]+), (-?[\d.]+)\)", m.group(6))]
         uit.append((m.group(3), m.group(2), havens[m.group(4)], havens[m.group(5)], via))
+    # W-SCHEPEN: line E (zone6/verhaal/Z6Lijn, added at runtime; harbour reserves in Z6VerhaalPlekken, via = LIJN_E_VIA)
+    z6 = open(os.path.join(JAVA, "zone6", "verhaal", "Z6Lijn.java"), encoding="utf-8").read()
+    z6p = open(os.path.join(JAVA, "zone6", "verhaal", "Z6VerhaalPlekken.java"), encoding="utf-8").read()
+    res = {m.group(1): (int(m.group(3)), int(m.group(4)), int(m.group(5)))
+           for m in re.finditer(r'BlockPos (\w+) = w\("([a-z0-9_]+)", (-?\d+), (-?\d+), (-?\d+)\)', z6p)}
+    per_id = {m.group(1): (int(m.group(2)), int(m.group(3)), int(m.group(4)))
+              for m in re.finditer(r'w\("([a-z0-9_]+)", (-?\d+), (-?\d+), (-?\d+)\)', z6p)}
+    hz = {m.group(1): (m.group(2), res.get(m.group(3)) or per_id.get(m.group(3).lower()), float(m.group(4)))
+          for m in re.finditer(r'Haven (\w+) = new Lijnen\.Haven\("([a-z0-9_]+)", Z6VerhaalPlekken\.(\w+), (-?[\d.]+)f', z6)}
+    m = re.search(r'LIJN_E_VIA = List\.of\((.*?)\);', z6p, re.S)
+    via = [tuple(float(v) for v in t) for t in re.findall(r"new Vec3\((-?[\d.]+), (-?[\d.]+), (-?[\d.]+)\)", m.group(1))]
+    m2 = re.search(r'Lijn LE = new Lijnen\.Lijn\(ID, "(\w)", (\w+), (\w+),', z6)
+    uit.append((m2.group(1), "z5_z6", hz[m2.group(2)], hz[m2.group(3)], via))
     return uit
 
 
@@ -57,7 +73,7 @@ def plek(h, alle):
     anker = {"haven_z4_z3_vertrek": "haven_3_4", "haven_z4_z5_vertrek": "haven_4_5"}.get(pid)
     if anker and anker + "_luchtschip" in alle and anker + "_landing" in alle:
         s, la = alle[anker + "_luchtschip"], alle[anker + "_landing"]
-        return (math.floor(s[0] - u[0] * 9), la[1], math.floor(s[2] - u[1] * 9)), u
+        return (math.floor(s[0] - u[0] * UIT), la[1], math.floor(s[2] - u[1] * UIT)), u
     return reserve, u
 
 
@@ -145,10 +161,10 @@ def main():
             print(f"lijn {letter} ({lid}): inactief (Lijn.actief: de havens {a[0]} / {b[0]} bestaan niet als POI), overgeslagen")
             continue
         (pa, ua), (pb, ub) = plek(a, alle), plek(b, alle)
-        da = (pa[0] + 0.5 + ua[0] * 9, pa[1], pa[2] + 0.5 + ua[1] * 9)
-        db = (pb[0] + 0.5 + ub[0] * 9, pb[1], pb[2] + 0.5 + ub[1] * 9)
+        da = (pa[0] + 0.5 + ua[0] * UIT, pa[1], pa[2] + 0.5 + ua[1] * UIT)
+        db = (pb[0] + 0.5 + ub[0] * UIT, pb[1], pb[2] + 0.5 + ub[1] * UIT)
         pts = [(da[0] + ua[0] * 26, da[1] + 5, da[2] + ua[1] * 26)] + via + [(db[0] + ub[0] * 26, db[1] + 4, db[2] + ub[1] * 26)]
-        laagst, waar = 1e9, None
+        laagst, waar, tekort = 1e9, None, 1e9
         for p, q in zip(pts, pts[1:]):
             n = max(1, int(math.dist(p, q) / 2))
             for i in range(n + 1):
@@ -158,12 +174,15 @@ def main():
                 vrij = min(w.onder(xi + dx, yi, zi + dz) for dx in range(-3, 4, 3) for dz in range(-3, 4, 3))
                 if any(w.boven(xi + dx, yi, zi + dz, 8) for dx in range(-3, 4, 3) for dz in range(-3, 4, 3)):
                     vrij = -1   # (something in the ship's own box)
-                if vrij < laagst:
-                    laagst, waar = vrij, (round(x), round(y), round(z), yi - vrij)
-        if FIX and laagst < MIN and len(sys.argv) > 1:
+                # W-SCHEPEN: the last 30 blocks to a dock descend to the pier itself (a low pier over water: line 0's De Haven):
+                # there 4 blocks free is enough (the docked ship itself is schepen_check.py's RUIMTE)
+                eis = MIN_DOK if min(math.hypot(x - da[0], z - da[2]), math.hypot(x - db[0], z - db[2])) < 30 else MIN
+                if vrij - eis < tekort:
+                    laagst, waar, tekort = vrij, (round(x), round(y), round(z), yi - vrij), vrij - eis
+        if FIX and tekort < 0 and len(sys.argv) > 1:
             nieuw = herstel(w, pts)
             print("  voorstel via: " + ", ".join(f"v({p[0]:.0f}, {p[1]:.0f}, {p[2]:.0f})" for p in nieuw[1:-1]))
-        ok = laagst >= MIN
+        ok = tekort >= 0
         slecht += not ok
         print(f"lijn {letter} ({lid}): {a[0]} {pa} -> {b[0]} {pb}: laagste vrije ruimte {laagst:.0f} blokken bij {waar[:3]} "
               f"(grond {waar[3]}) {'OK' if ok else 'TE LAAG'}")

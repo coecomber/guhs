@@ -72,10 +72,12 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.register(modBus);   // U-GILDEN: Knuffelbonden (guilds), Bondenvallei, castles
         nl.juiced.guhs.feature.vadsrijk.huizen.HuizenRegistry.register(modBus);   // U-HUIZEN: Het Knuffelkwartier (player housing)
         nl.juiced.guhs.feature.vadsrijk.grotten.Grotten.register(modBus);   // U-GROTTEN: one atmosphere cave per zone (areas, elite, schat, book)
+        nl.juiced.guhs.feature.vadsrijk.dungeon.Dungeons.register(modBus);   // W-GROT: dungeons (door block, queue, ready check, commands)
         nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotKerker.register(modBus);   // U-GROTKERKER: every cave a repeatable mini-dungeon (run, boss, end chest)
         nl.juiced.guhs.feature.vadsrijk.vint.VInt.register(modBus);   // V-INT: round-U glue (spec in the Karakter tab + party frames)
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.register(modBus);   // U-LEVEN-RITME: day/night in towns, weather, emote reactions, Pluizenblaadje
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.register(modBus);   // U-Z6RAID: the raid De Sterrendovende Toren
+        nl.juiced.guhs.feature.vadsrijk.party.PartyRegistry.register(modBus);   // W-PARTY: Party tab (saved parties, group queue) + nep-spelers
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
     }
 
@@ -110,7 +112,9 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.gilden.BondRegistry.payloads(registrar);   // U-GILDEN
         nl.juiced.guhs.feature.vadsrijk.questlopen.QuestLopenRegistry.payloads(registrar);   // U-QUESTLOPEN
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.payloads(registrar);   // U-Z6RAID
+        nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonNet.payloads(registrar);   // W-GROT: the dungeon door window + ready check
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.payloads(registrar);   // U-LEVEN-RITME
         nl.juiced.guhs.feature.vadsrijk.stadsleven.StadslevenRegistry.payloads(registrar);   // U-LEVEN-STAD: the Stadsleven setting
+        nl.juiced.guhs.feature.vadsrijk.party.PartyRegistry.payloads(registrar);   // W-PARTY
     }
 }

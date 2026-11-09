@@ -252,6 +252,15 @@ TEKSTEN = {
 }
 
 
+# W-INT: the "Effect:" line under the dream's named items (BazenLoot.BaasItem): their real bonus stats (DroomLoot.typen). (nl, en)
+EFFECTEN = {
+    "z5droom_wiegeliedstaf": ("neuriet je heals sterker: extra wijsheid en healkracht (roze)", "hums your heals stronger: extra wisdom and healing power (pink)"),
+    "z5droom_dromenzwaard": ("extra kracht en vads (roze)", "extra strength and chonk (pink)"),
+    "z5droom_sterrenboog": ("extra behendigheid en kritiek (water)", "extra agility and critical chance (water)"),
+    "z5droom_slaapmuts": ("veel vads en healkracht, en je loopt iets sneller", "lots of chonk and healing power, and you walk a little faster"),
+}
+
+
 def teksten():
     t = dict(TEKSTEN)
     for item, (typ, nl, en, _maak, fl_nl, fl_en, _h) in ITEMS.items():
@@ -259,6 +268,7 @@ def teksten():
         if typ:
             t["vadsrijk.loot." + typ] = (nl, en)
             t[f"vadsrijk.loot.{typ}.flavour.0"] = ("\"" + fl_nl + "\"", "\"" + fl_en + "\"")
+            t["vadsrijk.bazen.effect." + typ] = EFFECTEN[typ]   # W-INT
     return t
 
 

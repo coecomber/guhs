@@ -64,21 +64,22 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `gilde_bijenstal` | 2702, 215, -454 |
 | `gilde_brouwerij` | 2702, 215, -469 |
 | `gilde_hal` | 2702, 215, -484 |
-| `gilde_ingang` | 2695, 215, -484 |
+| `gilde_ingang` | 2695, 215, -483 |
 | `gilde_keuken` | 2702, 215, -474 |
 | `gilde_smidse` | 2702, 215, -464 |
 | `haven_5_1_vertrekbord` | 2646, 217, -441 |
 | `haven_5_4_bel` | 2631, 217, -359 |
 | `haven_5_4_kapitein` | 2632, 217, -370 |
 | `haven_5_4_landing` | 2630, 217, -362 |
-| `haven_5_4_luchtschip` | 2630, 216, -350 |
-| `haven_5_4_mast` | 2633, 227, -354 |
+| `haven_5_4_luchtschip` | 2630, 216, -342 |
+| `haven_5_4_mast` | 2633, 225, -352 |
 | `haven_5_4_vertrekbord` | 2626, 217, -441 |
 | `haven_5_6_vertrekbord` | 2606, 217, -441 |
 | `haven_5_pier_1` | 2650, 217, -365 |
 | `haven_5_pier_2` | 2630, 217, -365 |
 | `haven_5_pier_3` | 2610, 217, -365 |
-| `haven_z5_z4_vertrek` | 2630, 217, -360 |
+| `haven_z5_z4_vertrek` | 2630, 217, -352 |
+| `haven_z5_z6_vertrek` | 2966, 210, -520 |
 | `herberg_hemelbed_balie` | 2690, 218, -572 |
 | `herberg_hemelbed_boven` | 2690, 223, -564 |
 | `herberg_hemelbed_deur` | 2689, 218, -574 |
@@ -192,6 +193,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `staartpark_prieel` | 2880, 203, -502 |
 | `staartpark_vijver` | 2876, 204, -524 |
 | `staartpark_westeinde` | 2896, 205, -520 |
+| `staarttrap_boven` | 2856, 233, -523 |
+| `staarttrap_onder` | 2860, 204, -524 |
 | `staartvin_top` | 2905, 206, -520 |
 | `troonzaal_audientie` | 2840, 233, -520 |
 | `troonzaal_ingang` | 2831, 233, -520 |
@@ -266,6 +269,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `z5w_schuilnest_uit` | 2613, 217, -445 |
 | `z5w_staartvlakte_noord` | 2968, 206, -458 |
 | `z5w_wolkwaldroom_deur` | 2587, 167, -520 |
+| `z5w_wolkwaldroom_uitluik` | 2586, 167, -520 |
 | `z5w_zuidvin` | 2610, 154, -648 |
 | `zachtmoedlaan` | 2704, 221, -520 |
 

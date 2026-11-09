@@ -219,7 +219,11 @@ public final class StadsLeven {
     @Nullable
     static Groep maak(ServerLevel sl, Groep.Soort soort, Steden.Stad stad, Vec3 bij, RandomSource r, Niveau n) {
         return switch (soort) {
-            case DIERTJE -> Beestjes.Diertje.maak(sl, stad, bij, r, r.nextFloat() < Beestjes.BLOB_KANS);
+            case DIERTJE -> {   // W-LEVEN: mice and blobs each under their own cap (the mice times the town's multiplier)
+                int[] mb = diertjes(stad);
+                Boolean blob = Beestjes.volgendeIsBlob(stad, n, mb[1], mb[0], r);
+                yield blob == null ? null : Beestjes.Diertje.maak(sl, stad, bij, r, blob);
+            }
             case KAT -> Beestjes.Kat.maak(sl, stad, bij, r);
             case EENDJES -> Beestjes.Eendjes.maak(sl, stad, bij, r);
             case VOGEL -> Beestjes.Vogel.maak(sl, stad, bij, r);
@@ -241,6 +245,17 @@ public final class StadsLeven {
             }
         }
         return m;
+    }
+
+    /** W-LEVEN: the town's critters now: {mice, blobs}. */
+    static int[] diertjes(Steden.Stad stad) {
+        int[] mb = new int[2];
+        for (Groep g : GROEPEN.values()) {
+            if (g.stad == stad && g instanceof Beestjes.Diertje d) {
+                mb[d.blob ? 1 : 0]++;
+            }
+        }
+        return mb;
     }
 
     private static boolean iemandBij(List<Vec3> ogen, Vec3 p, double r) {
@@ -290,6 +305,19 @@ public final class StadsLeven {
             }
         }
         return true;
+    }
+
+    /** W-LEVEN: how many town-life entities are within r of p (the crowding check of {@link Plekken#magDruk}). */
+    static int druk(Vec3 p, double r) {
+        int n = 0;
+        for (Groep g : GROEPEN.values()) {
+            for (Entity e : g.leden) {
+                if (e.distanceToSqr(p) < r * r) {
+                    n++;
+                }
+            }
+        }
+        return n;
     }
 
     /** Bubbles showing right now in this town (the throttle). */

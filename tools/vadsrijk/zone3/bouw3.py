@@ -263,6 +263,13 @@ def honingtak_extra(W):
         W.wset(sx + ux * 2.6, HY + 2, sz + uz * 2.6, LAMP_G)
         lx, ly, lz = R({"cafe": "lift_cafe_boven", "nestkapel": "lift_kapel_boven", "raattros": "lift_raattros_boven"}[naam])
         W.wfill(lx - 1, HY, lz - 1, lx + 1, HY, lz + 1, PLANK)
+        # W-BEREIK: the deck's edge railing ran straight through this 3x3 stop (lift_kapel_boven was a fenced-in pocket: the
+        # chapel, Wasja and three main quests unreachable): the stop itself stays free up to head height
+        W.wfill(lx - 1, HY + 1, lz - 1, lx + 1, HY + 3, lz + 1, LUCHT)
+        for ex in range(int(lx) - 2, int(lx) + 3):      # a rail only where the stop borders the void
+            for ez in range(int(lz) - 2, int(lz) + 3):
+                if max(abs(ex - int(lx)), abs(ez - int(lz))) == 2 and W.wget(ex, HY, ez).startswith(LUCHT)                         and W.wget(ex, HY + 1, ez).startswith(LUCHT):
+                    W.wset(ex, HY + 1, ez, HEK)
         if naam == "cafe":
             for k in range(5):
                 b = k * 1.25
@@ -327,6 +334,7 @@ def dok(W):
         if not W.raakt(mx - 30, HY - 20, mz - 30, mx + 30, HY + 30, mz + 30):
             continue
         ua = math.atan2(uz, ux)
+        _, (ax, az) = PL.steiger_tip(naam)   # W-SCHEPEN: the cardinal side where the airship docks
         W.cilinder(mx, mz, 7.5, HY, HY, None, mixfn=lambda x, y, z, m: W.kies([PLANK, "minecraft:stripped_spruce_wood"], [4, 1],
                                                                                x, y, z, 3601))
         W.cilinder(mx, mz, 7.5, HY + 1, HY + 5, LUCHT)
@@ -334,6 +342,9 @@ def dok(W):
             b = k * 2 * math.pi / 30
             if math.cos(b - (ua + math.pi)) > 0.8:
                 continue        # open towards the boardwalk
+            vooruit, opzij = 7.2 * (math.cos(b) * ax + math.sin(b) * az), 7.2 * (math.sin(b) * ax - math.cos(b) * az)
+            if vooruit > 0 and abs(opzij) <= 4:
+                continue        # W-SCHEPEN: open at the tip, where the airship lies flush (its hull is 7 wide)
             W.wset(mx + 7.2 * math.cos(b), HY + 1, mz + 7.2 * math.sin(b), HEK)
         W.wfill(mx, HY + 1, mz, mx, HY + 22, mz, "minecraft:stripped_spruce_log[axis=y]")
         W.wfill(mx - 3, HY + 20, mz, mx + 3, HY + 20, mz, "minecraft:stripped_spruce_log[axis=x]")
@@ -1176,6 +1187,32 @@ def pad_vrij(W):
         W.v[a[weg], b[weg], c[weg]] = 0
 
 
+def takpunt_vrij(W):
+    """W-INT: the crown leaves of the Westtak end hang 1-2 blocks over the moss/path walk that leads onto the lookout platform
+    (uitkijk_takpunt): no head room, so the platform (and the lookout secret) could not be reached on foot (w-bereik). Leaves and
+    vines in the 3 cells above any non-leaf floor block around the lookout are cleared (the leaf mass itself stays)."""
+    x, y, z = PL.tak_punt("Westtak", 118)
+    R = 9
+    if not W.raakt(x - R, y - 4, z - R, x + R, y + 5, z + R):
+        return
+    blad = ("_leaves", "vines", "vines_plant", "hanging_moss")
+    for xx in range(int(x) - R, int(x) + R + 1):
+        for zz in range(int(z) - R, int(z) + R + 1):
+            if math.hypot(xx - x, zz - z) > R:
+                continue
+            for yy in range(int(y) - 4, int(y) + 2):
+                b = (W.wget(xx, yy, zz) or "").split("[")[0]
+                if not b or b.endswith(blad) or b.endswith("air") or "lantern" in b or "fence" in b:
+                    continue
+                for dy in (1, 2, 3):
+                    c = (W.wget(xx, yy + dy, zz) or "").split("[")[0]
+                    if c.endswith(blad):
+                        W.wset(xx, yy + dy, zz, LUCHT)
+                        boven = (W.wget(xx, yy + dy + 1, zz) or "").split("[")[0]
+                        if boven.endswith(("tulip", "petals", "short_grass", "fern", "flower", "poppy", "dandelion", "daisy")):
+                            W.wset(xx, yy + dy + 1, zz, LUCHT)   # (no flower floating on a leaf that is gone)
+
+
 # ================================================================================================ (r-int) village houses free
 def dorp_vrij(W):
     """The beekeeper-village houses on the branch tips (P.imkerdorpen) are built after the crown: a house that sits inside the
@@ -1518,6 +1555,8 @@ def bouw(W):
     dorp_vrij(W)
     dichten(W)
     udeco(W)   # U-DECO: Honingtak street furniture + lamp posts, stair floor bands/banners
+    WF.trappen_vrij(W)   # W-BEREIK: head room over the werf dock-tower stairs (last: hulls/rock are drawn before)
+    takpunt_vrij(W)      # W-INT: head room over the walk to the Westtak lookout (uitkijk_takpunt)
 
 
 init()

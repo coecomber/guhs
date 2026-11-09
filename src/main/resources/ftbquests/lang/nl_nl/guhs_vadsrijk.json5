@@ -188,35 +188,20 @@
   "quest.4755482A03FC1C1B.quest_desc": [
     "Het questbord: premie voor wie vijfentwintig wezens opvrolijkt in de Zwamtempel. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.47554804696E7194.title": "De proef van de Kussenkampioen",
-  "quest.4755486DD1CCD55C.title": "De proef van de Kussenkampioen",
-  "quest.4755486DD1CCD55C.quest_desc": [
-    "Je bent sterk geworden als Knuffelridder. Bewijs het in het Sporenwoud, dan word je Kussenkampioen. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  "task.47554834BD19DBFE.title": "De keuze van de Knuffelridder",
+  "quest.475548BE1E2DE5D0.title": "De keuze van de Knuffelridder",
+  "quest.475548BE1E2DE5D0.quest_desc": [
+    "Je bent een echte Knuffelridder geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, Schildridder of Reuzenkussen. Daarna ben je klaar voor de Zwamtempel. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.4755483AC9E1B89A.title": "De proef van de Pluizenschutter",
-  "quest.475548A2783A7ED0.title": "De proef van de Pluizenschutter",
-  "quest.475548A2783A7ED0.quest_desc": [
-    "Je bent sterk geworden als Pluisjager. Bewijs het in het Sporenwoud, dan word je Pluizenschutter. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  "task.4755489C41EBD10A.title": "De keuze van de Pluisjager",
+  "quest.4755489C6F8774B4.title": "De keuze van de Pluisjager",
+  "quest.4755489C6F8774B4.quest_desc": [
+    "Je bent een echte Pluisjager geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, Scherpschutter of Strikkenzetter. Daarna ben je klaar voor de Zwamtempel. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.475548F2084BFDCB.title": "De proef van de Roze Tovenaar",
-  "quest.4755483632E08727.title": "De proef van de Roze Tovenaar",
-  "quest.4755483632E08727.quest_desc": [
-    "Je bent sterk geworden als Vadsmagiër. Bewijs het in het Sporenwoud, dan word je Roze Tovenaar. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
-  ],
-  "task.4755488E1EBD2D2E.title": "De proef van de Vahoege Paladijn",
-  "quest.47554847ED9BECD9.title": "De proef van de Vahoege Paladijn",
-  "quest.47554847ED9BECD9.quest_desc": [
-    "De hoogste titel van zone 1: Vahoege Paladijn. Bereik level 20 en vrolijk de Opperzwam op. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
-  ],
-  "task.475548136BF91AA8.title": "De proef van de Sterrenjager",
-  "quest.4755485893732877.title": "De proef van de Sterrenjager",
-  "quest.4755485893732877.quest_desc": [
-    "De hoogste titel van zone 1: Sterrenjager. Bereik level 20 en vrolijk de Opperzwam op. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
-  ],
-  "task.4755486E8F424EBF.title": "De proef van de Vahoege Aartsmagiër",
-  "quest.475548856767862C.title": "De proef van de Vahoege Aartsmagiër",
-  "quest.475548856767862C.quest_desc": [
-    "De hoogste titel van zone 1: Vahoege Aartsmagiër. Bereik level 20 en vrolijk de Opperzwam op. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  "task.475548CF60103A0B.title": "De keuze van de Vadsmagiër",
+  "quest.475548FC81917398.title": "De keuze van de Vadsmagiër",
+  "quest.475548FC81917398.quest_desc": [
+    "Je bent een echte Vadsmagiër geworden. Bereik level 17 en kom terug bij Grootmeester Vadsvoet: dan kies je je specialisatie, Sterrenwever of Zegenzanger. Daarna ben je klaar voor de Zwamtempel. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
   "task.4755488EE4488B45.title": "Een eigen Wolkenschaapje",
   "quest.4755487F4DF719A4.title": "Een eigen Wolkenschaapje",
@@ -363,21 +348,6 @@
   "quest.475548CAC539BB39.quest_desc": [
     "Gondelguh Kabeltje vindt dat iedereen een keer met de gondel naar de top moet. Neem de gondel en zeg Gondelguh Katrol boven gedag. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.475548D487DBD4D0.title": "De proef van de Kristalkampioen",
-  "quest.475548198C92C119.title": "De proef van de Kristalkampioen",
-  "quest.475548198C92C119.quest_desc": [
-    "De derde titel van De Knuffelorde: Kristalkampioen. Bereik level 30 als Knuffelridder en bewijs je in de Splinterkloof. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
-  ],
-  "task.4755481DA6875470.title": "De proef van de Poolstervalk",
-  "quest.4755485DB82C52D6.title": "De proef van de Poolstervalk",
-  "quest.4755485DB82C52D6.quest_desc": [
-    "De derde titel van De Knuffelorde: Poolstervalk. Bereik level 30 als Pluisjager en bewijs je in de Splinterkloof. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
-  ],
-  "task.475548696D6DDC4D.title": "De proef van de Kristalorakel",
-  "quest.475548DB0D1862B5.title": "De proef van de Kristalorakel",
-  "quest.475548DB0D1862B5.quest_desc": [
-    "De derde titel van De Knuffelorde: Kristalorakel. Bereik level 30 als Vadsmagiër en bewijs je in de Splinterkloof. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
-  ],
   "task.4755487D3DD1BAC8.title": "Het gebrom in de berg",
   "quest.475548980E8C19B5.title": "Het gebrom in de berg",
   "quest.475548980E8C19B5.quest_desc": [
@@ -518,20 +488,20 @@
   "quest.475548D4894C895D.quest_desc": [
     "Kaartenmaakster Lusje wil vijf uitkijkpunten op haar nieuwe kaart zetten. Maar dan moet er wel iemand echt gestaan hebben. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.475548DA736D26CE.title": "De proef van de Nestwachter",
-  "quest.4755485BE591BC3C.title": "De proef van de Nestwachter",
-  "quest.4755485BE591BC3C.quest_desc": [
-    "De vierde titel van De Knuffelorde: Nestwachter. Bereik klasse-level 50 als Knuffelridder en bewijs je in het Wortelduister. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  "task.475548765458CD08.title": "Het nest van de Knuffelridder",
+  "quest.475548547C86697C.title": "Het nest van de Knuffelridder",
+  "quest.475548547C86697C.quest_desc": [
+    "Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als Knuffelridder en kom terug bij Ordemeester Wasja in de Nestkapel: dan wordt je specialisatie sterker. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.47554891B7182A38.title": "De proef van de Kruinvalk",
-  "quest.475548B8D6114C2E.title": "De proef van de Kruinvalk",
-  "quest.475548B8D6114C2E.quest_desc": [
-    "De vierde titel van De Knuffelorde: Kruinvalk. Bereik klasse-level 50 als Pluisjager en bewijs je in het Wortelduister. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  "task.4755488CCB683B04.title": "Het nest van de Pluisjager",
+  "quest.4755485357496A6A.title": "Het nest van de Pluisjager",
+  "quest.4755485357496A6A.quest_desc": [
+    "Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als Pluisjager en kom terug bij Ordemeester Wasja in de Nestkapel: dan wordt je specialisatie sterker. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.475548265824990A.title": "De proef van de Schemerwijze",
-  "quest.4755480DE4D48A8F.title": "De proef van de Schemerwijze",
-  "quest.4755480DE4D48A8F.quest_desc": [
-    "De vierde titel van De Knuffelorde: Schemerwijze. Bereik klasse-level 50 als Vadsmagiër en bewijs je in het Wortelduister. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  "task.4755483727821968.title": "Het nest van de Vadsmagiër",
+  "quest.475548E7E2B282A1.title": "Het nest van de Vadsmagiër",
+  "quest.475548E7E2B282A1.quest_desc": [
+    "Je tweede titel van De Knuffelorde. Bereik klasse-level 35 als Vadsmagiër en kom terug bij Ordemeester Wasja in de Nestkapel: dan wordt je specialisatie sterker. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
   "task.47554870C420C9DB.title": "De grauwe honing",
   "quest.475548466042DDE2.title": "De grauwe honing",
@@ -628,10 +598,10 @@
   "quest.4755481976BCB430.quest_desc": [
     "Het slaaplied staat op de achterkant van de bladzijde. Zing het de goede kant op, bij het oog van Moeder Wolkwal, en ze wordt helemaal wakker. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
-  "task.47554897101A901D.title": "De Stormrand",
-  "quest.4755483BADB8D29A.title": "De Stormrand",
+  "task.47554897101A901D.title": "Sterren in het oosten",
+  "quest.4755483BADB8D29A.title": "Sterren in het oosten",
   "quest.4755483BADB8D29A.quest_desc": [
-    "Zilverstaart werkte voor de Ringvinger, een generaal van de Keizer. In zijn Kanselarij ligt nog post. En in het oosten, achter de Wolkenzee, rommelt een storm. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+    "Zilverstaart werkte voor de Ringvinger, een generaal van de Keizer. In zijn Kanselarij ligt nog post. En in het oosten, achter de Wolkenzee, gaan sterren uit. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
   "task.47554839C118484F.title": "Een kom voor iedereen",
   "quest.475548CD82722FA1.title": "Een kom voor iedereen",
@@ -872,5 +842,185 @@
   "quest.47554845A944EAA0.title": "In de mist",
   "quest.47554845A944EAA0.quest_desc": [
     "Een verborgen schat van De Lampionkust. Hij glinstert goudgeel als je dichtbij bent.",
+  ],
+  "task.47554870B6C83455.title": "Land in zicht!",
+  "quest.475548F60CDDC3EF.title": "Land in zicht!",
+  "quest.475548F60CDDC3EF.quest_desc": [
+    "Moeder Wolkwal zwemt met heel Hoogvads naar het oosten, tot de roze kliffen van het Grote Vasteland opdoemen. Daar ligt het &dZijdeland&r. Lijn E vliegt van de Staarthaven van Hoogvads naar de Luchthaven van Rozenkloof. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.47554895C168E0CA.title": "De karavaan van Oma Dadel",
+  "quest.475548FF960335EC.title": "De karavaan van Oma Dadel",
+  "quest.475548FF960335EC.quest_desc": [
+    "Oma Dadel vertrekt met haar kleine karavaan naar Saffraanpoort, ook al zijn de sterrenbakens uit. Ze kan wel een paar handen gebruiken. En jij een bultguh. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755486C3B30F675.title": "Door de Roze Duinen",
+  "quest.4755489C8BDEC873.title": "Door de Roze Duinen",
+  "quest.4755489C8BDEC873.quest_desc": [
+    "De karavaan van Oma Dadel trekt door de Siq omhoog en langs de Roze Duinen naar Saffraanpoort. Zonder bakens. Blijf dichtbij. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548889E8DFA39.title": "Audiëntie bij Sultane Rozijntje",
+  "quest.47554888235B78EB.title": "Audiëntie bij Sultane Rozijntje",
+  "quest.47554888235B78EB.quest_desc": [
+    "Sultane Rozijntje bewaart de oude sterrenkaart van het &dZijdeland&r. Grootvizier Kaneelstok regelt de audiëntie. En Sterrenkijker Twinkel kan je leren hoe je sterren leest. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755484AB126B400.title": "Het Palmbaken",
+  "quest.47554853DB6F476A.title": "Het Palmbaken",
+  "quest.47554853DB6F476A.quest_desc": [
+    "Het eerste baken staat boven de watervallen van de Palmenkloven. 's Nachts moet je het sterrenbeeld De Dadelpalm volgen, anders vlamt het niet op. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755487145A79539.title": "Een tapijt van sterrenzijde",
+  "quest.4755483061474679.title": "Een tapijt van sterrenzijde",
+  "quest.4755483061474679.quest_desc": [
+    "Met zijdecocons van de moerbeibomen en het sterrenstof van het Palmbaken kan Tapijtweefster Knoopje een vliegend tapijt weven. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755484370E37617.title": "De Zoutvlakte bij nacht",
+  "quest.4755483D1DA31CA7.title": "De Zoutvlakte bij nacht",
+  "quest.4755483D1DA31CA7.quest_desc": [
+    "De karavaan van Oma Dadel kampeert op de Zoutvlakte. Daar ligt het Zoutbaken, en daar slaapt iets groots onder het zout. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548B67E9A2105.title": "De Verzonken Sterrenwacht",
+  "quest.4755489319B06762.title": "De Verzonken Sterrenwacht",
+  "quest.4755489319B06762.quest_desc": [
+    "In het Ruïnedal ligt De Verzonken Sterrenwacht van de oude Sterrenguhs. Daarin: het Sterrenkompas, dat de weg naar het Ruïnebaken en naar de oase kent. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548FCFFF6FEF1.title": "De Spiegelzaal",
+  "quest.4755489F9AD3C489.title": "De Spiegelzaal",
+  "quest.4755489F9AD3C489.quest_desc": [
+    "In de Spiegelzaal kaatsen duizend spiegels het licht van de bakens. Met het Sterrenkompas laten ze het verborgen pad naar de Moederoase zien. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548990069BA97.title": "De Moederoase",
+  "quest.475548C58641DF2B.title": "De Moederoase",
+  "quest.475548C58641DF2B.quest_desc": [
+    "De grote karavaan reist bij nacht over het sterrenpad naar de Moederoase. Steek het Duinbaken en het Oasebaken aan, vind Moeder Bron en kijk de toren van de Ringvinger in de ogen. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548F80C63D780.title": "Bobbeltjes verjaardag",
+  "quest.4755488A7DAE0F69.title": "Bobbeltjes verjaardag",
+  "quest.4755488A7DAE0F69.quest_desc": [
+    "Bobbeltje, het babybultguhtje van Oma Dadel, is jarig. Er moet een dadeltaart komen. En een feestje. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548FC087D7C6C.title": "Water voor de hangende tuinen",
+  "quest.475548AD22158405.title": "Water voor de hangende tuinen",
+  "quest.475548AD22158405.quest_desc": [
+    "De hangende tuinen van de Rozenkloof hangen over drie richels. Ze hebben dorst, en de wandtrappen zijn steil. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548593CAA3D94.title": "Post in de rots",
+  "quest.475548E88C91DAEF.title": "Post in de rots",
+  "quest.475548E88C91DAEF.quest_desc": [
+    "Postguh Stempel heeft zes brieven voor rotswoningen op verschillende richels. Haar pootjes zijn moe. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.47554812834902F3.title": "De verloren tapijtkwastjes",
+  "quest.4755489C2AE52E9E.title": "De verloren tapijtkwastjes",
+  "quest.4755489C2AE52E9E.quest_desc": [
+    "De kwastjes van Tapijtweefster Knoopje zijn weggewaaid over Saffraanpoort: op daken, in de bazaar en langs het kanaal. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548D8409AFD61.title": "Afdingen!",
+  "quest.47554807E11717C4.title": "Afdingen!",
+  "quest.47554807E11717C4.quest_desc": [
+    "In de Grote Bazaar hoort afdingen erbij. Maar wie lief afdingt, krijgt de meeste korting. Probeer het bij drie kooplieden. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548F4EFDE8732.title": "De norias zingen niet meer",
+  "quest.475548304CFA5C05.title": "De norias zingen niet meer",
+  "quest.475548304CFA5C05.quest_desc": [
+    "De drie grote waterraderen van Saffraanpoort kraken niet meer. Ze staan stil. Molenguh Knars hoort het in zijn tanden. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.47554865475EFED5.title": "Badeendjes in de Kanaalwijk",
+  "quest.475548F1F93B1EDA.title": "Badeendjes in de Kanaalwijk",
+  "quest.475548F1F93B1EDA.quest_desc": [
+    "De tien badeendjes van Kindje Pluk zijn weggedreven door de kanaaltjes van de Kanaalwijk. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.47554895E66365BB.title": "Sterrenkijkersexamen",
+  "quest.4755480AFB523ADB.title": "Sterrenkijkersexamen",
+  "quest.4755480AFB523ADB.quest_desc": [
+    "Twinkel wil weten of je echt een sterrenkijker bent. Vier sterrenbeelden, vier hoge plekken. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548DD350FD9B0.title": "De Dadelapenbende",
+  "quest.47554836B48565CC.title": "De Dadelapenbende",
+  "quest.47554836B48565CC.quest_desc": [
+    "Een bende dadelaapjes heeft de dadeloogst van Dadelpit gepikt en in de palmen verstopt. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.47554849F3081463.title": "Watervalkoerier",
+  "quest.475548B802F74582.title": "Watervalkoerier",
+  "quest.475548B802F74582.quest_desc": [
+    "Koerier Spetter brengt de post langs de watervallen van de Palmenkloven. Kun jij het sneller? &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548586E006763.title": "Zout op de staart",
+  "quest.47554891DACE7B8E.title": "Zout op de staart",
+  "quest.47554891DACE7B8E.quest_desc": [
+    "Zoutkreeftjes hebben een feestje gevierd in het ziedershuisje van Zoutzieder Korrel. Het huisje is half ingestort. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.47554833130B2F96.title": "Het lied van de Zoutgrot",
+  "quest.47554839071A82B3.title": "Het lied van de Zoutgrot",
+  "quest.47554839071A82B3.quest_desc": [
+    "Onder de Zoutvlakte ligt de Zingende Zoutgrot. Achter een wand van kristal ligt de kist van de Eerste Karavaan. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755487D1C54AB4D.title": "Koningin Wormelien",
+  "quest.47554835B852B586.title": "Koningin Wormelien",
+  "quest.47554835B852B586.quest_desc": [
+    "Koningin Wormelien, de grote roze zandworm die vroeger voor de karavanen zong, zwemt grauw en hongerig door de Roze Duinen. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548D50B6F512A.title": "De tabletten van de Sterrenguhs",
+  "quest.4755489A533C0588.title": "De tabletten van de Sterrenguhs",
+  "quest.4755489A533C0588.quest_desc": [
+    "Professor Stof zoekt zes stenen tabletten van de oude Sterrenguhs. Ze liggen verspreid tussen de mesa's van het Ruïnedal. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755481642D980F1.title": "Vluchtelingen langs de Oostroute",
+  "quest.4755483CC97EA465.title": "Vluchtelingen langs de Oostroute",
+  "quest.4755483CC97EA465.quest_desc": [
+    "Langs de Oostroute komen Uitgevadsten uit het oosten naar de Moederoase. Mager Mientje uit Hoogvads vangt ze op. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548D85B903FD0.title": "8 knuffels",
+  "quest.475548EDEBF2E657.title": "Acht knuffels in het zand",
+  "quest.475548EDEBF2E657.quest_desc": [
+    "Vind alle &e8 knuffels&r die in het Zijdeland verstopt zitten.",
+  ],
+  "task.47554851C013CC9D.title": "Grauwe brief",
+  "quest.475548F5F741EEA4.title": "Aan de Ringvinger",
+  "quest.475548F5F741EEA4.quest_desc": [
+    "Vind de &8Grauwe brief&r in het Mika-kamp op de Zoutvlakte.",
+  ],
+  "task.475548447EEA55B7.title": "4 uitkijkpunten",
+  "quest.4755484744E42F70.title": "Hoog boven het zand",
+  "quest.4755484744E42F70.quest_desc": [
+    "Ontdek alle &e4 uitkijkpunten&r van het Zijdeland.",
+  ],
+  "task.4755480AB96174AA.title": "5 bakens",
+  "quest.475548FE0F22F3C1.title": "Vijf sterren",
+  "quest.475548FE0F22F3C1.quest_desc": [
+    "Steek alle &e5 sterrenbakens&r van het Zijdeland weer aan.",
+  ],
+  "task.47554891374B6201.title": "Ringeling",
+  "quest.475548D5DC318FBB.title": "Tien blote tenen",
+  "quest.475548D5DC318FBB.quest_desc": [
+    "Vrolijk &dHertogin Ringeling&r op, boven in De Sterrendovende Toren (raid).",
+  ],
+  "task.4755481866243E59.title": "In de Schatkamer",
+  "quest.4755488A55023BD4.title": "In de Schatkamer",
+  "quest.4755488A55023BD4.quest_desc": [
+    "Een verborgen schat van het Zijdeland. Hij glinstert goudgeel als je dichtbij bent.",
+  ],
+  "task.475548F3D1BC8E6B.title": "Boven in de minaret",
+  "quest.475548CE75ADFF2A.title": "Boven in de minaret",
+  "quest.475548CE75ADFF2A.quest_desc": [
+    "Een verborgen schat van het Zijdeland. Hij glinstert goudgeel als je dichtbij bent.",
+  ],
+  "task.47554810E07C509A.title": "Op de Tafelmesa",
+  "quest.4755486E5A5B2F13.title": "Op de Tafelmesa",
+  "quest.4755486E5A5B2F13.quest_desc": [
+    "Een verborgen schat van het Zijdeland. Hij glinstert goudgeel als je dichtbij bent.",
+  ],
+  "task.475548C19E843C97.title": "De hoogste titel van de Knuffelridder",
+  "quest.475548BC14B2C2CB.title": "De hoogste titel van de Knuffelridder",
+  "quest.475548BC14B2C2CB.quest_desc": [
+    "&dHoogvads&r is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als Knuffelridder en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.4755483EFE490C41.title": "De hoogste titel van de Pluisjager",
+  "quest.4755482C54075993.title": "De hoogste titel van de Pluisjager",
+  "quest.4755482C54075993.quest_desc": [
+    "&dHoogvads&r is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als Pluisjager en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
+  ],
+  "task.475548671EB6F523.title": "De hoogste titel van de Vadsmagiër",
+  "quest.4755487BF0868219.title": "De hoogste titel van de Vadsmagiër",
+  "quest.4755487BF0868219.quest_desc": [
+    "&dHoogvads&r is gered, Ridder. De Wolkwacht wil je de hoogste titel van De Knuffelorde geven. Bereik klasse-level 58 als Vadsmagiër en kom terug bij Kapitein Veerkracht op het oefenplein van de Academie. &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)",
   ],
 }

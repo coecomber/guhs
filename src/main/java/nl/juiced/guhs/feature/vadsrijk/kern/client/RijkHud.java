@@ -568,6 +568,13 @@ public final class RijkHud {
             g.fill(0, 0, w, bar, 0xFF000000);
             g.fill(0, hh - bar, w, hh, 0xFF000000);
         }
+        float zw = SceneSpeler.zwart(pt);   // W-SPEL: black while the world of a cutscene shot loads (and a short fade after)
+        if (zw > 0) {
+            g.fill(0, 0, w, hh, (int) (zw * 255) << 24);
+            if (SceneSpeler.ladenTekst()) {
+                g.centeredText(Minecraft.getInstance().font, Component.translatable("vadsrijk.kern.scene.laden"), w / 2, hh / 2 - 4, 0xFFE8D6DF);
+            }
+        }
         Component t = titel;
         if (t == null || titelStart < 0) {
             return;

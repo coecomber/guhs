@@ -35,8 +35,13 @@ public final class Lijnen {
 
     /** One airship harbour: POI id, fallback position (stand spot on the pier), open-air direction (yaw) and its zone token. */
     public record Haven(String id, BlockPos reserve, float richting, String zone) {
-        /** How far out the middle of the docked ship lies (blocks, from the POI). */
-        public static final double UIT = 9;
+        /**
+         * How far out the middle of the docked ship lies (blocks, from the POI's centre). W-SCHEPEN: the POI is the last stand
+         * cell at the pier's open tip; at 10 the spinning propellers (9.5 behind the middle, model vr_luchtschip at scale 4) end
+         * exactly on that cell's outer edge and the stern of the hull (9.0) lies half a block beyond it: flush against the pier,
+         * nothing clips, and the stern click box (DELEN, 9.75 behind the middle) starts on the tip itself.
+         */
+        public static final double UIT = 10;
 
         /** The stand spot on the pier: the generated POI when it exists, else the placeholder. */
         public BlockPos plek() {
@@ -92,8 +97,9 @@ public final class Lijnen {
 
     // ------------------------------------------------------------------------------------------------------------ harbours
 
-    public static final Haven KAMPSTEIGER = new Haven("haven_kamp_z1_vertrek", new BlockPos(-235, 87, 1008), 270f, "kamp");
-    public static final Haven HAVEN_ZWAMZOET = new Haven("haven_z1_kamp_vertrek", new BlockPos(92, 65, 500), 0f, "z1");
+    // W-SCHEPEN: line 0's own pier tips (zone-1 map: bouwsels.lijn0_kampsteiger / the bay pier of De Haven, its west tip)
+    public static final Haven KAMPSTEIGER = new Haven("haven_kamp_z1_vertrek", new BlockPos(-229, 87, 1008), 270f, "kamp");
+    public static final Haven HAVEN_ZWAMZOET = new Haven("haven_z1_kamp_vertrek", new BlockPos(30, 65, 470), 90f, "z1");
     public static final Haven NOORDKLIFHAVEN = new Haven("haven_z1_z2_vertrek", new BlockPos(150, 121, -600), 180f, "z1");
     public static final Haven KANDIJKOM_DOK = new Haven("haven_z2_z1_vertrek", new BlockPos(704, 91, -900), 0f, "z2");
     public static final Haven GALMDOK = new Haven("haven_z2_z3_vertrek", new BlockPos(955, 111, -835), 270f, "z2");
@@ -145,10 +151,13 @@ public final class Lijnen {
             id -> veilig(nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken.ALLE, id),
             id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.ALLE, id),
             id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.ALLE, id),
-            // T-INT: zone 4 publishes haven_3_4_* / haven_4_5_* (stand spot + ship anchor): the pier spot is the anchor minus UIT
-            Lijnen::zone4Haven,
             id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.ALLE, id),
-            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.ALLE, id)));
+            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.ALLE, id),
+            // W-SCHEPEN: zone 6's POI (the Rozenkloof Luchthaven) is looked up here too, so every harbour uses its pier tip
+            id -> veilig(nl.juiced.guhs.feature.vadsrijk.zone6.wereld.Z6WereldPlekken.ALLE, id),
+            // T-INT fallback: zone 4 publishes haven_3_4_* / haven_4_5_* (stand spot + ship anchor): the pier spot is the anchor
+            // minus UIT. W-SCHEPEN: only when the map has no haven_z4_*_vertrek tip POI of its own (it has since round W)
+            Lijnen::zone4Haven));
 
     /** T-INT: the zone-4 harbours from t-z4wereld's anchors, so the docked ship floats exactly at haven_*_luchtschip. */
     @Nullable

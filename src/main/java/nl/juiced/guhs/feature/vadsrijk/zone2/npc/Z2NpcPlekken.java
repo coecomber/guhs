@@ -255,6 +255,14 @@ public final class Z2NpcPlekken {
         return POI.get(id);
     }
 
+    /**
+     * W-BEREIK: the horizontal radius of a POI. The Galmwolf needle's POI sits INSIDE the crystal spire and the shard field round
+     * its foot is broken: the nearest walkable cell is ~7 away, so the default 6 could never be met on foot (z2_hq04_naalden).
+     */
+    public static double straalVan(String poi) {
+        return poi.equals("z2_galmnaald") ? 9 : POI_STRAAL;
+    }
+
     public static double hoogteVan(String poi) {
         return poi.startsWith("z2_naald") || poi.equals("z2_galmnaald") || poi.equals("z2_uitkijk_poollicht") || poi.equals("z2_drakenravijn")
                 ? NAALD_HOOGTE : POI_HOOGTE;

@@ -40,13 +40,13 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `haven_3_4_bel` | 1799, 71, -472 |
 | `haven_3_4_kapitein` | 1798, 71, -467 |
 | `haven_3_4_landing` | 1796, 71, -468 |
-| `haven_3_4_luchtschip` | 1770, 70, -470 |
+| `haven_3_4_luchtschip` | 1781, 70, -470 |
 | `haven_3_4_trap_onder` | 1802, 67, -477 |
 | `haven_3_4_vertrekbord` | 1799, 71, -469 |
 | `haven_4_5_bel` | 2510, 73, -570 |
 | `haven_4_5_kapitein` | 2512, 73, -564 |
 | `haven_4_5_landing` | 2517, 73, -562 |
-| `haven_4_5_luchtschip` | 2539, 72, -565 |
+| `haven_4_5_luchtschip` | 2534, 72, -565 |
 | `haven_4_5_mast` | 2515, 103, -565 |
 | `haven_4_5_vertrekbord` | 2510, 73, -570 |
 | `opstijgpier` | 2511, 73, -565 |
@@ -494,3 +494,10 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `geheim_schat_2` | 2240, 64, -640 |
 | `geheim_schat_3` | 2183, 46, -579 |
 | `geheim_schat_4` | 2425, 63, -400 |
+
+## Other
+
+| id | x, y, z |
+|---|---|
+| `haven_z4_z3_vertrek` | 1791, 71, -470 |
+| `haven_z4_z5_vertrek` | 2524, 73, -565 |

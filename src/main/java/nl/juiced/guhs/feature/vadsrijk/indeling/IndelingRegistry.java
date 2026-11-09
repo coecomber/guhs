@@ -50,12 +50,13 @@ public final class IndelingRegistry {
     /** The shared harbour ids and their planned spots (the generated POIs win when the map has them). */
     public static final Map<String, Vec3> HAVENS = new LinkedHashMap<>();
     static {
-        HAVENS.put("haven_z1_z2_vertrek", new Vec3(150, 127, -653));
-        HAVENS.put("haven_z2_z1_vertrek", new Vec3(704, 91, -900));
-        HAVENS.put("haven_z2_z3_vertrek", new Vec3(980, 117, -856));
-        HAVENS.put("haven_z3_z2_vertrek", new Vec3(1201, 167, -601));
-        HAVENS.put("haven_z3_z4_vertrek", new Vec3(1607, 165, -488));
-        HAVENS.put("haven_z4_z3_vertrek", new Vec3(1800, 71, -470));
+        // W-SCHEPEN: the pier tips (the generated POIs win anyway)
+        HAVENS.put("haven_z1_z2_vertrek", new Vec3(150, 127, -657));
+        HAVENS.put("haven_z2_z1_vertrek", new Vec3(704, 91, -880));
+        HAVENS.put("haven_z2_z3_vertrek", new Vec3(984, 117, -856));
+        HAVENS.put("haven_z3_z2_vertrek", new Vec3(1186, 167, -602));
+        HAVENS.put("haven_z3_z4_vertrek", new Vec3(1622, 167, -485));
+        HAVENS.put("haven_z4_z3_vertrek", new Vec3(1791, 71, -470));
     }
 
     public static void register(IEventBus modBus) {

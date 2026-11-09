@@ -143,6 +143,22 @@ def steiger(naam):
     return (tip[0] - ux * 4, tip[2] - uz * 4), (ux, uz)
 
 
+def steiger_tip(naam):
+    """W-SCHEPEN: ((x, z) of the open tip cell of the round pier platform (r 7.5 round the mast) on the cardinal side that faces
+    out, (ax, az) that cardinal). The airship docks flush beyond it (Lijnen.Haven: richting 90 = west, 270 = east). A cell is
+    on the deck when its centre lies within 7.5 of the mast (schemerkit.cilinder)."""
+    (mx, mz), (ux, uz) = steiger(naam)
+    if abs(ux) >= abs(uz):
+        rij = math.floor(mz)
+        bereik = math.sqrt(7.5 ** 2 - (rij + 0.5 - mz) ** 2)
+        tx = math.floor(mx - 0.5 + bereik) if ux > 0 else math.ceil(mx - 0.5 - bereik)
+        return (tx, rij), (1 if ux > 0 else -1, 0)
+    kol = math.floor(mx)
+    bereik = math.sqrt(7.5 ** 2 - (kol + 0.5 - mx) ** 2)
+    tz = math.floor(mz - 0.5 + bereik) if uz > 0 else math.ceil(mz - 0.5 - bereik)
+    return (kol, tz), (0, 1 if uz > 0 else -1)
+
+
 def windkolommen():
     """(id, x, z, y0 = stand at the foot, y1 = stand on the landing, radius, landing x, landing z), rel coords."""
     out = []
@@ -167,18 +183,22 @@ def plekken():
     #   Weststeiger = the dock (dok_*, line B from zone 2's Galmdok), Oosttaksteiger (line C to Lampionhaven, zone 4)
     for naam, pre in (("Weststeiger", "dok"), ("Oosttaksteiger", "oosttaksteiger")):
         (mx, mz), (ux, uz) = steiger(naam)
-        put(f"{pre}_mast", mx, HY + 1, mz)
+        (tx, tz), (ax, az) = steiger_tip(naam)
+        # W-SCHEPEN: the mast POI is a stand spot at the foot of the mast (land side; it was inside the mast log: NPCs and the
+        # quest texts send you "to the mast")
+        put(f"{pre}_mast", math.floor(mx) - ax * 2, HY + 1, math.floor(mz) - az * 2)
         put(f"{pre}_landing", mx - ux * 8, HY + 1, mz - uz * 8)
         put(f"{pre}_bel", mx - ux * 4 - uz * 2, HY + 1, mz - uz * 4 + ux * 2)
         put(f"{pre}_kapitein", mx - ux * 6 + uz * 2, HY + 1, mz - uz * 6 - ux * 2)
-        put(f"{pre}_luchtschip", mx + ux * 24, HY - 1, mz + uz * 24)
+        put(f"{pre}_instap", tx, HY + 1, tz)   # W-SCHEPEN: the open tip where the airship lies flush
+        put(f"{pre}_luchtschip", tx + ax * 10, HY - 1, tz + az * 10)
         # U-OVERGANG: the viewpoints at the two piers are gone (feedback ronde 4: "ze liggen allemaal bij de ballonpunten");
         # zone 3's viewpoints are the Kruinnest (top of the tree), the Kroon, the Takpunt and the Wortelgewelf
     put("uitkijk_nest", 0, NEST_STAND, 17)
     # T-WERELD: the shared harbour ids of the world layout (t-luchtschip): line B (Galmdok <-> Weststeiger), line C
     # (Oosttaksteiger <-> Lampionhaven); the bell stands where the departure board goes
     for pre, hid in (("dok", "haven_z3_z2"), ("oosttaksteiger", "haven_z3_z4")):
-        PP[hid + "_vertrek"] = list(PP[pre + "_landing"])
+        PP[hid + "_vertrek"] = list(PP[pre + "_instap"])   # W-SCHEPEN: the tip (was the landing, 8 inland: the ship lay on the mast)
         PP[hid + "_bord"] = list(PP[pre + "_bel"])
         PP[hid + "_mast"] = list(PP[pre + "_mast"])
     # ---------------------------------------------------------------- Honingtak: the Honingplein + the ring
@@ -366,6 +386,8 @@ def plekken():
         ex_, ez_ = x + (R + 3) * math.cos(a + 1.6), z + (R + 3) * math.sin(a + 1.6)
         put(f"honingvijver_{i + 1}", ex_, kstand(0, ex_, ez_), ez_)
         kx_, kz_ = x + (R + 3) * math.cos(a - 1.6), z + (R + 3) * math.sin(a - 1.6)
+        if i == 2:   # W-INT: that side of pond 3 is the crown's steep leaf edge (snapped to y 213, unreachable): the walkable rim
+            kx_, kz_ = x + (R + 3) * math.cos(a + 1.25), z + (R + 3) * math.sin(a + 1.25)   # next to honingvijver_3
         put(f"kuiken_{i + 1}", kx_, kstand(0, kx_, kz_), kz_)
     for i, deg in enumerate((75, 235)):
         x, z = pol(math.radians(deg), 116)

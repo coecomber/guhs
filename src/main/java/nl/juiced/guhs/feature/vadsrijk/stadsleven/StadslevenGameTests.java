@@ -40,8 +40,13 @@ import nl.juiced.guhs.gametest.GuhTest;
 public class StadslevenGameTests {
     private static final Steden.Stad TEST = new Steden.Stad("test", 1, Set.of(), false);
 
+    /** W-LEVEN: the test town for WLevenGameTests. */
+    static Steden.Stad testStad() {
+        return TEST;
+    }
+
     /** The test town: a 28 x 28 lawn round the helper origin, with everything the scenes look for. */
-    private static BlockPos bouwStad(GameTestHelper helper) {
+    static BlockPos bouwStad(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = helper.absolutePos(new BlockPos(0, 0, 0)).offset(-12, 0, -12);
         for (int x = 0; x < 28; x++) {
@@ -79,7 +84,7 @@ public class StadslevenGameTests {
         return o;
     }
 
-    private static void begin(GameTestHelper helper, BlockPos o) {
+    static void begin(GameTestHelper helper, BlockPos o) {
         StadsLeven.allesWeg();
         StadsLeven.testModus = true;
         StadsLeven.testNacht = false;
@@ -94,7 +99,7 @@ public class StadslevenGameTests {
     }
 
     /** Runs the body once every chunk of the test town is really entity-ticking (checked every 5 ticks, at most 200 ticks). */
-    private static void wacht(GameTestHelper helper, BlockPos o, int keer, Runnable body) {
+    static void wacht(GameTestHelper helper, BlockPos o, int keer, Runnable body) {
         boolean klaar = true;
         for (int x = -1; x <= 29 && klaar; x += 15) {
             for (int z = -1; z <= 29 && klaar; z += 15) {
@@ -109,7 +114,7 @@ public class StadslevenGameTests {
     }
 
     /** The whole test town entity-ticking (or not any more). */
-    private static void forceer(GameTestHelper helper, BlockPos o, boolean aan) {
+    static void forceer(GameTestHelper helper, BlockPos o, boolean aan) {
         for (int cx = (o.getX() >> 4) - 1; cx <= (o.getX() + 28 >> 4) + 1; cx++) {
             for (int cz = (o.getZ() >> 4) - 1; cz <= (o.getZ() + 28 >> 4) + 1; cz++) {
                 helper.getLevel().setChunkForced(cx, cz, aan);
@@ -117,7 +122,7 @@ public class StadslevenGameTests {
         }
     }
 
-    private static void einde(GameTestHelper helper, BlockPos o) {
+    static void einde(GameTestHelper helper, BlockPos o) {
         forceer(helper, o, false);
         Speeltuin.vergeet("test");
         StadsLeven.allesWeg();
@@ -133,7 +138,7 @@ public class StadslevenGameTests {
         return List.of(new StadsLeven.Kijker(Vec3.atBottomCenterOf(o.offset(14, 1, 14)), TEST, n));
     }
 
-    private static int tel(ServerLevel sl, AABB doos) {
+    static int tel(ServerLevel sl, AABB doos) {
         return sl.getEntitiesOfClass(Entity.class, doos, StadsLeven::isLeven).size();
     }
 

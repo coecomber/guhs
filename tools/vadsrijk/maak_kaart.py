@@ -73,10 +73,16 @@ def main():
     os.environ.pop("GUHS_VERBIND_LATER", None)
     import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
     verbind.na_sinds(_t_verbind)
+    import vrijpad                              # W-BEREIK: lanterns/chains/floating rails out of the walking lines (all zones)
+    vrijpad.na_sinds(_t_verbind)
+    verbind.na_sinds(_t_verbind)                # W-INT: vrijpad took pieces out of lines: connect the states again (stable:
+                                                # vrijpad keeps the railing corners the pass fills)
     if a.audit and not a.alleen and a.zone in ("1", "alle"):   # (was at the end of zone 1, before the pass)
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
     if a.audit and not a.alleen:                # U-HEKKEN: the connection check (AUDIT_VERBIND.md), must be ~0
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "verbindcheck.py")], cwd=ROOT, check=True)
+    if a.audit and not a.alleen:                # W-BEREIK: the global survival reachability check (BEREIK_RAPPORT.md)
+        subprocess.run([sys.executable, os.path.join(HIER, "bereikcheck.py")], cwd=ROOT, check=True)
     if not a.geen_pak:                          # U-GROOTTE: the compact map pack the jar ships (data/guhs/vadsrijk/kaart.gpak)
         subprocess.run([sys.executable, os.path.join(HIER, "kaartpak.py")], cwd=ROOT, check=True)
 
@@ -112,6 +118,7 @@ def _main(a):
         import bouwsels
         plekken.update(bouwsels.bouw_alles(W, K, kamp_d))
         bouwsels.kamp_arena(plekken["wereld"], kamp_poi)
+        bouwsels.lijn0_kampsteiger(W, plekken["wereld"], kamp_poi)   # W-SCHEPEN: line 0's camp tip
         for d in deuren(plekken).values():
             bouwsels.deurkopie(W, d)
         java_plekken(plekken)

@@ -136,7 +136,9 @@ def verzamel(W, info, snap_=True):
     x1, y1, z1 = W.b[:3]
     bew = []
     for (x, y, z, yaw, skin, zit) in getattr(W, "guhs", []):
-        bew.append((x / W.k + x1, y / W.k + y1, z / W.k + z1, float(yaw) % 360, skin or "guh", 1 if zit else 0))
+        # W-LEVEN: the kit draws yaw a facing (-sin a, -cos a) (0 = north, 90 = WEST); Minecraft yaw Y faces (-sin Y, cos Y),
+        # so Y = 180 - a (the raw a only matched east/west figures: everybody facing north/south stood the wrong way round)
+        bew.append((x / W.k + x1, y / W.k + y1, z / W.k + z1, (180 - float(yaw)) % 360, skin or "guh", 1 if zit else 0))
     info["bewoners"] = bew
     info["rijdieren"] = list(getattr(W, "rijdieren", []))
     with open(os.path.join(CACHE, "plekken_z6.json"), "w", encoding="utf-8") as fh:
@@ -161,7 +163,7 @@ def schrijf(alle, info, W):
     soorten = ["bultguh", "tapijt", "pluimguh"]
     rij = info.get("rijdieren", [])
     rpak = _pak(rij, lambda e: f"{soorten.index(e[0])},{int(round(e[1] * 2))},{int(round(e[2] * 2))},{int(round(e[3] * 2))},"
-                               f"{int((e[4] + 180) % 360) // 2},{e[5]},{1 if e[6] else 0},{skins.index(e[7])}")
+                               f"{int((180 - e[4]) % 360) // 2},{e[5]},{1 if e[6] else 0},{skins.index(e[7])}")   # W-LEVEN: kit -> MC yaw as above
     kampvuren = sorted(k for k in alle if k.startswith("kampvuur_") and k not in PL.ALIAS)
     uitkijk = [alle[k] for k in PL.UITKIJKEN if k in alle]
     regels = [f'            Map.entry("{k}", {_bp(alle[k])})' for k in sorted(alle)]

@@ -140,7 +140,7 @@ def zet_bultguh(W, x, y, z, yaw=0, variant="zandroze", deken=0, ruiter=True, lop
         # zitpunt: iets achter het midden van de bult
         zx = x + math.sin(a) * 0.08
         zz = z + math.cos(a) * 0.08
-        W.wguh(zx, y + ZIT_Y + 0.05, zz, (180 - yaw) % 360, skin=skin, sitting=True)
+        W.wguh(zx, y + ZIT_Y + 0.05, zz, yaw % 360, skin=skin, sitting=True)   # W-LEVEN: the rider faces where its mount faces
 
 
 # ============================================================================================ vliegend tapijt
@@ -219,7 +219,7 @@ def zet_tapijt(W, x, y, z, yaw=0, patroon=0, fase=0.0, ruiter=True, skin="guh", 
         q += K.schaduw_quad(x, (grond if grond is not None else y) + 0.03, z, 1.1, 1.6, sterkte=0.35)
     W.extra += SK.quads_naar_voxel(W, q)
     if ruiter:
-        W.wguh(x, y + hoogte + 0.1, z, (180 - yaw) % 360, skin=skin, sitting=True)
+        W.wguh(x, y + hoogte + 0.1, z, yaw % 360, skin=skin, sitting=True)   # W-LEVEN: the rider faces where its carpet faces
 
 
 def zet_pluimguh(W, x, y, z, yaw=0, variant="roze", ruiter=False):

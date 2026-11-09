@@ -214,6 +214,7 @@ def zwamtempel(W, K, P):
     S.fill(308, TY, -421, 315, TY + 4, -411, CARVE)
     S.fill(307, TY + 6, -422, 316, TY + 6, -410, KSTEEN)
     S.fill(317, TY, -417, 317, TY + 2, -415, "minecraft:cracked_stone_bricks")
+    S.fill(316, TY, -416, 317, TY + 1, -416, CARVE)   # W-INT: a crumbled gap in the cracked wall (nothing opened it: sealed secret)
     S.set(309, TY, -416, "minecraft:chest[facing=east,type=single,waterlogged=false]")
     S.set(309, TY + 2, -413, LANT)
     P["geheim_tempelkamer"] = [311, TY, -416]
@@ -520,11 +521,13 @@ def haven(W, K, P):
             for z in (467, 473):
                 S.fill(x, 57, z, x, g, z, "minecraft:cherry_log[axis=y]")
                 S.set(x, g + 1, z, LANT if x % 10 == 0 else "minecraft:cherry_fence")
-    zwemtrap(S, 29, 470, (-1, 0), g, steun="minecraft:cherry_log[axis=y]")
+    # W-SCHEPEN: no swim ladder at the very tip any more (line 0's airship docks there; the ladders at x 37/42/52/62 stay)
     zwemtrap(S, 42, 467, (0, -1), g, steun="minecraft:cherry_log[axis=y]")
     for x in (37, 52, 62):
         zwemtrap(S, x, 473 if x != 52 else 467, (0, 1) if x != 52 else (0, -1), g, steun="minecraft:cherry_log[axis=y]")
     guhvlag(S, 30, g + 1, 473, "z", 7)             # (fix L) on the end post, not on the deck (was (31, 468): a pole on the pier)
+    # W-SCHEPEN: line 0 (Kampsteiger <-> De Haven) docks at the open west tip of this pier, flush over the bay (Lijnen.Haven.UIT)
+    P["haven_z1_kamp_vertrek"] = [30, g + 1, 470]
     for z in range(468, 473):                      # (fix L) the quay railing ran across the pier's start: keep it open
         if z in oevers:
             S.set(oevers[z], g + 1, z, CARVE)
@@ -1308,6 +1311,22 @@ def kamp_zuidsteiger(W, K, P, kamp_d):
     W.stempel(kamp_stempel(S, "kamp_zuidsteiger"))
 
 
+def lijn0_kampsteiger(W, P, kamp_poi):
+    """W-SCHEPEN: line 0's camp end. The north arm of the camp dock (kamp scene) ends 6 east of the bell in a railing: that
+    railing goes (the 4 rails south of the flag pole; the airship lies flush against the tip) and the tip is the harbour POI
+    haven_kamp_z1_vertrek. The pole's flag loses its top row (it reached into the docked ship's balloon)."""
+    bx, by, bz = kamp_poi["luchtschip_bel"]
+    tx, tz = bx + 6, bz
+    S = WS(tx - 1, by - 1, tz - 3, 3, 12, 7)
+    for z in range(tz - 1, tz + 3):
+        S.set(tx, by, z, CARVE)
+    for z in range(tz - 2, tz + 2):
+        S.set(tx, by + 9, z, CARVE)
+    S.set(tx + 1, by - 1, tz + 3, CARVE)   # (the top rung of the swim ladder beside the tip: in the docked ship's propeller)
+    W.stempel(S.stempel("w_kampsteiger_tip"))
+    P["haven_kamp_z1_vertrek"] = [tx, by, tz]
+
+
 def kamp_arena(P, kamp_poi):
     vx, vy, vz = kamp_poi["vijver"]
     # h-melee: radius 26 (was 20 here / 18 in NpcPlekken) with a wide flat dry ring around the pond (kamp.vijver); door outside it
@@ -1876,6 +1895,17 @@ def hoogste(W, K, x, z, kamp_d=None, tot=250):
     return max(K.h(x, z), 0)
 
 
+def grond_onder_hoed(W, K, x, z):
+    """W-INT: the first free stand cell above the real ground in this column (under any mushroom cap / tree crown)."""
+    g = max(K.h(x, z), 0)
+    if W.blok_op(x, g + 1, z) <= 1 and W.blok_op(x, g + 2, z) <= 1:   # the terrain itself (no stamp on it)
+        return g + 1
+    for y in range(g - 3, g + 12):
+        if W.blok_op(x, y, z) > 1 and W.blok_op(x, y + 1, z) <= 1 and W.blok_op(x, y + 2, z) <= 1:
+            return y + 1
+    return g + 1
+
+
 def npc_wensen(W, K, P, kamp_d):
     """POI_VERZOEKEN (npc): the 10 lost knuffels, the quest decorations, Mopje's cave spot."""
     knuffels = ["knuffel_normal", "knuffel_mint", "knuffel_starry", "knuffel_pinguh", "knuffel_wolk", "knuffel_choco",
@@ -1883,6 +1913,8 @@ def npc_wensen(W, K, P, kamp_d):
     spots = [(-68 + KDX, 952 + KDZ), (30 + KDX, 1040 + KDZ), (-36, 33), (70, -70), (116, 466), (300, 250), (470, 185), (-400, -100), (-300, -226), (326, -374)]
     for i, ((x, z), k) in enumerate(zip(spots, knuffels)):
         y = hoogste(W, K, x, z) + 1
+        if i == 7:   # W-INT: knuffel 8 ("Mosje") landed on a giant mushroom cap 36 up (no way to climb): on the forest floor under the cap
+            y = grond_onder_hoed(W, K, x, z)
         W.punten.set(x, y, z, "guhs:" + k)
         P[f"knuffel_{i + 1}"] = [x, y, z]
     # Dobber's lost hat near the lighthouse: a straw hat on the grass

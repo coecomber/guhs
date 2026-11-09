@@ -68,7 +68,13 @@ public final class Z6VerhaalPlekken {
 
     // ---- key places ------------------------------------------------------------------------------------------------------------
     /** Line E's harbour on Hoogvads: the Staarthaven at the end of the whale's tail (east; t-z5wereld's POI haven_z5_z6_vertrek wins). */
-    public static final BlockPos STAARTHAVEN = w("staarthaven", 2910, 205, -520);
+    public static final BlockPos STAARTHAVEN = staarthaven();
+
+    /** W-SCHEPEN: zone 5 builds the Staarthaven now (the open east end of the tail path, POI haven_z5_z6_vertrek): use it. */
+    private static BlockPos staarthaven() {
+        BlockPos b = nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.ALLE.get("haven_z5_z6_vertrek");
+        return b != null ? b : w("staarthaven", 2966, 210, -520);
+    }
     /** Line E's harbour in Rozenkloof: the Luchthaven on the north rim of the gorge (POI haven_z6_z5_vertrek). */
     public static final BlockPos LUCHTHAVEN = w("haven_z6_z5_vertrek", 3398, 120, -768);
     /** Where the first flight (and every short flight) sets you down: on the deck of the Luchthaven. */
@@ -333,12 +339,12 @@ public final class Z6VerhaalPlekken {
         int[][] kn = {{3436, 101, -684}, {3612, 98, -660}, {3480, 66, -986}, {3770, 96, -872}, {3950, 69, -540}, {3826, 104, -910},
                 {3754, 72, -894}, {4090, 67, -800}};
         for (int i = 0; i < kn.length; i++) {
-            KNUFFEL.put("knuffel_" + (i + 1), w("geheim_z6_knuffel_" + (i + 1), kn[i][0], kn[i][1], kn[i][2]));
+            KNUFFEL.put("knuffel_" + (i + 1), w("geheim_knuffel_" + (i + 1), kn[i][0], kn[i][1], kn[i][2]));
         }
         int[][] sc = {{3476, 73, -708}, {3740, 120, -892}, {4012, 122, -928}};
         String[] scId = {"schatkamer", "minaret", "mesa"};
         for (int i = 0; i < sc.length; i++) {
-            SCHAT.put(scId[i], w("geheim_z6_schat_" + (i + 1), sc[i][0], sc[i][1], sc[i][2]));
+            SCHAT.put(scId[i], w("geheim_schat_" + (i + 1), sc[i][0], sc[i][1], sc[i][2]));
         }
         vondst("z6_taart", "z6_s01_verjaardag", "z6_taart_", new int[][] {{3394, 69, -716}, {3410, 69, -704}, {3388, 69, -724}});
         vondst("z6_post", "z6_s03_post", "rozenkloof_post_", new int[][] {{3350, 85, -752}, {3378, 85, -754}, {3412, 85, -676}, {3366, 101, -678},
@@ -385,8 +391,11 @@ public final class Z6VerhaalPlekken {
                 Vec3.atCenterOf(TORENVOET).add(-20, 30, 20), Vec3.atCenterOf(TOREN_TOP)});
         CAMERA.put("ringeling", new Vec3[] {Vec3.atCenterOf(TOREN_TOP).add(8, 3, 8), Vec3.atCenterOf(TOREN_TOP), Vec3.atCenterOf(TOREN_TOP).add(-5, 2, 6),
                 Vec3.atCenterOf(TOREN_TOP)});
-        // F4: far east, the Keizer's throne room is not built: a slow drift from the tower to the grey horizon, then the Oog turning west
-        CAMERA.put("f4", new Vec3[] {Vec3.atCenterOf(TOREN_TOP).add(0, 20, 0), new Vec3(4900, 200, -700), new Vec3(4300, 300, -700), new Vec3(2700, 330, -520)});
+        // F4: far east, the Keizer's throne room is not built. W-INT: the first half looked at (4900, 200, -700), empty sky east of
+        // the map; it now starts on the grey Sterrendovende Toren itself (built zone-6 terrain, the Vinger's tower) seen from the
+        // east, and the look then sweeps west over the Zijdeland towards Hoogvads (the Oog turning west), as before.
+        CAMERA.put("f4", new Vec3[] {Vec3.atCenterOf(TOREN_TOP).add(36, 18, 22), Vec3.atCenterOf(TOREN_TOP).add(0, -40, 0), new Vec3(4300, 300, -700),
+                new Vec3(2700, 330, -520)});
     }
 
     /** The vision camera at a beacon (or anywhere): a slow lift above the spot towards the east. */

@@ -16,11 +16,25 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
  * whether its streets are snowy (soup instead of ice cream).
  */
 public final class Steden {
-    public record Stad(String id, int zone, Set<String> gebieden, boolean koud) {
+    /**
+     * W-LEVEN: {@code muizen} = the pieppiepmuisje multiplier of this town (regular and pink alike): the share of the critter cap
+     * that may be mice, times this. {@link #MUIZEN_STANDAARD} everywhere (the user: "ongeveer 30% van wat ik nu zie"), 1.0 in the
+     * Kandijkom ("daar vind ik het een goed aantal"). It also thins the mice among the walkers' pets.
+     */
+    public record Stad(String id, int zone, Set<String> gebieden, boolean koud, double muizen) {
+        public Stad(String id, int zone, Set<String> gebieden, boolean koud) {
+            this(id, zone, gebieden, koud, MUIZEN_STANDAARD);
+        }
+
         public String naamKey() {
             return "vadsrijk.stadsleven.stad." + id;
         }
     }
+
+    /** W-LEVEN: the pieppiepmuisje multiplier of every town without its own (see {@link Stad#muizen}). */
+    public static final double MUIZEN_STANDAARD = 0.3;
+    /** W-LEVEN: towns with their own pieppiepmuisje multiplier (id -> multiplier). */
+    static final Map<String, Double> MUIZEN = Map.of("kandijkom", 1.0);
 
     public static final Map<String, Stad> ALLE = new LinkedHashMap<>();
 
@@ -44,7 +58,7 @@ public final class Steden {
     }
 
     private static void voeg(String id, int zone, boolean koud, String... gebieden) {
-        ALLE.put(id, new Stad(id, zone, Set.of(gebieden), koud));
+        ALLE.put(id, new Stad(id, zone, Set.of(gebieden), koud, MUIZEN.getOrDefault(id, MUIZEN_STANDAARD)));
     }
 
     private Steden() {

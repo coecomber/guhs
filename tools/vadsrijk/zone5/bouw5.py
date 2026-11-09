@@ -122,6 +122,14 @@ def trap_af(W, S, x, z, y_vloer, uit, breed=1, max_k=12, blok="wit_trap", vul="s
             return
         if g == cur:
             return
+        if k == 1 and g > cur:
+            # W-BEREIK: going UP from a door, the first cell is a flat landing at door level (cut through the ground). A stair
+            # right at the door put the feet 0.5 above the door's floor, so a 1.8-high player bumped the door's lintel
+            # (Gildemeester Duimdop's hall door: "too tall to get through").
+            for s_ in range(-(breed // 2), breed - breed // 2):
+                px, pz = cx + zx * s_, cz + zz * s_
+                leeg(W, px, cur + 1, pz, px, cur + 3, pz)
+            continue
         for s_ in range(-(breed // 2), breed - breed // 2):
             px, pz = cx + zx * s_, cz + zz * s_
             if g < cur:           # down: a stair at cur (its top = the floor height), supported
@@ -803,13 +811,12 @@ def pieren(W, S, info):
         doos(W, px - 2, y0, z, px + 2, y0, z, "minecraft:stripped_cherry_wood[axis=y]" if z % 4 else P["goud"])
         zet(W, px - 3, y0 + 1, z, "minecraft:pale_oak_fence")
         zet(W, px + 3, y0 + 1, z, "minecraft:pale_oak_fence")
-    # mooring masts at the end, a gate across the end
+    # mooring masts at the end; W-SCHEPEN: no gate across the end any more (the line-D airship lies flush against this open tip)
+    # and the masts stop under the docked ship's balloon (it hangs half a block over the tip from deck + 9)
     for s in (-3, 3):
-        doos(W, px + s, y0 + 1, -168, px + s, y0 + 10, -168, P["wit_glad"])
-        zet(W, px + s, y0 + 11, -168, P["goud"])
-        zet(W, px + s, y0 + 12, -168, "minecraft:lantern[hanging=false,waterlogged=false]")
-    for x in range(px - 2, px + 3):
-        zet(W, x, y0 + 1, -168, "minecraft:pale_oak_fence_gate[facing=north,in_wall=false,open=false,powered=false]")
+        doos(W, px + s, y0 + 1, -168, px + s, y0 + 7, -168, P["wit_glad"])
+        zet(W, px + s, y0 + 8, -168, P["goud"])
+        zet(W, px + s, y0 + 9, -168, "minecraft:lantern[hanging=false,waterlogged=false]")
     zet(W, px - 1, y0 + 1, -161, "minecraft:bell[attachment=floor,facing=east,powered=false]")
     info["plekken"]["haven_5_4_bel"] = (px - 1, y0 + 1, -161)
 
@@ -873,6 +880,16 @@ def wolkwaldroom(W, S, info):
                     zet(W, x, cy + 1, z, "minecraft:sea_lantern")
     info["plekken"]["wolkwaldroom_arena"] = (cx, cy + 1, cz)
     info["plekken"]["z5w_wolkwaldroom_deur"] = (cx + r - 2, cy + 1, cz)
+    # W-BEREIK: the way out (Z5WezensPlekken.LUIKEN "wolkwaldroom_uit": right-click the ladder = up to the middle blowhole). A short
+    # ladder against the chamber wall next to the door with an open hatch on top, so it reads as "the way up".
+    lx = cx + r
+    for dz in (-1, 0, 1):
+        doos(W, lx + 1, cy + 1, cz + dz, lx + 1, cy + 5, cz + dz, "guhs:walvisbuik")
+    leeg(W, lx, cy + 1, cz, lx, cy + 4, cz)
+    for y in range(cy + 1, cy + 4):
+        zet(W, lx, y, cz, "minecraft:ladder[facing=west,waterlogged=false]")
+    zet(W, lx, cy + 4, cz, "minecraft:spruce_trapdoor[facing=west,half=top,open=true,powered=false,waterlogged=false]")
+    info["plekken"]["z5w_wolkwaldroom_uitluik"] = (lx, cy + 1, cz)
 
 
 def wolkplatformen(W, S, info):
@@ -994,6 +1011,24 @@ def wezens_toegang(W, S, info):
         pad(W, [(-262, 0), (-266, zl)])
     info["plekken"]["z5w_lift_staart_boven"] = (-194, None, 2)
     info["plekken"]["z5w_lift_staart_onder"] = (-250, None, 0)
+    staarthaven(W, info)
+
+
+def staarthaven(W, info):
+    """W-SCHEPEN: the Staarthaven (line E to Rozenkloof): the tail path runs out east between the two fluke bridges and ended in
+    a railing; that railing goes (3 wide, deck under it) and the end is the harbour POI haven_z5_z6_vertrek. The airship lies
+    flush beyond it, over the open sky east of the tail (Lijnen.Haven.UIT)."""
+    x0 = -262                                   # the last cell of the tail path (world x 2964), on its axis z 0
+    t = next((y for y in range(320, 150, -1) if not is_lucht(W, x0, y, 0)), None)
+    if t is None:
+        return
+    for x in (x0 - 1, x0 - 2):
+        for z in (-1, 0, 1):
+            if "fence" in naam(W, x, t + 1, z):
+                leeg(W, x, t + 1, z, x, t + 1, z)
+            if is_lucht(W, x, t, z):
+                zet(W, x, t, z, W.wget(x0, t, z))
+    info["plekken"]["haven_z5_z6_vertrek"] = (x0 - 2, t + 1, 0)
 
 
 def _top(W, x, z, ymax=330):
@@ -1206,6 +1241,14 @@ def huid_detail(W, S):
 
 
 # =============================================================================================== townsfolk
+def spel_yaw(yaw):
+    """W-LEVEN: kit yaw -> Minecraft yaw. The kit draws a figure with yaw a facing (-sin a, -cos a) (0 = north, 90 = WEST:
+    mcextra.affine turns counter-clockwise seen from above), and the game is the kit turned 180 degrees (x -> GX0 - x and
+    z -> GZ0 - z), so the figure must face (sin a, cos a) in the game. Minecraft yaw Y faces (-sin Y, cos Y), so Y = -a.
+    The old (a + 180) was only right for east/west-facing figures: everything facing north/south stood the wrong way round."""
+    return (360 - float(yaw)) % 360
+
+
 def bewoners(W, info):
     """Every render guh (W.guhs) and kit NPC as a spawn: (gx, gy, gz, yaw, skin, kind) in GAME coordinates."""
     import plan5 as PL
@@ -1214,10 +1257,10 @@ def bewoners(W, info):
     for i, (x, y, z, yaw, skin, zit) in enumerate(W.guhs):
         gx, gy, gz = PL.GX0 - (x / W.k + x1), y / W.k + y1 + PL.DY, PL.GZ0 - (z / W.k + z1)
         soort = 2 if i in RIDDERS else (1 if zit else 0)
-        out.append((gx, gy, gz, (yaw + 180) % 360, skin, soort))
+        out.append((gx, gy, gz, spel_yaw(yaw), skin, soort))
     for (soort, x, y, z, yaw) in NPCS:
         skin = "npc_" + soort[len("guh_npc_"):] if soort.startswith("guh_npc_") else soort
-        out.append((PL.GX0 - x, y + PL.DY, PL.GZ0 - z, (yaw + 180) % 360, skin, 3))
+        out.append((PL.GX0 - x, y + PL.DY, PL.GZ0 - z, spel_yaw(yaw), skin, 3))
     # only skins that exist as an entity texture in the mod (else a plain guh)
     import os
     tex = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "src", "main", "resources", "assets", "guhs",
@@ -1227,6 +1270,90 @@ def bewoners(W, info):
 
 
 # =============================================================================================== all
+def hofdeuren_vrij(W):
+    """W-BEREIK: the university's courtyard doors (universiteit()) got a facade column (hoog3) or a shelf right in front of them
+    later in the build: 3 doors opened onto a column. Run after hoog3/binnen2: 1 cell free on both sides of every courtyard door."""
+    y0 = 234
+    xa, xb, za, zb, d = -76, 6, -80, -30, 12
+    ia, ib, ja, jb = xa + d + 1, xb - d - 1, za + d + 1, zb - d - 1
+    for (x, z, f) in ((-50, ja - 1, "south"), (-20, ja - 1, "south"), (-50, jb + 1, "north"), (-20, jb + 1, "north"),
+                      (ia - 1, -55, "east"), (ib + 1, -55, "east")):
+        dx, dz = RICHTING[f]
+        for k in (-1, 1):
+            leeg(W, x + dx * k, y0 + 1, z + dz * k, x + dx * k, y0 + 2, z + dz * k)
+
+
+def staarttrap(W, S, info):
+    """W-BEREIK: the palace hill (floor game y 232) ends in a 29-high cliff above the Staartpark (floor game y 203). Without a way
+    down, the park, the tail, the Staarthaven (airship line E to zone 6) and all their quests were unreachable on foot. A
+    switchback stair against the cliff (game x 2855..2861, z -541..-522), 3 wide, solid under the steps, balustrades:
+      top landing at the open edge (game 2854..2857, -524..-522, y 232) -> flight 1 north (gx 2855..2857) to a landing at y 217
+      (gz -541..-539) -> flight 2 back south (gx 2859..2861) onto the park lawn at gz -525."""
+    PARK = 223                         # park floor, local y (game 203)
+    muur = "wit_muur"
+
+    def steun(x, y, z):
+        """Fill under (x, y, z) down to the first non-air block (max 40)."""
+        for yy in range(y - 1, y - 41, -1):
+            if not is_lucht(W, x, yy, z):
+                break
+            zet(W, x, yy, z, "steen_bak")
+
+    yv = 252                           # palace terrace floor (local)
+    doos(W, -155, yv, 2, -152, yv, 4, "vloer")
+    leeg(W, -155, yv + 1, 2, -150, yv + 4, 4)        # (through the palace's 2-high east parapet at game x 2852..2853)
+    for x in (-151, -150):
+        for z in (2, 3, 4):
+            if is_lucht(W, x, yv, z):
+                zet(W, x, yv, z, "vloer")
+    for x in range(-155, -151):
+        for z in (2, 3, 4):
+            steun(x, yv, z)
+    zet(W, -156, yv + 1, 2, muur)
+    zet(W, -156, yv + 1, 3, muur)
+    zet(W, -156, yv + 1, 4, muur)
+    zet(W, -156, yv, 2, "steen_bak")
+    zet(W, -156, yv, 3, "steen_bak")
+    zet(W, -156, yv, 4, "steen_bak")
+    zet(W, -155, yv + 1, 1, muur)
+    zet(W, -154, yv + 1, 1, muur)
+    zet(W, -153, yv + 1, 1, muur)
+    # flight 1: 14 steps north (local z 5..18), y 251..238
+    for k in range(1, 15):
+        z, y = 4 + k, yv - k
+        for x in range(-155, -152):
+            zet(W, x, y, z, trap("wit_trap", "north"))
+            steun(x, y, z)
+        leeg(W, -155, y + 1, z, -153, y + 4, z)
+        for yy in range(PARK + 1, y + 1):          # the partition between the flights, a balustrade on top
+            zet(W, -156, yy, z, "steen_bak")
+        zet(W, -156, y + 1, z, muur)
+    # the middle landing: local x -159..-153, z 19..21, floor y 237 (game 217)
+    yl = yv - 15
+    doos(W, -159, yl, 19, -153, yl, 21, "vloer")
+    leeg(W, -159, yl + 1, 19, -153, yl + 4, 21)
+    for x in range(-159, -152):
+        for z in (19, 20, 21):
+            steun(x, yl, z)
+        zet(W, x, yl + 1, 22, muur)
+    for z in (19, 20, 21, 22):
+        zet(W, -160, yl + 1, z, muur)
+        steun(-160, yl + 1, z)
+    # flight 2: 13 steps back south (local z 18..6), y 236..224 onto the lawn
+    for k in range(1, 14):
+        z, y = 19 - k, yl - k
+        for x in range(-159, -156):
+            zet(W, x, y, z, trap("wit_trap", "south"))
+            steun(x, y, z)
+        leeg(W, -159, y + 1, z, -157, y + 4, z)
+        zet(W, -160, y + 1, z, muur)
+        steun(-160, y + 1, z)
+    leeg(W, -159, PARK + 1, 5, -157, PARK + 4, 5)      # the way out onto the lawn
+    leeg(W, -159, PARK + 1, 4, -157, PARK + 4, 4)
+    info["plekken"]["staarttrap_boven"] = (-154, yv + 1, 3)
+    info["plekken"]["staarttrap_onder"] = (-158, PARK + 1, 4)
+
+
 def bouw(W, S, log=print):
     import plan5 as PL
     info = dict(plekken={}, huizen=[], bewoners=[], uitkijken=[], vangnet=[])
@@ -1245,6 +1372,7 @@ def bouw(W, S, log=print):
     hoog3.bouw(W, S, info, log=log)
     import binnen2   # [U-Z5BINNEN] lighter interiors: round chandeliers, sconces, candelabra, marble floors, light pools
     binnen2.bouw(W, S, info, log=log)
+    hofdeuren_vrij(W)   # W-BEREIK
     nt, mis = terrastrappen(W, S)
     log(f"terrastrappen: {nt} (passen niet: {mis})")
     wolkwaldroom(W, S, info)
@@ -1257,6 +1385,7 @@ def bouw(W, S, log=print):
     log(f"hekken boven trappen weg: {trap_hekken(W)}")
     import tuin   # [U-Z5TUIN] one calm lawn + designed gardens on every open grass patch
     tuin.bouw(W, S, info, log=log)
+    staarttrap(W, S, info)   # W-BEREIK: the walkable way from the palace hill down to the Staartpark (tail, line E to zone 6)
     import binnenlicht   # [U-Z5TUIN] wall sconces + small chandeliers in every enterable room
     binnenlicht.bouw(W, S, info, log=log)
     bewoners(W, info)

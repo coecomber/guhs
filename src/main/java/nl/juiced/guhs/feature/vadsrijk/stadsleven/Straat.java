@@ -83,7 +83,7 @@ final class Straat {
                 {"pieppiepmuisje", "textures/entity/pieppiepmuisje.png", "pieppiepmuisje", "zit", "walk", "1.0"},
                 {"guh_konijntje", "textures/entity/guh_konijntje_roze.png", "guh_konijntje", "idle", "walk", "0.8"},
                 {"guh_konijntje", "textures/entity/guh_konijntje_wit.png", "guh_konijntje", "idle", "walk", "0.8"},
-                {Beestjes.BLOB_MODEL, Beestjes.BLOB_TEX, Beestjes.BLOB_MODEL, "idle", "hop", "0.42"},
+                {BlubLook.MODEL, BlubLook.TEX, BlubLook.ANIM, BlubLook.IDLE, BlubLook.HOP, "" + BlubLook.SCHAAL_HUISDIER},   // W-MODELLEN
                 {"guh_eendje", "textures/entity/guh_eendje.png", "guh_eendje", "idle", "walk", "0.8"}};
         final LevenGuh guh;
         final LevenProp dier;
@@ -91,6 +91,13 @@ final class Straat {
         final Loper loper;
         final ArrayDeque<Vec3> spoor = new ArrayDeque<>();
         int pauze = 20, aaien;
+        /**
+         * W-LEVEN: how far the pet trails behind its guh, along the guh's path (was 1.2; the user: "kan daar iets meer ruimte
+         * tussen? Ongeveer 1 blok").
+         */
+        static final double AFSTAND = 2.2;
+        /** W-LEVEN: never closer than this to its guh (the guh turning back along its trail). */
+        static final double MIN_AFSTAND = 1.2;
 
         private Wandelaar(Steden.Stad stad, LevenGuh guh, LevenProp dier, String[] soort) {
             super(StadsLeven.nieuweSleutel("wandelaar"), Soort.WANDELAAR, stad);
@@ -98,6 +105,29 @@ final class Straat {
             this.dier = lid(dier);
             this.soort = soort;
             this.loper = new Loper(guh.position(), 0.062);
+            spoor.addLast(dier.position());   // W-LEVEN: the trail starts at the pet, so it keeps its distance from the first step
+            spoor.addLast(guh.position());
+        }
+
+        /** W-LEVEN: a pet for a walker; mice only as often as the town's pieppiepmuisje multiplier allows. */
+        static String[] huisdier(Steden.Stad stad, RandomSource r) {
+            String[] s = HUISDIEREN[r.nextInt(HUISDIEREN.length)];
+            while (s[0].equals(Beestjes.MUIS_MODEL) && r.nextDouble() >= stad.muizen()) {
+                s = HUISDIEREN[r.nextInt(HUISDIEREN.length)];
+            }
+            return s;
+        }
+
+        /** W-LEVEN: where the pet starts: {@link #AFSTAND} beside its guh, on walkable ground (else right next to it). */
+        static Vec3 naast(ServerLevel sl, Vec3 m) {
+            for (double[] o : new double[][] {{AFSTAND, 0}, {-AFSTAND, 0}, {0, AFSTAND}, {0, -AFSTAND}}) {
+                Vec3 n = new Vec3(m.x + o[0], m.y, m.z + o[1]);
+                double g = Plekken.grondY(sl, n.x, m.y, n.z);
+                if (!Double.isNaN(g) && Math.abs(g - m.y) <= 1 && Plekken.loopbaar(sl, m, new Vec3(n.x, g, n.z), 1.0)) {
+                    return new Vec3(n.x, g, n.z);
+                }
+            }
+            return m.add(0.8, 0, 0);
         }
 
         @Nullable
@@ -107,12 +137,12 @@ final class Straat {
                 if (Steden.op(m) != stad || !StadsLeven.vrij(m, 2)) {
                     continue;
                 }
-                String[] s = HUISDIEREN[r.nextInt(HUISDIEREN.length)];
+                String[] s = huisdier(stad, r);
                 LevenGuh g = StadsLeven.maakGuh(sl, m, r.nextFloat() * 360, r, false, stad);
                 if (g == null) {
                     return null;
                 }
-                LevenProp d = LevenProp.maak(sl, m.add(0.8, 0, 0), 0, s[0], s[1], s[2], s[3], Float.parseFloat(s[5]), false);
+                LevenProp d = LevenProp.maak(sl, naast(sl, m), 0, s[0], s[1], s[2], s[3], Float.parseFloat(s[5]), false);
                 if (d == null) {
                     StadsLeven.weg(g);
                     return null;
@@ -162,9 +192,22 @@ final class Straat {
                 }
             }
             spoor(spoor, guh.position());
-            Vec3 p = achter(spoor, guh.position(), 1.2);
+            Vec3 p = achter(spoor, guh.position(), AFSTAND);
+            // W-LEVEN: when the guh turns back along its own trail, the pet steps aside instead of being walked into
+            double hx = p.x - guh.getX(), hz = p.z - guh.getZ();
+            if (hx * hx + hz * hz < MIN_AFSTAND * MIN_AFSTAND) {
+                double dx = dier.getX() - guh.getX(), dz = dier.getZ() - guh.getZ(), l = Math.sqrt(dx * dx + dz * dz);
+                if (l < 1e-3) {
+                    dx = 1;
+                    dz = 0;
+                    l = 1;
+                }
+                double nx = guh.getX() + dx / l * MIN_AFSTAND, nz = guh.getZ() + dz / l * MIN_AFSTAND;
+                double g = Plekken.grondY(sl, nx, dier.getY(), nz);
+                p = Double.isNaN(g) || Math.abs(g - dier.getY()) > 1 ? dier.position() : new Vec3(nx, g, nz);
+            }
             boolean loopt = p.distanceToSqr(dier.position()) > 0.0009;
-            Vec3 zet = soort[4].equals("hop") && loopt ? p.add(0, Math.abs(Math.sin(t * 0.35)) * 0.25, 0) : p;
+            Vec3 zet = (soort[4].equals("hop") || soort[0].equals(BlubLook.MODEL)) && loopt ? p.add(0, Math.abs(Math.sin(t * 0.35)) * 0.25, 0) : p;
             if (loopt) {
                 dier.zet(zet);
             }
