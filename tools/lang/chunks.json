@@ -4904,6 +4904,22 @@
         "vadsrijk.menu.zoek",
         "vadsrijk.menu.zoek.niks"
       ]
+    },
+    {
+      "id": "c440_vr_x_labels",
+      "title": "1.10 round X (X-LABELS): keys built from run-time ids that had no text",
+      "prefixes": [
+        "vadsrijk.npc.naam.kk_poort_honingtak",
+        "vadsrijk.npc.naam.kk_poort_hoogvads",
+        "vadsrijk.npc.naam.kk_poort_kandijkom",
+        "vadsrijk.npc.naam.kk_poort_lampionhaven",
+        "vadsrijk.npc.naam.kk_poort_zwamzoet",
+        "vadsrijk.npc.plek.npc.kk_poort_honingtak",
+        "vadsrijk.npc.plek.npc.kk_poort_hoogvads",
+        "vadsrijk.npc.plek.npc.kk_poort_kandijkom",
+        "vadsrijk.npc.plek.npc.kk_poort_lampionhaven",
+        "vadsrijk.npc.plek.npc.kk_poort_zwamzoet"
+      ]
     }
   ]
 }

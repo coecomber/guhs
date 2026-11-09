@@ -7,7 +7,10 @@ What it scans (src/main/java and src/main/resources/data/guhs):
      "scene.f2.onder" in the same file (a bare literal counts when its first part is a family that exists under that prefix);
   3. area names: every area id in the code (new Gebied("id", ...), Gebied.cilinder("id", ...), new Wijk("id", ...),
      record-style area rows in *Plekken/*Registry files) needs "vadsrijk.kern.gebied.<id>" (the zone-change title card);
-  4. JSON data: every string value that looks like a vadsrijk key.
+  4. JSON data: every string value that looks like a vadsrijk key;
+  5. X-LABELS: keys BUILT from an id at run time ("vadsrijk.npc.naam." + h.npc()): the DYNAMISCH table below reads the ids from
+     the tables in the code (hub lists, NPC lists, caves, doors...) and asks every key the code builds from them. The user once saw
+     "vadsrijk.npc.naam.kk_poort_zwamzoet": the Kwartiermeesters are added at run time per hub, and only 2 of 7 had a name.
 
 The runtime half (every area that is really registered, incl. generated ones) is VadsrijkTaalGameTests.
 
@@ -29,12 +32,55 @@ CONST = re.compile(r'(?:static\s+)?final\s+String\s+([A-Z_][A-Z_0-9]*)\s*=\s*"(v
 BARE = re.compile(r'"([a-z0-9_]+(?:\.[a-z0-9_]+)+)"')
 AREA = re.compile(r'(?:\bGebied(?:\.cilinder)?|\bWijk)\(\s*"([a-z0-9_]+)"')
 # lines in test/robot files that only name a key as an example
-SKIP_FILES = {"VadsrijkDialoogGameTests.java"}
+SKIP_FILES = {"VadsrijkDialoogGameTests.java", "VadsrijkAlleLabelsGameTests.java"}
 # files whose Gebied(...) is another record (spawn bands, not kern areas), or a box that is never registered as an area
 SKIP_AREA_FILES = {"Z6WezensPlekken.java", "Z2WezensPlekken.java"}
 # keys that are documentation examples in comments
 SKIP_KEYS = {"vadsrijk.npc.q.iets.klaar.0", "vadsrijk.npc.q.iets.klaar.1", "vadsrijk.toetsen.uitleg.iets", "vadsrijk.z3npc.x",
              "vadsrijk.mijn.giet.x"}
+
+
+# X-LABELS: (where the ids are: file glob under src/main/java/nl/juiced/guhs/feature/vadsrijk, regex with the id as group 1,
+#            the key templates with {id}). The runtime twin is VadsrijkAlleLabelsGameTests.
+DYNAMISCH = [
+    # u-huizen: a Kwartiermeester per hub town (Poorten.HUBS)
+    ("huizen/Poorten.java", r'new Hub\("([a-z_]+)"', ["vadsrijk.npc.naam.kk_poort_{id}", "vadsrijk.npc.plek.npc.kk_poort_{id}"]),
+    # u-gilden: a Bondenbord guh per hub (BondPaneel.HUBS) + the teleport-stone button
+    ("gilden/BondPaneel.java", r'new Hub\("([a-z_]+)"', ["vadsrijk.npc.naam.bond_bord_{id}", "vadsrijk.gilden.hub.{id}"]),
+    # t-ambacht: a board guh per workshop
+    ("ambacht/AmbachtPlekken.java", r'w\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
+    # every zone's NPC list + the zone-1 campfire knights
+    ("**/*Npcs.java", r'npc\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
+    ("npc/NpcPlekken.java", r'KAMPWACHT\.put\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
+    # caves and cave dungeons
+    ("grotten/GrotData.java", r'new Grot\("([a-z0-9_]+)"', ["vadsrijk.grotten.naam.{id}", "vadsrijk.grotten.onder.{id}", "vadsrijk.grotten.elite.naam.{id}",
+                                                           "vadsrijk.grotten.boek.ontdekt.{id}", "vadsrijk.grotten.boek.elite.{id}",
+                                                           "vadsrijk.grotten.boek.puzzel.{id}", "vadsrijk.grotten.boek.schat.{id}"]),
+    ("grotkerker/KerkerData.java", r'new Kerker\("([a-z0-9_]+)"', ["vadsrijk.grotkerker.grot.{id}", "vadsrijk.grotkerker.baas.{id}",
+                                                                 "vadsrijk.grotkerker.baas.{id}.onder", "vadsrijk.grotten.boek.baas.{id}"]),
+    # lookouts, world doors, Wolkwal views, towns, travel map
+    ("wereld/WereldPlekken.java", r'new Uitkijk\("([a-z0-9_]+)"', ["vadsrijk.wereld.uitkijk.{id}"]),
+    ("wereld/WereldPlekken.java", r'new Deur\("([a-z0-9_]+)"', ["vadsrijk.wereld.deur.titel.{id}", "vadsrijk.wereld.deur.onder.{id}",
+                                                              "vadsrijk.wereld.deur.dicht.{id}"]),
+    ("zone5/wolkwal/WolkwalUitzicht.java", r'new Uitzicht\("([a-z0-9_]+)"', ["vadsrijk.wolkwal.uitzicht.{id}", "vadsrijk.wolkwal.uitzicht.{id}.onder"]),
+    ("stadsleven/Steden.java", r'voeg\("([a-z0-9_]+)"', ["vadsrijk.stadsleven.stad.{id}"]),
+]
+VR_JAVA = JAVA / "nl/juiced/guhs/feature/vadsrijk"
+
+
+def dynamisch(eis):
+    """X-LABELS: the keys built from run-time ids (DYNAMISCH)."""
+    for glob, rx, sjablonen in DYNAMISCH:
+        bestanden = sorted(VR_JAVA.glob(glob))
+        if not bestanden:
+            eis("<geen bestand " + glob + ">", "taalcheck DYNAMISCH")
+        for f in bestanden:
+            if f.name.endswith("GameTests.java"):
+                continue
+            t = zonder_commentaar(f.read_text(encoding="utf-8"))
+            for m in re.finditer(rx, t):
+                for sj in sjablonen:
+                    eis(sj.format(id=m.group(1)), f.name + " (dynamisch)")
 
 
 def laad(naam):
@@ -93,6 +139,8 @@ def main():
                 if (k + ".") in families:
                     continue
                 eis(k, rel + " (los)")
+
+    dynamisch(eis)
 
     if DATA.exists():
         for f in DATA.rglob("*.json"):

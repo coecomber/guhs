@@ -271,8 +271,17 @@ public final class GuhsTaal {
         @Override
         public String getOrDefault(String key, String fallback) {
             String v = ours.get(key);
+            if (v == null && key.startsWith("vadsrijk.") && key.equals(fallback) && !base.has(key)) {
+                // X-LABELS: never a raw Vadsrijk key on screen: a sibling's text or the readable id (Labels.terugval)
+                return terugval.computeIfAbsent(key, k -> {
+                    LOGGER.warn("Guhs: missing text {}", k);
+                    return nl.juiced.guhs.feature.vadsrijk.kern.Labels.terugval(k, x -> ours.containsKey(x) ? ours.get(x) : base.has(x) ? base.getOrDefault(x, x) : null);
+                });
+            }
             return v != null ? v : base.getOrDefault(key, fallback);
         }
+
+        private final Map<String, String> terugval = new java.util.concurrent.ConcurrentHashMap<>();   // X-LABELS
 
         @Override
         public boolean has(String key) {

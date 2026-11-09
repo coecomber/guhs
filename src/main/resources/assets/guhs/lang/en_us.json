@@ -47482,5 +47482,15 @@
   "vadsrijk.party.nep.zeg.gg.4": "gg wp",
   "vadsrijk.party.nep.zeg.vullen.1": "hi i'm here to fill your queue",
   "vadsrijk.party.nep.zeg.vullen.2": "i was the lfg guy, here i am",
-  "vadsrijk.party.nep.zeg.vullen.3": "yo! i'm in"
+  "vadsrijk.party.nep.zeg.vullen.3": "yo! i'm in",
+  "vadsrijk.npc.naam.kk_poort_zwamzoet": "Quartermaster Gilly",
+  "vadsrijk.npc.naam.kk_poort_kandijkom": "Quartermaster Cubey",
+  "vadsrijk.npc.naam.kk_poort_honingtak": "Quartermaster Waxy",
+  "vadsrijk.npc.naam.kk_poort_lampionhaven": "Quartermaster Wicky",
+  "vadsrijk.npc.naam.kk_poort_hoogvads": "Quartermaster Turret",
+  "vadsrijk.npc.plek.npc.kk_poort_zwamzoet": "on the square of Shroomsbury, a few steps from the middle",
+  "vadsrijk.npc.plek.npc.kk_poort_kandijkom": "on the square of Sugarbowl, a few steps from the middle",
+  "vadsrijk.npc.plek.npc.kk_poort_honingtak": "on the square of Honeybough, a few steps from the middle",
+  "vadsrijk.npc.plek.npc.kk_poort_lampionhaven": "on the harbor square of Lanternhaven, a few steps from the middle",
+  "vadsrijk.npc.plek.npc.kk_poort_hoogvads": "by the fountain on the market of Highchonk"
 }

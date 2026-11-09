@@ -47482,5 +47482,15 @@
   "vadsrijk.party.nep.zeg.gg.4": "gg wp",
   "vadsrijk.party.nep.zeg.vullen.1": "hoi ik kom jullie rij vullen",
   "vadsrijk.party.nep.zeg.vullen.2": "lfg was ik, hier ben ik",
-  "vadsrijk.party.nep.zeg.vullen.3": "yo! ik doe mee"
+  "vadsrijk.party.nep.zeg.vullen.3": "yo! ik doe mee",
+  "vadsrijk.npc.naam.kk_poort_zwamzoet": "Kwartiermeester Lamelletje",
+  "vadsrijk.npc.naam.kk_poort_kandijkom": "Kwartiermeester Klontje",
+  "vadsrijk.npc.naam.kk_poort_honingtak": "Kwartiermeester Wasje",
+  "vadsrijk.npc.naam.kk_poort_lampionhaven": "Kwartiermeester Lontje",
+  "vadsrijk.npc.naam.kk_poort_hoogvads": "Kwartiermeester Torentje",
+  "vadsrijk.npc.plek.npc.kk_poort_zwamzoet": "op het plein van Zwamzoet, een paar stappen van het midden",
+  "vadsrijk.npc.plek.npc.kk_poort_kandijkom": "op het plein van Kandijkom, een paar stappen van het midden",
+  "vadsrijk.npc.plek.npc.kk_poort_honingtak": "op het plein van Honingtak, een paar stappen van het midden",
+  "vadsrijk.npc.plek.npc.kk_poort_lampionhaven": "op het havenplein van Lampionhaven, een paar stappen van het midden",
+  "vadsrijk.npc.plek.npc.kk_poort_hoogvads": "bij de fontein op de markt van Hoogvads"
 }
