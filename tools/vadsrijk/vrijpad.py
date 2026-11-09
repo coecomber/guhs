@@ -108,6 +108,12 @@ def pas_tegel(TG, t, cls_lut, deco_lut):
             continue
         if "gate" in TG.pal[v[x, y, z]]:
             continue
+        # W-INT: a corner piece of a RAILING (the connection pass fills diagonal steps over the void) hangs on a supported
+        # neighbour piece: keep it, or the two passes fight (verbindcheck los/gat) and the railing gets holes
+        if any(C[X + ex, y + ey, Z + ez] == BC.FENCE and not PAS[X + ex, y + ey - 1, Z + ez]
+               for ex in (-1, 0, 1) for ez in (-1, 0, 1) for ey in (-1, 0, 1)
+               if (ex or ez) and 0 <= X + ex < C.shape[0] and 0 <= Z + ez < C.shape[2] and 1 <= y + ey < HOOG):
+            continue
         if any(stand[X, yy, Z] for yy in range(y - 5, y - 1)):
             weg.append((x, y, z))
     if not weg:

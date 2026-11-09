@@ -214,6 +214,7 @@ def zwamtempel(W, K, P):
     S.fill(308, TY, -421, 315, TY + 4, -411, CARVE)
     S.fill(307, TY + 6, -422, 316, TY + 6, -410, KSTEEN)
     S.fill(317, TY, -417, 317, TY + 2, -415, "minecraft:cracked_stone_bricks")
+    S.fill(316, TY, -416, 317, TY + 1, -416, CARVE)   # W-INT: a crumbled gap in the cracked wall (nothing opened it: sealed secret)
     S.set(309, TY, -416, "minecraft:chest[facing=east,type=single,waterlogged=false]")
     S.set(309, TY + 2, -413, LANT)
     P["geheim_tempelkamer"] = [311, TY, -416]

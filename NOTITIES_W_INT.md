@@ -59,3 +59,21 @@
   - z3 `uitkijk_takpunt`: leaves hung 1-2 over the moss/path walk onto the lookout platform. New last zone-3 pass
     `takpunt_vrij` clears leaves/vines in the 3 cells above non-leaf floor blocks within 9 of the lookout.
   - z4 `vliegerspul_1/_3`: Java literals (no map POI) on the kite rocks; moved onto the path right below (find radius 3).
+- Regen (full, `maak_kaart --audit --geen-cache`, zone 4 before zone 5 by the built-in order), 20 min.
+- **verbindcheck regression found + fixed:** w-bereik's `vrijpad` runs AFTER the connection pass and its "floating rail" rule
+  deleted the diagonal corner pieces verbind fills into railings over the void -> los 458 / fout 342 / gat 489. Fixes:
+  - `vrijpad.py`: a floating piece that touches a SUPPORTED line piece (3x3x3) is a railing corner: kept (the kathedraal
+    balustrade floats as a whole line, so it still goes);
+  - `maak_kaart.py`: a second `verbind.na_sinds` after vrijpad (converges: the 2nd pass changes ~1 block).
+  - Result: verbindcheck **2** (los 1, gat 1; v-int baseline 8). vrijpad keeps peeling one hanging chain stack by 3-5 blocks per
+    run (chain -> hanging lantern rule): harmless, not chased.
+- More secret fixes after the first bereikcheck:
+  - z2 `ijsgrot`: the ramp idea failed there (the cave sits on a steep lake bank, ground 30 below). The ramp is now galm-only;
+    the ice cave gets a 1x1 roof hole with a scaffolding column (the dome top is walkable).
+  - z1 `geheim_tempelkamer`: sealed behind cracked bricks and NO code opens it: a 2-high crumbled gap in the cracked wall.
+  - z2 `uitkijk_galmtop` (U-OVERGANG viewpoint needle): the slope buried the lowest treads of its spiral. `ijsnaald` now carves
+    3 cells of head room over every tread first, then lays the treads.
+  - z3: `takpunt_vrij` also clears flowers left standing on removed leaves (zweefcheck z3 back to 0).
+- Checker notes: `poicheck6` and `loopcheck6` read `_cache/plekken_z6.json` = the UNSNAPPED plan spots (37 / 30 hits at y 70);
+  the published Z6WereldPlekken (snapped) checks 0 bad with poicheck6's own `staat()`. loopcheck3 VAL +1 = a sealed 1-cell pocket
+  in the werf tower (1677,214,-805), no way in.

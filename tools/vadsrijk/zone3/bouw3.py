@@ -1208,6 +1208,9 @@ def takpunt_vrij(W):
                     c = (W.wget(xx, yy + dy, zz) or "").split("[")[0]
                     if c.endswith(blad):
                         W.wset(xx, yy + dy, zz, LUCHT)
+                        boven = (W.wget(xx, yy + dy + 1, zz) or "").split("[")[0]
+                        if boven.endswith(("tulip", "petals", "short_grass", "fern", "flower", "poppy", "dandelion", "daisy")):
+                            W.wset(xx, yy + dy + 1, zz, LUCHT)   # (no flower floating on a leaf that is gone)
 
 
 # ================================================================================================ (r-int) village houses free

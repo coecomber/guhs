@@ -75,6 +75,8 @@ def main():
     verbind.na_sinds(_t_verbind)
     import vrijpad                              # W-BEREIK: lanterns/chains/floating rails out of the walking lines (all zones)
     vrijpad.na_sinds(_t_verbind)
+    verbind.na_sinds(_t_verbind)                # W-INT: vrijpad took pieces out of lines: connect the states again (stable:
+                                                # vrijpad keeps the railing corners the pass fills)
     if a.audit and not a.alleen and a.zone in ("1", "alle"):   # (was at the end of zone 1, before the pass)
         subprocess.run([sys.executable, os.path.join(HIER, "audit", "audit.py")], cwd=ROOT, check=True)
     if a.audit and not a.alleen:                # U-HEKKEN: the connection check (AUDIT_VERBIND.md), must be ~0

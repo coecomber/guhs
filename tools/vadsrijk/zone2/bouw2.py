@@ -1106,16 +1106,33 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
             mk = m & (((y + (2 * np.sin(a * 2)).astype(int)) // 3) % len(lagen) == k)
             S.masker(x - 11, y, z - 11, mk[:, None, :], b)
     ang = 0.0
+    # W-INT: first the head room over every tread (the slope buried the lowest treads of uitkijk_galmtop: unreachable), then
+    # the treads themselves (so a carve never eats a tread)
     for y in range(g + 1, top + 1):
         t = (y - g) / hoogte
         r = 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
         for k in range(3):
             aa = ang + k * 0.5 / r
             for dr in (0.0, 0.9, 1.8):
-                S.set(x + (r + dr) * math.cos(aa), y, z + (r + dr) * math.sin(aa), "minecraft:spruce_slab[type=top,waterlogged=false]", keep=True)
-            S.set(x + (r + 2.7) * math.cos(aa), y + 1, z + (r + 2.7) * math.sin(aa), STAAF, keep=True)
+                for dy in (1, 2, 3):
+                    S.set(x + (r + dr) * math.cos(aa), y + dy, z + (r + dr) * math.sin(aa), CARVE, keep=True)
+        ang += 1.3 / r
+    ang = 0.0
+
+    def zet(px, py, pz, st):   # (like keep=True, but over the head-room carve too)
+        fx, fy, fz = math.floor(px), math.floor(py), math.floor(pz)
+        if S.get(fx, fy, fz) in ("minecraft:air", CARVE):
+            S.set(fx, fy, fz, st)
+    for y in range(g + 1, top + 1):
+        t = (y - g) / hoogte
+        r = 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
+        for k in range(3):
+            aa = ang + k * 0.5 / r
+            for dr in (0.0, 0.9, 1.8):
+                zet(x + (r + dr) * math.cos(aa), y, z + (r + dr) * math.sin(aa), "minecraft:spruce_slab[type=top,waterlogged=false]")
+            zet(x + (r + 2.7) * math.cos(aa), y + 1, z + (r + 2.7) * math.sin(aa), STAAF)
         if (y - g) % 12 == 0:
-            S.set(x + (r + 2.7) * math.cos(ang), y + 2, z + (r + 2.7) * math.sin(ang), LANT, keep=True)
+            zet(x + (r + 2.7) * math.cos(ang), y + 2, z + (r + 2.7) * math.sin(ang), LANT)
         ang += 1.3 / r
     S.cyl(x, z, 6.5, top + 1, top + 1, "minecraft:spruce_planks")
     S.cyl(x, z, 6.5, top + 2, top + 2, STAAF, hollow=1)
@@ -1278,15 +1295,23 @@ def grotje(W, K, P, naam, x, z, soort):
     # W-INT: the tunnel floor (g) often sits 3-8 above the real ground west of the mouth (the dome stands on K.h of its centre):
     # a 3-wide snow step ramp down to the ground, 1 per block, with free head room (w-bereik: the cave was unreachable on foot)
     trede = 0
-    for k in range(1, 14):
+    for k in range(1, 14 if soort == "galm" else 1):   # (the ice cave sits on a steep lake bank: a roof shaft instead, below)
         xx = x - 10 - k
         top = g - k
-        grond = max(hoogste(W, xx, zz) for zz in (z - 1, z, z + 1))
-        if grond >= top:
+        gronden = {zz: hoogste(W, xx, zz) for zz in (z - 1, z, z + 1)}
+        if min(gronden.values()) >= top:
             break
-        S.box(xx, grond + 1, z - 1, xx, top, z + 1, "minecraft:snow_block")
+        for zz, gr in gronden.items():
+            if gr < top:
+                S.box(xx, gr + 1, zz, xx, top, zz, "minecraft:snow_block")
         S.box(xx, top + 1, z - 1, xx, top + 4, z + 1, CARVE)
         trede = k
+    if soort != "galm":
+        # W-INT: the ice cave's tunnel mouth hangs 30 above the lake (steep bank); the dome TOP is walkable: a 1x1 hole in the
+        # roof with a scaffolding column down to the floor (climb: jump up / sneak down)
+        hx, hz = x + 2, z + 2
+        S.box(hx, g + 1, hz, hx, g + 12, hz, CARVE)
+        S.box(hx, g + 1, hz, hx, g + 8, hz, "minecraft:scaffolding[bottom=false,distance=0,waterlogged=false]")
     P[naam] = [x, g + 1, z]
     W.stempel(S.stempel(naam))
     P[naam + "_ingang"] = [x - 11 - trede, hoogste(W, x - 11 - trede, z) + 1, z]
