@@ -257,8 +257,8 @@ public class VadsrijkZonePoortGameTests {
             int hoofd = 0, hoofdGehaald = 0, zij = 0, zijGehaald = 0;
             StringBuilder vast = new StringBuilder();
             for (QuestRobot.Uitslag u : r.quests.values()) {
-                if (u.zone != 1) {
-                    continue;
+                if (u.zone != 1 || u.soort.equals("rijdier")) {
+                    continue;   // (the mount return quests wait for your first mount: the zone-3 starter, by design)
                 }
                 boolean ok = u.status.equals("gehaald");
                 if (u.soort.equals("hoofd")) {

@@ -68,9 +68,18 @@ het schip naar zone 2 is tijdelijk uit. Bouw die poort goed, maak zone 1 af als 
 - Geen kaart/tiles/POI's geraakt (geen regen nodig).
 
 ## Tests
-(zie onder "Testresultaten")
+- compileJava OK.
+- `runGameTestServer -Pgt=VadsrijkZonePoort,VadsrijkZwamgrotPoort,VadsrijkLuchtschip,VadsrijkSchepen,VadsrijkNpc,VadsrijkDungeon,
+  VadsrijkDungeonNep,VadsrijkMenu,VadsrijkKern,VadsrijkBalans,VadsrijkParty,VadsrijkQuestLopen,Taalsleutels`: **59/59** (log
+  `../x-zone1-gt2.log`). Nieuw: schipEnReisDicht, eindeZone1, dungeonsDicht, vangnet, zachtPlafond, robotZone1Poort1,
+  robotAlleZonesPoort6, zwamgrotMetAlleenZone1.
+- Robot poort 1: zone-1 hoofd 13/13, overige 26/26 (de 2 rijdier-terugkeerquests wachten bewust op je eerste rijdier = de
+  zone-3-starter: met poort 1 dus niet te doen, de NPC toont de bestaande teaser). Robot poort 6: hoofd z1-z6 13/12/15/7/10/10, 0 vast.
+- Python: taalcheck 0 ontbrekend, engelscheck OK (+`--merk`). Kaartcheckers (bereikcheck, schepen_check, kijkcheck, verbindcheck)
+  niet gedraaid: geen kaart/tiles/POI geraakt.
 
 ## Open punten
+- Rijdier-terugkeerquests van zone 1 (hoedhupper, knuffelhert) zijn met poort 1 niet te halen (eerste rijdier = zone 3).
 - Wiki/website: de site-generator (`web/`, u-site) toont nog alle zones; "binnenkort" voor zone 2+ op de wiki is niet gedaan
   (de site is een aparte pijplijn; bij publiceren met poort 1 de zone 2-6-pagina's verbergen of een banner zetten).
 - De HUD heeft geen wereldkaart met zones; de enige kaart (de reiskaart) toont dichte zones grijs "Binnenkort!".

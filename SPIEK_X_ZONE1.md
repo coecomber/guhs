@@ -41,7 +41,7 @@
 | Lijn A-pier | `/execute in guhs:vadsrijk run tp @s 150 127 -650` | klik de pier/het bord: "Lijn A ... Het schip naar De Splinterpieken vaart binnenkort!" |
 | Grens | `/execute in guhs:vadsrijk run tp @s 704 100 -1100` | (survival, geen op) je staat meteen terug in zone 1 / De Haven + melding |
 | Zwamgrot | `/execute in guhs:vadsrijk run tp @s -412 69 148` | deur werkt: solo / groep / wachtrij (nep-spelers vullen) |
-| Plafond | `/guhs vadsrijk level 19` en een paar mobs | stopt op 20, balk vol, chatregel over sparen |
+| Plafond | `/guhs vadsrijk level 19`, dan zonder op/creative een paar mobs | stopt op 20, balk vol, chatregel over sparen (ops hebben geen plafond) |
 | Open alles | `/guhs vadsrijk zones open 6` | alles weer normaal; spaarpot betaalt uit |
 
 Gametests: `runGameTestServer -Pgt=VadsrijkZonePoort,VadsrijkZwamgrotPoort`.
