@@ -107,6 +107,7 @@ public final class StadslevenClient {
                 }
             });
             this.shadowRadius = 0.15f;
+            withRenderLayer(new BlubGloed(this));   // X-DUNGEON
         }
 
         @Override
@@ -154,6 +155,26 @@ public final class StadslevenClient {
                     bones.ifPresent(b, sn -> sn.skipRender(true).skipChildrenRender(true));
                 }
             }
+        }
+    }
+
+    /**
+     * X-DUNGEON (round X): a town blob on the Blub-guh model glows softly like the blue Blub ({@code feature/blub/client/BlubClient}'s
+     * GloedLaag: the same glow texture, full bright, additive; the hidden bones stay hidden).
+     */
+    static class BlubGloed extends com.geckolib.renderer.layer.GeoRenderLayer<LevenProp, Void, EntityRenderState> {
+        private static final Identifier GLOED = Guhs.id("textures/entity/blubguh/blauw_gloed.png");
+
+        BlubGloed(com.geckolib.renderer.base.GeoRenderer<LevenProp, Void, EntityRenderState> renderer) {
+            super(renderer);
+        }
+
+        @Override
+        public void submitRenderTask(RenderPassInfo<EntityRenderState> info, net.minecraft.client.renderer.SubmitNodeCollector collector) {
+            if (!info.willRender() || !nl.juiced.guhs.feature.vadsrijk.stadsleven.BlubLook.MODEL.equals(info.getOrDefaultGeckolibData(MODEL, ""))) {
+                return;
+            }
+            getRenderer().submitRenderTasks(info, collector.order(1), nl.juiced.guhs.client.GuhRenderTypes.eyes(GLOED));
         }
     }
 

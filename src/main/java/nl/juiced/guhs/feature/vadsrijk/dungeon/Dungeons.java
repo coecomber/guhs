@@ -24,6 +24,7 @@ public final class Dungeons {
     public static void register(IEventBus modBus) {
         DungeonDeur.register(modBus);
         DungeonRij.register();
+        DungeonBord.register();   // X-DUNGEON
     }
 
     public static void bron(Supplier<List<? extends Dungeon>> b) {

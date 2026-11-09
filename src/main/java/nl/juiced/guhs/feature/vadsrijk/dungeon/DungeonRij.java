@@ -331,6 +331,10 @@ public final class DungeonRij {
         if (uit != null && nu - uit < 20) {
             return;
         }
+        if (d.zegel()) {   // X-DUNGEON: a sealed second entrance only says where the door is
+            p.sendSystemMessage(Component.translatable("vadsrijk.dungeon.zegel.msg." + d.dungeon()).withStyle(ChatFormatting.LIGHT_PURPLE));
+            return;
+        }
         openDeur(p, d.dungeon());
     }
 

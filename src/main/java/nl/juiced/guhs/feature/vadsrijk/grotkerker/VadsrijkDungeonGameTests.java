@@ -304,4 +304,88 @@ public class VadsrijkDungeonGameTests {
             }
         });
     }
+
+    /**
+     * X-DUNGEON: the name board over a door: exactly 2 text displays (name + small line), right over the door's top and 1 block out
+     * towards the stand spot, the name text; running it again (a chunk reload, every 2 s) makes no doubles; a killed line comes
+     * back; a moved door takes its board along (the old one goes). A seal ("zegel") click gives a message, not the window. And the
+     * door item exists (creative / JEI only).
+     */
+    @GuhTest(template = "empty", batch = BATCH + "_bord", timeoutTicks = 200)
+    public static void naambord(GameTestHelper helper) {
+        Kerker k = opzet(helper);
+        Deur d = DungeonDeur.hoofd(k.id());
+        ServerPlayer p = speler(helper, d);
+        helper.runAfterDelay(3, () -> {
+            ServerLevel sl = helper.getLevel();
+            try {
+                DungeonDeur.plaats(sl, d);
+                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99);
+                List<net.minecraft.world.entity.Display.TextDisplay> b = nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d);
+                helper.assertTrue(b.size() == 2, "two board lines: " + b.size());
+                int top = Integer.MIN_VALUE;
+                for (int[] c : d.cellen()) {
+                    top = Math.max(top, c[1]);
+                }
+                for (var e : b) {
+                    helper.assertTrue(e.getY() >= top + 1 && e.getY() < top + 2, "over the door's top: " + e.getY());
+                    helper.assertTrue(e.getZ() > d.cellen().get(0)[2] + 1 && e.getZ() < d.voor().getZ() + 1, "outside, towards the stand spot: " + e.getZ());
+                }
+                String tekst = nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.regels(d).get(0).getString();
+                helper.assertTrue(tekst.equals(Dungeons.van(k.id()).naam().getString()), "the name line: " + tekst);
+                for (int i = 0; i < 3; i++) {
+                    nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99);
+                }
+                helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d).size() == 2, "no doubles");
+                b.get(0).discard();
+                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99);
+                helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d).size() == 2, "a killed line comes back");
+                // the door moves 1 block west: the board goes along (still 2, all over the moved door)
+                Deur d2 = DungeonDeur.verschoven(d, -1, 0, 0);
+                for (int[] c : d.cellen()) {
+                    sl.setBlock(new BlockPos(c[0], c[1], c[2]), Blocks.AIR.defaultBlockState(), 2);
+                }
+                DungeonDeur.plaats(sl, d2);
+                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d2, 99);
+                List<net.minecraft.world.entity.Display.TextDisplay> b2 = nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d2);
+                helper.assertTrue(b2.size() == 2, "after the move: two lines: " + b2.size());
+                double mx = 0;
+                for (int[] c : d2.cellen()) {
+                    mx += c[0] + 0.5;
+                }
+                mx /= d2.cellen().size();
+                for (var e : b2) {
+                    helper.assertTrue(Math.abs(e.getX() - mx) < 0.01, "over the moved door: " + e.getX() + " vs " + mx);
+                }
+                for (int[] c : d2.cellen()) {
+                    sl.setBlock(new BlockPos(c[0], c[1], c[2]), Blocks.AIR.defaultBlockState(), 2);
+                }
+                // a seal: a click says where the door is, no window
+                Deur zegel = new Deur(d.dungeon(), false, d.thema(), false, d.cellen(), d.voor(), d.yawVoor(), d.binnen(), d.yawBinnen(), true);
+                DungeonDeur.TEST.put(k.id(), List.of(d, zegel));
+                DungeonDeur.plaats(sl, d);
+                DungeonRij.KIJKERS.remove(p.getUUID());
+                int[] c0 = d.cellen().get(0);
+                DungeonDeur.TEST.put(k.id(), List.of(zegel));
+                DungeonRij.klikDeur(sl, new BlockPos(c0[0], c0[1], c0[2]), p);
+                helper.assertFalse(DungeonRij.KIJKERS.containsKey(p.getUUID()), "a seal opens no window");
+                DungeonDeur.TEST.put(k.id(), List.of(d));
+                DungeonRij.klikDeur(sl, new BlockPos(c0[0], c0[1], c0[2]), p);
+                helper.assertTrue(DungeonRij.KIJKERS.containsKey(p.getUUID()), "the door opens the window");
+                helper.assertTrue(DungeonDeur.ITEM.get().getDefaultInstance().getItem() instanceof net.minecraft.world.item.BlockItem bi
+                        && bi.getBlock() == DungeonDeur.BLOK.get(), "the door has an item");
+                helper.succeed();
+            } finally {
+                for (var e : sl.getEntitiesOfClass(net.minecraft.world.entity.Display.TextDisplay.class,
+                        new net.minecraft.world.phys.AABB(DungeonDeur.midden(d)).inflate(10),
+                        e -> e.entityTags().contains(nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.TAG))) {
+                    e.discard();
+                }
+                for (int[] c : d.cellen()) {
+                    sl.setBlock(new BlockPos(c[0], c[1], c[2]), Blocks.AIR.defaultBlockState(), 2);
+                }
+                opruimen(helper, k, p);
+            }
+        });
+    }
 }

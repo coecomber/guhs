@@ -47482,5 +47482,11 @@
   "vadsrijk.party.nep.zeg.gg.4": "gg wp",
   "vadsrijk.party.nep.zeg.vullen.1": "hoi ik kom jullie rij vullen",
   "vadsrijk.party.nep.zeg.vullen.2": "lfg was ik, hier ben ik",
-  "vadsrijk.party.nep.zeg.vullen.3": "yo! ik doe mee"
+  "vadsrijk.party.nep.zeg.vullen.3": "yo! ik doe mee",
+  "block.guhs.vr_dungeondeur.tip": "De dichte deur van een dungeon in Het Vadsrijk.",
+  "block.guhs.vr_dungeondeur.tip2": "Alleen voor bouwers: zelf neergezet doet hij niets.",
+  "vadsrijk.dungeon.bord.onder": "Dungeon · %s · lv %s-%s",
+  "vadsrijk.dungeon.bord.onder.kort": "Dungeon",
+  "vadsrijk.dungeon.zegel.bord.koraalgrot": "Dichtgegroeid · de deur is boven op het atol",
+  "vadsrijk.dungeon.zegel.msg.koraalgrot": "Deze ingang van De Koraalgrot is dichtgegroeid met koraal. De deur zit boven op het atol, bij de koraalschoorsteen."
 }
