@@ -1087,11 +1087,60 @@ def kampvuren(W, K, P):
             kampvuur(W, K, P, gebied, i, x, z)
 
 
+def _naald_r(y, g, hoogte):
+    t = (y - g) / hoogte
+    return 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
+
+
+def _naald_start(K, x, z, g, hoogte):
+    """X-KAART: the start angle of a needle's spiral stair. The stair used to start at angle 0 whatever the terrain: at the Galmtop
+    that is the cliff side (ground 18 below the first tread). Every 5 degrees is scored: the first 3 treads hanging above the
+    ground cost 3x their height, any of the first 14 treads buried more than 3 deep costs a little. Angle 0 is kept unless it hangs (the other
+    needles keep their stair)."""
+    def kost(a0):
+        c, a = 0.0, a0
+        for n in range(14):
+            y = g + 1 + n
+            r = _naald_r(y, g, hoogte)
+            h = K.h(x + (r + 0.9) * math.cos(a), z + (r + 0.9) * math.sin(a))
+            c += (3 * max(0, y - 1 - h) if n < 3 else 0) + 0.2 * max(0, h - y - 3)
+            a += 1.3 / r
+        return c
+    if kost(0.0) <= 3:
+        return 0.0
+    return min((math.radians(d) for d in range(0, 360, 5)), key=kost)
+
+
+def _naald_aanloop(S, K, x, z, g, hoogte, ang0, zet):
+    """X-KAART: steps BELOW the first tread, back along the spiral, until the tread is at most 1 above the ground there; each one
+    on a rock foot down to the ground (no hanging lead-in). Max 8."""
+    a = ang0
+    for n in range(1, 9):
+        y = g + 1 - n
+        r = _naald_r(y, g, hoogte)
+        a -= 1.3 / r
+        hs = [K.h(x + (r + dr) * math.cos(a), z + (r + dr) * math.sin(a)) for dr in (0.0, 0.9, 1.8)]
+        if (y + 1) - (min(hs) + 1) <= 0:
+            break                                  # the previous tread already meets the ground here
+        for dr in (0.0, 0.9, 1.8):
+            px, pz = x + (r + dr) * math.cos(a), z + (r + dr) * math.sin(a)
+            for dy in (1, 2, 3):
+                S.set(px, y + dy, pz, CARVE)
+            S.set(px, y, pz, "minecraft:spruce_slab[type=top,waterlogged=false]")
+            for yy in range(y - 1, K.h(px, pz) - 1, -1):
+                S.set(px, yy, pz, "minecraft:stone", keep=True)
+        px, pz = x + (r + 2.7) * math.cos(a), z + (r + 2.7) * math.sin(a)
+        if y - K.h(px, pz) >= 2:
+            zet(px, y + 1, pz, STAAF)
+            for yy in range(y, K.h(px, pz) - 1, -1):
+                S.set(px, yy, pz, "minecraft:stone", keep=True)
+
+
 def ijsnaald(W, K, P, naam, x, z, hoogte):
     """A viewpoint: an icy rock needle with a spiral stair and a platform on top."""
     g = K.h(x, z)
     top = g + hoogte
-    S = Vol(x - 13, g - 4, z - 13, x + 13, top + 12, z + 13)
+    S = Vol(x - 18, g - 14, z - 18, x + 18, top + 12, z + 18)   # X-KAART: room for the lead-in steps (was +-13, g - 4)
     lagen = ["minecraft:calcite", "minecraft:packed_ice", "minecraft:stone", "minecraft:calcite", "minecraft:diorite", "minecraft:snow_block"]
     xs = np.arange(x - 11, x + 12)[:, None]
     zs = np.arange(z - 11, z + 12)[None, :]
@@ -1105,7 +1154,8 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
         for k, b in enumerate(lagen):
             mk = m & (((y + (2 * np.sin(a * 2)).astype(int)) // 3) % len(lagen) == k)
             S.masker(x - 11, y, z - 11, mk[:, None, :], b)
-    ang = 0.0
+    ang0 = _naald_start(K, x, z, g, hoogte)   # X-KAART: the stair starts where the slope meets it (galmtop began 18 above a cliff)
+    ang = ang0
     # W-INT: first the head room over every tread (the slope buried the lowest treads of uitkijk_galmtop: unreachable), then
     # the treads themselves (so a carve never eats a tread)
     for y in range(g + 1, top + 1):
@@ -1117,7 +1167,7 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
                 for dy in (1, 2, 3):
                     S.set(x + (r + dr) * math.cos(aa), y + dy, z + (r + dr) * math.sin(aa), CARVE, keep=True)
         ang += 1.3 / r
-    ang = 0.0
+    ang = ang0
 
     def zet(px, py, pz, st):   # (like keep=True, but over the head-room carve too)
         fx, fy, fz = math.floor(px), math.floor(py), math.floor(pz)
@@ -1134,6 +1184,7 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
         if (y - g) % 12 == 0:
             zet(x + (r + 2.7) * math.cos(ang), y + 2, z + (r + 2.7) * math.sin(ang), LANT)
         ang += 1.3 / r
+    _naald_aanloop(S, K, x, z, g, hoogte, ang0, zet)   # X-KAART
     S.cyl(x, z, 6.5, top + 1, top + 1, "minecraft:spruce_planks")
     S.cyl(x, z, 6.5, top + 2, top + 2, STAAF, hollow=1)
     # opening in the railing where the stair arrives
