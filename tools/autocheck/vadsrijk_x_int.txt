@@ -127,6 +127,10 @@ section rondex
 wait 80
 waitrender 400
 shot xi_x_walvispoort
+/tp @s 2860 233 -531 90 5
+wait 40
+waitrender 300
+shot xi_x_walvispoort_buiten
 /tp @s 2856 233 -531 180 35
 wait 40
 waitrender 300
@@ -138,27 +142,35 @@ shot xi_x_walvistrap_onder
 /guhs vadsrijk z6raid tp poort
 wait 240
 waitrender 400
-look 90 -5
+look -90 -15
 shot xi_x_raidtoren_poort
-look 160 10
+look 0 15
 shot xi_x_raid_heraut
-/guhs vadsrijk dungeon deur zwamgrot tp
+/tp @s 4110 88 -688 -90 -10
+wait 40
+waitrender 300
+shot xi_x_raidtoren_poort_ver
+/tp @s -406 69 148 90 -12
 wait 120
 waitrender 300
 shot xi_x_dungeonbord_zwamgrot
-/guhs vadsrijk dungeon deur kristalgrot tp
+/tp @s 869 119 -1104 -135 0
 wait 120
 waitrender 300
 shot xi_x_dungeonbord_kristalgrot
-/tp @s 0 70 59 0 25
+/tp @s 2 65 60 facing -6 66 57
 wait 240
 waitrender 300
+shot xi_x_kwartiermeester
+/tp @s 0 72 59 0 40
+wait 20
+waitrender 200
 shot xi_x_kwartiermeester_n
-look 90 25
+look 90 40
 shot xi_x_kwartiermeester_w
-look 180 25
+look 180 40
 shot xi_x_kwartiermeester_z
-look 270 25
+look 270 40
 shot xi_x_kwartiermeester_o
 
 section zone1einde
