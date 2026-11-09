@@ -184,8 +184,13 @@ public final class DungeonBord {
      * board's cell, and (a player near) a few sparks. {@code nr} = the door's index in {@link DungeonDeur#deuren()}.
      */
     public static void zorg(ServerLevel sl, Deur d, int nr) {
+        zorg(sl, d, nr, true);
+    }
+
+    /** The same; {@code wacht} false (gametests): also when the chunk's entities are not entity-ticking. */
+    public static void zorg(ServerLevel sl, Deur d, int nr, boolean wacht) {
         BlockPos m = DungeonDeur.midden(d);
-        if (!Dubbel.klaar(sl, m)) {
+        if (wacht && !Dubbel.klaar(sl, m)) {
             return;   // (the chunk's entities are not back yet: looking now would make a second board)
         }
         Vec3 v = plek(sl, d);

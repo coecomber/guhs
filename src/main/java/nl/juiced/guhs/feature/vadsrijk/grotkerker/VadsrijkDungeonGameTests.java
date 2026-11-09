@@ -320,9 +320,10 @@ public class VadsrijkDungeonGameTests {
             ServerLevel sl = helper.getLevel();
             try {
                 DungeonDeur.plaats(sl, d);
-                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99);
+                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99, false);
                 List<net.minecraft.world.entity.Display.TextDisplay> b = nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d);
-                helper.assertTrue(b.size() == 2, "two board lines: " + b.size());
+                helper.assertTrue(b.size() == 2, "two board lines: " + b.size() + " (plek " + nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.plek(sl, d)
+                        + ", klaar " + nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, DungeonDeur.midden(d)) + ")");
                 int top = Integer.MIN_VALUE;
                 for (int[] c : d.cellen()) {
                     top = Math.max(top, c[1]);
@@ -334,11 +335,11 @@ public class VadsrijkDungeonGameTests {
                 String tekst = nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.regels(d).get(0).getString();
                 helper.assertTrue(tekst.equals(Dungeons.van(k.id()).naam().getString()), "the name line: " + tekst);
                 for (int i = 0; i < 3; i++) {
-                    nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99);
+                    nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99, false);
                 }
                 helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d).size() == 2, "no doubles");
                 b.get(0).discard();
-                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99);
+                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d, 99, false);
                 helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d).size() == 2, "a killed line comes back");
                 // the door moves 1 block west: the board goes along (still 2, all over the moved door)
                 Deur d2 = DungeonDeur.verschoven(d, -1, 0, 0);
@@ -346,7 +347,7 @@ public class VadsrijkDungeonGameTests {
                     sl.setBlock(new BlockPos(c[0], c[1], c[2]), Blocks.AIR.defaultBlockState(), 2);
                 }
                 DungeonDeur.plaats(sl, d2);
-                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d2, 99);
+                nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.zorg(sl, d2, 99, false);
                 List<net.minecraft.world.entity.Display.TextDisplay> b2 = nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonBord.borden(sl, d2);
                 helper.assertTrue(b2.size() == 2, "after the move: two lines: " + b2.size());
                 double mx = 0;
