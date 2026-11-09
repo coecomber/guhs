@@ -184,6 +184,8 @@ def pad(W, pts, breed=2, top_k="vloer_zand", rand_k="zs", trap_k="vloer_zand", s
         side = 1 if (a // lampen) % 2 else -1
         px, pz = x + nx * (breed + 1.5) * side, z + nz * (breed + 1.5) * side
         y = grond(W, px, pz, 200) + 1
+        if _watertop(W, px, pz) >= y - 1:
+            continue                                   # X-KAART: no lamp post standing in the river beside a causeway
         if abs(y - 1 - t[a]) <= 2:
             doos(W, px, y, pz, px, y + 2, pz, "palm_hek")
             zet(W, px, y + 3, pz, "messing_lantaarn")
