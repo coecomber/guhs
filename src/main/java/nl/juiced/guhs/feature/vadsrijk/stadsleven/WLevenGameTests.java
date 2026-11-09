@@ -35,7 +35,7 @@ public class WLevenGameTests {
         }
     }
 
-    @GuhTest(template = "empty", batch = "vadsrijk_wleven_muizen", timeoutTicks = 600)
+    @GuhTest(template = "empty", batch = "vadsrijk_wleven_muizen", timeoutTicks = 2000)   // X-INT: StadslevenGameTests.wacht waits up to 1500 ticks
     public static void muizenFactor(GameTestHelper helper) {
         // the multiplier per town
         helper.assertTrue(Steden.van("kandijkom").muizen() == 1.0, "Kandijkom keeps its mice");
@@ -75,7 +75,7 @@ public class WLevenGameTests {
         });
     }
 
-    @GuhTest(template = "empty", batch = "vadsrijk_wleven_huisdier", timeoutTicks = 600)
+    @GuhTest(template = "empty", batch = "vadsrijk_wleven_huisdier", timeoutTicks = 2000)   // X-INT: StadslevenGameTests.wacht waits up to 1500 ticks
     public static void huisdierAfstand(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = StadslevenGameTests.bouwStad(helper);
@@ -113,7 +113,7 @@ public class WLevenGameTests {
         });
     }
 
-    @GuhTest(template = "empty", batch = "vadsrijk_wleven_steiger", timeoutTicks = 600)
+    @GuhTest(template = "empty", batch = "vadsrijk_wleven_steiger", timeoutTicks = 2000)   // X-INT: StadslevenGameTests.wacht waits up to 1500 ticks
     public static void smalleSteiger(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = StadslevenGameTests.bouwStad(helper);

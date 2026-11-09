@@ -98,7 +98,15 @@ public class StadslevenGameTests {
         Plekken.verken(helper.getLevel(), Vec3.atCenterOf(o.offset(14, 1, 14)), 3);
     }
 
-    /** Runs the body once every chunk of the test town is really entity-ticking (checked every 5 ticks, at most 200 ticks). */
+    /**
+     * Runs the body once every chunk of the test town is really entity-ticking (checked every 5 ticks, at most 1500 ticks).
+     * X-INT: was at most 200 ticks. The gametest server sprints (200 ticks can pass in well under a second), while the forced
+     * chunks become entity-ticking on the chunk workers in real time; so on a slow start the body ran at tick 200 with a chunk not
+     * ticking yet, the playground corner's {@code Dubbel.klaar} said no and {@code budget} saw no playground ("exactly one
+     * playground", flaky even alone). Waiting longer makes it independent of the machine's speed.
+     */
+    static final int WACHT_MAX = 300;
+
     static void wacht(GameTestHelper helper, BlockPos o, int keer, Runnable body) {
         boolean klaar = true;
         for (int x = -1; x <= 29 && klaar; x += 15) {
@@ -106,7 +114,10 @@ public class StadslevenGameTests {
                 klaar = nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(helper.getLevel(), o.offset(Math.max(0, x), 0, Math.max(0, z)));
             }
         }
-        if (klaar || keer >= 40) {
+        if (klaar || keer >= WACHT_MAX) {
+            if (!klaar) {
+                com.mojang.logging.LogUtils.getLogger().warn("StadslevenGameTests: test town still not entity-ticking after {} ticks", keer * 5);
+            }
             body.run();
         } else {
             helper.runAfterDelay(5, () -> wacht(helper, o, keer + 1, body));
@@ -129,6 +140,7 @@ public class StadslevenGameTests {
         StadsLeven.testModus = false;
         StadsLeven.testNacht = null;
         StadsLeven.testRegen = null;
+        Babbels.testHoort = null;
         Steden.testStad = null;
         Steden.testDoos = null;
         Plekken.wis();
@@ -151,7 +163,7 @@ public class StadslevenGameTests {
         }
     }
 
-    @GuhTest(template = "empty", batch = "vadsrijk_stadsleven_budget", timeoutTicks = 600)
+    @GuhTest(template = "empty", batch = "vadsrijk_stadsleven_budget", timeoutTicks = 2000)
     public static void budget(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = bouwStad(helper);
@@ -166,7 +178,13 @@ public class StadslevenGameTests {
                     helper.assertTrue(tel.getOrDefault(s, 0) <= s.max(StadsLeven.Niveau.VOL), s + " over its cap: " + tel.get(s));
                 }
                 helper.assertTrue(tel.getOrDefault(Groep.Soort.DIERTJE, 0) >= 4, "critters scurry about: " + tel);
-                helper.assertTrue(tel.getOrDefault(Groep.Soort.SPEELTUIN, 0) == 1, "exactly one playground: " + tel);
+                int guhsDiag = 0, entsDiag = 0;
+                for (Groep g : StadsLeven.GROEPEN.values()) {
+                    guhsDiag += g.guhs();
+                    entsDiag += g.leden.size();
+                }
+                helper.assertTrue(tel.getOrDefault(Groep.Soort.SPEELTUIN, 0) == 1, "exactly one playground: " + tel + " (guhs " + guhsDiag + ", ents " + entsDiag
+                        + ", spelers " + sl.players().size() + ")");
                 helper.assertTrue(tel.getOrDefault(Groep.Soort.KAR, 0) <= 1 && tel.getOrDefault(Groep.Soort.MUZIKANT, 0) <= 1, "unique cart/musician");
                 helper.assertTrue(tel.getOrDefault(Groep.Soort.TERRAS, 0) >= 1, "a terrace on the benches or a street chat: " + tel);
                 int ents = 0, guhs = 0;
@@ -212,7 +230,7 @@ public class StadslevenGameTests {
         });
     }
 
-    @GuhTest(template = "empty", batch = "vadsrijk_stadsleven_dubbel", timeoutTicks = 500)
+    @GuhTest(template = "empty", batch = "vadsrijk_stadsleven_dubbel", timeoutTicks = 2000)
     public static void geenDubbelen(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = bouwStad(helper);
@@ -259,7 +277,7 @@ public class StadslevenGameTests {
         });
     }
 
-    @GuhTest(template = "empty", batch = "vadsrijk_stadsleven_speeltuin", timeoutTicks = 500)
+    @GuhTest(template = "empty", batch = "vadsrijk_stadsleven_speeltuin", timeoutTicks = 2000)
     public static void speeltuin(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         BlockPos o = bouwStad(helper);
@@ -298,8 +316,12 @@ public class StadslevenGameTests {
                 helper.assertTrue(maxGlij > 2.9 && minGlij < 1.1, "a child climbs up (F+3) and comes down: " + minGlij + " .. " + maxGlij);
                 // night: the children go home (nobody watching), the equipment stays
                 StadsLeven.testNacht = true;
+                Babbels.testHoort = false;   // X-INT: nobody near the test town (other tests' mock players never leave the server)
                 StadsLeven.tickGroepen(sl);
-                helper.assertTrue(s.kinderenAantal() == 0 && !s.wip.isRemoved(), "at night the playground sleeps");
+                Babbels.testHoort = null;
+                helper.assertTrue(s.kinderenAantal() == 0 && !s.wip.isRemoved(), "at night the playground sleeps (children " + s.kinderenAantal()
+                        + ", wip weg " + s.wip.isRemoved() + ", hoort " + Babbels.iemandHoort(sl, s.m) + ", spelers " + sl.players().size() + " "
+                        + sl.players().stream().map(p -> p.getClass().getSimpleName() + "@" + (int) p.distanceToSqr(s.m)).toList() + ", in groepen " + StadsLeven.GROEPEN.containsKey(s.sleutel) + ")");
                 // ZACHT: fewer children
                 StadsLeven.testNacht = false;
                 StadsLeven.allesWeg();
