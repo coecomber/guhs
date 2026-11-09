@@ -37,9 +37,11 @@ import tegellezer as TL  # noqa: E402
 ROOT = os.path.abspath(os.path.join(HIER, "..", ".."))
 TEGELS = os.path.join(ROOT, "src", "main", "resources", "data", "guhs", "structure", "vadsrijk", "tegels")
 JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "feature", "vadsrijk")
-ZONES = {"1": (-20, -16, 15, 20), "2": (6, -23, 15, -13), "3": (16, -16, 26, -3), "4": (27, -12, 39, -5),
+ZONES = {"1": (-11, -11, 11, 18),   # X-Z1GROND: the zone-1 map grid only (wereld/kaart.py TX/TZ; was -20,-16,15,20 = zone 2 too)
+          "2": (6, -23, 15, -13), "3": (16, -16, 26, -3), "4": (27, -12, 39, -5),
          "5": (38, -12, 48, -5), "6": (51, -18, 66, -7)}
 MAX_GAT = 6
+HOOGTE_ZONES = ("1", "2")   # X-Z1GROND: zones checked against the generator's own ground heights (funderingcheck_hoogte.py)
 
 # terrain by name: what the land generators lay as ground. Zone 6's rock BANDS (pleister_roze/perzik, roze_marmer) are also wall
 # materials, so they are NOT terrain here (the bands only show on cliff faces; the column top is sand/rock/grass/salt).
@@ -101,12 +103,14 @@ def in_stad(x, z, boxen):
 T0 = {}   # zone 6: the ground heights of the generator (_cache/z6/terrein.npz, written by maak6): (T, x1, z1)
 
 
-def laad_terrein():
-    p = os.path.join(HIER, "_cache", "z6", "terrein.npz")
-    if os.path.exists(p) and not T0:
+def laad_terrein(zone="6"):
+    """X-Z1GROND: zone 1 too (_cache/z1/terrein.npz, written by maak_kaart / wereld/fundering1.py)."""
+    k = "z" + zone
+    p = os.path.join(HIER, "_cache", k, "terrein.npz")
+    if os.path.exists(p) and k not in T0:
         d = np.load(p)
-        T0["z6"] = (d["T"].astype(np.int32), int(d["b"][0]), int(d["b"][2]))
-    return bool(T0)
+        T0[k] = (d["T"].astype(np.int32), int(d["b"][0]), int(d["b"][2])) + ((d["pad"],) if "pad" in d.files else ())
+    return k in T0
 
 
 def tegel(pad, tx, tz, ref=None):
@@ -223,6 +227,9 @@ def clusters(fout):
 
 
 def check(zone, maxn, ook_steden=False, stil=False):
+    if zone in HOOGTE_ZONES and laad_terrein(zone):   # X-Z1GROND: the height-based check (the generator's ground)
+        import funderingcheck_hoogte as FH
+        return FH.check(zone, maxn, TEGELS, ZONES[zone], T0["z" + zone], stil)
     tx0, tz0, tx1, tz1 = ZONES[zone]
     boxen = [] if ook_steden else steden(zone)
     fout = []
@@ -234,7 +241,7 @@ def check(zone, maxn, ook_steden=False, stil=False):
         if not (tx0 <= tx <= tx1 and tz0 <= tz <= tz1):
             continue
         ref = None
-        if zone == "6" and laad_terrein():
+        if zone == "6" and laad_terrein("6"):
             Tz, x1, z1 = T0["z6"]
             i0, k0 = tx * 64 - x1, tz * 64 - z1
             if 0 <= i0 and 0 <= k0 and i0 + 64 <= Tz.shape[0] and k0 + 64 <= Tz.shape[1]:
