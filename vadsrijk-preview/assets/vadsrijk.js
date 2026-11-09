@@ -24,7 +24,7 @@
   var uitleg=null;
   function sluitUitleg(){if(uitleg){uitleg.remove();uitleg=null;}}
   if(zs){zs.addEventListener('change',function(){setZone(zs.value);sluitUitleg();});}
-  if(read('guhs-vr-spoileruitleg-weg')!=='1'){
+  if(read('guhs-vr-spoileruitleg-weg')!=='1'&&zs&&zs.options.length>1){   // X-SITE: only one open zone = nothing to explain
     uitleg=document.createElement('div');uitleg.className='spoileruitleg';uitleg.setAttribute('role','dialog');uitleg.setAttribute('aria-live','polite');
     uitleg.setAttribute('aria-label','Spoilers');
     uitleg.innerHTML='<p><span lang="nl">Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij <b>Toon tot</b> tot welke zone je alles wilt zien.</span>'+

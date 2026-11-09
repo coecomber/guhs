@@ -9,7 +9,7 @@
 #
 # Lifetime: the next deploy from main (any push to main touching docs/tools, or a manual run of "Wiki (GitHub Pages)") replaces
 #   the site WITHOUT the preview. To bring it back: push any commit to gh-pages (or re-run this workflow's last run in Actions).
-# Remove for good: delete vadsrijk-preview/ and this file from gh-pages (one commit), then run "Wiki (GitHub Pages)" on main.
+# Remove for good: delete vadsrijk-preview/, vadsrijk-preview-zone1/ and this file from gh-pages (one commit), then run "Wiki (GitHub Pages)" on main.
 name: Vadsrijk preview (GitHub Pages)
 
 on:
@@ -17,6 +17,7 @@ on:
     branches: [ gh-pages ]
     paths:
       - 'vadsrijk-preview/**'
+      - 'vadsrijk-preview-zone1/**'
       - '.github/workflows/vadsrijk-preview.yml'
 
 permissions:
@@ -43,7 +44,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: preview
-          sparse-checkout: vadsrijk-preview
+          sparse-checkout: |
+            vadsrijk-preview
+            vadsrijk-preview-zone1
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -72,6 +75,11 @@ jobs:
           test ! -e site/docs/site/vadsrijk-preview || { echo "main already has a vadsrijk-preview folder"; exit 1; }
           cp -r preview/vadsrijk-preview site/docs/site/vadsrijk-preview
           grep -q 'name="robots" content="noindex' site/docs/site/vadsrijk-preview/index.html || { echo "preview must be noindex"; exit 1; }
+          # X-SITE: the public zone-1 version (--open-zones 1), also hidden + noindex
+          test -f preview/vadsrijk-preview-zone1/index.html || { echo "zone-1 preview missing"; exit 1; }
+          test ! -e site/docs/site/vadsrijk-preview-zone1 || { echo "main already has a vadsrijk-preview-zone1 folder"; exit 1; }
+          cp -r preview/vadsrijk-preview-zone1 site/docs/site/vadsrijk-preview-zone1
+          grep -q 'name="robots" content="noindex' site/docs/site/vadsrijk-preview-zone1/index.html || { echo "zone-1 preview must be noindex"; exit 1; }
           du -sh site/docs/site site/docs/site/vadsrijk-preview
 
       - name: Configure Pages

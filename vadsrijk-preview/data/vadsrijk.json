@@ -506,7 +506,7 @@
    "id": "grot_wolkengrot",
    "naam": "De Wolkengrotten",
    "naam_en": "The Cloud Caves",
-   "zone": "zone1",
+   "zone": "zone5",
    "lv": [
     58,
     60
@@ -527,7 +527,7 @@
    "id": "grot_koraalgrot",
    "naam": "De Koraalgrot",
    "naam_en": "The Coral Grotto",
-   "zone": "zone1",
+   "zone": "zone4",
    "lv": [
     53,
     55
@@ -548,7 +548,7 @@
    "id": "grot_wortelgrot",
    "naam": "De Wortelgrot",
    "naam_en": "The Root Grotto",
-   "zone": "zone1",
+   "zone": "zone3",
    "lv": [
     44,
     46
@@ -569,7 +569,7 @@
    "id": "grot_kristalgrot",
    "naam": "De Kristalgrot",
    "naam_en": "The Crystal Grotto",
-   "zone": "zone1",
+   "zone": "zone2",
    "lv": [
     22,
     24
@@ -3063,10 +3063,6 @@
    "hub": "zwamzoet",
    "ring": "ring",
    "gebieden": [
-    "grot_wolkengrot",
-    "grot_koraalgrot",
-    "grot_wortelgrot",
-    "grot_kristalgrot",
     "grot_zwamgrot",
     "bondenvallei",
     "zwamzoet",
@@ -3091,6 +3087,7 @@
    "hub": "z2_kandijkom",
    "ring": "z2_ring",
    "gebieden": [
+    "grot_kristalgrot",
     "z2_spiegelburcht",
     "z2_kandijkom_dok",
     "z2_kandijkom",
@@ -3112,6 +3109,7 @@
    "hub": "z3_honingtak",
    "ring": "z3_ring",
    "gebieden": [
+    "grot_wortelgrot",
     "z3_zeppelinwerf",
     "z3_hart",
     "z3_wortelduister",
@@ -3136,6 +3134,7 @@
    "hub": "z4_lampionhaven",
    "ring": "z4_zee",
    "gebieden": [
+    "grot_koraalgrot",
     "z4_lampionhaven",
     "z4_knuffeltij",
     "z4_strandfeest",
@@ -3177,6 +3176,7 @@
     "z5_staartpark",
     "z5_ooggaarde",
     "z5_hoogvads",
+    "grot_wolkengrot",
     "z5_wolkwaldroom",
     "z5d_droom"
    ]
