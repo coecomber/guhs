@@ -77,3 +77,12 @@
 - Checker notes: `poicheck6` and `loopcheck6` read `_cache/plekken_z6.json` = the UNSNAPPED plan spots (37 / 30 hits at y 70);
   the published Z6WereldPlekken (snapped) checks 0 bad with poicheck6's own `staat()`. loopcheck3 VAL +1 = a sealed 1-cell pocket
   in the werf tower (1677,214,-805), no way in.
+- Full suite 407 tests, 6 red: 2 real (schadegetallen, huisdierNaamVanSpeler expected Dutch; the test server loads en_us, which is
+  real English since w-engels: tests now accept nl or en), 4 order-dependent (pass alone: Z2Bazen 6/6, Stadsleven 5/5, Z5Droom 7/7,
+  Ruiters 3/3). Quest robot 41/19/24/23/24/25, 0 stuck.
+- **Client start crash found by the AutoCheck run** (gametests never load the client): w-party registered the SERVER config and the
+  CLIENT config under the same file name `guhs-vadsrijk-nepspelers.toml` -> "Detected config file conflict". The client config is
+  now `guhs-vadsrijk-nepspelers-client.toml`.
+- Site: 110-w-int merged into 110-u-site, regen (runtime dump copied from w-int's run/), preview gh-pages aa19bf3e8 (200, noindex).
+- AutoCheck (2nd run, after the config fix): 33 shots, no crash. run/ cleaned (no saves/logs/crash-reports/gametest output;
+  screenshots/autocheck kept). run-client.bat text -> round W. From here on: NO gradle in w-int (the user's client).

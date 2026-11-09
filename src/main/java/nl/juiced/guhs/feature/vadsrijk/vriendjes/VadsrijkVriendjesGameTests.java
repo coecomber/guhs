@@ -35,7 +35,7 @@ public class VadsrijkVriendjesGameTests {
     public static void huisdierNaamVanSpeler(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         Language t = Language.getInstance();
-        helper.assertTrue(t.has("vadsrijk.huisdieren.naam_van") && t.getOrDefault("vadsrijk.huisdieren.naam_van").equals("%s van %s"), "lang naam_van");
+        helper.assertTrue(t.has("vadsrijk.huisdieren.naam_van") && java.util.Set.of("%s van %s", "%s of %s").contains(t.getOrDefault("vadsrijk.huisdieren.naam_van")), "lang naam_van");   // W-INT: nl or en
         Huisdier vahoegje = Huisdieren.van(Z3NpcRegistry.VAHOEGJE);
         helper.assertTrue(vahoegje != null, "Vahoegje is a pet");
         for (Huisdier h : new Huisdier[] {Huisdieren.KONING_KLODDER, vahoegje}) {

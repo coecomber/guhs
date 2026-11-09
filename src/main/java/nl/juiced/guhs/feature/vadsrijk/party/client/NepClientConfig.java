@@ -2,7 +2,7 @@ package nl.juiced.guhs.feature.vadsrijk.party.client;
 
 import net.neoforged.neoforge.common.ModConfigSpec;
 
-/** W-PARTY client config (config/guhs-vadsrijk-nepspelers.toml): "Nep-spelers: aan/uit" for this player. */
+/** W-PARTY client config (config/guhs-vadsrijk-nepspelers-client.toml): "Nep-spelers: aan/uit" for this player. */
 public final class NepClientConfig {
     public static final ModConfigSpec SPEC;
     public static final ModConfigSpec.BooleanValue AAN;

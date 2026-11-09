@@ -65,7 +65,9 @@ public class VadsrijkBelevingGameTests {
         helper.assertTrue("zwak".equals(Getalstijl.van(10, false, Element.VUUR, 1.5, false, false).label())
                 && "taai".equals(Getalstijl.van(10, false, Element.VUUR, 0.7, false, false).label())
                 && "".equals(Getalstijl.van(10, false, Element.VUUR, 1.0, false, false).label()), "Zwak! at x1.5, Taai at x0.7");
-        helper.assertTrue(Getalstijl.tekst(Getalstijl.van(10, false, Element.VUUR, 1.5, false, false)).getString().equals("10 Zwak!"), "the text");
+        String tekst = Getalstijl.tekst(Getalstijl.van(10, false, Element.VUUR, 1.5, false, false)).getString();   // W-INT: nl or en
+        helper.assertTrue(tekst.equals("10 " + net.minecraft.locale.Language.getInstance().getOrDefault("vadsrijk.kern.beleving.zwak", "Zwak!")),
+                "the text: " + tekst);
         Getalstijl.Stijl dot = Getalstijl.van(400, false, Element.VUUR, 1.5, true, false);
         helper.assertTrue("".equals(dot.label()) && dot.schaal() <= 1.0f, "DoT ticks stay small and never say Zwak!");
         helper.assertTrue(Getalstijl.van(10, false, Element.VUUR, 1, false, true).kleur() == Getalstijl.SPELER_ROOD, "damage on a player is red");
