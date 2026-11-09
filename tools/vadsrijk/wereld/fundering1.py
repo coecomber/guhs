@@ -100,6 +100,8 @@ def _venster2d(A, x0, z0, gx0, gz0, n, vul):
 
 def naloop(tegels, T, pad, x0, z0, map_=None, praat=True, bewust=None, naam="fundering1"):
     """The pass over the given zone-1 tiles. T / pad: the (NX, NZ) ground heights and path mask with origin (x0, z0)."""
+    if os.environ.get("GUHS_GEEN_FUNDERING"):          # (debug: build without the pass, to compare)
+        return {}
     sys.path.insert(0, VR)
     import verbind as VB
     t_0 = time.time()
