@@ -6962,6 +6962,18 @@
         "vadsrijk.z6raid.volg.wat.poort",
         "vadsrijk.z6raid.volg.wat.zaal"
       ]
+    },
+    {
+      "id": "c419_vr_x_dungeon",
+      "title": "1.10 round X (X-DUNGEON): dungeon name boards, the Koraalgrot seal, the door item tooltip",
+      "prefixes": [
+        "block.guhs.vr_dungeondeur.tip",
+        "block.guhs.vr_dungeondeur.tip2",
+        "vadsrijk.dungeon.bord.onder",
+        "vadsrijk.dungeon.bord.onder.kort",
+        "vadsrijk.dungeon.zegel.bord.koraalgrot",
+        "vadsrijk.dungeon.zegel.msg.koraalgrot"
+      ]
     }
   ]
 }

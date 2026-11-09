@@ -122,7 +122,9 @@
     "erfenis.ui.deco_knop",
     "erfenis.decowinkel.cat.water",
     "erfenis.decowinkel.tab",
-    "ftb.guhs_erfenis.section.erfenis_sherlock"
+    "ftb.guhs_erfenis.section.erfenis_sherlock",
+    "vadsrijk.dungeon.bord.onder",
+    "vadsrijk.dungeon.bord.onder.kort"
   ],
   "waarden": [
     "Guhdex",
