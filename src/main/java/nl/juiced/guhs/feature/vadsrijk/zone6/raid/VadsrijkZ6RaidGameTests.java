@@ -269,13 +269,13 @@ public class VadsrijkZ6RaidGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_deur")
     public static void deurNaarWachtzaal(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
-        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1));
-        BlockPos d = helper.absolutePos(new BlockPos(40, 2, 1));
+        // (far from the test grid: the Wachtzaal floor and the door floor must not spill into a neighbouring test)
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1)).offset(0, 0, 4000);
+        BlockPos d = helper.absolutePos(new BlockPos(40, 2, 1)).offset(0, 0, 4000);
         BlockPos oudA = Z6RaidPlekken.testAnker, oudP = Z6RaidPlekken.testPoort;
         Z6RaidPlekken.testAnker = a;
         Z6RaidPlekken.testPoort = d;
         try {
-            Z6Raid.wisAlles();
             vloer(sl, Z6RaidPlekken.midden(0), 22);
             vloer(sl, d, 8);
             for (int dx = -1; dx <= 3; dx++) {
@@ -306,7 +306,6 @@ public class VadsrijkZ6RaidGameTests {
         } finally {
             Z6RaidPlekken.testAnker = oudA;
             Z6RaidPlekken.testPoort = oudP;
-            Z6Raid.wisAlles();
         }
     }
 
@@ -317,11 +316,14 @@ public class VadsrijkZ6RaidGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_cirkel")
     public static void startCirkel(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
-        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1));
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1)).offset(0, 0, 4300);   // (far from the test grid)
         BlockPos oudA = Z6RaidPlekken.testAnker;
         Z6RaidPlekken.testAnker = a;
+        Z6Raid.Groep oudG = Z6Raid.groep;   // (shared static state: restored, never wiped, so parallel raid tests keep theirs)
+        java.util.List<java.util.List<java.util.UUID>> oudRij = new java.util.ArrayList<>(Z6Raid.RIJ);
+        Z6Raid.groep = null;
+        Z6Raid.RIJ.clear();
         try {
-            Z6Raid.wisAlles();
             vloer(sl, Z6RaidPlekken.midden(0), 22);
             for (int k = 0; k <= 3; k++) {
                 for (BlockPos b : Z6RaidPlekken.poortBlokken(k)) {
@@ -349,7 +351,9 @@ public class VadsrijkZ6RaidGameTests {
             helper.succeed();
         } finally {
             Z6RaidPlekken.testAnker = oudA;
-            Z6Raid.wisAlles();
+            Z6Raid.groep = oudG;
+            Z6Raid.RIJ.clear();
+            Z6Raid.RIJ.addAll(oudRij);
         }
     }
 
@@ -360,7 +364,7 @@ public class VadsrijkZ6RaidGameTests {
     @GuhTest(template = "empty", batch = BATCH + "_zaal", timeoutTicks = 400)
     public static void wachtzaalBereikbaar(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
-        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1));
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1)).offset(0, 0, 4600);   // (the 60x67x51 template: far from the test grid)
         BlockPos oudA = Z6RaidPlekken.testAnker;
         Z6RaidPlekken.testAnker = a;
         try {

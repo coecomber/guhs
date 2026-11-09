@@ -159,7 +159,7 @@ public final class Z6RaidHeraut {
         if (t == null) {
             return 0;
         }
-        Component tekst = Component.empty();
+        net.minecraft.network.chat.MutableComponent tekst = Component.empty();
         for (int i = 0; i < b.regels().size(); i++) {
             if (i > 0) {
                 tekst.append("\n");
