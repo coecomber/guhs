@@ -2,6 +2,8 @@
 #   docs/site/           the landing page (index.html), 404.html (sends old wiki links /<page>.html on to /wiki/<page>.html),
 #                        CNAME (guhs.nl), robots.txt, sitemap.xml   <- tools/wiki_site/landing.py
 #   docs/site/wiki/      the Guhs wiki                               <- the rest of tools/wiki_site/
+#   docs/site/vadsrijk/  Het Vadsrijk (guhs.nl/vadsrijk/)            <- copied as it is from docs/vadsrijk-site/ (prebuilt on the
+#                        1.10 branch: make_vadsrijk_site.py --echt --komt-eraan 1.10.0 --open-zones 1, zone1check --release = 0)
 # Both come out of one run of tools/make_wiki_site.py, which also checks every link (landing -> wiki too).
 #
 # Custom domain: with "GitHub Actions" as the Pages source the CNAME file in the artifact is not what sets the domain;
@@ -23,6 +25,7 @@ on:
     paths:
       - 'docs/wiki/**'
       - 'docs/screenshots/**'
+      - 'docs/vadsrijk-site/**'
       - 'tools/**'
       - 'src/main/resources/assets/guhs/lang/**'
       - '.github/workflows/pages.yml'
@@ -63,6 +66,15 @@ jobs:
           for f in index.html 404.html CNAME wiki/index.html wiki/server.html wiki/aan-de-slag.html; do
             test -f "docs/site/$f" || { echo "docs/site/$f is missing"; exit 1; }
           done
+          # SITE-LIVE: guhs.nl/vadsrijk/ (when docs/vadsrijk-site is committed) must be the real, indexable build
+          if [ -f docs/vadsrijk-site/index.html ]; then
+            for f in vadsrijk/index.html vadsrijk/kaart.html vadsrijk/zones/zone1.html; do
+              test -f "docs/site/$f" || { echo "docs/site/$f is missing"; exit 1; }
+            done
+            ! grep -rlq 'name="robots" content="noindex' docs/site/vadsrijk || { echo "docs/site/vadsrijk must be indexable (no noindex)"; exit 1; }
+            ! ls docs/site/vadsrijk/zones | grep -qv -e '^index.html$' -e '^zone1.html$' -e '^tutorial' || { echo "docs/site/vadsrijk has pages of closed zones"; ls docs/site/vadsrijk/zones; exit 1; }
+            grep -q 'vadsrijk/' docs/site/sitemap.xml || { echo "sitemap.xml misses /vadsrijk/"; exit 1; }
+          fi
           grep -qx 'guhs.nl' docs/site/CNAME || { echo "docs/site/CNAME must say guhs.nl"; exit 1; }
           touch docs/site/.nojekyll
           du -sh docs/site

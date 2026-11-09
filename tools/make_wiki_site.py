@@ -17,6 +17,7 @@ Requires: pillow (with WebP).
 import argparse
 import collections
 import os
+import shutil
 import sys
 import time
 
@@ -58,9 +59,19 @@ def main():
     os.makedirs(out, exist_ok=True)
     renderer = Renderer(site, builder, images, game, out, args.base_url)
     written = set(renderer.render_all())
+    vadsrijk = False
     if landing_dir:
+        # SITE-LIVE: guhs.nl/vadsrijk/ = the prebuilt Vadsrijk section in docs/vadsrijk-site (built on the 1.10 branch with
+        # tools/make_vadsrijk_site.py --echt --komt-eraan 1.10.0 --open-zones 1, checked there with zone1check --release).
+        # It is copied as it is, so every build of this site (pages.yml, and the gh-pages preview workflow) keeps it online.
+        vr_src = os.path.join(root, "docs", "vadsrijk-site")
+        if os.path.isfile(os.path.join(vr_src, "index.html")):
+            vr_out = os.path.join(landing_dir, "vadsrijk")
+            shutil.rmtree(vr_out, ignore_errors=True)
+            shutil.copytree(vr_src, vr_out)
+            vadsrijk = True
         from wiki_site.landing import Landing
-        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/")).write(landing_dir)
+        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/"), vadsrijk=vadsrijk).write(landing_dir)
     n_img = images.write()
     # pages that no longer exist
     stale = 0
