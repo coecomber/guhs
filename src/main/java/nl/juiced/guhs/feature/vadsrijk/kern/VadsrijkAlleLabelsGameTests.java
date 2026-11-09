@@ -129,6 +129,7 @@ public class VadsrijkAlleLabelsGameTests {
                     }
                 }
             }
+            LOG.info("X-LABELS {}: {} keys in {} families checked in nl_nl + en_us", wat, aantal(), keys.size());
             helper.assertTrue(aantal() >= minimaal, wat + ": only " + aantal() + " keys found (expected " + minimaal + "+): a source was not read");
             if (!fout.isEmpty()) {
                 StringBuilder sb = new StringBuilder(wat + ": " + fout.values().stream().mapToInt(Set::size).sum() + " ontbreken\n");
@@ -306,12 +307,22 @@ public class VadsrijkAlleLabelsGameTests {
     // ---- all NPCs the world can place -----------------------------------------------------------------------------------------
 
     /** Id -> definition of every NPC: the keeper's own + the ones other slices add only when a player comes near. */
+    /** Sources that could not be read (a renamed field): the npc test fails on them, so a source never silently drops out. */
+    static final Set<String> ONGELEZEN = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
     static Map<String, NpcDef> alleNpcs() {
         Map<String, NpcDef> l = new TreeMap<>();
         for (NpcDef d : Npcs.alle()) {
             l.put(d.id(), d);
         }
-        Consumer<String> extra = id -> l.computeIfAbsent(id, i -> new NpcDef(i, BlockPos.ZERO, 0, GuhVariant.NORMAL, List.of(), NpcDef.Gedrag.STAAN, null, 1f));
+        Consumer<String> extra = id -> {
+            if (id == null) {
+                LOG.warn("X-LABELS: an NPC source gave no id");
+                ONGELEZEN.add("npc-bron");
+                return;
+            }
+            l.computeIfAbsent(id, i -> new NpcDef(i, BlockPos.ZERO, 0, GuhVariant.NORMAL, List.of(), NpcDef.Gedrag.STAAN, null, 1f));
+        };
         // u-huizen: a Kwartiermeester per hub town (Poorten.HUBS), Meubelmeester Mollie
         for (Object h : items(statisch("huizen.Poorten", "HUBS"))) {
             extra.accept(str(h, "npc"));
@@ -332,7 +343,6 @@ public class VadsrijkAlleLabelsGameTests {
         }
         // the Werver at the portal temple
         extra.accept((String) statisch("npc.Werver", "ID"));
-        l.remove(null);
         return l;
     }
 
@@ -378,6 +388,9 @@ public class VadsrijkAlleLabelsGameTests {
         for (String hub : List.of("zwamzoet", "kandijkom", "honingtak", "lampionhaven", "hoogvads")) {
             helper.assertTrue(npcs.containsKey("kk_poort_" + hub), "Kwartiermeester of " + hub + " is enumerated");
         }
+        if (!ONGELEZEN.isEmpty()) {
+            e.fout("bronnen", "unreadable NPC sources: " + ONGELEZEN + " (see the log)");
+        }
         e.controleer(helper, "NPC-namen", 150);
         helper.succeed();
     }
@@ -405,7 +418,7 @@ public class VadsrijkAlleLabelsGameTests {
 
     /** NPCs whose click never reaches the chatter line (their own menu answers every click). */
     static boolean heeftEigenKlik(String id) {
-        return id.startsWith("bond_") || id.equals("kk_mollie") || id.equals("werver")
+        return id.startsWith("bond_") || id.startsWith("kk_poort_") || id.equals("kk_mollie") || id.equals("werver")   // (Menus.klik: the Kwartiermeesters always open their menu)
                 || items(statisch("ambacht.AmbachtPlekken", "WERKPLAATSEN")).stream().anyMatch(w -> id.equals(str(w, "npc")));
     }
 
