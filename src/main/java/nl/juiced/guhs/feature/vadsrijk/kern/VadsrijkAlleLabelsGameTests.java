@@ -339,6 +339,28 @@ public class VadsrijkAlleLabelsGameTests {
     /** Every NPC, dressed like in the world: its name tag must be a real name in both languages. */
     @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 400)
     public static void npcNamen(GameTestHelper helper) {
+        veilig(helper, () -> npcNamen0(helper));
+    }
+
+    /** A crash inside a test shows as "UnknownGameTestException": report the real exception instead. */
+    static void veilig(GameTestHelper helper, Runnable r) {
+        try {
+            r.run();
+        } catch (net.minecraft.gametest.framework.GameTestException a) {
+            throw a;
+        } catch (Throwable t) {
+            LOG.error("X-LABELS crash", t);
+            StringBuilder sb = new StringBuilder(t.toString());
+            for (StackTraceElement el : t.getStackTrace()) {
+                if (el.getClassName().startsWith("nl.juiced")) {
+                    sb.append(" @ ").append(el.getClassName().substring(el.getClassName().lastIndexOf('.') + 1)).append(':').append(el.getLineNumber());
+                }
+            }
+            helper.fail(sb.toString());
+        }
+    }
+
+    static void npcNamen0(GameTestHelper helper) {
         Eisen e = new Eisen();
         Map<String, NpcDef> npcs = alleNpcs();
         for (NpcDef d : npcs.values()) {
@@ -363,6 +385,10 @@ public class VadsrijkAlleLabelsGameTests {
     /** What a NPC says when you click it without quest business: praat.<id>.1..3 (..4 for a few). */
     @GuhTest(template = "empty", batch = BATCH)
     public static void npcRegels(GameTestHelper helper) {
+        veilig(helper, () -> npcRegels0(helper));
+    }
+
+    static void npcRegels0(GameTestHelper helper) {
         Eisen e = new Eisen();
         for (NpcDef d : alleNpcs().values()) {
             if (heeftEigenKlik(d.id())) {
@@ -399,9 +425,10 @@ public class VadsrijkAlleLabelsGameTests {
             new String[] {"ambacht.Recepten", "ALLE"}, new String[] {"ambacht.Maatwerk$Eigenschap", "values"}, new String[] {"kleding.Cosmetica", "alle"},
             new String[] {"kleding.Cosmetica$Soort", "values"}, new String[] {"kleding.Cosmetica$Kracht", "values"},
             new String[] {"puzzels.Puzzels", "DEFS"}, new String[] {"zone4.boot.BootVariant", "values"}, new String[] {"zone4.boot.BootVariant$As", "values"},
-            new String[] {"zone4.boot.BootZee", "steigers"}, new String[] {"party.nep.NepRol", "values"}, new String[] {"rijdier.Maatjes$Rol", "values"},
+            new String[] {"zone4.boot.BootZee", "PLACEHOLDERS"}, new String[] {"party.nep.NepRol", "values"}, new String[] {"rijdier.Maatjes$Rol", "values"},
             new String[] {"rijdier.Maatjes", "KRACHTEN"}, new String[] {"vfx.BaasProfielen", "alle"}, new String[] {"dungeon.DungeonType", "values"},
-            new String[] {"zone3.systemen.Premies", "POOL"}, new String[] {"zone3.systemen.Premies", "WINKEL"});
+            new String[] {"zone3.systemen.Premies", "POOL"}, new String[] {"zone3.systemen.Premies", "WINKEL"},
+            new String[] {"rijdier.Uiterlijk", "alle"}, new String[] {"rijdier.Uiterlijk$As", "values"});
 
     static Object bron(String klasse, String lid) {
         if (lid.equals("values")) {
@@ -493,12 +520,12 @@ public class VadsrijkAlleLabelsGameTests {
         // classes: the choice cards; specs: role, short text, titles, advancement lines
         for (var k : nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.alle()) {
             e.key("klassen", "vadsrijk.klassen.kies.rol." + k.id());
-            e.key("klassen", "vadsrijk.klassen.kort." + k.id());
             for (int s = 1; s <= 3; s++) {
                 e.key("klassen", "vadsrijk.klassen.titel." + k.id() + "." + s);
             }
             for (var v : k.vaardigheden()) {
                 e.key("klassen.skilluitleg", "vadsrijk.klassen.skilluitleg." + v.id());
+                e.key("klassen.kort", "vadsrijk.klassen.kort." + v.id());   // (the choice card: one line per skill)
             }
             for (var n : k.boom()) {
                 e.key("klassen.knoop.uitleg", "vadsrijk.klassen.knoop." + n.id() + ".uitleg");
@@ -516,7 +543,9 @@ public class VadsrijkAlleLabelsGameTests {
         for (Object a : items(bron("ambacht.Ambacht", "values"))) {
             String rol = nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtNpcs.rol((nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht) a);
             e.key("ambacht.npc", "vadsrijk.ambacht.npc." + rol + ".hallo");
-            e.key("ambacht.npc", "vadsrijk.ambacht.npc." + rol + ".uitleg");
+            if (((nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht) a).verzamel) {   // ("where do I gather?": only the gathering masters)
+                e.key("ambacht.npc", "vadsrijk.ambacht.npc." + rol + ".uitleg");
+            }
         }
         e.key("ambacht.npc", "vadsrijk.ambacht.npc." + nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtNpcs.rol(null) + ".hallo");
         // modes (karakter): the line, the new/make buttons
@@ -537,6 +566,86 @@ public class VadsrijkAlleLabelsGameTests {
         // u-huizen: the Kwartiermeester's "where" line, like zone 6's two
         for (Object h : items(statisch("huizen.Poorten", "HUBS"))) {
             e.key("kk_poort.plek", "vadsrijk.npc.plek.npc." + str(h, "npc"));
+        }
+        // secrets: zone 1's cuddly toys, clues and treasures (found message + questlog), zone 2's
+        for (String[] f : new String[][] {{"KNUFFEL", "vadsrijk.npc.knuffel."}, {"AANWIJZING", "vadsrijk.npc.aanwijzing."},
+                {"AANWIJZING", "vadsrijk.npc.aanwijzing.titel."}, {"SCHAT", "vadsrijk.npc.schat."}, {"SCHAT", "vadsrijk.npc.schat.naam."}}) {
+            if (statisch("npc.NpcPlekken", f[0]) instanceof Map<?, ?> m) {
+                m.keySet().forEach(k -> e.key("geheim.z1", f[1] + k));
+            }
+        }
+        for (String[] f : new String[][] {{"KNUFFEL", "vadsrijk.z2npc.knuffel."}, {"AANWIJZING", "vadsrijk.z2npc.aanwijzing."},
+                {"SCHAT", "vadsrijk.z2npc.schat."}}) {
+            if (statisch("zone2.npc.Z2NpcPlekken", f[0]) instanceof Map<?, ?> m) {
+                m.keySet().forEach(k -> e.key("geheim.z2", f[1] + k));
+            }
+        }
+        // mounts: the stable card per species; guilds: week tasks and castle levels
+        for (Object o : items(bron("economie.RijdierSoort", "values"))) {
+            String id = str(o, "id");
+            e.key("rijdier", "vadsrijk.economie.rijdier.eigen." + id);
+            if (!Boolean.TRUE.equals(roep(o, "kleuren"))) {
+                e.key("rijdier", "vadsrijk.economie.stal.nog_niet." + id);
+            }
+        }
+        for (Object o : items(bron("economie.RijdierSoort$PluimKleur", "values"))) {
+            e.key("rijdier", "vadsrijk.economie.pluimkleur.bron." + str(o, "id"));
+        }
+        for (Object t : items(statisch("gilden.BondXp", "TAKEN"))) {
+            e.key("gilden.taak", "vadsrijk.gilden.taak." + str(t, "id"));
+            e.key("gilden.taak", "vadsrijk.gilden.taak." + str(t, "id") + ".lang");
+        }
+        for (int i = 1; statisch("gilden.Kasteel", "MAX") instanceof Integer max && i <= max; i++) {
+            e.key("gilden.kasteel", "vadsrijk.gilden.kasteel." + i);
+            e.key("gilden.kasteel", "vadsrijk.gilden.kasteel.uitleg." + i);
+        }
+        // named creatures: the area leaders of zone 3/5/6 (their name tag), z3 contract targets (name tag + board), riders
+        for (String z : List.of("zone3.wezens.Z3WezensPlekken:z3wezens", "zone5.wezens.Z5WezensPlekken:z5wezens", "zone6.wezens.Z6WezensPlekken:z6wezens")) {
+            String[] d = z.split(":");
+            Object m = statisch(d[0], "LEIDERS");
+            if (m instanceof Map<?, ?> mm) {
+                mm.keySet().forEach(k -> e.key("leider", "vadsrijk." + d[1] + ".leider." + k));
+            } else {
+                e.fout("bronnen", d[0] + "#LEIDERS is gone");
+            }
+        }
+        if (statisch("zone3.wezens.Z3Contracten", "DOELWITTEN") instanceof Map<?, ?> m) {
+            m.keySet().forEach(k -> e.key("z3.contract", "vadsrijk.z3wezens.contract." + k));
+        }
+        for (Object k : items(statisch("zone3.systemen.Contracten", "DOELWITTEN"))) {
+            e.key("z3.contract", "vadsrijk.z3.systemen.contract." + k);
+        }
+        Object namen = statisch("ruiters.Ruiters", "NAMEN"), z1 = statisch("ruiters.Ruiters", "REGELS_Z1"), z3 = statisch("ruiters.Ruiters", "REGELS_Z3");
+        for (int i = 0; namen instanceof Integer n && i < n; i++) {
+            e.key("ruiters", "vadsrijk.ruiters.naam." + i);
+        }
+        for (int i = 0; z1 instanceof Integer n && i < n; i++) {
+            e.key("ruiters", "vadsrijk.ruiters.z1." + i);
+        }
+        for (int i = 0; z3 instanceof Integer n && i < n; i++) {
+            e.key("ruiters", "vadsrijk.ruiters.z3." + i);
+        }
+        // puzzles: name, book hint, overlay line, the riddle of a whisper stone, the torn page and the unlock of the reward
+        for (Object o : items(statisch("puzzels.Puzzels", "DEFS"))) {
+            String id = str(o, "id"), soort = str(o, "soort");
+            e.key("puzzels", "vadsrijk.puzzels.p." + id + ".naam");
+            e.key("puzzels", "vadsrijk.puzzels.p." + id + ".aanwijzing");
+            e.key("puzzels", "vadsrijk.puzzels.p." + id + ".uitleg");
+            e.key("puzzels", "vadsrijk.puzzels.soort." + soort);
+            if ("fluistersteen".equals(soort)) {
+                e.key("puzzels", "vadsrijk.puzzels.p." + id + ".vraag");
+            }
+            Object bel = roep(o, "beloning");
+            if (bel != null) {
+                Object bl = roep(bel, "bladzijde"), on = roep(bel, "ontgrendel");
+                if (bl instanceof Integer n && n > 0) {
+                    e.key("puzzels.bladzijde", "vadsrijk.puzzels.bladzijde." + n + ".titel");
+                    e.key("puzzels.bladzijde", "vadsrijk.puzzels.bladzijde." + n + ".tekst");
+                }
+                if (on instanceof String os && !os.isEmpty()) {
+                    e.key("puzzels.ontgrendel", "vadsrijk.puzzels.ontgrendel." + os);
+                }
+            }
         }
         e.controleer(helper, "families per id", 300);
         helper.succeed();

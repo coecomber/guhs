@@ -123,6 +123,16 @@ TEKSTEN = {
     "entity.guhs.vr_proefklodder": "Proefklodder",
     "entity.guhs.vr_proefkloddertje": "Kloddertje",
     "entity.guhs.vr_klodderreus": "Grauwe Klodderreus",
+    # X-LABELS: the names of kern's own base types (BasisType.naamKey; a crafted Maatwerk piece and the set tooltip show them):
+    # the other slices' bases had theirs, these 8 showed "vadsrijk.loot.kussenzwaard"
+    "vadsrijk.loot.kussenzwaard": "Kussenzwaard",
+    "vadsrijk.loot.knuffelknots": "Knuffelknots",
+    "vadsrijk.loot.pluishamer": "Pluishamer",
+    "vadsrijk.loot.pluishelm": "Pluishelm",
+    "vadsrijk.loot.knuffelharnas": "Knuffelharnas",
+    "vadsrijk.loot.roze_ring": "Roze Ring",
+    "vadsrijk.loot.knuffelketting": "Knuffelketting",
+    "vadsrijk.loot.pluisoorbel": "Pluisoorbel",
     # flavour lines (vadsrijk.loot.<type>.flavour.<n>)
     "vadsrijk.loot.kussenzwaard.flavour.0": "\"Slaat hard, knuffelt harder.\"",
     "vadsrijk.loot.kussenzwaard.flavour.1": "\"Gevuld met echt guhdons. Niet aan de guhs vertellen.\"",

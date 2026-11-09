@@ -48,9 +48,9 @@ DYNAMISCH = [
     # u-gilden: a Bondenbord guh per hub (BondPaneel.HUBS) + the teleport-stone button
     ("gilden/BondPaneel.java", r'new Hub\("([a-z_]+)"', ["vadsrijk.npc.naam.bond_bord_{id}", "vadsrijk.gilden.hub.{id}"]),
     # t-ambacht: a board guh per workshop
-    ("ambacht/AmbachtPlekken.java", r'w\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
+    ("ambacht/AmbachtPlekken.java", r'\bw\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
     # every zone's NPC list + the zone-1 campfire knights
-    ("**/*Npcs.java", r'npc\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
+    ("**/*Npcs.java", r'\bnpc\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
     ("npc/NpcPlekken.java", r'KAMPWACHT\.put\("([a-z0-9_]+)"', ["vadsrijk.npc.naam.{id}"]),
     # caves and cave dungeons
     ("grotten/GrotData.java", r'new Grot\("([a-z0-9_]+)"', ["vadsrijk.grotten.naam.{id}", "vadsrijk.grotten.onder.{id}", "vadsrijk.grotten.elite.naam.{id}",
@@ -63,7 +63,18 @@ DYNAMISCH = [
     ("wereld/WereldPlekken.java", r'new Deur\("([a-z0-9_]+)"', ["vadsrijk.wereld.deur.titel.{id}", "vadsrijk.wereld.deur.onder.{id}",
                                                               "vadsrijk.wereld.deur.dicht.{id}"]),
     ("zone5/wolkwal/WolkwalUitzicht.java", r'new Uitzicht\("([a-z0-9_]+)"', ["vadsrijk.wolkwal.uitzicht.{id}", "vadsrijk.wolkwal.uitzicht.{id}.onder"]),
-    ("stadsleven/Steden.java", r'voeg\("([a-z0-9_]+)"', ["vadsrijk.stadsleven.stad.{id}"]),
+    ("stadsleven/Steden.java", r'\bvoeg\("([a-z0-9_]+)"', ["vadsrijk.stadsleven.stad.{id}"]),
+    # secrets: zone 1 (found message + questlog) and zone 2
+    ("npc/NpcPlekken.java", r'\bKNUFFEL\.put\("([a-z0-9_]+)"', ["vadsrijk.npc.knuffel.{id}"]),
+    ("npc/NpcPlekken.java", r'\bAANWIJZING\.put\("([a-z0-9_]+)"', ["vadsrijk.npc.aanwijzing.{id}", "vadsrijk.npc.aanwijzing.titel.{id}"]),
+    ("npc/NpcPlekken.java", r'\bSCHAT\.put\("([a-z0-9_]+)"', ["vadsrijk.npc.schat.{id}", "vadsrijk.npc.schat.naam.{id}"]),
+    ("zone2/npc/Z2NpcPlekken.java", r'\bKNUFFEL\.put\("([a-z0-9_]+)"', ["vadsrijk.z2npc.knuffel.{id}"]),
+    ("zone2/npc/Z2NpcPlekken.java", r'\bAANWIJZING\.put\("([a-z0-9_]+)"', ["vadsrijk.z2npc.aanwijzing.{id}"]),
+    ("zone2/npc/Z2NpcPlekken.java", r'\bSCHAT\.put\("([a-z0-9_]+)"', ["vadsrijk.z2npc.schat.{id}"]),
+    # the area leaders' name tags
+    ("zone3/wezens/Z3WezensPlekken.java", r'\bLEIDERS\.put\("([a-z0-9_]+)"', ["vadsrijk.z3wezens.leider.{id}"]),
+    ("zone5/wezens/Z5WezensPlekken.java", r'\bLEIDERS\.put\("([a-z0-9_]+)"', ["vadsrijk.z5wezens.leider.{id}"]),
+    ("zone6/wezens/Z6WezensPlekken.java", r'\bLEIDERS\.put\("([a-z0-9_]+)"', ["vadsrijk.z6wezens.leider.{id}"]),
 ]
 VR_JAVA = JAVA / "nl/juiced/guhs/feature/vadsrijk"
 
@@ -79,6 +90,8 @@ def dynamisch(eis):
                 continue
             t = zonder_commentaar(f.read_text(encoding="utf-8"))
             for m in re.finditer(rx, t):
+                if t[m.end():m.end() + 4].lstrip().startswith("+"):
+                    continue   # (a prefix: "z5_burger_" + i; the runtime test covers those)
                 for sj in sjablonen:
                     eis(sj.format(id=m.group(1)), f.name + " (dynamisch)")
 

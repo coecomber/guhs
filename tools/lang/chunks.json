@@ -4909,6 +4909,14 @@
       "id": "c440_vr_x_labels",
       "title": "1.10 round X (X-LABELS): keys built from run-time ids that had no text",
       "prefixes": [
+        "vadsrijk.loot.knuffelharnas",
+        "vadsrijk.loot.knuffelketting",
+        "vadsrijk.loot.knuffelknots",
+        "vadsrijk.loot.kussenzwaard",
+        "vadsrijk.loot.pluishamer",
+        "vadsrijk.loot.pluishelm",
+        "vadsrijk.loot.pluisoorbel",
+        "vadsrijk.loot.roze_ring",
         "vadsrijk.npc.naam.kk_poort_honingtak",
         "vadsrijk.npc.naam.kk_poort_hoogvads",
         "vadsrijk.npc.naam.kk_poort_kandijkom",
@@ -4918,7 +4926,9 @@
         "vadsrijk.npc.plek.npc.kk_poort_hoogvads",
         "vadsrijk.npc.plek.npc.kk_poort_kandijkom",
         "vadsrijk.npc.plek.npc.kk_poort_lampionhaven",
-        "vadsrijk.npc.plek.npc.kk_poort_zwamzoet"
+        "vadsrijk.npc.plek.npc.kk_poort_zwamzoet",
+        "vadsrijk.z6raid.ster_bultguh.onder",
+        "vadsrijk.z6raid.ster_pluis.onder"
       ]
     }
   ]
