@@ -257,4 +257,27 @@ public class DecoGameTests {
         helper.assertTrue(terug.size() == 8 && terug.get(7)[0] == 5, "code and decode");
         helper.succeed();
     }
+
+    /** 1.9.7: the Terughekje is a real Erfhekje (both halves) between two flowers, turned along with the piece, and for sale. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void terughekje(GameTestHelper helper) {
+        ServerLevel lvl = helper.getLevel();
+        helper.assertTrue(DecoWinkel.stuk("terughekje") != null && DecoWinkel.stuk("terughekje").vanaf() == 1, "the Terughekje is in the shop from H1");
+        BlockPos o = helper.absolutePos(new BlockPos(1, 1, 1));
+        GebouwVormen.stempelDeco(lvl, "terughekje", o, 0);
+        BlockState onder = lvl.getBlockState(o.offset(1, 1, 0)), boven = lvl.getBlockState(o.offset(1, 2, 0));
+        helper.assertTrue(onder.getBlock() instanceof nl.juiced.guhs.feature.erfenis.koppeling.ErfhekjeBlock
+                && onder.getValue(nl.juiced.guhs.feature.erfenis.koppeling.ErfhekjeBlock.HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER,
+                "the lower half of the hekje in the middle: " + onder);
+        helper.assertTrue(boven.getBlock() instanceof nl.juiced.guhs.feature.erfenis.koppeling.ErfhekjeBlock
+                && boven.getValue(nl.juiced.guhs.feature.erfenis.koppeling.ErfhekjeBlock.HALF) == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.UPPER,
+                "and its upper half: " + boven);
+        BlockPos o2 = helper.absolutePos(new BlockPos(1, 1, 3));
+        GebouwVormen.stempelDeco(lvl, "terughekje", o2, 1);
+        BlockState gedraaid = lvl.getBlockState(o2.offset(0, 1, 1));
+        helper.assertTrue(gedraaid.getBlock() instanceof nl.juiced.guhs.feature.erfenis.koppeling.ErfhekjeBlock
+                && gedraaid.getValue(nl.juiced.guhs.feature.erfenis.koppeling.ErfhekjeBlock.FACING).getAxis() == net.minecraft.core.Direction.Axis.X,
+                "turned a quarter: the hekje turns along: " + gedraaid);
+        helper.succeed();
+    }
 }

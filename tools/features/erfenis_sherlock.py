@@ -156,7 +156,7 @@ ZAKEN = [
                 ("vadson", "Zijn dagboek! Maar kijk... de laatste bladzijden zijn eruit gescheurd!"),
                 ("sherlock", "Gescheurd. Dat is het tegenovergestelde van geplakt. Zoek de bladzijden, speurneus.")],
          kaarten={"geknabbelde_randjes": ("Geknabbelde papierrandjes", "De randjes zijn niet gescheurd. Ze zijn geknabbeld! Met kleine tandjes."),
-                  "angora_pluisjes": ("Angora-pluisjes op de trap", "Superzacht pluis op de kelderstoep. Angora! Dat komt toch van..."),
+                  "angora_pluisjes": ("Konijnenpluisjes op de trap", "Superzacht pluis op de kelderstoep. Konijnenpluis! Dat komt toch van..."),
                   "papier_in_ren": ("Plukjes papier in de konijnenren", "Papiersnippers in het hooi van de konijnenren. Heel zacht opgevouwen."),
                   "visitekaartje": ("Een grijs visitekaartje", "'Morris-Mika Projectontwikkeling: wij maken van groen grijs.' Was hij hier?!"),
                   "knabbel_knabbel": ("Getuige: Oehoe", "Oehoe sliep. Maar ze hoorde wel heel veel geknabbel. Knabbel knabbel, de hele dag.")},

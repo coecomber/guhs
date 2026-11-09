@@ -125,7 +125,7 @@ public final class ErfenisPayloads {
     public record Actie(int soort, int id, int x, int z, int x2, int z2, int rot, String tekst) implements CustomPacketPayload {
         public static final int OPEN = 0, PLAATS = 1, VERPLAATS = 3, DRAAI = 4, VERBETER = 5, OPHALEN = 6, GA = 7, TERUG = 8,
                 OPRUIMEN = 9, KAVEL = 10, VERF = 11, KIES = 12, KLEUR = 13, SELECTIE = 14, NAAR_HUIS = 15, LOKET = 16, BUREAU = 17,
-                MARKT = 18, PENSION = 19, OPHALEN_ALLES = 20, DECO = 21;
+                MARKT = 18, PENSION = 19, OPHALEN_ALLES = 20, DECO = 21, WEGGEVEN = 22;
         /** {@link #DECO} in {@code x2}: place {@code tekst} at (x, z, rot), or put the piece on tile (x, z) away. */
         public static final int DECO_PLAATS = 0, DECO_WEG = 1;
         /**

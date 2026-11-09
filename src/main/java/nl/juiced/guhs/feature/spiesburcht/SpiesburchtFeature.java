@@ -166,6 +166,7 @@ public final class SpiesburchtFeature {
         modBus.addListener(net.neoforged.bus.api.EventPriority.LOWEST, SpiesburchtFeature::spawnPlacements);   // (after the guh's own)
         NetherMikaRuil.register();
         SpiesburchtEvents.register();
+        KnabbelbakenMenu.init();   // 1.9.3: the right-click menu
         // 2.10.1: the Rookguh's own Guhdex page (it shows how many Rookguhs you saved, see SpiesburchtStats)
         nl.juiced.guhs.quest.GuhDex.creaturePage(nl.juiced.guhs.entity.GuhVariant.ROOKGUH, ROOKGUH);
     }

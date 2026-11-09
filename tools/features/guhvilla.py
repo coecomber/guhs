@@ -69,6 +69,28 @@ def _kroon():
     return img
 
 
+def _raampje():
+    """1.9.3: a real little window (not an eye, those are only the two big ones upstairs): a cream rounded frame, light
+    blue glass with a white cross and a shine, pink curtains tied back and a heart on top."""
+    img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle([0, 0, 15, 15], radius=4, fill=(255, 242, 230, 255))      # the frame
+    d.rounded_rectangle([2, 2, 13, 13], radius=3, fill=(168, 216, 246, 255))      # the glass
+    d.rectangle([3, 3, 12, 6], fill=(190, 228, 250, 255))                         # (lighter at the top)
+    d.line([(7, 2), (8, 2)], fill=(255, 242, 230, 255))
+    d.rectangle([7, 2, 8, 13], fill=(255, 250, 244, 255))                         # the window cross
+    d.rectangle([2, 7, 13, 8], fill=(255, 250, 244, 255))
+    d.line([(4, 4), (5, 3)], fill=(255, 255, 255, 255))                           # a shine
+    d.point((4, 10), fill=(232, 246, 255, 255))
+    for x0, x1 in ((2, 4), (11, 13)):                                             # the curtains, tied back
+        d.polygon([(x0, 2), (x1, 2), (x1 if x0 == 2 else x0, 9), (x0 if x0 == 2 else x1, 12)], fill=(255, 176, 208, 255))
+    d.point((3, 8), fill=(236, 120, 164, 255))
+    d.point((12, 8), fill=(236, 120, 164, 255))
+    for x, y in ((6, 0), (9, 0), (6, 1), (7, 1), (8, 1), (9, 1)):                  # a little heart on the frame
+        img.putpixel((x, y), (240, 110, 150, 255))
+    return img
+
+
 def _icoon():
     """The item / quest picture: a big pink guh head with two rows of windows, a porch and a golden crown (16x16)."""
     img = Image.new("RGBA", (16, 16), (0, 0, 0, 0))
@@ -88,8 +110,8 @@ def _icoon():
     for x0 in (3, 10):                                   # big eyes upstairs
         d.rectangle([x0, 5, x0 + 2, 7], fill=(52, 26, 52, 255))
         img.putpixel((x0, 5), (255, 255, 255, 255))
-    for x0 in (2, 12):                                   # little windows downstairs
-        img.putpixel((x0, 11), (52, 26, 52, 255))
+    for x0 in (2, 12):                                   # little windows downstairs (light glass: not eyes)
+        img.putpixel((x0, 11), (168, 216, 246, 255))
     d.rectangle([5, 10, 10, 15], fill=huisje.LICHT + (255,))   # porch + door
     d.rectangle([6, 11, 9, 15], fill=(200, 116, 132, 255))
     img.putpixel((9, 13), (255, 226, 120, 255))
@@ -122,9 +144,11 @@ def _romp():
         _el([16.5, 17, -4.3], [20.5, 19, -4], "blos", ["north"]),
         _el([-3, 16.5, -6.5], [7, 18.5, -4], "bloembak", ["north", "east", "west", "up"]),
         _el([9, 16.5, -6.5], [19, 18.5, -4], "bloembak", ["north", "east", "west", "up"]),
-        # downstairs: two little windows beside the porch
-        _el([-5, 5, -5.6], [0, 11, -5], "oog", ["north"]),
-        _el([16, 5, -5.6], [21, 11, -5], "oog", ["north"]),
+        # downstairs: two little windows beside the porch (1.9.3: real windows with a flower box, only the big ones are eyes)
+        _el([-5, 5, -5.6], [0, 11, -5], "raampje", ["north"]),
+        _el([16, 5, -5.6], [21, 11, -5], "raampje", ["north"]),
+        _el([-5.5, 3.5, -7], [0.5, 5, -5], "bloembak", ["north", "east", "west", "up"]),
+        _el([15.5, 3.5, -7], [21.5, 5, -5], "bloembak", ["north", "east", "west", "up"]),
         # the porch: the snoet with the door, the nose, two pillars, the roof with the balcony and its railing, the steps
         _el([3, 0, -9], [13, 9, -5], "vacht_licht", ["east", "west", "up", "north"], front="deur"),
         _el([6, 9, -8], [10, 11.5, -5], "neus", ["north", "east", "west", "up"]),
@@ -133,11 +157,11 @@ def _romp():
         _el([-2, 12, -12], [18, 13.5, -5], "pluis"),
         _el([-2, 13.5, -12], [18, 15.5, -11.5], "bloembak", ["north", "south", "east", "west", "up"]),
         _el([2, 0, -14], [14, 1.5, -11], "vacht_licht", ["north", "east", "west", "up"]),
-        # little windows in the sides (both floors)
-        _el([23, 5, 4], [23.6, 11, 10], "oog", ["east"]),
-        _el([-7.6, 5, 4], [-7, 11, 10], "oog", ["west"]),
-        _el([22, 20, 6], [22.6, 26, 12], "oog", ["east"]),
-        _el([-6.6, 20, 6], [-6, 26, 12], "oog", ["west"]),
+        # little windows in the sides (both floors; 1.9.3: windows, not eyes)
+        _el([23, 5, 4], [23.6, 11, 10], "raampje", ["east"]),
+        _el([-7.6, 5, 4], [-7, 11, 10], "raampje", ["west"]),
+        _el([22, 20, 6], [22.6, 26, 12], "raampje", ["east"]),
+        _el([-6.6, 20, 6], [-6, 26, 12], "raampje", ["west"]),
         # two chimneys at the back
         _el([14, 24, 16], [19, 32, 21], "schoorsteen"),
         _el([-3, 24, 16], [2, 32, 21], "schoorsteen"),
@@ -167,7 +191,7 @@ def _dak():
 
 
 def _model(elements):
-    tex = {k: f"guhs:block/guhhuisje_{k}" for k in list(huisje.TEXTURES) + ["pilaar", "kroon"]}
+    tex = {k: f"guhs:block/guhhuisje_{k}" for k in list(huisje.TEXTURES) + ["pilaar", "kroon", "raampje"]}
     tex["particle"] = "guhs:block/guhhuisje_vacht"
     m = huisje._model("groot")   # (the same display transforms as the other huisjes)
     m.pop("render_type", None)   # (26.1: the layer comes from the textures)
@@ -180,6 +204,7 @@ def blocks_and_items(h):
     A = h.A
     h.save(_pilaar(), "block", "guhhuisje_pilaar.png")
     h.save(_kroon(), "block", "guhhuisje_kroon.png")
+    h.save(_raampje(), "block", "guhhuisje_raampje.png")
     h.save(_icoon(), "item", "guhhuisje_villa.png")
     name = "guhhuisje_villa"
     h.w(f"{A}/models/block/{name}_model.json", _model(_romp()))

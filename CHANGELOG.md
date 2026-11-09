@@ -3,6 +3,37 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.7 — Minecraft 26.1.2
+
+- **Terughekje:** a new deco piece (5 Guhlden, from Hoeve level 1) with a real Erfhekje between two flowers. Walk through it (or right-click it) inside your Erfenis and you go back to where you came from. Place, turn and move it like any other deco.
+- **Give away or send home from the storage:** click a good in the storage window. Send it to your Leverkist (if that good may go home; the hourly limits still count), or give it away to the Leger des Heilguhs to make room. Giving away always works, asks once more, and gives nothing back.
+
+## 1.9.6 — Minecraft 26.1.2
+
+- No more double villagers in your Erfenis: the marktmeester-Mika behind the counter, the farmer at the coop and friends no longer get a twin when a building is stamped again while its chunk was still loading. Doubles that are already there clean themselves up.
+- Sherlock's witnesses no longer get a twin either when you leave and come back.
+- The chat now shows in the Erfenis overview too (at the left, in the middle), so you can follow what the others say while you build.
+- Clearer, sweeter names: Angora is now **Konijnenpluis**, Pluis **Wolkenpluis**, Was **Bijenwas**, Stof **Lapjes stof** and Dons **Eendendons**.
+- Bouwkeet blocks have the Bouwkeet as their icon, so they no longer look like a second Baksteen.
+
+## 1.9.5 — Minecraft 26.1.2
+
+- **More storage in your Erfenis:** the Hoeve and every Opslagschuur hold three times as much.
+- **A maximum per good:** one good can no longer fill the whole storage. Building stuff (logs, planks, stone...) may take the most, ordinary farm goods a quarter, dear things (bread, cheese, candles...) the least. The storage window shows how full each good is.
+- **Overflow goes home:** is a good at its maximum when you collect? Then the rest goes straight to your Leverkist, if that good may go home (the hourly limits still count). The rest waits in the building.
+- **Bigger Leverkist:** six rows instead of three, and every slot holds up to 9,999 of one thing. Breaking a Leverkist no longer spills its contents: they go back into your post and come out in your next Leverkist.
+
+## 1.9.4 — Minecraft 26.1.2
+
+- **Knabbelbaken:** right-click it for a little menu. Switch every effect you have unlocked on or off, several at once, and hide or show the beam (the effects keep working when it's hidden). It also reaches further now: 25 / 40 / 60 / 80 blocks for 1 / 2 / 3 / 4 layers (was 20 / 30 / 40 / 50).
+- **Guhvilla:** only its two real eyes upstairs are eyes now. The little windows downstairs and on the sides are proper windows with curtains, and there are flower boxes under the front windows.
+- The safari animals' names show up properly again in your guh's chat lines ("Een kleine regenboogschool! Ik smelt..."); 36 animals were missing them.
+
+## 1.9.3 — Minecraft 26.1.2
+
+- A new Houtzagerij (sawmill) no longer costs planks, only a few Guhlden. Only the Houtzagerij makes planks, so if you had spent Opa's planks on other buildings first, you could get stuck. Upgrades still cost planks as before.
+- Makelaar Guhrrit no longer brings a new copy of himself for every tutorial step: there is one Guhrrit, and he walks along with you.
+
 ## 1.9.2 — Minecraft 26.1.2
 
 - The Erfenis keys moved off O and M so they no longer take over your own keys: the overview is now **F9** and the world map **F10**. If you still had them on O and M, they move over once by themselves; keys you picked yourself stay as they are. You can change both in Options > Controls > Guhs.

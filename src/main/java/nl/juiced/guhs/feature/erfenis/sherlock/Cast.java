@@ -160,6 +160,9 @@ public final class Cast {
         Entity e = p.level().getEntity(p.entity());
         if (e == null || !e.isAlive()) {
             m.remove(sleutel);
+            // 1.9.6: it may only be unloaded (its chunk saved it): forget it for good, so it is thrown away when that chunk
+            // loads again instead of standing next to the new one (two Pims / Bonnies at the same building)
+            LEVEND.remove(p.entity());
             return null;
         }
         return e;
@@ -284,6 +287,7 @@ public final class Cast {
                 Entity ent = pl.level().getEntity(pl.entity());
                 if (ent == null) {
                     it.remove();
+                    LEVEND.remove(pl.entity());   // (1.9.6: unloaded = gone; a saved copy is thrown away when it loads)
                     continue;
                 }
                 boolean weg;

@@ -148,6 +148,11 @@ public final class Prijzen {
             case 2 -> 1.5;
             default -> 1.0;
         };
+        if (t == GebouwType.HOUTZAGERIJ && L <= 1) {
+            // 1.9.3: only the Houtzagerij makes planks, so a new one never asks for planks (spending opa's 50 planks on
+            // other buildings first was a softlock)
+            som.remove(Goed.PLANK);
+        }
         Map<Goed, Integer> uit = new LinkedHashMap<>();
         for (Goed g : Goed.values()) {   // (a fixed order: the panel lists them the same every time)
             Double v = som.get(g);

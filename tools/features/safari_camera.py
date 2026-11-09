@@ -223,7 +223,7 @@ if __name__ == "__main__":
     en_namen = json.load(open("tools/lang/en/c160_safari.json", encoding="utf-8"))
     for k, v in en_namen.items():
         if k.startswith("entity.guhs.safari.") and k.count(".") == 3:
-            en.setdefault("gui.guhs.safari.foto.naam." + k.split(".")[3], v[0].lower() + v[1:])
+            en.setdefault("gui.guhs.safari.foto.naam." + k.split(".")[3], v.lower())   # (inside a sentence: "red panda")
     for taal, teksten_ in (("nl_nl", nl), ("en_us", en)):
         path = f"{A}/lang/{taal}.json"
         data = json.load(open(path, encoding="utf-8"))

@@ -42,6 +42,11 @@ public final class KoppelingFeature {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Guhs.MODID);
+    public static final DeferredRegister<net.minecraft.world.inventory.MenuType<?>> MENUS = DeferredRegister.create(Registries.MENU, Guhs.MODID);
+    /** 1.9.5: the Leverkist's big-stack screen (drawn by the vanilla chest screen). */
+    public static final DeferredHolder<net.minecraft.world.inventory.MenuType<?>, net.minecraft.world.inventory.MenuType<net.minecraft.world.inventory.ChestMenu>> LEVERKIST_MENU =
+            MENUS.register("leverkist", () -> new net.minecraft.world.inventory.MenuType<net.minecraft.world.inventory.ChestMenu>(LeverkistMenu::client,
+                    net.minecraft.world.flag.FeatureFlags.VANILLA_SET));
 
     // --- blocks ---
     public static final DeferredBlock<ErfhekjeBlock> ERFHEKJE = BLOCKS.registerBlock("erfhekje", ErfhekjeBlock::new,
@@ -88,6 +93,7 @@ public final class KoppelingFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
+        MENUS.register(modBus);
         modBus.addListener(KoppelingFeature::capabilities);
         modBus.addListener((RegisterPayloadHandlersEvent event) -> KoppelingPayloads.register(event.registrar("1")));
         NeoForge.EVENT_BUS.addListener(KoppelingCommando::register);

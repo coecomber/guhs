@@ -71,6 +71,10 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
 
     private int levels;
     private Gunst gunst = Gunst.VAHOEG;
+    /** 1.9.3: the beam can be hidden from the right-click menu (the effect keeps working). */
+    private boolean straalUit;
+    /** 1.9.3: which effects are switched on (bit = Gunst ordinal); only the ones the pyramid allows work. */
+    private int actief = 1;
     /** Client: how high the beam goes (up to the first solid block). */
     int beamHeight;
 
@@ -94,8 +98,21 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         return beamHeight;
     }
 
+    /** Blocks of reach per pyramid layer count (1.9.3 buff: was 10 + 10 x layers = 20/30/40/50). */
+    static final int[] BEREIK = {0, 25, 40, 60, 80};
+
     public int range() {
-        return 10 + levels * 10;
+        return BEREIK[Math.max(0, Math.min(MAX_LEVELS, levels))];
+    }
+
+    public boolean straalUit() {
+        return straalUit;
+    }
+
+    /** Menu / tests: hide or show the beam. */
+    public void setStraalUit(boolean uit) {
+        straalUit = uit;
+        sync();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, KnabbelbakenBlockEntity baken) {
@@ -108,8 +125,8 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
             baken.beamHeight = beam(level, pos);
             return;
         }
-        if (baken.gunst.levels > baken.levels) {
-            baken.gunst = Gunst.VAHOEG;
+        if (baken.gunst.levels > baken.levels || !baken.aan(baken.gunst)) {
+            baken.gunst = baken.eersteAan();
         }
         if (baken.levels > 0) {
             baken.pulse();
@@ -174,8 +191,12 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         List<LivingEntity> targets = level.getEntitiesOfClass(LivingEntity.class, box,
                 e -> e.isAlive() && (e instanceof Player || (e instanceof GuhEntity guh && guh.isTame())));
         for (LivingEntity e : targets) {
-            for (MobEffectInstance effect : gunst.effects(levels)) {
-                e.addEffect(new MobEffectInstance(effect));
+            for (Gunst g : Gunst.values()) {
+                if (aan(g) && g.levels <= levels) {
+                    for (MobEffectInstance effect : g.effects(levels)) {
+                        e.addEffect(new MobEffectInstance(effect));
+                    }
+                }
             }
             if (e instanceof ServerPlayer p) {
                 GuhAdvancements.grant(p, "knabbelbaken_aan");
@@ -184,7 +205,45 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         }
     }
 
-    /** Right-click: the next effect this pyramid allows. */
+    public boolean aan(Gunst g) {
+        return (actief & (1 << g.ordinal())) != 0;
+    }
+
+    /** Menu: switch this effect on or off (only when the pyramid has unlocked it). The beam takes the colour of the last one switched on. */
+    public boolean schakel(ServerPlayer player, Gunst g) {
+        if (level == null) {
+            return false;
+        }
+        levels = countLevels(level, worldPosition);
+        if (levels == 0 || g.levels > levels) {
+            return false;
+        }
+        actief ^= 1 << g.ordinal();
+        boolean nuAan = aan(g);
+        if (nuAan) {
+            gunst = g;
+        } else if (gunst == g) {
+            gunst = eersteAan();
+        }
+        level.playSound(null, worldPosition, nuAan ? SoundEvents.BEACON_POWER_SELECT : SoundEvents.BEACON_DEACTIVATE, SoundSource.BLOCKS, 0.8f, 1.2f);
+        player.sendOverlayMessage(Component.translatable(nuAan ? "quest.guhs.knabbelbaken.effect_aan" : "quest.guhs.knabbelbaken.effect_uit",
+                Component.translatable("quest.guhs.knabbelbaken.gunst." + g.id()), levels, range()).withStyle(ChatFormatting.LIGHT_PURPLE));
+        pulse();
+        sync();
+        return true;
+    }
+
+    /** The first effect that is on and unlocked (the beam's colour), else VAHOEG. */
+    private Gunst eersteAan() {
+        for (Gunst g : Gunst.values()) {
+            if (aan(g) && g.levels <= Math.max(1, levels)) {
+                return g;
+            }
+        }
+        return Gunst.VAHOEG;
+    }
+
+    /** Right-click (before 1.9.3; tests): the next effect this pyramid allows. */
     public void cycle(ServerPlayer player) {
         if (level == null) {
             return;
@@ -200,6 +259,7 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
             i = (i + 1) % all.length;
         } while (all[i].levels > levels);
         gunst = all[i];
+        actief = 1 << gunst.ordinal();
         level.playSound(null, worldPosition, SoundEvents.BEACON_POWER_SELECT, SoundSource.BLOCKS, 1f, 1.2f);
         player.sendOverlayMessage(Component.translatable("quest.guhs.knabbelbaken.gekozen",
                 Component.translatable("quest.guhs.knabbelbaken.gunst." + gunst.id()), levels, range()).withStyle(ChatFormatting.LIGHT_PURPLE));
@@ -210,6 +270,7 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
     /** Game tests / commands: pick an effect directly. */
     public void setGunst(Gunst gunst) {
         this.gunst = gunst;
+        actief = 1 << gunst.ordinal();
         setChanged();
     }
 
@@ -231,17 +292,21 @@ public class KnabbelbakenBlockEntity extends BlockEntity {
         super.saveAdditional(tag);
         tag.putString("Gunst", gunst.id());
         tag.putInt("Levels", levels);
+        tag.putBoolean("StraalUit", straalUit);
+        tag.putInt("Actief", actief);
     }
 
     @Override
     protected void loadAdditional(ValueInput tag) {
         super.loadAdditional(tag);
         levels = tag.getIntOr("Levels", 0);
+        straalUit = tag.getBooleanOr("StraalUit", false);
         for (Gunst g : Gunst.values()) {
             if (g.id().equals(tag.getStringOr("Gunst", ""))) {
                 gunst = g;
             }
         }
+        actief = tag.getIntOr("Actief", 1 << gunst.ordinal());   // (before 1.9.3: only the chosen one)
     }
 
     @Override

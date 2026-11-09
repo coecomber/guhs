@@ -111,11 +111,23 @@ final class Vensters {
                 if (cy + 18 > y && cy < y1) {
                     Teken.rond(ui.g, cx, cy, cx + 50, cy + 18, 0xFFF6E9EF, 2);
                     ui.item(Ui.icoon(g), cx + 1, cy + 1);
-                    ui.tekst(Ui.getal(n), cx + 19, cy + 5, Teken.DONKER);
+                    int cap = b.opslagCap(g);   // (1.9.5: every good has its own maximum)
+                    ui.tekst(Ui.getal(n), cx + 19, cy + 5, n >= cap ? Teken.ROOD : Teken.DONKER);
+                    Teken.balk(ui.g, cx + 19, cy + 14, cx + 48, cy + 16, Math.min(1f, n / (float) cap), n >= cap ? Teken.ROOD : Teken.ROZE_DONKER);
                     List<Component> tip = new ArrayList<>();
                     tip.add(Component.translatable(g.naamKey()).withStyle(ChatFormatting.BOLD));
+                    tip.add(Component.translatable("erfenis.ui.goed_cap", Ui.getal(n), Ui.getal(cap)));
                     tip.add(Component.translatable(g.naarHuis() ? "erfenis.ui.mag_naar_huis" : "erfenis.ui.blijft_in_dorp").withColor(Teken.ZACHT));
-                    ui.klik(cx, cy, cx + 50, cy + 18, null, tip);
+                    tip.add(Component.translatable(g.naarHuis() ? "erfenis.ui.goed_cap_naar_huis" : "erfenis.ui.goed_cap_blijft").withColor(Teken.ZACHT));
+                    if (ErfenisClient.eigen) {   // 1.9.7: click a good to give it away or send it home
+                        tip.add(Component.translatable("erfenis.ui.goed_klik").withColor(Teken.GROEN_DONKER));
+                    }
+                    ui.klik(cx, cy, cx + 50, cy + 18, !ErfenisClient.eigen ? null : () -> {
+                        OverzichtScherm s = OverzichtScherm.huidig();
+                        if (s != null) {
+                            s.open(new GoedActie(g));
+                        }
+                    }, tip);
                 }
                 i++;
             }
@@ -170,6 +182,86 @@ final class Vensters {
         private static String sleutel(String id) {
             return id.startsWith("deco_") || !id.contains("_") && !id.startsWith("ansicht") ? "erfenis.deco." + id.replace("deco_", "")
                     : "erfenis.vondst." + id;
+        }
+    }
+
+    // =====================================================================================================================
+    // 1.9.7: one good from the storage: give it away (Leger des Heilguhs) or send it home (Leverkist)
+    // =====================================================================================================================
+
+    static final class GoedActie extends Venster {
+        private final Goed g;
+        private int aantal = 16;
+        /** The give-away button asks once more before anything goes. */
+        private boolean zeker;
+
+        GoedActie(Goed g) {
+            this.g = g;
+        }
+
+        @Override
+        int breed() {
+            return 300;
+        }
+
+        @Override
+        int hoog() {
+            return 196;
+        }
+
+        @Override
+        Component titel() {
+            return Component.translatable(g.naamKey());
+        }
+
+        @Override
+        void inhoud(Ui ui, Base b, int x0, int y0, int x1, int y1, long nu) {
+            int heeft = b.heeft(g);
+            ui.item(Ui.icoon(g), x0, y0);
+            ui.tekst(Component.translatable("erfenis.ui.goed_cap", Ui.getal(heeft), Ui.getal(b.opslagCap(g))), x0 + 20, y0 + 4, Teken.TEKST);
+            int y = y0 + 22;
+            aantal = Math.max(1, Math.min(aantal, Math.max(1, heeft)));
+            String t = Integer.toString(aantal);
+            ui.tekst(Component.translatable("erfenis.ui.aantal").append(": "), x0, y + 3, Teken.TEKST);
+            Teken.rond(ui.g, x0 + 50, y, x0 + 100, y + 14, 0xFFFFFFFF, 2);
+            ui.tekst(t, x0 + 75 - ui.font.width(t) / 2, y + 3, Teken.DONKER);
+            ui.knop(Component.translatable("erfenis.ui.alles_knop"), x0 + 106, y, x0 + 160, y + 14, heeft > 0, Teken.ROZE_DONKER, () -> {
+                aantal = Math.max(1, heeft);
+                zeker = false;
+            }, null);
+            y += 18;
+            int[] stap = {-64, -10, -1, 1, 10, 64};
+            int bx = x0, bw = (x1 - x0 - 10) / 6;
+            for (int st : stap) {
+                ui.knop(Component.literal((st > 0 ? "+" : "") + st), bx, y, bx + bw, y + 14, true, Teken.ROZE_DONKER, () -> {
+                    aantal = Math.max(1, aantal + st);
+                    zeker = false;
+                }, null);
+                bx += bw + 2;
+            }
+            y += 22;
+            // home: the usual rules (only goods that may go home, the caps per hour)
+            Base.Fout f = b.kanNaarHuis(g, aantal, nu);
+            List<Component> tip = f == null ? null : List.of(ErfenisClient.tekst(f.key(), List.of(f.args())));
+            ui.knop(Component.translatable("erfenis.ui.naar_leverkist", aantal), x0, y, x1, y + 16, f == null, Teken.GROEN,
+                    () -> ErfenisClient.stuur(new Actie(Actie.NAAR_HUIS, 0, aantal, 0, 0, 0, 0, g.id)), tip);
+            y += 20;
+            // away: always possible
+            boolean kan = heeft >= aantal && heeft > 0;
+            ui.knop(Component.translatable(zeker ? "erfenis.ui.weggeven_zeker" : "erfenis.ui.weggeven", aantal), x0, y, x1, y + 16, kan,
+                    zeker ? Teken.ROOD : Teken.ROZE_DONKER, () -> {
+                        if (!zeker) {
+                            zeker = true;
+                            return;
+                        }
+                        zeker = false;
+                        ErfenisClient.stuur(new Actie(Actie.WEGGEVEN, 0, aantal, 0, 0, 0, 0, g.id));
+                    }, List.of(Component.translatable("erfenis.ui.weggeven_tip")));
+            y += 22;
+            for (FormattedCharSequence s : ui.font.split(Component.translatable("erfenis.ui.weggeven_uitleg"), x1 - x0)) {
+                ui.tekst(s, x0, y, Teken.ZACHT);
+                y += 9;
+            }
         }
     }
 

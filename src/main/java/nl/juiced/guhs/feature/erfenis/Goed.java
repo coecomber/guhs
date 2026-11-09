@@ -61,7 +61,7 @@ public enum Goed {
     KAASKNABBEL("kaasknabbel", 2, "guhs:kaas_knabbels", "guhs:kaas_knabbels", 80),
     KAARS("kaars", 8, "minecraft:candle", "minecraft:candle", 0),
     LANTAARN("lantaarn", 15, "minecraft:lantern", "minecraft:lantern", 0),
-    BOUWBLOK("bouwblok", 5, "guhs:pastelbaksteen_roze", "*", 500);
+    BOUWBLOK("bouwblok", 5, "guhs:bouwkeet", "*", 500);   // (1.9.6: the Bouwkeet as its icon: the pink brick looked like Baksteen)
 
     /** The id in saved data, lang keys and the ErfenisEconomie API. */
     public final String id;
@@ -78,6 +78,21 @@ public enum Goed {
         this.icoonId = icoonId;
         this.thuisItem = thuisItem;
         this.capPerUur = capPerUur;
+    }
+
+    /** Building stuff: cheap and needed by the hundreds, so it may take a big share of the storage. */
+    private static final java.util.Set<String> BOUWSPUL = java.util.Set.of("stam", "steen", "klei", "zand", "plank", "balk", "baksteen",
+            "gladsteen", "glas", "glasscherf");
+
+    /**
+     * 1.9.5: the share of the whole storage one good may take (so one good never fills it all): building stuff 37%, the
+     * ordinary farm goods 25%, the dear things (value 6 and up: bread, cake, cheese, candles...) 11%.
+     */
+    public double opslagDeel() {
+        if (BOUWSPUL.contains(id)) {
+            return 0.37;
+        }
+        return waarde >= 6 ? 0.11 : 0.25;
     }
 
     /** May this go home with the Leverkist ("Naar huis sturen")? */

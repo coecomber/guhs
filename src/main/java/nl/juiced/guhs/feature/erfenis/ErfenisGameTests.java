@@ -124,15 +124,44 @@ public class ErfenisGameTests {
         b.goederen.clear();
         Gebouw hok = b.nieuwGebouw(GebouwType.KIPPENHOK, 1, 53, 41, 0, T0);
         hok.buffer.put(Goed.EI, 500.0);
-        helper.assertTrue(b.opslag() == Productie.HOEVE_OPSLAG, "start: only the Hoeve's room");
+        helper.assertTrue(b.opslag() == Productie.HOEVE_OPSLAG && Productie.HOEVE_OPSLAG == 450, "start: only the Hoeve's room (1.9.5: 450)");
+        int capEi = b.opslagCap(Goed.EI);
+        helper.assertTrue(capEi == Math.round(450 * 0.25), "eggs may take a quarter of the storage, not " + capEi);
         Object r = b.ophalen(hok.id, new Random(1));
-        helper.assertTrue(r instanceof Map<?, ?> m && ((Integer) m.get(Goed.EI)) == Productie.HOEVE_OPSLAG, "only what fits");
-        helper.assertTrue(ongeveer(hok.inBuffer(Goed.EI), 500 - Productie.HOEVE_OPSLAG), "the rest stays in the basket");
-        helper.assertTrue("erfenis.fout.vol".equals(b.kanOphalen(hok.id).key()), "full storage");
+        helper.assertTrue(r instanceof Map<?, ?> m && ((Integer) m.get(Goed.EI)) == capEi, "only what fits under the egg cap");
+        helper.assertTrue(ongeveer(hok.inBuffer(Goed.EI), 500 - capEi), "the rest stays in the basket");
+        helper.assertTrue(b.ruimte(Goed.EI) == 0 && b.ruimte(Goed.GRAAN) > 0, "eggs full, the storage still has room for other goods");
+        helper.assertTrue(b.geefGoed(Goed.EI, 10) == 0 && b.geefGoed(Goed.GRAAN, 10) == 10, "rewards respect the cap per good too");
+        helper.assertTrue(b.opslagCap(Goed.STAM) > b.opslagCap(Goed.GRAAN) && b.opslagCap(Goed.GRAAN) > b.opslagCap(Goed.KAAS),
+                "building stuff may take the most, dear things the least");
+        Gebouw zaag = b.nieuwGebouw(GebouwType.HOUTZAGERIJ, 1, 41, 41, 0, T0);
+        zaag.buffer.put(Goed.PLANK, 2000.0);
+        b.ophalen(zaag.id, new Random(1));
+        helper.assertTrue(b.heeft(Goed.PLANK) == b.opslagCap(Goed.PLANK), "planks stop at their own cap");
+        helper.assertTrue("erfenis.fout.vol".equals(b.kanOphalen(zaag.id).key()), "planks may not go home: the sawmill waits");
         b.nieuwGebouw(GebouwType.OPSLAGSCHUUR, 2, 41, 53, 0, T0);
         helper.assertTrue(b.opslag() == Productie.HOEVE_OPSLAG + Productie.opslagschuur(2), "an Opslagschuur adds room");
         b.guhlden = 0;
         helper.assertTrue(b.geefGuhlden(10_000) == 500 && b.guhlden == 500, "H1 holds 500 Guhlden");
+        helper.succeed();
+    }
+
+    /** 1.9.5: a good at its cap goes straight home to the Leverkist when collected (when it may), the rest waits. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void overloopNaarLeverkist(GameTestHelper helper) {
+        Base b = start();
+        b.eigenaar = java.util.UUID.randomUUID();
+        b.goederen.clear();
+        Gebouw hok = b.nieuwGebouw(GebouwType.KIPPENHOK, 1, 53, 41, 0, T0);
+        b.geefGoed(Goed.EI, 10_000);
+        int cap = b.opslagCap(Goed.EI);
+        helper.assertTrue(b.heeft(Goed.EI) == cap, "eggs at their cap");
+        hok.buffer.put(Goed.EI, 30.0);
+        helper.assertTrue(b.kanOphalen(hok.id) == null, "a full good that may go home can still be collected");
+        Object r = Erfenis.haalOp(helper.getLevel().getServer(), b, hok.id, T0);
+        helper.assertTrue(r instanceof Object[] uit && Erfenis.castGoed((Map<?, ?>) uit[1]).getOrDefault(Goed.EI, 0) == 30,
+                "the 30 eggs went to the Leverkist");
+        helper.assertTrue(b.heeft(Goed.EI) == cap && hok.inBuffer(Goed.EI) < 1e-6, "the storage stays at its cap, the basket is empty");
         helper.succeed();
     }
 
@@ -426,6 +455,23 @@ public class ErfenisGameTests {
         helper.assertTrue(b.plaatsDeco("uilenhuisje", 31, 31, 0) != null, "not on top of another piece");
         helper.assertTrue(b.plaats(GebouwType.KIPPENHOK, 28, 28, 0, T0, 0) == null && b.deco.isEmpty()
                 && b.decoOpslag.getOrDefault("hartjesnest", 0) == 1, "a building over it: the piece goes back into the schuurtje");
+        helper.succeed();
+    }
+
+    /** 1.9.7: from the storage you can always give a good away (Leger des Heilguhs), also one that may not go home. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void weggeven(GameTestHelper helper) {
+        Base b = start();
+        b.goederen.clear();
+        b.geefGoed(Goed.PLANK, 100);
+        helper.assertTrue(!Goed.PLANK.naarHuis() && b.heeft(Goed.PLANK) == 100, "planks: may not go home");
+        helper.assertTrue(b.weggeven(Goed.PLANK, 0) != null && b.weggeven(Goed.PLANK, 101) != null && b.heeft(Goed.PLANK) == 100,
+                "nothing, or more than there is: nothing goes");
+        helper.assertTrue(b.weggeven(Goed.PLANK, 60) == null && b.heeft(Goed.PLANK) == 40, "60 planks given away, 40 stay");
+        b.bouwblokSoorten.clear();
+        b.geefGoed(Goed.BOUWBLOK, 30);
+        helper.assertTrue(b.weggeven(Goed.BOUWBLOK, 30) == null && b.heeft(Goed.BOUWBLOK) == 0 && b.bouwblokSoorten.isEmpty(),
+                "Bouwkeet blocks: their kinds go too");
         helper.succeed();
     }
 }
