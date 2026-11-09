@@ -38,7 +38,7 @@ public final class PartyClient {
 
     public static void init(IEventBus modBus) {
         ModList.get().getModContainerById(Guhs.MODID).ifPresent(c -> c.registerConfig(ModConfig.Type.CLIENT, NepClientConfig.SPEC,
-                "guhs-vadsrijk-nepspelers.toml"));
+                "guhs-vadsrijk-nepspelers-client.toml"));   // W-INT: own name (the SERVER config uses guhs-vadsrijk-nepspelers.toml: same name = crash at client start)
         NepSpeler.ZICHTBAAR = NepClientConfig::aan;
         modBus.addListener((EntityRenderersEvent.RegisterRenderers e) -> e.registerEntityRenderer(PartyRegistry.NEPSPELER.get(), NepSpelerRenderer::new));
         VadsrijkMenu.tab("party", () -> new ItemStack(Items.CAKE), () -> stuur(new PartyPayloads.Vraag(true)), 112);
