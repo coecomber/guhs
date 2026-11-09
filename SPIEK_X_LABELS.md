@@ -18,6 +18,12 @@ Ze verschijnen een paar seconden nadat je bij het plein bent, 6 tot 13 blokken v
 
 Staat er nog een oude guh zonder naam? `/guhs vadsrijk huis poorten` zet de Kwartiermeesters opnieuw neer.
 
+## Zelfgemaakte uitrusting (Maatwerk)
+Een gesmeed stuk op een basis van de kern (Kussenzwaard, Knuffelknots, Pluishamer, Pluishelm, Knuffelharnas, Roze Ring,
+Knuffelketting, Pluisoorbel) heette `vadsrijk.loot.kussenzwaard`.
+- `/guhs vadsrijk ambacht maatwerk zwaard 1` en `/guhs vadsrijk ambacht maatwerk ring 1`
+- Zie: een gewone naam (bijv. "Vadsig Kussenzwaard" of "Roze Ring"), nergens `vadsrijk.loot...`. Ook de set-regels in de tooltip.
+
 ## Het vangnet
 Mist er ooit nog een tekst voor een Vadsrijk-sleutel, dan laat het spel nooit meer de sleutel zelf zien:
 - eerst de algemene naam van dezelfde soort (een Kwartiermeester van een onbekende stad heet dan gewoon "Kwartiermeester");
