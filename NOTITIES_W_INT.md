@@ -35,3 +35,27 @@
   VadsrijkZit, VadsrijkDungeon, VadsrijkGrotKerker, VadsrijkGrotten, Z4Verhaal, Z6Verhaal, VadsrijkQuestRobot, VadsrijkSchepen,
   VadsrijkLuchtschip, Taal, Taalsleutels: 68 tests, 67 passed. The only failure is `havensOpDeKaart` (expected until the map
   regen: line 0 POIs).
+
+## Phase 2 (after the PC restart, 2026-11-09)
+- slots/ was empty. Focused rerun `-Pgt=VadsrijkParty,VadsrijkUHud,VadsrijkZ6Raid,VadsrijkMenu,VadsrijkKern,VadsrijkDungeon,
+  VadsrijkDungeonNep,TaalsleutelsGameTests`: **36/36** (incl. the fixed `nepVultRijEnStart`).
+- Merged 110-w-bereik (5851f7a93) as 4421c85e8. Conflicts:
+  - `zone4/kit/eilanden.py` Opstijgpier ring: BOTH openings kept (W-SCHEPEN east tip where the airship docks + W-BEREIK west
+    where the pier walkway comes in).
+  - en_us.json: ours; the 2 new luik keys get English in the top-up (apply_en rebuilds en_us anyway).
+  - Auto-merged and checked: bouw3 (W-BEREIK lift_kapel stop + W-SCHEPEN steiger tip rim are different spots), bouw5 (staarttrap,
+    hofdeuren_vrij, trap_af landing next to W-SCHEPEN pier 2 + staarthaven), bouw2, maak_kaart (vrijpad after verbind + bereikcheck
+    in --audit next to lijn0_kampsteiger).
+- Secrets w-bereik could not reach (commit 9095c8f71), each checked against the real tiles first:
+  - z1 `holle_boom` / knuffel_8: sat on a giant mushroom CAP 36 up (ground = mycelium y 71). Now on the forest floor under the
+    cap (`bouwsels.grond_onder_hoed`).
+  - z1 `hoedenschat`: the narrow unlit plank walk is diagonal; its 1-wide cells only touched diagonally and the rails of both
+    sides closed every corner. `hoedenpaden.brug(smal=True)` now fills one corner cell at every diagonal-only contact.
+  - z2 `galmgrot` / `ijsgrot`: the tunnel floor sat 3 (galm) / 7 (ijs) above the ground west of the mouth. `grotje()` builds a
+    3-wide snow step ramp down (1 per block, head room carved); the `_ingang` POI moves to the ramp foot.
+  - z2 `boorgaten` clue: stood on top of an ice/snow overhang above the avalanche foot; offset (4,3) -> (6,2) = the walkable foot.
+  - z3 `kuiken_3`: that side of pond 3 is the crown's steep leaf edge (snapped down to y 213). Now on the walkable rim next to
+    honingvijver_3 (angle a+1.25).
+  - z3 `uitkijk_takpunt`: leaves hung 1-2 over the moss/path walk onto the lookout platform. New last zone-3 pass
+    `takpunt_vrij` clears leaves/vines in the 3 cells above non-leaf floor blocks within 9 of the lookout.
+  - z4 `vliegerspul_1/_3`: Java literals (no map POI) on the kite rocks; moved onto the path right below (find radius 3).
