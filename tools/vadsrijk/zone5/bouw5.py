@@ -1283,75 +1283,156 @@ def hofdeuren_vrij(W):
             leeg(W, x + dx * k, y0 + 1, z + dz * k, x + dx * k, y0 + 2, z + dz * k)
 
 
+STAARTBORD = ["Naar het", "Staartpark", "& de", "Staarthaven"]     # X-KAART: the sign text (Dutch; en_us copies it for now)
+_LOS = ("leaves", "short_grass", "tall_grass", "fern", "tulip", "allium", "daisy", "bluet", "poppy", "dandelion", "cornflower",
+        "petals", "rose_bush", "lilac", "peony", "carpet", "lantern", "torch", "bush", "flower")
+
+
+def bord_nbt(regels, sleutel):
+    """X-KAART: block-entity nbt of a waxed sign (26.1 text components: translate + Dutch fallback per line)."""
+    msgs = [{"translate": f"{sleutel}.{i + 1}", "fallback": t} if t else {"text": ""} for i, t in enumerate(regels)]
+    msgs += [{"text": ""}] * (4 - len(msgs))
+    kant = {"messages": msgs, "color": "black", "has_glowing_text": True}
+    leeg_ = {"messages": [{"text": ""}] * 4, "color": "black", "has_glowing_text": False}
+    return {"id": "minecraft:sign", "is_waxed": True, "front_text": kant, "back_text": leeg_}
+
+
 def staarttrap(W, S, info):
-    """W-BEREIK: the palace hill (floor game y 232) ends in a 29-high cliff above the Staartpark (floor game y 203). Without a way
-    down, the park, the tail, the Staarthaven (airship line E to zone 6) and all their quests were unreachable on foot. A
-    switchback stair against the cliff (game x 2855..2861, z -541..-522), 3 wide, solid under the steps, balustrades:
-      top landing at the open edge (game 2854..2857, -524..-522, y 232) -> flight 1 north (gx 2855..2857) to a landing at y 217
-      (gz -541..-539) -> flight 2 back south (gx 2859..2861) onto the park lawn at gz -525."""
-    PARK = 223                         # park floor, local y (game 203)
-    muur = "wit_muur"
+    """The walkable way from the palace hill (floor game y 232) down the 29-high cliff to the Staartpark (floor game y 203): the
+    park, the tail, the Staarthaven (airship line E to zone 6) and all their quests hang on it.
 
-    def steun(x, y, z):
-        """Fill under (x, y, z) down to the first non-air block (max 40)."""
-        for yy in range(y - 1, y - 41, -1):
-            if not is_lucht(W, x, yy, z):
+    W-BEREIK built it through a tunnel right BEHIND the throne (1 block behind the dais): hidden. X-KAART (user feedback round X)
+    moved and redesigned it; everything below is in GAME coordinates (G() turns them local):
+      - the gate: a 3-wide, 4-high opening in the throne room's back wall at the END of its north aisle (z -532..-530), flush
+        with the floor, framed in gold on both faces, a sign above it on the inside; a light-blue carpet runs from the main
+        carpet along the aisle to it (the path from the throne room's front door);
+      - the top landing (x 2855..2857, z -532..-530, y 232) with a balustrade, and an arch over the stair head carrying the sign
+        "Naar het Staartpark & de Staarthaven";
+      - flight 1 south (x 2855..2857, z -529..-516, y 231..218), a middle landing (z -515..-513, y 217), flight 2 back north
+        (x 2859..2861, z -516..-528, y 216..204) onto the lawn at z -529/-530;
+      - solid under every step and landing, a balustrade on the partition (x 2858) and on the outside (x 2862), lanterns ON the
+        balustrade/arch (never on a step), a lamp post beside the exit."""
+    import plan5 as PL
+
+    def G(gx, gy, gz):
+        return PL.GX0 - gx, gy - PL.DY, PL.GZ0 - gz
+
+    def gzet(gx, gy, gz, k):
+        zet(W, *G(gx, gy, gz), k)
+
+    def gleeg(gx1, gy1, gz1, gx2, gy2, gz2):
+        a, b_, c = G(gx1, gy1, gz1)
+        d, e, f = G(gx2, gy2, gz2)
+        leeg(W, a, b_, c, d, e, f)
+
+    def gnaam(gx, gy, gz):
+        return naam(W, *G(gx, gy, gz))
+
+    def fundament(gx, gy, gz, k="steen_bak", max_=40):
+        """Fill under (gx, gy, gz) down to the first SOLID block (through air, leaves and plants)."""
+        for yy in range(gy - 1, gy - 1 - max_, -1):
+            n = gnaam(gx, yy, gz)
+            if n not in (LUCHT, "minecraft:cave_air") and not any(w in n for w in _LOS):
                 break
-            zet(W, x, yy, z, "steen_bak")
+            gzet(gx, yy, gz, k)
 
-    yv = 252                           # palace terrace floor (local)
-    doos(W, -155, yv, 2, -152, yv, 4, "vloer")
-    leeg(W, -155, yv + 1, 2, -150, yv + 4, 4)        # (through the palace's 2-high east parapet at game x 2852..2853)
-    for x in (-151, -150):
-        for z in (2, 3, 4):
-            if is_lucht(W, x, yv, z):
-                zet(W, x, yv, z, "vloer")
-    for x in range(-155, -151):
-        for z in (2, 3, 4):
-            steun(x, yv, z)
-    zet(W, -156, yv + 1, 2, muur)
-    zet(W, -156, yv + 1, 3, muur)
-    zet(W, -156, yv + 1, 4, muur)
-    zet(W, -156, yv, 2, "steen_bak")
-    zet(W, -156, yv, 3, "steen_bak")
-    zet(W, -156, yv, 4, "steen_bak")
-    zet(W, -155, yv + 1, 1, muur)
-    zet(W, -154, yv + 1, 1, muur)
-    zet(W, -153, yv + 1, 1, muur)
-    # flight 1: 14 steps north (local z 5..18), y 251..238
+    def gtrap(f):          # a game-facing stair (the kit is turned 180 degrees)
+        return trap("wit_trap", TEGEN[f])
+
+    LANT = "minecraft:lantern[hanging=false,waterlogged=false]"
+    muur, PARK, TOP = "wit_muur", 203, 232
+    zg = (-532, -531, -530)                     # the gate / top landing rows
+    # --- the gate through the back wall (x 2852..2854; the room ends at x 2851), flush with the floor
+    gleeg(2851, TOP + 1, -532, 2857, TOP + 4, -530)
+    for gx in range(2852, 2858):
+        for gz in zg:
+            gzet(gx, TOP, gz, "vloer")
+    for gx in (2852, 2854):                     # gold frame on both faces of the wall
+        for gz in (-533, -529):
+            for gy in range(TOP + 1, TOP + 5):
+                gzet(gx, gy, gz, "goud")
+        for gz in range(-533, -528):
+            gzet(gx, TOP + 5, gz, "goud")
+    gzet(2851, TOP + 5, -531, f"minecraft:pale_oak_wall_sign[facing={TEGEN['west']},waterlogged=false]")
+    info.setdefault("bordjes", []).append(((2851, TOP + 5, -531), bord_nbt(STAARTBORD, "vadsrijk.z5.bord.staarttrap")))
+    # --- the carpet path: from the main carpet (z -522..-518) north along x 2829 to the aisle, then east to the gate
+    for gz in range(-531, -522):
+        if gnaam(2829, TOP + 1, gz) == LUCHT and gnaam(2829, TOP, gz) != LUCHT:
+            gzet(2829, TOP + 1, gz, "minecraft:light_blue_carpet")
+    for gx in range(2829, 2852):
+        if gnaam(gx, TOP + 1, -531) == LUCHT and gnaam(gx, TOP, -531) != LUCHT:
+            gzet(gx, TOP + 1, -531, "minecraft:light_blue_carpet")
+    # --- the top landing: solid down to the ground, balustrade north + east, the arch over the stair head (z -529)
+    for gx in range(2855, 2858):
+        for gz in zg:
+            fundament(gx, TOP, gz)
+    for gx in range(2855, 2859):
+        gzet(gx, TOP + 1, -533, muur)
+        fundament(gx, TOP + 1, -533)
+    for gz in zg:
+        gzet(2858, TOP + 1, gz, muur)
+        fundament(2858, TOP + 1, gz)
+    gzet(2858, TOP + 2, -533, LANT)             # lantern on the balustrade corner (beside the landing)
+    for gy in range(TOP + 1, TOP + 5):          # the arch: the palace wall (x 2854) + a gold post on the partition
+        gzet(2858, gy, -529, "goud")
+    fundament(2858, TOP + 1, -529)
+    for gx in range(2855, 2859):
+        gzet(gx, TOP + 5, -529, "goud")
+    gzet(2858, TOP + 6, -529, LANT)
+    gzet(2856, TOP + 4, -530, f"minecraft:pale_oak_wall_sign[facing={TEGEN['north']},waterlogged=false]")
+    info["bordjes"].append(((2856, TOP + 4, -530), bord_nbt(STAARTBORD, "vadsrijk.z5.bord.staarttrap")))
+    # --- flight 1: 14 steps south, y 231..218 (the palace wall on its west side, the partition x 2858 on the east)
     for k in range(1, 15):
-        z, y = 4 + k, yv - k
-        for x in range(-155, -152):
-            zet(W, x, y, z, trap("wit_trap", "north"))
-            steun(x, y, z)
-        leeg(W, -155, y + 1, z, -153, y + 4, z)
-        for yy in range(PARK + 1, y + 1):          # the partition between the flights, a balustrade on top
-            zet(W, -156, yy, z, "steen_bak")
-        zet(W, -156, y + 1, z, muur)
-    # the middle landing: local x -159..-153, z 19..21, floor y 237 (game 217)
-    yl = yv - 15
-    doos(W, -159, yl, 19, -153, yl, 21, "vloer")
-    leeg(W, -159, yl + 1, 19, -153, yl + 4, 21)
-    for x in range(-159, -152):
-        for z in (19, 20, 21):
-            steun(x, yl, z)
-        zet(W, x, yl + 1, 22, muur)
-    for z in (19, 20, 21, 22):
-        zet(W, -160, yl + 1, z, muur)
-        steun(-160, yl + 1, z)
-    # flight 2: 13 steps back south (local z 18..6), y 236..224 onto the lawn
+        gz, gy = -530 + k, TOP - k
+        gleeg(2855, gy + 1, gz, 2857, min(gy + 4, TOP + 4), gz)
+        for gx in range(2855, 2858):
+            gzet(gx, gy, gz, gtrap("north"))
+            fundament(gx, gy, gz)
+        for gy2 in range(PARK + 1, gy + 1):     # the partition between the flights, a balustrade on top
+            gzet(2858, gy2, gz, "steen_bak")
+        if k > 1:
+            gzet(2858, gy + 1, gz, muur)
+            if k in (6, 11):
+                gzet(2858, gy + 2, gz, LANT)
+    # --- the middle landing: x 2855..2861, z -515..-513, floor y 217; balustrade south + east, the hill wall west
+    yl = TOP - 15
+    for gx in range(2855, 2862):
+        for gz in (-515, -514, -513):
+            gzet(gx, yl, gz, "vloer")
+            fundament(gx, yl, gz)
+    gleeg(2855, yl + 1, -515, 2861, yl + 4, -513)
+    for gx in range(2854, 2863):
+        gzet(gx, yl + 1, -512, muur)
+        fundament(gx, yl + 1, -512)
+    for gz in (-515, -514, -513):
+        gzet(2862, yl + 1, gz, muur)
+        fundament(2862, yl + 1, gz)
+        if gnaam(2854, yl + 1, gz) == LUCHT:
+            gzet(2854, yl + 1, gz, muur)
+            fundament(2854, yl + 1, gz)
+    gzet(2862, yl + 2, -512, LANT)
+    gzet(2854, yl + 2, -512, LANT)
+    # --- flight 2: 13 steps back north, y 216..204, onto the lawn (z -529/-530); outer balustrade x 2862
     for k in range(1, 14):
-        z, y = 19 - k, yl - k
-        for x in range(-159, -156):
-            zet(W, x, y, z, trap("wit_trap", "south"))
-            steun(x, y, z)
-        leeg(W, -159, y + 1, z, -157, y + 4, z)
-        zet(W, -160, y + 1, z, muur)
-        steun(-160, y + 1, z)
-    leeg(W, -159, PARK + 1, 5, -157, PARK + 4, 5)      # the way out onto the lawn
-    leeg(W, -159, PARK + 1, 4, -157, PARK + 4, 4)
-    info["plekken"]["staarttrap_boven"] = (-154, yv + 1, 3)
-    info["plekken"]["staarttrap_onder"] = (-158, PARK + 1, 4)
+        gz, gy = -516 - (k - 1), yl - k
+        gleeg(2859, gy + 1, gz, 2861, gy + 4, gz)
+        for gx in range(2859, 2862):
+            gzet(gx, gy, gz, gtrap("south"))
+            fundament(gx, gy, gz)
+        gzet(2862, gy + 1, gz, muur)
+        fundament(2862, gy + 1, gz)
+        if k in (4, 9):
+            gzet(2862, gy + 2, gz, LANT)
+    gleeg(2859, PARK + 1, -530, 2861, PARK + 4, -529)   # the way out onto the lawn
+    for gx in range(2859, 2862):
+        for gz in (-530, -529):
+            if gnaam(gx, PARK, gz) == LUCHT:
+                gzet(gx, PARK, gz, "vloer")
+    gzet(2862, PARK + 1, -531, "guhs:guh_lantaarnpaal[half=lower]")   # a lamp post beside the exit
+    gzet(2862, PARK + 2, -531, "guhs:guh_lantaarnpaal[half=upper]")
+    fundament(2862, PARK + 1, -531)
+    info["plekken"]["staarttrap_boven"] = G(2856, TOP + 1, -531)
+    info["plekken"]["staarttrap_onder"] = G(2860, PARK + 1, -530)
 
 
 def bouw(W, S, log=print):
