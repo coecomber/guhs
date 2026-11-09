@@ -179,13 +179,15 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 
 | id | x, y, z |
 |---|---|
+| `haven_kamp_z1_vertrek` | -229, 87, 1008 |
 | `haven_pakhuis` | 103, 65, 520 |
 | `haven_plein` | 90, 65, 470 |
+| `haven_z1_kamp_vertrek` | 30, 65, 470 |
 | `haven_z1_z2_bord` | 147, 127, -647 |
 | `haven_z1_z2_eind` | 150, 127, -656 |
 | `haven_z1_z2_mast` | 155, 139, -656 |
 | `haven_z1_z2_plein` | 150, 127, -598 |
-| `haven_z1_z2_vertrek` | 150, 127, -653 |
+| `haven_z1_z2_vertrek` | 150, 127, -657 |
 | `stal.binnen` | -149, 65, -4 |
 | `stal.deur` | -143, 65, -4 |
 | `stal.wei` | -146, 65, 25 |
@@ -318,7 +320,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `knuffel_5` | 116, 65, 466 |
 | `knuffel_6` | 300, 69, 250 |
 | `knuffel_7` | 470, 75, 185 |
-| `knuffel_8` | -400, 108, -100 |
+| `knuffel_8` | -400, 72, -100 |
 | `knuffel_9` | -300, 90, -226 |
 | `lichtzwamkamer.centrum` | 330, 152, -415 |
 | `lichtzwamkamer.lichtzwammen.1` | 322, 152, -421 |

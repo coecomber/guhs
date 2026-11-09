@@ -56,10 +56,11 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 |---|---|
 | `binnenhof` | 1404, 167, -570 |
 | `dok_bel` | 1196, 167, -604 |
+| `dok_instap` | 1186, 167, -602 |
 | `dok_kapitein` | 1199, 167, -600 |
 | `dok_landing` | 1201, 167, -601 |
-| `dok_luchtschip` | 1169, 165, -605 |
-| `dok_mast` | 1193, 167, -602 |
+| `dok_luchtschip` | 1176, 165, -602 |
+| `dok_mast` | 1195, 167, -602 |
 | `honinglift_boven` | 1509, 167, -523 |
 | `honinglift_kruin_boven` | 1316, 231, -540 |
 | `honinglift_kruin_onder` | 1316, 167, -534 |
@@ -68,7 +69,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `kabelbrug_eind` | 1603, 160, -776 |
 | `lift_cafe_boven` | 1340, 167, -588 |
 | `lift_cafe_onder` | 1343, 155, -587 |
-| `lift_kapel_boven` | 1394, 167, -642 |
+| `lift_kapel_boven` | 1394, 167, -641 |
 | `lift_kapel_onder` | 1395, 152, -638 |
 | `lift_raattros_boven` | 1464, 167, -566 |
 | `lift_raattros_onder` | 1461, 157, -566 |
@@ -556,19 +557,20 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | id | x, y, z |
 |---|---|
 | `haven_z3_z2_bord` | 1196, 167, -604 |
-| `haven_z3_z2_mast` | 1193, 167, -602 |
-| `haven_z3_z2_vertrek` | 1201, 167, -601 |
+| `haven_z3_z2_mast` | 1195, 167, -602 |
+| `haven_z3_z2_vertrek` | 1186, 167, -602 |
 | `haven_z3_z4_bord` | 1609, 167, -485 |
-| `haven_z3_z4_mast` | 1615, 167, -485 |
-| `haven_z3_z4_vertrek` | 1607, 165, -488 |
+| `haven_z3_z4_mast` | 1613, 167, -485 |
+| `haven_z3_z4_vertrek` | 1622, 167, -485 |
 | `kuiken_1` | 1467, 226, -489 |
 | `kuiken_2` | 1374, 228, -476 |
-| `kuiken_3` | 1297, 213, -605 |
+| `kuiken_3` | 1301, 222, -626 |
 | `kuiken_4` | 1408, 227, -683 |
 | `kuiken_5` | 1493, 228, -641 |
 | `kuiken_6` | 1346, 231, -658 |
 | `oosttaksteiger_bel` | 1609, 167, -485 |
+| `oosttaksteiger_instap` | 1622, 167, -485 |
 | `oosttaksteiger_kapitein` | 1610, 167, -490 |
 | `oosttaksteiger_landing` | 1607, 165, -488 |
-| `oosttaksteiger_luchtschip` | 1637, 165, -476 |
-| `oosttaksteiger_mast` | 1614, 167, -485 |
+| `oosttaksteiger_luchtschip` | 1632, 165, -485 |
+| `oosttaksteiger_mast` | 1613, 167, -485 |

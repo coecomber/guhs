@@ -41,6 +41,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `dok_bankje` | 700, 91, -940 |
 | `dok_bel` | 708, 91, -888 |
 | `dok_eind` | 704, 91, -882 |
+| `dok_instap` | 704, 91, -880 |
 | `dok_kapitein` | 700, 91, -896 |
 | `dok_kiosk` | 713, 91, -922 |
 | `dok_landing` | 704, 91, -900 |
@@ -371,7 +372,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `geheim_boorplaats` | 674, 66, -1219 |
 | `geheim_burchtdak` | 864, 195, -1337 |
 | `geheim_galmgrot` | 940, 121, -1002 |
-| `geheim_galmgrot_ingang` | 929, 118, -1002 |
+| `geheim_galmgrot_ingang` | 927, 118, -1002 |
 | `geheim_ijsgrot` | 464, 105, -1066 |
 | `geheim_ijsgrot_ingang` | 453, 99, -1066 |
 
@@ -380,7 +381,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | id | x, y, z |
 |---|---|
 | `aantal_bomen` | 887, 0, 1344 |
-| `aanwijzing.boorgaten` | 868, 131, -1081 |
+| `aanwijzing.boorgaten` | 870, 124, -1082 |
 | `aanwijzing.boorschema` | 660, 104, -1083 |
 | `aanwijzing.bouwtekening` | 558, 126, -1174 |
 | `aanwijzing.olievlek` | 912, 144, -1174 |
@@ -390,12 +391,12 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `gehucht_meerkamp` | 592, 101, -962 |
 | `gehucht_plateaukamp` | 764, 130, -1256 |
 | `haven_z2_z1_bord` | 697, 91, -888 |
-| `haven_z2_z1_vertrek` | 704, 91, -900 |
+| `haven_z2_z1_vertrek` | 704, 91, -880 |
 | `haven_z2_z3_bord` | 974, 117, -859 |
 | `haven_z2_z3_eind` | 983, 117, -856 |
 | `haven_z2_z3_mast` | 983, 129, -851 |
 | `haven_z2_z3_plein` | 940, 117, -856 |
-| `haven_z2_z3_vertrek` | 980, 117, -856 |
+| `haven_z2_z3_vertrek` | 984, 117, -856 |
 | `ijsval_1` | 544, 66, -1181 |
 | `ijsval_2` | 774, 66, -1182 |
 | `ijsval_3` | 644, 66, -1216 |
@@ -427,7 +428,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_beeldhouwer` | 573, 106, -1113 |
 | `npcplek.z2_berggids` | 811, 101, -1045 |
 | `npcplek.z2_galmpje` | 696, 91, -1078 |
-| `npcplek.z2_gondel_boven` | 884, 162, -1131 |
+| `npcplek.z2_gondel_boven` | 884, 151, -1131 |
 | `npcplek.z2_kasguh` | 673, 105, -1033 |
 | `npcplek.z2_kwarts` | 719, 91, -1074 |
 | `npcplek.z2_marktguh_1` | 719, 91, -1044 |
@@ -469,7 +470,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `npcplek.z2_wacht_meer_2` | 470, 103, -996 |
 | `npcplek.z2_wacht_meer_3` | 578, 106, -1112 |
 | `npcplek.z2_wacht_meer_4` | 530, 92, -946 |
-| `npcplek.z2_wacht_plein_oost` | 718, 95, -1068 |
+| `npcplek.z2_wacht_plein_oost` | 716, 91, -1068 |
 | `npcplek.z2_wacht_plein_west` | 690, 91, -1068 |
 | `npcplek.z2_wapenhandelaar` | 727, 91, -1080 |
 | `npcplek.z2_winterslaap` | 683, 96, -1088 |
