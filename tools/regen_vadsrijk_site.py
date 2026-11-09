@@ -44,6 +44,7 @@ def main():
     ap.add_argument("--tegels", default=None, help="map tile folder for kaart.py")
     ap.add_argument("--echt", action="store_true", help="build the real site (no banner, indexable)")
     ap.add_argument("--out", default=None)
+    ap.add_argument("--open-zones", default=None, help="X-SITE: passed to make_vadsrijk_site.py (default there: 1)")
     a = ap.parse_args()
     fouten = 0
     if a.dump:
@@ -65,7 +66,7 @@ def main():
         fouten += bool(stap("renders", [PY, "tools/wiki_site/vadsrijk/renders.py"] + (["--alles"] if a.alles else [])))
     fouten += bool(stap("vanilla icons", [PY, "tools/wiki_site/vadsrijk/vanilla_iconen.py"]))
     fouten += bool(stap("map tiles", [PY, "tools/wiki_site/vadsrijk/kaart.py"] + (["--tegels", a.tegels] if a.tegels else [])))
-    site = [PY, "tools/make_vadsrijk_site.py"] + (["--echt"] if a.echt else []) + (["--out", a.out] if a.out else [])
+    site = [PY, "tools/make_vadsrijk_site.py"] + (["--echt"] if a.echt else []) + (["--out", a.out] if a.out else []) + (["--open-zones", a.open_zones] if a.open_zones else [])
     rc = stap("site", site)
     print(f"\nregen_vadsrijk_site: {'OK' if not (fouten or rc) else 'with problems (see above)'}")
     return rc or (1 if fouten else 0)
