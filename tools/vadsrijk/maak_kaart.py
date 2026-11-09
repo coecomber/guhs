@@ -110,6 +110,9 @@ def _main(a):
     print(f"scenes klaar ({time.time() - t0:.0f} s)")
     K = KA.Kaart()
     print(f"kaart klaar ({time.time() - t0:.0f} s)")
+    import fundering1                                      # X-Z1GROND: the real ground heights (+ paths) for the foundation
+    T_grond, pad_grond = fundering1.grond(K), fundering1.paden(K)   # pass and the height-based funderingcheck of zone 1
+    fundering1.schrijf_cache(T_grond, pad_grond)
     W = TG.Wereld(K)
     W.stempel(kamp)
     W.stempel(stad)
@@ -152,6 +155,8 @@ def _main(a):
             print(f"  tegel {n}/{len(tegels)} ({tx},{tz}): {nb} blokken; totaal {grootte / 1e6:.1f} MB ({time.time() - t0:.0f} s)",
                   flush=True)
     print(f"{len(tegels)} tegels, {totaal} blokken, {grootte / 1e6:.1f} MB, palet {len(W.palet.lijst)} ({time.time() - t0:.0f} s)")
+    fundering1.naloop(tegels, T_grond, pad_grond, KA.X0, KA.Z0)   # X-Z1GROND: walls/stems/logs down to the ground, poles/lamps
+                                                                   # attached, floating plants away, pond rims closed
     with open(os.path.join(CACHE, "plekken.json"), "w", encoding="utf-8") as f:
         json.dump(plekken, f, indent=1)
     if not a.alleen:

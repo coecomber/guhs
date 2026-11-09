@@ -57,26 +57,50 @@ public class KoppelingGameTests {
         UUID wie = UUID.randomUUID();
         Leverkist.BlockEntityImpl a = kist(helper, new BlockPos(1, 2, 1), wie);
         helper.assertTrue(!helper.getBlockState(new BlockPos(1, 2, 1)).getValue(Leverkist.POST), "an empty chest: flag down");
+        // 1.9.5: 54 slots with big stacks: 40 stacks of wool become one slot
         List<ItemStack> spul = new ArrayList<>();
         for (int i = 0; i < 40; i++) {
             spul.add(new ItemStack(Items.WHITE_WOOL, 64));
         }
         LeverkistPost.verstuur(s, wie, spul);
-        helper.assertTrue(tel(a) == 27 * 64, "the first chest is full: " + tel(a));
-        helper.assertTrue(LeverkistPost.wacht(s, wie) == 13 * 64, "13 stacks wait: " + LeverkistPost.wacht(s, wie));
+        helper.assertTrue(a.getContainerSize() == 54 && a.getItem(0).getCount() == 40 * 64 && a.getItem(1).isEmpty(),
+                "40 stacks of wool in one big slot: " + a.getItem(0).getCount());
         helper.assertTrue(helper.getBlockState(new BlockPos(1, 2, 1)).getValue(Leverkist.POST), "post inside: flag up");
+        // full: every slot at the big stack, then the rest waits for the next chest
+        for (int i = 0; i < a.getContainerSize(); i++) {
+            a.setItem(i, new ItemStack(Items.WHITE_WOOL, Leverkist.GROTE_STAPEL));
+        }
+        LeverkistPost.verstuur(s, wie, List.of(new ItemStack(Items.WHITE_WOOL, 64), new ItemStack(Items.OAK_LOG, 64)));
+        helper.assertTrue(LeverkistPost.wacht(s, wie) == 128, "a full chest: 128 wait: " + LeverkistPost.wacht(s, wie));
         Leverkist.BlockEntityImpl b = kist(helper, new BlockPos(3, 2, 1), wie);
         Leverkisten.bezorg(s, wie);
-        helper.assertTrue(tel(b) == 13 * 64 && LeverkistPost.wacht(s, wie) == 0, "the second chest got the rest");
+        helper.assertTrue(tel(b) == 128 && LeverkistPost.wacht(s, wie) == 0, "the second chest got the rest");
         helper.assertTrue(Leverkisten.kisten(s, wie).size() == 2, "two chests on the list");
-        // merging: a half stack goes onto the same item first
+        // saving and loading keeps the big stacks (the item codec alone stops at 99)
+        net.minecraft.nbt.CompoundTag tag = a.saveWithoutMetadata(helper.getLevel().registryAccess());
+        Leverkist.BlockEntityImpl kopie = new Leverkist.BlockEntityImpl(a.getBlockPos(), a.getBlockState());
+        kopie.loadWithComponents(nl.juiced.guhs.storage.Nbt.input(helper.getLevel().registryAccess(), tag));
+        helper.assertTrue(kopie.getItem(53).getCount() == Leverkist.GROTE_STAPEL && kopie.getItem(53).is(Items.WHITE_WOOL), "big stacks survive a save");
+        // merging: onto the same item first
+        for (int i = 0; i < a.getContainerSize(); i++) {
+            a.setItem(i, ItemStack.EMPTY);
+        }
         a.setItem(0, new ItemStack(Items.OAK_LOG, 10));
-        a.setItem(1, ItemStack.EMPTY);
         LeverkistPost.verstuur(s, wie, List.of(new ItemStack(Items.OAK_LOG, 60)));
-        helper.assertTrue(a.getItem(0).getCount() == 64 && a.getItem(1).getCount() == 6, "onto the same logs first, then an empty slot");
-        // a removed chest goes off the list
+        helper.assertTrue(a.getItem(0).getCount() == 70 && a.getItem(1).isEmpty(), "onto the same logs first");
+        // a broken chest goes off the list, and its contents go back into the post (into the other chest), not onto the floor
+        b.setItem(0, new ItemStack(Items.WHITE_WOOL, 500));
         helper.setBlock(new BlockPos(3, 2, 1), Blocks.AIR);
         helper.assertTrue(Leverkisten.kisten(s, wie).size() == 1, "the broken chest is off the list");
+        int wolInA = 0;
+        for (int i = 0; i < a.getContainerSize(); i++) {
+            if (a.getItem(i).is(Items.WHITE_WOOL)) {
+                wolInA += a.getItem(i).getCount();
+            }
+        }
+        helper.assertTrue(wolInA == 500 && LeverkistPost.wacht(s, wie) == 0, "the broken chest's post went to the other chest: " + wolInA);
+        helper.assertTrue(helper.getLevel().getEntitiesOfClass(net.minecraft.world.entity.item.ItemEntity.class,
+                new net.minecraft.world.phys.AABB(helper.absolutePos(new BlockPos(3, 2, 1))).inflate(3)).isEmpty(), "nothing fell on the floor");
         helper.succeed();
     }
 

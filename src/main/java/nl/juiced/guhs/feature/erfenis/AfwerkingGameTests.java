@@ -282,4 +282,45 @@ public class AfwerkingGameTests {
         helper.assertTrue(gedaan[0], "a job behind the stamp queue runs");
         helper.succeed();
     }
+
+    /** 1.9.3: opa's 50 planks spent on other buildings first was a softlock (only the Houtzagerij makes planks). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void houtzagerijZonderPlanken(GameTestHelper helper) {
+        Prijzen.Prijs eerste = Prijzen.gebouw(GebouwType.HOUTZAGERIJ, 1);
+        helper.assertTrue(!eerste.goederen().containsKey(Goed.PLANK), "a new Houtzagerij asks no planks");
+        helper.assertTrue(eerste.guhlden() > 0 && eerste.guhlden() <= Base.START_GUHLDEN, "it still costs a few Guhlden");
+        helper.assertTrue(Prijzen.gebouw(GebouwType.HOUTZAGERIJ, 2).goederen().getOrDefault(Goed.PLANK, 0) > 0,
+                "upgrades still ask planks (by then it makes them)");
+        ErfenisData data = ErfenisData.get(helper.getLevel().getServer());
+        ServerPlayer p = speler(helper, "Plankloosguh");
+        Base b = data.vanSpeler(p.getUUID(), "Plankloosguh", T0);
+        try {
+            b.verander(Goed.PLANK, -b.goed(Goed.PLANK));
+            helper.assertTrue(b.heeft(Goed.PLANK) == 0, "all planks spent");
+            helper.assertTrue(b.kanBetalen(eerste) == null, "without planks the Houtzagerij can still be paid");
+        } finally {
+            data.verwijder(p.getUUID());
+        }
+        helper.succeed();
+    }
+
+    /** 1.9.3: the tour's Guhrrit was keyed by his spot (in front of you), so every step put another Guhrrit in the village. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void eenTourGuhrrit(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper, "Tourguh2");
+        String sleutel = Makelaarstour.sleutel(p);
+        var a = nl.juiced.guhs.feature.erfenis.sherlock.Guhrrit.verschijn(level, helper.absolutePos(new BlockPos(1, 1, 1)), 0f, false, sleutel);
+        var c = nl.juiced.guhs.feature.erfenis.sherlock.Guhrrit.verschijn(level, helper.absolutePos(new BlockPos(5, 1, 6)), 90f, false, sleutel);
+        var d = nl.juiced.guhs.feature.erfenis.sherlock.Guhrrit.verschijn(level, helper.absolutePos(new BlockPos(2, 1, 3)), 0f, true, sleutel);
+        try {
+            helper.assertTrue(a != null && a == c && c == d, "the next tour steps reuse the same Guhrrit");
+            helper.assertTrue(d.getKind() == nl.juiced.guhs.entity.GuhNpcEntity.Kind.GUHRRIT_VAKANTIE, "the goodbye still puts on his holiday clothes");
+            int n = level.getEntitiesOfClass(nl.juiced.guhs.entity.GuhNpcEntity.class, new net.minecraft.world.phys.AABB(helper.absolutePos(BlockPos.ZERO)).inflate(12)).size();
+            helper.assertTrue(n == 1, "one Guhrrit in the village, not " + n);
+        } finally {
+            nl.juiced.guhs.feature.erfenis.sherlock.Guhrrit.weg(a);
+        }
+        helper.succeed();
+    }
 }

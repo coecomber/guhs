@@ -55,6 +55,10 @@ public final class Poorten {
         if (p.getAbilities().instabuild || l.test()) {
             return null;
         }
+        String poort = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.lijnSlot(p, (heen ? l.b() : l.a()).zone());   // X-ZONE1: zone closed
+        if (poort != null) {
+            return poort;
+        }
         return Luchtschepen.SLOT.getOrDefault(l.id(), (q, h) -> null).apply(p, heen);
     }
 
@@ -79,6 +83,9 @@ public final class Poorten {
     public static MutableComponent uitleg(ServerPlayer p, Lijnen.Lijn l, String slot) {
         Poort g = POORTEN.get(l.id());
         MutableComponent kop = Component.translatable("vadsrijk.luchtschip.dicht.kop", l.letter()).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
+        if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isPoortSlot(slot)) {   // X-ZONE1: the zone is closed (soon)
+            return kop.append(" ").append(Component.translatable(slot).withStyle(ChatFormatting.WHITE));
+        }
         if (g == null) {
             return kop.append(" ").append(Component.translatable(slot, Spelers.level(p)).withStyle(ChatFormatting.WHITE));
         }
@@ -104,6 +111,10 @@ public final class Poorten {
     /** Short, for the action bar: "nog dicht voor jou: na "X"" / "vanaf level 20". */
     public static MutableComponent kort(ServerPlayer p, Lijnen.Lijn l) {
         Poort g = POORTEN.get(l.id());
+        String poort = dicht(p, l, true);   // X-ZONE1: the destination zone is closed
+        if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isPoortSlot(poort)) {
+            return Component.translatable("vadsrijk.zonepoort.kort").withStyle(ChatFormatting.RED);
+        }
         if (g != null && !g.verhaalKlaar().test(p)) {
             return Component.translatable("vadsrijk.luchtschip.kort.verhaal", questNaam(g.naQuest())).withStyle(ChatFormatting.RED);
         }

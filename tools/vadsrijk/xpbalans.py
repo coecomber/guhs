@@ -200,6 +200,7 @@ def simuleer(zone, xp_in, met_zij, clears, kpm, extra_bazen, onderweg=0):
     xp = xp_in
     poort_min = 0.0
     bron = dict(hoofd=0, zij=0, kills=0, bazen=0, kerker=0)
+    cap_bij = None   # X-ZONE1: the quest after which the level cap (70) is reached
     ids_zone = {q["id"] for q in qs}
 
     def open_(q):
@@ -215,7 +216,7 @@ def simuleer(zone, xp_in, met_zij, clears, kpm, extra_bazen, onderweg=0):
             xp += nodig
 
     def doe(q, soort):
-        nonlocal xp
+        nonlocal xp, cap_bij
         k = kill_xp(zone, q)
         if onderweg:   # mobs you fight on the way to the objective (normal play), at the best area level you can handle
             _r, alv = grind_rate(zone, level_van(xp), 1)
@@ -225,6 +226,8 @@ def simuleer(zone, xp_in, met_zij, clears, kpm, extra_bazen, onderweg=0):
         xp += q["beloning"]["xp"]
         bron[soort] += q["beloning"]["xp"]
         klaar.add(q["id"])
+        if cap_bij is None and level_van(xp) >= MAX:
+            cap_bij = q["id"]
 
     kerker_lo = ZONES[zone]["kerker"][1]
     gedaan_clears = 0
@@ -262,7 +265,7 @@ def simuleer(zone, xp_in, met_zij, clears, kpm, extra_bazen, onderweg=0):
     r, area = grind_rate(zone, level_van(eind_quests), kpm)
     return dict(xp_in=xp_in, lv_in=level_f(xp_in), xp_uit=eind_quests, lv_uit=level_f(eind_quests), poort_min=poort_min,
                 tekort=tekort, rest_min=tekort / r if tekort else 0.0, rate=r, area=area, bron=bron, overgeslagen=[q["id"] for q in rest],
-                doel=doel)
+                doel=doel, cap_bij=cap_bij)
 
 
 SCENARIOS = (("A", "hoofd", False, 0), ("B", "hoofd+zij+bazen", True, 0), ("C", "B + 1 kerker-run", True, 1))
@@ -341,6 +344,20 @@ def tabel(kpm, onderweg):
       + ", ".join(f"z{z} hoofd {p[z][0]:.1f} / alles {p[z][1]:.1f}" for z in p) + ".")
 
 
+def keten_samenvatting(kpm):
+    """X-ZONE1: the chain for 0 / 2 / 5 kills on the way, and where main+side reaches the cap 70."""
+    w = print
+    w("")
+    w("### Keten bij 0 / 2 / 5 kills onderweg per quest (uit-level per zone, A = alleen hoofd, B = hoofd + zij + bazen)")
+    w("")
+    w("| Kills onderweg | " + " | ".join(f"z{z} A / B" for z in range(1, 7)) + " | B haalt 70 bij |")
+    w("|---|" + "---|" * 7)
+    for ow in (0, 2, 5):
+        ra, rb = keten(False, 0, kpm, ow), keten(True, 0, kpm, ow)
+        cap = next((f"z{z} {rb[z]['cap_bij']}" for z in range(1, 7) if rb[z]["cap_bij"]), "-")
+        w(f"| {ow} | " + " | ".join(f"{ra[z]['lv_uit']:.1f} / {rb[z]['lv_uit']:.1f}" for z in range(1, 7)) + f" | {cap} |")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--kpm", type=float, default=2.0)
@@ -359,6 +376,7 @@ def main():
                   f"{r['rest_min']:.0f} min (+{r['poort_min']:.0f} min voor poorten) @ {r['rate']:.0f} xp/min; bron {r['bron']}")
         return
     tabel(a.kpm, a.onderweg)
+    keten_samenvatting(a.kpm)
 
 
 if __name__ == "__main__":

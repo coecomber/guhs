@@ -354,6 +354,16 @@ public final class Base {
         return Math.max(0, opslag() - opslagGebruikt());
     }
 
+    /** 1.9.5: how much of this one good the storage holds at most (a share of the whole, Goed#opslagDeel). */
+    public int opslagCap(Goed g) {
+        return Math.max(1, (int) Math.round(opslag() * g.opslagDeel()));
+    }
+
+    /** Room for this good now: the free room of the whole storage, and no more than its own cap allows. */
+    public int ruimte(Goed g) {
+        return Math.max(0, Math.min(opslagVrij(), opslagCap(g) - (int) Math.ceil(goed(g) - 1e-6)));
+    }
+
     public int guhldenCap() {
         return Productie.guhldenCap(hoeveLevel());
     }
@@ -385,7 +395,7 @@ public final class Base {
 
     /** Adds goods up to the free room; returns what fitted (Bouwkeet blocks get the default kind). */
     public int geefGoed(Goed g, int n) {
-        int erin = Math.max(0, Math.min(n, opslagVrij()));
+        int erin = Math.max(0, Math.min(n, ruimte(g)));
         if (erin > 0) {
             verander(g, erin);
             if (g == Goed.BOUWBLOK) {
@@ -943,7 +953,12 @@ public final class Base {
         if (g.klaar() < 1) {
             return new Fout("erfenis.fout.niks");
         }
-        return opslagVrij() <= 0 ? new Fout("erfenis.fout.vol") : null;
+        for (Goed goed : g.buffer.keySet()) {   // (1.9.5: per good; a full good may still overflow to the Leverkist)
+            if (g.inBuffer(goed) >= 1 && (ruimte(goed) > 0 || goed.naarHuis())) {
+                return null;
+            }
+        }
+        return new Fout("erfenis.fout.vol");
     }
 
     @Nullable
@@ -1055,7 +1070,7 @@ public final class Base {
         }
         for (Goed goed : volgorde) {
             int heel = (int) Math.floor(g.inBuffer(goed) + 1e-9);
-            int neem = Math.min(heel, opslagVrij());
+            int neem = Math.min(heel, ruimte(goed));
             if (neem <= 0) {
                 continue;
             }
@@ -1180,6 +1195,22 @@ public final class Base {
         }
         if (magNaarHuis(g, nu) < n) {
             return new Fout("erfenis.fout.leverkist_cap", Integer.toString(magNaarHuis(g, nu)), Integer.toString(g.capPerUur));
+        }
+        return null;
+    }
+
+    /** 1.9.7: gives {@code n} of this good away (the Leger des Heilguhs): out of the storage, nothing back. Null = done. */
+    @Nullable
+    public Fout weggeven(Goed g, int n) {
+        if (n <= 0) {
+            return new Fout("erfenis.fout.weggeven_niks");
+        }
+        if (heeft(g) < n) {
+            return new Fout("erfenis.fout.goed", Integer.toString(n - heeft(g)), g.naamKey());
+        }
+        verander(g, -n);
+        if (g == Goed.BOUWBLOK) {
+            neemSoorten(n);
         }
         return null;
     }

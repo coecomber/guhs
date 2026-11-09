@@ -260,6 +260,10 @@ public final class DungeonRij {
         if (!inVadsrijk(p)) {
             return Component.translatable("vadsrijk.dungeon.msg.niet.vadsrijk");
         }
+        Component poort = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.dungeonDicht(p, dungeon);   // X-ZONE1: its zone is closed
+        if (poort != null) {
+            return poort;
+        }
         String al = dungeonVan(p.getUUID());
         if (al != null) {
             return zelf ? Component.translatable("vadsrijk.dungeon.msg.al.kerker", dungeonNaam(al))
@@ -329,6 +333,10 @@ public final class DungeonRij {
         long nu = sl.getServer().getTickCount();
         Long uit = NET_UIT.get(p.getUUID());
         if (uit != null && nu - uit < 20) {
+            return;
+        }
+        if (d.zegel()) {   // X-DUNGEON: a sealed second entrance only says where the door is
+            p.sendSystemMessage(Component.translatable("vadsrijk.dungeon.zegel.msg." + d.dungeon()).withStyle(ChatFormatting.LIGHT_PURPLE));
             return;
         }
         openDeur(p, d.dungeon());

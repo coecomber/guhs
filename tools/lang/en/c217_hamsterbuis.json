@@ -28,6 +28,5 @@
   "ftb.guhs_techniek.q.tech_hamsterknooppunt.title": "The Hamster Junction",
   "ftb.guhs_techniek.q.tech_hamsterknooppunt.desc": "Build a &dHamster Junction&r and run a guh wire to it. It fills a buffer with vadskracht: that keeps all your hamster tubes rolling. One per guh owner!",
   "ftb.guhs_techniek.q.tech_hamsterbuis_station.title": "Whoosh!",
-  "ftb.guhs_techniek.q.tech_hamsterbuis_station.desc": "Place two &dhamster tube stations&r, far apart (another dimension is fine!). Step into the tube, pick where to go, and whoosh!",
-  "ftb.guhs_techniek.section.tech_hamsterbuis": "The Hamster Tube Network"
+  "ftb.guhs_techniek.q.tech_hamsterbuis_station.desc": "Place two &dhamster tube stations&r, far apart (another dimension is fine!). Step into the tube, pick where to go, and whoosh!"
 }

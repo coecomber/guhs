@@ -408,12 +408,14 @@ public final class Spelers {
         }
         SpelerData d = data(p);
         int gVoor = d.level();
+        long nKlasse = klasse != null && Klassen.van(klasse) != null ? nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.knip(p, d, n, klasse) : n;   // X-ZONE1: soft cap / bank
+        n = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.knip(p, d, n, null);   // X-ZONE1
         d.generiekXp = Math.min(Levels.totaalVoorGeneriek(Levels.MAX_GENERIEK), d.generiekXp + n);
         int gNa = d.level();
         int kVoor = 0, kNa = 0;
         if (klasse != null && Klassen.van(klasse) != null) {
             kVoor = d.level(klasse);
-            d.xp.put(klasse, Math.min(Levels.totaalVoor(Levels.MAX), d.xp(klasse) + n));
+            d.xp.put(klasse, Math.min(Levels.totaalVoor(Levels.MAX), d.xp(klasse) + nKlasse));   // X-ZONE1: nKlasse (was n)
             kNa = d.level(klasse);
         }
         levelOp(p, gNa > gVoor ? gNa : 0, klasse, kNa > kVoor ? kNa : 0);

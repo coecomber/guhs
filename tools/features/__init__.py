@@ -335,6 +335,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_u_leven_stad',
             # 1.10 round W, W-SCHEPEN: boarding on foot (walk on / click the pier tip / the safety net); after vadsrijk_u_luchtschip
             'vadsrijk_w_schepen',
+            # 1.10 round X, X-ZONE1: the zone gate texts (Java: feature/vadsrijk/zonepoort)
+            'vadsrijk_x_zone1',
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',

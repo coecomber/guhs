@@ -86,6 +86,23 @@ TEKSTEN = {
     "biome.guhs.knuffelkwartier": ("Het Knuffelkwartier", "The Snuggle Quarter"),   # W-INT: the dimension's biome name
     # NPCs
     N + "naam.kk_poort": ("Kwartiermeester", "Quartermaster"),
+    # X-LABELS: the Kwartiermeester of every hub town in Poorten.HUBS has its own name (like zone 6's Rotsdak and Koepeltje);
+    # without it the name tag showed "vadsrijk.npc.naam.kk_poort_zwamzoet"
+    N + "naam.kk_poort_zwamzoet": ("Kwartiermeester Lamelletje", "Quartermaster Gilly"),
+    N + "naam.kk_poort_kandijkom": ("Kwartiermeester Klontje", "Quartermaster Cubey"),
+    N + "naam.kk_poort_honingtak": ("Kwartiermeester Wasje", "Quartermaster Waxy"),
+    N + "naam.kk_poort_lampionhaven": ("Kwartiermeester Lontje", "Quartermaster Wicky"),
+    N + "naam.kk_poort_hoogvads": ("Kwartiermeester Torentje", "Quartermaster Turret"),
+    N + "plek.npc.kk_poort_zwamzoet": ("op het plein van Zwamzoet, een paar stappen van het midden",
+                                       "on the square of Shroomsbury, a few steps from the middle"),
+    N + "plek.npc.kk_poort_kandijkom": ("op het plein van Kandijkom, een paar stappen van het midden",
+                                       "on the square of Sugarbowl, a few steps from the middle"),
+    N + "plek.npc.kk_poort_honingtak": ("op het plein van Honingtak, een paar stappen van het midden",
+                                       "on the square of Honeybough, a few steps from the middle"),
+    N + "plek.npc.kk_poort_lampionhaven": ("op het havenplein van Lampionhaven, een paar stappen van het midden",
+                                          "on the harbor square of Lanternhaven, a few steps from the middle"),
+    N + "plek.npc.kk_poort_hoogvads": ("bij de fontein op de markt van Hoogvads",
+                                      "by the fountain on the market of Highchonk"),
     N + "naam.kk_mollie": ("Meubelmeester Mollie", "Furniture Maker Mollie"),
     N + "praat.kk_mollie.1": ("Een huis is pas een thuis met een zitzak erin!", "A house is only a home with a beanbag in it!"),
     N + "praat.kk_mollie.2": ("Alles handgemaakt, met heel veel knuffels.", "All handmade, with lots of cuddles."),

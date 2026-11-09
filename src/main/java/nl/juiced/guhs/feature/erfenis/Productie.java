@@ -167,7 +167,8 @@ public final class Productie {
     private static final int[] HUTJE = {2, 3, 3, 4, 4, 5, 6, 7, 8, 9};
     private static final int[] SPEELTUIN = {1, 1, 2, 2, 3, 4, 6, 7, 10, 12};
     private static final int[] PENSION = {2, 2, 3, 3, 3, 4, 5, 6, 7, 8};
-    private static final int[] OPSLAG = {210, 300, 450, 600, 900, 1200, 2100, 3000, 4500, 6000};
+    /** 1.9.5: three times the room of 1.9.0 (players capped too fast), with a cap per good on top (Goed#opslagDeel). */
+    private static final int[] OPSLAG = {630, 900, 1350, 1800, 2700, 3600, 6300, 9000, 13500, 18000};
     private static final int[] GUHLDEN = {500, 1000, 2500, 5000, 10000, 18000, 30000, 45000, 65000, 100000};
     private static final int[] KARREN = {3, 3, 4, 4, 5, 5, 6, 6, 7, 7};
 
@@ -196,7 +197,7 @@ public final class Productie {
     }
 
     /** Goods room of the Hoeve itself (opa's old shed: so the very start has somewhere to put things). */
-    public static final int HOEVE_OPSLAG = 150;
+    public static final int HOEVE_OPSLAG = 450;   // (1.9.5: was 150)
 
     /** The Guhlden the Hoeve holds at this level. */
     public static int guhldenCap(int hoeve) {

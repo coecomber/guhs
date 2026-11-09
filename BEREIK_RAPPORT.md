@@ -1,6 +1,6 @@
 # BEREIK_RAPPORT: kan een survival-speler overal komen? (W-BEREIK)
 
-**GENERATED** by `python tools/vadsrijk/bereikcheck.py` (2026-11-09 12:25). Global flood over all 1305+ tiles from the start spawn, airship lines, lifts and hatches as edges. Player model and sources: see the docstring of the script.
+**GENERATED** by `python tools/vadsrijk/bereikcheck.py` (2026-11-09 20:20). Global flood over all 1305+ tiles from the start spawn, airship lines, lifts and hatches as edges. Player model and sources: see the docstring of the script.
 
 A target counts as **reached** when a reached stand cell lies within its radius (NPC 3.5 blocks, quest POI 5, area 10, boss 12, spawner = its radius) and height window. "via" = which zone entries reach it (the start reaches everything that is reached).
 
@@ -9,17 +9,17 @@ A target counts as **reached** when a reached stand cell lies within its radius 
 | zone | hoofdquest-doelen | zijquest-doelen | NPC's | geheimen/verzamelplekken | baasarena's (deur) | mob-spawners | puzzels | overige plekken |
 |---|---|---|---|---|---|---|---|---|
 | 1 | 24/24 | 40/40 | 52/52 | 61/61 | 1/1 | **318/325** | 7/7 | **308/320** |
-| 2 | 28/28 | 13/13 | 62/62 | **62/63** | - | **50/112** | 7/7 | **420/432** |
+| 2 | 28/28 | 13/13 | 62/62 | 63/63 | - | **50/112** | 7/7 | **420/432** |
 | 3 | 43/43 | 11/11 | 61/61 | 83/83 | 8/8 | **92/147** | 7/7 | **558/565** |
 | 4 | 24/24 | 26/26 | 48/48 | 121/121 | 1/1 | 20/20 | 1/1 | **344/346** |
 | 5 | 23/23 | 28/28 | 50/50 | 36/36 | 3/3 | 21/21 | 1/1 | **406/408** |
-| 6 | 37/37 | **37/38** | 53/53 | **45/47** | 2/2 | 39/39 | - | 420/420 |
+| 6 | 37/37 | **37/38** | 54/54 | **45/47** | 2/2 | 39/39 | - | 420/420 |
 
 Reached ONLY with a gap jump (1-2 blocks, the hat paths / rooftops): 1 quest/NPC/secret targets: `npc:z2_kasguh`
 
 Runtime-built areas (not in the tiles, not checked here): the guild valley (-12000, 12000), De Verzonken Sterrenwacht (Z6Bouw.sterrenwacht: rooms under the Ruinedal, entered by the hatch link); Raid binnentoren (Z6RaidBouw: the template raid_binnentoren, placed at runtime); Raid binnentoren top (Z6RaidBouw).
 
-Targets outside the map tiles (areas built at runtime, e.g. the guild valley; not checked): `npc:bond_pleinwachter`, `npc:bond_bord_vallei`, `arena:z6wezens:astrolabiumwachter`, `arena:z6wezens:glimmertje`, `arena:z6wezens:sterrenguh`, `arena:z6raid:zandwachter`, `arena:z6raid:spiegelvizier`, `arena:z6raid:sterrenbeelden`, `arena:z6raid:ringeling`, `mobs:kern:proeftuin_oost`, `mobs:kern:proeftuin_west`, `mobs:z6wezens:kerker_ingang#dover`, `mobs:z6wezens:kerker_ingang#wachter`, `mobs:z6wezens:kerker_kaarten#dover`, `mobs:z6wezens:kerker_kaarten#ring`, `mobs:z6wezens:kerker_kaarten#ster`, `plek:zone2.wereld.Z2WereldPlekken.ALLE.aantal_bomen`, `plek:zone2.wereld.Z2WereldPlekken.ALLE.arena_spiegelzucht_straal`, `plek:zone2.wereld.Z2WereldPlekken.ALLE.arena_boormeester_straal`, `plek:zone6.verhaal.Z6VerhaalPlekken.TOREN_TOP`, `plek:zone6.wereld.Z6WereldPlekken.ALLE.raid_toren_binnen`, `plek:zone6.wereld.Z6WereldPlekken.ALLE.toren_top`, `plek:zone6.wezens.Z6WezensPlekken.KERKER_AANKOMST`, `plek:zone6.wezens.Z6WezensPlekken.KERKER_UITGANG`, `plek:zone6.wezens.Z6WezensPlekken.INGANGSHAL`, `plek:zone6.wezens.Z6WezensPlekken.RINGENZAAL`, `plek:zone6.wezens.Z6WezensPlekken.KAARTENZAAL`, `plek:zone6.wezens.Z6WezensPlekken.VUURSCHALENZAAL`, `plek:zone6.wezens.Z6WezensPlekken.KOEPEL`
+Targets outside the map tiles (areas built at runtime, e.g. the guild valley; not checked): `npc:bond_pleinwachter`, `npc:bond_bord_vallei`, `npc:z6raid_zaalwachter`, `arena:z6wezens:astrolabiumwachter`, `arena:z6wezens:glimmertje`, `arena:z6wezens:sterrenguh`, `arena:z6raid:zandwachter`, `arena:z6raid:spiegelvizier`, `arena:z6raid:sterrenbeelden`, `arena:z6raid:ringeling`, `mobs:kern:proeftuin_oost`, `mobs:kern:proeftuin_west`, `mobs:z6wezens:kerker_ingang#dover`, `mobs:z6wezens:kerker_ingang#wachter`, `mobs:z6wezens:kerker_kaarten#dover`, `mobs:z6wezens:kerker_kaarten#ring`, `mobs:z6wezens:kerker_kaarten#ster`, `plek:zone2.wereld.Z2WereldPlekken.ALLE.aantal_bomen`, `plek:zone2.wereld.Z2WereldPlekken.ALLE.arena_boormeester_straal`, `plek:zone2.wereld.Z2WereldPlekken.ALLE.arena_spiegelzucht_straal`, `plek:zone6.verhaal.Z6VerhaalPlekken.TOREN_TOP`, `plek:zone6.wereld.Z6WereldPlekken.ALLE.raid_toren_binnen`, `plek:zone6.wereld.Z6WereldPlekken.ALLE.toren_top`, `plek:zone6.wezens.Z6WezensPlekken.KERKER_AANKOMST`, `plek:zone6.wezens.Z6WezensPlekken.KERKER_UITGANG`, `plek:zone6.wezens.Z6WezensPlekken.INGANGSHAL`, `plek:zone6.wezens.Z6WezensPlekken.RINGENZAAL`, `plek:zone6.wezens.Z6WezensPlekken.KAARTENZAAL`, `plek:zone6.wezens.Z6WezensPlekken.VUURSCHALENZAAL`, `plek:zone6.wezens.Z6WezensPlekken.KOEPEL`
 
 Quest targets the game cannot place (no NPC/POI with that id): 0
 
@@ -56,12 +56,6 @@ Quest targets the game cannot place (no NPC/POI with that id): 0
 
 
 ## Zone 2 - De Splinterpieken
-
-### Niet bereikt: geheimen/verzamelplekken (1)
-
-| doel | plek | dichtstbijzijnde bereikte cel (afstand) | quests |
-|---|---|---|---|
-| `plek:zone2.wereld.Z2WereldPlekken.ALLE.uitkijk_galmtop` | 928, 195, -1106 | 924, 179, -1115 (18.8) |  |
 
 ### Niet bereikt: mob-spawners (62)
 
@@ -191,7 +185,7 @@ Quest targets the game cannot place (no NPC/POI with that id): 0
 | `mobs:z3wezens:wortelvelden_111_rotzwijn` | 1606, 80, -608 | 1607, 63, -609 (17.1) |  |
 | `mobs:z3wezens:wortelvelden_112_wortelslang` | 1605, 80, -586 | 1605, 63, -586 (17.0) |  |
 | `mobs:z3wezens:wortelvelden_113_mika_schimmelboer` | 1614, 80, -569 | 1614, 63, -569 (17.0) |  |
-| `mobs:z3wezens:wortelvelden_114_wortelslang` | 1609, 80, -540 | 1606, 68, -538 (12.5) |  |
+| `mobs:z3wezens:wortelvelden_114_wortelslang` | 1609, 80, -540 | 1607, 68, -537 (12.5) |  |
 | `mobs:z3wezens:wortelvelden_72_mika_schimmelboer` | 1206, 80, -652 | 1206, 63, -652 (17.0) |  |
 | `mobs:z3wezens:wortelvelden_73_rotzwijn` | 1205, 80, -640 | 1205, 63, -640 (17.0) |  |
 | `mobs:z3wezens:wortelvelden_74_mika_schimmelboer` | 1194, 80, -613 | 1194, 63, -613 (17.0) |  |
@@ -267,22 +261,22 @@ Quest targets the game cannot place (no NPC/POI with that id): 0
 | `bazen:opperzwam` | 330, 152, -470 | 1539 (1482) | **57** bv. (311, 176, -504) | ja |
 | `z2bazen:galmwolf` | 850, 115, -974 | 3209 (3137) | **72** bv. (866, 127, -979) | ja |
 | `z2bazen:spiegelzucht` | 854, 176, -1371 | 3319 (1870) | **1449** bv. (832, 185, -1397) | ja |
-| `z3bazen:kruinroofvogel` | 1288, 229, -549 | 4609 (1507) | **3091** bv. (1237, 201, -530) | ja |
-| `z3bazen:taleggio` | 1609, 160, -782 | 983 (704) | **276** bv. (1601, 162, -818) | ja |
+| `z3bazen:kruinroofvogel` | 1288, 229, -549 | 1857 (1507) | **339** bv. (1237, 201, -530) | ja |
+| `z3bazen:taleggio` | 1609, 160, -782 | 720 (704) | **13** bv. (1602, 177, -826) | ja |
 | `z3bazen:brokkel` | 1609, 160, -782 | 792 (689) | **103** bv. (1642, 201, -873) | ja |
-| `z3bazen:roquefort` | 1609, 160, -782 | 996 (822) | **197** bv. (1677, 232, -826) | **NEE** (1646, 224, -799) |
-| `z3bazen:piepvel` | 1405, 61, -590 | 2014 (770) | **1130** bv. (1389, 75, -581) | ja |
+| `z3bazen:roquefort` | 1609, 160, -782 | 1000 (822) | **201** bv. (1677, 232, -826) | **NEE** (1646, 224, -799) |
+| `z3bazen:piepvel` | 1405, 61, -590 | 2010 (770) | **1126** bv. (1389, 75, -581) | ja |
 | `z3bazen:wortelwurger` | 1327, 31, -576 | 1345 (1009) | **336** bv. (1399, 21, -454) | ja |
 | `z3bazen:nestwachter` | 1327, 31, -576 | 1253 (1009) | **244** bv. (1478, 34, -497) | ja |
 | `z3bazen:bleu` | 1327, 31, -576 | 1529 (1257) | **272** bv. (1495, 34, -565) | ja |
 | `z3bazen:vahoegnir` | 1396, 293, -587 | 2690 (2353) | **302** bv. (1382, 303, -576) | ja |
 | `z3imker:mika_imker` | 1457, 157, -565 | 509 (509) | **199** bv. (1450, 155, -577) | ja |
-| `z4bazen:zeeslurf` | 2185, 65, -585 | 3009 (2800) | **203** bv. (2162, 48, -565) | ja |
+| `z4bazen:zeeslurf` | 2185, 65, -585 | 3013 (2800) | **207** bv. (2162, 48, -565) | ja |
 | `z4bazen:vliegervanger` | 2165, 67, -700 | 431 (363) | **6** bv. (2154, 79, -704) | ja |
 | `z5wezens:zilverstaart` | 2587, 167, -520 | 1538 (797) | **741** bv. (2586, 172, -520) | ja |
 | `z5wezens:gorgonzola` | 2780, 166, -520 | 503 (503) | 0 | ja |
 | `z5wezens:donderbuik` | 2951, 207, -569 | 1843 (1259) | **556** bv. (2955, 197, -567) | ja |
-| `z6wezens:wormelien` | 3640, 71, -582 | 2179 (2177) | 0 | ja |
+| `z6wezens:wormelien` | 3640, 71, -582 | 2170 (2168) | 0 | ja |
 | `z6wezens:zoutkolos` | 3995, 69, -586 | 1543 (1507) | 0 | ja |
 | `npc:kampvijver` | -360, 87, 1061 | 2130 (2130) | 0 | ja |
 
@@ -294,16 +288,16 @@ Boarding geometry belongs to slice w-schepen; this only reports.
 |---|---|---|---|---|
 | kamp_z1 | `haven_kamp_z1_vertrek` | -229, 87, 1008 (ja) | (-228, 85, 1011) | 2.0 |
 | kamp_z1 | `haven_z1_kamp_vertrek` | 30, 65, 470 (ja) | (13, 63, 467) | 0.4 |
-| z1_z2 | `haven_z1_z2_vertrek` | 150, 127, -657 (ja) | (148, 127, -657) | 3.0 |
+| z1_z2 | `haven_z1_z2_vertrek` | 150, 127, -657 (ja) | (147, 127, -657) | 3.0 |
 | z1_z2 | `haven_z2_z1_vertrek` | 704, 91, -880 (ja) | (701, 91, -880) | 3.0 |
 | z2_z3 | `haven_z2_z3_vertrek` | 984, 117, -856 (ja) | (984, 117, -859) | 3.0 |
 | z2_z3 | `haven_z3_z2_vertrek` | 1186, 167, -602 (ja) | (1185, 165, -604) | 2.0 |
-| z3_z4 | `haven_z3_z4_vertrek` | 1622, 167, -485 (ja) | (1623, 165, -485) | 2.0 |
-| z3_z4 | `haven_z4_z3_vertrek` | 1791, 71, -470 (ja) | (1791, 71, -470) | 3.0 |
+| z3_z4 | `haven_z3_z4_vertrek` | 1622, 167, -485 (ja) | (1623, 165, -484) | 2.0 |
+| z3_z4 | `haven_z4_z3_vertrek` | 1791, 71, -470 (ja) | (1791, 71, -471) | 3.0 |
 | z4_z5 | `haven_z4_z5_vertrek` | 2524, 73, -565 (ja) | (2524, 73, -567) | 3.0 |
-| z4_z5 | `haven_z5_z4_vertrek` | 2630, 217, -352 (ja) | (2628, 217, -352) | 3.0 |
+| z4_z5 | `haven_z5_z4_vertrek` | 2630, 217, -352 (ja) | (2629, 217, -352) | 3.0 |
 | z5_z6 | `haven_z5_z6_vertrek` | 2966, 210, -520 (ja) | (2966, 210, -521) | 3.0 |
-| z5_z6 | `haven_z6_z5_vertrek` | 3398, 142, -740 (ja) | (3398, 142, -740) | 3.0 |
+| z5_z6 | `haven_z6_z5_vertrek` | 3398, 142, -740 (ja) | (3399, 142, -740) | 3.0 |
 
 ## Verbindingen (links) in de graaf
 
@@ -355,22 +349,22 @@ Boarding geometry belongs to slice w-schepen; this only reports.
 - luik z6 in: (3985, 70, -950) -> (3943, 30, -971): ok (van-kant bereikt)
 - luik z6 uit: (3940, 30, -971) -> (3985, 70, -950): ok (van-kant bereikt)
 - luik z6 uit: (4061, 30, -971) -> (3985, 70, -950): ok (van-kant NIET bereikt)
-- raid z6 in: (4123, 85, -689) -> (4148, 4, -688): ok (van-kant bereikt)
-- raid z6 uit: (4120, 4, -688) -> (4122, 85, -689): ok (van-kant bereikt)
+- raid z6 in: (4123, 85, -688) -> (4148, 4, -688): ok (van-kant bereikt)
+- raid z6 uit: (4120, 4, -688) -> (4119, 85, -688): ok (van-kant bereikt)
 - verhaal z5 spuitgat->wolkwaldroom: (2552, 223, -520) -> (2587, 167, -520): ok (van-kant bereikt)
 
 ## Eenrichtingsgebieden (bereikt, maar geen weg terug naar een zone-ingang; >= 6 kolommen)
 
-134 groepen. De grootste 60:
+133 groepen. De grootste 60:
 
 | plek (laagste) | kolommen | y | water | onder de kaart |
 |---|---|---|---|---|
-| -388, 99, 189 | 1700 | 99..109 |  |  |
+| -388, 99, 189 | 1698 | 99..109 |  |  |
 | 2650, 132, -328 | 1065 | 132..140 |  |  |
 | 2657, 131, -714 | 889 | 131..140 |  |  |
 | 1531, 202, -575 | 724 | 202..214 |  |  |
 | 3672, 78, -804 | 678 | 78..86 |  |  |
-| 879, 79, -823 | 604 | 79..119 |  |  |
+| 879, 79, -823 | 592 | 79..119 |  |  |
 | -423, 106, 176 | 579 | 106..112 |  |  |
 | 1302, 208, -642 | 398 | 208..218 |  |  |
 | -439, 98, 161 | 354 | 98..104 |  |  |
@@ -385,7 +379,6 @@ Boarding geometry belongs to slice w-schepen; this only reports.
 | 1404, 209, -705 | 124 | 209..215 |  |  |
 | -12, 174, -46 | 123 | 174..175 |  |  |
 | 1428, 215, -453 | 123 | 215..218 |  |  |
-| 613, 170, -1360 | 96 | 170..170 |  |  |
 | 394, 122, -599 | 84 | 122..138 |  |  |
 | 274, 74, -603 | 81 | 74..84 |  |  |
 | 239, 83, -610 | 78 | 83..118 |  |  |
@@ -425,6 +418,7 @@ Boarding geometry belongs to slice w-schepen; this only reports.
 | 465, 97, -401 | 21 | 97..98 |  |  |
 | 642, 95, -1060 | 21 | 95..98 |  |  |
 | 700, 95, -1118 | 21 | 95..98 |  |  |
+| 766, 95, -1060 | 21 | 95..98 |  |  |
 
 ## Deuren
 
@@ -435,10 +429,10 @@ Boarding geometry belongs to slice w-schepen; this only reports.
 - deur naast een bereikte straat maar zelf niet bereikbaar: 0
 
 
-## Lantaarns/kettingen op looplijnen (75)
+## Lantaarns/kettingen op looplijnen (95)
 
 Blocking deco standing on a walked floor (2+ walked neighbours at that height) or hanging at head height over a walked floor.
-per zone: zone 1: 38, zone 2: 20, zone 3: 6, zone 5: 10, zone 6: 1
+per zone: zone 1: 40, zone 2: 19, zone 3: 15, zone 5: 16, zone 6: 5
 
 - -1, 64, -26 `lantern` staat
 - -19, 175, -51 `lantern` staat
@@ -460,9 +454,11 @@ per zone: zone 1: 38, zone 2: 20, zone 3: 6, zone 5: 10, zone 6: 1
 - -382, 107, 217 `iron_chain` staat
 - -375, 107, 223 `iron_chain` staat
 - -348, 108, 194 `iron_chain` staat
+- -360, 108, 198 `iron_chain` hangt
 - -425, 76, -306 `lantern` staat
 - -445, 73, 8 `lantern` staat
 - -415, 73, 220 `lantern` staat
+- -385, 107, 205 `iron_chain` hangt
 - 1, 64, -26 `lantern` staat
 - 62, 64, -8 `lantern` staat
 - 18, 175, -51 `lantern` staat
@@ -487,7 +483,6 @@ per zone: zone 1: 38, zone 2: 20, zone 3: 6, zone 5: 10, zone 6: 1
 - 739, 111, -1109 `iron_chain` staat
 - 740, 111, -1107 `iron_chain` staat
 - 739, 111, -1106 `iron_chain` staat
-- 746, 120, -1190 `iron_chain` staat
 - 769, 133, -1252 `elftocht_lampion` hangt
 - 64, 64, -8 `lantern` staat
 - 103, 64, -80 `lantern` staat
@@ -498,22 +493,41 @@ per zone: zone 1: 38, zone 2: 20, zone 3: 6, zone 5: 10, zone 6: 1
 - 70, 65, 473 `lantern` staat
 - 1337, 156, -590 `iron_chain` hangt
 - 1407, 124, -603 `lantern` staat
+- 1402, 82, -585 `iron_chain` hangt
+- 1406, 82, -585 `iron_chain` hangt
+- 1396, 153, -645 `iron_chain` hangt
+- 1392, 153, -644 `iron_chain` hangt
 - 1400, 97, -550 `lantern` staat
 - 1400, 115, -550 `lantern` staat
 - 1400, 151, -550 `lantern` staat
 - 1469, 232, -636 `lantern` staat
+- 1413, 168, -578 `iron_chain` hangt
+- 1413, 234, -578 `iron_chain` hangt
+- 1467, 158, -567 `iron_chain` hangt
+- 1467, 158, -563 `iron_chain` hangt
+- 1412, 168, -574 `iron_chain` hangt
 - 143, 127, -611 `lantern` staat
 - 157, 127, -611 `lantern` staat
 - 2608, 226, -556 `lantern` staat
+- 2765, 216, -444 `iron_chain` hangt
+- 2759, 216, -443 `iron_chain` hangt
+- 2765, 216, -443 `iron_chain` hangt
+- 2759, 215, -444 `iron_chain` staat
 - 2762, 226, -510 `iron_chain` staat
 - 2762, 226, -509 `iron_chain` staat
 - 2769, 226, -530 `iron_chain` staat
+- 2770, 226, -521 `iron_chain` hangt
+- 2770, 226, -519 `iron_chain` hangt
 - 2764, 224, -536 `lantern` staat
-- 2829, 198, -465 `iron_chain` staat
 - 2831, 198, -465 `iron_chain` staat
+- 2829, 198, -465 `iron_chain` staat
 - 2874, 198, -554 `iron_chain` staat
-- 2879, 197, -555 `iron_chain` staat
 - 2875, 197, -555 `iron_chain` staat
+- 2880, 198, -555 `iron_chain` hangt
+- 3379, 71, -693 `iron_chain` hangt
+- 3366, 87, -689 `iron_chain` hangt
+- 3426, 74, -686 `iron_chain` hangt
+- 3414, 89, -741 `iron_chain` hangt
 - 3487, 107, -674 `messing_lantaarn` staat
 
 ## Spookrelingen: gouden kaarsenrand (geen botsing) op een looprand (0)

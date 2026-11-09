@@ -94,6 +94,7 @@ public final class ErfenisClient {
             Overzicht.frame(mc.screen instanceof OverzichtScherm s && s.toetsenVrij());
         });
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeCameraAngles event) -> Overzicht.hoeken(event));
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.LOWEST, OverzichtChat::opChat);   // 1.9.6: chat in the overview
         NeoForge.EVENT_BUS.addListener((ViewportEvent.ComputeFov event) -> Overzicht.fov(event));
         NeoForge.EVENT_BUS.addListener((RenderLevelStageEvent.AfterTranslucentBlocks event) -> OverzichtWereld.teken(event));
         // The whole HUD goes while the overview is open. hideGui (see Overzicht.start) only hides the vanilla layers: other mods'

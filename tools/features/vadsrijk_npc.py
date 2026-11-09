@@ -1327,7 +1327,23 @@ def kampwacht_orde():
         return re.findall(r'KAMPWACHT\.put\("([a-z_0-9]+)"', f.read())
 
 
+# X-ZONE1: quest xp for a smooth chain (main-only reaches every next zone's entry level with ~0-15 min grinding; side quests
+# are a small extra so main+side stays near the band; the level cap 70 falls in the last part of zone 6). Computed with
+# tools/vadsrijk/xpbalans.py (see XP_BALANS.md, round X); only the xp of these quests changes.
+X_ZONE1_XP = {
+    "k01_dobber": 20, "k02_uitzicht": 20, "z01_wolletjes": 90, "z02_zwamtaart": 190, "z03_knuffels": 320,
+    "z04_inspiratie": 240, "z05_post": 80, "z06_tulpen": 100, "z07_tuba": 210, "z08_pluis": 140,
+    "z09_kristal": 450, "z10_rammel": 140, "z11_slijmgel": 100, "z12_kleuren": 140, "z13_snurk": 180,
+    "z14_kistjes": 450, "z15_lichtjes": 320, "z16_verstoppertje": 190, "z17_koning": 520, "z18_premie_woud": 320,
+    "z19_premie_grotten": 560, "z20_premie_tempel": 880, "rijdier_hoedhupper": 280, "rijdier_knuffelhert": 520, "hq08_sporenwoud": 3000,
+    "hq09_druipgrotten": 5900, "hq10_zwamtempel": 4400,
+}
+
+
 def quests_json():
+    for _q in QUESTS:   # X-ZONE1: the quest xp above
+        if _q["id"] in X_ZONE1_XP:
+            _q["beloning"]["xp"] = X_ZONE1_XP[_q["id"]]
     npc_ids, poi_ids = _java_ids()
     ids = [q["id"] for q in QUESTS]
     assert len(ids) == len(set(ids)), "duplicate quest id"

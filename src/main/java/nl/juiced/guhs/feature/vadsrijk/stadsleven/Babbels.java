@@ -46,7 +46,17 @@ final class Babbels {
     }
 
     /** Is a player (with Stadsleven on) close enough to read it? */
+    /**
+     * X-INT: gametests only (null = the real players). The gametest server never removes the mock players other tests made
+     * (GuhMockPlayer stays in the player list at its test's origin), so one of them could "hear" a test town 13 blocks away and
+     * keep the playground's children up at night (order-dependent StadslevenGameTests.speeltuin).
+     */
+    static Boolean testHoort;
+
     static boolean iemandHoort(ServerLevel sl, Vec3 p) {
+        if (testHoort != null) {
+            return testHoort;
+        }
         for (ServerPlayer sp : sl.players()) {
             if (StadsLeven.ziet(sp) && sp.distanceToSqr(p) < HOOR * HOOR) {
                 return true;

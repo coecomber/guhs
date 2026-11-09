@@ -74,6 +74,19 @@ def zet_h(W, x, z, top):
 
 
 # ------------------------------------------------------------------------------------------------ roads
+def _watertop(W, x, z):
+    """X-KAART: y of the highest water block in column (x, z) (-1000 = none)."""
+    i, k = W.vx(x), W.vz(z)
+    if not (0 <= i < W.v.shape[0] and 0 <= k < W.v.shape[2]):
+        return -1000
+    col = W.v[i, :, k]
+    for j in range(W.v.shape[1] - 1, -1, -1):
+        c = int(col[j])
+        if c and W.pal[c].startswith("minecraft:water"):
+            return int(W.b[1] + j)
+    return -1000
+
+
 def _herbemonster(pts, stap=1.0):
     P = np.asarray(pts, float)
     uit = [P[0]]
@@ -92,7 +105,9 @@ def pad(W, pts, breed=2, top_k="vloer_zand", rand_k="zs", trap_k="vloer_zand", s
     posts every `lampen` blocks. Returns the profile [(x, z, y_top)]."""
     P = _herbemonster(pts, 1.0)
     N = len(P)
-    h = np.array([grond(W, x, z, 200) for x, z in P], float)
+    # X-KAART: through water the road bed is at least the water surface (a causeway): it used to follow the river/lake BED and
+    # cut a dry trench through the water (water flowing into it, a road under the lake surface)
+    h = np.array([max(grond(W, x, z, 200), _watertop(W, x, z)) for x, z in P], float)
     if N > 9:
         k = np.ones(9) / 9
         hs = np.convolve(np.pad(h, 4, mode="edge"), k, mode="valid")
@@ -133,8 +148,9 @@ def pad(W, pts, breed=2, top_k="vloer_zand", rand_k="zs", trap_k="vloer_zand", s
             onder = min(g, y - 1)
             doos(W, cx, onder, cz, cx, y - 1, cz, "rots")
             k = top_k if ao < breed - 0.6 else rand_k
+            wt = _watertop(W, cx, cz)                  # X-KAART: never a dry trench under the water surface (a ford instead)
             zet(W, cx, y, cz, k)
-            leeg(W, cx, y + 1, cz, cx, y + 4, cz)
+            leeg(W, cx, max(y + 1, wt + 1), cz, cx, y + 4, cz)
             zet_h(W, cx, cz, y)
         else:
             # shoulder: 1:1 slope from the road edge to the terrain
@@ -168,6 +184,8 @@ def pad(W, pts, breed=2, top_k="vloer_zand", rand_k="zs", trap_k="vloer_zand", s
         side = 1 if (a // lampen) % 2 else -1
         px, pz = x + nx * (breed + 1.5) * side, z + nz * (breed + 1.5) * side
         y = grond(W, px, pz, 200) + 1
+        if _watertop(W, px, pz) >= y - 1:
+            continue                                   # X-KAART: no lamp post standing in the river beside a causeway
         if abs(y - 1 - t[a]) <= 2:
             doos(W, px, y, pz, px, y + 2, pz, "palm_hek")
             zet(W, px, y + 3, pz, "messing_lantaarn")
@@ -351,9 +369,32 @@ def toren(W):
             for yy in range(t - 6, t):
                 if W.wget(xx, yy, tz + dz) == "minecraft:air":
                     zet(W, xx, yy, tz + dz, "rots")
-    doos(W, tx - 16, y0 + 1, tz - 2, tx - 16, y0 + 7, tz + 2, "minecraft:black_stained_glass")
-    LS.ring(W, tx - 16.5, y0 + 4.5, tz + 0.5, 3.4, kanteling=1.5707, rond_as=0.0, dik=0.0, k="goudblok")
-    plek(W, "toren_poort", tx - 18, y0 + 1, tz)
+    # [x-raid] the raid door. The old "seal" (black glass 5 wide at tx-16 + a gold ring standing edge-on in the walkway) left
+    #   2 blocks free on both sides of the 9-wide niche: you walked round it, through the open back-wall door, into the
+    #   hollow tower, and nothing happened (the Java door box is only 4 wide). Now: the niche is open and is the door itself
+    #   (Java Z6Raid: entering the niche = to De Wachtzaal); the back-wall door is filled with sterrenvlies (purple glass, the
+    #   same as the raid's floor gates) inside a gold ring set flush in the wall; a gold circle inlaid in the niche floor.
+    # [x-raid] the voet is an octagon with a CORNER on the door axis: that corner stuck out 1 block in front of the iwan's gate
+    #   facade (x tx-19, 3 wide, y0+1..y0+14), a pillar right in the middle of the doorway. Cut it back to the facade.
+    muur = {W.id(b(k)) for k in ("grauw_steen", "grauw2", "goud")}
+    for xx in (tx - 20, tx - 19):
+        for dz in range(-8, 9):
+            for yy in range(y0 + 1, y0 + 15):
+                if W.v[W.vx(xx), W.vy(yy), W.vz(tz + dz)] in muur:
+                    zet(W, xx, yy, tz + dz, LUCHT)
+    cb = tx - 13
+    for dz in range(-5, 6):
+        for yy in range(y0 + 1, y0 + 12):
+            if W.wget(cb, yy, tz + dz) == LUCHT:
+                zet(W, cb, yy, tz + dz, "minecraft:purple_stained_glass")
+            elif abs(math.hypot(yy - (y0 + 3.5), dz) - 3.0) < 0.55:
+                zet(W, cb, yy, tz + dz, "goudblok")
+    for dx in range(-3, 4):
+        for dz in range(-3, 4):
+            if abs(math.hypot(dx, dz) - 2.0) < 0.6:
+                zet(W, tx - 15 + dx, y0, tz + dz, "goudblok")
+    # (stand spot outside: the threshold at the top of the stair, OUTSIDE the door box, so coming out never bounces you in)
+    plek(W, "toren_poort", gx, y0 + 1, tz)
     plek(W, "toren_raid_ingang", tx - 17, y0 + 1, tz)
     plek(W, "toren_voet", gx - 7, None, tz)
 

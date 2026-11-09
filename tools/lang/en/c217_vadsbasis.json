@@ -30,14 +30,13 @@
   "block.guhs.wolkenantenne_2": "Cloud Antenna II",
   "block.guhs.wolkenantenne_3": "Cloud Antenna III",
   "ftb.guhs_techniek.q.vb_knabbelketel.title": "Cheese in the boiler",
-  "ftb.guhs_techniek.q.vb_knabbelketel.desc": "The &6Nibble Boiler&r burns cheese nibbles for &d80 chonk power&r. A block of cheese nibbles burns nine times as long. Hungry, though: hundreds of nibbles an hour. Time for a nibble farm!",
+  "ftb.guhs_techniek.q.vb_knabbelketel.desc": "The &dNibble Boiler&r burns cheese nibbles for &b80 chonk power&r. A block of nibbles burns nine times as long. Quite the glutton, though: time for a nibble farm!",
   "ftb.guhs_techniek.q.vb_generator.title": "Soft stone",
-  "ftb.guhs_techniek.q.vb_generator.desc": "Cheese sauce + water = &dcuddlestone&r. Put the &6Cuddlestone Generator&r next to a water source, give it cheese sauce through a hose and chonk power, and put a chest next to it.",
+  "ftb.guhs_techniek.q.vb_generator.desc": "Cheese sauce + water = &dcuddlestone&r. Put the &dCuddlestone Generator&r next to water, give it sauce through a hose and chonk power, and put a chest next to it.",
   "ftb.guhs_techniek.q.vb_saustank.title": "A pool of sauce",
-  "ftb.guhs_techniek.q.vb_saustank.desc": "The &6Big Sauce Tank&r holds 64 buckets. The meter on its belly shows how full it is.",
+  "ftb.guhs_techniek.q.vb_saustank.desc": "The &dBig Sauce Tank&r holds 64 buckets. The meter on its belly shows how full it is. No swimming in it!",
   "ftb.guhs_techniek.q.vb_sausbuis.title": "Pipes all the way",
-  "ftb.guhs_techniek.q.vb_sausbuis.desc": "A &6Sauce Pipe&r carries sauce far: it only counts as a sixteenth of a hose.",
+  "ftb.guhs_techniek.q.vb_sausbuis.desc": "A &dSauce Pipe&r carries sauce far: it only counts as a sixteenth of a hose.",
   "ftb.guhs_techniek.q.vb_antenne.title": "Weather all around",
-  "ftb.guhs_techniek.q.vb_antenne.desc": "A Weather Vadser only reaches 10 blocks. Put a &bCloud Antenna&r on it: I, II and III make the radius 20, 35 and 60. Every step costs more chonk power.",
-  "ftb.guhs_techniek.section.vadsbasis": "Chonk power for your base"
+  "ftb.guhs_techniek.q.vb_antenne.desc": "A &dWeather Vadser&r reaches 10 blocks. Put a &dCloud Antenna&r on it: I, II and III make that 20, 35 and 60 blocks. Every step costs more chonk power."
 }

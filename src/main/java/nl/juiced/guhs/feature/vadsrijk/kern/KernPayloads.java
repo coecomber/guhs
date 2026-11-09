@@ -291,10 +291,12 @@ public final class KernPayloads {
         cdMax[Knuffelsprong.SLOT] = Knuffelsprong.COOLDOWN;
         skills.add("vadsrijk.kern.skill.knuffelsprong");
         int duiz = (int) Math.max(0, d.duizeligTot - nu);
+        int cap = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.plafond(p);   // X-ZONE1: at the soft cap the bars show full (like the max)
+        boolean kVol = lvl >= Levels.MAX || (cap > 0 && lvl >= cap), gVol = gl >= Levels.MAX_GENERIEK || (cap > 0 && gl >= cap);
         stuur(p, new Hud(Vadsrijk.in(p), (float) Spelers.vads(p), (float) Spelers.maxVads(p), (float) Spelers.energie(p), (float) Spelers.maxEnergie(p),
-                (float) d.ultLading, lvl, lvl >= Levels.MAX ? 0 : Levels.restXp(xp), lvl >= Levels.MAX ? 0 : Levels.xpVoor(lvl), Spelers.titelKey(p), cd, cdMax, d.munten,
+                (float) d.ultLading, lvl, kVol ? 0 : Levels.restXp(xp), kVol ? 0 : Levels.xpVoor(lvl), Spelers.titelKey(p), cd, cdMax, d.munten,
                 duiz, d.opgevrolijkt, d.gebied == null ? "" : d.gebied, skills, Statussen.ticks(p, Status.BEVROREN), gl,
-                gl >= Levels.MAX_GENERIEK ? 0 : Levels.restXpGeneriek(d.generiekXp), gl >= Levels.MAX_GENERIEK ? 0 : Levels.xpVoorGeneriek(gl),
+                gVol ? 0 : Levels.restXpGeneriek(d.generiekXp), gVol ? 0 : Levels.xpVoorGeneriek(gl),
                 Spelers.actieveWapenKlasse(p) == null, klasseLv,
                 // g-int: the bought tree nodes of the active class (incl. hidden _adv steps), for the client skill tooltips (SkillInfo)
                 List.copyOf(d.boom.getOrDefault(k.id(), java.util.Set.of()))));

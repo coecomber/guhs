@@ -83,12 +83,36 @@ public final class Z6RaidPlekken {
         return testAnker != null ? testAnker : p("raid_toren_binnen", 4140, 16, -688);
     }
 
+    /** Gametests: a fixed door spot (the niche's front block, like the POI) overrides the POI. */
+    @Nullable
+    public static BlockPos testPoort;
+
     public static BlockPos poort() {
-        return p("raid_toren_poort", 4123, 71, -688);
+        return testPoort != null ? testPoort : p("raid_toren_poort", 4123, 71, -688);
     }
 
+    /**
+     * X-RAID: the door is the WHOLE iwan niche of the tower (9 wide, 5 deep, west side): the POI {@code raid_toren_poort} is its
+     * front block (tx-17); the niche runs from 1 block in front of it (tx-18) to the sterrenvlies in the back wall (tx-13), 4
+     * blocks to each side. The old door box was 4 wide around the middle: you walked round the black glass seal at the sides
+     * into the hollow tower and nothing happened.
+     */
+    public static boolean bijPoort(double x, double y, double z) {
+        BlockPos d = poort();
+        return x >= d.getX() - 1 && x < d.getX() + 4 && Math.abs(z - (d.getZ() + 0.5)) < 5 && y >= d.getY() - 1 && y < d.getY() + 4;
+    }
+
+    /**
+     * Where you come out: the POI {@code raid_toren_buiten} (the stair top in front of the door). X-RAID: when that spot lies in the
+     * door box (the round-W POI was 1 block in front of the door: only the "just out" list stopped a bounce), the stair top 4
+     * in front of the door is used instead, so coming out can never send you straight back in.
+     */
     public static BlockPos buiten() {
-        return p("raid_toren_buiten", 4118, 71, -688);
+        BlockPos b = testPoort != null ? null : wereld("raid_toren_buiten");
+        if (b == null || bijPoort(b.getX() + 0.5, b.getY(), b.getZ() + 0.5)) {
+            return poort().offset(-4, 0, 0);
+        }
+        return b;
     }
 
     /** Feet height offset of floor k (0 = Wachtzaal, 1-4 the bosses). */

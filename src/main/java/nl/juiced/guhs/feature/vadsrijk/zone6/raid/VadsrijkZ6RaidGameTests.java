@@ -258,4 +258,152 @@ public class VadsrijkZ6RaidGameTests {
             });
         });
     }
+
+    // ---- X-RAID: the door, the Wachtzaal, the start circle ----------------------------------------------------------------------
+
+    /**
+     * X-RAID: the WHOLE door niche (9 wide) sends you into De Wachtzaal (the old box was 4 wide: the user walked past it at the
+     * side into the hollow tower); the exit puts you on the stair top OUTSIDE the box, and standing there never bounces you back
+     * in (no teleport loop); walking back into the niche works again.
+     */
+    @GuhTest(template = "empty", batch = BATCH + "_deur")
+    public static void deurNaarWachtzaal(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        // (far from the test grid: the Wachtzaal floor and the door floor must not spill into a neighbouring test)
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1)).offset(0, 0, 4000);
+        BlockPos d = helper.absolutePos(new BlockPos(40, 2, 1)).offset(0, 0, 4000);
+        BlockPos oudA = Z6RaidPlekken.testAnker, oudP = Z6RaidPlekken.testPoort;
+        Z6RaidPlekken.testAnker = a;
+        Z6RaidPlekken.testPoort = d;
+        try {
+            vloer(sl, Z6RaidPlekken.midden(0), 22);
+            vloer(sl, d, 8);
+            for (int dx = -1; dx <= 3; dx++) {
+                for (int dz = -4; dz <= 4; dz++) {
+                    helper.assertTrue(Z6RaidPlekken.bijPoort(d.getX() + dx + 0.5, d.getY(), d.getZ() + dz + 0.5), "niche cell " + dx + "," + dz + " is the door");
+                }
+            }
+            BlockPos uit = Z6RaidPlekken.buiten();
+            helper.assertTrue(!Z6RaidPlekken.bijPoort(uit.getX() + 0.5, uit.getY(), uit.getZ() + 0.5), "the outside spot is not in the door box");
+            // in at the SIDE of the niche (where the old 4-wide box missed you)
+            ServerPlayer p = speler(helper, new Vec3(d.getX() + 2.5, d.getY(), d.getZ() + 4.5));
+            helper.assertTrue(Z6Raid.deur(sl, p) == 1, "the side of the niche takes you in");
+            helper.assertTrue(Z6RaidPlekken.verdieping(p.getX(), p.getY(), p.getZ()) == 0, "you are in De Wachtzaal, got " + p.position());
+            helper.assertTrue(Z6Raid.deur(sl, p) == 0, "standing in the Wachtzaal: nothing happens");
+            // out through the exit arch
+            BlockPos u = Z6RaidPlekken.uitgang();
+            p.snapTo(u.getX() + 0.5, u.getY(), u.getZ() + 0.5);
+            helper.assertTrue(Z6Raid.deur(sl, p) == -1, "the exit arch takes you out");
+            helper.assertTrue(Z6RaidPlekken.verdieping(p.getX(), p.getY(), p.getZ()) == -1 && !Z6RaidPlekken.bijPoort(p.getX(), p.getY(), p.getZ()),
+                    "outside, on the stair top in front of the door, got " + p.position());
+            for (int i = 0; i < 5; i++) {
+                helper.assertTrue(Z6Raid.deur(sl, p) == 0, "no teleport loop: standing outside does nothing");
+            }
+            // and back in
+            p.snapTo(d.getX() + 0.5, d.getY(), d.getZ() + 0.5);
+            helper.assertTrue(Z6Raid.deur(sl, p) == 1 && Z6RaidPlekken.verdieping(p.getX(), p.getY(), p.getZ()) == 0, "the door works again");
+            helper.succeed();
+        } finally {
+            Z6RaidPlekken.testAnker = oudA;
+            Z6RaidPlekken.testPoort = oudP;
+        }
+    }
+
+    /**
+     * X-RAID: the start flow. Alone on the circle nothing starts (never solo); a second real player on it for 3 s starts the raid
+     * for both; the tracker line points at the circle in the Wachtzaal and at the door outside.
+     */
+    @GuhTest(template = "empty", batch = BATCH + "_cirkel")
+    public static void startCirkel(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1)).offset(0, 0, 4300);   // (far from the test grid)
+        BlockPos oudA = Z6RaidPlekken.testAnker;
+        Z6RaidPlekken.testAnker = a;
+        Z6Raid.Groep oudG = Z6Raid.groep;   // (shared static state: restored, never wiped, so parallel raid tests keep theirs)
+        java.util.List<java.util.List<java.util.UUID>> oudRij = new java.util.ArrayList<>(Z6Raid.RIJ);
+        Z6Raid.groep = null;
+        Z6Raid.RIJ.clear();
+        try {
+            vloer(sl, Z6RaidPlekken.midden(0), 22);
+            for (int k = 0; k <= 3; k++) {
+                for (BlockPos b : Z6RaidPlekken.poortBlokken(k)) {
+                    sl.getChunk(b);
+                }
+            }
+            Vec3 c = Z6RaidPlekken.start();
+            ServerPlayer een = speler(helper, c);
+            long t = 100000;
+            for (int i = 0; i <= 8; i++) {
+                Z6Raid.cirkel(sl, t + i * 10);
+            }
+            helper.assertTrue(Z6Raid.groep() == null, "one player on the circle never starts the raid");
+            ServerPlayer twee = speler(helper, c.add(1, 0, 0));
+            long t2 = t + 200;
+            for (int i = 0; i <= Z6Raid.START_TICKS / 10 + 1; i++) {
+                Z6Raid.cirkel(sl, t2 + i * 10);
+            }
+            Z6Raid.Groep g = Z6Raid.groep();
+            helper.assertTrue(g != null && g.leden.contains(een.getUUID()) && g.leden.contains(twee.getUUID()) && g.n == 2 && g.nep.isEmpty(),
+                    "two real players for 3 s: the raid starts for both (no made-up members)");
+            helper.assertTrue(Z6RaidPlekken.verdieping(een.getX(), een.getY(), een.getZ()) == 1, "the group went up to floor 1, got " + een.position());
+            helper.assertTrue(Z6RaidHeraut.volgRegel(true).doel().orElseThrow().equals(BlockPos.containing(Z6RaidPlekken.start()))
+                    && Z6RaidHeraut.volgRegel(false).doel().orElseThrow().equals(Z6RaidPlekken.poort()), "tracker: circle inside, door outside");
+            helper.succeed();
+        } finally {
+            Z6RaidPlekken.testAnker = oudA;
+            Z6Raid.groep = oudG;
+            Z6Raid.RIJ.clear();
+            Z6Raid.RIJ.addAll(oudRij);
+        }
+    }
+
+    /**
+     * X-RAID: no softlock in De Wachtzaal of the REAL template: from where the door drops you, you can walk to the start circle,
+     * to the hall keeper and to the exit arch (2 air above a floor, 4 directions, a step down of at most 1).
+     */
+    @GuhTest(template = "empty", batch = BATCH + "_zaal", timeoutTicks = 400)
+    public static void wachtzaalBereikbaar(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        BlockPos a = helper.absolutePos(new BlockPos(1, 30, 1)).offset(0, 0, 4600);   // (the 60x67x51 template: far from the test grid)
+        BlockPos oudA = Z6RaidPlekken.testAnker;
+        Z6RaidPlekken.testAnker = a;
+        try {
+            helper.assertTrue(Z6RaidBouw.zetTemplate(sl), "the binnentoren template exists");
+            BlockPos m = Z6RaidPlekken.midden(0);
+            BlockPos van = m.offset(8, 0, 0);
+            java.util.Set<BlockPos> gezien = new java.util.HashSet<>();
+            java.util.ArrayDeque<BlockPos> rij = new java.util.ArrayDeque<>();
+            helper.assertTrue(staan(sl, van), "the arrival spot is standable");
+            gezien.add(van);
+            rij.add(van);
+            while (!rij.isEmpty()) {
+                BlockPos b = rij.poll();
+                for (var r : net.minecraft.core.Direction.Plane.HORIZONTAL) {
+                    for (int dy = 0; dy >= -1; dy--) {
+                        BlockPos n = b.relative(r).offset(0, dy, 0);
+                        if (Math.abs(n.getX() - m.getX()) > 26 || Math.abs(n.getZ() - m.getZ()) > 26 || gezien.contains(n) || !staan(sl, n)) {
+                            continue;
+                        }
+                        gezien.add(n);
+                        rij.add(n);
+                        break;
+                    }
+                }
+            }
+            BlockPos cirkel = BlockPos.containing(Z6RaidPlekken.start());
+            BlockPos uit = Z6RaidPlekken.uitgang();
+            helper.assertTrue(gezien.contains(cirkel), "the start circle is reachable from the door's arrival spot (" + gezien.size() + " cells)");
+            helper.assertTrue(gezien.stream().anyMatch(b -> b.closerThan(uit, 1.6)), "the exit arch is reachable (no softlock)");
+            helper.assertTrue(gezien.stream().anyMatch(b -> b.closerThan(Z6RaidHeraut.zaalwachter(), 1.5)), "the hall keeper stands on a walkable spot");
+            helper.succeed();
+        } finally {
+            Z6RaidPlekken.testAnker = oudA;
+        }
+    }
+
+    /** A cell a player can stand in: something to stand on below, nothing to bump into in the 2 cells of the body. */
+    private static boolean staan(ServerLevel sl, BlockPos b) {
+        return !sl.getBlockState(b.below()).getCollisionShape(sl, b.below()).isEmpty()
+                && sl.getBlockState(b).getCollisionShape(sl, b).isEmpty() && sl.getBlockState(b.above()).getCollisionShape(sl, b.above()).isEmpty();
+    }
 }

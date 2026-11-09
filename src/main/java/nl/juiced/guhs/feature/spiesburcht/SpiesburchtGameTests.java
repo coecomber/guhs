@@ -509,6 +509,25 @@ public class SpiesburchtGameTests {
         helper.assertTrue(be.levels() == 2 && be.gunst() == KnabbelbakenBlockEntity.Gunst.GUHSPRONG, "two layers: Guhsprong");
         be.pulse();
         helper.assertTrue(player.hasEffect(MobEffects.JUMP_BOOST) && tame.hasEffect(MobEffects.JUMP_BOOST), "jump boost for both");
+        // 1.9.3: the menu switches effects on/off (several at once, only unlocked ones), hides the beam; reach 25/40/60/80
+        helper.assertTrue(be.range() == 40, "two layers reach 40 blocks, not " + be.range());
+        KnabbelbakenMenu.antwoord(player, be, KnabbelbakenBlockEntity.Gunst.VAHOEG.ordinal());
+        player.removeAllEffects();
+        be.pulse();
+        helper.assertTrue(player.hasEffect(MobEffects.SPEED) && player.hasEffect(MobEffects.JUMP_BOOST), "VAHOEG and Guhsprong on together");
+        KnabbelbakenMenu.antwoord(player, be, KnabbelbakenBlockEntity.Gunst.GUHSPRONG.ordinal());
+        KnabbelbakenMenu.antwoord(player, be, KnabbelbakenBlockEntity.Gunst.VADSSCHILD.ordinal());
+        player.removeAllEffects();
+        be.pulse();
+        helper.assertTrue(player.hasEffect(MobEffects.SPEED) && !player.hasEffect(MobEffects.JUMP_BOOST), "Guhsprong switched off");
+        helper.assertFalse(player.hasEffect(MobEffects.RESISTANCE), "Vadsschild is not unlocked with two layers");
+        helper.assertTrue(be.gunst() == KnabbelbakenBlockEntity.Gunst.VAHOEG, "the beam takes the colour of an effect that is on");
+        KnabbelbakenMenu.antwoord(player, be, KnabbelbakenMenu.STRAAL);
+        player.removeAllEffects();
+        be.pulse();
+        helper.assertTrue(be.straalUit() && player.hasEffect(MobEffects.SPEED), "beam hidden, the effect keeps working");
+        KnabbelbakenMenu.antwoord(player, be, KnabbelbakenMenu.STRAAL);
+        helper.assertFalse(be.straalUit(), "beam shown again");
         helper.setBlock(baken.offset(1, -1, 1), Blocks.DIRT);
         be.refresh();
         helper.assertTrue(be.levels() == 0, "a hole in the pyramid: off");

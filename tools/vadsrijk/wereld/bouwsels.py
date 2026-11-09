@@ -499,7 +499,9 @@ def haven(W, K, P):
             z = t + w
             ox = oevers.get(z, oever)
             S.set(ox, g + 1, z, CARVE)
-            for i in range(0, 5):
+            # X-INT: the top tread replaces the quay's edge block (i = -1): the stair used to end 1 below the quay floor (a
+            # 1-block jump at the end of the stair, loopcheck TRAP 56,63,455..457 / 83,63,527..529)
+            for i in range(-1, 5):
                 x, y = ox - 1 - i, g - 1 - i
                 wl = "true" if y <= KA.ZEE else "false"
                 S.set(x, y, z, f"minecraft:stone_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged={wl}]")
@@ -830,9 +832,20 @@ def naald(W, K, P, naam, x, z, hoogte):
     g = K.h(x, z)
     top = g + hoogte
     R = 19
-    S = WS(x - R, g - 4, z - R, 2 * R + 1, hoogte + 18, 2 * R + 1)
+    # X-Z1GROND: on a slope the needle's foot (from g - 3, the centre's ground) hung in the air on the downhill side: the rock
+    # now reaches down to the real ground under every foot column (the stamp box starts at the lowest ground around it)
+    g_laag = max(min(min(K.h(xx, zz) for xx in range(x - 13, x + 14, 2) for zz in range(z - 13, z + 14, 2)), g) - 4, g - 30)
+    S = WS(x - R, g_laag, z - R, 2 * R + 1, hoogte + 18 + (g - 4 - g_laag), 2 * R + 1)
     lagen = ["minecraft:stone", "minecraft:andesite", "minecraft:calcite", "minecraft:stone", "minecraft:tuff", "minecraft:diorite"]
     rng = random.Random(sum(map(ord, naam)) * 7919)
+    r0 = naald_straal(0)
+    for xx in range(x - 13, x + 14):                    # X-Z1GROND: the foot down to the ground
+        for zz in range(z - 13, z + 14):
+            a = math.atan2(zz - z, xx - x)
+            rr = r0 * (1 + 0.12 * math.sin(3 * a + (g - 3) * 0.15) + 0.06 * math.sin(7 * a))
+            if math.hypot(xx - x, zz - z) <= rr:
+                for y in range(max(K.h(xx, zz) - 1, g_laag + 1), g - 3):
+                    S.set(xx, y, zz, lagen[((y + int(2 * math.sin(a * 2))) // 3) % len(lagen)])
     for y in range(g - 3, top + 1):
         t = (y - g) / hoogte
         r = naald_straal(t)
@@ -1105,9 +1118,12 @@ def schildpad(W, K, P):
     for (fx, fz) in ((cx + 18, cz - rz - 2), (cx + 18, cz + rz + 2), (cx - 20, cz - rz), (cx - 20, cz + rz)):
         S.ellipsoid(fx, g, fz, 6, 1.5, 3, "minecraft:lime_terracotta")
     # a palm-ish blossom tree, a chest
-    S.fill(cx - 3, g + ry + 1, cz, cx - 3, g + ry + 6, cz, "guhbloesem_log[axis=y]")
+    def schild_top(x, z):          # X-Z1GROND: the shell's top block at (x, z) (the tree and the chest stood 1-2 over it)
+        return g + int(ry * math.sqrt(max(0.0, 1 - ((x - cx) / rx) ** 2 - ((z - cz) / rz) ** 2)))
+    S.fill(cx - 3, schild_top(cx - 3, cz) + 1, cz, cx - 3, g + ry + 6, cz, "guhbloesem_log[axis=y]")
     S.ellipsoid(cx - 3, g + ry + 7, cz, 4, 2, 4, "guhbloesem_leaves", keep=True)
-    S.set(cx + 4, g + ry + 1, cz + 2, "minecraft:chest[facing=south,type=single,waterlogged=false]")
+    S.fill(cx + 4, schild_top(cx + 4, cz + 2) + 1, cz + 2, cx + 4, g + ry, cz + 2, "minecraft:grass_block[snowy=false]")
+    S.set(cx + 4, g + ry + 1, cz + 2, "minecraft:chest[facing=south,type=single,waterlogged=false]")   # (same spot: POI kept)
     P["geheim_schildpad"] = [cx + 4, g + ry + 1, cz + 2]
     P["schildpad_eiland"] = [cx, g + ry + 1, cz]
     W.stempel(S.stempel("schildpad"))
@@ -1647,6 +1663,16 @@ def sporenwoud(W, K, P):
     for y in range(g + 1, g + 20):
         for x in range(wx - 1, wx + 2):
             S.set(x, y, wz + 10, "minecraft:water")
+    # X-Z1GROND: the curtain hung free in the air (open top, air behind and beside it: "water loopt raar"): a rock face behind
+    # it above the entrance, mossy cheeks on both sides and a rock lip over the top, so it pours from under a ledge
+    for y in range(g + 1, g + 21):
+        for x in (wx - 2, wx + 2):
+            S.set(x, y, wz + 10, "minecraft:mossy_cobblestone")
+        for x in range(wx - 2, wx + 3):
+            if y >= g + 4:
+                for z in range(wz + 6, wz + 10):
+                    S.set(x, y, z, "minecraft:stone" if (x + y + z) % 4 else "minecraft:mossy_cobblestone")
+    S.fill(wx - 2, g + 20, wz + 6, wx + 2, g + 20, wz + 11, "minecraft:mossy_cobblestone")
     for x in range(wx - 4, wx + 5):
         for z in range(wz + 11, wz + 17):
             S.set(x, g, z, "minecraft:water")

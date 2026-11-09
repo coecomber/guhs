@@ -60,6 +60,9 @@ def maak(alleen=None):
     import grot as GROT                                    # U-GROTTEN: the zone-2 cave (Kristalgrot), states known before the lut
     for _s in GROT.staten(2):
         W.palet.id(_s)
+    import fundering2                                      # X-Z1GROND: the ground heights (+ paths) for the foundation pass
+    T_grond, pad_grond = fundering2.grond(K), fundering2.paden(K)
+    fundering2.schrijf_cache(T_grond, pad_grond)
     lut = W.opaak_lut()
     tegels = [(tx, tz) for tx in range(PL.UIT_TX0, PL.UIT_TX1 + 1) for tz in range(PL.UIT_TZ0, PL.UIT_TZ1 + 1)]
     if alleen:   # --alleen takes WORLD tile indices
@@ -104,6 +107,7 @@ def maak(alleen=None):
         if n % 40 == 0:
             print(f"  z2 tegel {n}/{len(tegels)} ({tx},{tz}): {nb} blokken; {grootte / 1e6:.1f} MB ({time.time() - t0:.0f} s)", flush=True)
     print(f"zone 2: {len(tegels)} tegels, {totaal} blokken, {grootte / 1e6:.1f} MB ({time.time() - t0:.0f} s)")
+    fundering2.naloop([wereld_tegel(*t) for t in tegels], T_grond, pad_grond)   # X-Z1GROND: foundations (as zone 1)
     with open(os.path.join(CACHE, "plekken_z2.json"), "w", encoding="utf-8") as f:
         json.dump(Pw, f, indent=1)
     if not alleen:

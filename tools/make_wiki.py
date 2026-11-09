@@ -641,11 +641,11 @@ def barbecuether_section():
         h3("The Knabbelbaken", "Het Knabbelbaken") + \
         entry(img("knabbelbaken", "Knabbelbaken"), "The Knabbelbaken", "Het Knabbelbaken",
               p("The beacon of the guhs, made with the <b>gloeister</b>. Put it on a pyramid of 1&ndash;4 layers (3&times;3, 5&times;5, 7&times;7, 9&times;9) of <b>blocks of vahoege vads</b> "
-                "(nine vads ingots each; since 1.3.1 no other block counts). Every 4 seconds <b>players and tamed guhs</b> within 10 + 10&times;layers blocks get the chosen effect (wild guhs don't). Right-click to pick the "
-                "effect; the beam takes its colour and shoots all the way up to the sky (you see it from far away). With 4 layers VAHOEG and Guhsprong get stronger.",
+                "(nine vads ingots each; since 1.3.1 no other block counts). Every 4 seconds <b>players and tamed guhs</b> within 25 / 40 / 60 / 80 blocks (1 / 2 / 3 / 4 layers) get the effects you switched on (wild guhs don't). Right-click for its menu: switch every "
+                "unlocked effect on or off (several at once) and hide or show the beam; the beam takes the colour and shoots all the way up to the sky (you see it from far away). With 4 layers VAHOEG and Guhsprong get stronger.",
                 "Het baken van de guhs, gemaakt met de <b>gloeister</b>. Zet het op een piramide van 1&ndash;4 lagen (3&times;3, 5&times;5, 7&times;7, 9&times;9) <b>blokken vahoege vads</b> "
-                "(negen vadsstaven per blok; sinds 1.3.1 telt geen ander blok meer). Elke 4 seconden krijgen <b>spelers en getemde guhs</b> binnen 10 + 10&times;lagen blokken het gekozen effect (wilde guhs niet). Rechtsklik om "
-                "het effect te kiezen; de straal krijgt zijn kleur en schiet helemaal tot in de hemel (die zie je van ver). Met 4 lagen worden VAHOEG en Guhsprong sterker.") +
+                "(negen vadsstaven per blok; sinds 1.3.1 telt geen ander blok meer). Elke 4 seconden krijgen <b>spelers en getemde guhs</b> binnen 25 / 40 / 60 / 80 blokken (1 / 2 / 3 / 4 lagen) de effecten die je hebt aangezet (wilde guhs niet). Rechtsklik voor het menu: zet elk "
+                "vrijgespeeld effect aan of uit (ook meerdere tegelijk) en verberg of toon de straal; de straal krijgt de kleur en schiet helemaal tot in de hemel (die zie je van ver). Met 4 lagen worden VAHOEG en Guhsprong sterker.") +
               table([("Effect", "Effect"), ("What", "Wat"), ("From", "Vanaf")], [
                   ["<b>VAHOEG</b>", t("Speed + saturation", "Snelheid + verzadiging"), t("1 layer", "1 laag")],
                   ["<b>Guhsprong</b>", t("Jump boost", "Sprongkracht"), t("2 layers", "2 lagen")],

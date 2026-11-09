@@ -76,7 +76,7 @@ public final class Makelaarstour {
         ErfenisData.get(server).setDirty();
         Entity g = null;
         if (Erfenis.in(p) && Erfenis.onder(p) == b) {
-            g = Guhrrit.verschijn((ServerLevel) p.level(), voor(p), p.getYRot() + 180f, nieuw == KLAAR);
+            g = Guhrrit.verschijn((ServerLevel) p.level(), voor(p), p.getYRot() + 180f, nieuw == KLAAR, sleutel(p));
         }
         // only the arrival talks in the Praat screen; every later step comes from a click in the overview, and a Praat screen
         // would close the overview: then he just stands there (click = the step again) and the step comes as a chat line
@@ -92,6 +92,11 @@ public final class Makelaarstour {
         } else {
             p.sendSystemMessage(Component.translatable("erfenis.tut.chat", Component.translatable(k)).withStyle(ChatFormatting.LIGHT_PURPLE));
         }
+    }
+
+    /** One tour Guhrrit per player (1.9.3: the key was his spot, so every step made a new Guhrrit in front of you). */
+    static String sleutel(ServerPlayer p) {
+        return "guhrrit@tour:" + p.getUUID();
     }
 
     private static BlockPos voor(ServerPlayer p) {

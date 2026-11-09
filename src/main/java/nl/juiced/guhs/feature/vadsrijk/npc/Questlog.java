@@ -118,6 +118,9 @@ public final class Questlog {
         if (status(p, q.id()) != 0 || lvVoor(p, q) < q.lv()) {
             return false;
         }
+        if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.questDicht(p, q)) {   // X-ZONE1: a quest of a closed zone
+            return false;
+        }
         for (String na : q.na()) {
             if (na.equals(RijdierQuests.POORT)) {   // (fix round 2: the mount return quests, once you own any mount)
                 if (!RijdierQuests.poortOpen(p)) {

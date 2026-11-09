@@ -108,7 +108,8 @@ public final class Leverkisten {
         for (int pass = 0; pass < 2 && !rest.isEmpty(); pass++) {
             for (int i = 0; i < c.getContainerSize() && !rest.isEmpty(); i++) {
                 ItemStack in = c.getItem(i);
-                int max = Math.min(c.getMaxStackSize(), rest.getMaxStackSize());
+                int max = c instanceof Leverkist.BlockEntityImpl ? c.getMaxStackSize()   // (1.9.5: big stacks in a Leverkist)
+                        : Math.min(c.getMaxStackSize(), rest.getMaxStackSize());
                 if (pass == 0 && !in.isEmpty() && ItemStack.isSameItemSameComponents(in, rest) && in.getCount() < max) {
                     int n = Math.min(max - in.getCount(), rest.getCount());
                     in.grow(n);

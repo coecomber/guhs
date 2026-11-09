@@ -39,7 +39,7 @@ public final class ErfenisDeco {
                 "knabbeltrommel", 5, "burenhulp_bloempot", 6, "bouwvakkersbankje", 8, "burenhulp_bankje", 8, "burenhulp_vlaggetjes", 8,
                 "hartjesnest", 10, "theekransje_tafeltje", 10, "uilenhuisje", 10, "reuzensjaal", 12, "koeienbel_lantaarn", 12,
                 "moestuintje_pim", 15, "glimwormguhtjes", 15, "oudste_boompje", 18, "getuigenbank", 15, "standbeeld_opa_knabbel", 25,
-                "knabbelparkinkje", 25};
+                "knabbelparkinkje", 25, "terughekje", 1};
         for (int i = 0; i + 1 < t.length; i += 2) {
             KNUS.put((String) t[i], (Integer) t[i + 1]);
         }

@@ -46,7 +46,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `burger_1` | 2700, 221, -510 |
 | `burger_2` | 2760, 219, -512 |
 | `burger_3` | 2690, 221, -530 |
-| `burger_4` | 2860, 204, -514 |
+| `burger_4` | 2863, 204, -514 |
 | `burger_5` | 2560, 222, -570 |
 | `burger_6` | 2640, 217, -452 |
 | `geheim_knuffel_1` | 2690, 221, -505 |
@@ -193,8 +193,8 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `staartpark_prieel` | 2880, 203, -502 |
 | `staartpark_vijver` | 2876, 204, -524 |
 | `staartpark_westeinde` | 2896, 205, -520 |
-| `staarttrap_boven` | 2856, 233, -523 |
-| `staarttrap_onder` | 2860, 204, -524 |
+| `staarttrap_boven` | 2856, 233, -531 |
+| `staarttrap_onder` | 2860, 204, -530 |
 | `staartvin_top` | 2905, 206, -520 |
 | `troonzaal_audientie` | 2840, 233, -520 |
 | `troonzaal_ingang` | 2831, 233, -520 |

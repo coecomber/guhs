@@ -59,6 +59,20 @@ public final class Z6RaidBouw {
 
     /** Places the template (loads/generates the chunks it needs). Returns false when the template is missing. */
     public static boolean plaats(ServerLevel sl) {
+        if (!zetTemplate(sl)) {
+            return false;
+        }
+        Z6RaidData d = Z6RaidData.get(sl.getServer());
+        d.zet(() -> d.bouwVersie = VERSIE);
+        if (d.sterrenAan) {
+            sterren(sl, true);
+        }
+        LOG.info("U-Z6RAID: binnentoren v{} placed at {}", VERSIE, Z6RaidPlekken.anker().offset(Z6RaidPlekken.TEMPLATE_MIN));
+        return true;
+    }
+
+    /** X-RAID: only the blocks at the current anchor (no saved version: gametests place it at their own anchor). */
+    static boolean zetTemplate(ServerLevel sl) {
         Optional<StructureTemplate> t = sl.getStructureManager().get(TEMPLATE);
         if (t.isEmpty()) {
             LOG.warn("U-Z6RAID: template {} missing", TEMPLATE);
@@ -76,12 +90,6 @@ public final class Z6RaidBouw {
                 hoek.getZ() + maat.getZ() - 1);
         StructurePlaceSettings s = new StructurePlaceSettings().setBoundingBox(doos).setIgnoreEntities(true).setKnownShape(true);
         tpl.placeInWorld(sl, hoek, hoek, s, sl.getRandom(), 2);
-        Z6RaidData d = Z6RaidData.get(sl.getServer());
-        d.zet(() -> d.bouwVersie = VERSIE);
-        if (d.sterrenAan) {
-            sterren(sl, true);
-        }
-        LOG.info("U-Z6RAID: binnentoren v{} placed at {}", VERSIE, hoek);
         return true;
     }
 

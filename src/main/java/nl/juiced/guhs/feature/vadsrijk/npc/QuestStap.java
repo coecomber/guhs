@@ -33,7 +33,8 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
             if (!q.hoofd() || Questlog.klaar(p, q.id())) {
                 continue;
             }
-            return van(p, q);
+            QuestStap vervolgd = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.vervolgd(p, q);   // X-ZONE1: "Wordt vervolgd"
+            return vervolgd != null ? vervolgd : van(p, q);
         }
         return null;
     }
