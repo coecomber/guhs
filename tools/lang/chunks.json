@@ -4904,6 +4904,13 @@
         "vadsrijk.menu.zoek",
         "vadsrijk.menu.zoek.niks"
       ]
+    },
+    {
+      "id": "c417_vr_zonepoort",
+      "title": "1.10 Het Vadsrijk (round X, X-ZONE1: the zone gate)",
+      "prefixes": [
+        "vadsrijk.zonepoort."
+      ]
     }
   ]
 }

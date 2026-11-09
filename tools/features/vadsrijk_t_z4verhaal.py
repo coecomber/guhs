@@ -1053,7 +1053,22 @@ _PLEK_SOORTEN = ("npc:", "poi:", "gebied:", "baas:")
 LV_CAP = 60   # (T-INT: kern cap raised to 60)
 
 
+# X-ZONE1: quest xp for a smooth chain (main-only reaches every next zone's entry level with ~0-15 min grinding; side quests
+# are a small extra so main+side stays near the band; the level cap 70 falls in the last part of zone 6). Computed with
+# tools/vadsrijk/xpbalans.py (see XP_BALANS.md, round X); only the xp of these quests changes.
+X_ZONE1_XP = {
+    "z4_hq01_lampionkust": 7850, "z4_hq02_knuffeltij": 7850, "z4_hq03_waarvandaan": 8100, "z4_hq04_mist": 11250, "z4_hq05_vliegervanger": 8650,
+    "z4_hq06_feest": 14050, "z4_hq07_opstijgpier": 13150, "z4_s01_vlieger": 660, "z4_s02_wedstrijd": 680, "z4_s03_vissen": 660,
+    "z4_s04_parels": 680, "z4_s05_zeeslurf": 740, "z4_s06_volleybal": 660, "z4_s07_limonade": 660, "z4_s08_vuurtoren": 700,
+    "z4_s09_bijen": 680, "z4_s10_kransen": 680, "z4_s11_schildpad": 700, "z4_s12_mistbrieven": 720, "z4_s13_soep": 660,
+    "z4_s14_lampionnen": 660, "z4_s15_strandavond": 660, "z4_s16_flessenpost": 700,
+}
+
+
 def quests_json():
+    for _q in QUESTS:   # X-ZONE1: the quest xp above
+        if _q["id"] in X_ZONE1_XP:
+            _q["beloning"]["xp"] = X_ZONE1_XP[_q["id"]]
     npc_ids, poi_ids, gebied_ids, baas_ids, andere = _java_ids()
     alle_npc = npc_ids | andere
     ids = [q["id"] for q in QUESTS]

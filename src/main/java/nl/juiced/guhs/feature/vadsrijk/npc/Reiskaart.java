@@ -54,6 +54,9 @@ public final class Reiskaart {
 
     /** One place for this player: its state, the reason key (ONBEKEND/TEASER) and its argument (the player's level). */
     public static NpcPayloads.ReisPlek plek(ServerPlayer p, String id) {
+        if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.reisSlot(p, id) != null) {   // X-ZONE1: a closed zone: grey, "binnenkort"
+            return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.zonepoort.kaart", 0);
+        }
         if (id.equals("schemerwortel") && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p)
                 && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.bereikt(p)) {   // [z3-wereld] a real place once zone 2 is done
             return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.npc.reiskaart.binnenkort", 0);
