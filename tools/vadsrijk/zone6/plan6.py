@@ -138,7 +138,7 @@ for i, (x, z) in enumerate([(3880, -930), (3920, -955), (3960, -985), (4010, -97
 
 # De Moederoase + the raid tower (exterior; the inside is u-z6raid's)
 for k, v in {"moederoase": (4060, None, -790), "moederpalm": (4080, None, -812), "moeder_bron": (4072, None, -806),
-             "toren_voet": (4116, None, -688), "toren_poort": (4122, None, -688), "toren_raid_ingang": (4124, None, -688),
+             "toren_voet": (4116, None, -688), "toren_poort": (4119, None, -688), "toren_raid_ingang": (4123, None, -688),   # [x-raid] buiten = stair top
              "mager_mientje": (4150, None, -760), "oostroute": (4170, None, -730), "kampvuur_moederoase": (4054, None, -820),
              "uitkijk_oase": (4040, None, -720)}.items():
     _p(k, *v)

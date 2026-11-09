@@ -554,6 +554,66 @@ EN = {
     "vadsrijk.kleding.ding.vleugel.sterrenring": "Star-ring wings",
     "vadsrijk.huisdier.sterrenpluisje.naam": "Starfluff",
 }
+# X-RAID (round X): the heralds, the name texts and the tracker line of the raid door (Z6RaidHeraut)
+X_RAID_TEKSTEN = {
+    "vadsrijk.z6raid.heraut.1": "Welkom bij De Sterrendovende Toren! Dit is de raid: een toren voor 2 tot 10 spelers, vier verdiepingen, vier bazen.",
+    "vadsrijk.z6raid.heraut.2": "Loop door de grote poort naar De Wachtzaal. Ga daar met je groep 3 tellen op de gouden startcirkel staan.",
+    "vadsrijk.z6raid.heraut.3": "Ben je de leider van een party? Dan kan het ook via de Party-tab: \"Raid: party in de rij\". Partyleden in De Wachtzaal gaan vanzelf mee.",
+    "vadsrijk.z6raid.heraut.4": "Alleen gaat de toren niet open: neem minstens één vriendje mee. Wil je weg? De paarse boog in het westen van De Wachtzaal brengt je naar buiten.",
+    "vadsrijk.z6raid.bord.poort.titel": "De Sterrendovende Toren",
+    "vadsrijk.z6raid.bord.poort.1": "Raid voor 2-10 spelers",
+    "vadsrijk.z6raid.bord.poort.2": "Loop naar binnen: De Wachtzaal",
+    "vadsrijk.z6raid.bord.cirkel.titel": "Gouden startcirkel",
+    "vadsrijk.z6raid.bord.cirkel.1": "Ga met 2-10 spelers 3 tellen hier staan",
+    "vadsrijk.z6raid.bord.uitgang.titel": "Uitgang: naar buiten",
+    "vadsrijk.z6raid.volg.titel": "De Sterrendovende Toren (raid)",
+    "vadsrijk.z6raid.volg.wat.poort": "Loop door de grote poort van de toren naar De Wachtzaal",
+    "vadsrijk.z6raid.volg.waar.poort": "De grauwe toren op het rotsje naast de Moederoase, de poort aan de westkant (boven aan de trap)",
+    "vadsrijk.z6raid.volg.wat.zaal": "Ga met 2-10 spelers 3 tellen op de gouden startcirkel staan",
+    "vadsrijk.z6raid.volg.waar.zaal": "In De Wachtzaal, onder de toren",
+    "vadsrijk.z6raid.volg.extra": "Voor 2-10 spelers. Partyleider: Party-tab, \"Raid: party in de rij\".",
+    "vadsrijk.npc.naam.z6raid_heraut": "Heraut Sterrenroep",
+    "vadsrijk.npc.plek.npc.z6raid_heraut": "boven aan de trap voor de poort van De Sterrendovende Toren, naast de Moederoase",
+    "vadsrijk.npc.praat.z6raid_heraut.1": "De Sterrendovende Toren! Een raid voor 2 tot 10 spelers. Loop maar door de poort.",
+    "vadsrijk.npc.praat.z6raid_heraut.2": "In De Wachtzaal staat een gouden cirkel. Daar met je groep op, 3 tellen, en hup: naar boven.",
+    "vadsrijk.npc.praat.z6raid_heraut.3": "Alleen? Dan blijft het ringslot dicht. Neem een vriendje mee!",
+    "vadsrijk.npc.naam.z6raid_zaalwachter": "Zaalwachter Pril",
+    "vadsrijk.npc.plek.npc.z6raid_zaalwachter": "in De Wachtzaal onder De Sterrendovende Toren, naast de gouden startcirkel",
+    "vadsrijk.npc.praat.z6raid_zaalwachter.1": "Welkom in De Wachtzaal. De gouden cirkel is de start: 2 tot 10 spelers, 3 tellen blijven staan.",
+    "vadsrijk.npc.praat.z6raid_zaalwachter.2": "Is de toren bezet? Op de cirkel kom je in de rij. Ik roep jullie als het je beurt is.",
+    "vadsrijk.npc.praat.z6raid_zaalwachter.3": "Naar buiten? Door de paarse boog in het westen."
+}
+X_RAID_EN = {
+    "vadsrijk.z6raid.heraut.1": "Welcome to The Star-Snuffing Tower! This is the raid: a tower for 2 to 10 players, four floors, four bosses.",
+    "vadsrijk.z6raid.heraut.2": "Walk through the big gate into the Waiting Hall. Stand on the golden start circle there with your group for 3 seconds.",
+    "vadsrijk.z6raid.heraut.3": "Are you a party leader? Then you can also use the Party tab: \"Raid: queue the party\". Party members in the Waiting Hall come along.",
+    "vadsrijk.z6raid.heraut.4": "The tower won't open for one player: bring at least one friend. Want to leave? The purple arch in the west of the Waiting Hall takes you outside.",
+    "vadsrijk.z6raid.bord.poort.titel": "The Star-Snuffing Tower",
+    "vadsrijk.z6raid.bord.poort.1": "Raid for 2-10 players",
+    "vadsrijk.z6raid.bord.poort.2": "Walk in: the Waiting Hall",
+    "vadsrijk.z6raid.bord.cirkel.titel": "Golden start circle",
+    "vadsrijk.z6raid.bord.cirkel.1": "Stand here with 2-10 players for 3 seconds",
+    "vadsrijk.z6raid.bord.uitgang.titel": "Exit: to the outside",
+    "vadsrijk.z6raid.volg.titel": "The Star-Snuffing Tower (raid)",
+    "vadsrijk.z6raid.volg.wat.poort": "Walk through the tower's big gate into the Waiting Hall",
+    "vadsrijk.z6raid.volg.waar.poort": "The grey tower on the rock next to the Mother Oasis, the gate on the west side (at the top of the stairs)",
+    "vadsrijk.z6raid.volg.wat.zaal": "Stand on the golden start circle with 2-10 players for 3 seconds",
+    "vadsrijk.z6raid.volg.waar.zaal": "In the Waiting Hall, under the tower",
+    "vadsrijk.z6raid.volg.extra": "For 2-10 players. Party leader: Party tab, \"Raid: queue the party\".",
+    "vadsrijk.npc.naam.z6raid_heraut": "Herald Starcall",
+    "vadsrijk.npc.plek.npc.z6raid_heraut": "at the top of the stairs in front of the gate of The Star-Snuffing Tower, next to the Mother Oasis",
+    "vadsrijk.npc.praat.z6raid_heraut.1": "The Star-Snuffing Tower! A raid for 2 to 10 players. Just walk through the gate.",
+    "vadsrijk.npc.praat.z6raid_heraut.2": "There's a golden circle in the Waiting Hall. Stand on it with your group for 3 seconds, and up you go.",
+    "vadsrijk.npc.praat.z6raid_heraut.3": "On your own? Then the ring lock stays shut. Bring a friend!",
+    "vadsrijk.npc.naam.z6raid_zaalwachter": "Hall Keeper Pril",
+    "vadsrijk.npc.plek.npc.z6raid_zaalwachter": "in the Waiting Hall under The Star-Snuffing Tower, next to the golden start circle",
+    "vadsrijk.npc.praat.z6raid_zaalwachter.1": "Welcome to the Waiting Hall. The golden circle is the start: 2 to 10 players, stay put for 3 seconds.",
+    "vadsrijk.npc.praat.z6raid_zaalwachter.2": "Tower busy? On the circle you join the queue. I'll call you when it's your turn.",
+    "vadsrijk.npc.praat.z6raid_zaalwachter.3": "Going outside? Through the purple arch in the west."
+}
+TEKSTEN.update(X_RAID_TEKSTEN)
+EN.update(X_RAID_EN)
+
 TIPS = {
     "zandwachter": "Raid-tip: de Zandwachter neemt pas echt schade als de zandloper is omgedraaid. Twee groepjes op de twee roze platen, tegelijk! Daarna: sla hem in zijn RUG.",
     "spiegelvizier": "Raid-tip: alleen de echte Spiegelvizier fonkelt af en toe. Draai (rechtsklik) twee spiegels naar hetzelfde beeld om hem te ontmaskeren.",

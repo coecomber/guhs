@@ -146,6 +146,7 @@ public final class Z6Raid {
         }
         Z6RaidBouw.tick(sl);
         long nu = sl.getGameTime();
+        Z6RaidHeraut.tick(sl, nu);   // X-RAID: the name texts at the door, the circle and the exit
         poorten(sl);
         cirkel(sl, nu);
         if (groep != null) {
@@ -163,30 +164,46 @@ public final class Z6Raid {
 
     /** The tower door outside -> the Wachtzaal; the exit in the Wachtzaal -> outside; the light on the roof after a clear. */
     private static void poorten(ServerLevel sl) {
-        BlockPos poort = Z6RaidPlekken.poort(), uit = Z6RaidPlekken.uitgang();
         for (ServerPlayer p : new ArrayList<>(sl.players())) {
-            if (p.isSpectator() || RijkScenes.bezig(p)) {
-                continue;
-            }
-            boolean bijPoort = Math.abs(p.getX() - (poort.getX() + 0.5)) < 2 && Math.abs(p.getZ() - (poort.getZ() + 0.5)) < 2
-                    && p.getY() >= poort.getY() - 1 && p.getY() < poort.getY() + 3;
-            if (!bijPoort) {
-                NET_BUITEN.remove(p.getUUID());   // V-INT: walked away from the door after coming out: it works again
-            }
-            if (bijPoort && !NET_BUITEN.contains(p.getUUID())) {
-                naar(p, Vec3.atBottomCenterOf(Z6RaidPlekken.midden(0).offset(8, 0, 0)), -90);
-                p.sendSystemMessage(Component.translatable("vadsrijk.z6raid.wachtzaal.welkom").withStyle(ChatFormatting.LIGHT_PURPLE));
-                continue;
-            }
-            if (p.blockPosition().closerThan(uit, 1.6) || (groep != null && groep.klaar() && p.blockPosition().closerThan(Z6RaidPlekken.midden(4), 1.5))) {
-                naar(p, Vec3.atBottomCenterOf(Z6RaidPlekken.buiten()), 90);
-                NET_BUITEN.add(p.getUUID());   // V-INT: u-z6wereld's "buiten" spot lies right at the door: no bounce straight back in
-            }
+            deur(sl, p);
         }
     }
 
+    /**
+     * One player at the doors (also for gametests). X-RAID: the door box is the whole iwan niche ({@link Z6RaidPlekken#bijPoort}),
+     * the binnentoren is placed first when it is not there yet (never a teleport into bare rock), and the way out lands on the
+     * stair top outside the box. Returns what happened: 1 = in, -1 = out, 0 = nothing.
+     */
+    static int deur(ServerLevel sl, ServerPlayer p) {
+        if (p.isSpectator() || RijkScenes.bezig(p)) {
+            return 0;
+        }
+        boolean bijPoort = Z6RaidPlekken.bijPoort(p.getX(), p.getY(), p.getZ());
+        if (!bijPoort) {
+            NET_BUITEN.remove(p.getUUID());   // V-INT: walked away from the door after coming out: it works again
+        }
+        if (bijPoort && !NET_BUITEN.contains(p.getUUID())) {
+            if (Z6RaidPlekken.testPoort == null && Z6RaidData.get(sl.getServer()).bouwVersie < Z6RaidBouw.VERSIE) {
+                Z6RaidBouw.plaats(sl);   // X-RAID: the pocket must exist before anyone is sent into it
+            }
+            naar(sl, p, Vec3.atBottomCenterOf(Z6RaidPlekken.midden(0).offset(8, 0, 0)), -90);
+            p.sendSystemMessage(Component.translatable("vadsrijk.z6raid.wachtzaal.welkom").withStyle(ChatFormatting.LIGHT_PURPLE));
+            return 1;
+        }
+        if (p.blockPosition().closerThan(Z6RaidPlekken.uitgang(), 1.6) || (groep != null && groep.klaar() && p.blockPosition().closerThan(Z6RaidPlekken.midden(4), 1.5))) {
+            naar(sl, p, Vec3.atBottomCenterOf(Z6RaidPlekken.buiten()), 90);
+            NET_BUITEN.add(p.getUUID());   // (belt and braces: buiten() lies outside the door box)
+            return -1;
+        }
+        return 0;
+    }
+
     public static void naar(ServerPlayer p, Vec3 v, float yaw) {
-        ServerLevel sl = Vadsrijk.level(p.level().getServer());
+        naar(Vadsrijk.level(p.level().getServer()), p, v, yaw);
+    }
+
+    /** X-RAID: teleport within a given level (the Vadsrijk; gametests pass their own level). */
+    static void naar(@Nullable ServerLevel sl, ServerPlayer p, Vec3 v, float yaw) {
         if (sl == null) {
             return;
         }
@@ -197,7 +214,7 @@ public final class Z6Raid {
     }
 
     /** The start circle: 2+ players for 3 s = start (or into the queue when busy). */
-    private static void cirkel(ServerLevel sl, long nu) {
+    static void cirkel(ServerLevel sl, long nu) {   // (X-RAID: package-private for the gametest)
         Vec3 c = Z6RaidPlekken.start();
         List<ServerPlayer> op = new ArrayList<>();
         for (ServerPlayer p : sl.players()) {
@@ -325,7 +342,7 @@ public final class Z6Raid {
         resetVerdiepingen(sl);
         for (UUID id : g.leden) {
             if (sl.getEntity(id) instanceof ServerPlayer p) {
-                naar(p, Vec3.atBottomCenterOf(Z6RaidPlekken.landing(1)), -90);
+                naar(sl, p, Vec3.atBottomCenterOf(Z6RaidPlekken.landing(1)), -90);   // X-RAID: the level the group stands in
                 RijkScenes.titel(p, Component.translatable("vadsrijk.z6raid.titel").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD),
                         Component.translatable("vadsrijk.z6raid.start.onder", g.n), 70, 0xC080FF);
             }

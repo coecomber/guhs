@@ -24,6 +24,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
  */
 public final class NpcVolg {
     private static final Map<UUID, NpcPayloads.Volg> LAATST = new HashMap<>();
+    /** X-RAID: extra tracker lines of other slices (null = none now), after the quest lines. Add-only. */
+    public static final List<java.util.function.Function<ServerPlayer, NpcPayloads.VolgRegel>> EXTRA = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     private NpcVolg() {
     }
@@ -72,6 +74,12 @@ public final class NpcVolg {
         if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))
                 && (r == null || !r.id().equals(q.id()))) {
             regels.add(regel(QuestStap.van(p, q)));
+        }
+        for (var f : EXTRA) {   // X-RAID
+            NpcPayloads.VolgRegel x = f.apply(p);
+            if (x != null) {
+                regels.add(x);
+            }
         }
         return new NpcPayloads.Volg(!Questlog.vlag(p, "volg_uit"), !Questlog.vlag(p, "straal_uit"), regels);
     }
