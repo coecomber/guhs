@@ -1894,6 +1894,17 @@ def hoogste(W, K, x, z, kamp_d=None, tot=250):
     return max(K.h(x, z), 0)
 
 
+def grond_onder_hoed(W, K, x, z):
+    """W-INT: the first free stand cell above the real ground in this column (under any mushroom cap / tree crown)."""
+    g = max(K.h(x, z), 0)
+    if W.blok_op(x, g + 1, z) <= 1 and W.blok_op(x, g + 2, z) <= 1:   # the terrain itself (no stamp on it)
+        return g + 1
+    for y in range(g - 3, g + 12):
+        if W.blok_op(x, y, z) > 1 and W.blok_op(x, y + 1, z) <= 1 and W.blok_op(x, y + 2, z) <= 1:
+            return y + 1
+    return g + 1
+
+
 def npc_wensen(W, K, P, kamp_d):
     """POI_VERZOEKEN (npc): the 10 lost knuffels, the quest decorations, Mopje's cave spot."""
     knuffels = ["knuffel_normal", "knuffel_mint", "knuffel_starry", "knuffel_pinguh", "knuffel_wolk", "knuffel_choco",
@@ -1901,6 +1912,8 @@ def npc_wensen(W, K, P, kamp_d):
     spots = [(-68 + KDX, 952 + KDZ), (30 + KDX, 1040 + KDZ), (-36, 33), (70, -70), (116, 466), (300, 250), (470, 185), (-400, -100), (-300, -226), (326, -374)]
     for i, ((x, z), k) in enumerate(zip(spots, knuffels)):
         y = hoogste(W, K, x, z) + 1
+        if i == 7:   # W-INT: knuffel 8 ("Mosje") landed on a giant mushroom cap 36 up (no way to climb): on the forest floor under the cap
+            y = grond_onder_hoed(W, K, x, z)
         W.punten.set(x, y, z, "guhs:" + k)
         P[f"knuffel_{i + 1}"] = [x, y, z]
     # Dobber's lost hat near the lighthouse: a straw hat on the grass

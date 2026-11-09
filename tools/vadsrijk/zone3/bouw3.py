@@ -1187,6 +1187,29 @@ def pad_vrij(W):
         W.v[a[weg], b[weg], c[weg]] = 0
 
 
+def takpunt_vrij(W):
+    """W-INT: the crown leaves of the Westtak end hang 1-2 blocks over the moss/path walk that leads onto the lookout platform
+    (uitkijk_takpunt): no head room, so the platform (and the lookout secret) could not be reached on foot (w-bereik). Leaves and
+    vines in the 3 cells above any non-leaf floor block around the lookout are cleared (the leaf mass itself stays)."""
+    x, y, z = PL.tak_punt("Westtak", 118)
+    R = 9
+    if not W.raakt(x - R, y - 4, z - R, x + R, y + 5, z + R):
+        return
+    blad = ("_leaves", "vines", "vines_plant", "hanging_moss")
+    for xx in range(int(x) - R, int(x) + R + 1):
+        for zz in range(int(z) - R, int(z) + R + 1):
+            if math.hypot(xx - x, zz - z) > R:
+                continue
+            for yy in range(int(y) - 4, int(y) + 2):
+                b = (W.wget(xx, yy, zz) or "").split("[")[0]
+                if not b or b.endswith(blad) or b.endswith("air") or "lantern" in b or "fence" in b:
+                    continue
+                for dy in (1, 2, 3):
+                    c = (W.wget(xx, yy + dy, zz) or "").split("[")[0]
+                    if c.endswith(blad):
+                        W.wset(xx, yy + dy, zz, LUCHT)
+
+
 # ================================================================================================ (r-int) village houses free
 def dorp_vrij(W):
     """The beekeeper-village houses on the branch tips (P.imkerdorpen) are built after the crown: a house that sits inside the
@@ -1530,6 +1553,7 @@ def bouw(W):
     dichten(W)
     udeco(W)   # U-DECO: Honingtak street furniture + lamp posts, stair floor bands/banners
     WF.trappen_vrij(W)   # W-BEREIK: head room over the werf dock-tower stairs (last: hulls/rock are drawn before)
+    takpunt_vrij(W)      # W-INT: head room over the walk to the Westtak lookout (uitkijk_takpunt)
 
 
 init()

@@ -1243,7 +1243,7 @@ def galmhellingen(W, K, P):
 def grotje(W, K, P, naam, x, z, soort):
     """A small secret cave: an icy dome on the ground, the entrance behind a frozen waterfall (with a 1-wide gap)."""
     g = K.h(x, z)
-    S = Vol(x - 12, g - 6, z - 12, x + 12, g + 16, z + 12)
+    S = Vol(x - 24, g - 14, z - 12, x + 12, g + 16, z + 12)   # W-INT: west + down for the step ramp
     S.cyl(x, z, 9, g - 5, g, "minecraft:stone")
     S.ell(x, g + 1, z, 9, 8, 9, "minecraft:packed_ice" if soort == "galm" else SNEEUW, ymin=g + 1)
     S.ell(x, g + 1, z, 9.3, 8.3, 9.3, "minecraft:snow_block", hollow=0.6, ymin=g + 5)
@@ -1275,9 +1275,21 @@ def grotje(W, K, P, naam, x, z, soort):
         S.set(x + 3, g + 2, z, "guhs:sneeuwpopguh[facing=west,half=upper]")
         S.set(x + 2, g + 1, z + 2, "minecraft:white_carpet")
     S.set(x, g + 5, z, LANT_H)
+    # W-INT: the tunnel floor (g) often sits 3-8 above the real ground west of the mouth (the dome stands on K.h of its centre):
+    # a 3-wide snow step ramp down to the ground, 1 per block, with free head room (w-bereik: the cave was unreachable on foot)
+    trede = 0
+    for k in range(1, 14):
+        xx = x - 10 - k
+        top = g - k
+        grond = max(hoogste(W, xx, zz) for zz in (z - 1, z, z + 1))
+        if grond >= top:
+            break
+        S.box(xx, grond + 1, z - 1, xx, top, z + 1, "minecraft:snow_block")
+        S.box(xx, top + 1, z - 1, xx, top + 4, z + 1, CARVE)
+        trede = k
     P[naam] = [x, g + 1, z]
     W.stempel(S.stempel(naam))
-    P[naam + "_ingang"] = [x - 11, hoogste(W, x - 11, z) + 1, z]
+    P[naam + "_ingang"] = [x - 11 - trede, hoogste(W, x - 11 - trede, z) + 1, z]
 
 
 # ================================================================================================ Het Bevroren Knuffelmeer
@@ -2354,7 +2366,7 @@ def npc_plekken(W, K, P):
          "z2_uitkijk_poollicht": list(P["uitkijk_kloofkijk"])}
     for k, v in Q.items():
         P[f"poiplek.{k}"] = v
-    A = {"olievlek": plus("boortoren_3", 4, 4), "bouwtekening": plus("boortoren_1", 4, 4), "boorgaten": plus("galm_lawine_1_voet", 4, 3),
+    A = {"olievlek": plus("boortoren_3", 4, 4), "bouwtekening": plus("boortoren_1", 4, 4), "boorgaten": plus("galm_lawine_1_voet", 6, 2),
          "boorschema": huisdeur("huis_8", 0, 3), "warme_spleet": list(P["geheim_boorplaats"])}
     for k, v in A.items():
         P[f"aanwijzing.{k}"] = v

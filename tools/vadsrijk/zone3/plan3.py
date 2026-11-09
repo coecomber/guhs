@@ -386,6 +386,8 @@ def plekken():
         ex_, ez_ = x + (R + 3) * math.cos(a + 1.6), z + (R + 3) * math.sin(a + 1.6)
         put(f"honingvijver_{i + 1}", ex_, kstand(0, ex_, ez_), ez_)
         kx_, kz_ = x + (R + 3) * math.cos(a - 1.6), z + (R + 3) * math.sin(a - 1.6)
+        if i == 2:   # W-INT: that side of pond 3 is the crown's steep leaf edge (snapped to y 213, unreachable): the walkable rim
+            kx_, kz_ = x + (R + 3) * math.cos(a + 1.25), z + (R + 3) * math.sin(a + 1.25)   # next to honingvijver_3
         put(f"kuiken_{i + 1}", kx_, kstand(0, kx_, kz_), kz_)
     for i, deg in enumerate((75, 235)):
         x, z = pol(math.radians(deg), 116)

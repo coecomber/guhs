@@ -144,6 +144,7 @@ def brug(B, a, La, b, Lb, sla_over, ra, rb, smal=False, licht=True, mat=BRUG):
     if not hasattr(B, "laan"):
         B.laan = set()
     rails = []
+    eigen = {}
     for x, z, t, d in PK.lijn_cellen(a, b, breed, 1.0):
         if sla_over(x, z):
             continue
@@ -155,8 +156,25 @@ def brug(B, a, La, b, Lb, sla_over, ra, rb, smal=False, licht=True, mat=BRUG):
                     B.wis(x, L // 2 + dy, z)
             B.dek(x, z, L, mat)
             B.laan.add((x, z))
+            eigen[(x, z)] = L
         else:
             rails.append((x, z, L))
+    if smal:
+        # W-INT: a 1-wide diagonal walk only touched diagonally at every sideways shift (the rails of both sides closed the
+        # corner: the secret hut was unreachable on foot). Fill one corner cell at every diagonal-only contact.
+        for (x, z), L in list(eigen.items()):
+            for ddx, ddz in ((1, 1), (1, -1)):
+                if (x + ddx, z + ddz) in eigen and (x + ddx, z) not in eigen and (x, z + ddz) not in eigen:
+                    hx, hz = (x + ddx, z)
+                    if sla_over(hx, hz):
+                        hx, hz = (x, z + ddz)
+                    for dy in range(0, 3):
+                        s_ = B.get(hx, L // 2 + dy, hz)
+                        if s_ and ("fence" in s_ or "lantern" in s_):
+                            B.wis(hx, L // 2 + dy, hz)
+                    B.dek(hx, hz, L, mat)
+                    B.laan.add((hx, hz))
+                    eigen[(hx, hz)] = L
     for x, z, L in rails:
         if (x, z) in B.laan:
             continue

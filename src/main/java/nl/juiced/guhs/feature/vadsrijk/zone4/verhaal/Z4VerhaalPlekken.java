@@ -363,7 +363,8 @@ public final class Z4VerhaalPlekken {
             GROTE_KNUFFEL.put("groot_" + i, POI.get("z4_grote_knuffel_" + i));
         }
         vul(WRAKKNUFFEL, "wrak_", "wrak_knuffel_", new int[][] {{2163, 62, -699}, {2167, 62, -701}});
-        vul(VLIEGERSPUL, "vliegerspul_", "vliegerspul_", new int[][] {{2280, 78, -675}, {2315, 82, -655}, {2295, 85, -680}, {2320, 75, -670}});
+        // W-INT: _1 and _3 lay on the kite-island rocks 6-8 above the path (unreachable on foot): moved onto the path below them
+        vul(VLIEGERSPUL, "vliegerspul_", "vliegerspul_", new int[][] {{2286, 72, -673}, {2315, 82, -655}, {2298, 81, -673}, {2320, 75, -670}});
         vul(PARELS, "parel_", "parel_", new int[][] {{2175, 54, -560}, {2195, 53, -575}, {2170, 55, -585}, {2200, 54, -550}});
         vul(SCHELPEN, "schelp_", "schelp_", new int[][] {{1965, 66, -572}, {1980, 66, -570}, {1995, 66, -569}, {2010, 66, -570}, {2025, 66, -574},
                 {1995, 66, -640}});
