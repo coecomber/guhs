@@ -46,7 +46,34 @@ public final class ZonePoortRegistry {
                     + (n >= 6 ? " (alles open)." : "; zone " + (n + 1) + "-6 binnenkort. Opgeslagen in guhs-vadsrijk-zones.toml.")), true);
             return n;
         })));
+        // X-INT (dev): see the release view as an op in creative. "alsspeler aan" = the gate treats EVERY player as a normal
+        // player (also ops/creative; not saved, off again after a restart); "zone1klaar" = your zone-1 main story done + level 20.
+        z.then(Commands.literal("alsspeler").then(Commands.literal("aan").executes(c -> alsSpeler(c.getSource(), true)))
+                .then(Commands.literal("uit").executes(c -> alsSpeler(c.getSource(), false))));
+        z.then(Commands.literal("zone1klaar").executes(c -> {
+            ServerPlayer p = c.getSource().getPlayerOrException();
+            for (nl.juiced.guhs.feature.vadsrijk.npc.Quest q : nl.juiced.guhs.feature.vadsrijk.npc.Quests.alle().values()) {
+                if (q.hoofd() && nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()) == 1
+                        && !nl.juiced.guhs.feature.vadsrijk.npc.Questlog.klaar(p, q.id())) {
+                    nl.juiced.guhs.feature.vadsrijk.npc.Questlog.voltooi(p, q);
+                }
+            }
+            nl.juiced.guhs.feature.vadsrijk.npc.Questlog.zetVlag(p, nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.ZONE1_VLAG, true);
+            if (Spelers.level(p) < 20) {
+                Spelers.zetLevel(p, 20);
+            }
+            Spelers.sync(p);
+            c.getSource().sendSuccess(() -> Component.literal("Zone-1-hoofdverhaal klaar (dev), level 20. Ga naar de luchtschipper op De Haven."), false);
+            return 1;
+        }));
         event.getDispatcher().register(VadsrijkCommando.wortel(z));
+    }
+
+    private static int alsSpeler(CommandSourceStack s, boolean aan) {
+        ZonePoort.TEST_STRENG = aan;
+        s.sendSuccess(() -> Component.literal(aan ? "Zone-poort: iedereen telt nu als gewone speler (ook ops/creative). Uit: /guhs vadsrijk zones alsspeler uit"
+                : "Zone-poort: ops en creative mogen weer overal in."), false);
+        return 1;
     }
 
     private static int status(CommandSourceStack s) {
