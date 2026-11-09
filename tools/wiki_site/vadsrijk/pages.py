@@ -121,7 +121,7 @@ class Bouwer:
            ("patchnotes/index.html", "Patch notes", "Patch notes")]
 
     def __init__(self, data, root, out, live_url, voorbeeld=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
-                 kaart_bron=None, concepten=False, versie="?", noindex=False, volledig=None, open_zones=6):
+                 kaart_bron=None, concepten=False, versie="?", noindex=False, volledig=None, open_zones=6, komt_eraan=False):
         self.d, self.root, self.out = data, root, out
         # X-SITE: --open-zones. self.d = only the open zones (what the pages list); self.alle = everything (look-ups, so a link to a
         # later thing still comes out wrapped in <span data-zone=N> and poort.strip_html removes it)
@@ -133,6 +133,7 @@ class Bouwer:
         self.concepten = concepten
         self.versie = versie
         self.noindex = noindex   # U-SITE: a hidden preview (robots noindex + a banner)
+        self.komt_eraan = komt_eraan   # SITE-LIVE: the real (indexable) site before the mod is out: "komt eraan" banner, no patch notes yet
         self.geschreven = []
         self.z = {z["id"]: z for z in self.alle["zones"]}
         self.npc = {n["id"]: n for n in self.alle["npcs"]}
@@ -215,6 +216,10 @@ class Bouwer:
 
     def _voorbeeldbalk(self):
         """U-SITE: the preview banner (not released yet; live parts start once the server runs the update). W-SITE: no sample data any more."""
+        if self.komt_eraan and not self.noindex:   # SITE-LIVE: guhs.nl/vadsrijk is online before Guhs 1.10.0 itself
+            return ('<div class="voorbeeldbalk" role="note">' + t(f"Het Vadsrijk is coming in Guhs {self.komt_eraan}. You can't play it yet: the live parts (server, highscores, players on the map) go live once the server runs the update.",
+                                                                 f"Het Vadsrijk komt eraan in Guhs {self.komt_eraan}. Spelen kan nog niet: de live-delen (server, highscores, spelers op de kaart) zijn live zodra de server de update draait.")
+                    + "</div>")
         if not self.noindex:
             return ""
         return ('<div class="voorbeeldbalk" role="note">' + t("Preview of Guhs 1.10.0 \"Het Vadsrijk\": not released yet. The live parts (server, highscores, players on the map) start once the server runs the update.",
@@ -1105,6 +1110,9 @@ class Bouwer:
                     + (' &middot; <span class="badge">' + t("draft", "concept") + "</span>" if n["concept"] else "") + "</p>" + PN.html_van(n, "img/"))
             self.schrijf(P, n["titel"], n["titel"], main, "patchnotes/index.html")
             lijst += f'<a class="kaartje" href="{slug(n["versie"])}.html"><h3>{ESC(n["titel"])}</h3><p class="muted">Guhs {ESC(n["versie"])} &middot; {ESC(n["datum"])}</p><p>{ESC(n["samenvatting"])}</p></a>'
+        if self.komt_eraan and not lijst:   # SITE-LIVE: the 1.10.0 notes stay unpublished until the release
+            lijst = (f'<div class="kaartje"><h3>Guhs {ESC(self.komt_eraan)}: Het Vadsrijk!</h3><p class="muted"><span class="badge">{t("coming soon", "binnenkort")}</span></p>'
+                     f'<p>{t("The patch notes appear here as soon as the update is out.", "De patch notes verschijnen hier zodra de update uit is.")}</p></div>')
         main = (f'<h1>Patch notes</h1><p>{t("The same text as the Discord post, here with more pictures (spoilers behind a button).", "Dezelfde tekst als de Discord-post, hier met meer plaatjes (spoilers achter een knop).")}</p>'
                 f'<div class="grid">{lijst or "<p class=leeg>-</p>"}</div>')
         self.schrijf("patchnotes/index.html", "Patch notes", "Patch notes", main, "patchnotes/index.html")

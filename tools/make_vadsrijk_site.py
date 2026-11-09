@@ -35,7 +35,7 @@ OPEN_ZONES = 1   # X-SITE: the public release opens the tutorial + zone 1 only (
 
 
 def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/", stil=False, noindex=None,
-         open_zones=None):
+         open_zones=None, komt_eraan=None):
     """Builds the section into `out`; returns (pages written, notes). Used by make_wiki_site.py too.
     X-SITE: open_zones (default OPEN_ZONES = 1): only the tutorial + zones 1..N are published (pages, data, map, pictures);
     later zones are one "Binnenkort: nieuwe zones" card. 6 = the full site."""
@@ -54,6 +54,8 @@ def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/",
         vs = [f[:-3] for f in (os.listdir(pn) if os.path.isdir(pn) else []) if _re.fullmatch(r"\d+(\.\d+)+\.md", f)]
         if vs:
             MOD_VERSION = max(vs + [MOD_VERSION], key=lambda v: tuple(int(x) for x in _re.findall(r"\d+", v)))
+    if komt_eraan:   # SITE-LIVE: the header badge names the coming version, not the one on the server today
+        MOD_VERSION = f"{komt_eraan} (binnenkort)"
     if os.path.isdir(out):
         for _ in range(5):   # (Windows: a file indexer/AV can hold a folder for a moment)
             shutil.rmtree(out, ignore_errors=True)
@@ -75,7 +77,7 @@ def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/",
     live_url = live_url or LIVE_URL   # W-SITE: no sample data any more; the real endpoint (friendly empty state when unreachable)
     b = Bouwer(data, root, out, live_url, False, wiki_url, site_url, kaart_bron, concepten=not echt, versie=MOD_VERSION,
                noindex=(not echt) if noindex is None else noindex,   # U-SITE: previews are noindex + carry a banner
-               volledig=volledig, open_zones=n_open)
+               volledig=volledig, open_zones=n_open, komt_eraan=komt_eraan or False)   # SITE-LIVE
     b.kaart = kaart
     pages = b.alles()
     if n_open < poort.MAX_ZONE:   # X-SITE: later zones are not published at all
@@ -107,9 +109,12 @@ def main():
     ap.add_argument("--open-zones", type=int, default=OPEN_ZONES,
                     help=f"publish the tutorial + zones 1..N only (default {OPEN_ZONES}, like the server's zone gate; 6 = everything)")
     ap.add_argument("--noindex", action="store_true", help="robots noindex + the preview banner, also with --echt")
+    ap.add_argument("--komt-eraan", default=None, metavar="VERSIE",
+                    help="SITE-LIVE: with --echt, the real indexable site before the mod is out: a 'komt eraan in Guhs VERSIE' banner, "
+                         "the version badge says VERSIE (binnenkort) and the patch notes stay unpublished")
     a = ap.parse_args()
     out = a.out or os.path.join(a.root, "site_build", "vadsrijk")
-    _, res = bouw(a.root, out, a.live_url, a.echt, noindex=True if a.noindex else None, open_zones=a.open_zones)
+    _, res = bouw(a.root, out, a.live_url, a.echt, noindex=True if a.noindex else None, open_zones=a.open_zones, komt_eraan=a.komt_eraan)
     return 1 if res["broken"] else 0
 
 
