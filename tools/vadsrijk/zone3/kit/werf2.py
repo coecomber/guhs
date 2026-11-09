@@ -368,6 +368,26 @@ def kabelbrug(W):
     W.label(m[0], m[1] + 12, m[2], "kabelbrug (Werftak -> werf)")
 
 
+def trappen_vrij(W):
+    """W-BEREIK: head room over the dock-tower stairs, run at the very END of the zone-3 build (bouw3.bouw): the zeppelin hulls
+    and the cheese rock (gatenkaas / concrete) cut through the stair: 2 blocks over a +0.5 step, so a 1.8-high player bumped his
+    head and could not get up to the Roquefort deck and its cabin (z3_hq08_werf)."""
+    for d in DOKKEN:
+        if not d["toren"]:
+            continue
+        x, y, z = dok_pos(d)
+        if not W.raakt(x - 60, y - 80, z - 60, x + 60, y + 50, z + 60):
+            continue
+        for (px, pz, sh, nx, nz) in toren_trap(d):
+            a0 = int(math.ceil(sh))
+            for w in np.arange(-1.5, 1.51, 0.5):
+                qx, qz = px + nx * w, pz + nz * w
+                for yy in range(a0, a0 + 3):
+                    b = W.wget(qx, yy, qz)
+                    if b and "dark_oak" not in b and "air" not in b:
+                        W.wset(qx, yy, qz, "minecraft:air")
+
+
 def bouw(W):
     eiland(W)
     haven(W)

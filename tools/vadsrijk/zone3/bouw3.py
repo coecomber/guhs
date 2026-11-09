@@ -263,6 +263,13 @@ def honingtak_extra(W):
         W.wset(sx + ux * 2.6, HY + 2, sz + uz * 2.6, LAMP_G)
         lx, ly, lz = R({"cafe": "lift_cafe_boven", "nestkapel": "lift_kapel_boven", "raattros": "lift_raattros_boven"}[naam])
         W.wfill(lx - 1, HY, lz - 1, lx + 1, HY, lz + 1, PLANK)
+        # W-BEREIK: the deck's edge railing ran straight through this 3x3 stop (lift_kapel_boven was a fenced-in pocket: the
+        # chapel, Wasja and three main quests unreachable): the stop itself stays free up to head height
+        W.wfill(lx - 1, HY + 1, lz - 1, lx + 1, HY + 3, lz + 1, LUCHT)
+        for ex in range(int(lx) - 2, int(lx) + 3):      # a rail only where the stop borders the void
+            for ez in range(int(lz) - 2, int(lz) + 3):
+                if max(abs(ex - int(lx)), abs(ez - int(lz))) == 2 and W.wget(ex, HY, ez).startswith(LUCHT)                         and W.wget(ex, HY + 1, ez).startswith(LUCHT):
+                    W.wset(ex, HY + 1, ez, HEK)
         if naam == "cafe":
             for k in range(5):
                 b = k * 1.25
@@ -1522,6 +1529,7 @@ def bouw(W):
     dorp_vrij(W)
     dichten(W)
     udeco(W)   # U-DECO: Honingtak street furniture + lamp posts, stair floor bands/banners
+    WF.trappen_vrij(W)   # W-BEREIK: head room over the werf dock-tower stairs (last: hulls/rock are drawn before)
 
 
 init()

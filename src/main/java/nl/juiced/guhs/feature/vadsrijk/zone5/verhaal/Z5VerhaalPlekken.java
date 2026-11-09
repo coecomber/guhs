@@ -196,8 +196,10 @@ public final class Z5VerhaalPlekken {
             poi("z5_bloesemboom_" + i, w("staartpark_boom_" + i, bv[i - 1][0], bv[i - 1][1], bv[i - 1][2]));
         }
         poi("z5_flap", w("kathedraal_apsis", 2612, 248, -520));
-        poi("z5_roosvenster_noord", w("kathedraal_roos_noord", 2619, 248, -504));
-        poi("z5_roosvenster_zuid", w("kathedraal_roos_zuid", 2619, 248, -536));
+        // W-BEREIK: the generated spot lies on the light pool right under the window, behind the transept balustrade (7 from the
+        // nearest walkable cell, POI_STRAAL 5): the quest spot is 4 blocks into the transept, in front of the balustrade
+        poi("z5_roosvenster_noord", w("kathedraal_roos_noord", 2619, 248, -504).offset(0, 0, -4));
+        poi("z5_roosvenster_zuid", w("kathedraal_roos_zuid", 2619, 248, -536).offset(0, 0, 4));
         poi("z5_eerste_knuffel", KATHEDRAAL_ALTAAR);
         // lookouts
         poi("z5_uitkijk_oog", BALKON_OOG);
