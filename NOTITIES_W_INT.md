@@ -84,3 +84,5 @@
   CLIENT config under the same file name `guhs-vadsrijk-nepspelers.toml` -> "Detected config file conflict". The client config is
   now `guhs-vadsrijk-nepspelers-client.toml`.
 - Site: 110-w-int merged into 110-u-site, regen (runtime dump copied from w-int's run/), preview gh-pages aa19bf3e8 (200, noindex).
+- AutoCheck (2nd run, after the config fix): 33 shots, no crash. run/ cleaned (no saves/logs/crash-reports/gametest output;
+  screenshots/autocheck kept). run-client.bat text -> round W. From here on: NO gradle in w-int (the user's client).

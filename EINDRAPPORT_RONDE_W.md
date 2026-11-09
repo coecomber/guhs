@@ -46,7 +46,15 @@
 - **Onderweg:** de party/dungeon/HUD/raid/menu/kern/taal-set 36/36 (met de gerepareerde `nepVultRijEnStart`), BereikDoelen 2/2.
 - **Questrobot (zone 1-6):** 41/19/24/23/24/25 quests gehaald, **0 vast, 0 niet gestart**, 0 statische fouten, 0 staanplek-fouten.
   Alle zonevlaggen staan en alle luchtschiplijnen (ook lijn E) gaan open. 328 NPC's, 0 ontbrekende teksten.
-- **AutoCheck-wandeling** (`tools/autocheck/vadsrijk_w_int.txt`): {{AUTOCHECK}}
+- **AutoCheck-wandeling** (`tools/autocheck/vadsrijk_w_int.txt`): 33 schermafdrukken van zone 1 t/m 6 plus de ronde-W-plekken
+  (Opstijgpier, Oosttaksteiger, Staarthaven, Kampsteiger lijn 0, de walvistrap, de dungeondeur van de Zwamgrot, de Galmgrot-trap,
+  Mosje op de bosgrond, alle klodders van zone 1, de Blubs in het Knuffelkamp) in `run/screenshots/autocheck/wi_*.png`. Geen crash;
+  in het log alleen de oude modelwaarschuwingen (droombed, bliksemsmidse).
+  - **De eerste poging crashte bij het opstarten van de client:** w-party gaf de server- en de client-config van de nep-spelers
+    dezelfde bestandsnaam. Gametests laden de client niet, dus dit zag niemand. Gerepareerd (de client-config heet nu
+    `guhs-vadsrijk-nepspelers-client.toml`), daarna liep de wandeling foutloos.
+  - Op de foto van de Opstijgpier was het schip nog onderweg (de vertrektijd verzetten haalt het schip niet meteen terug); het
+    aanleggen zelf is door `schepen_check` en de gametests `VadsrijkSchepen` gecontroleerd, niet op een foto.
 
 ## Checkers (na de laatste regen)
 | check | uitslag | vorige keer (v-int) |
