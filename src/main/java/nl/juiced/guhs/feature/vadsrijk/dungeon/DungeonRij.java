@@ -260,6 +260,10 @@ public final class DungeonRij {
         if (!inVadsrijk(p)) {
             return Component.translatable("vadsrijk.dungeon.msg.niet.vadsrijk");
         }
+        Component poort = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.dungeonDicht(p, dungeon);   // X-ZONE1: its zone is closed
+        if (poort != null) {
+            return poort;
+        }
         String al = dungeonVan(p.getUUID());
         if (al != null) {
             return zelf ? Component.translatable("vadsrijk.dungeon.msg.al.kerker", dungeonNaam(al))

@@ -139,6 +139,12 @@ public final class MenuServer {
         long gx = d.generiekXp;
         t.putLong("xp", gx - Levels.totaalVoorGeneriek(lv));
         t.putLong("xpNodig", lv >= Levels.MAX_GENERIEK ? 0 : Levels.xpVoorGeneriek(lv));
+        if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.opPlafond(p, d)) {   // X-ZONE1: the soft cap: "hoogste level voor nu" + the bank
+            t.putLong("xpNodig", 0);
+            t.putString("maxKey", "vadsrijk.zonepoort.menu.max");
+            t.putLong("gespaard", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.gespaard(d, null));
+            t.putInt("volgendeZone", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.open() + 1);
+        }
         Klasse k = Spelers.klasse(p);
         t.putString("klasse", k.naamKey());
         t.putString("titel", k.titelKey(d.level(k.id())));

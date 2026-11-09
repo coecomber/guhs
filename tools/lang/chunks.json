@@ -6913,6 +6913,13 @@
         "sign.guhs.onderwol_bouw.stadje.vadskracht_aan",
         "subtitles.guhs.blubguh.piep"
       ]
+    },
+    {
+      "id": "c417_vr_zonepoort",
+      "title": "1.10 Het Vadsrijk (round X, X-ZONE1: the zone gate)",
+      "prefixes": [
+        "vadsrijk.zonepoort."
+      ]
     }
   ]
 }

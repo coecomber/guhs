@@ -207,6 +207,13 @@ public final class QuestMotor {
             }
             return;
         }
+        // 5c. (X-ZONE1) the giver of the next zone's first main quest while that zone is closed: "the ship sails soon"
+        Praat.Regel binnenkort = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.binnenkortRegel(p, npc, id);
+        if (binnenkort != null) {
+            regels.add(binnenkort);
+            open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""), reisOpties(p, id));
+            return;
+        }
         // 6. the role, or a little chatter
         NpcDef def = Npcs.van(id);
         rol(p, npc, def == null ? null : def.rol());
@@ -373,6 +380,10 @@ public final class QuestMotor {
     /** Null when the line is open for this player, else the lang key of why not (arg: the player's level). */
     @Nullable
     public static String reisSlot(ServerPlayer p, String naar) {
+        String poort = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.reisSlot(p, naar);   // X-ZONE1: zone closed (soon)
+        if (poort != null) {
+            return poort;
+        }
         return switch (naar) {
             case "zwamzoet" -> Questlog.klaar(p, "hq05_klodderreus") || Questlog.actief(p, "hq06_zwamzoet") ? null : "vadsrijk.npc.reis.slot.zwamzoet";
             case "kandijkom" -> Questlog.status(p, "z2_hq01_splinterpieken") != 0 ? null   // (the zone-2 story started: always open)
