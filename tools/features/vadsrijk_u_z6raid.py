@@ -480,6 +480,9 @@ TEKSTEN = {
     # sterrenbeelden
     "vadsrijk.z6raid.ster_bultguh": "De Vliegende Bultguh",
     "vadsrijk.z6raid.ster_pluis": "De Kleine Pluis",
+    # X-LABELS: the two side constellations are bosses too (titelKey + ".onder"): their subtitle on a title card
+    "vadsrijk.z6raid.ster_bultguh.onder": "Een gedoofd sterrenbeeld dat over een rode baan stormt",
+    "vadsrijk.z6raid.ster_pluis.onder": "Een gedoofd sterrenbeeldje dat de anderen heelt met een lied",
     "vadsrijk.z6raid.sterrenbeelden.venster": "Eén is uit! 10 tellen voor de andere twee",
     "vadsrijk.z6raid.sterrenbeelden.venster_hud": "Steek-aan-venster",
     "vadsrijk.z6raid.sterrenbeelden.een_uit": "%s straalt weer (%s/%s)!",
