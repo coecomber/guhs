@@ -62,6 +62,8 @@ def bouw_wereld(figuren=True):
     log(f"land ({time.time() - t0:.0f} s)")
     bouw6.wegen(W)
     log(f"wegen ({time.time() - t0:.0f} s)")
+    import fundering6                                   # X-KAART: the ground heights (land + roads) for the foundation pass
+    W.terrein = fundering6.terrein_top(W)
     if not os.environ.get("GUHS_Z6_ZONDER_STEDEN"):      # (test switch: the land without the two cities)
         RK.bouw(W, figuren=figuren)
         log(f"Rozenkloof ({time.time() - t0:.0f} s)")
@@ -81,6 +83,7 @@ def bouw_wereld(figuren=True):
         ZF.bevolk(W)
     log(f"groen + figuren ({time.time() - t0:.0f} s), palet {len(W.pal)}")
     bouw6.vul_putjes(W, log=lambda *a: log(*a))         # [u-z6afronding] small pits you can't get out of
+    fundering6.bouw(W, W.terrein, log=lambda *a: log(*a))   # X-KAART: no floating corners/walls/stairs outside the towns
     return W
 
 
@@ -213,6 +216,8 @@ def bewaar(W):
     d = os.path.join(CACHE, "z6")
     os.makedirs(d, exist_ok=True)
     np.savez_compressed(os.path.join(d, "wereld.npz"), v=W.v, pal=np.array(W.pal), b=np.array(W.b, float))
+    if getattr(W, "terrein", None) is not None:          # X-KAART: the ground heights for tools/vadsrijk/funderingcheck.py
+        np.savez_compressed(os.path.join(d, "terrein.npz"), T=W.terrein, b=np.array(W.b, float))
 
 
 def kaartbeeld(hgt, nm, O):

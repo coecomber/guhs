@@ -74,6 +74,19 @@ def zet_h(W, x, z, top):
 
 
 # ------------------------------------------------------------------------------------------------ roads
+def _watertop(W, x, z):
+    """X-KAART: y of the highest water block in column (x, z) (-1000 = none)."""
+    i, k = W.vx(x), W.vz(z)
+    if not (0 <= i < W.v.shape[0] and 0 <= k < W.v.shape[2]):
+        return -1000
+    col = W.v[i, :, k]
+    for j in range(W.v.shape[1] - 1, -1, -1):
+        c = int(col[j])
+        if c and W.pal[c].startswith("minecraft:water"):
+            return int(W.b[1] + j)
+    return -1000
+
+
 def _herbemonster(pts, stap=1.0):
     P = np.asarray(pts, float)
     uit = [P[0]]
@@ -92,7 +105,9 @@ def pad(W, pts, breed=2, top_k="vloer_zand", rand_k="zs", trap_k="vloer_zand", s
     posts every `lampen` blocks. Returns the profile [(x, z, y_top)]."""
     P = _herbemonster(pts, 1.0)
     N = len(P)
-    h = np.array([grond(W, x, z, 200) for x, z in P], float)
+    # X-KAART: through water the road bed is at least the water surface (a causeway): it used to follow the river/lake BED and
+    # cut a dry trench through the water (water flowing into it, a road under the lake surface)
+    h = np.array([max(grond(W, x, z, 200), _watertop(W, x, z)) for x, z in P], float)
     if N > 9:
         k = np.ones(9) / 9
         hs = np.convolve(np.pad(h, 4, mode="edge"), k, mode="valid")
@@ -133,8 +148,9 @@ def pad(W, pts, breed=2, top_k="vloer_zand", rand_k="zs", trap_k="vloer_zand", s
             onder = min(g, y - 1)
             doos(W, cx, onder, cz, cx, y - 1, cz, "rots")
             k = top_k if ao < breed - 0.6 else rand_k
+            wt = _watertop(W, cx, cz)                  # X-KAART: never a dry trench under the water surface (a ford instead)
             zet(W, cx, y, cz, k)
-            leeg(W, cx, y + 1, cz, cx, y + 4, cz)
+            leeg(W, cx, max(y + 1, wt + 1), cz, cx, y + 4, cz)
             zet_h(W, cx, cz, y)
         else:
             # shoulder: 1:1 slope from the road edge to the terrain
