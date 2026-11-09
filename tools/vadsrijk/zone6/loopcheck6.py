@@ -25,11 +25,13 @@ SLA = ("haven_6_5_luchtschip", "haven_6_5_mast", "palmbaken_ster", "duinbaken_st
 
 
 def main():
-    with open(os.path.join(HIER, "..", "_cache", "plekken_z6.json"), encoding="utf-8") as f:
-        alle = json.load(f)
+    import z6plekken   # X-KAART: the snapped spots the game uses (Z6WereldPlekken), not the possibly stale json cache
+    alle = z6plekken.lees()
+    print(f"loopcheck6: {len(alle)} plekken uit {z6plekken.bron_naam()}")
     pois = {k: v for k, v in alle.items() if not k.startswith(SLA)}
     zaden = {"seeds": [alle[k] for k in ("haven_z6_z5_vertrek", "rozenkloof_plein", "saffraanpoort_paleisplein") if k in alle],
              "links": [], "pois": pois}
+    os.makedirs(os.path.join(HIER, "..", "_cache"), exist_ok=True)   # X-KAART: a fresh worktree has no cache dir yet
     tmp = tempfile.mkdtemp()
     zp = os.path.join(tmp, "zaden.json")
     with open(zp, "w", encoding="utf-8") as f:

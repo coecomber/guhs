@@ -137,7 +137,8 @@ def zone4_onder(O, pad):
     return xs[m], ys[m], zs[m], ids[st[m]]
 
 
-def schrijf(O, vol, pad, extra=None):
+def schrijf(O, vol, pad, extra=None, nbt=None):
+    """nbt (X-KAART): {(x, y, z) in the tile: block-entity nbt dict} (the signs of bouw5, info["bordjes"])."""
     import nbtsnel
     if extra is not None:
         xs, ys, zs, ids = extra
@@ -147,7 +148,16 @@ def schrijf(O, vol, pad, extra=None):
     gebruikt, inv = np.unique(ids, return_inverse=True)
     palette = [O.B.splits(O.pal.lijst[i]) for i in gebruikt]
     return nbtsnel.schrijf(pad, (T, HOOG, T), palette, xs.astype(np.int32), ys.astype(np.int32), zs.astype(np.int32),
-                           inv.astype(np.int32), None)
+                           inv.astype(np.int32), nbt or None)
+
+
+def bordjes_van(info, tx, tz):
+    """X-KAART: the sign nbt of bouw5 (game positions) that falls in tile (tx, tz), in tile coordinates."""
+    uit = {}
+    for (gx, gy, gz), nbt in info.get("bordjes", []):
+        if gx // T == tx and gz // T == tz:
+            uit[(gx - tx * T, gy, gz - tz * T)] = nbt
+    return uit
 
 
 # ------------------------------------------------------------------------------------------------ main
@@ -192,7 +202,7 @@ def maak(alleen=None, snap=True):
         vol = hol(vol, O.op)
         if onder is not None:
             n_naad += 1
-        nb = schrijf(O, vol, pad, onder)
+        nb = schrijf(O, vol, pad, onder, bordjes_van(info, tx, tz))   # X-KAART: + the signs' text
         totaal += nb
         grootte += os.path.getsize(pad)
         log(f"tegel {tx},{tz}: {nb} blokken{' (+ zone 4 onder y %d)' % PL.NAAD_Y if onder is not None else ''}")

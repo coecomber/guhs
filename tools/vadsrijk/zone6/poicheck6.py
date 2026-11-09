@@ -107,7 +107,10 @@ def snap(alle, blok=None):
 
 
 def main():
-    alle = json.load(open(os.path.join(HIER, "..", "_cache", "plekken_z6.json"), encoding="utf-8"))
+    sys.path.insert(0, HIER)
+    import z6plekken   # X-KAART: the snapped spots the game uses (Z6WereldPlekken), not the possibly stale json cache
+    alle = z6plekken.lees()
+    print(f"poicheck6: plekken uit {z6plekken.bron_naam()}")
     blok = Lezer()
     slecht = []
     for k, (x, y, z) in sorted(alle.items()):
