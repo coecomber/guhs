@@ -1,35 +1,47 @@
-# Spiekbrief: Het Vadsrijk na ronde U (zone 1 t/m 6 + alle systemen + al je feedback)
+# Spiekbrief: Het Vadsrijk na ronde W (jouw playtest-feedback + dungeons + party + nep-spelers)
 
-Dit is de lange spiekbrief van ronde U (2026-11-06 t/m 11-08): alles wat je in je feedback van ronde 4 vroeg, plus zone 6
-"Het Zijdeland" met de eerste raid. Alles zit in één nieuwe testclient:
-**`guhs_vadsrijk\v-int\run-client.bat`** (de oude t-int-client heb je niet meer nodig).
+Dit is de lange spiekbrief van ronde W (2026-11-08/09). Ronde W repareert alles wat je na je playtest van de v-int-client
+meldde, maakt de release veilig (alles lopend bereikbaar, alle hoofdquests zeker af te ronden, alle geheimpjes vindbaar) en
+voegt drie systemen toe die je zelf vroeg: **dungeons met een echte deur en wachtrij**, **een Party-tab** en **nep-spelers**.
+Alles zit in één nieuwe testclient:
+**`guhs_vadsrijk\w-int\run-client.bat`** (de v-int-client heb je niet meer nodig).
 
-> **Het verhaal testen? Begin bij hoofdstuk 0: QUESTLOPEN.** Typ `/guhs vadsrijk questlopen` (alleen als OP) en klik de hele
-> hoofdlijn van zone 1 t/m 6 op volgorde door: met teleport, het juiste level, alle films, en bazen zelf vechten of laten verslaan.
-> Gebruik er een apart testkarakter voor.
+> **Het verhaal testen? Begin bij hoofdstuk 0: QUESTLOPEN.** Typ `/guhs vadsrijk questlopen` (alleen als OP). Nieuw: de knoppen
+> **[Sla stap over]** en **[Naar veilige plek]**, die altijd werken, ook midden in een gevecht.
+>
+> **Je feedback nalopen? Hoofdstuk 1: RONDE W.** Per punt een commando om te kopiëren en wat je hoort te zien.
 
-**Volgorde van deze spiekbrief:** eerst starten, de toetsen en de loot-regels, dan de nieuwe wereld, dan zone 1 → 6, dan de
-systemen, en helemaal achteraan (hoofdstuk 8) **elk feedbackpunt** met wat er gedaan is en hoe je het controleert.
+**Volgorde van deze spiekbrief:**
+- starten, toetsen en de loot-regels;
+- hoofdstuk 0: Questlopen;
+- hoofdstuk 1: ronde W, al je feedbackpunten;
+- hoofdstuk 2: de nieuwe systemen (dungeons, Party-tab, nep-spelers, de bereik-check);
+- daarna de bekende hoofdstukken uit ronde U, met een **B** ervoor (B1 de wereld, B2 zone 1+2, ..., B7 de systemen, B8 de
+  feedback van ronde 4).
+
 Elk blok test één onderdeel: copy-paste de commando's in de chat en kijk of gebeurt wat erbij staat.
 
 ## Starten
-- Dubbelklik `run-client.bat`. Maak een **nieuwe** wereld (Creatief, cheats aan); de saves-map is leeg.
+- Dubbelklik `run-client.bat` in `guhs_vadsrijk\w-int`. Maak een **nieuwe** wereld (Creatief, cheats aan); de saves-map is leeg.
   De hele kaart (zone 1 t/m 6) is opnieuw gegenereerd, dus een oude wereld klopt niet meer.
-- `/guhs vadsrijk` om erin te gaan. De eerste keer krijg je meteen het karakterscherm (3 vaste slots, zie §1).
-- Wil je geraakt kunnen worden: `/gamemode survival` (in creatief vallen de wezens je niet aan).
-- Alle teleportcommando's gebruiken plek-namen, dus die kloppen vanzelf.
+- `/guhs vadsrijk` om erin te gaan. De eerste keer krijg je meteen het karakterscherm (3 vaste slots).
+- Wil je geraakt kunnen worden of iets lopend testen: `/gamemode survival` (in creatief vallen de wezens je niet aan, en in
+  creatief zet een dungeon je er niet uit).
+- Alle teleportcommando's gebruiken plek-namen of de nieuwe kaart-coördinaten, dus die kloppen vanzelf.
 
 ## Handig tussendoor
 - `/guhs vadsrijk vol`: Vads, energie en ult vol, cooldowns gewist.
 - `/guhs vadsrijk info`: je data.
-- `/guhs vadsrijk level 70`: het level-plafond is nu **70** (was 60). Zone 5 is lv 56-60, zone 6 lv 60-70.
+- `/guhs vadsrijk level 70`: het level-plafond is **70**.
 - `/guhs vadsrijk tips reset`: alle tips opnieuw.
-- `/guhs vadsrijk loot kansen`: alle rijdier-drops met jouw pech-teller (zie "Loot" hieronder).
+- `/guhs vadsrijk loot kansen`: alle rijdier-drops met jouw pech-teller.
 - `/toetsen`: het toetsenoverzicht als los scherm (ook in het pauzemenu, rechts).
 - Plekken: `/guhs vadsrijk wereld plek <id>` (zone 1), `z2wereld`, `z3wereld`, `z4wereld`, `z5wereld`, `z6wereld plek <id>`;
   Tab-aanvullen toont alle ids.
+- **Nieuw:** `/guhs vadsrijk dungeon deur` (alle dungeondeuren), `/guhs vadsrijk party` (de Party-tab),
+  `/guhs vadsrijk nepspeler lijst` (de nep-spelers).
 
-## Toetsen (na ronde U)
+## Toetsen (na ronde W)
 Alle Vadsrijk-toetsen werken alleen in het Vadsrijk. Je vindt ze in Opties > Besturing, categorie Vadsrijk, én rechts in het
 pauzemenu (Esc). Een rode **!** daar = de toets botst met een andere.
 
@@ -46,6 +58,7 @@ pauzemenu (Esc). Een rode **!** daar = de toets botst met een andere.
 | X | rijdier: op- en afstappen (zone 4-water: je zeilbootje; zone 6: tapijt / bultguh) |
 | N | rijdieren-scherm |
 | P | huisdieren-scherm |
+| H → tab **Party** | **nieuw:** de Party-tab (uitnodigen, leider, wachtrij), ook `/guhs vadsrijk party` |
 | Y | Ambachten |
 | I | Knapzak |
 | O | Kledingkast |
@@ -89,6 +102,8 @@ Testen:
 /guhs vadsrijk loot rol opperzwam_zwamzwijntje
 ```
 Na `pech ... 15` is de volgende `rol` zeker raak (gouden chatregel + geluid). Een misser toont grijs "nog N tot zeker".
+
+---
 
 ---
 
@@ -156,7 +171,472 @@ Tip: maak er een apart testkarakter voor (Karakter-scherm), dan blijft je eigen 
 - "Geen echte baas gevonden": de baas staat niet in een arena (of nog niet geladen); de verslagen-haak is gebruikt.
 - Chat staat vol "Nieuwe quest / Quest af" na Spring naar: dat hoort zo.
 
-# 1. START EN DE NIEUWE WERELD
+### Nieuw in ronde W: [Sla stap over] en [Naar veilige plek] (W-SPEL)
+```
+/guhs vadsrijk questlopen
+```
+Nieuw onderaan het paneel: **[Sla stap over]** en **[Naar veilige plek]**. Ze werken altijd, ook midden in een gevecht of
+terwijl het paneel "Bezig..." zegt (heropen met hetzelfde commando).
+- Sla stap over: de stap telt meteen mee en je gaat naar de plek van de volgende stap.
+- Naar veilige plek: stopt wat er loopt en zet je terug op de laatste rustige plek buiten een arena.
+- Bij een baas (Zelf vechten of Laat hem verslaan): als de baas weg is maar de stap niet telde, telt hij na 5 s alsnog;
+  daarna word je naar de volgende stap gezet, nooit achtergelaten in de arena.
+Test bij Kootje Zilverstaart: Spring naar de stap "z5_hq08_wolkwaldroom" (doel 2), Zelf vechten, versla hem; daarna sta je
+bij de volgende stap. Of klik meteen Sla stap over.
+
+---
+
+# 1. RONDE W: JOUW FEEDBACK, PUNT VOOR PUNT
+
+Per punt: wat er gedaan is, een commando om te kopiëren en wat je hoort te zien. Alles in het Vadsrijk, als OP.
+Waar "lopend" staat: eerst `/gamemode survival`, niet vliegen, en het laatste stuk zelf lopen.
+
+## 1.1 Knuffelkamp: huisdiertjes en de drukte op de steiger
+Zet Stadsleven op VOL (Vadsrijk-menu, toets H > Instellingen) als je het goed wilt zien.
+
+**Huisdiertje loopt verder achter zijn guh**
+```
+/guhs vadsrijk leven tp knuffelkamp
+/guhs vadsrijk leven spawn wandelaar
+```
+- Een guh die zijn huisdiertje uitlaat (konijntje, muisje, Blub of eendje): het diertje loopt nu **ongeveer 2 blokken** achter
+  de guh (was 1). Ook als ze net verschijnen staat het diertje al een stukje naast de guh.
+
+**De steiger van het Knuffelkamp is rustiger**
+```
+/execute in guhs:vadsrijk run tp @s -240 88 1012
+```
+- Je staat bij de luchtschipkapitein op de steiger. Wacht een halve minuut.
+- Er staan nog maar een paar guhs/diertjes op de steiger, met ruimte ertussen. Op het plein en de grasvelden blijft het
+  gezellig druk.
+- Dat geldt voor alle smalle plekken (steigers, pieren, steegjes), ook in De Haven, de Lampionhaven en het Kandijkom-dok.
+
+## 1.2 De blobs: de oude look terug, en de blauwe stadsdiertjes zijn Blubs
+**De Grauwe Klodderreus en de proefklodders** (ga op een open plek staan):
+```
+/guhs vadsrijk models reus
+/guhs vadsrijk models reus vecht
+/summon guhs:vr_proefklodder ~ ~ ~3
+/summon guhs:vr_proefkloddertje ~ ~ ~3
+```
+- Een groot, grijs, **vierkant slijmblok** (ongeveer 3 blokken) met een binnenblokje en een boos gezichtje. Geen rond model met
+  wenkbrauwen meer. Springt/landt plat en weer hoog; deint mee bij een treffer, een fase-overgang en het juichen.
+- Na de plof: roze en doorzichtig.
+- De proefklodders en kloddertjes zijn kleine grijze vierkante slijmblokjes.
+
+**Alle klodders van zone 1**
+```
+/guhs vadsrijk models toon zone1
+/guhs vadsrijk models plof
+/guhs vadsrijk models weg
+```
+- Elke klodder is weer een **vierkant blok** met een plat kapje en twee guh-oortjes (geen afgeronde randen, geen wiebelkapje).
+  Groen (klodder), lichtgroen (kloddertje), blauw met bubbel, geel op een veer, paars met strik, blauwgroen met druppels, lila met
+  gloeiende kristallen, roze met bloem (kampklodder). Na `plof`: blij en gekleurd. Ook de elite- en blije versies zijn de oude.
+
+**De blauwe stadsdiertjes = Blubs**
+```
+/guhs vadsrijk leven tp knuffelkamp
+```
+Loop 10 tot 20 seconden tussen de huisjes (andere stadjes: `/guhs vadsrijk leven tp zwamzoet`).
+- Ongeveer 3 op de 10 diertjes zijn kleine **blauwe Blubs**: hetzelfde lijfje, dezelfde oortjes en pootjes als de Blub in de
+  droom en de tamme Blub in survival. Drie blauwtinten en verschillende snoetjes (puur, blosjes, guh-oogjes, :3).
+- Geen vleugels, sprieten, gewei, strikje of kleertjes. Een guh die een Blub uitlaat heeft een iets kleinere Blub achter zich.
+
+## 1.3 Pieppiepmuisjes: zeldzamer (behalve in de Kandijkom)
+```
+/guhs vadsrijk leven tp knuffelkamp
+/guhs vadsrijk leven status
+```
+- In het Knuffelkamp en de andere stadjes zie je nu zo'n **2 muisjes tegelijk in plaats van 6** (gewone en roze samen, ongeveer
+  30 %). De Blubs blijven even vaak.
+```
+/guhs vadsrijk leven tp kandijkom
+```
+- In de Kandijkom is het aantal muisjes **hetzelfde gebleven** (zo'n 6).
+
+## 1.4 "Ver in het oosten", laden vóór cutscenes en flash F4
+**"Ver in het oosten wil iets steeds meer"** (flash F2, einde zone 3):
+```
+/guhs vadsrijk z3npc f2
+```
+- Eerst kort zwart met "De wereld wordt geladen..." (hooguit 3 s, alleen de eerste keer). Dan vlieg je over het roze Zijdeland
+  naar één grauwe toren (de Sterrendovende Toren), met een grijze chatregel. Daarna de grauwe troonzaal: Graaf Piepvel in zijn
+  hemdje, Krabbel met zijn rapport, getik achter de troon, en de titel "WORDT VERVOLGD... / Ver in het oosten wil iets steeds
+  meer." Na afloop sta je weer waar je stond, met "Zone 3 klaar" in de chat.
+- **Niet meer:** een lege lucht onder een donker-effect.
+
+**Laden vóór elke cutscene**
+```
+/guhs vadsrijk z3npc cliffhanger
+```
+- Is de wereld daar nog niet klaar: eerst kort zwart (na een halve seconde met "De wereld wordt geladen..."), dan begint het
+  shot met een korte fade, met de wereld al helemaal opgebouwd. Is alles er al: geen zwart scherm.
+- Na een verre cutscene: kort zwart tot jouw eigen omgeving weer is opgebouwd (hooguit 3 s).
+
+**Flash F4** (na de raid, zone 6):
+```
+/guhs vadsrijk z6verhaal ringeling
+```
+- Eerst de film "Opgevrolijkt!". Dan F4: de eerste helft begint nu **bij de Sterrendovende Toren** (het gebouwde terrein van zone
+  6, van oost gezien) en de blik zwaait naar het westen, naar Hoogvads. **Niet meer:** naar lege lucht kijken ten oosten van de kaart.
+
+## 1.5 Luchtschepen: Kapitein Hemelhoog, de Oosttaksteiger en alle andere schepen
+Elk luchtschip legt nu **strak tegen het open eind van de pier** aan: de schroeven raken de pierrand, de romp ligt er een half
+blokje achter. Aan het eind van elke pier staat geen hek meer (de zijkanten houden hun hek).
+Instappen kan op drie manieren: **het schip oplopen**, **op het schip klikken**, of **op de plank van de pierpunt klikken**.
+**Vangnet:** ligt het schip er niet en loop je van de open punt af, dan sta je meteen weer op de pier met "Het luchtschip ligt
+hier nog niet aan. Volgende vertrek over m:ss". Je valt nooit van een pier.
+
+**Kapitein Hemelhoog** (jouw melding):
+```
+/guhs vadsrijk luchtschip vertrek D 120
+/guhs vadsrijk luchtschip haven haven_z4_z5_vertrek
+```
+- Oostkant van het ronde platform: de witte hekjes zijn daar weg, het schip ligt er strak tegen (lag 6 blokken los achter de
+  hekjes). Ook de westkant, waar de pier aankomt, is open: je loopt zo naar de kapitein.
+
+**De Oosttaksteiger** ("de boot te ver"):
+```
+/guhs vadsrijk luchtschip vertrek C 120
+/guhs vadsrijk luchtschip haven haven_z3_z4_vertrek
+```
+- Oostkant van het ronde platform open, het schip ligt ertegenaan, binnen 1 blok van je neus om te klikken.
+
+**Alle havens** (zet eerst de vertrektijd van die lijn op 120 s met `/guhs vadsrijk luchtschip vertrek <lijn> 120`):
+
+| Lijn | Haven | Teleport | Wat je ziet |
+|---|---|---|---|
+| 0 | Kampsteiger | `/guhs vadsrijk luchtschip haven haven_kamp_z1_vertrek` | noordarm van de kampsteiger, oosteinde open; **lijn 0 vliegt nu** |
+| 0 | De Haven | `/guhs vadsrijk luchtschip haven haven_z1_kamp_vertrek` | westeinde van de lange pier in de baai, schip boven het water |
+| A | Noordklifhaven | `/guhs vadsrijk luchtschip haven haven_z1_z2_vertrek` | noordrand open, de roze vlag wappert naar buiten |
+| A | Kandijkom-dok | `/guhs vadsrijk luchtschip haven haven_z2_z1_vertrek` | zuidrand van het dok open (7 breed) |
+| B | Galmdok | `/guhs vadsrijk luchtschip haven haven_z2_z3_vertrek` | oostrand open |
+| B | Weststeiger | `/guhs vadsrijk luchtschip haven haven_z3_z2_vertrek` | westkant open, schip niet meer over de mast |
+| C | Oosttaksteiger | `/guhs vadsrijk luchtschip haven haven_z3_z4_vertrek` | oostkant open |
+| C | Lampionhaven | `/guhs vadsrijk luchtschip haven haven_z4_z3_vertrek` | westrand, schip ertegen (lag 12 blokken verderop) |
+| D | Opstijgpier | `/guhs vadsrijk luchtschip haven haven_z4_z5_vertrek` | oost open, Kapitein Hemelhoog |
+| D | Walvisrughaven | `/guhs vadsrijk luchtschip haven haven_z5_z4_vertrek` | eind van pier 2: geen hekjespoort, masten lager |
+| E | Staarthaven | `/guhs vadsrijk luchtschip haven haven_z5_z6_vertrek` | **nieuw:** oosteinde van het staartpad, tussen de staartvinnen |
+| E | Rozenkloof | `/guhs vadsrijk luchtschip haven haven_z6_z5_vertrek` | schip aan de zuidkant, geen poortje, mast lager |
+
+Per haven, in survival: loop het schip op (welkomstbericht), sneak om uit te stappen, klik dan op een plank van de pierpunt (ook
+aan boord), laat het schip vertrekken (`/guhs vadsrijk luchtschip vertrek <lijn> 1`) en loop van de punt af: je staat meteen
+weer op de pier. De zeilbootjes van zone 4 (X-toets) zijn niet veranderd; alle 11 steigers zijn gecontroleerd.
+
+## 1.6 Kootje, de walvis en het kussen van Roosje
+**Kootje Zilverstaart: er weer uit**
+```
+/tp @s 2587 167 -520
+```
+- Je staat in de Wolkwaldroom (de vechtzaal in de walvis). Naast de deur, tegen de wand: een **ladder met een open luikje**.
+  Rechtsklik de ladder: "Je klimt de ladder op, terug naar het middelste spuitgat." en je staat bij het spuitgat.
+
+**De walvis: lopend naar de staart** (Staartpark, lijn E naar zone 6), lopend:
+```
+/tp @s 2848 233 -523
+```
+- Je staat op de Paleisheuvel. Loop naar het oosten: in de borstwering zit een opening met een bordes, dan een **brede witte trap
+  langs de klif** naar beneden (twee stukken, met een tussenbordes) tot op het gras van het Staartpark. Daarna verder naar de
+  Staarthaven en de staartlift. (Vroeger: een klif van 29 blokken, dus zone 6 was lopend niet te bereiken.)
+
+**Het kussen bij Kloofmoeder Roosje**
+```
+/execute in guhs:vadsrijk run tp @s 3486 75 -698
+```
+- Rechtsklik het magenta kussen naast de troon: je gaat zitten en zakt niet meer door de grond. Shift = opstaan: je staat óp of
+  naast het kussen, nooit in de vloer. Geldt voor alle kussens, zitzakken en stoelen.
+
+## 1.7 Zonenamen bij een zonewissel
+```
+/execute in guhs:vadsrijk run tp @s 2669 226 -536
+```
+- De titel **"De Ordekathedraal - veilig gebied"**, niet meer "vadsrijk.kern.gebied.z5_kathedraal". Ook terug: De Paleisheuvel, De
+  Universiteit, De Academie van de Wolkwacht, De Marktlaan, Moeder Wolkwal, De Buikgangen, De Proefarena, Het Schuilnest, de
+  Wolkrand-delen, De Staartvlakte. Er is een check (`taalcheck`) die nu 0 ontbrekende teksten meldt.
+
+## 1.8 Figuranten: minder, en ze kijken de goede kant op
+```
+/guhs vadsrijk z5wereld plek kathedraal_schip
+```
+- In de kathedraal zitten nog ongeveer 40 % van de kerkgangers, en ze **kijken naar het altaar**. Het koortje kijkt naar de banken.
+- Elders in Hoogvads staan ongeveer een kwart minder figuranten. Ridders en de bekende figuren blijven allemaal.
+- Ook goed gedraaid: de ridders in de troonzaal (naar het middenpad), het publiek (naar de koningin), de uiltjes-studenten (naar
+  hun professor), de twee duellerende ridders (naar elkaar).
+```
+/execute in guhs:vadsrijk run tp @s 3760 75 -905
+```
+- Zone 6, de Spiegelzaal in Saffraanpoort: de hofguhs kijken naar het middenpad (stonden met hun neus tegen de muur), de gouden
+  guh op de troon kijkt de zaal in. Ruiters kijken dezelfde kant op als hun rijdier.
+
+## 1.9 Duimdop, de kathedraal en de deuren van Saffraanpoort
+| Wat | Commando | Wat je ziet |
+|---|---|---|
+| **Gildemeester Duimdop** (lopend) | `/tp @s 2692 218 -483` | Loop de trap af naar de Gildehal: vlak voor de deur een **vlak bordesje** op deurhoogte, je loopt rechtop naar binnen. Duimdop staat binnen. Geldt voor elke deur met een trap omhoog in zone 5. |
+| **Kathedraal: muurtjes en lantaarns** | `/tp @s 2692 221 -520` | Loop de grote trap op naar de Grote Poort: **geen wit muurtje** meer dat 3-4 blokken boven de treden zweeft (een balustrade in de lucht, je liep eronderdoor). Geen lantaarns of kettingen meer óp traptreden of op hoofdhoogte; die aan muren en hoog aan plafonds blijven. Dit geldt in alle zones (~1.300 stuks opgeruimd). |
+| **Saffraanpoort: nepdeuren** | `/tp @s 3646 71 -842` | De deuren zonder kamer erachter zijn nu **ijzeren deuren** (met de hand niet open): duidelijk "op slot". Echte huizen houden hun houten deur en een kamer. |
+| Opstijgpier: de hemelkapitein (lopend) | `/tp @s 2500 73 -565` | Loop over de pier naar het oosten: het witte hekje is open waar de pier aankomt. |
+| Nestkapel-lift (zone 3, Wasja) | `/tp @s 1393 167 -641` | De bovenste liftstop staat niet meer achter het hek van het takdek. |
+| Kaaszeppelinwerf: trap naar de kajuit | `/tp @s 1683 212 -803` | De torentrap van Dok 3 heeft overal hoofdruimte (geen kaas/beton op hoofdhoogte). |
+
+## 1.10 De website: geen nepdata meer, en de wiki begint bij zone 1
+Open **https://guhs.nl/vadsrijk-preview/** (de verborgen voorbeeldsite; de gewone site is niet aangeraakt).
+- **Geen verzonnen spelers meer** (geen Lieke/PluisPiet, geen nep-highscores, geen "Voorbeelddata"-bordjes, geen verzonnen "Event
+  van vandaag"). Waar nog geen echte data is, staat "Nog niet live / Live zodra de server de update draait".
+- **De spoiler-schakelaar begint altijd bij zone 1** ("Toon tot zone 1"), bij elke pagina. Onderaan verschijnt een briefje: "Alle
+  informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij Toon tot..." met OK en
+  "Niet meer tonen" (dat verbergt alleen het briefje).
+- De site is opnieuw gebouwd met de ronde-W-modellen (de vierkante klodders, de Klodderreus, de Blubs) en de nieuwe kaart.
+
+## 1.11 Xp in de Lampionkust (zone 4)
+**Antwoord op je vraag:** ja, de Lampionkust brengt je in de zone zelf naar 56. Hoofd + zij + de twee bazen: ~58,5 (was 56,75,
+krap). Alleen hoofdquests: ~55,7, daarna nog ~7-10 min mobs aan het Mysterie-eiland. De Koraalgrot (lv 53-55) is de dungeon van
+zone 4 (~5.000 xp per run).
+```
+/guhs vadsrijk level 50
+/guhs vadsrijk npc quest klaar z4_hq01_lampionkust
+```
+- Lever in bij de Havenmeester: **+8.522 xp** (was 5.900), de balk springt ~2/3 vol.
+```
+/guhs vadsrijk npc quest klaar z4_s03_vissen
+```
+- **+2.884 xp** (was 2.360).
+```
+/guhs vadsrijk level 60
+/guhs vadsrijk npc quest klaar z6_hq01_land
+```
+- Zone 6: **+14.030 xp** (was 7.892), bijna een heel level.
+- Nog open, voor jou om te beslissen: zone 2 geeft te veel xp, en wie hoofd + zij doet, zit eind zone 5 al op het plafond 70.
+  Overzicht: `XP_BALANS.md`, narekenen met `python tools/vadsrijk/xpbalans.py`.
+
+## 1.12 Alle geheimpjes vindbaar (jouw release-eis)
+De bereik-check (hoofdstuk 2.4) vond ~9 geheimpjes die je lopend niet kon halen. Die zijn nu allemaal te bereiken:
+
+| Geheimpje | Commando | Wat je ziet |
+|---|---|---|
+| Zone 1: knuffel **Mosje** (holle boom) | `/execute in guhs:vadsrijk run tp @s -403 72 -100` | Mosje zit op de bosgrond onder de grote paddenstoel (zat 36 blokken hoog bovenop de hoed). |
+| Zone 1: **de schat op de Hoedenpaden** | `/guhs vadsrijk wereld plek geheim_hoedenschat`, loop dan terug over de smalle plankenloop | De smalle, donkere plankenloop naar het geheime hutje heeft geen "dichte hoekjes" meer: bij elke knik ligt een extra plank. |
+| Zone 1: **de geheime tempelkamer** (Zwamtempel) | `/execute in guhs:vadsrijk run tp @s 320 152 -416` en kijk naar het westen | In de gebarsten muur zit nu een bres van 2 hoog: erdoor en je staat in het kamertje met de kist (niets opende die muur). |
+| Zone 2: **de Galmgrot** | `/execute in guhs:vadsrijk run tp @s 927 118 -1002` | Een **trap van sneeuwblokken** omhoog naar de tunnel achter de bevroren waterval (die lag 3 blokken boven de grond). |
+| Zone 2: **de IJsgrot** | `/execute in guhs:vadsrijk run tp @s 462 113 -1064` | Je staat op de ijskoepel. In het dak zit een **gat met steigerwerk** naar beneden (de tunnelingang hangt hoog boven het meer). Steiger: springen = omhoog, sneaken = omlaag. |
+| Zone 2: aanwijzing **boorgaten** | `/execute in guhs:vadsrijk run tp @s 870 124 -1082` | De aanwijzing ligt aan de voet van de lawine, niet meer bovenop een ijsrichel. |
+| Zone 3: **kuiken 3** | `/execute in guhs:vadsrijk run tp @s 1301 222 -626` | Het kuikentje zit aan de bereikbare rand van honingvijver 3 (zat in de steile bladrand van de kruin). |
+| Zone 3: **uitkijkpunt op de Westtak** | `/execute in guhs:vadsrijk run tp @s 1299 211 -622` en loop naar het platform | Geen bladeren meer op hoofdhoogte boven het pad naar het roze uitkijkplatform. |
+| Zone 4: **vliegerspul 1 en 3** (zijquest z4_s01) | `/execute in guhs:vadsrijk run tp @s 2286 72 -673` en `/execute in guhs:vadsrijk run tp @s 2298 81 -673` | De twee stukken liggen op het pad onder de vliegerrotsen (lagen 6-8 blokken hoger). De glinstering zie je alleen als de zijquest loopt. |
+
+Nog over (zie het eindrapport): het uitkijkpunt op de ijsnaald bij de Galmtop (zone 2, decor) en de schat achter de kristalmuur
+in de Zoutgrot (zone 6, die opent de puzzel tijdens het spel).
+
+
+---
+
+# 2. DE NIEUWE SYSTEMEN VAN RONDE W
+## 2.1 Dungeons: een echte dichte deur, een dungeonvenster en een wachtrij (W-GROT)
+
+Het woord is nu **dungeon**: grotten zijn het eerste type dungeon ("Type: Grot"). Elke grot-dungeon (De Zwamgrot, De Kristalgrot, De Wortelgrot, De Koraalgrot, De Wolkengrotten, De Zingende Zoutgrot) heeft nu een
+**echte dichte deur**. Je kunt er niet doorheen lopen. **Rechtsklik op de deur** (ook met een wapen in je hand) en het
+**dungeonvenster** gaat open. Daarin start je de grot: solo, met je groepje, of via de wachtrij met andere spelers.
+
+> Test in **survival** (in creative zet de grot je er niet uit). De deur verschijnt vanzelf zodra het stukje wereld geladen is
+> (een paar seconden). Zie je hem niet: `/guhs vadsrijk dungeon deur <grot> tp` zet hem meteen neer.
+
+### 2.1.1 Naar elke deur
+
+| Grot | Deur | Teleport (je staat voor de deur) |
+|---|---|---|
+| De Zwamgrot (z1) | in de stam van de reuzenpaddenstoel, 3 breed x 3 hoog | `/guhs vadsrijk dungeon deur zwamgrot tp` |
+| De Kristalgrot (z2) | in de tunnel achter de kristallen boog (6 blokken naar binnen) | `/guhs vadsrijk dungeon deur kristalgrot tp` |
+| De Wortelgrot (z3) | in de holle wortelstronk (noordkant), 3 x 3 | `/guhs vadsrijk dungeon deur wortelgrot tp` |
+| De Koraalgrot (z4) | in de koraalschoorsteen op de atolrand (de droge weg); de duikingang op de zeebodem heeft óók een deur | `/guhs vadsrijk dungeon deur koraalgrot tp` |
+| De Wolkengrotten (z5) | een **wolkenluik**: loop het blaasgat in, de wenteltrap af; het luik zit in de schacht | `/guhs vadsrijk dungeon deur wolkengrot tp` |
+| De Zingende Zoutgrot (z6) | onderaan de uitgehakte trap, vlak voor de grote zaal, 3 x 4 | `/guhs vadsrijk dungeon deur zoutgrot tp` |
+
+Coördinaten (staanplek voor de deur): Zwamgrot -412 69 148 · Kristalgrot 869 119 -1104 · Wortelgrot 1410 69 -737 ·
+Koraalgrot 2230 71 -596 · Wolkengrotten 2494 205 -520 (op het luik) · Zoutgrot 3874 50 -521.
+Lijst van alle deuren: `/guhs vadsrijk dungeon deur`
+
+Wat je moet zien:
+- Een dichte deur in het thema van de grot (paddenstoelhout, kristal, donker wortelhout, koraal/prismarine, wolkenmarmer, zout met
+  messing). In het midden zit een **klopper** (ring). Bij de Wolkengrotten is het een **luik** in de vloer.
+- Je kunt er niet doorheen lopen of hem kapotslaan.
+
+### 2.1.2 Het dungeonvenster
+
+Rechtsklik op de deur (of zonder lopen: `/guhs vadsrijk dungeon deur zwamgrot`). Je ziet:
+- bovenin (roze balk): **"Dungeon: De Zwamgrot"**, daaronder **"Type: Grot · zone 1"**;
+- **Aanbevolen: level 11-14 · 1-4 spelers (alleen goed te doen)** (zone 3+: "2-4 spelers (alleen is pittig)");
+- **Eindbaas: Moeder Glimhoed** + haar ondertitel;
+- **Buit bij elke clear**: munten (zone 1: 700 brons), 1 uitrustingsstuk (je eerste clear: Episch; daarna Zeldzaam met 12% kans op
+  Episch), 3-5 ertsen, 25% kans op de bazenkern;
+- **Zeldzaam (persoonlijk)**: het huisdier (bijv. Glimhoedje: 6% per clear · pech 0/25) en de Pluimguh-kleur (bijv. Glimzwam: 10%
+  per clear · pech 0/15, of "pas als je een Pluimguh hebt", of "✔ al van jou"). Dezelfde getallen als `/guhs vadsrijk loot kansen`;
+- **Jij: N keer uitgespeeld** en je **wachttijd** ("Geen wachttijd" of "Wachttijd: nog 9:12");
+- de status: "De dungeon is vrij." / "Bezet: een groep van 2 is binnen (3:10)." / "Jij staat in de wachtrij: 2/4";
+- knoppen: **Solo starten**, **Starten met groep (n)**, **In de wachtrij** (of **Uit de wachtrij** + **Nu starten (2/4)**).
+  Beweeg over een knop voor uitleg.
+
+### 2.1.3 Solo
+
+Klik **Solo starten**: je staat meteen binnen (vlak achter de deur), de titel van de grot verschijnt. Loop de grot in: de run
+start ("⚔ De grot wordt wakker!") en gaat verder zoals in SPIEK_U_GROTKERKER (2 kamers, poort, baas, eindkist).
+Dev-snelweg (geen wachttijd/regels): `/guhs vadsrijk grot run zwamgrot`
+
+Na de baas:
+- chat: "Wachttijd voor dungeon De Zwamgrot: 10:00" en "Dungeon uitgespeeld! Rechtsklik op de deur ... om naar buiten te gaan";
+- na 3 seconden opent het venster vanzelf met **Dungeon verlaten** / **Nog even blijven**;
+- **Dungeon verlaten** = je staat buiten op de staanplek voor de deur. Je wordt NIET meteen weer naar binnen gezet.
+- Rechtsklik nu op de deur: je ziet "Wachttijd: nog 9:5x" en de startknoppen staan grijs.
+- Wachttijd weg: `/guhs vadsrijk dungeon wachttijd weg` (alle grotten) of `/guhs vadsrijk dungeon wachttijd weg zwamgrot`
+- Wachttijd zetten om het venster te zien: `/guhs vadsrijk dungeon wachttijd zwamgrot 90`
+
+### 2.1.4 De wachtrij alleen testen (nep-spelers)
+
+```
+/guhs vadsrijk dungeon nep zwamgrot 3
+```
+- Er komen 3 nep-spelers ("Testguh 1..3") in de wachtrij van De Zwamgrot, en jij ook: de rij is 4/4.
+- Meteen: **Klaar voor De Zwamgrot?** venster met de 4 namen (… = wacht), een tijdbalk van 30 s, en **Klaar!** / **Nee**.
+- Klik **Klaar!**: na een seconde zeggen de nep-spelers ook ja (✔). Jullie gaan naar binnen; in de chat: "(Testguh 1 is een
+  nep-testspeler en blijft buiten)". Je bent alleen binnen (de run telt als 1 speler).
+
+Weigeren testen:
+```
+/guhs vadsrijk dungeon nep zwamgrot 3 nee
+```
+- Klik **Klaar!**: "Testguh 1, Testguh 2, Testguh 3 doet (nog) niet mee. De anderen blijven in de wachtrij." Je staat nog in de
+  rij (1/4), de nep-spelers zijn eruit.
+
+Te laat testen:
+```
+/guhs vadsrijk dungeon nep zwamgrot 3 niets
+```
+- Klik **Klaar!** en wacht 30 s: "Niet iedereen was op tijd klaar...". Jij blijft in de rij.
+
+Eerder starten (niet vol):
+```
+/guhs vadsrijk dungeon nep zwamgrot 1
+/guhs vadsrijk dungeon deur zwamgrot
+```
+- De rij is 2/4. Klik in het venster **Nu starten (2/4)** → klaar-check voor 2 → Klaar! → naar binnen.
+
+Wachtrij-status:
+- In de wachtrij zie je elke 2 seconden in de actiebalk: **"Wachtrij dungeon De Zwamgrot 1/4"** (en "· bezet" als er een groep binnen is).
+- Je mag rondlopen; je blijft in de rij. Uitloggen of naar een andere wereld = uit de rij ("Je bent uit de wachtrij ... (andere wereld)").
+- **Uit de wachtrij** in het venster haalt je eruit.
+- Overzicht van alles: `/guhs vadsrijk dungeon rij`
+
+### 2.1.5 Met je groepje
+
+Maak een groepje (party) met een tweede speler. De leider klikt **Starten met groep (2)** → iedereen krijgt de klaar-check (de
+leider staat al op ✔) → allemaal Klaar! → samen naar binnen. Iemand op Nee → "... doet (nog) niet mee. Starten gaat niet door."
+Heeft iemand nog wachttijd of zit iemand al in een grot/de raid, dan zegt de knop dat (en wie).
+
+### 2.1.6 Regels die je kunt proberen
+
+- **Niet-leden komen er niet in**: zit er een groep in De Zwamgrot, dan zegt de deur voor een ander "Bezet: een groep van 1 is
+  binnen". (`/guhs vadsrijk grot tp zwamgrot hal` maakt je zelf lid: dat is een dev-snelweg.) Teleporteer in survival
+  met `/tp @s -482 47 130` de Zwamgrot in terwijl een andere groep binnen is: je staat meteen weer buiten de deur ("Deze dungeon is van een
+  andere groep"). Zonder groep binnen: "Deze dungeon is dicht. Start hem via de deur."
+- **Flauwgevallen?** Je wordt buiten wakker (zoals altijd). Rechtsklik op de deur: **Terug naar binnen** brengt je terug bij je groep.
+- **Groep weg** (iedereen een minuut buiten de grot, na een clear 10 s): "Jullie groep is weg: de dungeon gaat weer dicht."
+- **Uitgespeeld en er wacht een andere groep**: "Er wacht een andere groep: de dungeon gaat over 2:00 dicht" → daarna sta je buiten.
+- Niet starten terwijl je al in een grotkerker of de raid zit.
+
+### 2.1.7 Dev-commando's (kort)
+
+| Commando | Wat |
+|---|---|
+| `/guhs vadsrijk dungeon deur` | lijst van alle deuren (staanplek + binnen) |
+| `/guhs vadsrijk dungeon deur <grot>` | het dungeonvenster openen |
+| `/guhs vadsrijk dungeon deur <grot> tp` | naar de staanplek voor de deur (en de deur meteen neerzetten) |
+| `/guhs vadsrijk dungeon nep <grot> <1-3> [ja\|nee\|niets]` | nep-spelers in de wachtrij (jij erbij) |
+| `/guhs vadsrijk dungeon rij` | alle grotten: bezet door wie, wachtrijen, klaar-checks |
+| `/guhs vadsrijk dungeon wachttijd weg [grot]` | wachttijd weg |
+| `/guhs vadsrijk dungeon wachttijd <grot> <seconden>` | wachttijd zetten |
+| `/guhs vadsrijk dungeon verlaat` | uit je grotkerker (naar buiten) |
+| `/guhs vadsrijk dungeon start <id>` (of `grot run <id>`) | dev: solo naar binnen, zonder wachttijd/regels |
+
+> Alle `dungeon`-commando's werken ook met `grot` in plaats van `dungeon` (bijv. `/guhs vadsrijk grot nep zwamgrot 3`).
+
+## 2.2 De Party-tab en de nep-spelers (W-PARTY)
+
+De koppeling met de dungeons is gedaan (w-int): "Party in rij" en het vullen van de wachtrij met nep-spelers werken.
+
+### 2.2.1 De Party-tab
+- `H` (Vadsrijk-menu) -> tabblad **Party** (taart-icoon), of `/guhs vadsrijk party`.
+  - Zonder party: links uitleg, rechts "Spelers in het Vadsrijk" met **Uitnodigen** (dichtbij eerst, met afstand).
+  - Met een tweede account/speler: klik **Uitnodigen** -> bij de ander een **toast** "Party-uitnodiging" + belletje + in de chat
+    **[Accepteer] [Weiger]** (klikbaar). In diens tab staat de uitnodiging ook met knoppen.
+  - Na accepteren: links beide leden, kroon ♛ bij de leider, groene stip = online, regel "Lv · klasse · spec · zone".
+  - Als leider: knoppen **Leider** en **Weg** per lid. Iedereen: **Party verlaten**.
+- Commando's werken nog: `/guhs vadsrijk party uitnodigen <speler>`, `... accepteer`, `... weiger`, `... verlaat`,
+  `... verwijder <naam>`, `... leider <naam>`.
+
+### 2.2.2 Party bewaard na een herstart
+- Maak een party met 2 spelers, sluit de wereld/server en start opnieuw: de party staat er nog (zelfde leider, zelfde volgorde).
+- Uitloggen = niet meer uit de party: je frame wordt bij de ander grijs ("offline"). Logt de leider uit, dan wordt de ander leider.
+
+### 2.2.3 Samen in de wachtrij
+- Raid (leider, min. 2 spelers in het Vadsrijk): tab -> **Raid: party in de rij** (of `/guhs vadsrijk party raid`).
+  Verwacht: "De party staat in de rij..." en de raid-melding "je staat in de rij (#1)". Is de toren vrij: binnen een minuut naar
+  De Wachtzaal, dan gaan jullie samen naar boven.
+- Dungeon: kies met < > een dungeon -> **Party in rij**; bovenin "In de rij voor: <dungeon>".
+
+### 2.2.4 Nep-spelers
+- Snel een paar naast je: `/guhs vadsrijk nepspeler spawn` (willekeurige rol) of `/guhs vadsrijk nepspeler spawn heler 3`.
+  Kijk naar: speler-model met standaard-skin, naambordje `[NPC] xX_Vadsjesloper_Xx · Heler · Lv 12`, iets in de hand.
+- In de wildernis vanzelf: loop een mobzone in (geen stad; bv. de Klodderweide naast Zwamzoet) en blijf een paar minuten bij mobs. Zeldzaam: max 2-3 per zone, ze vechten tegen de mobs daar en kletsen ("lfg dungeon??", "brb mama roept").
+  Chat verschijnt boven hun hoofd en in de chat als `[Nep] naam: ...`.
+- Rekruteren: rechtsklik er een -> "hoi" + **[Kom je mee?]** -> klik -> "gaat met je mee!" en hij staat in je party-frames en in de
+  Party-tab met **[NPC]** en "nog 24 min". Of direct: `/guhs vadsrijk nepspeler rekruteer`.
+  - Hij volgt je, valt aan wat jij raakt; een heler heelt je (hartjes), een tank trekt mobs naar zich toe (boos wolkje).
+  - Laat hem bijna "doodgaan": hij zakt 10 s door de knieën ("rip") en staat weer op.
+  - Jouw nep-speler rechtsklikken: resterende minuten + **[Doei!]**. Als leider kun je hem ook in de tab **Weg**-klikken.
+  - Na 20-30 min: afscheidsregel ("moet eten, doei!") en weg.
+  - Loot: als hij de laatste klap geeft krijg JIJ gewoon xp + loot; hij neemt nooit iets.
+- Wachtrij vullen: ga alleen in een dungeon-rij en wacht 1 minuut: "Niemand anders kwam opdagen: 3 nep-speler(s)
+  vullen de rij...". Direct: `/guhs vadsrijk nepspeler vul`. In de dungeon lopen ze met je mee; ga je eruit, dan zeggen ze "gg" en
+  zijn weg. Nooit in de raid.
+- Overzicht: `/guhs vadsrijk nepspeler lijst`; allemaal weg: `/guhs vadsrijk nepspeler weg`.
+
+### 2.2.5 Aan/uit
+- Per speler: Vadsrijk-menu > **Instellingen** > **Nep-spelers** uit. Verwacht: alle nep-spelers verdwijnen voor jou (niet meer te
+  zien of aan te klikken), geen `[Nep]`-chat, je eigen metgezellen gaan naar huis, ze vullen jouw rij niet.
+  (Zonder client-knop testen: `/guhs vadsrijk nepspeler mij uit` / `mij aan`, alleen server-kant.)
+- Hele server: `/guhs vadsrijk nepspeler uit` -> iedereen gaat weg met een afscheidsregel, er komt niets meer bij;
+  `/guhs vadsrijk nepspeler aan` zet ze terug. Staat ook in `serverconfig/guhs-vadsrijk-nepspelers.toml`.
+
+### 2.2.6 Uitloggen = niet meer uit de party
+- Let op, dit is anders dan vroeger: wie uitlogt blijft in de party (grijs frame, "offline"). Logt de leider uit, dan wordt een
+  ander leider. Weg uit de party gaat met **Party verlaten** in de tab of `/guhs vadsrijk party verlaat`.
+
+## 2.3 Elke dungeon is één gedeelde ruimte
+- Per grot kan er één groep tegelijk binnen. Een tweede groep komt in de wachtrij ("Bezet: een groep van 2 is binnen"). Zo
+  bedoeld voor 1.10.0; zie het eindrapport.
+
+## 2.4 De bereik-check: kun je overal lopend komen? (W-BEREIK)
+Een nieuwe controle over de hele kaart (zone 1-6) met het lijf van een survival-speler: 1,8 hoog, een stap van 1 blok alleen
+met hoofdruimte, maximaal 3 blokken vallen, hekken en lantaarns blokkeren, ijzeren deuren zijn dicht. Hij rekent voor elke
+quest-plek, NPC, geheimpje, arena en luchtschip-haven uit of je er lopend kunt komen.
+```
+python tools/vadsrijk/bereikcheck.py
+python tools/vadsrijk/bereikcheck.py --strikt
+python tools/vadsrijk/bereikcheck.py --punt 2650,224,-520
+```
+- Schrijft `BEREIK_RAPPORT.md`: per zone hoeveel hoofdquest-doelen, zijquest-doelen, NPC's en geheimen je lopend haalt, en per
+  gemist doel de dichtstbijzijnde plek waar je wel komt. `--strikt` stopt met een fout als een hoofdquest-doel of NPC niet te
+  halen is. De uitslag van deze ronde staat in `EINDRAPPORT_RONDE_W.md`.
+- Hij draait ook mee in `maak_kaart.py --audit`, dus na elke kaart-regen.
+- Daarnaast ruimt een nieuwe pas (`vrijpad.py`) bij elke regen lantaarns/kettingen op trappen en paden en zwevende hekjes op.
+
+---
+
+# DEEL B: DE HOOFDSTUKKEN UIT RONDE U (nog steeds geldig)
+
+Hieronder de spiekbrief van ronde U, ongewijzigd (alleen de hoofdstuknummers kregen een B). Waar ronde W iets veranderde,
+staat dat in hoofdstuk 1 en 2 hierboven.
+
+# B1. START EN DE NIEUWE WERELD
 
 Eerst hoe alles aan elkaar hangt (zee, overgangen, havens, hekken), dan de luchtschepen, je karakters, het nieuwe Vadsrijk-menu (H) en de toetsen. Ronde U staat bovenaan, de blokken van de nachtronde daaronder (die gelden nog steeds).
 
@@ -1079,7 +1559,7 @@ controleert dat slot 0 precies hetzelfde blijft: allemaal "OK" verwacht.
 ### Gametests
 `-Pgt=VadsrijkKarakter` (migratie, slotIsolatie, accountBreed, modiEnPensioen, namen).
 
-# 2. ZONE 1 (Het Tussenland, lv 1-20) EN ZONE 2 (De Splinterpieken, lv 20-35)
+# B2. ZONE 1 (Het Tussenland, lv 1-20) EN ZONE 2 (De Splinterpieken, lv 20-35)
 
 ## Nieuw in ronde U: zone 1 (Knuffelkamp, Zwamzoet, Sporenwoud)
 - **Knuffelkamp:** alle paden verlicht met guh-lantaarnpalen (u-deco).
@@ -1449,7 +1929,7 @@ In het Vadsrijk:
 ---
 Valt je iets op? Noteer het commando-blok en wat je zag; dan kan ik het gericht fixen.
 
-# 3. ZONE 3: DE SCHEMERWORTEL (lv 35-50)
+# B3. ZONE 3: DE SCHEMERWORTEL (lv 35-50)
 
 ## Nieuw in ronde U: zone 3 (De Schemerwortel, de Boom)
 - **Honingtak:**
@@ -1677,7 +2157,7 @@ een zwevend bijtje met fladderende vleugeltjes.
 
 Gametests: `runGameTestServer -Pgt=VadsrijkImker` (3 tests).
 
-# 4. ZONE 4: DE LAMPIONKUST (lv 50-56)
+# B4. ZONE 4: DE LAMPIONKUST (lv 50-56)
 
 ## Nieuw in ronde U: zone 4 (De Lampionkust)
 - **Schildpadeiland:** de bloemetjes, lampionpaaltjes en de palm staan nu op het schild, en geheime knuffel 6 zit niet meer
@@ -2280,7 +2760,7 @@ Wat je moet zien:
 - Ver weg (meer dan 64 blokken): geen staart meer, wel nog de vlieger en het touw (dat scheelt werk voor je pc).
 - Geen wol-vliegers van blokken meer op de kaart.
 
-# 5. ZONE 5: HOOGVADS (lv 56-60)
+# B5. ZONE 5: HOOGVADS (lv 56-60)
 
 ## Nieuw in ronde U: zone 5 (Hoogvads op Moeder Wolkwal)
 - **Gebouwen met diepte (u-z5):**
@@ -2968,7 +3448,7 @@ Je ziet "Je zakt in een droom...", je staat op de wolk, na 1,5 s de intro (camer
 - **Uiterlijk** (zelf beoordelen): grijze walvis met traantjes en wolkjes op zijn rug; lila met "o"-mondje na het neuriën; roze en blij aan het eind. Nootstenen: wolksteen met een gouden randje en een draaiende muzieknoot (roze, geel, lichtblauw, lila). Ranken: zachte grijze sliertjes met blaadjes.
 - **Muziek:** hook-id `guhs:vr.z5droom.muziek.grauwe_droom` (nog geen geluid; t-geluid kan het vullen).
 
-# 6. ZONE 6: HET ZIJDELAND (lv 60-70)
+# B6. ZONE 6: HET ZIJDELAND (lv 60-70)
 
 ## Zone 6 in één oogopslag (nieuw in ronde U)
 Het Zijdeland is het eerste stuk van het grote continent: lv 60-70, roze duinen, oases, karavanen, bazaars en zwevende koepels.
@@ -3567,7 +4047,7 @@ Wat moet je horen:
 - 's Nachts krekels en sterrengetwinkel, en soms een zingend zoutkristal.
 - Is het zandgeruis toch te veel? Zeg het, dan gaat het nog zachter.
 
-# 7. DE SYSTEMEN
+# B7. DE SYSTEMEN
 
 Eerst alles wat in ronde U nieuw is of veranderd, daarna de systemen van de nachtronde.
 
@@ -6405,7 +6885,7 @@ Snelle rondgang: `/guhs vadsrijk puzzel tp z1_kleurplaten` → wacht 1 s → nog
 ### De 9 gescheurde bladzijdes (de legende van de Lege Schaal)
 1 Een gewone kleine Mika · 2 De eerste kaasknabbel · 3 Wat elke guh weet · 4 Lange armen · 5 Een gestolen kroontje · 6 De Lege Schaal · 7 Nooitgenoeg · 8 Het Oog · 9 Een eenzaam katje. Lezen: `/guhs vadsrijk puzzel bladzijde <n>`.
 
-# 8. FEEDBACK RONDE 4: ELK PUNT, WAT ER GEDAAN IS EN HOE JE HET CONTROLEERT
+# B8. FEEDBACK RONDE 4: ELK PUNT, WAT ER GEDAAN IS EN HOE JE HET CONTROLEERT
 
 Per punt uit je feedback: wat er veranderd is, de commando's en waar je op let. Alles is getest vanuit deze testclient
 (v-int). De kaart is opnieuw gegenereerd, dus begin in een **nieuwe wereld** (zie Starten).

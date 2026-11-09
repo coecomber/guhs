@@ -1,15 +1,39 @@
-# Testen: Het Vadsrijk (Guhs 1.10): zone 1 t/m 6 + alle systemen (na ronde U)
+# Testen: Het Vadsrijk (Guhs 1.10): zone 1 t/m 6 + alle systemen (na ronde W)
 
-Dit is de ENE testgids voor het hele Vadsrijk. Hij vervangt `TESTEN_VADSRIJK_ZONE1.md` en de losse slice-gidsen (die blijven
-alleen als naslag). Gebouwd in `guhs_vadsrijk\t-int` (branch `110-t-int`: alles van r-int + de nachtronde T: de wereldindeling,
-zone 4 "De Lampionkust", zone 5 "Hoogvads" en alle systemen). Snel alles langs met commando's: `SPIEKBRIEF.md` (lang: start,
-zone 1 → 5, systemen). Wat er 's nachts gebouwd is en wat nog niet af is: `EINDRAPPORT_NACHT.md`.
+Dit is de ENE testgids voor het hele Vadsrijk. Snel alles langs met commando's: `SPIEKBRIEF.md` (hoofdstuk 0 Questlopen,
+hoofdstuk 1 al je feedback van ronde W, hoofdstuk 2 de nieuwe systemen, daarna B1-B8 uit ronde U). Wat af is en wat niet:
+`EINDRAPPORT_RONDE_W.md`.
 
-> **Ronde U (2026-11-08):** de testclient is nu **`guhs_vadsrijk-intun-client.bat`** (branch `110-v-int`), met zone 6
-> "Het Zijdeland", de raid, alle feedbackpunten van ronde 4 en de Questlopen-knop om het hele verhaal door te klikken. Hieronder eerst
-> de testlijst van ronde U; de oudere blokken daaronder gelden nog steeds. Wat af is en wat niet: `EINDRAPPORT_RONDE_U.md`.
-> Toetsen die erbij kwamen: **H** = Vadsrijk-menu (alleen in het Vadsrijk), **`;`** = emote-wiel; het hele overzicht staat in het
-> pauzemenu (Esc) en in SPIEKBRIEF.md bovenaan.
+> **Ronde W (2026-11-09):** de testclient is nu **`guhs_vadsrijk\w-intun-client.bat`** (branch `110-w-int`). Nieuw: al je
+> playtest-feedback verwerkt, alles lopend bereikbaar (bereik-check), alle geheimpjes vindbaar, dungeons met een echte deur en
+> wachtrij, een Party-tab, nep-spelers en Engels voor alle Vadsrijk-teksten (je test alleen in het Nederlands). Hieronder eerst de
+> testlijst van ronde W; de lijsten van ronde U en ouder gelden nog steeds.
+
+## Nieuw in ronde W: de testlijst
+
+Speel vanuit **`guhs_vadsrijk\w-intun-client.bat`** in een **nieuwe wereld**: de kaart is opnieuw gegenereerd (zone 1-6).
+De commando's per punt staan in SPIEKBRIEF.md, hoofdstuk 1 (feedback) en 2 (systemen).
+
+| # | Onderdeel | Test | Goed als |
+|---|---|---|---|
+| W1 | Huisdiertjes + steiger | SPIEK 1.1: `leven tp knuffelkamp`, `leven spawn wandelaar`, tp naar de kampsteiger. | Diertje ~2 blokken achter de guh; op de steiger maar een paar guhs. |
+| W2 | Blobs | SPIEK 1.2: `models reus`, `models toon zone1`. | Vierkante slijmblokken met kapje + oortjes; de Klodderreus is weer het grijze slijmblok. |
+| W3 | Blubs in de stad | SPIEK 1.2: loop door het Knuffelkamp. | De blauwe diertjes zijn Blubs (zelfde model als in de droom). |
+| W4 | Muisjes | SPIEK 1.3: `leven status` in het kamp en in de Kandijkom. | Kamp ~2 muisjes, Kandijkom ~6. |
+| W5 | Cutscenes | SPIEK 1.4: `z3npc f2`, `z3npc cliffhanger`, `z6verhaal ringeling`. | Eerst "De wereld wordt geladen..." als het nodig is; F2 vliegt naar de toren; F4 begint bij de toren, niet in lege lucht. |
+| W6 | Luchtschepen | SPIEK 1.5: elke haven, in survival: oplopen, pierpunt klikken, van de punt af lopen zonder schip. | Schip strak tegen de open punt; instappen op 3 manieren; vangnet zet je terug op de pier. Lijn 0 en de Staarthaven werken. |
+| W7 | Kootje + walvis | SPIEK 1.6: de ladder in de Wolkwaldroom; lopend van de Paleisheuvel naar het Staartpark. | Ladder brengt je naar het spuitgat; de witte kliftrap loopt door tot het gras. |
+| W8 | Kussens | SPIEK 1.6: het kussen bij Roosje. | Zitten zonder door de vloer te zakken; opstaan op/naast het kussen. |
+| W9 | Zonenamen | SPIEK 1.7: tp naar de kathedraal. | Echte namen, nooit een `vadsrijk.kern...`-sleutel. |
+| W10 | Figuranten | SPIEK 1.8: kathedraal, Spiegelzaal. | Minder kerkgangers, iedereen kijkt naar het altaar / middenpad. |
+| W11 | Duimdop, kathedraal, deuren | SPIEK 1.9 (lopend). | Rechtop de Gildehal in; geen zwevend muurtje boven de trap; nepdeuren zijn ijzer. |
+| W12 | Website | SPIEK 1.10: guhs.nl/vadsrijk-preview/ | Geen nepspelers; begint altijd op "Toon tot zone 1" met het briefje; nieuwe klodder-renders. |
+| W13 | Xp | SPIEK 1.11: `npc quest klaar z4_hq01_lampionkust`. | +8.522 xp. |
+| W14 | Geheimpjes | SPIEK 1.12: de tp's in de tabel. | Alles lopend te pakken (Mosje op de bosgrond, sneeuwtrap bij de grotten, ...). |
+| W15 | Dungeons | SPIEK 2.1: `dungeon deur zwamgrot tp`, rechtsklik de deur; `dungeon nep zwamgrot 3`. | Dichte deur met klopper; venster met buit/wachttijd; klaar-check van 30 s; solo/groep/wachtrij werken. |
+| W16 | Party-tab | SPIEK 2.2: H → Party (met een tweede speler als het kan). | Uitnodigen, accepteren (toast + chat), kroon, Leider/Weg; de party blijft na een herstart. |
+| W17 | Nep-spelers | SPIEK 2.2: `nepspeler spawn`, rekruteren, wachtrij vullen, uitzetten in Instellingen. | `[NPC]`-naambordje; volgt en helpt; vult de dungeon-rij na ~1 min; uit = weg voor jou. |
+| W18 | Questlopen | Hoofdstuk 0: [Sla stap over] en [Naar veilige plek], ook midden in een gevecht. | Je blijft nooit vast in een arena. |
 
 ## Nieuw in ronde U (feedback ronde 4): de testlijst
 
