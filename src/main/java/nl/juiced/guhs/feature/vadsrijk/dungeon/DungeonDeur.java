@@ -80,8 +80,36 @@ public final class DungeonDeur {
     private DungeonDeur() {
     }
 
+    /**
+     * X-DUNGEON: the door's item, for creative / JEI / a builder's /give only (no recipe, no loot, the block is unbreakable: never
+     * obtainable in survival). Placed by hand it is only a look: a click does nothing unless the cell is one of a dungeon's doors.
+     */
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
+    public static final net.neoforged.neoforge.registries.DeferredItem<DeurItem> ITEM = ITEMS.registerItem("vr_dungeondeur",
+            p -> new DeurItem(BLOK.get(), p), () -> new net.minecraft.world.item.Item.Properties().rarity(net.minecraft.world.item.Rarity.EPIC));
+
+    /** X-DUNGEON: the item's tooltip. */
+    public static final class DeurItem extends net.minecraft.world.item.BlockItem {
+        public DeurItem(Block b, net.minecraft.world.item.Item.Properties p) {
+            super(b, p.useBlockDescriptionPrefix());
+        }
+
+        @Override
+        public void appendHoverText(ItemStack stack, TooltipContext ctx, net.minecraft.world.item.component.TooltipDisplay display,
+                java.util.function.Consumer<net.minecraft.network.chat.Component> t, net.minecraft.world.item.TooltipFlag flag) {
+            t.accept(net.minecraft.network.chat.Component.translatable("block.guhs.vr_dungeondeur.tip").withStyle(net.minecraft.ChatFormatting.GRAY));
+            t.accept(net.minecraft.network.chat.Component.translatable("block.guhs.vr_dungeondeur.tip2").withStyle(net.minecraft.ChatFormatting.DARK_GRAY));
+        }
+    }
+
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);
+        ITEMS.register(modBus);   // X-DUNGEON
+        modBus.addListener((net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent e) -> {
+            if (e.getTabKey() == nl.juiced.guhs.registry.ModCreativeTabs.GUHS_TAB.getKey()) {
+                e.accept(new ItemStack(ITEM.get()));
+            }
+        });
     }
 
     public static void nieuweSessie() {
@@ -151,7 +179,7 @@ public final class DungeonDeur {
             c.add(new int[] {a[0] + dx, a[1] + dy, a[2] + dz, a[3]});
         }
         return new Deur(d.dungeon(), d.hoofd(), d.thema(), d.luik(), List.copyOf(c), d.voor().offset(dx, dy, dz), d.yawVoor(), d.binnen().offset(dx, dy, dz),
-                d.yawBinnen());
+                d.yawBinnen(), d.zegel());
     }
 
     /** The doors of one dungeon (test doors first). */
@@ -255,11 +283,14 @@ public final class DungeonDeur {
         for (int i = 0; i < l.size(); i++) {
             Deur d = l.get(i);
             BlockPos m = midden(d);
-            if (!sl.isLoaded(m) || (GEZET.contains(i) && !ronde)) {
+            if (!sl.isLoaded(m)) {
                 continue;
             }
-            plaats(sl, d);
-            GEZET.add(i);
+            if (!GEZET.contains(i) || ronde) {
+                plaats(sl, d);
+                GEZET.add(i);
+            }
+            DungeonBord.zorg(sl, d, i);   // X-DUNGEON: the name board over the door (one per door, every 2 s)
         }
     }
 

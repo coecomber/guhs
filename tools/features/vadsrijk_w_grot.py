@@ -152,8 +152,11 @@ def deuren():
     # flooded mouth on the sea floor gets a door too (the cave has two ways in)
     D.append(dict(dungeon="koraalgrot", hoofd=True, thema="koraal", cellen=_ring(2234, -600, 3.6, 4.8, math.radians(135), 71, 73),
                   voor=(2230, 71, -596), binnen=(2232, 71, -598)))
+    # X-DUNGEON: the sea-floor mouth is 11 blocks under water (no dry stand spot possible without a map change), so it is no
+    # door any more but a SEAL ("zegel"): the same closed coral panels (no knocker), a click only says where the door is (the
+    # chimney on the atoll), its board says so too. "voor" stays the outer side (for the inside/outside test), not a stand spot.
     D.append(dict(dungeon="koraalgrot", hoofd=False, thema="koraal", cellen=_vlak(2267, (2267, 52, -572), 5, 50, 56, _boog(2268, -572, (-1, 0), 51, 3, 3, 1)),
-                  voor=(2270, 51, -572), binnen=(2232, 71, -598)))
+                  voor=(2270, 51, -572), binnen=(2232, 71, -598), zegel=True))
     # zone 5, De Wolkengrotten: the blowhole on the whale's head is a hole with a spiral down: a cloud HATCH in the shaft
     D.append(dict(dungeon="wolkengrot", hoofd=True, thema="wolk", cellen=_luik(2492, -520, 204, 3.6), luik=True,
                   voor=(2494, 205, -520), binnen=(2492, 199, -517), ingang=(2498, 209, -520)))   # (a flying whale: no walkable window edge)
@@ -161,9 +164,16 @@ def deuren():
     # with u-z6wereld's POI "zoutgrot" (3874, 50, -534) like the rest of the zone-6 cave entry
     D.append(dict(dungeon="zoutgrot", hoofd=True, thema="zout", cellen=_muur(3873, 3875, 50, 53, -523),
                   voor=(3874, 50, -521), binnen=(3874, 50, -526)))
+    open_ = _open_fn()
     for d in D:
         d.setdefault("luik", False)
+        d.setdefault("zegel", False)
         d["cellen"] = sorted(set(d["cellen"]))
+        if d["luik"] and open_ is not None and open_(*d["cellen"][0]) is not None:
+            # X-DUNGEON: the spiral stair's treads cross the hatch disc: those cells are solid already (the stair IS the seal
+            # there), so the hatch is only the open cells; the seal check proves the whole disc is closed
+            d["treden"] = [c for c in d["cellen"] if not open_(*c)]
+            d["cellen"] = [c for c in d["cellen"] if open_(*c)]
         d["deel"] = _delen(d)
     return D
 
@@ -172,6 +182,8 @@ def _delen(d):
     """Per cell the look: 0 panel, 1 panel with the knocker (middle column, one above the bottom), 2 hatch."""
     if d["luik"]:
         return [2] * len(d["cellen"])
+    if d.get("zegel"):
+        return [0] * len(d["cellen"])      # (a seal: panels only, no knocker)
     ys = [c[1] for c in d["cellen"]]
     y0 = min(ys)
     xs = sorted(set((c[0], c[2]) for c in d["cellen"]))
@@ -240,26 +252,62 @@ def controle(D, stil=False):
             fout.append(f"{naam}: {len(dicht)} deurcellen zijn nu niet open (worden overgeslagen): {[(c, info(*c)[0]) for c in dicht[:4]]}")
         for k in ("voor", "binnen"):
             v = d[k]
-            if d["dungeon"] == "koraalgrot" and not d["hoofd"] and k == "voor":
-                ok = open_(*v)                       # (under water: just open)
+            if d.get("zegel") and k == "voor":
+                ok = open_(*v)                       # (a seal: no stand spot, just the open outer side)
             else:
                 ok = vloer(*v) and open_(*v) and open_(v[0], v[1] + 1, v[2])
             if not ok:
                 fout.append(f"{naam}: {k} {v} is geen goede staanplek (vloer {info(v[0], v[1] - 1, v[2])}, {info(*v)}, {info(v[0], v[1] + 1, v[2])})")
         # the seal (the walkability standard's movement model, tools/vadsrijk/loopcheck.py): with the door cells solid, the spot
         # inside must NOT be reachable by walking/jumping/falling from the stand spot in front of the door (a window of tiles round it)
-        if d["dungeon"] == "zoutgrot":
-            continue      # (zone 6's tiles leave the rock under the surface out: the movement graph says nothing there)
+        # X-DUNGEON: zone 6 too. Its tiles leave out what is not built, and in the game that IS air (VadsrijkGenerator is void
+        # under the map, Ondergrond fills nothing there): the stair is a closed tube (crystal walls x 3872/3876, calcite floor,
+        # terracotta ceiling), so the tiles are exactly the game's world and the check below is the real seal proof
         lek = _lek(L, d, [c for e in D if e["dungeon"] == d["dungeon"] for c in e["cellen"]])
         if lek:
             fout.append(f"{naam}: LEK: {lek}")
+    for d in D:
+        if info(*d["cellen"][0]) is None:
+            continue
+        b = _bordplek(d, open_)
+        d["bord"] = b
+        if b is None:
+            fout.append(f"{d['dungeon']}: geen open plek voor het naambord")
     if not stil:
         for d in D:
-            print(f"  {d['dungeon']:12s} {'hoofd' if d['hoofd'] else '2e   '} {d['thema']:8s} {len(d['cellen']):2d} cellen  voor {d['voor']}  binnen {d['binnen']}")
+            soort = "hoofd" if d["hoofd"] else ("zegel" if d.get("zegel") else "2e   ")
+            extra = f"  (+{len(d['treden'])} traptreden al dicht)" if d.get("treden") else ""
+            print(f"  {d['dungeon']:12s} {soort} {d['thema']:8s} {len(d['cellen']):2d} cellen{extra}  voor {d['voor']}  binnen {d['binnen']}  bord {d.get('bord')}")
         print("  controle: " + ("alles goed" if not fout else ""))
         for f in fout:
             print("   - " + f)
     return fout
+
+
+def _bordplek(d, open_):
+    """X-DUNGEON: the same spot DungeonBord.plek picks in the game (the bottom of the board's small line): a hatch 2.2 over its
+    stand spot; else over the door's top, 1 block out towards the stand spot, further out (2, 3) or lower (down
+    to 1 over the bottom) when that is not open. Both the cell and the one over it must be open."""
+    def vrij(x, y, z):
+        c = (math.floor(x), math.floor(y), math.floor(z))
+        return c not in d["cellen"] and (c[0], c[1] + 1, c[2]) not in d["cellen"] and open_(*c) and open_(c[0], c[1] + 1, c[2])
+    if d["luik"]:
+        v = (d["voor"][0] + 0.5, d["voor"][1] + 2.2, d["voor"][2] + 0.5)
+        return tuple(round(a, 2) for a in v) if vrij(*v) else None
+    n = len(d["cellen"])
+    mx = sum(c[0] + 0.5 for c in d["cellen"]) / n
+    mz = sum(c[2] + 0.5 for c in d["cellen"]) / n
+    dx, dz = d["voor"][0] + 0.5 - mx, d["voor"][2] + 0.5 - mz
+    ln = math.hypot(dx, dz) or 1.0
+    ux, uz = dx / ln, dz / ln
+    top = max(c[1] for c in d["cellen"]) + 1
+    bodem = min(c[1] for c in d["cellen"]) + 1
+    for y in range(top, bodem - 1, -1):
+        for ver in (1.0, 2.0, 3.0):
+            v = (mx + ux * ver, y + 0.05, mz + uz * ver)
+            if vrij(*v):
+                return tuple(round(a, 2) for a in v)
+    return None
 
 
 def _lek(L, d, alle):
@@ -291,7 +339,7 @@ def _lek(L, d, alle):
             L.analyse(V, (V.x0, V.z0, V.x0 + (tx1 - tx0 + 1) * 64, V.z0 + (tz1 - tz0 + 1) * 64))
     finally:
         L.SEEDS, L.POIS, L.LINKS = oud
-    if not (d["dungeon"] == "koraalgrot" and not d["hoofd"]):
+    if not d.get("zegel"):
         for r in buf2.getvalue().splitlines():
             if r.startswith("POI") and "voor" in r:
                 return "de staanplek voor de deur is zelf niet te bereiken: " + r.strip()
@@ -314,7 +362,7 @@ def java(D):
         yv, yb = _yaw(v, mid), _yaw(mid, b) if (b[0], b[2]) != (round(mid[0]), round(mid[2])) else 0.0
         regels.append(f'            new Deur("{d["dungeon"]}", {str(d["hoofd"]).lower()}, "{d["thema"]}", {str(d["luik"]).lower()},\n'
                       f'                    List.of({cel}),\n'
-                      f'                    new BlockPos({v[0]}, {v[1]}, {v[2]}), {yv}f, new BlockPos({b[0]}, {b[1]}, {b[2]}), {yb}f)')
+                      f'                    new BlockPos({v[0]}, {v[1]}, {v[2]}), {yv}f, new BlockPos({b[0]}, {b[1]}, {b[2]}), {yb}f, {str(d["zegel"]).lower()})')
     src = f"""package nl.juiced.guhs.feature.vadsrijk.dungeon;
 
 import java.util.List;
@@ -325,12 +373,17 @@ import net.minecraft.core.BlockPos;
  * GENERATED by tools/features/vadsrijk_w_grot.py (do not edit by hand). W-GROT: the closed door of every dungeon (the caves are the first type): its cells
  * ({{x, y, z, look}}: look 0 panel, 1 panel with the knocker, 2 hatch), the stand spot in front of it ({{@code voor}}, where you come out,
  * with the yaw that looks at the door) and the spot just inside ({{@code binnen}}, where the group is teleported in). {{@code hoofd}} =
- * the main door (De Koraalgrot also has one on its flooded sea-floor mouth). Zone 6 is moved with u-z6wereld's POI "zoutgrot" in
- * {{@link Dungeon#pasAan}}.
+ * the main door. {{@code zegel}} (X-DUNGEON) = not a door but a seal: De Koraalgrot's flooded sea-floor mouth is closed the same
+ * way, a click only says where the door is. Zone 6 is moved with u-z6wereld's POI "zoutgrot" in {{@link Dungeon#pasAan}}.
  */
 public final class DungeonDeurData {{
     public record Deur(String dungeon, boolean hoofd, String thema, boolean luik, List<int[]> cellen, BlockPos voor, float yawVoor, BlockPos binnen,
-            float yawBinnen) {{
+            float yawBinnen, boolean zegel) {{
+        /** A real door (not a seal). */
+        public Deur(String dungeon, boolean hoofd, String thema, boolean luik, List<int[]> cellen, BlockPos voor, float yawVoor, BlockPos binnen,
+                float yawBinnen) {{
+            this(dungeon, hoofd, thema, luik, cellen, voor, yawVoor, binnen, yawBinnen, false);
+        }}
     }}
 
     public static final List<Deur> ALLE = List.of(
@@ -413,6 +466,8 @@ def assets():
                      {"parent": "minecraft:block/cube_all", "textures": {"all": f"guhs:block/vadsrijk/dungeondeur/{t}_{naam}"}})
             varianten[f"deel={deel},thema={t}"] = {"model": f"guhs:block/{m}"}
     _schrijf(os.path.join(A, "blockstates", f"{BLOK}.json"), {"variants": varianten})
+    # X-DUNGEON: the item (creative / JEI only) shows the zwam door with its knocker
+    _schrijf(os.path.join(A, "items", f"{BLOK}.json"), {"model": {"type": "minecraft:model", "model": f"guhs:block/{BLOK}_zwam_klink"}})
     return len(varianten)
 
 
@@ -428,6 +483,12 @@ def teksten():
     K = "vadsrijk.dungeon."
     t = {
         f"block.guhs.{BLOK}": "Dungeondeur",
+        f"block.guhs.{BLOK}.tip": "De dichte deur van een dungeon in Het Vadsrijk.",
+        f"block.guhs.{BLOK}.tip2": "Alleen voor bouwers: zelf neergezet doet hij niets.",
+        K + "bord.onder": "Dungeon · %s · lv %s-%s",
+        K + "bord.onder.kort": "Dungeon",
+        K + "zegel.bord.koraalgrot": "Dichtgegroeid · de deur is boven op het atol",
+        K + "zegel.msg.koraalgrot": "Deze ingang van De Koraalgrot is dichtgegroeid met koraal. De deur zit boven op het atol, bij de koraalschoorsteen.",
         K + "titel": "Dungeon: %s",
         K + "type": "Type: %s · zone %s",
         K + "type.grot": "Grot",

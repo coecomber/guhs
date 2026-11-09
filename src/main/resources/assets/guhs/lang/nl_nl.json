@@ -47502,5 +47502,11 @@
   "vadsrijk.loot.knuffelketting": "Knuffelketting",
   "vadsrijk.loot.pluisoorbel": "Pluisoorbel",
   "vadsrijk.z6raid.ster_bultguh.onder": "Een gedoofd sterrenbeeld dat over een rode baan stormt",
-  "vadsrijk.z6raid.ster_pluis.onder": "Een gedoofd sterrenbeeldje dat de anderen heelt met een lied"
+  "vadsrijk.z6raid.ster_pluis.onder": "Een gedoofd sterrenbeeldje dat de anderen heelt met een lied",
+  "block.guhs.vr_dungeondeur.tip": "De dichte deur van een dungeon in Het Vadsrijk.",
+  "block.guhs.vr_dungeondeur.tip2": "Alleen voor bouwers: zelf neergezet doet hij niets.",
+  "vadsrijk.dungeon.bord.onder": "Dungeon · %s · lv %s-%s",
+  "vadsrijk.dungeon.bord.onder.kort": "Dungeon",
+  "vadsrijk.dungeon.zegel.bord.koraalgrot": "Dichtgegroeid · de deur is boven op het atol",
+  "vadsrijk.dungeon.zegel.msg.koraalgrot": "Deze ingang van De Koraalgrot is dichtgegroeid met koraal. De deur zit boven op het atol, bij de koraalschoorsteen."
 }
