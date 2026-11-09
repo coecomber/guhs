@@ -121,5 +121,7 @@
   "vadsrijk.questlopen.melding.veilig": "Back on a safe spot.",
   "vadsrijk.questlopen.tip.overslaan": "This step counts right away (via the hook, otherwise the counter), even in the middle of a fight. Then you go to the spot of the next step.",
   "vadsrijk.questlopen.tip.veilig": "Stops whatever is running and puts you back on the last quiet spot outside an arena (otherwise at the current step or in Camp Snuggle).",
-  "vadsrijk.z3npc.scene.f2.oosten": "Even further east, beyond Highchonk, lies a pink land. A single gray tower rises there, and someone is snuffing out the stars."
+  "vadsrijk.z3npc.scene.f2.oosten": "Even further east, beyond Highchonk, lies a pink land. A single gray tower rises there, and someone is snuffing out the stars.",
+  "vadsrijk.z5wezens.luik.wolkwaldroom_uit": "You climb up the ladder, back to the middle blowhole.",
+  "vadsrijk.z5wezens.luik.hint.wolkwaldroom_uit": "The ladder outside (right-click)"
 }

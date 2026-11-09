@@ -1,0 +1,182 @@
+# W-INT: one walk over the whole integrated Vadsrijk after round W (zones 1-6): every zone loads, plus the round-W spots
+# (docked airships at open pier tips, dungeon door, square slimes, Blubs, the whale stair, the secret fixes).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_w_int.txt
+
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section kamp
+/guhs vadsrijk wereld plek aankomst
+wait 60
+waitrender 300
+look 0 5
+shot wi_kamp_aankomst
+
+section zone1
+/guhs vadsrijk wereld plek plein
+wait 60
+waitrender 300
+shot wi_z1_zwamzoet_plein
+/guhs vadsrijk wereld plek haven_z1_z2_vertrek
+wait 60
+waitrender 300
+look 180 0
+shot wi_z1_noordklifhaven
+
+section zone2
+/guhs vadsrijk z2wereld plek plein
+wait 60
+waitrender 300
+shot wi_z2_kandijkom
+/guhs vadsrijk z2wereld plek haven_z2_z3_vertrek
+wait 60
+waitrender 300
+look 270 0
+shot wi_z2_galmdok
+
+section zone3
+/guhs vadsrijk z3wereld plek plein
+wait 60
+waitrender 300
+shot wi_z3_bloesemplein
+/guhs vadsrijk z3wereld plek mika_imker_raatzaal
+wait 60
+waitrender 200
+shot wi_z3_raatzaal
+
+section zone4
+/guhs vadsrijk z4wereld plek plein
+wait 60
+waitrender 300
+shot wi_z4_lampionhaven
+/guhs vadsrijk z4wereld plek haven_3_4_landing
+wait 60
+waitrender 300
+look 90 5
+shot wi_z4_luchthaven
+/guhs vadsrijk z4wereld plek boot_dok_lampionhaven
+wait 60
+waitrender 300
+shot wi_z4_steiger
+/guhs vadsrijk z4wereld plek vliegerwedstrijd_finish
+wait 60
+waitrender 300
+shot wi_z4_vliegereiland
+
+section zone5
+/guhs vadsrijk z5wereld plek haven_z5_z4_vertrek
+wait 80
+waitrender 400
+look 180 5
+shot wi_z5_walvisrughaven
+/guhs vadsrijk z5wereld plek z5w_noordvin
+wait 60
+waitrender 300
+shot wi_z5_noordvin
+/guhs vadsrijk z5wereld plek kathedraal_schip
+wait 60
+waitrender 300
+shot wi_z5_kathedraal_schip
+
+section zone6
+/guhs vadsrijk z6wereld plek haven_z6_z5_vertrek
+wait 80
+waitrender 400
+look 180 10
+shot wi_z6_luchthaven
+/guhs vadsrijk z6wereld plek rozenkloof_plein
+wait 60
+waitrender 300
+shot wi_z6_rozenplein
+/guhs vadsrijk z6wereld plek rozenkloof_schatkamer
+wait 60
+waitrender 300
+look 0 -15
+shot wi_z6_schatkamer
+/guhs vadsrijk z6wereld plek bazaar_kruising
+wait 60
+waitrender 300
+shot wi_z6_bazaar
+/guhs vadsrijk z6wereld plek saffraanpoort_paleisplein
+wait 60
+waitrender 300
+shot wi_z6_paleisplein
+/guhs vadsrijk z6wereld plek moederpalm
+wait 60
+waitrender 300
+shot wi_z6_moederoase
+/guhs vadsrijk z6wereld plek toren_voet
+wait 60
+waitrender 300
+look 90 -20
+shot wi_z6_toren
+/guhs vadsrijk z6raid tp wachtzaal
+wait 80
+waitrender 300
+shot wi_z6_wachtzaal
+
+section rondew
+/guhs vadsrijk luchtschip vertrek D 300
+/guhs vadsrijk luchtschip vertrek C 300
+/guhs vadsrijk luchtschip vertrek E 300
+/guhs vadsrijk luchtschip vertrek 0 300
+wait 40
+/guhs vadsrijk luchtschip haven haven_z4_z5_vertrek
+wait 80
+waitrender 400
+shot wi_w_opstijgpier_hemelhoog
+/guhs vadsrijk luchtschip haven haven_z3_z4_vertrek
+wait 80
+waitrender 400
+shot wi_w_oosttaksteiger
+/guhs vadsrijk luchtschip haven haven_z5_z6_vertrek
+wait 80
+waitrender 400
+shot wi_w_staarthaven
+/guhs vadsrijk luchtschip haven haven_kamp_z1_vertrek
+wait 80
+waitrender 400
+shot wi_w_kampsteiger_lijn0
+/tp @s 2848 233 -523
+wait 60
+waitrender 300
+look 90 20
+shot wi_w_staarttrap
+/guhs vadsrijk dungeon deur zwamgrot tp
+wait 80
+waitrender 300
+shot wi_w_dungeondeur_zwamgrot
+/guhs vadsrijk z2wereld plek geheim_galmgrot_ingang
+wait 60
+waitrender 300
+look 90 10
+shot wi_w_galmgrot_trap
+/tp @s -406 73 -100
+wait 60
+waitrender 300
+look -90 10
+shot wi_w_knuffel_mosje
+/guhs vadsrijk wereld plek plein
+wait 40
+/guhs vadsrijk models toon zone1
+wait 60
+waitrender 200
+shot wi_w_klodders_zone1
+/guhs vadsrijk models weg
+/guhs vadsrijk leven tp knuffelkamp
+wait 400
+waitrender 300
+shot wi_w_knuffelkamp_blubs
+
+section menu
+/guhs vadsrijk z6wereld plek saffraanpoort_plein
+wait 60
+waitrender 300
+shot wi_z6_saffraanpoort_speeltuin_buurt
+
