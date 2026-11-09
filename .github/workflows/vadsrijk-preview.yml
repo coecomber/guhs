@@ -7,6 +7,10 @@
 #   and deploys that. main's code, the mod release and the existing pages stay untouched. The github-pages environment allows
 #   deploys from main and gh-pages.
 #
+# SITE-LIVE (2026-11-09): the REAL guhs.nl/vadsrijk/ now comes from main (docs/vadsrijk-site, copied in by main's
+#   tools/make_wiki_site.py). This workflow builds the normal site with that same main command, so /vadsrijk/ stays online when
+#   this workflow deploys, and a deploy from main keeps it too (only the two previews drop out then).
+#
 # Lifetime: the next deploy from main (any push to main touching docs/tools, or a manual run of "Wiki (GitHub Pages)") replaces
 #   the site WITHOUT the preview. To bring it back: push any commit to gh-pages (or re-run this workflow's last run in Actions).
 # Remove for good: delete vadsrijk-preview/, vadsrijk-preview-zone1/ and this file from gh-pages (one commit), then run "Wiki (GitHub Pages)" on main.
@@ -68,6 +72,10 @@ jobs:
           done
           grep -qx 'guhs.nl' docs/site/CNAME || { echo "docs/site/CNAME must say guhs.nl"; exit 1; }
           touch docs/site/.nojekyll
+          # SITE-LIVE: main's real /vadsrijk/ must be in this deploy too, or this run would take it offline
+          if [ -f docs/vadsrijk-site/index.html ]; then
+            test -f docs/site/vadsrijk/index.html || { echo "docs/site/vadsrijk is missing (main has docs/vadsrijk-site)"; exit 1; }
+          fi
 
       - name: Add the Vadsrijk preview
         run: |
