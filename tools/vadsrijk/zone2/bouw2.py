@@ -1136,6 +1136,44 @@ def _naald_aanloop(S, K, x, z, g, hoogte, ang0, zet):
                 S.set(px, yy, pz, "minecraft:stone", keep=True)
 
 
+def _naald_aankomst(S, x, z, top, hoek_bij, ea):
+    """X-INT: the stair's arrival on the platform, independent of the start angle. X-KAART's _naald_start rotated the Galmtop
+    stair; its top treads then rounded into cells under the plank floor (d <= 6.5 at top+1) and the railing gap missed the
+    arrival (loopcheck2 VAL 930,195,-1108). Now, just OUTSIDE the plank disc (cells 6.6 < d <= 8), in walking order:
+    tread level top-1 (stand top), tread level top (stand top+1), one bottom slab at top+1 (stand top+1.5), then the platform
+    (stand top+2) through a wide railing gap. Head room is carved over every step."""
+    slab_hoog = "minecraft:spruce_slab[type=top,waterlogged=false]"
+    slab_laag = "minecraft:spruce_slab[type=bottom,waterlogged=false]"
+    if top - 1 not in hoek_bij or top not in hoek_bij:
+        return
+    b0 = hoek_bij[top]
+
+    def strook(a_van, a_tot, y, blok):
+        n = max(2, int((a_tot - a_van) / 0.06) + 1)
+        for k in range(n):
+            aa = a_van + (a_tot - a_van) * k / (n - 1)
+            for rr in (6.9, 7.5, 8.0):
+                px, pz = x + rr * math.cos(aa), z + rr * math.sin(aa)
+                if math.hypot(math.floor(px) + 0.5 - x, math.floor(pz) + 0.5 - z) <= 6.6:
+                    continue
+                S.set(px, y, pz, blok)
+                for dy in (1, 2, 3):
+                    S.set(px, y + dy, pz, CARVE)
+    strook(hoek_bij[top - 1], b0, top - 1, slab_hoog)
+    strook(b0, b0 + 0.3, top, slab_hoog)
+    strook(b0 + 0.3, b0 + 0.6, top + 1, slab_laag)
+    mid = b0 + 0.5
+    for xx in range(math.floor(x) - 8, math.floor(x) + 9):
+        for zz in range(math.floor(z) - 8, math.floor(z) + 9):
+            d = math.hypot(xx + 0.5 - x, zz + 0.5 - z)
+            if not 5.0 < d <= 6.9:
+                continue
+            h = math.atan2(zz + 0.5 - z, xx + 0.5 - x) - mid
+            if abs(math.atan2(math.sin(h), math.cos(h))) <= 0.45:
+                S.set(xx, top + 2, zz, CARVE)
+                S.set(xx, top + 3, zz, CARVE)
+
+
 def ijsnaald(W, K, P, naam, x, z, hoogte):
     """A viewpoint: an icy rock needle with a spiral stair and a platform on top."""
     g = K.h(x, z)
@@ -1173,9 +1211,11 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
         fx, fy, fz = math.floor(px), math.floor(py), math.floor(pz)
         if S.get(fx, fy, fz) in ("minecraft:air", CARVE):
             S.set(fx, fy, fz, st)
+    hoek_bij = {}   # X-INT: the start angle of every tread level (for the arrival)
     for y in range(g + 1, top + 1):
         t = (y - g) / hoogte
         r = 8.5 * (1 - t) ** 0.7 + 3.2 + 1.6
+        hoek_bij[y] = ang
         for k in range(3):
             aa = ang + k * 0.5 / r
             for dr in (0.0, 0.9, 1.8):
@@ -1192,6 +1232,7 @@ def ijsnaald(W, K, P, naam, x, z, hoogte):
     for k in range(-2, 3):
         aa = ea + k * 0.18
         S.set(x + 6.2 * math.cos(aa), top + 2, z + 6.2 * math.sin(aa), CARVE)
+    _naald_aankomst(S, x, z, top, hoek_bij, ea)   # X-INT
     S.box(x, top + 2, z, x, top + 7, z, STAAF)
     S.set(x, top + 8, z, "minecraft:amethyst_block")
     S.set(x, top + 9, z, "minecraft:amethyst_cluster[facing=up,waterlogged=false]")

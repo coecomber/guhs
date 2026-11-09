@@ -499,7 +499,9 @@ def haven(W, K, P):
             z = t + w
             ox = oevers.get(z, oever)
             S.set(ox, g + 1, z, CARVE)
-            for i in range(0, 5):
+            # X-INT: the top tread replaces the quay's edge block (i = -1): the stair used to end 1 below the quay floor (a
+            # 1-block jump at the end of the stair, loopcheck TRAP 56,63,455..457 / 83,63,527..529)
+            for i in range(-1, 5):
                 x, y = ox - 1 - i, g - 1 - i
                 wl = "true" if y <= KA.ZEE else "false"
                 S.set(x, y, z, f"minecraft:stone_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged={wl}]")
