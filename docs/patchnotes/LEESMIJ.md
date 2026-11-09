@@ -8,3 +8,7 @@ markdown body. `:::spoiler Title` ... `:::` blocks only show on the site (behind
 - Discord: `python tools/patchnote_discord.py <versie>` prints the payload; `--post` sends it, with the webhook URL in the
   `GUHS_DISCORD_WEBHOOK` environment variable (never in the repo). Post only after the release is live (memory rule).
 Format details: tools/wiki_site/vadsrijk/patchnotes.py.
+
+X-SITE: `:::zone N` ... `:::` = only when zone N is open (`--open-zones` of the site build and of patchnote_discord.py, default 1);
+`:::tot N` ... `:::` = only while zone N is NOT open yet. They may hold `:::spoiler` blocks. `samenvatting_open:` replaces
+`samenvatting:` while not every zone is open.

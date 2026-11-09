@@ -61,6 +61,7 @@ details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .komma{list-style:none;padding:0;margin:0 0 1em}.komma li{display:inline}.komma li+li::before{content:", "}
 .spoileruitleg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:2000;width:min(560px,calc(100vw - 32px));background:var(--card);color:var(--ink);border:2px solid var(--vr);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:14px 16px;font:15px/1.45 var(--body)}
 .spoileruitleg p{margin:0 0 10px}
+.binnenkort{border:2px dashed var(--vr);background:transparent;display:flex;flex-direction:column;justify-content:center;text-align:center;min-height:120px}   /* X-SITE: the closed-zones teaser */
 .spoileruitleg .su-knoppen{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .spoileruitleg label{font-size:14px;color:var(--muted);cursor:pointer}
 .spoileruitleg .knop{min-width:80px;cursor:pointer}
@@ -191,7 +192,7 @@ JS = r"""
   var uitleg=null;
   function sluitUitleg(){if(uitleg){uitleg.remove();uitleg=null;}}
   if(zs){zs.addEventListener('change',function(){setZone(zs.value);sluitUitleg();});}
-  if(read('guhs-vr-spoileruitleg-weg')!=='1'){
+  if(read('guhs-vr-spoileruitleg-weg')!=='1'&&zs&&zs.options.length>1){   // X-SITE: only one open zone = nothing to explain
     uitleg=document.createElement('div');uitleg.className='spoileruitleg';uitleg.setAttribute('role','dialog');uitleg.setAttribute('aria-live','polite');
     uitleg.setAttribute('aria-label','Spoilers');
     uitleg.innerHTML='<p><span lang="nl">Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij <b>Toon tot</b> tot welke zone je alles wilt zien.</span>'+

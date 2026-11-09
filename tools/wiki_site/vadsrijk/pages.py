@@ -121,8 +121,12 @@ class Bouwer:
            ("patchnotes/index.html", "Patch notes", "Patch notes")]
 
     def __init__(self, data, root, out, live_url, voorbeeld=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
-                 kaart_bron=None, concepten=False, versie="?", noindex=False):
+                 kaart_bron=None, concepten=False, versie="?", noindex=False, volledig=None, open_zones=6):
         self.d, self.root, self.out = data, root, out
+        # X-SITE: --open-zones. self.d = only the open zones (what the pages list); self.alle = everything (look-ups, so a link to a
+        # later thing still comes out wrapped in <span data-zone=N> and poort.strip_html removes it)
+        self.alle = volledig or data
+        self.open_zones = open_zones
         self.live_url, self.voorbeeld = live_url, False   # W-SITE: sample data is gone; the live parts always read live_url
         self.wiki_url, self.site_url = wiki_url, site_url
         self.kaart_bron = kaart_bron
@@ -130,12 +134,12 @@ class Bouwer:
         self.versie = versie
         self.noindex = noindex   # U-SITE: a hidden preview (robots noindex + a banner)
         self.geschreven = []
-        self.z = {z["id"]: z for z in data["zones"]}
-        self.npc = {n["id"]: n for n in data["npcs"]}
-        self.q = {q["id"]: q for q in data["quests"]}
-        self.items = {i["id"]: i for i in data["items"]}
-        self.wezen = {w["id"]: w for w in data["wezens"]}
-        self.gebied = {g["id"]: g for g in data["gebieden"]}
+        self.z = {z["id"]: z for z in self.alle["zones"]}
+        self.npc = {n["id"]: n for n in self.alle["npcs"]}
+        self.q = {q["id"]: q for q in self.alle["quests"]}
+        self.items = {i["id"]: i for i in self.alle["items"]}
+        self.wezen = {w["id"]: w for w in self.alle["wezens"]}
+        self.gebied = {g["id"]: g for g in self.alle["gebieden"]}
         self.iconen = {}
         self.renders = {}   # U-SITE: render id -> file in img/renders
         self.kaart = None
@@ -146,7 +150,7 @@ class Bouwer:
         r = "../" * path.count("/")
         nav = "".join(f'<a href="{r}{u}"{" aria-current=page" if u == actief else ""}>{t(en, nl)}</a>' for u, en, nl in self.NAV)
         zonesel = ('<label class="zoneslot" title="Spoilers"><span>' + t("Show up to", "Toon tot") + '</span><select id="zonetot" aria-label="Spoilers">'
-                   + "".join(f'<option value="{z["nr"]}">{t("zone", "zone")} {z["nr"]}</option>' for z in self.d["zones"]) + "</select></label>")
+                   + "".join(f'<option value="{z["nr"]}">{t("tutorial + zone 1", "tutorial + zone 1") if z["nr"] == 1 else t("zone", "zone") + " " + str(z["nr"])}</option>' for z in self.d["zones"]) + "</select></label>")   # X-SITE: option 1 names the tutorial
         tools = ('<div class="tools">' + zonesel + '<span class="seg" role="group" aria-label="Taal / Language"><button type="button" data-setlang="nl" '
                  'aria-pressed="true">NL</button><button type="button" data-setlang="en" aria-pressed="false">EN</button></span>'
                  '<button class="icon-btn" id="theme" type="button" aria-label="Thema">&#9790;</button></div>')
@@ -224,10 +228,14 @@ class Bouwer:
     def tekst_zone(self, *teksten):
         """W-SITE: the highest zone whose own names (zones, areas, bosses, creatures, items, NPCs, quests) appear in the text, else 1.
         Used to tag rows of free-text tables (recipes, wardrobe, mounts, pets) so the spoiler switch hides them."""
+        if not hasattr(self, "_tz"):   # X-SITE: the names of poort.zone_namen (also without "De"/"Het", whole words)
+            from . import poort
+            namen = poort.zone_namen(self.alle)
+            self._tz = (namen, poort.patroon(namen))
         if not hasattr(self, "_tz"):
             z1, hoger = set(), {}
             for k, veld in (("zones", "naam"), ("gebieden", "naam"), ("bazen", "naam"), ("wezens", "naam"), ("items", "naam"), ("npcs", "naam"), ("quests", "titel")):
-                for x in self.d.get(k, []):
+                for x in self.alle.get(k, []):   # X-SITE: all zones, also when only some are published
                     n = (x.get(veld) or "").strip()
                     if len(n) < 5:
                         continue
@@ -495,6 +503,9 @@ class Bouwer:
             for z in self.d["zones"]) + "".join(
             f'<div class="verstopt-zone" data-zone="{z["nr"]}">{t("Zone " + str(z["nr"]) + " is hidden by your spoiler setting.", "Zone " + str(z["nr"]) + " is verborgen door je spoilerinstelling.")}</div>'
             for z in self.d["zones"] if z["nr"] > 1)
+        if self.open_zones < 6:   # X-SITE: one card for every zone that is not published yet
+            from .poort import teaser
+            zk += teaser(t)
         snel = [("gids.html", "New here? The guide", "Nieuw? De gids", "Your first hour, step by step.", "Je eerste uur, stap voor stap."),
                 ("kaart.html", "The world map", "De wereldkaart", "Zones, levels, campfires, bosses, airships.", "Zones, levels, kampvuren, bazen, luchtschepen."),
                 ("quests/index.html", "Quests", "Quests", "Every quest with a walkthrough (spoiler button).", "Elke quest met een walkthrough (spoilerknop)."),
@@ -508,7 +519,9 @@ class Bouwer:
 <img class="kop" src="img/titel.webp" alt="Het Vadsrijk" width="1024" height="256">
 <h1>{t("The Vadsrijk", "Het Vadsrijk")}</h1>
 {p("The RPG dimension of Guhs: six zones, three classes, a raid, coloured loot, bosses with real mechanics, an airship and a whole lot of grumpy creatures that only need a cuddle. Everything below comes straight from the game.",
-   "De RPG-dimensie van Guhs: zes zones, drie klassen, een raid, buit met kleurtjes, bazen met echte mechanics, een luchtschip en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.")}
+   "De RPG-dimensie van Guhs: zes zones, drie klassen, een raid, buit met kleurtjes, bazen met echte mechanics, een luchtschip en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.") if self.open_zones >= 6 else
+  p("The RPG dimension of Guhs: three classes, coloured loot, bosses with real mechanics and a whole lot of grumpy creatures that only need a cuddle. Everything below comes straight from the game.",
+    "De RPG-dimensie van Guhs: drie klassen, buit met kleurtjes, bazen met echte mechanics en heel veel chagrijnige wezens die alleen een knuffel nodig hebben. Alles hieronder komt rechtstreeks uit het spel.")}
 <div class="knoppen"><a class="knop" href="gids.html">{t("Start here", "Begin hier")}</a><a class="knop licht" href="kaart.html">{t("World map", "Wereldkaart")}</a><a class="knop licht" href="https://guhs.nl/">{t("Play on the server", "Speel op de server")}</a></div>
 </section>
 <h2>{t("Right now", "Nu")}</h2>
@@ -596,6 +609,9 @@ class Bouwer:
     def zones(self):
         kaarten = "".join(f'<a class="kaartje zonekaart" data-zone="{z["nr"]}" style="--zk:{z["kleur"]}" href="{z["id"]}.html"><img src="../img/kop_{z["id"]}.webp" alt="" style="width:100%;border-radius:10px" loading="lazy">'
                           f'<h3>{ESC(z["naam"])}</h3><p>{lv(z["lv"])}</p></a>' for z in self.d["zones"])
+        if self.open_zones < 6:   # X-SITE
+            from .poort import teaser
+            kaarten += teaser(t)
         self.schrijf("zones/index.html", "Zones", "Zones", f'<h1>{t("Zones", "Zones")}</h1><div class="grid">{kaarten}</div>', "zones/index.html")
         for z in self.d["zones"]:
             P = f"zones/{z['id']}.html"
@@ -1013,8 +1029,8 @@ class Bouwer:
                 "veren": ("Trade Golden Feathers (N screen).", "Ruil Gouden Veren (N-scherm)."), "baas": ("Beat a boss for the first time.", "Versla een baas voor het eerst.")}
         rt = "".join(f'<tr data-zone="{self.tekst_zone(r["naam"], r["tekst"], r.get("bron") or "")}"><td>{ESC(r["naam"])}</td><td>{ESC(r["tekst"])}</td><td>{t(*bron.get(r["bron"] or "", ("", "")))}{(" (" + str(r["prijs"]) + " " + t("bronze", "brons") + ")") if r.get("prijs") else ""}</td></tr>' for r in self.d["rijdieren"])
         ht = "".join(f'<tr data-zone="{self.tekst_zone(h["naam"], h["tekst"], h["bron"])}"><td>{ESC(h["naam"])}</td><td>{ESC(h["tekst"])}</td><td>{spoiler("<p>" + ESC(h["bron"]) + "</p>", "How to get it", "Hoe krijg je hem")}</td></tr>' for h in self.d["huisdieren"])
-        main = (f'<h1>{t("Mounts and pets", "Rijdieren en huisdieren")}</h1><h2>{t("Mounts", "Rijdieren")}</h2><div class="tscroll"><table class="data"><thead><tr><th>'
-                + t("Mount", "Rijdier") + "</th><th>" + t("What", "Wat") + "</th><th>" + t("How", "Hoe") + "</th></tr></thead><tbody>" + rt + "</tbody></table></div>"
+        main = (f'<h1>{t("Mounts and pets", "Rijdieren en huisdieren")}</h1>' + ((f'<h2>{t("Mounts", "Rijdieren")}</h2><div class="tscroll"><table class="data"><thead><tr><th>'
+                + t("Mount", "Rijdier") + "</th><th>" + t("What", "Wat") + "</th><th>" + t("How", "Hoe") + "</th></tr></thead><tbody>" + rt + "</tbody></table></div>") if rt else "")   # X-SITE: no mounts before zone 3
                 + f'<h2>{t("Pets", "Huisdieren")}</h2><div class="tscroll"><table class="data"><thead><tr><th>' + t("Pet", "Huisdier") + "</th><th>" + t("What", "Wat") + "</th><th>"
                 + t("How", "Hoe") + "</th></tr></thead><tbody>" + ht + "</tbody></table></div>")
         # U-SITE: dressing up mounts + pet powers (t-rijdier)
@@ -1073,7 +1089,7 @@ class Bouwer:
 
     def patchnotes(self):
         from . import patchnotes as PN
-        notes = PN.lees(os.path.join(self.root, "docs", "patchnotes"), self.concepten)
+        notes = PN.lees(os.path.join(self.root, "docs", "patchnotes"), self.concepten, self.open_zones)   # X-SITE: :::zone blocks
         os.makedirs(os.path.join(self.out, "patchnotes", "img"), exist_ok=True)
         lijst = ""
         for n in notes:

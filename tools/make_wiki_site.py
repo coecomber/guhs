@@ -8,6 +8,7 @@ Usage (from the project root):
     python tools/make_wiki_site.py [--base-url https://guhs.nl/wiki/] [--landing docs/site] [--out docs/site/wiki]
     python tools/make_wiki_site.py --no-landing --out docs/site --base-url https://<name>.github.io/guhs/   (only the wiki)
     python tools/make_wiki_site.py --vadsrijk      (also guhs.nl/vadsrijk/: tools/make_vadsrijk_site.py, live data from live.guhs.nl)
+                                                   X-SITE: + --open-zones N (default 1 = tutorial + zone 1; 6 = all zones)
 
 Everything comes from the project itself: the names, lists and numbers from the game data (lang, Java enums, worldgen,
 loot tables, recipes, advancements, FTB quests), the texts from the one-page wiki (tools/make_wiki.py), the pictures from
@@ -44,6 +45,8 @@ def main():
                     help="the public address of the site, for sitemap.xml (or set GUHS_WIKI_URL)")
     ap.add_argument("--vadsrijk", action="store_true", help="also build guhs.nl/vadsrijk/ (tools/make_vadsrijk_site.py) into <landing>/vadsrijk")
     ap.add_argument("--live-url", default="https://live.guhs.nl/", help="with --vadsrijk: where the server's live JSON is served")
+    ap.add_argument("--open-zones", type=int, default=1,   # X-SITE: the public release opens the tutorial + zone 1 only
+                    help="with --vadsrijk: publish only the tutorial + Vadsrijk zones 1..N (default 1, like the server's zone gate; 6 = all)")
     ap.add_argument("--verbose", action="store_true", help="list the knowledge-base chunks without a page and the leftover version numbers")
     args = ap.parse_args()
     root = os.path.abspath(args.root)
@@ -67,7 +70,7 @@ def main():
     n_img = images.write()
     if args.vadsrijk and landing_dir:   # S-SITE: the Vadsrijk section (its own pages, assets and link check; checked again below)
         import make_vadsrijk_site
-        make_vadsrijk_site.bouw(root, os.path.join(landing_dir, "vadsrijk"), args.live_url, echt=True)
+        make_vadsrijk_site.bouw(root, os.path.join(landing_dir, "vadsrijk"), args.live_url, echt=True, open_zones=args.open_zones)
     # pages that no longer exist
     stale = 0
     for d, _, files in os.walk(out):

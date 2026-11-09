@@ -205,7 +205,7 @@ def verhaal(b):
 
     # the map
     kaart = ""
-    if "wereldkaart" in namen:
+    if "wereldkaart" in namen and getattr(b, "open_zones", 6) >= 6:   # X-SITE: the lore world map names every later land
         kaart = (f'<figure class="vh-hero"><a href="img/verhaal/wereldkaart.webp"><img src="img/verhaal/wereldkaart.webp" alt="De Lange Reis: de wereldkaart van De Knuffelorde" width="1600" height="853"></a>'
                  f'<figcaption><span data-zone="6">' + f'{t("The Long Journey: the world map of De Knuffelorde. From Knuffelkamp (left) through the Island Sea and the Floating City to the Great Mainland and Burcht Nooitgenoeg (right). Zones 1-6 are in the game (up to Het Zijdeland); further east is still coming.", "De Lange Reis: de wereldkaart van De Knuffelorde. Van Knuffelkamp (links) via de Eilandzee en de Zwevende Stad naar het Grote Vasteland en Burcht Nooitgenoeg (rechts). Zone 1-6 zitten in het spel (tot en met Het Zijdeland); verder naar het oosten komt nog.")} ' + '</span>'
                  f'<span class="verstopt-zone" data-zone="6">{t("The Long Journey: the world map of De Knuffelorde. Pick a higher zone at the top right to read where it all goes.", "De Lange Reis: de wereldkaart van De Knuffelorde. Kies rechtsboven een hogere zone om te lezen waar het allemaal heen gaat.")}</span>'

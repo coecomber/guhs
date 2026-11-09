@@ -8,6 +8,7 @@ not there), into <root>/site_build/vadsrijk:
     python -m http.server 8000 -d site_build        ->  http://localhost:8000/vadsrijk/
 The real site (what tools/make_wiki_site.py --vadsrijk does): live data from live.guhs.nl, no drafts:
     python tools/make_vadsrijk_site.py --out docs/site/vadsrijk --live-url https://live.guhs.nl/ --echt
+X-SITE: --open-zones N (default 1) publishes only the tutorial + zones 1..N (the server's zone gate); --open-zones 6 = everything.
 
 Inputs (all in the repo): quests*.json, lang, POI_*.md, tools/features/vadsrijk*_npc_wiki.py, docs/patchnotes/*.md,
 docs/wiki/vadsrijk_runtime.json (the mod's WikiExport dump) and docs/wiki/vadsrijk_kaart/ (the map tiles of
@@ -30,13 +31,22 @@ from wiki_site.vadsrijk.bron import Bron  # noqa: E402
 from wiki_site.vadsrijk.pages import Bouwer  # noqa: E402
 
 
-def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/", stil=False, noindex=None):
-    """Builds the section into `out`; returns (pages written, notes). Used by make_wiki_site.py too."""
+OPEN_ZONES = 1   # X-SITE: the public release opens the tutorial + zone 1 only (the mod's zone gate); raise it with the mod
+
+
+def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/", stil=False, noindex=None,
+         open_zones=None):
+    """Builds the section into `out`; returns (pages written, notes). Used by make_wiki_site.py too.
+    X-SITE: open_zones (default OPEN_ZONES = 1): only the tutorial + zones 1..N are published (pages, data, map, pictures);
+    later zones are one "Binnenkort: nieuwe zones" card. 6 = the full site."""
+    from wiki_site.vadsrijk import poort
+    n_open = max(1, min(poort.MAX_ZONE, int(open_zones if open_zones is not None else OPEN_ZONES)))
     t0 = time.time()
     root = os.path.abspath(root)
     out = os.path.abspath(out)
     bron = Bron(root)
-    data = bron.build()
+    volledig = bron.build()
+    data = poort.filter_data(volledig, n_open)   # X-SITE
     from wiki_site.site import MOD_VERSION
     if not echt:   # U-SITE: a preview shows the newest (draft) patch-note version, e.g. 1.10.0
         import re as _re
@@ -55,20 +65,30 @@ def bouw(root, out, live_url=None, echt=False, wiki_url="https://guhs.nl/wiki/",
     kaart = None
     if os.path.exists(os.path.join(kaart_bron, "kaart.json")):
         kaart = json.load(open(os.path.join(kaart_bron, "kaart.json"), encoding="utf-8"))
-        shutil.copytree(os.path.join(kaart_bron, "tegels"), os.path.join(out, "kaart", "tegels"), dirs_exist_ok=True)
+        # X-SITE: only the tiles of the open zones (later zones transparent); the map frame shrinks to them
+        raam = poort.tegels(os.path.join(kaart_bron, "tegels"), os.path.join(out, "kaart", "tegels"), kaart, volledig, n_open)
+        if raam:
+            kaart = dict(kaart, **raam)
+            kaart.pop("grenzen", None)
     else:
         bron.notes.append("no map tiles (docs/wiki/vadsrijk_kaart): run python tools/wiki_site/vadsrijk/kaart.py")
     live_url = live_url or LIVE_URL   # W-SITE: no sample data any more; the real endpoint (friendly empty state when unreachable)
     b = Bouwer(data, root, out, live_url, False, wiki_url, site_url, kaart_bron, concepten=not echt, versie=MOD_VERSION,
-               noindex=(not echt) if noindex is None else noindex)   # U-SITE: previews are noindex + carry a banner
+               noindex=(not echt) if noindex is None else noindex,   # U-SITE: previews are noindex + carry a banner
+               volledig=volledig, open_zones=n_open)
     b.kaart = kaart
     pages = b.alles()
+    if n_open < poort.MAX_ZONE:   # X-SITE: later zones are not published at all
+        n_strip = poort.strip_html(out, n_open)
+        n_weg = poort.ruim_beelden(out)
+        b.notities.append(f"open zones: tutorial + 1..{n_open} ({n_strip} pages trimmed, {n_weg} unused pictures removed)")
     res = check.check(out)
     size = sum(os.path.getsize(os.path.join(d, f)) for d, _, fs in os.walk(out) for f in fs)
     if not stil:
         print(f"Vadsrijk site -> {out}  ({time.time() - t0:.0f} s)")
         print(f"  pages: {len(pages)}; quests {len(data['quests'])}, npcs {len(data['npcs'])}, creatures {len(data['wezens'])}, bosses {len(data['bazen'])}, "
               f"items {len(data['items'])} ({len(b.iconen)} with an icon), map points {len(data['punten'])}, secrets counted {sum(data['geheimen'].values())}")
+        print(f"  open zones: {n_open}{' (full site)' if n_open >= 6 else ' (later zones not published)'}")
         print(f"  runtime dump: {'yes' if data['meta']['runtime'] else 'NO'}; map tiles: {'yes' if kaart else 'NO'}; live: {live_url}")
         print(f"  links checked: {res['links']} links + {res['images']} pictures -> {len(res['broken'])} broken; size {size / 1e6:.1f} MB")
         for n in bron.notes + b.notities:
@@ -84,9 +104,12 @@ def main():
     ap.add_argument("--out", default=None, help="default: <root>/site_build/vadsrijk")
     ap.add_argument("--live-url", default=None, help="where the live JSON is (default https://live.guhs.nl/)")
     ap.add_argument("--echt", action="store_true", help="the real site: no drafts, no preview banner, indexable")
+    ap.add_argument("--open-zones", type=int, default=OPEN_ZONES,
+                    help=f"publish the tutorial + zones 1..N only (default {OPEN_ZONES}, like the server's zone gate; 6 = everything)")
+    ap.add_argument("--noindex", action="store_true", help="robots noindex + the preview banner, also with --echt")
     a = ap.parse_args()
     out = a.out or os.path.join(a.root, "site_build", "vadsrijk")
-    _, res = bouw(a.root, out, a.live_url, a.echt)
+    _, res = bouw(a.root, out, a.live_url, a.echt, noindex=True if a.noindex else None, open_zones=a.open_zones)
     return 1 if res["broken"] else 0
 
 
