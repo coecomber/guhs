@@ -531,7 +531,9 @@ def ftb(fq):
         FTB_EN[f"ftb.guhs_techniek.q.{key}.desc"] = en_d
         vorige = key
     FTB_EN["ftb.guhs_techniek.section.raket"] = "The Cheese Rocket"
-    w(EN_FTB, FTB_EN)
+    # X-ENGELS: tools/ftb_techniek.py rewrites these quests' Dutch (and drops the section), so this English is stale and
+    # writing it here would undo the overlay on every make_ftbquests run. c217_raket_ftb.json is now kept by hand.
+    # w(EN_FTB, FTB_EN)
 
 
 # =====================================================================================================================
