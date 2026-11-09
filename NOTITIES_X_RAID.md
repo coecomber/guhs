@@ -113,7 +113,14 @@ New:
 - `wachtzaalBereikbaar`: the REAL template placed at a test anchor. From the door's arrival spot you can walk to the start
   circle, the exit arch and the hall keeper (no softlock).
 
-Results: see the final report / commit message.
+Results (`runGameTestServer -Pgt=VadsrijkZ6Raid`, 10 tests):
+- my 3 new tests pass, and so do schaal, verdiepingEnWipe, lootPerClear, zandloper and sterrenbeelden;
+- **`spiegels` is FLAKY, and it already was** (not caused by this slice):
+  - on the untouched base b9ef85f4c (my src/main/java checked out back to b9ef85f4c), the batches loot+spiegel failed 1 of 2
+    runs with the same message ("two beams on a fake image: it breaks into a clone");
+  - spiegel alone passes; spiegel with each of my batches passes.
+- The new tests build far from the test grid (z + 4000..4600): the 60x67x51 template must not land in a neighbour test.
+  They also restore the shared `Z6Raid.groep`/`RIJ` instead of `wisAlles()`.
 
 ## 5. Shared-file changes (marked X-RAID)
 - `npc/NpcVolg.java`: `public static final List<Function<ServerPlayer, VolgRegel>> EXTRA` + the loop in `bouw` (add-only).
