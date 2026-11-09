@@ -66,7 +66,7 @@ def main():
     written = set(renderer.render_all())
     if landing_dir:
         from wiki_site.landing import Landing
-        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/")).write(landing_dir)
+        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/"), vadsrijk=args.vadsrijk).write(landing_dir)   # X-SITE
     n_img = images.write()
     if args.vadsrijk and landing_dir:   # S-SITE: the Vadsrijk section (its own pages, assets and link check; checked again below)
         import make_vadsrijk_site

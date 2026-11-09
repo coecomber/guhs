@@ -218,7 +218,10 @@ class Bouwer:
         if not self.noindex:
             return ""
         return ('<div class="voorbeeldbalk" role="note">' + t("Preview of Guhs 1.10.0 \"Het Vadsrijk\": not released yet. The live parts (server, highscores, players on the map) start once the server runs the update.",
-                                                             "Voorbeeld van Guhs 1.10.0 \"Het Vadsrijk\": nog niet uit. De live-delen (server, highscores, spelers op de kaart) starten zodra de server de update draait.") + "</div>")
+                                                             "Voorbeeld van Guhs 1.10.0 \"Het Vadsrijk\": nog niet uit. De live-delen (server, highscores, spelers op de kaart) starten zodra de server de update draait.")
+                + ((" " + t(f"This is the public version: only the tutorial and zone{'s 1-' + str(self.open_zones) if self.open_zones > 1 else ' 1'} are published.",
+                              f"Dit is de publieke versie: alleen de tutorial en zone {'1-' + str(self.open_zones) if self.open_zones > 1 else '1'} staan erop.")) if self.open_zones < 6 else "")   # X-SITE
+                + "</div>")
 
     # ---- links -------------------------------------------------------------------------------------------------------------
     def zone_naam(self, zid):
