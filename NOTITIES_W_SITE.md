@@ -102,3 +102,12 @@ None in mod code. Only the site tooling (`tools/wiki_site/vadsrijk/*`, `tools/ma
   - Skipped: the 1.10.0 patch notes, which summarise the whole update on purpose.
   - Every page whose subject is beyond zone 1 shows only "Verborgen door je spoilerinstelling."
 - Checked in headless Edge: bazen/index at zone 1 = only De Knuffelzwammen + hidden notes + the note card.
+
+## 8. Regen from 110-w-int (w-int agent, 2026-11-09)
+- 110-w-int merged into 110-u-site (2f0d39d9d; renders index kept, the regen rewrote it). No gradle in u-site: the runtime dump
+  is w-int's own `run/vadsrijk_runtime.json` from its full gametest run (VadsrijkWeb), copied here (read-only on w-int).
+- `python tools/regen_vadsrijk_site.py`: renders 117 (the round-W slime/Klodderreus renders came in with w-modellen; re-render
+  identical, index hashes updated), vanilla icons, map tiles from the round-W regen, site: 939 pages, 0 broken links;
+  zone1check 0 leaks on 937 pages; no sample data. Committed 907366dce.
+- Preview republished: gh-pages aa19bf3e8 (fast-forward on 932bbf7b5, scratch worktree `<scratchpad>/ghpages`). /vadsrijk-preview/
+  answers 200 with noindex. main untouched.
