@@ -5,6 +5,516 @@
  },
  "gebieden": [
   {
+   "id": "z3_zeppelinwerf",
+   "naam": "De Kaaszeppelinwerf",
+   "naam_en": "The Cheese Zeppelin Yard",
+   "zone": "zone3",
+   "lv": [
+    38,
+    40
+   ],
+   "stad": false,
+   "doos": [
+    1560,
+    -922,
+    1727,
+    -732
+   ],
+   "laag": {
+    "min_y": 60,
+    "max_y": 290,
+    "cx": 1655,
+    "cz": -827,
+    "r_min": 0,
+    "r_max": 95
+   }
+  },
+  {
+   "id": "z3_hart",
+   "naam": "Het Hart van de Boom",
+   "naam_en": "The Heart of the Tree",
+   "zone": "zone3",
+   "lv": [
+    49,
+    50
+   ],
+   "stad": false,
+   "doos": [
+    1254,
+    -726,
+    1554,
+    -426
+   ],
+   "laag": {
+    "min_y": 14,
+    "max_y": 52,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 76,
+    "r_max": 150
+   }
+  },
+  {
+   "id": "z3_wortelduister",
+   "naam": "Het Wortelduister",
+   "naam_en": "The Rootdark",
+   "zone": "zone3",
+   "lv": [
+    46,
+    49
+   ],
+   "stad": false,
+   "doos": [
+    1244,
+    -736,
+    1564,
+    -416
+   ],
+   "laag": {
+    "min_y": 0,
+    "max_y": 64,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 0,
+    "r_max": 160
+   }
+  },
+  {
+   "id": "z3_schorsstad",
+   "naam": "De Schorsstad",
+   "naam_en": "Barkton",
+   "zone": "zone3",
+   "lv": [
+    40,
+    43
+   ],
+   "stad": false,
+   "doos": [
+    1378,
+    -602,
+    1430,
+    -550
+   ],
+   "laag": {
+    "min_y": 55,
+    "max_y": 165,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 0,
+    "r_max": 26
+   }
+  },
+  {
+   "id": "z3_honingtak",
+   "naam": "Honingtak",
+   "naam_en": "Honeybough",
+   "zone": "zone3",
+   "lv": [
+    30,
+    50
+   ],
+   "stad": true,
+   "doos": [
+    1244,
+    -736,
+    1564,
+    -416
+   ],
+   "laag": {
+    "min_y": 145,
+    "max_y": 200,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 0,
+    "r_max": 160
+   }
+  },
+  {
+   "id": "z3_stamspiraal",
+   "naam": "Het Rijpad",
+   "naam_en": "The Bridle Path",
+   "zone": "zone3",
+   "lv": [
+    40,
+    43
+   ],
+   "stad": false,
+   "doos": [
+    1340,
+    -640,
+    1468,
+    -512
+   ],
+   "laag": {
+    "min_y": 75,
+    "max_y": 232,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 26,
+    "r_max": 64
+   }
+  },
+  {
+   "id": "z3_kruinzee",
+   "naam": "De Kruinzee",
+   "naam_en": "The Canopy Sea",
+   "zone": "zone3",
+   "lv": [
+    30,
+    34
+   ],
+   "stad": false,
+   "doos": [
+    1204,
+    -776,
+    1604,
+    -376
+   ],
+   "laag": {
+    "min_y": 212,
+    "max_y": 320,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 0,
+    "r_max": 200
+   }
+  },
+  {
+   "id": "z3_takkenbanen",
+   "naam": "De Takkenbanen",
+   "naam_en": "The Branchways",
+   "zone": "zone3",
+   "lv": [
+    34,
+    38
+   ],
+   "stad": false,
+   "doos": [
+    1144,
+    -836,
+    1664,
+    -316
+   ],
+   "laag": {
+    "min_y": 140,
+    "max_y": 320,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 0,
+    "r_max": 260
+   }
+  },
+  {
+   "id": "z3_wortelvelden",
+   "naam": "De Wortelvelden",
+   "naam_en": "The Root Fields",
+   "zone": "zone3",
+   "lv": [
+    43,
+    46
+   ],
+   "stad": false,
+   "doos": [
+    1024,
+    -1024,
+    1727,
+    -129
+   ],
+   "laag": {
+    "min_y": 0,
+    "max_y": 320,
+    "cx": 1404,
+    "cz": -576,
+    "r_min": 0,
+    "r_max": 600
+   }
+  },
+  {
+   "id": "z3_ring",
+   "naam": "De Schemerwortel",
+   "naam_en": "The Duskroot",
+   "zone": "zone3",
+   "lv": [
+    30,
+    50
+   ],
+   "stad": false,
+   "doos": [
+    1024,
+    -1024,
+    1727,
+    -129
+   ],
+   "laag": null
+  },
+  {
+   "id": "grot_wolkengrot",
+   "naam": "De Wolkengrotten",
+   "naam_en": "The Cloud Caves",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2477,
+    -560,
+    2554,
+    -483
+   ],
+   "laag": {
+    "min_y": 177,
+    "max_y": 195
+   }
+  },
+  {
+   "id": "grot_koraalgrot",
+   "naam": "De Koraalgrot",
+   "naam_en": "The Coral Grotto",
+   "zone": "zone4",
+   "lv": [
+    53,
+    55
+   ],
+   "stad": false,
+   "doos": [
+    2197,
+    -625,
+    2273,
+    -569
+   ],
+   "laag": {
+    "min_y": 38,
+    "max_y": 57
+   }
+  },
+  {
+   "id": "grot_wortelgrot",
+   "naam": "De Wortelgrot",
+   "naam_en": "The Root Grotto",
+   "zone": "zone3",
+   "lv": [
+    44,
+    46
+   ],
+   "stad": false,
+   "doos": [
+    1349,
+    -744,
+    1447,
+    -695
+   ],
+   "laag": {
+    "min_y": 39,
+    "max_y": 56
+   }
+  },
+  {
+   "id": "grot_kristalgrot",
+   "naam": "De Kristalgrot",
+   "naam_en": "The Crystal Grotto",
+   "zone": "zone2",
+   "lv": [
+    22,
+    24
+   ],
+   "stad": false,
+   "doos": [
+    856,
+    -1166,
+    955,
+    -1081
+   ],
+   "laag": {
+    "min_y": 107,
+    "max_y": 128
+   }
+  },
+  {
+   "id": "grot_zwamgrot",
+   "naam": "De Zwamgrot",
+   "naam_en": "The Shroom Grotto",
+   "zone": "zone1",
+   "lv": [
+    11,
+    13
+   ],
+   "stad": false,
+   "doos": [
+    -537,
+    90,
+    -415,
+    186
+   ],
+   "laag": {
+    "min_y": 43,
+    "max_y": 62
+   }
+  },
+  {
+   "id": "z6_rozenkloof",
+   "naam": "Rozenkloof",
+   "naam_en": "Rose Gorge",
+   "zone": "zone6",
+   "lv": [
+    60,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    3236,
+    -800,
+    3500,
+    -652
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_saffraanpoort",
+   "naam": "Saffraanpoort",
+   "naam_en": "Saffron Gate",
+   "zone": "zone6",
+   "lv": [
+    62,
+    62
+   ],
+   "stad": true,
+   "doos": [
+    3634,
+    -950,
+    3890,
+    -742
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_toren",
+   "naam": "De Sterrendovende Toren",
+   "naam_en": "The Star-Snuffing Tower",
+   "zone": "zone6",
+   "lv": [
+    70,
+    70
+   ],
+   "stad": false,
+   "doos": [
+    4100,
+    -730,
+    4180,
+    -646
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_moederoase",
+   "naam": "De Moederoase",
+   "naam_en": "The Mother Oasis",
+   "zone": "zone6",
+   "lv": [
+    68,
+    70
+   ],
+   "stad": false,
+   "doos": [
+    4000,
+    -900,
+    4180,
+    -600
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_ruinedal",
+   "naam": "Het Ruïnedal",
+   "naam_en": "Ruin Valley",
+   "zone": "zone6",
+   "lv": [
+    66,
+    68
+   ],
+   "stad": false,
+   "doos": [
+    3850,
+    -1060,
+    4180,
+    -900
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_zoutvlakte",
+   "naam": "De Zoutvlakte",
+   "naam_en": "The Salt Flats",
+   "zone": "zone6",
+   "lv": [
+    64,
+    66
+   ],
+   "stad": false,
+   "doos": [
+    3833,
+    -740,
+    4060,
+    -460
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_palmenkloven",
+   "naam": "De Palmenkloven",
+   "naam_en": "The Palm Gorges",
+   "zone": "zone6",
+   "lv": [
+    62,
+    64
+   ],
+   "stad": false,
+   "doos": [
+    3236,
+    -1060,
+    3850,
+    -800
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_roze_duinen",
+   "naam": "De Roze Duinen",
+   "naam_en": "The Pink Dunes",
+   "zone": "zone6",
+   "lv": [
+    60,
+    62
+   ],
+   "stad": false,
+   "doos": [
+    3236,
+    -800,
+    3833,
+    -460
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_zijdeland",
+   "naam": "Het Zijdeland",
+   "naam_en": "The Silklands",
+   "zone": "zone6",
+   "lv": [
+    60,
+    70
+   ],
+   "stad": false,
+   "doos": [
+    3264,
+    -1152,
+    4287,
+    -385
+   ],
+   "laag": null
+  },
+  {
    "id": "z5_proefarena",
    "naam": "De Proefarena van de Wolkwacht",
    "naam_en": "The Cloudwatch Trial Grounds",
@@ -341,273 +851,6 @@
    }
   },
   {
-   "id": "z6_rozenkloof",
-   "naam": "Rozenkloof",
-   "naam_en": "Rose Gorge",
-   "zone": "zone6",
-   "lv": [
-    60,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    3236,
-    -800,
-    3500,
-    -652
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_saffraanpoort",
-   "naam": "Saffraanpoort",
-   "naam_en": "Saffron Gate",
-   "zone": "zone6",
-   "lv": [
-    62,
-    62
-   ],
-   "stad": true,
-   "doos": [
-    3634,
-    -950,
-    3890,
-    -742
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_toren",
-   "naam": "De Sterrendovende Toren",
-   "naam_en": "The Star-Snuffing Tower",
-   "zone": "zone6",
-   "lv": [
-    70,
-    70
-   ],
-   "stad": false,
-   "doos": [
-    4100,
-    -730,
-    4180,
-    -646
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_moederoase",
-   "naam": "De Moederoase",
-   "naam_en": "The Mother Oasis",
-   "zone": "zone6",
-   "lv": [
-    68,
-    70
-   ],
-   "stad": false,
-   "doos": [
-    4000,
-    -900,
-    4180,
-    -600
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_ruinedal",
-   "naam": "Het Ruïnedal",
-   "naam_en": "Ruin Valley",
-   "zone": "zone6",
-   "lv": [
-    66,
-    68
-   ],
-   "stad": false,
-   "doos": [
-    3850,
-    -1060,
-    4180,
-    -900
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_zoutvlakte",
-   "naam": "De Zoutvlakte",
-   "naam_en": "The Salt Flats",
-   "zone": "zone6",
-   "lv": [
-    64,
-    66
-   ],
-   "stad": false,
-   "doos": [
-    3833,
-    -740,
-    4060,
-    -460
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_palmenkloven",
-   "naam": "De Palmenkloven",
-   "naam_en": "The Palm Gorges",
-   "zone": "zone6",
-   "lv": [
-    62,
-    64
-   ],
-   "stad": false,
-   "doos": [
-    3236,
-    -1060,
-    3850,
-    -800
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_roze_duinen",
-   "naam": "De Roze Duinen",
-   "naam_en": "The Pink Dunes",
-   "zone": "zone6",
-   "lv": [
-    60,
-    62
-   ],
-   "stad": false,
-   "doos": [
-    3236,
-    -800,
-    3833,
-    -460
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_zijdeland",
-   "naam": "Het Zijdeland",
-   "naam_en": "The Silklands",
-   "zone": "zone6",
-   "lv": [
-    60,
-    70
-   ],
-   "stad": false,
-   "doos": [
-    3264,
-    -1152,
-    4287,
-    -385
-   ],
-   "laag": null
-  },
-  {
-   "id": "grot_wolkengrot",
-   "naam": "De Wolkengrotten",
-   "naam_en": "The Cloud Caves",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2477,
-    -560,
-    2554,
-    -483
-   ],
-   "laag": {
-    "min_y": 177,
-    "max_y": 195
-   }
-  },
-  {
-   "id": "grot_koraalgrot",
-   "naam": "De Koraalgrot",
-   "naam_en": "The Coral Grotto",
-   "zone": "zone4",
-   "lv": [
-    53,
-    55
-   ],
-   "stad": false,
-   "doos": [
-    2197,
-    -625,
-    2273,
-    -569
-   ],
-   "laag": {
-    "min_y": 38,
-    "max_y": 57
-   }
-  },
-  {
-   "id": "grot_wortelgrot",
-   "naam": "De Wortelgrot",
-   "naam_en": "The Root Grotto",
-   "zone": "zone3",
-   "lv": [
-    44,
-    46
-   ],
-   "stad": false,
-   "doos": [
-    1349,
-    -744,
-    1447,
-    -695
-   ],
-   "laag": {
-    "min_y": 39,
-    "max_y": 56
-   }
-  },
-  {
-   "id": "grot_kristalgrot",
-   "naam": "De Kristalgrot",
-   "naam_en": "The Crystal Grotto",
-   "zone": "zone2",
-   "lv": [
-    22,
-    24
-   ],
-   "stad": false,
-   "doos": [
-    856,
-    -1166,
-    955,
-    -1081
-   ],
-   "laag": {
-    "min_y": 107,
-    "max_y": 128
-   }
-  },
-  {
-   "id": "grot_zwamgrot",
-   "naam": "De Zwamgrot",
-   "naam_en": "The Shroom Grotto",
-   "zone": "zone1",
-   "lv": [
-    11,
-    13
-   ],
-   "stad": false,
-   "doos": [
-    -537,
-    90,
-    -415,
-    186
-   ],
-   "laag": {
-    "min_y": 43,
-    "max_y": 62
-   }
-  },
-  {
    "id": "z5_wolkwaldroom",
    "naam": "De Wolkwaldroom",
    "naam_en": "The Cloudwhale Dream",
@@ -880,249 +1123,6 @@
     11932,
     -11744,
     32000
-   ],
-   "laag": null
-  },
-  {
-   "id": "z3_zeppelinwerf",
-   "naam": "De Kaaszeppelinwerf",
-   "naam_en": "The Cheese Zeppelin Yard",
-   "zone": "zone3",
-   "lv": [
-    38,
-    40
-   ],
-   "stad": false,
-   "doos": [
-    1560,
-    -922,
-    1727,
-    -732
-   ],
-   "laag": {
-    "min_y": 60,
-    "max_y": 290,
-    "cx": 1655,
-    "cz": -827,
-    "r_min": 0,
-    "r_max": 95
-   }
-  },
-  {
-   "id": "z3_hart",
-   "naam": "Het Hart van de Boom",
-   "naam_en": "The Heart of the Tree",
-   "zone": "zone3",
-   "lv": [
-    49,
-    50
-   ],
-   "stad": false,
-   "doos": [
-    1254,
-    -726,
-    1554,
-    -426
-   ],
-   "laag": {
-    "min_y": 14,
-    "max_y": 52,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 76,
-    "r_max": 150
-   }
-  },
-  {
-   "id": "z3_wortelduister",
-   "naam": "Het Wortelduister",
-   "naam_en": "The Rootdark",
-   "zone": "zone3",
-   "lv": [
-    46,
-    49
-   ],
-   "stad": false,
-   "doos": [
-    1244,
-    -736,
-    1564,
-    -416
-   ],
-   "laag": {
-    "min_y": 0,
-    "max_y": 64,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 0,
-    "r_max": 160
-   }
-  },
-  {
-   "id": "z3_schorsstad",
-   "naam": "De Schorsstad",
-   "naam_en": "Barkton",
-   "zone": "zone3",
-   "lv": [
-    40,
-    43
-   ],
-   "stad": false,
-   "doos": [
-    1378,
-    -602,
-    1430,
-    -550
-   ],
-   "laag": {
-    "min_y": 55,
-    "max_y": 165,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 0,
-    "r_max": 26
-   }
-  },
-  {
-   "id": "z3_honingtak",
-   "naam": "Honingtak",
-   "naam_en": "Honeybough",
-   "zone": "zone3",
-   "lv": [
-    30,
-    50
-   ],
-   "stad": true,
-   "doos": [
-    1244,
-    -736,
-    1564,
-    -416
-   ],
-   "laag": {
-    "min_y": 145,
-    "max_y": 200,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 0,
-    "r_max": 160
-   }
-  },
-  {
-   "id": "z3_stamspiraal",
-   "naam": "Het Rijpad",
-   "naam_en": "The Bridle Path",
-   "zone": "zone3",
-   "lv": [
-    40,
-    43
-   ],
-   "stad": false,
-   "doos": [
-    1340,
-    -640,
-    1468,
-    -512
-   ],
-   "laag": {
-    "min_y": 75,
-    "max_y": 232,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 26,
-    "r_max": 64
-   }
-  },
-  {
-   "id": "z3_kruinzee",
-   "naam": "De Kruinzee",
-   "naam_en": "The Canopy Sea",
-   "zone": "zone3",
-   "lv": [
-    30,
-    34
-   ],
-   "stad": false,
-   "doos": [
-    1204,
-    -776,
-    1604,
-    -376
-   ],
-   "laag": {
-    "min_y": 212,
-    "max_y": 320,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 0,
-    "r_max": 200
-   }
-  },
-  {
-   "id": "z3_takkenbanen",
-   "naam": "De Takkenbanen",
-   "naam_en": "The Branchways",
-   "zone": "zone3",
-   "lv": [
-    34,
-    38
-   ],
-   "stad": false,
-   "doos": [
-    1144,
-    -836,
-    1664,
-    -316
-   ],
-   "laag": {
-    "min_y": 140,
-    "max_y": 320,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 0,
-    "r_max": 260
-   }
-  },
-  {
-   "id": "z3_wortelvelden",
-   "naam": "De Wortelvelden",
-   "naam_en": "The Root Fields",
-   "zone": "zone3",
-   "lv": [
-    43,
-    46
-   ],
-   "stad": false,
-   "doos": [
-    1024,
-    -1024,
-    1727,
-    -129
-   ],
-   "laag": {
-    "min_y": 0,
-    "max_y": 320,
-    "cx": 1404,
-    "cz": -576,
-    "r_min": 0,
-    "r_max": 600
-   }
-  },
-  {
-   "id": "z3_ring",
-   "naam": "De Schemerwortel",
-   "naam_en": "The Duskroot",
-   "zone": "zone3",
-   "lv": [
-    30,
-    50
-   ],
-   "stad": false,
-   "doos": [
-    1024,
-    -1024,
-    1727,
-    -129
    ],
    "laag": null
   },
@@ -2862,7 +2862,7 @@
    "zone": "zone6",
    "pos": [
     3497,
-    60,
+    64,
     -964
    ],
    "naam": "Kampvuur (De Palmenkloven)",
@@ -2959,7 +2959,7 @@
    "pos": [
     4123,
     85,
-    -689
+    -688
    ],
    "naam": "De Sterrendovende Toren (raid)",
    "gebied": "z6_toren"
@@ -3109,7 +3109,6 @@
    "hub": "z3_honingtak",
    "ring": "z3_ring",
    "gebieden": [
-    "grot_wortelgrot",
     "z3_zeppelinwerf",
     "z3_hart",
     "z3_wortelduister",
@@ -3118,7 +3117,8 @@
     "z3_stamspiraal",
     "z3_kruinzee",
     "z3_takkenbanen",
-    "z3_wortelvelden"
+    "z3_wortelvelden",
+    "grot_wortelgrot"
    ]
   },
   {
@@ -3161,6 +3161,7 @@
    "hub": "z5_hoogvads",
    "ring": "z5_moeder_wolkwal",
    "gebieden": [
+    "grot_wolkengrot",
     "z5_proefarena",
     "z5_buikgangen",
     "z5_schuilnest",
@@ -3176,7 +3177,6 @@
     "z5_staartpark",
     "z5_ooggaarde",
     "z5_hoogvads",
-    "grot_wolkengrot",
     "z5_wolkwaldroom",
     "z5d_droom"
    ]
@@ -7573,7 +7573,7 @@
    "zone": "zone5",
    "waar": "bij de vijver in het Staartpark",
    "pos": [
-    2860,
+    2863,
     204,
     -514
    ],
@@ -9237,7 +9237,7 @@
    "waar": "bij de onderste waterval in de Palmenkloven, de rivierkloof ten zuidwesten van Saffraanpoort",
    "pos": [
     3538,
-    60,
+    64,
     -957
    ],
    "rol": null,
@@ -9257,7 +9257,7 @@
    "waar": "aan de monding van de Palmenkloven, waar de Saffraanrivier in zee stroomt",
    "pos": [
     3532,
-    60,
+    64,
     -958
    ],
    "rol": null,
@@ -9846,6 +9846,92 @@
     "Bestellingen, opdrachten en penningen!",
     "Wie maakt er iets moois voor een ander?",
     "Knutselpenningen? Die verdien je hier!"
+   ],
+   "quests": []
+  },
+  {
+   "id": "kk_poort_zwamzoet",
+   "naam": "Kwartiermeester Lamelletje",
+   "zone": "zone1",
+   "waar": "op het plein van Zwamzoet, een paar stappen van het midden",
+   "pos": null,
+   "rol": null,
+   "praat": [],
+   "quests": []
+  },
+  {
+   "id": "kk_poort_kandijkom",
+   "naam": "Kwartiermeester Klontje",
+   "zone": "zone2",
+   "waar": "op het plein van Kandijkom, een paar stappen van het midden",
+   "pos": null,
+   "rol": null,
+   "praat": [],
+   "quests": []
+  },
+  {
+   "id": "kk_poort_honingtak",
+   "naam": "Kwartiermeester Wasje",
+   "zone": "zone3",
+   "waar": "op het plein van Honingtak, een paar stappen van het midden",
+   "pos": null,
+   "rol": null,
+   "praat": [],
+   "quests": []
+  },
+  {
+   "id": "kk_poort_lampionhaven",
+   "naam": "Kwartiermeester Lontje",
+   "zone": "zone4",
+   "waar": "op het havenplein van Lampionhaven, een paar stappen van het midden",
+   "pos": null,
+   "rol": null,
+   "praat": [],
+   "quests": []
+  },
+  {
+   "id": "kk_poort_hoogvads",
+   "naam": "Kwartiermeester Torentje",
+   "zone": "zone5",
+   "waar": "bij de fontein op de markt van Hoogvads",
+   "pos": null,
+   "rol": null,
+   "praat": [],
+   "quests": []
+  },
+  {
+   "id": "z6raid_heraut",
+   "naam": "Heraut Sterrenroep",
+   "zone": "zone6",
+   "waar": "boven aan de trap voor de poort van De Sterrendovende Toren, naast de Moederoase",
+   "pos": [
+    4119,
+    85,
+    -686
+   ],
+   "rol": "z6raid_heraut",
+   "praat": [
+    "De Sterrendovende Toren! Een raid voor 2 tot 10 spelers. Loop maar door de poort.",
+    "In De Wachtzaal staat een gouden cirkel. Daar met je groep op, 3 tellen, en hup: naar boven.",
+    "Alleen? Dan blijft het ringslot dicht. Neem een vriendje mee!"
+   ],
+   "quests": []
+  },
+  {
+   "id": "z6raid_zaalwachter",
+   "naam": "Zaalwachter Pril",
+   "zone": "zone6",
+   "waar": "in De Wachtzaal onder De Sterrendovende Toren, naast de gouden startcirkel",
+   "pos": [
+    4141,
+    4,
+    -684
+   ],
+   "rol": "z6raid_heraut",
+   "praat": [
+    "Welkom in De Wachtzaal. De gouden cirkel is de start: 2 tot 10 spelers, 3 tellen blijven staan.",
+    "Is de toren bezet? Op de cirkel kom je in de rij. Ik roep jullie als het je beurt is.",
+    "Naar buiten? Door de paarse boog in het westen."
    ],
    "quests": []
   }
@@ -10507,7 +10593,7 @@
     }
    ],
    "beloning": {
-    "xp": 700,
+    "xp": 3000,
     "munten": 500,
     "wapen": false,
     "loot": "ongewoon",
@@ -10596,7 +10682,7 @@
     }
    ],
    "beloning": {
-    "xp": 1100,
+    "xp": 5900,
     "munten": 800,
     "wapen": false,
     "loot": "zeldzaam",
@@ -10689,7 +10775,7 @@
     }
    ],
    "beloning": {
-    "xp": 1400,
+    "xp": 4400,
     "munten": 1000,
     "wapen": false,
     "loot": "",
@@ -10917,7 +11003,7 @@
     }
    ],
    "beloning": {
-    "xp": 60,
+    "xp": 20,
     "munten": 40,
     "wapen": false,
     "loot": "",
@@ -10981,7 +11067,7 @@
     }
    ],
    "beloning": {
-    "xp": 60,
+    "xp": 20,
     "munten": 40,
     "wapen": false,
     "loot": "",
@@ -11036,7 +11122,7 @@
     }
    ],
    "beloning": {
-    "xp": 250,
+    "xp": 90,
     "munten": 200,
     "wapen": false,
     "loot": "",
@@ -11096,7 +11182,7 @@
     }
    ],
    "beloning": {
-    "xp": 550,
+    "xp": 190,
     "munten": 400,
     "wapen": false,
     "loot": "",
@@ -11156,7 +11242,7 @@
     }
    ],
    "beloning": {
-    "xp": 900,
+    "xp": 320,
     "munten": 600,
     "wapen": false,
     "loot": "zeldzaam",
@@ -11230,7 +11316,7 @@
     }
    ],
    "beloning": {
-    "xp": 700,
+    "xp": 240,
     "munten": 400,
     "wapen": false,
     "loot": "",
@@ -11316,7 +11402,7 @@
     }
    ],
    "beloning": {
-    "xp": 220,
+    "xp": 80,
     "munten": 250,
     "wapen": false,
     "loot": "",
@@ -11378,7 +11464,7 @@
     }
    ],
    "beloning": {
-    "xp": 300,
+    "xp": 100,
     "munten": 200,
     "wapen": false,
     "loot": "",
@@ -11438,7 +11524,7 @@
     }
    ],
    "beloning": {
-    "xp": 600,
+    "xp": 210,
     "munten": 450,
     "wapen": false,
     "loot": "",
@@ -11493,7 +11579,7 @@
     }
    ],
    "beloning": {
-    "xp": 400,
+    "xp": 140,
     "munten": 300,
     "wapen": false,
     "loot": "",
@@ -11565,7 +11651,7 @@
     }
    ],
    "beloning": {
-    "xp": 1300,
+    "xp": 450,
     "munten": 900,
     "wapen": false,
     "loot": "zeldzaam",
@@ -11620,7 +11706,7 @@
     }
    ],
    "beloning": {
-    "xp": 400,
+    "xp": 140,
     "munten": 300,
     "wapen": false,
     "loot": "ongewoon",
@@ -11680,7 +11766,7 @@
     }
    ],
    "beloning": {
-    "xp": 300,
+    "xp": 100,
     "munten": 250,
     "wapen": false,
     "loot": "",
@@ -11735,7 +11821,7 @@
     }
    ],
    "beloning": {
-    "xp": 400,
+    "xp": 140,
     "munten": 300,
     "wapen": false,
     "loot": "",
@@ -11790,7 +11876,7 @@
     }
    ],
    "beloning": {
-    "xp": 500,
+    "xp": 180,
     "munten": 400,
     "wapen": false,
     "loot": "ongewoon",
@@ -11845,7 +11931,7 @@
     }
    ],
    "beloning": {
-    "xp": 1300,
+    "xp": 450,
     "munten": 1500,
     "wapen": false,
     "loot": "",
@@ -11914,7 +12000,7 @@
     }
    ],
    "beloning": {
-    "xp": 900,
+    "xp": 320,
     "munten": 700,
     "wapen": false,
     "loot": "",
@@ -11978,7 +12064,7 @@
     }
    ],
    "beloning": {
-    "xp": 550,
+    "xp": 190,
     "munten": 350,
     "wapen": false,
     "loot": "",
@@ -12033,7 +12119,7 @@
     }
    ],
    "beloning": {
-    "xp": 1500,
+    "xp": 520,
     "munten": 1200,
     "wapen": false,
     "loot": "episch",
@@ -12088,7 +12174,7 @@
     }
    ],
    "beloning": {
-    "xp": 900,
+    "xp": 320,
     "munten": 800,
     "wapen": false,
     "loot": "",
@@ -12148,7 +12234,7 @@
     }
    ],
    "beloning": {
-    "xp": 1600,
+    "xp": 560,
     "munten": 1300,
     "wapen": false,
     "loot": "",
@@ -12198,7 +12284,7 @@
     }
    ],
    "beloning": {
-    "xp": 2500,
+    "xp": 880,
     "munten": 2500,
     "wapen": false,
     "loot": "zeldzaam",
@@ -12256,7 +12342,7 @@
     }
    ],
    "beloning": {
-    "xp": 800,
+    "xp": 280,
     "munten": 500,
     "wapen": false,
     "loot": "",
@@ -12359,7 +12445,7 @@
     }
    ],
    "beloning": {
-    "xp": 1500,
+    "xp": 520,
     "munten": 800,
     "wapen": false,
     "loot": "",
@@ -12716,7 +12802,7 @@
     }
    ],
    "beloning": {
-    "xp": 3000,
+    "xp": 1050,
     "munten": 2000,
     "wapen": false,
     "loot": "",
@@ -12816,7 +12902,7 @@
     }
    ],
    "beloning": {
-    "xp": 2500,
+    "xp": 1050,
     "munten": 1500,
     "wapen": false,
     "loot": "",
@@ -12903,7 +12989,7 @@
     }
    ],
    "beloning": {
-    "xp": 4000,
+    "xp": 1050,
     "munten": 2500,
     "wapen": false,
     "loot": "zeldzaam",
@@ -12979,7 +13065,7 @@
     }
    ],
    "beloning": {
-    "xp": 4500,
+    "xp": 1150,
     "munten": 3000,
     "wapen": false,
     "loot": "",
@@ -13044,7 +13130,7 @@
     }
    ],
    "beloning": {
-    "xp": 7000,
+    "xp": 1350,
     "munten": 5000,
     "wapen": false,
     "loot": "episch",
@@ -13162,7 +13248,7 @@
     }
    ],
    "beloning": {
-    "xp": 7500,
+    "xp": 1450,
     "munten": 5000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -13261,7 +13347,7 @@
     }
    ],
    "beloning": {
-    "xp": 8000,
+    "xp": 1500,
     "munten": 5500,
     "wapen": false,
     "loot": "zeldzaam",
@@ -13360,7 +13446,7 @@
     }
    ],
    "beloning": {
-    "xp": 9000,
+    "xp": 1600,
     "munten": 6000,
     "wapen": false,
     "loot": "episch",
@@ -13440,7 +13526,7 @@
     }
    ],
    "beloning": {
-    "xp": 10000,
+    "xp": 1700,
     "munten": 7000,
     "wapen": false,
     "loot": "",
@@ -13530,7 +13616,7 @@
     }
    ],
    "beloning": {
-    "xp": 8000,
+    "xp": 3000,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -13607,7 +13693,7 @@
     }
    ],
    "beloning": {
-    "xp": 15000,
+    "xp": 1950,
     "munten": 10000,
     "wapen": false,
     "loot": "episch",
@@ -13676,7 +13762,7 @@
     }
    ],
    "beloning": {
-    "xp": 12000,
+    "xp": 2050,
     "munten": 15000,
     "wapen": false,
     "loot": "",
@@ -13751,7 +13837,7 @@
     }
    ],
    "beloning": {
-    "xp": 9000,
+    "xp": 310,
     "munten": 6000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -13815,7 +13901,7 @@
     }
    ],
    "beloning": {
-    "xp": 2500,
+    "xp": 310,
     "munten": 1500,
     "wapen": false,
     "loot": "",
@@ -13901,7 +13987,7 @@
     }
    ],
    "beloning": {
-    "xp": 5000,
+    "xp": 330,
     "munten": 3000,
     "wapen": false,
     "loot": "",
@@ -13956,7 +14042,7 @@
     }
    ],
    "beloning": {
-    "xp": 5000,
+    "xp": 380,
     "munten": 3000,
     "wapen": false,
     "loot": "",
@@ -14028,7 +14114,7 @@
     }
    ],
    "beloning": {
-    "xp": 6000,
+    "xp": 360,
     "munten": 3000,
     "wapen": false,
     "loot": "",
@@ -14123,7 +14209,7 @@
     }
    ],
    "beloning": {
-    "xp": 3000,
+    "xp": 310,
     "munten": 2000,
     "wapen": false,
     "loot": "",
@@ -14258,7 +14344,7 @@
     }
    ],
    "beloning": {
-    "xp": 2615,
+    "xp": 3500,
     "munten": 3000,
     "wapen": false,
     "loot": "",
@@ -14358,7 +14444,7 @@
     }
    ],
    "beloning": {
-    "xp": 2615,
+    "xp": 3500,
     "munten": 3500,
     "wapen": false,
     "loot": "zeldzaam",
@@ -14485,7 +14571,7 @@
     }
    ],
    "beloning": {
-    "xp": 2615,
+    "xp": 3500,
     "munten": 3000,
     "wapen": false,
     "loot": "",
@@ -14609,7 +14695,7 @@
     }
    ],
    "beloning": {
-    "xp": 2755,
+    "xp": 3650,
     "munten": 4000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -14710,7 +14796,7 @@
     }
    ],
    "beloning": {
-    "xp": 3043,
+    "xp": 9000,
     "munten": 4500,
     "wapen": false,
     "loot": "",
@@ -14795,7 +14881,7 @@
     }
    ],
    "beloning": {
-    "xp": 3191,
+    "xp": 10650,
     "munten": 4000,
     "wapen": false,
     "loot": "",
@@ -14920,7 +15006,7 @@
     }
    ],
    "beloning": {
-    "xp": 3342,
+    "xp": 11150,
     "munten": 5000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -15010,7 +15096,7 @@
     }
    ],
    "beloning": {
-    "xp": 3651,
+    "xp": 12150,
     "munten": 8000,
     "wapen": false,
     "loot": "episch",
@@ -15100,7 +15186,7 @@
     }
    ],
    "beloning": {
-    "xp": 3970,
+    "xp": 13250,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -15203,7 +15289,7 @@
     }
    ],
    "beloning": {
-    "xp": 4134,
+    "xp": 13800,
     "munten": 10000,
     "wapen": false,
     "loot": "episch",
@@ -15319,7 +15405,7 @@
     }
    ],
    "beloning": {
-    "xp": 4468,
+    "xp": 14900,
     "munten": 9000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -15415,7 +15501,7 @@
     }
    ],
    "beloning": {
-    "xp": 4987,
+    "xp": 16600,
     "munten": 10000,
     "wapen": false,
     "loot": "episch",
@@ -15510,7 +15596,7 @@
     }
    ],
    "beloning": {
-    "xp": 5345,
+    "xp": 7150,
     "munten": 15000,
     "wapen": false,
     "loot": "episch",
@@ -15607,7 +15693,7 @@
     }
    ],
    "beloning": {
-    "xp": 5528,
+    "xp": 7350,
     "munten": 20000,
     "wapen": false,
     "loot": "episch",
@@ -15676,7 +15762,7 @@
     }
    ],
    "beloning": {
-    "xp": 5528,
+    "xp": 7350,
     "munten": 25000,
     "wapen": false,
     "loot": "",
@@ -15746,7 +15832,7 @@
     }
    ],
    "beloning": {
-    "xp": 1102,
+    "xp": 490,
     "munten": 4000,
     "wapen": false,
     "loot": "",
@@ -15805,7 +15891,7 @@
     }
    ],
    "beloning": {
-    "xp": 1217,
+    "xp": 540,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -15865,7 +15951,7 @@
     }
    ],
    "beloning": {
-    "xp": 1787,
+    "xp": 790,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -15925,7 +16011,7 @@
     }
    ],
    "beloning": {
-    "xp": 1653,
+    "xp": 730,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -16028,7 +16114,7 @@
     }
    ],
    "beloning": {
-    "xp": 1398,
+    "xp": 620,
     "munten": 8000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -16343,7 +16429,7 @@
     }
    ],
    "beloning": {
-    "xp": 8522,
+    "xp": 7850,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -16471,7 +16557,7 @@
     }
    ],
    "beloning": {
-    "xp": 8522,
+    "xp": 7850,
     "munten": 7000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -16599,7 +16685,7 @@
     }
    ],
    "beloning": {
-    "xp": 8795,
+    "xp": 8100,
     "munten": 8000,
     "wapen": false,
     "loot": "",
@@ -16711,7 +16797,7 @@
     }
    ],
    "beloning": {
-    "xp": 9072,
+    "xp": 11250,
     "munten": 8000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -16815,7 +16901,7 @@
     }
    ],
    "beloning": {
-    "xp": 9352,
+    "xp": 8650,
     "munten": 10000,
     "wapen": false,
     "loot": "episch",
@@ -16938,7 +17024,7 @@
     }
    ],
    "beloning": {
-    "xp": 9635,
+    "xp": 14050,
     "munten": 12000,
     "wapen": false,
     "loot": "",
@@ -17049,7 +17135,7 @@
     }
    ],
    "beloning": {
-    "xp": 9922,
+    "xp": 13150,
     "munten": 15000,
     "wapen": false,
     "loot": "episch",
@@ -17124,7 +17210,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -17193,7 +17279,7 @@
     }
    ],
    "beloning": {
-    "xp": 2977,
+    "xp": 680,
     "munten": 9000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -17257,7 +17343,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -17322,7 +17408,7 @@
     }
    ],
    "beloning": {
-    "xp": 2977,
+    "xp": 680,
     "munten": 6000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -17377,7 +17463,7 @@
     }
    ],
    "beloning": {
-    "xp": 3261,
+    "xp": 740,
     "munten": 12000,
     "wapen": false,
     "loot": "episch",
@@ -17441,7 +17527,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -17501,7 +17587,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -17576,7 +17662,7 @@
     }
    ],
    "beloning": {
-    "xp": 3071,
+    "xp": 700,
     "munten": 7000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -17641,7 +17727,7 @@
     }
    ],
    "beloning": {
-    "xp": 2977,
+    "xp": 680,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -17696,7 +17782,7 @@
     }
    ],
    "beloning": {
-    "xp": 2977,
+    "xp": 680,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -17756,7 +17842,7 @@
     }
    ],
    "beloning": {
-    "xp": 3071,
+    "xp": 700,
     "munten": 7000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -17816,7 +17902,7 @@
     }
    ],
    "beloning": {
-    "xp": 3165,
+    "xp": 720,
     "munten": 8000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -17913,7 +17999,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -17978,7 +18064,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -18042,7 +18128,7 @@
     }
    ],
    "beloning": {
-    "xp": 2884,
+    "xp": 660,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -18111,7 +18197,7 @@
     }
    ],
    "beloning": {
-    "xp": 3071,
+    "xp": 700,
     "munten": 6000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -18213,7 +18299,7 @@
     }
    ],
    "beloning": {
-    "xp": 6869,
+    "xp": 4600,
     "munten": 12000,
     "wapen": false,
     "loot": "",
@@ -18319,7 +18405,7 @@
     }
    ],
    "beloning": {
-    "xp": 7069,
+    "xp": 4700,
     "munten": 12000,
     "wapen": false,
     "loot": "",
@@ -18425,7 +18511,7 @@
     }
    ],
    "beloning": {
-    "xp": 7069,
+    "xp": 6200,
     "munten": 13000,
     "wapen": false,
     "loot": "",
@@ -18527,7 +18613,7 @@
     }
    ],
    "beloning": {
-    "xp": 7272,
+    "xp": 4850,
     "munten": 13000,
     "wapen": false,
     "loot": "",
@@ -18618,7 +18704,7 @@
     }
    ],
    "beloning": {
-    "xp": 7272,
+    "xp": 10150,
     "munten": 14000,
     "wapen": false,
     "loot": "",
@@ -18698,7 +18784,7 @@
     }
    ],
    "beloning": {
-    "xp": 7476,
+    "xp": 5000,
     "munten": 14000,
     "wapen": false,
     "loot": "",
@@ -18773,7 +18859,7 @@
     }
    ],
    "beloning": {
-    "xp": 7476,
+    "xp": 10450,
     "munten": 15000,
     "wapen": false,
     "loot": "",
@@ -18856,7 +18942,7 @@
     }
    ],
    "beloning": {
-    "xp": 7683,
+    "xp": 5100,
     "munten": 20000,
     "wapen": false,
     "loot": "episch",
@@ -18956,7 +19042,7 @@
     }
    ],
    "beloning": {
-    "xp": 7683,
+    "xp": 5100,
     "munten": 24000,
     "wapen": false,
     "loot": "episch",
@@ -19058,7 +19144,7 @@
     }
    ],
    "beloning": {
-    "xp": 7892,
+    "xp": 5250,
     "munten": 16000,
     "wapen": false,
     "loot": "",
@@ -19315,7 +19401,7 @@
     }
    ],
    "beloning": {
-    "xp": 2828,
+    "xp": 790,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -19385,7 +19471,7 @@
     }
    ],
    "beloning": {
-    "xp": 2828,
+    "xp": 790,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -19471,7 +19557,7 @@
     }
    ],
    "beloning": {
-    "xp": 2909,
+    "xp": 810,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -19541,7 +19627,7 @@
     }
    ],
    "beloning": {
-    "xp": 2909,
+    "xp": 810,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -19627,7 +19713,7 @@
     }
    ],
    "beloning": {
-    "xp": 2991,
+    "xp": 830,
     "munten": 7000,
     "wapen": false,
     "loot": "",
@@ -19719,7 +19805,7 @@
     }
    ],
    "beloning": {
-    "xp": 2909,
+    "xp": 810,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -19773,7 +19859,7 @@
     }
    ],
    "beloning": {
-    "xp": 2991,
+    "xp": 830,
     "munten": 7000,
     "wapen": false,
     "loot": "",
@@ -19854,7 +19940,7 @@
     }
    ],
    "beloning": {
-    "xp": 2828,
+    "xp": 790,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -19941,7 +20027,7 @@
     }
    ],
    "beloning": {
-    "xp": 2909,
+    "xp": 810,
     "munten": 5000,
     "wapen": false,
     "loot": "",
@@ -19991,7 +20077,7 @@
     }
    ],
    "beloning": {
-    "xp": 2991,
+    "xp": 830,
     "munten": 6000,
     "wapen": false,
     "loot": "",
@@ -20072,7 +20158,7 @@
     }
    ],
    "beloning": {
-    "xp": 3073,
+    "xp": 850,
     "munten": 7000,
     "wapen": false,
     "loot": "",
@@ -20161,7 +20247,7 @@
     }
    ],
    "beloning": {
-    "xp": 14030,
+    "xp": 8750,
     "munten": 26000,
     "wapen": false,
     "loot": "",
@@ -20271,7 +20357,7 @@
     }
    ],
    "beloning": {
-    "xp": 14030,
+    "xp": 8750,
     "munten": 26000,
     "wapen": false,
     "loot": "",
@@ -20380,7 +20466,7 @@
     }
    ],
    "beloning": {
-    "xp": 14406,
+    "xp": 9000,
     "munten": 27000,
     "wapen": false,
     "loot": "",
@@ -20478,7 +20564,7 @@
     }
    ],
    "beloning": {
-    "xp": 14784,
+    "xp": 9250,
     "munten": 28000,
     "wapen": false,
     "loot": "",
@@ -20550,7 +20636,7 @@
      "n": 1,
      "pos": [
       3538,
-      60,
+      64,
       -957
      ],
      "geheim": false
@@ -20582,7 +20668,7 @@
     }
    ],
    "beloning": {
-    "xp": 14784,
+    "xp": 14500,
     "munten": 29000,
     "wapen": false,
     "loot": "",
@@ -20676,7 +20762,7 @@
     }
    ],
    "beloning": {
-    "xp": 15166,
+    "xp": 28450,
     "munten": 30000,
     "wapen": false,
     "loot": "",
@@ -20778,7 +20864,7 @@
     }
    ],
    "beloning": {
-    "xp": 15942,
+    "xp": 29900,
     "munten": 32000,
     "wapen": false,
     "loot": "",
@@ -20889,7 +20975,7 @@
     }
    ],
    "beloning": {
-    "xp": 16734,
+    "xp": 20200,
     "munten": 34000,
     "wapen": false,
     "loot": "episch",
@@ -20989,7 +21075,7 @@
     }
    ],
    "beloning": {
-    "xp": 17134,
+    "xp": 20650,
     "munten": 36000,
     "wapen": false,
     "loot": "episch",
@@ -21113,7 +21199,7 @@
     }
    ],
    "beloning": {
-    "xp": 17538,
+    "xp": 10950,
     "munten": 40000,
     "wapen": false,
     "loot": "episch",
@@ -21195,7 +21281,7 @@
     }
    ],
    "beloning": {
-    "xp": 3858,
+    "xp": 880,
     "munten": 9000,
     "wapen": false,
     "loot": "",
@@ -21269,7 +21355,7 @@
     }
    ],
    "beloning": {
-    "xp": 3858,
+    "xp": 880,
     "munten": 9000,
     "wapen": false,
     "loot": "",
@@ -21329,7 +21415,7 @@
     }
    ],
    "beloning": {
-    "xp": 3962,
+    "xp": 900,
     "munten": 9500,
     "wapen": false,
     "loot": "",
@@ -21389,7 +21475,7 @@
     }
    ],
    "beloning": {
-    "xp": 4171,
+    "xp": 950,
     "munten": 10000,
     "wapen": false,
     "loot": "",
@@ -21475,7 +21561,7 @@
     }
    ],
    "beloning": {
-    "xp": 4066,
+    "xp": 920,
     "munten": 10000,
     "wapen": false,
     "loot": "",
@@ -21549,7 +21635,7 @@
     }
    ],
    "beloning": {
-    "xp": 4066,
+    "xp": 920,
     "munten": 10000,
     "wapen": false,
     "loot": "",
@@ -21609,7 +21695,7 @@
     }
    ],
    "beloning": {
-    "xp": 4171,
+    "xp": 950,
     "munten": 10500,
     "wapen": false,
     "loot": "",
@@ -21690,7 +21776,7 @@
     }
    ],
    "beloning": {
-    "xp": 4277,
+    "xp": 970,
     "munten": 11000,
     "wapen": false,
     "loot": "",
@@ -21750,7 +21836,7 @@
     }
    ],
    "beloning": {
-    "xp": 4171,
+    "xp": 950,
     "munten": 11000,
     "wapen": false,
     "loot": "",
@@ -21782,7 +21868,7 @@
    ],
    "gever_pos": [
     3538,
-    60,
+    64,
     -957
    ]
   },
@@ -21824,7 +21910,7 @@
     }
    ],
    "beloning": {
-    "xp": 4277,
+    "xp": 970,
     "munten": 11500,
     "wapen": false,
     "loot": "",
@@ -21856,7 +21942,7 @@
    ],
    "gever_pos": [
     3532,
-    60,
+    64,
     -958
    ]
   },
@@ -21891,7 +21977,7 @@
     }
    ],
    "beloning": {
-    "xp": 4384,
+    "xp": 1000,
     "munten": 12000,
     "wapen": false,
     "loot": "",
@@ -21965,7 +22051,7 @@
     }
    ],
    "beloning": {
-    "xp": 4492,
+    "xp": 1000,
     "munten": 14000,
     "wapen": false,
     "loot": "zeldzaam",
@@ -22030,7 +22116,7 @@
     }
    ],
    "beloning": {
-    "xp": 4171,
+    "xp": 950,
     "munten": 16000,
     "wapen": false,
     "loot": "episch",
@@ -22090,7 +22176,7 @@
     }
    ],
    "beloning": {
-    "xp": 4602,
+    "xp": 1050,
     "munten": 14000,
     "wapen": false,
     "loot": "",
@@ -22159,7 +22245,7 @@
     }
    ],
    "beloning": {
-    "xp": 4823,
+    "xp": 1100,
     "munten": 16000,
     "wapen": false,
     "loot": "",
@@ -51335,7 +51421,7 @@
    "tekst": "",
    "pos": [
     3497,
-    60,
+    64,
     -964
    ],
    "gebied": "z6_palmenkloven",
