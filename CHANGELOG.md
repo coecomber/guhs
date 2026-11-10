@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.9.8 — Minecraft 26.1.2
+
+- **No more holes in the ground:** in the third style the pebble path of the Marktplein (and of the Hoeve, the Kippenhok, the Muziektent and the Guhhutje) sank into the ground and looked like missing blocks. It now lies neatly on top of the ground. Every Erfenis is stamped once more the next time someone walks in, so the old holes heal by themselves.
+- **Out of the Akker:** gates and doors in your Erfenis open and close again, so you can always walk out of the fenced Akker (and any other fenced spot) through its gate.
+- **Fewer disappearing blocks:** farmland in the Erfenis no longer turns to dirt when you jump on it (the crops on it vanished), and the animals no longer eat the decoration.
+- **No bakery scoreboard in the Erfenis:** the baker of your Erfenis bakery no longer drags the Knabbelbakkerij top 3 along with him. That board belongs only to Bakker Korstje in the real Knabbelbakkerij. Old leftover boards disappear by themselves.
+
 ## 1.9.7 — Minecraft 26.1.2
 
 - **Terughekje:** a new deco piece (5 Guhlden, from Hoeve level 1) with a real Erfhekje between two flowers. Walk through it (or right-click it) inside your Erfenis and you go back to where you came from. Place, turn and move it like any other deco.
