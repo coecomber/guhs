@@ -517,7 +517,12 @@ for _id, (_nl, _en) in AMBACHTEN.items():
     t(f"gui.guhs.titels.naam.vr_amb_{_id}_leerling", f"Leerling-{_nl.lower()}" if _id not in ("vissen",) else "Leerling-visser",
       f"Apprentice ({_en})")
     t(f"gui.guhs.titels.naam.vr_amb_{_id}_gezel", f"Gezel-{_nl.lower()}" if _id not in ("vissen",) else "Gezel-visser", f"Journeyman ({_en})")
+    # (every title needs a hint: TitelsGameTests.titelsTekstenBestaan)
+    t(f"gui.guhs.titels.hint.vr_amb_{_id}_leerling", f"Haal niveau 25 in {_nl.lower()}.", f"Reach level 25 in {_en}.")
+    t(f"gui.guhs.titels.hint.vr_amb_{_id}_gezel", f"Haal niveau 50 in {_nl.lower()}.", f"Reach level 50 in {_en}.")
 t("gui.guhs.titels.naam.vr_ambachtskenner", "Ambachtskenner", "Master of Crafts")
+t("gui.guhs.titels.hint.vr_ambachtskenner", "Vul de pagina Ambachten helemaal (Verkenningsboek, toets B).",
+  "Complete the Professions page (Exploration Book, key B).")
 
 
 # ======================================================================================================================

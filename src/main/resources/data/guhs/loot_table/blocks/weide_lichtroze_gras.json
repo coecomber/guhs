@@ -11,10 +11,8 @@
               "type": "minecraft:item",
               "conditions": [
                 {
-                  "condition": "minecraft:match_tool",
-                  "predicate": {
-                    "items": "minecraft:shears"
-                  }
+                  "condition": "neoforge:can_item_perform_ability",
+                  "ability": "shears_dig"
                 }
               ],
               "name": "guhs:weide_lichtroze_gras"

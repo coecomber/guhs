@@ -608,9 +608,13 @@ public final class TechquestGameTests {
             helper.assertTrue(Bescherming.beschermd(level, knip) && Centrale.STRUCTUUR.equals(Bescherming.structuurBij(level, draad)), "the practice hall is protected");
             helper.assertTrue(Bescherming.mag(p, knip) && !Bescherming.mag(p, draad) && !Bescherming.mag(p, k.w(Centrale.RADEREN[1])),
                     "a player may cut the marked wire, and nothing else");
+            // (the test room is only 33x8x13 from the template's corner: the ovens of setup 2 lie at z 14, outside its box and,
+            // since 1.7.2's one-block rim, outside the protection too; a wheel of the hall lies inside, like the wire)
+            BlockPos wiel = k.w(Centrale.RADEREN[1]);
+            var wielVoor = level.getBlockState(wiel);
             p.gameMode.destroyBlock(draad);
-            p.gameMode.destroyBlock(k.w(Centrale.S2_OVENS[0]));
-            helper.assertTrue(level.getBlockState(draad).is(ModBlocks.GUH_WIRE.get()) && level.getBlockState(k.w(Centrale.S2_OVENS[0])).is(GuhovenFeature.GUH_OVEN.get()),
+            p.gameMode.destroyBlock(wiel);
+            helper.assertTrue(level.getBlockState(draad).is(ModBlocks.GUH_WIRE.get()) && !wielVoor.isAir() && level.getBlockState(wiel).equals(wielVoor),
                     "the building stays whole");
             p.gameMode.destroyBlock(knip);
             helper.assertTrue(level.getBlockState(knip).isAir() && Centrale.werkt(k, Centrale.Opstelling.TE_ZWAAR), "the marked wire goes: setup 2 works");
