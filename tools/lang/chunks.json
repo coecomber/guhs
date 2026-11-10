@@ -7032,6 +7032,13 @@
       ]
     },
     {
+      "id": "c455_scheiding",
+      "title": "Y-SCHEIDING: the survival <-> Vadsrijk border (refused teleports, commands, storage menus)",
+      "prefixes": [
+        "vadsrijk.scheiding."
+      ]
+    },
+    {
       "id": "c460_vr_y_vitrine",
       "title": "1.10 round Y (Y-VITRINE): the Vadsrijk-vitrine trophy block",
       "prefixes": [

@@ -80,6 +80,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.party.PartyRegistry.register(modBus);   // W-PARTY: Party tab (saved parties, group queue) + nep-spelers
         nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortRegistry.register(modBus);   // X-ZONE1: zone gate (open zones, safety net, soft cap)
         nl.juiced.guhs.feature.vadsrijk.vitrine.Vitrine.register(modBus);   // Y-VITRINE: the Vadsrijk-vitrine trophy block (survival base)
+        nl.juiced.guhs.feature.vadsrijk.scheiding.Scheiding.register(modBus);   // Y-SCHEIDING: survival <-> Vadsrijk truly separate (body swap, border, menus)
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
     }
 

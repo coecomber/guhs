@@ -307,6 +307,9 @@ public final class DungeonRij {
         if (Dungeons.van(dungeon) == null) {
             return;
         }
+        if (!Vadsrijk.in(p)) {
+            return;   // Y-SCHEIDING: the window's buttons only work inside ("verlaat"/"terug" from home teleported to any dungeon door)
+        }
         switch (wat) {
             case "solo" -> solo(p, dungeon, false);
             case "groep" -> groep(p, dungeon);

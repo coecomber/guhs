@@ -283,6 +283,9 @@ public final class Momo {
         if (!opSchouder(p) || !p.isAlive() || p.isSpectator()) {
             return;
         }
+        if (nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).binnen) {
+            return;   // Y-SCHEIDING: Momo waits at home: no stealing from / giving back into the Vadsrijk inventory, no Vadsrijk pickups
+        }
         CompoundTag staat = staat(p);
         if (staat.getIntOr("Geleend", 0) > 0) {
             int terug = staat.getIntOr("Terug", 0) - STAP;
