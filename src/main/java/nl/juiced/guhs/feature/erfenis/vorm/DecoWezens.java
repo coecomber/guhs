@@ -199,6 +199,12 @@ public final class DecoWezens {
             return;
         }
         Entity ent = e.getEntity();
+        if (ent instanceof net.minecraft.world.entity.Display.TextDisplay && ent.entityTags().contains(nl.juiced.guhs.quest.Scorebord.TAG)
+                && e.getLevel().dimension() == nl.juiced.guhs.feature.erfenis.Plot.DIM) {
+            // 1.9.8: no minigame top-3 board in the Erfenis (the old ones a deco baker left behind go away when they load)
+            e.setCanceled(true);
+            return;
+        }
         if (ent instanceof Mob m && isDeco(m)) {
             LEVEND.add(m);
         } else if (ent instanceof ItemEntity item && !e.loadedFromDisk()) {

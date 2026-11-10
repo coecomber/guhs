@@ -917,6 +917,11 @@ public final class Erfenis {
         if (!in(event.getEntity())) {
             return;
         }
+        if (magOpen(event.getLevel().getBlockState(event.getPos()))) {
+            // 1.9.8: gates and doors open and shut (the Akker's fence trapped you inside); the hand still does nothing
+            event.setUseItem(net.minecraft.util.TriState.FALSE);
+            return;
+        }
         event.setCanceled(true);
         // in the own village: the Detectivebureau opens Sherlock's Speurboekje, the Marktplein the orders
         if (event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && event.getEntity() instanceof ServerPlayer p
@@ -932,6 +937,26 @@ public final class Erfenis {
             } else if (g != null && g.level > 0 && g.type == GebouwType.MARKTPLEIN) {
                 nl.juiced.guhs.feature.erfenis.kaart.Bestellingen.open(p);
             }
+        }
+    }
+
+    /** (1.9.8) Blocks a player may open and shut in the Erfenis: fence gates and doors that open by hand. */
+    public static boolean magOpen(net.minecraft.world.level.block.state.BlockState s) {
+        return s.getBlock() instanceof net.minecraft.world.level.block.FenceGateBlock
+                || s.getBlock() instanceof net.minecraft.world.level.block.DoorBlock d && d.type().canOpenByHand();
+    }
+
+    /** (1.9.8) No farmland trodden to dirt in the Erfenis (the crops on it popped off: "random missing blocks"). */
+    static void opVertrappen(BlockEvent.FarmlandTrampleEvent event) {
+        if (event.getLevel() instanceof Level l && l.dimension() == Plot.DIM) {
+            event.setCanceled(true);
+        }
+    }
+
+    /** (1.9.8) The animals of the Erfenis don't eat its decoration (rabbits the carrots, sheep the grass). */
+    static void opGriefen(net.neoforged.neoforge.event.entity.EntityMobGriefingEvent event) {
+        if (event.getEntity() != null && event.getEntity().level().dimension() == Plot.DIM) {
+            event.setCanGrief(false);
         }
     }
 

@@ -682,6 +682,16 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         return this.level().isClientSide();
     }
 
+    /**
+     * (1.9.8) A decoration or story extra of the Erfenis (an Erfenis building's creature, a Sherlock character): its kind's
+     * world role does not tick there. Bakker Korstje's top-3 board (BakkerijRole) followed the Erfenis bakery's wandering
+     * baker around and left a board behind at every step; the minigame itself only lives at the real Knabbelbakkerij.
+     */
+    public boolean alleenDecor() {
+        return nl.juiced.guhs.feature.erfenis.vorm.DecoWezens.isDeco(this)
+                || this.entityTags().contains(nl.juiced.guhs.feature.erfenis.sherlock.Cast.TAG);
+    }
+
     @Override
     public void tick() {
         if (getKind() == Kind.POORTWACHTER && !roleData.contains("GateYaw")) {
@@ -699,7 +709,7 @@ public class GuhNpcEntity extends PathfinderMob implements GeoEntity, net.minecr
         if (!this.level().isClientSide() && getKind() == Kind.REISGUH) {
             nl.juiced.guhs.quest.Reisguh.tick(this);
         }
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide() && !alleenDecor()) {
             nl.juiced.guhs.feature.NpcRole role = nl.juiced.guhs.feature.Features.role(getKind());
             if (role != null) {
                 role.tick(this);
