@@ -8965,9 +8965,9 @@
    "naam": "Knuffelridder",
    "naam_en": "Knuffelridder",
    "wapens": [
-    "knots",
+    "zwaard",
     "hamer",
-    "zwaard"
+    "knots"
    ],
    "per_level": {
     "1": {
@@ -9026,9 +9026,9 @@
    "naam": "Pluisjager",
    "naam_en": "Pluisjager",
    "wapens": [
-    "kruisboog",
+    "katapult",
     "boog",
-    "katapult"
+    "kruisboog"
    ],
    "per_level": {
     "1": {
@@ -9099,9 +9099,9 @@
    "naam": "Vadsmagiër",
    "naam_en": "Vadsmagiër",
    "wapens": [
-    "toverstok",
+    "boek",
     "staf",
-    "boek"
+    "toverstok"
    ],
    "per_level": {
     "1": {

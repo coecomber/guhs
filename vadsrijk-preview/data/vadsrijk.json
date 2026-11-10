@@ -5,6 +5,885 @@
  },
  "gebieden": [
   {
+   "id": "grot_wolkengrot",
+   "naam": "De Wolkengrotten",
+   "naam_en": "The Cloud Caves",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2477,
+    -560,
+    2554,
+    -483
+   ],
+   "laag": {
+    "min_y": 177,
+    "max_y": 195
+   }
+  },
+  {
+   "id": "grot_koraalgrot",
+   "naam": "De Koraalgrot",
+   "naam_en": "The Coral Grotto",
+   "zone": "zone4",
+   "lv": [
+    53,
+    55
+   ],
+   "stad": false,
+   "doos": [
+    2197,
+    -625,
+    2273,
+    -569
+   ],
+   "laag": {
+    "min_y": 38,
+    "max_y": 57
+   }
+  },
+  {
+   "id": "grot_wortelgrot",
+   "naam": "De Wortelgrot",
+   "naam_en": "The Root Grotto",
+   "zone": "zone3",
+   "lv": [
+    44,
+    46
+   ],
+   "stad": false,
+   "doos": [
+    1349,
+    -744,
+    1447,
+    -695
+   ],
+   "laag": {
+    "min_y": 39,
+    "max_y": 56
+   }
+  },
+  {
+   "id": "grot_kristalgrot",
+   "naam": "De Kristalgrot",
+   "naam_en": "The Crystal Grotto",
+   "zone": "zone2",
+   "lv": [
+    22,
+    24
+   ],
+   "stad": false,
+   "doos": [
+    856,
+    -1166,
+    955,
+    -1081
+   ],
+   "laag": {
+    "min_y": 107,
+    "max_y": 128
+   }
+  },
+  {
+   "id": "grot_zwamgrot",
+   "naam": "De Zwamgrot",
+   "naam_en": "The Shroom Grotto",
+   "zone": "zone1",
+   "lv": [
+    11,
+    13
+   ],
+   "stad": false,
+   "doos": [
+    -537,
+    90,
+    -415,
+    186
+   ],
+   "laag": {
+    "min_y": 43,
+    "max_y": 62
+   }
+  },
+  {
+   "id": "z5_wolkwaldroom",
+   "naam": "De Wolkwaldroom",
+   "naam_en": "The Cloudwhale Dream",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2540,
+    -600,
+    2700,
+    -440
+   ],
+   "laag": {
+    "min_y": 150,
+    "max_y": 225
+   }
+  },
+  {
+   "id": "z5d_droom",
+   "naam": "De Droom van Moeder Wolkwal",
+   "naam_en": "Mother Cloudwhale's Dream",
+   "zone": "zone5",
+   "lv": [
+    60,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    3030,
+    -560,
+    3110,
+    -480
+   ],
+   "laag": {
+    "min_y": 212,
+    "max_y": 302
+   }
+  },
+  {
+   "id": "z5_proefarena",
+   "naam": "De Proefarena van de Wolkwacht",
+   "naam_en": "The Cloudwatch Trial Grounds",
+   "zone": "zone5",
+   "lv": [
+    56,
+    57
+   ],
+   "stad": false,
+   "doos": [
+    2701,
+    -583,
+    2727,
+    -557
+   ],
+   "laag": {
+    "min_y": 209,
+    "max_y": 225
+   }
+  },
+  {
+   "id": "z5_buikgangen",
+   "naam": "De Buikgangen",
+   "naam_en": "The Belly Tunnels",
+   "zone": "zone5",
+   "lv": [
+    57,
+    59
+   ],
+   "stad": false,
+   "doos": [
+    2700,
+    -545,
+    2810,
+    -495
+   ],
+   "laag": {
+    "min_y": 160,
+    "max_y": 180
+   }
+  },
+  {
+   "id": "z5_schuilnest",
+   "naam": "Het Schuilnest",
+   "naam_en": "The Hideout",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2586,
+    -440,
+    2624,
+    -414
+   ],
+   "laag": {
+    "min_y": 184,
+    "max_y": 198
+   }
+  },
+  {
+   "id": "z5_wolkrand_zuid",
+   "naam": "De Wolkrand: de Zuidvin",
+   "naam_en": "The Cloud Edge: South Fin",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2560,
+    -700,
+    2670,
+    -615
+   ],
+   "laag": {
+    "min_y": 125,
+    "max_y": 185
+   }
+  },
+  {
+   "id": "z5_wolkrand_noord",
+   "naam": "De Wolkrand: de Noordvin",
+   "naam_en": "The Cloud Edge: North Fin",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2560,
+    -425,
+    2670,
+    -340
+   ],
+   "laag": {
+    "min_y": 125,
+    "max_y": 185
+   }
+  },
+  {
+   "id": "z5_staartvlakte",
+   "naam": "De Staartvlakte",
+   "naam_en": "The Tail Flats",
+   "zone": "zone5",
+   "lv": [
+    58,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2932,
+    -655,
+    3025,
+    -385
+   ],
+   "laag": {
+    "min_y": 185,
+    "max_y": 230
+   }
+  },
+  {
+   "id": "z6_rozenkloof",
+   "naam": "Rozenkloof",
+   "naam_en": "Rose Gorge",
+   "zone": "zone6",
+   "lv": [
+    60,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    3236,
+    -800,
+    3500,
+    -652
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_saffraanpoort",
+   "naam": "Saffraanpoort",
+   "naam_en": "Saffron Gate",
+   "zone": "zone6",
+   "lv": [
+    62,
+    62
+   ],
+   "stad": true,
+   "doos": [
+    3634,
+    -950,
+    3890,
+    -742
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_toren",
+   "naam": "De Sterrendovende Toren",
+   "naam_en": "The Star-Snuffing Tower",
+   "zone": "zone6",
+   "lv": [
+    70,
+    70
+   ],
+   "stad": false,
+   "doos": [
+    4100,
+    -730,
+    4180,
+    -646
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_moederoase",
+   "naam": "De Moederoase",
+   "naam_en": "The Mother Oasis",
+   "zone": "zone6",
+   "lv": [
+    68,
+    70
+   ],
+   "stad": false,
+   "doos": [
+    4000,
+    -900,
+    4180,
+    -600
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_ruinedal",
+   "naam": "Het Ruïnedal",
+   "naam_en": "Ruin Valley",
+   "zone": "zone6",
+   "lv": [
+    66,
+    68
+   ],
+   "stad": false,
+   "doos": [
+    3850,
+    -1060,
+    4180,
+    -900
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_zoutvlakte",
+   "naam": "De Zoutvlakte",
+   "naam_en": "The Salt Flats",
+   "zone": "zone6",
+   "lv": [
+    64,
+    66
+   ],
+   "stad": false,
+   "doos": [
+    3833,
+    -740,
+    4060,
+    -460
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_palmenkloven",
+   "naam": "De Palmenkloven",
+   "naam_en": "The Palm Gorges",
+   "zone": "zone6",
+   "lv": [
+    62,
+    64
+   ],
+   "stad": false,
+   "doos": [
+    3236,
+    -1060,
+    3850,
+    -800
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_roze_duinen",
+   "naam": "De Roze Duinen",
+   "naam_en": "The Pink Dunes",
+   "zone": "zone6",
+   "lv": [
+    60,
+    62
+   ],
+   "stad": false,
+   "doos": [
+    3236,
+    -800,
+    3833,
+    -460
+   ],
+   "laag": null
+  },
+  {
+   "id": "z6_zijdeland",
+   "naam": "Het Zijdeland",
+   "naam_en": "The Silklands",
+   "zone": "zone6",
+   "lv": [
+    60,
+    70
+   ],
+   "stad": false,
+   "doos": [
+    3264,
+    -1152,
+    4287,
+    -385
+   ],
+   "laag": null
+  },
+  {
+   "id": "z5_paleisheuvel",
+   "naam": "De Paleisheuvel",
+   "naam_en": "Palace Hill",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2778,
+    -570,
+    2858,
+    -470
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_universiteit",
+   "naam": "De Universiteit",
+   "naam_en": "The University",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2694,
+    -494,
+    2780,
+    -434
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_academie",
+   "naam": "De Academie van de Wolkwacht",
+   "naam_en": "The Cloudwatch Academy",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2694,
+    -606,
+    2780,
+    -546
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_marktlaan",
+   "naam": "De Marktlaan",
+   "naam_en": "Market Lane",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2708,
+    -545,
+    2778,
+    -495
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_kathedraal",
+   "naam": "De Ordekathedraal",
+   "naam_en": "The Order Cathedral",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2572,
+    -572,
+    2708,
+    -468
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_luchthaven",
+   "naam": "De Luchthaven",
+   "naam_en": "The Skyport",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2578,
+    -467,
+    2682,
+    -345
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_staartpark",
+   "naam": "Het Staartpark",
+   "naam_en": "Tail Park",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2855,
+    -584,
+    2904,
+    -456
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_ooggaarde",
+   "naam": "De Ooggaarde",
+   "naam_en": "The Eye Garden",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2526,
+    -620,
+    2576,
+    -546
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_hoogvads",
+   "naam": "Hoogvads",
+   "naam_en": "Highchonk",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    2526,
+    -625,
+    2907,
+    -415
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z5_moeder_wolkwal",
+   "naam": "Moeder Wolkwal",
+   "naam_en": "Mother Cloudwhale",
+   "zone": "zone5",
+   "lv": [
+    56,
+    60
+   ],
+   "stad": false,
+   "doos": [
+    2432,
+    -702,
+    3022,
+    -338
+   ],
+   "laag": {
+    "min_y": 118,
+    "max_y": 330
+   }
+  },
+  {
+   "id": "z4_lampionhaven",
+   "naam": "Lampionhaven",
+   "naam_en": "Lanternhaven",
+   "zone": "zone4",
+   "lv": [
+    50,
+    50
+   ],
+   "stad": true,
+   "doos": [
+    1780,
+    -531,
+    1912,
+    -409
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_knuffeltij",
+   "naam": "Het Knuffeltij-strand",
+   "naam_en": "Snuggletide Beach",
+   "zone": "zone4",
+   "lv": [
+    50,
+    51
+   ],
+   "stad": false,
+   "doos": [
+    1860,
+    -398,
+    2010,
+    -292
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_strandfeest",
+   "naam": "Strandfeesteiland",
+   "naam_en": "Beach Party Island",
+   "zone": "zone4",
+   "lv": [
+    51,
+    52
+   ],
+   "stad": false,
+   "doos": [
+    1929,
+    -658,
+    2061,
+    -552
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_bloemeneiland",
+   "naam": "Bloemeneiland",
+   "naam_en": "Flower Island",
+   "zone": "zone4",
+   "lv": [
+    51,
+    52
+   ],
+   "stad": false,
+   "doos": [
+    2022,
+    -461,
+    2148,
+    -349
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_koraalbaai",
+   "naam": "De Koraalbaai",
+   "naam_en": "Coral Bay",
+   "zone": "zone4",
+   "lv": [
+    53,
+    54
+   ],
+   "stad": false,
+   "doos": [
+    2110,
+    -638,
+    2260,
+    -492
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_vliegereiland",
+   "naam": "Vliegereiland",
+   "naam_en": "Kite Island",
+   "zone": "zone4",
+   "lv": [
+    52,
+    53
+   ],
+   "stad": false,
+   "doos": [
+    2240,
+    -713,
+    2360,
+    -617
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_vuurtoreneiland",
+   "naam": "Vuurtoreneiland",
+   "naam_en": "Lighthouse Island",
+   "zone": "zone4",
+   "lv": [
+    54,
+    55
+   ],
+   "stad": false,
+   "doos": [
+    2352,
+    -544,
+    2448,
+    -456
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_pierkop",
+   "naam": "Pierkop en de Opstijgpier",
+   "naam_en": "Pierhead and the Liftoff Pier",
+   "zone": "zone4",
+   "lv": [
+    55,
+    56
+   ],
+   "stad": false,
+   "doos": [
+    2427,
+    -604,
+    2513,
+    -526
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_mysterie",
+   "naam": "Het Mysterie-eiland",
+   "naam_en": "Mystery Island",
+   "zone": "zone4",
+   "lv": [
+    55,
+    56
+   ],
+   "stad": false,
+   "doos": [
+    2429,
+    -376,
+    2531,
+    -284
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_wrak",
+   "naam": "Het Wrak van de Vliegervanger",
+   "naam_en": "The Wreck of the Kite Catcher",
+   "zone": "zone4",
+   "lv": [
+    54,
+    55
+   ],
+   "stad": false,
+   "doos": [
+    2139,
+    -719,
+    2191,
+    -681
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_schildpad",
+   "naam": "Het Schildpadeiland",
+   "naam_en": "Turtle Island",
+   "zone": "zone4",
+   "lv": [
+    52,
+    53
+   ],
+   "stad": false,
+   "doos": [
+    2212,
+    -483,
+    2368,
+    -357
+   ],
+   "laag": null
+  },
+  {
+   "id": "z4_zee",
+   "naam": "De Lampionkust",
+   "naam_en": "The Lantern Coast",
+   "zone": "zone4",
+   "lv": [
+    50,
+    56
+   ],
+   "stad": false,
+   "doos": [
+    1728,
+    -768,
+    2559,
+    -257
+   ],
+   "laag": null
+  },
+  {
+   "id": "bondenvallei",
+   "naam": "Bondenvallei",
+   "naam_en": "Squad Valley",
+   "zone": "zone1",
+   "lv": [
+    1,
+    60
+   ],
+   "stad": true,
+   "doos": [
+    -12256,
+    11932,
+    -11744,
+    32000
+   ],
+   "laag": null
+  },
+  {
    "id": "z3_zeppelinwerf",
    "naam": "De Kaaszeppelinwerf",
    "naam_en": "The Cheese Zeppelin Yard",
@@ -244,885 +1123,6 @@
     -1024,
     1727,
     -129
-   ],
-   "laag": null
-  },
-  {
-   "id": "grot_wolkengrot",
-   "naam": "De Wolkengrotten",
-   "naam_en": "The Cloud Caves",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2477,
-    -560,
-    2554,
-    -483
-   ],
-   "laag": {
-    "min_y": 177,
-    "max_y": 195
-   }
-  },
-  {
-   "id": "grot_koraalgrot",
-   "naam": "De Koraalgrot",
-   "naam_en": "The Coral Grotto",
-   "zone": "zone4",
-   "lv": [
-    53,
-    55
-   ],
-   "stad": false,
-   "doos": [
-    2197,
-    -625,
-    2273,
-    -569
-   ],
-   "laag": {
-    "min_y": 38,
-    "max_y": 57
-   }
-  },
-  {
-   "id": "grot_wortelgrot",
-   "naam": "De Wortelgrot",
-   "naam_en": "The Root Grotto",
-   "zone": "zone3",
-   "lv": [
-    44,
-    46
-   ],
-   "stad": false,
-   "doos": [
-    1349,
-    -744,
-    1447,
-    -695
-   ],
-   "laag": {
-    "min_y": 39,
-    "max_y": 56
-   }
-  },
-  {
-   "id": "grot_kristalgrot",
-   "naam": "De Kristalgrot",
-   "naam_en": "The Crystal Grotto",
-   "zone": "zone2",
-   "lv": [
-    22,
-    24
-   ],
-   "stad": false,
-   "doos": [
-    856,
-    -1166,
-    955,
-    -1081
-   ],
-   "laag": {
-    "min_y": 107,
-    "max_y": 128
-   }
-  },
-  {
-   "id": "grot_zwamgrot",
-   "naam": "De Zwamgrot",
-   "naam_en": "The Shroom Grotto",
-   "zone": "zone1",
-   "lv": [
-    11,
-    13
-   ],
-   "stad": false,
-   "doos": [
-    -537,
-    90,
-    -415,
-    186
-   ],
-   "laag": {
-    "min_y": 43,
-    "max_y": 62
-   }
-  },
-  {
-   "id": "z6_rozenkloof",
-   "naam": "Rozenkloof",
-   "naam_en": "Rose Gorge",
-   "zone": "zone6",
-   "lv": [
-    60,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    3236,
-    -800,
-    3500,
-    -652
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_saffraanpoort",
-   "naam": "Saffraanpoort",
-   "naam_en": "Saffron Gate",
-   "zone": "zone6",
-   "lv": [
-    62,
-    62
-   ],
-   "stad": true,
-   "doos": [
-    3634,
-    -950,
-    3890,
-    -742
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_toren",
-   "naam": "De Sterrendovende Toren",
-   "naam_en": "The Star-Snuffing Tower",
-   "zone": "zone6",
-   "lv": [
-    70,
-    70
-   ],
-   "stad": false,
-   "doos": [
-    4100,
-    -730,
-    4180,
-    -646
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_moederoase",
-   "naam": "De Moederoase",
-   "naam_en": "The Mother Oasis",
-   "zone": "zone6",
-   "lv": [
-    68,
-    70
-   ],
-   "stad": false,
-   "doos": [
-    4000,
-    -900,
-    4180,
-    -600
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_ruinedal",
-   "naam": "Het Ruïnedal",
-   "naam_en": "Ruin Valley",
-   "zone": "zone6",
-   "lv": [
-    66,
-    68
-   ],
-   "stad": false,
-   "doos": [
-    3850,
-    -1060,
-    4180,
-    -900
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_zoutvlakte",
-   "naam": "De Zoutvlakte",
-   "naam_en": "The Salt Flats",
-   "zone": "zone6",
-   "lv": [
-    64,
-    66
-   ],
-   "stad": false,
-   "doos": [
-    3833,
-    -740,
-    4060,
-    -460
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_palmenkloven",
-   "naam": "De Palmenkloven",
-   "naam_en": "The Palm Gorges",
-   "zone": "zone6",
-   "lv": [
-    62,
-    64
-   ],
-   "stad": false,
-   "doos": [
-    3236,
-    -1060,
-    3850,
-    -800
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_roze_duinen",
-   "naam": "De Roze Duinen",
-   "naam_en": "The Pink Dunes",
-   "zone": "zone6",
-   "lv": [
-    60,
-    62
-   ],
-   "stad": false,
-   "doos": [
-    3236,
-    -800,
-    3833,
-    -460
-   ],
-   "laag": null
-  },
-  {
-   "id": "z6_zijdeland",
-   "naam": "Het Zijdeland",
-   "naam_en": "The Silklands",
-   "zone": "zone6",
-   "lv": [
-    60,
-    70
-   ],
-   "stad": false,
-   "doos": [
-    3264,
-    -1152,
-    4287,
-    -385
-   ],
-   "laag": null
-  },
-  {
-   "id": "z5_proefarena",
-   "naam": "De Proefarena van de Wolkwacht",
-   "naam_en": "The Cloudwatch Trial Grounds",
-   "zone": "zone5",
-   "lv": [
-    56,
-    57
-   ],
-   "stad": false,
-   "doos": [
-    2701,
-    -583,
-    2727,
-    -557
-   ],
-   "laag": {
-    "min_y": 209,
-    "max_y": 225
-   }
-  },
-  {
-   "id": "z5_buikgangen",
-   "naam": "De Buikgangen",
-   "naam_en": "The Belly Tunnels",
-   "zone": "zone5",
-   "lv": [
-    57,
-    59
-   ],
-   "stad": false,
-   "doos": [
-    2700,
-    -545,
-    2810,
-    -495
-   ],
-   "laag": {
-    "min_y": 160,
-    "max_y": 180
-   }
-  },
-  {
-   "id": "z5_schuilnest",
-   "naam": "Het Schuilnest",
-   "naam_en": "The Hideout",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2586,
-    -440,
-    2624,
-    -414
-   ],
-   "laag": {
-    "min_y": 184,
-    "max_y": 198
-   }
-  },
-  {
-   "id": "z5_wolkrand_zuid",
-   "naam": "De Wolkrand: de Zuidvin",
-   "naam_en": "The Cloud Edge: South Fin",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2560,
-    -700,
-    2670,
-    -615
-   ],
-   "laag": {
-    "min_y": 125,
-    "max_y": 185
-   }
-  },
-  {
-   "id": "z5_wolkrand_noord",
-   "naam": "De Wolkrand: de Noordvin",
-   "naam_en": "The Cloud Edge: North Fin",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2560,
-    -425,
-    2670,
-    -340
-   ],
-   "laag": {
-    "min_y": 125,
-    "max_y": 185
-   }
-  },
-  {
-   "id": "z5_staartvlakte",
-   "naam": "De Staartvlakte",
-   "naam_en": "The Tail Flats",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2932,
-    -655,
-    3025,
-    -385
-   ],
-   "laag": {
-    "min_y": 185,
-    "max_y": 230
-   }
-  },
-  {
-   "id": "z5_paleisheuvel",
-   "naam": "De Paleisheuvel",
-   "naam_en": "Palace Hill",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2778,
-    -570,
-    2858,
-    -470
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_universiteit",
-   "naam": "De Universiteit",
-   "naam_en": "The University",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2694,
-    -494,
-    2780,
-    -434
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_academie",
-   "naam": "De Academie van de Wolkwacht",
-   "naam_en": "The Cloudwatch Academy",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2694,
-    -606,
-    2780,
-    -546
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_marktlaan",
-   "naam": "De Marktlaan",
-   "naam_en": "Market Lane",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2708,
-    -545,
-    2778,
-    -495
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_kathedraal",
-   "naam": "De Ordekathedraal",
-   "naam_en": "The Order Cathedral",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2572,
-    -572,
-    2708,
-    -468
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_luchthaven",
-   "naam": "De Luchthaven",
-   "naam_en": "The Skyport",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2578,
-    -467,
-    2682,
-    -345
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_staartpark",
-   "naam": "Het Staartpark",
-   "naam_en": "Tail Park",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2855,
-    -584,
-    2904,
-    -456
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_ooggaarde",
-   "naam": "De Ooggaarde",
-   "naam_en": "The Eye Garden",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2526,
-    -620,
-    2576,
-    -546
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_hoogvads",
-   "naam": "Hoogvads",
-   "naam_en": "Highchonk",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    2526,
-    -625,
-    2907,
-    -415
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_moeder_wolkwal",
-   "naam": "Moeder Wolkwal",
-   "naam_en": "Mother Cloudwhale",
-   "zone": "zone5",
-   "lv": [
-    56,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2432,
-    -702,
-    3022,
-    -338
-   ],
-   "laag": {
-    "min_y": 118,
-    "max_y": 330
-   }
-  },
-  {
-   "id": "z5_wolkwaldroom",
-   "naam": "De Wolkwaldroom",
-   "naam_en": "The Cloudwhale Dream",
-   "zone": "zone5",
-   "lv": [
-    58,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    2540,
-    -600,
-    2700,
-    -440
-   ],
-   "laag": {
-    "min_y": 150,
-    "max_y": 225
-   }
-  },
-  {
-   "id": "z5d_droom",
-   "naam": "De Droom van Moeder Wolkwal",
-   "naam_en": "Mother Cloudwhale's Dream",
-   "zone": "zone5",
-   "lv": [
-    60,
-    60
-   ],
-   "stad": false,
-   "doos": [
-    3030,
-    -560,
-    3110,
-    -480
-   ],
-   "laag": {
-    "min_y": 212,
-    "max_y": 302
-   }
-  },
-  {
-   "id": "z4_lampionhaven",
-   "naam": "Lampionhaven",
-   "naam_en": "Lanternhaven",
-   "zone": "zone4",
-   "lv": [
-    50,
-    50
-   ],
-   "stad": true,
-   "doos": [
-    1780,
-    -531,
-    1912,
-    -409
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_knuffeltij",
-   "naam": "Het Knuffeltij-strand",
-   "naam_en": "Snuggletide Beach",
-   "zone": "zone4",
-   "lv": [
-    50,
-    51
-   ],
-   "stad": false,
-   "doos": [
-    1860,
-    -398,
-    2010,
-    -292
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_strandfeest",
-   "naam": "Strandfeesteiland",
-   "naam_en": "Beach Party Island",
-   "zone": "zone4",
-   "lv": [
-    51,
-    52
-   ],
-   "stad": false,
-   "doos": [
-    1929,
-    -658,
-    2061,
-    -552
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_bloemeneiland",
-   "naam": "Bloemeneiland",
-   "naam_en": "Flower Island",
-   "zone": "zone4",
-   "lv": [
-    51,
-    52
-   ],
-   "stad": false,
-   "doos": [
-    2022,
-    -461,
-    2148,
-    -349
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_koraalbaai",
-   "naam": "De Koraalbaai",
-   "naam_en": "Coral Bay",
-   "zone": "zone4",
-   "lv": [
-    53,
-    54
-   ],
-   "stad": false,
-   "doos": [
-    2110,
-    -638,
-    2260,
-    -492
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_vliegereiland",
-   "naam": "Vliegereiland",
-   "naam_en": "Kite Island",
-   "zone": "zone4",
-   "lv": [
-    52,
-    53
-   ],
-   "stad": false,
-   "doos": [
-    2240,
-    -713,
-    2360,
-    -617
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_vuurtoreneiland",
-   "naam": "Vuurtoreneiland",
-   "naam_en": "Lighthouse Island",
-   "zone": "zone4",
-   "lv": [
-    54,
-    55
-   ],
-   "stad": false,
-   "doos": [
-    2352,
-    -544,
-    2448,
-    -456
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_pierkop",
-   "naam": "Pierkop en de Opstijgpier",
-   "naam_en": "Pierhead and the Liftoff Pier",
-   "zone": "zone4",
-   "lv": [
-    55,
-    56
-   ],
-   "stad": false,
-   "doos": [
-    2427,
-    -604,
-    2513,
-    -526
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_mysterie",
-   "naam": "Het Mysterie-eiland",
-   "naam_en": "Mystery Island",
-   "zone": "zone4",
-   "lv": [
-    55,
-    56
-   ],
-   "stad": false,
-   "doos": [
-    2429,
-    -376,
-    2531,
-    -284
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_wrak",
-   "naam": "Het Wrak van de Vliegervanger",
-   "naam_en": "The Wreck of the Kite Catcher",
-   "zone": "zone4",
-   "lv": [
-    54,
-    55
-   ],
-   "stad": false,
-   "doos": [
-    2139,
-    -719,
-    2191,
-    -681
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_schildpad",
-   "naam": "Het Schildpadeiland",
-   "naam_en": "Turtle Island",
-   "zone": "zone4",
-   "lv": [
-    52,
-    53
-   ],
-   "stad": false,
-   "doos": [
-    2212,
-    -483,
-    2368,
-    -357
-   ],
-   "laag": null
-  },
-  {
-   "id": "z4_zee",
-   "naam": "De Lampionkust",
-   "naam_en": "The Lantern Coast",
-   "zone": "zone4",
-   "lv": [
-    50,
-    56
-   ],
-   "stad": false,
-   "doos": [
-    1728,
-    -768,
-    2559,
-    -257
-   ],
-   "laag": null
-  },
-  {
-   "id": "bondenvallei",
-   "naam": "Bondenvallei",
-   "naam_en": "Squad Valley",
-   "zone": "zone1",
-   "lv": [
-    1,
-    60
-   ],
-   "stad": true,
-   "doos": [
-    -12256,
-    11932,
-    -11744,
-    32000
    ],
    "laag": null
   },
@@ -3109,6 +3109,7 @@
    "hub": "z3_honingtak",
    "ring": "z3_ring",
    "gebieden": [
+    "grot_wortelgrot",
     "z3_zeppelinwerf",
     "z3_hart",
     "z3_wortelduister",
@@ -3117,8 +3118,7 @@
     "z3_stamspiraal",
     "z3_kruinzee",
     "z3_takkenbanen",
-    "z3_wortelvelden",
-    "grot_wortelgrot"
+    "z3_wortelvelden"
    ]
   },
   {
@@ -3162,6 +3162,8 @@
    "ring": "z5_moeder_wolkwal",
    "gebieden": [
     "grot_wolkengrot",
+    "z5_wolkwaldroom",
+    "z5d_droom",
     "z5_proefarena",
     "z5_buikgangen",
     "z5_schuilnest",
@@ -3176,9 +3178,7 @@
     "z5_luchthaven",
     "z5_staartpark",
     "z5_ooggaarde",
-    "z5_hoogvads",
-    "z5_wolkwaldroom",
-    "z5d_droom"
+    "z5_hoogvads"
    ]
   },
   {
@@ -44029,9 +44029,9 @@
    "naam": "Knuffelridder",
    "naam_en": "Knuffelridder",
    "wapens": [
-    "knots",
+    "zwaard",
     "hamer",
-    "zwaard"
+    "knots"
    ],
    "per_level": {
     "1": {
@@ -44090,9 +44090,9 @@
    "naam": "Pluisjager",
    "naam_en": "Pluisjager",
    "wapens": [
-    "kruisboog",
+    "katapult",
     "boog",
-    "katapult"
+    "kruisboog"
    ],
    "per_level": {
     "1": {
@@ -44163,9 +44163,9 @@
    "naam": "Vadsmagiër",
    "naam_en": "Vadsmagiër",
    "wapens": [
-    "toverstok",
+    "boek",
     "staf",
-    "boek"
+    "toverstok"
    ],
    "per_level": {
     "1": {
