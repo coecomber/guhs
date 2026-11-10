@@ -7030,6 +7030,13 @@
         "gui.guhs.safari.foto.naam.zeeschildpad",
         "gui.guhs.safari.foto.naam.zeester"
       ]
+    },
+    {
+      "id": "c465_vr_y_cosmetica",
+      "title": "1.10 round Y (Y-COSMETICA): the Garderobe at home (Vadsrijk outfits as looks in survival)",
+      "prefixes": [
+        "vadsrijk.kleding.garderobe"
+      ]
     }
   ]
 }

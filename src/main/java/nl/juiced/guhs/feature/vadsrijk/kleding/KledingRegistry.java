@@ -100,6 +100,7 @@ public final class KledingRegistry {
             KAART_LATER.remove(e.getEntity().getUUID());
         });
         NeoForge.EVENT_BUS.addListener(KledingRegistry::commando);
+        NeoForge.EVENT_BUS.addListener(Garderobe::commando);   // Y-COSMETICA: /guhs garderobe
         puzzels();
     }
 

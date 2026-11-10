@@ -237,11 +237,17 @@ public final class Kledingkast {
 
     static int onthoud(CompoundTag looks, ItemStack s) {
         String k = lookSleutel(s);
-        if (k == null || looks.contains(k)) {
+        if (k == null || looks.contains(k) || !vadsrijkHarnas(s)) {   // Y-COSMETICA: only Vadsrijk armour becomes a look
             return 0;
         }
         looks.putString(k, BuiltInRegistries.ITEM.getKey(s.getItem()).toString());
         return 1;
+    }
+
+    /** Y-COSMETICA: Vadsrijk armour ({@code guhs:vr_*}); survival armour never feeds the Vadsrijk transmog. */
+    static boolean vadsrijkHarnas(ItemStack s) {
+        Identifier id = BuiltInRegistries.ITEM.getKey(s.getItem());
+        return id.getNamespace().equals("guhs") && id.getPath().startsWith("vr_");
     }
 
     /** The item ids of the looks this account collected for a slot. */
@@ -337,6 +343,14 @@ public final class Kledingkast {
 
     /** Opens (or refreshes) the wardrobe screen. {@code via}: an NPC id when opened at a tailor (the secret counts those). */
     public static void open(ServerPlayer p, @Nullable String via) {
+        open(p, via, Vadsrijk.in(p));
+    }
+
+    /**
+     * Y-COSMETICA: {@code binnen} = in the Vadsrijk. Only there does opening also check the sources and collect armour looks; at home
+     * (the Garderobe) it only shows what the Vadsrijk already gave you: unlocks never come from survival.
+     */
+    static void open(ServerPlayer p, @Nullable String via, boolean binnen) {
         if (via != null && !via.isEmpty()) {
             CompoundTag b = KledingData.deel(p, "bezocht");
             if (!b.getBooleanOr(via, false)) {
@@ -347,8 +361,10 @@ public final class Kledingkast {
                 }
             }
         }
-        verzamel(p);
-        Bronnen.check(p);
+        if (binnen) {   // Y-COSMETICA
+            verzamel(p);
+            Bronnen.check(p);
+        }
         KledingPayloads.stuur(p, new KledingPayloads.Scherm(schermData(p)));
     }
 
@@ -383,6 +399,7 @@ public final class Kledingkast {
         t.putBoolean("zweven", zweven(p));
         t.putInt("kills", kills(p));
         t.putBoolean("binnen", Vadsrijk.in(p));
+        t.putInt("poort", Garderobe.poort());   // Y-COSMETICA: locked pieces of closed zones are not listed
         return t;
     }
 
