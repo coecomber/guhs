@@ -105,5 +105,12 @@
   "sign.guhs.lobby.guh_op_een_rij": "~ Guh in a row ~",
   "sign.guhs.lobby.vier_guhs_op": "Four guhs in",
   "sign.guhs.lobby.een_rij_wint": "a row win.",
-  "sign.guhs.lobby.of_vier_blubs": "Or four Blubs."
+  "sign.guhs.lobby.of_vier_blubs": "Or four Blubs.",
+  "gui.guhs.spelgroep.gezelschapshoek": "The Gezelschapshoek",
+  "gui.guhs.spelgroep.gezelschapshoek.waar": "In the Guhpixel lobby (type /lobby): the Gezelschapshoek in the south-east, with the Pillow Boss, the Games Guh and the Rows Guh. Pyjamas on!",
+  "gui.guhs.spelgroep.tijdperk.guhpixel": "The Guhpixel lobby",
+  "gui.guhs.gids.rij.kussengevecht": "Pillow fight: points",
+  "gui.guhs.gids.rij.wieishet": "Guess who: wins",
+  "gui.guhs.gids.rij.opeenrij": "Guh in a row: wins",
+  "gui.guhs.kledingbron.gezelschapshoek": "The Gezelschapshoek (Guhpixel lobby)"
 }

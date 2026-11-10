@@ -133,6 +133,21 @@ TEKSTEN = {
     "gui.guhs.highscores.game.kussengevecht": ("Kussengevecht", "Pillow fight"),
     "gui.guhs.highscores.game.wieishet": ("Wie is het (gewonnen)", "Guess who (wins)"),
     "gui.guhs.highscores.game.opeenrij": ("Guh op een rij (gewonnen)", "Guh in a row (wins)"),
+    # the Gezelschapshoek in the Minigames tab of the Guhdex (1.10 y-fix: the group was missing)
+    "gui.guhs.spelgroep.gezelschapshoek": ("De Gezelschapshoek",
+        "The Gezelschapshoek"),
+    "gui.guhs.spelgroep.gezelschapshoek.waar": ("In de Guhpixel-lobby (typ /lobby): de Gezelschapshoek in het zuidoosten, bij de Kussenbaas, de Spelletjesguh en de Rijtjesguh. Pyjama aan, njeg!",
+        "In the Guhpixel lobby (type /lobby): the Gezelschapshoek in the south-east, with the Pillow Boss, the Games Guh and the Rows Guh. Pyjamas on!"),
+    "gui.guhs.spelgroep.tijdperk.guhpixel": ("De Guhpixel-lobby",
+        "The Guhpixel lobby"),
+    "gui.guhs.gids.rij.kussengevecht": ("Kussengevecht: punten",
+        "Pillow fight: points"),
+    "gui.guhs.gids.rij.wieishet": ("Wie is het: keer gewonnen",
+        "Guess who: wins"),
+    "gui.guhs.gids.rij.opeenrij": ("Guh op een rij: keer gewonnen",
+        "Guh in a row: wins"),
+    "gui.guhs.kledingbron.gezelschapshoek": ("De Gezelschapshoek (Guhpixel-lobby)",
+        "The Gezelschapshoek (Guhpixel lobby)"),
 }
 
 

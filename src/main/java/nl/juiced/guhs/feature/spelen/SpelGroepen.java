@@ -58,7 +58,9 @@ public final class SpelGroepen {
     public enum Tijdperk {
         KLASSIEKERS, KNUFFELDAL, GROTE_GUHSPELEN,
         /** 3.0 (Guhverhalen): the games of the stories (the Nomguh sledesprint, surfing and hula on Guhwai'i). */
-        VERHALEN;
+        VERHALEN,
+        /** 1.8.0 (Guhpixel): the games of the Guhpixel lobby (the Gezelschapshoek: Kussengevecht, Wie is het, Guh op een rij). */
+        GUHPIXEL;
 
         public String id() {
             return name().toLowerCase(Locale.ROOT);

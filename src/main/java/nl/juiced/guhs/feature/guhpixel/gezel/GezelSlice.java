@@ -87,6 +87,9 @@ public final class GezelSlice {
         return (npc, player) -> BordSpel.open(player, spel);
     }
 
+    /** The group id of the Gezelschapshoek in the Guhdex's Minigames tab (also its clothing source id). */
+    public static final String GROEP = "gezelschapshoek";
+
     public static void register(IEventBus modBus) {
         ITEMS.register(modBus);
         Sessies.registreer(KussenSessie.SPEL);
@@ -98,6 +101,11 @@ public final class GezelSlice {
                 server -> Component.translatable("gui.guhs.gezel.npc.wieishet").withStyle(ChatFormatting.GRAY));
         LobbyNpcs.registreer(LobbyPlek.SPEL_OPEENRIJ, GuhNpcEntity.Kind.OPEENRIJ_GUH, null,
                 server -> Component.translatable("gui.guhs.gezel.npc.opeenrij").withStyle(ChatFormatting.GRAY));
+        // the Gezelschapshoek in the Minigames tab of the Guhdex: its three Highscores rows (no structure: it is in the lobby)
+        nl.juiced.guhs.feature.spelen.SpelGroepen.groep(new nl.juiced.guhs.feature.spelen.SpelGroepen.Groep(GROEP,
+                nl.juiced.guhs.feature.spelen.SpelGroepen.Tijdperk.GUHPIXEL,
+                nl.juiced.guhs.feature.spelen.SpelGroepen.icoon("kussengevecht_kussen", net.minecraft.world.item.Items.WHITE_WOOL), null,
+                GuhNpcEntity.Kind.KUSSENBAAS_GUH, List.of(KussenSessie.BORD, BordSpel.WIEISHET, BordSpel.OPEENRIJ)));
 
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, GezelSlice::opAanval);
         NeoForge.EVENT_BUS.addListener(GezelSlice::opSchade);
