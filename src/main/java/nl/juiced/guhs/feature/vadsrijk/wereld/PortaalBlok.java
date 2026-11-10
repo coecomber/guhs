@@ -53,6 +53,12 @@ public class PortaalBlok extends Block {
         b.add(AXIS, WAKKER);
     }
 
+    // Y-INT: turns along with structures (DraaiGameTests)
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return nl.juiced.guhs.block.Draaien.as(state, AXIS, rotation);
+    }
+
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return state.getValue(AXIS) == Direction.Axis.X ? X : Z;

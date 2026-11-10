@@ -62,6 +62,8 @@ import nl.juiced.guhs.feature.vadsrijk.vitrine.VitrineBlockEntity;
  */
 public final class GrensCheck {
     static final String DIAMANT = "Grenscheck-diamant", SMARAGD = "Grensdruppel";
+    /** FTB Essentials 26.1.2.4: /enderchest, and the work blocks as /open <block> (there is no /ec and no bare /anvil). */
+    static final List<String> WERK = List.of("enderchest", "open anvil", "open crafting", "open smithing", "open stonecutter");
     private static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger("guhs");
     private static final List<String> REGELS = new ArrayList<>();
     private static int pass, fail, skip;
@@ -112,12 +114,14 @@ public final class GrensCheck {
         p.getFoodData().setFoodLevel(eten);
         check(p, !Scheiding.vrijgesteld(p), "the player counts as a normal player (no op exemption) for this check");
         if (ftbEssentials(p.level().getServer())) {
-            doe(p, "sethome grenscheck");
-            for (String w : List.of("anvil", "crafting", "smithing", "stonecutter")) {
-                doe(p, w);
-                check(p, p.containerMenu != p.inventoryMenu, "at home /" + w + " opens (FTB Essentials)");
-                p.closeContainer();
-            }
+            later(p, () -> {
+                doe(p, "sethome grenscheck");
+                for (String w : WERK) {
+                    doe(p, w);
+                    check(p, p.containerMenu != p.inventoryMenu, "at home /" + w + " opens (FTB Essentials, control)");
+                    p.closeContainer();
+                }
+            });
         } else {
             skip(p, "FTB Essentials is not loaded: the command checks are skipped");
         }
@@ -142,9 +146,7 @@ public final class GrensCheck {
         check(p, !p.hasEffect(MobEffects.SPEED), "the home Speed effect does not exist inside");
         check(p, Lichaam.thuisWacht(p), "the home body (health/food/effects) is stored");
         ServerLevel thuis = server.overworld();
-        Entity dr = druppel == null ? null : thuis.getEntity(druppel);
-        check(p, dr != null && dr.level() == thuis, "the emerald dropped at the border stayed home");
-        check(p, telNaam(p, SMARAGD) == 0 && geenNaam(p.level(), SMARAGD), "...and is nowhere inside");
+        check(p, telNaam(p, SMARAGD) == 0 && geenNaam(p.level(), SMARAGD), "the emerald dropped at the border is nowhere inside");
         // an item entity can't be sent across, either way
         ItemEntity a = new ItemEntity(thuis, 0.5, thuis.getMaxY() - 5, 0.5, new ItemStack(Items.GOLD_INGOT));
         thuis.addFreshEntity(a);
@@ -158,15 +160,20 @@ public final class GrensCheck {
         b.discard();
         // commands (FTB Essentials)
         if (ftbEssentials(server)) {
-            for (String c : List.of("ec", "enderchest", "anvil", "crafting", "smithing", "stonecutter")) {
-                doe(p, c);
-                check(p, p.containerMenu == p.inventoryMenu, "inside /" + c + " is refused (no menu)");
-                p.closeContainer();
+            if (server.getCommands().getDispatcher().getRoot().getChild("ec") == null) {
+                regel(p, "note: /ec does not exist in FTB Essentials 26.1.2.4 (only /enderchest); it is on the refusal list anyway");
             }
-            for (String c : List.of("home grenscheck", "back", "spawn")) {
-                doe(p, c);
-                check(p, Vadsrijk.in(p), "inside /" + c + " is refused (still in the Vadsrijk)");
-            }
+            later(p, () -> {
+                for (String c : WERK) {
+                    doe(p, c);
+                    check(p, p.containerMenu == p.inventoryMenu, "inside /" + c + " is refused (no menu)");
+                    p.closeContainer();
+                }
+                for (String c : List.of("home grenscheck", "back", "spawn")) {
+                    doe(p, c);
+                    check(p, Vadsrijk.in(p), "inside /" + c + " is refused (still in the Vadsrijk)");
+                }
+            });
         } else {
             skip(p, "FTB Essentials is not loaded: /ec /home inside not checked");
         }
@@ -194,13 +201,22 @@ public final class GrensCheck {
         check(p, Math.abs(p.getHealth() - hp) <= 1f, "health back (" + p.getHealth() + ", was " + hp + ")");
         check(p, Math.abs(p.getFoodData().getFoodLevel() - eten) <= 1, "food back (" + p.getFoodData().getFoodLevel() + ", was " + eten + ")");
         check(p, !Lichaam.thuisWacht(p), "no home body waiting any more");
+        Entity dr = druppel == null ? null : ((ServerLevel) p.level()).getEntity(druppel);
+        check(p, dr instanceof ItemEntity ie && !ie.isRemoved() && dr.level() == p.level(), "the emerald dropped at the border is still lying at home");
+        if (dr != null) {
+            dr.discard();
+        }
         if (ModList.get().isLoaded("ftbquests")) {
             GrensCheckFtb.thuis(p);
         }
         if (ftbEssentials(p.level().getServer())) {
-            doe(p, "anvil");
-            check(p, p.containerMenu != p.inventoryMenu, "at home /anvil works again");
-            p.closeContainer();
+            later(p, () -> {
+                for (String w : List.of("enderchest", "open anvil")) {
+                    doe(p, w);
+                    check(p, p.containerMenu != p.inventoryMenu, "at home /" + w + " works again");
+                    p.closeContainer();
+                }
+            });
         }
         // vitrine + pronkstuk in front of the player
         BlockPos plek = plek(p);
@@ -208,9 +224,9 @@ public final class GrensCheck {
         vitrinePlek = v ? plek : null;
         check(p, v && p.level().getBlockEntity(plek) instanceof VitrineBlockEntity be && p.getUUID().equals(be.eigenaar()),
                 "the vitrine is placed at home (owner = the player) at " + plek.toShortString());
-        BlockPos naast = plek.relative(p.getDirection().getClockWise(), 2);
+        BlockPos naast = grond(p.level(), plek.relative(p.getDirection().getClockWise(), 2));
         check(p, plaats(p, naast, VrFtbRegistry.ITEMS_PER_ID.get("vadsrijk_trofee_zone1").get()), "a pronkstuk is placed at home at " + naast.toShortString());
-        BlockPos naast2 = plek.relative(p.getDirection().getCounterClockWise(), 2);
+        BlockPos naast2 = grond(p.level(), plek.relative(p.getDirection().getCounterClockWise(), 2));
         check(p, plaats(p, naast2, VrFtbRegistry.ITEMS_PER_ID.get("vadsrijk_trofee_rekruut").get()), "the Rekruutvaantje is placed at home");
     }
 
@@ -269,6 +285,15 @@ public final class GrensCheck {
         return server.getCommands().getDispatcher().getRoot().getChild("enderchest") != null;
     }
 
+    /**
+     * Runs after the current command: a command started from inside another command (our /guhs grenscheck) is only QUEUED by
+     * vanilla until the outer one ends, so its effect can't be checked in the same call.
+     */
+    static void later(ServerPlayer p, Runnable r) {
+        MinecraftServer server = p.level().getServer();
+        server.schedule(new net.minecraft.server.TickTask(server.getTickCount() + 1, r));
+    }
+
     static void doe(ServerPlayer p, String cmd) {
         p.level().getServer().getCommands().performPrefixedCommand(p.createCommandSourceStack(), cmd);
     }
@@ -302,11 +327,15 @@ public final class GrensCheck {
 
     /** A free spot 3 blocks in front of the player, on the ground. */
     static BlockPos plek(ServerPlayer p) {
-        BlockPos b = p.blockPosition().relative(p.getDirection(), 3);
-        Level l = p.level();
+        return grond(p.level(), p.blockPosition().relative(p.getDirection(), 3));
+    }
+
+    /** The spot in this column (+-3) with a solid floor and room above (snow layers and grass count as room: they get replaced). */
+    static BlockPos grond(Level l, BlockPos b) {
         for (int dy = 3; dy >= -3; dy--) {
             BlockPos c = b.above(dy);
-            if (l.getBlockState(c).isAir() && l.getBlockState(c.above()).isAir() && !l.getBlockState(c.below()).isAir()) {
+            if (l.getBlockState(c).canBeReplaced() && l.getBlockState(c.above()).canBeReplaced()
+                    && l.getBlockState(c.below()).isFaceSturdy(l, c.below(), Direction.UP) && !l.getBlockState(c.below()).canBeReplaced()) {
                 return c;
             }
         }
