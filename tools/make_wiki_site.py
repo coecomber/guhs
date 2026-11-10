@@ -49,6 +49,11 @@ def main():
                     help="the wiki AND (with --vadsrijk) guhs.nl/vadsrijk publish only the tutorial + Vadsrijk zones 1..N (default 1, like the server's zone gate; 6 = all)")
     ap.add_argument("--verbose", action="store_true", help="list the knowledge-base chunks without a page and the leftover version numbers")
     args = ap.parse_args()
+    # Y-INT: the FTB quests of closed zones stay off the wiki (gamedata.ftb reads GUHS_OPEN_ZONES): it ALWAYS follows --open-zones,
+    # so the wiki's FTB pages, the Vadsrijk pages and /vadsrijk/ use one and the same gate
+    if os.environ.get("GUHS_OPEN_ZONES") not in (None, str(args.open_zones)):
+        print(f"  !! GUHS_OPEN_ZONES={os.environ['GUHS_OPEN_ZONES']} differs from --open-zones {args.open_zones}: using {args.open_zones}")
+    os.environ["GUHS_OPEN_ZONES"] = str(args.open_zones)
     root = os.path.abspath(args.root)
     landing_dir = None if args.no_landing else os.path.abspath(args.landing or os.path.join(root, "docs", "site"))
     out = os.path.abspath(args.out or (os.path.join(landing_dir, "wiki") if landing_dir else os.path.join(root, "docs", "site")))

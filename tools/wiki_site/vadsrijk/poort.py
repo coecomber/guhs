@@ -455,6 +455,9 @@ def filter_wiki(site, root, n):
         if "vr_" in pid.lower() or "vadsrijk" in pid.lower():
             m = re.search(r"vr_z([2-6])", pid.lower())
             z = max(z, int(m[1]) if m else 1, max(in_id(slugs, low) or [1]))
+            # Y-INT: the FTB pronkstukken of round Y (vadsrijk_trofee_zoneN / _geheimN, _raid = zone 6): their names carry zone names
+            mt = re.search(r"vadsrijk_trofee_(?:zone|geheim)([1-6])", pid.lower())
+            z = max(z, int(mt[1]) if mt else 1, 6 if "vadsrijk_trofee_raid" in pid.lower() else 1)
             tekst = " ".join([pg.title or "", pg.title_en or "", pg.lead_nl or "", pg.lead_en or ""]
                              + [str(v) for _, _, v in pg.infobox] + [x[3] for x in pg.sections])
             if pat:
