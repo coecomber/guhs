@@ -59,6 +59,7 @@ public final class Scheiding {
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (net.neoforged.neoforge.event.entity.item.ItemTossEvent e) -> Vangnet.gooi(e));
         NeoForge.EVENT_BUS.addListener((PlayerSetSpawnEvent e) -> Grens.spawnpunt(e));
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, (CommandEvent e) -> Grens.commando(e));
+        NeoForge.EVENT_BUS.addListener(GrensCheck::commando);   // Y-INT: /guhs grenscheck (dev, op): the real border check in a client run
         NeoForge.EVENT_BUS.addListener((PlayerContainerEvent.Open e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 Menus.open(p, e.getContainer());

@@ -18,6 +18,12 @@ public final class Post {
 
     /** Adds a stack to the post (call from the server thread). */
     public static void stuur(ServerPlayer p, ItemStack s) {
+        // Y-INT (user decision): only Vadsrijk deco/clothing goes home; anything else stays on the Vadsrijk side (bag or kern's chest).
+        if (!nl.juiced.guhs.feature.vadsrijk.scheiding.ThuisWaren.mag(s)) {
+            org.slf4j.LoggerFactory.getLogger("guhs").warn("Y-INT: {} is not Vadsrijk deco/clothing, not sent home by the Post", s);
+            EcoUtil.geefOfBewaar(p, s);
+            return;
+        }
         CompoundTag t = EcoUtil.tag(p.registryAccess(), s);
         if (t == null) {
             return;

@@ -1,0 +1,77 @@
+# Y-INT: round Y, the REAL survival <-> Vadsrijk border (the gametest server has no Vadsrijk dimension, so this is where it is
+# checked for real). /guhs grenscheck (feature/vadsrijk/scheiding/GrensCheck) does the checks server-side and writes
+# "GRENSCHECK PASS|FAIL|SKIP ..." lines to the log, to chat and to run/grenscheck.txt; the shots are only the evidence.
+# Run it with openZones = 1 in run/defaultconfigs (the release gate), FTB Essentials in run/mods:
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_y_int.txt
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+/gamerule doWeatherCycle false
+wait 60
+waitrender 200
+/guhs vadsrijk zones
+wait 20
+
+section grens_start
+# at home: the player counts as a normal player; marked diamond, xp 17, Speed II, 13 health, 11 food; /sethome; work blocks at home
+/guhs grenscheck start
+wait 40
+shot yi_01_thuis_start
+
+section grens_binnen
+# an emerald dropped at the border, the real entry, then every check inside
+/guhs grenscheck in
+wait 400
+waitrender 300
+/guhs grenscheck binnen
+wait 60
+shot yi_02_binnen_checks
+# the same commands typed by the player (the refusal message must be in chat)
+clearchat
+/ec
+wait 20
+/home grenscheck
+wait 20
+/anvil
+wait 20
+/crafting
+wait 20
+shot yi_03_binnen_geweigerd
+
+section grens_thuis
+/guhs grenscheck uit
+wait 300
+waitrender 300
+/guhs grenscheck thuis
+wait 60
+shot yi_04_thuis_terug
+
+section vitrine
+# zone 1 done + lv 20, a Knuffelhert as the statue, the snapshot refreshed, the camera on the case (gate 1: zones 2-6 are "?")
+/guhs vadsrijk zones zone1klaar
+wait 40
+/guhs grenscheck vitrine
+wait 20
+/guhs vadsrijk vitrine ververs
+wait 120
+clearchat
+waitrender 200
+shot yi_05_vitrine_gevuld
+/guhs grenscheck rapport
+wait 20
+shot yi_06_rapport
+
+section garderobe
+/guhs garderobe
+wait 40
+widgets
+shot yi_07_garderobe_thuis
+close
+wait 10
+
+section ftb
+# the chapter Het Vadsrijk at gate 1: rekruut, zone 1, geheimpjes 1 only
+gui ftbquests yi_ftb guhs_vadsrijk
+wait 20
+quit

@@ -57,7 +57,7 @@ public final class Menus {
 
     private static final Map<UUID, Staat> STAAT = new ConcurrentHashMap<>();
 
-    /** Mollie's wares: the Guhs furniture and deco (block items), price in brons. */
+    /** Mollie's wares: the Guhs furniture and Vadsrijk deco (block items), price in brons. Y-INT: only what {@code scheiding.ThuisWaren} allows. */
     record Waar(Supplier<ItemStack> item, long prijs) {
     }
 
@@ -70,20 +70,17 @@ public final class Menus {
         WAREN.add(new Waar(() -> new ItemStack(ModBlocks.ZITZAKKEN.get(DyeColor.PINK).get()), 50));
         WAREN.add(new Waar(() -> new ItemStack(ModBlocks.KUSSENS.get(DyeColor.MAGENTA).get()), 25));
         WAREN.add(new Waar(() -> new ItemStack(ModBlocks.VLAGGETJES.get()), 30));
-        WAREN.add(new Waar(() -> new ItemStack(ModBlocks.GUH_TAART.get()), 35));
-        WAREN.add(new Waar(() -> new ItemStack(ModBlocks.ROZE_GUHBLOEM.get(), 4), 20));
-        WAREN.add(new Waar(() -> new ItemStack(ModBlocks.GUHOORTJES.get(), 4), 20));
-        WAREN.add(new Waar(() -> new ItemStack(Items.LANTERN, 4), 30));
-        WAREN.add(new Waar(() -> new ItemStack(Items.PINK_CARPET, 8), 20));
-        WAREN.add(new Waar(() -> new ItemStack(Items.PINK_BED), 60));
-        WAREN.add(new Waar(() -> new ItemStack(Items.FLOWER_POT, 4), 15));
-        WAREN.add(new Waar(() -> new ItemStack(Items.CHERRY_PLANKS, 32), 30));
-        WAREN.add(new Waar(() -> new ItemStack(Items.PINK_STAINED_GLASS_PANE, 16), 30));
-        WAREN.add(new Waar(() -> new ItemStack(Items.BOOKSHELF, 4), 40));
+        // Y-INT (user decision): Vadsmunten buy only Vadsrijk deco/clothing + Guhs furniture for home (scheiding.ThuisWaren).
+        // Removed: Guh cake (food), guh flowers, lanterns, pink carpet, pink bed, flower pots, cherry planks, glass panes, bookshelves.
         WAREN.add(new Waar(() -> new ItemStack(EcoSpul.VADSRIJK_VAANDEL.get()), 300));
     }
 
     private Menus() {
+    }
+
+    /** Y-INT: Mollie's wares as stacks (for the round-Y test that she only sells what {@code scheiding.ThuisWaren} allows). */
+    public static List<ItemStack> mollieWaren() {
+        return WAREN.stream().map(w -> w.item().get()).toList();
     }
 
     static Staat staat(ServerPlayer p) {

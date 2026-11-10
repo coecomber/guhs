@@ -1916,6 +1916,7 @@ public final class AutoCheck {
                 // gui ftbquests [prefix]: open the FTB quest book on every Guhs chapter: an overview (zoomed out), the chapter at
                 // normal zoom from top to bottom, and the "Hoe kom je hier?" quest opened. (FTB Quests is only a dev dependency: reflection.)
                 String prefix = a.length > 2 ? a[2] : "gui_ftb";
+                String hoofdstuk = a.length > 3 ? a[3] : "guhs";   // Y-INT: gui ftbquests <prefix> <chapter id prefix> (e.g. guhs_vadsrijk)
                 return mc -> {
                     try {
                         Class<?> cqf = Class.forName("dev.ftb.mods.ftbquests.client.ClientQuestFile");
@@ -1927,7 +1928,7 @@ public final class AutoCheck {
                         }
                         List<Object> chapters = new ArrayList<>();
                         for (Object ch : (List<?>) file.getClass().getMethod("getAllChapters").invoke(file)) {
-                            if (ftbChapterName(ch).startsWith("guhs")) {
+                            if (ftbChapterName(ch).startsWith(hoofdstuk)) {
                                 chapters.add(ch);
                             }
                         }
