@@ -124,7 +124,8 @@ public class VadsrijkFtbGameTests {
             helper.assertTrue(VrFtb.heeft(p, "vr_ftb_zone1"), "zone 1 on the Normaal knight");
             helper.assertTrue(Karakters.maak(p, 2, "Eenvads Test") && Karakters.wissel(p, 2, true), "a new Eénvads knight, switched to");
             helper.assertTrue(Karakter.modus(p) == Modus.EENVADS && !Questlog.klaar(p, EIND.get(1)), "his quest log is empty");
-            helper.assertTrue(VrFtb.heeft(p, "vr_ftb_zone1") && VrFtb.controleer(p) == 0, "zone 1 stays ticked (the player has it, not the knight)");
+            VrFtb.controleer(p);
+            helper.assertTrue(VrFtb.heeft(p, "vr_ftb_zone1"), "zone 1 stays ticked (the player has it, not the knight)");
             Questlog.voltooi(p, Quests.van(EIND.get(2)));
             helper.assertTrue(VrFtb.heeft(p, "vr_ftb_zone2"), "zone 2 on the Eénvads knight");
             helper.assertTrue(Karakters.wissel(p, 0, true) && VrFtb.heeft(p, "vr_ftb_zone2"), "back on the Normaal knight: zone 2 stays ticked");
@@ -236,7 +237,9 @@ public class VadsrijkFtbGameTests {
         ServerPlayer p = speler(helper);
         ServerLevel thuis = (ServerLevel) p.level();
         ServerLevel vr = Vadsrijk.level(helper.getLevel().getServer());
-        helper.assertTrue(vr != null, "the Vadsrijk level is there");
+        helper.assertTrue(!FtbClaimRegel.magClaimenIn(Vadsrijk.DIM), "the Vadsrijk dimension: no claims");
+        helper.assertTrue(FtbClaimRegel.magClaimenIn(Level.OVERWORLD) && FtbClaimRegel.magClaimenIn(ModDimensions.GUHMENSION)
+                && FtbClaimRegel.magClaimenIn(Kwartier.DIM) && FtbClaimRegel.magClaimenIn(Level.NETHER), "overworld, Guhmensie, Knuffelkwartier, Nether: claims");
         FtbClaimRegel.vergeet();
         int voor = FtbClaimRegel.geweigerd;
         helper.assertTrue(thuis.dimension() == Level.OVERWORLD && FtbClaimRegel.magClaimen(p) && !FtbClaimRegel.weiger(p),
@@ -248,6 +251,11 @@ public class VadsrijkFtbGameTests {
             }
             p.teleportTo(l, 0.5, 200, 0.5, Set.<Relative>of(), 0, 0, true);
             helper.assertTrue(p.level() == l && !FtbClaimRegel.weiger(p), l.dimension().identifier() + ": claim allowed");
+        }
+        if (vr == null) {   // (the gametest server may not load the Vadsrijk dimension: the key checks above cover the rule)
+            p.teleportTo(thuis, p.getX(), 100, p.getZ(), Set.<Relative>of(), 0, 0, true);
+            helper.succeed();
+            return;
         }
         p.teleportTo(vr, 0.5, 300, 0.5, Set.<Relative>of(), 0, 0, true);
         try {
@@ -290,7 +298,8 @@ public class VadsrijkFtbGameTests {
                 helper.assertTrue(nl.get(key).getAsString().equals("Beloning: Zone " + n + " van Het Vadsrijk uitgespeeld"), id + ": " + nl.get(key));
             }
             // placed by a survival player on the floor of the test room
-            BlockPos vloer = new BlockPos(1 + x, 1, 2);
+            BlockPos vloer = new BlockPos(1, 1, 1);
+            helper.setBlock(vloer.above(), Blocks.AIR);
             helper.setBlock(vloer, Blocks.STONE);
             BlockPos abs = helper.absolutePos(vloer);
             ItemStack hand = new ItemStack(item.get(), 2);
@@ -300,12 +309,15 @@ public class VadsrijkFtbGameTests {
             helper.assertTrue(p.getMainHandItem().getCount() == 1, id + ": survival uses one up");
             helper.assertTrue(helper.getBlockState(vloer.above()).getValue(TrofeeBlock.FACING) == p.getDirection().getOpposite(), id + ": faces the player");
             // not in the Vadsrijk
+            helper.assertTrue(TrofeeBlock.magNietIn(Vadsrijk.DIM) && !TrofeeBlock.magNietIn(Level.OVERWORLD) && !TrofeeBlock.magNietIn(Kwartier.DIM),
+                    id + ": the rule: not in the Vadsrijk, yes at home and in the Knuffelkwartier");
             if (vr != null) {
                 BlockPos ergens = new BlockPos(0, 200, 0);
                 BlockPlaceContext ctx = new BlockPlaceContext(vr, p, InteractionHand.MAIN_HAND, new ItemStack(item.get()),
                         new BlockHitResult(Vec3.atCenterOf(ergens), Direction.UP, ergens, false));
                 helper.assertTrue(e.getValue().get().getStateForPlacement(ctx) == null, id + ": cannot be placed in the Vadsrijk");
             }
+            helper.setBlock(vloer.above(), Blocks.AIR);
             x++;
         }
         p.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);

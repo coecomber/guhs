@@ -64,6 +64,11 @@ public class TrofeeBlock extends HorizontalDirectionalBlock {
     }
 
     public static boolean magNietHier(BlockPlaceContext context) {
-        return Vadsrijk.in(context.getLevel());
+        return magNietIn(context.getLevel().dimension());
+    }
+
+    /** Not in the Vadsrijk; everywhere else (the Knuffelkwartier too) it may stand. */
+    public static boolean magNietIn(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim) {
+        return dim == Vadsrijk.DIM;
     }
 }

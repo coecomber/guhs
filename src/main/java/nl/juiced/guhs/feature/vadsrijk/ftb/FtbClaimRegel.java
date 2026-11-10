@@ -41,7 +41,12 @@ public final class FtbClaimRegel {
 
     /** May this player claim an FTB reward where he is now? */
     public static boolean magClaimen(@Nullable ServerPlayer p) {
-        return p == null || !Vadsrijk.in(p);
+        return p == null || magClaimenIn(p.level().dimension());
+    }
+
+    /** May FTB rewards be claimed in this dimension? Everywhere but the Vadsrijk. */
+    public static boolean magClaimenIn(net.minecraft.resources.ResourceKey<net.minecraft.world.level.Level> dim) {
+        return dim != Vadsrijk.DIM;
     }
 
     /**
