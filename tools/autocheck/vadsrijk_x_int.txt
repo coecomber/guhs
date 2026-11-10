@@ -1,0 +1,192 @@
+# X-INT: one walk over the integrated Vadsrijk after round X (zones 1-6 load) + the round-X spots: the whale gate and stair,
+# the raid tower door + herald, a dungeon door with its name board, Kwartiermeester Lamelletje, and the end of zone 1 with the
+# zone gate at 1 (tracker "Wordt vervolgd" + the captain's line), seen as a normal player (zones alsspeler aan).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_x_int.txt
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section kamp
+/guhs vadsrijk wereld plek aankomst
+wait 60
+waitrender 300
+look 0 5
+shot xi_kamp_aankomst
+
+section zone1
+/guhs vadsrijk wereld plek plein
+wait 60
+waitrender 300
+shot xi_z1_zwamzoet_plein
+/guhs vadsrijk wereld plek haven_z1_z2_vertrek
+wait 60
+waitrender 300
+look 180 0
+shot xi_z1_noordklifhaven
+
+section zone2
+/guhs vadsrijk z2wereld plek plein
+wait 60
+waitrender 300
+shot xi_z2_kandijkom
+/guhs vadsrijk z2wereld plek haven_z2_z3_vertrek
+wait 60
+waitrender 300
+look 270 0
+shot xi_z2_galmdok
+
+section zone3
+/guhs vadsrijk z3wereld plek plein
+wait 60
+waitrender 300
+shot xi_z3_bloesemplein
+/guhs vadsrijk z3wereld plek mika_imker_raatzaal
+wait 60
+waitrender 200
+shot xi_z3_raatzaal
+
+section zone4
+/guhs vadsrijk z4wereld plek plein
+wait 60
+waitrender 300
+shot xi_z4_lampionhaven
+/guhs vadsrijk z4wereld plek haven_3_4_landing
+wait 60
+waitrender 300
+look 90 5
+shot xi_z4_luchthaven
+/guhs vadsrijk z4wereld plek boot_dok_lampionhaven
+wait 60
+waitrender 300
+shot xi_z4_steiger
+/guhs vadsrijk z4wereld plek vliegerwedstrijd_finish
+wait 60
+waitrender 300
+shot xi_z4_vliegereiland
+
+section zone5
+/guhs vadsrijk z5wereld plek haven_z5_z4_vertrek
+wait 80
+waitrender 400
+look 180 5
+shot xi_z5_walvisrughaven
+/guhs vadsrijk z5wereld plek z5w_noordvin
+wait 60
+waitrender 300
+shot xi_z5_noordvin
+/guhs vadsrijk z5wereld plek kathedraal_schip
+wait 60
+waitrender 300
+shot xi_z5_kathedraal_schip
+
+section zone6
+/guhs vadsrijk z6wereld plek haven_z6_z5_vertrek
+wait 80
+waitrender 400
+look 180 10
+shot xi_z6_luchthaven
+/guhs vadsrijk z6wereld plek rozenkloof_plein
+wait 60
+waitrender 300
+shot xi_z6_rozenplein
+/guhs vadsrijk z6wereld plek rozenkloof_schatkamer
+wait 60
+waitrender 300
+look 0 -15
+shot xi_z6_schatkamer
+/guhs vadsrijk z6wereld plek bazaar_kruising
+wait 60
+waitrender 300
+shot xi_z6_bazaar
+/guhs vadsrijk z6wereld plek saffraanpoort_paleisplein
+wait 60
+waitrender 300
+shot xi_z6_paleisplein
+/guhs vadsrijk z6wereld plek moederpalm
+wait 60
+waitrender 300
+shot xi_z6_moederoase
+/guhs vadsrijk z6wereld plek toren_voet
+wait 60
+waitrender 300
+look 90 -20
+shot xi_z6_toren
+/guhs vadsrijk z6raid tp wachtzaal
+wait 80
+waitrender 300
+shot xi_z6_wachtzaal
+
+
+section rondex
+/tp @s 2845 233 -531 facing 2856 234 -531
+wait 80
+waitrender 400
+shot xi_x_walvispoort
+/tp @s 2860 233 -531 90 5
+wait 40
+waitrender 300
+shot xi_x_walvispoort_buiten
+/tp @s 2856 233 -531 180 35
+wait 40
+waitrender 300
+shot xi_x_walvistrap_boven
+/tp @s 2866 207 -527 facing 2858 218 -514
+wait 40
+waitrender 300
+shot xi_x_walvistrap_onder
+/guhs vadsrijk z6raid tp poort
+wait 240
+waitrender 400
+look -90 -15
+shot xi_x_raidtoren_poort
+look 0 15
+shot xi_x_raid_heraut
+/tp @s 4110 88 -688 -90 -10
+wait 40
+waitrender 300
+shot xi_x_raidtoren_poort_ver
+/tp @s -406 69 148 90 -12
+wait 120
+waitrender 300
+shot xi_x_dungeonbord_zwamgrot
+/tp @s 869 119 -1104 -135 0
+wait 120
+waitrender 300
+shot xi_x_dungeonbord_kristalgrot
+/tp @s 2 65 60 facing -6 66 57
+wait 240
+waitrender 300
+shot xi_x_kwartiermeester
+/tp @s 0 72 59 0 40
+wait 20
+waitrender 200
+shot xi_x_kwartiermeester_n
+look 90 40
+shot xi_x_kwartiermeester_w
+look 180 40
+shot xi_x_kwartiermeester_z
+look 270 40
+shot xi_x_kwartiermeester_o
+
+section zone1einde
+/guhs vadsrijk zones open 1
+/guhs vadsrijk zones alsspeler aan
+/guhs vadsrijk zones zone1klaar
+/tp @s 86 65 495 180 5
+wait 160
+waitrender 300
+shot xi_x_einde_zone1_tracker
+gui keep
+interact 86 65 491 guhs:vr_npc_guh
+wait 30
+shot xi_x_einde_zone1_kapitein gui
+gui close
+wait 10
+/guhs vadsrijk zones alsspeler uit
+/guhs vadsrijk zones open 6
+wait 20

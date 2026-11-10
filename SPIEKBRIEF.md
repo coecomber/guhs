@@ -1,28 +1,30 @@
-# Spiekbrief: Het Vadsrijk na ronde W (jouw playtest-feedback + dungeons + party + nep-spelers)
+# Spiekbrief: Het Vadsrijk na ronde X (jouw feedback + klaar voor een release met alleen zone 1)
 
-Dit is de lange spiekbrief van ronde W (2026-11-08/09). Ronde W repareert alles wat je na je playtest van de v-int-client
-meldde, maakt de release veilig (alles lopend bereikbaar, alle hoofdquests zeker af te ronden, alle geheimpjes vindbaar) en
-voegt drie systemen toe die je zelf vroeg: **dungeons met een echte deur en wachtrij**, **een Party-tab** en **nep-spelers**.
-Alles zit in één nieuwe testclient:
-**`guhs_vadsrijk\w-int\run-client.bat`** (de v-int-client heb je niet meer nodig).
+Dit is de spiekbrief van ronde X (2026-11-09). Ronde X repareert je laatste feedback (de walvisingang, zone 6 op de grond,
+de raid-toren, naamborden bij de dungeondeuren, de ruwe teksten/Kwartiermeesters, zone 1 en 2 op de grond) en maakt een
+release met **alleen het Knuffelkamp + zone 1** mogelijk: een zone-poort, een einde van zone 1 met "Wordt vervolgd", een
+zacht level-plafond en een wiki die alleen zone 1 laat zien. Alles zit in één nieuwe testclient:
+**`guhs_vadsrijk\x-int\run-client.bat`** (de w-int-client heb je niet meer nodig). De client staat op **alle zones open**
+(openZones 6); hoofdstuk 2 zegt hoe je de release-blik (1) aanzet.
 
-> **Het verhaal testen? Begin bij hoofdstuk 0: QUESTLOPEN.** Typ `/guhs vadsrijk questlopen` (alleen als OP). Nieuw: de knoppen
-> **[Sla stap over]** en **[Naar veilige plek]**, die altijd werken, ook midden in een gevecht.
+> **Het verhaal testen? Hoofdstuk 0: QUESTLOPEN** (`/guhs vadsrijk questlopen`, alleen als OP).
 >
-> **Je feedback nalopen? Hoofdstuk 1: RONDE W.** Per punt een commando om te kopiëren en wat je hoort te zien.
+> **Je feedback nalopen? Hoofdstuk 1: RONDE X.** Per punt een commando om te kopiëren en wat je hoort te zien.
+>
+> **De release met alleen zone 1 bekijken? Hoofdstuk 2.** De stappen voor de echte release staan in `RELEASE_CHECKLIST.md`.
 
 **Volgorde van deze spiekbrief:**
 - starten, toetsen en de loot-regels;
 - hoofdstuk 0: Questlopen;
-- hoofdstuk 1: ronde W, al je feedbackpunten;
-- hoofdstuk 2: de nieuwe systemen (dungeons, Party-tab, nep-spelers, de bereik-check);
-- daarna de bekende hoofdstukken uit ronde U, met een **B** ervoor (B1 de wereld, B2 zone 1+2, ..., B7 de systemen, B8 de
-  feedback van ronde 4).
+- hoofdstuk 1: ronde X, je feedbackpunten;
+- hoofdstuk 2: release met alleen zone 1;
+- daarna de hoofdstukken van ronde W (W1 feedback, W2 de systemen: dungeons, Party-tab, nep-spelers, bereik-check) en de
+  hoofdstukken uit ronde U (B1 t/m B8). Ze gelden nog steeds.
 
 Elk blok test één onderdeel: copy-paste de commando's in de chat en kijk of gebeurt wat erbij staat.
 
 ## Starten
-- Dubbelklik `run-client.bat` in `guhs_vadsrijk\w-int`. Maak een **nieuwe** wereld (Creatief, cheats aan); de saves-map is leeg.
+- Dubbelklik `run-client.bat` in `guhs_vadsrijk\x-int`. Maak een **nieuwe** wereld (Creatief, cheats aan); de saves-map is leeg.
   De hele kaart (zone 1 t/m 6) is opnieuw gegenereerd, dus een oude wereld klopt niet meer.
 - `/guhs vadsrijk` om erin te gaan. De eerste keer krijg je meteen het karakterscherm (3 vaste slots).
 - Wil je geraakt kunnen worden of iets lopend testen: `/gamemode survival` (in creatief vallen de wezens je niet aan, en in
@@ -186,7 +188,178 @@ bij de volgende stap. Of klik meteen Sla stap over.
 
 ---
 
-# 1. RONDE W: JOUW FEEDBACK, PUNT VOOR PUNT
+# 1. RONDE X: JOUW FEEDBACK, PUNT VOOR PUNT
+
+Elk punt: wat er mis was, het commando om er te komen, en wat je nu hoort te zien. Tip: `/gamemode spectator` om rond te
+kijken, `/gamemode survival` om iets echt lopend te testen.
+
+## 1.1 De ingang van de walvis (zone 5): de trap naar het Staartpark
+**Was:** de ingang zat in een tunneltje recht achter de troon, je zag hem niet.
+**Nu:** een brede poort aan het eind van het noordelijke zijpad van de troonzaal, met een lichtblauwe loper ernaartoe, een
+gouden lijst en een bord "Naar het Staartpark & de Staarthaven". Buiten een bordes en twee brede trappen (3 breed) met een
+tussenbordes, tot op het gras van het Staartpark.
+- **De poort vanuit de zaal:** `/tp @s 2845 233 -531 facing 2856 234 -531`
+  - Zie: een opening van 3 breed en 4 hoog in de achterwand, gelijk met de vloer, met een gouden lijst en het bord erboven.
+- **Het bordes buiten:** `/tp @s 2856 233 -531`
+  - Zie: een balustrade, een lantaarn op de hoek, een gouden boog boven de trap met hetzelfde bord.
+- **Het tussenbordes:** `/tp @s 2858 218 -514`
+- **Onderaan, op het gras:** `/tp @s 2860 204 -531`
+- In survival: loop van de troonzaal naar beneden en weer terug, zonder te springen of iets te breken.
+- **Let op:** de borden in de kaart zijn nieuw (tekst in de tegels). Zijn ze leeg? Zeg het: dan zit het in het bordformaat.
+
+## 1.2 Zone 6 buiten de stadjes: alles staat op de grond
+**Was:** gebouwen, tenten, palmstammen en randen zweefden net boven de grond; wegen liepen als droge geul door het water.
+**Nu:** een funderingspass zet alles buiten Rozenkloof/Saffraanpoort op de grond; wegen door water zijn een dijkje of een
+doorwaadplaats. De checker telt nu 0 gaten en 0 zwevende stukken buiten de steden (was 399 en 169 cellen).
+- **De voet van de Sterrendovende Toren** (was het ergst): `/guhs vadsrijk z6wereld plek toren_voet`
+- **Het rivierpad door de Palmenkloven:** `/tp @s 3500 65 -963`
+- **De Oostroute door de Moederoase:** `/tp @s 4106 65 -738`
+- **Het Palmbaken:** `/guhs vadsrijk z6wereld plek palmbaken`
+- **Het Duinbaken:** `/guhs vadsrijk z6wereld plek duinbaken_voet`
+- **Het karavaankamp:** `/guhs vadsrijk z6wereld plek karavaankamp`
+
+## 1.3 "Is de grote toren de raid?": De Sterrendovende Toren
+**Was:** ja, maar alleen de buitenkant. De echte raid zit in De Wachtzaal onder de toren, en de poort was een zwart glas van 5
+breed in een nis van 9 breed: je liep erlangs de holle toren in en er gebeurde niks. De verdiepingen, ringen en de lens
+zweefden los.
+**Nu:**
+- **Naar de poort:** `/guhs vadsrijk z6raid tp poort` (kijk naar het oosten).
+  - Zie: een open nis met een gouden cirkel in de vloer en achterin een paarse sterrenvlies-wand in een gouden ring.
+  - Erboven een naambord in dezelfde stijl als de dungeondeuren: groot **De Sterrendovende Toren**, klein eronder
+    "Raid voor 2-10 spelers · Loop naar binnen: De Wachtzaal".
+  - Op de trap staat **Heraut Sterrenroep**: klik hem, hij legt de raid uit en zegt of de toren vrij is.
+- **Naar binnen lopen** (ook aan de zijkant van de nis): je staat meteen in **De Wachtzaal**, met de gouden startcirkel
+  (bord erboven), **Zaalwachter Pril** en in het westen de paarse boog **Uitgang: naar buiten**.
+- **Weer naar buiten:** door de paarse boog. Je staat buiten op de trap en wordt niet terug naar binnen gestuurd.
+- **Starten:** met minstens één vriend samen 3 tellen op de cirkel. Alleen gebeurt er niks. Solo testen (dev):
+  `/guhs vadsrijk z6raid start 2`, stoppen: `/guhs vadsrijk z6raid stop`.
+- **De toren van buiten:** `/tp @s 4080 120 -688 -90 0`. Zie: één toren uit één stuk; de gouden ringen zitten als banden
+  om de toren; de Lege Lens rust op tien spitsen.
+- **Tracker:** na z6_hq10, zolang je de raid nog niet hebt gehaald, staat in zone 6 de regel
+  **De Sterrendovende Toren (raid)** met de straal op de poort.
+
+## 1.4 Naamborden bij de dungeondeuren
+**Was:** de deuren vielen niet op en hadden geen naam.
+**Nu:** boven elke deur een bord van twee regels: de naam groot en vet in de kleur van de dungeon, eronder klein
+"Dungeon · Grot · lv A-B". Fel, ook 's nachts, met een onzichtbaar lichtje en af en toe gloei-vonkjes op de deur.
+
+| Dungeon | Teleport | Wat je ziet |
+|---|---|---|
+| De Zwamgrot (zone 1) | `/tp @s -412 69 148 90 0` | "De Zwamgrot" + "Dungeon · Grot · lv 11-14" |
+| De Kristalgrot (zone 2) | `/tp @s 869 119 -1104 -135 0` | bord in de tunnel, vlak voor de deur |
+| De Wortelgrot (zone 3) | `/tp @s 1410 69 -737 0 0` | bord boven de deur in de wortelstronk |
+| De Koraalgrot (zone 4) | `/tp @s 2230 71 -596 -135 0` | bord boven de deur in de koraalschoorsteen |
+| De Koraalgrot, zeebodem | `/tp @s 2270 52 -572 90 0` | dichtgegroeid: geen klopper, bord "Dichtgegroeid · de deur is boven op het atol"; klik = alleen een chatregel |
+| De Wolkengrotten (zone 5) | `/tp @s 2494 205 -520 90 30` | bord boven het luik |
+| De Zingende Zoutgrot (zone 6) | `/tp @s 3874 50 -521 180 0` | bord op hoofdhoogte in de trapkoker |
+
+- Het bord komt altijd terug en nooit dubbel: `/kill @e[type=text_display,tag=guhs_vr_dungeonbord,distance=..10]`, binnen 2 s
+  staat het er weer.
+- De dungeondeur als item (alleen creative/JEI): `/give @s guhs:vr_dungeondeur`.
+- De blauwe stadsblubs gloeien weer zacht, net als de echte blauwe Blub (kijk 's nachts in Zwamzoet).
+
+## 1.5 Ruwe teksten weg: de Kwartiermeesters
+**Was:** een guh heette `vadsrijk.npc.naam.kk_poort_zwamzoet`.
+**Nu:** elke stad heeft een Kwartiermeester met een naam. Ze verschijnen een paar seconden nadat je bij het plein bent.
+
+| Stad | Commando | Naam |
+|---|---|---|
+| Zwamzoet | `/tp @s 0 66 59` | **Kwartiermeester Lamelletje** |
+| Kandijkom | `/tp @s 704 93 -1068` | **Kwartiermeester Klontje** |
+| Honingtak | `/tp @s 1396 169 -525` | **Kwartiermeester Wasje** |
+| Lampionhaven | `/tp @s 1848 69 -467` | **Kwartiermeester Lontje** |
+| Hoogvads | `/tp @s 2748 221 -529` | **Kwartiermeester Torentje** |
+
+- Gesmede uitrusting heette `vadsrijk.loot.kussenzwaard`: `/guhs vadsrijk ambacht maatwerk zwaard 1` geeft nu een gewone naam.
+- Vangnet: mist er ooit nog een tekst, dan toont het spel een leesbare naam in plaats van de sleutel (en zet het in de log).
+- Een nieuwe test leest ~4.100 sleutels die pas tijdens het spelen ontstaan, in het Nederlands én Engels: alles aanwezig.
+
+## 1.6 Zone 1 (+ Knuffeleiland) en zone 2 op de grond
+Muren, stelen, stammen en rotsvoeten die over een kuiltje hingen staan nu op de grond (zone 1: 400 kolommen, zone 2: 474).
+
+| # | Wat | Commando | Wat je moet zien |
+|---|---|---|---|
+| 1 | Knuffelkamp: huis aan de helling | `/tp @s -464 89 1063 -90 10` | de roze muur loopt door tot op het gras |
+| 2 | Sporenwoud: grote paddenstoel op een heuvel | `/tp @s -374 94 -137 -90 10` | de steel staat op de heuvel |
+| 3 | Druipspits (uitkijknaald) | `/tp @s -95 100 -490 180 15` | de rotsvoet gaat aan de lage kant door tot de grond |
+| 4 | Sporenwoud-waterval | `/tp @s -470 72 24 180 -10` | het water valt langs een rotswand; de geheime ingang erachter is open |
+| 5 | Schildpadeiland | `/tp @s 524 77 726 180 30` | kist en boom staan op het schild |
+| 6 | Zwamzoet: lampen onder het plafond | `/tp @s 0 196 -40 0 -60` | elke lamp hangt aan een ketting |
+| 7 | Zone 2: ijsbouwsel op de helling | `/tp @s 853 118 -944` | het pakijs loopt door tot de sneeuw |
+| 8 | **Nieuw (integratie):** de stenen trappen uit de baai bij De Haven | `/tp @s 60 65 456 90 30` | de trap uit het water loopt nu door tot op de kade (eerst moest je aan het eind 1 blok omhoog springen); de tweede trap: `/tp @s 87 65 528 90 30` |
+
+## 1.7 Uitkijkpunt Galmtop (zone 2)
+**Was:** de wenteltrap begon 18 blokken boven een klif. Daarna (tussenversie) kwam hij boven onder de vloer uit en zat de
+reling dicht waar je aankwam.
+**Nu:** de trap begint op de helling en komt boven via een paar treden net buiten het platform en een brede opening in de
+reling op het platform uit.
+- **Onderaan:** `/tp @s 916 162 -1098`
+- **Bovenop:** `/guhs vadsrijk indeling plek uitkijk_galmtop`
+- In survival: loop van onder naar boven en terug zonder te springen.
+
+## 1.8 Engels voor alles
+Ook de oude teksten (De Erfenis, Sherlock Guh, de mijnen, de FTB-hoofdstukken) hebben nu Engels: 0 ontbrekend. Niets om in
+de client te bekijken (jouw regel: Engels nooit in de client checken).
+
+## 1.9 De hotfixes van 1.9.3 t/m 1.9.7 zitten erin
+De 1.10-tak was gebouwd op 1.9.2. De fixes die sindsdien live gingen (Houtzagerij zonder planken, één Guhrrit bij de tour,
+Knabbelbaken-menu, Guhvilla-ramen, safari-namen, opslag x3 + plafond per goed, Leverkist 54 x 9999, geen dubbele
+deco-guhs, chat in het overzicht, Konijnenpluis e.d., het Terughekje, weggeven/naar de Leverkist vanuit de opslag) zijn erin
+gemerged, zodat de release ze niet ongedaan maakt.
+
+
+# 2. RELEASE MET ALLEEN ZONE 1
+
+Het plan: de publieke server gaat live met alleen het Knuffelkamp (tutorial) en zone 1 open. Het schip naar zone 2 vaart
+"binnenkort".
+
+## 2.1 De zone-poort
+- **Op de server (blijvend):** in de wereldmap `serverconfig/guhs-vadsrijk-zones.toml`:
+  ```
+  openZones = 1
+  ```
+  (1 = alleen Knuffelkamp + zone 1, 6 = alles open; standaard 6). Voor nieuwe werelden hetzelfde bestand in `defaultconfigs/`.
+- **Tijdens het spelen (als op):** `/guhs vadsrijk zones open 1` (meteen actief, wordt bewaard). Kijken: `/guhs vadsrijk zones`.
+- **Ops en creative gaan overal doorheen.** Wil je als op zien wat een speler ziet (nieuw in de integratie):
+  ```
+  /guhs vadsrijk zones alsspeler aan
+  ```
+  Nu telt iedereen als gewone speler, ook jij in creative. Uit: `/guhs vadsrijk zones alsspeler uit` (gaat ook uit na een herstart).
+- **Jouw testclient staat op 6** (alles open), zodat je alles kunt testen. Zo bekijk je de release:
+  ```
+  /guhs vadsrijk zones open 1
+  /guhs vadsrijk zones alsspeler aan
+  ```
+  en terug: `/guhs vadsrijk zones alsspeler uit` en `/guhs vadsrijk zones open 6`.
+
+## 2.2 Het einde van zone 1 (zoals een speler het ziet)
+Snel naar het einde (dev, nieuw): `/guhs vadsrijk zones zone1klaar` (je zone-1-hoofdverhaal klaar, level 20).
+1. Rechtsboven in de tracker: **"Wordt vervolgd: Het schip naar De Splinterpieken vaart binnenkort. Houd Discord in de gaten!"**
+   (geen lichtstraal).
+2. De luchtschipper op De Haven: `/tp @s 86 65 495 180 5`, klik hem: **"Het schip naar De Splinterpieken vaart binnenkort!
+   Houd Discord in de gaten."** Op de reiskaart staan Kandijkom en verder grijs met "Binnenkort!".
+3. De pier van lijn A (Noordklifhaven): `/tp @s 150 127 -650`: het bord/de pier zegt hetzelfde; het schip neemt je niet mee.
+4. Er toch heen lopen/vliegen: `/tp @s 704 100 -1100`: je staat meteen terug in zone 1 (of op De Haven) met de melding
+   "De Splinterpieken is nog dicht: het schip daarheen vaart binnenkort!".
+5. De Zwamgrot (zone 1) werkt gewoon: `/tp @s -412 69 148 90 0` (solo, groep, wachtrij).
+
+## 2.3 Het zachte level-plafond
+- Met de poort op 1 stop je op **level 20** (balk vol). Eén chatregel; extra xp wordt gespaard (tot 3 levels).
+  In het Vadsrijk-menu (Karakter) staat "Hoogste level voor nu" en hoeveel xp gespaard is.
+- Testen: `/guhs vadsrijk level 19`, dan (met `alsspeler aan`) een paar wezens: je stopt op 20.
+- Gaat de poort later naar 2: het plafond schuift naar 30 en de spaarpot betaalt uit als dubbele xp tot hij leeg is.
+  Plafonds: 20 (poort 1), 30 (2), 50 (3), 56 (4), 60 (5), geen (6).
+- Xp in zone 1: met alleen de hoofdquests hoef je niet meer te grinden (0-5 minuten). Zie `XP_BALANS.md`.
+- Bekend: de twee rijdier-terugkeerquests van zone 1 zijn met poort 1 niet te doen (je eerste rijdier komt in zone 3).
+
+## 2.4 De wiki: alleen zone 1
+- https://guhs.nl/vadsrijk-preview-zone1/ : zo ziet guhs.nl/vadsrijk eruit bij de release (alleen tutorial + zone 1, een
+  kaart "Binnenkort: nieuwe zones"; zone 2-6 staan er echt niet op: `.../zones/zone2.html` geeft 404).
+- https://guhs.nl/vadsrijk-preview/ : de volledige versie (alle zones, achter de spoilerschakelaar).
+- De poort in de mod en `--open-zones` van de wiki moeten altijd hetzelfde getal hebben. Zie `RELEASE_CHECKLIST.md`.
+
+
+# W1. RONDE W: JOUW FEEDBACK, PUNT VOOR PUNT (vorige ronde)
 
 Per punt: wat er gedaan is, een commando om te kopiëren en wat je hoort te zien. Alles in het Vadsrijk, als OP.
 Waar "lopend" staat: eerst `/gamemode survival`, niet vliegen, en het laatste stuk zelf lopen.
@@ -430,7 +603,7 @@ in de Zoutgrot (zone 6, die opent de puzzel tijdens het spel).
 
 ---
 
-# 2. DE NIEUWE SYSTEMEN VAN RONDE W
+# W2. DE NIEUWE SYSTEMEN VAN RONDE W
 ## 2.1 Dungeons: een echte dichte deur, een dungeonvenster en een wachtrij (W-GROT)
 
 Het woord is nu **dungeon**: grotten zijn het eerste type dungeon ("Type: Grot"). Elke grot-dungeon (De Zwamgrot, De Kristalgrot, De Wortelgrot, De Koraalgrot, De Wolkengrotten, De Zingende Zoutgrot) heeft nu een

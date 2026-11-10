@@ -1,0 +1,81 @@
+# X-INT: one walk over the integrated Vadsrijk after round X (zones 1-6 load) + the round-X spots: the whale gate and stair,
+# the raid tower door + herald, a dungeon door with its name board, Kwartiermeester Lamelletje, and the end of zone 1 with the
+# zone gate at 1 (tracker "Wordt vervolgd" + the captain's line), seen as a normal player (zones alsspeler aan).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_x_int.txt
+section setup
+/gamemode creative
+/time set 1000
+/gamerule doDaylightCycle false
+wait 40
+/guhs vadsrijk
+wait 400
+waitrender 300
+
+section rondex
+/tp @s 2845 233 -531 facing 2856 234 -531
+wait 80
+waitrender 400
+shot xi_x_walvispoort
+/tp @s 2860 233 -531 90 5
+wait 40
+waitrender 300
+shot xi_x_walvispoort_buiten
+/tp @s 2856 233 -531 180 35
+wait 40
+waitrender 300
+shot xi_x_walvistrap_boven
+/tp @s 2866 207 -527 facing 2858 218 -514
+wait 40
+waitrender 300
+shot xi_x_walvistrap_onder
+/guhs vadsrijk z6raid tp poort
+wait 240
+waitrender 400
+look -90 -15
+shot xi_x_raidtoren_poort
+look 0 15
+shot xi_x_raid_heraut
+/tp @s 4110 88 -688 -90 -10
+wait 40
+waitrender 300
+shot xi_x_raidtoren_poort_ver
+/tp @s -406 69 148 90 -12
+wait 120
+waitrender 300
+shot xi_x_dungeonbord_zwamgrot
+/tp @s 869 119 -1104 -135 0
+wait 120
+waitrender 300
+shot xi_x_dungeonbord_kristalgrot
+/tp @s 2 65 60 facing -6 66 57
+wait 240
+waitrender 300
+shot xi_x_kwartiermeester
+/tp @s 0 72 59 0 40
+wait 20
+waitrender 200
+shot xi_x_kwartiermeester_n
+look 90 40
+shot xi_x_kwartiermeester_w
+look 180 40
+shot xi_x_kwartiermeester_z
+look 270 40
+shot xi_x_kwartiermeester_o
+
+section zone1einde
+/guhs vadsrijk zones open 1
+/guhs vadsrijk zones alsspeler aan
+/guhs vadsrijk zones zone1klaar
+/tp @s 86 65 495 180 5
+wait 160
+waitrender 300
+shot xi_x_einde_zone1_tracker
+gui keep
+interact 86 65 491 guhs:vr_npc_guh
+wait 30
+shot xi_x_einde_zone1_kapitein gui
+gui close
+wait 10
+/guhs vadsrijk zones alsspeler uit
+/guhs vadsrijk zones open 6
+wait 20

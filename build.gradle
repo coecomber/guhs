@@ -177,6 +177,8 @@ dependencies {
         localRuntime("dev.ftb.mods:ftb-teams-neoforge:${ftb_teams_version}") { transitive = false }
         localRuntime("dev.ftb.mods:ftb-filter-system-neoforge:${ftb_filter_version}") { transitive = false }
         localRuntime("dev.ftb.mods:ftb-quests-neoforge:${ftb_quests_version}") { transitive = false }
+        // Y-INT: FTB Essentials like the server pack (/ec /home /anvil exist in the client, so the Vadsrijk border is tested for real)
+        localRuntime("dev.ftb.mods:ftb-essentials-neoforge:${ftb_essentials_version}") { transitive = false }
     }
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime

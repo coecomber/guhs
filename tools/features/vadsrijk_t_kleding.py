@@ -136,6 +136,12 @@ TEKSTEN = {
     "harnas.uitleg": ("Elk harnas dat je ooit had, wordt een uiterlijk. Alleen in het Vadsrijk.",
                       "Every armour you ever had becomes a look. Only in the Vadsrijk."),
     "harnas.thuis": ("(Je bent thuis: je harnas-uiterlijk zie je in het Vadsrijk.)", "(You are home: armour looks show in the Vadsrijk.)"),
+    # Y-COSMETICA: the Garderobe (the wardrobe at home: Vadsrijk outfits as looks in survival); English in tools/lang/en/c465
+    "garderobe.titel": ("Garderobe", "Wardrobe"),
+    "garderobe.thuis": ("Thuis is je Vadsrijk-kleding alleen voor de looks: geen krachten, geen harnas.",
+                        "At home your Chonkdom outfits are just for looks: no powers, no armor."),
+    "garderobe.leeg": ("Nog niks hier! Kleding verdien je in het Vadsrijk.", "Nothing here yet! You earn outfits in the Chonkdom."),
+    "garderobe.meer": ("Meer kleding vind je later, in nieuwe delen van het Vadsrijk.", "More outfits come later, in new parts of the Chonkdom."),
     "slot.head": ("Helm", "Helmet"),
     "slot.chest": ("Borst", "Chest"),
     "slot.legs": ("Benen", "Legs"),

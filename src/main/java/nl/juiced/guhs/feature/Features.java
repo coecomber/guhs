@@ -357,6 +357,7 @@ public final class Features {
         nl.juiced.guhs.feature.onderwater.OnderwaterFeature.creative(output);
         nl.juiced.guhs.feature.guheinde.GuheindeFeature.creative(output);
         nl.juiced.guhs.feature.einde2.Einde2.creative(output);   // einde2: the Guheinde expansion, see feature/einde2/Einde2
+        nl.juiced.guhs.feature.vadsrijk.ftb.VrFtbRegistry.creative(output);   // Y-FTB: the deco rewards of the FTB chapter Het Vadsrijk
         nl.juiced.guhs.feature.safari.camera.CameraFeature.creative(output);   // 1.6.0 Op Safari! S1: the safari camera
         nl.juiced.guhs.feature.gatenkaas.GatenkaasFeature.creative(output);
         nl.juiced.guhs.feature.kaasmoeras.KaasmoerasFeature.creative(output);

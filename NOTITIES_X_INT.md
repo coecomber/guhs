@@ -66,3 +66,34 @@
 - Full map regen zones 1-6 (zone 4 before zone 5): x-kaart needs 2, 5, 6; x-raid needs 6 (tower + raid POIs).
   Then `vadsrijk_w_grot.py` + `--check` (DungeonDeurData follows the POIs), BereikDoelen, and every checker.
 - Raid boards and dungeon boards: not seen in a client yet (run-client at the end).
+
+## Phase 2 (GO from the coordinator, 2026-11-09 evening)
+- Merged 110-x-z1grond 36c27d2da (no conflicts).
+- **Galmtop fix** (`zone2/bouw2.py`, X-INT `_naald_aankomst`): X-KAART's rotated start made the top treads round into cells
+  under the plank disc and the railing gap missed the arrival. Now, just outside the disc (6.6 < d <= 8): tread level top-1,
+  tread level top, a bottom slab at top+1, then a wide railing gap (top+2/top+3, +-0.45 rad). Independent of the start angle,
+  so Meerkijk/Kloofkijk get the same arrival. loopcheck2 VAL 33 -> 30, 930,195,-1108 gone; bereik zone 2 63/63.
+- **Zone-1 TRAP review:** classified all 303 TRAP/TRAP- by block and path blocks nearby (script in my scratchpad): 277 are
+  roof tiles / plaster / tent cloth (roofs, eaves), 18 cherry + 2 dark-oak stairs are chairs inside houses. Real: the two stone
+  swim stairs out of the bay at De Haven (`wereld/bouwsels.py`, z 456 and 528) ended 1 below the quay. The top tread now
+  replaces the quay edge (`range(-1, 5)`). TRAP 215 -> 209. Not fixed: VAL 83,95,27 (1-cell nook in a mushroom stem by a
+  spiral walk in Zwamzoet, way out only by breaking) and the lighthouse cellar (checker does not climb the hatch).
+- **Full regen** zones 1-6 (`maak_kaart --audit --geen-cache`), then `--zone 1 --audit` after the quay fix. BereikDoelen dump
+  (+ z6raid_heraut, z6raid_zaalwachter), bereikcheck --strikt exit 0. `vadsrijk_w_grot.py` + `--check`: all good
+  (DungeonDeurData unchanged). The full suite also re-dumps bereik_doelen.json (other tests move NPCs): I kept the dedicated
+  BereikDoelen dump.
+- **Merged v1.9.7** (main's hotfixes 1.9.3-1.9.7; 110 was built on 1.9.2). Conflicts: `Guhrrit.java` (v1.9.3's keyed
+  `verschijn(..., sleutel)` + 1.10's "never in the Vadsrijk" guard, both kept), `guhhuisje_villa.png` (v1.9.7's), FTB en_us
+  (regenerated), lang (key-wise; the 16 renamed goods Konijnenpluis/Wolkenpluis/... from 1.9.6 win). English: new overlay
+  `c426_oud_197.json` (36 safari names from v1.9.7's en_us + 14 storage/give-away/Terughekje texts) and the 17 renamed keys
+  retranslated in place (c413, c424). engelscheck --alles 0/0/0, --merk --alles (50,289).
+- **Dev commands** (ZonePoortRegistry, X-INT): `/guhs vadsrijk zones alsspeler aan|uit` (ZonePoort.TEST_STRENG: every player
+  counts as a normal player, not saved) and `/guhs vadsrijk zones zone1klaar` (zone-1 main quests done + flag + lv 20).
+- Full suite: 503 tests, 500 green; the 3 red pass alone (Z2Bazen 6/6, Ruiters 3/3, Z3Bazen 6/6). Quest robot 41/19/24/23/24/25,
+  0 stuck; gate 6 main 13/12/15/7/10/10; gate 1 main 13/13 other 26/26.
+- AutoCheck `tools/autocheck/vadsrijk_x_int.txt` (35 shots, no crash) + a re-aimed short round `vadsrijk_x_int_kort.txt`.
+  The end-of-zone-1 shot shows the captain's "Het schip naar De Splinterpieken vaart binnenkort!".
+- Site: 110-x-int merged into 110-u-site, runtime dump from x-int's run/, regen (renders, icons, map), full build 946 pages,
+  zone-1 build 380 files 0 leaks 0 broken; u-site 482e0b159; gh-pages 477b071f2 (both previews 200, zone1/zone2.html 404).
+- Docs: SPIEKBRIEF (new ch. 1 + 2, then round W as W1/W2, then B), TESTEN_RONDE_X.md, EINDRAPPORT_RONDE_X.md,
+  RELEASE_CHECKLIST.md. run/ cleaned; run/defaultconfigs/guhs-vadsrijk-zones.toml = openZones 6 for the client.

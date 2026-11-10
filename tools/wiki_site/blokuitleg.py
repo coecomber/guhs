@@ -2562,3 +2562,49 @@ UITLEG['erfhekje'] = dict(nl='Het poortje naar je eigen erfenis. Je krijgt het v
 UITLEG['leverkist'] = dict(nl='De brievenbus-schatkist voor je basis. Wat je in je dorp op "Naar huis sturen" zet, komt hier vanzelf in, ook als je er niet bent: zodra de kist geladen is. Het vlaggetje gaat omhoog als er post in zit.\n\nRechtsklik om hem te openen, of laat een trechter of buis hem leeghalen. Heb je er meer, dan vullen ze zich op volgorde: de eerste die je neerzette eerst. Past het niet, dan wacht de rest netjes tot er weer plek is. Je eerste Leverkist krijg je bij de opknapper.', en='The mailbox treasure chest for your base. What you set to "Send home" in your village arrives here by itself, even when you are away: as soon as the chest is loaded. The little flag goes up while there is post inside.\n\nRight-click to open it, or let a hopper or pipe empty it. With more chests they fill in order: the first one you placed first. What does not fit waits until there is room again. Your first Leverkist comes with the fixer-upper.')
 UITLEG['dorpszender'] = dict(nl='Een Vadszender met een dorp-upgrade (Vadszender, 4 guhkristallen en een blok kaasknabbels). Zet hem op je vadskracht-net: hij zendt vadskracht naar de Vadsmast in je dorp, waar de hoogste werkplaatsen en de Mammoetwei op draaien.\n\nRechtsklik zet hem hoger, sluipen + rechtsklik lager (10 tot 200 VK). Een kwart waait onderweg weg: 100 VK zenden is 75 VK in je dorp. Meer Dorpszenders tellen bij elkaar op. Heeft je net te weinig, dan staat alles op dat net stil, ook de zender.', en='A Vadszender with a village upgrade (Vadszender, 4 guh crystals and a block of cheese nibbles). Put it on your vadskracht net: it sends power to the Vadsmast in your village, which runs the top workshops and the Mammoth Meadow.\n\nRight-click turns it up, sneak + right-click down (10 to 200 VK). A quarter blows away on the way: 100 VK sent is 75 VK in your village. More senders add up. If your net has too little, everything on it stops, the sender too.')
 # </erfenis_koppeling>
+# <y-int> (1.10 round Y: the Vadsrijk-vitrine (y-vitrine) + the 14 FTB pronkstukken (y-ftb); no zone names, they stay spoiler-free)
+UITLEG["vr_vitrine"] = dict(
+    nl="Een trofeekastje voor je basis. Je krijgt het als beloning van de FTB-quest \"Word rekruut van De Knuffelorde\" (hoofdstuk Het "
+       "Vadsrijk). Claimen doe je in je eigen wereld, niet in Het Vadsrijk.\n"
+       "\n"
+       "Zet het neer in je eigen wereld (in Het Vadsrijk en het Knuffelkwartier kan het niet): wie het neerzet, is de eigenaar. Achter "
+       "het glas staat een beeldje van je rijdier of huisdier uit Het Vadsrijk (heb je er geen, dan het embleem van De Knuffelorde). "
+       "Erboven zweeft een bordje met je naam, je klasse, je level en een badge voor elke zone die je hebt uitgespeeld.\n"
+       "\n"
+       "- Rechtsklik met een lege hand: een overzicht van je held in de chat. Met een blok in je hand zet je dat blok gewoon tegen de vitrine.\n"
+       "- Het kastje werkt zichzelf bij zolang je online bent; ben je offline, dan laat het de laatste stand zien.\n"
+       "- Er kan niets in of uit: het laat alleen zien. Iedereen kan het oppakken (het valt dan als zichzelf).",
+    en="A trophy case for your base. You get it as the reward of the FTB quest \"Become a recruit of the Snuggle Order\" (chapter The "
+       "Chonkdom). You claim it in your own world, not in The Chonkdom.\n"
+       "\n"
+       "Place it in your own world (not in The Chonkdom or the Snuggle Quarter): whoever places it is the owner. Behind the glass stands "
+       "a little statue of your mount or pet from The Chonkdom (or the emblem of the Snuggle Order if you have none). Above it floats a "
+       "sign with your name, your class, your level and a badge for every zone you have completed.\n"
+       "\n"
+       "- Right-click with an empty hand: an overview of your hero in chat. With a block in your hand you just place that block against the case.\n"
+       "- The case updates itself while you are online; when you are offline it shows the last state.\n"
+       "- Nothing goes in or out: it only shows. Anyone can pick it up (it drops itself).",
+    meer=[])
+_TROFEE = {"rekruut": ("als je rekruut van De Knuffelorde wordt (aan het einde van de opleiding in het Knuffelkamp)",
+                       "when you become a recruit of the Snuggle Order (at the end of the training in the Snuggle Camp)"),
+           "raid": ("als je de raid van Het Vadsrijk voor het eerst uitspeelt", "when you first complete the raid of The Chonkdom")}
+for _n in range(1, 7):
+    _TROFEE[f"zone{_n}"] = (f"als je alle hoofdquests van zone {_n} van Het Vadsrijk hebt uitgespeeld",
+                            f"when you have finished every main quest of zone {_n} of The Chonkdom")
+    _TROFEE[f"geheim{_n}"] = (f"als je alle geheimpjes, verloren knuffels en puzzels van zone {_n} van Het Vadsrijk hebt gevonden",
+                              f"when you have found every secret, lost plushie and puzzle of zone {_n} of The Chonkdom")
+for _k, (_nl, _en) in _TROFEE.items():
+    UITLEG[f"vadsrijk_trofee_{_k}"] = dict(
+        nl=f"Een pronkstuk voor je eigen wereld: de beloning van het FTB-hoofdstuk Het Vadsrijk, {_nl}. Claimen doe je in je eigen "
+           "wereld, niet in Het Vadsrijk.\n"
+           "\n"
+           "Het is alleen deco: zet het neer waar je wilt (behalve in Het Vadsrijk), het kijkt naar wie het neerzet. Sommige pronkstukken "
+           "geven een beetje licht. Klikken doet niks; oppakken kan altijd.",
+        en=f"A showpiece for your own world: the reward of the FTB chapter The Chonkdom, {_en}. You claim it in your own world, not in "
+           "The Chonkdom.\n"
+           "\n"
+           "It is only decoration: place it wherever you like (except in The Chonkdom), it faces whoever places it. Some showpieces give "
+           "a little light. Clicking does nothing; you can always pick it up.",
+        meer=[])
+del _n, _k, _nl, _en
+# </y-int>

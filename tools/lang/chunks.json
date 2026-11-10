@@ -7030,6 +7030,37 @@
         "gui.guhs.safari.foto.naam.zeeschildpad",
         "gui.guhs.safari.foto.naam.zeester"
       ]
+    },
+    {
+      "id": "c450_vr_y_ftb",
+      "title": "1.10 round Y (Y-FTB): the compact FTB chapter Het Vadsrijk, its deco rewards and the claim rule",
+      "prefixes": [
+        "ftb.guhs_vadsrijk.q.vr_ftb_",
+        "block.guhs.vadsrijk_trofee_",
+        "vadsrijk.ftb."
+      ]
+    },
+    {
+      "id": "c455_scheiding",
+      "title": "Y-SCHEIDING: the survival <-> Vadsrijk border (refused teleports, commands, storage menus)",
+      "prefixes": [
+        "vadsrijk.scheiding."
+      ]
+    },
+    {
+      "id": "c460_vr_y_vitrine",
+      "title": "1.10 round Y (Y-VITRINE): the Vadsrijk-vitrine trophy block",
+      "prefixes": [
+        "vadsrijk.vitrine.",
+        "block.guhs.vr_vitrine"
+      ]
+    },
+    {
+      "id": "c465_vr_y_cosmetica",
+      "title": "1.10 round Y (Y-COSMETICA): the Garderobe at home (Vadsrijk outfits as looks in survival)",
+      "prefixes": [
+        "vadsrijk.kleding.garderobe"
+      ]
     }
   ]
 }

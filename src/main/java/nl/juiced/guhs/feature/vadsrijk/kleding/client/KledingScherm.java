@@ -19,6 +19,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import nl.juiced.guhs.feature.vadsrijk.economie.client.EcoScherm;
 import nl.juiced.guhs.feature.vadsrijk.kleding.Cosmetica;
+import nl.juiced.guhs.feature.vadsrijk.kleding.Garderobe;
 import nl.juiced.guhs.feature.vadsrijk.kleding.KledingPayloads;
 import nl.juiced.guhs.feature.vadsrijk.kleding.Kledingkast;
 
@@ -29,12 +30,19 @@ import nl.juiced.guhs.feature.vadsrijk.kleding.Kledingkast;
  */
 public class KledingScherm extends EcoScherm {
     private static final String[] TABS = {"rug", "hoofd", "harnas", "verf", "naamkleur", "titel", "plof", "spoor", "aura"};
+    /** Y-COSMETICA: at home (the Garderobe) no armour tab: transmog only dresses Vadsrijk gear. */
+    private static final String[] TABS_THUIS = {"rug", "hoofd", "verf", "naamkleur", "titel", "plof", "spoor", "aura"};
     private static final int RIJ = 14;
     private String tab = "rug";
     private int scroll;
 
     public KledingScherm(CompoundTag data) {
-        super("kledingkast", Component.translatable("vadsrijk.kleding.titel"), data, List.of(), 400, 232);
+        super("kledingkast", Component.translatable(data.getBooleanOr("binnen", true) ? "vadsrijk.kleding.titel" : "vadsrijk.kleding.garderobe.titel"),
+                data, List.of(), 400, 232);   // Y-COSMETICA: at home it is the Garderobe
+    }
+
+    private String[] tabs() {
+        return data.getBooleanOr("binnen", true) ? TABS : TABS_THUIS;
     }
 
     @Override
@@ -85,8 +93,12 @@ public class KledingScherm extends EcoScherm {
         tip(mx, my, px, py + 173, 82, 16, List.of(Component.translatable("vadsrijk.kleding.eigen.tip")));
         // ---- middle: the categories
         int tx = left + 98;
-        for (int i = 0; i < TABS.length; i++) {
-            String t = TABS[i];
+        String[] tabs = tabs();
+        if (!java.util.Arrays.asList(tabs).contains(tab)) {
+            tab = "rug";
+        }
+        for (int i = 0; i < tabs.length; i++) {
+            String t = tabs[i];
             boolean aan = t.equals(tab);
             int y = top + 24 + i * 20;
             if (aan) {
@@ -166,14 +178,28 @@ public class KledingScherm extends EcoScherm {
                     Cosmetica.Ding nu = Cosmetica.van(gekozen);
                     stuur("kies", (nu == null ? eerste : nu.soort()).id, "");
                 }));
-                if (tab.equals("rug")) {
+                boolean binnen = data.getBooleanOr("binnen", true);
+                if (!binnen) {   // Y-COSMETICA: at home: looks only
+                    l.add(tekst(Component.translatable(heeft.isEmpty() ? "vadsrijk.kleding.garderobe.leeg" : "vadsrijk.kleding.garderobe.thuis")
+                            .withStyle(ChatFormatting.ITALIC)));
+                } else if (tab.equals("rug")) {
                     l.add(tekst(Component.translatable(data.getBooleanOr("zweven", false) ? "vadsrijk.kleding.rug.zweven" : "vadsrijk.kleding.rug.nogniet")
                             .withStyle(ChatFormatting.ITALIC)));
                 }
+                int poort = data.getIntOr("poort", 6);
+                boolean verstopt = false;
                 for (Cosmetica.Soort s : soorten) {
                     for (Cosmetica.Ding d : Cosmetica.van(s)) {
-                        l.add(dingRij(d, heeft.contains(d.id()), d.id().equals(gekozen)));
+                        boolean heb = heeft.contains(d.id());
+                        if (!Garderobe.zichtbaar(d, heb, poort)) {   // Y-COSMETICA: a closed zone's locked pieces stay unseen
+                            verstopt = true;
+                            continue;
+                        }
+                        l.add(dingRij(d, heb, d.id().equals(gekozen)));
                     }
+                }
+                if (verstopt) {
+                    l.add(tekst(Component.translatable("vadsrijk.kleding.garderobe.meer").withStyle(ChatFormatting.ITALIC)));
                 }
             }
         }

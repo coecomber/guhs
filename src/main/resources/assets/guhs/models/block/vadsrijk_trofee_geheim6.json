@@ -1,0 +1,140 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "kist": "minecraft:block/spruce_planks",
+    "deksel": "minecraft:block/yellow_wool",
+    "slot": "minecraft:block/gold_block",
+    "edel": "minecraft:block/raw_gold_block",
+    "particle": "minecraft:block/spruce_planks"
+  },
+  "elements": [
+    {
+      "from": [
+        4,
+        0,
+        5
+      ],
+      "to": [
+        12,
+        5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#kist"
+        },
+        "south": {
+          "texture": "#kist"
+        },
+        "east": {
+          "texture": "#kist"
+        },
+        "west": {
+          "texture": "#kist"
+        },
+        "up": {
+          "texture": "#kist"
+        },
+        "down": {
+          "texture": "#kist"
+        }
+      }
+    },
+    {
+      "from": [
+        3.5,
+        5,
+        4.5
+      ],
+      "to": [
+        12.5,
+        7,
+        11.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#deksel"
+        },
+        "south": {
+          "texture": "#deksel"
+        },
+        "east": {
+          "texture": "#deksel"
+        },
+        "west": {
+          "texture": "#deksel"
+        },
+        "up": {
+          "texture": "#deksel"
+        },
+        "down": {
+          "texture": "#deksel"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        3,
+        4.5
+      ],
+      "to": [
+        9,
+        5.5,
+        5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#slot"
+        },
+        "south": {
+          "texture": "#slot"
+        },
+        "east": {
+          "texture": "#slot"
+        },
+        "west": {
+          "texture": "#slot"
+        },
+        "up": {
+          "texture": "#slot"
+        },
+        "down": {
+          "texture": "#slot"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        7,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#edel"
+        },
+        "south": {
+          "texture": "#edel"
+        },
+        "east": {
+          "texture": "#edel"
+        },
+        "west": {
+          "texture": "#edel"
+        },
+        "up": {
+          "texture": "#edel"
+        },
+        "down": {
+          "texture": "#edel"
+        }
+      }
+    }
+  ]
+}

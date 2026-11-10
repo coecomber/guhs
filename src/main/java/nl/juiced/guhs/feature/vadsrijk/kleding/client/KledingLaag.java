@@ -98,6 +98,9 @@ public class KledingLaag extends RenderLayer<AvatarRenderState, PlayerModel> {
         }
         int verf = uit.getIntOr("verf", -1);
         Cosmetica.Ding vleugel = KledingCache.vleugel(u);
+        if (vleugel != null && state.chestEquipment.has(DataComponents.GLIDER)) {
+            vleugel = null;   // Y-COSMETICA: a real elytra on (survival): no cosmetic wings through it
+        }
         Cosmetica.Ding kaap = KledingCache.kaap(u);
         if (kaap != null) {
             Identifier tex = Guhs.id("textures/vadsrijk/kleding/kaap_" + kaap.naam() + ".png");

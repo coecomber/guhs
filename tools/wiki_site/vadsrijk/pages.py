@@ -321,11 +321,14 @@ class Bouwer:
         img = os.path.join(self.out, "img")
         os.makedirs(os.path.join(img, "items"), exist_ok=True)
         tex = os.path.join(self.root, "src", "main", "resources", "assets", "guhs", "textures")
+        # Y-FTB: the zone headers of the old 204-quest FTB chapter are kept in tools/wiki_site/vadsrijk/koppen/ (the compact chapter
+        # has three neutral sections; "../koppen/..." is relative to textures/)
+        koppen = os.path.relpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "koppen"), tex)
         for bron, doel in (("ftbquests/guhs_vadsrijk/title.png", "titel.png"), ("ftbquests/guhs_vadsrijk/welkom.png", "welkom.png"),
-                           ("ftbquests/guhs_vadsrijk/kop_vr_zwamzoet.png", "kop_zone1.png"), ("ftbquests/guhs_vadsrijk/kop_vr_kamp.png", "kop_kamp.png"),
-                           ("ftbquests/guhs_vadsrijk/kop_vr_z2_kandijkom.png", "kop_zone2.png"), ("ftbquests/guhs_vadsrijk/kop_vr_z3_honingtak.png", "kop_zone3.png"),
-                           ("ftbquests/guhs_vadsrijk/kop_vr_z4_kust.png", "kop_zone4.png"), ("ftbquests/guhs_vadsrijk/kop_vr_z5_stad.png", "kop_zone5.png"),
-                           ("ftbquests/guhs_vadsrijk/kop_vr_verhaal.png", "kop_verhaal.png"), ("ftbquests/guhs_vadsrijk/kop_vr_klassen.png", "kop_klassen.png"),
+                           (f"{koppen}/kop_vr_zwamzoet.png", "kop_zone1.png"), (f"{koppen}/kop_vr_kamp.png", "kop_kamp.png"),
+                           (f"{koppen}/kop_vr_z2_kandijkom.png", "kop_zone2.png"), (f"{koppen}/kop_vr_z3_honingtak.png", "kop_zone3.png"),
+                           (f"{koppen}/kop_vr_z4_kust.png", "kop_zone4.png"), (f"{koppen}/kop_vr_z5_stad.png", "kop_zone5.png"),
+                           (f"{koppen}/kop_vr_verhaal.png", "kop_verhaal.png"), (f"{koppen}/kop_vr_klassen.png", "kop_klassen.png"),
                            ("gui/vadsrijk/reiskaart.png", "reiskaart.png")):
             s = os.path.join(tex, bron)
             if os.path.exists(s):
