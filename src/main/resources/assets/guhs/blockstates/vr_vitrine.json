@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/vr_vitrine"
+    },
+    "facing=east": {
+      "model": "guhs:block/vr_vitrine",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/vr_vitrine",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/vr_vitrine",
+      "y": 270
+    }
+  }
+}

@@ -7030,6 +7030,14 @@
         "gui.guhs.safari.foto.naam.zeeschildpad",
         "gui.guhs.safari.foto.naam.zeester"
       ]
+    },
+    {
+      "id": "c460_vr_y_vitrine",
+      "title": "1.10 round Y (Y-VITRINE): the Vadsrijk-vitrine trophy block",
+      "prefixes": [
+        "vadsrijk.vitrine.",
+        "block.guhs.vr_vitrine"
+      ]
     }
   ]
 }
