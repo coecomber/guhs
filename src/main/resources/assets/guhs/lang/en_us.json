@@ -47631,5 +47631,9 @@
   "erfenis.ui.weggeven_tip": "Gone is gone: you get nothing back for it.",
   "erfenis.ui.weggeven_uitleg": "The Salvation Guhmy hands it out to guhs who could use a little something. That frees up room in your storage.",
   "erfenis.ok.weggegeven": "%s %s go to the Salvation Guhmy. Thank you, sweet guh!",
-  "erfenis.fout.weggeven_niks": "First choose how much you want to give away."
+  "erfenis.fout.weggeven_niks": "First choose how much you want to give away.",
+  "vadsrijk.scheiding.reis.geweigerd": "You can't get into the Chonkdom that way. Take the entrance (or /guhs vadsrijk).",
+  "vadsrijk.scheiding.commando.geweigerd": "%s doesn't work in the Chonkdom. Going home? /guhs vadsrijk",
+  "vadsrijk.scheiding.menu.thuis": "That storage belongs at home: it won't open here in the Chonkdom.",
+  "vadsrijk.scheiding.menu.rijk": "That storage belongs to the Chonkdom: it won't open outside the Chonkdom."
 }

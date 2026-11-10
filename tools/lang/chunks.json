@@ -7030,6 +7030,13 @@
         "gui.guhs.safari.foto.naam.zeeschildpad",
         "gui.guhs.safari.foto.naam.zeester"
       ]
+    },
+    {
+      "id": "c455_scheiding",
+      "title": "Y-SCHEIDING: the survival <-> Vadsrijk border (refused teleports, commands, storage menus)",
+      "prefixes": [
+        "vadsrijk.scheiding."
+      ]
     }
   ]
 }

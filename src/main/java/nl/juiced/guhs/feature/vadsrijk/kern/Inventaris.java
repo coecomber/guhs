@@ -264,6 +264,12 @@ public final class Inventaris {
 
     /** The cursor item and the 2x2 crafting grid back into the inventory (closing whatever menu is open). */
     private static void handenLeeg(ServerPlayer p) {
+        // Y-SCHEIDING: nothing the swap empties may be DROPPED (a full inventory made placeItemBackInInventory / a closing menu drop
+        // the cursor or grid item on the OTHER world's ground): scheiding.Vangnet turns those drops into "gevonden" of their own world
+        nl.juiced.guhs.feature.vadsrijk.scheiding.Vangnet.tijdens(p, () -> handenLeeg0(p));
+    }
+
+    private static void handenLeeg0(ServerPlayer p) {
         if (p.containerMenu != p.inventoryMenu) {
             p.closeContainer();
         }

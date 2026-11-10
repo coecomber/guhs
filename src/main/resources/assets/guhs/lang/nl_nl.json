@@ -47631,5 +47631,9 @@
   "erfenis.ui.weggeven_tip": "Weg is weg: je krijgt er niks voor terug.",
   "erfenis.ui.weggeven_uitleg": "Het Leger des Heilguhs deelt het uit aan guhs die wel wat kunnen gebruiken. Zo maak je ruimte in je opslag.",
   "erfenis.ok.weggegeven": "%s %s gaan naar het Leger des Heilguhs. Dankjewel, lieve guh!",
-  "erfenis.fout.weggeven_niks": "Kies eerst hoeveel je wilt weggeven."
+  "erfenis.fout.weggeven_niks": "Kies eerst hoeveel je wilt weggeven.",
+  "vadsrijk.scheiding.reis.geweigerd": "Zo kom je het Vadsrijk niet in. Neem de ingang (of /guhs vadsrijk).",
+  "vadsrijk.scheiding.commando.geweigerd": "%s werkt niet in het Vadsrijk. Naar huis? /guhs vadsrijk",
+  "vadsrijk.scheiding.menu.thuis": "Die opslag hoort bij thuis: hier in het Vadsrijk gaat hij niet open.",
+  "vadsrijk.scheiding.menu.rijk": "Die opslag hoort bij het Vadsrijk: buiten het Vadsrijk gaat hij niet open."
 }
