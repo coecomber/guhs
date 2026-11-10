@@ -1398,46 +1398,9 @@ def build(h):
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-# FTB Quests: the chapter "Het Vadsrijk" (FTB_CHAPTER; the CHAPTERS entry is added at integration, see NOTITIES_NPC.md).
-# Nothing is locked; every task is the hidden advancement the Java grants on hand-in.
+# Y-FTB: the FTB chapter "Het Vadsrijk" is the compact one of tools/features/vadsrijk_y_ftb.py now (rekruut, 6 zones, raid,
+# secrets); this generator adds no FTB quests of its own any more. Its hidden advancements guhs:quest/vr_* stay (NpcFtb grants them).
 # ---------------------------------------------------------------------------------------------------------------------------
-FTB_CHAPTER = "guhs_vadsrijk"
-FTB_PORTRAIT = "guh:golden"
-FTB_SECTIES = [
-    ("vr_kamp", "Knuffelkamp", "guh:normal", ["vr_binnen", "vr_hq01_welkom", "vr_hq02_pad", "vr_hq03_poppen", "vr_hq03b_elementen", "vr_hq04_kampvuur",
-                                               "vr_hq05_klodderreus", "vr_k01_dobber", "vr_k02_uitzicht"]),
-    ("vr_verhaal", "Het verhaal van zone 1", "guh:golden", ["vr_hq06_zwamzoet", "vr_hq07_littekens", "vr_hq08_sporenwoud",
-                                                             "vr_hq09_druipgrotten", "vr_hq10_zwamtempel", "vr_hq11_opperzwam",
-                                                             "vr_hq12_schaduw"]),
-    ("vr_zwamzoet", "Zwamzoet helpen", "guh:mint", None),
-    ("vr_klassen", "Klassen en rijdieren", "guh:snow", [f"vr_spec17_{k}" for k in KLASSEN]
-     + ["vr_rijdier_hoedhupper", "vr_rijdier_knuffelhert"]),
-    ("vr_geheimen", "Geheimen", "guh:choco", ["vr_geheim_spion", "vr_knuffels_alle", "vr_aanwijzingen_alle"]
-     + [f"vr_schat_{s}" for s in SCHATTEN]),
-]
-
-
-def ftb(fq):
-    q, adv = fq.q, fq.adv
-    K = "guhs:kaas_knabbels"
-    q("vr_binnen", "Het Vadsrijk", "Vind de ingestorte ordetempel in de Guhmensie en stap door het slapende portaal. Je komt aan op "
-      "&dKnuffelkamp&r, het oefeneiland van &dDe Knuffelorde&r. Je eigen spullen blijven veilig thuis.", "minecraft:pink_wool",
-      [fq.dim("guhs:vadsrijk")], rewards=((K, 8),), shape="gear", xp=50)
-    for d in QUESTS:
-        tekst = d["tekst"].replace("Vadsrijk", "&dVadsrijk&r")
-        icon = {"hoofd": "minecraft:golden_sword", "klasse": "minecraft:enchanted_book", "rijdier": "minecraft:saddle",
-                "geheim": "minecraft:spyglass"}.get(d["soort"], "minecraft:writable_book")
-        vorm = "gear" if d["soort"] == "hoofd" else ("hexagon" if d["soort"] in ("klasse", "geheim") else None)
-        q(f"vr_{d['id']}", d["titel"], tekst + " &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)", icon,
-          [fq.met(adv(f"vr_{d['id']}"), d["titel"])], rewards=((K, 8 if d["soort"] == "zij" else 16),), shape=vorm,
-          xp=100 if d["soort"] == "hoofd" else 50)
-    q("vr_knuffels_alle", "Alle knuffels terug", "Vind alle &e10 verloren knuffels&r van Kleine Kiki. Ze glinsteren met hartjes.",
-      "guhs:knuffel_normal", [fq.met(adv("vr_knuffels_alle"), "10 knuffels")], rewards=((K, 16),), shape="hexagon")
-    q("vr_aanwijzingen_alle", "Er klopt iets niet", "Vind alle &e5 vreemde aanwijzingen&r in het rijk. Waar leiden ze naartoe?",
-      "minecraft:spyglass", [fq.met(adv("vr_aanwijzingen_alle"), "5 aanwijzingen")], rewards=((K, 16),), shape="hexagon")
-    for s, (naam, _t) in SCHATTEN.items():
-        q(f"vr_schat_{s}", naam, "Een verborgen schat van het Vadsrijk. Hij glinstert goudgeel als je dichtbij bent.", "minecraft:chest",
-          [fq.met(adv(f"vr_schat_{s}"), naam)], rewards=((K, 8),))
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

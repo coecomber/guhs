@@ -124,7 +124,17 @@
     "erfenis.decowinkel.tab",
     "ftb.guhs_erfenis.section.erfenis_sherlock",
     "vadsrijk.dungeon.bord.onder",
-    "vadsrijk.dungeon.bord.onder.kort"
+    "vadsrijk.dungeon.bord.onder.kort",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort2.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort2.task0.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort3.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort3.task0.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort4.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort4.task0.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort5.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort5.task0.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort6.title",
+    "ftb.guhs_vadsrijk.q.vr_ftb_poort6.task0.title"
   ],
   "waarden": [
     "Guhdex",

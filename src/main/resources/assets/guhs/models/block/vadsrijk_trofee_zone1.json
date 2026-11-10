@@ -1,0 +1,268 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "steel": "minecraft:block/mushroom_stem",
+    "hoed": "minecraft:block/pink_wool",
+    "gloed": "minecraft:block/shroomlight",
+    "stip": "minecraft:block/white_wool",
+    "particle": "minecraft:block/mushroom_stem"
+  },
+  "elements": [
+    {
+      "from": [
+        6,
+        0,
+        6
+      ],
+      "to": [
+        10,
+        7,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#steel"
+        },
+        "south": {
+          "texture": "#steel"
+        },
+        "east": {
+          "texture": "#steel"
+        },
+        "west": {
+          "texture": "#steel"
+        },
+        "up": {
+          "texture": "#steel"
+        },
+        "down": {
+          "texture": "#steel"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        6.5,
+        4
+      ],
+      "to": [
+        12,
+        7,
+        12
+      ],
+      "faces": {
+        "north": {
+          "texture": "#gloed"
+        },
+        "south": {
+          "texture": "#gloed"
+        },
+        "east": {
+          "texture": "#gloed"
+        },
+        "west": {
+          "texture": "#gloed"
+        },
+        "up": {
+          "texture": "#gloed"
+        },
+        "down": {
+          "texture": "#gloed"
+        }
+      }
+    },
+    {
+      "from": [
+        3,
+        7,
+        3
+      ],
+      "to": [
+        13,
+        11,
+        13
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      }
+    },
+    {
+      "from": [
+        5,
+        11,
+        5
+      ],
+      "to": [
+        11,
+        12.5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#hoed"
+        },
+        "south": {
+          "texture": "#hoed"
+        },
+        "east": {
+          "texture": "#hoed"
+        },
+        "west": {
+          "texture": "#hoed"
+        },
+        "up": {
+          "texture": "#hoed"
+        },
+        "down": {
+          "texture": "#hoed"
+        }
+      }
+    },
+    {
+      "from": [
+        4,
+        9,
+        2.9
+      ],
+      "to": [
+        6,
+        10,
+        3.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stip"
+        },
+        "south": {
+          "texture": "#stip"
+        },
+        "east": {
+          "texture": "#stip"
+        },
+        "west": {
+          "texture": "#stip"
+        },
+        "up": {
+          "texture": "#stip"
+        },
+        "down": {
+          "texture": "#stip"
+        }
+      }
+    },
+    {
+      "from": [
+        10,
+        8,
+        12.9
+      ],
+      "to": [
+        12,
+        9,
+        13.1
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stip"
+        },
+        "south": {
+          "texture": "#stip"
+        },
+        "east": {
+          "texture": "#stip"
+        },
+        "west": {
+          "texture": "#stip"
+        },
+        "up": {
+          "texture": "#stip"
+        },
+        "down": {
+          "texture": "#stip"
+        }
+      }
+    },
+    {
+      "from": [
+        12.9,
+        9,
+        6
+      ],
+      "to": [
+        13.1,
+        10,
+        8
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stip"
+        },
+        "south": {
+          "texture": "#stip"
+        },
+        "east": {
+          "texture": "#stip"
+        },
+        "west": {
+          "texture": "#stip"
+        },
+        "up": {
+          "texture": "#stip"
+        },
+        "down": {
+          "texture": "#stip"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        12.5,
+        7
+      ],
+      "to": [
+        9,
+        12.6,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#stip"
+        },
+        "south": {
+          "texture": "#stip"
+        },
+        "east": {
+          "texture": "#stip"
+        },
+        "west": {
+          "texture": "#stip"
+        },
+        "up": {
+          "texture": "#stip"
+        },
+        "down": {
+          "texture": "#stip"
+        }
+      }
+    }
+  ]
+}

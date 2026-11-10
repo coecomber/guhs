@@ -1391,41 +1391,9 @@ def build(h):
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-# FTB Quests: zone 6 joins the chapter "Het Vadsrijk" with its own sections. Nothing is locked.
+# Y-FTB: the FTB chapter "Het Vadsrijk" is the compact one of tools/features/vadsrijk_y_ftb.py now (rekruut, 6 zones, raid,
+# secrets); this generator adds no FTB quests of its own any more. Its hidden advancements guhs:quest/vr_* stay (NpcFtb grants them).
 # ---------------------------------------------------------------------------------------------------------------------------
-FTB_CHAPTER = "guhs_vadsrijk"
-FTB_PORTRAIT = "guh:golden"
-FTB_SECTIES = [
-    ("vr_z6_verhaal", "Het Zijdeland (zone 6)", "guh:golden", [f"vr_{q}" for q in HQ]),
-    ("vr_z6_land", "Het Zijdeland helpen", "guh:mint", [f"vr_{q['id']}" for q in QUESTS if q["soort"] == "zij"]),
-    ("vr_z6_geheimen", "Geheimen van het Zijdeland", "guh:snow", ["vr_z6_knuffels_alle", "vr_z6_grauwe_brief", "vr_z6_uitkijken_alle",
-                                                                 "vr_z6_bakens_alle", "vr_z6_ringeling"] + [f"vr_z6_schat_{s}" for s in SCHATTEN]),
-]
-
-
-def ftb(fq):
-    q, adv = fq.q, fq.adv
-    K = "guhs:kaas_knabbels"
-    for d in QUESTS:
-        tekst = d["tekst"].replace("Zijdeland", "&dZijdeland&r")
-        icon = {"hoofd": "minecraft:writable_book"}.get(d["soort"], "minecraft:paper")
-        vorm = "gear" if d["soort"] == "hoofd" else None
-        q(f"vr_{d['id']}", d["titel"], tekst + " &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)", icon,
-          [fq.met(adv(f"vr_{d['id']}"), d["titel"])], rewards=((K, 8 if d["soort"] == "zij" else 16),), shape=vorm,
-          xp=100 if d["soort"] == "hoofd" else 50)
-    q("vr_z6_knuffels_alle", "Acht knuffels in het zand", "Vind alle &e8 knuffels&r die in het Zijdeland verstopt zitten.", "guhs:knuffel_golden",
-      [fq.met(adv("vr_z6_knuffels_alle"), "8 knuffels")], rewards=((K, 16),), shape="hexagon")
-    q("vr_z6_grauwe_brief", "Aan de Ringvinger", "Vind de &8Grauwe brief&r in het Mika-kamp op de Zoutvlakte.", "minecraft:paper",
-      [fq.met(adv("vr_z6_grauwe_brief"), "Grauwe brief")], rewards=((K, 8),))
-    q("vr_z6_uitkijken_alle", "Hoog boven het zand", "Ontdek alle &e4 uitkijkpunten&r van het Zijdeland.", "minecraft:spyglass",
-      [fq.met(adv("vr_z6_uitkijken_alle"), "4 uitkijkpunten")], rewards=((K, 16),), shape="hexagon")
-    q("vr_z6_bakens_alle", "Vijf sterren", "Steek alle &e5 sterrenbakens&r van het Zijdeland weer aan.", "minecraft:beacon",
-      [fq.met(adv("vr_z6_bakens_alle"), "5 bakens")], rewards=((K, 16),), shape="hexagon")
-    q("vr_z6_ringeling", "Tien blote tenen", "Vrolijk &dHertogin Ringeling&r op, boven in De Sterrendovende Toren (raid).", "minecraft:gold_nugget",
-      [fq.met(adv("vr_z6_ringeling"), "Ringeling")], rewards=((K, 32),), shape="hexagon")
-    for s, (naam, _t) in SCHATTEN.items():
-        q(f"vr_z6_schat_{s}", naam, "Een verborgen schat van het Zijdeland. Hij glinstert goudgeel als je dichtbij bent.",
-          "minecraft:chest", [fq.met(adv(f"vr_z6_schat_{s}"), naam)], rewards=((K, 8),))
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

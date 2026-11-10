@@ -1889,6 +1889,9 @@ public class GuhGameTests {
                 } else if (name.equals("guhs_sponsguh")) {
                     // (einde2: the Sponsguh story may be told in order too, FTB_LINEAIR; its places are free)
                     helper.assertTrue(locks >= 0, "Sponsguh");
+                } else if (name.equals("guhs_vadsrijk")) {
+                    // Y-FTB: zones 2-6, their secrets and the raid hang behind the zone gate ("Zone N is open!", vadsrijk_y_ftb.py)
+                    helper.assertTrue(locks == 11, "Het Vadsrijk: 5 zones + 5 secrets + the raid behind the gate, not " + locks);
                 } else if (name.equals("guhs_pad_echt")) {
                     // (guhpad: a preview nobody can do yet: everything hangs behind its lock quest)
                     helper.assertTrue(locks == 8, "Het echte Guheinde is locked: " + locks);
