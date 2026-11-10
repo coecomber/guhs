@@ -72,6 +72,7 @@ public class VadsrijkYIntGameTests {
             helper.assertTrue(Grens.GEWEIGERD.contains(Grens.wortel(List.of("ftbessentials", c))), "/ftbessentials " + c + " too");
         }
         helper.assertTrue(Grens.GEWEIGERD.containsAll(Grens.WERKBANKEN), "every work block is in GEWEIGERD");
+        helper.assertTrue(Grens.GEWEIGERD.contains(Grens.wortel(List.of("open", "anvil"))), "/open anvil (FTB Essentials 26.1.2.4) is refused inside");
         // end to end: a stand-in /stonecutter on the real dispatcher (FTB Essentials is not loaded here)
         var server = helper.getLevel().getServer();
         int[] gedraaid = {0};

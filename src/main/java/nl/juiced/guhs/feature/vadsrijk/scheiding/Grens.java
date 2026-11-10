@@ -52,11 +52,11 @@ public final class Grens {
     /** Root command names refused for non-ops inside the Vadsrijk (FTB Essentials; with or without its namespace). */
     public static final Set<String> GEWEIGERD = Set.of("home", "sethome", "delhome", "back", "warp", "rtp", "tpa", "tpahere", "tpaccept", "tpl",
             "tpx", "enderchest", "ec", "spawn",
-            // Y-INT (user decision): FTB Essentials' virtual work blocks (26.1.2.4 registers anvil, crafting, smithing, stonecutter);
-            // the others are not in FTB Essentials today, listed so a later version or alias is refused too
-            "anvil", "crafting", "craft", "workbench", "smithing", "stonecutter", "grindstone", "loom", "cartography");
+            // Y-INT (user decision): FTB Essentials' virtual work blocks. 26.1.2.4 has them as /open anvil|crafting|smithing|stonecutter
+            // (gamemaster only); the bare names (older FTB Essentials, other mods) and grindstone/loom/cartography are listed too
+            "open", "anvil", "crafting", "craft", "workbench", "smithing", "stonecutter", "grindstone", "loom", "cartography");
     /** Y-INT: the work-block commands of {@link #GEWEIGERD} (for the test and the docs). */
-    public static final Set<String> WERKBANKEN = Set.of("anvil", "crafting", "craft", "workbench", "smithing", "stonecutter", "grindstone", "loom",
+    public static final Set<String> WERKBANKEN = Set.of("open", "anvil", "crafting", "craft", "workbench", "smithing", "stonecutter", "grindstone", "loom",
             "cartography");
 
     private Grens() {

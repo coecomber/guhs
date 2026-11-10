@@ -49,6 +49,17 @@ public final class KristalBlokken {
         protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> b) {
             b.add(FACING);
         }
+
+        // Y-INT: turns along with structures (DraaiGameTests)
+        @Override
+        protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+            return nl.juiced.guhs.block.Draaien.facing(state, FACING, rotation);
+        }
+
+        @Override
+        protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+            return nl.juiced.guhs.block.Draaien.facing(state, FACING, mirror);
+        }
     }
 
     /** A crystal lock: LIT while a beam ends on it. */

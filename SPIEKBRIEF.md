@@ -1,30 +1,30 @@
-# Spiekbrief: Het Vadsrijk na ronde X (jouw feedback + klaar voor een release met alleen zone 1)
+# Spiekbrief: Het Vadsrijk na ronde Y (Vadsrijk ↔ survival, klaar voor de release met alleen zone 1)
 
-Dit is de spiekbrief van ronde X (2026-11-09). Ronde X repareert je laatste feedback (de walvisingang, zone 6 op de grond,
-de raid-toren, naamborden bij de dungeondeuren, de ruwe teksten/Kwartiermeesters, zone 1 en 2 op de grond) en maakt een
-release met **alleen het Knuffelkamp + zone 1** mogelijk: een zone-poort, een einde van zone 1 met "Wordt vervolgd", een
-zacht level-plafond en een wiki die alleen zone 1 laat zien. Alles zit in één nieuwe testclient:
-**`guhs_vadsrijk\x-int\run-client.bat`** (de w-int-client heb je niet meer nodig). De client staat op **alle zones open**
-(openZones 6); hoofdstuk 2 zegt hoe je de release-blik (1) aanzet.
+Dit is de spiekbrief van ronde Y (2026-11-10). Ronde Y maakt de grens tussen je survival-wereld en het Vadsrijk dicht en legt
+de drie bruggen die jij koos: het compacte **FTB-hoofdstuk "Het Vadsrijk"** met **pronkstukken** als beloning (claimen nooit in
+het Vadsrijk), de **Vadsrijk-vitrine** voor je basis en je **Vadsrijk-kleding als looks** thuis (Garderobe). Plus je twee
+besluiten (Mollie/Post alleen deco en kleding; geen FTB-werkbanken binnen). Alles zit in één nieuwe testclient:
+**`guhs_vadsrijk\y-int\run-client.bat`** (de x-int-client heb je niet meer nodig). De client staat op **alle zones open**
+(openZones 6); hoofdstuk X2 zegt hoe je de release-blik (1) aanzet. FTB Essentials zit er nu in, net als op de server.
 
 > **Het verhaal testen? Hoofdstuk 0: QUESTLOPEN** (`/guhs vadsrijk questlopen`, alleen als OP).
 >
-> **Je feedback nalopen? Hoofdstuk 1: RONDE X.** Per punt een commando om te kopiëren en wat je hoort te zien.
+> **Ronde Y nalopen? Hoofdstuk 1: VADSRIJK ↔ SURVIVAL.** FTB-hoofdstuk, pronkstukken, vitrine, Garderobe, de scheiding en je
+> twee besluiten, met per punt een commando en wat je hoort te zien.
 >
-> **De release met alleen zone 1 bekijken? Hoofdstuk 2.** De stappen voor de echte release staan in `RELEASE_CHECKLIST.md`.
+> **De release met alleen zone 1 bekijken? Hoofdstuk X2.** De stappen voor de echte release staan in `RELEASE_CHECKLIST.md`.
 
 **Volgorde van deze spiekbrief:**
 - starten, toetsen en de loot-regels;
 - hoofdstuk 0: Questlopen;
-- hoofdstuk 1: ronde X, je feedbackpunten;
-- hoofdstuk 2: release met alleen zone 1;
-- daarna de hoofdstukken van ronde W (W1 feedback, W2 de systemen: dungeons, Party-tab, nep-spelers, bereik-check) en de
-  hoofdstukken uit ronde U (B1 t/m B8). Ze gelden nog steeds.
+- hoofdstuk 1: ronde Y, Vadsrijk ↔ survival;
+- daarna de hoofdstukken van ronde X (X1 je feedback, X2 release met alleen zone 1), ronde W (W1 feedback, W2 de systemen)
+  en ronde U (B1 t/m B8). Ze gelden nog steeds.
 
 Elk blok test één onderdeel: copy-paste de commando's in de chat en kijk of gebeurt wat erbij staat.
 
 ## Starten
-- Dubbelklik `run-client.bat` in `guhs_vadsrijk\x-int`. Maak een **nieuwe** wereld (Creatief, cheats aan); de saves-map is leeg.
+- Dubbelklik `run-client.bat` in `guhs_vadsrijk\y-int`. Maak een **nieuwe** wereld (Creatief, cheats aan); de saves-map is leeg.
   De hele kaart (zone 1 t/m 6) is opnieuw gegenereerd, dus een oude wereld klopt niet meer.
 - `/guhs vadsrijk` om erin te gaan. De eerste keer krijg je meteen het karakterscherm (3 vaste slots).
 - Wil je geraakt kunnen worden of iets lopend testen: `/gamemode survival` (in creatief vallen de wezens je niet aan, en in
@@ -188,12 +188,168 @@ bij de volgende stap. Of klik meteen Sla stap over.
 
 ---
 
-# 1. RONDE X: JOUW FEEDBACK, PUNT VOOR PUNT
+# 1. RONDE Y: VADSRIJK ↔ SURVIVAL
+
+Ronde Y maakt de grens tussen je survival-wereld en het Vadsrijk dicht, met precies drie bruggen die jij koos: de
+**pronkstukken** (FTB-beloningen), de **Vadsrijk-vitrine** en je **Vadsrijk-kleding als looks** (Garderobe). Plus je twee
+besluiten: Vadsmunten kopen thuis alleen Vadsrijk-deco en kleding, en de FTB-werkbank-commando's werken niet in het Vadsrijk.
+
+> Test de grensregels als **gewone speler**: ops mogen erlangs (om te testen). Met één account:
+> `/guhs grenscheck start` zet jou tijdelijk op "geen op-vrijstelling" tot `/guhs grenscheck rapport` (zie 1.6).
+> FTB Essentials zit nu in deze client (zoals op de server), dus `/enderchest`, `/home`, `/back` en `/open anvil` bestaan echt.
+> Let op: FTB Essentials 26.1.2.4 heeft **geen `/ec`** en **geen los `/anvil`**: de werkbanken heten daar `/open anvil`,
+> `/open crafting`, `/open smithing`, `/open stonecutter`, en die mogen alleen ops.
+
+## 1.1 Het FTB-hoofdstuk "Het Vadsrijk" (compact)
+Open het FTB-boek, hoofdstuk **Het Vadsrijk**. Drie kopjes: De Knuffelorde, Het avontuur, Geheimpjes. 14 quests:
+- **Word rekruut van De Knuffelorde**: vinkt af aan het einde van de opleiding in het Knuffelkamp (`hq05_klodderreus`).
+  Beloning: **Rekruutvaantje + Vadsrijk-vitrine**.
+- **Zone 1..6 uitgespeeld**: de laatste hoofdquest van die zone. Beloning: een pronkstuk per zone.
+- **De Sterrendovende Toren verslagen**: de eerste raid-clear. Beloning: Sterrendovende trofee.
+- **Alle geheimpjes van zone 1..6**: alle Geheimen + Verloren knuffels + Puzzels van die zone. Beloning: Geheimpjesdoosje.
+- Geen kaasknabbels, geen xp, geen spullen: elke beloning is precies één deco-blok. Elke gamemode en elk karakter telt.
+
+Bij **gate 1** (de release) zie je alleen rekruut, zone 1 en geheimpjes 1. Gaat een zone open, dan verschijnt "Zone N is open!"
+(afgevinkt) met de twee quests van die zone.
+```
+/guhs vadsrijk zones open 1
+/guhs vadsrijk ftb status
+/guhs vadsrijk zones open 2
+```
+Na `open 2` verschijnen binnen 10 s **Zone 2 is open!**, **Zone 2 uitgespeeld** en **Alle geheimpjes van zone 2**. Daarna weer
+`/guhs vadsrijk zones open 6` (de client staat standaard op 6; wat verscheen blijft staan).
+
+Snel afvinken: `/guhs vadsrijk ftb geef zone1` (of `rekruut`, `raid`, `geheimen1`...), alles terug: `/guhs vadsrijk ftb vergeet`.
+
+**De claimregel: nooit in het Vadsrijk.**
+1. Vink iets af terwijl je **in het Vadsrijk** staat (`/guhs vadsrijk`, dan `/guhs vadsrijk ftb geef zone1`). Klik de beloning
+   (of "claim all"). Zie: goud bericht **"Beloningen claim je in je eigen wereld, niet in het Vadsrijk."**, je krijgt niets, en de
+   beloning blijft claimbaar.
+2. Ga naar huis (`/guhs vadsrijk`), klik nog eens. Zie: het **Knuffelzwamlampje** in je inventaris.
+3. In het Knuffelkwartier (je Vadsrijk-huis) mag claimen wel: daar heb je je thuis-inventaris.
+Dit geldt voor álle FTB-beloningen, ook van de andere Guhs-hoofdstukken.
+
+## 1.2 De pronkstukken (14 deco-blokken voor je eigen wereld)
+```
+/guhs vadsrijk ftb trofeeen
+```
+Rekruutvaantje, Knuffelzwamlampje, Splinternaaldjes, Schemerwortellantaarn, Lampionvliegertje, Hoogvads-roosvenstertje,
+Sterrentorentje, Sterrendovende trofee en 6x Geheimpjesdoosje (deksel in de zonekleur).
+- Thuis neerzetten: kijkt naar jou; de lampjes geven licht. Tooltip "Beloning: Zone N van Het Vadsrijk uitgespeeld".
+- In het Vadsrijk neerzetten: lukt niet ("Dit pronkstuk is voor je eigen wereld...").
+- Hoe ze eruitzien heb je nog niet gezien: graag even oordelen (alleen vanilla-texturen, geen nieuwe plaatjes).
+
+## 1.3 De Vadsrijk-vitrine
+Eén glazen trofeekastje voor je basis, dat **live** je Vadsrijk-held laat zien. Je krijgt hem bij de rekruut-quest.
+```
+/give @s guhs:vr_vitrine
+```
+- Thuis neerzetten: "Je Vadsrijk-vitrine staat!", jij bent de eigenaar. In het glas je rijdier als draaiend beeldje (anders je
+  huisdier, anders het Knuffelorde-hartschild). Erboven (binnen ~14 blokken): naam, klasse + level, zone-badges, raid en de datum
+  van je eerste zone.
+- Rechtsklik met lege hand: een overzicht in de chat. Met een blok in je hand zet je dat blok gewoon tegen de vitrine.
+- In het Vadsrijk (en het Knuffelkwartier) neerzetten: lukt niet.
+- Vullen (als op), bij je vitrine:
+```
+/guhs vadsrijk vitrine zone 1
+/guhs vadsrijk mount geef knuffelhert
+/guhs vadsrijk mount rijd knuffelhert
+/guhs vadsrijk vitrine ververs
+```
+- Gate 1: badges **① ? ? ? ? ?**, geen zonenamen, geen raid-regel, ook niet als je (als op) alles al klaar hebt.
+  `/guhs vadsrijk zones open 6`: binnen 5 s alle badges en de raid-regel.
+- Offline: de vitrine houdt de laatste stand vast ("... is nu niet online").
+- Graag beoordelen: hoe het glas over het beeldje valt, en of grote rijdiers door het glas steken.
+
+## 1.4 De Garderobe: je Vadsrijk-kleding thuis als looks
+- Toets **O** of `/guhs garderobe` (iedereen, overal). Thuis heet het scherm **Garderobe** (8 tabs, geen Harnas-tab), in het
+  Vadsrijk nog "Kledingkast".
+- Bovenaan: "Thuis is je Vadsrijk-kleding alleen voor de looks: geen krachten, geen harnas."
+- Kies thuis bij Rug de **Knuffelorde-cape**, bij Hoofd het **Strikje**: je ziet ze meteen (F5), en andere spelers ook.
+- Vleugels thuis: alleen een look. Zweven, dubbele sprong en zachte landing doen thuis niks.
+- Met een echte elytra aan verdwijnen de cosmetische vleugels.
+- Vrijspelen gebeurt alleen in het Vadsrijk; thuis openen geeft niks gratis. Bij gate 1 zie je van zone 2-6 geen vergrendelde
+  stukken ("Meer kleding vind je later, in nieuwe delen van het Vadsrijk.").
+- Een diamanten helm wordt nooit een Vadsrijk-harnaslook.
+
+## 1.5 De scheiding: wat is dicht (14 kanalen getest)
+| kanaal | wat er nu gebeurt |
+|---|---|
+| Inventaris | wisselt bij de grens; volle tas + item aan je muis: er valt niks op de grond (rest in `/guhs vadsrijk kist`) |
+| Enderkist | binnen dicht: `/enderchest` "werkt niet in het Vadsrijk", een enderkistscherm sluit meteen |
+| Shulkers/bundels | reizen gewoon mee in je tas (spullen erin blijven erin), dus geen lek |
+| Spullen/xp-bolletjes/karretjes | geen enkel niet-speler-ding gaat over de grens, beide kanten op |
+| Vanilla xp | wisselt: binnen een eigen pot (meestal 0), buiten precies terug |
+| Effecten, hartjes, honger, vuur | thuis-lijf wordt bewaard en precies teruggegeven; Vadsrijk-effecten (Nachtzicht...) blijven binnen |
+| Dood / respawn | binnen flauwvallen; nergens binnen een spawnpunt zetten |
+| Uitloggen / crash | wissel is in één tick en idempotent |
+| Dieren / paarden / leidtouw | je stapt af, het dier blijft aan zijn kant |
+| Teleports van andere mods | `/home`, `/back`, `/tpa`, `/warp`, `/rtp`, `/spawn` binnen geweigerd; van buiten naar binnen kan alleen via de ingang |
+| Opslag en handel | Bank Guh en Leverkist binnen dicht; Vadsrijk-opslag (Opslag, Materiaaltas, Bondbank) buiten dicht; Premiebord alleen binnen |
+| Munten | Vadsmunten blijven een getal in je Vadsrijk-data; thuis kopen ze alleen deco/kleding (zie 1.7) |
+| Survival-beloningen terwijl je binnen bent | (Sherlock, Momo, Opa's kelder...) gaan naar je thuis-inventaris, niet in je Vadsrijk-tas |
+| Ops | mogen erlangs bij de grensregels; de wissels gelden voor iedereen |
+
+Proberen (als gewone speler, of met `/guhs grenscheck start` eerst):
+```
+/xp add @s 30 levels
+/effect give @s minecraft:strength 300 1
+/guhs vadsrijk
+```
+Binnen: xp-balk 0, geen Kracht, volle hartjes. Typ `/enderchest`, `/home test`, `/open anvil`: allemaal "werkt niet in het
+Vadsrijk" (zonder `/guhs grenscheck start` mag je als op wel).
+Weer `/guhs vadsrijk`: 30 levels, Kracht II met de resttijd, je oude hartjes en honger.
+
+## 1.6 De echte grenstest in één commando-rij (wat de AutoCheck deed)
+De gametest-server heeft geen Vadsrijk-dimensie, dus de echte grens is in de client getest met `/guhs grenscheck` (op):
+```
+/guhs grenscheck start
+/guhs grenscheck in
+/guhs grenscheck binnen
+/guhs grenscheck uit
+/guhs grenscheck thuis
+/guhs grenscheck vitrine
+/guhs grenscheck rapport
+```
+Elke stap zet groene **PASS**- of rode **FAIL**-regels in de chat (en in `run\grenscheck.txt`). `thuis` zet ook een vitrine en
+twee pronkstukken voor je neer, `vitrine` geeft je een Knuffelhert en zet je camera op het kastje.
+
+**Uitslag van de AutoCheck (poort 1, nieuwe wereld): 42 PASS, 0 FAIL.** Gecontroleerd: inventaris, vanilla xp (17 -> 0 -> 17),
+Speed II weg binnen en terug thuis, Nachtzicht van binnen niet mee naar buiten, hartjes 13 en eten 11 precies terug, een
+smaragd die je bij de grens liet vallen ligt nog thuis en is nergens binnen, een item-entiteit kan niet over de grens (beide
+kanten), `/enderchest` + de vier `/open`-werkbanken + `/home` + `/back` + `/spawn` binnen geweigerd (thuis werken ze),
+FTB-claim van de vitrine binnen geweigerd en thuis gelukt, vitrine en pronkstuk binnen niet neer te zetten en thuis wel.
+Schermafdrukken en `grenscheck.txt`: `guhs_vadsrijk\y-int-autocheck-bewijs\` (yi_*.png).
+
+## 1.7 Jouw twee besluiten
+**a) Vadsmunten kopen thuis alleen Vadsrijk-deco en kleding.**
+- Meubelmeester Mollie (Knuffelkwartier, markt) verkoopt nu alleen nog: Guh-stoel, Guh-tafel, Guh-bank, roze zitzak, magenta
+  kussen, vlaggetjes en het Vadsrijk-vaandel. **Weg:** Guh-taart (eten), Roze guhbloem en Guhoortjes (bloemen), lantaarns,
+  roze tapijt, roze bed, bloempotten, kersenplanken, roze glas, boekenkasten.
+- De Vadsrijk Post brengt alleen nog deco en kleding thuis. Wat hij bracht was al allemaal deco of kleding (Guh-kleding,
+  vr_eco-deco, het guh-vliegertje), dus daar verdwijnt niks; er zit nu een slot op: iets anders gaat nooit meer per Post naar huis
+  (het blijft dan in je Vadsrijk-tas).
+- Wat je al gekocht had, blijft van jou.
+```
+/guhs vadsrijk munten 50000
+/guhs vadsrijk huis wijk
+```
+Loop naar **Meubelmeester Mollie** in het middelste marktkraampje en klik haar aan: nog 7 dingen (6 + 1 op "Meer spulletjes »").
+
+**b) FTB-werkbanken werken niet in het Vadsrijk.** In FTB Essentials 26.1.2.4 heten ze `/open anvil`, `/open crafting`,
+`/open smithing` en `/open stonecutter`, en ze zijn **alleen voor ops** (gewone spelers hebben ze sowieso niet). Binnen geeft
+`/open ...` nu "werkt niet in het Vadsrijk" (voor wie geen op-vrijstelling heeft); thuis werken ze gewoon. Voor de zekerheid
+staan ook de losse namen `/anvil`, `/crafting`, `/smithing`, `/stonecutter`, `/grindstone`, `/loom`, `/cartography`, `/craft`
+en `/workbench` op de lijst (een latere FTB-versie of een andere mod).
+
+---
+
+# X1. RONDE X: JOUW FEEDBACK, PUNT VOOR PUNT (vorige ronde)
 
 Elk punt: wat er mis was, het commando om er te komen, en wat je nu hoort te zien. Tip: `/gamemode spectator` om rond te
 kijken, `/gamemode survival` om iets echt lopend te testen.
 
-## 1.1 De ingang van de walvis (zone 5): de trap naar het Staartpark
+## X1.1 De ingang van de walvis (zone 5): de trap naar het Staartpark
 **Was:** de ingang zat in een tunneltje recht achter de troon, je zag hem niet.
 **Nu:** een brede poort aan het eind van het noordelijke zijpad van de troonzaal, met een lichtblauwe loper ernaartoe, een
 gouden lijst en een bord "Naar het Staartpark & de Staarthaven". Buiten een bordes en twee brede trappen (3 breed) met een
@@ -207,7 +363,7 @@ tussenbordes, tot op het gras van het Staartpark.
 - In survival: loop van de troonzaal naar beneden en weer terug, zonder te springen of iets te breken.
 - **Let op:** de borden in de kaart zijn nieuw (tekst in de tegels). Zijn ze leeg? Zeg het: dan zit het in het bordformaat.
 
-## 1.2 Zone 6 buiten de stadjes: alles staat op de grond
+## X1.2 Zone 6 buiten de stadjes: alles staat op de grond
 **Was:** gebouwen, tenten, palmstammen en randen zweefden net boven de grond; wegen liepen als droge geul door het water.
 **Nu:** een funderingspass zet alles buiten Rozenkloof/Saffraanpoort op de grond; wegen door water zijn een dijkje of een
 doorwaadplaats. De checker telt nu 0 gaten en 0 zwevende stukken buiten de steden (was 399 en 169 cellen).
@@ -218,7 +374,7 @@ doorwaadplaats. De checker telt nu 0 gaten en 0 zwevende stukken buiten de stede
 - **Het Duinbaken:** `/guhs vadsrijk z6wereld plek duinbaken_voet`
 - **Het karavaankamp:** `/guhs vadsrijk z6wereld plek karavaankamp`
 
-## 1.3 "Is de grote toren de raid?": De Sterrendovende Toren
+## X1.3 "Is de grote toren de raid?": De Sterrendovende Toren
 **Was:** ja, maar alleen de buitenkant. De echte raid zit in De Wachtzaal onder de toren, en de poort was een zwart glas van 5
 breed in een nis van 9 breed: je liep erlangs de holle toren in en er gebeurde niks. De verdiepingen, ringen en de lens
 zweefden los.
@@ -238,7 +394,7 @@ zweefden los.
 - **Tracker:** na z6_hq10, zolang je de raid nog niet hebt gehaald, staat in zone 6 de regel
   **De Sterrendovende Toren (raid)** met de straal op de poort.
 
-## 1.4 Naamborden bij de dungeondeuren
+## X1.4 Naamborden bij de dungeondeuren
 **Was:** de deuren vielen niet op en hadden geen naam.
 **Nu:** boven elke deur een bord van twee regels: de naam groot en vet in de kleur van de dungeon, eronder klein
 "Dungeon · Grot · lv A-B". Fel, ook 's nachts, met een onzichtbaar lichtje en af en toe gloei-vonkjes op de deur.
@@ -258,7 +414,7 @@ zweefden los.
 - De dungeondeur als item (alleen creative/JEI): `/give @s guhs:vr_dungeondeur`.
 - De blauwe stadsblubs gloeien weer zacht, net als de echte blauwe Blub (kijk 's nachts in Zwamzoet).
 
-## 1.5 Ruwe teksten weg: de Kwartiermeesters
+## X1.5 Ruwe teksten weg: de Kwartiermeesters
 **Was:** een guh heette `vadsrijk.npc.naam.kk_poort_zwamzoet`.
 **Nu:** elke stad heeft een Kwartiermeester met een naam. Ze verschijnen een paar seconden nadat je bij het plein bent.
 
@@ -274,7 +430,7 @@ zweefden los.
 - Vangnet: mist er ooit nog een tekst, dan toont het spel een leesbare naam in plaats van de sleutel (en zet het in de log).
 - Een nieuwe test leest ~4.100 sleutels die pas tijdens het spelen ontstaan, in het Nederlands én Engels: alles aanwezig.
 
-## 1.6 Zone 1 (+ Knuffeleiland) en zone 2 op de grond
+## X1.6 Zone 1 (+ Knuffeleiland) en zone 2 op de grond
 Muren, stelen, stammen en rotsvoeten die over een kuiltje hingen staan nu op de grond (zone 1: 400 kolommen, zone 2: 474).
 
 | # | Wat | Commando | Wat je moet zien |
@@ -288,7 +444,7 @@ Muren, stelen, stammen en rotsvoeten die over een kuiltje hingen staan nu op de 
 | 7 | Zone 2: ijsbouwsel op de helling | `/tp @s 853 118 -944` | het pakijs loopt door tot de sneeuw |
 | 8 | **Nieuw (integratie):** de stenen trappen uit de baai bij De Haven | `/tp @s 60 65 456 90 30` | de trap uit het water loopt nu door tot op de kade (eerst moest je aan het eind 1 blok omhoog springen); de tweede trap: `/tp @s 87 65 528 90 30` |
 
-## 1.7 Uitkijkpunt Galmtop (zone 2)
+## X1.7 Uitkijkpunt Galmtop (zone 2)
 **Was:** de wenteltrap begon 18 blokken boven een klif. Daarna (tussenversie) kwam hij boven onder de vloer uit en zat de
 reling dicht waar je aankwam.
 **Nu:** de trap begint op de helling en komt boven via een paar treden net buiten het platform en een brede opening in de
@@ -297,28 +453,29 @@ reling op het platform uit.
 - **Bovenop:** `/guhs vadsrijk indeling plek uitkijk_galmtop`
 - In survival: loop van onder naar boven en terug zonder te springen.
 
-## 1.8 Engels voor alles
+## X1.8 Engels voor alles
 Ook de oude teksten (De Erfenis, Sherlock Guh, de mijnen, de FTB-hoofdstukken) hebben nu Engels: 0 ontbrekend. Niets om in
 de client te bekijken (jouw regel: Engels nooit in de client checken).
 
-## 1.9 De hotfixes van 1.9.3 t/m 1.9.7 zitten erin
+## X1.9 De hotfixes van 1.9.3 t/m 1.9.7 zitten erin
 De 1.10-tak was gebouwd op 1.9.2. De fixes die sindsdien live gingen (Houtzagerij zonder planken, één Guhrrit bij de tour,
 Knabbelbaken-menu, Guhvilla-ramen, safari-namen, opslag x3 + plafond per goed, Leverkist 54 x 9999, geen dubbele
 deco-guhs, chat in het overzicht, Konijnenpluis e.d., het Terughekje, weggeven/naar de Leverkist vanuit de opslag) zijn erin
 gemerged, zodat de release ze niet ongedaan maakt.
 
 
-# 2. RELEASE MET ALLEEN ZONE 1
+# X2. RELEASE MET ALLEEN ZONE 1
 
 Het plan: de publieke server gaat live met alleen het Knuffelkamp (tutorial) en zone 1 open. Het schip naar zone 2 vaart
 "binnenkort".
 
-## 2.1 De zone-poort
+## X2.1 De zone-poort
 - **Op de server (blijvend):** in de wereldmap `serverconfig/guhs-vadsrijk-zones.toml`:
   ```
   openZones = 1
   ```
-  (1 = alleen Knuffelkamp + zone 1, 6 = alles open; standaard 6). Voor nieuwe werelden hetzelfde bestand in `defaultconfigs/`.
+  (1 = alleen Knuffelkamp + zone 1, 6 = alles open; standaard 6). Ronde Y: NeoForge 26 leest dit bestand uit `config/`
+  (in deze client: `run\config\guhs-vadsrijk-zones.toml`, staat op 6); `defaultconfigs/` doet niets meer.
 - **Tijdens het spelen (als op):** `/guhs vadsrijk zones open 1` (meteen actief, wordt bewaard). Kijken: `/guhs vadsrijk zones`.
 - **Ops en creative gaan overal doorheen.** Wil je als op zien wat een speler ziet (nieuw in de integratie):
   ```
@@ -332,7 +489,7 @@ Het plan: de publieke server gaat live met alleen het Knuffelkamp (tutorial) en 
   ```
   en terug: `/guhs vadsrijk zones alsspeler uit` en `/guhs vadsrijk zones open 6`.
 
-## 2.2 Het einde van zone 1 (zoals een speler het ziet)
+## X2.2 Het einde van zone 1 (zoals een speler het ziet)
 Snel naar het einde (dev, nieuw): `/guhs vadsrijk zones zone1klaar` (je zone-1-hoofdverhaal klaar, level 20).
 1. Rechtsboven in de tracker: **"Wordt vervolgd: Het schip naar De Splinterpieken vaart binnenkort. Houd Discord in de gaten!"**
    (geen lichtstraal).
@@ -343,7 +500,7 @@ Snel naar het einde (dev, nieuw): `/guhs vadsrijk zones zone1klaar` (je zone-1-h
    "De Splinterpieken is nog dicht: het schip daarheen vaart binnenkort!".
 5. De Zwamgrot (zone 1) werkt gewoon: `/tp @s -412 69 148 90 0` (solo, groep, wachtrij).
 
-## 2.3 Het zachte level-plafond
+## X2.3 Het zachte level-plafond
 - Met de poort op 1 stop je op **level 20** (balk vol). Eén chatregel; extra xp wordt gespaard (tot 3 levels).
   In het Vadsrijk-menu (Karakter) staat "Hoogste level voor nu" en hoeveel xp gespaard is.
 - Testen: `/guhs vadsrijk level 19`, dan (met `alsspeler aan`) een paar wezens: je stopt op 20.
@@ -352,7 +509,7 @@ Snel naar het einde (dev, nieuw): `/guhs vadsrijk zones zone1klaar` (je zone-1-h
 - Xp in zone 1: met alleen de hoofdquests hoef je niet meer te grinden (0-5 minuten). Zie `XP_BALANS.md`.
 - Bekend: de twee rijdier-terugkeerquests van zone 1 zijn met poort 1 niet te doen (je eerste rijdier komt in zone 3).
 
-## 2.4 De wiki: alleen zone 1
+## X2.4 De wiki: alleen zone 1
 - https://guhs.nl/vadsrijk-preview-zone1/ : zo ziet guhs.nl/vadsrijk eruit bij de release (alleen tutorial + zone 1, een
   kaart "Binnenkort: nieuwe zones"; zone 2-6 staan er echt niet op: `.../zones/zone2.html` geeft 404).
 - https://guhs.nl/vadsrijk-preview/ : de volledige versie (alle zones, achter de spoilerschakelaar).

@@ -1,7 +1,9 @@
 # Y-INT: round Y, the REAL survival <-> Vadsrijk border (the gametest server has no Vadsrijk dimension, so this is where it is
 # checked for real). /guhs grenscheck (feature/vadsrijk/scheiding/GrensCheck) does the checks server-side and writes
 # "GRENSCHECK PASS|FAIL|SKIP ..." lines to the log, to chat and to run/grenscheck.txt; the shots are only the evidence.
-# Run it with openZones = 1 in run/defaultconfigs (the release gate), FTB Essentials in run/mods:
+# Run it with openZones = 1 in run/config/guhs-vadsrijk-zones.toml (the release gate; NeoForge 26 reads server configs from
+# config/, not defaultconfigs/). FTB Essentials is a dev localRuntime (build.gradle). FTB Essentials 26.1.2.4 has /enderchest
+# (no /ec) and the work blocks as /open anvil|crafting|smithing|stonecutter.
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_y_int.txt
 section setup
 /gamemode creative
@@ -29,13 +31,13 @@ wait 60
 shot yi_02_binnen_checks
 # the same commands typed by the player (the refusal message must be in chat)
 clearchat
-/ec
+/enderchest
 wait 20
 /home grenscheck
 wait 20
-/anvil
+/open anvil
 wait 20
-/crafting
+/open crafting
 wait 20
 shot yi_03_binnen_geweigerd
 
@@ -63,11 +65,12 @@ wait 20
 shot yi_06_rapport
 
 section garderobe
+gui keep
 /guhs garderobe
 wait 40
 widgets
 shot yi_07_garderobe_thuis
-close
+gui close
 wait 10
 
 section ftb
