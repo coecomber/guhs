@@ -1464,6 +1464,7 @@ public final class Base {
         t.putInt("VolgendeId", volgendeId);
         t.putInt("Guhlden", guhlden);
         t.putBoolean("MoetStempelen", moetStempelen);
+        t.putBoolean("Vorm198", true);
         t.putInt("Bewoners", bewoners);
         t.putLong("VolgendeIntrek", volgendeIntrek);
         t.putInt("Bestellingen", bestellingen);
@@ -1578,7 +1579,8 @@ public final class Base {
         b.zaakKlaar = t.getBooleanOr("ZaakKlaar", false);
         b.volgendeId = t.getIntOr("VolgendeId", 1);
         b.guhlden = t.getIntOr("Guhlden", 0);
-        b.moetStempelen = t.getBooleanOr("MoetStempelen", true);
+        // 1.9.8: every base is stamped once more on its next visit (the T3 path no longer leaves holes in the ground)
+        b.moetStempelen = t.getBooleanOr("MoetStempelen", true) || !t.getBooleanOr("Vorm198", false);
         b.bewoners = t.getIntOr("Bewoners", 0);
         b.volgendeIntrek = t.getLongOr("VolgendeIntrek", 0L);
         b.bestellingen = t.getIntOr("Bestellingen", 0);
