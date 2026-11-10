@@ -95,17 +95,24 @@ public class VadsrijkVitrineGameTests {
         helper.assertTrue("test-mock-player".equals(be.foto().getStringOr("naam", "")), "the first snapshot right away: " + be.foto());
         helper.assertTrue(Vitrine.magHier(helper.getLevel()), "overworld: allowed");
         ServerLevel rijk = Vadsrijk.level(helper.getLevel().getServer());
-        helper.assertTrue(rijk != null, "the Vadsrijk dimension exists in the test server");
-        helper.assertTrue(!Vitrine.magHier(rijk), "Het Vadsrijk: not allowed");
+        if (rijk != null) {
+            helper.assertTrue(!Vitrine.magHier(rijk), "Het Vadsrijk: not allowed");
+        }
         ServerLevel kwartier = helper.getLevel().getServer().getLevel(Kwartier.DIM);
         if (kwartier != null) {
             helper.assertTrue(!Vitrine.magHier(kwartier), "Het Knuffelkwartier: not allowed");
         }
-        // really try it in the Vadsrijk, as a player would
-        BlockPos daar = new BlockPos(0, 250, 0);
-        InteractionResult r = plaats(p, rijk, daar);
-        helper.assertTrue(!r.consumesAction(), "placing in Het Vadsrijk is refused: " + r);
-        helper.assertTrue(!rijk.getBlockState(daar).is(Vitrine.BLOK.get()), "no vitrine block in Het Vadsrijk");
+        // really try it "in the Vadsrijk", as a player would (the test server has no Vadsrijk dimension: this level stands in)
+        BlockPos daar = helper.absolutePos(new BlockPos(3, 2, 3));
+        try {
+            Vitrine.TEST_RIJK = helper.getLevel();
+            helper.assertTrue(!Vitrine.magHier(helper.getLevel()), "the stand-in Vadsrijk: not allowed");
+            InteractionResult r = plaats(p, helper.getLevel(), daar);
+            helper.assertTrue(!r.consumesAction(), "placing in Het Vadsrijk is refused: " + r);
+            helper.assertTrue(!helper.getLevel().getBlockState(daar).is(Vitrine.BLOK.get()), "no vitrine block in Het Vadsrijk");
+        } finally {
+            Vitrine.TEST_RIJK = null;
+        }
         Questlog.wisAlles(p);
         helper.succeed();
     }
@@ -118,8 +125,8 @@ public class VadsrijkVitrineGameTests {
             ZonePoortConfig.TEST = 6;
             VitrineBlockEntity be = neer(helper, p);
             helper.assertTrue(be.foto().getIntOr("zones", -1) == 0 && be.foto().getLongOr("eerste", -1L) == 0L, "a fresh hero: no zones, no date");
-            Spelers.zetLevel(p, 20);
             int n = Vitrine.maakZoneKlaar(p, 1);
+            Spelers.zetLevel(p, 20);   // (after the quests: their rewards give xp)
             helper.assertTrue(n > 0 && Vitrine.zoneKlaar(p, 1) && !Vitrine.zoneKlaar(p, 2), "zone 1 main story done (" + n + " quests)");
             Rijdieren.geef(p, RijdierSoort.KNUFFELHERT);
             Rijdieren.kies(p, RijdierSoort.KNUFFELHERT);
@@ -158,8 +165,8 @@ public class VadsrijkVitrineGameTests {
             be.ververs(false);
             helper.assertTrue(be.foto().getIntOr("level", 0) == 12, "online: level 12");
             Vitrine.TEST_OFFLINE.add(p.getUUID());
-            Spelers.zetLevel(p, 18);
             Vitrine.maakZoneKlaar(p, 1);
+            Spelers.zetLevel(p, 18);
             helper.assertTrue(!be.ververs(false), "offline: the vitrine does not change");
             helper.assertTrue(be.foto().getIntOr("level", 0) == 12 && be.foto().getIntOr("zones", 0) == 0, "offline: still the old snapshot");
             List<Component> chat = Vitrine.samenvatting(be.foto(), false, 6);

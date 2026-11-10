@@ -103,8 +103,8 @@ public class VitrineBlock extends BaseEntityBlock {
     @Override
     protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
             BlockHitResult hit) {
-        if (stack.getItem() instanceof BlockItem && !player.isShiftKeyDown()) {
-            return InteractionResult.TRY_WITH_EMPTY_HAND;
+        if (stack.getItem() instanceof BlockItem) {
+            return InteractionResult.PASS;   // (a block in hand: place it against the case as usual)
         }
         return useWithoutItem(state, level, pos, player, hit);
     }

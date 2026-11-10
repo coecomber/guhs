@@ -89,6 +89,9 @@ public final class Vitrine {
     static final int EERSTE_CHECK = 600;
     /** Tests: owners that count as offline even though they are on the player list. */
     public static final Set<UUID> TEST_OFFLINE = ConcurrentHashMap.newKeySet();
+    /** Tests: a level that counts as Het Vadsrijk (the gametest server has no Vadsrijk dimension). */
+    @Nullable
+    public static volatile Level TEST_RIJK;
 
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(Guhs.MODID);
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
@@ -119,7 +122,7 @@ public final class Vitrine {
 
     /** May a vitrine stand in this level? Everywhere except Het Vadsrijk and Het Knuffelkwartier. */
     public static boolean magHier(@Nullable Level level) {
-        return level != null && !Vadsrijk.in(level) && level.dimension() != Kwartier.DIM;
+        return level != null && level != TEST_RIJK && !Vadsrijk.in(level) && level.dimension() != Kwartier.DIM;
     }
 
     // ---- progress -----------------------------------------------------------------------------------------------------------------
