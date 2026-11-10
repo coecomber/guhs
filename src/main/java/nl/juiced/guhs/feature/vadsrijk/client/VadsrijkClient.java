@@ -58,6 +58,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.dungeon.client.DungeonScherm.installeer();   // W-GROT: the dungeon door window + ready check
         nl.juiced.guhs.feature.vadsrijk.ritme.client.RitmeClient.init(modBus);   // U-LEVEN-RITME: weather per zone, town lights, fireflies
         nl.juiced.guhs.feature.vadsrijk.questlopen.client.QuestLopenClient.init(modBus);   // U-QUESTLOPEN: the admin main-line screen
+        nl.juiced.guhs.feature.vadsrijk.vitrine.client.VitrineClient.init(modBus);   // Y-VITRINE: the vitrine renderer
         nl.juiced.guhs.feature.vadsrijk.party.client.PartyClient.init(modBus);   // W-PARTY: Party tab, invite toast, nep-speler renderer + setting
         nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.init(modBus);   // U-TABS: the Vadsrijk-menu (key H, all tabs in one frame; keep last)
         nl.juiced.guhs.feature.vadsrijk.vint.client.VIntClient.init(modBus);   // V-INT: key H contexts (menu in the Vadsrijk, einde2 power elsewhere), bond/house/hud/spec tabs

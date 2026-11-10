@@ -7032,6 +7032,14 @@
       ]
     },
     {
+      "id": "c460_vr_y_vitrine",
+      "title": "1.10 round Y (Y-VITRINE): the Vadsrijk-vitrine trophy block",
+      "prefixes": [
+        "vadsrijk.vitrine.",
+        "block.guhs.vr_vitrine"
+      ]
+    },
+    {
       "id": "c465_vr_y_cosmetica",
       "title": "1.10 round Y (Y-COSMETICA): the Garderobe at home (Vadsrijk outfits as looks in survival)",
       "prefixes": [
