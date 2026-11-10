@@ -61,6 +61,17 @@ public class VitrineBlock extends BaseEntityBlock {
         b.add(FACING);
     }
 
+    // Y-INT: turns along with structures / rotated placements (DraaiGameTests)
+    @Override
+    protected BlockState rotate(BlockState state, net.minecraft.world.level.block.Rotation rotation) {
+        return nl.juiced.guhs.block.Draaien.facing(state, FACING, rotation);
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, net.minecraft.world.level.block.Mirror mirror) {
+        return nl.juiced.guhs.block.Draaien.facing(state, FACING, mirror);
+    }
+
     @Override
     protected RenderShape getRenderShape(BlockState state) {
         return RenderShape.MODEL;
