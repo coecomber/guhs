@@ -218,7 +218,10 @@ def assets(A, D, w=_schrijf):
       {"parent": "minecraft:block/block", "render_type": "minecraft:translucent", "textures": tex, "elements": elementen()})
     w(os.path.join(A, "blockstates", f"{ID}.json"),
       {"variants": {f"facing={f}": {"model": f"guhs:block/{ID}", **({"y": y} if y else {})} for f, y in FACING_Y.items()}})
-    w(os.path.join(A, "items", f"{ID}.json"), {"model": {"type": "minecraft:model", "model": f"guhs:block/{ID}"}})
+    # Y-INT: an item model of its own (parent = the block), like the pronkstukken: the wiki (gamedata.items) only lists a block that
+    # has a models/item file, and the vitrine needs its wiki page + "Zo werkt het"
+    w(os.path.join(A, "models", "item", f"{ID}.json"), {"parent": f"guhs:block/{ID}"})
+    w(os.path.join(A, "items", f"{ID}.json"), {"model": {"type": "minecraft:model", "model": f"guhs:item/{ID}"}})
     w(os.path.join(D, "loot_table", "blocks", f"{ID}.json"), {
         "type": "minecraft:block", "pools": [{"rolls": 1, "entries": [{"type": "minecraft:item", "name": f"guhs:{ID}"}],
                                                "conditions": [{"condition": "minecraft:survives_explosion"}]}]})
