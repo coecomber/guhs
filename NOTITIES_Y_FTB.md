@@ -92,7 +92,10 @@ FTB Quests kan niet dynamisch op een server-config verbergen, maar wel op afhank
 ## Checks
 - `python tools/make_ftbquests.py` (met de 1.21.1-client-jar in `build/moddev/artifacts/`), `python tools/lang/apply_en.py`,
   `engelscheck.py`: alles 0 / OK; `taalcheck.py`: 2.958 sleutels, 0 ontbreken.
-- compileJava OK. Gametests: zie het eindrapport (`-Pgt=VadsrijkFtb,ftbquests`).
+- compileJava OK. Gametests `-Pgt=VadsrijkFtb,ftbquests`: **14/14 groen** (8 van VadsrijkFtbGameTests + de ftbquests-batch van
+  GuhGameTests). In GuhGameTests stond `guhs_vadsrijk` nog niet in de verwachte hoofdstukkenlijst (faalde al vóór deze slice); toegevoegd.
+  De gametest-server laadt de Vadsrijk-dimensie niet altijd: de claim-/plaatsregel wordt dan op dimensiesleutel getest
+  (`FtbClaimRegel.magClaimenIn`, `TrofeeBlock.magNietIn`); het teleport-stuk draait alleen als het level er is.
 
 ## Open punten
 - In de client checken (integratie): claimknop/claim all in het Vadsrijk geweigerd + bericht, thuis wel; hoofdstuk bij gate 1 toont
