@@ -19,7 +19,8 @@ import net.minecraft.world.inventory.PlayerEnderChestContainer;
  *   <li>inside the Vadsrijk: no ender chest (the survival one) and no survival Guhs storage ({@link #ALLEEN_THUIS});</li>
  *   <li>outside: no Vadsrijk storage ({@link #ALLEEN_RIJK}).</li>
  * </ul>
- * Ops are not exempt here: an op who wants to look uses {@code /guhs vadsrijk} to go in or out.
+ * Creative players (ops/dev) may open Vadsrijk storage outside (the BondBank already let them); the ender chest and survival
+ * storage stay closed inside for everyone.
  */
 public final class Menus {
     /** Menus that must never open on the Vadsrijk side (survival storage). */
@@ -29,6 +30,14 @@ public final class Menus {
 
     static {
         ALLEEN_THUIS.add(m -> m instanceof ChestMenu c && c.getContainer() instanceof PlayerEnderChestContainer);
+        // survival Guhs storage (all block-bound today, and nothing can be placed inside: defence in depth)
+        ALLEEN_THUIS.add(klasse("nl.juiced.guhs.menu.BankGuhMenu"));
+        ALLEEN_THUIS.add(klasse("nl.juiced.guhs.feature.erfenis.koppeling.LeverkistMenu"));
+        // Vadsrijk storage: knapzak/bank (OpslagMenu), materiaaltas, the Knuffelbond bank (its own gate let creative players in
+        // from outside)
+        ALLEEN_RIJK.add(klasse("nl.juiced.guhs.feature.vadsrijk.opslag.OpslagMenu"));
+        ALLEEN_RIJK.add(klasse("nl.juiced.guhs.feature.vadsrijk.opslag.MateriaalMenu"));
+        ALLEEN_RIJK.add(klasse("nl.juiced.guhs.feature.vadsrijk.gilden.BondBank$Menu"));
     }
 
     private Menus() {
@@ -45,8 +54,9 @@ public final class Menus {
     }
 
     static void open(ServerPlayer p, AbstractContainerMenu m) {
-        if (m == p.inventoryMenu || mag(m, Scheiding.binnen(p))) {
-            return;
+        boolean binnen = Scheiding.binnen(p);
+        if (m == p.inventoryMenu || mag(m, binnen) || (!binnen && p.isCreative())) {
+            return;   // (creative players, i.e. ops/dev, may look into Vadsrijk storage from outside, as BondBank already allowed)
         }
         p.closeContainer();
         p.sendOverlayMessage(Component.translatable(Scheiding.binnen(p) ? "vadsrijk.scheiding.menu.thuis" : "vadsrijk.scheiding.menu.rijk")

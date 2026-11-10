@@ -78,6 +78,9 @@ public final class BondTeleport {
         if (!dev && BondXp.KLOK.getAsLong() - BondXp.tag(p).getLongOr("steen", 0L) > 60_000L) {
             return BondActies.Uitslag.nee("vadsrijk.gilden.fout.steen");
         }
+        if (!dev && !nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p)) {
+            return BondActies.Uitslag.nee("vadsrijk.scheiding.reis.geweigerd");   // Y-SCHEIDING: no way in from home past the entry
+        }
         CompoundTag t = BondXp.tag(p);
         if (doel.equals("plein")) {
             Vallei.zet(p, Vallei.pleinAankomst(), 180);

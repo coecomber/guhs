@@ -71,6 +71,9 @@ public final class Premiebord {
     }
 
     static void doe(ServerPlayer p, String actie, CompoundTag a) {
+        if (!Vadsrijk.in(p) || !nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).binnen) {
+            return;   // Y-SCHEIDING: a packet from outside paid Vadsrijk rewards (gear, premiekist) into the survival inventory
+        }
         String tab = a.getStringOr("tab", PREMIES);
         String melding = switch (actie) {
             case "claim" -> Premies.claim(p, a.getIntOr("slot", -1));

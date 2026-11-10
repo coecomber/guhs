@@ -24,13 +24,14 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
  *   <li><b>potion effects</b>: survival effects (Strength, Speed, Night Vision...) wait with their remaining time and come back on
  *   the way home; whatever the Vadsrijk gave (Darkness, Slow Falling, Water Breathing...) is gone when you leave.</li>
  * </ul>
- * State lives in {@code SpelerData.extra("scheiding")} (the player attachment, saved in the same player.dat as the live body and
+ * State lives in {@code SpelerData.extra("account_scheiding")} (ACCOUNT-wide: a Vadsrijk character switch must never move the
+ * real body; the player attachment, saved in the same player.dat as the live body and
  * copied on death), with its own side flag {@link #KANT}: {@link #verzoen} only acts when that flag differs from kern's
  * {@code SpelerData.binnen}, so calling it twice, at login, or after a crash never swaps twice. A player who was inside when this
  * update arrived: their current xp/effects are their home ones (nothing was swapped before), so they are stashed as home.
  */
 public final class Lichaam {
-    static final String SLICE = "scheiding", KANT = "lijf_binnen", THUIS = "lijf_thuis", RIJK_XP = "lijf_rijk_xp";
+    static final String SLICE = "account_scheiding", KANT = "lijf_binnen", THUIS = "lijf_thuis", RIJK_XP = "lijf_rijk_xp";
 
     private Lichaam() {
     }

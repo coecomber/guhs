@@ -26,8 +26,9 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  *   mounts, leashed animals, armour stands...) that would travel into or out of the Vadsrijk stays where it is (the travel is
  *   cancelled, so nothing is lost). kern.Buitenstaanders already kept the rest of the mod's guhs out; this also keeps vanilla
  *   and other-mod entities out, and keeps Vadsrijk entities in.</li>
- *   <li><b>Players only enter through the Vadsrijk's own flows</b> ({@code /guhs vadsrijk}, the entry, parties, dungeons...):
- *   a cross-dimension teleport INTO the Vadsrijk is only allowed when Guhs Vadsrijk code is on the call stack ({@link #VAN_ONS}).
+ *   <li><b>Players only enter through Guhs' own flows</b> ({@code /guhs vadsrijk}, the portals, parties, dungeons, and the rest
+ *   of the mod's "back to where you were"): a cross-dimension teleport INTO the Vadsrijk is only allowed when Guhs code is on the
+ *   call stack ({@link #VAN_ONS}).
  *   FTB Essentials {@code /home}, {@code /back}, {@code /tpa}, {@code /warp}, {@code /rtp} into the Vadsrijk are refused, and
  *   so is any other mod's teleport. Leaving is always allowed (the swap happens on the dimension change: kern.KernEvents.verzoen).
  *   A rider is put down first (vanilla does that too), passengers get off, and leashes held by the player stay behind.</li>
@@ -39,8 +40,15 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  * Ops (permission 2) skip the player rules, for testing ({@link Scheiding#vrijgesteld}). Entities never skip.
  */
 public final class Grens {
-    /** Class name prefixes whose code may take a player into the Vadsrijk. */
-    public static final List<String> VAN_ONS = new CopyOnWriteArrayList<>(List.of("nl.juiced.guhs.feature.vadsrijk."));
+    /**
+     * Class name prefixes whose code may take a player into the Vadsrijk: all of Guhs. The Vadsrijk's own entries (portals,
+     * {@code /guhs vadsrijk}, dungeons, parties) are in feature/vadsrijk; the rest of the mod only ever brings a player BACK to
+     * where they stood (Erfenis {@code terug}, Guhpixel, ...: leaving the Vadsrijk that way and coming back must not strand them).
+     * What this keeps out is other mods (FTB Essentials /home /back /tpa /warp /rtp, waystones...) and non-op vanilla commands.
+     */
+    public static final List<String> VAN_ONS = new CopyOnWriteArrayList<>(List.of("nl.juiced.guhs."));
+    /** ...except these (the gametest runner, this package). */
+    static final List<String> NIET_VAN_ONS = List.of("nl.juiced.guhs.gametest.", Grens.class.getPackageName() + ".");
     /** Root command names refused for non-ops inside the Vadsrijk (FTB Essentials; with or without its namespace). */
     public static final Set<String> GEWEIGERD = Set.of("home", "sethome", "delhome", "back", "warp", "rtp", "tpa", "tpahere", "tpaccept", "tpl",
             "tpx", "enderchest", "ec", "spawn");
@@ -87,7 +95,7 @@ public final class Grens {
     /** Is Guhs Vadsrijk code (other than this border) on the call stack? */
     static boolean vanOns() {
         return StackWalker.getInstance().walk(s -> s.map(StackWalker.StackFrame::getClassName)
-                .filter(c -> !c.startsWith(Grens.class.getPackageName() + "."))
+                .filter(c -> NIET_VAN_ONS.stream().noneMatch(c::startsWith))
                 .anyMatch(c -> VAN_ONS.stream().anyMatch(c::startsWith)));
     }
 

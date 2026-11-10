@@ -410,12 +410,14 @@ public class VadsrijkScheidingGameTests {
         helper.assertTrue(!Grens.magReizen(p, k.thuis, Vadsrijk.DIM, false), "a non-op can't be teleported in by another mod (/home, /back, /tpa)");
         helper.assertTrue(Grens.magReizen(p, k.thuis, Vadsrijk.DIM, true), "...but the Vadsrijk's own entry works");
         helper.assertTrue(Grens.magReizen(p, Vadsrijk.DIM, k.thuis, false), "leaving is always allowed (the swap follows the dimension change)");
-        helper.assertTrue(Grens.vanOns() == false, "a gametest is not Vadsrijk code (the stack check is not fooled)");
+        helper.assertTrue(!Grens.vanOns(), "a gametest is not Guhs entry code (the stack check is not fooled)");
         for (String c : new String[] {"home", "back", "tpa", "tpahere", "tpaccept", "warp", "rtp", "sethome"}) {
             helper.assertTrue(Grens.GEWEIGERD.contains(Grens.wortel(List.of(c))), "/" + c + " is refused inside");
         }
         helper.assertTrue(!Grens.GEWEIGERD.contains(Grens.wortel(List.of("guhs", "vadsrijk"))), "/guhs vadsrijk still works inside");
         ServerLevel vr = Vadsrijk.level(helper.getLevel().getServer());
+        org.slf4j.LoggerFactory.getLogger("guhs").info("Y-SCHEIDING: the Vadsrijk dimension is {} on this test server (real-teleport checks {})",
+                vr != null ? "present" : "absent", vr != null ? "ran" : "skipped");
         if (vr != null) {
             BlockPos plek = new BlockPos(8, Vadsrijk.GROND + 1, 8);
             vr.getChunk(plek);
@@ -426,6 +428,74 @@ public class VadsrijkScheidingGameTests {
             p.teleport(new TeleportTransition(helper.getLevel(), p.position(), Vec3.ZERO, 0f, 0f, Set.<Relative>of(), TeleportTransition.DO_NOTHING));
             helper.assertTrue(!Vadsrijk.in(p) && !Spelers.data(p).binnen && !Lichaam.thuisWacht(p), "leaving by any teleport swaps back");
         }
+        helper.succeed();
+    }
+
+    // ---- 11. storage menus and trading ---------------------------------------------------------------------------------------
+
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void kanaal11Opslag(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        var lever = new nl.juiced.guhs.feature.erfenis.koppeling.LeverkistMenu(1, p.getInventory(), new net.minecraft.world.SimpleContainer(54));
+        var tas = new nl.juiced.guhs.feature.vadsrijk.opslag.MateriaalMenu(2, p.getInventory(), null, null);
+        helper.assertTrue(!Menus.mag(lever, true) && Menus.mag(lever, false), "the survival Leverkist never opens inside, always at home");
+        helper.assertTrue(!Menus.mag(tas, false) && Menus.mag(tas, true), "the Vadsrijk materiaaltas never opens outside, always inside");
+        helper.assertTrue(!nl.juiced.guhs.feature.vadsrijk.opslag.Opslag.magOpenen(p), "the Vadsrijk knapzak/bank gate says no outside");
+        // a menu that belongs to the other side closes the moment it opens (whoever opened it)
+        naarRijk(p);
+        p.openMenu(new SimpleMenuProvider((id, inv, x) -> new nl.juiced.guhs.feature.erfenis.koppeling.LeverkistMenu(id, inv,
+                new net.minecraft.world.SimpleContainer(54)), Component.literal("lever")));
+        helper.assertTrue(p.containerMenu == p.inventoryMenu, "inside: a Leverkist menu is closed at once");
+        naarThuis(p);
+        p.openMenu(new SimpleMenuProvider((id, inv, x) -> new nl.juiced.guhs.feature.vadsrijk.opslag.MateriaalMenu(id, inv, null, null),
+                Component.literal("tas")));
+        helper.assertTrue(p.containerMenu == p.inventoryMenu, "outside: a Vadsrijk menu is closed at once");
+        helper.succeed();
+    }
+
+    // ---- 12. currencies -------------------------------------------------------------------------------------------------------
+
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void kanaal12Munten(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        SpelerData d = Spelers.data(p);
+        d.munten = 12345;
+        naarRijk(p);
+        p.getInventory().setItem(0, new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.MUNT_GOUD.get(), 3));
+        naarThuis(p);
+        helper.assertTrue(d.munten == 12345, "Vadsmunten are a number in the Vadsrijk record: the swaps never touch them");
+        helper.assertTrue(tel(p, nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.MUNT_GOUD.get()) == 0, "Vadsmunt coins stay in the Vadsrijk inventory");
+        // a coin that got out anyway (a dev command) is worth nothing at home
+        ItemStack munt = new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.MUNT_GOUD.get(), 1);
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, munt);
+        var r = munt.use(helper.getLevel(), p, net.minecraft.world.InteractionHand.MAIN_HAND);
+        helper.assertTrue(!r.consumesAction() && d.munten == 12345, "a coin can't be cashed outside");
+        p.setItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        helper.succeed();
+    }
+
+    // ---- 13. survival rewards while inside -------------------------------------------------------------------------------------
+
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void kanaal13ThuisBeloning(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        naarRijk(p);
+        // the rest of the mod (code outside feature/vadsrijk) hands out an item the usual way, while the player is inside
+        boolean ok = nl.juiced.guhs.feature.scheidingproef.ThuisGeverProef.geef(p, new ItemStack(Items.DIAMOND, 5));
+        nl.juiced.guhs.feature.scheidingproef.ThuisGeverProef.legTerug(p, new ItemStack(Items.EMERALD, 2));
+        Scheiding.geefThuis(p, new ItemStack(Items.GOLD_INGOT, 1));
+        helper.assertTrue(ok, "for the giver it looks like it worked (no drop on Vadsrijk ground)");
+        helper.assertTrue(tel(p, Items.DIAMOND) == 0 && tel(p, Items.EMERALD) == 0 && tel(p, Items.GOLD_INGOT) == 0, "nothing landed in the Vadsrijk inventory");
+        helper.assertTrue(helper.getLevel().getEntitiesOfClass(ItemEntity.class, p.getBoundingBox().inflate(8)).isEmpty(), "nothing was dropped");
+        // Vadsrijk code (this test lives in feature/vadsrijk) and vanilla pickups still fill the live inventory
+        p.getInventory().add(new ItemStack(Items.STICK, 1));
+        helper.assertTrue(tel(p, Items.STICK) == 1, "Vadsrijk code gives into the Vadsrijk inventory as before");
+        naarThuis(p);
+        helper.assertTrue(tel(p, Items.DIAMOND) == 5 && tel(p, Items.EMERALD) == 2 && tel(p, Items.GOLD_INGOT) == 1, "home: the rewards are there");
+        helper.assertTrue(tel(p, Items.STICK) == 0, "the stick stayed inside");
+        // at home the same giver just gives
+        nl.juiced.guhs.feature.scheidingproef.ThuisGeverProef.geef(p, new ItemStack(Items.DIAMOND, 1));
+        helper.assertTrue(tel(p, Items.DIAMOND) == 6, "at home: straight into the inventory");
         helper.succeed();
     }
 
