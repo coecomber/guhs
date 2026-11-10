@@ -1254,38 +1254,9 @@ def build(h):
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-# FTB Quests: zone 2 joins the chapter "Het Vadsrijk" (vadsrijk_npc.py) with its own sections. Nothing is locked.
+# Y-FTB: the FTB chapter "Het Vadsrijk" is the compact one of tools/features/vadsrijk_y_ftb.py now (rekruut, 6 zones, raid,
+# secrets); this generator adds no FTB quests of its own any more. Its hidden advancements guhs:quest/vr_* stay (NpcFtb grants them).
 # ---------------------------------------------------------------------------------------------------------------------------
-FTB_CHAPTER = "guhs_vadsrijk"
-FTB_PORTRAIT = "guh:snow"
-FTB_SECTIES = [
-    ("vr_z2_verhaal", "De Splinterpieken (zone 2)", "guh:snow", [f"vr_{q['id']}" for q in QUESTS if q["soort"] == "hoofd"]),
-    ("vr_z2_kandijkom", "Kandijkom helpen", "guh:choco", [f"vr_{q['id']}" for q in QUESTS if q["soort"] in ("zij", "klasse", "rijdier")]),
-    ("vr_z2_geheimen", "Geheimen van de Splinterpieken", "guh:mint", ["vr_z2_geheim_boormeester", "vr_z2_knuffels_alle",
-                                                                      "vr_z2_aanwijzingen_alle"] + [f"vr_z2_schat_{s}" for s in SCHATTEN]),
-]
-
-
-def ftb(fq):
-    q, adv = fq.q, fq.adv
-    K = "guhs:kaas_knabbels"
-    for d in QUESTS:
-        tekst = d["tekst"].replace("Kandijkom", "&bKandijkom&r")
-        icon = {"hoofd": "minecraft:amethyst_shard", "klasse": "minecraft:enchanted_book", "geheim": "minecraft:spyglass",
-                "rijdier": "minecraft:saddle"}.get(
-            d["soort"], "minecraft:writable_book")
-        vorm = "gear" if d["soort"] == "hoofd" else ("hexagon" if d["soort"] in ("klasse", "geheim") else None)
-        q(f"vr_{d['id']}", d["titel"], tekst + " &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)", icon,
-          [fq.met(adv(f"vr_{d['id']}"), d["titel"])], rewards=((K, 8 if d["soort"] == "zij" else 16),), shape=vorm,
-          xp=100 if d["soort"] == "hoofd" else 50)
-    q("vr_z2_knuffels_alle", "Tien knuffels onder het ijs", "Bevrijd alle &e10 knuffels&r van Kleine Vlokje onder het ijs van de "
-      "Splinterpieken. Ze glinsteren met hartjes.", "guhs:knuffel_snow", [fq.met(adv("vr_z2_knuffels_alle"), "10 knuffels")],
-      rewards=((K, 16),), shape="hexagon")
-    q("vr_z2_aanwijzingen_alle", "Het gebrom in de berg", "Vind alle &e5 boorsporen&r in de Splinterpieken. Waar staat die machine?",
-      "minecraft:spyglass", [fq.met(adv("vr_z2_aanwijzingen_alle"), "5 boorsporen")], rewards=((K, 16),), shape="hexagon")
-    for s, (naam, _t) in SCHATTEN.items():
-        q(f"vr_z2_schat_{s}", naam, "Een verborgen schat van de Splinterpieken. Hij glinstert goudgeel als je dichtbij bent.",
-          "minecraft:chest", [fq.met(adv(f"vr_z2_schat_{s}"), naam)], rewards=((K, 8),))
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

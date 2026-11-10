@@ -1889,6 +1889,9 @@ public class GuhGameTests {
                 } else if (name.equals("guhs_sponsguh")) {
                     // (einde2: the Sponsguh story may be told in order too, FTB_LINEAIR; its places are free)
                     helper.assertTrue(locks >= 0, "Sponsguh");
+                } else if (name.equals("guhs_vadsrijk")) {
+                    // Y-FTB: zones 2-6, their secrets and the raid hang behind the zone gate ("Zone N is open!", vadsrijk_y_ftb.py)
+                    helper.assertTrue(locks == 11, "Het Vadsrijk: 5 zones + 5 secrets + the raid behind the gate, not " + locks);
                 } else if (name.equals("guhs_pad_echt")) {
                     // (guhpad: a preview nobody can do yet: everything hangs behind its lock quest)
                     helper.assertTrue(locks == 8, "Het echte Guheinde is locked: " + locks);
@@ -1917,7 +1920,7 @@ public class GuhGameTests {
             java.util.List<String> names = nl.juiced.guhs.compat.FtbQuestsChapter.chapters();
             helper.assertTrue(names.equals(java.util.List.of("guhs_basis", "guhs_guhmensie", "guhs_minigames", "guhs_onderwater", "guhs_maag",
                     "guhs_barbecuether", "guhs_extra27", "guhs_knuffeldal", "guhs_piep", "guhs_band", "guhs_diertjes",
-                    "guhs_guhpixel", "guhs_techniek", "guhs_safari", "guhs_bouwhulp", "guhs_onderwol", "guhs_dromen", "guhs_erfenis", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
+                    "guhs_guhpixel", "guhs_techniek", "guhs_safari", "guhs_bouwhulp", "guhs_onderwol", "guhs_dromen", "guhs_erfenis", "guhs_vadsrijk", "guhs_verhalen", "guhs_pad_barbecuether", "guhs_guheinde", "guhs_guhvatar",
                     "guhs_guhvatar_zij", "guhs_sponsguh", "guhs_pad_echt")),
                     "the chapters (3.0: Diertjes van de Guhmensie; guhpixel: Guhpixel; bbq2: Guh-technologie; 1.6.0: Op Safari! and Bouwhulp; 1.7.0: Onder de Wol), in reading order, and "
                             + "(guhpad) the four chapters of the group Het Guhpad at the end: the stories of the Guhmensie (3.0's Guhverhalen), of the "

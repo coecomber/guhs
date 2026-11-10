@@ -1253,41 +1253,9 @@ def build(h):
 
 
 # ---------------------------------------------------------------------------------------------------------------------------
-# FTB Quests: zone 3 joins the chapter "Het Vadsrijk" (vadsrijk_npc.py) with its own sections. Nothing is locked.
+# Y-FTB: the FTB chapter "Het Vadsrijk" is the compact one of tools/features/vadsrijk_y_ftb.py now (rekruut, 6 zones, raid,
+# secrets); this generator adds no FTB quests of its own any more. Its hidden advancements guhs:quest/vr_* stay (NpcFtb grants them).
 # ---------------------------------------------------------------------------------------------------------------------------
-FTB_CHAPTER = "guhs_vadsrijk"
-FTB_PORTRAIT = "guh:golden"
-FTB_SECTIES = [
-    ("vr_z3_verhaal", "De Schemerwortel (zone 3)", "guh:golden", [f"vr_{q['id']}" for q in QUESTS if q["soort"] == "hoofd"]),
-    ("vr_z3_honingtak", "Honingtak helpen", "guh:choco", [f"vr_{q['id']}" for q in QUESTS if q["soort"] in ("zij", "klasse")]),
-    ("vr_z3_geheimen", "Geheimen van De Schemerwortel", "guh:mint", ["vr_z3_geheim_imker", "vr_z3_knuffels_alle", "vr_z3_aanwijzingen_alle",
-                                                                    "vr_z3_reliefs_alle", "vr_z3_grauwe_brief"]
-     + [f"vr_z3_schat_{s}" for s in SCHATTEN]),
-]
-
-
-def ftb(fq):
-    q, adv = fq.q, fq.adv
-    K = "guhs:kaas_knabbels"
-    for d in QUESTS:
-        tekst = d["tekst"].replace("Honingtak", "&6Honingtak&r")
-        icon = {"hoofd": "minecraft:honeycomb", "klasse": "minecraft:enchanted_book", "geheim": "minecraft:spyglass"}.get(
-            d["soort"], "minecraft:writable_book")
-        vorm = "gear" if d["soort"] == "hoofd" else ("hexagon" if d["soort"] in ("klasse", "geheim") else None)
-        q(f"vr_{d['id']}", d["titel"], tekst + " &7(Vinkt zichzelf af als je hem in het Vadsrijk inlevert.)", icon,
-          [fq.met(adv(f"vr_{d['id']}"), d["titel"])], rewards=((K, 8 if d["soort"] == "zij" else 16),), shape=vorm,
-          xp=100 if d["soort"] == "hoofd" else 50)
-    q("vr_z3_knuffels_alle", "Tien knuffels in de boom", "Vind alle &e10 knuffels&r die in De Schemerwortel verstopt zitten. Drie ervan "
-      "bereik je alleen zwevend.", "guhs:knuffel_golden", [fq.met(adv("vr_z3_knuffels_alle"), "10 knuffels")], rewards=((K, 16),), shape="hexagon")
-    q("vr_z3_aanwijzingen_alle", "De grauwe honing", "Vind alle &e5 imkersporen&r in Honingtak. Wie verstopt zich in de Raattrossen?",
-      "minecraft:spyglass", [fq.met(adv("vr_z3_aanwijzingen_alle"), "5 sporen")], rewards=((K, 16),), shape="hexagon")
-    q("vr_z3_reliefs_alle", "Het Muurverhaal", "Vind alle &e8 reliëfs&r van het boomvolk in de wand van de Schorsstad.", "minecraft:chiseled_stone_bricks",
-      [fq.met(adv("vr_z3_reliefs_alle"), "8 reliëfs")], rewards=((K, 16),), shape="hexagon")
-    q("vr_z3_grauwe_brief", "Uit Nooitgenoeg", "Vind de eerste &8Grauwe brief&r. Wie schrijft er aan de Pink?", "minecraft:paper",
-      [fq.met(adv("vr_z3_grauwe_brief"), "Grauwe brief")], rewards=((K, 8),))
-    for s, (naam, _t) in SCHATTEN.items():
-        q(f"vr_z3_schat_{s}", naam, "Een verborgen schat van De Schemerwortel. Hij glinstert goudgeel als je dichtbij bent.",
-          "minecraft:chest", [fq.met(adv(f"vr_z3_schat_{s}"), naam)], rewards=((K, 8),))
 
 
 # ---------------------------------------------------------------------------------------------------------------------------

@@ -736,6 +736,14 @@ class Game:
             os.chdir(self.root)
             ns = runpy.run_path(os.path.join(self.tools, "make_ftbquests.py"), run_name="wiki_site")
             sections = ns["assign"]()
+            # Y-FTB: the quests of zones that are still closed (features/vadsrijk_y_ftb.py wiki_verborgen) stay off the wiki, like
+            # they stay hidden in the quest book; GUHS_OPEN_ZONES = the server's openZones (default 1, the first release)
+            for mod in ns["MODULES"].values():
+                if hasattr(mod, "wiki_verborgen"):
+                    weg = set(mod.wiki_verborgen(int(os.environ.get("GUHS_OPEN_ZONES", "1"))))
+                    for ss in sections.values():
+                        for s in ss:
+                            s["quests"] = [k for k in s["quests"] if k not in weg]
         finally:
             os.chdir(here)
         quests = {q[0]: q for q in ns["QUESTS"]}

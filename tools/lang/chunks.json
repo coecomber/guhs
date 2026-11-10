@@ -7032,6 +7032,15 @@
       ]
     },
     {
+      "id": "c450_vr_y_ftb",
+      "title": "1.10 round Y (Y-FTB): the compact FTB chapter Het Vadsrijk, its deco rewards and the claim rule",
+      "prefixes": [
+        "ftb.guhs_vadsrijk.q.vr_ftb_",
+        "block.guhs.vadsrijk_trofee_",
+        "vadsrijk.ftb."
+      ]
+    },
+    {
       "id": "c455_scheiding",
       "title": "Y-SCHEIDING: the survival <-> Vadsrijk border (refused teleports, commands, storage menus)",
       "prefixes": [

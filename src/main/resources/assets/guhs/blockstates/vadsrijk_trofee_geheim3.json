@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/vadsrijk_trofee_geheim3"
+    },
+    "facing=east": {
+      "model": "guhs:block/vadsrijk_trofee_geheim3",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/vadsrijk_trofee_geheim3",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/vadsrijk_trofee_geheim3",
+      "y": 270
+    }
+  }
+}
