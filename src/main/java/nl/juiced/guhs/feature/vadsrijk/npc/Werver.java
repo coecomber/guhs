@@ -117,6 +117,9 @@ public final class Werver {
     }
 
     static boolean inTempel(ServerLevel sl, BlockPos pos) {
+        if (nl.juiced.guhs.feature.vadsrijk.wereld.VasteTempel.in(sl, pos)) {
+            return true;   // (y-tempel) the fixed temple counts like a worldgen one
+        }
         Structure s = structuur(sl);
         return s != null && sl.structureManager().getStructureWithPieceAt(pos, s).isValid();
     }
@@ -148,11 +151,15 @@ public final class Werver {
             if (p.isSpectator() || Vadsrijk.in(p) || !(p.level() instanceof ServerLevel sl)) {
                 continue;
             }
+            BlockPos b = p.blockPosition();
+            BoundingBox vast = nl.juiced.guhs.feature.vadsrijk.wereld.VasteTempel.doos(sl);
+            if (vast != null && vast.inflatedBy(48).isInside(b)) {
+                houdBij(sl, vast);   // (y-tempel) the fixed temple gets its Wimpel too
+            }
             Structure s = structuur(sl);
             if (s == null) {
                 return;
             }
-            BlockPos b = p.blockPosition();
             for (BlockPos q : new BlockPos[] {b, b.offset(40, 0, 0), b.offset(-40, 0, 0), b.offset(0, 0, 40), b.offset(0, 0, -40)}) {
                 if (!sl.isLoaded(q)) {
                     continue;
@@ -292,6 +299,13 @@ public final class Werver {
 
     static NpcDef def(BlockPos plek, float yaw) {
         return new NpcDef(ID, plek, yaw, GuhVariant.SNOW, List.of(KNIGHT_HELMET, KNIGHT_ARMOUR, ROYAL_CAPE), NpcDef.Gedrag.STAAN, null, 1.05f);
+    }
+
+    /** (y-tempel) a fixed temple was taken away: forget its portal spot and its Wimpel. */
+    public static void vergeet(BoundingBox box) {
+        long key = BlockPos.asLong(box.minX(), box.minY(), box.minZ());
+        TEMPELS.remove(key);
+        LEVEND.remove(key);
     }
 
     /** (server stop) */
