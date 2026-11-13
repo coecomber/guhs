@@ -24,6 +24,7 @@ on:
       - 'docs/wiki/**'
       - 'docs/screenshots/**'
       - 'tools/**'
+      - 'docs/patchnotes/**'
       - 'src/main/resources/assets/guhs/lang/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
@@ -55,17 +56,21 @@ jobs:
       - name: Install wiki dependencies
         run: pip install -r tools/requirements-wiki.txt
 
-      - name: Build the landing page + wiki (uses the committed images, no re-render)
-        run: python tools/make_wiki_site.py --base-url https://guhs.nl/wiki/ --landing docs/site --out docs/site/wiki
+      - name: Build the landing page + wiki + Het Vadsrijk (uses the committed images, no re-render)
+        # --open-zones N = the server's Vadsrijk zone gate: only the tutorial + zones 1..N are published (raise it with the server)
+        run: python tools/make_wiki_site.py --base-url https://guhs.nl/wiki/ --landing docs/site --out docs/site/wiki --vadsrijk --live-url https://live.guhs.nl/ --open-zones 1
 
       - name: Check the site exists
         run: |
-          for f in index.html 404.html CNAME wiki/index.html wiki/server.html wiki/aan-de-slag.html; do
+          for f in index.html 404.html CNAME wiki/index.html wiki/server.html wiki/aan-de-slag.html vadsrijk/index.html vadsrijk/kaart.html; do
             test -f "docs/site/$f" || { echo "docs/site/$f is missing"; exit 1; }
           done
           grep -qx 'guhs.nl' docs/site/CNAME || { echo "docs/site/CNAME must say guhs.nl"; exit 1; }
           touch docs/site/.nojekyll
           du -sh docs/site
+
+      - name: Vadsrijk release check (nothing of closed zones may be published)
+        run: python tools/wiki_site/vadsrijk/zone1check.py --release --open-zones 1 --dir docs/site/vadsrijk
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
