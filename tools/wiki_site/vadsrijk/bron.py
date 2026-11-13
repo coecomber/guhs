@@ -230,6 +230,10 @@ class Bron:
         return out
 
     # ---- the pieces ------------------------------------------------------------------------------------------------------
+    def _gebied_ids(self):
+        """W-SITE: every area id that has a kern lang key (z2_..z6_ prefixed ones carry their zone)."""
+        return [k[len("vadsrijk.kern.gebied."):] for k in self.nl if k.startswith("vadsrijk.kern.gebied.")]
+
     def zone_van_gebied(self, gid):
         for pre, zone in ZONE_PREFIX:
             if gid.startswith(pre):
@@ -298,6 +302,14 @@ class Bron:
             nl, en = self.gebied_naam(g["id"])
             gb_out.append(dict(id=g["id"], naam=nl, naam_en=en, zone=self.zone_van_gebied(g["id"]), lv=[g["min_lv"], g["max_lv"]],
                                stad=g["stad"], doos=g["doos"], laag=g.get("laag")))
+        # X-SITE: the mining caves (grot_*) have no zone prefix, so they all said zone 1; they take the zone of the smallest
+        # other area around their centre (De Kristalgrot = zone 2, De Wortelgrot = zone 3, ...)
+        for g in gb_out:
+            if g["id"].startswith("grot_"):
+                cx, cz = (g["doos"][0] + g["doos"][2]) / 2, (g["doos"][1] + g["doos"][3]) / 2
+                om = [h for h in gb_out if not h["id"].startswith("grot_") and h["doos"][0] <= cx <= h["doos"][2] and h["doos"][1] <= cz <= h["doos"][3]]
+                if om:
+                    g["zone"] = min(om, key=lambda h: (h["doos"][2] - h["doos"][0]) * (h["doos"][3] - h["doos"][1]))["zone"]
         data["gebieden"] = gb_out
 
         # secrets: count per area, never a position
@@ -406,6 +418,12 @@ class Bron:
                 continue
             nid = k[len("vadsrijk.npc.naam."):]
             zone = self.zone_van_gebied(nid)
+            if zone == "zone1":   # W-SITE: shared NPC kinds named after a later town (bond_bord_rozenkloof, kk_poort_saffraanpoort, ...)
+                for g in sorted(self._gebied_ids(), key=len, reverse=True):
+                    m = re.match(r"z([2-6])_(.+)$", g)
+                    if m and nid.endswith("_" + m.group(2)):
+                        zone = "zone" + m.group(1)
+                        break
             zone_van[nid] = zone
             out.append(dict(id=nid, naam=v, zone=zone, waar=self.t("vadsrijk.npc.plek.npc." + nid, ""), pos=plek.get(nid),
                             rol=rol.get(nid), praat=[self.nl[f"vadsrijk.npc.praat.{nid}.{i}"] for i in range(1, 9)

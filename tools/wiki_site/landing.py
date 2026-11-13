@@ -179,8 +179,9 @@ def _t(nl, en):
 
 
 class Landing:
-    def __init__(self, builder, images, site_url, wiki_rel):
+    def __init__(self, builder, images, site_url, wiki_rel, vadsrijk=False):
         self.b, self.im = builder, images
+        self.vadsrijk = vadsrijk   # X-SITE: make_wiki_site.py --vadsrijk also builds guhs.nl/vadsrijk/: one link + a sitemap entry
         self.site_url = site_url.rstrip("/") + "/"
         self.wiki = wiki_rel.strip("/") + "/"
 
@@ -293,6 +294,7 @@ class Landing:
 </div>
 <p class="small" lang="nl">{small} <a href="{w}server.html">Hoe speel ik mee?</a></p>
 <p class="small" lang="en">Minecraft {MC_VERSION} with Guhs {GUHS_VERSION}. New? Start with the <a href="{w}aan-de-slag.html">getting-started guide</a>.</p>
+{('<p class="small">' + _t('Nieuw: <a href="vadsrijk/">Het Vadsrijk</a>, de RPG-dimensie (wiki, kaart en highscores).', 'New: <a href="vadsrijk/">Het Vadsrijk</a>, the RPG dimension (wiki, map and highscores).') + '</p>') if self.vadsrijk else ''}
 </div>
 <div class="art">{self.img(hero_img, "Een guh") if hero_img else ""}<span class="bubble" aria-hidden="true">njeg!</span></div>
 </section>
@@ -344,7 +346,7 @@ a{{color:#b8325f;font-weight:700}}</style>
         put("404.html", self.not_found())
         put("CNAME", DOMAIN + "\n")
         put(".nojekyll", "")
-        urls = [self.site_url, self.site_url + self.wiki]
+        urls = [self.site_url, self.site_url + self.wiki] + ([self.site_url + "vadsrijk/"] if self.vadsrijk else [])
         put("sitemap.xml", '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
             + "".join(f"<url><loc>{xml_escape(u)}</loc></url>\n" for u in urls) + "</urlset>\n")
         put("robots.txt", f"User-agent: *\nAllow: /\nSitemap: {self.site_url}sitemap.xml\nSitemap: {self.site_url}{self.wiki}sitemap.xml\n")

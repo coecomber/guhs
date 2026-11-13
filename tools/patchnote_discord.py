@@ -4,6 +4,7 @@ The Discord changelog from the same source as the site's patch notes (docs/patch
     python tools/patchnote_discord.py 1.10.0            # prints the payload (dry run)
     python tools/patchnote_discord.py 1.10.0 --post     # posts it: needs GUHS_DISCORD_WEBHOOK in the environment
 
+X-SITE: --open-zones N (default 1, like the public site) keeps only the :::zone blocks of open zones.
 Text = the body without the :::spoiler blocks and without inline pictures; at most 4 pictures (discord_beelden).
 Post only after the release is live on the server and in the pack (see the memory rule on Discord changelogs).
 """
@@ -24,9 +25,10 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("versie")
     ap.add_argument("--post", action="store_true")
+    ap.add_argument("--open-zones", type=int, default=1, help="X-SITE: like the site build: :::zone N blocks need N <= this (default 1)")
     a = ap.parse_args()
     map_ = os.path.join(os.path.dirname(HERE), "docs", "patchnotes")
-    n = next((x for x in PN.lees(map_, concepten=True) if x["versie"] == a.versie), None)
+    n = next((x for x in PN.lees(map_, concepten=True, open_zones=a.open_zones) if x["versie"] == a.versie), None)
     if not n:
         raise SystemExit(f"no docs/patchnotes/{a.versie}.md")
     tekst = PN.discord_tekst(n)

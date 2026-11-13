@@ -14,6 +14,12 @@ docs/patchnotes/<versie>.md:
     :::spoiler Title
     Only on the site, behind a spoiler button (Discord skips the whole block, pictures included).
     :::
+    :::zone 3
+    X-SITE: only when zone 3 is open (--open-zones >= 3): site AND Discord. Blocks may hold :::spoiler blocks.
+    :::
+    :::tot 6
+    X-SITE: only while zone 6 is NOT open yet (--open-zones < 6), e.g. "more zones follow".
+    :::
 
 `python tools/patchnote_discord.py <versie>` prints the Discord payload (text without the spoiler blocks + the discord_beelden);
 it only posts with --post and the webhook in the GUHS_DISCORD_WEBHOOK environment variable (never in the repo).
@@ -42,7 +48,28 @@ def _kop(tekst):
     return meta, m[2]
 
 
-def lees(map_, concepten=False):
+def zone_filter(body, open_zones=6):
+    """X-SITE: keeps a `:::zone N` block only when N <= open_zones and a `:::tot N` block only when open_zones < N; drops the markers."""
+    uit, stack = [], []
+    for regel in body.split(chr(10)):
+        r = regel.strip()
+        m = re.match(r"^:::(zone|tot)\s+(\d+)\s*$", r)
+        if m:
+            n = int(m[2])
+            stack.append(("zone", n <= open_zones) if m[1] == "zone" else ("zone", open_zones < n))
+            continue
+        if r.startswith(":::spoiler"):
+            stack.append(("spoiler", True))
+        elif r == ":::" and stack:
+            soort, _ = stack.pop()
+            if soort == "zone":
+                continue
+        if all(z for _, z in stack):
+            uit.append(regel)
+    return chr(10).join(uit)
+
+
+def lees(map_, concepten=False, open_zones=6):
     out = []
     if not os.path.isdir(map_):
         return out
@@ -53,6 +80,9 @@ def lees(map_, concepten=False):
         meta, body = _kop(tekst)
         if meta.get("concept") and not concepten:
             continue
+        body = zone_filter(body, open_zones)   # X-SITE
+        if open_zones < 6 and meta.get("samenvatting_open"):
+            meta["samenvatting"] = meta["samenvatting_open"]
         beelden = [dict(pad=_pad(b)) for b in re.findall(r"!\[[^\]]*\]\(([^)\s]+)\)", body)]
         out.append(dict(versie=str(meta.get("versie", f[:-3])), datum=str(meta.get("datum", "")), titel=str(meta.get("titel", f[:-3])),
                         samenvatting=str(meta.get("samenvatting", "")), concept=bool(meta.get("concept")), body=body,

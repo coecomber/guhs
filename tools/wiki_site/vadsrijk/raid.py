@@ -164,7 +164,8 @@ def _loottabel(b, R, P):
 def paginas(b):
     R = b.d.get("raid")
     if not R:
-        b.notities.append("raid: no data (zone6/raid/Z6RaidLoot.java missing)")
+        if getattr(b, "open_zones", 6) >= 6:   # X-SITE: with --open-zones < 6 the raid is simply not published
+            b.notities.append("raid: no data (zone6/raid/Z6RaidLoot.java missing)")
         return
     verstopt = f'<div class="verstopt-zone" data-zone="6">{t("Hidden by your spoiler setting.", "Verborgen door je spoilerinstelling.")}</div>'
     # overview

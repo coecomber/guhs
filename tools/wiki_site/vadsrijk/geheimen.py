@@ -228,6 +228,8 @@ def pagina(b):
             lijst = [g for g in mine if g["soort"] == soort]
             if not lijst:
                 continue
+            if soort == "puzzel" and z["nr"] < 6:   # X-SITE: the star beacons are zone 6 only
+                en, nl = "Puzzles", "Puzzels"
             items = ""
             for i, g in enumerate(lijst, 1):
                 x, y, zz = g["pos"]

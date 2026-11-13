@@ -58,6 +58,13 @@ details.spoiler{border:1.5px dashed var(--vr);border-radius:12px;padding:6px 12p
 details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
+.komma{list-style:none;padding:0;margin:0 0 1em}.komma li{display:inline}.komma li+li::before{content:", "}
+.spoileruitleg{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:2000;width:min(560px,calc(100vw - 32px));background:var(--card);color:var(--ink);border:2px solid var(--vr);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.25);padding:14px 16px;font:15px/1.45 var(--body)}
+.spoileruitleg p{margin:0 0 10px}
+.binnenkort{border:2px dashed var(--vr);background:transparent;display:flex;flex-direction:column;justify-content:center;text-align:center;min-height:120px}   /* X-SITE: the closed-zones teaser */
+.spoileruitleg .su-knoppen{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.spoileruitleg label{font-size:14px;color:var(--muted);cursor:pointer}
+.spoileruitleg .knop{min-width:80px;cursor:pointer}
 .verstopt-zone{border:1.5px dashed var(--line2);border-radius:14px;padding:10px 14px;color:var(--muted);margin:10px 0}
 html[data-zonetot="1"] [data-zone="2"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="1"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="3"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="2"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="4"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="3"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="5"]:not(.verstopt-zone),html[data-zonetot="4"] [data-zone="6"]:not(.verstopt-zone),html[data-zonetot="5"] [data-zone="6"]:not(.verstopt-zone){display:none!important}
 .verstopt-zone{display:none}
@@ -177,12 +184,26 @@ JS = r"""
   showTheme();
   // spoiler switch: show everything up to zone X
   var zs=document.getElementById('zonetot');
-  function setZone(z){html.setAttribute('data-zonetot',z);store('guhs-vr-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
-  if(zs){zs.addEventListener('change',function(){setZone(zs.value);});}
-  setZone(read('guhs-vr-zonetot')||html.getAttribute('data-zonetot')||'3');
-  window.VR={lang:function(){return html.getAttribute('data-lang')||'nl';},zone:function(){return +(html.getAttribute('data-zonetot')||3);},
+  // W-SITE (user request): EVERY page load starts at zone 1 (tutorial + zone 1); a higher choice is never remembered
+  function setZone(z){html.setAttribute('data-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
+  try{localStorage.removeItem('guhs-vr-zonetot');}catch(e){}
+  setZone('1');
+  // W-SITE: a friendly note on load; "niet meer tonen" only hides the NOTE next time (the switch still starts at zone 1)
+  var uitleg=null;
+  function sluitUitleg(){if(uitleg){uitleg.remove();uitleg=null;}}
+  if(zs){zs.addEventListener('change',function(){setZone(zs.value);sluitUitleg();});}
+  if(read('guhs-vr-spoileruitleg-weg')!=='1'&&zs&&zs.options.length>1){   // X-SITE: only one open zone = nothing to explain
+    uitleg=document.createElement('div');uitleg.className='spoileruitleg';uitleg.setAttribute('role','dialog');uitleg.setAttribute('aria-live','polite');
+    uitleg.setAttribute('aria-label','Spoilers');
+    uitleg.innerHTML='<p><span lang="nl">Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij <b>Toon tot</b> tot welke zone je alles wilt zien.</span>'+
+      '<span lang="en">Everything shows only the tutorial and the first zone. Want spoilers or more information? Pick up to which zone you want to see everything at <b>Show up to</b> (top right).</span></p>'+
+      '<div class="su-knoppen"><label><input type="checkbox" id="su-weg"> <span lang="nl">Niet meer tonen</span><span lang="en">Don&#39;t show again</span></label>'+
+      '<button type="button" class="knop" id="su-ok">OK</button></div>';
+    body.appendChild(uitleg);
+    uitleg.querySelector('#su-ok').addEventListener('click',function(){if(uitleg.querySelector('#su-weg').checked)store('guhs-vr-spoileruitleg-weg','1');sluitUitleg();});}
+  window.VR={lang:function(){return html.getAttribute('data-lang')||'nl';},zone:function(){return +(html.getAttribute('data-zonetot')||1);},
     t:function(en,nl){return (html.getAttribute('data-lang')==='en')?en:nl;},root:body.getAttribute('data-root')||'',
-    live:body.getAttribute('data-live')||'',voorbeeld:body.getAttribute('data-voorbeeld')==='1'};
+    live:body.getAttribute('data-live')||''};
   // filter tables: <input data-filter="#id">, <select data-filter-col="n" data-filter="#id">
   document.querySelectorAll('[data-filter]').forEach(function(el){
     var tab=document.querySelector(el.getAttribute('data-filter'));if(!tab)return;
@@ -221,8 +242,13 @@ JS = r"""
   document.addEventListener('vr-zone',function(){document.querySelectorAll('table[data-pagina]').forEach(function(tab){pageer(tab);});});
 
   // ---- live data ----
-  function haal(naam){var url=VR.live+naam;return fetch(url,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});}
+  // W-SITE: always the real endpoint (live.guhs.nl); 8 s timeout; when it is unreachable or not live yet every part shows a friendly empty state
+  function haal(naam){var url=VR.live+naam,ac=window.AbortController?new AbortController():null,tm=ac?setTimeout(function(){ac.abort();},8000):0;
+    return fetch(url,{cache:'no-store',signal:ac?ac.signal:undefined}).then(function(r){clearTimeout(tm);if(!r.ok)throw new Error(r.status);return r.json();})
+      .then(function(d){if(d&&d.nog_niet_live)throw new Error('nog niet live');return d;},function(e){clearTimeout(tm);throw e;});}
   VR.haal=haal;
+  VR.leeg=function(){return VR.t('No players in the Vadsrijk yet','Nog geen spelers in het Vadsrijk');};
+  VR.nietLive=function(){return VR.t('Live as soon as the server runs the update','Live zodra de server de update draait');};
   function duur(s){s=Math.max(0,Math.round(s));var h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;
     return (h?h+':'+(m<10?'0':''):'')+m+':'+(x<10?'0':'')+x;}
   VR.duur=duur;
@@ -233,13 +259,15 @@ JS = r"""
   VR.esc=esc;
   // status tiles: [data-live-status]
   (function(el){if(!el)return;
-    function toon(s){var oud=(Date.now()-Date.parse(s.tijd))/1000;var aan=s.online&&(oud<180||VR.voorbeeld);
+    function toon(s){var oud=(Date.now()-Date.parse(s.tijd))/1000;var aan=s.online&&oud<180;
       el.querySelector('[data-k=status]').innerHTML='<span class="stip-status '+(aan?'aan':'uit')+'"></span>'+(aan?VR.t('Online','Online'):VR.t('Offline','Offline'));
       el.querySelector('[data-k=spelers]').textContent=aan?s.aantal+' / '+s.max:'-';
       el.querySelector('[data-k=rijk]').textContent=aan?s.in_vadsrijk:'-';
       el.querySelector('[data-k=versie]').textContent=s.versie||'?';
       var namen=el.querySelector('[data-k=namen]');if(namen)namen.innerHTML=aan&&s.spelers.length?s.spelers.map(function(n){return '<a href="'+VR.root+'speler.html#'+encodeURIComponent(n)+'">'+esc(n)+'</a>';}).join(', '):'<span class="leeg">'+VR.t('nobody right now','nu niemand')+'</span>';}
-    function fout(){el.querySelector('[data-k=status]').innerHTML='<span class="stip-status uit"></span>'+VR.t('No data','Geen gegevens');}
+    function fout(){el.querySelector('[data-k=status]').innerHTML='<span class="stip-status uit"></span>'+VR.t('Not live yet','Nog niet live');
+      el.querySelector('[data-k=spelers]').textContent='-';el.querySelector('[data-k=rijk]').textContent='-';el.querySelector('[data-k=versie]').textContent='-';
+      var namen=el.querySelector('[data-k=namen]');if(namen)namen.innerHTML='<span class="leeg">'+esc(VR.nietLive())+'</span>';}
     function laad(){haal('status.json').then(toon,fout);}laad();setInterval(laad,60000);})(document.querySelector('[data-live-status]'));
   // world clock: [data-live-wereld]
   (function(el){if(!el)return;
@@ -254,8 +282,10 @@ JS = r"""
         k.innerHTML=(kv.fase==='stop'?VR.t('Standing at ','Staat bij ')+'<b>'+esc(vt('stop:'+kv.stop))+'</b>'+(kv.vertrekt_over_s!=null?VR.t(', leaves in ',', vertrekt over ')+duur(kv.vertrekt_over_s-weg):''):
           kv.fase==='aanval'?VR.t('Under attack by klodders! Help!','Wordt aangevallen door klodders! Help!'):VR.t('On the road','Onderweg'))+
           ' &middot; <a href="'+VR.root+'kaart.html?plek=karavaan">'+VR.t('on the map','op de kaart')+'</a>';}
-      var e=el.querySelector('[data-k=event]');if(e){var ev=window.VR_EVENTS||[];var d=new Date().getDay();var x=ev[d%ev.length];if(x)e.innerHTML='<b>'+esc(VR.t(x.en,x.nl))+'</b> '+esc(VR.t(x.uit_en,x.uit_nl));}}
-    function laad2(){haal('wereld.json').then(function(d){wd=d;geladen=Date.now()-Math.max(0,(Date.now()-Date.parse(d.tijd)))*(VR.voorbeeld?0:1);teken();},function(){});}
+    }
+    function nietLive(){if(wd)return;var tb=el.querySelector('[data-k=bazen]');if(tb)tb.innerHTML='<tr><td colspan=4 class="leeg">'+esc(VR.nietLive())+'</td></tr>';
+      var k=el.querySelector('[data-k=karavaan]');if(k)k.innerHTML='<span class="leeg">'+esc(VR.nietLive())+'</span>';}
+    function laad2(){haal('wereld.json').then(function(d){wd=d;geladen=Date.now()-Math.max(0,(Date.now()-Date.parse(d.tijd)));teken();},nietLive);}
     laad2();setInterval(laad2,30000);setInterval(teken,1000);document.addEventListener('vr-lang',teken);})(document.querySelector('[data-live-wereld]'));
   // highscores: [data-hiscores]
   (function(el){if(!el)return;
@@ -263,16 +293,16 @@ JS = r"""
     var huidig=(location.hash||'#generiek').slice(1),rijen=[];
     function kies(id){huidig=id;tabs.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-l')===id));});
       var L=lijsten.filter(function(l){return l.id===id;})[0]||lijsten[0];kop.innerHTML=VR.t(L.k_en,L.k_nl);
-      haal('hiscores/'+L.id+'.json').then(function(d){rijen=d.rijen;vul();el.querySelector('[data-k=tijd]').textContent=new Date(d.tijd).toLocaleString();},function(){tb2.innerHTML='<tr><td colspan=4 class="leeg">'+VR.t('No data (is the server online?)','Geen gegevens (staat de server aan?)')+'</td></tr>';});
+      haal('hiscores/'+L.id+'.json').then(function(d){rijen=d.rijen;vul();el.querySelector('[data-k=tijd]').textContent=new Date(d.tijd).toLocaleString();},function(){rijen=[];tb2.innerHTML='<tr><td colspan=4 class="leeg">'+esc(VR.leeg())+'. '+esc(VR.nietLive())+'.</td></tr>';});
       history.replaceState(null,'','#'+id);}
     function vul(){var q=(zoek.value||'').toLowerCase();tb2.innerHTML=rijen.filter(function(r){return !q||r.naam.toLowerCase().indexOf(q)>=0;}).slice(0,100).map(function(r){
-      return '<tr><td class="num">'+r.plek+'</td><td><img class="hoofd" alt="" loading="lazy" src="https://mc-heads.net/avatar/'+encodeURIComponent(r.naam)+'/24"><a href="speler.html#'+encodeURIComponent(r.naam)+'">'+esc(r.naam)+'</a></td><td class="num">'+r.waarde+'</td><td class="num">'+(r.xp!=null?r.xp.toLocaleString():'')+'</td></tr>';}).join('')||'<tr><td colspan=4 class="leeg">'+VR.t('Nobody yet','Nog niemand')+'</td></tr>';}
+      return '<tr><td class="num">'+r.plek+'</td><td><img class="hoofd" alt="" loading="lazy" src="https://mc-heads.net/avatar/'+encodeURIComponent(r.naam)+'/24"><a href="speler.html#'+encodeURIComponent(r.naam)+'">'+esc(r.naam)+'</a></td><td class="num">'+r.waarde+'</td><td class="num">'+(r.xp!=null?r.xp.toLocaleString():'')+'</td></tr>';}).join('')||'<tr><td colspan=4 class="leeg">'+esc(VR.leeg())+'</td></tr>';}
     lijsten.forEach(function(l){var b=document.createElement('button');b.type='button';b.setAttribute('data-l',l.id);b.innerHTML='<span lang="en">'+l.en+'</span><span lang="nl">'+l.nl+'</span>';b.addEventListener('click',function(){kies(l.id);});tabs.appendChild(b);});
     zoek.addEventListener('input',vul);kies(huidig);})(document.querySelector('[data-hiscores]'));
   // profile: [data-profiel]
   (function(el){if(!el)return;
     function laadP(){var naam=decodeURIComponent((location.hash||'').slice(1));var uit=el.querySelector('[data-k=uit]');
-      if(!naam){haal('spelers/index.json').then(function(d){uit.innerHTML='<h2>'+VR.t('All players','Alle spelers')+'</h2><p>'+d.spelers.map(function(s){return '<a href="#'+encodeURIComponent(s.naam)+'">'+esc(s.naam)+'</a> <span class="badge lv">lv '+s.lv+'</span>';}).join(' &middot; ')+'</p>';},function(){uit.innerHTML='<p class="leeg">'+VR.t('No data.','Geen gegevens.')+'</p>';});return;}
+      if(!naam){haal('spelers/index.json').then(function(d){if(!d.spelers||!d.spelers.length){uit.innerHTML='<p class="leeg">'+esc(VR.leeg())+'.</p>';return;}uit.innerHTML='<h2>'+VR.t('All players','Alle spelers')+'</h2><p>'+d.spelers.map(function(s){return '<a href="#'+encodeURIComponent(s.naam)+'">'+esc(s.naam)+'</a> <span class="badge lv">lv '+s.lv+'</span>';}).join(' &middot; ')+'</p>';},function(){uit.innerHTML='<p class="leeg">'+esc(VR.leeg())+'. '+esc(VR.nietLive())+'.</p>';});return;}
       haal('spelers/'+naam.toLowerCase()+'.json').then(function(p){
         var kl=Object.keys(p.klassen).map(function(k){return '<div><dt>'+esc(vt('klasse:'+k))+'</dt><dd>lv '+p.klassen[k]+'</dd></div>';}).join('');
         var boek=Object.keys(p.boek).map(function(z){return '<div><dt>'+esc(vt('zone:'+z))+'</dt><dd><div class="balk"><i style="width:'+p.boek[z]+'%"></i></div>'+p.boek[z]+'%</dd></div>';}).join('');
@@ -373,7 +403,7 @@ KAART_JS = r"""
   var KI={knuffelridder:'&#9876;',pluisjager:'&#127993;',vadsmagier:'&#10024;'};
   function glij(m,naar){var van=m.getLatLng(),t0=performance.now(),d=1800;cancelAnimationFrame(m._raf);
     (function stap(t){var f=Math.min(1,(t-t0)/d);f=f<.5?2*f*f:1-Math.pow(-2*f+2,2)/2;m.setLatLng(L.latLng(van.lat+(naar.lat-van.lat)*f,van.lng+(naar.lng-van.lng)*f));if(f<1)m._raf=requestAnimationFrame(stap);})(t0);}
-  function posities(){VR.haal('posities.json').then(function(P){var zien={},sz={};
+  function posities(){VR.haal('posities.json').then(function(P){var zien={},sz={};if(P.tijd&&Date.now()-P.tijd>120000)P={spelers:[],status:[],schepen:[]};   // W-SITE: an old file (server stopped) = nobody
       (P.spelers||[]).forEach(function(s){var id=s.naam;zien[id]=1;var to=ll(s.x,s.z),m=spelersM[id];
         var html='<span class="vr-speler"><img src="https://mc-heads.net/avatar/'+encodeURIComponent(s.naam)+'/20" alt="" width="20" height="20"><b>'+VR.esc(s.naam)+'</b><i>'+(KI[s.klasse]||'')+' '+(s.level||'')+'</i></span>';
         if(!m){m=L.marker(to,{icon:L.divIcon({className:'',html:html,iconSize:null,iconAnchor:[10,10]}),title:s.naam,zIndexOffset:1000});
@@ -385,8 +415,9 @@ KAART_JS = r"""
           m.bindPopup('<h4>'+VR.t('Airship in flight','Luchtschip onderweg')+'</h4>'+(s.naar?VR.t('to ','naar ')+VR.esc(s.naar):''));m.addTo(Lspel);schipM[s.id]=m;}else{glij(m,to);}});
       Object.keys(schipM).forEach(function(id){if(!sz[id]){Lspel.removeLayer(schipM[id]);delete schipM[id];}});
       if(pnote){var n=(P.spelers||[]).length,st=(P.status||[]).length;
-        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):VR.t('No players online','Geen spelers online');}
-      setTimeout(zoneFilter,30);},function(){if(pnote)pnote.textContent=VR.t('No players online','Geen spelers online');});}
-  posities();setInterval(posities,10000);
+        pnote.textContent=n?VR.t(n+' player'+(n>1?'s':'')+' on the map','Spelers op de kaart: '+n)+(st?VR.t(' ('+st+' hidden in a dungeon, raid or house)',' (+'+st+' in een kerker, raid of huisje)'):''):(st?VR.t(st+' in a dungeon, raid or house',st+' in een kerker, raid of huisje'):VR.leeg());}
+      pfout=0;setTimeout(zoneFilter,30);},function(){pfout++;if(pnote)pnote.textContent=VR.nietLive();});}
+  // W-SITE: unreachable -> back off (10 s, then every 60 s) instead of hammering a missing endpoint
+  var pfout=0,ptik=0;posities();setInterval(function(){ptik++;if(pfout<2||ptik%6===0)posities();},10000);
 })();
 """

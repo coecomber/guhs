@@ -8,6 +8,7 @@ Usage (from the project root):
     python tools/make_wiki_site.py [--base-url https://guhs.nl/wiki/] [--landing docs/site] [--out docs/site/wiki]
     python tools/make_wiki_site.py --no-landing --out docs/site --base-url https://<name>.github.io/guhs/   (only the wiki)
     python tools/make_wiki_site.py --vadsrijk      (also guhs.nl/vadsrijk/: tools/make_vadsrijk_site.py, live data from live.guhs.nl)
+                                                   X-SITE: + --open-zones N (default 1 = tutorial + zone 1; 6 = all zones)
 
 Everything comes from the project itself: the names, lists and numbers from the game data (lang, Java enums, worldgen,
 loot tables, recipes, advancements, FTB quests), the texts from the one-page wiki (tools/make_wiki.py), the pictures from
@@ -44,8 +45,15 @@ def main():
                     help="the public address of the site, for sitemap.xml (or set GUHS_WIKI_URL)")
     ap.add_argument("--vadsrijk", action="store_true", help="also build guhs.nl/vadsrijk/ (tools/make_vadsrijk_site.py) into <landing>/vadsrijk")
     ap.add_argument("--live-url", default="https://live.guhs.nl/", help="with --vadsrijk: where the server's live JSON is served")
+    ap.add_argument("--open-zones", type=int, default=1,   # X-SITE: the public release opens the tutorial + zone 1 only
+                    help="the wiki AND (with --vadsrijk) guhs.nl/vadsrijk publish only the tutorial + Vadsrijk zones 1..N (default 1, like the server's zone gate; 6 = all)")
     ap.add_argument("--verbose", action="store_true", help="list the knowledge-base chunks without a page and the leftover version numbers")
     args = ap.parse_args()
+    # Y-INT: the FTB quests of closed zones stay off the wiki (gamedata.ftb reads GUHS_OPEN_ZONES): it ALWAYS follows --open-zones,
+    # so the wiki's FTB pages, the Vadsrijk pages and /vadsrijk/ use one and the same gate
+    if os.environ.get("GUHS_OPEN_ZONES") not in (None, str(args.open_zones)):
+        print(f"  !! GUHS_OPEN_ZONES={os.environ['GUHS_OPEN_ZONES']} differs from --open-zones {args.open_zones}: using {args.open_zones}")
+    os.environ["GUHS_OPEN_ZONES"] = str(args.open_zones)
     root = os.path.abspath(args.root)
     landing_dir = None if args.no_landing else os.path.abspath(args.landing or os.path.join(root, "docs", "site"))
     out = os.path.abspath(args.out or (os.path.join(landing_dir, "wiki") if landing_dir else os.path.join(root, "docs", "site")))
@@ -58,16 +66,23 @@ def main():
     images = Images(img_src, game.assets, os.path.join(out, "img"))
     builder = Builder(game, chunks, images)
     site = builder.build()
+    from wiki_site.vadsrijk import poort   # X-SITE: no wiki pages of Vadsrijk zones that are not open yet (see --open-zones)
+    dropped = poort.filter_wiki(site, root, args.open_zones)
+    if dropped:
+        print(f"  Vadsrijk zone gate (open zones 1..{args.open_zones}): {len(dropped)} wiki pages of later zones left out")
+        anders = [p for p in dropped if "vr_" not in p and "vadsrijk" not in p]
+        if anders:
+            print("    (not vr_/vadsrijk ids:", ", ".join(sorted(anders)) + ")")
     os.makedirs(out, exist_ok=True)
     renderer = Renderer(site, builder, images, game, out, args.base_url)
     written = set(renderer.render_all())
     if landing_dir:
         from wiki_site.landing import Landing
-        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/")).write(landing_dir)
+        Landing(builder, images, site_url, os.path.relpath(out, landing_dir).replace("\\", "/"), vadsrijk=args.vadsrijk).write(landing_dir)   # X-SITE
     n_img = images.write()
     if args.vadsrijk and landing_dir:   # S-SITE: the Vadsrijk section (its own pages, assets and link check; checked again below)
         import make_vadsrijk_site
-        make_vadsrijk_site.bouw(root, os.path.join(landing_dir, "vadsrijk"), args.live_url, echt=True)
+        make_vadsrijk_site.bouw(root, os.path.join(landing_dir, "vadsrijk"), args.live_url, echt=True, open_zones=args.open_zones)
     # pages that no longer exist
     stale = 0
     for d, _, files in os.walk(out):
