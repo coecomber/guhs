@@ -448,13 +448,24 @@ public class BlubGuhEntity extends Landdiertje {
     }
 
     /**
-     * Wild Blubs stay, like vanilla animals (fix 1.8.0 playtest): they mostly spawn once, with the chunk, and a creature
-     * that despawns when you walk away hardly ever comes back (the creature cap is full of guhs), so the Zingende Weide was
-     * empty by the time you got there.
+     * 1.9.9: wild Blubs of the Guhmension come and go like the wild guhs (GuhEntity#removeWhenFarAway): the
+     * GuhmensionSpawner keeps bringing new ones around you in De Zingende Weide. Tame Blubs (and Blubs elsewhere, like the
+     * dream) stay. (1.8.0 had every wild Blub stay, because nothing brought new ones back.)
      */
     @Override
     public boolean removeWhenFarAway(double distance) {
-        return false;
+        return !isTame() && level().dimension() == nl.juiced.guhs.world.ModDimensions.GUHMENSION;
+    }
+
+    /** 1.9.9: a wild come-and-go Blub (nobody's, not named, not kept on purpose, e.g. on a lead): like a wild guh. */
+    public boolean isKomEnGaBlub() {
+        return !isTame() && !isPersistenceRequired() && !requiresCustomPersistence() && !hasCustomName() && removeWhenFarAway(0);
+    }
+
+    /** Like the wild guhs: a come-and-go Blub is never written to disk, so they can't pile up in saved chunks. */
+    @Override
+    public boolean shouldBeSaved() {
+        return super.shouldBeSaved() && !isKomEnGaBlub();
     }
 
     // --- babyblubjes -------------------------------------------------------------------------------------------------------------

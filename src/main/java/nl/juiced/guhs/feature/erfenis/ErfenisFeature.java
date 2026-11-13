@@ -28,6 +28,8 @@ public final class ErfenisFeature {
         NeoForge.EVENT_BUS.addListener(Erfenis::opPlaatsen);
         NeoForge.EVENT_BUS.addListener(Erfenis::opKlikBlok);
         NeoForge.EVENT_BUS.addListener(Erfenis::opSlaBlok);
+        NeoForge.EVENT_BUS.addListener(Erfenis::opVertrappen);
+        NeoForge.EVENT_BUS.addListener(Erfenis::opGriefen);
         NeoForge.EVENT_BUS.addListener(Erfenis::opItem);
         NeoForge.EVENT_BUS.addListener(Erfenis::opSchade);
         NeoForge.EVENT_BUS.addListener(ErfenisMomenten::opLogin);

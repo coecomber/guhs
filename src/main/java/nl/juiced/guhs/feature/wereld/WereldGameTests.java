@@ -251,12 +251,13 @@ public class WereldGameTests {
         ServerPlayer p = speler(helper, new BlockPos(1, 2, 1));
         try {
             kopie(helper, BEWAAKT, new BlockPos(8, 2, 8), Rotation.NONE);
-            BlockPos binnen = helper.absolutePos(new BlockPos(10, 2, 10)), rand = helper.absolutePos(new BlockPos(6, 2, 10));
-            BlockPos buiten = helper.absolutePos(new BlockPos(5, 2, 10));
+            // (1.7.2: a registered rim is at most one block, whatever is asked: 2 gives 1)
+            BlockPos binnen = helper.absolutePos(new BlockPos(10, 2, 10)), rand = helper.absolutePos(new BlockPos(7, 2, 10));
+            BlockPos buiten = helper.absolutePos(new BlockPos(6, 2, 10));
             helper.assertTrue(!Bescherming.beschermd(level, binnen), "not registered: free");
             Bescherming.registreer(BEWAAKT, 2);
             helper.assertTrue(Bescherming.beschermd(level, binnen) && Bescherming.beschermd(level, rand) && !Bescherming.beschermd(level, buiten),
-                    "the piece and two blocks around it");
+                    "the piece and one block around it (not two)");
             helper.assertTrue(BEWAAKT.equals(Bescherming.structuurBij(level, binnen)) && Bescherming.structuurBij(level, buiten) == null, "which structure");
             helper.assertTrue(!Bescherming.mag(p, binnen) && Bescherming.mag(p, buiten), "a survival player may not change it");
             helper.assertTrue(!Bescherming.magWijzigen(level, binnen, p.getUUID()) && Bescherming.magWijzigen(level, buiten, p.getUUID())

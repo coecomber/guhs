@@ -430,7 +430,7 @@ public final class GebouwVormen {
         }
 
         /** The block at a turned cell, or null when this job leaves it alone. */
-        private BlockState blok(int wx, int y, int wz) {
+        BlockState blok(int wx, int y, int wz) {
             if (v == null) {
                 return y < 0 ? Blocks.DIRT.defaultBlockState() : y == 0 ? Blocks.GRASS_BLOCK.defaultBlockState() : Blocks.AIR.defaultBlockState();
             }
@@ -461,8 +461,23 @@ public final class GebouwVormen {
             if (y == 0 && s.isAir()) {
                 s = Blocks.GRASS_BLOCK.defaultBlockState();
             }
+            // 1.9.8: a thin layer (the T3 path, landdiertjes_steentjespad, is a carpet) in the ground layer left a sunken hole in
+            // the ground (Marktplein, Hoeve, Kippenhok ...): it goes on top of a ground block instead, one higher
+            if (y == 0 && dun(s)) {
+                s = ONDER_DUN;
+            } else if (y == 1 && s.isAir() && v.ymin <= 0 && dun(st[v.at(lx, 0, lz)])) {
+                s = st[v.at(lx, 0, lz)];
+            }
             return Draai.state(s, rot);
         }
+    }
+
+    /** (1.9.8) The ground under a thin layer that a shape puts in its ground layer. */
+    static final BlockState ONDER_DUN = Blocks.COARSE_DIRT.defaultBlockState();
+
+    /** (1.9.8) A thin layer (a carpet: 1/16 high) that must lie on the ground instead of being the ground. */
+    static boolean dun(BlockState s) {
+        return s.getBlock() instanceof net.minecraft.world.level.block.CarpetBlock;
     }
 
     static String norm(String s) {

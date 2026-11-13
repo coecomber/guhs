@@ -77,7 +77,10 @@ public class UpstreamSamenGameTests {
         helper.assertTrue(al == null, naam + " and " + al + " are the same bit");
     }
 
-    /** bbq2's NPC kinds stand between the last story kind of 3.0 and the first kind of guhpixel, and have no Guhdex page. */
+    /**
+     * bbq2's NPC kinds stand between the last story kind of 3.0 and the first kind of guhpixel, and have no Guhdex page
+     * (the later kinds neither, except the 1.8.0 dream characters: Snoes and co. got bonus character pages, see GuhVariant).
+     */
     @GuhTest(template = "empty", batch = BATCH)
     public static void upstreamsamenKindsVoorGuhpixel(GameTestHelper helper) {
         int tiki = GuhNpcEntity.Kind.TIKIGUH.ordinal(), lobby = GuhNpcEntity.Kind.LOBBY_WELKOMSTGUH.ordinal();
@@ -87,7 +90,8 @@ public class UpstreamSamenGameTests {
         }
         for (GuhNpcEntity.Kind k : GuhNpcEntity.Kind.values()) {
             if (k.ordinal() > tiki) {
-                helper.assertTrue(GuhVariant.ofCharacter(k) == null, k + " has no character page in the Guhdex");
+                GuhVariant pagina = GuhVariant.ofCharacter(k);
+                helper.assertTrue(pagina == null || pagina.ordinal() >= GuhVariant.SNOES.ordinal(), k + " has no character page in the Guhdex");
             }
         }
         // (the kind is saved by its id and synced by ordinal: both sides run the same build, so the order is free to choose)

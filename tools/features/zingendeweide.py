@@ -26,6 +26,7 @@ import io
 import json
 import os
 import random
+import re
 import sys
 import zipfile
 
@@ -481,18 +482,18 @@ def blocks_and_items(h):
             tekst = tekst.replace('"minecraft:oak_planks"', f'"guhs:{base}"').replace('"minecraft:stripped_oak_log"', f'"guhs:{base}"')
             tekst = tekst.replace(f'"minecraft:{van}"', f'"guhs:{ours}"').replace('"group": "wooden_', f'"group": "{HOUT}_').replace('"group": "hanging_sign"', f'"group": "{HOUT}_hanging_sign"')
             w(f"{D}/recipe/{ours}.json", json.loads(tekst))
-        leaves = json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/cherry_leaves.json")))
+        leaves = _schaar(json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/cherry_leaves.json"))))
         for n in (f"{HOUT}_bladeren", f"{HOUT}_bladeren_roze"):
             w(f"{D}/loot_table/blocks/{n}.json", json.loads(leaves.replace("minecraft:cherry_leaves", f"guhs:{n}")
                                                             .replace("minecraft:cherry_sapling", f"guhs:{HOUT}_zaailing")))
-        tall = json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/tall_grass.json")))
-        short = json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/short_grass.json")))
+        tall = _schaar(json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/tall_grass.json"))))
+        short = _schaar(json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/short_grass.json"))))
         for n in ("weide_hoog_roze_gras", "weide_hoog_lichtroze_gras"):
             w(f"{D}/loot_table/blocks/{n}.json", json.loads(tall.replace("minecraft:tall_grass", f"guhs:{n}").replace(
                 "minecraft:short_grass", f"guhs:{n.replace('hoog_', '')}")))
         for n in ("weide_roze_gras", "weide_lichtroze_gras"):
             w(f"{D}/loot_table/blocks/{n}.json", json.loads(short.replace("minecraft:short_grass", f"guhs:{n}")))
-        hang = json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/pale_hanging_moss.json")))
+        hang = _schaar(json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/pale_hanging_moss.json"))))
         w(f"{D}/loot_table/blocks/wolkjes_sliert.json", json.loads(hang.replace("minecraft:pale_hanging_moss", "guhs:wolkjes_sliert")))
         for k in KLEUREN:
             cl = json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/amethyst_cluster.json")))
@@ -501,6 +502,13 @@ def blocks_and_items(h):
         for n in ("zalmklei_gras", "zeegroen_gras"):
             g = json.dumps(json.loads(z.read("data/minecraft/loot_table/blocks/grass_block.json")))
             w(f"{D}/loot_table/blocks/{n}.json", json.loads(g.replace("minecraft:grass_block", f"guhs:{n}").replace("minecraft:dirt", "guhs:zalmklei")))
+
+
+def _schaar(tekst):
+    """Vanilla's loot tables check for the shears ITEM (match_tool minecraft:shears); ours check the shears ability, like
+    the mod's other leaves and grasses, so the Vahoege-vadsschaar (and any modded shears) cut them off too."""
+    return re.sub(r'\{"condition": "minecraft:match_tool", "predicate": \{"items": "minecraft:shears"\}\}',
+                  '{"condition": "neoforge:can_item_perform_ability", "ability": "shears_dig"}', tekst)
 
 
 def loot_recipes_tags(h):

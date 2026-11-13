@@ -69,6 +69,7 @@ public final class GidsData {
                 case KNUFFELDAL -> Soort.KNUFFELDAL_SPELLETJES;
                 case GROTE_GUHSPELEN -> Soort.GROTE_GUHSPELEN;
                 case VERHALEN -> Soort.VERHALEN;
+                case GUHPIXEL -> Soort.PLEKKEN;
             };
         }
         if (VERHAAL_BRONNEN.contains(bron)) {

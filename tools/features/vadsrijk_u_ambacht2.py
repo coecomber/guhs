@@ -240,7 +240,9 @@ t(S + "meester.nu", "Je bent nu Meester in %s (niveau %s)! De Meesterschort ligt
 t(S + "meester.kort", "Meester", "Master")
 for _id, (_nl, _en) in T.AMBACHTEN.items():
     t(f"gui.guhs.titels.naam.vr_amb_{_id}_meester", f"Meester-{_nl.lower()}" if _id != "vissen" else "Meester-visser", f"Master ({_en})")
+    t(f"gui.guhs.titels.hint.vr_amb_{_id}_meester", f"Haal het hoogste niveau in {_nl.lower()}.", f"Reach the highest level in {_en}.")
 t("gui.guhs.titels.naam.vr_amb_grootmeester", "Grootmeester der Ambachten", "Grand Master of Crafts")
+t("gui.guhs.titels.hint.vr_amb_grootmeester", "Haal het hoogste niveau in alle negen ambachten.", "Reach the highest level in all nine professions.")
 t("vadsrijk.kleding.ding.kaap.meesterschort", "Meesterschort", "Master's Apron")
 t("vadsrijk.kleding.ding.kaap.meesterschort.bron", "Haal het hoogste niveau in een ambacht.", "Reach the highest level in a profession.")
 # ---- names

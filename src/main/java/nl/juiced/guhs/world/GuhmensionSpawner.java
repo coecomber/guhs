@@ -30,6 +30,10 @@ public final class GuhmensionSpawner {
     /** 1.1.1: never more wild (come-and-go) guhs in the whole Guhmension than this (plus this much per player there). */
     public static final int MAX_WILD_BASE = 300;
     public static final int MAX_WILD_PER_PLAYER = 150;
+    /** 1.9.9: in De Zingende Weide this share of the guh groups becomes a group of wild Blub-guhs instead. */
+    public static final float BLUB_DEEL = 1f / 3f;
+    /** 1.9.9: the spawner stops at about a third of the guhs around you in wild Blubs. */
+    public static final int BLUBS_PER_PLAYER = GUHS_PER_PLAYER / 3;
     private static final int CULL_EVERY_TICKS = 20 * 30;
     /** A wild guh this close to a player is never tidied away (you'd see it vanish). */
     private static final double CULL_SAFE_DISTANCE = 64;
@@ -101,8 +105,17 @@ public final class GuhmensionSpawner {
             return;
         }
         int groupSize = 2 + random.nextInt(3);
-        if (level.getBiome(new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z))
-                .is(nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.BIOME)) {
+        net.minecraft.core.Holder<net.minecraft.world.level.biome.Biome> biome =
+                level.getBiome(new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z), z));
+        if (biome.is(nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.ZINGENDE_WEIDE) && random.nextFloat() < BLUB_DEEL) {
+            // 1.9.9: in De Zingende Weide about a third of the groups are Blub-guhs instead (with their own cap)
+            if (level.getEntitiesOfClass(nl.juiced.guhs.feature.blub.BlubGuhEntity.class, new AABB(player.blockPosition()).inflate(COUNT_RADIUS),
+                    b -> !b.isTame()).size() < BLUBS_PER_PLAYER) {
+                spawnBlubs(level, x, z, groupSize, random);
+            }
+            return;
+        }
+        if (biome.is(nl.juiced.guhs.feature.beverbeek.BeverbeekFeature.BIOME)) {
             // 1.6.2: the Beverbeek belongs to the beavers: half the groups don't come, the others are 1-2 guhs (about a quarter)
             if (random.nextBoolean()) {
                 return;
@@ -130,6 +143,29 @@ public final class GuhmensionSpawner {
             if (level.noCollision(guh)) {
                 guh.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
                 level.addFreshEntity(guh);
+            }
+        }
+    }
+
+    /** 1.9.9: a group of wild Blub-guhs (De Zingende Weide); the kind follows the part of the meadow (BlubGuhEntity#finalizeSpawn). */
+    private static void spawnBlubs(ServerLevel level, int x, int z, int groupSize, RandomSource random) {
+        for (int i = 0; i < groupSize; i++) {
+            int gx = x + random.nextInt(5) - 2;
+            int gz = z + random.nextInt(5) - 2;
+            BlockPos pos = new BlockPos(gx, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, gx, gz), gz);
+            if (!level.getBiome(pos).is(nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.ZINGENDE_WEIDE)
+                    || !nl.juiced.guhs.feature.boerderij.BoerderijDier.checkDierSpawnRules(level, EntitySpawnReason.NATURAL, pos)
+                    || nl.juiced.guhs.quest.VerstopGame.inHouse(level, pos)) {
+                continue;
+            }
+            nl.juiced.guhs.feature.blub.BlubGuhEntity blub = nl.juiced.guhs.feature.blub.BlubFeature.BLUBGUH.get().create(level, EntitySpawnReason.TRIGGERED);
+            if (blub == null) {
+                return;
+            }
+            blub.snapTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, random.nextFloat() * 360f, 0);
+            if (level.noCollision(blub)) {
+                blub.finalizeSpawn(level, level.getCurrentDifficultyAt(pos), EntitySpawnReason.NATURAL, null);
+                level.addFreshEntity(blub);
             }
         }
     }

@@ -191,6 +191,7 @@ def teksten():
         "vadsrijk.momenten.karavaan.zeldzaam": "Kruimel stopt je stiekem iets zeldzaams toe: %s!",
         "vadsrijk.momenten.karavaan.titel": "Nieuwe titel: Karavaanvriend!",
         "gui.guhs.titels.naam.vr_karavaanvriend": "Karavaanvriend",
+        "gui.guhs.titels.hint.vr_karavaanvriend": "Help de karavaan van Kruimel drie keer uit de nood.",
     }
     return t
 
