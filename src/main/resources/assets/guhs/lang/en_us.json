@@ -47727,5 +47727,7 @@
   "vadsrijk.vitrine.chat.zone.dicht": " ? Zone %s: coming soon",
   "vadsrijk.vitrine.chat.beeld": "In the showcase: %s",
   "vadsrijk.vitrine.chat.beeld.embleem": "In the showcase: the emblem of the Snuggle Order",
-  "vadsrijk.vitrine.chat.offline": "(%s is not online now: this is how things stood last time.)"
+  "vadsrijk.vitrine.chat.offline": "(%s is not online now: this is how things stood last time.)",
+  "structure.guhs.vr_w_portaaltempel": "The Chonkdom",
+  "structure.guhs.vr_w_portaaltempel.tooltip": "The old order temple with the sleeping portal to the Chonkdom. Talk to Werver Wimpel first!"
 }

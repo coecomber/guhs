@@ -138,6 +138,13 @@ public class GuhCompassItem extends Item {
             // 1.6.1: stations are guaranteed (custom placement) or placed by hand: only the known ones count
             return nl.juiced.guhs.feature.safari.bus.Busstation.dichtstbij(level, from);
         }
+        if (key.identifier().getPath().equals("vr_w_portaaltempel")) {
+            // 1.10.0 (y-tempel): "Het Vadsrijk" points at THE fixed temple first; else the nearest worldgen temple in existing land
+            BlockPos vast = nl.juiced.guhs.feature.vadsrijk.wereld.VasteTempel.wijs(level);
+            if (vast != null) {
+                return vast;
+            }
+        }
         Optional<Holder.Reference<Structure>> holder = level.registryAccess().lookupOrThrow(Registries.STRUCTURE).get(key);
         if (holder.isEmpty()) {
             return null;

@@ -47727,5 +47727,7 @@
   "vadsrijk.vitrine.chat.zone.dicht": " ? Zone %s: binnenkort",
   "vadsrijk.vitrine.chat.beeld": "In de vitrine: %s",
   "vadsrijk.vitrine.chat.beeld.embleem": "In de vitrine: het embleem van De Knuffelorde",
-  "vadsrijk.vitrine.chat.offline": "(%s is nu niet online: dit is de stand van de laatste keer.)"
+  "vadsrijk.vitrine.chat.offline": "(%s is nu niet online: dit is de stand van de laatste keer.)",
+  "structure.guhs.vr_w_portaaltempel": "Het Vadsrijk",
+  "structure.guhs.vr_w_portaaltempel.tooltip": "De oude ordetempel met het slapende portaal naar Het Vadsrijk. Praat eerst met Werver Wimpel!"
 }

@@ -29,6 +29,9 @@ TEKSTEN = {
     "block.guhs.vr_w_litteken_gras": "Grauw litteken",
     "block.guhs.vr_w_litteken_plant": "Grauw bloempje",
     "item.guhs.vr_w_vonk": "Vadsrijk-vonk",
+    # y-tempel: the Superkompas entry (tab Avontuur) for the ordetempel (the fixed one first, else the nearest worldgen one)
+    "structure.guhs.vr_w_portaaltempel": "Het Vadsrijk",
+    "structure.guhs.vr_w_portaaltempel.tooltip": "De oude ordetempel met het slapende portaal naar Het Vadsrijk. Praat eerst met Werver Wimpel!",
     W + "portaal.eerst_zelf": "Njeg! Het portaal herkent je nog niet. Vind eerst zelf de oude ordetempel in de Guhmension.",
     W + "portaal.geen_raam": "Dat is geen dicht raam van Vadsrijk-poortsteen. Bouw een rechthoek (binnen max. 21 bij 21).",
     W + "portaal.aan": "Het portaal ontwaakt! Vahoeg, op naar het Vadsrijk.",
