@@ -21,7 +21,7 @@ public final class ZonePoortConfig {
                         "Alles voorbij deze zone is dicht voor spelers: geen schip, geen reis, geen quests, geen dungeon daar;",
                         "wie er toch komt, wordt vriendelijk teruggezet. Ops en creative mogen er altijd in (testen).",
                         "Tijdens het spelen aanpassen kan ook: /guhs vadsrijk zones open <n> (meteen actief, wordt bewaard).")
-                .defineInRange("openZones", 6, 1, 6);
+                .defineInRange("openZones", 1, 1, 6);   // RELEASE 1.10.0: a fresh server opens zone 1 only (dev: run/config sets 6)
         SPEC = b.build();
     }
 
@@ -33,9 +33,9 @@ public final class ZonePoortConfig {
             return TEST;
         }
         try {
-            return SPEC.isLoaded() ? OPEN.get() : 6;
+            return SPEC.isLoaded() ? OPEN.get() : 1;
         } catch (RuntimeException e) {
-            return 6;
+            return 1;
         }
     }
 

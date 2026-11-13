@@ -3,6 +3,16 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.0 — Minecraft 26.1.2
+
+- **Het Vadsrijk:** a whole new RPG world behind an old portal in the Guhmension. Become a recruit in the Knuffelkamp, pick a class (Knuffelridder, Pluisjager or Vadsmagiër) and fly to the first zone, De Knuffelzwammen (level 1 to 20): the town of Zwamzoet, De Haven, klodders and three world bosses. More zones follow later.
+- **Dungeons** with a real door: solo, with your party or through the queue. A **Party tab** in the Vadsrijk menu (H) keeps your party, even after a restart.
+- Loot with colours, stars at the smith, sets with bonuses, pets, crafts, an exploring book full of secrets, and a wardrobe of capes and hats.
+- **Your own bag:** what you bring from home stays safe at home. FTB rewards are claimed at home, never in the Vadsrijk.
+- **For your own world:** the FTB chapter "Het Vadsrijk" with show pieces as rewards, the Vadsrijk display case for your base, and the **Garderobe** (O) to wear your Vadsrijk looks at home (looks only).
+- Everything about the Vadsrijk (map, quests, highscores) is on [guhs.nl/vadsrijk](https://guhs.nl/vadsrijk/).
+- Also: wild Blub-guhs keep coming to De Zingende Weide, the Gids Minigames tab has the Gezelschapshoek, and a few small fixes.
+
 ## 1.9.8 — Minecraft 26.1.2
 
 - **No more holes in the ground:** in the third style the pebble path of the Marktplein (and of the Hoeve, the Kippenhok, the Muziektent and the Guhhutje) sank into the ground and looked like missing blocks. It now lies neatly on top of the ground. Every Erfenis is stamped once more the next time someone walks in, so the old holes heal by themselves.
