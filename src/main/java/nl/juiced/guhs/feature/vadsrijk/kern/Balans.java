@@ -25,8 +25,61 @@ public final class Balans {
      * main-stat compensation); bosses' hits x schade on the final damage (after Verdediging). Helpers already hit through
      * [mobs] schade, so they don't get [bazen] schade (no double count).
      */
-    /** 1.10.3: [bazen] leven 1.25 -> 1.9 (+50 % boss HP on top of 1.10.2; zone-2 bosses fell in seconds). */
-    public static final double BAZEN_LEVEN_STANDAARD = 1.9, BAZEN_SCHADE_STANDAARD = 1.2, BAZEN_LEVEN_V3 = 1.25;
+    /**
+     * 1.10.3: [bazen] leven 1.25 -> 1.9 (+50 % boss HP on top of 1.10.2; zone-2 bosses fell in seconds), then the schade-audit
+     * (SCHADE_1103_AUDIT.md, config versie 5): 1.9 -> 3.4, together with the [gevecht] rendement below (geared lv-35 players did
+     * ~10x the modelled damage; the Galmwolf died in 5-16 s).
+     */
+    public static final double BAZEN_LEVEN_STANDAARD = 3.4, BAZEN_SCHADE_STANDAARD = 1.2, BAZEN_LEVEN_V3 = 1.25, BAZEN_LEVEN_V4 = 1.9;
+
+    /**
+     * 1.10.3 schade-audit, {@code [gevecht]}: how much of a player's offensive stats counts ({@link Spelers#stats} applies it last,
+     * so the character screen shows what really counts).
+     * <ul>
+     *   <li>{@code hoofd_rendement}: the share of Kracht/Behendigheid/Wijsheid ABOVE the balance model ({@link Schade#modelHoofd} of
+     *   your class level) that counts (0.35: armour main stat grows 15 %/lv and a lv-35 mage reached 331 Wijsheid vs the model 126);</li>
+     *   <li>{@code kritiekschade_rendement}, {@code elementschade_rendement}, {@code aanvalssnelheid_rendement}: the share of those %
+     *   stats ABOVE your class's own base value that counts (gear + tree + spec + sets stacked to +125 % crit damage, +48 % speed);</li>
+     *   <li>{@code kritiek_max}: Kritiek (crit chance %) is capped here.</li>
+     * </ul>
+     * Without gear (the balance model, klassen.Balans.dps) nothing changes.
+     */
+    public static final double HOOFD_RENDEMENT_STANDAARD = 0.35, PROCENT_RENDEMENT_STANDAARD = 0.4, KRITIEK_MAX_STANDAARD = 40;
+
+    private static volatile double hoofdRendement = HOOFD_RENDEMENT_STANDAARD;
+    private static volatile double kritiekschadeRendement = PROCENT_RENDEMENT_STANDAARD;
+    private static volatile double elementschadeRendement = PROCENT_RENDEMENT_STANDAARD;
+    private static volatile double aanvalssnelheidRendement = PROCENT_RENDEMENT_STANDAARD;
+    private static volatile double kritiekMax = KRITIEK_MAX_STANDAARD;
+
+    /** From KlasseBalans ([gevecht], file/command): the shares clamped to 0..1, the crit cap to 0..100. */
+    public static void zetGevecht(double hoofd, double kritiekschade, double elementschade, double aanvalssnelheid, double kritMax) {
+        hoofdRendement = Math.max(0, Math.min(1, hoofd));
+        kritiekschadeRendement = Math.max(0, Math.min(1, kritiekschade));
+        elementschadeRendement = Math.max(0, Math.min(1, elementschade));
+        aanvalssnelheidRendement = Math.max(0, Math.min(1, aanvalssnelheid));
+        kritiekMax = Math.max(0, Math.min(100, kritMax));
+    }
+
+    /** One stat after its rendement: {@code basis} counts in full, what is above it at {@code rendement}. Pure (tests). */
+    public static double rendement(double waarde, double basis, double rendement) {
+        return waarde <= basis ? waarde : basis + (waarde - basis) * rendement;
+    }
+
+    /**
+     * The [gevecht] rendement on a player's finished stats (pure: tests and {@link Spelers#stats}). {@code klasseBasis} = the
+     * class's own growth at its level (Klasse.basis), {@code klasseLevel} for the main-stat model.
+     */
+    public static void pasRendementToe(Stats s, Stats klasseBasis, int klasseLevel) {
+        double model = Schade.modelHoofd(klasseLevel);
+        for (Stat st : new Stat[] {Stat.KRACHT, Stat.BEHENDIGHEID, Stat.WIJSHEID}) {
+            s.zet(st, rendement(s.get(st), model, hoofdRendement));
+        }
+        s.zet(Stat.KRITIEKSCHADE, rendement(s.get(Stat.KRITIEKSCHADE), klasseBasis.get(Stat.KRITIEKSCHADE), kritiekschadeRendement));
+        s.zet(Stat.ELEMENTSCHADE, rendement(s.get(Stat.ELEMENTSCHADE), klasseBasis.get(Stat.ELEMENTSCHADE), elementschadeRendement));
+        s.zet(Stat.AANVALSSNELHEID, rendement(s.get(Stat.AANVALSSNELHEID), klasseBasis.get(Stat.AANVALSSNELHEID), aanvalssnelheidRendement));
+        s.zet(Stat.KRITIEK, Math.min(kritiekMax, s.get(Stat.KRITIEK)));
+    }
 
     private static volatile double mobSchade = MOB_SCHADE_STANDAARD;
     private static volatile double mobLeven = MOB_LEVEN_STANDAARD;
@@ -40,7 +93,7 @@ public final class Balans {
     static void registreer() {
     }
 
-    /** 1102-balans: the boss/helper HP multiplier (default 1.25). */
+    /** 1102-balans: the boss/helper HP multiplier (default 3.4 since the 1.10.3 schade-audit). */
     public static double bazenLeven() {
         return bazenLeven;
     }

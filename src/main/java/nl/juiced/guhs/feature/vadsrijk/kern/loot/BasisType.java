@@ -33,10 +33,20 @@ public record BasisType(String id, String itemId, Slot slot, String soort, @Null
     }
 
     /**
-     * 1.10.2 (user decision "D"): how much of its base a main stat (Kracht / Behendigheid / Wijsheid) on armour and jewellery grows
-     * per item level, for every zone's set pieces. Was 0.25.
+     * 1.10.2 (user decision "D"): how much of its base a main stat on armour and jewellery grows per item level, for every zone's
+     * set pieces. Was 0.25. 1.10.3 schade-audit (user decision): Kracht / Behendigheid / Wijsheid grow {@link #AANVALSSTAT_GROEI}
+     * 0.10 (a lv-35 mage had 125 Wijsheid from three Kristal armour bases); an extra Vads / Verdediging line keeps this 0.15.
      */
     public static final double HOOFD_GROEI = 0.15;
+    public static final double AANVALSSTAT_GROEI = 0.10;
+
+    /** The per-level growth share of a main stat ({@link Stat#hoofd}) on set armour/jewellery: 0.10 for Kracht/Behendigheid/Wijsheid, else 0.15. */
+    public static double hoofdGroei(nl.juiced.guhs.feature.vadsrijk.kern.Stat s) {
+        return switch (s) {
+            case KRACHT, BEHENDIGHEID, WIJSHEID -> AANVALSSTAT_GROEI;
+            default -> HOOFD_GROEI;
+        };
+    }
 
     public static BasisType wapen(String id, String itemId, String soort, String klasse, Element e, double schade, double perLevel, Stats basis,
             Stats groei, int flavours) {

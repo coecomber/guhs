@@ -76,7 +76,7 @@ public class VadsrijkBalans1101GameTests {
     public static void mobVermenigvuldigers(GameTestHelper helper) {
         KlasseBalans.standaardAlles();
         helper.assertTrue(Math.abs(Balans.mobSchade() - 2.028) < 1e-9 && Math.abs(Balans.mobLeven() - 1.75) < 1e-9, "defaults 2.028 / 1.75");
-        helper.assertTrue(Math.abs(Balans.bazenLeven() - 1.9) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "[bazen] defaults 1.9 / 1.2");
+        helper.assertTrue(Math.abs(Balans.bazenLeven() - 3.4) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "[bazen] defaults 3.4 / 1.2");
         ServerLevel sl = helper.getLevel();
         BlockPos b = helper.absolutePos(new BlockPos(1, 1, 1));
         Klodders.Klodder k = WezensRegistry.KLODDER.get().create(sl, EntitySpawnReason.COMMAND);
@@ -91,8 +91,8 @@ public class VadsrijkBalans1101GameTests {
         KoningKlodder kk = BazenRegistry.KONING_KLODDER.get().create(sl, EntitySpawnReason.COMMAND);
         kk.snapTo(b.getX() + 0.5, b.getY(), b.getZ() + 0.5, 0, 0);
         kk.stelIn(8, Element.WATER, false, Set.of());
-        double baas = (2000 + 200 * 8) * MobBalans.compensatie(8) * 1.9;
-        helper.assertTrue(Math.abs(kk.maxVads() - baas) < 0.5, "boss: no [mobs] leven, the compensation x [bazen] leven 1.9: " + baas + " vs " + kk.maxVads());
+        double baas = (2000 + 200 * 8) * MobBalans.compensatie(8) * 3.4;
+        helper.assertTrue(Math.abs(kk.maxVads() - baas) < 0.5, "boss: no [mobs] leven, the compensation x [bazen] leven 3.4: " + baas + " vs " + kk.maxVads());
         // the knob is live
         KlasseBalans.zet(KlasseBalans.MOBS, "leven", 2.0, false);
         k.stelIn(1, Element.WATER, false, Set.of());
@@ -113,30 +113,34 @@ public class VadsrijkBalans1101GameTests {
             // versie 1 -> 3
             String r = KlasseBalans.testMigreer(Map.of("schade", 1.3));
             helper.assertTrue(r != null && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "schade") - 2.028) < 1e-9
-                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 4,
+                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 5,
                     "1.10.0 defaults -> 2.028 / 1.75 / versie 3: " + r);
             helper.assertTrue(Math.abs(Balans.mobSchade() - 2.028) < 1e-9 && Math.abs(Balans.mobLeven() - 1.75) < 1e-9
-                    && Math.abs(Balans.bazenLeven() - 1.9) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "applied to kern");
+                    && Math.abs(Balans.bazenLeven() - 3.4) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "applied to kern");
             r = KlasseBalans.testMigreer(Map.of("schade", 2.0));
             helper.assertTrue(r != null && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "schade") - 2.0) < 1e-9
                     && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9, "v1: a hand-set schade stays: " + r);
             // versie 2 (the live server: 1.10.1 defaults) -> 3
             r = KlasseBalans.testMigreer(Map.of("schade", 1.69, "leven", 1.4, "versie", 2.0));
             helper.assertTrue(r != null && r.contains("[bazen]") && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "schade") - 2.028) < 1e-9
-                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 4
-                    && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "leven") - 1.9) < 1e-9 && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "schade") - 1.2) < 1e-9,
+                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 5
+                    && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "leven") - 3.4) < 1e-9 && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "schade") - 1.2) < 1e-9,
                     "1.10.1 defaults -> 2.028 / 1.75 / versie 3 + [bazen] 1.25 / 1.2: " + r);
-            helper.assertTrue(KlasseBalans.toon().stream().anyMatch(t -> t.equals("[mobs] schade=2.03 leven=1.75 versie=4.00"))
-                    && KlasseBalans.toon().stream().anyMatch(t -> t.equals("[bazen] leven=1.90 schade=1.20")), "balans toon: " + KlasseBalans.toon());
+            helper.assertTrue(KlasseBalans.toon().stream().anyMatch(t -> t.equals("[mobs] schade=2.03 leven=1.75 versie=5.00"))
+                    && KlasseBalans.toon().stream().anyMatch(t -> t.equals("[bazen] leven=3.40 schade=1.20")), "balans toon: " + KlasseBalans.toon());
             r = KlasseBalans.testMigreer(Map.of("schade", 1.5, "leven", 1.2, "versie", 2.0));
             helper.assertTrue(r != null && Math.abs(Balans.mobSchade() - 1.5) < 1e-9 && Math.abs(Balans.mobLeven() - 1.2) < 1e-9
-                    && Math.abs(Balans.bazenLeven() - 1.9) < 1e-9, "v2: hand-set schade/leven stay, [bazen] added: " + r);
+                    && Math.abs(Balans.bazenLeven() - 3.4) < 1e-9, "v2: hand-set schade/leven stay, [bazen] added: " + r);
             r = KlasseBalans.testMigreer(Map.of("schade", 1.69, "leven", 1.3, "versie", 2.0));
             helper.assertTrue(r != null && Math.abs(Balans.mobSchade() - 2.028) < 1e-9 && Math.abs(Balans.mobLeven() - 1.3) < 1e-9,
                     "v2: only the untouched key moves: " + r);
+            // versie 4 (1.10.3 before the schade-audit) -> 5: [bazen] leven 1.9 -> 3.4, [mobs] untouched
             r = KlasseBalans.testMigreer(Map.of("schade", 1.5, "leven", 1.2, "versie", 4.0));
+            helper.assertTrue(r != null && r.contains("3.4") && Math.abs(Balans.mobSchade() - 1.5) < 1e-9 && Math.abs(Balans.mobLeven() - 1.2) < 1e-9
+                    && Math.abs(Balans.bazenLeven() - 3.4) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 5, "versie 4 -> 5: " + r);
+            r = KlasseBalans.testMigreer(Map.of("schade", 1.5, "leven", 1.2, "versie", 5.0));
             helper.assertTrue(r == null && Math.abs(Balans.mobSchade() - 1.5) < 1e-9 && Math.abs(Balans.mobLeven() - 1.2) < 1e-9,
-                    "versie 4: nothing changes: " + r);
+                    "versie 5: nothing changes: " + r);
             helper.succeed();
         } finally {
             KlasseBalans.standaardAlles();

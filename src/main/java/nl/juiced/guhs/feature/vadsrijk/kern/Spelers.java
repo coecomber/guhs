@@ -275,6 +275,7 @@ public final class Spelers {
                 f.accept(sp, s);
             }
         }
+        Balans.pasRendementToe(s, k.basis(klv), klv);   // 1.10.3 schade-audit: [gevecht] rendement of stacked offensive stats
         if (Statussen.heeft(p, Status.DUIZELIG)) {
             for (Stat st : Stat.values()) {
                 if (st.hoofd() && st != Stat.VADS) {
