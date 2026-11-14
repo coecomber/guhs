@@ -164,7 +164,7 @@ public abstract class VadsrijkMob extends Monster {
      * compensation for the flatter main stat ({@link MobBalans#compensatie}), so boss fights last as long as in 1.10.0.
      */
     protected double levenFactor(int level) {
-        return lootTabel() != null ? MobBalans.leven(level) : MobBalans.compensatie(level);
+        return lootTabel() != null ? MobBalans.leven(level) : MobBalans.baas(level);   // 1102: bosses/helpers x [bazen] leven, never [mobs] leven
     }
 
     public int mobLevel() {

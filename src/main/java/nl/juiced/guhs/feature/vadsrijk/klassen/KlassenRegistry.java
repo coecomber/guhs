@@ -230,13 +230,14 @@ public final class KlassenRegistry {
             return 1;
         }));
         b.then(Commands.argument("klasse", StringArgumentType.word())
-                .suggests((c, sb) -> SharedSuggestionProvider.suggest(java.util.stream.Stream.concat(java.util.stream.Stream.of(KlasseBalans.ALGEMEEN, KlasseBalans.MOBS,
+                .suggests((c, sb) -> SharedSuggestionProvider.suggest(java.util.stream.Stream.concat(java.util.stream.Stream.of(KlasseBalans.ALGEMEEN, KlasseBalans.MOBS, KlasseBalans.BAZEN,
                         KlasseBalans.RIJDIEREN),
                         Klassen.alle().stream().map(Klasse::id)), sb))
                 .then(Commands.argument("sleutel", StringArgumentType.word())
                         .suggests((c, sb) -> SharedSuggestionProvider.suggest(KlasseBalans.ALGEMEEN.equals(StringArgumentType.getString(c, "klasse"))
                                 ? KlasseBalans.ALGEMEEN_SLEUTELS : KlasseBalans.MOBS.equals(StringArgumentType.getString(c, "klasse"))
-                                ? KlasseBalans.MOBS_SLEUTELS : KlasseBalans.RIJDIEREN.equals(StringArgumentType.getString(c, "klasse"))
+                                ? KlasseBalans.MOBS_SLEUTELS : KlasseBalans.BAZEN.equals(StringArgumentType.getString(c, "klasse"))
+                                ? KlasseBalans.BAZEN_SLEUTELS : KlasseBalans.RIJDIEREN.equals(StringArgumentType.getString(c, "klasse"))
                                 ? KlasseBalans.RIJDIEREN_SLEUTELS : KlasseBalans.SLEUTELS, sb))
                         .then(Commands.argument("waarde", com.mojang.brigadier.arguments.DoubleArgumentType.doubleArg(0, 100)).executes(c -> {
                             String kl = StringArgumentType.getString(c, "klasse"), sl = StringArgumentType.getString(c, "sleutel");

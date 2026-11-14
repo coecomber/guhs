@@ -25,7 +25,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen;
  *   <li>{@link #VOOR_KLAP} modifiers (blocks, reflects, boss shields);</li>
  *   <li>defender (players): Verdediging, level-relative ({@link #verdedigingFactor}: def / (def + 25 + 15 x attacker level), at
  *   most 60 % off), Elementweerstand%, then Knuffelschild absorbs. Hits of normal mobs (not bosses) first get
- *   {@link Balans#mobSchade()} (config guhs-vadsrijk-balans.toml);</li>
+ *   {@link Balans#mobSchade()} (config guhs-vadsrijk-balans.toml); hits of bosses get {@link Balans#bazenSchade()} on the final
+ *   damage (after Verdediging, before the Knuffelschild);</li>
  *   <li>apply: players lose {@link SpelerData#vads} (0 = {@link Flauwvallen}), mobs {@link VadsrijkMob#krijgSchade}; lifesteal;
  *   a floating number; {@link #NA_KLAP}.</li>
  * </ol>
@@ -189,6 +190,9 @@ public final class Schade {
         }
         if (doel instanceof ServerPlayer dp && k.soort() != Soort.WAAR) {
             n = verdediging(n, Spelers.stats(dp), k.element(), aanvallerLevel(bron, dp));
+        }
+        if (doel instanceof ServerPlayer && bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas) {
+            n *= Balans.bazenSchade();   // 1102-balans: bosses x1.2 on the final damage (helpers already get [mobs] schade)
         }
         Statussen.Actief schild = Statussen.actief(doel, Status.KNUFFELSCHILD);
         if (schild != null && n > 0) {

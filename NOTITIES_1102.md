@@ -25,6 +25,14 @@ geen vloer meer, dan kom je bij de aankomstplek van de hoogste open zone (zone 1
 dan onthouden we de plek voor de dungeondeur. Andersom (Vadsrijk uit) ging al goed: je komt terug bij het survival-portaal
 waar je in ging; nieuw is dat je nu naast dat portaal uitkomt in plaats van erin.
 
+**4. Balans: alle wezens en bazen +25 % leven en +20 % schade.**
+Bovenop 1.10.1. Gewone wezens en elites: `[mobs] schade` 1,69 -> **2,028** en `[mobs] leven` 1,4 -> **1,75**. Alle bazen
+(zone-, kerker- en raidbazen) en baas-hulpjes: nieuwe sectie **`[bazen]`** met `leven = 1.25` (max Vads) en `schade = 1.2`
+(op de eindschade, na Verdediging). Niets telt dubbel: een baas krijgt nooit `[mobs]`, hulpjes slaan via `[mobs] schade`.
+Het configbestand gaat bij de start vanzelf naar `versie = 3` (alleen waarden die nog op de oude standaard staan; met de hand
+gezette blijven), met een regel in de log. **Servercheck na de uitrol:** `/guhs vadsrijk balans toon` ->
+`[mobs] schade=2.03 leven=1.75 versie=3.00` en `[bazen] leven=1.25 schade=1.20`.
+
 Niets gepusht, mod_version niet verhoogd.
 
 ---

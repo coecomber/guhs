@@ -10,7 +10,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Schade;
  *   about linearly instead of quadratically.</li>
  *   <li>Open-world creatures: their per-level HP slope goes 0.30 -> 0.45 ({@link #helling}), times {@code [mobs] leven} (x1.4).</li>
  *   <li>Bosses and boss helpers: only {@link #compensatie} = the player's damage change at that level, so a boss takes as long as
- *   in 1.10.0 (the user: boss loot and Zwamgrot difficulty unchanged).</li>
+ *   in 1.10.0 (the user: boss loot and Zwamgrot difficulty unchanged); 1102: times {@code [bazen] leven} ({@link #baas}).</li>
  * </ul>
  */
 public final class MobBalans {
@@ -30,7 +30,12 @@ public final class MobBalans {
         return Balans.mobLeven() * helling(level);
     }
 
-    /** Boss HP factor: how much the player's damage changed at this level (model Kracht, see Schade#modelHoofd). */
+    /** 1102-balans: the real HP factor of bosses and boss helpers = the compensation x {@code [bazen] leven} (x1.25). */
+    public static double baas(int level) {
+        return compensatie(level) * Balans.bazenLeven();
+    }
+
+    /** Boss HP compensation: how much the player's damage changed at this level (model Kracht, see Schade#modelHoofd). */
     public static double compensatie(int level) {
         return Schade.damageVerandering(level);
     }

@@ -450,10 +450,10 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return level().getGameTime() < introTot;
     }
 
-    /** 1101-balans: bosses never get [mobs] leven / the slope fix, only the compensation for the flatter main stat. */
+    /** 1101-balans: bosses never get [mobs] leven / the slope fix, only the compensation for the flatter main stat (1102: x [bazen] leven). */
     @Override
     protected double levenFactor(int level) {
-        return nl.juiced.guhs.feature.vadsrijk.kern.mob.MobBalans.compensatie(level);
+        return nl.juiced.guhs.feature.vadsrijk.kern.mob.MobBalans.baas(level);
     }
 
     /** Max Vads for this many players in the arena (+75 % per extra player), keeping the HP fraction. */
