@@ -178,4 +178,51 @@ public class VadsrijkBazenGevechtTests {
                 && !Zwamtempel.bijDeur(BazenPlekken.TEMPELDEUR_VOOR.south(12)), "the door area");
         helper.succeed();
     }
+
+    /**
+     * 1.10.2 (live bug 1.10.1): the big temple door did not open on hq11's "click the big door". The ceremony opened wereld's
+     * moving door, which slides shut by itself after 30 s, while the temple kept its own 5-minute "open" window (and kept it for
+     * ever while anyone stood within 12 blocks): a click in that window only said "already open". Now a click (or walking up)
+     * opens the shut door again, the quest step counts, and a shut door never keeps the window open.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void tempeldeurGaatWeerOpen(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        Zwamtempel.deurVergeet(sl);
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        Spelers.zetLevel(p, Zwamtempel.TEMPEL_ALTIJD_LEVEL);          // hq11 is offered from level 18 (its own lv)
+        nl.juiced.guhs.feature.vadsrijk.npc.Quest hq11 = nl.juiced.guhs.feature.vadsrijk.npc.Quests.van(Zwamtempel.QUEST_OPPERZWAM);
+        helper.assertTrue(hq11 != null && hq11.lv() <= Zwamtempel.TEMPEL_ALTIJD_LEVEL, "hq11 never needs more than the always-open level");
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.neemAan(p, hq11);
+        BlockPos voor = BazenPlekken.TEMPELDEUR_VOOR;
+        p.snapTo(voor.getX() + 0.5, voor.getY(), voor.getZ() + 40.5);   // (far from the door: no scene for the mock player)
+        long nu = sl.getGameTime();
+        // 1. someone opened it earlier (the ceremony), then wereld's door slid shut by itself after 30 s
+        Zwamtempel.ceremonie(sl, nu);
+        helper.assertTrue(Zwamtempel.deurStaatOpen(), "the ceremony opens the door");
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.sluit(sl, "zwamtempel");
+        helper.assertTrue(!Zwamtempel.deurStaatOpen() && Zwamtempel.deurOpenTot() > 0, "the bug state: shut, but the window still open");
+        // 2. the player clicks the big door within the window: it must open again and the quest step must count
+        helper.assertTrue(Zwamtempel.klikDeurIn(sl, p, BazenPlekken.TEMPELDEUR_MIN.offset(6, 2, 0)), "the click is handled");
+        helper.assertTrue(Zwamtempel.deurStaatOpen(), "a click on the shut door opens it again");
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.npc.Questlog.doelKlaar(p, hq11, 0), "hq11 step 1 (click the big door) counts");
+        // 3. shut again; the player walks up (within 6 blocks): the door opens again without a click
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.sluit(sl, "zwamtempel");
+        p.snapTo(voor.getX() + 0.5, voor.getY(), voor.getZ() + 3.5);
+        Zwamtempel.deur(sl, nu + 20 * 60);
+        helper.assertTrue(Zwamtempel.deurStaatOpen(), "walking up to the shut door opens it again");
+        // 4. the window is over, the door shut by itself, someone waits 10 blocks away: the window must end (no stuck state)
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.sluit(sl, "zwamtempel");
+        p.snapTo(voor.getX() + 0.5, voor.getY(), voor.getZ() + 10.5);
+        Zwamtempel.deur(sl, Zwamtempel.deurOpenTot() + 1);
+        helper.assertTrue(Zwamtempel.deurOpenTot() < 0, "a shut door never keeps the open window alive");
+        // 5. and then a click is the full ceremony again
+        p.snapTo(voor.getX() + 0.5, voor.getY(), voor.getZ() + 40.5);
+        Zwamtempel.klikDeurIn(sl, p, BazenPlekken.TEMPELDEUR_MIN.offset(6, 2, 0));
+        helper.assertTrue(Zwamtempel.deurStaatOpen() && Zwamtempel.deurOpenTot() > 0, "a later click opens it with the ceremony");
+        Zwamtempel.deurVergeet(sl);
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.wisAlles(p);
+        helper.succeed();
+    }
 }

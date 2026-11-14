@@ -93,7 +93,15 @@ public final class Zwamtempel {
      * and nothing opens (also no vanilla door/gate/trapdoor there); allowed = the ceremony. Returns true when handled.
      */
     public static boolean klikDeur(ServerPlayer p, BlockPos pos) {
-        if (!(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl) || !bijDeur(pos)) {
+        if (!(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl)) {
+            return false;
+        }
+        return klikDeurIn(sl, p, pos);
+    }
+
+    /** {@link #klikDeur} without the "is this the Vadsrijk" check (public for the gametests). */
+    public static boolean klikDeurIn(ServerLevel sl, ServerPlayer p, BlockPos pos) {
+        if (!bijDeur(pos)) {
             return false;
         }
         String waarom = waaromDicht(p);
@@ -116,9 +124,56 @@ public final class Zwamtempel {
         if (deurOpenTot < 0 && deurAnim < 0) {
             ceremonie(sl, sl.getGameTime());
         } else {
+            if (!deurStaatOpen()) {
+                heropen(sl, sl.getGameTime(), List.of(p));   // 1.10.2: wereld's door slid shut by itself after 30 s: open it again
+            }
             meldDeurOpen(p);   // (already open: the quest step "click the big door" still counts)
         }
         return true;
+    }
+
+    /**
+     * 1.10.2: is the big door really open (or opening) right now? wereld's moving door slides shut by itself
+     * {@link nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren#OPEN_TICKS 30 s} after it opened, while {@link #deurOpenTot} kept
+     * saying "open" for 5 minutes (and for ever while anyone stood within 12 blocks): a click then only said "already open" and
+     * the door stayed shut (live bug 1.10.1: hq11 "click the big door"). Without wereld's door our own fallback state counts.
+     */
+    public static boolean deurStaatOpen() {
+        if (deurAnim >= 0) {
+            return true;
+        }
+        try {
+            if (nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.deur("zwamtempel") != null) {
+                return nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.gaatOpen("zwamtempel");
+            }
+        } catch (RuntimeException | LinkageError e) {
+            // (no wereld doors)
+        }
+        return deurOpenTot > 0;
+    }
+
+    /** 1.10.2: the door shut by itself within the open window: open it again without the scene (they saw it already). */
+    static void heropen(ServerLevel sl, long nu, List<ServerPlayer> wie) {
+        if (!Adapters.deurOpen(sl, "zwamtempel") && deurAnim < 0 && deurOpenTot < 0) {
+            deurAnim = 0;
+        }
+        deurOpenTot = nu + DEUR_OPEN_TICKS;
+        for (ServerPlayer p : wie) {
+            p.sendOverlayMessage(Component.translatable("vadsrijk.bazen.tempel.open").withStyle(ChatFormatting.LIGHT_PURPLE));
+            meldDeurOpen(p);
+        }
+    }
+
+    /** Tests: only the door state back to shut (no blocks touched outside wereld's door state). */
+    public static void deurVergeet(ServerLevel sl) {
+        deurOpenTot = -1;
+        deurAnim = -1;
+        Adapters.deurDicht(sl, "zwamtempel");
+    }
+
+    /** Tests: the end of the open window (-1 = shut). */
+    public static long deurOpenTot() {
+        return deurOpenTot;
     }
 
     /** The line below the gate: what is needed (gold so it reads as advice, not as an error). */
@@ -248,7 +303,8 @@ public final class Zwamtempel {
 
     // ---- the door ceremony --------------------------------------------------------------------------------------------------
 
-    private static void deur(ServerLevel sl, long nu) {
+    /** The door part of the tick (public for the gametests). */
+    public static void deur(ServerLevel sl, long nu) {
         Vec3 voor = Vec3.atBottomCenterOf(BazenPlekken.TEMPELDEUR_VOOR);
         if (deurAnim >= 0) {
             deurAnim += 5;
@@ -261,9 +317,17 @@ public final class Zwamtempel {
             return;
         }
         if (deurOpenTot > 0) {
+            boolean open = deurStaatOpen();
+            if (!open) {   // 1.10.2: wereld's door slid shut by itself: whoever may enter and walks up opens it again
+                List<ServerPlayer> mag = sl.players().stream().filter(p -> p.position().distanceToSqr(voor) <= 6 * 6 && MAG_NAAR_BINNEN.test(p)).toList();
+                if (!mag.isEmpty()) {
+                    heropen(sl, nu, mag);
+                    return;
+                }
+            }
             if (nu > deurOpenTot) {
                 boolean dichtbij = sl.players().stream().anyMatch(p -> p.position().distanceToSqr(voor) < 12 * 12);
-                if (!dichtbij) {
+                if (!dichtbij || !open) {   // 1.10.2: an already shut door never keeps the window "open"
                     deurOpenTot = -1;
                     if (!Adapters.deurDicht(sl, "zwamtempel")) {
                         Herstel.terug(sl, H_DEUR);

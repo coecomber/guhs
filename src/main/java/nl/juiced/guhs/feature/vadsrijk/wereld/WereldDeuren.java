@@ -147,6 +147,12 @@ public final class WereldDeuren {
         return s != null && s.stap > 0;
     }
 
+    /** 1.10.2: is this door open or opening (not shut, not sliding shut)? It slides shut by itself {@link #OPEN_TICKS} after opening. */
+    public static boolean gaatOpen(String id) {
+        Staat s = STAAT.get(id);
+        return s != null && s.doel > 0;
+    }
+
     /** Which door is this block part of (or null)? */
     @Nullable
     public static WereldPlekken.Deur bij(BlockPos p) {
