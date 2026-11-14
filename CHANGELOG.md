@@ -17,6 +17,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **Quest tracker:** the mount return quests (Knuffelhert, Guhwolf, Wolkenschaapje) are no longer added to the tracker by themselves (they could not be unfollowed); pin them in the questlog like any side quest.
 - **Fix: the Spiegelburcht's front door never opened** (nothing ever unlocked it). It now opens for anyone who has taken Vrouwe Spiegelzucht's quest (z2_hq11) or finished the castle story; the locked line now points to Prisma.
 - **Boss arena boards and dungeon door signs are back:** the respawn board in front of every boss arena ("Back in m:ss" / "is awake") and the name boards over the dungeon doors never appeared after most server restarts (their timer checked the saved game time while being run on the server's own tick counter, which restarts at 0). They now appear reliably, survive chunk unloads and never double up.
+- **No more double bosses:** after a boss arena had been unloaded and loaded again, the boss forgot its arena: beaten, it did not report the kill, so a fresh boss spawned at once next to the cheered-up one (no respawn time). The arena now hands the reloaded boss its arena again, a defeat always starts the respawn timer, and the arena never spawns while a beaten copy is still there.
 
 ## 1.10.2 — Minecraft 26.1.2
 

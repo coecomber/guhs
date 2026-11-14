@@ -96,7 +96,8 @@ public final class Arenas {
     /** The boss of this arena was beaten with these players there (helpers + everyone inside). */
     static void verslagen(Arena a, java.util.Collection<UUID> erbij) {
         Toestand t = ALLE.get(a.id());
-        if (t != null && t.baas != null) {
+        // 1.10.3: also when the arena did not know this boss yet (a reloaded copy), unless a respawn is already pending
+        if (t != null && (t.baas != null || t.respawnOp == -1)) {
             t.baas = null;
             t.respawnOp = -2;   // set on the next tick (we may not have the level here)
             t.erbij.clear();
@@ -146,6 +147,11 @@ public final class Arenas {
     @Nullable
     private static VadsrijkBaas zoek(ServerLevel sl, Toestand t) {
         if (t.baas != null && sl.getEntity(t.baas) instanceof VadsrijkBaas b && !b.isRemoved() && !b.geplofd()) {
+            // 1.10.3 (live doubles): after a chunk reload this is a NEW object with the same uuid and no arena; without it the boss
+            // never reported its defeat, and the arena spawned a fresh one at once next to the cheered-up one
+            if (b.arena() != t.arena) {
+                b.zetArena(t.arena);
+            }
             return b;
         }
         // U-DUBBEL: the boss with this arena's unique key wherever it flew to (a Kruinroofvogel leaves the box below)
@@ -173,6 +179,20 @@ public final class Arenas {
         return null;
     }
 
+    /** 1.10.3: is a beaten (geplofd, not yet vanished) boss of this arena still in the level? */
+    private static boolean geplofdeKopie(ServerLevel sl, Toestand t) {
+        if (t.baas != null && sl.getEntity(t.baas) instanceof VadsrijkBaas b && !b.isRemoved() && b.geplofd()) {
+            return true;
+        }
+        if (nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.zoek(sl, sleutel(t.arena.id())) instanceof VadsrijkBaas b && b.geplofd()) {
+            return true;
+        }
+        BlockPos c = t.arena.centrum();
+        int r = t.arena.straal() + 8;
+        return !sl.getEntitiesOfClass(VadsrijkBaas.class, new AABB(c).inflate(r, 24, r),
+                x -> !x.isRemoved() && x.geplofd() && t.arena.id().equals(x.arenaId)).isEmpty();
+    }
+
     public static void tick(MinecraftServer server) {
         ServerLevel sl = Vadsrijk.level(server);
         if (sl == null) {
@@ -189,6 +209,16 @@ public final class Arenas {
         Toestand t = ALLE.get(arenaId);
         if (t != null) {
             tickArena(sl.getServer(), sl, t, nu);
+        }
+    }
+
+    /** Tests: no known boss, this respawn time (-1 = the boss is due), as if already loaded from {@link ArenaData}. */
+    static void testStaat(String arenaId, long respawnOp) {
+        Toestand t = ALLE.get(arenaId);
+        if (t != null) {
+            t.baas = null;
+            t.respawnOp = respawnOp;
+            t.geladen = true;
         }
     }
 
@@ -242,7 +272,15 @@ public final class Arenas {
             t.respawnOp = nu + NIEUWKOMER_SECONDEN * 20L;
             data.zet(a.id(), t.respawnOp);
         }
-        if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
+        // 1.10.3: a beaten (cheered-up) copy of this arena's boss is still hopping around: never a fresh one next to it. A kill that
+        // was not reported (respawn still "alive") starts the respawn time now.
+        if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp) && geplofdeKopie(sl, t)) {
+            if (t.respawnOp < 0) {
+                t.baas = null;
+                t.respawnOp = nu + a.respawnSeconden() * 20L;
+                data.zet(a.id(), t.respawnOp);
+            }
+        } else if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
             b = t.maker.apply(sl);
             if (b != null) {
                 b.zetArena(a);
