@@ -11,6 +11,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **Verkenningsboek:** every row is numbered, the same numbers as the Geheimen page on guhs.nl.
 - **Bosses +50 % HP** (config `[bazen] leven` 1.25 -> 1.9, migrated only when still at the default; balans config versie 4) and a server-log line per boss defeat (time, HP, players, damage per helper).
 - **Rarer top loot:** luck now lifts rarity weights only up to Episch (bosses: Guhddelijk 11.5 % -> 1.6 %, Legendarisch 15 % -> 6.4 % per random item; elites 6.9 % -> 1.25 %). Named first-kill rewards unchanged.
+- **No useless main stats on weapons:** bonus rolls on a weapon skip the other classes' main stats (bow: no Kracht/Wijsheid, staff: no Kracht/Behendigheid, melee: no Behendigheid/Wijsheid); also for the smith's reroll and Maatwerk's random bonuses. Existing items are unchanged.
 - **Druipgrotten:** fewer tunnel mobs (a group every 21 instead of 15 blocks, Knaag groups of 2), slower respawn (45-65 s, knots 60 s), area cap 80 -> 55: the Mopje escort is no longer the hardest part of the zone-1 story.
 - **Quest tracker:** the mount return quests (Knuffelhert, Guhwolf, Wolkenschaapje) are no longer added to the tracker by themselves (they could not be unfollowed); pin them in the questlog like any side quest.
 - **Fix: the Spiegelburcht's front door never opened** (nothing ever unlocked it). It now opens for anyone who has taken Vrouwe Spiegelzucht's quest (z2_hq11) or finished the castle story; the locked line now points to Prisma.

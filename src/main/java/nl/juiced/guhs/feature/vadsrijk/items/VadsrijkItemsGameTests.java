@@ -322,4 +322,21 @@ public class VadsrijkItemsGameTests {
         }
         helper.succeed();
     }
+
+    /** 1.10.3: weapons never roll another class's main stat (bow: no Kracht/Wijsheid, staff: no Kracht/Behendigheid, sword: no Behendigheid/Wijsheid). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void wapenGeenNuttelozeStats(GameTestHelper helper) {
+        RandomSource r = RandomSource.create(42);
+        String[][] gevallen = {{"pluisboog", "KRACHT", "WIJSHEID"}, {"vlammenstaf", "KRACHT", "BEHENDIGHEID"}, {"kussenzwaard", "BEHENDIGHEID", "WIJSHEID"}};
+        for (String[] g : gevallen) {
+            nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType t = nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes.van(g[0]);
+            helper.assertTrue(t != null, "base type " + g[0]);
+            for (int i = 0; i < 300; i++) {
+                for (Bonus b : Bonussen.rol(5, 30, Zeldzaamheid.GUHDDELIJK, r, t)) {
+                    helper.assertTrue(!b.stat().name().equals(g[1]) && !b.stat().name().equals(g[2]), g[0] + " rolled " + b.stat());
+                }
+            }
+        }
+        helper.succeed();
+    }
 }
