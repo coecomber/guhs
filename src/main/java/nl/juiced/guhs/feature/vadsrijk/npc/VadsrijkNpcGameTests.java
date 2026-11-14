@@ -128,7 +128,7 @@ public class VadsrijkNpcGameTests {
         Questlog.wisAlles(p);
         nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 1);
         java.util.List<Quest> hoofd = Quests.alle().values().stream().filter(Quest::hoofd).filter(q -> nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()) == 1).toList();   // (zone 1; zones 2 and 3 have their own tests; K-INT)
-        helper.assertTrue(hoofd.size() == 13, "13 main quests (12 + the element quiz): " + hoofd.size());
+        helper.assertTrue(hoofd.size() == 14, "14 main quests (12 + the element quiz + 1.10.1 Opruimen): " + hoofd.size());
         int stappen = 0;
         for (Quest q : hoofd) {
             QuestStap s = QuestStap.hoofdlijn(p);
@@ -180,7 +180,7 @@ public class VadsrijkNpcGameTests {
         }
         QuestStap na = QuestStap.hoofdlijn(p);   // (integration: after zone 1 the main line goes on in zone 2)
         helper.assertTrue((na == null || na.quest().startsWith("z2_")) && Questlog.klaar(p, "hq12_schaduw"), "the zone-1 main story is done");
-        helper.assertTrue(QuestStap.hoofdGedaan(p).size() == 13, "13 steps of history");
+        helper.assertTrue(QuestStap.hoofdGedaan(p).size() == 14, "14 steps of history (1.10.1: + Opruimen)");
         helper.assertTrue(stappen > 30, "walked " + stappen + " steps");
         Questlog.wisAlles(p);
         helper.succeed();

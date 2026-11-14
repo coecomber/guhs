@@ -7091,6 +7091,20 @@
       "prefixes": [
         "vadsrijk.kleding.garderobe"
       ]
+    },
+    {
+      "id": "c470_vr_1101_opruimen",
+      "title": "1.10.1 (1101-items): Opruimen: salvage, lock, 'alle slechtere', the tutorial step hq03c",
+      "prefixes": [
+        "vadsrijk.economie.opruim.",
+        "item.guhs.vr_item_smeed",
+        "vadsrijk.economie.winkel.kampwinkel",
+        "vadsrijk.economie.winkel.verkoop_slechter",
+        "vadsrijk.economie.winkel.ontmantel_slechter",
+        "vadsrijk.npc.q.hq03c_opruimen.",
+        "vadsrijk.npc.tip.opruimen",
+        "vadsrijk.npc.gids.opruimen."
+      ]
     }
   ]
 }

@@ -67,6 +67,7 @@ public final class EconomieClient {
         });
         modBus.addListener((RegisterGuiLayersEvent e) -> e.registerAbove(VanillaGuiLayers.HOTBAR, Guhs.id("vr_economie_munten"), EconomieClient::tekenMunten));
         RijdierClient.init(modBus);
+        OpruimClient.init();   // 1.10.1
         NeoForge.EVENT_BUS.addListener((ClientPlayerNetworkEvent.LoggingOut e) -> {
             munten = -1;
             popTot = 0;
@@ -97,6 +98,7 @@ public final class EconomieClient {
             case EcoPayloads.HANDEL -> new HandelScherm(d, items);
             case EcoPayloads.STAL -> new RijdierScherm(d, items);
             case EcoPayloads.STARTER -> new StarterScherm(d, items);
+            case EcoPayloads.OPRUIM -> new OpruimScherm(d, items);   // 1.10.1
             default -> new WinkelScherm(d, items);
         };
     }

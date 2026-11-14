@@ -170,6 +170,12 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         hoverTekst = null;
         super.extractRenderState(g, mouseX, mouseY, partialTick);
         inhoud(g, mouseX, mouseY, partialTick);
+        if (vraag != null) {   // 1.10.1: a confirm window on top: only its two buttons work
+            knoppen.clear();
+            hoverItem = null;
+            hoverTekst = null;
+            tekenVraag(g, mouseX, mouseY);
+        }
         String m = data.getStringOr("melding", "");
         if (!m.isEmpty()) {
             Component c = Component.translatable(m, data.getStringOr("meldingArg", ""));
@@ -182,6 +188,60 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         } else if (hoverTekst != null) {
             g.setComponentTooltipForNextFrame(font, hoverTekst, mouseX, mouseY);
         }
+    }
+
+    // ---- 1.10.1: a confirm window ("Weet je het zeker?") ------------------------------------------------------------------------
+    @Nullable
+    private List<Component> vraag;
+    @Nullable
+    private Runnable vraagJa;
+
+    /** Asks first: the lines, then Ja (runs {@code ja}) / Nee. */
+    protected void vraag(List<Component> regels, Runnable ja) {
+        vraag = regels;
+        vraagJa = ja;
+    }
+
+    private void tekenVraag(GuiGraphicsExtractor g, int mx, int my) {
+        int bw = Math.min(w - 20, 260), bh = 30 + vraag.size() * 11 + 22;
+        int x = left + (w - bw) / 2, y = top + (h - bh) / 2;
+        g.fill(left, top, left + w, top + h, 0x90401838);
+        g.fill(x - 2, y - 2, x + bw + 2, y + bh + 2, RAND);
+        g.fill(x, y, x + bw, y + bh, PANEEL);
+        int ty = y + 8;
+        for (Component c : vraag) {
+            g.centeredText(font, c, x + bw / 2, ty, TEKST);
+            ty += 11;
+        }
+        int ky = y + bh - 24;
+        Runnable ja = vraagJa;
+        knop(g, mx, my, x + bw / 2 - 64, ky, 60, 16, Component.translatable("vadsrijk.economie.opruim.knop.ja"), true, () -> {
+            vraag = null;
+            vraagJa = null;
+            if (ja != null) {
+                ja.run();
+            }
+        });
+        knop(g, mx, my, x + bw / 2 + 4, ky, 60, 16, Component.translatable("vadsrijk.economie.opruim.knop.nee"), true, () -> {
+            vraag = null;
+            vraagJa = null;
+        });
+    }
+
+    /** The confirm lines for an "alle slechtere" button from the server's summary ({@code Opruimen.samenvatting}). */
+    protected List<Component> vraagSlechter(CompoundTag sam, boolean verkopen) {
+        int[] per = sam.getIntArray("per").orElse(new int[6]);
+        int blauw = 0;
+        for (int i = 2; i < per.length; i++) {
+            blauw += per[i];
+        }
+        String k = "vadsrijk.economie.opruim.";
+        List<Component> l = new ArrayList<>();
+        l.add(Component.translatable(k + (verkopen ? "vraag.verkoop" : "vraag.ontmantel"), sam.getIntOr("aantal", 0)).withStyle(ChatFormatting.BOLD));
+        l.add(Component.translatable(k + "vraag.per", per.length > 0 ? per[0] : 0, per.length > 1 ? per[1] : 0, blauw));
+        l.add(verkopen ? Component.translatable(k + "vraag.krijg_munten", nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(sam.getLongOr("waarde", 0)))
+                : Component.translatable(k + "vraag.krijg", sam.getIntOr("stofjes", 0), sam.getIntOr("splinters", 0), sam.getIntOr("kristallen", 0)));
+        return l;
     }
 
     /** Draw the screen's own content here (after the widgets). */

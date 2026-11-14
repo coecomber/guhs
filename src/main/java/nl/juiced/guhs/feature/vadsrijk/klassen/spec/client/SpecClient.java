@@ -58,33 +58,7 @@ public final class SpecClient {
     /** What the player wears in the slot of {@code u} (null = nothing / not comparable); {@code leeg[0]} = the slot is empty. */
     @Nullable
     static Uitrusting gedragen(Player p, Uitrusting u, BasisType bt, boolean[] leeg, @Nullable String klasse) {
-        Slot slot = bt.slot();
-        Uitrusting oud;
-        if (slot == Slot.WAPEN) {
-            oud = Rollen.van(p.getMainHandItem());
-            if (oud == null || oud.basisType() == null || !java.util.Objects.equals(Spelers.wapenKlasse(oud.basisType()), Spelers.wapenKlasse(bt))) {
-                return null;   // (another class's weapon: no fair comparison)
-            }
-        } else if (slot.vanilla != null) {
-            oud = Rollen.van(p.getItemBySlot(slot.vanilla));
-        } else if (slot == Slot.RING || slot == Slot.RING2) {
-            Uitrusting a = sieraad(Slot.RING), b = sieraad(Slot.RING2);
-            if (u.equals(a) || u.equals(b)) {
-                return null;
-            }
-            if (a == null || b == null) {
-                oud = null;
-            } else {
-                oud = GearVergelijk.vergelijk(a, b, klasse).score() < 0 ? a : b;   // the weaker ring is the one you'd swap
-            }
-        } else {
-            oud = sieraad(slot);
-        }
-        if (oud == null) {
-            leeg[0] = true;
-            return null;
-        }
-        return oud;
+        return GearVergelijk.gedragen(u, p.getMainHandItem(), p::getItemBySlot, SpecClient::sieraad, klasse, leeg);   // 1.10.1: shared with the server
     }
 
     static void tooltip(Uitrusting u, Consumer<Component> t) {
@@ -120,7 +94,15 @@ public final class SpecClient {
                     .append(naam.withStyle(ChatFormatting.GRAY)));
         }
         String oordeel = uit.oordeel() > 0 ? "beter" : uit.oordeel() < 0 ? "slechter" : "gelijk";
-        t.accept(Component.translatable("vadsrijk.klassen.vergelijk." + oordeel)
-                .withStyle(uit.oordeel() > 0 ? ChatFormatting.GREEN : uit.oordeel() < 0 ? ChatFormatting.RED : ChatFormatting.YELLOW, ChatFormatting.BOLD));
+        MutableComponent regel = Component.translatable("vadsrijk.klassen.vergelijk." + oordeel)
+                .withStyle(uit.oordeel() > 0 ? ChatFormatting.GREEN : uit.oordeel() < 0 ? ChatFormatting.RED : ChatFormatting.YELLOW, ChatFormatting.BOLD);
+        if (uit.oordeel() != 0 && !uit.regels().isEmpty() && !leeg[0]) {   // 1.10.1: the main difference right on the verdict line
+            GearVergelijk.Verschil v = uit.regels().get(0);
+            String getal = v.stat() != null && v.stat().procent ? String.format(Locale.ROOT, "%+.0f%%", v.verschil())
+                    : String.format(Locale.ROOT, "%+.0f", v.verschil());
+            regel.append(Component.literal(" (" + getal + " ").withStyle(ChatFormatting.GRAY).append(v.stat() == null
+                    ? Component.translatable("vadsrijk.klassen.vergelijk.schade") : Component.translatable(v.stat().key())).append(")"));
+        }
+        t.accept(regel);
     }
 }

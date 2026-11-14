@@ -189,8 +189,8 @@ public final class QuestMotor {
                 } else if (dienst(eigenRol)) {   // (a shop/service NPC keeps its service choice during a quest)
                     open(p, npc, regels, new Gesprek(id, npc.getId(), "", eigenRol, ""),
                             metExtra(p, id, new Praat.Optie(ROL, "vadsrijk.npc.optie.rol." + eigenRol)));
-                } else {
-                    open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""));
+                } else {   // (1.10.1: plus this NPC's extra choices, e.g. the camp shop/smithy during the step "Opruimen")
+                    open(p, npc, regels, new Gesprek(id, npc.getId(), "", "", ""), metExtra(p, id));
                 }
                 return;
             }

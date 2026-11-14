@@ -38,6 +38,50 @@ public final class GearVergelijk {
     private GearVergelijk() {
     }
 
+    /**
+     * 1.10.1 (opruimen): what the player wears in the slot of {@code u}, the same on both sides (the tooltip on the client, the
+     * "alle slechtere" selection on the server). Weapons: the main-hand weapon of the same weapon class (another class: null, no
+     * fair comparison); armour: the worn piece; jewellery: the worn one (rings: the weaker of the two, when both are worn).
+     * Returns null when nothing comparable is worn; {@code leeg[0]} = the slot is empty.
+     *
+     * @param hand    the main-hand stack
+     * @param harnas  the worn stack per vanilla armour slot
+     * @param sieraad the worn piece per virtual slot (kern.Sieraden), or null
+     * @param klasse  the class for the main-stat weight (rings: which one is weaker)
+     */
+    @Nullable
+    public static Uitrusting gedragen(Uitrusting u, net.minecraft.world.item.ItemStack hand,
+            java.util.function.Function<net.minecraft.world.entity.EquipmentSlot, net.minecraft.world.item.ItemStack> harnas,
+            java.util.function.Function<Slot, Uitrusting> sieraad, @Nullable String klasse, boolean[] leeg) {
+        nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType bt = u.basisType();
+        if (bt == null) {
+            return null;
+        }
+        Slot slot = bt.slot();
+        Uitrusting oud;
+        if (slot == Slot.WAPEN) {
+            oud = Rollen.van(hand);
+            if (oud == null || oud.basisType() == null || !java.util.Objects.equals(nl.juiced.guhs.feature.vadsrijk.kern.Spelers.wapenKlasse(oud.basisType()),
+                    nl.juiced.guhs.feature.vadsrijk.kern.Spelers.wapenKlasse(bt))) {
+                return null;   // (another class's weapon: no fair comparison)
+            }
+        } else if (slot.vanilla != null) {
+            oud = Rollen.van(harnas.apply(slot.vanilla));
+        } else if (slot == Slot.RING || slot == Slot.RING2) {
+            Uitrusting a = sieraad.apply(Slot.RING), b = sieraad.apply(Slot.RING2);
+            if (u.equals(a) || u.equals(b)) {
+                return null;
+            }
+            oud = a == null || b == null ? null : vergelijk(a, b, klasse).score() < 0 ? a : b;   // the weaker ring is the one you'd swap
+        } else {
+            oud = sieraad.apply(slot);
+        }
+        if (oud == null) {
+            leeg[0] = true;
+        }
+        return oud;
+    }
+
     /** The main stat of a class (Kracht / Behendigheid / Wijsheid). */
     public static Stat hoofdstat(@Nullable String klasse) {
         return Klassen.JAGER.equals(klasse) ? Stat.BEHENDIGHEID : Klassen.MAGIER.equals(klasse) ? Stat.WIJSHEID : Stat.KRACHT;

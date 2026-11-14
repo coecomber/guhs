@@ -174,6 +174,10 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
                 if (d.doel().equals("spion:ontmaskerd")) {
                     waar = npcPlek("akim_kaasguh");
                     pos = npcPos(p, "akim_kaasguh");
+                } else if (d.doel().startsWith("opruimen:")) {   // 1.10.1: sell at the camp shop (kok), salvage at the camp smithy (sergeant)
+                    String wie = d.doel().equals("opruimen:verkocht") ? "kok" : "rekruteerder";
+                    waar = npcPlek(wie);
+                    pos = npcPos(p, wie);
                 } else if (d.doel().startsWith("quiz:")) {   // (the element quiz: at the quest giver)
                     waar = npcPlek(q.gever());
                     pos = npcPos(p, q.gever());

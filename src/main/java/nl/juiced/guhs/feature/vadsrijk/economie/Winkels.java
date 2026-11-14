@@ -31,6 +31,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
  */
 public final class Winkels {
     public static final String DRANKJES = "drankjes", UITRUSTING = "uitrusting", SMIDWAREN = "smidwaren", COSMETICA = "cosmetica", ALGEMEEN = "algemeen";
+    /** 1.10.1: Kok Knapperkorst's little camp shop on Knuffelkamp (the tutorial step "Opruimen" sells an old piece here). */
+    public static final String KAMPWINKEL = "kampwinkel";
     /** The level tiers of the basic gear. */
     public static final int[] NIVEAUS = {1, 5, 10, 15};
 
@@ -105,6 +107,7 @@ public final class Winkels {
         zet(new Winkel(UITRUSTING, true, gear));
         zet(new Winkel(COSMETICA, false, cos));
         zet(new Winkel(ALGEMEEN, true, alg));
+        zet(new Winkel(KAMPWINKEL, true, List.of(drank.get(0), smid.get(0))));   // 1.10.1 (same wares and prices as the town shops)
     }
 
     /**
@@ -214,10 +217,13 @@ public final class Winkels {
                     t.putLong("waarde", v);
                     t.putInt("item", items.size());
                     items.add(s.copy());
+                    t.putBoolean("slot_op", Opruimen.vergrendeld(s));   // 1.10.1
+                    t.putBoolean("hand", i == p.getInventory().getSelectedSlot() && Rollen.van(s) != null);
                     tas.add(t);
                 }
             }
             d.put("tas", tas);
+            d.put("slechter", Opruimen.samenvatting(p, Opruimen.slechtere(p)));   // 1.10.1: the confirm window's counts
         }
         d.putInt("post", Post.aantal(p));
         EcoPayloads.open(p, EcoPayloads.WINKEL, w.id(), d, items);
@@ -232,6 +238,8 @@ public final class Winkels {
             case "koop" -> koop(p, w, a.getStringOr("waar", ""), a.getIntOr("aantal", 1), a.getIntOr("level", 1));
             case "verkoop" -> verkoop(p, w, a.getIntOr("slot", -1));
             case "verkoopgrijs" -> verkoopGrijs(p, w);
+            case "verkoopslechter" -> w.koopt() ? Opruimen.verkoopSlechtere(p) : new String[] {"", ""};   // 1.10.1
+            case "ontmantelslechter" -> w.koopt() ? Opruimen.ontmantelSlechtere(p) : new String[] {"", ""};
             default -> new String[] {"", ""};
         };
         stuur(p, w, uit[0], uit[1]);
@@ -321,15 +329,7 @@ public final class Winkels {
         if (!w.koopt() || slot < 0 || slot >= EcoUtil.TAS) {
             return new String[] {"", ""};
         }
-        ItemStack s = p.getInventory().getItem(slot);
-        long v = Waarde.verkoop(s);
-        if (v <= 0) {
-            return new String[] {"", ""};
-        }
-        p.getInventory().setItem(slot, ItemStack.EMPTY);
-        Spelers.geefMunten(p, v);
-        EcoUtil.geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f, 1.8f);
-        return new String[] {"vadsrijk.economie.winkel.verkocht", Spelers.munten(v)};
+        return Opruimen.verkoop(p, slot);   // 1.10.1: refuses locked / worn pieces, tells the quest step "Opruimen"
     }
 
     /** Sells every plain (gewoon, grey) piece without stars in the bag at once. */
@@ -341,7 +341,7 @@ public final class Winkels {
         for (int i = 0; i < EcoUtil.TAS; i++) {
             ItemStack s = p.getInventory().getItem(i);
             Uitrusting u = Rollen.van(s);
-            if (u != null && u.zeldzaamheid() == Zeldzaamheid.GEWOON && u.sterren() == 0 && !u.verpluisd()) {
+            if (u != null && u.zeldzaamheid() == Zeldzaamheid.GEWOON && u.sterren() == 0 && !u.verpluisd() && Opruimen.magWeg(p, i).isEmpty()) {
                 totaal += Waarde.gear(u);
                 p.getInventory().setItem(i, ItemStack.EMPTY);
             }
@@ -351,6 +351,7 @@ public final class Winkels {
         }
         Spelers.geefMunten(p, totaal);
         EcoUtil.geluid(p, SoundEvents.AMETHYST_BLOCK_CHIME, 0.8f, 1.8f);
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.meld(p, "opruimen", "verkocht");   // 1.10.1
         return new String[] {"vadsrijk.economie.winkel.verkocht", Spelers.munten(totaal)};
     }
 }
