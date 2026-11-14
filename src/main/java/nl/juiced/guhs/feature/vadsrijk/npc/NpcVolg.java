@@ -64,15 +64,11 @@ public final class NpcVolg {
         if (k != null) {
             regels.add(regel(QuestStap.van(p, k)));
         }
-        // (fix round 2, g-werver) a mount return quest (Knuffelhert / Guhwolf): shown once it is available, until it is handed in
-        Quest r = RijdierQuests.trackerQuest(p);
-        if (r != null) {
-            regels.add(regel(QuestStap.van(p, r)));
-        }
+        // 1.10.3: the mount return quests (Knuffelhert / Guhwolf / Wolkenschaapje) are no longer put in the tracker by themselves
+        // (they could not be unfollowed and popped up at a level): like any side quest they show only when pinned in the questlog
         String pin = pin(p);
         Quest q = pin.isEmpty() ? null : Quests.van(pin);
-        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))
-                && (r == null || !r.id().equals(q.id()))) {
+        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))) {
             regels.add(regel(QuestStap.van(p, q)));
         }
         for (var f : EXTRA) {   // X-RAID

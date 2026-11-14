@@ -218,6 +218,27 @@ public final class MenuServer {
             l.add(c);
         }
         t.put("plekken", l);
+        t.putInt("x", k.x());   // 1.10.3: your position, the area labels, your campfires
+        t.putInt("z", k.z());
+        ListTag n = new ListTag();
+        for (NpcPayloads.ReisNaam rn : k.namen()) {
+            CompoundTag c = new CompoundTag();
+            c.putString("g", rn.gebied());
+            c.putInt("zone", rn.zone());
+            c.putInt("x", rn.x());
+            c.putInt("z", rn.z());
+            n.add(c);
+        }
+        t.put("namen", n);
+        ListTag v = new ListTag();
+        for (NpcPayloads.ReisVuur rv : k.vuren()) {
+            CompoundTag c = new CompoundTag();
+            c.putInt("x", rv.x());
+            c.putInt("z", rv.z());
+            c.putInt("zone", rv.zone());
+            v.add(c);
+        }
+        t.put("vuren", v);
         return t;
     }
 
@@ -229,7 +250,19 @@ public final class MenuServer {
             CompoundTag c = pl.getCompoundOrEmpty(i);
             l.add(new NpcPayloads.ReisPlek(c.getStringOr("id", ""), c.getIntOr("staat", 0), c.getStringOr("reden", ""), c.getIntOr("arg", 0)));
         }
-        return new NpcPayloads.Reiskaart(t.getStringOr("hier", ""), l);
+        List<NpcPayloads.ReisNaam> n = new ArrayList<>();
+        ListTag nl = t.getListOrEmpty("namen");
+        for (int i = 0; i < nl.size(); i++) {
+            CompoundTag c = nl.getCompoundOrEmpty(i);
+            n.add(new NpcPayloads.ReisNaam(c.getStringOr("g", ""), c.getIntOr("zone", 0), c.getIntOr("x", 0), c.getIntOr("z", 0)));
+        }
+        List<NpcPayloads.ReisVuur> v = new ArrayList<>();
+        ListTag vl = t.getListOrEmpty("vuren");
+        for (int i = 0; i < vl.size(); i++) {
+            CompoundTag c = vl.getCompoundOrEmpty(i);
+            v.add(new NpcPayloads.ReisVuur(c.getIntOr("x", 0), c.getIntOr("z", 0), c.getIntOr("zone", 0)));
+        }
+        return new NpcPayloads.Reiskaart(t.getStringOr("hier", ""), l, t.getIntOr("x", 0), t.getIntOr("z", 0), n, v);
     }
 
 }

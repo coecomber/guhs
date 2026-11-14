@@ -12,16 +12,38 @@ import java.util.UUID;
 public final class Bijdrage {
     public static final double DREMPEL = 0.05;
     private final Map<UUID, double[]> per = new HashMap<>();
+    /** 1.10.3 (fight log): wall-clock time of the first contribution of this fight (0 = none yet). */
+    private long startMs;
 
     public void schade(UUID p, double n) {
+        begin();
         per.computeIfAbsent(p, k -> new double[3])[0] += n;
     }
 
+    private void begin() {
+        if (startMs == 0) {
+            startMs = System.currentTimeMillis();
+        }
+    }
+
+    /** 1.10.3 (fight log): seconds since the first contribution. */
+    public double seconden() {
+        return startMs == 0 ? 0 : (System.currentTimeMillis() - startMs) / 1000.0;
+    }
+
+    /** 1.10.3 (fight log): {damage, healing, tanked} of this player. */
+    public double[] van(UUID p) {
+        double[] w = per.get(p);
+        return w == null ? new double[3] : w.clone();
+    }
+
     public void heal(UUID p, double n) {
+        begin();
         per.computeIfAbsent(p, k -> new double[3])[1] += n;
     }
 
     public void tank(UUID p, double n) {
+        begin();
         per.computeIfAbsent(p, k -> new double[3])[2] += n;
     }
 
@@ -55,5 +77,6 @@ public final class Bijdrage {
 
     public void wis() {
         per.clear();
+        startMs = 0;
     }
 }

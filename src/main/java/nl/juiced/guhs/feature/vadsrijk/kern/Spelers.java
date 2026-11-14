@@ -440,6 +440,22 @@ public final class Spelers {
         sync(p);
     }
 
+    /**
+     * 1.10.3: xp from one defeat with several helpers: every helper and every party member within 48 blocks of a helper gets it
+     * in full, but each player exactly ONCE (before, each helper shared it with the whole party again, so a party of two that both
+     * hit got 2x the xp of every kill).
+     */
+    public static java.util.Set<ServerPlayer> geefXpGroep(java.util.Collection<ServerPlayer> helpers, long n, String bron) {
+        java.util.Set<ServerPlayer> ontvangers = new java.util.LinkedHashSet<>();
+        for (ServerPlayer h : helpers) {
+            ontvangers.addAll(Partijen.ledenInBuurt(h, 48));
+        }
+        for (ServerPlayer l : ontvangers) {
+            geefXp(l, n, bron);
+        }
+        return ontvangers;
+    }
+
     /** Xp from a defeat: the player and every party member within 48 blocks in the dimension get it in full. */
     public static void geefXpGedeeld(ServerPlayer p, long n, String bron) {
         List<ServerPlayer> leden = Partijen.ledenInBuurt(p, 48);

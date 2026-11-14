@@ -325,8 +325,8 @@ public abstract class VadsrijkMob extends Monster {
     /** Xp (shared with the party nearby) and personal loot per helper. Bosses override this (chests). */
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
         LootTabel t = lootTabel() == null ? null : LootTabellen.van(lootTabel());
+        Spelers.geefXpGroep(helpers, xp() * (elite ? 3 : 1), "mob");   // 1.10.3: each player once
         for (ServerPlayer p : helpers) {
-            Spelers.geefXpGedeeld(p, xp() * (elite ? 3 : 1), "mob");
             Spelers.data(p).opgevrolijkt++;
             if (t != null) {
                 LootTabel.Resultaat r = t.rol(mobLevel(), getRandom());

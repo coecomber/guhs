@@ -42,7 +42,7 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
 public final class WezensSpawners {
     public static final double ELITE = 0.06;
     /** Max alive per area (all spawners of the area summed; only spawners near a player are awake). */
-    public static final Map<String, Integer> GEBIED_MAX = Map.of("klodderweide", 80, "sporenwoud", 90, "druipgrotten", 80, "zwamtempel", 30, "ring", 30);
+    public static final Map<String, Integer> GEBIED_MAX = Map.of("klodderweide", 80, "sporenwoud", 90, "druipgrotten", 55, "zwamtempel", 30, "ring", 30);
 
     private static int oppervlak, vloer;
     /** Spawner id -> its patrol route (two ends). */
@@ -440,19 +440,20 @@ public final class WezensSpawners {
         WezensSpawners.niet = niet;
         langsPaden(g, r, paden, 26, niet, KNAAG, 3, KRISTAL, 2, GLIM, 1);
         kampen(g, r, 6, paden, niet, new Soort[][] {{KNAAG, GLIM}, {KRISTAL, GLIM}, {KNAAG, KRISTAL}}, new int[][] {{3, 1}, {2, 1}, {3, 1}});
-        // the caves: along every tunnel, groups every 15 blocks (druipslijm on the low tunnel ceilings)
+        // the caves: along every tunnel, groups every 21 blocks (druipslijm on the low tunnel ceilings). 1.10.3: was every 15 blocks
+        // with knaag x3 and a 15-25 s respawn: the Mopje escort (hq09) through these tunnels was much harder than the rest of the story
         int n = 0;
         for (WezensPlekken.Gang gang : WezensPlekken.gangen()) {
             double L = gang.lengte();
             int stuk = 0;
-            for (double t = 10; t < L - 8; t += 15) {
+            for (double t = 10; t < L - 8; t += 21) {
                 int[] c = gang.punt(t / L);
                 Soort s = stuk++ % 3 == 0 ? KNAAG : kies(r, DRUIP, 4, KRISTAL, 1, GLIM, 1);
-                int max = s == KNAAG ? 3 : s == GLIM ? 1 : 2;
+                int max = s == KNAAG ? 2 : s == GLIM ? 1 : 2;
                 String groep = g + "_gang_" + n++;
                 // 1.10.1: c = the tunnel's centre line (2 above its floor): search the tunnel itself (floor c - 2 .. c + 1), not the
                 // rock 4 blocks above/below it (hollow pockets there filled up with mobs just outside the cave)
-                zet(g, groep, s, new BlockPos(c[0], c[1], c[2]), 3, max, 300 + r.nextInt(201), ELITE, true, c[1] - 3, c[1] + 1);
+                zet(g, groep, s, new BlockPos(c[0], c[1], c[2]), 3, max, 900 + r.nextInt(401), ELITE, true, c[1] - 3, c[1] + 1);   // 1.10.3: 45-65 s (was 15-25 s)
             }
         }
         // the four knots: a camp each (+ an elite), on the knot floor and its ledges
@@ -466,7 +467,7 @@ public final class WezensSpawners {
             int straal = k[3] - 3, maxY = voet + 4, minY = voet - 1;
             String groep = g + "_knoop_" + (i + 1);
             for (int j = 0; j < knoopKamp[i].length; j++) {
-                zet(g, groep, knoopKamp[i][j], new BlockPos(k[0], maxY, k[2]), straal, knoopAantal[i][j], 500, ELITE, true, minY, maxY);
+                zet(g, groep, knoopKamp[i][j], new BlockPos(k[0], maxY, k[2]), straal, knoopAantal[i][j], 1200, ELITE, true, minY, maxY);   // 1.10.3: 60 s (was 25 s)
             }
             zet(g, g + "_elite_knoop_" + (i + 1), knoopElite[i], new BlockPos(k[0], maxY, k[2]), straal, 1, 3600, 1.0, true, minY, maxY);
         }

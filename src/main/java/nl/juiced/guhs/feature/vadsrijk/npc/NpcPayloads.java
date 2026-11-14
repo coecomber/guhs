@@ -39,11 +39,28 @@ public final class NpcPayloads {
                 ByteBufCodecs.VAR_INT, ReisPlek::staat, ByteBufCodecs.STRING_UTF8, ReisPlek::reden, ByteBufCodecs.VAR_INT, ReisPlek::arg, ReisPlek::new);
     }
 
-    /** Server -> client: open the airship's travel map (where you are + every place). */
-    public record Reiskaart(String hier, List<ReisPlek> plekken) implements CustomPacketPayload {
+    /** 1.10.3: an area label on the travel map: the Gebieden id, its zone, world x/z (ReiskaartIndeling.NAMEN, open zones only). */
+    public record ReisNaam(String gebied, int zone, int x, int z) {
+        static final StreamCodec<RegistryFriendlyByteBuf, ReisNaam> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, ReisNaam::gebied,
+                ByteBufCodecs.VAR_INT, ReisNaam::zone, ByteBufCodecs.VAR_INT, ReisNaam::x, ByteBufCodecs.VAR_INT, ReisNaam::z, ReisNaam::new);
+    }
+
+    /** 1.10.3: one of the player's own lit campfires on the travel map: world x/z and its zone (0 = camp, 5 = floats). */
+    public record ReisVuur(int x, int z, int zone) {
+        static final StreamCodec<RegistryFriendlyByteBuf, ReisVuur> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.VAR_INT, ReisVuur::x,
+                ByteBufCodecs.VAR_INT, ReisVuur::z, ByteBufCodecs.VAR_INT, ReisVuur::zone, ReisVuur::new);
+    }
+
+    /**
+     * Server -> client: open the airship's travel map: where you are ({@code hier}, "" outside the Vadsrijk), every place, 1.10.3:
+     * your real x/z, the area labels and your lit campfires (both only in zones that are open for you).
+     */
+    public record Reiskaart(String hier, List<ReisPlek> plekken, int x, int z, List<ReisNaam> namen, List<ReisVuur> vuren) implements CustomPacketPayload {
         public static final Type<Reiskaart> TYPE = new Type<>(Guhs.id("vr_npc_reiskaart"));
         public static final StreamCodec<RegistryFriendlyByteBuf, Reiskaart> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8,
-                Reiskaart::hier, ReisPlek.STREAM_CODEC.apply(ByteBufCodecs.list(16)), Reiskaart::plekken, Reiskaart::new);
+                Reiskaart::hier, ReisPlek.STREAM_CODEC.apply(ByteBufCodecs.list(16)), Reiskaart::plekken, ByteBufCodecs.VAR_INT, Reiskaart::x,
+                ByteBufCodecs.VAR_INT, Reiskaart::z, ReisNaam.STREAM_CODEC.apply(ByteBufCodecs.list(128)), Reiskaart::namen,
+                ReisVuur.STREAM_CODEC.apply(ByteBufCodecs.list(1024)), Reiskaart::vuren, Reiskaart::new);
 
         @Override
         public Type<? extends CustomPacketPayload> type() {

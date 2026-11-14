@@ -76,7 +76,7 @@ public class VadsrijkBalans1101GameTests {
     public static void mobVermenigvuldigers(GameTestHelper helper) {
         KlasseBalans.standaardAlles();
         helper.assertTrue(Math.abs(Balans.mobSchade() - 2.028) < 1e-9 && Math.abs(Balans.mobLeven() - 1.75) < 1e-9, "defaults 2.028 / 1.75");
-        helper.assertTrue(Math.abs(Balans.bazenLeven() - 1.25) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "[bazen] defaults 1.25 / 1.2");
+        helper.assertTrue(Math.abs(Balans.bazenLeven() - 1.9) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "[bazen] defaults 1.9 / 1.2");
         ServerLevel sl = helper.getLevel();
         BlockPos b = helper.absolutePos(new BlockPos(1, 1, 1));
         Klodders.Klodder k = WezensRegistry.KLODDER.get().create(sl, EntitySpawnReason.COMMAND);
@@ -91,8 +91,8 @@ public class VadsrijkBalans1101GameTests {
         KoningKlodder kk = BazenRegistry.KONING_KLODDER.get().create(sl, EntitySpawnReason.COMMAND);
         kk.snapTo(b.getX() + 0.5, b.getY(), b.getZ() + 0.5, 0, 0);
         kk.stelIn(8, Element.WATER, false, Set.of());
-        double baas = (2000 + 200 * 8) * MobBalans.compensatie(8) * 1.25;
-        helper.assertTrue(Math.abs(kk.maxVads() - baas) < 0.5, "boss: no [mobs] leven, the compensation x [bazen] leven 1.25: " + baas + " vs " + kk.maxVads());
+        double baas = (2000 + 200 * 8) * MobBalans.compensatie(8) * 1.9;
+        helper.assertTrue(Math.abs(kk.maxVads() - baas) < 0.5, "boss: no [mobs] leven, the compensation x [bazen] leven 1.9: " + baas + " vs " + kk.maxVads());
         // the knob is live
         KlasseBalans.zet(KlasseBalans.MOBS, "leven", 2.0, false);
         k.stelIn(1, Element.WATER, false, Set.of());
@@ -113,30 +113,30 @@ public class VadsrijkBalans1101GameTests {
             // versie 1 -> 3
             String r = KlasseBalans.testMigreer(Map.of("schade", 1.3));
             helper.assertTrue(r != null && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "schade") - 2.028) < 1e-9
-                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 3,
+                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 4,
                     "1.10.0 defaults -> 2.028 / 1.75 / versie 3: " + r);
             helper.assertTrue(Math.abs(Balans.mobSchade() - 2.028) < 1e-9 && Math.abs(Balans.mobLeven() - 1.75) < 1e-9
-                    && Math.abs(Balans.bazenLeven() - 1.25) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "applied to kern");
+                    && Math.abs(Balans.bazenLeven() - 1.9) < 1e-9 && Math.abs(Balans.bazenSchade() - 1.2) < 1e-9, "applied to kern");
             r = KlasseBalans.testMigreer(Map.of("schade", 2.0));
             helper.assertTrue(r != null && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "schade") - 2.0) < 1e-9
                     && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9, "v1: a hand-set schade stays: " + r);
             // versie 2 (the live server: 1.10.1 defaults) -> 3
             r = KlasseBalans.testMigreer(Map.of("schade", 1.69, "leven", 1.4, "versie", 2.0));
             helper.assertTrue(r != null && r.contains("[bazen]") && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "schade") - 2.028) < 1e-9
-                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 3
-                    && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "leven") - 1.25) < 1e-9 && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "schade") - 1.2) < 1e-9,
+                    && Math.abs(KlasseBalans.get(KlasseBalans.MOBS, "leven") - 1.75) < 1e-9 && KlasseBalans.get(KlasseBalans.MOBS, "versie") == 4
+                    && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "leven") - 1.9) < 1e-9 && Math.abs(KlasseBalans.get(KlasseBalans.BAZEN, "schade") - 1.2) < 1e-9,
                     "1.10.1 defaults -> 2.028 / 1.75 / versie 3 + [bazen] 1.25 / 1.2: " + r);
-            helper.assertTrue(KlasseBalans.toon().stream().anyMatch(t -> t.equals("[mobs] schade=2.03 leven=1.75 versie=3.00"))
-                    && KlasseBalans.toon().stream().anyMatch(t -> t.equals("[bazen] leven=1.25 schade=1.20")), "balans toon: " + KlasseBalans.toon());
+            helper.assertTrue(KlasseBalans.toon().stream().anyMatch(t -> t.equals("[mobs] schade=2.03 leven=1.75 versie=4.00"))
+                    && KlasseBalans.toon().stream().anyMatch(t -> t.equals("[bazen] leven=1.90 schade=1.20")), "balans toon: " + KlasseBalans.toon());
             r = KlasseBalans.testMigreer(Map.of("schade", 1.5, "leven", 1.2, "versie", 2.0));
             helper.assertTrue(r != null && Math.abs(Balans.mobSchade() - 1.5) < 1e-9 && Math.abs(Balans.mobLeven() - 1.2) < 1e-9
-                    && Math.abs(Balans.bazenLeven() - 1.25) < 1e-9, "v2: hand-set schade/leven stay, [bazen] added: " + r);
+                    && Math.abs(Balans.bazenLeven() - 1.9) < 1e-9, "v2: hand-set schade/leven stay, [bazen] added: " + r);
             r = KlasseBalans.testMigreer(Map.of("schade", 1.69, "leven", 1.3, "versie", 2.0));
             helper.assertTrue(r != null && Math.abs(Balans.mobSchade() - 2.028) < 1e-9 && Math.abs(Balans.mobLeven() - 1.3) < 1e-9,
                     "v2: only the untouched key moves: " + r);
-            r = KlasseBalans.testMigreer(Map.of("schade", 1.5, "leven", 1.2, "versie", 3.0));
+            r = KlasseBalans.testMigreer(Map.of("schade", 1.5, "leven", 1.2, "versie", 4.0));
             helper.assertTrue(r == null && Math.abs(Balans.mobSchade() - 1.5) < 1e-9 && Math.abs(Balans.mobLeven() - 1.2) < 1e-9,
-                    "versie 3: nothing changes: " + r);
+                    "versie 4: nothing changes: " + r);
             helper.succeed();
         } finally {
             KlasseBalans.standaardAlles();
@@ -241,6 +241,29 @@ public class VadsrijkBalans1101GameTests {
         helper.assertTrue(GrotBaas.xpFactor(1) == 0.5 && GrotBaas.xpFactor(2) == 0.5 && GrotBaas.xpFactor(3) == 0.63, "dungeon boss share of a level");
         long zwamgrot = Math.round(Levels.xpVoor(14) * 0.5);
         helper.assertTrue(zwamgrot > 850 && zwamgrot < 900, "Zwamgrot boss lv 14: ~870 xp (was 262): " + zwamgrot);
+        helper.succeed();
+    }
+
+    /**
+     * 1.10.3 (baas-xp): a boss gives at most half a level on a first kill and a tenth of a level after that; a dungeon boss keeps its
+     * own xp; xp of one defeat reaches every player once (geefXpGroep), however many helpers there are.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void baasXpEersteEnHerhaal(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        BlockPos b = helper.absolutePos(new BlockPos(1, 1, 1));
+        KoningKlodder kk = BazenRegistry.KONING_KLODDER.get().create(sl, EntitySpawnReason.COMMAND);
+        kk.snapTo(b.getX() + 0.5, b.getY(), b.getZ() + 0.5, 0, 0);
+        kk.stelIn(3, Element.WATER, false, Set.of());
+        long stap = nl.juiced.guhs.feature.vadsrijk.kern.Levels.xpVoor(3);
+        helper.assertTrue(kk.xp() > stap / 2, "Koning Klodder lv 3 would give more than half a level: " + kk.xp() + " vs " + stap);
+        helper.assertTrue(kk.baasXp(true) == Math.round(stap * 0.5), "first kill: half a level: " + kk.baasXp(true));
+        helper.assertTrue(kk.baasXp(false) == Math.round(stap * 0.1), "repeat kill: a tenth of a level: " + kk.baasXp(false));
+        kk.stelIn(1, Element.WATER, false, Set.of());
+        helper.assertTrue(kk.baasXp(false) <= kk.baasXp(true) && kk.baasXp(true) <= kk.xp(), "never more than its own xp / the first kill");
+        ServerPlayer a = GuhMockPlayer.of(helper), c = GuhMockPlayer.of(helper);
+        java.util.List<ServerPlayer> helpers = java.util.List.of(a, c, a);
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.kern.Spelers.geefXpGroep(helpers, 10, "test").size() == 2, "each player once");
         helper.succeed();
     }
 }

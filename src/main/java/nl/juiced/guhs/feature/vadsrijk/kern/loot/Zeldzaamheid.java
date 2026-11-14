@@ -36,12 +36,19 @@ public enum Zeldzaamheid {
         }
     }
 
-    /** A weighted random rarity; {@code geluk} >= 1 shifts weight to the rarer ones (bosses use 3). */
+    /**
+     * 1.10.3: luck lifts the weights up to Episch only (the exponent stops at {@link #GELUK_TOT}). Before, luck 3 (bosses) gave
+     * Guhddelijk 11.5 % and Legendarisch 15 % per item, elites (luck 2.5) 6.9 % / 11 %: now 1.6 % / 6.4 % and 1.25 % / 5 %
+     * (luck 1: 0.2 % / 0.8 %, unchanged). The named first-kill Legendaries / Guhddelijke of bosses are fixed and unaffected.
+     */
+    public static final int GELUK_TOT = 3;
+
+    /** A weighted random rarity; {@code geluk} >= 1 shifts weight to the rarer ones (bosses use 3), Legendarisch/Guhddelijk only a little. */
     public static Zeldzaamheid rol(RandomSource r, double geluk) {
         double[] w = new double[values().length];
         double som = 0;
         for (Zeldzaamheid z : values()) {
-            w[z.ordinal()] = z.gewicht * Math.pow(geluk, z.ordinal());
+            w[z.ordinal()] = z.gewicht * Math.pow(geluk, Math.min(z.ordinal(), GELUK_TOT));
             som += w[z.ordinal()];
         }
         double x = r.nextDouble() * som;

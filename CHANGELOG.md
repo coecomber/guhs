@@ -3,6 +3,17 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.3 — Minecraft 26.1.2
+
+- **New travel map:** the airship's Reiskaart (also the Vadsrijk-menu tab) is redrawn: every zone at its real spot and size with its own landscape, the main area names, the campfires you lit and your own position (an arrow that points where you look). Names and campfires only show for zones that are open for you; closed zones stay under a grey mist with their requirement in the hover.
+- **Boss xp:** a boss gives at most half a level on your first kill and a tenth of a level on every later kill (Opperzwam, Galmwolf and Spiegelzucht gave 1.2 to 1.5 levels every 5 minutes); dungeon bosses are unchanged.
+- **Fix: double party xp.** Each helper shared the xp of a kill with the whole party again, so a party of two that both hit got twice the xp of every monster and boss. Now everyone gets it exactly once.
+- **Verkenningsboek:** every row is numbered, the same numbers as the Geheimen page on guhs.nl.
+- **Bosses +50 % HP** (config `[bazen] leven` 1.25 -> 1.9, migrated only when still at the default; balans config versie 4) and a server-log line per boss defeat (time, HP, players, damage per helper).
+- **Rarer top loot:** luck now lifts rarity weights only up to Episch (bosses: Guhddelijk 11.5 % -> 1.6 %, Legendarisch 15 % -> 6.4 % per random item; elites 6.9 % -> 1.25 %). Named first-kill rewards unchanged.
+- **Druipgrotten:** fewer tunnel mobs (a group every 21 instead of 15 blocks, Knaag groups of 2), slower respawn (45-65 s, knots 60 s), area cap 80 -> 55: the Mopje escort is no longer the hardest part of the zone-1 story.
+- **Quest tracker:** the mount return quests (Knuffelhert, Guhwolf, Wolkenschaapje) are no longer added to the tracker by themselves (they could not be unfollowed); pin them in the questlog like any side quest.
+
 ## 1.10.2 — Minecraft 26.1.2
 
 - **Zones 2 and 3 are open:** the ship at the end of zone 1 sails. De Splinterpieken (level 20 to 30) with the crystal town of Kandijkom, and De Schemerwortel (level 30 to 50), the giant tree with the town of Honingtak in its branches and your first mount. At the end of zone 3 the next ship sails soon.

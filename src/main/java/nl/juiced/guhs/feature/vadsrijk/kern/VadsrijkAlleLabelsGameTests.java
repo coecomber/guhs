@@ -524,6 +524,10 @@ public class VadsrijkAlleLabelsGameTests {
         for (Object p : items(statisch("npc.Reiskaart", "PLEKKEN"))) {
             e.key("reiskaart", "vadsrijk.npc.reiskaart.plek." + p);
         }
+        for (var n : nl.juiced.guhs.feature.vadsrijk.npc.ReiskaartIndeling.NAMEN) {   // 1.10.3: the area labels on the travel map
+            e.key("reiskaart.naam", "vadsrijk.kern.gebied." + n.gebied());
+        }
+        e.key("reiskaart", "vadsrijk.npc.reiskaart.kampvuur");
         for (Object k : items(statisch("npc.KamerTips", "KAMERS"))) {
             String id = str(k, "id");
             if (!id.startsWith("z2_")) {

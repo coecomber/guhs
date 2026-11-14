@@ -333,6 +333,12 @@ public class GrotBaas extends VadsrijkBaas implements GeoEntity {
         return "grotbaas:" + grot();
     }
 
+    /** 1.10.3 (baas-xp): a dungeon boss keeps its run-designed xp (part of the ~0.8 level per run), first kill or not. */
+    @Override
+    public long baasXp(boolean eerste) {
+        return xp();
+    }
+
     // ---- GeckoLib ------------------------------------------------------------------------------------------------------------
 
     @Override

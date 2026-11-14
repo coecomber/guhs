@@ -559,6 +559,50 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return "baaskill:" + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType());
     }
 
+    private static final org.slf4j.Logger GEVECHT_LOG = com.mojang.logging.LogUtils.getLogger();
+
+    /**
+     * 1.10.3 (fight log): one server-log line per boss defeat, for balancing: boss type + level, fight time, max Vads, players the HP
+     * was scaled for, and per helper level, class, damage (+ share), healing and damage tanked.
+     */
+    protected void gevechtslog(ServerLevel sl) {
+        try {
+            StringBuilder b = new StringBuilder("[Vadsrijk] boss defeated: ").append(killSleutel().replace("baaskill:", "")).append(" lv ").append(mobLevel())
+                    .append(String.format(java.util.Locale.ROOT, " in %.1fs, max Vads %.0f, scaled for %d player(s); helpers:", bijdragen.seconden(), maxVads(),
+                            Math.max(1, spelersGeschaald)));
+            double totaal = 0;
+            for (java.util.UUID id : bijdragen.spelers()) {
+                totaal += bijdragen.van(id)[0];
+            }
+            for (java.util.UUID id : bijdragen.spelers()) {
+                double[] w = bijdragen.van(id);
+                ServerPlayer p = sl.getServer().getPlayerList().getPlayer(id);
+                String naam = p != null ? p.getGameProfile().name() : id.toString().substring(0, 8);
+                String wie = p != null ? " lv " + Spelers.level(p) + " " + Spelers.data(p).klasse : "";
+                b.append(String.format(java.util.Locale.ROOT, " %s%s dmg %.0f (%.0f%%, %.0f/s) heal %.0f tank %.0f;", naam, wie, w[0],
+                        totaal > 0 ? 100 * w[0] / totaal : 0, bijdragen.seconden() > 0 ? w[0] / bijdragen.seconden() : 0, w[1], w[2]));
+            }
+            GEVECHT_LOG.info(b.toString());
+        } catch (RuntimeException e) {
+            GEVECHT_LOG.warn("[Vadsrijk] boss fight log failed: {}", e.toString());
+        }
+    }
+
+    /** 1.10.3 (baas-xp): at most this share of a level (of the boss level) for a first kill, and this share for every later kill. */
+    public static final double EERSTE_DEEL = 0.5, HERHAAL_DEEL = 0.10;
+
+    /**
+     * 1.10.3 (baas-xp): the xp for one player. A first kill = the boss's own {@link #xp()}, but never more than half a level of
+     * the boss level (Opperzwam/Galmwolf/Spiegelzucht gave 1.2-1.5 levels every 5 minutes); a later kill = a tenth of a level
+     * (never more than the first kill). Dungeon bosses override this (their xp is part of a run).
+     */
+    public long baasXp(boolean eerste) {
+        int l = Math.max(1, Math.min(nl.juiced.guhs.feature.vadsrijk.kern.Levels.MAX - 1, mobLevel()));
+        long stap = nl.juiced.guhs.feature.vadsrijk.kern.Levels.xpVoor(l);
+        long eersteXp = Math.max(1, Math.min(xp(), Math.round(stap * EERSTE_DEEL)));
+        return eerste ? eersteXp : Math.min(eersteXp, Math.max(1, Math.round(stap * HERHAAL_DEEL)));
+    }
+
     /** T-VFX: the boss's base hit (the bouwdoos multiplies it per attack step). */
     public double tVfxSlag() {
         return basisSchade(mobLevel());
@@ -568,11 +612,25 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
         nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.verslagen(this);   // T-VFX: the cheer-up finale
         int kist = 0;
+        // 1.10.3 (baas-xp): every player gets the xp exactly once (helpers + their party within 48 blocks); a helper's first kill of
+        // this boss gives the first-kill amount, every later kill (and a party member who did not hit it) the repeat amount
+        java.util.Map<ServerPlayer, Boolean> ontvangers = new java.util.LinkedHashMap<>();
+        for (java.util.UUID id : bijdragen.spelers()) {
+            if (sl.getEntity(id) instanceof ServerPlayer p && p.distanceTo(this) <= 64) {
+                ontvangers.put(p, !Spelers.data(p).gezien.contains(killSleutel()));
+            }
+        }
+        for (ServerPlayer p : new java.util.ArrayList<>(ontvangers.keySet())) {
+            for (ServerPlayer l : nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen.ledenInBuurt(p, 48)) {
+                ontvangers.putIfAbsent(l, false);
+            }
+        }
+        ontvangers.forEach((p, eerste) -> Spelers.geefXp(p, baasXp(eerste), "baas"));
+        gevechtslog(sl);
         for (java.util.UUID id : bijdragen.spelers()) {
             if (!(sl.getEntity(id) instanceof ServerPlayer p) || p.distanceTo(this) > 64) {
                 continue;
             }
-            Spelers.geefXpGedeeld(p, xp(), "baas");
             Spelers.data(p).opgevrolijkt++;
             boolean eerste = Spelers.data(p).gezien.add(killSleutel());
             if (bijdragen.verdientKist(id)) {

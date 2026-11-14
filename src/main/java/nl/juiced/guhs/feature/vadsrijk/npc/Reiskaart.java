@@ -15,13 +15,16 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 
 /**
- * The airship's travel map (fix round 2, g-ux): every airship NPC opens an illustrated map of the Vadsrijk (client
- * {@code npc/client/ReiskaartScherm}, art by tools/features/vadsrijk_reiskaart_art.py). A place is open once the main story
- * brought you there; the others are greyed with a "?" and a short requirement line; De Schemerwortel (zone 3) and a nameless
- * zone 4 are teasers. A click on an open place flies there through {@link QuestMotor#vliegNaar} (the same flights as the bells).
+ * The airship's travel map (fix round 2, g-ux; reworked in 1.10.3): every airship NPC opens an illustrated map of the Vadsrijk
+ * (client {@code npc/client/ReiskaartScherm}, art by tools/features/vadsrijk_reiskaart_art.py), the Vadsrijk menu shows the same
+ * map look-only. All seven places sit at their real spots ({@link ReiskaartIndeling}: one linear world -> image mapping). A place
+ * is open once the main story brought you there; the others are greyed with a "?" and a short requirement line; places in a zone
+ * that is closed for you are teasers under a grey mist. 1.10.3: the map also gets your real position, the main area names and the
+ * campfires you lit, but only for zones open for you ({@link #namen}, {@link #vuren}). A click on an open place flies there
+ * through {@link QuestMotor#vliegNaar} (the same flights as the bells).
  */
 public final class Reiskaart {
-    /** All places in map order. */
+    /** All places in map order (their spots: {@link ReiskaartIndeling#PLEKKEN}). */
     public static final List<String> PLEKKEN = List.of("knuffelkamp", "zwamzoet", "kandijkom", "schemerwortel", "lampionkust", "hoogvads", "zijdeland");   // T-Z4VERHAAL: zone4 -> lampionkust; T-Z5VERHAAL: + hoogvads; U-Z6VERHAAL: + zijdeland
     /** States: open (click to fly), you are here, not discovered yet (grey "?", reason), a teaser for later (grey "?"). */
     public static final int OPEN = 0, HIER = 1, ONBEKEND = 2, TEASER = 3;
@@ -90,7 +93,44 @@ public final class Reiskaart {
         for (String id : PLEKKEN) {
             l.add(plek(p, id));
         }
-        return new NpcPayloads.Reiskaart(hier(p), l);
+        return new NpcPayloads.Reiskaart(hier(p), l, p.getBlockX(), p.getBlockZ(), namen(p), vuren(p));
+    }
+
+    /** 1.10.3: may the map show names / campfires of zone {@code zone} to this player? (zone 0 = the camp: always.) */
+    public static boolean zoneZichtbaar(ServerPlayer p, int zone) {
+        return zone <= 0 || !nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.dicht(p, zone);
+    }
+
+    /** 1.10.3: the area labels of the zones that are open for this player (no spoilers for closed zones). */
+    public static List<NpcPayloads.ReisNaam> namen(ServerPlayer p) {
+        List<NpcPayloads.ReisNaam> l = new ArrayList<>();
+        boolean[] zicht = new boolean[8];
+        for (int z = 0; z < zicht.length; z++) {
+            zicht[z] = zoneZichtbaar(p, z);
+        }
+        for (ReiskaartIndeling.Naam n : ReiskaartIndeling.NAMEN) {
+            if (n.zone() >= 0 && n.zone() < zicht.length && zicht[n.zone()]) {
+                l.add(new NpcPayloads.ReisNaam(n.gebied(), n.zone(), n.x(), n.z()));
+            }
+        }
+        return l;
+    }
+
+    /** 1.10.3: the campfires this player lit/used (the Verkenningsboek's memory + the checkpoint), in zones open for him. */
+    public static List<NpcPayloads.ReisVuur> vuren(ServerPlayer p) {
+        List<net.minecraft.core.BlockPos> alle = new ArrayList<>(nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.vuren(p));
+        net.minecraft.core.BlockPos cp = Spelers.data(p).checkpoint;
+        if (cp != null && alle.stream().noneMatch(b -> b.distSqr(cp) <= 9)) {
+            alle.add(cp);
+        }
+        List<NpcPayloads.ReisVuur> l = new ArrayList<>();
+        for (net.minecraft.core.BlockPos b : alle) {
+            int zone = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneOp(b.getX() + 0.5, b.getY(), b.getZ() + 0.5);
+            if (zoneZichtbaar(p, zone) && l.size() < 1000) {
+                l.add(new NpcPayloads.ReisVuur(b.getX(), b.getZ(), zone));
+            }
+        }
+        return l;
     }
 
     /** Opens the map for this player (at an airship NPC). */

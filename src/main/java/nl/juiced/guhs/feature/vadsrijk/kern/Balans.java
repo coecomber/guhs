@@ -25,7 +25,8 @@ public final class Balans {
      * main-stat compensation); bosses' hits x schade on the final damage (after Verdediging). Helpers already hit through
      * [mobs] schade, so they don't get [bazen] schade (no double count).
      */
-    public static final double BAZEN_LEVEN_STANDAARD = 1.25, BAZEN_SCHADE_STANDAARD = 1.2;
+    /** 1.10.3: [bazen] leven 1.25 -> 1.9 (+50 % boss HP on top of 1.10.2; zone-2 bosses fell in seconds). */
+    public static final double BAZEN_LEVEN_STANDAARD = 1.9, BAZEN_SCHADE_STANDAARD = 1.2, BAZEN_LEVEN_V3 = 1.25;
 
     private static volatile double mobSchade = MOB_SCHADE_STANDAARD;
     private static volatile double mobLeven = MOB_LEVEN_STANDAARD;

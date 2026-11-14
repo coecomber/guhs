@@ -55,9 +55,10 @@ public final class KlasseBalans {
      * 1101-balans: the version of the defaults in {@code [mobs]}. A file without {@code versie} (or a lower one) was written by an
      * older release: on load, every key still at that release's default moves to the new default (a value an op changed by hand
      * stays), then the file is written again with {@code versie = }{@link #MOBS_VERSIE}. 1 = 1.10.0 (schade 1.3, no leven),
-     * 2 = 1.10.1 (schade 1.69, leven 1.4), 3 = 1.10.2 (schade 2.028, leven 1.75, new section {@code [bazen]}).
+     * 2 = 1.10.1 (schade 1.69, leven 1.4), 3 = 1.10.2 (schade 2.028, leven 1.75, new section {@code [bazen]}),
+     * 4 = 1.10.3 ({@code [bazen] leven} 1.25 -> 1.9).
      */
-    public static final int MOBS_VERSIE = 3;
+    public static final int MOBS_VERSIE = 4;
     /** 1102-balans: bosses + boss helpers ({@code [bazen] leven} x1.25 max Vads, {@code [bazen] schade} x1.2 final damage of bosses). */
     public static final String BAZEN = "bazen";
     public static final List<String> BAZEN_SLEUTELS = List.of("leven", "schade");
@@ -277,9 +278,19 @@ public final class KlasseBalans {
                 l.add("[mobs] leven " + leven + " blijft (met de hand gezet)");
             }
             Map<String, Double> bz = WAARDEN.computeIfAbsent(BAZEN, x -> new LinkedHashMap<>());
-            bz.putIfAbsent("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD);
+            bz.putIfAbsent("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V3);   // (1.10.3: then versie 4 takes it to 1.9)
             bz.putIfAbsent("schade", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_STANDAARD);
             l.add("[bazen] leven=" + bz.get("leven") + " schade=" + bz.get("schade"));
+        }
+        if (versie < 4) {   // 1.10.3: bosses +50 % HP ([bazen] leven 1.25 -> 1.9), only when still at the 1.10.2 default
+            Map<String, Double> bz = WAARDEN.computeIfAbsent(BAZEN, x -> new LinkedHashMap<>());
+            Double leven = bz.get("leven");
+            if (leven == null || Math.abs(leven - nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V3) < 1e-9) {
+                bz.put("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD);
+                l.add("[bazen] leven " + (leven == null ? "-" : leven) + " -> " + nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD);
+            } else {
+                l.add("[bazen] leven " + leven + " blijft (met de hand gezet)");
+            }
         }
         m.put("versie", (double) MOBS_VERSIE);
         return "migratie [mobs] versie " + versie + " -> " + MOBS_VERSIE + ": " + String.join(", ", l);
@@ -308,7 +319,7 @@ public final class KlasseBalans {
         b.append("# [mobs] schade = vermenigvuldiger op de klappen van gewone wezens en elites (geen bazen); 2.028 = +102,8 %.\n");
         b.append("# [mobs] leven = vermenigvuldiger op de max Vads van gewone wezens en elites (geen bazen); 1.75 = +75 %.\n");
         b.append("# [mobs] versie = niet aanpassen (de mod zet hiermee oude standaardwaarden om bij een update).\n");
-        b.append("# [bazen] leven = vermenigvuldiger op de max Vads van alle bazen en baas-hulpjes (kerker-, zone- en raidbazen); 1.25 = +25 %.\n");   // 1102-balans
+        b.append("# [bazen] leven = vermenigvuldiger op de max Vads van alle bazen en baas-hulpjes (kerker-, zone- en raidbazen); 1.9 = +90 %.\n");   // 1102-balans
         b.append("# [bazen] schade = vermenigvuldiger op de eindschade van bazen (na Verdediging); 1.2 = +20 %. Hulpjes slaan via [mobs] schade.\n");
         b.append("# [rijdieren] snelheid/sprong = vermenigvuldigers op alle rijdieren; groei_snelheid = extra snelheid per rijdierlevel\n");
         b.append("# (0.015 = +1,5 %), groei_sprong = extra sprongkracht per rijdierlevel (0.01 = ongeveer +0,07 blok).\n");

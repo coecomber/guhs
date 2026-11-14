@@ -75,10 +75,15 @@ public class VadsrijkWerverGameTests {
         helper.assertTrue(!Rijdieren.heeftEen(p) && Questlog.beschikbaar(p, hert) && Questlog.beschikbaar(p, wolf) && Questlog.beschikbaar(p, schaap),
                 "no mount needed: all three return quests are there");
         helper.assertTrue(RijdierQuests.teaser(p, schaap.gever()) == null && RijdierQuests.teaser(p, hert.gever()) == null, "no teaser");
-        Quest t = RijdierQuests.trackerQuest(p);
-        helper.assertTrue(t != null, "one is in the tracker");
-        helper.assertTrue(NpcVolg.bouw(p).regels().stream().anyMatch(r -> r.quest().equals(t.id()) && r.doel().isPresent()),
-                "tracked with a beam target (the giver)");
+        // 1.10.3: never in the tracker by themselves; only when pinned (and then unpinnable like any side quest)
+        helper.assertTrue(NpcVolg.bouw(p).regels().stream().noneMatch(r -> r.quest().equals(hert.id()) || r.quest().equals(wolf.id()) || r.quest().equals(schaap.id())),
+                "available mount quests are not tracked by themselves");
+        Questlog.neemAan(p, hert);
+        helper.assertTrue(NpcVolg.bouw(p).regels().stream().noneMatch(r -> r.quest().equals(hert.id())), "accepted: still not tracked until pinned");
+        NpcVolg.keuze(p, new NpcPayloads.VolgKeuze(NpcPayloads.VolgKeuze.PIN, hert.id()));
+        helper.assertTrue(NpcVolg.bouw(p).regels().stream().anyMatch(r -> r.quest().equals(hert.id()) && r.doel().isPresent()), "pinned: tracked with a beam target");
+        NpcVolg.keuze(p, new NpcPayloads.VolgKeuze(NpcPayloads.VolgKeuze.PIN, hert.id()));
+        helper.assertTrue(NpcVolg.bouw(p).regels().stream().noneMatch(r -> r.quest().equals(hert.id())), "unpinned: gone from the tracker");
         // the reward action gives the mount
         QuestMotor.doeActie(p, hert.actieKlaar(), null);
         QuestMotor.doeActie(p, wolf.actieKlaar(), null);

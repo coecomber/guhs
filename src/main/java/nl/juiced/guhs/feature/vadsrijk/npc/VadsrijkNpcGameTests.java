@@ -279,6 +279,71 @@ public class VadsrijkNpcGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.3: the travel map's layout and payload. Every zone (tile box) fits the image through the one world -> image mapping;
+     * every destination and area label lies in its own zone; the payload carries your position, and area labels + your lit
+     * campfires only for zones that are open for you (gate 1: zone 1 + the camp; everything once the gate is open).
+     */
+    @GuhTest(template = "empty", batch = B)
+    public static void reiskaartInhoud(GameTestHelper helper) {
+        for (var zo : nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.values()) {
+            int zone = zo == nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.KAMP ? 0 : nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneId(zo.id);
+            for (int[] c : new int[][] {{zo.minX, zo.minZ}, {zo.maxX, zo.maxZ}, {zo.minX, zo.maxZ}, {zo.maxX, zo.minZ}}) {
+                helper.assertTrue(ReiskaartIndeling.inBeeld(ReiskaartIndeling.px(c[0]), ReiskaartIndeling.py(c[1], zone)),
+                        zo.id + ": corner " + c[0] + "," + c[1] + " inside the map image");
+            }
+        }
+        helper.assertTrue(ReiskaartIndeling.PLEKKEN.stream().map(ReiskaartIndeling.Plek::id).toList().equals(Reiskaart.PLEKKEN),
+                "ReiskaartIndeling.PLEKKEN = Reiskaart.PLEKKEN");
+        for (var pl : ReiskaartIndeling.PLEKKEN) {
+            int z = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneOp(pl.x() + 0.5, pl.zone() == 5 ? 200 : 64, pl.z() + 0.5);
+            helper.assertTrue(z == pl.zone() && pl.zone() == Math.max(0, nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.plekZone(pl.id())),
+                    pl.id() + ": badge in zone " + pl.zone() + " (map says " + z + ")");
+        }
+        for (var n : ReiskaartIndeling.NAMEN) {
+            int z = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneOp(n.x() + 0.5, n.zone() == 5 ? 200 : 64, n.z() + 0.5);
+            helper.assertTrue(z == n.zone(), n.gebied() + ": label in zone " + n.zone() + " (map says " + z + ")");
+            helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.kern.Gebieden.van(n.gebied()) != null, n.gebied() + ": a real area");
+        }
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        Questlog.wisAlles(p);
+        try {
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = 1;
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST_BOEK = 0;
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.TEST_STRENG = true;
+            nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.kampvuur(p, nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.kamp(5, 65, 1020));
+            nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.kampvuur(p, new BlockPos(40, 70, 80));
+            nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.kampvuur(p, new BlockPos(704, 120, -1000));
+            NpcPayloads.Reiskaart k = Reiskaart.bouw(p);
+            helper.assertTrue(k.x() == p.getBlockX() && k.z() == p.getBlockZ(), "your position is in the payload");
+            java.util.Set<Integer> vz = new java.util.HashSet<>();
+            k.vuren().forEach(v -> vz.add(v.zone()));
+            helper.assertTrue(vz.equals(Set.of(0, 1)), "gate 1: the camp + zone-1 campfires, not zone 2's: " + vz);
+            helper.assertTrue(!k.namen().isEmpty() && k.namen().stream().allMatch(n -> n.zone() <= 1), "gate 1: only zone-1 area names: " + k.namen());
+            for (var v : k.vuren()) {
+                helper.assertTrue(ReiskaartIndeling.inBeeld(ReiskaartIndeling.px(v.x()), ReiskaartIndeling.py(v.z(), v.zone())), "campfire on the map: " + v);
+            }
+            // the menu tab gets the same data through NBT
+            NpcPayloads.Reiskaart m = nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.reiskaartVan(nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.reiskaart(p));
+            helper.assertTrue(m.namen().equals(k.namen()) && m.vuren().equals(k.vuren()) && m.x() == k.x() && m.z() == k.z(), "menu NBT round trip");
+            // the gate opens (and you may pass): every zone's names, zone 2's campfire too
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = 6;
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.TEST_STRENG = false;
+            p.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+            k = Reiskaart.bouw(p);
+            helper.assertTrue(k.namen().size() == ReiskaartIndeling.NAMEN.size(), "all open: every area name: " + k.namen().size());
+            helper.assertTrue(k.vuren().stream().anyMatch(v -> v.zone() == 2), "all open: zone 2's campfire shows");
+        } finally {
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = null;
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST_BOEK = null;
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.TEST_STRENG = false;
+            p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+            Questlog.wisAlles(p);
+        }
+        helper.succeed();
+    }
+
     /** The job advancement shows in the tracker (and questlog) once it may be started, pointing at the Grootmeester. */
     @GuhTest(template = "empty", batch = B)
     public static void klasseInTracker(GameTestHelper helper) {

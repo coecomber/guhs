@@ -16,6 +16,7 @@ import nl.juiced.guhs.feature.vadsrijk.economie.client.EcoScherm;
  * I-VOLTOOIING: the Verkenningsboek. An open pink book: zone bookmarks on top; the left page shows the zone's overall percentage
  * (a big number + a ribbon bar), the 100 % reward, and every category with its icon, x/y and a little bar (click one); the right
  * page lists the chosen category: done = green tick + name, busy = yellow dot, not done = grey (secrets: "???" + a small hint).
+ * 1.10.3: every row is numbered ("3. ???"), the same numbers as the Geheimen page on guhs.nl (WikiExport.boek).
  * The collection tabs (Rijdieren / Huisdieren / Verkenningsboek) sit above the panel (i-ui CollectieTabs, via EcoScherm). All data comes from the server.
  */
 public class BoekScherm extends EcoScherm {
@@ -226,8 +227,10 @@ public class BoekScherm extends EcoScherm {
         for (int i = 0; i < dl0.size(); i++) {
             CompoundTag d = dl0.getCompoundOrEmpty(i);
             boolean geheim0 = d.getBooleanOr("g", false) && d.getByteOr("s", (byte) 0) == 0;
-            if (past((geheim0 ? "???" : naam(d).getString()) + " " + (d.contains("h") ? hint(d).getString() : ""))) {
-                dl.add(d);
+            if (past((i + 1) + ". " + (geheim0 ? "???" : naam(d).getString()) + " " + (d.contains("h") ? hint(d).getString() : ""))) {
+                CompoundTag dc = d.copy();   // 1.10.3: the row number in the book (= the number on guhs.nl's Geheimen page), also when filtered
+                dc.putInt("nr", i + 1);
+                dl.add(dc);
             }
         }
         if (dl.isEmpty() && !zoekTekst.isEmpty()) {
@@ -251,7 +254,7 @@ public class BoekScherm extends EcoScherm {
             int tx = x + 12;
             Component naam = geheim ? Component.literal("???") : naam(d);
             int kleur = klaar ? 0xFF1F7A44 : bezig ? 0xFF8A6000 : geheim ? GRIJS : ZACHT;
-            String tekst = font.plainSubstrByWidth(naam.getString(), pw - 12);
+            String tekst = font.plainSubstrByWidth(d.getIntOr("nr", i + 1) + ". " + naam.getString(), pw - 12);
             g.text(font, tekst, tx, y + 1, kleur, false);
             // a hint after the name for what isn't done yet (secrets: only the hint)
             if (!klaar && d.contains("h")) {

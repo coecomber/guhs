@@ -1,7 +1,5 @@
 package nl.juiced.guhs.feature.vadsrijk.npc.client;
 
-import java.util.Map;
-
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
@@ -19,29 +17,20 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcPayloads;
 import nl.juiced.guhs.feature.vadsrijk.npc.Reiskaart;
+import nl.juiced.guhs.feature.vadsrijk.npc.ReiskaartIndeling;
 
 /**
- * The airship's travel map (fix round 2, g-ux): an illustrated map of the Vadsrijk (art: tools/features/vadsrijk_reiskaart_art.py,
- * 768x480, drawn 1 image pixel = 1 GUI pixel). Hold the mouse and drag to pan (clamped to the map). Each place has a round badge
- * with an icon and its name; dotted airship routes connect them; the place you are at has a pulsing marker. Places you have not
- * reached through the story (and the teasers zone 3 / zone 4) are greyed with a big "?", their silhouette still visible.
- * Clicking an open place sends {@link NpcPayloads.ReisKies}; the server checks and flies (the existing flight scenes).
+ * The airship's travel map (fix round 2, g-ux; reworked in 1.10.3): an illustrated map of the WHOLE Vadsrijk, every zone at its real
+ * spot (art: tools/features/vadsrijk_reiskaart_art.py; layout + world -> image mapping: {@link ReiskaartIndeling}, drawn 1 image
+ * pixel = 1 GUI pixel). Hold the mouse and drag to pan (clamped to the map). Each place has a round badge with an icon and its
+ * name; dotted airship routes connect them; the place you are at has a pulsing marker. Places you have not reached through the
+ * story (and the zones closed for you) are greyed with a big "?" under a grey mist, their silhouette still visible. 1.10.3: small
+ * area names, your lit campfires (tiny flames) and your real position (an arrow) for the zones open to you (the server sends only
+ * those). Clicking an open place sends {@link NpcPayloads.ReisKies}; the server checks and flies (the existing flight scenes).
  */
 public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: Geschaald
     static final Identifier KAART = Guhs.id("textures/gui/vadsrijk/reiskaart.png");
-    static final int KW = 768, KH = 480;
-    /** Place -> its spot on the image (fractions) and the half size of its land (for the grey veil). Keep in sync with the art. */
-    static final Map<String, float[]> PLEKKEN = Map.of(
-            "knuffelkamp", new float[] {0.12f, 0.80f, 56, 38},
-            "zwamzoet", new float[] {0.30f, 0.50f, 132, 92},
-            "kandijkom", new float[] {0.52f, 0.22f, 104, 72},
-            "schemerwortel", new float[] {0.77f, 0.56f, 150, 108},
-            "lampionkust", new float[] {0.93f, 0.14f, 52, 30},   // T-Z4VERHAAL: was "zone4"
-            "hoogvads", new float[] {0.97f, 0.05f, 36, 22},   // T-Z5VERHAAL (no art yet: a marker in the top-right corner)
-            "zijdeland", new float[] {0.97f, 0.30f, 36, 22});   // U-Z6VERHAAL (no art yet: a marker on the right edge, below Hoogvads)
-    /** The airship routes (dotted). (R-INT, WERELDINDELING §4) line 0 camp-Haven, A Zwamzoet-Kandijkom, B Galmdok (zone 2) -> Weststeiger
-     *  (zone 3), C Oosttaksteiger (zone 3) -> Lampionhaven (zone 4), D Opstijgpier (zone 4) -> Hoogvads. */
-    static final String[][] ROUTES = {{"knuffelkamp", "zwamzoet"}, {"zwamzoet", "kandijkom"}, {"kandijkom", "schemerwortel"}, {"schemerwortel", "lampionkust"}, {"lampionkust", "hoogvads"}, {"hoogvads", "zijdeland"}};   // U-Z6VERHAAL: + line E
+    static final int KW = ReiskaartIndeling.W, KH = ReiskaartIndeling.H;
     private static final int INKT = 0xFF4A3A55, PAPIER = 0xF2FFF6EC, ROZE = 0xFFF2A9C4, GRIJS = 0xFF9A93A2, GOUD = 0xFFFFD54A;
 
     private final NpcPayloads.Reiskaart kaart;
@@ -50,6 +39,9 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
     private double sleep;
     @Nullable
     private String hover;
+    /** 1.10.3: the tooltip of a campfire / your own marker under the mouse (no click action). */
+    @Nullable
+    private Component hoverTip;
 
     public ReiskaartScherm(NpcPayloads.Reiskaart kaart) {
         this(kaart, false);
@@ -110,9 +102,18 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
             width = kader.lw();
             height = kader.lh();
         }
-        float[] h = PLEKKEN.getOrDefault(kaart.hier(), PLEKKEN.get("zwamzoet"));
-        camX = h[0] * KW - (vx1() - vx0()) / 2f;
-        camY = h[1] * KH - (vy1() - vy0()) / 2f;
+        float fx, fy;
+        ReiskaartIndeling.Plek h = ReiskaartIndeling.plek(kaart.hier());
+        if (h != null) {   // centred on you (1.10.3: your real spot), else on De Haven
+            fx = ReiskaartIndeling.px(kaart.x());
+            fy = ReiskaartIndeling.py(kaart.z(), h.zone());
+        } else {
+            h = ReiskaartIndeling.plek("zwamzoet");
+            fx = h.bx();
+            fy = h.by();
+        }
+        camX = fx - (vx1() - vx0()) / 2f;
+        camY = fy - (vy1() - vy0()) / 2f;
         klem();
     }
 
@@ -122,13 +123,17 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
         camY = vh >= KH ? (KH - vh) / 2f : Mth.clamp(camY, 0, KH - vh);
     }
 
-    /** Screen x/y of an image point. */
-    private int sx(float fx) {
-        return Math.round(vx0() - camX + fx * KW);
+    /** Screen x/y of an image point (image pixels). */
+    private int sx(float ix) {
+        return Math.round(vx0() - camX + ix);
     }
 
-    private int sy(float fy) {
-        return Math.round(vy0() - camY + fy * KH);
+    private int sy(float iy) {
+        return Math.round(vy0() - camY + iy);
+    }
+
+    private boolean inVenster(double mx, double my) {
+        return mx >= vx0() && mx < vx1() && my >= vy0() && my < vy1();
     }
 
     @Nullable
@@ -153,27 +158,48 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
         g.fill(vx0() - (menu ? 1 : 3), vy0() - (menu ? 1 : 3), vx1() + (menu ? 1 : 3), vy1() + (menu ? 1 : 3), ROZE);
         g.enableScissor(vx0(), vy0(), vx1(), vy1());
         g.blit(RenderPipelines.GUI_TEXTURED, KAART, sx(0), sy(0), 0f, 0f, KW, KH, KW, KH);
-        // the grey veil over the places you have not reached (and the teasers): the silhouette stays visible
+        // the grey mist over the places you have not reached and the zones closed for you: the silhouette stays visible
         for (NpcPayloads.ReisPlek p : kaart.plekken()) {
-            if (p.staat() == Reiskaart.ONBEKEND || p.staat() == Reiskaart.TEASER) {
-                float[] d = PLEKKEN.get(p.id());
-                if (d != null) {
-                    sluier(g, sx(d[0]), sy(d[1]), d[2] * 1.05f, d[3] * 1.08f, 0x9A6E6878);
-                }
+            ReiskaartIndeling.Plek d = ReiskaartIndeling.plek(p.id());
+            if (d != null && (p.staat() == Reiskaart.ONBEKEND || p.staat() == Reiskaart.TEASER)) {
+                mist(g, d, p.staat() == Reiskaart.TEASER);
             }
         }
         // the airship routes, dotted (bright between two open places)
         long t = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0;
-        for (String[] r : ROUTES) {
+        for (String[] r : ReiskaartIndeling.ROUTES) {
             NpcPayloads.ReisPlek a0 = plek(r[0]), b0 = plek(r[1]);
-            float[] a1 = PLEKKEN.get(r[0]), b1 = PLEKKEN.get(r[1]);
+            ReiskaartIndeling.Plek a1 = ReiskaartIndeling.plek(r[0]), b1 = ReiskaartIndeling.plek(r[1]);
             if (a0 == null || b0 == null || a1 == null || b1 == null) {
                 continue;
             }
             boolean open = a0.staat() <= Reiskaart.HIER && b0.staat() <= Reiskaart.HIER;
-            route(g, sx(a1[0]), sy(a1[1]), sx(b1[0]), sy(b1[1]), open ? 0xFFFFFFFF : 0x90E0DCE6, open ? (int) (t % 8) : 0);
+            route(g, sx(a1.bx()), sy(a1.by()), sx(b1.bx()), sy(b1.by()), open ? 0xFFFFFFFF : 0x90E0DCE6, open ? (int) (t % 8) : 0);
+        }
+        // 1.10.3: the area names (small, ink), only for zones open for you (the server sends only those)
+        for (NpcPayloads.ReisNaam n : kaart.namen()) {
+            Component c = Component.translatable("vadsrijk.kern.gebied." + n.gebied());
+            int x = sx(ReiskaartIndeling.px(n.x())), y = sy(ReiskaartIndeling.py(n.z(), n.zone()));
+            int w = font.width(c);
+            g.pose().pushMatrix();
+            g.pose().translate(x, y);
+            g.pose().scale(0.5f, 0.5f);
+            g.text(font, c, -w / 2 + 1, -3, 0xD0FFFBF4, false);
+            g.text(font, c, -w / 2, -4, 0xFF3E3048, false);
+            g.pose().popMatrix();
         }
         g.disableScissor();
+    }
+
+    /** The grey mist over a place's land box (two soft ellipses; zone 5's land is drawn floating). */
+    private void mist(GuiGraphicsExtractor g, ReiskaartIndeling.Plek d, boolean dicht) {
+        int[] b = d.land();
+        float x0 = ReiskaartIndeling.px(b[0]), x1 = ReiskaartIndeling.px(b[2]);
+        float y0 = ReiskaartIndeling.py(b[1], d.zone()), y1 = ReiskaartIndeling.py(b[3], d.zone());
+        int cx = sx((x0 + x1) / 2), cy = sy((y0 + y1) / 2);
+        float rx = (x1 - x0) / 2f * 1.12f + 6, ry = (y1 - y0) / 2f * 1.15f + 6;
+        sluier(g, cx, cy, rx, ry, dicht ? 0x8A746E80 : 0x70746E80);
+        sluier(g, cx, cy, rx * 0.8f, ry * 0.8f, dicht ? 0x50857F90 : 0x30857F90);
     }
 
     /** A filled ellipse made of horizontal lines. */
@@ -199,19 +225,39 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
     public void extractRenderState(GuiGraphicsExtractor g, int mouseX, int mouseY, float a) {
         super.extractRenderState(g, mouseX, mouseY, a);
         hover = null;
+        hoverTip = null;
         g.enableScissor(vx0(), vy0(), vx1(), vy1());
         long t = Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getGameTime() : 0;
+        boolean binnen = inVenster(mouseX, mouseY);
+        // 1.10.3: your lit campfires (tiny flames)
+        for (NpcPayloads.ReisVuur v : kaart.vuren()) {
+            int x = sx(ReiskaartIndeling.px(v.x())), y = sy(ReiskaartIndeling.py(v.z(), v.zone()));
+            vuurtje(g, x, y, t);
+            if (binnen && Math.abs(mouseX - x) <= 4 && mouseY >= y - 6 && mouseY <= y + 2) {
+                hoverTip = Component.translatable("vadsrijk.npc.reiskaart.kampvuur");
+            }
+        }
         for (NpcPayloads.ReisPlek p : kaart.plekken()) {
-            float[] d = PLEKKEN.get(p.id());
+            ReiskaartIndeling.Plek d = ReiskaartIndeling.plek(p.id());
             if (d == null) {
                 continue;
             }
-            int x = sx(d[0]), y = sy(d[1]);
-            boolean over = Math.abs(mouseX - x) <= 13 && Math.abs(mouseY - y) <= 13 && mouseY >= vy0() && mouseY <= vy1();
+            int x = sx(d.bx()), y = sy(d.by());
+            boolean over = binnen && Math.abs(mouseX - x) <= 13 && Math.abs(mouseY - y) <= 13;
             if (over) {
                 hover = p.id();
             }
             badge(g, p, x, y, over, t, a);
+        }
+        // 1.10.3: your real position (an arrow that looks where you look)
+        ReiskaartIndeling.Plek hier = ReiskaartIndeling.plek(kaart.hier());
+        if (hier != null) {
+            int x = sx(ReiskaartIndeling.px(kaart.x())), y = sy(ReiskaartIndeling.py(kaart.z(), hier.zone()));
+            float yaw = Minecraft.getInstance().player != null ? Minecraft.getInstance().player.getYRot() : 180f;
+            pijl(g, x, y, yaw, t, a);
+            if (binnen && hover == null && Math.abs(mouseX - x) <= 6 && Math.abs(mouseY - y) <= 6) {
+                hoverTip = Component.translatable("vadsrijk.npc.reiskaart.jij");
+            }
         }
         g.disableScissor();
         if (menu) {   // U-TABS: no own title / close button; a hint line: look only
@@ -235,6 +281,9 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
     }
 
     private void hoverKaartje(GuiGraphicsExtractor g, int mouseX, int mouseY) {
+        if (hover == null && hoverTip != null) {
+            g.setTooltipForNextFrame(font, hoverTip, mouseX, mouseY);
+        }
         if (hover != null) {
             NpcPayloads.ReisPlek p = plek(hover);
             if (p != null) {
@@ -248,6 +297,32 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
                 g.text(font, r, tx + 5, ty + 13, 0xFFFFFFFF, true);
             }
         }
+    }
+
+    /** 1.10.3: a tiny campfire: logs and a flickering flame (about 8x8 GUI pixels, standing on y). */
+    private static void vuurtje(GuiGraphicsExtractor g, int x, int y, long t) {
+        g.fill(x - 4, y, x + 4, y + 2, INKT);
+        g.fill(x - 3, y, x + 3, y + 1, 0xFF8A5A3A);
+        boolean flik = ((t / 6) + x) % 2 == 0;
+        g.fill(x - 2, y - 3, x + 2, y, 0xFFFF7A3A);
+        g.fill(x - 1, y - (flik ? 6 : 5), x + 1, y - 3, 0xFFFF9A40);
+        g.fill(x - 1, y - 2, x + 1, y, 0xFFFFE070);
+    }
+
+    /** 1.10.3: you: a gold arrow in a white ring, pointing where you look (Minecraft yaw: 0 = south = down on the map). */
+    private static void pijl(GuiGraphicsExtractor g, int x, int y, float yaw, long t, float a) {
+        float puls = 0.5f + 0.5f * Mth.sin((t + a) * 0.25f);
+        sluier(g, x, y, 7 + puls * 3, 7 + puls * 3, ((int) (110 * (1 - puls)) + 40) << 24 | 0xFFFFFF);
+        sluier(g, x, y, 6, 6, 0xFFFFFFFF);
+        sluier(g, x, y, 5, 5, INKT);
+        g.pose().pushMatrix();
+        g.pose().translate(x, y);
+        g.pose().rotate((float) Math.toRadians(yaw) + (float) Math.PI);
+        for (int i = 0; i < 7; i++) {   // the tip points "up" before the rotation
+            int w = i / 2 + 1;
+            g.fill(-w, -4 + i, w, -3 + i, GOUD);
+        }
+        g.pose().popMatrix();
     }
 
     private void badge(GuiGraphicsExtractor g, NpcPayloads.ReisPlek p, int x, int y, boolean over, long t, float a) {
@@ -284,6 +359,10 @@ public final class ReiskaartScherm extends Screen implements nl.juiced.guhs.feat
             case "knuffelkamp" -> Items.CAMPFIRE;
             case "zwamzoet" -> Items.RED_MUSHROOM;
             case "kandijkom" -> Items.AMETHYST_CLUSTER;
+            case "schemerwortel" -> Items.OAK_SAPLING;
+            case "lampionkust" -> Items.LANTERN;
+            case "hoogvads" -> Items.FEATHER;
+            case "zijdeland" -> Items.STRING;
             default -> Items.MAP;
         });
     }

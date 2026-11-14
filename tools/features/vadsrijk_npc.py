@@ -1045,6 +1045,7 @@ OVERIG = {
     P + "reiskaart.titel": "Reiskaart van het Vadsrijk",
     P + "reiskaart.uitleg": "Houd de muis ingedrukt en sleep om de kaart te verschuiven. Klik op een bestemming om te vliegen.",
     P + "reiskaart.sluit": "Sluiten",
+    P + "reiskaart.kampvuur": "Jouw kampvuur (hier word je wakker als het dichtstbij is)",   # 1.10.3: your lit campfires on the map
     P + "reiskaart.jij": "Jij bent hier",
     P + "reiskaart.hier": "Hier ben je nu.",
     P + "reiskaart.vlieg": "Klik om hierheen te vliegen!",
