@@ -512,6 +512,12 @@ public final class DungeonRij {
         if (d == null) {
             return;
         }
+        if (i != null && !i.leden.contains(p.getUUID())) {
+            Dungeon k = Dungeons.van(dungeon);
+            if (k == null || !k.bevat(p.getX(), p.getY(), p.getZ())) {
+                return;   // 1.10.3: (the inventory button) not a member of this dungeon's group and not in it: nothing to leave
+            }
+        }
         if (i != null) {
             i.leden.remove(p.getUUID());
         }
@@ -811,6 +817,7 @@ public final class DungeonRij {
             zetWachttijd(p, dungeon, WACHTTIJD_MS);
             zeg(p, Component.translatable("vadsrijk.dungeon.msg.wachttijd.gezet", dungeonNaam(dungeon), tijd(WACHTTIJD_MS)), ChatFormatting.GRAY);
             zeg(p, Component.translatable("vadsrijk.dungeon.msg.klaar.uit"), ChatFormatting.LIGHT_PURPLE);
+            zeg(p, Component.translatable("vadsrijk.dungeon.msg.verlaat.altijd"), ChatFormatting.GRAY);   // 1.10.3: loot first, leave any time
         }
     }
 
@@ -890,10 +897,48 @@ public final class DungeonRij {
             if (i != null && i.leden.contains(p.getUUID())) {
                 continue;
             }
+            if (i != null && partyErbij(p, i, k)) {
+                continue;
+            }
             naarBuiten(p, k.id(), d);
             p.sendSystemMessage(Component.translatable(i == null ? "vadsrijk.dungeon.msg.niet.gestart" : "vadsrijk.dungeon.msg.niet.van.jou")
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
+    }
+
+    /**
+     * 1.10.3 (live: "ik word steeds naar de ingang gezet"): a player who walks into a running dungeon while a member of their own
+     * party is in its group joins that group (if it has room, is not cleared yet and the player may go in: no cooldown, no other
+     * dungeon, ...), instead of being put outside the door again and again.
+     */
+    static boolean partyErbij(ServerPlayer p, Instantie i, Dungeon k) {
+        if (i.klaar || i.leden.size() >= GROEP_MAX) {
+            return false;
+        }
+        Partijen.Party party = Partijen.party(p);
+        if (party == null || party.leden.stream().noneMatch(i.leden::contains) || weiger(p, k.id(), true) != null) {
+            return false;
+        }
+        i.leden.add(p.getUUID());
+        i.namen.put(p.getUUID(), p.getGameProfile().name());
+        uitRijWeg(p.getUUID(), null);
+        zeg(p, Component.translatable("vadsrijk.dungeon.msg.party.erbij", dungeonNaam(k.id())), ChatFormatting.GOLD);
+        return true;
+    }
+
+    /** 1.10.3: who is in which dungeon group, last told to each client (the inventory's leave button). */
+    private static final Map<UUID, String> LID_GESTUURD = new HashMap<>();
+
+    static void stuurLeden(MinecraftServer s) {
+        for (ServerPlayer p : s.getPlayerList().getPlayers()) {
+            String d = dungeonVan(p.getUUID());
+            String wil = d != null && inVadsrijk(p) ? d : "";
+            if (!wil.equals(LID_GESTUURD.getOrDefault(p.getUUID(), ""))) {
+                LID_GESTUURD.put(p.getUUID(), wil);
+                DungeonNet.stuurLid(p, wil);
+            }
+        }
+        LID_GESTUURD.keySet().removeIf(id -> speler(s, id) == null);
     }
 
     // ---- the tick ---------------------------------------------------------------------------------------------------------------
@@ -914,6 +959,9 @@ public final class DungeonRij {
             }
         }
         tickRij(s, nu);
+        if (nu % 20 == 0) {
+            stuurLeden(s);
+        }
     }
 
     /** The queue, checks, instances and windows (also called by the gametests). */

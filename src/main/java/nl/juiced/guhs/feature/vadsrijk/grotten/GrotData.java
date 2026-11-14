@@ -36,41 +36,41 @@ public final class GrotData {
                     Map.entry("schat", new BlockPos(-532, 45, 181)),
                     Map.entry("amb_1", new BlockPos(-476, 44, 124)),
                     Map.entry("amb_2", new BlockPos(-488, 44, 136)))),
-            new Grot("kristalgrot", 2, 856, 107, -1166, 955, 128, -1081, 22, 24, 24, "grot_kristalgrot", Map.ofEntries(
+            new Grot("kristalgrot", 2, 856, 96, -1145, 960, 128, -1020, 22, 24, 24, "grot_kristalgrot", Map.ofEntries(
                     Map.entry("ingang", new BlockPos(856, 119, -1104)),
                     Map.entry("binnen", new BlockPos(892, 114, -1108)),
                     Map.entry("hal", new BlockPos(906, 112, -1127)),
                     Map.entry("puzzel", new BlockPos(916, 110, -1091)),
-                    Map.entry("elite", new BlockPos(940, 112, -1151)),
-                    Map.entry("schat", new BlockPos(950, 112, -1161)),
+                    Map.entry("elite", new BlockPos(930, 99, -1034)),
+                    Map.entry("schat", new BlockPos(949, 99, -1025)),
                     Map.entry("amb_1", new BlockPos(894, 111, -1111)),
                     Map.entry("amb_2", new BlockPos(921, 108, -1134)))),
-            new Grot("wortelgrot", 3, 1349, 39, -744, 1447, 56, -695, 44, 46, 47, "grot_wortelgrot", Map.ofEntries(
+            new Grot("wortelgrot", 3, 1349, 42, -765, 1529, 57, -693, 44, 46, 47, "grot_wortelgrot", Map.ofEntries(
                     Map.entry("ingang", new BlockPos(1410, 69, -737)),
                     Map.entry("binnen", new BlockPos(1402, 45, -728)),
                     Map.entry("hal", new BlockPos(1380, 44, -716)),
                     Map.entry("puzzel", new BlockPos(1358, 40, -736)),
-                    Map.entry("elite", new BlockPos(1430, 41, -709)),
-                    Map.entry("schat", new BlockPos(1442, 41, -700)),
+                    Map.entry("elite", new BlockPos(1510, 44, -712)),
+                    Map.entry("schat", new BlockPos(1524, 44, -698)),
                     Map.entry("amb_1", new BlockPos(1384, 41, -712)),
                     Map.entry("amb_2", new BlockPos(1376, 41, -720)))),
-            new Grot("koraalgrot", 4, 2197, 38, -625, 2273, 57, -569, 53, 55, 55, "grot_koraalgrot", Map.ofEntries(
+            new Grot("koraalgrot", 4, 2134, 36, -628, 2273, 57, -523, 53, 55, 55, "grot_koraalgrot", Map.ofEntries(
                     Map.entry("ingang", new BlockPos(2269, 63, -568)),
                     Map.entry("binnen", new BlockPos(2222, 44, -597)),
                     Map.entry("hal", new BlockPos(2224, 44, -596)),
                     Map.entry("puzzel", new BlockPos(2212, 40, -578)),
-                    Map.entry("elite", new BlockPos(2212, 44, -611)),
-                    Map.entry("schat", new BlockPos(2202, 44, -620)),
+                    Map.entry("elite", new BlockPos(2232, 40, -545)),
+                    Map.entry("schat", new BlockPos(2238, 40, -528)),
                     Map.entry("amb_1", new BlockPos(2233, 39, -589)),
                     Map.entry("amb_2", new BlockPos(2220, 41, -598)),
                     Map.entry("uitgang", new BlockPos(2230, 71, -596)))),
-            new Grot("wolkengrot", 5, 2477, 177, -560, 2554, 195, -483, 58, 60, 60, "grot_wolkengrot", Map.ofEntries(
+            new Grot("wolkengrot", 5, 2477, 177, -560, 2559, 195, -455, 58, 60, 60, "grot_wolkengrot", Map.ofEntries(
                     Map.entry("ingang", new BlockPos(2498, 209, -520)),
                     Map.entry("binnen", new BlockPos(2489, 181, -524)),
                     Map.entry("hal", new BlockPos(2512, 181, -548)),
                     Map.entry("puzzel", new BlockPos(2486, 177, -492)),
                     Map.entry("elite", new BlockPos(2537, 179, -506)),
-                    Map.entry("schat", new BlockPos(2549, 179, -494)),
+                    Map.entry("schat", new BlockPos(2554, 179, -520)),
                     Map.entry("amb_1", new BlockPos(2516, 178, -552)),
                     Map.entry("amb_2", new BlockPos(2506, 178, -544)))));
 

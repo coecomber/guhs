@@ -56,6 +56,7 @@ public final class VadsrijkClient {
         nl.juiced.guhs.feature.vadsrijk.grotten.client.GrotSfeerClient.init(modBus);   // U-GROTTEN: cave particles + drips
         nl.juiced.guhs.feature.vadsrijk.grotkerker.client.GrotKerkerClient.init(modBus);   // U-GROTKERKER: the cave boss renderers
         nl.juiced.guhs.feature.vadsrijk.dungeon.client.DungeonScherm.installeer();   // W-GROT: the dungeon door window + ready check
+        nl.juiced.guhs.feature.vadsrijk.dungeon.client.DungeonVerlaatKnop.installeer();   // 1.10.3: "Dungeon verlaten" in the inventory
         nl.juiced.guhs.feature.vadsrijk.ritme.client.RitmeClient.init(modBus);   // U-LEVEN-RITME: weather per zone, town lights, fireflies
         nl.juiced.guhs.feature.vadsrijk.questlopen.client.QuestLopenClient.init(modBus);   // U-QUESTLOPEN: the admin main-line screen
         nl.juiced.guhs.feature.vadsrijk.vitrine.client.VitrineClient.init(modBus);   // Y-VITRINE: the vitrine renderer

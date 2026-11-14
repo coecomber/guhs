@@ -119,6 +119,9 @@ public record GrotDungeon(String id) implements Dungeon {
         b.lijn(eerste ? Component.translatable("vadsrijk.dungeon.buit.stuk.eerste", k.baasLv())
                 : Component.translatable("vadsrijk.dungeon.buit.stuk", k.baasLv(), Math.round(KerkerLoot.EPISCH_KANS * 100)), 0xFF5A3A56);
         b.lijn(Component.translatable("vadsrijk.dungeon.buit.erts"), 0xFF5A3A56);
+        if (k.groot()) {   // 1.10.3: the chest halfway
+            b.lijn(Component.translatable("vadsrijk.grotkerker.venster.tussenkist", KerkerLoot.TUSSEN_MUNTEN * zone * zone + 100), 0xFF5A3A56);
+        }
         if (zone <= 5) {
             b.lijn(Component.translatable("vadsrijk.dungeon.buit.kern", Math.round(KerkerLoot.KERN_KANS * 100)), 0xFF5A3A56);
         }

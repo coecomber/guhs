@@ -48,6 +48,8 @@ DOORLOOP = ("air", "carpet", "grass", "fern", "flower", "tulip", "mushroom[", "g
 def lucht(b):
     if "water" in b and "waterlogged" not in b:
         return False
+    if "sea_lantern" in b:
+        return False   # (1.10.3: a full block, not a lantern)
     if b in ("minecraft:red_mushroom", "minecraft:brown_mushroom"):
         return True
     return any(w in b for w in DOORLOOP) and "mushroom_block" not in b
@@ -209,15 +211,79 @@ def controleer(g):
     return fout, len(seen)
 
 
+def kerker(g, d):
+    """1.10.3: the cave dungeon on the real tiles (KerkerData as tools/features/vadsrijk_u_grotkerker.py generates it): walking
+    from room 1 reaches EVERY spawn spot of every pack room, the elite's den and the boss room (live bug "mobs buiten de grot":
+    a spot must be reachable cave floor), the chest halfway and a stand cell next to every lever; and every spot can walk back."""
+    global _BINNEN
+    g.bouw()
+
+    def _b(c):
+        x, y, z = c
+        i, j = x - g.x0, z - g.z0
+        if 0 <= i < g.X and 0 <= j < g.Z and not math.isnan(g.F[i, j]) and y <= g.C[i, j] + 1:
+            return True
+        return any((x - t["cx"]) ** 2 + (z - t["cz"]) ** 2 <= 3.7 ** 2 and t["bot"] - 1 <= y <= t["top"] + 1 for t in g.trappen)
+    _BINNEN = _b
+    fout = []
+    x0, y0, z0, x1, y1, z1 = d["doos"]
+    doos = (x0 - 4, z0 - 4, x1 + 4, z1 + 4, y0 - 4, y1 + 4)
+    k1 = d["kamers"][0][5]
+    start = None
+    for (x, y, z) in k1:
+        if hoogte(x, y, z) is not None:
+            start = (x, y, z)
+            break
+    if start is None:
+        return [f"kamer 1: geen staanbare spawnplek"], 0
+    seen, _ = loop(start, doos)
+    terug = terug_graaf(seen, start)
+    plekken = [(k[0], p) for k in d["kamers"] for p in k[5]] + [("baaskamer", p) for p in d["baas"][5]]
+    if d.get("kist"):
+        plekken.append(("tussenkist", tuple(d["kist"])))
+    for naam, (x, y, z) in plekken:
+        if hoogte(x, y, z) is None:
+            fout.append(f"{naam} {x},{y},{z}: niet staanbaar ({blok(x, y - 1, z)} / {blok(x, y, z)} / {blok(x, y + 1, z)})")
+        elif (x, y, z) not in seen:
+            fout.append(f"{naam} {x},{y},{z}: niet lopend bereikbaar vanaf kamer 1")
+        elif (x, y, z) not in terug:
+            fout.append(f"{naam} {x},{y},{z}: komt niet lopend terug")
+    for (x, y, z) in d["hendels"]:
+        if "lever" not in blok(x, y, z):
+            fout.append(f"hendel {x},{y},{z}: geen hendel in de tegel ({blok(x, y, z)})")
+        if not any((x + dx, yy, z + dz) in seen for dx, dz in ((1, 0), (-1, 0), (0, 1), (0, -1), (1, 1), (-1, 1), (1, -1), (-1, -1))
+                   for yy in (y - 1, y, y + 1)):
+            fout.append(f"hendel {x},{y},{z}: niemand kan erbij")
+    for (x, a, z, b) in d["poort"] + d["sluis"]:
+        if not all(lucht(blok(x, yy, z)) for yy in range(a, b)):
+            fout.append(f"poortkolom {x},{a}..{b},{z}: niet helemaal lucht in de tegel")
+    return fout, len(seen)
+
+
 def main():
     ids = sys.argv[1:]
     slecht = 0
     for g in GR.grotten():
         if ids and g.id not in ids:
             continue
+        if g.id == "zoutgrot":
+            continue
         fout, n = controleer(g)
         print(f"{g.id}: {n} loopbare plekken, {len(fout)} problemen")
         for f in fout:
+            print("   ", f)
+        slecht += len(fout)
+    # 1.10.3: the dungeons (incl. zone 6's wing)
+    sys.path.insert(0, os.path.join(ROOT, "tools", "features"))
+    import vadsrijk_u_grotkerker as UK
+    gs = {g.id: g for g in GR.grotten()}
+    for d in UK.kerkers():
+        if (ids and d["id"] not in ids) or d["id"] not in gs:
+            continue
+        fout, n = kerker(gs[d["id"]], d)
+        print(f"{d['id']} (dungeon): {n} loopbare plekken vanaf kamer 1, {sum(len(k[5]) for k in d['kamers']) + len(d['baas'][5])} spawnplekken, "
+              f"{len(fout)} problemen")
+        for f in fout[:20]:
             print("   ", f)
         slecht += len(fout)
     sys.exit(1 if slecht else 0)

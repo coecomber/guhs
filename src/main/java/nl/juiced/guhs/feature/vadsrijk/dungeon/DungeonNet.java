@@ -52,6 +52,24 @@ public final class DungeonNet {
         }
     }
 
+    /**
+     * 1.10.3 (user request "na de baas wil ik eerst looten, daarna kom ik er niet snel meer uit"): the dungeon this player is a
+     * member of right now ("" = none). The client shows the "Dungeon verlaten" button in the inventory while it is set.
+     */
+    public record Lid(String dungeon) implements CustomPacketPayload {
+        public static final Type<Lid> TYPE = new Type<>(Guhs.id("vr_dungeon_lid"));
+        public static final StreamCodec<RegistryFriendlyByteBuf, Lid> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, Lid::dungeon,
+                Lid::new);
+
+        @Override
+        public Type<? extends CustomPacketPayload> type() {
+            return TYPE;
+        }
+    }
+
+    /** Client side: the dungeon the local player is a member of ("" = none). */
+    public static volatile String LID = "";
+
     /** Set by the client. */
     public static Consumer<Scherm> ontvanger = s -> {
     };
@@ -68,6 +86,7 @@ public final class DungeonNet {
             }
         });
         r.playToClient(Scherm.TYPE, Scherm.STREAM_CODEC, (m, c) -> ontvanger.accept(m));
+        r.playToClient(Lid.TYPE, Lid.STREAM_CODEC, (m, c) -> LID = m.dungeon());
     }
 
     static void stuur(ServerPlayer p, Scherm s) {
@@ -75,6 +94,17 @@ public final class DungeonNet {
         if (p.connection != null && !(p instanceof net.neoforged.neoforge.common.util.FakePlayer)) {
             try {
                 PacketDistributor.sendToPlayer(p, s);
+            } catch (RuntimeException e) {
+                // (a gametest mock player has no real connection)
+            }
+        }
+    }
+
+    /** 1.10.3: tells the client whether its player is in a dungeon group (the inventory's leave button). */
+    static void stuurLid(ServerPlayer p, String dungeon) {
+        if (p.connection != null && !(p instanceof net.neoforged.neoforge.common.util.FakePlayer)) {
+            try {
+                PacketDistributor.sendToPlayer(p, new Lid(dungeon));
             } catch (RuntimeException e) {
                 // (a gametest mock player has no real connection)
             }

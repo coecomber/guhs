@@ -29,10 +29,20 @@ sys.path.insert(0, HIER)
 # (index into g.gangen: the one that ends in the boss room), levels (mobs, mid-elite, boss)
 RUN = {
     "zwamgrot": dict(kamers=["sporenhal", "glimzaal"], baas="elitehol", gang=2, lv=(11, 13), elite=13, baaslv=14),
-    "kristalgrot": dict(kamers=["kristalhal", "ijsmeer"], baas="elitehol", gang=3, lv=(22, 24), elite=24, baaslv=25),
-    "wortelgrot": dict(kamers=["wortelvoet", "wortelhal"], baas="elitehol", gang=2, lv=(44, 46), elite=47, baaslv=48),
-    "koraalgrot": dict(kamers=["koraalhal:o", "koraalhal:w"], baas="elitehol", gang=3, lv=(53, 55), elite=55, baaslv=56),
-    "wolkengrot": dict(kamers=["blaasgatbodem", "wolkenhal"], baas="elitehol", gang=2, lv=(58, 60), elite=60, baaslv=60),
+    # 1.10.3 "Grotere dungeons": zones 2+ have 4 pack rooms + the elite's own den (the last room), a sluis (a second gate that the
+    # run shuts until the levers in the sluis room are pulled; gang = the tunnel name in grotplan) and a chest halfway (room 2)
+    "kristalgrot": dict(kamers=["kristalhal", "ijsmeer", "galmzaal", "pegelhal", "kristalhol"], baas="elitehol", gang="poort",
+                        sluis="sluis", sluiskamer="kristalsluis", lv=(22, 24), elite=24, baaslv=25),
+    "wortelgrot": dict(kamers=["wortelvoet", "wortelhal", "knoestzaal", "zwamwortelzaal", "wortelhol"], baas="elitehol", gang="poort",
+                       sluis="sluis", sluiskamer="wortelsluis", lv=(44, 46), elite=47, baaslv=48),
+    "koraalgrot": dict(kamers=["koraalhal", "koraaltuin", "anemonenzaal", "parelzaal", "parelhol"], baas="elitehol", gang="poort",
+                       sluis="sluis", sluiskamer="koraalsluis", lv=(53, 55), elite=55, baaslv=56),
+    "wolkengrot": dict(kamers=["blaasgatbodem", "wolkenhal", "donderzaal", "pluiszaal", "grauwhol"], baas="elitehol", gang="poort",
+                       sluis="sluis", sluiskamer="wolkensluis", lv=(58, 60), elite=60, baaslv=60),
+    # zone 6: rooms 1 + 2 are the two halves of the existing salt hall (zone 6's own generator; spawn spots read from the tiles),
+    # the rest is the dungeon wing stamp (grotplan.zoutgrot); the boss room is the existing round chamber (a virtual room there)
+    "zoutgrot": dict(kamers=[("hal_west", 3861, 50, -540, 8), ("hal_oost", 3889, 50, -534, 6), "galmzoutzaal", "kristalzoutzaal", "zouthol"],
+                     baas="zoutkamer", gang="poort", sluis="sluis", sluiskamer="zoutsluis", lv=(64, 66), elite=66, baaslv=67),
 }
 # zone 6: De Zingende Zoutgrot (u-z6wereld, tools/vadsrijk/zone6/bouw6.py zoutgrot()): hall centre (ex, 50, hz) with ex = 3874,
 # hz = -542 (stand "zoutgrot" = hz + 8), hall radii 22 x 15, the lake at (ex + 8, hz - 7), the elite chamber "zoutgrot_elite"
@@ -95,9 +105,10 @@ def _ellips(k, x, z):
     return math.sqrt(((x - k["cx"]) / k["rx"]) ** 2 + ((z - k["cz"]) / k["rz"]) ** 2)
 
 
-def _poort(g, gang, k):
+def _poort(g, gang, k, verboden=None):
     """The gate: walk the tunnel back from the boss room until ~3 blocks outside its edge; take the air columns of the tunnel across
-    that spot (2 rows deep). Returns (cells [(x, y0, z, y1)], centre (x, y, z))."""
+    that spot (2 rows deep). Returns (cells [(x, y0, z, y1)], centre (x, y, z)). 1.10.3: also the sluis (k = the sluis room; then
+    `verboden` = the rooms that must be unreachable from k's side with it shut)."""
     import numpy as np
     P = gang["punten"]
     # sample the polyline densely from the boss end backwards
@@ -147,43 +158,148 @@ def _poort(g, gang, k):
                 continue
             gezien.add((a, b))
             rij.append((a, b))
-    lek = [kk["naam"] for kk in g.kamers if kk is not k and kk["naam"] != "schatnis"
-           and (int(round(kk["cx"])) - g.x0, int(round(kk["cz"])) - g.z0) in gezien]
+    if verboden is None:
+        verboden = [kk for kk in g.kamers if kk is not k and kk["naam"] != "schatnis"]
+    lek = [kk["naam"] for kk in verboden if (int(round(kk["cx"])) - g.x0, int(round(kk["cz"])) - g.z0) in gezien]
     if lek:
         raise RuntimeError(f"{g.id}: the gate leaks into {lek}")
     return sorted(cellen.values()), (int(round(gx)), int(math.ceil(gS)), int(round(gz)))
 
 
+def _gang(g, sleutel):
+    if isinstance(sleutel, int):
+        return g.gangen[sleutel]
+    for ga in g.gangen:
+        if ga.get("naam") == sleutel:
+            return ga
+    raise RuntimeError(f"{g.id}: no tunnel {sleutel}")
+
+
+def _plekken(g, k, n=36, rmax=0.8):
+    """1.10.3 (live bug "mobs buiten de grot"): the spawn spots of a room: dry, full floor blocks of THIS room with 3 free cells
+    above, inside rmax of its normalised radius, no deco on them; spread evenly, at most n. Java only spawns on these."""
+    import numpy as np
+    uit = []
+    for i in range(g.X):
+        for j in range(g.Z):
+            if int(g.eig[i, j]) != k["i"]:
+                continue
+            S = g.F[i, j]
+            if np.isnan(S) or g.Wt[i, j] > -900 or S != math.ceil(S):
+                continue
+            x, z = i + g.x0, j + g.z0
+            if _ellips(k, x, z) > rmax:
+                continue
+            y = int(S)
+            if not all(g.is_lucht(x, y + d, z) for d in range(3)) or not g.is_vast(x, y - 1, z):
+                continue
+            uit.append((x, y, z))
+    if len(uit) > n:
+        stap = len(uit) / n
+        uit = [uit[int(i * stap)] for i in range(n)]
+    return uit
+
+
+_TG = None
+
+
+def _tegel_plekken(cx, cz, r, y, n=36):
+    """Spawn spots read from the map tiles (for rooms another generator built: zone 6's salt hall + round chamber): a solid floor
+    block at y - 1, three free cells above, within r of (cx, cz)."""
+    global _TG
+    if _TG is None:
+        sys.path.insert(0, os.path.join(ROOT, "tools", "vadsrijk"))
+        import verbind as VB
+        _TG = VB._Tegels(VB.UIT)
+    T = 64
+
+    def blok(x, yy, z):
+        v = _TG.dicht((x // T, z // T))
+        return "minecraft:air" if v is None else _TG.pal[int(v[x % T, yy, z % T])]
+
+    def vrij(b):
+        n_ = b.split("[")[0]
+        return n_ in ("minecraft:air", "minecraft:cave_air") or any(w in b for w in ("carpet", "kristalletjes", "short_dry_grass", "dead_bush"))
+    uit = []
+    for x in range(int(cx - r), int(cx + r) + 1):
+        for z in range(int(cz - r), int(cz + r) + 1):
+            if (x - cx) ** 2 + (z - cz) ** 2 > r * r:
+                continue
+            onder = blok(x, y - 1, z)
+            if vrij(onder) or "water" in onder or "slab" in onder or "stairs" in onder or "wall" in onder or "fence" in onder:
+                continue
+            if all(blok(x, y + d, z) == "minecraft:air" for d in range(3)):
+                uit.append((x, y, z))
+    if len(uit) > n:
+        stap = len(uit) / n
+        uit = [uit[int(i * stap)] for i in range(n)]
+    return uit
+
+
+def _kist(g, k):
+    """The chest halfway (room 2): the floor spot nearest the room centre with a dry 3x3 floor round it."""
+    best = None
+    for (x, y, z) in _plekken(g, k, n=100000, rmax=0.7):
+        if all(g.stand(x + dx, z + dz) == y and g.is_lucht(x + dx, y, z + dz) for dx in (-1, 0, 1) for dz in (-1, 0, 1)):
+            d = math.hypot(x - k["cx"], z - k["cz"])
+            if best is None or d < best[0]:
+                best = (d, (x, y, z))
+    if best is None:
+        raise RuntimeError(f"{g.id}: no spot for the chest halfway in {k['naam']}")
+    return best[1]
+
+
+def _doos(g):
+    """1.10.3 (live bug "steeds naar de ingang"): the cave box covers ALL cave air and water + 2 (the old one stopped at the
+    floor - 2 / the highest ceiling + 1 and missed the lake bed and the pockets under it). The entrance shaft above the highest
+    room ceiling is not in it (the surface round it must never count as "in the dungeon"); kerker data's per-column space
+    (herbouw.py) is the precise part."""
+    import numpy as np
+    from grot import LUCHT, ZACHT, ZET
+    lucht = np.isin(g.op, (LUCHT, ZACHT))
+    wid = g.pidx.get("minecraft:water")
+    if wid is not None:
+        lucht |= (g.op == ZET) & (g.blk == wid)
+    ii, yy, jj = np.nonzero(lucht)
+    plafond = int(np.max(g.C[~np.isnan(g.F)]))
+    y1 = min(int(yy.max()) + g.y0 + 2, plafond + 2)
+    return (int(ii.min()) + g.x0 - 2, int(yy.min()) + g.y0 - 2, int(jj.min()) + g.z0 - 2, int(ii.max()) + g.x0 + 2, y1,
+            int(jj.max()) + g.z0 + 2)
+
+
 def kerkers():
     import grot
-    import numpy as np
     uit = []
     for g in grot.grotten():
         g.bouw()
         r = RUN[g.id]
         kn = {k["naam"]: k for k in g.kamers}
-        # the cave box (same as vadsrijk_u_grotten: rooms + tunnels, the shaft above the highest ceiling not included)
-        F = g.F
-        ii, jj = np.nonzero(~np.isnan(F))
-        x0, x1 = int(ii.min()) + g.x0 - 1, int(ii.max()) + g.x0 + 1
-        z0, z1 = int(jj.min()) + g.z0 - 1, int(jj.max()) + g.z0 + 1
-        y0 = int(math.ceil(np.nanmin(F))) - 2
-        y1 = int(np.max(g.C[~np.isnan(F)])) + 1
-        for t in g.trappen:
-            x0, x1 = min(x0, int(t["cx"]) - 4), max(x1, int(t["cx"]) + 4)
-            z0, z1 = min(z0, int(t["cz"]) - 4), max(z1, int(t["cz"]) + 4)
+        doos = _doos(g)
         kamers = []
         for n, naam in enumerate(r["kamers"]):
+            if isinstance(naam, tuple):   # (zone 6: a fixed spot in a room of zone 6's own generator)
+                nm, cx, y, cz, rad = naam
+                pl = _tegel_plekken(cx, cz, rad, y)
+                if len(pl) < 8:
+                    raise RuntimeError(f"{g.id}: room {nm} has only {len(pl)} spawn spots in the tiles")
+                kamers.append((f"kamer_{n + 1}", cx, y, cz, rad, pl))
+                continue
             basis, _, helft = naam.partition(":")
             k = kn[basis]
             cx, cz, rad = k["cx"], k["cz"], min(k["rx"], k["rz"]) * 0.72
             if helft:   # a half of one big room: centre at a third of the long axis, smaller radius
                 cx = k["cx"] + (k["rx"] * 0.45 if helft == "o" else -k["rx"] * 0.45)
                 rad = min(k["rx"] * 0.42, k["rz"] * 0.62)
-            kamers.append((f"kamer_{n + 1}", int(round(cx)), int(math.ceil(k["S"])), int(round(cz)), max(4, int(round(rad)))))
+            pl = _plekken(g, k)
+            if helft:
+                pl = [p for p in pl if math.hypot(p[0] - cx, p[2] - cz) <= rad + 1]
+            if len(pl) < 8:
+                raise RuntimeError(f"{g.id}: room {naam} has only {len(pl)} spawn spots")
+            kamers.append((f"kamer_{n + 1}", int(round(cx)), int(math.ceil(k["S"])), int(round(cz)), max(4, int(round(rad))), pl))
         b = kn[r["baas"]]
-        baas = ("baaskamer", int(round(b["cx"])), int(math.ceil(b["S"])), int(round(b["cz"])), int(min(b["rx"], b["rz"])))
-        poort, pc = _poort(g, g.gangen[r["gang"]], b)
+        bpl = _tegel_plekken(b["cx"], b["cz"], min(b["rx"], b["rz"]) - 1, int(math.ceil(b["S"]))) if b.get("virtueel") else _plekken(g, b)
+        baas = ("baaskamer", int(round(b["cx"])), int(math.ceil(b["S"])), int(round(b["cz"])), int(min(b["rx"], b["rz"])), bpl)
+        poort, pc = _poort(g, _gang(g, r["gang"]), b)
         # behind the gate: the boss room (radius + 2, but always 1.5 short of the gate itself, so standing in front of it is not "behind")
         dmin = min(math.hypot(c[0] - b["cx"], c[2] - b["cz"]) for c in poort)
         achter = [(int(round(b["cx"])), int(math.ceil(b["S"])), int(round(b["cz"])), int(min(max(b["rx"], b["rz"]) + 2, dmin - 1.5)))]
@@ -196,26 +312,45 @@ def kerkers():
             if _ellips(b, p0[0], p0[1]) <= 1.2 and "schatnis" in kn and _ellips(kn["schatnis"], p1[0], p1[1]) <= 1.6:
                 for (x, z, S) in ga["punten"]:
                     achter.append((int(round(x)), int(math.ceil(S)), int(round(z)), 4))
-        uit.append(dict(id=g.id, zone=g.zone, doos=(x0, y0, z0, x1, y1, z1), kamers=kamers, baas=baas, poort=poort, bord=pc, achter=achter,
-                        lv=r["lv"], elite=r["elite"], baaslv=r["baaslv"]))
-    uit.append(dict(id=Z6["id"], zone=6, doos=Z6["doos"], kamers=Z6["kamers"], baas=Z6["baas"], poort=[], bord=None, achter=Z6["achter"],
-                    lv=Z6["lv"], elite=Z6["elite"], baaslv=Z6["baaslv"]))
+        sluis, sbord, kist = [], None, None
+        if "sluis" in r:
+            sk = kn[r["sluiskamer"]]
+            achter_sluis = [kn[n_] for n_ in r["kamers"][2:] if not isinstance(n_, tuple)] + [b]
+            sluis, sbord = _poort(g, _gang(g, r["sluis"]), sk, verboden=achter_sluis)
+            k2 = r["kamers"][1]
+            if isinstance(k2, tuple):
+                kist = min(kamers[1][5], key=lambda p: math.hypot(p[0] - k2[1], p[2] - k2[3]))
+            else:
+                kist = _kist(g, kn[k2])
+            if len(g.hendels) < 2:
+                raise RuntimeError(f"{g.id}: the sluis room needs levers")
+        if g.id == "zoutgrot":   # (+ the salt hall, stair foot and chamber of zone 6's own generator)
+            doos = tuple(min(a, b_) for a, b_ in zip(doos[:3], Z6["doos"][:3])) + tuple(max(a, b_) for a, b_ in zip(doos[3:], Z6["doos"][3:]))
+        uit.append(dict(id=g.id, zone=g.zone, doos=doos, kamers=kamers, baas=baas, poort=poort, bord=pc, achter=achter,
+                        lv=r["lv"], elite=r["elite"], baaslv=r["baaslv"], sluis=sluis, sbord=sbord, hendels=list(g.hendels), kist=kist))
     return uit
 
 
 def java(ks):
+    def pos(p):
+        return "null" if p is None else f"new BlockPos({p[0]}, {p[1]}, {p[2]})"
+
     def kamer(k):
-        return f'new Kamer("{k[0]}", {k[1]}, {k[2]}, {k[3]}, {k[4]})'
+        pl = ", ".join(f"{x}, {y}, {z}" for (x, y, z) in k[5])
+        return f'new Kamer("{k[0]}", {k[1]}, {k[2]}, {k[3]}, {k[4]}, new int[] {{{pl}}})'
+
+    def kolommen(cs):
+        return "List.of(" + ", ".join(f"new int[] {{{x}, {a}, {z}, {b}}}" for (x, a, z, b) in cs) + ")"
     regels = []
     for d in ks:
         x0, y0, z0, x1, y1, z1 = d["doos"]
-        kamers = ", ".join(kamer(k) for k in d["kamers"])
-        poort = ", ".join(f"new int[] {{{x}, {a}, {z}, {b}}}" for (x, a, z, b) in d["poort"])
+        kamers = ",\n                        ".join(kamer(k) for k in d["kamers"])
         achter = ", ".join(f"new int[] {{{x}, {y}, {z}, {r}}}" for (x, y, z, r) in d["achter"])
-        bord = "null" if d["bord"] is None else f"new BlockPos({d['bord'][0]}, {d['bord'][1]}, {d['bord'][2]})"
+        hendels = ", ".join(pos(h) for h in d["hendels"])
         regels.append(f'            new Kerker("{d["id"]}", {d["zone"]}, {x0}, {y0}, {z0}, {x1}, {y1}, {z1}, {d["lv"][0]}, {d["lv"][1]}, {d["elite"]}, '
                       f'{d["baaslv"]},\n                    List.of({kamers}),\n                    {kamer(d["baas"])},\n'
-                      f'                    List.of({poort}),\n                    {bord},\n                    List.of({achter}))')
+                      f'                    {kolommen(d["poort"])},\n                    {pos(d["bord"])},\n                    List.of({achter}),\n'
+                      f'                    {kolommen(d["sluis"])}, {pos(d["sbord"])},\n                    List.of({hendels}), {pos(d["kist"])})')
     src = f"""package nl.juiced.guhs.feature.vadsrijk.grotkerker;
 
 import java.util.List;
@@ -224,16 +359,30 @@ import net.minecraft.core.BlockPos;
 
 /**
  * GENERATED by tools/features/vadsrijk_u_grotkerker.py from tools/vadsrijk/grotten/grotplan.py (do not edit by hand). The six
- * cave runs (U-GROTKERKER): per cave its box, the two pack rooms (centre stand position + spawn radius), the boss room, the gate
- * columns ({{x, y0, z, y1}}: air from y0 up to y1 - 1 in the tunnel into the boss room; empty = no gate), where the gate board
- * hangs, and the "behind the gate" circles ({{x, y, z, r}}: a gate never closes on anyone there). Zone 6 is switched on in
- * {{@link Kerkers}} only when u-z6wereld's Z6WereldPlekken is present.
+ * cave runs (U-GROTKERKER): per cave its box, the pack rooms (centre stand position + radius + the spawn spots {{x, y, z, ...}}),
+ * the boss room, the gate columns ({{x, y0, z, y1}}: air from y0 up to y1 - 1 in the tunnel into the boss room; empty = no gate),
+ * where the gate board hangs, and the "behind the gate" circles ({{x, y, z, r}}: a gate never closes on anyone there). 1.10.3
+ * "Grotere dungeons" (zones 2+): 4 pack rooms + the elite's den (the last room), the sluis columns + its board, the levers in
+ * the sluis room and the spot of the chest halfway. Zone 6 is switched on in {{@link Kerkers}} only when u-z6wereld's
+ * Z6WereldPlekken is present. The per-column cave space lives in data/guhs/vadsrijk/grotkerker/&lt;id&gt;.json ({{@link Kerkers#ruimte}}).
  */
 public final class KerkerData {{
-    /** A room: id, stand centre, spawn/fight radius. */
-    public record Kamer(String id, int x, int y, int z, int r) {{
+    /** A room: id, stand centre, fight radius, and its spawn spots (x, y, z triples; empty = random within r). */
+    public record Kamer(String id, int x, int y, int z, int r, int[] plekken) {{
+        public Kamer(String id, int x, int y, int z, int r) {{
+            this(id, x, y, z, r, new int[0]);
+        }}
+
         public BlockPos pos() {{
             return new BlockPos(x, y, z);
+        }}
+
+        public int aantalPlekken() {{
+            return plekken.length / 3;
+        }}
+
+        public BlockPos plek(int i) {{
+            return new BlockPos(plekken[i * 3], plekken[i * 3 + 1], plekken[i * 3 + 2]);
         }}
 
         public boolean binnen(double px, double py, double pz, double extra) {{
@@ -243,9 +392,26 @@ public final class KerkerData {{
     }}
 
     public record Kerker(String id, int zone, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, int minLv, int maxLv, int eliteLv,
-            int baasLv, List<Kamer> kamers, Kamer baas, List<int[]> poort, BlockPos bord, List<int[]> achter) {{
+            int baasLv, List<Kamer> kamers, Kamer baas, List<int[]> poort, BlockPos bord, List<int[]> achter, List<int[]> sluis, BlockPos sluisBord,
+            List<BlockPos> hendels, BlockPos kist) {{
+        /** The 1.10.2 shape (two rooms, no sluis): the Zwamgrot and the gametests' stand-in caves. */
+        public Kerker(String id, int zone, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, int minLv, int maxLv, int eliteLv, int baasLv,
+                List<Kamer> kamers, Kamer baas, List<int[]> poort, BlockPos bord, List<int[]> achter) {{
+            this(id, zone, minX, minY, minZ, maxX, maxY, maxZ, minLv, maxLv, eliteLv, baasLv, kamers, baas, poort, bord, achter, List.of(), null, List.of(), null);
+        }}
+
+        /** In the cave box AND (when the cave has its generated per-column space) in the cave's real space. */
         public boolean bevat(double x, double y, double z) {{
-            return x >= minX && x < maxX + 1 && z >= minZ && z < maxZ + 1 && y >= minY && y < maxY + 1;
+            if (!(x >= minX && x < maxX + 1 && z >= minZ && z < maxZ + 1 && y >= minY && y < maxY + 1)) {{
+                return false;
+            }}
+            Kerkers.Ruimte r = Kerkers.ruimte(this);
+            return r == null || r.bevat(x, y, z);
+        }}
+
+        /** 1.10.3: the big layout (4 pack rooms + the elite's den, a sluis, a chest halfway). */
+        public boolean groot() {{
+            return kamers.size() > 2;
         }}
 
         /** Behind the gate (the boss room, the treasure nook and the tunnel between)? */
@@ -357,6 +523,16 @@ def teksten():
         K + "bord.titel": ("Grotkerker", "Cave dungeon"),
         K + "bijroep": ("%s roept hulp uit de grot!", "%s calls for help from the cave!"),
         K + "terug": ("%s springt terug naar het midden!", "%s jumps back to the middle!"),
+        # 1.10.3 "Grotere dungeons": the big caves (4 rooms, the sluis + levers, the chest halfway)
+        "vadsrijk.grotkerker.start.groot": ("⚔ De grot wordt wakker! Vier grotkamers, een sluis met hendels en een elite staan tussen jou en de grotbaas.", "⚔ The cave wakes up! Four cave rooms, a sluice gate with levers and an elite stand between you and the cave boss."),
+        "vadsrijk.grotkerker.sluis.dicht": ("Sluis", "Sluice gate"),
+        "vadsrijk.grotkerker.sluis.nog": ("Haal de hendels in de sluiszaal over: %s/%s", "Pull the levers in the sluice room: %s/%s"),
+        "vadsrijk.grotkerker.sluis.hendel": ("Hendel overgehaald! (%s/%s)", "Lever pulled! (%s/%s)"),
+        "vadsrijk.grotkerker.sluis.open": ("De sluis gaat open! Op naar de diepere grotkamers.", "The sluice gate opens! On to the deeper cave rooms."),
+        "vadsrijk.grotkerker.sluis.botst": ("De sluis zit dicht. Haal eerst alle hendels in de sluiszaal over!", "The sluice gate is shut. Pull every lever in the sluice room first!"),
+        "vadsrijk.grotkerker.tussenkist": ("★ Halverwege! Er staat een tussenkist voor je klaar.", "★ Halfway there! A chest is waiting for you."),
+        "vadsrijk.grotkerker.venster.tussenkist": ("• Halverwege (na grotkamer 2): een tussenkist met %s brons, een uitrustingsstuk en erts", "• Halfway (after cave room 2): a chest with %s bronze, a piece of gear and ore"),
+
     })
     return t
 

@@ -238,7 +238,9 @@ public class VadsrijkBalans1101GameTests {
             double x = nieuw / oud;
             helper.assertTrue(x > 0.9 && x < 1.8, "TTK lv " + lv + " x" + x);
         }
-        helper.assertTrue(GrotBaas.xpFactor(1) == 0.5 && GrotBaas.xpFactor(2) == 0.5 && GrotBaas.xpFactor(3) == 0.63, "dungeon boss share of a level");
+        // 1.10.3: the dungeons from zone 2 on are twice as big: the boss share grows so a run gives ~1.3 level (the Zwamgrot stays)
+        helper.assertTrue(GrotBaas.xpFactor(1) == 0.5 && GrotBaas.xpFactor(2) == 0.75 && GrotBaas.xpFactor(3) == 0.86 && GrotBaas.xpFactor(6) == 0.86,
+                "dungeon boss share of a level");
         long zwamgrot = Math.round(Levels.xpVoor(14) * 0.5);
         helper.assertTrue(zwamgrot > 850 && zwamgrot < 900, "Zwamgrot boss lv 14: ~870 xp (was 262): " + zwamgrot);
         helper.succeed();

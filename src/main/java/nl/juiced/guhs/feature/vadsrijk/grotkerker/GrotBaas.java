@@ -103,9 +103,13 @@ public class GrotBaas extends VadsrijkBaas implements GeoEntity {
     /**
      * 1101-balans: the boss's share of a level (was 0.15), so a solo run (7 pack mobs + elite + boss) gives ~0.8 level of the boss
      * level in every dungeon: zones 1-2 0.50 (Zwamgrot 791 -> ~1,400 xp), zones 3-6 0.63 (their mobs give stap/55, less per kill).
+     * <p>1.10.3 "Grotere dungeons": from zone 2 on a run is twice as long (15 pack mobs solo instead of 7, ~15-20 min instead of ~8)
+     * and gives ~1.3 level in total (xp per minute a bit lower than before): zone 2 0.75 (15 x ~0.028 + the elite 0.13 + the boss
+     * 0.75 x stap(25) = ~1.32 x stap(24)), zones 3-6 0.86 (15 / 55 + the elite 0.08 + 0.86 x ~1.1 = ~1.30). The Zwamgrot (zone 1,
+     * not enlarged) stays at 0.50.
      */
     public static double xpFactor(int zone) {
-        return zone <= 2 ? 0.50 : 0.63;
+        return zone <= 1 ? 0.50 : zone == 2 ? 0.75 : 0.86;
     }
 
     @Nullable

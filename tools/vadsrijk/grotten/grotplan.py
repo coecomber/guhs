@@ -47,7 +47,57 @@ META = {
                        onder=("Wolkengrotten in de kop van Moeder Wolkwal", "Cloud caves in Mother Cloudwhale's head")),
 }
 
+# 1.10.3 "Grotere dungeons": every cave from zone 2 on is about twice as big (4 pack rooms, a sluis room with a lever puzzle, an
+# elite den, then the boss room). GUHS_GROT_OUD=1 builds the 1.10.2 layout instead (the rebuild tool needs it to take the old cave
+# out of the tiles, and the previews show old vs new). The Zwamgrot (zone 1) is the same in both.
+GROOT = os.environ.get("GUHS_GROT_OUD") != "1"
+
 SLAB = "[type=bottom,waterlogged=false]"
+HENDEL = "minecraft:lever[face=floor,facing={f},powered=false]"
+
+
+def koppel(g, gangen):
+    """1.10.3: every end of these tunnels runs on into the room it starts/ends at (half way to its centre, on the room's floor),
+    so no rock lip is left between a room's edge and the tunnel when the wobble of either pulls back."""
+    for ga in gangen:
+        P = ga["punten"]
+        for kant in (0, -1):
+            x, z, S = P[kant]
+            beste = None
+            for k in g.kamers:
+                d = math.sqrt(((x - k["cx"]) / k["rx"]) ** 2 + ((z - k["cz"]) / k["rz"]) ** 2)
+                if d <= 1.6 and (beste is None or d < beste[0]):
+                    beste = (d, k)
+            if beste is None:
+                continue
+            k = beste[1]
+            nx, nz = x + (k["cx"] - x) * 0.5, z + (k["cz"] - z) * 0.5
+            if abs(k["S"] - S) > 0.5 * math.hypot(nx - x, nz - z) + 1e-6:
+                raise RuntimeError(f"{g.id}: tunnel end {x},{z} at {S} too steep into {k['naam']} ({k['S']})")
+            if kant == 0:
+                P.insert(0, (nx, nz, k["S"]))
+            else:
+                P.append((nx, nz, k["S"]))
+
+
+def hendels(g, k, hoeken, voet, licht, r=0.74):
+    """1.10.3: the sluis puzzle of a dungeon: a lever on a little pedestal at each angle (radians) on a ring of room k (normalised
+    radius r), a light beside it. The positions go to g.hendels (KerkerData: the run shuts the sluis until all are pulled)."""
+    a = int(math.ceil(k["S"]))
+    plekken = []
+    for h in hoeken:
+        x, z = round(k["cx"] + math.cos(h) * k["rx"] * r), round(k["cz"] + math.sin(h) * k["rz"] * r)
+        plekken.append((x, z, h))
+        g.vrij.append((x, z, 2.2))
+        g.hendels.append((x, a + 1, z))
+
+    def zet(g_):
+        for (x, z, h) in plekken:
+            g_.zet(x, a, z, voet)
+            g_.zet(x, a + 1, z, HENDEL.format(f=kompas(k["cx"] - x, k["cz"] - z)))
+            dx, dz = round(math.cos(h + math.pi / 2)), round(math.sin(h + math.pi / 2))
+            g_.zet(x + dx, a - 1, z + dz, licht)    # (a light in the floor beside it)
+    g.bouwwerk.append(zet)
 LANT = "minecraft:lantern[hanging=false,waterlogged=false]"
 LANT_H = "minecraft:lantern[hanging=true,waterlogged=false]"
 ZLANT = "minecraft:soul_lantern[hanging=false,waterlogged=false]"
@@ -337,13 +387,40 @@ def kristalgrot():
     g.meer(921, -1134, 9, 6.5, 111, 108.5, ijs=0.6)
     g.gang([(901, -1104, 114), (909, -1097, 114), (912, -1094, 114)])
     puzzel = g.kamer("puzzelhal", 916, -1091, 9, 9, 114, 9, wobbel=0.06)
-    g.gang([(927, -1139, 112), (934, -1145, 112)])
-    elite = g.kamer("elitehol", 940, -1151, 9, 8, 112, 9)
-    g.gang([(945, -1155, 112), (948, -1159, 112)])
-    nis = g.kamer("schatnis", 950, -1161, 4.5, 4.5, 112, 5, hmin=3.5, wobbel=0.05)
-    g.plekken = dict(ingang=(856, 119, -1104), binnen=(892, 114, -1108), hal=(906, 112, -1127), puzzel=(916, 110, -1091),
-                     elite=(940, 112, -1151), schat=(950, 112, -1161), amb_1=(894, 111, -1111), amb_2=(921, 108, -1134))
-    g.vrij += [(916, -1091, 7.5), (940, -1151, 2.5)]
+    nieuwe = []
+    if not GROOT:
+        g.gang([(927, -1139, 112), (934, -1145, 112)])
+        elite = g.kamer("elitehol", 940, -1151, 9, 8, 112, 9)
+        g.gang([(945, -1155, 112), (948, -1159, 112)])
+        nis = g.kamer("schatnis", 950, -1161, 4.5, 4.5, 112, 5, hmin=3.5, wobbel=0.05)
+        g.plekken = dict(ingang=(856, 119, -1104), binnen=(892, 114, -1108), hal=(906, 112, -1127), puzzel=(916, 110, -1091),
+                         elite=(940, 112, -1151), schat=(950, 112, -1161), amb_1=(894, 111, -1111), amb_2=(921, 108, -1134))
+        g.vrij += [(916, -1091, 7.5), (940, -1151, 2.5)]
+        kist = (952, -1162, 950, -1161)
+    else:
+        # 1.10.3: from the Ijsmeer the way goes down south-east into the deep Galmtop (floor 98-104, well under the slopes): the
+        # sluis room (3 crystal levers), the Galmzaal and the Pegelhal (pack 3 + 4), the Kristalhol (elite), the boss room, the nook
+        n0 = len(g.gangen)
+        g.gang([(930, -1128, 112), (938, -1122, 111), (943, -1114, 109.5), (946, -1104, 107), (948, -1096, 105), (950, -1090, 104)],
+               naam="naar_sluis")
+        sluis = g.kamer("kristalsluis", 951, -1083, 8, 7, 104, 8)
+        g.gang([(931, -1066, 100), (937, -1070, 101), (942, -1075, 102.5), (946, -1079, 104)], naam="sluis")
+        galm = g.kamer("galmzaal", 920, -1062, 12, 9, 100, 10)
+        g.gang([(908, -1060, 100), (901, -1058, 99), (895, -1060, 98), (890, -1062, 98)])
+        pegel = g.kamer("pegelhal", 882, -1064, 11, 9, 98, 9)
+        g.gang([(884, -1054, 98), (886, -1046, 98), (890, -1040, 98)])
+        hol = g.kamer("kristalhol", 894, -1033, 9, 8, 98, 9)
+        g.gang([(903, -1031, 98), (911, -1030, 98.5), (918, -1031, 99)], naam="poort")
+        elite = g.kamer("elitehol", 930, -1034, 10, 9, 99, 11)
+        g.gang([(940, -1030, 99), (946, -1027, 99)])
+        nis = g.kamer("schatnis", 949, -1025, 4.5, 4.5, 99, 5, hmin=3.5, wobbel=0.05)
+        koppel(g, g.gangen[n0:])
+        hendels(g, sluis, (math.radians(200), math.radians(300), math.radians(60)), "minecraft:amethyst_block", "minecraft:sea_lantern")
+        g.plekken = dict(ingang=(856, 119, -1104), binnen=(892, 114, -1108), hal=(906, 112, -1127), puzzel=(916, 110, -1091),
+                         elite=(930, 99, -1034), schat=(949, 99, -1025), amb_1=(894, 111, -1111), amb_2=(921, 108, -1134))
+        g.vrij += [(916, -1091, 7.5), (930, -1034, 2.5), (894, -1033, 2.5)]
+        kist = (951, -1024, 949, -1025)
+        nieuwe = [(galm, 8), (pegel, 8), (hol, 6), (sluis, 3)]
 
     def poort(g_):
         boog(g_, 866, -1104, (1, 0), 119, 4, 4, [("minecraft:calcite", 3), ("minecraft:amethyst_block", 2), ("minecraft:packed_ice", 2),
@@ -358,10 +435,10 @@ def kristalgrot():
     def deco(g_, rng):
         plafondlicht(g_, rng, "minecraft:sea_lantern", 0.035)
         hangers(g_, rng, [("minecraft:amethyst_cluster[facing=down,waterlogged=false]", 3), ("guhs:guh_kristal_cluster[facing=down]", 2),
-                          ("minecraft:ice", 1)], 0.09)
+                          ("minecraft:packed_ice", 1)], 0.09)   # 1.10.3: never plain ice (it melts under the sea lanterns)
         plantjes(g_, rng, [("minecraft:amethyst_cluster[facing=up,waterlogged=false]", 2), ("guhs:guh_kristal_cluster[facing=up]", 2),
                            ("minecraft:snow[layers=1]", 3), ("minecraft:small_amethyst_bud[facing=up,waterlogged=false]", 1)], 0.12)
-        for k, n in ((kristal, 9), (meer, 7), (elite, 6), (puzzel, 4)):
+        for k, n in [(kristal, 9), (meer, 7), (elite, 6), (puzzel, 4)] + nieuwe:
             for i in range(n):
                 a = rng.uniform(0, 2 * math.pi)
                 r = rng.uniform(0.62, 0.9) if k is not puzzel else 0.92
@@ -371,8 +448,11 @@ def kristalgrot():
                                int(rng.integers(2, 5)), "minecraft:amethyst_cluster[facing=up,waterlogged=false]")
         ring_palen(g_, meer, 0.86, 7, "minecraft:birch_fence", ZLANT)
         ring_palen(g_, puzzel, 0.8, 6, "minecraft:packed_ice", "minecraft:sea_lantern", hoog=2)
+        if GROOT:
+            ring_palen(g_, galm, 0.88, 7, "minecraft:birch_fence", ZLANT)
+            ring_palen(g_, elite, 0.86, 6, "minecraft:packed_ice", "minecraft:sea_lantern", hoog=2)
         lantaarnpalen(g_, "minecraft:birch_fence", ZLANT)
-        schatnis(g_, nis, 952, -1162, 950, -1161, "minecraft:diamond_block", "minecraft:light_blue_carpet",
+        schatnis(g_, nis, *kist, "minecraft:diamond_block", "minecraft:light_blue_carpet",
                  "minecraft:amethyst_cluster[facing=up,waterlogged=false]")
     g.deco.append(deco)
     return g
@@ -399,17 +479,44 @@ def wortelgrot():
     hal = g.kamer("wortelhal", *z3(-24, -140), 13, 11, 44, 11)
     g.gang([(*z3(-33, -147), 44), (*z3(-40, -154), 44)])
     puzzel = g.kamer("puzzelkamer", *z3(-46, -160), 8, 8, 44, 8, wobbel=0.06)
-    g.gang([(*z3(13, -150), 45), (*z3(16, -146), 43.5), (*z3(19, -142), 42), (*z3(21, -139), 41), (*z3(25, -135), 41)])
-    elite = g.kamer("elitehol", *z3(26, -133), 9, 8, 41, 9)
-    g.gang([(*z3(31, -129), 41), (*z3(35, -126), 41)])
-    nis = g.kamer("schatnis", *z3(38, -124), 4.5, 4.5, 41, 5, hmin=3.5, wobbel=0.05)
-
     def w(rx, y, rz):
         x, z = z3(rx, rz)
         return (x, y, z)
-    g.plekken = dict(ingang=w(6, TOP, -161), binnen=w(-2, 45, -152), hal=w(-24, 44, -140), puzzel=w(-46, 40, -160), elite=w(26, 41, -133),
-                     schat=w(38, 41, -124), amb_1=w(-20, 41, -136), amb_2=w(-28, 41, -144))
-    g.vrij += [(*z3(-46, -160), 7.0), (*z3(26, -133), 2.5)]
+    nieuwe = []
+    if not GROOT:
+        g.gang([(*z3(13, -150), 45), (*z3(16, -146), 43.5), (*z3(19, -142), 42), (*z3(21, -139), 41), (*z3(25, -135), 41)])
+        elite = g.kamer("elitehol", *z3(26, -133), 9, 8, 41, 9)
+        g.gang([(*z3(31, -129), 41), (*z3(35, -126), 41)])
+        nis = g.kamer("schatnis", *z3(38, -124), 4.5, 4.5, 41, 5, hmin=3.5, wobbel=0.05)
+        g.plekken = dict(ingang=w(6, TOP, -161), binnen=w(-2, 45, -152), hal=w(-24, 44, -140), puzzel=w(-46, 40, -160), elite=w(26, 41, -133),
+                         schat=w(38, 41, -124), amb_1=w(-20, 41, -136), amb_2=w(-28, 41, -144))
+        g.vrij += [(*z3(-46, -160), 7.0), (*z3(26, -133), 2.5)]
+        kist = (*z3(40, -123), *z3(38, -124))
+    else:
+        # 1.10.3: from the Wortelhal north (world coordinates, zone 3 sits at x 1404, z -576 from its local frame): the sluis room,
+        # the Knoestzaal (pack 3), east past the root trench to the Zwamwortelzaal (pack 4), the Wortelhol (elite), then east the
+        # boss room and the nook. All at floor 44, under 15-25 blocks of the Wortelweg's ground.
+        n0 = len(g.gangen)
+        g.gang([(1383, -727, 44), (1385, -737, 44), (1388, -745, 44)], naam="naar_sluis")
+        sluis = g.kamer("wortelsluis", 1390, -753, 8, 6, 44, 8)
+        g.gang([(1419, -756, 44), (1410, -754, 44), (1402, -753, 44), (1397, -753, 44)], naam="sluis")
+        knoest = g.kamer("knoestzaal", 1430, -757, 11, 8, 44, 9)
+        g.gang([(1441, -756, 44), (1452, -757, 44), (1463, -753, 44), (1471, -746, 44), (1476, -740, 44)])
+        zwam = g.kamer("zwamwortelzaal", 1480, -733, 10, 8, 44, 9)
+        g.gang([(1480, -724, 44), (1479, -716, 44), (1478, -711, 44)])
+        hol = g.kamer("wortelhol", 1478, -704, 9, 7, 44, 9)
+        g.gang([(1487, -705, 44), (1493, -706, 44), (1499, -708, 44)], naam="poort")
+        elite = g.kamer("elitehol", 1510, -712, 10, 9, 44, 11)
+        g.gang([(1517, -705, 44), (1521, -701, 44)])
+        nis = g.kamer("schatnis", 1524, -698, 4.5, 4.5, 44, 5, hmin=3.5, wobbel=0.05)
+        koppel(g, g.gangen[n0:])
+        hendels(g, sluis, (math.radians(150), math.radians(270), math.radians(30)), "minecraft:stripped_dark_oak_wood[axis=y]",
+                "minecraft:ochre_froglight[axis=y]")
+        g.plekken = dict(ingang=w(6, TOP, -161), binnen=w(-2, 45, -152), hal=w(-24, 44, -140), puzzel=w(-46, 40, -160), elite=(1510, 44, -712),
+                         schat=(1524, 44, -698), amb_1=w(-20, 41, -136), amb_2=w(-28, 41, -144))
+        g.vrij += [(*z3(-46, -160), 7.0), (1510, -712, 2.5), (1478, -704, 2.5)]
+        kist = (1526, -697, 1524, -698)
+        nieuwe = [(knoest, 6), (zwam, 6), (hol, 4), (elite, 4)]
 
     def stomp(g_):
         """The entrance: a hollow root stump (the spiral inside) with the door towards the Wortelweg."""
@@ -459,7 +566,7 @@ def wortelgrot():
         plantjes(g_, rng, [("minecraft:moss_carpet", 4), ("guhs:glimpaddenstoel", 2), ("minecraft:brown_mushroom", 1),
                            ("minecraft:fern", 1)], 0.12)
         # root pillars (logs floor to ceiling) for the Houthakken spots, and in the den
-        for k, n in ((hal, 10), (voet, 3), (elite, 4)):
+        for k, n in [(hal, 10), (voet, 3), (elite, 4)] + nieuwe:
             for i in range(n):
                 a = rng.uniform(0, 2 * math.pi)
                 r = rng.uniform(0.35, 0.85)
@@ -468,10 +575,11 @@ def wortelgrot():
                     zuil(g_, x, z, [("minecraft:dark_oak_wood[axis=y]", 3), ("minecraft:mangrove_roots[waterlogged=false]", 1)])
         ring_palen(g_, hal, 0.9, 7, "minecraft:dark_oak_fence", LANT)
         ring_palen(g_, puzzel, 0.85, 5, "minecraft:dark_oak_fence", "minecraft:ochre_froglight[axis=y]")
+        if GROOT:
+            ring_palen(g_, knoest, 0.88, 7, "minecraft:dark_oak_fence", LANT)
+            ring_palen(g_, elite, 0.86, 6, "minecraft:dark_oak_fence", "minecraft:ochre_froglight[axis=y]")
         lantaarnpalen(g_, "minecraft:dark_oak_fence", LANT)
-        kx, kz = z3(40, -123)
-        sx, sz = z3(38, -124)
-        schatnis(g_, nis, kx, kz, sx, sz, "minecraft:honeycomb_block", "minecraft:orange_carpet", "minecraft:ochre_froglight[axis=y]")
+        schatnis(g_, nis, *kist, "minecraft:honeycomb_block", "minecraft:orange_carpet", "minecraft:ochre_froglight[axis=y]")
     g.deco.append(deco)
     return g
 
@@ -499,9 +607,34 @@ def koraalgrot():
     g.gang([(2215, -588, 44), (2213, -584, 44)])
     puzzel = g.kamer("puzzelkamer", 2212, -578, 8, 8, 44, 8, wobbel=0.06)
     g.gang([(2219, -601, 44), (2214, -606, 44)])
-    elite = g.kamer("elitehol", 2212, -611, 8, 7, 44, 8)
-    g.gang([(2207, -615, 44), (2204, -618, 44)])
-    nis = g.kamer("schatnis", 2202, -620, 4.5, 4.5, 44, 5, hmin=3.5, wobbel=0.05)
+    nieuwe = []
+    if not GROOT:
+        elite = g.kamer("elitehol", 2212, -611, 8, 7, 44, 8)
+        g.gang([(2207, -615, 44), (2204, -618, 44)])
+        nis = g.kamer("schatnis", 2202, -620, 4.5, 4.5, 44, 5, hmin=3.5, wobbel=0.05)
+        kist = (2200, -622, 2202, -620)
+    else:
+        # 1.10.3: the old elite den is pack room 2 now (the Koraaltuin, a bit bigger), the old nook the sluis room; then west and
+        # down under the lagoon (floor 38, >= 5 blocks under the lagoon bed, west of its deep pit): the Anemonenzaal + Parelzaal (pack 3 + 4), the
+        # Parelhol (elite), then east under the atoll rim the boss room and the nook.
+        n0 = len(g.gangen)
+        tuin = g.kamer("koraaltuin", 2212, -611, 10, 8, 44, 9)
+        g.gang([(2207, -615, 44), (2204, -618, 44)])
+        sluis = g.kamer("koraalsluis", 2198, -622, 7, 6, 44, 7)
+        g.gang([(2152, -592, 38), (2156, -602, 40), (2164, -612, 42), (2178, -618, 43.5), (2192, -621, 44)], naam="sluis")
+        anemoon = g.kamer("anemonenzaal", 2150, -584, 10, 8, 38, 8)
+        g.gang([(2148, -575, 38), (2146, -566, 38), (2145, -559, 38)])
+        parel = g.kamer("parelzaal", 2145, -550, 10, 8, 38, 8)
+        g.gang([(2155, -547, 38), (2165, -544, 38), (2177, -541, 38)])
+        hol = g.kamer("parelhol", 2186, -540, 9, 7, 38, 8)
+        g.gang([(2195, -540, 38), (2204, -541, 38.5), (2213, -543, 39.5), (2219, -544, 40)], naam="poort")
+        elite = g.kamer("elitehol", 2232, -545, 10, 9, 40, 10)
+        g.gang([(2235, -536, 40), (2237, -532, 40)])
+        nis = g.kamer("schatnis", 2238, -528, 4.5, 4.5, 40, 5, hmin=3.5, wobbel=0.05)
+        koppel(g, g.gangen[n0:])
+        hendels(g, sluis, (math.radians(90), math.radians(200), math.radians(320)), "minecraft:prismarine_bricks", "minecraft:sea_lantern")
+        kist = (2240, -527, 2238, -528)
+        nieuwe = [(tuin, 4), (anemoon, 6), (parel, 6), (hol, 4)]
     # the dry way out: a spiral up to a coral chimney on the atoll rim
     EX, EZ, ETOP = 2234, -600, 71
     trap_naar(g, EX, EZ, ETOP, 44, math.radians(135))
@@ -509,6 +642,9 @@ def koraalgrot():
     g.plekken = dict(ingang=(2269, 63, -568), binnen=(2222, 44, -597), hal=(2224, 44, -596), puzzel=(2212, 40, -578), elite=(2212, 44, -611),
                      schat=(2202, 44, -620), amb_1=(2233, 39, -589), amb_2=(2220, 41, -598), uitgang=(2230, ETOP, -596))
     g.vrij += [(2212, -578, 7.0), (2212, -611, 2.5)]
+    if GROOT:
+        g.plekken.update(elite=(2232, 40, -545), schat=(2238, 40, -528))
+        g.vrij += [(2232, -545, 2.5), (2186, -540, 2.5)]
 
     def boei(g_):
         # the arch on the sea floor, coral and sea lanterns round it, and a little raft with a lantern right above
@@ -579,7 +715,7 @@ def koraalgrot():
                 if g_.lees(x, y, z)[1] == "minecraft:water" and g_.is_vast(x, y - 1, z):
                     g_.zet(x, y, z, "minecraft:sea_pickle[pickles=%d,waterlogged=true]" % int(rng.integers(2, 5)))
                     break
-        for k, n in ((hal, 8), (elite, 4)):
+        for k, n in [(hal, 8), (elite, 4)] + nieuwe:
             for i in range(n):
                 a = rng.uniform(0, 2 * math.pi)
                 r = rng.uniform(0.6, 0.88)
@@ -589,8 +725,11 @@ def koraalgrot():
                                "guhs:nepkoraal[kleur=roze]")
         ring_palen(g_, hal, 0.9, 7, "minecraft:prismarine_wall", LANT, hoog=1)
         ring_palen(g_, puzzel, 0.85, 5, "minecraft:prismarine_wall", "minecraft:sea_lantern", hoog=1)
+        if GROOT:
+            ring_palen(g_, anemoon, 0.88, 6, "minecraft:prismarine_wall", LANT, hoog=1)
+            ring_palen(g_, elite, 0.86, 6, "minecraft:prismarine_wall", "minecraft:sea_lantern", hoog=1)
         lantaarnpalen(g_, "minecraft:prismarine_wall", LANT)
-        schatnis(g_, nis, 2200, -622, 2202, -620, "minecraft:gold_block", "minecraft:cyan_carpet", "minecraft:sea_lantern")
+        schatnis(g_, nis, *kist, "minecraft:gold_block", "minecraft:cyan_carpet", "minecraft:sea_lantern")
     g.deco.append(deco)
     return g
 
@@ -612,12 +751,39 @@ def wolkengrot():
     hal = g.kamer("wolkenhal", 2512, -548, 13, 11, 181, 12)
     g.gang([(2490, -514, 181), (2488, -504, 181), (2487, -499, 181)])
     puzzel = g.kamer("puzzelhal", 2486, -492, 8.5, 8.5, 181, 9, wobbel=0.06)
-    g.gang([(2519, -542, 181), (2527, -533, 180.5), (2530, -525, 180), (2533, -517, 179.5), (2535, -512, 179)])
+    nieuwe = []
+    if not GROOT:
+        g.gang([(2519, -542, 181), (2527, -533, 180.5), (2530, -525, 180), (2533, -517, 179.5), (2535, -512, 179)])
+    else:
+        # 1.10.3: inside the whale's head (its body is hollow-free only here: east of x 2564 the city floats over open air): from
+        # the Wolkenhal south to the sluis room, on south to the Donderzaal + Pluiszaal (pack 3 + 4) under the Puzzelhal, the
+        # Grauwhol (elite), then north through the gate into the old den (the boss room); the nook moved to its north-east.
+        n0 = len(g.gangen)
+        g.gang([(2515, -537, 181), (2516, -527, 181), (2517, -516, 181)], naam="naar_sluis")
+        sluis = g.kamer("wolkensluis", 2517, -510, 6, 5, 181, 7)
+        g.gang([(2504, -475, 181), (2508, -484, 181), (2513, -494, 181), (2516, -503, 181)], naam="sluis")
+        donder = g.kamer("donderzaal", 2500, -468, 10, 7, 181, 9)
+        g.gang([(2510, -466, 181), (2516, -464, 181), (2521, -463, 181)])
+        pluis = g.kamer("pluiszaal", 2530, -462, 9, 7, 181, 9)
+        g.gang([(2534, -469, 181), (2539, -474, 181)])
+        grauw = g.kamer("grauwhol", 2545, -482, 8, 6, 181, 8)
+        g.gang([(2544, -490, 181), (2542, -494, 180), (2540, -498, 179)], naam="poort")
+        hendels(g, sluis, (math.radians(150), math.radians(270), math.radians(30)), "guhs:wolkmarmer_gepolijst",
+                "minecraft:pearlescent_froglight[axis=y]")
+        g.vrij += [(2545, -482, 2.5)]
+        nieuwe = [(donder, 5), (pluis, 5), (grauw, 4)]
     elite = g.kamer("elitehol", 2537, -506, 9, 8, 179, 9)
-    g.gang([(2543, -500, 179), (2547, -496, 179)])
-    nis = g.kamer("schatnis", 2549, -494, 4.5, 4.5, 179, 5, hmin=3.5, wobbel=0.05)
+    if not GROOT:
+        g.gang([(2543, -500, 179), (2547, -496, 179)])
+        nis = g.kamer("schatnis", 2549, -494, 4.5, 4.5, 179, 5, hmin=3.5, wobbel=0.05)
+        kist = (2551, -493, 2549, -494)
+    else:
+        g.gang([(2545, -511, 179), (2550, -516, 179)])
+        nis = g.kamer("schatnis", 2554, -520, 4.5, 4.5, 179, 5, hmin=3.5, wobbel=0.05)
+        koppel(g, g.gangen[n0:])
+        kist = (2556, -521, 2554, -520)
     g.plekken = dict(ingang=(2498, TOP, -520), binnen=(2489, 181, -524), hal=(2512, 181, -548), puzzel=(2486, 177, -492),
-                     elite=(2537, 179, -506), schat=(2549, 179, -494), amb_1=(2516, 178, -552), amb_2=(2506, 178, -544))
+                     elite=(2537, 179, -506), schat=(kist[2], 179, kist[3]), amb_1=(2516, 178, -552), amb_2=(2506, 178, -544))
     g.vrij += [(2486, -492, 7.0), (2537, -506, 2.5)]
 
     def blaasgat(g_):
@@ -639,7 +805,7 @@ def wolkengrot():
         hangers(g_, rng, [("minecraft:end_rod[facing=down]", 1)], 0.03)
         plantjes(g_, rng, [("minecraft:white_carpet", 3), ("minecraft:snow[layers=1]", 2), ("minecraft:white_candle[candles=3,lit=true,waterlogged=false]", 0.5),
                            ("minecraft:lily_of_the_valley", 1)], 0.11)
-        for k, n in ((hal, 10), (bodem, 3), (elite, 5)):
+        for k, n in [(hal, 10), (bodem, 3), (elite, 5)] + nieuwe:
             for i in range(n):
                 a = rng.uniform(0, 2 * math.pi)
                 r = rng.uniform(0.55, 0.88)
@@ -654,12 +820,77 @@ def wolkengrot():
                 g_.zet(x, y + 1, z, "minecraft:gray_wool")
         ring_palen(g_, hal, 0.9, 7, "minecraft:birch_fence", LANT)
         ring_palen(g_, puzzel, 0.82, 6, "guhs:wolkmarmer_zuil[axis=y]", "minecraft:pearlescent_froglight[axis=y]", hoog=2)
+        if GROOT:
+            ring_palen(g_, donder, 0.88, 7, "minecraft:birch_fence", LANT)
         lantaarnpalen(g_, "minecraft:birch_fence", LANT)
-        schatnis(g_, nis, 2551, -493, 2549, -494, "guhs:wolkmarmer_gepolijst", "minecraft:light_blue_carpet",
+        schatnis(g_, nis, *kist, "guhs:wolkmarmer_gepolijst", "minecraft:light_blue_carpet",
                  "minecraft:pearlescent_froglight[axis=y]")
     g.deco.append(deco)
     return g
 
 
+# ================================================================================================ zone 6: De Zingende Zoutgrot
+def zoutgrot():
+    """1.10.3: the dungeon wing of De Zingende Zoutgrot. The cave itself (stair, salt hall, lake, puzzle niche, treasure room, the
+    elite's round chamber) is built by zone 6's own generator (tools/vadsrijk/zone6/bouw6.py zoutgrot(): hall centre 3874, -542,
+    floor stand 50; chamber 3917, -542). This stamp adds the wing north of it (maak6 applies it like the other makers do): the
+    sluis room, the Galmzoutzaal + Kristalzoutzaal (pack 3 + 4), the Zouthol (elite), then the gate into the round chamber (the
+    boss room) from the north-east; and it closes the old straight tunnel hall -> chamber with salt. The hall and the chamber
+    are VIRTUAL rooms here (they exist; nothing is carved there). GUHS_GROT_OUD=1: only the virtual rooms (no change)."""
+    g = Grot("zoutgrot", 6, zaad=606)
+    g.thema = dict(
+        vloer=[("minecraft:smooth_sandstone", 3), ("minecraft:calcite", 2), ("guhs:pleister_roze", 0.6)],
+        plaat=[("minecraft:smooth_sandstone_slab" + SLAB, 1)],
+        vul=[("minecraft:calcite", 3), ("minecraft:smooth_sandstone", 1)],
+        muur=[("minecraft:calcite", 3), ("guhs:fossielmijn_zoutkristalblok", 2), ("guhs:pleister_roze", 1)],
+        pilaar=[("guhs:fossielmijn_zoutkristalblok", 2), ("minecraft:pearlescent_froglight[axis=y]", 1)],
+        trap_blok="minecraft:smooth_sandstone", trap_plaat="minecraft:smooth_sandstone_slab" + SLAB, hek="minecraft:sandstone_wall")
+    hal = g.kamer("zouthal", 3874, -542, 17, 11, 50, 12, virtueel=True)
+    kamer = g.kamer("zoutkamer", 3917, -542, 9, 9, 50, 9, virtueel=True)
+    g.plekken = dict(hal=(3874, 50, -534), elite=(3917, 50, -542))
+    if not GROOT:
+        return g
+    n0 = len(g.gangen)
+    g.gang([(3872, -552, 50), (3870, -562, 50), (3868, -572, 50)], naam="naar_sluis")
+    sluis = g.kamer("zoutsluis", 3868, -580, 7, 6, 50, 8)
+    g.gang([(3885, -586, 50), (3875, -582, 50)], naam="sluis")
+    galm = g.kamer("galmzoutzaal", 3896, -588, 11, 8, 50, 9)
+    g.gang([(3907, -589, 50), (3916, -588, 50)])
+    kristal = g.kamer("kristalzoutzaal", 3927, -584, 10, 8, 50, 9)
+    g.gang([(3934, -576, 50), (3938, -568, 50)])
+    hol = g.kamer("zouthol", 3940, -560, 8, 6, 50, 8)
+    g.gang([(3936, -555, 50), (3930, -551, 50), (3925, -548, 50)], naam="poort")
+    # no shell where the new tunnels run into the existing hall / chamber air
+    g.monden += [(3872, 52, -556, 5.5), (3925, 52, -549, 4.5)]
+    # the old straight tunnel hall -> chamber (bouw6: x ex+15 .. ex+37, z hz-1 .. hz+1, air y 50-53) is closed with salt between
+    # the two rooms, so the boss room is only reached through the new gate
+    def dicht(g_):
+        for x in range(3897, 3907):
+            for z in range(-543, -540):
+                for y in range(50, 54):
+                    g_.zet(x, y, z, g_._kies(g_.thema["muur"], x, z, y))
+    g.bouwwerk.append(dicht)
+    koppel(g, g.gangen[n0:])
+    hendels(g, sluis, (math.radians(90), math.radians(210), math.radians(330)), "guhs:fossielmijn_zoutkristalblok",
+            "minecraft:pearlescent_froglight[axis=y]")
+    g.vrij += [(3940, -560, 2.5)]
+
+    def deco(g_, rng):
+        plafondlicht(g_, rng, "minecraft:pearlescent_froglight[axis=y]", 0.04)
+        plantjes(g_, rng, [("guhs:fossielmijn_zoutkristalletjes", 3), ("minecraft:short_dry_grass", 1)], 0.1)
+        for k, n in ((galm, 6), (kristal, 6), (hol, 4)):
+            for i in range(n):
+                a = rng.uniform(0, 2 * math.pi)
+                r = rng.uniform(0.6, 0.88)
+                x, z = round(k["cx"] + math.cos(a) * k["rx"] * r), round(k["cz"] + math.sin(a) * k["rz"] * r)
+                if not g_.bezet_vrij(x, z, 1.5) and not g_.pad[x - g_.x0, z - g_.z0]:
+                    stalagmiet(g_, rng, x, z, [("guhs:fossielmijn_zoutkristalblok", 2), ("minecraft:calcite", 1)], int(rng.integers(2, 5)),
+                               "guhs:fossielmijn_zoutkristalletjes")
+        ring_palen(g_, galm, 0.88, 6, "minecraft:sandstone_wall", "guhs:messing_lantaarn", hoog=1)
+        lantaarnpalen(g_, "minecraft:sandstone_wall", "guhs:messing_lantaarn")
+    g.deco.append(deco)
+    return g
+
+
 def alle():
-    return [zwamgrot(), kristalgrot(), wortelgrot(), koraalgrot(), wolkengrot()]
+    return [zwamgrot(), kristalgrot(), wortelgrot(), koraalgrot(), wolkengrot(), zoutgrot()]

@@ -33,6 +33,8 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Relative;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LeverBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -82,7 +84,13 @@ import nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing;
  * one group per cave ({@link DungeonRij}, as a {@link GrotDungeon}): a run only starts for the cave's group (solo / party / queue, through the door), once per
  * group; the run scales with the group's size; nobody else can be in the cave; a clear gives a cooldown per player instead of the
  * 10-min shared wait, and the cave closes when the group left.
- * <p>Dev: {@code /guhs vadsrijk grot run [id] | reset <id> | baas <id> | kist [id]}.
+ * <p><b>1.10.3 "Grotere dungeons" (user decision):</b> every cave from zone 2 on is about twice as big ({@link Kerker#groot}): four pack
+ * rooms (3 / 4 / 4 / 4 solo) with the elite alone in its own den after them, a SLUIS between pack room 2 and 3 (a second barrier
+ * gate that stays shut until every lever in the sluis room is pulled; the levers go back up on every new run) and a personal
+ * chest halfway when pack room 2 is clear ({@link KerkerLoot#tussenKist}). Spawns only use the generated spawn spots of a room
+ * (live bug: mobs in the hollow rock behind the walls), and a run creature that leaves the cave is put back in its room.
+ * <p>Dev: {@code /guhs vadsrijk grot run [id] | reset <id> | baas <id> | kist [id]}; {@code /guhs vadsrijk grotten herbouw|herstel}
+ * ({@link GrotHerbouw}).
  */
 public final class GrotKerker {
     public static final String DATA = "grotkerker";
@@ -125,6 +133,12 @@ public final class GrotKerker {
         Display.TextDisplay bord;
         int hulpTeller;
         final Map<UUID, Long> botsMelding = new HashMap<>();
+        /** 1.10.3: the sluis (open once every lever in the sluis room is pulled), the chest halfway, the levers already announced. */
+        boolean sluisOpen = true, sluisDicht, tussenGegeven;
+        int hendelsGemeld;
+        final List<BlockPos> sluisGezet = new ArrayList<>();
+        @Nullable
+        Display.TextDisplay sluisBord;
 
         Run(String id) {
             this.id = id;
@@ -140,6 +154,7 @@ public final class GrotKerker {
     public static void register(IEventBus modBus) {
         GrotBazen.register(modBus);
         GrotDungeon.register();   // W-GROT: every cave run is a dungeon (type GROT) behind a closed door (dungeon.DungeonRij)
+        GrotHerbouw.register();   // 1.10.3: /guhs vadsrijk grotten herbouw|herstel (the bigger caves into an existing world)
         Haken.VERSLAGEN.add(GrotKerker::verslagen);
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
             RUNS.clear();
@@ -247,6 +262,9 @@ public final class GrotKerker {
                 meedoen(k, r, binnen);
                 spawnOntbrekend(sl, k, r, nu);
                 meldKamers(sl, k, r);
+                if (nu % 40 == 0) {
+                    leiband(sl, k, r);
+                }
                 if (alleGedaan(r)) {
                     naarBaas(sl, k, r, binnen);
                 }
@@ -269,6 +287,7 @@ public final class GrotKerker {
             }
         }
         poort(sl, k, r, nu);
+        sluis(sl, k, r, nu);
         bord(sl, k, r, nu);
     }
 
@@ -292,17 +311,35 @@ public final class GrotKerker {
         r.baasGespawnd = -1;
         r.hulpTeller = 0;
         int extra = r.spelers - 1;
-        int n1 = Math.min(6, 3 + extra), n2 = Math.min(7, 4 + extra);
-        for (int i = 0; i < n1; i++) {
-            r.plan.put("k1_" + i, new Plan("k1_" + i, 0, false));
+        if (k.groot()) {
+            // 1.10.3 "Grotere dungeons": 4 pack rooms (3 / 4 / 4 / 4 solo, +1 per extra player up to +3), the elite alone in its den
+            int den = k.kamers().size() - 1;
+            for (int kamer = 0; kamer < den; kamer++) {
+                int basis = PAK_GROOT[Math.min(kamer, PAK_GROOT.length - 1)];
+                int n = Math.min(basis + 3, basis + extra);
+                for (int i = 0; i < n; i++) {
+                    String slot = "k" + (kamer + 1) + "_" + i;
+                    r.plan.put(slot, new Plan(slot, kamer, false));
+                }
+            }
+            r.plan.put("elite", new Plan("elite", den, true));
+        } else {
+            int n1 = Math.min(6, 3 + extra), n2 = Math.min(7, 4 + extra);
+            for (int i = 0; i < n1; i++) {
+                r.plan.put("k1_" + i, new Plan("k1_" + i, 0, false));
+            }
+            for (int i = 0; i < n2; i++) {
+                r.plan.put("k2_" + i, new Plan("k2_" + i, 1, false));
+            }
+            r.plan.put("elite", new Plan("elite", 1, true));
         }
-        for (int i = 0; i < n2; i++) {
-            r.plan.put("k2_" + i, new Plan("k2_" + i, 1, false));
-        }
-        r.plan.put("elite", new Plan("elite", 1, true));
+        r.sluisOpen = k.sluis().isEmpty();
+        r.tussenGegeven = false;
+        r.hendelsGemeld = 0;
+        hendelsTerug(sl, k);
         for (ServerPlayer p : binnen) {
             r.deelnemers.add(p.getUUID());
-            p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.start").withStyle(ChatFormatting.GOLD));
+            p.sendSystemMessage(Component.translatable(k.groot() ? "vadsrijk.grotkerker.start.groot" : "vadsrijk.grotkerker.start").withStyle(ChatFormatting.GOLD));
             if (r.spelers > 1) {
                 p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.start.groep", r.spelers).withStyle(ChatFormatting.GRAY));
             }
@@ -411,11 +448,26 @@ public final class GrotKerker {
         return m;
     }
 
-    /** A standable floor spot (solid below, 2 free above, no fluid) within r of the room centre, or null. */
+    /**
+     * A standable floor spot (solid below, 2 free above, no fluid) within r of the room centre, or null. 1.10.3 (live bug "ik kan
+     * niet alle mobs doden, sommige staan buiten de grot"): a room with generated spawn spots ({@link Kamer#plekken}, checked
+     * reachable cave floor) only ever uses those; the random search round the centre found the hollow rock behind the walls.
+     */
     @Nullable
     static BlockPos vrijePlek(ServerLevel sl, Kamer kamer, int r) {
         var rnd = sl.getRandom();
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        if (kamer.aantalPlekken() > 0) {
+            int n = kamer.aantalPlekken();
+            int start = rnd.nextInt(n);
+            for (int i = 0; i < Math.min(n, 24); i++) {
+                BlockPos b = kamer.plek((start + i * 7) % n);
+                if (staanbaar(sl, b, m)) {
+                    return b;
+                }
+            }
+            return null;
+        }
         for (int poging = 0; poging < 24; poging++) {
             double a = rnd.nextDouble() * Math.PI * 2, d = Math.sqrt(rnd.nextDouble()) * Math.max(1, r);
             int x = kamer.x() + (int) Math.round(Math.cos(a) * d), z = kamer.z() + (int) Math.round(Math.sin(a) * d);
@@ -439,6 +491,41 @@ public final class GrotKerker {
         return null;
     }
 
+    /** Solid floor under b, b and the 2 cells above free, no fluid, no barrier. */
+    static boolean staanbaar(ServerLevel sl, BlockPos b, BlockPos.MutableBlockPos m) {
+        m.set(b.getX(), b.getY() - 1, b.getZ());
+        if (sl.getBlockState(m).getCollisionShape(sl, m).isEmpty() || !sl.getFluidState(m).isEmpty() || sl.getBlockState(m).is(Blocks.BARRIER)) {
+            return false;
+        }
+        for (int d = 0; d < 3; d++) {
+            m.set(b.getX(), b.getY() + d, b.getZ());
+            if (!sl.getBlockState(m).getCollisionShape(sl, m).isEmpty() || (d == 0 && !sl.getFluidState(m).isEmpty())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** 1.10.3: a run creature that got out of the cave (pushed into the rock, knocked through a wall) goes back to its room. */
+    static void leiband(ServerLevel sl, Kerker k, Run r) {
+        for (var e : r.levend.entrySet()) {
+            Plan p = r.plan.get(e.getKey());
+            Entity m = sl.getEntity(e.getValue());
+            if (p == null || !(m instanceof VadsrijkMob mob) || mob.isRemoved() || mob.geplofd()) {
+                continue;
+            }
+            if (k.bevat(m.getX(), m.getY(), m.getZ()) && !m.isInWall()) {
+                continue;
+            }
+            Kamer kamer = k.kamers().get(Math.min(p.kamer(), k.kamers().size() - 1));
+            BlockPos b = vrijePlek(sl, kamer, kamer.r());
+            if (b != null) {
+                m.teleportTo(b.getX() + 0.5, b.getY(), b.getZ() + 0.5);
+                m.resetFallDistance();
+            }
+        }
+    }
+
     static void meldKamers(ServerLevel sl, Kerker k, Run r) {
         for (int i = 0; i < k.kamers().size(); i++) {
             if (r.kamerGemeld.contains(i)) {
@@ -453,6 +540,9 @@ public final class GrotKerker {
             }
             if (iets && leeg) {
                 r.kamerGemeld.add(i);
+                if (i == 1 && k.groot() && !r.tussenGegeven) {
+                    tussenKist(sl, k, r);   // 1.10.3: the chest halfway (after pack room 2)
+                }
                 for (ServerPlayer p : inGrot(sl, k)) {
                     p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.kamer", i + 1, r.kamerGemeld.size(), k.kamers().size())
                             .withStyle(ChatFormatting.GREEN));
@@ -462,9 +552,30 @@ public final class GrotKerker {
         }
     }
 
-    /** Both rooms beaten: the gate opens, the boss wakes up. */
+    /** 1.10.3: the chest halfway: a personal chest for every participant in the cave, round the spot in pack room 2. */
+    static void tussenKist(ServerLevel sl, Kerker k, Run r) {
+        r.tussenGegeven = true;
+        if (k.kist() == null) {
+            return;
+        }
+        int n = 0;
+        for (ServerPlayer p : inGrot(sl, k)) {
+            if (!r.deelnemers.contains(p.getUUID())) {
+                continue;
+            }
+            double a = n * 2.1;
+            double d = n == 0 ? 0 : 2.2;
+            n++;
+            BlockPos plek = BlockPos.containing(k.kist().getX() + 0.5 + Math.cos(a) * d, k.kist().getY(), k.kist().getZ() + 0.5 + Math.sin(a) * d);
+            BaasKist.plaats(sl, p, plek, KerkerLoot.tussenKist(k.id(), k.maxLv(), p));
+            p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.tussenkist").withStyle(ChatFormatting.GOLD));
+        }
+    }
+
+    /** All rooms beaten: the gate opens, the boss wakes up. */
     static void naarBaas(ServerLevel sl, Kerker k, Run r, List<ServerPlayer> binnen) {
         r.staat = Staat.BAAS;
+        r.sluisOpen = true;
         for (ServerPlayer p : binnen) {
             p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.poort.open").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
             p.level().playSound(null, p.blockPosition(), SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1f, 0.7f);
@@ -609,6 +720,16 @@ public final class GrotKerker {
             r.bord.discard();
             r.bord = null;
         }
+        haalWeg(sl, r.sluisGezet);
+        r.sluisDicht = false;
+        r.sluisOpen = true;
+        r.tussenGegeven = false;
+        r.hendelsGemeld = 0;
+        if (r.sluisBord != null) {
+            r.sluisBord.discard();
+            r.sluisBord = null;
+        }
+        hendelsTerug(sl, k);
         r.staat = Staat.SLAAPT;
         r.nonce = 0;
         r.plan.clear();
@@ -770,13 +891,155 @@ public final class GrotKerker {
         if (r.dicht) {
             return;
         }
-        for (int[] c : k.poort()) {
+        List<int[]> alle = new ArrayList<>(k.poort());
+        if (!r.sluisDicht) {
+            alle.addAll(k.sluis());
+        }
+        for (int[] c : alle) {
             for (int y = c[1]; y < c[3]; y++) {
                 BlockPos p = new BlockPos(c[0], y, c[2]);
                 if (sl.getBlockState(p).is(Blocks.BARRIER)) {
                     sl.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
                 }
             }
+        }
+    }
+
+    // ---- 1.10.3: the sluis (a second gate, opened by the levers of the sluis room) --------------------------------------------
+
+    /** Pack sizes of the 4 pack rooms of a big cave (solo). */
+    static final int[] PAK_GROOT = {3, 4, 4, 4};
+
+    /** How many of the sluis room's levers are pulled (unloaded = not). */
+    static int hendelsAan(ServerLevel sl, Kerker k) {
+        int n = 0;
+        for (BlockPos h : k.hendels()) {
+            if (sl.isLoaded(h)) {
+                BlockState st = sl.getBlockState(h);
+                if (st.getBlock() instanceof LeverBlock && st.getValue(LeverBlock.POWERED)) {
+                    n++;
+                }
+            }
+        }
+        return n;
+    }
+
+    /** Every lever back up (a new run, a reset). */
+    static void hendelsTerug(ServerLevel sl, Kerker k) {
+        for (BlockPos h : k.hendels()) {
+            if (sl.isLoaded(h)) {
+                BlockState st = sl.getBlockState(h);
+                if (st.getBlock() instanceof LeverBlock && st.getValue(LeverBlock.POWERED)) {
+                    sl.setBlock(h, st.setValue(LeverBlock.POWERED, false), 3);
+                }
+            }
+        }
+    }
+
+    static boolean iemandIn(ServerLevel sl, List<int[]> kolommen) {
+        for (ServerPlayer p : sl.players()) {
+            for (int[] c : kolommen) {
+                double dx = p.getX() - (c[0] + 0.5), dz = p.getZ() - (c[2] + 0.5);
+                if (dx * dx + dz * dz <= 2.2 * 2.2 && p.getY() > c[1] - 2 && p.getY() < c[3] + 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /** Barriers in the AIR of these columns only (nothing else is ever replaced); remembered in gezet. */
+    static void zetBarrieres(ServerLevel sl, List<int[]> kolommen, List<BlockPos> gezet) {
+        gezet.clear();
+        for (int[] c : kolommen) {
+            for (int y = c[1]; y < c[3]; y++) {
+                BlockPos p = new BlockPos(c[0], y, c[2]);
+                if (sl.getBlockState(p).isAir()) {
+                    sl.setBlock(p, Blocks.BARRIER.defaultBlockState(), 2);
+                    gezet.add(p);
+                }
+            }
+        }
+    }
+
+    static void haalWeg(ServerLevel sl, List<BlockPos> gezet) {
+        for (BlockPos p : gezet) {
+            if (sl.getBlockState(p).is(Blocks.BARRIER)) {
+                sl.setBlock(p, Blocks.AIR.defaultBlockState(), 2);
+            }
+        }
+        gezet.clear();
+    }
+
+    static void sluis(ServerLevel sl, Kerker k, Run r, long nu) {
+        if (k.sluis().isEmpty() || k.sluisBord() == null) {
+            return;
+        }
+        if (r.staat == Staat.BEZIG && !r.sluisOpen) {
+            int aan = hendelsAan(sl, k), n = k.hendels().size();
+            if (aan != r.hendelsGemeld) {
+                if (aan > r.hendelsGemeld) {
+                    for (ServerPlayer p : inGrot(sl, k)) {
+                        p.sendOverlayMessage(Component.translatable("vadsrijk.grotkerker.sluis.hendel", aan, n).withStyle(ChatFormatting.LIGHT_PURPLE));
+                    }
+                }
+                r.hendelsGemeld = aan;
+            }
+            if (aan >= n) {
+                r.sluisOpen = true;
+                for (ServerPlayer p : inGrot(sl, k)) {
+                    p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.sluis.open").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
+                }
+                sl.playSound(null, k.sluisBord(), SoundEvents.IRON_DOOR_OPEN, SoundSource.BLOCKS, 1f, 0.8f);
+                sl.playSound(null, k.sluisBord(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1f, 1.1f);
+            }
+        }
+        boolean wil = r.staat == Staat.BEZIG && !r.sluisOpen;
+        if (wil && !r.sluisDicht && sl.isLoaded(k.sluisBord()) && !iemandIn(sl, k.sluis())) {
+            zetBarrieres(sl, k.sluis(), r.sluisGezet);
+            r.sluisDicht = true;
+        } else if (!wil && r.sluisDicht) {
+            haalWeg(sl, r.sluisGezet);
+            r.sluisDicht = false;
+        }
+        if (r.sluisDicht) {
+            DustParticleOptions blauw = new DustParticleOptions(0x8FD0FF, 1.2f);
+            for (int i = 0; i < 3; i++) {
+                int[] c = k.sluis().get(sl.getRandom().nextInt(k.sluis().size()));
+                double y = c[1] + sl.getRandom().nextDouble() * Math.max(1, c[3] - c[1]);
+                sl.sendParticles(blauw, c[0] + sl.getRandom().nextDouble(), y, c[2] + sl.getRandom().nextDouble(), 1, 0.1, 0.1, 0.1, 0);
+            }
+            for (ServerPlayer p : sl.players()) {
+                for (int[] c : k.sluis()) {
+                    double dx = p.getX() - (c[0] + 0.5), dz = p.getZ() - (c[2] + 0.5);
+                    if (dx * dx + dz * dz <= 1.6 * 1.6 && Math.abs(p.getY() - c[1]) < 3) {
+                        if (nu - r.botsMelding.getOrDefault(p.getUUID(), -1000L) > 60) {
+                            r.botsMelding.put(p.getUUID(), nu);
+                            p.sendOverlayMessage(Component.translatable("vadsrijk.grotkerker.sluis.botst").withStyle(ChatFormatting.LIGHT_PURPLE));
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        // the board over the sluis: how many levers are pulled
+        if (nu % 20 != 0) {
+            return;
+        }
+        if (!r.sluisDicht || !sl.isLoaded(k.sluisBord())) {
+            if (r.sluisBord != null) {
+                r.sluisBord.discard();
+                r.sluisBord = null;
+            }
+            return;
+        }
+        Component tekst = Component.empty().append(Component.translatable("vadsrijk.grotkerker.sluis.dicht").withStyle(ChatFormatting.AQUA, ChatFormatting.BOLD))
+                .append("\n").append(Component.translatable("vadsrijk.grotkerker.sluis.nog", r.hendelsGemeld, k.hendels().size())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+        if (r.sluisBord == null || r.sluisBord.isRemoved()) {
+            r.sluisBord = Getallen.hologram(sl, k.sluisBord().getX() + 0.5, k.sluisBord().getY() + 2.4, k.sluisBord().getZ() + 0.5, tekst);
+        } else {
+            Getallen.zetTekst(r.sluisBord, tekst);
         }
     }
 
@@ -919,6 +1182,9 @@ public final class GrotKerker {
         if (r.dicht) {
             open(sl, r);
         }
+        r.sluisOpen = true;
+        haalWeg(sl, r.sluisGezet);
+        r.sluisDicht = false;
         return baas(sl, k, r) != null ? 1 : 0;
     }
 
