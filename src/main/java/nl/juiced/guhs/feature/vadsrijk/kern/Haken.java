@@ -18,7 +18,23 @@ import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
  */
 public final class Haken {
     /** A mob was "opgevrolijkt": the mob, the players who helped (contributors, incl. the last hit). */
-    public record Verslagen(VadsrijkMob mob, Set<ServerPlayer> helpers) {
+    public record Verslagen(VadsrijkMob mob, Set<ServerPlayer> helpers, Set<ServerPlayer> kijkers) {
+        public Verslagen(VadsrijkMob mob, Set<ServerPlayer> helpers) {
+            this(mob, helpers, Set.of());
+        }
+
+        /**
+         * 1.10.1: who counts for QUESTS: the helpers + the onlookers (everyone inside a boss arena at the defeat), so two players
+         * on the same boss step both get it. Loot/xp listeners keep using {@link #helpers}.
+         */
+        public Set<ServerPlayer> voorQuests() {
+            if (kijkers.isEmpty()) {
+                return helpers;
+            }
+            Set<ServerPlayer> s = new java.util.LinkedHashSet<>(helpers);
+            s.addAll(kijkers);
+            return s;
+        }
     }
 
     public static final List<Consumer<Verslagen>> VERSLAGEN = new CopyOnWriteArrayList<>();

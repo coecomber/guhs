@@ -40,6 +40,8 @@ public final class Arenas {
         @Nullable
         Display.TextDisplay bord;
         final Set<UUID> binnen = new HashSet<>();
+        /** 1.10.1: who took part in the last kill (helpers + everyone inside the arena then). */
+        final Set<UUID> erbij = new HashSet<>();
 
         Toestand(Arena a, Function<ServerLevel, VadsrijkBaas> maker) {
             this.arena = a;
@@ -79,12 +81,31 @@ public final class Arenas {
         return t == null ? null : zoek(sl, t);
     }
 
+    /**
+     * 1.10.1: a player who was NOT at the last kill and stands in the arena while it waits for its respawn does not wait the
+     * full time (up to 20 min): the boss comes back within this many seconds. Those who were at the kill (farming) still wait.
+     */
+    public static final int NIEUWKOMER_SECONDEN = 30;
+
     static void verslagen(Arena a) {
+        verslagen(a, java.util.List.of());
+    }
+
+    /** The boss of this arena was beaten with these players there (helpers + everyone inside). */
+    static void verslagen(Arena a, java.util.Collection<UUID> erbij) {
         Toestand t = ALLE.get(a.id());
         if (t != null && t.baas != null) {
             t.baas = null;
             t.respawnOp = -2;   // set on the next tick (we may not have the level here)
+            t.erbij.clear();
+            t.erbij.addAll(erbij);
         }
+    }
+
+    /** 1.10.1: the respawn time of this arena (game time; -1 = none pending). Tests. */
+    public static long respawnOp(String arenaId) {
+        Toestand t = ALLE.get(arenaId);
+        return t == null ? -1 : t.respawnOp;
     }
 
     /** Dev: the boss of this arena away and back right now (full HP, phase 1). */
@@ -186,6 +207,11 @@ public final class Arenas {
                 t.respawnOp = nu + a.respawnSeconden() * 20L;
                 data.zet(a.id(), t.respawnOp);
             }
+            // 1.10.1: a newcomer (not at the last kill) waits in the arena: the boss is back soon (quests for several players)
+            if (b == null && t.respawnOp > nu + NIEUWKOMER_SECONDEN * 20L && nieuwkomerBinnen(sl, t)) {
+                t.respawnOp = nu + NIEUWKOMER_SECONDEN * 20L;
+                data.zet(a.id(), t.respawnOp);
+            }
             if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
                 b = t.maker.apply(sl);
                 if (b != null) {
@@ -235,6 +261,32 @@ public final class Arenas {
             }
             bord(sl, t, b, nu);
         }
+    }
+
+    /** 1.10.1 tests: does a player who was not at the last kill stand in this arena now (= the respawn gets short)? */
+    public static boolean nieuwkomerBinnen(ServerLevel sl, String arenaId) {
+        Toestand t = ALLE.get(arenaId);
+        return t != null && nieuwkomerBinnen(sl, t);
+    }
+
+    private static boolean nieuwkomerBinnen(ServerLevel sl, Toestand t) {
+        for (ServerPlayer p : sl.players()) {
+            if (!p.isSpectator() && p.isAlive() && t.arena.binnen(p.getX(), p.getY(), p.getZ()) && !t.erbij.contains(p.getUUID())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** 1.10.1: the (non-spectator, living) players inside this arena now. */
+    public static List<ServerPlayer> spelersBinnen(ServerLevel sl, Arena a) {
+        List<ServerPlayer> uit = new ArrayList<>();
+        for (ServerPlayer p : sl.players()) {
+            if (!p.isSpectator() && p.isAlive() && a.binnen(p.getX(), p.getY(), p.getZ())) {
+                uit.add(p);
+            }
+        }
+        return uit;
     }
 
     private static void bord(ServerLevel sl, Toestand t, @Nullable VadsrijkBaas b, long nu) {

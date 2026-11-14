@@ -103,21 +103,28 @@ public final class Z6Bazen {
         BlockPos naar;
         switch (fase) {
             case "wormelien" -> {
-                forceerWormelien = true;
-                if (Arenas.baas(sl, WORMELIEN) == null) {
+                if (Arenas.baas(sl, WORMELIEN) == null) {   // 1.10.1: force (ignore day/night) only when we spawn it now
+                    forceerWormelien = true;
                     Arenas.reset(sl.getServer(), WORMELIEN);
                 }
                 naar = Z6WezensPlekken.WORMELIEN_DEUR;
             }
             case "zoutkolos" -> {
-                forceerZoutkolos = true;
-                if (Arenas.baas(sl, ZOUTKOLOS) == null) {
+                if (Arenas.baas(sl, ZOUTKOLOS) == null) {   // 1.10.1: force (ignore day/night) only when we spawn it now
+                    forceerZoutkolos = true;
                     Arenas.reset(sl.getServer(), ZOUTKOLOS);
                 }
                 naar = Z6WezensPlekken.ZOUTKOLOS_DEUR;
             }
             case "sterrenwacht" -> {
                 Z6Bouw.sterrenwacht(sl);
+                // 1.10.1: one shared dungeon: a player who comes after someone else's run finds its bosses back at once
+                // (not an empty dome with a 5-minute board); a fight in progress is never reset
+                for (String a : new String[] {ASTROLABIUM, GLIMMERTJE, STERRENGUH}) {
+                    if (Arenas.baas(sl, a) == null) {
+                        Arenas.reset(sl.getServer(), a);
+                    }
+                }
                 naar = Z6WezensPlekken.KERKER_AANKOMST;
             }
             default -> {

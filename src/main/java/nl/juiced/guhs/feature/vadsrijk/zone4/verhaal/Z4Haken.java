@@ -186,7 +186,7 @@ public final class Z4Haken {
         for (String[] b : BAZEN) {
             if (type.contains(b[0])) {
                 Set<ServerPlayer> wie = new LinkedHashSet<>();
-                for (ServerPlayer p : v.helpers()) {
+                for (ServerPlayer p : v.voorQuests()) {
                     wie.add(p);
                     wie.addAll(Partijen.ledenInBuurt(p, 48));
                 }

@@ -202,7 +202,7 @@ public final class Z2Haken {
             return;
         }
         Set<ServerPlayer> wie = new LinkedHashSet<>();
-        for (ServerPlayer p : v.helpers()) {
+        for (ServerPlayer p : v.voorQuests()) {
             wie.add(p);
             wie.addAll(Partijen.ledenInBuurt(p, 48));
         }

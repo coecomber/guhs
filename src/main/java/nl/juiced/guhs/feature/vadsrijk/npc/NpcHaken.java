@@ -75,7 +75,7 @@ public final class NpcHaken {
         String gebied = g == null ? "" : g.id();
         boolean baas = mob instanceof VadsrijkBaas;
         Set<ServerPlayer> wie = new LinkedHashSet<>();
-        for (ServerPlayer p : v.helpers()) {
+        for (ServerPlayer p : v.voorQuests()) {
             wie.add(p);
             wie.addAll(Partijen.ledenInBuurt(p, 48));   // (ronde 11: shared progress on cheer-up quests in a party)
         }
@@ -197,7 +197,6 @@ public final class NpcHaken {
             }
             plekken(p);
             klasseGekozen(p);
-            escortes(p, sl);
             geheimen(p, sl);
             if (t % 40 == 4) {
                 Questlog.kijkLive(p);
@@ -231,32 +230,6 @@ public final class NpcHaken {
                     if (q.doelen().get(i).type() == Quest.Doel.Type.KLASSE && !Questlog.doelKlaar(p, q, i)) {
                         NpcApi.meld(p, "klasse", Spelers.data(p).klasse);
                         return;
-                    }
-                }
-            }
-        }
-    }
-
-    /** An escort that reached its destination: done; when it is also the one to hand in to, straight to the hand-in. */
-    static void escortes(ServerPlayer p, ServerLevel sl) {
-        for (Quest q : Questlog.actieve(p)) {
-            for (int i = 0; i < q.doelen().size(); i++) {
-                Quest.Doel d = q.doelen().get(i);
-                if (d.type() != Quest.Doel.Type.ESCORTE || Questlog.doelKlaar(p, q, i)) {
-                    continue;
-                }
-                RijkGuh g = Npcs.levend(sl, d.doel());
-                BlockPos naar = NpcPlekken.poi(d.bron().startsWith("poi:") ? d.bron().substring(4) : d.bron());
-                if (g == null || naar == null || !p.getUUID().equals(g.volgt())) {
-                    continue;
-                }
-                if (bij(g, naar, NpcPlekken.POI_STRAAL + 2, NpcPlekken.POI_HOOGTE)) {
-                    g.volg(null);
-                    g.rust(naar, 20 * 60 * 5);
-                    Questlog.tel(p, Quest.Doel.Type.ESCORTE, x -> x == d, 1);
-                    g.emotes.start(nl.juiced.guhs.feature.emotes.Emote.VAHOEG, false, nl.juiced.guhs.feature.emotes.GuhEmotes.Source.SELF);
-                    if (q.inleveren().equals(d.doel()) && Questlog.allesKlaar(p, q)) {
-                        QuestMotor.klik(p, g);
                     }
                 }
             }

@@ -980,6 +980,8 @@ OVERIG = {
     P + "quest_klaar": "Quest klaar: %s! Ga terug naar %s.",
     P + "quest_af": "Quest voltooid: %s. Vahoeg!",
     P + "escorte.volgt": "%s loopt met je mee!",
+    P + "escorte.terug": "%s is teruggegaan naar de vaste plek. Praat opnieuw met hem of haar om de begeleiding opnieuw te beginnen.",
+    P + "escorte.ander": "%s loopt al met iemand anders mee. Haal je eigen begeleiding op bij de vaste plek!",
     P + "optie.hoofd": "Vahoeg, ik doe het!",
     P + "optie.ja": "Ik help je!",
     P + "optie.later": "Nu even niet",

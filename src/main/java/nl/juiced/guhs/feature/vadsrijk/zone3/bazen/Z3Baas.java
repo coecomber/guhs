@@ -64,6 +64,8 @@ public abstract class Z3Baas extends Z2Baas {
     public static final int GROEN = 0x6AD06A;
     private final List<IntPredicate> taken = new ArrayList<>();
     private boolean vahoeg;
+    /** 1.10.1: the level before the Vahoeg form (to switch back for a story player). */
+    private int normaalLv;
     private int gevechtT;
     private boolean enraged;
     private long immuunBericht;
@@ -135,8 +137,11 @@ public abstract class Z3Baas extends Z2Baas {
         if (v == vahoeg) {
             return;
         }
+        if (v) {
+            normaalLv = mobLevel();
+        }
         vahoeg = v;
-        stelIn(v ? 52 : mobLevel(), element(), false, Set.of());
+        stelIn(v ? 52 : normaalLv > 0 ? normaalLv : mobLevel(), element(), false, Set.of());
         if (v && VahoegModus.zegel() == VahoegModus.Zegel.TAAI) {
             Statussen.geef(this, Status.KNUFFELSCHILD, 20 * 120, maxVads() * 0.15, this);
         }

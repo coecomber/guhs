@@ -175,6 +175,9 @@ public final class WezensSpawners {
         Spawners.GEBIED_MAX.putAll(GEBIED_MAX);
         Spawners.VEILIGE_PLEKKEN.addAll(WereldPlekken.KAMPVUREN);
         Spawners.VERBODEN.add(WezensSpawners::npcInBuurt);
+        // 1.10.1: the Druipgrotten tunnels, knots and the crystal chamber are real caves: never a spot under the open sky
+        nl.juiced.guhs.feature.vadsrijk.kern.mob.GrotRuimte.ONDERDAK.addAll(java.util.List.of("wezens:druipgrotten_gang_", "wezens:druipgrotten_knoop_",
+                "wezens:druipgrotten_elite_knoop_", "wezens:druipgrotten_kristalkamer"));
         WezensPlekken.allePaden().forEach((naam, pad) -> Spawners.registreerPad("z1:" + naam, pad, WezensPlekken.padBreedte(naam)));
         verschoven = nietVerschoven = 0;
 
@@ -447,7 +450,9 @@ public final class WezensSpawners {
                 Soort s = stuk++ % 3 == 0 ? KNAAG : kies(r, DRUIP, 4, KRISTAL, 1, GLIM, 1);
                 int max = s == KNAAG ? 3 : s == GLIM ? 1 : 2;
                 String groep = g + "_gang_" + n++;
-                zet(g, groep, s, new BlockPos(c[0], c[1] + 2, c[2]), 3, max, 300 + r.nextInt(201), ELITE, true, c[1] - 6, c[1] + 2);
+                // 1.10.1: c = the tunnel's centre line (2 above its floor): search the tunnel itself (floor c - 2 .. c + 1), not the
+                // rock 4 blocks above/below it (hollow pockets there filled up with mobs just outside the cave)
+                zet(g, groep, s, new BlockPos(c[0], c[1], c[2]), 3, max, 300 + r.nextInt(201), ELITE, true, c[1] - 3, c[1] + 1);
             }
         }
         // the four knots: a camp each (+ an elite), on the knot floor and its ledges
@@ -456,7 +461,9 @@ public final class WezensSpawners {
         Soort[] knoopElite = {KNAAG, KRISTAL, DRUIP, KRISTAL};
         for (int i = 0; i < WezensPlekken.KNOPEN.length; i++) {
             int[] k = WezensPlekken.KNOPEN[i];   // centre x, y, z, r
-            int straal = k[3] - 3, maxY = k[1] + 3, minY = k[1] - k[3];
+            // 1.10.1: from the knot's flat floor (voet) up; was centre - r (pockets under the floor) to centre + 3
+            int voet = WezensPlekken.knoopVoet(k);
+            int straal = k[3] - 3, maxY = voet + 4, minY = voet - 1;
             String groep = g + "_knoop_" + (i + 1);
             for (int j = 0; j < knoopKamp[i].length; j++) {
                 zet(g, groep, knoopKamp[i][j], new BlockPos(k[0], maxY, k[2]), straal, knoopAantal[i][j], 500, ELITE, true, minY, maxY);

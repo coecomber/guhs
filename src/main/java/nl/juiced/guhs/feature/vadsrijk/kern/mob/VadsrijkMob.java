@@ -273,6 +273,11 @@ public abstract class VadsrijkMob extends Monster {
 
     // ---- defeat ---------------------------------------------------------------------------------------------------------
 
+    /** 1.10.1: players who are not helpers but still count for the quests/bestiary of this defeat (a boss: its arena). */
+    protected java.util.List<ServerPlayer> ookVoorQuests(ServerLevel sl) {
+        return java.util.List.of();
+    }
+
     /** Opgevrolijkt! Xp + loot for the helpers, the hook, then the plof. */
     public void verslagen(@Nullable LivingEntity laatste) {
         if (geplofd() || !(level() instanceof ServerLevel sl)) {
@@ -290,7 +295,9 @@ public abstract class VadsrijkMob extends Monster {
             helpers.add(p);
         }
         Spelers.metKlasseBijdrage(klasseBijdrage, () -> beloon(sl, helpers));
-        Haken.VERSLAGEN.forEach(h -> h.accept(new Haken.Verslagen(this, helpers)));
+        Set<ServerPlayer> kijkers = new LinkedHashSet<>(ookVoorQuests(sl));   // 1.10.1: a boss arena's onlookers (quest credit only)
+        kijkers.removeAll(helpers);
+        Haken.VERSLAGEN.forEach(h -> h.accept(new Haken.Verslagen(this, helpers, kijkers)));
         setTarget(null);
         getNavigation().stop();
         Statussen.wisAlles(this);

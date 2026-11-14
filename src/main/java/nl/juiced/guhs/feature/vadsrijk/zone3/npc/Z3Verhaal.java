@@ -214,11 +214,15 @@ public final class Z3Verhaal {
 
     /** Fallback when z3-wezens did not bind its Bladrovers: zone 1's klodders dropped by the zeppelin (they cheer up as usual). */
     static void bladrovers(ServerLevel sl, Vec3 c, int n) {
-        for (int i = 0; i < n; i++) {
+        // 1.10.1: every player who accepts hq02 used to add 8 more: now it tops the plaza up to 8 (they no longer pile up)
+        int al = sl.getEntitiesOfClass(Mob.class, new net.minecraft.world.phys.AABB(c, c).inflate(16, 8, 16),
+                x -> x.isAlive() && x.entityTags().contains("z3_bladrover")).size();
+        for (int i = al; i < n; i++) {
             Mob m = nl.juiced.guhs.feature.vadsrijk.wezens.WezensRegistry.KLODDER.get().create(sl, EntitySpawnReason.EVENT);
             if (m != null) {
                 double a = i * Math.PI * 2 / n;
                 m.snapTo(c.x + Math.cos(a) * 6, c.y + 1, c.z + Math.sin(a) * 6, (float) Math.toDegrees(a), 0);
+                m.addTag("z3_bladrover");
                 sl.addFreshEntity(m);
             }
         }

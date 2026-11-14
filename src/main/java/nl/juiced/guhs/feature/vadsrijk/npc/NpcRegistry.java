@@ -67,9 +67,11 @@ public final class NpcRegistry {
         Werver.init();
         RijdierQuests.init();
         NpcHaken.registreer();
+        Escortes.init();
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
             Npcs.tick(e.getServer());
             NpcHaken.tick(e.getServer());
+            Escortes.tick(e.getServer());
             NpcMarkers.tick(e.getServer());
             NpcVolg.tick(e.getServer());
             Verhaal.tick(e.getServer());
@@ -98,6 +100,7 @@ public final class NpcRegistry {
             KamerTips.vergeet(e.getEntity().getUUID());
             Reiskaart.vergeet(e.getEntity().getUUID());
             RijdierQuests.vergeet(e.getEntity().getUUID());
+            Escortes.uitgelogd(e.getEntity().level().getServer(), e.getEntity().getUUID());
         });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> NpcCommando.register(e));
     }

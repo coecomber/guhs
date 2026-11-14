@@ -128,8 +128,8 @@ public final class QlDoe {
             }
             case ESCORTE -> {
                 RijkGuh g = npc(p, d.doel());
-                if (g != null && !p.getUUID().equals(g.volgt())) {
-                    QuestMotor.klik(p, g);   // (starts following)
+                if (g != null && nl.juiced.guhs.feature.vadsrijk.npc.Escortes.kopieVan(p, d.doel()) == null) {
+                    QuestMotor.klik(p, g);   // (a copy starts following: 1.10.1)
                     if (stil) {
                         QuestMotor.afronden(p);
                         Praat.vergeet(p);
@@ -212,11 +212,7 @@ public final class QlDoe {
                         }
                     }
                     case ESCORTE -> {
-                        RijkGuh g = Npcs.levend(QlPlek.level(p), d.doel());
-                        if (g != null && p.getUUID().equals(g.volgt())) {
-                            g.volg(null);
-                        }
-                        Questlog.tel(p, Quest.Doel.Type.ESCORTE, x -> x == d, 1);
+                        Questlog.tel(p, Quest.Doel.Type.ESCORTE, x -> x == d, 1);   // (1.10.1: the copy then vanishes on its own)
                     }
                     case MELD -> {
                         if (!d.plek().isEmpty() && !d.plek().startsWith("npc:")) {
@@ -313,9 +309,10 @@ public final class QlDoe {
     static void neemAan(ServerPlayer p, Quest q) {
         Questlog.neemAan(p, q);
         RijkGuh gever = npc(p, q.gever());
-        for (Quest.Doel d : q.doelen()) {
+        for (int i = 0; i < q.doelen().size(); i++) {
+            Quest.Doel d = q.doelen().get(i);
             if (d.type() == Quest.Doel.Type.ESCORTE && gever != null && gever.isAddedToLevel() && gever.npcId().equals(d.doel())) {
-                gever.volg(p);
+                nl.juiced.guhs.feature.vadsrijk.npc.Escortes.start(p, gever, q, i);   // 1.10.1: a copy follows
             }
         }
         if (!q.actieAanname().isEmpty()) {
