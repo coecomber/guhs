@@ -592,10 +592,11 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
             }
         }
         losseKijkers.clear();
-        if (arena != null) {
+        Arena ar = arena != null ? arena : arenaId.isEmpty() ? null : Arenas.van(arenaId);   // 1.10.3: a reloaded copy without its arena yet
+        if (ar != null) {
             java.util.Set<java.util.UUID> erbij = new java.util.HashSet<>(bijdragen.spelers());
-            Arenas.spelersBinnen(sl, arena).forEach(p -> erbij.add(p.getUUID()));
-            Arenas.verslagen(arena, erbij);   // 1.10.1: + who was there (a newcomer later gets the quick respawn)
+            Arenas.spelersBinnen(sl, ar).forEach(p -> erbij.add(p.getUUID()));
+            Arenas.verslagen(ar, erbij);   // 1.10.1: + who was there (a newcomer later gets the quick respawn)
         }
     }
 
