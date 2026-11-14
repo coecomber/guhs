@@ -438,6 +438,47 @@ public final class Spelers {
         }
         levelOp(p, gNa > gVoor ? gNa : 0, klasse, kNa > kVoor ? kNa : 0);
         sync(p);
+        telXp(p, bron, n);
+    }
+
+    // ---- 1.10.3: xp log per source (balancing) -------------------------------------------------------------------------------
+    private static final org.slf4j.Logger XP_LOG = com.mojang.logging.LogUtils.getLogger();
+    private static final Map<java.util.UUID, Map<String, long[]>> XP_TEL = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final Map<java.util.UUID, Long> XP_TEL_SINDS = new java.util.concurrent.ConcurrentHashMap<>();
+    /** Write a player's tally every this many ms (and on logout). */
+    static final long XP_TEL_MS = 30 * 60 * 1000L;
+
+    /** Counts the xp a player really got (after factors and caps) per source: total + how many times. */
+    static void telXp(ServerPlayer p, String bron, long n) {
+        Map<String, long[]> m = XP_TEL.computeIfAbsent(p.getUUID(), k -> new java.util.concurrent.ConcurrentHashMap<>());
+        long[] t = m.computeIfAbsent(bron == null || bron.isEmpty() ? "?" : bron, k -> new long[2]);
+        t[0] += n;
+        t[1]++;
+        long nu = System.currentTimeMillis();
+        long sinds = XP_TEL_SINDS.computeIfAbsent(p.getUUID(), k -> nu);
+        if (nu - sinds >= XP_TEL_MS) {
+            schrijfXpTelling(p);
+        }
+    }
+
+    /** One server-log line with this player's xp per source since the last line, then starts over. */
+    public static void schrijfXpTelling(ServerPlayer p) {
+        Map<String, long[]> m = XP_TEL.remove(p.getUUID());
+        Long sinds = XP_TEL_SINDS.remove(p.getUUID());
+        if (m == null || m.isEmpty()) {
+            return;
+        }
+        long tot = 0;
+        for (long[] t : m.values()) {
+            tot += t[0];
+        }
+        StringBuilder b = new StringBuilder("[Vadsrijk] xp tally ").append(p.getGameProfile().name()).append(" lv ").append(level(p))
+                .append(sinds == null ? "" : String.format(java.util.Locale.ROOT, " over %.0f min", (System.currentTimeMillis() - sinds) / 60000.0))
+                .append(": total ").append(tot).append(';');
+        final long totaal = tot;
+        m.entrySet().stream().sorted((x, y) -> Long.compare(y.getValue()[0], x.getValue()[0])).forEach(e -> b.append(String.format(java.util.Locale.ROOT,
+                " %s %d (%.0f%%, %dx);", e.getKey(), e.getValue()[0], totaal > 0 ? 100.0 * e.getValue()[0] / totaal : 0, e.getValue()[1])));
+        XP_LOG.info(b.toString());
     }
 
     /**

@@ -56,6 +56,9 @@ final class KernEvents {
         });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             java.util.UUID id = e.getEntity().getUUID();
+            if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                Spelers.schrijfXpTelling(sp);   // 1.10.3: the xp-per-source line
+            }
             if (e.getEntity().level().getServer() != null) {   // W-PARTY: parties are saved; logging out no longer leaves
                 Partijen.uitgelogd(e.getEntity().level().getServer(), id);
             }

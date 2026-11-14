@@ -300,7 +300,7 @@ public class VadsrijkAmbachtGameTests {
         BasisType mw = BasisTypes.van("mw_t3_borstplaat"), set = BasisTypes.van("schorspantser");
         if (set != null) {
             double f = mw.statsOp(45).get(Stat.VERDEDIGING) / set.statsOp(45).get(Stat.VERDEDIGING);
-            helper.assertTrue(f > 0.8 && f < 0.95, "~90 % of the set: " + f);
+            helper.assertTrue(f > 0.8 && f < 1.0, "below the set (1.10.2: set armour grows slower, ~98 % now): " + f);
         }
         // Meesterwerk jewellery: Legendarisch, bound, 3 chosen + a property, above the zone-3 drop
         ItemStack r = Maatwerk.maak(Maatwerk.SOORTEN.get("ring"), 3, List.of(Stat.KRITIEK, Stat.KRITIEKSCHADE, Stat.AANVALSSNELHEID), 80, "test",

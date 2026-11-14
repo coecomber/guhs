@@ -25,7 +25,7 @@ public final class Beloningen {
     static void geef(ServerPlayer p, Quest q) {
         Quest.Beloning b = q.beloning();
         if (b.xp() > 0) {
-            Spelers.geefXp(p, b.xp(), "quest");
+            Spelers.geefXp(p, Math.max(1, Math.round(b.xp() * xpFactor(q))), q.hoofd() ? "hoofdquest" : "quest");
         }
         List<ItemStack> buit = new ArrayList<>();
         if (b.wapen()) {
@@ -50,6 +50,13 @@ public final class Beloningen {
         for (Quest.Beloning.Ding d : b.items()) {
             Questlog.geef(p, new ItemStack(Questlog.item(d.item()), d.n()));
         }
+    }
+
+    /** 1.10.3: main-story quests from zone 2 on give 25 % less xp (the 75 % Verkenningsboek gate adds side content with its own xp). */
+    public static final double HOOFD_XP_VANAF_ZONE2 = 0.75;
+
+    public static double xpFactor(Quest q) {
+        return q.hoofd() && nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()) >= 2 ? HOOFD_XP_VANAF_ZONE2 : 1.0;
     }
 
     /** A weapon base type of the player's class (the first one registered: the class's starter weapon). */

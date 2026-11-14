@@ -7,6 +7,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 - **New travel map:** the airship's Reiskaart (also the Vadsrijk-menu tab) is redrawn: every zone at its real spot and size with its own landscape, the main area names, the campfires you lit and your own position (an arrow that points where you look). Names and campfires only show for zones that are open for you; closed zones stay under a grey mist with their requirement in the hover.
 - **Boss xp:** a boss gives at most half a level on your first kill and a tenth of a level on every later kill (Opperzwam, Galmwolf and Spiegelzucht gave 1.2 to 1.5 levels every 5 minutes); dungeon bosses are unchanged.
+- **Main-story xp -25 % from zone 2 on** (the 75 % Verkenningsboek gate adds side content with its own xp), plus a server-log line per player every 30 min and on logout with the xp per source (hoofdquest, quest, mob, baas, ...).
 - **Fix: double party xp.** Each helper shared the xp of a kill with the whole party again, so a party of two that both hit got twice the xp of every monster and boss. Now everyone gets it exactly once.
 - **Verkenningsboek:** every row is numbered, the same numbers as the Geheimen page on guhs.nl.
 - **Bosses +50 % HP** (config `[bazen] leven` 1.25 -> 1.9, migrated only when still at the default; balans config versie 4) and a server-log line per boss defeat (time, HP, players, damage per helper).
