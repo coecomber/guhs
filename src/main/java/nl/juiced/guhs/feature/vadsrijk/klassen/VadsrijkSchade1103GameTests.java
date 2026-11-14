@@ -203,6 +203,7 @@ public class VadsrijkSchade1103GameTests {
      */
     @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
     public static void coecomberBoogTijdTotVerslaan(GameTestHelper helper) {
+        KlasseBalans.standaardAlles();   // (the defaults, not a dev run/config file)
         ServerPlayer p = GuhMockPlayer.of(helper);
         Doel mob = mob(helper, Z2WezensRegistry.SNEEUWKNABBELAAR.get(), 28, Element.WATER, 4);
         Doel splinter = mob(helper, Z2WezensRegistry.SPLINTERLING.get(), 28, Element.GEEN, 5);
@@ -231,6 +232,7 @@ public class VadsrijkSchade1103GameTests {
     /** The same for Luc_Ermeling's mage (basic bolt; the skills are checked by the model tests). */
     @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
     public static void lucStafTijdTotVerslaan(GameTestHelper helper) {
+        KlasseBalans.standaardAlles();   // (the defaults, not a dev run/config file)
         ServerPlayer p = GuhMockPlayer.of(helper);
         Doel mob = mob(helper, Z2WezensRegistry.SPLINTERLING.get(), 28, Element.GEEN, 4);
         Doel baas = mob(helper, Z2BazenRegistry.GALMWOLF.get(), 23, Element.WATER, 7);
@@ -257,6 +259,7 @@ public class VadsrijkSchade1103GameTests {
     public static void rendementAlleenBovenModel(GameTestHelper helper) {
         helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.kern.Balans.rendement(50, 126, 0.5) == 50
                 && Math.abs(nl.juiced.guhs.feature.vadsrijk.kern.Balans.rendement(226, 126, 0.5) - 176) < 1e-9, "below the base: all; above: half");
+        KlasseBalans.standaardAlles();   // (the defaults, not a dev run/config file)
         ServerPlayer p = GuhMockPlayer.of(helper);
         try {
             klasse(p, Klassen.JAGER, 35, "j_spec_scherpschutter");
@@ -267,8 +270,8 @@ public class VadsrijkSchade1103GameTests {
             coecomber(p);
             s = Spelers.stats(p);
             helper.assertTrue(s.get(Stat.KRITIEK) <= nl.juiced.guhs.feature.vadsrijk.kern.Balans.KRITIEK_MAX_STANDAARD + 1e-9, "Kritiek capped: " + s.get(Stat.KRITIEK));
-            // Coecomber's raw totals: Behendigheid 197.2, Kritiekschade 125.3 %, Aanvalssnelheid 47.7 % (SCHADE_1103_AUDIT.md)
-            helper.assertTrue(Math.abs(s.get(Stat.BEHENDIGHEID) - (126 + (197.2 - 126) * 0.35)) < 0.5, "Behendigheid above the model at 35 %: " + s.get(Stat.BEHENDIGHEID));
+            // Coecomber's raw totals: Behendigheid 188.1 (197.2 before the armour growth 0.15 -> 0.10), Kritiekschade 125.3 %, Aanvalssnelheid 47.7 % (SCHADE_1103_AUDIT.md)
+            helper.assertTrue(Math.abs(s.get(Stat.BEHENDIGHEID) - (126 + (188.07 - 126) * 0.35)) < 0.5, "Behendigheid above the model at 35 %: " + s.get(Stat.BEHENDIGHEID));
             helper.assertTrue(Math.abs(s.get(Stat.KRITIEKSCHADE) - (10 + 115.31 * 0.4)) < 0.5, "Kritiekschade above the class base at 40 %: " + s.get(Stat.KRITIEKSCHADE));
             helper.assertTrue(Math.abs(s.get(Stat.AANVALSSNELHEID) - 47.7 * 0.4) < 0.5, "Aanvalssnelheid at 40 %: " + s.get(Stat.AANVALSSNELHEID));
             helper.succeed();
