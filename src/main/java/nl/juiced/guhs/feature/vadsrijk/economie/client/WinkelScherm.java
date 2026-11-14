@@ -13,7 +13,7 @@ import nl.juiced.guhs.feature.vadsrijk.economie.Winkels;
 
 /** A Vadsmunten shop: buy (items, plain gear per level tier, cosmetics by post, titles) and sell loot. */
 public class WinkelScherm extends EcoScherm {
-    private static final int RIJ = 22, ZICHT = 7;
+    private static final int RIJ = 22, ZICHT_MAX = 7;
     private boolean verkopen;
     private int scroll, niveau = 1;
 
@@ -21,9 +21,14 @@ public class WinkelScherm extends EcoScherm {
         super(EcoPayloads.WINKEL, Component.translatable("vadsrijk.economie.winkel." + data.getStringOr("winkel", "algemeen")), data, items, 300, 228);
     }
 
+    /** Visible rows (1.10.1: one less on the sell tab, for the "alle slechtere" button row). */
+    private int zicht() {
+        return verkopen ? ZICHT_MAX - 1 : ZICHT_MAX;
+    }
+
     @Override
     protected void opNieuweData() {
-        int max = Math.max(0, lijst().size() - ZICHT);
+        int max = Math.max(0, lijst().size() - zicht());
         scroll = Math.min(scroll, max);
     }
 
@@ -56,6 +61,15 @@ public class WinkelScherm extends EcoScherm {
         }
         if (verkopen) {
             knop(g, mx, my, left + w - 128, y, 120, 14, Component.translatable("vadsrijk.economie.winkel.verkoop_grijs"), true, () -> doe("verkoopgrijs"));
+            // 1.10.1: everything worse than what you wear (unlocked, not worn), after a confirm window with the counts
+            y += 18;
+            CompoundTag sam = data.getCompoundOrEmpty("slechter");
+            int n = sam.getIntOr("aantal", 0);
+            int bw = (w - 20) / 2;
+            knop(g, mx, my, left + 8, y, bw, 14, Component.translatable("vadsrijk.economie.winkel.verkoop_slechter", n), n > 0,
+                    () -> vraag(vraagSlechter(sam, true), () -> doe("verkoopslechter")));
+            knop(g, mx, my, left + 12 + bw, y, bw, 14, Component.translatable("vadsrijk.economie.winkel.ontmantel_slechter", n), n > 0,
+                    () -> vraag(vraagSlechter(sam, false), () -> doe("ontmantelslechter")));
         }
         y += 20;
         ListTag l = lijst();
@@ -63,7 +77,8 @@ public class WinkelScherm extends EcoScherm {
             g.centeredText(font, Component.translatable(verkopen ? "vadsrijk.economie.winkel.niks_te_verkopen" : "vadsrijk.economie.winkel.leeg"),
                     left + w / 2, y + 30, ZACHT);
         }
-        for (int i = scroll; i < Math.min(l.size(), scroll + ZICHT); i++) {
+        int zicht = zicht();
+        for (int i = scroll; i < Math.min(l.size(), scroll + zicht); i++) {
             CompoundTag t = l.getCompoundOrEmpty(i);
             int ry = y + (i - scroll) * RIJ;
             boolean hover = binnen(mx, my, left + 6, ry, w - 12, RIJ - 2);
@@ -76,10 +91,10 @@ public class WinkelScherm extends EcoScherm {
                 rijKoop(g, mx, my, t, s, ry);
             }
         }
-        if (l.size() > ZICHT) {
-            int bh = ZICHT * RIJ - 2;
-            int kh = Math.max(12, bh * ZICHT / l.size());
-            int ky = y + (bh - kh) * scroll / Math.max(1, l.size() - ZICHT);
+        if (l.size() > zicht) {
+            int bh = zicht * RIJ - 2;
+            int kh = Math.max(12, bh * zicht / l.size());
+            int ky = y + (bh - kh) * scroll / Math.max(1, l.size() - zicht);
             g.fill(left + w - 5, y, left + w - 2, y + bh, 0x40FF5FAF);
             g.fill(left + w - 5, ky, left + w - 2, ky + kh, RAND);
         }
@@ -138,6 +153,11 @@ public class WinkelScherm extends EcoScherm {
         g.text(font, s.getHoverName(), left + 30, ry + 6, TEKST, false);
         int bx = left + w - 10;
         int slot = t.getIntOr("slot", -1);
+        if (t.getBooleanOr("slot_op", false) || t.getBooleanOr("hand", false)) {   // 1.10.1: locked / in your hand: not for sale
+            g.text(font, Component.translatable("vadsrijk.economie.opruim." + (t.getBooleanOr("slot_op", false) ? "rij.slot" : "rij.hand")),
+                    bx - 60, ry + 6, ZACHT, false);
+            return;
+        }
         knop(g, mx, my, bx - 52, ry + 2, 52, 16, Component.translatable("vadsrijk.economie.winkel.verkoop"), true, () -> {
             CompoundTag a = new CompoundTag();
             a.putInt("slot", slot);
@@ -148,7 +168,7 @@ public class WinkelScherm extends EcoScherm {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
-        int max = Math.max(0, lijst().size() - ZICHT);
+        int max = Math.max(0, lijst().size() - zicht());
         scroll = Math.max(0, Math.min(max, scroll - (int) Math.signum(scrollY)));
         return true;
     }

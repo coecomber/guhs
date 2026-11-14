@@ -48,6 +48,7 @@ public final class EconomieRegistry {
         EcoBasisTypes.registreer();
         Winkels.registreer();
         Cosmetica.registreer();
+        Opruimen.init();   // 1.10.1
         Rollen.STER_BONUS = SterRegels::bonus;
         Rollen.STER_SCHADE = SterRegels::schade;
 

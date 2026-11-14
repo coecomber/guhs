@@ -310,9 +310,27 @@ Q("hq03b_elementen", "hoofd", "trainer_magier", "De elementendriehoek",
            "beetje. En Roze? Roze is extra sterk tegen alles wat ontvadst is. Klik straks op mij, dan overhoor ik je!")],
   "Vuur > Zwam > Slijm > Vuur. Klik op mij, dan overhoor ik je!",
   [("npc", "Goed zo! Jij bent een slimme. Kijk in je questlog (J) bij Gids, daar staat de driehoek nog een keer getekend."),
-   ("npc", "Ga nu terug naar Kok Knapperkorst, bij het kampvuur op het kampplein. Hij wil dat het vuur brandt voor het donker "
-           "wordt.")],
+   ("npc", "Loop nu even langs bij Sergeant Pluizebol, op de steiger waar je aankwam. Hij heeft nog wat oude spullen voor je, en "
+           "een lesje in opruimen.")],
   xp=80, munten=40, na=["hq03_poppen"])
+
+# 1.10.1 (opruimen): what to do with old gear that is worse than what you have. Inserted between hq03b and hq04; players who
+# already started hq04 never see it (Questlog.INGEVOEGD counts it as done for them).
+Q("hq03c_opruimen", "hoofd", "rekruteerder", "Opruimen",
+  "Sergeant Pluizebol gaf je twee oude oefenwapens: slechter dan wat je nu hebt. Verkoop er één in het kampwinkeltje van Kok "
+  "Knapperkorst op het plein, en ontmantel de andere in de kampsmidse van Sergeant Pluizebol. Ontmantelen geeft smeedmateriaal: "
+  "grijs geeft stofjes, groen splinters, blauw en beter kristallen. De smid smelt dat om tot verbetersteentjes en meer.",
+  [D("meld", "opruimen:verkocht", 1, "Verkoop een oud stuk in het kampwinkeltje van de kok"),
+   D("meld", "opruimen:ontmanteld", 1, "Ontmantel een oud stuk in de kampsmidse van de sergeant")],
+  [("npc", "Rekruut! Hier, twee oude oefenwapens uit de kampkist. Kijk maar in je tooltip: slechter dan wat je nu hebt."),
+   ("npc", "Oude spullen gooi je niet weg. Verkopen geeft Vadsmunten, ontmantelen geeft smeedmateriaal voor sterren bij de smid. "
+           "Lievelingsstuk? Druk op L in je inventaris, dan zit het op slot."),
+   ("npc", "Verkoop er één in het winkeltje van Kok Knapperkorst en ontmantel de andere hier bij mij: ik ben ook de kampsmid. "
+           "Klik op mij en kies 'Kampsmidse'.")],
+  "Eén verkopen bij de kok, één ontmantelen bij mij. Klik op mij en kies 'Kampsmidse'!",
+  [("npc", "Een oud oefenwapen voor mijn winkeltje? Dank je! Opgeruimd staat netjes, zeg ik altijd."),
+   ("npc", "En onthoud: in elke winkel en bij elke smid zit een knop 'alle slechtere'. Dan ben je in één klik van je oude rommel af.")],
+  xp=40, munten=0, na=["hq03b_elementen"], inleveren="kok", actie_aanname="opruimspullen")
 
 Q("hq04_kampvuur", "hoofd", "kok", "Een warm plekje",
   "Kampvuren zijn je checkpoints: steek er een aan met rechtsklik en daar word je wakker als je flauwvalt. Steek het kampvuur op "
@@ -326,7 +344,7 @@ Q("hq04_kampvuur", "hoofd", "kok", "Een warm plekje",
    ("jij", "Het is hier echt mooi."),
    ("npc", "Ja hè? Zo vreedzaam. Zo stil. Zo..."),
    ("npc", "...hé. Wat is dat voor schaduw boven het water?")],
-  xp=100, munten=50, items=[("minecraft:cookie", 2)], na=["hq03b_elementen"], actie_klaar="bam")
+  xp=100, munten=50, items=[("minecraft:cookie", 2)], na=["hq03c_opruimen"], actie_klaar="bam")
 
 Q("hq05_klodderreus", "hoofd", "rekruteerder", "De Grauwe Klodderreus",
   "Een grote draak vloog over het kamp en liet een klont zwarte pluis in de vijver vallen. Daar kwam een reusachtige grauwe klodder "
@@ -830,6 +848,8 @@ TIPS = {
     "sterren": ("Sterren", "Bij de smid zet je sterren op je spullen. Spannend: soms valt er een ster af, en heel soms raakt iets "
                            "verpluisd. Verpluisd is nooit voor altijd: de smid klopt het weer glad."),
     "markt": ("De markt", "In het veilinghuis koop en verkoop je buit met Vadsmunten. Gebonden buit blijft bij jou."),
+    "opruimen": ("Oude spullen", "Slechter dan wat je draagt? Verkoop het in een winkel of ontmantel het tot smeedmateriaal (bij de smid, "
+                                 "of met de knop naast je inventaris). Druk op L in je inventaris om een lievelingsstuk op slot te zetten."),
     "party": ("Samen op pad", "In een groep tot vijf deel je xp in de buurt, tel je samen voor opvrolijk-quests en doen jullie elkaar "
                               "nooit pijn. /guhs vadsrijk party uitnodigen <naam>."),
     "flauw": ("Flauwgevallen", "Geen zorgen: je verliest niks. Je wordt wakker bij je laatste kampvuur en bent 30 tellen een beetje "
@@ -868,6 +888,18 @@ GIDS = {
                                      "(guhddelijk). Buit is persoonlijk. Bij een baas krijgt iedereen die genoeg hielp een eigen kist."),
     "sterren": ("Sterren en de smid", "De smid zet sterren op je spullen, met een beetje risico. Verpluisde spullen repareert hij. Je kunt "
                                       "ook de bonussen opnieuw laten rollen."),
+    "opruimen": ("Wat doe ik met oude spullen?", "Je tooltip vertelt het meteen: 'Slechter dan wat je draagt' of 'Beter dan wat je "
+                                                  "draagt', met het grootste verschil, wat het in de winkel oplevert en wat ontmantelen "
+                                                  "geeft. Verkopen geeft Vadsmunten. Ontmantelen geeft smeedmateriaal: grijs geeft "
+                                                  "Smeedstofjes, groen Smeedsplinters, blauw en beter Smeedkristallen (meer voor een "
+                                                  "hoger level en voor sterren). De smid smelt dat om: 3 stofjes of 1 splinter worden een "
+                                                  "Verbetersteentje, 1 splinter kan ook Pluisdraad worden, 2 kristallen worden Glinstergruis "
+                                                  "voor je ambacht en 3 kristallen een Herrolknabbel. In elke winkel en bij de smid zitten "
+                                                  "de knoppen 'Verkoop alle slechtere' en 'Ontmantel alle slechtere': die pakken alleen "
+                                                  "stukken die slechter zijn dan wat je draagt, zonder sterren of kristallen, en nooit wat "
+                                                  "je draagt. Lievelingsstuk? Druk op L in je inventaris (of klik het slotje): dan kan het "
+                                                  "niet verkocht, ontmanteld of verhandeld worden. Blauw en beter vraagt altijd eerst of je "
+                                                  "het zeker weet."),
     "kampvuren": ("Kampvuren", "In elk gebied staan 2-3 kampvuren met een ridder-guh. Rechtsklik: dan is het je checkpoint. Er is geen "
                                "snelreizen; het luchtschip brengt je tussen Knuffelkamp en Zwamzoet."),
     "flauw": ("Flauwvallen", "Valt je Vads op nul, dan word je wakker bij je kampvuur (bij een baas: bij de arenadeur). Je verliest niks, "

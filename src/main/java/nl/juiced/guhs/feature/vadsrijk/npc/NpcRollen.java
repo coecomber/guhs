@@ -125,6 +125,13 @@ public final class NpcRollen {
                     p -> nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie.geefStartwapen(p, klasse,
                             nl.juiced.guhs.feature.vadsrijk.klassen.KlasseBalie.WAPEN_PRIJS)));
         }
+        // 1.10.1 (opruimen): Knuffelkamp's little shop (Kok Knapperkorst) and camp smithy (Sergeant Pluizebol: salvage + melting)
+        QuestMotor.EXTRA.computeIfAbsent("kok", k -> new java.util.concurrent.CopyOnWriteArrayList<>()).add(new QuestMotor.ExtraOptie(
+                "vadsrijk.economie.opruim.optie.kampwinkel", p -> true,
+                p -> nl.juiced.guhs.feature.vadsrijk.economie.Winkels.open(p, nl.juiced.guhs.feature.vadsrijk.economie.Winkels.KAMPWINKEL)));
+        QuestMotor.EXTRA.computeIfAbsent("rekruteerder", k -> new java.util.concurrent.CopyOnWriteArrayList<>()).add(new QuestMotor.ExtraOptie(
+                "vadsrijk.economie.opruim.optie.kampsmidse", p -> true,
+                p -> nl.juiced.guhs.feature.vadsrijk.economie.Opruimen.open(p, nl.juiced.guhs.feature.vadsrijk.economie.Opruimen.SMID)));
         nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.VIA_BALIE = false;
         LOG.debug("Vadsrijk npc: all {} roles bound directly ({})", KOPPELS.size(), V0);
     }

@@ -101,6 +101,9 @@ public final class EcoUtil {
         if (s.isEmpty()) {
             return false;
         }
+        if (Opruimen.vergrendeld(s)) {
+            return false;   // 1.10.1: a locked piece stays with you
+        }
         Uitrusting u = Rollen.van(s);
         return u == null || !u.gebonden();
     }

@@ -177,13 +177,60 @@
       "auto": false
     },
     {
+      "id": "hq03c_opruimen",
+      "soort": "hoofd",
+      "gever": "rekruteerder",
+      "inleveren": "kok",
+      "lv": 1,
+      "na": [
+        "hq03b_elementen"
+      ],
+      "doelen": [
+        {
+          "soort": "meld",
+          "doel": "opruimen:verkocht",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        },
+        {
+          "soort": "meld",
+          "doel": "opruimen:ontmanteld",
+          "n": 1,
+          "bron": "",
+          "kans": 0.0
+        }
+      ],
+      "beloning": {
+        "xp": 40,
+        "munten": 0,
+        "items": [],
+        "wapen": false,
+        "loot": ""
+      },
+      "aanbod": [
+        "npc",
+        "npc",
+        "npc"
+      ],
+      "klaar": [
+        "npc",
+        "npc"
+      ],
+      "praat": {},
+      "actie_aanname": "opruimspullen",
+      "actie_klaar": "",
+      "start_items": [],
+      "auto": false
+    },
+    {
       "id": "hq04_kampvuur",
       "soort": "hoofd",
       "gever": "kok",
       "inleveren": "kok",
       "lv": 1,
       "na": [
-        "hq03b_elementen"
+        "hq03c_opruimen"
       ],
       "doelen": [
         {

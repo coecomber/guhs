@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import nl.juiced.guhs.Guhs;
+import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 
 /**
  * The economie slice's network: ONE screen payload to the client (which screen, its data, the item stacks it shows) and ONE action
@@ -25,7 +26,7 @@ import nl.juiced.guhs.Guhs;
  */
 public final class EcoPayloads {
     public static final String WINKEL = "winkel", SMID = "smid", MARKT = "markt", HANDEL = "handel", STAL = "stal", DICHT = "dicht",
-            STARTER = "starter";
+            STARTER = "starter", OPRUIM = "opruim";   // 1.10.1: Opruimen (salvage / sell old gear)
 
     /** Server -> client: open (or refresh) a screen. {@code scherm} = {@link #DICHT} closes it. */
     public record Scherm(String scherm, CompoundTag data, List<ItemStack> items) implements CustomPacketPayload {
@@ -159,6 +160,18 @@ public final class EcoPayloads {
             }
             return;
         }
+        if (d.scherm().equals(OPRUIM) && (d.actie().equals("open") || d.actie().equals("vergrendel_inv"))) {
+            // 1.10.1: from the inventory (no economie screen open): the "⚒" button opens Opruimen, key L locks the hovered piece
+            if (d.actie().equals("open")) {
+                Opruimen.open(p, Opruimen.INVENTARIS);
+            } else if (Vadsrijk.in(p)) {
+                String[] r = Opruimen.vergrendel(p, d.args().getIntOr("slot", -1));
+                if (!r[0].isEmpty()) {
+                    p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable(r[0], r[1]));
+                }
+            }
+            return;
+        }
         Open o = OPEN.get(p.getUUID());
         if (o == null || !o.scherm().equals(d.scherm())) {
             return;   // (not opened through the API: ignored)
@@ -170,6 +183,7 @@ public final class EcoPayloads {
             case HANDEL -> Handel.doe(p, d.actie(), d.args());
             case STAL -> Stal.doe(p, o.context(), d.actie(), d.args());
             case STARTER -> Stal.doeStarter(p, d.actie(), d.args());
+            case OPRUIM -> Opruimen.doe(p, o.context(), d.actie(), d.args());
             default -> {
             }
         }

@@ -83,6 +83,9 @@ public final class QlPlek {
             case POP -> NpcPlekken.TRAINING;
             case LEVEL -> null;
             case MELD -> {
+                if (d.doel().startsWith("opruimen:")) {   // 1.10.1: the camp shop (kok) / camp smithy (sergeant)
+                    yield QuestStap.npcPos(p, d.doel().equals("opruimen:verkocht") ? "kok" : "rekruteerder");
+                }
                 if (d.doel().startsWith("quiz:")) {
                     yield QuestStap.npcPos(p, q.gever());
                 }

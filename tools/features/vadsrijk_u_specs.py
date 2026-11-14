@@ -283,8 +283,8 @@ t("vergelijk.kop", "Vergeleken met je %s:", "Compared with your %s:")
 t("vergelijk.leeg", "Je draagt nog niets als %s:", "You wear nothing as %s yet:")
 t("vergelijk.gedragen", "(dit draag je nu)", "(you are wearing this)")
 t("vergelijk.schade", "Schade per klap", "Damage per hit")
-t("vergelijk.beter", "▲ Beter dan wat je nu hebt", "▲ Better than what you have")
-t("vergelijk.slechter", "▼ Slechter dan wat je nu hebt", "▼ Worse than what you have")
+t("vergelijk.beter", "▲ Beter dan wat je draagt", "▲ Better than what you have")
+t("vergelijk.slechter", "▼ Slechter dan wat je draagt", "▼ Worse than what you have")
 t("vergelijk.gelijk", "= Ongeveer even goed", "= About as good")
 for _slot, nl, en in (("wapen", "wapen", "weapon"), ("hoofd", "helm", "helmet"), ("borst", "borststuk", "chest piece"),
                       ("benen", "broek", "leggings"), ("voeten", "schoenen", "boots"), ("ring", "ring", "ring"), ("ring2", "ring", "ring"),

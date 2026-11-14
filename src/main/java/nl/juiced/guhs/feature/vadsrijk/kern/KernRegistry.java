@@ -63,6 +63,9 @@ public final class KernRegistry {
             () -> AttachmentType.serializable(SpelerData::new).copyOnDeath().build());
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Uitrusting>> UITRUSTING = COMPONENTS.registerComponentType("vr_uitrusting",
             b -> b.persistent(Uitrusting.CODEC).networkSynchronized(Uitrusting.STREAM_CODEC));
+    /** 1.10.1 (opruimen): a piece the player locked ("vergrendeld"): never sold, salvaged, traded or put on the market. */
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> VERGRENDELD = COMPONENTS.registerComponentType("vr_vergrendeld",
+            b -> b.persistent(com.mojang.serialization.Codec.BOOL).networkSynchronized(net.minecraft.network.codec.ByteBufCodecs.BOOL));
 
     // ---- the 5 reference base types (the economie slice adds the rest of the ~30) ------------------------------------------
     public static final DeferredItem<Item> KUSSENZWAARD = wapen("vr_kussenzwaard");

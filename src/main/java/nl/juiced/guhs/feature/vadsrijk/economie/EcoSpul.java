@@ -55,6 +55,14 @@ public final class EcoSpul {
     public static final DeferredItem<EcoItems.Uitleg> PLUISDRAAD = ITEMS.registerItem("vr_item_pluisdraad", EcoItems.Uitleg::new,
             () -> new Item.Properties().stacksTo(99));
 
+    // ---- 1.10.1 opruimen: what salvaging old gear gives (grey -> stofjes, green -> splinters, blue and up -> kristallen) ----------
+    public static final DeferredItem<EcoItems.Uitleg> SMEEDSTOFJE = ITEMS.registerItem("vr_item_smeedstofje", EcoItems.Uitleg::new,
+            () -> new Item.Properties().stacksTo(99));
+    public static final DeferredItem<EcoItems.Uitleg> SMEEDSPLINTER = ITEMS.registerItem("vr_item_smeedsplinter", EcoItems.Uitleg::new,
+            () -> new Item.Properties().stacksTo(99).rarity(Rarity.UNCOMMON));
+    public static final DeferredItem<EcoItems.Uitleg> SMEEDKRISTAL = ITEMS.registerItem("vr_item_smeedkristal", EcoItems.Uitleg::new,
+            () -> new Item.Properties().stacksTo(99).rarity(Rarity.RARE));
+
     // ---- mounts ---------------------------------------------------------------------------------------------------------------
     public static final DeferredItem<EcoItems.Fluitje> RIJFLUITJE = ITEMS.registerItem("vr_item_rijfluitje", EcoItems.Fluitje::new,
             () -> new Item.Properties().stacksTo(1));

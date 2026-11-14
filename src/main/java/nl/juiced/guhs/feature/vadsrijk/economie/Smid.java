@@ -57,6 +57,7 @@ public final class Smid {
         d.putInt("steentjes", EcoUtil.tel(p.getInventory(), EcoSpul.VERBETERSTEENTJE.get()));
         d.putInt("knabbels", EcoUtil.tel(p.getInventory(), EcoSpul.HERROLKNABBEL.get()));
         d.putInt("draad", EcoUtil.tel(p.getInventory(), EcoSpul.PLUISDRAAD.get()));
+        d.putInt("slechter", Opruimen.slechtere(p).size());   // 1.10.1: on the Opruimen button
         d.putInt("kies", kies);
         d.putString("uitkomst", uitkomst);
         d.putString("melding", melding);
@@ -73,9 +74,15 @@ public final class Smid {
             case "ster" -> ster(p, slot, p.getRandom());
             case "herrol" -> herrol(p, slot, a.getIntOr("houd", -1), p.getRandom());
             case "repareer" -> repareer(p, slot);
+            case "opruimen" -> {   // 1.10.1: the Opruimen screen (salvage, sell, melt) from the smid
+                Opruimen.open(p, Opruimen.SMID);
+                yield null;
+            }
             default -> nl.juiced.guhs.feature.vadsrijk.items.SmidExtra.doe(p, actie, a);   // T-ITEMS: polijst, doorgroei, overvads, talisman
         };
-        stuur(p, slot, r[0], r[1]);
+        if (r != null) {
+            stuur(p, slot, r[0], r[1]);
+        }
     }
 
     private static Uitrusting lees(ServerPlayer p, int slot) {

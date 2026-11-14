@@ -195,6 +195,9 @@ public class SmidScherm extends EcoScherm {
         materiaal(g, mx, my, left + 8, my0, new ItemStack(EcoSpul.VERBETERSTEENTJE.get()), data.getIntOr("steentjes", 0));
         materiaal(g, mx, my, left + 48, my0, new ItemStack(EcoSpul.HERROLKNABBEL.get()), data.getIntOr("knabbels", 0));
         materiaal(g, mx, my, left + 88, my0, new ItemStack(EcoSpul.PLUISDRAAD.get()), data.getIntOr("draad", 0));
+        // 1.10.1: Opruimen (salvage / sell old gear, melt the material into steentjes and more)
+        knop(g, mx, my, left + 8, top + h - 26, 112, 12, Component.translatable("vadsrijk.economie.opruim.smid_knop", data.getIntOr("slechter", 0)), true,
+                () -> doe("opruimen", new CompoundTag()));
 
         // right: the piece on the anvil
         int rx = left + 128, rw = w - 136;

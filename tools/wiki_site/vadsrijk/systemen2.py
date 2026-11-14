@@ -119,6 +119,23 @@ def uitrusting(b):
 <li>{t("Knuffeltalisman: protects a star once when it would be lost.", "Knuffeltalisman: beschermt één keer een ster die je anders kwijt zou raken.")}</li>
 <li>{t("Polish: a new value for one bonus within its range (it can also go down!).", "Polijsten: een nieuwe waarde voor één bonus binnen zijn bereik (kan ook lager!).")}</li>
 </ul>
+<h2>{t("Old gear: sell or salvage (1.10.1)", "Oude spullen: verkopen of ontmantelen (1.10.1)")}</h2>
+{p("Every gear tooltip says whether it is worse or better than what you wear (with the biggest difference), its shop value and what salvaging gives. Salvage at the smith, with the ⚒ button next to your inventory, or with 'Salvage all worse' in a shop. Press L in your inventory to lock a piece: locked pieces are never sold, salvaged or traded. Worn pieces and survival items are never touched; blue and better asks first.",
+   "Elke tooltip zegt of iets slechter of beter is dan wat je draagt (met het grootste verschil), wat het in de winkel oplevert en wat ontmantelen geeft. Ontmantel bij de smid, met de ⚒-knop naast je inventaris, of met 'Ontmantel alle slechtere' in een winkel. Druk op L in je inventaris om iets op slot te zetten: dat wordt nooit verkocht, ontmanteld of verhandeld. Wat je draagt en survival-spullen blijven altijd; blauw en beter vraagt het eerst.")}
+<div class="tscroll"><table class="data"><thead><tr><th>{t("Rarity", "Zeldzaamheid")}</th><th>{t("Salvages into", "Ontmantelt tot")}</th><th class="num">{t("Amount", "Aantal")}</th></tr></thead><tbody>
+<tr><td>{t("Common (gray)", "Gewoon (grijs)")}</td><td>{t("Smithing Dust", "Smeedstofje")}</td><td class="num">2 + {t("level", "level")}/20</td></tr>
+<tr><td>{t("Uncommon (green)", "Ongewoon (groen)")}</td><td>{t("Smithing Splinter", "Smeedsplinter")}</td><td class="num">1 + {t("level", "level")}/20</td></tr>
+<tr><td>{t("Rare (blue)", "Zeldzaam (blauw)")}</td><td>{t("Smithing Crystal", "Smeedkristal")}</td><td class="num">1 + {t("level", "level")}/25</td></tr>
+<tr><td>{t("Epic (purple)", "Episch (paars)")}</td><td>{t("Smithing Crystal", "Smeedkristal")}</td><td class="num">2 + {t("level", "level")}/25</td></tr>
+<tr><td>{t("Legendary (orange)", "Legendarisch (oranje)")}</td><td>{t("Smithing Crystal", "Smeedkristal")}</td><td class="num">4 + {t("level", "level")}/25</td></tr>
+<tr><td>{t("Guhvine (pink)", "Guhddelijk (roze)")}</td><td>{t("Smithing Crystal", "Smeedkristal")}</td><td class="num">8 + {t("level", "level")}/25</td></tr>
+</tbody></table></div>
+<p class="muted">{t("Plus 1 per 2 stars on the piece.", "Plus 1 per 2 sterren op het stuk.")}</p>
+<ul>
+<li>{t("At the smith (Tidy up): 3 Smithing Dust = 1 Upgrade Pebble; 1 Smithing Splinter = 1 Upgrade Pebble or 1 Fluff Thread; 2 Smithing Crystals = 1 Glitter Grit (crafts); 3 Smithing Crystals = 1 Reroll Nibble.", "Bij de smid (Opruimen): 3 Smeedstofjes = 1 Verbetersteentje; 1 Smeedsplinter = 1 Verbetersteentje of 1 Pluisdraad; 2 Smeedkristallen = 1 Glinstergruis (ambachten); 3 Smeedkristallen = 1 Herrolknabbel.")}</li>
+<li>{t("'Sell all worse' / 'Salvage all worse' (shops and the smith): only bag pieces worse than what you wear in that slot, unlocked, without stars or crystals; a window lists the counts first. 'Sell all gray' stays.", "'Verkoop alle slechtere' / 'Ontmantel alle slechtere' (winkels en de smid): alleen stukken in je tas die slechter zijn dan wat je in dat vak draagt, niet op slot, zonder sterren of kristallen; eerst toont een venster de aantallen. 'Verkoop alle grijze' blijft.")}</li>
+<li>{t("Knuffelkamp: Cook Crispycrust has a camp shop, Sergeant Fluffball a camp smithy (tutorial step 'Tidy Up').", "Knuffelkamp: Kok Knapperkorst heeft een kampwinkeltje, Sergeant Pluizebol een kampsmidse (tutorialstap 'Opruimen').")}</li>
+</ul>
 <h2>{t("Heirlooms", "Erfstukken")}</h2>
 <ul>
 <li>{t("Trusted: gear you wear earns item xp (elite 3, boss 15) up to Trusted 5, with a little more base stats per level.", "Vertrouwd: wat je draagt krijgt item-xp (elite 3, baas 15) tot Vertrouwd 5, met per niveau wat meer basisstats.")}</li>

@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.vadsrijk.npc;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -65,8 +66,21 @@ public final class Questlog {
     }
 
     public static int status(ServerPlayer p, String quest) {
-        return quests(p).getCompoundOrEmpty(quest).getIntOr("s", 0);
+        int s = quests(p).getCompoundOrEmpty(quest).getIntOr("s", 0);
+        if (s == 0) {   // 1.10.1: a tutorial step inserted later counts as done for who already started the step after it
+            String na = INGEVOEGD.get(quest);
+            if (na != null && quests(p).getCompoundOrEmpty(na).getIntOr("s", 0) != 0) {
+                return KLAAR;
+            }
+        }
+        return s;
     }
+
+    /**
+     * 1.10.1: main steps inserted into an existing chain -> the step that used to follow. Players who already started that next
+     * step (or got further) never see the new one: it counts as done for them (nothing is written into their data).
+     */
+    public static final Map<String, String> INGEVOEGD = Map.of("hq03c_opruimen", "hq04_kampvuur");
 
     public static boolean klaar(ServerPlayer p, String quest) {
         return status(p, quest) == KLAAR;
