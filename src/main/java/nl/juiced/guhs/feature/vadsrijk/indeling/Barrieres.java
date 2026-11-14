@@ -61,6 +61,10 @@ public final class Barrieres {
             new Vrij("z1", 0, -20, 715, 660, -64),
             new Vrij("z1_zw", -560, 600, 120, 110, -64),          // the south-west peninsula
             new Vrij("z1_schildpad", 520, 720, 90, 90, -64),      // the turtle island off the south-east coast
+            // 1.10.2: the water between the south-east coast and the turtle island (a zone-1 secret, geheim_schildpad 524,76,722).
+            // The two areas above only touched in one point (~520, 630): between them lay a 30-40 block strip of "current"
+            // that pushed every swimmer / boat back to the coast. This lane joins them (x ~380..560, z ~580..700).
+            new Vrij("z1_schildpad_vaarweg", 470, 640, 90, 60, -64),
             new Vrij("z2", 704, -1143, 330, 395, -64),
             new Vrij("z3", 1404, -576, 300, 300, -64),
             new Vrij("z3_werf", 1655, -827, 115, 115, -64),

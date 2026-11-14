@@ -24,6 +24,9 @@ Player model (W_BRIEF walkability standard), in half blocks:
   - fences, walls, iron bars, glass panes, lanterns, chains are BLOCKING (fences/walls count 1.5 high: you can't jump on them);
     wooden doors, gates and trapdoors are passable, iron doors are not (they are the "fake / locked" doors);
   - leaves are solid; plants, carpets, torches, signs, banners are passable; lava is never a floor.
+Barriers (1.10.2, --barriere): no walking/swimming INTO a cell outside indeling/Barrieres.VRIJ (in the island sea a player is
+pushed back there), so a target behind a "current" counts as unreached (the turtle island of zone 1 was such a target). Off by
+default: with it, zones 4-6 are only reached through the z3_z4 pier, which this model does not reach yet (see NOTITIES_1102.md).
 Transport edges: airship lines (pier <-> pier), city lifts (lift_*_voet <-> lift_*_top), the zone-5 hatches/lifts, the moving temple
 doors (open), plus the links in bereik_doelen.json "links".
 
@@ -268,6 +271,28 @@ def laad(tegel_filter=None):
     print(f"  tegels gelezen: {K.N} runs, {len(K.deuren)} deuren, {len(K.los)} lantaarns/kettingen, {len(K.spook)} spookblokken "
           f"({time.time() - t0:.0f} s)", flush=True)
     return K
+
+
+# ------------------------------------------------------------------ the barriers (1.10.2)
+def vrije_gebieden():
+    """indeling/Barrieres.VRIJ: (zone, cx, cz, rx, rz, vanafY) superellipses (p 4); outside them (in the sea area) a player is
+    pushed back (the soft current / wind / mist). Same parser as schepen_check.py."""
+    src = open(os.path.join(JAVA, "indeling", "Barrieres.java"), encoding="utf-8").read()
+    return [(m.group(1), *(float(m.group(i)) for i in range(2, 6)), int(m.group(6)))
+            for m in re.finditer(r'new Vrij\("(\w+)", (-?[\d.]+), (-?[\d.]+), (-?[\d.]+), (-?[\d.]+), (-?\d+)\)', src)]
+
+
+def barriere_vrij(x, y, z):
+    """Vectorised Barrieres.vrij: True where a player is NOT pushed (outside the island sea, or inside a free area)."""
+    x = np.asarray(x, np.float64)
+    z = np.asarray(z, np.float64)
+    y = np.asarray(y, np.float64)
+    vrij = ~((x > -1300) & (x < 4700) & (z > -1900) & (z < 1700))
+    for (_n, cx, cz, rx, rz, vanaf) in vrije_gebieden():
+        a = np.abs(x - cx) / rx
+        b = np.abs(z - cz) / rz
+        vrij |= (y >= vanaf) & ((a ** 4 + b ** 4) ** 0.25 <= 1.0)
+    return vrij
 
 
 # ------------------------------------------------------------------ edges
@@ -672,7 +697,7 @@ class Uitslag:
     pass
 
 
-def analyseer(K=None):
+def analyseer(K=None, barriere=False):
     t0 = time.time()
     D = lees_doelen()
     quests = lees_quests()
@@ -683,6 +708,12 @@ def analyseer(K=None):
     js, jd = sprongen(K)
     print(f"  randen: {len(src)} lopen + {len(js)} sprongen ({time.time() - t0:.0f} s)", flush=True)
     n_lopen = len(src)
+    if barriere:   # 1.10.2: no walking/swimming INTO a cell where Barrieres pushes you back (links/airships stay)
+        VR = barriere_vrij(K.x + 0.5, K.F / 2.0, K.z + 0.5)
+        k0, k1 = VR[dst], VR[jd]
+        print(f"  barrieres: {int((~VR).sum())} runs buiten de vrije gebieden; {int((~k0).sum()) + int((~k1).sum())} randen eruit", flush=True)
+        src, dst, js, jd = src[k0], dst[k0], js[k1], jd[k1]
+        n_lopen = len(src)
     src = np.concatenate([src, js])
     dst = np.concatenate([dst, jd])
     del js, jd
@@ -1098,10 +1129,11 @@ def main():
     ap.add_argument("--zone", type=int, default=None)
     ap.add_argument("--punt", action="append", default=[], help="x,y,z: debug one spot")
     ap.add_argument("--strikt", action="store_true")
+    ap.add_argument("--barriere", action="store_true", help="1.10.2: model the zone barriers' push-back (Barrieres.VRIJ)")
     a = ap.parse_args()
     t0 = time.time()
     print("bereikcheck: tegels lezen ...", flush=True)
-    U = analyseer()
+    U = analyseer(barriere=a.barriere)
     for p in a.punt:
         x, y, z = (int(v) for v in p.split(","))
         r = U.Z.rond(x, y, z, 2)

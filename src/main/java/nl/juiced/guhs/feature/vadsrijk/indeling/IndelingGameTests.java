@@ -79,6 +79,60 @@ public class IndelingGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.2: the turtle island (zone-1 secret geheim_schildpad 524,76,722, south-east of zone 1) is reachable by swimming or by
+     * boat: a flood over the barrier's free cells (sea level, 2-block grid) from Zwamzoet reaches the secret, and the old gap
+     * (the strip of "current" between the coast and the island free area) is free now. The real map edge further out still pushes.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void schildpadEilandBereikbaar(GameTestHelper helper) {
+        BlockPos geheim = WereldPlekken.plek("geheim_schildpad");
+        helper.assertTrue(geheim != null && Barrieres.vrij(geheim.getX(), 63, geheim.getZ()), "the secret itself is free");
+        // the old gap between the coast (z1) and the island area (z1_schildpad)
+        for (int[] g : new int[][] {{520, 610}, {480, 620}, {450, 630}, {500, 640}, {540, 625}}) {
+            helper.assertTrue(Barrieres.vrij(g[0], 63, g[1]), "the water between the coast and the turtle island is free: " + g[0] + "," + g[1]);
+        }
+        // flood on a 2-block grid inside the box x -100..700, z -100..900 from Zwamzoet's square
+        int x0 = -100, z0 = -100, w = 400, h = 500, st = 2;
+        boolean[] gezien = new boolean[w * h];
+        java.util.ArrayDeque<int[]> rij = new java.util.ArrayDeque<>();
+        rij.add(new int[] {(0 - x0) / st, (0 - z0) / st});
+        boolean bereikt = false;
+        int gx = (geheim.getX() - x0) / st, gz = (geheim.getZ() - z0) / st;
+        while (!rij.isEmpty()) {
+            int[] c = rij.poll();
+            if (c[0] < 0 || c[1] < 0 || c[0] >= w || c[1] >= h || gezien[c[1] * w + c[0]]) {
+                continue;
+            }
+            gezien[c[1] * w + c[0]] = true;
+            if (!Barrieres.vrij(x0 + c[0] * st, 63, z0 + c[1] * st)) {
+                continue;
+            }
+            if (Math.abs(c[0] - gx) <= 1 && Math.abs(c[1] - gz) <= 1) {
+                bereikt = true;
+                break;
+            }
+            rij.add(new int[] {c[0] + 1, c[1]});
+            rij.add(new int[] {c[0] - 1, c[1]});
+            rij.add(new int[] {c[0], c[1] + 1});
+            rij.add(new int[] {c[0], c[1] - 1});
+        }
+        helper.assertTrue(bereikt, "from Zwamzoet over free water to the turtle island secret");
+        // the real map edge beyond the island and the strait to the camp keep pushing
+        helper.assertTrue(!Barrieres.vrij(680, 63, 720) && !Barrieres.vrij(520, 63, 880), "the open sea past the turtle island still pushes");
+        helper.assertTrue(!Barrieres.vrij(-380, 63, 760), "Zoete-Zeestroom strait (camp / zone 1) unchanged");
+        helper.assertTrue(ZonePoortZone.zone1(geheim), "the turtle island counts as zone 1 for the zone gate");
+        helper.succeed();
+    }
+
+    /** (the zone gate's own lookup, kept here so the test reads as a sentence) */
+    private static final class ZonePoortZone {
+        static boolean zone1(BlockPos b) {
+            return nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneOp(b.getX(), 63, b.getZ()) == 1
+                    && nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneOp(520, 63, 615) == 1;
+        }
+    }
+
     @GuhTest(template = "empty", batch = BATCH)
     public static void zeeVulling(GameTestHelper helper) {
         helper.assertTrue(ZeeVulling.inZee(1200, -200) && !ZeeVulling.inZee(3100, 3100), "sea area");
