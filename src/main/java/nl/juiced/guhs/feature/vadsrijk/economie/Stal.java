@@ -90,6 +90,9 @@ public final class Stal {
 
     private static void stuur(ServerPlayer p, String ctx, String melding) {
         CompoundTag d = data(p, CTX_STAL.equals(ctx));
+        if ((melding == null || melding.isEmpty()) && !Rijdieren.magRijden(p) && Rijdieren.heeftEen(p)) {
+            melding = "vadsrijk.economie.rijdier.leer_stal";   // 1.10.2: your mounts wait; riding is learnt at the Pluimstal in zone 3
+        }
         d.putString("melding", melding);
         EcoPayloads.open(p, EcoPayloads.STAL, ctx, d, List.of());
     }

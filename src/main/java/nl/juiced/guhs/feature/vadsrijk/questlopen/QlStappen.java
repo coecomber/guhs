@@ -28,7 +28,7 @@ import nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken;
  * Whether a step is done is read from the real questlog, so the list always matches the character's progress.
  */
 public final class QlStappen {
-    /** The main quest whose step gives the first mount (the "@rijdier" gate of the mount quests opens after it). */
+    /** The main quest step that gives the first mount (until 1.10.2 the "@rijdier" gate of the mount quests opened after it). */
     static final String RIJDIER_MELD = "rijdier:starter";
 
     private QlStappen() {
@@ -99,26 +99,19 @@ public final class QlStappen {
         for (String n : q.na()) {
             int i = -1;
             if (n.equals(RijdierQuests.POORT)) {
-                for (int k = 0; k < hoofd.size(); k++) {
-                    for (Quest.Doel d : hoofd.get(k).doelen()) {
-                        if (d.type() == Quest.Doel.Type.MELD && d.doel().equals(RIJDIER_MELD)) {
-                            i = k;
-                        }
-                    }
+                continue;   // 1.10.2: the "@rijdier" gate is gone (the return quests no longer wait for a mount)
+            }
+            for (int k = 0; k < hoofd.size(); k++) {
+                if (hoofd.get(k).id().equals(n)) {
+                    i = k;
                 }
-            } else {
-                for (int k = 0; k < hoofd.size(); k++) {
-                    if (hoofd.get(k).id().equals(n)) {
+            }
+            if (i < 0) {
+                Quest x = Quests.van(n);   // (behind another optional quest: that one's anchor)
+                String a = x == null || x.hoofd() ? null : anker(x, hoofd);
+                for (int k = 0; a != null && k < hoofd.size(); k++) {
+                    if (hoofd.get(k).id().equals(a)) {
                         i = k;
-                    }
-                }
-                if (i < 0) {
-                    Quest x = Quests.van(n);   // (behind another optional quest: that one's anchor)
-                    String a = x == null || x.hoofd() ? null : anker(x, hoofd);
-                    for (int k = 0; a != null && k < hoofd.size(); k++) {
-                        if (hoofd.get(k).id().equals(a)) {
-                            i = k;
-                        }
                     }
                 }
             }

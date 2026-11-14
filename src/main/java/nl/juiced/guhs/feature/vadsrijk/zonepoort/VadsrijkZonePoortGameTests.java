@@ -34,6 +34,8 @@ import nl.juiced.guhs.gametest.GuhTest;
  */
 public class VadsrijkZonePoortGameTests {
     private static final String BATCH = "vadsrijk_zonepoort";
+    /** The per-player gate key for zone 2 (a gate id, not a lang key: the text is "vadsrijk.zonepoort.eis"). */
+    private static final String EIS2 = ZonePoort.K + "eis." + 2;
 
     private static ServerPlayer speler(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
@@ -289,12 +291,12 @@ public class VadsrijkZonePoortGameTests {
             poort(3);
             ZonePoortConfig.TEST_BOEK = 100;   // (a fresh mock player is far below 100 % of the zone-1 book)
             ZonePoort.zetHoogste(p, 1);
-            // 1. no story, no book: closed, and the line says both
+            // 1. no story, no book: closed; the travel NPC gives its own story reason first; the gate line marks both ✘
             helper.assertTrue(ZonePoort.dicht(p, 2) && !ZonePoort.serverDicht(p, 2), "zone 2: open on the server, closed for this player");
             String r = QuestMotor.reisSlot(p, "kandijkom");
-            helper.assertTrue("vadsrijk.zonepoort.eis.2".equals(r), "travel NPC: the per-player gate key: " + r);
-            helper.assertTrue(ZonePoort.isPoortSlot(r) && ZonePoort.isEis(r), "an 'eis' gate key");
-            Object[] a = ZonePoort.args(p, r);
+            helper.assertTrue("vadsrijk.npc.reis.slot.kandijkom_verhaal".equals(r), "travel NPC: the story reason first: " + r);
+            helper.assertTrue(ZonePoort.isEis(EIS2) && ZonePoort.isPoortSlot(EIS2), "an 'eis' gate key");
+            Object[] a = ZonePoort.args(p, EIS2);
             helper.assertTrue(a.length == 6 && a[1].toString().contains("✘") && a[3].toString().contains("✘"), "both conditions marked ✘");
             // 2. story done, book short: still closed; the tracker says explore, the captain says what is missing
             for (Quest q : Quests.alle().values()) {
@@ -306,10 +308,10 @@ public class VadsrijkZonePoortGameTests {
             Spelers.zetLevel(p, 20);
             ZonePoort.vergeetCache(p.getUUID());
             helper.assertTrue(ZonePoort.verhaalKlaar(p, 1) && !ZonePoort.boekOk(p, 1), "story done, book " + ZonePoort.boekProcent(p, 1) + " % < 100 %");
-            helper.assertTrue("vadsrijk.zonepoort.eis.2".equals(QuestMotor.reisSlot(p, "kandijkom")), "still closed for the book");
-            helper.assertTrue("vadsrijk.zonepoort.eis.2".equals(Poorten.dicht(p, Lijnen.vanId("z1_z2"), true)), "airship line A: the per-player key");
+            helper.assertTrue(EIS2.equals(QuestMotor.reisSlot(p, "kandijkom")), "still closed for the book");
+            helper.assertTrue(EIS2.equals(Poorten.dicht(p, Lijnen.vanId("z1_z2"), true)), "airship line A: the per-player key");
             helper.assertTrue(!ZonePoort.isPoortSlot(Poorten.dicht(p, Lijnen.vanId("z1_z2"), false)), "the way back is never gated");
-            Object[] b = ZonePoort.args(p, "vadsrijk.zonepoort.eis.2");
+            Object[] b = ZonePoort.args(p, EIS2);
             helper.assertTrue(b[1].toString().contains("✔") && b[3].toString().contains("✘"), "story ✔, book ✘");
             Quest z2 = Quests.van("z2_hq01_splinterpieken");
             helper.assertTrue(!Questlog.beschikbaar(p, z2), "zone 2's first quest is not offered yet");

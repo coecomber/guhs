@@ -55,7 +55,7 @@ public class VadsrijkWerverGameTests {
     }
 
     @GuhTest(template = "empty", batch = B)
-    public static void rijdierQuestsNaEenRijdier(GameTestHelper helper) {
+    public static void rijdierQuestsZonderRijdier(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         Questlog.wisAlles(p);
         Rijdieren.reset(p);
@@ -71,15 +71,10 @@ public class VadsrijkWerverGameTests {
             }
         }
         Rijdieren.reset(p);   // (a finished story quest may have handed out a mount)
-        helper.assertFalse(Questlog.beschikbaar(p, hert) || Questlog.beschikbaar(p, wolf) || Questlog.beschikbaar(p, schaap),
-                "no mount: no return quest is there");
-        helper.assertTrue(RijdierQuests.teaser(p, schaap.gever()) == schaap && RijdierQuests.teaser(p, hert.gever()) == hert
-                && RijdierQuests.teaser(p, wolf.gever()) == wolf, "but their givers tease them");
-        helper.assertTrue(RijdierQuests.trackerQuest(p) == null, "and nothing in the tracker");
-        Rijdieren.geef(p, "wolkenschaapje");
-        helper.assertTrue(Questlog.beschikbaar(p, hert) && Questlog.beschikbaar(p, wolf) && Questlog.beschikbaar(p, schaap),
-                "owning a mount: all three appear");
-        helper.assertTrue(RijdierQuests.teaser(p, schaap.gever()) == null, "no teaser any more");
+        // 1.10.2 (user decision): no mount gate any more: all three are there without a mount, and nobody teases them
+        helper.assertTrue(!Rijdieren.heeftEen(p) && Questlog.beschikbaar(p, hert) && Questlog.beschikbaar(p, wolf) && Questlog.beschikbaar(p, schaap),
+                "no mount needed: all three return quests are there");
+        helper.assertTrue(RijdierQuests.teaser(p, schaap.gever()) == null && RijdierQuests.teaser(p, hert.gever()) == null, "no teaser");
         Quest t = RijdierQuests.trackerQuest(p);
         helper.assertTrue(t != null, "one is in the tracker");
         helper.assertTrue(NpcVolg.bouw(p).regels().stream().anyMatch(r -> r.quest().equals(t.id()) && r.doel().isPresent()),

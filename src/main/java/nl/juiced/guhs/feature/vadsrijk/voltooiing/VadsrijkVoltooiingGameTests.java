@@ -66,7 +66,7 @@ public class VadsrijkVoltooiingGameTests {
             ZoneBoek z1 = ZoneBoeken.ZONE1, z2 = ZoneBoeken.ZONE2;
             helper.assertTrue(Voltooiing.zone("zone1") == z1 && Voltooiing.zone("zone2") == z2, "both zones registered");
             helper.assertTrue(Voltooiing.tel(p, z1).klaar() == 0, "a fresh player has done nothing in zone 1, got " + Voltooiing.tel(p, z1).klaar());
-            helper.assertTrue(totaal(z1, "hoofd") == 13 && totaal(z2, "hoofd") == 12, "13 + 12 main quests (zone by id prefix)");
+            helper.assertTrue(totaal(z1, "hoofd") == 14 && totaal(z2, "hoofd") == 12, "14 (1.10.1: + hq03c_opruimen) + 12 main quests (zone by id prefix): " + totaal(z1, "hoofd") + " + " + totaal(z2, "hoofd"));
             helper.assertTrue(totaal(z1, "uitkijk") == WereldPlekken.UITKIJKEN.size() && totaal(z1, "kampvuur") == WereldPlekken.KAMPVUREN.size(),
                     "every lookout and campfire of zone 1");
             helper.assertTrue(totaal(z1, "knuffel") == NpcPlekken.KNUFFEL.size() && totaal(z1, "geheim") == NpcPlekken.AANWIJZING.size() + NpcPlekken.SCHAT.size(),

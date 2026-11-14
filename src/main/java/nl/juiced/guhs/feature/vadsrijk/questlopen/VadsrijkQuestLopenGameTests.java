@@ -64,7 +64,9 @@ public class VadsrijkQuestLopenGameTests {
         int spec = indexVan(extra, "spec17_knuffelridder"), hq09 = indexVan(extra, "hq09_druipgrotten");
         helper.assertTrue(spec > hq09 && hq09 >= 0, "spec17 after hq09 (" + spec + " > " + hq09 + ")");
         helper.assertTrue(indexVan(extra, "spec17_pluisjager") < 0, "only your own class's advancements");
-        helper.assertTrue(indexVan(extra, "rijdier_hoedhupper") > indexVan(extra, "z3_hq03_pluimstal"), "mount quests after the first mount");
+        int schaap = indexVan(extra, "rijdier_hoedhupper");   // 1.10.2: no mount gate any more: right after its own prerequisite hq06
+        helper.assertTrue(schaap > indexVan(extra, "hq06_zwamzoet") && schaap < indexVan(extra, "z3_hq03_pluimstal"),
+                "mount quests after hq06, no longer after the first mount: " + schaap);
         helper.succeed();
     }
 

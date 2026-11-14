@@ -298,6 +298,16 @@ public class VadsrijkLuchtschipGameTests {
     public static void dichtUitleg(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         p.setGameMode(GameType.SURVIVAL);
+        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = 6;   // (1.10.2: the story reasons, not the server gate's "binnenkort")
+        try {
+            dichtUitlegAlles(helper, p);
+        } finally {
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = null;
+        }
+        helper.succeed();
+    }
+
+    private static void dichtUitlegAlles(GameTestHelper helper, ServerPlayer p) {
         String[][] verwacht = {{"kamp_z1", "hq05_klodderreus"}, {"z1_z2", "hq12_schaduw"}, {"z2_z3", "z2_hq12_hartsplinter"},
                 {"z3_z4", "z3_hq14_vahoegnir"}, {"z4_z5", "z4_hq07_opstijgpier"}};
         for (String[] v : verwacht) {
@@ -316,7 +326,6 @@ public class VadsrijkLuchtschipGameTests {
         }
         p.setGameMode(GameType.CREATIVE);
         helper.assertTrue(Poorten.dicht(p, Lijnen.vanId("z1_z2"), true) == null, "creative: open");
-        helper.succeed();
     }
 
     /** All translation keys, literal texts and arguments of a component, joined (to test texts without a language). */

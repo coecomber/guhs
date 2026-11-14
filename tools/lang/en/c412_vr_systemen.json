@@ -2599,5 +2599,7 @@
   "vadsrijk.wolkwal.uitzicht.z5_staartpark.onder": "Her tail waves softly: all of Highchonk swims along with her.",
   "structure.guhs.vr_w_portaaltempel": "The Chonkdom",
   "structure.guhs.vr_w_portaaltempel.tooltip": "The old order temple with the sleeping portal to the Chonkdom. Talk to Werver Wimpel first!",
-  "vadsrijk.voltooiing.nodig": "Needed for the next zone: %s%%"
+  "vadsrijk.voltooiing.nodig": "Needed for the next zone: %s%%",
+  "vadsrijk.economie.rijdier.leer": "Your %s is waiting for you! You learn to ride in zone 3 at the Plume Stable.",
+  "vadsrijk.economie.rijdier.leer_stal": "Your mounts are waiting for you! You learn to ride in zone 3 at the Plume Stable."
 }

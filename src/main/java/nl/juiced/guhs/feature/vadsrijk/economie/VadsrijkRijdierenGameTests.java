@@ -267,4 +267,51 @@ public class VadsrijkRijdierenGameTests {
         Rijdieren.geraakt(p);   // (a hit while not riding does nothing)
         helper.succeed();
     }
+
+    /**
+     * 1.10.2 (user decision): the mount return quests no longer wait for a mount (only their level/quest prerequisites), and mounts
+     * can be USED only after the zone-3 Pluimstal (starter chosen); a mount from earlier stays in the collection. Creative always.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void rijdenNaPluimstal(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+        Spelers.data(p).extra.remove("economie");
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.wisAlles(p);
+        try {
+            // the return quests: available without any mount once their own prerequisites are met
+            var schaap = nl.juiced.guhs.feature.vadsrijk.npc.Quests.van(nl.juiced.guhs.feature.vadsrijk.npc.RijdierQuests.SCHAAP);
+            var hert = nl.juiced.guhs.feature.vadsrijk.npc.Quests.van(nl.juiced.guhs.feature.vadsrijk.npc.RijdierQuests.HERT);
+            helper.assertTrue(schaap != null && hert != null, "the return quests exist");
+            for (String na : new String[] {"hq06_zwamzoet"}) {
+                var q = nl.juiced.guhs.feature.vadsrijk.npc.Quests.van(na);
+                for (var v : nl.juiced.guhs.feature.vadsrijk.npc.Quests.alle().values()) {   // (everything before hq06 + hq06 itself)
+                    if (v.hoofd() && nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(v.id()) == 1) {
+                        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.voltooi(p, v);
+                    }
+                    if (v == q) {
+                        break;
+                    }
+                }
+            }
+            Spelers.zetLevel(p, 12);
+            helper.assertTrue(!Rijdieren.heeftEen(p), "no mount yet");
+            helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.npc.Questlog.beschikbaar(p, schaap) && nl.juiced.guhs.feature.vadsrijk.npc.Questlog.beschikbaar(p, hert),
+                    "Wolkenschaapje and Knuffelhert quests are offered without a mount");
+            helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.npc.RijdierQuests.teaser(p, schaap.gever()) == null, "no 'you need a mount first' teaser any more");
+            // a mount from a drop / reward: kept, but not usable before the Pluimstal
+            helper.assertTrue(Rijdieren.geef(p, RijdierSoort.KNUFFELHERT) && Rijdieren.heeft(p, RijdierSoort.KNUFFELHERT), "the drop/reward is added to the collection");
+            helper.assertTrue(!Rijdieren.magRijden(p), "no riding before the zone-3 Pluimstal");
+            helper.assertTrue(Rijdieren.geefStarter(p, PluimKleur.ROZE) && Rijdieren.magRijden(p), "after the Pluimstal (starter chosen): riding allowed");
+            helper.assertTrue(Rijdieren.heeft(p, RijdierSoort.KNUFFELHERT), "the earlier mount is still there");
+            Spelers.data(p).extra.remove("economie");
+            p.setGameMode(net.minecraft.world.level.GameType.CREATIVE);
+            helper.assertTrue(Rijdieren.magRijden(p), "creative: always");
+        } finally {
+            Spelers.data(p).extra.remove("economie");
+            nl.juiced.guhs.feature.vadsrijk.npc.Questlog.wisAlles(p);
+            Spelers.zetLevel(p, 1);
+        }
+        helper.succeed();
+    }
 }

@@ -50,9 +50,12 @@ public final class RijdierQuests {
         QuestMotor.ACTIES.put("rijdier_geef", (p, soort) -> Rijdieren.geef(p, soort));
     }
 
-    /** The {@link #POORT} condition. */
+    /**
+     * The {@link #POORT} condition. 1.10.2 (user decision): gone. The return quests unlock by their normal level/quest prerequisites;
+     * riding the reward waits for the zone-3 Pluimstal ({@code Rijdieren.magRijden}). (So no teaser any more either.)
+     */
     static boolean poortOpen(ServerPlayer p) {
-        return Rijdieren.heeftEen(p);
+        return true;
     }
 
     /**

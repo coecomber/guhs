@@ -349,7 +349,7 @@ public final class ZonePoort {
         if (serverDicht(p, z)) {
             return K + "reis." + plek;
         }
-        return dicht(p, z) ? K + "eis." + z : null;   // 1.10.2: the per-player gate
+        return eisSlot(p, z);   // 1.10.2: the per-player gate
     }
 
     /** For an airship line: the lang key when its destination zone is closed, or null. */
@@ -359,7 +359,16 @@ public final class ZonePoort {
         if (serverDicht(p, z)) {
             return K + "lijn." + z;
         }
-        return dicht(p, z) ? K + "eis." + z : null;   // 1.10.2: the per-player gate
+        return eisSlot(p, z);   // 1.10.2: the per-player gate
+    }
+
+    /**
+     * 1.10.2: the per-player gate key for a trip to zone z, only once zone z-1's story is done (before that the line's / travel NPC's
+     * own story reason is the clearer one); null when open.
+     */
+    @Nullable
+    static String eisSlot(ServerPlayer p, int z) {
+        return z > 1 && dicht(p, z) && verhaalKlaar(p, z - 1) ? K + "eis." + z : null;
     }
 
     public static boolean isPoortSlot(@Nullable String key) {

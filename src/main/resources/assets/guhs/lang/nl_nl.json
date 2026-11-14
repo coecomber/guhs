@@ -47824,5 +47824,7 @@
   "vadsrijk.zonepoort.weg_open": "De weg naar %s is open! Het schip wacht op je.",
   "vadsrijk.voltooiing.nodig": "Nodig voor de volgende zone: %s%%",
   "vadsrijk.npc.gids.zonepoort.titel": "Naar de volgende zone",
-  "vadsrijk.npc.gids.zonepoort.tekst": "Naar de volgende zone? Speel het hoofdverhaal uit én verken minstens 75% van de zone in je Verkenningsboek (toets B): uitkijkpunten, kampvuren, geheimen, zijquests en meer. De kapitein en de reiskaart laten zien wat je nog mist. Je hoogste level is het level van de hoogste zone waar je bent geweest + 5 (25 als je nog nooit in zone 2 was). Extra xp spaar je op en krijg je er later dubbel bij."
+  "vadsrijk.npc.gids.zonepoort.tekst": "Naar de volgende zone? Speel het hoofdverhaal uit én verken minstens 75% van de zone in je Verkenningsboek (toets B): uitkijkpunten, kampvuren, geheimen, zijquests en meer. De kapitein en de reiskaart laten zien wat je nog mist. Je hoogste level is het level van de hoogste zone waar je bent geweest + 5 (25 als je nog nooit in zone 2 was). Extra xp spaar je op en krijg je er later dubbel bij.",
+  "vadsrijk.economie.rijdier.leer": "Je %s wacht op je! Rijden leer je in zone 3 bij de Pluimstal.",
+  "vadsrijk.economie.rijdier.leer_stal": "Je rijdieren wachten op je! Rijden leer je in zone 3 bij de Pluimstal."
 }

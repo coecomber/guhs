@@ -236,6 +236,9 @@ public final class Rijdieren {
         }
         EcoUtil.geluid(p, SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 0.7f, 1.3f);
         EcoUtil.chat(p, "vadsrijk.economie.rijdier.nieuw", Component.translatable(s.naamKey()).withStyle(ChatFormatting.GOLD));
+        if (!magRijden(p)) {   // 1.10.2
+            EcoUtil.chat(p, "vadsrijk.economie.rijdier.leer", Component.translatable(s.naamKey()));
+        }
         return true;
     }
 
@@ -255,6 +258,15 @@ public final class Rijdieren {
     /** True when the player owns any mount (the return quests of the Knuffelhert / Guhwolf appear from then on). */
     public static boolean heeftEen(ServerPlayer p) {
         return actief(p) != null;
+    }
+
+    /**
+     * 1.10.2 (user decision): mounts can be USED (summoned with the key / the rijfluitje, ridden) only after the zone-3 Pluimstal quest,
+     * where the starter Pluimguh is chosen. Mounts from earlier (drops, the return quests) stay in the collection. Ops/creative always.
+     */
+    public static boolean magRijden(ServerPlayer p) {
+        return heeftStarter(p) || nl.juiced.guhs.feature.vadsrijk.npc.Questlog.klaar(p, "z3_hq03_pluimstal") || p.isCreative()
+                || p.permissions().hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER);
     }
 
     /** True when the player already picked a starter (zone 3 quest). */
@@ -387,6 +399,10 @@ public final class Rijdieren {
             return;
         }
         RijdierSoort s = actief(p);
+        if (s != null && !magRijden(p)) {   // 1.10.2: riding is learnt at the Pluimstal in zone 3; the mount waits in the stable
+            EcoUtil.zeg(p, "vadsrijk.economie.rijdier.leer", Component.translatable(s.naamKey()));
+            return;
+        }
         RijdierSoort plek = nl.juiced.guhs.feature.vadsrijk.zone4.boot.Boot.kiesSoort(p, s);   // T-Z4BOOT: on water the boat, on land a land mount
         if (plek != s) {
             if (plek == null) {

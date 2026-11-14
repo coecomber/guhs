@@ -1,4 +1,4 @@
-# Guhs 1.10.2 (voorbereid, NIET gereleased)
+# Guhs 1.10.2 (release-branch klaar, NIET gepusht)
 
 ## Samenvatting voor jou
 
@@ -33,7 +33,7 @@ Het configbestand gaat bij de start vanzelf naar `versie = 3` (alleen waarden di
 gezette blijven), met een regel in de log. **Servercheck na de uitrol:** `/guhs vadsrijk balans toon` ->
 `[mobs] schade=2.03 leven=1.75 versie=3.00` en `[bazen] leven=1.25 schade=1.20`.
 
-Niets gepusht, mod_version niet verhoogd.
+Niets gepusht. (mod_version is inmiddels 1.10.2, zie hieronder.)
 
 ---
 
@@ -106,3 +106,68 @@ Geen nieuwe taalsleutels (engelscheck en taalcheck staan op 0). mod_version niet
 - Bestaande tests mee gedraaid: Indeling, Scheiding, YInt, Tempel, Werver, ZonePoort (+LootOpruimen), QuestRobot (zone 1),
   BazenGevecht, Escorte. Alle 47 groen; daarna Terugkeer nog eens apart: 4/4 groen.
 - bereikcheck `--barriere --zone 1`: zone 1 hoofd 24/24, zij 40/40, npc 52/52, geheim 61/61.
+
+
+---
+
+## Afronding release 1.10.2 (2026-11-14)
+
+**Op de server:** `/guhs vadsrijk zones open 3` (openZones = 3). Nieuwe serverconfig-waarde in `guhs-vadsrijk-zones.toml`:
+`verkenningsboekProcent = 75` (0 = boek-eis uit). Patch notes voor Discord: `python tools/patchnote_discord.py 1.10.2 --open-zones 3`
+(zonder `--open-zones 3` vallen de zone-2/3-blokken weg, de standaard is 1).
+
+### Wat er bij kwam (na de eerste drie fixes)
+5. **Zones 2 en 3 open**: wiki/site met `--open-zones 3` (pages.yml, build + zone1check). zone1check-vals-positieven opgelost met
+   `poort.OOK_VANAF` (naam -> vanaf welke zone toegestaan): Spiegelzaal (2, ook de troonzaal van Spiegelzucht), Hoogvads en
+   De Zwevende Stad (3, de zone-3-finale noemt ze), Sterretje/Lampionnetje (3, zitten in "Sterretjes"/"Lampionnetjes" van het
+   rijdiertuig). 1.10.0-patchnotes: de Lampionkust/Hoogvads-plaatjes staan nu achter `:::zone 4`/`:::zone 5`, "Wordt vervolgd"
+   (eind zone 1) achter `:::tot 2`. Zone-3-einde: "Wordt vervolgd" + de "vaart binnenkort"-regel bij Ordemeester Wasja (gever van
+   z4_hq01) en nu ook bij `z3_kapitein` (`ZonePoort.VERTREK`).
+6. **Per-speler zonepoort** (`ZonePoort.toegang`): naar zone N+1 = hoofdverhaal zone N (dezelfde check als luchtschiplijn N) EN
+   Verkenningsboek zone N >= 75 %. Bovenop de servergrens. Opgeslagen als `extra.zonepoort.toegang`; wie er al was of al een
+   quest van die zone had, houdt toegang. Terug kan altijd, ops/creative mogen altijd. Kapitein/reiskaart/luchtschipbord tonen
+   "Naar X: ✔ hoofdverhaal · ✘ Verkenningsboek 62% / 75%", de questvolger "Volgende: verken X tot 75%", het boek een streepje
+   bij 75 % ("Nodig voor de volgende zone"), en een melding "De weg naar X is open!". Gids-onderwerp "Naar de volgende zone".
+   Questrobot telt het boek als gehaald (`ZonePoort.BOEK_VRIJ`). Let op: de reiskaarttekst noemt vast 75 %.
+7. **Level-plafond per speler** (`ZonePoort.plafond`): top van de hoogste BETREDEN zone + 5: zone 1 -> **25**, 2 -> **35**,
+   3 -> **55**, 4 -> **61**, 5 -> **65**, 6 -> 70 (geen plafond). "Betreden" = in die zone gestaan (vangnet-tik) of een quest van
+   die zone afgerond; oude saves krijgen eenmalig krediet voor alle afgeronde quests. De xp-bank werkt zoals voorheen.
+8. **Wakker bij het dichtstbijzijnde kampvuur** (`Kampvuren.dichtstbij`): van alle aangestoken kampvuren (Verkenningsboek-geheugen
+   + checkpoint) het dichtste vanaf de plek waar je flauwviel, alleen in zones die voor jou open zijn en als het kampvuur er nog is.
+   Arena's/raid houden hun eigen deur. Geen kampvuur = oude regel.
+9. **Servercrash (Sfeer.java:56, 15:27 en 15:36)**: `TikWacht.alle()` (kopie zonder nulls) voor alle 17 `getAllEntities()`-lussen
+   in heel Guhs; Sfeer gooit pas na de lus weg. Alle 131 server-tick-listeners van Guhs (74 lambda's + 57 method refs) lopen nu via
+   `TikWacht.post/pre`: een fout wordt gelogd (eerste keer met stacktrace, daarna max 1x per minuut) en die feature slaat één tik
+   over. Niet omgezet: ~13 `@SubscribeEvent`-tickhandlers buiten het Vadsrijk (safari, guhrio, piep, ...).
+10. **Kristalklodder-spiegel** (`Weerkaatsen`): max 1 rol per spreuk (speler+skill+tik), nooit Liedpuls/plasjes/kettingbolt/
+    status, max 15 % van je max Vads, gewone magieschade (Verdediging telt), geen `[mobs]`/`[bazen]`-vermenigvuldiger.
+11. **Flauwval-log**: elke flauwte geeft een serverregel `[Vadsrijk] <naam> fainted at <dim> x,y,z <klasse> (max Vads): last hit
+    <bron> skill=<id> amount=<n> vadsBefore=<n>` (max 1 per speler per 5 s).
+12. **Vadsmagiër**: Vuurbal/Meteoorguh kritiek nu op kans (was altijd), Tijdsprongetje halveert de Vuurbal-wachttijd. **Set-harnas**:
+    hoofdstat-groei 25 % -> 15 % per level voor alle harnas/sieraden van alle zones (`BasisType.HOOFD_GROEI`), ook bestaande stukken.
+13. **Balans**: +25 % HP en +20 % schade blijft zoals gebouwd (`[mobs]` 2.028/1.75, `[bazen]` 1.25/1.2).
+
+14. **Rijdieren**: de terugbreng-quests (Wolkenschaapje, Knuffelhert, Guhwolf) hebben de `@rijdier`-poort niet meer
+    (`RijdierQuests.poortOpen` = altijd waar; geen teaser meer). Rijden (rijdiertoets, rijfluitje) pas na de zone-3-Pluimstal
+    (`Rijdieren.magRijden` = starter gekozen of z3_hq03 klaar; ops/creative altijd). Eerder gekregen rijdieren blijven in de stal,
+    met de melding "Je <rijdier> wacht op je! Rijden leer je in zone 3 bij de Pluimstal." (ook bovenaan de stal). Questlopen
+    plaatst de rijdierquests nu na hun eigen voorwaarde (hq06).
+15. Vooraf al kapotte tests gerepareerd: `VadsrijkLuchtschip.dichtUitleg` (draaide met servergrens 1, zet nu 6) en
+    `VadsrijkVoltooiing.telling` (zone 1 heeft sinds 1.10.1 14 hoofdquests door hq03c_opruimen).
+
+### Discord-tekst (na live, met `--open-zones 3`)
+
+Zones 2 en 3 zijn nu open! ⛵
+Het schip aan het eind van zone 1 vaart eindelijk. In **De Splinterpieken** (lv 20-30) wacht Kandijkom, een stad van snoepkleurig ijs. In **De Schemerwortel** (lv 30-50) woont een hele stad in een reuzenboom en ligt bovenin een oud nest... van iets héél groots. En aan het eind? Weer een schip. Dat vaart binnenkort. 😏
+
+🧭 Naar de volgende zone? Speel het hoofdverhaal uit én verken minstens 75% van de zone (Verkenningsboek, toets B).
+📈 Je max level is het level van de hoogste zone waar je bent geweest + 5.
+💪 Wezens en bazen: +25% HP en +20% schade
+🔥 Vuurbal en Meteoorguh van de Vadsmagiër waren altijd kritiek (bug): nu een kans zoals bij de andere klassen. Tijdsprongetje halveert de Vuurbal-wachttijd; setharnas groeit 15% per level (was 25%)
+🦌 Rijdier-quests kun je nu al eerder doen; rijden zelf leer je in zone 3 bij de Pluimstal
+💎 Kristalklodders spiegelen je spreuken niet meer dodelijk terug
+🏕️ Flauwgevallen? Wakker bij het dichtstbijzijnde kampvuur
+🚪 Zwamtempeldeur gaat weer open · 🐢 schildpadeiland bereikbaar · 🌀 terug bij je portaal
+🛠️ Stabieler: geen servercrashes meer door opruimende vlindertjes
+
+Alles op guhs.nl/vadsrijk. Njeg!

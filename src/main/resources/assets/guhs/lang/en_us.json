@@ -47824,5 +47824,7 @@
   "vadsrijk.zonepoort.weg_open": "The way to %s is open! The ship is waiting for you.",
   "vadsrijk.voltooiing.nodig": "Needed for the next zone: %s%%",
   "vadsrijk.npc.gids.zonepoort.titel": "To the next zone",
-  "vadsrijk.npc.gids.zonepoort.tekst": "To the next zone? Finish the main story AND explore at least 75% of the zone in your Exploring Book (key B): viewpoints, campfires, secrets, side quests and more. The captain and the travel map show what you still miss. Your highest level is the level of the highest zone you have been to + 5 (25 if you never went to zone 2). Extra xp is saved up and paid out double later."
+  "vadsrijk.npc.gids.zonepoort.tekst": "To the next zone? Finish the main story AND explore at least 75% of the zone in your Exploring Book (key B): viewpoints, campfires, secrets, side quests and more. The captain and the travel map show what you still miss. Your highest level is the level of the highest zone you have been to + 5 (25 if you never went to zone 2). Extra xp is saved up and paid out double later.",
+  "vadsrijk.economie.rijdier.leer": "Your %s is waiting for you! You learn to ride in zone 3 at the Plume Stable.",
+  "vadsrijk.economie.rijdier.leer_stal": "Your mounts are waiting for you! You learn to ride in zone 3 at the Plume Stable."
 }

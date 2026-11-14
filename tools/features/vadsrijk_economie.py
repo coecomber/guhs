@@ -875,6 +875,8 @@ TEKSTEN = {
     E + "rijdier.al": "Dat rijdier heb je al.",
     E + "rijdier.level": "%s is nu level %s!",
     E + "rijdier.alleen_rijk": "Je rijdier huppelt alleen in het Vadsrijk.",
+    E + "rijdier.leer": 'Je %s wacht op je! Rijden leer je in zone 3 bij de Pluimstal.',   # 1.10.2
+    E + "rijdier.leer_stal": 'Je rijdieren wachten op je! Rijden leer je in zone 3 bij de Pluimstal.',
     E + "rijdier.geen": "Nog geen rijdier: dat krijg je in De Schemerwortel.",
     E + "rijdier.geschrokken": "Je rijdier schrok en huppelde weg!",
     E + "zadel.uitleg": "Rechtsklik: %s komt in je stal.",
