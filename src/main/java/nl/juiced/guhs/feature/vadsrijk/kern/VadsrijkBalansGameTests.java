@@ -49,7 +49,7 @@ public class VadsrijkBalansGameTests {
         helper.assertTrue(BasisTypes.van("kussenzwaard") == null || BasisTypes.van("kussenzwaard").basis().get(Stat.VERDEDIGING) == 0, "weapons untouched");
         double[] b = nl.juiced.guhs.feature.vadsrijk.kern.loot.Bonussen.bereik(Stat.VERDEDIGING, 1);
         helper.assertTrue(b[0] == 1 && b[1] == 2, "the Verdediging bonus rolls 1-2 at level 1");
-        helper.assertTrue(Balans.mobSchade() > 1.29 && Balans.mobSchade() < 1.31, "mob damage +30 % by default: " + Balans.mobSchade());
+        helper.assertTrue(Math.abs(Balans.mobSchade() - 1.69) < 1e-9, "1101-balans: mob damage x1.69 by default: " + Balans.mobSchade());
         helper.succeed();
     }
 

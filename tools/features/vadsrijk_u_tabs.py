@@ -68,6 +68,10 @@ TEKSTEN = {
     M + "karakter.schade.uitleg": ("Hoe hard je vaardigheden ongeveer raken met dit wapen (voor stats en bonussen).",
                                    "Roughly how hard your skills hit with this weapon (before stats and bonuses)."),
     M + "karakter.uitrusting": ("Uitrusting", "Gear"),
+    # 1101-balans: class catch-up
+    M + "karakter.inhaal": ("Inhaalbonus ×%s", "Catch-up bonus ×%s"),
+    M + "karakter.inhaal.uitleg": ("Deze klasse loopt achter op je hoogste klasse: +15% klasse-xp per level achterstand, tot ×3.",
+                                   "This class is behind your highest class: +15% class xp per level behind, up to ×3."),
     M + "karakter.uitrusting.uitleg": ("Ringen, ketting, oorbel, armband, handschoenen en cape doe je aan met rechtsklik of shift-klik in je inventaris.",
                                        "Put on rings, necklace, earring, bracelet, gloves and cape with right-click or shift-click in your inventory."),
     M + "karakter.leeg": ("Nog leeg.", "Still empty."),

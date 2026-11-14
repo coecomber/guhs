@@ -7,14 +7,18 @@ Reads the quest data (src/main/resources/data/guhs/vadsrijk/npc/quests*.json) an
   * mobs z3-6  Z3Xp.mob / Z5Wezen.xp5 / Z6Wezen.xp   stap(lv)/55 * gewicht (gewicht ~1)
   * elite      3x a normal mob (kern)
   * bosses     z3-z6 0.35 * stap(lv) (Z3Xp.baas, Z5Baas, Z6Baas); z1/z2 fixed formulas
-  * dungeon    grotkerker/GrotKerker + KerkerData: solo run = 3 + 4 pack mobs + 1 elite + GrotBaas (max(150, 0.15*stap(baasLv)))
+  * dungeon    grotkerker/GrotKerker + KerkerData: solo run = 3 + 4 pack mobs + 1 elite + GrotBaas
+               (1101-balans: max(150, f*stap(baasLv)), f = 0.50 in zones 1-2 and 0.63 in zones 3-6, so a run ~= 0.8 level of baasLv;
+               was max(150, 0.15*stap(baasLv)))
 Bonuses (rested xp, food, guild bond, streak, party) are NOT counted: this is the plain solo baseline.
 
 Simulation per zone (greedy, like a normal player): before each main quest do every side quest that is unlocked and whose level
 is met; when a quest's level gate blocks, grind the zone's own mobs (counted as minutes); at the end grind to the TARGET (the level
 the next zone needs). Every scenario enters a zone at max(own end level, the zone's entry gate).
 
-Usage:  python tools/vadsrijk/xpbalans.py [--kpm 2.0] [--clears 1] [--md]
+Scenario D (1101-balans) = main quests + N dungeon runs, no side quests (table "Alleen hoofd + kerker-runs").
+
+Usage:  python tools/vadsrijk/xpbalans.py [--kpm 2.0] [--onderweg 5] [--zone N] [--runs 3] [--schaal z:hoofd:zij]
 """
 import argparse
 import glob
@@ -166,12 +170,16 @@ def kill_xp(zone, q):
     return xp
 
 
+# 1101-balans: GrotBaas xp factor per zone, chosen so that pack + elite + boss ~= 0.8 * stap(baasLv) (was 0.15 everywhere)
+KERKER_BAAS_F = {1: 0.50, 2: 0.50, 3: 0.63, 4: 0.63, 5: 0.63, 6: 0.63}
+
+
 def kerker_xp(zone):
     _n, lo, hi, elv, blv = ZONES[zone]["kerker"]
     mid = (lo + hi) / 2
     pack = 7 * mob_xp(zone, round(mid))
     elite = 3 * mob_xp(zone, elv)
-    baas = max(150, round(stap(blv) * 0.15))
+    baas = max(150, round(stap(blv) * KERKER_BAAS_F[zone]))
     return pack + elite + baas
 
 
@@ -344,6 +352,23 @@ def tabel(kpm, onderweg):
       + ", ".join(f"z{z} hoofd {p[z][0]:.1f} / alles {p[z][1]:.1f}" for z in p) + ".")
 
 
+def hoofd_runs_tabel(kpm, onderweg, runs):
+    """1101-balans, scenario D: main quests + N dungeon runs (no side quests), los (entered at exactly the gate level)."""
+    w = print
+    reeks = sorted({0, 2, 3, 4, runs})
+    w("")
+    w(f"### Alleen hoofd + kerker-runs (scenario D, los, {onderweg} kills onderweg; runs zodra je level >= kerker-minLv - 1)")
+    w("")
+    w("| Zone | Kerker (1 run) | " + " | ".join(f"Grind {n} runs" for n in reeks) + " | Uit (" + str(runs) + " runs) |")
+    w("|---|---|" + "---|" * (len(reeks) + 1))
+    for z in range(1, 7):
+        rs = {n: simuleer(z, totaal(poort(z)), False, n, kpm, extra_bazen=False, onderweg=onderweg) for n in reeks}
+        k = kerker_xp(z)
+        blv = ZONES[z]["kerker"][4]
+        w(f"| {z} {ZONES[z]['naam']} | {ZONES[z]['kerker'][0]} {k} xp ({k / stap(blv):.2f} lv van {blv}) | "
+          + " | ".join(_g(rs[n]) for n in reeks) + f" | {rs[runs]['lv_uit']:.2f} |")
+
+
 def keten_samenvatting(kpm):
     """X-ZONE1: the chain for 0 / 2 / 5 kills on the way, and where main+side reaches the cap 70."""
     w = print
@@ -363,6 +388,7 @@ def main():
     ap.add_argument("--kpm", type=float, default=2.0)
     ap.add_argument("--onderweg", type=int, default=5)
     ap.add_argument("--zone", type=int, default=0, help="detail of one zone (entered at its gate)")
+    ap.add_argument("--runs", type=int, default=3, help="scenario D: main quests + this many dungeon runs (no side quests)")
     ap.add_argument("--schaal", action="append", default=[], help="what-if quest xp: zone:main:side, e.g. 4:1.4:1.2")
     a = ap.parse_args()
     for x in a.schaal:
@@ -370,12 +396,13 @@ def main():
         SCHAAL[int(z)] = (float(fh), float(fz))
     if a.zone:
         z = a.zone
-        for k, naam, zij, cl in SCENARIOS:
+        for k, naam, zij, cl in SCENARIOS + (("D", f"hoofd + {a.runs} runs", False, a.runs),):
             r = simuleer(z, totaal(poort(z)), zij, cl, a.kpm, extra_bazen=zij, onderweg=a.onderweg)
             print(f"z{z} {k} {naam:18s} in lv {r['lv_in']:.2f} -> {r['lv_uit']:.2f}; doel {r['doel']}: tekort {r['tekort']} xp = "
                   f"{r['rest_min']:.0f} min (+{r['poort_min']:.0f} min voor poorten) @ {r['rate']:.0f} xp/min; bron {r['bron']}")
         return
     tabel(a.kpm, a.onderweg)
+    hoofd_runs_tabel(a.kpm, a.onderweg, a.runs)
     keten_samenvatting(a.kpm)
 
 

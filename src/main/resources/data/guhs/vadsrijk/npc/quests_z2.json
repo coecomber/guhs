@@ -29,7 +29,7 @@
         }
       ],
       "beloning": {
-        "xp": 1050,
+        "xp": 630,
         "munten": 2000,
         "items": [
           [
@@ -86,7 +86,7 @@
         }
       ],
       "beloning": {
-        "xp": 1050,
+        "xp": 630,
         "munten": 1500,
         "items": [],
         "wapen": false,
@@ -150,7 +150,7 @@
         }
       ],
       "beloning": {
-        "xp": 1050,
+        "xp": 630,
         "munten": 2500,
         "items": [],
         "wapen": false,
@@ -204,7 +204,7 @@
         }
       ],
       "beloning": {
-        "xp": 1150,
+        "xp": 690,
         "munten": 3000,
         "items": [],
         "wapen": false,
@@ -245,7 +245,7 @@
         }
       ],
       "beloning": {
-        "xp": 1350,
+        "xp": 810,
         "munten": 5000,
         "items": [],
         "wapen": false,
@@ -319,7 +319,7 @@
         }
       ],
       "beloning": {
-        "xp": 1450,
+        "xp": 870,
         "munten": 5000,
         "items": [],
         "wapen": false,
@@ -410,7 +410,7 @@
         }
       ],
       "beloning": {
-        "xp": 1500,
+        "xp": 900,
         "munten": 5500,
         "items": [],
         "wapen": false,
@@ -476,7 +476,7 @@
         }
       ],
       "beloning": {
-        "xp": 1600,
+        "xp": 960,
         "munten": 6000,
         "items": [],
         "wapen": false,
@@ -531,7 +531,7 @@
         }
       ],
       "beloning": {
-        "xp": 1700,
+        "xp": 1020,
         "munten": 7000,
         "items": [
           [
@@ -586,7 +586,7 @@
         }
       ],
       "beloning": {
-        "xp": 3000,
+        "xp": 1800,
         "munten": 6000,
         "items": [],
         "wapen": false,
@@ -641,7 +641,7 @@
         }
       ],
       "beloning": {
-        "xp": 1950,
+        "xp": 1170,
         "munten": 10000,
         "items": [],
         "wapen": false,
@@ -682,7 +682,7 @@
         }
       ],
       "beloning": {
-        "xp": 2050,
+        "xp": 1230,
         "munten": 15000,
         "items": [],
         "wapen": false,

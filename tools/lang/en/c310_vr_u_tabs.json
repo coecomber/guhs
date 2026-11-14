@@ -45,6 +45,8 @@
   "vadsrijk.menu.karakter.schade": "Weapon damage: %s per second",
   "vadsrijk.menu.karakter.schade.uitleg": "Roughly how hard your skills hit with this weapon (before stats and bonuses).",
   "vadsrijk.menu.karakter.uitrusting": "Gear",
+  "vadsrijk.menu.karakter.inhaal": "Catch-up bonus ×%s",
+  "vadsrijk.menu.karakter.inhaal.uitleg": "This class is behind your highest class: +15% class xp per level behind, up to ×3.",
   "vadsrijk.menu.karakter.uitrusting.uitleg": "Put on rings, necklace, earring, bracelet, gloves and cape with right-click or shift-click in your inventory.",
   "vadsrijk.menu.karakter.leeg": "Still empty.",
   "vadsrijk.menu.karakter.stats": "Stats",

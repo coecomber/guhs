@@ -68,6 +68,28 @@ public final class Schade {
     private Schade() {
     }
 
+    /** 1101-balans (damage curve, option A): the main stat gives 1 % per point (was 2 %), times a flat base so zone 1 starts where it was. */
+    public static final double HOOFD_PER_PUNT = 0.01;
+    public static final double HOOFD_BASIS = 1.7;
+    /** The 1.10.0 values (for the boss compensation and the before/after tables). */
+    public static final double HOOFD_PER_PUNT_OUD = 0.02;
+
+    /** The main-stat multiplier on a player's hit: HOOFD_BASIS x (1 + 0.01 x stat) (aanval does the 1 + 0.01 x stat, doe the base). Lv 1 (Kracht ~17): x1.99 (was x1.34); lv 14 (~59): x2.70 (was x2.18); lv 70 (~238): x5.75 (was x5.76). */
+    public static double hoofdFactor(double hoofd) {
+        return HOOFD_BASIS * (1 + HOOFD_PER_PUNT * hoofd);
+    }
+
+    /** The main stat of the balance model at a level (zone weapon, Zeldzaam, 2 bonuses: ~17 at lv 1, 58 at 14, 238 at 70). */
+    public static double modelHoofd(int level) {
+        return 14 + 3.2 * Math.max(1, level);
+    }
+
+    /** New / old main-stat multiplier at a level with the model stat: what bosses' HP is scaled by to keep their fight length. */
+    public static double damageVerandering(int level) {
+        double k = modelHoofd(level);
+        return hoofdFactor(k) / (1 + HOOFD_PER_PUNT_OUD * k);
+    }
+
     /** Pure maths of step 2 (also used by tests): base x main stat x crit x element. */
     public static double aanval(double basis, Stats s, Soort soort, boolean kritiek, Element element, @Nullable Element doelElement, boolean ontvadst) {
         double hoofd = switch (soort) {
@@ -76,7 +98,7 @@ public final class Schade {
             case MAGIE -> s.get(Stat.WIJSHEID);
             case WAAR -> 0;
         };
-        double n = basis * (1 + 0.02 * hoofd);
+        double n = basis * (1 + HOOFD_PER_PUNT * hoofd);   // 1101-balans: 1 % per point (was 2 %); players also get HOOFD_BASIS in doe()
         if (kritiek) {
             n *= 1.5 + s.get(Stat.KRITIEKSCHADE) / 100.0;
         }
@@ -144,6 +166,9 @@ public final class Schade {
             Stats s = bron instanceof ServerPlayer bp ? Spelers.stats(bp) : new Stats();
             krit = k.zekerKritiek() || (k.kanKritiek() && bron != null && bron.getRandom().nextDouble() * 100 < s.get(Stat.KRITIEK));
             n = aanval(n, s, k.soort(), krit, k.element(), doelEl, ontvadst);
+            if (bron instanceof ServerPlayer) {
+                n *= HOOFD_BASIS;   // 1101-balans: the flat player base of the flatter main stat (mobs have no main stat: unchanged)
+            }
             if (bron != null && Statussen.heeft(bron, Status.VAHOEG)) {
                 n *= 1 + Math.max(0.1, Statussen.sterkte(bron, Status.VAHOEG));
             }
@@ -172,6 +197,11 @@ public final class Schade {
             n -= weg;
         }
         n = Math.max(0, n);
+        if (doel instanceof ServerPlayer gp && bron instanceof VadsrijkMob) {
+            Gevecht.gevochten(gp);   // 1101-balans: in combat (slower Vads regen)
+        } else if (bron instanceof ServerPlayer gp && doel instanceof VadsrijkMob) {
+            Gevecht.gevochten(gp);
+        }
         if (doel instanceof ServerPlayer dp) {
             SpelerData d = Spelers.data(dp);
             d.vads = Math.max(0, Spelers.vads(dp) - n);

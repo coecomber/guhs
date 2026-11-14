@@ -394,7 +394,7 @@ public class Spiegelvizier extends Z6RaidBaas {
     }
 
     private void schaalKloon() {
-        zetMaxVads(basisVads(mobLevel()) * (0.7 + 0.15 * n()), true);
+        zetMaxVads(vadsOp(mobLevel()) * (0.7 + 0.15 * n()), true);
     }
 
     public int klonen() {

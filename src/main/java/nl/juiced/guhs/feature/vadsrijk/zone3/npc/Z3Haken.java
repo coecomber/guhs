@@ -573,14 +573,7 @@ public final class Z3Haken {
     /** A random piece the player can use: a weapon of their class or any armour/jewellery (as zone 2's treasures). */
     @Nullable
     static nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType stukVoor(ServerPlayer p) {
-        String k = Spelers.data(p).klasse;
-        List<nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType> l = new ArrayList<>();
-        for (nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType t : nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes.alle()) {
-            if (t.slot() != nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.WAPEN || k.equals(t.klasse())) {
-                l.add(t);
-            }
-        }
-        return l.isEmpty() ? null : l.get(p.getRandom().nextInt(l.size()));
+        return nl.juiced.guhs.feature.vadsrijk.kern.loot.ZonePools.stuk(3, Spelers.data(p).klasse, p.getRandom());   // 1101-balans: only this zone's pool
     }
 
     /** (dev/tests) */

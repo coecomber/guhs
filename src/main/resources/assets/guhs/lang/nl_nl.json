@@ -47729,5 +47729,7 @@
   "vadsrijk.vitrine.chat.beeld.embleem": "In de vitrine: het embleem van De Knuffelorde",
   "vadsrijk.vitrine.chat.offline": "(%s is nu niet online: dit is de stand van de laatste keer.)",
   "structure.guhs.vr_w_portaaltempel": "Het Vadsrijk",
-  "structure.guhs.vr_w_portaaltempel.tooltip": "De oude ordetempel met het slapende portaal naar Het Vadsrijk. Praat eerst met Werver Wimpel!"
+  "structure.guhs.vr_w_portaaltempel.tooltip": "De oude ordetempel met het slapende portaal naar Het Vadsrijk. Praat eerst met Werver Wimpel!",
+  "vadsrijk.menu.karakter.inhaal": "Inhaalbonus ×%s",
+  "vadsrijk.menu.karakter.inhaal.uitleg": "Deze klasse loopt achter op je hoogste klasse: +15% klasse-xp per level achterstand, tot ×3."
 }

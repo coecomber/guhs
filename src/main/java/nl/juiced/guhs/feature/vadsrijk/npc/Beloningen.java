@@ -35,7 +35,7 @@ public final class Beloningen {
             }
         }
         if (!b.loot().isEmpty()) {
-            BasisType t = stukVoor(p);
+            BasisType t = stukVoor(p, nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()));
             if (t != null) {
                 buit.add(Rollen.stack(Rollen.rol(t, Math.max(1, Spelers.level(p)), Zeldzaamheid.van(b.loot()), p.getRandom())));
             }
@@ -71,14 +71,7 @@ public final class Beloningen {
 
     /** A random piece the player can use: a weapon of their class or any armour. */
     @Nullable
-    static BasisType stukVoor(ServerPlayer p) {
-        String k = Spelers.data(p).klasse;
-        List<BasisType> l = new ArrayList<>();
-        for (BasisType t : BasisTypes.alle()) {
-            if (t.slot() != Slot.WAPEN || k.equals(t.klasse())) {
-                l.add(t);
-            }
-        }
-        return l.isEmpty() ? null : l.get(p.getRandom().nextInt(l.size()));
+    static BasisType stukVoor(ServerPlayer p, int zone) {
+        return nl.juiced.guhs.feature.vadsrijk.kern.loot.ZonePools.stuk(zone, Spelers.data(p).klasse, p.getRandom());   // 1101-balans: only this zone's pool
     }
 }

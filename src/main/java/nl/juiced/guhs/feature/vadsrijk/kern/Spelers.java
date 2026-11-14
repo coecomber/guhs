@@ -387,6 +387,23 @@ public final class Spelers {
         return data(p).klasse;
     }
 
+    /** 1101-balans: class catch-up, +15 % class xp per level behind your highest class, at most x3 (generic xp unchanged). */
+    public static final double INHAAL_PER_LEVEL = 0.15, INHAAL_MAX = 3.0;
+
+    /** The catch-up factor for a class {@code achter} levels behind the highest class (pure, tests). */
+    public static double inhaalFactor(int hoogste, int deze) {
+        return Math.min(INHAAL_MAX, 1 + INHAAL_PER_LEVEL * Math.max(0, hoogste - deze));
+    }
+
+    /** The catch-up factor of {@code klasse} for this player (1 for the highest class). */
+    public static double inhaalFactor(SpelerData d, String klasse) {
+        int hoogste = 1;
+        for (var k : Klassen.alle()) {
+            hoogste = Math.max(hoogste, d.level(k.id()));
+        }
+        return inhaalFactor(hoogste, d.level(klasse));
+    }
+
     /** Xp (g-klassen): ALL of it to the generic level AND to the class of {@link #xpKlasse}. */
     public static void geefXp(ServerPlayer p, long n, String bron) {
         geefXp(p, n, bron, xpKlasse(p));
@@ -408,7 +425,8 @@ public final class Spelers {
         }
         SpelerData d = data(p);
         int gVoor = d.level();
-        long nKlasse = klasse != null && Klassen.van(klasse) != null ? nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.knip(p, d, n, klasse) : n;   // X-ZONE1: soft cap / bank
+        long nKlasse = klasse != null && Klassen.van(klasse) != null
+                ? nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.knip(p, d, Math.round(n * inhaalFactor(d, klasse)), klasse) : n;   // X-ZONE1: soft cap / bank; 1101-balans: catch-up
         n = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.knip(p, d, n, null);   // X-ZONE1
         d.generiekXp = Math.min(Levels.totaalVoorGeneriek(Levels.MAX_GENERIEK), d.generiekXp + n);
         int gNa = d.level();

@@ -1063,11 +1063,20 @@ X_ZONE1_XP = {
     "z5_s11_knuffellied": 850,
 }
 
+# 1101-balans: every zone-5 main ("hoofd") quest gets x0.65 on top of X_ZONE1_XP, rounded to 10; side, mount and class
+# quests keep their xp.
+BALANS_1101_HOOFD = 0.65
+_BALANS_1101_BASIS = {}   # (base xp per quest, so calling quests_json() twice never compounds)
+
 
 def quests_json():
     for _q in QUESTS:   # X-ZONE1: the quest xp above
         if _q["id"] in X_ZONE1_XP:
             _q["beloning"]["xp"] = X_ZONE1_XP[_q["id"]]
+    for _q in QUESTS:   # 1101-balans: the factor above
+        if _q["soort"] == "hoofd":
+            basis = _BALANS_1101_BASIS.setdefault(_q["id"], _q["beloning"]["xp"])
+            _q["beloning"]["xp"] = int(basis * BALANS_1101_HOOFD / 10 + 0.5) * 10
     npc_ids, poi_ids, gebied_ids, baas_ids = _java_ids()
     andere = {"z2_kapitein", "luchtschipper", "z3_kapitein"}
     alle_npc = npc_ids | andere

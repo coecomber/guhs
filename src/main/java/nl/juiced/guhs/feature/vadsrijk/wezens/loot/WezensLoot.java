@@ -111,13 +111,13 @@ public final class WezensLoot {
     }
 
     private static void tabel(String mob, List<LootTabel.Regel> r, double kans, int muntMin, int muntMax) {
-        LootTabellen.registreer("wezens:" + mob, new LootTabel(r, 1, kans, 1.0, muntMin, muntMax));
+        LootTabellen.registreer("wezens:" + mob, new LootTabel(r, 1, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.gewoon(kans), 1.0, muntMin, muntMax));
         // elites (integration 1.10.0): also kern's 3 jewellery pieces, weight 1 each (rare)
         List<LootTabel.Regel> elite = new ArrayList<>(r);
         for (String s : SIERADEN) {
             elite.add(new LootTabel.Regel(s, 1));
         }
-        LootTabellen.registreer("wezens:" + mob + "_elite", new LootTabel(elite, 2, Math.min(1, kans * 3.5), 2.5, muntMin * 3, muntMax * 3));
+        LootTabellen.registreer("wezens:" + mob + "_elite", new LootTabel(elite, 2, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.elite(kans), nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.eliteGeluk(2.5), muntMin * 3, muntMax * 3));
     }
 
     /** One table per creature (from WezensRegistry.register, after {@link #basisTypes}). */

@@ -205,12 +205,12 @@ public final class Z4Loot {
     }
 
     private static void tabel(String mob, List<LootTabel.Regel> r, double kans, int muntMin, int muntMax) {
-        LootTabellen.registreer("z4wezens:" + mob, new LootTabel(r, 1, kans, 1.4, muntMin, muntMax));
+        LootTabellen.registreer("z4wezens:" + mob, new LootTabel(r, 1, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.gewoon(kans), 1.4, muntMin, muntMax));
         List<LootTabel.Regel> elite = new ArrayList<>(r);
         elite.add(new LootTabel.Regel("parelring", 2));
         elite.add(new LootTabel.Regel("schelpenketting", 2));
         elite.add(new LootTabel.Regel("lampionoorbel", 2));
-        LootTabellen.registreer("z4wezens:" + mob + "_elite", new LootTabel(elite, 2, Math.min(1, kans * 3.5), 3.2, muntMin * 3, muntMax * 3));
+        LootTabellen.registreer("z4wezens:" + mob + "_elite", new LootTabel(elite, 2, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.elite(kans), nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.eliteGeluk(3.2), muntMin * 3, muntMax * 3));
     }
 
     /** Another slice's zone-4 piece (a base type id) in every zone-4 creature table (rebuilds them): t-items' new slots. */

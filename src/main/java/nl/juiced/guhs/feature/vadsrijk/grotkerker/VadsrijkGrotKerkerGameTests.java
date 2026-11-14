@@ -186,7 +186,13 @@ public class VadsrijkGrotKerkerGameTests {
             for (int i = 0; i < 2; i++) {
                 LootTabel.Resultaat r = KerkerLoot.kist("zwamgrot", 14, p, false);
                 helper.assertTrue(r.munten() == 400 + 300, "zone 1: 700 brons, got " + r.munten());
-                helper.assertTrue(r.items().size() >= 2, "a gear piece + ore every clear, got " + r.items().size());
+                helper.assertTrue(r.items().size() >= 3, "2 gear pieces + ore every clear, got " + r.items().size());
+                long stukken = r.items().stream().filter(s -> nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.van(s) != null).count();
+                helper.assertTrue(stukken == KerkerLoot.STUKKEN, "1101-balans: 2 gear pieces per clear, got " + stukken);
+                for (var s : r.items()) {   // 1101-balans: only zone 1's pool
+                    var u = nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen.van(s);
+                    helper.assertTrue(u == null || nl.juiced.guhs.feature.vadsrijk.kern.loot.ZonePools.ids(1).contains(u.type()), "zone-1 pool only: " + (u == null ? "" : u.type()));
+                }
             }
             GrotBazen.Def d = GrotBazen.def("zwamgrot");
             // the pet: pity

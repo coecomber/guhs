@@ -181,12 +181,12 @@ public final class Z6Loot {
     }
 
     private static void tabel(String mob, List<LootTabel.Regel> r, double kans, int muntMin, int muntMax) {
-        LootTabellen.registreer("z6wezens:" + mob, new LootTabel(r, 1, kans, 1.4, muntMin, muntMax));
+        LootTabellen.registreer("z6wezens:" + mob, new LootTabel(r, 1, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.gewoon(kans), 1.4, muntMin, muntMax));
         List<LootTabel.Regel> elite = new ArrayList<>(r);
         for (String s : SIERADEN) {
             elite.add(new LootTabel.Regel(s, 2));
         }
-        LootTabellen.registreer("z6wezens:" + mob + "_elite", new LootTabel(elite, 2, Math.min(1, kans * 3.5), 3.4, muntMin * 3, muntMax * 3));
+        LootTabellen.registreer("z6wezens:" + mob + "_elite", new LootTabel(elite, 2, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.elite(kans), nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.eliteGeluk(3.4), muntMin * 3, muntMax * 3));
     }
 
     /** The open-world pool: both sets (weight 3 each piece), a ring now and then. */

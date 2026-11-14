@@ -31,6 +31,7 @@ public final class ZonePoortRegistry {
         NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> ZonePoort.tik(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> ZonePoort.vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener(ZonePoortRegistry::commando);
+        NeoForge.EVENT_BUS.addListener(LootOpruimen::commando);   // 1101-balans: /guhs vadsrijk loot opruimen (one-time cleanup)
     }
 
     private static void commando(RegisterCommandsEvent event) {

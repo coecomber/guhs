@@ -47729,5 +47729,7 @@
   "vadsrijk.vitrine.chat.beeld.embleem": "In the showcase: the emblem of the Snuggle Order",
   "vadsrijk.vitrine.chat.offline": "(%s is not online now: this is how things stood last time.)",
   "structure.guhs.vr_w_portaaltempel": "The Chonkdom",
-  "structure.guhs.vr_w_portaaltempel.tooltip": "The old order temple with the sleeping portal to the Chonkdom. Talk to Werver Wimpel first!"
+  "structure.guhs.vr_w_portaaltempel.tooltip": "The old order temple with the sleeping portal to the Chonkdom. Talk to Werver Wimpel first!",
+  "vadsrijk.menu.karakter.inhaal": "Catch-up bonus ×%s",
+  "vadsrijk.menu.karakter.inhaal.uitleg": "This class is behind your highest class: +15% class xp per level behind, up to ×3."
 }
