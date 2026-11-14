@@ -330,6 +330,26 @@ def teksten():
         "vadsrijk.menu.instellingen.weer.uitleg": ("Buitjes met regenboog, sneeuw, bloesemregen, lampiongloed, wolkenslierten, zandwervels en ochtendmist. 0 = uit.",
                                                    "Showers with rainbows, snow, blossom rain, lampion glow, cloud wisps, sand swirls and morning mist. 0 = off."),
     })
+    # 1.10.1 (p1101-tijd): /guhs vadsrijk tijd (feature/vadsrijk/tijd); English in tools/lang/en/c471_vr_tijd.json
+    t.update({
+        "vadsrijk.tijd.status": ("Vadsrijk-tijd: cyclus %1$s min · dag %2$s min · avond + nacht + ochtend %3$s min (dag_deel %4$s)",
+                                 "Chonkdom time: cycle %1$s min · day %2$s min · dusk + night + dawn %3$s min (dag_deel %4$s)"),
+        "vadsrijk.tijd.status.nu": ("Nu %1$s in het Vadsrijk (%2$s, dag %3$s, kloktijd %4$s) · tempo %5$s · overworld %6$s",
+                                    "Now %1$s in the Chonkdom (%2$s, day %3$s, clock time %4$s) · speed %5$s · overworld %6$s"),
+        "vadsrijk.tijd.status.config": ("Instellingen: config/%s (of /guhs vadsrijk tijd cyclus|dag)",
+                                        "Settings: config/%s (or /guhs vadsrijk tijd cyclus|dag)"),
+        "vadsrijk.tijd.is_dag": ("dag", "day"),
+        "vadsrijk.tijd.is_nacht": ("nacht", "night"),
+        "vadsrijk.tijd.cyclus.gezet": ("De Vadsrijk-cyclus duurt nu %1$s minuten (dag %2$s min, avond + nacht + ochtend %3$s min).",
+                                       "The Chonkdom cycle now lasts %1$s minutes (day %2$s min, dusk + night + dawn %3$s min)."),
+        "vadsrijk.tijd.dag.gezet": ("De dag is nu %1$s van de Vadsrijk-cyclus (dag %2$s min, avond + nacht + ochtend %3$s min).",
+                                    "Day is now %1$s of the Chonkdom cycle (day %2$s min, dusk + night + dawn %3$s min)."),
+        "vadsrijk.tijd.zet.dag": ("Goedemorgen, Vadsrijk! Het is nu dag.", "Good morning, Chonkdom! It is day now."),
+        "vadsrijk.tijd.zet.nacht": ("Welterusten, Vadsrijk! Het is nu nacht.", "Good night, Chonkdom! It is night now."),
+        "vadsrijk.tijd.herlaad": ("config/%s opnieuw gelezen.", "Read config/%s again."),
+        "vadsrijk.tijd.geen_klok": ("Het Vadsrijk heeft geen eigen klok (mist data/guhs/world_clock/vadsrijk.json?).",
+                                    "The Chonkdom has no clock of its own (data/guhs/world_clock/vadsrijk.json missing?)."),
+    })
     weer = {
         "roze": ("een roze buitje", "a pink shower"),
         "sneeuw": ("een sneeuwbuitje", "a snow shower"),

@@ -33,8 +33,10 @@ DIM_TYPE = {
     "monster_spawn_light_level": 0,
     "monster_spawn_block_light_limit": 0,
     "has_fixed_time": False,
-    "default_clock": "minecraft:overworld",   # (integration: /time set works in the dimension, like the Guhmension)
-    "timelines": "#minecraft:in_overworld",
+    # 1.10.1 (p1101-tijd): its own world clock guhs:vadsrijk + timelines #guhs:in_vadsrijk (copies of vanilla day/moon/early_game
+    # on that clock; hand-placed json in data/guhs/world_clock, timeline, tags/timeline). Length + day share: feature/vadsrijk/tijd.
+    "default_clock": "guhs:vadsrijk",
+    "timelines": "#guhs:in_vadsrijk",
 }
 
 # (fix round 2 "biomen": the generator guhs:vadsrijk_kaart = the old flat generator (one bedrock layer, no structures, the

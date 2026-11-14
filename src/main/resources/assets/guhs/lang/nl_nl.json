@@ -47801,5 +47801,16 @@
   "vadsrijk.npc.gids.opruimen.titel": "Wat doe ik met oude spullen?",
   "vadsrijk.npc.gids.opruimen.tekst": "Je tooltip vertelt het meteen: 'Slechter dan wat je draagt' of 'Beter dan wat je draagt', met het grootste verschil, wat het in de winkel oplevert en wat ontmantelen geeft. Verkopen geeft Vadsmunten. Ontmantelen geeft smeedmateriaal: grijs geeft Smeedstofjes, groen Smeedsplinters, blauw en beter Smeedkristallen (meer voor een hoger level en voor sterren). De smid smelt dat om: 3 stofjes of 1 splinter worden een Verbetersteentje, 1 splinter kan ook Pluisdraad worden, 2 kristallen worden Glinstergruis voor je ambacht en 3 kristallen een Herrolknabbel. In elke winkel en bij de smid zitten de knoppen 'Verkoop alle slechtere' en 'Ontmantel alle slechtere': die pakken alleen stukken die slechter zijn dan wat je draagt, zonder sterren of kristallen, en nooit wat je draagt. Lievelingsstuk? Druk op L in je inventaris (of klik het slotje): dan kan het niet verkocht, ontmanteld of verhandeld worden. Blauw en beter vraagt altijd eerst of je het zeker weet.",
   "vadsrijk.menu.karakter.inhaal": "Inhaalbonus ×%s",
-  "vadsrijk.menu.karakter.inhaal.uitleg": "Deze klasse loopt achter op je hoogste klasse: +15% klasse-xp per level achterstand, tot ×3."
+  "vadsrijk.menu.karakter.inhaal.uitleg": "Deze klasse loopt achter op je hoogste klasse: +15% klasse-xp per level achterstand, tot ×3.",
+  "vadsrijk.tijd.status": "Vadsrijk-tijd: cyclus %1$s min · dag %2$s min · avond + nacht + ochtend %3$s min (dag_deel %4$s)",
+  "vadsrijk.tijd.status.nu": "Nu %1$s in het Vadsrijk (%2$s, dag %3$s, kloktijd %4$s) · tempo %5$s · overworld %6$s",
+  "vadsrijk.tijd.status.config": "Instellingen: config/%s (of /guhs vadsrijk tijd cyclus|dag)",
+  "vadsrijk.tijd.is_dag": "dag",
+  "vadsrijk.tijd.is_nacht": "nacht",
+  "vadsrijk.tijd.cyclus.gezet": "De Vadsrijk-cyclus duurt nu %1$s minuten (dag %2$s min, avond + nacht + ochtend %3$s min).",
+  "vadsrijk.tijd.dag.gezet": "De dag is nu %1$s van de Vadsrijk-cyclus (dag %2$s min, avond + nacht + ochtend %3$s min).",
+  "vadsrijk.tijd.zet.dag": "Goedemorgen, Vadsrijk! Het is nu dag.",
+  "vadsrijk.tijd.zet.nacht": "Welterusten, Vadsrijk! Het is nu nacht.",
+  "vadsrijk.tijd.herlaad": "config/%s opnieuw gelezen.",
+  "vadsrijk.tijd.geen_klok": "Het Vadsrijk heeft geen eigen klok (mist data/guhs/world_clock/vadsrijk.json?)."
 }

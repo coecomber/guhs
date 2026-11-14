@@ -47801,5 +47801,16 @@
   "vadsrijk.npc.gids.opruimen.titel": "What do I do with old stuff?",
   "vadsrijk.npc.gids.opruimen.tekst": "Your tooltip tells you right away: 'Worse than what you're wearing' or 'Better than what you're wearing', with the biggest difference, what it sells for and what salvaging gives. Selling gets you Chonkcoins. Salvaging gets you smithing stuff: gray gives Smithing Dust, green Smithing Splinters, blue and better Smithing Crystals (more for a higher level and for stars). The smith melts that down: 3 dust or 1 splinter become an Upgrade Pebble, 1 splinter can also become Fluff Thread, 2 crystals become Glitter Grit for your craft and 3 crystals a Reroll Nibble. Every shop and the smith have the buttons 'Sell all worse' and 'Salvage all worse': they only take pieces that are worse than what you're wearing, without stars or crystals, and never what you're wearing. A favorite piece? Press L in your inventory (or click the little lock): then it can't be sold, salvaged or traded. Blue and better always asks if you're sure first.",
   "vadsrijk.menu.karakter.inhaal": "Catch-up bonus ×%s",
-  "vadsrijk.menu.karakter.inhaal.uitleg": "This class is behind your highest class: +15% class xp per level behind, up to ×3."
+  "vadsrijk.menu.karakter.inhaal.uitleg": "This class is behind your highest class: +15% class xp per level behind, up to ×3.",
+  "vadsrijk.tijd.status": "Chonkdom time: cycle %1$s min · day %2$s min · dusk + night + dawn %3$s min (dag_deel %4$s)",
+  "vadsrijk.tijd.status.nu": "Now %1$s in the Chonkdom (%2$s, day %3$s, clock time %4$s) · speed %5$s · overworld %6$s",
+  "vadsrijk.tijd.status.config": "Settings: config/%s (or /guhs vadsrijk tijd cyclus|dag)",
+  "vadsrijk.tijd.is_dag": "day",
+  "vadsrijk.tijd.is_nacht": "night",
+  "vadsrijk.tijd.cyclus.gezet": "The Chonkdom cycle now lasts %1$s minutes (day %2$s min, dusk + night + dawn %3$s min).",
+  "vadsrijk.tijd.dag.gezet": "Day is now %1$s of the Chonkdom cycle (day %2$s min, dusk + night + dawn %3$s min).",
+  "vadsrijk.tijd.zet.dag": "Good morning, Chonkdom! It is day now.",
+  "vadsrijk.tijd.zet.nacht": "Good night, Chonkdom! It is night now.",
+  "vadsrijk.tijd.herlaad": "Read config/%s again.",
+  "vadsrijk.tijd.geen_klok": "The Chonkdom has no clock of its own (data/guhs/world_clock/vadsrijk.json missing?)."
 }

@@ -76,6 +76,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotKerker.register(modBus);   // U-GROTKERKER: every cave a repeatable mini-dungeon (run, boss, end chest)
         nl.juiced.guhs.feature.vadsrijk.vint.VInt.register(modBus);   // V-INT: round-U glue (spec in the Karakter tab + party frames)
         nl.juiced.guhs.feature.vadsrijk.ritme.RitmeRegistry.register(modBus);   // U-LEVEN-RITME: day/night in towns, weather, emote reactions, Pluizenblaadje
+        nl.juiced.guhs.feature.vadsrijk.tijd.TijdRegistry.register(modBus);   // 1.10.1 p1101-tijd: own day/night clock (cycle length + day share)
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidRegistry.register(modBus);   // U-Z6RAID: the raid De Sterrendovende Toren
         nl.juiced.guhs.feature.vadsrijk.party.PartyRegistry.register(modBus);   // W-PARTY: Party tab (saved parties, group queue) + nep-spelers
         nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortRegistry.register(modBus);   // X-ZONE1: zone gate (open zones, safety net, soft cap)
