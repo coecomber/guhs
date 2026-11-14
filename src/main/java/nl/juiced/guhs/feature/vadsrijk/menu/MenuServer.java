@@ -78,7 +78,7 @@ public final class MenuServer {
 
     /** The tab ids for the command's suggestions (the client registry is the real list; other slices add theirs). */
     public static final List<String> TABS = new java.util.concurrent.CopyOnWriteArrayList<>(List.of("karakter", "skillboom", "questlog", "voltooiing",
-            "rijdieren", "zeilbootje", "huisdieren", "kledingkast", "knapzak", "materiaaltas", "ambachten", "puzzels", "ridders", "reiskaart", "instellingen"));
+            "rijdieren", "zeilbootje", "huisdieren", "kledingkast", "knapzak", "materiaaltas", "ambachten", "puzzels", "ridders", "reiskaart", "bazen", "instellingen"));
 
     public static void register(IEventBus modBus) {
         net.neoforged.neoforge.common.NeoForge.EVENT_BUS.addListener(MenuServer::commando);
@@ -122,6 +122,7 @@ public final class MenuServer {
         switch (wat) {
             case "karakter" -> PacketDistributor.sendToPlayer(p, new Antwoord(wat, karakter(p), gear(p)));
             case "reiskaart" -> PacketDistributor.sendToPlayer(p, new Antwoord(wat, reiskaart(p), List.of()));
+            case "bazen" -> PacketDistributor.sendToPlayer(p, new Antwoord(wat, nl.juiced.guhs.feature.vadsrijk.bazenboek.Bazenboek.scherm(p), List.of()));
             default -> {
             }
         }

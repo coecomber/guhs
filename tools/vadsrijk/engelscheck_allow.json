@@ -137,7 +137,11 @@
     "ftb.guhs_vadsrijk.q.vr_ftb_poort6.task0.title",
     "vadsrijk.vitrine.chat.zone.klaar",
     "vadsrijk.vitrine.klasse",
-    "vadsrijk.vitrine.klasse.spec"
+    "vadsrijk.vitrine.klasse.spec",
+    "vadsrijk.vint.pech.per.kill",
+    "vadsrijk.vint.pech.per.clear",
+    "vadsrijk.vint.pech.per.run",
+    "vadsrijk.bazenboek.lv"
   ],
   "waarden": [
     "Guhdex",

@@ -222,6 +222,11 @@ public final class Arenas {
         }
     }
 
+    /** Tests (other packages, e.g. the Bazen tab): see {@link #testStaat}. */
+    public static void testRespawn(String arenaId, long respawnOp) {
+        testStaat(arenaId, respawnOp);
+    }
+
     /** Tests: the board this arena holds now (may be a stale reference). */
     @Nullable
     static Display.TextDisplay bordVan(String arenaId) {

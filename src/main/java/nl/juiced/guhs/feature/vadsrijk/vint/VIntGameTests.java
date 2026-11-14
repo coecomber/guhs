@@ -67,4 +67,77 @@ public class VIntGameTests {
                 "Ringeling's theme known (her fanfare follows Haken.VERSLAGEN)");
         helper.succeed();
     }
+
+    /** 1.10.3 "pech zichtbaar": the mount screen data carries the pity counter per source, the pet screen data the cave pet's. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void pechInSchermData(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        try {
+            String id = "opperzwam_zwamzwijntje";
+            for (int i = 0; i < 8; i++) {
+                RijdierBuit.testRol = 0.99;   // a miss
+                RijdierBuit.rol(p, id);
+            }
+            net.minecraft.nbt.CompoundTag e = pechVan(economieData(p), RijdierSoort.ZWAMZWIJNTJE, id);
+            helper.assertTrue(e != null, "the Zwamzwijntje row carries its drop source");
+            helper.assertTrue(e.getIntOr("pech", -1) == 8 && e.getIntOr("pity", 0) == RijdierBuit.PITY && e.getIntOr("kans", 0) == 10,
+                    "pech 8/15 at 10 %: " + e);
+            helper.assertTrue("kill".equals(e.getStringOr("per", "")) && e.getStringOr("kleur", "x").isEmpty() && e.getBooleanOr("mag", false),
+                    "per kill, the mount itself, counts");
+            helper.assertTrue(RijdierBuit.misTekst("x", 8).getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tc
+                    && "vadsrijk.vint.buit.mis".equals(tc.getKey()) && Integer.valueOf(7).equals(tc.getArgs()[4]), "miss line: 7 more until a sure drop");
+            helper.assertTrue(RijdierBuit.misTekst("x", 15).getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents tz
+                    && "vadsrijk.vint.buit.mis.zeker".equals(tz.getKey()), "miss line at 15/15: the next one is sure");
+            // the Kristal colour: no Pluimguh yet = shown, but it doesn't count
+            net.minecraft.nbt.CompoundTag k = pechVan(economieData(p), RijdierSoort.PLUIMGUH, "spiegelzucht_kristal");
+            helper.assertTrue(k != null && "kristal".equals(k.getStringOr("kleur", "")) && !k.getBooleanOr("mag", true), "Kristal: needs a Pluimguh first");
+            // a cave colour with a Pluimguh: its counter + where it drops
+            Rijdieren.geef(p, "pluimguh:honing");
+            String grot = "grot_zwamgrot_pluim";
+            for (int i = 0; i < RijdierBuit.PITY; i++) {
+                RijdierBuit.testRol = 0.99;
+                RijdierBuit.rol(p, grot);
+            }
+            net.minecraft.nbt.CompoundTag g = pechVan(economieData(p), RijdierSoort.PLUIMGUH, grot);
+            helper.assertTrue(g != null && g.getIntOr("pech", 0) == RijdierBuit.PITY && "glimzwam".equals(g.getStringOr("kleur", ""))
+                    && "vadsrijk.grotten.naam.zwamgrot".equals(g.getStringOr("waarArg", "")), "Glimzwam 15/15 from the Zwamgrot: " + g);
+            // owned: no entry any more
+            RijdierBuit.testRol = 0.05;   // a lucky roll (under 10 %)
+            helper.assertTrue(RijdierBuit.rol(p, id), "a lucky drop");
+            helper.assertTrue(pechVan(economieData(p), RijdierSoort.ZWAMZWIJNTJE, id) == null, "owned: no pity line");
+            // the pet screen: the cave pet's counter
+            nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotBazen.Def d = nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotBazen.def("zwamgrot");
+            nl.juiced.guhs.feature.vadsrijk.kern.Spelers.data(p).extra(nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotKerker.DATA).putInt("zwamgrot.petpech", 9);
+            net.minecraft.nbt.CompoundTag h = new net.minecraft.nbt.CompoundTag();
+            nl.juiced.guhs.feature.vadsrijk.grotkerker.KerkerLoot.schermData(p, h);
+            net.minecraft.nbt.CompoundTag pp = h.getCompoundOrEmpty("petpech").getCompoundOrEmpty(d.pet());
+            helper.assertTrue(pp.getIntOr("pech", 0) == 9 && pp.getIntOr("pity", 0) == nl.juiced.guhs.feature.vadsrijk.grotkerker.KerkerLoot.PET_PITY
+                    && pp.getIntOr("kans", 0) == 6, "pet pech 9/25 at 6 %: " + pp);
+            helper.succeed();
+        } finally {
+            RijdierBuit.testRol = null;
+            Rijdieren.reset(p);
+        }
+    }
+
+    private static net.minecraft.nbt.CompoundTag economieData(ServerPlayer p) {
+        return nl.juiced.guhs.feature.vadsrijk.economie.Stal.data(p, false);
+    }
+
+    @javax.annotation.Nullable
+    private static net.minecraft.nbt.CompoundTag pechVan(net.minecraft.nbt.CompoundTag d, RijdierSoort s, String bron) {
+        net.minecraft.nbt.ListTag l = d.getListOrEmpty("rijdieren");
+        for (int i = 0; i < l.size(); i++) {
+            net.minecraft.nbt.CompoundTag t = l.getCompoundOrEmpty(i);
+            if (s.id().equals(t.getStringOr("soort", ""))) {
+                net.minecraft.nbt.ListTag pl = t.getListOrEmpty("pech");
+                for (int j = 0; j < pl.size(); j++) {
+                    if (bron.equals(pl.getCompoundOrEmpty(j).getStringOr("bron", ""))) {
+                        return pl.getCompoundOrEmpty(j);
+                    }
+                }
+            }
+        }
+        return null;
+    }
 }

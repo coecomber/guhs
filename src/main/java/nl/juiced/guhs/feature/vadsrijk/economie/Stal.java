@@ -47,7 +47,7 @@ public final class Stal {
         }
     }
 
-    static CompoundTag data(ServerPlayer p, boolean stal) {
+    public static CompoundTag data(ServerPlayer p, boolean stal) {
         CompoundTag d = new CompoundTag();
         ListTag l = new ListTag();
         RijdierSoort actief = Rijdieren.actief(p);
@@ -77,6 +77,7 @@ public final class Stal {
                 t.put("kleuren", kl);
             }
             nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.schermData(p, s, t);   // T-RIJDIER: looks + where the new mounts come from
+            nl.juiced.guhs.feature.vadsrijk.vint.RijdierBuit.schermData(p, s, t);   // 1.10.3: the drop chance + pity counter per source
             l.add(t);
         }
         d.put("rijdieren", l);

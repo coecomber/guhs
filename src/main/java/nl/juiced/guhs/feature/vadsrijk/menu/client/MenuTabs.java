@@ -67,6 +67,8 @@ final class MenuTabs {
 
         VadsrijkMenu.tab("reiskaart", () -> new ItemStack(Items.MAP), () -> vraag("reiskaart"), 120);
 
+        VadsrijkMenu.tab("bazen", () -> new ItemStack(Items.GOLDEN_HELMET), () -> vraag("bazen"), 125);   // 1.10.3: boss stats + pity
+
         VadsrijkMenu.scherm("instellingen", () -> new ItemStack(Items.COMPARATOR), InstellingenPaneel::new, 130);
     }
 
@@ -91,6 +93,13 @@ final class MenuTabs {
                     mc.setScreen(null);   // (typed in the chat: the chat closes first)
                 }
                 VadsrijkMenu.open(tab.isEmpty() ? null : tab);
+            }
+            case "bazen" -> {
+                if (mc.screen instanceof BazenPaneel b) {
+                    b.update(a.data(), java.util.List.of());
+                } else {
+                    mc.setScreen(new BazenPaneel(a.data()));
+                }
             }
             case "reiskaart" -> mc.setScreen(new nl.juiced.guhs.feature.vadsrijk.npc.client.ReiskaartScherm(MenuServer.reiskaartVan(a.data()), true));
             default -> {

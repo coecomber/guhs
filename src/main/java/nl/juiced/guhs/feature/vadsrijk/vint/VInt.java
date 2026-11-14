@@ -29,6 +29,7 @@ public final class VInt {
 
     public static void register(IEventBus modBus) {
         RijdierBuit.register();
+        nl.juiced.guhs.feature.vadsrijk.bazenboek.Bazenboek.register();   // 1.10.3: the Bazen tab (boss stats + pity + access)
         // u-z6verhaal's airship line E (Hoogvads Staarthaven <-> Rozenkloof) in u-luchtschip's "why closed" explanations: after the
         // swim film (flag z6_lijn_e_open) and from level 60; flying back is always open (Z6Lijn's own gate)
         nl.juiced.guhs.feature.vadsrijk.luchtschip.Poorten.POORTEN.put(nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6Lijn.ID,
@@ -44,6 +45,8 @@ public final class VInt {
         RijdierBuit.bron(Z6RAID_BRON, "Sterrennacht-Bultguh (Sterrendovende Toren, zone 6)", null, p -> true,
                 nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHalster::heeftSterrennacht,
                 nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHalster::geefSterrennacht);
+        RijdierBuit.doel(Z6RAID_BRON, new RijdierBuit.Doel(nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.BULTGUH, null, "clear",
+                "vadsrijk.vint.pech.waar.z6raid", null));   // 1.10.3: shown with its pity in the mount screen
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHaken.OPGEVROLIJKT.add(p -> {
             RijdierBuit.rol(p, Z6RAID_BRON);
             nl.juiced.guhs.feature.vadsrijk.gilden.BondXp.deed(p, "bazen", 1, RAID_BOND_XP);

@@ -532,6 +532,9 @@ def teksten():
         "vadsrijk.grotkerker.sluis.botst": ("De sluis zit dicht. Haal eerst alle hendels in de sluiszaal over!", "The sluice gate is shut. Pull every lever in the sluice room first!"),
         "vadsrijk.grotkerker.tussenkist": ("★ Halverwege! Er staat een tussenkist voor je klaar.", "★ Halfway there! A chest is waiting for you."),
         "vadsrijk.grotkerker.venster.tussenkist": ("• Halverwege (na grotkamer 2): een tussenkist met %s brons, een uitrustingsstuk en erts", "• Halfway (after cave room 2): a chest with %s bronze, a piece of gear and ore"),
+        # 1.10.3 "pech zichtbaar": a pet miss says how far the sure pet is
+        "vadsrijk.grotkerker.pet.mis.pech": ("Geen huisdier %s deze keer (%s%%) · pech %s/%s · nog %s keer tot een zekere drop", "No pet %s this time (%s%%) · pity %s/%s · %s more tries until a sure drop"),
+        "vadsrijk.grotkerker.pet.mis.zeker": ("Geen huisdier %s deze keer (%s%%) · pech %s/%s · de volgende keer is hij zeker van jou!", "No pet %s this time (%s%%) · pity %s/%s · next time it's guaranteed yours!"),
 
     })
     return t

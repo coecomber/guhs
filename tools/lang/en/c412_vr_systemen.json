@@ -2410,7 +2410,7 @@
   "vadsrijk.vint.bond.uitleg.2": "You can join from zone 1: check a Squad Board in any town. Founding your own squad is only possible in Highchonk, at Squad Clerk Stampy.",
   "vadsrijk.vint.bond.uitleg.3": "Every squad gets a castle in Squad Valley that you build up together (level 1 to 5), with a vault, trophy hall and workshops.",
   "vadsrijk.vint.bond.voet": "Buttons open the squad panel in the chat (also: /bond, /bc to chat)",
-  "vadsrijk.vint.buit.mis": "No %s this time (10%%). In %s more tries at most, it's guaranteed yours.",
+  "vadsrijk.vint.buit.mis": "No %s this time (%s%%) · pity %s/%s · %s more tries until a sure drop",
   "vadsrijk.vint.buit.raak": "Mount drop: %s is yours! (after %s tries)",
   "vadsrijk.vint.huis.intro": "The Snuggle Quarter is a neighborhood of its own with little streets, neighbors, a square and a market. You buy a plot with a little house you furnish yourself.",
   "vadsrijk.vint.huis.titel": "My house in the Snuggle Quarter",
