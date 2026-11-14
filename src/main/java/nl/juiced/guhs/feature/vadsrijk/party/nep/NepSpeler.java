@@ -201,6 +201,9 @@ public class NepSpeler extends PathfinderMob {
             discard();   // (a leftover after a restart / a reload: NepSpelers owns every nep-speler)
             return;
         }
+        if (tickCount % 20 == 9 && uitDeGrond(sl)) {
+            return;
+        }
         if (flauw()) {
             getNavigation().stop();
             if (tickCount >= flauwTot) {
@@ -380,14 +383,39 @@ public class NepSpeler extends PathfinderMob {
         double a = distanceTo(baas);
         getLookControl().setLookAt(baas, 20f, 20f);
         if (a > 28) {
-            Vec3 plek = baas.position().add(getRandom().nextDouble() * 2 - 1, 0, getRandom().nextDouble() * 2 - 1);
-            teleportTo(plek.x, baas.getY(), plek.z);
+            // 1.10.3: beside the player only where one can stand (a random offset on a slope was inside the hill)
+            Vec3 plek = nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.vrijBij((ServerLevel) level(), baas.position(),
+                    baas.position().add(getRandom().nextDouble() * 2 - 1, 0, getRandom().nextDouble() * 2 - 1));
+            teleportTo(plek.x, plek.y, plek.z);
             getNavigation().stop();
         } else if (a > 4.5) {
             getNavigation().moveTo(baas, a > 10 ? 1.3 : 1.0);
         } else {
             getNavigation().stop();
         }
+    }
+
+    /**
+     * 1.10.3 (npc-vloer), once a second: stuck inside blocks -> up to the first free floor; under the map (fell through a gap of
+     * the terrain shell onto the bedrock: "NPCs under the ground") -> a companion comes back to its player, a wild one leaves.
+     * True = it is gone.
+     */
+    private boolean uitDeGrond(ServerLevel sl) {
+        if (nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.onderDeKaart(this)) {
+            ServerPlayer baas = eigenaar == null ? null : sl.getServer().getPlayerList().getPlayer(eigenaar);
+            if (baas != null && baas.level() == sl) {
+                teleportTo(baas.getX(), baas.getY(), baas.getZ());
+                getNavigation().stop();
+                resetFallDistance();
+                return false;
+            }
+            NepSpelers.weg(this);
+            return true;
+        }
+        if (nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.bevrijd(this)) {
+            getNavigation().stop();
+        }
+        return false;
     }
 
     private void dwaal() {

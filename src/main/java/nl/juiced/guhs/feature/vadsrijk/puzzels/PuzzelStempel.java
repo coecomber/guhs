@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.vadsrijk.puzzels;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -186,7 +188,8 @@ public final class PuzzelStempel {
                             }
                         }
                     }
-                    if (!ok || n == 0 || hi - lo > MAX_VERSCHIL || !boxVrij(l, cx, cz, w, dp, lo, d.hoogte())) {
+                    if (!ok || n == 0 || hi - lo > MAX_VERSCHIL || !boxVrij(l, cx, cz, w, dp, lo, d.hoogte())
+                            || raaktBeschermd(l, cx, cz, w, dp, lo, d.hoogte())) {   // 1.10.3: never over a campfire / NPC spot
                         continue;
                     }
                     java.util.Arrays.sort(alle, 0, n);
@@ -208,6 +211,55 @@ public final class PuzzelStempel {
             beste = new BlockPos(anker.getX() - w / 2, g == GEEN ? anker.getY() : g, anker.getZ() - dp / 2);
         }
         return beste;
+    }
+
+    /** 1.10.3: how far (blocks, all sides) a stamp stays from a campfire or an NPC spot. */
+    static final int BESCHERM_RAND = 2;
+    @Nullable
+    private static List<BlockPos> beschermd;
+
+    /**
+     * 1.10.3 (npc-vloer, "the campfire at 604 100 -986 is gone"): the spots a puzzle stamp may never cover: every campfire of the
+     * campfire lists and every NPC spot. z2_ijsschuif was stamped right over kampvuur_knuffelmeer_1 (the box check only looked 3+
+     * blocks above the ground, so the campfire at ground level counted as "free" and was replaced by a slide block).
+     */
+    static List<BlockPos> beschermd() {
+        if (beschermd == null) {
+            List<BlockPos> l = new ArrayList<>();
+            l.addAll(nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken.KAMPVUREN);
+            l.addAll(nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldPlekken.KAMPVUREN);
+            l.addAll(nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldPlekken.KAMPVUREN);
+            l.addAll(nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.KAMPVUREN);
+            beschermd = List.copyOf(l);
+        }
+        List<BlockPos> uit = new ArrayList<>(beschermd);
+        for (nl.juiced.guhs.feature.vadsrijk.npc.NpcDef d : nl.juiced.guhs.feature.vadsrijk.npc.Npcs.alle()) {
+            uit.add(d.plek());   // (not cached: the zone NPCs register on server start)
+        }
+        return uit;
+    }
+
+    /** Does the box (plus {@link #BESCHERM_RAND}) hold a protected spot or a campfire block of the live world? */
+    static boolean raaktBeschermd(ServerLevel l, int x0, int z0, int w, int dp, int y0, int h) {
+        int r = BESCHERM_RAND;
+        for (BlockPos b : beschermd()) {
+            if (b.getX() >= x0 - r && b.getX() < x0 + w + r && b.getZ() >= z0 - r && b.getZ() < z0 + dp + r && b.getY() >= y0 - 4
+                    && b.getY() <= y0 + h + r) {
+                return true;
+            }
+        }
+        BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        for (int x = -r; x < w + r; x++) {
+            for (int z = -r; z < dp + r; z++) {
+                for (int y = -MAX_VERSCHIL - 1; y < h; y++) {
+                    m.set(x0 + x, y0 + y, z0 + z);
+                    if (l.getBlockState(m).getBlock() instanceof net.minecraft.world.level.block.CampfireBlock) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /** No logs/walls/buildings inside the box above the lowest ground (leaves and plants are fine: they get cleared). */

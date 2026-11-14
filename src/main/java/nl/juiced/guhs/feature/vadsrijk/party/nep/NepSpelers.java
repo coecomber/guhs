@@ -164,6 +164,14 @@ public final class NepSpelers {
         }
         RandomSource r = sl.getRandom();
         n.stelIn(naam != null ? naam : NepNamen.naam(r, bezet), r.nextInt(NepSpeler.SKINS), rol, level);
+        // 1.10.3 (npc-vloer): a spot inside a slope/wall (the +-1.5 jitter of a wild group, a filler beside its player) moves to
+        // the nearest free floor (never inside the rock)
+        BlockPos cel = BlockPos.containing(pos);
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.Wereld w = nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.van(sl);
+        if (nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.geblokt(w, cel)) {
+            BlockPos s = nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.staanPlek(w, cel);
+            pos = new Vec3(s.getX() + 0.5, s.getY(), s.getZ() + 0.5);
+        }
         n.snapTo(pos.x, pos.y, pos.z, r.nextFloat() * 360f, 0f);
         n.setYHeadRot(n.getYRot());
         n.thuis = BlockPos.containing(pos);
@@ -219,7 +227,7 @@ public final class NepSpelers {
                 BlockState onder = sl.getBlockState(p.below());
                 if (onder.isFaceSturdy(sl, p.below(), Direction.UP) && sl.getBlockState(p).getCollisionShape(sl, p).isEmpty()
                         && sl.getBlockState(p.above()).getCollisionShape(sl, p.above()).isEmpty() && sl.getFluidState(p).isEmpty()
-                        && sl.getFluidState(p.above()).isEmpty()) {
+                        && sl.getFluidState(p.above()).isEmpty() && sl.getRawBrightness(p, 0) > 0) {   // 1.10.3: + not a sealed pocket in the rock
                     Gebieden.Gebied g = Gebieden.op(p);
                     if (gebied == null || (g != null && g.id().equals(gebied))) {
                         return p;

@@ -17,7 +17,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.EntitySpawnReason;
-import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhVariant;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
@@ -189,86 +188,34 @@ public final class Npcs {
         g.setYBodyRot(d.yaw());
         g.stelIn(d);
         nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(g, sleutel(d.id()));   // U-DUBBEL
-        if (!staanOp(sl, s) && Double.isNaN(vloerOfNaN(sl, d.plek()))) {
-            g.setNoGravity(true);   // (no floor built here yet: hover instead of falling into the void)
+        if (!staanOp(sl, s) && !NpcVloer.geblokt(NpcVloer.van(sl), s) && Double.isNaN(vloerOfNaN(sl, d.plek()))) {
+            g.setNoGravity(true);   // (no floor built here yet: hover instead of falling into the void; 1.10.3: never inside blocks)
         }
         sl.addFreshEntity(g);
         LEVEND.put(d.id(), g.getUUID());
         return g;
     }
 
-    /** The y to stand on in the spot's own column: the spot's exact y, else down (max 4) first, then the nearest floor within 12
+    /** The y to stand on in the spot's own column: the spot's exact y, else down (max 4) first, then the nearest lit floor within 12
      * blocks either way (the spot's own y when there is none). */
     public static double vloer(ServerLevel sl, BlockPos pos) {
         double y = vloerOfNaN(sl, pos);
         return Double.isNaN(y) ? pos.getY() : y;
     }
 
-    /** Fix round 2 (Bakker Bram stood on his stall's roof): where an NPC of this spot stands. The exact spot first; when that is
-     * blocked (a counter, a wall), the free floor beside it at the SAME y (within 2 blocks, inside the building/stall) before
-     * the column search, which tries downward before upward, so a spot never ends up on the roof above it. */
+    /** Fix round 2 (Bakker Bram stood on his stall's roof): where an NPC of this spot stands. 1.10.3: one rule in
+     * {@link NpcVloer#staanPlek} (time-independent light; a blocked spot without a lit floor goes up, never stays in the rock). */
     public static BlockPos staanPlek(ServerLevel sl, BlockPos pos) {
-        // g-int: ONE rule for g-kaart's staanPlek + g-ux's standplek: the exact spot first; when that cell is blocked (counter,
-        // wall, ground) the nearest free LIT floor at the same y within 2 (ring 1, then ring 2: inside the stall/house, never the
-        // dark pocket under it); then the column: down 1..4 first, then the nearest lit floor up/down within 12 (vloerOfNaN).
-        if (staanOp(sl, pos)) {
-            return pos;
-        }
-        boolean geblokt = !sl.getBlockState(pos).getCollisionShape(sl, pos).isEmpty()
-                || !sl.getBlockState(pos.above()).getCollisionShape(sl, pos.above()).isEmpty();
-        for (int r = 1; geblokt && r <= 2; r++) {
-            BlockPos beste = null;
-            double bd = Double.MAX_VALUE;
-            for (int dx = -r; dx <= r; dx++) {
-                for (int dz = -r; dz <= r; dz++) {
-                    if (Math.max(Math.abs(dx), Math.abs(dz)) != r) {
-                        continue;
-                    }
-                    BlockPos b = pos.offset(dx, 0, dz);
-                    double dd = dx * dx + dz * dz;
-                    if (dd < bd && staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
-                        beste = b;
-                        bd = dd;
-                    }
-                }
-            }
-            if (beste != null) {
-                return beste;
-            }
-        }
-        double y = vloerOfNaN(sl, pos);
-        return Double.isNaN(y) ? pos : new BlockPos(pos.getX(), (int) y, pos.getZ());
+        return NpcVloer.staanPlek(NpcVloer.van(sl), pos);
     }
 
     private static double vloerOfNaN(ServerLevel sl, BlockPos pos) {
-        if (staanOp(sl, pos)) {
-            return pos.getY();
-        }
-        // (integration: the map's terrain is hollowed, sealed air pockets are pitch dark; away from the exact spot only lit floors)
-        for (int d = 1; d <= 4; d++) {   // (fix round 2: down first, the floor of the room the spot is in)
-            BlockPos b = pos.below(d);
-            if (staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
-                return b.getY();
-            }
-        }
-        for (int d = 1; d <= 12; d++) {
-            for (int s : new int[] {-1, 1}) {
-                if (s < 0 && d <= 4) {
-                    continue;
-                }
-                BlockPos b = pos.above(s * d);
-                if (staanOp(sl, b) && sl.getMaxLocalRawBrightness(b) > 0) {
-                    return b.getY();
-                }
-            }
-        }
-        return Double.NaN;
+        BlockPos b = NpcVloer.kolom(NpcVloer.van(sl), pos);
+        return b == null ? Double.NaN : b.getY();
     }
 
     private static boolean staanOp(ServerLevel sl, BlockPos b) {
-        BlockState onder = sl.getBlockState(b.below());
-        return !onder.getCollisionShape(sl, b.below()).isEmpty() && sl.getBlockState(b).getCollisionShape(sl, b).isEmpty()
-                && sl.getBlockState(b.above()).getCollisionShape(sl, b.above()).isEmpty();
+        return NpcVloer.staan(NpcVloer.van(sl), b);
     }
 
     /** Dev: every NPC away (they come back within a second when a player is near). */

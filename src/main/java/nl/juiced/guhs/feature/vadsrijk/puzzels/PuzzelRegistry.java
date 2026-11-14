@@ -124,6 +124,7 @@ public final class PuzzelRegistry {
             }
         });
         NeoForge.EVENT_BUS.addListener(PuzzelRegistry::commando);
+        NeoForge.EVENT_BUS.addListener(TegelPatch::commando);   // 1.10.3 npc-vloer
     }
 
     // ---- commands ------------------------------------------------------------------------------------------------------------

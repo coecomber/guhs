@@ -137,6 +137,9 @@ public class RijkGuh extends GuhEntity {
         if (zwaaiPauze > 0) {
             zwaaiPauze--;
         }
+        if (this.tickCount % 20 == 13) {
+            uitDeGrond(sl);   // 1.10.3 npc-vloer
+        }
         if (STIL.test(this)) {
             return;   // U-LEVEN-RITME: asleep
         }
@@ -151,6 +154,31 @@ public class RijkGuh extends GuhEntity {
             Emote[] idle = gedrag == NpcDef.Gedrag.ZITTEN ? new Emote[] {Emote.GAPEN, Emote.ZINGEN, Emote.SMAKKEN}
                     : new Emote[] {Emote.VAHOEG, Emote.ZINGEN, Emote.DANSEN, Emote.GAPEN, Emote.HARTJES};
             emotes.start(idle[getRandom().nextInt(idle.length)], false, GuhEmotes.Source.SELF);
+        }
+    }
+
+    /**
+     * 1.10.3 (npc-vloer): once a second. Inside blocks: up to the first free floor; under the map (fell through a gap of the
+     * terrain shell onto the bedrock): back home, or to the player it follows; a lost copy without either goes.
+     */
+    void uitDeGrond(ServerLevel sl) {
+        if (NpcVloer.onderDeKaart(this)) {
+            ServerPlayer p = volgt == null ? null : sl.getServer().getPlayerList().getPlayer(volgt);
+            if (p != null && p.level() == sl) {
+                snapTo(p.getX(), p.getY(), p.getZ());
+            } else if (thuis != null) {
+                BlockPos s = Npcs.staanPlek(sl, thuis);
+                snapTo(s.getX() + 0.5, s.getY(), s.getZ() + 0.5);
+            } else {
+                discard();
+                return;
+            }
+            getNavigation().stop();
+            resetFallDistance();
+            return;
+        }
+        if (NpcVloer.bevrijd(this)) {
+            getNavigation().stop();
         }
     }
 
@@ -180,7 +208,10 @@ public class RijkGuh extends GuhEntity {
             getLookControl().setLookAt(p);
             double d = distanceTo(p);
             if (d > 24) {
-                snapTo(p.getX() + (getRandom().nextDouble() - 0.5) * 2, p.getY(), p.getZ() + (getRandom().nextDouble() - 0.5) * 2);
+                // 1.10.3: beside the player only where a guh can stand (a random offset on a slope was inside the hill)
+                net.minecraft.world.phys.Vec3 v = NpcVloer.vrijBij((ServerLevel) level(), p.position(),
+                        p.position().add((getRandom().nextDouble() - 0.5) * 2, 0, (getRandom().nextDouble() - 0.5) * 2));
+                snapTo(v.x, v.y, v.z);
                 getNavigation().stop();
             } else if (d > 3.2) {
                 getNavigation().moveTo(p, 1.15);
