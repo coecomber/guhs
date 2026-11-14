@@ -5,6 +5,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 ## 1.10.3 — Minecraft 26.1.2
 
+- **Element advantage x1.5 -> x1.25** (also Roze vs ontvadst/versteend; the disadvantage stays x0.7).
 - **Fix: jewellery lost on right-click.** Right-clicking a ring/necklace/etc. from the hotbar destroyed the piece that was worn (vanilla ItemStack.use replaced the hand with the emptied stack); the worn piece now comes back into your hand.
 - **New travel map:** the airship's Reiskaart (also the Vadsrijk-menu tab) is redrawn: every zone at its real spot and size with its own landscape, the main area names, the campfires you lit and your own position (an arrow that points where you look). Names and campfires only show for zones that are open for you; closed zones stay under a grey mist with their requirement in the hover.
 - **Boss xp:** a boss gives at most half a level on your first kill and a tenth of a level on every later kill (Opperzwam, Galmwolf and Spiegelzucht gave 1.2 to 1.5 levels every 5 minutes); dungeon bosses are unchanged.

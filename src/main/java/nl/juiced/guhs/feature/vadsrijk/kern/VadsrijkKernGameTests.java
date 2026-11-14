@@ -157,14 +157,14 @@ public class VadsrijkKernGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void elementDriehoek(GameTestHelper helper) {
-        helper.assertTrue(Element.factor(Element.VUUR, Element.NATUUR, false) == 1.5, "vuur > natuur");
-        helper.assertTrue(Element.factor(Element.NATUUR, Element.WATER, false) == 1.5, "natuur > water");
-        helper.assertTrue(Element.factor(Element.WATER, Element.VUUR, false) == 1.5, "water > vuur");
+        helper.assertTrue(Element.factor(Element.VUUR, Element.NATUUR, false) == Element.STERK, "vuur > natuur");
+        helper.assertTrue(Element.factor(Element.NATUUR, Element.WATER, false) == Element.STERK, "natuur > water");
+        helper.assertTrue(Element.factor(Element.WATER, Element.VUUR, false) == Element.STERK, "water > vuur");
         helper.assertTrue(Element.factor(Element.NATUUR, Element.VUUR, false) == 0.7, "natuur weak against vuur");
         helper.assertTrue(Element.factor(Element.VUUR, Element.WATER, false) == 0.7, "vuur weak against water");
         helper.assertTrue(Element.factor(Element.WATER, Element.NATUUR, false) == 0.7, "water weak against natuur");
         helper.assertTrue(Element.factor(Element.VUUR, Element.VUUR, true) == 1.0, "same element: neutral");
-        helper.assertTrue(Element.factor(Element.ROZE, Element.WATER, true) == 1.5 && Element.factor(Element.ROZE, Element.WATER, false) == 1.0,
+        helper.assertTrue(Element.factor(Element.ROZE, Element.WATER, true) == Element.ROZE_TEGEN_ONTVADST && Element.factor(Element.ROZE, Element.WATER, false) == 1.0,
                 "roze: strong only against ontvadst");
         helper.assertTrue(Element.factor(Element.GEEN, Element.VUUR, true) == 1.0, "no element: neutral");
         helper.succeed();
@@ -179,7 +179,7 @@ public class VadsrijkKernGameTests {
         double krit = Schade.aanval(10, s, Schade.Soort.MELEE, true, Element.GEEN, Element.WATER, true);
         helper.assertTrue(Math.abs(krit - 15 * 1.7) < 1e-9, "crit x(1.5 + 20%)");
         double vuur = Schade.aanval(10, s, Schade.Soort.MELEE, false, Element.VUUR, Element.NATUUR, false);
-        helper.assertTrue(Math.abs(vuur - 15 * 1.5 * 1.1) < 1e-9, "element weakness x1.5 and +10% elementschade");
+        helper.assertTrue(Math.abs(vuur - 15 * Element.STERK * 1.1) < 1e-9, "element weakness x" + Element.STERK + " and +10% elementschade");
         double magie = Schade.aanval(10, s, Schade.Soort.MAGIE, false, Element.GEEN, null, false);
         helper.assertTrue(Math.abs(magie - 10) < 1e-9, "magic uses wijsheid (0 here)");
         // (balans 2026-11) level-relative: def / (def + 25 + 15 x attacker level), at most 60 % (VadsrijkBalansGameTests has more)

@@ -52,7 +52,7 @@ public final class Getalstijl {
         if (opSpeler) {
             schaal = Math.min(schaal, 1.2f);
         }
-        String label = dot ? "" : factor >= 1.45 ? "zwak" : factor > 0 && factor <= 0.75 ? "taai" : "";
+        String label = dot ? "" : factor >= 1.2 ? "zwak"   /* 1.10.3: the element advantage is x1.25 now */ : factor > 0 && factor <= 0.75 ? "taai" : "";
         int kleur = opSpeler ? SPELER_ROOD : krit ? GOUD : el != null && el != Element.GEEN ? el.rgb : WIT;
         String getal = (krit ? "★" : "") + (int) Math.ceil(n);
         return new Stijl(getal, kleur, schaal, label, krit || "zwak".equals(label));

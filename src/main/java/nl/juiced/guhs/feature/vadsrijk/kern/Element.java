@@ -13,7 +13,8 @@ public enum Element {
     NATUUR("N", "", ChatFormatting.GREEN, 0x5BD14A),
     WATER("W", "", ChatFormatting.AQUA, 0x3FA9FF);
 
-    public static final double STERK = 1.5, ZWAK = 0.7, ROZE_TEGEN_ONTVADST = 1.5;
+    /** 1.10.3 (user decision): the element advantage x1.5 -> x1.25 (also Roze vs ontvadst/versteend); the disadvantage stays x0.7. */
+    public static final double STERK = 1.25, ZWAK = 0.7, ROZE_TEGEN_ONTVADST = 1.25;
 
     /** The letter (logs/commands), its chat colour, its RGB. */
     public final String letter;
