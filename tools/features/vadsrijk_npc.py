@@ -316,6 +316,7 @@ Q("hq03b_elementen", "hoofd", "trainer_magier", "De elementendriehoek",
 
 # 1.10.1 (opruimen): what to do with old gear that is worse than what you have. Inserted between hq03b and hq04; players who
 # already started hq04 never see it (Questlog.INGEVOEGD counts it as done for them).
+# xp: tutorial territory (before hq07_littekens, so no BALANS_1101_HOOFD factor): 60, a bit under hq03b's 80 (release-1.10.1).
 Q("hq03c_opruimen", "hoofd", "rekruteerder", "Opruimen",
   "Sergeant Pluizebol gaf je twee oude oefenwapens: slechter dan wat je nu hebt. Verkoop er één in het kampwinkeltje van Kok "
   "Knapperkorst op het plein, en ontmantel de andere in de kampsmidse van Sergeant Pluizebol. Ontmantelen geeft smeedmateriaal: "
@@ -330,7 +331,7 @@ Q("hq03c_opruimen", "hoofd", "rekruteerder", "Opruimen",
   "Eén verkopen bij de kok, één ontmantelen bij mij. Klik op mij en kies 'Kampsmidse'!",
   [("npc", "Een oud oefenwapen voor mijn winkeltje? Dank je! Opgeruimd staat netjes, zeg ik altijd."),
    ("npc", "En onthoud: in elke winkel en bij elke smid zit een knop 'alle slechtere'. Dan ben je in één klik van je oude rommel af.")],
-  xp=40, munten=0, na=["hq03b_elementen"], inleveren="kok", actie_aanname="opruimspullen")
+  xp=60, munten=0, na=["hq03b_elementen"], inleveren="kok", actie_aanname="opruimspullen")
 
 Q("hq04_kampvuur", "hoofd", "kok", "Een warm plekje",
   "Kampvuren zijn je checkpoints: steek er een aan met rechtsklik en daar word je wakker als je flauwvalt. Steek het kampvuur op "

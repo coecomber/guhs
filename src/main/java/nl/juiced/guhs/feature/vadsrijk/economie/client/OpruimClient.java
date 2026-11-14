@@ -60,7 +60,7 @@ public final class OpruimClient {
             if (!(e.getScreen() instanceof InventoryScreen s) || mc.player == null || !Vadsrijk.in(mc.player) || mc.player.isCreative()) {
                 return;
             }
-            // (under the opslag buttons at +4/+26 and the karakter/bond buttons at +44)
+            // (column left of the inventory, 22 apart: opslag ▤ +4 / ✿ +26, karakter ⚔ +48, bond ⚑ +70, this ⚒ +92)
             int x = s.getGuiLeft() - 24, y = s.getGuiTop() + 4 + 88;
             e.addListener(Button.builder(Component.literal("⚒"),
                     b -> ClientPacketDistributor.sendToServer(new EcoPayloads.Doe(EcoPayloads.OPRUIM, "open", new CompoundTag())))

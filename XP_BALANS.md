@@ -27,6 +27,9 @@ hoofd + 2-4 kerker-runs per zone: geen grind. Kerkers moeten de moeite waard wor
 - Nieuw in `xpbalans.py`: **scenario D** = alleen hoofd + N kerker-runs (geen zijquests), tabel "Alleen hoofd + kerker-runs"
   (`--runs N`, standaard 3). Runs worden gedaan zodra je level >= kerker-minLv - 1.
 - Levelpoorten, curve, mob-xp, bazen buiten de kerkers en zijquests: **niet** aangeraakt.
+- **Tutorialstap hq03c_opruimen** (1101-items, ingevoegd tussen hq03b en hq04): **60 xp** (tutorialgebied = vol, geen x0,6),
+  tussen hq03b (80) en een derde level op lv 2-3 in; staat niet in `X_ZONE1_XP`. Zone 1 alleen-hoofd: +20 xp t.o.v. de
+  placeholder 40, verwaarloosbaar (z1 A blijft lv ~20,95).
 
 **Grind per zone (los, 5 kills onderweg, 2 kills/min):**
 

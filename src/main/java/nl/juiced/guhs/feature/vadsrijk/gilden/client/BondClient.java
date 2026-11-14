@@ -34,7 +34,7 @@ public final class BondClient {
             if (!(e.getScreen() instanceof InventoryScreen s) || mc.player == null || !Vadsrijk.in(mc.player) || mc.player.isCreative()) {
                 return;
             }
-            int x = s.getGuiLeft() - 24, y = s.getGuiTop() + 4 + 44;
+            int x = s.getGuiLeft() - 24, y = s.getGuiTop() + 4 + 66;   // release-1.10.1: under the ⚔ (+44), was on top of it
             e.addListener(Button.builder(Component.literal("⚑"), b -> {
                 if (mc.getConnection() != null) {
                     mc.getConnection().sendCommand("bond");
