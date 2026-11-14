@@ -62,12 +62,15 @@ public final class Sieraden {
         d.sieradenCache.put(slot.name(), s.copy());
     }
 
+    /** Tests: right-click equipping also outside the dimension. */
+    public static boolean TEST_OVERAL = false;
+
     /** Right-click with a piece of jewellery: wear it (swap with the worn one). */
     public static boolean draag(ServerPlayer p, InteractionHand hand) {
         ItemStack inHand = p.getItemInHand(hand);
         Uitrusting u = Rollen.van(inHand);
         BasisType t = u == null ? null : u.basisType();
-        if (t == null || !t.slot().sieraad() || !Vadsrijk.in(p)) {
+        if (t == null || !t.slot().sieraad() || !(Vadsrijk.in(p) || TEST_OVERAL)) {
             return false;
         }
         if (u.level() > Spelers.level(p)) {

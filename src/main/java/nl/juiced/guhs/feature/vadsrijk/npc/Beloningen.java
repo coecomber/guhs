@@ -52,11 +52,19 @@ public final class Beloningen {
         }
     }
 
-    /** 1.10.3: main-story quests from zone 2 on give 25 % less xp (the 75 % Verkenningsboek gate adds side content with its own xp). */
-    public static final double HOOFD_XP_VANAF_ZONE2 = 0.75;
+    /**
+     * 1.10.3 (user decision): main-story xp per zone, so the story alone keeps you a little below the zone and you grind / do caves
+     * to keep up: zone 1 x1, zone 2 x0.75, zones 3, 5 and 6 x0.5; zone 4 stays x1 (its story is the short sea crossing, as in 1.10.1).
+     * Side quests are unchanged.
+     */
+    public static final double HOOFD_XP_ZONE2 = 0.75, HOOFD_XP_LAAT = 0.5;
 
     public static double xpFactor(Quest q) {
-        return q.hoofd() && nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()) >= 2 ? HOOFD_XP_VANAF_ZONE2 : 1.0;
+        if (!q.hoofd()) {
+            return 1.0;
+        }
+        int z = nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id());
+        return z == 2 ? HOOFD_XP_ZONE2 : z == 3 || z == 5 || z == 6 ? HOOFD_XP_LAAT : 1.0;
     }
 
     /** A weapon base type of the player's class (the first one registered: the class's starter weapon). */

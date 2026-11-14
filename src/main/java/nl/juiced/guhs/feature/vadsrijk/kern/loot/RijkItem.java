@@ -131,8 +131,10 @@ public class RijkItem extends Item {
             net.minecraft.world.InteractionHand hand) {
         Uitrusting u = Rollen.van(player.getItemInHand(hand));
         if (u != null && u.basisType() != null && u.basisType().slot().sieraad()) {
-            if (player instanceof net.minecraft.server.level.ServerPlayer sp) {
-                nl.juiced.guhs.feature.vadsrijk.kern.Sieraden.draag(sp, hand);
+            if (player instanceof net.minecraft.server.level.ServerPlayer sp && nl.juiced.guhs.feature.vadsrijk.kern.Sieraden.draag(sp, hand)) {
+                // 1.10.3 bug fix: ItemStack.use turns a plain SUCCESS into "the held item becomes the (now empty) original stack",
+                // which overwrote the piece that was worn before and had just been put in the hand: it was lost. Say what the hand holds now.
+                return net.minecraft.world.InteractionResult.SUCCESS.heldItemTransformedTo(sp.getItemInHand(hand));
             }
             return net.minecraft.world.InteractionResult.SUCCESS;
         }

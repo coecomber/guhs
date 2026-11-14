@@ -325,4 +325,36 @@ public class VadsrijkKernGameTests {
         }
         helper.succeed();
     }
+
+    /** 1.10.3 bug: right-clicking a piece of jewellery from the hotbar (the full vanilla use path) must give the worn one back. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void sieraadRechtsklikHotbar(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        var RING = nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING;
+        BasisType ring = BasisTypes.van("roze_ring");
+        Sieraden.TEST_OVERAL = true;
+        try {
+            ItemStack a = Rollen.stack(Rollen.rol(ring, 1, Zeldzaamheid.GEWOON, RandomSource.create(13)));
+            ItemStack b = Rollen.stack(Rollen.rol(ring, 1, Zeldzaamheid.ZELDZAAM, RandomSource.create(14)));
+            ItemStack c = Rollen.stack(Rollen.rol(ring, 1, Zeldzaamheid.EPISCH, RandomSource.create(15)));
+            Sieraden.zet(p, RING, a.copy());
+            Sieraden.zet(p, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING2, b.copy());
+            p.getInventory().setSelectedSlot(0);
+            p.getInventory().setItem(0, c.copy());
+            p.gameMode.useItem(p, helper.getLevel(), p.getItemInHand(net.minecraft.world.InteractionHand.MAIN_HAND), net.minecraft.world.InteractionHand.MAIN_HAND);
+            helper.assertTrue(ItemStack.isSameItemSameComponents(Sieraden.get(p, RING), c), "the new ring is worn");
+            int terug = 0;
+            for (int i = 0; i < p.getInventory().getContainerSize(); i++) {
+                if (ItemStack.isSameItemSameComponents(p.getInventory().getItem(i), a)) {
+                    terug++;
+                }
+            }
+            helper.assertTrue(terug == 1, "the old ring came back into the inventory (found " + terug + "), hand: " + p.getMainHandItem());
+        } finally {
+            Sieraden.TEST_OVERAL = false;
+            Sieraden.zet(p, RING, ItemStack.EMPTY);
+            Sieraden.zet(p, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING2, ItemStack.EMPTY);
+        }
+        helper.succeed();
+    }
 }
