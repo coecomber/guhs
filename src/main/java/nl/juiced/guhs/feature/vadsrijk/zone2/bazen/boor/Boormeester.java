@@ -239,6 +239,7 @@ public class Boormeester extends Z2Baas {
         }
         Spelers.data(p).extra("z2bazen").putBoolean("boormeester_ontgrendeld", true);
         if (sl.getGameTime() < terugOp && zoek(sl, false) == null) {
+            terugOp = Math.min(terugOp, sl.getGameTime() + 600);   // 1.10.1: a new player waits 30 s, not 10 min
             return false;
         }
         Boormeester m = zoek(sl, true);
@@ -708,6 +709,13 @@ public class Boormeester extends Z2Baas {
     /** Every 20 ticks: the sleeping machine back at the drill site once the time-out is over. */
     public static void beheer(MinecraftServer server) {
         ServerLevel sl = Vadsrijk.level(server);
+        // 1.10.1: an unlocked player who still needs him (secret quest open) at the drill site: back within 30 s, not after 10 min
+        if (sl != null && sl.getGameTime() % 20 == 0 && sl.getGameTime() + 600 < terugOp && sl.players().stream()
+                .anyMatch(p -> p.position().distanceToSqr(Vec3.atCenterOf(Z2BazenPlekken.BOOR_CENTRUM)) < 40 * 40
+                        && Spelers.data(p).extra("z2bazen").getBooleanOr("boormeester_ontgrendeld", false)
+                        && nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.questActief(p, "z2_geheim_boormeester"))) {
+            terugOp = sl.getGameTime() + 600;
+        }
         if (sl == null || sl.getGameTime() % 20 != 0 || sl.getGameTime() < terugOp || !sl.isLoaded(Z2BazenPlekken.BOOR_CENTRUM)) {
             return;
         }

@@ -170,6 +170,8 @@ public final class Spawners {
 
     /** The numbers of the last tick (dev command / notes). */
     public static int laatstActief, laatstLevend, laatstGespawnd, laatstWeg;
+    /** 1.10.1: cave mobs removed because they stood outside their cave space (since the server start). */
+    public static int verdwaaldWeg;
     public static final Map<String, Integer> LAATST_PER_GEBIED = new LinkedHashMap<>();
 
     private Spawners() {
@@ -276,6 +278,21 @@ public final class Spawners {
                     }
                 }
             }
+            // 1.10.1: every 10 s, mobs of a cave spawner stuck in the rock around it (a pocket above/below the tunnel, or outside
+            // on the hill) go, so the spawner refills inside the cave; not while they fight
+            if (s.grot() && (nu / 20) % 10 == 0) {
+                GrotRuimte.Ruimte ruimte = GrotRuimte.van(sl, s);
+                if (ruimte != null) {
+                    for (VadsrijkMob mob : new ArrayList<>(m)) {
+                        if (mob.getTarget() == null && GrotRuimte.verdwaald(s, ruimte, mob.blockPosition())) {
+                            mob.discard();
+                            m.remove(mob);
+                            weg++;
+                            verdwaaldWeg++;
+                        }
+                    }
+                }
+            }
             wakker.add(s);
             levendPer.put(s.id(), m);
             perGebied.merge(gebiedVan(s), m.size(), Integer::sum);
@@ -354,17 +371,24 @@ public final class Spawners {
 
     public static VadsrijkMob spawn(ServerLevel sl, Spawner s) {
         RandomSource r = sl.getRandom();
+        GrotRuimte.Ruimte ruimte = GrotRuimte.van(sl, s);   // 1.10.1: a cave spawner only in its own connected cave space
+        if (ruimte == null && GrotRuimte.ongeladen) {
+            return null;   // (the cave around it is not loaded yet: later, not blindly into the rock)
+        }
         for (int poging = 0; poging < 12; poging++) {
             double a = r.nextDouble() * Math.PI * 2, d = Math.sqrt(r.nextDouble()) * s.straal();
             int x = s.centrum().getX() + (int) Math.round(Math.cos(a) * d), z = s.centrum().getZ() + (int) Math.round(Math.sin(a) * d);
             if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, new BlockPos(x, 0, z))) {   // U-DUBBEL (was isLoaded)
                 continue;
             }
-            int y = s.grot() ? vloer(sl, x, z, s.minY(), s.maxY()) : grond(sl, x, z);
+            int y = s.grot() ? vloer(sl, x, z, s.minY(), s.maxY(), ruimte) : grond(sl, x, z);
             if (y == Integer.MIN_VALUE || y <= sl.getMinY() + 1 || !sl.getFluidState(new BlockPos(x, y - 1, z)).isEmpty()) {
                 continue;
             }
             BlockPos plek = new BlockPos(x, y, z);
+            if (s.grot() && !GrotRuimte.magStaan(sl, s, ruimte, plek)) {
+                continue;
+            }
             if (!magHier(sl, plek) || VERBODEN_VOOR.stream().anyMatch(t -> t.test(s, plek))) {   // U-DECO: + VERBODEN_VOOR
                 continue;
             }
@@ -458,6 +482,11 @@ public final class Spawners {
 
     /** The first standing spot searching down from maxY to minY (solid floor, 2 free blocks, no fluid), or MIN_VALUE. */
     static int vloer(ServerLevel sl, int x, int z, int minY, int maxY) {
+        return vloer(sl, x, z, minY, maxY, null);
+    }
+
+    /** 1.10.1: {@link #vloer}, but only stand spots inside the cave space (null = any): the first of THE CAVE, not of a pocket above. */
+    static int vloer(ServerLevel sl, int x, int z, int minY, int maxY, @Nullable GrotRuimte.Ruimte ruimte) {
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
         int boven = Math.min(maxY, sl.getMaxY() - 2), onder = Math.max(minY, sl.getMinY() + 1);
         for (int y = boven; y >= onder; y--) {
@@ -469,7 +498,7 @@ public final class Spawners {
             boolean vrij1 = sl.getBlockState(m).getCollisionShape(sl, m).isEmpty() && sl.getFluidState(m).isEmpty();
             m.set(x, y + 1, z);
             boolean vrij2 = sl.getBlockState(m).getCollisionShape(sl, m).isEmpty();
-            if (vrij1 && vrij2) {
+            if (vrij1 && vrij2 && (ruimte == null || ruimte.cellen().contains(BlockPos.asLong(x, y, z)))) {
                 return y;
             }
         }

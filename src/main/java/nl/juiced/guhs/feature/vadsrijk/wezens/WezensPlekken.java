@@ -106,17 +106,30 @@ public final class WezensPlekken {
         }
     }
 
+    /** The flat floor of a knot (stand y; bouwsels.py {@code voet = cy - int(r * 0.7) + 1}). */
+    public static int knoopVoet(int[] k) {
+        return k[1] - (int) (k[3] * 0.7) + 1;
+    }
+
+    /**
+     * The tunnels exactly as bouwsels.grotten carves them (1.10.1): a knot end is (x, voet + 2, z), NOT the knot's centre y (that
+     * put the knot-to-knot tunnels 4 blocks too high, so their cave spawners searched the rock above the tunnel); a mouth tunnel
+     * starts 7 blocks outside the mouth, 2 above the terrain (was the mouth itself, 3 too low). The centre line is 2 above the
+     * tunnel floor (the floor is carved from centre - 2 up to about centre + 2.5).
+     */
     public static List<Gang> gangen() {
         List<Gang> uit = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            BlockPos in = WereldPlekken.plek("grot_ingangen." + (i + 1));   // stand y = terrain + 1; the tunnel starts at terrain - 1
+            BlockPos in = WereldPlekken.plek("grot_ingangen." + (i + 1));   // stand y = terrain + 1
             int[] k = KNOPEN[i];
-            uit.add(new Gang(in.getX(), in.getY() - 2, in.getZ(), k[0], k[1], k[2]));
+            double L0 = Math.max(1, Math.hypot(in.getX() - k[0], in.getZ() - k[2]));
+            double bx = in.getX() + (in.getX() - k[0]) / L0 * 7, bz = in.getZ() + (in.getZ() - k[2]) / L0 * 7;
+            uit.add(new Gang(bx, in.getY() + 1, bz, k[0], knoopVoet(k) + 2, k[2]));
         }
         int[][] paren = {{0, 1}, {1, 2}, {1, 3}, {0, 2}};
         for (int[] pr : paren) {
             int[] a = KNOPEN[pr[0]], b = KNOPEN[pr[1]];
-            uit.add(new Gang(a[0], a[1], a[2], b[0], b[1], b[2]));
+            uit.add(new Gang(a[0], knoopVoet(a) + 2, a[2], b[0], knoopVoet(b) + 2, b[2]));
         }
         return uit;
     }

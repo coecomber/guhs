@@ -116,9 +116,9 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
                 pos = npcPos(p, d.doel());
             }
             case ESCORTE -> {
-                RijkGuh g = p.level() instanceof ServerLevel sl ? Npcs.levend(sl, d.doel()) : null;
+                RijkGuh g = Escortes.kopieVan(p, d.doel());   // 1.10.1: your (party's) escort copy walks with you
                 String poi = d.bron().startsWith("poi:") ? d.bron().substring(4) : d.bron();
-                if (g != null && p.getUUID().equals(g.volgt())) {
+                if (g != null) {
                     waar = poiPlek(poi);
                     pos = NpcPlekken.poi(poi);
                 } else {

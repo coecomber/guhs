@@ -35349,6 +35349,8 @@
   "vadsrijk.npc.quest_klaar": "Quest done: %s! Go back to %s.",
   "vadsrijk.npc.quest_af": "Quest complete: %s. Wahoog!",
   "vadsrijk.npc.escorte.volgt": "%s is walking with you!",
+  "vadsrijk.npc.escorte.terug": "%s went back to their usual spot. Talk to them again to start the escort over.",
+  "vadsrijk.npc.escorte.ander": "%s is already walking with someone else. Pick up your own escort at their usual spot!",
   "vadsrijk.npc.optie.hoofd": "Wahoog, I'll do it!",
   "vadsrijk.npc.optie.ja": "I'll help you!",
   "vadsrijk.npc.optie.later": "Not right now",

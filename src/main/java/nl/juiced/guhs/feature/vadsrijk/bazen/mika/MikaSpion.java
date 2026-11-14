@@ -280,6 +280,11 @@ public class MikaSpion extends BazenBaas {
     /** Every 20 ticks: put Akim back at his stall when he's gone and his time-out is over. */
     public static void beheer(MinecraftServer server) {
         ServerLevel sl = Vadsrijk.level(server);
+        // 1.10.1: someone who may unmask him now (the spy quest ready) stands at the stall: back within 30 s, not after 10 min
+        if (sl != null && sl.getGameTime() % 20 == 0 && sl.getGameTime() + 600 < terugOp && sl.players().stream()
+                .anyMatch(p -> p.position().distanceToSqr(Vec3.atCenterOf(BazenPlekken.MIKA_KRAAM)) < 32 * 32 && MAG_ONTMASKEREN.test(p))) {
+            terugOp = sl.getGameTime() + 600;
+        }
         if (sl == null || sl.getGameTime() % 20 != 0 || sl.getGameTime() < terugOp || !sl.isLoaded(BazenPlekken.MIKA_KRAAM)) {
             return;
         }

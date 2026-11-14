@@ -76,7 +76,9 @@ public final class Z3BazenApi {
     }
 
     private static boolean startVahoegnir(boolean herinnering, ServerLevel sl) {
-        if (Arenas.baas(sl, Z3BazenRegistry.ARENA_NEST) != null) {
+        // 1.10.1: also while a beaten one still plays its ending (it is "geplofd", so Arenas.baas misses it): a second one would
+        // spawn and the old one's clean-up would take the new fight's shield branches away; the caller retries a bit later
+        if (Arenas.baas(sl, Z3BazenRegistry.ARENA_NEST) != null || !alleVahoegnirs(sl).isEmpty()) {
             return false;
         }
         aanvraag = new Aanvraag(herinnering);

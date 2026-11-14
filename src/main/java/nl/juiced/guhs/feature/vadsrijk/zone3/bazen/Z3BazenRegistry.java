@@ -233,6 +233,7 @@ public final class Z3BazenRegistry {
         Z3Vast.tick(e.getServer());
         Z3Scenes.tick(e.getServer());
         Z3Kerkers.tick(e.getServer());
+        VahoegModus.kijk(e.getServer());   // 1.10.1
     }
 
     // ---- dev commands -------------------------------------------------------------------------------------------------------

@@ -481,8 +481,14 @@ public final class QuestRobot {
                 QuestMotor.klik(p, g);
                 Praat.vergeet(p);
                 QuestMotor.vergeet(p);
-                if (!p.getUUID().equals(g.volgt())) {
-                    vast(u, u.stap, d.doel() + " gaat niet volgen na een klik");
+                // 1.10.1: the NPC stays at its post, a personal copy follows (Escortes)
+                RijkGuh kopie = nl.juiced.guhs.feature.vadsrijk.npc.Escortes.kopieVan(p, d.doel());
+                if (kopie == null || !p.getUUID().equals(kopie.volgt())) {
+                    vast(u, u.stap, d.doel() + " gaat niet volgen na een klik (geen escorte-kopie)");
+                    return;
+                }
+                if (g.volgt() != null) {
+                    vast(u, u.stap, d.doel() + " zelf volgt iemand: de NPC moet op zijn plek blijven");
                     return;
                 }
                 String poi = d.bron().startsWith("poi:") ? d.bron().substring(4) : d.bron();
@@ -492,9 +498,20 @@ public final class QuestRobot {
                     return;
                 }
                 doel(q, "escorte", poi, naar);
-                g.volg(null);
-                Questlog.tel(p, Quest.Doel.Type.ESCORTE, x -> x == d, 1);
-                u.notities.add("escorte " + d.doel() + " -> " + poi + ": aankomst gesimuleerd (lopen niet gespeeld)");
+                // the real arrival code (Escortes.kijk): the walk itself is not played, so the destination is where the copy is now
+                // (moving it into a far, unloaded chunk would take it out of the level's entity lookup)
+                var esc = nl.juiced.guhs.feature.vadsrijk.npc.Escortes.vanKopie(kopie);
+                if (esc == null) {
+                    vast(u, u.stap, d.doel() + ": de kopie hoort bij geen escorte");
+                    return;
+                }
+                esc.naar = kopie.blockPosition();
+                nl.juiced.guhs.feature.vadsrijk.npc.Escortes.kijk(p.level().getServer());
+                if (Questlog.actief(p, q.id()) && !Questlog.doelKlaar(p, q, i)) {
+                    vast(u, u.stap, "escorte " + d.doel() + " -> " + poi + ": aankomst telde niet");
+                    return;
+                }
+                u.notities.add("escorte " + d.doel() + " -> " + poi + ": aankomst via Escortes.kijk (lopen niet gespeeld)");
             }
             case LEVEL -> {
                 if (d.n() > CAP) {

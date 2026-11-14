@@ -143,6 +143,8 @@ public final class Zwamtempel {
     // room 1
     private static int[] volgorde = {0, 1, 2, 3, 4};
     private static int stap, toonT = -1;
+    /** 1.10.1: who was in room 1 when the order was shown. */
+    private static final java.util.Set<UUID> k1Gezien = new java.util.HashSet<>();
     private static long k1Klaar = -1;
     // room 2
     private static boolean[] patroon = {true, false, true, true};
@@ -160,6 +162,18 @@ public final class Zwamtempel {
     static boolean binnen(Player p, BlockPos a, BlockPos b) {
         return p.getX() >= Math.min(a.getX(), b.getX()) && p.getX() <= Math.max(a.getX(), b.getX()) + 1 && p.getZ() >= Math.min(a.getZ(), b.getZ())
                 && p.getZ() <= Math.max(a.getZ(), b.getZ()) + 1 && p.getY() >= Math.min(a.getY(), b.getY()) - 1 && p.getY() <= Math.max(a.getY(), b.getY()) + 2;
+    }
+
+    /** 1.10.1: nobody in the Opperzwam hall (the gate resets must not lock players in there, e.g. waiting for the boss). */
+    static boolean halLeeg(ServerLevel sl) {
+        BlockPos c = BazenPlekken.OZ_CENTRUM;
+        for (ServerPlayer p : sl.players()) {
+            double dx = p.getX() - (c.getX() + 0.5), dz = p.getZ() - (c.getZ() + 0.5);
+            if (!p.isSpectator() && dx * dx + dz * dz < (BazenPlekken.OZ_STRAAL + 6.0) * (BazenPlekken.OZ_STRAAL + 6.0) && Math.abs(p.getY() - c.getY()) < 20) {
+                return false;
+            }
+        }
+        return true;
     }
 
     static List<ServerPlayer> in(ServerLevel sl, BlockPos a, BlockPos b) {
@@ -344,7 +358,8 @@ public final class Zwamtempel {
             l.forEach(Zwamtempel::meldDeurOpen);   // (inside = through the door, however you got in)
         }
         if (k1Klaar > 0) {
-            if (nu - k1Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K2_MIN, BazenPlekken.K2_MAX).isEmpty()) {
+            if (nu - k1Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K2_MIN, BazenPlekken.K2_MAX).isEmpty()
+                    && in(sl, BazenPlekken.K3_MIN, BazenPlekken.K3_MAX).isEmpty() && halLeeg(sl)) {
                 k1Reset(sl);
             }
             return;
@@ -358,7 +373,11 @@ public final class Zwamtempel {
             }
             if (toonT == -1) {
                 toonT = 0;
+                k1Gezien.clear();
+                l.forEach(p -> k1Gezien.add(p.getUUID()));
                 zeg(l, "vadsrijk.bazen.tempel.kamer1", ChatFormatting.LIGHT_PURPLE);
+            } else if (toonT == -2 && stap == 0 && l.stream().anyMatch(p -> !k1Gezien.contains(p.getUUID()))) {
+                toonT = -1;   // 1.10.1: someone came in after the show (and nobody is half-way): show the order again
             }
             return;
         }
@@ -442,7 +461,7 @@ public final class Zwamtempel {
     private static void kamer2(ServerLevel sl, long nu) {
         List<ServerPlayer> l = in(sl, BazenPlekken.K2_MIN, BazenPlekken.K2_MAX);
         if (k2Klaar > 0) {
-            if (nu - k2Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K3_MIN, BazenPlekken.K3_MAX).isEmpty() && golf == 0) {
+            if (nu - k2Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K3_MIN, BazenPlekken.K3_MAX).isEmpty() && golf == 0 && halLeeg(sl)) {
                 k2Reset(sl);
             }
             return;
@@ -483,7 +502,7 @@ public final class Zwamtempel {
     private static void kamer3(ServerLevel sl, long nu) {
         List<ServerPlayer> l = in(sl, BazenPlekken.K3_MIN, BazenPlekken.K3_MAX);
         if (k3Klaar > 0) {
-            if (nu - k3Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K2_MIN, BazenPlekken.K2_MAX).isEmpty()) {
+            if (nu - k3Klaar > RESET_TICKS && l.isEmpty() && in(sl, BazenPlekken.K2_MIN, BazenPlekken.K2_MAX).isEmpty() && halLeeg(sl)) {
                 k3Klaar = -1;
                 poortDicht(sl, BazenPlekken.K3_POORT_MIN, BazenPlekken.K3_POORT_MAX);
             }
@@ -492,7 +511,7 @@ public final class Zwamtempel {
         if (golf == 0) {
             boolean diep = l.stream().anyMatch(p -> p.getZ() < BazenPlekken.K3_MAX.getZ() - 4);
             if (diep) {
-                poortDicht(sl, BazenPlekken.K2_POORT_MIN, BazenPlekken.K2_POORT_MAX);
+                // 1.10.1: the room-2 gate no longer shuts behind the group: a player who comes later just joins the waves
                 golf(sl, 1, l);
             }
             return;

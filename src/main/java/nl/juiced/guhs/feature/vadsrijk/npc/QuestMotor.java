@@ -97,17 +97,28 @@ public final class QuestMotor {
                 return;
             }
         }
-        if (p.getUUID().equals(npc.volgt())) {
-            p.sendOverlayMessage(Component.translatable("vadsrijk.npc.escorte.volgt", npc.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
-            return;
+        // 1.10.1: an escort copy (Escortes): while it walks only its leader/party may use it; once arrived it is a normal NPC
+        if (npc.isKopie()) {
+            Escortes.Escorte e = Escortes.vanKopie(npc);
+            if (e == null || !e.aangekomen()) {
+                boolean mijn = e != null && Escortes.hoort(p, e);
+                p.sendOverlayMessage(Component.translatable(mijn ? "vadsrijk.npc.escorte.volgt" : "vadsrijk.npc.escorte.ander", npc.getDisplayName())
+                        .withStyle(ChatFormatting.LIGHT_PURPLE));
+                return;
+            }
         }
         List<Praat.Regel> regels = new ArrayList<>();
-        // 1. an escort: this NPC starts following you
+        // 1. an escort: a copy of this NPC starts following you (the NPC itself stays at its post: 1.10.1)
         for (Quest q : Questlog.actieve(p)) {
             for (int i = 0; i < q.doelen().size(); i++) {
                 Quest.Doel d = q.doelen().get(i);
                 if (d.type() == Quest.Doel.Type.ESCORTE && d.doel().equals(id) && !Questlog.doelKlaar(p, q, i)) {
-                    npc.volg(p);
+                    boolean al = Escortes.van(p, q.id(), i) != null;
+                    RijkGuh kopie = Escortes.start(p, npc, q, i);
+                    if (kopie == null || al) {
+                        p.sendOverlayMessage(Component.translatable("vadsrijk.npc.escorte.volgt", npc.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
+                        return;
+                    }
                     if (q.praat().containsKey(id)) {
                         regels.addAll(regels(p, npc, q.praat().get(id), q.sleutel() + ".praat." + id + "."));
                     } else {   // U-QUESTROBOT: no own lines for this escort (z10_rammel, z3_s02, z5_s07): the generic one, not a missing key
@@ -606,9 +617,10 @@ public final class QuestMotor {
     }
 
     static void startEscorte(ServerPlayer p, Quest q, @Nullable Entity spreker) {
-        for (Quest.Doel d : q.doelen()) {
+        for (int i = 0; i < q.doelen().size(); i++) {
+            Quest.Doel d = q.doelen().get(i);
             if (d.type() == Quest.Doel.Type.ESCORTE && spreker instanceof RijkGuh g && g.npcId().equals(d.doel())) {
-                g.volg(p);
+                Escortes.start(p, g, q, i);   // 1.10.1: a personal copy follows, the NPC stays
             }
         }
     }

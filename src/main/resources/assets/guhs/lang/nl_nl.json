@@ -35349,6 +35349,8 @@
   "vadsrijk.npc.quest_klaar": "Quest klaar: %s! Ga terug naar %s.",
   "vadsrijk.npc.quest_af": "Quest voltooid: %s. Vahoeg!",
   "vadsrijk.npc.escorte.volgt": "%s loopt met je mee!",
+  "vadsrijk.npc.escorte.terug": "%s is teruggegaan naar de vaste plek. Praat opnieuw met hem of haar om de begeleiding opnieuw te beginnen.",
+  "vadsrijk.npc.escorte.ander": "%s loopt al met iemand anders mee. Haal je eigen begeleiding op bij de vaste plek!",
   "vadsrijk.npc.optie.hoofd": "Vahoeg, ik doe het!",
   "vadsrijk.npc.optie.ja": "Ik help je!",
   "vadsrijk.npc.optie.later": "Nu even niet",

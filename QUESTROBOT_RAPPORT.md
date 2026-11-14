@@ -15,18 +15,18 @@ Automatisch gemaakt door `tools/vadsrijk/questrobot/rapport.py` uit de speelrond
 
 Zonevlaggen en luchtschip-poorten (gecontroleerd zodra het hoofdverhaal van een zone klaar was):
 
-- NPC-teksten: 328 NPC's, 0 ontbrekende naam/praat-teksten
+- NPC-teksten: 330 NPC's, 0 ontbrekende naam/praat-teksten
 - zone 1 hoofdverhaal klaar: vlag zone1_klaar = true
 -   luchtschip naar kandijkom (lv 20): open
 - zone 2 hoofdverhaal klaar: vlag zone2_klaar = true
--   luchtschip naar schemerwortel (lv 42): open
+-   luchtschip naar schemerwortel (lv 30): open
 - zone 3 hoofdverhaal klaar: vlag zone3_klaar = true
--   luchtschip naar lampionkust (lv 52): open
+-   luchtschip naar lampionkust (lv 50): open
 - zone 4 hoofdverhaal klaar: vlag zone4_klaar = true
--   luchtschip naar hoogvads (lv 59): open
+-   luchtschip naar hoogvads (lv 57): open
 - zone 5 hoofdverhaal klaar: vlag zone5_klaar = true
 -   vlag z6_lijn_e_open (lijn E naar het Zijdeland) = true
--   luchtschip naar zijdeland (lv 66): open
+-   luchtschip naar zijdeland (lv 62): open
 - zone 6 hoofdverhaal klaar: vlag zone6_klaar = true
 
 Legenda: **gehaald** = van aannemen tot inleveren door de echte quest-motor gespeeld; **vast** = de robot liep vast (en duwde de quest daarna met de hand door, zodat alles erachter ook getest werd); **niet gestart** = kwam nooit vrij.
@@ -67,41 +67,44 @@ Wat de robot NIET echt speelt (en via de haak van het spel meldt): gevechten (VE
 
 ### Zone 6: Zijdeland
 
+- **z6_hq06_tapijt** (hoofd): **gehaald**
+  - staanplek [waarschuwing] plek `poi:z6_moerbeibomen` @ 3433,67,-957: staanplek (3430, 67, -956) is ingesloten (1 loopbare cellen in de buurt)
 - **z6_s08_examen** (zij): **gehaald**
   - staanplek [waarschuwing] plek `poi:z6_examen_3` @ 3795,99,-890: staanplek (3794, 99, -891) is ingesloten (23 loopbare cellen in de buurt)
 - **z6_s10_koerier** (zij): **gehaald**
-  - staanplek [waarschuwing] plek `poi:z6_waterval_3` @ 3520,60,-955: staanplek (3519, 60, -957) is ingesloten (1 loopbare cellen in de buurt)
-  - staanplek [waarschuwing] poi `z6_waterval_3` @ 3520,60,-955: staanplek (3519, 60, -957) is ingesloten (1 loopbare cellen in de buurt)
+  - staanplek [waarschuwing] plek `poi:z6_waterval_3` @ 3520,64,-955: staanplek (3519, 64, -957) is ingesloten (1 loopbare cellen in de buurt)
+  - staanplek [waarschuwing] poi `z6_waterval_3` @ 3520,64,-955: staanplek (3519, 64, -957) is ingesloten (1 loopbare cellen in de buurt)
 
-(23 van de 25 quests zonder enige opmerking zijn hierboven weggelaten.)
+(22 van de 25 quests zonder enige opmerking zijn hierboven weggelaten.)
 
 ## Robot-notities (wat gesimuleerd is)
 
 - `hq03_poppen`: oefenpoppen: geteld zonder echte poppen (geen wereld hier)
 - `hq03b_elementen`: meld quiz:elementen via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `hq05_klodderreus`: auto-hoofdquest startte niet vanzelf na de vorige quest; via de gever aangenomen; baas guhs:vr_klodderreus: 'verslagen'-haak afgevuurd (gevecht niet gespeeld)
-- `hq09_druipgrotten`: level 7 -> 12 (levelpoort); escorte mijnwerker_mopje -> grotkamp: aankomst gesimuleerd (lopen niet gespeeld)
-- `hq11_opperzwam`: level 13 -> 18 (levelpoort); meld zwamtempel:deur via NpcApi.meld (minigame/moment zelf niet gespeeld); baas gebied:zwamtempel: 'verslagen'-haak afgevuurd (gevecht niet gespeeld)
-- `z01_wolletjes`: guhs:vr_npc_wolletje: 6 gevallen na 15 keer opvrolijken in gebied:klodderweide
-- `z02_zwamtaart`: guhs:vr_npc_zwamhoedje: 5 gevallen na 16 keer opvrolijken in gebied:sporenwoud
-- `z08_pluis`: guhs:vr_npc_grauwe_pluis: 8 gevallen na 30 keer opvrolijken in *
+- `hq09_druipgrotten`: level 10 -> 12 (levelpoort); escorte mijnwerker_mopje -> grotkamp: aankomst via Escortes.kijk (lopen niet gespeeld)
+- `hq11_opperzwam`: meld zwamtempel:deur via NpcApi.meld (minigame/moment zelf niet gespeeld); baas gebied:zwamtempel: 'verslagen'-haak afgevuurd (gevecht niet gespeeld)
+- `z01_wolletjes`: guhs:vr_npc_wolletje: 6 gevallen na 10 keer opvrolijken in gebied:klodderweide
+- `z02_zwamtaart`: guhs:vr_npc_zwamhoedje: 5 gevallen na 9 keer opvrolijken in gebied:sporenwoud
+- `z08_pluis`: guhs:vr_npc_grauwe_pluis: 8 gevallen na 13 keer opvrolijken in *
 - `z09_kristal`: guhs:vr_npc_druppelkristal: 3 gevallen na 5 keer opvrolijken in gebied:druipgrotten
-- `z10_rammel`: escorte ridder_rammel -> kampvuur_weide_1: aankomst gesimuleerd (lopen niet gespeeld)
-- `z11_slijmgel`: guhs:vr_npc_slijmdruppel: 6 gevallen na 9 keer opvrolijken in gebied:klodderweide
-- `z14_kistjes`: guhs:vr_npc_kistje: 4 gevallen na 20 keer opvrolijken in gebied:druipgrotten
+- `z10_rammel`: escorte ridder_rammel -> kampvuur_weide_1: aankomst via Escortes.kijk (lopen niet gespeeld)
+- `z11_slijmgel`: guhs:vr_npc_slijmdruppel: 6 gevallen na 14 keer opvrolijken in gebied:klodderweide
+- `z14_kistjes`: guhs:vr_npc_kistje: 4 gevallen na 13 keer opvrolijken in gebied:druipgrotten
 - `z17_koning`: baas gebied:klodderweide: 'verslagen'-haak afgevuurd (gevecht niet gespeeld)
-- `rijdier_hoedhupper`: guhs:vr_npc_wortelzwam: 5 gevallen na 22 keer opvrolijken in gebied:sporenwoud
+- `rijdier_hoedhupper`: guhs:vr_npc_wortelzwam: 5 gevallen na 7 keer opvrolijken in gebied:sporenwoud
 - `rijdier_knuffelhert`: meld hert:open_plek via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `spec17_pluisjager`: level 1 -> 16 (levelpoort)
 - `spec17_vadsmagier`: level 1 -> 16 (levelpoort)
 - `geheim_spion`: meld spion:ontmaskerd via NpcApi.meld (minigame/moment zelf niet gespeeld); meld spion:gevangen via NpcApi.meld (minigame/moment zelf niet gespeeld)
-- `z2_hq04_naalden`: guhs:vr_z2_npc_galmscherf: 6 gevallen na 17 keer opvrolijken in gebied:z2_galmhellingen
+- `z2_hq04_naalden`: guhs:vr_z2_npc_galmscherf: 6 gevallen na 9 keer opvrolijken in gebied:z2_galmhellingen
 - `z2_hq05_galmwolf`: baas gebied:z2_galmhellingen: 'verslagen'-haak afgevuurd (gevecht niet gespeeld)
+- `z2_hq08_splinterkloof`: guhs:vr_z2_npc_boorbeitel: 3 gevallen na 3 keer opvrolijken in gebied:z2_splinterkloof
 - `z2_hq09_draak`: meld z2:draak_geholpen via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `z2_hq11_spiegelzucht`: baas gebied:z2_spiegelburcht: 'verslagen'-haak afgevuurd (gevecht niet gespeeld)
-- `z2_hq12_hartsplinter`: auto-hoofdquest startte niet vanzelf na de vorige quest; via de gever aangenomen
+- `z2_hq12_hartsplinter`: level 29 -> 30 (levelpoort); auto-hoofdquest startte niet vanzelf na de vorige quest; via de gever aangenomen
 - `z2_s03_knuffels`: teller z2_knuffels gevuld door de robot (10x verzamelen niet gespeeld)
-- `z2_s13_ijsbloemen`: guhs:vr_z2_npc_ijsbloem: 5 gevallen na 20 keer opvrolijken in gebied:z2_knuffelmeer
+- `z2_s13_ijsbloemen`: guhs:vr_z2_npc_ijsbloem: 5 gevallen na 10 keer opvrolijken in gebied:z2_knuffelmeer
 - `z2_geheim_boormeester`: auto-quest: door de robot gestart (de echte start is een wereldmoment); teller z2_aanwijzingen gevuld door de robot (5x verzamelen niet gespeeld); meld z2_boormeester:verslagen via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `z3_hq01_boom`: meld z3:aangekomen via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `z3_hq03_pluimstal`: meld rijdier:starter via NpcApi.meld (minigame/moment zelf niet gespeeld); meld z3:opgestegen via NpcApi.meld (minigame/moment zelf niet gespeeld); meld z3:gezweefd via NpcApi.meld (minigame/moment zelf niet gespeeld)
@@ -112,8 +115,8 @@ Wat de robot NIET echt speelt (en via de haak van het spel meldt): gevechten (VE
 - `z3_hq13_hart`: meld z3_wortelwurger:verslagen via NpcApi.meld (minigame/moment zelf niet gespeeld); meld z3_nestwachter:opgevrolijkt via NpcApi.meld (minigame/moment zelf niet gespeeld); meld z3_bleu:verslagen via NpcApi.meld (minigame/moment zelf niet gespeeld); meld z3:ei: echt geteld via poi:z3_nestkamer
 - `z3_hq14_vahoegnir`: meld z3_vahoegnir:opgevrolijkt via NpcApi.meld (minigame/moment zelf niet gespeeld); meld z3:finale: echt geteld via poi:z3_kruintop
 - `z3_s01_kuikens`: teller z3_kuikens gevuld door de robot (6x verzamelen niet gespeeld)
-- `z3_s02_opa_bast`: escorte z3_opa_bast -> z3_kruintop: aankomst gesimuleerd (lopen niet gespeeld)
-- `z3_s03_thee`: guhs:vr_z3_npc_moerasbloem: 3 gevallen na 11 keer opvrolijken in gebied:z3_wortelvelden
+- `z3_s02_opa_bast`: escorte z3_opa_bast -> z3_kruintop: aankomst via Escortes.kijk (lopen niet gespeeld)
+- `z3_s03_thee`: guhs:vr_z3_npc_moerasbloem: 3 gevallen na 8 keer opvrolijken in gebied:z3_wortelvelden
 - `z3_s04_lichtjes`: teller z3_lichtjes gevuld door de robot (4x verzamelen niet gespeeld)
 - `z3_adv35_pluisjager`: level 17 -> 33 (levelpoort)
 - `z3_adv35_vadsmagier`: level 17 -> 33 (levelpoort)
@@ -132,7 +135,7 @@ Wat de robot NIET echt speelt (en via de haak van het spel meldt): gevechten (VE
 - `z4_s08_vuurtoren`: meld z4:lens via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `z4_s09_bijen`: teller z4_bijtjes gevuld door de robot (5x verzamelen niet gespeeld)
 - `z4_s10_kransen`: teller z4_bloemen gevuld door de robot (6x verzamelen niet gespeeld)
-- `z4_s11_schildpad`: guhs:vr_z4_npc_zeewier: 5 gevallen na 11 keer opvrolijken in gebied:z4_lampionhaven|z4_knuffeltij|z4_strandfeest|z4_bloemeneiland|z4_koraalbaai|z4_vliegereiland|z4_vuurtoreneiland|z4_pierkop|z4_mysterie|z4_wrak|z4_schildpad|z4_zee
+- `z4_s11_schildpad`: guhs:vr_z4_npc_zeewier: 5 gevallen na 19 keer opvrolijken in gebied:z4_lampionhaven|z4_knuffeltij|z4_strandfeest|z4_bloemeneiland|z4_koraalbaai|z4_vliegereiland|z4_vuurtoreneiland|z4_pierkop|z4_mysterie|z4_wrak|z4_schildpad|z4_zee
 - `z4_s12_mistbrieven`: teller z4_mistbrieven gevuld door de robot (3x verzamelen niet gespeeld)
 - `z4_s14_lampionnen`: teller z4_lampionhaken gevuld door de robot (5x verzamelen niet gespeeld)
 - `z4_s15_strandavond`: meld z4:dans via NpcApi.meld (minigame/moment zelf niet gespeeld)
@@ -147,7 +150,7 @@ Wat de robot NIET echt speelt (en via de haak van het spel meldt): gevechten (VE
 - `z5_adv58_vadsmagier`: level 35 -> 56 (levelpoort)
 - `z5_s01_bessen`: teller z5_bessen gevuld door de robot (8x verzamelen niet gespeeld)
 - `z5_s04_oog`: meld z5:oog_gemeten via NpcApi.meld (minigame/moment zelf niet gespeeld)
-- `z5_s07_kadet`: escorte z5_kadet_dons -> z5_academie: aankomst gesimuleerd (lopen niet gespeeld)
+- `z5_s07_kadet`: escorte z5_kadet_dons -> z5_academie: aankomst via Escortes.kijk (lopen niet gespeeld)
 - `z5_s10_wol`: teller z5_bollen gevuld door de robot (3x verzamelen niet gespeeld)
 - `z6_hq01_land`: meld z6:aangekomen via NpcApi.meld (minigame/moment zelf niet gespeeld)
 - `z6_hq02_karavaan`: meld z6:bultguh: echt geteld via npc:z6_hobbel

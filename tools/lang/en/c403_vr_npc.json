@@ -26,6 +26,8 @@
   "vadsrijk.npc.adv.vadsmagier.4": "Dusk Sage",
   "vadsrijk.npc.bam.aanval": "Something is falling from the sky into the camp pond! The Gray Blob Giant!",
   "vadsrijk.npc.escorte.volgt": "%s is walking with you!",
+  "vadsrijk.npc.escorte.terug": "%s went back to their usual spot. Talk to them again to start the escort over.",
+  "vadsrijk.npc.escorte.ander": "%s is already walking with someone else. Pick up your own escort at their usual spot!",
   "vadsrijk.npc.gids.begin.tekst": "The Chonkdom is a world of its own, full of adventure. Your normal stuff stays safe at home; here you have your adventurer's inventory. Follow the golden ! and the story quests: they lead you through Camp Snuggle to Shroomsbury and beyond. Press J for your quest log. Stuck? Press U.",
   "vadsrijk.npc.gids.begin.titel": "Welcome to the Chonkdom",
   "vadsrijk.npc.gids.driehoek": "beats",

@@ -48,6 +48,8 @@ public class RijkGuh extends GuhEntity {
     long rustTot;
     @Nullable
     BlockPos rustPlek;
+    /** 1.10.1: a personal escort copy of the NPC ({@link Escortes}), not the NPC at its post. */
+    boolean kopie;
     private int zwaaiPauze;
     /** U-LEVEN-RITME: true = this guh is asleep (night schedule): no waving, idle emotes or strolling. */
     public static java.util.function.Predicate<RijkGuh> STIL = g -> false;
@@ -101,6 +103,11 @@ public class RijkGuh extends GuhEntity {
     @Nullable
     public UUID volgt() {
         return volgt;
+    }
+
+    /** 1.10.1: is this a personal escort copy ({@link Escortes}) instead of the NPC at its post? */
+    public boolean isKopie() {
+        return kopie;
     }
 
     @Override

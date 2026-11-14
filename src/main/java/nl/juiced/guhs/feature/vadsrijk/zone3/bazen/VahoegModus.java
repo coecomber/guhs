@@ -44,6 +44,8 @@ public final class VahoegModus {
     @Nullable
     public static Zegel testZegel;
     private static final Map<String, Long> ACTIEF = new HashMap<>();
+    /** 1.10.1: per dungeon the seal holder + his party at the start: only for them the bosses wear the Vahoeg form. */
+    private static final Map<String, java.util.Set<java.util.UUID>> GROEP = new HashMap<>();
 
     private VahoegModus() {
     }
@@ -70,6 +72,12 @@ public final class VahoegModus {
     /** Starts the mode (the altar). Bosses that stand untouched switch at once; the others when they respawn. */
     public static void start(ServerLevel sl, String kerker, @Nullable ServerPlayer wie, Vec3 altaar) {
         ACTIEF.put(kerker, sl.getGameTime() + DUUR);
+        java.util.Set<java.util.UUID> groep = new java.util.HashSet<>();
+        if (wie != null) {
+            groep.add(wie.getUUID());
+            nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen.leden(wie).forEach(q -> groep.add(q.getUUID()));
+        }
+        GROEP.put(kerker, groep);
         for (String id : arenas(kerker)) {
             VadsrijkBaas b = Arenas.baas(sl, id);
             if (b instanceof Z3Baas z && !z.vahoeg() && z.vads() >= z.maxVads() - 0.5 && z.strijders().isEmpty()) {
@@ -87,9 +95,49 @@ public final class VahoegModus {
         }
     }
 
+    /**
+     * 1.10.1: the mode was global: one level-50 seal made every boss of the dungeon lv 52 for everyone for 30 minutes, also for
+     * story players (z3_hq08 / z3_hq13, lv 38-50). Now, every second, an untouched boss (full Vads, nobody fighting) wears the
+     * Vahoeg form only while someone of the seal holder's group stands in its arena; with only others inside it is normal.
+     * A fight in progress never changes.
+     */
+    public static void kijk(net.minecraft.server.MinecraftServer server) {
+        ServerLevel sl = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(server);
+        if (sl == null || sl.getGameTime() % 20 != 3 || ACTIEF.isEmpty()) {
+            return;
+        }
+        for (String kerker : new java.util.ArrayList<>(ACTIEF.keySet())) {
+            if (!actief(sl, kerker)) {
+                continue;
+            }
+            java.util.Set<java.util.UUID> groep = GROEP.getOrDefault(kerker, java.util.Set.of());
+            for (String id : arenas(kerker)) {
+                VadsrijkBaas b = Arenas.baas(sl, id);
+                if (!(b instanceof Z3Baas z) || z.vads() < z.maxVads() - 0.5 || !z.strijders().isEmpty()) {
+                    continue;
+                }
+                var a = Arenas.van(id);
+                if (a == null) {
+                    continue;
+                }
+                var binnen = Arenas.spelersBinnen(sl, a);
+                if (binnen.isEmpty()) {
+                    continue;
+                }
+                z.zetVahoeg(binnen.stream().anyMatch(p -> groep.contains(p.getUUID())));
+            }
+        }
+    }
+
+    /** 1.10.1 tests: is this player in the Vahoeg group of this dungeon? */
+    public static boolean inGroep(String kerker, ServerPlayer p) {
+        return GROEP.getOrDefault(kerker, java.util.Set.of()).contains(p.getUUID());
+    }
+
     /** The last boss of a Vahoeg run fell: the mode ends (a fresh seal starts the next run). */
     public static void runKlaar(ServerLevel sl, String kerker) {
         ACTIEF.remove(kerker);
+        GROEP.remove(kerker);
     }
 
     /** A boss of this dungeon was just made by its arena: Vahoeg when the mode is on. */

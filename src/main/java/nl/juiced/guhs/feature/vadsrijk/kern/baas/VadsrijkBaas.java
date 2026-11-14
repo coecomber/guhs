@@ -587,8 +587,16 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         }
         losseKijkers.clear();
         if (arena != null) {
-            Arenas.verslagen(arena);
+            java.util.Set<java.util.UUID> erbij = new java.util.HashSet<>(bijdragen.spelers());
+            Arenas.spelersBinnen(sl, arena).forEach(p -> erbij.add(p.getUUID()));
+            Arenas.verslagen(arena, erbij);   // 1.10.1: + who was there (a newcomer later gets the quick respawn)
         }
+    }
+
+    /** 1.10.1: everyone inside the arena at the defeat also counts for quests (not for xp/loot): standing there is enough. */
+    @Override
+    protected java.util.List<ServerPlayer> ookVoorQuests(ServerLevel sl) {
+        return arena == null ? java.util.List.of() : Arenas.spelersBinnen(sl, arena);
     }
 
     @Override
