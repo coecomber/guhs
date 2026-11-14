@@ -826,6 +826,11 @@ public final class QuestLoper {
                 stilStap(p, s, cur);
                 QlDoe.spoel(p);
             }
+            // like eindeSpoel (the in-game jump): the target step gets its level (since 1.10.1 the zone xp alone no longer
+            // reaches the next zone's gate level; that grind is intended)
+            if (naar >= 0 && naar < l.size()) {
+                zetLevelVoor(p, s, l.get(naar));
+            }
         } finally {
             s.stil = false;
             s.fase = Fase.RUST;
