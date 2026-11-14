@@ -492,8 +492,8 @@ class Bouwer:
         self.bazen()
         from . import raid   # U-SITE round 3: De Sterrendovende Toren
         raid.paginas(self)
-        from . import geheimen
-        geheimen.pagina(self)
+        from . import boekspiegel   # 1.10.3: the Verkenningsboek mirror (falls back on geheimen.pagina)
+        boekspiegel.pagina(self)
         self.items_()
         self.systemen()
         self.verhaal()

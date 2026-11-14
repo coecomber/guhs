@@ -374,6 +374,8 @@ class Bron:
         data["puzzels"] = self._puzzels()
         from . import geheimen   # U-SITE round 3: every secret WITH its location (behind spoiler clicks on the page + an off-by-default map layer)
         data["geheimen_lijst"] = geheimen.data(self, pois, gebieden, punten, data["puzzels"]["lijst"])
+        from . import boekspiegel   # 1.10.3: the secrets page mirrors the Verkenningsboek
+        data["boek"] = boekspiegel.data(self, data["geheimen_lijst"])
         data["kleding"] = self._kleding()
         data["rij_uiterlijk"] = self._rij_uiterlijk()
         data["krachten"] = self._krachten()
