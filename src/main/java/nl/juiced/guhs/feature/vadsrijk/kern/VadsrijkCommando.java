@@ -163,7 +163,8 @@ public final class VadsrijkCommando {
             return;
         }
         SpelerData d = Spelers.data(p);
-        if (!Vadsrijk.in(p)) {
+        boolean vanBuiten = !Vadsrijk.in(p);
+        if (vanBuiten) {
             CompoundTag t = new CompoundTag();
             t.putString("dim", p.level().dimension().identifier().toString());
             t.putDouble("x", p.getX());
@@ -176,7 +177,16 @@ public final class VadsrijkCommando {
         boolean kaart = !proeftuin && KaartFeature.tegel(sl, Math.floorDiv(Gebieden.AANKOMST.getX(), KaartFeature.TEGEL),
                 Math.floorDiv(Gebieden.AANKOMST.getZ(), KaartFeature.TEGEL)).isPresent();   // U-GROOTTE: pack-aware
         net.minecraft.core.BlockPos a = kaart ? Gebieden.AANKOMST : (d.checkpoint != null && Ondergrond.proeftuin(d.checkpoint) ? d.checkpoint : Ondergrond.KAMP);
-        p.teleport(new TeleportTransition(sl, Vec3.atBottomCenterOf(a), Vec3.ZERO, 180f, 0f, TeleportTransition.DO_NOTHING));
+        Vec3 naar = Vec3.atBottomCenterOf(a);
+        float yaw = 180f;
+        if (kaart && vanBuiten) {   // 1.10.2: back where you left (the first time, or nothing good kept: the jetty / a zone's arrival)
+            nl.juiced.guhs.feature.vadsrijk.wereld.Terugkeer.Doel doel = nl.juiced.guhs.feature.vadsrijk.wereld.Terugkeer.ingang(p, sl, a);
+            if (doel != null) {
+                naar = doel.pos();
+                yaw = doel.yaw();
+            }
+        }
+        p.teleport(new TeleportTransition(sl, naar, Vec3.ZERO, yaw, 0f, TeleportTransition.DO_NOTHING));
         p.resetFallDistance();
         KernEvents.verzoen(p);
     }
@@ -185,13 +195,21 @@ public final class VadsrijkCommando {
     public static void terug(ServerPlayer p) {
         MinecraftServer server = p.level().getServer();
         SpelerData d = Spelers.data(p);
+        nl.juiced.guhs.feature.vadsrijk.wereld.Terugkeer.onthoud(p);   // 1.10.2: the spot you leave from is where you come back
         TeleportTransition tr = null;
         if (d.terug != null) {
             Identifier id = Identifier.tryParse(d.terug.getStringOr("dim", ""));
             ServerLevel l = id == null ? null : server.getLevel(ResourceKey.create(Registries.DIMENSION, id));
             if (l != null && l.dimension() != Vadsrijk.DIM) {
-                tr = new TeleportTransition(l, new Vec3(d.terug.getDoubleOr("x", 0), d.terug.getDoubleOr("y", 64), d.terug.getDoubleOr("z", 0)), Vec3.ZERO,
-                        d.terug.getFloatOr("yaw", 0), d.terug.getFloatOr("pitch", 0), TeleportTransition.DO_NOTHING);
+                Vec3 v = new Vec3(d.terug.getDoubleOr("x", 0), d.terug.getDoubleOr("y", 64), d.terug.getDoubleOr("z", 0));
+                float yaw = d.terug.getFloatOr("yaw", 0);
+                // 1.10.2: you entered standing IN the survival portal: come out next to it, facing away (not straight back in)
+                nl.juiced.guhs.feature.vadsrijk.wereld.Terugkeer.Doel naast = nl.juiced.guhs.feature.vadsrijk.wereld.Terugkeer.uitPortaal(l, v);
+                if (naast != null) {
+                    v = naast.pos();
+                    yaw = naast.yaw();
+                }
+                tr = new TeleportTransition(l, v, Vec3.ZERO, yaw, d.terug.getFloatOr("pitch", 0), TeleportTransition.DO_NOTHING);
             }
         }
         if (tr == null) {
