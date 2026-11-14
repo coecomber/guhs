@@ -47,6 +47,16 @@ public final class RijdierBuit {
     }
 
     public static final Map<String, Bron> BRONNEN = new LinkedHashMap<>();
+
+    /**
+     * 1.10.3 "pech zichtbaar": what a source gives and where it drops, for the mount screen ({@link #schermData}). {@code kleur} = the
+     * Pluimguh colour it gives (null: the mount itself or a look of it); {@code per} = "kill" | "clear" | "run" (lang
+     * {@code vadsrijk.vint.pech.per.<per>}); {@code waar} = the lang key of "where" with an optional lang key {@code waarArg} as its %s.
+     */
+    public record Doel(RijdierSoort soort, @Nullable RijdierSoort.PluimKleur kleur, String per, String waar, @Nullable String waarArg) {
+    }
+
+    public static final Map<String, Doel> DOELEN = new LinkedHashMap<>();
     /** Test hook: the next roll (null = random). */
     @Nullable
     static Double testRol;
@@ -57,6 +67,11 @@ public final class RijdierBuit {
     public static void bron(String id, String naam, @Nullable String baasType, Predicate<ServerPlayer> mag, Predicate<ServerPlayer> heeft,
             Consumer<ServerPlayer> geef) {
         BRONNEN.put(id, new Bron(id, naam, baasType, mag, heeft, geef));
+    }
+
+    /** Registers what source {@code id} gives and where (shown with the pity counter in the mount screen). */
+    public static void doel(String id, Doel d) {
+        DOELEN.put(id, d);
     }
 
     static void register() {
@@ -71,6 +86,9 @@ public final class RijdierBuit {
         bron("vahoeg_goud", "Gouden Pluimguh (einde Vahoeg-run, zone 3)", null, p -> true,
                 nl.juiced.guhs.feature.vadsrijk.zone3.systemen.GoudenVeren::heeftGoud,
                 nl.juiced.guhs.feature.vadsrijk.zone3.systemen.GoudenVeren::geefGoudPubliek);
+        doel("opperzwam_zwamzwijntje", new Doel(RijdierSoort.ZWAMZWIJNTJE, null, "kill", "vadsrijk.vint.pech.waar.opperzwam", null));
+        doel("spiegelzucht_kristal", new Doel(RijdierSoort.PLUIMGUH, RijdierSoort.PluimKleur.KRISTAL, "kill", "vadsrijk.vint.pech.waar.spiegelzucht", null));
+        doel("vahoeg_goud", new Doel(RijdierSoort.PLUIMGUH, RijdierSoort.PluimKleur.GOUD, "run", "vadsrijk.vint.pech.waar.vahoeg", null));
         // the old automatic first-kill sources are drops now (not handed out by Aankleden.inhalen any more)
         var r = nl.juiced.guhs.feature.vadsrijk.rijdier.Aankleden.SOORT_BRON;
         r.put(RijdierSoort.ZWAMZWIJNTJE, nl.juiced.guhs.feature.vadsrijk.rijdier.Uiterlijk.Bron.api("drop:opperzwam_zwamzwijntje"));
@@ -115,8 +133,44 @@ public final class RijdierBuit {
             return true;
         }
         data(p).putInt(id, pech + 1);
-        p.sendOverlayMessage(Component.translatable("vadsrijk.vint.buit.mis", b.naam(), PITY - pech).withStyle(ChatFormatting.GRAY));
+        p.sendOverlayMessage(misTekst(b.naam(), pech + 1).withStyle(ChatFormatting.GRAY));
         return false;
+    }
+
+    /** The miss line: "no X this time (10 %) · pity n/15 · n more tries until a sure drop" ({@code pech} = misses now, this one included). */
+    static net.minecraft.network.chat.MutableComponent misTekst(String naam, int pech) {
+        int nog = Math.max(0, PITY - pech);
+        return nog == 0 ? Component.translatable("vadsrijk.vint.buit.mis.zeker", naam, Math.round(KANS * 100), pech, PITY)
+                : Component.translatable("vadsrijk.vint.buit.mis", naam, Math.round(KANS * 100), pech, PITY, nog);
+    }
+
+    /**
+     * 1.10.3 "pech zichtbaar": the pity counters of one mount row of the mount screen ({@code economie.Stal.data}): a list
+     * {@code pech} of {bron, kleur ("" = the mount / a look of it), per, waar, waarArg, pech, pity, kans (%), mag} for every source
+     * of this mount that you don't own yet. The screen shows them as "Kans: 10 % per kill · zeker na nog n keer".
+     */
+    public static void schermData(ServerPlayer p, RijdierSoort s, CompoundTag t) {
+        net.minecraft.nbt.ListTag l = new net.minecraft.nbt.ListTag();
+        for (Bron b : BRONNEN.values()) {
+            Doel d = DOELEN.get(b.id());
+            if (d == null || d.soort() != s || b.heeft().test(p)) {
+                continue;
+            }
+            CompoundTag c = new CompoundTag();
+            c.putString("bron", b.id());
+            c.putString("kleur", d.kleur() == null ? "" : d.kleur().id());
+            c.putString("per", d.per());
+            c.putString("waar", d.waar());
+            c.putString("waarArg", d.waarArg() == null ? "" : d.waarArg());
+            c.putInt("pech", Math.min(PITY, pech(p, b.id())));
+            c.putInt("pity", PITY);
+            c.putInt("kans", (int) Math.round(KANS * 100));
+            c.putBoolean("mag", b.mag().test(p));
+            l.add(c);
+        }
+        if (!l.isEmpty()) {
+            t.put("pech", l);
+        }
     }
 
     private static void commando(RegisterCommandsEvent e) {

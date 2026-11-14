@@ -94,6 +94,20 @@ public class HuisdierScherm extends EcoScherm {
         });
     }
 
+    /** 1.10.3: "Kans: 6 % per clear · zeker na nog n keer" for a cave pet you don't own yet (null: no pity for this pet). */
+    @Nullable
+    private Component pechTekst(String pet) {
+        CompoundTag pp = data.getCompoundOrEmpty("petpech");
+        if (!pp.contains(pet)) {
+            return null;
+        }
+        CompoundTag c = pp.getCompoundOrEmpty(pet);
+        Component per = Component.translatable("vadsrijk.vint.pech.per.clear");
+        int nog = Math.max(0, c.getIntOr("pity", 25) - c.getIntOr("pech", 0));
+        return nog == 0 ? Component.translatable("vadsrijk.vint.pech.zeker", c.getIntOr("kans", 6), per, per)
+                : Component.translatable("vadsrijk.vint.pech.kans", c.getIntOr("kans", 6), per, nog);
+    }
+
     @Override
     protected void inhoud(GuiGraphicsExtractor g, int mx, int my, float pt) {
         List<Huisdier> alle = List.copyOf(Huisdieren.alle());
@@ -132,6 +146,10 @@ public class HuisdierScherm extends EcoScherm {
             tip.add(Component.translatable("vadsrijk.huisdieren.hoe").withStyle(ChatFormatting.GOLD));
             for (var line : font.getSplitter().splitLines(Component.translatable(h.bronKey()), 200, net.minecraft.network.chat.Style.EMPTY)) {
                 tip.add(Component.literal(line.getString()).withStyle(heeft ? ChatFormatting.GRAY : ChatFormatting.YELLOW));
+            }
+            Component pech = heeft ? null : pechTekst(h.id());
+            if (pech != null) {
+                tip.add(pech.copy().withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             tip(mx, my, x, y, VAK, VAK, tip);
             klikvlak(x, y, VAK, VAK, () -> gekozen = h.id());
@@ -221,12 +239,34 @@ public class HuisdierScherm extends EcoScherm {
         if (!heeft) {
             g.text(font, Component.translatable("vadsrijk.huisdieren.hoe").withStyle(ChatFormatting.BOLD), px, iy, GOUD, false);
             iy += 10;
+            Component pech = pechTekst(h.id());
+            int bronStop = pech == null ? stop : stop - 24;   // (room for the pity line + bar)
             for (var line : font.split(Component.translatable(h.bronKey()), pw)) {
-                if (iy > stop) {
+                if (iy > bronStop) {
                     break;
                 }
                 g.text(font, line, px, iy, 0xFF9A3A7A, false);
                 iy += 9;
+            }
+            if (pech != null) {
+                // 1.10.3 "pech zichtbaar": the cave pet's chance, the pity bar (n/25) and how far the sure one is
+                iy += 2;
+                for (var line : font.split(pech, pw)) {
+                    if (iy > stop) {
+                        break;
+                    }
+                    g.text(font, line, px, iy, 0xFF7A4AB0, false);
+                    iy += 9;
+                }
+                CompoundTag c = data.getCompoundOrEmpty("petpech").getCompoundOrEmpty(h.id());
+                int n = c.getIntOr("pech", 0), pity = Math.max(1, c.getIntOr("pity", 25));
+                if (iy <= stop + 4) {
+                    g.fill(px, iy + 1, px + pw, iy + 5, 0xFFE8C8DC);
+                    g.fill(px, iy + 1, px + pw * Math.min(n, pity) / pity, iy + 5, n >= pity ? 0xFFFFC040 : 0xFFB070E0);
+                    tip(mx, my, px, iy, pw, 6, List.of(Component.translatable("vadsrijk.vint.pech.balk", n, pity).withStyle(ChatFormatting.LIGHT_PURPLE),
+                            Component.translatable("vadsrijk.dungeon.pech.uitleg").withStyle(ChatFormatting.GRAY)));
+                    iy += 8;
+                }
             }
         } else {
             for (var line : font.split(Component.translatable(h.tekstKey()).withStyle(ChatFormatting.ITALIC), pw)) {

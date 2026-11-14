@@ -139,7 +139,37 @@ public final class KerkerLoot {
             return true;
         }
         data(p).putInt(sleutel, pech + 1);
+        // 1.10.3 "pech zichtbaar": a miss says how far the sure pet is (chat: the mount roll right after uses the overlay)
+        int nog = Math.max(0, PET_PITY - (pech + 1));
+        Component pet = Component.translatable("vadsrijk.huisdier." + d.pet() + ".naam");
+        p.sendSystemMessage((nog == 0 ? Component.translatable("vadsrijk.grotkerker.pet.mis.zeker", pet, Math.round(PET_KANS * 100), pech + 1, PET_PITY)
+                : Component.translatable("vadsrijk.grotkerker.pet.mis.pech", pet, Math.round(PET_KANS * 100), pech + 1, PET_PITY, nog))
+                .withStyle(ChatFormatting.GRAY));
         return false;
+    }
+
+    /** The pet's pity counter (misses in a row at this cave's end chest). */
+    public static int petPech(ServerPlayer p, GrotBazen.Def d) {
+        return data(p).getIntOr(d.grot() + ".petpech", 0);
+    }
+
+    /**
+     * 1.10.3 "pech zichtbaar": the pet screen's numbers ({@code huisdieren.Huisdieren.stuurScherm}): a compound {@code petpech} of
+     * pet id -> {pech, pity, kans (%)} for every cave pet you don't own yet.
+     */
+    public static void schermData(ServerPlayer p, CompoundTag d) {
+        CompoundTag c = new CompoundTag();
+        for (GrotBazen.Def def : GrotBazen.alle().values()) {
+            if (Huisdieren.heeft(p, def.pet())) {
+                continue;
+            }
+            CompoundTag t = new CompoundTag();
+            t.putInt("pech", Math.min(PET_PITY, petPech(p, def)));
+            t.putInt("pity", PET_PITY);
+            t.putInt("kans", (int) Math.round(PET_KANS * 100));
+            c.put(def.pet(), t);
+        }
+        d.put("petpech", c);
     }
 
     /** A random piece the player can use: a weapon of their class or any armour (like the cave treasures). */

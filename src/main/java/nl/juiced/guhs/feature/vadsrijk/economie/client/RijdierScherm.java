@@ -196,8 +196,8 @@ public class RijdierScherm extends EcoScherm {
             }
         }
 
+        int gy = sy + 18;
         if (stal && s.kleuren()) {   // (the stalmeester's little fourth-wall joke)
-            int gy = sy + 18;
             for (var line : font.split(Component.translatable("vadsrijk.economie.stal.grapje").withStyle(ChatFormatting.ITALIC), (int) (pw / 0.75f))) {
                 g.pose().pushMatrix();
                 g.pose().translate(px, gy);
@@ -206,6 +206,10 @@ public class RijdierScherm extends EcoScherm {
                 g.pose().popMatrix();
                 gy += 7;
             }
+            gy += 3;
+        }
+        if (s.kleuren()) {
+            verborgenPech(g, mx, my, t, px, gy, pw);   // 1.10.3: the hidden rare colours you're already trying for
         }
 
         // ---- info -----------------------------------------------------------------------------------------------------------
@@ -262,6 +266,7 @@ public class RijdierScherm extends EcoScherm {
                 sp / 1.05);
         iy += 18;
         iy = nl.juiced.guhs.feature.vadsrijk.tapijt.client.TapijtClient.statRegels(g, font, s, ix, iy, iw);   // U-TAPIJT: hover + glide
+        int stop = top + h - 40;   // (above the buttons; the Gouden Veren trade moves it up)
         if (!eigen) {
             String bron = s.kleuren() ? "vadsrijk.economie.pluimkleur.bron." + kleur.id() : "vadsrijk.economie.stal.nog_niet." + s.id();
             for (var line : font.split(Component.translatable(bron), iw)) {
@@ -277,6 +282,7 @@ public class RijdierScherm extends EcoScherm {
             if (sb.getStringOr("bron", "").equals("veren") && (heeft || !s.kleuren())) {
                 long n = sb.getLongOr("waarde", 0);
                 int veren = data.getIntOr("veren", 0);
+                stop = top + h - 62;
                 g.text(font, Component.translatable("vadsrijk.rijdier.veren", veren), ix, top + h - 58, GOUD, false);
                 knop(g, mx, my, ix, top + h - 48, iw, 14, Component.translatable("vadsrijk.rijdier.ruil_knop", n), veren >= n, () -> {
                     CompoundTag a = new CompoundTag();
@@ -287,6 +293,9 @@ public class RijdierScherm extends EcoScherm {
                 });
             }
         }
+
+        // 1.10.3 "pech zichtbaar": the drop chance + pity of every source of this mount (or the selected colour) you don't own yet
+        pechRegels(g, mx, my, t, kleur, ix, iy + 2, iw, stop);
 
         // ---- buttons --------------------------------------------------------------------------------------------------------
         int by = top + h - 34;
@@ -325,6 +334,111 @@ public class RijdierScherm extends EcoScherm {
                 by += 9;
             }
         }
+    }
+
+    // ---- 1.10.3 "pech zichtbaar" ----------------------------------------------------------------------------------------------------
+
+    private static final int PECH_PAARS = 0xFF7A4AB0;
+
+    /** "Kans: 10 % per kill · zeker na nog n keer" (or "zeker bij de volgende kill!"), for one {@code pech} entry of the row. */
+    static Component kansTekst(CompoundTag c) {
+        Component per = Component.translatable("vadsrijk.vint.pech.per." + c.getStringOr("per", "kill"));
+        int nog = Math.max(0, c.getIntOr("pity", 15) - c.getIntOr("pech", 0));
+        return nog == 0 ? Component.translatable("vadsrijk.vint.pech.zeker", c.getIntOr("kans", 10), per, per)
+                : Component.translatable("vadsrijk.vint.pech.kans", c.getIntOr("kans", 10), per, nog);
+    }
+
+    static Component waarTekst(CompoundTag c) {
+        String arg = c.getStringOr("waarArg", "");
+        Component waar = arg.isEmpty() ? Component.translatable(c.getStringOr("waar", ""))
+                : Component.translatable(c.getStringOr("waar", ""), Component.translatable(arg));
+        return Component.translatable("vadsrijk.vint.pech.valt_bij", waar);
+    }
+
+    /** The info column: chance, a pity bar (n/15) and where it drops. Entries for the mount itself, or for the selected colour. */
+    private int pechRegels(GuiGraphicsExtractor g, int mx, int my, CompoundTag t, PluimKleur kleur, int x, int y, int bw, int stop) {
+        ListTag l = t.getListOrEmpty("pech");
+        for (int i = 0; i < l.size(); i++) {
+            CompoundTag c = l.getCompoundOrEmpty(i);
+            String k = c.getStringOr("kleur", "");
+            if (!k.isEmpty() && !k.equals(kleur.id())) {
+                continue;
+            }
+            if (y + 20 > stop) {
+                break;
+            }
+            if (!c.getBooleanOr("mag", true)) {
+                for (var line : font.split(Component.translatable("vadsrijk.vint.pech.mag_niet", c.getIntOr("kans", 10)), bw)) {
+                    if (y + 9 > stop) {
+                        break;
+                    }
+                    g.text(font, line, x, y, ZACHT, false);
+                    y += 9;
+                }
+                y += 2;
+                continue;
+            }
+            for (var line : font.split(kansTekst(c), bw)) {
+                if (y + 9 > stop) {
+                    break;
+                }
+                g.text(font, line, x, y, PECH_PAARS, false);
+                y += 9;
+            }
+            // the pity bar: one notch per miss in a row, gold when the next one is sure
+            int pech = c.getIntOr("pech", 0), pity = Math.max(1, c.getIntOr("pity", 15));
+            g.fill(x, y + 1, x + bw, y + 5, 0xFFE8C8DC);
+            g.fill(x, y + 1, x + bw * Math.min(pech, pity) / pity, y + 5, pech >= pity ? 0xFFFFC040 : 0xFFB070E0);
+            tip(mx, my, x, y, bw, 6, List.of(Component.translatable("vadsrijk.vint.pech.balk", pech, pity).withStyle(ChatFormatting.LIGHT_PURPLE),
+                    Component.translatable("vadsrijk.dungeon.pech.uitleg").withStyle(ChatFormatting.GRAY)));
+            y += 8;
+            for (var line : font.split(waarTekst(c), bw)) {
+                if (y + 9 > stop) {
+                    break;
+                }
+                g.text(font, line, x, y, ZACHT, false);
+                y += 9;
+            }
+            y += 3;
+        }
+        return y;
+    }
+
+    /** Under the swatches: the hidden colours (cave colours, gold) you have tried for at least once, small, with a tooltip. */
+    private void verborgenPech(GuiGraphicsExtractor g, int mx, int my, CompoundTag t, int x, int y, int bw) {
+        ListTag l = t.getListOrEmpty("pech");
+        boolean kop = false;
+        int stop = top + h - 10;
+        for (int i = 0; i < l.size(); i++) {
+            CompoundTag c = l.getCompoundOrEmpty(i);
+            String id = c.getStringOr("kleur", "");
+            PluimKleur k = id.isEmpty() ? null : PluimKleur.vanOfNull(id);
+            if (k == null || !k.verborgen() || c.getIntOr("pech", 0) <= 0 || y + 8 > stop) {
+                continue;
+            }
+            if (!kop) {
+                klein(g, Component.translatable("vadsrijk.vint.pech.verborgen").withStyle(ChatFormatting.BOLD), x, y, PECH_PAARS);
+                y += 8;
+                kop = true;
+            }
+            int nog = Math.max(0, c.getIntOr("pity", 15) - c.getIntOr("pech", 0));
+            Component naam = Component.translatable(k.naamKey());
+            Component r = nog == 0 ? Component.translatable("vadsrijk.vint.pech.kort.zeker", naam)
+                    : Component.translatable("vadsrijk.vint.pech.kort", naam, c.getIntOr("pech", 0), c.getIntOr("pity", 15), nog);
+            g.fill(x, y + 1, x + 5, y + 6, k.kleur);
+            klein(g, r, x + 7, y, nog == 0 ? GOUD : ZACHT);
+            tip(mx, my, x, y, bw, 7, List.of(Component.translatable(k.naamKey()).withStyle(ChatFormatting.BOLD),
+                    kansTekst(c).copy().withStyle(ChatFormatting.LIGHT_PURPLE), waarTekst(c).copy().withStyle(ChatFormatting.GRAY)));
+            y += 8;
+        }
+    }
+
+    private void klein(GuiGraphicsExtractor g, Component c, int x, int y, int kleur) {
+        g.pose().pushMatrix();
+        g.pose().translate(x, y);
+        g.pose().scale(0.75f, 0.75f);
+        g.text(font, c, 0, 0, kleur, false);
+        g.pose().popMatrix();
     }
 
     // ---- T-RIJDIER: the dress-up panel draws through these -------------------------------------------------------------------------

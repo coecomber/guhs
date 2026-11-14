@@ -344,6 +344,7 @@ public final class Huisdieren {
         Huisdier a = actief(p);
         d.putString("actief", a == null ? "" : a.id());
         nl.juiced.guhs.feature.vadsrijk.rijdier.Maatjes.schermData(p, d);   // T-RIJDIER: pet levels + Vahoegje's stage
+        nl.juiced.guhs.feature.vadsrijk.grotkerker.KerkerLoot.schermData(p, d);   // 1.10.3: the cave pets' drop chance + pity
         HuisdierPayloads.stuur(p, new HuisdierPayloads.Scherm(d));
     }
 

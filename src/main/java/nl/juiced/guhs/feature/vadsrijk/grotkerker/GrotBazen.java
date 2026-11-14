@@ -236,6 +236,8 @@ public final class GrotBazen {
             PluimKleur k = d.pluim();
             nl.juiced.guhs.feature.vadsrijk.vint.RijdierBuit.bron(d.mountBron(), "Pluimguh " + k.id() + " (eindkist " + d.grot() + ")", null,
                     p -> Rijdieren.heeft(p, RijdierSoort.PLUIMGUH), p -> Rijdieren.heeftKleur(p, k), p -> Rijdieren.geefKleur(p, k));
+            nl.juiced.guhs.feature.vadsrijk.vint.RijdierBuit.doel(d.mountBron(), new nl.juiced.guhs.feature.vadsrijk.vint.RijdierBuit.Doel(
+                    RijdierSoort.PLUIMGUH, k, "clear", "vadsrijk.vint.pech.waar.grot", "vadsrijk.grotten.naam." + d.grot()));   // 1.10.3: pity in the mount screen
         }
     }
 }

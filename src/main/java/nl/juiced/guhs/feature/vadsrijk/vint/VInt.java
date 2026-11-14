@@ -44,6 +44,8 @@ public final class VInt {
         RijdierBuit.bron(Z6RAID_BRON, "Sterrennacht-Bultguh (Sterrendovende Toren, zone 6)", null, p -> true,
                 nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHalster::heeftSterrennacht,
                 nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHalster::geefSterrennacht);
+        RijdierBuit.doel(Z6RAID_BRON, new RijdierBuit.Doel(nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.BULTGUH, null, "clear",
+                "vadsrijk.vint.pech.waar.z6raid", null));   // 1.10.3: shown with its pity in the mount screen
         nl.juiced.guhs.feature.vadsrijk.zone6.raid.Z6RaidHaken.OPGEVROLIJKT.add(p -> {
             RijdierBuit.rol(p, Z6RAID_BRON);
             nl.juiced.guhs.feature.vadsrijk.gilden.BondXp.deed(p, "bazen", 1, RAID_BOND_XP);
