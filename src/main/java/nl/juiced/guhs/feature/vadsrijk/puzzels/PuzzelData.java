@@ -34,6 +34,11 @@ public final class PuzzelData extends SavedData {
         return plekken.get(id);
     }
 
+    /** 1.10.3: every placed puzzle (id -> spot), read-only. */
+    public Map<String, Plek> alle() {
+        return java.util.Collections.unmodifiableMap(plekken);
+    }
+
     public void zet(String id, @Nullable Plek p) {
         if (p == null) {
             plekken.remove(id);

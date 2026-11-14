@@ -244,6 +244,9 @@ public final class Spawners {
     /** Every second (kern). */
     public static void tick(ServerLevel sl) {
         long nu = sl.getGameTime();
+        if ((nu / 20) % 5 == 0) {
+            onderDeKaartWeg(sl);   // 1.10.3 npc-vloer
+        }
         int actief = 0, gespawnd = 0, weg = 0, totaal = 0;
         Map<String, Integer> perGebied = new HashMap<>();
         List<Spawner> wakker = new ArrayList<>();
@@ -361,6 +364,26 @@ public final class Spawners {
         }
         LAATST_ACTIEF.put(s.id(), nu);
         return gedaan;
+    }
+
+    /** How many mobs {@link #onderDeKaartWeg} removed since the start (dev/test). */
+    public static int onderDeKaartWeg;
+
+    /**
+     * 1.10.3 (npc-vloer, "NPCs under the ground" in zone 2): the map is a shell over an empty void down to the bedrock; a mob
+     * that walks through a gap of the shell (a cave edge, a cliff foot) falls onto the bedrock (y 0) and stays there, outside its
+     * spawner's box (y 40..220), so it was never counted, never despawned and its spawner kept refilling. Every 5 s every
+     * (non-boss) Vadsrijk mob standing on that bedrock goes. Returns how many.
+     */
+    public static int onderDeKaartWeg(ServerLevel sl) {
+        int n = 0;
+        for (VadsrijkMob m : sl.getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(VadsrijkMob.class),
+                m -> !(m instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas) && nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer.onderDeKaart(m))) {
+            m.discard();
+            n++;
+        }
+        onderDeKaartWeg += n;
+        return n;
     }
 
     /** Forget the wake-up state of every spawner (tests, the dev command). */

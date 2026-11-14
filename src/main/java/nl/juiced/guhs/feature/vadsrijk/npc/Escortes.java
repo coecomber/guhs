@@ -101,7 +101,8 @@ public final class Escortes {
         if (e != null && kopie(sl, e) instanceof RijkGuh g) {
             if (!e.aangekomen()) {
                 if (g.distanceTo(p) > 8) {
-                    g.snapTo(p.getX() + 1, p.getY(), p.getZ() + 1);   // (a stuck copy comes to you)
+                    net.minecraft.world.phys.Vec3 v = NpcVloer.vrijBij(sl, p.position(), p.position().add(1, 0, 1));   // 1.10.3: not into a slope
+                    g.snapTo(v.x, v.y, v.z);   // (a stuck copy comes to you)
                     g.getNavigation().stop();
                 }
                 return g;
