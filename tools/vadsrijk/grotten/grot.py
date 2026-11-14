@@ -25,6 +25,9 @@ from scipy import ndimage
 HIER = os.path.dirname(os.path.abspath(__file__))
 T, HOOG = 64, 320
 LUCHT, ZACHT, ZET, MUUR, VUL = 1, 2, 3, 4, 5
+# 1.10.3 (live bug): lake ice is blue ice, never plain ice: plain ice melts next to the cave lights (block light > 11) into water
+# that runs through the rooms (De Kristalgrot). Blue ice is only a wall block in the themes, so ZET blue ice = lake ice.
+IJS = "minecraft:blue_ice"
 STIJG = 6.0          # spiral stairs: blocks up per full turn (inner lane steps stay <= 0.5)
 
 
@@ -96,6 +99,8 @@ class Grot:
         self.bouwwerk = []          # callables (grot) -> None that run after the shell (explicit 3D parts)
         self.deco = []              # callables (grot, rng) -> None
         self.monden = []            # (x, y, z, r): no shell near an opening (z4: the underwater mouth)
+        self.hendels = []           # 1.10.3: (x, y, z) lever blocks of the dungeon's sluis puzzle (grotkerker)
+        self.dicht = []             # 1.10.3: (x0, y0, z0, x1, y1, z1) boxes of an OLD cave part filled with rock (op VUL-force)
         self.kolom = []             # (x, z, dy, state): a block relative to the column's ground top (dy 0 = replace the top, 1 = on it)
         self.bewaar_hout = False
         self.thema = {}
@@ -104,13 +109,16 @@ class Grot:
         self.gebouwd = False
 
     # ---- elements ----------------------------------------------------------------------------------------------------------
-    def kamer(self, naam, cx, cz, rx, rz, S, h, hmin=4.0, water=None, wobbel=0.12):
-        k = dict(naam=naam, cx=cx, cz=cz, rx=rx, rz=rz, S=float(S), h=h, hmin=hmin, water=water, wobbel=wobbel, i=len(self.kamers))
+    def kamer(self, naam, cx, cz, rx, rz, S, h, hmin=4.0, water=None, wobbel=0.12, virtueel=False):
+        """virtueel (1.10.3): a room that already exists in the map (built by another generator, e.g. zone 6's salt hall): it only
+        takes part in the floor/ownership grid (tunnels stop at it, the dungeon data can name it), nothing is carved or shelled."""
+        k = dict(naam=naam, cx=cx, cz=cz, rx=rx, rz=rz, S=float(S), h=h, hmin=hmin, water=water, wobbel=wobbel, i=len(self.kamers),
+                 virtueel=virtueel)
         self.kamers.append(k)
         return k
 
-    def gang(self, punten, breed=3.4, h=4.2, water=None):
-        g = dict(punten=[(float(x), float(z), float(S)) for (x, z, S) in punten], breed=breed, h=h, water=water)
+    def gang(self, punten, breed=3.4, h=4.2, water=None, naam=None):
+        g = dict(punten=[(float(x), float(z), float(S)) for (x, z, S) in punten], breed=breed, h=h, water=water, naam=naam)
         self.gangen.append(g)
         return g
 
@@ -167,6 +175,7 @@ class Grot:
         eig = np.full((X, Z), -1, np.int32)        # owner: room index, 100+ tunnel index
         pad = np.zeros((X, Z), bool)               # walkway (tunnel centre lines): no deco
         ijs = np.zeros((X, Z), bool)
+        virt = np.zeros((X, Z), bool)              # 1.10.3: columns of virtual rooms (existing, not carved)
         z_ = self.zaad
         # rooms
         for k in self.kamers:
@@ -181,6 +190,8 @@ class Grot:
             F[m] = S
             C[m] = np.maximum(np.where(m, np.round(dak).astype(np.int32), -999), C)[m]
             eig[m] = k["i"]
+            if k.get("virtueel"):
+                virt |= m
             if k["water"] is not None:
                 Wt[m] = k["water"]
         # tunnels
@@ -219,14 +230,14 @@ class Grot:
             Wt[m] = me["top"]
             # ice only on the 1-deep rim (a frozen shore ring): the deep middle stays open, nobody gets stuck under ice
             ijs |= m & (d > 0.75) & (me["ijs"] > 0)
-        self.F, self.C, self.Wt, self.eig, self.pad, self.ijs = F, C, Wt, eig, pad, ijs
+        self.F, self.C, self.Wt, self.eig, self.pad, self.ijs, self.virt = F, C, Wt, eig, pad, ijs, virt
         self._controleer_vloer()
         th = self.thema
         # 3D: air / water / floors
         for i in range(X):
             for j in range(Z):
                 S = F[i, j]
-                if np.isnan(S):
+                if np.isnan(S) or virt[i, j]:
                     continue
                 a = int(math.ceil(S))
                 c = int(C[i, j])
@@ -236,7 +247,7 @@ class Grot:
                     if not 0 <= yi < Y:
                         continue
                     if y <= w:
-                        self._zet_i(i, yi, j, ZET, "minecraft:ice" if (ijs[i, j] and y == w) else "minecraft:water")
+                        self._zet_i(i, yi, j, ZET, IJS if (ijs[i, j] and y == w) else "minecraft:water")
                     elif self.bewaar_hout and y >= a + 3:
                         self.op[i, yi, j] = ZACHT
                     else:
@@ -254,7 +265,10 @@ class Grot:
         self._controleer_water()
         for f in self.bouwwerk:
             f(self)
-        for k in ("binnen", "hal", "elite", "schat", "ingang", "uitgang"):     # stand POIs stay free of deco
+        vrije = ("binnen", "hal", "elite", "schat", "ingang", "uitgang")
+        if self.zone >= 2 and os.environ.get("GUHS_GROT_OUD") != "1":
+            vrije += ("amb_1", "amb_2")     # 1.10.3: the Ambacht anchors too (a root pillar landed on the Wortelgrot's amb_2)
+        for k in vrije:     # stand POIs stay free of deco
             if k in self.plekken:
                 v = self.plekken[k]
                 self.vrij.append((v[0], v[2], 1.6))
@@ -354,7 +368,7 @@ class Grot:
         binnen = (self.op == LUCHT) | (self.op == ZACHT)
         water = np.zeros_like(binnen)
         wid = self.pidx.get("minecraft:water")
-        iid = self.pidx.get("minecraft:ice")
+        iid = self.pidx.get(IJS)
         if wid is not None:
             water |= (self.op == ZET) & (self.blk == wid)
         if iid is not None:
@@ -364,6 +378,10 @@ class Grot:
         s = np.ones((3, 3, 3), bool)
         d1 = ndimage.binary_dilation(kern, s) & ~bezet
         d2 = ndimage.binary_dilation(kern | d1, s) & ~bezet & ~d1
+        if self.virt.any():   # (no shell inside an existing room: it is open air there)
+            v3 = np.broadcast_to(self.virt[:, None, :], d1.shape)
+            d1 &= ~v3
+            d2 &= ~v3
         # mouths: no shell there
         if self.monden:
             X, Y, Z = self.op.shape
@@ -432,7 +450,7 @@ class Grot:
 
     def is_vast(self, x, y, z):
         o, s = self.lees(x, y, z)
-        return o in (MUUR, VUL) or (o == ZET and s not in ("minecraft:water", "minecraft:ice") and not _zacht(s or ""))
+        return o in (MUUR, VUL) or (o == ZET and s not in ("minecraft:water", IJS) and not _zacht(s or ""))
 
     # ---- queries for deco ------------------------------------------------------------------------------------------------
     def stand(self, x, z):

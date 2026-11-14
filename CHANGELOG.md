@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.3 — Minecraft 26.1.2
+
+- **Bigger dungeons:** every cave dungeon from zone 2 on is about twice as big: four cave rooms instead of two with long winding tunnels, a sluice gate halfway that stays shut until every lever in the sluice room is pulled, the elite in its own den, then the boss. A run takes about 15-20 minutes and gives about 1.3 level of xp (was 0.8), plus a chest halfway (after cave room 2) with bronze, a piece of gear and ore. The Zwamgrot (zone 1) is unchanged. Admin: `/guhs vadsrijk grotten herbouw <cave> [--echt]` rebuilds an already generated cave underground only (dry run by default, backup first), `/guhs vadsrijk grotten herstel <cave> <file>` undoes it.
+- **Leave a dungeon any time:** a "Leave dungeon" button in the inventory while you are in a dungeon group (with a confirmation). The window after the boss stays, but closing it keeps the run open until the normal close timer.
+- **Party mates join:** walking into a running dungeon where a member of your party is in the group adds you to that group (if there is room) instead of putting you outside again and again.
+- **Fixes:** ice no longer melts in Het Vadsrijk (De Kristalgrot filled with water); cave creatures only spawn on the floor of their cave room and are put back when they get out of the cave; who counts as "in the dungeon" now follows the cave itself (players in a corner of the cave were seen as gone, players on the mountain above it as intruders).
+
 ## 1.10.2 — Minecraft 26.1.2
 
 - **Zones 2 and 3 are open:** the ship at the end of zone 1 sails. De Splinterpieken (level 20 to 30) with the crystal town of Kandijkom, and De Schemerwortel (level 30 to 50), the giant tree with the town of Honingtak in its branches and your first mount. At the end of zone 3 the next ship sails soon.

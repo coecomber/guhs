@@ -43,14 +43,14 @@ public class VadsrijkGrotKerkerGameTests {
         helper.assertTrue(KerkerData.ALLE.size() == 6, "six cave runs in the data");
         helper.assertTrue(Kerkers.alle().size() == (Kerkers.zone6Aanwezig() ? 6 : 5), "zone 6 only with u-z6wereld: " + Kerkers.alle().size());
         for (Kerker k : KerkerData.ALLE) {
-            helper.assertTrue(k.kamers().size() == 2, k.id() + ": two pack rooms");
+            helper.assertTrue(k.kamers().size() == (k.zone() >= 2 ? 5 : 2), k.id() + ": two pack rooms (1.10.3: from zone 2 on 4 + the elite's den)");
             helper.assertTrue(k.baasLv() >= k.eliteLv() && k.eliteLv() >= k.maxLv() && k.maxLv() >= k.minLv(), k.id() + ": levels");
             for (Kamer a : k.kamers()) {
                 helper.assertTrue(k.bevat(a.x() + 0.5, a.y() + 0.5, a.z() + 0.5), k.id() + ": room " + a.id() + " inside the cave box");
             }
             helper.assertTrue(k.bevat(k.baas().x() + 0.5, k.baas().y() + 0.5, k.baas().z() + 0.5), k.id() + ": boss room inside the box");
             helper.assertTrue(k.achter(k.baas().x() + 0.5, k.baas().y() + 0.5, k.baas().z() + 0.5), k.id() + ": the boss room is behind the gate");
-            if (k.zone() < 6) {
+            if (k.zone() <= 6) {   // (1.10.3: zone 6's dungeon wing has a real gate too)
                 helper.assertTrue(k.poort().size() >= 3 && k.bord() != null, k.id() + ": a gate");
                 for (int[] c : k.poort()) {
                     helper.assertTrue(k.bevat(c[0] + 0.5, c[1] + 0.5, c[2] + 0.5) && c[3] > c[1], k.id() + ": gate column in the cave");

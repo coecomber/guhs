@@ -44,6 +44,8 @@ def grotten():
     import grotplan
     uit = []
     for g in grot.grotten():
+        if g.id not in grotplan.META:
+            continue   # (1.10.3: the zone-6 dungeon wing is a stamp too; De Zingende Zoutgrot itself is zone 6's own)
         g.bouw()
         meta = grotplan.META[g.id]
         F = g.F

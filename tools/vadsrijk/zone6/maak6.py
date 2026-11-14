@@ -179,6 +179,12 @@ def maak(alleen=None, snap=True, tegels_schrijven=True):
     nm = np.full((NX, NZ), 0, np.uint16)
     totaal, grootte = 0, 0
     import indeling
+    sys.path.insert(0, os.path.join(HIER, "..", "grotten"))
+    import grot as GROT
+    for st in GROT.staten(6):
+        O.id(st)
+    if len(O.op) < len(O.pal.lijst) + 16:
+        O.op = np.concatenate([O.op, np.zeros(4096, bool)])
     for (tx, tz) in (tegels if tegels_schrijven else []):
         if indeling.van_andere_zone(tx, tz, "z6"):
             log(f"tegel {tx},{tz} hoort bij een andere zone: overgeslagen")
@@ -196,6 +202,7 @@ def maak(alleen=None, snap=True, tegels_schrijven=True):
         if 0 <= i0 < NX and 0 <= j0 < NZ:
             hgt[i0:i0 + T, j0:j0 + T] = hy
             nm[i0:i0 + T, j0:j0 + T] = hid
+        GROT.pas_toe(vol, tx, tz, O.id, O.pal.lijst, 6)   # 1.10.3: the dungeon wing of De Zingende Zoutgrot (grotplan.zoutgrot)
         vol = hol(vol, O.op)
         nb = schrijf(O, vol, pad)
         totaal += nb

@@ -571,6 +571,16 @@ def teksten():
         K + "msg.niet.gestart": "Deze dungeon is dicht. Start hem via de deur.",
         K + "msg.uit": "Je bent weer buiten bij de deur van dungeon %s.",
         K + "msg.klaar.uit": "Dungeon uitgespeeld! Rechtsklik op de deur (of gebruik het venster) om naar buiten te gaan.",
+        # 1.10.3: leave from the inventory any time, a party mate joins the group
+        "vadsrijk.dungeon.msg.verlaat.altijd": "Je kunt de dungeon altijd verlaten via je inventaris (knop 'Dungeon verlaten').",
+        "vadsrijk.dungeon.msg.party.erbij": "Je partymaatje zit in %s: je doet mee met hun groep.",
+        "vadsrijk.dungeon.inv.knop": "Dungeon verlaten",
+        "vadsrijk.dungeon.inv.tip": "Naar buiten bij de deur; je verlaat je groep.",
+        "vadsrijk.dungeon.inv.vraag": "Dungeon verlaten?",
+        "vadsrijk.dungeon.inv.uitleg": "Pak eerst je buit! Je gaat naar buiten bij de deur en verlaat je groep. Terug naar binnen kan daarna niet meer in deze run.",
+        "vadsrijk.dungeon.inv.ja": "Verlaten",
+        "vadsrijk.dungeon.inv.nee": "Blijven",
+
         K + "msg.sluit.straks": "Er wacht een andere groep: de dungeon gaat over %s dicht en jullie staan dan buiten.",
         K + "msg.gesloten": "De dungeon is gesloten. Bedankt voor het spelen!",
         K + "msg.wachttijd.gezet": "Wachttijd voor dungeon %s: %s (dan kun je opnieuw).",

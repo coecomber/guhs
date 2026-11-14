@@ -1,0 +1,18 @@
+{
+  "vadsrijk.grotkerker.start.groot": "⚔ The cave wakes up! Four cave rooms, a sluice gate with levers and an elite stand between you and the cave boss.",
+  "vadsrijk.grotkerker.sluis.dicht": "Sluice gate",
+  "vadsrijk.grotkerker.sluis.nog": "Pull the levers in the sluice room: %s/%s",
+  "vadsrijk.grotkerker.sluis.hendel": "Lever pulled! (%s/%s)",
+  "vadsrijk.grotkerker.sluis.open": "The sluice gate opens! On to the deeper cave rooms.",
+  "vadsrijk.grotkerker.sluis.botst": "The sluice gate is shut. Pull every lever in the sluice room first!",
+  "vadsrijk.grotkerker.tussenkist": "★ Halfway there! A chest is waiting for you.",
+  "vadsrijk.grotkerker.venster.tussenkist": "• Halfway (after cave room 2): a chest with %s bronze, a piece of gear and ore",
+  "vadsrijk.dungeon.msg.verlaat.altijd": "You can always leave the dungeon from your inventory (button 'Leave dungeon').",
+  "vadsrijk.dungeon.msg.party.erbij": "Your party mate is in %s: you join their group.",
+  "vadsrijk.dungeon.inv.knop": "Leave dungeon",
+  "vadsrijk.dungeon.inv.tip": "Out by the door; you leave your group.",
+  "vadsrijk.dungeon.inv.vraag": "Leave the dungeon?",
+  "vadsrijk.dungeon.inv.uitleg": "Grab your loot first! You go outside by the door and leave your group. After that you can't go back in to this run.",
+  "vadsrijk.dungeon.inv.ja": "Leave",
+  "vadsrijk.dungeon.inv.nee": "Stay"
+}

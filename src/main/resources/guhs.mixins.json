@@ -21,6 +21,7 @@
     "RingZichtMixin",
     "ServerLevelMixin",
     "StructuurPakMixin",
+    "VadsrijkIjsMixin",
     "VillagerMixin"
   ],
   "injectors": {

@@ -94,6 +94,34 @@ public final class KerkerLoot {
         return new LootTabel.Resultaat(buit, 400L * zone * zone + 300);
     }
 
+    /**
+     * 1.10.3 "Grotere dungeons": the chest halfway (after pack room 2 of a big cave), a smaller personal chest: 150·zone² + 100
+     * brons, one gear piece of this zone's pool at the cave's level (ZELDZAAM, {@link #EPISCH_KANS} for EPISCH) and 2-3 ores.
+     * No pet / mount roll, no first-clear bonus (those stay with the end chest).
+     */
+    public static LootTabel.Resultaat tussenKist(String grot, int lv, ServerPlayer p) {
+        KerkerData.Kerker k = Kerkers.van(grot);
+        int zone = k == null ? 1 : k.zone();
+        RandomSource r = p.getRandom();
+        List<ItemStack> buit = new ArrayList<>();
+        BasisType t = stukVoor(p, zone);
+        if (t != null) {
+            buit.add(Rollen.stack(Rollen.rol(t, lv, r.nextDouble() < EPISCH_KANS ? Zeldzaamheid.EPISCH : Zeldzaamheid.ZELDZAAM, r)));
+        }
+        List<Materialen.Materiaal> ertsen = Materialen.van(Ambacht.MIJNEN, Math.min(5, zone));
+        if (!ertsen.isEmpty()) {
+            Materialen.Materiaal m = ertsen.get(r.nextInt(ertsen.size()));
+            ItemStack s = Materialen.stack(m.id(), 0, 2 + r.nextInt(2));
+            if (!s.isEmpty()) {
+                buit.add(s);
+            }
+        }
+        return new LootTabel.Resultaat(buit, TUSSEN_MUNTEN * zone * zone + 100);
+    }
+
+    /** 1.10.3: brons of the chest halfway per zone² (+ 100). */
+    public static final long TUSSEN_MUNTEN = 150;
+
     /** The rare pet roll ({@link #PET_KANS}, pity {@link #PET_PITY}); true = given now. Nothing (and no count) when owned. */
     public static boolean rolPet(ServerPlayer p, GrotBazen.Def d) {
         if (Huisdieren.heeft(p, d.pet())) {
