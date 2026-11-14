@@ -47729,5 +47729,16 @@
   "vadsrijk.vitrine.chat.beeld.embleem": "In de vitrine: het embleem van De Knuffelorde",
   "vadsrijk.vitrine.chat.offline": "(%s is nu niet online: dit is de stand van de laatste keer.)",
   "structure.guhs.vr_w_portaaltempel": "Het Vadsrijk",
-  "structure.guhs.vr_w_portaaltempel.tooltip": "De oude ordetempel met het slapende portaal naar Het Vadsrijk. Praat eerst met Werver Wimpel!"
+  "structure.guhs.vr_w_portaaltempel.tooltip": "De oude ordetempel met het slapende portaal naar Het Vadsrijk. Praat eerst met Werver Wimpel!",
+  "vadsrijk.tijd.status": "Vadsrijk-tijd: cyclus %1$s min · dag %2$s min · avond + nacht + ochtend %3$s min (dag_deel %4$s)",
+  "vadsrijk.tijd.status.nu": "Nu %1$s in het Vadsrijk (%2$s, dag %3$s, kloktijd %4$s) · tempo %5$s · overworld %6$s",
+  "vadsrijk.tijd.status.config": "Instellingen: config/%s (of /guhs vadsrijk tijd cyclus|dag)",
+  "vadsrijk.tijd.is_dag": "dag",
+  "vadsrijk.tijd.is_nacht": "nacht",
+  "vadsrijk.tijd.cyclus.gezet": "De Vadsrijk-cyclus duurt nu %1$s minuten (dag %2$s min, avond + nacht + ochtend %3$s min).",
+  "vadsrijk.tijd.dag.gezet": "De dag is nu %1$s van de Vadsrijk-cyclus (dag %2$s min, avond + nacht + ochtend %3$s min).",
+  "vadsrijk.tijd.zet.dag": "Goedemorgen, Vadsrijk! Het is nu dag.",
+  "vadsrijk.tijd.zet.nacht": "Welterusten, Vadsrijk! Het is nu nacht.",
+  "vadsrijk.tijd.herlaad": "config/%s opnieuw gelezen.",
+  "vadsrijk.tijd.geen_klok": "Het Vadsrijk heeft geen eigen klok (mist data/guhs/world_clock/vadsrijk.json?)."
 }

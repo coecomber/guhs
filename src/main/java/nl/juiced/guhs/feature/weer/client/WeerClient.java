@@ -270,7 +270,7 @@ public final class WeerClient {
 
     /** A big arc of coloured dust, opposite the sun, that moves with you (as a real rainbow does). */
     private static void regenboog(ClientLevel level, Vec3 c, RandomSource r, float s) {
-        long tijd = level.getOverworldClockTime() % 24000L;
+        long tijd = nl.juiced.guhs.world.GuhTime.timeOfDay(level);   // (1.10.1: the clock of this level)
         double kant = tijd < 6000 || tijd > 18000 ? -1 : 1;       // morning: in the west; afternoon: in the east
         double afstand = 46, straal = 30;
         int aantal = (int) (34 * s);
@@ -286,7 +286,7 @@ public final class WeerClient {
     }
 
     private static boolean isNacht(ClientLevel level) {
-        long t = level.getOverworldClockTime() % 24000L;
+        long t = nl.juiced.guhs.world.GuhTime.timeOfDay(level);   // (1.10.1: the clock of this level)
         return t > 12800 && t < 23200;
     }
 

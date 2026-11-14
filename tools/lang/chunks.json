@@ -7091,6 +7091,13 @@
       "prefixes": [
         "vadsrijk.kleding.garderobe"
       ]
+    },
+    {
+      "id": "c470_vr_tijd",
+      "title": "1.10.1 (p1101-tijd): /guhs vadsrijk tijd, the Vadsrijk's own day/night cycle",
+      "prefixes": [
+        "vadsrijk.tijd."
+      ]
     }
   ]
 }

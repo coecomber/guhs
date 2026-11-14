@@ -1,6 +1,11 @@
 package nl.juiced.guhs.world;
 
+import java.util.Optional;
+
 import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.clock.WorldClock;
@@ -21,16 +26,38 @@ import net.minecraft.world.level.Level;
  * level.isDay() / level.isNight()       -> level.isBrightOutside() / level.isDarkOutside()   (identical code)
  * </pre>
  * Works on both sides (the client gets the clocks from the server).
+ * <p>
+ * 1.10.1 (p1101-tijd): the Vadsrijk (guhs:vadsrijk) is the one exception. Its dimension type has its own world clock
+ * {@link #VADSRIJK_KLOK} (default_clock), so for a Vadsrijk level every method here reads/sets THAT clock; every other level
+ * keeps the overworld clock. The Vadsrijk clock still counts on the vanilla 24000 scale (0 sunrise, 13000 night), only its
+ * speed changes (feature/vadsrijk/tijd/VadsrijkTijd), so every "is it night" threshold keeps working.
  */
 public final class GuhTime {
     public static final long DAY = 24000L;
+    /** 1.10.1: the Vadsrijk's own world clock (data/guhs/world_clock/vadsrijk.json). */
+    public static final ResourceKey<net.minecraft.world.clock.WorldClock> VADSRIJK_KLOK = ResourceKey.create(Registries.WORLD_CLOCK,
+            Identifier.fromNamespaceAndPath("guhs", "vadsrijk"));
 
     private GuhTime() {
     }
 
-    /** 1.21.1 {@code level.getDayTime()}: total ticks of the overworld day clock. */
+    /** 1.21.1 {@code level.getDayTime()}: total ticks of the overworld day clock (1.10.1: of the Vadsrijk clock in the Vadsrijk). */
     public static long dayTime(Level level) {
-        return level.getOverworldClockTime();
+        return level.clockManager().getTotalTicks(klok(level));
+    }
+
+    /** The day clock of this level: the Vadsrijk's own clock when that is its default clock, else the overworld clock. */
+    public static Holder<WorldClock> klok(Level level) {
+        return klok(level.dimensionType(), level.registryAccess());
+    }
+
+    /** {@link #klok(Level)} for a dimension type (also without a loaded level: the gametest server has no Vadsrijk level). */
+    public static Holder<WorldClock> klok(net.minecraft.world.level.dimension.DimensionType type, net.minecraft.core.RegistryAccess registries) {
+        Optional<Holder<WorldClock>> eigen = type.defaultClock();
+        if (eigen.isPresent() && eigen.get().is(VADSRIJK_KLOK)) {
+            return eigen.get();
+        }
+        return registries.getOrThrow(WorldClocks.OVERWORLD);
     }
 
     /** Time of day in ticks, 0..23999 (0 = sunrise-ish 6:00, 6000 noon, 18000 midnight). */
@@ -61,8 +88,9 @@ public final class GuhTime {
         return level.registryAccess().getOrThrow(WorldClocks.OVERWORLD);
     }
 
-    /** 1.21.1 {@code serverLevel.setDayTime(t)}: sets the overworld day clock (shared by all dimensions, like 1.21.1). */
+    /** 1.21.1 {@code serverLevel.setDayTime(t)}: sets the overworld day clock (shared by all dimensions, like 1.21.1);
+     *  1.10.1: on the Vadsrijk level it sets the Vadsrijk clock only. */
     public static void setDayTime(ServerLevel level, long ticks) {
-        level.clockManager().setTotalTicks(overworldClock(level), ticks);
+        level.clockManager().setTotalTicks(klok(level), ticks);
     }
 }
