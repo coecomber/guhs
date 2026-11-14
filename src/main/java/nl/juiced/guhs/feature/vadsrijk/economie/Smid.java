@@ -178,7 +178,7 @@ public final class Smid {
     /** New bonuses: as many as before; the kept one stays (same place, same value), the others are distinct from it. */
     public static List<Bonus> herrolBonussen(Uitrusting u, int houd, RandomSource r) {
         int n = u.bonussen().size();
-        List<Bonus> nieuw = Bonussen.rol(n + 1, u.level(), u.zeldzaamheid(), r, u.basisType() == null ? null : u.basisType().slot());   // T-ITEMS: slot pool
+        List<Bonus> nieuw = Bonussen.rol(n + 1, u.level(), u.zeldzaamheid(), r, u.basisType());   // (1.10.3: + no useless main stat on weapons)   // T-ITEMS: slot pool
         List<Bonus> uit = new ArrayList<>();
         Bonus vast = houd >= 0 ? u.bonussen().get(houd) : null;
         for (Bonus b : nieuw) {

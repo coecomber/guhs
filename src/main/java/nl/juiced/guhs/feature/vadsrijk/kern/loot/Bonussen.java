@@ -91,14 +91,40 @@ public final class Bonussen {
 
     /** {@code n} distinct bonuses for an item of this level and rarity. */
     public static List<Bonus> rol(int n, int level, Zeldzaamheid z, RandomSource r) {
-        return rol(n, level, z, r, null);
+        return rol(n, level, z, r, (Slot) null);
     }
 
     /** T-ITEMS: {@code n} distinct bonuses for a piece for this slot (the slot-limited stats only where they may roll). */
     public static List<Bonus> rol(int n, int level, Zeldzaamheid z, RandomSource r, @javax.annotation.Nullable Slot slot) {
+        return rol(n, level, z, r, slot, null);
+    }
+
+    /** 1.10.3: bonuses for a piece of this base type: on a weapon only the main stat of its own damage kind (see {@link #nuttig}). */
+    public static List<Bonus> rol(int n, int level, Zeldzaamheid z, RandomSource r, @javax.annotation.Nullable BasisType t) {
+        return rol(n, level, z, r, t == null ? null : t.slot(), t != null && t.slot() == Slot.WAPEN ? nl.juiced.guhs.feature.vadsrijk.kern.Aanvalstempo.schadeSoort(t) : null);
+    }
+
+    /**
+     * 1.10.3 (user request): a weapon never rolls another class's main stat: Kracht only works for melee, Behendigheid for ranged,
+     * Wijsheid for magic (kern/Schade.aanval), so Wijsheid on a bow etc. was a dead roll. {@code wapenSoort} null = no limit.
+     */
+    public static boolean nuttig(Stat s, @javax.annotation.Nullable nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort wapenSoort) {
+        if (wapenSoort == null) {
+            return true;
+        }
+        return switch (s) {
+            case KRACHT -> wapenSoort == nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort.MELEE;
+            case BEHENDIGHEID -> wapenSoort == nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort.AFSTAND;
+            case WIJSHEID -> wapenSoort == nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort.MAGIE;
+            default -> true;
+        };
+    }
+
+    private static List<Bonus> rol(int n, int level, Zeldzaamheid z, RandomSource r, @javax.annotation.Nullable Slot slot,
+            @javax.annotation.Nullable nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort wapenSoort) {
         List<Stat> vrij = new ArrayList<>();
         for (Stat st : POOL.keySet()) {
-            if (mag(st, slot)) {
+            if (mag(st, slot) && nuttig(st, wapenSoort)) {
                 vrij.add(st);
             }
         }

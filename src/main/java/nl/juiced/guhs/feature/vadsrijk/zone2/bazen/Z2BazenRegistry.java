@@ -142,6 +142,11 @@ public final class Z2BazenRegistry {
     }
 
     private static void arenas() {
+        // 1.10.3: the Spiegelburcht's front door opens for whoever got Vrouwe Spiegelzucht's quest (z2_hq11, from Prisma on the
+        // forecourt) or has finished it / the castle story; before nothing unlocked it ("Er moet een sleutel zijn..." for everyone)
+        nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.SLEUTELS.put("spiegelburcht", p ->
+                nl.juiced.guhs.feature.vadsrijk.npc.Questlog.status(p, "z2_hq11_spiegelzucht") != 0
+                        || nl.juiced.guhs.feature.vadsrijk.npc.Questlog.klaar(p, "z2_hq10_spiegelburcht"));
         Arenas.registreer(new Arena(ARENA_GALM, Z2BazenPlekken.GALM_CENTRUM, Z2BazenPlekken.GALM_STRAAL, Z2BazenPlekken.GALM_DEUR,
                 Z2BazenPlekken.GALM_RESPAWN, Z2BazenPlekken.GALM_BORD, "vadsrijk.z2bazen.galmwolf"), sl -> {
                     Galmwolf g = GALMWOLF.get().create(sl, EntitySpawnReason.SPAWNER);

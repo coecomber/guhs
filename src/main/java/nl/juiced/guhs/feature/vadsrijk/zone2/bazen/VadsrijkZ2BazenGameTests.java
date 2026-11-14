@@ -317,4 +317,17 @@ public class VadsrijkZ2BazenGameTests {
         helper.assertTrue(Rollen.van(kroon) != null && Rollen.van(kroon).gebonden(), "the Guhddelijk crown rolls and is gebonden");
         helper.succeed();
     }
+
+    /** 1.10.3: the Spiegelburcht's front door has a key: Vrouwe Spiegelzucht's quest (z2_hq11) taken, or the castle story done. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void burchtDeurSleutel(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.wisAlles(p);
+        Spelers.data(p).extra("wereld").remove("deur_spiegelburcht");
+        helper.assertFalse(nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.ontgrendeld("spiegelburcht", p), "no quest yet: shut");
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.neemAan(p, nl.juiced.guhs.feature.vadsrijk.npc.Quests.van("z2_hq11_spiegelzucht"));
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.wereld.WereldDeuren.ontgrendeld("spiegelburcht", p), "z2_hq11 taken: the door opens for you");
+        nl.juiced.guhs.feature.vadsrijk.npc.Questlog.wisAlles(p);
+        helper.succeed();
+    }
 }

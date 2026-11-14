@@ -13,6 +13,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 - **Rarer top loot:** luck now lifts rarity weights only up to Episch (bosses: Guhddelijk 11.5 % -> 1.6 %, Legendarisch 15 % -> 6.4 % per random item; elites 6.9 % -> 1.25 %). Named first-kill rewards unchanged.
 - **Druipgrotten:** fewer tunnel mobs (a group every 21 instead of 15 blocks, Knaag groups of 2), slower respawn (45-65 s, knots 60 s), area cap 80 -> 55: the Mopje escort is no longer the hardest part of the zone-1 story.
 - **Quest tracker:** the mount return quests (Knuffelhert, Guhwolf, Wolkenschaapje) are no longer added to the tracker by themselves (they could not be unfollowed); pin them in the questlog like any side quest.
+- **Fix: the Spiegelburcht's front door never opened** (nothing ever unlocked it). It now opens for anyone who has taken Vrouwe Spiegelzucht's quest (z2_hq11) or finished the castle story; the locked line now points to Prisma.
 - **Boss arena boards and dungeon door signs are back:** the respawn board in front of every boss arena ("Back in m:ss" / "is awake") and the name boards over the dungeon doors never appeared after most server restarts (their timer checked the saved game time while being run on the server's own tick counter, which restarts at 0). They now appear reliably, survive chunk unloads and never double up.
 
 ## 1.10.2 — Minecraft 26.1.2

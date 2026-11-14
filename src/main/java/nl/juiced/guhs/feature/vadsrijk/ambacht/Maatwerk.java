@@ -234,7 +234,7 @@ public final class Maatwerk {
         }
         int rest = z.maxBonus - bonussen.size();
         for (int poging = 0; poging < 20 && rest > 0; poging++) {
-            for (Bonus b : Bonussen.rol(rest, level, z, r)) {
+            for (Bonus b : Bonussen.rol(rest, level, z, r, t)) {   // (1.10.3: the random rest follows the piece, no useless main stat on weapons)
                 if (rest > 0 && gezien.add(b.stat())) {
                     bonussen.add(b);
                     rest--;

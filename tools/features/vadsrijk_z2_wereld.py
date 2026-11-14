@@ -32,7 +32,7 @@ TEKSTEN = {
     # the Spiegelburcht door (WereldDeuren id spiegelburcht)
     W + "deur.titel.spiegelburcht": "De Spiegelburcht",
     W + "deur.onder.spiegelburcht": "Kerker van zone 2 - lv 28-30",
-    W + "deur.dicht.spiegelburcht": "De spiegeldeur weerkaatst alleen je eigen gezicht. Er moet een sleutel zijn...",
+    W + "deur.dicht.spiegelburcht": "De spiegeldeur weerkaatst alleen je eigen gezicht. Prisma op het voorplein weet hoe je binnenkomt.",
     # airship line
     Z + "luchtschip.titel": "Kandijkom",
     Z + "luchtschip.onder": "De Splinterpieken - lv 20-30",

@@ -105,8 +105,18 @@ public final class WereldDeuren {
     }
 
     public static boolean ontgrendeld(String id, ServerPlayer p) {
-        return Spelers.data(p).extra("wereld").getBooleanOr("deur_" + id, false);
+        if (Spelers.data(p).extra("wereld").getBooleanOr("deur_" + id, false)) {
+            return true;
+        }
+        java.util.function.Predicate<ServerPlayer> k = SLEUTELS.get(id);
+        return k != null && k.test(p);
     }
+
+    /**
+     * 1.10.3: the "key" of a door per id (e.g. a quest step): a player for whom it holds may open it. Before, the Spiegelburcht's
+     * front door had no key at all (nothing ever called {@link #ontgrendel} for it), so it never opened for anyone.
+     */
+    public static final Map<String, java.util.function.Predicate<ServerPlayer>> SLEUTELS = new java.util.concurrent.ConcurrentHashMap<>();
 
     public static void openZonderScene(ServerLevel sl, String id) {
         WereldPlekken.Deur d = deur(id);
