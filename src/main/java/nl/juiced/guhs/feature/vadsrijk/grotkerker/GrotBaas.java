@@ -96,7 +96,16 @@ public class GrotBaas extends VadsrijkBaas implements GeoEntity {
     @Override
     public int xp() {
         int l = Math.max(1, Math.min(Levels.MAX - 1, mobLevel()));
-        return (int) Math.max(150, Math.round(Levels.xpVoor(l) * 0.15));
+        Kerker k = kerker();
+        return (int) Math.max(150, Math.round(Levels.xpVoor(l) * xpFactor(k == null ? 1 : k.zone())));
+    }
+
+    /**
+     * 1101-balans: the boss's share of a level (was 0.15), so a solo run (7 pack mobs + elite + boss) gives ~0.8 level of the boss
+     * level in every dungeon: zones 1-2 0.50 (Zwamgrot 791 -> ~1,400 xp), zones 3-6 0.63 (their mobs give stap/55, less per kill).
+     */
+    public static double xpFactor(int zone) {
+        return zone <= 2 ? 0.50 : 0.63;
     }
 
     @Nullable

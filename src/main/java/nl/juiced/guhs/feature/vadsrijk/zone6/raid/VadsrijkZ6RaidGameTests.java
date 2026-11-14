@@ -88,7 +88,8 @@ public class VadsrijkZ6RaidGameTests {
         Zandwachter tien = zet(sl, Z6RaidRegistry.ZANDWACHTER.get(), Vec3.atBottomCenterOf(c).add(3, 0, 0), 10);
         double ratio = tien.maxVads() / twee.maxVads();
         helper.assertTrue(Math.abs(ratio - 5.05 / 1.45) < 0.01, "10 players vs 2: x" + (5.05 / 1.45) + ", got x" + ratio);
-        helper.assertTrue(Math.abs(twee.maxVads() - 30000 * 1.45) < 1, "2 players: 30000 x 1.45, got " + twee.maxVads());
+        double comp = nl.juiced.guhs.feature.vadsrijk.kern.mob.MobBalans.compensatie(twee.mobLevel());   // 1101-balans: boss HP x the main-stat compensation
+        helper.assertTrue(Math.abs(twee.maxVads() - 30000 * 1.45 * comp) < 1, "2 players: 30000 x 1.45 x " + comp + ", got " + twee.maxVads());
         helper.assertTrue(twee.plaatNodig() == 1 && tien.plaatNodig() == 2, "plate count 1 (2p) / 2 (10p)");
         twee.discard();
         tien.discard();

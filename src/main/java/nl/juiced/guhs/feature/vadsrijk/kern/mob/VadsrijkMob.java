@@ -140,7 +140,7 @@ public abstract class VadsrijkMob extends Monster {
         this.entityData.set(ELITE, elite);
         this.affixen.clear();
         this.affixen.addAll(affixen);
-        double max = basisVads(level) * (elite ? 2.5 : 1);
+        double max = vadsOp(level) * (elite ? 2.5 : 1);
         this.entityData.set(MAX_VADS, (float) max);
         this.entityData.set(VADS, (float) max);
         if (affixen.contains(Affix.SNEL) && getAttribute(Attributes.MOVEMENT_SPEED) != null) {
@@ -148,6 +148,23 @@ public abstract class VadsrijkMob extends Monster {
         }
         ingesteld = true;
         naamplaatje();
+    }
+
+    /**
+     * 1101-balans: the max Vads this creature really gets at a level = {@link #basisVads} x {@link #levenFactor}. Use this (not
+     * basisVads) wherever max Vads is (re)set.
+     */
+    public double vadsOp(int level) {
+        return basisVads(level) * levenFactor(level);
+    }
+
+    /**
+     * 1101-balans: the HP factor on top of basisVads. Open-world creatures (a loot table, not a boss): {@code [mobs] leven} (x1.4)
+     * times the slope fix 0.30 -> 0.45 per level ({@link MobBalans#helling}). Everything else (bosses, their helpers): only the
+     * compensation for the flatter main stat ({@link MobBalans#compensatie}), so boss fights last as long as in 1.10.0.
+     */
+    protected double levenFactor(int level) {
+        return lootTabel() != null ? MobBalans.leven(level) : MobBalans.compensatie(level);
     }
 
     public int mobLevel() {

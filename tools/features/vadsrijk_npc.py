@@ -1373,11 +1373,24 @@ X_ZONE1_XP = {
     "hq09_druipgrotten": 5900, "hq10_zwamtempel": 4400,
 }
 
+# 1101-balans: zone-1 main quests from hq08 on (every "hoofd" quest after hq07_littekens in QUESTS: hq08-hq12) get x0.6
+# on top of X_ZONE1_XP, rounded to 10; the tutorial hq01-hq07, side, mount and class quests keep their xp.
+BALANS_1101_HOOFD = 0.6
+BALANS_1101_VANAF_NA = "hq07_littekens"
+_BALANS_1101_BASIS = {}   # (base xp per quest, so calling quests_json() twice never compounds)
+
 
 def quests_json():
     for _q in QUESTS:   # X-ZONE1: the quest xp above
         if _q["id"] in X_ZONE1_XP:
             _q["beloning"]["xp"] = X_ZONE1_XP[_q["id"]]
+    na_tutorial = False
+    for _q in QUESTS:   # 1101-balans: the factor above
+        if na_tutorial and _q["soort"] == "hoofd":
+            basis = _BALANS_1101_BASIS.setdefault(_q["id"], _q["beloning"]["xp"])
+            _q["beloning"]["xp"] = int(basis * BALANS_1101_HOOFD / 10 + 0.5) * 10
+        if _q["id"] == BALANS_1101_VANAF_NA:
+            na_tutorial = True
     npc_ids, poi_ids = _java_ids()
     ids = [q["id"] for q in QUESTS]
     assert len(ids) == len(set(ids)), "duplicate quest id"

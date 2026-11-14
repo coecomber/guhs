@@ -62,6 +62,16 @@ public class KarakterPaneel extends MenuPaneel {
             String l = "lv " + k.getIntOr("lv", 1);
             g.text(font, l, x1 + kolom - 8 - font.width(l), y, actief ? TEKST : ZACHT, false);
             y += 10;
+            double inhaal = k.getDoubleOr("inhaal", 1);
+            if (inhaal > 1.001) {   // 1101-balans: "Inhaalbonus x1,6" under a class that is behind
+                String f = String.format(Locale.ROOT, "%.1f", inhaal);
+                if (net.minecraft.client.Minecraft.getInstance().options.languageCode.startsWith("nl")) {
+                    f = f.replace('.', ',');
+                }
+                g.text(font, Component.literal("    ").append(Component.translatable("vadsrijk.menu.karakter.inhaal", f)), x1, y, 0xFF2E8B3A, false);
+                tip(mx, my, x1, y - 1, kolom - 8, 10, List.of(Component.translatable("vadsrijk.menu.karakter.inhaal.uitleg")));
+                y += 10;
+            }
         }
         y += 4;
         g.text(font, Component.translatable("vadsrijk.menu.karakter.schade", String.format(Locale.ROOT, "%.1f", data.getDoubleOr("wapenSchade", 0))), x1, y, TEKST,

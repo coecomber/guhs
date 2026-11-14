@@ -155,6 +155,7 @@ public final class MenuServer {
             c.putString("naam", o.naamKey());
             c.putInt("lv", d.level(o.id()));
             c.putBoolean("actief", o.id().equals(k.id()));
+            c.putDouble("inhaal", Spelers.inhaalFactor(d, o.id()));   // 1101-balans: the catch-up bonus of that class
             kl.add(c);
         }
         t.put("klassen", kl);

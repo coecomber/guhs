@@ -1,10 +1,136 @@
 # XP-balans Het Vadsrijk
 
-Gemaakt met `python tools/vadsrijk/xpbalans.py` (opties: `--kpm`, `--onderweg`, `--zone N`, `--schaal z:hoofd:zij` voor wat-als).
+Gemaakt met `python tools/vadsrijk/xpbalans.py` (opties: `--kpm`, `--onderweg`, `--zone N`, `--runs N` (scenario D), `--schaal z:hoofd:zij` voor wat-als).
 Bron: de quest-JSON's (`data/guhs/vadsrijk/npc/quests*.json`) + de xp-formules uit de Java-code (Levels-curve, mob-xp per zone,
-bazen 0,35 level, kerker-run = 3+4 mobs + elite + grotbaas 0,15 level). Het **generieke** level telt voor quest-poorten.
-A = alleen hoofdquests, B = hoofd + zij + 1 klasse-quest + eerste keer elke baas, C = B + 1 kerker-run. "Onderweg" = extra
+bazen 0,35 level, kerker-run = 3+4 mobs + elite + grotbaas, sinds 1.10.1 samen ~0,8 level van het baaslevel). Het **generieke** level telt voor quest-poorten.
+A = alleen hoofdquests, B = hoofd + zij + 1 klasse-quest + eerste keer elke baas, C = B + 1 kerker-run, D = alleen hoofd + N kerker-runs. "Onderweg" = extra
 gewone kills per quest (normaal spelen; 0 = alleen wat de quests zelf vragen).
+
+## Ronde 1.10.1 (1101-balans, 2026-11-14)
+
+**Gevraagd:** zone 1 voelde in de tweede helft te makkelijk; hoofdquests droegen 87 % van de xp (hq08 en hq09 gaven elk 3,4-3,9
+levels). Doel: alleen-hoofd ("los", precies op het poortlevel binnen, 5 kills onderweg) ~10-30 min grinden per zone (2 kills/min);
+hoofd + 2-4 kerker-runs per zone: geen grind. Kerkers moeten de moeite waard worden. Analyse: `BALANS_1101_ANALYSE.md` sectie 1.
+
+**Wat er veranderde:**
+- **Hoofdquest-xp** (alleen `soort == "hoofd"`; zij-, rijdier- en klasse-quests ongewijzigd), als factor bovenop `X_ZONE1_XP`
+  in de generators (blok `BALANS_1101_HOOFD`, afgerond op 10):
+  - zone 1: tutorial hq01-hq07 vol; **x0,6 vanaf hq08** (hq08 3000 -> 1800, hq09 5900 -> 3540, hq10 4400 -> 2640,
+    hq11 3000 -> 1800, hq12 2000 -> 1200); totaal hoofd 19.590 -> 12.270;
+  - zone 2 **x0,6** (18.900 -> 11.340), zone 3 **x0,8** (137.500 -> 110.000), zone 4 **ongewijzigd** (70.900),
+    zone 5 **x0,65** (61.400 -> 39.920), zone 6 **x0,7** (160.400 -> 112.290).
+- **Kerkerbaas** (`GrotBaas.xp()`): van `max(150, 0,15 * stap(baasLv))` naar `max(150, f * stap(baasLv))` met **f = 0,50 in
+  zone 1-2 en 0,63 in zone 3-6**, zodat een solo-run (7 pack-mobs + 1 elite + baas) **~0,8 level van het baaslevel** geeft:
+  Zwamgrot 791 -> 1.401, Kristalgrot 1.925 -> 3.448, Wortelgrot 3.905 -> 9.801, Koraalgrot 5.080 -> 12.621,
+  Wolkengrot 5.758 -> 14.176, Zingende Zoutgrot 6.785 -> 16.825. (Het verschil komt doordat mobs in zone 1-2 relatief meer xp
+  geven: daar doen pack + elite al ~0,3 level, in zone 3-6 maar ~0,17.)
+- Nieuw in `xpbalans.py`: **scenario D** = alleen hoofd + N kerker-runs (geen zijquests), tabel "Alleen hoofd + kerker-runs"
+  (`--runs N`, standaard 3). Runs worden gedaan zodra je level >= kerker-minLv - 1.
+- Levelpoorten, curve, mob-xp, bazen buiten de kerkers en zijquests: **niet** aangeraakt.
+
+**Grind per zone (los, 5 kills onderweg, 2 kills/min):**
+
+| Zone | A vóór | A na | Hoofd + 2 runs vóór / na | Hoofd + 3 runs vóór / na | Hoofd + 4 runs vóór / na |
+|---|---|---|---|---|---|
+| 1 Klodderdal | 0 | **30 min** | 0 / 7 min | 0 / **0** | 0 / 0 |
+| 2 Splinterpieken | 1 min | **23 min** | 0 / 0 | 0 / **0** | 0 / 0 |
+| 3 Schemerwortel | 10 min | **72 min** | 0 / 24 min | 0 / **13 min** | 0 / 13 min |
+| 4 Lampionkust | 1 min | **1 min** | 0 / 0 | 0 / **0** | 0 / 0 |
+| 5 Hoogvads | 19 min | **39 min** | 19 min / 28 min | 19 min / **28 min** | 19 min / 28 min |
+| 6 Zijdeland | 7 min | **64 min** | 6 min / 20 min | 6 min / **18 min** | 6 min / 18 min |
+
+**VOOR (ronde X)** en **NA (1.10.1)**, volledige tabellen van de tool (standaard, 5 kills onderweg):
+
+#### VOOR (ronde X)
+
+##### Los (zone binnen op PRECIES het poortlevel: de strenge toets)
+
+| Zone | Doel | Binnen A / B | Uit A | Uit B | Uit C | Grind A | Grind B | Grind C | Grindtempo |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 Het Klodderdal | 20 | 1.0 / 1.0 | 22.02 | 28.11 | 28.26 | 0 | 0 | 0 | 152 xp/min (mobs lv 20) |
+| 2 De Splinterpieken | 30 | 20.0 / 20.0 | 31.86 | 33.10 | 33.40 | 1 min | 0 | 0 | 332 xp/min (mobs lv 33) |
+| 3 De Schemerwortel | 50 | 30.0 / 30.0 | 50.42 | 51.09 | 51.38 | 10 min | 0 | 0 | 462 xp/min (mobs lv 49) |
+| 4 De Lampionkust | 56 | 50.0 / 50.0 | 56.07 | 58.58 | 58.89 | 1 min | 0 | 0 | 572 xp/min (mobs lv 56) |
+| 5 Hoogvads | 60 | 55.0 / 55.0 | 61.09 | 63.52 | 63.83 | 19 min | 16 min | 16 min | 638 xp/min (mobs lv 60) |
+| 6 Het Zijdeland | 69 | 60.0 / 60.0 | 69.70 | 70.00 | 70.00 | 7 min | 0 | 0 | 798 xp/min (mobs lv 70) |
+
+##### Alleen hoofd + kerker-runs (scenario D, los, 5 kills onderweg; runs zodra je level >= kerker-minLv - 1)
+
+| Zone | Kerker (1 run) | Grind 0 runs | Grind 2 runs | Grind 3 runs | Grind 4 runs | Uit (3 runs) |
+|---|---|---|---|---|---|---|
+| 1 Het Klodderdal | Zwamgrot 791 xp (0.45 lv van 14) | 0 | 0 | 0 | 0 | 22.70 |
+| 2 De Splinterpieken | Kristalgrot 1925 xp (0.44 lv van 25) | 1 min | 0 | 0 | 0 | 32.74 |
+| 3 De Schemerwortel | Wortelgrot 3905 xp (0.32 lv van 48) | 10 min | 0 | 0 | 0 | 51.00 |
+| 4 De Lampionkust | Koraalgrot 5080 xp (0.32 lv van 56) | 1 min | 0 | 0 | 0 | 57.02 |
+| 5 Hoogvads | Wolkengrot 5758 xp (0.33 lv van 60) | 19 min | 19 min | 19 min | 19 min | 62.05 |
+| 6 Het Zijdeland | Zingende Zoutgrot 6785 xp (0.32 lv van 67) | 7 min | 6 min | 6 min | 6 min | 70.00 |
+
+#### NA (1.10.1)
+
+##### Keten (zone binnen op het eigen level uit de vorige zone)
+
+| Zone | Doel | Binnen A / B | Uit A | Uit B | Uit C | Grind A | Grind B | Grind C | Grindtempo |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 Het Klodderdal | 20 | 1.0 / 1.0 | 20.95 | 26.60 | 26.91 | 30 min | 0 | 0 | 152 xp/min (mobs lv 20) |
+| 2 De Splinterpieken | 30 | 21.0 / 26.6 | 31.60 | 35.82 | 36.49 | 11 min | 0 | 0 | 348 xp/min (mobs lv 35) |
+| 3 De Schemerwortel | 50 | 31.6 / 35.8 | 50.09 | 52.05 | 53.15 | 42 min | 0 | 0 | 462 xp/min (mobs lv 49) |
+| 4 De Lampionkust | 56 | 50.1 / 52.1 | 56.12 | 60.24 | 61.85 | 0 | 0 | 0 | 572 xp/min (mobs lv 56) |
+| 5 Hoogvads | 60 | 56.1 / 60.2 | 60.57 | 66.36 | 68.41 | 10 min | 0 | 0 | 638 xp/min (mobs lv 60) |
+| 6 Het Zijdeland | 69 | 60.6 / 66.4 | 69.44 | 70.00 | 70.00 | 49 min | 0 | 0 | 798 xp/min (mobs lv 70) |
+
+##### Los (zone binnen op PRECIES het poortlevel: de strenge toets)
+
+| Zone | Doel | Binnen A / B | Uit A | Uit B | Uit C | Grind A | Grind B | Grind C | Grindtempo |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 Het Klodderdal | 20 | 1.0 / 1.0 | 20.95 | 26.60 | 26.91 | 30 min | 0 | 0 | 152 xp/min (mobs lv 20) |
+| 2 De Splinterpieken | 30 | 20.0 / 20.0 | 31.60 | 31.91 | 32.48 | 23 min | 0 | 0 | 332 xp/min (mobs lv 33) |
+| 3 De Schemerwortel | 50 | 30.0 / 30.0 | 50.09 | 50.09 | 50.09 | 72 min | 37 min | 14 min | 462 xp/min (mobs lv 49) |
+| 4 De Lampionkust | 56 | 50.0 / 50.0 | 56.07 | 58.58 | 59.33 | 1 min | 0 | 0 | 572 xp/min (mobs lv 56) |
+| 5 Hoogvads | 60 | 55.0 / 55.0 | 60.57 | 62.51 | 63.28 | 39 min | 20 min | 20 min | 638 xp/min (mobs lv 60) |
+| 6 Het Zijdeland | 69 | 60.0 / 60.0 | 69.44 | 70.00 | 70.00 | 64 min | 6 min | 6 min | 798 xp/min (mobs lv 70) |
+
+##### Bronnen per zone (scenario C, los)
+
+| Zone | Hoofd-xp | Zij-xp | Kills (quest + onderweg) | Bazen (1e keer) | 1 kerker-run | Kerker | Zij niet gehaald (level) |
+|---|---|---|---|---|---|---|---|
+| 1 | 12270 | 8960 | 14859 | 11355 | 1401 | Zwamgrot (lv 11-13) | - |
+| 2 | 11340 | 2000 | 20290 | 20394 | 3448 | Kristalgrot (lv 22-24) | - |
+| 3 | 110000 | 6213 | 18680 | 33429 | 9801 | Wortelgrot (lv 44-46) | - |
+| 4 | 70900 | 10900 | 31342 | 13506 | 12621 | Koraalgrot (lv 53-55) | - |
+| 5 | 39920 | 16019 | 32215 | 25985 | 14176 | Wolkengrot (lv 58-60) | - |
+| 6 | 112290 | 14390 | 42175 | 39456 | 16825 | Zingende Zoutgrot (lv 64-66) | - |
+
+Puur quest-xp vanaf level 1, zonder een enkele kill (cumulatief): z1 hoofd 15.9 / alles 19.6, z2 hoofd 20.4 / alles 23.6, z3 hoofd 39.5 / alles 41.4, z4 hoofd 46.5 / alles 48.9, z5 hoofd 49.8 / alles 53.1, z6 hoofd 57.6 / alles 61.0.
+
+##### Alleen hoofd + kerker-runs (scenario D, los, 5 kills onderweg; runs zodra je level >= kerker-minLv - 1)
+
+| Zone | Kerker (1 run) | Grind 0 runs | Grind 2 runs | Grind 3 runs | Grind 4 runs | Uit (3 runs) |
+|---|---|---|---|---|---|---|
+| 1 Het Klodderdal | Zwamgrot 1401 xp (0.80 lv van 14) | 30 min | 7 min | 0 | 0 | 21.08 |
+| 2 De Splinterpieken | Kristalgrot 3448 xp (0.79 lv van 25) | 23 min | 0 | 0 | 0 | 32.27 |
+| 3 De Schemerwortel | Wortelgrot 9801 xp (0.80 lv van 48) | 72 min | 24 min | 13 min | 13 min | 50.48 |
+| 4 De Lampionkust | Koraalgrot 12621 xp (0.80 lv van 56) | 1 min | 0 | 0 | 0 | 58.41 |
+| 5 Hoogvads | Wolkengrot 14176 xp (0.81 lv van 60) | 39 min | 28 min | 28 min | 28 min | 62.56 |
+| 6 Het Zijdeland | Zingende Zoutgrot 16825 xp (0.80 lv van 67) | 64 min | 20 min | 18 min | 18 min | 70.00 |
+
+##### Keten bij 0 / 2 / 5 kills onderwegper quest (uit-level per zone, A = alleen hoofd, B = hoofd + zij + bazen)
+
+| Kills onderweg | z1 A / B | z2 A / B | z3 A / B | z4 A / B | z5 A / B | z6 A / B | B haalt 70 bij |
+|---|---|---|---|---|---|---|---|
+| 0 | 20.7 / 24.2 | 31.3 / 32.3 | 49.8 / 49.8 | 55.9 / 56.7 | 60.3 / 61.5 | 69.3 / 70.0 | - |
+| 2 | 20.8 / 25.1 | 31.4 / 33.7 | 49.9 / 50.0 | 55.9 / 57.4 | 60.4 / 62.8 | 69.4 / 70.0 | z6 z6_hq09_spiegelzaal |
+| 5 | 21.0 / 26.6 | 31.6 / 35.8 | 50.1 / 52.1 | 56.1 / 60.2 | 60.6 / 66.4 | 69.4 / 70.0 | z6 z6_s10_koerier |
+
+**Conclusie:**
+- **Zone 1, 2 en 4 halen het doel:** alleen-hoofd 30 / 23 / 1 min grinden (zone 4 bewust ongewijzigd), met 2-3 Zwamgrot- of
+  1-2 Kristalgrot-runs 0 min. Het level bij hq09/hq10/hq11 zakt ~0,5-1 level; einde zone 1 nu ~21 (was ~22).
+- **Zone 3, 5 en 6 missen de 10-30 min met de gekozen factoren** (niet aangepast, keuze van de gebruiker): alleen-hoofd
+  72 / 39 / 64 min. Met kerker-runs zakt dat naar 13 / 28 / 18 min, maar **niet naar 0**: alle resterende grind zit bij
+  levelpoorten *vóórdat* de kerker op level is (Wortelgrot vanaf ~43, Wolkengrot vanaf ~57, Zoutgrot vanaf ~63). Een vierde run
+  helpt dan niet meer. Wie de kerker eerder (onder level) doet, of de zijquests meeneemt (B), heeft in zone 3 nog 37 min (B) /
+  14 min (C), in zone 5 20 min, in zone 6 6 min nodig.
+- In de **keten** (binnen op het eigen level uit de vorige zone) is alleen-hoofd: 30 / 11 / 42 / 0 / 10 / 49 min. Hoofd + zij
+  (B) heeft nergens grind nodig; B haalt de cap 70 nu pas bij z6_s10 (5 kills onderweg) of z6_hq09 (2 kills), bij 0 kills niet.
 
 ## Ronde X (X-ZONE1, 2026-11-09): zone 1 als losse release + een gladde keten
 

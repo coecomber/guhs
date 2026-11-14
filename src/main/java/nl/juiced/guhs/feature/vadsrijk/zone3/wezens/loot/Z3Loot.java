@@ -125,12 +125,12 @@ public final class Z3Loot {
     }
 
     private static void tabel(String mob, List<LootTabel.Regel> r, double kans, int muntMin, int muntMax) {
-        LootTabellen.registreer("z3wezens:" + mob, new LootTabel(r, 1, kans, 1.3, muntMin, muntMax));
+        LootTabellen.registreer("z3wezens:" + mob, new LootTabel(r, 1, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.gewoon(kans), 1.3, muntMin, muntMax));
         List<LootTabel.Regel> elite = new ArrayList<>(r);
         elite.add(new LootTabel.Regel("honingring", 2));
         elite.add(new LootTabel.Regel("harsketting", 2));
         elite.add(new LootTabel.Regel("sporenoorbel", 2));
-        LootTabellen.registreer("z3wezens:" + mob + "_elite", new LootTabel(elite, 2, Math.min(1, kans * 3.5), 3.0, muntMin * 3, muntMax * 3));
+        LootTabellen.registreer("z3wezens:" + mob + "_elite", new LootTabel(elite, 2, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.elite(kans), nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.eliteGeluk(3.0), muntMin * 3, muntMax * 3));
     }
 
     /** Another slice's zone-3 weapon (a base type id) in every zone-3 creature table (rebuilds them). */

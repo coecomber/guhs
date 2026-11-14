@@ -119,7 +119,7 @@ public abstract class Z6RaidBaas extends Z3Baas {
             return;
         }
         geschaaldN = nu;
-        zetMaxVads(basisVads(mobLevel()) * Z6Schaal.factor(nu), true);
+        zetMaxVads(vadsOp(mobLevel()) * Z6Schaal.factor(nu), true);
     }
 
     @Override

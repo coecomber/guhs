@@ -50,7 +50,14 @@ public final class KlasseBalans {
     public static final List<String> ALGEMEEN_SLEUTELS = List.of("xp_schaal_generiek", "xp_schaal_klasse");
     /** g-int: g-balans' kern {@code Balans} section in the same file ({@code [mobs] schade}, default 1.3). */
     public static final String MOBS = "mobs";
-    public static final List<String> MOBS_SLEUTELS = List.of("schade");
+    public static final List<String> MOBS_SLEUTELS = List.of("schade", "leven", "versie");
+    /**
+     * 1101-balans: the version of the defaults in {@code [mobs]}. A file without {@code versie} (or a lower one) was written by an
+     * older release: on load, every key still at that release's default moves to the new default (a value an op changed by hand
+     * stays), then the file is written again with {@code versie = }{@link #MOBS_VERSIE}. 1 = 1.10.0 (schade 1.3, no leven),
+     * 2 = 1.10.1 (schade 1.69, leven 1.4).
+     */
+    public static final int MOBS_VERSIE = 2;
     /** I-MOUNTS: the mount knobs ({@code [rijdieren]}; pushed to economie's {@code RijdierSoort.Balans}). */
     public static final String RIJDIEREN = "rijdieren";
     public static final List<String> RIJDIEREN_SLEUTELS = List.of("snelheid", "sprong", "groei_snelheid", "groei_sprong");
@@ -87,6 +94,8 @@ public final class KlasseBalans {
             case "groei_snelheid" -> nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.GROEI_SNELHEID;
             case "groei_sprong" -> nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.GROEI_SPRONG;
             case "schade" -> MOBS.equals(klasse) ? nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_SCHADE_STANDAARD : 1.0;
+            case "leven" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_LEVEN_STANDAARD;   // 1101-balans
+            case "versie" -> MOBS_VERSIE;
             default -> 1.0;
         };
     }
@@ -146,6 +155,7 @@ public final class KlasseBalans {
         Levels.SCHAAL_GENERIEK = Math.max(0.05, get(ALGEMEEN, "xp_schaal_generiek"));
         Levels.SCHAAL_KLASSE = Math.max(0.05, get(ALGEMEEN, "xp_schaal_klasse"));
         nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetMobSchade(get(MOBS, "schade"));
+        nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetMobLeven(get(MOBS, "leven"));   // 1101-balans
         nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.Balans.zet(get(RIJDIEREN, "snelheid"), get(RIJDIEREN, "sprong"),
                 get(RIJDIEREN, "groei_snelheid"), get(RIJDIEREN, "groei_sprong"));
         nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.zet(k -> get(ITEMS, k));   // T-ITEMS
@@ -201,13 +211,58 @@ public final class KlasseBalans {
                     LogUtils.getLogger().warn("Vadsrijk balans: '{}' in [{}] is geen getal", regel, sectie);
                 }
             }
+            String migratie = migreer();   // 1101-balans
             pasToe();
             gelezen = Files.getLastModifiedTime(p).toMillis();
+            if (migratie != null) {
+                schrijf();
+                LogUtils.getLogger().info("Vadsrijk balans: {}", migratie);
+                return n + " waarden gelezen uit " + p + "; " + migratie;
+            }
             return n + " waarden gelezen uit " + p;
         } catch (IOException e) {
             LogUtils.getLogger().warn("Vadsrijk balans: could not read {}", p, e);
             return "kon " + p + " niet lezen: " + e.getMessage();
         }
+    }
+
+    /**
+     * 1101-balans: bring {@code [mobs]} of an older file to the current defaults (see {@link #MOBS_VERSIE}); only values still at the
+     * old default move. Null = nothing to do. Works on WAARDEN only (the caller writes the file).
+     */
+    @Nullable
+    static String migreer() {
+        Map<String, Double> m = WAARDEN.computeIfAbsent(MOBS, x -> new LinkedHashMap<>());
+        int versie = (int) Math.round(m.getOrDefault("versie", 1.0));
+        if (versie >= MOBS_VERSIE) {
+            return null;
+        }
+        List<String> l = new ArrayList<>();
+        if (versie < 2) {
+            Double schade = m.get("schade");
+            if (schade == null || Math.abs(schade - nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_SCHADE_OUD) < 1e-9) {
+                m.put("schade", nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_SCHADE_STANDAARD);
+                l.add("[mobs] schade " + (schade == null ? "-" : schade) + " -> " + nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_SCHADE_STANDAARD);
+            } else {
+                l.add("[mobs] schade " + schade + " blijft (met de hand gezet)");
+            }
+            if (!m.containsKey("leven")) {
+                m.put("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_LEVEN_STANDAARD);
+                l.add("[mobs] leven -> " + nl.juiced.guhs.feature.vadsrijk.kern.Balans.MOB_LEVEN_STANDAARD);
+            }
+        }
+        m.put("versie", (double) MOBS_VERSIE);
+        return "migratie [mobs] versie " + versie + " -> " + MOBS_VERSIE + ": " + String.join(", ", l);
+    }
+
+    /** Tests: take these raw [mobs] values as if read from an old file (nothing else), migrate, apply; returns the report. */
+    @Nullable
+    public static synchronized String testMigreer(Map<String, Double> mobs) {
+        WAARDEN.clear();
+        WAARDEN.put(MOBS, new LinkedHashMap<>(mobs));
+        String r = migreer();
+        pasToe();
+        return r;
     }
 
     private static void schrijf() {
@@ -220,7 +275,9 @@ public final class KlasseBalans {
         b.append("# schade/skillschade/vads/verdediging/cooldowns/energie zijn vermenigvuldigers (1.0 = normaal).\n");
         b.append("# melee_reductie = minder schade (0.20 = 20 %) zolang deze klasse actief is met een melee-wapen.\n");
         b.append("# vads_per_klasselevel = extra max Vads per klasseniveau boven 1.\n");
-        b.append("# [mobs] schade = vermenigvuldiger op de klappen van gewone wezens en elites (geen bazen); 1.3 = +30 %.\n");
+        b.append("# [mobs] schade = vermenigvuldiger op de klappen van gewone wezens en elites (geen bazen); 1.69 = +69 %.\n");
+        b.append("# [mobs] leven = vermenigvuldiger op de max Vads van gewone wezens en elites (geen bazen); 1.4 = +40 %.\n");
+        b.append("# [mobs] versie = niet aanpassen (de mod zet hiermee oude standaardwaarden om bij een update).\n");
         b.append("# [rijdieren] snelheid/sprong = vermenigvuldigers op alle rijdieren; groei_snelheid = extra snelheid per rijdierlevel\n");
         b.append("# (0.015 = +1,5 %), groei_sprong = extra sprongkracht per rijdierlevel (0.01 = ongeveer +0,07 blok).\n");
         b.append("# [items] = itemisatie 2.0: budget_* = vermenigvuldiger op alles wat een stuk in dat vak geeft; pity, Vertrouwd,\n");   // T-ITEMS

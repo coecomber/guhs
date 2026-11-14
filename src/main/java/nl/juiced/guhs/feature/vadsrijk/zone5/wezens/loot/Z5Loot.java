@@ -175,14 +175,14 @@ public final class Z5Loot {
     }
 
     private static void tabel(String mob, List<LootTabel.Regel> r, double kans, int muntMin, int muntMax) {
-        LootTabellen.registreer("z5wezens:" + mob, new LootTabel(r, 1, kans, 1.3, muntMin, muntMax));
+        LootTabellen.registreer("z5wezens:" + mob, new LootTabel(r, 1, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.gewoon(kans), 1.3, muntMin, muntMax));
         List<LootTabel.Regel> elite = new ArrayList<>(r);
         for (String s : List.of("wolkring", "walvisketting", "regendruppeloorbel", "stormarmband")) {
             if (STUKKEN.containsKey(s)) {
                 elite.add(new LootTabel.Regel(s, 2));
             }
         }
-        LootTabellen.registreer("z5wezens:" + mob + "_elite", new LootTabel(elite, 2, Math.min(1, kans * 3.5), 3.0, muntMin * 3, muntMax * 3));
+        LootTabellen.registreer("z5wezens:" + mob + "_elite", new LootTabel(elite, 2, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.elite(kans), nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.eliteGeluk(3.0), muntMin * 3, muntMax * 3));
     }
 
     /** One table per creature + the sparring and boss tables (after {@link #basisTypes}). */

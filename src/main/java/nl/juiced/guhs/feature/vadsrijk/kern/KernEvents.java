@@ -208,7 +208,7 @@ final class KernEvents {
                 SpelerData d = Spelers.data(p);
                 d.energie = Math.min(Spelers.maxEnergie(p), Spelers.energie(p) + Spelers.klasse(p).energieRegen(Spelers.klasseLevel(p)));
                 double max = Spelers.maxVads(p);
-                d.vads = Math.min(max, Spelers.vads(p) + max * 0.01);
+                d.vads = Math.min(max, Spelers.vads(p) + max * Gevecht.regen(p));   // 1101-balans: 0.3 %/s in combat, 1 %/s outside
                 gebied(p, d);
                 snelheid(p);
             }

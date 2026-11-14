@@ -55,6 +55,6 @@ public final class Balans {
         };
         double krit = Math.min(100, s.get(Stat.KRITIEK)) / 100.0 * (0.5 + s.get(Stat.KRITIEKSCHADE) / 100.0);
         double element = t.element() == nl.juiced.guhs.feature.vadsrijk.kern.Element.GEEN ? 1 : 1 + s.get(Stat.ELEMENTSCHADE) / 100.0;
-        return t.schadeOp(level) * Aanvalstempo.klasseFactor(soort) * (1 + 0.02 * hoofd) * (1 + krit) * element * eenheden(klasse);
+        return t.schadeOp(level) * Aanvalstempo.klasseFactor(soort) * Schade.hoofdFactor(hoofd) * (1 + krit) * element * eenheden(klasse);
     }
 }

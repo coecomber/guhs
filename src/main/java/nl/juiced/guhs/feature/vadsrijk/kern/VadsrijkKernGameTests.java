@@ -174,11 +174,12 @@ public class VadsrijkKernGameTests {
     public static void schadeEnLevels(GameTestHelper helper) {
         Stats s = Stats.van(Stat.KRACHT, 50, Stat.KRITIEKSCHADE, 20, Stat.ELEMENTSCHADE, 10);
         double gewoon = Schade.aanval(10, s, Schade.Soort.MELEE, false, Element.GEEN, Element.WATER, true);
-        helper.assertTrue(Math.abs(gewoon - 20) < 1e-9, "10 x (1 + 2% x 50 kracht) = 20, got " + gewoon);
+        helper.assertTrue(Math.abs(gewoon - 15) < 1e-9, "1101-balans: 10 x (1 + 1% x 50 kracht) = 15, got " + gewoon);
+        helper.assertTrue(Math.abs(Schade.hoofdFactor(50) - 1.7 * 1.5) < 1e-9, "1101-balans: player main-stat factor 1.7 x (1 + 0.5)");
         double krit = Schade.aanval(10, s, Schade.Soort.MELEE, true, Element.GEEN, Element.WATER, true);
-        helper.assertTrue(Math.abs(krit - 20 * 1.7) < 1e-9, "crit x(1.5 + 20%)");
+        helper.assertTrue(Math.abs(krit - 15 * 1.7) < 1e-9, "crit x(1.5 + 20%)");
         double vuur = Schade.aanval(10, s, Schade.Soort.MELEE, false, Element.VUUR, Element.NATUUR, false);
-        helper.assertTrue(Math.abs(vuur - 20 * 1.5 * 1.1) < 1e-9, "element weakness x1.5 and +10% elementschade");
+        helper.assertTrue(Math.abs(vuur - 15 * 1.5 * 1.1) < 1e-9, "element weakness x1.5 and +10% elementschade");
         double magie = Schade.aanval(10, s, Schade.Soort.MAGIE, false, Element.GEEN, null, false);
         helper.assertTrue(Math.abs(magie - 10) < 1e-9, "magic uses wijsheid (0 here)");
         // (balans 2026-11) level-relative: def / (def + 25 + 15 x attacker level), at most 60 % (VadsrijkBalansGameTests has more)

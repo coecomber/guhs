@@ -451,7 +451,7 @@
         }
       ],
       "beloning": {
-        "xp": 3000,
+        "xp": 1800,
         "munten": 500,
         "items": [],
         "wapen": false,
@@ -507,7 +507,7 @@
         }
       ],
       "beloning": {
-        "xp": 5900,
+        "xp": 3540,
         "munten": 800,
         "items": [],
         "wapen": false,
@@ -567,7 +567,7 @@
         }
       ],
       "beloning": {
-        "xp": 4400,
+        "xp": 2640,
         "munten": 1000,
         "items": [],
         "wapen": false,
@@ -621,7 +621,7 @@
         }
       ],
       "beloning": {
-        "xp": 3000,
+        "xp": 1800,
         "munten": 2500,
         "items": [],
         "wapen": false,
@@ -662,7 +662,7 @@
         }
       ],
       "beloning": {
-        "xp": 2000,
+        "xp": 1200,
         "munten": 5000,
         "items": [],
         "wapen": false,

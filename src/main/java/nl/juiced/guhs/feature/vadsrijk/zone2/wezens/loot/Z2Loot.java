@@ -126,7 +126,7 @@ public final class Z2Loot {
     }
 
     private static void tabel(String mob, List<LootTabel.Regel> r, double kans, int muntMin, int muntMax) {
-        LootTabellen.registreer("z2wezens:" + mob, new LootTabel(r, 1, kans, 1.2, muntMin, muntMax));
+        LootTabellen.registreer("z2wezens:" + mob, new LootTabel(r, 1, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.gewoon(kans), 1.2, muntMin, muntMax));
         List<LootTabel.Regel> elite = new ArrayList<>(r);
         for (String s : WezensLoot.SIERADEN) {
             elite.add(new LootTabel.Regel(s, 1));
@@ -134,7 +134,7 @@ public final class Z2Loot {
         elite.add(new LootTabel.Regel("kristalring", 2));
         elite.add(new LootTabel.Regel("spiegelketting", 2));
         elite.add(new LootTabel.Regel("galmoorbel", 2));
-        LootTabellen.registreer("z2wezens:" + mob + "_elite", new LootTabel(elite, 2, Math.min(1, kans * 3.5), 2.8, muntMin * 3, muntMax * 3));
+        LootTabellen.registreer("z2wezens:" + mob + "_elite", new LootTabel(elite, 2, nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.elite(kans), nl.juiced.guhs.feature.vadsrijk.kern.loot.DropBalans.eliteGeluk(2.8), muntMin * 3, muntMax * 3));
     }
 
     /** One table per creature (after {@link #basisTypes}). */

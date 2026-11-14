@@ -294,7 +294,7 @@ public final class NpcHaken {
                 p.level().playSound(null, b, SoundEvents.PLAYER_LEVELUP, net.minecraft.sounds.SoundSource.PLAYERS, 1f, 1.3f);
                 RijkScenes.titel(p, Component.translatable("vadsrijk.npc.schat.titel").withStyle(ChatFormatting.GOLD),
                         Component.translatable("vadsrijk.npc.schat." + id), 60, 0xFFD24A);
-                var t = Beloningen.stukVoor(p);
+                var t = Beloningen.stukVoor(p, 1);
                 List<ItemStack> buit = t == null ? List.of()
                         : List.of(Rollen.stack(Rollen.rol(t, Math.max(1, Spelers.level(p)), id.equals("kristalkamer") ? Zeldzaamheid.EPISCH : Zeldzaamheid.ZELDZAAM,
                                 p.getRandom())));
