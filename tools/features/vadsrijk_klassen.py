@@ -110,7 +110,7 @@ KNOPEN = {
     "j_vuurregen": ("Vuurregen", "Pluizenregen zet alles eronder 4 s in brand. Kan niet samen met Kleefregen."),
     "j_kleefregen": ("Kleefregen", "Pluizenregen maakt vijanden Plakkerig en regent een 4e golf. Kan niet samen met Vuurregen."),
     "j_doorboor": ("Doorboorpijl", "Je gewone schoten gaan door 1 extra vijand heen (kruisbogen dus door 2)."),
-    "j_valkenoog": ("Valkenoog", "Schoten op vijanden verder dan 12 blokken doen 25 % meer schade."),
+    "j_valkenoog": ("Valkenoog", "Schoten op vijanden verder dan 12 blokken doen 25 % meer schade (een Scherpschutter krijgt in plaats daarvan Verre schoten)."),
     "j_plakbom": ("Plakbommetje", "Rolsalto laat een slijmbommetje achter: vijanden in 3 blokken plakken 3 s en krijgen 0,8x schade. Rolsalto laadt 2 s sneller op."),
     "j_hartjespijl": ("Hartjespijl", "Knuffelpijl healt 60 % meer en geeft je teamgenoot 4 s Snelpootjes. Op vijanden 30 % meer schade."),
     "j_vallende_ster": ("Vallende Ster", "Sterrenschot doet 50 % meer schade en geeft 25 % van je ultieme lading terug."),

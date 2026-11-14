@@ -201,7 +201,10 @@ public final class Basisaanval {
         };
         sc.opRaak = (schot, doel) -> {
             double mult = 1;
-            if (Boom.heeft(p, "j_valkenoog") && doel.position().distanceTo(start) > 12) {
+            // 1.10.3 schade-audit: Valkenoog (+25 % beyond 12 blocks) and the Scherpschutter's Verre schoten (+30 % beyond 10 blocks,
+            // SpecEffecten) are the same bonus: a Scherpschutter only gets Verre schoten (they stacked to x1.625 on every long shot)
+            if (Boom.heeft(p, "j_valkenoog") && doel.position().distanceTo(start) > 12
+                    && !nl.juiced.guhs.feature.vadsrijk.klassen.spec.Specs.heeft(p, nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec.SCHERPSCHUTTER, 1)) {
                 mult *= 1.25;
             }
             treffer(p, doel, basis * mult, el, s.schade(), schot.waarde < 0, "basis");

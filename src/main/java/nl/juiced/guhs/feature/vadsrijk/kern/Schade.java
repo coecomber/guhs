@@ -110,7 +110,7 @@ public final class Schade {
         };
         double n = basis * (1 + HOOFD_PER_PUNT * hoofd);   // 1101-balans: 1 % per point (was 2 %); players also get HOOFD_BASIS in doe()
         if (kritiek) {
-            n *= 1.5 + s.get(Stat.KRITIEKSCHADE) / 100.0;
+            n *= kritiekFactor(s);
         }
         double ef = Element.factor(element, doelElement, ontvadst);
         n *= ef;
@@ -118,6 +118,11 @@ public final class Schade {
             n *= 1 + s.get(Stat.ELEMENTSCHADE) / 100.0;
         }
         return n;
+    }
+
+    /** The multiplier of a critical hit: x1.5 + Kritiekschade%. */
+    public static double kritiekFactor(Stats s) {
+        return 1.5 + s.get(Stat.KRITIEKSCHADE) / 100.0;
     }
 
     /** At most this much of a hit is taken off by Verdediging (balans 2026-11). */
