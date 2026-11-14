@@ -173,6 +173,7 @@ def filter_data(full, n):
         d[k] = [x for x in d.get(k, []) if ok(x)]
     d["punten"] = [p for p in d["punten"] if tz(p.get("naam")) <= n]
     d["geheimen"] = {k: v for k, v in d["geheimen"].items() if k in gids_ or (k.startswith("zone") and znr(k) <= n)}
+    d["boek"] = [z for z in d.get("boek", []) if re.fullmatch(r"zone\d", z["zone"]) and znr(z["zone"]) <= n]   # 1.10.3: the Verkenningsboek mirror (zone pages only; the Ambachten book mixes all zones)
     d["routes"] = [r for r in d["routes"] if max(znr(r.get("za")), znr(r.get("zb"))) <= n]
     d["gids"] = [g for g in d["gids"] if gids_zone(g) <= n and tz(g["titel"], g["tekst"]) <= n]
     items = {i["id"] for i in d["items"]}

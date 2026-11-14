@@ -56,6 +56,7 @@ a.kaartje:hover{border-color:var(--vr)}
 .dialoog b{display:block;font-size:12.5px;color:var(--muted)}
 details.spoiler{border:1.5px dashed var(--vr);border-radius:12px;padding:6px 12px;margin:10px 0;background:color-mix(in srgb,var(--vr-soft) 50%,transparent)}
 details.spoiler>summary{cursor:pointer;font-weight:700;color:var(--vr)}
+.boeknr{display:inline-block;min-width:2.2em;font-variant-numeric:tabular-nums;opacity:.75}div.boekrij{padding:6px 12px;margin:4px 0}details.boekrij{margin:6px 0}details.boekrij>summary .muted{font-weight:400}
 .zoneslot{display:inline-flex;align-items:center;gap:6px;font-size:14px}
 .zoneslot select{font:600 14px var(--body);border-radius:999px;border:1.5px solid var(--line2);background:var(--card);color:var(--ink);padding:5px 10px}
 .komma{list-style:none;padding:0;margin:0 0 1em}.komma li{display:inline}.komma li+li::before{content:", "}

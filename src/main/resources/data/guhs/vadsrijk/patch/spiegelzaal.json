@@ -1,0 +1,315 @@
+{
+  "_uitleg": "1.10.3: the six mirror niches of the Spiegelzaal (arena_spiegelzucht 854,176,-1397) cut through the outer wall at their corners, so the hall could be walked into from the plateau. Same cells as the generator fix in tools/vadsrijk/zone2/bouw2.py (spiegelburcht).",
+  "dimensie": "guhs:vadsrijk",
+  "beschrijving": "Spiegelzaal: dicht de 6 spiegelnissen aan de buitenkant (zijkant/achterkant)",
+  "dozen": [
+    {
+      "naam": "spiegelnis 1 (oost)",
+      "min": [
+        878,
+        176,
+        -1398
+      ],
+      "max": [
+        878,
+        178,
+        -1398
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 1 (oost)",
+      "min": [
+        878,
+        179,
+        -1398
+      ],
+      "max": [
+        878,
+        182,
+        -1398
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 1 (oost)",
+      "min": [
+        878,
+        176,
+        -1396
+      ],
+      "max": [
+        878,
+        178,
+        -1396
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 1 (oost)",
+      "min": [
+        878,
+        179,
+        -1396
+      ],
+      "max": [
+        878,
+        182,
+        -1396
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 2 (zuidoost)",
+      "min": [
+        865,
+        176,
+        -1376
+      ],
+      "max": [
+        865,
+        178,
+        -1376
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 2 (zuidoost)",
+      "min": [
+        865,
+        179,
+        -1376
+      ],
+      "max": [
+        865,
+        182,
+        -1376
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 2 (zuidoost)",
+      "min": [
+        867,
+        176,
+        -1377
+      ],
+      "max": [
+        867,
+        178,
+        -1376
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 2 (zuidoost)",
+      "min": [
+        867,
+        179,
+        -1377
+      ],
+      "max": [
+        867,
+        182,
+        -1376
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 3 (zuidwest)",
+      "min": [
+        843,
+        176,
+        -1376
+      ],
+      "max": [
+        843,
+        178,
+        -1376
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 3 (zuidwest)",
+      "min": [
+        843,
+        179,
+        -1376
+      ],
+      "max": [
+        843,
+        182,
+        -1376
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 4 (west)",
+      "min": [
+        830,
+        176,
+        -1398
+      ],
+      "max": [
+        830,
+        178,
+        -1398
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 4 (west)",
+      "min": [
+        830,
+        179,
+        -1398
+      ],
+      "max": [
+        830,
+        182,
+        -1398
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 4 (west)",
+      "min": [
+        830,
+        176,
+        -1396
+      ],
+      "max": [
+        830,
+        178,
+        -1396
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 4 (west)",
+      "min": [
+        830,
+        179,
+        -1396
+      ],
+      "max": [
+        830,
+        182,
+        -1396
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 5 (noordwest)",
+      "min": [
+        841,
+        176,
+        -1418
+      ],
+      "max": [
+        841,
+        178,
+        -1417
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 5 (noordwest)",
+      "min": [
+        841,
+        179,
+        -1418
+      ],
+      "max": [
+        841,
+        182,
+        -1417
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 5 (noordwest)",
+      "min": [
+        843,
+        176,
+        -1418
+      ],
+      "max": [
+        843,
+        178,
+        -1418
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 5 (noordwest)",
+      "min": [
+        843,
+        179,
+        -1418
+      ],
+      "max": [
+        843,
+        182,
+        -1418
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 6 (noordoost)",
+      "min": [
+        865,
+        176,
+        -1418
+      ],
+      "max": [
+        865,
+        178,
+        -1418
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 6 (noordoost)",
+      "min": [
+        865,
+        179,
+        -1418
+      ],
+      "max": [
+        865,
+        182,
+        -1418
+      ],
+      "blok": "minecraft:calcite"
+    },
+    {
+      "naam": "spiegelnis 6 (noordoost)",
+      "min": [
+        867,
+        176,
+        -1418
+      ],
+      "max": [
+        867,
+        178,
+        -1417
+      ],
+      "blok": "minecraft:tuff_bricks"
+    },
+    {
+      "naam": "spiegelnis 6 (noordoost)",
+      "min": [
+        867,
+        179,
+        -1418
+      ],
+      "max": [
+        867,
+        182,
+        -1417
+      ],
+      "blok": "minecraft:calcite"
+    }
+  ]
+}

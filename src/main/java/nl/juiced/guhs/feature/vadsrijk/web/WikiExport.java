@@ -70,6 +70,7 @@ public final class WikiExport {
         o.add("sets", sets());
         o.add("kristallen", kristallen());
         o.add("sterren", sterren());
+        o.add("boek", boek());
         return o;
     }
 
@@ -374,9 +375,49 @@ public final class WikiExport {
         return o;
     }
 
+    /**
+     * 1.10.3: the Verkenningsboek exactly as the game builds it (zones, categories, entries in book order, name/hint keys, spots),
+     * so the site's secrets page uses the same categories, order and numbering as the book (B).
+     */
+    private static JsonArray boek() {
+        JsonArray zones = new JsonArray();
+        for (nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.ZoneBoek z : nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.zones()) {
+            JsonObject zo = new JsonObject();
+            zo.addProperty("id", z.id());
+            zo.addProperty("naam", z.naamKey());
+            JsonArray cats = new JsonArray();
+            for (nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.Categorie c : nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.categorieen(z)) {
+                JsonObject co = new JsonObject();
+                co.addProperty("id", c.id());
+                co.addProperty("naam", c.naamKey());
+                co.addProperty("icoon", c.icoon());
+                co.addProperty("later", c.later());
+                JsonArray ds = new JsonArray();
+                for (nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.Ding d : c.dingen()) {
+                    JsonObject dob = new JsonObject();
+                    dob.addProperty("id", d.id());
+                    dob.addProperty("n", d.naamKey());
+                    dob.addProperty("na", d.naamArg());
+                    dob.addProperty("h", d.hintKey());
+                    dob.addProperty("ha", d.hintArg());
+                    dob.addProperty("geheim", d.geheim());
+                    if (d.plek() != null) {
+                        dob.add("pos", pos(d.plek()));
+                    }
+                    ds.add(dob);
+                }
+                co.add("dingen", ds);
+                cats.add(co);
+            }
+            zo.add("categorieen", cats);
+            zones.add(zo);
+        }
+        return zones;
+    }
+
     /** For the gametest: non-empty sections. */
     static String controleer(JsonObject o) {
-        for (String k : new String[] {"gebieden", "spawners", "basistypes", "klassen", "rijdieren"}) {
+        for (String k : new String[] {"gebieden", "spawners", "basistypes", "klassen", "rijdieren", "boek"}) {
             if (!o.has(k) || o.getAsJsonArray(k).isEmpty()) {
                 return "section " + k + " is empty";
             }

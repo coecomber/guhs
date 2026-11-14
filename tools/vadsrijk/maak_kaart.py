@@ -70,6 +70,8 @@ def main():
     import speeltuin                                         # connection pass: its fences come out connected)
     os.environ["GUHS_VERBIND_LATER"] = "1"                   # (the pass below covers its tiles)
     speeltuin.main([])
+    import terugportalen                                     # 1.10.3: a central return portal in every safe town (same spots as
+    terugportalen.main([])                                   # data/guhs/vadsrijk/terugportalen.txt + the live patches)
     os.environ.pop("GUHS_VERBIND_LATER", None)
     import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
     verbind.na_sinds(_t_verbind)
