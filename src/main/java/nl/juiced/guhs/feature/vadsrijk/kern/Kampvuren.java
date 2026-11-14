@@ -22,7 +22,8 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * Checkpoints (ronde 12): right-click a campfire in the dimension. An unlit one lights up (with a little show) and becomes your
- * checkpoint; a lit one makes it your checkpoint again. No teleport between campfires. 1.10.2: after fainting you wake at the
+ * checkpoint; a lit one makes it your checkpoint again. 1.10.3: in a zone at 100 % in the Verkenningsboek the click also opens the
+ * campfire travel screen (voltooiing/KampvuurReizen, via {@link Haken#KAMPVUUR_KLIK}). 1.10.2: after fainting you wake at the
  * NEAREST campfire you ever lit/used ({@link #dichtstbij}), not just the last one you clicked.
  */
 public final class Kampvuren {
@@ -41,6 +42,7 @@ public final class Kampvuren {
         e.setCanceled(true);
         e.setCancellationResult(InteractionResult.SUCCESS);
         steekAan(p, pos);
+        Haken.KAMPVUUR_KLIK.forEach(h -> h.accept(p, pos));   // 1.10.3: Kampvuurreizen (a fully explored zone)
     }
 
     public static void steekAan(ServerPlayer p, BlockPos pos) {
@@ -108,7 +110,7 @@ public final class Kampvuren {
 
     /** The campfire block at or within {@link #ZOEK} blocks of this remembered spot (the closest), or null. */
     @Nullable
-    static BlockPos zoekVuur(ServerLevel sl, BlockPos b) {
+    public static BlockPos zoekVuur(ServerLevel sl, BlockPos b) {
         if (sl.getBlockState(b).getBlock() instanceof CampfireBlock) {
             return b;
         }

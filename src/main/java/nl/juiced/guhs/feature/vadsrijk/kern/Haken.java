@@ -46,6 +46,8 @@ public final class Haken {
     public static final List<BiConsumer<ServerPlayer, ItemStack>> LOOT = new CopyOnWriteArrayList<>();
     /** A player lit a campfire checkpoint. */
     public static final List<BiConsumer<ServerPlayer, BlockPos>> KAMPVUUR = new CopyOnWriteArrayList<>();
+    /** 1.10.3: a player right-clicked a campfire (every click, after the checkpoint/rest action; Kampvuurreizen opens its screen). */
+    public static final List<BiConsumer<ServerPlayer, BlockPos>> KAMPVUUR_KLIK = new CopyOnWriteArrayList<>();
     /** A status was given to an entity. */
     public static final List<BiConsumer<LivingEntity, Status>> STATUS = new CopyOnWriteArrayList<>();
     /** A player entered (true) or left (false) the dimension, after the inventory swap. */
