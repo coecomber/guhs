@@ -76,6 +76,8 @@ public final class DungeonDeur {
     /** Doors placed this session (index in {@link #deuren()}) and when they were last checked. */
     private static final Set<Integer> GEZET = new HashSet<>();
     private static long laatsteRonde = -1;
+    /** 1.10.3: game time of the last {@link #tick} that ran (every 2 s). */
+    private static long laatsteTik = -1;
 
     private DungeonDeur() {
     }
@@ -115,6 +117,7 @@ public final class DungeonDeur {
     public static void nieuweSessie() {
         GEZET.clear();
         laatsteRonde = -1;
+        laatsteTik = -1;
     }
 
     /** The block. */
@@ -272,9 +275,12 @@ public final class DungeonDeur {
     /** Every 2 s: doors whose chunk is loaded and that were not placed this session (or 30 s ago) are (re)placed. */
     public static void tick(ServerLevel sl) {
         long nu = sl.getGameTime();
-        if (nu % 40 != 0) {
+        // 1.10.3: own clock, not "nu % 40": the caller (DungeonRij) runs every 10 SERVER ticks (tick count, 0 at every start), and
+        // when the saved game time was out of step with that (most server starts) the doors and their name boards never came
+        if (laatsteTik >= 0 && nu >= laatsteTik && nu - laatsteTik < 40) {
             return;
         }
+        laatsteTik = nu;
         boolean ronde = laatsteRonde < 0 || nu - laatsteRonde >= 600;
         if (ronde) {
             laatsteRonde = nu;

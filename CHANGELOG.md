@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.3 — Minecraft 26.1.2
+
+- **Boss arena boards and dungeon door signs are back:** the respawn board in front of every boss arena ("Back in m:ss" / "is awake") and the name boards over the dungeon doors never appeared after most server restarts (their timer checked the saved game time while being run on the server's own tick counter, which restarts at 0). They now appear reliably, survive chunk unloads and never double up.
+
 ## 1.10.2 — Minecraft 26.1.2
 
 - **Zones 2 and 3 are open:** the ship at the end of zone 1 sails. De Splinterpieken (level 20 to 30) with the crystal town of Kandijkom, and De Schemerwortel (level 30 to 50), the giant tree with the town of Honingtak in its branches and your first mount. At the end of zone 3 the next ship sails soon.

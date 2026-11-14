@@ -194,7 +194,7 @@ public final class Verzamelen {
         Eten.hud(p, d);
         d.putLong("uitgerust", AmbachtData.uitgerust(p));
         String sleutel = d.toString();
-        if (!altijd && sleutel.equals(VERSTUURD.get(p.getUUID())) && p.level().getGameTime() % 100 != 7) {
+        if (!altijd && sleutel.equals(VERSTUURD.get(p.getUUID())) && p.level().getServer().getTickCount() % 100 != 7) {
             return;
         }
         VERSTUURD.put(p.getUUID(), sleutel);

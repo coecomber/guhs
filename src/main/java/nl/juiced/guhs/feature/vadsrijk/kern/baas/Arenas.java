@@ -39,6 +39,8 @@ public final class Arenas {
         boolean geladen;
         @Nullable
         Display.TextDisplay bord;
+        /** 1.10.3: game time of the last board update (own clock: see {@link #bord}). */
+        long bordOp = -1000;
         final Set<UUID> binnen = new HashSet<>();
         /** 1.10.1: who took part in the last kill (helpers + everyone inside the arena then). */
         final Set<UUID> erbij = new HashSet<>();
@@ -178,89 +180,116 @@ public final class Arenas {
         }
         long nu = sl.getGameTime();
         for (Toestand t : ALLE.values()) {
-            Arena a = t.arena;
-            if (!sl.isLoaded(a.centrum())) {
-                t.bord = null;
-                // (integration) a far teleport unloads the arena: clear the bar of whoever was inside, or it stays on screen
-                for (UUID weg : t.binnen) {
-                    if (sl.getEntity(weg) instanceof ServerPlayer p) {
-                        KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
-                    }
-                }
-                t.binnen.clear();
-                continue;
-            }
-            // U-DUBBEL: the chunk is there but its entities may not be yet (disk load / visibility a tick later): a boss that
-            // is still coming back would look missing and get a twin. Wait until they are loaded and visible.
-            if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, a.centrum())) {
-                continue;
-            }
-            ArenaData data = ArenaData.get(server);
-            if (!t.geladen) {
-                t.geladen = true;
-                if (t.respawnOp != -2) {
-                    t.respawnOp = data.respawnOp(a.id());
-                }
-            }
-            VadsrijkBaas b = zoek(sl, t);
-            if (t.respawnOp == -2) {
-                t.respawnOp = nu + a.respawnSeconden() * 20L;
-                data.zet(a.id(), t.respawnOp);
-            }
-            // 1.10.1: a newcomer (not at the last kill) waits in the arena: the boss is back soon (quests for several players)
-            if (b == null && t.respawnOp > nu + NIEUWKOMER_SECONDEN * 20L && nieuwkomerBinnen(sl, t)) {
-                t.respawnOp = nu + NIEUWKOMER_SECONDEN * 20L;
-                data.zet(a.id(), t.respawnOp);
-            }
-            if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
-                b = t.maker.apply(sl);
-                if (b != null) {
-                    b.zetArena(a);
-                    nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(b, sleutel(a.id()));   // U-DUBBEL
-                    b.snapTo(a.centrum().getX() + 0.5, a.centrum().getY(), a.centrum().getZ() + 0.5, 180, 0);
-                    sl.addFreshEntity(b);
-                    t.baas = b.getUUID();
-                    t.respawnOp = -1;
-                    data.zet(a.id(), -1);
-                    t.binnen.clear();
-                }
-            }
-            // players inside: intro for newcomers, HP scaling, boss bar
-            List<ServerPlayer> binnen = new ArrayList<>();
-            for (ServerPlayer p : sl.players()) {
-                if (!p.isSpectator() && a.binnen(p.getX(), p.getY(), p.getZ()) && (b == null || b.magIntro(p))) {   // (M-BAZEN) magIntro
-                    binnen.add(p);
-                }
-            }
-            Set<UUID> nuBinnen = new HashSet<>();
-            for (ServerPlayer p : binnen) {
-                nuBinnen.add(p.getUUID());
-                if (b != null && !t.binnen.contains(p.getUUID())) {
-                    boolean eerste = Spelers.data(p).gezien.add("baas:" + a.id());
-                    b.intro(p, eerste);
-                }
-                if (b != null) {
-                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(b.getId(), Component.translatable(b.titelKey()), b.fase(), (float) b.vads(), (float) b.maxVads(),
-                            b.muziek() == null ? "" : b.muziek().toString()));
-                }
-            }
+            tickArena(server, sl, t, nu);
+        }
+    }
+
+    /** Tests: tick one arena in this level at this game time (the real tick passes the Vadsrijk level and its game time). */
+    static void tickEen(ServerLevel sl, String arenaId, long nu) {
+        Toestand t = ALLE.get(arenaId);
+        if (t != null) {
+            tickArena(sl.getServer(), sl, t, nu);
+        }
+    }
+
+    /** Tests: the board this arena holds now (may be a stale reference). */
+    @Nullable
+    static Display.TextDisplay bordVan(String arenaId) {
+        Toestand t = ALLE.get(arenaId);
+        return t == null ? null : t.bord;
+    }
+
+    /** Tests: force the board reference (e.g. a display that never made it into the level). */
+    static void zetBord(String arenaId, @Nullable Display.TextDisplay d) {
+        Toestand t = ALLE.get(arenaId);
+        if (t != null) {
+            t.bord = d;
+        }
+    }
+
+    private static void tickArena(MinecraftServer server, ServerLevel sl, Toestand t, long nu) {
+        Arena a = t.arena;
+        if (!sl.isLoaded(a.centrum())) {
+            t.bord = null;
+            // (integration) a far teleport unloads the arena: clear the bar of whoever was inside, or it stays on screen
             for (UUID weg : t.binnen) {
-                if (!nuBinnen.contains(weg) && sl.getEntity(weg) instanceof ServerPlayer p) {
-                    KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
-                }
-            }
-            if (b == null) {
-                for (ServerPlayer p : binnen) {
+                if (sl.getEntity(weg) instanceof ServerPlayer p) {
                     KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
                 }
             }
             t.binnen.clear();
-            t.binnen.addAll(nuBinnen);
-            if (b != null) {
-                b.schaal(binnen.size());
-            }
-            bord(sl, t, b, nu);
+            return;
         }
+        // U-DUBBEL: the chunk is there but its entities may not be yet (disk load / visibility a tick later): a boss that
+        // is still coming back would look missing and get a twin. Wait until they are loaded and visible.
+        if (!nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.klaar(sl, a.centrum())) {
+            return;
+        }
+        ArenaData data = ArenaData.get(server);
+        if (!t.geladen) {
+            t.geladen = true;
+            if (t.respawnOp != -2) {
+                t.respawnOp = data.respawnOp(a.id());
+            }
+        }
+        VadsrijkBaas b = zoek(sl, t);
+        if (t.respawnOp == -2) {
+            t.respawnOp = nu + a.respawnSeconden() * 20L;
+            data.zet(a.id(), t.respawnOp);
+        }
+        // 1.10.1: a newcomer (not at the last kill) waits in the arena: the boss is back soon (quests for several players)
+        if (b == null && t.respawnOp > nu + NIEUWKOMER_SECONDEN * 20L && nieuwkomerBinnen(sl, t)) {
+            t.respawnOp = nu + NIEUWKOMER_SECONDEN * 20L;
+            data.zet(a.id(), t.respawnOp);
+        }
+        if (b == null && (t.respawnOp < 0 || nu >= t.respawnOp)) {
+            b = t.maker.apply(sl);
+            if (b != null) {
+                b.zetArena(a);
+                nl.juiced.guhs.feature.vadsrijk.dubbel.Dubbel.merk(b, sleutel(a.id()));   // U-DUBBEL
+                b.snapTo(a.centrum().getX() + 0.5, a.centrum().getY(), a.centrum().getZ() + 0.5, 180, 0);
+                sl.addFreshEntity(b);
+                t.baas = b.getUUID();
+                t.respawnOp = -1;
+                data.zet(a.id(), -1);
+                t.binnen.clear();
+            }
+        }
+        // players inside: intro for newcomers, HP scaling, boss bar
+        List<ServerPlayer> binnen = new ArrayList<>();
+        for (ServerPlayer p : sl.players()) {
+            if (!p.isSpectator() && a.binnen(p.getX(), p.getY(), p.getZ()) && (b == null || b.magIntro(p))) {   // (M-BAZEN) magIntro
+                binnen.add(p);
+            }
+        }
+        Set<UUID> nuBinnen = new HashSet<>();
+        for (ServerPlayer p : binnen) {
+            nuBinnen.add(p.getUUID());
+            if (b != null && !t.binnen.contains(p.getUUID())) {
+                boolean eerste = Spelers.data(p).gezien.add("baas:" + a.id());
+                b.intro(p, eerste);
+            }
+            if (b != null) {
+                KernPayloads.stuur(p, new KernPayloads.BaasBalk(b.getId(), Component.translatable(b.titelKey()), b.fase(), (float) b.vads(), (float) b.maxVads(),
+                        b.muziek() == null ? "" : b.muziek().toString()));
+            }
+        }
+        for (UUID weg : t.binnen) {
+            if (!nuBinnen.contains(weg) && sl.getEntity(weg) instanceof ServerPlayer p) {
+                KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
+            }
+        }
+        if (b == null) {
+            for (ServerPlayer p : binnen) {
+                KernPayloads.stuur(p, new KernPayloads.BaasBalk(-1, Component.empty(), 0, 0, 0));
+            }
+        }
+        t.binnen.clear();
+        t.binnen.addAll(nuBinnen);
+        if (b != null) {
+            b.schaal(binnen.size());
+        }
+        bord(sl, t, b, nu);
     }
 
     /** 1.10.1 tests: does a player who was not at the last kill stand in this arena now (= the respawn gets short)? */
@@ -289,10 +318,26 @@ public final class Arenas {
         return uit;
     }
 
+    /** Tag of an arena's board (+ arena id): how a board whose reference got lost is found again. */
+    static final String BORD_MERK = "guhs_vr_arenabord:";
+
+    /**
+     * The respawn board, about once a second. 1.10.3 (live: the boards were nowhere): this ran inside the 5-SERVER-tick rhythm
+     * (tick count, 0 at every start) but waited for a GAME time (saved, keeps counting) that is a multiple of 20; when the two were
+     * out of step (4 in 5 server starts) it never came. Now it keeps its own clock, and {@link Getallen#houdHologram} keeps exactly
+     * one board: a stale reference (unloaded / never added) is replaced, a lost one is found again.
+     */
     private static void bord(ServerLevel sl, Toestand t, @Nullable VadsrijkBaas b, long nu) {
-        if (nu % 20 != 0) {
+        boolean weg = !Getallen.inLevel(sl, t.bord);
+        if (!weg && nu >= t.bordOp && nu - t.bordOp < 20) {
             return;
         }
+        BlockPos p = t.arena.bord();
+        if (!sl.isLoaded(p)) {
+            t.bord = null;
+            return;
+        }
+        t.bordOp = nu;
         Component naam = Component.translatable(t.arena.titelKey()).withStyle(ChatFormatting.RED, ChatFormatting.BOLD);
         Component regel;
         if (b != null) {
@@ -302,11 +347,6 @@ public final class Arenas {
             regel = Component.translatable("vadsrijk.kern.arena.terug", String.format("%d:%02d", s / 60, s % 60)).withStyle(ChatFormatting.LIGHT_PURPLE);
         }
         Component tekst = Component.empty().append(naam).append("\n").append(regel);
-        if (t.bord == null || t.bord.isRemoved()) {
-            BlockPos p = t.arena.bord();
-            t.bord = Getallen.hologram(sl, p.getX() + 0.5, p.getY() + 1.6, p.getZ() + 0.5, tekst);
-        } else {
-            Getallen.zetTekst(t.bord, tekst);
-        }
+        t.bord = Getallen.houdHologram(sl, weg ? null : t.bord, BORD_MERK + t.arena.id(), p.getX() + 0.5, p.getY() + 1.6, p.getZ() + 0.5, tekst);
     }
 }
