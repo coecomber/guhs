@@ -401,7 +401,9 @@ public final class Z6Raid {
             }
             LootTabel.Resultaat r = Z6RaidLoot.clearKist(p, g, p.getRandom());
             double a = i++ * Math.PI * 2 / Math.max(1, g.leden.size());
-            BaasKist.plaats(sl, p, m.offset((int) Math.round(Math.cos(a) * 5), 0, (int) Math.round(Math.sin(a) * 5)), r);
+            // 1.10.3 (Bazen tab): the clear chest counts as Ringeling's (the tower's last boss) drop
+            nl.juiced.guhs.feature.vadsrijk.kern.baas.BaasStats.metBaas("z6raid_ringeling",
+                    () -> BaasKist.plaats(sl, p, m.offset((int) Math.round(Math.cos(a) * 5), 0, (int) Math.round(Math.sin(a) * 5)), r));
             Z6RaidLoot.titels(p, g);
             Z6RaidHaken.opgevrolijkt(p);
             p.sendSystemMessage(Component.translatable("vadsrijk.z6raid.klaar.chat", tijd(sl.getGameTime() - g.start), g.wipes).withStyle(ChatFormatting.GOLD));

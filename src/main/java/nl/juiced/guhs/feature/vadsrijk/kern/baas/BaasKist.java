@@ -68,6 +68,7 @@ public class BaasKist extends BaseEntityBlock {
 
     /** Puts a chest for {@code p} with this loot at {@code pos} (the coins go straight to them). */
     public static void plaats(ServerLevel sl, ServerPlayer p, BlockPos pos, LootTabel.Resultaat r) {
+        BaasStats.kist(p, r);   // 1.10.3 (Bazen tab): counted as a drop of the boss being rewarded (if any)
         if (r.munten() > 0) {
             Spelers.geefMunten(p, r.munten());
         }

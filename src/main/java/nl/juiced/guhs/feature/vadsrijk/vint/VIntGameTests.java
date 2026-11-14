@@ -102,8 +102,8 @@ public class VIntGameTests {
             helper.assertTrue(g != null && g.getIntOr("pech", 0) == RijdierBuit.PITY && "glimzwam".equals(g.getStringOr("kleur", ""))
                     && "vadsrijk.grotten.naam.zwamgrot".equals(g.getStringOr("waarArg", "")), "Glimzwam 15/15 from the Zwamgrot: " + g);
             // owned: no entry any more
-            RijdierBuit.testRol = 0.99;
-            helper.assertTrue(RijdierBuit.rol(p, id), "the sure one");
+            RijdierBuit.testRol = 0.05;   // a lucky roll (under 10 %)
+            helper.assertTrue(RijdierBuit.rol(p, id), "a lucky drop");
             helper.assertTrue(pechVan(economieData(p), RijdierSoort.ZWAMZWIJNTJE, id) == null, "owned: no pity line");
             // the pet screen: the cave pet's counter
             nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotBazen.Def d = nl.juiced.guhs.feature.vadsrijk.grotkerker.GrotBazen.def("zwamgrot");

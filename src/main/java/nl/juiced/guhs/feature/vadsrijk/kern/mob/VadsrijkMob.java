@@ -311,7 +311,10 @@ public abstract class VadsrijkMob extends Monster {
         if (laatste instanceof ServerPlayer p) {
             helpers.add(p);
         }
-        Spelers.metKlasseBijdrage(klasseBijdrage, () -> beloon(sl, helpers));
+        // 1.10.3 (Bazen tab): a boss's kill counts per helper, and the chests placed by its rewards count as its drops
+        String baasId = this instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas vb
+                ? nl.juiced.guhs.feature.vadsrijk.kern.baas.BaasStats.kill(vb, helpers) : null;
+        nl.juiced.guhs.feature.vadsrijk.kern.baas.BaasStats.metBaas(baasId, () -> Spelers.metKlasseBijdrage(klasseBijdrage, () -> beloon(sl, helpers)));
         Set<ServerPlayer> kijkers = new LinkedHashSet<>(ookVoorQuests(sl));   // 1.10.1: a boss arena's onlookers (quest credit only)
         kijkers.removeAll(helpers);
         Haken.VERSLAGEN.forEach(h -> h.accept(new Haken.Verslagen(this, helpers, kijkers)));

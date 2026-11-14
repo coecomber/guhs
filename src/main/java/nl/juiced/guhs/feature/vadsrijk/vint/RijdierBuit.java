@@ -128,6 +128,7 @@ public final class RijdierBuit {
         if (pech >= PITY || r < KANS) {
             data(p).remove(id);
             b.geef().accept(p);
+            nl.juiced.guhs.feature.vadsrijk.bazenboek.Bazenboek.mountGekregen(p, id);   // 1.10.3: in the Bazen tab's "received"
             p.sendSystemMessage(Component.translatable("vadsrijk.vint.buit.raak", b.naam(), pech + 1).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
             p.level().playSound(null, p.blockPosition(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, net.minecraft.sounds.SoundSource.PLAYERS, 1f, 1.1f);
             return true;

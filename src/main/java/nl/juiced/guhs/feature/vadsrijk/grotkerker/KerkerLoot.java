@@ -134,6 +134,7 @@ public final class KerkerLoot {
         if (pech >= PET_PITY || rol < PET_KANS) {
             data(p).remove(sleutel);
             Huisdieren.geef(p, d.pet(), Huisdieren.MOMENT_WACHT);
+            nl.juiced.guhs.feature.vadsrijk.bazenboek.Bazenboek.petGekregen(p, d.grot(), d.pet());   // 1.10.3: in the Bazen tab
             p.sendSystemMessage(Component.translatable("vadsrijk.grotkerker.zeldzaam", Component.translatable("vadsrijk.huisdier." + d.pet() + ".naam"))
                     .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD));
             return true;
