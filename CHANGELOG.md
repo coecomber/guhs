@@ -3,6 +3,16 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.1 — Minecraft 26.1.2
+
+- **Balance in Het Vadsrijk:** creatures have more health and hit harder, and you heal slower in the middle of a fight. Ordinary creatures drop less loot, dungeons give much more xp and two pieces in the dungeon chest, and the main quests give a bit less xp. A class that lags behind your highest class gets a catch-up bonus on class xp (shown in the Karakter tab).
+- **No more too-strong weapons:** quest rewards, chests and dungeon loot only give gear from your own zone. Gear from zones that are not open yet is cleaned up once.
+- **Opruimen:** the tooltip says whether a piece is better or worse than what you wear. Sell old gear in any shop or salvage it into smithing material at the smith (he melts it into upgrade stones and more), with "all worse" buttons, a ⚒ button next to the inventory and **L** to lock a favourite piece. New recruits learn it from Sergeant Pluizebol in a new tutorial step.
+- **Escort quests together:** every player (or party) gets their own escort, and the real NPC stays at its post. Standing in the arena when a boss falls also counts for your quest.
+- **Druipgrotten:** no more creatures spawning in the rock around the caves or on the hill above them.
+- **Its own day and night:** Het Vadsrijk has its own clock, with two thirds day. Sleeping or changing the time in the overworld no longer changes it.
+- The ⚔ and ⚑ buttons next to the inventory no longer sit on top of each other.
+
 ## 1.10.0 — Minecraft 26.1.2
 
 - **Het Vadsrijk:** a whole new RPG world behind an old portal in the Guhmension. Become a recruit in the Knuffelkamp, pick a class (Knuffelridder, Pluisjager or Vadsmagiër) and fly to the first zone, De Knuffelzwammen (level 1 to 20): the town of Zwamzoet, De Haven, klodders and three world bosses. More zones follow later.
