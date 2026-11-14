@@ -633,7 +633,7 @@ public final class Binnen {
         Regels.zone(Binnen::in);     // (no breaking, placing, damage, hunger, tossing: the Guhpixel rules)
         Protected.add(Binnen::in);   // (fire and fluids)
         NeoForge.EVENT_BUS.addListener(Binnen::opKlik);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> tick(event.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Binnen:636", event -> tick(event.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerSetSpawnEvent event) -> {
             if (event.getSpawnLevel() == DIM) {
                 event.setCanceled(true);   // (the logeerbedje never becomes your spawn point)

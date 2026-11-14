@@ -134,7 +134,7 @@ public final class Z2BazenRegistry {
             }
             return null;
         });
-        NeoForge.EVENT_BUS.addListener(Z2BazenRegistry::tick);
+        nl.juiced.guhs.world.TikWacht.post("Z2BazenRegistry.tick", Z2BazenRegistry::tick);
         NeoForge.EVENT_BUS.addListener(Z2BazenRegistry::commando);
     }
 

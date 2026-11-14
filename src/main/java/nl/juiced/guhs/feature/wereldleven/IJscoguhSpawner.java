@@ -48,7 +48,7 @@ public final class IJscoguhSpawner {
 
     static void register() {
         GuhHooks.doelen((guh, goals) -> goals.addGoal(5, new IJscoguhEntity.Volgen(guh)));
-        NeoForge.EVENT_BUS.addListener(IJscoguhSpawner::onTick);
+        nl.juiced.guhs.world.TikWacht.post("IJscoguhSpawner.onTick", IJscoguhSpawner::onTick);
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> {
             VOLGENDE.clear();
             IJscoguhEntity.LEVEND.clear();

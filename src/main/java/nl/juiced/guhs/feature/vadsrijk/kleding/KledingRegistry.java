@@ -66,7 +66,7 @@ public final class KledingRegistry {
                     .add(new nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.ExtraOptie("vadsrijk.kleding.npc.optie", p -> true,
                             p -> Kledingkast.open(p, npc)));
         }
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("KledingRegistry:69", e -> {
             Zweven.tick(e.getServer());
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null || sl.getGameTime() % 20 != 13) {

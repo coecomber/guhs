@@ -126,7 +126,7 @@ public final class Binnentuin {
         GuhrioSpel.BIJ_KLAAR.add(Binnentuin::klaar);
         Bezetting.npc(PADGUH_ID, GuhrioKasteel.STRUCTUUR, null, PADGUH, GuhNpcEntity.Kind.PADGUH, PADGUH_PLEK, PADGUH_YAW);
         NpcRollen.zet(GuhNpcEntity.Kind.PADGUH, PADGUH_PLEK, new PadguhRol());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> serverTick());
+        nl.juiced.guhs.world.TikWacht.post("Binnentuin:129", event -> serverTick());
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent event) -> {
             WACHT.removeIf(w -> w.speler == event.getEntity());
             LEEST.removeIf(l -> l.speler == event.getEntity());

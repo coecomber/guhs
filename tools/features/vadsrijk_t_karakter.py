@@ -17,8 +17,8 @@ TEKSTEN = {
     # game modes
     K + "modus.normaal": ("Normaal", "Normal"),
     K + "modus.normaal.kort": ("Normaal", "Normal"),
-    K + "modus.normaal.uitleg": ("Het gewone avontuur. Flauwvallen kost niets: je wordt wakker bij je laatste kampvuur.",
-                                 "The normal adventure. Fainting costs nothing: you wake up at your last campfire."),
+    K + "modus.normaal.uitleg": ("Het gewone avontuur. Flauwvallen kost niets: je wordt wakker bij je dichtstbijzijnde kampvuur.",
+                                 "The normal adventure. Fainting costs nothing: you wake up at your nearest campfire."),
     K + "modus.eenvads": ("Eénvads", "One-Vads"),
     K + "modus.eenvads.kort": ("Eénvads", "One-Vads"),
     K + "modus.eenvads.uitleg": ("Eén leven! Val je flauw buiten een stad, dan gaat je ridder met pensioen: hij krijgt een standbeeld in de "

@@ -181,7 +181,7 @@ public final class Z3WezensRegistry {
         Lantaarnlicht.DRAGERS.add(p -> Z3Sets.stukken(p, Z3Sets.WORTEL) >= 4);
         Z3WezensSpawners.registreer();
         haken();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z3WezensRegistry:184", e -> {
             ServerLevel sl = e.getServer().getLevel(Vadsrijk.DIM);
             if (sl != null) {
                 Z3Critters.tick(sl);

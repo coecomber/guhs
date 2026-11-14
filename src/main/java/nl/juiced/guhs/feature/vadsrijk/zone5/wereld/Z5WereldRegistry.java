@@ -65,7 +65,7 @@ public final class Z5WereldRegistry {
         nl.juiced.guhs.feature.vadsrijk.zone5.binnen.Z5Licht.register(modBus);   // U-Z5BINNEN: chandeliers, sconces, candelabra
         nl.juiced.guhs.feature.vadsrijk.zone5.wolkwal.WolkwalRegistry.register();   // T-WOLKWAL: knight model, moving whale, panoramas
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> gebieden());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z5WereldRegistry:68", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
                 return;

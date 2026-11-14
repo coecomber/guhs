@@ -86,7 +86,7 @@ public final class WereldRegistry {
                 e.accept(new ItemStack(LITTEKEN_PLANT_ITEM.get()));
             }
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("WereldRegistry:89", e -> {
             Later.tick(e.getServer());
             WereldDeuren.tick(e.getServer());
             ServerLevel sl = Vadsrijk.level(e.getServer());

@@ -60,7 +60,7 @@ public final class Z4WereldRegistry {
 
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> gebieden());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z4WereldRegistry:63", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
                 return;

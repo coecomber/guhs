@@ -54,7 +54,14 @@ public final class Reiskaart {
 
     /** One place for this player: its state, the reason key (ONBEKEND/TEASER) and its argument (the player's level). */
     public static NpcPayloads.ReisPlek plek(ServerPlayer p, String id) {
-        if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.reisSlot(p, id) != null) {   // X-ZONE1: a closed zone: grey, "binnenkort"
+        String poort = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.reisSlot(p, id);
+        if (poort != null) {   // X-ZONE1: a closed zone: grey, "binnenkort"; 1.10.2: closed for this player: the book % to reach
+            if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isEis(poort)) {
+                int z = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.plekZone(id);
+                return new NpcPayloads.ReisPlek(id, TEASER, nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.verhaalKlaar(p, Math.max(1, z - 1))
+                        ? "vadsrijk.zonepoort.eis.kaart" : "vadsrijk.zonepoort.eis.kaart_verhaal",
+                        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.boekProcent(p, Math.max(1, z - 1)));
+            }
             return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.zonepoort.kaart", 0);
         }
         if (id.equals("schemerwortel") && !nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3Reizen.zone2Klaar(p)
@@ -101,7 +108,9 @@ public final class Reiskaart {
         NpcPayloads.ReisPlek pl = PLEKKEN.contains(id) ? plek(p, id) : null;
         if (pl == null || pl.staat() != OPEN) {
             if (pl != null && pl.staat() == ONBEKEND) {
-                p.sendOverlayMessage(Component.translatable(QuestMotor.reisSlot(p, id), Spelers.level(p)).withStyle(ChatFormatting.LIGHT_PURPLE));
+                String s = QuestMotor.reisSlot(p, id);
+                p.sendOverlayMessage(Component.translatable(nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.sleutel(s),
+                        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.args(p, s)).withStyle(ChatFormatting.LIGHT_PURPLE));
             }
             return;
         }

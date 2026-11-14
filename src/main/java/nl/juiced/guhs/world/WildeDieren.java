@@ -177,7 +177,7 @@ public final class WildeDieren {
     /** The safety net (see the class comment). Returns how many went. */
     public static int tidyUp(ServerLevel level) {
         Map<EntityType<?>, List<Mob>> perSoort = new HashMap<>();
-        for (Entity e : level.getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
             if (e instanceof Mob mob && !mob.isRemoved() && opruimbaar(mob)) {
                 perSoort.computeIfAbsent(mob.getType(), k -> new ArrayList<>()).add(mob);
             }

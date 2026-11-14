@@ -56,7 +56,7 @@ public final class Z3SystemenRegistry {
         Haken.VERSLAGEN.add(Premies::verslagen);
         Contracten.koppel(() -> server);
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> server = e.getServer());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Z3Wind.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Z3SystemenRegistry:59", e -> Z3Wind.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> Z3Wind.vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener(Z3SystemenRegistry::commando);
     }

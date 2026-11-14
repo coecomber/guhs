@@ -70,7 +70,7 @@ public final class GebouwKlus {
     private static final Map<String, Taak> TAKEN = new ConcurrentHashMap<>();
 
     static void register() {
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> tik(event.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("GebouwKlus:73", event -> tik(event.getServer()));
     }
 
     private static String sleutel(ServerLevel level, BlockPos kern) {

@@ -60,7 +60,7 @@ public final class DroomweerFeature {
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
-        NeoForge.EVENT_BUS.addListener(DroomweerFeature::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomweerFeature.tick", DroomweerFeature::tick);
     }
 
     public static void creative(Consumer<ItemStack> output) {

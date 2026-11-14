@@ -152,7 +152,7 @@ public final class TechquestFeature {
         Titels.registreer(new Titels.Titel(KNABBELMACHINIST, "gui.guhs.titels.naam." + KNABBELMACHINIST, ChatFormatting.GOLD, "guhs:knabbelmachine_beeldje",
                 p -> TechquestFeature.KNABBELMACHINE.klaar(p)));
         KNABBELMACHINE.opStap((p, oud, nieuw) -> Knabbelmachine.sync(p));
-        NeoForge.EVENT_BUS.addListener(TechquestFeature::opTick);
+        nl.juiced.guhs.world.TikWacht.post("TechquestFeature.opTick", TechquestFeature::opTick);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, (PlayerInteractEvent.RightClickBlock event) -> Centrale.opKlik(event));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent event) -> sync(event.getEntity()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerRespawnEvent event) -> sync(event.getEntity()));

@@ -203,7 +203,7 @@ public final class GuhrioW3Feature {
             DuelPlan.vergeet();
             PADGUH_STRAKS.clear();
         });
-        NeoForge.EVENT_BUS.addListener(GuhrioW3Feature::tik);
+        nl.juiced.guhs.world.TikWacht.post("GuhrioW3Feature.tik", GuhrioW3Feature::tik);
         NeoForge.EVENT_BUS.addListener((OnDatapackSyncEvent event) -> {
             if (event.getPlayer() == null) {
                 DuelPlan.vergeet();

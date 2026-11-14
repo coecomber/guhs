@@ -42,7 +42,7 @@ public final class ErfenisFtbFeature {
     public static void register(IEventBus modBus) {
         STATS.register(modBus);
         ErfenisMomenten.luister((p, moment) -> ErfenisFtb.kijk(p));
-        NeoForge.EVENT_BUS.addListener(ErfenisFtb::tick);
+        nl.juiced.guhs.world.TikWacht.post("ErfenisFtb.tick", ErfenisFtb::tick);
         NeoForge.EVENT_BUS.addListener(ErfenisFtb::opLogin);
     }
 

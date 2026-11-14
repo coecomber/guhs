@@ -56,7 +56,7 @@ public final class OpslagRegistry {
                     nl.juiced.guhs.feature.vadsrijk.kern.veilig.Losknuffelen.KANAAL_TICKS, 0xFF9AD5);
         });
         NeoForge.EVENT_BUS.addListener(Materiaaltas::opraap);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> HudBron.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("OpslagRegistry:59", e -> HudBron.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> HudBron.vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener(OpslagCommando::register);
     }

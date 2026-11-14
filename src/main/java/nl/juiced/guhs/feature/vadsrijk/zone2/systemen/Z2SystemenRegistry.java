@@ -54,7 +54,7 @@ public final class Z2SystemenRegistry {
         Boomrijen.init();
         Advancement3.init();
         Haken.VERSLAGEN.add(Z2SystemenRegistry::kristalDrop);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Bevroren.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Z2SystemenRegistry:57", e -> Bevroren.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> Juwelier.vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener(Z2SystemenRegistry::commando);
     }

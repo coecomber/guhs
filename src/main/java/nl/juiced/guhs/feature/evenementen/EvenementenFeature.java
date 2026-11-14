@@ -61,7 +61,7 @@ public final class EvenementenFeature {
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(PARADE_GUH.get(), GuhEntity.createAttributes().build()));
-        NeoForge.EVENT_BUS.addListener(Evenementen::tick);
+        nl.juiced.guhs.world.TikWacht.post("Evenementen.tick", Evenementen::tick);
         NeoForge.EVENT_BUS.addListener(Evenementen::onPlayerTick);
         NeoForge.EVENT_BUS.addListener(Evenementen::onInteract);
         NeoForge.EVENT_BUS.addListener(Evenementen::onLogout);

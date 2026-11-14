@@ -30,7 +30,7 @@ public final class DirigentFeature {
 
     public static void register(IEventBus modBus) {
         ITEMS.register(modBus);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Concert.tickAlles());
+        nl.juiced.guhs.world.TikWacht.post("DirigentFeature:33", e -> Concert.tickAlles());
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> Concert.wisAlles());
     }
 

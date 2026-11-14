@@ -157,9 +157,13 @@ public final class QuestRobot {
         robot.r.totZone = totZone;
         long t0 = System.currentTimeMillis();
         ACTIEF.put(p.getUUID(), robot);
+        // 1.10.2: the per-player gate's Verkenningsboek % counts as met for the robot (it plays quests, not the book), and the
+        // per-player level cap follows the zones it plays (it teleports, so the "entered" tick never sees it)
+        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.BOEK_VRIJ.add(p.getUUID());
         try {
             robot.alles(totZone);
         } finally {
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.BOEK_VRIJ.remove(p.getUUID());
             ACTIEF.remove(p.getUUID());
             for (RijkGuh g : robot.invallers.values()) {
                 g.discard();
@@ -178,6 +182,7 @@ public final class QuestRobot {
         Questlog.wisAlles(p);
         p.getInventory().clearContent();
         Spelers.zetLevel(p, 1);
+        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zetHoogste(p, Math.min(6, totZone));   // 1.10.2 (see speel)
         List<Quest> lijst = new ArrayList<>();
         for (Quest q : Quests.alle().values()) {
             if (ZoneBoeken.zoneVan(q.id()) <= totZone) {

@@ -74,7 +74,7 @@ public final class WezensLoot {
             double v = ((Number) extra[i + 1]).doubleValue();
             basis.plus(s, v);
             if (s.hoofd()) {
-                groei.plus(s, v * 0.25);
+                groei.plus(s, v * BasisType.HOOFD_GROEI);
             }
         }
         return new BasisType(id, itemId(id), HARNAS.get(id), "harnas", null, Element.GEEN, 0, 0, basis, groei, 3);

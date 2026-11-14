@@ -79,7 +79,7 @@ public final class VliegdroomFeature {
         ENTITY_TYPES.register(modBus);
         ITEMS.register(modBus);
         modBus.addListener((EntityAttributeCreationEvent event) -> event.put(ROOKGUH.get(), RookguhEntity.createAttributes().build()));
-        NeoForge.EVENT_BUS.addListener(VliegdroomFeature::tick);
+        nl.juiced.guhs.world.TikWacht.post("VliegdroomFeature.tick", VliegdroomFeature::tick);
         NeoForge.EVENT_BUS.addListener(VliegdroomFeature::commands);
     }
 

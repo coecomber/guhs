@@ -133,7 +133,7 @@ public final class LobbySlice {
                 Component.translatable("gui.guhs.lobby.verkoper.kop").withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD),
                 server -> Component.translatable("gui.guhs.lobby.verkoper.onder." + (server.getTickCount() / 200) % 4).withStyle(ChatFormatting.GRAY));
         GidsBlad.registreer(new LobbyGids());
-        NeoForge.EVENT_BUS.addListener(LobbySlice::opServerTick);
+        nl.juiced.guhs.world.TikWacht.post("LobbySlice.opServerTick", LobbySlice::opServerTick);
         NeoForge.EVENT_BUS.addListener(LobbySlice::opSpelerTick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> weg(e.getEntity()));
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickItem e) -> {

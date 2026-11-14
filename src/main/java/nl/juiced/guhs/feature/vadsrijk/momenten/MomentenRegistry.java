@@ -75,7 +75,7 @@ public final class MomentenRegistry {
         });
         Golf.init();
         Karavaan.init();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("MomentenRegistry:78", e -> {
             Golf.tick(e.getServer());
             Karavaan.tick(e.getServer());
         });

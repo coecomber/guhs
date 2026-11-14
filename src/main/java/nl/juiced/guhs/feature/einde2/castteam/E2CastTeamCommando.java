@@ -78,7 +78,7 @@ public final class E2CastTeamCommando {
     /** Removes every entity of a row; returns how many. */
     public static int weg(ServerLevel level) {
         List<Entity> weg = new ArrayList<>();
-        for (Entity e : level.getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
             if (e.entityTags().contains(TAG)) {
                 weg.add(e);
             }

@@ -581,7 +581,7 @@ public final class QuestMotor {
                 if (slot != null) {   // (a locked line: the captain says why)
                     RijkGuh npc = p.level().getEntity(g.entity()) instanceof RijkGuh r ? r : null;
                     LOPEND.put(p.getUUID(), new Gesprek(g.npc(), g.entity(), "", "", ""));
-                    Praat.scene(p, SLEUTEL, List.of(new Praat.Regel(npc, "", slot, Spelers.level(p))));
+                    Praat.scene(p, SLEUTEL, List.of(new Praat.Regel(npc, "", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.sleutel(slot), nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.args(p, slot))));   // 1.10.2: the per-player gate line with progress
                     return;
                 }
                 Praat.sluit(p);

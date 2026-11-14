@@ -81,7 +81,7 @@ public final class DraakVriendjes {
 
     public static void register(IEventBus modBus) {
         ENTITIES.register(modBus);
-        NeoForge.EVENT_BUS.addListener(DraakVriendjes::opTick);
+        nl.juiced.guhs.world.TikWacht.post("DraakVriendjes.opTick", DraakVriendjes::opTick);
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> {
             GROEPEN.clear();
             EXTRA.clear();

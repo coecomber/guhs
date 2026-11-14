@@ -37,7 +37,7 @@ public final class UDeco {
 
     public static void register(IEventBus modBus) {
         Aankomstvrij.registreer();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("UDeco:40", e -> {
             ServerLevel sl = e.getServer().getLevel(Vadsrijk.DIM);
             if (sl != null) {
                 HoningtakBijen.tick(sl);

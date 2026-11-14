@@ -144,7 +144,7 @@ public final class WeerFeature {
         BLOCK_ENTITIES.register(modBus);
         PARTICLES.register(modBus);
         modBus.addListener((RegisterCapabilitiesEvent event) -> VadskrachtFeature.knoopCapability(event, WEER_VADSER_BE.get()));
-        NeoForge.EVENT_BUS.addListener(WeerFeature::tick);
+        nl.juiced.guhs.world.TikWacht.post("WeerFeature.tick", WeerFeature::tick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent event) -> {
             if (event.getEntity() instanceof ServerPlayer sp) {
                 WeerZones.stuur(sp);

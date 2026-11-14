@@ -44,7 +44,7 @@ public class KarakterPaneel extends MenuPaneel {
         long xp = data.getLongOr("xp", 0), nodig = data.getLongOr("xpNodig", 0);
         balk(g, x1, y, kolom - 8, 6, nodig <= 0 ? 1f : xp / (float) nodig);
         tip(mx, my, x1, y - 2, kolom - 8, 10, List.of(nodig <= 0 ? Component.translatable(data.getStringOr("maxKey", "vadsrijk.menu.karakter.max"),   // X-ZONE1: soft cap
-                        Component.translatable("vadsrijk.zonepoort.zone." + data.getIntOr("volgendeZone", 2)), data.getLongOr("gespaard", 0))
+                        data.getIntOr("cap", lv), Component.translatable("vadsrijk.zonepoort.zone." + data.getIntOr("volgendeZone", 2)), data.getLongOr("gespaard", 0))
                 : Component.translatable("vadsrijk.menu.karakter.xp", xp, nodig)));
         y += 12;
         g.text(font, Component.translatable(data.getStringOr("titel", "")).withStyle(ChatFormatting.BOLD), x1, y, 0xFFD0307A, false);

@@ -81,8 +81,8 @@ public final class KnabbelveldenFeature {
                         e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
                     }
                 });
-        NeoForge.EVENT_BUS.addListener(Geesten::tick);
-        NeoForge.EVENT_BUS.addListener(Pensioen::tick);
+        nl.juiced.guhs.world.TikWacht.post("Geesten.tick", Geesten::tick);
+        nl.juiced.guhs.world.TikWacht.post("Pensioen.tick", Pensioen::tick);
         NeoForge.EVENT_BUS.addListener(KnabbelveldenFeature::opSchade);
         NeoForge.EVENT_BUS.addListener(KnabbelveldenFeature::opSpelerTick);
         NeoForge.EVENT_BUS.addListener(KnabbelveldenFeature::opBreken);
@@ -91,7 +91,7 @@ public final class KnabbelveldenFeature {
             Pensioen.vergeet(e.getEntity().getUUID());
             ETEN.remove(e.getEntity().getUUID());
             if (e.getEntity().level() instanceof ServerLevel level && Knabbelvelden.level(level.getServer()) instanceof ServerLevel velden) {
-                for (Entity g : com.google.common.collect.Lists.newArrayList(velden.getAllEntities())) {   // (guhs and maatjes)   // (a copy: discard while iterating crashes)
+                for (Entity g : com.google.common.collect.Lists.newArrayList(nl.juiced.guhs.world.TikWacht.alle(velden.getAllEntities()))) {   // (guhs and maatjes)   // (a copy: discard while iterating crashes)
                     Geesten.Geest geest = Geesten.isGeest(g) ? Geesten.geest(g) : null;
                     if (geest != null && geest.eigenaar().equals(e.getEntity().getUUID())) {
                         g.discard();

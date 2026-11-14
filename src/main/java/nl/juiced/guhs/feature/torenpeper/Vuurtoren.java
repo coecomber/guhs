@@ -277,7 +277,7 @@ public final class Vuurtoren {
     /** All lost Rookguhs of this player, wherever they are (they leave when the player logs out or changes dimension). */
     public static List<VerdwaaldeRookguhEntity> alleVan(ServerLevel level, UUID gids) {
         List<VerdwaaldeRookguhEntity> uit = new ArrayList<>();
-        for (var e : level.getAllEntities()) {
+        for (var e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
             if (e instanceof VerdwaaldeRookguhEntity r && gids.equals(r.gids())) {
                 uit.add(r);
             }

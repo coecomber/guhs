@@ -74,7 +74,7 @@ public final class DroomwolkjeFeature {
         DroomRegels.MAG_HIER = Wolkjes::magBouwen;
         DroomRegels.PLEK = Wolkjes::plek;
         DroomRegels.TERUG = Wolkjes::terug;
-        NeoForge.EVENT_BUS.addListener(DroomwolkjeFeature::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomwolkjeFeature.tick", DroomwolkjeFeature::tick);
         NeoForge.EVENT_BUS.addListener(DroomwolkjeFeature::spelerTick);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, DroomwolkjeFeature::klikBlok);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, (PlayerInteractEvent.EntityInteract e) -> {

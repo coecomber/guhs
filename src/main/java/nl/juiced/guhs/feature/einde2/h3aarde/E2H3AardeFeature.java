@@ -91,8 +91,8 @@ public final class E2H3AardeFeature {
         NeoForge.EVENT_BUS.addListener(H3Sluipen::opTick);
         NeoForge.EVENT_BUS.addListener(H3Thee::opTick);
         NeoForge.EVENT_BUS.addListener(H3Thee::opKlik);
-        NeoForge.EVENT_BUS.addListener(PaiShoSpel::opTick);
-        NeoForge.EVENT_BUS.addListener(H3Theebezoek::opTick);
+        nl.juiced.guhs.world.TikWacht.post("PaiShoSpel.opTick", PaiShoSpel::opTick);
+        nl.juiced.guhs.world.TikWacht.post("H3Theebezoek.opTick", H3Theebezoek::opTick);
         NeoForge.EVENT_BUS.addListener(H3Acteurs::opBinnenkomst);
         NeoForge.EVENT_BUS.addListener(H3Rollen::opBinnenkomst);
         NeoForge.EVENT_BUS.addListener(H3Acteurs::opUitloggen);

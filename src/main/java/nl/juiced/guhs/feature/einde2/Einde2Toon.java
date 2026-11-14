@@ -289,7 +289,7 @@ public final class Einde2Toon {
     /** Removes every thing of every row; returns how many. */
     public static int weg(ServerLevel level) {
         List<Entity> weg = new ArrayList<>();
-        for (Entity e : level.getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
             if (e.entityTags().contains(TAG)) {
                 weg.add(e);
             }

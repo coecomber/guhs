@@ -87,7 +87,7 @@ public final class BlubKoortje {
     }
 
     public static void register() {
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("BlubKoortje:90", e -> {
             ServerLevel level = e.getServer().getLevel(DromenFeature.DIM);
             if (level == null || level.players().isEmpty() || level.getGameTime() % ELKE != 0) {
                 return;

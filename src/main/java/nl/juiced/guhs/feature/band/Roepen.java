@@ -119,7 +119,7 @@ public final class Roepen {
 
     static void register(IEventBus modBus) {
         TICKET_TYPES.register(modBus);
-        NeoForge.EVENT_BUS.addListener(Roepen::tick);
+        nl.juiced.guhs.world.TikWacht.post("Roepen.tick", Roepen::tick);
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> stopAlles());
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {

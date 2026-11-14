@@ -116,7 +116,7 @@ public final class SterrenveldFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         ENTITY_TYPES.register(modBus);
-        NeoForge.EVENT_BUS.addListener(SterrenveldFeature::tick);
+        nl.juiced.guhs.world.TikWacht.post("SterrenveldFeature.tick", SterrenveldFeature::tick);
     }
 
     public static void creative(Consumer<ItemStack> output) {

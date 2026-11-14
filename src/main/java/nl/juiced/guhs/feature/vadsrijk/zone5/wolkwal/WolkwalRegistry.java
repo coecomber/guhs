@@ -40,7 +40,7 @@ public final class WolkwalRegistry {
     }
 
     public static void register() {
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("WolkwalRegistry:43", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
                 return;

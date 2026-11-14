@@ -37,7 +37,7 @@ public final class SafariDialoog {
     static void register() {
         Praat.luister(SLEUTEL, (p, spreker, optie) -> {
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> flush(event.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("SafariDialoog:40", event -> flush(event.getServer()));
     }
 
     /**

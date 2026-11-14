@@ -239,7 +239,7 @@ public final class Z6WezensRegistry {
         Z6BazenEffecten.register();
         Bultguh.registreer();
         haken();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z6WezensRegistry:242", e -> {
             ServerLevel sl = e.getServer().getLevel(Vadsrijk.DIM);
             if (sl != null) {
                 Z6Bouw.tick(sl);

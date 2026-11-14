@@ -46,7 +46,7 @@ public final class Z6Wereld {
 
     public static void register() {
         NeoForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> gebieden());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z6Wereld:49", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl != null && sl.getGameTime() % 20 == 0) {
                 Z6Bewoners.tick(sl);

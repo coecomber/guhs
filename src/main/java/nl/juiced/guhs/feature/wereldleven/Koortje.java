@@ -258,7 +258,7 @@ public final class Koortje {
     }
 
     static void register() {
-        NeoForge.EVENT_BUS.addListener(Koortje::onTick);
+        nl.juiced.guhs.world.TikWacht.post("Koortje.onTick", Koortje::onTick);
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> {
             SESSIES.clear();
             synchronized (MELODIEEN) {

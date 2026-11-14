@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.vadsrijk.wezens;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import net.minecraft.core.BlockPos;
@@ -52,15 +54,22 @@ public final class Sfeer {
             }
         }
         if (t % 200 == 100) {
-            for (Entity e : sl.getAllEntities()) {
-                if (e.entityTags().contains(TAG) && e.isAlive()) {
-                    var p = sl.getNearestPlayer(e, WEG);
-                    if (p == null) {
-                        e.discard();
-                    }
-                }
+            ruimOp(sl);
+        }
+    }
+
+    /**
+     * Removes the critters with no player within {@link #WEG} blocks. 1.10.2 (live crash 2026-11-14 15:27): it walks a COPY of the
+     * entities without nulls (TikWacht.alle) and discards after the walk, never while the live lookup is being iterated.
+     */
+    static void ruimOp(ServerLevel sl) {
+        List<Entity> weg = new ArrayList<>();
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(sl.getAllEntities())) {
+            if (e.isAlive() && e.entityTags().contains(TAG) && sl.getNearestPlayer(e, WEG) == null) {
+                weg.add(e);
             }
         }
+        weg.forEach(Entity::discard);
     }
 
     private static void vulAan(ServerLevel sl, ServerPlayer p) {

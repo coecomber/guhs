@@ -37,7 +37,7 @@ public final class HuizenRegistry {
         NeoForge.EVENT_BUS.addListener(Regels::binnenkomen);
         NeoForge.EVENT_BUS.addListener(Regels::uitgelogd);
         NeoForge.EVENT_BUS.addListener(Regels::ingelogd);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("HuizenRegistry:40", e -> tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> Figuranten.wisAlles(e.getServer()));
         Praat.luister(Menus.SLEUTEL, Menus::antwoord);
         QuestMotor.KLIK_VOOR.add(Menus::klik);

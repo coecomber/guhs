@@ -34,6 +34,15 @@ OOK_IN_ZONE1 = {
     "De Schemerwortel": "Stalmeester Hoefje (Knuffelkamp) says you pick your Pluimguh there",
     "Bolletje": "also the name of a zone-1 cuddly toy (secret) and a zone-1 quest text",
 }
+# 1.10.2: names of a later thing that an EARLIER zone's game text (or an unrelated earlier thing) also uses: allowed once that zone
+# is open (name: (zone, why)). They still count as their own zone while that zone is closed.
+OOK_VANAF = {
+    "Spiegelzaal": (2, "also the throne room of the zone-2 quest Spiegelzucht (Spiegelburcht), besides the zone-6 palace hall/raid floor"),
+    "Hoogvads": (3, "the zone-3 finale (z3_hq15 'Naar de Zwevende Stad') names it: the ship there sails soon"),
+    "De Zwevende Stad": (3, "the title of the zone-3 finale quest z3_hq15"),
+    "Sterretje": (3, "inside 'Sterretjes', a mount pattern (Pluimstal, zone 3), besides the zone-5 thing"),
+    "Lampionnetje": (3, "inside 'Lampionnetjes', a mount tack (Pluimstal, zone 3), besides the zone-4 thing"),
+}
 GIDS_ZONE = {"rijdieren": 3}
 RIJDIER_ZONE = 3   # the first mount is chosen in the Pluimstal (zone 3)   # guide topics without a zN_ prefix that talk about a later zone (same as pages.GIDS_ZONE)
 
@@ -96,7 +105,7 @@ def later_namen(full, n=1):
     vroeg = {x for x, z in lager.items() if z <= n}
     uit = {}
     for x, z in lager.items():
-        if z > n and x not in vroeg and not any(x in a for a in vroeg) and not _ook(x):
+        if z > n and x not in vroeg and not any(x in a for a in vroeg) and not _vrij(x, n):
             uit[x] = f"zone{z}"
     return uit
 
@@ -104,6 +113,16 @@ def later_namen(full, n=1):
 def _ook(x):
     """A name zone-1 game text says itself (also without its article: "Schemerwortel")."""
     return any(x == o or o.endswith(" " + x) for o in OOK_IN_ZONE1)
+
+
+def _vanaf(x):
+    """The zone from which this later name is allowed (OOK_VANAF, also without its article: "Zwevende Stad"); 99 = never."""
+    return min([z for o, (z, _) in OOK_VANAF.items() if x == o or o.endswith(" " + x)] or [99])
+
+
+def _vrij(x, n):
+    """Allowed with zones 1..n open: a zone-1 story name, or an OOK_VANAF name whose zone is open."""
+    return _ook(x) or _vanaf(x) <= n
 
 
 def patroon(namen, heel=False):
@@ -119,7 +138,8 @@ def zone_namen(full):
     """{name: first zone} of every name that is not also a zone-1 name: for tagging free text (Bouwer.tekst_zone)."""
     lager, _ = _namen(full)
     vroeg = {x for x, z in lager.items() if z <= 1}
-    return {x: z for x, z in lager.items() if z > 1 and x not in vroeg and not any(x in a for a in vroeg) and not _ook(x)}
+    uit = {x: min(z, _vanaf(x)) for x, z in lager.items() if z > 1 and x not in vroeg and not any(x in a for a in vroeg) and not _ook(x)}
+    return {x: z for x, z in uit.items() if z > 1}
 
 
 def tekst_zone(pat, namen_zone, *teksten):
@@ -136,8 +156,8 @@ def filter_data(full, n):
         return d
     lager, hoger = _namen(full)
     vroeg = {x for x, z in lager.items() if z <= n}
-    nz = {x: z for x, z in lager.items() if z > n and x not in vroeg and not any(x in a for a in vroeg) and not _ook(x)}
-    streng = {x: z for x, z in lager.items() if z > n and x not in vroeg and not any(x in a for a in vroeg)}   # incl. the story names
+    nz = {x: z for x, z in lager.items() if z > n and x not in vroeg and not any(x in a for a in vroeg) and not _vrij(x, n)}
+    streng = {x: z for x, z in lager.items() if z > n and x not in vroeg and not any(x in a for a in vroeg) and _vanaf(x) > n}   # incl. the story names
     spat = patroon(streng)
     pat = patroon(nz)
 

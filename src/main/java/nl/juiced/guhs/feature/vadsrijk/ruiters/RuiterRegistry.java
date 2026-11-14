@@ -59,7 +59,7 @@ public final class RuiterRegistry {
             e.put(PLUIM.get(), RijdierEntity.attributen().build());
             e.put(GUH.get(), GuhEntity.createAttributes().build());
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Ruiters.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("RuiterRegistry:62", e -> Ruiters.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (EntityJoinLevelEvent e) -> {
             if (!e.getLevel().isClientSide() && !Ruiters.magErin(e.getEntity())) {
                 e.setCanceled(true);   // a rider this manager didn't spawn (never from disk: the types are noSave)

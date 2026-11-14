@@ -88,7 +88,7 @@ public final class Vadsjes {
     @Nullable
     public static TamableAnimal zoekGeladen(MinecraftServer s, UUID id) {
         for (ServerLevel level : s.getAllLevels()) {
-            for (Entity e : level.getAllEntities()) {
+            for (Entity e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
                 if (e instanceof PiepMaatje m && !Geesten.isGeest(e) && id.equals(bandId(e))) {
                     return m.dier();
                 }

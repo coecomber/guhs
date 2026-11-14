@@ -33,7 +33,7 @@ public class QuestlogScherm extends Screen implements nl.juiced.guhs.feature.vad
     private static final int RAND = 0xFFF7B6CB, TEKST = 0xFF4A1E46, ZACHT = 0xFF8A5A84, GOUD = 0xFFB07800, GROEN = 0xFF2E9E5A;
     private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
     /** The Avonturiersgids topics (lang vadsrijk.npc.gids.&lt;id&gt;.titel / .tekst). */
-    static final String[] GIDS = {"begin", "vastzitten", "weergave", "klassen", "vaardigheden", "loot", "sterren", "opruimen", "kampvuren", "flauw", "elementen", "statussen", "party",
+    static final String[] GIDS = {"begin", "vastzitten", "weergave", "klassen", "vaardigheden", "loot", "sterren", "opruimen", "kampvuren", "flauw", "zonepoort", "elementen", "statussen", "party",
             "quests", "munten", "markt", "rijdieren", "geheimen",
             // zone 2 (tools/features/vadsrijk_z2_npc.py GIDS)
             "z2_splinterpieken", "z2_kristalwezens", "z2_bevroren", "z2_edelstenen", "z2_reizen", "z2_titel",

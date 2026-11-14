@@ -59,7 +59,7 @@ public final class Z2WereldRegistry {
             Gebieden.voegVooraan(g.get(i));
         }
         WereldDeuren.EXTRA.addAll(Z2WereldPlekken.DEUREN);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z2WereldRegistry:62", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null || sl.getGameTime() % 10 != 0) {
                 return;

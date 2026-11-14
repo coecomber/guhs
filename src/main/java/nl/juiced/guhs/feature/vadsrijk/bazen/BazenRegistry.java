@@ -129,7 +129,7 @@ public final class BazenRegistry {
             }
         });
         LichtzwamBlok.AANGESTOKEN.add(ZwamtempelToegang::k1);
-        NeoForge.EVENT_BUS.addListener(BazenRegistry::tick);
+        nl.juiced.guhs.world.TikWacht.post("BazenRegistry.tick", BazenRegistry::tick);
         NeoForge.EVENT_BUS.addListener(BazenRegistry::commando);
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> Herstel.allesTerug(e.getServer()));
         ElementKlodder.registreerSchild();

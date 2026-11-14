@@ -191,7 +191,7 @@ public final class BouwDalSlice {
         }
         SuperkompasItem.voegToe("knus", "weebhuisje");
         BESCHERMING.register();
-        NeoForge.EVENT_BUS.addListener(WeebHuizen::onServerTick);
+        nl.juiced.guhs.world.TikWacht.post("WeebHuizen.onServerTick", WeebHuizen::onServerTick);
         NeoForge.EVENT_BUS.addListener(BouwDalCheck::commando);
         BioZelftest.registreer("bouw-dal", BouwDalCheck::zelftest);
     }

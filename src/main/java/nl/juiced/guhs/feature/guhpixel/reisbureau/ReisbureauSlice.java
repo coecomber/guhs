@@ -103,7 +103,7 @@ public final class ReisbureauSlice {
         GuhHooks.tick(Reizen::tickGuh);
         GidsBlad.registreer(new ReisGids());
         NeoForge.EVENT_BUS.addListener(ReisCommando::register);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> Reizen.serverTick(event.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("ReisbureauSlice:106", event -> Reizen.serverTick(event.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent event) -> {
             if (event.getEntity() instanceof ServerPlayer p) {
                 Reizen.login(p);

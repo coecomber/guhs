@@ -53,7 +53,7 @@ public final class EconomieRegistry {
         Rollen.STER_SCHADE = SterRegels::schade;
 
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> EcoCommando.register(e));
-        NeoForge.EVENT_BUS.addListener(EconomieRegistry::tick);
+        nl.juiced.guhs.world.TikWacht.post("EconomieRegistry.tick", EconomieRegistry::tick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 Handel.annuleer(p, "vadsrijk.economie.handel.weg");

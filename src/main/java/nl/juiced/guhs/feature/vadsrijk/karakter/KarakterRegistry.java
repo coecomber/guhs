@@ -98,7 +98,7 @@ public final class KarakterRegistry {
         });
         NeoForge.EVENT_BUS.addListener(Badges::naam);
         NeoForge.EVENT_BUS.addListener(Badges::tabNaam);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("KarakterRegistry:101", e -> {
             if (e.getServer().getTickCount() % 100 == 37) {
                 RustendeRidders.tick(e.getServer());
             }

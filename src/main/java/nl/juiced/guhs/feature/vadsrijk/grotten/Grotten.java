@@ -165,7 +165,7 @@ public final class Grotten {
             gebieden();
             herhaal = 40;
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Grotten:168", e -> tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener(Grotten::commando);
     }
 

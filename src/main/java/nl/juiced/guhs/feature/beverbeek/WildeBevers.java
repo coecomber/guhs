@@ -42,7 +42,7 @@ public final class WildeBevers {
     }
 
     static void registreer() {
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("WildeBevers:45", e -> {
             int t = e.getServer().getTickCount();
             if (t % ELKE != 7 && t % OM_DE != 3) {
                 return;
@@ -75,7 +75,7 @@ public final class WildeBevers {
             return 0;
         }
         int wereld = 0;
-        for (var e : level.getAllEntities()) {
+        for (var e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
             if (is(e)) {
                 wereld++;
             }

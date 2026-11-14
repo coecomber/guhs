@@ -3,6 +3,21 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.2 — Minecraft 26.1.2
+
+- **Zones 2 and 3 are open:** the ship at the end of zone 1 sails. De Splinterpieken (level 20 to 30) with the crystal town of Kandijkom, and De Schemerwortel (level 30 to 50), the giant tree with the town of Honingtak in its branches and your first mount. At the end of zone 3 the next ship sails soon.
+- **To the next zone:** zone N+1 opens for you once you finished zone N's main story AND explored at least 75% of it in the Exploring Book (key B). The captain, the travel map and the quest tracker show your progress; players who already were there keep their access.
+- **Level cap per player:** your highest level is the top level of the highest zone you have entered + 5 (25 until you set foot in zone 2, then 35, 55, 61, 65, 70). Extra xp is still banked and paid out double later.
+- **Kristalklodder mirror:** it reflects at most once per spell, never the automatic Liedpuls, at most 15% of your max Vads, as normal damage (Verdediging counts) and without the creature damage bonus.
+- **Tougher creatures and bosses:** every creature and boss in Het Vadsrijk has 25% more health and hits 20% harder.
+- **Vadsmagiër fix:** Roze Vuurbal and Meteoorguh always crit (a bug); they now crit by chance like every other skill. Tijdsprongetje halves the Vuurbal cooldown instead of resetting it.
+- **Set armour:** the main stat (Kracht, Behendigheid, Wijsheid) on armour and jewellery grows 15% of its base per level instead of 25%, for every class and also for gear you already have.
+- **Zwamtempel door:** the big temple door opens again when you click it (it slid shut after 30 seconds while the temple still thought it was open).
+- **Turtle island:** the turtle island south-east of zone 1 can be reached by swimming or by boat; the sea current no longer pushes you back.
+- **Wake at the nearest campfire:** after fainting you wake at the nearest campfire you have lit (in an open zone), not at the last one you clicked. Boss arenas and the raid keep waking you at their door.
+- **Back where you left:** entering Het Vadsrijk again puts you next to the portal you left from, not on the Knuffelkamp pier. At home you come out next to your portal instead of inside it.
+- **Stability:** fixed a server crash while the Vadsrijk's ambient critters were cleaned up. Every server-tick hook of Guhs is now guarded: an error is logged and that feature skips the tick, the server keeps running.
+
 ## 1.10.1 — Minecraft 26.1.2
 
 - **Balance in Het Vadsrijk:** creatures have more health and hit harder, and you heal slower in the middle of a fight. Ordinary creatures drop less loot, dungeons give much more xp and two pieces in the dungeon chest, and the main quests give a bit less xp. A class that lags behind your highest class gets a catch-up bonus on class xp (shown in the Karakter tab).

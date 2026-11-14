@@ -77,7 +77,7 @@ public final class Z5DroomRegistry {
         aanmelden();
         gebied();
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (ServerAboutToStartEvent e) -> gebied());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Z5Droom.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Z5DroomRegistry:80", e -> Z5Droom.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener(Z5DroomCommando::register);
     }
 

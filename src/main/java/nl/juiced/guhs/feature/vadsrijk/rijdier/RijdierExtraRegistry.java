@@ -127,7 +127,7 @@ public final class RijdierExtraRegistry {
         Spelers.EXTRA_STATS.add(Maatjes::stats);
         Schade.NA_KLAP.add(Maatjes::klap);
         Haken.VERSLAGEN.add(Maatjes::verslagen);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("RijdierExtraRegistry:130", e -> tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 Maatjes.uitgelogd(p);

@@ -95,7 +95,7 @@ public final class RaketFeature {
         RaketScene.init();
         KledingBronnen.bron(GuhClothes.ASTRONAUTENPAKJE, BRON, KledingBronnen.prijs("gui.guhs.kleding.prijs.hint.raket"));
         KledingBronnen.bron(GuhClothes.ASTRONAUTENHELM, BRON, KledingBronnen.prijs("gui.guhs.kleding.prijs.hint.raket"));
-        NeoForge.EVENT_BUS.addListener(KaasMaan::tick);
+        nl.juiced.guhs.world.TikWacht.post("KaasMaan.tick", KaasMaan::tick);
         NeoForge.EVENT_BUS.addListener(KaasMaan::opKlik);
         NeoForge.EVENT_BUS.addListener(KaasMaan::opNeerzetten);
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> RaketCommando.register(event));

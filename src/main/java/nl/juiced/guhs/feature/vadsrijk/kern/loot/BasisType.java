@@ -32,6 +32,12 @@ public record BasisType(String id, String itemId, Slot slot, String soort, @Null
         return "vadsrijk.loot." + id + ".flavour." + i;
     }
 
+    /**
+     * 1.10.2 (user decision "D"): how much of its base a main stat (Kracht / Behendigheid / Wijsheid) on armour and jewellery grows
+     * per item level, for every zone's set pieces. Was 0.25.
+     */
+    public static final double HOOFD_GROEI = 0.15;
+
     public static BasisType wapen(String id, String itemId, String soort, String klasse, Element e, double schade, double perLevel, Stats basis,
             Stats groei, int flavours) {
         return new BasisType(id, itemId, Slot.WAPEN, soort, klasse, e, schade, perLevel, basis, groei, flavours);

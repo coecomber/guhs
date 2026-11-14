@@ -128,7 +128,7 @@ KNOPEN = {
     "m_bronschild": ("Bronschild", "Wie voor het eerst in je Vadsbron stapt, krijgt 5 s een Knuffelschild van 12 % van jouw max Vads."),
     "m_kettingbolt": ("Kettingbolt", "Je toverbollen springen door naar een tweede vijand in 6 blokken (60 % schade)."),
     "m_meteoorregen": ("Meteoorregen", "Na Meteoorguh vallen er nog 3 kleine meteoren rondom (elk 1,5x schade)."),
-    "m_tijdsprong": ("Tijdsprongetje", "Blink geeft 15 energie terug en Roze Vuurbal is meteen weer klaar."),
+    "m_tijdsprong": ("Tijdsprongetje", "Blink geeft 15 energie terug en halveert de wachttijd van Roze Vuurbal."),
 }
 
 ADV = {

@@ -31,7 +31,7 @@ public final class KaartFeature {
 
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener(KaartCommando::register);
-        NeoForge.EVENT_BUS.addListener(KaartServer::tick);
+        nl.juiced.guhs.world.TikWacht.post("KaartServer.tick", KaartServer::tick);
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent e) -> {
             if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer p) {
                 Handje.bijInloggen(p);   // ("X hielp je een handje!" while you were away)

@@ -46,7 +46,7 @@ public final class SfeerRegistry {
 
     public static void register(IEventBus modBus) {
         Schade.NA_KLAP.add(Drakenpas::klap);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("SfeerRegistry:49", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
                 return;

@@ -53,7 +53,7 @@ public final class HuisdierenRegistry {
                 Huisdieren.weg(p, false);
             }
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Huisdieren.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("HuisdierenRegistry:56", e -> Huisdieren.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
                 Huisdieren.uitgelogd(p);

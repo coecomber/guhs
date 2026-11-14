@@ -114,7 +114,7 @@ public final class Vitrine {
                 e.accept(new ItemStack(ITEM.get()));
             }
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> eersteCheck(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Vitrine:117", e -> eersteCheck(e.getServer()));
         NeoForge.EVENT_BUS.addListener(Vitrine::commando);
     }
 

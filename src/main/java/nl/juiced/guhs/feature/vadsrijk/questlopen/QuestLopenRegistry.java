@@ -23,7 +23,7 @@ public final class QuestLopenRegistry {
 
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> commando(e));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> QuestLoper.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("QuestLopenRegistry:26", e -> QuestLoper.tick(e.getServer()));
         KernPayloads.VOOR_STUUR = QuestLoper::voorStuur;
         QlHaken.SCENE.add(nl.juiced.guhs.feature.vadsrijk.npc.Verhaal::bezig);
     }

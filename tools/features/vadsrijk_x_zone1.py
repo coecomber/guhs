@@ -25,10 +25,17 @@ TEKSTEN = {
     K + "dungeon": ("%s ligt in %s: die zone gaat binnenkort open!", "%s lies in %s: that zone opens soon!"),
     K + "grens": ("%s is nog dicht: het schip daarheen vaart binnenkort! Houd Discord in de gaten.",
                   "%s is still closed: the ship there sails soon! Keep an eye on Discord."),
-    K + "plafond": ("Level %s: het hoogste level tot het schip naar %s vaart! Extra xp spaar je op (tot %s levels) en die krijg je er straks dubbel bij.",
-                    "Level %s: the highest level until the ship to %s sails! Extra xp is saved up (up to %s levels) and you get it as a double bonus later."),
-    K + "menu.max": ("Hoogste level voor nu: %s gaat binnenkort open. Gespaarde xp: %s",
-                     "Highest level for now: %s opens soon. Saved xp: %s"),
+    K + "eis": ('Naar %1$s: %2$s hoofdverhaal %3$s · %4$s Verkenningsboek %5$s%% / %6$s%% (toets B)', 'To %1$s: %2$s main story %3$s · %4$s Exploring Book %5$s%% / %6$s%% (key B)'),
+    K + "eis.kort": ('eerst het hoofdverhaal en je Verkenningsboek (B)', 'first the main story and your Exploring Book (B)'),
+    K + "eis.kaart": ('Verken eerst de vorige zone: Verkenningsboek %s%% / 75%% (toets B)', 'Explore the previous zone first: Exploring Book %s%% / 75%% (key B)'),
+    K + "eis.kaart_verhaal": ('Speel eerst het hoofdverhaal uit en verken de vorige zone (Verkenningsboek %s%% / 75%%)', 'Finish the main story first and explore the previous zone (Exploring Book %s%% / 75%%)'),
+    K + "verken.titel": ('Volgende: verken %s tot %s%%', 'Next: explore %s to %s%%'),
+    K + "verken.wat": ('Je Verkenningsboek (toets B): nu %s%% van %s%%', 'Your Exploring Book (key B): %s%% of %s%% now'),
+    K + "verken.waar": ('Daarna mag je met het schip naar %s!', 'Then the ship takes you to %s!'),
+    K + "dungeon.eis": ('%s: %s', '%s: %s'),
+    K + "weg_open": ('De weg naar %s is open! Het schip wacht op je.', 'The way to %s is open! The ship is waiting for you.'),
+    K + "plafond": ('Level %s: je hoogste level tot je %s betreedt! Extra xp spaar je op (tot %s levels) en die krijg je er straks dubbel bij.', 'Level %s: your highest level until you enter %s! Extra xp is saved up (up to %s levels) and you get it as a double bonus later.'),
+    K + "menu.max": ('Hoogste level voor nu: %s (betreed %s voor meer). Gespaarde xp: %s', 'Highest level for now: %s (enter %s for more). Saved xp: %s'),
 }
 for _z, (_nl, _en) in ZONES.items():
     TEKSTEN[K + f"zone.{_z}"] = (_nl, _en[0].upper() + _en[1:])

@@ -383,7 +383,7 @@ public final class Parade {
         STOETEN.clear();
         dagGestart = Long.MIN_VALUE;
         List<Entity> weg = new java.util.ArrayList<>();          // (collect first: discarding while iterating crashed the server)
-        for (Entity e : level.getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
             if (isParadeDier(e) || isParadeGuh(e)) {
                 weg.add(e);
             }

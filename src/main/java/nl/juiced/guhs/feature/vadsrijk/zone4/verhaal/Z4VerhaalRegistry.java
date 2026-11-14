@@ -94,7 +94,7 @@ public final class Z4VerhaalRegistry {
         reizen();
         Voltooiing.registreer(new Voltooiing.ZoneBoek("zone4", "vadsrijk.voltooiing.zone.zone4", "vr_kenner_van_de_lampionkust", 80000,
                 Z4VerhaalRegistry::boek));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z4VerhaalRegistry:97", e -> {
             Z4Haken.tick(e.getServer());
             Z4Verhaal.tick(e.getServer());
         });

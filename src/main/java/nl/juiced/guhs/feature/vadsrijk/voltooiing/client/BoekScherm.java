@@ -154,6 +154,14 @@ public class BoekScherm extends EcoScherm {
         g.text(font, Component.translatable("vadsrijk.voltooiing.verkend", k, t), nx, y + 9, ZACHT, false);
         y += 21;
         balk(g, x, y, pw, 5, t == 0 ? 1 : k / (float) t, pct >= 100);
+        int eis = zt.getIntOr("eis", 0);
+        if (eis > 0 && eis < 100) {   // 1.10.2: the marker of the per-player zone gate ("needed for the next zone")
+            int mx75 = x + Math.round(pw * eis / 100f);
+            g.fill(mx75 - 1, y - 2, mx75 + 1, y + 7, pct >= eis ? GROEN : GOUD);
+            y += 9;
+            klein(g, Component.translatable("vadsrijk.voltooiing.nodig", eis).getVisualOrderText(), x, y, pct >= eis ? GROEN : GOUD);
+            y += 2;
+        }
         y += 9;
         // the reward line
         Component beloning = zt.getBooleanOr("beloond", false)

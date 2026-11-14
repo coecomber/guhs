@@ -35,7 +35,7 @@ public final class Veilig {
     }
 
     public static void register() {
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Losknuffelen.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Veilig:38", e -> Losknuffelen.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> e.getDispatcher().register(VadsrijkCommando.wortel(Commands.literal("vast").executes(c -> {
             Losknuffelen.probeer(c.getSource().getPlayerOrException());
             return 1;

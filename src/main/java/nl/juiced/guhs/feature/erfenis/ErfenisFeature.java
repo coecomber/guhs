@@ -23,7 +23,7 @@ public final class ErfenisFeature {
 
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener(ErfenisCommando::register);
-        NeoForge.EVENT_BUS.addListener(Erfenis::tick);
+        nl.juiced.guhs.world.TikWacht.post("Erfenis.tick", Erfenis::tick);
         NeoForge.EVENT_BUS.addListener(Erfenis::opBreken);
         NeoForge.EVENT_BUS.addListener(Erfenis::opPlaatsen);
         NeoForge.EVENT_BUS.addListener(Erfenis::opKlikBlok);

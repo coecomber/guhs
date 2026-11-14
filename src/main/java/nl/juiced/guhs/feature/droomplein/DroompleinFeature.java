@@ -64,8 +64,8 @@ public final class DroompleinFeature {
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
-        NeoForge.EVENT_BUS.addListener(DroomBezocht::tick);
-        NeoForge.EVENT_BUS.addListener(DroomFontein::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomBezocht.tick", DroomBezocht::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomFontein.tick", DroomFontein::tick);
         // part C's look for the Wekkerguh (its tag, spot, click and keeping stay in feature/dromen)
         Wekkerguh.MAKER = level -> {
             GuhNpcEntity npc = ModEntities.GUH_NPC.get().create(level, EntitySpawnReason.STRUCTURE);

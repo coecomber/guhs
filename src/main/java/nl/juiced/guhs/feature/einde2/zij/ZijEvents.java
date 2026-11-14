@@ -39,7 +39,7 @@ public final class ZijEvents {
 
     static void register() {
         NeoForge.EVENT_BUS.addListener(ZijEvents::onPlayerTick);
-        NeoForge.EVENT_BUS.addListener(ZijEvents::onServerTick);
+        nl.juiced.guhs.world.TikWacht.post("ZijEvents.onServerTick", ZijEvents::onServerTick);
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStoppingEvent e) -> ZijKrachten.allesTerug(e.getServer()));
         NeoForge.EVENT_BUS.addListener(ZijEvents::onLogout);
         NeoForge.EVENT_BUS.addListener(ZijEvents::onRightClickBlock);

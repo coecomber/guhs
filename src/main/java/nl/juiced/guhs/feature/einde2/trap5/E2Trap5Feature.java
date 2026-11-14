@@ -161,7 +161,7 @@ public final class E2Trap5Feature {
         Einde2Haken.WERKPLAATS_OPEN = E2Trap5::deurOpen;
         Schijn.registreer(Komeetkern::schijn);
 
-        NeoForge.EVENT_BUS.addListener(E2Trap5Feature::opTick);
+        nl.juiced.guhs.world.TikWacht.post("E2Trap5Feature.opTick", E2Trap5Feature::opTick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent event) -> {
             if (event.getEntity() instanceof ServerPlayer p) {
                 Werkplaats.vergeet(p);

@@ -68,7 +68,7 @@ public final class NpcRegistry {
         RijdierQuests.init();
         NpcHaken.registreer();
         Escortes.init();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("NpcRegistry:71", e -> {
             Npcs.tick(e.getServer());
             NpcHaken.tick(e.getServer());
             Escortes.tick(e.getServer());

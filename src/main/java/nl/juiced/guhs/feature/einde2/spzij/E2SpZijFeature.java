@@ -59,7 +59,7 @@ public final class E2SpZijFeature {
             }
         });
         NeoForge.EVENT_BUS.addListener(E2SpZijFeature::opTick);
-        NeoForge.EVENT_BUS.addListener(Guhlander::serverTick);
+        nl.juiced.guhs.world.TikWacht.post("Guhlander.serverTick", Guhlander::serverTick);
         NeoForge.EVENT_BUS.addListener(Guhlander::opVal);
         NeoForge.EVENT_BUS.addListener(E2SpZijFeature::opUitloggen);
         NeoForge.EVENT_BUS.addListener(SpZijEigen::opJoin);

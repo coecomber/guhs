@@ -67,7 +67,7 @@ public final class StadslevenRegistry {
             e.put(GUH.get(), GuhEntity.createAttributes().build());
             e.put(KAT.get(), Cat.createAttributes().build());
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> StadsLeven.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("StadslevenRegistry:70", e -> StadsLeven.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (EntityJoinLevelEvent e) -> {
             if (!e.getLevel().isClientSide() && !StadsLeven.magErin(e.getEntity())) {
                 e.setCanceled(true);   // a town-life entity this manager didn't spawn (never from disk: the types are noSave)

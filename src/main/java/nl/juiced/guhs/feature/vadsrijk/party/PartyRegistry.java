@@ -76,7 +76,7 @@ public final class PartyRegistry {
             NepVulling.wisAlles();
             PartijenData.vergeet();
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("PartyRegistry:79", e -> {
             NepSpelers.tick(e.getServer());
             NepVulling.tick(e.getServer());
         });

@@ -59,7 +59,7 @@ public final class DroomSlapen {
     static void register() {
         NeoForge.EVENT_BUS.addListener(DroomSlapen::onKlik);
         NeoForge.EVENT_BUS.addListener(DroomSlapen::onSpelerTick);
-        NeoForge.EVENT_BUS.addListener(DroomSlapen::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomSlapen.tick", DroomSlapen::tick);
         nl.juiced.guhs.feature.verhaal.Praat.luister(SLEUTEL, DroomSlapen::antwoord);
     }
 

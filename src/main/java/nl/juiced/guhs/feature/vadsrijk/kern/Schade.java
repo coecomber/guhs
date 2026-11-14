@@ -46,6 +46,15 @@ public final class Schade {
         }
     }
 
+    /** 1.10.2: the last hit a player took (for the faint log line in Flauwvallen). */
+    public record LaatsteKlap(String bron, String skill, double schade, double vadsVoor, long tik) {
+    }
+
+    public static final java.util.Map<java.util.UUID, LaatsteKlap> LAATSTE = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** 1.10.2: the skill id of a hit that a mob reflects back (Kristalklodder): never gets the mob/boss damage multipliers. */
+    public static final String WEERKAATST = "weerkaatst";
+
     /** What came out (after everything). */
     public record Uitkomst(Klap klap, double schade, boolean kritiek, double elementFactor) {
     }
@@ -185,13 +194,14 @@ public final class Schade {
         if (negeren > 0 && n > 0 && n < voorAanpassers) {
             n += (voorAanpassers - n) * negeren;   // T-ITEMS: negeren takes back part of what blocks/shields took off (never a full dodge)
         }
-        if (doel instanceof ServerPlayer && bron instanceof VadsrijkMob && !(bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas)) {
+        boolean weerkaatst = WEERKAATST.equals(k.skillId());   // 1.10.2: a reflected player hit is no mob hit: no [mobs]/[bazen] multiplier
+        if (!weerkaatst && doel instanceof ServerPlayer && bron instanceof VadsrijkMob && !(bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas)) {
             n *= Balans.mobSchade();   // (balans 2026-11) normal zone mobs + elites hit harder; bosses unchanged
         }
         if (doel instanceof ServerPlayer dp && k.soort() != Soort.WAAR) {
             n = verdediging(n, Spelers.stats(dp), k.element(), aanvallerLevel(bron, dp));
         }
-        if (doel instanceof ServerPlayer && bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas) {
+        if (!weerkaatst && doel instanceof ServerPlayer && bron instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas) {
             n *= Balans.bazenSchade();   // 1102-balans: bosses x1.2 on the final damage (helpers already get [mobs] schade)
         }
         Statussen.Actief schild = Statussen.actief(doel, Status.KNUFFELSCHILD);
@@ -208,6 +218,8 @@ public final class Schade {
         }
         if (doel instanceof ServerPlayer dp) {
             SpelerData d = Spelers.data(dp);
+            LAATSTE.put(dp.getUUID(), new LaatsteKlap(bron == null ? "-" : bron.getType().toShortString() + (bron instanceof ServerPlayer bp ? "(" + bp.getGameProfile().name() + ")" : ""),
+                    k.skillId(), n, Spelers.vads(dp), sl.getGameTime()));   // 1.10.2: for the faint log line
             d.vads = Math.max(0, Spelers.vads(dp) - n);
             if (n > 0) {
                 dp.connection.send(new net.minecraft.network.protocol.game.ClientboundHurtAnimationPacket(dp));

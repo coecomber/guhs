@@ -267,7 +267,7 @@ public final class E2Verhaal {
         Einde2Haken.ELEMENT_GELEERD = E2Verhaal::elementGeleerd;
         Einde2Haken.VERBORGEN = Sluiers::isVerborgen;
         Einde2Haken.VERHAAL_KLAAR = (p, id) -> klaar(p, id);
-        NeoForge.EVENT_BUS.addListener(E2Verhaal::opTick);
+        nl.juiced.guhs.world.TikWacht.post("E2Verhaal.opTick", E2Verhaal::opTick);
         NeoForge.EVENT_BUS.addListener(E2VerhaalCommando::register);
         // fix round 1 (fix-kern): the hints per step and "Verder met het verhaal" (both also load the look scene, both sides)
         StapHint.register();

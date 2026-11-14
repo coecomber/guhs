@@ -62,7 +62,7 @@ public final class Z3WereldRegistry {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wind.KOLOMMEN = Z3WereldPlekken.WINDKOLOMMEN.stream()
                 .map(w -> new nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wind.Kolom(w.id(), w.x(), w.z(), w.y0(), w.y1(), w.r(), w.lx(), w.lz()))
                 .toList();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z3WereldRegistry:65", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null) {
                 return;

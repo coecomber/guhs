@@ -88,7 +88,7 @@ public final class Beleving {
         Haken.VERSLAGEN.add(Beleving::verslagen);
         Spelers.XP_FACTOR.add(p -> Reeks.xpFactor(Reeks.stand(p.getUUID(), nu(p))));
         BaasKist.CEREMONIE = new Kistceremonie();
-        NeoForge.EVENT_BUS.addListener(Beleving::tick);
+        nl.juiced.guhs.world.TikWacht.post("Beleving.tick", Beleving::tick);
         NeoForge.EVENT_BUS.addListener(Beleving::baasTick);
         NeoForge.EVENT_BUS.addListener((LivingFallEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p && Vadsrijk.in(p) && e.getDistance() > 4) {

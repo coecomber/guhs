@@ -88,7 +88,7 @@ public final class VrFtbRegistry {
                 VrFtb.controleer(p);
             }
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("VrFtbRegistry:91", e -> {
             if (e.getServer().getTickCount() % VrFtb.INTERVAL == 37) {
                 for (ServerPlayer p : List.copyOf(e.getServer().getPlayerList().getPlayers())) {
                     VrFtb.controleer(p);

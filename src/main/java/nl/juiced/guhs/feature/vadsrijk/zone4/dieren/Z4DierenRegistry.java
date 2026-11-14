@@ -78,7 +78,7 @@ public final class Z4DierenRegistry {
 
     public static void register(IEventBus modBus) {
         ENTITIES.register(modBus);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z4DierenRegistry:81", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl != null) {
                 tick(sl);

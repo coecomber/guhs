@@ -109,7 +109,7 @@ public final class GezelSlice {
 
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, GezelSlice::opAanval);
         NeoForge.EVENT_BUS.addListener(GezelSlice::opSchade);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> BordSpel.tick(event.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("GezelSlice:112", event -> BordSpel.tick(event.getServer()));
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> {
             BordSpel.VAN.clear();
             BordSpel.WACHT.clear();

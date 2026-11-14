@@ -52,7 +52,7 @@ public final class DroomRegels {
         NeoForge.EVENT_BUS.addListener(DroomRegels::onItem);
         NeoForge.EVENT_BUS.addListener(DroomRegels::onDood);
         NeoForge.EVENT_BUS.addListener(DroomRegels::onTick);
-        NeoForge.EVENT_BUS.addListener(DroomRegels::onServerTick);
+        nl.juiced.guhs.world.TikWacht.post("DroomRegels.onServerTick", DroomRegels::onServerTick);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer sp && !DroomReis.inDroom(sp)) {
                 weg(sp);

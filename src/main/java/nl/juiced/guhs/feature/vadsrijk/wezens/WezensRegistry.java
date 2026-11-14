@@ -152,7 +152,7 @@ public final class WezensRegistry {
         nl.juiced.guhs.feature.vadsrijk.kern.Spelers.EXTRA_STATS.add(SetBonussen::stats);
         WezensSpawners.registreer();
         haken();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("WezensRegistry:155", e -> {
             Effecten.tick();
             DraakVlucht.tick();
             WezensCommando.Later.tick();
@@ -181,12 +181,11 @@ public final class WezensRegistry {
                 return n * 0.1;
             }
             if (doel instanceof Klodders.Kristalklodder kk && k.soort() == Schade.Soort.MAGIE && bron != null
-                    && kk.getRandom().nextDouble() < Klodders.Kristalklodder.WEERKAATS) {
+                    && Weerkaatsen.magRollen(bron, k.skillId(), sl.getGameTime()) && (Weerkaatsen.TEST_ALTIJD || kk.getRandom().nextDouble() < Klodders.Kristalklodder.WEERKAATS)) {
                 kk.speel("speciaal");
                 Getallen.tekst(sl, kk.getX(), kk.getY() + kk.getBbHeight() + 0.3, kk.getZ(), Component.translatable("vadsrijk.wezens.weerkaatst"), 0.8f);
                 sl.playSound(null, kk.blockPosition(), net.minecraft.sounds.SoundEvents.AMETHYST_CLUSTER_BREAK, net.minecraft.sounds.SoundSource.HOSTILE, 1f, 1.4f);
-                double terug = n * 0.5;
-                Schade.doe(new Schade.Klap(kk, bron, terug, kk.element(), Schade.Soort.WAAR, false, "weerkaatst"));
+                Schade.doe(new Schade.Klap(kk, bron, Weerkaatsen.terug(bron, n), kk.element(), Schade.Soort.MAGIE, false, Weerkaatsen.SKILL));
                 return 0;
             }
             if (doel instanceof Anderen.Mosgeest m && m.probeerOntwijken(bron)) {

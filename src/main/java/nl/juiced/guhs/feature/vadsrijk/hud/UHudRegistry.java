@@ -19,7 +19,7 @@ public final class UHudRegistry {
 
     public static void register(IEventBus modBus) {
         PartyFrames.init();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("UHudRegistry:22", e -> {
             PartyFrames.tick(e.getServer());
             Emotes.tick(e.getServer());
         });

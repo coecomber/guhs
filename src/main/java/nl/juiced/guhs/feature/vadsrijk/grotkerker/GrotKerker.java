@@ -145,7 +145,7 @@ public final class GrotKerker {
             RUNS.clear();
             sessie = (System.nanoTime() ^ e.getServer().overworld().getSeed()) & 0xFFFFFL;
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("GrotKerker:148", e -> tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener(GrotKerker::binnenkomst);
         NeoForge.EVENT_BUS.addListener(GrotKerker::commando);
         // zone 6: the cave elite of u-z6wezens' own spawner lives in what is now the boss room: switched off while the run exists

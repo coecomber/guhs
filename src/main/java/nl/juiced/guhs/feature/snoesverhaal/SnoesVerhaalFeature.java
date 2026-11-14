@@ -36,8 +36,8 @@ public final class SnoesVerhaalFeature {
         nl.juiced.guhs.feature.dromen.DroomSlapen.SNOES_BIJ_BED = SnoesVerhaal::snoesBijBed;
         nl.juiced.guhs.feature.dromen.DroomSlapen.DROOM_MET_SNOES = SnoesVerhaal::droomMetSnoes;
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> SnoesVerhaal.onDimensie(e));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> SnoesVerhaal.tick(e));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("SnoesVerhaalFeature:39", e -> SnoesVerhaal.tick(e));
+        nl.juiced.guhs.world.TikWacht.post("SnoesVerhaalFeature:40", e -> {
             if (e.getServer().getTickCount() % 20 == 9) {
                 SnoesHud.tick(e.getServer());                 // (playtest) the story HUD, when it changed
             }

@@ -180,7 +180,7 @@ public final class Z5WezensRegistry {
         Z5Bazen.registreer();
         haken();
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (ServerAboutToStartEvent e) -> gebieden());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z5WezensRegistry:183", e -> {
             ServerLevel sl = e.getServer().getLevel(Vadsrijk.DIM);
             if (sl != null) {
                 Z5Bouw.tick(sl);

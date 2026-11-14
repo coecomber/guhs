@@ -91,7 +91,7 @@ public final class Z3BazenApi {
     /** Every Vahoegnir in the loaded level (the arena's own and any orphan: one that wandered off or outlived a reload). */
     public static List<Vahoegnir> alleVahoegnirs(ServerLevel sl) {
         List<Vahoegnir> l = new java.util.ArrayList<>();
-        for (net.minecraft.world.entity.Entity e : sl.getAllEntities()) {
+        for (net.minecraft.world.entity.Entity e : nl.juiced.guhs.world.TikWacht.alle(sl.getAllEntities())) {
             if (e instanceof Vahoegnir v && !v.isRemoved()) {
                 l.add(v);
             }

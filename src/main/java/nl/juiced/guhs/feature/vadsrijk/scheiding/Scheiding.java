@@ -43,7 +43,7 @@ public final class Scheiding {
     public static void register(IEventBus modBus) {
         // after kern's swap (Haken.BINNEN runs right after it) and as a safety net every second
         Haken.BINNEN.add((p, binnen) -> Lichaam.verzoen(p));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Scheiding:46", e -> {
             if (e.getServer().getTickCount() % 20 == 10) {
                 for (ServerPlayer p : e.getServer().getPlayerList().getPlayers()) {
                     Lichaam.verzoen(p);

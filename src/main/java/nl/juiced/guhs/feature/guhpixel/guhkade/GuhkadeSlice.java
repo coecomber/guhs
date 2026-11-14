@@ -144,7 +144,7 @@ public final class GuhkadeSlice {
         });
         GuhHooks.tick(KastGoal::ruimOp);
         GidsBlad.registreer(new Gids());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> Guhkade.tick(event.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("GuhkadeSlice:147", event -> Guhkade.tick(event.getServer()));
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> {
             Guhkade.vergeet();
             KastGoal.vergeet();

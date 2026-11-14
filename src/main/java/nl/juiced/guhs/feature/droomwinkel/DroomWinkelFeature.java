@@ -75,7 +75,7 @@ public final class DroomWinkelFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         DroomWinkel.registreerVast();
-        NeoForge.EVENT_BUS.addListener(DroomWinkelFeature::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomWinkelFeature.tick", DroomWinkelFeature::tick);
         NeoForge.EVENT_BUS.addListener(DroomWinkelFeature::onPraat);
     }
 

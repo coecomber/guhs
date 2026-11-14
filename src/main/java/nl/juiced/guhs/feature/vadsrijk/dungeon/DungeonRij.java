@@ -137,7 +137,7 @@ public final class DungeonRij {
 
     public static void register() {
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> wisAlles());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("DungeonRij:140", e -> tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> uitRijWeg(e.getEntity().getUUID(), null));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p && !Vadsrijk.in(p)) {

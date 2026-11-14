@@ -104,7 +104,7 @@ public final class SafariQuests {
         NeoForge.EVENT_BUS.addListener(SafariQuests::onEntity);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onEntitySpecifiek);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onBlock);
-        NeoForge.EVENT_BUS.addListener(SafariQuests::onTick);
+        nl.juiced.guhs.world.TikWacht.post("SafariQuests.onTick", SafariQuests::onTick);
         NeoForge.EVENT_BUS.addListener(SafariQuests::onLogin);
         NeoForge.EVENT_BUS.addListener(SafariQuests::commands);
         Beloningen.register();

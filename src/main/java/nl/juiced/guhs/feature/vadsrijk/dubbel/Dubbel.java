@@ -230,7 +230,7 @@ public final class Dubbel {
     public static List<Groep> scan(ServerLevel sl) {
         Map<String, List<Entity>> per = new LinkedHashMap<>();
         Map<String, Boolean> streng = new HashMap<>();
-        for (Entity e : sl.getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(sl.getAllEntities())) {
             if (e == null || e.isRemoved()) {
                 continue;
             }

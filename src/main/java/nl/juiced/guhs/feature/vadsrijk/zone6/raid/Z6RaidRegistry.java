@@ -93,7 +93,7 @@ public final class Z6RaidRegistry {
         arenas();
         haken();
         Z6RaidHeraut.init();   // X-RAID: the heralds, their role and the tracker line
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Z6Raid.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("Z6RaidRegistry:96", e -> Z6Raid.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener(Z6RaidCommando::register);
     }
 

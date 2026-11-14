@@ -36,7 +36,7 @@ public final class DubbelRegistry {
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, false, EntityJoinLevelEvent.class, Dubbel::binnen);
         NeoForge.EVENT_BUS.addListener(EntityLeaveLevelEvent.class, Dubbel::verborgen);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Dubbel.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("DubbelRegistry:39", e -> Dubbel.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> Dubbel.wis());
         NeoForge.EVENT_BUS.addListener(DubbelRegistry::commandos);
     }

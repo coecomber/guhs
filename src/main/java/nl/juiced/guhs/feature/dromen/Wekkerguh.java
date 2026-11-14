@@ -49,7 +49,7 @@ public final class Wekkerguh {
     static void register() {
         NeoForge.EVENT_BUS.addListener(Wekkerguh::onKlik);
         nl.juiced.guhs.feature.verhaal.Praat.luister(SLEUTEL, Wekkerguh::antwoord);
-        NeoForge.EVENT_BUS.addListener(Wekkerguh::tick);
+        nl.juiced.guhs.world.TikWacht.post("Wekkerguh.tick", Wekkerguh::tick);
     }
 
     public static boolean is(@Nullable Entity e) {

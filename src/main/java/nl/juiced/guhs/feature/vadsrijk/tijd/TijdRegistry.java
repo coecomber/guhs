@@ -15,7 +15,7 @@ public final class TijdRegistry {
 
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener((ServerStartingEvent e) -> TijdConfig.lees());
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Pre e) -> VadsrijkTijd.pas(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.pre("TijdRegistry:18", e -> VadsrijkTijd.pas(e.getServer()));
         NeoForge.EVENT_BUS.addListener(TijdCommando::register);
     }
 }

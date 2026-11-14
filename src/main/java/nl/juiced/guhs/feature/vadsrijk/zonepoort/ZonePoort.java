@@ -1,6 +1,7 @@
 package nl.juiced.guhs.feature.vadsrijk.zonepoort;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,6 +27,7 @@ import nl.juiced.guhs.feature.vadsrijk.indeling.Barrieres;
 import nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones;
 import nl.juiced.guhs.feature.vadsrijk.kern.Levels;
 import nl.juiced.guhs.feature.vadsrijk.kern.SpelerData;
+import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 import nl.juiced.guhs.feature.vadsrijk.npc.Quest;
@@ -59,8 +61,16 @@ public final class ZonePoort {
     public static final String K = "vadsrijk.zonepoort.";
     /** The bank holds at most this many levels' worth of xp above the soft cap. */
     public static final int BANK_LEVELS = 3;
-    /** The level each zone hands you over at (the next zone's entry level): the soft cap while the zone after it is closed. */
+    /** The level each zone hands you over at (the next zone's entry level). */
     static final int[] PLAFOND = {0, 20, 30, 50, 56, 60, 0};
+    /**
+     * 1.10.2: the top level of each zone (index = zone; 0 = the camp counts as zone 1). The per-player level cap is the top of the
+     * highest zone you ENTERED + {@link #CAP_EXTRA}: zone 1 -> 25, 2 -> 35, 3 -> 55, 4 -> 61, 5 -> 65, 6 -> 70 (= Levels.MAX: no cap).
+     */
+    static final int[] TOP = {20, 20, 30, 50, 56, 60, 70};
+    public static final int CAP_EXTRA = 5;
+    /** 1.10.2 (tests / the quest robot): players for whom the Verkenningsboek % of the per-player gate counts as met. */
+    public static final Set<UUID> BOEK_VRIJ = ConcurrentHashMap.newKeySet();
     /** Tests: never bypass (the gametest mock player is creative). */
     public static boolean TEST_STRENG;
 
@@ -83,9 +93,212 @@ public final class ZonePoort {
         return p.isCreative() || p.isSpectator() || p.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER);
     }
 
-    /** Is zone {@code zone} closed for this player? (zone 0 = Knuffelkamp, never) */
+    /**
+     * Is zone {@code zone} closed for this player? (zone 0 = Knuffelkamp, never.) 1.10.2: closed by the server gate
+     * ({@link #serverDicht}) OR by the per-player gate ({@link #toegang}: zone N's main story + {@link ZonePoortConfig#boek()} % of its
+     * Verkenningsboek).
+     */
     public static boolean dicht(ServerPlayer p, int zone) {
+        return !vrij(p) && (zone > open() || !toegang(p, zone));
+    }
+
+    /** Closed by the server gate only ("binnenkort"). */
+    public static boolean serverDicht(ServerPlayer p, int zone) {
         return zone > open() && !vrij(p);
+    }
+
+    // ---- 1.10.2: the per-player gate ------------------------------------------------------------------------------------------------
+
+    /**
+     * May this player enter zone {@code zone} (server gate aside)? Zones 0/1 always. Granted for good (stored "toegang") when he was
+     * already in that zone or started one of its quests (grandfathering), or once zone {@code zone - 1}'s main story is done AND its
+     * Verkenningsboek is at least {@link ZonePoortConfig#boek()} %.
+     */
+    public static boolean toegang(ServerPlayer p, int zone) {
+        if (zone <= 1) {
+            return true;
+        }
+        CompoundTag b = bank(Spelers.data(p));
+        if (b.getIntOr("toegang", 0) >= zone) {
+            return true;
+        }
+        String k = p.getUUID() + "/" + zone;
+        long t = p.level().getGameTime();
+        Long nee = NEE.get(k);
+        if (nee != null && t < nee && t >= nee - 20) {
+            return false;   // (a "no" is remembered for a second: quest lists ask this for every quest)
+        }
+        if (hoogste(p) >= zone || begonnen(p, zone) || (verhaalKlaar(p, zone - 1) && boekOk(p, zone - 1))) {
+            b.putInt("toegang", Math.max(zone, b.getIntOr("toegang", 0)));
+            NEE.remove(k);
+            return true;
+        }
+        NEE.put(k, t + 20);
+        return false;
+    }
+
+    private static final Map<String, Long> NEE = new ConcurrentHashMap<>();
+
+    /** Is zone n's main story done up to the trip to zone n + 1 (the airship line's own story check)? */
+    public static boolean verhaalKlaar(ServerPlayer p, int n) {
+        String lijn = switch (n) {
+            case 1 -> "z1_z2";
+            case 2 -> "z2_z3";
+            case 3 -> "z3_z4";
+            case 4 -> "z4_z5";
+            default -> null;
+        };
+        if (lijn != null) {
+            var g = nl.juiced.guhs.feature.vadsrijk.luchtschip.Poorten.POORTEN.get(lijn);
+            if (g != null) {
+                return g.verhaalKlaar().test(p);
+            }
+        }
+        if (n == 5) {
+            return nl.juiced.guhs.feature.vadsrijk.zone6.verhaal.Z6Verhaal.magZien(p);
+        }
+        for (Quest q : Quests.alle().values()) {   // (fallback: every main quest of zone n done)
+            if (q.hoofd() && ZoneBoeken.zoneVan(q.id()) == n && !Questlog.klaar(p, q.id())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private record Boek(long tik, int procent) {
+    }
+
+    private static final Map<String, Boek> BOEK_CACHE = new ConcurrentHashMap<>();
+
+    /** Zone n's Verkenningsboek % for this player (the number the book shows; cached 5 s). */
+    public static int boekProcent(ServerPlayer p, int n) {
+        long t = p.level().getGameTime();
+        String k = p.getUUID() + "/" + n;
+        Boek c = BOEK_CACHE.get(k);
+        if (c != null && t - c.tik() < 100 && t >= c.tik()) {
+            return c.procent();
+        }
+        int pct = 100;
+        try {
+            var zb = nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.zone("zone" + n);
+            if (zb != null) {
+                pct = nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.tel(p, zb).procent();
+            }
+        } catch (RuntimeException e) {
+            pct = 100;   // (never lock someone out on a broken book)
+        }
+        BOEK_CACHE.put(k, new Boek(t, pct));
+        return pct;
+    }
+
+    public static boolean boekOk(ServerPlayer p, int n) {
+        return BOEK_VRIJ.contains(p.getUUID()) || boekProcent(p, n) >= ZonePoortConfig.boek();
+    }
+
+    /** Did this player start (or finish) any quest of that zone? (grandfathering) */
+    static boolean begonnen(ServerPlayer p, int zone) {
+        for (Quest q : Quests.alle().values()) {
+            if (ZoneBoeken.zoneVan(q.id()) == zone && Questlog.status(p, q.id()) != 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * The highest zone this player has ENTERED (1..6; the camp counts as 1): stored when he stands in an open zone, plus credit for
+     * every zone of which he finished a quest (players from before 1.10.2).
+     */
+    public static int hoogste(ServerPlayer p) {
+        CompoundTag b = bank(Spelers.data(p));
+        int h = Math.max(1, b.getIntOr("hoogste", 0));
+        if (h < 6 && !b.getBooleanOr("hoogste_quests", false)) {
+            for (Quest q : Quests.alle().values()) {
+                int z = ZoneBoeken.zoneVan(q.id());
+                if (z > h && Questlog.klaar(p, q.id())) {
+                    h = z;
+                }
+            }
+            b.putInt("hoogste", h);
+            b.putBoolean("hoogste_quests", true);   // (the quest credit once; later only real visits raise it)
+        }
+        return Math.min(6, h);
+    }
+
+    /** A finished quest of zone z counts as having been there (only raises; Questlog.voltooi). */
+    public static void questKlaar(ServerPlayer p, String quest) {
+        hoogste(p);   // (the one-time credit for older saves first)
+        betreden(p, ZoneBoeken.zoneVan(quest));
+    }
+
+    /** Remembers that this player stands in zone z now (only raises). */
+    static void betreden(ServerPlayer p, int z) {
+        CompoundTag b = bank(Spelers.data(p));
+        if (z > b.getIntOr("hoogste", 0)) {
+            b.putInt("hoogste", Math.min(6, z));
+        }
+    }
+
+    /** (tests / dev) sets the highest entered zone (and forgets the access record above it when lower). */
+    public static void zetHoogste(ServerPlayer p, int z) {
+        CompoundTag b = bank(Spelers.data(p));
+        b.putInt("hoogste", Math.max(0, Math.min(6, z)));
+        b.putBoolean("hoogste_quests", true);
+        if (b.getIntOr("toegang", 0) > z) {
+            b.putInt("toegang", Math.max(1, z));
+        }
+        vergeetCache(p.getUUID());
+    }
+
+    /** (tests / a quest step) forget the cached book % and "no" answers of this player. */
+    public static void vergeetCache(UUID id) {
+        BOEK_CACHE.keySet().removeIf(k -> k.startsWith(id + "/"));
+        NEE.keySet().removeIf(k -> k.startsWith(id + "/"));
+    }
+
+    /** "✔" / "✘" in green / red. */
+    static Component vink(boolean ok) {
+        return Component.literal(ok ? "✔" : "✘").withStyle(ok ? ChatFormatting.GREEN : ChatFormatting.RED);
+    }
+
+    /** The arguments of the "eis" line: zone name, ✔/✘ story, previous zone, ✔/✘ book, book %, needed %. */
+    public static Object[] eisArgs(ServerPlayer p, int zone) {
+        int n = Math.max(1, zone - 1);
+        boolean boek = boekOk(p, n);
+        return new Object[] {zoneNaam(zone), vink(verhaalKlaar(p, n)), zoneNaam(n), vink(boek), boekProcent(p, n), ZonePoortConfig.boek()};
+    }
+
+    /** "Naar De Splinterpieken: ✔ hoofdverhaal De Knuffelzwammen · ✘ Verkenningsboek 62% / 75%". */
+    public static MutableComponent eisTekst(ServerPlayer p, int zone) {
+        return Component.translatable(K + "eis", eisArgs(p, zone));
+    }
+
+    /** Is this gate key the per-player gate ("vadsrijk.zonepoort.eis.<zone>")? */
+    public static boolean isEis(@Nullable String key) {
+        return key != null && key.startsWith(K + "eis.");
+    }
+
+    static int eisZone(String key) {
+        try {
+            return Integer.parseInt(key.substring((K + "eis.").length()));
+        } catch (RuntimeException e) {
+            return 2;
+        }
+    }
+
+    /** The text of a gate key: the per-player line with its progress, else the plain "binnenkort" line. */
+    public static MutableComponent tekst(ServerPlayer p, String key) {
+        return isEis(key) ? eisTekst(p, eisZone(key)) : Component.translatable(key);
+    }
+
+    /** The arguments for a gate key in a talk line (the level for the old keys). */
+    public static Object[] args(ServerPlayer p, String key) {
+        return isEis(key) ? eisArgs(p, eisZone(key)) : new Object[] {Spelers.level(p)};
+    }
+
+    /** The lang key to show for a gate key (the "eis" keys share one text). */
+    public static String sleutel(String key) {
+        return isEis(key) ? K + "eis" : key;
     }
 
     public static Component zoneNaam(int zone) {
@@ -132,14 +345,21 @@ public final class ZonePoort {
     /** For QuestMotor.reisSlot: the lang key why this destination is closed (the captain's line), or null. */
     @Nullable
     public static String reisSlot(ServerPlayer p, String plek) {
-        return dicht(p, plekZone(plek)) ? K + "reis." + plek : null;
+        int z = plekZone(plek);
+        if (serverDicht(p, z)) {
+            return K + "reis." + plek;
+        }
+        return dicht(p, z) ? K + "eis." + z : null;   // 1.10.2: the per-player gate
     }
 
     /** For an airship line: the lang key when its destination zone is closed, or null. */
     @Nullable
     public static String lijnSlot(ServerPlayer p, String naarZone) {
         int z = zoneId(naarZone);
-        return dicht(p, z) ? K + "lijn." + z : null;
+        if (serverDicht(p, z)) {
+            return K + "lijn." + z;
+        }
+        return dicht(p, z) ? K + "eis." + z : null;   // 1.10.2: the per-player gate
     }
 
     public static boolean isPoortSlot(@Nullable String key) {
@@ -158,18 +378,32 @@ public final class ZonePoort {
             return null;
         }
         int z = ZoneBoeken.zoneVan(q.id());
+        if (!serverDicht(p, z)) {   // 1.10.2: the server has it open, the player not yet: explore zone z-1 to the book %
+            int n = Math.max(1, z - 1);
+            if (!verhaalKlaar(p, n)) {
+                return null;   // (the story itself is the next step)
+            }
+            return new QuestStap(q.id(), true, Component.translatable(K + "verken.titel", zoneNaam(n), ZonePoortConfig.boek()),
+                    Component.translatable(K + "verken.wat", boekProcent(p, n), ZonePoortConfig.boek()),
+                    Component.translatable(K + "verken.waar", zoneNaam(z)), null, null);
+        }
         return new QuestStap(q.id(), true, Component.translatable(K + "volg.titel"), Component.translatable(K + "volg.wat", zoneNaam(z)),
                 Component.translatable(K + "volg.waar"), null, null);
     }
 
     /**
-     * The giver of the next main quest (the first main quest not done) when that quest lies in a closed zone and its earlier quests
-     * are done: the captain's "the ship sails soon" line. Null otherwise.
+     * The giver of the next main quest (the first main quest not done), or the captain whose ship leaves for that zone
+     * ({@link #VERTREK}), when that quest lies in a closed zone and its earlier quests are done: the "the ship sails soon" line.
+     * Null otherwise.
      */
     @Nullable
     public static Praat.Regel binnenkortRegel(ServerPlayer p, Entity npc, String npcId) {
         Quest q = volgendeHoofd(p);
-        if (q == null || !questDicht(p, q) || !q.gever().equals(npcId) || Questlog.status(p, q.id()) != 0) {
+        if (q == null || !questDicht(p, q) || Questlog.status(p, q.id()) != 0) {
+            return null;
+        }
+        int zone = ZoneBoeken.zoneVan(q.id());
+        if (!q.gever().equals(npcId) && !npcId.equals(VERTREK.get(zone))) {
             return null;
         }
         for (String na : q.na()) {
@@ -177,8 +411,17 @@ public final class ZonePoort {
                 return null;
             }
         }
-        return new Praat.Regel(npc, "", K + "schip", zoneNaam(ZoneBoeken.zoneVan(q.id())));
+        if (!serverDicht(p, zone)) {   // 1.10.2: open on the server, not yet for this player: both conditions with his progress
+            return new Praat.Regel(npc, "", K + "eis", eisArgs(p, zone));
+        }
+        return new Praat.Regel(npc, "", K + "schip", zoneNaam(zone));
     }
+
+    /**
+     * 1.10.2: the captain whose ship leaves for zone N, who also says "the ship sails soon" at the end of zone N-1 when he is not the
+     * giver of zone N's first main quest (zone 4's is given by Ordemeester Wasja, but the ship leaves from Kapitein's Oosttaksteiger).
+     */
+    static final Map<Integer, String> VERTREK = Map.of(2, "luchtschipper", 3, "z2_kapitein", 4, "z3_kapitein");
 
     @Nullable
     static Quest volgendeHoofd(ServerPlayer p) {
@@ -197,18 +440,24 @@ public final class ZonePoort {
         if (d == null || !dicht(p, d.zone())) {
             return null;
         }
+        if (!serverDicht(p, d.zone())) {
+            return Component.translatable(K + "dungeon.eis", d.naam(), eisTekst(p, d.zone()));
+        }
         return Component.translatable(K + "dungeon", d.naam(), zoneNaam(d.zone()));
     }
 
     // ---- the soft cap -------------------------------------------------------------------------------------------------------------
 
-    /** The soft cap level now for this player (0 = none: every zone open, or bypass). */
+    /**
+     * The level cap now for this player (0 = none: bypass, or level 70 is allowed). 1.10.2: per player, the top level of the highest
+     * zone he has ENTERED + {@link #CAP_EXTRA} (25 for someone who never set foot in zone 2), whatever the server gate.
+     */
     public static int plafond(ServerPlayer p) {
-        int o = open();
-        if (o >= 6 || vrij(p)) {
+        if (vrij(p)) {
             return 0;
         }
-        return PLAFOND[o];
+        int cap = Math.min(Levels.MAX, TOP[hoogste(p)] + CAP_EXTRA);
+        return cap >= Levels.MAX ? 0 : cap;
     }
 
     static CompoundTag bank(SpelerData d) {
@@ -251,7 +500,7 @@ public final class ZonePoort {
             b.putLong(sleutel, Math.min(max, pot + over));
             if (klasse == null && b.getIntOr("gemeld", 0) != cap) {
                 b.putInt("gemeld", cap);
-                p.sendSystemMessage(Component.translatable(K + "plafond", cap, zoneNaam(open() + 1), BANK_LEVELS).withStyle(ChatFormatting.GOLD));
+                p.sendSystemMessage(Component.translatable(K + "plafond", cap, zoneNaam(Math.min(6, hoogste(p) + 1)), BANK_LEVELS).withStyle(ChatFormatting.GOLD));
             }
         }
         return erbij;
@@ -283,6 +532,31 @@ public final class ZonePoort {
         }
         for (ServerPlayer p : sl.players()) {
             controleer(sl, p, t);
+            if (t % 100 == 0) {
+                meldToegang(p);
+            }
+        }
+    }
+
+    /** 1.10.2: "De weg naar <zone> is open!" once per zone, when the per-player gate opens (not for zones he already visited). */
+    static void meldToegang(ServerPlayer p) {
+        if (vrij(p)) {
+            return;
+        }
+        CompoundTag b = bank(Spelers.data(p));
+        int gemeld = b.getIntOr("toegang_gemeld", 1);
+        for (int z = gemeld + 1; z <= Math.min(6, open()); z++) {
+            if (hoogste(p) >= z) {
+                b.putInt("toegang_gemeld", z);
+                continue;
+            }
+            if (!toegang(p, z)) {
+                return;
+            }
+            b.putInt("toegang_gemeld", z);
+            p.sendSystemMessage(Component.translatable(K + "weg_open", zoneNaam(z)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+            p.sendOverlayMessage(Component.translatable(K + "weg_open", zoneNaam(z)).withStyle(ChatFormatting.GOLD));
+            p.level().playSound(null, p.blockPosition(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.2f);
         }
     }
 
@@ -293,6 +567,9 @@ public final class ZonePoort {
         }
         int z = zoneOp(p.getX(), p.getY(), p.getZ());
         if (!dicht(p, z)) {
+            if (z > 0) {
+                betreden(p, z);   // 1.10.2: the highest zone entered (the level cap)
+            }
             DUWT.remove(p.getUUID());
             if (t % 10 == 0 && (p.onGround() || p.isInWater()) && !p.isPassenger()) {
                 LAATST_OPEN.put(p.getUUID(), p.position());
@@ -340,7 +617,7 @@ public final class ZonePoort {
     }
 
     private static void meld(ServerPlayer p, int zone, long t) {
-        MutableComponent m = Component.translatable(K + "grens", zoneNaam(zone));
+        MutableComponent m = serverDicht(p, zone) ? Component.translatable(K + "grens", zoneNaam(zone)) : eisTekst(p, zone);
         p.sendOverlayMessage(m.copy().withStyle(ChatFormatting.GOLD));
         Long vorig = MELDING.get(p.getUUID());
         if (vorig == null || t - vorig > 20 * 30 || t < vorig) {
@@ -350,6 +627,7 @@ public final class ZonePoort {
     }
 
     static void vergeet(UUID id) {
+        vergeetCache(id);
         LAATST_OPEN.remove(id);
         DUWT.remove(id);
         MELDING.remove(id);

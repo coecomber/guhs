@@ -174,7 +174,7 @@ final class E2SpCastCommando {
 
     private static int weg(CommandSourceStack source) {
         List<Entity> lijst = new ArrayList<>();
-        for (Entity e : source.getLevel().getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(source.getLevel().getAllEntities())) {
             if (e.entityTags().contains(TAG)) {
                 lijst.add(e);
             }

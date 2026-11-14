@@ -317,7 +317,7 @@ public final class GrensCheck {
         if (!(l instanceof ServerLevel sl)) {
             return true;
         }
-        for (Entity e : sl.getAllEntities()) {
+        for (Entity e : nl.juiced.guhs.world.TikWacht.alle(sl.getAllEntities())) {
             if (e instanceof ItemEntity it && it.getItem().has(DataComponents.CUSTOM_NAME) && naam.equals(it.getItem().getHoverName().getString())) {
                 return false;
             }

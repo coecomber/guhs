@@ -167,7 +167,7 @@ public final class Z2WezensRegistry {
         Spelers.EXTRA_STATS.add(Bevroren::stats);
         Z2WezensSpawners.registreer();
         haken();
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z2WezensRegistry:170", e -> {
             Bevroren.tick();
             Verslagen.tick();
             ServerLevel sl = e.getServer().getLevel(Vadsrijk.DIM);

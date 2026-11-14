@@ -81,7 +81,7 @@ public final class Z5VerhaalRegistry {
         Z5Speurwerk.init();
         reizen();
         Voltooiing.registreer(new Voltooiing.ZoneBoek("zone5", "vadsrijk.voltooiing.zone.zone5", "vr_kenner_van_hoogvads", 90000, Z5VerhaalRegistry::boek));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z5VerhaalRegistry:84", e -> {
             Z5Haken.tick(e.getServer());
             Z5Verhaal.tick(e.getServer());
         });

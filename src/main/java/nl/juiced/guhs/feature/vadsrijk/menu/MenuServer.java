@@ -143,7 +143,8 @@ public final class MenuServer {
             t.putLong("xpNodig", 0);
             t.putString("maxKey", "vadsrijk.zonepoort.menu.max");
             t.putLong("gespaard", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.gespaard(d, null));
-            t.putInt("volgendeZone", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.open() + 1);
+            t.putInt("volgendeZone", Math.min(6, nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.hoogste(p) + 1));   // 1.10.2: per player
+            t.putInt("cap", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.plafond(p));
         }
         Klasse k = Spelers.klasse(p);
         t.putString("klasse", k.naamKey());

@@ -44,7 +44,7 @@ public final class SpecRegistry {
         // the story places of steps 2 and 3 (step 1 = the lv-17 quest of the Grootmeester, before the Zwamtempel)
         Advancement.POORT.put(2, p -> nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.questKlaar(p, "z3_hq08_werf"));
         Advancement.POORT.put(3, p -> nl.juiced.guhs.feature.vadsrijk.npc.NpcApi.questKlaar(p, "z5_hq09_slaaplied"));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> SpecEffecten.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("SpecRegistry:47", e -> SpecEffecten.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> SpecEffecten.vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener(SpecRegistry::commando);
         Haken.BINNEN.add((p, binnen) -> {

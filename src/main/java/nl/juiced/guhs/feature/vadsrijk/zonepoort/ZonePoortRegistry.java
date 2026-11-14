@@ -28,7 +28,7 @@ public final class ZonePoortRegistry {
 
     public static void register(IEventBus modBus) {
         ModList.get().getModContainerById(Guhs.MODID).ifPresent(c -> c.registerConfig(ModConfig.Type.SERVER, ZonePoortConfig.SPEC, "guhs-vadsrijk-zones.toml"));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> ZonePoort.tik(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("ZonePoortRegistry:31", e -> ZonePoort.tik(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> ZonePoort.vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener(ZonePoortRegistry::commando);
         NeoForge.EVENT_BUS.addListener(LootOpruimen::commando);   // 1101-balans: /guhs vadsrijk loot opruimen (one-time cleanup)
@@ -79,8 +79,8 @@ public final class ZonePoortRegistry {
 
     private static int status(CommandSourceStack s) {
         int n = ZonePoort.open();
-        s.sendSuccess(() -> Component.literal("Het Vadsrijk: zones 1-" + n + " open" + (n >= 6 ? " (alles)." : ", zone " + (n + 1) + "-6 binnenkort; level-plafond "
-                + ZonePoort.PLAFOND[n] + ".") + " Ops/creative mogen overal in. Wijzig met /guhs vadsrijk zones open <1-6>."), false);
+        s.sendSuccess(() -> Component.literal("Het Vadsrijk: zones 1-" + n + " open" + (n >= 6 ? " (alles)." : ", zone " + (n + 1) + "-6 binnenkort.")
+                + " Per speler: naar zone N+1 na het hoofdverhaal + " + ZonePoortConfig.boek() + "% Verkenningsboek van zone N; level-plafond = hoogste betreden zone + 5." + " Ops/creative mogen overal in. Wijzig met /guhs vadsrijk zones open <1-6>."), false);
         return n;
     }
 }

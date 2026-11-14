@@ -42,9 +42,9 @@ public final class SherlockFeature {
         ITEMS.register(modBus);
         SherlockScenes.laad();
         NeoForge.EVENT_BUS.addListener(SherlockCommando::register);
-        NeoForge.EVENT_BUS.addListener(Sherlock::tick);
-        NeoForge.EVENT_BUS.addListener(Cast::tick);
-        NeoForge.EVENT_BUS.addListener(Rechtbank::tick);
+        nl.juiced.guhs.world.TikWacht.post("Sherlock.tick", Sherlock::tick);
+        nl.juiced.guhs.world.TikWacht.post("Cast.tick", Cast::tick);
+        nl.juiced.guhs.world.TikWacht.post("Rechtbank.tick", Rechtbank::tick);
         NeoForge.EVENT_BUS.addListener(Cast::opLaden);
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, Sherlock::opInteractie);
         // the dimension cancels every click on a block: the glass still works when you look at the ground

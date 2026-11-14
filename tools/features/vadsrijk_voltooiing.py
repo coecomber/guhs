@@ -16,6 +16,7 @@ def teksten():
         "vadsrijk.voltooiing.zone.zone1": "De Knuffelzwammen",
         "vadsrijk.voltooiing.zone.zone2": "De Splinterpieken",
         "vadsrijk.voltooiing.verkend": "%s van de %s gedaan",
+        "vadsrijk.voltooiing.nodig": "Nodig voor de volgende zone: %s%%",   # 1.10.2
         "vadsrijk.voltooiing.bezig": "Hier ben je mee bezig!",
         # categories
         "vadsrijk.voltooiing.cat.hoofd": "Hoofdverhaal",

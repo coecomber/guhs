@@ -197,7 +197,7 @@ final class E2GeestWezensCommando {
         ServerPlayer p = source.getPlayerOrException();
         int n = 0;
         for (ServerLevel level : source.getServer().getAllLevels()) {
-            for (Entity e : level.getAllEntities()) {
+            for (Entity e : nl.juiced.guhs.world.TikWacht.alle(level.getAllEntities())) {
                 if (e.entityTags().contains(TAG)) {
                     e.discard();
                     n++;

@@ -408,7 +408,7 @@ public final class StapHint {
     /** From E2Verhaal.register (common code). */
     static void register() {
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> HINTS.keySet().forEach(StapHint::luister));
-        NeoForge.EVENT_BUS.addListener(StapHint::opTick);
+        nl.juiced.guhs.world.TikWacht.post("StapHint.opTick", StapHint::opTick);
     }
 
     private static void opTick(ServerTickEvent.Post event) {

@@ -72,7 +72,7 @@ public final class KlassenRegistry {
         KlasseBalans.installeer();
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerStartingEvent e) ->
                 com.mojang.logging.LogUtils.getLogger().info("Vadsrijk balans: {}", KlasseBalans.laad()));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("KlassenRegistry:75", e -> {
             KlasseBalans.tick();
             Later.tick();
             Schoten.tick();

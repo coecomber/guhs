@@ -99,7 +99,7 @@ public final class DroomEilanden {
     }
 
     static void register() {
-        NeoForge.EVENT_BUS.addListener(DroomEilanden::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomEilanden.tick", DroomEilanden::tick);
     }
 
     // =====================================================================================================================

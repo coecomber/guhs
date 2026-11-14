@@ -42,7 +42,7 @@ public final class GuheindeEvents {
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, GuheindeEvents::onInteract);
         NeoForge.EVENT_BUS.addListener(GuheindeEvents::onDamage);
         NeoForge.EVENT_BUS.addListener(MagereCellen::onPlayerTick);
-        NeoForge.EVENT_BUS.addListener(MagereCellen::onServerTick);
+        nl.juiced.guhs.world.TikWacht.post("MagereCellen.onServerTick", MagereCellen::onServerTick);
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, GuheindeEvents::onTame);
     }
 

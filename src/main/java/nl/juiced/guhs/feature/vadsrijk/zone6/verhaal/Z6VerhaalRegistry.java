@@ -109,7 +109,7 @@ public final class Z6VerhaalRegistry {
         ambachten();
         Voltooiing.registreer(new Voltooiing.ZoneBoek("zone6", "vadsrijk.voltooiing.zone.zone6", "vr_kenner_van_het_zijdeland", 120000,
                 Z6VerhaalRegistry::boek));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z6VerhaalRegistry:112", e -> {
             Z6Haken.tick(e.getServer());
             Z6Verhaal.tick(e.getServer());
         });

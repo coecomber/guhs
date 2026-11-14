@@ -28,7 +28,7 @@ public final class WebRegistry {
     public static void register(IEventBus modBus) {
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> WebExport.gestart(e.getServer()));
         NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> WebExport.stopt(e.getServer()));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> WebExport.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("WebRegistry:31", e -> WebExport.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
             if (WebExport.aan && e.getEntity() instanceof ServerPlayer p) {
                 WebExport.bewaar(p.level().getServer(), p);

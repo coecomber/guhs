@@ -38,7 +38,7 @@ public final class RitmeRegistry {
         RijkGuh.STIL = Rooster::slaapt;   // U-LEVEN-RITME hook: a sleeping guh doesn't wave, idle-emote or stroll
         nl.juiced.guhs.feature.vadsrijk.hud.Emotes.NA_EMOTE.add(Knuffelmeter::opEmote);   // U-LEVEN-RITME hook in U-HUD's emotes
         nl.juiced.guhs.feature.vadsrijk.menu.MenuServer.KARAKTER_EXTRA.add(Knuffelmeter::karakter);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("RitmeRegistry:41", e -> {
             Rooster.tick(e.getServer());
             Nachtleven.tick(e.getServer());
             Nachtleven.houSlapend(e.getServer());

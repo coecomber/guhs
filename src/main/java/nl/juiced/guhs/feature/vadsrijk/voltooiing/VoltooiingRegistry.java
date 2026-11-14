@@ -34,7 +34,7 @@ public final class VoltooiingRegistry {
         ZoneBoeken.registreer();
         Haken.GEBIED_BETREDEN.add(Voltooiing::markeerGebied);
         Haken.KAMPVUUR.add(Voltooiing::kampvuur);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("VoltooiingRegistry:37", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null || sl.getGameTime() % 20 != 7) {
                 return;

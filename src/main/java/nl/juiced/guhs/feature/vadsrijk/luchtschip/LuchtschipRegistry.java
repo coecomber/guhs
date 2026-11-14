@@ -55,7 +55,7 @@ public final class LuchtschipRegistry {
 
     public static void register(IEventBus modBus) {
         ENTITY_TYPES.register(modBus);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("LuchtschipRegistry:58", e -> {
             Luchtschepen.tick(e.getServer());
             if (e.getServer().getTickCount() % 20 == 0) {
                 Zicht.pas(e.getServer());

@@ -43,7 +43,7 @@ public final class ZichtbaarRegistry {
     }
 
     public static void register(IEventBus modBus) {
-        NeoForge.EVENT_BUS.addListener(Zichtbaar::tick);
+        nl.juiced.guhs.world.TikWacht.post("Zichtbaar.tick", Zichtbaar::tick);
         NeoForge.EVENT_BUS.addListener(Zichtbaar::startTracking);
         NeoForge.EVENT_BUS.addListener(Zichtbaar::login);
         NeoForge.EVENT_BUS.addListener(Zichtbaar::logout);

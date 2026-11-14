@@ -132,7 +132,7 @@ public final class Z4Loot {
             Stat s = (Stat) extra[i];
             double v = ((Number) extra[i + 1]).doubleValue();
             basis.plus(s, v);
-            groei.plus(s, v * (s.hoofd() ? 0.25 : 0.06));
+            groei.plus(s, v * (s.hoofd() ? nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType.HOOFD_GROEI : 0.06));
         }
     }
 

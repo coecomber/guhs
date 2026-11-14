@@ -1,5 +1,11 @@
 package nl.juiced.guhs.feature.vadsrijk.kern;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -11,11 +17,13 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 /**
  * Checkpoints (ronde 12): right-click a campfire in the dimension. An unlit one lights up (with a little show) and becomes your
- * checkpoint; a lit one makes it your checkpoint again. You wake there after fainting. No teleport between campfires.
+ * checkpoint; a lit one makes it your checkpoint again. No teleport between campfires. 1.10.2: after fainting you wake at the
+ * NEAREST campfire you ever lit/used ({@link #dichtstbij}), not just the last one you clicked.
  */
 public final class Kampvuren {
     private Kampvuren() {
@@ -60,6 +68,59 @@ public final class Kampvuren {
             p.sendOverlayMessage(Component.translatable("vadsrijk.kern.kampvuur.rust").withStyle(ChatFormatting.LIGHT_PURPLE));
         }
         Spelers.sync(p);
+    }
+
+    /** A campfire block counts within this many blocks of a remembered spot (the book snaps spots to its own campfire list). */
+    static final int ZOEK = 3;
+
+    /**
+     * 1.10.2: the wake-up spot at the campfire nearest to {@code van} among the ones this player has lit/used (the Verkenningsboek's
+     * memory, plus the checkpoint), in this dimension. Skipped: campfires in a zone that is closed for this player (the zone gate)
+     * and spots where the campfire is gone. Null = none (the caller keeps the old rule: the checkpoint, else the area's respawn).
+     */
+    @Nullable
+    public static BlockPos dichtstbij(ServerPlayer p, Vec3 van) {
+        if (!(p.level() instanceof ServerLevel sl)) {
+            return null;
+        }
+        List<BlockPos> kandidaten = new ArrayList<>(nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.vuren(p));
+        BlockPos cp = Spelers.data(p).checkpoint;
+        if (cp != null) {
+            kandidaten.add(cp);
+        }
+        kandidaten.sort(Comparator.comparingDouble(b -> b.distToCenterSqr(van)));
+        for (BlockPos b : kandidaten) {
+            if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.dicht(p,
+                    nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneOp(b.getX() + 0.5, b.getY(), b.getZ() + 0.5))) {
+                continue;
+            }
+            if (b.equals(cp)) {
+                return cp;   // (the checkpoint is already a free spot next to the campfire you clicked)
+            }
+            BlockPos vuur = zoekVuur(sl, b);
+            if (vuur != null) {
+                BlockPos plek = vrijePlek(sl, vuur);
+                return cp != null && cp.distSqr(vuur) <= 9 ? cp : plek;
+            }
+        }
+        return null;
+    }
+
+    /** The campfire block at or within {@link #ZOEK} blocks of this remembered spot (the closest), or null. */
+    @Nullable
+    static BlockPos zoekVuur(ServerLevel sl, BlockPos b) {
+        if (sl.getBlockState(b).getBlock() instanceof CampfireBlock) {
+            return b;
+        }
+        BlockPos beste = null;
+        double d = Double.MAX_VALUE;
+        for (BlockPos x : BlockPos.betweenClosed(b.offset(-ZOEK, -ZOEK, -ZOEK), b.offset(ZOEK, ZOEK, ZOEK))) {
+            if (sl.getBlockState(x).getBlock() instanceof CampfireBlock && x.distSqr(b) < d) {
+                d = x.distSqr(b);
+                beste = x.immutable();
+            }
+        }
+        return beste;
     }
 
     /** A free standing spot next to the campfire (south first). */

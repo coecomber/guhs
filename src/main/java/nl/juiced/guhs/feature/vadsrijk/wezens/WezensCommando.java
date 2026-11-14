@@ -98,7 +98,7 @@ public final class WezensCommando {
                     ServerLevel vr = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(c.getSource().getServer());
                     int alles = 0, wezens = 0;
                     if (vr != null) {
-                        for (var e : vr.getAllEntities()) {
+                        for (var e : nl.juiced.guhs.world.TikWacht.alle(vr.getAllEntities())) {
                             alles++;
                             if (e instanceof RijkWezen) {
                                 wezens++;

@@ -58,7 +58,7 @@ jobs:
 
       - name: Build the landing page + wiki + Het Vadsrijk (uses the committed images, no re-render)
         # --open-zones N = the server's Vadsrijk zone gate: only the tutorial + zones 1..N are published (raise it with the server)
-        run: python tools/make_wiki_site.py --base-url https://guhs.nl/wiki/ --landing docs/site --out docs/site/wiki --vadsrijk --live-url https://live.guhs.nl/ --open-zones 1
+        run: python tools/make_wiki_site.py --base-url https://guhs.nl/wiki/ --landing docs/site --out docs/site/wiki --vadsrijk --live-url https://live.guhs.nl/ --open-zones 3
 
       - name: Check the site exists
         run: |
@@ -70,7 +70,7 @@ jobs:
           du -sh docs/site
 
       - name: Vadsrijk release check (nothing of closed zones may be published)
-        run: python tools/wiki_site/vadsrijk/zone1check.py --release --open-zones 1 --dir docs/site/vadsrijk
+        run: python tools/wiki_site/vadsrijk/zone1check.py --release --open-zones 3 --dir docs/site/vadsrijk
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

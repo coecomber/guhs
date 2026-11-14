@@ -117,7 +117,7 @@ public final class PuzzelRegistry {
             PuzzelBoek.herbouw();
         });
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> List.copyOf(Puzzels.alleInst().keySet()).forEach(id -> Puzzels.verwijder(id)));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> Puzzels.tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("PuzzelRegistry:120", e -> Puzzels.tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((ServerChatEvent e) -> {
             if (Puzzels.zeg(e.getPlayer(), e.getRawText())) {
                 e.setCanceled(true);   // (the answer is whispered: nobody else reads it)

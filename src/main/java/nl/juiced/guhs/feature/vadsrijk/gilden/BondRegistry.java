@@ -121,7 +121,7 @@ public final class BondRegistry {
                 e.setCanceled(true);
             }
         });
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("BondRegistry:124", e -> {
             MinecraftServer s = e.getServer();
             long t = s.getTickCount();
             Vallei.tik(s, t);

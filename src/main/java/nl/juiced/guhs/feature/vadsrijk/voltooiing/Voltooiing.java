@@ -236,6 +236,26 @@ public final class Voltooiing {
         return cp != null && cp.distSqr(vuur) <= 9;
     }
 
+    /** 1.10.2: every campfire this player has lit/used (the remembered spots, snapped to the book's campfires). */
+    public static List<BlockPos> vuren(ServerPlayer p) {
+        List<BlockPos> l = new ArrayList<>();
+        CompoundTag t = map(p, "vuren");
+        for (String k : t.keySet()) {
+            if (!t.getBooleanOr(k, false)) {
+                continue;
+            }
+            String[] v = k.split(",");
+            if (v.length == 3) {
+                try {
+                    l.add(new BlockPos(Integer.parseInt(v[0].trim()), Integer.parseInt(v[1].trim()), Integer.parseInt(v[2].trim())));
+                } catch (NumberFormatException ignored) {
+                    // (a broken key: skip it)
+                }
+            }
+        }
+        return l;
+    }
+
     /** Haken.KAMPVUUR: remembers the campfire (snapped to a known one within 3 blocks, so map tweaks don't matter). */
     public static void kampvuur(ServerPlayer p, BlockPos pos) {
         BlockPos beste = pos;
@@ -356,6 +376,7 @@ public final class Voltooiing {
             zt.putString("titel", z.titelId());
             zt.putLong("beloning", z.beloning());
             zt.putBoolean("beloond", beloond(p, z.id()));
+            zt.putInt("eis", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.boek());   // 1.10.2: the % the next zone needs (0 = none)
             ListTag cl = new ListTag();
             int k = 0, t = 0;
             for (Categorie c : categorieen(z)) {

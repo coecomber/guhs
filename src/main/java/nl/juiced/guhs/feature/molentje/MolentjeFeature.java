@@ -67,7 +67,7 @@ public final class MolentjeFeature {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
         BLOCK_ENTITIES.register(modBus);
-        NeoForge.EVENT_BUS.addListener(Molen::tick);
+        nl.juiced.guhs.world.TikWacht.post("Molen.tick", Molen::tick);
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent event) -> MolentjeCommando.register(event));
         // (integration) the Zandguh talk is chained in SnoesVerhaalFeature (molen first, then the story hint)
     }

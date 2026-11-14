@@ -80,7 +80,7 @@ public final class DroomBewoners {
     }
 
     static void register() {
-        NeoForge.EVENT_BUS.addListener(DroomBewoners::tick);
+        nl.juiced.guhs.world.TikWacht.post("DroomBewoners.tick", DroomBewoners::tick);
         NeoForge.EVENT_BUS.addListener(DroomBewoners::onKlik);
     }
 

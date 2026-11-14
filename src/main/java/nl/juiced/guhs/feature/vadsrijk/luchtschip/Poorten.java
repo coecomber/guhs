@@ -84,7 +84,7 @@ public final class Poorten {
         Poort g = POORTEN.get(l.id());
         MutableComponent kop = Component.translatable("vadsrijk.luchtschip.dicht.kop", l.letter()).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
         if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isPoortSlot(slot)) {   // X-ZONE1: the zone is closed (soon)
-            return kop.append(" ").append(Component.translatable(slot).withStyle(ChatFormatting.WHITE));
+            return kop.append(" ").append(nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.tekst(p, slot).withStyle(ChatFormatting.WHITE));   // 1.10.2: + the per-player gate
         }
         if (g == null) {
             return kop.append(" ").append(Component.translatable(slot, Spelers.level(p)).withStyle(ChatFormatting.WHITE));
@@ -113,7 +113,8 @@ public final class Poorten {
         Poort g = POORTEN.get(l.id());
         String poort = dicht(p, l, true);   // X-ZONE1: the destination zone is closed
         if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isPoortSlot(poort)) {
-            return Component.translatable("vadsrijk.zonepoort.kort").withStyle(ChatFormatting.RED);
+            return Component.translatable(nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isEis(poort) ? "vadsrijk.zonepoort.eis.kort" : "vadsrijk.zonepoort.kort")
+                    .withStyle(ChatFormatting.RED);
         }
         if (g != null && !g.verhaalKlaar().test(p)) {
             return Component.translatable("vadsrijk.luchtschip.kort.verhaal", questNaam(g.naQuest())).withStyle(ChatFormatting.RED);

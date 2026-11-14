@@ -56,7 +56,7 @@ public final class Grijpmachine {
     static void register() {
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> BEURTEN.clear());
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> BEURTEN.remove(e.getEntity().getUUID()));
-        NeoForge.EVENT_BUS.addListener(Grijpmachine::onTick);
+        nl.juiced.guhs.world.TikWacht.post("Grijpmachine.onTick", Grijpmachine::onTick);
     }
 
     /** (Minigames) is this player steering a claw? */

@@ -229,7 +229,7 @@ public final class AmongSlice {
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGH, true, AmongSlice::opBlok);
         NeoForge.EVENT_BUS.addListener(AmongSlice::opReis);
         NeoForge.EVENT_BUS.addListener(AmongSlice::opChat);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> {
+        nl.juiced.guhs.world.TikWacht.post("AmongSlice:232", event -> {
             AmongWachtrij.tick(event.getServer());
             AmongThuis.tick(event.getServer());
         });

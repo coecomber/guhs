@@ -60,7 +60,7 @@ public final class IndelingRegistry {
     }
 
     public static void register(IEventBus modBus) {
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("IndelingRegistry:63", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl != null) {
                 Barrieres.tik(e.getServer(), sl.getGameTime());

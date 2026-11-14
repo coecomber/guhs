@@ -102,14 +102,14 @@ public final class ItemsRegistry {
         return "vr_t_" + id;
     }
 
-    /** The base type of a new piece; growth per level like zone 2's loot (main stats 25 % of the base, side stats 6 %). */
+    /** The base type of a new piece; growth per level like zone 2's loot (main stats BasisType.HOOFD_GROEI = 15 % of the base since 1.10.2, side stats 6 %). */
     static BasisType basisType(Stuk s) {
         Stats basis = new Stats(), groei = new Stats();
         for (int i = 0; i + 1 < s.stats().length; i += 2) {
             Stat st = (Stat) s.stats()[i];
             double v = ((Number) s.stats()[i + 1]).doubleValue();
             basis.plus(st, v);
-            groei.plus(st, v * (st.hoofd() ? 0.25 : 0.06));
+            groei.plus(st, v * (st.hoofd() ? nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType.HOOFD_GROEI : 0.06));
         }
         return new BasisType(s.id(), "guhs:" + itemNaam(s.id()), s.slot(), soort(s.slot()), null, Element.GEEN, 0, 0, basis, groei, 2);
     }

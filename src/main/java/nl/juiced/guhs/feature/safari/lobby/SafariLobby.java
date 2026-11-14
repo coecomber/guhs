@@ -49,7 +49,7 @@ public final class SafariLobby {
         LobbyItems.ITEMS.register(modBus);
         Rollen.register();
         SafariWinkel.registreerVast();
-        NeoForge.EVENT_BUS.addListener(SafariLobby::tick);
+        nl.juiced.guhs.world.TikWacht.post("SafariLobby.tick", SafariLobby::tick);
         NeoForge.EVENT_BUS.addListener(SafariLobby::opInteractie);
         NeoForge.EVENT_BUS.addListener(Bezoekers::opInteractieSpecifiek);
         NeoForge.EVENT_BUS.addListener(Kijkguhs::opInteractieSpecifiek);

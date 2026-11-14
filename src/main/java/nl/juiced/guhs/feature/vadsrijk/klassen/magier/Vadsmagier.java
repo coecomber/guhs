@@ -169,6 +169,19 @@ public final class Vadsmagier implements Klasse {
 
     // ---- R: Roze Vuurbal ------------------------------------------------------------------------------------------------
 
+    /**
+     * One Roze Vuurbal hit. 1.10.2: the crit is ROLLED on the player's Kritiek like every other skill (it passed "guaranteed crit"
+     * since the first version, so every Vuurbal was a gold crit: the bug behind the ~1,000 hits).
+     */
+    static Schade.Uitkomst vuurbalTreffer(ServerPlayer p, LivingEntity e, double schade, Element el) {
+        return Basisaanval.treffer(p, e, schade, el, Schade.Soort.MAGIE, false, "roze_vuurbal");
+    }
+
+    /** One Meteoorguh hit: the crit rolled, like {@link #vuurbalTreffer} (1.10.2). */
+    static Schade.Uitkomst meteoorTreffer(ServerPlayer p, LivingEntity e, double schade) {
+        return Basisaanval.treffer(p, e, schade, Element.ROZE, Schade.Soort.MAGIE, false, "meteoorguh");
+    }
+
     static final class RozeVuurbal extends Skill {
         RozeVuurbal() {
             super("roze_vuurbal", 0, 25, Balans.VUURBAL_CD);
@@ -211,7 +224,7 @@ public final class Vadsmagier implements Klasse {
         private static void ontplof(ServerPlayer p, Vec3 waar, double straal, double schade, Element el) {
             ServerLevel sl = (ServerLevel) p.level();
             for (LivingEntity e : Fx.mobsBij(sl, waar, straal)) {
-                Basisaanval.treffer(p, e, schade, el, Schade.Soort.MAGIE, true, "roze_vuurbal");
+                vuurbalTreffer(p, e, schade, el);
                 status(p, e, el, schade);
             }
             Fx.plof(sl, waar, straal * 0.7, el);
@@ -293,10 +306,19 @@ public final class Vadsmagier implements Klasse {
                 Later.na(0, () -> {
                     SpelerData d = Spelers.data(p);
                     d.energie = Math.min(Spelers.maxEnergie(p), Spelers.energie(p) + 15);
-                    d.klaarOp.remove("roze_vuurbal");
+                    tijdsprong(p, d);
                 });
             }
             return true;
+        }
+
+        /** m_tijdsprong (1.10.2): halves the remaining Roze Vuurbal cooldown (it used to reset it to 0). */
+        static void tijdsprong(ServerPlayer p, SpelerData d) {
+            long nu = p.level().getGameTime();
+            long klaar = d.klaarOp.getOrDefault("roze_vuurbal", 0L);
+            if (klaar > nu) {
+                d.klaarOp.put("roze_vuurbal", nu + (klaar - nu) / 2);
+            }
         }
 
         private static boolean vrijPad(ServerLevel sl, Vec3 a, Vec3 b) {
@@ -421,7 +443,7 @@ public final class Vadsmagier implements Klasse {
             Later.na(val + 1, () -> {
                 d.discard();
                 for (LivingEntity e : Fx.mobsBij(sl, doel, straal)) {
-                    Basisaanval.treffer(p, e, schade, Element.ROZE, Schade.Soort.MAGIE, true, "meteoorguh");
+                    meteoorTreffer(p, e, schade);
                     Statussen.geef(e, Status.BRANDEND, 60, Math.max(1, schade * 0.04), p);
                     Vec3 weg = e.position().subtract(doel).multiply(1, 0, 1).normalize();
                     e.setDeltaMovement(e.getDeltaMovement().add(weg.x * 0.6, 0.5, weg.z * 0.6));

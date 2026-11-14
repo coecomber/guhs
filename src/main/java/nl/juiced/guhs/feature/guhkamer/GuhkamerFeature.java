@@ -75,7 +75,7 @@ public final class GuhkamerFeature {
             }
         });
         Band.opNiveau((eigenaar, guh, bandId, niveau) -> Guhkamer.nieuwNiveau(eigenaar, niveau));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post event) -> {
+        nl.juiced.guhs.world.TikWacht.post("GuhkamerFeature:78", event -> {
             var s = event.getServer();
             if (s.getTickCount() % 10 == 0) {
                 Guhkamer.tick(s);

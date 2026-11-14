@@ -282,6 +282,7 @@ public final class Questlog {
         CompoundTag t = new CompoundTag();
         t.putInt("s", KLAAR);
         quests(p).put(q.id(), t);
+        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.questKlaar(p, q.id());   // 1.10.2: a finished quest of zone N = zone N entered (level cap)
         Beloningen.geef(p, q);
         p.sendSystemMessage(Component.translatable("vadsrijk.npc.quest_af", Component.translatable(q.titelKey())).withStyle(ChatFormatting.GOLD));
         NpcFtb.klaar(p, q);

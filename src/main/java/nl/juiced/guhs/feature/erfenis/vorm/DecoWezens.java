@@ -54,7 +54,7 @@ public final class DecoWezens {
         NeoForge.EVENT_BUS.addListener(DecoWezens::opInteract);
         NeoForge.EVENT_BUS.addListener(DecoWezens::opInteractAt);
         NeoForge.EVENT_BUS.addListener(DecoWezens::opDrops);
-        NeoForge.EVENT_BUS.addListener(DecoWezens::opTick);
+        nl.juiced.guhs.world.TikWacht.post("DecoWezens.opTick", DecoWezens::opTick);
     }
 
     public static boolean isDeco(Entity e) {

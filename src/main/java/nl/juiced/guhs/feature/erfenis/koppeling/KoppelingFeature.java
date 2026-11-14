@@ -97,10 +97,10 @@ public final class KoppelingFeature {
         modBus.addListener(KoppelingFeature::capabilities);
         modBus.addListener((RegisterPayloadHandlersEvent event) -> KoppelingPayloads.register(event.registrar("1")));
         NeoForge.EVENT_BUS.addListener(KoppelingCommando::register);
-        NeoForge.EVENT_BUS.addListener(Makelaarsbrief::tick);
+        nl.juiced.guhs.world.TikWacht.post("Makelaarsbrief.tick", Makelaarsbrief::tick);
         NeoForge.EVENT_BUS.addListener(Makelaarsbrief::opJoin);
-        NeoForge.EVENT_BUS.addListener(ErfhekjeBlock::tick);
-        NeoForge.EVENT_BUS.addListener(Leverkisten::tick);
+        nl.juiced.guhs.world.TikWacht.post("ErfhekjeBlock.tick", ErfhekjeBlock::tick);
+        nl.juiced.guhs.world.TikWacht.post("Leverkisten.tick", Leverkisten::tick);
     }
 
     private static void capabilities(RegisterCapabilitiesEvent event) {

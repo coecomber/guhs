@@ -73,7 +73,7 @@ public final class AmbachtRegistry {
         Praat.luister(AmbachtNpcs.SLEUTEL, AmbachtNpcs::antwoord);
         Waarde.EXTRA.add(AmbachtRegistry::waarde);
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> Ranglijst.koppel(e.getServer()));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("AmbachtRegistry:76", e -> {
             Verzamelen.tick(e.getServer());
             AmbachtNpcs.tick(e.getServer());
             Ranglijst.tick(e.getServer());

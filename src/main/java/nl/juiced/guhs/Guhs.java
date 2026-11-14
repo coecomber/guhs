@@ -70,7 +70,7 @@ public class Guhs {
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.feature.guheinde.Enderguhs::onLevelTick);   // 1.2.8: wild Enderguhs only in the Guheinde
         NeoForge.EVENT_BUS.register(nl.juiced.guhs.world.WildeDieren.class);   // 1.1.2: wild animals/critters/Mikas don't pile up
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwCheck::registerCommands);
-        NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwCheck::onServerTick);
+        nl.juiced.guhs.world.TikWacht.post("BouwCheck.onServerTick", nl.juiced.guhs.world.BouwCheck::onServerTick);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.world.BouwRuimte::onLevelLoad);
         NeoForge.EVENT_BUS.addListener(KeepOnDeathHandler::onDeath);
         NeoForge.EVENT_BUS.addListener(nl.juiced.guhs.entity.TamGuhBescherming::onAttack);   // 1.2.1: others' tamed guhs

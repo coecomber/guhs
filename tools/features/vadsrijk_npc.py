@@ -853,7 +853,7 @@ TIPS = {
                                  "of met de knop naast je inventaris). Druk op L in je inventaris om een lievelingsstuk op slot te zetten."),
     "party": ("Samen op pad", "In een groep tot vijf deel je xp in de buurt, tel je samen voor opvrolijk-quests en doen jullie elkaar "
                               "nooit pijn. /guhs vadsrijk party uitnodigen <naam>."),
-    "flauw": ("Flauwgevallen", "Geen zorgen: je verliest niks. Je wordt wakker bij je laatste kampvuur en bent 30 tellen een beetje "
+    "flauw": ("Flauwgevallen", "Geen zorgen: je verliest niks. Je wordt wakker bij het dichtstbijzijnde kampvuur dat je hebt aangestoken en bent 30 tellen een beetje "
                                "duizelig."),
     "elementen": ("Elementen", "Vuur wint van zwam, zwam van slijm, slijm van vuur (x1,5). Roze is sterk tegen alles wat ontvadst is. "
                                "Het gekleurde icoontje voor de naam van een wezen vertelt zijn element."),
@@ -903,8 +903,8 @@ GIDS = {
                                                   "het zeker weet."),
     "kampvuren": ("Kampvuren", "In elk gebied staan 2-3 kampvuren met een ridder-guh. Rechtsklik: dan is het je checkpoint. Er is geen "
                                "snelreizen; het luchtschip brengt je tussen Knuffelkamp en Zwamzoet."),
-    "flauw": ("Flauwvallen", "Valt je Vads op nul, dan word je wakker bij je kampvuur (bij een baas: bij de arenadeur). Je verliest niks, "
-                             "je bent alleen 30 tellen duizelig."),
+    "flauw": ("Flauwvallen", 'Valt je Vads op nul, dan word je wakker bij het dichtstbijzijnde kampvuur dat je hebt aangestoken (bij een baas: bij de arenadeur). Je verliest niks, je bent alleen 30 tellen duizelig.'),
+    "zonepoort": ("Naar de volgende zone", 'Naar de volgende zone? Speel het hoofdverhaal uit én verken minstens 75% van de zone in je Verkenningsboek (toets B): uitkijkpunten, kampvuren, geheimen, zijquests en meer. De kapitein en de reiskaart laten zien wat je nog mist. Je hoogste level is het level van de hoogste zone waar je bent geweest + 5 (25 als je nog nooit in zone 2 was). Extra xp spaar je op en krijg je er later dubbel bij.'),
     "elementen": ("Elementen", "Vuur > Zwam > Slijm > Vuur: x1,5 schade op een zwakte en x0,7 de andere kant op. Roze is extra sterk "
                                "tegen ontvadste wezens. Het icoontje voor de naam van een wezen (en op je wapen) is zijn element: "
                                " vlammetje = Vuur,  blaadje = Zwam (natuur),  druppel = Slijm (water),  hartje = Roze. "

@@ -66,7 +66,7 @@ public final class SceneLaden {
 
     public static void register(IEventBus modBus) {
         TICKETS.register(modBus);
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> tick(e.getServer()));
+        nl.juiced.guhs.world.TikWacht.post("SceneLaden:69", e -> tick(e.getServer()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> LOPEND.remove(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerChangedDimensionEvent e) -> LOPEND.remove(e.getEntity().getUUID()));
     }

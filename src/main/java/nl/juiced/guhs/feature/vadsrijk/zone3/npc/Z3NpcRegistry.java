@@ -71,7 +71,7 @@ public final class Z3NpcRegistry {
         Z3Haken.registreer();
         Voltooiing.registreer(new Voltooiing.ZoneBoek("zone3", "vadsrijk.voltooiing.zone.zone3", "vr_kenner_van_de_schemerwortel", 60000,
                 Z3NpcRegistry::boek));
-        NeoForge.EVENT_BUS.addListener((ServerTickEvent.Post e) -> {
+        nl.juiced.guhs.world.TikWacht.post("Z3NpcRegistry:74", e -> {
             Z3Haken.tick(e.getServer());
             Z3Verhaal.tick(e.getServer());
             Z3Leven.tick(e.getServer());   // (P-VERHUIS) Pluimguh riders on the riding spiral

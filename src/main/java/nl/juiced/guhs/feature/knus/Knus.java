@@ -49,7 +49,7 @@ public final class Knus {
         KnusVoortgang.onderdeel("kamperen", icoon("guh_slaapzak", Items.CAMPFIRE));
         KnusVoortgang.onderdeel("knuffelbad", icoon("eendjesmunt", Items.WATER_BUCKET));
         KnusVoortgang.onderdeel("wereldleven", icoon("guh_fluitje", Items.NOTE_BLOCK));
-        NeoForge.EVENT_BUS.addListener(Seizoen::onServerTick);
+        nl.juiced.guhs.world.TikWacht.post("Seizoen.onServerTick", Seizoen::onServerTick);
         NeoForge.EVENT_BUS.addListener(Seizoen::onServerStarted);
         NeoForge.EVENT_BUS.addListener(Seizoen::onServerStopped);
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent event) -> PleinSlot.testWissen());

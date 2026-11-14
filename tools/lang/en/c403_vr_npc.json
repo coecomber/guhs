@@ -34,7 +34,7 @@
   "vadsrijk.npc.gids.driehoek.uitleg": "Strong = x1.5 and 'Weak!'. The other way around = x0.7. Pink is strong against everything dechonked.",
   "vadsrijk.npc.gids.elementen.tekst": "Fire > Shroom > Slime > Fire: x1.5 damage on a weakness and x0.7 the other way around. Pink is extra strong against dechonked creatures. The icon in front of a creature's name (and on your weapon) is its element:  little flame = Fire,  leaf = Shroom (nature),  droplet = Slime (water),  heart = Pink. No icon = no element.",
   "vadsrijk.npc.gids.elementen.titel": "Elements",
-  "vadsrijk.npc.gids.flauw.tekst": "If your Chonk drops to zero, you wake up at your campfire (at a boss: at the arena door). You don't lose anything, you're just dizzy for 30 seconds.",
+  "vadsrijk.npc.gids.flauw.tekst": "If your Chonk drops to zero, you wake up at the nearest campfire you have lit (at a boss: at the arena door). You don't lose anything, you're just dizzy for 30 seconds.",
   "vadsrijk.npc.gids.flauw.titel": "Fainting",
   "vadsrijk.npc.gids.geheimen.tekst": "Secrets are hidden all over the realm: ten lost plushies, five strange clues and hidden treasures. They sparkle a little when you're close. Who knows where the clues lead...",
   "vadsrijk.npc.gids.geheimen.titel": "Secrets",
@@ -1372,7 +1372,7 @@
   "vadsrijk.npc.stap.z2_poort": "%s. First get out of the Sugarbowl geode: %s.",
   "vadsrijk.npc.tip.elementen": "Fire beats shroom, shroom beats slime, slime beats fire (x1.5). Pink is strong against everything dechonked. The colored icon in front of a creature's name tells its element.",
   "vadsrijk.npc.tip.elementen.titel": "Elements",
-  "vadsrijk.npc.tip.flauw": "No worries: you don't lose anything. You wake up at your last campfire and feel a little dizzy for 30 seconds.",
+  "vadsrijk.npc.tip.flauw": "No worries: you don't lose anything. You wake up at the nearest campfire you have lit and feel a little dizzy for 30 seconds.",
   "vadsrijk.npc.tip.flauw.titel": "Fainted",
   "vadsrijk.npc.tip.kampvuur": "Right-click a campfire: that's where you wake up if you faint. It also refills your Chonk and energy.",
   "vadsrijk.npc.tip.kampvuur.titel": "Campfire",
@@ -1470,5 +1470,7 @@
   "vadsrijk.npc.wezen.vr_z2_ijzelgeest": "A floating ice spirit that makes the ground freeze. Loves to steal mittens.",
   "vadsrijk.npc.wezen.vr_z2_mika_mijnwerker": "A Mika with a little helmet and a drill. When defeated, he flees to his fort in a puff of smoke.",
   "vadsrijk.npc.wezen.vr_z2_spiegelzucht": "Lady Mirrorsigh, lady of the Mirror Keep. Only the reflection without a shadow is real.",
-  "vadsrijk.npc.wezen.vr_z2_splinterling": "A crystal golem of gray crystal. With every hit he shoots shards around. When defeated, he bursts apart."
+  "vadsrijk.npc.wezen.vr_z2_splinterling": "A crystal golem of gray crystal. With every hit he shoots shards around. When defeated, he bursts apart.",
+  "vadsrijk.npc.gids.zonepoort.titel": "To the next zone",
+  "vadsrijk.npc.gids.zonepoort.tekst": "To the next zone? Finish the main story AND explore at least 75% of the zone in your Exploring Book (key B): viewpoints, campfires, secrets, side quests and more. The captain and the travel map show what you still miss. Your highest level is the level of the highest zone you have been to + 5 (25 if you never went to zone 2). Extra xp is saved up and paid out double later."
 }
