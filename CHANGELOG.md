@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.3 — Minecraft 26.1.2
+
+- **Return portals in every town:** every safe town of Het Vadsrijk has a central return portal on its square, built like zone 1's (Zwamzoet's plaza, Knuffelkamp, Kandijkom and its airship dock, Honingtak; the towns of zones 4-6 get theirs in the map for when they open). Shown on the wiki map. Existing worlds get them once via `/guhs vadsrijk patch alle-portalen --echt` (one per town: `portaal_<town>`; undo with `/guhs vadsrijk patch herstel <file>`).
+- **Spiegelburcht:** the hall of Vrouwe Spiegelzucht is closed properly. The six mirror niches cut through its outer wall, so you could walk in from the side and the back past the puzzle rooms; the generator closes them and the live world gets the same wall blocks once via `/guhs vadsrijk patch spiegelzaal --echt` (undo: `/guhs vadsrijk patch herstel <file>`).
+
 ## 1.10.2 — Minecraft 26.1.2
 
 - **Zones 2 and 3 are open:** the ship at the end of zone 1 sails. De Splinterpieken (level 20 to 30) with the crystal town of Kandijkom, and De Schemerwortel (level 30 to 50), the giant tree with the town of Honingtak in its branches and your first mount. At the end of zone 3 the next ship sails soon.

@@ -1982,8 +1982,16 @@ def spiegelburcht(W, K, Pw):
         x, zz = round(hx_ + 17 * math.cos(a)), round(hz_ + 17 * math.sin(a))
         wx, wz = round(hx_ + (hr + 1) * math.cos(a)), round(hz_ + (hr + 1) * math.sin(a))
         S.box(wx - 1, Y, wz - 1, wx + 1, Y + 6, wz + 1, CARVE)
-        S.box(round(hx_ + (hr + 2.4) * math.cos(a)), Y, round(hz_ + (hr + 2.4) * math.sin(a)),
-              round(hx_ + (hr + 2.4) * math.cos(a)), Y + 6, round(hz_ + (hr + 2.4) * math.sin(a)), "minecraft:white_stained_glass")
+        gx, gz = round(hx_ + (hr + 2.4) * math.cos(a)), round(hz_ + (hr + 2.4) * math.sin(a))
+        S.box(gx, Y, gz, gx, Y + 6, gz, "minecraft:white_stained_glass")
+        # 1.10.3: the 3x3 niche reached through the outer wall (r hr + 3) at its outer corners (players walked in from the
+        # plateau, past the doors). Every niche cell beyond hr + 1.5 except the mirror column is wall again (same blocks as
+        # the hall wall). The live world got the same cells via /guhs vadsrijk patch spiegelzaal (data/guhs/vadsrijk/patch).
+        for nx in range(wx - 1, wx + 2):
+            for nz in range(wz - 1, wz + 2):
+                if (nx, nz) != (gx, gz) and math.hypot(nx - hx_, nz - hz_) > hr + 1.5:
+                    S.box(nx, Y, nz, nx, Y + 2, nz, "minecraft:tuff_bricks")
+                    S.box(nx, Y + 3, nz, nx, Y + 6, nz, "minecraft:calcite")
         P[f"spiegelzucht_spiegel_{k + 1}"] = [x, Y, zz]
     for k in range(8):
         a = k * math.pi / 4

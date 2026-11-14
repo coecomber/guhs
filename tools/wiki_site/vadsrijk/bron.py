@@ -205,6 +205,15 @@ class Bron:
                 m = re.match(r"\| `([^`]+)` \| (-?\d+), (-?\d+), (-?\d+) \|", regel)
                 if m:
                     out[(zone, m[1])] = (zone, sec, (int(m[2]), int(m[3]), int(m[4])))
+        # 1.10.3: the central return portals of the safe towns (tools/vadsrijk/stadsleven/terugportalen.py, also in the tiles)
+        try:
+            for regel in open(os.path.join(self.root, "src", "main", "resources", "data", "guhs", "vadsrijk", "terugportalen.txt"), encoding="utf-8"):
+                d = regel.split()
+                if len(d) >= 11 and d[0] == "terugportaal":
+                    zone = "zone" + d[10]
+                    out[(zone, d[6])] = (zone, "Terugportalen", (int(d[7]), int(d[8]), int(d[9])))
+        except OSError:
+            self.notes.append("terugportalen.txt missing: no town return portals")
         return out
 
     def _z6_java(self):
