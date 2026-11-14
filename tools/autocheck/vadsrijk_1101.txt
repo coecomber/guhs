@@ -1,0 +1,87 @@
+# release-1.10.1 smoke test: one short walk through the client code that changed in 1.10.1 (Vadsrijk clock + sky, gear tooltip
+# compare/value/salvage lines, the Opruimen screen from the smid and from the inventory, the ⚔ ⚑ ⚒ column next to the inventory).
+# Run with openZones = 1 in run/config/guhs-vadsrijk-zones.toml (the release gate).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/vadsrijk_1101.txt
+# gui 640x360 (1280x720, scale 2): inventory at (232,97); the button column at x 208, y 101/123/145/167/189.
+
+section setup
+/gamemode survival
+/gamerule doWeatherCycle false
+wait 60
+waitrender 200
+
+section binnen
+/guhs vadsrijk
+wait 400
+waitrender 400
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+/guhs vadsrijk level 8
+wait 40
+/clear @s
+wait 5
+shot r1101_01_binnen
+
+section tijd
+clearchat
+/guhs vadsrijk tijd
+wait 20
+shot r1101_02_tijd gui
+/guhs vadsrijk tijd zet nacht
+wait 100
+waitrender 200
+look 0 -30
+shot r1101_03_nacht
+/guhs vadsrijk tijd zet dag
+wait 100
+waitrender 200
+shot r1101_04_dag
+unlock
+
+section tooltip
+/guhs vadsrijk items nieuwe gewoon
+wait 30
+gui inventaris 1
+wait 15
+shot r1101_05_tooltip gui
+gui inventaris 2
+wait 15
+shot r1101_06_tooltip2 gui
+
+section knoppen
+gui inventaris
+wait 10
+mouse 10 10
+widgets
+shot r1101_07_knoppen gui
+mouse 218 199
+wait 5
+shot r1101_08_knop_opruimen_tip gui
+gui keep
+press ⚒
+wait 30
+shot r1101_09_opruimen_inventaris gui
+gui close
+
+section smid
+gui keep
+/guhs vadsrijk items opruimen
+wait 30
+shot r1101_10_opruimen_smid gui
+widgets
+gui close
+gui keep
+/guhs vadsrijk items smid
+wait 30
+shot r1101_11_smid gui
+gui close
+
+section balans
+clearchat
+/guhs vadsrijk balans toon
+wait 20
+shot r1101_12_balans gui

@@ -47,6 +47,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
  *   smidspul                                 steentjes, knabbels, draad, 5 talismannen, 5 groeipluis, 50 zilver
  *   drankjes                                 fill the drankjesriem
  *   smid                                     open the smid
+ *   opruimen                                 open the smid's Opruimen screen (1.10.1)
  * </pre>
  */
 public final class ItemsCommando {
@@ -151,6 +152,11 @@ public final class ItemsCommando {
         }));
         k.then(Commands.literal("smid").executes(c -> {
             Smid.open(c.getSource().getPlayerOrException());
+            return 1;
+        }));
+        k.then(Commands.literal("opruimen").executes(c -> {   // release-1.10.1: the smid's Opruimen screen directly (AutoCheck, testing)
+            nl.juiced.guhs.feature.vadsrijk.economie.Opruimen.open(c.getSource().getPlayerOrException(),
+                    nl.juiced.guhs.feature.vadsrijk.economie.Opruimen.SMID);
             return 1;
         }));
         event.getDispatcher().register(VadsrijkCommando.wortel(k));
