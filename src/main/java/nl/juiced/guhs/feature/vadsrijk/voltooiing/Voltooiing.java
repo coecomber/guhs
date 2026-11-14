@@ -33,6 +33,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
  *   vuren      {"x,y,z": true}        campfires lit/used by this player (Haken.KAMPVUUR; the lit block is shared, the memory isn't)
  *   mijlpaal   {zone id: 0..4}        the highest 25/50/75/100 % step already celebrated
  *   beloond    {zone id: true}        the 100 % reward was handed out
+ *   reis       {zone id: true}        1.10.3: "campfire travel unlocked" was announced (KampvuurReizen)
  * </pre>
  * <b>Adding a zone (zone 3+):</b> {@code Voltooiing.registreer(new ZoneBoek("zone3", "vadsrijk.voltooiing.zone.zone3",
  * "vr_kenner_<naam>", 30000, () -> List.of(...categories...)))} from your registry class, with the helpers in {@link ZoneBoeken}
@@ -300,6 +301,7 @@ public final class Voltooiing {
             }
             if (t.vol()) {
                 beloon(p, z);
+                KampvuurReizen.meldVrij(p, z);   // 1.10.3: campfire travel unlocked in this zone (once)
             }
         }
         if (!nieuw.isEmpty()) {

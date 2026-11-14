@@ -34,6 +34,9 @@ public final class VoltooiingRegistry {
         ZoneBoeken.registreer();
         Haken.GEBIED_BETREDEN.add(Voltooiing::markeerGebied);
         Haken.KAMPVUUR.add(Voltooiing::kampvuur);
+        Haken.KAMPVUUR_KLIK.add(KampvuurReizen::klik);   // 1.10.3: Kampvuurreizen
+        NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent e) -> KampvuurReizen.vergeet(
+                e.getEntity().getUUID()));
         nl.juiced.guhs.world.TikWacht.post("VoltooiingRegistry:37", e -> {
             ServerLevel sl = Vadsrijk.level(e.getServer());
             if (sl == null || sl.getGameTime() % 20 != 7) {

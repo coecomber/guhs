@@ -579,6 +579,8 @@ class Bouwer:
              "Kies je klasse bij Zuster Zachtjes: Knuffelridder (dichtbij, stevig), Pluisjager (van ver, beweeglijk) of Vadsmagiër (elementen en heling). Wisselen kan later."),
             ("Right-click every campfire: it becomes your checkpoint. Fainted? You wake up there; you lose nothing.",
              "Rechtsklik elk kampvuur: dan is het je checkpoint. Flauwgevallen? Je wordt daar wakker; je verliest niks."),
+            ("Explored a zone completely (100 % in your Exploration book, B)? Then every campfire you lit there becomes a travel spot: right-click a campfire and pick another one to be there at once. Free, just not in the middle of a fight.",
+             "Een zone helemaal verkend (100% in je Verkenningsboek, B)? Dan wordt elk kampvuur dat je daar aanstak een reisplek: rechtsklik een kampvuur en kies een ander, dan sta je er meteen. Gratis, alleen niet midden in een gevecht."),
             ("Stuck in a hole or in the water? Press U (Losknuffelen).", "Zit je vast in een kuil of in het water? Druk op U (Losknuffelen)."),
             ("Finish the camp's story and the airship takes you to Zwamzoet. From there the whole Vadsrijk opens up.",
              "Maak het verhaal van het kamp af en het luchtschip brengt je naar Zwamzoet. Vanaf daar gaat het hele Vadsrijk open."),
