@@ -799,11 +799,8 @@ public final class GrotKerker {
         };
         Component tekst = Component.empty().append(Component.translatable("vadsrijk.grotkerker.poort.dicht").withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.BOLD))
                 .append("\n").append(regel);
-        if (r.bord == null || r.bord.isRemoved()) {
-            r.bord = Getallen.hologram(sl, k.bord().getX() + 0.5, k.bord().getY() + 2.4, k.bord().getZ() + 0.5, tekst);
-        } else {
-            Getallen.zetTekst(r.bord, tekst);
-        }
+        // 1.10.3: exactly one board (a stale reference is replaced, a lost one found again; see Arenas.bord)
+        r.bord = Getallen.houdHologram(sl, r.bord, "guhs_vr_grotbord:" + k.id(), k.bord().getX() + 0.5, k.bord().getY() + 2.4, k.bord().getZ() + 0.5, tekst);
     }
 
     // ---- dev commands --------------------------------------------------------------------------------------------------------
