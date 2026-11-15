@@ -99,7 +99,7 @@ def main():
         K.render(N, "ambacht_1_overzicht" + suf, yaw=35, pitch=32, scale=5.0, ss=ss, extra=npc_extra(C, x1, z1, 0, x2, z2))
     if "brug" in wat:
         _, bz = C.s(0, A.BRUG_Z)
-        x1, z1, x2, z2 = max(0, ex1 - 6), bz - 46, xk - 18, bz + 40
+        x1, z1, x2, z2 = max(0, ex1 - 8), ez1 - 8, xk - 18, ez2 + 8
         N = crop(S, C, x1, z1, x2, z2)
         K.render(N, "ambacht_2_vanafdebrug" + suf, yaw=78, pitch=16, scale=9.0, ss=ss, extra=npc_extra(C, x1, z1, 0, x2, z2))
     if "plein" in wat:
@@ -108,6 +108,13 @@ def main():
         lab = [(x - x1, y, z - z1, t) for t, (x, y, z) in C.labels.items()
                if t in ("Smederij", "Keuken", "Viswinkel", "Verzamelhuisje", "Meester Knutsel")]
         K.render(N, "ambacht_3_plein" + suf, yaw=32, pitch=36, scale=15.0, ss=ss, extra=npc_extra(C, x1, z1, 0, x2, z2), labels=lab)
+    if "plein2" in wat:      # same square seen from the north-west (the fronts of Verzamelhuisje + Viswinkel)
+        x1, z1, x2, z2 = px - 30, pz - 28, px + 30, pz + 30
+        N = crop(S, C, x1, z1, x2, z2, KP.VLOER - 6)
+        lab = [(x - x1, y, z - z1, t) for t, (x, y, z) in C.labels.items()
+               if t in ("Smederij", "Keuken", "Viswinkel", "Verzamelhuisje", "Meester Knutsel")]
+        K.render(N, "ambacht_3b_plein_noordwest" + suf, yaw=212, pitch=36, scale=15.0, ss=ss,
+                 extra=npc_extra(C, x1, z1, 0, x2, z2), labels=lab)
     if "kaart" in wat:
         x1, z1, x2, z2 = max(0, ex1 - 10), ez1 - 10, xk + 6, ez2 + 10
         N = crop(S, C, x1, z1, x2, z2)
