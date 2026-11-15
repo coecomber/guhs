@@ -45,7 +45,7 @@ public final class Knutselwinkel {
         }
         w("koninginnengelei", 10, "tas", () -> Materialen.stack("koninginnengelei", 0, 1));
         w("thee", 12, "thee", () -> new ItemStack(Items.CLOCK));
-        int[] kernPrijs = {25, 30, 35, 45, 55};
+        int[] kernPrijs = {25, 30, 35, 45, 55, 65};
         for (int i = 0; i < Materialen.KERNEN.size(); i++) {
             String k = Materialen.KERNEN.get(i);
             w(k, kernPrijs[Math.min(i, kernPrijs.length - 1)], "item", () -> new ItemStack(Materialen.KERN.get(k).get()));

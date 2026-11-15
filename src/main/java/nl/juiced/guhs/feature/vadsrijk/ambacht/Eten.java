@@ -76,6 +76,10 @@ public final class Eten {
         g("wolkbessentaart", 5, Stats.van(Stat.HEALKRACHT, 7, Stat.WIJSHEID, 14, Stat.VADS, 320), 1, 0, 1, false);
         g("donderstoofpot", 5, Stats.van(Stat.VERDEDIGING, 22, Stat.VADS, 360), 1, 0, 1, false);
         g("hemelfeestmaal", 5, Stats.van(Stat.VADS, 300, Stat.KRACHT, 9, Stat.BEHENDIGHEID, 9, Stat.WIJSHEID, 9), 1, 0, 1, true);
+        // 1.10.4: zone 6 (T6, Het Zijdeland)
+        g("saffraanrijst", 6, Stats.van(Stat.HEALKRACHT, 9, Stat.WIJSHEID, 18, Stat.VADS, 400), 1, 0, 1, false);
+        g("dadelstoofpot", 6, Stats.van(Stat.VERDEDIGING, 26, Stat.VADS, 440), 1, 0, 1, false);
+        g("sterrenfeestmaal", 6, Stats.van(Stat.VADS, 360, Stat.KRACHT, 12, Stat.BEHENDIGHEID, 12, Stat.WIJSHEID, 12), 1, 0, 1, true);
     }
 
     private Eten() {

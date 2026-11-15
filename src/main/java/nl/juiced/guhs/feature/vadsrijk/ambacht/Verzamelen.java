@@ -55,7 +55,7 @@ public final class Verzamelen {
     }
 
     private static final Map<UUID, Map<String, Staat>> STAAT = new ConcurrentHashMap<>();
-    private static final Map<UUID, Long> LAATSTE = new ConcurrentHashMap<>();
+    static final Map<UUID, Long> LAATSTE = new ConcurrentHashMap<>();   // (package: the tests reset it)
     private static final Map<UUID, Afk> AFK = new ConcurrentHashMap<>();
     private static final Map<UUID, String> VERSTUURD = new ConcurrentHashMap<>();
 

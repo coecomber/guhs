@@ -349,6 +349,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_vfx',
             # 1.10.4 Ambachten in het verhaal: Meester Knutsel's islet lesson + two craft steps per zone (quests_ambacht.json, lang only)
             'vadsrijk_ambacht_verhaal',
+            # 1.10.4: T6 in Het Zijdeland (zone-6 gathering, T6 jewellery/Koken) + the islet's klaverhoning (after t_ambacht + u_ambacht2)
+            'vadsrijk_ambacht_t6',
             ]
 
 

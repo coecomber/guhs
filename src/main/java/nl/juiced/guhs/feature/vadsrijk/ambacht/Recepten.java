@@ -85,11 +85,14 @@ public final class Recepten {
     public static final Map<String, Recept> ALLE = new LinkedHashMap<>();
     /** The cosmetics/deco of {@code post:<id>}. */
     public static final Map<String, Supplier<ItemStack>> POST = new LinkedHashMap<>();
-    static final List<String> VIS1 = List.of("kloddervisje", "maanbaarsje", "plonsguppie"), VIS2 = List.of("spiegelforel", "sterrenzalm", "sneeuwsnoek"),
+    static final List<String> VIS1 = List.of("kloddervisje", "maanbaarsje", "plonsguppie"),
+            VIS1_HONING = List.of("kloddervisje", "maanbaarsje", "plonsguppie", "klaverhoning"), VIS2 = List.of("spiegelforel", "sterrenzalm", "sneeuwsnoek"),
             VIS3 = List.of("wortelpaling", "lantaarnvis", "honingkarper"), HONING = List.of("bloesemhoning", "schemerhoning", "wortelhoning");
     /** U-AMBACHT2: the zone-4/5 fish and honey (any kind of the tier). */
     static final List<String> VIS4 = List.of("koraalbaars", "maanrog", "regenboogmakreel"), VIS5 = List.of("wolkenvis", "sterrenspiering", "donderforel"),
             HONING4 = List.of("lampionhoning", "duinhoning"), HONING5 = List.of("wolkenhoning", "hemelhoning");
+    /** 1.10.4: the zone-6 fish (T6, Het Zijdeland). */
+    static final List<String> VIS6 = List.of("oasekarper", "sterrenschubvis", "zandaal");
     /**
      * 1.10.4: the jewellery Smeden makes (Maatwerk + Meesterwerk). Per tier: ring = 5 ore + 1 wood, ketting = 4 ore + 2 fibre, oorbel =
      * 4 ore + 1 herb, armband = 3 ore + 2 wood + 1 fibre (from the tier's level + 0..3); Meesterwerk = 4 ore + glinstergruis + the core
@@ -97,7 +100,7 @@ public final class Recepten {
      */
     public static final List<String> SIERADEN = List.of("ring", "ketting", "oorbel", "armband");
     /** 1.10.4: the Smeden level of each tier's Meesterwerk (and boss core from splinters); index = tier (the recipe lines match). */
-    public static final int[] MEESTER_LEVEL = {0, 8, 18, 28, 37, 46};
+    public static final int[] MEESTER_LEVEL = {0, 8, 18, 28, 37, 46, 54};
     /** 1.10.4: the removed Maatwerk gear (no recipes any more; items and base types stay registered so nothing breaks). */
     public static final List<String> GESCHRAPT = List.of("zwaard", "boog", "staf", "helm", "borstplaat", "broek", "schoentjes");
     /**
@@ -122,11 +125,12 @@ public final class Recepten {
         WAREN.put("snelpootjesdrankje", () -> new ItemStack(EcoSpul.SNELPOOTJESDRANKJE.get()));   // 1.10.4: no longer in the shops
         WAREN.put("vahoegdrankje", () -> new ItemStack(EcoSpul.VAHOEGDRANKJE.get()));
 
-        // ---- Koken (1.10.4: koken + brouwen; levels on the new tier scale T1 1, T2 12, T3 22, T4 32, T5 40) ---------------------
-        r("klodderpudding", Ambacht.KOKEN, 1, 1, "eten:klodderpudding", 2, i(2, "klodderklaver"), i(1, VIS1));
+        // ---- Koken (1.10.4: koken + brouwen; levels on the new tier scale T1 1, T2 12, T3 22, T4 32, T5 40, T6 48) --------------
+        //   (1.10.4: the islet's klaverhoning may stand in for the fish of the pudding and the mushroom stalk of the energy potion)
+        r("klodderpudding", Ambacht.KOKEN, 1, 1, "eten:klodderpudding", 2, i(2, "klodderklaver"), i(1, VIS1_HONING));
         r("vadsdrankje", Ambacht.KOKEN, 1, 1, "drank:vadsdrankje", 2, i(2, "klodderklaver"));
         r("visstoofje", Ambacht.KOKEN, 3, 1, "eten:visstoofje", 2, i(2, VIS1), i(1, "zwamsteel"));
-        r("energiedrankje", Ambacht.KOKEN, 3, 1, "drank:energiedrankje", 2, i(1, "klodderklaver"), i(1, "zwamsteel"));
+        r("energiedrankje", Ambacht.KOKEN, 3, 1, "drank:energiedrankje", 2, i(1, "klodderklaver"), i(1, "zwamsteel", "klaverhoning"));
         r("snelpootjesdrankje", Ambacht.KOKEN, 4, 1, "item:snelpootjesdrankje", 2, i(2, "klodderklaver"), i(1, VIS1));
         r("vahoegdrankje", Ambacht.KOKEN, 5, 1, "item:vahoegdrankje", 2, i(1, "klodderklaver"), i(1, "pluiskatoen"), i(1, "zwamsteel"));
         r("verzamelaarshapje", Ambacht.KOKEN, 6, 1, "eten:verzamelaarshapje", 2, i(2, "klodderklaver"), i(1, "pluiskatoen"), i(1, VIS1));
@@ -191,6 +195,17 @@ public final class Recepten {
         r("kern_wortel", Ambacht.SMEDEN, 28, 3, "kern:wortelkern", 1, i(5, "kernsplinter"));
         r("kern_lampion", Ambacht.SMEDEN, 37, 4, "kern:lampionkern", 1, i(5, "kernsplinter"));
         r("kern_wolk", Ambacht.SMEDEN, 46, 5, "kern:wolkkern", 1, i(5, "kernsplinter"));
+        // 1.10.4: T6 (zone 6, Het Zijdeland): sterrengoud + date palm wood / silk thread / saffron; Meesterwerk with incense resin
+        // (made only at the zone-6 teachers in Saffraanpoort: Werkplaats.magHier)
+        r("ring_t6", Ambacht.SMEDEN, 48, 6, "sieraad:ring", 1, i(5, "sterrengoud"), i(1, "dadelpalmhout"));
+        r("ketting_t6", Ambacht.SMEDEN, 49, 6, "sieraad:ketting", 1, i(4, "sterrengoud"), i(2, "zijdedraad"));
+        r("oorbel_t6", Ambacht.SMEDEN, 50, 6, "sieraad:oorbel", 1, i(4, "sterrengoud"), i(1, "saffraan"));
+        r("armband_t6", Ambacht.SMEDEN, 51, 6, "sieraad:armband", 1, i(3, "sterrengoud"), i(2, "dadelpalmhout"), i(1, "zijdedraad"));
+        r("meester_ring_t6", Ambacht.SMEDEN, 54, 6, "meester:ring", 1, i(4, "sterrengoud"), i(4, "glinstergruis"), i(2, "wierookhars"), i(1, "sterrenkern"));
+        r("meester_ketting_t6", Ambacht.SMEDEN, 54, 6, "meester:ketting", 1, i(4, "sterrengoud"), i(4, "glinstergruis"), i(2, "wierookhars"), i(1, "sterrenkern"));
+        r("meester_oorbel_t6", Ambacht.SMEDEN, 54, 6, "meester:oorbel", 1, i(4, "sterrengoud"), i(4, "glinstergruis"), i(2, "wierookhars"), i(1, "sterrenkern"));
+        r("meester_armband_t6", Ambacht.SMEDEN, 54, 6, "meester:armband", 1, i(4, "sterrengoud"), i(4, "glinstergruis"), i(2, "wierookhars"), i(1, "sterrenkern"));
+        r("kern_sterren", Ambacht.SMEDEN, 54, 6, "kern:sterrenkern", 1, i(5, "kernsplinter"));
         // cosmetics and deco that go home by the Post (what the old smidse and naaiatelier made)
         r("post_kokschort", Ambacht.SMEDEN, 3, 1, "post:kokschort", 1, i(5, "pluiskatoen"));
         r("post_mijnhelm", Ambacht.SMEDEN, 7, 1, "post:mijnhelm", 1, i(4, "pluisijzer"), i(1, "glinstergruis"));
@@ -217,7 +232,14 @@ public final class Recepten {
         r("donderstoofpot", Ambacht.KOKEN, 43, 5, "eten:donderstoofpot", 2, i(2, "donderforel"), i(1, "wolkbes"), i(1, "wolkenhout"));
         r("wolken_energiedrank", Ambacht.KOKEN, 43, 5, "drank:wolken_energiedrank", 2, i(1, "wolkbes"), i(1, VIS5));
         r("hemelfeestmaal", Ambacht.KOKEN, 46, 5, "eten:hemelfeestmaal", 1, i(2, VIS5), i(2, HONING5), i(2, "wolkbes"), i(1, "wolkenhout"));
-        r("hemelelixer", Ambacht.KOKEN, 48, 5, "drank:hemelelixer", 2, i(1, "koninginnengelei"), i(2, HONING5), i(1, "wolkbes"));
+        r("hemelelixer", Ambacht.KOKEN, 47, 5, "drank:hemelelixer", 2, i(1, "koninginnengelei"), i(2, HONING5), i(1, "wolkbes"));
+        // ---- 1.10.4: T6 (zone 6, Het Zijdeland) Koken: saffron, date palm and the oasis fish (only at the zone-6 teachers) --------
+        r("saffraanrijst", Ambacht.KOKEN, 48, 6, "eten:saffraanrijst", 2, i(3, "saffraan"), i(1, VIS6));
+        r("saffraan_vadsdrank", Ambacht.KOKEN, 48, 6, "drank:saffraan_vadsdrank", 2, i(2, "saffraan"), i(1, "saffraanhoning"));
+        r("dadelstoofpot", Ambacht.KOKEN, 51, 6, "eten:dadelstoofpot", 2, i(2, "oasekarper"), i(1, "saffraan"), i(1, "dadelpalmhout"));
+        r("saffraan_energiedrank", Ambacht.KOKEN, 51, 6, "drank:saffraan_energiedrank", 2, i(1, "saffraan"), i(1, VIS6));
+        r("sterrenfeestmaal", Ambacht.KOKEN, 54, 6, "eten:sterrenfeestmaal", 1, i(2, VIS6), i(2, "saffraanhoning"), i(2, "saffraan"), i(1, "dadelpalmhout"));
+        r("sterrenelixer", Ambacht.KOKEN, 56, 6, "drank:sterrenelixer", 2, i(1, "koninginnengelei"), i(2, "saffraanhoning"), i(1, "wierookhars"));
     }
 
     private Recepten() {

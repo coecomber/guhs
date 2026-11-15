@@ -223,6 +223,9 @@ PLEKKEN = {
     "amb_z4_duik": ("bij de duiksteiger in de Koraalbaai", "at the diving jetty in Coral Bay"),
     "amb_z5_wol": ("in het prieel van het Staartpark in Hoogvads", "in the arbour of the Tail Park in Hoogvads"),
     "amb_z5_erts": ("op de noordvin van Moeder Wolkwal, bij Hoogvads", "on Mother Cloudwhale's north fin, by Hoogvads"),
+    "amb_z6_zijde": ("bij de moerbeibomen in De Palmenkloven, waar de zijderupsen wonen",
+                     "by the mulberry trees in the Palm Gorges, where the silkworms live"),
+    "amb_z6_erts": ("bij de ertsaders in De Zingende Zoutgrot, onder De Zoutvlakte", "by the ore veins in the Singing Salt Cave, under the Salt Flats"),
 }
 for _id, (_nl, _en) in PLEKKEN.items():
     t(P + "plek.poi." + _id, _nl, _en)
@@ -572,43 +575,49 @@ Q("z5_hq08b_dekentje", "z5_hq08a_wolkenwol", "z5_koningin",
   xp=2000, munten=10000, lv=59, na=["z5_hq08a_wolkenwol"])
 
 # ===== zone 6: a star-silk cord for the compass (between De Zoutvlakte and De Verzonken Sterrenwacht) =======================
-# (zone 6 has no gathering spots of its own yet (Zone6Haken): the threads come from Hoogvads; see the open questions)
+# (1.10.4: zone 6 has its own T6 materials: silk thread from the mulberry trees, star gold from the salt cave; made in Saffraanpoort)
 Q("z6_hq07a_zijde", "z6_hq07_zoutvlakte", "z6_twinkel",
   ("Draad voor sterrenzijde", "Thread for star silk"),
   ("Het Sterrenkompas van de oude Sterrenguhs draait alleen aan een koord van sterrenzijde. Sterrenkijker Twinkel weet dat je dat spint "
-   "van wolkenwol en hemelzilver uit Hoogvads (Verzamelen niveau 40).",
-   "The Star Compass of the old Star Guhs only turns on a cord of star silk. Stargazer Twinkle knows you spin that from cloud wool and "
-   "sky silver from Hoogvads (Gathering level 40)."),
-  [D("verzamel", "guhs:vr_amb_wolkenwol", 3, "Pluk 3 wolkenwol in de tuinen van Hoogvads", "Pick 3 cloud wool in the gardens of Hoogvads",
-     bron="houd", plek="poi:amb_z5_wol"),
-   D("verzamel", "guhs:vr_amb_hemelzilver", 2, "Tik 2 hemelzilver op de vinnen van Moeder Wolkwal", "Tap 2 sky silver on Mother Cloudwhale's fins",
-     bron="houd", plek="poi:amb_z5_erts")],
+   "van zijdedraad uit de moerbeibomen van De Palmenkloven, met een draadje sterrengoud uit De Zingende Zoutgrot (Verzamelen niveau 48).",
+   "The Star Compass of the old Star Guhs only turns on a cord of star silk. Stargazer Twinkle knows you spin that from silk thread from "
+   "the mulberry trees of the Palm Gorges, with a thread of star gold from the Singing Salt Cave (Gathering level 48)."),
+  [D("verzamel", "guhs:vr_amb_zijdedraad", 3, "Pluk 3 zijdedraad bij de moerbeibomen in De Palmenkloven",
+     "Pick 3 silk thread by the mulberry trees in the Palm Gorges", bron="houd", plek="poi:amb_z6_zijde"),
+   D("verzamel", "guhs:vr_amb_sterrengoud", 2, "Tik 2 sterrengoud in De Zingende Zoutgrot", "Tap 2 star gold in the Singing Salt Cave",
+     bron="houd", plek="poi:amb_z6_erts")],
   [("npc", ("Het Sterrenkompas. Ik heb er tekeningen van. Zie je dit draadje? De naald hangt aan een koord van sterrenzijde. Zonder "
             "koord draait hij alleen maar rondjes. Net als ik zonder thee.",
             "The Star Compass. I have drawings of it. See this little thread? The needle hangs on a cord of star silk. Without the cord it "
             "just spins in circles. Like me without tea.")),
    ("jij", ("Waar vind je sterrenzijde?", "Where do you find star silk?")),
-   ("npc", ("Je maakt het. Wolkenwol uit de tuinen van Hoogvads, met een draadje hemelzilver van de vinnen van Moeder Wolkwal. Dan "
-            "glinstert het als de nacht.",
-            "You make it. Cloud wool from the gardens of Hoogvads, with a thread of sky silver from Mother Cloudwhale's fins. Then it "
-            "glitters like the night."))],
-  ("Drie wolkenwol en twee hemelzilver uit Hoogvads (Verzamelen 40). Houd ze bij je.",
-   "Three cloud wool and two sky silver from Hoogvads (Gathering 40). Keep them with you."),
+   ("npc", ("Je maakt het. De zijderupsen in de moerbeibomen van De Palmenkloven spinnen de zachtste draad van het Zijdeland. Daar "
+            "gaat een draadje sterrengoud uit De Zingende Zoutgrot doorheen. Dan glinstert het als de nacht.",
+            "You make it. The silkworms in the mulberry trees of the Palm Gorges spin the softest thread of the Silklands. A thread of "
+            "star gold from the Singing Salt Cave goes through it. Then it glitters like the night."))],
+  ("Drie zijdedraad uit De Palmenkloven en twee sterrengoud uit De Zingende Zoutgrot (Verzamelen 48). Houd ze bij je.",
+   "Three silk thread from the Palm Gorges and two star gold from the Singing Salt Cave (Gathering 48). Keep them with you."),
   [("npc", ("Ja! Dat is het. Ik voel de sterren er al in kriebelen.", "Yes! That's it. I can already feel the stars tickling in it.")),
-   ("npc", ("Nu nog smeden tot een koord. Dat kan alleen in het Ambachtsgilde van Hoogvads, daar hebben ze de fijnste naalden.",
-            "Now it still needs forging into a cord. Only the Hoogvads Craft Guild can do that, they have the finest needles."))],
+   ("npc", ("Nu nog smeden tot een koord. Dat doet de leermeester in de smidse van de Grote Bazaar. Die heeft de fijnste naalden van "
+            "Saffraanpoort.",
+            "Now it still needs forging into a cord. The teacher in the smithy of the Grand Bazaar does that. They have the finest "
+            "needles of Saffron Gate."))],
   xp=7000, munten=12000, lv=65, na=["z6_hq07_zoutvlakte"], actie_klaar="start:z6_hq07b_kompaskoord")
 
 Q("z6_hq07b_kompaskoord", "z6_hq07a_zijde", "z6_twinkel",
   ("Het kompaskoord", "The compass cord"),
-  ("Smeed het sterrenzijden kompaskoord in het Ambachtsgilde van Hoogvads, bij de leermeester van Smeden (Smeden niveau 48). Breng het "
-   "naar Sterrenkijker Twinkel.",
-   "Forge the star-silk compass cord in the Hoogvads Craft Guild, at the Smithing teacher (Smithing level 48). Bring it to Stargazer Twinkle."),
-  [D("verzamel", "guhs:vr_amb_verhaal_kompaskoord", 1, "Smeed het kompaskoord in het Ambachtsgilde van Hoogvads (Smeden 48)",
-     "Forge the compass cord in the Hoogvads Craft Guild (Smithing 48)", plek="npc:z5_leermeester_smeden")],
-  [("npc", ("Kies 'Sterrenzijden kompaskoord' in het Gilde. Smeden niveau 48, het is heel fijn werk. Adem niet te hard, dan waait het weg.",
-            "Choose 'Star-silk Compass Cord' at the Guild. Smithing level 48, it's very fine work. Don't breathe too hard, or it blows away."))],
-  ("Het kompaskoord smeed je in het Ambachtsgilde van Hoogvads (Smeden 48).", "You forge the compass cord in the Hoogvads Craft Guild (Smithing 48)."),
+  ("Smeed het sterrenzijden kompaskoord in de smidse van de Grote Bazaar in Saffraanpoort, bij Leermeester Smidguh Saffraan (Smeden "
+   "niveau 48). Breng het naar Sterrenkijker Twinkel.",
+   "Forge the star-silk compass cord in the smithy of the Grand Bazaar in Saffron Gate, at Mentor Smithguh Saffron (Smithing level 48). "
+   "Bring it to Stargazer Twinkle."),
+  [D("verzamel", "guhs:vr_amb_verhaal_kompaskoord", 1, "Smeed het kompaskoord in de smidse van de Grote Bazaar (Smeden 48)",
+     "Forge the compass cord in the smithy of the Grand Bazaar (Smithing 48)", plek="npc:z6_leermeester_smeden")],
+  [("npc", ("Kies 'Sterrenzijden kompaskoord' in de smidse van de bazaar. Smeden niveau 48, het is heel fijn werk. Adem niet te hard, "
+            "dan waait het weg.",
+            "Choose 'Star-silk Compass Cord' in the bazaar smithy. Smithing level 48, it's very fine work. Don't breathe too hard, or it "
+            "blows away."))],
+  ("Het kompaskoord smeed je in de smidse van de Grote Bazaar in Saffraanpoort (Smeden 48).",
+   "You forge the compass cord in the smithy of the Grand Bazaar in Saffron Gate (Smithing 48)."),
   [("npc", ("Het glinstert als de nacht. Precies zoals op de tekening. Nu kan het kompas weer draaien.",
             "It glitters like the night. Just like in the drawing. Now the compass can turn again.")),
    ("npc", ("Op naar De Verzonken Sterrenwacht. Daar wacht het kompas op zijn koord.", "On to the Sunken Observatory. The compass is waiting there for its cord."))],

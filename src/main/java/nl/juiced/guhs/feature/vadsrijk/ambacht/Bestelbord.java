@@ -125,6 +125,24 @@ public final class Bestelbord {
     /** 1.10.4: an order fits your level up to this many levels above its own (tiers are ~10 levels wide now; was 25). */
     public static final int BOVEN = 16;
 
+    /** 1.10.4: T6 orders only for players who have been in zone 6 (it may still be closed). */
+    static java.util.function.Predicate<ServerPlayer> ZONE6 = p -> nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.hoogste(p) >= 6;
+
+    /** The tier of an order: the material's, the dish's/potion's recipe tier, or the tier of its level (gather/make orders). */
+    static int tier(Bestelling b) {
+        if (b.soort().equals("breng")) {
+            Materialen.Materiaal m = Materialen.ALLE.get(b.wat());
+            if (m != null) {
+                return m.tier();
+            }
+            Recept r = Recepten.van(b.id().substring("breng_".length()));
+            if (r != null) {
+                return r.tier();
+            }
+        }
+        return AmbachtXp.tierVoor(b.level());
+    }
+
     /** The orders this player can do: their level in that ambacht is high enough (never honey before you have a hive). */
     static List<Bestelling> mogelijk(ServerPlayer p) {
         List<Bestelling> l = new ArrayList<>();
@@ -133,7 +151,7 @@ public final class Bestelbord {
             int lv = AmbachtData.level(p, b.ambacht());
             Materialen.Materiaal m = b.soort().equals("breng") ? Materialen.ALLE.get(b.wat()) : null;
             boolean imker = geenKorf && m != null && m.soort() == NodeSoort.KORF;
-            if (lv >= b.level() && lv <= b.level() + BOVEN && !imker) {
+            if (lv >= b.level() && lv <= b.level() + BOVEN && !imker && (tier(b) < 6 || ZONE6.test(p))) {
                 l.add(b);
             }
         }

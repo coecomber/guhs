@@ -37,12 +37,14 @@ public class VadsrijkAmbachtGameTests {
             helper.assertTrue(AmbachtXp.levelVan(AmbachtXp.totaalVoor(l)) == l, "round trip " + l);
         }
         helper.assertTrue(AmbachtXp.levelVan(Long.MAX_VALUE / 4) == AmbachtXp.CAP, "capped");
-        // 1.10.4 tiers: T1 1, T2 12, T3 22, T4 32, T5 40 (T6 48 = zone 6 volgt)
+        // 1.10.4 tiers: T1 1, T2 12, T3 22, T4 32, T5 40, T6 48 (zone 6)
         helper.assertTrue(AmbachtXp.tierVoor(1) == 1 && AmbachtXp.tierVoor(11) == 1 && AmbachtXp.tierVoor(12) == 2 && AmbachtXp.tierVoor(21) == 2
-                && AmbachtXp.tierVoor(22) == 3 && AmbachtXp.tierVoor(32) == 4 && AmbachtXp.tierVoor(40) == 5 && AmbachtXp.tierVoor(60) == 5, "tiers");
-        helper.assertTrue(AmbachtXp.TIER_MIN[6] == 48 && AmbachtXp.tierLevel(2) == 12 && AmbachtXp.tierTop(1) == 11 && AmbachtXp.tierTop(5) == 60, "bands");
+                && AmbachtXp.tierVoor(22) == 3 && AmbachtXp.tierVoor(32) == 4 && AmbachtXp.tierVoor(40) == 5 && AmbachtXp.tierVoor(47) == 5
+                && AmbachtXp.tierVoor(48) == 6 && AmbachtXp.tierVoor(60) == 6, "tiers");
+        helper.assertTrue(AmbachtXp.TIER_MIN[6] == 48 && AmbachtXp.tierLevel(2) == 12 && AmbachtXp.tierTop(1) == 11 && AmbachtXp.tierTop(5) == 47
+                && AmbachtXp.tierTop(6) == 60, "bands");
         helper.assertTrue(AmbachtXp.verzamel(1, 10) == 30 && AmbachtXp.verzamel(1, 16) == 30 && AmbachtXp.verzamel(1, 17) == 15, "half xp 5 levels over the top");
-        helper.assertTrue(AmbachtXp.verzamel(5, 60) == AmbachtXp.VERZAMEL[5], "never half on the highest tier");
+        helper.assertTrue(AmbachtXp.verzamel(6, 60) == AmbachtXp.VERZAMEL[6] && AmbachtXp.verzamel(5, 53) == AmbachtXp.VERZAMEL[5] / 2, "never half on the highest tier (1.10.4: T6; T5 half from 53)");
         // pacing (design "Getallen"): 1 -> 10 ~40 harvests, 1 -> 20 ~250 harvests on T1 (30-40 min at ~8 a minute)
         double h10 = AmbachtXp.totaalVoor(10) / (double) AmbachtXp.VERZAMEL[1], h20 = AmbachtXp.totaalVoor(20) / (double) AmbachtXp.VERZAMEL[1];
         helper.assertTrue(h10 > 35 && h10 < 46, "1->10 harvests " + h10);

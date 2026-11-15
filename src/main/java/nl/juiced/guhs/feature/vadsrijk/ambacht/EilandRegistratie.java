@@ -23,9 +23,10 @@ import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPlekken;
  * meets it (only the public {@link AmbachtPlekken#groep}/{@link AmbachtPlekken#korfGroep}/{@link AmbachtPlekken#werkplaats} API):
  * <ul>
  *   <li>Meester Knutsel, the quest guh of the islet lesson (npc slice NPC on POI {@code ambacht_knutsel});</li>
- *   <li>a master per hut, exactly at its {@code .voor} POI: smid (Smederij), kok (Keuken), vis (Viswinkel), verzamel (Verzamelhuisje);</li>
+ *   <li>a master per hut, exactly at its {@code .voor} POI, looking at the square ({@code ambacht_plein}): smid (Smederij), kok (Keuken),
+ *   vis (Viswinkel), verzamel (Verzamelhuisje);</li>
  *   <li>the gathering groups, all T1 with a fast respawn (20-30 s): Kiezelgroeve (ore), Knuffelbosje (wood), Bloemenwei (herbs),
- *   Bijenhofje (hives), Visvijver + Vissteiger (fish); per-player spots, enough for a few players at once;</li>
+ *   Bijenhofje (hives: the T1 {@code klaverhoning}), Visvijver + Vissteiger (fish); per-player spots, enough for a few players at once;</li>
  *   <li>the islet's info boards ({@code guhs:infobord} without a species): a helpful text by the nearest place ({@link #bordTekst});</li>
  *   <li>and the hub masters of Verzamelen and Vissen in zone 2 (Kandijkom) and zone 3 (Honingtak: Imkerguh Zoemie), like Zwamzoet's.</li>
  * </ul>
@@ -36,6 +37,10 @@ public final class EilandRegistratie {
     }
 
     public static final String KNUTSEL = "meester_knutsel";
+    /** The centre of the islet's square (the hut masters look at it). */
+    public static final String PLEIN = "ambacht_plein";
+    /** The islet's own T1 honey (the Bijenhofje): an alternative ingredient in T1 Koken (pudding, energy potion). */
+    public static final String HONING = "klaverhoning";
     /** Islet respawn (ONTWERP_1104 "Getallen": 20-30 s; elsewhere 60-120 s). */
     public static final int LEEG_MIN = 20, LEEG_MAX = 30;
     /** group id -> its POI (the islet's ".midden" spots). */
@@ -64,11 +69,14 @@ public final class EilandRegistratie {
         AmbachtPlekken.werkplaats("amb_kok_eiland", 1, MEESTERS.get("amb_kok_eiland"), Ambacht.KOKEN, true);
         AmbachtPlekken.werkplaats("amb_vis_eiland", 1, MEESTERS.get("amb_vis_eiland"), Ambacht.VISSEN, true);
         AmbachtPlekken.werkplaats("amb_verzamel_eiland", 1, MEESTERS.get("amb_verzamel_eiland"), Ambacht.VERZAMELEN, true);
+        for (String m : MEESTERS.keySet()) {
+            AmbachtPlekken.kijk(m, PLEIN);   // (they face the square, not the wall of their hut)
+        }
         // the gathering groups (spots in the terrain round each POI, found the soort's default way)
         AmbachtPlekken.groep("eiland_groeve", 1, GROEPEN.get("eiland_groeve"), NodeSoort.ERTS, 1, 10, 16, LEEG_MIN, LEEG_MAX);
         AmbachtPlekken.groep("eiland_bosje", 1, GROEPEN.get("eiland_bosje"), NodeSoort.HOUT, 1, 10, 16, LEEG_MIN, LEEG_MAX);
         AmbachtPlekken.groep("eiland_bloemenwei", 1, GROEPEN.get("eiland_bloemenwei"), NodeSoort.KRUID, 1, 10, 14, LEEG_MIN, LEEG_MAX);
-        AmbachtPlekken.korfGroep("eiland_bijenhofje", 1, GROEPEN.get("eiland_bijenhofje"), 1, "bloesemhoning", 4, 12);
+        AmbachtPlekken.korfGroep("eiland_bijenhofje", 1, GROEPEN.get("eiland_bijenhofje"), 1, HONING, 4, 12);
         AmbachtPlekken.groep("eiland_visvijver", 1, GROEPEN.get("eiland_visvijver"), NodeSoort.VIS, 1, 6, 10, LEEG_MIN, LEEG_MAX);
         AmbachtPlekken.groep("eiland_vissteiger", 1, GROEPEN.get("eiland_vissteiger"), NodeSoort.VIS, 1, 5, 10, LEEG_MIN, LEEG_MAX);
         // zone 2 and 3: a Verzamelen and a Vissen master on the hub square, like Zwamzoet's (Madelief, Dobbertje)

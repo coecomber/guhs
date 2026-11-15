@@ -67,7 +67,7 @@ public final class AmbachtSchermen {
                 } else if (o.bij() != null && o.bij().distSqr(p.blockPosition()) > 12 * 12) {
                     m = "vadsrijk.ambacht.werk.te_ver";
                 } else if (!Werkplaats.magHier(o.npc(), r)) {
-                    m = r.tier() >= 5 ? "vadsrijk.ambacht.werk.gilde" : "vadsrijk.ambacht.werk.gilde4";   // U-AMBACHT2
+                    m = Werkplaats.nietHier(r.tier());   // U-AMBACHT2 (1.10.4: T6 in Saffraanpoort)
                 } else {
                     List<Stat> keuzes = new ArrayList<>();
                     for (String s : a.getStringOr("keuzes", "").split(",")) {
