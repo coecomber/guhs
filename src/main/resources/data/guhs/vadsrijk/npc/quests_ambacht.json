@@ -635,19 +635,19 @@
       "doelen": [
         {
           "soort": "verzamel",
-          "doel": "guhs:vr_amb_wolkenwol",
+          "doel": "guhs:vr_amb_zijdedraad",
           "n": 3,
           "bron": "houd",
           "kans": 0.0,
-          "plek": "poi:amb_z5_wol"
+          "plek": "poi:amb_z6_zijde"
         },
         {
           "soort": "verzamel",
-          "doel": "guhs:vr_amb_hemelzilver",
+          "doel": "guhs:vr_amb_sterrengoud",
           "n": 2,
           "bron": "houd",
           "kans": 0.0,
-          "plek": "poi:amb_z5_erts"
+          "plek": "poi:amb_z6_erts"
         }
       ],
       "beloning": {
@@ -689,7 +689,7 @@
           "n": 1,
           "bron": "",
           "kans": 0.0,
-          "plek": "npc:z5_leermeester_smeden"
+          "plek": "npc:z6_leermeester_smeden"
         }
       ],
       "beloning": {

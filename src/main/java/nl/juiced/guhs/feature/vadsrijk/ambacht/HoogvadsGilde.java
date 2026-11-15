@@ -60,10 +60,16 @@ public final class HoogvadsGilde {
         QuestMotor.EXTRA.computeIfAbsent(npc, k -> new java.util.concurrent.CopyOnWriteArrayList<>()).add(o);
     }
 
-    /** How many Gilde steps exist now: 2 (zones 4 + 5); 4 once zone 6's tier is on (1.10.4: by tier, the cap stays 60). */
+    /**
+     * How many Gilde steps exist now: 2 (zones 4 + 5). 1.10.4: T6 is on, but the steps at 54/60 have no texts yet: they stay off
+     * until they are written ({@link #MET_ZONE6}).
+     */
     public static int stappen() {
-        return AmbachtXp.MAX_TIER >= 6 ? LEVELS.length : 2;
+        return MET_ZONE6 ? LEVELS.length : 2;
     }
+
+    /** The Gilde steps 54/60 (zone 6) are written and switched on. */
+    static final boolean MET_ZONE6 = false;
 
     /** All story steps of an ambacht now (the hub teachers' 5 + the Gilde's). */
     public static int totaal() {

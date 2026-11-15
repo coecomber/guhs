@@ -57,6 +57,10 @@ public final class Brouwsels {
         d("wolken_vadsdrank", 5, 2400, 0, false);
         d("wolken_energiedrank", 5, 0, 300, false);
         d("hemelelixer", 5, 1100, 140, true);
+        // 1.10.4: zone 6 (T6, Het Zijdeland)
+        d("saffraan_vadsdrank", 6, 2900, 0, false);
+        d("saffraan_energiedrank", 6, 0, 350, false);
+        d("sterrenelixer", 6, 1400, 180, true);
     }
 
     private Brouwsels() {

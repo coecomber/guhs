@@ -37,14 +37,29 @@ public final class Werkplaats {
 
     /**
      * U-AMBACHT2 (Hoogvads is the professions capital): T1-T3 recipes work at every workshop; T4 only in Hoogvads' Ambachtsgilde
-     * (the z5_leermeester_* teachers) or Lampionhaven's workshop ({@code z4_werkplaats}); T5 only at the Gilde. {@code npc} null =
-     * the dev command (anywhere).
+     * (the z5_leermeester_* teachers) or Lampionhaven's workshop ({@code z4_werkplaats}); T5 only at the Gilde. 1.10.4: T6 only at
+     * the zone-6 teachers in Saffraanpoort ({@link Zone6Haken#werkplaats}), who can make T4/T5 too. {@code npc} null = the dev
+     * command (anywhere).
      */
     public static boolean magHier(@Nullable String npc, Recept r) {
-        if (r.tier() <= 3 || npc == null || npc.startsWith("z5_leermeester") || npc.equals("z5_gildemeester")) {
+        if (r.tier() <= 3 || npc == null) {
+            return true;
+        }
+        if (Zone6Haken.werkplaats(npc)) {
+            return true;
+        }
+        if (r.tier() >= 6) {
+            return false;
+        }
+        if (npc.startsWith("z5_leermeester") || npc.equals("z5_gildemeester")) {
             return true;
         }
         return r.tier() == 4 && npc.equals("z4_werkplaats");
+    }
+
+    /** The "not here" line of a recipe tier (T4: Gilde or Lampionhaven, T5: Gilde, T6: Saffraanpoort). */
+    public static String nietHier(int tier) {
+        return tier >= 6 ? "vadsrijk.ambacht.werk.zijdeland" : tier >= 5 ? "vadsrijk.ambacht.werk.gilde" : "vadsrijk.ambacht.werk.gilde4";
     }
 
     public static boolean kent(ServerPlayer p, Recept r) {

@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.vadsrijk.ambacht;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Nullable;
 
@@ -64,6 +65,11 @@ public final class AmbachtPlekken {
     public static final List<Werkplaats> WERKPLAATSEN = new ArrayList<>();
     /** 1.10.4: workshop guhs that stand exactly on their POI (the Ambachtseiland huts) instead of in a ring round a hub square. */
     public static final java.util.Set<String> VAST = java.util.concurrent.ConcurrentHashMap.newKeySet();
+    /**
+     * 1.10.4: workshop guh -> the POI (same zone) it looks at when it is placed (the islet's hut masters face the square: {@link #kijk});
+     * without one a guh looks at its hub's centre.
+     */
+    public static final Map<String, String> KIJK = new java.util.concurrent.ConcurrentHashMap<>();
 
     static {
         // ---- zone 1 (T1): Klodderweide herbs, Sporenwoud wood, Druipgrotten ore, ponds + harbour fish; a starter patch at the camp
@@ -241,6 +247,19 @@ public final class AmbachtPlekken {
         return w;
     }
 
+    /** 1.10.4: workshop guh {@code npc} looks at POI {@code poi} of its own zone when it is placed (also after every restart). */
+    public static void kijk(String npc, String poi) {
+        KIJK.put(npc, poi);
+    }
+
+    /** Where workshop guh {@code w} looks: its {@link #KIJK} POI, else its hub's centre (null: not in this map). */
+    @Nullable
+    public static BlockPos kijkNaar(Werkplaats w) {
+        String k = KIJK.get(w.npc());
+        BlockPos b = k == null ? null : plek(w.zone(), k);
+        return b != null ? b : w.anker();
+    }
+
     /** The honey kinds that exist now (one per bee meadow, in order). */
     public static List<String> honingSoorten() {
         List<String> l = new ArrayList<>();
@@ -265,7 +284,7 @@ public final class AmbachtPlekken {
         WERKPLAATSEN.add(new Werkplaats(npc, zone, poi, a));
     }
 
-    /** A POI of zone 1..5 (null: not in this map). */
+    /** A POI of zone 1..6 (null: not in this map). */
     @Nullable
     public static BlockPos plek(int zone, String id) {
         if (id.startsWith("grot_")) {
@@ -277,7 +296,8 @@ public final class AmbachtPlekken {
             case 3 -> Z3WereldPlekken.plek(id);
             case 4 -> nl.juiced.guhs.feature.vadsrijk.zone4.wereld.Z4WereldPlekken.plek(id);   // T-INT
             case 5 -> nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.plek(id);   // U-AMBACHT2
-            default -> null;   // (zone 6 volgt: Zone6Haken)
+            case 6 -> nl.juiced.guhs.feature.vadsrijk.zone6.wereld.Z6WereldPlekken.plek(id);   // 1.10.4: T6 (Zone6Haken)
+            default -> null;
         };
     }
 

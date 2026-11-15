@@ -42,9 +42,9 @@ public class VadsrijkAmbachtZonesGameTests {
                         a.id + " has T" + zone + " spots in zone " + zone);
             }
         }
-        helper.assertTrue(AmbachtPlekken.maxZone() == 5, "book pages go to zone 5");
+        helper.assertTrue(AmbachtPlekken.maxZone() == 6, "book pages go to zone 6 (1.10.4: T6)");
         helper.assertTrue(AmbachtPlekken.GROEPEN.stream().anyMatch(g -> g.zoek() == Zoek.KORAAL && g.soort() == NodeSoort.DUIK), "coral diving spots");
-        helper.assertTrue(AmbachtPlekken.honingSoorten().size() == 7, "3 + 2 + 2 honey kinds: " + AmbachtPlekken.honingSoorten());
+        helper.assertTrue(AmbachtPlekken.honingSoorten().size() == 9, "3 + 2 + 2 + zone 6 + the islet's klaverhoning: " + AmbachtPlekken.honingSoorten());
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
         AmbachtData.voegToe(p, "plekken", "z4_vis_haven");
@@ -267,17 +267,19 @@ public class VadsrijkAmbachtZonesGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void zone6Haken(GameTestHelper helper) {
-        Set<String> ids = new HashSet<>(Materialen.ALLE.keySet());
-        for (Zone6Haken.Materiaal m : Zone6Haken.MATERIALEN) {
-            helper.assertTrue(ids.add(m.id()), "zone-6 material id is new: " + m.id());
+        // 1.10.4: T6 is on (zone 6, Het Zijdeland): its materials, honey and core exist, its groups are active
+        Set<String> ids = new HashSet<>();
+        for (String m : Zone6Haken.MATERIALEN) {
+            helper.assertTrue(ids.add(m) && Materialen.ALLE.containsKey(m) && Materialen.ALLE.get(m).tier() == Zone6Haken.TIER, "zone-6 material: " + m);
         }
-        helper.assertTrue(!Materialen.ALLE.containsKey(Zone6Haken.HONING) && !Materialen.KERNEN.contains(Zone6Haken.KERN), "honey + core are new");
-        for (Zone6Haken.PlekSlot s : Zone6Haken.PLEKKEN) {
-            helper.assertTrue(AmbachtPlekken.groep(s.id()) == null, "spot slot not active yet: " + s.id());
+        helper.assertTrue(Materialen.ALLE.containsKey(Zone6Haken.HONING) && Materialen.KERNEN.contains(Zone6Haken.KERN), "honey + core exist");
+        for (Zone6Haken.Plek s : Zone6Haken.PLEKKEN) {
+            helper.assertTrue(AmbachtPlekken.groep(s.id()) != null, "zone-6 group active: " + s.id());
         }
-        helper.assertTrue(Zone6Haken.CAP == 60 && AmbachtXp.CAP == Zone6Haken.CAP && AmbachtXp.TIER_MIN[6] == 48 && AmbachtXp.VERZAMEL.length > 6,
-                "T6 band ready (from 48, cap stays 60)");
-        helper.assertTrue(HoogvadsGilde.LEVELS.length == 4 && HoogvadsGilde.LEVELS[3] == 60, "Gilde steps 54/60 wait for zone 6");
+        helper.assertTrue(Zone6Haken.CAP == 60 && AmbachtXp.CAP == Zone6Haken.CAP && AmbachtXp.TIER_MIN[6] == 48 && AmbachtXp.VERZAMEL.length > 6
+                && AmbachtXp.MAX_TIER == 6, "T6 band on (from 48, cap stays 60)");
+        helper.assertTrue(HoogvadsGilde.LEVELS.length == 4 && HoogvadsGilde.LEVELS[3] == 60 && HoogvadsGilde.stappen() == 2,
+                "Gilde steps 54/60 still wait for their texts");
         helper.succeed();
     }
 }

@@ -97,8 +97,10 @@ public final class AmbachtVerhaal {
                 Recepten.ingredient(4, "roze_koraal"), Recepten.ingredient(2, "zeesponsje"));
         Recepten.verhaalRecept("wolkendekentje", Ambacht.SMEDEN, 40, 5, () -> new ItemStack(ITEMS.get("wolkendekentje").get()),
                 Recepten.ingredient(5, "wolkenwol"));
-        Recepten.verhaalRecept("kompaskoord", Ambacht.SMEDEN, 48, 5, () -> new ItemStack(ITEMS.get("kompaskoord").get()),
-                Recepten.ingredient(3, "wolkenwol"), Recepten.ingredient(2, "hemelzilver"));
+        // 1.10.4: zone 6 has its own T6 materials now (Zone6Haken): silk thread from the mulberry trees + star gold, at the smidse of
+        // Saffraanpoort's bazaar (T6 recipes: only at the zone-6 teachers)
+        Recepten.verhaalRecept("kompaskoord", Ambacht.SMEDEN, 48, 6, () -> new ItemStack(ITEMS.get("kompaskoord").get()),
+                Recepten.ingredient(3, "zijdedraad"), Recepten.ingredient(2, "sterrengoud"));
         // Meester Knutsel's lesson: the Klein Vadsdrankje (the only potion the shops still sell) is a Koken T1 recipe too
         Recepten.WAREN.put("klein_vadsdrankje", () -> new ItemStack(EcoSpul.KLEIN_VADSDRANKJE.get()));
         Recepten.ALLE.put("klein_vadsdrankje", new Recepten.Recept("klein_vadsdrankje", Ambacht.KOKEN, 1, 1,
@@ -110,6 +112,7 @@ public final class AmbachtVerhaal {
         ITEMS_REG.register(modBus);
         recepten();
         EilandRegistratie.registreer();
+        Zone6Haken.registreer();   // 1.10.4: the T6 gathering groups of zone 6
         plekken();
         MateriaalTas.GEGEVEN.add(AmbachtVerhaal::verzameld);
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
@@ -141,6 +144,8 @@ public final class AmbachtVerhaal {
         poi("amb_z4_duik", 4, "duiksteiger");
         poi("amb_z5_wol", 5, "staartpark_prieel");
         poi("amb_z5_erts", 5, "z5w_noordvin");
+        poi("amb_z6_zijde", 6, "palmenkloven_moerbei");
+        poi("amb_z6_erts", 6, "zoutgrot_mijn");
     }
 
     private static void poi(String id, int zone, String wereldPoi) {

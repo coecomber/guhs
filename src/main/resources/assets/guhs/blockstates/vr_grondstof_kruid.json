@@ -31,10 +31,10 @@
       "model": "minecraft:block/dead_bush"
     },
     "tier=6,vol=true": {
-      "model": "minecraft:block/lily_of_the_valley"
+      "model": "minecraft:block/orange_tulip"
     },
     "tier=6,vol=false": {
-      "model": "minecraft:block/dead_bush"
+      "model": "minecraft:block/short_dry_grass"
     }
   }
 }

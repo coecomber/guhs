@@ -70,7 +70,7 @@ public final class Maatwerk {
     /** 1.10.4: how much a made piece of jewellery is above the zone's best drop of its slot: 100 % Vadsigheid / 0 % Vadsigheid. */
     public static final double BOVEN_BUIT = 0.10, BOVEN_BUIT_MIN = 0.05;
     /** The gear level of each tier's recipes (U-AMBACHT2: T4 = the zone-4 sets' level 50, T5 = zone 5's 56). */
-    public static final int[] GEAR_LEVEL = {0, 15, 30, 45, 50, 56};
+    public static final int[] GEAR_LEVEL = {0, 15, 30, 45, 50, 56, Zone6Haken.GEAR_LEVEL};
 
     /** What a made piece remembers: the chosen stats and the Meesterwerk property ("" = none). */
     public record Info(List<String> gekozen, String eigenschap, boolean meesterwerk) {
@@ -161,9 +161,11 @@ public final class Maatwerk {
         // (the set's own Verdediging/Vads extras counted in: schorspantser 26 + 8 Verdediging = 34, ...)
         // U-AMBACHT2: T4 = the zone-4 Schelpenset (helm 21+4, pantser 34+8, broek 29, laarzen 17), T5 = the zone-5 Wolkwachtset
         // (helm 20+6, kuras 33+10, beenstukken 28, laarzen 17+5); weapons on the zone-4/5 DPS lines (6.8/1.36, 6.9/1.38)
-        double[][] helm = {{}, {4, 10}, {9, 28}, {21, 46}, {25, 64}, {26, 58}}, borst = {{}, {6, 16}, {18, 46}, {34, 76}, {42, 104}, {43, 96}},
-                broek = {{}, {5, 13}, {12, 46}, {22, 64}, {29, 88}, {28, 82}}, voet = {{}, {3, 9}, {6, 24}, {19, 60}, {17, 56}, {22, 52}};
-        double[][] wapen = {{}, {5.5, 1.1}, {5.95, 1.19}, {6.35, 1.27}, {6.8, 1.36}, {6.9, 1.38}};
+        // (1.10.4: a T6 entry too, a copy of T5: the gear is not made any more, its base types only exist so every tier has them)
+        double[][] helm = {{}, {4, 10}, {9, 28}, {21, 46}, {25, 64}, {26, 58}, {26, 58}},
+                borst = {{}, {6, 16}, {18, 46}, {34, 76}, {42, 104}, {43, 96}, {43, 96}},
+                broek = {{}, {5, 13}, {12, 46}, {22, 64}, {29, 88}, {28, 82}, {28, 82}}, voet = {{}, {3, 9}, {6, 24}, {19, 60}, {17, 56}, {22, 52}, {22, 52}};
+        double[][] wapen = {{}, {5.5, 1.1}, {5.95, 1.19}, {6.35, 1.27}, {6.8, 1.36}, {6.9, 1.38}, {6.9, 1.38}};
         for (int t = 1; t < GEAR_LEVEL.length; t++) {
             String r = Klassen.RIDDER, j = Klassen.JAGER, m = Klassen.MAGIER;
             wapen("zwaard", t, r, Element.ROZE, wapen[t], Stats.van(Stat.KRACHT, 2.0 * t), Stats.van(Stat.KRACHT, 0.35));
@@ -180,7 +182,8 @@ public final class Maatwerk {
                 case 2 -> 0.62;
                 case 3 -> 1.0;
                 case 4 -> 1.18;
-                default -> 1.36;
+                case 5 -> 1.36;
+                default -> 1.5;   // 1.10.4: T6 (Maatwerk.normaliseer puts it ~10 % above the zone-6 drops anyway)
             };
             sieraad("ring", t, Stats.van(Stat.KRITIEK, 4 * f, Stat.KRITIEKSCHADE, 10 * f));
             sieraad("ketting", t, Stats.van(Stat.VADS, 50 * f, Stat.VERDEDIGING, 12 * f));

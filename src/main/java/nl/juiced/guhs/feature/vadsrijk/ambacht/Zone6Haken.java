@@ -3,19 +3,21 @@ package nl.juiced.guhs.feature.vadsrijk.ambacht;
 import java.util.List;
 
 /**
- * ZONE 6 VOLGT. The data hooks for tier T6 (zone 6 "Het Zijdeland"; 1.10.4: T6 from ambacht level 48, the cap stays 60; being designed now: guhs1100-avontuur/ZONE6_PLAN.md
- * once it exists). Nothing here is switched on yet: no items are registered, no spots are scanned, no recipes exist. When zone 6
- * lands (its POIs in a {@code Z6WereldPlekken}), the steps are:
- * <ol>
- *   <li>register {@link #MATERIALEN} in {@link Materialen} (the same {@code m}/{@code v} lines; names are already in the lang files,
- *   written by tools/features/vadsrijk_u_ambacht2.py), {@link #HONING} as an Imkeren material and {@link #KERN} in
- *   {@code Materialen.KERNEN};</li>
- *   <li>add {@code case 6} to {@link AmbachtPlekken#plek} and turn the {@link #PLEKKEN} slots into groups (fill in the real POI ids);</li>
- *   <li>{@link AmbachtXp#MAX_TIER} = 6 (the tier band T6 48-60 and its xp are already there; the cap stays {@link #CAP});</li>
- *   <li>T6 recipes (Maatwerk gear level {@link #GEAR_LEVEL}, Meesterwerk with the {@link #KERN}), the Gilde story step at lv 65/70
- *   ({@link HoogvadsGilde#LEVELS} already lists them as "zone 6 volgt"), Bestelbord orders follow by themselves.</li>
- * </ol>
- * The gametest {@code zone6Haken} checks that none of these ids collide with what exists now.
+ * 1.10.4: tier T6 is ON (zone 6 "Het Zijdeland"; T6 from ambacht level 48, the cap stays 60). Everything of the crafts that lives in
+ * zone 6, in one place, as data + registrations through the public API ({@link AmbachtPlekken#groep}/{@link AmbachtPlekken#korfGroep}),
+ * so the zone-6 story/world slices never meet it:
+ * <ul>
+ *   <li>the T6 materials ({@link #MATERIALEN}: registered in {@link Materialen}, names in tools/features/vadsrijk_u_ambacht2.py), the
+ *   honey {@link #HONING} and the boss core {@link #KERN} (in {@code Materialen.KERNEN}; zone-6 bosses drop it, 5 splinters make one);</li>
+ *   <li>the gathering groups ({@link #PLEKKEN}) at natural spots by the two towns and along the caravan route: the herb gardens of
+ *   Rozenkloof and the Kanaalwijk of Saffraanpoort, the mulberry trees (silk) and palm grove of the Palmenkloven, the Duinput and the
+ *   Moederoase palms, the Zingende Zoutgrot, the salt rocks and the mesas of the Ruinedal; fish in the canals, under the Saffraanbrug,
+ *   in the Moederoase and at the Zeemond; a bee meadow in the Paradijstuin;</li>
+ *   <li>the workshops are the zone-6 teachers that already stand in Saffraanpoort (the smidse in the Grote Bazaar, the kitchen of the
+ *   karavanserai: {@code z6_leermeester_*}, t-z6verhaal); T6 recipes are made only there ({@link Werkplaats#magHier}).</li>
+ * </ul>
+ * Group names: {@code vadsrijk.ambacht.groep.<id>} (tools/features/vadsrijk_ambacht_t6.py). The Gilde story steps 54/60 still wait
+ * ({@link HoogvadsGilde#stappen}: no texts yet).
  */
 public final class Zone6Haken {
     /** The level cap with zone 6 in (1.10.4: stays 60). */
@@ -23,42 +25,59 @@ public final class Zone6Haken {
     public static final int TIER = 6;
     /** The Maatwerk gear level of T6 (zone 6 starts at 60). */
     public static final int GEAR_LEVEL = 62;
-
-    /** A T6 material that will exist: id, spot kind, colour, fish "wanneer" ("" for non-fish). */
-    public record Materiaal(String id, NodeSoort soort, int kleur, String wanneer) {
-    }
-
-    /** One gathering-spot slot: group id, spot kind, how it is found, and a placeholder POI name (the real id comes with the map). */
-    public record PlekSlot(String id, NodeSoort soort, AmbachtPlekken.Zoek zoek, String poiVoorlopig) {
-    }
-
-    /** Zone 6 volgt: the T6 materials (Zijdeland: rose dunes, oases, caravans, bazaars, floating dome palaces). */
-    public static final List<Materiaal> MATERIALEN = List.of(
-            new Materiaal("sterrengoud", NodeSoort.ERTS, 0xFFD870, ""),
-            new Materiaal("rozenzandsteen", NodeSoort.ERTS, 0xF0A8A0, ""),
-            new Materiaal("dadelpalmhout", NodeSoort.HOUT, 0xC89A6A, ""),
-            new Materiaal("wierookhars", NodeSoort.HOUT, 0xE8C8A0, ""),
-            new Materiaal("saffraan", NodeSoort.KRUID, 0xFF8A2A, ""),
-            new Materiaal("zijdedraad", NodeSoort.KRUID, 0xFFE8F4, ""),
-            new Materiaal("oasekarper", NodeSoort.VIS, 0x4AC8B8, ""),
-            new Materiaal("sterrenschubvis", NodeSoort.VIS, 0x3A3A8A, "nacht"),
-            new Materiaal("zandaal", NodeSoort.VIS, 0xD8B888, "regen"));
-    /** Zone 6 volgt: the zone's honey kind (date palms and saffron fields). */
+    /** The T6 materials (Materialen: ore, wood + resin, herb + fibre, three fish). */
+    public static final List<String> MATERIALEN = List.of("sterrengoud", "dadelpalmhout", "wierookhars", "saffraan", "zijdedraad", "oasekarper",
+            "sterrenschubvis", "zandaal");
+    /** The zone's honey kind (the Paradijstuin of Saffraanpoort). */
     public static final String HONING = "saffraanhoning";
-    /** Zone 6 volgt: the boss core of zone 6 (Meesterwerk T6). */
+    /** The boss core of zone 6 (Meesterwerk T6). */
     public static final String KERN = "sterrenkern";
-    /** Zone 6 volgt: the spot slots (one oasis city + dunes + the caravan route; placeholder POI names). */
-    public static final List<PlekSlot> PLEKKEN = List.of(
-            new PlekSlot("z6_pluk_saffraanveld", NodeSoort.KRUID, AmbachtPlekken.Zoek.GROND, "saffraanveld"),
-            new PlekSlot("z6_pluk_terrastuin", NodeSoort.KRUID, AmbachtPlekken.Zoek.GROND, "saffraanpoort_terrastuin"),
-            new PlekSlot("z6_hout_oase", NodeSoort.HOUT, AmbachtPlekken.Zoek.BOOM, "moederoase"),
-            new PlekSlot("z6_hout_palmen", NodeSoort.HOUT, AmbachtPlekken.Zoek.BOOM, "palmenoase"),
-            new PlekSlot("z6_mijn_rozenkloof", NodeSoort.ERTS, AmbachtPlekken.Zoek.STEEN, "rozenkloof"),
-            new PlekSlot("z6_mijn_duinen", NodeSoort.ERTS, AmbachtPlekken.Zoek.STEEN, "sterrenduinen"),
-            new PlekSlot("z6_vis_kanaal", NodeSoort.VIS, AmbachtPlekken.Zoek.WATER, "saffraanpoort_kanaal"),
-            new PlekSlot("z6_vis_oase", NodeSoort.VIS, AmbachtPlekken.Zoek.WATER, "moederoase"),
-            new PlekSlot("z6_korf_dadeltuin", NodeSoort.KORF, AmbachtPlekken.Zoek.BLOEM, "dadeltuin"));
+
+    /** One gathering group: id, spot kind, POI of zone 6 (Z6WereldPlekken), spots, radius. */
+    public record Plek(String id, NodeSoort soort, String poi, int aantal, int straal) {
+    }
+
+    /** The gathering groups of zone 6 (T6, the default 60-120 s respawn). */
+    public static final List<Plek> PLEKKEN = List.of(
+            // herbs: saffron and silk thread (the silk worms live in the mulberry trees of the Palmenkloven)
+            new Plek("z6_pluk_rozenkloof", NodeSoort.KRUID, "rozenkloof_tuin_1", 6, 20),
+            new Plek("z6_pluk_kanaalwijk", NodeSoort.KRUID, "kanaalwijk_pluk", 6, 24),
+            new Plek("z6_pluk_moerbei", NodeSoort.KRUID, "palmenkloven_moerbei", 8, 36),
+            // wood: date palms (and their incense resin)
+            new Plek("z6_hout_palmenbos", NodeSoort.HOUT, "palmenkloven_palmenbos", 8, 36),
+            new Plek("z6_hout_duinput", NodeSoort.HOUT, "duinput", 6, 24),
+            new Plek("z6_hout_oase", NodeSoort.HOUT, "moederpalm", 8, 40),
+            // ore: star gold in the salt cave, the salt rocks and the mesas
+            new Plek("z6_mijn_zoutgrot", NodeSoort.ERTS, "zoutgrot_mijn", 8, 20),
+            new Plek("z6_mijn_zoutrots", NodeSoort.ERTS, "uitkijk_zoutrots", 6, 30),
+            new Plek("z6_mijn_mesa", NodeSoort.ERTS, "uitkijk_mesa", 6, 30),
+            // fish
+            new Plek("z6_vis_kanaal", NodeSoort.VIS, "kanaalwijk_brug", 6, 24),
+            new Plek("z6_vis_saffraanbrug", NodeSoort.VIS, "saffraanbrug", 5, 28),
+            new Plek("z6_vis_oase", NodeSoort.VIS, "moeder_bron", 6, 36),
+            new Plek("z6_vis_zeemond", NodeSoort.VIS, "rozenkloof_zeemond", 5, 28));
+    /** The bee meadow of zone 6. */
+    public static final String KORF_GROEP = "z6_korf_paradijstuin", KORF_POI = "saffraanpoort_paradijstuin";
+
+    private static boolean klaar;
 
     private Zone6Haken() {
+    }
+
+    /** Adds the zone-6 gathering groups (once, at registration, before players join). */
+    static synchronized void registreer() {
+        if (klaar) {
+            return;
+        }
+        klaar = true;
+        for (Plek p : PLEKKEN) {
+            AmbachtPlekken.groep(p.id(), 6, p.poi(), p.soort(), TIER, p.aantal(), p.straal(), AmbachtPlekken.LEEG_MIN, AmbachtPlekken.LEEG_MAX);
+        }
+        AmbachtPlekken.korfGroep(KORF_GROEP, 6, KORF_POI, TIER, HONING, 4, 36);
+    }
+
+    /** Is this one of the zone-6 workshops (the teachers in Saffraanpoort)? */
+    public static boolean werkplaats(String npc) {
+        return npc.startsWith("z6_leermeester");
     }
 }

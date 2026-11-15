@@ -131,6 +131,9 @@ public final class AmbachtRegistry {
 
     /** The boss core of a boss at this level and place (zone 5 above zone 4: same x/z, from y 118 up). */
     static String kernVoor(int lv, double x, double y, double z) {
+        if (nl.juiced.guhs.feature.vadsrijk.zone6.wereld.Z6WereldPlekken.inZone6(x, z)) {
+            return "sterrenkern";   // 1.10.4: zone 6
+        }
         if (nl.juiced.guhs.feature.vadsrijk.zone5.wereld.Z5WereldPlekken.inZone5(x, y, z)) {
             return "wolkkern";
         }
@@ -144,7 +147,7 @@ public final class AmbachtRegistry {
     static long waarde(ItemStack s) {
         Materialen.Materiaal m = Materialen.van(s);
         if (m != null) {
-            long[] t = {60, 3, 8, 15, 25, 38, 52};   // (rare, T1..T5, T6 zone 6 volgt)
+            long[] t = {60, 3, 8, 15, 25, 38, 52};   // (rare, T1..T6)
             return Math.round(t[Math.min(t.length - 1, m.tier())] * (1 + 0.5 * Materialen.kwaliteit(s)));
         }
         if (s.getItem() instanceof Eten.EtenItem e) {

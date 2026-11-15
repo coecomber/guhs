@@ -789,7 +789,8 @@ class Bron:
                     opties = re.findall(r'"([a-z_]+)"', im[2])
                     if not opties:
                         lijst = im[2].strip()
-                        naam = {"VIS1": "vis (tier 1)", "VIS2": "vis (tier 2)", "VIS3": "vis (tier 3)", "HONING": "honing"}.get(lijst, lijst.lower())
+                        naam = {"VIS1": "vis (tier 1)", "VIS2": "vis (tier 2)", "VIS3": "vis (tier 3)", "HONING": "honing",
+                                "VIS1_HONING": "vis (tier 1) / klaverhoning", "VIS6": "vis (tier 6)"}.get(lijst, lijst.lower())
                     else:
                         naam = " / ".join(self.t("item.guhs.vr_amb_" + o) or self.t("item.guhs.vr_" + o) or o.replace("_", " ") for o in opties)
                     ingr.append([int(im[1]), naam])

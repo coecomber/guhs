@@ -31,10 +31,10 @@
       "model": "guhs:block/vr_grondstof_erts_t5_leeg"
     },
     "tier=6,vol=true": {
-      "model": "guhs:block/vr_grondstof_erts_t5_vol"
+      "model": "guhs:block/vr_grondstof_erts_t6_vol"
     },
     "tier=6,vol=false": {
-      "model": "guhs:block/vr_grondstof_erts_t5_leeg"
+      "model": "guhs:block/vr_grondstof_erts_t6_leeg"
     }
   }
 }

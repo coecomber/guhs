@@ -1,16 +1,16 @@
 """
 1.10.4 "Grondstoffen zie je nu echt": the real, shared gathering blocks of Het Vadsrijk (Java: feature/vadsrijk/ambacht/GrondstofBlok
-+ Grondstoffen). One block per spot kind (vr_grondstof_erts/hout/kruid/vis/duik; hives stay drawn stands), properties tier 1..6 (6 =
-the T5 look until zone 6), vol (full / empty) and waterlogged (fishing + dive spots; not in the variant keys).
++ Grondstoffen). One block per spot kind (vr_grondstof_erts/hout/kruid/vis/duik; hives stay drawn stands), properties tier 1..6 (1.10.4: T6 =
+zone 6, Het Zijdeland, its own look), vol (full / empty) and waterlogged (fishing + dive spots; not in the variant keys).
 
 Looks per tier (full -> empty):
   - erts (an ore vein in the floor rock, the mod's knuffel ores): T1 ijzererts (Pluisijzer), T2 diamanterts (Kandijzilver),
-    T3 kopererts (Amberkoper), T4 gouderts (Lampionbrons), T5 a white-blue recolour (Hemelzilver); empty = the same rock with the
-    ore picked out (dark dimples);
-  - hout (an upright chopping stump beside the tree): T1 zwamsteel, T2 spruce, T3 dark oak, T4 bamboo, T5 pale oak; empty = a low
-    cut stump with the stripped rings on top;
+    T3 kopererts (Amberkoper), T4 gouderts (Lampionbrons), T5 a white-blue recolour (Hemelzilver), T6 Sterrengoud: rose sandstone
+    with gold flecks and white star glints; empty = the same rock with the ore picked out (dark dimples);
+  - hout (an upright chopping stump beside the tree): T1 zwamsteel, T2 spruce, T3 dark oak, T4 bamboo, T5 pale oak, T6 jungle wood
+    (the date palm); empty = a low cut stump with the stripped rings on top;
   - kruid (a bush on the grass): T1 flowering azalea -> azalea, T2 sweet berries -> bare berry bush, T3 firefly bush (glows) -> dead
-    bush, T4 torchflower -> its sprout, T5 lily of the valley -> dead bush;
+    bush, T4 torchflower -> its sprout, T5 lily of the valley -> dead bush, T6 orange tulip (saffron) -> short dry grass;
   - vis (a pink bobber in ripples on the water) -> calm water (nothing);
   - duik (brain coral on the sea floor) -> dead brain coral.
 
@@ -26,13 +26,15 @@ A = os.path.join(R, "assets", "guhs")
 TEX = os.path.join(A, "textures", "block", "vr_grondstof")
 T = "guhs:block/vr_grondstof/"
 
-ERTS = {1: "ijzererts_knuffel", 2: "diamanterts_knuffel", 3: "kopererts_knuffel", 4: "gouderts_knuffel", 5: None}
+ERTS = {1: "ijzererts_knuffel", 2: "diamanterts_knuffel", 3: "kopererts_knuffel", 4: "gouderts_knuffel", 5: None, 6: None}
+TIERS = 6
 HOUT = {  # tier: (side, top (full), top (empty: the cut))
     1: ("minecraft:block/mushroom_stem", "minecraft:block/mushroom_block_inside", "minecraft:block/mushroom_block_inside"),
     2: ("minecraft:block/spruce_log", "minecraft:block/spruce_log_top", "minecraft:block/stripped_spruce_log_top"),
     3: ("minecraft:block/dark_oak_log", "minecraft:block/dark_oak_log_top", "minecraft:block/stripped_dark_oak_log_top"),
     4: ("minecraft:block/bamboo_block", "minecraft:block/bamboo_block_top", "minecraft:block/stripped_bamboo_block_top"),
     5: ("minecraft:block/pale_oak_log", "minecraft:block/pale_oak_log_top", "minecraft:block/stripped_pale_oak_log_top"),
+    6: ("minecraft:block/jungle_log", "minecraft:block/jungle_log_top", "minecraft:block/stripped_jungle_log_top"),
 }
 KRUID = {  # tier: (full vanilla model, empty vanilla model)
     1: ("minecraft:block/flowering_azalea", "minecraft:block/azalea"),
@@ -40,6 +42,7 @@ KRUID = {  # tier: (full vanilla model, empty vanilla model)
     3: ("minecraft:block/firefly_bush", "minecraft:block/dead_bush"),
     4: ("minecraft:block/torchflower", "minecraft:block/torchflower_crop_stage1"),
     5: ("minecraft:block/lily_of_the_valley", "minecraft:block/dead_bush"),
+    6: ("minecraft:block/orange_tulip", "minecraft:block/short_dry_grass"),
 }
 SOORTEN = ("erts", "hout", "kruid", "vis", "duik")
 
@@ -83,9 +86,20 @@ def _erts_masker(im):
     return m
 
 
-def leeg_erts(im):
+def rozensteen(im):
+    """The plain knuffelsteen tinted to the rose sandstone of the Zijdeland (zone 6): warm pink, the same grain."""
+    uit = im.copy()
+    for y in range(16):
+        for x in range(16):
+            r, g, b, a = im.getpixel((x, y))
+            v = (r + g + b) / 3 / 255
+            uit.putpixel((x, y), (min(255, int(150 + 100 * v)), min(255, int(95 + 95 * v)), min(255, int(100 + 90 * v)), a))
+    return uit
+
+
+def leeg_erts(im, basis=None):
     """The same rock with the ore picked out: every ore pixel becomes a shadowed dimple in the plain knuffelsteen."""
-    basis = _png("knuffelsteen")
+    basis = basis or _png("knuffelsteen")
     uit = basis.copy()
     m = _erts_masker(im)
     for (x, y) in m:
@@ -104,6 +118,19 @@ def hemelzilver(im):
         v = (px[0] + px[1] + px[2]) / 3 / 255
         glans = (x * 7 + y * 3) % 9 == 0
         c = (255, 255, 255) if glans else (int(90 + 110 * v), int(140 + 90 * v), int(215 + 40 * v))
+        uit.putpixel((x, y), (*[min(255, k) for k in c], 255))
+    return uit
+
+
+def sterrengoud(im):
+    """T6 Sterrengoud: the iron vein as warm gold flecks with white star glints, in rose sandstone (zone 6)."""
+    m = _erts_masker(im)
+    uit = rozensteen(_png("knuffelsteen"))
+    for (x, y) in m:
+        px = im.getpixel((x, y))
+        v = (px[0] + px[1] + px[2]) / 3 / 255
+        ster = (x * 5 + y * 7) % 11 == 0
+        c = (255, 255, 240) if ster else (int(215 + 40 * v), int(160 + 70 * v), int(40 + 50 * v))
         uit.putpixel((x, y), (*[min(255, k) for k in c], 255))
     return uit
 
@@ -146,9 +173,9 @@ def stronk(side, top, hoogte):
 
 def modellen():
     mod, bs = {}, {}
-    for tier in range(1, 6):
+    for tier in range(1, TIERS + 1):
         # ore: cube_all
-        vol = f"guhs:block/{ERTS[tier]}" if ERTS[tier] else f"{T}erts_t5"
+        vol = f"guhs:block/{ERTS[tier]}" if ERTS[tier] else f"{T}erts_t{tier}"
         mod[f"vr_grondstof_erts_t{tier}_vol"] = {"parent": "minecraft:block/cube_all", "textures": {"all": vol}}
         mod[f"vr_grondstof_erts_t{tier}_leeg"] = {"parent": "minecraft:block/cube_all", "textures": {"all": f"{T}erts_t{tier}_leeg"}}
         side, top, snee = HOUT[tier]
@@ -173,7 +200,7 @@ def modellen():
     for s in SOORTEN:
         v = {}
         for tier in range(1, 7):
-            tt = min(5, tier)
+            tt = min(TIERS, tier)
             for vol in (True, False):
                 w = "vol" if vol else "leeg"
                 if s == "kruid":   # (the vanilla plant models themselves; 26.1 picks the cutout layer from the texture)
@@ -192,10 +219,13 @@ def modellen():
 def texturen():
     tex = {}
     for tier, naam in ERTS.items():
-        bron = _png(naam) if naam else hemelzilver(_png("ijzererts_knuffel"))
-        if naam is None:
-            tex["erts_t5"] = bron
-        tex[f"erts_t{tier}_leeg"] = leeg_erts(bron)
+        if naam:
+            bron = _png(naam)
+        else:
+            bron = (sterrengoud if tier == 6 else hemelzilver)(_png("ijzererts_knuffel"))
+            tex[f"erts_t{tier}"] = bron
+        # (T6: the vein mask comes from the iron ore it was painted on; the empty rock is rose sandstone)
+        tex[f"erts_t{tier}_leeg"] = leeg_erts(_png("ijzererts_knuffel"), rozensteen(_png("knuffelsteen"))) if tier == 6 else leeg_erts(bron)
     tex["rimpel"] = rimpels()
     tex["dobber"] = dobber()
     return tex

@@ -111,8 +111,10 @@ public class WerkplaatsScherm extends EcoScherm {
             y += 20;
         }
         if (!r.getBooleanOr("hier", true)) {
-            // U-AMBACHT2: T4/T5 recipes are made in Hoogvads' Ambachtsgilde (T4 also in Lampionhaven)
-            g.text(font, Component.translatable(r.getIntOr("tier", 1) >= 5 ? "vadsrijk.ambacht.werk.gilde" : "vadsrijk.ambacht.werk.gilde4"), x, y + 1, ROOD, false);
+            // U-AMBACHT2: T4/T5 recipes are made in Hoogvads' Ambachtsgilde (T4 also in Lampionhaven); 1.10.4: T6 in Saffraanpoort
+            int tr = r.getIntOr("tier", 1);
+            g.text(font, Component.translatable(tr >= 6 ? "vadsrijk.ambacht.werk.zijdeland" : tr >= 5 ? "vadsrijk.ambacht.werk.gilde"
+                    : "vadsrijk.ambacht.werk.gilde4"), x, y + 1, ROOD, false);
             y += 11;
         }
         String soort = r.getStringOr("soort", "");

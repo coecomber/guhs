@@ -145,14 +145,14 @@ public class VadsrijkAmbachtVerhaalGameTests {
         helper.succeed();
     }
 
-    /** Every gathering step's materials come from a gathering group of that zone at that tier (zone 6: Hoogvads, no T6 yet). */
+    /** Every gathering step's materials come from a gathering group of that zone at that tier (1.10.4: zone 6 too, T6). */
     @GuhTest(template = "empty", batch = BATCH)
     public static void materialenTeHalen(GameTestHelper helper) {
         for (AmbachtVerhaal.Keten k : AmbachtVerhaal.KETENS) {
             if (k.id().equals("les")) {
                 continue;
             }
-            int zone = Math.min(5, k.zone());   // (zone 6 has no gathering spots yet: Zone6Haken)
+            int zone = k.zone();
             Quest q = Quests.van(k.quests().get(0));
             for (Quest.Doel d : q.doelen()) {
                 helper.assertTrue(d.type() == Quest.Doel.Type.VERZAMEL && Questlog.HOUD.equals(d.bron()), q.id() + ": materials kept for the next step");

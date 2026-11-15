@@ -63,7 +63,8 @@ public final class AmbachtBoek {
                 case 2 -> "minecraft:amethyst_shard";
                 case 3 -> "minecraft:honeycomb";
                 case 4 -> "minecraft:brain_coral";
-                default -> "minecraft:feather";
+                case 5 -> "minecraft:feather";
+                default -> "minecraft:string";   // 1.10.4: zone 6 (Het Zijdeland)
             }, d));
         }
         List<Ding> vissen = new ArrayList<>(), honing = new ArrayList<>(), recepten = new ArrayList<>();

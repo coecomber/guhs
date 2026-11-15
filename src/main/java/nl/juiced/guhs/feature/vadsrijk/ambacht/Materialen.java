@@ -33,8 +33,8 @@ import nl.juiced.guhs.Guhs;
 /**
  * The gathered materials (items {@code guhs:vr_amb_<id>}, stack 64, so they sell as stacks on the market) with a quality
  * (component {@code guhs:vr_amb_kwaliteit}: 0 gewoon, 1 vadsig, 2 extra vadsig; only equal qualities stack), the boss cores
- * ({@code vr_amb_kern_<zone>} + the kernsplinter) and the weekly Ambachtskist. Tiers follow the zones (T1 zone 1 ... T5 zone 5;
- * T6 = zone 6 volgt, {@link Zone6Haken}); tier 0 = a rare one from a glittering spot. 1.10.4: every material has a spot kind
+ * ({@code vr_amb_kern_<zone>} + the kernsplinter) and the weekly Ambachtskist. Tiers follow the zones (T1 zone 1 ... T6 zone 6,
+ * 1.10.4: {@link Zone6Haken}); tier 0 = a rare one from a glittering spot. 1.10.4: every material has a spot kind
  * ({@link NodeSoort}); its ambacht follows from that. Fish "wanneer": "" always, "nacht", "regen",
  * "duik" (coral diving spots only, not a fish). Names/flavour: {@code item.guhs.vr_amb_<id>(.uitleg)}.
  */
@@ -140,13 +140,24 @@ public final class Materialen {
         m("duinhoning", NodeSoort.KORF, 4, 0xF0D8A0);
         m("wolkenhoning", NodeSoort.KORF, 5, 0xFFF8F0);
         m("hemelhoning", NodeSoort.KORF, 5, 0xFFE070);
+        // ---- 1.10.4: zone 6 (T6, Het Zijdeland; spots: Zone6Haken) and the islet's T1 honey (EilandRegistratie: the Bijenhofje) -------
+        m("sterrengoud", NodeSoort.ERTS, 6, 0xFFD870);
+        m("dadelpalmhout", NodeSoort.HOUT, 6, 0xC89A6A);
+        m("wierookhars", NodeSoort.HOUT, 6, 0xE8C8A0);
+        m("saffraan", NodeSoort.KRUID, 6, 0xFF8A2A);
+        m("zijdedraad", NodeSoort.KRUID, 6, 0xFFE8F4);
+        v("oasekarper", 6, 0x4AC8B8, "");
+        v("sterrenschubvis", 6, 0x3A3A8A, "nacht");
+        v("zandaal", 6, 0xD8B888, "regen");
+        m("saffraanhoning", NodeSoort.KORF, 6, 0xFF9A2A);
+        m("klaverhoning", NodeSoort.KORF, 1, 0xFFE89A);
     }
 
     /**
      * The boss cores (Meesterwerk, index = tier - 1) and their splinter (5 = 1 core at the smidse). U-AMBACHT2: Lampionkern (zone-4
-     * bosses), Wolkkern (zone-5 bosses); zone 6 volgt ({@link Zone6Haken#KERN}).
+     * bosses), Wolkkern (zone-5 bosses); 1.10.4: Sterrenkern (zone-6 bosses).
      */
-    public static final List<String> KERNEN = List.of("zwamkern", "splinterkern", "wortelkern", "lampionkern", "wolkkern");
+    public static final List<String> KERNEN = List.of("zwamkern", "splinterkern", "wortelkern", "lampionkern", "wolkkern", "sterrenkern");
     public static final Map<String, DeferredItem<Item>> KERN = new LinkedHashMap<>();
     public static final DeferredItem<Item> KERNSPLINTER;
     public static final DeferredItem<Ambachtskist> AMBACHTSKIST;

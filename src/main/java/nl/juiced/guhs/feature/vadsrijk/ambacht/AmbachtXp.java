@@ -10,7 +10,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
  *   <li>same shape as combat ({@code 40 + 25 lv^1.6}), own scale {@link #SCHAAL} 0.33 (3x faster than 1.10.3); cap {@link #CAP} 60;</li>
  *   <li>a gathering action gives a fixed amount per resource tier ({@link #VERZAMEL}): 1 -> 10 is ~40 harvests, 1 -> 20 ~250
  *   (30-40 min). Far above the tier ({@link #TE_HOOG} levels over its top) it gives half: you rise fastest on your own tier;</li>
- *   <li>tiers by level ({@link #TIER_MIN}): T1 1, T2 12, T3 22, T4 32, T5 40 (T6 48 = zone 6 volgt);</li>
+ *   <li>tiers by level ({@link #TIER_MIN}): T1 1, T2 12, T3 22, T4 32, T5 40, T6 48 (zone 6);</li>
  *   <li>generic (main-level) xp: a little, ~20 % of what fighting gives in the same time ({@link #generiek});</li>
  *   <li>Uitgerust (rested): offline you build up to 2 h of double ambacht-xp (1 s per 6 s offline); every action uses 7 s.</li>
  * </ul>
@@ -22,15 +22,15 @@ public final class AmbachtXp {
     public static final int[] CAP_PER_ZONE = {0, 30, 40, 50, 55, 60, 60};
     /** Zone 6 volgt: the cap once zone 6's tier is switched on (1.10.4: the cap stays 60). */
     public static final int CAP_ZONE6 = 60;
-    /** The highest tier that exists now (T6 = zone 6 volgt). */
-    public static final int MAX_TIER = 5;
+    /** The highest tier that exists now (1.10.4: T6 = zone 6, Het Zijdeland: {@link Zone6Haken}). */
+    public static final int MAX_TIER = 6;
     /** 1.10.4: 0.33 (3x faster; was 1). */
     public static volatile double SCHAAL = 0.33;
-    /** Xp of one gathering action per tier (index = tier 1..6; T6 = zone 6 volgt). */
+    /** Xp of one gathering action per tier (index = tier 1..6). */
     public static final int[] VERZAMEL = {0, 30, 52, 62, 75, 90, 105};
     /**
      * The first level of each tier (index = tier): T1 1 (zone 1/2), T2 12, T3 22, T4 32 (zone 4, Lampionkust), T5 40 (zone 5,
-     * Hoogvads), T6 48 (zone 6 volgt: only used once {@link #MAX_TIER} goes to 6). Was 1 / 20 / 35 / 50 / 55 (1.10.3).
+     * Hoogvads), T6 48 (zone 6, Het Zijdeland; 1.10.4). Was 1 / 20 / 35 / 50 / 55 (1.10.3).
      */
     public static final int[] TIER_MIN = {0, 1, 12, 22, 32, 40, 48};
     /** 1.10.4: half xp this many levels above a tier's top (tiers are ~10 levels wide now; was 8 on 15-level tiers). */

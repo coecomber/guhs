@@ -149,10 +149,25 @@ public final class AmbachtNpcs {
             }
             gekozen.add(plek);
             GEZET.put(w.npc(), plek);
-            float yaw = (float) (Math.toDegrees(Math.atan2(a.getZ() - plek.getZ(), a.getX() - plek.getX())) - 90);
+            BlockPos kijk = AmbachtPlekken.kijkNaar(w);   // 1.10.4: the islet's hut masters face the square
+            float yaw = yaw(plek, kijk == null ? a : kijk);
             Npcs.voegToe(new NpcDef(w.npc(), plek, yaw, variant(w), kleren(w.ambacht()), NpcDef.Gedrag.STAAN, "ambacht", 1f));
+            nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh g = Npcs.levend(sl, w.npc());
+            if (g != null) {   // (a guh from before a restart/update keeps standing: turn it the right way too)
+                g.setYRot(yaw);
+                g.setYHeadRot(yaw);
+                g.setYBodyRot(yaw);
+            }
             i++;
         }
+    }
+
+    /** The yaw (degrees, Minecraft: 0 = south, 90 = west) of a guh at {@code van} that looks at {@code naar}. */
+    public static float yaw(BlockPos van, BlockPos naar) {
+        if (van.getX() == naar.getX() && van.getZ() == naar.getZ()) {
+            return 0f;
+        }
+        return (float) (Math.toDegrees(Math.atan2(naar.getZ() - van.getZ(), naar.getX() - van.getX())) - 90);
     }
 
     @Nullable
@@ -226,7 +241,7 @@ public final class AmbachtNpcs {
         for (AmbachtPlekken.Groep g : AmbachtPlekken.GROEPEN) {
             BlockPos a = g.anker();
             boolean kan = AmbachtData.level(p, w.ambacht()) >= Verzamelen.nodig(g) && g.soort() != NodeSoort.KORF;   // (hives: the Gilde imker)
-            if (g.ambacht() != w.ambacht() || a == null || !kan) {
+            if (g.ambacht() != w.ambacht() || a == null || !kan || !zoneBekend(p, g.zone())) {
                 continue;
             }
             double d = a.distSqr(p.blockPosition()) - (g.tier() == tier ? 1e7 : 0);   // (your own tier first)
@@ -243,6 +258,11 @@ public final class AmbachtNpcs {
             regels.add(new Praat.Regel(spreker, naam, "vadsrijk.ambacht.npc.waar", Component.translatable("vadsrijk.ambacht.groep." + beste.id()), a.getX(), a.getZ()));
         }
         Praat.scene(p, SLEUTEL, regels);
+    }
+
+    /** 1.10.4: zone 6's spots are only pointed out to players who have been there (it may still be closed). */
+    static boolean zoneBekend(ServerPlayer p, int zone) {
+        return zone < 6 || nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.hoogste(p) >= zone;
     }
 
     /** The next story step, when your level allows it. */
