@@ -180,7 +180,7 @@ public class VadsrijkNpcGameTests {
         }
         QuestStap na = QuestStap.hoofdlijn(p);   // (integration: after zone 1 the main line goes on in zone 2)
         helper.assertTrue((na == null || na.quest().startsWith("z2_")) && Questlog.klaar(p, "hq12_schaduw"), "the zone-1 main story is done");
-        helper.assertTrue(QuestStap.hoofdGedaan(p).size() == 14, "14 steps of history (1.10.1: + Opruimen)");
+        helper.assertTrue(QuestStap.hoofdGedaan(p).size() == 19, "19 steps of history (1.10.1: + Opruimen; 1.10.4: + 3 Knutsel lesson steps + 2 craft steps): " + QuestStap.hoofdGedaan(p).size());
         helper.assertTrue(stappen > 30, "walked " + stappen + " steps");
         Questlog.wisAlles(p);
         helper.succeed();

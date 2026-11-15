@@ -49,7 +49,7 @@ public class Z4VerhaalGameTests {
         Language t = Language.getInstance();
         List<Quest> z4 = z4();
         long hoofd = z4.stream().filter(Quest::hoofd).count(), zij = z4.stream().filter(q -> q.soort() == Quest.Soort.ZIJ).count();
-        helper.assertTrue(hoofd == 7 && zij >= 15, "zone 4: 7 main and ~15 side quests: " + hoofd + "/" + zij);
+        helper.assertTrue(hoofd == 9 && zij >= 15, "zone 4: 9 main (1.10.4: + 2 craft steps) and ~15 side quests: " + hoofd + "/" + zij);
         helper.assertTrue(Quests.van("z3_hq15_hoogvads") != null && Quests.van("hq01_welkom") != null, "zones 1-3 still load");
         for (String id : Z4VerhaalPlekken.NPC.keySet()) {
             NpcDef d = Npcs.van(id);

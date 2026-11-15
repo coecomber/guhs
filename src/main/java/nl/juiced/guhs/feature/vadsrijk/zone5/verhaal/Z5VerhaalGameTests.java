@@ -48,7 +48,7 @@ public class Z5VerhaalGameTests {
         Language t = Language.getInstance();
         List<Quest> z5 = z5();
         long hoofd = z5.stream().filter(Quest::hoofd).count(), zij = z5.stream().filter(q -> q.soort() == Quest.Soort.ZIJ).count();
-        helper.assertTrue(hoofd == 10 && zij >= 10, "zone 5: 10 main and ~10 side quests: " + hoofd + "/" + zij);
+        helper.assertTrue(hoofd == 12 && zij >= 10, "zone 5: 12 main (1.10.4: + 2 craft steps) and ~10 side quests: " + hoofd + "/" + zij);
         helper.assertTrue(Quests.van("hq01_welkom") != null && Quests.van("z3_hq01_boom") != null, "zones 1-3 still load");
         List<Quest> alle = new ArrayList<>(Quests.alle().values());
         helper.assertTrue(alle.indexOf(Quests.van(Z5Haken.HQ01)) > alle.indexOf(Quests.van("z4_hq07_opstijgpier")), "zone 5 comes after zone 4 in the questlog");   // (T-INT)
@@ -102,7 +102,7 @@ public class Z5VerhaalGameTests {
         Z5VerhaalRegistry.klaarzetten(p);
         helper.assertTrue(Questlog.actief(p, Z5Haken.HQ01), "zone 4 done: z5_hq01 starts by itself");
         List<Quest> hoofd = z5().stream().filter(Quest::hoofd).toList();
-        helper.assertTrue(hoofd.stream().map(Quest::id).toList().equals(Z5Haken.HOOFD), "the main quests in story order");
+        helper.assertTrue(hoofd.stream().map(Quest::id).filter(id -> !id.matches("z5_hq[0-9]+[ab]_.*")).toList().equals(Z5Haken.HOOFD), "the main quests in story order (1.10.4: craft steps hqNNa/b in between)");
         String vorige = "z4_hq07_opstijgpier";   // (T-INT: zone 4's last main quest)
         int x = 0;
         for (Quest q : hoofd) {
@@ -203,6 +203,7 @@ public class Z5VerhaalGameTests {
                 op(helper, p, Z5VerhaalPlekken.poi(d.doel().substring(4)));
                 Z5Verhaal.spoel(p);   // (a scene the spot started: the finale fallback, the lullaby, the cliffhanger)
             }
+            case VERZAMEL -> nl.juiced.guhs.feature.vadsrijk.npc.Questlog.geef(p, new net.minecraft.world.item.ItemStack(nl.juiced.guhs.feature.vadsrijk.npc.Questlog.item(d.doel()), d.n()));   // 1.10.4: craft gather steps
             case MELD -> meld(helper, p, q, d, x);
             default -> helper.fail(q.id() + ": no test path for " + d.type());
         }

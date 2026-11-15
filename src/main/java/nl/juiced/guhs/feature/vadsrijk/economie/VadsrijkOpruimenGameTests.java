@@ -219,7 +219,7 @@ public class VadsrijkOpruimenGameTests {
         Quest q = Quests.van("hq03c_opruimen");
         helper.assertTrue(q != null && q.hoofd() && q.na().contains("hq03b_elementen"), "hq03c follows hq03b");
         Quest kampvuur = Quests.van("hq04_kampvuur");
-        helper.assertTrue(kampvuur.na().contains("hq03c_opruimen"), "hq04 follows hq03c");
+        helper.assertTrue(kampvuur.na().contains("hq03f_maken") && Quests.van("hq03d_knutsel").na().contains("hq03c_opruimen"), "1.10.4: hq03d (Meester Knutsel) follows hq03c, hq04 follows the lesson hq03f");
         // an existing player who already started hq04: hq03c counts as done, nothing new is offered
         Questlog.neemAan(p, kampvuur);
         helper.assertTrue(Questlog.klaar(p, q.id()) && !Questlog.beschikbaar(p, q), "past the tutorial: not affected");

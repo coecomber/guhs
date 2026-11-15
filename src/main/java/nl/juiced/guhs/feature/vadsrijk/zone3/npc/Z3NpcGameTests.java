@@ -49,7 +49,7 @@ public class Z3NpcGameTests {
         Language t = Language.getInstance();
         List<Quest> z3 = z3();
         long hoofd = z3.stream().filter(Quest::hoofd).count(), zij = z3.stream().filter(q -> q.soort() == Quest.Soort.ZIJ).count();
-        helper.assertTrue(hoofd == 15 && zij >= 3, "zone 3: 15 main and a few side quests: " + hoofd + "/" + zij);
+        helper.assertTrue(hoofd == 17 && zij >= 3, "zone 3: 17 main (1.10.4: + 2 craft steps) and a few side quests: " + hoofd + "/" + zij);
         helper.assertTrue(Quests.van("hq01_welkom") != null && Quests.van("z2_hq01_splinterpieken") != null, "zones 1 and 2 still load");
         for (String id : Z3NpcPlekken.NPC.keySet()) {
             NpcDef d = Npcs.van(id);

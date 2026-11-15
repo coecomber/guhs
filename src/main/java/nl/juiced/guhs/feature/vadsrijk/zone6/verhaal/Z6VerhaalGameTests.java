@@ -51,7 +51,7 @@ public class Z6VerhaalGameTests {
         Language t = Language.getInstance();
         List<Quest> z6 = z6();
         long hoofd = z6.stream().filter(Quest::hoofd).count(), zij = z6.stream().filter(q -> q.soort() == Quest.Soort.ZIJ).count();
-        helper.assertTrue(hoofd == 10 && zij == 15, "zone 6: 10 main and 15 side quests: " + hoofd + "/" + zij);
+        helper.assertTrue(hoofd == 12 && zij == 15, "zone 6: 12 main (1.10.4: + 2 craft steps) and 15 side quests: " + hoofd + "/" + zij);
         List<Quest> alle = new ArrayList<>(Quests.alle().values());
         helper.assertTrue(alle.indexOf(Quests.van(Z6Haken.HQ01)) > alle.indexOf(Quests.van(Z6Haken.Z5_LAATSTE)), "zone 6 comes after zone 5 in the questlog");
         for (String id : Z6VerhaalPlekken.NPC.keySet()) {
@@ -101,7 +101,7 @@ public class Z6VerhaalGameTests {
         Z6VerhaalRegistry.klaarzetten(p);
         helper.assertTrue(Questlog.actief(p, Z6Haken.HQ01), "line E open: z6_hq01 starts by itself");
         List<Quest> hoofd = z6().stream().filter(Quest::hoofd).toList();
-        helper.assertTrue(hoofd.stream().map(Quest::id).toList().equals(Z6Haken.HOOFD), "the main quests in story order");
+        helper.assertTrue(hoofd.stream().map(Quest::id).filter(id -> !id.matches("z6_hq[0-9]+[ab]_.*")).toList().equals(Z6Haken.HOOFD), "the main quests in story order (1.10.4: craft steps hqNNa/b in between)");
         String vorige = Z6Haken.Z5_LAATSTE;
         int x = 0;
         for (Quest q : hoofd) {
@@ -237,6 +237,7 @@ public class Z6VerhaalGameTests {
                     op(helper, p, b);
                 }
             }
+            case VERZAMEL -> nl.juiced.guhs.feature.vadsrijk.npc.Questlog.geef(p, new net.minecraft.world.item.ItemStack(nl.juiced.guhs.feature.vadsrijk.npc.Questlog.item(d.doel()), d.n()));   // 1.10.4: craft gather steps
             default -> helper.fail(q.id() + ": no test path for " + d.type());
         }
     }
