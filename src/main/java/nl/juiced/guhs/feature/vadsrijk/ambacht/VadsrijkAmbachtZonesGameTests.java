@@ -64,12 +64,12 @@ public class VadsrijkAmbachtZonesGameTests {
                 .anyMatch(c -> c.id().equals("plekken_5")), "Verkenningsboek pages for zones 4 + 5");
         // the fish collection: 15 fish (T1-T5 x 3), the coral finds are not fish
         long vissen = Materialen.ALLE.values().stream().filter(Materialen.Materiaal::vis).count();
-        helper.assertTrue(vissen == 15 && !Materialen.ALLE.get("roze_koraal").vis(), "15 fish, coral is a dive find: " + vissen);
+        helper.assertTrue(vissen == 18 && !Materialen.ALLE.get("roze_koraal").vis(), "18 fish (1.10.4: + 3 zone-6 fish), coral is a dive find: " + vissen);
         // T4/T5 Maatwerk at the zone-4/5 set levels, Meesterwerk above the zone drops
         helper.assertTrue(Maatwerk.GEAR_LEVEL[4] == 50 && Maatwerk.GEAR_LEVEL[5] == 56, "gear levels");
         BasisType z5borst = BasisTypes.van("mw_t5_borstplaat"), z3ring = BasisTypes.van("mw_t3_ring"), z5ring = BasisTypes.van("mw_t5_ring");
         helper.assertTrue(z5borst != null && z5ring != null && z5ring.basis().get(Stat.KRITIEK) > z3ring.basis().get(Stat.KRITIEK), "T5 above T3");
-        helper.assertTrue(Materialen.KERNEN.size() == 5 && AmbachtRegistry.kernVoor(52, 0, 64, 0).equals("lampionkern")
+        helper.assertTrue(Materialen.KERNEN.size() == 6 && AmbachtRegistry.kernVoor(52, 0, 64, 0).equals("lampionkern")
                 && AmbachtRegistry.kernVoor(58, 0, 64, 0).equals("wolkkern") && AmbachtRegistry.kernVoor(40, 0, 64, 0).equals("wortelkern"), "boss cores per zone");
         helper.succeed();
     }

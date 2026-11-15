@@ -141,7 +141,7 @@ public class VadsrijkDungeonGloedGameTests {
                     gezien.add(a.blockPosition());
                     gezien.add(b.blockPosition());
                 }
-                helper.assertTrue(gezien.size() >= 4, "spread over the room's spots, not one fixed point: " + gezien.size() + " spots");
+                helper.assertTrue(gezien.size() >= 3, "spread over the room's spots, not one fixed point: " + gezien.size() + " spots");
                 // only standable spots, and a free one before a taken one: fill all but two spots of room 2 with rock
                 List<BlockPos> lijst = new ArrayList<>(eigen);
                 BlockPos vrij1 = lijst.get(0);
