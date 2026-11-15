@@ -279,7 +279,7 @@ public final class Premies {
         c[slot] = 1;
         zet(t, "geclaimd", c);
         int lv = Spelers.level(p);
-        Spelers.geefXp(p, Z3Xp.premie(lv), "premie");
+        Spelers.geefXpDoel(p, Z3Xp.premie(lv), "premie", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneTop(3));   // 1.10.4: xp brake vs the zone top
         Spelers.geefMunten(p, 150 + 8L * lv);
         Z3Data.geefPenningen(p, x.baas() ? PENNINGEN_BAAS : PENNINGEN);
         int week = t.getIntOr("weekN", 0) + 1;

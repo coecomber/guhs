@@ -153,7 +153,7 @@ public class Z3Hulpje extends VadsrijkMob implements GeoEntity {
 
     @Override
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
-        Spelers.geefXpGroep(helpers, xp(), "mob");   // 1.10.3: each player once
+        Spelers.geefXpGroep(helpers, xp(), "mob", mobLevel());   // 1.10.3: each player once; 1.10.4: xp brake per player vs the mob level
     }
 
     @Override

@@ -47753,5 +47753,8 @@
   "vadsrijk.ambacht.gilde.verzamelen.1.1": "Thank you, Mother Cloudwhale!",
   "vadsrijk.ambacht.gilde.verzamelen.1.2": "She winks back, see? Master Gatherer, that's you now.",
   "gui.guhs.titels.naam.vr_amb_verzamelen_meester": "Master Gatherer",
-  "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Reach the highest level in Gathering."
+  "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Reach the highest level in Gathering.",
+  "vadsrijk.kern.xp_rem": "+%s xp (level too low)",
+  "vadsrijk.grotkerker.volg.over": "%s left",
+  "vadsrijk.grotkerker.volg.waar": "The last creatures glow, even through walls."
 }

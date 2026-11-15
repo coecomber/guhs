@@ -85,7 +85,7 @@ public final class Contracten {
         }
         t.putString("contract", "");
         int lv = Spelers.level(p);
-        Spelers.geefXp(p, Z3Xp.contract(lv), "contract");
+        Spelers.geefXpDoel(p, Z3Xp.contract(lv), "contract", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneTop(3));   // 1.10.4: xp brake vs the zone top
         Spelers.geefMunten(p, 300 + 10L * lv);
         Z3Data.geefPenningen(p, PENNINGEN);
         p.sendSystemMessage(Component.translatable("vadsrijk.z3.systemen.contract.klaar", Component.translatable(naamKey(id)), PENNINGEN)

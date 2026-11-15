@@ -425,7 +425,7 @@ public final class Proef {
             extra.putInt("sparren", n);
             Spelers.opgeslagen(p);
             p.sendSystemMessage(Component.translatable("vadsrijk.z5wezens.sparren.gewonnen", n).withStyle(ChatFormatting.LIGHT_PURPLE));
-            Spelers.geefXp(p, xp5(6), "sparren");
+            Spelers.geefXpDoel(p, xp5(6), "sparren", nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneTop(5));   // 1.10.4: xp brake vs the zone top
             LootTabel tabel = LootTabellen.van("z5wezens:sparren");
             if (tabel != null && (n == 1 || getRandom().nextDouble() < 0.3)) {
                 LootBundel.laatVallen(p, position().add(0, 0.8, 0), tabel.rol(Math.max(56, mobLevel()), getRandom()), 0);

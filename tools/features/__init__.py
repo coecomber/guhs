@@ -316,6 +316,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_w_grot',   # W-INT
             # 1.10 round U integration, V-INT: texts of the glue between the round-U slices (Java: feature/vadsrijk/vint)
             'vadsrijk_v_int',
+            'vadsrijk_xprem',   # 1.10.4 xp-rem: xp brake popup + dungeon 'Nog N over' line
             # 1.10 round U, U-TAPIJT: the flying carpet (zone 6; Java: feature/vadsrijk/tapijt); after vadsrijk_t_rijdier
             'vadsrijk_u_tapijt',
             'vadsrijk_u_z6muziek',   # U-Z6MUZIEK: zone-6 music + ambience (after u_audio2)

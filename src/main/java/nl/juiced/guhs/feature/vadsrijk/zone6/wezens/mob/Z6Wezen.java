@@ -277,7 +277,7 @@ public abstract class Z6Wezen extends RijkWezen {
         String id = lootTabel();
         LootTabel t = id == null || klein() ? null : elite() && LootTabellen.van(id + "_elite") != null ? LootTabellen.van(id + "_elite") : LootTabellen.van(id);
         int xp = (int) Math.round(xp() * (elite() ? 3 : 1) * (klein() ? 0.4 : 1));
-        Spelers.geefXpGroep(helpers, xp, "mob");   // 1.10.3: each player once
+        Spelers.geefXpGroep(helpers, xp, "mob", mobLevel());   // 1.10.3: each player once; 1.10.4: xp brake per player vs the mob level
         for (ServerPlayer p : helpers) {
             if (afloop() == Afloop.OPVROLIJKEN) {
                 Spelers.data(p).opgevrolijkt++;

@@ -25,7 +25,7 @@ public final class Beloningen {
     static void geef(ServerPlayer p, Quest q) {
         Quest.Beloning b = q.beloning();
         if (b.xp() > 0) {
-            Spelers.geefXp(p, Math.max(1, Math.round(b.xp() * xpFactor(q))), q.hoofd() ? "hoofdquest" : "quest");
+            Spelers.geefXpDoel(p, Math.max(1, Math.round(b.xp() * xpFactor(q))), q.hoofd() ? "hoofdquest" : "quest", remLevel(q));
         }
         List<ItemStack> buit = new ArrayList<>();
         if (b.wapen()) {
@@ -65,6 +65,17 @@ public final class Beloningen {
         }
         int z = nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id());
         return z == 2 ? HOOFD_XP_ZONE2 : z == 3 || z == 5 || z == 6 ? HOOFD_XP_LAAT : 1.0;
+    }
+
+    /**
+     * 1.10.4 (xp brake): a quest counts as a target of its zone's top level (a zone-2 quest for a class-39 player gives 10 %); a
+     * job advancement (KLASSE) never brakes (it is gated on the class level itself). 0 = no brake.
+     */
+    public static int remLevel(Quest q) {
+        if (q.soort() == Quest.Soort.KLASSE) {
+            return 0;
+        }
+        return nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.zoneTop(nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()));
     }
 
     /** A weapon base type of the player's class (the first one registered: the class's starter weapon). */
