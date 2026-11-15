@@ -149,6 +149,9 @@ public final class AmbachtSchermen {
     private static ListTag recepten(ServerPlayer p, Ambacht a, List<ItemStack> items, boolean werk) {
         ListTag l = new ListTag();
         for (Recept r : Recepten.van(a)) {
+            if (r.soort().equals("verhaal") && !AmbachtVerhaal.magMaken(p, r.id())) {
+                continue;   // 1.10.4: a story item only shows (and can only be made) while its story step asks for it
+            }
             CompoundTag e = new CompoundTag();
             e.putString("id", r.id());
             e.putString("naam", r.naamKey());

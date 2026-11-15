@@ -51,6 +51,18 @@ public class VadsrijkZonePoortGameTests {
         ZonePoort.TEST_STRENG = true;
     }
 
+    /** 1.10.4: the craft steps of zones 1..n done (the per-player gate asks for them next to the story and the book). */
+    private static void ambachtKlaar(ServerPlayer p, int n) {
+        for (nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.Keten k : nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.KETENS) {
+            if (k.zone() <= n) {
+                for (String id : k.quests()) {
+                    Questlog.voltooi(p, Quests.van(id));
+                }
+            }
+        }
+        ZonePoort.vergeetCache(p.getUUID());
+    }
+
     private static void herstel() {
         ZonePoortConfig.TEST = null;
         ZonePoortConfig.TEST_BOEK = null;
@@ -85,6 +97,7 @@ public class VadsrijkZonePoortGameTests {
             poort(1);
             Spelers.zetLevel(p, 20);
             Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, true);
+            ambachtKlaar(p, 1);
             Lijnen.Lijn a = Lijnen.vanId("z1_z2");
             String slot = Poorten.dicht(p, a, true);
             helper.assertTrue("vadsrijk.zonepoort.lijn.2".equals(slot), "line A to zone 2: closed (soon): " + slot);
@@ -255,6 +268,7 @@ public class VadsrijkZonePoortGameTests {
             helper.assertTrue(ZonePoort.plafond(p) == 25, "never in zone 2: 25, also with every zone open on the server");
             // standing in zone 2 (gate 6, book off, zone-1 story done) raises it
             Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, true);
+            ambachtKlaar(p, 1);
             ZonePoort.vergeetCache(p.getUUID());
             p.snapTo(704.5, 100, -1100.5);
             ZonePoort.controleer(helper.getLevel(), p, 4);
@@ -297,7 +311,7 @@ public class VadsrijkZonePoortGameTests {
             helper.assertTrue("vadsrijk.npc.reis.slot.kandijkom_verhaal".equals(r), "travel NPC: the story reason first: " + r);
             helper.assertTrue(ZonePoort.isEis(EIS2) && ZonePoort.isPoortSlot(EIS2), "an 'eis' gate key");
             Object[] a = ZonePoort.args(p, EIS2);
-            helper.assertTrue(a.length == 6 && a[1].toString().contains("✘") && a[3].toString().contains("✘"), "both conditions marked ✘");
+            helper.assertTrue(a.length == 9 && a[1].toString().contains("✘") && a[3].toString().contains("✘"), "both conditions marked ✘");
             // 2. story done, book short: still closed; the tracker says explore, the captain says what is missing
             for (Quest q : Quests.alle().values()) {
                 if (q.hoofd() && ZoneBoeken.zoneVan(q.id()) == 1) {
@@ -346,6 +360,7 @@ public class VadsrijkZonePoortGameTests {
             Spelers.data(p).extra.remove("zonepoort");
             ZonePoort.zetHoogste(p, 1);
             Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, true);
+            ambachtKlaar(p, 1);
             ZonePoort.BOEK_VRIJ.add(p.getUUID());
             ZonePoort.vergeetCache(p.getUUID());
             helper.assertTrue(!ZonePoort.dicht(p, 2), "the quest robot's bypass counts as the book %");

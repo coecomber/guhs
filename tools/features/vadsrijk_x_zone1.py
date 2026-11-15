@@ -25,8 +25,9 @@ TEKSTEN = {
     K + "dungeon": ("%s ligt in %s: die zone gaat binnenkort open!", "%s lies in %s: that zone opens soon!"),
     K + "grens": ("%s is nog dicht: het schip daarheen vaart binnenkort! Houd Discord in de gaten.",
                   "%s is still closed: the ship there sails soon! Keep an eye on Discord."),
-    K + "eis": ('Naar %1$s: %2$s hoofdverhaal %3$s · %4$s Verkenningsboek %5$s%% / %6$s%% (toets B)', 'To %1$s: %2$s main story %3$s · %4$s Exploring Book %5$s%% / %6$s%% (key B)'),
-    K + "eis.kort": ('eerst het hoofdverhaal en je Verkenningsboek (B)', 'first the main story and your Exploring Book (B)'),
+    # 1.10.4: + the craft steps (ZonePoort.eisArgs: %7$s ✔/✘, %8$s done, %9$s total)
+    K + "eis": ('Naar %1$s: %2$s hoofdverhaal %3$s · %4$s Verkenningsboek %5$s%% / %6$s%% · %7$s ambachtstappen (%8$s/%9$s) (toets B, J)', 'To %1$s: %2$s main story %3$s · %4$s Exploring Book %5$s%% / %6$s%% · %7$s craft steps (%8$s/%9$s) (keys B, J)'),
+    K + "eis.kort": ('eerst het hoofdverhaal, je ambachtstappen en je Verkenningsboek (B)', 'first the main story, your craft steps and your Exploring Book (B)'),
     K + "eis.kaart": ('Verken eerst de vorige zone: Verkenningsboek %s%% / 75%% (toets B)', 'Explore the previous zone first: Exploring Book %s%% / 75%% (key B)'),
     K + "eis.kaart_verhaal": ('Speel eerst het hoofdverhaal uit en verken de vorige zone (Verkenningsboek %s%% / 75%%)', 'Finish the main story first and explore the previous zone (Exploring Book %s%% / 75%%)'),
     K + "verken.titel": ('Volgende: verken %s tot %s%%', 'Next: explore %s to %s%%'),

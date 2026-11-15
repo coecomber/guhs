@@ -344,6 +344,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10 T-VFX: VFX kit v1 + boss bouwdoos (Java: feature/vadsrijk/vfx); merges vfx_* anims into the boss animation files,
             # so it must stay AFTER every boss/model slice (t-models too)
             'vadsrijk_t_vfx',
+            # 1.10.4 Ambachten in het verhaal: Meester Knutsel's islet lesson + two craft steps per zone (quests_ambacht.json, lang only)
+            'vadsrijk_ambacht_verhaal',
             ]
 
 

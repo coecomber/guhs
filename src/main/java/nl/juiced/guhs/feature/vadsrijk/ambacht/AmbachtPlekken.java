@@ -62,6 +62,8 @@ public final class AmbachtPlekken {
     public static final int LEEG_MIN = 60, LEEG_MAX = 120;
     public static final List<Groep> GROEPEN = new ArrayList<>();
     public static final List<Werkplaats> WERKPLAATSEN = new ArrayList<>();
+    /** 1.10.4: workshop guhs that stand exactly on their POI (the Ambachtseiland huts) instead of in a ring round a hub square. */
+    public static final java.util.Set<String> VAST = java.util.concurrent.ConcurrentHashMap.newKeySet();
 
     static {
         // ---- zone 1 (T1): Klodderweide herbs, Sporenwoud wood, Druipgrotten ore, ponds + harbour fish; a starter patch at the camp
@@ -220,6 +222,23 @@ public final class AmbachtPlekken {
                 Zoek.BLOEM, honing, LEEG_MIN, LEEG_MAX);
         voeg(g);
         return g;
+    }
+
+    /**
+     * 1.10.4: adds a workshop guh of another slice: {@code npc} (lang {@code vadsrijk.npc.naam.<npc>}, role from the ambacht: the id
+     * must read {@code amb_<rol>_...}), at POI {@code poi} of zone {@code zone}; {@code vast} = exactly on that POI (else in the ring
+     * round it, like the hub masters). Throws on a duplicate id.
+     */
+    public static synchronized Werkplaats werkplaats(String npc, int zone, String poi, @Nullable Ambacht a, boolean vast) {
+        if (werkplaats(npc) != null) {
+            throw new IllegalArgumentException("ambacht workshop id twice: " + npc);
+        }
+        Werkplaats w = new Werkplaats(npc, zone, poi, a);
+        WERKPLAATSEN.add(w);
+        if (vast) {
+            VAST.add(npc);
+        }
+        return w;
     }
 
     /** The honey kinds that exist now (one per bee meadow, in order). */

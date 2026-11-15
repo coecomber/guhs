@@ -164,7 +164,7 @@ public class VadsrijkAmbachtVierGameTests {
         }
         // story steps and titles follow the new scale
         helper.assertTrue(AmbachtNpcs.VERHAAL_LEVELS[4] == 32 && HoogvadsGilde.LEVELS[0] == 40 && AmbachtBoek.LEERLING == 15 && AmbachtBoek.GEZEL == 32, "levels");
-        helper.assertTrue(AmbachtPlekken.WERKPLAATSEN.stream().filter(w -> w.zone() == 1 && w.ambacht() != null).count() == 4, "4 workshop guhs in Zwamzoet");
+        helper.assertTrue(AmbachtPlekken.WERKPLAATSEN.stream().filter(w -> w.zone() == 1 && w.poi().equals("plein") && w.ambacht() != null).count() == 4, "4 workshop guhs in Zwamzoet");
         helper.succeed();
     }
 
@@ -294,7 +294,7 @@ public class VadsrijkAmbachtVierGameTests {
             }
         }
         helper.assertTrue(Recepten.van("ring_t1").level() == 1, "jewellery from Smeden 1");
-        helper.assertTrue(Recepten.VERHAAL.isEmpty() && Recepten.van("post_klodderknuffel").ambacht() == Ambacht.SMEDEN, "story-item kind ready; naaien's post items");
+        helper.assertTrue(Recepten.VERHAAL.keySet().equals(AmbachtVerhaal.RECEPT_STAP.keySet()) && Recepten.van("post_klodderknuffel").ambacht() == Ambacht.SMEDEN, "story items: only the craft steps' (1.10.4); naaien's post items");
         helper.assertTrue(Recepten.van("slijp_geslepen").ambacht() == Ambacht.KOKEN, "crystal cutting is Koken's");
         // the story-item kind works end to end (a temporary recipe)
         Recepten.Recept v = Recepten.verhaalRecept("t_tempelsleutel", Ambacht.SMEDEN, 1, 1, () -> new ItemStack(net.minecraft.world.item.Items.TRIPWIRE_HOOK),

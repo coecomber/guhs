@@ -33,6 +33,9 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
             if (!q.hoofd() || Questlog.klaar(p, q.id())) {
                 continue;
             }
+            if (nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.gemist(p, q.id())) {
+                continue;   // 1.10.4: a craft step inserted behind this player (in the questlog; the zone gate asks for it)
+            }
             QuestStap vervolgd = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.vervolgd(p, q);   // X-ZONE1: "Wordt vervolgd"
             return vervolgd != null ? vervolgd : van(p, q);
         }

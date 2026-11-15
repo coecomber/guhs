@@ -330,7 +330,7 @@ public final class QuestRobot {
                     continue;
                 }
                 switch (d.type()) {
-                    case VERZAMEL -> Questlog.geef(p, new ItemStack(Questlog.item(d.doel()), d.n()));
+                    case VERZAMEL -> geef(new ItemStack(Questlog.item(d.doel()), d.n()));
                     case LEVEL -> zetLevel(q.klasse(), d.n());
                     case GEHEIM -> {
                         CompoundTag t = Questlog.map(p, switch (d.doel()) {
@@ -693,8 +693,16 @@ public final class QuestRobot {
             u.notities.add(d.doel() + ": " + d.n() + " gevallen na " + k + " keer opvrolijken in " + bron);
             return;
         }
-        Questlog.geef(p, new ItemStack(Questlog.item(d.doel()), d.n()));
+        geef(new ItemStack(Questlog.item(d.doel()), d.n()));
         u.notities.add(d.doel() + ": valt nergens van (kans 0); door de robot gegeven");
+    }
+
+    /** 1.10.4: a quest item for the robot; a bag full of loot from the earlier zones is emptied first (else it lands on the ground). */
+    private void geef(ItemStack s) {
+        if (p.getInventory().getFreeSlot() < 0) {
+            p.getInventory().clearContent();
+        }
+        Questlog.geef(p, s);
     }
 
     // ---- helpers -----------------------------------------------------------------------------------------------------------------

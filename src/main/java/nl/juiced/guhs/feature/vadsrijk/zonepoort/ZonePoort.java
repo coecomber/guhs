@@ -119,8 +119,8 @@ public final class ZonePoort {
             return true;
         }
         CompoundTag b = bank(Spelers.data(p));
-        if (b.getIntOr("toegang", 0) >= zone) {
-            return true;
+        if (b.getIntOr("toegang", 0) >= zone && (hoogste(p) >= zone || ambachtOk(p, zone - 1))) {
+            return true;   // (1.10.4: an old grant for a zone never entered still asks for the craft steps)
         }
         String k = p.getUUID() + "/" + zone;
         long t = p.level().getGameTime();
@@ -128,7 +128,7 @@ public final class ZonePoort {
         if (nee != null && t < nee && t >= nee - 20) {
             return false;   // (a "no" is remembered for a second: quest lists ask this for every quest)
         }
-        if (hoogste(p) >= zone || begonnen(p, zone) || (verhaalKlaar(p, zone - 1) && boekOk(p, zone - 1))) {
+        if (hoogste(p) >= zone || begonnen(p, zone) || (verhaalKlaar(p, zone - 1) && boekOk(p, zone - 1) && ambachtOk(p, zone - 1))) {
             b.putInt("toegang", Math.max(zone, b.getIntOr("toegang", 0)));
             NEE.remove(k);
             return true;
@@ -138,6 +138,14 @@ public final class ZonePoort {
     }
 
     private static final Map<String, Long> NEE = new ConcurrentHashMap<>();
+
+    /**
+     * 1.10.4 (user decision): every craft step of zones 1..n (Meester Knutsel's islet lesson included) is done. Missed steps of older
+     * players are mandatory for the NEXT zone; who already stands in a later zone keeps it ({@link #hoogste}).
+     */
+    public static boolean ambachtOk(ServerPlayer p, int n) {
+        return nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.ok(p, n);
+    }
 
     /** Is zone n's main story done up to the trip to zone n + 1 (the airship line's own story check)? */
     public static boolean verhaalKlaar(ServerPlayer p, int n) {
@@ -261,11 +269,16 @@ public final class ZonePoort {
         return Component.literal(ok ? "✔" : "✘").withStyle(ok ? ChatFormatting.GREEN : ChatFormatting.RED);
     }
 
-    /** The arguments of the "eis" line: zone name, ✔/✘ story, previous zone, ✔/✘ book, book %, needed %. */
+    /**
+     * The arguments of the "eis" line: zone name, ✔/✘ story, previous zone, ✔/✘ book, book %, needed %, (1.10.4) ✔/✘ craft steps,
+     * done, total.
+     */
     public static Object[] eisArgs(ServerPlayer p, int zone) {
         int n = Math.max(1, zone - 1);
         boolean boek = boekOk(p, n);
-        return new Object[] {zoneNaam(zone), vink(verhaalKlaar(p, n)), zoneNaam(n), vink(boek), boekProcent(p, n), ZonePoortConfig.boek()};
+        int[] amb = nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.telling(p, n);
+        return new Object[] {zoneNaam(zone), vink(verhaalKlaar(p, n)), zoneNaam(n), vink(boek), boekProcent(p, n), ZonePoortConfig.boek(),
+                vink(amb[0] >= amb[1]), amb[0], amb[1]};
     }
 
     /** "Naar De Splinterpieken: ✔ hoofdverhaal De Knuffelzwammen · ✘ Verkenningsboek 62% / 75%". */
@@ -392,6 +405,12 @@ public final class ZonePoort {
             if (!verhaalKlaar(p, n)) {
                 return null;   // (the story itself is the next step)
             }
+            Quest gemist = nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.eersteOpen(p, n);
+            if (gemist != null) {   // 1.10.4: a missed craft step first ("Volgende: ambachtstap ...")
+                QuestStap s = QuestStap.van(p, gemist);
+                return new QuestStap(gemist.id(), true, Component.translatable(K + "ambacht.titel", Component.translatable(gemist.titelKey())), s.wat(),
+                        s.waar(), s.doel(), s.extra());
+            }
             return new QuestStap(q.id(), true, Component.translatable(K + "verken.titel", zoneNaam(n), ZonePoortConfig.boek()),
                     Component.translatable(K + "verken.wat", boekProcent(p, n), ZonePoortConfig.boek()),
                     Component.translatable(K + "verken.waar", zoneNaam(z)), null, null);
@@ -435,7 +454,7 @@ public final class ZonePoort {
     @Nullable
     static Quest volgendeHoofd(ServerPlayer p) {
         for (Quest q : Quests.alle().values()) {
-            if (q.hoofd() && !Questlog.klaar(p, q.id())) {
+            if (q.hoofd() && !Questlog.klaar(p, q.id()) && !nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.gemist(p, q.id())) {
                 return q;
             }
         }

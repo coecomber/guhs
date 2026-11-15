@@ -127,7 +127,7 @@ public final class AmbachtNpcs {
         List<BlockPos> gekozen = new ArrayList<>(GEZET.values());
         int i = 0;
         for (Werkplaats w : hub) {
-            BlockPos plek = null;
+            BlockPos plek = AmbachtPlekken.VAST.contains(w.npc()) ? Npcs.staanPlek(sl, a) : null;   // 1.10.4: on its POI (the islet huts)
             for (int poging = 0; poging < 48 && plek == null; poging++) {
                 double hoek = (Math.floorMod(w.npc().hashCode(), 360) + poging * 37) * Math.PI / 180, r = 7 + (poging % 10);
                 BlockPos c = a.offset((int) Math.round(Math.cos(hoek) * r), 0, (int) Math.round(Math.sin(hoek) * r));

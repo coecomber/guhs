@@ -120,8 +120,8 @@ public final class ZoneBoeken {
     public static List<Ding> quests(int zone, Quest.Soort soort) {
         List<Ding> l = new ArrayList<>();
         for (Quest q : Quests.alle().values()) {
-            if (q.soort() != soort || zoneVan(q.id()) != zone) {
-                continue;
+            if (q.soort() != soort || zoneVan(q.id()) != zone || nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.isStap(q.id())) {
+                continue;   // (1.10.4: the craft steps are not book rows: books already at 100 % stay there; the zone gate asks for them itself)
             }
             boolean hoofd = soort == Quest.Soort.HOOFD;
             String hint = hoofd ? T + "hint.verhaal" : T + "hint.quest";
