@@ -246,4 +246,59 @@ public class VadsrijkXpRemGameTests {
             Spelers.zetLevel(p, 1);
         }
     }
+
+    /**
+     * Zone-1 quests whose json level (mostly 1) is far below the level you are when you hand them in: the estimate from their place
+     * in the chain (tutorial hq01-hq07, the Zwamzoet side quests after hq06/hq07, the woods chapter hq08, the epilogue hq12) and
+     * the secret quest (its clues are spread over the whole zone).
+     */
+    static final java.util.Map<String, Integer> VERWACHT = java.util.Map.ofEntries(
+            java.util.Map.entry("hq01_welkom", 1), java.util.Map.entry("hq02_pad", 2), java.util.Map.entry("hq03_poppen", 2),
+            java.util.Map.entry("hq03b_elementen", 3), java.util.Map.entry("hq03c_opruimen", 3), java.util.Map.entry("hq04_kampvuur", 4),
+            java.util.Map.entry("hq05_klodderreus", 4), java.util.Map.entry("hq06_zwamzoet", 5), java.util.Map.entry("hq07_littekens", 6),
+            java.util.Map.entry("hq08_sporenwoud", 8), java.util.Map.entry("hq12_schaduw", 19), java.util.Map.entry("k01_dobber", 2),
+            java.util.Map.entry("k02_uitzicht", 2), java.util.Map.entry("geheim_spion", 12));
+
+    /** The level you are when you hand a quest in: the estimate above, else its own level or that of a quest before it. */
+    static int verwachtLevel(Quest q, java.util.Map<String, Quest> alle, int diepte) {
+        Integer v = VERWACHT.get(q.id());
+        if (v != null) {
+            return v;
+        }
+        int lv = Math.max(1, q.lv());
+        if (diepte < 40) {
+            for (String na : q.na()) {
+                Quest n = alle.get(na);
+                if (n != null) {
+                    lv = Math.max(lv, verwachtLevel(n, alle, diepte + 1));
+                }
+            }
+        }
+        return lv;
+    }
+
+    /** 1.10.4: no quest gives more than 1.5 level at the level you hand it in (after the main-story zone factor); secret quests ~0.75. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void questXpPlafond(GameTestHelper helper) {
+        var alle = Quests.alle();
+        helper.assertTrue(alle.size() > 150, "all quest files loaded: " + alle.size());
+        List<String> te = new ArrayList<>();
+        int geheim = 0;
+        for (Quest q : alle.values()) {
+            long xp = Math.max(0, Math.round(q.beloning().xp() * Beloningen.xpFactor(q)));
+            int lv = verwachtLevel(q, alle, 0);
+            double deel = xp / (double) Levels.xpVoor(lv);
+            if (deel > 1.5) {
+                te.add(String.format(java.util.Locale.ROOT, "%s %d xp at lv %d = %.2f level", q.id(), xp, lv, deel));
+            }
+            if (q.soort() == Quest.Soort.GEHEIM) {
+                geheim++;
+                helper.assertTrue(deel > 0.6 && deel < 0.9, "secret quest " + q.id() + ": ~0.75 level, got " + deel);
+            }
+        }
+        helper.assertTrue(te.isEmpty(), "quests above 1.5 level: " + te);
+        helper.assertTrue(geheim >= 3, "the secret quests were checked: " + geheim);
+        helper.assertTrue(Quests.van("z2_geheim_boormeester").beloning().xp() < 4000, "live: the Boormeester secret quest gave 15,000 xp (2.9 levels)");
+        helper.succeed();
+    }
 }

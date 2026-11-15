@@ -1190,6 +1190,13 @@ BALANS_1101_HOOFD = 0.6
 _BALANS_1101_BASIS = {}   # (base xp per quest, so calling quests_json() twice never compounds)
 
 
+# 1.10.4 xp-rem (live: one secret quest was 49 % of a level-39 player's xp in 30 min): the FINAL xp of these quests, after
+# X_ZONE1_XP and the 1101 factor. Secret quests give ~0.75 of a level at the level you do them (Levels.xpVoor), and no quest
+# gives more than ~1.2 level at the level you are when you hand it in (gametest VadsrijkXpRemGameTests.questXpPlafond, max 1.5).
+XPREM_1104_XP = {
+    "z2_geheim_boormeester": 3910,   # secret, lv 28: 0.75 x xpVoor(28) = 0.75 x 5208 (was 15000 = 2.9 level)
+}
+
 def quests_json():
     for _q in QUESTS:   # X-ZONE1: the quest xp above
         if _q["id"] in X_ZONE1_XP:
@@ -1198,6 +1205,9 @@ def quests_json():
         if _q["soort"] == "hoofd":
             basis = _BALANS_1101_BASIS.setdefault(_q["id"], _q["beloning"]["xp"])
             _q["beloning"]["xp"] = int(basis * BALANS_1101_HOOFD / 10 + 0.5) * 10
+    for _q in QUESTS:   # 1.10.4 xp-rem: the final xp of these quests (see XPREM_1104_XP)
+        if _q["id"] in XPREM_1104_XP:
+            _q["beloning"]["xp"] = XPREM_1104_XP[_q["id"]]
     npc_ids, poi_ids, gebied_ids, baas_ids, npc1 = _java_ids()
     alle_npc = npc_ids | npc1
     ids = [q["id"] for q in QUESTS]

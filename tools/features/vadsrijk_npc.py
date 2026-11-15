@@ -1382,6 +1382,15 @@ BALANS_1101_VANAF_NA = "hq07_littekens"
 _BALANS_1101_BASIS = {}   # (base xp per quest, so calling quests_json() twice never compounds)
 
 
+# 1.10.4 xp-rem (live: one secret quest was 49 % of a level-39 player's xp in 30 min): the FINAL xp of these quests, after
+# X_ZONE1_XP and the 1101 factor. Secret quests give ~0.75 of a level at the level you do them (Levels.xpVoor), and no quest
+# gives more than ~1.2 level at the level you are when you hand it in (gametest VadsrijkXpRemGameTests.questXpPlafond, max 1.5).
+XPREM_1104_XP = {
+    "geheim_spion": 1030,        # secret, done around lv 12: 0.75 x xpVoor(12) = 0.75 x 1373 (was 2500 = 1.8 level)
+    "hq08_sporenwoud": 880,      # handed in around lv 8: 1.2 x xpVoor(8) = 1.2 x 737 (was 1800 = 2.4 level)
+    "hq09_druipgrotten": 1870,   # lv 12 gate, handed in around lv 13: 1.2 x xpVoor(13) = 1.2 x 1555 (was 3540 = 2.6 level at 12)
+}
+
 def quests_json():
     for _q in QUESTS:   # X-ZONE1: the quest xp above
         if _q["id"] in X_ZONE1_XP:
@@ -1393,6 +1402,9 @@ def quests_json():
             _q["beloning"]["xp"] = int(basis * BALANS_1101_HOOFD / 10 + 0.5) * 10
         if _q["id"] == BALANS_1101_VANAF_NA:
             na_tutorial = True
+    for _q in QUESTS:   # 1.10.4 xp-rem: the final xp of these quests (see XPREM_1104_XP)
+        if _q["id"] in XPREM_1104_XP:
+            _q["beloning"]["xp"] = XPREM_1104_XP[_q["id"]]
     npc_ids, poi_ids = _java_ids()
     ids = [q["id"] for q in QUESTS]
     assert len(ids) == len(set(ids)), "duplicate quest id"
