@@ -99,6 +99,7 @@ public class VadsrijkAmbachtZonesGameTests {
         AmbachtData.reset(p);
         Verzamelen.vergeet(p.getUUID());
         AmbachtData.zetLevel(p, Ambacht.VISSEN, 31);
+        Grondstoffen.get(sl.getServer()).wis(l.get(0).id());   // (1.10.4: shared spot state, start clean)
         helper.assertTrue(Verzamelen.doeOogst(p, sl, l.get(0), 1).equals("vadsrijk.ambacht.oogst.te_laag"), "T4 needs Vissen 32");
         AmbachtData.zetLevel(p, Ambacht.VISSEN, 32);
         helper.assertTrue(Verzamelen.doeOogst(p, sl, l.get(0), 1).isEmpty(), "dive");

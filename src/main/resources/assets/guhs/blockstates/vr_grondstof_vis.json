@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "tier=1,vol=true": {
+      "model": "guhs:block/vr_grondstof_vis_vol"
+    },
+    "tier=1,vol=false": {
+      "model": "guhs:block/vr_grondstof_vis_leeg"
+    },
+    "tier=2,vol=true": {
+      "model": "guhs:block/vr_grondstof_vis_vol"
+    },
+    "tier=2,vol=false": {
+      "model": "guhs:block/vr_grondstof_vis_leeg"
+    },
+    "tier=3,vol=true": {
+      "model": "guhs:block/vr_grondstof_vis_vol"
+    },
+    "tier=3,vol=false": {
+      "model": "guhs:block/vr_grondstof_vis_leeg"
+    },
+    "tier=4,vol=true": {
+      "model": "guhs:block/vr_grondstof_vis_vol"
+    },
+    "tier=4,vol=false": {
+      "model": "guhs:block/vr_grondstof_vis_leeg"
+    },
+    "tier=5,vol=true": {
+      "model": "guhs:block/vr_grondstof_vis_vol"
+    },
+    "tier=5,vol=false": {
+      "model": "guhs:block/vr_grondstof_vis_leeg"
+    },
+    "tier=6,vol=true": {
+      "model": "guhs:block/vr_grondstof_vis_vol"
+    },
+    "tier=6,vol=false": {
+      "model": "guhs:block/vr_grondstof_vis_leeg"
+    }
+  }
+}

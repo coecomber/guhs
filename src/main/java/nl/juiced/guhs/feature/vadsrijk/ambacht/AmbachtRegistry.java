@@ -64,6 +64,7 @@ public final class AmbachtRegistry {
         Maatwerk.SOORTEN.size();
         Materialen.ITEMS.register(modBus);
         Materialen.COMPONENTS.register(modBus);
+        Grondstoffen.register(modBus);   // 1.10.4: the real gathering blocks (vr_grondstof_*)
         Maatwerk.basisTypes();
         AmbachtBoek.registreer();
         Spelers.EXTRA_STATS.add(Eten::stats);
@@ -244,7 +245,9 @@ public final class AmbachtRegistry {
         k.then(Commands.literal("plekken").executes(c -> {
             ServerPlayer p = speler(c);
             List<Spot> l = Verzamelen.inBuurt(p, 96);
-            zeg(c, l.size() + " plekken in de buurt (96):");
+            Grondstoffen gs = Grondstoffen.get(c.getSource().getServer());
+            zeg(c, l.size() + " plekken in de buurt (96); echte blokken in de wereld: " + gs.geplaatst() + " " + gs.perSoort()
+                    + (gs.wezen() > 0 ? ", " + gs.wezen() + " oude plekken wachten op hun chunk" : ""));
             int n = 0;
             for (Spot s : l) {
                 BlockPos pos = Verzamelen.positie(p, s);
@@ -279,7 +282,7 @@ public final class AmbachtRegistry {
         k.then(Commands.literal("vul").executes(c -> {
             ServerPlayer p = speler(c);
             for (Spot s : Verzamelen.inBuurt(p, 128)) {
-                Verzamelen.staat(p, s).klaar = 0;
+                Verzamelen.maakVol(p, s);
                 if (s.groep().soort() == NodeSoort.KORF && Imkeren.eigen(p, s)) {
                     Imkeren.vul(p, s);
                 }
@@ -294,6 +297,10 @@ public final class AmbachtRegistry {
             return 1;
         }));
         k.then(Commands.literal("scan").executes(c -> {
+            ServerLevel vr = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(c.getSource().getServer());
+            if (vr != null) {
+                Grondstoffen.get(c.getSource().getServer()).allesWeg(vr);   // 1.10.4: the real blocks leave (original blocks back)
+            }
             PlekWereld.get(c.getSource().getServer()).vergeet();
             AmbachtNpcs.vergeet();
             zeg(c, "Plekken en werkplaats-guhs worden opnieuw gezocht als je in de buurt komt.");

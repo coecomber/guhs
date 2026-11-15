@@ -178,9 +178,19 @@ public class VadsrijkAmbachtGameTests {
     }
 
     static Spot testSpot(GameTestHelper helper, NodeSoort a, int tier) {
-        Groep g = new Groep("t_" + a.id, 1, "x", a, tier, 1, 5, Zoek.GROND, a == NodeSoort.KORF ? "bloesemhoning" : "");
-        return new Spot(g.id() + "_0", g, List.of(helper.absolutePos(new BlockPos(2, 2, 2)), helper.absolutePos(new BlockPos(8, 2, 8))),
+        return testSpot(helper, a, tier, "t_" + a.id);
+    }
+
+    /**
+     * A test spot with its own group id (1.10.4: the state of a spot is shared and lives in {@link Grondstoffen}, so every test
+     * uses its own id and starts clean).
+     */
+    static Spot testSpot(GameTestHelper helper, NodeSoort a, int tier, String id) {
+        Groep g = new Groep(id, 1, "x", a, tier, 1, 5, Zoek.GROND, a == NodeSoort.KORF ? "bloesemhoning" : "");
+        Spot s = new Spot(g.id() + "_0", g, List.of(helper.absolutePos(new BlockPos(2, 2, 2)), helper.absolutePos(new BlockPos(8, 2, 8))),
                 List.of(helper.absolutePos(new BlockPos(3, 2, 3))));
+        Grondstoffen.get(helper.getLevel().getServer()).wis(s.id());
+        return s;
     }
 
     @GuhTest(template = "empty", batch = BATCH)
@@ -190,12 +200,11 @@ public class VadsrijkAmbachtGameTests {
         AmbachtData.reset(a);
         AmbachtData.reset(b);
         Verzamelen.vergeet(a.getUUID());
-        Spot s = testSpot(helper, NodeSoort.KRUID, 1);
-        BlockPos voor = Verzamelen.positie(a, s);
+        Spot s = testSpot(helper, NodeSoort.KRUID, 1, "t_kruid_oogst");
         String m = Verzamelen.doeOogst(a, sl, s, 2);
         helper.assertTrue(m.isEmpty(), "harvest: " + m);
-        helper.assertTrue(!Verzamelen.beschikbaar(a, s) && Verzamelen.beschikbaar(b, s), "empty for A only");
-        helper.assertTrue(!Verzamelen.positie(a, s).equals(voor), "it comes back at another position");
+        // 1.10.4: a real, shared block: empty for everyone (the move to another position: VadsrijkGrondstofGameTests)
+        helper.assertTrue(!Verzamelen.beschikbaar(a, s) && !Verzamelen.beschikbaar(b, s), "empty for everyone");
         int n = 0, q = -1;
         for (int i = 0; i < a.getInventory().getContainerSize(); i++) {
             ItemStack st = a.getInventory().getItem(i);
@@ -205,15 +214,16 @@ public class VadsrijkAmbachtGameTests {
             }
         }
         helper.assertTrue(n >= 1 && q == 2, "got " + n + " extra vadsig material (q " + q + ")");
-        helper.assertTrue(AmbachtData.xp(a, Ambacht.VERZAMELEN) >= 30 && AmbachtData.heeft(a, "plekken", "t_kruid"), "Verzamelen xp + book");
+        helper.assertTrue(AmbachtData.xp(a, Ambacht.VERZAMELEN) >= 30 && AmbachtData.heeft(a, "plekken", "t_kruid_oogst"), "Verzamelen xp + book");
         helper.assertTrue(Verzamelen.doeOogst(a, sl, s, 0).equals("vadsrijk.ambacht.oogst.leeg"), "not twice");
         // too low for tier 3
         Verzamelen.vergeet(b.getUUID());
-        helper.assertTrue(Verzamelen.doeOogst(b, sl, testSpot(helper, NodeSoort.ERTS, 3), 0).equals("vadsrijk.ambacht.oogst.te_laag"), "tier gate");
+        helper.assertTrue(Verzamelen.doeOogst(b, sl, testSpot(helper, NodeSoort.ERTS, 3, "t_erts_poort"), 0).equals("vadsrijk.ambacht.oogst.te_laag"),
+                "tier gate");
         // a rare spot gives 3x
         Verzamelen.vergeet(b.getUUID());
         AmbachtData.zetLevel(b, Ambacht.VERZAMELEN, 1);
-        Spot h = testSpot(helper, NodeSoort.HOUT, 1);
+        Spot h = testSpot(helper, NodeSoort.HOUT, 1, "t_hout_zeldzaam");
         Verzamelen.maakZeldzaam(b, h);
         Verzamelen.doeOogst(b, sl, h, 0);
         int hout = MateriaalTas.tel(b, st -> Materialen.van(st) != null && Materialen.van(st).id().equals("zwamsteel"));

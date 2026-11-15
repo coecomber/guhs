@@ -284,6 +284,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_t_z4dieren',
             # 1.10 round U, U-AMBACHT2: the Ambachten grow with zones 4/5 (T4/T5), Gilde story, Knutselwinkel, Opdrachtenbord, Meesterschort; after vadsrijk_t_ambacht + vadsrijk_t_kleding
             'vadsrijk_u_ambacht2',
+            # 1.10.4: the real, shared gathering blocks (ore veins, stumps, bushes, fishing + dive spots; Java: ambacht/GrondstofBlok + Grondstoffen)
+            'vadsrijk_grondstoffen',
             # T-DROOM: zone-5 finale phase DROOM, de Grauwe Droom (Java: feature/vadsrijk/zone5/droom)
             'vadsrijk_t_droom',
             # 1.10 U-OVERGANG: sea-band biomes between the zones + the epic viewpoint names (Java: biomen.VadsrijkBiomen, indeling.ZeeVulling)

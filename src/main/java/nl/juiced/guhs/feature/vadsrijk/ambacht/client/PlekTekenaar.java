@@ -30,10 +30,9 @@ import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.client.ClientPlekken.Plek;
 
 /**
- * Draws the player's OWN gathering spots (nobody else sees them: they are not blocks, only this client's picture of the server's
- * per-player list): a little ore lump, a stump, a flower bush, a lily pad on a fishing swirl, a hive on its stand. The real block
- * models (the bouwhulp ghost technique), softly bobbing; spots you are too low for are faint. Rare spots pulse brighter (the
- * client tick adds the glitter particles).
+ * Draws the hive stands (your own hive or a free stand; they are per player, so not blocks): the real block model (the bouwhulp
+ * ghost technique); stands you are too low for are faint. 1.10.4: ore, wood, herbs, fishing and dive spots are real shared blocks
+ * now ({@code GrondstofBlok}), so they are no longer drawn here.
  */
 public final class PlekTekenaar {
     private static final int LICHT = 0xF000F0;
@@ -47,32 +46,7 @@ public final class PlekTekenaar {
     }
 
     static Model model(Plek p) {
-        return switch (p.soort()) {
-            case ERTS -> switch (p.tier()) {
-                case 1 -> new Model(Blocks.RAW_IRON_BLOCK.defaultBlockState(), 0.55f, 0);
-                case 2 -> new Model(Blocks.AMETHYST_CLUSTER.defaultBlockState(), 1.0f, 0);
-                case 4 -> new Model(Blocks.RAW_GOLD_BLOCK.defaultBlockState(), 0.55f, 0);       // U-AMBACHT2: lampionbrons
-                case 5 -> new Model(Blocks.CALCITE.defaultBlockState(), 0.55f, 0);              // U-AMBACHT2: hemelzilver
-                default -> new Model(Blocks.RAW_COPPER_BLOCK.defaultBlockState(), 0.55f, 0);
-            };
-            case HOUT -> switch (p.tier()) {
-                case 1 -> new Model(Blocks.MUSHROOM_STEM.defaultBlockState(), 0.6f, 0);
-                case 2 -> new Model(Blocks.BIRCH_LOG.defaultBlockState(), 0.6f, 0);
-                case 4 -> new Model(Blocks.BAMBOO_BLOCK.defaultBlockState(), 0.6f, 0);          // U-AMBACHT2: driftwood + kite bamboo
-                case 5 -> new Model(Blocks.STRIPPED_BIRCH_LOG.defaultBlockState(), 0.6f, 0);    // U-AMBACHT2: wolkenhout
-                default -> new Model(Blocks.DARK_OAK_LOG.defaultBlockState(), 0.6f, 0);
-            };
-            case KRUID -> switch (p.tier()) {
-                case 1 -> new Model(Blocks.FLOWERING_AZALEA.defaultBlockState(), 0.6f, 0);
-                case 2 -> new Model(Blocks.BLUE_ORCHID.defaultBlockState(), 1.1f, 0);
-                case 4 -> new Model(Blocks.FERN.defaultBlockState(), 1.0f, 0);                  // U-AMBACHT2: zeekraal + zeegaren
-                case 5 -> new Model(Blocks.AZURE_BLUET.defaultBlockState(), 1.1f, 0);           // U-AMBACHT2: wolkbes + wolkenwol
-                default -> new Model(Blocks.TORCHFLOWER.defaultBlockState(), 1.1f, 0);
-            };
-            case DUIK -> new Model(Blocks.BRAIN_CORAL.defaultBlockState(), 1.0f, 0);  // U-AMBACHT2: coral diving
-            case VIS -> new Model(Blocks.LILY_PAD.defaultBlockState(), 1.0f, 0.88f);
-            default -> new Model((p.eigen() ? Blocks.BEEHIVE : Blocks.BEE_NEST).defaultBlockState(), 0.7f, 0);
-        };
+        return new Model((p.eigen() ? Blocks.BEEHIVE : Blocks.BEE_NEST).defaultBlockState(), 0.7f, 0);
     }
 
     @SuppressWarnings("unchecked")
@@ -112,19 +86,18 @@ public final class PlekTekenaar {
         VertexConsumer vc = buffers.getBuffer(type);
         Vector3f v = new Vector3f();
         for (Plek p : lijst) {
-            if (p.leeg() && p.soort() != NodeSoort.KORF) {
-                continue;
+            if (p.echt() || p.soort() != NodeSoort.KORF) {
+                continue;   // (1.10.4: a real block in the world)
             }
             BlockPos b = p.pos();
             if (b.distToCenterSqr(cam) > 64 * 64) {
                 continue;
             }
             Model m = model(p);
-            float bob = p.soort() == NodeSoort.VIS ? 0.02f * (float) Math.sin(t * 0.1f + b.getX()) : 0;
             float puls = p.zeldzaam() ? 0.75f + 0.25f * (float) Math.sin(t * 0.25f) : 1f;
-            int alfa = (int) (255 * (!p.lvOk() ? 0.4f : p.soort() == NodeSoort.KORF && !p.eigen() ? 0.55f : 0.95f) * puls);
+            int alfa = (int) (255 * (!p.lvOk() ? 0.4f : !p.eigen() ? 0.55f : 0.95f) * puls);
             pose.pushPose();
-            pose.translate(b.getX() + 0.5 - cam.x, b.getY() + m.dy() + bob - cam.y, b.getZ() + 0.5 - cam.z);
+            pose.translate(b.getX() + 0.5 - cam.x, b.getY() + m.dy() - cam.y, b.getZ() + 0.5 - cam.z);
             pose.scale(m.maat(), m.maat(), m.maat());
             pose.translate(-0.5, 0, -0.5);
             Matrix4f mat = pose.last().pose();

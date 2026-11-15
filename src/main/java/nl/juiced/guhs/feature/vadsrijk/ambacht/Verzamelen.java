@@ -28,11 +28,13 @@ import nl.juiced.guhs.feature.vadsrijk.ambacht.PlekWereld.Spot;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 
 /**
- * Gathering (A1: "plekken per speler die tussen posities verschuiven, met een optionele korte minigame voor kwaliteit, lichte
- * anti-AFK en uitgerust-xp; zeldzame plekken glinsteren"):
+ * Gathering (A1: "plekken die tussen posities verschuiven, met een optionele korte minigame voor kwaliteit, lichte anti-AFK en
+ * uitgerust-xp; zeldzame plekken glinsteren"):
  * <ul>
- *   <li>every spot is PER PLAYER: you see your own spots (the client draws them from {@link #sync}); harvesting empties it for you
- *   only, for {@link #LEEG_MIN}-{@link #LEEG_MAX} s, after which it comes back at ANOTHER of its positions;</li>
+ *   <li>1.10.4 "Grondstoffen zie je nu echt": every spot except hives is a REAL block, the same for everyone ({@link Grondstoffen},
+ *   {@link GrondstofBlok}); harvesting empties it for everybody for the group's respawn time ({@link #LEEG_MIN}-{@link #LEEG_MAX} s
+ *   by default), after which it comes back full, usually at ANOTHER of its positions. Hives stay per player (your own hive on a
+ *   stand, drawn by the client from {@link #sync});</li>
  *   <li>the optional minigame (client, 2-4 s) gives a score 0..2 = the quality (gewoon / vadsig / extra vadsig); sneak-click skips it
  *   (gewoon);</li>
  *   <li>a refilled spot is sometimes rare ({@link #ZELDZAAM_KANS}): it glitters; 3x the yield and a chance on the rare material;</li>
@@ -45,7 +47,7 @@ public final class Verzamelen {
     public static final int LEEG_MIN = AmbachtPlekken.LEEG_MIN, LEEG_MAX = AmbachtPlekken.LEEG_MAX, ZICHT = 64, AFK_MINUTEN = 10, AFK_AFSTAND = 5;
     public static final double ZELDZAAM_KANS = 0.05, ZELDZAAM_MATERIAAL = 0.35, BEREIK = 6.0;
 
-    /** One spot's state for one player. */
+    /** One hive stand's place for one player (1.10.4: the other spots are shared, {@link Grondstoffen}). */
     static final class Staat {
         int pos;
         long klaar;
@@ -78,25 +80,55 @@ public final class Verzamelen {
         });
     }
 
-    /** Where this player sees this spot now. */
+    /** True: a shared real block (everything but hives). */
+    public static boolean echt(Spot s) {
+        return s.groep().soort() != NodeSoort.KORF;
+    }
+
+    /**
+     * Where this spot is now: the node block (shared; ore: the vein in the floor) or, for a hive, this player's stand position.
+     */
     public static BlockPos positie(ServerPlayer p, Spot s) {
+        if (echt(s) && p.level().getServer() != null) {
+            return Grondstoffen.get(p.level().getServer()).positie(s);
+        }
         Staat st = staat(p, s);
         return s.posities().get(Math.min(st.pos, s.posities().size() - 1));
     }
 
     public static boolean beschikbaar(ServerPlayer p, Spot s) {
+        if (echt(s) && p.level() instanceof ServerLevel sl) {
+            return Grondstoffen.get(sl.getServer()).vol(sl, s);
+        }
         return p.level().getGameTime() >= staat(p, s).klaar;
     }
 
     public static boolean zeldzaam(ServerPlayer p, Spot s) {
+        if (echt(s) && p.level().getServer() != null) {
+            return Grondstoffen.get(p.level().getServer()).node(s).zeldzaam();
+        }
         return staat(p, s).zeldzaam;
     }
 
-    /** Dev: make this spot rare (glittering) for this player. */
+    /** Dev: make this spot rare (glittering) and full (shared: for everyone). */
     public static void maakZeldzaam(ServerPlayer p, Spot s) {
+        if (echt(s) && p.level().getServer() != null) {
+            Grondstoffen.get(p.level().getServer()).maakVol(s, true);
+            return;
+        }
         Staat st = staat(p, s);
         st.zeldzaam = true;
         st.klaar = 0;
+    }
+
+    /** Dev: this spot is full again (shared spots for everyone; a hive stand for this player). */
+    public static void maakVol(ServerPlayer p, Spot s) {
+        if (echt(s) && p.level().getServer() != null) {
+            Grondstoffen g = Grondstoffen.get(p.level().getServer());
+            g.maakVol(s, g.node(s).zeldzaam());
+            return;
+        }
+        staat(p, s).klaar = 0;
     }
 
     // ---- finding spots -------------------------------------------------------------------------------------------------------
@@ -157,6 +189,7 @@ public final class Verzamelen {
         if (sl == null) {
             return;
         }
+        Grondstoffen.tick(server);   // 1.10.4: the real blocks (placed lazily near players, follow their timers)
         for (ServerPlayer p : sl.players()) {
             sync(p, false);
         }
@@ -167,21 +200,28 @@ public final class Verzamelen {
         CompoundTag d = new CompoundTag();
         ListTag l = new ListTag();
         long nu = p.level().getGameTime();
+        Grondstoffen gs = p.level().getServer() == null ? null : Grondstoffen.get(p.level().getServer());
         for (Spot s : inBuurt(p, ZICHT)) {
-            BlockPos pos = positie(p, s);
+            Groep g = s.groep();
+            boolean echt = echt(s) && gs != null;
+            Grondstoffen.Node node = echt ? gs.node(s) : null;
+            if (echt && node.pos() == null) {
+                continue;   // (1.10.4: a shared spot shows only once its block is in the world)
+            }
+            BlockPos pos = echt ? node.pos() : positie(p, s);
             if (pos.distSqr(p.blockPosition()) > ZICHT * ZICHT) {
                 continue;
             }
-            Groep g = s.groep();
             CompoundTag e = new CompoundTag();
             e.putString("id", s.id());
             e.putLong("pos", pos.asLong());
             e.putString("a", g.ambacht().id);
             e.putString("s", g.soort().id);   // 1.10.4: the spot kind (minigame + look)
             e.putInt("tier", g.tier());
-            boolean leeg = nu < staat(p, s).klaar;
+            boolean leeg = echt ? nu < node.klaar() : nu < staat(p, s).klaar;
             e.putBoolean("leeg", leeg);
-            e.putBoolean("zeldzaam", !leeg && zeldzaam(p, s));
+            e.putBoolean("echt", echt);   // 1.10.4: a real block (the client clicks the block itself; only hives are drawn)
+            e.putBoolean("zeldzaam", !leeg && (echt ? node.zeldzaam() : zeldzaam(p, s)));
             e.putBoolean("lvOk", AmbachtData.level(p, g.ambacht()) >= nodig(g));
             if (g.zoek() == AmbachtPlekken.Zoek.KORAAL) {
                 e.putBoolean("duik", true);   // U-AMBACHT2: the client draws coral and an underwater hit box
@@ -232,9 +272,10 @@ public final class Verzamelen {
         if (g.soort() == NodeSoort.KORF) {
             return Imkeren.klik(p, s, score);
         }
-        Staat st = staat(p, s);
+        Grondstoffen gs = Grondstoffen.get(sl.getServer());
+        Grondstoffen.Node st = gs.node(s);
         long nu = sl.getGameTime();
-        if (nu < st.klaar) {
+        if (nu < st.klaar()) {
             return meld(p, "vadsrijk.ambacht.oogst.leeg");
         }
         int lv = AmbachtData.level(p, g.ambacht()), nodig = AmbachtXp.tierLevel(g.tier());
@@ -249,7 +290,7 @@ public final class Verzamelen {
         }
         LAATSTE.put(p.getUUID(), nu);
         int q = overgeslagen ? 0 : Math.max(0, Math.min(2, score));
-        boolean zeld = st.zeldzaam;
+        boolean zeld = st.zeldzaam();
         boolean afk = afk(p);
         // the yield: 1 + a little per level above the tier (1.10.4: per 8 levels, tiers are ~10 wide), a chance on double, x3 when
         // rare, halved when not moving
@@ -300,13 +341,10 @@ public final class Verzamelen {
         AmbachtData.tag(p).putLong("oogsten", AmbachtData.tag(p).getLongOr("oogsten", 0L) + 1);
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Premies.meld(p, "ambacht", 1);   // ("event:ambacht" bounties, if any)
         Bestelbord.verzameld(p, g.ambacht(), n);
-        // the spot empties for this player and comes back elsewhere (sometimes rare)
-        st.klaar = nu + 20L * (g.leegMin() + p.getRandom().nextInt(Math.max(1, g.leegMax() - g.leegMin() + 1)));   // (1.10.4: per group)
-        if (s.posities().size() > 1) {
-            int nieuw = p.getRandom().nextInt(s.posities().size() - 1);
-            st.pos = nieuw >= st.pos ? nieuw + 1 : nieuw;
-        }
-        st.zeldzaam = p.getRandom().nextDouble() < ZELDZAAM_KANS;
+        // the spot empties for EVERYONE (1.10.4: a real block) for the group's time (1.10.4: per group), then it comes back full,
+        // usually elsewhere (Grondstoffen.bijwerk moves it), sometimes rare
+        gs.geoogst(sl, s, nu + 20L * (g.leegMin() + p.getRandom().nextInt(Math.max(1, g.leegMax() - g.leegMin() + 1))),
+                p.getRandom().nextDouble() < ZELDZAAM_KANS);
         effect(p, sl, pos, g.soort(), q, zeld);
         if (afk) {
             p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.oogst.afk").withStyle(ChatFormatting.GRAY));
@@ -379,13 +417,17 @@ public final class Verzamelen {
             case VIS, DUIK -> SoundEvents.FISHING_BOBBER_SPLASH;
             case KORF -> SoundEvents.BEEHIVE_SHEAR;
         };
-        Vec3 c = Vec3.atCenterOf(pos);
+        Vec3 c = Vec3.atCenterOf(pos).add(0, s == NodeSoort.ERTS ? 0.6 : 0, 0);   // (ore: just above the vein in the floor)
         sl.playSound(null, pos, geluid, SoundSource.PLAYERS, 0.8f, 1.0f + 0.15f * q);
-        // (particles only for this player: the spot is theirs)
-        sl.sendParticles(p, q == 2 ? ParticleTypes.END_ROD : q == 1 ? ParticleTypes.HAPPY_VILLAGER : ParticleTypes.POOF, true, false,
-                c.x, c.y, c.z, 8, 0.3, 0.3, 0.3, 0.02);
+        // (1.10.4: everyone nearby sees a harvest, the block is shared; a hive stays the player's own)
+        var deeltje = q == 2 ? ParticleTypes.END_ROD : q == 1 ? ParticleTypes.HAPPY_VILLAGER : ParticleTypes.POOF;
+        if (s == NodeSoort.KORF) {
+            sl.sendParticles(p, deeltje, true, false, c.x, c.y, c.z, 8, 0.3, 0.3, 0.3, 0.02);
+        } else {
+            sl.sendParticles(deeltje, c.x, c.y, c.z, 8, 0.3, 0.3, 0.3, 0.02);
+        }
         if (zeldzaam) {
-            sl.sendParticles(p, ParticleTypes.TOTEM_OF_UNDYING, true, false, c.x, c.y + 0.3, c.z, 20, 0.4, 0.5, 0.4, 0.15);
+            sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, c.x, c.y + 0.3, c.z, 20, 0.4, 0.5, 0.4, 0.15);
             sl.playSound(null, pos, SoundEvents.AMETHYST_CLUSTER_BREAK, SoundSource.PLAYERS, 0.8f, 1.4f);
         }
     }

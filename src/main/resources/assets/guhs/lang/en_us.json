@@ -47753,5 +47753,11 @@
   "vadsrijk.ambacht.gilde.verzamelen.1.1": "Thank you, Mother Cloudwhale!",
   "vadsrijk.ambacht.gilde.verzamelen.1.2": "She winks back, see? Master Gatherer, that's you now.",
   "gui.guhs.titels.naam.vr_amb_verzamelen_meester": "Master Gatherer",
-  "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Reach the highest level in Gathering."
+  "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Reach the highest level in Gathering.",
+  "block.guhs.vr_grondstof_erts": "Ore vein",
+  "block.guhs.vr_grondstof_hout": "Chopping stump",
+  "block.guhs.vr_grondstof_kruid": "Herb bush",
+  "block.guhs.vr_grondstof_vis": "Fishing spot",
+  "block.guhs.vr_grondstof_duik": "Coral spot",
+  "vadsrijk.ambacht.hud.leeg": "%s · empty, back soon"
 }

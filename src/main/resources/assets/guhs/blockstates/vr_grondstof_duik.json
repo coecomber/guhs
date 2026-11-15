@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "tier=1,vol=true": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "tier=1,vol=false": {
+      "model": "minecraft:block/dead_brain_coral"
+    },
+    "tier=2,vol=true": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "tier=2,vol=false": {
+      "model": "minecraft:block/dead_brain_coral"
+    },
+    "tier=3,vol=true": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "tier=3,vol=false": {
+      "model": "minecraft:block/dead_brain_coral"
+    },
+    "tier=4,vol=true": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "tier=4,vol=false": {
+      "model": "minecraft:block/dead_brain_coral"
+    },
+    "tier=5,vol=true": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "tier=5,vol=false": {
+      "model": "minecraft:block/dead_brain_coral"
+    },
+    "tier=6,vol=true": {
+      "model": "minecraft:block/brain_coral"
+    },
+    "tier=6,vol=false": {
+      "model": "minecraft:block/dead_brain_coral"
+    }
+  }
+}

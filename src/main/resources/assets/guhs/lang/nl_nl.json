@@ -47753,5 +47753,11 @@
   "vadsrijk.ambacht.gilde.verzamelen.1.1": "Dankjewel, Moeder Wolkwal!",
   "vadsrijk.ambacht.gilde.verzamelen.1.2": "Ze knipoogt terug, zie je? Meester-verzamelaar, dat ben je nu.",
   "gui.guhs.titels.naam.vr_amb_verzamelen_meester": "Meester-verzamelaar",
-  "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Haal het hoogste niveau in verzamelen."
+  "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Haal het hoogste niveau in verzamelen.",
+  "block.guhs.vr_grondstof_erts": "Ertsader",
+  "block.guhs.vr_grondstof_hout": "Hakstronk",
+  "block.guhs.vr_grondstof_kruid": "Kruidenstruik",
+  "block.guhs.vr_grondstof_vis": "Visplek",
+  "block.guhs.vr_grondstof_duik": "Koraalplek",
+  "vadsrijk.ambacht.hud.leeg": "%s · leeg, komt zo weer terug"
 }

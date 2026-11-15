@@ -1,4 +1,9 @@
 {
+  "block.guhs.vr_grondstof_duik": "Coral spot",
+  "block.guhs.vr_grondstof_erts": "Ore vein",
+  "block.guhs.vr_grondstof_hout": "Chopping stump",
+  "block.guhs.vr_grondstof_kruid": "Herb bush",
+  "block.guhs.vr_grondstof_vis": "Fishing spot",
   "gui.guhs.titels.hint.vr_amb_grootmeester": "Reach the highest level in all four professions.",
   "gui.guhs.titels.hint.vr_amb_koken_gezel": "Reach level 32 in Cooking.",
   "gui.guhs.titels.hint.vr_amb_koken_leerling": "Reach level 15 in Cooking.",
@@ -190,6 +195,7 @@
   "vadsrijk.ambacht.hud.gezellig": "Snug (%sm)",
   "vadsrijk.ambacht.hud.korf": "Your hive: %s combs (%s)",
   "vadsrijk.ambacht.hud.korf_vrij": "Free hive spot (%2$s): click to place your hive",
+  "vadsrijk.ambacht.hud.leeg": "%s · empty, back soon",
   "vadsrijk.ambacht.hud.plek": "%s · tier %s (right-click)",
   "vadsrijk.ambacht.hud.te_laag": "%s · tier %s (needs level %s)",
   "vadsrijk.ambacht.hud.uitgerust": "Rested: %s min of double profession xp",
