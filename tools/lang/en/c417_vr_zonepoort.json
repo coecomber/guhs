@@ -1,10 +1,10 @@
 {
   "vadsrijk.zonepoort.dungeon": "%s lies in %s: that zone opens soon!",
   "vadsrijk.zonepoort.dungeon.eis": "%s: %s",
-  "vadsrijk.zonepoort.eis": "To %1$s: %2$s main story %3$s · %4$s Exploring Book %5$s%% / %6$s%% (key B)",
+  "vadsrijk.zonepoort.eis": "To %1$s: %2$s main story %3$s · %4$s Exploring Book %5$s%% / %6$s%% · %7$s craft steps (%8$s/%9$s) (keys B, J)",
   "vadsrijk.zonepoort.eis.kaart": "Explore the previous zone first: Exploring Book %s%% / 75%% (key B)",
   "vadsrijk.zonepoort.eis.kaart_verhaal": "Finish the main story first and explore the previous zone (Exploring Book %s%% / 75%%)",
-  "vadsrijk.zonepoort.eis.kort": "first the main story and your Exploring Book (B)",
+  "vadsrijk.zonepoort.eis.kort": "first the main story, your craft steps and your Exploring Book (B)",
   "vadsrijk.zonepoort.grens": "%s is still closed: the ship there sails soon! Keep an eye on Discord.",
   "vadsrijk.zonepoort.kaart": "Coming soon! Keep an eye on Discord.",
   "vadsrijk.zonepoort.kort": "soon! Keep an eye on Discord.",

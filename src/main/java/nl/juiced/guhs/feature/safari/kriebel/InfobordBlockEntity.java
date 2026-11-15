@@ -41,8 +41,22 @@ public class InfobordBlockEntity extends BlockEntity {
         return Language.getInstance().has(eigen) ? eigen : "gui.guhs.safari.infobord.algemeen";
     }
 
+    /**
+     * 1.10.4: other places that use the board without a species (the Vadsrijk's Ambachtseiland): (player, board spot) -> {name key,
+     * text key} or null (then the next, and at last "waiting for an animal").
+     */
+    public static final java.util.List<java.util.function.BiFunction<ServerPlayer, BlockPos, String[]>> LEEG_TEKST =
+            new java.util.concurrent.CopyOnWriteArrayList<>();
+
     void lees(ServerPlayer p) {
         if (soort.isEmpty()) {
+            for (java.util.function.BiFunction<ServerPlayer, BlockPos, String[]> h : LEEG_TEKST) {
+                String[] t = h.apply(p, worldPosition);
+                if (t != null) {
+                    SafariDialoog.zeg(p, null, t[0], t[1]);
+                    return;
+                }
+            }
             SafariDialoog.zeg(p, null, "block.guhs.infobord", tekstKey());
         } else {
             SafariDialoog.zeg(p, null, "entity.guhs.safari." + soort, tekstKey(), Component.translatable("entity.guhs.safari." + soort));

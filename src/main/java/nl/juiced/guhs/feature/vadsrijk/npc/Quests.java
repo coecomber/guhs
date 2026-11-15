@@ -36,6 +36,12 @@ public final class Quests {
     public static final String BESTAND_Z5 = "/data/guhs/vadsrijk/npc/quests_z5.json";
     /** U-Z6VERHAAL: zone 6 Het Zijdeland (tools/features/vadsrijk_u_z6verhaal.py): read after zone 5. */
     public static final String BESTAND_Z6 = "/data/guhs/vadsrijk/npc/quests_z6.json";
+    /**
+     * 1.10.4 (tools/features/vadsrijk_ambacht_verhaal.py): the craft steps (Meester Knutsel's islet lesson + two per zone), read last
+     * and spliced into the chains: each quest goes into the questlog right after its "voeg_na", and "na_patch" gives the quest that
+     * used to follow a chain its new previous quest (players already past it: ambacht.AmbachtVerhaal).
+     */
+    public static final String BESTAND_AMBACHT = "/data/guhs/vadsrijk/npc/quests_ambacht.json";
     private static volatile Map<String, Quest> alle;
 
     private Quests() {
@@ -78,7 +84,61 @@ public final class Quests {
         }
         leesNa(m, BESTAND_Z5);   // T-Z5VERHAAL
         leesNa(m, BESTAND_Z6);   // U-Z6VERHAAL
-        return Collections.unmodifiableMap(m);
+        return Collections.unmodifiableMap(voegIn(m, BESTAND_AMBACHT));   // 1.10.4
+    }
+
+    /** 1.10.4: splices the craft steps into the chains (see {@link #BESTAND_AMBACHT}). */
+    static Map<String, Quest> voegIn(Map<String, Quest> m, String bestand) {
+        Map<String, List<Quest>> na = new LinkedHashMap<>();
+        Map<String, List<String>> patch = new LinkedHashMap<>();
+        try (InputStream in = Quests.class.getResourceAsStream(bestand)) {
+            if (in == null) {
+                LOG.error("Vadsrijk npc: {} is missing", bestand);
+                return m;
+            }
+            JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
+            for (JsonElement e : root.getAsJsonArray("quests")) {
+                JsonObject o = e.getAsJsonObject();
+                na.computeIfAbsent(str(o, "voeg_na", ""), k -> new ArrayList<>()).add(quest(o));
+            }
+            if (root.has("na_patch")) {
+                for (Map.Entry<String, JsonElement> e : root.getAsJsonObject("na_patch").entrySet()) {
+                    patch.put(e.getKey(), strs(e.getValue().getAsJsonArray()));
+                }
+            }
+        } catch (Exception e) {
+            LOG.error("Vadsrijk npc: could not read {}", bestand, e);
+            return m;
+        }
+        Map<String, Quest> uit = new LinkedHashMap<>();
+        java.util.ArrayDeque<Quest> rij = new java.util.ArrayDeque<>();
+        for (Quest q : m.values()) {
+            rij.add(q);
+            while (!rij.isEmpty()) {   // (a quest, then whatever goes in right after it: chains of inserted quests too)
+                Quest x = rij.poll();
+                List<String> nieuw = patch.get(x.id());
+                uit.put(x.id(), nieuw == null ? x : metNa(x, nieuw));
+                List<Quest> erna = na.remove(x.id());
+                if (erna != null) {
+                    for (int i = erna.size() - 1; i >= 0; i--) {
+                        rij.addFirst(erna.get(i));
+                    }
+                }
+            }
+        }
+        for (List<Quest> rest : na.values()) {   // (an unknown "voeg_na": at the end, never lost)
+            for (Quest q : rest) {
+                LOG.warn("Vadsrijk npc: craft step {} has no place in the questlog", q.id());
+                uit.put(q.id(), q);
+            }
+        }
+        return uit;
+    }
+
+    /** The same quest with other previous quests. */
+    static Quest metNa(Quest q, List<String> na) {
+        return new Quest(q.id(), q.soort(), q.gever(), q.inleveren(), q.lv(), List.copyOf(na), q.klasse(), q.auto(), q.doelen(), q.beloning(),
+                q.aanbod(), q.klaar(), q.praat(), q.actieAanname(), q.actieKlaar(), q.startItems());
     }
 
     /** T-Z5VERHAAL: one later zone's quest file, after all the others (so its quests come last in the questlog). */

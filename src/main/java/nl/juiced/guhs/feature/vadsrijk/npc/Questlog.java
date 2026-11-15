@@ -37,6 +37,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
 public final class Questlog {
     public static final String SLICE = "npc";
     public static final int ACTIEF = 1, KLAAR = 2;
+    /** 1.10.4: the {@code bron} of a VERZAMEL objective whose items are only checked at hand-in, never taken (a craft step's materials). */
+    public static final String HOUD = "houd";
 
     private Questlog() {
     }
@@ -275,7 +277,7 @@ public final class Questlog {
     public static void voltooi(ServerPlayer p, Quest q) {
         for (int i = 0; i < q.doelen().size(); i++) {
             Quest.Doel d = q.doelen().get(i);
-            if (d.type() == Quest.Doel.Type.VERZAMEL) {
+            if (d.type() == Quest.Doel.Type.VERZAMEL && !HOUD.equals(d.bron())) {   // (1.10.4: "houd" = only checked, the next step uses them)
                 neemItems(p, item(d.doel()), d.n());
             }
         }

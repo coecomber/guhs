@@ -102,6 +102,7 @@ public final class AmbachtRegistry {
         });
         NeoForge.EVENT_BUS.addListener(AmbachtRegistry::commando);
         nl.juiced.guhs.feature.vadsrijk.web.WebExport.EXTRA_HISCORES.add(Ranglijst::exporteer);
+        AmbachtVerhaal.register(modBus);   // 1.10.4: story items/recipes, the craft steps, Meester Knutsel's islet (EilandRegistratie)
         HoogvadsGilde.koppel();   // T-INT: the Hoogvads Ambachtsgilde teachers open the workshops   // T-INT: the ambacht hiscores ride along with s-site's live export
     }
 

@@ -78,11 +78,14 @@ public final class Werkplaats {
         if (r == null) {
             return "vadsrijk.ambacht.werk.onbekend";
         }
+        if (r.soort().equals("verhaal") && !AmbachtVerhaal.magMaken(p, r.id())) {
+            return "vadsrijk.ambacht.werk.verhaal_niet";   // 1.10.4: only while the story step is active
+        }
         if (!kent(p, r)) {
             return "vadsrijk.ambacht.werk.te_laag";
         }
         boolean massa = aantal > 1;
-        if (massa && r.kiest()) {
+        if (massa && (r.kiest() || r.soort().equals("verhaal"))) {
             return "vadsrijk.ambacht.werk.geen_massa";
         }
         aantal = massa ? MASSA_AANTAL : 1;
@@ -152,6 +155,7 @@ public final class Werkplaats {
         AmbachtData.geefXp(p, r.ambacht(), Math.round(xp), true);
         AmbachtData.voegToe(p, "gemaakt", r.id());
         Bestelbord.gemaakt(p, r, r.aantal() * aantal);
+        AmbachtVerhaal.gemaakt(p, r);   // 1.10.4: the story steps / Meester Knutsel's lesson listen
         p.level().playSound(null, p.blockPosition(), r.soort().equals("post") && r.ambacht() == Ambacht.SMEDEN ? SoundEvents.WOOL_PLACE
                 : r.ambacht() == Ambacht.SMEDEN ? SoundEvents.ANVIL_USE : r.soort().equals("drank") || r.soort().equals("slijp") ? SoundEvents.BREWING_STAND_BREW
                 : SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.PLAYERS, 0.6f, 1.2f);

@@ -61,6 +61,10 @@ public final class Reiskaart {
         if (poort != null) {   // X-ZONE1: a closed zone: grey, "binnenkort"; 1.10.2: closed for this player: the book % to reach
             if (nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.isEis(poort)) {
                 int z = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.plekZone(id);
+                int[] amb = nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.telling(p, Math.max(1, z - 1));
+                if (amb[0] < amb[1] && nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.verhaalKlaar(p, Math.max(1, z - 1))) {   // 1.10.4
+                    return new NpcPayloads.ReisPlek(id, TEASER, "vadsrijk.zonepoort.eis.kaart_ambacht", amb[1] - amb[0]);
+                }
                 return new NpcPayloads.ReisPlek(id, TEASER, nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.verhaalKlaar(p, Math.max(1, z - 1))
                         ? "vadsrijk.zonepoort.eis.kaart" : "vadsrijk.zonepoort.eis.kaart_verhaal",
                         nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.boekProcent(p, Math.max(1, z - 1)));

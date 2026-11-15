@@ -128,7 +128,7 @@ public class VadsrijkNpcGameTests {
         Questlog.wisAlles(p);
         nl.juiced.guhs.feature.vadsrijk.kern.Spelers.zetLevel(p, 1);
         java.util.List<Quest> hoofd = Quests.alle().values().stream().filter(Quest::hoofd).filter(q -> nl.juiced.guhs.feature.vadsrijk.voltooiing.ZoneBoeken.zoneVan(q.id()) == 1).toList();   // (zone 1; zones 2 and 3 have their own tests; K-INT)
-        helper.assertTrue(hoofd.size() == 14, "14 main quests (12 + the element quiz + 1.10.1 Opruimen): " + hoofd.size());
+        helper.assertTrue(hoofd.size() == 19, "19 main quests (12 + the element quiz + 1.10.1 Opruimen + 1.10.4: Knutsel's lesson 3, the temple key 2): " + hoofd.size());
         int stappen = 0;
         for (Quest q : hoofd) {
             QuestStap s = QuestStap.hoofdlijn(p);

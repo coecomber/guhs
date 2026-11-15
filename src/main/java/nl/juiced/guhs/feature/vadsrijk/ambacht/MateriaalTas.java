@@ -30,6 +30,9 @@ public final class MateriaalTas {
         List<ItemStack> neem(ServerPlayer p, Predicate<ItemStack> wat, int n);
     }
 
+    /** 1.10.4: told about every material that comes in this way (gathering, hives; a copy of the stack). */
+    public static final List<java.util.function.BiConsumer<ServerPlayer, ItemStack>> GEGEVEN = new java.util.concurrent.CopyOnWriteArrayList<>();
+
     /** Set by t-opslag (null = inventory only). */
     @Nullable
     public static volatile Bron BRON = null;
@@ -41,6 +44,9 @@ public final class MateriaalTas {
     public static void geef(ServerPlayer p, ItemStack s) {
         if (s.isEmpty()) {
             return;
+        }
+        for (java.util.function.BiConsumer<ServerPlayer, ItemStack> l : GEGEVEN) {   // 1.10.4: e.g. Meester Knutsel's lesson
+            l.accept(p, s.copy());
         }
         Bron b = BRON;
         if (b != null && Materialen.van(s) != null) {
