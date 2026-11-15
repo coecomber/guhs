@@ -27,6 +27,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPayloads;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtXp;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.client.ClientPlekken.Plek;
@@ -111,14 +112,14 @@ public final class AmbachtClient {
         e.setSwingHand(true);
         if (!p.lvOk()) {
             mc.gui.setOverlayMessage(Component.translatable("vadsrijk.ambacht.oogst.te_laag", Component.translatable(p.ambacht().naamKey()),
-                    AmbachtXp.tierLevel(p.tier())), false);
+                    p.nodig()), false);
             return;
         }
-        boolean korfZonderOogst = p.ambacht() == Ambacht.IMKEREN && (!p.eigen() || p.raten() <= 0);
+        boolean korfZonderOogst = p.soort() == NodeSoort.KORF && (!p.eigen() || p.raten() <= 0);
         if (mc.player.isShiftKeyDown() || korfZonderOogst) {
             Minigame.stuur(p.id(), 0, true);
         } else {
-            Minigame.start(p.id(), p.ambacht(), p.duik());   // (U-AMBACHT2: coral dives)
+            Minigame.start(p.id(), p.soort());   // (1.10.4: by spot kind, coral dives too)
         }
     }
 
@@ -144,10 +145,10 @@ public final class AmbachtClient {
             if (p.zeldzaam() && t % 4 == 0) {
                 mc.level.addParticle(ParticleTypes.END_ROD, b.getX() + R.nextDouble(), b.getY() + 0.3 + R.nextDouble() * 0.8, b.getZ() + R.nextDouble(), 0, 0.02, 0);
             }
-            if (p.ambacht() == Ambacht.VISSEN && !p.leeg() && t % 10 == 0) {
+            if (p.soort() == NodeSoort.VIS && !p.leeg() && t % 10 == 0) {
                 mc.level.addParticle(ParticleTypes.BUBBLE_POP, b.getX() + 0.2 + R.nextDouble() * 0.6, b.getY() + 0.95, b.getZ() + 0.2 + R.nextDouble() * 0.6, 0, 0.02, 0);
             }
-            if (p.ambacht() == Ambacht.IMKEREN && p.eigen() && !p.bloemen().isEmpty() && t % 6 == 0) {
+            if (p.soort() == NodeSoort.KORF && p.eigen() && !p.bloemen().isEmpty() && t % 6 == 0) {
                 // a bee flying from the hive to a flower (or back with nectar)
                 BlockPos bl = p.bloemen().get(R.nextInt(p.bloemen().size()));
                 boolean heen = R.nextBoolean();
@@ -168,11 +169,11 @@ public final class AmbachtClient {
         if (!Minigame.bezig() && mc.screen == null) {
             Plek p = ClientPlekken.bekeken(dt.getGameTimeDeltaPartialTick(false));
             if (p != null) {
-                Component c = p.ambacht() == Ambacht.IMKEREN
+                Component c = p.soort() == NodeSoort.KORF
                         ? Component.translatable(p.eigen() ? "vadsrijk.ambacht.hud.korf" : "vadsrijk.ambacht.hud.korf_vrij", p.raten(),
                                 Component.translatable("item.guhs.vr_amb_" + p.honing()))
-                        : Component.translatable(p.lvOk() ? "vadsrijk.ambacht.hud.plek" : "vadsrijk.ambacht.hud.te_laag", Component.translatable(p.ambacht().naamKey()),
-                                p.tier(), AmbachtXp.tierLevel(p.tier()));
+                        : Component.translatable(p.lvOk() ? "vadsrijk.ambacht.hud.plek" : "vadsrijk.ambacht.hud.te_laag", Component.translatable(p.soort().naamKey()),
+                                p.tier(), p.nodig());
                 g.centeredText(mc.font, c, g.guiWidth() / 2, g.guiHeight() / 2 + 14, p.lvOk() ? 0xFFFFE8F4 : 0xFFFF9090);
                 if (p.zeldzaam()) {
                     g.centeredText(mc.font, Component.translatable("vadsrijk.ambacht.hud.zeldzaam"), g.guiWidth() / 2, g.guiHeight() / 2 + 25, 0xFFFFD84A);

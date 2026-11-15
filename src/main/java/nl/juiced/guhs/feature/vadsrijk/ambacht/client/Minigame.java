@@ -12,7 +12,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.client.network.ClientPacketDistributor;
-import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPayloads;
 
 /**
@@ -34,7 +34,7 @@ public final class Minigame {
     private static final RandomSource R = RandomSource.create();
     @Nullable
     private static String spot;
-    private static Ambacht ambacht = Ambacht.MIJNEN;
+    private static NodeSoort ambacht = NodeSoort.ERTS;
     private static Soort soort = Soort.TIKKEN;
     private static long start, beet;
     private static int nodig, gedaan, punten;
@@ -54,12 +54,8 @@ public final class Minigame {
     /** U-AMBACHT2: the current one is a coral dive (gently loosen the coral: the hold-release game). */
     private static boolean duik;
 
-    static void start(String id, Ambacht a) {
-        start(id, a, false);
-    }
-
-    static void start(String id, Ambacht a, boolean duiken) {
-        duik = duiken;
+    static void start(String id, NodeSoort a) {
+        duik = a == NodeSoort.DUIK;
         spot = id;
         ambacht = a;
         start = System.currentTimeMillis();
@@ -67,18 +63,18 @@ public final class Minigame {
         punten = 0;
         vast = false;
         fase = R.nextDouble() * Math.PI * 2;
-        switch (duik ? Ambacht.PLUKKEN : a) {
-            case MIJNEN -> {
+        switch (duik ? NodeSoort.KRUID : a) {
+            case ERTS -> {
                 soort = Soort.TIKKEN;
                 nodig = 3;
                 snelheid = 1.6 + R.nextDouble() * 0.5;
             }
-            case HOUTHAKKEN -> {
+            case HOUT -> {
                 soort = Soort.TIKKEN;
                 nodig = 2;
                 snelheid = 2.3 + R.nextDouble() * 0.5;
             }
-            case VISSEN -> {
+            case VIS -> {
                 soort = Soort.BEET;
                 nodig = 1;
                 beet = start + 900 + R.nextInt(1600);
@@ -86,11 +82,11 @@ public final class Minigame {
             default -> {
                 soort = Soort.LOSLATEN;
                 nodig = 1;
-                snelheid = a == Ambacht.IMKEREN ? 0.45 : 0.6;
+                snelheid = a == NodeSoort.KORF ? 0.45 : 0.6;
             }
         }
         nieuwDoel();
-        geluid(a == Ambacht.VISSEN ? SoundEvents.FISHING_BOBBER_THROW : SoundEvents.UI_BUTTON_CLICK.value(), 1.4f);
+        geluid(a == NodeSoort.VIS ? SoundEvents.FISHING_BOBBER_THROW : SoundEvents.UI_BUTTON_CLICK.value(), 1.4f);
     }
 
     private static void nieuwDoel() {
@@ -207,7 +203,7 @@ public final class Minigame {
             return;
         }
         int w = 120, x0 = cx - w / 2;
-        g.centeredText(font, Component.translatable("vadsrijk.ambacht.mini." + (duik ? "duiken" : ambacht.id)).withStyle(ChatFormatting.BOLD), cx, y - 11, 0xFFFFFFFF);
+        g.centeredText(font, Component.translatable("vadsrijk.ambacht.mini." + ambacht.oud).withStyle(ChatFormatting.BOLD), cx, y - 11, 0xFFFFFFFF);
         g.fill(x0 - 2, y - 2, x0 + w + 2, y + 10, 0xC0402040);
         g.fill(x0, y, x0 + w, y + 8, 0xFF5A3A5A);
         if (soort == Soort.BEET) {

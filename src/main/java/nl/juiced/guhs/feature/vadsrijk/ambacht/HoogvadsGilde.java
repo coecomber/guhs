@@ -17,17 +17,24 @@ import nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh;
  * T-INT: Hoogvads is the professions capital. t-z5verhaal's Ambachtsgilde teachers (z5_leermeester_*) open t-ambacht's
  * workshop of their craft from their talk menu ("Werkplaats"), and the Gildemeester opens the Ambachtenboek ("Receptenboek").
  * <p>U-AMBACHT2: the Gilde is where the professions grow on: the T4/T5 recipes are made here ({@link Werkplaats#magHier}), and
- * the story goes on here after the five steps of the hub teachers: one step per new cap ({@link #LEVELS}: 55 and 60 now; 65 and
- * 70 = zone 6 volgt). The teachers of Koken/Brouwen/Smeden/Naaien/Imkeren tell their own craft; the Gildemeester tells the
- * gatherers' (Mijnen, Houthakken, Plukken, Vissen). Choice "Vertel eens..." on every Gilde guh.
+ * the story goes on here after the five steps of the hub teachers: two steps per craft ({@link #LEVELS}: 40 and 48 now on the
+ * 1.10.4 tier scale; 54 and 60 = zone 6 volgt). 1.10.4 (9 -> 4): the Koken and Smeden teachers tell their craft's story, the
+ * Gildemeester tells Verzamelen's and Vissen's; the Brouwen and Naaien teachers open the Koken / Smeden workshop, the imker the
+ * Verzamelen book. Choice "Vertel eens..." on the story guhs.
  */
 public final class HoogvadsGilde {
+    /** The teachers whose workbench opens (1.10.4: brouwen -> Koken, naaien -> Smeden). */
     private static final Map<String, Ambacht> LEERMEESTERS = Map.of(
-            "z5_leermeester_koken", Ambacht.KOKEN, "z5_leermeester_brouwen", Ambacht.BROUWEN, "z5_leermeester_smeden", Ambacht.SMEDEN,
-            "z5_leermeester_naaien", Ambacht.NAAIEN);
-    /** The Gilde story steps (step 5, 6, ...): the ambacht level each needs. 65 / 70 = zone 6 volgt (only used once the cap allows). */
-    public static final int[] LEVELS = {55, 60, 65, 70};
-    static final List<Ambacht> VERZAMELAARS = List.of(Ambacht.MIJNEN, Ambacht.HOUTHAKKEN, Ambacht.PLUKKEN, Ambacht.VISSEN);
+            "z5_leermeester_koken", Ambacht.KOKEN, "z5_leermeester_brouwen", Ambacht.KOKEN, "z5_leermeester_smeden", Ambacht.SMEDEN,
+            "z5_leermeester_naaien", Ambacht.SMEDEN);
+    /** The teachers that tell their craft's Gilde story (one per making craft). */
+    private static final Map<String, Ambacht> VERTELLERS = Map.of("z5_leermeester_koken", Ambacht.KOKEN, "z5_leermeester_smeden", Ambacht.SMEDEN);
+    /**
+     * The Gilde story steps (step 5, 6, ...): the ambacht level each needs (1.10.4: the old 55/60/65/70 on the new tier scale).
+     * The last two = zone 6 volgt ({@link #stappen}).
+     */
+    public static final int[] LEVELS = {40, 48, 54, 60};
+    static final List<Ambacht> VERZAMELAARS = List.of(Ambacht.VERZAMELEN, Ambacht.VISSEN);
 
     private HoogvadsGilde() {
     }
@@ -41,12 +48,10 @@ public final class HoogvadsGilde {
                 p -> AmbachtSchermen.boek(p, "overzicht", null)));
         // (imkeren is a gathering craft: the imker opens the book on beekeeping instead of a workbench)
         optie("z5_leermeester_imkeren", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.boek", p -> true,
-                p -> AmbachtSchermen.boek(p, "recepten", Ambacht.IMKEREN)));
+                p -> AmbachtSchermen.boek(p, "recepten", Ambacht.VERZAMELEN)));
         // U-AMBACHT2: the Gilde story steps
-        LEERMEESTERS.forEach((npc, a) -> optie(npc, new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.verhaal", p -> true,
+        VERTELLERS.forEach((npc, a) -> optie(npc, new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.verhaal", p -> true,
                 p -> verhaal(p, npc, List.of(a)))));
-        optie("z5_leermeester_imkeren", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.verhaal", p -> true,
-                p -> verhaal(p, "z5_leermeester_imkeren", List.of(Ambacht.IMKEREN))));
         optie("z5_gildemeester", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.verhaal", p -> true,
                 p -> verhaal(p, "z5_gildemeester", VERZAMELAARS)));
     }
@@ -55,15 +60,9 @@ public final class HoogvadsGilde {
         QuestMotor.EXTRA.computeIfAbsent(npc, k -> new java.util.concurrent.CopyOnWriteArrayList<>()).add(o);
     }
 
-    /** How many Gilde steps exist now (the ones whose level fits under the cap). */
+    /** How many Gilde steps exist now: 2 (zones 4 + 5); 4 once zone 6's tier is on (1.10.4: by tier, the cap stays 60). */
     public static int stappen() {
-        int n = 0;
-        for (int l : LEVELS) {
-            if (l <= AmbachtXp.CAP) {
-                n++;
-            }
-        }
-        return n;
+        return AmbachtXp.MAX_TIER >= 6 ? LEVELS.length : 2;
     }
 
     /** All story steps of an ambacht now (the hub teachers' 5 + the Gilde's). */

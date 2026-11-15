@@ -36,16 +36,14 @@ public class VadsrijkAmbachtZonesGameTests {
     public static void zone45Data(GameTestHelper helper) {
         // every gatherer has spots in zones 4 and 5, the fishing spots of zone 4 are in the book overview (the fix)
         for (int zone = 4; zone <= 5; zone++) {
-            for (Ambacht a : Ambacht.values()) {
-                if (a.verzamel) {
-                    int z = zone;
-                    helper.assertTrue(AmbachtPlekken.GROEPEN.stream().anyMatch(g -> g.zone() == z && g.ambacht() == a && g.tier() == z),
-                            a.id + " has T" + zone + " spots in zone " + zone);
-                }
+            for (NodeSoort a : List.of(NodeSoort.ERTS, NodeSoort.HOUT, NodeSoort.KRUID, NodeSoort.KORF, NodeSoort.VIS)) {
+                int z = zone;
+                helper.assertTrue(AmbachtPlekken.GROEPEN.stream().anyMatch(g -> g.zone() == z && g.soort() == a && g.tier() == z),
+                        a.id + " has T" + zone + " spots in zone " + zone);
             }
         }
         helper.assertTrue(AmbachtPlekken.maxZone() == 5, "book pages go to zone 5");
-        helper.assertTrue(AmbachtPlekken.GROEPEN.stream().anyMatch(g -> g.zoek() == Zoek.KORAAL), "coral diving spots");
+        helper.assertTrue(AmbachtPlekken.GROEPEN.stream().anyMatch(g -> g.zoek() == Zoek.KORAAL && g.soort() == NodeSoort.DUIK), "coral diving spots");
         helper.assertTrue(AmbachtPlekken.honingSoorten().size() == 7, "3 + 2 + 2 honey kinds: " + AmbachtPlekken.honingSoorten());
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
@@ -56,7 +54,7 @@ public class VadsrijkAmbachtZonesGameTests {
         boolean z4vis = false, z5 = false;
         for (int i = 0; i < l.size(); i++) {
             CompoundTag e = l.getCompoundOrEmpty(i);
-            if (e.getIntOr("zone", 0) == 4 && e.getStringOr("ambacht", "").equals("vissen")) {
+            if (e.getIntOr("zone", 0) == 4 && e.getStringOr("soort", "").equals("vis")) {
                 z4vis = e.getIntOr("gevonden", 0) == 1 && e.getIntOr("totaal", 0) >= 5;
             }
             z5 |= e.getIntOr("zone", 0) == 5;
@@ -90,18 +88,19 @@ public class VadsrijkAmbachtZonesGameTests {
             }
         }
         BlockPos anker = helper.absolutePos(new BlockPos(6, 4, 6));
-        Groep g = new Groep("t_duik", 4, "x", Ambacht.VISSEN, 4, 1, 5, Zoek.KORAAL, "");
+        Groep g = new Groep("t_duik", 4, "x", NodeSoort.DUIK, 4, 1, 5, Zoek.KORAAL, "");
         List<Spot> l = PlekWereld.scan(sl, anker, g);
         helper.assertTrue(!l.isEmpty(), "dive spots in the pool");
         for (BlockPos q : l.get(0).posities()) {
             helper.assertTrue(sl.getBlockState(q.below()).is(Blocks.SAND) && sl.getBlockState(q).is(Blocks.WATER), "on the sea floor: " + q);
         }
-        // a dive gives coral/sponges, never fish; it needs Vissen 50
+        // a dive gives coral/sponges, never fish; it needs Vissen 32 (T4, 1.10.4)
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
         Verzamelen.vergeet(p.getUUID());
-        helper.assertTrue(Verzamelen.doeOogst(p, sl, l.get(0), 1).equals("vadsrijk.ambacht.oogst.te_laag"), "T4 needs Vissen 50");
-        AmbachtData.zetLevel(p, Ambacht.VISSEN, 50);
+        AmbachtData.zetLevel(p, Ambacht.VISSEN, 31);
+        helper.assertTrue(Verzamelen.doeOogst(p, sl, l.get(0), 1).equals("vadsrijk.ambacht.oogst.te_laag"), "T4 needs Vissen 32");
+        AmbachtData.zetLevel(p, Ambacht.VISSEN, 32);
         helper.assertTrue(Verzamelen.doeOogst(p, sl, l.get(0), 1).isEmpty(), "dive");
         int duik = MateriaalTas.tel(p, s -> Materialen.van(s) != null && Materialen.van(s).duik());
         int vis = MateriaalTas.tel(p, s -> Materialen.van(s) != null && Materialen.van(s).vis());
@@ -124,17 +123,17 @@ public class VadsrijkAmbachtZonesGameTests {
         ServerLevel sl = helper.getLevel();
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
-        Groep g = new Groep("t_korf4", 4, "x", Ambacht.IMKEREN, 4, 1, 5, Zoek.BLOEM, "lampionhoning");
+        Groep g = new Groep("t_korf4", 4, "x", NodeSoort.KORF, 4, 1, 5, Zoek.BLOEM, "lampionhoning");
         Spot k = new Spot("t_korf4_0", g, List.of(helper.absolutePos(new BlockPos(2, 2, 2))), List.of());
-        helper.assertTrue(Imkeren.korfLevel(3) == 1 && Imkeren.korfLevel(4) == 20 && Imkeren.korfLevel(5) == 35, "hive gates");
-        helper.assertTrue(Verzamelen.doeOogst(p, sl, k, 1).equals("vadsrijk.ambacht.oogst.te_laag"), "zone-4 meadow needs Imkeren 20");
-        AmbachtData.zetLevel(p, Ambacht.IMKEREN, 20);
-        helper.assertTrue(Verzamelen.doeOogst(p, sl, k, 1).isEmpty() && Imkeren.eigen(p, k), "placed at 20");
+        helper.assertTrue(Imkeren.korfLevel(3) == 1 && Imkeren.korfLevel(4) == 12 && Imkeren.korfLevel(5) == 22, "hive gates (1.10.4: one tier soft)");
+        helper.assertTrue(Verzamelen.doeOogst(p, sl, k, 1).equals("vadsrijk.ambacht.oogst.te_laag"), "zone-4 meadow needs Verzamelen 12");
+        AmbachtData.zetLevel(p, Ambacht.VERZAMELEN, 12);
+        helper.assertTrue(Verzamelen.doeOogst(p, sl, k, 1).isEmpty() && Imkeren.eigen(p, k), "placed at 12");
         Imkeren.vul(p, k);
         Verzamelen.doeOogst(p, sl, k, 2);
         helper.assertTrue(MateriaalTas.tel(p, s -> Materialen.van(s) != null && Materialen.van(s).id().equals("lampionhoning")) == Imkeren.MAX_RATEN,
                 "lampionhoning harvested");
-        helper.assertTrue(Imkeren.max(55) == 5, "a fifth hive at 55");
+        helper.assertTrue(Imkeren.max(40) == 5, "a fifth hive at 40");
         helper.succeed();
     }
 
@@ -142,12 +141,12 @@ public class VadsrijkAmbachtZonesGameTests {
     public static void maakT4T5(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
-        AmbachtData.zetLevel(p, Ambacht.SMEDEN, 56);
-        AmbachtData.zetLevel(p, Ambacht.KOKEN, 55);
+        AmbachtData.zetLevel(p, Ambacht.SMEDEN, 40);
+        AmbachtData.zetLevel(p, Ambacht.KOKEN, 40);
         for (String m : List.of("hemelzilver", "wolkenhout", "glinstergruis", "wolkbes", "wolkenhoning")) {
             MateriaalTas.geef(p, Materialen.stack(m, 1, 20));
         }
-        String r = Werkplaats.maak(p, "zwaard_t5", List.of(Stat.KRACHT, Stat.KRITIEK), null, null, 2, 1);
+        String r = Werkplaats.maak(p, "ring_t5", List.of(Stat.KRITIEK, Stat.KRITIEKSCHADE), null, null, 2, 1);
         helper.assertTrue(r.startsWith("vadsrijk.ambacht.werk."), "made: " + r);
         ItemStack zwaard = ItemStack.EMPTY;
         for (int i = 0; i < p.getInventory().getContainerSize(); i++) {
@@ -156,14 +155,14 @@ public class VadsrijkAmbachtZonesGameTests {
             }
         }
         Uitrusting u = Rollen.van(zwaard);
-        helper.assertTrue(u != null && u.type().equals("mw_t5_zwaard") && u.level() == 56, "a T5 Maatwerk sword at lv 56");
+        helper.assertTrue(u != null && u.type().equals("mw_t5_ring") && u.level() == 56, "a T5 Maatwerk ring at lv 56");
         helper.assertTrue(Werkplaats.maak(p, "wolkbessentaart", List.of(), null, null, 1, 1).startsWith("vadsrijk.ambacht.werk."), "T5 dish");
         // T4/T5 only at the Gilde (T4 also Lampionhaven)
-        Recepten.Recept t5 = Recepten.van("zwaard_t5"), t4 = Recepten.van("zwaard_t4"), t3 = Recepten.van("zwaard_t3");
+        Recepten.Recept t5 = Recepten.van("ring_t5"), t4 = Recepten.van("ring_t4"), t3 = Recepten.van("ring_t3");
         helper.assertTrue(Werkplaats.magHier("amb_smid_z1", t3) && !Werkplaats.magHier("amb_smid_z1", t4) && Werkplaats.magHier("z4_werkplaats", t4)
                 && !Werkplaats.magHier("z4_werkplaats", t5) && Werkplaats.magHier("z5_leermeester_smeden", t5) && Werkplaats.magHier(null, t5),
                 "workshop gates");
-        helper.assertTrue(Recepten.van("post_vlieger") != null && !Recepten.toon(Recepten.van("post_vlieger")).isEmpty(), "kite building (Naaien)");
+        helper.assertTrue(Recepten.van("post_vlieger") != null && !Recepten.toon(Recepten.van("post_vlieger")).isEmpty(), "kite building (Smeden, was Naaien)");
         helper.succeed();
     }
 
@@ -227,11 +226,12 @@ public class VadsrijkAmbachtZonesGameTests {
                 && Spelers.data(vrager).munten == 600, "refund");
         helper.assertTrue(Opdrachten.trekIn(vrager, id2).equals("vadsrijk.ambacht.opdracht.weg"), "refund only once");
         // Maatwerk orders: only that kind and tier, never Meesterwerk
-        Recepten.Recept r = Recepten.van("helm_t1");
-        ItemStack helm = Maatwerk.maak(Maatwerk.SOORTEN.get("helm"), 1, List.of(Stat.VADS, Stat.KRACHT), 50, "x", null, helper.getLevel().getRandom());
+        Recepten.Recept r = Recepten.van("ring_t1");
+        ItemStack mw = Maatwerk.maak(Maatwerk.SOORTEN.get("ring"), 1, List.of(Stat.VADS, Stat.KRACHT), 50, "x", null, helper.getLevel().getRandom());
         ItemStack ring = Maatwerk.maak(Maatwerk.SOORTEN.get("ring"), 1, List.of(Stat.VADS, Stat.KRACHT, Stat.KRITIEK), 50, "x", Maatwerk.Eigenschap.BAZEN,
                 helper.getLevel().getRandom());
-        helper.assertTrue(Opdrachten.past(r).test(helm) && !Opdrachten.past(Recepten.van("helm_t2")).test(helm) && !Opdrachten.past(r).test(ring), "gear match");
+        helper.assertTrue(Opdrachten.vraagbaar(r) && Opdrachten.past(r).test(mw) && !Opdrachten.past(Recepten.van("ring_t2")).test(mw) && !Opdrachten.past(r).test(ring),
+                "jewellery match");
         helper.succeed();
     }
 
@@ -247,7 +247,7 @@ public class VadsrijkAmbachtZonesGameTests {
         helper.assertTrue(t != null && t.behaald().test(p) && !Titels.van("vr_amb_grootmeester").behaald().test(p), "Meester-kok, not yet Grootmeester");
         Meesterschap.check(p);
         helper.assertTrue(Knutselwinkel.penningen(p) == Meesterschap.PENNINGEN, "once per cap");
-        // the Gilde story: steps 6 and 7 at 55 and 60 (65/70 = zone 6 volgt)
+        // the Gilde story: steps 6 and 7 at 40 and 48 (54/60 = zone 6 volgt; 1.10.4 tier scale)
         helper.assertTrue(HoogvadsGilde.stappen() == 2 && HoogvadsGilde.totaal() == 7, "2 Gilde steps under cap 60");
         AmbachtData.zetVerhaal(p, Ambacht.KOKEN, 2);
         helper.assertTrue(HoogvadsGilde.verhaal(p, "z5_leermeester_koken", List.of(Ambacht.KOKEN)) == null, "first the hub teacher's five");
@@ -259,7 +259,7 @@ public class VadsrijkAmbachtZonesGameTests {
                 "Gilde step 2, then done");
         // the gatherers at the Gildemeester: the first one with a step ready
         AmbachtData.zetVerhaal(p, Ambacht.VISSEN, 5);
-        AmbachtData.zetLevel(p, Ambacht.VISSEN, 55);
+        AmbachtData.zetLevel(p, Ambacht.VISSEN, 40);
         helper.assertTrue(HoogvadsGilde.verhaal(p, "z5_gildemeester", HoogvadsGilde.VERZAMELAARS) == Ambacht.VISSEN, "the Gildemeester tells Vissen");
         helper.succeed();
     }
@@ -274,8 +274,9 @@ public class VadsrijkAmbachtZonesGameTests {
         for (Zone6Haken.PlekSlot s : Zone6Haken.PLEKKEN) {
             helper.assertTrue(AmbachtPlekken.groep(s.id()) == null, "spot slot not active yet: " + s.id());
         }
-        helper.assertTrue(Zone6Haken.CAP == 70 && AmbachtXp.CAP < Zone6Haken.CAP && AmbachtXp.TIER_MIN[6] == 60 && AmbachtXp.VERZAMEL.length > 6, "T6 band ready");
-        helper.assertTrue(HoogvadsGilde.LEVELS.length == 4 && HoogvadsGilde.LEVELS[3] == 70, "Gilde steps 65/70 wait for zone 6");
+        helper.assertTrue(Zone6Haken.CAP == 60 && AmbachtXp.CAP == Zone6Haken.CAP && AmbachtXp.TIER_MIN[6] == 48 && AmbachtXp.VERZAMEL.length > 6,
+                "T6 band ready (from 48, cap stays 60)");
+        helper.assertTrue(HoogvadsGilde.LEVELS.length == 4 && HoogvadsGilde.LEVELS[3] == 60, "Gilde steps 54/60 wait for zone 6");
         helper.succeed();
     }
 }

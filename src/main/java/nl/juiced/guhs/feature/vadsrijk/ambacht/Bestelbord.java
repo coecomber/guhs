@@ -45,8 +45,8 @@ public final class Bestelbord {
     static {
         for (Materialen.Materiaal m : Materialen.ALLE.values()) {
             if (m.tier() > 0) {
-                b("breng_" + m.id(), "breng", m.ambacht(), m.ambacht() == Ambacht.IMKEREN ? Imkeren.korfLevel(m.tier()) : AmbachtXp.tierLevel(m.tier()), m.id(),
-                        m.ambacht() == Ambacht.IMKEREN ? 4 : 10);
+                boolean korf = m.soort() == NodeSoort.KORF;
+                b("breng_" + m.id(), "breng", m.ambacht(), korf ? Imkeren.korfLevel(m.tier()) : AmbachtXp.tierLevel(m.tier()), m.id(), korf ? 4 : 10);
             }
         }
         for (Recept r : Recepten.ALLE.values()) {
@@ -57,9 +57,7 @@ public final class Bestelbord {
         for (Ambacht a : Ambacht.values()) {
             if (a.verzamel) {
                 for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {   // U-AMBACHT2: tiers 4 + 5
-                    if (a != Ambacht.IMKEREN || t == 1) {
-                        b("verzamel_" + a.id + "_" + t, "verzamel", a, AmbachtXp.tierLevel(t), "", a == Ambacht.IMKEREN ? 6 : 12 + 4 * t);
-                    }
+                    b("verzamel_" + a.id + "_" + t, "verzamel", a, AmbachtXp.tierLevel(t), "", 12 + 4 * t);
                 }
             } else {
                 for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {
@@ -124,13 +122,18 @@ public final class Bestelbord {
         return s.toString();
     }
 
-    /** The orders this player can do: their level in that ambacht is high enough (never imkeren before you have a hive). */
+    /** 1.10.4: an order fits your level up to this many levels above its own (tiers are ~10 levels wide now; was 25). */
+    public static final int BOVEN = 16;
+
+    /** The orders this player can do: their level in that ambacht is high enough (never honey before you have a hive). */
     static List<Bestelling> mogelijk(ServerPlayer p) {
         List<Bestelling> l = new ArrayList<>();
+        boolean geenKorf = AmbachtData.tag(p).getCompoundOrEmpty("korven").isEmpty();
         for (Bestelling b : POOL.values()) {
             int lv = AmbachtData.level(p, b.ambacht());
-            boolean imker = b.ambacht() == Ambacht.IMKEREN && AmbachtData.tag(p).getCompoundOrEmpty("korven").isEmpty();
-            if (lv >= b.level() && lv <= b.level() + 25 && !imker) {
+            Materialen.Materiaal m = b.soort().equals("breng") ? Materialen.ALLE.get(b.wat()) : null;
+            boolean imker = geenKorf && m != null && m.soort() == NodeSoort.KORF;
+            if (lv >= b.level() && lv <= b.level() + BOVEN && !imker) {
                 l.add(b);
             }
         }

@@ -42,7 +42,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
  * </ul>
  */
 public final class Verzamelen {
-    public static final int LEEG_MIN = 60, LEEG_MAX = 120, ZICHT = 64, AFK_MINUTEN = 10, AFK_AFSTAND = 5;
+    public static final int LEEG_MIN = AmbachtPlekken.LEEG_MIN, LEEG_MAX = AmbachtPlekken.LEEG_MAX, ZICHT = 64, AFK_MINUTEN = 10, AFK_AFSTAND = 5;
     public static final double ZELDZAAM_KANS = 0.05, ZELDZAAM_MATERIAAL = 0.35, BEREIK = 6.0;
 
     /** One spot's state for one player. */
@@ -177,15 +177,17 @@ public final class Verzamelen {
             e.putString("id", s.id());
             e.putLong("pos", pos.asLong());
             e.putString("a", g.ambacht().id);
+            e.putString("s", g.soort().id);   // 1.10.4: the spot kind (minigame + look)
             e.putInt("tier", g.tier());
             boolean leeg = nu < staat(p, s).klaar;
             e.putBoolean("leeg", leeg);
             e.putBoolean("zeldzaam", !leeg && zeldzaam(p, s));
-            e.putBoolean("lvOk", AmbachtData.level(p, g.ambacht()) >= (g.ambacht() == Ambacht.IMKEREN ? Imkeren.korfLevel(g.tier()) : AmbachtXp.tierLevel(g.tier())));
+            e.putBoolean("lvOk", AmbachtData.level(p, g.ambacht()) >= nodig(g));
             if (g.zoek() == AmbachtPlekken.Zoek.KORAAL) {
                 e.putBoolean("duik", true);   // U-AMBACHT2: the client draws coral and an underwater hit box
             }
-            if (g.ambacht() == Ambacht.IMKEREN) {
+            if (g.soort() == NodeSoort.KORF) {
+                e.putInt("nodig", nodig(g));
                 Imkeren.syncInfo(p, s, e);
             }
             l.add(e);
@@ -227,7 +229,7 @@ public final class Verzamelen {
         boolean overgeslagen = false;
         BlockPos pos = positie(p, s);
         Groep g = s.groep();
-        if (g.ambacht() == Ambacht.IMKEREN) {
+        if (g.soort() == NodeSoort.KORF) {
             return Imkeren.klik(p, s, score);
         }
         Staat st = staat(p, s);
@@ -249,8 +251,9 @@ public final class Verzamelen {
         int q = overgeslagen ? 0 : Math.max(0, Math.min(2, score));
         boolean zeld = st.zeldzaam;
         boolean afk = afk(p);
-        // the yield: 1 + a little per level above the tier, a chance on double, x3 when rare, halved when not moving
-        int n = 1 + Math.max(0, lv - nodig) / 15;
+        // the yield: 1 + a little per level above the tier (1.10.4: per 8 levels, tiers are ~10 wide), a chance on double, x3 when
+        // rare, halved when not moving
+        int n = 1 + Math.max(0, lv - nodig) / 8;
         if (p.getRandom().nextDouble() < 0.05 + 0.01 * (lv / 10) + Eten.dubbelKans(p)) {
             n++;
         }
@@ -272,22 +275,22 @@ public final class Verzamelen {
         }
         // extras: the rare material on a rare spot, a raw crystal on a perfect ore swing, resin from schemerhout
         if (zeld && p.getRandom().nextDouble() < ZELDZAAM_MATERIAAL) {
-            Materiaal r = Materialen.zeldzaam(g.ambacht());
+            Materiaal r = Materialen.zeldzaam(g.soort());
             if (r != null) {
                 MateriaalTas.geef(p, Materialen.stack(r.id(), q, 1));
                 p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.oogst.zeldzaam", Component.translatable(r.naamKey())).withStyle(ChatFormatting.GOLD));
             }
         }
-        if (g.ambacht() == Ambacht.MIJNEN && q == 2 && g.tier() >= 2 && p.getRandom().nextDouble() < 0.25) {
+        if (g.soort() == NodeSoort.ERTS && q == 2 && g.tier() >= 2 && p.getRandom().nextDouble() < 0.25) {
             ItemStack k = kristal(p, g.tier());
             if (!k.isEmpty()) {
                 MateriaalTas.geef(p, k);
             }
         }
-        if (g.ambacht() == Ambacht.HOUTHAKKEN && g.tier() == 3 && p.getRandom().nextDouble() < 0.3) {
+        if (g.soort() == NodeSoort.HOUT && g.tier() == 3 && p.getRandom().nextDouble() < 0.3) {
             MateriaalTas.geef(p, Materialen.stack("roze_hars", q, 1));
         }
-        if (g.zoek() == AmbachtPlekken.Zoek.KORAAL && p.getRandom().nextDouble() < 0.06) {
+        if (g.soort() == NodeSoort.DUIK && p.getRandom().nextDouble() < 0.06) {
             MateriaalTas.geef(p, Materialen.stack("parelschelp", q, 1));   // U-AMBACHT2: divers sometimes find a pearl shell
         }
         // xp: the tier amount, +10 % per quality step, x3 on a rare spot, halved when AFK
@@ -298,13 +301,13 @@ public final class Verzamelen {
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Premies.meld(p, "ambacht", 1);   // ("event:ambacht" bounties, if any)
         Bestelbord.verzameld(p, g.ambacht(), n);
         // the spot empties for this player and comes back elsewhere (sometimes rare)
-        st.klaar = nu + 20L * (LEEG_MIN + p.getRandom().nextInt(LEEG_MAX - LEEG_MIN + 1));
+        st.klaar = nu + 20L * (g.leegMin() + p.getRandom().nextInt(Math.max(1, g.leegMax() - g.leegMin() + 1)));   // (1.10.4: per group)
         if (s.posities().size() > 1) {
             int nieuw = p.getRandom().nextInt(s.posities().size() - 1);
             st.pos = nieuw >= st.pos ? nieuw + 1 : nieuw;
         }
         st.zeldzaam = p.getRandom().nextDouble() < ZELDZAAM_KANS;
-        effect(p, sl, pos, g.ambacht(), q, zeld);
+        effect(p, sl, pos, g.soort(), q, zeld);
         if (afk) {
             p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.oogst.afk").withStyle(ChatFormatting.GRAY));
         }
@@ -317,20 +320,14 @@ public final class Verzamelen {
         return key;
     }
 
-    /** Which material a harvest gives (fish: by time of day and weather). */
+    /** Which material a harvest gives (fish: by time of day and weather; a dive spot gives the diving finds). */
     @Nullable
     static Materiaal kies(ServerPlayer p, ServerLevel sl, Groep g) {
-        List<Materiaal> l = Materialen.van(g.ambacht(), g.tier());
-        if (g.ambacht() == Ambacht.VISSEN) {
-            // U-AMBACHT2: a dive spot gives the diving finds (coral, sponges), a fishing spot only fish
-            boolean duik = g.zoek() == AmbachtPlekken.Zoek.KORAAL;
-            l = new java.util.ArrayList<>(l);
-            l.removeIf(m -> m.duik() != duik);
-        }
+        List<Materiaal> l = Materialen.van(g.soort(), g.tier());
         if (l.isEmpty()) {
             return null;
         }
-        if (g.ambacht() == Ambacht.VISSEN && g.zoek() != AmbachtPlekken.Zoek.KORAAL) {
+        if (g.soort() == NodeSoort.VIS) {
             boolean nacht = !sl.isBrightOutside(), regen = sl.isRaining();
             Materiaal gewoon = null, n = null, r = null;
             for (Materiaal m : l) {
@@ -369,13 +366,18 @@ public final class Verzamelen {
         return nu - a.sinds() > 20L * 60 * AFK_MINUTEN;
     }
 
-    static void effect(ServerPlayer p, ServerLevel sl, BlockPos pos, Ambacht a, int q, boolean zeldzaam) {
-        SoundEvent geluid = switch (a) {
-            case MIJNEN -> SoundEvents.AMETHYST_BLOCK_HIT;
-            case HOUTHAKKEN -> SoundEvents.WOOD_BREAK;
-            case PLUKKEN -> SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES;
-            case VISSEN -> SoundEvents.FISHING_BOBBER_SPLASH;
-            default -> SoundEvents.BEEHIVE_SHEAR;
+    /** The minimum level for a group: the tier's start (hives: the softer {@link Imkeren#korfLevel}). */
+    public static int nodig(Groep g) {
+        return g.soort() == NodeSoort.KORF ? Imkeren.korfLevel(g.tier()) : AmbachtXp.tierLevel(g.tier());
+    }
+
+    static void effect(ServerPlayer p, ServerLevel sl, BlockPos pos, NodeSoort s, int q, boolean zeldzaam) {
+        SoundEvent geluid = switch (s) {
+            case ERTS -> SoundEvents.AMETHYST_BLOCK_HIT;
+            case HOUT -> SoundEvents.WOOD_BREAK;
+            case KRUID -> SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES;
+            case VIS, DUIK -> SoundEvents.FISHING_BOBBER_SPLASH;
+            case KORF -> SoundEvents.BEEHIVE_SHEAR;
         };
         Vec3 c = Vec3.atCenterOf(pos);
         sl.playSound(null, pos, geluid, SoundSource.PLAYERS, 0.8f, 1.0f + 0.15f * q);

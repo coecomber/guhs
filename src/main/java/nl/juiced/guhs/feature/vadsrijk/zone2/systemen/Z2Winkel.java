@@ -59,13 +59,9 @@ public final class Z2Winkel {
 
     static void registreer() {
         Winkels.registreer(new Winkels.Winkel(KANDIJKRAAM, true, List.of(
-                Winkels.itemWaar("vadsdrankje", 40, () -> new ItemStack(EcoSpul.VADSDRANKJE.get())),
-                Winkels.itemWaar("grote_vadsdrank", 300, () -> new ItemStack(GROTE_VADSDRANK.get())),   // (balans 2026-11: 3 zilver)
-                Winkels.itemWaar("energiedrankje", 20, () -> new ItemStack(EcoSpul.ENERGIEDRANKJE.get())),
-                Winkels.itemWaar("grote_energiedrank", 55, () -> new ItemStack(GROTE_ENERGIEDRANK.get())),
+                // 1.10.4 (Koken = drankjes + eten): only the smallest heal potion; the Warme Chocomelk stays (the thaw against the cold)
+                Winkels.itemWaar("klein_vadsdrankje", 8, () -> new ItemStack(EcoSpul.KLEIN_VADSDRANKJE.get())),
                 Winkels.itemWaar("warme_chocomelk", 30, () -> new ItemStack(WARME_CHOCOMELK.get())),
-                Winkels.itemWaar("vahoegdrankje", 60, () -> new ItemStack(EcoSpul.VAHOEGDRANKJE.get())),
-                Winkels.itemWaar("snelpootjesdrankje", 45, () -> new ItemStack(EcoSpul.SNELPOOTJESDRANKJE.get())),
                 Winkels.itemWaar("verbetersteentje", 50, () -> new ItemStack(EcoSpul.VERBETERSTEENTJE.get())))));
     }
 

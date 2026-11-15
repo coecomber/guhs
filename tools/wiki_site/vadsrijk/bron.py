@@ -770,7 +770,7 @@ class Bron:
             return ""
 
     def _ambachten(self):
-        """The 9 crafts: names, gathering spots per zone (lang groups) and every recipe of ambacht/Recepten.java (its loops expanded)."""
+        """The 4 crafts (1.10.4; was 9): names, gathering spots per zone (lang groups) and every recipe of ambacht/Recepten.java (its loops expanded)."""
         tekst = self._java(os.path.join("ambacht", "Recepten.java"))
         lijsten = {m[1]: re.findall(r'"([a-z_]+)"', m[2]) for m in re.finditer(r"\b([A-Z0-9]+) = List\.of\(([^)]*)\)", tekst)}
         lijsten.update({m[1]: re.findall(r'"([a-z_]+)"', m[2]) for m in re.finditer(r",\s*([A-Z0-9]+) = List\.of\(([^)]*)\)", tekst)})
@@ -802,7 +802,7 @@ class Bron:
             m = re.match(r"vadsrijk\.ambacht\.groep\.(z(\d)_([a-z]+)_[a-z0-9_]+)$", k)
             if m:
                 plekken[(m[3], int(m[2]))].append(v)
-        soort_van = {"pluk": "plukken", "mijn": "mijnen", "hout": "houthakken", "vis": "vissen", "korf": "imkeren"}
+        soort_van = {"pluk": "verzamelen", "mijn": "verzamelen", "hout": "verzamelen", "korf": "verzamelen", "vis": "vissen", "duik": "vissen"}
         verzamel = collections.defaultdict(dict)
         for (s_, z), lijst in plekken.items():
             verzamel[soort_van.get(s_, s_)][z] = lijst

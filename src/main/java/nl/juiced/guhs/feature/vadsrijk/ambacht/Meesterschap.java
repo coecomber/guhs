@@ -11,9 +11,9 @@ import nl.juiced.guhs.feature.vadsrijk.kleding.Kledingkast;
 
 /**
  * U-AMBACHT2: the Meesterschort path (VOORSTEL_PROFESSIONS "Meesterschort", deferred by t-ambacht because lv 100 was beyond the cap).
- * It now SCALES WITH THE CAP: an ambacht at the current cap ({@link AmbachtXp#CAP}, 60 now, 70 with zone 6) makes you
+ * It now SCALES WITH THE CAP: an ambacht at the current cap ({@link AmbachtXp#CAP}, 60) makes you
  * "Meester-&lt;ambacht&gt;" (a title, shown at home too) and the first time unlocks the Meesterschort, a cosmetic cape in the
- * Kledingkast (A2: cosmetics, never power). All nine at the cap = "Grootmeester". Every new cap is a new mastery moment: the
+ * Kledingkast (A2: cosmetics, never power). All four (1.10.4; was nine) at the cap = "Grootmeester". Every new cap is a new mastery moment: the
  * reward is remembered per ambacht AND cap ({@code AmbachtData "meester"}: "smeden@60"), so when the cap rises to 70 reaching 70
  * gives the moment (+ Knutselpenningen) again; the title always follows the current cap.
  */

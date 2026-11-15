@@ -34,7 +34,7 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
-import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken;
 import nl.juiced.guhs.feature.vadsrijk.geluid.GeluidPlan;
 import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
@@ -148,7 +148,7 @@ public final class Grotten {
     public static void register(IEventBus modBus) {
         for (GrotData.Amb a : GrotData.AMBACHT) {
             AmbachtPlekken.GROEPEN.add(new AmbachtPlekken.Groep("grot_" + a.grot() + "_" + a.poi().substring(a.poi().lastIndexOf("amb")), a.zone(),
-                    a.poi(), Ambacht.valueOf(a.ambacht()), a.tier(), a.aantal(), a.straal(), AmbachtPlekken.Zoek.valueOf(a.zoek()), ""));
+                    a.poi(), NodeSoort.valueOf(a.soort()), a.tier(), a.aantal(), a.straal(), AmbachtPlekken.Zoek.valueOf(a.zoek()), ""));
         }
         for (GrotData.Grot g : GrotData.ALLE) {
             GeluidPlan.EXTRA.put(gebiedId(g), new GeluidPlan.Streek(gebiedId(g), List.of(thema(g)), g.id().equals("wortelgrot") ? "wortel" : "grot"));

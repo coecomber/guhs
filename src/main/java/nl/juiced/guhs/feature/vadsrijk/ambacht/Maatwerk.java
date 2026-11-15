@@ -48,22 +48,27 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Uitrusting;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Zeldzaamheid;
+import nl.juiced.guhs.feature.vadsrijk.kern.loot.ZonePools;
 import nl.juiced.guhs.feature.vadsrijk.kern.mob.VadsrijkMob;
 
 /**
- * Maatwerk and Meesterwerk (VOORSTEL §3.4, A1 + A3):
+ * Maatwerk and Meesterwerk (VOORSTEL §3.4, A1 + A3; 1.10.4 "Smeden = sieraden"):
  * <ul>
- *   <li><b>Maatwerk</b> (Smeden: weapons of the 3 classes + helm + borstplaat; Naaien: broek + schoentjes): Episch, base stats at
- *   ~90 % of that tier's dungeon/zone set ({@link #MAATWERK}), you CHOOSE 2 of the bonuses (the rest rolls), +1 guaranteed socket
- *   (max 3), NO set bonus (its base types are in no set), tradeable;</li>
- *   <li><b>Meesterwerk jewellery</b> (Smeden + a boss core): Legendarisch, 3 chosen bonuses + 1 small property ({@link Eigenschap}),
- *   base stats above every dropped piece of its tier: Best in Slot (A3). Bound (gebonden) once made.</li>
+ *   <li><b>Maatwerk jewellery</b> (Smeden, from T1: ring, ketting, oorbel, armband): Episch, you CHOOSE 2 of the bonuses (the rest
+ *   rolls), +1 guaranteed socket (max 3), NO set bonus, tradeable;</li>
+ *   <li><b>Meesterwerk jewellery</b> (Smeden + a boss core): Legendarisch, 3 chosen bonuses + 1 small property ({@link Eigenschap}).</li>
+ *   <li>Strength ({@link #normaliseer}): a made piece is worth {@link #BOVEN_BUIT_MIN}..{@link #BOVEN_BUIT} more than the best
+ *   jewellery of its slot that drops in the zone of its tier (same level and rarity; 100 % Vadsigheid = +10 %), with your own bonuses.</li>
+ *   <li>The Maatwerk weapons and armour (zwaard, boog, staf, helm, borstplaat, broek, schoentjes) were removed in 1.10.4 (nobody had
+ *   made one): no recipes; their items and base types stay registered, harmless, so no world breaks.</li>
  * </ul>
  * Vadsigheid pushes the chosen bonuses up their range (100 %: always in the top 20 %). Base type ids {@code mw_t<tier>_<soort>};
  * items {@code guhs:vr_amb_mw_<soort>} (one item per kind, its name from the base type). Extra data: component {@code guhs:vr_amb_maatwerk}.
  */
 public final class Maatwerk {
     public static final double MAATWERK = 0.9;
+    /** 1.10.4: how much a made piece of jewellery is above the zone's best drop of its slot: 100 % Vadsigheid / 0 % Vadsigheid. */
+    public static final double BOVEN_BUIT = 0.10, BOVEN_BUIT_MIN = 0.05;
     /** The gear level of each tier's recipes (U-AMBACHT2: T4 = the zone-4 sets' level 50, T5 = zone 5's 56). */
     public static final int[] GEAR_LEVEL = {0, 15, 30, 45, 50, 56};
 
@@ -125,11 +130,17 @@ public final class Maatwerk {
         s(new Soort("staf", Slot.WAPEN, Klassen.MAGIER, "staf", Ambacht.SMEDEN));
         s(new Soort("helm", Slot.HOOFD, null, "harnas", Ambacht.SMEDEN));
         s(new Soort("borstplaat", Slot.BORST, null, "harnas", Ambacht.SMEDEN));
-        s(new Soort("broek", Slot.BENEN, null, "harnas", Ambacht.NAAIEN));
-        s(new Soort("schoentjes", Slot.VOETEN, null, "harnas", Ambacht.NAAIEN));
+        s(new Soort("broek", Slot.BENEN, null, "harnas", Ambacht.SMEDEN));
+        s(new Soort("schoentjes", Slot.VOETEN, null, "harnas", Ambacht.SMEDEN));
         s(new Soort("ring", Slot.RING, null, "sieraad", Ambacht.SMEDEN));
         s(new Soort("ketting", Slot.KETTING, null, "sieraad", Ambacht.SMEDEN));
         s(new Soort("oorbel", Slot.OORBEL, null, "sieraad", Ambacht.SMEDEN));
+        s(new Soort("armband", Slot.ARMBAND, null, "sieraad", Ambacht.SMEDEN));   // 1.10.4
+    }
+
+    /** 1.10.4: a kind Smeden still makes (jewellery); the removed weapons/armour are not. */
+    public static boolean sieraad(Soort s) {
+        return s.slot() == Slot.RING || s.slot() == Slot.KETTING || s.slot() == Slot.OORBEL || s.slot() == Slot.ARMBAND;
     }
 
     private Maatwerk() {
@@ -174,6 +185,7 @@ public final class Maatwerk {
             sieraad("ring", t, Stats.van(Stat.KRITIEK, 4 * f, Stat.KRITIEKSCHADE, 10 * f));
             sieraad("ketting", t, Stats.van(Stat.VADS, 50 * f, Stat.VERDEDIGING, 12 * f));
             sieraad("oorbel", t, Stats.van(Stat.ELEMENTSCHADE, 11 * f, Stat.COOLDOWNREDUCTIE, 2.5 * f));
+            sieraad("armband", t, Stats.van(Stat.AANVALSSNELHEID, 3 * f, Stat.COOLDOWNREDUCTIE, 2 * f));   // 1.10.4
         }
     }
 
@@ -241,6 +253,9 @@ public final class Maatwerk {
                 }
             }
         }
+        if (sieraad(s)) {
+            bonussen = normaliseer(t, tier, level, z, bonussen, vadsigheid);   // 1.10.4: ~10 % above the zone's drops
+        }
         int sokjes = Math.min(3, Rollen.SOKJES.aantal(t, level, z, r) + 1);
         Uitrusting u = new Uitrusting(t.id(), z, level, bonussen, t.element(), 0, 0, false, meester, r.nextLong(),
                 java.util.Collections.nCopies(sokjes, ""));
@@ -248,6 +263,100 @@ public final class Maatwerk {
         stack.set(INFO.get(), new Info(namen, meester ? eigenschap.id : "", meester));
         Gemaakt.zet(stack, vadsigheid, maker);
         return stack;
+    }
+
+    // ---- 1.10.4: the strength of made jewellery against the zone's drops ---------------------------------------------------------
+
+    /** One stat line's worth: its value as a share of the top of that stat's bonus range at this level. */
+    static double waard(Stat st, double v, int level) {
+        double top = Bonussen.bereik(st, level)[1];
+        return top <= 0 ? 0 : v / top;
+    }
+
+    /** The worth of a base type's own stats at this level and rarity. */
+    static double basisKracht(BasisType t, int level, Zeldzaamheid z) {
+        double k = 0;
+        for (Map.Entry<Stat, Double> e : t.statsOp(level).alles().entrySet()) {
+            k += waard(e.getKey(), e.getValue() * z.factor, level);
+        }
+        return k;
+    }
+
+    /** What a piece is worth (base stats x rarity + its bonuses; stars, gems and the slot budget left out). */
+    public static double kracht(Uitrusting u) {
+        BasisType t = u.basisType();
+        if (t == null) {
+            return 0;
+        }
+        double k = basisKracht(t, u.level(), u.zeldzaamheid());
+        for (Bonus b : u.bonussen()) {
+            k += waard(b.stat(), b.waarde(), u.level());
+        }
+        return k;
+    }
+
+    /** The expected worth of a DROPPED piece of this base type (bonus count and roll height of the rarity, the slot's bonus pool). */
+    public static double verwacht(BasisType t, int level, Zeldzaamheid z) {
+        double a = 1 + 0.35 * z.ordinal(), eu = a / (a + 1);   // (Bonussen.waarde: u = r^(1/a), E[u] = a / (a + 1))
+        double som = 0;
+        int n = 0;
+        for (Stat st : Stat.values()) {
+            if (Bonussen.mag(st, t.slot())) {
+                double[] b = Bonussen.bereik(st, level);
+                som += (b[0] + (b[1] - b[0]) * eu) / b[1];
+                n++;
+            }
+        }
+        double perBonus = n == 0 ? 0 : som / n;
+        return basisKracht(t, level, z) + perBonus * (z.minBonus + z.maxBonus) / 2.0;
+    }
+
+    /**
+     * The best expected drop of this jewellery slot in this zone's loot pool at this level and rarity (no slot of that kind in the
+     * pool: the best piece of jewellery of any slot; no jewellery at all: 0).
+     */
+    public static double buitReferentie(int zone, Slot slot, int level, Zeldzaamheid z) {
+        double beste = 0, elk = 0;
+        for (BasisType t : ZonePools.voorZone(zone, null)) {
+            boolean juweel = t.slot() == Slot.RING || t.slot() == Slot.KETTING || t.slot() == Slot.OORBEL || t.slot() == Slot.ARMBAND;
+            if (!juweel) {
+                continue;
+            }
+            double v = verwacht(t, level, z);
+            elk = Math.max(elk, v);
+            if (t.slot() == slot) {
+                beste = Math.max(beste, v);
+            }
+        }
+        return beste > 0 ? beste : elk;
+    }
+
+    /**
+     * Scales a made piece's bonuses so the whole piece is worth {@code 1 + BOVEN_BUIT_MIN .. 1 + BOVEN_BUIT} (by Vadsigheid) times
+     * {@link #buitReferentie} of the zone of its tier. The chosen stats stay chosen; only the numbers move (may pass a roll's top).
+     */
+    static List<Bonus> normaliseer(BasisType t, int tier, int level, Zeldzaamheid z, List<Bonus> bonussen, int vadsigheid) {
+        double ref = buitReferentie(Math.max(1, Math.min(ZonePools.ZONES, tier)), t.slot(), level, z);
+        if (ref <= 0 || bonussen.isEmpty()) {
+            return bonussen;
+        }
+        double v = Math.max(0, Math.min(100, vadsigheid)) / 100.0;
+        double doel = ref * (1 + BOVEN_BUIT_MIN + (BOVEN_BUIT - BOVEN_BUIT_MIN) * v);
+        double basis = basisKracht(t, level, z), bonus = 0;
+        for (Bonus b : bonussen) {
+            bonus += waard(b.stat(), b.waarde(), level);
+        }
+        if (bonus <= 0) {
+            return bonussen;
+        }
+        double f = Math.max(0.1, Math.min(5.0, (doel - basis) / bonus));
+        List<Bonus> uit = new ArrayList<>();
+        for (Bonus b : bonussen) {
+            double w = b.waarde() * f;
+            w = b.stat().procent ? Math.max(0.1, Math.round(w * 10) / 10.0) : Math.max(1, Math.round(w));
+            uit.add(new Bonus(b.stat(), w));
+        }
+        return uit;
     }
 
     @Nullable

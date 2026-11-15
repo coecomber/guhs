@@ -77,11 +77,33 @@ public final class ZonePools {
         return l;
     }
 
-    /** A random piece of the zone's pool for that class (null when the pool is empty). */
+    /**
+     * A random piece of the zone's pool for that class (null when the pool is empty). 1.10.4: jewellery weighs
+     * 1/{@link DropBalans#SIERAAD_DEEL} of another piece (Smeden makes it).
+     */
     @Nullable
     public static BasisType stuk(int zone, @Nullable String klasse, RandomSource r) {
         List<BasisType> l = voorZone(zone, klasse);
-        return l.isEmpty() ? null : l.get(r.nextInt(l.size()));
+        if (l.isEmpty()) {
+            return null;
+        }
+        int som = 0;
+        for (BasisType t : l) {
+            som += gewicht(t);
+        }
+        int x = r.nextInt(som);
+        for (BasisType t : l) {
+            x -= gewicht(t);
+            if (x < 0) {
+                return t;
+            }
+        }
+        return l.get(l.size() - 1);
+    }
+
+    /** 1.10.4: the pick weight of a pool piece (jewellery 1, everything else {@link DropBalans#SIERAAD_DEEL}). */
+    public static int gewicht(BasisType t) {
+        return DropBalans.sieraadDrop(t.id()) ? 1 : DropBalans.SIERAAD_DEEL;
     }
 
     /**

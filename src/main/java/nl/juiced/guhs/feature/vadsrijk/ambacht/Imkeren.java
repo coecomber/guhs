@@ -27,17 +27,19 @@ public final class Imkeren {
     private Imkeren() {
     }
 
-    /** How many hives this Imkeren level may keep (U-AMBACHT2: a fifth at 55, with the zone-4/5 meadows). */
+    /**
+     * How many hives this Verzamelen level may keep (1.10.4: the old Imkeren steps 15/30/45/55 on the new tier scale: 9/19/29/40).
+     */
     public static int max(int level) {
-        return level >= 55 ? 5 : level >= 45 ? 4 : level >= 30 ? 3 : level >= 15 ? 2 : 1;
+        return level >= 40 ? 5 : level >= 29 ? 4 : level >= 19 ? 3 : level >= 9 ? 2 : 1;
     }
 
     /**
-     * U-AMBACHT2: the Imkeren level a meadow of this tier needs. Imkeren starts in zone 3 for everyone (A3), so its gates are softer
-     * than the other gatherers': zone 3 = 1, zone 4 = 20, zone 5 = 35 (zone 6 volgt: 45).
+     * The Verzamelen level a meadow of this tier needs. Hives start in zone 3 for everyone (A3), so the gates are one tier softer
+     * than the other spots': zone 3 = 1, zone 4 = 12 (T2), zone 5 = 22 (T3), zone 6 volgt = 32 (T4). (1.10.4: was 1/20/35/45.)
      */
     public static int korfLevel(int tier) {
-        return tier <= 3 ? 1 : tier == 4 ? 20 : tier == 5 ? 35 : 45;
+        return tier <= 3 ? 1 : AmbachtXp.tierLevel(tier - 2);
     }
 
     static CompoundTag korven(ServerPlayer p) {
@@ -88,9 +90,9 @@ public final class Imkeren {
 
     /** A click on a hive stand (see class doc). */
     static String klik(ServerPlayer p, Spot s, int score) {
-        int lv = AmbachtData.level(p, Ambacht.IMKEREN);
+        int lv = AmbachtData.level(p, Ambacht.VERZAMELEN);
         if (!eigen(p, s) && lv < korfLevel(s.groep().tier())) {
-            p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.oogst.te_laag", Component.translatable(Ambacht.IMKEREN.naamKey()),
+            p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.oogst.te_laag", Component.translatable(Ambacht.VERZAMELEN.naamKey()),
                     korfLevel(s.groep().tier())).withStyle(ChatFormatting.RED));
             return "vadsrijk.ambacht.oogst.te_laag";
         }
@@ -132,11 +134,11 @@ public final class Imkeren {
         }
         zet(p, s, 0);
         double xp = AmbachtXp.verzamel(AmbachtXp.tierVoor(lv), lv) * raten * (1 + 0.1 * q);
-        AmbachtData.geefXp(p, Ambacht.IMKEREN, Math.round(xp), true);
+        AmbachtData.geefXp(p, Ambacht.VERZAMELEN, Math.round(xp), true);
         AmbachtData.voegToe(p, "plekken", s.groep().id());
-        Bestelbord.verzameld(p, Ambacht.IMKEREN, raten);
+        Bestelbord.verzameld(p, Ambacht.VERZAMELEN, raten);
         if (p.level() instanceof ServerLevel sl) {
-            Verzamelen.effect(p, sl, Verzamelen.positie(p, s), Ambacht.IMKEREN, q, false);
+            Verzamelen.effect(p, sl, Verzamelen.positie(p, s), NodeSoort.KORF, q, false);
         }
         Verzamelen.sync(p, true);
         return "";

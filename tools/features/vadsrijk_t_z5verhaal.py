@@ -180,7 +180,7 @@ NPCS = {
     # --- the Ambachtsgilde (professions capital; T-INT: the teachers open t-ambacht's workshops, HoogvadsGilde) --------------------------------------------------------------------
     "z5_gildemeester": ("Gildemeester Duimdop", [
         "Welkom in het Ambachtsgilde! Hoogvads is de hoofdstad van alle ambachten. Hier leer je de Meesterwerken.",
-        "Mijnen, houthakken, plukken, vissen, imkeren, smeden, naaien, koken en brouwen. Negen ambachten, één gilde.",
+        "Verzamelen, vissen, smeden en koken. Vier ambachten, één gilde.",
         "De werkplaatsen zijn open! Praat met een leermeester en je staat zo aan de werkbank."],
         _GILDE + ", in de grote hal"),
     "z5_leermeester_koken": ("Leermeester Kookguh Peper", [
@@ -854,7 +854,7 @@ OVERIG = {
     P + "reis.slot.hoogvads.kort": "Na de Lampionkust, vanaf level 55",
     P + "reiskaart.plek.hoogvads": "Hoogvads",
     Z + "ambacht.binnenkort": "De werkplaatsen van het Ambachtsgilde gaan binnenkort open. Kom dan terug!",
-    Z + "ambacht.gilde": "Het Ambachtsgilde leert je de Meesterwerken van negen ambachten. Binnenkort gaan de deuren open. Tot die tijd: oefen in de "
+    Z + "ambacht.gilde": "Het Ambachtsgilde leert je de Meesterwerken van de vier ambachten. Binnenkort gaan de deuren open. Tot die tijd: oefen in de "
                          "werkplaatsen van je eigen stad.",
     # the teasers
     Z + "vitrine.naam": "De vitrine",

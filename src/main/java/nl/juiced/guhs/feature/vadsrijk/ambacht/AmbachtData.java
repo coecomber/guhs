@@ -40,8 +40,108 @@ public final class AmbachtData {
     private AmbachtData() {
     }
 
+    /** The data version: 2 = the 4 ambachten of 1.10.4 (no "versie" = the 9 of 1.10.0-1.10.3, migrated once by {@link #migreer}). */
+    public static final int VERSIE = 2;
+
     public static CompoundTag tag(Player p) {
-        return Spelers.data(p).extra(SLICE);
+        CompoundTag t = Spelers.data(p).extra(SLICE);
+        if (t.getIntOr("versie", 0) < VERSIE) {
+            migreer(t);
+        }
+        return t;
+    }
+
+    // ---- 1.10.4: 9 -> 4 (once, on the first read) ------------------------------------------------------------------------------
+
+    /**
+     * Migrates one player's slice from the 9 ambachten to the 4 (idempotent; sets {@code versie}):
+     * <ul>
+     *   <li>xp: per new ambacht the HIGHEST of its old ones (most xp = highest level; that xp total is kept, so on the 3x faster
+     *   curve it is a higher level now);</li>
+     *   <li>story step: the furthest of the merged chains (capped at what exists);</li>
+     *   <li>mastery moments ("meester" {@code old@cap}) under the new id (no second reward);</li>
+     *   <li>today's Bestelbord orders are drawn again (their ids named old ambachten); week count, hives, found spots, fish, honey
+     *   and made recipes stay as they are.</li>
+     * </ul>
+     * The chosen title is migrated at login ({@link #migreerTitel}).
+     */
+    public static void migreer(CompoundTag t) {
+        CompoundTag oudXp = t.getCompoundOrEmpty("xp"), oudVerhaal = t.getCompoundOrEmpty("verhaal");
+        CompoundTag xp = new CompoundTag(), verhaal = new CompoundTag();
+        for (Ambacht a : Ambacht.values()) {
+            long beste = oudXp.getLongOr(a.id, 0L);
+            int stap = oudVerhaal.getIntOr(a.id, 0);
+            for (String o : a.oud) {
+                beste = Math.max(beste, oudXp.getLongOr(o, 0L));
+                stap = Math.max(stap, oudVerhaal.getIntOr(o, 0));
+            }
+            if (beste > 0) {
+                xp.putLong(a.id, beste);
+            }
+            if (stap > 0) {
+                verhaal.putInt(a.id, Math.min(stap, AmbachtNpcs.VERHAAL_LEVELS.length + HoogvadsGilde.LEVELS.length));
+            }
+        }
+        t.put("xp", xp);
+        t.put("verhaal", verhaal);
+        ListTag meester = t.getListOrEmpty("meester");
+        if (!meester.isEmpty()) {
+            ListTag nieuw = new ListTag();
+            java.util.Set<String> gezien = new java.util.LinkedHashSet<>();
+            for (int i = 0; i < meester.size(); i++) {
+                String s = meester.getString(i).orElse("");
+                int at = s.indexOf('@');
+                Ambacht a = Ambacht.van(at < 0 ? s : s.substring(0, at));
+                if (a != null && gezien.add(a.id + (at < 0 ? "" : s.substring(at)))) {
+                    nieuw.add(StringTag.valueOf(a.id + (at < 0 ? "" : s.substring(at))));
+                }
+            }
+            t.put("meester", nieuw);
+        }
+        if (t.contains("bestel")) {
+            CompoundTag b = t.getCompoundOrEmpty("bestel").copy();
+            b.remove("dag");
+            t.put("bestel", b);
+        }
+        t.putInt("versie", VERSIE);
+    }
+
+    /**
+     * At login: a chosen ambacht title of the 9 ({@code vr_amb_mijnen_leerling}) becomes the one of its new ambacht
+     * ({@code vr_amb_verzamelen_leerling}); the "already announced" list gets the new ids too (no "new title!" for what you had).
+     */
+    public static void migreerTitel(ServerPlayer p) {
+        CompoundTag saved = nl.juiced.guhs.quest.GuhQuests.saved(p);
+        String keuze = saved.getStringOr(nl.juiced.guhs.feature.titels.Titels.KEUZE, "");
+        String nieuw = titelNaarNieuw(keuze);
+        if (!nieuw.equals(keuze)) {
+            saved.putString(nl.juiced.guhs.feature.titels.Titels.KEUZE, nieuw);
+        }
+        String bekend = saved.getStringOr(nl.juiced.guhs.feature.titels.Titels.BEKEND, "");
+        if (!bekend.isEmpty()) {
+            java.util.Set<String> s = new java.util.LinkedHashSet<>(java.util.Arrays.asList(bekend.split(",")));
+            for (String id : List.copyOf(s)) {
+                s.add(titelNaarNieuw(id));
+            }
+            String uit = String.join(",", s);
+            if (!uit.equals(bekend)) {
+                saved.putString(nl.juiced.guhs.feature.titels.Titels.BEKEND, uit);
+            }
+        }
+    }
+
+    /** {@code vr_amb_<old>_<kind>} -> {@code vr_amb_<new>_<kind>}; anything else unchanged. */
+    public static String titelNaarNieuw(String id) {
+        if (!id.startsWith("vr_amb_")) {
+            return id;
+        }
+        String rest = id.substring("vr_amb_".length());
+        int u = rest.lastIndexOf('_');
+        if (u <= 0) {
+            return id;
+        }
+        Ambacht a = Ambacht.van(rest.substring(0, u));
+        return a == null ? id : "vr_amb_" + a.id + rest.substring(u);
     }
 
     public static long nu() {
@@ -193,5 +293,6 @@ public final class AmbachtData {
         for (String k : List.copyOf(t.keySet())) {
             t.remove(k);
         }
+        t.putInt("versie", VERSIE);
     }
 }

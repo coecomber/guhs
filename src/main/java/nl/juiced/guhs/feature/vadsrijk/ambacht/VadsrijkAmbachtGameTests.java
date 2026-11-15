@@ -32,19 +32,23 @@ public class VadsrijkAmbachtGameTests {
 
     @GuhTest(template = "empty", batch = BATCH)
     public static void xpCurve(GameTestHelper helper) {
-        helper.assertTrue(AmbachtXp.CAP == 60, "cap 60 with zones 4 + 5 (U-AMBACHT2)");
+        helper.assertTrue(AmbachtXp.CAP == 60 && Math.abs(AmbachtXp.SCHAAL - 0.33) < 1e-9, "cap 60, scale 0.33 (1.10.4: 3x faster)");
         for (int l = 1; l <= AmbachtXp.CAP; l++) {
             helper.assertTrue(AmbachtXp.levelVan(AmbachtXp.totaalVoor(l)) == l, "round trip " + l);
         }
         helper.assertTrue(AmbachtXp.levelVan(Long.MAX_VALUE / 4) == AmbachtXp.CAP, "capped");
-        helper.assertTrue(AmbachtXp.tierVoor(1) == 1 && AmbachtXp.tierVoor(20) == 2 && AmbachtXp.tierVoor(49) == 3, "tiers follow the zones");
-        helper.assertTrue(AmbachtXp.tierVoor(50) == 4 && AmbachtXp.tierVoor(55) == 5 && AmbachtXp.tierVoor(60) == 5, "T4 50, T5 55 (T6 zone 6 volgt)");
-        helper.assertTrue(AmbachtXp.verzamel(1, 10) == 30 && AmbachtXp.verzamel(1, 40) == 15, "half xp far above the tier");
-        // pacing: 1 -> 20 on T1 at ~8 actions a minute takes 1-2 h, 35 -> 50 on T3 4-7 h
-        double t1 = AmbachtXp.totaalVoor(20) / (double) AmbachtXp.VERZAMEL[1] / 8 / 60;
-        double t3 = (AmbachtXp.totaalVoor(50) - AmbachtXp.totaalVoor(35)) / (double) AmbachtXp.VERZAMEL[3] / 8 / 60;
-        helper.assertTrue(t1 > 1.0 && t1 < 2.2, "1->20 hours " + t1);
-        helper.assertTrue(t3 > 4.0 && t3 < 7.0, "35->50 hours " + t3);
+        // 1.10.4 tiers: T1 1, T2 12, T3 22, T4 32, T5 40 (T6 48 = zone 6 volgt)
+        helper.assertTrue(AmbachtXp.tierVoor(1) == 1 && AmbachtXp.tierVoor(11) == 1 && AmbachtXp.tierVoor(12) == 2 && AmbachtXp.tierVoor(21) == 2
+                && AmbachtXp.tierVoor(22) == 3 && AmbachtXp.tierVoor(32) == 4 && AmbachtXp.tierVoor(40) == 5 && AmbachtXp.tierVoor(60) == 5, "tiers");
+        helper.assertTrue(AmbachtXp.TIER_MIN[6] == 48 && AmbachtXp.tierLevel(2) == 12 && AmbachtXp.tierTop(1) == 11 && AmbachtXp.tierTop(5) == 60, "bands");
+        helper.assertTrue(AmbachtXp.verzamel(1, 10) == 30 && AmbachtXp.verzamel(1, 16) == 30 && AmbachtXp.verzamel(1, 17) == 15, "half xp 5 levels over the top");
+        helper.assertTrue(AmbachtXp.verzamel(5, 60) == AmbachtXp.VERZAMEL[5], "never half on the highest tier");
+        // pacing (design "Getallen"): 1 -> 10 ~40 harvests, 1 -> 20 ~250 harvests on T1 (30-40 min at ~8 a minute)
+        double h10 = AmbachtXp.totaalVoor(10) / (double) AmbachtXp.VERZAMEL[1], h20 = AmbachtXp.totaalVoor(20) / (double) AmbachtXp.VERZAMEL[1];
+        helper.assertTrue(h10 > 35 && h10 < 46, "1->10 harvests " + h10);
+        helper.assertTrue(h20 > 220 && h20 < 280 && h20 / 8 > 25 && h20 / 8 < 40, "1->20 harvests " + h20);
+        helper.assertTrue(AmbachtXp.oudNaarNieuw(20) == 12 && AmbachtXp.oudNaarNieuw(35) == 22 && AmbachtXp.oudNaarNieuw(50) == 32
+                && AmbachtXp.oudNaarNieuw(55) == 40 && AmbachtXp.oudNaarNieuw(1) == 1, "old -> new level scale");
         helper.succeed();
     }
 
@@ -69,10 +73,16 @@ public class VadsrijkAmbachtGameTests {
                 helper.assertTrue(BasisTypes.van(s.basisId(t)) != null, "base type " + s.basisId(t));
             }
         }
-        // every made-ambacht has recipes at every tier, the gatherers have materials at every tier
+        // every made-ambacht has recipes at every tier, the gatherers have materials at every tier (per spot kind; hives from zone 3)
+        helper.assertTrue(Ambacht.values().length == 4, "4 ambachten (1.10.4)");
+        for (NodeSoort n : NodeSoort.values()) {
+            for (int t = n == NodeSoort.KORF ? 3 : n == NodeSoort.DUIK ? 4 : 1; t <= (n == NodeSoort.DUIK ? 4 : AmbachtXp.MAX_TIER); t++) {
+                helper.assertTrue(!Materialen.van(n, t).isEmpty(), n.id + " T" + t);
+            }
+        }
         for (Ambacht a : Ambacht.values()) {
             if (a.verzamel) {
-                for (int t = a == Ambacht.IMKEREN ? 3 : 1; t <= AmbachtXp.MAX_TIER; t++) {
+                for (int t = 1; t <= AmbachtXp.MAX_TIER; t++) {
                     helper.assertTrue(!Materialen.van(a, t).isEmpty(), a.id + " T" + t);
                 }
             } else {
@@ -90,10 +100,10 @@ public class VadsrijkAmbachtGameTests {
     public static void xpEnUitgerust(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
-        long g = AmbachtData.geefXp(p, Ambacht.MIJNEN, 100, true);
-        helper.assertTrue(g == 100 && AmbachtData.xp(p, Ambacht.MIJNEN) == 100, "plain xp " + g);
+        long g = AmbachtData.geefXp(p, Ambacht.VERZAMELEN, 100, true);
+        helper.assertTrue(g == 100 && AmbachtData.xp(p, Ambacht.VERZAMELEN) == 100, "plain xp " + g);
         AmbachtData.zetUitgerust(p, 70);
-        g = AmbachtData.geefXp(p, Ambacht.MIJNEN, 100, true);
+        g = AmbachtData.geefXp(p, Ambacht.VERZAMELEN, 100, true);
         helper.assertTrue(g == 200 && AmbachtData.uitgerust(p) == 63, "rested doubles and uses 7 s: " + g + " / " + AmbachtData.uitgerust(p));
         // offline: 1 s rest per 6 s away, capped at 2 h
         var oud = AmbachtData.KLOK;
@@ -131,17 +141,17 @@ public class VadsrijkAmbachtGameTests {
         ServerLevel sl = helper.getLevel();
         BlockPos anker = helper.absolutePos(new BlockPos(6, 2, 6));
         veld(helper, Blocks.GRASS_BLOCK);
-        List<Spot> gras = PlekWereld.scan(sl, anker, new Groep("t_gras", 1, "x", Ambacht.PLUKKEN, 1, 1, 5, Zoek.GROND, ""));
+        List<Spot> gras = PlekWereld.scan(sl, anker, new Groep("t_gras", 1, "x", NodeSoort.KRUID, 1, 1, 5, Zoek.GROND, ""));
         helper.assertTrue(gras.size() == 1 && gras.get(0).posities().size() == AmbachtPlekken.POSITIES, "grass: 1 spot with 4 positions");
         for (BlockPos p : gras.get(0).posities()) {
             helper.assertTrue(sl.getBlockState(p.below()).is(Blocks.GRASS_BLOCK) && sl.getBlockState(p).isAir(), "on the grass at " + p);
         }
         // ore wants rock
         veld(helper, Blocks.STONE);
-        List<Spot> steen = PlekWereld.scan(sl, anker, new Groep("t_steen", 1, "x", Ambacht.MIJNEN, 1, 1, 5, Zoek.STEEN, ""));
+        List<Spot> steen = PlekWereld.scan(sl, anker, new Groep("t_steen", 1, "x", NodeSoort.ERTS, 1, 1, 5, Zoek.STEEN, ""));
         helper.assertTrue(steen.size() == 1 && sl.getBlockState(steen.get(0).posities().get(0).below()).is(Blocks.STONE), "ore on stone");
         // a path never gets a spot (strict pass); deterministic
-        List<Spot> nog = PlekWereld.scan(sl, anker, new Groep("t_steen", 1, "x", Ambacht.MIJNEN, 1, 1, 5, Zoek.STEEN, ""));
+        List<Spot> nog = PlekWereld.scan(sl, anker, new Groep("t_steen", 1, "x", NodeSoort.ERTS, 1, 1, 5, Zoek.STEEN, ""));
         helper.assertTrue(nog.get(0).posities().equals(steen.get(0).posities()), "same terrain, same spots");
         // fish: still water with a shore
         veld(helper, Blocks.GRASS_BLOCK);
@@ -151,7 +161,7 @@ public class VadsrijkAmbachtGameTests {
                 helper.setBlock(new BlockPos(x, 0, z), Blocks.DIRT.defaultBlockState());
             }
         }
-        List<Spot> water = PlekWereld.scan(sl, anker.below(), new Groep("t_water", 1, "x", Ambacht.VISSEN, 1, 1, 5, Zoek.WATER, ""));
+        List<Spot> water = PlekWereld.scan(sl, anker.below(), new Groep("t_water", 1, "x", NodeSoort.VIS, 1, 1, 5, Zoek.WATER, ""));
         helper.assertTrue(!water.isEmpty(), "fish spots in the pond");
         for (BlockPos p : water.get(0).posities()) {
             helper.assertTrue(sl.getFluidState(p).isSource(), "a fish spot is water: " + p);
@@ -162,13 +172,13 @@ public class VadsrijkAmbachtGameTests {
             helper.setBlock(new BlockPos(x, 2, 1), Blocks.POPPY.defaultBlockState());
             helper.setBlock(new BlockPos(x, 2, 10), Blocks.DANDELION.defaultBlockState());
         }
-        List<Spot> korf = PlekWereld.scan(sl, anker, new Groep("t_korf", 3, "x", Ambacht.IMKEREN, 3, 1, 5, Zoek.BLOEM, "schemerhoning"));
+        List<Spot> korf = PlekWereld.scan(sl, anker, new Groep("t_korf", 3, "x", NodeSoort.KORF, 3, 1, 5, Zoek.BLOEM, "schemerhoning"));
         helper.assertTrue(!korf.isEmpty() && !korf.get(0).bloemen().isEmpty(), "a hive knows its flowers");
         helper.succeed();
     }
 
-    private static Spot testSpot(GameTestHelper helper, Ambacht a, int tier) {
-        Groep g = new Groep("t_" + a.id, 1, "x", a, tier, 1, 5, Zoek.GROND, a == Ambacht.IMKEREN ? "bloesemhoning" : "");
+    static Spot testSpot(GameTestHelper helper, NodeSoort a, int tier) {
+        Groep g = new Groep("t_" + a.id, 1, "x", a, tier, 1, 5, Zoek.GROND, a == NodeSoort.KORF ? "bloesemhoning" : "");
         return new Spot(g.id() + "_0", g, List.of(helper.absolutePos(new BlockPos(2, 2, 2)), helper.absolutePos(new BlockPos(8, 2, 8))),
                 List.of(helper.absolutePos(new BlockPos(3, 2, 3))));
     }
@@ -180,7 +190,7 @@ public class VadsrijkAmbachtGameTests {
         AmbachtData.reset(a);
         AmbachtData.reset(b);
         Verzamelen.vergeet(a.getUUID());
-        Spot s = testSpot(helper, Ambacht.PLUKKEN, 1);
+        Spot s = testSpot(helper, NodeSoort.KRUID, 1);
         BlockPos voor = Verzamelen.positie(a, s);
         String m = Verzamelen.doeOogst(a, sl, s, 2);
         helper.assertTrue(m.isEmpty(), "harvest: " + m);
@@ -195,15 +205,15 @@ public class VadsrijkAmbachtGameTests {
             }
         }
         helper.assertTrue(n >= 1 && q == 2, "got " + n + " extra vadsig material (q " + q + ")");
-        helper.assertTrue(AmbachtData.xp(a, Ambacht.PLUKKEN) >= 30 && AmbachtData.heeft(a, "plekken", "t_plukken"), "xp + book");
+        helper.assertTrue(AmbachtData.xp(a, Ambacht.VERZAMELEN) >= 30 && AmbachtData.heeft(a, "plekken", "t_kruid"), "Verzamelen xp + book");
         helper.assertTrue(Verzamelen.doeOogst(a, sl, s, 0).equals("vadsrijk.ambacht.oogst.leeg"), "not twice");
         // too low for tier 3
         Verzamelen.vergeet(b.getUUID());
-        helper.assertTrue(Verzamelen.doeOogst(b, sl, testSpot(helper, Ambacht.MIJNEN, 3), 0).equals("vadsrijk.ambacht.oogst.te_laag"), "tier gate");
+        helper.assertTrue(Verzamelen.doeOogst(b, sl, testSpot(helper, NodeSoort.ERTS, 3), 0).equals("vadsrijk.ambacht.oogst.te_laag"), "tier gate");
         // a rare spot gives 3x
         Verzamelen.vergeet(b.getUUID());
-        AmbachtData.zetLevel(b, Ambacht.HOUTHAKKEN, 1);
-        Spot h = testSpot(helper, Ambacht.HOUTHAKKEN, 1);
+        AmbachtData.zetLevel(b, Ambacht.VERZAMELEN, 1);
+        Spot h = testSpot(helper, NodeSoort.HOUT, 1);
         Verzamelen.maakZeldzaam(b, h);
         Verzamelen.doeOogst(b, sl, h, 0);
         int hout = MateriaalTas.tel(b, st -> Materialen.van(st) != null && Materialen.van(st).id().equals("zwamsteel"));
@@ -216,7 +226,7 @@ public class VadsrijkAmbachtGameTests {
         ServerLevel sl = helper.getLevel();
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
-        Spot k = testSpot(helper, Ambacht.IMKEREN, 3);
+        Spot k = testSpot(helper, NodeSoort.KORF, 3);
         helper.assertTrue(Verzamelen.doeOogst(p, sl, k, 1).isEmpty() && Imkeren.eigen(p, k), "first click places your hive");
         helper.assertTrue(Imkeren.raten(p, k) == 0, "empty at first");
         var oud = AmbachtData.KLOK;
@@ -232,7 +242,8 @@ public class VadsrijkAmbachtGameTests {
         } finally {
             AmbachtData.KLOK = oud;
         }
-        helper.assertTrue(Imkeren.max(1) == 1 && Imkeren.max(30) == 3, "more hives with level");
+        helper.assertTrue(Imkeren.max(1) == 1 && Imkeren.max(9) == 2 && Imkeren.max(19) == 3 && Imkeren.max(29) == 4 && Imkeren.max(40) == 5,
+                "more hives with level (1.10.4 scale)");
         helper.succeed();
     }
 
@@ -269,7 +280,7 @@ public class VadsrijkAmbachtGameTests {
             AmbachtData.KLOK = oud;
         }
         // brewing: cutting crystals 3 ruw -> 1 geslepen
-        AmbachtData.zetLevel(p, Ambacht.BROUWEN, 15);
+        AmbachtData.zetLevel(p, Ambacht.KOKEN, 9);   // (1.10.4: cutting is Koken's)
         p.getInventory().add(Kristallen.stack("rozekwarts", 0, 3));
         m = Werkplaats.maak(p, "slijp_geslepen", List.of(), null, "rozekwarts", 1, 1);
         helper.assertTrue(MateriaalTas.tel(p, Werkplaats.kristalVan("rozekwarts", 1)) == 1 && MateriaalTas.tel(p, Werkplaats.kristalVan("rozekwarts", 0)) == 0,
@@ -284,35 +295,22 @@ public class VadsrijkAmbachtGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void maatwerkEnMeesterwerk(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);
-        ItemStack s = Maatwerk.maak(Maatwerk.SOORTEN.get("zwaard"), 3, List.of(Stat.KRITIEK, Stat.KRACHT), 100, "test", null, p.getRandom());
+        // 1.10.4: Maatwerk = jewellery (Episch, 2 chosen, +1 socket, no set, tradeable)
+        ItemStack s = Maatwerk.maak(Maatwerk.SOORTEN.get("ring"), 3, List.of(Stat.KRITIEK, Stat.KRITIEKSCHADE), 100, "test", null, p.getRandom());
         Uitrusting u = Rollen.van(s);
         helper.assertTrue(u != null && u.zeldzaamheid() == Zeldzaamheid.EPISCH && !u.gebonden() && u.level() == 45, "Episch, tradeable, lv 45");
         helper.assertTrue(u.bonussen().size() == Zeldzaamheid.EPISCH.maxBonus, "4 bonuses: " + u.bonussen());
+        helper.assertTrue(u.bonussen().stream().anyMatch(b -> b.stat() == Stat.KRITIEK) && u.bonussen().stream().anyMatch(b -> b.stat() == Stat.KRITIEKSCHADE),
+                "the chosen stats are on it");
         helper.assertTrue(!u.sokjes().isEmpty(), "+1 socket guaranteed");
-        for (Bonus b : u.bonussen()) {
-            if (b.stat() == Stat.KRITIEK || b.stat() == Stat.KRACHT) {
-                double[] r = Bonussen.bereik(b.stat(), 45);
-                helper.assertTrue(b.waarde() >= r[0] + (r[1] - r[0]) * 0.78, "100 %: chosen bonus in the top 20 %: " + b);
-            }
-        }
         helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.zone2.wezens.loot.Z2Sets.setVan(u.type()) == null, "no set bonus");
-        // ~90 % of the zone-3 set (schorspantser 26/76 vs maatwerk borstplaat)
-        BasisType mw = BasisTypes.van("mw_t3_borstplaat"), set = BasisTypes.van("schorspantser");
-        if (set != null) {
-            double f = mw.statsOp(45).get(Stat.VERDEDIGING) / set.statsOp(45).get(Stat.VERDEDIGING);
-            helper.assertTrue(f > 0.8 && f < 1.0, "below the set (1.10.2: set armour grows slower, ~98 % now): " + f);
-        }
         // Meesterwerk jewellery: Legendarisch, bound, 3 chosen + a property, above the zone-3 drop
         ItemStack r = Maatwerk.maak(Maatwerk.SOORTEN.get("ring"), 3, List.of(Stat.KRITIEK, Stat.KRITIEKSCHADE, Stat.AANVALSSNELHEID), 80, "test",
                 Maatwerk.Eigenschap.BAZEN, p.getRandom());
         Uitrusting ru = Rollen.van(r);
         helper.assertTrue(ru.zeldzaamheid() == Zeldzaamheid.LEGENDARISCH && ru.gebonden() && Maatwerk.info(r).eigenschap().equals("bazen"), "Meesterwerk");
-        BasisType drop = BasisTypes.van("honingring");
-        if (drop != null) {
-            double mwK = ru.basisType().statsOp(45).get(Stat.KRITIEK) * ru.zeldzaamheid().factor;
-            double dropK = drop.statsOp(45).get(Stat.KRITIEK) * Zeldzaamheid.LEGENDARISCH.factor;
-            helper.assertTrue(mwK > dropK, "BiS: " + mwK + " > " + dropK);
-        }
+        double ref = Maatwerk.buitReferentie(3, nl.juiced.guhs.feature.vadsrijk.kern.loot.Slot.RING, 45, Zeldzaamheid.LEGENDARISCH);
+        helper.assertTrue(ref > 0 && Maatwerk.kracht(ru) > ref, "above the zone-3 drop: " + Maatwerk.kracht(ru) + " > " + ref);
         // the property works: +8 % against bosses only (no boss here: the plain hit is untouched)
         double plain = Maatwerk.voorKlap(new nl.juiced.guhs.feature.vadsrijk.kern.Schade.Klap(p, p, 100, nl.juiced.guhs.feature.vadsrijk.kern.Element.GEEN,
                 nl.juiced.guhs.feature.vadsrijk.kern.Schade.Soort.MELEE, false, "test"), 100);

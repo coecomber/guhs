@@ -102,7 +102,7 @@ public final class Werkplaats {
         if (kan(p, r, kristal) < aantal) {
             return "vadsrijk.ambacht.werk.te_weinig";
         }
-        if (r.soort().equals("post") || r.kiest()) {
+        if (r.soort().equals("post") || r.kiest() || r.soort().equals("verhaal")) {
             if (!r.soort().equals("post") && EcoUtil.vrij(p.getInventory()) == 0) {
                 return "vadsrijk.economie.markt.tas_vol";
             }
@@ -128,7 +128,9 @@ public final class Werkplaats {
         switch (r.soort()) {
             case "eten" -> uit.add(gemaakt(new ItemStack(Eten.ITEM.get(r.doel()).get(), r.aantal() * aantal), vads, maker));
             case "drank" -> uit.add(gemaakt(new ItemStack(Brouwsels.ITEM.get(r.doel()).get(), r.aantal() * aantal), vads, maker));
-            case "gear", "meester" -> uit.add(Maatwerk.maak(Maatwerk.SOORTEN.get(r.doel()), r.tier(), keuzes, vads, maker, e, p.getRandom()));
+            case "gear", "sieraad", "meester" -> uit.add(Maatwerk.maak(Maatwerk.SOORTEN.get(r.doel()), r.tier(), keuzes, vads, maker, e, p.getRandom()));
+            case "verhaal" -> uit.add(Recepten.VERHAAL.get(r.doel()).get());   // 1.10.4: a story item
+            case "item" -> uit.add(Recepten.WAREN.get(r.doel()).get().copyWithCount(r.aantal() * aantal));   // 1.10.4: buff potions
             case "slijp" -> uit.add(Kristallen.stack(kristal, Integer.parseInt(r.doel()) + 1, aantal));
             case "kern" -> uit.add(new ItemStack(Materialen.KERN.get(r.doel()).get(), aantal));
             case "post" -> {
@@ -144,18 +146,15 @@ public final class Werkplaats {
             EcoUtil.geefOfBewaar(p, s);
         }
         double xp = 0.7 * r.eenheden() * AmbachtXp.VERZAMEL[Math.max(1, Math.min(AmbachtXp.VERZAMEL.length - 1, r.tier()))] * aantal * (1 + 0.1 * q);
-        if (lv > AmbachtXp.TIER_MAX[r.tier()] + AmbachtXp.TE_HOOG) {
+        if (AmbachtXp.teHoog(r.tier(), lv)) {
             xp /= 2;
         }
         AmbachtData.geefXp(p, r.ambacht(), Math.round(xp), true);
         AmbachtData.voegToe(p, "gemaakt", r.id());
         Bestelbord.gemaakt(p, r, r.aantal() * aantal);
-        p.level().playSound(null, p.blockPosition(), switch (r.ambacht()) {
-            case SMEDEN -> SoundEvents.ANVIL_USE;
-            case NAAIEN -> SoundEvents.WOOL_PLACE;
-            case KOKEN -> SoundEvents.FURNACE_FIRE_CRACKLE;
-            default -> SoundEvents.BREWING_STAND_BREW;
-        }, SoundSource.PLAYERS, 0.6f, 1.2f);
+        p.level().playSound(null, p.blockPosition(), r.soort().equals("post") && r.ambacht() == Ambacht.SMEDEN ? SoundEvents.WOOL_PLACE
+                : r.ambacht() == Ambacht.SMEDEN ? SoundEvents.ANVIL_USE : r.soort().equals("drank") || r.soort().equals("slijp") ? SoundEvents.BREWING_STAND_BREW
+                : SoundEvents.FURNACE_FIRE_CRACKLE, SoundSource.PLAYERS, 0.6f, 1.2f);
         return vads >= 100 ? "vadsrijk.ambacht.werk.vadsig" : "vadsrijk.ambacht.werk.klaar";
     }
 

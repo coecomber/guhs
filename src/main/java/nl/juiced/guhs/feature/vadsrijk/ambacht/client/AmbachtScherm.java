@@ -73,7 +73,7 @@ public class AmbachtScherm extends EcoScherm {
             Component naam = Component.translatable("vadsrijk.ambacht.tab." + t);
             int bw = font.width(naam) + pad;
             knop(g, mx, my, tx, top + 22, bw, 14, nu ? naam.copy().withStyle(ChatFormatting.UNDERLINE) : naam, !nu,
-                    () -> open(t, data.getStringOr("ambacht", "mijnen"), ""));
+                    () -> open(t, data.getStringOr("ambacht", "verzamelen"), ""));
             tx += bw + 3;
         }
         switch (tab()) {
@@ -89,11 +89,11 @@ public class AmbachtScherm extends EcoScherm {
 
     private void overzicht(GuiGraphicsExtractor g, int mx, int my) {
         ListTag l = data.getListOrEmpty("tegels");
-        int bw = (w - 16) / 3, bh = 44;
+        int kol = 2, bw = (w - 16) / kol, bh = 44;   // (1.10.4: 4 ambachten in 2 x 2)
         for (int i = 0; i < l.size(); i++) {
             CompoundTag t = l.getCompoundOrEmpty(i);
-            int x = left + 8 + (i % 3) * bw, y = top + 42 + (i / 3) * (bh + 3);
-            g.fill(x, y, x + bw - 3, y + bh, (i % 2 == 0) ? RIJ_A : RIJ_B);
+            int x = left + 8 + (i % kol) * bw, y = top + 42 + (i / kol) * (bh + 3);
+            g.fill(x, y, x + bw - 3, y + bh, ((i + i / kol) % 2 == 0) ? RIJ_A : RIJ_B);
             slot(g, mx, my, x + 3, y + 3, icoon(t.getStringOr("icoon", "minecraft:book")), false);
             String id = t.getStringOr("id", "");
             g.text(font, Component.translatable("vadsrijk.ambacht.naam." + id).withStyle(ChatFormatting.BOLD), x + 24, y + 4, TEKST, false);
@@ -110,7 +110,7 @@ public class AmbachtScherm extends EcoScherm {
             tip(mx, my, bx, y + 28, bbw, 10, List.of(Component.translatable("vadsrijk.ambacht.xp_balk", in, nodig)));
             klikvlak(x, y, bw - 3, bh, () -> open("recepten", id, ""));
         }
-        int y = top + 42 + 3 * (bh + 3) + 2;
+        int y = top + 42 + ((l.size() + kol - 1) / kol) * (bh + 3) + 2;
         String buff = data.getStringOr("buff", "");
         Component b = buff.isEmpty() ? Component.translatable("vadsrijk.ambacht.boek.geen_buff")
                 : Component.translatable("vadsrijk.ambacht.boek.buff", Component.translatable("item.guhs.vr_amb_eten_" + buff), data.getLongOr("buffOver", 0) / 60);
@@ -121,7 +121,7 @@ public class AmbachtScherm extends EcoScherm {
     }
 
     private void ambachtKeuze(GuiGraphicsExtractor g, int mx, int my, String tab, boolean totaal) {
-        String nu = tab.equals("rang") ? data.getStringOr("lijst", "mijnen") : data.getStringOr("ambacht", "mijnen");
+        String nu = tab.equals("rang") ? data.getStringOr("lijst", "verzamelen") : data.getStringOr("ambacht", "verzamelen");
         int x = left + 8;
         for (Ambacht a : Ambacht.values()) {
             boolean gekozen = a.id.equals(nu);
@@ -133,7 +133,7 @@ public class AmbachtScherm extends EcoScherm {
         }
         if (totaal) {
             boolean gekozen = nu.equals("totaal");
-            knop(g, mx, my, x + 4, top + 42, 50, 14, Component.translatable("vadsrijk.ambacht.rang.totaal"), !gekozen, () -> open("rang", "mijnen", "totaal"));
+            knop(g, mx, my, x + 4, top + 42, 50, 14, Component.translatable("vadsrijk.ambacht.rang.totaal"), !gekozen, () -> open("rang", "verzamelen", "totaal"));
         }
     }
 
@@ -178,7 +178,7 @@ public class AmbachtScherm extends EcoScherm {
             int slot = i, n = e.getIntOr("aantal", 1), v = e.getIntOr("voortgang", 0);
             boolean claimd = e.getBooleanOr("geclaimd", false), klaar = e.getBooleanOr("klaar", false);
             g.fill(left + 6, y, left + w - 6, y + 40, i % 2 == 0 ? RIJ_A : RIJ_B);
-            slot(g, mx, my, left + 10, y + 11, claimd ? new ItemStack(Items.LIME_DYE) : icoon(Ambacht.van(e.getStringOr("ambacht", "mijnen")).icoon), false);
+            slot(g, mx, my, left + 10, y + 11, claimd ? new ItemStack(Items.LIME_DYE) : icoon(ambachtIcoon(e.getStringOr("ambacht", "verzamelen"))), false);
             Component tekst = Component.translatable(e.getStringOr("key", ""), Component.translatable(e.getStringOr("gever", "")), n,
                     Component.translatable(e.getStringOr("ding", "")));
             int ty = y + 4;
@@ -247,7 +247,7 @@ public class AmbachtScherm extends EcoScherm {
                 y += 12;
             }
             int gev = e.getIntOr("gevonden", 0), tot = e.getIntOr("totaal", 1);
-            g.text(font, Component.translatable("vadsrijk.ambacht.naam." + e.getStringOr("ambacht", "")).append(": " + gev + "/" + tot), x, y,
+            g.text(font, Component.translatable("vadsrijk.ambacht.soort." + e.getStringOr("soort", "erts")).append(": " + gev + "/" + tot), x, y,
                     gev >= tot ? GROEN : TEKST, false);
             y += 10;
         }
@@ -405,5 +405,11 @@ public class AmbachtScherm extends EcoScherm {
     public boolean mouseScrolled(double mx, double my, double dx, double dy) {
         scroll = Math.max(0, scroll - (int) Math.signum(dy));
         return true;
+    }
+
+    /** The icon of an ambacht id (an unknown id: the Verzamelen one). */
+    private static String ambachtIcoon(String id) {
+        Ambacht a = Ambacht.van(id);
+        return (a == null ? Ambacht.VERZAMELEN : a).icoon;
     }
 }

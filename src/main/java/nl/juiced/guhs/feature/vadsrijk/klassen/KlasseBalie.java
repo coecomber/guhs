@@ -170,6 +170,21 @@ public final class KlasseBalie {
         }
     }
 
+    /** 1.10.4 (Koken = drankjes): the starter stack of the smallest heal potion, once per player (with the first class). */
+    public static final int START_DRANKJES = 5;
+
+    public static void startDrankjes(ServerPlayer p) {
+        CompoundTag x = Spelers.data(p).extra("klassen");
+        if (x.getBooleanOr("start_drankjes", false)) {
+            return;
+        }
+        ItemStack s = new ItemStack(nl.juiced.guhs.feature.vadsrijk.economie.EcoSpul.KLEIN_VADSDRANKJE.get(), START_DRANKJES);
+        if (!p.getInventory().add(s)) {
+            p.drop(s, false);
+        }
+        x.putBoolean("start_drankjes", true);
+    }
+
     public static boolean aanBalie(ServerPlayer p) {
         Sessie s = SESSIES.get(p.getUUID());
         return s != null && Vadsrijk.in(p) && p.level().getGameTime() - s.tijd() < 12000 && p.position().distanceTo(s.pos()) <= 12;
@@ -239,6 +254,7 @@ public final class KlasseBalie {
                 d.energie = -1;
                 d.extra("klassen").putBoolean("gekozen", true);
                 startwapen(p, arg);
+                startDrankjes(p);   // 1.10.4: the shops sell only the small heal potion now
                 Spelers.sync(p);
                 Fx.geluid(sl, p.position(), SoundEvents.UI_TOAST_CHALLENGE_COMPLETE, 0.8f, 1.2f);
                 sl.sendParticles(ParticleTypes.TOTEM_OF_UNDYING, p.getX(), p.getY() + 1, p.getZ(), 40, 0.5, 0.8, 0.5, 0.3);

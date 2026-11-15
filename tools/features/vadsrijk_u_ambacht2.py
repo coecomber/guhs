@@ -68,9 +68,7 @@ RECEPTEN = {
     "wolken_energiedrank": "Wolken-Energiedrank", "hemelelixer": "Hemelelixer",
     "kern_lampion": "Lampionkern (uit splinters)", "kern_wolk": "Wolkkern (uit splinters)", "post_vlieger": "Guh-vlieger (naar huis)",
 }
-for _s in ("zwaard", "boog", "staf", "helm", "borstplaat", "broek", "schoentjes", "ring", "ketting", "oorbel"):
-    for _t in (4, 5):
-        RECEPTEN[f"{_s}_t{_t}"] = T.MW_TIER[_s].format(*TIER_NAAM[_t]).replace("- ", "-")
+# (1.10.4: the jewellery recipes of T4/T5 are named in vadsrijk_t_ambacht.py, the weapons/armour are gone)
 
 GROEPEN = {
     "z4_pluk_bloemeneiland": "het Bloemeneiland", "z4_pluk_knuffeltij": "het eiland van het Knuffeltij", "z4_pluk_strandfeest": "de duinen bij het Strandfeest",
@@ -89,59 +87,29 @@ GROEPEN = {
 
 # the Gilde story steps (Hoogvads' Ambachtsgilde): per ambacht 2 steps (lv 55 / 60) x (teacher, you, teacher)
 GILDE = {
-    "smeden": [
-        ("Welkom in de smidse van het Gilde! Het Aambeeld van de Orde is heel, maar Hoogvads heeft er nog een: het Wolkaambeeld.",
-         "Nog een aambeeld?", "Het hangt aan kettingen boven de stad. Smeed eerst iets moois van lampionbrons, dan mag je erop."),
-        ("Hoor je dat? Het Wolkaambeeld zingt als jij erop slaat. Dat doet het alleen voor meesters.", "Ben ik nu een meester?",
-         "Een Meester-smid! Hier in Hoogvads hangen we je hamer aan de muur. Naast die van de oude Orde."),
-    ],
-    "naaien": [
-        ("Daar ben je! De quilt hangt nu in de Gildehal. Er kan nog een lapje bij: eentje van De Lampionkust.", "Van zeegaren?",
-         "Van zeegaren, met een vliegertje erop geborduurd. Dan wappert de quilt een beetje."),
-        ("En nu het laatste lapje: wolkenwol. Zo zacht dat de Keizer er misschien zelf onder wil slapen.", "Zou hij dat willen?",
-         "Iedereen wil een knuffel, lieverd. Zelfs keizers. Jij bent nu Meester-naaier."),
-    ],
-    "koken": [
-        ("Kijk eens wat de duikers vonden: een bladzijde van Oma Truus, in een fles, in de Koraalbaai!", "Wat staat erop?",
-         "'Visjes van de roze zee, met een snufje zeekraal.' Maak het maar, dan proeven we samen."),
-        ("De allerlaatste bladzijde lag in de Kathedraal: 'Het koekje dat de Keizer nooit kreeg... begint met wolkbessen.'", "Wolkbessen!",
-         "Wolkbessen. De rest mogen we zelf verzinnen. Meester-kok, dat ben je nu. Oma zou trots zijn."),
-    ],
-    "brouwen": [
-        ("Blub! De zee maakt de kristallen hier niet grauw, maar zout. Zout kristal blijft langer roze, wist je dat?", "Dus zeekraal helpt?",
-         "Zeekraal en een sponsje uit de diepte. Het ont-grauw-drankje wordt steeds beter."),
-        ("Met hemelhoning blijft een kristal zelfs in de mist roze. Het Hemelelixer! Mijn meesterwerk... nee, ONS meesterwerk.", "Ons meesterwerk!",
-         "Blub blub! Meester-brouwer. Laat de Vadsleidingen maar stralen."),
-    ],
-    "imkeren": [
-        ("Zzzoem, welkom in de bijenstal van het Gilde. Onze bijen vliegen helemaal naar De Lampionkust en terug.", "Zo ver?",
-         "Ze willen lampionhoning! Zet een korf op het Bloemeneiland, dan hoeven ze niet zo ver te vliegen."),
-        ("De bijen van Hoogvads dansen in de wolken. Ze maken hemelhoning, de zoetste van het hele Vadsrijk.", "Mag ik een dansje leren?",
-         "Je kent het al: ze dansen voor jou. Meester-imker. Zzzoem!"),
-    ],
-    "mijnen": [
-        ("Bonk is de mijnmeester van Zwamzoet, ik ben die van Hoogvads. Hij schreef dat jij goed tikt.", "Bonk! Bonk! Bonk!",
-         "Haha, ja, precies zo. Op Pierkop ligt lampionbrons. Tik zachtjes, het gloeit nog na."),
+    "verzamelen": [
+        ("Madelief is de verzamelmeester van Zwamzoet, ik ben die van Hoogvads. Ze schreef dat jij goed tikt, hakt en plukt.", "Tik, hak, pluk!",
+         "Haha, ja, precies zo. Op Pierkop ligt lampionbrons, op het Vliegereiland groeit vliegerbamboe. En zet een korf op het Bloemeneiland!"),
         ("Weet je waar hemelzilver vandaan komt? Uit de vinnen van Moeder Wolkwal. Ze vindt het niet erg, het kriebelt haar.", "Dankjewel, Moeder Wolkwal!",
-         "Ze knipoogt terug, zie je? Meester-mijner, dat ben je nu."),
-    ],
-    "houthakken": [
-        ("Op het Vliegereiland groeit vliegerbamboe. Buigzaam, licht, en het fluit in de wind.", "Mag ik een vlieger maken?",
-         "Hak eerst wat bamboe, en vraag de naaiers. Samen maken jullie de mooiste vliegers."),
-        ("Wolkenhout weegt bijna niks. Je kunt er een huis van bouwen dat blijft zweven.", "Een zwevend huisje!",
-         "Ooit, misschien. Eerst ben je Meester-houthakker. Het bos van het Staartpark fluistert je naam."),
-    ],
-    "plukken": [
-        ("Zeekraal! Proef maar, het knispert en het smaakt naar de zee.", "Zout!",
-         "Zout en lief, net als de zeeguhs. Pluk het zachtjes, dan groeit het terug."),
-        ("De wolkbessen in de Ooggaarde zijn rijp. Je moet ze plukken voordat ze wegdrijven.", "Wegdrijven?!",
-         "Hihi, echt waar. Snel zijn en zacht zijn: dat is een Meester-plukker. Dat ben jij."),
+         "Ze knipoogt terug, zie je? Meester-verzamelaar, dat ben je nu."),
     ],
     "vissen": [
         ("Ahoy! Je bent in de Koraalbaai gaan duiken, hoorde ik. Dobbertje uit Zwamzoet wist het al: jij komt ver.", "Het koraal was zo roze!",
          "En het groeit weer aan als je het zachtjes losmaakt. Zo zorgen we voor de zee."),
         ("Er zwemmen vissen in de fontein van de Marktlaan. Wolkenvisjes. Niemand weet hoe ze daar komen.", "Misschien regende het vis?",
          "Misschien wel! Meester-visser, jij mag dat raadsel houden."),
+    ],
+    "smeden": [
+        ("Welkom in de smidse van het Gilde! Het Aambeeld van de Orde is heel, maar Hoogvads heeft er nog een: het Wolkaambeeld.",
+         "Nog een aambeeld?", "Het hangt aan kettingen boven de stad. Smeed eerst een mooi sieraad van lampionbrons, dan mag je erop."),
+        ("Hoor je dat? Het Wolkaambeeld zingt als jij erop slaat. Dat doet het alleen voor meesters.", "Ben ik nu een meester?",
+         "Een Meester-smid! Hier in Hoogvads hangen we je hamer aan de muur. Naast die van de oude Orde."),
+    ],
+    "koken": [
+        ("Kijk eens wat de duikers vonden: een bladzijde van Oma Truus, in een fles, in de Koraalbaai!", "Wat staat erop?",
+         "'Visjes van de roze zee, met een snufje zeekraal.' Maak het maar, dan proeven we samen."),
+        ("De allerlaatste bladzijde lag in de Kathedraal: 'Het koekje dat de Keizer nooit kreeg... begint met wolkbessen.'", "Wolkbessen!",
+         "Wolkbessen. De rest mogen we zelf verzinnen. Meester-kok, dat ben je nu. Oma zou trots zijn."),
     ],
 }
 
@@ -169,7 +137,7 @@ for _z in (4, 5):
     t(S + f"boek.cat.plekken.{_z}", f"Plekken zone {_z}", f"Spots zone {_z}")
 for _z in (4, 5, 6):
     t(S + f"tier.{_z}", f"tier {_z}", f"tier {_z}")
-t(S + "boek.hint.plek", "Een plek voor %s. Vraag de meesterguh in Zwamzoet, of het Gilde in Hoogvads, waar.",
+t(S + "boek.hint.plek", "Een plek met %s. Vraag de meesterguh in Zwamzoet, of het Gilde in Hoogvads, waar.",
   "A spot for %s. Ask the master guh in Zwamzoet, or the Gilde in Hoogvads.")
 t(S + "bestel.kist_open", "In de kist: kernsplinters, iets zeldzaams, 5 zilver en Knutselpenningen!",
   "In the chest: core splinters, something rare, 5 silver and craft coins!")
@@ -239,10 +207,10 @@ t(S + "meester.nu", "Je bent nu Meester in %s (niveau %s)! De Meesterschort ligt
   "You are now a Master of %s (level %s)! The Master's Apron is in your wardrobe.")
 t(S + "meester.kort", "Meester", "Master")
 for _id, (_nl, _en) in T.AMBACHTEN.items():
-    t(f"gui.guhs.titels.naam.vr_amb_{_id}_meester", f"Meester-{_nl.lower()}" if _id != "vissen" else "Meester-visser", f"Master ({_en})")
+    t(f"gui.guhs.titels.naam.vr_amb_{_id}_meester", f"Meester-{T.AMBACHT_PERSOON[_id]}", f"Master ({_en})")
     t(f"gui.guhs.titels.hint.vr_amb_{_id}_meester", f"Haal het hoogste niveau in {_nl.lower()}.", f"Reach the highest level in {_en}.")
 t("gui.guhs.titels.naam.vr_amb_grootmeester", "Grootmeester der Ambachten", "Grand Master of Crafts")
-t("gui.guhs.titels.hint.vr_amb_grootmeester", "Haal het hoogste niveau in alle negen ambachten.", "Reach the highest level in all nine professions.")
+t("gui.guhs.titels.hint.vr_amb_grootmeester", "Haal het hoogste niveau in alle vier ambachten.", "Reach the highest level in all four professions.")
 t("vadsrijk.kleding.ding.kaap.meesterschort", "Meesterschort", "Master's Apron")
 t("vadsrijk.kleding.ding.kaap.meesterschort.bron", "Haal het hoogste niveau in een ambacht.", "Reach the highest level in a profession.")
 # ---- names
@@ -263,9 +231,7 @@ for _id, (_k, _n) in DRANKEN.items():
 t("item.guhs.vr_amb_vlieger", "Guh-vlieger", "Guh Kite")
 t("item.guhs.vr_amb_vlieger.uitleg", "Gemaakt van vliegerbamboe en zeegaren. Voor thuis: hang hem op, hij lacht naar je.",
   "Made of kite bamboo and sea yarn. For home: hang it up, it smiles at you.")
-for _id in T.MW:
-    for _t in (4, 5):
-        t(f"vadsrijk.loot.mw_t{_t}_{_id}", T.MW_TIER[_id].format(*TIER_NAAM[_t]).replace("- ", "-"))
+# (1.10.4: the T4/T5 base type names are written by vadsrijk_t_ambacht.py)
 # the board guhs of Lampionhaven and Hoogvads
 for _npc, _naam in {"amb_bord_z4": "Klerk Kwastje", "amb_bord_z5": "Klerk Kroontje"}.items():
     t("vadsrijk.npc.naam." + _npc, _naam)

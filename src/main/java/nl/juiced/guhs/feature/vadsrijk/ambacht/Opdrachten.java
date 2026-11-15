@@ -74,10 +74,10 @@ public final class Opdrachten extends SavedData {
 
     // ---- what can be asked for -------------------------------------------------------------------------------------------------
 
-    /** Recipes whose result may be asked for (dishes, potions, Maatwerk, boss cores). */
+    /** Recipes whose result may be asked for (dishes, potions, Maatwerk jewellery, boss cores; 1.10.4: + the buff potions). */
     public static boolean vraagbaar(@Nullable Recept r) {
         return r != null && switch (r.soort()) {
-            case "eten", "drank", "gear", "kern" -> true;
+            case "eten", "drank", "gear", "sieraad", "kern", "item" -> true;
             default -> false;
         };
     }
@@ -95,7 +95,7 @@ public final class Opdrachten extends SavedData {
     /** How many may be asked at once (gear one, cores a few, food/potions a stack). */
     public static int maxAantal(Recept r) {
         return switch (r.soort()) {
-            case "gear" -> 1;
+            case "gear", "sieraad" -> 1;
             case "kern" -> 5;
             default -> 64;
         };
@@ -108,7 +108,8 @@ public final class Opdrachten extends SavedData {
             case "eten" -> s -> s.getItem() instanceof Eten.EtenItem e && e.gerecht.id().equals(doel);
             case "drank" -> s -> s.getItem() instanceof Brouwsels.DrankItem d && d.drank.id().equals(doel);
             case "kern" -> s -> Materialen.KERN.containsKey(doel) && s.is(Materialen.KERN.get(doel).get());
-            case "gear" -> s -> {
+            case "item" -> s -> Recepten.WAREN.containsKey(doel) && s.is(Recepten.WAREN.get(doel).get().getItem());
+            case "gear", "sieraad" -> s -> {
                 Maatwerk.Soort so = Maatwerk.SOORTEN.get(doel);
                 Maatwerk.Info i = Maatwerk.info(s);
                 Uitrusting u = Rollen.van(s);

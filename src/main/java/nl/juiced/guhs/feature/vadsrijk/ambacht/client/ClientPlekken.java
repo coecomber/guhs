@@ -12,14 +12,26 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtXp;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 
 /** The client's copy of its own gathering spots (from the server's sync every second) + the HUD values. */
 public final class ClientPlekken {
     /** One spot as the server sent it. */
-    public record Plek(String id, BlockPos pos, Ambacht ambacht, int tier, boolean leeg, boolean zeldzaam, boolean lvOk, boolean eigen, int raten,
-            List<BlockPos> bloemen, String honing, boolean duik) {
+    public record Plek(String id, BlockPos pos, NodeSoort soort, int tier, boolean leeg, boolean zeldzaam, boolean lvOk, boolean eigen, int raten,
+            List<BlockPos> bloemen, String honing, int nodig) {
+        /** The ambacht that levels here (1.10.4: from the spot kind). */
+        public Ambacht ambacht() {
+            return soort.ambacht;
+        }
+
+        /** A coral dive spot. */
+        public boolean duik() {
+            return soort == NodeSoort.DUIK;
+        }
+
         public AABB doos() {
-            if (ambacht == Ambacht.VISSEN && !duik) {
+            if (soort == NodeSoort.VIS) {
                 return new AABB(pos.getX() - 0.2, pos.getY() + 0.5, pos.getZ() - 0.2, pos.getX() + 1.2, pos.getY() + 1.3, pos.getZ() + 1.2);
             }
             return new AABB(pos.getX() + 0.1, pos.getY(), pos.getZ() + 0.1, pos.getX() + 0.9, pos.getY() + 1.0, pos.getZ() + 0.9);
@@ -38,7 +50,7 @@ public final class ClientPlekken {
         ListTag t = d.getListOrEmpty("spots");
         for (int i = 0; i < t.size(); i++) {
             CompoundTag e = t.getCompoundOrEmpty(i);
-            Ambacht a = Ambacht.van(e.getStringOr("a", "mijnen"));
+            NodeSoort a = NodeSoort.van(e.getStringOr("s", "erts"));
             List<BlockPos> bl = new ArrayList<>();
             ListTag b = e.getListOrEmpty("bloemen");
             for (net.minecraft.nbt.Tag x : b) {
@@ -46,9 +58,10 @@ public final class ClientPlekken {
                     bl.add(BlockPos.of(lt.longValue()));
                 }
             }
-            l.add(new Plek(e.getStringOr("id", ""), BlockPos.of(e.getLongOr("pos", 0L)), a == null ? Ambacht.MIJNEN : a, e.getIntOr("tier", 1),
+            int tier = e.getIntOr("tier", 1);
+            l.add(new Plek(e.getStringOr("id", ""), BlockPos.of(e.getLongOr("pos", 0L)), a == null ? NodeSoort.ERTS : a, tier,
                     e.getBooleanOr("leeg", false), e.getBooleanOr("zeldzaam", false), e.getBooleanOr("lvOk", true), e.getBooleanOr("eigen", false),
-                    e.getIntOr("raten", 0), bl, e.getStringOr("honing", ""), e.getBooleanOr("duik", false)));
+                    e.getIntOr("raten", 0), bl, e.getStringOr("honing", ""), e.getIntOr("nodig", AmbachtXp.tierLevel(tier))));
         }
         PLEKKEN = List.copyOf(l);
         buff = d.getStringOr("buff", "");

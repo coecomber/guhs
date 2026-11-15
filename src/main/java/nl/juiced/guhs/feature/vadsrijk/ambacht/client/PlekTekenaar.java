@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
-import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.client.ClientPlekken.Plek;
 
 /**
@@ -47,30 +47,30 @@ public final class PlekTekenaar {
     }
 
     static Model model(Plek p) {
-        return switch (p.ambacht()) {
-            case MIJNEN -> switch (p.tier()) {
+        return switch (p.soort()) {
+            case ERTS -> switch (p.tier()) {
                 case 1 -> new Model(Blocks.RAW_IRON_BLOCK.defaultBlockState(), 0.55f, 0);
                 case 2 -> new Model(Blocks.AMETHYST_CLUSTER.defaultBlockState(), 1.0f, 0);
                 case 4 -> new Model(Blocks.RAW_GOLD_BLOCK.defaultBlockState(), 0.55f, 0);       // U-AMBACHT2: lampionbrons
                 case 5 -> new Model(Blocks.CALCITE.defaultBlockState(), 0.55f, 0);              // U-AMBACHT2: hemelzilver
                 default -> new Model(Blocks.RAW_COPPER_BLOCK.defaultBlockState(), 0.55f, 0);
             };
-            case HOUTHAKKEN -> switch (p.tier()) {
+            case HOUT -> switch (p.tier()) {
                 case 1 -> new Model(Blocks.MUSHROOM_STEM.defaultBlockState(), 0.6f, 0);
                 case 2 -> new Model(Blocks.BIRCH_LOG.defaultBlockState(), 0.6f, 0);
                 case 4 -> new Model(Blocks.BAMBOO_BLOCK.defaultBlockState(), 0.6f, 0);          // U-AMBACHT2: driftwood + kite bamboo
                 case 5 -> new Model(Blocks.STRIPPED_BIRCH_LOG.defaultBlockState(), 0.6f, 0);    // U-AMBACHT2: wolkenhout
                 default -> new Model(Blocks.DARK_OAK_LOG.defaultBlockState(), 0.6f, 0);
             };
-            case PLUKKEN -> switch (p.tier()) {
+            case KRUID -> switch (p.tier()) {
                 case 1 -> new Model(Blocks.FLOWERING_AZALEA.defaultBlockState(), 0.6f, 0);
                 case 2 -> new Model(Blocks.BLUE_ORCHID.defaultBlockState(), 1.1f, 0);
                 case 4 -> new Model(Blocks.FERN.defaultBlockState(), 1.0f, 0);                  // U-AMBACHT2: zeekraal + zeegaren
                 case 5 -> new Model(Blocks.AZURE_BLUET.defaultBlockState(), 1.1f, 0);           // U-AMBACHT2: wolkbes + wolkenwol
                 default -> new Model(Blocks.TORCHFLOWER.defaultBlockState(), 1.1f, 0);
             };
-            case VISSEN -> p.duik() ? new Model(Blocks.BRAIN_CORAL.defaultBlockState(), 1.0f, 0)  // U-AMBACHT2: coral diving
-                    : new Model(Blocks.LILY_PAD.defaultBlockState(), 1.0f, 0.88f);
+            case DUIK -> new Model(Blocks.BRAIN_CORAL.defaultBlockState(), 1.0f, 0);  // U-AMBACHT2: coral diving
+            case VIS -> new Model(Blocks.LILY_PAD.defaultBlockState(), 1.0f, 0.88f);
             default -> new Model((p.eigen() ? Blocks.BEEHIVE : Blocks.BEE_NEST).defaultBlockState(), 0.7f, 0);
         };
     }
@@ -112,7 +112,7 @@ public final class PlekTekenaar {
         VertexConsumer vc = buffers.getBuffer(type);
         Vector3f v = new Vector3f();
         for (Plek p : lijst) {
-            if (p.leeg() && p.ambacht() != Ambacht.IMKEREN) {
+            if (p.leeg() && p.soort() != NodeSoort.KORF) {
                 continue;
             }
             BlockPos b = p.pos();
@@ -120,9 +120,9 @@ public final class PlekTekenaar {
                 continue;
             }
             Model m = model(p);
-            float bob = p.ambacht() == Ambacht.VISSEN && !p.duik() ? 0.02f * (float) Math.sin(t * 0.1f + b.getX()) : 0;
+            float bob = p.soort() == NodeSoort.VIS ? 0.02f * (float) Math.sin(t * 0.1f + b.getX()) : 0;
             float puls = p.zeldzaam() ? 0.75f + 0.25f * (float) Math.sin(t * 0.25f) : 1f;
-            int alfa = (int) (255 * (!p.lvOk() ? 0.4f : p.ambacht() == Ambacht.IMKEREN && !p.eigen() ? 0.55f : 0.95f) * puls);
+            int alfa = (int) (255 * (!p.lvOk() ? 0.4f : p.soort() == NodeSoort.KORF && !p.eigen() ? 0.55f : 0.95f) * puls);
             pose.pushPose();
             pose.translate(b.getX() + 0.5 - cam.x, b.getY() + m.dy() + bob - cam.y, b.getZ() + 0.5 - cam.z);
             pose.scale(m.maat(), m.maat(), m.maat());

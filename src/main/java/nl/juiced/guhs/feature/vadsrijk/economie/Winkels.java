@@ -72,12 +72,9 @@ public final class Winkels {
     }
 
     static void registreer() {
-        // (balans 2026-11) flat potion tiers: Klein 120 Vads for 8 brons, the Vadsdrankje 300 Vads for 40 brons
-        List<Waar> drank = List.of(item("klein_vadsdrankje", 8, () -> new ItemStack(EcoSpul.KLEIN_VADSDRANKJE.get())),
-                item("vadsdrankje", 40, () -> new ItemStack(EcoSpul.VADSDRANKJE.get())),
-                item("energiedrankje", 20, () -> new ItemStack(EcoSpul.ENERGIEDRANKJE.get())),
-                item("snelpootjesdrankje", 45, () -> new ItemStack(EcoSpul.SNELPOOTJESDRANKJE.get())),
-                item("vahoegdrankje", 60, () -> new ItemStack(EcoSpul.VAHOEGDRANKJE.get())));
+        // (balans 2026-11) flat potion tiers: Klein 120 Vads for 8 brons. 1.10.4 (Koken = drankjes + eten): the shops sell ONLY the
+        // smallest heal potion; every better potion (Vadsdrankje, energy, Snelpootjes, Vahoeg) is made by Koken or ordered from a player.
+        List<Waar> drank = List.of(item("klein_vadsdrankje", 8, () -> new ItemStack(EcoSpul.KLEIN_VADSDRANKJE.get())));
         List<Waar> smid = List.of(item("verbetersteentje", 50, () -> new ItemStack(EcoSpul.VERBETERSTEENTJE.get())),
                 item("pluisdraad", 30, () -> new ItemStack(EcoSpul.PLUISDRAAD.get())),
                 item("herrolknabbel", 600, () -> new ItemStack(EcoSpul.HERROLKNABBEL.get())),

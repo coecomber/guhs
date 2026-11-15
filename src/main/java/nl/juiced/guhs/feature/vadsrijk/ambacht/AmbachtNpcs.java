@@ -40,14 +40,16 @@ import nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh;
  *   hub's square (free, standable floor), once a player is near; they join the npc slice's keeper ({@link Npcs#voegToe}).</li>
  *   <li>A click (npc's {@code QuestMotor.KLIK_VOOR}): a talking screen with the choices Werkplaats / Receptenboek / Verhaal / Dag
  *   (gathering masters: Waar? instead of the workshop; the board guh: Bestelbord / Ambachtsbord).</li>
- *   <li>The story: 5 steps per ambacht at ambacht level {@link #VERHAAL_LEVELS} (U-AMBACHT2: then more at Hoogvads' Ambachtsgilde,
+ *   <li>The story: 5 steps per ambacht at ambacht level {@link #VERHAAL_LEVELS} (1.10.4: one chain per new ambacht, levels on the new
+ *   tier scale; U-AMBACHT2: then more at Hoogvads' Ambachtsgilde,
  *   {@link HoogvadsGilde}); 3 pages each ({@code vadsrijk.ambacht.verhaal.<a>.<step>.<0-2>});
  *   rewards: munten + a bit of xp, and on the last step (lv 50) a keepsake for home by the Post (decoration only).</li>
  * </ul>
  */
 public final class AmbachtNpcs {
     public static final String SLEUTEL = "vr_amb";
-    public static final int[] VERHAAL_LEVELS = {1, 10, 20, 35, 50};
+    /** 1.10.4: the old 1/10/20/35/50 on the new tier scale ({@link AmbachtXp#oudNaarNieuw}). */
+    public static final int[] VERHAAL_LEVELS = {1, 6, 12, 22, 32};
     static final int WERK = 1, BOEK = 2, VERHAAL = 3, DAG = 4, WAAR = 5, BESTEL = 6, RANG = 7, OPDRACHT = 8, WINKEL = 9;
     private static final Map<String, BlockPos> GEZET = new ConcurrentHashMap<>();
     /** Who a player is talking to. */
@@ -63,14 +65,9 @@ public final class AmbachtNpcs {
         }
         return switch (a) {
             case SMEDEN -> "smid";
-            case NAAIEN -> "naai";
             case KOKEN -> "kok";
-            case BROUWEN -> "brouw";
-            case MIJNEN -> "mijn";
-            case HOUTHAKKEN -> "hout";
-            case PLUKKEN -> "pluk";
+            case VERZAMELEN -> "verzamel";
             case VISSEN -> "vis";
-            case IMKEREN -> "imker";
         };
     }
 
@@ -85,14 +82,9 @@ public final class AmbachtNpcs {
         }
         return switch (a) {
             case SMEDEN -> List.of(BUILDER_HELMET, GRILL_SCHORT);
-            case NAAIEN -> List.of(ZONNEHOEDJE, KNUS_SJAALTJE);
             case KOKEN -> List.of(CHEF_HAT, CHEF_JACKET);
-            case BROUWEN -> List.of(WIZARD_HAT, MONOCLE);
-            case MIJNEN -> List.of(KAASMIJN_HELM, KAASMIJN_OVERALL);
-            case HOUTHAKKEN -> List.of(BOSWACHTERSHOED, BOSWACHTERSJAS);
-            case PLUKKEN -> List.of(TUINHOEDJE, TUINSCHORTJE);
+            case VERZAMELEN -> List.of(KAASMIJN_HELM, TUINSCHORTJE);
             case VISSEN -> List.of(VISSERSHOEDJE, VISVEST);
-            case IMKEREN -> List.of(STRAW_HAT, TUINSCHORTJE);
         };
     }
 
@@ -233,7 +225,7 @@ public final class AmbachtNpcs {
         int tier = AmbachtXp.tierVoor(AmbachtData.level(p, w.ambacht()));
         for (AmbachtPlekken.Groep g : AmbachtPlekken.GROEPEN) {
             BlockPos a = g.anker();
-            boolean kan = w.ambacht() == Ambacht.IMKEREN ? AmbachtData.level(p, Ambacht.IMKEREN) >= Imkeren.korfLevel(g.tier()) : g.tier() <= Math.max(tier, 1);
+            boolean kan = AmbachtData.level(p, w.ambacht()) >= Verzamelen.nodig(g) && g.soort() != NodeSoort.KORF;   // (hives: the Gilde imker)
             if (g.ambacht() != w.ambacht() || a == null || !kan) {
                 continue;
             }
@@ -284,7 +276,7 @@ public final class AmbachtNpcs {
         AmbachtData.zetVerhaal(p, a, stap + 1);
         Spelers.geefMunten(p, 100L * (stap + 1));
         AmbachtData.geefXp(p, a, Math.round(AmbachtXp.xpVoor(AmbachtData.level(p, a)) * 0.15), false);
-        if (stap == 0 && a.verzamel && a != Ambacht.IMKEREN) {
+        if (stap == 0 && a.verzamel) {
             for (Materialen.Materiaal m : Materialen.van(a, 1)) {
                 MateriaalTas.geef(p, Materialen.stack(m.id(), 1, 3));
             }
@@ -305,12 +297,8 @@ public final class AmbachtNpcs {
         String post = switch (a) {
             case KOKEN -> "kokschort";
             case VISSEN -> "vissershoedje";
-            case PLUKKEN -> "tuinhoedje";
-            case IMKEREN -> "imkershoed";
-            case MIJNEN, SMEDEN -> "mijnhelm";
-            case HOUTHAKKEN -> "opperzwambeeld";
-            case NAAIEN -> "klodderknuffel";
-            case BROUWEN -> "mini_koning";
+            case VERZAMELEN -> "tuinhoedje";
+            case SMEDEN -> "mijnhelm";
         };
         return Recepten.POST.get(post).get();
     }

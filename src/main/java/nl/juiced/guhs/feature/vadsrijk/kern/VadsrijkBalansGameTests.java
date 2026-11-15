@@ -99,9 +99,9 @@ public class VadsrijkBalansGameTests {
         helper.assertTrue(uc != null && uc.ticks() == 200 && uc.cooldownGroup().orElseThrow().equals(Drinken.GROEP), "10 s, one group");
         // prices
         var w = Winkels.winkel(Winkels.DRANKJES);
-        helper.assertTrue(w != null && w.waar("klein_vadsdrankje").prijs() == 8 && w.waar("vadsdrankje").prijs() == 40, "zone-1 prices");
+        helper.assertTrue(w != null && w.waar("klein_vadsdrankje").prijs() == 8 && w.waar("vadsdrankje") == null, "zone-1 prices (1.10.4: only the small one)");
         var k = Winkels.winkel(Z2Winkel.KANDIJKRAAM);
-        helper.assertTrue(k != null && k.waar("grote_vadsdrank").prijs() == 300, "Groot Vadsdrankje: 3 zilver");
+        helper.assertTrue(k != null && k.waar("grote_vadsdrank") == null && k.waar("klein_vadsdrankje").prijs() == 8, "1.10.4: Groot Vadsdrankje is Koken's");
         helper.succeed();
     }
 

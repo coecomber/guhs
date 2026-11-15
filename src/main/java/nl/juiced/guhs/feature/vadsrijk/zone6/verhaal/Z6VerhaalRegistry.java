@@ -73,8 +73,8 @@ public final class Z6VerhaalRegistry {
     /** The airship destinations of Havenmeester Zandloper; "zijdeland" is added to the other captains' lists. */
     static final List<String> HAVEN_REIZEN = List.of("hoogvads", "lampionkust", "schemerwortel", "kandijkom", "zwamzoet", "knuffelkamp");
     /** Teachers -> their craft (they open t-ambacht's workshop / book like Hoogvads' guild: QuestMotor.EXTRA). */
-    static final Map<String, Ambacht> LEERMEESTERS = Map.of("z6_leermeester_smeden", Ambacht.SMEDEN, "z6_leermeester_naaien", Ambacht.NAAIEN,
-            "z6_leermeester_koken", Ambacht.KOKEN, "z6_leermeester_brouwen", Ambacht.BROUWEN);
+    static final Map<String, Ambacht> LEERMEESTERS = Map.of("z6_leermeester_smeden", Ambacht.SMEDEN, "z6_leermeester_naaien", Ambacht.SMEDEN,
+            "z6_leermeester_koken", Ambacht.KOKEN, "z6_leermeester_brouwen", Ambacht.KOKEN);
 
     private Z6VerhaalRegistry() {
     }
@@ -139,7 +139,7 @@ public final class Z6VerhaalRegistry {
         LEERMEESTERS.forEach((npc, a) -> optie(npc, new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.werk", p -> true,
                 p -> AmbachtSchermen.werkplaats(p, a, npc))));
         optie("z6_leermeester_imkeren", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.boek", p -> true,
-                p -> AmbachtSchermen.boek(p, "recepten", Ambacht.IMKEREN)));
+                p -> AmbachtSchermen.boek(p, "recepten", Ambacht.VERZAMELEN)));
     }
 
     private static void optie(String npc, QuestMotor.ExtraOptie o) {

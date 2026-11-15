@@ -43,7 +43,8 @@ import nl.juiced.guhs.feature.vadsrijk.kern.loot.LootTabel;
 import nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor;
 
 /**
- * Het Vadsrijk "Ambachten" (night round T, slice t-ambacht; VOORSTEL_PROFESSIONS + decisions A1-A3): 9 professions with their own
+ * Het Vadsrijk "Ambachten" (night round T, slice t-ambacht; VOORSTEL_PROFESSIONS + decisions A1-A3; 1.10.4: 4 instead of 9:
+ * Verzamelen, Vissen, Smeden, Koken): professions with their own
  * levels ({@link AmbachtData}, {@link AmbachtXp}), per-player gathering spots in zones 1-3 ({@link Verzamelen}, {@link PlekWereld},
  * {@link AmbachtPlekken}), hives ({@link Imkeren}), food buffs ({@link Eten}), brewing ({@link Brouwsels}), Maatwerk/Meesterwerk
  * ({@link Maatwerk}), the recipes and workshops ({@link Recepten}, {@link Werkplaats}, {@link AmbachtNpcs}), the Bestelbord, the
@@ -80,6 +81,8 @@ public final class AmbachtRegistry {
         });
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedInEvent e) -> {
             if (e.getEntity() instanceof ServerPlayer p) {
+                AmbachtData.tag(p);   // 1.10.4: the 9 -> 4 migration (once) before anything reads the slice
+                AmbachtData.migreerTitel(p);
                 AmbachtData.ingelogd(p);
                 Meesterschap.check(p);   // U-AMBACHT2: who reached the cap before the Meesterschort existed
             }
@@ -179,7 +182,7 @@ public final class AmbachtRegistry {
             return 1;
         })));
         k.then(Commands.literal("werk").then(Commands.argument("ambacht", StringArgumentType.word())
-                .suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("smeden", "naaien", "koken", "brouwen"), b)).executes(c -> {
+                .suggests((c, b) -> SharedSuggestionProvider.suggest(List.of("smeden", "koken"), b)).executes(c -> {
                     Ambacht a = Ambacht.van(StringArgumentType.getString(c, "ambacht"));
                     if (a != null) {
                         AmbachtSchermen.werkplaats(speler(c), a, null);
@@ -277,7 +280,7 @@ public final class AmbachtRegistry {
             ServerPlayer p = speler(c);
             for (Spot s : Verzamelen.inBuurt(p, 128)) {
                 Verzamelen.staat(p, s).klaar = 0;
-                if (s.groep().ambacht() == Ambacht.IMKEREN && Imkeren.eigen(p, s)) {
+                if (s.groep().soort() == NodeSoort.KORF && Imkeren.eigen(p, s)) {
                     Imkeren.vul(p, s);
                 }
             }
@@ -437,7 +440,7 @@ public final class AmbachtRegistry {
                         if (AmbachtData.verhaal(p, a) < AmbachtNpcs.VERHAAL_LEVELS.length) {
                             AmbachtData.zetVerhaal(p, a, AmbachtNpcs.VERHAAL_LEVELS.length);
                         }
-                        HoogvadsGilde.verhaal(p, a.verzamel && a != Ambacht.IMKEREN ? "z5_gildemeester" : "z5_leermeester_" + a.id, List.of(a));
+                        HoogvadsGilde.verhaal(p, a.verzamel ? "z5_gildemeester" : "z5_leermeester_" + a.id, List.of(a));
                     }
                     return 1;
                 })));

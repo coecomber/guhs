@@ -411,8 +411,8 @@ public final class Kasteel {
         boolean steen = st.is(Blocks.LODESTONE), kist = st.is(Blocks.CHEST) || st.is(Blocks.BARREL) || st.is(Blocks.TRAPPED_CHEST);
         nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht werk = st.is(Blocks.SMITHING_TABLE) ? nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.SMEDEN
                 : st.is(Blocks.SMOKER) ? nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.KOKEN
-                : st.is(Blocks.LOOM) ? nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.NAAIEN
-                : st.is(Blocks.BREWING_STAND) ? nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.BROUWEN : null;
+                : st.is(Blocks.LOOM) ? nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.SMEDEN
+                : st.is(Blocks.BREWING_STAND) ? nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.KOKEN : null;
         if (!steen && !kist && werk == null && !st.is(Blocks.CRAFTING_TABLE) && !st.is(Blocks.FURNACE) && !st.is(Blocks.ANVIL)) {
             return false;
         }

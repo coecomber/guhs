@@ -32,10 +32,17 @@ def _hex(k):
 # ======================================================================================================================
 # data (same ids as the Java)
 # ======================================================================================================================
+# 1.10.4 (Ambachten: van 9 naar 4): Verzamelen = mijnen + houthakken + plukken + imkeren, Vissen (+ duiken), Smeden = smeden + naaien,
+# Koken = koken + brouwen
 AMBACHTEN = {
-    "mijnen": ("Mijnen", "Mining"), "houthakken": ("Houthakken", "Woodcutting"), "plukken": ("Plukken", "Picking"),
-    "vissen": ("Vissen", "Fishing"), "imkeren": ("Imkeren", "Beekeeping"), "smeden": ("Smeden", "Smithing"),
-    "naaien": ("Naaien", "Sewing"), "koken": ("Koken", "Cooking"), "brouwen": ("Brouwen", "Brewing"),
+    "verzamelen": ("Verzamelen", "Gathering"), "vissen": ("Vissen", "Fishing"), "smeden": ("Smeden", "Smithing"), "koken": ("Koken", "Cooking"),
+}
+# the person words of the titles (Leerling-<x>, Gezel-<x>, Meester-<x>)
+AMBACHT_PERSOON = {"verzamelen": "verzamelaar", "vissen": "visser", "smeden": "smid", "koken": "kok"}
+# 1.10.4: the spot kinds (NodeSoort) and their names
+SOORTEN = {
+    "erts": ("Erts", "Ore"), "hout": ("Hout", "Wood"), "kruid": ("Kruiden", "Herbs"), "korf": ("Bijenkorven", "Beehives"),
+    "vis": ("Visplekken", "Fishing spots"), "duik": ("Duikplekken", "Dive spots"),
 }
 
 # id: (soort, kleur, naam, uitleg)
@@ -96,17 +103,26 @@ DRANKEN = {
     "honingelixer": (0xFFC830, "Honingelixer"),
 }
 MW = {
+    # (1.10.4: the weapons/armour have no recipes any more; their items stay registered, so they keep a name)
     "zwaard": ("Maatwerkzwaard", "Maatwerk Sword"), "boog": ("Maatwerkboog", "Maatwerk Bow"), "staf": ("Maatwerkstaf", "Maatwerk Staff"),
     "helm": ("Maatwerkhelm", "Maatwerk Helmet"), "borstplaat": ("Maatwerkborstplaat", "Maatwerk Breastplate"),
     "broek": ("Maatwerkbroek", "Maatwerk Trousers"), "schoentjes": ("Maatwerkschoentjes", "Maatwerk Shoes"),
-    "ring": ("Meesterring", "Master Ring"), "ketting": ("Meesterketting", "Master Necklace"), "oorbel": ("Meesteroorbel", "Master Earring"),
+    "ring": ("Gesmede ring", "Forged Ring"), "ketting": ("Gesmede ketting", "Forged Necklace"), "oorbel": ("Gesmede oorbel", "Forged Earring"),
+    "armband": ("Gesmede armband", "Forged Bracelet"),
 }
+SIERADEN = ("ring", "ketting", "oorbel", "armband")
+# per tier: (metal, fibre, boss core) words
 TIER_NAAM = {1: ("Pluisijzeren", "Pluiskatoenen", "Zwamkern-"), 2: ("Kandijzilveren", "Kristalvlassen", "Splinterkern-"),
-             3: ("Amberkoperen", "Schemerzijden", "Wortelkern-")}
+             3: ("Amberkoperen", "Schemerzijden", "Wortelkern-"), 4: ("Lampionbronzen", "Zeegaren", "Lampionkern-"),
+             5: ("Hemelzilveren", "Wolkenwollen", "Wolkkern-")}
+# the name of a base type mw_t<tier>_<kind> (a made piece's name; the same base for Maatwerk and Meesterwerk)
 MW_TIER = {
     "zwaard": "{0} Zwaard", "boog": "{0} Boog", "staf": "{0} Staf", "helm": "{0} Helm", "borstplaat": "{0} Borstplaat",
-    "broek": "{1} Broek", "schoentjes": "{1} Schoentjes", "ring": "{2}Meesterring", "ketting": "{2}Meesterketting", "oorbel": "{2}Meesteroorbel",
+    "broek": "{1} Broek", "schoentjes": "{1} Schoentjes", "ring": "{0} Ring", "ketting": "{0} Ketting", "oorbel": "{0} Oorbel",
+    "armband": "{0} Armband",
 }
+# a Meesterwerk recipe's name
+MEESTER_NAAM = {"ring": "{2}Meesterring", "ketting": "{2}Meesterketting", "oorbel": "{2}Meesteroorbel", "armband": "{2}Meesterarmband"}
 
 GROEPEN = {
     "z1_pluk_kamp": "de wei bij het kampvuur van Knuffelkamp", "z1_pluk_weide_1": "de Klodderweide (west)", "z1_pluk_weide_2": "de Klodderweide (midden)",
@@ -138,9 +154,11 @@ RECEPTEN = {
     "post_kokschort": "Kokschort (naar huis)", "post_vaandel": "Vadsrijk-vaandel (naar huis)", "post_vissershoedje": "Vissershoedje (naar huis)",
     "post_tuinhoedje": "Tuinhoedje (naar huis)", "post_imkershoed": "Imkershoed (naar huis)", "post_klodderknuffel": "Klodderreus-knuffel (naar huis)",
 }
-for _s in ("zwaard", "boog", "staf", "helm", "borstplaat", "broek", "schoentjes", "ring", "ketting", "oorbel"):
-    for _t in (1, 2, 3):
-        RECEPTEN[f"{_s}_t{_t}"] = MW_TIER[_s].format(*TIER_NAAM[_t]).replace("- ", "-")
+RECEPTEN.update({"snelpootjesdrankje": "Snelpootjesdrankje", "vahoegdrankje": "Vahoegdrankje"})   # 1.10.4: no longer in the shops
+for _s in SIERADEN:   # 1.10.4: Smeden = jewellery, T1-T5 (Maatwerk + Meesterwerk)
+    for _t in range(1, 6):
+        RECEPTEN[f"{_s}_t{_t}"] = MW_TIER[_s].format(*TIER_NAAM[_t])
+        RECEPTEN[f"meester_{_s}_t{_t}"] = MEESTER_NAAM[_s].format(*TIER_NAAM[_t]).replace("- ", "-")
 
 EIGENSCHAPPEN = {
     "bazen": ("Schade tegen bazen +%s%%", "Damage against bosses +%s%%"),
@@ -151,125 +169,41 @@ EIGENSCHAPPEN = {
 }
 
 ROLLEN = {  # rol: (hallo, uitleg (gathering masters), idle lines)
-    "smid": ("Welkom in de smidse! Hier smeed ik wapens, helmen en borstplaten op maat. Jij kiest de bonussen, ik zorg voor een extra sokje.",
-             None, ("Klink, klonk, klunk!", "Een goed zwaard is als een knuffel: stevig maar lief.", "Wie een bazenkern heeft, maakt een Meesterwerk!")),
-    "naai": ("Kom binnen in het naaiatelier! Broeken, schoentjes, en hoedjes en deco voor thuis. Alles met liefde gestikt.",
-             None, ("Steek, steek, knoop!", "Vingerhoedje op, daar gaan we.", "Pluiskatoen is het zachtste wat er is.")),
-    "kok": ("Ruik je dat? In de keuken maken we eten met buffs: een half uur sterker, en het blijft als je flauwvalt!",
-            None, ("Proeven mag, snoepen niet!", "Een feestmaal is pas lekker met je hele party.", "Oma Truus zegt: altijd een snufje vads.")),
-    "brouw": ("Blub blub! In de brouwerij maak ik drankjes, en ik slijp kristallen: drie ruwe worden één geslepen.",
-              None, ("Bubbel, bubbel, borrel...", "Niet aan de ketel zitten, die is heet!", "Waarom worden de kristallen toch grauw?")),
-    "mijn": ("Hé, mijnwerkertje! Overal in het Vadsrijk liggen ertsplekken. Alleen jij ziet de jouwe.",
-             "Klik met rechts op een ertsplek en tik drie keer op het glinsterende stukje. Goed getikt is vadsig erts! Sluipklik slaat het spelletje over.",
-             ("Bonk! Bonk! Bonk!", "Glinstert daar iets?", "Een helm op je hoofd is geen overbodige luxe.")),
-    "hout": ("Hallo houthakkertje! Bij de bomen staan stronkjes die jij mag hakken. Hak op het ritme, dan krijg je vadsig hout.",
-             "Rechtsklik op een stronk en tik twee keer op het roze. Elke stronk komt na een minuutje terug, maar dan ergens anders!",
-             ("Njeg-njeg, hak-hak!", "Een boom die je knuffelt, groeit harder.", "Spaan voor spaan.")),
-    "pluk": ("Dag plukkertje! Op de weiden groeien kruiden en vezels. Pluk ze zachtjes, dan blijven ze heel.",
-             "Rechtsklik op een plantje, HOUD de muisknop vast en laat los in het groene stukje. Te lang? Dan is het geplet.",
-             ("Zachtjes, zachtjes...", "Een gouden klaver? Dan heb je geluk!", "Ruik eens aan de klodderklaver.")),
+    "smid": ("Welkom in de smidse! Hier smeed ik sieraden op maat: ringen, kettingen, oorbellen en armbanden. Jij kiest de bonussen. "
+             "Met een bazenkern wordt het een Meesterwerk!",
+             None, ("Klink, klonk, klunk!", "Een goede ring is als een knuffel: stevig maar lief.", "Wie een bazenkern heeft, maakt een Meesterwerk!")),
+    "kok": ("Ruik je dat? In de keuken maken we eten met buffs en alle drankjes. Ik slijp ook kristallen: drie ruwe worden één geslepen.",
+            None, ("Proeven mag, snoepen niet!", "Een feestmaal is pas lekker met je hele party.", "Bubbel, bubbel, borrel... wie wil er een drankje?")),
+    "verzamel": ("Hallo verzamelaartje! Overal in het Vadsrijk liggen plekken voor jou: ertsaders, stronkjes, kruiden en later ook bijenkorven. "
+                 "Alleen jij ziet de jouwe.",
+                 "Rechtsklik op een plek. Erts: tik drie keer op het glinsterende. Hout: tik twee keer op het roze. Kruiden: HOUD vast en laat los "
+                 "in het groen. Goed gedaan is vadsig! Sluipklik slaat het spelletje over.",
+                 ("Bonk! Hak! Pluk!", "Glinstert daar iets?", "Een gouden klaver? Dan heb je geluk!")),
     "vis": ("Ahoy visvriendje! Waar het water borrelt, zit vis. 's Nachts en bij regen bijten er andere soorten.",
             "Rechtsklik op een borrelplek, wacht tot je 'Beet!' ziet en klik dan meteen. Te vroeg? Dan schrikt de vis.",
             ("Stil... stil... beet!", "De grootste vis zwemt altijd net weg.", "Ooit vis ik in de Lampionkust.")),
-    "imker": ("Zzzoem! Welkom bij de bijenstal. Zet je eigen korf bij de bloemen, dan halen jouw bijen nectar.",
-              "Klik op een lege korfplaats om je korf neer te zetten. Kom later terug: hoe meer bloemen, hoe sneller de raten vol zijn. Oogsten = rook geven (houd vast, laat los in het groen).",
-              ("Zzzoem zzzoem.", "Bijen zijn guhs met vleugeltjes, zeg ik altijd.", "Pas op, die Mika-imker zuigt alles leeg!")),
     "bord": ("Hallo! Hier hangen de bestellingen van de stad, en de ranglijst van de beste ambachtsguhs.",
              None, ("Drie bestellingen per dag, niet meer en niet minder.", "Kijk eens wie er bovenaan staat!", "Bestellen, leveren, blij maken.")),
 }
 NPC_NAMEN = {
-    "amb_smid_z1": "Smidguh Hamertje", "amb_naai_z1": "Naaiguh Vingerhoedje", "amb_kok_z1": "Kok Kruimeltje", "amb_brouw_z1": "Brouwguh Bubbel",
-    "amb_mijn_z1": "Mijnguh Bonk", "amb_hout_z1": "Houtguh Spaan", "amb_pluk_z1": "Kruidenguh Madelief", "amb_vis_z1": "Visguh Dobbertje",
-    "amb_bord_z1": "Klerk Krabbel", "amb_smid_z2": "Smidguh IJzerpootje", "amb_naai_z2": "Naaiguh Wolwantje", "amb_kok_z2": "Kok Kandijkoek",
-    "amb_brouw_z2": "Brouwguh Bruisje", "amb_bord_z2": "Klerk Kriebel", "amb_smid_z3": "Hamerhoning", "amb_naai_z3": "Naaiguh Zijdezoem",
-    "amb_kok_z3": "Kok Honingtaartje", "amb_brouw_z3": "Brouwguh Nectarine", "amb_imker_z3": "Imkerguh Zoemie", "amb_bord_z3": "Klerk Kraaltje",
+    "amb_smid_z1": "Smidguh Hamertje", "amb_kok_z1": "Kok Kruimeltje", "amb_verzamel_z1": "Verzamelguh Madelief", "amb_vis_z1": "Visguh Dobbertje",
+    "amb_bord_z1": "Klerk Krabbel", "amb_smid_z2": "Smidguh IJzerpootje", "amb_kok_z2": "Kok Kandijkoek", "amb_bord_z2": "Klerk Kriebel",
+    "amb_smid_z3": "Hamerhoning", "amb_kok_z3": "Kok Honingtaartje", "amb_bord_z3": "Klerk Kraaltje",
 }
 
 # the stories: per ambacht 5 steps x (teacher, you, teacher)
 VERHAAL = {
-    "smeden": [
-        ("Weet je wat dit is? Een splinter van het Aambeeld van de Orde. Ooit smeedde de hele stad erop.", "Wat is er met het aambeeld gebeurd?",
-         "De Grauwe Keizer liet het in stukken springen. Vind de stukken, en word een echte smid. Hier, een beetje ijzer om te oefenen."),
-        ("Je slagen worden zekerder! Ik hoorde dat er een stuk van het aambeeld in de Druipgrotten ligt.", "Dan ga ik daar mijnen!",
-         "Goed zo. En onthoud: een zwaard op maat is net zo lief als een knuffel op maat."),
-        ("Het tweede stuk zat in de Spiegelburcht. Het weerkaatste mijn eigen gezicht... en dat van een blije smid.", "Hoeveel stukken zijn er nog?",
-         "Nog een paar. Elk stuk maakt het aambeeld warmer. Voel maar."),
-        ("Met amberkoper uit De Schemerwortel zingt het aambeeld bijna. Bijna!", "Wat ontbreekt er nog?",
-         "Een smid die het met hart smeedt. Dat ben jij, denk ik."),
-        ("Het aambeeld is heel! Hoor je het? KLIIING. Dat is het geluid van de Orde die weer lacht.", "Dankzij ons!",
-         "Dankzij jou, Gezel. Ik stuur je een mijnhelmpje naar huis, als aandenken."),
-    ],
-    "naaien": [
-        ("Ik naai een reuzenquilt voor Hoogvads, met een lapje uit elke zone.", "Een quilt van het hele Vadsrijk?",
-         "Precies! Begin maar met pluiskatoen. Zacht, roze en een beetje eigenwijs."),
-        ("Het lapje van Zwamzoet is klaar. Er zit een klein Klodderkoninkje op geborduurd.", "Schattig!",
-         "Nu de Splinterpieken. Daar heb ik kristalvlas voor nodig, dat glinstert zo mooi."),
-        ("Het ijslapje knispert als je erover aait. Hoogvads gaat dit prachtig vinden.", "Wie slaapt er onder die quilt?",
-         "Iedereen die het koud heeft. Zelfs de Keizer, als hij ooit wil."),
-        ("Schemerzijde! Kijk hoe paars het glanst. Het lapje van De Schemerwortel wordt het mooiste.", "Mag ik helpen met de steken?",
-         "Jij doet al de helft, lieverd. Jouw steken zijn net zo netjes als de mijne."),
-        ("De quilt is af! Drie zones, drie lapjes, en nog plek voor meer.", "Op naar Hoogvads!",
-         "Eerst een cadeautje: een Klodderreus-knuffel, voor thuis. Gezel Naaier, dat ben je nu."),
-    ],
-    "koken": [
-        ("Oma Truus had een receptenboek. 'Toen de klodders nog roze waren', staat erin. De bladzijden zijn weggewaaid.", "Over het hele Vadsrijk?",
-         "Over het hele Vadsrijk! Begin met haar klodderpudding. Dat recept ken ik nog uit mijn hoofd."),
-        ("Ik vond een bladzijde in een visnet! Er staat een visstoofje op, met een vlek van saus.", "Smaakt het naar vroeger?",
-         "Het smaakt naar zondag. Blijf koken, dan vinden we er meer."),
-        ("Deze bladzijde lag bevroren in de Splinterpieken: Kandijsoep. Oma schreef erbij: 'tegen koude pootjes'.", "Ik maak er meteen een pan van!",
-         "Dat is de goede houding, kokkie."),
-        ("Honingpannenkoek! Met een tekeningetje van een bijtje. Oma kon niet tekenen, kijk die pootjes.", "Zes pootjes... of acht?",
-         "Het telt niet. Wat telt is dat het lekker is."),
-        ("De laatste bladzijde. 'Het koekje dat de Keizer nooit kreeg.' De rest is uitgeveegd...", "Misschien kunnen we het ooit bakken?",
-         "Ooit, Gezel Kok. Ooit. Hier, een kokschort voor thuis, zodat je het niet vergeet."),
-    ],
-    "brouwen": [
-        ("Blub! Weet je waarom de kristallen grauw worden? Ik ook niet. Maar ik ga het uitzoeken!", "Kan ik helpen?",
-         "Brouw eerst een vadsdrankje. Wie roze kan brouwen, kan grauw verslaan."),
-        ("Ik heb een grauw kristal in de ketel gedaan. Het werd... een beetje minder grauw!", "Wat deed je erbij?",
-         "Klodderklaver en een hele grote knuffelgedachte. Wetenschap!"),
-        ("Geslepen kristallen houden het grauw beter buiten. Daarom slijpen we ze!", "Drie ruw voor één geslepen?",
-         "Precies. Kwaliteit boven kwantiteit, blub."),
-        ("Met honing uit De Schemerwortel blijft het roze zelfs 's nachts! Het ont-grauw-drankje komt dichterbij.", "Hoe noemen we het?",
-         "Het Honingelixer. Klinkt deftig, smaakt naar zomer."),
-        ("Het werkt! Een druppel Honingelixer en een grauw kristal begint te stralen. De Vadsleidingen zullen blij zijn.", "Dat hebben we samen gedaan!",
-         "Zeker weten, Gezel Brouwer. Hier, een Mini Koning Klodder voor op je kast."),
-    ],
-    "mijnen": [
-        ("Bonk! Elke ader in het Vadsrijk is een beetje vads die onder de grond slaapt.", "En wij maken hem wakker?",
-         "Precies! Hier, wat pluisijzer om te beginnen. Tik op het glinsterende stukje."),
-        ("Er is een Mika die aders leegzuigt met een kaasgaspomp. Heb jij hem gezien?", "Een kaasgaspomp?!",
-         "Ik zweer het. Het ruikt er nog naar. Hou je ogen open."),
-        ("In de Splinterkloof glinstert het kandijzilver. En diep in een ijsgrot zit een geheime ader...", "Een geheime?",
-         "Zoek maar. Het Verkenningsboek houdt bij welke plekken je vond."),
-        ("Amberkoper! Warm als een kampvuur. De wortels van de boom beschermen het.", "Ik voel het zoemen.",
-         "Dat is de boom die bromt. Hij vindt je aardig."),
-        ("Je bent een echte mijnwerker. Glinsteraders vind je nu als de beste.", "Bonk! Bonk! Bonk!",
-         "Haha, precies zo! Gezel Mijner. Ik stuur je een mijnhelmpje naar huis."),
-    ],
-    "houthakken": [
-        ("Hout hakken doe je niet zomaar. Je bedankt de boom eerst.", "Dankjewel, boom!",
-         "Goed zo. Hier, wat zwamsteel om te oefenen. Hak op het ritme: njeg-njeg."),
-        ("Elke stronk die je hakt, groeit ergens anders weer terug. Het bos danst een beetje.", "Dus ze verhuizen?",
-         "Ze verhuizen! Daarom moet je goed rondkijken."),
-        ("Kristalden uit de Splinterpieken. Het klinkt als een klokje als je erop tikt.", "Tink!",
-         "Tink! Ja. Mooi hout voor een boog."),
-        ("Schemerhout huilt roze hars. Geen verdriet, hoor, gewoon blij sap.", "Blij sap?",
-         "Blij sap. Smiden gebruiken het voor hun beste werk."),
-        ("Je hakt als een echte bosguh. Het bos fluistert je naam.", "Wat zegt het?",
-         "'Dank je.' Gezel Houthakker! Hier, een Opperzwambeeld voor thuis."),
-    ],
-    "plukken": [
-        ("Plantjes zijn net guhs: als je ze zachtjes vasthoudt, blijven ze heel.", "Zachtjes, zachtjes...",
-         "Precies! Hier, wat klodderklaver en pluiskatoen om mee te beginnen."),
-        ("Op de Klodderweide groeit soms een gouden klaver. Op glinsterplekjes, als je geluk hebt.", "Ik ga zoeken!",
-         "Neem je tijd. Haast plet de blaadjes."),
-        ("IJsbloemen smelten nooit. Ze denken dat het altijd winter is.", "Arme bloemetjes?",
-         "Nee hoor, ze vinden het heerlijk. Net als sneeuwguhs."),
-        ("Lichtkeverkruid geeft licht, omdat de lichtkevers er 's nachts op slapen.", "Daarom gloeit het!",
-         "Slim! Jij weet al bijna net zoveel als ik."),
-        ("Mijn tuinhoedje is te klein geworden voor al jouw kennis. Gezel Plukker!", "Dankjewel, Madelief!",
-         "Hier, je eigen tuinhoedje, voor thuis."),
+    "verzamelen": [
+        ("Elke ader, elke boom en elk plantje in het Vadsrijk is een beetje vads die onder de grond slaapt.", "En wij maken het wakker?",
+         "Precies! Hier, wat erts, hout en kruiden om te beginnen. Tik, hak en pluk maar."),
+        ("Elke plek die je oogst, komt ergens anders weer terug. Het bos danst een beetje.", "Dus ze verhuizen?",
+         "Ze verhuizen! En soms glinstert er een. Dan is het je geluksdag: drie keer zoveel."),
+        ("IJsbloemen smelten nooit. Ze denken dat het altijd winter is. En in de Splinterkloof glinstert het kandijzilver.", "Arme bloemetjes?",
+         "Nee hoor, ze vinden het heerlijk. Net als sneeuwguhs. Diep in een ijsgrot zit trouwens een geheime ader..."),
+        ("Schemerhout huilt roze hars. Geen verdriet, hoor, gewoon blij sap. En in De Schemerwortel zet je je eigen bijenkorf.", "Een eigen korf!",
+         "Zet hem bij veel bloemen. Hoe meer bloemen, hoe sneller de honing."),
+        ("Je verzamelt als een echte bosguh. Het bos fluistert je naam.", "Wat zegt het?",
+         "'Dank je.' Gezel Verzamelaar! Hier, je eigen tuinhoedje, voor thuis."),
     ],
     "vissen": [
         ("Vissen is wachten, en wachten is knuffelen met de tijd.", "Hoe weet ik wanneer ik moet klikken?",
@@ -283,17 +217,29 @@ VERHAAL = {
         ("Je bent een echte visser. Weet je wat er achter De Schemerwortel ligt? De Lampionkust. Daar duiken ze naar koraal...", "Gaan we daarheen?",
          "Ooit! Gezel Visser. Hier, een vissershoedje voor thuis."),
     ],
-    "imkeren": [
-        ("Bijen zijn guhs met vleugeltjes. Ze delen alles, net als wij.", "Mag ik ook een korf?",
-         "Natuurlijk! Zet hem bij veel bloemen. Hoe meer bloemen, hoe sneller de honing."),
-        ("Elke wei geeft een andere honing: bloesemhoning, schemerhoning, wortelhoning.", "Ik wil ze allemaal proeven!",
-         "Dan moet je overal een korf zetten. Op naar de volgende wei!"),
-        ("Pas op voor de Mika-imker. Hij zuigt de raten leeg met een kaaspomp.", "Gemeen!",
-         "Gemeen, ja. Maar onze bijen zijn slimmer. Ze verstoppen de beste honing."),
-        ("Je bijen kennen je stem al. Hoor je ze zoemen als je eraan komt?", "Zzzoem!",
-         "Precies zo. Soms vind je koninginnengelei: het lekkerste van de korf."),
-        ("Je bent een echte imker. De bijen hebben je tot erelid benoemd.", "Een erelid!",
-         "Gezel Imker! Hier, een imkershoed voor thuis. Zzzoem."),
+    "smeden": [
+        ("Weet je wat dit is? Een splinter van het Aambeeld van de Orde. Ooit smeedde de hele stad erop.", "Wat is er met het aambeeld gebeurd?",
+         "De Grauwe Keizer liet het in stukken springen. Vind de stukken, en word een echte smid. Hier, een beetje ijzer om te oefenen."),
+        ("Je slagen worden zekerder! Ik hoorde dat er een stuk van het aambeeld in de Druipgrotten ligt.", "Dan ga ik daar erts zoeken!",
+         "Goed zo. En onthoud: een ring op maat is net zo lief als een knuffel op maat."),
+        ("Het tweede stuk zat in de Spiegelburcht. Het weerkaatste mijn eigen gezicht... en dat van een blije smid.", "Hoeveel stukken zijn er nog?",
+         "Nog een paar. Elk stuk maakt het aambeeld warmer. Voel maar."),
+        ("Met amberkoper uit De Schemerwortel zingt het aambeeld bijna. Bijna!", "Wat ontbreekt er nog?",
+         "Een smid die het met hart smeedt. Dat ben jij, denk ik."),
+        ("Het aambeeld is heel! Hoor je het? KLIIING. Dat is het geluid van de Orde die weer lacht.", "Dankzij ons!",
+         "Dankzij jou, Gezel. Ik stuur je een mijnhelmpje naar huis, als aandenken."),
+    ],
+    "koken": [
+        ("Oma Truus had een receptenboek. 'Toen de klodders nog roze waren', staat erin. De bladzijden zijn weggewaaid.", "Over het hele Vadsrijk?",
+         "Over het hele Vadsrijk! Begin met haar klodderpudding. Dat recept ken ik nog uit mijn hoofd."),
+        ("Ik vond een bladzijde in een visnet! Er staat een vadsdrankje op, met een vlek van saus.", "Smaakt het naar vroeger?",
+         "Het smaakt naar zondag. Blijf koken en brouwen, dan vinden we er meer."),
+        ("Deze bladzijde lag bevroren in de Splinterpieken: Kandijsoep. Oma schreef erbij: 'tegen koude pootjes'.", "Ik maak er meteen een pan van!",
+         "Dat is de goede houding, kokkie."),
+        ("Honingpannenkoek! Met een tekeningetje van een bijtje. Oma kon niet tekenen, kijk die pootjes.", "Zes pootjes... of acht?",
+         "Het telt niet. Wat telt is dat het lekker is."),
+        ("De laatste bladzijde. 'Het koekje dat de Keizer nooit kreeg.' De rest is uitgeveegd...", "Misschien kunnen we het ooit bakken?",
+         "Ooit, Gezel Kok. Ooit. Hier, een kokschort voor thuis, zodat je het niet vergeet."),
     ],
 }
 
@@ -378,9 +324,9 @@ t(S + "werk.te_ver", "Je bent te ver van de werkbank.", "You're too far from the
 t(S + "werk.kristal_in.0", "3 ruwe kristallen van één soort", "3 raw crystals of one kind")
 t(S + "werk.kristal_in.1", "3 geslepen kristallen van één soort", "3 cut crystals of one kind")
 t(S + "werk.titel.smeden", "De Smidse", "The Smithy")
-t(S + "werk.titel.naaien", "Het Naaiatelier", "The Sewing Room")
 t(S + "werk.titel.koken", "De Keuken", "The Kitchen")
-t(S + "werk.titel.brouwen", "De Brouwerij", "The Brewery")
+for _id, (_nl, _en) in SOORTEN.items():
+    t(S + "soort." + _id, _nl, _en)
 t(S + "werk.level", "Jouw niveau: %s", "Your level: %s")
 t(S + "werk.kies_n", "Kies %s bonussen (%s gekozen):", "Choose %s bonuses (%s chosen):")
 t(S + "werk.maak", "Maak", "Make")
@@ -468,7 +414,7 @@ for _z in (1, 2, 3):
 t(S + "boek.cat.vissen", "Vissen", "Fish")
 t(S + "boek.cat.honing", "Honing", "Honey")
 t(S + "boek.cat.recepten", "Recepten", "Recipes")
-t(S + "boek.hint.plek", "Een plek voor %s. Vraag de meesterguh in Zwamzoet waar.", "A spot for %s. Ask the master guh in Zwamzoet.")
+t(S + "boek.hint.plek", "Een plek met %s. Vraag de meesterguh in Zwamzoet waar.", "A spot with %s. Ask the master guh in Zwamzoet.")
 t(S + "boek.hint.vis.altijd", "Altijd te vangen (%s).", "Can always be caught (%s).")
 t(S + "boek.hint.vis.nacht", "Alleen 's nachts (%s).", "Only at night (%s).")
 t(S + "boek.hint.vis.regen", "Vooral als het regent (%s).", "Mostly when it rains (%s).")
@@ -504,7 +450,7 @@ for _id, (_k, _n) in DRANKEN.items():
     t(f"item.guhs.vr_amb_drank_{_id}", _n)
 for _id, (_nl, _en) in MW.items():
     t(f"item.guhs.vr_amb_mw_{_id}", _nl, _en)
-    for _t in (1, 2, 3):
+    for _t in range(1, 6):   # (1.10.4: T4/T5 here too)
         t(f"vadsrijk.loot.mw_t{_t}_{_id}", MW_TIER[_id].format(*TIER_NAAM[_t]).replace("- ", "-"))
 # NPCs (the npc slice's keys: name + 3 idle lines)
 for _npc, _naam in NPC_NAMEN.items():
@@ -514,12 +460,11 @@ for _npc, _naam in NPC_NAMEN.items():
         t(f"vadsrijk.npc.praat.{_npc}.{_i + 1}", _r)
 # titles
 for _id, (_nl, _en) in AMBACHTEN.items():
-    t(f"gui.guhs.titels.naam.vr_amb_{_id}_leerling", f"Leerling-{_nl.lower()}" if _id not in ("vissen",) else "Leerling-visser",
-      f"Apprentice ({_en})")
-    t(f"gui.guhs.titels.naam.vr_amb_{_id}_gezel", f"Gezel-{_nl.lower()}" if _id not in ("vissen",) else "Gezel-visser", f"Journeyman ({_en})")
-    # (every title needs a hint: TitelsGameTests.titelsTekstenBestaan)
-    t(f"gui.guhs.titels.hint.vr_amb_{_id}_leerling", f"Haal niveau 25 in {_nl.lower()}.", f"Reach level 25 in {_en}.")
-    t(f"gui.guhs.titels.hint.vr_amb_{_id}_gezel", f"Haal niveau 50 in {_nl.lower()}.", f"Reach level 50 in {_en}.")
+    t(f"gui.guhs.titels.naam.vr_amb_{_id}_leerling", f"Leerling-{AMBACHT_PERSOON[_id]}", f"Apprentice ({_en})")
+    t(f"gui.guhs.titels.naam.vr_amb_{_id}_gezel", f"Gezel-{AMBACHT_PERSOON[_id]}", f"Journeyman ({_en})")
+    # (every title needs a hint: TitelsGameTests.titelsTekstenBestaan; 1.10.4: Leerling 15, Gezel 32)
+    t(f"gui.guhs.titels.hint.vr_amb_{_id}_leerling", f"Haal niveau 15 in {_nl.lower()}.", f"Reach level 15 in {_en}.")
+    t(f"gui.guhs.titels.hint.vr_amb_{_id}_gezel", f"Haal niveau 32 in {_nl.lower()}.", f"Reach level 32 in {_en}.")
 t("gui.guhs.titels.naam.vr_ambachtskenner", "Ambachtskenner", "Master of Crafts")
 t("gui.guhs.titels.hint.vr_ambachtskenner", "Vul de pagina Ambachten helemaal (Verkenningsboek, toets B).",
   "Complete the Professions page (Exploration Book, key B).")
@@ -737,6 +682,18 @@ def oorbel(c):
     return d.rand()
 
 
+def armband(c):
+    d = Doek()
+    for i in range(24):
+        h = i / 24 * math.pi * 2
+        d.px(8 + math.cos(h) * 5.5, 9 + math.sin(h) * 3.5, (250, 200, 80))
+    d.disc(8, 5.5, 1.8, c)
+    d.disc(4, 9, 1.2, c)
+    d.disc(12, 9, 1.2, c)
+    d.px(7, 5, (255, 255, 255))
+    return d.rand()
+
+
 def _item(naam, doek, handheld=False):
     doek.png(os.path.join(A, "textures", "item", ITEM_TEX, f"{naam}.png"))
     parent = "minecraft:item/handheld" if handheld else "minecraft:item/generated"
@@ -773,6 +730,7 @@ def _assets():
     _item("vr_amb_mw_ring", ring((255, 90, 170)))
     _item("vr_amb_mw_ketting", ketting((120, 220, 255)))
     _item("vr_amb_mw_oorbel", oorbel((255, 200, 60)))
+    _item("vr_amb_mw_armband", armband((180, 120, 255)))   # 1.10.4
     return n
 
 

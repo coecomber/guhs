@@ -11,7 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.Materialen;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.Huisdieren;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
@@ -70,7 +70,7 @@ public final class KerkerLoot {
                 buit.add(Rollen.stack(Rollen.rol(t, lv, z, r)));
             }
         }
-        List<Materialen.Materiaal> ertsen = Materialen.van(Ambacht.MIJNEN, Math.min(5, zone));
+        List<Materialen.Materiaal> ertsen = Materialen.van(NodeSoort.ERTS, Math.min(5, zone));
         if (!ertsen.isEmpty()) {
             Materialen.Materiaal m = ertsen.get(r.nextInt(ertsen.size()));
             ItemStack s = Materialen.stack(m.id(), r.nextDouble() < 0.3 ? 1 : 0, 3 + r.nextInt(3));
@@ -108,7 +108,7 @@ public final class KerkerLoot {
         if (t != null) {
             buit.add(Rollen.stack(Rollen.rol(t, lv, r.nextDouble() < EPISCH_KANS ? Zeldzaamheid.EPISCH : Zeldzaamheid.ZELDZAAM, r)));
         }
-        List<Materialen.Materiaal> ertsen = Materialen.van(Ambacht.MIJNEN, Math.min(5, zone));
+        List<Materialen.Materiaal> ertsen = Materialen.van(NodeSoort.ERTS, Math.min(5, zone));
         if (!ertsen.isEmpty()) {
             Materialen.Materiaal m = ertsen.get(r.nextInt(ertsen.size()));
             ItemStack s = Materialen.stack(m.id(), 0, 2 + r.nextInt(2));

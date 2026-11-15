@@ -3,6 +3,16 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.4 — Minecraft 26.1.2
+
+- **Ambachten 9 -> 4:** Verzamelen (= mijnen + houthakken + plukken + imkeren; the spot kinds ore/wood/herb/hive keep their own minigame and look, `NodeSoort`), Vissen (+ coral diving), Smeden (= smeden + naaien), Koken (= koken + brouwen). Saved data is migrated once on load (data version 2): per new ambacht the highest old xp total (higher level on the new curve), the furthest story step, mastery moments, the chosen ambacht title, and the rankings (`vr_ambacht_ranglijst`). Zwamzoet has 4 workshop guhs (smid, kok, verzamel, vis) + the board, Kandijkom and Honingtak the smid and the kok; one story chain per ambacht; the Hoogvads Gilde: Koken/Smeden teachers + the Gildemeester (Verzamelen, Vissen).
+- **Curve + tiers:** ambacht xp scale 0.33 (3x faster), cap 60; tiers T1 1, T2 12, T3 22, T4 32, T5 40 (T6 48 for zone 6). Recipes, hive gates/counts, story steps (1/6/12/22/32, Gilde 40/48), titles (Leerling 15, Gezel 32) and the half-xp rule (5 levels over a tier's top, never on the highest tier) follow the new scale.
+- **Smeden = jewellery:** ring, ketting, oorbel and (new) armband from Smeden 1: Maatwerk (Episch, choose 2) and Meesterwerk (Legendarisch, choose 3 + a property, boss core). A made piece is scaled to 1.05-1.10x (by Vadsigheid) the expected worth of the best jewellery drop of its slot in the zone of its tier. The Maatwerk weapons/armour recipes are removed (items and base types stay registered). A `verhaal:<id>` recipe kind for story items (empty for now).
+- **Jewellery rare as loot:** random ring/ketting/oorbel/armband picks weigh 1/5 in every loot-table roll and zone-pool pick (quest rewards, dungeon/cave chests); named boss items unchanged.
+- **Koken = potions + food:** the shops (drankjes, algemeen, kampwinkel, Kandijkraam, Honingkraam) sell only the Klein Vadsdrankje (the Kandijkraam keeps the Warme Chocomelk); the better potions, Snelpootjes and Vahoeg are Koken recipes (and can be ordered on the Opdrachtenbord). New players get 5 Klein Vadsdrankjes with their first class.
+- **Hiscores:** `ambacht_verzamelen/vissen/smeden/koken/totaal.json`; the old list files (mijnen, houthakken, plukken, imkeren, naaien, brouwen) are still written as copies of their new list.
+- **API for other slices:** `AmbachtPlekken.groep(id, zone, poi, NodeSoort, tier, aantal, straal, leegMin, leegMax)` / `korfGroep(...)` add gathering groups at a POI with their own respawn time.
+
 ## 1.10.3 — Minecraft 26.1.2
 
 - **Element advantage x1.5 -> x1.25** (also Roze vs ontvadst/versteend; the disadvantage stays x0.7).

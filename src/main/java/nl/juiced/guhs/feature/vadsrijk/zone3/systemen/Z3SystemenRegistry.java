@@ -25,7 +25,6 @@ import nl.juiced.guhs.feature.vadsrijk.economie.Winkels;
 import nl.juiced.guhs.feature.vadsrijk.kern.Haken;
 import nl.juiced.guhs.feature.vadsrijk.kern.VadsrijkCommando;
 import nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Kristallen;
-import nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Z2Winkel;
 
 /**
  * Het Vadsrijk zone 3 "De Schemerwortel", slice "systemen" (Z3_BRIEF): layered areas ({@link Z3Lagen}), cap 50 (kern Levels),
@@ -68,13 +67,8 @@ public final class Z3SystemenRegistry {
     /** The Honingtak shop (z3-npc: {@code Winkels.open(p, Z3SystemenRegistry.HONINGKRAAM)}): tier-3 potions + the old tiers. */
     static void winkel() {
         Winkels.registreer(new Winkels.Winkel(HONINGKRAAM, true, List.of(
-                Winkels.itemWaar("grote_vadsdrank", 300, () -> new ItemStack(Z2Winkel.GROTE_VADSDRANK.get())),
-                Winkels.itemWaar("reuzen_vadsdrank", 900, () -> new ItemStack(Z3Spul.REUZEN_VADSDRANK.get())),
-                Winkels.itemWaar("grote_energiedrank", 55, () -> new ItemStack(Z2Winkel.GROTE_ENERGIEDRANK.get())),
-                Winkels.itemWaar("reuzen_energiedrank", 150, () -> new ItemStack(Z3Spul.REUZEN_ENERGIEDRANK.get())),
-                Winkels.itemWaar("bloesemthee", 120, () -> new ItemStack(Z3Spul.BLOESEMTHEE.get())),
-                Winkels.itemWaar("vahoegdrankje", 60, () -> new ItemStack(EcoSpul.VAHOEGDRANKJE.get())),
-                Winkels.itemWaar("snelpootjesdrankje", 45, () -> new ItemStack(EcoSpul.SNELPOOTJESDRANKJE.get())),
+                // 1.10.4 (Koken = drankjes + eten): only the smallest heal potion; the rest is Koken's (or a player's order)
+                Winkels.itemWaar("klein_vadsdrankje", 8, () -> new ItemStack(EcoSpul.KLEIN_VADSDRANKJE.get())),
                 Winkels.itemWaar("verbetersteentje", 50, () -> new ItemStack(EcoSpul.VERBETERSTEENTJE.get())))));
     }
 

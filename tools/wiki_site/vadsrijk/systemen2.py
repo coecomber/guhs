@@ -6,8 +6,8 @@ cosmetics), otherwise short player-facing prose from the slices' cheat sheets. N
 from .pages import ESC, t, p, feiten, spoiler, zbadge
 
 KAARTEN = [
-    ("ambachten.html", "Crafts", "Ambachten", "Gathering, cooking, brewing, smithing and sewing: 9 crafts up to level 50.",
-     "Verzamelen, koken, brouwen, smeden en naaien: 9 ambachten tot niveau 50."),
+    ("ambachten.html", "Crafts", "Ambachten", "Gathering, fishing, smithing and cooking: 4 crafts up to level 60.",
+     "Verzamelen, vissen, smeden en koken: 4 ambachten tot niveau 60."),
     ("uitrusting.html", "Gear 2.0", "Uitrusting 2.0", "New slots, clear stats, heirlooms and the smith's safety nets.",
      "Nieuwe vakken, duidelijke stats, erfstukken en de vangnetten van de smid."),
     ("karakters.html", "Characters and game modes", "Karakters en spelmodi", "Up to 3 knights per account; Eénvads and Knuffelmodus.",
@@ -21,9 +21,9 @@ KAARTEN = [
 SOORT_KLEDING = {"vleugel": ("Wings", "Vleugels"), "kaap": ("Capes", "Capes"), "accessoire": ("Head things", "Hoofddingen"),
                  "naamkleur": ("Name colours", "Naamkleuren"), "verf": ("Paint (wings + head thing)", "Verf (vleugels + hoofdding)"),
                  "plof": ("Cheer-up effects", "Opvrolijk-effecten"), "spoor": ("Trails", "Sporen"), "aura": ("Auras", "Aura's")}
-AMBACHT_EN = {"mijnen": "Mining", "houthakken": "Woodcutting", "plukken": "Picking", "vissen": "Fishing", "imkeren": "Beekeeping",
-              "smeden": "Smithing", "naaien": "Sewing", "koken": "Cooking", "brouwen": "Brewing"}
-UIT_EN = {"eten": ("Dish", "Gerecht"), "drank": ("Potion", "Drankje"), "gear": ("Maatwerk gear", "Maatwerk"), "meester": ("Masterwork jewellery", "Meesterwerk"),
+AMBACHT_EN = {"verzamelen": "Gathering", "vissen": "Fishing", "smeden": "Smithing", "koken": "Cooking"}
+UIT_EN = {"eten": ("Dish", "Gerecht"), "drank": ("Potion", "Drankje"), "item": ("Potion", "Drankje"), "sieraad": ("Maatwerk jewellery", "Maatwerk-sieraad"),
+          "meester": ("Masterwork jewellery", "Meesterwerk"), "verhaal": ("Story item", "Verhaalvoorwerp"),
           "slijp": ("Cut crystals", "Kristal slijpen"), "kern": ("Boss core", "Bazenkern"), "post": ("Decoration (sent home)", "Versiering (naar huis)")}
 
 
@@ -44,8 +44,8 @@ def ambachten(b):
     P = "systemen/ambachten.html"
     a = b.d.get("ambachten") or {}
     namen = a.get("namen", {})
-    verzamel = [k for k in ("mijnen", "houthakken", "plukken", "vissen", "imkeren") if k in namen]
-    maak = [k for k in ("koken", "brouwen", "smeden", "naaien") if k in namen]
+    verzamel = [k for k in ("verzamelen", "vissen") if k in namen]
+    maak = [k for k in ("smeden", "koken") if k in namen]
     # gathering spots per zone (names only; the game shows the spots themselves)
     plek_rijen = []
     for k in verzamel:
@@ -63,19 +63,21 @@ def ambachten(b):
         blok += (f'<h3 id="{k}">{t(AMBACHT_EN.get(k, k), namen[k])} <small class="muted">({len(rijen)})</small></h3>'
                  + tabel([(t("Level", "Niveau"), 1), (t("Recipe", "Recept"), 0), (t("Makes", "Maakt"), 0), ("Tier", 1), (t("Needs", "Nodig"), 0)], rijen))
     main = f"""<h1>{t("Crafts", "Ambachten")}</h1>
-<p class="lead">{t("Nine crafts, each up to level 50, with their own book (key Y). Gathering gives materials; the workshops in the towns turn them into food, potions and gear.",
-                   "Negen ambachten, elk tot niveau 50, met een eigen boek (toets Y). Verzamelen geeft materialen; de werkplaatsen in de steden maken er eten, drankjes en uitrusting van.")}</p>
+<p class="lead">{t("Four crafts, each up to level 60, with their own book (key Y): Gathering (ore, wood, herbs and beehives), Fishing (with coral diving), Smithing (jewellery) and Cooking (food and every potion). Gathering and Fishing give materials; the smithy and the kitchen turn them into jewellery, food and potions.",
+                   "Vier ambachten, elk tot niveau 60, met een eigen boek (toets Y): Verzamelen (erts, hout, kruiden en bijenkorven), Vissen (met koraalduiken), Smeden (sieraden) en Koken (eten en alle drankjes). Verzamelen en Vissen geven materialen; de smidse en de keuken maken er sieraden, eten en drankjes van.")}</p>
+<p>{t("Tiers by craft level: T1 from 1, T2 from 12, T3 from 22, T4 from 32, T5 from 40. Level 1 to 10 takes about 40 harvests.",
+     "Tiers per ambachtniveau: T1 vanaf 1, T2 vanaf 12, T3 vanaf 22, T4 vanaf 32, T5 vanaf 40. Van niveau 1 naar 10 is ongeveer 40 keer oogsten.")}</p>
 <div class="tw"><div>
 <h2>{t("Gathering", "Verzamelen")}</h2>
 {p("Gathering spots only show up for YOU (every player has their own spots). Look at one and right-click: a little game of 2-4 seconds. Perfect = extra vadsig, good = vadsig, doing nothing = normal. Sneak + right-click harvests at once. A used spot comes back elsewhere after 1-2 minutes.",
    "Verzamelplekken zie alleen JIJ (elke speler heeft zijn eigen plekken). Kijk ernaar en rechtsklik: een spelletje van 2-4 seconden. Perfect = extra vadsig, goed = vadsig, niks doen = gewoon. Sluipen + rechtsklik oogst meteen. Een geoogste plek komt na 1-2 minuten ergens anders terug.")}
 <ul>
-<li>{t("Picking: hold right-click, let go in the green part.", "Plukken: houd rechtsklik vast, laat los in het groene stuk.")}</li>
-<li>{t("Mining: tap three times on the pink.", "Mijnen: drie keer tikken op het roze.")}</li>
-<li>{t("Woodcutting: tap twice, quickly.", "Houthakken: twee keer snel tikken.")}</li>
+<li>{t("Herbs: hold right-click, let go in the green part.", "Kruiden: houd rechtsklik vast, laat los in het groene stuk.")}</li>
+<li>{t("Ore: tap three times on the pink.", "Erts: drie keer tikken op het roze.")}</li>
+<li>{t("Wood: tap twice, quickly.", "Hout: twee keer snel tikken.")}</li>
 <li>{t("Fishing: wait for BITE! and click at once. Other fish bite at night and in the rain.", "Vissen: wacht op BEET! en klik meteen. 's Nachts en bij regen bijten andere soorten.")}</li>
-<li>{t("Beekeeping (zone 3): place your hive near the flowers; combs fill in real time. Harvest with smoke: too early = grumpy bees (sticky, never damage). More hives at level 15, 30 and 45.",
-       "Imkeren (zone 3): zet je korf bij de bloemen; de raten vullen in echte tijd. Oogsten met rook: te vroeg = chagrijnige bijen (plakkerig, nooit schade). Meer korven op niveau 15, 30 en 45.")}</li>
+<li>{t("Beehives (zone 3 on, part of Gathering): place your hive near the flowers; combs fill in real time. Harvest with smoke: too early = grumpy bees (sticky, never damage). More hives at Gathering level 9, 19, 29 and 40.",
+       "Bijenkorven (vanaf zone 3, hoort bij Verzamelen): zet je korf bij de bloemen; de raten vullen in echte tijd. Oogsten met rook: te vroeg = chagrijnige bijen (plakkerig, nooit schade). Meer korven op Verzamelen-niveau 9, 19, 29 en 40.")}</li>
 <li>{t("A golden, glittering spot is rare: triple harvest and a chance on something special.", "Een gouden, glinsterende plek is zeldzaam: driedubbele oogst en kans op iets bijzonders.")}</li>
 <li>{t("Rested: offline time builds up double craft xp (max 2 hours).", "Uitgerust: offline bouw je dubbele ambachts-xp op (max 2 uur).")}</li>
 </ul>
@@ -89,18 +91,19 @@ def ambachten(b):
        "Iets maken is een timingspelletje: stop het streepje in het roze voor een hogere Vadsigheid (beter eten, sterkere drankjes). Maak 10x slaat het spelletje over (altijd 60%).")}</li>
 <li>{t("Food: one buff at a time, 30 minutes, it stays when you faint. A feast gives the whole party nearby the buff plus Gezellig.",
        "Eten: één buff tegelijk, 30 minuten, hij blijft bij flauwvallen. Een feestmaal geeft de hele party in de buurt de buff plus Gezellig.")}</li>
-<li>{t("Maatwerk (smithing + sewing): choose 2 bonuses yourself; you get an Epic piece with at least one socket. It does not count for a set bonus.",
-       "Maatwerk (smeden + naaien): kies zelf 2 bonussen; je krijgt een Episch stuk met minstens één sokje. Het telt niet voor een setbonus.")}</li>
-<li>{t("Masterwork jewellery: 3 bonuses + 1 property (e.g. Damage against bosses +8%), needs a boss core. Boss cores: 15% per boss per helper, or 5 core splinters from elites.",
-       "Meesterwerk-sieraden: 3 bonussen + 1 eigenschap (bijv. Schade tegen bazen +8%), met een bazenkern. Bazenkernen: 15% per baas per helper, of 5 kernsplinters van elites.")}</li>
+<li>{t("Smithing makes jewellery from level 1: ring, necklace, earring and bracelet. Maatwerk: choose 2 bonuses yourself; you get an Epic piece with at least one socket, about 10% better than the Epic jewellery that drops in that zone. Jewellery is rare as loot.",
+       "Smeden maakt sieraden vanaf niveau 1: ring, ketting, oorbel en armband. Maatwerk: kies zelf 2 bonussen; je krijgt een Episch stuk met minstens één sokje, ongeveer 10% beter dan de Epische sieraden die in die zone droppen. Sieraden zijn zeldzaam als buit.")}</li>
+<li>{t("Masterwork jewellery: 3 bonuses + 1 property (e.g. Damage against bosses +8%), needs a boss core; about 10% better than the zone's Legendary jewellery. Boss cores: 15% per boss per helper, or 5 core splinters from elites.",
+       "Meesterwerk-sieraden: 3 bonussen + 1 eigenschap (bijv. Schade tegen bazen +8%), met een bazenkern; ongeveer 10% beter dan de Legendarische sieraden van die zone. Bazenkernen: 15% per baas per helper, of 5 kernsplinters van elites.")}</li>
+<li>{t("Cooking makes food and every potion: the shops only sell the Small Vads Potion.", "Koken maakt eten en alle drankjes: de winkels verkopen alleen nog het Klein Vadsdrankje.")}</li>
 <li>{t("Order board: 3 orders a day (new at 06:00); 12 in a week = the Craft chest.", "Bestelbord: 3 bestellingen per dag (nieuw om 06:00); 12 in een week = de Ambachtskist.")}</li>
-<li>{t("Titles: Apprentice at level 25, Journeyman at 50, Ambachtskenner for the whole book. Highscores per craft on the Highscores page.",
-       "Titels: Leerling op niveau 25, Gezel op 50, Ambachtskenner voor het hele boek. Ranglijsten per ambacht op de Highscores-pagina.")}</li>
+<li>{t("Titles: Apprentice at level 15, Journeyman at 32, Master at 60, Ambachtskenner for the whole book. Highscores per craft on the Highscores page.",
+       "Titels: Leerling op niveau 15, Gezel op 32, Meester op 60, Ambachtskenner voor het hele boek. Ranglijsten per ambacht op de Highscores-pagina.")}</li>
 </ul>
 <h2>{t("Recipes", "Recepten")}</h2>{blok or '<p class="leeg">-</p>'}
 </div><aside class="zij"><div class="kaartje">{feiten([(t("Key", "Toets"), "<kbd>Y</kbd>"), (t("Crafts", "Ambachten"), str(len(namen))),
-                                                    (t("Max level", "Max niveau"), "50"), (t("Recipes", "Recepten"), str(len(a.get("recepten", []))))])}</div></aside></div>"""
-    b.schrijf(P, "Ambachten", "Crafts", main, "systemen/index.html", beschrijving="De 9 ambachten van Het Vadsrijk: verzamelen, koken, brouwen, smeden, naaien.")
+                                                    (t("Max level", "Max niveau"), "60"), (t("Recipes", "Recepten"), str(len(a.get("recepten", []))))])}</div></aside></div>"""
+    b.schrijf(P, "Ambachten", "Crafts", main, "systemen/index.html", beschrijving="De 4 ambachten van Het Vadsrijk: verzamelen, vissen, smeden en koken.")
 
 
 def uitrusting(b):

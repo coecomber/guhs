@@ -15,12 +15,13 @@ import nl.juiced.guhs.feature.vadsrijk.voltooiing.Voltooiing.Staat;
  * The Ambachten in the Verkenningsboek (VOORSTEL §4: "per zone een Ambachtspagina ... telt niet mee in het zonepercentage, maar krijgt
  * een eigen Ambachtsboek %"): its own page {@code zone_ambachten} (sorted after the zones) with the spots found per zone, the fish,
  * the honey kinds and the recipes made; 100 % = the title "Ambachtskenner" + munten. Also the ambacht titles (A2: titles go home):
- * Leerling at lv 25, Gezel at lv 50 per ambacht (shown outside the dimension by the titles feature).
+ * Leerling at lv 15, Gezel at lv 32 per ambacht (1.10.4: the old 25/50 on the new tier scale; shown outside the dimension by the
+ * titles feature).
  */
 public final class AmbachtBoek {
     public static final String T = "vadsrijk.ambacht.boek.";
     public static final Voltooiing.ZoneBoek BOEK = new Voltooiing.ZoneBoek("zone_ambachten", T + "titel", "vr_ambachtskenner", 20000, AmbachtBoek::bouw);
-    public static final int LEERLING = 25, GEZEL = 50;
+    public static final int LEERLING = 15, GEZEL = 32;
 
     private AmbachtBoek() {
     }
@@ -31,7 +32,7 @@ public final class AmbachtBoek {
             titel(a, "leerling", LEERLING);
             titel(a, "gezel", GEZEL);
         }
-        Meesterschap.registreer();   // U-AMBACHT2: Meester-<ambacht> at the cap, Grootmeester with all nine
+        Meesterschap.registreer();   // U-AMBACHT2: Meester-<ambacht> at the cap, Grootmeester with all four (1.10.4)
     }
 
     public static String titelId(Ambacht a, String soort) {
@@ -53,7 +54,7 @@ public final class AmbachtBoek {
             for (AmbachtPlekken.Groep g : AmbachtPlekken.GROEPEN) {
                 if (g.zone() == zone) {
                     String id = g.id();
-                    d.add(new Ding(id, "vadsrijk.ambacht.groep." + id, "", T + "hint.plek", g.ambacht().naamKey(), id.contains("druipmeer") || id.contains("ijsgrot"),
+                    d.add(new Ding(id, "vadsrijk.ambacht.groep." + id, "", T + "hint.plek", g.soort().naamKey(), id.contains("druipmeer") || id.contains("ijsgrot"),
                             p -> AmbachtData.heeft(p, "plekken", id) ? Staat.KLAAR : Staat.NIETS, null));
                 }
             }

@@ -49,7 +49,7 @@ public final class AmbachtSchermen {
         }
         switch (actie) {
             case "oogst" -> Verzamelen.oogst(p, a.getStringOr("spot", ""), a.getIntOr("score", 0), a.getBooleanOr("over", false));
-            case "boek" -> boek(p, a.getStringOr("tab", "overzicht"), Ambacht.van(a.getStringOr("ambacht", "mijnen")), a.getStringOr("lijst", ""), "");
+            case "boek" -> boek(p, a.getStringOr("tab", "overzicht"), Ambacht.van(a.getStringOr("ambacht", "verzamelen")), a.getStringOr("lijst", ""), "");
             case "claim" -> boek(p, "bestel", null, "", Bestelbord.claim(p, a.getIntOr("slot", -1)));
             case "ruil" -> boek(p, "bestel", null, "", Bestelbord.ruil(p, a.getIntOr("slot", -1)));
             case "koop" -> boek(p, "winkel", null, "", Knutselwinkel.koop(p, a.getStringOr("id", "")));   // U-AMBACHT2
@@ -104,7 +104,7 @@ public final class AmbachtSchermen {
             return;
         }
         if (a == null) {
-            a = Ambacht.MIJNEN;
+            a = Ambacht.VERZAMELEN;
         }
         CompoundTag d = new CompoundTag();
         List<ItemStack> items = new ArrayList<>();
@@ -253,13 +253,13 @@ public final class AmbachtSchermen {
     static void plekken(ServerPlayer p, CompoundTag d) {
         ListTag l = new ListTag();
         for (int zone = 1; zone <= AmbachtPlekken.maxZone(); zone++) {   // U-AMBACHT2: zones 4 and 5 too (the zone-4 fishing spots were missing)
-            for (Ambacht a : Ambacht.values()) {
-                if (!a.verzamel) {
+            for (NodeSoort a : NodeSoort.values()) {   // 1.10.4: per spot kind (dives count with the fishing spots)
+                if (a == NodeSoort.DUIK) {
                     continue;
                 }
                 int tot = 0, gev = 0;
                 for (AmbachtPlekken.Groep g : AmbachtPlekken.GROEPEN) {
-                    if (g.zone() == zone && g.ambacht() == a) {
+                    if (g.zone() == zone && (g.soort() == a || (a == NodeSoort.VIS && g.soort() == NodeSoort.DUIK))) {
                         tot++;
                         if (AmbachtData.heeft(p, "plekken", g.id())) {
                             gev++;
@@ -269,7 +269,8 @@ public final class AmbachtSchermen {
                 if (tot > 0) {
                     CompoundTag e = new CompoundTag();
                     e.putInt("zone", zone);
-                    e.putString("ambacht", a.id);
+                    e.putString("soort", a.id);
+                    e.putString("ambacht", a.ambacht.id);
                     e.putInt("gevonden", gev);
                     e.putInt("totaal", tot);
                     l.add(e);

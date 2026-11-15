@@ -34,7 +34,8 @@ import nl.juiced.guhs.Guhs;
  * The gathered materials (items {@code guhs:vr_amb_<id>}, stack 64, so they sell as stacks on the market) with a quality
  * (component {@code guhs:vr_amb_kwaliteit}: 0 gewoon, 1 vadsig, 2 extra vadsig; only equal qualities stack), the boss cores
  * ({@code vr_amb_kern_<zone>} + the kernsplinter) and the weekly Ambachtskist. Tiers follow the zones (T1 zone 1 ... T5 zone 5;
- * T6 = zone 6 volgt, {@link Zone6Haken}); tier 0 = a rare one from a glittering spot. Fish "wanneer": "" always, "nacht", "regen",
+ * T6 = zone 6 volgt, {@link Zone6Haken}); tier 0 = a rare one from a glittering spot. 1.10.4: every material has a spot kind
+ * ({@link NodeSoort}); its ambacht follows from that. Fish "wanneer": "" always, "nacht", "regen",
  * "duik" (coral diving spots only, not a fish). Names/flavour: {@code item.guhs.vr_amb_<id>(.uitleg)}.
  */
 public final class Materialen {
@@ -45,9 +46,15 @@ public final class Materialen {
     public static final String[] KWALITEITEN = {"gewoon", "vadsig", "extra_vadsig"};
 
     /**
-     * One material: its ambacht, tier (0 = rare), its colour (icon), and for fish: when it bites ("" always, "nacht", "regen").
+     * One material: its spot kind ({@link NodeSoort}: which ambacht gathers it), tier (0 = rare), its colour (icon), and for fish:
+     * when it bites ("" always, "nacht", "regen"; "duik" = a coral find).
      */
-    public record Materiaal(String id, Ambacht ambacht, int tier, int kleur, String wanneer) {
+    public record Materiaal(String id, NodeSoort soort, int tier, int kleur, String wanneer) {
+        /** The ambacht that gathers it (1.10.4: Verzamelen or Vissen). */
+        public Ambacht ambacht() {
+            return soort.ambacht;
+        }
+
         public String itemId() {
             return "vr_amb_" + id;
         }
@@ -62,12 +69,12 @@ public final class Materialen {
 
         /** A coral-diving find (not a fish: not in the fish collection). */
         public boolean duik() {
-            return "duik".equals(wanneer);
+            return soort == NodeSoort.DUIK;
         }
 
         /** A real fish (the fish collection). */
         public boolean vis() {
-            return ambacht == Ambacht.VISSEN && tier > 0 && !duik();
+            return soort == NodeSoort.VIS && tier > 0;
         }
     }
 
@@ -76,24 +83,24 @@ public final class Materialen {
 
     static {
         // Mijnen
-        m("pluisijzer", Ambacht.MIJNEN, 1, 0xC8B0C0);
-        m("kandijzilver", Ambacht.MIJNEN, 2, 0xD8E8F8);
-        m("amberkoper", Ambacht.MIJNEN, 3, 0xE8904A);
-        m("glinstergruis", Ambacht.MIJNEN, 0, 0xFFE070);
+        m("pluisijzer", NodeSoort.ERTS, 1, 0xC8B0C0);
+        m("kandijzilver", NodeSoort.ERTS, 2, 0xD8E8F8);
+        m("amberkoper", NodeSoort.ERTS, 3, 0xE8904A);
+        m("glinstergruis", NodeSoort.ERTS, 0, 0xFFE070);
         // Houthakken
-        m("zwamsteel", Ambacht.HOUTHAKKEN, 1, 0xE8D8C0);
-        m("kristalden", Ambacht.HOUTHAKKEN, 2, 0x8AC8D8);
-        m("schemerhout", Ambacht.HOUTHAKKEN, 3, 0x6A4A7A);
-        m("roze_hars", Ambacht.HOUTHAKKEN, 3, 0xFF8AB0);
-        m("oerbast", Ambacht.HOUTHAKKEN, 0, 0x8A6A3A);
+        m("zwamsteel", NodeSoort.HOUT, 1, 0xE8D8C0);
+        m("kristalden", NodeSoort.HOUT, 2, 0x8AC8D8);
+        m("schemerhout", NodeSoort.HOUT, 3, 0x6A4A7A);
+        m("roze_hars", NodeSoort.HOUT, 3, 0xFF8AB0);
+        m("oerbast", NodeSoort.HOUT, 0, 0x8A6A3A);
         // Plukken (a herb for the kitchen/brewery + a fibre for the naaiatelier per tier)
-        m("klodderklaver", Ambacht.PLUKKEN, 1, 0x6AD86A);
-        m("pluiskatoen", Ambacht.PLUKKEN, 1, 0xFFF0F8);
-        m("ijsbloem", Ambacht.PLUKKEN, 2, 0xA8E8FF);
-        m("kristalvlas", Ambacht.PLUKKEN, 2, 0xC8D8FF);
-        m("lichtkeverkruid", Ambacht.PLUKKEN, 3, 0xD8FF6A);
-        m("schemerzijde", Ambacht.PLUKKEN, 3, 0xB89AE8);
-        m("gouden_klaver", Ambacht.PLUKKEN, 0, 0xFFD84A);
+        m("klodderklaver", NodeSoort.KRUID, 1, 0x6AD86A);
+        m("pluiskatoen", NodeSoort.KRUID, 1, 0xFFF0F8);
+        m("ijsbloem", NodeSoort.KRUID, 2, 0xA8E8FF);
+        m("kristalvlas", NodeSoort.KRUID, 2, 0xC8D8FF);
+        m("lichtkeverkruid", NodeSoort.KRUID, 3, 0xD8FF6A);
+        m("schemerzijde", NodeSoort.KRUID, 3, 0xB89AE8);
+        m("gouden_klaver", NodeSoort.KRUID, 0, 0xFFD84A);
         // Vissen: per tier a common fish, a night fish and a rain fish (FF14/Animal Crossing)
         v("kloddervisje", 1, 0x7AB8FF, "");
         v("maanbaarsje", 1, 0xC8C8FF, "nacht");
@@ -104,23 +111,23 @@ public final class Materialen {
         v("wortelpaling", 3, 0x8A6A4A, "");
         v("lantaarnvis", 3, 0xFFD06A, "nacht");
         v("honingkarper", 3, 0xFFB830, "regen");
-        m("parelschelp", Ambacht.VISSEN, 0, 0xFFF0FF);
+        m("parelschelp", NodeSoort.VIS, 0, 0xFFF0FF);
         // Imkeren (A3: a honey kind per zone; zone 3 has three meadows: one per area)
-        m("bloesemhoning", Ambacht.IMKEREN, 3, 0xFFB8D8);
-        m("schemerhoning", Ambacht.IMKEREN, 3, 0xE8A040);
-        m("wortelhoning", Ambacht.IMKEREN, 3, 0xA86A2A);
-        m("bijenwas", Ambacht.IMKEREN, 3, 0xFFE8A0);
-        m("koninginnengelei", Ambacht.IMKEREN, 0, 0xFFF8E0);
+        m("bloesemhoning", NodeSoort.KORF, 3, 0xFFB8D8);
+        m("schemerhoning", NodeSoort.KORF, 3, 0xE8A040);
+        m("wortelhoning", NodeSoort.KORF, 3, 0xA86A2A);
+        m("bijenwas", NodeSoort.KORF, 3, 0xFFE8A0);
+        m("koninginnengelei", NodeSoort.KORF, 0, 0xFFF8E0);
         // ---- U-AMBACHT2: zone 4 (T4, De Lampionkust) and zone 5 (T5, Hoogvads); the professions grow with every zone ----------
-        m("lampionbrons", Ambacht.MIJNEN, 4, 0xF0A050);
-        m("hemelzilver", Ambacht.MIJNEN, 5, 0xE8F0FF);
-        m("drijfhout", Ambacht.HOUTHAKKEN, 4, 0xC8B49A);
-        m("vliegerbamboe", Ambacht.HOUTHAKKEN, 4, 0xB8D86A);
-        m("wolkenhout", Ambacht.HOUTHAKKEN, 5, 0xF0EAF8);
-        m("zeekraal", Ambacht.PLUKKEN, 4, 0x5AB87A);
-        m("zeegaren", Ambacht.PLUKKEN, 4, 0x9AE0E0);
-        m("wolkbes", Ambacht.PLUKKEN, 5, 0xB8C8FF);
-        m("wolkenwol", Ambacht.PLUKKEN, 5, 0xFAFAFF);
+        m("lampionbrons", NodeSoort.ERTS, 4, 0xF0A050);
+        m("hemelzilver", NodeSoort.ERTS, 5, 0xE8F0FF);
+        m("drijfhout", NodeSoort.HOUT, 4, 0xC8B49A);
+        m("vliegerbamboe", NodeSoort.HOUT, 4, 0xB8D86A);
+        m("wolkenhout", NodeSoort.HOUT, 5, 0xF0EAF8);
+        m("zeekraal", NodeSoort.KRUID, 4, 0x5AB87A);
+        m("zeegaren", NodeSoort.KRUID, 4, 0x9AE0E0);
+        m("wolkbes", NodeSoort.KRUID, 5, 0xB8C8FF);
+        m("wolkenwol", NodeSoort.KRUID, 5, 0xFAFAFF);
         v("koraalbaars", 4, 0xFF7A8A, "");
         v("maanrog", 4, 0x8A8AE0, "nacht");
         v("regenboogmakreel", 4, 0x7AE0C8, "regen");
@@ -129,10 +136,10 @@ public final class Materialen {
         v("wolkenvis", 5, 0xE8F4FF, "");
         v("sterrenspiering", 5, 0xFFF0A0, "nacht");
         v("donderforel", 5, 0x8AA0D8, "regen");
-        m("lampionhoning", Ambacht.IMKEREN, 4, 0xFF9A3A);
-        m("duinhoning", Ambacht.IMKEREN, 4, 0xF0D8A0);
-        m("wolkenhoning", Ambacht.IMKEREN, 5, 0xFFF8F0);
-        m("hemelhoning", Ambacht.IMKEREN, 5, 0xFFE070);
+        m("lampionhoning", NodeSoort.KORF, 4, 0xFF9A3A);
+        m("duinhoning", NodeSoort.KORF, 4, 0xF0D8A0);
+        m("wolkenhoning", NodeSoort.KORF, 5, 0xFFF8F0);
+        m("hemelhoning", NodeSoort.KORF, 5, 0xFFE070);
     }
 
     /**
@@ -158,12 +165,12 @@ public final class Materialen {
     private Materialen() {
     }
 
-    private static void m(String id, Ambacht a, int tier, int kleur) {
-        voeg(new Materiaal(id, a, tier, kleur, ""));
+    private static void m(String id, NodeSoort s, int tier, int kleur) {
+        voeg(new Materiaal(id, s, tier, kleur, ""));
     }
 
     private static void v(String id, int tier, int kleur, String wanneer) {
-        voeg(new Materiaal(id, Ambacht.VISSEN, tier, kleur, wanneer));
+        voeg(new Materiaal(id, "duik".equals(wanneer) ? NodeSoort.DUIK : NodeSoort.VIS, tier, kleur, wanneer));
     }
 
     private static void voeg(Materiaal m) {
@@ -197,7 +204,18 @@ public final class Materialen {
         return s.getItem() instanceof MateriaalItem m ? m.materiaal : null;
     }
 
-    /** The materials of one ambacht and tier (rare ones: tier 0). */
+    /** The materials of one spot kind and tier (rare ones: tier 0). */
+    public static List<Materiaal> van(NodeSoort s, int tier) {
+        List<Materiaal> l = new ArrayList<>();
+        for (Materiaal m : ALLE.values()) {
+            if (m.soort() == s && m.tier() == tier) {
+                l.add(m);
+            }
+        }
+        return l;
+    }
+
+    /** The materials an ambacht gathers on a tier (every kind of it). */
     public static List<Materiaal> van(Ambacht a, int tier) {
         List<Materiaal> l = new ArrayList<>();
         for (Materiaal m : ALLE.values()) {
@@ -208,10 +226,10 @@ public final class Materialen {
         return l;
     }
 
-    /** The rare material of a gathering ambacht (null: none). */
+    /** The rare material of a spot kind (null: none; coral dives share the fishers' parelschelp). */
     @Nullable
-    public static Materiaal zeldzaam(Ambacht a) {
-        List<Materiaal> l = van(a, 0);
+    public static Materiaal zeldzaam(NodeSoort s) {
+        List<Materiaal> l = van(s == NodeSoort.DUIK ? NodeSoort.VIS : s, 0);
         return l.isEmpty() ? null : l.get(0);
     }
 

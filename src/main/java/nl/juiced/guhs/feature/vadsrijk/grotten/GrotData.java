@@ -23,7 +23,7 @@ public final class GrotData {
     }
 
     /** An Ambacht spot group in a cave: the POI id (grot_&lt;cave&gt;_amb_n), Ambacht / Zoek enum names. */
-    public record Amb(String grot, String poi, int zone, String ambacht, int tier, int aantal, int straal, String zoek) {
+    public record Amb(String grot, String poi, int zone, String soort, int tier, int aantal, int straal, String zoek) {
     }
 
     public static final List<Grot> ALLE = List.of(
@@ -75,16 +75,16 @@ public final class GrotData {
                     Map.entry("amb_2", new BlockPos(2506, 178, -544)))));
 
     public static final List<Amb> AMBACHT = List.of(
-            new Amb("zwamgrot", "grot_zwamgrot_amb_1", 1, "PLUKKEN", 1, 6, 11, "GROND"),
-            new Amb("zwamgrot", "grot_zwamgrot_amb_2", 1, "MIJNEN", 1, 6, 11, "STEEN"),
-            new Amb("kristalgrot", "grot_kristalgrot_amb_1", 2, "MIJNEN", 2, 6, 10, "STEEN"),
-            new Amb("kristalgrot", "grot_kristalgrot_amb_2", 2, "VISSEN", 2, 4, 9, "WATER"),
-            new Amb("wortelgrot", "grot_wortelgrot_amb_1", 3, "HOUTHAKKEN", 3, 6, 11, "BOOM"),
-            new Amb("wortelgrot", "grot_wortelgrot_amb_2", 3, "MIJNEN", 3, 6, 11, "STEEN"),
-            new Amb("koraalgrot", "grot_koraalgrot_amb_1", 4, "VISSEN", 3, 4, 7, "WATER"),
-            new Amb("koraalgrot", "grot_koraalgrot_amb_2", 4, "MIJNEN", 3, 6, 9, "STEEN"),
-            new Amb("wolkengrot", "grot_wolkengrot_amb_1", 5, "MIJNEN", 3, 6, 10, "STEEN"),
-            new Amb("wolkengrot", "grot_wolkengrot_amb_2", 5, "PLUKKEN", 3, 6, 10, "GROND"));
+            new Amb("zwamgrot", "grot_zwamgrot_amb_1", 1, "KRUID", 1, 6, 11, "GROND"),
+            new Amb("zwamgrot", "grot_zwamgrot_amb_2", 1, "ERTS", 1, 6, 11, "STEEN"),
+            new Amb("kristalgrot", "grot_kristalgrot_amb_1", 2, "ERTS", 2, 6, 10, "STEEN"),
+            new Amb("kristalgrot", "grot_kristalgrot_amb_2", 2, "VIS", 2, 4, 9, "WATER"),
+            new Amb("wortelgrot", "grot_wortelgrot_amb_1", 3, "HOUT", 3, 6, 11, "BOOM"),
+            new Amb("wortelgrot", "grot_wortelgrot_amb_2", 3, "ERTS", 3, 6, 11, "STEEN"),
+            new Amb("koraalgrot", "grot_koraalgrot_amb_1", 4, "VIS", 3, 4, 7, "WATER"),
+            new Amb("koraalgrot", "grot_koraalgrot_amb_2", 4, "ERTS", 3, 6, 9, "STEEN"),
+            new Amb("wolkengrot", "grot_wolkengrot_amb_1", 5, "ERTS", 3, 6, 10, "STEEN"),
+            new Amb("wolkengrot", "grot_wolkengrot_amb_2", 5, "KRUID", 3, 6, 10, "GROND"));
 
     private GrotData() {
     }

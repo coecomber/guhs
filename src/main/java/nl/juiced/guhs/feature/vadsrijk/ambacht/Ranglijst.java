@@ -38,7 +38,9 @@ import nl.juiced.guhs.storage.GuhSavedData;
  * <p>Website export (VOORSTEL_WEBSITE §5.2 "hiscores/&lt;lijst&gt;.json", the s-site slice reads these): every 5 min, at logout and on
  * {@code /guhs vadsrijk ambacht export}, written atomically (.tmp then rename, off the server thread) to
  * {@code <server>/guhs-web/live/hiscores/} (override: system property {@code guhs.web.map}). Files: {@code ambacht_<id>.json} per
- * ambacht + {@code ambacht_totaal.json}:
+ * ambacht (1.10.4: verzamelen, vissen, smeden, koken) + {@code ambacht_totaal.json}; the 1.10.3 files of the merged ambachten
+ * (mijnen, houthakken, plukken, imkeren, naaien, brouwen) keep being written as copies of their new list ({@link #OUDE_LIJSTEN}), so
+ * an older website page never shows a stale list. Saved rows of older versions are migrated once on load (highest xp per new ambacht):
  * <pre>
  * {"lijst":"ambacht_mijnen","naam":"Mijnen","bijgewerkt":"2026-11-06T03:00:00Z","cap":50,
  *  "spelers":[{"plek":1,"naam":"Juiced","uuid":"...","level":42,"xp":123456,"sinds":1762390000000}, ...]}
@@ -59,6 +61,8 @@ public final class Ranglijst extends SavedData {
     }
 
     private final Map<UUID, Rij> rijen = new HashMap<>();
+    /** 1.10.4: the data version (2 = the 4 ambachten). */
+    static final int VERSIE = 2;
 
     public static Ranglijst get(MinecraftServer s) {
         return s.overworld().getDataStorage().computeIfAbsent(TYPE);
@@ -150,10 +154,12 @@ public final class Ranglijst extends SavedData {
             ids.add(a.id);
         }
         ids.add(TOTAAL);
-        for (String id : ids) {
+        ids.addAll(OUDE_LIJSTEN);
+        for (String bestand : ids) {
+            Ambacht a = Ambacht.van(bestand);
+            String id = a == null ? TOTAAL : a.id;   // (an old list name: the data of its new ambacht)
             JsonObject o = new JsonObject();
-            o.addProperty("lijst", "ambacht_" + id);
-            Ambacht a = Ambacht.van(id);
+            o.addProperty("lijst", "ambacht_" + bestand);
             o.addProperty("naam", a == null ? "Totaal" : a.naam);
             o.addProperty("tijd", nu);
             o.addProperty("cap", AmbachtXp.CAP);
@@ -171,7 +177,7 @@ public final class Ranglijst extends SavedData {
                 l.add(e);
             }
             o.add("rijen", l);
-            nl.juiced.guhs.feature.vadsrijk.web.WebExport.schrijf("hiscores/ambacht_" + id + ".json", o);
+            nl.juiced.guhs.feature.vadsrijk.web.WebExport.schrijf("hiscores/ambacht_" + bestand + ".json", o);
         }
         return map(s);
     }
@@ -193,7 +199,51 @@ public final class Ranglijst extends SavedData {
             l.add(c);
         });
         t.put("rijen", l);
+        t.putInt("versie", VERSIE);
         return t;
+    }
+
+    /** 1.10.4: the 1.10.3 list names of the merged ambachten (still written, as copies of the new list). */
+    public static final List<String> OUDE_LIJSTEN = List.of("mijnen", "houthakken", "plukken", "imkeren", "naaien", "brouwen");
+
+    /** 1.10.4: one saved row of the 9 ambachten -> the 4 (highest xp per new ambacht, with its "since"; the total recomputed). */
+    static void migreer(Rij rij) {
+        Map<String, Long> xp = new HashMap<>(), sinds = new HashMap<>();
+        long totaal = 0;
+        for (Ambacht a : Ambacht.values()) {
+            long beste = rij.xp.getOrDefault(a.id, 0L);
+            long wanneer = rij.sinds.getOrDefault(a.id, 0L);
+            for (String o : a.oud) {
+                long x = rij.xp.getOrDefault(o, 0L);
+                if (x > beste) {
+                    beste = x;
+                    wanneer = rij.sinds.getOrDefault(o, 0L);
+                }
+            }
+            if (beste > 0) {
+                xp.put(a.id, beste);
+                sinds.put(a.id, wanneer);
+            }
+            totaal += beste;
+        }
+        xp.put(TOTAAL, totaal);
+        sinds.put(TOTAAL, rij.sinds.getOrDefault(TOTAAL, 0L));
+        rij.xp.clear();
+        rij.xp.putAll(xp);
+        rij.sinds.clear();
+        rij.sinds.putAll(sinds);
+    }
+
+    /** Dev/tests: the xp of one row (null: no such player). */
+    @javax.annotation.Nullable
+    public Map<String, Long> xpVan(UUID u) {
+        Rij r = rijen.get(u);
+        return r == null ? null : java.util.Collections.unmodifiableMap(r.xp);
+    }
+
+    /** Tests: a ranking loaded from saved data (the migration path). */
+    public static Ranglijst laad(CompoundTag t) {
+        return load(t);
     }
 
     private static Ranglijst load(CompoundTag t) {
@@ -213,6 +263,9 @@ public final class Ranglijst extends SavedData {
             }
             for (String k : sinds.keySet()) {
                 rij.sinds.put(k, sinds.getLongOr(k, 0L));
+            }
+            if (t.getIntOr("versie", 0) < VERSIE) {
+                migreer(rij);
             }
             r.rijen.put(u, rij);
         }

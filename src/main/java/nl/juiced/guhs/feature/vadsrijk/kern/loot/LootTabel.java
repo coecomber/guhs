@@ -19,14 +19,14 @@ public record LootTabel(List<Regel> regels, int rollen, double kans, double gelu
 
     public Resultaat rol(int level, RandomSource r) {
         List<ItemStack> uit = new ArrayList<>();
-        int som = regels.stream().mapToInt(Regel::gewicht).sum();
+        int som = regels.stream().mapToInt(DropBalans::gewicht).sum();   // (1.10.4: random jewellery 1/5)
         for (int i = 0; i < rollen && som > 0; i++) {
             if (r.nextDouble() >= kans) {
                 continue;
             }
             int x = r.nextInt(som);
             for (Regel g : regels) {
-                x -= g.gewicht();
+                x -= DropBalans.gewicht(g);
                 if (x < 0) {
                     BasisType t = BasisTypes.van(g.basisType());
                     if (t != null) {

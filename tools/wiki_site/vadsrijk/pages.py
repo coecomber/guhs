@@ -108,10 +108,9 @@ def feiten(rijen):
 
 
 # T-INT: t-ambacht's hiscore lists (id, English, Dutch), in the order of the mod's Ambacht enum + the total
-AMBACHT_LIJSTEN = [("mijnen", "Mining", "Mijnen"), ("houthakken", "Woodcutting", "Houthakken"), ("plukken", "Picking", "Plukken"),
-                   ("vissen", "Fishing", "Vissen"), ("imkeren", "Beekeeping", "Imkeren"), ("smeden", "Smithing", "Smeden"),
-                   ("naaien", "Sewing", "Naaien"), ("koken", "Cooking", "Koken"), ("brouwen", "Brewing", "Brouwen"),
-                   ("totaal", "Crafts total", "Ambachten totaal")]
+# (1.10.4: 4 crafts; the old lists mijnen/houthakken/plukken/imkeren/naaien/brouwen are still written as copies of their new one)
+AMBACHT_LIJSTEN = [("verzamelen", "Gathering", "Verzamelen"), ("vissen", "Fishing", "Vissen"), ("smeden", "Smithing", "Smeden"),
+                   ("koken", "Cooking", "Koken"), ("totaal", "Crafts total", "Ambachten totaal")]
 
 class Bouwer:
     NAV = [("index.html", "Start", "Start"), ("kaart.html", "Map", "Kaart"), ("gids.html", "Guide", "Gids"),
