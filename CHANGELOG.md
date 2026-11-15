@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.4 — Minecraft 26.1.2
+
+- **Ambachtseiland:** a cosy craft islet west of Knuffelkamp (around -610, 1030; safe area `ambachtseiland`, zone 1), reached over a 63-block wooden bridge from the camp's west coast: a round square with Meester Knutsel's spot, four workshop huts (Smederij, Keuken, Viswinkel, Verzamelhuisje), a Kiezelgroeve with real ore veins, Knuffelbosje, Bloemenwei, Bijenhofje, Visvijver and a Vissteiger. Built into the zone-1 map tiles (`tools/vadsrijk/kamp/ambacht_kaart.py`, run by `maak_kaart.py`; 12 tiles changed), its POIs (`ambacht_*`) are in WereldPlekken / POI_VADSRIJK.md. Not in the zone-1 Verkenningsboek list (existing 100 % books stay at 100 %). NPCs, quests and gathering come in a later step.
+- **Knuffelkamp path to the islet:** a 3-wide path (dirt path, knuffelklinkers, a stone-brick edge) straight from the campfire square to the bridge, lamp posts every 8 blocks on alternating sides, a lamp pair at the bridge head and two direction signs ("Naar het Ambachtseiland"); the 6 trees on or next to it are gone.
+- **Live patch kind "stempel":** `/guhs vadsrijk patch ambachtseiland [--echt]` and `/guhs vadsrijk patch kamp_pad [--echt]` (or both: `patch ambacht`) put a region of the new tiles into an already generated world cell by cell: dry run by default; only where the cell still holds the generated block, or air/water/plants (the camp path: trees and ground where the generator had them); never a block entity or a player's block; never generates a chunk (reported as "nog niet gegenereerd"); backup of every changed cell first; runs over several ticks (4000 blocks per tick, progress messages) and has no cell cap. Undo: `/guhs vadsrijk patch herstel <file>` (big backups also in steps).
+
 ## 1.10.3 — Minecraft 26.1.2
 
 - **Element advantage x1.5 -> x1.25** (also Roze vs ontvadst/versteend; the disadvantage stays x0.7).

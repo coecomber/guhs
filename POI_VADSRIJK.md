@@ -175,6 +175,51 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `vijver` | -330, 87, 1069 |
 | `vuurtoren_top` | -468, 125, 932 |
 
+## Ambachtseiland (1.10.4, west of Knuffelkamp over its bridge; a hut: voor = yard stand spot, deur = door, binnen = inside; a gather zone: midden = stand spot, min/max = its box corners, npc = the gatherer's spot)
+
+| id | x, y, z |
+|---|---|
+| `ambacht_bijenhofje.max` | -619, 100, 1082 |
+| `ambacht_bijenhofje.midden` | -626, 87, 1077 |
+| `ambacht_bijenhofje.min` | -633, 72, 1072 |
+| `ambacht_bijenhofje.npc` | -624, 87, 1078 |
+| `ambacht_bloemenwei.max` | -639, 100, 1067 |
+| `ambacht_bloemenwei.midden` | -652, 87, 1054 |
+| `ambacht_bloemenwei.min` | -665, 72, 1041 |
+| `ambacht_bloemenwei.npc` | -644, 88, 1046 |
+| `ambacht_bosje.max` | -570, 100, 1008 |
+| `ambacht_bosje.midden` | -586, 87, 994 |
+| `ambacht_bosje.min` | -602, 72, 980 |
+| `ambacht_bosje.npc` | -586, 87, 1008 |
+| `ambacht_brug_eiland` | -544, 89, 1024 |
+| `ambacht_brug_kamp` | -474, 89, 1024 |
+| `ambacht_brug_midden` | -508, 90, 1024 |
+| `ambacht_groeve.max` | -636, 100, 1012 |
+| `ambacht_groeve.midden` | -652, 86, 996 |
+| `ambacht_groeve.min` | -668, 72, 980 |
+| `ambacht_groeve.npc` | -644, 86, 1006 |
+| `ambacht_keuken.binnen` | -626, 87, 1030 |
+| `ambacht_keuken.deur` | -622, 87, 1030 |
+| `ambacht_keuken.voor` | -620, 87, 1030 |
+| `ambacht_knutsel` | -604, 87, 1029 |
+| `ambacht_plein` | -607, 87, 1036 |
+| `ambacht_smederij.binnen` | -607, 87, 1011 |
+| `ambacht_smederij.deur` | -607, 87, 1015 |
+| `ambacht_smederij.voor` | -607, 87, 1017 |
+| `ambacht_verzamelhuisje.binnen` | -607, 87, 1049 |
+| `ambacht_verzamelhuisje.deur` | -607, 87, 1045 |
+| `ambacht_verzamelhuisje.voor` | -607, 87, 1043 |
+| `ambacht_vissteiger.begin` | -680, 66, 1032 |
+| `ambacht_vissteiger.midden` | -699, 65, 1032 |
+| `ambacht_vissteiger.npc` | -700, 65, 1032 |
+| `ambacht_visvijver.max` | -574, 100, 1078 |
+| `ambacht_visvijver.midden` | -588, 88, 1065 |
+| `ambacht_visvijver.min` | -594, 72, 1066 |
+| `ambacht_visvijver.npc` | -588, 87, 1069 |
+| `ambacht_viswinkel.binnen` | -586, 87, 1044 |
+| `ambacht_viswinkel.deur` | -590, 87, 1044 |
+| `ambacht_viswinkel.voor` | -592, 87, 1044 |
+
 ## De Haven + Stal
 
 | id | x, y, z |

@@ -131,10 +131,12 @@ public final class WereldRegistry {
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> {
             Later.wis();
             WereldDeuren.wis();
+            WereldStempel.wis();
         });
         NeoForge.EVENT_BUS.addListener(WereldRegistry::commandos);
         NeoForge.EVENT_BUS.addListener(TempelCommando::register);   // y-tempel: the fixed ordetempel
         NeoForge.EVENT_BUS.addListener(PatchCommando::register);    // 1.10.3: one-time patches of the generated world
+        NeoForge.EVENT_BUS.addListener(WereldStempel::tick);        // 1.10.4: stamp patches run over several ticks
         nl.juiced.guhs.item.SuperkompasItem.voegToe("avontuur", "vr_w_portaaltempel");   // y-tempel: "Het Vadsrijk"
         nl.juiced.guhs.feature.vadsrijk.zone2.wereld.Z2WereldRegistry.register(modBus);   // [zone 2] De Splinterpieken (z2-wereld)
         nl.juiced.guhs.feature.vadsrijk.zone3.wereld.Z3WereldRegistry.register(modBus);   // [zone 3] De Schemerwortel (z3-wereld)

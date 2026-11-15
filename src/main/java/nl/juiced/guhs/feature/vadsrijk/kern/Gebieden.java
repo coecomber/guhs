@@ -111,6 +111,9 @@ public final class Gebieden {
             new Gebied("sporenwoud", -600, -160, -160, 400, 6, 13, false),
             new Gebied("druipgrotten", -600, -600, -160, -160, 12, 18, false),
             new Gebied("zwamtempel", 160, -600, 600, -300, 18, 20, false),
+            // 1.10.4: the Ambachtseiland (tools/vadsrijk/kamp/ambachtseiland.py), west of Knuffelkamp across its bridge: safe, tutorial
+            // level. Not in ZoneBoeken.GEBIEDEN_Z1 (that would drop the zone-1 book of every player who already has it at 100 %).
+            new Gebied("ambachtseiland", -704, 940, -513, 1110, 1, 3, true),
             new Gebied("knuffelkamp", -128 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.KAMP_DX, 900, 128 + nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.KAMP_DX, 1150, 1, 3, true),   // T-WERELD
             new Gebied("proeftuin", 3000, 3000, 3192, 3192, 1, 20, false),
             new Gebied("ring", -660, -660, 660, 660, 1, 20, false)));   // T-WERELD: the organic coast reaches ~640

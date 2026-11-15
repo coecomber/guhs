@@ -59,6 +59,7 @@ class Ctx:
         self.npcs = []          # (x, y, z, yaw, soort) in scene coords, rendered as GeckoLib NPC guhs
         self.labels = {}        # name -> (x, y, z) scene coords (for the map)
         self.zone = {}          # name -> (x1, z1, x2, z2) scene rect, for the map
+        self.hutten = {}        # 1.10.4: hut name -> (voor, deur, binnen) scene (x, y, z): stand spot in the yard, door, inside
 
     def s(self, wx, wz):
         return int(wx - self.ox), int(wz - self.oz)
@@ -344,6 +345,7 @@ def hut(C, fx, fz, facing, dak, muur="guhs:pleister_roze", W=4, D=8, schoorsteen
     for lx in (-W - 1, W + 1):
         T.set(lx, 1, -1, LAMP_O)
         T.set(lx, 2, -1, LAMP_B)
+    C.laatste_hut = (T.w(0, 1, -2), T.w(0, 1, 0), T.w(0, 1, D // 2))    # 1.10.4: POIs (yard stand spot, door, inside)
     cs = [T.w(lx, 0, lz) for lx in (-W - 1, W + 1) for lz in (-4, D)]
     I.claim(min(c[0] for c in cs), min(c[2] for c in cs), max(c[0] for c in cs), max(c[2] for c in cs), 1)
     return T
@@ -368,6 +370,7 @@ def smederij(C):
     T.set(-3, 1, -1, "guhs:infobord[facing=front]")
     npc(C, T, 1, -3, "guh_npc_smidguh", 20)
     C.labels["Smederij"] = T.w(0, 11, 3)
+    C.hutten["Smederij"] = C.laatste_hut
 
 
 def keuken(C):
@@ -386,6 +389,7 @@ def keuken(C):
                                      "minecraft:fern", "guhs:knabbelbessenstruik[age=3]"]))
     npc(C, T, 0, -2, "guh_npc_mika_kok", -15)
     C.labels["Keuken"] = T.w(0, 11, 3)
+    C.hutten["Keuken"] = C.laatste_hut
 
 
 def viswinkel(C):
@@ -405,6 +409,7 @@ def viswinkel(C):
     T.set(-1, 1, -3, "minecraft:dried_kelp_block")
     npc(C, T, 0, -2, "guh_npc_botenhuisje_visserguh", 10)
     C.labels["Viswinkel"] = T.w(0, 11, 3)
+    C.hutten["Viswinkel"] = C.laatste_hut
 
 
 def verzamelhuisje(C):
@@ -423,6 +428,7 @@ def verzamelhuisje(C):
     T.set(-2, 1, -4, "guhs:infobord[facing=front]")
     npc(C, T, 1, -3, "guh_npc_houthakkerguh", -20)
     C.labels["Verzamelhuisje"] = T.w(0, 11, 3)
+    C.hutten["Verzamelhuisje"] = C.laatste_hut
 
 
 # ------------------------------------------------------------------------------------------------- gathering zones
@@ -744,6 +750,7 @@ def groen(C, n_bomen=34):
 def bouw(S, ox, oz, kamp_H=None):
     """Builds the Ambachtseiland into S (scene column 0,0 = world ox,oz). Returns the Ctx (npcs, labels, zones)."""
     C = Ctx(S, ox, oz, kamp_H)
+    rng.seed(1104)         # 1.10.4: a second build in the same process gives the same islet (the module rng starts at 1104)
     hoogtekaart(C)
     brug(C)
     groeve_vorm(C)

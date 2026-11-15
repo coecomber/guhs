@@ -60,12 +60,15 @@ public final class WereldPatch {
     /** The central return portals of the safe towns (tools/vadsrijk/stadsleven/terugportalen.py writes their json). */
     public static final List<String> PORTALEN = List.of("portaal_zwamzoet", "portaal_knuffelkamp", "portaal_kandijkom", "portaal_kandijkom_dok", "portaal_honingtak",
             "portaal_lampionhaven", "portaal_hoogvads", "portaal_luchthaven", "portaal_rozenkloof", "portaal_saffraanpoort");
+    /** 1.10.4: the STAMP patches ({@link WereldStempel}: a region of the map tiles, cell by cell, over several ticks). */
+    public static final List<String> STEMPELS = List.of("ambachtseiland", "kamp_pad");
     /** The registry: every patch name that has a json under data/guhs/vadsrijk/patch/. Add new patches here. */
-    public static final List<String> NAMEN = java.util.stream.Stream.concat(java.util.stream.Stream.of("spiegelzaal"), PORTALEN.stream()).toList();
+    public static final List<String> NAMEN = java.util.stream.Stream.of(java.util.stream.Stream.of("spiegelzaal"), PORTALEN.stream(), STEMPELS.stream())
+            .flatMap(x -> x).toList();
     /** Named groups ({@code /guhs vadsrijk patch <groep> [--echt]} runs every member). */
-    public static final Map<String, List<String>> GROEPEN = Map.of("alle-portalen", PORTALEN);
+    public static final Map<String, List<String>> GROEPEN = Map.of("alle-portalen", PORTALEN, "ambacht", STEMPELS);
     static final Pattern BESTAND = Pattern.compile("vr_patch_backup_[a-z0-9_]+_\\d+\\.nbt");
-    /** Most cells one patch may hold (a typo in a box must not fill a mountain). */
+    /** Most cells one box patch may hold (a typo in a box must not fill a mountain). Stamps ({@link #STEMPELS}) have no cap. */
     static final int MAX_CELLEN = 20_000;
 
     /** A box filled with {@code blok}; besides air/replaceable blocks it may also replace the blocks in {@code vervang} (a floor). */
@@ -113,7 +116,7 @@ public final class WereldPatch {
 
     /** The registered patch {@code naam}, read from its json, or empty (unknown name / unreadable file, logged). */
     public static Optional<Patch> laad(String naam) {
-        if (!NAMEN.contains(naam)) {
+        if (!NAMEN.contains(naam) || STEMPELS.contains(naam)) {
             return Optional.empty();
         }
         String pad = "/data/guhs/vadsrijk/patch/" + naam + ".json";

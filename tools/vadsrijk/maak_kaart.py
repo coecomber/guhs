@@ -72,6 +72,8 @@ def main():
     speeltuin.main([])
     import terugportalen                                     # 1.10.3: a central return portal in every safe town (same spots as
     terugportalen.main([])                                   # data/guhs/vadsrijk/terugportalen.txt + the live patches)
+    if a.zone in ("1", "alle"):                              # 1.10.4: the Ambachtseiland + the Knuffelkamp path (own process: the
+        subprocess.run([sys.executable, os.path.join(HIER, "kamp", "ambacht_kaart.py")], cwd=ROOT, check=True)   # kamp kit's modules)
     os.environ.pop("GUHS_VERBIND_LATER", None)
     import verbind                              # U-HEKKEN: fences/walls/panes/chains/garlands connected (+ tile borders)
     verbind.na_sinds(_t_verbind)
@@ -118,7 +120,7 @@ def _main(a):
     W = TG.Wereld(K)
     W.stempel(kamp)
     W.stempel(stad)
-    plekken = {"kamp": kamp_poi, "stad": stad_info}
+    plekken = {"kamp": kamp_poi, "stad": stad_info, "ambacht": ambacht_plekken()}
     if not a.zonder_bouwsels:
         import bouwsels
         plekken.update(bouwsels.bouw_alles(W, K, kamp_d))
@@ -218,6 +220,17 @@ def zone6(a):   # U-Z6WERELD: Het Zijdeland: own process (its render kit shares 
     subprocess.run(cmd, cwd=ROOT, check=True)
 
 
+AMBACHT_PLEKKEN = os.path.join(HIER, "kamp", "ambacht_plekken.json")
+
+
+def ambacht_plekken():
+    """1.10.4: the Ambachtseiland POIs (written by kamp/ambacht_kaart.py, committed)."""
+    if not os.path.exists(AMBACHT_PLEKKEN):
+        return {}
+    with open(AMBACHT_PLEKKEN, encoding="utf-8") as f:
+        return json.load(f)
+
+
 def plekken_nbt(plekken, tx, tz):
     return None
 
@@ -246,10 +259,10 @@ JAVA = os.path.join(ROOT, "src", "main", "java", "nl", "juiced", "guhs", "featur
 def java_plekken(plekken):
     alle = {}
     plat("", {"kamp": plekken["kamp"], "stad": plekken["stad"]["poi"], "gebouw": plekken["stad"]["gebouwen"],
-              "wereld": plekken["wereld"]}, alle)
+              "wereld": plekken["wereld"], "ambacht": plekken.get("ambacht") or ambacht_plekken()}, alle)
     kort = {}
     for k, v in alle.items():
-        for pre in ("kamp.", "stad.", "wereld."):
+        for pre in ("kamp.", "stad.", "wereld.", "ambacht."):
             if k.startswith(pre):
                 k = k[len(pre):]
         kort[k] = v
@@ -330,6 +343,8 @@ SECTIES = [
     ("Zwamzoet: ordetempel, plein, questbord, hats (cap tops)", ("ordetempel", "deur_ordetempel", "plein", "questbord", "guhpoort", "hoed_")),
     ("Zwamzoet buildings (deur = stand outside the door, binnen = interior centre, doos = bounding box)", ("gebouw.",)),
     ("Knuffelkamp", ("ordetent", "training", "tempeltje", "vijver", "vuurtoren")),
+    ("Ambachtseiland (1.10.4, west of Knuffelkamp over its bridge; a hut: voor = yard stand spot, deur = door, binnen = inside; a gather "
+     "zone: midden = stand spot, min/max = its box corners, npc = the gatherer's spot)", ("ambacht_",)),
     ("De Haven + Stal", ("haven_", "stal.")),
     ("Viewpoints (top platform, panorama on first visit)", ("uitkijk_",)),
     ("Mika-spion clues + secrets", ("mika_", "geheim_")),
