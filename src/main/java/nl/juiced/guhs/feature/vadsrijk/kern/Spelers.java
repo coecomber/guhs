@@ -406,15 +406,15 @@ public final class Spelers {
         return inhaalFactor(hoogste, d.level(klasse));
     }
 
-    /** Xp (g-klassen): ALL of it to the generic level AND to the class of {@link #xpKlasse}. */
-    public static void geefXp(ServerPlayer p, long n, String bron) {
-        geefXp(p, n, bron, xpKlasse(p));
+    /** Xp (g-klassen): ALL of it to the generic level AND to the class of {@link #xpKlasse}. Returns the generic xp really given. */
+    public static long geefXp(ServerPlayer p, long n, String bron) {
+        return geefXp(p, n, bron, xpKlasse(p));
     }
 
-    /** Xp to the generic level and to {@code klasse} (null = only generic). */
-    public static void geefXp(ServerPlayer p, long n, String bron, @Nullable String klasse) {
+    /** Xp to the generic level and to {@code klasse} (null = only generic). Returns the generic xp really given (after factors/cap). */
+    public static long geefXp(ServerPlayer p, long n, String bron, @Nullable String klasse) {
         if (n <= 0) {
-            return;
+            return 0;
         }
         double factor = 1;
         for (java.util.function.ToDoubleFunction<ServerPlayer> f : XP_FACTOR) {
@@ -438,17 +438,88 @@ public final class Spelers {
             d.xp.put(klasse, Math.min(Levels.totaalVoor(Levels.MAX), d.xp(klasse) + nKlasse));   // X-ZONE1: nKlasse (was n)
             kNa = d.level(klasse);
         }
+        telXp(p, bron, n);   // 1.10.4: counted first (a level-up or HUD hiccup after this can no longer lose the count)
         levelOp(p, gNa > gVoor ? gNa : 0, klasse, kNa > kVoor ? kNa : 0);
         sync(p);
-        telXp(p, bron, n);
+        return n;
+    }
+
+    // ---- 1.10.4: xp brake against much lower targets ----------------------------------------------------------------------------
+    /** More than this many levels below you: less xp. */
+    public static final int REM_MARGE = 3;
+    /** Per level beyond {@link #REM_MARGE}: this much less, never below {@link #REM_MIN}. */
+    public static final double REM_PER_LEVEL = 0.15, REM_MIN = 0.10;
+    /** At most one "(te laag level)" popup per player per this many ms. */
+    static final long REM_MELDING_MS = 30_000;
+    private static final Map<java.util.UUID, Long> REM_MELDING = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /** The brake factor (pure, tests): 1 up to 3 levels below you, then 15 % less per level, at least 10 %. */
+    public static double xpRem(int jouwLevel, int doelLevel) {
+        int verschil = jouwLevel - doelLevel - REM_MARGE;
+        return verschil <= 0 ? 1.0 : Math.max(REM_MIN, 1.0 - REM_PER_LEVEL * verschil);
+    }
+
+    /**
+     * The brake for this player against a target of {@code doelLevel} (0 or less = no brake): compared with the level of the CLASS
+     * that gets the xp ({@link #xpKlasse}: the class that hit the mob hardest, else the active class), NOT the generic level, so taking
+     * a lower class back to a lower zone gives full xp (and {@link #inhaalFactor} still applies on top).
+     */
+    public static double xpRem(ServerPlayer p, int doelLevel) {
+        if (doelLevel <= 0) {
+            return 1.0;
+        }
+        String k = xpKlasse(p);
+        SpelerData d = data(p);
+        int lv = k != null && Klassen.van(k) != null ? d.level(k) : d.klasseLevel();
+        return xpRem(lv, doelLevel);
+    }
+
+    /** Xp from a target of {@code doelLevel} (a mob, a boss, a quest's zone): the brake per receiving player, then {@link #geefXp}. */
+    public static long geefXpDoel(ServerPlayer p, long n, String bron, int doelLevel) {
+        if (n <= 0) {
+            return 0;
+        }
+        double f = xpRem(p, doelLevel);
+        long m = f < 1 ? Math.max(1, Math.round(n * f)) : n;
+        long gekregen = geefXp(p, m, bron);
+        if (f < 1) {
+            telRem(p, n - m);
+            meldRem(p, gekregen);
+        }
+        return gekregen;
+    }
+
+    /** The "+12 xp (te laag level)" popup, at most once per {@link #REM_MELDING_MS} per player. True = shown now. */
+    static boolean meldRem(ServerPlayer p, long gekregen) {
+        if (gekregen <= 0) {
+            return false;
+        }
+        long nu = System.currentTimeMillis();
+        Long vorig = REM_MELDING.get(p.getUUID());
+        if (vorig != null && nu - vorig < REM_MELDING_MS) {
+            return false;
+        }
+        REM_MELDING.put(p.getUUID(), nu);
+        p.sendOverlayMessage(Component.translatable("vadsrijk.kern.xp_rem", gekregen).withStyle(ChatFormatting.GRAY));
+        return true;
+    }
+
+    /** Tests: forget the popup pause. */
+    static void vergeetRemMelding(ServerPlayer p) {
+        REM_MELDING.remove(p.getUUID());
     }
 
     // ---- 1.10.3: xp log per source (balancing) -------------------------------------------------------------------------------
     private static final org.slf4j.Logger XP_LOG = com.mojang.logging.LogUtils.getLogger();
     private static final Map<java.util.UUID, Map<String, long[]>> XP_TEL = new java.util.concurrent.ConcurrentHashMap<>();
     private static final Map<java.util.UUID, Long> XP_TEL_SINDS = new java.util.concurrent.ConcurrentHashMap<>();
+    /** 1.10.4: per player [xp held back by the brake, how many gains]: shown in the tally, not part of its total. */
+    private static final Map<java.util.UUID, long[]> XP_REM_TEL = new java.util.concurrent.ConcurrentHashMap<>();
     /** Write a player's tally every this many ms (and on logout). */
     static final long XP_TEL_MS = 30 * 60 * 1000L;
+    /** Tests: the last tally line written (null = none yet). */
+    @Nullable
+    static volatile String laatsteXpTelling;
 
     /** Counts the xp a player really got (after factors and caps) per source: total + how many times. */
     static void telXp(ServerPlayer p, String bron, long n) {
@@ -463,24 +534,60 @@ public final class Spelers {
         }
     }
 
-    /** One server-log line with this player's xp per source since the last line, then starts over. */
-    public static void schrijfXpTelling(ServerPlayer p) {
+    /** 1.10.4: every online player whose tally window is 30+ minutes old gets its line now (also without a new gain). */
+    public static void schrijfVerlopenTellingen(net.minecraft.server.MinecraftServer server) {
+        long nu = System.currentTimeMillis();
+        for (ServerPlayer p : server.getPlayerList().getPlayers()) {
+            Long sinds = XP_TEL_SINDS.get(p.getUUID());
+            if (sinds != null && nu - sinds >= XP_TEL_MS) {
+                schrijfXpTelling(p);
+            }
+        }
+    }
+
+    /** 1.10.4: xp the brake held back (see {@link #geefXpDoel}). */
+    static void telRem(ServerPlayer p, long minder) {
+        long[] t = XP_REM_TEL.computeIfAbsent(p.getUUID(), k -> new long[2]);
+        t[0] += Math.max(0, minder);
+        t[1]++;
+    }
+
+    /** Tests: pretend this player's tally started {@code ms} ago. */
+    static void zetXpTellingSinds(ServerPlayer p, long ms) {
+        XP_TEL_SINDS.put(p.getUUID(), System.currentTimeMillis() - ms);
+    }
+
+    /** One server-log line with this player's xp per source since the last line, then starts over. Returns it (null = nothing). */
+    @Nullable
+    public static String schrijfXpTelling(ServerPlayer p) {
         Map<String, long[]> m = XP_TEL.remove(p.getUUID());
         Long sinds = XP_TEL_SINDS.remove(p.getUUID());
+        long[] rem = XP_REM_TEL.remove(p.getUUID());
         if (m == null || m.isEmpty()) {
-            return;
+            return null;
         }
+        String regel = bouwXpTelling(p.getGameProfile().name(), level(p), sinds, m, rem);
+        laatsteXpTelling = regel;
+        XP_LOG.info(regel);
+        return regel;
+    }
+
+    /** The tally line itself (pure, tests). */
+    static String bouwXpTelling(String naam, int lv, @Nullable Long sinds, Map<String, long[]> m, @Nullable long[] rem) {
         long tot = 0;
         for (long[] t : m.values()) {
             tot += t[0];
         }
-        StringBuilder b = new StringBuilder("[Vadsrijk] xp tally ").append(p.getGameProfile().name()).append(" lv ").append(level(p))
+        StringBuilder b = new StringBuilder("[Vadsrijk] xp tally ").append(naam).append(" lv ").append(lv)
                 .append(sinds == null ? "" : String.format(java.util.Locale.ROOT, " over %.0f min", (System.currentTimeMillis() - sinds) / 60000.0))
                 .append(": total ").append(tot).append(';');
         final long totaal = tot;
         m.entrySet().stream().sorted((x, y) -> Long.compare(y.getValue()[0], x.getValue()[0])).forEach(e -> b.append(String.format(java.util.Locale.ROOT,
                 " %s %d (%.0f%%, %dx);", e.getKey(), e.getValue()[0], totaal > 0 ? 100.0 * e.getValue()[0] / totaal : 0, e.getValue()[1])));
-        XP_LOG.info(b.toString());
+        if (rem != null && rem[1] > 0) {
+            b.append(String.format(java.util.Locale.ROOT, " brake -%d (%dx);", rem[0], rem[1]));
+        }
+        return b.toString();
     }
 
     /**
@@ -489,12 +596,17 @@ public final class Spelers {
      * hit got 2x the xp of every kill).
      */
     public static java.util.Set<ServerPlayer> geefXpGroep(java.util.Collection<ServerPlayer> helpers, long n, String bron) {
+        return geefXpGroep(helpers, n, bron, 0);
+    }
+
+    /** 1.10.4: {@link #geefXpGroep} from a target of {@code doelLevel}: the xp brake per receiving player (0 = no brake). */
+    public static java.util.Set<ServerPlayer> geefXpGroep(java.util.Collection<ServerPlayer> helpers, long n, String bron, int doelLevel) {
         java.util.Set<ServerPlayer> ontvangers = new java.util.LinkedHashSet<>();
         for (ServerPlayer h : helpers) {
             ontvangers.addAll(Partijen.ledenInBuurt(h, 48));
         }
         for (ServerPlayer l : ontvangers) {
-            geefXp(l, n, bron);
+            geefXpDoel(l, n, bron, doelLevel);
         }
         return ontvangers;
     }

@@ -139,6 +139,8 @@ public final class GrotKerker {
         final List<BlockPos> sluisGezet = new ArrayList<>();
         @Nullable
         Display.TextDisplay sluisBord;
+        /** 1.10.4: the run creatures that glow for the members now (the last {@link #GLOED_VANAF}). */
+        final Set<UUID> gloeit = new HashSet<>();
 
         Run(String id) {
             this.id = id;
@@ -156,6 +158,7 @@ public final class GrotKerker {
         GrotDungeon.register();   // W-GROT: every cave run is a dungeon (type GROT) behind a closed door (dungeon.DungeonRij)
         GrotHerbouw.register();   // 1.10.3: /guhs vadsrijk grotten herbouw|herstel (the bigger caves into an existing world)
         Haken.VERSLAGEN.add(GrotKerker::verslagen);
+        nl.juiced.guhs.feature.vadsrijk.npc.NpcVolg.EXTRA.add(GrotKerker::volgRegel);   // 1.10.4: "Nog N over" + arrow to the nearest
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
             RUNS.clear();
             sessie = (System.nanoTime() ^ e.getServer().overworld().getSeed()) & 0xFFFFFL;
@@ -261,6 +264,7 @@ public final class GrotKerker {
             case BEZIG -> {
                 meedoen(k, r, binnen);
                 spawnOntbrekend(sl, k, r, nu);
+                laatsteGloed(sl, k, r);   // 1.10.4
                 meldKamers(sl, k, r);
                 if (nu % 40 == 0) {
                     leiband(sl, k, r);
@@ -506,8 +510,17 @@ public final class GrotKerker {
         return true;
     }
 
-    /** 1.10.3: a run creature that got out of the cave (pushed into the rock, knocked through a wall) goes back to its room. */
+    /**
+     * 1.10.3: a run creature that got out of the cave (pushed into the rock, knocked through a wall) goes back to its room.
+     * 1.10.4 (live: two Kristalnaaldkruipers both stood on exactly 906.5 112 -1131.5, the FIRST spawn spot of room 2, at full HP,
+     * until the run said "nog 2 van 16"): the old put-back took {@link #vrijePlek}, the first spot of a fixed stride that passed
+     * the floor check, so every put-back of a room tended to the same spot, never checked the cave's own space (a spot outside it
+     * is put back again 2 s later) and left the creature standing there without a target. Now: a random spot of THAT creature's own
+     * room that is standable, inside the cave's space and not taken by another run creature ({@link #terugPlek}), and the creature
+     * goes after the nearest member right away.
+     */
     static void leiband(ServerLevel sl, Kerker k, Run r) {
+        List<ServerPlayer> leden = null;
         for (var e : r.levend.entrySet()) {
             Plan p = r.plan.get(e.getKey());
             Entity m = sl.getEntity(e.getValue());
@@ -518,12 +531,162 @@ public final class GrotKerker {
                 continue;
             }
             Kamer kamer = k.kamers().get(Math.min(p.kamer(), k.kamers().size() - 1));
-            BlockPos b = vrijePlek(sl, kamer, kamer.r());
+            BlockPos b = terugPlek(sl, k, kamer, mob);
             if (b != null) {
                 m.teleportTo(b.getX() + 0.5, b.getY(), b.getZ() + 0.5);
                 m.resetFallDistance();
+                mob.getNavigation().stop();
+                if (leden == null) {
+                    leden = leden(sl, k, r);
+                }
+                achterDichtste(mob, leden);
             }
         }
+    }
+
+    /**
+     * 1.10.4: where a run creature is put back: a random spawn spot of its own room that is standable, inside the cave's space and
+     * not within 1.5 blocks of another run creature (all taken: any standable one in the space). Rooms without spots: {@link #vrijePlek}.
+     */
+    @Nullable
+    static BlockPos terugPlek(ServerLevel sl, Kerker k, Kamer kamer, @Nullable Entity zelf) {
+        int n = kamer.aantalPlekken();
+        if (n == 0) {
+            return vrijePlek(sl, kamer, kamer.r());
+        }
+        int x0 = Integer.MAX_VALUE, y0 = Integer.MAX_VALUE, z0 = Integer.MAX_VALUE, x1 = Integer.MIN_VALUE, y1 = Integer.MIN_VALUE, z1 = Integer.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            BlockPos b = kamer.plek(i);
+            x0 = Math.min(x0, b.getX());
+            y0 = Math.min(y0, b.getY());
+            z0 = Math.min(z0, b.getZ());
+            x1 = Math.max(x1, b.getX());
+            y1 = Math.max(y1, b.getY());
+            z1 = Math.max(z1, b.getZ());
+        }
+        List<VadsrijkMob> anderen = sl.getEntitiesOfClass(VadsrijkMob.class, new AABB(x0 - 2, y0 - 2, z0 - 2, x1 + 3, y1 + 4, z1 + 3),
+                o -> o != zelf && o.entityTags().contains(TAG) && !o.isRemoved() && !o.geplofd());
+        BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        List<BlockPos> vrij = new ArrayList<>(), druk = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            BlockPos b = kamer.plek(i);
+            if (!staanbaar(sl, b, m) || !k.bevat(b.getX() + 0.5, b.getY(), b.getZ() + 0.5)) {
+                continue;
+            }
+            boolean bezet = false;
+            for (VadsrijkMob o : anderen) {
+                if (o.distanceToSqr(b.getX() + 0.5, b.getY(), b.getZ() + 0.5) < 2.25) {
+                    bezet = true;
+                    break;
+                }
+            }
+            (bezet ? druk : vrij).add(b);
+        }
+        List<BlockPos> uit = vrij.isEmpty() ? druk : vrij;
+        return uit.isEmpty() ? null : uit.get(sl.getRandom().nextInt(uit.size()));
+    }
+
+    /** 1.10.4: the run's members here (the dungeon group + whoever took part), not spectating. */
+    static List<ServerPlayer> leden(ServerLevel sl, Kerker k, Run r) {
+        List<ServerPlayer> l = new ArrayList<>();
+        for (ServerPlayer p : sl.players()) {
+            if (!p.isSpectator() && (DungeonRij.lid(p, k.id()) || r.deelnemers.contains(p.getUUID()))) {
+                l.add(p);
+            }
+        }
+        return l;
+    }
+
+    /** 1.10.4: a put-back creature goes after the nearest member (within 64 blocks, not creative). */
+    static void achterDichtste(VadsrijkMob mob, List<ServerPlayer> leden) {
+        ServerPlayer best = null;
+        double d = 64 * 64;
+        for (ServerPlayer p : leden) {
+            double x = mob.distanceToSqr(p);
+            if (x < d && !p.isCreative() && p.isAlive()) {
+                d = x;
+                best = p;
+            }
+        }
+        if (best != null) {
+            mob.setTarget(best);
+            mob.getNavigation().moveTo(best, 1.0);
+        }
+    }
+
+    // ---- 1.10.4: the last creatures glow + the tracker line -------------------------------------------------------------------
+    /** From this many creatures left (and fewer) they glow for the members and the tracker points at the nearest. */
+    static final int GLOED_VANAF = 3;
+
+    /** The run creatures still to beat that are in the world now. */
+    static List<VadsrijkMob> resterend(ServerLevel sl, Run r) {
+        List<VadsrijkMob> l = new ArrayList<>();
+        for (Plan p : r.plan.values()) {
+            if (r.verslagen.contains(p.slot())) {
+                continue;
+            }
+            UUID u = r.levend.get(p.slot());
+            if (u != null && sl.getEntity(u) instanceof VadsrijkMob m && !m.isRemoved() && !m.geplofd()) {
+                l.add(m);
+            }
+        }
+        return l;
+    }
+
+    /**
+     * 3 or fewer left: they glow (vanilla glowing, seen through walls) for the run's members only: a private entity-data packet per
+     * member (VadsrijkMob.gloeiVoor), sent again every half second (it also covers a member who comes into range later).
+     */
+    static void laatsteGloed(ServerLevel sl, Kerker k, Run r) {
+        int over = over(r);
+        r.gloeit.clear();
+        if (over <= 0 || over > GLOED_VANAF) {
+            return;
+        }
+        List<ServerPlayer> leden = leden(sl, k, r);
+        for (VadsrijkMob m : resterend(sl, r)) {
+            r.gloeit.add(m.getUUID());
+            for (ServerPlayer p : leden) {
+                m.gloeiVoor(p, true);
+            }
+        }
+    }
+
+    /** The tracker line (NpcVolg.EXTRA) of a member of a running cave with 3 or fewer left: "Nog N over" + the arrow to the nearest. */
+    @Nullable
+    static nl.juiced.guhs.feature.vadsrijk.npc.NpcPayloads.VolgRegel volgRegel(ServerPlayer p) {
+        if (!(p.level() instanceof ServerLevel sl)) {
+            return null;
+        }
+        for (Run r : RUNS.values()) {
+            if (r.staat != Staat.BEZIG) {
+                continue;
+            }
+            Kerker k = Kerkers.van(r.id);
+            if (k == null || !(DungeonRij.lid(p, k.id()) || r.deelnemers.contains(p.getUUID()))) {
+                continue;
+            }
+            int over = over(r);
+            if (over <= 0 || over > GLOED_VANAF) {
+                continue;
+            }
+            VadsrijkMob dichtst = null;
+            double d = Double.MAX_VALUE;
+            for (VadsrijkMob m : resterend(sl, r)) {
+                double x = m.distanceToSqr(p);
+                if (x < d) {
+                    d = x;
+                    dichtst = m;
+                }
+            }
+            if (dichtst == null) {
+                continue;
+            }
+            return new nl.juiced.guhs.feature.vadsrijk.npc.NpcPayloads.VolgRegel("grotkerker", false,
+                    Component.translatable("vadsrijk.grotkerker.grot." + k.id()), Component.translatable("vadsrijk.grotkerker.volg.over", over),
+                    Component.translatable("vadsrijk.grotkerker.volg.waar"), java.util.Optional.empty(), java.util.Optional.of(dichtst.blockPosition()));
+        }
+        return null;
     }
 
     static void meldKamers(ServerLevel sl, Kerker k, Run r) {

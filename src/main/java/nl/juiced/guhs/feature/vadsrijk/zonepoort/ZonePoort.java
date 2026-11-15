@@ -69,6 +69,11 @@ public final class ZonePoort {
      */
     static final int[] TOP = {20, 20, 30, 50, 56, 60, 70};
     public static final int CAP_EXTRA = 5;
+
+    /** 1.10.4 (xp brake for quests and exploration): the top level of a zone (1..6; anything else counts as zone 1). */
+    public static int zoneTop(int zone) {
+        return TOP[Math.max(1, Math.min(TOP.length - 1, zone))];
+    }
     /** 1.10.2 (tests / the quest robot): players for whom the Verkenningsboek % of the per-player gate counts as met. */
     public static final Set<UUID> BOEK_VRIJ = ConcurrentHashMap.newKeySet();
     /** Tests: never bypass (the gametest mock player is creative). */

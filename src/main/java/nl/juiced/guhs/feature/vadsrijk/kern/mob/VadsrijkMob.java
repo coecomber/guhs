@@ -212,6 +212,21 @@ public abstract class VadsrijkMob extends Monster {
         return entityData.get(PLOF);
     }
 
+    /**
+     * 1.10.4 (dungeon: the last creatures glow): vanilla glowing (outline through walls) for this ONE player only: a private copy of
+     * this creature's entity flags with the glow bit, so the rest of the world does not see it. The next flag change of the creature
+     * itself resets it on that client: the caller sends it again regularly.
+     */
+    public void gloeiVoor(ServerPlayer p, boolean aan) {
+        if (p.connection == null) {
+            return;
+        }
+        byte b = entityData.get(DATA_SHARED_FLAGS_ID);
+        b = (byte) (aan ? b | (1 << FLAG_GLOWING) : b & ~(1 << FLAG_GLOWING));
+        p.connection.send(new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(getId(),
+                java.util.List.<SynchedEntityData.DataValue<?>>of(SynchedEntityData.DataValue.create(DATA_SHARED_FLAGS_ID, b))));
+    }
+
     public boolean geplofd() {
         return plofTicks() >= 0;
     }
@@ -328,7 +343,7 @@ public abstract class VadsrijkMob extends Monster {
     /** Xp (shared with the party nearby) and personal loot per helper. Bosses override this (chests). */
     protected void beloon(ServerLevel sl, Set<ServerPlayer> helpers) {
         LootTabel t = lootTabel() == null ? null : LootTabellen.van(lootTabel());
-        Spelers.geefXpGroep(helpers, xp() * (elite ? 3 : 1), "mob");   // 1.10.3: each player once
+        Spelers.geefXpGroep(helpers, xp() * (elite ? 3 : 1), "mob", mobLevel());   // 1.10.3: each player once; 1.10.4: xp brake per player vs the mob level
         for (ServerPlayer p : helpers) {
             Spelers.data(p).opgevrolijkt++;
             if (t != null) {

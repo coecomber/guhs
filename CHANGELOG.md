@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.4 — Minecraft 26.1.2
+
+- **Xp brake against much lower targets:** mobs, bosses (also dungeon bosses) and dungeon creatures more than 3 levels below the level of the class that gets the xp give 15 % less per extra level, at least 10 % (class 39 vs a lv-28 mob: 10 %). Quests count as their zone's top level (zone 1: 20, zone 2: 30, zone 3: 50, ...), as do zone-3 contracts/bounties and zone-5 sparring; job advancement quests never brake. It compares with the class level, not the generic level, so levelling a lower class in a lower zone gives full xp (the catch-up bonus still applies), and in a party it is decided per player. A "+N xp (te laag level)" popup shows at most once per 30 s. The xp tally log line also shows how much the brake held back.
+- **Xp tally log made robust:** the "[Vadsrijk] xp tally ..." line no longer depends on the shared logout listener (it was one step inside a listener that any exception in an earlier one of the 150+ logout listeners skips): it now has its own HIGHEST-priority, guarded logout listener, a check every minute writes a 30-minute window even without a new gain (before, only the next gain after 30 min did), every online player is flushed when the server stops, and a gain is counted before the level-up/HUD code runs. Covered by a gametest (several sources, the 30-minute and minute checks, in Het Vadsrijk, a real logout, the log4j output).
+- **Dungeons: the last creatures glow.** With 3 or fewer run creatures left they glow (visible through walls) for the dungeon group only, and the quest tracker shows "Nog N over" with an arrow and the distance to the nearest one.
+- **Fix: run creatures stuck on one spot** (live: two Kristalnaaldkruipers on exactly 906.5 112 -1131.5 at "nog 2 van 16"): a creature that got out of the cave is now put back on a random free spawn spot of its own room (standable, inside the cave's space, not taken by another creature) and goes after the nearest member at once.
+
 ## 1.10.3 — Minecraft 26.1.2
 
 - **Element advantage x1.5 -> x1.25** (also Roze vs ontvadst/versteend; the disadvantage stays x0.7).

@@ -625,7 +625,7 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
                 ontvangers.putIfAbsent(l, false);
             }
         }
-        ontvangers.forEach((p, eerste) -> Spelers.geefXp(p, baasXp(eerste), "baas"));
+        ontvangers.forEach((p, eerste) -> Spelers.geefXpDoel(p, baasXp(eerste), "baas", mobLevel()));   // 1.10.4: xp brake (also dungeon bosses)
         gevechtslog(sl);
         for (java.util.UUID id : bijdragen.spelers()) {
             if (!(sl.getEntity(id) instanceof ServerPlayer p) || p.distanceTo(this) > 64) {

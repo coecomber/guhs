@@ -54,11 +54,26 @@ final class KernEvents {
                 verzoen(p);
             }
         });
+        // 1.10.4: the xp tally line on logout runs FIRST (HIGHEST) and guarded: an exception in any other logout listener
+        // (there are 150+) can no longer skip it; plus a check every minute (a 30-minute window is written even without a new
+        // gain) and a flush of every online player when the server stops
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGHEST, (PlayerEvent.PlayerLoggedOutEvent e) -> {
+            if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
+                nl.juiced.guhs.world.TikWacht.veilig("xp tally logout", () -> Spelers.schrijfXpTelling(sp));
+            }
+        });
+        nl.juiced.guhs.world.TikWacht.post("xp tally", e -> {
+            if (e.getServer().getTickCount() % 1200 == 0) {
+                Spelers.schrijfVerlopenTellingen(e.getServer());
+            }
+        });
+        NeoForge.EVENT_BUS.addListener((ServerStoppingEvent e) -> nl.juiced.guhs.world.TikWacht.veilig("xp tally stop", () -> {
+            for (ServerPlayer sp : e.getServer().getPlayerList().getPlayers()) {
+                Spelers.schrijfXpTelling(sp);
+            }
+        }));
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> {
             java.util.UUID id = e.getEntity().getUUID();
-            if (e.getEntity() instanceof net.minecraft.server.level.ServerPlayer sp) {
-                Spelers.schrijfXpTelling(sp);   // 1.10.3: the xp-per-source line
-            }
             if (e.getEntity().level().getServer() != null) {   // W-PARTY: parties are saved; logging out no longer leaves
                 Partijen.uitgelogd(e.getEntity().level().getServer(), id);
             }
