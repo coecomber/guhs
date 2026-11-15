@@ -46,6 +46,7 @@ class Eiland:
         self.H = np.full((X, Z), -1, int)
         self.bezet = np.zeros((X, Z), bool)
         self.kust = np.zeros((X, Z), float)
+        self.bomen = []         # 1.10.4: every tree of bomen_en_bloemen (x, y, z, soort, h, r), so ambachtpad can take some out
 
     def h(self, x, z):
         return int(self.H[x, z])
@@ -771,7 +772,9 @@ def bomen_en_bloemen(I, n_bomen=170):
                for dx in range(-3, 4) for dz in range(-3, 4) if 0 <= x + dx < I.X and 0 <= z + dz < I.Z):
             continue                      # (no trees on or overhanging the paths)
         soort = rng.choice([BOOM_ROZE, BOOM_ROZE, BOOM_GROEN, BOOM_BLOEI])
-        boom(S, x, I.h(x, z), z, soort, h=rng.randint(4, 7), r=rng.uniform(2.6, 3.8))
+        bh, br = rng.randint(4, 7), rng.uniform(2.6, 3.8)       # (same draw order as before: the camp is unchanged)
+        boom(S, x, I.h(x, z), z, soort, h=bh, r=br)
+        I.bomen.append((x, I.h(x, z), z, soort, bh, br))
         I.claim(x - 2, z - 2, x + 2, z + 2, 0)
         gezet += 1
     bloemen = ["minecraft:short_grass"] * 10 + ["minecraft:pink_tulip", "minecraft:allium", "minecraft:oxeye_daisy",
@@ -862,8 +865,10 @@ def paden_verlichten(I, straal=LICHT_STRAAL):
     return gezet
 
 
-def bouw(S):
-    """Hele Knuffelkamp in Scene S (minstens KAMP_MAAT). Geeft het Eiland-object terug."""
+def bouw(S, ambacht=True):
+    """Hele Knuffelkamp in Scene S (minstens KAMP_MAAT). Geeft het Eiland-object terug.
+    ambacht = False: the camp as it was up to 1.10.3 (without the Ambachtseiland path), the reference for the tile/live patch."""
+    rng.seed(110)          # 1.10.4: a second build in the same process gives the same camp (the module rng starts at 110)
     I = eiland(S)
     # gebouwplekken eerst vlak maken, dan pas de blokken zetten
     I.vlak(KAMP[0] - 34, KAMP[1] - 40, KAMP[0] + 34, KAMP[1] + 32, VLOER, 8)
@@ -933,7 +938,98 @@ def bouw(S):
     guhballon(S, 300, 64, 70)
     paden_verlichten(I)   # U-DECO
     bomen_en_bloemen(I)
+    if ambacht:
+        ambachtpad(I)     # 1.10.4: LAST, with its own rng, so every other tree/flower of the camp stays where it was
     return I
+
+
+# ------------------------------------------------------------------------------------- 1.10.4: path to the Ambachtseiland
+# Straight from the west rim of the campfire square (between the two west tents) to the camp end of the Ambachtseiland
+# bridge (ambachtseiland.BRUG_Z = world z 1024 = scene z 159; the deck ends at scene x 58 = world x -476).
+AMBACHTPAD = [(137, 159), (59, 159)]
+AMBACHTPAD_LAMPEN = (132, 116, 108, 100, 92, 84, 76, 68)        # lamp posts, alternating sides (3 from the centre line)
+AMBACHTPAD_BORDEN = ((136, 162), (63, 162))                     # direction signs on the south side, facing north (the path): "→" = west
+AMBACHTPAD_BOOMVRIJ = 3                                         # no crown within this many blocks of the path's edge
+BORD_AMBACHT = ["Naar het", "Ambachtseiland", "→", ""]        # sign text (Dutch fallback; lang vadsrijk.z1.bord.ambacht.N)
+BORD_AMBACHT_SLEUTEL = "vadsrijk.z1.bord.ambacht"
+
+
+def _afstand(px, pz, pts):
+    best = 1e9
+    for (x1, z1), (x2, z2) in zip(pts, pts[1:]):
+        dx, dz = x2 - x1, z2 - z1
+        t = max(0.0, min(1.0, ((px - x1) * dx + (pz - z1) * dz) / float(dx * dx + dz * dz)))
+        best = min(best, math.hypot(px - (x1 + t * dx), pz - (z1 + t * dz)))
+    return best
+
+
+def ambachtpad(I):
+    """1.10.4 (user request): a clear path from the campfire square to the Ambachtseiland bridge: 3 wide (dirt path with
+    knuffelklinkers and a little gravel), a flush stone-brick edge, lamp posts every 8 blocks on alternating sides, a lamp
+    pair at the bridge head and two direction signs. Every tree whose trunk or crown comes within AMBACHTPAD_BOOMVRIJ of the
+    path's edge is taken out (and the crowns of the trees around it are made whole again). Own rng: nothing else moves."""
+    S = I.S
+    r = random.Random(1104)
+    pts = AMBACHTPAD
+    weg = [b for b in I.bomen if _afstand(b[0], b[2], pts) <= 2.5 + AMBACHTPAD_BOOMVRIJ + b[5]]
+    blijf = [b for b in I.bomen if b not in weg]
+    for (x, y, z, soort, h, rr) in weg:
+        log, leaves = soort
+        for k in range(1, h + 1):
+            if S.get(x, y + k, z) == log:
+                S.set(x, y + k, z, "minecraft:air")
+        cy = y + h + 1
+        for xx in range(int(x - rr - 1), int(x + rr + 2)):
+            for yy in range(int(cy - rr * 0.75 - 1), int(cy + rr * 0.75 + 2)):
+                for zz in range(int(z - rr - 1), int(z + rr + 2)):
+                    if ((xx - x) / rr) ** 2 + ((yy - cy) / (rr * 0.75)) ** 2 + ((zz - z) / rr) ** 2 <= 1 and S.get(xx, yy, zz) == leaves:
+                        S.set(xx, yy, zz, "minecraft:air")
+    for (x, y, z, soort, h, rr) in blijf:                 # a neighbour's crown that shared leaves with a removed tree
+        if any(math.hypot(x - b[0], z - b[2]) < rr + b[5] + 1 for b in weg):
+            boom(S, x, y, z, soort, h=h, r=rr)
+    I.bomen = blijf
+    I.ambacht_weg = weg
+    kern, rand = set(), set()
+    for x in range(min(p[0] for p in pts) - 3, max(p[0] for p in pts) + 4):
+        for z in range(min(p[1] for p in pts) - 3, max(p[1] for p in pts) + 4):
+            d = _afstand(x, z, pts)
+            if d <= 1.5:
+                kern.add((x, z))
+            elif d <= 2.5:
+                rand.add((x, z))
+
+    def plant(b):
+        return b == "minecraft:air" or any(t in b for t in ("grass", "fern", "tulip", "allium", "daisy", "cornflower", "bluet",
+                                                             "guhbloem", "guhoortjes", "poppy", "dandelion", "_leaves"))
+    for (x, z) in sorted(kern):
+        if 0 <= x < I.X and 0 <= z < I.Z and I.H[x, z] >= 0 and S.get(x, I.h(x, z), z) == GRAS:
+            q = r.random()
+            top(I, x, z, "minecraft:gravel" if q < 0.1 else KLINKER if q < 0.38 else PAD)
+            for k in (1, 2, 3):
+                if plant(S.get(x, I.h(x, z) + k, z)):
+                    S.set(x, I.h(x, z) + k, z, "minecraft:air")
+    for (x, z) in sorted(rand):
+        if 0 <= x < I.X and 0 <= z < I.Z and I.H[x, z] >= 0 and S.get(x, I.h(x, z), z) == GRAS:
+            top(I, x, z, "minecraft:stone_bricks" if r.random() < 0.6 else "minecraft:mossy_stone_bricks")
+            if plant(S.get(x, I.h(x, z) + 1, z)):
+                S.set(x, I.h(x, z) + 1, z, "minecraft:air")
+    (x1, z1), (x2, z2) = pts[0], pts[-1]
+    lampen = [(x, z1 + (3 if i % 2 else -3)) for i, x in enumerate(AMBACHTPAD_LAMPEN)] + [(x2, z2 - 3), (x2, z2 + 3)]
+    I.ambacht_lampen = []
+    for (lx, lz) in lampen:
+        if I.H[lx, lz] >= 0 and S.get(lx, I.h(lx, lz), lz) == GRAS and all(plant(S.get(lx, I.h(lx, lz) + k, lz)) for k in (1, 2, 3)):
+            S.set(lx, I.h(lx, lz) + 1, lz, LAMP_O)
+            S.set(lx, I.h(lx, lz) + 2, lz, LAMP_B)
+            S.set(lx, I.h(lx, lz) + 3, lz, "minecraft:air")
+            I.ambacht_lampen.append((lx, lz))
+    I.ambacht_borden = []
+    for (bx, bz) in AMBACHTPAD_BORDEN:
+        if I.H[bx, bz] >= 0 and all(plant(S.get(bx, I.h(bx, bz) + k, bz)) for k in (1, 2)):
+            S.set(bx, I.h(bx, bz) + 1, bz, "minecraft:cherry_sign[rotation=8,waterlogged=false]")
+            S.set(bx, I.h(bx, bz) + 2, bz, "minecraft:air")
+            I.ambacht_borden.append((bx, I.h(bx, bz) + 1, bz))
+    for (x, z) in list(kern) + list(rand):
+        I.claim(x, z, x, z, 1)
 
 
 def sokkel(N, y_bodem):

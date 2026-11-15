@@ -982,6 +982,18 @@
       "stad": false
     },
     {
+      "id": "ambachtseiland",
+      "doos": [
+        -704,
+        940,
+        -513,
+        1110
+      ],
+      "min_lv": 1,
+      "max_lv": 3,
+      "stad": true
+    },
+    {
       "id": "knuffelkamp",
       "doos": [
         -512,

@@ -10,6 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
@@ -134,6 +135,9 @@ public class VadsrijkPatchGameTests {
             if (g.id().equals("bondenvallei")) {
                 continue;   // the guild valley: stamped at runtime, its own gate back to Hoogvads
             }
+            if (g.id().equals("ambachtseiland")) {
+                continue;   // 1.10.4: the craft islet hangs on Knuffelkamp by its bridge; the camp's portal (~90 blocks) serves it
+            }
             boolean deel = steden.stream().anyMatch(o -> o != g && o.minX() <= g.minX() && o.maxX() >= g.maxX() && o.minZ() <= g.minZ() && o.maxZ() >= g.maxZ());
             if (deel) {
                 continue;   // a district (z5_marktlaan in z5_hoogvads): the town's portal serves it
@@ -219,5 +223,177 @@ public class VadsrijkPatchGameTests {
                 }
             }
         });
+    }
+
+    // ---- 1.10.4: stamp patches (WereldStempel) ------------------------------------------------------------------------------------
+
+    private static WereldStempel.Stempel stempel(ServerLevel l, List<BlockPos> plekken, List<BlockState> oud, List<BlockState> nieuw,
+                                                 java.util.Map<Long, net.minecraft.nbt.CompoundTag> nbt, WereldStempel.Beleid b) {
+        List<BlockState> palet = new ArrayList<>();
+        int[] pos = new int[plekken.size() * 3], o = new int[plekken.size()], n = new int[plekken.size()];
+        for (int i = 0; i < plekken.size(); i++) {
+            pos[3 * i] = plekken.get(i).getX();
+            pos[3 * i + 1] = plekken.get(i).getY();
+            pos[3 * i + 2] = plekken.get(i).getZ();
+            if (!palet.contains(oud.get(i))) {
+                palet.add(oud.get(i));
+            }
+            if (!palet.contains(nieuw.get(i))) {
+                palet.add(nieuw.get(i));
+            }
+            o[i] = palet.indexOf(oud.get(i));
+            n[i] = palet.indexOf(nieuw.get(i));
+        }
+        return new WereldStempel.Stempel("test", l.dimension(), "test", b, null, List.copyOf(palet), pos, o, n, nbt);
+    }
+
+    /**
+     * A small stamp: dry run counts, --echt places over the generated block / air / water but never over a player block or a block
+     * entity, writes the backup first, loads a sign text, never generates a chunk (a cell in an unknown chunk is reported), runs
+     * in steps (2 cells per tick) and herstel undoes it.
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 200)
+    public static void stempelProefEchtHerstel(GameTestHelper helper) throws Exception {
+        ServerLevel l = helper.getLevel();
+        BlockPos m = new BlockPos(57016, 120, 57016);
+        l.getChunk(m);
+        for (BlockPos b : BlockPos.betweenClosed(m.offset(-1, -1, -1), m.offset(7, 2, 1))) {
+            l.setBlock(b, Blocks.AIR.defaultBlockState(), 2 | 16);
+        }
+        WereldStempel.Stempel echtPad = WereldStempel.laad("kamp_pad").orElseThrow();
+        var bordNbt = echtPad.nbt().values().iterator().next();
+        BlockState bord = Blocks.CHERRY_SIGN.defaultBlockState();
+        BlockState lucht = Blocks.AIR.defaultBlockState(), water = Blocks.WATER.defaultBlockState(), steen = Blocks.STONE.defaultBlockState();
+        BlockPos a = m, w = m.offset(1, 0, 0), speler = m.offset(2, 0, 0), sign = m.offset(3, 0, 0), kist = m.offset(4, 0, 0), goed = m.offset(5, 0, 0);
+        BlockPos ver = new BlockPos(9_000_016, 120, 9_000_016);       // a chunk that was never generated
+        l.setBlock(w, water, 2 | 16);
+        l.setBlock(speler, Blocks.OAK_PLANKS.defaultBlockState(), 2 | 16);
+        l.setBlock(kist, Blocks.CHEST.defaultBlockState(), 2 | 16);
+        l.setBlock(goed, steen, 2 | 16);
+        WereldStempel.Stempel s = stempel(l, List.of(a, w, speler, sign, kist, goed, ver), List.of(lucht, water, lucht, lucht, lucht, lucht, lucht),
+                List.of(steen, Blocks.CALCITE.defaultBlockState(), steen, bord, steen, steen, steen), java.util.Map.of(sign.asLong(), bordNbt),
+                WereldStempel.Beleid.ZEE);
+        helper.assertTrue(!l.hasChunk(ver.getX() >> 4, ver.getZ() >> 4), "the far chunk is not loaded");
+
+        WereldStempel.Uitslag proef = WereldStempel.toepassen(l, s, false);
+        helper.assertTrue(proef.fout() == null && proef.backup() == null, "dry run: " + proef.fout());
+        helper.assertTrue(proef.plaatsen() == 3 && proef.alGoed() == 1 && proef.bezet() == 2 && proef.nietGegenereerd() == 1 && proef.chunksNietGegenereerd() == 1,
+                "dry run place/ok/occupied/not generated = " + proef.plaatsen() + "/" + proef.alGoed() + "/" + proef.bezet() + "/" + proef.nietGegenereerd()
+                        + " (want 3/1/2/1)");
+        helper.assertTrue(l.getBlockState(a).isAir() && l.getBlockState(w).is(Blocks.WATER), "the dry run changed nothing");
+
+        // --echt in steps of 2 cells per tick
+        WereldStempel.Klus k = new WereldStempel.Klus(l, s, true, null, 2);
+        int stappen = 0;
+        while (!k.stap()) {
+            stappen++;
+        }
+        WereldStempel.Uitslag echt = k.uitslag();
+        try {
+            helper.assertTrue(stappen >= 2, "it ran in steps: " + stappen);
+            helper.assertTrue(echt.fout() == null && echt.backup() != null && echt.plaatsen() == 3, "echt: " + echt.fout() + " " + echt.plaatsen());
+            helper.assertTrue(Files.isRegularFile(WereldPatch.map(l.getServer()).resolve(echt.backup())), "backup file " + echt.backup());
+            helper.assertTrue(l.getBlockState(a).is(Blocks.STONE) && l.getBlockState(w).is(Blocks.CALCITE) && l.getBlockState(sign).is(Blocks.CHERRY_SIGN),
+                    "placed over air, water and air");
+            helper.assertTrue(l.getBlockState(speler).is(Blocks.OAK_PLANKS), "the player planks stay");
+            helper.assertTrue(l.getBlockState(kist).is(Blocks.CHEST) && l.getBlockEntity(kist) != null, "the chest (a block entity) stays");
+            helper.assertTrue(l.getBlockEntity(sign) instanceof net.minecraft.world.level.block.entity.SignBlockEntity be && be.isWaxed()
+                    && !be.getFrontText().getMessage(1, false).getString().isEmpty(), "the sign got its text");
+            helper.assertTrue(!l.hasChunk(ver.getX() >> 4, ver.getZ() >> 4), "no chunk was generated");
+            // herstel: back to air / water
+            WereldPatch.Herstel h = WereldPatch.herstel(l.getServer(), echt.backup());
+            helper.assertTrue(h.fout() == null && h.teruggezet() == 3 && h.overgeslagen() == 0, "herstel " + h.fout() + " " + h.teruggezet() + "/" + h.overgeslagen());
+            helper.assertTrue(l.getBlockState(a).isAir() && l.getBlockState(w).is(Blocks.WATER) && l.getBlockState(sign).isAir(), "the old blocks are back");
+            helper.assertTrue(l.getBlockState(goed).is(Blocks.STONE) && l.getBlockState(kist).is(Blocks.CHEST), "untouched cells stay");
+        } finally {
+            if (echt.backup() != null) {
+                Files.deleteIfExists(WereldPatch.map(l.getServer()).resolve(echt.backup()));
+            }
+        }
+        helper.succeed();
+    }
+
+    /** The two shipped stamps load, sit where they belong and never replace a block entity. */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 100)
+    public static void ambachtStempelsLaden(GameTestHelper helper) {
+        WereldStempel.Stempel eiland = WereldStempel.laad("ambachtseiland").orElse(null);
+        WereldStempel.Stempel pad = WereldStempel.laad("kamp_pad").orElse(null);
+        helper.assertTrue(eiland != null && pad != null, "both stamps load");
+        helper.assertTrue(WereldPatch.laad("ambachtseiland").isEmpty() && WereldPatch.NAMEN.containsAll(WereldPatch.STEMPELS), "stamps are registered, not boxes");
+        helper.assertTrue(eiland.dim().equals(Vadsrijk.DIM) && pad.dim().equals(Vadsrijk.DIM), "in the Vadsrijk");
+        helper.assertTrue(eiland.cellen() > 50_000 && eiland.cellen() > WereldPatch.MAX_CELLEN, "the islet is a big stamp: " + eiland.cellen());
+        helper.assertTrue(eiland.beleid() == WereldStempel.Beleid.ZEE && pad.beleid() == WereldStempel.Beleid.KAMP_PAD, "policies");
+        for (int i = 0; i < eiland.cellen(); i++) {
+            BlockPos b = eiland.plek(i);
+            helper.assertTrue(b.getX() >= -704 && b.getX() <= -476 && b.getZ() >= 940 && b.getZ() <= 1110, "islet cell outside its box: " + b.toShortString());
+            helper.assertTrue(!eiland.oud(i).hasBlockEntity(), "the islet replaces no block entity: " + eiland.oud(i));
+        }
+        int borden = 0;
+        for (int i = 0; i < pad.cellen(); i++) {
+            BlockPos b = pad.plek(i);
+            helper.assertTrue(b.getX() > -476 && b.getX() <= -380 && Math.abs(b.getZ() - 1024) <= 12, "path cell outside its corridor: " + b.toShortString());
+            helper.assertTrue(!pad.oud(i).hasBlockEntity(), "the path replaces no block entity: " + pad.oud(i));
+            if (pad.nieuw(i).is(BlockTags.STANDING_SIGNS)) {
+                borden++;
+                helper.assertTrue(pad.nbt().containsKey(b.asLong()), "a sign with text at " + b.toShortString());
+            }
+        }
+        helper.assertTrue(borden == 2, "two direction signs: " + borden);
+        helper.succeed();
+    }
+
+    /**
+     * The real kamp_pad stamp, moved into the test world over its generated states: a chest and a barrel put on the path and planks
+     * where a tree trunk stood stay; everything else becomes the path; herstel brings the trees back.
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 300)
+    public static void kampPadRaaktGeenBlokEntiteiten(GameTestHelper helper) throws Exception {
+        ServerLevel l = helper.getLevel();
+        WereldStempel.Stempel echtPad = WereldStempel.laad("kamp_pad").orElseThrow();
+        BlockPos lo = new BlockPos(-476, 80, 1010);
+        BlockPos d = new BlockPos(58016, 40, 58016).subtract(lo);
+        WereldStempel.Stempel s = echtPad.verschoven(d, l.dimension());
+        for (int i = 0; i < s.cellen(); i++) {
+            l.getChunk(s.plek(i));
+            l.setBlock(s.plek(i), s.oud(i), 2 | 16);
+        }
+        // a chest on a path cell, a barrel on an edge cell, and planks in a trunk cell
+        int kistI = -1, tonI = -1, plankI = -1;
+        for (int i = 0; i < s.cellen(); i++) {
+            if (kistI < 0 && s.nieuw(i).is(Blocks.DIRT_PATH)) {
+                kistI = i;
+            } else if (tonI < 0 && s.nieuw(i).is(Blocks.STONE_BRICKS)) {
+                tonI = i;
+            } else if (plankI < 0 && s.oud(i).is(BlockTags.LOGS)) {
+                plankI = i;
+            }
+        }
+        helper.assertTrue(kistI >= 0 && tonI >= 0 && plankI >= 0, "path, edge and trunk cells exist");
+        l.setBlock(s.plek(kistI), Blocks.CHEST.defaultBlockState(), 2 | 16);
+        l.setBlock(s.plek(tonI), Blocks.BARREL.defaultBlockState(), 2 | 16);
+        l.setBlock(s.plek(plankI), Blocks.OAK_PLANKS.defaultBlockState(), 2 | 16);
+        WereldStempel.Uitslag u = WereldStempel.toepassen(l, s, true);
+        try {
+            helper.assertTrue(u.fout() == null && u.bezet() == 3 && u.plaatsen() == s.cellen() - 3 && u.nietGegenereerd() == 0,
+                    "all but 3 placed: " + u.fout() + " " + u.plaatsen() + "/" + s.cellen() + ", bezet " + u.bezet());
+            helper.assertTrue(l.getBlockState(s.plek(kistI)).is(Blocks.CHEST) && l.getBlockEntity(s.plek(kistI)) != null, "the chest stays");
+            helper.assertTrue(l.getBlockState(s.plek(tonI)).is(Blocks.BARREL) && l.getBlockEntity(s.plek(tonI)) != null, "the barrel stays");
+            helper.assertTrue(l.getBlockState(s.plek(plankI)).is(Blocks.OAK_PLANKS), "the planks stay");
+            int fout = 0;
+            for (int i = 0; i < s.cellen(); i++) {
+                if (i != kistI && i != tonI && i != plankI && l.getBlockState(s.plek(i)) != s.nieuw(i)) {
+                    fout++;
+                }
+            }
+            helper.assertTrue(fout == 0, fout + " cells are not the path");
+            WereldPatch.Herstel h = WereldPatch.herstel(l.getServer(), u.backup());
+            helper.assertTrue(h.fout() == null && h.teruggezet() == s.cellen() - 3, "herstel " + h.fout() + " " + h.teruggezet());
+            helper.assertTrue(l.getBlockState(s.plek(kistI)).is(Blocks.CHEST), "the chest is still there after herstel");
+        } finally {
+            if (u.backup() != null) {
+                Files.deleteIfExists(WereldPatch.map(l.getServer()).resolve(u.backup()));
+            }
+        }
+        helper.succeed();
     }
 }

@@ -45,6 +45,9 @@ final class PatchCommando {
 
     private static int patch(CommandContext<CommandSourceStack> c, String naam, boolean echt) {
         CommandSourceStack src = c.getSource();
+        if (WereldStempel.isStempel(naam)) {
+            return stempel(src, naam, echt);
+        }
         Optional<WereldPatch.Patch> op = WereldPatch.laad(naam);
         if (op.isEmpty()) {
             src.sendFailure(Component.literal("Patch " + naam + " is niet te laden (zie de log)."));
@@ -95,7 +98,52 @@ final class PatchCommando {
         return Math.max(1, t);
     }
 
+    /** 1.10.4: a stamp patch runs over several ticks; the counts come when it is done (dry run: scan only). */
+    private static int stempel(CommandSourceStack src, String naam, boolean echt) {
+        Optional<WereldStempel.Stempel> op = WereldStempel.laad(naam);
+        if (op.isEmpty()) {
+            src.sendFailure(Component.literal("Stempel " + naam + " is niet te laden (zie de log)."));
+            return 0;
+        }
+        if (WereldStempel.bezig(naam)) {
+            src.sendFailure(Component.literal("Stempel " + naam + " loopt al."));
+            return 0;
+        }
+        WereldStempel.Stempel s = op.get();
+        ServerLevel level = src.getServer().getLevel(s.dim());
+        if (level == null) {
+            src.sendFailure(Component.literal("Dimensie " + s.dim().identifier() + " bestaat niet."));
+            return 0;
+        }
+        src.sendSuccess(() -> Component.literal((echt ? "Stempel " : "Proefrun stempel ") + naam + " (" + s.beschrijving() + "), " + s.dim().identifier()
+                + ": " + s.cellen() + " cellen, beleid " + s.beleid().name().toLowerCase(java.util.Locale.ROOT) + ". Bezig..."), false);
+        WereldStempel.start(new WereldStempel.Klus(level, s, echt, src, WereldStempel.PER_TICK), u -> {
+            if (u.fout() != null) {
+                src.sendFailure(Component.literal("Stempel " + naam + " niet (helemaal) uitgevoerd: " + u.fout()));
+                return;
+            }
+            String niet = u.nietGegenereerd() == 0 ? "" : ", nog niet gegenereerd " + u.nietGegenereerd() + " (" + u.chunksNietGegenereerd()
+                    + " chunks: die krijgen het vanzelf uit de nieuwe tegels)";
+            String tel = (echt ? "geplaatst " : "zou plaatsen ") + u.plaatsen() + ", al goed " + u.alGoed() + ", bezet (blijft) " + u.bezet() + niet;
+            String slot = echt
+                    ? (u.backup() == null ? "Niets veranderd (" + tel + ")."
+                            : "Stempel " + naam + " klaar: " + tel + ". Ongedaan maken: /guhs vadsrijk patch herstel " + u.backup())
+                    : "Proefrun stempel " + naam + ": " + tel + ". Echt doen: /guhs vadsrijk patch " + naam + " --echt";
+            src.sendSuccess(() -> Component.literal(slot), echt);
+        });
+        return Math.max(1, s.cellen());
+    }
+
     private static int herstel(CommandContext<CommandSourceStack> c, String bestand) {
+        if (WereldStempel.backupGrootte(c.getSource().getServer(), bestand) > WereldStempel.PER_TICK) {   // 1.10.4: a stamp's backup: in steps
+            String fout = WereldStempel.herstelInStappen(c.getSource().getServer(), bestand, c.getSource());
+            if (fout != null) {
+                c.getSource().sendFailure(Component.literal("Herstel niet gelukt: " + fout));
+                return 0;
+            }
+            c.getSource().sendSuccess(() -> Component.literal("Herstel uit " + bestand + " loopt (in stappen)..."), false);
+            return 1;
+        }
         WereldPatch.Herstel h = WereldPatch.herstel(c.getSource().getServer(), bestand);
         if (h.fout() != null) {
             c.getSource().sendFailure(Component.literal("Herstel niet gelukt: " + h.fout()));

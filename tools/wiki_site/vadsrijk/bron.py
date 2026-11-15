@@ -18,7 +18,7 @@ import re
 ZONES = [
     # id, voltooiing key, ring area, hub area, quest file, quest prefix, level range, colour
     dict(id="zone1", nr=1, boek="zone1", ring="ring", hub="zwamzoet", quests="quests.json", lv=(1, 20), kleur="#e0559a",
-         extra_gebieden=("knuffelkamp", "haven", "zwamzoet", "klodderweide", "sporenwoud", "druipgrotten", "zwamtempel")),
+         extra_gebieden=("knuffelkamp", "ambachtseiland", "haven", "zwamzoet", "klodderweide", "sporenwoud", "druipgrotten", "zwamtempel")),
     dict(id="zone2", nr=2, boek="zone2", ring="z2_ring", hub="z2_kandijkom", quests="quests_z2.json", lv=(20, 30), kleur="#5aa9e6",
          extra_gebieden=()),
     dict(id="zone3", nr=3, boek="zone3", ring="z3_ring", hub="z3_honingtak", quests="quests_z3.json", lv=(30, 50), kleur="#e8a33a",
