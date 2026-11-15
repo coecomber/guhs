@@ -1,0 +1,40 @@
+{
+  "variants": {
+    "tier=1,vol=true": {
+      "model": "minecraft:block/flowering_azalea"
+    },
+    "tier=1,vol=false": {
+      "model": "minecraft:block/azalea"
+    },
+    "tier=2,vol=true": {
+      "model": "minecraft:block/sweet_berry_bush_stage3"
+    },
+    "tier=2,vol=false": {
+      "model": "minecraft:block/sweet_berry_bush_stage1"
+    },
+    "tier=3,vol=true": {
+      "model": "minecraft:block/firefly_bush"
+    },
+    "tier=3,vol=false": {
+      "model": "minecraft:block/dead_bush"
+    },
+    "tier=4,vol=true": {
+      "model": "minecraft:block/torchflower"
+    },
+    "tier=4,vol=false": {
+      "model": "minecraft:block/torchflower_crop_stage1"
+    },
+    "tier=5,vol=true": {
+      "model": "minecraft:block/lily_of_the_valley"
+    },
+    "tier=5,vol=false": {
+      "model": "minecraft:block/dead_bush"
+    },
+    "tier=6,vol=true": {
+      "model": "minecraft:block/lily_of_the_valley"
+    },
+    "tier=6,vol=false": {
+      "model": "minecraft:block/dead_bush"
+    }
+  }
+}

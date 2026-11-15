@@ -47756,5 +47756,11 @@
   "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Haal het hoogste niveau in verzamelen.",
   "vadsrijk.kern.xp_rem": "+%s xp (te laag level)",
   "vadsrijk.grotkerker.volg.over": "Nog %s over",
-  "vadsrijk.grotkerker.volg.waar": "De laatste wezens lichten op, ook door muren heen."
+  "vadsrijk.grotkerker.volg.waar": "De laatste wezens lichten op, ook door muren heen.",
+  "block.guhs.vr_grondstof_erts": "Ertsader",
+  "block.guhs.vr_grondstof_hout": "Hakstronk",
+  "block.guhs.vr_grondstof_kruid": "Kruidenstruik",
+  "block.guhs.vr_grondstof_vis": "Visplek",
+  "block.guhs.vr_grondstof_duik": "Koraalplek",
+  "vadsrijk.ambacht.hud.leeg": "%s · leeg, komt zo weer terug"
 }

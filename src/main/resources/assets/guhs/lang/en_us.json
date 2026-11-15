@@ -47756,5 +47756,11 @@
   "gui.guhs.titels.hint.vr_amb_verzamelen_meester": "Reach the highest level in Gathering.",
   "vadsrijk.kern.xp_rem": "+%s xp (level too low)",
   "vadsrijk.grotkerker.volg.over": "%s left",
-  "vadsrijk.grotkerker.volg.waar": "The last creatures glow, even through walls."
+  "vadsrijk.grotkerker.volg.waar": "The last creatures glow, even through walls.",
+  "block.guhs.vr_grondstof_erts": "Ore vein",
+  "block.guhs.vr_grondstof_hout": "Chopping stump",
+  "block.guhs.vr_grondstof_kruid": "Herb bush",
+  "block.guhs.vr_grondstof_vis": "Fishing spot",
+  "block.guhs.vr_grondstof_duik": "Coral spot",
+  "vadsrijk.ambacht.hud.leeg": "%s · empty, back soon"
 }

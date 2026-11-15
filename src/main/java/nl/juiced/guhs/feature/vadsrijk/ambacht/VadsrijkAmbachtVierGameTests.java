@@ -140,7 +140,7 @@ public class VadsrijkAmbachtVierGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         AmbachtData.reset(p);
         Verzamelen.vergeet(p.getUUID());
-        Spot t2 = VadsrijkAmbachtGameTests.testSpot(helper, NodeSoort.ERTS, 2);
+        Spot t2 = VadsrijkAmbachtGameTests.testSpot(helper, NodeSoort.ERTS, 2, "t_erts_t2");
         AmbachtData.zetLevel(p, Ambacht.VERZAMELEN, 11);
         helper.assertTrue(Verzamelen.doeOogst(p, sl, t2, 0).equals("vadsrijk.ambacht.oogst.te_laag"), "T2 ore at 11: too low");
         AmbachtData.zetLevel(p, Ambacht.VERZAMELEN, 12);
@@ -335,9 +335,10 @@ public class VadsrijkAmbachtVierGameTests {
             Verzamelen.vergeet(p.getUUID());
             Spot s = new Spot("t_eiland_erts_0", g, List.of(helper.absolutePos(new net.minecraft.core.BlockPos(2, 2, 2)),
                     helper.absolutePos(new net.minecraft.core.BlockPos(4, 2, 4))), List.of());
+            Grondstoffen.get(sl.getServer()).wis(s.id());
             long nu = sl.getGameTime();
             helper.assertTrue(Verzamelen.doeOogst(p, sl, s, 0).isEmpty(), "harvest");
-            long klaar = Verzamelen.staat(p, s).klaar - nu;
+            long klaar = Grondstoffen.get(sl.getServer()).node(s).klaar() - nu;   // (1.10.4: the shared node's timer)
             helper.assertTrue(klaar >= 20L * 20 && klaar <= 20L * 30, "empty 20-30 s: " + klaar + " ticks");
         } finally {
             AmbachtPlekken.GROEPEN.remove(g);

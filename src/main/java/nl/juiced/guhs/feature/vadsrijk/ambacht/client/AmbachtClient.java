@@ -1,5 +1,7 @@
 package nl.juiced.guhs.feature.vadsrijk.ambacht.client;
 
+import javax.annotation.Nullable;
+
 import org.lwjgl.glfw.GLFW;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -15,6 +17,8 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
@@ -27,6 +31,7 @@ import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.common.NeoForge;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
+import nl.juiced.guhs.feature.vadsrijk.ambacht.GrondstofBlok;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPayloads;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtXp;
@@ -36,9 +41,10 @@ import nl.juiced.guhs.feature.vadsrijk.kern.client.KernClient;
 
 /**
  * The Ambachten on the client: the book key {@link #BOEK} (default Y, Vadsrijk category; taken were R V G Z C U K J X N P B),
- * the screens, drawing your own spots ({@link PlekTekenaar}), clicking them (right-click: the {@link Minigame}; sneak + right-click:
- * harvest without it), the glitter of rare spots and your bees flying to their flowers, and the small HUD (food buff, rest, what
- * you look at).
+ * the screens, clicking a gathering spot (right-click: the {@link Minigame}; sneak + right-click: harvest without it), the soft
+ * glitter of full spots in the craft colour (1.10.4: dimmer and rarer when your level is too low; rare spots golden), your bees
+ * flying to their flowers, and the small HUD (food buff, rest, what you look at). 1.10.4: the spots are real shared blocks
+ * ({@link GrondstofBlok}), clicked through the normal block target; only the hive stands are still drawn ({@link PlekTekenaar}).
  */
 public final class AmbachtClient {
     public static final KeyMapping BOEK = new KeyMapping("key.guhs.vr_ambachten", InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_Y, KernClient.CATEGORIE);
@@ -91,7 +97,27 @@ public final class AmbachtClient {
         return mc.player != null && Vadsrijk.in(mc.player) && mc.screen == null;
     }
 
-    /** Right-click on one of your spots: the minigame (or a tap in it). */
+    /** True: the crosshair is on a gathering node block. */
+    private static boolean opNode() {
+        Minecraft mc = Minecraft.getInstance();
+        return mc.level != null && mc.hitResult instanceof BlockHitResult bh && bh.getType() == HitResult.Type.BLOCK
+                && mc.level.getBlockState(bh.getBlockPos()).getBlock() instanceof GrondstofBlok;
+    }
+
+    /** The spot you look at: the node block under the crosshair (1.10.4), else a drawn hive stand. */
+    @Nullable
+    static Plek doel(float pt) {
+        Minecraft mc = Minecraft.getInstance();
+        if (opNode() && mc.hitResult instanceof BlockHitResult bh) {
+            Plek p = ClientPlekken.opBlok(bh.getBlockPos());
+            if (p != null) {
+                return p;
+            }
+        }
+        return ClientPlekken.bekeken(pt);
+    }
+
+    /** Right-click on a spot: the minigame (or a tap in it). */
     private static void klik(InputEvent.InteractionKeyMappingTriggered e) {
         if (!hier() || !e.isUseItem()) {
             return;
@@ -104,12 +130,20 @@ public final class AmbachtClient {
             }
             return;
         }
-        Plek p = ClientPlekken.bekeken(1f);
+        Plek p = doel(1f);
         if (p == null) {
+            if (opNode()) {   // (a node the last sync did not mention yet: nothing to do, nothing else may happen)
+                e.setCanceled(true);
+                e.setSwingHand(false);
+            }
             return;
         }
         e.setCanceled(true);
         e.setSwingHand(true);
+        if (p.echt() && p.leeg()) {
+            mc.gui.setOverlayMessage(Component.translatable("vadsrijk.ambacht.oogst.leeg"), false);
+            return;
+        }
         if (!p.lvOk()) {
             mc.gui.setOverlayMessage(Component.translatable("vadsrijk.ambacht.oogst.te_laag", Component.translatable(p.ambacht().naamKey()),
                     p.nodig()), false);
@@ -139,14 +173,25 @@ public final class AmbachtClient {
         long t = mc.level.getGameTime();
         for (Plek p : ClientPlekken.PLEKKEN) {
             BlockPos b = p.pos();
+            if (b.distSqr(pl.blockPosition()) > GLINSTER * GLINSTER) {
+                continue;
+            }
+            if (p.echt() && !p.leeg()) {
+                glinster(mc, p, t);
+            }
             if (b.distSqr(pl.blockPosition()) > 40 * 40) {
                 continue;
             }
             if (p.zeldzaam() && t % 4 == 0) {
-                mc.level.addParticle(ParticleTypes.END_ROD, b.getX() + R.nextDouble(), b.getY() + 0.3 + R.nextDouble() * 0.8, b.getZ() + R.nextDouble(), 0, 0.02, 0);
+                double y0 = p.soort() == NodeSoort.ERTS ? 1.0 : 0.3;
+                mc.level.addParticle(ParticleTypes.END_ROD, true, false, b.getX() + R.nextDouble(), b.getY() + y0 + R.nextDouble() * 0.8, b.getZ() + R.nextDouble(),
+                        0, 0.02, 0);
             }
             if (p.soort() == NodeSoort.VIS && !p.leeg() && t % 10 == 0) {
                 mc.level.addParticle(ParticleTypes.BUBBLE_POP, b.getX() + 0.2 + R.nextDouble() * 0.6, b.getY() + 0.95, b.getZ() + 0.2 + R.nextDouble() * 0.6, 0, 0.02, 0);
+            }
+            if (p.soort() == NodeSoort.DUIK && !p.leeg() && t % 8 == 0) {
+                mc.level.addParticle(ParticleTypes.BUBBLE, b.getX() + 0.3 + R.nextDouble() * 0.4, b.getY() + 0.5, b.getZ() + 0.3 + R.nextDouble() * 0.4, 0, 0.08, 0);
             }
             if (p.soort() == NodeSoort.KORF && p.eigen() && !p.bloemen().isEmpty() && t % 6 == 0) {
                 // a bee flying from the hive to a flower (or back with nectar)
@@ -159,6 +204,46 @@ public final class AmbachtClient {
         }
     }
 
+    /** How far the glitter of a full spot shows (blocks). */
+    static final int GLINSTER = 48;
+
+    /**
+     * 1.10.4: the soft glitter of a full spot in its craft's colour ({@link Ambacht#kleur}, a little lighter): a mote every few
+     * ticks drifting up; when your level is too low for it, rarer, smaller and greyer; a rare spot adds gold.
+     */
+    private static void glinster(Minecraft mc, Plek p, long t) {
+        BlockPos b = p.pos();
+        int elke = p.lvOk() ? 6 : 30;
+        if ((t + (b.hashCode() & 63)) % elke != 0) {
+            return;
+        }
+        int k = licht(p.ambacht().kleur & 0xFFFFFF, 0.3);
+        if (!p.lvOk()) {
+            k = grijs(k);
+        }
+        double y = switch (p.soort()) {
+            case ERTS -> b.getY() + 1.05 + R.nextDouble() * 0.3;   // (above the vein in the floor)
+            case VIS -> b.getY() + 0.95 + R.nextDouble() * 0.3;
+            default -> b.getY() + 0.2 + R.nextDouble() * 0.9;
+        };
+        mc.level.addParticle(new DustParticleOptions(k, p.lvOk() ? 1.1f : 0.6f), true, false, b.getX() + 0.1 + R.nextDouble() * 0.8, y,
+                b.getZ() + 0.1 + R.nextDouble() * 0.8, 0, 0.02, 0);
+        if (p.zeldzaam()) {
+            mc.level.addParticle(new DustParticleOptions(0xFFD84A, 1.3f), true, false, b.getX() + R.nextDouble(), y + 0.2, b.getZ() + R.nextDouble(),
+                    0, 0.03, 0);
+        }
+    }
+
+    private static int licht(int rgb, double f) {
+        int r = rgb >> 16 & 0xFF, g = rgb >> 8 & 0xFF, b = rgb & 0xFF;
+        return (int) (r + (255 - r) * f) << 16 | (int) (g + (255 - g) * f) << 8 | (int) (b + (255 - b) * f);
+    }
+
+    private static int grijs(int rgb) {
+        int r = rgb >> 16 & 0xFF, g = rgb >> 8 & 0xFF, b = rgb & 0xFF, m = (r + g + b) / 3;
+        return (r + m) / 2 << 16 | (g + m) / 2 << 8 | (b + m) / 2;
+    }
+
     /** The HUD: the minigame bar, what you look at, the food buff and your rest. */
     private static void hud(GuiGraphicsExtractor g, DeltaTracker dt) {
         Minecraft mc = Minecraft.getInstance();
@@ -167,8 +252,11 @@ public final class AmbachtClient {
         }
         Minigame.teken(g, mc.font);
         if (!Minigame.bezig() && mc.screen == null) {
-            Plek p = ClientPlekken.bekeken(dt.getGameTimeDeltaPartialTick(false));
-            if (p != null) {
+            Plek p = doel(dt.getGameTimeDeltaPartialTick(false));
+            if (p != null && p.echt() && p.leeg()) {
+                g.centeredText(mc.font, Component.translatable("vadsrijk.ambacht.hud.leeg", Component.translatable(p.soort().naamKey())), g.guiWidth() / 2,
+                        g.guiHeight() / 2 + 14, 0xFFB8B8C8);
+            } else if (p != null) {
                 Component c = p.soort() == NodeSoort.KORF
                         ? Component.translatable(p.eigen() ? "vadsrijk.ambacht.hud.korf" : "vadsrijk.ambacht.hud.korf_vrij", p.raten(),
                                 Component.translatable("item.guhs.vr_amb_" + p.honing()))

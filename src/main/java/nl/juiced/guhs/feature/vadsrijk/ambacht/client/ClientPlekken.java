@@ -15,11 +15,15 @@ import nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtXp;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort;
 
-/** The client's copy of its own gathering spots (from the server's sync every second) + the HUD values. */
+/**
+ * The client's copy of the gathering spots near it (from the server's sync every second) + the HUD values. 1.10.4: the spots
+ * are real shared blocks ({@code echt}: {@code pos} = the node block, clicked through the normal block target, see {@link #opBlok});
+ * only the hive stands are still drawn by the client ({@link PlekTekenaar}) and hit through their own box ({@link #bekeken}).
+ */
 public final class ClientPlekken {
     /** One spot as the server sent it. */
     public record Plek(String id, BlockPos pos, NodeSoort soort, int tier, boolean leeg, boolean zeldzaam, boolean lvOk, boolean eigen, int raten,
-            List<BlockPos> bloemen, String honing, int nodig) {
+            List<BlockPos> bloemen, String honing, int nodig, boolean echt) {
         /** The ambacht that levels here (1.10.4: from the spot kind). */
         public Ambacht ambacht() {
             return soort.ambacht;
@@ -61,7 +65,7 @@ public final class ClientPlekken {
             int tier = e.getIntOr("tier", 1);
             l.add(new Plek(e.getStringOr("id", ""), BlockPos.of(e.getLongOr("pos", 0L)), a == null ? NodeSoort.ERTS : a, tier,
                     e.getBooleanOr("leeg", false), e.getBooleanOr("zeldzaam", false), e.getBooleanOr("lvOk", true), e.getBooleanOr("eigen", false),
-                    e.getIntOr("raten", 0), bl, e.getStringOr("honing", ""), e.getIntOr("nodig", AmbachtXp.tierLevel(tier))));
+                    e.getIntOr("raten", 0), bl, e.getStringOr("honing", ""), e.getIntOr("nodig", AmbachtXp.tierLevel(tier)), e.getBooleanOr("echt", false)));
         }
         PLEKKEN = List.copyOf(l);
         buff = d.getStringOr("buff", "");
@@ -76,7 +80,18 @@ public final class ClientPlekken {
         buff = "";
     }
 
-    /** The spot under the crosshair within reach (null: none). */
+    /** 1.10.4: the real spot whose node block is at {@code pos} (null: none known there). */
+    @Nullable
+    static Plek opBlok(BlockPos pos) {
+        for (Plek p : PLEKKEN) {
+            if (p.echt() && p.pos().equals(pos)) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /** The drawn spot (hive stand) under the crosshair within reach (null: none). */
     @Nullable
     static Plek bekeken(float pt) {
         Minecraft mc = Minecraft.getInstance();
@@ -88,7 +103,7 @@ public final class ClientPlekken {
         Plek beste = null;
         double bd = Double.MAX_VALUE;
         for (Plek p : PLEKKEN) {
-            if (p.leeg()) {
+            if (p.leeg() || p.echt()) {
                 continue;
             }
             var hit = p.doos().clip(oog, eind);
