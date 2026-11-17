@@ -399,6 +399,20 @@ public class MijnhuisjeGameTests {
         helper.succeed();
     }
 
+    /** 1.10.5: the ores and the natural ground of every dimension are in the tag (Samengeperste super vahoege vads was missing). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void mijnhuisjeMijnbaar(GameTestHelper helper) {
+        for (String id : new String[]{"guhs:compressed_super_vahoege_vads", "guhs:vahoegiet_erts", "guhs:kaaskorrelerts", "guhs:kristalkaas_erts",
+                "guhs:houtskoolsteen_kaasknabbelerts", "guhs:fossielmijn_zoutkristalerts", "guhs:parelmoer", "guhs:houtskoolsteen", "guhs:kaaskorst",
+                "minecraft:diamond_ore", "minecraft:deepslate_iron_ore", "minecraft:orange_terracotta", "minecraft:netherrack"}) {
+            Block b = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse(id));
+            helper.assertTrue(b != Blocks.AIR && b.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR), id + " is mijnbaar");
+        }
+        helper.assertTrue(!Blocks.OAK_LOG.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR) && !Blocks.BEDROCK.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR),
+                "no trees, no bedrock");
+        helper.succeed();
+    }
+
     /** The quest texts and the resources exist (names in both languages). */
     @GuhTest(template = "empty", batch = BATCH)
     public static void mijnhuisjeTeksten(GameTestHelper helper) {

@@ -211,7 +211,17 @@ MIJNBAAR = ["minecraft:pink_wool", "minecraft:magenta_wool", "minecraft:white_wo
             "minecraft:magenta_terracotta", "minecraft:pink_concrete_powder", "minecraft:terracotta",
             "guhs:viltkiezel", "guhs:guhklei", "guhs:gatenkaas", "guhs:block_of_kaasknabbels", "guhs:kaasknabbel_stone",
             "guhs:kaasknabbel_dirt", "guhs:kaasknabbel_cobblestone", "guhs:kaasknabbel_deepslate", "guhs:rijpgras", "guhs:knuffelgras",
-            "guhs:vadsmos", "guhs:bleekmos", "guhs:kaasmodder", "guhs:modderig_kaasgras", "guhs:gladde_knuffelsteen"]
+            "guhs:vadsmos", "guhs:bleekmos", "guhs:kaasmodder", "guhs:modderig_kaasgras", "guhs:gladde_knuffelsteen",
+            # 1.10.5: the missing ores (vahoege vads!) and the natural ground of the Guhmension, Barbecuether, Guheinde and the
+            # Onder de Wol layers, all terracotta colours (badlands), the Nether and the End
+            "guhs:compressed_super_vahoege_vads", "guhs:kaaskorrelerts", "guhs:fossielmijn_zoutkristalerts",
+            "guhs:houtskoolsteen_kaasknabbelerts", "guhs:kristalkaas_erts", "guhs:guh_kristal_blok", "guhs:knuffelnaad",
+            "guhs:parelmoer", "guhs:schildjeszand", "guhs:wolkenweide_steen", "guhs:wolkenweide_steen_blauw",
+            "guhs:wolkenweide_steen_lila", "guhs:zalmklei_streep_a", "guhs:zalmklei_streep_b", "guhs:lichtmosblok",
+            "guhs:pluiswolblok", "guhs:as_aarde", "guhs:as_blok", "guhs:houtskoolsteen", "guhs:mosterd_blok",
+            "guhs:mosterd_nylium", "guhs:pindasaus_nylium", "guhs:roosterijzer", "guhs:roosterijzer_pilaar", "guhs:sate_vlees",
+            "guhs:gebarsten_korst", "guhs:kaaskorst", "guhs:klipkaas", "guhs:koorkorst", "guhs:kruimelzand",
+            "guhs:schimmelkaas", "#minecraft:terracotta", "#minecraft:base_stone_nether", "minecraft:end_stone"]
 GROND = ["minecraft:pink_wool", "minecraft:magenta_wool", "minecraft:white_wool", "guhs:viltsteen", "guhs:knuffelsteen",
          "guhs:roze_knuffelsteen", "guhs:guh_kristalsteen", "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:stone",
          "minecraft:cobblestone", "minecraft:deepslate", "minecraft:cobbled_deepslate", "minecraft:granite", "minecraft:diorite",

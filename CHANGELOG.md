@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.6 — Minecraft 26.1.2
+
+- **Mijn-guhhuisje mines more:** `guhs:mijnhuisje_mijnbaar` (source `tools/features/mijnrook.py` MIJNBAAR) gains the ores that were missing (compressed_super_vahoege_vads, kaaskorrelerts, kristalkaas_erts, houtskoolsteen_kaasknabbelerts, fossielmijn_zoutkristalerts, guh_kristal_blok), the natural ground of the Guhmension (knuffelnaad, parelmoer, schildjeszand, wolkenweide_steen(+_blauw/_lila), zalmklei_streep_a/b), the Onder de Wol layers (lichtmosblok, pluiswolblok), the Barbecuether (as_aarde, as_blok, houtskoolsteen, mosterd_blok/_nylium, pindasaus_nylium, roosterijzer(+_pilaar), sate_vlees) and the Guheinde (gebarsten_korst, kaaskorst, klipkaas, koorkorst, kruimelzand, schimmelkaas), plus `#minecraft:terracotta`, `#minecraft:base_stone_nether` and end stone. Gametest `mijnhuisjeMijnbaar`.
+
 ## 1.10.5 — Minecraft 26.1.2
 
 - **Mijn-guhhuisje 5x faster:** `PUNTEN_PER_BLOK` 400 -> 80 (per guh a block per 4 s for free, per second fed; the x4 knabbel multiplier stays). A kaasknabbel lasts 100 blocks instead of 20 (`BLOKKEN_PER_KNABBEL`), so the knabbels eaten per hour stay as before.
