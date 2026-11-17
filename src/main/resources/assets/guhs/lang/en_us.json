@@ -9982,6 +9982,7 @@
   "gui.guhs.among.hud.klaar": "ready!",
   "gui.guhs.among.hud.bezig": "busy",
   "gui.guhs.among.hud.seconden": "%s s",
+  "gui.guhs.among.geen_kaart": "No map during Among Guhs, njeg! Find your own way.",
   "gui.guhs.among.hud.licht": "Lights out! Switches in Electrical",
   "gui.guhs.among.hud.alarm": "NIBBLE ALARM: %1$s (%2$s/2 codes)",
   "gui.guhs.among.hud.deuren": "Doors shut: %1$s (%2$s)",

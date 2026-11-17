@@ -220,6 +220,46 @@ public class KaartGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.6: orders ask only for goods the player can deliver. A Hoeve L3 (tier 2) with only T1 buildings and a
+     * konijnenren got orders for melk, baksteen and dons and could deliver almost none of them.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void bestellingenAlleenMaakbaar(GameTestHelper helper) {
+        Set<String> kan = Set.of("ei", "veer", "wol", "graan", "wortel", "bloem", "stam", "plank", "angora", "mest");
+        int tier = Bestellingen.tier(3);
+        helper.assertTrue(tier == 2, "Hoeve L3 is tier 2");
+        boolean angora = false;
+        for (int rel = -1; rel <= 2; rel++) {
+            boolean ster = rel == 2;
+            for (int seed = 0; seed < 300; seed++) {
+                Bestelling b = new Bestelling();
+                b.maak(new Random(seed * 17L + rel), new UUID(9, 9), tier, ster ? 0 : rel, ster, g -> false, g -> kan.contains(g.id));
+                helper.assertFalse(b.regels.isEmpty(), "an order asks something");
+                for (Bestelling.Regel r : b.regels) {
+                    helper.assertTrue(kan.contains(r.goed()), "only goods the player can make: " + r.goed() + " (rel " + rel + ")");
+                    angora |= r.goed().equals("angora");
+                }
+            }
+        }
+        helper.assertTrue(angora, "its own T2 good (angora) is asked for");
+        // nothing deliverable at all (a brand-new base): orders as before, never empty
+        for (int seed = 0; seed < 50; seed++) {
+            Bestelling b = new Bestelling();
+            b.maak(new Random(seed), new UUID(9, 9), tier, 0, false, g -> false, g -> false);
+            helper.assertFalse(b.regels.isEmpty(), "nothing makeable: still an order (the old way)");
+        }
+        // no T2 good makeable: the kinds come from T1 only
+        for (int seed = 0; seed < 100; seed++) {
+            Bestelling b = new Bestelling();
+            b.maak(new Random(seed), new UUID(9, 9), tier, 0, seed % 2 == 0, g -> false, g -> g.tier == 1);
+            for (Bestelling.Regel r : b.regels) {
+                helper.assertTrue(BestelGoed.van(r.goed()).tier == 1, "only T1 when no T2 good is makeable: " + r.goed());
+            }
+        }
+        helper.succeed();
+    }
+
     private static Bestellingen.Omgeving omgeving(int hoeve, int markt) {
         List<Bestellingen.Buur> buren = List.of(new Bestellingen.Buur(new UUID(7, 1), "Knabbeldorp", 0xFFF29BB8, hoeve - 1),
                 new Bestellingen.Buur(new UUID(7, 2), "Kaasdijk", 0xFF9BD8F2, hoeve), new Bestellingen.Buur(new UUID(7, 3), "Vadsveen", 0xFFB8F29B, hoeve + 1));

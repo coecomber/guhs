@@ -4,7 +4,7 @@ package nl.juiced.guhs.feature.guhpixel.among.model;
  * Every tunable number of a round, in ticks and blocks. Two presets: {@link #normaal} (9 participants, 1 Mika) and
  * {@link #lastig} (10 participants, 2 Mikas). Tuned with {@link Simulatie} so that NPC-only rounds on Normaal are won
  * by the Mika about half of the time and a round takes ten to fifteen minutes: about 12 minutes on Normaal (the Mika wins
- * 50%), about 13 on Lastig (the Mikas win 58%). Ten tasks each and a pillow that needs almost a minute to cool down make
+ * 50%), about 12 on Lastig (the Mikas win 66% since 1.10.6: smarter Mikas, a crew with a longer memory, a shorter push cooldown). Ten tasks each and a pillow that needs almost a minute to cool down make
  * the round that long; with fewer tasks or a quicker pillow it is over in nine.
  */
 public final class Balans {
@@ -74,6 +74,25 @@ public final class Balans {
     /** Average ticks between sabotage attempts when the sabotage is ready. */
     public int saboteerGemiddeld = 900;
 
+    // --- 1.10.6: Lastig thinks harder ---
+    /**
+     * The NPC Mikas play smart ({@link MikaBrein}): always away through a vent after a push (out far from the sleeper, at a
+     * task panel), crawling through the vents to a lonely crew guh, the lights out right before a push and the Knabbelalarm
+     * right after one, the doors shut behind a victim, two Mikas hunting in different parts of the ship and covering for each
+     * other now and then, and lies that fit what the crew could have seen. (Tried and dropped: reporting its own push when
+     * caught beside the sleeper, and fewer random sabotages: both made the Mikas lose more often.)
+     */
+    public boolean slimmeMika;
+    /**
+     * The crew NPCs remember more ({@link Geheugen}): the last sightings of everybody (not only the last one), a logbook of
+     * the meetings (who accused whom, who vouched for whom), they learn from every vote (whoever pushed an innocent out, or
+     * vouched for a Mika, becomes suspect) and from every sleeper (pushed guhs are innocent: whoever accused them is
+     * suspect), a proven liar stays suspect, and what they saw for sure they say again in every meeting.
+     */
+    public boolean langGeheugen;
+    /** After a meeting the suspicion that is not certain shrinks to this part. */
+    public double verval = 0.8;
+
     public static Balans normaal() {
         return new Balans();
     }
@@ -83,11 +102,17 @@ public final class Balans {
         b.lastig = true;
         b.deelnemers = 10;
         b.mikas = 2;
-        b.duwAfkoel = 1550;
+        b.duwAfkoel = 1350;     // (1.10.6: 1550 -> 1350, with the crew's longer memory; NPC-only rounds: the Mikas win ~66%)
         b.duwAfkoelVergadering = 1700;
         b.duwAfkoelSamen = 1.0;
         b.mikaStemtMee = 2;
         b.beschuldigKans = 0.35;
+        // 1.10.6: smarter on both sides
+        b.slimmeMika = true;
+        b.langGeheugen = true;
+        b.verval = 0.9;
+        b.vergeetKans = 0.15;
+        b.vergisKans = 0.08;
         return b;
     }
 

@@ -80,6 +80,12 @@ public final class Vergadering {
                 if (slaper >= 0) {
                     g.slaperBekend(r, d, r.d(slaper));
                 }
+                if (b.langGeheugen) {
+                    g.onschuldigen(r, d);
+                    if (slaper >= 0) {
+                        g.slaperTijdlijn(r, d, r.d(slaper));
+                    }
+                }
             }
         }
         zeg(new Uitspraak(oproeper, slaper >= 0 ? Uitspraak.Soort.GEVONDEN : Uitspraak.Soort.KNOP, slaper, slaperZone, rng.nextInt(3), 0));
@@ -165,6 +171,14 @@ public final class Vergadering {
                     beschuldigdDoorMij[s * stemmen.length + x] = true;
                     beschuldigd[x]++;
                 }
+                if (x >= 0 && x < 64) {
+                    r.logBeschuldigt[s] |= 1L << x;
+                }
+            }
+            case STA_IN -> {
+                if (x >= 0 && x < 64) {
+                    r.logInstaan[s] |= 1L << x;
+                }
             }
             default -> {
             }
@@ -197,10 +211,15 @@ public final class Vergadering {
         Geheugen g = luisteraar.brein.geheugen;
         int s = u.spreker(), x = u.wie(), ik = luisteraar.idx;
         double geloof = g.zeker[s] ? 0.1 : Math.max(0.25, Math.min(1.0, 1.0 - 0.25 * Math.max(0, g.verdenking[s])));
+        boolean lang = r.balans.langGeheugen;
+        if (g.leugenaar[s]) {
+            geloof = Math.min(geloof, 0.35);
+        }
         switch (u.soort()) {
             case DUW, LUIK -> {
                 if (x == ik) {
                     g.verdenking[s] += 4.0;
+                    g.betrapt(s, lang);
                 } else if (!g.zeker[x]) {
                     if (alibi(g, x)) {
                         g.verdenking[s] += 2.0;
@@ -230,6 +249,7 @@ public final class Vergadering {
                 if (gezien >= 0 && gezien != zone && startTick - g.gezienTick[s] < reistijd(gezien, zone)) {
                     g.verdenking[s] += 2.5;
                     klopNiet[ik] = s;
+                    g.betrapt(s, lang);
                 }
             }
             case STA_IN -> {
@@ -293,6 +313,10 @@ public final class Vergadering {
             zeg(new Uitspraak(d.idx, Uitspraak.Soort.DUW, g.zagDuwDoor, -1, v, teller));
         } else if (g.zagLuikVan >= 0 && rng.nextDouble() >= b.vergeetKans * 0.3) {
             zeg(new Uitspraak(d.idx, Uitspraak.Soort.LUIK, g.zagLuikVan, -1, v, teller));
+        } else if (b.langGeheugen && bekendeDader(d) >= 0) {
+            // long memory: what it saw for sure in an earlier part of the round, it says again
+            int dader = bekendeDader(d);
+            zeg(new Uitspraak(d.idx, g.zekerSoort[dader] == 1 ? Uitspraak.Soort.DUW : Uitspraak.Soort.LUIK, dader, -1, v, teller));
         } else if (slaper >= 0 && !g.bijSlaper.isEmpty() && rng.nextDouble() >= b.vergeetKans && d.idx != oproeper) {
             zeg(new Uitspraak(d.idx, Uitspraak.Soort.BIJ_SLAPER, misschienVergist(d, g.bijSlaper.get(0)), slaperZone, v, teller));
         } else if (slaper >= 0 && g.laatstMet >= 0 && rng.nextDouble() >= b.vergeetKans) {
@@ -334,6 +358,17 @@ public final class Vergadering {
                 zeg(rood >= 0 ? new Uitspraak(d.idx, Uitspraak.Soort.SUS, rood, -1, v, teller) : new Uitspraak(d.idx, Uitspraak.Soort.NIKS, -1, -1, v, teller));
             }
         }
+    }
+
+    /** A participant still awake that this crew NPC saw push or vent for sure (-1: none). */
+    private int bekendeDader(Deelnemer d) {
+        Geheugen g = d.brein.geheugen;
+        for (Deelnemer o : r.deelnemers) {
+            if (o != d && geldig(o.idx) && g.zeker[o.idx] && g.zekerSoort[o.idx] > 0) {
+                return o.idx;
+            }
+        }
+        return -1;
     }
 
     /** The second statement of an NPC: a reaction to what was said. */
@@ -398,7 +433,7 @@ public final class Vergadering {
     private int nepZone(Deelnemer d) {
         Geheugen g = d.brein.geheugen;
         for (Deelnemer o : r.deelnemers) {
-            if (o != d && geldig(o.idx) && !o.mika() && startTick - g.gezienTick[o.idx] <= 120) {
+            if (o != d && geldig(o.idx) && !o.mika() && startTick - g.gezienTick[o.idx] <= (r.balans.slimmeMika ? 300 : 120)) {
                 return waar[d.idx];       // somebody was there: stay close to the truth
             }
         }
@@ -440,6 +475,21 @@ public final class Vergadering {
 
     /** The crew guh the Mikas would like to see voted out: the most accused one. */
     private int zondebok(Deelnemer d) {
+        if (r.balans.slimmeMika) {
+            // smart: the most accused now, and whom the crew already doubted in earlier meetings
+            int best = -1;
+            double bestS = 0;
+            for (Deelnemer o : r.deelnemers) {
+                if (o != d && geldig(o.idx) && !o.mika()) {
+                    double sc = beschuldigd[o.idx] * 2.0 + r.beschuldigdTotaal[o.idx] * 0.7;
+                    if (sc > bestS) {
+                        bestS = sc;
+                        best = o.idx;
+                    }
+                }
+            }
+            return best;
+        }
         int best = -1;
         for (Deelnemer o : r.deelnemers) {
             if (o != d && geldig(o.idx) && !o.mika() && beschuldigd[o.idx] > 0 && (best < 0 || beschuldigd[o.idx] > beschuldigd[best])) {
@@ -451,6 +501,17 @@ public final class Vergadering {
 
     private void mikaTweede(Deelnemer d) {
         int v = rng.nextInt(3);
+        if (r.balans.slimmeMika) {
+            // smart: cover the other Mika when only one crew guh accused it so far (not too often: a Mika that vouched for a
+            // Mika is remembered)
+            for (Deelnemer o : r.deelnemers) {
+                if (o != d && o.mika() && geldig(o.idx) && beschuldigd[o.idx] == 1 && !beschuldigdDoorMij[d.idx * stemmen.length + o.idx]
+                        && rng.nextDouble() < 0.35) {
+                    zeg(new Uitspraak(d.idx, Uitspraak.Soort.STA_IN, o.idx, -1, v, teller));
+                    return;
+                }
+            }
+        }
         int aanklager = aanklager(d.idx);
         if (aanklager >= 0 && geldig(aanklager) && !beschuldigdDoorMij[d.idx * stemmen.length + aanklager]) {
             zeg(new Uitspraak(d.idx, Uitspraak.Soort.VERDENK, aanklager, -1, v, teller));
@@ -521,6 +582,9 @@ public final class Vergadering {
         weg = best >= 0 && !dubbel && tel[best] > overslaan && geldig(best) ? best : -1;
         if (weg >= 0) {
             wegMika = r.d(weg).mika();
+        }
+        for (int i = 0; i < n; i++) {
+            r.beschuldigdTotaal[i] += beschuldigd[i];
         }
         stap = Stap.UITSLAG;
         uitslagStart = teller;

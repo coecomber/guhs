@@ -19,6 +19,11 @@ public final class MikaBrein extends Brein {
     private int zelfMeld = -1;
     /** The victim of this Mika's last push (it does not "find" that sleeper). */
     public int laatsteSlachtoffer = -1;
+    // --- 1.10.6, the smart Mika of Lastig (Balans.slimmeMika) ---
+    /** The lonely crew guh it is on its way to (-1: none), and the vent it wants to crawl out of (-1: any empty one). */
+    private int prooiDoel = -1, luikDoel = -1;
+    /** Away from this spot (the sleeper) when it picks a vent to come out of. */
+    private double wegX = Double.NaN, wegZ;
 
     public MikaBrein(Ronde r, Deelnemer ik) {
         super(r, ik);
@@ -31,6 +36,8 @@ public final class MikaBrein extends Brein {
         stand = Stand.TREUZEL;
         doelwit = -1;
         zelfMeld = -1;
+        prooiDoel = luikDoel = -1;
+        wegX = Double.NaN;
     }
 
     @Override
@@ -82,8 +89,70 @@ public final class MikaBrein extends Brein {
         return best;
     }
 
+    private boolean slim() {
+        return r.balans.slimmeMika;
+    }
+
+    /** Another awake Mika that is nearly ready to push is closer to this crew guh (that one is its prey). */
+    private boolean andereMikaDichter(Deelnemer c) {
+        for (Deelnemer m : r.deelnemers) {
+            if (m != ik && m.mika() && m.wakker && !m.weg && m.duwAfkoel <= 150 && m.afstand(c) < ik.afstand(c)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean andereMikaIn(int kamer) {
+        for (Deelnemer m : r.deelnemers) {
+            if (m != ik && m.mika() && m.wakker && !m.weg && m.zone == kamer) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /** The vent nearest to this node on the walking graph, null when none is within {@code max}. */
+    private Schip.Luik luikBij(int start, double max) {
+        Schip.Luik best = null;
+        double bestD = max;
+        for (Schip.Luik l : r.schip.luiken) {
+            double d = r.schip.loopAfstand(start, l.knoop());
+            if (d < bestD) {
+                bestD = d;
+                best = l;
+            }
+        }
+        return best;
+    }
+
+    /** No awake crew guh in that room, except perhaps the one the Mika is after. */
+    private boolean leegOpProoiNa(int kamer, int prooi) {
+        for (Deelnemer c : r.deelnemers) {
+            if (!c.mika() && c.wakker && !c.weg && c.zone == kamer && c.idx != prooi) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /** Smart: the lights go out right before it reaches its prey (the crew then sees almost nothing). */
+    private void lichtUitVoorDuw() {
+        if (prooiDoel < 0 || ik.duwAfkoel > 60 || r.sabotage != Ronde.Sabotage.GEEN || r.saboteerAfkoel > 0) {
+            return;
+        }
+        Deelnemer p = r.d(prooiDoel);
+        if (!p.wakker || p.weg || ik.afstand(p) > 16) {
+            return;
+        }
+        r.saboteerNpc(ik, Ronde.Sabotage.LICHT, -1);
+    }
+
     @Override
     protected void denk() {
+        if (slim() && r.tick % 5 == 0) {
+            lichtUitVoorDuw();
+        }
         saboteer();
         if (stand != Stand.JAAG && stand != Stand.ZELF_MELDEN && ik.duwAfkoel == 0 && r.tick % 5 == 0) {
             Deelnemer p = prooi();
@@ -95,7 +164,7 @@ public final class MikaBrein extends Brein {
                 stop();
                 // the doors of a small room shut behind the two of them
                 Schip.Zone zone = r.schip.zone(ik.zone);
-                if (zone.kamer() && r.schip.deurenVan(zone.idx()).size() <= 2 && rng.nextDouble() < 0.5) {
+                if (zone.kamer() && r.schip.deurenVan(zone.idx()).size() <= 2 && (slim() || rng.nextDouble() < 0.5)) {
                     r.saboteerNpc(ik, Ronde.Sabotage.DEUREN, zone.idx());
                 }
             }
@@ -111,6 +180,12 @@ public final class MikaBrein extends Brein {
                 }
             }
             case NAAR_LUIK -> {
+                if (slim()) {
+                    if (beweeg(r.balans.npcSnelheid * 1.2)) {
+                        slimLuik();
+                    }
+                    return;
+                }
                 if (beweeg(r.balans.npcSnelheid * 1.2)) {
                     Schip.Luik luik = r.schip.luikIn(ik.zone);
                     if (luik != null && ik.afstand(luik.x() + 0.5, luik.z() + 0.5) < 1.5) {
@@ -165,6 +240,91 @@ public final class MikaBrein extends Brein {
         }
     }
 
+    /**
+     * Smart, at a vent: peek through the grates and crawl out of the right one: to its prey (a room with nobody else in
+     * it), or after a push far away from the sleeper, preferably beside a task panel (it is "working" there at once).
+     */
+    private void slimLuik() {
+        Schip.Luik luik = null;
+        for (Schip.Luik l : r.schip.luiken) {
+            if (ik.afstand(l.x() + 0.5, l.z() + 0.5) < 1.5) {
+                luik = l;
+            }
+        }
+        int doel = luikDoel;
+        luikDoel = -1;
+        stand = Stand.KIES;
+        if (luik == null || !zietNiemand()) {
+            wegX = Double.NaN;
+            return;
+        }
+        Schip.Luik uit = null;
+        if (doel >= 0) {
+            Schip.Luik d = r.schip.luiken.get(doel);
+            if (prooiDoel >= 0 && d != luik && d.netwerk().equals(luik.netwerk()) && leegOpProoiNa(d.kamer(), prooiDoel)) {
+                // the lights out first: the prey must not see it crawl out
+                if (!r.donker() && r.sabotage == Ronde.Sabotage.GEEN && r.saboteerAfkoel == 0) {
+                    r.saboteerNpc(ik, Ronde.Sabotage.LICHT, -1);
+                }
+                if (!r.ziet(r.d(prooiDoel), d.x() + 0.5, d.z() + 0.5, d.kamer())) {
+                    uit = d;
+                }
+            }
+            if (uit == null) {
+                prooiDoel = -1;     // the prey is not alone any more: stay out of the vents
+                return;
+            }
+        }
+        if (uit == null) {
+            int vanKnoop = Double.isNaN(wegX) ? luik.knoop() : r.schip.dichtsteKnoop(wegX, wegZ);
+            double best = -1;
+            for (Schip.Luik l : r.schip.netwerk(luik)) {
+                if (l == luik || !leegOpProoiNa(l.kamer(), -1)) {
+                    continue;
+                }
+                boolean paneel = false;
+                for (Schip.Paneel p : r.schip.panelen) {
+                    paneel |= p.soort() == Schip.PaneelSoort.TAAK && p.kamer() == l.kamer();
+                }
+                double score = r.schip.loopAfstand(vanKnoop, l.knoop()) + (paneel ? 25 : 0) + rng.nextDouble() * 10;
+                if (score > best) {
+                    best = score;
+                    uit = l;
+                }
+            }
+        }
+        wegX = Double.NaN;
+        if (uit == null) {
+            return;
+        }
+        r.luikNpc(ik, luik, uit);
+        if (prooiDoel < 0) {
+            nepTaakIn(ik.zone);
+        }
+    }
+
+    /** Pretends a task in this room (the nearest task panel there), or anywhere when the room has none. */
+    private void nepTaakIn(int kamer) {
+        int start = r.schip.dichtsteKnoop(ik.x, ik.z);
+        Schip.Paneel best = null;
+        double bestD = Double.MAX_VALUE;
+        for (Schip.Paneel p : r.schip.panelen) {
+            if (p.soort() == Schip.PaneelSoort.TAAK && p.kamer() == kamer) {
+                double d = r.schip.loopAfstand(start, p.knoop());
+                if (d < bestD) {
+                    bestD = d;
+                    best = p;
+                }
+            }
+        }
+        if (best != null && loopNaar(best.knoop())) {
+            nepPaneel = best.idx();
+            stand = Stand.NEP_LOPEN;
+        } else {
+            nepTaak(0);
+        }
+    }
+
     private void jaag() {
         Deelnemer p = doelwit < 0 ? null : r.d(doelwit);
         if (p == null || !p.wakker || ik.duwAfkoel > 0 || ++jaagTeller > 200 || !r.ziet(ik, p)) {
@@ -193,6 +353,23 @@ public final class MikaBrein extends Brein {
         if (r.fase != Ronde.Fase.SPEL) {
             return;
         }
+        if (slim()) {
+            prooiDoel = -1;
+            // the Knabbelalarm right away: nobody can press the button, and the crew runs to the panels
+            if (r.sabotage == Ronde.Sabotage.GEEN && r.saboteerAfkoel == 0 && rng.nextDouble() < 0.5) {
+                r.saboteerNpc(ik, Ronde.Sabotage.ALARM, -1);
+            }
+            Schip.Luik luik = r.schip.zone(ik.zone).kamer() ? r.schip.luikIn(ik.zone) : null;
+            if (luik != null && loopNaar(luik.knoop())) {
+                wegX = slachtoffer.lichaamX;
+                wegZ = slachtoffer.lichaamZ;
+                luikDoel = -1;
+                stand = Stand.NAAR_LUIK;
+                return;
+            }
+            nepTaak(25);
+            return;
+        }
         if (rng.nextDouble() < r.balans.zelfMeldKans) {
             stand = Stand.ZELF_MELDEN;
             zelfMeld = slachtoffer.idx;
@@ -208,6 +385,14 @@ public final class MikaBrein extends Brein {
     }
 
     private void kies() {
+        if (slim()) {
+            prooiDoel = -1;
+            if (ik.duwAfkoel <= 150 && slimJacht()) {
+                return;
+            }
+            nepTaak(0);
+            return;
+        }
         // nearly ready to push: go where a lonely crew guh is (as far as the Mika can "hear")
         if (ik.duwAfkoel <= 150 && rng.nextDouble() < r.balans.sluwheid) {
             int start = r.schip.dichtsteKnoop(ik.x, ik.z);
@@ -241,12 +426,66 @@ public final class MikaBrein extends Brein {
         nepTaak(0);
     }
 
+    /**
+     * Smart hunting: the nearest lonely crew guh it can "hear" that the other Mika is not closer to, on foot or through
+     * the vents (when that is shorter); false when there is none.
+     */
+    private boolean slimJacht() {
+        if (rng.nextDouble() >= Math.min(1.0, r.balans.sluwheid + 0.15)) {
+            return false;
+        }
+        int start = r.schip.dichtsteKnoop(ik.x, ik.z);
+        Schip.Luik eigen = luikBij(start, 20);
+        Deelnemer best = null;
+        Schip.Luik bestLuik = null;
+        double bestD = r.balans.gehoorAfstand;
+        for (Deelnemer c : r.deelnemers) {
+            if (c.mika() || !c.wakker || c.weg || c.zone < 0 || !leegOpProoiNa(c.zone, c.idx) || andereMikaDichter(c)) {
+                continue;
+            }
+            int cKnoop = r.schip.dichtsteKnoop(c.x, c.z);
+            double d = r.schip.loopAfstand(start, cKnoop);
+            Schip.Luik via = null;
+            Schip.Luik daar = r.schip.zone(c.zone).kamer() ? r.schip.luikIn(c.zone) : null;
+            boolean lichtKan = r.donker() || (r.sabotage == Ronde.Sabotage.GEEN && r.saboteerAfkoel == 0);
+            if (lichtKan && eigen != null && daar != null && daar != eigen && daar.netwerk().equals(eigen.netwerk())) {
+                double v = r.schip.loopAfstand(start, eigen.knoop()) + 6 + r.schip.loopAfstand(daar.knoop(), cKnoop);
+                if (v < d) {
+                    d = v;
+                    via = daar;
+                }
+            }
+            if (d < bestD) {
+                bestD = d;
+                best = c;
+                bestLuik = via;
+            }
+        }
+        if (best == null) {
+            return false;
+        }
+        prooiDoel = best.idx;
+        if (bestLuik != null && loopNaar(eigen.knoop())) {
+            luikDoel = bestLuik.idx();
+            wegX = Double.NaN;
+            stand = Stand.NAAR_LUIK;
+            return true;
+        }
+        if (loopNaar(r.schip.dichtsteKnoop(best.x, best.z))) {
+            nepPaneel = -1;
+            stand = Stand.NEP_LOPEN;
+            return true;
+        }
+        prooiDoel = -1;
+        return false;
+    }
+
     /** Walks to a task panel (at least this far away) to pretend. */
     private void nepTaak(double minAfstand) {
         int start = r.schip.dichtsteKnoop(ik.x, ik.z);
         List<Schip.Paneel> kan = new ArrayList<>();
         for (Schip.Paneel p : r.schip.panelen) {
-            if (p.soort() == Schip.PaneelSoort.TAAK) {
+            if (p.soort() == Schip.PaneelSoort.TAAK && !(slim() && andereMikaIn(p.kamer()))) {
                 double d = r.schip.loopAfstand(start, p.knoop());
                 if (d >= minAfstand && d < 70) {
                     kan.add(p);

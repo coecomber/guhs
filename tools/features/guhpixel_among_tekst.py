@@ -146,6 +146,7 @@ TEXTS = {
     "gui.guhs.among.hud.klaar": "klaar!",
     "gui.guhs.among.hud.bezig": "bezig",
     "gui.guhs.among.hud.seconden": "%s tellen",
+    "gui.guhs.among.geen_kaart": "Geen kaart tijdens Among Guhs, njeg! Zoek het zelf maar uit.",
     "gui.guhs.among.hud.licht": "Licht uit! Schakelaars in Elektra",
     "gui.guhs.among.hud.alarm": "KNABBELALARM: %1$s (%2$s/2 codes)",
     "gui.guhs.among.hud.deuren": "Deuren dicht: %1$s (%2$s)",

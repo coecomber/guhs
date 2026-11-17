@@ -85,6 +85,15 @@ public final class Bestelling {
      * village may hold one such kind). Deterministic for the {@link Random}.
      */
     public void maak(Random rng, UUID dorp, int tier, int relatie, boolean ster, Predicate<BestelGoed> kanMaken) {
+        maak(rng, dorp, tier, relatie, ster, kanMaken, g -> true);
+    }
+
+    /**
+     * As above; {@code maakbaar} (1.10.6): the goods the player can deliver at all (a building of its own makes them, or
+     * they are in stock). The kinds come only from those, the tier's own good too (none of this tier: the kinds come from
+     * the lower tiers); when the player can deliver nothing at all, from everything as before.
+     */
+    public void maak(Random rng, UUID dorp, int tier, int relatie, boolean ster, Predicate<BestelGoed> kanMaken, Predicate<BestelGoed> maakbaar) {
         tier = Math.max(1, Math.min(5, tier));
         this.dorp = dorp;
         this.relatie = Math.max(-1, Math.min(1, relatie));
@@ -109,9 +118,13 @@ public final class Bestelling {
         // the kinds: one of this tier's own goods first (from T2 on), the rest from everything up to this tier
         // (only goods worth enough per piece, so the wanted value fits in the tier's number of goods: no 300 planks at T4)
         double minWaarde = waarde / (maxN * 1.5);
-        List<BestelGoed> pot = duur(BestelGoed.totTier(tier), minWaarde, soorten), gekozen = new ArrayList<>();
-        if (tier > 1) {
-            List<BestelGoed> eigen = duur(BestelGoed.vanTier(tier), minWaarde, 1);
+        // (1.10.6: only goods the player can deliver; a low Hoeve with only T1 buildings got orders for melk and baksteen)
+        List<BestelGoed> kan = alleen(BestelGoed.totTier(tier), maakbaar);
+        boolean gefilterd = !kan.isEmpty();
+        List<BestelGoed> pot = duur(gefilterd ? kan : BestelGoed.totTier(tier), minWaarde, soorten), gekozen = new ArrayList<>();
+        List<BestelGoed> eigenTier = gefilterd ? alleen(BestelGoed.vanTier(tier), maakbaar) : BestelGoed.vanTier(tier);
+        if (tier > 1 && !eigenTier.isEmpty()) {
+            List<BestelGoed> eigen = duur(eigenTier, minWaarde, 1);
             gekozen.add(eigen.get(rng.nextInt(eigen.size())));
         }
         while (gekozen.size() < soorten && gekozen.size() < pot.size()) {
@@ -158,6 +171,17 @@ public final class Bestelling {
         }
         beloning = Math.max(5, (int) Math.round(echteWaarde * factor() / 5.0) * 5);
         reden = rng.nextInt(ster ? STER_REDENEN : REDENEN);
+    }
+
+    /** The goods of the list that pass the test (in order). */
+    private static List<BestelGoed> alleen(List<BestelGoed> l, Predicate<BestelGoed> test) {
+        List<BestelGoed> r = new ArrayList<>();
+        for (BestelGoed g : l) {
+            if (test.test(g)) {
+                r.add(g);
+            }
+        }
+        return r;
     }
 
     /** The goods worth at least {@code min} each; when fewer than {@code nodig} are left, all of them. */

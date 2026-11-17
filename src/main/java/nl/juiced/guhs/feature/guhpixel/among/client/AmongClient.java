@@ -55,6 +55,7 @@ public final class AmongClient {
             mc.execute(() -> ontvang(mc, p));
         };
         TaakSpellen.registreer();
+        KaartBlok.init();
         modBus.addListener((EntityRenderersEvent.RegisterRenderers event) -> event.registerEntityRenderer(AmongSlice.AMONG_GUH.get(), GuhRenderer::new));
         modBus.addListener((RegisterGuiLayersEvent event) -> event.registerAboveAll(Guhs.id("among_hud"), AmongClient::tekenHud));
         GuhRenderer.hook((guh, partialTick, frame) -> {
@@ -68,6 +69,11 @@ public final class AmongClient {
             hud = null;
             GuhpixelClient.hudVerborgen = false;
         });
+    }
+
+    /** 1.10.6: this client is in a round of Among Guhs (its HUD is there). */
+    public static boolean inRonde() {
+        return hud != null;
     }
 
     /**

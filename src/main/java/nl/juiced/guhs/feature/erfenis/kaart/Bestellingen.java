@@ -71,6 +71,14 @@ public final class Bestellingen {
         /** Whether the player can already make this good (an order from a higher village may ask one of the next tier). */
         boolean kanMaken(BestelGoed g);
 
+        /**
+         * 1.10.6: can the player deliver this good at all (a building of its own makes it, or it is in stock)? Orders ask
+         * only for such goods (when there are none at all, for anything as before). Default: everything.
+         */
+        default boolean maakbaar(BestelGoed g) {
+            return true;
+        }
+
         /** (1.9 afwerking) Does Oma Breiguh order here (Sherlock's reward oma_bestelling)? */
         default boolean oma() {
             return false;
@@ -183,7 +191,7 @@ public final class Bestellingen {
                     }
                     Random rng = new Random(seed * 31 + speler.getMostSignificantBits() ^ (s.teller++) * 0x2545F4914F6CDD1DL);
                     int tier = tier(o.hoeve());
-                    b.maak(rng, buur.id(), tier, Integer.signum(buur.hoeve() - o.hoeve()), b.ster, o::kanMaken);
+                    b.maak(rng, buur.id(), tier, Integer.signum(buur.hoeve() - o.hoeve()), b.ster, o::kanMaken, o::maakbaar);
                     if (b.ster) {
                         b.deco = sterDeco(o.hoeve(), rng);
                     }
@@ -314,6 +322,7 @@ public final class Bestellingen {
         KaartBron bron = KaartFeature.BRON;
         return new Omgeving() {
             private List<Buur> buren;
+            private java.util.Set<String> maakbaar;
 
             @Override
             public List<Buur> buren() {
@@ -336,6 +345,14 @@ public final class Bestellingen {
             @Override
             public boolean kanMaken(BestelGoed g) {
                 return ErfenisEconomie.heeft(server, speler, g.id) > 0;
+            }
+
+            @Override
+            public boolean maakbaar(BestelGoed g) {
+                if (maakbaar == null) {
+                    maakbaar = ErfenisEconomie.maakbaar(server, speler);
+                }
+                return maakbaar.contains(g.id);
             }
 
             @Override

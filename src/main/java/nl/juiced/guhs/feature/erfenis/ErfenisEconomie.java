@@ -70,6 +70,37 @@ public final class ErfenisEconomie {
         return g == null ? 0 : b.heeft(g);
     }
 
+    /**
+     * 1.10.6: the goods this player can deliver (Goed ids): what is in stock, and what one of its buildings makes (the
+     * output or a byproduct of a recipe the building may use at its level). For the orders of the neighbour villages.
+     */
+    public static java.util.Set<String> maakbaar(MinecraftServer s, UUID eigenaar) {
+        java.util.Set<String> uit = new java.util.HashSet<>();
+        Base b = base(s, eigenaar);
+        if (b == null) {
+            return uit;
+        }
+        for (Goed g : Goed.values()) {
+            if (b.heeft(g) > 0) {
+                uit.add(g.id);
+            }
+        }
+        for (Gebouw geb : b.gebouwen) {
+            if (geb.level <= 0) {
+                continue;
+            }
+            for (Recept r : Productie.recepten(geb.type)) {
+                if (r.minLevel() <= Math.max(1, geb.level) && Productie.magRecept(b, r)) {
+                    uit.add(r.uit().id);
+                    for (Goed bij : r.bij().keySet()) {
+                        uit.add(bij.id);
+                    }
+                }
+            }
+        }
+        return uit;
+    }
+
     public static boolean neem(MinecraftServer s, UUID eigenaar, String id, int n) {
         Base b = base(s, eigenaar);
         if (b == null || n < 0) {

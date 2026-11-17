@@ -38,6 +38,8 @@ import nl.juiced.guhs.feature.guhpixel.Sessie;
 import nl.juiced.guhs.feature.guhpixel.Sessies;
 import nl.juiced.guhs.feature.guhpixel.among.model.Balans;
 import nl.juiced.guhs.feature.guhpixel.among.model.Deelnemer;
+import nl.juiced.guhs.feature.guhpixel.among.model.Gebeurtenis;
+import nl.juiced.guhs.feature.guhpixel.among.model.Geheugen;
 import nl.juiced.guhs.feature.guhpixel.among.model.Ronde;
 import nl.juiced.guhs.feature.guhpixel.among.model.Schip;
 import nl.juiced.guhs.feature.guhpixel.among.model.Simulatie;
@@ -684,7 +686,7 @@ public class PxAmongGameTests {
         LOGGER.info("[px_among sim] {}", lastig.tekst("Lastig"));
         helper.assertTrue(normaal.onbeslist() == 0 && lastig.onbeslist() == 0, "every round ends with a winner");
         helper.assertTrue(normaal.mikaDeel() >= 0.35 && normaal.mikaDeel() <= 0.65, "Normaal: the Mika wins 35-65%: " + normaal.tekst("Normaal"));
-        helper.assertTrue(lastig.mikaDeel() >= 0.40 && lastig.mikaDeel() <= 0.80, "Lastig: the Mikas win 40-80%: " + lastig.tekst("Lastig"));
+        helper.assertTrue(lastig.mikaDeel() >= 0.55 && lastig.mikaDeel() <= 0.80, "Lastig: the Mikas win 55-80% (1.10.6: ~66%): " + lastig.tekst("Lastig"));
         helper.assertTrue(normaal.gemTicks() >= 20 * 60 * 10 && normaal.gemTicks() <= 20 * 60 * 15 && normaal.langste() <= 20 * 60 * 25,
                 "a round takes ten to fifteen minutes on average: " + normaal.tekst("Normaal"));
         helper.assertTrue(lastig.gemTicks() >= 20 * 60 * 10 && lastig.gemTicks() <= 20 * 60 * 15, "on Lastig too: " + lastig.tekst("Lastig"));
@@ -692,6 +694,104 @@ public class PxAmongGameTests {
         helper.assertTrue(normaal.gemVergaderingen() >= 2 && normaal.gemDuwen() >= 3, "meetings and pushes happen");
         helper.succeed();
     }
+    /** 1.10.6: on Lastig the crew remembers liars, learns from a vote and from a pushed guh, and says again what it saw for sure. */
+    @GuhTest(template = KLEIN, batch = BATCH)
+    public static void lastigLangGeheugen(GameTestHelper helper) {
+        Schip schip = Schip.standaard();
+        // (1) a liar stays a liar; an innocent guh voted out makes its accuser suspect
+        Ronde r = new Ronde(schip, Balans.lastig(), 8L, 1, new int[]{8, 9});
+        r.devVergadering(0);
+        r.uitspraak(0, Uitspraak.Soort.VERDENK, 4, -1);
+        r.uitspraak(0, Uitspraak.Soort.DUW, 3, -1);
+        r.uitspraak(0, Uitspraak.Soort.DUW, 3, -1);
+        Geheugen g3 = r.d(3).brein.geheugen, g5 = r.d(5).brein.geheugen;
+        helper.assertTrue(g3.leugenaar[0] && !g5.leugenaar[0], "3 knows the player lied about it (a liar for good), 5 cannot know");
+        helper.assertTrue((r.logBeschuldigt[0] & (1L << 3)) != 0 && (r.logBeschuldigt[0] & (1L << 4)) != 0, "the logbook: the player accused 3 and 4");
+        ticks(r, r.balans.bespreekTijd + 1);
+        r.stem(0, 3);
+        for (int i = 0; i < r.balans.stemTijd + 5 && r.vergadering.stap != Vergadering.Stap.UITSLAG; i++) {
+            r.tick();
+        }
+        Vergadering v = r.vergadering;
+        helper.assertTrue(v.stap == Vergadering.Stap.UITSLAG && v.weg == 3 && !v.wegMika, "3 is voted out, wrongly: " + v.weg);
+        double voor = g5.verdenking[0];
+        ticks(r, r.balans.uitslagTijd + 5);
+        helper.assertTrue(r.fase == Ronde.Fase.SPEL && g5.verdenking[0] >= (voor + 1.2) * r.balans.verval - 1e-9,
+                "who pushed an innocent guh out is suspect now: " + voor + " -> " + g5.verdenking[0]);
+        // (2) a pushed guh is innocent: whoever accused it in an earlier meeting is suspect at the next one
+        Deelnemer mika = r.d(8), vier = r.d(4);
+        mika.duwAfkoel = 0;
+        mika.x = vier.x + 1.2;
+        mika.z = vier.z;
+        mika.zone = vier.zone;
+        helper.assertTrue(r.duw(8, 4) == Ronde.Antwoord.OK, "8 pushes 4 asleep");
+        double voor2 = g5.verdenking[0];
+        r.devVergadering(0);
+        helper.assertTrue(g5.verdenking[0] >= voor2 + 0.8, "the player accused 4, and 4 was pushed: more suspect " + voor2 + " -> " + g5.verdenking[0]);
+        // (3) what it saw for sure it says again in a later meeting
+        Ronde r3 = new Ronde(schip, Balans.lastig(), 11L, 1, new int[]{8, 9});
+        Geheugen g = r3.d(5).brein.geheugen;
+        g.zagDuw(9);
+        g.naVergadering(r3.balans.verval);
+        helper.assertTrue(g.zagDuwDoor < 0 && g.zeker[9] && g.zekerSoort[9] == 1, "the push is still known after a meeting");
+        r3.devVergadering(0);
+        ticks(r3, r3.balans.bespreekTijd);
+        boolean gezegd = false;
+        for (Uitspraak u : r3.vergadering.uitspraken) {
+            gezegd |= u.spreker() == 5 && u.soort() == Uitspraak.Soort.DUW && u.wie() == 9;
+        }
+        helper.assertTrue(gezegd, "5 says again that 9 pushed");
+        // Normaal keeps no liars
+        Ronde n = new Ronde(schip, Balans.normaal(), 8L, 1, new int[]{8});
+        n.devVergadering(0);
+        n.uitspraak(0, Uitspraak.Soort.DUW, 3, -1);
+        helper.assertTrue(!n.d(3).brein.geheugen.leugenaar[0] && n.d(3).brein.geheugen.verdenking[0] >= 4.0, "Normaal: suspect, but no liar list");
+        helper.succeed();
+    }
+
+    /** 1.10.6: the Mikas of Lastig vent away after a push, put the lights out right before one and the alarm on right after one. */
+    @GuhTest(template = KLEIN, batch = BATCH, timeoutTicks = 400)
+    public static void lastigSlimmeMikas(GameTestHelper helper) {
+        Schip schip = Schip.standaard();
+        int[][] tel = new int[2][];
+        for (int m = 0; m < 2; m++) {
+            int duwen = 0, luikNa = 0, lichtVoor = 0, alarmNa = 0;
+            for (int i = 0; i < 30; i++) {
+                Ronde r = new Ronde(schip, Balans.van(m == 1), 500 + i, 0, null);
+                int[] duw = new int[r.deelnemers.size()], licht = new int[r.deelnemers.size()];
+                java.util.Arrays.fill(duw, -100000);
+                java.util.Arrays.fill(licht, -100000);
+                while (r.fase != Ronde.Fase.KLAAR && r.tick < Simulatie.MAX_TICKS) {
+                    r.tick();
+                    for (Gebeurtenis e : r.gebeurtenissen) {
+                        if (e.soort() == Gebeurtenis.Soort.DUW) {
+                            duwen++;
+                            duw[e.a()] = r.tick;
+                            lichtVoor += r.tick - licht[e.a()] <= 200 ? 1 : 0;
+                        } else if (e.soort() == Gebeurtenis.Soort.LUIK && r.tick - duw[e.a()] <= 300) {
+                            luikNa++;
+                            duw[e.a()] = -100000;
+                        } else if (e.soort() == Gebeurtenis.Soort.SABOTAGE && e.a() == Ronde.Sabotage.LICHT.ordinal()) {
+                            licht[e.c()] = r.tick;
+                        } else if (e.soort() == Gebeurtenis.Soort.SABOTAGE && e.a() == Ronde.Sabotage.ALARM.ordinal() && r.tick - duw[e.c()] <= 2) {
+                            alarmNa++;
+                        }
+                    }
+                    r.gebeurtenissen.clear();
+                }
+            }
+            tel[m] = new int[]{duwen, luikNa, lichtVoor, alarmNa};
+        }
+        String uit = "Normaal " + java.util.Arrays.toString(tel[0]) + ", Lastig " + java.util.Arrays.toString(tel[1]) + " (pushes, vent after, lights before, alarm after)";
+        LOGGER.info("[px_among trucs] {}", uit);
+        double luikN = tel[0][1] / (double) tel[0][0], luikL = tel[1][1] / (double) tel[1][0];
+        double lichtN = tel[0][2] / (double) tel[0][0], lichtL = tel[1][2] / (double) tel[1][0];
+        helper.assertTrue(luikL >= luikN + 0.1, "Lastig: away through a vent after a push more often: " + uit);
+        helper.assertTrue(lichtL >= lichtN * 1.5, "Lastig: the lights out right before a push more often: " + uit);
+        helper.assertTrue(tel[0][3] == 0 && tel[1][3] > 0, "only on Lastig the alarm right after a push: " + uit);
+        helper.succeed();
+    }
+
     // =====================================================================================================================
     // the task mini-games
     // =====================================================================================================================

@@ -47,6 +47,12 @@ public final class Ronde {
     public Deelnemer.Rol winnaar;
     public Einde einde;
     public int aantalVergaderingen, aantalDuwen;
+    /**
+     * 1.10.6, the logbook of every meeting of this round: whom each participant accused and vouched for (a bit per
+     * participant), and how often everybody was accused in all. The crew's long memory and the smart Mikas read it.
+     */
+    public long[] logBeschuldigt, logInstaan;
+    public int[] beschuldigdTotaal;
 
     /**
      * @param echteSpelers  how many of the participants are real players (indices 0..n-1)
@@ -96,6 +102,9 @@ public final class Ronde {
         }
         knopAfkoel = balans.knopAfkoel;
         saboteerAfkoel = balans.saboteerAfkoelStart;
+        logBeschuldigt = new long[n];
+        logInstaan = new long[n];
+        beschuldigdTotaal = new int[n];
     }
 
     public Deelnemer d(int idx) {
@@ -367,6 +376,13 @@ public final class Ronde {
                 weg.brein.inSlaap();
             }
             meld(Gebeurtenis.Soort.UIT, weg.idx, 1, 0);
+            if (balans.langGeheugen) {
+                for (Deelnemer d : deelnemers) {
+                    if (d.npc && d.wakker && !d.mika()) {
+                        d.brein.geheugen.leerVanUitslag(this, d, weg.idx, v.wegMika);
+                    }
+                }
+            }
         }
         int mikaNr = 0;
         for (Deelnemer d : deelnemers) {

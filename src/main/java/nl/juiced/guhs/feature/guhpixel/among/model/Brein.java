@@ -78,7 +78,7 @@ public abstract class Brein {
         doel = -1;
         wacht = 20 + rng.nextInt(80);
         gezieneSlapers.clear();
-        geheugen.naVergadering();
+        geheugen.naVergadering(r.balans.verval);
     }
 
     public void inSlaap() {
