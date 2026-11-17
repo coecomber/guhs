@@ -257,20 +257,40 @@ public class MijnhuisjeGameTests {
             for (int i = 0; i < MijnhuisjeBlockEntity.PUNTEN_PER_BLOK - 1; i++) {
                 be.tick(level);
             }
-            helper.assertTrue(be.gemijnd() == 0 && be.status() == MijnhuisjeBlockEntity.BEZIG, "399 ticks: not yet (" + be.punten() + " points)");
+            helper.assertTrue(be.gemijnd() == 0 && be.status() == MijnhuisjeBlockEntity.BEZIG, "79 ticks: not yet (" + be.punten() + " points)");
             be.tick(level);
-            helper.assertTrue(be.gemijnd() == 1, "tick 400: one block for one guh");
+            helper.assertTrue(be.gemijnd() == 1, "tick 80: one block for one guh (4 s)");
             be.vakken.setItem(MijnhuisjeBlockEntity.VAK_KNABBELS, new ItemStack(ModItems.KAAS_KNABBELS.get(), 2));
             for (int i = 0; i < MijnhuisjeBlockEntity.PUNTEN_PER_BLOK / MijnhuisjeBlockEntity.GEVOERD; i++) {
                 be.tick(level);
             }
-            helper.assertTrue(be.gemijnd() == 2, "fed: a block in 100 ticks (5 s)");
+            helper.assertTrue(be.gemijnd() == 2, "fed: a block in 20 ticks (1 s)");
             helper.assertTrue(be.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).getCount() == 1, "the first knabbel is eaten");
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < MijnhuisjeBlockEntity.BLOKKEN_PER_KNABBEL; i++) {
                 be.testStap(level);
             }
-            helper.assertTrue(be.gemijnd() == 22 && be.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).isEmpty() && be.gevoerd(),
-                    "one knabbel per 20 blocks: after 21 fed blocks the second is going");
+            helper.assertTrue(be.gemijnd() == 2 + MijnhuisjeBlockEntity.BLOKKEN_PER_KNABBEL && be.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).isEmpty() && be.gevoerd(),
+                    "one knabbel per 100 blocks: after 101 fed blocks the second is going");
+            // 1.10.5: the knabbel slot takes more than a stack, keeps it through a save and hands out a stack at a time
+            MijnhuisjeMenu menu = new MijnhuisjeMenu(0, p.getInventory(), be);
+            p.getInventory().clearContent();
+            p.getInventory().setItem(0, new ItemStack(ModItems.KAAS_KNABBELS.get(), 64));
+            p.getInventory().setItem(1, new ItemStack(ModItems.KAAS_KNABBELS.get(), 64));
+            be.vakken.setItem(MijnhuisjeBlockEntity.VAK_KNABBELS, new ItemStack(ModItems.KAAS_KNABBELS.get(), 500));
+            int hotbar0 = MijnhuisjeBlockEntity.VAKKEN + 27;
+            menu.quickMoveStack(p, hotbar0);
+            menu.quickMoveStack(p, hotbar0 + 1);
+            helper.assertTrue(be.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).getCount() == 628, "shift-click adds past 64 ("
+                    + be.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).getCount() + ")");
+            net.minecraft.nbt.CompoundTag tag = be.saveWithoutMetadata(level.registryAccess());
+            MijnhuisjeBlockEntity kopie = new MijnhuisjeBlockEntity(be.getBlockPos(), be.getBlockState());
+            kopie.loadWithComponents(nl.juiced.guhs.storage.Nbt.input(level.registryAccess(), tag));
+            helper.assertTrue(kopie.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).getCount() == 628, "the big knabbel stack survives a save ("
+                    + kopie.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).getCount() + ")");
+            helper.assertTrue(menu.getSlot(MijnhuisjeBlockEntity.VAK_KNABBELS).tryRemove(628, Integer.MAX_VALUE, p).map(ItemStack::getCount).orElse(0) == 64,
+                    "taken out a normal stack at a time");
+            be.vakken.clearContent();
+            p.getInventory().clearContent();
         } finally {
             weg(helper, p, guh);
         }

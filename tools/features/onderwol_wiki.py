@@ -296,7 +296,7 @@ WIKI = {
         ("systemen/mijn-guhhuisje", "Zo werkt het huisje",
          "Klik met een opgepakte guh op het huisje en die trekt erin: hooguit vier van je eigen tamme guhs. In het menu stel je met "
          "schuifjes het gebied in (tot 20 blokken naar elke kant en zo diep als je wilt, nooit onder y 10); roze glinsters laten de "
-         "rand zien. Gratis mijnt elke guh een blok per 20 seconden, met kaasknabbels vier keer zo snel. Wat ze minen gaat in een kist "
+         "rand zien. Gratis mijnt elke guh een blok per 4 seconden, met kaasknabbels vier keer zo snel (een knabbel per 100 blokken). Wat ze minen gaat in een kist "
          "naast het huisje, of in de Bank Guh van een Banksleutel. Gebouwen, water en lava laten ze met rust."),
         ("systemen/mijn-guhhuisje", "Het Rugzakzadel",
          "Guhkleding voor op de rug, te maken met een zadel, roze wol, een kist en een Vahoegiet. In de rugzak zit een guhtje dat alles "

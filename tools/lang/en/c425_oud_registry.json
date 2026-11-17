@@ -199,7 +199,7 @@
   "gui.guhs.mijnhuisje.status.8": "Too deep: the guhs never mine below y 10",
   "gui.guhs.mijnhuisje.trekt_in": "%s moves into the Mining Guh House. Pickaxe at the ready, nyeg!",
   "gui.guhs.mijnhuisje.uit_huis": "%s moves out",
-  "gui.guhs.mijnhuisje.vak.knabbels": "Cheese nibbles: the guhs work four times as fast (one nibble per 20 blocks)",
+  "gui.guhs.mijnhuisje.vak.knabbels": "Cheese nibbles: the guhs work four times as fast (one nibble per 100 blocks). It holds up to 9999",
   "gui.guhs.mijnhuisje.vak.sleutel": "A Bank Key: whatever gets mined goes into that Bank Guh",
   "gui.guhs.mijnhuisje.van": "This is %s's Mining Guh House",
   "gui.guhs.mijnhuisje.verder": "Resume",

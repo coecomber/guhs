@@ -29568,7 +29568,7 @@
   "gui.guhs.mijnhuisje.rugzak_legen": "Rugzak legen",
   "gui.guhs.mijnhuisje.rugzak_legen.tooltip": "De rugzakzadels van de bewoners gaan in de kist (zoveel als past)",
   "gui.guhs.mijnhuisje.uit_huis": "%s gaat uit huis",
-  "gui.guhs.mijnhuisje.vak.knabbels": "Kaasknabbels: de guhs werken vier keer zo snel (een knabbel per 20 blokken)",
+  "gui.guhs.mijnhuisje.vak.knabbels": "Kaasknabbels: de guhs werken vier keer zo snel (een knabbel per 100 blokken). Er passen er tot 9999 in",
   "gui.guhs.mijnhuisje.vak.sleutel": "Een Banksleutel: wat gemined wordt gaat in die Bank Guh",
   "gui.guhs.mijnhuisje.status.0": "Er wonen nog geen guhs. Klik met een opgepakte guh!",
   "gui.guhs.mijnhuisje.status.1": "Druk aan het minen: %s van de %s guhs aan het werk",

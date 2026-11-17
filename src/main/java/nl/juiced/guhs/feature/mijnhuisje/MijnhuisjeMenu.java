@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -52,7 +51,7 @@ public class MijnhuisjeMenu extends AbstractContainerMenu {
         for (int i = 0; i < n; i++) {
             namen.add(buf.readUtf(64));
         }
-        return new MijnhuisjeMenu(id, inventory, pos, null, new SimpleContainer(MijnhuisjeBlockEntity.VAKKEN), new SimpleContainerData(DATA),
+        return new MijnhuisjeMenu(id, inventory, pos, null, new MijnhuisjeBlockEntity.Vakken(), new SimpleContainerData(DATA),
                 rx, rz, bodem, namen);
     }
 
@@ -96,7 +95,19 @@ public class MijnhuisjeMenu extends AbstractContainerMenu {
 
                 @Override
                 public int getMaxStackSize() {
-                    return vak == MijnhuisjeBlockEntity.VAK_SLEUTEL ? 1 : 64;
+                    return vak == MijnhuisjeBlockEntity.VAK_SLEUTEL ? 1 : MijnhuisjeBlockEntity.KNABBEL_STAPEL;
+                }
+
+                @Override
+                public int getMaxStackSize(ItemStack stack) {
+                    return vak == MijnhuisjeBlockEntity.VAK_SLEUTEL ? 1 : MijnhuisjeBlockEntity.KNABBEL_STAPEL;
+                }
+
+                /** (1.10.5) A big knabbel stack hands out at most a normal stack at a time (a cursor never holds thousands). */
+                @Override
+                public java.util.Optional<ItemStack> tryRemove(int amount, int maxAmount, Player player) {
+                    int normaal = getItem().isEmpty() ? amount : getItem().getMaxStackSize();
+                    return super.tryRemove(Math.min(amount, normaal), Math.min(maxAmount, normaal), player);
                 }
             });
         }

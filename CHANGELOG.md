@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.5 — Minecraft 26.1.2
+
+- **Mijn-guhhuisje 5x faster:** `PUNTEN_PER_BLOK` 400 -> 80 (per guh a block per 4 s for free, per second fed; the x4 knabbel multiplier stays). A kaasknabbel lasts 100 blocks instead of 20 (`BLOKKEN_PER_KNABBEL`), so the knabbels eaten per hour stay as before.
+- **Big knabbel slot:** the Mijn-guhhuisje's knabbel slot holds up to 9999 (`KNABBEL_STAPEL`, shift-click and placing fill it past 64; taking out by hand goes a normal stack at a time, like the Leverkist). Saved as at most 64 in `Vakken` plus the real count in `Mijn.Knabbels` (the item codec stops at 99); a broken huisje drops it in normal stacks.
+
 ## 1.10.4 — Minecraft 26.1.2
 
 - **Ambachten 9 -> 4:** Verzamelen (= mijnen + houthakken + plukken + imkeren; the spot kinds ore/wood/herb/hive keep their own minigame and look, `NodeSoort`), Vissen (+ coral diving), Smeden (= smeden + naaien), Koken (= koken + brouwen). Saved data is migrated once on load (data version 2): per new ambacht the highest old xp total (higher level on the new curve), the furthest story step, mastery moments, the chosen ambacht title, and the rankings (`vr_ambacht_ranglijst`). Zwamzoet has 4 workshop guhs (smid, kok, verzamel, vis) + the board, Kandijkom and Honingtak the smid and the kok; one story chain per ambacht; the Hoogvads Gilde: Koken/Smeden teachers + the Gildemeester (Verzamelen, Vissen).

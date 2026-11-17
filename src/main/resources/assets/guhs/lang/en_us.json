@@ -29568,7 +29568,7 @@
   "gui.guhs.mijnhuisje.rugzak_legen": "Empty Backpacks",
   "gui.guhs.mijnhuisje.rugzak_legen.tooltip": "The residents' backpack saddles get emptied into the chest (as much as fits)",
   "gui.guhs.mijnhuisje.uit_huis": "%s moves out",
-  "gui.guhs.mijnhuisje.vak.knabbels": "Cheese nibbles: the guhs work four times as fast (one nibble per 20 blocks)",
+  "gui.guhs.mijnhuisje.vak.knabbels": "Cheese nibbles: the guhs work four times as fast (one nibble per 100 blocks). It holds up to 9999",
   "gui.guhs.mijnhuisje.vak.sleutel": "A Bank Key: whatever gets mined goes into that Bank Guh",
   "gui.guhs.mijnhuisje.status.0": "No guhs live here yet. Click with a picked-up guh!",
   "gui.guhs.mijnhuisje.status.1": "Busy mining: %s of the %s guhs at work",

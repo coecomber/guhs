@@ -62,8 +62,9 @@ import nl.juiced.guhs.storage.BankStorage;
  * <ul>
  *   <li><b>Speed</b>: every tick each working guh (loaded, within {@value #BEREIK} blocks, not sitting, not a baby) adds
  *       {@value #VRIJ} point, or {@value #GEVOERD} while it is fed (kaasknabbels in the first slot, one per
- *       {@value #BLOKKEN_PER_KNABBEL} blocks); every {@value #PUNTEN_PER_BLOK} points one block is mined. So per guh one
- *       block per 20 s for free, one per 5 s with kaasknabbels.</li>
+ *       {@value #BLOKKEN_PER_KNABBEL} blocks, the slot holds up to {@value #KNABBEL_STAPEL}); every {@value #PUNTEN_PER_BLOK}
+ *       points one block is mined. So per guh one block per 4 s for free, one per second with kaasknabbels (1.10.5: five
+ *       times as fast as before).</li>
  *   <li><b>Safety</b> ({@link #magMijnen}): only natural terrain (block tag {@code guhs:mijnhuisje_mijnbaar}), nothing with a
  *       block entity, nothing unbreakable, nothing of a structure or a protected guh building, never a block next to a
  *       fluid (it stays as a seal), never one with sand or gravel on top that is not mined itself, never below y
@@ -79,7 +80,10 @@ import nl.juiced.guhs.storage.BankStorage;
  */
 public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
     public static final int VAK_KNABBELS = 0, VAK_SLEUTEL = 1, VAKKEN = 2;
-    public static final int PUNTEN_PER_BLOK = 400, VRIJ = 1, GEVOERD = 4, BLOKKEN_PER_KNABBEL = 20;
+    /** (1.10.5: 400 -> 80, the guhs work five times as fast; a knabbel lasts 100 blocks instead of 20, so as long as before) */
+    public static final int PUNTEN_PER_BLOK = 80, VRIJ = 1, GEVOERD = 4, BLOKKEN_PER_KNABBEL = 100;
+    /** (1.10.5) The knabbel slot holds this many (a normal stack at a time comes out by hand). */
+    public static final int KNABBEL_STAPEL = 9999;
     public static final int MAX_BEWONERS = 4;
     /** A resident further away than this doesn't work; further than {@link #WEG} it moves out (taken along, called away). */
     public static final int BEREIK = 48, WEG = 96;
@@ -99,7 +103,7 @@ public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
     private static final ItemStack GEREEDSCHAP = new ItemStack(Items.NETHERITE_PICKAXE);
     private static final int ROZE = 0xFF6FB5;
 
-    final SimpleContainer vakken = new SimpleContainer(VAKKEN) {
+    final SimpleContainer vakken = new Vakken() {
         @Override
         public void setChanged() {
             super.setChanged();
@@ -111,6 +115,23 @@ public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
             return magInVak(slot, stack);
         }
     };
+    /** (1.10.5) The two slots: the knabbel slot takes a big stack ({@link #KNABBEL_STAPEL}), the key slot one key. */
+    public static class Vakken extends SimpleContainer {
+        public Vakken() {
+            super(VAKKEN);
+        }
+
+        @Override
+        public int getMaxStackSize() {
+            return KNABBEL_STAPEL;
+        }
+
+        @Override
+        public int getMaxStackSize(ItemStack stack) {
+            return stack.is(ModItems.KAAS_KNABBELS.get()) ? KNABBEL_STAPEL : stack.getMaxStackSize();
+        }
+    }
+
     /** What was mined but fits nowhere yet. */
     final NonNullList<ItemStack> wacht = NonNullList.withSize(27, ItemStack.EMPTY);
 
@@ -872,8 +893,15 @@ public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
             lijst.add(b);
         }
         m.put("Bewoners", lijst);
+        // 1.10.5: the item codec stops at 99, so the knabbel slot is saved as at most 64 plus its real count
+        NonNullList<ItemStack> opslaan = NonNullList.withSize(VAKKEN, ItemStack.EMPTY);
+        for (int i = 0; i < VAKKEN; i++) {
+            ItemStack st = vakken.getItem(i);
+            opslaan.set(i, st.getCount() > st.getMaxStackSize() ? st.copyWithCount(st.getMaxStackSize()) : st.copy());
+        }
+        m.putInt("Knabbels", vakken.getItem(VAK_KNABBELS).getCount());
         tag.store("Mijn", CompoundTag.CODEC, m);
-        ContainerHelper.saveAllItems(tag.child("Vakken"), vakken.getItems());
+        ContainerHelper.saveAllItems(tag.child("Vakken"), opslaan);
         ContainerHelper.saveAllItems(tag.child("Wacht"), wacht);
     }
 
@@ -905,6 +933,11 @@ public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
         }
         vakken.clearContent();
         ContainerHelper.loadAllItems(tag.childOrEmpty("Vakken"), vakken.getItems());
+        ItemStack knabbels = vakken.getItem(VAK_KNABBELS);
+        int n = m.getIntOr("Knabbels", 0);
+        if (!knabbels.isEmpty() && n > knabbels.getCount()) {
+            knabbels.setCount(Math.min(n, KNABBEL_STAPEL));
+        }
         for (int i = 0; i < wacht.size(); i++) {
             wacht.set(i, ItemStack.EMPTY);
         }
@@ -916,7 +949,13 @@ public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
     public void preRemoveSideEffects(BlockPos pos, BlockState state) {
         super.preRemoveSideEffects(pos, state);
         if (level instanceof ServerLevel sl) {
-            Containers.dropContents(sl, pos, vakken);
+            for (int i = 0; i < VAKKEN; i++) {                // (1.10.5: a big knabbel stack drops in normal stacks)
+                ItemStack st = vakken.getItem(i);
+                while (!st.isEmpty()) {
+                    Containers.dropItemStack(sl, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, st.split(st.getMaxStackSize()));
+                }
+            }
+            vakken.clearContent();
             for (ItemStack s : wacht) {
                 if (!s.isEmpty()) {
                     Containers.dropItemStack(sl, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, s);

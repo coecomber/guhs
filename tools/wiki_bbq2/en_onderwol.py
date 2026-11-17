@@ -313,7 +313,7 @@ TEKST = {
         "How the house works",
         "Click the house with a picked-up guh and it moves in: at most four of your own tamed guhs. In the menu you set the area with "
         "sliders (up to 20 blocks to each side and as deep as you like, never below y 10); pink sparkles show the edge. For free each "
-        "guh mines a block every 20 seconds, with cheese nibbles four times as fast. What they mine goes into a chest next to the "
+        "guh mines a block every 4 seconds, with cheese nibbles four times as fast (one nibble per 100 blocks). What they mine goes into a chest next to the "
         "house, or into the Bank Guh of a Bank Key. They leave buildings, water and lava alone."),
     ("systemen/mijn-guhhuisje", "Het Rugzakzadel"): (
         "The Saddle Bag",
