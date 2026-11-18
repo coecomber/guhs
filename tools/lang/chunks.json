@@ -7196,6 +7196,21 @@
         "item.guhs.guhwinter_mijter",
         "item.guhs.guhwinter_schaatsen"
       ]
+    },
+    {
+      "id": "c510_guhwinter_lootjes",
+      "title": "1.10.9 Guhwinter, slice lootjes: Het Grote Boek, the draw, the creative plots, the Surprise, the Zak van Sinterklaas",
+      "prefixes": [
+        "guhwinter.lootjes.",
+        "item.guhs.guhwinter_surprise",
+        "item.guhs.guhwinter_zak",
+        "item.guhs.guhwinter_grote_boek",
+        "item.guhs.guhwinter_bouwbord",
+        "block.guhs.guhwinter_grote_boek",
+        "block.guhs.guhwinter_bouwbord",
+        "block.guhs.guhwinter_surprise",
+        "key.guhs.guhwinter_surprise_draai"
+      ]
     }
   ]
 }

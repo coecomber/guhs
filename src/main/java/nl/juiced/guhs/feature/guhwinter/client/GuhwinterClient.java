@@ -16,5 +16,6 @@ public final class GuhwinterClient {
         nl.juiced.guhs.feature.guhwinter.tekenen.client.TekenenClient.init(modBus);   // editor, album, drawing renderers
         nl.juiced.guhs.feature.guhwinter.npc.client.GuhwinterNpcClient.init(modBus);   // the Winterplein guhs' looks
         nl.juiced.guhs.feature.guhwinter.spellen.client.SpellenClient.init(modBus);   // race, oliebollen and shop screens
+        nl.juiced.guhs.feature.guhwinter.lootjes.client.LootjesClient.init(modBus);   // the placed Surprise, its preview and turning
     }
 }
