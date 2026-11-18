@@ -2523,6 +2523,8 @@ CRITTERS_30 = {
     "pluisegeltje": ("pluisegeltje", "pluisegeltje"),
     **{f"guh_konijntje_{k}": ("guh_konijntje", f"guh_konijntje_{k}") for k in ("roze", "wit", "choco", "grijs")},
     "pluiseekhoorntje": ("pluiseekhoorntje", "pluiseekhoorntje"), "shuckle": ("shuckle", "shuckle"), "mew": ("mew", "mew"),
+    # 1.10.9 Guhwinter: the two hoentjes (rare wild birds of the Guhmension)
+    "guhwinter_waterhoen": ("guhwinter_waterhoen", "guhwinter_waterhoen"), "guhwinter_alpinehoen": ("guhwinter_alpinehoen", "guhwinter_alpinehoen"),
 }
 # the outfit sets of the four story questlines + the Timmerguh (clothes pieces, lower case)
 OUTFITS_30 = {"timmerguh": ("timmer_helmpje", "timmer_gereedschapsriem"),

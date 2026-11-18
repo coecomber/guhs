@@ -10044,5 +10044,47 @@
         "attenuation_distance": 16
       }
     ]
+  },
+  "guhwinter_hoentjes.waterhoen_roep": {
+    "sounds": [
+      "guhs:guhwinter_hoentjes/waterhoen_roep1",
+      "guhs:guhwinter_hoentjes/waterhoen_roep2",
+      "guhs:guhwinter_hoentjes/waterhoen_roep3"
+    ],
+    "subtitle": "subtitles.guhs.guhwinter_hoentjes.waterhoen_roep"
+  },
+  "guhwinter_hoentjes.waterhoen_piep": {
+    "sounds": [
+      "guhs:guhwinter_hoentjes/waterhoen_piep1",
+      "guhs:guhwinter_hoentjes/waterhoen_piep2"
+    ],
+    "subtitle": "subtitles.guhs.guhwinter_hoentjes.waterhoen_piep"
+  },
+  "guhwinter_hoentjes.alpinehoen_roep": {
+    "sounds": [
+      "guhs:guhwinter_hoentjes/alpinehoen_roep1",
+      "guhs:guhwinter_hoentjes/alpinehoen_roep2",
+      "guhs:guhwinter_hoentjes/alpinehoen_roep3"
+    ],
+    "subtitle": "subtitles.guhs.guhwinter_hoentjes.alpinehoen_roep"
+  },
+  "guhwinter_hoentjes.alpinehoen_piep": {
+    "sounds": [
+      "guhs:guhwinter_hoentjes/alpinehoen_piep1",
+      "guhs:guhwinter_hoentjes/alpinehoen_piep2"
+    ],
+    "subtitle": "subtitles.guhs.guhwinter_hoentjes.alpinehoen_piep"
+  },
+  "guhwinter_hoentjes.noway": {
+    "sounds": [
+      "guhs:guhwinter_hoentjes/noway"
+    ],
+    "subtitle": "subtitles.guhs.guhwinter_hoentjes.noway"
+  },
+  "guhwinter_hoentjes.noway_extreem": {
+    "sounds": [
+      "guhs:guhwinter_hoentjes/noway_extreem"
+    ],
+    "subtitle": "subtitles.guhs.guhwinter_hoentjes.noway_extreem"
   }
 }
