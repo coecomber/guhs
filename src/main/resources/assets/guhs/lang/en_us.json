@@ -48543,5 +48543,6 @@
   "item.guhs.guhwinter_bakkraam": "Oliebollen Baking Stall",
   "item.guhs.guhwinter_schaatsbord": "Skating Lap Start Sign",
   "item.guhs.guhwinter_pepernootzakje": "Hidden Pepernoten Bag",
-  "item.guhs.guhwinter_kerstlampjes": "Christmas Lights"
+  "item.guhs.guhwinter_kerstlampjes": "Christmas Lights",
+  "item.guhs.guhwinter_kerstlampjes.lore": "A string of twinkling lights for your wall. Melts on 3 January, like the snow."
 }
