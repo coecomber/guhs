@@ -455,6 +455,40 @@ public final class Reisguh {
         return Data.get(server).points.values().stream().filter(p -> p.pos().closerThan(pos, range)).toList();
     }
 
+    // --- 1.10.9 Guhwinter: a destination without a Reisguh standing there (an event place) --------------------------------
+
+    /**
+     * Puts (or moves) a waypoint that has no Reisguh entity: you can travel TO it (you arrive 2 blocks in front of
+     * {@code pos} along {@code yaw}, looking back at it), not from it. It stays on the list until {@link #haalPuntWeg}.
+     */
+    public static void zetVastPunt(MinecraftServer server, UUID id, Component name, BlockPos pos, float yaw) {
+        Data data = Data.get(server);
+        Point p = new Point(id, name, pos, yaw);
+        if (!p.equals(data.points.get(id))) {
+            data.points.put(id, p);
+            data.setDirty();
+        }
+    }
+
+    /** Takes a waypoint off the list (players who knew it simply don't see it any more). */
+    public static void haalPuntWeg(MinecraftServer server, UUID id) {
+        Data data = Data.get(server);
+        if (data.points.remove(id) != null) {
+            data.setDirty();
+        }
+    }
+
+    /** Is this waypoint on the list? */
+    public static boolean heeftPunt(MinecraftServer server, UUID id) {
+        return Data.get(server).points.containsKey(id);
+    }
+
+    /** Discovers a waypoint for a player (at the end of their own order). True when it was new for them. */
+    public static boolean ontdekVoor(MinecraftServer server, UUID player, UUID id) {
+        Data data = Data.get(server);
+        return data.points.containsKey(id) && ReisVolgorde.ontdek(data, player, id);
+    }
+
     /** For tests: has this player discovered that Reisguh? */
     public static boolean discovered(ServerPlayer player, UUID reisguh) {
         return Data.get(player.level().getServer()).of(player.getUUID()).contains(reisguh);

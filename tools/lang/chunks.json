@@ -7119,6 +7119,14 @@
       "prefixes": [
         "vadsrijk.tijd."
       ]
+    },
+    {
+      "id": "c480_guhwinter_kern",
+      "title": "1.10.9 Guhwinter (kern): pepernoot, phase/login chat, Winterplein destination, /guhs winter, melting",
+      "prefixes": [
+        "guhwinter.kern.",
+        "item.guhs.guhwinter_pepernoot"
+      ]
     }
   ]
 }
