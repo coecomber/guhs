@@ -404,7 +404,10 @@ public class MijnhuisjeGameTests {
     public static void mijnhuisjeMijnbaar(GameTestHelper helper) {
         for (String id : new String[]{"guhs:compressed_super_vahoege_vads", "guhs:vahoegiet_erts", "guhs:kaaskorrelerts", "guhs:kristalkaas_erts",
                 "guhs:houtskoolsteen_kaasknabbelerts", "guhs:fossielmijn_zoutkristalerts", "guhs:parelmoer", "guhs:houtskoolsteen", "guhs:kaaskorst",
-                "minecraft:diamond_ore", "minecraft:deepslate_iron_ore", "minecraft:orange_terracotta", "minecraft:netherrack"}) {
+                "minecraft:diamond_ore", "minecraft:deepslate_iron_ore", "minecraft:orange_terracotta", "minecraft:netherrack",
+                // 1.10.8: more natural ground
+                "guhs:kristalpegelblok", "guhs:kaasmos", "guhs:roze_zand", "guhs:bloesemmeertje_meerslib_diep", "guhs:kruimelrots",
+                "guhs:zeegroen_steen", "guhs:gloeikool", "minecraft:soul_soil", "minecraft:crimson_nylium"}) {
             Block b = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getValue(net.minecraft.resources.Identifier.parse(id));
             helper.assertTrue(b != Blocks.AIR && b.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR), id + " is mijnbaar");
         }

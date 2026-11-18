@@ -221,7 +221,12 @@ MIJNBAAR = ["minecraft:pink_wool", "minecraft:magenta_wool", "minecraft:white_wo
             "guhs:pluiswolblok", "guhs:as_aarde", "guhs:as_blok", "guhs:houtskoolsteen", "guhs:mosterd_blok",
             "guhs:mosterd_nylium", "guhs:pindasaus_nylium", "guhs:roosterijzer", "guhs:roosterijzer_pilaar", "guhs:sate_vlees",
             "guhs:gebarsten_korst", "guhs:kaaskorst", "guhs:klipkaas", "guhs:koorkorst", "guhs:kruimelzand",
-            "guhs:schimmelkaas", "#minecraft:terracotta", "#minecraft:base_stone_nether", "minecraft:end_stone"]
+            "guhs:schimmelkaas", "#minecraft:terracotta", "#minecraft:base_stone_nether", "minecraft:end_stone",
+            # 1.10.8: more natural ground (Onder de Wol caves, Gatenkaas hollows, Bloesemmeertje lake bed, Guheinde, Zingende
+            # Weide, Barbecuether) and the Nether's soft ground
+            "guhs:kristalpegelblok", "guhs:kaasmos", "guhs:roze_zand", "guhs:bloesemmeertje_meerzand", "guhs:bloesemmeertje_meerslib",
+            "guhs:bloesemmeertje_meerslib_licht", "guhs:bloesemmeertje_meerslib_diep", "guhs:kruimelrots", "guhs:zeegroen_steen", "guhs:gloeikool",
+            "minecraft:soul_sand", "minecraft:soul_soil", "minecraft:crimson_nylium", "minecraft:warped_nylium", "minecraft:magma_block", "minecraft:glowstone"]
 GROND = ["minecraft:pink_wool", "minecraft:magenta_wool", "minecraft:white_wool", "guhs:viltsteen", "guhs:knuffelsteen",
          "guhs:roze_knuffelsteen", "guhs:guh_kristalsteen", "minecraft:dirt", "minecraft:coarse_dirt", "minecraft:stone",
          "minecraft:cobblestone", "minecraft:deepslate", "minecraft:cobbled_deepslate", "minecraft:granite", "minecraft:diorite",

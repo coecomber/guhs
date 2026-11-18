@@ -71,6 +71,22 @@
     "guhs:schimmelkaas",
     "#minecraft:terracotta",
     "#minecraft:base_stone_nether",
-    "minecraft:end_stone"
+    "minecraft:end_stone",
+    "guhs:kristalpegelblok",
+    "guhs:kaasmos",
+    "guhs:roze_zand",
+    "guhs:bloesemmeertje_meerzand",
+    "guhs:bloesemmeertje_meerslib",
+    "guhs:bloesemmeertje_meerslib_licht",
+    "guhs:bloesemmeertje_meerslib_diep",
+    "guhs:kruimelrots",
+    "guhs:zeegroen_steen",
+    "guhs:gloeikool",
+    "minecraft:soul_sand",
+    "minecraft:soul_soil",
+    "minecraft:crimson_nylium",
+    "minecraft:warped_nylium",
+    "minecraft:magma_block",
+    "minecraft:glowstone"
   ]
 }

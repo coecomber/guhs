@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.8 — Minecraft 26.1.2
+
+- **Blub-Guh-Meter, lopsided bell:** a wild Blub's meter (`BlubTrekking.meter`, also the Droomwinkel) keeps its top at 35, but half of the draws go below it with sigma 13.4 (`METER_SIGMA_LAAG`) and half above with sigma 23.8 (`METER_SIGMA_HOOG`), instead of one sigma of 18. Pure Blub (0) goes from about 1 in 36 to 1 in 200, Volle Guh (100) from about 1 in 5900 to 1 in 300; 20-59 stays about the same, 60+ about doubles, the average goes 35 -> 39. Existing Blubs and the babyblubje inheritance are unchanged. Gametest `blubTrekkingVerdeling` checks the new ends (1 in 200 / 1 in 300) and the two halves.
+- **Mijn-guhhuisje mines more natural ground:** `guhs:mijnhuisje_mijnbaar` (source `tools/features/mijnrook.py` MIJNBAAR) gains kristalpegelblok (Onder de Wol caves), kaasmos (Gatenkaas hollows), roze_zand, bloesemmeertje_meerzand + meerslib (normal/licht/diep), kruimelrots (Guheinde), zeegroen_steen (Zingende Weide), gloeikool (Barbecuether) and the Nether's soul_sand, soul_soil, crimson/warped nylium, magma_block and glowstone. Still skipped on purpose: kruimelwolk (cloud), kruimelzandlaag (layer), ice, crystals, plants, trees, bricks. Gametest `mijnhuisjeMijnbaar` covers them.
+
 ## 1.10.7 — Minecraft 26.1.2
 
 - **Blubs that stay put stay put:** a tame Blub with Rondvadsen off (`isOrderedToSit`) no longer picks hupsen as a trick of its own (`BlubGuhEntity.zelfTrucKeuzes`); hupsen switched Rondvadsen on and never back, so the Blub walked off afterwards. (`vrijOmHeen` needs room for the hop ring at the Blub's own block height, which a slab floor never has: that is why it never happened on slabs.) Tricks on the spot still happen. Hupsen asked from the menu while it stays put: it stays put again afterwards (`hupsZat`, also saved halfway through as `HupsZat`). The Blub-badje no longer lures a Blub that stays put. Gametest `blubBlijftStaan`.

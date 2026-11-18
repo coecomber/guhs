@@ -11,8 +11,10 @@ import net.minecraft.util.RandomSource;
  * 1.8.0 (Guhdromenland): the dice of a Blub-guh (ontwerp-guhs180-dromen.md, the Blub-Guh-Meter). A wild one gets its values
  * once, when it spawns, and they never change after that:
  * <ul>
- *   <li>{@link #meter}: how guh it is, 0..100 (0 = a pure Blub, 100 = almost a guh): a bell around {@value #METER_MIDDEN}
- *       (sigma {@value #METER_SIGMA}), cut off at 0 and 100;</li>
+ *   <li>{@link #meter}: how guh it is, 0..100 (0 = a pure Blub, 100 = almost a guh): a lopsided bell with its top at
+ *       {@value #METER_MIDDEN} (1.10.8): half of them below it (sigma {@value #METER_SIGMA_LAAG}), half above (sigma
+ *       {@value #METER_SIGMA_HOOG}), cut off at 0 and 100. That makes a Pure Blub (0) about 1 in 200 and a Volle Guh (100)
+ *       about 1 in 300 (was 1 in 36 and 1 in 5900 with one sigma of 18);</li>
  *   <li>{@link Soort}: blauw 50%, weide 22%, schildje 15%, ravijn 9%, zwam 4%;</li>
  *   <li>tint: 0 = the normal colour (60%), 1 and 2 = a pastel one (20% each);</li>
  *   <li>grootte: whole percents 75..125 (a bell around 100, sigma {@value #GROOTTE_SIGMA}; 75 and 125 are rare, no title).</li>
@@ -20,7 +22,9 @@ import net.minecraft.util.RandomSource;
  * A babyblubje gets every number somewhere between its parents' and the soort and tint of one of them ({@link #erf}).
  */
 public final class BlubTrekking {
-    public static final int METER_MIDDEN = 35, METER_SIGMA = 18;
+    public static final int METER_MIDDEN = 35;
+    /** 1.10.8: the two sides of the meter bell (narrow below, wide above). */
+    public static final double METER_SIGMA_LAAG = 13.4, METER_SIGMA_HOOG = 23.8;
     public static final float GROOTTE_MIN = 0.75f, GROOTTE_MAX = 1.25f;
     /** The size in whole percents (1.8.0, round 2 of the finish: 75..125, sigma 8.5). */
     public static final int GROOTTE_MIN_PROCENT = 75, GROOTTE_MAX_PROCENT = 125;
@@ -64,7 +68,9 @@ public final class BlubTrekking {
     }
 
     public static int meter(RandomSource random) {
-        return Mth.clamp((int) Math.round(METER_MIDDEN + random.nextGaussian() * METER_SIGMA), 0, 100);
+        double z = Math.abs(random.nextGaussian());
+        double x = random.nextBoolean() ? METER_MIDDEN - z * METER_SIGMA_LAAG : METER_MIDDEN + z * METER_SIGMA_HOOG;
+        return Mth.clamp((int) Math.round(x), 0, 100);
     }
 
     public static Soort soort(RandomSource random) {

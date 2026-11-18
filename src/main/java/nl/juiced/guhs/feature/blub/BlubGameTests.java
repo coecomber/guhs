@@ -17,7 +17,7 @@ import nl.juiced.guhs.gametest.GuhTest;
 import nl.juiced.guhs.registry.ModItems;
 
 /**
- * Game tests of the Blub-guh (1.8.0 test build): the spawn dice (bell around 35, the soort and tint chances, the size range),
+ * Game tests of the Blub-guh (1.8.0 test build): the spawn dice (lopsided bell with its top at 35, the soort and tint chances, the size range),
  * babyblubjes between their parents, taming + the pick-up round trip keeps every die (and the strikje and name), it can't be
  * hurt (but /kill works), and the menu buttons (strikje, volgen, a trick, the lullaby, hupsen, verstoppertje, the shoulder).
  * Template landdiertjes_test_tuin (24 x 24 grass).
@@ -57,7 +57,7 @@ public class BlubGameTests {
         int n = 6000;
         long som = 0;
         int[] soorten = new int[BlubTrekking.Soort.values().length];
-        int normaal = 0, laag = 0, hoog = 0, rond100 = 0, randje = 0;
+        int normaal = 0, onder = 0, boven = 0, puur = 0, guhKant = 0, rond100 = 0, randje = 0;
         long somGroot = 0;
         for (int i = 0; i < n; i++) {
             BlubTrekking.Waarden w = BlubTrekking.trek(r);
@@ -72,15 +72,28 @@ public class BlubGameTests {
             som += w.meter();
             soorten[w.soort().ordinal()]++;
             normaal += w.tint() == 0 ? 1 : 0;
-            laag += w.meter() < 10 ? 1 : 0;
-            hoog += w.meter() > 80 ? 1 : 0;
+            onder += w.meter() < BlubTrekking.METER_MIDDEN ? 1 : 0;
+            boven += w.meter() > BlubTrekking.METER_MIDDEN ? 1 : 0;
+            puur += w.meter() == 0 ? 1 : 0;
+            guhKant += w.meter() >= 70 ? 1 : 0;
         }
         double gem = som / (double) n;
         double gemGroot = somGroot / (double) n;
         helper.assertTrue(gemGroot > 99 && gemGroot < 101, "the size is a bell around 100%, got " + gemGroot);
         helper.assertTrue(rond100 > n * 0.6 && randje < n * 0.02, "75 and 125 are rare: " + randje + " near the ends, " + rond100 + " near 100");
-        helper.assertTrue(gem > 33 && gem < 37, "the meter is a bell around 35, got " + gem);
-        helper.assertTrue(laag > hoog, "more Blub than guh: " + laag + " low vs " + hoog + " high");
+        // 1.10.8: a lopsided bell with its top at 35: half below (narrow), half above (wide), so the average is about 39
+        helper.assertTrue(gem > 37 && gem < 41, "the meter averages about 39, got " + gem);
+        helper.assertTrue(onder > n * 0.45 && boven > n * 0.45, "half below 35, half above: " + onder + " below, " + boven + " above");
+        helper.assertTrue(guhKant > puur * 3, "the guh side is the long one: " + guhKant + " at 70+ vs " + puur + " at 0");
+        // the ends: Pure Blub about 1 in 200, Volle Guh about 1 in 300 (only the meter, a bigger sample)
+        int m = 120000, nul = 0, honderd = 0;
+        for (int i = 0; i < m; i++) {
+            int meter = BlubTrekking.meter(r);
+            nul += meter == 0 ? 1 : 0;
+            honderd += meter == 100 ? 1 : 0;
+        }
+        helper.assertTrue(nul > m / 250 && nul < m / 160, "Pure Blub about 1 in 200, got " + nul + " in " + m);
+        helper.assertTrue(honderd > m / 400 && honderd < m / 230, "Volle Guh about 1 in 300, got " + honderd + " in " + m);
         for (BlubTrekking.Soort s : BlubTrekking.Soort.values()) {
             double kans = soorten[s.ordinal()] * 100.0 / n;
             helper.assertTrue(Math.abs(kans - s.kans) < 2.5, s.id() + ": about " + s.kans + "%, got " + kans);
