@@ -26,6 +26,7 @@ public final class GuhwinterFeature {
         nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes.register(modBus);   // waterhoentje + alpine hoentje
         nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.register(modBus);   // drawing editor, 2x2 drawing, kerstboom, Kerstalbum
         nl.juiced.guhs.feature.guhwinter.npc.GuhwinterNpcFeature.register(modBus);   // the Winterplein's guhs
+        nl.juiced.guhs.feature.guhwinter.plein.GuhwinterPleinFeature.register(modBus);   // the plaza, frame, arrival, anchors, /inrichten
     }
 
     public static void payloads(PayloadRegistrar registrar) {

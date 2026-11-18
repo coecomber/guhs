@@ -7146,6 +7146,14 @@
         "guhwinter.npc.",
         "entity.guhs.guhwinter_guh"
       ]
+    },
+    {
+      "id": "c480_guhwinter_plein",
+      "title": "1.10.9 Guhwinter (plein): the winter square's signs and the /guhs winter inrichten|plein|anker feedback",
+      "prefixes": [
+        "sign.guhs.guhwinter_plein.",
+        "commands.guhs.guhwinter."
+      ]
     }
   ]
 }

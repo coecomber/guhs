@@ -21,7 +21,7 @@ import nl.juiced.guhs.Guhs;
  * Guhwinter (npc slice): the plein slice's named positions ({@code data/guhs/guhwinter/ankers.json}, name to
  * {@code {x, y, z, yaw}}), read here directly because plein's {@code GuhwinterAnkers} did not exist yet in this branch.
  * Missing file or name: null (the NPC then uses its fallback spot inside the plaza, see {@link NpcDefs}).
- * <p>INTEGRATION: {@link #bron} can point at {@code GuhwinterAnkers.get} in one line.
+ * <p>Since the 1.10.9 integration {@link #bron} reads plein's {@code GuhwinterAnkers}; the json reader stays as a fall-back.
  */
 public final class NpcAnkers {
     /** One anchor: where (block-centred when the file gives whole numbers) and which way it looks. */
@@ -34,7 +34,24 @@ public final class NpcAnkers {
         Anker get(MinecraftServer server, String naam);
     }
 
-    public static Bron bron = NpcAnkers::uitJson;
+    /** 1.10.9 integration: plein's {@link nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers} (no log line for a missing name). */
+    public static Bron bron = NpcAnkers::uitPlein;
+
+    @Nullable
+    private static Anker uitPlein(MinecraftServer server, String naam) {
+        nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.Anker a = nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.zoek(naam);
+        if (a == null) {
+            return null;
+        }
+        double x = a.x(), z = a.z();
+        if (x == Math.floor(x)) {   // whole numbers are a block: stand in its middle (as the json reader below)
+            x += 0.5;
+        }
+        if (z == Math.floor(z)) {
+            z += 0.5;
+        }
+        return new Anker(new Vec3(x, a.y(), z), a.yaw());
+    }
     private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
 
     private static final Map<String, Anker> CACHE = new HashMap<>();
