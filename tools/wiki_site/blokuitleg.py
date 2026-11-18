@@ -2056,6 +2056,8 @@ UITLEG["mijn_guhhuisje"] = dict(
        "- Wat ze minen gaat in een kist naast het huisje, of in de Bank Guh van een Banksleutel in het andere vakje. Een guh "
        "met een rugzakzadel neemt alle gewone grondblokken mee in zijn rugzak (eindeloos) en brengt ze naar de Bank Guh.\n"
        "- Is alles vol, dan wachten de guhs tot er weer plek is.\n"
+       "- De bewoners staan rechts als opgepakte guhs: sleep er een naar je inventaris en je pakt hem op (uit huis), sleep "
+       "een opgepakte guh in een leeg vakje en hij trekt in. Rechtsklik op een bewoner: hij gaat uit huis maar blijft waar hij is.\n"
        "\n"
        "Ze minen alleen gewone grond (wol, de steenlagen, ertsen, aarde, zand...), nooit gebouwen, nooit naast water of "
        "lava. Onder het huisje blijft een pilaar staan met een ladder naar beneden, en er komen roze lampjes in.",
@@ -2070,6 +2072,8 @@ UITLEG["mijn_guhhuisje"] = dict(
        "- What they mine goes into a chest next to the house, or into the Bank Guh of a Bank Key in the other slot. A guh "
        "wearing a Saddle Bag takes all plain ground blocks along in its bag (endlessly) and brings them to the Bank Guh.\n"
        "- When everything is full, the guhs wait until there is room again.\n"
+       "- The residents show on the right as picked-up guhs: drag one to your inventory to pick it up (it moves out), drag a "
+       "picked-up guh into an empty slot and it moves in. Right-click a resident: it moves out but stays where it is.\n"
        "\n"
        "They only mine plain ground (wool, the stone layers, ores, dirt, sand...), never buildings, never next to water "
        "or lava. A pillar stays under the house with a ladder down, and pink lamps go in it.",

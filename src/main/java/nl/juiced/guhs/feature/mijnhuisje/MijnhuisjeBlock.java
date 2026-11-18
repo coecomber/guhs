@@ -128,23 +128,37 @@ public class MijnhuisjeBlock extends HorizontalDirectionalBlock implements Entit
             sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.van", be.eigenaarNaam()).withStyle(ChatFormatting.GRAY));
             return InteractionResult.CONSUME;
         }
+        return zetIn(sl, sp, be, stack) ? InteractionResult.SUCCESS : InteractionResult.CONSUME;
+    }
+
+    /**
+     * A picked-up guh moves in (out of the door; the item is used up). Also the menu's resident slots (1.10.7). False, with
+     * a message: full, or (1.10.7) someone else's guh (it used to pop out at the door anyway).
+     */
+    static boolean zetIn(ServerLevel sl, ServerPlayer sp, MijnhuisjeBlockEntity be, ItemStack stack) {
         if (be.isVol()) {
             sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.vol", MijnhuisjeBlockEntity.MAX_BEWONERS).withStyle(ChatFormatting.LIGHT_PURPLE));
-            return InteractionResult.CONSUME;
+            return false;
         }
-        Direction voor = state.getValue(FACING);
-        BlockPos d = pos.relative(voor);
-        Entity e = PickedUpGuhItem.release(sl, PickedUpGuhItem.guhData(stack), d.getX() + 0.5, d.getY(), d.getZ() + 0.5, voor.toYRot());
+        net.minecraft.nbt.CompoundTag data = PickedUpGuhItem.guhData(stack);
+        String van = data.getStringOr(PickedUpGuhItem.EIGENAAR, "");
+        if (data.contains(PickedUpGuhItem.VOORBEELD) || be.eigenaar() == null || !van.isEmpty() && !van.equals(be.eigenaar().toString())) {
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.niet_jouw_guh").withStyle(ChatFormatting.GRAY));
+            return false;
+        }
+        Direction voor = be.getBlockState().getValue(FACING);
+        BlockPos d = be.getBlockPos().relative(voor);
+        Entity e = PickedUpGuhItem.release(sl, data, d.getX() + 0.5, d.getY(), d.getZ() + 0.5, voor.toYRot());
         if (e == null) {
-            return InteractionResult.CONSUME;
+            return false;
         }
-        stack.consume(1, sp);
+        stack.shrink(1);                                               // (also in creative: a guh is never copied)
         if (be.trekIn(e)) {
             sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.trekt_in", e.getDisplayName()).withStyle(ChatFormatting.LIGHT_PURPLE));
         } else {
             sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.niet_jouw_guh").withStyle(ChatFormatting.GRAY));
         }
-        return InteractionResult.SUCCESS;
+        return true;
     }
 
     /** Only the owner (or an op) even starts breaking it. */

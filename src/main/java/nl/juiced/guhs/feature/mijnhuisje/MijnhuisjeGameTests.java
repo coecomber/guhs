@@ -277,7 +277,7 @@ public class MijnhuisjeGameTests {
             p.getInventory().setItem(0, new ItemStack(ModItems.KAAS_KNABBELS.get(), 64));
             p.getInventory().setItem(1, new ItemStack(ModItems.KAAS_KNABBELS.get(), 64));
             be.vakken.setItem(MijnhuisjeBlockEntity.VAK_KNABBELS, new ItemStack(ModItems.KAAS_KNABBELS.get(), 500));
-            int hotbar0 = MijnhuisjeBlockEntity.VAKKEN + 27;
+            int hotbar0 = MijnhuisjeMenu.INV_START + 27;
             menu.quickMoveStack(p, hotbar0);
             menu.quickMoveStack(p, hotbar0 + 1);
             helper.assertTrue(be.vakken.getItem(MijnhuisjeBlockEntity.VAK_KNABBELS).getCount() == 628, "shift-click adds past 64 ("
@@ -424,6 +424,74 @@ public class MijnhuisjeGameTests {
         helper.assertTrue(new ItemStack(Items.COBBLESTONE).is(Rugzak.GROND) && !new ItemStack(Items.COAL).is(Rugzak.GROND), "ground blocks, not ores");
         helper.assertTrue(Blocks.PINK_WOOL.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR) && Blocks.COAL_ORE.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR)
                 && !Blocks.OAK_PLANKS.defaultBlockState().is(MijnhuisjeFeature.MIJNBAAR), "natural terrain only");
+        helper.succeed();
+    }
+
+    /**
+     * 1.10.7: the residents in the menu, as picked-up guhs: drag one out (picked up, out of the house), drop it on an empty
+     * slot (it moves in again), shift-click it out and in, right-click (out of the house, it stays), no look-alike ever
+     * becomes an item, and someone else's guh stays outside.
+     */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
+    public static void mijnhuisjeBewonersSlepen(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        ServerPlayer p = speler(helper);
+        MijnhuisjeBlockEntity be = huisje(helper, p);
+        GuhEntity guh = guh(helper, p, new BlockPos(10, 8, 10));
+        java.util.UUID id = guh.getUUID();
+        ServerPlayer ander = GuhMockPlayer.of(helper);
+        GuhEntity zijne = guh(helper, ander, new BlockPos(5, 8, 5));
+        int vak0 = MijnhuisjeBlockEntity.VAKKEN;
+        var PICKUP = net.minecraft.world.inventory.ContainerInput.PICKUP;
+        try {
+            p.getInventory().clearContent();
+            helper.assertTrue(be.trekIn(guh), "the guh moves in");
+            MijnhuisjeMenu menu = new MijnhuisjeMenu(0, p.getInventory(), be);
+            ItemStack lijkt = menu.getSlot(vak0).getItem();
+            helper.assertTrue(lijkt.is(ModItems.PICKED_UP_GUH.get()) && menu.getSlot(vak0 + 1).getItem().isEmpty(), "the resident shows as a picked-up guh");
+            // dragged out: picked up for real
+            menu.clicked(vak0, 0, PICKUP, p);
+            ItemStack opgepakt = menu.getCarried();
+            helper.assertTrue(opgepakt.is(ModItems.PICKED_UP_GUH.get()) && !nl.juiced.guhs.item.PickedUpGuhItem.guhData(opgepakt).contains(nl.juiced.guhs.item.PickedUpGuhItem.VOORBEELD)
+                    && nl.juiced.guhs.item.PickedUpGuhItem.guhData(opgepakt).contains("Variant"), "on the cursor: the real picked-up guh");
+            helper.assertTrue(guh.isRemoved() && be.bewoners().isEmpty() && menu.getSlot(vak0).getItem().isEmpty(), "out of the world and out of the house");
+            // dropped on an empty slot: it moves in again
+            menu.clicked(vak0 + 2, 0, PICKUP, p);
+            helper.assertTrue(menu.getCarried().isEmpty() && be.bewoners().size() == 1 && level.getEntity(id) instanceof GuhEntity g2 && MijnhuisjeBlockEntity.isBewoner(g2),
+                    "dropped in: it lives here again");
+            helper.assertTrue(menu.getSlot(vak0).getItem().is(ModItems.PICKED_UP_GUH.get()), "its slot is filled again");
+            // shift-click out (into the inventory) and in again
+            menu.clicked(vak0, 0, net.minecraft.world.inventory.ContainerInput.QUICK_MOVE, p);
+            int waar = -1;
+            for (int i = 0; i < 36; i++) {
+                if (p.getInventory().getItem(i).is(ModItems.PICKED_UP_GUH.get())) {
+                    waar = i;
+                }
+            }
+            helper.assertTrue(waar >= 0 && be.bewoners().isEmpty(), "shift-click: into your inventory");
+            int slot = MijnhuisjeMenu.INV_START + (waar < 9 ? 27 + waar : waar - 9);
+            menu.quickMoveStack(p, slot);
+            helper.assertTrue(p.getInventory().getItem(waar).isEmpty() && be.bewoners().size() == 1, "shift-click from the inventory: it moves in");
+            // the look-alike never comes along with vanilla moves
+            menu.clicked(vak0, 0, net.minecraft.world.inventory.ContainerInput.CLONE, p);
+            helper.assertTrue(menu.getCarried().isEmpty(), "middle-click: no copy");
+            // right-click: out of the house, still in the world
+            Entity nu = level.getEntity(id);
+            menu.clicked(vak0, 1, PICKUP, p);
+            helper.assertTrue(be.bewoners().isEmpty() && nu != null && !nu.isRemoved() && !MijnhuisjeBlockEntity.isBewoner(nu), "right-click: moves out, stays");
+            // someone else's guh: refused, it stays an item
+            ItemStack vreemd = nl.juiced.guhs.item.PickedUpGuhItem.pickUp(zijne);
+            menu.setCarried(vreemd);
+            menu.clicked(vak0, 0, PICKUP, p);
+            helper.assertTrue(menu.getCarried().is(ModItems.PICKED_UP_GUH.get()) && be.bewoners().isEmpty(), "someone else's guh stays on the cursor");
+            menu.setCarried(ItemStack.EMPTY);
+            if (nu != null) {
+                nu.discard();
+            }
+        } finally {
+            weg(helper, p, guh, zijne);
+            helper.getLevel().removePlayerImmediately(ander, Entity.RemovalReason.DISCARDED);
+        }
         helper.succeed();
     }
 }

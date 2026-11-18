@@ -113,7 +113,7 @@ public class BlubBadjeBlock extends Block {
                 bubbels(level, pos, 10);
                 BlubGeluid.KLUS_BADDEREN.speel(b);
                 b.emotie(BlubGuhEntity.RECHTOP, 60);
-            } else if (b.magZelfTruc() && random.nextInt(4) == 0) {
+            } else if (b.magZelfTruc() && !b.isOrderedToSit() && random.nextInt(4) == 0) {   // (1.10.7: not one that stays put)
                 b.getNavigation().moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 1.1);
             }
         }

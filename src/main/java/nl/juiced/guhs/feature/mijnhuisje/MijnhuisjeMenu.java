@@ -32,9 +32,16 @@ public class MijnhuisjeMenu extends AbstractContainerMenu {
     public static final int KNOP_RX = 0, KNOP_RZ = 100, KNOP_TOON = 50, KNOP_AAN = 51, KNOP_RUGZAK = 52, KNOP_UIT = 60, KNOP_BODEM = 1000;
     /** The y range a slider can send (KNOP_BODEM + y + BODEM_VERSCHUIF). */
     public static final int BODEM_VERSCHUIF = 100;
-    public static final int BREED = 176, HOOG = 244, VAK_X = 8, VAK_Y = 102, INV_X = 8, INV_Y = 162;
+    public static final int BREED = 176, HOOG = 258, VAK_X = 8, VAK_Y = 102, INV_X = 8, INV_Y = 176;
+    /** (1.10.7) The residents' slots: 2 x 2 at the right, next to the two slots; slot index VAKKEN + i is resident i. */
+    public static final int BEWONER_X = 134, BEWONER_Y = 102, BEWONER_STAP = 19;
+    /** The first slot of your inventory. */
+    public static final int INV_START = MijnhuisjeBlockEntity.VAKKEN + MijnhuisjeBlockEntity.MAX_BEWONERS;
 
     private final Container vakken;
+    /** (1.10.7) Look-alikes of the residents as picked-up guhs (the server fills them; taking one picks the guh up). */
+    private final net.minecraft.world.SimpleContainer bewonerVakken = new net.minecraft.world.SimpleContainer(MijnhuisjeBlockEntity.MAX_BEWONERS);
+    private int verversTik;
     private final ContainerData data;
     @Nullable
     private final MijnhuisjeBlockEntity be;
@@ -111,8 +118,134 @@ public class MijnhuisjeMenu extends AbstractContainerMenu {
                 }
             });
         }
+        for (int i = 0; i < MijnhuisjeBlockEntity.MAX_BEWONERS; i++) {
+            addSlot(new Slot(bewonerVakken, i, BEWONER_X + (i % 2) * BEWONER_STAP, BEWONER_Y + (i / 2) * BEWONER_STAP) {
+                // (vanilla never moves these: clicked() handles them, on the server)
+                @Override
+                public boolean mayPlace(ItemStack stack) {
+                    return false;
+                }
+
+                @Override
+                public boolean mayPickup(Player player) {
+                    return false;
+                }
+            });
+        }
         addStandardInventorySlots(inventory, INV_X, INV_Y);
         addDataSlots(data);
+        ververs();
+    }
+
+    /** (1.10.7) The residents' look-alikes, fresh (server). */
+    private void ververs() {
+        if (be == null || !(be.getLevel() instanceof net.minecraft.server.level.ServerLevel sl)) {
+            return;
+        }
+        List<java.util.UUID> b = be.bewoners();
+        for (int i = 0; i < MijnhuisjeBlockEntity.MAX_BEWONERS; i++) {
+            ItemStack v = ItemStack.EMPTY;
+            if (i < b.size()) {
+                v = sl.getEntity(b.get(i)) instanceof nl.juiced.guhs.entity.GuhEntity g && g.isAlive()
+                        ? nl.juiced.guhs.item.PickedUpGuhItem.voorbeeld(g) : nl.juiced.guhs.item.PickedUpGuhItem.voorbeeld(be.naamVan(b.get(i)));
+            }
+            bewonerVakken.setItem(i, v);
+        }
+    }
+
+    @Override
+    public void broadcastChanges() {
+        if (++verversTik >= 20) {                                    // (once a second: names, hearts, health)
+            verversTik = 0;
+            ververs();
+        }
+        super.broadcastChanges();
+    }
+
+    /**
+     * (1.10.7) The residents' slots: drag one out (click, shift-click, a hotbar key, Q) and the guh is picked up, out of the
+     * house; right-click: it moves out (stays in the world); a picked-up guh dropped on an empty slot moves in. Only the
+     * server does it (the client waits for the result: no look-alike ever becomes a real item).
+     */
+    @Override
+    public void clicked(int slotIndex, int button, net.minecraft.world.inventory.ContainerInput input, Player player) {
+        int i = slotIndex - MijnhuisjeBlockEntity.VAKKEN;
+        if (slotIndex >= 0 && i >= 0 && i < MijnhuisjeBlockEntity.MAX_BEWONERS) {
+            if (be != null && player instanceof ServerPlayer sp && be.mag(sp)) {
+                bewonerKlik(sp, i, button, input);
+                ververs();
+            }
+            return;
+        }
+        super.clicked(slotIndex, button, input, player);
+    }
+
+    private void bewonerKlik(ServerPlayer sp, int i, int button, net.minecraft.world.inventory.ContainerInput input) {
+        List<java.util.UUID> b = be.bewoners();
+        ItemStack carried = getCarried();
+        if (input == net.minecraft.world.inventory.ContainerInput.PICKUP && !carried.isEmpty()) {
+            if (i >= b.size() && carried.is(nl.juiced.guhs.registry.ModItems.PICKED_UP_GUH.get())
+                    && sp.level() instanceof net.minecraft.server.level.ServerLevel sl) {
+                MijnhuisjeBlock.zetIn(sl, sp, be, carried);
+            }
+            return;
+        }
+        if (i >= b.size() || !carried.isEmpty()) {
+            return;
+        }
+        java.util.UUID id = b.get(i);
+        switch (input) {
+            case PICKUP -> {
+                if (button == 1) {                                     // right-click: out of the house, it stays where it is
+                    sp.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.mijnhuisje.uit_huis", be.naamVan(id))
+                            .withStyle(net.minecraft.ChatFormatting.LIGHT_PURPLE));
+                    be.trekUit(id);
+                    return;
+                }
+                ItemStack guh = be.pakOp(sp, id);
+                if (!guh.isEmpty()) {
+                    setCarried(guh);
+                }
+            }
+            case QUICK_MOVE -> {
+                ItemStack guh = be.pakOp(sp, id);
+                if (!guh.isEmpty()) {
+                    sp.getInventory().placeItemBackInInventory(guh);
+                }
+            }
+            case SWAP -> {
+                if (button < 0 || button >= 9 && button != 40) {
+                    return;
+                }
+                ItemStack guh = be.pakOp(sp, id);
+                if (guh.isEmpty()) {
+                    return;
+                }
+                if (sp.getInventory().getItem(button).isEmpty()) {
+                    sp.getInventory().setItem(button, guh);
+                } else {
+                    sp.getInventory().placeItemBackInInventory(guh);
+                }
+            }
+            case THROW -> {
+                ItemStack guh = be.pakOp(sp, id);
+                if (!guh.isEmpty()) {
+                    sp.drop(guh, true);
+                }
+            }
+            default -> {
+            }
+        }
+    }
+
+    @Override
+    public boolean canTakeItemForPickAll(ItemStack carried, Slot target) {
+        return target.container != bewonerVakken && super.canTakeItemForPickAll(carried, target);
+    }
+
+    @Override
+    public boolean canDragTo(Slot slot) {
+        return slot.container != bewonerVakken && super.canDragTo(slot);
     }
 
     public int rx() {
@@ -194,7 +327,7 @@ public class MijnhuisjeMenu extends AbstractContainerMenu {
         return true;
     }
 
-    /** Shift-click: the inventory's kaasknabbels / Banksleutel into their slot, the slots' things back. */
+    /** Shift-click: the inventory's kaasknabbels / Banksleutel into their slot, (1.10.7) a picked-up guh into the house, the slots' things back. */
     @Override
     public ItemStack quickMoveStack(Player player, int index) {
         Slot slot = slots.get(index);
@@ -205,9 +338,18 @@ public class MijnhuisjeMenu extends AbstractContainerMenu {
         ItemStack kopie = stack.copy();
         int vakken = MijnhuisjeBlockEntity.VAKKEN;
         if (index < vakken) {
-            if (!moveItemStackTo(stack, vakken, slots.size(), true)) {
+            if (!moveItemStackTo(stack, INV_START, slots.size(), true)) {
                 return ItemStack.EMPTY;
             }
+        } else if (index < INV_START) {
+            return ItemStack.EMPTY;                                    // (the residents: clicked() handles them)
+        } else if (stack.is(nl.juiced.guhs.registry.ModItems.PICKED_UP_GUH.get())) {
+            if (be != null && player instanceof ServerPlayer sp && be.mag(sp) && sp.level() instanceof net.minecraft.server.level.ServerLevel sl
+                    && MijnhuisjeBlock.zetIn(sl, sp, be, stack)) {
+                slot.setChanged();
+                ververs();
+            }
+            return ItemStack.EMPTY;
         } else {
             int doel = MijnhuisjeBlockEntity.magInVak(MijnhuisjeBlockEntity.VAK_KNABBELS, stack) ? MijnhuisjeBlockEntity.VAK_KNABBELS
                     : MijnhuisjeBlockEntity.magInVak(MijnhuisjeBlockEntity.VAK_SLEUTEL, stack) ? MijnhuisjeBlockEntity.VAK_SLEUTEL : -1;

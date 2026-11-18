@@ -40,8 +40,57 @@ public class PickedUpGuhItem extends Item {
     /** (item data, 1.6.0 F3b) its owner (UUID string and name) and its number in the owner's Guhdex; read by the tooltip. */
     public static final String EIGENAAR = "GuhEigenaar", EIGENAAR_NAAM = "GuhEigenaarNaam", NUMMER = "GuhdexNr";
 
+    /**
+     * (1.10.7) A look-alike for a menu (the Mijn-guhhuisje's resident slots): only what the name and tooltip need, the guh
+     * stays where it is. {@link #VOORBEELD}: 1 = here (drag it out to pick it up), 2 = not around right now.
+     */
+    public static final String VOORBEELD = "MijnVoorbeeld", VOORBEELD_NAAM = "MijnNaam";
+    private static final java.util.Set<String> VOORBEELD_SLEUTELS = java.util.Set.of("GuhDisplayName", "Variant", "Personality", HARTJES,
+            "Health", "Saddle", EIGENAAR, EIGENAAR_NAAM, NUMMER);
+
+    public static ItemStack voorbeeld(GuhEntity guh) {
+        CompoundTag vol = gegevens(guh);
+        CompoundTag tag = new CompoundTag();
+        for (String k : VOORBEELD_SLEUTELS) {
+            if (vol.get(k) instanceof Tag t) {
+                tag.put(k, t.copy());
+            }
+        }
+        ListTag attributen = new ListTag();
+        for (Tag t : vol.getListOrEmpty("attributes")) {
+            if (t instanceof CompoundTag a && (a.getStringOr("id", "").endsWith("scale") || a.getStringOr("id", "").endsWith("max_health"))) {
+                attributen.add(a.copy());
+            }
+        }
+        tag.put("attributes", attributen);
+        tag.putInt(VOORBEELD, 1);
+        tag.putString(VOORBEELD_NAAM, guh.getName().getString());
+        return of(tag);
+    }
+
+    /** (1.10.7) A look-alike of a guh that isn't around (only its name). */
+    public static ItemStack voorbeeld(String naam) {
+        CompoundTag tag = new CompoundTag();
+        nl.juiced.guhs.taal.Tekst.put(tag, "GuhDisplayName", Component.literal(naam));
+        tag.putInt(VOORBEELD, 2);
+        tag.putString(VOORBEELD_NAAM, naam);
+        return of(tag);
+    }
+
     /** Takes the guh out of the world and returns it as an item. */
     public static ItemStack pickUp(GuhEntity guh) {
+        CompoundTag tag = gegevens(guh);
+        guh.discard();
+        ItemStack stack = of(tag);
+        if (!guh.level().isClientSide()) {   // 2.10: "waar is mijn guh": in its owner's pockets now
+            nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_SPELER, guh.level().dimension(), guh.blockPosition(),
+                    guh.getOwner() instanceof net.minecraft.world.entity.player.Player owner ? owner.getGameProfile().name() : "", guh.level().getGameTime());
+        }
+        return stack;
+    }
+
+    /** Everything of the guh, as the item keeps it. */
+    private static CompoundTag gegevens(GuhEntity guh) {
         CompoundTag tag = nl.juiced.guhs.storage.Nbt.saveWithoutId(guh);
         tag.putString("id", EntityType.getKey(guh.getType()).toString());
         tag.putBoolean("Sitting", false);
@@ -66,13 +115,7 @@ public class PickedUpGuhItem extends Item {
                 tag.putInt(NUMMER, nr);
             }
         }
-        guh.discard();
-        ItemStack stack = of(tag);
-        if (!guh.level().isClientSide()) {   // 2.10: "waar is mijn guh": in its owner's pockets now
-            nl.juiced.guhs.feature.band.GuhVolger.item(stack, nl.juiced.guhs.feature.band.PlekSoort.ITEM_SPELER, guh.level().dimension(), guh.blockPosition(),
-                    guh.getOwner() instanceof net.minecraft.world.entity.player.Player owner ? owner.getGameProfile().name() : "", guh.level().getGameTime());
-        }
-        return stack;
+        return tag;
     }
 
     /** 2.10: "waar is mijn guh": in someone's pockets (checked every 5 seconds). */
@@ -165,6 +208,12 @@ public class PickedUpGuhItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
         CompoundTag data = guhData(stack);
+        int voorbeeld = data.getIntOr(VOORBEELD, 0);
+        if (voorbeeld == 2) {                                         // (1.10.7: a Mijn-guhhuisje resident that isn't around)
+            tooltip.accept(Component.translatable("gui.guhs.mijnhuisje.bewoner.weg_tip").withStyle(ChatFormatting.GRAY));
+            tooltip.accept(Component.translatable("gui.guhs.mijnhuisje.bewoner.uit_tip").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+            return;
+        }
         double scale = 1.0;
         double maxHealth = 25;
         ListTag attributes = data.getListOrEmpty("attributes");
@@ -210,6 +259,11 @@ public class PickedUpGuhItem extends Item {
         tooltip.accept(Component.translatable("gui.guhs.menu.hp", (int) Math.ceil(data.getFloatOr("Health", 0.0F)), (int) maxHealth).withStyle(ChatFormatting.GRAY));
         if (data.getBooleanOr("Saddle", false)) {
             tooltip.accept(Component.translatable("item.minecraft.saddle").withStyle(ChatFormatting.GRAY));
+        }
+        if (voorbeeld == 1) {                                         // (1.10.7: a Mijn-guhhuisje resident)
+            tooltip.accept(Component.translatable("gui.guhs.mijnhuisje.bewoner.pak_tip").withStyle(ChatFormatting.LIGHT_PURPLE));
+            tooltip.accept(Component.translatable("gui.guhs.mijnhuisje.bewoner.uit_tip").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
+            return;
         }
         tooltip.accept(Component.translatable("item.guhs.picked_up_guh.hint").withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
     }

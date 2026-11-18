@@ -301,4 +301,23 @@ public class BlubGameTests {
         helper.getLevel().removePlayerImmediately(p, Entity.RemovalReason.DISCARDED);
         helper.succeed();
     }
+
+    /** 1.10.7: a Blub that stays put (Rondvadsen off) does no hupsen by itself, and after hupsen asked from the menu it sits again. */
+    @GuhTest(template = TUIN, batch = "blub", timeoutTicks = 320)
+    public static void blubBlijftStaan(GameTestHelper helper) {
+        ServerPlayer p = speler(helper, new BlockPos(11, 2, 11));
+        BlubGuhEntity b = blub(helper, new BlockPos(12, 2, 12), new BlubTrekking.Waarden(35, BlubTrekking.Soort.BLAUW, 0, 1f));
+        tem(helper, b, p);
+        helper.assertTrue(b.zelfTrucKeuzes().contains(BlubTruc.HUPSEN), "free: hupsen is one of its own tricks");
+        BlubMenu.doe(p, b, BlubMenu.Actie.WISSEL, PiepInstelling.RONDVADSEN.ordinal(), "");
+        helper.assertTrue(b.isOrderedToSit(), "Rondvadsen off: it stays put");
+        helper.assertFalse(b.zelfTrucKeuzes().contains(BlubTruc.HUPSEN), "staying put: no hupsen by itself");
+        helper.assertFalse(b.zelfTrucKeuzes().isEmpty(), "staying put: tricks on the spot still");
+        helper.assertTrue(BlubMenu.doe(p, b, BlubMenu.Actie.TRUC, BlubTruc.HUPSEN.ordinal(), "") && b.isBezig(), "hupsen from the menu");
+        helper.runAfterDelay(240, () -> {
+            helper.assertFalse(b.isBezig(), "done hopping");
+            helper.assertTrue(b.isOrderedToSit(), "after hupsen it stays put again");
+            helper.succeed();
+        });
+    }
 }

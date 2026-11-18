@@ -101,6 +101,8 @@ public class BlubGuhEntity extends Landdiertje {
     private BlockPos verstopPlek;
     /** Hupsen: hops still to do, done so far, its record; ticks until the next hop. */
     private int hupsenOver, hupsenGedaan, hupsRecord, hupsWacht;
+    /** Did it stay put (Rondvadsen off) when the hupsen began? Then it sits down again when done. */
+    private boolean hupsZat;
     /** The slaapliedje: ticks it still sings (0: not). */
     private int liedje;
     /** How long the lullaby (one sound file, blubguh.liedje / blubguh.klus_zingen) lasts: 23.5 s after the import's trim. */
@@ -636,18 +638,24 @@ public class BlubGuhEntity extends Landdiertje {
         return true;
     }
 
+    /** The tricks it may pick by itself right now. 1.10.7: a Blub that stays put (Rondvadsen off) only picks tricks on the spot. */
+    java.util.List<BlubTruc> zelfTrucKeuzes() {
+        java.util.List<BlubTruc> kan = new java.util.ArrayList<>();
+        for (BlubTruc t : BlubTruc.values()) {
+            if (t.zelf && (t != BlubTruc.HUPSEN || !isOrderedToSit() && vrijOmHeen())) {
+                kan.add(t);
+            }
+        }
+        return kan;
+    }
+
     /** Does one random trick of its own (BlubTruc#zelf; hupsen only with room). Returns it, or null when it can't now. */
     @Nullable
     public BlubTruc zelfTruc() {
         if (!magZelfTruc()) {
             return null;
         }
-        java.util.List<BlubTruc> kan = new java.util.ArrayList<>();
-        for (BlubTruc t : BlubTruc.values()) {
-            if (t.zelf && (t != BlubTruc.HUPSEN || vrijOmHeen())) {
-                kan.add(t);
-            }
-        }
+        java.util.List<BlubTruc> kan = zelfTrucKeuzes();
         BlubTruc t = kan.get(random.nextInt(kan.size()));
         t.doe(this, null);
         return t;
@@ -901,6 +909,8 @@ public class BlubGuhEntity extends Landdiertje {
     /** Hupsen: a few hops in a ring around its owner, faster and faster (its record is kept). */
     public void hupsen(@Nullable ServerPlayer player) {
         setSlaapt(false);
+        // (1.10.7: asked from the menu while it stays put, it stays put again afterwards; it used to keep wandering)
+        hupsZat = hupsZat || isTame() && isOrderedToSit();
         if (isTame()) {
             zet(nl.juiced.guhs.feature.piep.PiepInstelling.RONDVADSEN, true);
         }
@@ -1336,6 +1346,10 @@ public class BlubGuhEntity extends Landdiertje {
             hupsenOver--;
             hupsWacht = Math.max(4, 12 - hupsenGedaan);
             if (hupsenOver == 0) {
+                if (hupsZat) {
+                    hupsZat = false;
+                    zet(nl.juiced.guhs.feature.piep.PiepInstelling.RONDVADSEN, false);
+                }
                 boolean record = hupsenGedaan > hupsRecord;
                 hupsRecord = Math.max(hupsRecord, hupsenGedaan);
                 if (owner instanceof ServerPlayer sp) {
@@ -1492,6 +1506,9 @@ public class BlubGuhEntity extends Landdiertje {
         tag.store("Kleding", net.minecraft.nbt.CompoundTag.CODEC, kleren);
         tag.putBoolean("VanSchouder", vanSchouder);
         tag.putInt("HupsRecord", hupsRecord);
+        if (hupsZat && hupsenOver > 0) {
+            tag.putBoolean("HupsZat", true);                          // (saved halfway through its hupsen: it sits again after loading)
+        }
     }
 
     @Override
@@ -1511,5 +1528,9 @@ public class BlubGuhEntity extends Landdiertje {
         zetKleding(m);
         vanSchouder = tag.getBooleanOr("VanSchouder", false);
         hupsRecord = tag.getIntOr("HupsRecord", 0);
+        if (tag.getBooleanOr("HupsZat", false)) {
+            setOrderedToSit(true);
+            setInSittingPose(true);
+        }
     }
 }

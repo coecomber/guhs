@@ -15,7 +15,8 @@ import nl.juiced.guhs.feature.mijnhuisje.MijnhuisjeMenu;
 /**
  * The Mijn-guhhuisje's screen: what the guhs are doing, three sliders (blocks to each side on x and z, down to y), "Laat
  * zien" (the pink outline), work on/off, "Rugzak legen", the slots for kaasknabbels and a Banksleutel, the residents (with
- * "uit huis"), what was mined. Drawn with plain fills like the Haltepaaltje's screen.
+ * "uit huis"), what was mined. Drawn with plain fills like the Haltepaaltje's screen. 1.10.7: the residents are slots
+ * (2 x 2, right) with picked-up guhs: drag one out to pick it up, drop a picked-up guh in to move it in, right-click: uit huis.
  */
 public class MijnhuisjeScherm extends AbstractContainerScreen<MijnhuisjeMenu> {
     private static final int BG = 0xFF3A1F2C, PANEL = 0xFFF3DCE8, SLOT = 0xFF8A5A76, SLOT_IN = 0xFFC79BB3;
@@ -47,11 +48,6 @@ public class MijnhuisjeScherm extends AbstractContainerScreen<MijnhuisjeMenu> {
         aan = addRenderableWidget(Button.builder(aanTekst(), b -> klik(MijnhuisjeMenu.KNOP_AAN)).bounds(x + bw + 4, topPos + 83, bw, 16).build());
         addRenderableWidget(Button.builder(Component.translatable("gui.guhs.mijnhuisje.rugzak_legen"), b -> klik(MijnhuisjeMenu.KNOP_RUGZAK))
                 .bounds(x + 2 * (bw + 4), topPos + 83, bw, 16).tooltip(Tooltip.create(Component.translatable("gui.guhs.mijnhuisje.rugzak_legen.tooltip"))).build());
-        for (int i = 0; i < menu.namen.size(); i++) {
-            final int knop = MijnhuisjeMenu.KNOP_UIT + i;
-            addRenderableWidget(Button.builder(Component.literal("x"), b -> klik(knop)).bounds(leftPos + imageWidth - 20, topPos + 103 + i * 11, 12, 10)
-                    .tooltip(Tooltip.create(Component.translatable("gui.guhs.mijnhuisje.uit_huis", menu.namen.get(i)))).build());
-        }
     }
 
     private Component aanTekst() {
@@ -70,6 +66,12 @@ public class MijnhuisjeScherm extends AbstractContainerScreen<MijnhuisjeMenu> {
             aan.setMessage(aanTekst());
         }
         super.extractRenderState(g, mouseX, mouseY, partialTick);
+        for (int i = 0; i < MijnhuisjeBlockEntity.MAX_BEWONERS; i++) {
+            int bx = MijnhuisjeMenu.BEWONER_X + (i % 2) * MijnhuisjeMenu.BEWONER_STAP, by = MijnhuisjeMenu.BEWONER_Y + (i / 2) * MijnhuisjeMenu.BEWONER_STAP;
+            if (isHovering(bx, by, 16, 16, mouseX, mouseY) && !menu.getSlot(MijnhuisjeBlockEntity.VAKKEN + i).hasItem()) {
+                g.setTooltipForNextFrame(font, font.split(Component.translatable("gui.guhs.mijnhuisje.vak.bewoner"), 170), mouseX, mouseY);
+            }
+        }
         if (menu.getCarried().isEmpty()) {
             for (int i = 0; i < 2; i++) {
                 if (isHovering(MijnhuisjeMenu.VAK_X, MijnhuisjeMenu.VAK_Y + i * 20, 16, 16, mouseX, mouseY) && !menu.getSlot(i).hasItem()) {
@@ -88,6 +90,9 @@ public class MijnhuisjeScherm extends AbstractContainerScreen<MijnhuisjeMenu> {
         g.fill(x, y, x + imageWidth, y + imageHeight, PANEL);
         for (int i = 0; i < 2; i++) {
             vak(g, x + MijnhuisjeMenu.VAK_X - 1, y + MijnhuisjeMenu.VAK_Y - 1 + i * 20);
+        }
+        for (int i = 0; i < MijnhuisjeBlockEntity.MAX_BEWONERS; i++) {
+            vak(g, x + MijnhuisjeMenu.BEWONER_X - 1 + (i % 2) * MijnhuisjeMenu.BEWONER_STAP, y + MijnhuisjeMenu.BEWONER_Y - 1 + (i / 2) * MijnhuisjeMenu.BEWONER_STAP);
         }
         for (int r = 0; r < 3; r++) {
             for (int c = 0; c < 9; c++) {
@@ -117,25 +122,15 @@ public class MijnhuisjeScherm extends AbstractContainerScreen<MijnhuisjeMenu> {
                 menu.vlag(16) ? GROEN : GRIJS, false);
         g.text(font, Component.translatable("gui.guhs.mijnhuisje.bank" + (menu.vlag(2) ? ".aan" : "")), 28, MijnhuisjeMenu.VAK_Y + 24,
                 menu.vlag(2) ? GROEN : GRIJS, false);
-        // the residents
-        int rx = 92;
-        g.text(font, Component.translatable("gui.guhs.mijnhuisje.bewoners", menu.namen.size(), MijnhuisjeBlockEntity.MAX_BEWONERS), rx, 92 + 3, TEXT, false);
-        if (menu.namen.isEmpty()) {
-            for (var regel : font.split(Component.translatable("gui.guhs.mijnhuisje.geen_bewoners"), imageWidth - rx - 6)) {
-                g.text(font, regel, rx, 104 + 0, GRIJS, false);
-                break;
-            }
-        }
-        for (int i = 0; i < menu.namen.size(); i++) {
-            String n = menu.namen.get(i);
-            g.text(font, font.plainSubstrByWidth(n, imageWidth - rx - 24), rx, 104 + i * 11, TEXT, false);
-        }
-        // what was mined, where the work is, what the bags hold, whether there is a chest
-        Component info = Component.translatable("gui.guhs.mijnhuisje.info", menu.gemijnd(), menu.laag());
-        g.text(font, info, 8, 141, GRIJS, false);
+        // the residents: the slots (2 x 2, right); their count under them, at the right
+        Component bewoners = Component.translatable("gui.guhs.mijnhuisje.bewoners", menu.aantal(), MijnhuisjeBlockEntity.MAX_BEWONERS);
+        g.text(font, bewoners, imageWidth - 8 - font.width(bewoners), 145, TEXT, false);
+        // what was mined, where the work is, what the bags hold, whether there is a chest (1.10.7: under the slots)
         Component opslag = Component.translatable("gui.guhs.mijnhuisje.opslag", Component.translatable(menu.vlag(1) ? "gui.guhs.mijnhuisje.ja" : "gui.guhs.mijnhuisje.nee"),
                 menu.vlag(4) ? Component.translatable("gui.guhs.mijnhuisje.rugzak", menu.rugzak()) : Component.empty());
-        g.text(font, opslag, 8, 130, menu.vlag(1) ? GRIJS : ORANJE, false);
+        g.text(font, opslag, 8, 145, menu.vlag(1) ? GRIJS : ORANJE, false);
+        Component info = Component.translatable("gui.guhs.mijnhuisje.info", menu.gemijnd(), menu.laag());
+        g.text(font, info, 8, 156, GRIJS, false);
     }
 
     /** A slider for one number, sent as a menu button when it changes. */

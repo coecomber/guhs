@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.NonNullList;
@@ -337,6 +338,30 @@ public class MijnhuisjeBlockEntity extends BlockEntity implements MenuProvider {
             ontruim(g);
         }
         vergeet(id);
+    }
+
+    /**
+     * (1.10.7) The menu's resident slot dragged out: the resident is picked up (out of the house, a picked-up guh item for
+     * the player). EMPTY, with a message, when it can't: not around right now, or riding / being ridden.
+     */
+    public ItemStack pakOp(ServerPlayer sp, UUID id) {
+        if (!(level instanceof ServerLevel sl) || !bewoners.contains(id)) {
+            return ItemStack.EMPTY;
+        }
+        String naam = naamVan(id);
+        if (!(sl.getEntity(id) instanceof GuhEntity g) || !g.isAlive() || !isHier(g)) {
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.bewoner.weg", naam).withStyle(ChatFormatting.GRAY));
+            return ItemStack.EMPTY;
+        }
+        if (g.isVehicle() || g.isPassenger()) {
+            sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.bewoner.rijdt", naam).withStyle(ChatFormatting.GRAY));
+            return ItemStack.EMPTY;
+        }
+        trekUit(id);
+        g.playSound(nl.juiced.guhs.registry.ModSounds.GUH_HAPPY.get(), 1f, 1f);
+        ItemStack stack = nl.juiced.guhs.item.PickedUpGuhItem.pickUp(g);
+        sp.sendOverlayMessage(Component.translatable("gui.guhs.mijnhuisje.bewoner.opgepakt", naam).withStyle(ChatFormatting.LIGHT_PURPLE));
+        return stack;
     }
 
     private void vergeet(UUID id) {
