@@ -1913,6 +1913,25 @@ UITLEG = {
         nl='De kist die verschijnt als je een baas in het Vadsrijk hebt opgevrolijkt. Rechtsklik: je eigen buit (iedereen krijgt zijn eigen).',
         en='The chest that appears when you have cheered up a boss in the Vadsrijk. Right-click: your own loot (everyone gets their own).'),
     # </T-INT>
+    # 1.10.9 Guhwinter (spellen): the games of the winter plaza
+    "guhwinter_arcadekast": dict(
+        nl="De speelkast van de Pepernotenrace, op het winterplein (alleen tijdens Guhwinter).\n\nRechtsklik erop: dan opent een telefoonspelletje op je hele scherm. Je bent een Pakjesguh die over de besneeuwde daken rent. Met A/D of de pijltjes wissel je van baan, met W of spatie spring je, met S buk je. Ontwijk schoorstenen, schotels, sneeuwpoppen en waslijnen en raap pepernoten. Een chocoladeletter trekt even alle pepernoten naar je toe, en Ozovads draagt je een paar tellen over alles heen.\n\nElke 10 pepernoten op de daken zijn 1 echte pepernoot (tot 10 per run), en je allereerste run geeft er 25 extra. Je beste score komt op het highscorebord ernaast.",
+        en="The cabinet of the Pepernoten Race, on the winter plaza (only during Guhwinter).\n\nRight-click it and a phone game opens on your whole screen. You are a Pakjesguh running over the snowy roofs. A/D or the arrows change lanes, W or space jumps, S ducks. Dodge chimneys, satellite dishes, snowmen and washing lines and grab pepernoten. A chocolate letter pulls every pepernoot towards you for a while, and Ozovads carries you over everything for a few seconds.\n\nEvery 10 pepernoten on the roofs are 1 real pepernoot (up to 10 a run), and your very first run gives 25 extra. Your best score goes on the highscore board next to it."),
+    "guhwinter_highscorebord": dict(
+        nl="Het highscorebord van het winterplein. Erboven zweeft de top 10: bij de speelkast die van de Pepernotenrace, bij de vijver die van het schaatsrondje.\n\nRechtsklik erop en je ziet in de chat je eigen beste score (of je snelste rondje).",
+        en="The highscore board of the winter plaza. Above it floats the top 10: by the arcade cabinet the one of the Pepernoten Race, by the pond the one of the skating lap.\n\nRight-click it to see your own best score (or your fastest lap) in the chat."),
+    "guhwinter_winkelkraam": dict(
+        nl="Het pepernotenwinkeltje op het winterplein. Rechtsklik erop (of praat met de winkelguh) om te kopen met je pepernoten:\n\n- sneeuwballen en vuurwerkpijlen;\n- warme chocomel (even sneller, en een beetje beter);\n- een chocoladeletter met jouw eigen beginletter;\n- winterschaatsen (sneller op het ijs);\n- een kerstmuts en een Sint-mijter voor op je hoofd;\n- kerstlampjes voor aan de muur.\n\nDe schaatsen, de muts, de mijter en de lampjes smelten op 3 januari, net als de sneeuw.",
+        en="The pepernoten shop on the winter plaza. Right-click it (or talk to the shopkeeper guh) to buy with your pepernoten:\n\n- snowballs and firework rockets;\n- hot chocomel (a little faster for a while, and a bit better);\n- a chocolate letter with your very own first letter;\n- winter skates (faster on the ice);\n- a Christmas hat and a Sint's mitre for on your head;\n- Christmas lights for your walls.\n\nThe skates, the hat, the mitre and the lights melt on 3 January, like the snow."),
+    "guhwinter_bakkraam": dict(
+        nl="De oliebollenkraam van het winterplein. Vanaf 26 december (Oud & Nieuw) kun je hier zelf oliebollen bakken: schep deeg in de pan, draai elke bol om als de onderkant goudbruin is en haal hem eruit als de andere kant ook goudbruin is. Na 45 seconden krijg je een score, en voor een goed baksel neem je oliebollen mee.",
+        en="The oliebollen stall of the winter plaza. From 26 December (New Year's Eve) you can bake oliebollen here yourself: scoop dough into the pan, turn every ball when its underside is golden and take it out when the other side is golden too. After 45 seconds you get a score, and a good batch gives you oliebollen to take along."),
+    "guhwinter_schaatsbord": dict(
+        nl="Het startbordje van het schaatsrondje op de vijver. Rechtsklik erop: na 3-2-1 glij je door de poortjes (de fonkelende is de volgende) en terug door het eerste. Heb je geen schaatsen, dan leen je er een paar. Je eerste rondje geeft 15 pepernoten, elk nieuw eigen record 5. Klik nog eens om te stoppen.",
+        en="The start sign of the skating lap on the pond. Right-click it: after 3-2-1 you glide through the little gates (the sparkling one is next) and back through the first. No skates? You borrow a pair. Your first lap gives 15 pepernoten, every new personal best 5. Click again to stop."),
+    "guhwinter_pepernootzakje": dict(
+        nl="Een verstopt zakje pepernoten op het winterplein. Rechtsklik erop voor een handje pepernoten. Elk zakje kun je een keer vinden; een zakje dat je nog niet had, glinstert als je in de buurt komt.",
+        en="A hidden bag of pepernoten on the winter plaza. Right-click it for a handful of pepernoten. You can find every bag once; a bag you haven't found yet glitters when you come near."),
 }
 
 LINK = {

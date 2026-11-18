@@ -5,7 +5,7 @@ a NOWAY chat line when you see one, and a scene API for the kerstwandeling.
 
 build(h) writes the models/animations/textures (guhwinter_hoentjes_modellen), the spawn egg icons + item models, sounds.json
 (the OGGs are made once by guhwinter_hoentjes_geluid.py and committed), the loot tables (a feather, sometimes), the
-seen_<page> advancements and all texts (Dutch in nl_nl; the English is in tools/lang/en/guhwinter_hoentjes.json, which
+seen_<page> advancements and all texts (Dutch in nl_nl; the English is in tools/lang/en/c480_guhwinter_hoentjes.json, which
 _direct() writes, so a full make_resources run keeps it).
 
 Standalone (no full regeneration; from the project root):  PYTHONPATH=tools python tools/features/guhwinter_hoentjes.py
@@ -182,7 +182,7 @@ def _direct():
     sys.path.insert(0, "tools")
     import make_v2 as h   # (its helpers: w, save, lang, patch_json; importing it runs nothing)
     build(h)
-    en_pad = os.path.join("tools", "lang", "en", "guhwinter_hoentjes.json")
+    en_pad = os.path.join("tools", "lang", "en", "c480_guhwinter_hoentjes.json")
     with open(en_pad, "w", encoding="utf-8", newline="\n") as f:
         json.dump({k: en for k, (nl, en) in TEKSTEN.items()}, f, indent=2, ensure_ascii=False)
         f.write("\n")

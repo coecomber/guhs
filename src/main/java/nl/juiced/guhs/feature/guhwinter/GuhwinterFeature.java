@@ -27,11 +27,13 @@ public final class GuhwinterFeature {
         nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.register(modBus);   // drawing editor, 2x2 drawing, kerstboom, Kerstalbum
         nl.juiced.guhs.feature.guhwinter.npc.GuhwinterNpcFeature.register(modBus);   // the Winterplein's guhs
         nl.juiced.guhs.feature.guhwinter.plein.GuhwinterPleinFeature.register(modBus);   // the plaza, frame, arrival, anchors, /inrichten
+        nl.juiced.guhs.feature.guhwinter.spellen.SpellenFeature.register(modBus);   // race, schaatsrondje, oliebollen, shop, hidden pepernoten
     }
 
     public static void payloads(PayloadRegistrar registrar) {
         // --- slices (one line each) ---
         nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.payloads(registrar);
+        nl.juiced.guhs.feature.guhwinter.spellen.SpellenFeature.payloads(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -39,5 +41,6 @@ public final class GuhwinterFeature {
         // --- slices (one line each) ---
         nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes.creative(output);   // the hoentjes' spawn eggs
         nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.creative(output);   // the Kerstalbum
+        nl.juiced.guhs.feature.guhwinter.spellen.SpellenFeature.creative(output);   // the games' blocks, chocomel, letters, skates, hats
     }
 }

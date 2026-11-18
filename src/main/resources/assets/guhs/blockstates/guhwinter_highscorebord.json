@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=north,spel=race": {
+      "model": "guhs:block/guhwinter_highscorebord_race"
+    },
+    "facing=north,spel=schaats": {
+      "model": "guhs:block/guhwinter_highscorebord_schaats"
+    },
+    "facing=east,spel=race": {
+      "model": "guhs:block/guhwinter_highscorebord_race",
+      "y": 90
+    },
+    "facing=east,spel=schaats": {
+      "model": "guhs:block/guhwinter_highscorebord_schaats",
+      "y": 90
+    },
+    "facing=south,spel=race": {
+      "model": "guhs:block/guhwinter_highscorebord_race",
+      "y": 180
+    },
+    "facing=south,spel=schaats": {
+      "model": "guhs:block/guhwinter_highscorebord_schaats",
+      "y": 180
+    },
+    "facing=west,spel=race": {
+      "model": "guhs:block/guhwinter_highscorebord_race",
+      "y": 270
+    },
+    "facing=west,spel=schaats": {
+      "model": "guhs:block/guhwinter_highscorebord_schaats",
+      "y": 270
+    }
+  }
+}

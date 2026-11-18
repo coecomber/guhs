@@ -63,6 +63,44 @@ public final class GuhwinterPlein {
     private static final long BUDGET = 15_000_000L;
     private static Klus klus;
 
+    /**
+     * (1.10.9 integration) Other slices' own pieces on the square: {@link #voorStempel} runs before either square is
+     * stamped (take your blocks and floating texts away), {@link #naStempel} after (put them on it; check {@code welke}).
+     * Both return a line for the summary, or null.
+     */
+    public interface PleinHaak {
+        @Nullable
+        String doe(ServerLevel level, Identifier welke);
+    }
+
+    private static final List<PleinHaak> VOOR_STEMPEL = new java.util.concurrent.CopyOnWriteArrayList<>();
+    private static final List<PleinHaak> NA_STEMPEL = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    public static void voorStempel(PleinHaak haak) {
+        VOOR_STEMPEL.add(haak);
+    }
+
+    public static void naStempel(PleinHaak haak) {
+        NA_STEMPEL.add(haak);
+    }
+
+    @Nullable
+    private static String haken(List<PleinHaak> haken, ServerLevel level, Identifier welke) {
+        List<String> regels = new java.util.ArrayList<>();
+        for (PleinHaak h : haken) {
+            try {
+                String r = h.doe(level, welke);
+                if (r != null) {
+                    regels.add(r);
+                }
+            } catch (RuntimeException e) {
+                LOGGER.error("Guhwinter: a square hook failed", e);
+                regels.add("a hook FAILED: " + e);
+            }
+        }
+        return regels.isEmpty() ? null : String.join("; ", regels);
+    }
+
     private GuhwinterPlein() {
     }
 
@@ -258,6 +296,7 @@ public final class GuhwinterPlein {
         void plein(Identifier welke) {
             GuhwinterPleinData d = GuhwinterPleinData.van(level);
             boolean band = !d.grondKlaar;
+            stap("slices away", () -> haken(VOOR_STEMPEL, level, welke));
             stappen.add(new Grond("ground of the square" + (band ? " (with its band)" : ""), PLEIN_VLAK, !band));
             stap("square", () -> {
                 String r = stempel(welke, PLEIN_MIN);
@@ -268,6 +307,7 @@ public final class GuhwinterPlein {
                 });
                 return r;
             });
+            stap("slices", () -> haken(NA_STEMPEL, level, welke));
         }
 
         /** The arrival: its ground, its template, Ozovads' hiding spot. */

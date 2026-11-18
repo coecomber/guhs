@@ -1,0 +1,76 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "z": "guhs:block/guhwinter_kast_zij",
+    "o": "guhs:block/guhwinter_kast_onder",
+    "b": "guhs:block/guhwinter_kast_boven",
+    "s": "guhs:block/guhwinter_sneeuw",
+    "particle": "guhs:block/guhwinter_kast_zij"
+  },
+  "elements": [
+    {
+      "from": [
+        1,
+        0,
+        2
+      ],
+      "to": [
+        15,
+        15,
+        15
+      ],
+      "faces": {
+        "north": {
+          "texture": "#b"
+        },
+        "south": {
+          "texture": "#z"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    },
+    {
+      "from": [
+        0.5,
+        15,
+        1.5
+      ],
+      "to": [
+        15.5,
+        16.5,
+        15.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#s"
+        },
+        "south": {
+          "texture": "#s"
+        },
+        "east": {
+          "texture": "#s"
+        },
+        "west": {
+          "texture": "#s"
+        },
+        "up": {
+          "texture": "#s"
+        },
+        "down": {
+          "texture": "#s"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "guhs:block/guhwinter_zakje",
+    "z": "guhs:block/guhwinter_zakje",
+    "l": "guhs:block/guhwinter_lint"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        0,
+        5
+      ],
+      "to": [
+        11,
+        5,
+        11
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    },
+    {
+      "from": [
+        6,
+        5,
+        6
+      ],
+      "to": [
+        10,
+        6,
+        10
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    },
+    {
+      "from": [
+        6.5,
+        6,
+        6.5
+      ],
+      "to": [
+        9.5,
+        6.8,
+        9.5
+      ],
+      "faces": {
+        "north": {
+          "texture": "#l"
+        },
+        "south": {
+          "texture": "#l"
+        },
+        "east": {
+          "texture": "#l"
+        },
+        "west": {
+          "texture": "#l"
+        },
+        "up": {
+          "texture": "#l"
+        },
+        "down": {
+          "texture": "#l"
+        }
+      }
+    },
+    {
+      "from": [
+        7,
+        6.8,
+        7
+      ],
+      "to": [
+        9,
+        8,
+        9
+      ],
+      "faces": {
+        "north": {
+          "texture": "#z"
+        },
+        "south": {
+          "texture": "#z"
+        },
+        "east": {
+          "texture": "#z"
+        },
+        "west": {
+          "texture": "#z"
+        },
+        "up": {
+          "texture": "#z"
+        },
+        "down": {
+          "texture": "#z"
+        }
+      }
+    }
+  ]
+}

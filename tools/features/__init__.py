@@ -357,6 +357,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhwinter_tekenen',   # drawing editor, 2x2 drawing, kerstboom, Kerstalbum (feature/guhwinter/tekenen)
             'guhwinter_npc',   # the Winterplein's guhs (feature/guhwinter/npc)
             'guhwinter_plein',   # the winter plaza, frame, arrival, anchors (feature/guhwinter/plein)
+            'guhwinter_spellen',   # race, schaatsrondje, oliebollen, shop, hidden pepernoten (feature/guhwinter/spellen)
             ]
 
 

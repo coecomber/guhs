@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "guhs:block/guhwinter_schaatsbord"
+    },
+    "facing=east": {
+      "model": "guhs:block/guhwinter_schaatsbord",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "guhs:block/guhwinter_schaatsbord",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "guhs:block/guhwinter_schaatsbord",
+      "y": 270
+    }
+  }
+}
