@@ -7196,6 +7196,22 @@
         "item.guhs.guhwinter_mijter",
         "item.guhs.guhwinter_schaatsen"
       ]
+    },
+    {
+      "id": "c510_guhwinter_verhaal",
+      "title": "1.10.9 Guhwinter (verhaal slice): the winter story (3 chapters: scenes, talks, the kerstwandeling, chat lines, prikbord) and its 3 deco blocks (made by tools/features/guhwinter_verhaal.py, English included)",
+      "prefixes": [
+        "guhwinter.verhaal.",
+        "gui.guhs.verhalen.guhwinter_",
+        "gui.guhs.verhalen.kop.guhwinter",
+        "scene.guhs.guhwinter_",
+        "block.guhs.guhwinter_pakjesstapel",
+        "block.guhs.guhwinter_kerststukje",
+        "block.guhs.guhwinter_oliebollenkraam",
+        "item.guhs.guhwinter_pakjesstapel",
+        "item.guhs.guhwinter_kerststukje",
+        "item.guhs.guhwinter_oliebollenkraam"
+      ]
     }
   ]
 }
