@@ -17,6 +17,7 @@ tools/lang/en/*.json like every other key).
 
 The self-check compares the name lists and the keys the Java code uses with this file, so no raw key shows in the game.
 """
+import json
 import os
 import re
 
@@ -279,12 +280,21 @@ def check(alles):
             continue   # (guhpixel: the kern and its slices write their own command texts in tools/features/guhpixel*.py)
         if os.sep + "safari" in root:
             continue   # (1.6.0 Op Safari!: the safari slices write their own command texts in tools/features/safari*.py)
+        if os.sep + "guhwinter" in root:
+            continue   # (1.10.9 Guhwinter: the slices write their own command texts in tools/features/guhwinter_*.py)
         for f in files:
             if f.endswith(".java"):
                 with open(os.path.join(root, f), encoding="utf-8") as fh:
                     gebruikt.update(re.findall(r'"((?:gui\.guhs\.kleding\.prijs|commands\.guhs|gui\.guhs\.taal|gui\.guhs\.taalvraag|gui\.guhs\.menu\.taal)\.[a-z0-9_.]+)"', fh.read()))
+    # 1.10.9: a key another generator already wrote (blub, kleding prices/hints of 1.7+) counts too: the lang file of the
+    # last run is on disk (full runs were paused after the 26.1 port, and those generators run after this one)
+    lang_nu = {}
+    nl_pad = os.path.join("src", "main", "resources", "assets", "guhs", "lang", "nl_nl.json")
+    if os.path.exists(nl_pad):
+        with open(nl_pad, encoding="utf-8") as fh:
+            lang_nu = json.load(fh)
     for k in sorted(gebruikt):
-        if k not in alles and not k.endswith("."):
+        if k not in alles and k not in lang_nu and not k.endswith("."):
             problems.append(f"the Java uses {k}, but taal.py has no Dutch for it")
     if problems:
         raise ValueError("taal.py:\n  " + "\n  ".join(problems))
