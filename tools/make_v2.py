@@ -4446,9 +4446,10 @@ def run_features():
     import types
     import features
     h = types.SimpleNamespace(**globals())
-    # 1.10.9: GUHS_SELFCHECK_WARN=1 turns a module's failing self-check (SystemExit) into a warning, so one stale check
-    # (full runs were paused after the 26.1 port and some checks lag behind the Java) doesn't stop every module after it.
-    # A self-check runs at the end of its module's build, so its outputs are already written. Summary at the end of the run.
+    # 1.10.9: GUHS_SELFCHECK_WARN=1 turns a module's failing self-check (SystemExit) or crash into a warning, so one stale
+    # check (full runs were paused after the 26.1 port and some checks lag behind the Java) doesn't stop every module after
+    # it. A self-check runs at the end of its module's build, so its outputs are mostly written; a crash can leave a module
+    # half done (its churn is reverted anyway). Summary at the end of the run.
     warn = os.environ.get("GUHS_SELFCHECK_WARN") == "1"
     for module in features.modules():
         if not warn:
@@ -4461,6 +4462,11 @@ def run_features():
                 raise
             SELFCHECK_WARNINGS.append(f"{module.__name__}: {e.code}")
             print(f"WARNING (GUHS_SELFCHECK_WARN) {module.__name__}: {e.code}")
+        except Exception as e:   # noqa: BLE001 (reported, see above)
+            import traceback
+            traceback.print_exc()
+            SELFCHECK_WARNINGS.append(f"{module.__name__}: CRASH {type(e).__name__}: {e}")
+            print(f"WARNING (GUHS_SELFCHECK_WARN) {module.__name__} crashed: {type(e).__name__}: {e}")
 
 
 SELFCHECK_WARNINGS = []

@@ -335,6 +335,8 @@ def selfcheck(h):
     for f in sorted(os.listdir(f"{A}/models/block")):
         if f.startswith((P, "zeepbel", "bubbelstroom", "bloemwolk")):
             for t in json.load(open(f"{A}/models/block/{f}", encoding="utf-8")).get("textures", {}).values():
+                if isinstance(t, dict):   # (26.1 model format: {"sprite": ..., ...})
+                    t = t.get("sprite", "")
                 if t.startswith("guhs:") and not os.path.exists(f"{A}/textures/{t[5:]}.png"):
                     missing.append(f"texture {t} ({f})")
     for name in BUIT:
