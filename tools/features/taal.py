@@ -17,7 +17,6 @@ tools/lang/en/*.json like every other key).
 
 The self-check compares the name lists and the keys the Java code uses with this file, so no raw key shows in the game.
 """
-import json
 import os
 import re
 
@@ -286,13 +285,16 @@ def check(alles):
             if f.endswith(".java"):
                 with open(os.path.join(root, f), encoding="utf-8") as fh:
                     gebruikt.update(re.findall(r'"((?:gui\.guhs\.kleding\.prijs|commands\.guhs|gui\.guhs\.taal|gui\.guhs\.taalvraag|gui\.guhs\.menu\.taal)\.[a-z0-9_.]+)"', fh.read()))
-    # 1.10.9: a key another generator already wrote (blub, kleding prices/hints of 1.7+) counts too: the lang file of the
-    # last run is on disk (full runs were paused after the 26.1 port, and those generators run after this one)
-    lang_nu = {}
-    nl_pad = os.path.join("src", "main", "resources", "assets", "guhs", "lang", "nl_nl.json")
-    if os.path.exists(nl_pad):
-        with open(nl_pad, encoding="utf-8") as fh:
-            lang_nu = json.load(fh)
+    # 1.10.9: a key that another generator defines (blub commands, the 1.7+ kleding prices and hints) counts too; those
+    # generators run after this one, so look for the key as a string in their sources
+    hier = os.path.dirname(os.path.abspath(__file__))
+    andere = ""
+    for d in (hier, os.path.dirname(hier)):
+        for f in sorted(os.listdir(d)):
+            if f.endswith(".py") and f != "taal.py":
+                with open(os.path.join(d, f), encoding="utf-8") as fh:
+                    andere += fh.read()
+    lang_nu = {k for k in gebruikt if f'"{k}"' in andere or f"'{k}'" in andere}
     for k in sorted(gebruikt):
         if k not in alles and k not in lang_nu and not k.endswith("."):
             problems.append(f"the Java uses {k}, but taal.py has no Dutch for it")
