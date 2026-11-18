@@ -1,0 +1,195 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "minecraft:custom_model_data",
+    "index": 0,
+    "cases": [
+      {
+        "when": "A",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_a"
+        }
+      },
+      {
+        "when": "B",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_b"
+        }
+      },
+      {
+        "when": "C",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_c"
+        }
+      },
+      {
+        "when": "D",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_d"
+        }
+      },
+      {
+        "when": "E",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_e"
+        }
+      },
+      {
+        "when": "F",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_f"
+        }
+      },
+      {
+        "when": "G",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_g"
+        }
+      },
+      {
+        "when": "H",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_h"
+        }
+      },
+      {
+        "when": "I",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_i"
+        }
+      },
+      {
+        "when": "J",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_j"
+        }
+      },
+      {
+        "when": "K",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_k"
+        }
+      },
+      {
+        "when": "L",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_l"
+        }
+      },
+      {
+        "when": "M",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_m"
+        }
+      },
+      {
+        "when": "N",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_n"
+        }
+      },
+      {
+        "when": "O",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_o"
+        }
+      },
+      {
+        "when": "P",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_p"
+        }
+      },
+      {
+        "when": "Q",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_q"
+        }
+      },
+      {
+        "when": "R",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_r"
+        }
+      },
+      {
+        "when": "S",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_s"
+        }
+      },
+      {
+        "when": "T",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_t"
+        }
+      },
+      {
+        "when": "U",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_u"
+        }
+      },
+      {
+        "when": "V",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_v"
+        }
+      },
+      {
+        "when": "W",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_w"
+        }
+      },
+      {
+        "when": "X",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_x"
+        }
+      },
+      {
+        "when": "Y",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_y"
+        }
+      },
+      {
+        "when": "Z",
+        "model": {
+          "type": "minecraft:model",
+          "model": "guhs:item/guhwinter_chocoladeletter_z"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "guhs:item/guhwinter_chocoladeletter"
+    }
+  }
+}

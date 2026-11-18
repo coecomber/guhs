@@ -351,6 +351,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_ambacht_verhaal',
             # 1.10.4: T6 in Het Zijdeland (zone-6 gathering, T6 jewellery/Koken) + the islet's klaverhoning (after t_ambacht + u_ambacht2)
             'vadsrijk_ambacht_t6',
+            # 1.10.9 Guhwinter, slice spellen: the plaza games + the pepernoten shop (Java: feature/guhwinter/spellen; append only)
+            'guhwinter_spellen',
             ]
 
 
