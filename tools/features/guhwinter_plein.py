@@ -686,7 +686,8 @@ def huis(p):
     # the big Christmas tree in the east part (7 high), presents underneath, a star on top
     kx, kz = x2 - 4, hz
     boom(p, kx, F + 1, kz)
-    p.anker("kerstboom", kx - 3 + 0.5, F + 1, kz + 0.5, YAW["east"])
+    p.anker("kerstboom", kx + 0.5, F + 1, kz + 0.5, YAW["west"])               # the base centre of the tree (tekenen)
+    p.anker("kerstboom_voor", kx - 4 + 0.5, F + 1, kz + 0.5, YAW["east"])       # where you stand to look at it
     # a sideboard with plants and a cosy lamp at the back wall, Corine near the table, a coat rack by the door
     for x in range(tx1, tx2 + 1):
         p.set(x, F + 1, z1 + 1, "spruce_planks" if x in (tx1, tx2) else "barrel", {"facing": "up", "open": "false"} if x not in (tx1, tx2) else None)
@@ -784,6 +785,12 @@ def vijver(p):
     p.anker("npc_kim", math.floor(cx - rx - 1) + 0.5, VLOER + 1, cz + 5.5, YAW["east"])
     p.anker("npc_finn", cx + 1.5, VLOER + 1, cz - 2.5, YAW["east"])
     p.anker("npc_liv", math.floor(cx - rx + 1) + 0.5, VLOER + 1, cz + 3.5, YAW["east"])
+    # Liv's sled, parked on the ice next to her spot (two spruce trapdoors)
+    for x in (-295, -294):
+        p.set(x, VLOER + 1, -719, "spruce_trapdoor", {"facing": "east", "half": "bottom", "open": "false", "powered": "false", "waterlogged": "false"})
+    p.pad.add((-295, -719))
+    p.pad.add((-294, -719))
+    p.anker("slee", -294.0, VLOER + 1, -718.5, YAW["east"])
     p.anker("highscorebord_schaats", -299 + 0.5, VLOER + 1, -714 + 0.5, YAW["east"])
     p.set(-300, VLOER + 1, -714, "spruce_planks")
     p.set(-300, VLOER + 2, -714, "spruce_planks")
@@ -1109,6 +1116,7 @@ def plein_midden(p):
         p.bankje(cx + dx, VLOER + 1, cz + dz, f)
     for (dx, dz) in ((-4, -4), (4, -4), (-4, 4), (4, 4)):
         p.paal(cx + dx, VLOER + 1, cz + dz)
+    p.anker("winterplein_reis", -299.5, VLOER + 1, Z2 - 3 + 0.5, YAW["south"])   # kern's Reisguh point: arrive just inside the gate
     p.anker("plein_midden", cx + 0.5, VLOER + 1, cz + 6.5, YAW["north"])
 
 
@@ -1309,7 +1317,7 @@ def aankomst():
     for x in range(fx2 + 3, -287):
         for z in (fz, fz + 1):
             p.set(x, G, z, "gravel" if (x * 3 + z) % 5 else "cobblestone")
-    for i, z in enumerate(range(fz + 4, AZ2 + 1)):
+    for i, z in enumerate(range(fz + 4, fz + 10)):          # (it fades into the valley where the ground starts to rise)
         for x in (-300 + (i // 3), -299 + (i // 3)):
             if AX1 <= x <= AX2:
                 p.set(x, G, z, "gravel" if (x + z) % 4 else "mossy_cobblestone")
@@ -1352,9 +1360,9 @@ def aankomst():
     return p
 
 
-SPOOR = [(-298, 30, -652), (-297, 30, -650), (-297, 30, -648), (-298, 30, -646), (-297, 30, -644), (-296, 30, -642),
-         (-295, 31, -640), (-295, 32, -638), (-294, 33, -636)]   # Ozovads' trail (y: standing level; GuhwinterAnkers snaps it)
-VERSTOP = (-294, 33, -634)
+SPOOR = [(-299, 30, -652), (-298, 30, -651), (-298, 30, -649), (-297, 30, -648), (-296, 30, -647), (-295, 30, -646)]
+# Ozovads' trail from the portal down into the valley (y: standing level; outside the square, use Anker.opGrond)
+VERSTOP = (-294, 30, -644)                     # his hiding spot behind the rocks (Java: GuhwinterPlein.VERSTOP)
 
 
 def check(*plannen):

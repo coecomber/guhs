@@ -58,7 +58,7 @@ public final class GuhwinterPlein {
     /** Around the portal no ground is ever shaped. */
     static final BoundingBox PORTAAL_VRIJ = new BoundingBox(-303, 25, -658, -296, 40, -652);
     /** Ozovads' hiding spot down the valley (outside the square): two little spruces and some rocks go around it. */
-    static final BlockPos VERSTOP = new BlockPos(-294, 33, -634);
+    static final BlockPos VERSTOP = new BlockPos(-294, 30, -644);
 
     private static final long BUDGET = 15_000_000L;
     private static Klus klus;
@@ -385,7 +385,7 @@ public final class GuhwinterPlein {
                         return false;
                     }
                 }
-                int boom = GuhwinterGrond.bomen(level, bomen, 6000, p -> vrij(p.getX(), p.getZ()));
+                int boom = GuhwinterGrond.bomen(level, bomen, 6000, p -> vrij(p.getX(), p.getZ()) || vlak.afstand(p.getX(), p.getZ()) > vlak.band() + 6);
                 String r = naam + ": " + kolommen + " columns, " + blokken + " blocks changed, " + boom + " tree blocks of cut trees removed";
                 LOGGER.info("Guhwinter: {}", r);
                 verslag.add(r);
