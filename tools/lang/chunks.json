@@ -7127,6 +7127,17 @@
         "guhwinter.kern.",
         "item.guhs.guhwinter_pepernoot"
       ]
+    },
+    {
+      "id": "c480_guhwinter_tekenen",
+      "title": "1.10.9 Guhwinter, slice tekenen: the drawing editor, the 2x2 drawing, the kerstboom drawings, the Kerstalbum",
+      "prefixes": [
+        "guhwinter.tekenen.",
+        "item.guhs.guhwinter_tekening",
+        "item.guhs.guhwinter_kerstalbum",
+        "entity.guhs.guhwinter_tekening",
+        "entity.guhs.guhwinter_boomkaartje"
+      ]
     }
   ]
 }

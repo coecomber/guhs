@@ -354,6 +354,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10.9 Guhwinter: kern (pepernoot, tags, texts; Java: feature/guhwinter; API: guhs_winter/CONTRACT.md), then the slices (append only)
             'guhwinter_kern',
             'guhwinter_hoentjes',   # the waterhoentje + alpine hoentje (feature/guhwinter/hoentjes)
+            'guhwinter_tekenen',   # drawing editor, 2x2 drawing, kerstboom, Kerstalbum (feature/guhwinter/tekenen)
             ]
 
 

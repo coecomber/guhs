@@ -24,15 +24,18 @@ public final class GuhwinterFeature {
         GuhwinterCommando.register();
         // --- slices (one line each) ---
         nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes.register(modBus);   // waterhoentje + alpine hoentje
+        nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.register(modBus);   // drawing editor, 2x2 drawing, kerstboom, Kerstalbum
     }
 
     public static void payloads(PayloadRegistrar registrar) {
         // --- slices (one line each) ---
+        nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.payloads(registrar);
     }
 
     public static void creative(Consumer<ItemStack> output) {
         KernRegistry.creative(output);
         // --- slices (one line each) ---
         nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes.creative(output);   // the hoentjes' spawn eggs
+        nl.juiced.guhs.feature.guhwinter.tekenen.TekenenFeature.creative(output);   // the Kerstalbum
     }
 }
