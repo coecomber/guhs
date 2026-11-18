@@ -207,6 +207,7 @@ public final class Features {
         nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.register(modBus);   // 1.9: De Erfenis, het Sherlock-verhaal
         nl.juiced.guhs.feature.erfenis.ftb.ErfenisFtbFeature.register(modBus);   // 1.9 Een opknapper!: the FTB chapter's quests from the village state
         nl.juiced.guhs.feature.vadsrijk.VadsrijkFeature.register(modBus);   // 1.10 Het Vadsrijk (kern + slices, see CONTRACT_VADSRIJK.md)
+        nl.juiced.guhs.feature.guhwinter.plein.GuhwinterPleinFeature.register(modBus);   // 1.10.9 Guhwinter: het winterplein, portaal, ankers
     }
 
     public static void payloads(PayloadRegistrar registrar) {
