@@ -84,7 +84,9 @@ public final class GuhDex {
             GuhVariant.SCHADUWGEEST, GuhVariant.KENNISVOSJE, GuhVariant.MISTREIGER, GuhVariant.OUDE_REIGERGUH,
             // 1.8.0 Guhdromenland: the Blub-guh, the sterrenvisje and the dream characters (mostly met in the dream or behind Snoes' story)
             GuhVariant.BLUBGUH, GuhVariant.STERRENVISJE, GuhVariant.SNOES, GuhVariant.ZANDGUH, GuhVariant.WEKKERGUH, GuhVariant.ROMMELGUH,
-            GuhVariant.DROOM_OMAGUH, GuhVariant.KUSSENGEVECHT_GUH, GuhVariant.BUBBELBADGUH);
+            GuhVariant.DROOM_OMAGUH, GuhVariant.KUSSENGEVECHT_GUH, GuhVariant.BUBBELBADGUH,
+            // 1.10.9 Guhwinter: the waterhoentje and the alpine hoentje (rare wild mobs, feature/guhwinter/hoentjes)
+            GuhVariant.GUHWINTER_WATERHOEN, GuhVariant.GUHWINTER_ALPINEHOEN);
     /** The pages that count for progress (ENTRIES without the {@link #EXTRA} ones). */
     public static final List<GuhVariant> TELLEND = ENTRIES.stream().filter(v -> !EXTRA.contains(v)).toList();
 

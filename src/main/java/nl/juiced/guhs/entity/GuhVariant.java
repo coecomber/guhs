@@ -196,6 +196,11 @@ public enum GuhVariant {
     BLUBGUH(0), STERRENVISJE(0),
     SNOES(0), ZANDGUH(0), WEKKERGUH(0), ROMMELGUH(0), DROOM_OMAGUH(0), KUSSENGEVECHT_GUH(0), BUBBELBADGUH(0),
     // </dromen18>
+    // <guhwinter-hoentjes>
+    // 1.10.9 Guhwinter: the waterhoentje and the alpine hoentje (creature pages: their id is their entity id; rare wild mobs of
+    // the Guhmension, feature/guhwinter/hoentjes). Bonus pages (GuhDex.EXTRA): a full Guhdex stays full. Appended last.
+    GUHWINTER_WATERHOEN(0), GUHWINTER_ALPINEHOEN(0),
+    // </guhwinter-hoentjes>
     ;
 
     /** The Guhdex page is a guh character (GuhNpcEntity), not a variant: it can't be tamed. */

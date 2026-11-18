@@ -3820,7 +3820,18 @@ def verhalen30_section():
               "zit hij op je <b>schouder</b> (<i>Op mijn schouder!</i>) en graaft hij af en toe een voorraadje voor je op"), ("kaas knabbels", "kaasknabbels")),
             ("shuckle", "Sjokkel", ("rocky coast of the kloon-eiland; very rare deep in the Gatenkaasgrotten", "rotskust van het kloon-eiland; heel zelden diep in de Gatenkaasgrotten"),
              ("see <i>D &middot; Het kloon-eiland</i>: shy, slow, makes bessensapje and polishes stones", "zie <i>D &middot; Het kloon-eiland</i>: verlegen, traag, maakt "
-              "bessensapje en poetst steentjes"), ("sweet berries (1 in 4)", "zoete bessen (1 op 4)"))]
+              "bessensapje en poetst steentjes"), ("sweet berries (1 in 4)", "zoete bessen (1 op 4)")),
+            # 1.10.9 Guhwinter: the two hoentjes (rare; bonus Guhdex pages)
+            ("guhwinter_waterhoen", "Waterhoentje", ("rare, at the water's edge (ponds, lakes, streams)", "zeldzaam, aan de waterkant (vijvers, meertjes, beekjes)"),
+             ("a guh-ified moorhen: red shield, red-and-yellow bill, very long green toes; walks and swims, bobs its head and flicks its white tail; "
+              "very shy (sneak!); you'll shout <i>NOWAY EEN WATERHOEN!????</i>; a <b>bonus</b> Guhdex page",
+              "een guh-waterhoentje: rood schildje, rood-geel snaveltje, hele lange groene tenen; loopt en zwemt, knikt met zijn kopje en wipt met zijn witte "
+              "staartje; heel verlegen (sluip!); je roept vanzelf <i>NOWAY EEN WATERHOEN!????</i>; een <b>bonus</b>pagina in de Guhdex"), "&ndash;"),
+            ("guhwinter_alpinehoen", "Alpine hoentje", ("rare, high in the mountains and in the snow", "zeldzaam, hoog in de bergen en in de sneeuw"),
+             ("a guh-ified rock ptarmigan in winter white: red combs above its eyes, fluffy snowshoe feet; it doesn't walk, it hops; even shyer; "
+              "<i>NOWAYYY EEN ALPINE HOENTJE?!?!??!?!</i>; a <b>bonus</b> Guhdex page",
+              "een guh-alpensneeuwhoen in winterwit: rode kammetjes boven zijn oogjes, pluizige sneeuwschoenvoetjes; het loopt niet, het huppelt; nog "
+              "verlegener; <i>NOWAYYY EEN ALPINE HOENTJE?!?!??!?!</i>; een <b>bonus</b>pagina in de Guhdex"), "&ndash;")]
     diertjes = h3("H &middot; Diertjes van de Guhmensie", "H &middot; Diertjes van de Guhmensie") + \
         p("The Guhmension got a lot livelier: thirteen kinds of little critters, all lief and guh-inspired, but not guhs. Each one has a <b>Guhdex page</b> (they "
           "count for <i>alles verzameld</i>, and so does Sjokkel). The ones you can tame can also be <b>picked up</b> (sneak + right-click with an empty hand, like "

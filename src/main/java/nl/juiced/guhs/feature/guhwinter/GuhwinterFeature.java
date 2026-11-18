@@ -11,7 +11,7 @@ import nl.juiced.guhs.feature.guhwinter.kern.KernRegistry;
 /**
  * Guhs 1.10.9 "Guhwinter": the winter event on the Winterplein in the Guhmension (design: guhswinter/GUHSWINTER.md,
  * API: guhs_winter/CONTRACT.md). Kern first (the clock, moments, zone, pepernoot, commands); every slice adds ONE line
- * per method below.
+ * per method below (client side: {@link nl.juiced.guhs.feature.guhwinter.client.GuhwinterClient}).
  */
 public final class GuhwinterFeature {
     private GuhwinterFeature() {
@@ -23,6 +23,7 @@ public final class GuhwinterFeature {
         KernEvents.register();
         GuhwinterCommando.register();
         // --- slices (one line each) ---
+        nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes.register(modBus);   // waterhoentje + alpine hoentje
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -32,5 +33,6 @@ public final class GuhwinterFeature {
     public static void creative(Consumer<ItemStack> output) {
         KernRegistry.creative(output);
         // --- slices (one line each) ---
+        nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes.creative(output);   // the hoentjes' spawn eggs
     }
 }
