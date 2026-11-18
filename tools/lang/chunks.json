@@ -7138,6 +7138,14 @@
         "entity.guhs.guhwinter_tekening",
         "entity.guhs.guhwinter_boomkaartje"
       ]
+    },
+    {
+      "id": "c509_guhwinter_npc",
+      "title": "1.10.9 Guhwinter (npc slice): the names and idle lines of the Winterplein guhs (made by tools/features/guhwinter_npc.py, English included)",
+      "prefixes": [
+        "guhwinter.npc.",
+        "entity.guhs.guhwinter_guh"
+      ]
     }
   ]
 }

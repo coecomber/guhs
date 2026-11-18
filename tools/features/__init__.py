@@ -355,6 +355,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhwinter_kern',
             'guhwinter_hoentjes',   # the waterhoentje + alpine hoentje (feature/guhwinter/hoentjes)
             'guhwinter_tekenen',   # drawing editor, 2x2 drawing, kerstboom, Kerstalbum (feature/guhwinter/tekenen)
+            'guhwinter_npc',   # the Winterplein's guhs (feature/guhwinter/npc)
             ]
 
 
