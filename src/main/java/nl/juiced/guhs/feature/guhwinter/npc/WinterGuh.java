@@ -173,7 +173,7 @@ public class WinterGuh extends GuhEntity {
         this.kijkDoel = null;
         this.kijkEntity = null;
         NpcDefs.Def d = def();
-        if (d != null && (d.gedrag() == NpcDefs.Gedrag.ZITTEN || d.gedrag() == NpcDefs.Gedrag.SLEE)) {
+        if (d != null && thuis != null && (d.gedrag() == NpcDefs.Gedrag.ZITTEN || d.gedrag() == NpcDefs.Gedrag.SLEE)) {
             snapTo(thuis.x, thuis.y, thuis.z, thuisYaw, 0);
             setOrderedToSit(true);
             setInSittingPose(true);
@@ -266,7 +266,7 @@ public class WinterGuh extends GuhEntity {
         } else if (n.startsWith("pakjesguh_")) {
             // pepernoten in a little arc (only to look at; the real ones are hidden around the plein)
             Vec3 voor = Vec3.directionFromRotation(-35, getYRot());
-            ItemParticleOption noot = new ItemParticleOption(ParticleTypes.ITEM, new ItemStack(Items.COOKIE));
+            ItemParticleOption noot = new ItemParticleOption(ParticleTypes.ITEM, Items.COOKIE);
             for (int i = 0; i < 10; i++) {
                 double s = 0.25 + getRandom().nextDouble() * 0.2;
                 sl.sendParticles(noot, getX(), getY() + 0.7, getZ(), 0, voor.x + (getRandom().nextDouble() - 0.5) * 0.6, voor.y,
