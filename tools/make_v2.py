@@ -4384,6 +4384,8 @@ def fix_compass_needles():
     folder = f"{A}/models/item"
     for f in os.listdir(folder):
         path = os.path.join(folder, f)
+        if not f.endswith(".json") or not os.path.isfile(path):
+            continue   # sub-folders of models/item (1.10: vr_t_kleding/, vr_u_zichtbaar/) hold no compasses
         model = json.load(open(path, encoding="utf-8"))
         overrides = model.get("overrides", [])
         if not overrides or "angle" not in overrides[0].get("predicate", {}):
@@ -4444,8 +4446,24 @@ def run_features():
     import types
     import features
     h = types.SimpleNamespace(**globals())
+    # 1.10.9: GUHS_SELFCHECK_WARN=1 turns a module's failing self-check (SystemExit) into a warning, so one stale check
+    # (full runs were paused after the 26.1 port and some checks lag behind the Java) doesn't stop every module after it.
+    # A self-check runs at the end of its module's build, so its outputs are already written. Summary at the end of the run.
+    warn = os.environ.get("GUHS_SELFCHECK_WARN") == "1"
     for module in features.modules():
-        module.build(h)
+        if not warn:
+            module.build(h)
+            continue
+        try:
+            module.build(h)
+        except SystemExit as e:
+            if not isinstance(e.code, str):
+                raise
+            SELFCHECK_WARNINGS.append(f"{module.__name__}: {e.code}")
+            print(f"WARNING (GUHS_SELFCHECK_WARN) {module.__name__}: {e.code}")
+
+
+SELFCHECK_WARNINGS = []
 
 
 # =====================================================================================================================
@@ -4752,3 +4770,7 @@ if __name__ == "__main__":
     buiten_gebouwen()
     config_lang()
     write_lang()
+    if SELFCHECK_WARNINGS:
+        print(f"\n{len(SELFCHECK_WARNINGS)} self-check(s) failed (GUHS_SELFCHECK_WARN=1, the run went on):")
+        for _w in SELFCHECK_WARNINGS:
+            print("  - " + _w.replace("\n", "\n    "))

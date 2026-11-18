@@ -286,13 +286,24 @@ ANDERE_BBQ2 = {"paleizen", "bestaand", "camping_markt", "toren_peper", "ring", "
 # loot inside a feature's OWN building counts as that feature (the same logical source; 2.8 sets stay as 2.8 made them)
 # guhpixel: every slice registers the sources of its own pieces (marker blocks px_<slice> in GuhClothes)
 # einde2: the same for its marker blocks einde2_<slice>
+# 1.7.0+ (Onder de Wol, slaapkleding, raket, Vadsrijk): these slices register their own pieces in Java
+# (KledingBronnen.bron in their Feature) or hand them out from their own structures' loot. The self-check was not updated
+# while full make_resources runs were paused after the 26.1 port (1.10.9 integration: brought up to date).
+ANDERE_17 = {"mijnhulp", "mijnrook", "minigames1", "minigames2", "structuren2", "structuren3", "slaapkleding", "raket",
+             "vadsrijk_economie"}
+
+
 def _eigen_bron(marker):
+    if marker in ANDERE_17:
+        return True
     if (marker or "").startswith("bio_"):   # biomes3: a slice registers the sources of its own pieces, as px_ does
         return True
     return marker in ANDERE_29 or marker in ANDERE_30 or marker in ANDERE_BBQ2 or (marker or "").startswith(("px_", "einde2_", "safari", "beverbeek", "voetjes"))   # 1.6.0: the safari slices register their own pieces too (1.6.2: the Beverbeek too, BeverGuhs; 1.7.0: voetjes, VoetjesFeature)
 
 
-EIGEN_LOOT = {("boerderij_zakdoek", "guhboerderij.json")}
+EIGEN_LOOT = {("boerderij_zakdoek", "guhboerderij.json"),
+              # 1.7.0 cave buildings (live since 1.7.0): the bathhouse and the sleeping hall also hide the bath/camping pieces
+              ("badjasje", "badhuis.json"), ("slaapmutsje", "knuffelslaapzaal.json"), ("pyjama_pakje", "knuffelslaapzaal.json")}
 
 
 def selfcheck(h):
