@@ -351,6 +351,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'vadsrijk_ambacht_verhaal',
             # 1.10.4: T6 in Het Zijdeland (zone-6 gathering, T6 jewellery/Koken) + the islet's klaverhoning (after t_ambacht + u_ambacht2)
             'vadsrijk_ambacht_t6',
+            # 1.10.9 Guhwinter, slice npc: the Winterplein's guhs (names, idle lines, look textures + 4 bones; Java: feature/guhwinter/npc)
+            'guhwinter_npc',
             ]
 
 
