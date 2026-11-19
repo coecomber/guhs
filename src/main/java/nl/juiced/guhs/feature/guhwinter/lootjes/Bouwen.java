@@ -133,7 +133,7 @@ public final class Bouwen {
         }
         LootjesData d = LootjesData.get(server);
         UUID eigenaar = d.eigenaarVanVeld(v.i());
-        GameType m = p.gameMode();
+        GameType m = p.gameMode.getGameModeForPlayer();
         if (p.getUUID().equals(eigenaar) && Guhwinter.bouwenOpen(server) && (m == GameType.SURVIVAL || m == GameType.ADVENTURE)) {
             Bouwkist.begin(p, v.i());
             p.level().playSound(null, p.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0f, 1.0f);

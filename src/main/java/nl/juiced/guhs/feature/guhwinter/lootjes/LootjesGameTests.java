@@ -54,7 +54,7 @@ public class LootjesGameTests {
         p.setExperienceLevels(7);
         Bouwkist.begin(p, 2);
         helper.assertTrue(Bouwkist.bouwt(p) && Bouwkist.veld(p) == 2, "building on plot 3");
-        helper.assertTrue(p.gameMode() == GameType.CREATIVE, "creative while building");
+        helper.assertTrue(p.gameMode.getGameModeForPlayer() == GameType.CREATIVE, "creative while building");
         helper.assertTrue(p.getInventory().isEmpty() && p.getActiveEffects().isEmpty(), "creative starts empty");
         // creative junk that must NOT come out
         p.getInventory().setItem(0, new ItemStack(Items.DIAMOND_BLOCK, 64));
@@ -62,7 +62,7 @@ public class LootjesGameTests {
         p.setHealth(20f);
         helper.assertTrue(Bouwkist.herstel(p), "back out");
         helper.assertTrue(!Bouwkist.bouwt(p) && !p.getPersistentData().contains(Bouwkist.SLEUTEL), "the stash is gone");
-        helper.assertTrue(p.gameMode() == GameType.SURVIVAL, "survival again");
+        helper.assertTrue(p.gameMode.getGameModeForPlayer() == GameType.SURVIVAL, "survival again");
         helper.assertTrue(p.getInventory().getItem(0).is(Items.DIAMOND) && p.getInventory().getItem(0).getCount() == 5, "slot 0 back");
         helper.assertTrue(p.getInventory().getItem(20).is(Items.COBBLESTONE) && p.getInventory().getItem(20).getCount() == 64, "slot 20 back");
         helper.assertTrue(p.getItemBySlot(EquipmentSlot.HEAD).is(Items.IRON_HELMET), "helmet back");

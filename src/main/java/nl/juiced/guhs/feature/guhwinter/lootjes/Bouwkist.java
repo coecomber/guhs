@@ -134,7 +134,7 @@ public final class Bouwkist {
         k.putInt("XpL", p.experienceLevel);
         k.putFloat("XpP", p.experienceProgress);
         k.putInt("XpT", p.totalExperience);
-        k.putString("Mode", p.gameMode().getName());
+        k.putString("Mode", p.gameMode.getGameModeForPlayer().getName());
         k.putInt("Lucht", p.getAirSupply());
         return k;
     }
