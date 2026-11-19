@@ -1,6 +1,5 @@
 package nl.juiced.guhs.feature.guhwinter.verhaal;
 
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -327,19 +326,10 @@ public final class VerhaalStappen {
         });
     }
 
-    /**
-     * The lootjes slice's Het Grote Boek, when it is there ({@code nl.juiced.guhs.feature.guhwinter.lootjes.Lootjes.openBoek(ServerPlayer)},
-     * looked up by name: the lootjes slice is built in parallel). False: not there (the story then points to the lectern).
-     */
+    /** The lootjes slice's Het Grote Boek (its page in the chat). Always there since the 1.10.9 integration. */
     static boolean openBoek(ServerPlayer p) {
-        try {
-            Class<?> c = Class.forName("nl.juiced.guhs.feature.guhwinter.lootjes.Lootjes");
-            Method m = c.getMethod("openBoek", ServerPlayer.class);
-            m.invoke(null, p);
-            return true;
-        } catch (ReflectiveOperationException | LinkageError | RuntimeException e) {
-            return false;
-        }
+        nl.juiced.guhs.feature.guhwinter.lootjes.Lootjes.openBoek(p);
+        return true;
     }
 
     /** The day (Europe/Amsterdam, honouring the dev date) as a number: the schoentje needs a night in between. */
