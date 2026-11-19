@@ -402,7 +402,11 @@ public class VadsrijkAmbachtVerhaalGameTests {
             QuestStap s = QuestStap.hoofdlijn(p);
             helper.assertTrue(s != null && s.quest().equals("hq07_littekens"), "the tracker keeps the real story: " + (s == null ? null : s.quest()));
             // 1.10.9: ...and shows the missed lesson as its own line, pointing at the islet bridge
+            // (stand on the camp island, like a real player: from a random gametest spot far away the route would be "first the airship")
+            double ox = p.getX(), oy = p.getY(), oz = p.getZ();
+            p.setPos(-610.5, 70, 1030.5);
             var volg = nl.juiced.guhs.feature.vadsrijk.npc.NpcVolg.bouw(p);
+            p.setPos(ox, oy, oz);
             var les = volg.regels().stream().filter(r -> r.quest().equals("hq03d_knutsel")).findFirst();
             helper.assertTrue(volg.regels().get(0).quest().equals("hq07_littekens"), "main story stays the first tracker line");
             helper.assertTrue(les.isPresent() && les.get().doel().isPresent() && les.get().doel().get().getX() < -400,
