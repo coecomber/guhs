@@ -42,6 +42,21 @@ public final class WinterVerhaalClient {
     private WinterVerhaalClient() {
     }
 
+    /** Is this one of the two Ozovads horses, and is it not where this player's story has him? */
+    private static boolean ozovadsElders(net.minecraft.world.entity.Entity e) {
+        if (!(e instanceof net.minecraft.world.entity.animal.equine.Horse) || e.getCustomName() == null
+                || !(e.getCustomName().getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents t)) {
+            return false;
+        }
+        boolean verstopt = t.getKey().equals("guhwinter.npc.naam.ozovads_verstop");
+        if (!verstopt && !t.getKey().equals("guhwinter.npc.naam.ozovads")) {
+            return false;
+        }
+        int stap = nl.juiced.guhs.feature.verhaal.VerhaalSync.Client.stap("guhwinter_sint");
+        return verstopt ? stap != nl.juiced.guhs.feature.guhwinter.verhaal.WinterVerhaal.S_OZOVADS
+                : stap <= nl.juiced.guhs.feature.guhwinter.verhaal.WinterVerhaal.S_OZOVADS;
+    }
+
     public static void init(IEventBus modBus) {
         GuhRenderer.hook((guh, partialTick, frame) -> {
             if (guh.entityTags().isEmpty()) {
@@ -54,6 +69,9 @@ public final class WinterVerhaalClient {
                 }
             }
         });
+        // (playtest 1) Ozovads is where YOUR story says: hiding down the valley until you found him (the plein's horse is
+        // not drawn for you), on the plein from then on (the hiding one is not drawn). Before the intocht: neither.
+        nl.juiced.guhs.feature.verhaal.client.CutsceneSpeler.OOK_VERBORGEN.add(WinterVerhaalClient::ozovadsElders);
         WinterVerhaalPayloads.opener = p -> {
             Minecraft mc = Minecraft.getInstance();
             mc.execute(() -> mc.setScreen(p.data().getBooleanOr("Schrijf", false) ? new VoornemenScherm(p.data()) : new PrikbordScherm(p.data())));

@@ -49078,5 +49078,11 @@
   "guhwinter.lootjes.surprise.opgepakt": "De surprise van %s zit weer in je tas.",
   "guhwinter.lootjes.surprise.info": "Een surprise van %s",
   "guhwinter.lootjes.surprise.info.eigen": "Jouw surprise van %s. Shift+rechtsklik pakt hem op.",
-  "guhwinter.lootjes.surprise.niet_slopen": "Een surprise sloop je niet! Shift+rechtsklik pakt hem in zijn geheel op."
+  "guhwinter.lootjes.surprise.niet_slopen": "Een surprise sloop je niet! Shift+rechtsklik pakt hem in zijn geheel op.",
+  "guhwinter.npc.naam.ozovads_verstop": "Ozovads",
+  "guhwinter.npc.praat.ozovads_verstop.sint.1": "*knabbelt aan het hooi en kijkt heel schuldig* ...Hinnik?",
+  "guhwinter.npc.praat.ozovads_verstop.sint.2": "*verstopt zijn hoofd achter een rotsje* Hinnikvads... (Jij ziet mij niet.)",
+  "guhwinter.npc.praat.ozovads_verstop.sint.3": "*snuffelt* Wortel? Het ruikt hier naar wortel. Hinnik!",
+  "guhwinter.verhaal.taak": "➜ Wat nu, vadsje? %s (%s)",
+  "guhwinter.verhaal.taak.teller": "(%s van %s gevonden)"
 }

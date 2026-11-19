@@ -41,4 +41,43 @@ public class GuhwinterVerhaalGameTests {
         WinterVerhaal.SINT.wis(p);
         helper.succeed();
     }
+
+    /**
+     * Playtest round 1: the tree cards hang in a grid on the east and west side (never two in one spot), the walk-to radius
+     * of Ozovads' hiding spot reaches from the end of the carrot trail, there is a hiding-spot Ozovads, and the plein guhs
+     * never plan a walk through water.
+     */
+    @GuhTest(template = "empty", batch = B)
+    public static void playtestRonde1(GameTestHelper helper) {
+        // --- the tree cards
+        java.util.Set<String> plekken = new java.util.HashSet<>();
+        for (int i = 0; i < 24; i++) {
+            double[] k = nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.plek(i);
+            boolean oost = k[0] > 0;
+            helper.assertTrue(Math.abs(Math.abs(k[0]) - nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.KANT) < 1e-9,
+                    "card " + i + " hangs on the east or west side");
+            helper.assertTrue(oost == (i % 2 == 0) && k[3] == (oost ? 90.0 : -90.0), "card " + i + " alternates sides and faces outwards");
+            helper.assertTrue(plekken.add(oost + ":" + Math.round(k[1] * 10) + ":" + Math.round(k[2] * 10)), "card " + i + " has a spot of its own");
+        }
+        double[] eerste = nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.plek(0);
+        helper.assertTrue(Math.abs(eerste[1] + 0.32 - 2.4) < 0.05, "the first row is centred about 2 blocks above the floor");
+        // --- Ozovads: found from the end of the trail, and there is one in the hiding spot
+        java.util.List<nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.Anker> spoor = nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.reeks("paard_spoor_");
+        nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.Anker verstop = nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.zoek("paard_verstop");
+        if (verstop != null && spoor.size() >= 2) {
+            net.minecraft.world.phys.Vec3 eind = spoor.get(spoor.size() - 2).vec(), v = verstop.vec();
+            helper.assertTrue(Math.hypot(eind.x - v.x, eind.z - v.z) < VerhaalStappen.VERSTOP_STRAAL, "the end of the trail is close enough to find him");
+        }
+        nl.juiced.guhs.feature.guhwinter.npc.NpcDefs.Def d = nl.juiced.guhs.feature.guhwinter.npc.NpcDefs.van("ozovads_verstop");
+        helper.assertTrue(d != null && d.soort() == nl.juiced.guhs.feature.guhwinter.npc.NpcDefs.Soort.PAARD
+                && d.in(nl.juiced.guhs.feature.guhwinter.npc.NpcFase.SINT) && !d.in(nl.juiced.guhs.feature.guhwinter.npc.NpcFase.KERST)
+                && d.ankers().get(0).anker().equals("npc_ozovads_verstop"), "a hiding-spot Ozovads, Sint time only");
+        // --- the plein guhs never walk into water
+        net.minecraft.world.phys.Vec3 bij = net.minecraft.world.phys.Vec3.atBottomCenterOf(helper.absolutePos(new net.minecraft.core.BlockPos(1, 2, 1)));
+        net.minecraft.world.entity.Entity e = nl.juiced.guhs.feature.guhwinter.npc.GuhwinterNpcs.zet(helper.getLevel(), "anthony", bij, 0);
+        helper.assertTrue(e instanceof net.minecraft.world.entity.Mob m
+                && m.getPathfindingMalus(net.minecraft.world.level.pathfinder.PathType.WATER) < 0, "Anthony never plans a walk through water");
+        e.discard();
+        helper.succeed();
+    }
 }

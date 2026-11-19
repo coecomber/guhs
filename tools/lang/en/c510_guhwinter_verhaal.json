@@ -121,6 +121,8 @@
   "guhwinter.verhaal.schoen.vol": "Your shoe has been filled! The carrot is gone, and there's a %s and %s pepernoten in it. Thank you, Sint!",
   "guhwinter.verhaal.schoen.vol_terug": "The Sint has already gone back to Spain, but there was still something in the chimney for you: a %s and %s pepernoten!",
   "guhwinter.verhaal.schoen.wacht": "Your shoe is still there. So is the carrot. A little more patience, chonky!",
+  "guhwinter.verhaal.taak": "➜ What now, chonky? %s (%s)",
+  "guhwinter.verhaal.taak.teller": "(%s of %s found)",
   "guhwinter.verhaal.verteller": "Narrator",
   "guhwinter.verhaal.wandel.alpine.0": "An ALPINE chick? There isn't even a mount... oh. There's a mountain.",
   "guhwinter.verhaal.wandel.alpine.1": "I'm never sleeping again. This was everything.",

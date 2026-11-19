@@ -100,6 +100,21 @@ public final class CutsceneSpeler {
         return scene != null;
     }
 
+    /**
+     * Other features' "not drawn for this viewer", also when no scene plays (e.g. an NPC that is somewhere else in this
+     * player's story). Checked for every entity every frame by the render mixin: keep each test cheap.
+     */
+    public static final java.util.List<java.util.function.Predicate<Entity>> OOK_VERBORGEN = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    public static boolean ookVerborgen(Entity e) {
+        for (java.util.function.Predicate<Entity> p : OOK_VERBORGEN) {
+            if (p.test(e)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** The scene that plays (null: none) and how far it is (ticks). */
     @Nullable
     public static Cutscene scene() {

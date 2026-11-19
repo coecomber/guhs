@@ -233,6 +233,9 @@ NAMEN = {
     "pakjesguh_2": ("Pakjesguh Strikje", "Parcel Guh Strikje"),
     "pakjesguh_3": ("Pakjesguh Hupsakee", "Parcel Guh Hupsakee"),
     "ozovads": ("Ozovads", "Ozovads"),
+    # (playtest 1) Ozovads in his hiding spot by the arrival: only the players who still look for him see this one; the
+    # others see him on the plein (client: verhaal's WinterVerhaalClient)
+    "ozovads_verstop": ("Ozovads", "Ozovads"),
     "winkelguh": ("Winkelguh Toffie", "Shopkeeper Toffie"),
 }
 
@@ -795,6 +798,14 @@ PRAAT = {
             ("*schudt met zijn manen en kijkt heel trots* Hinnik!", "*shakes his mane and looks very proud* Neigh!"),
         ],
     },
+    "ozovads_verstop": {
+        "sint": [
+            ("*knabbelt aan het hooi en kijkt heel schuldig* ...Hinnik?", "*nibbles the hay and looks very guilty* ...Neigh?"),
+            ("*verstopt zijn hoofd achter een rotsje* Hinnikvads... (Jij ziet mij niet.)",
+             "*hides his head behind a little rock* Neighvads... (You can't see me.)"),
+            ("*snuffelt* Wortel? Het ruikt hier naar wortel. Hinnik!", "*sniffs* Carrot? It smells like carrot around here. Neigh!"),
+        ],
+    },
     "winkelguh": {
         "sint": [
             ("Welkom in mijn winkeltje! Alles is te koop voor pepernoten. Echte pepernoten, geen knopen.",
@@ -856,7 +867,7 @@ def teksten():
 def _controle():
     problemen = []
     alle_fasen = {"sint", "kerst", "oudjaar"}
-    alleen_sint = {"sint", "ozovads"} | {f"pakjesguh_{i}" for i in range(4)}
+    alleen_sint = {"sint", "ozovads", "ozovads_verstop"} | {f"pakjesguh_{i}" for i in range(4)}
     for naam in NAMEN:
         fasen = PRAAT.get(naam, {})
         nodig = {"sint"} if naam in alleen_sint else ({"kerst", "oudjaar"} if naam == "wijnand" else alle_fasen)

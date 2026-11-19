@@ -1039,6 +1039,31 @@ def boot(p):
     p.anker("boot_dek", cx2 + 2 + 0.5, VLOER + 1, zc + 0.5, YAW["east"])
 
 
+# --- steps out of the water (playtest 1: players and guhs got stuck in the canal by the Pakjesboot) -------------------
+# (water cell x, z) -> (kade edge cell x, z), the way up: a stone brick step in the water (waterlogged) and a polished
+# andesite step cut into the kade edge, so you walk out in two half steps
+TRAPJES = [((-282, -671), (-282, -672), "north"), ((-281, -671), (-281, -672), "north"),      # by the Pakjesboot (kade_boot)
+           ((-294, -664), (-295, -664), "west"), ((-294, -663), (-295, -663), "west"),        # south-west corner of the basin
+           ((-337, -670), (-337, -671), "north"), ((-336, -670), (-336, -671), "north"),      # the canal, north side
+           ((-313, -670), (-313, -671), "north"), ((-312, -670), (-312, -671), "north"),
+           ((-345, -666), (-345, -665), "south"), ((-344, -666), (-344, -665), "south"),      # the canal, south side
+           ((-318, -666), (-318, -665), "south"), ((-317, -666), (-317, -665), "south")]
+
+
+def trapjes(p):
+    for (xw, zw), (xk, zk), richting in TRAPJES:
+        dx, dz = DIRS[richting]
+        if p.get(xw, VLOER - 1, zw) != "minecraft:water" or not p.leeg(xw, VLOER, zw) or not p.leeg(xw, VLOER + 1, zw):
+            raise SystemExit(f"guhwinter_plein: step {xw},{zw} is not open water")
+        if p.get(xk, VLOER, zk) != "minecraft:polished_andesite" or not p.leeg(xk, VLOER + 1, zk) or (xk - xw, zk - zw) != (dx, dz):
+            raise SystemExit(f"guhwinter_plein: step {xk},{zk} is not a free kade edge")
+        if not (p.leeg(xk + dx, VLOER + 1, zk + dz) or p.get(xk + dx, VLOER + 1, zk + dz) == "minecraft:snow") or not p.leeg(xk + dx, VLOER + 2, zk + dz):
+            raise SystemExit(f"guhwinter_plein: nowhere to step off at {xk + dx},{zk + dz}")
+        p.set(xw, VLOER - 1, zw, "stone_brick_stairs", {"facing": richting, "half": "bottom", "shape": "straight", "waterlogged": "true"})
+        p.trap(xk, VLOER, zk, "polished_andesite_stairs", richting)
+        p.pad.add((xk, zk))
+
+
 # --- the Surprisestraatje: 8 empty build plots ----------------------------------------------------------------------------
 def straatje(p):
     i = 0
@@ -1265,6 +1290,7 @@ def winter():
     arcade(p)
     sintkade(p)
     boot(p)
+    trapjes(p)
     straatje(p)
     prikbord(p)
     plein_midden(p)
@@ -1272,19 +1298,33 @@ def winter():
     muziektent(p)
     bloembakken(p)
     bomen_en_lichten(p)
-    # hiding spots for the presents (overboard) and the pepernoten
-    pakjes = [(-345, VLOER + 1, -663), (-331, VLOER + 1, -672), (-296, VLOER + 1, -684), (-277, VLOER + 1, -686),
+    # hiding spots for the presents (overboard) and the pepernoten (playtest 1: pakje 0 lay under the spruce at -346,-664,
+    # now beside the lamp post; pepernoot 4 lay under the spruce at -327,-688, now at its foot; see check_verstop)
+    pakjes = [(-342, VLOER + 1, -663), (-331, VLOER + 1, -672), (-296, VLOER + 1, -684), (-277, VLOER + 1, -686),
               (-349, VLOER + 1, -686), (-301, VLOER + 1, -733), (-325, VLOER + 1, -717)]
     for i, (x, y, z) in enumerate(pakjes):
         p.anker(f"pakje_verstop_{i}", x + 0.5, y, z + 0.5, 0.0)
-    pepers = [(-349, -734), (-277, -734), (-277, -662), (-349, -662), (-326, -686), (-302, -692), (-318, -713), (-283, -706),
+    pepers = [(-349, -734), (-277, -734), (-277, -662), (-349, -662), (-325, -685), (-302, -692), (-318, -713), (-283, -706),
               (-296, -722), (-280, -726), (-323, -718), (-342, -694), (-332, -694), (-305, -681), (-292, -678), (-310, -689)]
     # (1.10.10 integration) these spots lie on a raised floor (the arcade booth's planks at VLOER + 1): one block higher
     hoger = {(-305, -681)}
     for i, (x, z) in enumerate(pepers):
         p.anker(f"pepernoot_verstop_{i}", x + 0.5, VLOER + (2 if (x, z) in hoger else 1), z + 0.5, 0.0)
     sneeuw(p)
+    check_verstop(p)
     return p
+
+
+def check_verstop(p):
+    """Every hiding spot on the square stands in the open: nothing but air (or a snow layer) in it and two blocks above it."""
+    for k, a in p.ankers.items():
+        if not k.startswith(("pakje_verstop_", "pepernoot_verstop_")):
+            continue
+        x, y, z = math.floor(a["x"]), int(a["y"]), math.floor(a["z"])
+        for yy in range(y, y + 3):
+            b = p.get(x, yy, z)
+            if not (b in (None, "minecraft:air") or (yy == y and b == "minecraft:snow")):
+                raise SystemExit(f"guhwinter_plein: hiding spot {k} at {x},{y},{z} is not open ({b} at y {yy})")
 
 
 def raam():
@@ -1370,7 +1410,7 @@ def aankomst():
     return p
 
 
-SPOOR = [(-299, 30, -652), (-298, 30, -651), (-298, 30, -649), (-297, 30, -648), (-296, 30, -647), (-295, 30, -646)]
+SPOOR = [(-299, 30, -652), (-298, 30, -651), (-298, 30, -649), (-297, 30, -648), (-296, 30, -647), (-293, 31, -646)]
 # Ozovads' trail from the portal down into the valley (y: standing level; outside the square, use Anker.opGrond)
 VERSTOP = (-294, 30, -644)                     # his hiding spot behind the rocks (Java: GuhwinterPlein.VERSTOP)
 

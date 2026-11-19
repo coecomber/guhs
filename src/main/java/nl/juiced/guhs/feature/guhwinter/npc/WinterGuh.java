@@ -23,6 +23,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -30,6 +31,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.entity.GuhClothes;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -69,12 +72,17 @@ public class WinterGuh extends GuhEntity {
     private Entity kijkEntity;
     private long kijkTot;
 
+    /** The keeper's count of seconds in a row this guh was in the water (playtest 1: then it goes home). */
+    int natTellen;
     private int zwaaiPauze;
     private int klusPauze = 200;
 
     public WinterGuh(EntityType<? extends TamableAnimal> type, Level level) {
         super(type, level);
         this.setPersistenceRequired();
+        // (playtest 1) never plan a walk through water: the canal by the Pakjesboot is 2 deep with a kade around it
+        setPathfindingMalus(PathType.WATER, -1f);
+        setPathfindingMalus(PathType.WATER_BORDER, 16f);
     }
 
     @Override
@@ -192,7 +200,9 @@ public class WinterGuh extends GuhEntity {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new SceneGoal());
+        // (playtest 1) float: without it a guh that fell in sank to the bottom of the canal and walked there for ever
+        this.goalSelector.addGoal(0, new FloatGoal(this));
+        this.goalSelector.addGoal(1, new SceneGoal());
         this.goalSelector.addGoal(2, new LookAtPlayerGoal(this, Player.class, 8f));
         this.goalSelector.addGoal(3, new IdleGoal());
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
@@ -365,8 +375,15 @@ public class WinterGuh extends GuhEntity {
             double x = thuis.x, z = thuis.z, snel = 0.6;
             switch (gedrag) {
                 case SLENTER -> {
-                    x += getRandom().nextInt(9) - 4;
-                    z += getRandom().nextInt(9) - 4;
+                    // a dry spot within 4 blocks (Anthony and the pakjesguhs stand right at the kade: no strolls into the canal)
+                    for (int i = 0; i < 8; i++) {
+                        double px = thuis.x + getRandom().nextInt(9) - 4, pz = thuis.z + getRandom().nextInt(9) - 4;
+                        if (droog(px, thuis.y, pz)) {
+                            x = px;
+                            z = pz;
+                            break;
+                        }
+                    }
                 }
                 case SCHAATSEN -> {
                     // big rounds on the ice: the next point a bit further round the circle
@@ -392,6 +409,17 @@ public class WinterGuh extends GuhEntity {
         public boolean canContinueToUse() {
             return !getNavigation().isDone() && !vast;
         }
+    }
+
+    /** A spot to stroll to: no water in it or under it (the canal's air above the water counts as wet too). */
+    private boolean droog(double x, double y, double z) {
+        BlockPos p = BlockPos.containing(x, y, z);
+        for (int dy = -2; dy <= 0; dy++) {
+            if (!level().getFluidState(p.above(dy)).isEmpty()) {
+                return false;
+            }
+        }
+        return !level().getBlockState(p.below()).isAir() || !level().getBlockState(p.below(2)).isAir();
     }
 
     // --- never anybody's, never hurt, never saved ---------------------------------------------------------------------------

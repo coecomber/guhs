@@ -185,7 +185,16 @@ public final class GuhwinterNpcs {
                     g.thuis = p.pos();           // (the anchors file came, or changed after a /reload)
                     g.thuisYaw = p.yaw();
                 }
-                if (!g.isVast() && g.distanceToSqr(p.pos()) > 24 * 24) {
+                // (playtest 1) in the water for 3 seconds (pushed in, fell off the kade): back home with a puff of snow
+                g.natTellen = g.isInWater() && !g.isVast() ? g.natTellen + 1 : 0;
+                if (g.natTellen >= 3) {
+                    level.sendParticles(ParticleTypes.SPLASH, g.getX(), g.getY() + 0.5, g.getZ(), 12, 0.3, 0.2, 0.3, 0.05);
+                    g.snapTo(p.pos().x, p.pos().y, p.pos().z, p.yaw(), 0);
+                    g.getNavigation().stop();
+                    g.setDeltaMovement(net.minecraft.world.phys.Vec3.ZERO);
+                    level.sendParticles(ParticleTypes.SNOWFLAKE, p.pos().x, p.pos().y + 0.6, p.pos().z, 12, 0.35, 0.4, 0.35, 0.02);
+                    g.natTellen = 0;
+                } else if (!g.isVast() && g.distanceToSqr(p.pos()) > 24 * 24) {
                     g.snapTo(p.pos().x, p.pos().y, p.pos().z, p.yaw(), 0);   // (wandered off: home)
                     g.getNavigation().stop();
                 }

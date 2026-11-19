@@ -33,7 +33,7 @@ public class GuhwinterNpcGameTests {
             Entity e = GuhwinterNpcs.zet(level, naam, bij, 0);
             helper.assertTrue(e != null && GuhwinterNpcs.get(level, naam) == e, naam + " spawns and is found by name");
             helper.assertTrue(naam.equals(GuhwinterNpcs.naamVan(e)) && GuhwinterNpcs.isNpc(e), naam + " knows its name");
-            if (naam.equals("ozovads")) {
+            if (naam.startsWith("ozovads")) {
                 helper.assertTrue(e instanceof Horse h && h.isInvulnerable() && h.getAttributeValue(Attributes.MOVEMENT_SPEED) == 0, "Ozovads: a still horse");
             } else {
                 helper.assertTrue(e instanceof WinterGuh, naam + " is a WinterGuh");

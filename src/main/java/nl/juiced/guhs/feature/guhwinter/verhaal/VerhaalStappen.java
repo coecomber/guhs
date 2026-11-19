@@ -64,8 +64,17 @@ public final class VerhaalStappen {
     private static final DustParticleOptions ROOD = new DustParticleOptions(0xE0384C, 1.1f), GROEN = new DustParticleOptions(0x3FA34D, 1.1f),
             GOUD = new DustParticleOptions(0xFFD34A, 0.9f);
 
+    /** (playtest 1) How close to Ozovads' hiding spot counts as "found him" (it lies behind a few rocks, the trail ends ~3.6 away). */
+    static final double VERSTOP_STRAAL = 6.0;
+    /** (playtest 1) No progress on the plein for this long: a reminder of your task above the hotbar, and again after as long (ticks). */
+    static final int HERINNER_NA = 20 * 120;
+    /** (playtest 1) Clicking a guh with nothing to do for you tells you your task at most this often (ticks). */
+    static final int KLIK_HINT_PAUZE = 20 * 15;
+
     private static final Map<UUID, Long> RUST = new ConcurrentHashMap<>();
     private static final Map<UUID, Long> LOGIN = new ConcurrentHashMap<>();
+    /** player -> {steps signature, tick of the last progress, tick of the last reminder, tick of the last click hint}. */
+    private static final Map<UUID, long[]> TAAK = new ConcurrentHashMap<>();
 
     private VerhaalStappen() {
     }
@@ -81,6 +90,7 @@ public final class VerhaalStappen {
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> {
             RUST.clear();
             LOGIN.clear();
+            TAAK.clear();
         });
         GuhwinterNpcs.klikHook((speler, naam, npc) -> klik(speler, naam));
     }
@@ -164,6 +174,7 @@ public final class VerhaalStappen {
         if (!vrij(p) || rust(p)) {
             return;
         }
+        herinner(p, f);
         int sint = WinterVerhaal.SINT.stap(p);
         boolean terug = !f.sint();
         switch (sint) {
@@ -177,11 +188,8 @@ public final class VerhaalStappen {
                 }
             }
             case WinterVerhaal.S_OZOVADS -> {
-                if (bij(p, "paard_verstop", 3.2)) {
-                    scene(p, WinterScenes.OZOVADS, a -> {
-                        WinterVerhaal.SINT.verder(a, WinterVerhaal.S_OZOVADS);
-                        a.sendSystemMessage(Component.translatable("guhwinter.verhaal.hint.pakjes", WinterVerhaal.PAKJES_NODIG).withStyle(ChatFormatting.YELLOW));
-                    });
+                if (bij(p, "paard_verstop", VERSTOP_STRAAL)) {
+                    ozovadsGevonden(p);
                     return;
                 }
             }
@@ -207,7 +215,7 @@ public final class VerhaalStappen {
         }
         if (WinterVerhaal.open(p, WinterVerhaal.Hoofdstuk.KERST)) {
             int kerst = WinterVerhaal.KERST.stap(p);
-            if (kerst == WinterVerhaal.K_SPARREN && bij(p, "paard_verstop", 4.5)) {
+            if (kerst == WinterVerhaal.K_SPARREN && bij(p, "paard_verstop", VERSTOP_STRAAL)) {
                 rustig(p);
                 WinterGesprek.boomKiezen(p);
                 return;
@@ -273,6 +281,15 @@ public final class VerhaalStappen {
     // =====================================================================================================================
     // chapter 1
     // =====================================================================================================================
+
+    /** At the end of the carrot trail (walking there, or clicking him in his hiding spot): the Ozovads scene, then the pakjes. */
+    static void ozovadsGevonden(ServerPlayer p) {
+        scene(p, WinterScenes.OZOVADS, a -> {
+            if (WinterVerhaal.SINT.verder(a, WinterVerhaal.S_OZOVADS)) {
+                a.sendSystemMessage(Component.translatable("guhwinter.verhaal.hint.pakjes", WinterVerhaal.PAKJES_NODIG).withStyle(ChatFormatting.YELLOW));
+            }
+        });
+    }
 
     /** How many lost pakjes this player found (bits of the counter "pakjes"). */
     public static int pakjesGevonden(ServerPlayer p) {
@@ -413,6 +430,15 @@ public final class VerhaalStappen {
         boolean zes = Wandeling.isZes(naam);
         // chapter 1
         int sint = WinterVerhaal.SINT.stap(p);
+        if (sint == WinterVerhaal.S_OZOVADS && naam.startsWith("ozovads")) {
+            // (playtest 1) the one in his hiding spot: found him! (the plein's one is not drawn for you yet: follow the trail)
+            if (naam.equals("ozovads_verstop") && vrij(p)) {
+                ozovadsGevonden(p);
+            } else {
+                p.sendSystemMessage(Component.translatable("guhwinter.verhaal.hint.spoor").withStyle(ChatFormatting.YELLOW));
+            }
+            return true;
+        }
         if (sint == WinterVerhaal.S_TERUG && (naam.equals("sint") || naam.startsWith("pakjesguh_"))) {
             sintBlijft(p);
             return true;
@@ -470,7 +496,92 @@ public final class VerhaalStappen {
                 return true;
             }
         }
+        // (playtest 1) nothing for you with this guh right now: what your task is (then its own idle line)
+        if (zes || naam.equals("sint") || naam.startsWith("ozovads") || naam.startsWith("pakjesguh_")) {
+            klikHint(p);
+        }
         return false;
+    }
+
+    // =====================================================================================================================
+    // what now? (playtest 1: "I have no idea what to do")
+    // =====================================================================================================================
+
+    /** The steps of the open chapters in one number: it changes whenever the player gets further. */
+    private static long handtekening(ServerPlayer p, GuhwinterFase f) {
+        long h = 0;
+        for (WinterVerhaal.Hoofdstuk c : WinterVerhaal.Hoofdstuk.values()) {
+            h = h * 16 + (c.open(f) ? c.lijn().stap(p) + 1 : 0);
+        }
+        return h * 64 + (WinterVerhaal.SINT.stap(p) == WinterVerhaal.S_PAKJES ? pakjesGevonden(p) : 0);
+    }
+
+    private static long[] taak(ServerPlayer p) {
+        return TAAK.computeIfAbsent(p.getUUID(), u -> new long[] {Long.MIN_VALUE, 0, 0, Long.MIN_VALUE / 2});
+    }
+
+    /**
+     * Your task in every open chapter that is not done ("Wat nu? Zoek 5 glinsterende pakjes (Overal op het plein...)"), from
+     * the Verhalen texts (gui.guhs.verhalen.&lt;line&gt;.nu/waar.&lt;variant&gt;). Waiting steps (pakjesavond before 5 December)
+     * only when nothing else is open and {@code metWachten}. Empty: nothing to do.
+     */
+    static List<Component> taken(ServerPlayer p, boolean metWachten) {
+        GuhwinterFase f = WinterVerhaal.fase(p);
+        List<Component> doen = new java.util.ArrayList<>(), wachten = new java.util.ArrayList<>();
+        for (WinterVerhaal.Hoofdstuk c : WinterVerhaal.Hoofdstuk.values()) {
+            Verhaallijn l = c.lijn();
+            if (!c.open(f) || l.klaar(p)) {
+                continue;
+            }
+            String s = l.sleutel(p);
+            if (s.equals("wacht") || s.equals("voorbij") || s.equals("klaar")) {
+                continue;
+            }
+            String k = "gui.guhs.verhalen." + c.id + ".";
+            net.minecraft.network.chat.MutableComponent nu = Component.translatable(k + "nu." + s);
+            if (c == WinterVerhaal.Hoofdstuk.SINT && l.stap(p) == WinterVerhaal.S_PAKJES) {
+                nu.append(" ").append(Component.translatable("guhwinter.verhaal.taak.teller", pakjesGevonden(p), WinterVerhaal.PAKJES_NODIG));
+            }
+            (s.endsWith("_wacht") ? wachten : doen).add(Component.translatable("guhwinter.verhaal.taak", nu.withStyle(ChatFormatting.GOLD),
+                    Component.translatable(k + "waar." + s)).withStyle(ChatFormatting.YELLOW));
+        }
+        return doen.isEmpty() && metWachten ? wachten : doen;
+    }
+
+    /** A click on a guh with nothing for you: your task in chat (at most every {@link #KLIK_HINT_PAUZE} ticks). */
+    static void klikHint(ServerPlayer p) {
+        long nu = p.level().getServer().getTickCount();
+        long[] t = taak(p);
+        if (nu - t[3] < KLIK_HINT_PAUZE) {
+            return;
+        }
+        List<Component> taken = taken(p, true);
+        if (taken.isEmpty()) {
+            return;
+        }
+        t[3] = nu;
+        t[2] = nu;     // (counts as a reminder too)
+        taken.forEach(p::sendSystemMessage);
+    }
+
+    /** On the plein without progress for {@link #HERINNER_NA} ticks: your first task above the hotbar, now and then. */
+    private static void herinner(ServerPlayer p, GuhwinterFase f) {
+        long nu = p.level().getServer().getTickCount();
+        long[] t = taak(p);
+        long h = handtekening(p, f);
+        if (h != t[0]) {
+            t[0] = h;
+            t[1] = nu;
+            return;
+        }
+        if (!opPlein(p) || nu - t[1] < HERINNER_NA || nu - t[2] < HERINNER_NA) {
+            return;
+        }
+        t[2] = nu;
+        List<Component> taken = taken(p, false);
+        if (!taken.isEmpty()) {
+            p.sendOverlayMessage(taken.get(0));
+        }
     }
 
     /** Right-clicking blocks: the shoe spot, the kerstboom (versieren), the prikbord. Runs before tekenen's tree click. */

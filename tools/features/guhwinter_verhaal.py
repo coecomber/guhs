@@ -56,6 +56,9 @@ TEKSTEN = {
     V + "hint.pakjesavond": ("Het is pakjesavond! Iedereen is bij Krijn en Corine. Kom snel naar het Winterplein!",
                              "It's pakjesavond! Everyone is at Krijn and Corine's. Hurry to the Winter Square!"),
     V + "hint.sparren": ("Op naar de sparretjes buiten het plein, bij de rotsjes in het dal!", "Off to the little spruces outside the square, by the rocks in the valley!"),
+    # (playtest 1) your task when you click a guh with nothing for you, and now and then above the hotbar
+    V + "taak": ("➜ Wat nu, vadsje? %s (%s)", "➜ What now, vadsje? %s (%s)"),
+    V + "taak.teller": ("(%s van %s gevonden)", "(%s of %s found)"),
     V + "bal": ("Je hangt een glimmende roze bal in de boom. Hij past er precies naast het ringdoosje van Suus.",
                 "You hang a shiny pink bauble in the tree. It fits right next to Suus' ring box."),
     V + "schoen.gezet": ("Je zet je schoentje bij de schoorsteen, met een wortel erin voor Ozovads. Nu een nachtje slapen...",

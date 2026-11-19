@@ -26,17 +26,23 @@ import nl.juiced.guhs.world.ModDimensions;
  *       preloaded (or empty the first time);</li>
  *   <li>fallback: right-clicking the tree itself (leaves/logs within 3 blocks of the plein anchor {@code kerstboom}) does the
  *       same, unless {@link #boomKlik} is switched off (when the story handles the tree);</li>
- *   <li>a few {@link BoomKaartje}s float around the tree showing the submitted drawings, swapping every half minute.</li>
+ *   <li>{@link BoomKaartje}s hang on the east and west side of the tree showing the submitted drawings, swapping every half
+ *       minute when there are more drawings than cards.</li>
  * </ul>
  */
 public final class KerstboomTekeningen {
     /** Right-clicking the tree opens the editor (switch off when another slice handles the tree's clicks). */
     public static volatile boolean boomKlik = true;
-    /** The cards: how many at most, their ring around the anchor (blocks), their height above it, swap time (ticks). */
-    public static int KAARTJES_MAX = 8;
-    // 1.10.10 integration, fitted to plein's tree (anchor = trunk base at y 32; leaves radius 3 at +1..+2, 2 at +3..+4, 1 at
-    // +5..+6; the house wall 3.5 east of the trunk, the ceiling at +8): the cards hang from +3.2 to +6.35, just outside the leaves
-    public static double RING = 2.9, HOOGTE_VAN = 3.2, HOOGTE_STAP = 0.45;
+    /** The cards: how many at most (2 sides x {@link #KOLOMMEN} x rows). */
+    public static int KAARTJES_MAX = 20;
+    // Playtest 1: all cards on the east and west side of the tree, facing outwards, in a neat grid: card i goes to side i % 2
+    // (east, west), then sideways along north-south (middle, +1, -1, +2, -2 columns), then a row higher. Fitted to plein's
+    // tree (anchor = trunk base = the floor you stand on, y 32; from +2 up its leaves reach 2.5 from the trunk's middle, the
+    // layer at +1 reaches 3.5; the east wall's inside is 3.5 from the middle, the ceiling at +8): the cards hang 2.95 out
+    // (just outside the leaves, inside the wall), the first row centred 2.4 above the floor, rows and columns 0.8 apart
+    // (a card is 0.64 square).
+    public static double KANT = 2.95, HOOGTE_VAN = 2.08, RIJ_STAP = 0.8, KOLOM_STAP = 0.8;
+    public static int KOLOMMEN = 5;
     private static final int WISSEL_TICKS = 600, KIJK_TICKS = 40, BIJ = 48;
 
     private static final List<BoomKaartje> KAARTJES = new ArrayList<>();
@@ -124,9 +130,8 @@ public final class KerstboomTekeningen {
                 if (k == null) {
                     return;
                 }
-                double hoek = i * 2.39996;   // the golden angle: spread around the tree
-                double x = boom.getX() + 0.5 + Math.cos(hoek) * RING, z = boom.getZ() + 0.5 + Math.sin(hoek) * RING;
-                k.snapTo(x, boom.getY() + HOOGTE_VAN + i * HOOGTE_STAP, z, (float) Math.toDegrees(hoek) - 90f, 0f);
+                double[] plek = plek(i);
+                k.snapTo(boom.getX() + 0.5 + plek[0], boom.getY() + plek[1], boom.getZ() + 0.5 + plek[2], (float) plek[3], 0f);
                 level.addFreshEntity(k);
                 if (i < KAARTJES.size()) {
                     KAARTJES.set(i, k);
@@ -136,6 +141,17 @@ public final class KerstboomTekeningen {
             }
             k.zetTekening(alle.get((ronde * n + i) % alle.size()).id());
         }
+    }
+
+    /**
+     * Card i's spot from the trunk's middle (dx, dy above the anchor, dz) and its yaw: even = east side (facing east), odd =
+     * west side (facing west); then the column (0, +1, -1, +2, -2, ...) along north-south; then the row.
+     */
+    public static double[] plek(int i) {
+        boolean oost = i % 2 == 0;
+        int j = i / 2, kolom = j % KOLOMMEN, rij = j / KOLOMMEN;
+        int zij = kolom == 0 ? 0 : ((kolom + 1) / 2) * (kolom % 2 == 1 ? 1 : -1);
+        return new double[] {oost ? KANT : -KANT, HOOGTE_VAN + rij * RIJ_STAP, zij * KOLOM_STAP, oost ? 90.0 : -90.0};
     }
 
     private static boolean iemandBij(ServerLevel level, BlockPos boom) {

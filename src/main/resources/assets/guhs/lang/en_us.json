@@ -49078,5 +49078,11 @@
   "guhwinter.lootjes.surprise.opgepakt": "The surprise from %s is back in your bag.",
   "guhwinter.lootjes.surprise.info": "A surprise from %s",
   "guhwinter.lootjes.surprise.info.eigen": "Your surprise from %s. Shift+right-click picks it up.",
-  "guhwinter.lootjes.surprise.niet_slopen": "You don't break a surprise! Shift+right-click picks the whole thing up."
+  "guhwinter.lootjes.surprise.niet_slopen": "You don't break a surprise! Shift+right-click picks the whole thing up.",
+  "guhwinter.npc.naam.ozovads_verstop": "Ozovads",
+  "guhwinter.npc.praat.ozovads_verstop.sint.1": "*nibbles the hay and looks very guilty* ...Neigh?",
+  "guhwinter.npc.praat.ozovads_verstop.sint.2": "*hides his head behind a little rock* Neighchonk... (You can't see me.)",
+  "guhwinter.npc.praat.ozovads_verstop.sint.3": "*sniffs* Carrot? It smells like carrot around here. Neigh!",
+  "guhwinter.verhaal.taak": "➜ What now, chonky? %s (%s)",
+  "guhwinter.verhaal.taak.teller": "(%s of %s found)"
 }

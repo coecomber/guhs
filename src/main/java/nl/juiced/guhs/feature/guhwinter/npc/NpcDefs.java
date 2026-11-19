@@ -245,6 +245,9 @@ public final class NpcDefs {
                     .bij("sint_stoel", i % 2 == 0 ? -3 - i : 3 + i, 2 + i).klaar();
         }
         npc("ozovads", -309, -690, 0).paard().alleen(SINT).bij("sint_stoel", 3, -1).klaar();
+        // (playtest 1) and Ozovads in his hiding spot down the valley (anchor npc_ozovads_verstop = paard_verstop): the story's
+        // client side shows each player only the one that fits their story (still hiding: this one; found: the one on the plein)
+        npc("ozovads_verstop", -294, -644, 0).paard().alleen(SINT).bij("paard_verstop", 0, 0).klaar();
 
         // --- the shop --------------------------------------------------------------------------------------------------------------
         npc("winkelguh", -287, -671, 0).haar(KAPSEL_KRULLEN, KASTANJE).draagt(KNUS_SJAALTJE, BAKKERSSCHORTJE)
