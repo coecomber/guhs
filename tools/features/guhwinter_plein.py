@@ -1279,8 +1279,10 @@ def winter():
         p.anker(f"pakje_verstop_{i}", x + 0.5, y, z + 0.5, 0.0)
     pepers = [(-349, -734), (-277, -734), (-277, -662), (-349, -662), (-326, -686), (-302, -692), (-318, -713), (-283, -706),
               (-296, -722), (-280, -726), (-323, -718), (-342, -694), (-332, -694), (-305, -681), (-292, -678), (-310, -689)]
+    # (1.10.9 integration) these spots lie on a raised floor (the arcade booth's planks at VLOER + 1): one block higher
+    hoger = {(-305, -681)}
     for i, (x, z) in enumerate(pepers):
-        p.anker(f"pepernoot_verstop_{i}", x + 0.5, VLOER + 1, z + 0.5, 0.0)
+        p.anker(f"pepernoot_verstop_{i}", x + 0.5, VLOER + (2 if (x, z) in hoger else 1), z + 0.5, 0.0)
     sneeuw(p)
     return p
 
