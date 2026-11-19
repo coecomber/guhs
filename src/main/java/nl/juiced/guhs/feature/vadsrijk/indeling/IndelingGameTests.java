@@ -64,6 +64,10 @@ public class IndelingGameTests {
         helper.assertTrue(Barrieres.vrij(2100, 63, -480), "zone 4 free");
         helper.assertTrue(Barrieres.vrij(2740, 260, -520), "Hoogvads free");
         helper.assertTrue(Barrieres.vrij(520, 63, 720), "the turtle island free");
+        // 1.10.9: the Ambachtseiland (plein, bridge, Vissteiger head, Kiezelgroeve, Bijenhofje, Visvijver) is free, not current
+        for (int[] a : new int[][] {{-607, 1030}, {-560, 1024}, {-545, 1024}, {-703, 1032}, {-652, 996}, {-626, 1077}, {-584, 1072}, {-686, 1030}}) {
+            helper.assertTrue(Barrieres.vrij(a[0], 64, a[1]), "Ambachtseiland free at " + a[0] + "," + a[1]);
+        }
         BlockPos nk = IndelingRegistry.plek("haven_z1_z2_vertrek");
         helper.assertTrue(Barrieres.vrij(nk.getX(), nk.getY(), nk.getZ()), "Noordklifhaven platform free " + nk);
         // not free: the barriers between the zones

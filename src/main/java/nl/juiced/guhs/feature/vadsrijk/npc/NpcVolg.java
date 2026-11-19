@@ -66,9 +66,16 @@ public final class NpcVolg {
         }
         // 1.10.3: the mount return quests (Knuffelhert / Guhwolf / Wolkenschaapje) are no longer put in the tracker by themselves
         // (they could not be unfollowed and popped up at a level): like any side quest they show only when pinned in the questlog
+        // 1.10.9: a missed craft step (the islet lesson, a zone's craft steps) is mandatory for the zone gate but skipped by the main
+        // line: show the first one as its own line, so the tracker points at the Ambachtseiland / the craft spot
+        Quest a = nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtVerhaal.eersteGemist(p);
+        if (a != null && (h == null || !h.quest().equals(a.id())) && (k == null || !k.id().equals(a.id()))) {
+            regels.add(regel(QuestStap.van(p, a)));
+        }
         String pin = pin(p);
         Quest q = pin.isEmpty() ? null : Quests.van(pin);
-        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))) {
+        if (q != null && Questlog.actief(p, q.id()) && (h == null || !h.quest().equals(q.id())) && (k == null || !k.id().equals(q.id()))
+                && (a == null || !a.id().equals(q.id()))) {
             regels.add(regel(QuestStap.van(p, q)));
         }
         for (var f : EXTRA) {   // X-RAID
