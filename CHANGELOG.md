@@ -3,6 +3,19 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.9 Guhwinter — Minecraft 26.1.2
+
+- **Guhwinter**: a limited winter event on the new Winterplein in the Guhmension, next to the moved Guh portal at spawn. It runs from 24 Nov 2026 to 2 Jan 2027 (Europe/Amsterdam). Phases: Sint, pakjesavond (5 Dec 19:00), Kerst (6 Dec), Oud & Nieuw (26 Dec), over (3 Jan). Package `feature.guhwinter`; the design is in guhswinter/GUHSWINTER.md.
+  - **kern**: phases plus a dev date (`/guhs winter datum`), one-shot moments that catch up after downtime (`Guhwinter.opMoment`), the protected plaza (`GuhwinterZone`), the pepernoot currency, event items melting on 3 Jan (tags `guhwinter_smelt(_blok)`), login/phase chat, the Reisguh destination "Winterplein".
+  - **plein**: the 75x75 winter square (Krijn & Corine's house, canal, pond, stalls, plots), the arrival at the new portal, the old peak restored, anchors (`data/guhs/guhwinter/ankers.json`). `/guhs winter inrichten` does the one-time setup; on 3 Jan the square becomes the empty party-square frame.
+  - **npc**: 23 event guhs (the six, the family, Sinterklaas, Pakjesguhs, Ozovads the horse, the winkelguh) with idle lines per phase and a scene API.
+  - **verhaal**: three story chapters (Verdwaalde Sint, Kerst bij Papa & Mama, Oud & Nieuw) with cutscenes, the schoentje, the kerstwandeling, the prikbord, and three permanent reward deco blocks.
+  - **lootjes**: Het Grote Boek sign-up (max 8), the draw on 2 Dec, creative 7x7x7 plots until 5 Dec 18:00, each build captured as a placeable Surprise and delivered on pakjesavond.
+  - **tekenen**: a 64x64 drawing editor, hangable 2x2 drawings, one kerstboom drawing per player (cards around the tree), and the Kerstalbum from 26 Dec.
+  - **spellen**: Pepernotenrace (arcade runner) and the schaatsrondje with highscore boards, oliebollen bakken, hidden pepernoten, and the pepernoten shop.
+  - **hoentjes**: the waterhoentje and alpine hoentje, rare permanent Guhmension birds with Guhdex bonus pages and a NOWAY chat line.
+- **Tools**: the full `tools/make_resources.py` runs again. Fixes: compass needles skip the sub-folders of models/item; the kleding, taal and bikinibodem checks are up to date; the opt-in `GUHS_SELFCHECK_WARN=1` reports failing modules instead of stopping. See guhs_winter/INTEGRATIE.md.
+
 ## 1.10.8 — Minecraft 26.1.2
 
 - **Blub-Guh-Meter, lopsided bell:** a wild Blub's meter (`BlubTrekking.meter`, also the Droomwinkel) keeps its top at 35, but half of the draws go below it with sigma 13.4 (`METER_SIGMA_LAAG`) and half above with sigma 23.8 (`METER_SIGMA_HOOG`), instead of one sigma of 18. Pure Blub (0) goes from about 1 in 36 to 1 in 200, Volle Guh (100) from about 1 in 5900 to 1 in 300; 20-59 stays about the same, 60+ about doubles, the average goes 35 -> 39. Existing Blubs and the babyblubje inheritance are unchanged. Gametest `blubTrekkingVerdeling` checks the new ends (1 in 200 / 1 in 300) and the two halves.
