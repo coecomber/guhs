@@ -1,5 +1,5 @@
 """
-Guhs 1.10.9 "Guhwinter", slice TEKENEN (Java: feature/guhwinter/tekenen): the drawing editor, the hangable 2x2 drawing, the
+Guhs 1.10.10 "Guhwinter", slice TEKENEN (Java: feature/guhwinter/tekenen): the drawing editor, the hangable 2x2 drawing, the
 kerstboom drawings and the Kerstalbum.
 
   - textures: item/guhwinter_tekening (a little framed doodle), item/guhwinter_kerstalbum (a red book with a tree),
@@ -230,7 +230,7 @@ def engels():
         return
     prefixes = [K, "item.guhs.guhwinter_tekening", "item.guhs.guhwinter_kerstalbum", "entity.guhs.guhwinter_tekening",
                 "entity.guhs.guhwinter_boomkaartje"]
-    blok = ('    {\n      "id": "%s",\n      "title": "1.10.9 Guhwinter, slice tekenen: the drawing editor, the 2x2 drawing, the kerstboom '
+    blok = ('    {\n      "id": "%s",\n      "title": "1.10.10 Guhwinter, slice tekenen: the drawing editor, the 2x2 drawing, the kerstboom '
             'drawings, the Kerstalbum",\n      "prefixes": [\n%s\n      ]\n    }' % (
                 CHUNK, ",\n".join(f'        "{x}"' for x in prefixes)))
     i = src.rstrip().rfind("]")
@@ -242,7 +242,7 @@ def engels():
 
 
 BLOKUITLEG = os.path.join("tools", "wiki_site", "blokuitleg.py")
-_MARK = "# <guhwinter_tekenen> (1.10.9, tools/features/guhwinter_tekenen.py: rewritten on every run)"
+_MARK = "# <guhwinter_tekenen> (1.10.10, tools/features/guhwinter_tekenen.py: rewritten on every run)"
 
 
 def blokuitleg():

@@ -7122,7 +7122,7 @@
     },
     {
       "id": "c480_guhwinter_kern",
-      "title": "1.10.9 Guhwinter (kern): pepernoot, phase/login chat, Winterplein destination, /guhs winter, melting",
+      "title": "1.10.10 Guhwinter (kern): pepernoot, phase/login chat, Winterplein destination, /guhs winter, melting",
       "prefixes": [
         "guhwinter.kern.",
         "item.guhs.guhwinter_pepernoot"
@@ -7130,7 +7130,7 @@
     },
     {
       "id": "c480_guhwinter_tekenen",
-      "title": "1.10.9 Guhwinter, slice tekenen: the drawing editor, the 2x2 drawing, the kerstboom drawings, the Kerstalbum",
+      "title": "1.10.10 Guhwinter, slice tekenen: the drawing editor, the 2x2 drawing, the kerstboom drawings, the Kerstalbum",
       "prefixes": [
         "guhwinter.tekenen.",
         "item.guhs.guhwinter_tekening",
@@ -7141,7 +7141,7 @@
     },
     {
       "id": "c509_guhwinter_npc",
-      "title": "1.10.9 Guhwinter (npc slice): the names and idle lines of the Winterplein guhs (made by tools/features/guhwinter_npc.py, English included)",
+      "title": "1.10.10 Guhwinter (npc slice): the names and idle lines of the Winterplein guhs (made by tools/features/guhwinter_npc.py, English included)",
       "prefixes": [
         "guhwinter.npc.",
         "entity.guhs.guhwinter_guh"
@@ -7149,7 +7149,7 @@
     },
     {
       "id": "c480_guhwinter_plein",
-      "title": "1.10.9 Guhwinter (plein): the winter square's signs and the /guhs winter inrichten|plein|anker feedback",
+      "title": "1.10.10 Guhwinter (plein): the winter square's signs and the /guhs winter inrichten|plein|anker feedback",
       "prefixes": [
         "sign.guhs.guhwinter_plein.",
         "commands.guhs.guhwinter."
@@ -7157,7 +7157,7 @@
     },
     {
       "id": "c480_guhwinter_hoentjes",
-      "title": "1.10.9 Guhwinter (hoentjes slice): the waterhoentje and the alpine hoentje (names, NOWAY lines, sounds, Guhdex pages)",
+      "title": "1.10.10 Guhwinter (hoentjes slice): the waterhoentje and the alpine hoentje (names, NOWAY lines, sounds, Guhdex pages)",
       "prefixes": [
         "entity.guhs.guhwinter_waterhoen",
         "entity.guhs.guhwinter_alpinehoen",
@@ -7173,7 +7173,7 @@
     },
     {
       "id": "c509_guhwinter_spellen",
-      "title": "1.10.9 Guhwinter (spellen slice): Pepernotenrace, schaatsrondje, oliebollen bakken, hidden pepernoten, the pepernoten shop",
+      "title": "1.10.10 Guhwinter (spellen slice): Pepernotenrace, schaatsrondje, oliebollen bakken, hidden pepernoten, the pepernoten shop",
       "prefixes": [
         "gui.guhs.guhwinter_spellen.",
         "block.guhs.guhwinter_arcadekast",
@@ -7199,7 +7199,7 @@
     },
     {
       "id": "c510_guhwinter_verhaal",
-      "title": "1.10.9 Guhwinter (verhaal slice): the winter story (3 chapters: scenes, talks, the kerstwandeling, chat lines, prikbord) and its 3 deco blocks (made by tools/features/guhwinter_verhaal.py, English included)",
+      "title": "1.10.10 Guhwinter (verhaal slice): the winter story (3 chapters: scenes, talks, the kerstwandeling, chat lines, prikbord) and its 3 deco blocks (made by tools/features/guhwinter_verhaal.py, English included)",
       "prefixes": [
         "guhwinter.verhaal.",
         "gui.guhs.verhalen.guhwinter_",
@@ -7215,7 +7215,7 @@
     },
     {
       "id": "c510_guhwinter_lootjes",
-      "title": "1.10.9 Guhwinter, slice lootjes: Het Grote Boek, the draw, the creative plots, the Surprise, the Zak van Sinterklaas",
+      "title": "1.10.10 Guhwinter, slice lootjes: Het Grote Boek, the draw, the creative plots, the Surprise, the Zak van Sinterklaas",
       "prefixes": [
         "guhwinter.lootjes.",
         "item.guhs.guhwinter_surprise",

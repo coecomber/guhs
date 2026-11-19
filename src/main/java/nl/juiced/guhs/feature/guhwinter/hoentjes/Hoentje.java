@@ -31,7 +31,7 @@ import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.world.WildeDieren;
 
 /**
- * 1.10.9 Guhwinter: what the two hoentjes share ({@link WaterhoenEntity}, {@link AlpinehoenEntity}). Lief, shy wild birds of
+ * 1.10.10 Guhwinter: what the two hoentjes share ({@link WaterhoenEntity}, {@link AlpinehoenEntity}). Lief, shy wild birds of
  * the Guhmension with a guh face (big glossy guh eyes, a blush, two little round guh ears):
  * <ul>
  *   <li>passive and shy: they panic when hurt and walk away from a player who comes close without sneaking;</li>

@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.guhwinter;
 import java.time.ZonedDateTime;
 
 /**
- * 1.10.9 Guhwinter: the phase of the event at a moment (Europe/Amsterdam), see {@link Guhwinter#fase}.
+ * 1.10.10 Guhwinter: the phase of the event at a moment (Europe/Amsterdam), see {@link Guhwinter#fase}.
  * <ul>
  *   <li>{@link #VOOR}: before {@link Guhwinter#START}; counts as Sint everywhere ({@link #sint()}, {@link #bezig()});</li>
  *   <li>{@link #SINT}: until 5 Dec 18:59;</li>

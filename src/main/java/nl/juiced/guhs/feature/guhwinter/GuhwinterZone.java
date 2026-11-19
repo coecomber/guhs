@@ -45,7 +45,7 @@ import nl.juiced.guhs.feature.guhwinter.kern.KernRegistry;
 import nl.juiced.guhs.world.ModDimensions;
 
 /**
- * 1.10.9 Guhwinter: the plaza ({@link #PLEIN}, x -350..-276, z -735..-661, y 20..90 in the Guhmension) is unbreakable,
+ * 1.10.10 Guhwinter: the plaza ({@link #PLEIN}, x -350..-276, z -735..-661, y 20..90 in the Guhmension) is unbreakable,
  * during the event and after it (then it is the empty feestplein frame):
  * <ul>
  *   <li>no breaking, no placing, no items used on blocks (food, fireworks and the tag {@code guhs:guhwinter_plein_mag}

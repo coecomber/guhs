@@ -1,5 +1,5 @@
 """
-1.10.9 Guhwinter, slice hoentjes - the sounds, synthesized (mono OGG, 44.1 kHz) into assets/guhs/sounds/guhwinter_hoentjes/:
+1.10.10 Guhwinter, slice hoentjes - the sounds, synthesized (mono OGG, 44.1 kHz) into assets/guhs/sounds/guhwinter_hoentjes/:
 
   waterhoen_roep1-3    the waterhoentje's "krrr-uk!": a short purring rattle, then a bright little "uk" (a moorhen's call,
                        pitched up and softened: cute, not loud)

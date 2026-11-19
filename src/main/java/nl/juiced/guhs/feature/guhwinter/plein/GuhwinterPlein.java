@@ -30,7 +30,7 @@ import nl.juiced.guhs.world.ModDimensions;
 import org.slf4j.Logger;
 
 /**
- * 1.10.9 Guhwinter, slice plein: the event square in the Guhmension (75 x 75, x -350..-276, z -735..-661, floor y 30), its
+ * 1.10.10 Guhwinter, slice plein: the event square in the Guhmension (75 x 75, x -350..-276, z -735..-661, floor y 30), its
  * two looks (the winter square and the empty frame for after the event, templates by tools/features/guhwinter_plein.py), the
  * arrival around the new spawn portal and the one-time setup ({@code /guhs winter inrichten}: {@link #inrichten}).
  * <p>
@@ -64,7 +64,7 @@ public final class GuhwinterPlein {
     private static Klus klus;
 
     /**
-     * (1.10.9 integration) Other slices' own pieces on the square: {@link #voorStempel} runs before either square is
+     * (1.10.10 integration) Other slices' own pieces on the square: {@link #voorStempel} runs before either square is
      * stamped (take your blocks and floating texts away), {@link #naStempel} after (put them on it; check {@code welke}).
      * Both return a line for the summary, or null.
      */

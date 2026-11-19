@@ -21,7 +21,7 @@ import nl.juiced.guhs.Guhs;
  * Guhwinter (npc slice): the plein slice's named positions ({@code data/guhs/guhwinter/ankers.json}, name to
  * {@code {x, y, z, yaw}}), read here directly because plein's {@code GuhwinterAnkers} did not exist yet in this branch.
  * Missing file or name: null (the NPC then uses its fallback spot inside the plaza, see {@link NpcDefs}).
- * <p>Since the 1.10.9 integration {@link #bron} reads plein's {@code GuhwinterAnkers}; the json reader stays as a fall-back.
+ * <p>Since the 1.10.10 integration {@link #bron} reads plein's {@code GuhwinterAnkers}; the json reader stays as a fall-back.
  */
 public final class NpcAnkers {
     /** One anchor: where (block-centred when the file gives whole numbers) and which way it looks. */
@@ -34,7 +34,7 @@ public final class NpcAnkers {
         Anker get(MinecraftServer server, String naam);
     }
 
-    /** 1.10.9 integration: plein's {@link nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers} (no log line for a missing name). */
+    /** 1.10.10 integration: plein's {@link nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers} (no log line for a missing name). */
     public static Bron bron = NpcAnkers::uitPlein;
 
     @Nullable

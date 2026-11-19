@@ -30,7 +30,7 @@ import nl.juiced.guhs.feature.guhwinter.kern.KernRegistry;
 import nl.juiced.guhs.feature.guhwinter.kern.Momenten;
 
 /**
- * 1.10.9 "Guhwinter": the facade of the event (kern). Everything time-related goes through here, so the dev override
+ * 1.10.10 "Guhwinter": the facade of the event (kern). Everything time-related goes through here, so the dev override
  * ({@code /guhs winter datum <yyyy-MM-dd HH:mm> | echt}) moves the whole event at once.
  * <ul>
  *   <li>{@link #nu}, {@link #fase}: the time in Europe/Amsterdam (real, or the override) and the {@link GuhwinterFase};</li>

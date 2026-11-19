@@ -29,7 +29,7 @@ import nl.juiced.guhs.quest.GuhDex;
 import nl.juiced.guhs.registry.ModItems;
 
 /**
- * 1.10.9 Guhwinter, slice hoentjes: the <b>waterhoentje</b> ({@link WaterhoenEntity}) and the <b>alpine hoentje</b>
+ * 1.10.10 Guhwinter, slice hoentjes: the <b>waterhoentje</b> ({@link WaterhoenEntity}) and the <b>alpine hoentje</b>
  * ({@link AlpinehoenEntity}). They stay after the event: rare, shy wild birds of the Guhmension.
  * <ul>
  *   <li>Natural spawns: {@link HoentjesSpawner} (a rare top-up around players: water edges, high/cold/snowy ground).</li>

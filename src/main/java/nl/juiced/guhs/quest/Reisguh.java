@@ -455,7 +455,7 @@ public final class Reisguh {
         return Data.get(server).points.values().stream().filter(p -> p.pos().closerThan(pos, range)).toList();
     }
 
-    // --- 1.10.9 Guhwinter: a destination without a Reisguh standing there (an event place) --------------------------------
+    // --- 1.10.10 Guhwinter: a destination without a Reisguh standing there (an event place) --------------------------------
 
     /**
      * Puts (or moves) a waypoint that has no Reisguh entity: you can travel TO it (you arrive 2 blocks in front of

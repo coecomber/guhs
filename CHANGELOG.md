@@ -3,7 +3,7 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.10.9 Guhwinter — Minecraft 26.1.2
+## 1.10.10 Guhwinter — Minecraft 26.1.2
 
 - **Guhwinter**: a limited winter event on the new Winterplein in the Guhmension, next to the moved Guh portal at spawn. It runs from 24 Nov 2026 to 2 Jan 2027 (Europe/Amsterdam). Phases: Sint, pakjesavond (5 Dec 19:00), Kerst (6 Dec), Oud & Nieuw (26 Dec), over (3 Jan). Package `feature.guhwinter`; the design is in guhswinter/GUHSWINTER.md.
   - **kern**: phases plus a dev date (`/guhs winter datum`), one-shot moments that catch up after downtime (`Guhwinter.opMoment`), the protected plaza (`GuhwinterZone`), the pepernoot currency, event items melting on 3 Jan (tags `guhwinter_smelt(_blok)`), login/phase chat, the Reisguh destination "Winterplein".

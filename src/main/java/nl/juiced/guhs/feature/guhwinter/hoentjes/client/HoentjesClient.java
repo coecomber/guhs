@@ -20,7 +20,7 @@ import nl.juiced.guhs.feature.guhwinter.hoentjes.GuhwinterHoentjes;
 import nl.juiced.guhs.feature.guhwinter.hoentjes.Hoentje;
 
 /**
- * The hoentjes' renderers (1.10.9 Guhwinter): their own GeckoLib models (tools/features/guhwinter_hoentjes_modellen.py) with
+ * The hoentjes' renderers (1.10.10 Guhwinter): their own GeckoLib models (tools/features/guhwinter_hoentjes_modellen.py) with
  * a turning head and guh eyes that blink now and then (the &lt;name&gt;_dicht.png texture, like the birds of 3.0).
  */
 public final class HoentjesClient {

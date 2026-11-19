@@ -17,7 +17,7 @@ import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Het waterhoentje (1.10.9 Guhwinter): a guh-ified common moorhen. A round dark-slate little bird with an olive-brown back
+ * Het waterhoentje (1.10.10 Guhwinter): a guh-ified common moorhen. A round dark-slate little bird with an olive-brown back
  * and a white line along its flank, a red frontal shield with a red-and-yellow bill, a white tail that flicks up and down
  * all the time, and long green toes with a red garter; plus the guh face (glossy guh eyes, a blush, two little round
  * guh ears). It walks and swims (it floats on the water, like the guh-eendje), bobs its head with every step and every

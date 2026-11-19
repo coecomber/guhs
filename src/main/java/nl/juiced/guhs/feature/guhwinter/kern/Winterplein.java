@@ -19,7 +19,7 @@ import nl.juiced.guhs.feature.guhwinter.Guhwinter;
 import nl.juiced.guhs.quest.Reisguh;
 
 /**
- * 1.10.9 Guhwinter: "Winterplein" as a Reisguh destination while the event is on. It is a waypoint without a Reisguh
+ * 1.10.10 Guhwinter: "Winterplein" as a Reisguh destination while the event is on. It is a waypoint without a Reisguh
  * ({@link Reisguh#zetVastPunt}): every player gets it in their list when they log in (or click the chat hint), and it is
  * taken off the list at AFGELOPEN.
  * <p>

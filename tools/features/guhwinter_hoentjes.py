@@ -1,5 +1,5 @@
 """
-1.10.9 Guhwinter, slice hoentjes: het waterhoentje en het alpine hoentje (feature/guhwinter/hoentjes). They stay after the
+1.10.10 Guhwinter, slice hoentjes: het waterhoentje en het alpine hoentje (feature/guhwinter/hoentjes). They stay after the
 event as rare, shy wild birds of the Guhmensie (water edges; high, cold or snowy ground), with a Guhdex bonus page each,
 a NOWAY chat line when you see one, and a scene API for the kerstwandeling.
 

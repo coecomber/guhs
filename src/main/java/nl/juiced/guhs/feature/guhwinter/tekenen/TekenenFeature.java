@@ -31,7 +31,7 @@ import nl.juiced.guhs.feature.guhwinter.Guhwinter;
 import nl.juiced.guhs.feature.guhwinter.GuhwinterCommando;
 
 /**
- * Guhwinter 1.10.9, slice TEKENEN (package {@code feature.guhwinter.tekenen}; ids {@code guhwinter_*}, lang {@code guhwinter.tekenen.*},
+ * Guhwinter 1.10.10, slice TEKENEN (package {@code feature.guhwinter.tekenen}; ids {@code guhwinter_*}, lang {@code guhwinter.tekenen.*},
  * generator tools/features/guhwinter_tekenen.py, gametests {@code TekenenGameTests}):
  * <ul>
  *   <li>the 64x64 drawing editor (client: TekenScherm) and the storage + sync of drawings ({@link Tekeningen}, {@link TekeningenData});</li>

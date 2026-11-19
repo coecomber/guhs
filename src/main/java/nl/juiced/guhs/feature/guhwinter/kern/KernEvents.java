@@ -28,7 +28,7 @@ import nl.juiced.guhs.feature.guhwinter.GuhwinterZone;
 import org.slf4j.Logger;
 
 /**
- * 1.10.9 Guhwinter kern: the clock work (moments every second and at server start), the chat messages (on login during
+ * 1.10.10 Guhwinter kern: the clock work (moments every second and at server start), the chat messages (on login during
  * the event, one per new phase), the Winterplein destination, the end of the event and the melting.
  */
 public final class KernEvents {

@@ -1,5 +1,5 @@
 """
-1.10.9 "Guhwinter", kern (Java: feature/guhwinter + feature/guhwinter/kern; API: guhs_winter/CONTRACT.md).
+1.10.10 "Guhwinter", kern (Java: feature/guhwinter + feature/guhwinter/kern; API: guhs_winter/CONTRACT.md).
 
   * the pepernoot (item guhs:guhwinter_pepernoot): a 16x16 painted kruidnootje (dome with light from the top left, a darker
     baked foot, a few spice specks and sugar glints) + item model + client item definition;

@@ -18,7 +18,7 @@ import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 
-/** 1.10.9 Guhwinter kern: the pepernoot and the tags (resources: tools/features/guhwinter_kern.py). */
+/** 1.10.10 Guhwinter kern: the pepernoot and the tags (resources: tools/features/guhwinter_kern.py). */
 public final class KernRegistry {
     public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
 

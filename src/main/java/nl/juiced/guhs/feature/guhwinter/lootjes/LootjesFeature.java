@@ -53,7 +53,7 @@ import nl.juiced.guhs.feature.guhwinter.plein.GuhwinterPlein;
 import nl.juiced.guhs.feature.guhwinter.tekenen.Doel;
 
 /**
- * Guhwinter 1.10.9, slice LOOTJES (package {@code feature.guhwinter.lootjes}; ids {@code guhwinter_*}, lang
+ * Guhwinter 1.10.10, slice LOOTJES (package {@code feature.guhwinter.lootjes}; ids {@code guhwinter_*}, lang
  * {@code guhwinter.lootjes.*}, generator tools/features/guhwinter_lootjes.py, gametests {@code LootjesGameTests}).
  * The flow is in {@link Lootjes}; building in {@link Bouwen} / {@link Bouwkist} / {@link BouwRegels}; the gift in
  * {@link Inhoud}, {@link SurpriseItem}, {@link SurpriseBlok}, {@link SurprisePlaatsen} (client: lootjes.client).

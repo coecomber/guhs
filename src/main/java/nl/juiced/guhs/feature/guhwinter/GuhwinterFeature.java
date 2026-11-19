@@ -9,7 +9,7 @@ import nl.juiced.guhs.feature.guhwinter.kern.KernEvents;
 import nl.juiced.guhs.feature.guhwinter.kern.KernRegistry;
 
 /**
- * Guhs 1.10.9 "Guhwinter": the winter event on the Winterplein in the Guhmension (design: guhswinter/GUHSWINTER.md,
+ * Guhs 1.10.10 "Guhwinter": the winter event on the Winterplein in the Guhmension (design: guhswinter/GUHSWINTER.md,
  * API: guhs_winter/CONTRACT.md). Kern first (the clock, moments, zone, pepernoot, commands); every slice adds ONE line
  * per method below (client side: {@link nl.juiced.guhs.feature.guhwinter.client.GuhwinterClient}).
  */

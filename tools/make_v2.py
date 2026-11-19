@@ -4446,7 +4446,7 @@ def run_features():
     import types
     import features
     h = types.SimpleNamespace(**globals())
-    # 1.10.9: GUHS_SELFCHECK_WARN=1 turns a module's failing self-check (SystemExit) or crash into a warning, so one stale
+    # 1.10.10: GUHS_SELFCHECK_WARN=1 turns a module's failing self-check (SystemExit) or crash into a warning, so one stale
     # check (full runs were paused after the 26.1 port and some checks lag behind the Java) doesn't stop every module after
     # it. A self-check runs at the end of its module's build, so its outputs are mostly written; a crash can leave a module
     # half done (its churn is reverted anyway). Summary at the end of the run.

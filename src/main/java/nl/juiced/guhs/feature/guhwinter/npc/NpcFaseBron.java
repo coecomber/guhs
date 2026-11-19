@@ -33,7 +33,7 @@ public interface NpcFaseBron {
     /** 3 Jan 2027 00:00: everything melts away. */
     LocalDateTime WEG_VANAF = LocalDateTime.of(2027, 1, 3, 0, 0);
 
-    /** The default (1.10.9 integration): kern's phase, so {@code /guhs winter datum} moves the NPCs too. */
+    /** The default (1.10.10 integration): kern's phase, so {@code /guhs winter datum} moves the NPCs too. */
     NpcFaseBron KERN = server -> van(nl.juiced.guhs.feature.guhwinter.Guhwinter.fase(server));
 
     /** kern's phase as the NPCs' phase. */

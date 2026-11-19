@@ -288,7 +288,7 @@ ANDERE_BBQ2 = {"paleizen", "bestaand", "camping_markt", "toren_peper", "ring", "
 # einde2: the same for its marker blocks einde2_<slice>
 # 1.7.0+ (Onder de Wol, slaapkleding, raket, Vadsrijk): these slices register their own pieces in Java
 # (KledingBronnen.bron in their Feature) or hand them out from their own structures' loot. The self-check was not updated
-# while full make_resources runs were paused after the 26.1 port (1.10.9 integration: brought up to date).
+# while full make_resources runs were paused after the 26.1 port (1.10.10 integration: brought up to date).
 ANDERE_17 = {"mijnhulp", "mijnrook", "minigames1", "minigames2", "structuren2", "structuren3", "slaapkleding", "raket",
              "vadsrijk_economie"}
 

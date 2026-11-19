@@ -3821,7 +3821,7 @@ def verhalen30_section():
             ("shuckle", "Sjokkel", ("rocky coast of the kloon-eiland; very rare deep in the Gatenkaasgrotten", "rotskust van het kloon-eiland; heel zelden diep in de Gatenkaasgrotten"),
              ("see <i>D &middot; Het kloon-eiland</i>: shy, slow, makes bessensapje and polishes stones", "zie <i>D &middot; Het kloon-eiland</i>: verlegen, traag, maakt "
               "bessensapje en poetst steentjes"), ("sweet berries (1 in 4)", "zoete bessen (1 op 4)")),
-            # 1.10.9 Guhwinter: the two hoentjes (rare; bonus Guhdex pages)
+            # 1.10.10 Guhwinter: the two hoentjes (rare; bonus Guhdex pages)
             ("guhwinter_waterhoen", "Waterhoentje", ("rare, at the water's edge (ponds, lakes, streams)", "zeldzaam, aan de waterkant (vijvers, meertjes, beekjes)"),
              ("a guh-ified moorhen: red shield, red-and-yellow bill, very long green toes; walks and swims, bobs its head and flicks its white tail; "
               "very shy (sneak!); you'll shout <i>NOWAY EEN WATERHOEN!????</i>; a <b>bonus</b> Guhdex page",

@@ -34,7 +34,7 @@ public final class KerstboomTekeningen {
     public static volatile boolean boomKlik = true;
     /** The cards: how many at most, their ring around the anchor (blocks), their height above it, swap time (ticks). */
     public static int KAARTJES_MAX = 8;
-    // 1.10.9 integration, fitted to plein's tree (anchor = trunk base at y 32; leaves radius 3 at +1..+2, 2 at +3..+4, 1 at
+    // 1.10.10 integration, fitted to plein's tree (anchor = trunk base at y 32; leaves radius 3 at +1..+2, 2 at +3..+4, 1 at
     // +5..+6; the house wall 3.5 east of the trunk, the ceiling at +8): the cards hang from +3.2 to +6.35, just outside the leaves
     public static double RING = 2.9, HOOGTE_VAN = 3.2, HOOGTE_STAP = 0.45;
     private static final int WISSEL_TICKS = 600, KIJK_TICKS = 40, BIJ = 48;

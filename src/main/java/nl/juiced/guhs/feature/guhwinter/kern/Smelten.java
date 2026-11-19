@@ -34,7 +34,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.level.ChunkEvent;
 
 /**
- * 1.10.9 Guhwinter: from 3 Jan (AFGELOPEN) the event things melt.
+ * 1.10.10 Guhwinter: from 3 Jan (AFGELOPEN) the event things melt.
  * <ul>
  *   <li>items with the tag {@code guhs:guhwinter_smelt}: out of the inventory (login, every 5 s, also the cursor), out of
  *       every container a player opens, and they never land on the ground (a message per kind of item);</li>

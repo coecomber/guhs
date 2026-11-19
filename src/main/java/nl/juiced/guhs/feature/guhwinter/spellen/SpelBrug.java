@@ -22,7 +22,7 @@ import nl.juiced.guhs.world.ModDimensions;
 import org.slf4j.Logger;
 
 /**
- * What the spellen slice needs from kern and plein, in one place (since the 1.10.9 integration these are direct calls):
+ * What the spellen slice needs from kern and plein, in one place (since the 1.10.10 integration these are direct calls):
  * <ul>
  *   <li>the pepernoot: kern's {@link Guhwinter#PEPERNOOT} and its helpers ({@link #pepernoot}, {@link #tel}, {@link #neem}, {@link #geef});</li>
  *   <li>the event phase: {@link Guhwinter#fase} ({@link #fase}, {@link #open}, {@link #oudjaar});</li>

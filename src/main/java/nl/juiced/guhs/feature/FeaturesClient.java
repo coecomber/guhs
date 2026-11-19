@@ -162,7 +162,7 @@ public final class FeaturesClient {
         nl.juiced.guhs.feature.erfenis.sherlock.client.SherlockClient.init(modBus);   // 1.9: De Erfenis, het Sherlock-verhaal (bureau, looks)
         nl.juiced.guhs.feature.erfenis.ftb.client.ErfenisFtbClient.init(modBus);   // 1.9 Een opknapper!: FTB (tells the server the overview/map opened)
         nl.juiced.guhs.feature.vadsrijk.client.VadsrijkClient.init(modBus);   // 1.10 Het Vadsrijk
-        nl.juiced.guhs.feature.guhwinter.client.GuhwinterClient.init(modBus);   // 1.10.9 Guhwinter (slices: see GuhwinterClient)
+        nl.juiced.guhs.feature.guhwinter.client.GuhwinterClient.init(modBus);   // 1.10.10 Guhwinter (slices: see GuhwinterClient)
     }
 
     private FeaturesClient() {

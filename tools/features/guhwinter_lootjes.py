@@ -1,5 +1,5 @@
 """
-Guhs 1.10.9 "Guhwinter", slice LOOTJES (Java: feature/guhwinter/lootjes): Het Grote Boek, the draw, the 8 creative plots,
+Guhs 1.10.10 "Guhwinter", slice LOOTJES (Java: feature/guhwinter/lootjes): Het Grote Boek, the draw, the 8 creative plots,
 the Surprise (a captured plot you can place), the Zak van Sinterklaas.
 
   - textures: block/guhwinter_grote_boek_pagina + _kaft (the open book on the lectern), item/guhwinter_surprise (a wrapped
@@ -494,7 +494,7 @@ def engels():
     prefixes = [K, "item.guhs.guhwinter_surprise", "item.guhs.guhwinter_zak", "item.guhs.guhwinter_grote_boek", "item.guhs.guhwinter_bouwbord",
                 "block.guhs.guhwinter_grote_boek", "block.guhs.guhwinter_bouwbord", "block.guhs.guhwinter_surprise",
                 "key.guhs.guhwinter_surprise_draai"]
-    blok = ('    {\n      "id": "%s",\n      "title": "1.10.9 Guhwinter, slice lootjes: Het Grote Boek, the draw, the creative plots, '
+    blok = ('    {\n      "id": "%s",\n      "title": "1.10.10 Guhwinter, slice lootjes: Het Grote Boek, the draw, the creative plots, '
             'the Surprise, the Zak van Sinterklaas",\n      "prefixes": [\n%s\n      ]\n    }' % (
                 CHUNK, ",\n".join(f'        "{x}"' for x in prefixes)))
     i = src.rstrip().rfind("]")
@@ -506,7 +506,7 @@ def engels():
 
 
 BLOKUITLEG = os.path.join("tools", "wiki_site", "blokuitleg.py")
-_MARK = "# <guhwinter_lootjes> (1.10.9, tools/features/guhwinter_lootjes.py: rewritten on every run)"
+_MARK = "# <guhwinter_lootjes> (1.10.10, tools/features/guhwinter_lootjes.py: rewritten on every run)"
 
 
 def blokuitleg():

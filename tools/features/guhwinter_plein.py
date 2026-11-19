@@ -1,5 +1,5 @@
 """
-1.10.9 Guhwinter, slice plein (design: MineScapeStory/guhswinter/GUHSWINTER.md R2, R7, R8, R11; terrain: guhswinter/TERREIN.md;
+1.10.10 Guhwinter, slice plein (design: MineScapeStory/guhswinter/GUHSWINTER.md R2, R7, R8, R11; terrain: guhswinter/TERREIN.md;
 Java: feature/guhwinter/plein): the templates of the event square in the Guhmension and its anchors.
 
   guhwinter_plein_winter   the snowy Dutch winter square (75 x 75, x -350..-276, z -735..-661, floor y 30)
@@ -770,7 +770,7 @@ def vijver(p):
     ring("wandel_", 12, rx * 1.23 + 0.7, rz * 1.23 + 0.7)
     ring("vijver_route_", 8, rx * 0.68, rz * 0.68)
     p.anker("vijver_midden", cx + 0.5, VLOER + 1, cz + 0.5, 0.0)
-    # (1.10.9 integration) spellen's start sign of the schaatsrondje: on the rim 2 rows north of the start (vijver_route_0),
+    # (1.10.10 integration) spellen's start sign of the schaatsrondje: on the rim 2 rows north of the start (vijver_route_0),
     # its face to the ice
     rij = math.floor(cz) - 2
     for x in range(int(cx), int(cx + rx + 5)):
@@ -870,7 +870,7 @@ def kramen(p):
         key, keeper, klant = kraam(p, z1, i)
         if key == "winkel":
             p.anker("winkel", *keeper)
-            # (1.10.9 integration) spellen puts its winkelkraam block ON the keeper spot: the winkelguh stands beside it
+            # (1.10.10 integration) spellen puts its winkelkraam block ON the keeper spot: the winkelguh stands beside it
             p.anker("npc_winkelguh", keeper[0], keeper[1], keeper[2] - 1, keeper[3])
             p.anker("winkel_klant", *klant)
         elif key == "oliebollen":
@@ -1279,7 +1279,7 @@ def winter():
         p.anker(f"pakje_verstop_{i}", x + 0.5, y, z + 0.5, 0.0)
     pepers = [(-349, -734), (-277, -734), (-277, -662), (-349, -662), (-326, -686), (-302, -692), (-318, -713), (-283, -706),
               (-296, -722), (-280, -726), (-323, -718), (-342, -694), (-332, -694), (-305, -681), (-292, -678), (-310, -689)]
-    # (1.10.9 integration) these spots lie on a raised floor (the arcade booth's planks at VLOER + 1): one block higher
+    # (1.10.10 integration) these spots lie on a raised floor (the arcade booth's planks at VLOER + 1): one block higher
     hoger = {(-305, -681)}
     for i, (x, z) in enumerate(pepers):
         p.anker(f"pepernoot_verstop_{i}", x + 0.5, VLOER + (2 if (x, z) in hoger else 1), z + 0.5, 0.0)
@@ -1407,7 +1407,7 @@ def ankers(*plannen):
     # pakjes also around the plaza (outside, by the arrival)
     alle["pakje_verstop_7"] = {"x": -306.5, "y": AVLOER + 1, "z": -657.5, "yaw": 0.0}
     alle["pakje_verstop_8"] = {"x": -284.5, "y": AVLOER + 1, "z": -655.5, "yaw": 0.0}
-    out = {"_doc": "Guhwinter (1.10.9) anchors in guhs:guhmension, world coordinates; x/z are block centres where it matters, y is the "
+    out = {"_doc": "Guhwinter (1.10.10) anchors in guhs:guhmension, world coordinates; x/z are block centres where it matters, y is the "
                    "standing level (the block a guh stands in). Made by tools/features/guhwinter_plein.py; read with GuhwinterAnkers.get(name).",
            "ankers": dict(sorted(alle.items(), key=lambda kv: _sorteer(kv[0])))}
     return out

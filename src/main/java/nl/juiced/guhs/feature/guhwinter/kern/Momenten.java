@@ -14,7 +14,7 @@ import net.minecraft.server.MinecraftServer;
 import org.slf4j.Logger;
 
 /**
- * 1.10.9 Guhwinter: one-shot moment listeners ({@code Guhwinter.opMoment}). Every listener has an id that is unique and
+ * 1.10.10 Guhwinter: one-shot moment listeners ({@code Guhwinter.opMoment}). Every listener has an id that is unique and
  * stays the same between versions (it is what the world remembers) and a time. {@link #vuur} fires, oldest time first,
  * every listener whose time has come and whose id is not in the fired set yet; the id goes into the set BEFORE the
  * listener runs, so a listener that throws never runs twice. Because the set is saved with the world, a moment that

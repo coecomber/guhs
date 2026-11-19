@@ -280,12 +280,12 @@ def check(alles):
         if os.sep + "safari" in root:
             continue   # (1.6.0 Op Safari!: the safari slices write their own command texts in tools/features/safari*.py)
         if os.sep + "guhwinter" in root:
-            continue   # (1.10.9 Guhwinter: the slices write their own command texts in tools/features/guhwinter_*.py)
+            continue   # (1.10.10 Guhwinter: the slices write their own command texts in tools/features/guhwinter_*.py)
         for f in files:
             if f.endswith(".java"):
                 with open(os.path.join(root, f), encoding="utf-8") as fh:
                     gebruikt.update(re.findall(r'"((?:gui\.guhs\.kleding\.prijs|commands\.guhs|gui\.guhs\.taal|gui\.guhs\.taalvraag|gui\.guhs\.menu\.taal)\.[a-z0-9_.]+)"', fh.read()))
-    # 1.10.9: a key that another generator defines (blub commands, the 1.7+ kleding prices and hints) counts too; those
+    # 1.10.10: a key that another generator defines (blub commands, the 1.7+ kleding prices and hints) counts too; those
     # generators run after this one, so look for the key as a string in their sources
     hier = os.path.dirname(os.path.abspath(__file__))
     andere = ""

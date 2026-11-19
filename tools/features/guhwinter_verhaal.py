@@ -1,5 +1,5 @@
 """
-1.10.9 "Guhwinter", slice verhaal: the three-chapter winter story. Java: feature/guhwinter/verhaal.
+1.10.10 "Guhwinter", slice verhaal: the three-chapter winter story. Java: feature/guhwinter/verhaal.
 
   build(h)   the texts of the story (the three Verhaallijnen "guhwinter_sint/kerst/oudjaar" with their steps and objective
              lines, the camera scenes scene.guhs.guhwinter_*, the talks guhwinter.verhaal.praat.*, the kerstwandeling's lines,
@@ -583,7 +583,7 @@ UITLEG = {
         "whether they're deep-fried). It never melts: you keep it forever."),
 }
 BLOKUITLEG = os.path.join("tools", "wiki_site", "blokuitleg.py")
-_MARK = "# <guhwinter_verhaal> (1.10.9, tools/features/guhwinter_verhaal.py: rewritten on every run)"
+_MARK = "# <guhwinter_verhaal> (1.10.10, tools/features/guhwinter_verhaal.py: rewritten on every run)"
 
 
 def blokuitleg():

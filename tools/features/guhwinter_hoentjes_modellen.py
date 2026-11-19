@@ -1,5 +1,5 @@
 """
-1.10.9 Guhwinter, slice hoentjes - the looks: GeckoLib models, animations and textures of the two hoentjes. Birds, not
+1.10.10 Guhwinter, slice hoentjes - the looks: GeckoLib models, animations and textures of the two hoentjes. Birds, not
 guhs, but with the guh twist of the 3.0 birds (vogels_modellen, whose atlas and painters this reuses): the big glossy guh
 eyes, a pink blush and two little round guh ears on top of the head.
 

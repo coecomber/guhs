@@ -343,7 +343,7 @@ public class BioSystemenGameTests {
                 GuhVariant.BLUBGUH, GuhVariant.STERRENVISJE, GuhVariant.SNOES, GuhVariant.ZANDGUH, GuhVariant.WEKKERGUH,   // (1.8.0:
                 GuhVariant.ROMMELGUH, GuhVariant.DROOM_OMAGUH, GuhVariant.KUSSENGEVECHT_GUH, GuhVariant.BUBBELBADGUH,   // Guhdromenland)
                 GuhVariant.MAMMOETGUH, GuhVariant.TGUH, GuhVariant.PTEROGUH, GuhVariant.STOKSTAARTJEGUH,   // (1.8.0: the oerguhs)
-                GuhVariant.GUHWINTER_WATERHOEN, GuhVariant.GUHWINTER_ALPINEHOEN);   // (1.10.9 Guhwinter: the hoentjes)
+                GuhVariant.GUHWINTER_WATERHOEN, GuhVariant.GUHWINTER_ALPINEHOEN);   // (1.10.10 Guhwinter: the hoentjes)
         // einde2 (1.5.0) adds bonus pages of its own (GuhDex.NIEUW_EINDE2 minus its six counting biome guhs): not biomes3's
         Set<GuhVariant> einde2Bonus = new java.util.HashSet<>();
         for (GuhVariant v : GuhDex.EXTRA) {

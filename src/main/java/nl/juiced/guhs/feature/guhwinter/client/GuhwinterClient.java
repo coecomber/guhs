@@ -3,7 +3,7 @@ package nl.juiced.guhs.feature.guhwinter.client;
 import net.neoforged.bus.api.IEventBus;
 
 /**
- * Guhs 1.10.9 "Guhwinter", client side: the counterpart of {@link nl.juiced.guhs.feature.guhwinter.GuhwinterFeature},
+ * Guhs 1.10.10 "Guhwinter", client side: the counterpart of {@link nl.juiced.guhs.feature.guhwinter.GuhwinterFeature},
  * called once from FeaturesClient. Every slice with client code adds ONE line below.
  */
 public final class GuhwinterClient {

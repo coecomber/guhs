@@ -12,7 +12,7 @@ import nl.juiced.guhs.feature.guhwinter.kern.Momenten;
 import nl.juiced.guhs.gametest.GuhTest;
 
 /**
- * 1.10.9 Guhwinter kern: the phase calculation, the dev date override and the moment catch-up. Everything happens inside
+ * 1.10.10 Guhwinter kern: the phase calculation, the dev date override and the moment catch-up. Everything happens inside
  * one call (no waiting), so the server's own moment tick never sees the override. Run:
  * {@code runGameTestServer -Pgt=GuhwinterKern}.
  */

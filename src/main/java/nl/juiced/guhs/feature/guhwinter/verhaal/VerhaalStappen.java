@@ -326,7 +326,7 @@ public final class VerhaalStappen {
         });
     }
 
-    /** The lootjes slice's Het Grote Boek (its page in the chat). Always there since the 1.10.9 integration. */
+    /** The lootjes slice's Het Grote Boek (its page in the chat). Always there since the 1.10.10 integration. */
     static boolean openBoek(ServerPlayer p) {
         nl.juiced.guhs.feature.guhwinter.lootjes.Lootjes.openBoek(p);
         return true;

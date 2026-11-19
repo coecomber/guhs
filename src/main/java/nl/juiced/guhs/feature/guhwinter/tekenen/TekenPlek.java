@@ -8,7 +8,7 @@ import nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers;
 
 /**
  * Where the kerstboom stands: plein's anchor {@code kerstboom} (the base centre of the tree, in guhs:guhmension), through
- * {@link GuhwinterAnkers} (1.10.9 integration; it used to read the json itself).
+ * {@link GuhwinterAnkers} (1.10.10 integration; it used to read the json itself).
  */
 public final class TekenPlek {
     private TekenPlek() {

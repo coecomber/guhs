@@ -66,7 +66,7 @@ public class RoepOveralGameTests {
         double d = e.distanceTo(p);
         helper.assertTrue(d <= 3.6, wat + ": next to the player (" + d + ")");
         Plek nu = GuhVolger.plek(p.level().getServer(), p.getUUID(), id);
-        // (1.10.9: the guh's own ~5 s bookkeeping (BandEvents.bijhouden, on (tickCount + id) % 100) may already have
+        // (1.10.10: the guh's own ~5 s bookkeeping (BandEvents.bijhouden, on (tickCount + id) % 100) may already have
         //  written WERELD at the same spot within these 60 ticks: that depends on the entity id, so it is fine too)
         boolean hier = nu.soort() == PlekSoort.WERELD && nu.pos() != null && nu.pos().closerToCenterThan(p.position(), 4);
         helper.assertTrue(nu.soort() == PlekSoort.BIJ_JOU || hier, wat + ": bij jou (" + nu + ")");

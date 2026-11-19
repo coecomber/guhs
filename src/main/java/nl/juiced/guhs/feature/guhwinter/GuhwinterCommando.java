@@ -27,7 +27,7 @@ import nl.juiced.guhs.feature.guhwinter.kern.Momenten;
 import nl.juiced.guhs.feature.guhwinter.kern.Winterplein;
 
 /**
- * 1.10.9 Guhwinter: {@code /guhs winter ...}.
+ * 1.10.10 Guhwinter: {@code /guhs winter ...}.
  * <ul>
  *   <li>everyone: {@code /guhs winter} or {@code /guhs winter waar} (the chat hint): the Winterplein goes in your Reisguh
  *       list, and the way there;</li>

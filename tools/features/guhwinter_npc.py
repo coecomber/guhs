@@ -1,5 +1,5 @@
 """
-Guhwinter 1.10.9 "Guhwinter", slice npc (Java: feature/guhwinter/npc; CONTRACT.md "## npc").
+Guhwinter 1.10.10 "Guhwinter", slice npc (Java: feature/guhwinter/npc; CONTRACT.md "## npc").
 
   BONES     four new guh model bones for the event's own look pieces: Sinterklaas' golden staff, a pakjesguh's tiny soot
             smudge, Anthony's camera, Liek's golden nose ring (hidden on every other guh). tools/make_guh_variants.py can no

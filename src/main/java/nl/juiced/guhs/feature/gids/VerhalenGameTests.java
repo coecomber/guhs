@@ -102,7 +102,7 @@ public class VerhalenGameTests {
         helper.assertTrue(alle.stream().map(VerhaalStand::id).toList().equals(VerhalenVoortgang.ids()), "all questlines, in order");
         for (VerhaalStand v : alle) {
             // (einde2 zij: a line may show a reserved step-0 variant, e.g. omashguh "0_element" = "learn earthbending first";
-            //  the status is still NIET_BEGONNEN; 1.10.9 Guhwinter: a chapter that isn't open yet / any more shows "wacht" / "voorbij")
+            //  the status is still NIET_BEGONNEN; 1.10.10 Guhwinter: a chapter that isn't open yet / any more shows "wacht" / "voorbij")
             String nu = key(v.nu()), voor = "gui.guhs.verhalen." + v.id() + ".nu.";
             String rest = nu.startsWith(voor) ? nu.substring(voor.length()) : "";
             String sleutel = rest.startsWith("0_") || v.id().startsWith("guhwinter_") && (rest.equals("wacht") || rest.equals("voorbij")) ? rest : "0";

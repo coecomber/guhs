@@ -20,7 +20,7 @@ import net.minecraft.world.level.saveddata.SavedDataType;
 import nl.juiced.guhs.storage.GuhSavedData;
 
 /**
- * 1.10.9 Guhwinter: the event's shared SavedData {@code guhs:guhwinter} (with the overworld).
+ * 1.10.10 Guhwinter: the event's shared SavedData {@code guhs:guhwinter} (with the overworld).
  * <ul>
  *   <li>kern: the dev date override (as an offset to the real clock, so it keeps running), the moments that have fired
  *       ({@link Guhwinter#opMoment}), per player the last phase they were told about;</li>

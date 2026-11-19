@@ -1,5 +1,5 @@
 {
- "_doc": "Guhwinter (1.10.9) anchors in guhs:guhmension, world coordinates; x/z are block centres where it matters, y is the standing level (the block a guh stands in). Made by tools/features/guhwinter_plein.py; read with GuhwinterAnkers.get(name).",
+ "_doc": "Guhwinter (1.10.10) anchors in guhs:guhmension, world coordinates; x/z are block centres where it matters, y is the standing level (the block a guh stands in). Made by tools/features/guhwinter_plein.py; read with GuhwinterAnkers.get(name).",
  "ankers": {
   "aankomst": {
    "x": -299.0,

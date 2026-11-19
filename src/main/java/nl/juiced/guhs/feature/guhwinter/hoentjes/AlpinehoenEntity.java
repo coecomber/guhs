@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 /**
- * Het alpine hoentje (1.10.9 Guhwinter): a guh-ified rock ptarmigan in its winter plumage. A plump snow-white little bird
+ * Het alpine hoentje (1.10.10 Guhwinter): a guh-ified rock ptarmigan in its winter plumage. A plump snow-white little bird
  * with a black "eyeliner" stripe from the bill to the eye, a small red comb above each eye, a black-edged tail and big
  * fluffy feathered feet (snowshoes!); plus the guh face (glossy guh eyes, a blush, two little round guh ears). It doesn't
  * walk far: it <b>hops</b> (little jumps while it goes somewhere). Lives high up, on snow and in the cold of the Guhmension

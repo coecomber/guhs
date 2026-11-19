@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 
 /**
- * 1.10.9 Guhwinter: the named spots of the winter square (data/guhs/guhwinter/ankers.json, made by
+ * 1.10.10 Guhwinter: the named spots of the winter square (data/guhs/guhwinter/ankers.json, made by
  * tools/features/guhwinter_plein.py), in world coordinates of guhs:guhmension. x/z are block centres where that matters
  * (npc spots, chairs), y is the standing level (the block a guh stands in). See guhs_winter/CONTRACT.md (plein) for the names.
  * <p>

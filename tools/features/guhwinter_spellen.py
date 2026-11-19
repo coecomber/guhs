@@ -1,5 +1,5 @@
 """
-1.10.9 "Guhwinter", slice spellen: the games of the winter plaza and the pepernoten shop. Java: feature/guhwinter/spellen.
+1.10.10 "Guhwinter", slice spellen: the games of the winter plaza and the pepernoten shop. Java: feature/guhwinter/spellen.
 
   build(h)   the plaza blocks (arcade cabinet, highscore board, the shop's stall, the oliebollen stall, the skating lap's start
              sign, the hidden pepernoot bag) and the shop's goods (warme chocomel, chocoladeletters A-Z, winter skates, a kerstmuts

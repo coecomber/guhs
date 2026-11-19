@@ -10,7 +10,7 @@ import nl.juiced.guhs.feature.guhpixel.guhkade.spel.PixelFont;
 import nl.juiced.guhs.feature.guhpixel.guhkade.spel.Sim;
 
 /**
- * De Pepernotenrace (Guhwinter 1.10.9): a Pakjesguh runs over the snowy rooftops of the winter plaza, seen from above, on
+ * De Pepernotenrace (Guhwinter 1.10.10): a Pakjesguh runs over the snowy rooftops of the winter plaza, seen from above, on
  * three snow paths. Chimneys only let you pass in another lane; a satellite dish or a snowman you can also jump over; a
  * washing line full of socks hangs across all three lanes, so you duck under it. Pepernoten lie on the paths; a
  * chocoladeletter pulls every pepernoot near you into your pocket for a while, and Ozovads (Sinterklaas' horse) carries

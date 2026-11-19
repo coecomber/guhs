@@ -14,7 +14,7 @@ import nl.juiced.guhs.feature.guhwinter.GuhwinterCommando;
 import net.neoforged.neoforge.event.server.ServerStoppedEvent;
 
 /**
- * 1.10.9 Guhwinter, slice plein: see {@link GuhwinterPlein}. Commands (op / console; Brigadier merges them into kern's
+ * 1.10.10 Guhwinter, slice plein: see {@link GuhwinterPlein}. Commands (op / console; Brigadier merges them into kern's
  * {@code /guhs winter} tree):
  * <ul>
  *   <li>{@code /guhs winter inrichten}: the one-time setup (portal move, Reisguh "Spawn", old peak, square, arrival);</li>

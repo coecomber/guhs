@@ -53,7 +53,7 @@ import nl.juiced.guhs.feature.elftocht.WarmDrankjeItem;
 import nl.juiced.guhs.feature.guhwinter.spellen.race.RaceSim;
 
 /**
- * Guhwinter 1.10.9, slice "spellen": the games of the winter plaza and the pepernoten shop.
+ * Guhwinter 1.10.10, slice "spellen": the games of the winter plaza and the pepernoten shop.
  * <ul>
  *   <li>De Pepernotenrace: a phone-style 3-lane runner from the arcade cabinet ({@link Pepernotenrace}, race.RaceSim);</li>
  *   <li>the highscore boards (top 10; {@link HighscorebordBlock}): one for the race, one for the schaatsrondje;</li>
@@ -166,7 +166,7 @@ public final class SpellenFeature {
             VerstopteNoten.tick(event.getServer());
         });
         nl.juiced.guhs.feature.guhwinter.GuhwinterCommando.voegToe(ctx -> commandos());
-        // (1.10.9 integration) the blocks go with the square: away before any square is stamped (also the frame at the
+        // (1.10.10 integration) the blocks go with the square: away before any square is stamped (also the frame at the
         // end), back on the winter square; and the winkelguh opens the shop
         GuhwinterPlein.voorStempel((level, welke) -> "spellen: " + SpellenPlaatsing.weg(level));
         GuhwinterPlein.naStempel((level, welke) -> welke.equals(GuhwinterPlein.WINTER) ? "spellen: " + SpellenPlaatsing.plaats(level) : null);

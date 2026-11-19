@@ -22,7 +22,7 @@ import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
 
 /**
- * Guhwinter 1.10.9, slice npc ({@code nl.juiced.guhs.feature.guhwinter.npc}): the guhs of the Winterplein. The entity type
+ * Guhwinter 1.10.10, slice npc ({@code nl.juiced.guhs.feature.guhwinter.npc}): the guhs of the Winterplein. The entity type
  * {@code guhwinter_guh} ({@link WinterGuh}), the keeper ({@link GuhwinterNpcs}, every second), the clicks, and
  * {@code /guhs winter npc}. Texts and look textures: tools/features/guhwinter_npc.py. Client: client/GuhwinterNpcClient.
  */

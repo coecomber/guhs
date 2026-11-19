@@ -22,7 +22,7 @@ import nl.juiced.guhs.feature.verhaal.Verhaallijn;
 import nl.juiced.guhs.world.ModDimensions;
 
 /**
- * Guhwinter 1.10.9, slice "verhaal": the winter story in three chapters (design guhswinter/GUHSWINTER.md, R3/R4/R8/R10),
+ * Guhwinter 1.10.10, slice "verhaal": the winter story in three chapters (design guhswinter/GUHSWINTER.md, R3/R4/R8/R10),
  * played once per player with the six main guhs. Each chapter is a {@link Verhaallijn} of the verhaal engine (group
  * "guhwinter"), so the Guhdex tab Verhalen, the objective line on the screen ("➜ ...") and the Superkompas entry "Mijn
  * verhaal" follow it by themselves.

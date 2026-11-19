@@ -207,7 +207,7 @@ public final class Features {
         nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.register(modBus);   // 1.9: De Erfenis, het Sherlock-verhaal
         nl.juiced.guhs.feature.erfenis.ftb.ErfenisFtbFeature.register(modBus);   // 1.9 Een opknapper!: the FTB chapter's quests from the village state
         nl.juiced.guhs.feature.vadsrijk.VadsrijkFeature.register(modBus);   // 1.10 Het Vadsrijk (kern + slices, see CONTRACT_VADSRIJK.md)
-        nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.register(modBus);   // 1.10.9 Guhwinter (kern + slices, see guhs_winter/CONTRACT.md)
+        nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.register(modBus);   // 1.10.10 Guhwinter (kern + slices, see guhs_winter/CONTRACT.md)
     }
 
     public static void payloads(PayloadRegistrar registrar) {
@@ -340,7 +340,7 @@ public final class Features {
         nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.payloads(registrar);   // 1.9: De Erfenis, het Sherlock-verhaal
         nl.juiced.guhs.feature.erfenis.ftb.ErfenisFtbFeature.payloads(registrar);   // 1.9 Een opknapper!: FTB (overview/map opened)
         nl.juiced.guhs.feature.vadsrijk.VadsrijkFeature.payloads(registrar);   // 1.10 Het Vadsrijk
-        nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.payloads(registrar);   // 1.10.9 Guhwinter
+        nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.payloads(registrar);   // 1.10.10 Guhwinter
     }
 
     public static void creative(Consumer<ItemStack> output) {
@@ -505,7 +505,7 @@ public final class Features {
         nl.juiced.guhs.feature.centrale.CentraleFeature.creative(output);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale
         nl.juiced.guhs.feature.fabriek.FabriekFeature.creative(output);   // 1.8.0 (vadskracht): de Fabriekshal
         nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.creative(output);   // 1.9: Sherlocks vergrootglas
-        nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.creative(output);   // 1.10.9 Guhwinter
+        nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.creative(output);   // 1.10.10 Guhwinter
     }
 
     /** Things the minigames only lend you (tools/make_v2.py: the item tag guhs:loaned): they never go into storage. */
