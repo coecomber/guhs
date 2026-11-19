@@ -58,6 +58,10 @@ public final class Barrieres {
      */
     public static final List<Vrij> VRIJ = List.of(
             new Vrij("kamp", -373, 996, 205, 200, -64),
+            // 1.10.9: the Ambachtseiland (1.10.4, tools/vadsrijk/kamp/ambachtseiland.py: centre -610,1030, land ~152x128 plus the
+            // Vissteiger on the west coast). The camp area above ends at x ~-578, so the islet and its bridge lay in the
+            // "Zoete-Zeestroom" and pushed every walker back ("alleen een luchtschip komt hier voorbij").
+            new Vrij("kamp_ambachtseiland", -610, 1030, 110, 95, -64),
             new Vrij("z1", 0, -20, 715, 660, -64),
             new Vrij("z1_zw", -560, 600, 120, 110, -64),          // the south-west peninsula
             new Vrij("z1_schildpad", 520, 720, 90, 90, -64),      // the turtle island off the south-east coast

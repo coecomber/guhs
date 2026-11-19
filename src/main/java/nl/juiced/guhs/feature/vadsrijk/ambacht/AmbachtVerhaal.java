@@ -226,6 +226,31 @@ public final class AmbachtVerhaal {
         return null;
     }
 
+    /**
+     * 1.10.9: the first active craft step the story already went past (chain order, so the islet lesson first), or null. The main
+     * line in the tracker skips these ({@code QuestStap.hoofdlijn}), so without this an older player on the Ambachtseiland saw
+     * only his next main quest somewhere else; NpcVolg shows this one as its own tracker line.
+     */
+    @Nullable
+    public static Quest eersteGemist(ServerPlayer p) {
+        for (Keten k : KETENS) {
+            if (!voorbij(p, k)) {
+                continue;
+            }
+            for (String id : k.quests()) {
+                if (Questlog.klaar(p, id)) {
+                    continue;
+                }
+                Quest q = Quests.van(id);
+                if (q != null && Questlog.actief(p, id)) {
+                    return q;
+                }
+                break;   // (one open step per chain)
+            }
+        }
+        return null;
+    }
+
     // ---- missed chains of older players ----------------------------------------------------------------------------------------------
 
     /** Players to check (uuid -> the tick it may happen; 0 = soon). */

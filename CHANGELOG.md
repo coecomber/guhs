@@ -16,6 +16,11 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   - **hoentjes**: the waterhoentje and alpine hoentje, rare permanent Guhmension birds with Guhdex bonus pages and a NOWAY chat line.
 - **Tools**: the full `tools/make_resources.py` runs again. Fixes: compass needles skip the sub-folders of models/item; the kleding, taal and bikinibodem checks are up to date; the opt-in `GUHS_SELFCHECK_WARN=1` reports failing modules instead of stopping. See guhs_winter/INTEGRATIE.md.
 
+## 1.10.9 — Minecraft 26.1.2
+
+- **Ambachtseiland reachable on foot:** the Vadsrijk sea barrier (`Barrieres.VRIJ`) only knew the Knuffelkamp's free area (centre -373,996, half axis 205), which ends at x ~-578. The Ambachtseiland from 1.10.4 (centre -610,1030, land ~-686..-534) and its bridge lay in the "Zoete-Zeestroom", so walkers were pushed back with "Alleen een luchtschip komt hier voorbij". New free area `kamp_ambachtseiland` (centre -610,1030, half axes 110 x 95) covers the islet, the bridge and the Vissteiger; `zoneOp` treats it as the camp (zone 0). Gametest `barrieres` checks plein, bridge, jetty head, Kiezelgroeve, Bijenhofje, Visvijver and the west coast.
+- **Quest tracker shows missed craft steps:** `QuestStap.hoofdlijn` skips craft steps the story already went past (`AmbachtVerhaal.gemist`: the islet lesson hq03d-f and the zone steps of older players), so the tracker only pointed at the next main quest elsewhere while the zone gate still asked for them. `NpcVolg.bouw` now adds the first active missed step (`AmbachtVerhaal.eersteGemist`, chain order, so the lesson first) as its own line with distance and light beam, after the main story line. Gametest `bestaandeSpelers` checks it.
+
 ## 1.10.8 — Minecraft 26.1.2
 
 - **Blub-Guh-Meter, lopsided bell:** a wild Blub's meter (`BlubTrekking.meter`, also the Droomwinkel) keeps its top at 35, but half of the draws go below it with sigma 13.4 (`METER_SIGMA_LAAG`) and half above with sigma 23.8 (`METER_SIGMA_HOOG`), instead of one sigma of 18. Pure Blub (0) goes from about 1 in 36 to 1 in 200, Volle Guh (100) from about 1 in 5900 to 1 in 300; 20-59 stays about the same, 60+ about doubles, the average goes 35 -> 39. Existing Blubs and the babyblubje inheritance are unchanged. Gametest `blubTrekkingVerdeling` checks the new ends (1 in 200 / 1 in 300) and the two halves.

@@ -401,6 +401,12 @@ public class VadsrijkAmbachtVerhaalGameTests {
             helper.assertTrue(AmbachtVerhaal.bijwerken(p) == 0, "only once");
             QuestStap s = QuestStap.hoofdlijn(p);
             helper.assertTrue(s != null && s.quest().equals("hq07_littekens"), "the tracker keeps the real story: " + (s == null ? null : s.quest()));
+            // 1.10.9: ...and shows the missed lesson as its own line, pointing at the islet bridge
+            var volg = nl.juiced.guhs.feature.vadsrijk.npc.NpcVolg.bouw(p);
+            var les = volg.regels().stream().filter(r -> r.quest().equals("hq03d_knutsel")).findFirst();
+            helper.assertTrue(volg.regels().get(0).quest().equals("hq07_littekens"), "main story stays the first tracker line");
+            helper.assertTrue(les.isPresent() && les.get().doel().isPresent() && les.get().doel().get().getX() < -400,
+                    "tracker line for the missed lesson with a target: " + les);
             // past zone 2's story: the zone-1 and zone-2 steps too
             Questlog.wisAlles(p);
             verhaalZonder(p, 2);
