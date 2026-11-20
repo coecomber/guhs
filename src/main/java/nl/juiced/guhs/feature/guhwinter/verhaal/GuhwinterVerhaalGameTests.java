@@ -43,24 +43,36 @@ public class GuhwinterVerhaalGameTests {
     }
 
     /**
-     * Playtest round 1: the tree cards hang in a grid on the east and west side (never two in one spot), the walk-to radius
+     * Playtest round 1: the tree cards hang in a grid on the open sides of the tree (1.10.11: west first, then north and
+     * south; never east, against the house wall; never two in one spot), the walk-to radius
      * of Ozovads' hiding spot reaches from the end of the carrot trail, there is a hiding-spot Ozovads, and the plein guhs
      * never plan a walk through water.
      */
     @GuhTest(template = "empty", batch = B)
     public static void playtestRonde1(GameTestHelper helper) {
         // --- the tree cards
+        double kantAf = nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.KANT;
+        int max = nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.KAARTJES_MAX;
+        helper.assertTrue(max >= 20, "room for 20 cards");
         java.util.Set<String> plekken = new java.util.HashSet<>();
-        for (int i = 0; i < 24; i++) {
+        for (int i = 0; i < 30; i++) {
             double[] k = nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.plek(i);
-            boolean oost = k[0] > 0;
-            helper.assertTrue(Math.abs(Math.abs(k[0]) - nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.KANT) < 1e-9,
-                    "card " + i + " hangs on the east or west side");
-            helper.assertTrue(oost == (i % 2 == 0) && k[3] == (oost ? 90.0 : -90.0), "card " + i + " alternates sides and faces outwards");
-            helper.assertTrue(plekken.add(oost + ":" + Math.round(k[1] * 10) + ":" + Math.round(k[2] * 10)), "card " + i + " has a spot of its own");
+            double midden = k[1] + 0.32;
+            boolean west = Math.abs(k[0] + kantAf) < 1e-9 && Math.abs(k[2]) <= 1.6 + 1e-9 && k[3] == -90.0;
+            boolean noord = Math.abs(k[2] + kantAf) < 1e-9 && Math.abs(k[0]) <= 1.6 + 1e-9 && k[3] == 0.0;
+            boolean zuid = Math.abs(k[2] - kantAf) < 1e-9 && Math.abs(k[0]) <= 1.6 + 1e-9 && k[3] == 180.0;
+            helper.assertTrue(west || noord || zuid, "card " + i + " hangs on the west, north or south side, facing outwards: "
+                    + java.util.Arrays.toString(k));
+            helper.assertTrue(k[0] < kantAf - 0.5, "card " + i + " is not on the east side (the house wall)");
+            helper.assertTrue(i >= 10 || west, "cards 1-10 hang on the west side (the room side)");
+            helper.assertTrue(midden > 2.0 && midden < 3.3, "card " + i + " hangs 2-3 blocks above the floor");
+            helper.assertTrue(i >= max || i < 10 || midden < 2.5, "of the first 20, north and south have one row");
+            helper.assertTrue(plekken.add(Math.round(k[0] * 10) + ":" + Math.round(k[1] * 10) + ":" + Math.round(k[2] * 10)),
+                    "card " + i + " has a spot of its own");
         }
         double[] eerste = nl.juiced.guhs.feature.guhwinter.tekenen.KerstboomTekeningen.plek(0);
-        helper.assertTrue(Math.abs(eerste[1] + 0.32 - 2.4) < 0.05, "the first row is centred about 2 blocks above the floor");
+        helper.assertTrue(eerste[0] < 0 && eerste[2] == 0 && eerste[3] == -90.0 && Math.abs(eerste[1] + 0.32 - 2.4) < 0.05,
+                "card 1 hangs in the middle of the west side, about 2.4 above the floor (in front of kerstboom_voor)");
         // --- Ozovads: found from the end of the trail, and there is one in the hiding spot
         java.util.List<nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.Anker> spoor = nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.reeks("paard_spoor_");
         nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.Anker verstop = nl.juiced.guhs.feature.guhwinter.plein.GuhwinterAnkers.zoek("paard_verstop");
