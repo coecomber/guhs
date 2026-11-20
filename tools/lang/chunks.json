@@ -7254,6 +7254,14 @@
         "gui.guhs.dagboek.eerste.klusjes_slijmpjes",
         "gui.guhs.wistjedat.klusjes.slijmpjes"
       ]
+    },
+    {
+      "id": "c512_erfenis_muziek",
+      "title": "1.10.10 The Erfenis Muziekdoosje's dance tune: its subtitle and action-bar lines (made by tools/features/erfenis_muziek.py, English included)",
+      "prefixes": [
+        "gui.guhs.muziekdoosje.",
+        "subtitles.guhs.muziekdoosje."
+      ]
     }
   ]
 }

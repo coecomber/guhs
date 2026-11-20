@@ -10086,5 +10086,15 @@
       "guhs:guhwinter_hoentjes/noway_extreem"
     ],
     "subtitle": "subtitles.guhs.guhwinter_hoentjes.noway_extreem"
+  },
+  "muziekdoosje.dansje": {
+    "sounds": [
+      {
+        "name": "guhs:muziekdoosje/dansje",
+        "stream": true,
+        "attenuation_distance": 20
+      }
+    ],
+    "subtitle": "subtitles.guhs.muziekdoosje.dansje"
   }
 }

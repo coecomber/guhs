@@ -49170,5 +49170,9 @@
   "gui.guhs.blauwdruk.cat.japans_tuintje": "Japans tuintje",
   "gui.guhs.blauwdruk.cat.wensboom": "Wensboom",
   "gui.guhs.blauwdruk.cat.muziektuin": "Muziektuin",
-  "gui.guhs.blauwdruk.cat.kampeerplekje": "Kampeerplekje met guh-tentjes"
+  "gui.guhs.blauwdruk.cat.kampeerplekje": "Kampeerplekje met guh-tentjes",
+  "subtitles.guhs.muziekdoosje.dansje": "Muziekdoosje speelt een guhdansje",
+  "gui.guhs.muziekdoosje.dansen": "♪ Iedereen dansen, vadsjes! ♪",
+  "gui.guhs.muziekdoosje.speelt_al": "Het muziekdoosje speelt al!",
+  "gui.guhs.muziekdoosje.niet_eigen": "Dit muziekdoosje is van de boer van dit dorp. Alleen die mag het opwinden, njeg!"
 }

@@ -44,8 +44,12 @@ import com.geckolib.animation.RawAnimation;
  */
 public final class GuhEmotes {
     public static final int LOOP = 0x100;
-    /** How the emote started: asked by the owner, by itself (favourite, random, a wave), or a jukebox dance. */
-    public enum Source { OWNER, SELF, JUKEBOX }
+    /**
+     * How the emote started: asked by the owner, by itself (favourite, random, a wave), a jukebox dance, or (1.10.10) the
+     * Muziekdoosje's dance tune in De Erfenis ({@link #startMuziek}: also for the village's show guhs without AI, and quiet,
+     * so the tune is all you hear).
+     */
+    public enum Source { OWNER, SELF, JUKEBOX, MUZIEK }
 
     /** Wild guhs: 1 in N every 10 seconds does a random emote (so about once in 7 minutes); tamed: its favourite. */
     public static final int WILD_CHANCE = 40, FAVORITE_CHANCE = 12;
@@ -138,6 +142,55 @@ public final class GuhEmotes {
         return emote == Emote.AAIEN && guh.isVehicle() && vrij(guh) && guh.getDeltaMovement().horizontalDistanceSqr() < 0.0025;
     }
 
+    /**
+     * 1.10.10: may it dance to a Muziekdoosje? As {@link #vrij}, but a guh without AI may too (the Erfenis' show guhs stand
+     * on their spot with their AI off): it only plays the animation, nothing moves it.
+     */
+    public static boolean muziekVrij(GuhEntity guh) {
+        return guh.getType() == ModEntities.GUH.get() && guh.isAlive() && guh.getHiddenBy() == null && !guh.isPassenger()
+                && !guh.isVehicle() && !guh.isInWater() && !guh.isInLava() && guh.getLaunchState() == GuhEntity.LAUNCH_NONE
+                && guh.getTarget() == null;
+    }
+
+    /**
+     * 1.10.10: dance to a Muziekdoosje for {@code ticks} (server). The owner's own emote goes first; a dance that is already
+     * going on just lasts longer (no restart of the animation). Returns whether it dances now.
+     */
+    public boolean startMuziek(Emote emote, int ticks) {
+        if (guh.level().isClientSide() || !muziekVrij(guh) || !(guh.onGround() || guh.isOrderedToSit() || guh.isNoAi())) {
+            return false;
+        }
+        Emote nu = current();
+        if (nu != null && source == Source.OWNER) {
+            return false;
+        }
+        if (nu == emote && source == Source.MUZIEK) {
+            ticksLeft = Math.max(ticksLeft, ticks);
+            return true;
+        }
+        this.source = Source.MUZIEK;
+        this.ticksLeft = ticks;
+        this.elapsed = 0;
+        this.lookTarget = null;
+        guh.setEmoteData(emote.ordinal() + 1);
+        if (!guh.isNoAi()) {
+            guh.getNavigation().stop();
+        }
+        return true;
+    }
+
+    /** 1.10.10: is it dancing to a Muziekdoosje right now? */
+    public boolean dansOpMuziek() {
+        return current() != null && source == Source.MUZIEK;
+    }
+
+    /** 1.10.10: the song is over: a Muziekdoosje dance stops (any other emote goes on). */
+    public void stopMuziek() {
+        if (dansOpMuziek()) {
+            stop();
+        }
+    }
+
     /** Can it start one? (also standing on something: not while falling or flying) */
     public static boolean canStart(GuhEntity guh) {
         return canContinue(guh) && (guh.onGround() || guh.isOrderedToSit());
@@ -188,7 +241,8 @@ public final class GuhEmotes {
         if (emote != null) {
             // (a standing guh is held still by EmoteGoal: if something else makes it walk, that went first)
             boolean walking = !guh.isOrderedToSit() && elapsed > 3 && !guh.getNavigation().isDone();
-            if (!(canContinue(guh) || aaienBereden(guh, emote)) || ownerLeft() || walking) {
+            boolean muziek = source == Source.MUZIEK && muziekVrij(guh);   // (1.10.10: the show guhs without AI dance too)
+            if (!(canContinue(guh) || aaienBereden(guh, emote) || muziek) || ownerLeft() || walking) {
                 stop();
             } else {
                 elapsed++;
@@ -344,8 +398,8 @@ public final class GuhEmotes {
     // ------------------------------------------------------------------------------------------------------------
 
     private void sounds(Emote emote) {
-        if (guh.isTame() && !guh.areSoundsEnabled()) {
-            return; // "sounds off" in the Guh menu: quiet emotes too
+        if (guh.isTame() && !guh.areSoundsEnabled() || source == Source.MUZIEK) {
+            return; // "sounds off" in the Guh menu: quiet emotes too (1.10.10: and the Muziekdoosje's dancers: the tune sings)
         }
         float pitch = guh.getVoicePitch();
         switch (emote) {

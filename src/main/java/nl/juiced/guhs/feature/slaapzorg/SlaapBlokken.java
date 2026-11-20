@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -126,6 +127,9 @@ public final class SlaapBlokken {
     /**
      * The Muziekdoosje and the Mobiel: click and the lullaby plays (about 24 seconds; {@link Slaapliedje}), the guhs around
      * yawn and fall asleep. {@link #SPEELT}: how many 2-second steps are left (0: quiet; a click then starts it again).
+     * 1.10.10: in De Erfenis the Muziekdoosje plays a dance tune instead and the guhs around dance (erfenis.ErfenisMuziek:
+     * 12 steps of 2.5 seconds); a box that says it plays but has no tick waiting (the Muziektent shapes were stamped with
+     * speelt=1 before 1.10.10) is not stuck: a click starts it.
      */
     public static class Speeldoos extends Deco implements EntityBlock {
         public static final IntegerProperty SPEELT = IntegerProperty.create("speelt", 0, 12);
@@ -153,20 +157,33 @@ public final class SlaapBlokken {
 
         @Override
         protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-            if (state.getValue(SPEELT) > 0) {
+            if (!(level instanceof ServerLevel sl)) {
+                return InteractionResult.SUCCESS;
+            }
+            if (speelt(sl, pos, state)) {
+                player.sendOverlayMessage(Component.translatable("gui.guhs.muziekdoosje.speelt_al"));
                 return InteractionResult.CONSUME;   // still playing: no second song on top
             }
-            if (level instanceof ServerLevel sl) {
-                speel(sl, pos, state);
-            }
+            speel(sl, pos, state);
             return InteractionResult.SUCCESS;
         }
 
-        /** Starts the song (also the test command and the game tests); returns how many guhs listen. */
+        /** Is a song playing here (a step left and its tick waiting)? */
+        public boolean speelt(ServerLevel level, BlockPos pos, BlockState state) {
+            return state.getValue(SPEELT) > 0 && level.getBlockTicks().hasScheduledTick(pos, this);
+        }
+
+        /** Is this box playing the Erfenis dance tune (the Muziekdoosje in De Erfenis), not the lullaby? */
+        private boolean dans(ServerLevel level, BlockPos pos) {
+            return !mobiel && nl.juiced.guhs.feature.erfenis.ErfenisMuziek.dansHier(level, pos);
+        }
+
+        /** Starts the song (also the test command and the game tests); returns how many guhs listen (or dance). */
         public int speel(ServerLevel level, BlockPos pos, BlockState state) {
+            boolean dans = dans(level, pos);
             level.setBlock(pos, state.setValue(SPEELT, 12), Block.UPDATE_ALL);
-            level.scheduleTick(pos, this, 40);
-            return Slaapliedje.zing(level, pos, bereik, volume);
+            level.scheduleTick(pos, this, dans ? nl.juiced.guhs.feature.erfenis.ErfenisMuziek.STAP : 40);
+            return dans ? nl.juiced.guhs.feature.erfenis.ErfenisMuziek.start(level, pos) : Slaapliedje.zing(level, pos, bereik, volume);
         }
 
         @Override
@@ -175,10 +192,17 @@ public final class SlaapBlokken {
             if (rest <= 0) {
                 return;
             }
-            Slaapliedje.noten(level, mobiel ? pos.below() : pos);
+            boolean dans = dans(level, pos);
+            if (!dans) {
+                Slaapliedje.noten(level, mobiel ? pos.below() : pos);
+            } else if (rest > 1) {
+                nl.juiced.guhs.feature.erfenis.ErfenisMuziek.stap(level, pos, 13 - rest);
+            } else {
+                nl.juiced.guhs.feature.erfenis.ErfenisMuziek.einde(level, pos);
+            }
             level.setBlock(pos, state.setValue(SPEELT, rest - 1), Block.UPDATE_ALL);
             if (rest > 1) {
-                level.scheduleTick(pos, this, 40);
+                level.scheduleTick(pos, this, dans ? nl.juiced.guhs.feature.erfenis.ErfenisMuziek.STAP : 40);
             }
         }
 
