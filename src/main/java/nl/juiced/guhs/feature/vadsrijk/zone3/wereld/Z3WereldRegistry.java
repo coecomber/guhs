@@ -58,6 +58,7 @@ public final class Z3WereldRegistry {
         NeoForge.EVENT_BUS.addListener((net.neoforged.neoforge.event.server.ServerAboutToStartEvent e) -> vlakkeGebieden());
         QuestMotor.ACTIES.put("z3_vlieg", (p, naar) -> Z3Reizen.naarHoningtak(p));
         npcBindingen();
+        Z3Liften.viaRoutes();   // 1.10.10: the tracker points at the lift first (Nestkapel, cafe, Raattrossen)
         // the wind-column physics is z3-systemen's Z3Wind: give it the columns as built on the map (v1, incl. spiraal_kruin)
         nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wind.KOLOMMEN = Z3WereldPlekken.WINDKOLOMMEN.stream()
                 .map(w -> new nl.juiced.guhs.feature.vadsrijk.zone3.systemen.Z3Wind.Kolom(w.id(), w.x(), w.z(), w.y0(), w.y1(), w.r(), w.lx(), w.lz()))
@@ -68,6 +69,9 @@ public final class Z3WereldRegistry {
                 return;
             }
             long t = sl.getGameTime();
+            if (t % 40 == 13) {
+                Z3LiftBorden.tick(sl);   // 1.10.10: name boards over the honey lifts to the cells under the deck
+            }
             for (ServerPlayer p : sl.players()) {
                 if (!inZone3(p.getX(), p.getZ()) || p.isSpectator()) {
                     continue;

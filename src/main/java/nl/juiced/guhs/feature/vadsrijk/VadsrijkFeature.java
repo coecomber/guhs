@@ -84,6 +84,7 @@ public final class VadsrijkFeature {
         nl.juiced.guhs.feature.vadsrijk.scheiding.Scheiding.register(modBus);   // Y-SCHEIDING: survival <-> Vadsrijk truly separate (body swap, border, menus)
         nl.juiced.guhs.feature.vadsrijk.ftb.VrFtbRegistry.register(modBus);   // Y-FTB: compact FTB chapter (tasks, claim rule, deco rewards)
         nl.juiced.guhs.feature.vadsrijk.klassen.spec.SpecRegistry.register(modBus);   // U-SPECS: specs + new advancements (keep LAST: re-lays the trees)
+        nl.juiced.guhs.feature.vadsrijk.npc.ViaRoutes.register();   // 1.10.10: tracker "via" routes (lifts), last: after the zones' airship hops
     }
 
     public static void payloads(PayloadRegistrar registrar) {

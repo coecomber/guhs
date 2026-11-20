@@ -5,6 +5,7 @@ Run from the project root (after maak_kaart.py; ~2-4 min, ~2 GB RAM):
     python tools/vadsrijk/bereikcheck.py --zone 5         # report only zone 5's targets (the flood is always global)
     python tools/vadsrijk/bereikcheck.py --punt 2650,224,-520   # debug: is this spot reached, nearest reached cell
     python tools/vadsrijk/bereikcheck.py --strikt         # exit code 1 when a main-quest target or an NPC is not reached
+    python tools/vadsrijk/bereikcheck.py --via --zone 3   # 1.10.10: targets reached ONLY via a lift/hatch (-> npc/ViaRoutes.java)
 
 What it reads (the way the pipeline ships the map):
   - the tiles src/main/resources/data/guhs/structure/vadsrijk/tegels/t_<tx>_<tz>.nbt: the working format every generator writes
@@ -697,7 +698,7 @@ class Uitslag:
     pass
 
 
-def analyseer(K=None, barriere=False):
+def analyseer(K=None, barriere=False, via=False):
     t0 = time.time()
     D = lees_doelen()
     quests = lees_quests()
@@ -730,6 +731,17 @@ def analyseer(K=None, barriere=False):
             if beide:
                 extra_s.append(rb[0])
                 extra_d.append(ra[0])
+    if via:   # 1.10.10 (--via): the lift/hatch/wind edges by themselves, to take them out again (airship lines stay)
+        lk_s, lk_d, lk_n = [], [], []
+        for naam, a, b, beide, ra, rb in link_info:
+            if ra >= 0 and rb >= 0 and not naam.startswith("luchtschip"):
+                lk_s.append(ra)
+                lk_d.append(rb)
+                lk_n.append((naam, a, b))
+                if beide:
+                    lk_s.append(rb)
+                    lk_d.append(ra)
+                    lk_n.append((naam, b, a))
     src = np.concatenate([src, np.array(extra_s, np.int32)])
     dst = np.concatenate([dst, np.array(extra_d, np.int32)])
     G = sparse.csr_matrix((np.ones(len(src), np.int8), (src, dst)), shape=(K.N, K.N))
@@ -765,6 +777,12 @@ def analyseer(K=None, barriere=False):
     U = Uitslag()
     U.K, U.Z, U.G, U.GT, U.FR, U.BR, U.zaden, U.per_ingang, U.links, U.D, U.poi = K, Z, G, GT, FR, BR, zaden, per_ingang, link_info, D, poi
     U.doelen, U.arenas = verzamel_doelen(D, quests)
+    if via:
+        U.via_links = list(zip(lk_s, lk_d, lk_n))
+        Lk = sparse.csr_matrix((np.ones(len(lk_s), np.int8), (np.array(lk_s, np.int64), np.array(lk_d, np.int64))), shape=(K.N, K.N))
+        U.Gv = (G - Lk).tocsr()
+        U.Gv.eliminate_zeros()
+        U.Gv.data[:] = 1
     # stand points of reached runs: feet at F/2, and for water/ladder runs also at the top of the swim/climb (H/2)
     staan = FR & K.geldig & ~K.bodem
     ids = np.nonzero(staan)[0]
@@ -790,6 +808,7 @@ def analyseer(K=None, barriere=False):
             kand = kand[np.abs(U.py[kand] - y) <= d["dy"]]
         if len(kand):
             d["ok"] = True
+            d["_kand"] = U.pid[kand]
             q = kand[np.argmin((px[kand] - x) ** 2 + (pz[kand] - z) ** 2 + (U.py[kand] - y) ** 2)]
             d["via"] = ["start"]
             d["sprong"] = not bool(zonder[kand].any())
@@ -1124,16 +1143,62 @@ def schrijf_rapport(U, extra, zone_filter=None):
     return tellers
 
 
+def via_analyse(U, zone_filter=None):
+    """1.10.10 (--via): targets a survival player reaches ONLY through a lift / hatch / wind column (not by walking from a zone
+    entry, the airship piers and travel-map landings included), and through which link. These need a "via" route in the quest
+    tracker (npc/ViaRoutes.java): first the lift, then the target. Writes tools/vadsrijk/_cache/via.json and prints a table."""
+    t0 = time.time()
+    FRv = bfs(U.Gv, [r for r in U.zaden.values() if r >= 0])
+    print(f"  via: zonder liften/luiken bereikt: {int(FRv.sum())} runs (met: {int(U.FR.sum())}) ({time.time() - t0:.0f} s)", flush=True)
+    nodig = []
+    for d in U.doelen:
+        k = d.get("_kand")
+        if not d.get("ok") or k is None or FRv[k].any():
+            continue
+        if zone_filter and d["zone"] != zone_filter:
+            continue
+        d["via_links"] = []
+        nodig.append(d)
+    # one BFS (walking only) from every link exit: which of those targets lie behind it
+    gezien = {}
+    for s_, d_, (naam, a, b) in U.via_links:
+        if d_ in gezien:
+            R = gezien[d_]
+        else:
+            order = csgraph.breadth_first_order(U.Gv, d_, directed=True, return_predecessors=False)
+            R = np.zeros(U.K.N, bool)
+            R[order] = True
+            gezien[d_] = R
+        if not FRv[s_] and not U.FR[s_]:
+            continue
+        for d in nodig:
+            if R[d["_kand"]].any():
+                d["via_links"].append(f"{naam} ({a[0]},{a[1]},{a[2]} -> {b[0]},{b[1]},{b[2]})" + ("" if FRv[s_] else " [instap zelf via lift]"))
+    print(f"  via: {len(nodig)} doelen alleen via een lift/luik ({time.time() - t0:.0f} s)")
+    uit = []
+    for d in sorted(nodig, key=lambda d: (d["zone"], d["id"])):
+        uit.append({"id": d["id"], "zone": d["zone"], "pos": d["pos"], "groep": groep(d), "quests": d["quests"], "via": d["via_links"]})
+        print(f"    z{d['zone']} {groep(d):6s} {d['id']:45s} {d['pos']}  via {'; '.join(d['via_links']) or '?'}"
+              + (f"  [{', '.join(d['quests'][:6])}]" if d["quests"] else ""))
+    os.makedirs(CACHE, exist_ok=True)
+    with open(os.path.join(CACHE, "via.json"), "w", encoding="utf-8") as f:
+        json.dump(uit, f, indent=1, default=str)
+    return uit
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--zone", type=int, default=None)
     ap.add_argument("--punt", action="append", default=[], help="x,y,z: debug one spot")
     ap.add_argument("--strikt", action="store_true")
     ap.add_argument("--barriere", action="store_true", help="1.10.2: model the zone barriers' push-back (Barrieres.VRIJ)")
+    ap.add_argument("--via", action="store_true", help="1.10.10: list targets reached only through a lift/hatch (for npc/ViaRoutes)")
     a = ap.parse_args()
     t0 = time.time()
     print("bereikcheck: tegels lezen ...", flush=True)
-    U = analyseer(barriere=a.barriere)
+    U = analyseer(barriere=a.barriere, via=a.via)
+    if a.via:
+        via_analyse(U, a.zone)
     for p in a.punt:
         x, y, z = (int(v) for v in p.split(","))
         r = U.Z.rond(x, y, z, 2)
@@ -1150,7 +1215,7 @@ def main():
     tellers = schrijf_rapport(U, extra, a.zone)
     os.makedirs(CACHE, exist_ok=True)
     with open(os.path.join(CACHE, "bereik.json"), "w", encoding="utf-8") as f:
-        json.dump({"doelen": [{k: v for k, v in d.items()} for d in U.doelen]}, f, default=str)
+        json.dump({"doelen": [{k: v for k, v in d.items() if not k.startswith("_")} for d in U.doelen]}, f, default=str)
     print(f"  {os.path.relpath(RAPPORT, ROOT)} ({time.time() - t0:.0f} s)")
     for zn in sorted(ZONENAMEN):
         s = []

@@ -41,7 +41,8 @@ NPCS = {
         "Dit is de Nestkapel, het filiaal van De Knuffelorde in de boom. Hier wissel je van klasse.",
         "De Orde heeft hier vroeger een eiersokkel neergezet. Leeg. Niemand weet meer waarvoor.",
         "Bijen dansen om de weg te wijzen. Ik dans om warm te blijven. Iedereen heeft zo zijn reden."],
-        "in de Nestkapel, de grote raatcel onder de noordkant van het ringdek van Honingtak (neem de kapellift aan de noordkant omlaag)"),
+        "in de Nestkapel, de grote raatcel onder het ringdek van Honingtak (de kapellift bij het kettinghekje aan de noordrand gaat "
+        "omlaag)"),
     "z3_veertje": ("Stalmeester Veertje", [
         "Een Pluimguh borstelen is het fijnste werk van de wereld. Na Pluimguhs voeren. En Pluimguhs knuffelen.",
         "Rijden doe je met je knieën, je hart en een zakje Honingbrokjes.",
@@ -313,7 +314,7 @@ PLEK_POI = {
     "z3_schorsstad_vloer": "op de vloer van de Schorsstad, onderaan de binnentrap in de holle stam",
     "z3_pelstrap": "bij de trap omlaag naar de Pelszaal, op de vloer van de Schorsstad",
     "z3_kabelbrug": "bij het begin van de kabelbrug naar de Kaaszeppelinwerf, aan de noordoostrand van Honingtak",
-    "z3_nestkapel_balkon": "in de Nestkapel, de raatcel onder de noordkant van het ringdek (de kapellift omlaag)",
+    "z3_nestkapel_balkon": "in de Nestkapel, de raatcel onder de noordkant van het ringdek (de kapellift bij het kettinghekje omlaag)",
     "z3_raattrossen": "in de Raattrossen, de raatcel onder de oostkant van het ringdek van Honingtak (neem de raattroslift omlaag)",
     "z3_vlek_1": "bij de eerste grauwe plek, aan de zuidoostkant van kruin 1",
     "z3_vlek_2": "bij de tweede grauwe plek, op kruin 2 aan de zuidwestkant (de windkolom of de binnentrap omhoog)",
@@ -452,8 +453,8 @@ Q("z3_hq01_boom", "hoofd", "z2_kapitein", "Een boom zo groot als een berg",
   [("npc", "Daar ben je, lieverd! Wat een vlucht, hè? Iedereen kijkt altijd zo verbaasd als ze de boom voor het eerst zien."),
    ("npc", "Ik ben Raatje. Burgemeester, imker en oma van iedereen hier. Welkom in Honingtak."),
    ("jij", "In de wortels... ik zag twee ogen. Grijsblauw. En ik hoorde iets kraken."),
-   ("npc", "Ogen? In de wortels? Brrr. Dat moet Ordemeester Wasja horen. Ze zit in de Nestkapel, de grote raatcel onder de "
-           "noordkant van het ringdek. Neem de kapellift omlaag.")],
+   ("npc", "Ogen? In de wortels? Brrr. Dat moet Ordemeester Wasja horen. Ze zit in de Nestkapel, de grote raatcel onder het "
+           "ringdek. Neem de kapellift omlaag: het hekje met de kettingen aan de noordrand van het dek. Klik erop.")],
   xp=4000, munten=3000, items=[(item("honingthee"), 2)], lv=30, na=["z2_hq12_hartsplinter"], inleveren="z3_raatje",
   actie_aanname="z3_vlieg:honingtak")
 

@@ -847,7 +847,7 @@
   "vadsrijk.npc.plek.npc.z3_wacht_wortel_3": "at the campfire on the Root Road in the northwest of the Root Fields",
   "vadsrijk.npc.plek.npc.z3_wacht_wortel_4": "at the campfire on the Root Road in the northeast of the Root Fields",
   "vadsrijk.npc.plek.npc.z3_wapens": "in the gear shop on the northwest side of the ring deck of Honeybough",
-  "vadsrijk.npc.plek.npc.z3_wasja": "in the Nest Chapel, the big honeycomb cell under the north side of the ring deck of Honeybough (take the chapel lift on the north side down)",
+  "vadsrijk.npc.plek.npc.z3_wasja": "in the Nest Chapel, the big honeycomb cell under Honeybough's ring deck (the chapel lift at the chained fence on the north edge goes down)",
   "vadsrijk.npc.plek.npc.z3_winkel": "in the potion shop on the west side of the ring deck of Honeybough",
   "vadsrijk.npc.plek.npc.z3_wortelien": "in Mossfoot, the hamlet on the ground by the bottom station of the Honey Lift, in the southeast (take the Honey Lift down)",
   "vadsrijk.npc.plek.npc.z3_zoemer": "on the Blossom Square of Honeybough",
@@ -1086,7 +1086,7 @@
   "vadsrijk.npc.plek.poi.z3_lantaarntoren": "by the Lantern Tower, in the middle of Barkton's hollow trunk (start at the bottom by ring 1)",
   "vadsrijk.npc.plek.poi.z3_mosvoet": "in Mossfoot, on the ground in the southeast (by the bottom station of the Honey Lift)",
   "vadsrijk.npc.plek.poi.z3_nestkamer": "by the egg's root basket, in the middle of the root hall under the trunk",
-  "vadsrijk.npc.plek.poi.z3_nestkapel_balkon": "in the Nest Chapel, the honeycomb cell under the north side of the ring deck (take the chapel lift down)",
+  "vadsrijk.npc.plek.poi.z3_nestkapel_balkon": "in the Nest Chapel, the honeycomb cell under the north side of the ring deck (the chapel lift at the chained fence, down)",
   "vadsrijk.npc.plek.poi.z3_nestsplinter": "between the branches of the old nest at the top of the tree (it glows pink when you get close)",
   "vadsrijk.npc.plek.poi.z3_pelstrap": "by the stairs down to the Fur Hall, on the floor of Barkton",
   "vadsrijk.npc.plek.poi.z3_pelszaal": "in the Fur Hall, under the floor of Barkton (the stairs down from the floor)",
@@ -1463,5 +1463,8 @@
   "vadsrijk.npc.wezen.vr_z2_spiegelzucht": "Lady Mirrorsigh, lady of the Mirror Keep. Only the reflection without a shadow is real.",
   "vadsrijk.npc.wezen.vr_z2_splinterling": "A crystal golem of gray crystal. With every hit he shoots shards around. When defeated, he bursts apart.",
   "vadsrijk.npc.gids.zonepoort.titel": "To the next zone",
-  "vadsrijk.npc.gids.zonepoort.tekst": "To the next zone? Finish the main story, do every craft step (Master Tinker's lesson on the Craft Island too) AND explore at least 75% of the zone in your Exploring Book (key B): viewpoints, campfires, secrets, side quests and more. The captain and the travel map show what you still miss. Your highest level is the level of the highest zone you have been to + 5 (25 if you never went to zone 2). Extra xp is saved up and paid out double later."
+  "vadsrijk.npc.gids.zonepoort.tekst": "To the next zone? Finish the main story, do every craft step (Master Tinker's lesson on the Craft Island too) AND explore at least 75% of the zone in your Exploring Book (key B): viewpoints, campfires, secrets, side quests and more. The captain and the travel map show what you still miss. Your highest level is the level of the highest zone you have been to + 5 (25 if you never went to zone 2). Extra xp is saved up and paid out double later.",
+  "vadsrijk.npc.stap.via.z3_nestkapel": "first the chapel lift down: the chained fence on the north edge of the ring deck",
+  "vadsrijk.npc.stap.via.z3_cafe": "first the cafe lift down: the chained fence on the west edge of the ring deck",
+  "vadsrijk.npc.stap.via.z3_raattros": "first the comb cluster lift down: the chained fence on the east edge of the ring deck"
 }

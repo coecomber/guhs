@@ -14,6 +14,10 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   - **tekenen**: a 64x64 drawing editor, hangable 2x2 drawings, one kerstboom drawing per player (cards around the tree), and the Kerstalbum from 26 Dec.
   - **spellen**: Pepernotenrace (arcade runner) and the schaatsrondje with highscore boards, oliebollen bakken, hidden pepernoten, and the pepernoten shop.
   - **hoentjes**: the waterhoentje and alpine hoentje, rare permanent Guhmension birds with Guhdex bonus pages and a NOWAY chat line.
+- **Vadsrijk quest tracker: the lift first.** A target that can only be reached by a lift now gets the lift as its first stop: the tracker line, beam and distance point at the lift ("eerst de kapellift omlaag: het kettinghekje aan de noordrand van het ringdek"), then at the real target once you are inside. The data-driven list is `npc/ViaRoutes`, hooked in last in `QuestStap.ROUTES`. Zone 3 registers its three cells under the Honingtak deck: the Nestkapel (Ordemeester Wasja, only reachable by the kapellift), and café De Zoete Raat and the Raattrossen (from the deck only; a branch path also walks in).
+  - The three honey lifts get a name board at both stops ("Kapellift · Omlaag naar de Nestkapel · klik op het hekje"). Clicking the lift's chains, fence ring or honeycomb landing now rides it from up to 7 blocks away.
+  - Wasja's where-text and Raatje's hq01 line say where the kapellift is.
+  - `tools/vadsrijk/bereikcheck.py --via` lists the targets reached only through a lift or hatch. In zones 3-6 only the Nestkapel needs a route.
 - **Tools**: the full `tools/make_resources.py` runs again. Fixes: compass needles skip the sub-folders of models/item; the kleding, taal and bikinibodem checks are up to date; the opt-in `GUHS_SELFCHECK_WARN=1` reports failing modules instead of stopping. See guhs_winter/INTEGRATIE.md.
 
 ## 1.10.9 — Minecraft 26.1.2
