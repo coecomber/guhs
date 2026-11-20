@@ -200,7 +200,7 @@ def build(h):
     h.save(_badje_icoon(), "item", "blub_badje.png")
     h.item_model("blub_badje")
     h.self_drop("blub_badje")
-    h.shaped("blub_badje", ["T T", "TST"], {"T": "minecraft:white_terracotta", "S": "minecraft:slime_ball"}, "guhs:blub_badje")
+    h.shaped("blub_badje", ["T T", "TST"], {"T": "minecraft:white_terracotta", "S": "#guhs:slijmballen"}, "guhs:blub_badje")
     for k in ("bellen", "knabbels", "liedje"):
         h.save(_icoon(k), "item", f"blubguh_klus_{k}.png")
         h.item_model(f"blubguh_klus_{k}")

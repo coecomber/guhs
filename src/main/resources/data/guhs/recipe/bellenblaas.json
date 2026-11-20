@@ -9,7 +9,7 @@
   "key": {
     "R": "minecraft:pink_dye",
     "S": "minecraft:stick",
-    "Z": "minecraft:slime_ball",
+    "Z": "#guhs:slijmballen",
     "B": "minecraft:bowl"
   },
   "result": {

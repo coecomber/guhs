@@ -96,6 +96,9 @@ public final class SterrenveldFeature {
     public static final DeferredItem<Item> LOOK_VALT = ITEMS.registerSimpleItem("droomsterretje");
     public static final DeferredItem<Item> LOOK_GLOED = ITEMS.registerSimpleItem("droomsterretje_gloed");
     public static final DeferredItem<Item> LOOK_VAAG = ITEMS.registerSimpleItem("droomsterretje_vaag");
+    /** 1.10.10: the golden star (falling and glowing, then fading). */
+    public static final DeferredItem<Item> LOOK_GOUD = ITEMS.registerSimpleItem("droomsterretje_goud");
+    public static final DeferredItem<Item> LOOK_GOUD_VAAG = ITEMS.registerSimpleItem("droomsterretje_goud_vaag");
 
     public static final DeferredHolder<EntityType<?>, EntityType<VallendeSter>> VALLENDE_STER = ENTITY_TYPES.register("droomsterretje",
             () -> EntityType.Builder.<VallendeSter>of(VallendeSter::new, MobCategory.MISC).sized(0.7f, 0.7f).clientTrackingRange(8)
@@ -103,6 +106,8 @@ public final class SterrenveldFeature {
 
     /** How many little stars may be about at once, how often a new one may fall, how far around the island they fall. */
     static final int MAX_STERREN = 6, VAL_KANS = 6, STRAAL = 30;
+    /** Droomzand for the big star (once; 1.10.10: 3 -> 9). */
+    public static final int GROTE_STER_ZAND = 9;
     /** How close you have to come to the big star's middle, and how near the island somebody must be for stars to fall. */
     static final double STER_BEREIK = 4.5, BIJ_EILAND = 90;
     private static final Map<UUID, Long> AL_GEMELD = new HashMap<>();
@@ -193,7 +198,7 @@ public final class SterrenveldFeature {
         if (DroomVoortgang.geef(p, DroomVoortgang.Stukje.STER)) {
             level.playSound(null, ster.x, ster.y, ster.z, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.PLAYERS, 1.2f, 1.2f);
             level.playSound(null, ster.x, ster.y, ster.z, SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.8f, 1.4f);
-            ItemStack zand = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), 3);
+            ItemStack zand = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), GROTE_STER_ZAND);
             if (!p.getInventory().add(zand)) {
                 p.drop(zand, false);
             }

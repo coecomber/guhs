@@ -49,4 +49,44 @@ public class SterrenveldGameTests {
         s.zetFase(VallendeSter.VERVAAGT);
         helper.succeedWhen(() -> helper.assertTrue(s.isRemoved(), "the fading star disappeared"));
     }
+
+    /** 1.10.10: a golden star gives 10 droomzand; ten in a row give 5 extra; a star fading near you breaks the row. */
+    @GuhTest(template = KAMER, batch = BATCH)
+    public static void goudenSterEnSterrenreeks(GameTestHelper helper) {
+        ServerPlayer p = helper.makeMockServerPlayerInLevel();
+        Vec3 plek = Vec3.atBottomCenterOf(helper.absolutePos(new BlockPos(2, 3, 2)));
+        p.snapTo(plek.x, plek.y - 1, plek.z);
+        p.getInventory().clearContent();
+        Sterrenreeks.vergeet(p);
+        var zand = DroomblokkenFeature.DROOMZAND.get();
+        VallendeSter goud = VallendeSter.nieuw(helper.getLevel(), plek);
+        goud.zetGoud(true);
+        helper.assertTrue(goud.getItem().is(SterrenveldFeature.LOOK_GOUD.get()), "a golden star looks golden");
+        helper.assertTrue(goud.vang(p), "caught the golden one");
+        helper.assertTrue(p.getInventory().countItem(zand) == VallendeSter.GOUD_ZAND, "a golden star: 10 droomzand, got " + p.getInventory().countItem(zand));
+        for (int i = 2; i <= 9; i++) {                                   // catches 2..9 of the row
+            VallendeSter s = VallendeSter.nieuw(helper.getLevel(), plek);
+            s.zetGoud(false);
+            s.vang(p);
+        }
+        helper.assertTrue(Sterrenreeks.stand(p) == 9, "nine in a row: " + Sterrenreeks.stand(p));
+        int voor = p.getInventory().countItem(zand);
+        VallendeSter tiende = VallendeSter.nieuw(helper.getLevel(), plek);
+        tiende.zetGoud(false);
+        tiende.vang(p);
+        int erbij = p.getInventory().countItem(zand) - voor;
+        helper.assertTrue(erbij >= 1 + Sterrenreeks.BONUS && erbij <= 2 + Sterrenreeks.BONUS, "the tenth: its own droomzand + 5, got " + erbij);
+        helper.assertTrue(Sterrenreeks.stand(p) == 0, "the row starts over");
+        for (int i = 0; i < 3; i++) {
+            VallendeSter s = VallendeSter.nieuw(helper.getLevel(), plek);
+            s.zetGoud(false);
+            s.vang(p);
+        }
+        helper.assertTrue(Sterrenreeks.stand(p) == 3, "three in a new row");
+        VallendeSter weg = VallendeSter.nieuw(helper.getLevel(), plek);
+        weg.vervaagd(helper.getLevel());
+        helper.assertTrue(weg.isRemoved() && Sterrenreeks.stand(p) == 0, "a star fading near you breaks the row");
+        Sterrenreeks.vergeet(p);
+        helper.succeed();
+    }
 }

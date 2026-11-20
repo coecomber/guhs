@@ -8,7 +8,7 @@
   ],
   "key": {
     "W": "#minecraft:wool",
-    "S": "minecraft:slime_ball"
+    "S": "#guhs:slijmballen"
   },
   "result": {
     "id": "guhs:safari_speelbal"

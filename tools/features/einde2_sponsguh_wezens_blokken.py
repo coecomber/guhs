@@ -462,7 +462,7 @@ def data(h):
     for uit in ("vruchthuis_dak", "vruchthuis_raam"):
         h.w(f"{h.D}/recipe/{uit}_van_vruchthuis_wand_steenzagen.json", {"type": "minecraft:stonecutting", "ingredient": {"item": "guhs:vruchthuis_wand"},
                                                                          "result": {"id": f"guhs:{uit}", "count": 1}})
-    h.shaped("bellenblaas", [" R ", " S ", "ZBZ"], {"R": "minecraft:pink_dye", "S": "minecraft:stick", "Z": "minecraft:slime_ball",
+    h.shaped("bellenblaas", [" R ", " S ", "ZBZ"], {"R": "minecraft:pink_dye", "S": "minecraft:stick", "Z": "#guhs:slijmballen",
                                                     "B": "minecraft:bowl"}, "guhs:bellenblaas")
     h.shaped("spooklantaarn", ["NDN", "NLN", "NNN"], {"N": "minecraft:iron_nugget", "D": "minecraft:lime_dye", "L": "guhs:lichtstaafje"},
              "guhs:spooklantaarn")

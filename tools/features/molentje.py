@@ -549,7 +549,7 @@ def build(h, ms):
     for n in NAMEN:
         h.self_drop(n)
     h.shaped("molen_tandwiel", [" G ", "GCG", " G "], {"G": "minecraft:gold_nugget", "C": "minecraft:copper_ingot"}, "guhs:molen_tandwiel")
-    h.shaped("blaaskussentje", ["WSW"], {"W": "minecraft:purple_wool", "S": "minecraft:slime_ball"}, "guhs:blaaskussentje")
+    h.shaped("blaaskussentje", ["WSW"], {"W": "minecraft:purple_wool", "S": "#guhs:slijmballen"}, "guhs:blaaskussentje")
     h.shaped("molenwieken", ["W W", " S ", "W W"], {"W": "minecraft:pink_wool", "S": "minecraft:stick"}, "guhs:molenwieken")
     h.add_tag("minecraft/tags/block/mineable/pickaxe", ["guhs:molen_tandwiel"])
     h.add_tag("minecraft/tags/block/mineable/axe", ["guhs:molenwieken"])

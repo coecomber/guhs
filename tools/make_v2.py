@@ -1384,6 +1384,11 @@ def bees_slimes_mikas():
     shapeless("guh_slimeball_from_block", ["guhs:roze_slijmblok"], "guhs:guh_slimeball", 9)
     shaped("sticky_piston_from_guh_slimeball", ["S", "P"], {"S": "guhs:guh_slimeball", "P": "minecraft:piston"}, "minecraft:sticky_piston")
     shaped("lead_from_guh_slimeball", ["SS ", "SB ", "  S"], {"S": "minecraft:string", "B": "guhs:guh_slimeball"}, "minecraft:lead", 2)
+    # 1.10.10: a guh slimeball is a slimeball. The mod's own recipes take the tag guhs:slijmballen (both balls), it is in the
+    # common tag c:slime_balls (other mods), and one turns into a plain slimeball for vanilla's recipes.
+    add_tag("guhs/tags/item/slijmballen", ["minecraft:slime_ball", "guhs:guh_slimeball"])
+    add_tag("c/tags/item/slime_balls", ["guhs:guh_slimeball"])
+    shapeless("slime_ball_from_guh_slimeball", ["guhs:guh_slimeball"], "minecraft:slime_ball", 1)
 
     # items
     icons = {
@@ -1412,7 +1417,11 @@ def bees_slimes_mikas():
         {"type": "minecraft:item", "name": "guhs:guh_slimeball", "functions": count_fn(0, 2) + [
             {"function": "minecraft:enchanted_count_increase", "enchantment": "minecraft:looting", "count": {"type": "minecraft:uniform", "min": 0, "max": 1}}]}],
         "conditions": [{"condition": "minecraft:entity_properties", "entity": "this",
-                        "predicate": {"type_specific": {"type": "minecraft:slime", "size": 1}}}]}]})
+                        "predicate": {"type_specific": {"type": "minecraft:slime", "size": 1}}}]},
+        # 1.10.10: the medium ones (size 2) drop 0-1 too
+        {"rolls": 1, "entries": [{"type": "minecraft:item", "name": "guhs:guh_slimeball", "functions": count_fn(0, 1)}],
+         "conditions": [{"condition": "minecraft:entity_properties", "entity": "this",
+                         "predicate": {"type_specific": {"type": "minecraft:slime", "size": 2}}}]}]})
     mika_loot = json.load(open(f"{D}/loot_table/entities/mika.json", encoding="utf-8"))
     mika_loot["pools"].append({"rolls": 1, "entries": [{"type": "minecraft:item", "name": "minecraft:magma_cream"}],
                                "conditions": [{"condition": "minecraft:random_chance", "chance": 0.3}]})
@@ -1424,7 +1433,7 @@ def bees_slimes_mikas():
             creature = [e for e in d["spawners"].get("creature", []) if e["type"] not in ("guhs:guh_bee", "guhs:guh_slime")]
             if b != "mikas_biome":
                 creature.append({"type": "guhs:guh_bee", "weight": 12, "minCount": 1, "maxCount": 3})
-                creature.append({"type": "guhs:guh_slime", "weight": 8, "minCount": 1, "maxCount": 2})
+                creature.append({"type": "guhs:guh_slime", "weight": 14, "minCount": 2, "maxCount": 4})   # (1.10.10: 8, 1-2)
             d["spawners"]["creature"] = creature
         patch_json(f"{D}/worldgen/biome/{b}.json", add)
     w(f"{D}/neoforge/biome_modifier/guh_bees_overworld.json", {

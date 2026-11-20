@@ -52,6 +52,19 @@ public final class DroomReis {
         return t;
     }
 
+    /** 1.10.10: counts the dreams of this player (+1 every time one starts from home): what "once per dream" means. */
+    static final String SESSIE = "Sessie";
+
+    /** The number of this player's current (or last) dream. */
+    public static long sessie(ServerPlayer p) {
+        return data(p).getLongOr(SESSIE, 0L);
+    }
+
+    /** Tests: as if a new dream started. */
+    public static void nieuweSessie(ServerPlayer p) {
+        data(p).putLong(SESSIE, sessie(p) + 1);
+    }
+
     public static boolean inDroom(@Nullable Player p) {
         return p != null && DromenFeature.isDroom(p.level());
     }
@@ -82,6 +95,7 @@ public final class DroomReis {
         ServerLevel droom = p.level().getServer().getLevel(DromenFeature.DIM);
         if (!inDroom(p)) {
             onthoudThuis(p);
+            data(p).putLong(SESSIE, sessie(p) + 1);   // (1.10.10: a new dream, e.g. the zandhoopjes are full again)
         }
         if (p.isSleeping()) {
             p.stopSleepInBed(true, true);

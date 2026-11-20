@@ -75,6 +75,8 @@ public final class Molen {
     public static final int DUUR = 20 * 90, RONDE = 10;
     /** How many wild Blubs and sterrenvisjes the island keeps. */
     public static final int BLUBS = 5, VISJES = 4;
+    /** The Zandguh's little bag of droomzand (once per turning; 1.10.10: 3 -> 9). */
+    public static final int ZANDGUH_ZAND = 9;
     /** A Blub's persistent data: which cushion it goes to / sits on (1-based; 0 = none), and how long it has been on its way. */
     public static final String KUSSEN = "guhs_molen_kussen", WACHT = "guhs_molen_wacht";
     static final String HINT = "guhs_molen_hint";
@@ -466,7 +468,7 @@ public final class Molen {
             }
             run.gemalen.add(sp.getUUID());
             stand.setDirty();
-            ItemStack zakje = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), 3);
+            ItemStack zakje = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), ZANDGUH_ZAND);
             if (!sp.getInventory().add(zakje)) {
                 sp.drop(zakje, false);
             }

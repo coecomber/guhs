@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "guhs:knuffelblok_wolkje",
-    "minecraft:slime_ball"
+    "#guhs:slijmballen"
   ],
   "result": {
     "id": "guhs:stuiterkussen_wolkje",

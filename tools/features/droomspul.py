@@ -207,7 +207,7 @@ def spullen(h):
     for naam, maak in (("zeepje", zeepje), ("sterlampje", sterlampje), ("fotootje", fotootje)):
         h.save(maak(), "item", f"{naam}.png")
         h.item_model(naam)
-    h.shapeless("zeepje", ["minecraft:slime_ball", "minecraft:pink_dye", "minecraft:sugar"], "guhs:zeepje", 2)
+    h.shapeless("zeepje", ["#guhs:slijmballen", "minecraft:pink_dye", "minecraft:sugar"], "guhs:zeepje", 2)
     h.shapeless("sterlampje", ["minecraft:glowstone_dust", "minecraft:gold_nugget", "minecraft:glass_pane"], "guhs:sterlampje")
     h.shapeless("fotootje", ["minecraft:paper", "minecraft:ink_sac", "minecraft:pink_dye"], "guhs:fotootje")
     for naam, (tafel, kans) in LOOT.items():

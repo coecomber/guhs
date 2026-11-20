@@ -89,9 +89,9 @@ def extra(h):
     h.shapeless("knuffelbad_badtegel", ["minecraft:white_concrete", "minecraft:white_concrete", "minecraft:white_concrete", "minecraft:white_concrete",
                                        "minecraft:light_blue_dye"], "guhs:knuffelbad_badtegel", 4)
     h.shaped("glimtegel", ["TTT", "TGT", "TTT"], {"T": "guhs:knuffelbad_badtegel", "G": "minecraft:glow_ink_sac"}, "guhs:glimtegel", 8)
-    h.shaped("knuffelbad_glijgoot", ["TT", "TS"], {"T": "guhs:trechtertegel", "S": "minecraft:slime_ball"}, "guhs:knuffelbad_glijgoot", 4)
+    h.shaped("knuffelbad_glijgoot", ["TT", "TS"], {"T": "guhs:trechtertegel", "S": "#guhs:slijmballen"}, "guhs:knuffelbad_glijgoot", 4)
     h.shapeless("knuffelbad_schuim", ["minecraft:snowball", "minecraft:snowball", "minecraft:pink_dye", "guhs:kaas_knabbels"], "guhs:knuffelbad_schuim", 4)
-    h.shapeless("guhshampoo", ["minecraft:glass_bottle", "minecraft:pink_dye", "minecraft:slime_ball"], "guhs:guhshampoo", 1)
+    h.shapeless("guhshampoo", ["minecraft:glass_bottle", "minecraft:pink_dye", "#guhs:slijmballen"], "guhs:guhshampoo", 1)
     h.shaped("guh_fohn", ["PPI", " R ", " P "], {"P": "minecraft:pink_concrete", "I": "minecraft:iron_ingot", "R": "minecraft:redstone"}, "guhs:guh_fohn", 1)
     h.shapeless("knuffelbad_badeendje", ["minecraft:yellow_wool", "minecraft:orange_dye", "guhs:kaas_knabbels"], "guhs:knuffelbad_badeendje", 2)
     add = h.add_tag

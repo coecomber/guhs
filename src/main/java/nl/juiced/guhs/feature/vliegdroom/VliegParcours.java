@@ -33,6 +33,8 @@ public final class VliegParcours {
     public static final String BESTE = "guhs_vlieg_beste", DIPLOMA = "guhs_vlieg_diploma", DAG = "guhs_vlieg_dag";
     /** Ticks without passing a ring before the round is off. */
     public static final int KWIJT = 45 * 20;
+    /** Droomzand with the diploma (first whole round) and for a record once a day (1.10.10: 5 -> 15, 2 -> 6). */
+    public static final int DIPLOMA_ZAND = 15, RECORD_ZAND = 6;
     /** How close to a ring's middle counts as through it (part of its radius). */
     static final double BINNEN = 0.95;
 
@@ -140,14 +142,14 @@ public final class VliegParcours {
         if (!saved.getBooleanOr(DIPLOMA, false)) {
             saved.putBoolean(DIPLOMA, true);
             geef(p, new ItemStack(VliegdroomFeature.DIPLOMA.get()));
-            geef(p, droomzand(5));
+            geef(p, droomzand(DIPLOMA_ZAND));
             p.sendSystemMessage(Component.translatable("gui.guhs.vliegdroom.diploma", tekstTijd(ticks)).withStyle(ChatFormatting.LIGHT_PURPLE));
             uit = Uitkomst.DIPLOMA;
         } else if (record) {
             long dag = Band.dag(level.getServer());
             if (saved.getLongOr(DAG, Long.MIN_VALUE) != dag) {
                 saved.putLong(DAG, dag);
-                geef(p, droomzand(2));
+                geef(p, droomzand(RECORD_ZAND));
                 p.sendSystemMessage(Component.translatable("gui.guhs.vliegdroom.record_beloning", tekstTijd(ticks)).withStyle(ChatFormatting.GOLD));
                 uit = Uitkomst.RECORD_BELONING;
             } else {

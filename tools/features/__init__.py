@@ -360,6 +360,8 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhwinter_spellen',   # race, schaatsrondje, oliebollen, shop, hidden pepernoten (feature/guhwinter/spellen)
             'guhwinter_verhaal',   # the 3-chapter winter story + its 3 deco blocks (feature/guhwinter/verhaal)
             'guhwinter_lootjes',   # Het Grote Boek, the draw, the creative plots, the Surprise (feature/guhwinter/lootjes)
+            # 1.10.10 economie: golden star looks, the zandhoopje + its spots on the dream islands, the texts (feature/droomzand)
+            'economie1110',
             ]
 
 

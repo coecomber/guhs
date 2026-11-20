@@ -102,7 +102,7 @@ public class DirigentGameTests {
         c.eindeNu(p);
         Item zand = DroomblokkenFeature.DROOMZAND.get();
         int na1 = tel(p.getInventory(), zand);
-        helper.assertTrue(na1 >= 3, "droomzand for the stars (got " + na1 + ")");
+        helper.assertTrue(na1 >= 3 * Concert.ZAND_PER_STER, "droomzand for the stars (got " + na1 + ")");
         helper.assertTrue(GuhQuests.saved(p).getIntOr(Concert.RECORD, 0) == Concert.MAX, "the record is kept");
         Concert.wisAlles();
         p.getInventory().clearContent();
@@ -113,7 +113,7 @@ public class DirigentGameTests {
             c2.raak(i, 2);
         }
         c2.eindeNu(p);
-        helper.assertTrue(tel(p.getInventory(), zand) == 3, "the same day: only the stars' droomzand (got "
+        helper.assertTrue(tel(p.getInventory(), zand) == 3 * Concert.ZAND_PER_STER, "the same day: only the stars' droomzand (got "
                 + tel(p.getInventory(), zand) + ")");
         helper.assertTrue(tel(p.getInventory(), DroomblokkenFeature.MAANBLOEMETJE.get().asItem()) == 0, "and no big prize");
         Concert.wisAlles();

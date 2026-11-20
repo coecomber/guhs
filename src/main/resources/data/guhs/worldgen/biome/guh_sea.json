@@ -63,9 +63,9 @@
       },
       {
         "type": "guhs:guh_slime",
-        "weight": 8,
-        "minCount": 1,
-        "maxCount": 2
+        "weight": 14,
+        "minCount": 2,
+        "maxCount": 4
       }
     ]
   },

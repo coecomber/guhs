@@ -7227,6 +7227,18 @@
         "block.guhs.guhwinter_surprise",
         "key.guhs.guhwinter_surprise_draai"
       ]
+    },
+    {
+      "id": "c511_economie",
+      "title": "1.10.10 economie: the golden star, the Sterrenreeks, the zandhoopje, cuddling a guh slime",
+      "prefixes": [
+        "item.guhs.droomsterretje_goud",
+        "gui.guhs.sterren.goud",
+        "gui.guhs.sterren.reeks",
+        "block.guhs.droomzandhoopje",
+        "gui.guhs.zandhoopje.",
+        "gui.guhs.guh_slime."
+      ]
     }
   ]
 }

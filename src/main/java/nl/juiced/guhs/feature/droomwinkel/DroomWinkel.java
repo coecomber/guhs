@@ -155,7 +155,7 @@ public final class DroomWinkel {
      * so a bed that does not exist yet is simply not in it) is on sale for {@value #BED_PRIJS} droomzand.
      */
     public static final TagKey<Item> BEDDEN = TagKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath("guhs", "droomwinkel/bedden"));
-    static final int BED_PRIJS = 16;
+    static final int BED_PRIJS = 10;   // (1.10.10: 16 -> 10)
 
     private static List<Aanbod> bedden() {
         List<Aanbod> uit = new ArrayList<>();

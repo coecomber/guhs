@@ -4510,11 +4510,14 @@ def build():
               stats=[(("Health", "Levens"), "10"), (("Temper", "Humeur"), t("always friendly", "altijd vriendelijk"))]) + \
         entry(img("guh_slime", "Guh slime"), "Guh slime", "Guhslijm",
               p("A pink slime with big guh eyes. Bounces around happily and splits like a normal slime, but it's a <b>peaceful</b> "
-                "creature: it never hurts you. The little ones drop <b>guh slimeballs</b> &mdash; nine make a pink slime block.",
+                "creature: it never hurts you. The little and medium ones drop <b>guh slimeballs</b> &mdash; nine make a pink slime block. "
+                "Right-click one with an empty hand for a cuddle: it gives you a guh slimeball (then it needs five minutes). A guh "
+                "slimeball works as a slimeball in the mod's recipes, and one crafts into a plain slimeball.",
                 "Een roze slijm met grote guhogen. Stuitert vrolijk rond en splitst zoals een gewone slijm, maar het is een "
-                "<b>vredig</b> wezen: hij doet je nooit pijn. De kleintjes laten <b>guhslijmballen</b> vallen &mdash; negen worden een "
-                "roze slijmblok."),
-              stats=[(("Drops", "Laat vallen"), icon("guh_slimeball", "Guh slimeball") + " " + t("guh slimeballs (small ones)", "guhslijmballen (kleintjes)"))]) + \
+                "<b>vredig</b> wezen: hij doet je nooit pijn. De kleintjes en middelgrote laten <b>guhslijmballen</b> vallen &mdash; negen "
+                "worden een roze slijmblok. Rechtsklik er een met lege hand voor een knuffel: dan krijg je een guhslijmbal (daarna moet hij "
+                "vijf minuten bijkomen). Een guhslijmbal telt als slijmbal in de recepten van de mod, en in de werkbank maak je er een gewone slijmbal van."),
+              stats=[(("Drops", "Laat vallen"), icon("guh_slimeball", "Guh slimeball") + " " + t("guh slimeballs (small and medium ones; a cuddle)", "guhslijmballen (kleintjes en middelgrote; een knuffel)"))]) + \
         entry(img("guh_vis", "Guh fish"), "Guh fish", "Guhvis",
               p("Chubby pink fish with guh eyes, swimming in schools in the pink pools of the <b>guh sea</b>. Catch one in a bucket, "
                 "or fish in the Guhmension. Eat it raw, or <b>fry</b> it: in a furnace, smoker, on a campfire &mdash; or in the guh "

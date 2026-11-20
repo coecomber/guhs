@@ -49,6 +49,8 @@ public final class DroomKistje {
     static final String T = "gui.guhs.droomweer.kistje.";
     /** How far around the big star the kistje is looked for and put. */
     static final int ZOEK_R = 7, ZOEK_OMLAAG = 20, ZOEK_OMHOOG = 4;
+    /** The daily droomzand (1.10.10: 2-4 -> 8-12). */
+    public static final int ZAND_MIN = 8, ZAND_MAX = 12;
 
     public enum Uitkomst { DROOMWEER, CADEAUTJE, MORGEN }
 
@@ -96,7 +98,7 @@ public final class DroomKistje {
 
     /** Every day after the first: droomzand and a little something. */
     private static void cadeautje(ServerPlayer p, RandomSource r) {
-        Minigames.give(p, new ItemStack(DroomblokkenFeature.DROOMZAND.get(), 2 + r.nextInt(3)));
+        Minigames.give(p, new ItemStack(DroomblokkenFeature.DROOMZAND.get(), ZAND_MIN + r.nextInt(ZAND_MAX - ZAND_MIN + 1)));
         ItemStack extra = switch (r.nextInt(4)) {
             case 3 -> new ItemStack(nl.juiced.guhs.feature.blub.BlubFeature.KLEDING_ITEMS.get(
                     nl.juiced.guhs.feature.blub.BlubKleding.KLEDING.get(r.nextInt(nl.juiced.guhs.feature.blub.BlubKleding.KLEDING.size()))).get());
