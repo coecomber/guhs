@@ -436,13 +436,17 @@ public class SausdierenGameTests {
         // (the far spot lies outside the test's own chunks: an entity put into a chunk that is not loaded can't be found any more)
         Vec3 ver = baan.start().add(Proefrit.TE_VER + 6, 0, 0);
         ChunkPos verChunk = ChunkPos.containing(BlockPos.containing(ver));
-        level.setChunkForced(verChunk.x(), verChunk.z(), true);
+        // 1.10.10: only unforce it when this test forced it. The far chunk can hold another test of the batch, still waiting
+        // for its chunks to load; unforcing that one made it wait for ever and the whole run stalled (full suite, twice)
+        boolean zelfGeforceerd = level.setChunkForced(verChunk.x(), verChunk.z(), true);
         level.getChunk(verChunk.x(), verChunk.z());
         try {
             zet(nieuw, ver);
             Proefrit.tick(a);
         } finally {
-            level.setChunkForced(verChunk.x(), verChunk.z(), false);
+            if (zelfGeforceerd) {
+                level.setChunkForced(verChunk.x(), verChunk.z(), false);
+            }
         }
         helper.assertTrue(Proefrit.poort(a) == 0, "strayed far: the lap starts again (gate " + Proefrit.poort(a) + ")");
         helper.assertTrue(nieuw.isAlive() && nieuw.distanceToSqr(baan.start()) < 9, "strayed far: back to the start (" + nieuw.position() + ")");
