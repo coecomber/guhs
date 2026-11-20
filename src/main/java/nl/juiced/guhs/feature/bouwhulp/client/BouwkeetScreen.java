@@ -292,7 +292,10 @@ public class BouwkeetScreen extends Screen {
         if (tekort.isEmpty()) {
             GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.alles_er"), x, y + 17, W - 20, 0.75f, GROEN, false);
         } else {
-            GidsTekst.passend(g, Component.translatable("gui.guhs.bouwhulp.spook.tekort"), x, y + 17, 60, 0.75f, ROOD, false);
+            int dekking = pr.getIntOr("Dekking", -1);   // 1.10.10: the 80% rule
+            Component tekortKop = dekking < 0 ? Component.translatable("gui.guhs.bouwhulp.spook.tekort")
+                    : Component.translatable("gui.guhs.bouwkeet.dekking", dekking);
+            GidsTekst.passend(g, tekortKop, x, y + 17, 60, 0.75f, dekking >= 80 ? 0xFFC8862A : ROOD, false);
             for (int i = 0; i < Math.min(12, tekort.size()); i++) {
                 CompoundTag c = tekort.getCompoundOrEmpty(i);
                 var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));

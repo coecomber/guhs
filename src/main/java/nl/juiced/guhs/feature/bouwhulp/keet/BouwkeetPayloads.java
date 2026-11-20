@@ -103,7 +103,9 @@ public final class BouwkeetPayloads {
             pr.putInt("Rest", s.nogTeGaan());
             var g = s.ontwerp().grootte();
             pr.putIntArray("Grootte", new int[] {g.getX(), g.getY(), g.getZ()});
-            pr.put("Tekort", items(Spookbouw.tekort(p, s)));
+            nl.juiced.guhs.feature.bouwhulp.kern.Werkplan plan = Spookbouw.plan(p, s);
+            pr.put("Tekort", items(plan.tekort()));
+            pr.putInt("Dekking", Spookbouw.dekkingProcent(p, s, plan));   // 1.10.10: -1, or the 80% rule's percentage
             pr.putInt("Ongedaan", Spoken.van(level).ongedaanTeMaken(p.getUUID()));
             pr.putBoolean("Pof", keet.werkNiveau().pof());
             nl.juiced.guhs.feature.bouwhulp.kern.SpookPayloads.bereik(level, s, pr);                         // test round 5: the reach, blocks outside it
@@ -160,7 +162,8 @@ public final class BouwkeetPayloads {
                     if (mag && s != null) {
                         Spoken.Bouwen b = Spookbouw.bouw(p, s, a == Actie.ALSNOG);
                         if (!b.begonnen()) {
-                            Spookbouw.toonBediening(p, s);   // (the panel asks "alsnog bouwen?" with the list)
+                            // (the panel asks "toch bouwen?" with the list, or says it is below 80%)
+                            nl.juiced.guhs.feature.bouwhulp.kern.SpookPayloads.bediening(p, s, b.tekort(), true, b);
                             return;
                         }
                     }

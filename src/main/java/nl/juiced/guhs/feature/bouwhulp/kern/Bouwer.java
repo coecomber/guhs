@@ -39,6 +39,14 @@ public interface Bouwer {
         return false;
     }
 
+    /**
+     * 1.10.10: the 80% rule ({@link Spoken#MIN_DEKKING}): with something missing, start only from 80% and leave the rest
+     * open (air) instead of ghosts. Default no: the old "alsnog bouwen" (missing spots stay ghosts).
+     */
+    default boolean tachtigProcent() {
+        return false;
+    }
+
     /** A block was placed (for sounds, the crane, the bouwguhs). */
     default void geplaatst(ServerLevel level, Spook spook, BlockPos pos) {
     }

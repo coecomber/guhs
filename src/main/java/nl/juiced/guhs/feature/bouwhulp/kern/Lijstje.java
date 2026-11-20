@@ -29,11 +29,16 @@ public final class Lijstje {
 
     /** 1.10.10: with the lines of what the keet crafts itself ("12× Eiken trap (worden gemaakt van 3× Eiken stam)"). */
     public static boolean geef(ServerPlayer p, String project, Map<Item, Integer> nodig, List<Werkplan.Gemaakt> gemaakt) {
+        return geef(p, project, nodig, gemaakt, -1);
+    }
+
+    /** 1.10.10: {@code dekking} >= 0: the book also says how much is there (the 80% rule). */
+    public static boolean geef(ServerPlayer p, String project, Map<Item, Integer> nodig, List<Werkplan.Gemaakt> gemaakt, int dekking) {
         if (nodig.isEmpty()) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.bouwhulp.lijstje.niets").withStyle(ChatFormatting.GREEN));
             return false;
         }
-        ItemStack boek = boek(project, p.getGameProfile().name(), nodig, gemaakt);
+        ItemStack boek = boek(project, p.getGameProfile().name(), nodig, gemaakt, dekking);
         if (!p.getInventory().add(boek)) {
             p.drop(boek, false);
         }
@@ -46,14 +51,24 @@ public final class Lijstje {
     }
 
     public static ItemStack boek(String project, String schrijver, Map<Item, Integer> nodig, List<Werkplan.Gemaakt> gemaakt) {
+        return boek(project, schrijver, nodig, gemaakt, -1);
+    }
+
+    public static ItemStack boek(String project, String schrijver, Map<Item, Integer> nodig, List<Werkplan.Gemaakt> gemaakt, int dekking) {
         List<Map.Entry<Item, Integer>> lijst = new ArrayList<>(nodig.entrySet());
         lijst.sort(Map.Entry.<Item, Integer>comparingByValue().reversed());
         int totaal = lijst.stream().mapToInt(Map.Entry::getValue).sum();
         List<Filterable<Component>> bladen = new ArrayList<>();
         MutableComponent blad = Component.empty()
                 .append(Component.translatable("gui.guhs.bouwhulp.lijstje.kop", project).withStyle(ChatFormatting.BOLD)).append("\n")
-                .append(Component.translatable("gui.guhs.bouwhulp.lijstje.totaal", totaal).withStyle(ChatFormatting.DARK_GRAY)).append("\n\n");
+                .append(Component.translatable("gui.guhs.bouwhulp.lijstje.totaal", totaal).withStyle(ChatFormatting.DARK_GRAY)).append("\n");
         int regels = 3;
+        if (dekking >= 0) {
+            blad.append(Component.translatable("gui.guhs.bouwhulp.lijstje.dekking", dekking, Spoken.MIN_DEKKING)
+                    .withStyle(dekking >= Spoken.MIN_DEKKING ? ChatFormatting.DARK_GREEN : ChatFormatting.DARK_RED)).append("\n");
+            regels += 2;
+        }
+        blad.append("\n");
         for (Map.Entry<Item, Integer> e : lijst) {
             if (regels >= PER_BLAD + 3) {
                 bladen.add(Filterable.passThrough(blad));

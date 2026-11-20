@@ -152,6 +152,11 @@ public final class SpookPayloads {
 
     /** Opens (or refreshes) the control panel of a ghost for this player. */
     public static void bediening(ServerPlayer p, Spook s, Map<Item, Integer> tekort, boolean vraagAlsnog) {
+        bediening(p, s, tekort, vraagAlsnog, null);
+    }
+
+    /** The same, with the answer of "Bouw!" (1.10.10: the 80% rule's coverage: the confirm step or the refusal). */
+    public static void bediening(ServerPlayer p, Spook s, Map<Item, Integer> tekort, boolean vraagAlsnog, @javax.annotation.Nullable Spoken.Bouwen b) {
         ServerLevel level = p.level();
         CompoundTag t = new CompoundTag();
         t.store("Id", UUIDUtil.CODEC, s.id);
@@ -171,6 +176,12 @@ public final class SpookPayloads {
         t.putBoolean("Keet", s.bouwerPos != null);
         bereik(level, s, t);
         t.putBoolean("VraagAlsnog", vraagAlsnog);
+        if (b != null && b.dekking() >= 0) {
+            t.putInt("Dekking", b.dekking());
+            t.putInt("Open", b.open());
+            t.putBoolean("TeWeinig", b.teWeinig());
+            t.putInt("MinDekking", Spoken.MIN_DEKKING);
+        }
         t.putInt("Ongedaan", Spoken.van(level).ongedaanTeMaken(p.getUUID()));
         t.put("Tekort", items(tekort));
         t.put("Nodig", items(Spoken.van(level).nogNodig(level, s)));
