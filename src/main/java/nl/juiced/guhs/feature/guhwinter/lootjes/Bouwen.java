@@ -44,7 +44,7 @@ import nl.juiced.guhs.feature.guhwinter.Guhwinter;
 import nl.juiced.guhs.feature.guhwinter.GuhwinterZone;
 
 /**
- * Building on your lootjes plot (design R5, R10: open from the draw on 2 Dec until 5 Dec 18:00).
+ * Building on your lootjes plot (design R5, R10: open from the draw on 1 Dec until 5 Dec 18:00).
  * <ul>
  *   <li>Walk into your own plot: creative, your survival things stashed ({@link Bouwkist}). Walk out (through the gate, on the
  *       ground): everything back. Flying is kept to the plot (+1 block around it, +1 above).</li>

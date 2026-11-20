@@ -10,7 +10,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   - **plein**: the 75x75 winter square (Krijn & Corine's house, canal, pond, stalls, plots), the arrival at the new portal, the old peak restored, anchors (`data/guhs/guhwinter/ankers.json`). `/guhs winter inrichten` does the one-time setup; on 3 Jan the square becomes the empty party-square frame.
   - **npc**: 23 event guhs (the six, the family, Sinterklaas, Pakjesguhs, Ozovads the horse, the winkelguh) with idle lines per phase and a scene API.
   - **verhaal**: three story chapters (Verdwaalde Sint, Kerst bij Papa & Mama, Oud & Nieuw) with cutscenes, the schoentje, the kerstwandeling, the prikbord, and three permanent reward deco blocks.
-  - **lootjes**: Het Grote Boek sign-up (max 8), the draw on 2 Dec, creative 7x7x7 plots until 5 Dec 18:00, each build captured as a placeable Surprise and delivered on pakjesavond.
+  - **lootjes**: Het Grote Boek sign-up (max 8), sign-up through 30 Nov, the draw on 1 Dec 00:00, creative 7x7x7 plots until 5 Dec 18:00, each build captured as a placeable Surprise and delivered on pakjesavond.
   - **tekenen**: a 64x64 drawing editor, hangable 2x2 drawings, one kerstboom drawing per player (cards around the tree), and the Kerstalbum from 26 Dec.
   - **spellen**: Pepernotenrace (arcade runner) and the schaatsrondje with highscore boards, oliebollen bakken, hidden pepernoten, and the pepernoten shop.
   - **hoentjes**: the waterhoentje and alpine hoentje, rare permanent Guhmension birds with Guhdex bonus pages and a NOWAY chat line.

@@ -41,9 +41,9 @@ public class GuhwinterKernGameTests {
         helper.assertTrue(GuhwinterFase.op(ZonedDateTime.of(2026, 12, 5, 17, 59, 0, 0, ZoneOffset.UTC)) == GuhwinterFase.SINT, "UTC 17:59 = still Sint");
         helper.assertTrue(GuhwinterFase.VOOR.sint() && GuhwinterFase.VOOR.bezig() && GuhwinterFase.PAKJESAVOND.sint() && !GuhwinterFase.KERST.sint()
                 && GuhwinterFase.OUDJAAR.bezig() && !GuhwinterFase.AFGELOPEN.bezig(), "VOOR counts as Sint; AFGELOPEN is over");
-        helper.assertTrue(Guhwinter.inschrijvenOpen(t("2026-12-01 23:59")) && !Guhwinter.inschrijvenOpen(t("2026-12-02 00:00")), "signing up until 1 Dec 23:59");
-        helper.assertTrue(!Guhwinter.bouwenOpen(t("2026-12-01 23:59")) && Guhwinter.bouwenOpen(t("2026-12-02 00:00"))
-                && Guhwinter.bouwenOpen(t("2026-12-05 17:59")) && !Guhwinter.bouwenOpen(t("2026-12-05 18:00")), "building 2 Dec - 5 Dec 18:00");
+        helper.assertTrue(Guhwinter.inschrijvenOpen(t("2026-11-30 23:59")) && !Guhwinter.inschrijvenOpen(t("2026-12-01 00:00")), "signing up through 30 Nov 23:59");
+        helper.assertTrue(!Guhwinter.bouwenOpen(t("2026-11-30 23:59")) && Guhwinter.bouwenOpen(t("2026-12-01 00:00"))
+                && Guhwinter.bouwenOpen(t("2026-12-05 17:59")) && !Guhwinter.bouwenOpen(t("2026-12-05 18:00")), "building 1 Dec - 5 Dec 18:00");
         helper.assertTrue(Guhwinter.kerstboomOpen(t("2026-12-25 23:59")) && !Guhwinter.kerstboomOpen(t("2026-12-26 00:00")), "kerstboom until 25 Dec");
         helper.assertTrue(!Guhwinter.albumOpen(t("2026-12-25 23:59")) && Guhwinter.albumOpen(t("2026-12-26 00:00"))
                 && Guhwinter.albumOpen(t("2027-01-02 23:59")) && !Guhwinter.albumOpen(t("2027-01-03 00:00")), "album 26 Dec - 2 Jan");
@@ -81,7 +81,7 @@ public class GuhwinterKernGameTests {
     @GuhTest(template = "empty", batch = B)
     public static void momenten(GameTestHelper helper) {
         MinecraftServer s = helper.getLevel().getServer();
-        ZonedDateTime t1 = t("2026-12-02 00:00"), t2 = t("2026-12-05 19:00"), t3 = t("2027-01-03 00:00");
+        ZonedDateTime t1 = t("2026-12-01 00:00"), t2 = t("2026-12-05 19:00"), t3 = t("2027-01-03 00:00");
         List<String> log = new ArrayList<>();
         Momenten m = nieuw(log, t1, t2, t3);
         boolean dubbel = false;

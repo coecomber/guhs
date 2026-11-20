@@ -47,10 +47,10 @@ public final class Guhwinter {
 
     /** Before this the phase is VOOR (which counts as Sint). The planned release. */
     public static final ZonedDateTime START = op(2026, 11, 24, 0, 0);
-    /** Lootjes: signing up is open until 1 Dec 23:59 (so: before this). */
-    public static final ZonedDateTime INSCHRIJVEN_TOT = op(2026, 12, 2, 0, 0);
-    /** Lootjes: the Sint draws at 2 Dec 00:00; the building plots open. */
-    public static final ZonedDateTime TREKKING = op(2026, 12, 2, 0, 0);
+    /** Lootjes: signing up is open through 30 Nov 23:59 (so: before this). */
+    public static final ZonedDateTime INSCHRIJVEN_TOT = op(2026, 12, 1, 0, 0);
+    /** Lootjes: the Sint draws at 1 Dec 00:00; the building plots open. */
+    public static final ZonedDateTime TREKKING = op(2026, 12, 1, 0, 0);
     /** Lootjes: building and drawing until 5 Dec 18:00 (before this). */
     public static final ZonedDateTime BOUWEN_TOT = op(2026, 12, 5, 18, 0);
     /** Pakjesavond: 5 Dec 19:00 (phase PAKJESAVOND, the gifts are unwrapped). */
@@ -126,7 +126,7 @@ public final class Guhwinter {
         return fase(server).bezig();
     }
 
-    /** Lootjes: may you still sign up (before 2 Dec 00:00)? */
+    /** Lootjes: may you still sign up (before 1 Dec 00:00)? */
     public static boolean inschrijvenOpen(MinecraftServer server) {
         return inschrijvenOpen(nu(server));
     }
@@ -135,7 +135,7 @@ public final class Guhwinter {
         return t.isBefore(INSCHRIJVEN_TOT);
     }
 
-    /** Lootjes: are the building plots open (2 Dec 00:00 until 5 Dec 18:00)? */
+    /** Lootjes: are the building plots open (1 Dec 00:00 until 5 Dec 18:00)? */
     public static boolean bouwenOpen(MinecraftServer server) {
         return bouwenOpen(nu(server));
     }

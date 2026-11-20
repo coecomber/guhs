@@ -33,9 +33,9 @@ import nl.juiced.guhs.feature.guhwinter.tekenen.Tekeningen;
 /**
  * Lootjes trekken (design §0 Lootjes, R1, R5, R6, R9, R10): the public API and the whole flow.
  * <ol>
- *   <li><b>Signing up</b> at Het Grote Boek ({@link GroteBoekBlok}, {@link #openBoek}) from the start until 1 Dec 23:59; first
+ *   <li><b>Signing up</b> at Het Grote Boek ({@link GroteBoekBlok}, {@link #openBoek}) from the start through 30 Nov 23:59; first
  *       come, first served, at most {@link #MAX}; signing out is fine until the deadline;</li>
- *   <li><b>the draw</b> on 2 Dec 00:00 ({@code trekking:lootjes}): a derangement ({@link Trekking}); each giver gets one plot
+ *   <li><b>the draw</b> on 1 Dec 00:00 ({@code trekking:lootjes}): a derangement ({@link Trekking}); each giver gets one plot
  *       and a letter from the Sint (now, or at the next login). Fewer than two names: no draw, a sweet letter and 25 pepernoten;</li>
  *   <li><b>building</b> until 5 Dec 18:00 in creative on your own plot ({@link Bouwen}), and your drawing for your lootje
  *       (from the book or the plot's sign: {@link #teken});</li>
@@ -254,7 +254,7 @@ public final class Lootjes {
     }
 
     // =====================================================================================================================
-    // the draw (2 Dec 00:00)
+    // the draw (1 Dec 00:00)
     // =====================================================================================================================
 
     /** The Sint draws. Returns a line for the dev command / log. */

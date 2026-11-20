@@ -65,9 +65,9 @@ TEKSTEN = {
     K + "boek.knop.in.hover": ("Doe mee met lootjes trekken", "Join the drawing of names"),
     K + "boek.knop.uit": ("[Toch maar niet]", "[Never mind]"),
     K + "boek.knop.uit.hover": ("Je naam weer uit het boek halen", "Take your name out of the book again"),
-    K + "boek.wanneer": ("Inschrijven kan t/m 1 december 23:59. Op 2 december trekt de Sint de lootjes, en dan mag je bouwen en tekenen "
+    K + "boek.wanneer": ("Inschrijven kan t/m 30 november 23:59. Op 1 december trekt de Sint de lootjes, en dan mag je bouwen en tekenen "
                          "tot 5 december 18:00. Pakjesavond: 5 december 19:00!",
-                         "You can sign up until 1 December 23:59. On 2 December the Sint draws the names, then you build and draw until "
+                         "You can sign up through 30 November 23:59. On 1 December the Sint draws the names, then you build and draw until "
                          "5 December 18:00. Pakjesavond: 5 December 19:00!"),
     K + "boek.trekken_straks": ("Het boek is dicht. Om middernacht trekt de Sint de lootjes... spannend, njeg!",
                                 "The book is closed. At midnight the Sint draws the names... exciting, nyeg!"),
@@ -90,12 +90,12 @@ TEKSTEN = {
     K + "boek.klaar": ("Alle surprises zijn uitgedeeld. Wat een feest! Vahoeg!", "All the surprises have been handed out. What a party! Wahoog!"),
     K + "in.dicht": ("Het Grote Boek is nu dicht: inschrijven kan niet meer.", "The Big Book is closed now: you can't sign up any more."),
     K + "in.al": ("Je naam staat al in het boek, gekke guh!", "Your name is already in the book, silly guh!"),
-    K + "in.gelukt": ("Je naam staat in Het Grote Boek! (%s van de %s) Op 2 december krijg je een briefje van de Sint.",
-                      "Your name is in the Big Book! (%s of %s) On 2 December you'll get a letter from the Sint."),
+    K + "in.gelukt": ("Je naam staat in Het Grote Boek! (%s van de %s) Op 1 december krijg je een briefje van de Sint.",
+                      "Your name is in the Big Book! (%s of %s) On 1 December you'll get a letter from the Sint."),
     K + "uit.te_laat": ("Uitschrijven kan niet meer: de lootjes zijn al (bijna) getrokken.", "You can't sign out any more: the names are (almost) drawn."),
     K + "uit.niet": ("Je naam stond niet in het boek.", "Your name wasn't in the book."),
-    K + "uit.gelukt": ("Je naam is weer uit het boek. Jammer! Je mag je t/m 1 december opnieuw inschrijven.",
-                       "Your name is out of the book again. Aww! You can sign up again until 1 December."),
+    K + "uit.gelukt": ("Je naam is weer uit het boek. Jammer! Je mag je t/m 30 november opnieuw inschrijven.",
+                       "Your name is out of the book again. Aww! You can sign up again through 30 November."),
     # --- drawing ---
     K + "teken.voor": ("Je tekent voor %s. Ssst!", "You're drawing for %s. Shh!"),
     K + "teken.geen_lootje": ("Je hebt geen lootje getrokken, dus je hoeft niks te tekenen.", "You didn't draw a name, so there's nothing to draw."),
@@ -116,8 +116,8 @@ TEKSTEN = {
     K + "bouwen.niet_jouw": ("Dit is het bouwplekje van een ander. Kijken mag, naar binnen niet!",
                              "This is someone else's build plot. Looking is fine, going in is not!"),
     K + "bouwen.vrij": ("Dit bouwplekje is (nog) van niemand.", "This build plot belongs to no one (yet)."),
-    K + "bouwen.dicht": ("Bouwen kan nu niet: tussen 2 december en 5 december 18:00 is het open.",
-                         "You can't build now: it's open between 2 December and 5 December 18:00."),
+    K + "bouwen.dicht": ("Bouwen kan nu niet: tussen 1 december en 5 december 18:00 is het open.",
+                         "You can't build now: it's open between 1 December and 5 December 18:00."),
     K + "bouwen.modus": ("Kom in survival of adventure je bouwplekje in, dan krijg je creative.",
                          "Walk into your build plot in survival or adventure to get creative."),
     K + "bouwen.mag_niet": ("%s mag niet op je bouwplekje (geen kisten, machines, redstone of spawners).",
@@ -188,22 +188,22 @@ UITLEG = {
     "guhwinter_grote_boek": (
         "Het Grote Boek van Sinterklaas ligt op een lessenaar naast zijn stoel op het Winterplein (Guhwinter, de Sinterklaastijd). "
         "Rechtsklik erop en de bladzijde staat in je chat: hoeveel namen er al in staan, en een knop om je in te schrijven voor "
-        "lootjes trekken (of toch maar niet).\n\nInschrijven kan tot en met 1 december 23:59, met maximaal 8 namen: wie het eerst "
-        "komt, het eerst maalt. Op 2 december trekt de Sint en krijg je een brief met het lootje dat jij hebt (nooit jezelf). Daarna "
+        "lootjes trekken (of toch maar niet).\n\nInschrijven kan tot en met 30 november 23:59, met maximaal 8 namen: wie het eerst "
+        "komt, het eerst maalt. Op 1 december trekt de Sint en krijg je een brief met het lootje dat jij hebt (nooit jezelf). Daarna "
         "staat in het boek ook je bouwplekje en een knop voor je tekening.",
         "The Big Book of Sinterklaas lies on a lectern next to his chair on the Winter Square (Guhwinter, the Sinterklaas time). "
         "Right-click it and the page shows in your chat: how many names are in it, and a button to sign up for the drawing of names "
-        "(or never mind).\n\nYou can sign up until 1 December 23:59, with at most 8 names: first come, first served. On 2 December "
+        "(or never mind).\n\nYou can sign up through 30 November 23:59, with at most 8 names: first come, first served. On 1 December "
         "the Sint draws and you get a letter with the name you drew (never yourself). After that the book also shows your build "
         "plot and a button for your drawing."),
     "guhwinter_bouwbord": (
         "Het naambordje van een bouwplekje in het Surprisestraatje op het Winterplein. Er staat op wie er bouwt (\"Gemaakt door\"), "
-        "maar nooit voor wie: dat blijft een geheimpje tot pakjesavond.\n\nVan 2 december tot 5 december 18:00 bouw je op je eigen "
+        "maar nooit voor wie: dat blijft een geheimpje tot pakjesavond.\n\nVan 1 december tot 5 december 18:00 bouw je op je eigen "
         "plekje in creative: alles wat mooi is mag, maar geen kisten, machines, redstone of spawners. Je eigen spullen liggen zolang "
         "veilig bewaard en komen terug zodra je het plekje uit loopt.\n\n"
         "Rechtsklik op het bordje van je eigen plekje opent je tekening voor je lootje. Bij een ander bordje zie je wie daar bouwt.",
         "The name sign of a build plot in Surprise Lane on the Winter Square. It says who builds there (\"Made by\"), but never for "
-        "whom: that stays a secret until pakjesavond.\n\nFrom 2 December until 5 December 18:00 you build on your own plot in "
+        "whom: that stays a secret until pakjesavond.\n\nFrom 1 December until 5 December 18:00 you build on your own plot in "
         "creative: anything pretty goes, but no chests, machines, redstone or spawners. Your own things are kept safe meanwhile and "
         "come back as soon as you walk out of the plot.\n\n"
         "Right-click the sign of your own plot to open the drawing for your name. On someone else's sign you see who builds there."),

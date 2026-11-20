@@ -35,7 +35,7 @@ public final class LootjesData extends SavedData {
     }
 
     final List<Deelnemer> ingeschreven = new ArrayList<>();
-    /** The draw happened (2 Dec); {@code mislukt}: there were fewer than two names, so no draw. */
+    /** The draw happened (1 Dec); {@code mislukt}: there were fewer than two names, so no draw. */
     boolean getrokken, mislukt;
     /** The plots were captured (5 Dec 18:00); the sacks were handed out (5 Dec 19:00). */
     boolean gevangen, bezorgd;
