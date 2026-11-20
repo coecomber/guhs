@@ -179,6 +179,95 @@ public class VadsrijkAmbachtGameTests {
         helper.succeed();
     }
 
+    /** 1.10.12: fishing from a pier: the deck lies 2 above the water and there is no bank at the water line (the Vissteiger, De Haven). */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void scanSteiger(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int x = 0; x < 12; x++) {
+            for (int z = 0; z < 12; z++) {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.DIRT.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.WATER.defaultBlockState());
+                for (int y = 2; y < 7; y++) {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState());
+                }
+            }
+        }
+        for (int z = 0; z < 12; z++) {
+            helper.setBlock(new BlockPos(6, 3, z), Blocks.OAK_PLANKS.defaultBlockState());   // the pier deck
+        }
+        BlockPos anker = helper.absolutePos(new BlockPos(6, 1, 6));
+        List<Spot> water = PlekWereld.scan(sl, anker, new Groep("t_steiger", 1, "x", NodeSoort.VIS, 1, 1, 5, Zoek.WATER, ""));
+        helper.assertTrue(!water.isEmpty(), "fish spots beside the pier");
+        BlockPos deck = helper.absolutePos(new BlockPos(6, 3, 0));
+        for (BlockPos p : water.get(0).posities()) {
+            helper.assertTrue(sl.getFluidState(p).isSource() && Math.abs(p.getX() - deck.getX()) <= 2 && p.getX() != deck.getX(),
+                    "beside (never under) the pier: " + p);
+        }
+        // open sea without a pier: still nothing
+        for (int z = 0; z < 12; z++) {
+            helper.setBlock(new BlockPos(6, 3, z), Blocks.AIR.defaultBlockState());
+        }
+        helper.assertTrue(!PlekWereld.oever(sl, anker), "open water is no shore");
+        helper.succeed();
+    }
+
+    /** 1.10.12: an old save drops the incomplete non-hive groups (scanned again with the new shore rule); the rest stays. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void plekkenOpnieuw(GameTestHelper helper) {
+        Groep haven = AmbachtPlekken.groep("z1_vis_haven"), kamp = AmbachtPlekken.groep("z1_pluk_kamp"),
+                korf = AmbachtPlekken.groep("eiland_bijenhofje");
+        helper.assertTrue(haven != null && kamp != null && korf != null && haven.poi().equals("haven_z1_kamp_vertrek"), "groups (De Haven at the quay)");
+        net.minecraft.nbt.CompoundTag oud = new net.minecraft.nbt.CompoundTag();
+        oud.put(haven.id(), groepTag(haven, 0));
+        oud.put(kamp.id(), groepTag(kamp, kamp.aantal()));
+        oud.put(korf.id(), groepTag(korf, 1));
+        PlekWereld w = PlekWereld.load(oud);
+        helper.assertTrue(w.bekend(haven) == null, "incomplete fishing group dropped");
+        helper.assertTrue(w.bekend(kamp) != null && w.bekend(kamp).size() == kamp.aantal(), "complete group kept");
+        helper.assertTrue(w.bekend(korf) != null && w.bekend(korf).size() == 1, "hive meadow kept (hives are keyed on spot ids)");
+        PlekWereld nieuw = PlekWereld.load(w.save());
+        helper.assertTrue(nieuw.bekend(kamp) != null && nieuw.bekend(korf) != null, "the new version keeps everything");
+        net.minecraft.nbt.CompoundTag v2 = new net.minecraft.nbt.CompoundTag();
+        v2.putInt(PlekWereld.VERSIE_SLEUTEL, PlekWereld.VERSIE);
+        v2.put(haven.id(), groepTag(haven, 0));
+        helper.assertTrue(PlekWereld.load(v2).bekend(haven) != null, "a scan with the new rules is kept, even when it found little");
+        helper.succeed();
+    }
+
+    /** 1.10.12: the admin command takes back all hives of a player, nothing else. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void korvenWeg(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        AmbachtData.geefXp(p, Ambacht.VERZAMELEN, 500, true);
+        net.minecraft.nbt.CompoundTag k = new net.minecraft.nbt.CompoundTag();
+        k.put("eiland_bijenhofje_2", new net.minecraft.nbt.CompoundTag());
+        k.put("z3_korf_kever_2", new net.minecraft.nbt.CompoundTag());
+        AmbachtData.tag(p).put("korven", k);
+        AmbachtData.voegToe(p, "plekken", "z1_pluk_kamp");
+        long xp = AmbachtData.xp(p, Ambacht.VERZAMELEN);
+        helper.assertTrue(Imkeren.allesWeg(p) == 2, "two hives taken back");
+        helper.assertTrue(AmbachtData.tag(p).getCompoundOrEmpty("korven").isEmpty(), "no hives left");
+        helper.assertTrue(AmbachtData.xp(p, Ambacht.VERZAMELEN) == xp && AmbachtData.heeft(p, "plekken", "z1_pluk_kamp"), "the rest stays");
+        helper.assertTrue(Imkeren.allesWeg(p) == 0, "again: none");
+        helper.succeed();
+    }
+
+    private static net.minecraft.nbt.CompoundTag groepTag(Groep g, int spots) {
+        net.minecraft.nbt.CompoundTag c = new net.minecraft.nbt.CompoundTag();
+        c.putLong("anker", g.anker().asLong());
+        net.minecraft.nbt.ListTag l = new net.minecraft.nbt.ListTag();
+        for (int i = 0; i < spots; i++) {
+            net.minecraft.nbt.CompoundTag s = new net.minecraft.nbt.CompoundTag();
+            net.minecraft.nbt.ListTag pos = new net.minecraft.nbt.ListTag();
+            pos.add(net.minecraft.nbt.LongTag.valueOf(g.anker().offset(i, 0, 0).asLong()));
+            s.put("pos", pos);
+            s.put("bloem", new net.minecraft.nbt.ListTag());
+            l.add(s);
+        }
+        c.put("spots", l);
+        return c;
+    }
+
     static Spot testSpot(GameTestHelper helper, NodeSoort a, int tier) {
         return testSpot(helper, a, tier, "t_" + a.id);
     }

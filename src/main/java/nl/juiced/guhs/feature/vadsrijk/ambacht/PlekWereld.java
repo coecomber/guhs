@@ -38,7 +38,7 @@ import nl.juiced.guhs.storage.GuhSavedData;
  *   <li>GROND: a natural floor (grass, moss, podzol, snow...) with 2 free blocks above;</li>
  *   <li>STEEN: a rock floor (stone kinds, dripstone, calcite...), caves included;</li>
  *   <li>BOOM: a natural floor right beside a trunk;</li>
- *   <li>WATER: a still water surface with land within 2 blocks (fished from the shore);</li>
+ *   <li>WATER: a still water surface with land within 2 blocks (fished from the shore; 1.10.12: or from a pier/quay up to 3 higher);</li>
  *   <li>BLOEM: a natural floor with flowers within 6 blocks (the hives; the flowers are kept: the bees fly to them);</li>
  *   <li>KORAAL (U-AMBACHT2, coral diving): a sea floor block with still water above it and the surface 2-{@link #DUIK_DIEP} blocks
  *   up (walkability: a diver always comes up within a few blocks; never in a cave without air above). The spot is the water
@@ -268,13 +268,32 @@ public final class PlekWereld extends SavedData {
         return 0;
     }
 
-    private static boolean oever(Level l, BlockPos p) {
+    /**
+     * Land to fish from beside this water block: a full block at the water line (+0..1) with room above, or (1.10.12) a standable
+     * floor up to {@link #OEVER_HOOG} above the water (a pier, a quay: planks and slabs too) with 2 free blocks above; the water itself
+     * must be open up to that height (never a spot under a pier deck).
+     */
+    static boolean oever(Level l, BlockPos p) {
+        for (int k = 2; k <= OEVER_HOOG; k++) {
+            if (!vrij(l, p.above(k))) {
+                return false;
+            }
+        }
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
-                for (int dy = 0; dy <= 1; dy++) {
+                if (dx == 0 && dz == 0) {
+                    continue;
+                }
+                for (int dy = 0; dy <= OEVER_HOOG; dy++) {
                     BlockPos q = p.offset(dx, dy, dz);
                     BlockState s = l.getBlockState(q);
-                    if (s.getFluidState().isEmpty() && s.isCollisionShapeFullBlock(l, q) && vrij(l, q.above())) {
+                    if (!s.getFluidState().isEmpty()) {
+                        continue;
+                    }
+                    if (dy <= 1 && s.isCollisionShapeFullBlock(l, q) && vrij(l, q.above())) {
+                        return true;
+                    }
+                    if (!s.getCollisionShape(l, q).isEmpty() && !s.is(BlockTags.LEAVES) && vrij(l, q.above()) && vrij(l, q.above(2))) {
                         return true;
                     }
                 }
@@ -282,6 +301,9 @@ public final class PlekWereld extends SavedData {
         }
         return false;
     }
+
+    /** 1.10.12: how high above the water a pier or quay may lie and still count as a shore. */
+    public static final int OEVER_HOOG = 3;
 
     static List<BlockPos> bloemenBij(Level l, BlockPos p, int r) {
         List<BlockPos> uit = new ArrayList<>();
@@ -301,8 +323,17 @@ public final class PlekWereld extends SavedData {
 
     // ---- saving --------------------------------------------------------------------------------------------------------------
 
-    private CompoundTag save() {
+    /**
+     * 1.10.12: the scan rules' version. Loading an older save drops the cached non-hive groups that found fewer spots than they want,
+     * so they are scanned again with the new rules (the shore rule found nothing at piers and high quays). Complete groups and hive
+     * meadows (players' hives are keyed on spot ids) keep their spots.
+     */
+    public static final int VERSIE = 2;
+    static final String VERSIE_SLEUTEL = "_versie";
+
+    CompoundTag save() {
         CompoundTag t = new CompoundTag();
+        t.putInt(VERSIE_SLEUTEL, VERSIE);
         opgelost.forEach((id, o) -> {
             CompoundTag g = new CompoundTag();
             g.putLong("anker", o.anker());
@@ -337,8 +368,9 @@ public final class PlekWereld extends SavedData {
         return l;
     }
 
-    private static PlekWereld load(CompoundTag t) {
+    static PlekWereld load(CompoundTag t) {
         PlekWereld w = new PlekWereld();
+        int versie = t.getIntOr(VERSIE_SLEUTEL, 1);
         for (String id : t.keySet()) {
             Groep g = AmbachtPlekken.groep(id);
             if (g == null) {
@@ -350,6 +382,9 @@ public final class PlekWereld extends SavedData {
             for (int i = 0; i < spots.size(); i++) {
                 CompoundTag s = spots.getCompoundOrEmpty(i);
                 l.add(new Spot(id + "_" + i, g, posities(s.getListOrEmpty("pos")), posities(s.getListOrEmpty("bloem"))));
+            }
+            if (versie < VERSIE && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
+                continue;   // 1.10.12: scanned again with the new rules (when a player comes near)
             }
             w.opgelost.put(id, new Opgelost(c.getLongOr("anker", 0L), l));
         }

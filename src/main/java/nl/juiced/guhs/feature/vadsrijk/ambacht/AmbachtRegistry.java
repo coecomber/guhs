@@ -300,6 +300,14 @@ public final class AmbachtRegistry {
             zeg(c, s == null ? "geen plek" : s.id() + ": " + Verzamelen.oogst(p, s.id(), 2, false));
             return 1;
         }));
+        // 1.10.12: an admin takes back all hives of a player (a player was stuck at the hive maximum); the rest of the data stays
+        k.then(Commands.literal("korven").then(Commands.literal("weg").then(Commands.argument("speler",
+                net.minecraft.commands.arguments.EntityArgument.player()).executes(c -> {
+                    ServerPlayer p = net.minecraft.commands.arguments.EntityArgument.getPlayer(c, "speler");
+                    int n = Imkeren.allesWeg(p);
+                    zeg(c, n + " korf/korven van " + p.getGameProfile().name() + " weggehaald.");
+                    return n;
+                }))));
         k.then(Commands.literal("scan").executes(c -> {
             ServerLevel vr = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(c.getSource().getServer());
             if (vr != null) {

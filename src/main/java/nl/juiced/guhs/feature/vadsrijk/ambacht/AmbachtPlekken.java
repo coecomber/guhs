@@ -86,7 +86,7 @@ public final class AmbachtPlekken {
         g("z1_mijn_tempel", 1, "kampvuur_zwamtempel_1", NodeSoort.ERTS, 1, 6, 36, Zoek.STEEN);
         g("z1_vis_vijver", 1, "vijver", NodeSoort.VIS, 1, 5, 24, Zoek.WATER);
         g("z1_vis_waterval", 1, "waterval", NodeSoort.VIS, 1, 5, 28, Zoek.WATER);
-        g("z1_vis_haven", 1, "kampvuur_haven", NodeSoort.VIS, 1, 6, 40, Zoek.WATER);
+        g("z1_vis_haven", 1, "haven_z1_kamp_vertrek", NodeSoort.VIS, 1, 6, 40, Zoek.WATER);   // 1.10.12: the quay (the campfire stands in the village, 40+ blocks from the water)
         g("z1_vis_druipmeer", 1, "druipschacht_meer", NodeSoort.VIS, 1, 3, 16, Zoek.WATER);   // (a secret fishing spot)
         // ---- zone 2 (T2): Galmhellingen herbs, Kristalbos wood, Splinterkloof ore, Knuffelmeer fish
         g("z2_pluk_helling_1", 2, "kampvuur_galmhellingen_1", NodeSoort.KRUID, 2, 8, 40, Zoek.GROND);

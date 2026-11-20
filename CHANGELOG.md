@@ -3,6 +3,16 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.12 — Minecraft 26.1.2
+
+- **Fishing spots at piers and quays:** `PlekWereld.oever` only accepted a full block at the water line (+0..1) with room above, so piers and high quays never counted as a shore: live had 0 spots at De Haven, the Vissteiger (Ambachtseiland), Knuffelmeer 2, the Honingvijver and the Waterrad, and only 1 at a few others. A standable floor (planks and slabs too, 2 free blocks above) up to 3 blocks above the water within 2 blocks now counts as well; the water itself must be open up to that height (never a spot under a pier deck). Gametest `scanSteiger`.
+- **Incomplete gathering groups scan again:** the scan cache was keyed only on the anchor. `PlekWereld` now saves a version (`_versie` = 2); loading an older save drops the cached non-hive groups with fewer spots than they want, so they rescan with the new rule when a player comes near (Grondstoffen puts the old node blocks back via `hoort`/`weg`). Complete groups and hive meadows (hives are keyed on spot ids) are kept. Gametest `plekkenOpnieuw`.
+- **De Haven fishes at the quay:** `z1_vis_haven` is anchored at `haven_z1_kamp_vertrek` (30, 65, 470) instead of the campfire in the village (100, 65, 452), which was 40+ blocks from the water.
+- **"Max hives" says where yours are:** clicking a free stand with the maximum number of hives now also tells you where your hives stand (meadow + x/z of your own stand, `Imkeren.waarZijnKorven`). A player had a full hive on the same Bijenhofje without knowing which stand was hers.
+- **Ambachtenboek hint:** the spot hint also names the Verzamelhuisje and the Viswinkel on the Ambachtseiland.
+- **Admin: `/guhs vadsrijk ambacht korven weg <speler>`** (gamemasters) takes back all hives of an online player (`Imkeren.allesWeg`: clears AmbachtData `korven`, syncs, prints the count); the rest of their ambacht data stays. Gametest `korvenWeg`.
+- **Erfenis: no Bestelguh at the Marktplein:** the Marktplein buildings (L6-L10) use a Bestelbalie as decoration; in the Erfenis it no longer spawns a Bestelguh, and one that already stands there leaves. It told players to link a Banksleutel, which the Erfenis never lets you do (every click on the Marktplein opens the orders of the neighbouring villages).
+
 ## 1.10.11 — Minecraft 26.1.2
 
 - **Winterplein: the canal houses can be entered:** the six pastel grachtenhuisjes on the south side (`guhwinter_plein.py` `pand`) had their ground floor (spruce planks) at y31, while their doors stand on the y30 paving, so the floor was 1 block above the doorway and the trim above the door blocked the jump. The ground floor is now at y30 (level with the sill), the room's furniture (table, chair, potted spruce, carpet) moved 1 down with it, and the stray hole in each floor is gone; upper floors, walls, doors and windows are unchanged. `pepernoot_verstop_13` (inside house 5) moved from y32 to y31. New generator self-check `check_deuren`: every door on the plaza templates must have a floor at sill level with 2 free blocks on both sides (all 8 doors pass: 6 canal houses + Krijn & Corine's double door; the frame and the arrival have none). Live worlds: lowered in place with fill/clone (no re-stamp needed).

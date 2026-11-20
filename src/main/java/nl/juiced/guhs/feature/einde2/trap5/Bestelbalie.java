@@ -452,6 +452,17 @@ public final class Bestelbalie {
 
         /** The guh stands at the balie; missing twice (a few seconds apart, the chunk's entities loaded): a new one. */
         private void zorgVoorGuh(ServerLevel server) {
+            if (decoratie(server)) {
+                // 1.10.12: in the Erfenis (the Marktplein's counter) a balie is decoration: no Bestelguh there (it told players to link
+                // a Banksleutel, which the Erfenis never lets you do); one that already stands there goes
+                for (BestelguhEntity g : server.getEntitiesOfClass(BestelguhEntity.class, new AABB(worldPosition).inflate(T5Getallen.BALIE_BEREIK + 4),
+                        g -> worldPosition.equals(g.balie()))) {
+                    g.discard();
+                }
+                guhId = null;
+                geenGuh = 0;
+                return;
+            }
             if (guh(server) != null) {
                 geenGuh = 0;
                 return;
@@ -478,6 +489,11 @@ public final class Bestelbalie {
             server.addFreshEntity(g);
             guhId = g.getUUID();
             geenGuh = 0;
+        }
+
+        /** 1.10.12: a balie in the Erfenis is decoration (the Marktplein buildings use the block): it never gets a Bestelguh. */
+        public static boolean decoratie(ServerLevel server) {
+            return server.dimension() == nl.juiced.guhs.feature.erfenis.Plot.DIM;
         }
 
         @Override

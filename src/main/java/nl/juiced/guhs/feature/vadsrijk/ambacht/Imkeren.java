@@ -100,6 +100,10 @@ public final class Imkeren {
             int n = korven(p).keySet().size();
             if (n >= max(lv)) {
                 p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.korf.vol", max(lv)).withStyle(ChatFormatting.RED));
+                Component waar = waarZijnKorven(p);   // 1.10.12: say where your hives stand (a player had a full one right there)
+                if (waar != null) {
+                    p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.vol.waar", waar).withStyle(ChatFormatting.GOLD));
+                }
                 return "vadsrijk.ambacht.korf.vol";
             }
             zet(p, s, 0);
@@ -142,6 +146,41 @@ public final class Imkeren {
         }
         Verzamelen.sync(p, true);
         return "";
+    }
+
+    /**
+     * 1.10.12: "the meadow (x .., z ..), ..." for every hive of this player (null: none known): the hive stands are per player, so
+     * a player who forgot which stand was theirs clicked a free one and only heard "max reached".
+     */
+    @javax.annotation.Nullable
+    public static Component waarZijnKorven(ServerPlayer p) {
+        net.minecraft.server.MinecraftServer server = p.level().getServer();
+        if (server == null) {
+            return null;
+        }
+        net.minecraft.network.chat.MutableComponent uit = null;
+        for (String id : new java.util.TreeSet<>(korven(p).keySet())) {
+            Spot s = Verzamelen.spot(server, id);
+            if (s == null || s.posities().isEmpty()) {
+                continue;
+            }
+            BlockPos q = Verzamelen.positie(p, s);
+            Component een = Component.translatable("vadsrijk.ambacht.korf.plek", Component.translatable("vadsrijk.ambacht.groep." + s.groep().id()),
+                    q.getX(), q.getZ());
+            uit = uit == null ? Component.empty().append(een) : uit.append(", ").append(een);
+        }
+        return uit;
+    }
+
+    /**
+     * 1.10.12 (admin, {@code /guhs vadsrijk ambacht korven weg <speler>}): takes back all of this player's hives; the rest of their
+     * ambacht data stays. Returns how many there were.
+     */
+    public static int allesWeg(ServerPlayer p) {
+        int n = korven(p).keySet().size();
+        AmbachtData.tag(p).put("korven", new CompoundTag());
+        Verzamelen.sync(p, true);
+        return n;
     }
 
     /** Dev/tests: take this hive back. */

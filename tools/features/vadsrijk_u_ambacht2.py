@@ -137,8 +137,8 @@ for _z in (4, 5):
     t(S + f"boek.cat.plekken.{_z}", f"Plekken zone {_z}", f"Spots zone {_z}")
 for _z in (4, 5, 6):
     t(S + f"tier.{_z}", f"tier {_z}", f"tier {_z}")
-t(S + "boek.hint.plek", "Een plek met %s. Vraag de meesterguh in Zwamzoet, of het Gilde in Hoogvads, waar.",
-  "A spot for %s. Ask the master guh in Zwamzoet, or the Gilde in Hoogvads.")
+t(S + "boek.hint.plek", "Een plek met %s. Vraag het Verzamelhuisje of de Viswinkel op het Ambachtseiland, de meesterguh in Zwamzoet of het Gilde in Hoogvads waar.",
+  "A spot with %s. Ask at the Gathering Hut or the Fish Shop on the Craft Island, the master guh in Shroomsbury or the Guild in Highchonk where it is.")   # 1.10.12: the Ambachtseiland too
 t(S + "bestel.kist_open", "In de kist: kernsplinters, iets zeldzaams, 5 zilver en Knutselpenningen!",
   "In the chest: core splinters, something rare, 5 silver and craft coins!")
 # ---- the Gilde story
