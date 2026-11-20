@@ -540,6 +540,14 @@ public final class Catalogus {
         b("luchtballonhaven", "episch");   // N06 De Zweefguh
         b("draaimolen", "episch");         // N09 De Guhdraaier
         b("sterrenwacht", "episch");       // N10 De Sterrenguhker
+        b("blubbelbadhuis", "episch");    // N01 (water: the 2-bucket rule)
+        b("blubseum", "episch");          // N02 (water: the 2-bucket rule)
+        b("piepnest", "episch");          // N03
+        b("piepmolen", "episch");         // N04 (one gatenkaas: mined in the Guhmension)
+        b("knuffelkasteel", "episch");    // N05
+        b("theepothuisje", "episch");     // N07
+        b("treinstation", "episch");      // N11 (Guhslee rails)
+        b("boomhuisdorpje", "episch");    // N08 Bloesemtakjesdorp
     }
 
     private Catalogus() {

@@ -49179,5 +49179,13 @@
   "subtitles.guhs.muziekdoosje.dansje": "Music Box plays a guh dance",
   "gui.guhs.muziekdoosje.dansen": "♪ Everybody dance, vadsjes! ♪",
   "gui.guhs.muziekdoosje.speelt_al": "The music box is already playing!",
-  "gui.guhs.muziekdoosje.niet_eigen": "This music box belongs to this village's farmer. Only they may wind it up!"
+  "gui.guhs.muziekdoosje.niet_eigen": "This music box belongs to this village's farmer. Only they may wind it up!",
+  "gui.guhs.blauwdruk.cat.blubbelbadhuis": "The Blubble Bathhouse",
+  "gui.guhs.blauwdruk.cat.blubseum": "The Blubseum",
+  "gui.guhs.blauwdruk.cat.piepnest": "The Squeak Nest",
+  "gui.guhs.blauwdruk.cat.piepmolen": "The Squeak Mill",
+  "gui.guhs.blauwdruk.cat.knuffelkasteel": "Cuddle Castle (Softenburg Castle)",
+  "gui.guhs.blauwdruk.cat.theepothuisje": "Teapot cottage (The Tea Guh)",
+  "gui.guhs.blauwdruk.cat.treinstation": "Little train station (Guhda Station)",
+  "gui.guhs.blauwdruk.cat.boomhuisdorpje": "Treehouse village (Blossom Twig Village)"
 }

@@ -59,6 +59,14 @@ CATALOGUS = {
     "luchtballonhaven": "Guh-luchtballonhaven (De Zweefguh)",
     "draaimolen": "Guh-draaimolen (De Guhdraaier)",
     "sterrenwacht": "Sterrenwacht (De Sterrenguhker)",
+    "blubbelbadhuis": "Het Blubbelbadhuis",
+    "blubseum": "Het Blubseum",
+    "piepnest": "Het Piepnest",
+    "piepmolen": "De Piepmolen",
+    "knuffelkasteel": "Knuffelkasteel (Slot Zachtenburg)",
+    "theepothuisje": "Theepot-huisje (Het Theeguhtje)",
+    "treinstation": "Treinstationnetje (Station Guhda)",
+    "boomhuisdorpje": "Boomhuisdorpje (Bloesemtakjesdorp)",
 }
 
 # ======================================================================================================================
