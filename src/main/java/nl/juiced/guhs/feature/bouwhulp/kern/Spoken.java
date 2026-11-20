@@ -111,9 +111,10 @@ public final class Spoken extends SavedData {
         SpookPayloads.stuur(level, s);
     }
 
-    /** Takes a ghost away (cancelled, or the last block stands). */
+    /** Takes a ghost away (cancelled, or the last block stands). Its crafted credit goes back (1.10.10). */
     public void weg(ServerLevel level, Spook s) {
         if (spoken.remove(s.id) != null) {
+            geefTegoedTerug(level, s);
             pof.remove(s.id);
             setDirty();
             SpookPayloads.weg(level, s.id);
@@ -124,8 +125,11 @@ public final class Spoken extends SavedData {
     // building
     // =====================================================================================================================
 
-    /** The answer to "Bouw!". */
-    public record Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof) {
+    /** The answer to "Bouw!" ({@code tekort}: what is missing after crafting; {@code gemaakt}: what the keet crafts). */
+    public record Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof, List<Werkplan.Gemaakt> gemaakt) {
+        public Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof) {
+            this(begonnen, tekort, pof, List.of());
+        }
     }
 
     /**
@@ -140,9 +144,14 @@ public final class Spoken extends SavedData {
         Bouwer bouwer = bouwer(level, s);
         Materiaal.Bronnen bronnen = bronnen(level, s, bouwer, p);
         Map<Item, Integer> nodig = nogNodig(level, s);
-        Map<Item, Integer> tekort = bronnen.tekort(nodig);
+        Werkplan plan = Werkplan.maak(level, nodig, bronnen);   // 1.10.10: what is not there may be crafted
+        Map<Item, Integer> tekort = plan.tekort();
         if (!tekort.isEmpty() && !alsnog) {
-            return new Bouwen(false, tekort, false);
+            return new Bouwen(false, tekort, false, plan.gemaakt());
+        }
+        if (!plan.stappen().isEmpty()) {
+            plan.voerUit(bronnen, s.tegoed);
+            p.sendSystemMessage(Werkplan.bericht(plan.gemaakt()));
         }
         s.volgende = 0;
         s.mist.clear();
@@ -161,7 +170,7 @@ public final class Spoken extends SavedData {
             Feestje.pof(level, s);
         }
         veranderd(level, s);
-        return new Bouwen(true, tekort, poffen);
+        return new Bouwen(true, tekort, poffen, plan.gemaakt());
     }
 
     /** The items still needed: every spot that differs from the ghost now (whatever is built already costs nothing). */
@@ -172,8 +181,8 @@ public final class Spoken extends SavedData {
                 continue;
             }
             Materiaal.Kost k = Materiaal.kost(e.getValue());
-            if (k != null && k.aantal() > 0) {
-                uit.merge(k.item(), k.aantal(), Integer::sum);
+            if (k != null) {
+                k.telOp(uit);
             }
         }
         return uit;
@@ -196,8 +205,29 @@ public final class Spoken extends SavedData {
         return level.getBlockEntity(s.bouwerPos) instanceof Bouwer b ? b : null;
     }
 
+    /** The places of this build, its crafted credit in front (1.10.10). */
     Materiaal.Bronnen bronnen(ServerLevel level, Spook s, @Nullable Bouwer bouwer, @Nullable ServerPlayer p) {
-        return bouwer != null ? bouwer.bronnen(level, s, p) : Materiaal.bronnen(level, p, s.bank, null);
+        return (bouwer != null ? bouwer.bronnen(level, s, p) : Materiaal.bronnen(level, p, s.bank, null)).metTegoed(s.tegoed);
+    }
+
+    /** The crafted credit goes back: inventory, bank, the keet's chests; what has no place falls at the keet/ghost. */
+    private void geefTegoedTerug(ServerLevel level, Spook s) {
+        if (s.tegoed.isEmpty()) {
+            return;
+        }
+        UUID wie = s.bouwer != null ? s.bouwer : s.eigenaar;
+        ServerPlayer p = level.getServer().getPlayerList().getPlayer(wie);
+        Bouwer b = bouwer(level, s);
+        Materiaal.Bronnen terug = b != null ? b.bronnen(level, s, p) : Materiaal.bronnen(level, p, s.bank, null);
+        BlockPos waar = s.bouwerPos != null ? s.bouwerPos : p != null ? p.blockPosition() : s.oorsprong;
+        for (ItemStack st : BouwActie.stapels(s.tegoed)) {
+            ItemStack rest = terug.gratis() ? st : terug.terug(st);
+            while (!rest.isEmpty()) {
+                net.minecraft.world.Containers.dropItemStack(level, waar.getX() + 0.5, waar.getY() + 1.5, waar.getZ() + 0.5, rest.split(rest.getMaxStackSize()));
+            }
+        }
+        s.tegoed.clear();
+        setDirty();
     }
 
     @Nullable
@@ -281,7 +311,8 @@ public final class Spoken extends SavedData {
             boolean betaald = false;
             if (kost.aantal() > 0 && !bronnen.gratis()) {
                 int kreeg = bronnen.neem(kost.item(), kost.aantal());
-                if (kreeg < kost.aantal()) {
+                // 1.10.10: a potted plant also takes the plant
+                if (kreeg < kost.aantal() || kost.heeftExtra() && bronnen.neem(kost.extra(), 1) < 1) {
                     if (kreeg > 0) {
                         Materiaal.terug(level, bronnen, new ItemStack(kost.item(), kreeg), pos);
                     }
@@ -422,8 +453,10 @@ public final class Spoken extends SavedData {
             if (level.getBlockState(x.pos()) == x.nieuw()) {
                 level.setBlock(x.pos(), x.oud(), Block.UPDATE_ALL);
                 Materiaal.Kost k = Materiaal.kost(x.nieuw());
-                if (x.betaald() && k != null && k.aantal() > 0) {
-                    Materiaal.terug(level, bronnen, new ItemStack(k.item(), k.aantal()), p.blockPosition());
+                if (x.betaald() && k != null) {
+                    for (ItemStack st : k.stapels()) {
+                        Materiaal.terug(level, bronnen, st, p.blockPosition());
+                    }
                 }
             } else {
                 geefOud(level, bronnen, x, p);
@@ -435,8 +468,10 @@ public final class Spoken extends SavedData {
 
     private static void geefOud(ServerLevel level, Materiaal.Bronnen bronnen, BouwActie.Wijziging x, ServerPlayer p) {
         Materiaal.Kost k = Materiaal.kost(x.oud());
-        if (k != null && k.aantal() > 0) {
-            Materiaal.terug(level, bronnen, new ItemStack(k.item(), k.aantal()), p.blockPosition());
+        if (k != null) {
+            for (ItemStack st : k.stapels()) {
+                Materiaal.terug(level, bronnen, st, p.blockPosition());
+            }
         }
     }
 

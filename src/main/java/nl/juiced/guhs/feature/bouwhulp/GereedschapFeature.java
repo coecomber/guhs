@@ -27,7 +27,6 @@ import nl.juiced.guhs.feature.bouwhulp.gereedschap.KeetGereedschapTabs;
 import nl.juiced.guhs.feature.bouwhulp.gereedschap.Kwast;
 import nl.juiced.guhs.feature.bouwhulp.gereedschap.Terreinwerk;
 import nl.juiced.guhs.feature.bouwhulp.gereedschap.Vormstaf;
-import nl.juiced.guhs.feature.safari.lobby.SafariWinkel;
 
 /**
  * 1.6.0 deel 2, F9: the tools and the blueprints (design 2.3-2.6, 2.9). The vormstaf (shapes, roofs, capturing), the four
@@ -61,9 +60,6 @@ public final class GereedschapFeature {
         return ITEMS.registerItem(id, p -> new Terreinwerk(p, g), () -> new Item.Properties().stacksTo(1).rarity(r));
     }
 
-    /** The giftshop's prices of the park blueprints (design 2.9 / 3.2: 50-150 coins). */
-    private static final int[] PRIJZEN = {80, 100, 120, 90, 150, 70};
-
     public static void register(IEventBus modBus) {
         BLOCKS.register(modBus);
         ITEMS.register(modBus);
@@ -77,14 +73,8 @@ public final class GereedschapFeature {
                 out.accept(BlauwdrukItem.catalogus(o.id()));
             }
         });
-        for (int i = 0; i < Catalogus.SAFARI.size(); i++) {
-            String id = Catalogus.SAFARI.get(i);
-            SafariWinkel.aanbod("blauwdruk_" + id).groep("blauwdrukken").icoon(() -> BlauwdrukItem.catalogus(id))
-                    .naam(Component.translatable("gui.guhs.blauwdruk.cat." + id))
-                    .uitleg(Component.translatable("gui.guhs.blauwdruk.winkel.uitleg"))
-                    .prijs(PRIJZEN[i]).max(1)
-                    .lever((p, a) -> geef(p, BlauwdrukItem.catalogus(id))).registreer();
-        }
+        // 1.10.10: the safari giftshop no longer sells the six park blueprints (they left the catalogue); bought ones
+        // still build (Catalogus.oud). The shop keeps its other goods; its "blauwdrukken" header simply disappears.
         NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent event) -> {
             if (event.getEntity() instanceof ServerPlayer p) {
                 nl.juiced.guhs.feature.bouwhulp.gereedschap.VastlegDienst.vergeet(p.getUUID());
@@ -119,16 +109,6 @@ public final class GereedschapFeature {
                     ctx.getSource().sendSuccess(() -> Component.literal("catalogus: " + Catalogus.lijst().size() + " ontwerpen"), false);
                     return 1;
                 }))));
-    }
-
-    private static boolean geef(ServerPlayer p, ItemStack s) {
-        if (s.isEmpty()) {
-            return false;
-        }
-        if (!p.getInventory().add(s)) {
-            p.drop(s, false);
-        }
-        return true;
     }
 
     public static void payloads(PayloadRegistrar registrar) {

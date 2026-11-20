@@ -24,11 +24,16 @@ public final class Lijstje {
 
     /** Gives (or drops) the book. False when nothing is missing. */
     public static boolean geef(ServerPlayer p, String project, Map<Item, Integer> nodig) {
+        return geef(p, project, nodig, List.of());
+    }
+
+    /** 1.10.10: with the lines of what the keet crafts itself ("12× Eiken trap (worden gemaakt van 3× Eiken stam)"). */
+    public static boolean geef(ServerPlayer p, String project, Map<Item, Integer> nodig, List<Werkplan.Gemaakt> gemaakt) {
         if (nodig.isEmpty()) {
             p.sendOverlayMessage(Component.translatable("gui.guhs.bouwhulp.lijstje.niets").withStyle(ChatFormatting.GREEN));
             return false;
         }
-        ItemStack boek = boek(project, p.getGameProfile().name(), nodig);
+        ItemStack boek = boek(project, p.getGameProfile().name(), nodig, gemaakt);
         if (!p.getInventory().add(boek)) {
             p.drop(boek, false);
         }
@@ -37,6 +42,10 @@ public final class Lijstje {
     }
 
     public static ItemStack boek(String project, String schrijver, Map<Item, Integer> nodig) {
+        return boek(project, schrijver, nodig, List.of());
+    }
+
+    public static ItemStack boek(String project, String schrijver, Map<Item, Integer> nodig, List<Werkplan.Gemaakt> gemaakt) {
         List<Map.Entry<Item, Integer>> lijst = new ArrayList<>(nodig.entrySet());
         lijst.sort(Map.Entry.<Item, Integer>comparingByValue().reversed());
         int totaal = lijst.stream().mapToInt(Map.Entry::getValue).sum();
@@ -60,6 +69,21 @@ public final class Lijstje {
             }
             blad.append(regel).append("\n");
             regels++;
+        }
+        if (!gemaakt.isEmpty()) {
+            // 1.10.10: what the keet crafts itself, on a page of its own
+            bladen.add(Filterable.passThrough(blad));
+            blad = Component.empty().append(Component.translatable("gui.guhs.bouwhulp.lijstje.maakt").withStyle(ChatFormatting.BOLD)).append("\n\n");
+            int r = 2;
+            for (Werkplan.Gemaakt g : gemaakt) {
+                if (r >= PER_BLAD) {
+                    bladen.add(Filterable.passThrough(blad));
+                    blad = Component.empty();
+                    r = 0;
+                }
+                blad.append(Werkplan.regel(g).copy().withStyle(ChatFormatting.DARK_GREEN)).append("\n");
+                r += 2;
+            }
         }
         bladen.add(Filterable.passThrough(blad));
         String titel = Component.translatable("gui.guhs.bouwhulp.lijstje.titel").getString();

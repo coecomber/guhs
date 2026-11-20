@@ -15,7 +15,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntArrayTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -125,8 +128,8 @@ public final class Ontwerp {
         Map<Item, Integer> uit = new HashMap<>();
         for (BlockState s : blokken.values()) {
             Materiaal.Kost k = Materiaal.kost(s);
-            if (k != null && k.aantal() > 0) {
-                uit.merge(k.item(), k.aantal(), Integer::sum);
+            if (k != null) {
+                k.telOp(uit);
             }
         }
         return uit;
@@ -192,6 +195,122 @@ public final class Ontwerp {
 
     static BlockPos pak(int v) {
         return new BlockPos(v >> 20 & 1023, v >> 10 & 1023, v & 1023);
+    }
+
+    // =====================================================================================================================
+    // 1.10.10: from a structure .nbt
+    // =====================================================================================================================
+
+    /** Ground a structure was saved on (the ground slab {@code zonderFundering} leaves out; guhs: knuffelgras, bleekmos). */
+    private static final java.util.Set<Identifier> FUNDERING = java.util.Set.of(Identifier.withDefaultNamespace("dirt"),
+            Identifier.withDefaultNamespace("grass_block"), Identifier.withDefaultNamespace("stone"), Identifier.withDefaultNamespace("pink_wool"),
+            Identifier.withDefaultNamespace("coarse_dirt"), Identifier.withDefaultNamespace("bedrock"), Identifier.withDefaultNamespace("rooted_dirt"),
+            Identifier.withDefaultNamespace("deepslate"), Identifier.fromNamespaceAndPath("guhs", "knuffelgras"),
+            Identifier.fromNamespaceAndPath("guhs", "bleekmos"));
+    /** Blocks without an item that a structure design builds as something else (the huisje's view window: glass). */
+    private static final Map<Identifier, Block> STANDIN = Map.of(Identifier.fromNamespaceAndPath("guhs", "huisje_raam"), Blocks.GLASS);
+    /** A bottom layer belongs to the ground slab when at least this part of its footprint is ground. */
+    private static final double GROND_DEEL = 0.45;
+
+    /**
+     * An ontwerp from a structure file of the mod or a datapack ({@code data/<ns>/structure/<path>.nbt}, read through the
+     * server's StructureTemplateManager, so data-fixed like any structure). Left out: air (the build does not dig),
+     * structure voids, jigsaws and structure blocks, every block without an item ({@link Materiaal#kost} null: fire, a
+     * fluid that is not water) and, with {@code zonderFundering}, whole bottom layers of plain dirt / grass / coarse dirt /
+     * stone (the piece of ground a structure was saved with). Block entities' contents (chest loot, signs) are never
+     * taken: only the block state. Empty when the file does not exist.
+     */
+    public static Ontwerp uitStructuur(MinecraftServer server, Identifier id, boolean zonderFundering) {
+        return uitStructuur(server, id, zonderFundering, null);
+    }
+
+    /** The same; {@code zonderItem} (may be null) gets the blocks that were left out because they have no item. */
+    public static Ontwerp uitStructuur(MinecraftServer server, Identifier id, boolean zonderFundering, @javax.annotation.Nullable Map<Block, Integer> zonderItem) {
+        java.util.Optional<StructureTemplate> t = server.getStructureManager().get(id);
+        if (t.isEmpty()) {
+            return van(Map.of());
+        }
+        CompoundTag tag = t.get().save(new CompoundTag());
+        ListTag palet = tag.contains("palette") ? tag.getListOrEmpty("palette") : tag.getListOrEmpty("palettes").getListOrEmpty(0);
+        List<BlockState> staten = new ArrayList<>(palet.size());
+        for (int i = 0; i < palet.size(); i++) {
+            staten.add(NbtUtils.readBlockState(BuiltInRegistries.BLOCK, palet.getCompoundOrEmpty(i)));
+        }
+        ListTag lijst = tag.getListOrEmpty("blocks");
+        Map<BlockPos, BlockState> m = new LinkedHashMap<>();
+        for (int i = 0; i < lijst.size(); i++) {
+            CompoundTag b = lijst.getCompoundOrEmpty(i);
+            int idx = b.getIntOr("state", -1);
+            ListTag pos = b.getListOrEmpty("pos");
+            if (idx < 0 || idx >= staten.size() || pos.size() < 3) {
+                continue;
+            }
+            BlockState s = staten.get(idx);
+            if (s.isAir() || s.is(Blocks.STRUCTURE_VOID) || s.is(Blocks.JIGSAW) || s.is(Blocks.STRUCTURE_BLOCK)) {
+                continue;
+            }
+            if (Materiaal.kost(s) == null && STANDIN.containsKey(BuiltInRegistries.BLOCK.getKey(s.getBlock()))) {
+                s = STANDIN.get(BuiltInRegistries.BLOCK.getKey(s.getBlock())).defaultBlockState();   // a block without an item that has a buildable stand-in
+            }
+            if (Materiaal.kost(s) == null) {
+                if (zonderItem != null) {
+                    zonderItem.merge(s.getBlock(), 1, Integer::sum);
+                }
+                continue;
+            }
+            m.put(new BlockPos(pos.getIntOr(0, 0), pos.getIntOr(1, 0), pos.getIntOr(2, 0)), s);
+        }
+        if (zonderFundering) {
+            Vec3i maat = t.get().getSize();
+            zonderFundering(m, maat.getX() * maat.getZ());
+        }
+        return van(m);
+    }
+
+    /**
+     * Leaves out the ground slab (the same rule as the blueprint renders, blauwdruk_kandidaten/_bron/kandkit.py): from the
+     * lowest layer up, every layer that is for at least {@link #GROND_DEEL} of the footprint ({@code vlak} = x * z of the
+     * file) {@link #FUNDERING} ground belongs to the slab; in each column, ground blocks of the slab go from the bottom up
+     * to the first real building block. Ground higher up (pink wool walls) stays.
+     */
+    static void zonderFundering(Map<BlockPos, BlockState> m, int vlak) {
+        if (m.isEmpty()) {
+            return;
+        }
+        int laag = m.keySet().stream().mapToInt(BlockPos::getY).min().orElse(0);
+        int hoog = m.keySet().stream().mapToInt(BlockPos::getY).max().orElse(0);
+        int y = laag;
+        while (y <= hoog) {
+            int yy = y;
+            long grond = m.entrySet().stream().filter(e -> e.getKey().getY() == yy && grond(e.getValue())).count();
+            if (grond < GROND_DEEL * vlak) {
+                break;
+            }
+            y++;
+        }
+        int bovenGrond = y - 1;
+        if (bovenGrond < laag) {
+            return;
+        }
+        Map<Long, List<BlockPos>> kolommen = new HashMap<>();
+        for (BlockPos p : m.keySet()) {
+            if (p.getY() <= bovenGrond) {
+                kolommen.computeIfAbsent(((long) p.getX() << 32) ^ (p.getZ() & 0xffffffffL), k -> new ArrayList<>()).add(p);
+            }
+        }
+        for (List<BlockPos> kolom : kolommen.values()) {
+            kolom.sort(Comparator.comparingInt(BlockPos::getY));
+            for (BlockPos p : kolom) {
+                if (!grond(m.get(p))) {
+                    break;   // the first real building block: the rest of the column stays
+                }
+                m.remove(p);
+            }
+        }
+    }
+
+    private static boolean grond(BlockState s) {
+        return FUNDERING.contains(BuiltInRegistries.BLOCK.getKey(s.getBlock()));
     }
 
     /** (for tests and the dev command) a filled box of one block. */

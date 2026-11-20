@@ -61,8 +61,8 @@ public final class BouwActie {
         Map<Item, Integer> uit = new LinkedHashMap<>();
         for (Wijziging w : wijzigingen) {
             Materiaal.Kost k = Materiaal.kost(w.oud());
-            if (k != null && k.aantal() > 0) {
-                uit.merge(k.item(), k.aantal(), Integer::sum);
+            if (k != null) {
+                k.telOp(uit);
             }
         }
         return uit;

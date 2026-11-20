@@ -20,6 +20,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BedPart;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -45,8 +46,40 @@ public final class Materiaal {
     /** The most chests "draadloos materiaal" looks into (a huge net with a hundred chests is still fast). */
     public static final int MAX_KISTEN = 64;
 
-    /** What one block costs: {@code aantal} of {@code item} (0: free; a door's upper half, water, an empty spot). */
-    public record Kost(Item item, int aantal) {
+    /**
+     * What one block costs: {@code aantal} of {@code item} (0: free; a door's upper half, water, an empty spot), plus one
+     * {@code extra} (1.10.10: a potted plant is a flower pot AND the plant; {@link Items#AIR}: nothing extra).
+     */
+    public record Kost(Item item, int aantal, Item extra) {
+        public Kost(Item item, int aantal) {
+            this(item, aantal, Items.AIR);
+        }
+
+        public boolean heeftExtra() {
+            return extra != Items.AIR && aantal > 0;
+        }
+
+        /** Adds what it costs to this map (item -> count). */
+        public void telOp(Map<Item, Integer> naar) {
+            if (aantal > 0) {
+                naar.merge(item, aantal, Integer::sum);
+                if (heeftExtra()) {
+                    naar.merge(extra, 1, Integer::sum);
+                }
+            }
+        }
+
+        /** What it costs as stacks (to give back). */
+        public List<ItemStack> stapels() {
+            List<ItemStack> uit = new ArrayList<>(2);
+            if (aantal > 0) {
+                uit.add(new ItemStack(item, aantal));
+                if (heeftExtra()) {
+                    uit.add(new ItemStack(extra));
+                }
+            }
+            return uit;
+        }
     }
 
     private static final Kost GRATIS = new Kost(Items.AIR, 0);
@@ -69,6 +102,11 @@ public final class Materiaal {
         if (s.hasProperty(BlockStateProperties.BED_PART) && s.getValue(BlockStateProperties.BED_PART) == BedPart.HEAD) {
             return GRATIS;
         }
+        if (s.getBlock() instanceof FlowerPotBlock pot && pot.getPotted() != Blocks.AIR) {
+            // 1.10.10: potted_* blocks have no item of their own: a flower pot plus the plant
+            Item potItem = pot.getEmptyPot().asItem(), plant = pot.getPotted().asItem();
+            return potItem == Items.AIR || plant == Items.AIR ? null : new Kost(potItem, 1, plant);
+        }
         Item item = s.getBlock().asItem();
         if (item == Items.AIR) {
             return null;
@@ -77,9 +115,16 @@ public final class Materiaal {
         return new Kost(item, n);
     }
 
+    /** What kind of place (1.10.10: the Materiaal tab shows the bank's share). */
+    public enum Soort { TEGOED, INVENTARIS, BANK, KIST }
+
     /** One place items can come from and go back to. */
     public interface Bron {
         long tel(Item item);
+
+        default Soort soort() {
+            return Soort.KIST;
+        }
 
         /** Takes up to n; returns how many it took. */
         int neem(Item item, int n);
@@ -162,6 +207,40 @@ public final class Materiaal {
         public int aantalBronnen() {
             return lijst.size();
         }
+
+        /** How many of this item the places of one kind hold (the bank's share in the Materiaal tab). */
+        public long tel(Item item, Soort soort) {
+            if (gratis) {
+                return 0;
+            }
+            long n = 0;
+            for (Bron b : lijst) {
+                if (b.soort() == soort) {
+                    n += b.tel(item);
+                }
+            }
+            return n;
+        }
+
+        public boolean heeft(Soort soort) {
+            return lijst.stream().anyMatch(b -> b.soort() == soort);
+        }
+
+        /**
+         * 1.10.10: the same places with the build's own crafted credit in front ({@code tegoed}: what the keet made at
+         * "Bouw!" and has not used yet). It is only taken from; things given back never go into it.
+         */
+        public Bronnen metTegoed(Map<Item, Integer> tegoed) {
+            List<Bron> l = new ArrayList<>(lijst.size() + 1);
+            l.add(new TegoedBron(tegoed));
+            l.addAll(lijst);
+            return new Bronnen(l, gratis);
+        }
+
+        /** The places without the credit (to give the credit back into). */
+        public Bronnen zonderTegoed() {
+            return new Bronnen(lijst.stream().filter(b -> b.soort() != Soort.TEGOED).toList(), gratis);
+        }
     }
 
     /**
@@ -243,6 +322,11 @@ public final class Materiaal {
 
     private record InventarisBron(Inventory inv) implements Bron {
         @Override
+        public Soort soort() {
+            return Soort.INVENTARIS;
+        }
+
+        @Override
         public long tel(Item item) {
             long n = 0;
             for (int i = 0; i < inv.getContainerSize(); i++) {
@@ -280,6 +364,11 @@ public final class Materiaal {
     }
 
     private record BankBron(BankGuhBlockEntity bank) implements Bron {
+        @Override
+        public Soort soort() {
+            return Soort.BANK;
+        }
+
         @Override
         public long tel(Item item) {
             return bank.getStorage().count(new ItemStack(item));
@@ -329,6 +418,35 @@ public final class Materiaal {
         @Override
         public ItemStack stop(ItemStack stack) {
             return Kisten.stop(kist, stack);
+        }
+    }
+
+    /** The crafted credit of one build (a map kept in its {@link Spook}): taken first, never given back into. */
+    private record TegoedBron(Map<Item, Integer> tegoed) implements Bron {
+        @Override
+        public Soort soort() {
+            return Soort.TEGOED;
+        }
+
+        @Override
+        public long tel(Item item) {
+            return tegoed.getOrDefault(item, 0);
+        }
+
+        @Override
+        public int neem(Item item, int n) {
+            int heb = tegoed.getOrDefault(item, 0), k = Math.min(heb, Math.max(0, n));
+            if (heb - k <= 0) {
+                tegoed.remove(item);
+            } else {
+                tegoed.put(item, heb - k);
+            }
+            return k;
+        }
+
+        @Override
+        public ItemStack stop(ItemStack stack) {
+            return stack;
         }
     }
 

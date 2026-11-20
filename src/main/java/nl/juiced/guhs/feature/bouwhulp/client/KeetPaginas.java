@@ -93,7 +93,13 @@ final class KeetPaginas {
     static final BouwkeetScreen.TabPagina MATERIAAL = new BouwkeetScreen.TabPagina() {
         @Override
         public void knoppen(BouwkeetScreen s, CompoundTag tab, int x, int y, int w, int h) {
-            if (tab.getBooleanOr("Bank", false)) {
+            // 1.10.10: the Banksleutel slot (click: your key goes in / the key comes back out)
+            ItemStack sleutel = BuiltInRegistries.ITEM.getOptional(Identifier.parse(tab.getStringOr("Sleutel", "minecraft:air")))
+                    .map(ItemStack::new).orElse(ItemStack.EMPTY);
+            ItemKnop vak = s.voegToe(new ItemKnop(x, y, sleutel, () -> s.doe(BouwkeetTabs.MATERIAAL, 4, 0, "")));
+            vak.active = s.magBewerken();
+            vak.setTooltip(Tooltip.create(Component.translatable(sleutel.isEmpty() ? "gui.guhs.bouwkeet.sleutel.vak.leeg" : "gui.guhs.bouwkeet.sleutel.vak.vol")));
+            if (tab.getBooleanOr("BankOud", false)) {
                 s.knop(Component.translatable("gui.guhs.bouwkeet.bank.los"), x + w - 90, y, 90, () -> s.doe(BouwkeetTabs.MATERIAAL, 3, 0, ""), s.magBewerken());
             }
             // test round 5: what is still missing as a written book
@@ -119,15 +125,17 @@ final class KeetPaginas {
 
         @Override
         public void teken(BouwkeetScreen s, GuiGraphicsExtractor g, CompoundTag tab, int x, int y, int w, int h) {
-            Component bank = !tab.getBooleanOr("Bank", false) ? Component.translatable("gui.guhs.bouwkeet.bank.geen")
-                    : tab.getBooleanOr("BankGevonden", false) ? Component.translatable("gui.guhs.bouwkeet.bank.ja")
-                    : Component.translatable("gui.guhs.bouwkeet.bank.kwijt");
-            GidsTekst.passend(g, bank, x, y + 4, w - 96, 0.75f, tab.getBooleanOr("BankGevonden", false) ? GROEN : LICHT, false);
+            GidsTekst.passend(g, bankTekst(tab), x + 22, y + 1, w - 118, 0.75f, tab.getBooleanOr("BankGevonden", false) ? GROEN : LICHT, false);
             Component draadloos = tab.getBooleanOr("Draadloos", false) ? Component.translatable("gui.guhs.bouwkeet.draadloos.ja", tab.getIntOr("Kisten", 0))
                     : Component.translatable("gui.guhs.bouwkeet.draadloos.nee");
-            GidsTekst.passend(g, draadloos, x, y + 14, w - 96, 0.75f, TEKST, false);
+            GidsTekst.passend(g, draadloos, x + 22, y + 10, w - 118, 0.75f, TEKST, false);
+            long[] som = tab.getLongArray("Som").orElse(new long[0]);
+            if (som.length == 3 && tab.getBooleanOr("Bank", false) && !tab.getBooleanOr("Gratis", false)) {
+                GidsTekst.passend(g, Component.translatable("gui.guhs.bouwkeet.bank.deel", som[1], som[0], som[2]), x, y + 22, w - 96, 0.7f,
+                        som[2] > 0 ? ROOD : GROEN, false);
+            }
             ListTag nodig = tab.getListOrEmpty("Nodig");
-            int ny = y + 28;
+            int ny = y + 32;
             if (tab.getBooleanOr("Gratis", false)) {
                 GidsTekst.passend(g, Component.translatable("gui.guhs.bouwkeet.gratis"), x, ny, w, 0.75f, GROEN, false);
             } else if (!nodig.isEmpty()) {
@@ -139,8 +147,13 @@ final class KeetPaginas {
                     if (item.isPresent()) {
                         g.item(new ItemStack(item.get()), ix, iy);
                         long heb = c.getLongOr("Heb", 0L);
-                        int n = c.getIntOr("N", 0);
-                        GidsTekst.schaal(g, Component.literal(Math.min(heb, n) + "/" + n), ix + 18, iy + 5, 0.7f, heb >= n ? GROEN : ROOD, false);
+                        int n = c.getIntOr("N", 0), maak = c.getIntOr("Maak", 0);
+                        // 1.10.10: amber = the keet crafts the rest
+                        int kleur = heb >= n ? GROEN : c.getIntOr("Mist", 0) == 0 && maak > 0 ? 0xFFC8862A : ROOD;
+                        GidsTekst.schaal(g, Component.literal(Math.min(heb, n) + "/" + n), ix + 18, iy + 1, 0.7f, kleur, false);
+                        if (maak > 0) {
+                            GidsTekst.schaal(g, Component.literal("+" + maak), ix + 18, iy + 9, 0.6f, 0xFFC8862A, false);
+                        }
                     }
                 }
             }
@@ -166,18 +179,54 @@ final class KeetPaginas {
 
     // =====================================================================================================================
 
-    /** (Materiaal) the needed item under the mouse: its name and "12 / 30". */
+    /** 1.10.10: which Bank Guh the keet is linked to (the key in the slot, or the old click-link). */
+    static Component bankTekst(CompoundTag tab) {
+        if (!tab.getBooleanOr("Bank", false)) {
+            return Component.translatable("gui.guhs.bouwkeet.bank.geen");
+        }
+        if (!tab.getBooleanOr("BankGevonden", false)) {
+            return Component.translatable("gui.guhs.bouwkeet.bank.kwijt");
+        }
+        int[] p = tab.getIntArray("BankPlek").orElse(new int[3]);
+        Component dim = nl.juiced.guhs.feature.band.GuhVolger.dimensie(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.DIMENSION,
+                Identifier.parse(tab.getStringOr("BankDim", "minecraft:overworld"))));
+        return Component.translatable(tab.getBooleanOr("BankOud", false) ? "gui.guhs.bouwkeet.bank.oud" : "gui.guhs.bouwkeet.bank.bij", p[0], p[1], p[2], dim);
+    }
+
+    /** (Materiaal) the needed item under the mouse: its name, "12 / 30", the bank's share, what the keet crafts, what is missing. */
     static java.util.List<Component> materiaalTip(CompoundTag tab, int x, int y, int mx, int my) {
         ListTag nodig = tab.getListOrEmpty("Nodig");
-        int ny = y + 28;
+        int ny = y + 32;
         for (int i = 0; i < Math.min(12, nodig.size()); i++) {
             int ix = x + (i % 6) * 52, iy = ny + 10 + (i / 6) * 20;
             if (mx >= ix && mx < ix + 50 && my >= iy && my < iy + 18) {
                 CompoundTag c = nodig.getCompoundOrEmpty(i);
                 var item = BuiltInRegistries.ITEM.getOptional(Identifier.parse(c.getStringOr("Id", "minecraft:air")));
                 if (item.isPresent()) {
-                    return java.util.List.of(new ItemStack(item.get()).getHoverName(), Component.translatable("gui.guhs.bouwhulp.tip.heb",
-                            Math.min(c.getLongOr("Heb", 0L), c.getIntOr("N", 0)), c.getIntOr("N", 0)).withStyle(ChatFormatting.GRAY));
+                    java.util.List<Component> uit = new java.util.ArrayList<>();
+                    uit.add(new ItemStack(item.get()).getHoverName());
+                    uit.add(Component.translatable("gui.guhs.bouwhulp.tip.heb", Math.min(c.getLongOr("Heb", 0L), c.getIntOr("N", 0)), c.getIntOr("N", 0))
+                            .withStyle(ChatFormatting.GRAY));
+                    if (tab.getBooleanOr("Bank", false)) {
+                        uit.add(Component.translatable("gui.guhs.bouwkeet.tip.bank", c.getLongOr("Bank", 0L)).withStyle(ChatFormatting.GRAY));
+                    }
+                    if (c.getIntOr("Maak", 0) > 0) {
+                        net.minecraft.network.chat.MutableComponent van = Component.empty();
+                        ListTag l = c.getListOrEmpty("Van");
+                        for (int j = 0; j < l.size(); j++) {
+                            CompoundTag v = l.getCompoundOrEmpty(j);
+                            var vi = BuiltInRegistries.ITEM.getOptional(Identifier.parse(v.getStringOr("Id", "minecraft:air")));
+                            if (vi.isPresent()) {
+                                van.append(j == 0 ? "" : ", ").append(v.getIntOr("N", 0) + "× ").append(new ItemStack(vi.get()).getHoverName());
+                            }
+                        }
+                        uit.add((l.isEmpty() ? Component.translatable("gui.guhs.bouwkeet.tip.maak.rest", c.getIntOr("Maak", 0))
+                                : Component.translatable("gui.guhs.bouwkeet.tip.maak", c.getIntOr("Maak", 0), van)).withStyle(ChatFormatting.GOLD));
+                    }
+                    if (c.getIntOr("Mist", 0) > 0) {
+                        uit.add(Component.translatable("gui.guhs.bouwkeet.tip.mist", c.getIntOr("Mist", 0)).withStyle(ChatFormatting.RED));
+                    }
+                    return uit;
                 }
             }
         }
