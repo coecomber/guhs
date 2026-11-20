@@ -22,7 +22,7 @@ SECTIES = [
       "tech_quests_aflezen", "tech_quests_hoeveel", "tech_quests_beurs"]),
     ("t1_kracht", 1, "Tier 1: Meer kracht, minder werk", "item:guhs:block/guh_oven_front_on", "tech_quests_oven",
      ["tech_quests_trechters", "tech_quests_molen", "tech_quests_knuffel", "tech_quests_disco", "vb_knabbelketel",
-      "vb_antenne"]),
+      "vb_antenne", "tk_slijmhuisje"]),
     ("t1_klusjes", 1, "Tier 1: Guhs aan het werk", "guh:normal", "tech_quests_oven",
      ["tech_quests_klus_machines", "tech_quests_klus_oogst", "kaaskas_band", "tk_kassier"]),
     ("t1_wol", 1, "Tier 1: Kaaskas & wolfabriek", "item:guhs:kaaskas", "tech_quests_draad",
@@ -86,6 +86,7 @@ NIEUW = [
     ("tk_schakelaar", "Aan, uit, aan, uit", "guhs:vadsschakelaar", "item"),
     ("tk_kassier", "De kas plukt zichzelf", "guhs:kaaskas", "check"),
     ("tk_sausslang", "Een slang vol saus", "guhs:sausslang", "item"),
+    ("tk_slijmhuisje", "Een huisje voor een slijmpje", "guhs:slijmhuisje", "item"),   # 1.10.10 (feature/slijmhuisje)
 ]
 
 # key: (title, text). Short: one to three sentences, a guh joke where it fits.
@@ -243,6 +244,9 @@ TEKST = {
     "tech_quests_saus_kaart": ("Saus en slangen",
         "Voor dit rijtje heb je de &dreceptkaart: saus en slangen&r nodig, en grillspiesen of blubroom uit de "
         "Guhbarbecuether."),
+    "tk_slijmhuisje": ("Een huisje voor een slijmpje",
+        "Sluip en rechtsklik met een lege hand op een guh-slime: je pakt hem op. Breng hem naar een &dSlijmhuisje&r (glas, roze "
+        "en witte wol, Guhdraad): op &b4 vadskracht&r maakt hij elke 45 tellen een guh-slijmbal in zijn schaaltje. Blub!"),
     "tk_sausslang": ("Een slang vol saus",
         "Gedroogde kelp, koper en een grillspies geven 8 &dSausslangen&r (zonder receptkaart). Ze brengen saus van pomp naar "
         "vat en machine. Slurp!"),

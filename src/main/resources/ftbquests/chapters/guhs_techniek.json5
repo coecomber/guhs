@@ -3,7 +3,7 @@
   default_quest_shape: "circle",
   filename: "guhs_techniek",
   group: "475548DB0F6F37EB",
-  guhs_chapter_version: 64,
+  guhs_chapter_version: 65,
   icon: {
     components: {
       "ftbquests:icon": "guhs:textures/ftbquests/icon_guhs_techniek.png",
@@ -694,6 +694,40 @@
         },
       ],
       x: 19.0,
+      y: 6.5625,
+    },
+    {
+      id: "475548DB1D0A5850",
+      icon: {
+        id: "guhs:slijmhuisje",
+      },
+      tasks: [
+        {
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:slijmhuisje",
+          },
+          id: "475548833AA99A7E",
+        },
+      ],
+      rewards: [
+        {
+          id: "4755482F4F93482C",
+          type: "item",
+          item: {
+            count: 1,
+            id: "guhs:kaas_knabbels",
+          },
+          count: 8,
+        },
+        {
+          id: "475548542202F63C",
+          type: "xp",
+          xp: 50,
+        },
+      ],
+      x: 20.5,
       y: 6.5625,
     },
     {

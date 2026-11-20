@@ -1419,6 +1419,26 @@ UITLEG = {
            "Right-click the box with an axe and the whole tree comes down in one go; the harvest lands in your pockets "
            "and saplings that fall out go back into the box. Then it starts again. It needs 6 chonk power.",
         meer=["systemen/guhmachines", "systemen/klusjes"]),
+    "slijmhuisje": dict(
+        nl="Een lief huisje van 3 bij 3 voor één guh-slime, met een zeepbelkoepel en een schaaltje voor de deur.\n"
+           "\n"
+           "- Sluip en rechtsklik met een lege hand op een guh-slime (elke grootte): je hebt een Opgepakte guh-slime.\n"
+           "- Rechtsklik ermee op het huisje: de slime trekt erin. Sluip en rechtsklik met een lege hand: hij komt er "
+           "weer uit, terug in je hand.\n"
+           "- Op 4 vadskracht maakt hij elke 45 tellen een guh-slijmbal in het schaaltje (elke grootte even snel). In "
+           "het schaaltje passen er 16; is het vol, dan wacht hij tevreden. Zonder vadskracht slaapt hij.\n"
+           "- Rechtsklik met een lege hand en je pakt de slijmballen uit het schaaltje. Een bewoner met het klusje "
+           "Slijmpjes verzorgen doet dat ook: hij aait het slijmpje en brengt de slijmballen naar de kist.",
+        en="A sweet 3 by 3 little house for one guh slime, with a soap-bubble dome and a little bowl by the door.\n"
+           "\n"
+           "- Sneak and right-click a guh slime (any size) with an empty hand: you get a Picked-up Guh Slime.\n"
+           "- Right-click the house with it: the slime moves in. Sneak and right-click with an empty hand: it comes out "
+           "again, back into your hand.\n"
+           "- On 4 chonk power it makes a guh slimeball in the little bowl every 45 seconds (every size just as fast). "
+           "The bowl holds 16; when it is full, the slime waits contentedly. Without chonk power it sleeps.\n"
+           "- Right-click with an empty hand to take the slimeballs from the bowl. A resident with the chore Caring "
+           "for Slimes does it too: it pets the slime and brings the slimeballs to the chest.",
+        meer=["systemen/guhmachines", "systemen/klusjes"]),
     "reuzenschelp": dict(
         nl="Een grote roze schelp. Is hij open, rechtsklik hem dan: je krijgt een parel en de schelp gaat dicht. Na een "
            "tijdje groeit er vanzelf een nieuwe parel en gaat hij weer open.\n"

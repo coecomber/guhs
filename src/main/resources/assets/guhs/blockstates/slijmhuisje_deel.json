@@ -1,0 +1,27 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "guhs:block/slijmhuisje_leeg"
+      }
+    },
+    {
+      "when": {
+        "dy": "0",
+        "stuk": "midden"
+      },
+      "apply": {
+        "model": "guhs:block/slijmhuisje_voet"
+      }
+    },
+    {
+      "when": {
+        "dy": "2",
+        "stuk": "midden"
+      },
+      "apply": {
+        "model": "guhs:block/slijmhuisje_koepel"
+      }
+    }
+  ]
+}

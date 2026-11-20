@@ -362,6 +362,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhwinter_lootjes',   # Het Grote Boek, the draw, the creative plots, the Surprise (feature/guhwinter/lootjes)
             # 1.10.10 economie: golden star looks, the zandhoopje + its spots on the dream islands, the texts (feature/droomzand)
             'economie1110',
+            'slijmhuisje',   # 1.10.10: Het Slijmhuisje, a house for one guh slime + its chore (feature/slijmhuisje)
             ]
 
 

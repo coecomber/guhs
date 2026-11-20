@@ -1,0 +1,76 @@
+{
+  "textures": {
+    "particle": "guhs:block/slijmhuisje_balletje",
+    "bal": "guhs:block/slijmhuisje_balletje"
+  },
+  "elements": [
+    {
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        2,
+        2,
+        2
+      ],
+      "faces": {
+        "north": {
+          "texture": "#bal",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "south": {
+          "texture": "#bal",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "west": {
+          "texture": "#bal",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "east": {
+          "texture": "#bal",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "up": {
+          "texture": "#bal",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        },
+        "down": {
+          "texture": "#bal",
+          "uv": [
+            0,
+            0,
+            2,
+            2
+          ]
+        }
+      }
+    }
+  ]
+}
