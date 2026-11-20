@@ -113,6 +113,13 @@ public final class Materiaal {
         if (s.hasProperty(BlockStateProperties.BED_PART) && s.getValue(BlockStateProperties.BED_PART) == BedPart.HEAD) {
             return GRATIS;
         }
+        if (s.getBlock() instanceof nl.juiced.guhs.block.SleeRailBlock) {
+            // 1.10.10: a Guhslee rail piece: its anchor costs the rail item of its shape, its parts are free (the anchor lays them)
+            return new Kost(nl.juiced.guhs.block.SleeRailBlock.itemFor(s.getValue(nl.juiced.guhs.block.SleeRailBlock.SHAPE)), 1);
+        }
+        if (s.getBlock() instanceof nl.juiced.guhs.block.SleeRailPartBlock) {
+            return GRATIS;
+        }
         if (s.getBlock() instanceof FlowerPotBlock pot && pot.getPotted() != Blocks.AIR) {
             // 1.10.10: potted_* blocks have no item of their own: a flower pot plus the plant
             Item potItem = pot.getEmptyPot().asItem(), plant = pot.getPotted().asItem();

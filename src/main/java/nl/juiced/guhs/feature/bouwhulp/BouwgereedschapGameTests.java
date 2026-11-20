@@ -375,6 +375,43 @@ public class BouwgereedschapGameTests {
         });
     }
 
+    /** 1.10.10 (N11 prep): a straight Guhslee rail piece costs one sleerail_recht; the keet lays the anchor with its 15 parts. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 200)
+    public static void bouwgereedschapSleerail(GameTestHelper helper) {
+        BlockState anker = nl.juiced.guhs.registry.ModBlocks.SLEE_RAIL.get().defaultBlockState()
+                .setValue(nl.juiced.guhs.block.SleeRailBlock.FACING, net.minecraft.core.Direction.WEST)
+                .setValue(nl.juiced.guhs.block.SleeRailBlock.SHAPE, nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT);
+        BlockPos a = new BlockPos(3, 0, 3);
+        Map<BlockPos, BlockState> m = new java.util.LinkedHashMap<>();
+        m.put(a, anker);
+        List<BlockPos> stuk = new nl.juiced.guhs.slee.SleePath.Placement(a, net.minecraft.core.Direction.WEST, nl.juiced.guhs.slee.SleePath.Shape.STRAIGHT).blocks();
+        for (BlockPos p : stuk) {
+            if (!p.equals(a)) {
+                m.put(p, nl.juiced.guhs.registry.ModBlocks.SLEE_RAIL_PART.get().forOffset(p.subtract(a)));
+            }
+        }
+        helper.assertTrue(stuk.size() == 16, "a straight piece is 16 blocks (" + stuk.size() + ")");
+        Ontwerp o = Ontwerp.van(m);
+        helper.assertTrue(o.nodig().equals(Map.of(nl.juiced.guhs.registry.ModItems.SLEERAIL_RECHT.get(), 1)), "one rail item, the parts are free: " + o.nodig());
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        p.getInventory().add(new ItemStack(nl.juiced.guhs.registry.ModItems.SLEERAIL_RECHT.get()));
+        Spook s = Spookbouw.start(p, o, helper.absolutePos(new BlockPos(4, 2, 4)), net.minecraft.world.level.block.Rotation.NONE,
+                net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null, "a ghost");
+        List<Map.Entry<BlockPos, BlockState>> doel = new java.util.ArrayList<>(s.volgorde());
+        helper.assertTrue(Spookbouw.bouw(p, s, false).begonnen(), "it builds");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null, "done");
+            for (Map.Entry<BlockPos, BlockState> e : doel) {
+                helper.assertTrue(helper.getLevel().getBlockState(e.getKey()) == e.getValue(), "rail block stands: " + helper.relativePos(e.getKey())
+                        + " " + helper.getLevel().getBlockState(e.getKey()));
+            }
+            helper.assertTrue(tel(p, nl.juiced.guhs.registry.ModItems.SLEERAIL_RECHT.get()) == 0, "the rail item was used");
+        });
+    }
+
     /** 1.10.10: a potted plant costs a flower pot plus the plant (it used to be skipped). */
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
     public static void bouwgereedschapPot(GameTestHelper helper) {

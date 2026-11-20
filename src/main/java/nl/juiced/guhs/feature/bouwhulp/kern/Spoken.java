@@ -312,6 +312,9 @@ public final class Spoken extends SavedData {
             s.volgende++;
             gekeken++;
             BlockState doel = e.getValue(), nu = level.getBlockState(pos);
+            if (doel.getBlock() instanceof nl.juiced.guhs.block.SleeRailPartBlock) {
+                continue;   // 1.10.10: a sled rail part is laid by its anchor (a part without its anchor breaks)
+            }
             if (nu == doel || !magBouwen(level, pos, nu)) {
                 continue;
             }
@@ -349,6 +352,9 @@ public final class Spoken extends SavedData {
             if (actie != null) {
                 actie.voegToe(pos, nu, doel, betaald);
             }
+            if (doel.getBlock() instanceof nl.juiced.guhs.block.SleeRailBlock) {
+                s.gedaan += sleeParts(level, pos, doel, actie);
+            }
             s.gedaan++;
             geplaatst++;
             if (bouwer != null) {
@@ -362,6 +368,32 @@ public final class Spoken extends SavedData {
         if (s.volgende >= v.size()) {
             klaar(level, s, bouwer);
         }
+    }
+
+    /**
+     * 1.10.10: a sled rail anchor was placed: lay its parts right after it, like SleeRailItem.place (computed from the
+     * anchor's facing and shape, so a turned or mirrored ghost lays them right too). Spots that may not be built are left
+     * out. Returns how many parts were laid.
+     */
+    private static int sleeParts(ServerLevel level, BlockPos anker, BlockState staat, @Nullable BouwActie actie) {
+        nl.juiced.guhs.block.SleeRailPartBlock part = nl.juiced.guhs.registry.ModBlocks.SLEE_RAIL_PART.get();
+        int n = 0;
+        for (BlockPos p : new nl.juiced.guhs.slee.SleePath.Placement(anker, staat.getValue(nl.juiced.guhs.block.SleeRailBlock.FACING),
+                staat.getValue(nl.juiced.guhs.block.SleeRailBlock.SHAPE)).blocks()) {
+            if (p.equals(anker) || !level.isLoaded(p)) {
+                continue;
+            }
+            BlockState nu = level.getBlockState(p), wil = part.forOffset(p.subtract(anker));
+            if (nu == wil || !magBouwen(level, p, nu)) {
+                continue;
+            }
+            level.setBlock(p, wil, Block.UPDATE_ALL);
+            if (actie != null) {
+                actie.voegToe(p, nu, wil, false);
+            }
+            n++;
+        }
+        return n;
     }
 
     /** Test round 5: is this spot further than {@code bereik} from the builder's block (in x or in z)? */
