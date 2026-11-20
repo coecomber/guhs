@@ -79,10 +79,25 @@ TEKSTEN = {
     "gui.guhs.bouwkeet.proefhuisje": "Proefhuisje",
     "gui.guhs.bouwkeet.proefhuisje.knop": "Proefhuisje als project",
     "gui.guhs.bouwkeet.proefhuisje.uitleg": "Een klein roze guh-huisje voor de deur van de keet, om de spookbouw te proberen.",
-    "gui.guhs.bouwkeet.bank.geen": "Geen Bank Guh gekoppeld (klik met een Banksleutel op de keet).",
+    "gui.guhs.bouwkeet.bank.geen": "Geen Bank Guh gekoppeld: stop een Banksleutel in het vakje.",
     "gui.guhs.bouwkeet.bank.ja": "Bank Guh gekoppeld: de keet pakt er blokjes uit.",
     "gui.guhs.bouwkeet.bank.kwijt": "De gekoppelde Bank Guh staat nergens meer.",
     "gui.guhs.bouwkeet.bank.los": "Bank loskoppelen",
+    # 1.10.10: the Banksleutel slot, the bank's share, crafting at the werkbank
+    "gui.guhs.bouwkeet.bank.bij": "Bank Guh bij %s, %s, %s (%s)",
+    "gui.guhs.bouwkeet.bank.oud": "Oude koppeling: Bank Guh bij %s, %s, %s (%s). Stop er een Banksleutel in, of koppel hem los.",
+    "gui.guhs.bouwkeet.bank.deel": "Uit de bank: %s van de %s blokjes. Ontbreekt nog: %s",
+    "gui.guhs.bouwkeet.sleutel.vak.leeg": "Banksleutel-vakje: klik, en je Banksleutel gaat erin. Dan pakt de keet ook blokjes uit die Bank Guh.",
+    "gui.guhs.bouwkeet.sleutel.vak.vol": "Klik: de Banksleutel komt terug in je inventaris en de bank is ontkoppeld.",
+    "gui.guhs.bouwkeet.sleutel.uit": "Banksleutel eruit: de Bank Guh is ontkoppeld.",
+    "gui.guhs.bouwkeet.sleutel.geen": "Je hebt geen Banksleutel die een Bank Guh onthoudt. Klik eerst met je sleutel op je Bank Guh, vads!",
+    "gui.guhs.bouwkeet.tip.bank": "In de bank: %s",
+    "gui.guhs.bouwkeet.tip.maak": "Maakt de keet zelf: %s (van %s)",
+    "gui.guhs.bouwkeet.tip.maak.rest": "Maakt de keet zelf: %s (van wat er over was)",
+    "gui.guhs.bouwkeet.tip.mist": "Ontbreekt: %s",
+    "gui.guhs.bouwhulp.werkbank.bericht": "Njeg! De keet maakt zelf aan de werkbank:",
+    "gui.guhs.bouwhulp.werkbank.regel": "%s× %s (worden gemaakt van %s)",
+    "gui.guhs.bouwhulp.werkbank.regel.rest": "%s× %s (van wat er over was)",
     "gui.guhs.bouwkeet.draadloos.ja": "Draadloos materiaal: %s kisten op het vadsnet",
     "gui.guhs.bouwkeet.draadloos.nee": "Draadloos materiaal: vanaf de Guhrad-keet (met vadskracht)",
     "gui.guhs.bouwkeet.gratis": "Creatief: alles is gratis.",
@@ -521,7 +536,7 @@ def ftb(fq):
       "sluip-klik één keer op een gebouw). Zo wordt het een eigen &dblauwdruk&r.",
       "minecraft:paper", [adv("bouwhulp_vastgelegd")], deps=["bouwhulp_eerste_bouw"], xp=100)
     q("bouwhulp_ontwerpbureau", "Het Ontwerpbureau", "Maak een &dOntwerpbureau&r. Daar blader je door je eigen blauwdrukken, de catalogus "
-      "met 25 ontwerpen en de bibliotheek van de server.",
+      "met kant-en-klare ontwerpen en de bibliotheek van de server.",
       "guhs:ontwerpbureau", [item("guhs:ontwerpbureau")], deps=["bouwhulp_vastgelegd"], xp=50)
     q("bouwhulp_blauwdruk", "Een blauwdruk in je hand", "Druk aan het Ontwerpbureau een blauwdruk af (een vel papier). Klik ermee op een "
       "blok en het ontwerp staat er als spook. Hij raakt nooit op!",

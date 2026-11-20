@@ -30,8 +30,9 @@ import nl.juiced.guhs.feature.vadskracht.MachineBlock;
 /**
  * The Bouwkeet (design 2.2): a yellow-pink hut of 3 x 3 x 3 with a little crane on the roof, plans on the wall and a design
  * table inside, drawn by GeckoLib from its kern block (the bottom middle of the front; the rest is invisible
- * {@code machine_deel}). A click opens its menu; a Banksleutel that remembers a bank links that bank; an upgrade item
- * raises its level. Everything else is {@link BouwkeetBlockEntity}. Resources: tools/features/bouwhulp.py.
+ * {@code machine_deel}). A click opens its menu; a Banksleutel that remembers a bank goes into the keet's key slot (1.10.10;
+ * the slot is also in the Materiaal tab) and so links that bank; an upgrade item raises its level. Everything else is
+ * {@link BouwkeetBlockEntity}. Resources: tools/features/bouwhulp.py.
  */
 public class BouwkeetBlock extends MachineBlock {
     public static final MapCodec<BouwkeetBlock> CODEC = simpleCodec(BouwkeetBlock::new);
@@ -100,7 +101,15 @@ public class BouwkeetBlock extends MachineBlock {
                 if (!magBewerken(keet, sp)) {
                     sp.sendOverlayMessage(Component.translatable("gui.guhs.bouwkeet.niet_van_jou"));
                 } else {
-                    keet.zetBank(bank);
+                    // 1.10.10: the key goes into the keet's slot (an old one in it comes back to you)
+                    ItemStack in = stack.copyWithCount(1);
+                    if (!sp.getAbilities().instabuild) {
+                        stack.shrink(1);
+                    }
+                    ItemStack oud = keet.zetSleutel(in);
+                    if (!oud.isEmpty() && !sp.getInventory().add(oud)) {
+                        sp.drop(oud, false);
+                    }
                     sp.sendOverlayMessage(Component.translatable("gui.guhs.bouwkeet.bank_gekoppeld"));
                     level.playSound(null, pos, SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.BLOCKS, 0.6f, 1.6f);
                 }

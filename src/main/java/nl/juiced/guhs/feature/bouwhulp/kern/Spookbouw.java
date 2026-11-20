@@ -166,10 +166,21 @@ public final class Spookbouw {
         return Spoken.van(p.level()).ongedaan(p.level(), p);
     }
 
-    /** What is still missing for the rest of this ghost, with these sources. */
+    /** What is still missing for the rest of this ghost, with these sources (after what the keet can craft, 1.10.10). */
     public static Map<Item, Integer> tekort(ServerPlayer p, Spook s) {
+        return plan(p, s).tekort();
+    }
+
+    /** 1.10.10: the crafting plan for the rest of this ghost: what is missing, what the keet would craft and from what. */
+    public static Werkplan plan(ServerPlayer p, Spook s) {
         Spoken spoken = Spoken.van(p.level());
-        return spoken.bronnen(p.level(), s, spoken.bouwer(p.level(), s), p).tekort(spoken.nogNodig(p.level(), s));
+        return Werkplan.maak(p.level(), spoken.nogNodig(p.level(), s), spoken.bronnen(p.level(), s, spoken.bouwer(p.level(), s), p));
+    }
+
+    /** The shopping list of this ghost as a book (LIJSTJE), with the lines of what the keet crafts itself. */
+    public static void lijstje(ServerPlayer p, Spook s) {
+        Werkplan plan = plan(p, s);
+        Lijstje.geef(p, s.naam.isEmpty() ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam, plan.tekort(), plan.gemaakt());
     }
 
     /** Opens the control panel of the ghost for the player (with the current shortage). */
@@ -230,7 +241,7 @@ public final class Spookbouw {
                     Spoken.van(level).veranderd(level, s);
                 }
             }
-            case LIJSTJE -> Lijstje.geef(p, s.naam.isEmpty() ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam, tekort(p, s));
+            case LIJSTJE -> lijstje(p, s);
             case WEGHALEN -> {
                 s.helpers.removeIf(u -> {
                     ServerPlayer hp = level.getServer().getPlayerList().getPlayer(u);

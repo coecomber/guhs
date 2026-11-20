@@ -15,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.Mirror;
@@ -29,6 +30,7 @@ import nl.juiced.guhs.feature.bouwhulp.kern.Ontwerp;
 import nl.juiced.guhs.feature.bouwhulp.kern.Spook;
 import nl.juiced.guhs.feature.bouwhulp.kern.Spookbouw;
 import nl.juiced.guhs.feature.bouwhulp.kern.Spoken;
+import nl.juiced.guhs.feature.bouwhulp.kern.Werkplan;
 
 /**
  * The tabs F8 brings (see {@link BouwkeetTabs}): Bouwguhs, Materiaal and Niveau, plus "binnenkort" stand-ins for Vormen,
@@ -208,24 +210,54 @@ public final class KeetTabs {
         public void schrijf(ServerPlayer p, ServerLevel level, BouwkeetBlockEntity keet, CompoundTag uit) {
             UUID bank = keet.bank();
             uit.putBoolean("Bank", bank != null);
-            uit.putBoolean("BankGevonden", bank != null && BankAdressen.van(level.getServer()).plek(bank) != null);
+            // 1.10.10: the key slot, the old click-link, where the bank stands
+            ItemStack sleutel = keet.sleutel();
+            if (!sleutel.isEmpty()) {
+                uit.putString("Sleutel", BuiltInRegistries.ITEM.getKey(sleutel.getItem()).toString());
+            }
+            uit.putBoolean("BankOud", keet.bankOud());
+            net.minecraft.core.GlobalPos plek = bank == null ? null : BankAdressen.van(level.getServer()).plek(bank);
+            uit.putBoolean("BankGevonden", plek != null);
+            if (plek != null) {
+                uit.putIntArray("BankPlek", new int[] {plek.pos().getX(), plek.pos().getY(), plek.pos().getZ()});
+                uit.putString("BankDim", plek.dimension().identifier().toString());
+            }
             boolean draadloos = keet.werkNiveau().draadloos();
             uit.putBoolean("Draadloos", draadloos);
             uit.putInt("Kisten", draadloos ? Materiaal.kisten(level, keet.getBlockPos()).size() : 0);
             Spook s = keet.project();
             if (s != null) {
                 Map<Item, Integer> nodig = Spoken.van(level).nogNodig(level, s);
-                Materiaal.Bronnen bronnen = keet.bronnen(level, s, p);
+                Werkplan plan = Spookbouw.plan(p, s);
+                Materiaal.Bronnen bronnen = keet.bronnen(level, s, p).metTegoed(new java.util.HashMap<>(s.tegoed()));
                 ListTag lijst = new ListTag();
-                nodig.entrySet().stream().sorted(Map.Entry.<Item, Integer>comparingByValue().reversed()).limit(40).forEach(e -> {
+                long[] som = new long[3];   // needed, in the bank, missing
+                nodig.entrySet().stream().sorted(Map.Entry.<Item, Integer>comparingByValue().reversed()).forEach(e -> {
+                    long inBank = bronnen.tel(e.getKey(), Materiaal.Soort.BANK);
+                    int mist = plan.tekort().getOrDefault(e.getKey(), 0);
+                    som[0] += e.getValue();
+                    som[1] += Math.min(inBank, e.getValue());
+                    som[2] += mist;
+                    if (lijst.size() >= 40) {
+                        return;
+                    }
                     CompoundTag c = new CompoundTag();
                     c.putString("Id", BuiltInRegistries.ITEM.getKey(e.getKey()).toString());
                     c.putInt("N", e.getValue());
                     c.putLong("Heb", Math.min(Integer.MAX_VALUE, bronnen.tel(e.getKey())));
+                    c.putLong("Bank", Math.min(Integer.MAX_VALUE, inBank));
+                    c.putInt("Mist", mist);
+                    for (Werkplan.Gemaakt g : plan.gemaakt()) {
+                        if (g.item() == e.getKey()) {
+                            c.putInt("Maak", g.aantal());
+                            c.put("Van", BouwkeetPayloads.items(g.van()));
+                        }
+                    }
                     lijst.add(c);
                 });
                 uit.put("Nodig", lijst);
                 uit.putBoolean("Gratis", bronnen.gratis());
+                uit.putLongArray("Som", som);
             }
             ListTag spoken = new ListTag();
             List<Spook> lijstSpoken = new java.util.ArrayList<>(Spoken.van(level).van(p.getUUID()));
@@ -245,11 +277,18 @@ public final class KeetTabs {
             uit.put("Spoken", spoken);
         }
 
-        /** 1: show a ghost's panel (tekst = id); 2: make a ghost this keet's project; 3: unlink the bank. */
+        /**
+         * 1: show a ghost's panel (tekst = id); 2: make a ghost this keet's project; 3: unlink the old-style bank link;
+         * 4 (1.10.10): the key slot: a key in it comes back to you, else your Banksleutel (the one in your hand first) goes in.
+         */
         @Override
         public void doe(ServerPlayer p, ServerLevel level, BouwkeetBlockEntity keet, int actie, int waarde, String tekst) {
             if (actie == 3) {
                 keet.zetBank(null);
+                return;
+            }
+            if (actie == 4) {
+                sleutelVak(p, level, keet);
                 return;
             }
             Spook s;
@@ -267,6 +306,36 @@ public final class KeetTabs {
                 keet.zetProject(level, s);
             }
         }
+    }
+
+    /** The key slot was clicked (see {@link MateriaalTab#doe}, action 4). */
+    public static void sleutelVak(ServerPlayer p, ServerLevel level, BouwkeetBlockEntity keet) {
+        ItemStack in = keet.sleutel();
+        if (!in.isEmpty()) {
+            keet.zetSleutel(ItemStack.EMPTY);
+            if (!p.getInventory().add(in)) {
+                p.drop(in, false);
+            }
+            p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.bouwkeet.sleutel.uit"));
+            level.playSound(null, keet.getBlockPos(), net.minecraft.sounds.SoundEvents.ITEM_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 0.6f, 1.2f);
+            return;
+        }
+        int vak = BouwkeetBlockEntity.pastSleutel(p.getMainHandItem()) ? p.getInventory().getSelectedSlot() : -1;
+        for (int i = 0; vak < 0 && i < p.getInventory().getContainerSize(); i++) {
+            if (BouwkeetBlockEntity.pastSleutel(p.getInventory().getItem(i))) {
+                vak = i;
+            }
+        }
+        if (vak < 0) {
+            p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.bouwkeet.sleutel.geen"));
+            return;
+        }
+        ItemStack st = p.getInventory().getItem(vak);
+        keet.zetSleutel(st.copyWithCount(1));
+        st.shrink(1);
+        p.getInventory().setChanged();
+        p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable("gui.guhs.bouwkeet.bank_gekoppeld"));
+        level.playSound(null, keet.getBlockPos(), net.minecraft.sounds.SoundEvents.EXPERIENCE_ORB_PICKUP, net.minecraft.sounds.SoundSource.BLOCKS, 0.6f, 1.6f);
     }
 
     // =====================================================================================================================

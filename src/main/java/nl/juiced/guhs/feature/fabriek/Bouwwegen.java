@@ -48,17 +48,52 @@ public final class Bouwwegen {
 
     private static MinecraftServer van;
     private static Map<Item, List<Weg>> wegen = Map.of();
+    /** 1.10.10 (Bouwkeet): only the shaped/shapeless crafting-table recipes, output without components. */
+    private static Map<Item, List<Weg>> craften = Map.of();
 
     private Bouwwegen() {
     }
 
     /** The ways to the target item (empty: none). */
     public static List<Weg> naar(ServerLevel level, Item doel) {
+        laad(level);
+        return wegen.getOrDefault(doel, List.of());
+    }
+
+    /**
+     * Crafting-only mode (1.10.10, the Bouwkeet): the shaped and shapeless crafting-table recipes that make this item (no
+     * stonecutter, no furnace). Unlike {@link Weg#neemt} the ingredients may be different items (planks + sticks); each
+     * entry of {@link Weg#in} is one grid slot.
+     */
+    public static List<Weg> craftNaar(ServerLevel level, Item doel) {
+        laad(level);
+        return craften.getOrDefault(doel, List.of());
+    }
+
+    private static void laad(ServerLevel level) {
         if (van != level.getServer()) {
             van = level.getServer();
             wegen = lees(level);
+            craften = leesCraften(level);
         }
-        return wegen.getOrDefault(doel, List.of());
+    }
+
+    private static Map<Item, List<Weg>> leesCraften(ServerLevel level) {
+        Map<Item, List<Weg>> m = new HashMap<>();
+        for (var houder : level.recipeAccess().getRecipes()) {
+            if (houder.value() instanceof CraftingRecipe r && (r instanceof ShapedRecipe || r instanceof ShapelessRecipe)) {
+                List<Ingredient> in = r.placementInfo().ingredients();
+                if (in.isEmpty() || in.size() > 9) {
+                    continue;
+                }
+                ItemStack uit = r.assemble(CraftingInput.EMPTY);
+                if (uit.isEmpty() || !uit.getComponentsPatch().isEmpty()) {
+                    continue;
+                }
+                m.computeIfAbsent(uit.getItem(), k -> new ArrayList<>()).add(new Weg(List.copyOf(in), uit.getCount()));
+            }
+        }
+        return m;
     }
 
     /** Forget the ways (a /reload). */

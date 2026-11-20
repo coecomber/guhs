@@ -4,14 +4,19 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
+import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.feature.bouwhulp.kern.Ontwerp;
 import nl.juiced.guhs.feature.bouwhulp.vormen.Daken.Dak;
 
@@ -19,44 +24,116 @@ import static nl.juiced.guhs.feature.bouwhulp.blauwdruk.Bouwdoos.LUCHT;
 import static nl.juiced.guhs.feature.bouwhulp.blauwdruk.Bouwdoos.g;
 
 /**
- * The catalogue of ready blueprints (design 2.6, ronde B11/B12): about 25 in four groups (safari buildings, also sold in
- * the giftshop; guh houses; garden and outdoors; towers and specials), each with its picture, and room for more ("meer
- * hier binnenkort"). Every design faces south (its door at the high z side). Text keys: gui.guhs.blauwdruk.cat.&lt;id&gt;.
- * Catalogue designs have no size limit (they are hand-picked); own and library ones keep the level's.
+ * The catalogue of ready blueprints (design 2.6, ronde B11/B12; cleaned up in 1.10.10): a hand-picked list in groups, each
+ * with its picture, and room for more ("meer hier binnenkort"). Every design faces south (its door at the high z side).
+ * Text keys: gui.guhs.blauwdruk.cat.&lt;id&gt;. Catalogue designs have no size limit (they are hand-picked); own and library
+ * ones keep the level's.
+ * <p>
+ * Three kinds of entries:
+ * <ul>
+ *   <li>{@link #c}: built in Java (with {@link Bouwdoos});</li>
+ *   <li>{@link #s}: loaded from a structure .nbt of the mod ({@code data/guhs/structure/<pad>.nbt}) the first time a server
+ *       asks for it ({@link Ontwerp#uitStructuur}: no air, jigsaws or blocks without an item; optionally without the bottom
+ *       layers of plain ground). Adding one is ONE line here plus its name in tools/features/bouwhulp_gereedschap.py
+ *       (CATALOGUS) and tools/lang/en/c181_bouwhulp_gereedschap.json;</li>
+ *   <li>{@link #oud}: taken out of the catalogue (1.10.10) but still built for the printed blueprints players already have
+ *       (and the giftshop ones they bought): not listed, not in the creative tab, {@link #get} still knows them.</li>
+ * </ul>
  */
 public final class Catalogus {
-    public static final List<String> GROEPEN = List.of("safari", "huizen", "tuin", "torens");
+    public static final List<String> GROEPEN = List.of("safari", "huizen", "tuin", "torens", "snoep");
 
-    public record Ontwerpje(String id, String groep, Supplier<Ontwerp> bouw) {
+    /** One entry; {@code bouw} gets the server (only {@link #s} entries use it). Not {@code zichtbaar}: an {@link #oud} one. */
+    public record Ontwerpje(String id, String groep, Function<MinecraftServer, Ontwerp> bouw, boolean zichtbaar, @Nullable Identifier structuur) {
     }
 
     private static final Map<String, Ontwerpje> ALLE = new LinkedHashMap<>();
     private static final Map<String, Blauwdruk> GEMAAKT = new java.util.concurrent.ConcurrentHashMap<>();
+    /** The server the structure designs in {@link #GEMAAKT} were read on (another server, another datapack: read again). */
+    @Nullable
+    private static MinecraftServer structuurVan;
 
-    /** The six park buildings sold as blueprints in the safari giftshop (design 2.9). */
-    public static final List<String> SAFARI = List.of("lodge_hutje", "rangerpost", "acacia_uitkijktoren", "watergat_terras", "safaripoort",
-            "rieten_paviljoen");
-
+    /** A design built in Java. */
     private static void c(String id, String groep, Supplier<Ontwerp> bouw) {
-        ALLE.put(id, new Ontwerpje(id, groep, bouw));
+        ALLE.put(id, new Ontwerpje(id, groep, server -> bouw.get(), true, null));
     }
 
+    /**
+     * 1.10.10: a design from a structure file, {@code structuur} = its id ({@code guhs:cheese_fountain} is
+     * data/guhs/structure/cheese_fountain.nbt). {@code zonderFundering}: leave out whole bottom layers of plain
+     * dirt/grass/stone.
+     */
+    private static void s(String id, String groep, Identifier structuur, boolean zonderFundering) {
+        ALLE.put(id, new Ontwerpje(id, groep, server -> {
+            Map<Block, Integer> weg = new LinkedHashMap<>();
+            Ontwerp o = Ontwerp.uitStructuur(server, structuur, zonderFundering, weg);
+            ZONDER_ITEM.put(id, weg);
+            if (o.isLeeg()) {
+                LOGGER.warn("[Bouwkeet] catalogus {}: structure {} is missing or empty", id, structuur);
+            } else if (!weg.isEmpty()) {
+                LOGGER.info("[Bouwkeet] catalogus {}: left out (no item): {}", id, weg);
+            }
+            return o;
+        }, true, structuur));
+    }
+
+    /** (tests, the log) per structure design: the blocks left out because they have no item. */
+    private static final Map<String, Map<Block, Integer>> ZONDER_ITEM = new java.util.concurrent.ConcurrentHashMap<>();
+    private static final org.slf4j.Logger LOGGER = com.mojang.logging.LogUtils.getLogger();
+
+    /** The blocks of a structure design that were left out because they have no item (after {@link #get}). */
+    public static Map<Block, Integer> zonderItem(String id) {
+        return ZONDER_ITEM.getOrDefault(id, Map.of());
+    }
+
+    /** 1.10.10: out of the catalogue, but printed blueprints of it still build. */
+    private static void oud(String id, String groep, Supplier<Ontwerp> bouw) {
+        ALLE.put(id, new Ontwerpje(id, groep, server -> bouw.get(), false, null));
+    }
+
+    /** The catalogue as players see it (the removed {@link #oud} designs are not in it). */
     public static List<Ontwerpje> lijst() {
-        return new ArrayList<>(ALLE.values());
+        List<Ontwerpje> uit = new ArrayList<>();
+        for (Ontwerpje o : ALLE.values()) {
+            if (o.zichtbaar()) {
+                uit.add(o);
+            }
+        }
+        return uit;
+    }
+
+    /** Is this id a design the catalogue knows (listed or {@link #oud})? */
+    public static boolean bekend(String id) {
+        return ALLE.containsKey(id);
     }
 
     /** How many placeholder spots ("meer hier binnenkort") the list shows after the real ones. */
     public static final int PLAATSHOUDERS = 3;
 
-    /** A catalogue design as a blueprint (made once). Null for an unknown id. */
+    /**
+     * A catalogue design as a blueprint (made once; also an {@link #oud} one). Null for an unknown id, and for a structure
+     * design when there is no server (the client).
+     */
     @Nullable
     public static Blauwdruk get(String id) {
         Ontwerpje o = ALLE.get(id);
         if (o == null) {
             return null;
         }
+        MinecraftServer server = null;
+        if (o.structuur() != null) {
+            server = ServerLifecycleHooks.getCurrentServer();
+            if (server == null) {
+                return null;
+            }
+            if (server != structuurVan) {
+                structuurVan = server;
+                ALLE.values().stream().filter(x -> x.structuur() != null).forEach(x -> GEMAAKT.remove(x.id()));
+            }
+        }
+        MinecraftServer van = server;
         return GEMAAKT.computeIfAbsent(id, k -> {
-            Ontwerp ontwerp = o.bouw().get();
+            Ontwerp ontwerp = o.bouw().apply(van);
             return new Blauwdruk("c:" + id, "", null, "Guhs", 0L, ontwerp, Voorbeeld.maak(ontwerp));
         });
     }
@@ -90,8 +167,11 @@ public final class Catalogus {
     // =====================================================================================================================
 
     static {
-        // --- safari buildings (also in the giftshop) ---
-        c("lodge_hutje", "safari", () -> {
+        // 1.10.10: the catalogue is the six guh houses and gardens below (c) plus the structure designs (s); the other 19
+        // are oud: gone from the catalogue, the creative tab and the giftshop, but printed blueprints of them still build.
+
+        // --- safari buildings (oud: were sold in the giftshop until 1.10.10) ---
+        oud("lodge_hutje", "safari", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int[] p : new int[][] {{0, 0}, {6, 0}, {0, 6}, {6, 6}}) {
                 b.vul(p[0], 0, p[1], p[0], 3, p[1], Blocks.ACACIA_LOG);
@@ -104,7 +184,7 @@ public final class Catalogus {
             b.lamp(3, 7, 3, true);
             return b.dak(Dak.ZADEL, 1, 1, 5, 5, 8, RIET, BAMBOE, 1, true, null).ontwerp();
         });
-        c("rangerpost", "safari", () -> {
+        oud("rangerpost", "safari", () -> {
             Bouwdoos b = new Bouwdoos();
             b.vul(0, 0, 0, 8, 0, 6, Blocks.COBBLESTONE);
             b.huis(0, 0, 8, 6, 1, 4, ACACIA, Blocks.STRIPPED_ACACIA_LOG, Blocks.ACACIA_LOG);
@@ -115,7 +195,7 @@ public final class Catalogus {
             b.zet(4, 1, 7, MAT);
             return b.dak(Dak.ZADEL, 0, 0, 8, 6, 6, RIET, Blocks.STRIPPED_ACACIA_LOG, 1, true, null).ontwerp();
         });
-        c("acacia_uitkijktoren", "safari", () -> {
+        oud("acacia_uitkijktoren", "safari", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int[] p : new int[][] {{0, 0}, {4, 0}, {0, 4}, {4, 4}}) {
                 b.vul(p[0], 0, p[1], p[0], 8, p[1], Blocks.ACACIA_LOG);
@@ -128,7 +208,7 @@ public final class Catalogus {
             b.zet(1, 9, 1, STOEL).zet(3, 9, 1, STOEL).lamp(2, 11, 2, true);
             return b.dak(Dak.SCHILD, 0, 0, 4, 4, 11, RIET, BAMBOE, 1, false, null).ontwerp();
         });
-        c("watergat_terras", "safari", () -> {
+        oud("watergat_terras", "safari", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int x = 0; x <= 10; x += 5) {
                 for (int z = 0; z <= 6; z += 6) {
@@ -142,7 +222,7 @@ public final class Catalogus {
             b.vul(4, 6, 2, 6, 6, 4, Blocks.ORANGE_WOOL).zet(5, 7, 3, Blocks.ORANGE_WOOL);
             return b.zet(1, 3, 5, Blocks.POTTED_ACACIA_SAPLING).zet(9, 3, 5, Blocks.POTTED_ACACIA_SAPLING).ontwerp();
         });
-        c("safaripoort", "safari", () -> {
+        oud("safaripoort", "safari", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int x : new int[] {0, 8}) {
                 b.vul(x, 0, 0, x + 2, 6, 2, BAMBOE).vul(x, 0, 0, x, 6, 0, Blocks.ACACIA_LOG).vul(x + 2, 0, 0, x + 2, 6, 0, Blocks.ACACIA_LOG)
@@ -154,7 +234,7 @@ public final class Catalogus {
                     .zet(5, 9, 1, Blocks.YELLOW_TERRACOTTA).zet(4, 9, 1, Blocks.PINK_WOOL).zet(6, 9, 1, Blocks.PINK_WOOL);
             return b.ontwerp();
         });
-        c("rieten_paviljoen", "safari", () -> {
+        oud("rieten_paviljoen", "safari", () -> {
             Bouwdoos b = new Bouwdoos();
             b.vul(0, 0, 0, 8, 0, 8, ACACIA);
             for (int[] p : new int[][] {{0, 0}, {8, 0}, {0, 8}, {8, 8}}) {
@@ -225,7 +305,7 @@ public final class Catalogus {
             b.ring(0, 1, 8, 7, 1, 11, HEKJE).vul(3, 1, 8, 3, 1, 8, LUCHT);
             return b.ontwerp();
         });
-        c("guh_winkeltje", "huizen", () -> {
+        oud("guh_winkeltje", "huizen", () -> {
             Bouwdoos b = new Bouwdoos();
             Block muur = pastel("pistache", Blocks.LIME_TERRACOTTA);
             b.huis(0, 0, 7, 6, 0, 4, TEGEL, muur, Blocks.STRIPPED_BIRCH_LOG);
@@ -253,7 +333,7 @@ public final class Catalogus {
         });
 
         // --- garden & outdoors ---
-        c("kas_met_oortjes", "tuin", () -> {
+        oud("kas_met_oortjes", "tuin", () -> {
             Bouwdoos b = new Bouwdoos();
             b.huis(0, 0, 6, 8, 0, 3, Blocks.MOSS_BLOCK, Blocks.GLASS, Blocks.WHITE_CONCRETE);
             b.deur(3, 1, 8, Z, Blocks.BIRCH_DOOR);
@@ -263,7 +343,7 @@ public final class Catalogus {
             b.dak(Dak.OORTJES, 0, 0, 6, 8, 4, Blocks.GLASS, Blocks.GLASS, 0, true, Blocks.PINK_STAINED_GLASS);
             return b.ontwerp();
         });
-        c("bloemenprieel", "tuin", () -> {
+        oud("bloemenprieel", "tuin", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int[] p : new int[][] {{0, 0}, {4, 0}, {0, 4}, {4, 4}}) {
                 b.vul(p[0], 0, p[1], p[0], 3, p[1], HEKJE);
@@ -273,7 +353,7 @@ public final class Catalogus {
             b.gericht(1, 0, 2, BANKJE, O).gericht(3, 0, 2, BANKJE, W);
             return b.zet(2, 0, 2, Blocks.PINK_PETALS).ontwerp();
         });
-        c("boogbrug", "tuin", () -> {
+        oud("boogbrug", "tuin", () -> {
             Bouwdoos b = new Bouwdoos();
             int[] hoogte = {0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0};
             for (int x = 0; x < 11; x++) {
@@ -286,7 +366,7 @@ public final class Catalogus {
             }
             return b.lamp(0, 2, 0, false).lamp(10, 2, 0, false).lamp(0, 2, 4, false).lamp(10, 2, 4, false).ontwerp();
         });
-        c("steiger_botenhuisje", "tuin", () -> {
+        oud("steiger_botenhuisje", "tuin", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int x = 0; x <= 10; x += 2) {
                 b.vul(x, 0, 0, x, 1, 0, Blocks.SPRUCE_LOG).vul(x, 0, 4, x, 1, 4, Blocks.SPRUCE_LOG);
@@ -297,7 +377,7 @@ public final class Catalogus {
             b.zet(8, 3, 2, Blocks.BARREL).lamp(8, 5, 2, true).zet(0, 3, 0, Blocks.SPRUCE_FENCE).zet(0, 3, 4, Blocks.SPRUCE_FENCE);
             return b.dak(Dak.ZADEL, 6, 0, 10, 4, 6, DAKPAN_MINT, pastel("hemelsblauw", Blocks.LIGHT_BLUE_TERRACOTTA), 1, true, null).ontwerp();
         });
-        c("vijver_stapstenen", "tuin", () -> {
+        oud("vijver_stapstenen", "tuin", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int x = 0; x < 11; x++) {
                 for (int z = 0; z < 9; z++) {
@@ -318,7 +398,7 @@ public final class Catalogus {
             b.zet(2, 1, 6, Blocks.LILY_PAD).zet(8, 1, 2, Blocks.LILY_PAD).zet(6, 1, 6, Blocks.LILY_PAD);
             return b.zet(0, 1, 4, Blocks.SUGAR_CANE).zet(10, 1, 4, Blocks.SUGAR_CANE).ontwerp();
         });
-        c("picknickplek", "tuin", () -> {
+        oud("picknickplek", "tuin", () -> {
             Bouwdoos b = new Bouwdoos();
             b.vul(0, 0, 0, 6, 0, 4, Blocks.GRASS_BLOCK).vul(2, 1, 1, 4, 1, 3, Blocks.WHITE_CARPET).zet(3, 1, 2, Blocks.PINK_CARPET);
             b.vul(2, 1, 2, 4, 1, 2, Blocks.RED_CARPET).zet(3, 1, 2, Blocks.CAKE);
@@ -344,7 +424,7 @@ public final class Catalogus {
         });
 
         // --- towers & specials ---
-        c("guh_vuurtoren", "torens", () -> {
+        oud("guh_vuurtoren", "torens", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int y = 0; y <= 13; y++) {
                 b.cilinder(3, 3, 3, y, y, (y / 2) % 2 == 0 ? Blocks.WHITE_CONCRETE : Blocks.PINK_CONCRETE, true);
@@ -355,7 +435,7 @@ public final class Catalogus {
             b.dak(Dak.TENT, 0, 0, 6, 6, 17, Blocks.RED_TERRACOTTA, Blocks.RED_TERRACOTTA, 0, false, null);
             return b.vul(0, 18, 3, 0, 19, 3, Blocks.PINK_WOOL).vul(6, 18, 3, 6, 19, 3, Blocks.PINK_WOOL).ontwerp();
         });
-        c("guh_windmolen", "torens", () -> {
+        oud("guh_windmolen", "torens", () -> {
             Bouwdoos b = new Bouwdoos();
             b.cilinder(3, 3, 3, 0, 9, pastel("vanille", Blocks.WHITE_TERRACOTTA), true).vul(1, 0, 1, 5, 0, 5, Blocks.OAK_PLANKS);
             b.deur(3, 1, 6, Z, Blocks.OAK_DOOR).zet(3, 5, 6, GLAS_HART);
@@ -369,7 +449,7 @@ public final class Catalogus {
             }
             return b.zet(cx + 4, cy + 3, z, Blocks.PINK_WOOL).zet(cx + 3, cy + 4, z, Blocks.PINK_WOOL).ontwerp();
         });
-        c("kasteeltoren", "torens", () -> {
+        oud("kasteeltoren", "torens", () -> {
             Bouwdoos b = new Bouwdoos();
             b.cilinder(3.5, 3.5, 3.5, 0, 11, Blocks.STONE_BRICKS, true).vul(1, 0, 1, 6, 0, 6, Blocks.COBBLESTONE);
             b.vul(3, 1, 7, 4, 2, 7, LUCHT).vul(1, 6, 1, 6, 6, 6, Blocks.SPRUCE_PLANKS).ladder(3, 1, 6, 1, Z);
@@ -385,7 +465,7 @@ public final class Catalogus {
             b.zet(0, 4, 3, Blocks.GLASS_PANE).zet(7, 8, 4, Blocks.GLASS_PANE).lamp(3, 5, 3, true);
             return b.ontwerp();
         });
-        c("boomhut", "torens", () -> {
+        oud("boomhut", "torens", () -> {
             Bouwdoos b = new Bouwdoos();
             b.vul(3, 0, 3, 4, 9, 4, Blocks.OAK_LOG);
             b.huis(1, 1, 6, 6, 5, 3, Blocks.OAK_PLANKS, Blocks.OAK_PLANKS, Blocks.STRIPPED_OAK_LOG).vul(3, 6, 3, 4, 8, 4, Blocks.OAK_LOG);
@@ -395,7 +475,7 @@ public final class Catalogus {
             b.cilinder(3.5, 3.5, 4.5, 10, 12, Blocks.OAK_LEAVES, false).cilinder(3.5, 3.5, 3.0, 13, 13, Blocks.OAK_LEAVES, false);
             return b.dak(Dak.ZADEL, 1, 1, 6, 6, 9, Blocks.SPRUCE_PLANKS, Blocks.OAK_PLANKS, 1, true, null).lamp(3, 8, 2, true).ontwerp();
         });
-        c("guhbol_koepel", "torens", () -> {
+        oud("guhbol_koepel", "torens", () -> {
             Bouwdoos b = new Bouwdoos();
             for (int x = 0; x <= 10; x++) {
                 for (int y = 0; y <= 9; y++) {
@@ -415,7 +495,7 @@ public final class Catalogus {
             b.vul(2, 9, 5, 3, 11, 5, Blocks.PINK_WOOL).zet(2, 12, 5, Blocks.PINK_WOOL).vul(7, 9, 5, 8, 11, 5, Blocks.PINK_WOOL).zet(8, 12, 5, Blocks.PINK_WOOL);
             return b.lamp(5, 7, 5, true).ontwerp();
         });
-        c("guh_klokkentoren", "torens", () -> {
+        oud("guh_klokkentoren", "torens", () -> {
             Bouwdoos b = new Bouwdoos();
             Block muur = pastel("lavendel", Blocks.PURPLE_TERRACOTTA);
             b.huis(0, 0, 4, 4, 0, 12, Blocks.SPRUCE_PLANKS, muur, Blocks.STRIPPED_SPRUCE_LOG);
@@ -429,6 +509,21 @@ public final class Catalogus {
             b.zet(2, 15, 2, Blocks.BELL);
             return b.dak(Dak.SCHILD, 0, 0, 4, 4, 16, DAKPAN, muur, 1, false, null).ontwerp();
         });
+
+        // --- from structure files (1.10.10; picked from guhs_winter/blauwdruk_kandidaten/LIJST.md, numbers K..) ---
+        // s(id, group, structure, strip the ground slab). Names: tools/features/bouwhulp_gereedschap.py CATALOGUS + en.
+        s("kaasfontein", "snoep", Guhs.id("cheese_fountain"), true);                  // K01 (the kaas_saus fluid has no item: left out)
+        s("reuzentaart", "snoep", Guhs.id("giant_cake"), true);                       // K02
+        s("reuzenkaasknabbel", "snoep", Guhs.id("giant_kaasknabbel"), true);          // K03
+        s("blokguh", "snoep", Guhs.id("block_guh"), false);                           // K05 (pink wool is the guh, not ground)
+        s("weebhuisje", "huizen", Guhs.id("weebhuisje"), true);                       // K20
+        s("botenhuisje", "huizen", Guhs.id("botenhuisje"), true);                     // K21
+        s("villa_binnen", "huizen", Guhs.id("huisje_binnen/villa"), false);           // K18 (the huisje's villa room)
+        s("eendenvijver", "tuin", Guhs.id("knabbelpark/eendenvijver"), true);         // K12
+        s("japans_tuintje", "tuin", Guhs.id("knabbelpark/japanse_tuin"), true);       // K13
+        s("wensboom", "tuin", Guhs.id("knabbelpark/wensboom"), true);                 // K14
+        s("muziektuin", "tuin", Guhs.id("knabbelpark/muziektuin"), true);             // K15
+        s("kampeerplekje", "tuin", Guhs.id("kampeerplekje"), true);                   // K30
     }
 
     private Catalogus() {

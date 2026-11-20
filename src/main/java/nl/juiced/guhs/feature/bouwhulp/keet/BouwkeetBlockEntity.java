@@ -20,9 +20,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.neoforged.neoforge.transfer.item.ItemResource;
+import nl.juiced.guhs.feature.bank.BankFeature;
+import nl.juiced.guhs.feature.bank.BankSleutelItem;
 import nl.juiced.guhs.feature.bouwhulp.BouwhulpFeature;
 import nl.juiced.guhs.feature.bouwhulp.kern.Bouwer;
 import nl.juiced.guhs.feature.bouwhulp.kern.Materiaal;
@@ -46,8 +50,15 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
     /** Seconds the whole project may take at most. */
     public static final int MAX_SECONDEN = 3600;
 
+    /** 1.10.10: the keet's one slot holds the Banksleutel of its Bank Guh (in: linked; out: unlinked). */
+    public static final int SLEUTEL = 0;
+
     private int niveau;
     private boolean aanGezet = true;
+    /**
+     * The bank linked the old way (before 1.10.10: a Banksleutel click only remembered the id). Still used while the
+     * slot is empty; a key put in the slot replaces it, "loskoppelen" clears it.
+     */
     @Nullable
     private UUID bank;
     @Nullable
@@ -161,14 +172,59 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
         }
     }
 
+    /** The linked Bank Guh: the key's in the slot, else the old click-link (see {@link #bankOud}), else null. */
     @Nullable
     public UUID bank() {
+        ItemStack sleutel = sleutel();
+        if (!sleutel.isEmpty()) {
+            return BankSleutelItem.bank(sleutel);
+        }
         return bank;
     }
 
+    /** Linked the old way (an id only, no key in the slot)? */
+    public boolean bankOud() {
+        return bank != null && sleutel().isEmpty();
+    }
+
+    /** Sets (null: clears) the old-style link. */
     public void zetBank(@Nullable UUID bank) {
         this.bank = bank;
+        setChanged();
         sync();
+    }
+
+    /** The Banksleutel in the slot (empty: none). */
+    public ItemStack sleutel() {
+        ItemResource r = vakken().getResource(SLEUTEL);
+        return r.isEmpty() ? ItemStack.EMPTY : r.toStack(Math.max(1, vakken().getAmountAsInt(SLEUTEL)));
+    }
+
+    /** Does this stack fit the slot: a Banksleutel that remembers a bank? */
+    public static boolean pastSleutel(ItemStack s) {
+        return s.is(BankFeature.BANK_SLEUTEL.get()) && BankSleutelItem.bank(s) != null;
+    }
+
+    /**
+     * Puts this key in the slot (one of the stack) and links its bank; the old-style link goes. Returns what was in the
+     * slot before (empty: nothing), for the player.
+     */
+    public ItemStack zetSleutel(ItemStack s) {
+        ItemStack oud = sleutel();
+        if (s.isEmpty()) {
+            vakken().set(SLEUTEL, ItemResource.EMPTY, 0);
+        } else {
+            vakken().set(SLEUTEL, ItemResource.of(s), 1);
+            bank = null;
+        }
+        setChanged();
+        sync();
+        return oud;
+    }
+
+    @Override
+    protected boolean past(int vak, ItemResource wat) {
+        return vak == SLEUTEL && pastSleutel(wat.toStack());
     }
 
     public boolean bouwt() {
@@ -280,7 +336,7 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
 
     @Override
     public Materiaal.Bronnen bronnen(ServerLevel level, Spook spook, @Nullable ServerPlayer bouwer) {
-        return Materiaal.bronnen(level, bouwer, bank, werkNiveau().draadloos() ? worldPosition : null);
+        return Materiaal.bronnen(level, bouwer, bank(), werkNiveau().draadloos() ? worldPosition : null);   // (the key in the slot, else the old link)
     }
 
     @Override

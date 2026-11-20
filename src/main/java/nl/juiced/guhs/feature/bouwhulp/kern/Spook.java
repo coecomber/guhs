@@ -2,6 +2,7 @@ package nl.juiced.guhs.feature.bouwhulp.kern;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,11 +13,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.LongArrayTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
@@ -66,6 +70,11 @@ public final class Spook {
     final Set<Long> mist = new HashSet<>();
     int gedaan;
     double opgespaard;
+    /**
+     * 1.10.10: what the keet crafted at "Bouw!" and the build has not used yet ({@link Werkplan}); taken before anything
+     * else, given back when the build is done or cancelled.
+     */
+    final Map<Item, Integer> tegoed = new LinkedHashMap<>();
     /** Cached building order (not saved: made again from the ontwerp). */
     @Nullable
     private List<Map.Entry<BlockPos, BlockState>> volgorde;
@@ -126,6 +135,11 @@ public final class Spook {
 
     public double tempo() {
         return tempo;
+    }
+
+    /** (1.10.10) The crafted credit not used yet (a copy). */
+    public Map<Item, Integer> tegoed() {
+        return Map.copyOf(tegoed);
     }
 
     public String naam() {
@@ -238,6 +252,11 @@ public final class Spook {
         t.putInt("Volgende", volgende);
         t.putInt("Gedaan", gedaan);
         t.put("Mist", new LongArrayTag(mist.stream().mapToLong(Long::longValue).toArray()));
+        if (!tegoed.isEmpty()) {
+            CompoundTag g = new CompoundTag();
+            tegoed.forEach((item, n) -> g.putInt(BuiltInRegistries.ITEM.getKey(item).toString(), n));
+            t.put("Tegoed", g);
+        }
         return t;
     }
 
@@ -265,6 +284,14 @@ public final class Spook {
         s.gedaan = t.getIntOr("Gedaan", 0);
         for (long l : t.getLongArray("Mist").orElse(new long[0])) {
             s.mist.add(l);
+        }
+        CompoundTag g = t.getCompoundOrEmpty("Tegoed");
+        for (String k : g.keySet()) {
+            Identifier id = Identifier.tryParse(k);
+            int n = g.getIntOr(k, 0);
+            if (id != null && n > 0) {
+                BuiltInRegistries.ITEM.getOptional(id).ifPresent(item -> s.tegoed.merge(item, n, Integer::sum));
+            }
         }
         return s;
     }

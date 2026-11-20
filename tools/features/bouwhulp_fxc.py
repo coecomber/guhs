@@ -116,6 +116,7 @@ TEKSTEN = {
     "gui.guhs.bouwhulp.tip.aantal": "Nog %s nodig",
     "gui.guhs.bouwhulp.tip.heb": "Je hebt er %s van de %s",
     "gui.guhs.bouwhulp.lijstje.knop": "Lijstje",
+    "gui.guhs.bouwhulp.lijstje.maakt": "Maakt de keet zelf (aan de werkbank):",
     "gui.guhs.bouwhulp.lijstje.uitleg": "Exporteer naar lijstje: je krijgt een boek met alle blokken die nog ontbreken (naam en aantal). Handig bij de werkbank.",
     "gui.guhs.bouwhulp.lijstje.niets.uitleg": "Er ontbreekt niets (in creative bouwt het gratis).",
     "gui.guhs.bouwhulp.lijstje.niets": "Er ontbreekt niets!",

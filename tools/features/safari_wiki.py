@@ -146,7 +146,7 @@ WIKI = {
          "marshmallows. Elke dag is er ook een pinguïnparade door het dorp."),
         ("safari-lobby", "De giftshop",
          "Voor Safarimunten koop je verblijfsborden (100, 175 of 300 munten), safarivoer, safarikleding voor jou en je guhs, "
-         "safari-bouwblokken, speeltjes voor je dieren thuis, posters en schilderijen, en de parkgebouwen als blauwdruk. Het "
+         "safari-bouwblokken, speeltjes voor je dieren thuis, en posters en schilderijen. Het "
          "safarihek gaat open als er 10 soorten in je dex staan, de rotswanden bij 20."),
         # --- the animals ---
         ("safari-dieren", "Per zone", _per_zone()),

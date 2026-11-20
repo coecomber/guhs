@@ -41,6 +41,20 @@ CATALOGUS = {
     "vijver_stapstenen": "Vijver met stapstenen", "picknickplek": "Picknickplek", "guh_speeltuintje": "Guh-speeltuintje",
     "guh_vuurtoren": "Guh-vuurtoren", "guh_windmolen": "Guh-windmolen", "kasteeltoren": "Kasteeltoren met oortjes",
     "boomhut": "Boomhut met guh-raam", "guhbol_koepel": "Guhbol-uitkijkkoepel", "guh_klokkentoren": "Guh-klokkentoren",
+    # 1.10.10: from structure files (the 19 above minus the six houses/playground are out of the catalogue but keep their
+    # names for printed blueprints)
+    "kaasfontein": "Kaasfontein",
+    "reuzentaart": "Reuzentaart",
+    "reuzenkaasknabbel": "Reuzenkaasknabbel",
+    "blokguh": "Blokguh",
+    "weebhuisje": "Weebhuisje",
+    "botenhuisje": "Botenhuisje op palen",
+    "villa_binnen": "Villazaal (huisje vanbinnen)",
+    "eendenvijver": "Eendenvijver",
+    "japans_tuintje": "Japans tuintje",
+    "wensboom": "Wensboom",
+    "muziektuin": "Muziektuin",
+    "kampeerplekje": "Kampeerplekje met guh-tentjes",
 }
 
 # ======================================================================================================================
@@ -186,6 +200,7 @@ TEKSTEN = {
     "gui.guhs.blauwdruk.groep.huizen": "Guh-huizen",
     "gui.guhs.blauwdruk.groep.tuin": "Tuin & buiten",
     "gui.guhs.blauwdruk.groep.torens": "Torens & bijzonder",
+    "gui.guhs.blauwdruk.groep.snoep": "Kaas, snoep & beelden",
     "gui.guhs.blauwdruk.plaats": "Plaats",
     "gui.guhs.blauwdruk.plaats.uitleg": "Wordt het project van deze keet: een spook voor de deur.",
     "gui.guhs.blauwdruk.print": "Print",

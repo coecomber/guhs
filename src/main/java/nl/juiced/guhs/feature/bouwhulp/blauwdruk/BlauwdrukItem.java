@@ -37,10 +37,21 @@ public class BlauwdrukItem extends Item {
         return s;
     }
 
-    /** A catalogue blueprint item (the giftshop). */
+    /**
+     * A catalogue blueprint item (the creative tab). Made from the id alone, so a structure design needs no server (the
+     * creative tab is filled on the client too).
+     */
     public static ItemStack catalogus(String id) {
-        Blauwdruk b = Catalogus.get(id);
-        return b == null ? ItemStack.EMPTY : van(b);
+        if (!Catalogus.bekend(id)) {
+            return ItemStack.EMPTY;
+        }
+        ItemStack s = new ItemStack(GereedschapFeature.BLAUWDRUK.get());
+        CompoundTag t = new CompoundTag();
+        t.putString("Blauwdruk", "c:" + id);
+        t.putString("Naam", "");
+        t.putString("Maker", "Guhs");
+        s.set(DataComponents.CUSTOM_DATA, CustomData.of(t));
+        return s;
     }
 
     private static CompoundTag data(ItemStack s) {

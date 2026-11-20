@@ -187,8 +187,7 @@ public final class BouwkeetPayloads {
                 }
                 case LIJSTJE -> {
                     if (s != null) {
-                        nl.juiced.guhs.feature.bouwhulp.kern.Lijstje.geef(p, s.naam().isEmpty()
-                                ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam(), Spookbouw.tekort(p, s));
+                        Spookbouw.lijstje(p, s);
                     }
                 }
             }

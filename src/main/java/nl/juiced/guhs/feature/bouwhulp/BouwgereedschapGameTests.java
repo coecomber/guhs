@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.Half;
 import net.minecraft.world.level.block.state.properties.StairsShape;
 import nl.juiced.guhs.feature.bouwhulp.blauwdruk.Bibliotheek;
 import nl.juiced.guhs.feature.bouwhulp.blauwdruk.Blauwdruk;
+import nl.juiced.guhs.feature.bouwhulp.blauwdruk.BlauwdrukItem;
 import nl.juiced.guhs.feature.bouwhulp.blauwdruk.Catalogus;
 import nl.juiced.guhs.feature.bouwhulp.blauwdruk.Voorbeeld;
 import nl.juiced.guhs.feature.bouwhulp.gereedschap.Gereedschap;
@@ -191,20 +192,177 @@ public class BouwgereedschapGameTests {
         helper.succeed();
     }
 
-    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 60)
+    /** 1.10.10: the six kept Java designs plus the twelve structure designs; the 19 removed ones still build for old prints. */
+    static final List<String> HOUD = List.of("guh_huisje_klein", "guh_huis_middel", "guh_villa_groot", "guh_boerderijtje", "guh_rijtje", "guh_speeltuintje");
+    static final List<String> STRUCTUUR = List.of("kaasfontein", "reuzentaart", "reuzenkaasknabbel", "blokguh", "weebhuisje", "botenhuisje",
+            "villa_binnen", "eendenvijver", "japans_tuintje", "wensboom", "muziektuin", "kampeerplekje");
+    static final List<String> WEG = List.of("lodge_hutje", "rangerpost", "acacia_uitkijktoren", "watergat_terras", "safaripoort", "rieten_paviljoen",
+            "guh_winkeltje", "kas_met_oortjes", "bloemenprieel", "boogbrug", "steiger_botenhuisje", "vijver_stapstenen", "picknickplek", "guh_vuurtoren",
+            "guh_windmolen", "kasteeltoren", "boomhut", "guhbol_koepel", "guh_klokkentoren");
+
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
     public static void bouwgereedschapCatalogus(GameTestHelper helper) {
-        helper.assertTrue(Catalogus.lijst().size() >= 25, "about 25 designs (" + Catalogus.lijst().size() + ")");
+        List<String> ids = Catalogus.lijst().stream().map(Catalogus.Ontwerpje::id).toList();
+        helper.assertTrue(ids.size() == HOUD.size() + STRUCTUUR.size() && ids.containsAll(HOUD) && ids.containsAll(STRUCTUUR),
+                "the catalogue is the six houses plus the twelve structures: " + ids);
+        StringBuilder zonder = new StringBuilder();
         for (Catalogus.Ontwerpje c : Catalogus.lijst()) {
             Blauwdruk b = Catalogus.get(c.id());
             helper.assertTrue(b != null && !b.ontwerp.isLeeg() && b.ontwerp.maat() <= 64, c.id() + " is a real design");
             helper.assertTrue(b.voorbeeld.length == Voorbeeld.N * Voorbeeld.N && java.util.Arrays.stream(b.voorbeeld).filter(x -> x != 0).count() > 50,
                     c.id() + " has a picture");
             helper.assertTrue(Catalogus.GROEPEN.contains(c.groep()), c.id() + " is in a group");
+            for (BlockState st : b.ontwerp.blokken().values()) {
+                helper.assertTrue(nl.juiced.guhs.feature.bouwhulp.kern.Materiaal.kost(st) != null, c.id() + ": every block can be paid (" + st + ")");
+            }
+            if (c.structuur() != null && !Catalogus.zonderItem(c.id()).isEmpty()) {
+                zonder.append(c.id()).append(' ').append(Catalogus.zonderItem(c.id())).append("; ");
+            }
         }
-        for (String s : Catalogus.SAFARI) {
-            helper.assertTrue(Catalogus.get(s) != null, "giftshop blueprint " + s);
+        org.slf4j.LoggerFactory.getLogger("BouwkeetTest").info("[Bouwkeet] structure designs, blocks without an item: {}", zonder);
+        for (String s : WEG) {
+            helper.assertTrue(!ids.contains(s) && Catalogus.get(s) != null && !Catalogus.get(s).ontwerp.isLeeg(), s + ": out of the list, still builds");
         }
+        Blauwdruk fontein = Catalogus.get("kaasfontein");
+        helper.assertTrue(fontein.ontwerp.blokken().values().stream().filter(st -> st.is(Blocks.POTTED_PINK_TULIP)).count() == 4, "the fountain keeps its 4 pots");
+        helper.assertTrue(Catalogus.zonderItem("kaasfontein").keySet().stream().anyMatch(bl -> net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(bl).getPath().equals("kaas_saus")),
+                "the sauce (a fluid) is left out");
+        int vijver = Catalogus.get("eendenvijver").ontwerp.aantal();
+        helper.assertTrue(vijver < 681 - 100, "the duck pond loses its ground slab (" + vijver + " of 681)");
+        helper.assertTrue(!BlauwdrukItem.catalogus("guh_vuurtoren").isEmpty() && BlauwdrukItem.catalogus("bestaat_niet").isEmpty(), "old prints still have an id");
         helper.succeed();
+    }
+
+    /** 1.10.10: a .nbt catalogue design really builds (Blokguh, creative, fast). */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 400)
+    public static void bouwgereedschapStructuurBouwt(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.CREATIVE);
+        Blauwdruk b = Catalogus.get("blokguh");
+        helper.assertTrue(b != null && b.ontwerp.aantal() > 250, "the Blokguh loads from its .nbt");
+        Spook s = Spookbouw.start(p, b.ontwerp, helper.absolutePos(new BlockPos(3, 2, 3)), net.minecraft.world.level.block.Rotation.NONE,
+                net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null, "a ghost");
+        Spookbouw.zetTempo(helper.getLevel(), s, 5000);
+        List<Map.Entry<BlockPos, BlockState>> doel = new java.util.ArrayList<>(s.volgorde());
+        helper.assertTrue(Spookbouw.bouw(p, s, false).begonnen(), "it builds");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null, "done");
+            for (Map.Entry<BlockPos, BlockState> e : doel) {
+                helper.assertTrue(helper.getLevel().getBlockState(e.getKey()).is(e.getValue().getBlock()), "every block stands: " + e.getKey());
+            }
+        });
+    }
+
+    private static int tel(ServerPlayer p, net.minecraft.world.item.Item item) {
+        int n = 0;
+        for (int i = 0; i < p.getInventory().getContainerSize(); i++) {
+            if (p.getInventory().getItem(i).is(item)) {
+                n += p.getInventory().getItem(i).getCount();
+            }
+        }
+        return n;
+    }
+
+    private static Ontwerp trappen(int n) {
+        Map<BlockPos, BlockState> m = new java.util.LinkedHashMap<>();
+        for (int x = 0; x < n; x++) {
+            m.put(new BlockPos(x, 0, 0), Blocks.OAK_STAIRS.defaultBlockState());
+        }
+        return Ontwerp.van(m);
+    }
+
+    /** 1.10.10: 6 oak stairs from 3 oak logs only (logs -> 12 planks -> 8 stairs); the 2 stairs too many come back. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 200)
+    public static void bouwgereedschapWerkbankTrappen(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        p.getInventory().add(new ItemStack(Items.OAK_LOG, 3));
+        Spook s = Spookbouw.start(p, trappen(6), helper.absolutePos(new BlockPos(3, 2, 3)), net.minecraft.world.level.block.Rotation.NONE,
+                net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null, "a ghost");
+        nl.juiced.guhs.feature.bouwhulp.kern.Werkplan plan = Spookbouw.plan(p, s);
+        helper.assertTrue(plan.tekort().isEmpty() && plan.maakt(Items.OAK_STAIRS) == 6, "the plan crafts all 6 stairs: " + plan.tekort());
+        helper.assertTrue(plan.gemaakt().get(0).van().getOrDefault(Items.OAK_LOG, 0) == 3, "from 3 logs: " + plan.gemaakt().get(0).van());
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(b.begonnen() && b.tekort().isEmpty(), "nothing missing, it builds");
+        helper.assertTrue(tel(p, Items.OAK_LOG) == 0, "the logs went into the crafting");
+        helper.succeedWhen(() -> {
+            for (int x = 0; x < 6; x++) {
+                helper.assertBlockPresent(Blocks.OAK_STAIRS, new BlockPos(3 + x, 2, 3));
+            }
+            helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null, "done");
+            helper.assertTrue(tel(p, Items.OAK_STAIRS) == 2 && tel(p, Items.OAK_PLANKS) == 0, "the 2 extra stairs came back ("
+                    + tel(p, Items.OAK_STAIRS) + " stairs, " + tel(p, Items.OAK_PLANKS) + " planks)");
+        });
+    }
+
+    /** 1.10.10: a potted plant costs a flower pot plus the plant (it used to be skipped). */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 100)
+    public static void bouwgereedschapPot(GameTestHelper helper) {
+        nl.juiced.guhs.feature.bouwhulp.kern.Materiaal.Kost k = nl.juiced.guhs.feature.bouwhulp.kern.Materiaal.kost(Blocks.POTTED_PINK_TULIP.defaultBlockState());
+        helper.assertTrue(k != null && k.item() == Items.FLOWER_POT && k.aantal() == 1 && k.extra() == Items.PINK_TULIP, "a pot + a tulip: " + k);
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        p.getInventory().add(new ItemStack(Items.FLOWER_POT, 1));
+        p.getInventory().add(new ItemStack(Items.PINK_TULIP, 1));
+        Ontwerp o = Ontwerp.van(Map.of(new BlockPos(0, 0, 0), Blocks.POTTED_PINK_TULIP.defaultBlockState()));
+        helper.assertTrue(o.nodig().getOrDefault(Items.FLOWER_POT, 0) == 1 && o.nodig().getOrDefault(Items.PINK_TULIP, 0) == 1, "it needs both");
+        Spook s = Spookbouw.start(p, o, helper.absolutePos(new BlockPos(4, 2, 4)), net.minecraft.world.level.block.Rotation.NONE,
+                net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null && Spookbouw.bouw(p, s, false).begonnen(), "it builds");
+        helper.succeedWhen(() -> {
+            helper.assertBlockPresent(Blocks.POTTED_PINK_TULIP, new BlockPos(4, 2, 4));
+            helper.assertTrue(tel(p, Items.FLOWER_POT) == 0 && tel(p, Items.PINK_TULIP) == 0, "both were used");
+        });
+    }
+
+    /**
+     * 1.10.10: the keet's Banksleutel slot links the bank (and unlinks when the key comes out; the old click-link still
+     * counts while the slot is empty), and the keet crafts stairs from logs that are only in that bank.
+     */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 300)
+    public static void bouwgereedschapBankSleutel(GameTestHelper helper) {
+        net.minecraft.server.level.ServerLevel level = helper.getLevel();
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        helper.setBlock(new BlockPos(1, 2, 1), nl.juiced.guhs.registry.ModBlocks.BANK_GUH.get());
+        nl.juiced.guhs.block.entity.BankGuhBlockEntity bank = (nl.juiced.guhs.block.entity.BankGuhBlockEntity) level.getBlockEntity(helper.absolutePos(new BlockPos(1, 2, 1)));
+        ItemStack sleutel = new ItemStack(nl.juiced.guhs.feature.bank.BankFeature.BANK_SLEUTEL.get());
+        nl.juiced.guhs.feature.bank.BankSleutelItem.onthoud(sleutel, bank);
+        bank.getStorage().insert(new ItemStack(Items.OAK_LOG), 3);
+        BlockPos kern = new BlockPos(12, 2, 3);
+        helper.setBlock(kern, BouwhulpFeature.BOUWKEET.get().defaultBlockState());
+        nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity keet = (nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity) level.getBlockEntity(helper.absolutePos(kern));
+        // the old click-link (an id, no key) still counts
+        keet.zetBank(bank.bankId());
+        helper.assertTrue(bank.bankId().equals(keet.bank()) && keet.bankOud(), "an old link is kept and shown as old");
+        // the slot: the key from the inventory goes in
+        p.getInventory().add(sleutel);
+        nl.juiced.guhs.feature.bouwhulp.keet.KeetTabs.sleutelVak(p, level, keet);
+        helper.assertTrue(!keet.sleutel().isEmpty() && tel(p, nl.juiced.guhs.feature.bank.BankFeature.BANK_SLEUTEL.get()) == 0, "the key is in the slot");
+        helper.assertTrue(bank.bankId().equals(keet.bank()) && !keet.bankOud(), "linked through the key; the old link is gone");
+        Spook s = Spookbouw.start(p, trappen(6), helper.absolutePos(new BlockPos(2, 2, 10)), net.minecraft.world.level.block.Rotation.NONE,
+                net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null && keet.zetProject(level, s), "the keet's project");
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(b.begonnen() && b.tekort().isEmpty(), "stairs crafted from the bank's logs: " + b.tekort());
+        helper.assertTrue(bank.getStorage().count(new ItemStack(Items.OAK_LOG)) == 0, "the logs left the bank");
+        helper.succeedWhen(() -> {
+            for (int x = 0; x < 6; x++) {
+                helper.assertBlockPresent(Blocks.OAK_STAIRS, new BlockPos(2 + x, 2, 10));
+            }
+            helper.assertTrue(keet.project() == null, "done");
+            long over = tel(p, Items.OAK_STAIRS) + bank.getStorage().count(new ItemStack(Items.OAK_STAIRS));
+            helper.assertTrue(over == 2, "the 2 extra stairs came back (" + over + ")");
+            // the key out again: unlinked
+            nl.juiced.guhs.feature.bouwhulp.keet.KeetTabs.sleutelVak(p, level, keet);
+            helper.assertTrue(keet.sleutel().isEmpty() && keet.bank() == null && tel(p, nl.juiced.guhs.feature.bank.BankFeature.BANK_SLEUTEL.get()) == 1,
+                    "the key came back, the bank is unlinked");
+        });
     }
 
     @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 20)
