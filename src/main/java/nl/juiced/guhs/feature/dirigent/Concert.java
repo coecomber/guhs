@@ -62,6 +62,8 @@ public final class Concert {
     static final double VAN_VER = 40, EIGEN_VER = 16, BOOG = 4.0;
     /** Points for one, two and three stars. */
     static final int STER1 = 8, STER2 = 18, STER3 = 26;
+    /** Droomzand per star of a concert (1.10.10: 1 -> 3, so 3-9). */
+    public static final int ZAND_PER_STER = 3;
     /** Semitones above do (a major scale) and each note's dust colour (roze, boter, aqua, lavendel, hemelsblauw). */
     static final int[] HALVE_TONEN = {0, 2, 4, 5, 7};
     static final int[] KLEUR = {0xF4A6C8, 0xFFE38A, 0x8FE3E8, 0xC7A6F0, 0x8FB8F4};
@@ -427,7 +429,7 @@ public final class Concert {
         if (sterren <= 0) {
             return;
         }
-        Minigames.give(p, new ItemStack(DroomblokkenFeature.DROOMZAND.get(), sterren));
+        Minigames.give(p, new ItemStack(DroomblokkenFeature.DROOMZAND.get(), sterren * ZAND_PER_STER));
         long dag = Band.dag(p.level().getServer());
         if (sterren < 2 || GuhQuests.saved(p).getLongOr(DAG, Long.MIN_VALUE) == dag) {
             return;

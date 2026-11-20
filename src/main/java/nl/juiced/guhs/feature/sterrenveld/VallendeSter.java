@@ -36,6 +36,9 @@ public class VallendeSter extends Entity implements ItemSupplier {
     /** How long it glows after landing, how long the fading takes, and the longest fall (then it is simply gone). */
     public static final int GLOEI_TICKS = 140, VERVAAG_TICKS = 60, MAX_VAL_TICKS = 900;
     private static final EntityDataAccessor<Integer> FASE = SynchedEntityData.defineId(VallendeSter.class, EntityDataSerializers.INT);
+    /** 1.10.10: a golden one (about 1 in {@value #GOUD_KANS}): a gold look and sparkles, {@value #GOUD_ZAND} droomzand. */
+    private static final EntityDataAccessor<Boolean> GOUD = SynchedEntityData.defineId(VallendeSter.class, EntityDataSerializers.BOOLEAN);
+    public static final int GOUD_KANS = 25, GOUD_ZAND = 10;
 
     /** Ticks in the current phase (server). */
     private int inFase;
@@ -53,12 +56,21 @@ public class VallendeSter extends Entity implements ItemSupplier {
         double a = level.getRandom().nextDouble() * Math.PI * 2;
         s.driftX = Math.cos(a) * 0.035;
         s.driftZ = Math.sin(a) * 0.035;
+        s.zetGoud(level.getRandom().nextInt(GOUD_KANS) == 0);
         level.addFreshEntity(s);
         return s;
     }
 
     public int fase() {
         return entityData.get(FASE);
+    }
+
+    public boolean isGoud() {
+        return entityData.get(GOUD);
+    }
+
+    public void zetGoud(boolean goud) {
+        entityData.set(GOUD, goud);
     }
 
     void zetFase(int fase) {
@@ -69,10 +81,14 @@ public class VallendeSter extends Entity implements ItemSupplier {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         builder.define(FASE, VALT);
+        builder.define(GOUD, false);
     }
 
     @Override
     public ItemStack getItem() {
+        if (isGoud()) {
+            return new ItemStack(fase() == VERVAAGT ? SterrenveldFeature.LOOK_GOUD_VAAG.get() : SterrenveldFeature.LOOK_GOUD.get());
+        }
         return new ItemStack(switch (fase()) {
             case GLOEIT -> SterrenveldFeature.LOOK_GLOED.get();
             case VERVAAGT -> SterrenveldFeature.LOOK_VAAG.get();
@@ -87,6 +103,10 @@ public class VallendeSter extends Entity implements ItemSupplier {
             return;
         }
         inFase++;
+        if (isGoud() && inFase % 4 == 0) {                         // a golden one sparkles gold all the time
+            level.sendParticles(ParticleTypes.WAX_ON, getX(), getY() + 0.35, getZ(), 2, 0.25, 0.25, 0.25, 0.0);
+            level.sendParticles(ParticleTypes.ELECTRIC_SPARK, getX(), getY() + 0.35, getZ(), 1, 0.2, 0.2, 0.2, 0.0);
+        }
         switch (fase()) {
             case VALT -> {
                 Vec3 volgende = position().add(driftX, -0.11, driftZ);
@@ -103,7 +123,7 @@ public class VallendeSter extends Entity implements ItemSupplier {
                         level.sendParticles(ParticleTypes.WAX_OFF, getX(), getY() + 0.3, getZ(), 1, 0.1, 0.1, 0.1, 0.0);
                     }
                     if (inFase > MAX_VAL_TICKS || getY() < level.getMinY()) {
-                        discard();
+                        vervaagd(level);
                     }
                 }
             }
@@ -121,28 +141,56 @@ public class VallendeSter extends Entity implements ItemSupplier {
                 }
                 if (inFase >= VERVAAG_TICKS) {
                     level.sendParticles(ParticleTypes.WHITE_ASH, getX(), getY() + 0.3, getZ(), 6, 0.2, 0.2, 0.2, 0.01);
-                    discard();
+                    vervaagd(level);
                 }
             }
         }
     }
 
-    /** Caught: droomzand for the catcher (two now and then), a chime and a shower of sparkles. */
+    /** Nobody caught it (faded, or fell out of the world): gone, and the Sterrenreeks of whoever stood near breaks. */
+    void vervaagd(ServerLevel level) {
+        if (isRemoved()) {
+            return;
+        }
+        Sterrenreeks.gemist(level, position());
+        discard();
+    }
+
+    /**
+     * Caught: droomzand for the catcher (two now and then; a golden one {@value #GOUD_ZAND}), a chime and a shower of sparkles.
+     * Every {@value Sterrenreeks#REEKS}th catch in a row without a star fading near you: {@value Sterrenreeks#BONUS} extra.
+     */
     public boolean vang(ServerPlayer p) {
         if (isRemoved() || !(level() instanceof ServerLevel level)) {
             return false;
         }
-        int n = level.getRandom().nextInt(4) == 0 ? 2 : 1;
+        boolean goud = isGoud();
+        int n = goud ? GOUD_ZAND : level.getRandom().nextInt(4) == 0 ? 2 : 1;
         if (nl.juiced.guhs.feature.slaapkleding.Droompyjama.draagtSet(p) && level.getRandom().nextBoolean()) {
             n++;                                           // (the droompyjama's set bonus)
         }
+        int reeks = Sterrenreeks.gevangen(p);
+        n += reeks;
         ItemStack zand = new ItemStack(DroomblokkenFeature.DROOMZAND.get(), n);
         if (!p.getInventory().add(zand)) {
             p.drop(zand, false);
         }
         level.playSound(null, getX(), getY(), getZ(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0f, 1.9f);
         level.sendParticles(ParticleTypes.END_ROD, getX(), getY() + 0.3, getZ(), 14, 0.3, 0.3, 0.3, 0.08);
-        p.sendOverlayMessage(Component.translatable("gui.guhs.sterren.gevangen").withStyle(ChatFormatting.YELLOW));
+        if (goud) {
+            level.playSound(null, getX(), getY(), getZ(), SoundEvents.PLAYER_LEVELUP, SoundSource.PLAYERS, 0.7f, 1.7f);
+            level.playSound(null, getX(), getY(), getZ(), SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.PLAYERS, 1.0f, 1.5f);
+            level.sendParticles(ParticleTypes.WAX_ON, getX(), getY() + 0.3, getZ(), 24, 0.5, 0.5, 0.5, 0.2);
+            level.sendParticles(ParticleTypes.HAPPY_VILLAGER, getX(), getY() + 0.3, getZ(), 8, 0.4, 0.4, 0.4, 0.0);
+        }
+        if (reeks > 0) {
+            level.playSound(null, p.getX(), p.getY(), p.getZ(), SoundEvents.NOTE_BLOCK_BELL.value(), SoundSource.PLAYERS, 0.9f, 1.4f);
+            p.sendOverlayMessage(Component.translatable("gui.guhs.sterren.reeks", reeks).withStyle(ChatFormatting.GOLD));
+        } else if (goud) {
+            p.sendOverlayMessage(Component.translatable("gui.guhs.sterren.goud", n).withStyle(ChatFormatting.GOLD));
+        } else {
+            p.sendOverlayMessage(Component.translatable("gui.guhs.sterren.gevangen").withStyle(ChatFormatting.YELLOW));
+        }
         discard();
         return true;
     }

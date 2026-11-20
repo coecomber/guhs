@@ -174,6 +174,7 @@ public final class Features {
         nl.juiced.guhs.feature.herinnering.HerinneringFeature.register();   // 1.8.0: the Herinneringseiland (its herinneringsbelletjes and retro films)
         nl.juiced.guhs.feature.dromen.liedjes.BlubKoortje.register();   // 1.8.0 Guhdromenland: the Slaapliedjesheuvels' Blub-koortje
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.register(modBus);   // 1.8.0: het Sterrenkussenveld (stuiterkussens, vallende sterren)
+        nl.juiced.guhs.feature.droomzand.DroomzandFeature.register(modBus);   // 1.10.10 economie: the zandhoopjes on the dream islands
         nl.juiced.guhs.feature.molentje.MolentjeFeature.register(modBus);   // 1.8.0 (Guhdromenland E): Het Maanmolentje (cog puzzle, blowing Blubs, the Zandguh's droomzand)
         nl.juiced.guhs.feature.snoesverhaal.SnoesVerhaalFeature.register(modBus);   // 1.8.0 (Guhdromenland F): the story of Snoes, its finale, the dream weerpotjes
         nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.register(modBus);   // 1.8.0: De Zingende Weide (the Blub biome)
@@ -482,6 +483,7 @@ public final class Features {
         nl.juiced.guhs.feature.droomwezens.DroomwezensFeature.creative(output);   // 1.8.0: sterrenvisje, its bucket, glas met een restje
         nl.juiced.guhs.feature.droomplein.DroompleinFeature.creative(output);   // 1.8.0: the Droomplein's brievenbusjes and droomwekker
         nl.juiced.guhs.feature.sterrenveld.SterrenveldFeature.creative(output);   // 1.8.0: the stuiterkussens
+        nl.juiced.guhs.feature.droomzand.DroomzandFeature.creative(output);   // 1.10.10: the droomzandhoopje
         nl.juiced.guhs.feature.molentje.MolentjeFeature.creative(output);   // 1.8.0: molentandwieltje, blaaskussentje, molenwieken
         nl.juiced.guhs.feature.zingendeweide.ZingendeWeideFeature.creative(output);   // 1.8.0: De Zingende Weide's blocks
         nl.juiced.guhs.feature.droomspul.DroomspulFeature.creative(output);   // 1.8.0: verhuis-/schoenen-/pizzadoos, zeepje, sterlampje, fotootje

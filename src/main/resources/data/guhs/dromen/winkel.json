@@ -243,56 +243,56 @@
     "id": "weerpotje_pluisjes",
     "groep": "weer",
     "item": "guhs:weerpotje_pluisjes",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_bellen",
     "groep": "weer",
     "item": "guhs:weerpotje_bellen",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_sterren",
     "groep": "weer",
     "item": "guhs:weerpotje_sterren",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_knusmist",
     "groep": "weer",
     "item": "guhs:weerpotje_knusmist",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_hartjes",
     "groep": "weer",
     "item": "guhs:weerpotje_hartjes",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_regenboog",
     "groep": "weer",
     "item": "guhs:weerpotje_regenboog",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_knabbel",
     "groep": "weer",
     "item": "guhs:weerpotje_knabbel",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   },
   {
     "id": "weerpotje_bloesem",
     "groep": "weer",
     "item": "guhs:weerpotje_bloesem",
-    "prijs": 40,
+    "prijs": 25,
     "max": 1
   }
 ]

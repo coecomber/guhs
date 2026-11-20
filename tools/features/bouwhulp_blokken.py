@@ -1006,7 +1006,7 @@ def groep_knuffel():
         item(n)
         loot(n)
         naam(n, f"{nl} knuffelblok", f"{en} Snuggle Block")
-        shaped(n, [" W ", "WSW", " W "], {"W": KNUFFEL_WOL[kid], "S": "slime_ball"}, 4)
+        shaped(n, [" W ", "WSW", " W "], {"W": KNUFFEL_WOL[kid], "S": "#guhs:slijmballen"}, 4)
     for pid, bestand, nl, en, extra in KNUFFEL_PATRONEN:
         n = f"knuffelblok_{pid}"
         t = save(tex_knuffel_patroon(bestand), n)

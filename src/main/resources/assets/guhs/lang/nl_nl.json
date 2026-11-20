@@ -49084,5 +49084,16 @@
   "guhwinter.npc.praat.ozovads_verstop.sint.2": "*verstopt zijn hoofd achter een rotsje* Hinnikvads... (Jij ziet mij niet.)",
   "guhwinter.npc.praat.ozovads_verstop.sint.3": "*snuffelt* Wortel? Het ruikt hier naar wortel. Hinnik!",
   "guhwinter.verhaal.taak": "➜ Wat nu, vadsje? %s (%s)",
-  "guhwinter.verhaal.taak.teller": "(%s van %s gevonden)"
+  "guhwinter.verhaal.taak.teller": "(%s van %s gevonden)",
+  "item.guhs.droomsterretje_goud": "Gouden sterretje",
+  "item.guhs.droomsterretje_goud_vaag": "Vervagend gouden sterretje",
+  "gui.guhs.sterren.goud": "Een GOUDEN sterretje! %s droomzand, vahoeg!",
+  "gui.guhs.sterren.reeks": "Sterrenreeks! +%s",
+  "block.guhs.droomzandhoopje": "Droomzandhoopje",
+  "block.guhs.droomzandhoopje.lore": "Een hoopje glinsterend droomzand. In een droom mag je er één keer uit scheppen, vads!",
+  "gui.guhs.zandhoopje.geschept": "Je schept %s droomzand uit het hoopje. Glinster glinster!",
+  "gui.guhs.zandhoopje.al": "Dit hoopje heb je al leeggeschept",
+  "gui.guhs.zandhoopje.geen_droom": "Droomzand schep je alleen in een droom, vadsje.",
+  "gui.guhs.guh_slime.knuffel": "Squish! De guh-slime giechelt en geeft je een guhslijmbal.",
+  "gui.guhs.guh_slime.uitgeknuffeld": "Deze guh-slime is even uitgeknuffeld"
 }

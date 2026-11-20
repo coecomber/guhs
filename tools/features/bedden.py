@@ -416,7 +416,7 @@ def build(h):
     h.shaped("droombed", ["WDW", "PPP"], {"W": "minecraft:purple_wool", "D": "guhs:droomzand", "P": planken}, "guhs:droombed")
     h.shaped("guh_hoofdbed", ["KKK", "WWW", "PPP"], {"K": "guhs:knuffelblok_roze", "W": "minecraft:pink_wool", "P": planken},
              "guhs:guh_hoofdbed")
-    h.shaped("blub_bed", ["WSW", "BBB"], {"W": "minecraft:white_wool", "S": "minecraft:slime_ball", "B": "minecraft:light_blue_wool"},
+    h.shaped("blub_bed", ["WSW", "BBB"], {"W": "minecraft:white_wool", "S": "#guhs:slijmballen", "B": "minecraft:light_blue_wool"},
              "guhs:blub_bed")
     h.shaped("wolkenhemelbed", ["CCC", "T T", "WWW"], {"C": "guhs:wolkenblok_wit", "T": "minecraft:stick", "W": "minecraft:white_wool"},
              "guhs:wolkenhemelbed")

@@ -127,10 +127,10 @@ public class MolentjeGameTests {
             GuhNpcEntity zandguh = DroomNpc.spawn(level, p.zandguh(), 0, GuhNpcEntity.Kind.ZANDGUH);
             helper.assertTrue(Molen.praatZandguh(sp, zandguh), "the Zandguh talks at the mill");
             int zand = sp.getInventory().countItem(DroomblokkenFeature.DROOMZAND.get());
-            helper.assertTrue(zand == 3, "a bag of 3 droomzand, got " + zand);
+            helper.assertTrue(zand == Molen.ZANDGUH_ZAND, "a bag of " + Molen.ZANDGUH_ZAND + " droomzand, got " + zand);
             helper.assertTrue(DroomVoortgang.heeft(sp, DroomVoortgang.Stukje.DROOMZAND), "Snoes' piece: the droomzand");
             Molen.praatZandguh(sp, zandguh);
-            helper.assertTrue(sp.getInventory().countItem(DroomblokkenFeature.DROOMZAND.get()) == 3, "only one bag per run");
+            helper.assertTrue(sp.getInventory().countItem(DroomblokkenFeature.DROOMZAND.get()) == Molen.ZANDGUH_ZAND, "only one bag per run");
             zandguh.discard();
 
             Molen.reset(level, p);

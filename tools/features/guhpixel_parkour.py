@@ -147,7 +147,7 @@ RECEPTEN = {
     "guhparkour_finishpaaltje": ([" WP", " F ", " S "], {"W": "minecraft:white_wool", "P": "minecraft:pink_wool", "F": "#minecraft:wooden_fences",
                                                        "S": "#minecraft:wooden_slabs"}, 1),
     "guhparkour_horde": (["SWS", "F F"], {"S": "minecraft:stick", "W": "minecraft:pink_wool", "F": "#minecraft:wooden_fences"}, 2),
-    "guhparkour_springplank": (["CCC", "PBP"], {"C": "minecraft:pink_carpet", "P": "#minecraft:planks", "B": "minecraft:slime_ball"}, 1),
+    "guhparkour_springplank": (["CCC", "PBP"], {"C": "minecraft:pink_carpet", "P": "#minecraft:planks", "B": "#guhs:slijmballen"}, 1),
     "guhparkour_kruiptunnel": (["WWW", "S S"], {"W": "minecraft:light_blue_wool", "S": "minecraft:stick"}, 1),
     "guhparkour_slalompaaltjes": (["W W", "FWF", "SSS"], {"W": "minecraft:pink_wool", "F": "#minecraft:wooden_fences", "S": "#minecraft:wooden_slabs"}, 1),
     "guhparkour_evenwichtsbalk": (["LLL", "W W"], {"L": "#minecraft:logs", "W": "minecraft:pink_wool"}, 1),

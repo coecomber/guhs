@@ -1,0 +1,13 @@
+{
+  "item.guhs.droomsterretje_goud": "Golden little star",
+  "item.guhs.droomsterretje_goud_vaag": "Fading golden little star",
+  "gui.guhs.sterren.goud": "A GOLDEN little star! %s dream sand, hooray!",
+  "gui.guhs.sterren.reeks": "Star streak! +%s",
+  "block.guhs.droomzandhoopje": "Little Heap of Dream Sand",
+  "block.guhs.droomzandhoopje.lore": "A little heap of glittering dream sand. In a dream you may scoop from it once, vads!",
+  "gui.guhs.zandhoopje.geschept": "You scoop %s dream sand out of the heap. Twinkle twinkle!",
+  "gui.guhs.zandhoopje.al": "You already scooped this heap empty",
+  "gui.guhs.zandhoopje.geen_droom": "You only scoop dream sand in a dream, vadsje.",
+  "gui.guhs.guh_slime.knuffel": "Squish! The guh slime giggles and gives you a guh slimeball.",
+  "gui.guhs.guh_slime.uitgeknuffeld": "This guh slime has had enough cuddles for now"
+}

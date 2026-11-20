@@ -8,7 +8,7 @@
   ],
   "key": {
     "W": "minecraft:light_blue_wool",
-    "S": "minecraft:slime_ball"
+    "S": "#guhs:slijmballen"
   },
   "result": {
     "id": "guhs:knuffelblok_hemelsblauw",

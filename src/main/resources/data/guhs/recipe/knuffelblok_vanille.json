@@ -8,7 +8,7 @@
   ],
   "key": {
     "W": "minecraft:white_wool",
-    "S": "minecraft:slime_ball"
+    "S": "#guhs:slijmballen"
   },
   "result": {
     "id": "guhs:knuffelblok_vanille",

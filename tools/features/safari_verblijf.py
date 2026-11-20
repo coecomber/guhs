@@ -660,7 +660,7 @@ def build(h):
     h.save(tex_effen((120, 200, 236), 6, 2, streep=4), "block", "safari_glijbaantje.png")
     h.save(tex_effen((206, 176, 130), 10, 4, streep=3), "block", "safari_krabboom.png")
     h.save(tex_band(), "block", "safari_schommelband.png")
-    h.shaped("safari_speelbal", [" W ", "WSW", " W "], {"W": "#minecraft:wool", "S": "minecraft:slime_ball"}, "guhs:safari_speelbal")
+    h.shaped("safari_speelbal", [" W ", "WSW", " W "], {"W": "#minecraft:wool", "S": "#guhs:slijmballen"}, "guhs:safari_speelbal")
     h.shaped("safari_glijbaantje", ["  P", " PS", "PSS"], {"P": "#minecraft:planks", "S": "minecraft:smooth_stone_slab"}, "guhs:safari_glijbaantje")
     h.shaped("safari_krabboom", ["W", "L", "W"], {"W": "#minecraft:wool", "L": "#minecraft:logs"}, "guhs:safari_krabboom")
     h.shaped("safari_schommelband", ["LLL", " S ", " K "], {"L": "#minecraft:logs", "S": "minecraft:string", "K": "minecraft:black_dye"}, "guhs:safari_schommelband")

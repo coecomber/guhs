@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     "guhs:knuffelblok_vanille",
-    "minecraft:slime_ball"
+    "#guhs:slijmballen"
   ],
   "result": {
     "id": "guhs:stuiterkussen_vanille",

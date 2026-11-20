@@ -394,7 +394,7 @@ def build(h):
         h.w(f"{A}/blockstates/stuiterkussen_{k}.json", {"variants": {"": {"model": f"guhs:block/stuiterkussen_{k}"}}})
         h.w(f"{A}/models/item/stuiterkussen_{k}.json", {"parent": f"guhs:block/stuiterkussen_{k}"})
         h.self_drop(f"stuiterkussen_{k}")
-        h.shapeless(f"stuiterkussen_{k}", [f"guhs:knuffelblok_{k}", "minecraft:slime_ball"], f"guhs:stuiterkussen_{k}", 1)
+        h.shapeless(f"stuiterkussen_{k}", [f"guhs:knuffelblok_{k}", "#guhs:slijmballen"], f"guhs:stuiterkussen_{k}", 1)
     for naam, alpha, glans in ((STER_LOOKS[0], 255, 0), (STER_LOOKS[1], 235, 25), (STER_LOOKS[2], 110, 40)):
         ster_textuur(h, naam, alpha, glans)
         h.item_model(naam)

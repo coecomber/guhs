@@ -8,7 +8,7 @@
   "key": {
     "C": "minecraft:pink_carpet",
     "P": "#minecraft:planks",
-    "B": "minecraft:slime_ball"
+    "B": "#guhs:slijmballen"
   },
   "result": {
     "id": "guhs:guhparkour_springplank"

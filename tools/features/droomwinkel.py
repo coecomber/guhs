@@ -65,7 +65,7 @@ AANBOD = [
     ("knuffel_pluisguh", "knuffels", "guhs:knuffel_pluisguh", 14),
     ("knuffel_rainbow", "knuffels", "guhs:knuffel_rainbow", 20),
     # weerpotjes: only the guh-weertjes you can find elsewhere too, dear, as a way to catch up (once each)
-] + [(f"weerpotje_{w}", "weer", f"guhs:weerpotje_{w}", 40, 1, 1)
+] + [(f"weerpotje_{w}", "weer", f"guhs:weerpotje_{w}", 25, 1, 1)   # (1.10.10: 40 -> 25)
      for w in ("pluisjes", "bellen", "sterren", "knusmist", "hartjes", "regenboog", "knabbel", "bloesem")]
 
 # the beds of the bedden branch (optional tag entries: a bed that does not exist yet is just not in it)

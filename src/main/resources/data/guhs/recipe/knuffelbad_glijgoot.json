@@ -7,7 +7,7 @@
   ],
   "key": {
     "T": "guhs:trechtertegel",
-    "S": "minecraft:slime_ball"
+    "S": "#guhs:slijmballen"
   },
   "result": {
     "id": "guhs:knuffelbad_glijgoot",
