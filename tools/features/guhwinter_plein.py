@@ -405,7 +405,10 @@ def gevel_rijen(soort, w):
 
 
 def pand(p, x1, x2, muur, trim, verdiepingen, gevel, dak, deur_dx, idx):
-    """A canal house, front (south) at HUIZEN_Z[1], back at HUIZEN_Z[0]. Storeys of 4: floors at 31, 35, 39, (43)."""
+    """A canal house, front (south) at HUIZEN_Z[1], back at HUIZEN_Z[0]. Storeys of 4: floors at 30, 35, 39, (43).
+
+    (1.10.11) The ground floor is level with the street (planks at VLOER, the door's sill height), so you walk straight in;
+    it used to be at VLOER + 1, one block above the doorway, and nobody could get inside. Its room is 4 high (31..34)."""
     zf, zb = HUIZEN_Z[1], HUIZEN_Z[0]
     w = x2 - x1 + 1
     top = VLOER + 1 + 4 * verdiepingen        # first row above the top storey
@@ -416,7 +419,7 @@ def pand(p, x1, x2, muur, trim, verdiepingen, gevel, dak, deur_dx, idx):
                 rand_ = x in (x1, x2) or z in (zb, zf)
                 if rand_:
                     p.set(x, y, z, muur)
-                elif (y - VLOER - 1) % 4 == 0:
+                elif y == VLOER or (y > VLOER + 1 and (y - VLOER - 1) % 4 == 0):
                     p.set(x, y, z, "spruce_planks")
                 else:
                     p.set(x, y, z, "air")
@@ -497,11 +500,11 @@ def pand(p, x1, x2, muur, trim, verdiepingen, gevel, dak, deur_dx, idx):
     p.set(dx, VLOER + 3, zf, trim)
     p.set(dx + 1 if dx + 1 < x2 else dx - 1, VLOER + 3, zf + 1, "lantern", {"hanging": "false", "waterlogged": "false"})
     p.lichten.append((dx + 1, VLOER + 3, zf + 1, 15))
-    p.set(dx, VLOER + 1, zb + 1, "air")
-    p.set(x2 - 1, VLOER + 2, zb + 2, g("guh_tafel"), {"facing": "south"})
-    p.set(x2 - 1, VLOER + 2, zb + 3, g("guh_stoel"), {"facing": "north"})
-    p.set(x1 + 1, VLOER + 2, zb + 1, "potted_spruce_sapling")
-    p.set(x1 + 1, VLOER + 2, zf - 1, "red_carpet")
+    # (1.10.11) the room's things stand on the ground floor at VLOER (one lower than before, with the floor)
+    p.set(x2 - 1, VLOER + 1, zb + 2, g("guh_tafel"), {"facing": "south"})
+    p.set(x2 - 1, VLOER + 1, zb + 3, g("guh_stoel"), {"facing": "north"})
+    p.set(x1 + 1, VLOER + 1, zb + 1, "potted_spruce_sapling")
+    p.set(x1 + 1, VLOER + 1, zf - 1, "red_carpet")
     # a garland of winter lights under the cornice
     for x in range(x1 + 1, x2):
         p.set(x, top - 2, zf + 1, g("seizoensslinger"), {"axis": "x", "seizoen": "winter"})
@@ -1306,12 +1309,14 @@ def winter():
         p.anker(f"pakje_verstop_{i}", x + 0.5, y, z + 0.5, 0.0)
     pepers = [(-349, -734), (-277, -734), (-277, -662), (-349, -662), (-325, -685), (-302, -692), (-318, -713), (-283, -706),
               (-296, -722), (-280, -726), (-323, -718), (-342, -694), (-332, -694), (-305, -681), (-292, -678), (-310, -689)]
-    # (1.10.10 integration) these spots lie on a raised floor (the arcade booth's planks at VLOER + 1): one block higher
-    hoger = {(-305, -681)}
+    # (1.10.10 integration) these spots lie on a raised floor: one block higher. (1.10.11: none left; -305,-681 is inside
+    # canal house 5, whose ground floor is now level with the street, so it stands at VLOER + 1 like the others)
+    hoger = set()
     for i, (x, z) in enumerate(pepers):
         p.anker(f"pepernoot_verstop_{i}", x + 0.5, VLOER + (2 if (x, z) in hoger else 1), z + 0.5, 0.0)
     sneeuw(p)
     check_verstop(p)
+    check_deuren(p)
     return p
 
 
@@ -1325,6 +1330,48 @@ def check_verstop(p):
             b = p.get(x, yy, z)
             if not (b in (None, "minecraft:air") or (yy == y and b == "minecraft:snow")):
                 raise SystemExit(f"guhwinter_plein: hiding spot {k} at {x},{y},{z} is not open ({b} at y {yy})")
+
+
+# what you can walk through (in a door's cell or the two cells above a floor); None = nothing in the template = cleared air
+DOORLOOPBAAR = ("minecraft:air", "minecraft:snow", "minecraft:light_weighted_pressure_plate", "minecraft:heavy_weighted_pressure_plate")
+
+
+def _doorloopbaar(b):
+    return b is None or b in DOORLOOPBAAR or b.endswith("_carpet")
+
+
+def _vloer(p, x, y, z):
+    """The block at (x, y, z) is something you stand on, its top at about y + 1 (a full block, a stair, a top slab)."""
+    b = p.s.blocks.get(p._l(x, y, z))
+    if b is None or _doorloopbaar(b[0]) or b[0] in ("minecraft:water", "minecraft:lava"):
+        return False
+    if b[0].endswith("_slab"):
+        return b[1].get("type") in ("top", "double")
+    return not b[0].endswith(("_door", "_fence", "_wall", "_pane", "_sign", "_banner", "_trapdoor")) and "lantern" not in b[0]
+
+
+def check_deuren(p):
+    """(1.10.11) Every door you can walk through: the block under it, and on both sides (in front and behind) a floor at
+    the door's sill level with two free blocks above it. Playtest: the canal houses' floors were one block above the doors."""
+    n = 0
+    for (lx, ly, lz), (naam, props, _nbt) in list(p.s.blocks.items()):
+        if not naam.endswith("_door") or props.get("half") != "lower":
+            continue
+        x, y, z = lx + p.mn[0], ly + p.mn[1], lz + p.mn[2]
+        dx, dz = DIRS[props["facing"]]
+        fouten = []
+        if not _vloer(p, x, y - 1, z):
+            fouten.append(f"nothing solid under the door ({p.get(x, y - 1, z)})")
+        for kant, (sx, sz) in (("front", (x + dx, z + dz)), ("back", (x - dx, z - dz))):
+            if not _vloer(p, sx, y - 1, sz):
+                fouten.append(f"{kant}: no floor at the sill level ({p.get(sx, y - 1, sz)} at y {y - 1})")
+            for yy in (y, y + 1):
+                if not _doorloopbaar(p.get(sx, yy, sz)):
+                    fouten.append(f"{kant}: {p.get(sx, yy, sz)} at y {yy}")
+        if fouten:
+            raise SystemExit(f"guhwinter_plein: the door at {x},{y},{z} is not walk-through: " + "; ".join(fouten))
+        n += 1
+    return n
 
 
 def raam():
@@ -1462,6 +1509,8 @@ def _sorteer(k):
 def build(h):
     w, r, a = winter(), raam(), aankomst()
     check(w, r, a)
+    for plan in (r, a):                            # (the winter square checks its doors in winter())
+        check_deuren(plan)
     check_aankomst(a)
     w.s.save("guhwinter_plein_winter")
     r.s.save("guhwinter_plein_raam")
