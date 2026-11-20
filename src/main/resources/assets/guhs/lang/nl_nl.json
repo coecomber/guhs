@@ -49170,5 +49170,10 @@
   "gui.guhs.blauwdruk.cat.japans_tuintje": "Japans tuintje",
   "gui.guhs.blauwdruk.cat.wensboom": "Wensboom",
   "gui.guhs.blauwdruk.cat.muziektuin": "Muziektuin",
-  "gui.guhs.blauwdruk.cat.kampeerplekje": "Kampeerplekje met guh-tentjes"
+  "gui.guhs.blauwdruk.cat.kampeerplekje": "Kampeerplekje met guh-tentjes",
+  "gui.guhs.blauwdruk.groep.episch": "Epische bouwwerken",
+  "gui.guhs.blauwdruk.cat.luchtballonhaven": "Guh-luchtballonhaven (De Zweefguh)",
+  "gui.guhs.blauwdruk.cat.draaimolen": "Guh-draaimolen (De Guhdraaier)",
+  "gui.guhs.blauwdruk.cat.sterrenwacht": "Sterrenwacht (De Sterrenguhker)",
+  "gui.guhs.bouwhulp.water.regel": "Water: %s emmers water nodig (oneindige bron: ze worden niet opgebruikt)"
 }

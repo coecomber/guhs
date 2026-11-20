@@ -224,6 +224,10 @@ public class BouwkeetScreen extends Screen {
         if (item.isEmpty()) {
             return null;
         }
+        if (item.get() == net.minecraft.world.item.Items.WATER_BUCKET) {   // 1.10.10: the infinite source
+            return List.of(new ItemStack(item.get()).getHoverName(), Component.translatable("gui.guhs.bouwhulp.water.regel", c.getIntOr("N", 0))
+                    .withStyle(ChatFormatting.AQUA));
+        }
         return List.of(new ItemStack(item.get()).getHoverName(), Component.translatable("gui.guhs.bouwhulp.tip.aantal", c.getIntOr("N", 0))
                 .withStyle(ChatFormatting.GRAY));
     }

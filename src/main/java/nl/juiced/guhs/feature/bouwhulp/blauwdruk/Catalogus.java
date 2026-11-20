@@ -32,6 +32,8 @@ import static nl.juiced.guhs.feature.bouwhulp.blauwdruk.Bouwdoos.g;
  * Three kinds of entries:
  * <ul>
  *   <li>{@link #c}: built in Java (with {@link Bouwdoos});</li>
+ *   <li>{@link #b}: a blueprint made for the catalogue, {@code data/guhs/structure/blauwdruk/<id>.nbt} (the easiest: copy
+ *       the file, one line {@code b("id", "groep");}, the two names, and the id in BouwgereedschapGameTests.STRUCTUUR);</li>
  *   <li>{@link #s}: loaded from a structure .nbt of the mod ({@code data/guhs/structure/<pad>.nbt}) the first time a server
  *       asks for it ({@link Ontwerp#uitStructuur}: no air, jigsaws or blocks without an item; optionally without the bottom
  *       layers of plain ground). Adding one is ONE line here plus its name in tools/features/bouwhulp_gereedschap.py
@@ -41,7 +43,7 @@ import static nl.juiced.guhs.feature.bouwhulp.blauwdruk.Bouwdoos.g;
  * </ul>
  */
 public final class Catalogus {
-    public static final List<String> GROEPEN = List.of("safari", "huizen", "tuin", "torens", "snoep");
+    public static final List<String> GROEPEN = List.of("safari", "huizen", "tuin", "torens", "snoep", "episch");
 
     /** One entry; {@code bouw} gets the server (only {@link #s} entries use it). Not {@code zichtbaar}: an {@link #oud} one. */
     public record Ontwerpje(String id, String groep, Function<MinecraftServer, Ontwerp> bouw, boolean zichtbaar, @Nullable Identifier structuur) {
@@ -84,6 +86,14 @@ public final class Catalogus {
     /** The blocks of a structure design that were left out because they have no item (after {@link #get}). */
     public static Map<Block, Integer> zonderItem(String id) {
         return ZONDER_ITEM.getOrDefault(id, Map.of());
+    }
+
+    /**
+     * 1.10.10: a blueprint made for the catalogue: {@code data/guhs/structure/blauwdruk/<id>.nbt}, saved without a ground
+     * slab. Adding one = copy the .nbt there, this one line, and its names (see the class comment).
+     */
+    private static void b(String id, String groep) {
+        s(id, groep, Guhs.id("blauwdruk/" + id), false);
     }
 
     /** 1.10.10: out of the catalogue, but printed blueprints of it still build. */
@@ -524,6 +534,12 @@ public final class Catalogus {
         s("wensboom", "tuin", Guhs.id("knabbelpark/wensboom"), true);                 // K14
         s("muziektuin", "tuin", Guhs.id("knabbelpark/muziektuin"), true);             // K15
         s("kampeerplekje", "tuin", Guhs.id("kampeerplekje"), true);                   // K30
+
+        // --- brand-new blueprints by the design agents (guhs_winter/nieuwe_blauwdrukken/nieuw/ONTWERPEN.md) ---
+        // b(id, group): the file is data/guhs/structure/blauwdruk/<id>.nbt, saved without ground (nothing to strip).
+        b("luchtballonhaven", "episch");   // N06 De Zweefguh
+        b("draaimolen", "episch");         // N09 De Guhdraaier
+        b("sterrenwacht", "episch");       // N10 De Sterrenguhker
     }
 
     private Catalogus() {

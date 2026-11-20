@@ -339,6 +339,12 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
         return Materiaal.bronnen(level, bouwer, bank(), werkNiveau().draadloos() ? worldPosition : null);   // (the key in the slot, else the old link)
     }
 
+    /** 1.10.10: the keet places water only with an infinite source (two water buckets among its places). */
+    @Override
+    public boolean oneindigWater() {
+        return true;
+    }
+
     @Override
     public boolean pof(ServerLevel level, Spook spook) {
         return werkNiveau().pof();

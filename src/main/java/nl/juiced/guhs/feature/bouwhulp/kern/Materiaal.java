@@ -50,9 +50,13 @@ public final class Materiaal {
      * What one block costs: {@code aantal} of {@code item} (0: free; a door's upper half, water, an empty spot), plus one
      * {@code extra} (1.10.10: a potted plant is a flower pot AND the plant; {@link Items#AIR}: nothing extra).
      */
-    public record Kost(Item item, int aantal, Item extra) {
+    public record Kost(Item item, int aantal, Item extra, boolean oneindig) {
         public Kost(Item item, int aantal) {
-            this(item, aantal, Items.AIR);
+            this(item, aantal, Items.AIR, false);
+        }
+
+        public Kost(Item item, int aantal, Item extra) {
+            this(item, aantal, extra, false);
         }
 
         public boolean heeftExtra() {
@@ -83,6 +87,13 @@ public final class Materiaal {
     }
 
     private static final Kost GRATIS = new Kost(Items.AIR, 0);
+    /**
+     * 1.10.10: how many water buckets make an infinite water source. A water source block costs nothing ({@code aantal}
+     * 0) but is {@code oneindig}: a Bouwkeet ({@link Bouwer#oneindigWater}) only places it while its places hold at least
+     * this many buckets, and never uses them up. Other builders (helpers, tools) still place water for free.
+     */
+    public static final int WATER_EMMERS = 2;
+    public static final Kost WATER = new Kost(Items.WATER_BUCKET, 0, Items.AIR, true);
 
     /**
      * What a block costs, or null: it cannot be built at all (fire, a portal, lava, anything without an item). A double
@@ -94,7 +105,7 @@ public final class Materiaal {
             return GRATIS;
         }
         if (s.is(Blocks.WATER)) {
-            return s.getFluidState().is(Fluids.WATER) ? GRATIS : null;
+            return s.getFluidState().is(Fluids.WATER) ? WATER : null;
         }
         if (s.hasProperty(BlockStateProperties.DOUBLE_BLOCK_HALF) && s.getValue(BlockStateProperties.DOUBLE_BLOCK_HALF) == DoubleBlockHalf.UPPER) {
             return GRATIS;

@@ -55,6 +55,10 @@ CATALOGUS = {
     "wensboom": "Wensboom",
     "muziektuin": "Muziektuin",
     "kampeerplekje": "Kampeerplekje met guh-tentjes",
+    # new blueprints (data/guhs/structure/blauwdruk/)
+    "luchtballonhaven": "Guh-luchtballonhaven (De Zweefguh)",
+    "draaimolen": "Guh-draaimolen (De Guhdraaier)",
+    "sterrenwacht": "Sterrenwacht (De Sterrenguhker)",
 }
 
 # ======================================================================================================================
@@ -201,6 +205,7 @@ TEKSTEN = {
     "gui.guhs.blauwdruk.groep.tuin": "Tuin & buiten",
     "gui.guhs.blauwdruk.groep.torens": "Torens & bijzonder",
     "gui.guhs.blauwdruk.groep.snoep": "Kaas, snoep & beelden",
+    "gui.guhs.blauwdruk.groep.episch": "Epische bouwwerken",
     "gui.guhs.blauwdruk.plaats": "Plaats",
     "gui.guhs.blauwdruk.plaats.uitleg": "Wordt het project van deze keet: een spook voor de deur.",
     "gui.guhs.blauwdruk.print": "Print",

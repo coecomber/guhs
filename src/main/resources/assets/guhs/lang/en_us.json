@@ -49170,5 +49170,10 @@
   "gui.guhs.blauwdruk.cat.japans_tuintje": "Japanese garden",
   "gui.guhs.blauwdruk.cat.wensboom": "Wishing tree",
   "gui.guhs.blauwdruk.cat.muziektuin": "Music garden",
-  "gui.guhs.blauwdruk.cat.kampeerplekje": "Campsite with guh tents"
+  "gui.guhs.blauwdruk.cat.kampeerplekje": "Campsite with guh tents",
+  "gui.guhs.blauwdruk.groep.episch": "Epic builds",
+  "gui.guhs.blauwdruk.cat.luchtballonhaven": "Guh balloon port (The Floaty Guh)",
+  "gui.guhs.blauwdruk.cat.draaimolen": "Guh carousel (The Guh-Go-Round)",
+  "gui.guhs.blauwdruk.cat.sterrenwacht": "Observatory (The Stargazer Guh)",
+  "gui.guhs.bouwhulp.water.regel": "Water: %s water buckets needed (infinite source: they are not used up)"
 }

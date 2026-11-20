@@ -226,6 +226,9 @@ final class KeetPaginas {
                     if (c.getIntOr("Mist", 0) > 0) {
                         uit.add(Component.translatable("gui.guhs.bouwkeet.tip.mist", c.getIntOr("Mist", 0)).withStyle(ChatFormatting.RED));
                     }
+                    if (item.get() == net.minecraft.world.item.Items.WATER_BUCKET) {
+                        uit.add(Component.translatable("gui.guhs.bouwhulp.water.regel", c.getIntOr("N", 0)).withStyle(ChatFormatting.AQUA));
+                    }
                     return uit;
                 }
             }

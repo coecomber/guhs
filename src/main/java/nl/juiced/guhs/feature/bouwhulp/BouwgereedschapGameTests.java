@@ -195,7 +195,8 @@ public class BouwgereedschapGameTests {
     /** 1.10.10: the six kept Java designs plus the twelve structure designs; the 19 removed ones still build for old prints. */
     static final List<String> HOUD = List.of("guh_huisje_klein", "guh_huis_middel", "guh_villa_groot", "guh_boerderijtje", "guh_rijtje", "guh_speeltuintje");
     static final List<String> STRUCTUUR = List.of("kaasfontein", "reuzentaart", "reuzenkaasknabbel", "blokguh", "weebhuisje", "botenhuisje",
-            "villa_binnen", "eendenvijver", "japans_tuintje", "wensboom", "muziektuin", "kampeerplekje");
+            "villa_binnen", "eendenvijver", "japans_tuintje", "wensboom", "muziektuin", "kampeerplekje",
+            "luchtballonhaven", "draaimolen", "sterrenwacht");
     static final List<String> WEG = List.of("lodge_hutje", "rangerpost", "acacia_uitkijktoren", "watergat_terras", "safaripoort", "rieten_paviljoen",
             "guh_winkeltje", "kas_met_oortjes", "bloemenprieel", "boogbrug", "steiger_botenhuisje", "vijver_stapstenen", "picknickplek", "guh_vuurtoren",
             "guh_windmolen", "kasteeltoren", "boomhut", "guhbol_koepel", "guh_klokkentoren");
@@ -227,6 +228,28 @@ public class BouwgereedschapGameTests {
         helper.assertTrue(fontein.ontwerp.blokken().values().stream().filter(st -> st.is(Blocks.POTTED_PINK_TULIP)).count() == 4, "the fountain keeps its 4 pots");
         helper.assertTrue(Catalogus.zonderItem("kaasfontein").keySet().stream().anyMatch(bl -> net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(bl).getPath().equals("kaas_saus")),
                 "the sauce (a fluid) is left out");
+        // the blueprints made for the catalogue (structure/blauwdruk/): EVERY block of the file is in the design (a state
+        // that failed to load, e.g. a renamed block, would come out as air and be missing)
+        for (Catalogus.Ontwerpje c : Catalogus.lijst()) {
+            if (c.structuur() != null && c.structuur().getPath().startsWith("blauwdruk/")) {
+                net.minecraft.nbt.CompoundTag t = helper.getLevel().getServer().getStructureManager().get(c.structuur()).orElseThrow()
+                        .save(new net.minecraft.nbt.CompoundTag());
+                net.minecraft.nbt.ListTag palet = t.getListOrEmpty("palette");
+                net.minecraft.nbt.ListTag blokken = t.getListOrEmpty("blocks");
+                int inBestand = 0;
+                for (int i = 0; i < blokken.size(); i++) {
+                    String naam = palet.getCompoundOrEmpty(blokken.getCompoundOrEmpty(i).getIntOr("state", 0)).getStringOr("Name", "");
+                    if (!naam.endsWith(":air") && !naam.endsWith("structure_void") && !naam.endsWith(":jigsaw")) {
+                        inBestand++;
+                    }
+                }
+                helper.assertTrue(Catalogus.zonderItem(c.id()).isEmpty(), c.id() + ": every block has an item " + Catalogus.zonderItem(c.id()));
+                helper.assertTrue(Catalogus.get(c.id()).ontwerp.aantal() == inBestand, c.id() + ": all " + inBestand + " blocks ("
+                        + Catalogus.get(c.id()).ontwerp.aantal() + ")");
+            }
+        }
+        helper.assertTrue(Catalogus.get("draaimolen").ontwerp.blokken().values().stream().anyMatch(st -> st.is(Blocks.IRON_CHAIN)),
+                "the carousel's chains load (iron_chain from DataVersion 3955)");
         int vijver = Catalogus.get("eendenvijver").ontwerp.aantal();
         helper.assertTrue(vijver < 681 - 100, "the duck pond loses its ground slab (" + vijver + " of 681)");
         helper.assertTrue(!BlauwdrukItem.catalogus("guh_vuurtoren").isEmpty() && BlauwdrukItem.catalogus("bestaat_niet").isEmpty(), "old prints still have an id");
@@ -295,6 +318,60 @@ public class BouwgereedschapGameTests {
             helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null, "done");
             helper.assertTrue(tel(p, Items.OAK_STAIRS) == 2 && tel(p, Items.OAK_PLANKS) == 0, "the 2 extra stairs came back ("
                     + tel(p, Items.OAK_STAIRS) + " stairs, " + tel(p, Items.OAK_PLANKS) + " planks)");
+        });
+    }
+
+    /** A keet whose project is one water block inside a stone ring; the player holds {@code emmers} water buckets. */
+    private static Spook waterProject(GameTestHelper helper, ServerPlayer p, int emmers) {
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        for (int i = 0; i < emmers; i++) {
+            p.getInventory().add(new ItemStack(Items.WATER_BUCKET));
+        }
+        for (int x = 3; x <= 5; x++) {
+            for (int z = 3; z <= 5; z++) {
+                if (x != 4 || z != 4) {
+                    helper.setBlock(new BlockPos(x, 2, z), Blocks.STONE);
+                }
+            }
+        }
+        BlockPos kern = new BlockPos(12, 2, 3);
+        helper.setBlock(kern, BouwhulpFeature.BOUWKEET.get().defaultBlockState());
+        nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity keet = (nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(kern));
+        Spook s = Spookbouw.start(p, Ontwerp.van(Map.of(BlockPos.ZERO, Blocks.WATER.defaultBlockState())), helper.absolutePos(new BlockPos(4, 2, 4)),
+                net.minecraft.world.level.block.Rotation.NONE, net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null && keet.zetProject(helper.getLevel(), s), "the keet's water project");
+        return s;
+    }
+
+    /** 1.10.10: one water bucket is no infinite source: the water stays a ghost (and the bucket stays). */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 200)
+    public static void bouwgereedschapWaterEenEmmer(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Spook s = waterProject(helper, p, 1);
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(!b.begonnen() && b.tekort().getOrDefault(Items.WATER_BUCKET, 0) == 1, "one more water bucket is missing: " + b.tekort());
+        helper.assertTrue(Spookbouw.bouw(p, s, true).begonnen(), "alsnog: it starts");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(s.status() == Spook.Status.WACHT, "it waits: the water is missing");
+            helper.assertTrue(!helper.getBlockState(new BlockPos(4, 2, 4)).is(Blocks.WATER), "no water placed");
+            helper.assertTrue(tel(p, Items.WATER_BUCKET) == 1, "the bucket stays");
+        });
+    }
+
+    /** 1.10.10: two water buckets are an infinite source: the water is placed and both buckets stay. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 200)
+    public static void bouwgereedschapWaterTweeEmmers(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Spook s = waterProject(helper, p, 2);
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(b.begonnen() && b.tekort().isEmpty(), "two buckets: nothing missing " + b.tekort());
+        helper.succeedWhen(() -> {
+            helper.assertTrue(helper.getBlockState(new BlockPos(4, 2, 4)).is(Blocks.WATER)
+                    && helper.getBlockState(new BlockPos(4, 2, 4)).getFluidState().isSource(), "a water source stands");
+            helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null, "done");
+            helper.assertTrue(tel(p, Items.WATER_BUCKET) == 2, "both buckets stay (" + tel(p, Items.WATER_BUCKET) + ")");
         });
     }
 

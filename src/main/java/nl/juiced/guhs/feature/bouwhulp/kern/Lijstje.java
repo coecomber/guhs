@@ -61,7 +61,9 @@ public final class Lijstje {
                 regels = 0;
             }
             int n = e.getValue(), stapel = e.getKey().getDefaultInstance().getMaxStackSize();
-            MutableComponent regel = Component.literal(n + "× ").withStyle(ChatFormatting.DARK_RED)
+            MutableComponent regel = e.getKey() == Items.WATER_BUCKET
+                    ? Component.translatable("gui.guhs.bouwhulp.water.regel", n).withStyle(ChatFormatting.DARK_BLUE)
+                    : Component.literal(n + "× ").withStyle(ChatFormatting.DARK_RED)
                     .append(e.getKey().getDefaultInstance().getHoverName().copy().withStyle(ChatFormatting.BLACK));
             if (stapel > 1 && n >= stapel) {
                 regel.append(Component.literal(" (" + (n / stapel) + "×" + stapel + (n % stapel > 0 ? "+" + n % stapel : "") + ")")

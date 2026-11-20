@@ -98,6 +98,7 @@ TEKSTEN = {
     "gui.guhs.bouwhulp.werkbank.bericht": "Njeg! De keet maakt zelf aan de werkbank:",
     "gui.guhs.bouwhulp.werkbank.regel": "%s× %s (worden gemaakt van %s)",
     "gui.guhs.bouwhulp.werkbank.regel.rest": "%s× %s (van wat er over was)",
+    "gui.guhs.bouwhulp.water.regel": "Water: %s emmers water nodig (oneindige bron: ze worden niet opgebruikt)",
     "gui.guhs.bouwkeet.draadloos.ja": "Draadloos materiaal: %s kisten op het vadsnet",
     "gui.guhs.bouwkeet.draadloos.nee": "Draadloos materiaal: vanaf de Guhrad-keet (met vadskracht)",
     "gui.guhs.bouwkeet.gratis": "Creatief: alles is gratis.",

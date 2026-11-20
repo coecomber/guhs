@@ -31,6 +31,14 @@ public interface Bouwer {
         return Integer.MAX_VALUE;
     }
 
+    /**
+     * 1.10.10: does a water source need the infinite source ({@link Materiaal#WATER_EMMERS} water buckets among the
+     * places, not used up)? Default no: water is free.
+     */
+    default boolean oneindigWater() {
+        return false;
+    }
+
     /** A block was placed (for sounds, the crane, the bouwguhs). */
     default void geplaatst(ServerLevel level, Spook spook, BlockPos pos) {
     }

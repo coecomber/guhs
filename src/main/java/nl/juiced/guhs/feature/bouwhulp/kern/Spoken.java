@@ -173,9 +173,13 @@ public final class Spoken extends SavedData {
         return new Bouwen(true, tekort, poffen, plan.gemaakt());
     }
 
-    /** The items still needed: every spot that differs from the ghost now (whatever is built already costs nothing). */
+    /**
+     * The items still needed: every spot that differs from the ghost now (whatever is built already costs nothing). With a
+     * keet, water still to place asks for {@link Materiaal#WATER_EMMERS} water buckets (there, not used up; 1.10.10).
+     */
     public Map<Item, Integer> nogNodig(ServerLevel level, Spook s) {
         Map<Item, Integer> uit = new LinkedHashMap<>();
+        boolean water = false;
         for (Map.Entry<BlockPos, BlockState> e : s.volgorde()) {
             if (level.isLoaded(e.getKey()) && level.getBlockState(e.getKey()) == e.getValue()) {
                 continue;
@@ -183,9 +187,19 @@ public final class Spoken extends SavedData {
             Materiaal.Kost k = Materiaal.kost(e.getValue());
             if (k != null) {
                 k.telOp(uit);
+                water |= k.oneindig();
             }
         }
+        if (water && oneindigWater(level, s)) {
+            uit.merge(net.minecraft.world.item.Items.WATER_BUCKET, Materiaal.WATER_EMMERS, Math::max);
+        }
         return uit;
+    }
+
+    /** Does this ghost's water need the infinite source (its builder is a keet)? */
+    boolean oneindigWater(ServerLevel level, Spook s) {
+        Bouwer b = bouwer(level, s);
+        return b != null && b.oneindigWater();
     }
 
     /** Stops building (the ghost stays; what stands, stands). */
@@ -287,6 +301,7 @@ public final class Spoken extends SavedData {
     private void bouwStukje(ServerLevel level, Spook s, @Nullable Bouwer bouwer, Materiaal.Bronnen bronnen, @Nullable BouwActie actie, boolean poffen) {
         List<Map.Entry<BlockPos, BlockState>> v = s.volgorde();
         int gekeken = 0, geplaatst = 0;
+        Boolean bron = null;   // 1.10.10: the infinite water source, asked once per tick (only when there is water)
         int budget = poffen ? POF_PER_TICK : (int) s.opgespaard;
         while (s.volgende < v.size() && geplaatst < budget && gekeken < (poffen ? POF_PER_TICK * 2 : MAX_KIJK)) {
             Map.Entry<BlockPos, BlockState> e = v.get(s.volgende);
@@ -307,6 +322,15 @@ public final class Spoken extends SavedData {
             Materiaal.Kost kost = Materiaal.kost(doel);
             if (kost == null) {
                 continue;
+            }
+            if (kost.oneindig() && !bronnen.gratis() && bouwer != null && bouwer.oneindigWater()) {
+                if (bron == null) {
+                    bron = bronnen.tel(kost.item()) >= Materiaal.WATER_EMMERS;
+                }
+                if (!bron) {
+                    s.mist.add(pos.asLong());   // no infinite source: the water stays a ghost
+                    continue;
+                }
             }
             boolean betaald = false;
             if (kost.aantal() > 0 && !bronnen.gratis()) {
