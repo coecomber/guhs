@@ -196,7 +196,7 @@ public class BouwgereedschapGameTests {
     static final List<String> HOUD = List.of("guh_huisje_klein", "guh_huis_middel", "guh_villa_groot", "guh_boerderijtje", "guh_rijtje", "guh_speeltuintje");
     static final List<String> STRUCTUUR = List.of("kaasfontein", "reuzentaart", "reuzenkaasknabbel", "blokguh", "weebhuisje", "botenhuisje",
             "villa_binnen", "eendenvijver", "japans_tuintje", "wensboom", "muziektuin", "kampeerplekje",
-            "luchtballonhaven", "draaimolen", "sterrenwacht", "blubbelbadhuis", "blubseum", "piepnest", "piepmolen", "knuffelkasteel", "theepothuisje", "treinstation", "boomhuisdorpje");
+            "luchtballonhaven", "draaimolen", "sterrenwacht", "blubbelbadhuis", "blubseum", "piepnest", "piepmolen", "knuffelkasteel", "theepothuisje", "treinstation", "boomhuisdorpje", "reuzenblub", "reuzenpiepje");
     static final List<String> WEG = List.of("lodge_hutje", "rangerpost", "acacia_uitkijktoren", "watergat_terras", "safaripoort", "rieten_paviljoen",
             "guh_winkeltje", "kas_met_oortjes", "bloemenprieel", "boogbrug", "steiger_botenhuisje", "vijver_stapstenen", "picknickplek", "guh_vuurtoren",
             "guh_windmolen", "kasteeltoren", "boomhut", "guhbol_koepel", "guh_klokkentoren");

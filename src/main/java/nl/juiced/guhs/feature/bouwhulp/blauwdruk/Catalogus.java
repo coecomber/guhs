@@ -548,6 +548,8 @@ public final class Catalogus {
         b("theepothuisje", "episch");     // N07
         b("treinstation", "episch");      // N11 (Guhslee rails)
         b("boomhuisdorpje", "episch");    // N08 Bloesemtakjesdorp
+        b("reuzenblub", "episch");        // N12 statue
+        b("reuzenpiepje", "episch");      // N13 statue
     }
 
     private Catalogus() {

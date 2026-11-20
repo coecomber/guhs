@@ -67,6 +67,8 @@ CATALOGUS = {
     "theepothuisje": "Theepot-huisje (Het Theeguhtje)",
     "treinstation": "Treinstationnetje (Station Guhda)",
     "boomhuisdorpje": "Boomhuisdorpje (Bloesemtakjesdorp)",
+    "reuzenblub": "De Reuzenblub",
+    "reuzenpiepje": "Het Reuzenpiepje",
 }
 
 # ======================================================================================================================
