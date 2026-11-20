@@ -1,0 +1,79 @@
+{
+  "textures": {
+    "particle": "guhs:block/slijmhuisje_slijm",
+    "slijm": {
+      "sprite": "guhs:block/slijmhuisje_slijm",
+      "force_translucent": true
+    }
+  },
+  "elements": [
+    {
+      "from": [
+        -4,
+        0,
+        -4
+      ],
+      "to": [
+        4,
+        8,
+        4
+      ],
+      "faces": {
+        "up": {
+          "texture": "#slijm",
+          "uv": [
+            2.0,
+            0.0,
+            4.0,
+            4.0
+          ]
+        },
+        "down": {
+          "texture": "#slijm",
+          "uv": [
+            4.0,
+            0.0,
+            6.0,
+            4.0
+          ]
+        },
+        "west": {
+          "texture": "#slijm",
+          "uv": [
+            0.0,
+            4.0,
+            2.0,
+            8.0
+          ]
+        },
+        "north": {
+          "texture": "#slijm",
+          "uv": [
+            2.0,
+            4.0,
+            4.0,
+            8.0
+          ]
+        },
+        "east": {
+          "texture": "#slijm",
+          "uv": [
+            4.0,
+            4.0,
+            6.0,
+            8.0
+          ]
+        },
+        "south": {
+          "texture": "#slijm",
+          "uv": [
+            6.0,
+            4.0,
+            8.0,
+            8.0
+          ]
+        }
+      }
+    }
+  ]
+}

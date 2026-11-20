@@ -29,21 +29,25 @@ import nl.juiced.guhs.feature.slijmhuisje.SlijmhuisjeBlockEntity;
 import nl.juiced.guhs.feature.vadskracht.Snoet;
 
 /**
- * What moves in a Slijmhuisje (the house itself, the cushion and the bowl are block models): the guh slime on its cushion
- * (model {@code slijmhuisje_slijm}, a 16 px cube with a face) and the slimeballs in the bowl (model
- * {@code slijmhuisje_balletje}, one per 4, at most 4).
+ * What moves in a Slijmhuisje (the house, the dome, the cushion and the bowl are block models): the guh slime on its
+ * lavender cushion, built like the entity (model {@code slijmhuisje_slijm_binnen}: the inner cube with eyes and mouth,
+ * cutout; {@code slijmhuisje_slijm_buiten}: the jelly around it, translucent; the real guh slime texture), and the pink
+ * slimeballs in the mint bowl in front of the door (model {@code slijmhuisje_balletje}, one per 4, at most 4).
  * <p>
  * Awake (vadskracht) the slime bounces gently: a squash when it lands, a stretch in the air. Asleep it sits a bit flattened
- * and breathes slowly. Its size is the real size (1, 2, 4) scaled to fit under the dome ({@link #schaal}).
- * <p>
- * THE LOOK IS A PLACEHOLDER (the user is still choosing): positions here match tools/features/slijmhuisje.py.
+ * and breathes slowly. Its size is the real size (1, 2, 4) scaled to fit under the dome ({@link #schaal}); a big one only
+ * squashes, it has no room to hop. Positions match tools/features/slijmhuisje.py ("the look").
  */
 public class SlijmhuisjeRenderer implements BlockEntityRenderer<SlijmhuisjeBlockEntity, SlijmhuisjeRenderer.State> {
-    public static final StandaloneModelKey<BlockStateModelPart> SLIJM = new StandaloneModelKey<>(() -> "guhs:block/slijmhuisje_slijm");
+    public static final StandaloneModelKey<BlockStateModelPart> SLIJM_BINNEN = new StandaloneModelKey<>(() -> "guhs:block/slijmhuisje_slijm_binnen");
+    public static final StandaloneModelKey<BlockStateModelPart> SLIJM_BUITEN = new StandaloneModelKey<>(() -> "guhs:block/slijmhuisje_slijm_buiten");
     public static final StandaloneModelKey<BlockStateModelPart> BALLETJE = new StandaloneModelKey<>(() -> "guhs:block/slijmhuisje_balletje");
-    /** Model space (facing north, the kern at 0..1): the top of the cushion, and the middle of the bowl. */
-    private static final float KUSSEN_Y = 19f / 16f, KUSSEN_Z = 1.5f, SCHAAL_Y = 17f / 16f, SCHAAL_Z = 2.25f / 16f;
-    private static final float[][] BALLETJES = {{-1.5f, 0f}, {1.5f, 0f}, {0f, 0.8f}, {0f, -0.8f}};
+    /** Model space (facing north, the kern at 0..1): the top of the cushion (its middle is one block behind the kern). */
+    private static final float KUSSEN_Y = 28f / 16f, KUSSEN_Z = 1.5f;
+    /** How high (blocks) the slime may reach above the cushion under the dome. */
+    private static final float RUIMTE = 1.1f;
+    /** The slimeballs in the bowl: x, y, z in pixels of the kern (the bowl is at x 3..13, z -15..-5, its floor at y 1). */
+    private static final int[][] BALLETJES = {{8, 1, -10}, {6, 1, -12}, {8, 1, -13}, {6, 2, -9}};
 
     public static class State extends BlockEntityRenderState {
         Direction facing = Direction.NORTH;
@@ -57,13 +61,14 @@ public class SlijmhuisjeRenderer implements BlockEntityRenderer<SlijmhuisjeBlock
 
     /** Mod bus (client): the two models that are no block state of their own. */
     public static void registerModels(ModelEvent.RegisterStandalone event) {
-        event.register(SLIJM, SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/slijmhuisje_slijm")));
+        event.register(SLIJM_BINNEN, SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/slijmhuisje_slijm_binnen")));
+        event.register(SLIJM_BUITEN, SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/slijmhuisje_slijm_buiten")));
         event.register(BALLETJE, SimpleUnbakedStandaloneModel.simpleModelWrapper(Guhs.id("block/slijmhuisje_balletje")));
     }
 
     /** How big the slime is drawn (blocks): the real size, scaled to fit under the dome. */
     static float schaal(int grootte) {
-        return grootte >= 4 ? 1.2f : grootte >= 2 ? 0.8f : 0.5f;
+        return grootte >= 4 ? 1.0f : grootte >= 2 ? 0.8f : 0.5f;
     }
 
     @Override
@@ -97,27 +102,28 @@ public class SlijmhuisjeRenderer implements BlockEntityRenderer<SlijmhuisjeBlock
             float s = schaal(state.grootte), hoogte = 0f, plat, breed;
             if (state.wakker) {
                 float sprong = (float) Math.sin(state.fase * Math.PI);    // 0 on the cushion .. 1 at the top
-                hoogte = sprong * 0.25f * s;
-                plat = 0.8f + 0.3f * sprong;                               // squashed when it lands, stretched in the air
-                breed = 1.1f - 0.12f * sprong;
+                plat = 0.84f + 0.24f * sprong;                             // squashed when it lands, stretched in the air
+                breed = 1.08f - 0.1f * sprong;
+                hoogte = sprong * Math.max(0f, Math.min(0.25f * s, RUIMTE - s * 1.08f));
             } else {
                 float adem = (float) Math.sin(state.fase * Math.PI * 2) * 0.03f;
-                plat = 0.75f + adem;
-                breed = 1.12f - adem;
+                plat = 0.8f + adem;
+                breed = 1.1f - adem;
             }
+            float k = s / 0.5f;                                            // (the model is 8 px = half a block wide)
             pose.pushPose();
             pose.translate(0.5, KUSSEN_Y + hoogte, KUSSEN_Z);
-            pose.scale(s * breed, s * plat, s * breed);
-            pose.translate(-0.5, 0, -0.5);                                 // (the model is a cube of 0..16 standing on y 0)
-            collector.submitBlockModel(pose, Sheets.cutoutBlockSheet(), List.of(models.getStandaloneModel(SLIJM)),
+            pose.scale(k * breed, k * plat, k * breed);
+            collector.submitBlockModel(pose, Sheets.cutoutBlockSheet(), List.of(models.getStandaloneModel(SLIJM_BINNEN)),
+                    BlockModelRenderState.EMPTY_TINTS, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
+            collector.submitBlockModel(pose, Sheets.translucentBlockItemSheet(), List.of(models.getStandaloneModel(SLIJM_BUITEN)),
                     BlockModelRenderState.EMPTY_TINTS, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             pose.popPose();
         }
         int n = Math.min(BALLETJES.length, (state.schaal + 3) / 4);
         for (int i = 0; i < n; i++) {
             pose.pushPose();
-            pose.translate(0.5 + BALLETJES[i][0] / 16f, SCHAAL_Y, SCHAAL_Z + BALLETJES[i][1] / 16f);
-            pose.translate(-0.5, 0, -0.5);                                 // (the model is a little ball around x/z 8, standing on y 0)
+            pose.translate(BALLETJES[i][0] / 16f, BALLETJES[i][1] / 16f, BALLETJES[i][2] / 16f);
             collector.submitBlockModel(pose, Sheets.cutoutBlockSheet(), List.of(models.getStandaloneModel(BALLETJE)),
                     BlockModelRenderState.EMPTY_TINTS, state.lightCoords, OverlayTexture.NO_OVERLAY, 0);
             pose.popPose();

@@ -8,84 +8,15 @@
     {
       "when": {
         "dy": "0",
-        "stuk": "nw"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_hoek"
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
-        "stuk": "no"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_hoek",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
-        "stuk": "zo"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_hoek",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
-        "stuk": "zw"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_hoek",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
-        "stuk": "o"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_rand",
-        "y": 90
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
-        "stuk": "z"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_rand",
-        "y": 180
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
-        "stuk": "w"
-      },
-      "apply": {
-        "model": "guhs:block/slijmhuisje_rand",
-        "y": 270
-      }
-    },
-    {
-      "when": {
-        "dy": "0",
         "stuk": "midden"
       },
       "apply": {
-        "model": "guhs:block/slijmhuisje_midden"
+        "model": "guhs:block/slijmhuisje_voet"
       }
     },
     {
       "when": {
-        "dy": "1",
+        "dy": "2",
         "stuk": "midden"
       },
       "apply": {

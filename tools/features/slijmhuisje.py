@@ -7,27 +7,18 @@ This module writes:
   * MECHANICS (stable): the loot table, the recipe, the tags (guhs:vadskracht for the hover readout, mineable/axe), the two
     advancements (quest/ + techniek/tech_machines_slijmhuisje), the client item definitions and every text (Dutch here,
     English in TEKSTEN too, and in tools/lang/en/c511_slijmhuisje.json, which this module writes as well);
-  * THE LOOK (placeholder "Zeepbelkoepel", the user may still pick another one): every texture, block model and blockstate,
-    in the section "the look" below and nothing else. The renderer (client/SlijmhuisjeRenderer.java) draws the slime on
-    the cushion and the slimeballs in the bowl at the positions noted there.
-
-Pieces (block slijmhuisje_deel, properties stuk + dy): layer 0 = the base (corners "hoek", edges "rand", the middle with the
-cushion), the kern (slijmhuisje, facing + snoet) is the middle of the front edge with the round door, the snoet and the bowl;
-layer 1 middle = the soap-bubble dome (translucent, it spans the 3 x 3 and two layers) with a flower on top; the rest shows
-nothing.
+  * THE LOOK ("Zeepbelkoepel", the user's pick): every texture, block model and blockstate, in the section "the look"
+    below and nothing else (which block draws what: see there). The renderer (client/SlijmhuisjeRenderer.java) draws the
+    slime on the cushion and the slimeballs in the bowl at the positions noted there.
 
 Standalone (from the project root): PYTHONPATH="tools;tools/features" python tools/features/slijmhuisje.py
 """
 import json
+import math
 import os
 
 import numpy as np
 from PIL import Image
-
-try:
-    from features import vadskracht
-except ImportError:  # (standalone with only tools/features on the path)
-    import vadskracht
 
 STATEN = ("slaapt", "werkt", "vol")
 ROT = {"north": 0, "east": 90, "south": 180, "west": 270}
@@ -91,83 +82,161 @@ TEKSTEN = {
 }
 
 # =====================================================================================================================
-# the look (PLACEHOLDER "Zeepbelkoepel"): textures, models, blockstates. Positions shared with SlijmhuisjeRenderer.java:
-#   the cushion's top at y 19 of the middle base block, the bowl on the kern's top at x 5..11, z 0.5..4
+# the look: "Zeepbelkoepel" (the user's pick; concept render guhs_winter/slijmhuisje_renders/A_zeepbelkoepel_*.png, its
+# voxel source _bron/a_zeepbelkoepel.py). Coordinates: F = the house's own pixels, facing north (the door at z 0), x/z 0..48
+# over the 3 x 3, y 0 = the ground. Which block draws what (MachineDeelBlock offsets: the kern is F x 16..32, z 0..16):
+#   kern (slijmhuisje_<snoet>)        the snoet + the door (a decal on the front), the cream door frame, the mint bowl in front
+#                                     of the door (it sticks out of the 3 x 3 on purpose, as in the render)
+#   dy 0, middle (slijmhuisje_voet)   the whole base: mint plinth, pink body with cream drips, cream frosting rim with pink
+#                                     dots, the pistachio floor with its cream seat ring, four candy knobs, the lavender cushion
+#   dy 2, middle (slijmhuisje_koepel) the soap-bubble dome (translucent, with a glint) and the pink flower on top
+# The renderer (client/SlijmhuisjeRenderer.java) puts the slime on the cushion (top at F y 28, middle F 24/24) and the pink
+# slimeballs in the bowl. The base and the dome are round, so they never turn; the kern turns with its facing.
 # =====================================================================================================================
-ROZE = (248, 186, 208)
-MINT = (170, 232, 204)
-MINT_DONKER = (110, 190, 160)
-WIT = (255, 248, 250)
+H = 24                      # the base: plinth y 0..3, body to 21, frosting rim 21..24
+KOEPEL_RX, KOEPEL_RY = 23.0, 27.0
+KOEPEL_RES = 2              # the dome is built from cells of this many pixels (fewer elements)
+BEL = (226, 222, 252)       # the soap film, faintly lilac
+BLOEM, BLOEM_LICHT, GOUD = (255, 150, 196), (255, 196, 222), (250, 214, 96)
+STEEL, BLAD = (108, 186, 112), (140, 210, 130)
+HART, DEURRAND = (255, 196, 222), (250, 240, 220)
+OOG, GLANS, WANG, MOND = (52, 34, 58), (255, 255, 255), (244, 140, 172), (120, 50, 80)
+SNOEP = (255, 160, 200)
 
 
-def _ruis(kleur, var, seed):
-    rng = np.random.default_rng(seed)
-    a = np.zeros((16, 16, 4), np.uint8)
-    n = rng.normal(0, var, (16, 16))
-    for c in range(3):
-        a[..., c] = np.clip(kleur[c] + n, 0, 255)
-    a[..., 3] = 255
-    return a
+def _bron(a, pad):
+    """A texture of the mod as RGBA (the plaster of the bouwhulp, the bounce cushion...)."""
+    return Image.open(os.path.join(a, "textures", *pad.split("/")) + ".png").convert("RGBA")
 
 
-def _png(a):
-    return Image.fromarray(a)
+def _tegel(tex, n=64):
+    """A 16 x 16 texture tiled over n x n."""
+    out = Image.new("RGBA", (n, n))
+    for x in range(0, n, 16):
+        for y in range(0, n, 16):
+            out.paste(tex, (x, y))
+    return out
 
 
-def texturen():
-    """name -> PIL image (block textures; plus the item texture under 'item/...')."""
+def _effen(kleur):
+    return Image.new("RGBA", (16, 16), tuple(kleur[:3]) + (255,))
+
+
+def _rond_vierkant(x, z, lo, hi, r):
+    """Is pixel (x, z) (its middle) inside the square lo..hi with corners rounded by r?"""
+    px, pz = x + .5, z + .5
+    cx, cz = min(max(px, lo + r), hi - r), min(max(pz, lo + r), hi - r)
+    return math.hypot(px - cx, pz - cz) <= r
+
+
+def _afstand(x, z):
+    return math.hypot(x + .5 - 24, z + .5 - 24)
+
+
+def _in_deur(x, y, r=4.6, cy=6.0, cx=24.0):
+    return abs(x - cx) <= r and (y <= cy or math.hypot(x - cx, y - cy) <= r)
+
+
+def texturen(a):
+    """name -> image. 'zij', 'boven' and 'kussen' are 64 x 64 canvases mapped onto the house's pixels (F / 4, see _uv_f):
+    zij by height (rows: y = 31 - row) and along the face, boven by x/z from above."""
+    roze, aqua, vanille = _bron(a, "block/bouwhulp/pleister_roze"), _bron(a, "block/bouwhulp/pleister_aqua"), _bron(a, "block/bouwhulp/pleister_vanille")
+    framboos, lavendel = _bron(a, "block/bouwhulp/pleister_framboos"), _bron(a, "block/stuiterkussen_lavendel")
     t = {}
-    zij = _ruis(ROZE, 4, 101)
-    zij[13:16, :, :3] = MINT
-    zij[13, :, :3] = WIT
+    # the sides: mint plinth (y 0..2), pink body (3..20) with cream drips at y 20, cream rim (21..23) with pink dots
+    zij = _tegel(roze)
+    mint, room = _tegel(aqua), _tegel(vanille)
+    px, mpx, rpx = zij.load(), mint.load(), room.load()
+    for row in range(64):
+        y = 31 - row
+        for c in range(64):
+            if y <= 2 or y > 31:
+                px[c, row] = mpx[c, row]
+            elif y >= 21:
+                px[c, row] = rpx[c, row]
+                if y == 22 and c % 8 == 3:
+                    px[c, row] = SNOEP + (255,)
+            elif y == 20 and (c // 3) % 2 == 0:
+                px[c, row] = rpx[c, row]
     t["zij"] = zij
-    boven = _ruis(ROZE, 3, 102)
-    boven[0, :, :3] = boven[15, :, :3] = boven[:, 0, :3] = boven[:, 15, :3] = MINT
+    # the top: cream rim, pistachio floor under the dome, a cream seat ring, pink sprinkles on the rim
+    boven = _tegel(vanille)
+    bpx = boven.load()
+    pist = _tegel(aqua).point(lambda v: min(255, int(v * 1.1)))
+    ppx = pist.load()
+    for x in range(48):
+        for z in range(48):
+            d = _afstand(x, z)
+            if d <= 20.5:
+                bpx[x, z] = ppx[x, z]
+            elif d <= 23.2:
+                r_, g_, b_, _ = bpx[x, z]
+                bpx[x, z] = (min(255, r_ + 6), min(255, g_ + 6), min(255, b_ + 8), 255)
+            elif (x * 7 + z * 13) % 23 == 0:
+                bpx[x, z] = SNOEP + (255,)
     t["boven"] = boven
+    t["kussen"] = _tegel(lavendel)
+    # the front decal (32 x 32, transparent; column = viewer's left to right over F x 40..8, row = 31 - y): the round door
+    # (raspberry, a heart, a gold knob) and the plantagebak snoet above it, per state
     for staat in STATEN:
-        a = zij.copy()
-        for y in range(7, 16):                      # the round door: an arch of mint with a darker rim
-            for x in range(5, 11):
-                dx = x - 7.5
-                if y < 9 and dx * dx + (9 - y) ** 2 > 7:
-                    continue
-                a[y, x, :3] = MINT_DONKER if x in (5, 10) or y == 7 else MINT
-        a[11, 9, :3] = (250, 214, 92)               # the little door knob
-        img = _png(a)
-        vadskracht.snoet(img, 2, 1, staat)
+        img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
+        d = img.load()
+        fpx = framboos.load()
+        def zet(c, y, kleur):
+            if 0 <= c < 32 and 0 <= 31 - y < 32:
+                d[c, 31 - y] = tuple(kleur[:3]) + (255,)
+        for c in range(32):
+            for y in range(14):
+                if _in_deur(c + 8 + .5, y + .5):
+                    zet(c, y, fpx[c % 16, (31 - y) % 16])
+        # (columns: the door's middle is column 15.5; the voxel source's x minus 8)
+        for (x, y) in ((21, 8), (22, 8), (24, 8), (25, 8), (20, 7), (21, 7), (22, 7), (23, 7), (24, 7), (25, 7), (26, 7),
+                       (21, 6), (22, 6), (23, 6), (24, 6), (25, 6), (22, 5), (23, 5), (24, 5), (23, 4)):
+            zet(x - 8, y, HART)
+        zet(18, 3, GOUD)                                       # the little gold door knob
+        # the snoet: eyes 3 x 4 at columns 7..9 and 22..24 (bottom y 15), cheeks under them, the mouth in the middle
+        for c0, wx in ((7, 5), (22, 24)):
+            if staat == "slaapt":                              # closed: a little line, no shine
+                for i in range(3):
+                    zet(c0 + i, 15, OOG)
+            elif staat == "vol":                               # content: happy "^" eyes
+                for dc, y in ((0, 15), (0, 16), (1, 17), (2, 16), (2, 15)):
+                    zet(c0 + dc, y, OOG)
+            else:                                              # happy: big round open eyes with a shine
+                for i in range(3):
+                    for j in range(4):
+                        if (i, j) not in ((0, 0), (2, 0), (0, 3), (2, 3)):
+                            zet(c0 + i, 15 + j, OOG)
+                zet(c0, 17, GLANS)
+            if staat != "slaapt":
+                for i in range(3):
+                    zet(wx + i, 14, WANG)
+        if staat == "slaapt":
+            zet(15, 12, MOND), zet(16, 12, MOND)
+        else:
+            l, r = (12, 19) if staat == "vol" else (13, 18)    # a smile; content = a wider one
+            zet(l, 13, MOND), zet(r, 13, MOND)
+            for c in range(l + 1, r):
+                zet(c, 12, MOND)
         t[f"voor_{staat}"] = img
-    koepel = np.zeros((16, 16, 4), np.uint8)
-    koepel[..., :3] = (214, 236, 255)
-    koepel[..., 3] = 70
-    for i in range(3, 9):                           # a shine streak
-        koepel[i, i - 1, :] = (255, 255, 255, 170)
-        koepel[i, i, :] = (255, 255, 255, 120)
-    koepel[12:14, 11:13, :] = (255, 214, 240, 140)
-    t["koepel"] = koepel
-    kussen = _ruis((255, 226, 236), 3, 103)
-    kussen[0, :, :3] = kussen[15, :, :3] = kussen[:, 0, :3] = kussen[:, 15, :3] = ROZE
-    kussen[7:9, 7:9, :3] = ROZE                     # the button in the middle
-    t["kussen"] = kussen
-    t["schaal"] = _ruis(MINT, 4, 104)
-    bloem = np.zeros((16, 16, 4), np.uint8)
-    bloem[...] = (255, 170, 200, 255)
-    bloem[6:10, 6:10, :3] = (255, 226, 110)
-    t["bloem"] = bloem
-    slijm = np.zeros((16, 16, 4), np.uint8)
-    slijm[...] = (240, 140, 190, 255)
-    slijm[4:12, 4:12, :3] = (226, 110, 170)         # the darker core seen through the jelly
-    t["slijm"] = slijm
-    voor = slijm.copy()
-    voor[5:8, 4:6, :3] = voor[5:8, 10:12, :3] = (58, 28, 60)    # eyes
-    voor[5, 4, :3] = voor[5, 10, :3] = (255, 255, 255)
-    voor[10, 6:10, :3] = (150, 60, 110)                          # a little smile
-    voor[9, 6, :3] = voor[9, 9, :3] = (150, 60, 110)
-    voor[9, 2:4, :3] = voor[9, 12:14, :3] = (255, 120, 170)      # blush
-    t["slijm_voor"] = voor
-    bal = np.zeros((16, 16, 4), np.uint8)
-    bal[...] = (236, 120, 180, 255)
-    bal[0:4, 0:4, :3] = (255, 200, 228)
-    t["balletje"] = bal
+    t["room"] = _effen(DEURRAND)
+    t["snoep"] = _effen(SNOEP)
+    t["schaal"] = aqua
+    # the soap film and its glint (forced translucent in the models)
+    bel = Image.new("RGBA", (16, 16), BEL + (58,))
+    bpx = bel.load()
+    for x in range(16):
+        for y in range(16):
+            if (x + y) % 7 == 0:
+                bpx[x, y] = (236, 246, 255, 70)
+    t["bel"] = bel
+    t["glim"] = Image.new("RGBA", (16, 16), (255, 255, 255, 185))
+    for naam, kleur in (("bloem", BLOEM), ("bloem_licht", BLOEM_LICHT), ("goud", GOUD), ("steel", STEEL), ("blad", BLAD)):
+        t[naam] = _effen(kleur)
+    # the slime: the real guh slime texture (the renderer builds the slime model from it like the entity's)
+    t["slijm"] = _bron(a, "entity/guh_slime")
+    t["balletje"] = _effen((236, 120, 176))
+    t["balletje"].putpixel((0, 0), (255, 196, 228, 255))
     # the item: a little pink slime cube in your hand
     item = np.zeros((16, 16, 4), np.uint8)
     for y in range(4, 15):
@@ -179,67 +248,225 @@ def texturen():
     item[7, 5, :3] = item[7, 10, :3] = (255, 255, 255)
     item[11, 7:9, :3] = (150, 60, 110)
     item[5, 3:6, :3] = (255, 210, 232)
-    t["item/opgepakte_guh_slime"] = item
-    return {k: (v if isinstance(v, Image.Image) else _png(v)) for k, v in t.items()}
+    t["item/opgepakte_guh_slime"] = Image.fromarray(item)
+    return t
 
 
-VOL = [0, 0, 16, 16]
+VLAKKEN = ("north", "south", "west", "east", "up", "down")
 
 
-def doos(van, tot, tex, zonder=()):
+def _uv_f(vlak, f, t):
+    """uv on a 64 x 64 canvas mapped onto the house's pixels (F): 4 pixels a uv unit, vertical faces by height."""
+    (x1, y1, z1), (x2, y2, z2) = f, t
+    uv = {"north": (48 - x2, 32 - y2, 48 - x1, 32 - y1), "south": (x1, 32 - y2, x2, 32 - y1),
+          "west": (z1, 32 - y2, z2, 32 - y1), "east": (48 - z2, 32 - y2, 48 - z1, 32 - y1),
+          "up": (x1, z1, x2, z2), "down": (x1, 48 - z2, x2, 48 - z1)}[vlak]
+    return [round(v / 4, 4) for v in uv]
+
+
+def _el(f, t, tex, vlakken=VLAKKEN, off=(0, 0, 0), uv="f"):
+    """An element given in F pixels, written in the model's own pixels (F - off). tex: one texture or {face: texture};
+    uv "f" = the F-mapped canvas, "vol" = the whole 16 x 16 texture, or a list."""
     faces = {}
-    for vlak in ("north", "south", "west", "east", "up", "down"):
-        if vlak in zonder:
+    for v in vlakken:
+        tx = tex.get(v, tex.get("*")) if isinstance(tex, dict) else tex
+        if tx is None:
             continue
-        t = tex.get(vlak, tex.get("*")) if isinstance(tex, dict) else tex
-        faces[vlak] = {"texture": t, "uv": VOL}
-    return {"from": van, "to": tot, "faces": faces}
+        u = _uv_f(v, f, t) if uv == "f" else [0, 0, 16, 16] if uv == "vol" else uv
+        faces[v] = {"texture": tx, "uv": u}
+    return {"from": [round(f[i] - off[i], 4) for i in range(3)], "to": [round(t[i] - off[i], 4) for i in range(3)], "faces": faces}
 
 
-def _model(textures, elements, doorzichtig=False, parent="minecraft:block/block"):
-    """A block model in the 26.1 shape: no render_type (26.1 picks the layer from the texture: alpha 0/255 = cutout);
-    doorzichtig = every texture forced translucent (what tools/mc26.py makes of render_type translucent)."""
-    if doorzichtig:
-        textures = {k: {"sprite": v, "force_translucent": True} if not v.startswith("#") else v for k, v in textures.items()}
-    return {"parent": parent, "textures": textures, "elements": elements}
+def _rechthoeken(cellen):
+    """A set of (x, z) cells as few rectangles (x1, z1, x2, z2), exclusive ends: row runs, merged down when equal."""
+    rijen = {}
+    for z in sorted({c[1] for c in cellen}):
+        xs = sorted(x for x, zz in cellen if zz == z)
+        runs, start = [], None
+        for i, x in enumerate(xs):
+            if start is None:
+                start = x
+            if i + 1 == len(xs) or xs[i + 1] != x + 1:
+                runs.append((start, x + 1))
+                start = None
+        rijen[z] = runs
+    open_, uit = {}, []
+    for z in sorted(rijen):
+        nieuw = {}
+        for run in rijen[z]:
+            if run in open_ and open_[run][1] == z:
+                nieuw[run] = (open_[run][0], z + 1)
+            else:
+                nieuw[run] = (z, z + 1)
+        for run, (z1, z2) in open_.items():
+            if run not in nieuw or nieuw[run][0] != z1:
+                uit.append((run[0], z1, run[1], z2))
+        open_ = nieuw
+    uit += [(run[0], z1, run[1], z2) for run, (z1, z2) in open_.items()]
+    return uit
+
+
+def _voet():
+    """The base (block dy 0, middle: off F 16, 0, 16)."""
+    off = (16, 0, 16)
+    els = []
+    lijf = {(x, z) for x in range(48) for z in range(48) if _rond_vierkant(x, z, 1, 47, 6)}
+    for x1, z1, x2, z2 in _rechthoeken(lijf):               # plinth + body: the canvas colours them by height
+        els.append(_el((x1, 0, z1), (x2, 21, z2), "#zij", ("north", "south", "west", "east"), off))
+    rand = {(x, z) for x in range(48) for z in range(48) if _rond_vierkant(x, z, 0, 48, 7)}
+    for x1, z1, x2, z2 in _rechthoeken(rand):               # the frosting rim with the floor painted on top
+        els.append(_el((x1, 21, z1), (x2, H, z2), {"up": "#boven", "down": "#room", "*": "#zij"}, off=off))
+    ring = {(x, z) for x in range(48) for z in range(48) if 20.5 < _afstand(x, z) <= 23.2}
+    for x1, z1, x2, z2 in _rechthoeken(ring):               # the cream seat ring the dome stands in
+        els.append(_el((x1, H, z1), (x2, H + 1, z2), "#room", ("north", "south", "west", "east", "up"), off, uv=[0, 0, 1, 1]))
+    for x, z in ((3, 3), (43, 3), (3, 43), (43, 43)):       # four candy knobs on the corners
+        els.append(_el((x, H, z), (x + 2, H + 2, z + 2), "#snoep", ("north", "south", "west", "east", "up"), off, uv=[0, 0, 2, 2]))
+    kussen = {(x, z) for x in range(48) for z in range(48) if _afstand(x, z) <= 10.5}
+    for x1, z1, x2, z2 in _rechthoeken(kussen):             # the lavender cushion (a puffed middle) and its button
+        els.append(_el((x1, H, z1), (x2, H + 3, z2), "#kussen", ("north", "south", "west", "east", "up"), off))
+    midden = {(x, z) for x in range(48) for z in range(48) if _afstand(x, z) <= 8}
+    for x1, z1, x2, z2 in _rechthoeken(midden):
+        els.append(_el((x1, H + 3, z1), (x2, H + 4, z2), "#kussen", ("north", "south", "west", "east", "up"), off))
+    els.append(_el((23.5, H + 4, 23.5), (24.5, H + 4.6, 24.5), "#room", ("north", "south", "west", "east", "up"), off, uv=[0, 0, 1, 1]))
+    return els
+
+
+def _kern_delen():
+    """The kern's own parts (F, off 16, 0, 0): the front decal, the cream door frame, the mint bowl in front of the door."""
+    off = (16, 0, 0)
+    els = [_el((8, 0, 0.97), (40, 32, 0.97), "#voor", ("north",), off, uv=[0, 0, 16, 16])]
+    lijst = {(x, y) for x in range(16, 33) for y in range(14) if _in_deur(x + .5, y + .5, r=5.9) and not _in_deur(x + .5, y + .5)}
+    for x1, y1, x2, y2 in _rechthoeken(lijst):              # (x, y) cells here: the frame stands 1 px proud of the body
+        els.append(_el((x1, y1, 0), (x2, y2, 1), "#room", ("north", "west", "east", "up", "down"), off, uv=[0, 0, 1, 1]))
+    bak = lambda x, z: math.hypot(x + .5 - 8, z + .5 + 10)  # the bowl: middle at kern x 8, z -10 (F 24, -10), radius 5
+    vloer = {(x, z) for x in range(3, 13) for z in range(-15, -5) if bak(x, z) <= 5}
+    wand = {c for c in vloer if bak(*c) > 3.3}
+    for x1, z1, x2, z2 in _rechthoeken({(x + 16, z) for x, z in vloer}):
+        els.append(_el((x1, 0, z1), (x2, 1, z2), "#schaal", ("north", "south", "west", "east", "up"), off, uv=[0, 0, 4, 4]))
+    for x1, z1, x2, z2 in _rechthoeken({(x + 16, z) for x, z in wand}):
+        els.append(_el((x1, 1, z1), (x2, 2, z2), "#schaal", ("north", "south", "west", "east"), off, uv=[4, 4, 8, 5]))
+        els.append(_el((x1, 2, z1), (x2, 3, z2), "#room", ("north", "south", "west", "east", "up"), off, uv=[0, 0, 1, 1]))
+    return els
+
+
+def _koepel():
+    """The soap-bubble dome and the flower on top (block dy 2, middle: off F 16, 32, 16). The outer skin of a voxel
+    ellipsoid (cells of KOEPEL_RES px), greedy-merged into flat faces; the glint where the light catches it."""
+    off, n = (16, 32, 16), KOEPEL_RES
+    nx_, ny_ = 48 // n, int(KOEPEL_RY) // n + 1
+
+    def binnen(i, j, k):
+        if not (0 <= i < nx_ and 0 <= k < nx_ and j >= 0):
+            return False
+        x, y, z = i * n + n / 2, H + j * n + n / 2, k * n + n / 2
+        return ((x - 24) / KOEPEL_RX) ** 2 + ((y - H) / KOEPEL_RY) ** 2 + ((z - 24) / KOEPEL_RX) ** 2 <= 1
+
+    def glimt(i, j, k):
+        x, y, z = i * n + n / 2 - 24, j * n + n / 2, k * n + n / 2 - 24
+        v = (x / KOEPEL_RX, y / KOEPEL_RY, z / KOEPEL_RX)
+        ln = math.sqrt(sum(c * c for c in v)) or 1
+        g = (0.5 * v[0] + 0.78 * v[1] - 0.38 * v[2]) / ln     # upper left as you look at the door
+        return 0.955 < g < 0.982 or g > 0.994
+
+    richtingen = {"north": (2, -1), "south": (2, 1), "west": (0, -1), "east": (0, 1), "up": (1, 1)}
+    els = []
+    for vlak, (as_, s) in richtingen.items():
+        masker = {}
+        for i in range(nx_):
+            for j in range(ny_):
+                for k in range(nx_):
+                    if not binnen(i, j, k):
+                        continue
+                    nb = [i, j, k]
+                    nb[as_] += s
+                    if binnen(*nb):
+                        continue
+                    vlakpos = (i, j, k)[as_]
+                    a, b = [c for idx, c in enumerate((i, j, k)) if idx != as_]
+                    masker.setdefault((vlakpos, "#glim" if glimt(i, j, k) else "#bel"), set()).add((a, b))
+        for (pos, tex), cellen in masker.items():
+            for a1, b1, a2, b2 in _rechthoeken(cellen):
+                lo, hi = [0, 0, 0], [0, 0, 0]
+                vrij = [idx for idx in range(3) if idx != as_]
+                lo[vrij[0]], hi[vrij[0]] = a1 * n, a2 * n
+                lo[vrij[1]], hi[vrij[1]] = b1 * n, b2 * n
+                vlak_c = (pos + (1 if s > 0 else 0)) * n
+                lo[as_] = hi[as_] = vlak_c
+                lo[1] += H
+                hi[1] += H
+                els.append(_el(tuple(lo), tuple(hi), tex, (vlak,), off, uv="vol"))
+    top = H + int(KOEPEL_RY)
+    bloem = [((23, top - 1, 23), (25, top + 2, 25), "#steel"), ((21, top + 1, 23), (23, top + 2, 25), "#blad"),
+             ((23, top + 2, 23), (25, top + 4, 25), "#goud"), ((23, top + 4, 23), (25, top + 5, 25), "#bloem_licht")]
+    for dx, dz in ((-2, 0), (2, 0), (0, -2), (0, 2)):
+        bloem.append(((23 + dx, top + 2, 23 + dz), (25 + dx, top + 4, 25 + dz), "#bloem"))
+    for f, t, tex in bloem:
+        els.append(_el(f, t, tex, off=off, uv=[0, 0, 2, 2]))
+    return els
+
+
+def _tex(*namen, doorzichtig=()):
+    out = {"particle": "guhs:block/slijmhuisje_zij"}
+    for naam in namen:
+        sprite = f"guhs:block/slijmhuisje_{naam}"
+        out[naam] = {"sprite": sprite, "force_translucent": True} if naam in doorzichtig else sprite
+    return out
+
+
+def _model(textures, elements):
+    """A block model in the 26.1 shape (no render_type: 26.1 picks the layer from the texture; the soap film is forced
+    translucent, what tools/mc26.py makes of render_type translucent). No ambient occlusion: the parts reach far out of
+    their block."""
+    return {"parent": "minecraft:block/block", "ambientocclusion": False, "textures": textures, "elements": elements}
+
+
+def _slijm_box(van, maat, uvpos, tex="#slijm"):
+    """A box of the guh slime's entity model (texture 64 x 32: 4 px a uv unit across, 2 down), front = north."""
+    (u, v), (w, h, d) = uvpos, maat
+    reg = {"up": (u + d, v, u + d + w, v + d), "down": (u + d + w, v, u + d + 2 * w, v + d),
+           "west": (u, v + d, u + d, v + d + h), "north": (u + d, v + d, u + d + w, v + d + h),
+           "east": (u + d + w, v + d, u + 2 * d + w, v + d + h), "south": (u + 2 * d + w, v + d, u + 2 * d + 2 * w, v + d + h)}
+    faces = {k: {"texture": tex, "uv": [r[0] / 4, r[1] / 2, r[2] / 4, r[3] / 2]} for k, r in reg.items()}
+    return {"from": list(van), "to": [van[0] + w, van[1] + h, van[2] + d], "faces": faces}
 
 
 def modellen():
     """path under models/ -> model json."""
-    tx = lambda **meer: {"particle": "guhs:block/slijmhuisje_zij", "zij": "guhs:block/slijmhuisje_zij", "boven": "guhs:block/slijmhuisje_boven",
-                         **{k: f"guhs:block/slijmhuisje_{v}" for k, v in meer.items()}}
-    blok = lambda voor="#zij": doos([0, 0, 0], [16, 16, 16], {"north": voor, "up": "#boven", "*": "#zij"})
-    schaal = [doos([5, 16, 0.5], [11, 17, 4], "#schaal"),
-              doos([5, 17, 0.5], [11, 17.5, 1], "#schaal"), doos([5, 17, 3.5], [11, 17.5, 4], "#schaal")]
     m = {}
     for staat in STATEN:
-        m[f"block/slijmhuisje_{staat}"] = _model(tx(voor=f"voor_{staat}", schaal="schaal"), [blok("#voor")] + schaal)
-    m["block/slijmhuisje_rand"] = _model(tx(), [blok()])
-    m["block/slijmhuisje_hoek"] = _model(tx(schaal="schaal"), [blok(), doos([0.5, 16, 0.5], [3.5, 18, 3.5], "#schaal")])
-    m["block/slijmhuisje_midden"] = _model(tx(kussen="kussen"), [blok(), doos([3, 16, 3], [13, 19, 13], "#kussen")])
+        tx = _tex("room", "schaal")
+        tx["voor"] = f"guhs:block/slijmhuisje_voor_{staat}"
+        m[f"block/slijmhuisje_{staat}"] = _model(tx, _kern_delen())
+    m["block/slijmhuisje_voet"] = _model(_tex("zij", "boven", "room", "snoep", "kussen"), _voet())
+    m["block/slijmhuisje_koepel"] = _model(_tex("bel", "glim", "steel", "blad", "goud", "bloem", "bloem_licht", doorzichtig=("bel", "glim")) |
+                                           {"particle": "guhs:block/slijmhuisje_bloem"}, _koepel())
     m["block/slijmhuisje_leeg"] = {"textures": {"particle": "guhs:block/slijmhuisje_zij"}}
-    koepel = [doos([-12, 0, -12], [28, 10, 28], "#koepel", zonder=("down",)),
-              doos([-9, 10, -9], [25, 18, 25], "#koepel", zonder=("down",)),
-              doos([-4, 18, -4], [20, 24, 20], "#koepel", zonder=("down",)),
-              doos([6, 24, 6], [10, 26, 10], "#bloem"),
-              doos([5, 26, 5], [11, 27, 11], "#bloem")]
-    m["block/slijmhuisje_koepel"] = _model({"particle": "guhs:block/slijmhuisje_koepel", "koepel": "guhs:block/slijmhuisje_koepel",
-                                            "bloem": "guhs:block/slijmhuisje_bloem"}, koepel, doorzichtig=True)
-    m["block/slijmhuisje_slijm"] = _model({"particle": "guhs:block/slijmhuisje_slijm", "slijm": "guhs:block/slijmhuisje_slijm",
-                                           "voor": "guhs:block/slijmhuisje_slijm_voor"},
-                                          [doos([0, 0, 0], [16, 16, 16], {"north": "#voor", "*": "#slijm"})])
-    m["block/slijmhuisje_balletje"] = _model({"particle": "guhs:block/slijmhuisje_balletje", "bal": "guhs:block/slijmhuisje_balletje"},
-                                             [doos([6.5, 0, 6.5], [9.5, 2.5, 9.5], "#bal")])
-    # the item: the house in small (base, dome, flower) as you see it from the front
-    m["item/slijmhuisje"] = _model({"particle": "guhs:block/slijmhuisje_zij", "voor": "guhs:block/slijmhuisje_voor_werkt",
-                                    "zij": "guhs:block/slijmhuisje_zij", "boven": "guhs:block/slijmhuisje_boven",
-                                    "koepel": "guhs:block/slijmhuisje_koepel", "bloem": "guhs:block/slijmhuisje_bloem",
-                                    "slijm": "guhs:block/slijmhuisje_slijm_voor"},
-                                   [doos([1, 0, 1], [15, 7, 15], {"north": "#voor", "up": "#boven", "*": "#zij"}),
-                                    doos([6, 7, 6], [10, 10, 10], "#slijm"),
-                                    doos([2.5, 7, 2.5], [13.5, 11, 13.5], "#koepel", zonder=("down",)),
-                                    doos([4.5, 11, 4.5], [11.5, 14, 11.5], "#koepel", zonder=("down",)),
-                                    doos([7, 14, 7], [9, 15.5, 9], "#bloem")], doorzichtig=True)
+    # the slime (the renderer: centred on x/z 0, standing on y 0, 8 px = size 1), as the entity: an inner cube with eyes
+    # and a mouth (cutout) and the jelly around it (translucent)
+    m["block/slijmhuisje_slijm_binnen"] = {"textures": {"particle": "guhs:block/slijmhuisje_slijm", "slijm": "guhs:block/slijmhuisje_slijm"},
+                                           "elements": [_slijm_box((-3, 1, -3), (6, 6, 6), (0, 16)),
+                                                        _slijm_box((-3.25, 4, -3.5), (2, 2, 2), (32, 0)),
+                                                        _slijm_box((1.25, 4, -3.5), (2, 2, 2), (32, 4)),
+                                                        _slijm_box((-0.5, 2, -3.5), (1, 1, 1), (32, 8))]}
+    m["block/slijmhuisje_slijm_buiten"] = {"textures": {"particle": "guhs:block/slijmhuisje_slijm",
+                                                        "slijm": {"sprite": "guhs:block/slijmhuisje_slijm", "force_translucent": True}},
+                                           "elements": [_slijm_box((-4, 0, -4), (8, 8, 8), (0, 0))]}
+    m["block/slijmhuisje_balletje"] = {"textures": {"particle": "guhs:block/slijmhuisje_balletje", "bal": "guhs:block/slijmhuisje_balletje"},
+                                       "elements": [_el((0, 0, 0), (2, 2, 2), "#bal", uv=[0, 0, 2, 2])]}
+    # the item: the whole house at half size (base, kern parts, dome), as you see it from the front
+    def half(els, d):
+        out = []
+        for e in els:
+            e = json.loads(json.dumps(e))
+            for k in ("from", "to"):
+                p = [e[k][i] + d[i] for i in range(3)]
+                e[k] = [round(8 + (p[0] - 8) * 0.5, 4), round(p[1] * 0.5, 4), round(8 + (p[2] - 8) * 0.5, 4)]
+            out.append(e)
+        return out
+    tx = _tex("zij", "boven", "room", "snoep", "kussen", "schaal", "bel", "glim", "steel", "blad", "goud", "bloem", "bloem_licht",
+              doorzichtig=("bel", "glim"))
+    tx["voor"] = "guhs:block/slijmhuisje_voor_werkt"
+    m["item/slijmhuisje"] = _model(tx, half(_voet(), (0, 0, 0)) + half(_kern_delen(), (0, 0, -16)) + half(_koepel(), (0, 32, 0)))
     m["item/opgepakte_guh_slime"] = {"parent": "minecraft:item/generated", "textures": {"layer0": "guhs:item/opgepakte_guh_slime"}}
     return m
 
@@ -247,15 +474,9 @@ def modellen():
 def blockstates():
     kern = {"variants": {f"facing={f},snoet={s}": {"model": f"guhs:block/slijmhuisje_{s}", **({"y": r} if r else {})}
                          for f, r in ROT.items() for s in STATEN}}
-    deel = [{"apply": {"model": "guhs:block/slijmhuisje_leeg"}}]
-    hoek = {"nw": 0, "no": 90, "zo": 180, "zw": 270}
-    rand = {"o": 90, "z": 180, "w": 270}
-    for stuk, r in hoek.items():
-        deel.append({"when": {"dy": "0", "stuk": stuk}, "apply": {"model": "guhs:block/slijmhuisje_hoek", **({"y": r} if r else {})}})
-    for stuk, r in rand.items():
-        deel.append({"when": {"dy": "0", "stuk": stuk}, "apply": {"model": "guhs:block/slijmhuisje_rand", "y": r}})
-    deel.append({"when": {"dy": "0", "stuk": "midden"}, "apply": {"model": "guhs:block/slijmhuisje_midden"}})
-    deel.append({"when": {"dy": "1", "stuk": "midden"}, "apply": {"model": "guhs:block/slijmhuisje_koepel"}})
+    deel = [{"apply": {"model": "guhs:block/slijmhuisje_leeg"}},
+            {"when": {"dy": "0", "stuk": "midden"}, "apply": {"model": "guhs:block/slijmhuisje_voet"}},
+            {"when": {"dy": "2", "stuk": "midden"}, "apply": {"model": "guhs:block/slijmhuisje_koepel"}}]
     return {"slijmhuisje": kern, "slijmhuisje_deel": {"multipart": deel}}
 
 
@@ -291,7 +512,7 @@ def schrijf(a, r, w=_schrijf_json):
     """Everything but the lang files. a = assets/guhs, r = src/main/resources."""
     d = os.path.join(r, "data", "guhs")
     # the look
-    for naam, img in texturen().items():
+    for naam, img in texturen(a).items():
         pad = os.path.join(a, "textures", *(naam.split("/") if "/" in naam else ("block", f"slijmhuisje_{naam}"))) + ".png"
         os.makedirs(os.path.dirname(pad), exist_ok=True)
         img.save(pad)
@@ -334,7 +555,7 @@ def _direct():
         data.update({k: v[i] for k, v in TEKSTEN.items()})
         _schrijf_json(p, data)
     _schrijf_json(EN_FILE, {k: v[1] for k, v in sorted(TEKSTEN.items())})
-    print(f"slijmhuisje: {len(texturen())} textures, {len(modellen())} models, {len(TEKSTEN)} texts")
+    print(f"slijmhuisje: {len(texturen(a))} textures, {len(modellen())} models, {len(TEKSTEN)} texts")
 
 
 if __name__ == "__main__":
