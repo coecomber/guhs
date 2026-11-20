@@ -508,6 +508,7 @@ public final class Features {
         nl.juiced.guhs.feature.centrale.CentraleFeature.creative(output);   // 1.8.0 (vadskracht): de Mega-knuffelcentrale
         nl.juiced.guhs.feature.fabriek.FabriekFeature.creative(output);   // 1.8.0 (vadskracht): de Fabriekshal
         nl.juiced.guhs.feature.erfenis.sherlock.SherlockFeature.creative(output);   // 1.9: Sherlocks vergrootglas
+        nl.juiced.guhs.feature.erfenis.ErfenisFeature.creative(output);   // 1.10.10: the Guhdansje music disc
         nl.juiced.guhs.feature.slijmhuisje.SlijmhuisjeFeature.creative(output);   // 1.10.10: Het Slijmhuisje
         nl.juiced.guhs.feature.guhwinter.GuhwinterFeature.creative(output);   // 1.10.10 Guhwinter
     }

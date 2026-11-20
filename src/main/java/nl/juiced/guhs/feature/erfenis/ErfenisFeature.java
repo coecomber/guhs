@@ -44,4 +44,9 @@ public final class ErfenisFeature {
     public static void payloads(PayloadRegistrar registrar) {
         ErfenisPayloads.register(registrar);
     }
+
+    /** 1.10.10: the Guhdansje music disc. */
+    public static void creative(java.util.function.Consumer<net.minecraft.world.item.ItemStack> output) {
+        output.accept(new net.minecraft.world.item.ItemStack(ErfenisMuziek.MUZIEKPLAAT.get()));
+    }
 }

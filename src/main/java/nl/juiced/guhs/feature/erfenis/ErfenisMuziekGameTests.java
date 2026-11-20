@@ -60,4 +60,42 @@ public class ErfenisMuziekGameTests {
             helper.succeed();
         });
     }
+
+    /**
+     * The Guhdansje music disc: a jukebox disc of song guhs:dansje (the Muziekdoosje's sound event, 31 s), a rare disc for
+     * the Disco-dynamo, and the Ballonfestival, guh picnic and Grotdisco chests hold it about as often as intended.
+     */
+    @GuhTest(template = EMPTY, batch = BATCH)
+    public static void muziekplaatDansje(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        net.minecraft.world.item.ItemStack plaat = new net.minecraft.world.item.ItemStack(ErfenisMuziek.MUZIEKPLAAT.get());
+        helper.assertTrue(plaat.has(net.minecraft.core.component.DataComponents.JUKEBOX_PLAYABLE), "a jukebox disc");
+        var song = net.minecraft.world.item.JukeboxSong.fromStack(plaat);
+        helper.assertTrue(song.isPresent() && song.get().is(net.minecraft.resources.ResourceKey.create(
+                net.minecraft.core.registries.Registries.JUKEBOX_SONG, nl.juiced.guhs.Guhs.id("dansje"))), "the disc points at song guhs:dansje");
+        helper.assertTrue(song.get().value().soundEvent().value() == ErfenisMuziek.DANSJE.get()
+                && song.get().value().lengthInSeconds() == 31f, "the song plays the Muziekdoosje's tune for 31 s");
+        helper.assertTrue(plaat.is(net.minecraft.tags.TagKey.create(net.minecraft.core.registries.Registries.ITEM, nl.juiced.guhs.Guhs.id("techbron/zeldzame_plaat"))),
+                "a rare disc for the Disco-dynamo");
+        var params = new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
+                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN, helper.absoluteVec(new net.minecraft.world.phys.Vec3(1, 1, 1)))
+                .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CHEST);
+        // (tools/features/erfenis_muziek.py PLAAT_KISTEN: table, chance per chest)
+        for (var kist : java.util.Map.of("chests/ballonfestival", 0.15, "chests/guh_picnic", 0.12, "chests/onderwol/grotdisco", 0.25).entrySet()) {
+            String tafel = kist.getKey();
+            var table = level.getServer().reloadableRegistries().getLootTable(net.minecraft.resources.ResourceKey.create(
+                    net.minecraft.core.registries.Registries.LOOT_TABLE, nl.juiced.guhs.Guhs.id(tafel)));
+            int keer = 0;
+            for (int i = 0; i < 400; i++) {
+                for (net.minecraft.world.item.ItemStack s : table.getRandomItems(params)) {
+                    if (s.is(ErfenisMuziek.MUZIEKPLAAT.get())) {
+                        keer++;
+                    }
+                }
+            }
+            double verwacht = 400 * kist.getValue();
+            helper.assertTrue(keer >= verwacht * 0.5 && keer <= verwacht * 1.6, tafel + ": about " + (int) verwacht + " of 400 chests, got " + keer);
+        }
+        helper.succeed();
+    }
 }

@@ -5,23 +5,33 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
+import java.util.function.Consumer;
+
+import net.minecraft.ChatFormatting;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Rarity;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import nl.juiced.guhs.Guhs;
 import nl.juiced.guhs.entity.GuhEntity;
@@ -49,6 +59,19 @@ public final class ErfenisMuziek {
     public static final DeferredHolder<SoundEvent, SoundEvent> DANSJE = SOUNDS.register("muziekdoosje.dansje",
             () -> SoundEvent.createVariableRangeEvent(Guhs.id("muziekdoosje.dansje")));
 
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(Guhs.MODID);
+    /**
+     * 1.10.10: the dance tune as a music disc (jukebox song {@code guhs:dansje}: the same sound event {@link #DANSJE}, 31 s).
+     * Found now and then in the chests of the Ballonfestival, the guh picnic and the Grotdisco (tools/features/erfenis_muziek.py). Every guh
+     * near a playing jukebox dances anyway (GuhEmotes), so the tune does at home what it does on the Muziektent.
+     */
+    public static final DeferredItem<Item> MUZIEKPLAAT = ITEMS.registerItem("music_disc_dansje", p -> new Item(p) {
+        @Override
+        public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag flag) {
+            tooltip.accept(Component.translatable("item.guhs.music_disc_dansje.lore").withStyle(ChatFormatting.GRAY));
+        }
+    }, () -> new Item.Properties().stacksTo(1).rarity(Rarity.RARE).jukeboxPlayable(ResourceKey.create(Registries.JUKEBOX_SONG, Guhs.id("dansje"))));
+
     /** One step (ticks): notes from the box, the dancers collected again. */
     public static final int STAP = 50;
     /** Steps of a song (fits in {@link SlaapBlokken.Speeldoos#SPEELT}, 0..12): 12 x 50 ticks = the tune's 30 seconds. */
@@ -67,6 +90,7 @@ public final class ErfenisMuziek {
 
     static void register(IEventBus modBus) {
         SOUNDS.register(modBus);
+        ITEMS.register(modBus);
     }
 
     /** Does a Muziekdoosje at this spot play the dance tune (in De Erfenis, or started as one)? */

@@ -1,0 +1,8 @@
+{
+  "sound_event": "guhs:muziekdoosje.dansje",
+  "description": {
+    "translate": "jukebox_song.guhs.dansje"
+  },
+  "length_in_seconds": 31.0,
+  "comparator_output": 4
+}

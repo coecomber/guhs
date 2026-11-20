@@ -49179,5 +49179,8 @@
   "subtitles.guhs.muziekdoosje.dansje": "Music Box plays a guh dance",
   "gui.guhs.muziekdoosje.dansen": "♪ Everybody dance, vadsjes! ♪",
   "gui.guhs.muziekdoosje.speelt_al": "The music box is already playing!",
-  "gui.guhs.muziekdoosje.niet_eigen": "This music box belongs to this village's farmer. Only they may wind it up!"
+  "gui.guhs.muziekdoosje.niet_eigen": "This music box belongs to this village's farmer. Only they may wind it up!",
+  "item.guhs.music_disc_dansje": "Music Disc: Guh Dance",
+  "item.guhs.music_disc_dansje.lore": "The happy tune of the music box in The Inheritance. Everybody dance!",
+  "jukebox_song.guhs.dansje": "Guhs - Little Dance"
 }

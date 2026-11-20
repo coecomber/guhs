@@ -78,6 +78,8 @@ public record LichtShow(Patroon patroon, int tempo, int[] kleuren) {
         vast("guhs:music_disc_ze_hangen", Patroon.HART, 10, 0xFFFF6FB1, 0xFFFFC1DC, 0xFFB57BFF);
         // (1.4.1 disc "Het Snuffeleiland": sea, sand and island green, rolling like the waves)
         vast("guhs:music_disc_snuffeleiland", Patroon.GOLF, 12, 0xFF2BA8E0, 0xFFF2DFA0, 0xFF5BC85B);
+        // (1.10.10 disc "Guhdansje", the Erfenis Muziekdoosje's 128 BPM tune: pastel pink, mint and lilac squares on the beat)
+        vast("guhs:music_disc_dansje", Patroon.SCHAAKBORD, 9, 0xFFFF9CCB, 0xFFA8F0D8, 0xFFD2B4FF);
     }
 
     /** The discs with a hand-picked show. */
