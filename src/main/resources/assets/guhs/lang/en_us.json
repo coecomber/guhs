@@ -49182,5 +49182,15 @@
   "gui.guhs.muziekdoosje.niet_eigen": "This music box belongs to this village's farmer. Only they may wind it up!",
   "item.guhs.music_disc_dansje": "Music Disc: Guh Dance",
   "item.guhs.music_disc_dansje.lore": "The happy tune of the music box in The Inheritance. Everybody dance!",
-  "jukebox_song.guhs.dansje": "Guhs - Little Dance"
+  "jukebox_song.guhs.dansje": "Guhs - Little Dance",
+  "gui.guhs.blauwdruk.cat.blubbelbadhuis": "The Blubble Bathhouse",
+  "gui.guhs.blauwdruk.cat.blubseum": "The Blubseum",
+  "gui.guhs.blauwdruk.cat.piepnest": "The Squeak Nest",
+  "gui.guhs.blauwdruk.cat.piepmolen": "The Squeak Mill",
+  "gui.guhs.blauwdruk.cat.knuffelkasteel": "Cuddle Castle (Softenburg Castle)",
+  "gui.guhs.blauwdruk.cat.theepothuisje": "Teapot cottage (The Tea Guh)",
+  "gui.guhs.blauwdruk.cat.treinstation": "Little train station (Guhda Station)",
+  "gui.guhs.blauwdruk.cat.boomhuisdorpje": "Treehouse village (Blossom Twig Village)",
+  "gui.guhs.blauwdruk.cat.reuzenblub": "The Giant Blub",
+  "gui.guhs.blauwdruk.cat.reuzenpiepje": "The Giant Squeak"
 }

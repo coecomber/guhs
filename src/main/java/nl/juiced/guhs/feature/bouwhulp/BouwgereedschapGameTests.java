@@ -196,7 +196,7 @@ public class BouwgereedschapGameTests {
     static final List<String> HOUD = List.of("guh_huisje_klein", "guh_huis_middel", "guh_villa_groot", "guh_boerderijtje", "guh_rijtje", "guh_speeltuintje");
     static final List<String> STRUCTUUR = List.of("kaasfontein", "reuzentaart", "reuzenkaasknabbel", "blokguh", "weebhuisje", "botenhuisje",
             "villa_binnen", "eendenvijver", "japans_tuintje", "wensboom", "muziektuin", "kampeerplekje",
-            "luchtballonhaven", "draaimolen", "sterrenwacht");
+            "luchtballonhaven", "draaimolen", "sterrenwacht", "blubbelbadhuis", "blubseum", "piepnest", "piepmolen", "knuffelkasteel", "theepothuisje", "treinstation", "boomhuisdorpje", "reuzenblub", "reuzenpiepje");
     static final List<String> WEG = List.of("lodge_hutje", "rangerpost", "acacia_uitkijktoren", "watergat_terras", "safaripoort", "rieten_paviljoen",
             "guh_winkeltje", "kas_met_oortjes", "bloemenprieel", "boogbrug", "steiger_botenhuisje", "vijver_stapstenen", "picknickplek", "guh_vuurtoren",
             "guh_windmolen", "kasteeltoren", "boomhut", "guhbol_koepel", "guh_klokkentoren");
@@ -248,6 +248,12 @@ public class BouwgereedschapGameTests {
                         + Catalogus.get(c.id()).ontwerp.aantal() + ")");
             }
         }
+        for (String nat : List.of("blubbelbadhuis", "blubseum")) {
+            helper.assertTrue(Catalogus.get(nat).ontwerp.blokken().values().stream().anyMatch(st -> st.is(Blocks.WATER))
+                    && nl.juiced.guhs.feature.bouwhulp.kern.Materiaal.kost(Blocks.WATER.defaultBlockState()).oneindig(), nat + ": water, by the 2-bucket rule");
+        }
+        helper.assertTrue(Catalogus.get("treinstation").ontwerp.nodig().getOrDefault(nl.juiced.guhs.registry.ModItems.SLEERAIL_RECHT.get(), 0) == 10,
+                "the station's track: 10 straight rail pieces " + Catalogus.get("treinstation").ontwerp.nodig().get(nl.juiced.guhs.registry.ModItems.SLEERAIL_RECHT.get()));
         helper.assertTrue(Catalogus.get("draaimolen").ontwerp.blokken().values().stream().anyMatch(st -> st.is(Blocks.IRON_CHAIN)),
                 "the carousel's chains load (iron_chain from DataVersion 3955)");
         int vijver = Catalogus.get("eendenvijver").ontwerp.aantal();

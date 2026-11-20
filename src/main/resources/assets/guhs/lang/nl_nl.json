@@ -49182,5 +49182,15 @@
   "gui.guhs.muziekdoosje.niet_eigen": "Dit muziekdoosje is van de boer van dit dorp. Alleen die mag het opwinden, njeg!",
   "item.guhs.music_disc_dansje": "Muziekplaat: Guhdansje",
   "item.guhs.music_disc_dansje.lore": "Het vrolijke deuntje van het muziekdoosje in De Erfenis. Iedereen dansen!",
-  "jukebox_song.guhs.dansje": "Guhs - Dansje"
+  "jukebox_song.guhs.dansje": "Guhs - Dansje",
+  "gui.guhs.blauwdruk.cat.blubbelbadhuis": "Het Blubbelbadhuis",
+  "gui.guhs.blauwdruk.cat.blubseum": "Het Blubseum",
+  "gui.guhs.blauwdruk.cat.piepnest": "Het Piepnest",
+  "gui.guhs.blauwdruk.cat.piepmolen": "De Piepmolen",
+  "gui.guhs.blauwdruk.cat.knuffelkasteel": "Knuffelkasteel (Slot Zachtenburg)",
+  "gui.guhs.blauwdruk.cat.theepothuisje": "Theepot-huisje (Het Theeguhtje)",
+  "gui.guhs.blauwdruk.cat.treinstation": "Treinstationnetje (Station Guhda)",
+  "gui.guhs.blauwdruk.cat.boomhuisdorpje": "Boomhuisdorpje (Bloesemtakjesdorp)",
+  "gui.guhs.blauwdruk.cat.reuzenblub": "De Reuzenblub",
+  "gui.guhs.blauwdruk.cat.reuzenpiepje": "Het Reuzenpiepje"
 }
