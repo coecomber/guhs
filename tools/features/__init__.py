@@ -363,6 +363,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             # 1.10.10 economie: golden star looks, the zandhoopje + its spots on the dream islands, the texts (feature/droomzand)
             'economie1110',
             'slijmhuisje',   # 1.10.10: Het Slijmhuisje, a house for one guh slime + its chore (feature/slijmhuisje)
+            'erfenis_muziek',   # 1.10.10: the Erfenis Muziekdoosje's dance tune (feature/erfenis/ErfenisMuziek)
             ]
 
 

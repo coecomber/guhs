@@ -22,6 +22,7 @@ public final class ErfenisFeature {
     }
 
     public static void register(IEventBus modBus) {
+        ErfenisMuziek.register(modBus);   // 1.10.10: the Muziekdoosje's dance tune
         NeoForge.EVENT_BUS.addListener(ErfenisCommando::register);
         nl.juiced.guhs.world.TikWacht.post("Erfenis.tick", Erfenis::tick);
         NeoForge.EVENT_BUS.addListener(Erfenis::opBreken);

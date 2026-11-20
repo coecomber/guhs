@@ -923,6 +923,17 @@ public final class Erfenis {
             return;
         }
         event.setCanceled(true);
+        // 1.10.10: the Muziekdoosje (on the Muziektent) plays its dance tune for the village's owner (ErfenisMuziek)
+        net.minecraft.world.level.block.state.BlockState geklikt = event.getLevel().getBlockState(event.getPos());
+        if (geklikt.is(nl.juiced.guhs.feature.slaapzorg.SlaapzorgFeature.MUZIEKDOOSJE.get())) {
+            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+            if (event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && event.getEntity() instanceof ServerPlayer p
+                    && event.getLevel() instanceof net.minecraft.server.level.ServerLevel sl) {
+                Base b = onder(p);
+                ErfenisMuziek.klik(p, sl, event.getPos(), geklikt, b != null && eigen(p, b));
+            }
+            return;
+        }
         // in the own village: the Detectivebureau opens Sherlock's Speurboekje, the Marktplein the orders
         if (event.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && event.getEntity() instanceof ServerPlayer p
                 && !(event.getItemStack().getItem() instanceof nl.juiced.guhs.feature.erfenis.sherlock.Vergrootglas)) {
