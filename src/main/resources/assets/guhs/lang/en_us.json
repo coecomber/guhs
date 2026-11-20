@@ -49192,5 +49192,10 @@
   "gui.guhs.blauwdruk.cat.treinstation": "Little train station (Guhda Station)",
   "gui.guhs.blauwdruk.cat.boomhuisdorpje": "Treehouse village (Blossom Twig Village)",
   "gui.guhs.blauwdruk.cat.reuzenblub": "The Giant Blub",
-  "gui.guhs.blauwdruk.cat.reuzenpiepje": "The Giant Squeak"
+  "gui.guhs.blauwdruk.cat.reuzenpiepje": "The Giant Squeak",
+  "gui.guhs.bouwhulp.spook.dekking.te_weinig": "Not enough stuff yet: %s%% there, at least %s%% needed. Check your List for what's missing.",
+  "gui.guhs.bouwhulp.spook.dekking.vraag": "Still %s%% missing: %s blocks stay open (air). Build anyway? You fill those gaps yourself afterwards.",
+  "gui.guhs.bouwhulp.spook.open": "Done! %s blocks stayed open (air): fill them yourself with something similar!",
+  "gui.guhs.bouwhulp.lijstje.dekking": "There: %s%% (the shed builds from %s%%; the rest stays open)",
+  "gui.guhs.bouwkeet.dekking": "%s%% there:"
 }

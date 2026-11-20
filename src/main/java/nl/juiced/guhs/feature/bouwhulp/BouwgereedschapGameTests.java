@@ -358,12 +358,10 @@ public class BouwgereedschapGameTests {
         Spook s = waterProject(helper, p, 1);
         nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
         helper.assertTrue(!b.begonnen() && b.tekort().getOrDefault(Items.WATER_BUCKET, 0) == 1, "one more water bucket is missing: " + b.tekort());
-        helper.assertTrue(Spookbouw.bouw(p, s, true).begonnen(), "alsnog: it starts");
-        helper.succeedWhen(() -> {
-            helper.assertTrue(s.status() == Spook.Status.WACHT, "it waits: the water is missing");
-            helper.assertTrue(!helper.getBlockState(new BlockPos(4, 2, 4)).is(Blocks.WATER), "no water placed");
-            helper.assertTrue(tel(p, Items.WATER_BUCKET) == 1, "the bucket stays");
-        });
+        helper.assertTrue(b.teWeinig() && b.dekking() == 0, "all its blocks are water: 0%, below 80% (" + b.dekking() + ")");
+        helper.assertTrue(!Spookbouw.bouw(p, s, true).begonnen(), "even 'toch bouwen' does not start below 80%");
+        helper.assertTrue(!helper.getBlockState(new BlockPos(4, 2, 4)).is(Blocks.WATER) && tel(p, Items.WATER_BUCKET) == 1, "no water, the bucket stays");
+        helper.succeed();
     }
 
     /** 1.10.10: two water buckets are an infinite source: the water is placed and both buckets stay. */
@@ -415,6 +413,73 @@ public class BouwgereedschapGameTests {
                         + " " + helper.getLevel().getBlockState(e.getKey()));
             }
             helper.assertTrue(tel(p, nl.juiced.guhs.registry.ModItems.SLEERAIL_RECHT.get()) == 0, "the rail item was used");
+        });
+    }
+
+    /** A keet whose project is a 10 x 10 floor of oak planks (100 spots); the player holds {@code planken} planks. */
+    private static Spook vloerProject(GameTestHelper helper, ServerPlayer p, int planken) {
+        p.setGameMode(GameType.SURVIVAL);
+        p.getInventory().clearContent();
+        if (planken > 0) {
+            p.getInventory().add(new ItemStack(Items.OAK_PLANKS, planken));
+        }
+        BlockPos kern = new BlockPos(14, 2, 14);
+        helper.setBlock(kern, BouwhulpFeature.BOUWKEET.get().defaultBlockState());
+        nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity keet = (nl.juiced.guhs.feature.bouwhulp.keet.BouwkeetBlockEntity) helper.getLevel()
+                .getBlockEntity(helper.absolutePos(kern));
+        Spook s = Spookbouw.start(p, Ontwerp.doos(10, 1, 10, Blocks.OAK_PLANKS.defaultBlockState()), helper.absolutePos(new BlockPos(1, 2, 1)),
+                net.minecraft.world.level.block.Rotation.NONE, net.minecraft.world.level.block.Mirror.NONE);
+        helper.assertTrue(s != null && keet.zetProject(helper.getLevel(), s), "the keet's floor project");
+        return s;
+    }
+
+    private static int vloer(GameTestHelper helper) {
+        int n = 0;
+        for (int x = 1; x <= 10; x++) {
+            for (int z = 1; z <= 10; z++) {
+                if (helper.getBlockState(new BlockPos(x, 2, z)).is(Blocks.OAK_PLANKS)) {
+                    n++;
+                }
+            }
+        }
+        return n;
+    }
+
+    /** 1.10.10, the 80% rule: 79 of 100 planks is refused (also "toch bouwen"); nothing is built or taken. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 40)
+    public static void bouwgereedschapTachtigTeWeinig(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Spook s = vloerProject(helper, p, 79);
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(!b.begonnen() && b.teWeinig() && b.dekking() == 79 && b.open() == 21, "79%: refused (" + b.dekking() + "%, " + b.open() + " open)");
+        helper.assertTrue(!Spookbouw.bouw(p, s, true).begonnen(), "toch bouwen: still no");
+        helper.assertTrue(tel(p, Items.OAK_PLANKS) == 79 && vloer(helper) == 0, "nothing built, nothing taken");
+        helper.succeed();
+    }
+
+    /** 1.10.10, the 80% rule: 85 of 100 planks asks first, then builds 85 and leaves 15 open (air); the build is done. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 600)
+    public static void bouwgereedschapTachtigGenoeg(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Spook s = vloerProject(helper, p, 85);
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(!b.begonnen() && !b.teWeinig() && b.dekking() == 85 && b.open() == 15, "85%: it asks first (" + b.dekking() + "%, " + b.open() + " open)");
+        helper.assertTrue(Spookbouw.bouw(p, s, true).begonnen(), "toch bouwen: it starts");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null, "the build is done (no waiting ghost)");
+            helper.assertTrue(vloer(helper) == 85 && tel(p, Items.OAK_PLANKS) == 0, "85 planks laid (" + vloer(helper) + "), the other 15 spots air");
+        });
+    }
+
+    /** 1.10.10: with everything there nothing changes: "Bouw!" starts at once and builds all 100. */
+    @GuhTest(template = VLOER, batch = BATCH, timeoutTicks = 600)
+    public static void bouwgereedschapTachtigAlles(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Spook s = vloerProject(helper, p, 100);
+        nl.juiced.guhs.feature.bouwhulp.kern.Spoken.Bouwen b = Spookbouw.bouw(p, s, false);
+        helper.assertTrue(b.begonnen() && b.tekort().isEmpty() && b.dekking() == -1, "everything there: it starts");
+        helper.succeedWhen(() -> {
+            helper.assertTrue(Spookbouw.get(helper.getLevel(), s.id()) == null && vloer(helper) == 100, "all 100 laid (" + vloer(helper) + ")");
         });
     }
 

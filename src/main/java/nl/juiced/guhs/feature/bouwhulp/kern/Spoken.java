@@ -125,11 +125,76 @@ public final class Spoken extends SavedData {
     // building
     // =====================================================================================================================
 
-    /** The answer to "Bouw!" ({@code tekort}: what is missing after crafting; {@code gemaakt}: what the keet crafts). */
-    public record Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof, List<Werkplan.Gemaakt> gemaakt) {
+    /**
+     * The answer to "Bouw!" ({@code tekort}: what is missing after crafting; {@code gemaakt}: what the keet crafts). With a
+     * keet and something missing (1.10.10): {@code dekking} = the percentage of block spots that can be built, {@code open}
+     * = how many would stay open (air), {@code teWeinig} = below {@link #MIN_DEKKING}: refused. Elsewhere dekking is -1.
+     */
+    public record Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof, List<Werkplan.Gemaakt> gemaakt, int dekking, int open,
+                         boolean teWeinig) {
         public Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof) {
             this(begonnen, tekort, pof, List.of());
         }
+
+        public Bouwen(boolean begonnen, Map<Item, Integer> tekort, boolean pof, List<Werkplan.Gemaakt> gemaakt) {
+            this(begonnen, tekort, pof, gemaakt, -1, 0, false);
+        }
+    }
+
+    /**
+     * 1.10.10 (the user's 80% rule): a keet starts a build with something missing only when at least this percentage of
+     * its block spots can be built (crafting and the water rule counted); the missing spots then stay open (air) and the
+     * build ends as done.
+     */
+    public static final int MIN_DEKKING = 80;
+
+    /** How much of a build can be made: {@code procent} of {@code totaal} block spots; {@code open} spots stay air. */
+    public record Dekking(int procent, int totaal, int open) {
+        public boolean genoeg() {
+            return procent >= MIN_DEKKING;
+        }
+    }
+
+    /**
+     * The coverage of the rest of this ghost with this plan. Every spot that still differs and is not air counts (free
+     * ones such as door tops as covered). Per item the missing amount is spread over the spots that use it (a double slab
+     * is 2 slabs for 1 spot); the water of a keet is all-or-nothing (the infinite source).
+     */
+    public Dekking dekking(ServerLevel level, Spook s, Werkplan plan) {
+        Map<Item, Integer> plekken = new HashMap<>(), stuks = new HashMap<>();
+        int totaal = 0;
+        boolean keetWater = oneindigWater(level, s);
+        for (Map.Entry<BlockPos, BlockState> e : s.volgorde()) {
+            if (e.getValue().isAir() || level.isLoaded(e.getKey()) && level.getBlockState(e.getKey()) == e.getValue()) {
+                continue;
+            }
+            Materiaal.Kost k = Materiaal.kost(e.getValue());
+            if (k == null) {
+                continue;
+            }
+            totaal++;
+            if (k.oneindig() && keetWater) {
+                plekken.merge(k.item(), 1, Integer::sum);
+            } else if (k.aantal() > 0) {
+                plekken.merge(k.item(), 1, Integer::sum);
+                stuks.merge(k.item(), k.aantal(), Integer::sum);
+                if (k.heeftExtra()) {
+                    plekken.merge(k.extra(), 1, Integer::sum);
+                    stuks.merge(k.extra(), 1, Integer::sum);
+                }
+            }
+        }
+        long open = 0;
+        for (Map.Entry<Item, Integer> t : plan.tekort().entrySet()) {
+            int p = plekken.getOrDefault(t.getKey(), 0), n = stuks.getOrDefault(t.getKey(), 0);
+            if (p == 0) {
+                continue;
+            }
+            open += n == 0 ? p : Math.min(p, ((long) t.getValue() * p + n - 1) / n);   // (n == 0: the water buckets)
+        }
+        int o = (int) Math.min(totaal, open);
+        int procent = totaal == 0 ? 100 : (int) Math.floor((totaal - o) * 100.0 / totaal);
+        return new Dekking(procent, totaal, o);
     }
 
     /**
@@ -146,6 +211,11 @@ public final class Spoken extends SavedData {
         Map<Item, Integer> nodig = nogNodig(level, s);
         Werkplan plan = Werkplan.maak(level, nodig, bronnen);   // 1.10.10: what is not there may be crafted
         Map<Item, Integer> tekort = plan.tekort();
+        // 1.10.10, the 80% rule (a keet): enough there -> ask, then build and leave the rest open (air); too little -> no
+        Dekking d = !tekort.isEmpty() && !bronnen.gratis() && bouwer != null && bouwer.tachtigProcent() ? dekking(level, s, plan) : null;
+        if (d != null && (!d.genoeg() || !alsnog)) {
+            return new Bouwen(false, tekort, false, plan.gemaakt(), d.procent(), d.open(), !d.genoeg());
+        }
         if (!tekort.isEmpty() && !alsnog) {
             return new Bouwen(false, tekort, false, plan.gemaakt());
         }
@@ -155,6 +225,8 @@ public final class Spoken extends SavedData {
         }
         s.volgende = 0;
         s.mist.clear();
+        s.openLaten = d != null;
+        s.opengelaten = 0;
         s.status = Spook.Status.BOUWT;
         s.bouwer = p.getUUID();
         BouwActie actie = new BouwActie(UUID.randomUUID(), p.getUUID(), s.id);
@@ -164,13 +236,13 @@ public final class Spoken extends SavedData {
         while (lijst.size() > MAX_ACTIES) {
             sluit(level, lijst.removeFirst());
         }
-        boolean poffen = tekort.isEmpty() && bouwer != null && bouwer.pof(level, s);
+        boolean poffen = (tekort.isEmpty() || s.openLaten) && bouwer != null && bouwer.pof(level, s);
         if (poffen) {
             pof.add(s.id);
             Feestje.pof(level, s);
         }
         veranderd(level, s);
-        return new Bouwen(true, tekort, poffen, plan.gemaakt());
+        return new Bouwen(true, tekort, poffen, plan.gemaakt(), d == null ? -1 : d.procent(), d == null ? 0 : d.open(), false);
     }
 
     /**
@@ -331,7 +403,7 @@ public final class Spoken extends SavedData {
                     bron = bronnen.tel(kost.item()) >= Materiaal.WATER_EMMERS;
                 }
                 if (!bron) {
-                    s.mist.add(pos.asLong());   // no infinite source: the water stays a ghost
+                    mist(level, s, pos, nu, actie);   // no infinite source: the water stays a ghost (80% rule: open)
                     continue;
                 }
             }
@@ -343,7 +415,7 @@ public final class Spoken extends SavedData {
                     if (kreeg > 0) {
                         Materiaal.terug(level, bronnen, new ItemStack(kost.item(), kreeg), pos);
                     }
-                    s.mist.add(pos.asLong());
+                    mist(level, s, pos, nu, actie);
                     continue;
                 }
                 betaald = true;
@@ -396,6 +468,25 @@ public final class Spoken extends SavedData {
         return n;
     }
 
+    /**
+     * The material of a spot is missing: it stays a ghost ("alsnog bouwen"), or, in a build started by the 80% rule
+     * (1.10.10), it stays open: air (what stood there goes into the undo action, like a dug-out spot).
+     */
+    private static void mist(ServerLevel level, Spook s, BlockPos pos, BlockState nu, @Nullable BouwActie actie) {
+        if (!s.openLaten) {
+            s.mist.add(pos.asLong());
+            return;
+        }
+        if (!nu.isAir()) {
+            BlockState lucht = net.minecraft.world.level.block.Blocks.AIR.defaultBlockState();
+            level.setBlock(pos, lucht, Block.UPDATE_ALL);
+            if (actie != null) {
+                actie.voegToe(pos, nu, lucht, false);
+            }
+        }
+        s.opengelaten++;
+    }
+
     /** Test round 5: is this spot further than {@code bereik} from the builder's block (in x or in z)? */
     public static boolean buiten(@Nullable BlockPos bouwerPos, int bereik, BlockPos pos) {
         return bouwerPos != null && bereik < Integer.MAX_VALUE
@@ -438,6 +529,10 @@ public final class Spoken extends SavedData {
         pof.remove(s.id);
         ServerPlayer p = s.bouwer == null ? null : level.getServer().getPlayerList().getPlayer(s.bouwer);
         if (helemaal) {
+            if (p != null && s.opengelaten > 0) {
+                p.sendSystemMessage(Component.translatable("gui.guhs.bouwhulp.spook.open", s.opengelaten).withStyle(net.minecraft.ChatFormatting.GOLD));
+            }
+            s.openLaten = false;
             Feestje.klaar(level, s, p);
             if (bouwer != null) {
                 bouwer.gestopt(level, s, true);

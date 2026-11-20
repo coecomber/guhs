@@ -177,10 +177,21 @@ public final class Spookbouw {
         return Werkplan.maak(p.level(), spoken.nogNodig(p.level(), s), spoken.bronnen(p.level(), s, spoken.bouwer(p.level(), s), p));
     }
 
-    /** The shopping list of this ghost as a book (LIJSTJE), with the lines of what the keet crafts itself. */
+    /** The shopping list of this ghost as a book (LIJSTJE), with the lines of what the keet crafts itself (and the 80% line). */
     public static void lijstje(ServerPlayer p, Spook s) {
         Werkplan plan = plan(p, s);
-        Lijstje.geef(p, s.naam.isEmpty() ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam, plan.tekort(), plan.gemaakt());
+        Lijstje.geef(p, s.naam.isEmpty() ? Component.translatable("gui.guhs.bouwhulp.project").getString() : s.naam, plan.tekort(), plan.gemaakt(),
+                dekkingProcent(p, s, plan));
+    }
+
+    /** 1.10.10: for a keet's ghost with something missing, how much of it can be built now (percent), else -1. */
+    public static int dekkingProcent(ServerPlayer p, Spook s, Werkplan plan) {
+        Spoken spoken = Spoken.van(p.level());
+        Bouwer b = spoken.bouwer(p.level(), s);
+        if (plan.tekort().isEmpty() || b == null || !b.tachtigProcent()) {
+            return -1;
+        }
+        return spoken.dekking(p.level(), s, plan).procent();
     }
 
     /** Opens the control panel of the ghost for the player (with the current shortage). */
@@ -215,8 +226,8 @@ public final class Spookbouw {
             case BOUW, ALSNOG -> {
                 Spoken.Bouwen b = bouw(p, s, a == SpookPayloads.Actie.ALSNOG);
                 if (!b.begonnen()) {
-                    vraag = true;
-                    tekort = b.tekort();
+                    SpookPayloads.bediening(p, s, b.tekort(), true, b);
+                    return;
                 }
             }
             case PAUZE -> pauzeer(level, s);

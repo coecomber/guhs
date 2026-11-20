@@ -339,6 +339,12 @@ public class BouwkeetBlockEntity extends MachineBlockEntity implements Bouwer, G
         return Materiaal.bronnen(level, bouwer, bank(), werkNiveau().draadloos() ? worldPosition : null);   // (the key in the slot, else the old link)
     }
 
+    /** 1.10.10: the 80% rule: missing blocks stay open (air), the build ends as done. */
+    @Override
+    public boolean tachtigProcent() {
+        return true;
+    }
+
     /** 1.10.10: the keet places water only with an infinite source (two water buckets among its places). */
     @Override
     public boolean oneindigWater() {

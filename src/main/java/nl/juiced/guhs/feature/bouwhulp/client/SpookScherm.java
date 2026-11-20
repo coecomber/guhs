@@ -114,8 +114,10 @@ public class SpookScherm extends Screen {
         // building
         int by = top + H - 46;
         if (data.getBooleanOr("VraagAlsnog", false) && mag) {
-            addRenderableWidget(Button.builder(Component.translatable("gui.guhs.bouwhulp.spook.alsnog.ja"), b -> doe(Actie.ALSNOG, 0, ""))
-                    .bounds(left + 10, by, 136, 18).build());
+            Button ja = Button.builder(Component.translatable("gui.guhs.bouwhulp.spook.alsnog.ja"), b -> doe(Actie.ALSNOG, 0, ""))
+                    .bounds(left + 10, by, 136, 18).build();
+            ja.active = !data.getBooleanOr("TeWeinig", false);   // 1.10.10: below 80% a keet does not start
+            addRenderableWidget(ja);
             addRenderableWidget(Button.builder(Component.translatable("gui.guhs.bouwhulp.spook.alsnog.nee"), b -> {
                 data.putBoolean("VraagAlsnog", false);
                 rebuildWidgets();
@@ -205,7 +207,11 @@ public class SpookScherm extends Screen {
         int lx = left + 196, ly = top + 92;
         ListTag tekort = data.getListOrEmpty("Tekort");
         if (data.getBooleanOr("VraagAlsnog", false)) {
-            GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwhulp.spook.alsnog.vraag"), left + 10, top + 156, 180, 0.75f, ROOD);
+            Component vraag = !data.contains("Dekking") ? Component.translatable("gui.guhs.bouwhulp.spook.alsnog.vraag")
+                    : data.getBooleanOr("TeWeinig", false)
+                    ? Component.translatable("gui.guhs.bouwhulp.spook.dekking.te_weinig", data.getIntOr("Dekking", 0), data.getIntOr("MinDekking", 80))
+                    : Component.translatable("gui.guhs.bouwhulp.spook.dekking.vraag", 100 - data.getIntOr("Dekking", 0), data.getIntOr("Open", 0));
+            GidsTekst.alinea(g, vraag, left + 10, top + 156, 180, 0.75f, ROOD);
         }
         if (tekort.isEmpty()) {
             GidsTekst.alinea(g, Component.translatable("gui.guhs.bouwhulp.spook.alles_er"), lx, ly, W - 206, 0.75f, GROEN);

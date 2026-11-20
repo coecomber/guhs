@@ -49192,5 +49192,10 @@
   "gui.guhs.blauwdruk.cat.treinstation": "Treinstationnetje (Station Guhda)",
   "gui.guhs.blauwdruk.cat.boomhuisdorpje": "Boomhuisdorpje (Bloesemtakjesdorp)",
   "gui.guhs.blauwdruk.cat.reuzenblub": "De Reuzenblub",
-  "gui.guhs.blauwdruk.cat.reuzenpiepje": "Het Reuzenpiepje"
+  "gui.guhs.blauwdruk.cat.reuzenpiepje": "Het Reuzenpiepje",
+  "gui.guhs.bouwhulp.spook.dekking.te_weinig": "Nog niet genoeg spullen: %s%% aanwezig, minimaal %s%% nodig. Kijk in je Lijstje wat er mist, vads.",
+  "gui.guhs.bouwhulp.spook.dekking.vraag": "Er ontbreekt nog %s%%: %s blokjes blijven open (lucht). Toch bouwen? Die gaatjes vul je daarna zelf.",
+  "gui.guhs.bouwhulp.spook.open": "Klaar! %s blokjes zijn open gebleven (lucht): vul ze zelf in met iets wat erop lijkt, njeg!",
+  "gui.guhs.bouwhulp.lijstje.dekking": "Aanwezig: %s%% (vanaf %s%% bouwt de keet; de rest blijft open)",
+  "gui.guhs.bouwkeet.dekking": "Er is %s%%:"
 }

@@ -75,6 +75,10 @@ public final class Spook {
      * else, given back when the build is done or cancelled.
      */
     final Map<Item, Integer> tegoed = new LinkedHashMap<>();
+    /** 1.10.10: started by the 80% rule: a spot whose material is missing stays open (air) instead of a ghost. */
+    boolean openLaten;
+    /** How many spots were left open in this build (for the "Klaar!" line). */
+    int opengelaten;
     /** Cached building order (not saved: made again from the ontwerp). */
     @Nullable
     private List<Map.Entry<BlockPos, BlockState>> volgorde;
@@ -252,6 +256,10 @@ public final class Spook {
         t.putInt("Volgende", volgende);
         t.putInt("Gedaan", gedaan);
         t.put("Mist", new LongArrayTag(mist.stream().mapToLong(Long::longValue).toArray()));
+        if (openLaten) {
+            t.putBoolean("OpenLaten", true);
+            t.putInt("Opengelaten", opengelaten);
+        }
         if (!tegoed.isEmpty()) {
             CompoundTag g = new CompoundTag();
             tegoed.forEach((item, n) -> g.putInt(BuiltInRegistries.ITEM.getKey(item).toString(), n));
@@ -285,6 +293,8 @@ public final class Spook {
         for (long l : t.getLongArray("Mist").orElse(new long[0])) {
             s.mist.add(l);
         }
+        s.openLaten = t.getBooleanOr("OpenLaten", false);
+        s.opengelaten = t.getIntOr("Opengelaten", 0);
         CompoundTag g = t.getCompoundOrEmpty("Tegoed");
         for (String k : g.keySet()) {
             Identifier id = Identifier.tryParse(k);

@@ -175,5 +175,10 @@
   "gui.guhs.bouwhulp.werkbank.bericht": "The shed crafts these itself at the crafting table:",
   "gui.guhs.bouwhulp.werkbank.regel": "%s× %s (crafted from %s)",
   "gui.guhs.bouwhulp.werkbank.regel.rest": "%s× %s (from leftovers)",
-  "gui.guhs.bouwhulp.water.regel": "Water: %s water buckets needed (infinite source: they are not used up)"
+  "gui.guhs.bouwhulp.water.regel": "Water: %s water buckets needed (infinite source: they are not used up)",
+  "gui.guhs.bouwhulp.spook.dekking.te_weinig": "Not enough stuff yet: %s%% there, at least %s%% needed. Check your List for what's missing.",
+  "gui.guhs.bouwhulp.spook.dekking.vraag": "Still %s%% missing: %s blocks stay open (air). Build anyway? You fill those gaps yourself afterwards.",
+  "gui.guhs.bouwhulp.spook.open": "Done! %s blocks stayed open (air): fill them yourself with something similar!",
+  "gui.guhs.bouwhulp.lijstje.dekking": "There: %s%% (the shed builds from %s%%; the rest stays open)",
+  "gui.guhs.bouwkeet.dekking": "%s%% there:"
 }
