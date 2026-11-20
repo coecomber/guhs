@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GGG",
+    "PWP",
+    "PDP"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "P": "minecraft:pink_wool",
+    "W": "minecraft:white_wool",
+    "D": "guhs:guh_wire"
+  },
+  "result": {
+    "id": "guhs:slijmhuisje"
+  }
+}

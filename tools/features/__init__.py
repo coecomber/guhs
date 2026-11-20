@@ -360,6 +360,7 @@ FEATURES = ['beauty', 'race', 'meppen', 'disco', 'golf', 'smul', 'vissen', 'eila
             'guhwinter_spellen',   # race, schaatsrondje, oliebollen, shop, hidden pepernoten (feature/guhwinter/spellen)
             'guhwinter_verhaal',   # the 3-chapter winter story + its 3 deco blocks (feature/guhwinter/verhaal)
             'guhwinter_lootjes',   # Het Grote Boek, the draw, the creative plots, the Surprise (feature/guhwinter/lootjes)
+            'slijmhuisje',   # 1.10.10: Het Slijmhuisje, a house for one guh slime + its chore (feature/slijmhuisje)
             ]
 
 

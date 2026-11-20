@@ -27,6 +27,8 @@ public final class VadsGetallen {
     public static final int KETEL_KNABBELS_PER_UUR = 72_000 / KETEL_KNABBEL_TIKKEN;
     /** 1.8.0: the Knuffelsteen-generator (feature/techsaus, KnuffelsteenGeneratorBlockEntity). */
     public static final int KNUFFELSTEEN_GENERATOR = 4;
+    /** 1.10.10: the Slijmhuisje (feature/slijmhuisje): one guh slime makes a guh slimeball every 45 seconds. */
+    public static final int SLIJMHUISJE = 4;
 
     /** The most blocks (Guhdraad + machine blocks) in one net; a bigger net stands still ({@link VadsNet.Status#TE_GROOT}). */
     public static final int MAX_NET = 8192;

@@ -67,6 +67,10 @@
   "quest.475548338C23DDC9.quest_desc": [
     "A &dWeather Vadser&r reaches 10 blocks. Put a &dCloud Antenna&r on it: I, II and III make that 20, 35 and 60 blocks. Every step costs more chonk power.",
   ],
+  "quest.475548DB1D0A5850.title": "A Little House for a Slime",
+  "quest.475548DB1D0A5850.quest_desc": [
+    "Sneak and right-click a guh slime with an empty hand: you pick it up. Bring it to a &dSlime House&r (glass, pink and white wool, Guh Wire): on &b4 chonk power&r it makes a guh slimeball in its little bowl every 45 seconds. Blub!",
+  ],
   "quest.475548857F9855C8.title": "Colleagues with a Snoot",
   "quest.475548857F9855C8.quest_desc": [
     "Switch on the chore &eRefill \\& Empty Machines&r for a resident of your &dGuh House&r. Put something in a machine once yourself: it remembers and refills from the chest or your Bank Guh. Who still needs hoppers?",

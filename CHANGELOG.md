@@ -14,6 +14,7 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
   - **tekenen**: a 64x64 drawing editor, hangable 2x2 drawings, one kerstboom drawing per player (cards around the tree), and the Kerstalbum from 26 Dec.
   - **spellen**: Pepernotenrace (arcade runner) and the schaatsrondje with highscore boards, oliebollen bakken, hidden pepernoten, and the pepernoten shop.
   - **hoentjes**: the waterhoentje and alpine hoentje, rare permanent Guhmension birds with Guhdex bonus pages and a NOWAY chat line.
+- **Slijmhuisje** (`feature.slijmhuisje`): a 3x3 house (3 high) for one guh slime. Sneak + right-click a guh slime with an empty hand gives an "Opgepakte guh-slime" (keeps size and name; right-click a block to put it down, or the house to move it in; sneak + empty hand takes it out again). On 4 vadskracht (`VadsGetallen.SLIJMHUISJE`) it makes 1 guh slimeball per 45 s (every size), into a bowl of 16 (full = paused, face content); empty hand on the house takes the bowl. New chore "Slijmpjes verzorgen" (on by default): a huisje guh pets the slime and brings the slimeballs home. Recipe: glass, pink and white wool, Guhdraad. Advancement `techniek/tech_machines_slijmhuisje`. The look (Zeepbelkoepel) is a placeholder.
 - **Tools**: the full `tools/make_resources.py` runs again. Fixes: compass needles skip the sub-folders of models/item; the kleding, taal and bikinibodem checks are up to date; the opt-in `GUHS_SELFCHECK_WARN=1` reports failing modules instead of stopping. See guhs_winter/INTEGRATIE.md.
 
 ## 1.10.9 — Minecraft 26.1.2

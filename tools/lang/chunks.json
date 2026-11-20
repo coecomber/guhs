@@ -7227,6 +7227,21 @@
         "block.guhs.guhwinter_surprise",
         "key.guhs.guhwinter_surprise_draai"
       ]
+    },
+    {
+      "id": "c511_slijmhuisje",
+      "title": "1.10.10 Het Slijmhuisje: the block, the picked-up guh slime, the chore Slijmpjes verzorgen, its advancement (made by tools/features/slijmhuisje.py, English included)",
+      "prefixes": [
+        "block.guhs.slijmhuisje",
+        "item.guhs.slijmhuisje",
+        "item.guhs.opgepakte_guh_slime",
+        "gui.guhs.slijmhuisje.",
+        "advancements.guhs.techniek.tech_machines_slijmhuisje",
+        "gui.guhs.klus.slijmpjes",
+        "gui.guhs.huisje.overzicht.klus.slijmpjes.",
+        "gui.guhs.dagboek.eerste.klusjes_slijmpjes",
+        "gui.guhs.wistjedat.klusjes.slijmpjes"
+      ]
     }
   ]
 }
