@@ -2,6 +2,8 @@ package nl.juiced.guhs.feature.vadsrijk.zone3.wereld;
 
 import java.util.function.Predicate;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -9,11 +11,16 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScene;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 import nl.juiced.guhs.feature.vadsrijk.npc.Questlog;
+import nl.juiced.guhs.feature.vadsrijk.npc.ViaRoutes;
 import nl.juiced.guhs.feature.vadsrijk.wereld.Later;
 
 /**
@@ -38,7 +45,67 @@ public final class Z3Liften {
                 return rijd(p, l, true);
             }
         }
-        return false;
+        // 1.10.10: the lift's own look (the chains, the fence ring round the shaft hole, the honeycomb landing) counts from further
+        // away: that is what a player sees as "the lift". The chains hang ~3.6 blocks from the top stop and ~6.3 from the bottom
+        // one. Nothing else to click on those blocks.
+        // (holding a lead: a fence click ties a mob, leave it)
+        if (p.getMainHandItem().is(Items.LEAD) || !liftBlok(p.level().getBlockState(pos))) {
+            return false;
+        }
+        Z3WereldPlekken.Lift beste = null;
+        boolean omhoog = false;
+        double bd = Double.MAX_VALUE;
+        for (Z3WereldPlekken.Lift l : Z3WereldPlekken.LIFTEN) {
+            for (boolean onder : new boolean[] {false, true}) {
+                BlockPos s = onder ? l.onder() : l.boven();
+                int dy = pos.getY() - s.getY();
+                double h = sq(pos.getX() - s.getX()) + sq(pos.getZ() - s.getZ());
+                if (dy >= -3 && dy <= 8 && h <= KLIK_RUIM * KLIK_RUIM && h < bd) {
+                    beste = l;
+                    omhoog = onder;
+                    bd = h;
+                }
+            }
+        }
+        return beste != null && rijd(p, beste, omhoog);
+    }
+
+    /** 1.10.10: how far (horizontally) a click on a lift block still rides the nearest stop. */
+    static final double KLIK_RUIM = 7.0;
+
+    /** The blocks the lift shafts are made of (tools/vadsrijk/zone3/bouw3.py: chains, spruce fence ring, honeycomb landing). */
+    static boolean liftBlok(BlockState s) {
+        return s.is(Blocks.IRON_CHAIN) || s.is(BlockTags.WOODEN_FENCES) || s.is(Blocks.HONEYCOMB_BLOCK);
+    }
+
+    private static double sq(double v) {
+        return v * v;
+    }
+
+    /**
+     * 1.10.10: the three honeycomb cells under the ring deck as tracker "via" routes ({@link ViaRoutes}). The Nestkapel is reached
+     * ONLY by the kapellift (bereikcheck --via); the cafe and the Raattrossen can also be walked into along a branch, so their lift
+     * is the route only from the deck. Cell shape from plan3.py CELLEN (angle, R, height): the cell's middle is its
+     * {@code gebouw.<cel>.binnen} spot, the floor stand y; the room reaches up to just under the deck (stand 167).
+     */
+    public static void viaRoutes() {
+        ViaRoutes.Gebied dek = ViaRoutes.cilinder(Z3WereldPlekken.STAM_X + 0.5, Z3WereldPlekken.STAM_Z + 0.5, 160, 165, 215);
+        via("z3_nestkapel", "nestkapel", 10, "lift_kapel", null);
+        via("z3_cafe", "cafe", 9, "lift_cafe", dek);
+        via("z3_raattros", "raattros", 6, "lift_raattros", dek);
+    }
+
+    private static void via(String id, String cel, double r, String liftId, @Nullable ViaRoutes.Gebied van) {
+        BlockPos m = Z3WereldPlekken.plek("gebouw." + cel + ".binnen");
+        Z3WereldPlekken.Lift l = lift(liftId);
+        if (m == null || l == null) {
+            return;
+        }
+        double cx = m.getX() + 0.5, cz = m.getZ() + 0.5;
+        int dekY = l.boven().getY();
+        ViaRoutes.Gebied gebied = ViaRoutes.cilinder(cx, cz, r + 1, m.getY() - 2, dekY - 3);
+        ViaRoutes.Gebied binnen = gebied.of(ViaRoutes.cilinder(l.onder().getX() + 0.5, l.onder().getZ() + 0.5, 4, l.onder().getY() - 2, dekY - 3));
+        ViaRoutes.voegToe(new ViaRoutes.Via(id, gebied, binnen, van, l.boven(), "vadsrijk.npc.stap.via." + id));
     }
 
     public static Z3WereldPlekken.Lift lift(String id) {

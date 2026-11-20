@@ -49,6 +49,19 @@ TEKSTEN = {
     Z + "lift.omhoog": "Omhoog!",
     Z + "lift.omlaag": "Omlaag...",
     Z + "honinglift.dicht": "De grote Honinglift staat nog stil. Zodra je de weg door de stam kent, gaat hij open.",
+    # 1.10.10: name boards over the honey lifts to the cells under the deck (Z3LiftBorden) + the tracker's "via" phrases
+    # (npc/ViaRoutes, Z3Liften.viaRoutes: first the lift, then the target in the cell)
+    Z + "liftbord.lift_kapel": "Kapellift",
+    Z + "liftbord.lift_cafe": "Cafélift",
+    Z + "liftbord.lift_raattros": "Raattroslift",
+    Z + "liftbord.omlaag": "Omlaag naar %s · klik op het hekje",
+    Z + "liftbord.omhoog": "Omhoog naar het ringdek · klik op de vloer hier",
+    Z + "liftbord.cel.lift_kapel": "de Nestkapel",
+    Z + "liftbord.cel.lift_cafe": "café De Zoete Raat",
+    Z + "liftbord.cel.lift_raattros": "de Raattrossen",
+    "vadsrijk.npc.stap.via.z3_nestkapel": "eerst de kapellift omlaag: het kettinghekje aan de noordrand van het ringdek",
+    "vadsrijk.npc.stap.via.z3_cafe": "eerst de cafélift omlaag: het kettinghekje aan de westrand van het ringdek",
+    "vadsrijk.npc.stap.via.z3_raattros": "eerst de raattroslift omlaag: het kettinghekje aan de oostrand van het ringdek",
     # viewpoints
     W + "uitkijk.kroon": "De Kroon",
     W + "uitkijk.takpunt": "Takpunt",
