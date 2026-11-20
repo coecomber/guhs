@@ -304,6 +304,7 @@ KRAMEN = [-715, -709, -703, -697]  # z1 of every stall (5 wide)
 VELD_X = (-348, -334)             # min x of the west and east build plots (7 x 7 inside)
 VELD_Z = [-732, -722, -712, -702]  # min z of the plots
 STRAAT_X = (-340, -336)           # Surprisestraatje
+WEG_SPARREN = [(-346, -732), (-329, -733)]   # (1.10.11) deco spruces removed: in plot 0 / on plot 4's fence (check_velden)
 
 
 def is_gracht(x, z):
@@ -1208,11 +1209,18 @@ def sneeuwpoppen(p):
 
 
 def bomen_en_lichten(p):
-    # snowy spruces along the walls and kades
+    # snowy spruces along the walls and kades (1.10.11: the two by the north wall are gone: (-346, -732) stood inside plot 0
+    # and (-329, -733) on plot 4's fence with its needles in the plot; see check_velden)
     for (x, z) in ((-346, -664), (-336, -663), (-326, -664), (-316, -663), (-306, -664),
-                   (-347, -692), (-327, -688), (-346, -734 + 2), (-329, -733),
+                   (-347, -692), (-327, -688),
                    (-280, -688), (-293, -689), (-279, -702)):
         p.spar(x, VLOER + 1, z, 6 + (x * 7 + z) % 3, gezicht="north" if (x + z) % 3 == 0 else None)
+    # their old spots stay free of snow, as on the live world where they were cleared (and so the snow noise, drawn in
+    # visiting order, stays exactly as before everywhere else)
+    for (x, z) in WEG_SPARREN:
+        los = Plan(p.mn, p.s.size)
+        los.spar(x, VLOER + 1, z, 6 + (x * 7 + z) % 3)
+        p.pad |= {(lx + p.mn[0], lz + p.mn[2]) for (lx, _ly, lz) in los.s.blocks}
     # lantern posts along the kades and streets
     for x in range(-344, HAVEN_X[0] - 2, 8):
         p.paal(x, VLOER + 1, Z2 - 2)
@@ -1317,6 +1325,7 @@ def winter():
     sneeuw(p)
     check_verstop(p)
     check_deuren(p)
+    check_velden(p)
     return p
 
 
@@ -1330,6 +1339,33 @@ def check_verstop(p):
             b = p.get(x, yy, z)
             if not (b in (None, "minecraft:air") or (yy == y and b == "minecraft:snow")):
                 raise SystemExit(f"guhwinter_plein: hiding spot {k} at {x},{y},{z} is not open ({b} at y {yy})")
+
+
+def check_velden(p):
+    """(1.10.11) The 8 lootjes plots are clean: the snow floor whole, nothing at all in the 7x7 room from its floor up to the
+    template's top (a Surprise captures the 7x7x7 and a builder may only change that), and the fence ring whole (hekjes and
+    one gate). Playtest: two deco spruces stood in plots 0 and 4. (Needles resting on top of a fence are allowed: the spruce
+    at -347,-692 touches plot 3's south fence, outside its room.)"""
+    top = Y0 + HOOGTE - 1
+    for i in range(len(VELD_X) * len(VELD_Z)):
+        a = p.ankers[f"bouwveld_{i}"]
+        vx, vy, vz = int(a["x"]), int(a["y"]), int(a["z"])
+        fout = []
+        for x in range(vx - 1, vx + 8):
+            for z in range(vz - 1, vz + 8):
+                ring = x in (vx - 1, vx + 7) or z in (vz - 1, vz + 7)
+                if not ring and p.get(x, vy - 1, z) != "minecraft:snow_block":
+                    fout.append(f"floor {x},{vy - 1},{z} is {p.get(x, vy - 1, z)}")
+                if ring and p.get(x, vy, z) not in (g("guh_hekje_wit"), g("guh_poortje_wit")):
+                    fout.append(f"fence {x},{vy},{z} is {p.get(x, vy, z)}")
+                for y in ([] if ring else range(vy, top + 1)):
+                    if not p.leeg(x, y, z):
+                        fout.append(f"{p.get(x, y, z)} at {x},{y},{z}")
+        poorten = sum(1 for x in range(vx - 1, vx + 8) for z in range(vz - 1, vz + 8) if p.get(x, vy, z) == g("guh_poortje_wit"))
+        if poorten != 1:
+            fout.append(f"{poorten} gates")
+        if fout:
+            raise SystemExit(f"guhwinter_plein: plot bouwveld_{i} is not clean: " + "; ".join(fout[:8]) + (" ..." if len(fout) > 8 else ""))
 
 
 # what you can walk through (in a door's cell or the two cells above a floor); None = nothing in the template = cleared air
