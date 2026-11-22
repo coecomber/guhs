@@ -156,7 +156,7 @@ public final class Juwelier {
             sl.sendParticles(ParticleTypes.END_ROD, p.getX(), p.getY() + 1.2, p.getZ(), 10, 0.3, 0.3, 0.3, 0.03);
         }
         Spelers.sync(p);
-        return new String[] {"vadsrijk.z2.systemen.juwelier.gezet", stuk.getHoverName().getString()};
+        return new String[] {"vadsrijk.z2.systemen.juwelier.gezet", nl.juiced.guhs.taal.Tekst.alsString(stuk.getHoverName())};
     }
 
     /** Takes the gem out of socket {@code i} of the piece in {@code slot} for the fee; the crystal comes back. */

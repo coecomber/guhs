@@ -258,4 +258,39 @@ public class VadsrijkOpruimenGameTests {
         Questlog.wisAlles(p);
         helper.succeed();
     }
+
+    /** Does the text still hold a translate key somewhere (resolved by the reader's client, not by the en_us server)? */
+    public static boolean vertaalbaar(net.minecraft.network.chat.Component c) {
+        if (c.getContents() instanceof net.minecraft.network.chat.contents.TranslatableContents) {
+            return true;
+        }
+        for (net.minecraft.network.chat.Component s : c.getSiblings()) {
+            if (vertaalbaar(s)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Language leak (dedicated server = en_us): the item names in the Opruimen/shop/smith messages ({key, arg}) must reach the
+     * client translatable (Tekst.alsString), never as getString() (that was English in the Dutch client).
+     * Run: {@code runGameTestServer -Pgt=vadsrijk_taallek}.
+     */
+    @GuhTest(template = "empty", batch = "vadsrijk_taallek")
+    public static void meldingNamenBlijvenVertaalbaar(GameTestHelper helper) {
+        ServerPlayer p = leeg(helper);
+        p.getInventory().setItem(3, stack(kaal("kussenzwaard", 5, Zeldzaamheid.GEWOON)));
+        String[] r = Opruimen.vergrendel(p, 3);
+        net.minecraft.network.chat.Component naam = nl.juiced.guhs.taal.Tekst.uitString(r[1]);
+        helper.assertTrue(r[0].equals(Opruimen.K + "op_slot") && vertaalbaar(naam), "lock: the gear name stays translatable, not '" + r[1] + "'");
+        p.getInventory().setItem(4, new ItemStack(EcoSpul.SMEEDSTOFJE.get(), 3));
+        String[] o = Opruimen.omsmelt(p, "stofje_steentje");
+        helper.assertTrue(o[0].equals(Opruimen.K + "omgesmolten") && vertaalbaar(nl.juiced.guhs.taal.Tekst.uitString(o[1])),
+                "melt: the item name stays translatable, not '" + o[1] + "'");
+        helper.assertTrue(nl.juiced.guhs.taal.Tekst.uitString("1z 5b").getString().equals("1z 5b"), "a plain argument stays itself");
+        helper.assertTrue(nl.juiced.guhs.taal.Tekst.alsString(net.minecraft.network.chat.Component.literal("Juiced")).equals("Juiced"),
+                "a literal is not packed");
+        helper.succeed();
+    }
 }

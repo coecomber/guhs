@@ -208,22 +208,25 @@ public final class Knuffelmeter {
     /** The Karakter-tab line (MenuServer.KARAKTER_EXTRA). */
     static void karakter(ServerPlayer p, CompoundTag t) {
         ListTag extra = t.getListOrEmpty("extra").copy();
-        StringBuilder sb = new StringBuilder();
+        // the town names stay translatable (the server's Language is en_us: never resolve them here); sent as "ac" (a Component)
+        net.minecraft.network.chat.MutableComponent sb = Component.empty();
+        boolean iets = false;
         for (Map.Entry<String, Integer> e : standen(p).entrySet()) {
             Steden.Stad s = Steden.van(e.getKey());
-            if (sb.length() > 0) {
+            if (iets) {
                 sb.append(" · ");
             }
-            sb.append(s == null ? e.getKey() : net.minecraft.locale.Language.getInstance().getOrDefault(s.naamKey())).append(' ').append(e.getValue());
+            iets = true;
+            sb.append(s == null ? Component.literal(e.getKey()) : Component.translatable(s.naamKey())).append(" " + e.getValue());
         }
         CompoundTag regel = new CompoundTag();
         regel.putString("k", Ritme.P + "knuffel.karakter");
         regel.putString("a", String.valueOf(totaal(p)));
         extra.add(regel);
-        if (sb.length() > 0) {
+        if (iets) {
             CompoundTag r2 = new CompoundTag();
             r2.putString("k", Ritme.P + "knuffel.karakter.steden");
-            r2.putString("a", sb.toString());
+            nl.juiced.guhs.taal.Tekst.put(r2, "ac", sb);
             extra.add(r2);
         }
         t.put("extra", extra);

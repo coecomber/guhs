@@ -83,7 +83,8 @@ public class KarakterPaneel extends MenuPaneel {
         ListTag extra = data.getListOrEmpty("extra");
         for (int i = 0; i < extra.size() && y < top + h - 10; i++) {
             CompoundTag e = extra.getCompoundOrEmpty(i);
-            Component c = e.contains("a") ? Component.translatable(e.getStringOr("k", ""), Component.translatable(e.getStringOr("a", "")))
+            Component c = e.contains("ac") ? Component.translatable(e.getStringOr("k", ""), nl.juiced.guhs.taal.Tekst.get(e, "ac"))   // (a Component argument)
+                    : e.contains("a") ? Component.translatable(e.getStringOr("k", ""), Component.translatable(e.getStringOr("a", "")))
                     : Component.translatable(e.getStringOr("k", ""));
             for (var regel : font.split(c, kolom - 8)) {
                 g.text(font, regel, x1, y, TEKST, false);
