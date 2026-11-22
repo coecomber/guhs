@@ -198,9 +198,9 @@ public final class PlekWereld extends SavedData {
 
     /** The highest spot position in this column from {@code boven} down to {@code onder} (both included). */
     @Nullable
-    static BlockPos zoekY(Level l, int x, int z, int boven, int onder, Zoek zoek, boolean streng) {
+    static BlockPos zoekY(Level l, int x, int z, int boven, int laagste, Zoek zoek, boolean streng) {
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
-        for (int y = boven; y >= onder; y--) {
+        for (int y = boven; y >= laagste; y--) {
             m.set(x, y, z);
             BlockState onder = l.getBlockState(m.below());
             if (zoek == Zoek.KORAAL) {
