@@ -591,7 +591,7 @@ public final class Erfenis {
                     return fout;
                 }
                 Object[] uit = (Object[]) r;
-                melding(p, "erfenis.ok.opgehaald", true, ophaalRegel(castGoed((Map<?, ?>) uit[0]), castGoed((Map<?, ?>) uit[1])).getString());
+                melding(p, "erfenis.ok.opgehaald", true, ErfenisPayloads.Melding.tekst(ophaalRegel(castGoed((Map<?, ?>) uit[0]), castGoed((Map<?, ?>) uit[1])), p.registryAccess()));
                 geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
                 return null;
             }
@@ -612,7 +612,7 @@ public final class Erfenis {
                 if (som.isEmpty() && weg.isEmpty()) {
                     return new Base.Fout(vol ? "erfenis.fout.vol" : "erfenis.fout.niks");
                 }
-                melding(p, "erfenis.ok.opgehaald", true, ophaalRegel(som, weg).getString());
+                melding(p, "erfenis.ok.opgehaald", true, ErfenisPayloads.Melding.tekst(ophaalRegel(som, weg), p.registryAccess()));
                 geluid(p, SoundEvents.EXPERIENCE_ORB_PICKUP);
                 return vol ? new Base.Fout("erfenis.fout.vol") : null;
             }
@@ -832,7 +832,7 @@ public final class Erfenis {
     }
 
     /** The text for a collect: "12 eieren" (+ "en 30 stammen naar je Leverkist"). */
-    private static Component ophaalRegel(Map<Goed, Integer> erin, Map<Goed, Integer> weg) {
+    static Component ophaalRegel(Map<Goed, Integer> erin, Map<Goed, Integer> weg) {
         net.minecraft.network.chat.MutableComponent c = erin.isEmpty() ? Component.empty() : ophaalTekst(erin).copy();
         if (!weg.isEmpty()) {
             if (!erin.isEmpty()) {
