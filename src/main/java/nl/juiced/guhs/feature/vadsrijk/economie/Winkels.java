@@ -297,7 +297,7 @@ public final class Winkels {
             case POST -> {
                 Post.stuur(p, krijg);
                 EcoUtil.geluid(p, SoundEvents.UI_TOAST_IN, 0.8f, 1.3f);
-                return new String[] {"vadsrijk.economie.winkel.per_post", krijg.getHoverName().getString()};
+                return new String[] {"vadsrijk.economie.winkel.per_post", nl.juiced.guhs.taal.Tekst.alsString(krijg.getHoverName())};
             }
             case TITEL -> {
                 Cosmetica.geefTitel(p, x.extra());

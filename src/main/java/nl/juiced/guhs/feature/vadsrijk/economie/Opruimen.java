@@ -253,7 +253,7 @@ public final class Opruimen {
         }
         ItemStack uit = opbrengst(u);
         p.getInventory().setItem(slot, ItemStack.EMPTY);
-        String naam = uit.getCount() + "x " + uit.getHoverName().getString();
+        String naam = nl.juiced.guhs.taal.Tekst.alsString(net.minecraft.network.chat.Component.literal(uit.getCount() + "x ").append(uit.getHoverName()));   // (never getString: the server is en_us)
         EcoUtil.geefOfBewaar(p, uit);
         p.level().sendParticles(ParticleTypes.CRIT, p.getX(), p.getY() + 1.2, p.getZ(), 14, 0.4, 0.4, 0.4, 0.15);
         EcoUtil.geluid(p, SoundEvents.SMITHING_TABLE_USE, 0.7f, 1.4f);
@@ -340,7 +340,7 @@ public final class Opruimen {
         }
         p.getInventory().setChanged();
         EcoUtil.geluid(p, nu ? SoundEvents.IRON_TRAPDOOR_CLOSE : SoundEvents.IRON_TRAPDOOR_OPEN, 0.6f, 1.5f);
-        return new String[] {K + (nu ? "op_slot" : "van_slot"), s.getHoverName().getString()};
+        return new String[] {K + (nu ? "op_slot" : "van_slot"), nl.juiced.guhs.taal.Tekst.alsString(s.getHoverName())};
     }
 
     /** Melt salvage material into what the smid and the crafts use. */
@@ -352,7 +352,7 @@ public final class Opruimen {
                 }
                 EcoUtil.neem(p.getInventory(), o.in().get(), o.n());
                 ItemStack uit = o.uit().get();
-                String naam = uit.getHoverName().getString();
+                String naam = nl.juiced.guhs.taal.Tekst.alsString(uit.getHoverName());
                 EcoUtil.geefOfBewaar(p, uit);
                 EcoUtil.geluid(p, SoundEvents.ANVIL_USE, 0.5f, 1.6f);
                 return new String[] {K + "omgesmolten", naam};

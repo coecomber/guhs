@@ -167,7 +167,7 @@ public final class EcoPayloads {
             } else if (Vadsrijk.in(p)) {
                 String[] r = Opruimen.vergrendel(p, d.args().getIntOr("slot", -1));
                 if (!r[0].isEmpty()) {
-                    p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable(r[0], r[1]));
+                    p.sendOverlayMessage(net.minecraft.network.chat.Component.translatable(r[0], nl.juiced.guhs.taal.Tekst.uitString(r[1])));
                 }
             }
             return;

@@ -122,7 +122,8 @@ public class MarktScherm extends EcoScherm {
             if (fLevel > 0 && (lv < LEVELS[fLevel][0] || lv > LEVELS[fLevel][1])) {
                 continue;
             }
-            if (!z.isEmpty() && !t.getStringOr("zoek", "").contains(z) && !t.getStringOr("naam", "").toLowerCase(Locale.ROOT).contains(z)) {
+            if (!z.isEmpty() && !t.getStringOr("zoek", "").contains(z) && !t.getStringOr("naam", "").toLowerCase(Locale.ROOT).contains(z)
+                    && !item(t.getIntOr("item", -1)).getHoverName().getString().toLowerCase(Locale.ROOT).contains(z)) {   // ("zoek" is the server's en_us name)
                 continue;
             }
             uit.add(t);

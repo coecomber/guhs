@@ -100,7 +100,7 @@ public final class Markt {
         m.setDirty();
         ServerPlayer verkoper = p.level().getServer().getPlayerList().getPlayer(a.verkoper());
         if (verkoper != null) {
-            EcoUtil.chat(verkoper, "vadsrijk.economie.markt.verkocht_melding", s.getHoverName().getString(), Spelers.munten(a.prijs()));
+            EcoUtil.chat(verkoper, "vadsrijk.economie.markt.verkocht_melding", s.getHoverName(), Spelers.munten(a.prijs()));   // (a Component: the seller's client resolves it)
             if (n >= Cosmetica.VERKOCHT_VOOR_TITEL) {
                 Cosmetica.geefTitel(verkoper, Cosmetica.MARKTKOOPMAN);
             }

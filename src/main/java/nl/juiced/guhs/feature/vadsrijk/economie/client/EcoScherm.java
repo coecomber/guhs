@@ -178,7 +178,7 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         }
         String m = data.getStringOr("melding", "");
         if (!m.isEmpty()) {
-            Component c = Component.translatable(m, data.getStringOr("meldingArg", ""));
+            Component c = Component.translatable(m, nl.juiced.guhs.taal.Tekst.uitString(data.getStringOr("meldingArg", "")));   // (item names come packed: Tekst.alsString)
             int mw = font.width(c) + 10;
             g.fill(left + (w - mw) / 2, top + h - 13, left + (w + mw) / 2, top + h - 2, 0xF0FFFFFF);
             g.centeredText(font, c, left + w / 2, top + h - 11, TEKST);

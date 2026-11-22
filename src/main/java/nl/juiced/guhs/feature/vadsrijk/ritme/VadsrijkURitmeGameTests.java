@@ -256,4 +256,20 @@ public class VadsrijkURitmeGameTests {
             return null;
         }
     }
+
+    /** Language leak: the town names of the Knuffelmeter line in the Karakter tab stay translatable (the server is en_us). */
+    @GuhTest(template = "empty", batch = "vadsrijk_taallek", timeoutTicks = 100)
+    public static void knuffelmeterStedenVertaalbaar(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Knuffelmeter.reset(p);
+        Knuffelmeter.tel(p, "zwamzoet", "npc:oma_truus", 1000);
+        net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+        Knuffelmeter.karakter(p, t);
+        net.minecraft.nbt.CompoundTag steden = t.getListOrEmpty("extra").getCompoundOrEmpty(1);
+        Component a = nl.juiced.guhs.taal.Tekst.get(steden, "ac");
+        helper.assertTrue(!steden.contains("a") && nl.juiced.guhs.feature.vadsrijk.economie.VadsrijkOpruimenGameTests.vertaalbaar(a),
+                "the towns are sent as a translatable Component: " + steden);
+        Knuffelmeter.reset(p);
+        helper.succeed();
+    }
 }

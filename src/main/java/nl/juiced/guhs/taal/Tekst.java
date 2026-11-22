@@ -46,6 +46,38 @@ public final class Tekst {
         return literal(c) && ((PlainTextContents) c.getContents()).text().isEmpty();
     }
 
+    /** Marks a String made by {@link #alsString}. */
+    private static final String PAK = "\u0001";
+
+    /**
+     * A Component packed into a String, for the message paths that only carry Strings ({message key, argument}, e.g. the
+     * Vadsrijk shop/smith screens): never send {@code c.getString()} there, the server resolves in en_us. Unpack with
+     * {@link #uitString} where the text is shown (client) or wrapped into a Component (server).
+     */
+    public static String alsString(Component c) {
+        if (literal(c)) {
+            return ((PlainTextContents) c.getContents()).text();
+        }
+        try {
+            return PAK + ComponentSerialization.CODEC.encodeStart(com.mojang.serialization.JsonOps.INSTANCE, c).getOrThrow();
+        } catch (RuntimeException e) {
+            return c.getString();
+        }
+    }
+
+    /** The Component of an {@link #alsString} String (a plain String stays a plain literal). */
+    public static Component uitString(String s) {
+        if (s.startsWith(PAK)) {
+            try {
+                return ComponentSerialization.CODEC.parse(com.mojang.serialization.JsonOps.INSTANCE,
+                        com.google.gson.JsonParser.parseString(s.substring(PAK.length()))).getOrThrow();
+            } catch (RuntimeException e) {
+                return Component.literal("?");
+            }
+        }
+        return Component.literal(s);
+    }
+
     private Tekst() {
     }
 }
