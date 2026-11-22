@@ -128,6 +128,11 @@ AMBACHT_NL = {"PLUKKEN": ("plukplekjes", "herb spots"), "MIJNEN": ("mijnplekjes"
               "VISSEN": ("visstekjes", "fishing spots")}
 
 
+# 1.10.13: what an Ambacht spot in a cave is called, per ambacht (+ the cave name: "de ertsvloer in de Zwamgrot")
+AMB_PLEK = {"PLUKKEN": ("de kruidenhoek in", "the herb corner in"), "MIJNEN": ("de ertsvloer in", "the ore floor in"),
+            "HOUTHAKKEN": ("de wortelstammen in", "the root trunks in"), "VISSEN": ("het grotwater in", "the cave water in")}
+
+
 def teksten(gs):
     """{key: (nl, en)}"""
     t = {}
@@ -145,6 +150,10 @@ def teksten(gs):
             "zwamgrot": ("Oude Zwamwachter", "Old Toadstool Warden"), "kristalgrot": ("IJskoude Wacht", "Icy Sentinel"),
             "wortelgrot": ("Grote Wortelslang", "Great Root Snake"), "koraalgrot": ("Koning Mopperkrab", "King Grumble Crab"),
             "wolkengrot": ("Grauwe Wolkduivel", "Grey Cloud Devil")}[i]
+        # 1.10.13: the names of the two Ambacht spots per cave (the book, the Verzamelhuisje "where?"); they were missing (raw keys)
+        for key, amb, *_ in m["amb"]:
+            w_nl, w_en = AMB_PLEK[amb]
+            t[f"vadsrijk.ambacht.groep.grot_{i}_{key}"] = (w_nl + " " + m["nl"].replace("De ", "de "), w_en + " " + m["en"].replace("The ", "the "))
     algemeen = {
         "vadsrijk.grotten.ontdekt.titel": ("Grot ontdekt!", "Cave discovered!"),
         "vadsrijk.grotten.ontdekt.chat": ("✦ Je hebt %s ontdekt! Er is een elite, een puzzel en een schat te vinden.",

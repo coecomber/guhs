@@ -231,6 +231,20 @@ public class VadsrijkAmbachtGameTests {
         v2.putInt(PlekWereld.VERSIE_SLEUTEL, PlekWereld.VERSIE);
         v2.put(haven.id(), groepTag(haven, 0));
         helper.assertTrue(PlekWereld.load(v2).bekend(haven) != null, "a scan with the new rules is kept, even when it found little");
+        // 1.10.13: a version-2 save drops the (complete) cave groups: they are scanned again on the cave floor
+        Groep grot = AmbachtPlekken.groep("grot_zwamgrot_amb_2");
+        helper.assertTrue(grot != null, "cave group");
+        net.minecraft.nbt.CompoundTag oud2 = new net.minecraft.nbt.CompoundTag();
+        oud2.putInt(PlekWereld.VERSIE_SLEUTEL, 2);
+        oud2.put(grot.id(), groepTag(grot, grot.aantal()));
+        oud2.put(kamp.id(), groepTag(kamp, kamp.aantal()));
+        PlekWereld w2 = PlekWereld.load(oud2);
+        helper.assertTrue(w2.bekend(grot) == null && w2.bekend(kamp) != null, "version 2: cave group dropped, the rest kept");
+        helper.assertTrue(PlekWereld.load(w2.save()).bekend(kamp) != null, "saved as version 3");
+        net.minecraft.nbt.CompoundTag v3 = new net.minecraft.nbt.CompoundTag();
+        v3.putInt(PlekWereld.VERSIE_SLEUTEL, PlekWereld.VERSIE);
+        v3.put(grot.id(), groepTag(grot, grot.aantal()));
+        helper.assertTrue(PlekWereld.load(v3).bekend(grot) != null, "a cave scan with the new rules is kept");
         helper.succeed();
     }
 

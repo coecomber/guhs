@@ -27,6 +27,8 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken.Groep;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken.Zoek;
+import nl.juiced.guhs.feature.vadsrijk.grotten.GrotData;
+import nl.juiced.guhs.feature.vadsrijk.grotten.Grotten;
 import nl.juiced.guhs.storage.GuhSavedData;
 
 /**
@@ -115,12 +117,14 @@ public final class PlekWereld extends SavedData {
         RandomSource r = RandomSource.create(g.id().hashCode() * 31L ^ anker.asLong());
         List<BlockPos> gevonden = new ArrayList<>();
         Map<BlockPos, List<BlockPos>> bloemen = new HashMap<>();
+        // 1.10.13: a group whose anchor lies in one of the five caves only looks at that cave's floor (the anchor is floor - 3)
+        GrotData.Grot grot = Grotten.op(anker.getX() + 0.5, anker.getY() + 3.5, anker.getZ() + 0.5);
         for (int pass = 0; pass < 2 && gevonden.size() < nodig; pass++) {
             boolean streng = pass == 0;
             for (int poging = 0; poging < nodig * 40 && gevonden.size() < nodig; poging++) {
                 double hoek = r.nextDouble() * Math.PI * 2, afstand = 3 + r.nextDouble() * (g.straal() - 3);
                 int x = anker.getX() + (int) Math.round(Math.cos(hoek) * afstand), z = anker.getZ() + (int) Math.round(Math.sin(hoek) * afstand);
-                BlockPos p = zoekY(l, x, z, anker.getY(), g.zoek(), streng);
+                BlockPos p = grot != null ? zoekGrotY(l, x, z, anker.getY(), g.zoek(), streng, grot) : zoekY(l, x, z, anker.getY(), g.zoek(), streng);
                 if (p == null || teDichtbij(gevonden, p)) {
                     continue;
                 }
@@ -164,11 +168,39 @@ public final class PlekWereld extends SavedData {
     /** Coral diving: the deepest a dive spot lies under the surface. */
     public static final int DUIK_DIEP = 8;
 
+    /**
+     * 1.10.13: a cave spot: searched from the bottom up, only from the floor - 2 to the floor + 3 (anchor + 1..6), and only inside the
+     * cave's box. Before, the normal top-down scan (anchor + 20 down) found air pockets in the rock above the cave first: the ore of the
+     * Zwamgrot's second spot sat 8-14 blocks above the floor, inside the ceiling, where nobody could reach it.
+     */
+    @Nullable
+    static BlockPos zoekGrotY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng, GrotData.Grot grot) {
+        if (!grot.bevat(x + 0.5, ankerY + 3.5, z + 0.5)) {
+            return null;
+        }
+        for (int y = ankerY + 1; y <= ankerY + 6; y++) {
+            if (!grot.bevat(x + 0.5, y + 0.5, z + 0.5)) {
+                continue;
+            }
+            BlockPos p = zoekY(l, x, z, y, y, zoek, streng);
+            if (p != null) {
+                return p;
+            }
+        }
+        return null;
+    }
+
     /** The position of a spot in this column near {@code ankerY} (the free block above the floor; WATER: the water block). */
     @Nullable
     static BlockPos zoekY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng) {
+        return zoekY(l, x, z, ankerY + 20, ankerY - 30, zoek, streng);
+    }
+
+    /** The highest spot position in this column from {@code boven} down to {@code onder} (both included). */
+    @Nullable
+    static BlockPos zoekY(Level l, int x, int z, int boven, int onder, Zoek zoek, boolean streng) {
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
-        for (int y = ankerY + 20; y >= ankerY - 30; y--) {
+        for (int y = boven; y >= onder; y--) {
             m.set(x, y, z);
             BlockState onder = l.getBlockState(m.below());
             if (zoek == Zoek.KORAAL) {
@@ -327,8 +359,10 @@ public final class PlekWereld extends SavedData {
      * 1.10.12: the scan rules' version. Loading an older save drops the cached non-hive groups that found fewer spots than they want,
      * so they are scanned again with the new rules (the shore rule found nothing at piers and high quays). Complete groups and hive
      * meadows (players' hives are keyed on spot ids) keep their spots.
+     * 1.10.13 (version 3): the cave groups ({@code grot_*}) are scanned again on the cave floor (see {@link #zoekGrotY}); their old
+     * nodes go back to the original block by themselves ({@code Grondstoffen.bijwerk}: the position no longer belongs to the spot).
      */
-    public static final int VERSIE = 2;
+    public static final int VERSIE = 3;
     static final String VERSIE_SLEUTEL = "_versie";
 
     CompoundTag save() {
@@ -383,8 +417,11 @@ public final class PlekWereld extends SavedData {
                 CompoundTag s = spots.getCompoundOrEmpty(i);
                 l.add(new Spot(id + "_" + i, g, posities(s.getListOrEmpty("pos")), posities(s.getListOrEmpty("bloem"))));
             }
-            if (versie < VERSIE && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
+            if (versie < 2 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
                 continue;   // 1.10.12: scanned again with the new rules (when a player comes near)
+            }
+            if (versie < 3 && g.soort() != NodeSoort.KORF && id.startsWith("grot_")) {
+                continue;   // 1.10.13: cave groups scanned again on the cave floor
             }
             w.opgelost.put(id, new Opgelost(c.getLongOr("anker", 0L), l));
         }
