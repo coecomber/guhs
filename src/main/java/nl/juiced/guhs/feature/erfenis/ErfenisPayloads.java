@@ -4,8 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.mojang.serialization.JsonOps;
+
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentSerialization;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
@@ -85,10 +94,44 @@ public final class ErfenisPayloads {
         }
     }
 
-    /** A short message for the overview (its own toast: the HUD is hidden there). Args: numbers or lang keys. */
+    /**
+     * A short message for the overview (its own toast: the HUD is hidden there). Args: numbers, lang keys, or a whole text
+     * made with {@link #tekst} (never a String resolved on the server: a dedicated server resolves in en_us).
+     */
     public record Melding(String key, List<String> args, boolean goed) implements CustomPacketPayload {
         public static final Type<Melding> TYPE = new Type<>(Guhs.id("erfenis_melding"));
         public static final StreamCodec<FriendlyByteBuf, Melding> STREAM_CODEC = StreamCodec.ofMember(Melding::write, Melding::new);
+        /** The start of an argument that is a whole text (component JSON), see {@link #tekst}. */
+        public static final String TEKST = "\u0001json:";
+
+        /**
+         * An argument that is a whole text ("12 eieren, 3 veren"): sent as component JSON, so the reader's client resolves
+         * its lang keys in its own language (1.10.13: the collect toast came in English from the dedicated server).
+         */
+        public static String tekst(Component c, @Nullable HolderLookup.Provider reg) {
+            try {
+                return TEKST + ComponentSerialization.CODEC.encodeStart(ops(reg), c).getOrThrow().toString();
+            } catch (RuntimeException e) {
+                return "";
+            }
+        }
+
+        /** The text of an argument made with {@link #tekst}, or null when it is a plain one (a number or a lang key). */
+        @Nullable
+        public static Component leesTekst(String arg, @Nullable HolderLookup.Provider reg) {
+            if (arg == null || !arg.startsWith(TEKST)) {
+                return null;
+            }
+            try {
+                return ComponentSerialization.CODEC.parse(ops(reg), JsonParser.parseString(arg.substring(TEKST.length()))).getOrThrow();
+            } catch (RuntimeException e) {
+                return Component.empty();
+            }
+        }
+
+        private static com.mojang.serialization.DynamicOps<JsonElement> ops(@Nullable HolderLookup.Provider reg) {
+            return reg == null ? JsonOps.INSTANCE : reg.createSerializationContext(JsonOps.INSTANCE);
+        }
 
         private Melding(FriendlyByteBuf buf) {
             this(buf.readUtf(), lees(buf), buf.readBoolean());

@@ -153,12 +153,14 @@ public final class ErfenisClient {
         }
     }
 
-    /** A lang key with arguments that are numbers/text or other lang keys. */
+    /** A lang key with arguments that are numbers/text, other lang keys or whole texts (component JSON, see Melding.tekst). */
     static Component tekst(String key, List<String> args) {
         Object[] a = new Object[args.size()];
+        Minecraft mc = Minecraft.getInstance();
         for (int i = 0; i < a.length; i++) {
             String s = args.get(i);
-            a[i] = I18n.exists(s) ? Component.translatable(s) : s;
+            Component heel = ErfenisPayloads.Melding.leesTekst(s, mc.level == null ? null : mc.level.registryAccess());
+            a[i] = heel != null ? heel : I18n.exists(s) ? Component.translatable(s) : s;
         }
         return Component.translatable(key, a);
     }
