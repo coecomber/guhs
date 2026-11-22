@@ -61,7 +61,11 @@ import nl.juiced.guhs.gametest.GuhTest;
  *   lookouts, world doors, Wolkwal views, guild hubs, travel map, room tips, class/spec/skill/node texts, craft roles...;</li>
  *   <li>{@link #wezens}: every Vadsrijk entity type is created; its name (custom or type name) is rendered in both languages and
  *   its key methods are checked;</li>
- *   <li>{@link #gebiedenEnQuests}: areas, quests (title, text, objectives, giver's name).</li>
+ *   <li>{@link #gebiedenEnQuests}: areas, quests (title, text, objectives, giver's name);</li>
+ *   <li>1.10.13: {@link #ambachten} (every gathering group incl. the cave ones Grotten adds, spot kinds, fish hints, story steps,
+ *   order board), {@link #npcKeuzes} (class names in the party panel, travel NPCs, role and extra choices), {@link #questTeksten}
+ *   (quest dialogue + the tracker's "where" line), {@link #geheimenZones} (zone 3-6 secrets), {@link #itemsEnBazen} (item names,
+ *   boss item effects, the Bazen tab, sealed dungeon doors).</li>
  * </ul>
  * The static half is tools/vadsrijk/taalcheck.py (its DYNAMISCH table). The client safety net is {@link Labels#terugval}.
  */
@@ -441,7 +445,9 @@ public class VadsrijkAlleLabelsGameTests {
             new String[] {"zone4.boot.BootZee", "PLACEHOLDERS"}, new String[] {"party.nep.NepRol", "values"}, new String[] {"rijdier.Maatjes$Rol", "values"},
             new String[] {"rijdier.Maatjes", "KRACHTEN"}, new String[] {"vfx.BaasProfielen", "alle"}, new String[] {"dungeon.DungeonType", "values"},
             new String[] {"zone3.systemen.Premies", "POOL"}, new String[] {"zone3.systemen.Premies", "WINKEL"},
-            new String[] {"rijdier.Uiterlijk", "alle"}, new String[] {"rijdier.Uiterlijk$As", "values"});
+            new String[] {"rijdier.Uiterlijk", "alle"}, new String[] {"rijdier.Uiterlijk$As", "values"},
+            // 1.10.13: the gathering kinds (book hint, HUD), the cave dungeon defs and the mount/pet drop targets (pity lines)
+            new String[] {"ambacht.NodeSoort", "values"}, new String[] {"grotkerker.GrotBazen", "alle"}, new String[] {"vint.RijdierBuit", "DOELEN"});
 
     static Object bron(String klasse, String lid) {
         if (lid.equals("values")) {
@@ -744,6 +750,279 @@ public class VadsrijkAlleLabelsGameTests {
             }
         }
         e.controleer(helper, "gebieden + quests", 300);
+        helper.succeed();
+    }
+
+    // ---- 1.10.13: the families the first version missed -------------------------------------------------------------------------
+
+    /**
+     * Ambachten: every gathering group's name (the Ambachtenboek, the board guhs' "where" line, the beekeeping messages; the cave
+     * groups that Grotten adds at run time showed "vadsrijk.ambacht.groep.grot_zwamgrot_amb_1"), the spot kinds and minigame titles,
+     * the fish hints, the hub teachers' and the Gilde's story steps, the order board's givers and goods.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void ambachten(GameTestHelper helper) {
+        veilig(helper, () -> ambachten0(helper));
+    }
+
+    static void ambachten0(GameTestHelper helper) {
+        Eisen e = new Eisen();
+        int groepen = 0;
+        for (var g : nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken.GROEPEN) {
+            groepen++;
+            e.key("ambacht.groep", "vadsrijk.ambacht.groep." + g.id());
+            e.key("ambacht.soort", g.soort().naamKey());
+        }
+        helper.assertTrue(groepen >= 60 && nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken.GROEPEN.stream().anyMatch(g -> g.id().startsWith("grot_")),
+                "all gathering groups are registered, the cave ones too: " + groepen);
+        for (var s : nl.juiced.guhs.feature.vadsrijk.ambacht.NodeSoort.values()) {
+            e.key("ambacht.soort", s.naamKey());
+            e.key("ambacht.mini", "vadsrijk.ambacht.mini." + s.oud);
+        }
+        for (var m : nl.juiced.guhs.feature.vadsrijk.ambacht.Materialen.ALLE.values()) {
+            if (m.vis()) {
+                e.key("ambacht.boek.vis", "vadsrijk.ambacht.boek.hint.vis." + (m.wanneer().isEmpty() ? "altijd" : m.wanneer()));
+            }
+            if (!m.wanneer().isEmpty()) {
+                e.key("ambacht.vis", "vadsrijk.ambacht.vis." + m.wanneer());
+            }
+            if (m.tier() > 0) {
+                e.key("ambacht.tier", "vadsrijk.ambacht.tier." + m.tier());
+            }
+        }
+        int gilde = nl.juiced.guhs.feature.vadsrijk.ambacht.HoogvadsGilde.stappen();
+        for (var a : nl.juiced.guhs.feature.vadsrijk.ambacht.Ambacht.values()) {
+            for (int stap = 0; stap < nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtNpcs.VERHAAL_LEVELS.length; stap++) {
+                for (int r = 0; r < 3; r++) {
+                    e.key("ambacht.verhaal", "vadsrijk.ambacht.verhaal." + a.id + "." + stap + "." + r);
+                }
+            }
+            for (int i = 0; i < gilde; i++) {
+                for (int r = 0; r < 3; r++) {
+                    e.key("ambacht.gilde", "vadsrijk.ambacht.gilde." + a.id + "." + i + "." + r);
+                }
+            }
+        }
+        for (Object g : items(statisch("ambacht.Bestelbord", "GEVERS"))) {
+            e.key("ambacht.bestel.gever", "vadsrijk.npc.naam." + g);
+        }
+        for (var b : nl.juiced.guhs.feature.vadsrijk.ambacht.Bestelbord.POOL.values()) {
+            if (b.soort().equals("breng")) {
+                String w = b.wat();
+                e.key("ambacht.bestel.ding", w.startsWith("eten:") ? "item.guhs.vr_amb_eten_" + w.substring(5)
+                        : w.startsWith("drank:") ? "item.guhs.vr_amb_drank_" + w.substring(6) : "item.guhs.vr_amb_" + w);
+            }
+        }
+        e.controleer(helper, "ambachten", 300);
+        helper.succeed();
+    }
+
+    /**
+     * What a click on an NPC offers: the class name in the party panel (built from the class id: the Knuffelridder's own naamKey is
+     * another key), the travel NPCs' "where to?" line and destinations (the Zandloper of zone 6 had none), every role choice and
+     * every extra choice.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void npcKeuzes(GameTestHelper helper) {
+        veilig(helper, () -> npcKeuzes0(helper));
+    }
+
+    static void npcKeuzes0(GameTestHelper helper) {
+        Eisen e = new Eisen();
+        for (var k : nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen.alle()) {
+            e.key("klasse.party", "vadsrijk.klassen.klasse." + k.id());   // (PartyDienst, Advancement's fallback)
+            e.key("klasse.naam", k.naamKey());
+        }
+        for (var r : nl.juiced.guhs.feature.vadsrijk.party.nep.NepRol.values()) {
+            e.key("klasse.party", "vadsrijk.klassen.klasse." + r.klasse);
+        }
+        var reizen = nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.REIZEN;
+        helper.assertTrue(reizen.size() >= 7, "the travel NPCs are registered: " + reizen.keySet());
+        reizen.forEach((npc, doelen) -> {
+            e.key("reis.kies", "vadsrijk.npc.reis.kies." + npc);
+            e.key("reis.npc", "vadsrijk.npc.naam." + npc);
+            for (String naar : doelen) {
+                e.key("reis.vlieg", "vadsrijk.npc.optie.vlieg." + naar);
+                e.key("reis.vlieg", "vadsrijk.npc.optie.vlieg." + naar + ".slot");
+            }
+        });
+        Set<String> zelf = Set.of("training", "kampwacht", "marktguh", "klasse", "questbord", "versteend", "luchtschip", "luchtschip_kamp",
+                "luchtschip_z2", "luchtschip_z3", "luchtschip_z5");   // (QuestMotor.rol handles these itself, Z2Haken the frozen guhs)
+        for (NpcDef d : alleNpcs().values()) {
+            if (d.rol() != null && !zelf.contains(d.rol()) && !heeftEigenKlik(d.id())) {
+                e.key("npc.rol", "vadsrijk.npc.optie.rol." + d.rol());
+            }
+        }
+        nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.EXTRA.forEach((npc, l) -> l.forEach(o -> e.key("npc.extra", o.tekstKey())));
+        e.controleer(helper, "NPC-keuzes", 60);
+        helper.succeed();
+    }
+
+    /**
+     * Every quest's dialogue (offer, how is it going, hand-in, the "talk to" pages and who speaks them) and the tracker's "where"
+     * line of every objective (QuestStap: npc/poi/area/campfire/boss/everywhere), like the quest robot but without playing.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void questTeksten(GameTestHelper helper) {
+        veilig(helper, () -> questTeksten0(helper));
+    }
+
+    static void questTeksten0(GameTestHelper helper) {
+        Eisen e = new Eisen();
+        String plek = nl.juiced.guhs.feature.vadsrijk.npc.QuestStap.PLEK;
+        Consumer<String> spreker = s -> {
+            String id = s.contains(":") ? s.substring(0, s.indexOf(':')) : s;
+            if (!id.equals("npc") && !id.equals("jij") && Npcs.van(id) != null) {
+                e.key("quest.spreker", "vadsrijk.npc.naam." + id);
+            }
+        };
+        for (Quest q : Quests.alle().values()) {
+            String s = q.sleutel();
+            for (int i = 0; i < q.aanbod().size(); i++) {
+                e.key("quest.aanbod", s + ".aanbod." + i);
+                spreker.accept(q.aanbod().get(i));
+            }
+            for (int i = 0; i < q.klaar().size(); i++) {
+                e.key("quest.klaar", s + ".klaar." + i);
+                spreker.accept(q.klaar().get(i));
+            }
+            q.praat().forEach((npc, l) -> {
+                for (int i = 0; i < l.size(); i++) {
+                    e.key("quest.praat", s + ".praat." + npc + "." + i);
+                    spreker.accept(l.get(i));
+                }
+            });
+            if (!q.gever().isEmpty() || !q.inleveren().isEmpty()) {
+                e.key("quest.bezig", s + ".bezig");
+            }
+            for (String n : List.of(q.gever(), q.inleveren())) {
+                if (!n.isEmpty()) {
+                    e.key("quest.npc", "vadsrijk.npc.naam." + n);
+                    e.key("stap.npc", plek + "npc." + n);
+                }
+            }
+            for (Quest.Doel d : q.doelen()) {
+                if (d.plek() != null && !d.plek().isEmpty() && nl.juiced.guhs.feature.vadsrijk.npc.QuestPlek.pos(null, d.plek()) != null) {
+                    e.key("stap.plek", nl.juiced.guhs.feature.vadsrijk.npc.QuestPlek.tekstKey(d.plek()));
+                    continue;
+                }
+                String doel = d.doel();
+                String k = switch (d.type()) {
+                    case PRAAT -> plek + "npc." + doel;
+                    case ESCORTE -> plek + "poi." + (d.bron().startsWith("poi:") ? d.bron().substring(4) : d.bron());
+                    case GEBIED, GEHEIM -> doel.startsWith("poi:") ? plek + "poi." + doel.substring(4)
+                            : d.type() == Quest.Doel.Type.GEBIED ? plek + "gebied." + doel.split("\\|")[0] : plek + "overal." + doel;
+                    case KAMPVUUR -> doel.equals("*") ? plek + "overal" : plek + "kampvuur." + doel;
+                    case OPVROLIJK, ELITE -> doel.startsWith("gebied:") ? plek + "gebied." + doel.substring(7) : plek + "overal";
+                    case VERZAMEL -> d.bron().startsWith("gebied:") ? plek + "gebied." + d.bron().substring(7) : plek + "overal";
+                    case BAAS -> plek + "baas." + (doel.startsWith("gebied:") ? doel.substring(7) : doel.substring(doel.indexOf(':') + 1));
+                    default -> null;
+                };
+                e.key("stap." + d.type().name().toLowerCase(java.util.Locale.ROOT), k);
+                if (d.type() == Quest.Doel.Type.PRAAT || d.type() == Quest.Doel.Type.ESCORTE) {
+                    e.key("stap.npc", plek + "npc." + doel);
+                }
+            }
+        }
+        e.controleer(helper, "quest-teksten", 1000);
+        helper.succeed();
+    }
+
+    /** The secrets of zones 3 to 6 (found message, title card, page), like zone 1 and 2's in {@link #familiesPerId}. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void geheimenZones(GameTestHelper helper) {
+        veilig(helper, () -> geheimenZones0(helper));
+    }
+
+    static void geheimenZones0(GameTestHelper helper) {
+        Eisen e = new Eisen();
+        java.util.function.BiConsumer<String, String[]> kaart = (bron, sjablonen) -> {
+            String[] d = bron.split("#");
+            if (!(statisch(d[0], d[1]) instanceof Map<?, ?> m) || m.isEmpty()) {
+                e.fout("bronnen", bron + " is empty or gone");
+                return;
+            }
+            for (Object id : m.keySet()) {
+                for (String s : sjablonen) {
+                    String nr = id.toString().substring(id.toString().lastIndexOf('_') + 1);
+                    e.key(bron, s.replace("{id}", id.toString()).replace("{nr}", nr));
+                }
+            }
+        };
+        String z3 = "vadsrijk.z3npc.", z4 = "vadsrijk.z4verhaal.", z5 = "vadsrijk.z5verhaal.", z6 = "vadsrijk.z6verhaal.";
+        kaart.accept("zone3.npc.Z3NpcPlekken#KNUFFEL", new String[] {z3 + "knuffel.{id}"});
+        kaart.accept("zone3.npc.Z3NpcPlekken#AANWIJZING", new String[] {z3 + "aanwijzing.{id}"});
+        kaart.accept("zone3.npc.Z3NpcPlekken#SCHAT", new String[] {z3 + "schat.{id}"});
+        kaart.accept("zone3.npc.Z3NpcPlekken#RELIEF", new String[] {z3 + "relief.{id}"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#KNUFFEL", new String[] {z4 + "knuffel.{id}"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#FLESSENPOST", new String[] {z4 + "fles.{id}", z4 + "fles.titel.{id}"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#SCHAT", new String[] {z4 + "schat.{id}"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#UITZICHT", new String[] {z4 + "uitzicht.{id}", z4 + "uitzicht.titel.{id}"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#TIJKNUFFEL", new String[] {z4 + "tijknuffel.{id}.naam", z4 + "tijknuffel.{id}.verhaal"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#WRAKKNUFFEL", new String[] {z4 + "tijknuffel.{id}.naam", z4 + "tijknuffel.{id}.verhaal"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#GROTE_KNUFFEL", new String[] {z4 + "tijknuffel.{id}.naam", z4 + "tijknuffel.{id}.verhaal.0",
+                z4 + "tijknuffel.{id}.verhaal.1", z4 + "tijknuffel.{id}.verhaal.2"});
+        kaart.accept("zone4.verhaal.Z4VerhaalPlekken#MISTBRIEVEN", new String[] {z4 + "mistbrief.mistbrief_{nr}"});
+        kaart.accept("zone5.verhaal.Z5VerhaalPlekken#KNUFFEL", new String[] {z5 + "knuffel.{id}"});
+        kaart.accept("zone5.verhaal.Z5VerhaalPlekken#SCHAT", new String[] {z5 + "schat.{id}"});
+        kaart.accept("zone6.verhaal.Z6VerhaalPlekken#KNUFFEL", new String[] {z6 + "knuffel.{id}"});
+        kaart.accept("zone6.verhaal.Z6VerhaalPlekken#SCHAT", new String[] {z6 + "schat.{id}"});
+        kaart.accept("zone6.verhaal.Z6VerhaalPlekken#BAKEN", new String[] {z6 + "bakens.{id}"});
+        kaart.accept("zone6.verhaal.Z6VerhaalPlekken#VONDST", new String[] {z6 + "vondst.{id}"});
+        if (statisch("zone6.verhaal.Z6VerhaalPlekken", "VONDST") instanceof Map<?, ?> v && v.get("z6_tabletten") instanceof Map<?, ?> t) {
+            t.keySet().forEach(id -> e.key("z6.tablet", z6 + "tablet." + id));
+        }
+        e.controleer(helper, "geheimen zone 3-6", 80);
+        helper.succeed();
+    }
+
+    /**
+     * Every Vadsrijk item's name (tooltips, chat, the order board) and a boss item's effect line; the Bazen tab's rows (name, area,
+     * cave name, cave pet); the sealed dungeon doors.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void itemsEnBazen(GameTestHelper helper) {
+        veilig(helper, () -> itemsEnBazen0(helper));
+    }
+
+    static void itemsEnBazen0(GameTestHelper helper) {
+        Eisen e = new Eisen();
+        for (var item : BuiltInRegistries.ITEM) {
+            var id = BuiltInRegistries.ITEM.getKey(item);
+            if (!id.getNamespace().equals("guhs") || !id.getPath().startsWith("vr_")) {
+                continue;
+            }
+            e.key("item.naam", item.getDescriptionId());
+            if (item instanceof nl.juiced.guhs.feature.vadsrijk.bazen.BazenLoot.BaasItem && veld(item, "type") == null) {
+                e.fout("item.effect", id.getPath() + ": no type");
+            } else if (item instanceof nl.juiced.guhs.feature.vadsrijk.bazen.BazenLoot.BaasItem) {
+                e.key("item.effect", "vadsrijk.bazen.effect." + veld(item, "type"));
+            }
+        }
+        for (var b : nl.juiced.guhs.feature.vadsrijk.bazenboek.Bazenboek.alle()) {
+            e.key("bazenboek.naam", b.naamKey);
+            Object gebied = veld(b, "gebiedKey"), grot = veld(b, "dungeon"), pet = veld(b, "grotPet");
+            e.key("bazenboek.gebied", gebied != null ? gebied.toString() : "vadsrijk.zonepoort.zone." + b.zone);
+            if (grot != null) {
+                e.key("bazenboek.grot", "vadsrijk.grotten.naam." + grot);
+            }
+            if (pet != null) {
+                e.key("bazenboek.huisdier", "vadsrijk.huisdier." + pet + ".naam");
+            }
+        }
+        for (Object set : items(statisch("items.Sets", "SET_VAN"))) {   // (the gear tooltip's set line)
+            e.key("item.set", "vadsrijk.items.set." + set);
+        }
+        for (var d : nl.juiced.guhs.feature.vadsrijk.vint.RijdierBuit.DOELEN.values()) {
+            e.key("rijdierbuit.per", "vadsrijk.vint.pech.per." + d.per());
+        }
+        for (var d : nl.juiced.guhs.feature.vadsrijk.dungeon.DungeonDeurData.ALLE) {
+            if (d.zegel()) {
+                e.key("dungeon.zegel", "vadsrijk.dungeon.zegel.bord." + d.dungeon());
+                e.key("dungeon.zegel", "vadsrijk.dungeon.zegel.msg." + d.dungeon());
+            }
+        }
+        e.controleer(helper, "items + bazen", 500);
         helper.succeed();
     }
 

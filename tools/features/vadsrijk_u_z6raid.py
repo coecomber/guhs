@@ -584,7 +584,8 @@ X_RAID_TEKSTEN = {
     "vadsrijk.npc.plek.npc.z6raid_zaalwachter": "in De Wachtzaal onder De Sterrendovende Toren, naast de gouden startcirkel",
     "vadsrijk.npc.praat.z6raid_zaalwachter.1": "Welkom in De Wachtzaal. De gouden cirkel is de start: 2 tot 10 spelers, 3 tellen blijven staan.",
     "vadsrijk.npc.praat.z6raid_zaalwachter.2": "Is de toren bezet? Op de cirkel kom je in de rij. Ik roep jullie als het je beurt is.",
-    "vadsrijk.npc.praat.z6raid_zaalwachter.3": "Naar buiten? Door de paarse boog in het westen."
+    "vadsrijk.npc.praat.z6raid_zaalwachter.3": "Naar buiten? Door de paarse boog in het westen.",
+    "vadsrijk.npc.optie.rol.z6raid_heraut": "Hoe werkt de toren?",   # (1.10.13: the role choice of the herald and the hall keeper was a raw key)
 }
 X_RAID_EN = {
     "vadsrijk.z6raid.heraut.1": "Welcome to The Star-Snuffing Tower! This is the raid: a tower for 2 to 10 players, four floors, four bosses.",
@@ -612,7 +613,8 @@ X_RAID_EN = {
     "vadsrijk.npc.plek.npc.z6raid_zaalwachter": "in the Waiting Hall under The Star-Snuffing Tower, next to the golden start circle",
     "vadsrijk.npc.praat.z6raid_zaalwachter.1": "Welcome to the Waiting Hall. The golden circle is the start: 2 to 10 players, stay put for 3 seconds.",
     "vadsrijk.npc.praat.z6raid_zaalwachter.2": "Tower busy? On the circle you join the queue. I'll call you when it's your turn.",
-    "vadsrijk.npc.praat.z6raid_zaalwachter.3": "Going outside? Through the purple arch in the west."
+    "vadsrijk.npc.praat.z6raid_zaalwachter.3": "Going outside? Through the purple arch in the west.",
+    "vadsrijk.npc.optie.rol.z6raid_heraut": "How does the tower work?",
 }
 TEKSTEN.update(X_RAID_TEKSTEN)
 EN.update(X_RAID_EN)
