@@ -146,6 +146,7 @@ ADV = {
 
 TEKSTEN = {
     "key.guhs.vr_kl_boom": "Skillboom (Vadsrijk)",
+    K + "klasse.knuffelridder": "Knuffelridder",   # (1.10.13: the party panel builds this key from the class id; the knight's own naamKey is kern.klasse.*)
     K + "klasse.pluisjager": "Pluisjager",
     K + "klasse.vadsmagier": "Vadsmagiër",
     K + "kies.rol.knuffelridder": "Zware knuffelbruiser",

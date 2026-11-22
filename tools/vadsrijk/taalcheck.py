@@ -75,6 +75,9 @@ DYNAMISCH = [
     ("zone3/wezens/Z3WezensPlekken.java", r'\bLEIDERS\.put\("([a-z0-9_]+)"', ["vadsrijk.z3wezens.leider.{id}"]),
     ("zone5/wezens/Z5WezensPlekken.java", r'\bLEIDERS\.put\("([a-z0-9_]+)"', ["vadsrijk.z5wezens.leider.{id}"]),
     ("zone6/wezens/Z6WezensPlekken.java", r'\bLEIDERS\.put\("([a-z0-9_]+)"', ["vadsrijk.z6wezens.leider.{id}"]),
+    # 1.10.13: a travel NPC's "where to?" line (the Zandloper of zone 6 had none), the cave dungeons' cave name (Bazen tab)
+    ("**/*Registry.java", r'QuestMotor\.REIZEN\.put\("([a-z0-9_]+)"', ["vadsrijk.npc.reis.kies.{id}"]),
+    ("grotkerker/GrotBazen.java", r'\bbaas\("([a-z0-9_]+)"', ["vadsrijk.grotten.naam.{id}", "vadsrijk.grotkerker.grot.{id}"]),
 ]
 VR_JAVA = JAVA / "nl/juiced/guhs/feature/vadsrijk"
 

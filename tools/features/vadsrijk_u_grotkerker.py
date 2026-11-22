@@ -480,6 +480,8 @@ def teksten():
         gn = GROTNAAM[i]
         t[f"vadsrijk.grotten.boek.baas.{i}"] = (f"Grotbaas van {gn[0].replace('De ', 'de ')} verslagen", f"Cave boss of {gn[1].replace('The ', 'the ')} defeated")
         t[K + f"grot.{i}"] = gn
+        if i == "zoutgrot":   # 1.10.13: the Bazen tab, the mount pity line and the dungeon access line use vadsrijk.grotten.naam.<grot>;
+            t["vadsrijk.grotten.naam.zoutgrot"] = gn   # (the other five come from vadsrijk_w_grot.py: zone 6's cave has no exploration cave)
     for k, v in AANVALLEN.items():
         t[f"vadsrijk.vfx.aanval.{k}"] = v
     for p, (nl, en, tnl, ten) in PETS.items():

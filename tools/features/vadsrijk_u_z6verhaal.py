@@ -1045,6 +1045,7 @@ OVERIG = {
     "gui.guhs.titels.naam.vr_vriend_van_ringeling": "Vriend van Ringeling",
     "gui.guhs.titels.hint.vr_vriend_van_ringeling": "Vrolijk Hertogin Ringeling op, boven in De Sterrendovende Toren.",
     # travel
+    P + "reis.kies.z6_zandloper": "Waarheen? Eén zandloper per schip, dus kies maar rustig hieronder, of bekijk de reiskaart.",   # (1.10.13: was missing)
     P + "optie.vlieg.zijdeland": "Naar het Zijdeland (Rozenkloof)",
     P + "optie.vlieg.zijdeland.slot": "Naar het Zijdeland (nog dicht)",
     P + "reis.slot.zijdeland": "Lijn E naar het Zijdeland gaat pas open als Moeder Wolkwal naar het oosten gezwommen is (na 'De Stormrand' in "
