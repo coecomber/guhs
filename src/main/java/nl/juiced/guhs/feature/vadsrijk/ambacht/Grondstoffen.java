@@ -243,6 +243,9 @@ public final class Grondstoffen extends SavedData {
         }
         int[] budget = {PLAATS_PER_RONDE};
         g.herstelWezen(sl, WEES_PER_RONDE);
+        if (++g.ronde % OPRUIM_RONDES == 0) {
+            g.opruimen(sl);
+        }
         for (Spot s : spots.values()) {
             g.bijwerk(sl, s, budget);
         }
@@ -376,6 +379,40 @@ public final class Grondstoffen extends SavedData {
         }
     }
 
+    /** 1.10.13: every how many rounds (seconds) {@link #opruimen} runs. */
+    static final int OPRUIM_RONDES = 30;
+    private int ronde;
+
+    /**
+     * 1.10.13: nodes whose spot no longer exists leave the world (original block back). A rescan that finds fewer spots than before
+     * (the frozen Knuffelmeer: 1 -> 0) left the old node standing forever: a fishing spot nobody could use. Only for groups whose scan
+     * is known for their current anchor; hives are never touched. Public for the gametests.
+     */
+    public int opruimen(ServerLevel sl) {
+        PlekWereld pw = PlekWereld.get(sl.getServer());
+        int weg = 0;
+        for (var it = nodes.entrySet().iterator(); it.hasNext();) {
+            var e = it.next();
+            String id = e.getKey();
+            int i = id.lastIndexOf('_');
+            Groep g = i > 0 ? AmbachtPlekken.groep(id.substring(0, i)) : null;
+            if (g == null || g.soort() == NodeSoort.KORF) {
+                continue;
+            }
+            List<Spot> l = pw.bekend(g);
+            if (l == null || l.stream().anyMatch(s -> s.id().equals(id))) {
+                continue;
+            }
+            weg(sl, e.getValue(), g.soort());
+            it.remove();
+            weg++;
+        }
+        if (weg > 0) {
+            setDirty();
+        }
+        return weg;
+    }
+
     /** Dev ({@code /ambacht scan}): every placed node leaves the world (original blocks back, or later); the state is forgotten. */
     public void allesWeg(ServerLevel sl) {
         for (Node n : nodes.values()) {
@@ -427,7 +464,8 @@ public final class Grondstoffen extends SavedData {
                         && PlekWereld.natuur(onder) && !(onder.getBlock() instanceof GrondstofBlok);
             }
             case VIS -> {
-                return st.is(Blocks.WATER) && sl.getFluidState(t).isSource() && sl.getBlockState(t.above()).isAir();
+                return (st.is(Blocks.WATER) && sl.getFluidState(t).isSource() && sl.getBlockState(t.above()).isAir())
+                        || PlekWereld.wak(sl, t);   // 1.10.13: or a hole in the ice of a frozen lake
             }
             case DUIK -> {
                 BlockState onder = sl.getBlockState(t.below());

@@ -179,6 +179,64 @@ public class VadsrijkAmbachtGameTests {
         helper.succeed();
     }
 
+    /** 1.10.13: a frozen lake (the Knuffelmeer froze over on live: 0 spots): fished through holes in the ice; a node may stand there. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void scanIjs(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int x = 0; x < 12; x++) {
+            for (int z = 0; z < 12; z++) {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.DIRT.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.WATER.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 2, z), Blocks.ICE.defaultBlockState());
+                for (int y = 3; y < 7; y++) {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState());
+                }
+            }
+        }
+        BlockPos anker = helper.absolutePos(new BlockPos(6, 2, 6));
+        List<Spot> water = PlekWereld.scan(sl, anker, new Groep("t_ijs", 2, "x", NodeSoort.VIS, 2, 1, 5, Zoek.WATER, ""));
+        helper.assertTrue(!water.isEmpty(), "fish spots in the frozen lake");
+        for (BlockPos p : water.get(0).posities()) {
+            helper.assertTrue(sl.getBlockState(p).is(Blocks.ICE) && Grondstoffen.magHier(sl, NodeSoort.VIS, p), "an ice hole: " + p);
+        }
+        helper.assertTrue(!PlekWereld.wak(sl, helper.absolutePos(new BlockPos(6, 1, 6))), "water itself is no ice hole");
+        helper.succeed();
+    }
+
+    /** 1.10.13: a node whose spot no longer exists (a rescan found fewer spots) leaves the world; its original block comes back. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void weesNodeOpruimen(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        Groep g = AmbachtPlekken.groep("z2_vis_meer_1");
+        helper.assertTrue(g != null && g.anker() != null, "group with an anchor");
+        net.minecraft.nbt.CompoundTag t = new net.minecraft.nbt.CompoundTag();
+        t.putInt(PlekWereld.VERSIE_SLEUTEL, PlekWereld.VERSIE);
+        t.put(g.id(), groepTag(g, 1));   // known scan: one spot (_0)
+        PlekWereld pw = PlekWereld.get(sl.getServer());
+        PlekWereld geladen = PlekWereld.load(t);
+        Spot echt = geladen.bekend(g).get(0);
+        Spot wees = new Spot(g.id() + "_3", g, List.of(helper.absolutePos(new BlockPos(2, 2, 2))), List.of());
+        BlockPos p = wees.posities().get(0);
+        helper.setBlock(new BlockPos(2, 1, 2), Blocks.DIRT.defaultBlockState());
+        helper.setBlock(new BlockPos(2, 2, 2), Blocks.WATER.defaultBlockState());
+        helper.setBlock(new BlockPos(2, 3, 2), Blocks.AIR.defaultBlockState());
+        net.minecraft.nbt.CompoundTag oudPw = pw.saveVoorTest();
+        try {
+            pw.zetVoorTest(geladen);
+            Grondstoffen gs = Grondstoffen.get(sl.getServer());
+            int[] budget = {5};
+            gs.bijwerk(sl, wees, budget);
+            helper.assertTrue(Grondstoffen.isNode(sl.getBlockState(p), NodeSoort.VIS), "the orphan's node stands");
+            gs.node(echt);
+            int weg = gs.opruimen(sl);
+            helper.assertTrue(weg >= 1 && gs.bekend(wees.id()) == null && gs.bekend(echt.id()) != null, "only the orphan is cleaned up");
+            helper.assertTrue(sl.getBlockState(p).is(Blocks.WATER), "its water is back");
+        } finally {
+            pw.zetVoorTest(PlekWereld.load(oudPw));
+        }
+        helper.succeed();
+    }
+
     /** 1.10.12: fishing from a pier: the deck lies 2 above the water and there is no bank at the water line (the Vissteiger, De Haven). */
     @GuhTest(template = "empty", batch = BATCH)
     public static void scanSteiger(GameTestHelper helper) {

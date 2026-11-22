@@ -92,6 +92,16 @@ public final class PlekWereld extends SavedData {
         return o == null || a == null || o.anker() != a.asLong() ? null : o.spots();
     }
 
+    /** Gametests: this world's scans as a tag, and replacing them (the real SavedData is shared by every test). */
+    public CompoundTag saveVoorTest() {
+        return save();
+    }
+
+    public void zetVoorTest(PlekWereld w) {
+        opgelost.clear();
+        opgelost.putAll(w.opgelost);
+    }
+
     /** Dev: forget every scan (everything is scanned again when players come near). */
     public void vergeet() {
         opgelost.clear();
@@ -196,11 +206,11 @@ public final class PlekWereld extends SavedData {
         return zoekY(l, x, z, ankerY + 20, ankerY - 30, zoek, streng);
     }
 
-    /** The highest spot position in this column from {@code boven} down to {@code onder} (both included). */
+    /** The highest spot position in this column from {@code hoog} down to {@code laag} (both included). */
     @Nullable
-    static BlockPos zoekY(Level l, int x, int z, int boven, int onder, Zoek zoek, boolean streng) {
+    static BlockPos zoekY(Level l, int x, int z, int hoog, int laag, Zoek zoek, boolean streng) {
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
-        for (int y = boven; y >= onder; y--) {
+        for (int y = hoog; y >= laag; y--) {
             m.set(x, y, z);
             BlockState onder = l.getBlockState(m.below());
             if (zoek == Zoek.KORAAL) {
@@ -218,6 +228,9 @@ public final class PlekWereld extends SavedData {
                 if (f.is(FluidTags.WATER) && f.isSource() && l.getBlockState(m.above()).isAir() && l.getBlockState(m).is(Blocks.WATER) && oever(l, m)) {
                     return m.immutable();
                 }
+                if (wak(l, m)) {
+                    return m.immutable();   // 1.10.13: a frozen lake: fished through a hole in the ice
+                }
                 continue;
             }
             if (!vrij(l, m) || !vrij(l, m.above()) || !onder.isCollisionShapeFullBlock(l, m.below()) || !l.getFluidState(m).isEmpty()) {
@@ -234,6 +247,19 @@ public final class PlekWereld extends SavedData {
             }
         }
         return null;
+    }
+
+    /**
+     * 1.10.13: ice right on top of still water, with room above: an ice-fishing hole (the node replaces the ice; the ice comes back
+     * when the spot moves). The Knuffelmeer in zone 2 froze over completely, so the open-water rule found 0 spots there.
+     */
+    public static boolean wak(Level l, BlockPos p) {
+        BlockState s = l.getBlockState(p);
+        if (!s.is(Blocks.ICE) && !s.is(Blocks.PACKED_ICE) && !s.is(Blocks.BLUE_ICE) && !s.is(Blocks.FROSTED_ICE)) {
+            return false;
+        }
+        FluidState onder = l.getFluidState(p.below());
+        return onder.is(FluidTags.WATER) && onder.isSource() && vrij(l, p.above()) && vrij(l, p.above(2));
     }
 
     private static boolean vrij(Level l, BlockPos p) {
@@ -276,7 +302,8 @@ public final class PlekWereld extends SavedData {
                 }
                 for (int dy = 0; dy <= 2; dy++) {
                     BlockState s = l.getBlockState(p.offset(dx, dy, dz));
-                    if (s.is(BlockTags.LOGS) || s.is(Blocks.MUSHROOM_STEM)) {
+                    // (1.10.13: the crystal trees of the Kristalbos have trunks of guh_kristal_blok)
+                    if (s.is(BlockTags.LOGS) || s.is(Blocks.MUSHROOM_STEM) || s.is(nl.juiced.guhs.registry.ModBlocks.GUH_KRISTAL_BLOK.get())) {
                         return true;
                     }
                 }
@@ -361,6 +388,8 @@ public final class PlekWereld extends SavedData {
      * meadows (players' hives are keyed on spot ids) keep their spots.
      * 1.10.13 (version 3): the cave groups ({@code grot_*}) are scanned again on the cave floor (see {@link #zoekGrotY}); their old
      * nodes go back to the original block by themselves ({@code Grondstoffen.bijwerk}: the position no longer belongs to the spot).
+     * Incomplete non-hive groups are dropped once more too: frozen lakes ({@link #wak}) and the Kristalbos (crystal trunks) find
+     * spots now. Nodes of spots that no longer exist are cleaned up by {@code Grondstoffen.opruimen}.
      */
     public static final int VERSIE = 3;
     static final String VERSIE_SLEUTEL = "_versie";
@@ -417,8 +446,8 @@ public final class PlekWereld extends SavedData {
                 CompoundTag s = spots.getCompoundOrEmpty(i);
                 l.add(new Spot(id + "_" + i, g, posities(s.getListOrEmpty("pos")), posities(s.getListOrEmpty("bloem"))));
             }
-            if (versie < 2 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
-                continue;   // 1.10.12: scanned again with the new rules (when a player comes near)
+            if (versie < 3 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
+                continue;   // 1.10.12 / 1.10.13: scanned again with the new rules (when a player comes near)
             }
             if (versie < 3 && g.soort() != NodeSoort.KORF && id.startsWith("grot_")) {
                 continue;   // 1.10.13: cave groups scanned again on the cave floor
