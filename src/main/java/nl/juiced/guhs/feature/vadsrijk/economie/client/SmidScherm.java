@@ -89,6 +89,14 @@ public class SmidScherm extends EcoScherm {
         kies = data.getIntOr("kies", -1);
     }
 
+    /** 1.10.15: wider (and a bit taller when the window allows): the Dutch lines did not fit the old 330 x 232 and overlapped. */
+    @Override
+    protected void init() {
+        w = Math.max(330, Math.min(440, width - 16));
+        h = Math.max(232, Math.min(264, height - 16));
+        super.init();
+    }
+
     @Override
     protected void opNieuweData() {
         int k = data.getIntOr("kies", -1);
@@ -191,11 +199,14 @@ public class SmidScherm extends EcoScherm {
             g.text(font, Component.translatable("vadsrijk.economie.smid.geen_gear"), left + 8, top + 40, ZACHT, false);
         }
         // materials
-        int my0 = top + h - 46;
+        int my0 = top + h - 64;
         materiaal(g, mx, my, left + 8, my0, new ItemStack(EcoSpul.VERBETERSTEENTJE.get()), data.getIntOr("steentjes", 0));
         materiaal(g, mx, my, left + 48, my0, new ItemStack(EcoSpul.HERROLKNABBEL.get()), data.getIntOr("knabbels", 0));
         materiaal(g, mx, my, left + 88, my0, new ItemStack(EcoSpul.PLUISDRAAD.get()), data.getIntOr("draad", 0));
         // 1.10.1: Opruimen (salvage / sell old gear, melt the material into steentjes and more)
+        // 1.10.15: the smid's own shop (verbetersteentjes, pluisdraad, herrolknabbels, rijfluitjes): nothing opened it before
+        knop(g, mx, my, left + 8, top + h - 42, 112, 12, Component.translatable("vadsrijk.economie.smid.knop.winkel"), true,
+                () -> doe("winkel", new CompoundTag()));
         knop(g, mx, my, left + 8, top + h - 26, 112, 12, Component.translatable("vadsrijk.economie.opruim.smid_knop", data.getIntOr("slechter", 0)), true,
                 () -> doe("opruimen", new CompoundTag()));
 
@@ -239,7 +250,10 @@ public class SmidScherm extends EcoScherm {
             }
         }
         int tx = ax + 46;
-        g.text(font, s.getHoverName(), tx, top + 28, TEKST, false);
+        var naam = font.split(s.getHoverName(), Math.max(20, rx + rw - tx - 4));   // (1.10.15: long names stay inside the panel)
+        if (!naam.isEmpty()) {
+            g.text(font, naam.get(0), tx, top + 28, TEKST, false);
+        }
         g.text(font, Component.translatable("vadsrijk.economie.smid.level", u.level()), tx, top + 38, ZACHT, false);
         // the stars
         int toonSterren = bezig && vorigeSterren >= 0 ? vorigeSterren : u.sterren();
@@ -260,13 +274,11 @@ public class SmidScherm extends EcoScherm {
         } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.OVERVADSEN) {
             nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.overvads(brug, g, mx, my, rx + 8, y, rw - 16, u);
         } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.STERREN && u.verpluisd() && !bezig) {
-            g.text(font, Component.translatable("vadsrijk.economie.smid.is_verpluisd").withStyle(ChatFormatting.BOLD), rx + 8, y, ROOD, false);
-            y += 12;
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable("vadsrijk.economie.smid.is_verpluisd").withStyle(ChatFormatting.BOLD), rx + 8, y, rw - 16, ROOD) + 2;
             long prijs = SterRegels.reparatiePrijs(u.level(), u.sterren());
             int draad = SterRegels.reparatieDraad(u.sterren());
-            g.text(font, Component.translatable("vadsrijk.economie.smid.reparatie_kost", draad), rx + 8, y, TEKST, false);
-            munten(g, rx + rw - 8, y, prijs, true, false);
-            y += 14;
+            int mb = munten(g, rx + rw - 8, y, prijs, true, false);
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable("vadsrijk.economie.smid.reparatie_kost", draad), rx + 8, y, rw - 22 - mb, TEKST) + 4;
             knop(g, mx, my, rx + 8, y, rw - 16, 18, Component.translatable("vadsrijk.economie.smid.knop.repareer"),
                     data.getLongOr("munten", 0) >= prijs && data.getIntOr("draad", 0) >= draad, () -> actie("repareer"));
             y += 26;
@@ -275,24 +287,20 @@ public class SmidScherm extends EcoScherm {
             // T-ITEMS: the chance with the smid's patience, the patience meter, the talisman switch (replaces the plain chance line)
             y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.sterBoven(brug, g, mx, my, rx + 8, y, rw - 16, u);
             if (risico[0] > 0 || risico[1] > 0) {
-                g.text(font, Component.translatable("vadsrijk.economie.smid.risico", pct(risico[0]), pct(risico[1])), rx + 8, y, ROOD, false);
-                y += 10;
+                y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable("vadsrijk.economie.smid.risico", pct(risico[0]), pct(risico[1])), rx + 8, y, rw - 16, ROOD);
             } else {
-                g.text(font, Component.translatable("vadsrijk.economie.smid.veilig"), rx + 8, y, ZACHT, false);
-                y += 10;
+                y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable("vadsrijk.economie.smid.veilig"), rx + 8, y, rw - 16, ZACHT);
             }
             long prijs = SterRegels.prijs(u.level(), u.sterren());
             int steen = SterRegels.steentjes(u.sterren());
-            g.text(font, Component.translatable("vadsrijk.economie.smid.ster_kost", steen), rx + 8, y + 2, TEKST, false);
-            munten(g, rx + rw - 8, y + 2, prijs, true, false);
-            y += 14;
+            int mb = munten(g, rx + rw - 8, y + 2, prijs, true, false);
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable("vadsrijk.economie.smid.ster_kost", steen), rx + 8, y + 2, rw - 22 - mb, TEKST) + 2;
             knop(g, mx, my, rx + 8, y, rw - 16, 18, Component.translatable("vadsrijk.economie.smid.knop.ster").withStyle(ChatFormatting.BOLD),
                     !bezig && data.getLongOr("munten", 0) >= prijs && data.getIntOr("steentjes", 0) >= steen, () -> actie("ster"));
             y += 22;
             y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.sterVoorbeeld(brug, g, rx + 8, y, rw - 16, u);   // T-ITEMS: preview
         } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.STERREN) {
-            g.text(font, Component.translatable("vadsrijk.economie.smid.max_uitleg"), rx + 8, y, GOUD, false);
-            y += 14;
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable("vadsrijk.economie.smid.max_uitleg"), rx + 8, y, rw - 16, GOUD) + 4;
         }
         // the bonuses (click one to keep it while rerolling; T-ITEMS: its own tab, + polijsten)
         if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.BONUSSEN && !u.bonussen().isEmpty() && !u.verpluisd()) {
@@ -316,17 +324,16 @@ public class SmidScherm extends EcoScherm {
             boolean slot = houd >= 0 && u.bonussen().size() > 1;
             long prijs = SterRegels.herrolPrijs(u.level(), slot);
             int kn = SterRegels.herrolKnabbels(slot);
-            g.text(font, Component.translatable(slot ? "vadsrijk.economie.smid.herrol_kost_slot" : "vadsrijk.economie.smid.herrol_kost", kn), rx + 8, y + 4,
-                    ZACHT, false);
-            munten(g, rx + rw - 8, y + 4, prijs, true, false);
-            y += 15;
+            int mb = munten(g, rx + rw - 8, y + 4, prijs, true, false);
+            y = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable(slot ? "vadsrijk.economie.smid.herrol_kost_slot" : "vadsrijk.economie.smid.herrol_kost", kn), rx + 8,
+                    y + 4, rw - 22 - mb, ZACHT) + 1;
             knop(g, mx, my, rx + 8, y, rw - 16, 16, Component.translatable("vadsrijk.economie.smid.knop.herrol"),
                     !bezig && data.getLongOr("munten", 0) >= prijs && data.getIntOr("knabbels", 0) >= kn, () -> actie("herrol"));
             y += 20;
             nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.polijst(brug, g, mx, my, rx + 8, y, rw - 16, u, houd);   // T-ITEMS
         } else if (tab == nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.BONUSSEN) {
-            g.text(font, Component.translatable(u.verpluisd() ? "vadsrijk.economie.smid.eerst_repareren" : "vadsrijk.economie.smid.geen_bonussen"),
-                    rx + 8, y, ZACHT, false);   // T-ITEMS
+            nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.regels(font, g, Component.translatable(u.verpluisd() ? "vadsrijk.economie.smid.eerst_repareren" : "vadsrijk.economie.smid.geen_bonussen"),
+                    rx + 8, y, rw - 16, ZACHT);   // T-ITEMS
         }
         // the result card
         if (anim >= ANIM) {

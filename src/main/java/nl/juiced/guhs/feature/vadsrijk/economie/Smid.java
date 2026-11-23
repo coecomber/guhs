@@ -78,6 +78,10 @@ public final class Smid {
                 Opruimen.open(p, Opruimen.SMID);
                 yield null;
             }
+            case "winkel" -> {   // 1.10.15: the smid's wares (verbetersteentjes...): the shop existed, but nothing opened it
+                Winkels.open(p, Winkels.SMIDWAREN);
+                yield null;
+            }
             default -> nl.juiced.guhs.feature.vadsrijk.items.SmidExtra.doe(p, actie, a);   // T-ITEMS: polijst, doorgroei, overvads, talisman
         };
         if (r != null) {

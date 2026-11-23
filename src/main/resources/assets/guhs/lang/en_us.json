@@ -35215,6 +35215,7 @@
   "vadsrijk.economie.smid.is_verpluisd": "Frayed! (does nothing until you repair it)",
   "vadsrijk.economie.smid.reparatie_kost": "Cost: %s Fluff Thread +",
   "vadsrijk.economie.smid.knop.repareer": "Repair",
+  "vadsrijk.economie.smid.knop.winkel": "Buy smithing wares",
   "vadsrijk.economie.smid.eerst_repareren": "Repair it first, nyeg!",
   "vadsrijk.economie.smid.max": "Ten stars already!",
   "vadsrijk.economie.smid.geen_steentjes": "Not enough Upgrade Pebbles.",

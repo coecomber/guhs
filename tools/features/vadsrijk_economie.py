@@ -771,6 +771,7 @@ TEKSTEN = {
     E + "smid.is_verpluisd": "Verpluisd! (doet niks tot je het repareert)",
     E + "smid.reparatie_kost": "Kost: %s pluisdraad +",
     E + "smid.knop.repareer": "Repareren",
+    E + "smid.knop.winkel": "Smidwaren kopen",   # 1.10.15
     E + "smid.eerst_repareren": "Eerst repareren, njeg!",
     E + "smid.max": "Al tien sterren!",
     E + "smid.geen_steentjes": "Niet genoeg verbetersteentjes.",
