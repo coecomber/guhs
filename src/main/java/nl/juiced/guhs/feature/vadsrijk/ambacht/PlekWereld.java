@@ -129,12 +129,16 @@ public final class PlekWereld extends SavedData {
         Map<BlockPos, List<BlockPos>> bloemen = new HashMap<>();
         // 1.10.13: a group whose anchor lies in one of the five caves only looks at that cave's floor (the anchor is floor - 3)
         GrotData.Grot grot = Grotten.op(anker.getX() + 0.5, anker.getY() + 3.5, anker.getZ() + 0.5);
+        // 1.10.14: a group inside a small closed room (the secret IJsgrot dome) only takes floor spots a player can walk to
+        java.util.Set<Long> binnen = BINNEN.contains(g.id()) ? bereikbaar(l, anker, g.straal()) : null;
         for (int pass = 0; pass < 2 && gevonden.size() < nodig; pass++) {
             boolean streng = pass == 0;
             for (int poging = 0; poging < nodig * 40 && gevonden.size() < nodig; poging++) {
                 double hoek = r.nextDouble() * Math.PI * 2, afstand = 3 + r.nextDouble() * (g.straal() - 3);
                 int x = anker.getX() + (int) Math.round(Math.cos(hoek) * afstand), z = anker.getZ() + (int) Math.round(Math.sin(hoek) * afstand);
-                BlockPos p = grot != null ? zoekGrotY(l, x, z, anker.getY(), g.zoek(), streng, grot) : zoekY(l, x, z, anker.getY(), g.zoek(), streng);
+                BlockPos p = grot != null ? zoekGrotY(l, x, z, anker.getY(), g.zoek(), streng, grot)
+                        : binnen != null ? zoekBinnenY(l, x, z, anker.getY(), g.zoek(), streng, binnen)
+                        : zoekY(l, x, z, anker.getY(), g.zoek(), streng);
                 if (p == null || teDichtbij(gevonden, p)) {
                     continue;
                 }
@@ -198,6 +202,57 @@ public final class PlekWereld extends SavedData {
             }
         }
         return null;
+    }
+
+    /**
+     * 1.10.14: groups inside a small closed room whose anchor is the free block above its floor. The normal top-down scan found the
+     * roof of the secret IJsgrot (zone 2) and a sealed hollow under its floor: on live none of its 12 positions could be reached.
+     */
+    public static final Set<String> BINNEN = Set.of("z2_mijn_ijsgrot");
+
+    /** 1.10.14: a room spot: floor - 1 .. floor + 1 around the anchor height, and only where a player can walk from the anchor. */
+    @Nullable
+    static BlockPos zoekBinnenY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng, java.util.Set<Long> bereik) {
+        for (int y = ankerY - 1; y <= ankerY + 1; y++) {
+            BlockPos p = zoekY(l, x, z, y, y, zoek, streng);
+            if (p != null && bereik.contains(p.asLong())) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 1.10.14: every open block a player can reach from the anchor without breaking anything (air, plants, carpets, scaffolding,
+     * water), within the group radius and from 3 below to 6 above the anchor. Starts at the open blocks right round the anchor.
+     */
+    static java.util.Set<Long> bereikbaar(Level l, BlockPos anker, int straal) {
+        java.util.Set<Long> gezien = new java.util.HashSet<>();
+        java.util.ArrayDeque<BlockPos> rij = new java.util.ArrayDeque<>();
+        for (BlockPos p : BlockPos.betweenClosed(anker.offset(-2, -1, -2), anker.offset(2, 3, 2))) {
+            if (open(l, p) && gezien.add(p.asLong())) {
+                rij.add(p.immutable());
+            }
+        }
+        int r = straal + 2;
+        while (!rij.isEmpty() && gezien.size() < 200_000) {
+            BlockPos p = rij.poll();
+            for (net.minecraft.core.Direction d : net.minecraft.core.Direction.values()) {
+                BlockPos q = p.relative(d);
+                if (Math.abs(q.getX() - anker.getX()) > r || Math.abs(q.getZ() - anker.getZ()) > r || q.getY() < anker.getY() - 3
+                        || q.getY() > anker.getY() + 6 || gezien.contains(q.asLong()) || !open(l, q)) {
+                    continue;
+                }
+                gezien.add(q.asLong());
+                rij.add(q);
+            }
+        }
+        return gezien;
+    }
+
+    private static boolean open(Level l, BlockPos p) {
+        BlockState s = l.getBlockState(p);
+        return s.isAir() || s.is(Blocks.SCAFFOLDING) || s.getCollisionShape(l, p).isEmpty();
     }
 
     /** The position of a spot in this column near {@code ankerY} (the free block above the floor; WATER: the water block). */
@@ -390,8 +445,9 @@ public final class PlekWereld extends SavedData {
      * nodes go back to the original block by themselves ({@code Grondstoffen.bijwerk}: the position no longer belongs to the spot).
      * Incomplete non-hive groups are dropped once more too: frozen lakes ({@link #wak}) and the Kristalbos (crystal trunks) find
      * spots now. Nodes of spots that no longer exist are cleaned up by {@code Grondstoffen.opruimen}.
+     * 1.10.14 (version 4): the groups in {@link #BINNEN} (the IJsgrot) are scanned again on their floor.
      */
-    public static final int VERSIE = 3;
+    public static final int VERSIE = 4;
     static final String VERSIE_SLEUTEL = "_versie";
 
     CompoundTag save() {
@@ -448,6 +504,9 @@ public final class PlekWereld extends SavedData {
             }
             if (versie < 3 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
                 continue;   // 1.10.12 / 1.10.13: scanned again with the new rules (when a player comes near)
+            }
+            if (versie < 4 && BINNEN.contains(id)) {
+                continue;   // 1.10.14: the IJsgrot scanned again on its floor
             }
             if (versie < 3 && g.soort() != NodeSoort.KORF && id.startsWith("grot_")) {
                 continue;   // 1.10.13: cave groups scanned again on the cave floor

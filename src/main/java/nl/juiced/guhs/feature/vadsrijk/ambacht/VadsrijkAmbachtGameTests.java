@@ -179,6 +179,49 @@ public class VadsrijkAmbachtGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.14: the secret IJsgrot: a closed room with a roof, a sealed hollow under its floor and a ledge on its roof. Its spots lie on
+     * the room floor only, where a player can walk (live: 0 of 12 positions were reachable).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void scanBinnen(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int x = 0; x < 12; x++) {
+            for (int z = 0; z < 12; z++) {
+                boolean rand = x == 0 || z == 0 || x == 11 || z == 11;
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 1, z), rand ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());   // the hollow
+                helper.setBlock(new BlockPos(x, 2, z), rand ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 3, z), Blocks.SNOW_BLOCK.defaultBlockState());                                    // the floor
+                for (int y = 4; y < 7; y++) {
+                    helper.setBlock(new BlockPos(x, y, z), rand ? Blocks.BLUE_ICE.defaultBlockState() : Blocks.AIR.defaultBlockState());
+                }
+                helper.setBlock(new BlockPos(x, 7, z), Blocks.STONE.defaultBlockState());                                         // the roof
+                helper.setBlock(new BlockPos(x, 8, z), Blocks.AIR.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 9, z), Blocks.AIR.defaultBlockState());
+            }
+        }
+        BlockPos anker = helper.absolutePos(new BlockPos(6, 4, 6));
+        List<Spot> l = PlekWereld.scan(sl, anker, new Groep("z2_mijn_ijsgrot", 2, "x", NodeSoort.ERTS, 2, 3, 16, Zoek.STEEN, ""));
+        helper.assertTrue(!l.isEmpty(), "spots in the room");
+        for (Spot s : l) {
+            for (BlockPos p : s.posities()) {
+                helper.assertTrue(p.getY() == anker.getY(), "a room spot lies on the room floor: " + p + " (anchor " + anker + ")");
+                BlockPos rel = p.subtract(helper.absolutePos(BlockPos.ZERO));
+                helper.assertTrue(rel.getX() > 0 && rel.getX() < 11 && rel.getZ() > 0 && rel.getZ() < 11, "inside the room: " + p);
+            }
+        }
+        // a version-3 save drops the IJsgrot (scanned again), the rest stays
+        Groep ijs = AmbachtPlekken.groep("z2_mijn_ijsgrot"), kamp = AmbachtPlekken.groep("z1_pluk_kamp");
+        net.minecraft.nbt.CompoundTag v3 = new net.minecraft.nbt.CompoundTag();
+        v3.putInt(PlekWereld.VERSIE_SLEUTEL, 3);
+        v3.put(ijs.id(), groepTag(ijs, ijs.aantal()));
+        v3.put(kamp.id(), groepTag(kamp, kamp.aantal()));
+        PlekWereld w = PlekWereld.load(v3);
+        helper.assertTrue(w.bekend(ijs) == null && w.bekend(kamp) != null, "version 3: IJsgrot dropped, the rest kept");
+        helper.succeed();
+    }
+
     /** 1.10.13: a frozen lake (the Knuffelmeer froze over on live: 0 spots): fished through holes in the ice; a node may stand there. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void scanIjs(GameTestHelper helper) {

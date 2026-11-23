@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.14 — Minecraft 26.1.2
+
+- **The secret IJsgrot vein can be reached:** the ore spots of `z2_mijn_ijsgrot` (zone 2, Ambachtenboek "???" entry 10) lay in a sealed hollow under the ice dome's floor and on the outside of its roof: on live none of its 12 positions could be reached from inside. Groups in `PlekWereld.BINNEN` now scan floor - 1 .. floor + 1 around their anchor and only take positions a player can walk to from the anchor (`bereikbaar`: open blocks incl. scaffolding within the radius). Live terrain: 12 positions, all on the dome floor. Save version 4 drops the cached IJsgrot once; its old nodes go back to their original block. Gametest `scanBinnen`.
+
 ## 1.10.13 — Minecraft 26.1.2
 
 - **Cave Ambacht spots on the cave floor:** `PlekWereld.scan` searched every column top-down from anchor + 20, so in the five caves it found air pockets in the rock above the cave first. Live: the Zwamgrot ore spot (`grot_zwamgrot_amb_2`) sat 8-14 blocks above the floor inside the ceiling ("no ore at spot 2"), and Wortelgrot/Kristalgrot spots lay 15-20 blocks under the floor or against the ceiling. A group anchored in a cave (`Grotten.op`) now scans bottom-up from floor - 2 to floor + 3, only inside the cave box (`zoekGrotY`). Checked against the live terrain: every position of the Zwamgrot, Wortelgrot and Kristalgrot groups now lies on the floor.
