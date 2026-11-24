@@ -15,6 +15,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Element;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.Status;
 import nl.juiced.guhs.feature.vadsrijk.kern.Statussen;
+import nl.juiced.guhs.feature.vadsrijk.zone2.bazen.Z2Baas;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.piepvel.Piepvel;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.roofvogel.Kruinroofvogel;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.werf.Brokkel;
@@ -131,6 +132,34 @@ public class VadsrijkZ3BazenGameTests {
             helper.assertTrue(k.vads() == v, "he can't be hit while he flies off");
             k.discard();
             helper.assertTrue(!Kruinroofvogel.jachtActief, "a reset ends the chase");
+            helper.succeed();
+        });
+    }
+
+    /**
+     * (Live 2026-11-24: "fase 3 he flies away and you can't find him") The perch is 230-280 blocks off: nobody there within 30 s
+     * used to reset him (gone, a fresh one on the Kale Kruin). Now he waits while one of his fighters is around; without them the
+     * empty-arena reset still comes.
+     */
+    @GuhTest(template = "empty", batch = BATCH + "_roofvogel_wacht", timeoutTicks = 1500)
+    public static void roofvogelWachtOpJagers(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        BlockPos c = helper.absolutePos(new BlockPos(1, 1, 1));
+        vloer(sl, c, 20);
+        Kruinroofvogel k = zet(sl, Z3BazenRegistry.KRUINROOFVOGEL.get(), c, 38);
+        ServerPlayer p = speler(helper, Vec3.atBottomCenterOf(c).add(-6, 0, 0), true);
+        k.testFilter = q -> q == p;
+        Statussen.geef(k, Status.VERDOOFD, 1450, 1, null);   // (frozen in place: the flight itself would leave the test area)
+        k.krijgSchade(k.vads() - k.maxVads() * 0.34, p);
+        helper.assertTrue(k.fase() == 3 && k.jacht(), "fase 3 at 35 %: he flees to a perch");
+        helper.assertTrue(k.bijdragen().spelers().contains(p.getUUID()), "the player is one of his fighters");
+        helper.runAfterDelay(Z2Baas.LEEG_TICKS + 40, () -> {
+            helper.assertTrue(!k.isRemoved() && k.gewacht >= 1, "nobody at the perch for 30 s, but his fighter is on the way: he waits (" + k.gewacht + ")");
+            helper.assertTrue(k.fase() == 3 && k.vads() < k.maxVads() * 0.35, "he keeps his fase and Vads");
+            k.testFilter = q -> false;   // his fighters are gone
+        });
+        helper.runAfterDelay(2 * Z2Baas.LEEG_TICKS + 80, () -> {
+            helper.assertTrue(k.isRemoved(), "no fighters left: the empty-arena reset still comes");
             helper.succeed();
         });
     }
