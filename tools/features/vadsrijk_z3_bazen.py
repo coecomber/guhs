@@ -86,6 +86,7 @@ TEKSTEN = {
     Z + "kr.geland": "HIJ IS GELAND",
     Z + "kr.geland.onder": "Het gevecht gaat hier verder",
     Z + "kr.snel": "Snel erbij! 10 s Vahoeg!",
+    Z + "kr.waar": "De Kruinroofvogel zit op zijn andere kruintop, bij %s, %s, %s. Volg het roze lichtspoor: hij wacht op je!",
     Z + "kr.vlucht_immuun": "Hij vliegt weg: volg hem!",
     Z + "kr.verslagen": "De Kruinroofvogel valt uiteen in grauwe veren die wegwaaien over de kruin.",
     # Taleggio

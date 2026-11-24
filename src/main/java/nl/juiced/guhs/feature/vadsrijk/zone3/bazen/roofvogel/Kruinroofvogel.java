@@ -48,7 +48,9 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Vast;
  *       (35 %, slow falling: no fall damage).</li>
  *   <li>Fase 3 (35 %): De Achtervolging: he flees to one of his 2 other perches on the crown (~200 blocks), a pink light trail
  *       shows which. Mounts are ALLOWED in his arena during this phase ({@link #jacht}); whoever gets there fast gets 10 s
- *       Vahoeg. The fight goes on at the perch; on foot you can still join.</li>
+ *       Vahoeg. The fight goes on at the perch; on foot you can still join. (Live 2026-11-24: the perch is 230-280 blocks off and
+ *       the 30 s empty-arena reset threw him away before you got there, a fresh one appeared on the Kale Kruin. Now he waits
+ *       {@link #JACHT_GEDULD} for his fighters, and tells them where he sits: {@link #wachtOpJagers}.)</li>
  * </ul>
  */
 public class Kruinroofvogel extends Z3Baas {
@@ -70,8 +72,10 @@ public class Kruinroofvogel extends Z3Baas {
     @Nullable
     private UUID gegrepen;
     private double draagSchade;
-    /** Gametests: grabs done / freed. */
-    public int grepen, bevrijd;
+    /** Gametests: grabs done / freed; empty-arena resets skipped while he waited at the perch. */
+    public int grepen, bevrijd, gewacht;
+    /** After fleeing he waits this long (game ticks since the flight began) for his fighters before an empty perch resets him. */
+    public static final int JACHT_GEDULD = 20 * 60 * 5;
 
     /** True while any Kruinroofvogel is fleeing / being chased: riding is allowed in his arena (Rijdieren exception). */
     public static volatile boolean jachtActief;
@@ -289,11 +293,11 @@ public class Kruinroofvogel extends Z3Baas {
         windCd--;
         grijpCd--;
         if (zit != null && jachtStart >= 0) {
-            vluchtSpoor(sl);
-            // whoever gets to the perch fast gets 10 s Vahoeg
+            vluchtSpoor(sl, l.isEmpty());
+            // whoever gets to the perch fast gets 10 s Vahoeg (only marked once there: during the flight l also holds the Kale Kruin)
             if (sl.getGameTime() - jachtStart < 20 * 32) {
                 for (ServerPlayer p : l) {
-                    if (snel.add(p.getUUID()) && p.distanceToSqr(Vec3.atBottomCenterOf(zit)) < Math.pow(Z3BazenPlekken.ZIT_STRAAL, 2)) {
+                    if (p.distanceToSqr(Vec3.atBottomCenterOf(zit)) < Math.pow(Z3BazenPlekken.ZIT_STRAAL, 2) && snel.add(p.getUUID())) {
                         Statussen.geef(p, Status.VAHOEG, 200, 0.25, p);
                         p.sendSystemMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.z3bazen.kr.snel").withStyle(ChatFormatting.LIGHT_PURPLE));
                     }
@@ -456,13 +460,52 @@ public class Kruinroofvogel extends Z3Baas {
         zetVliegt(true);
         kaart("vadsrijk.z3bazen.kr.fase3", ROZE);
         zeg("vadsrijk.z3bazen.kr.achtervolg", ChatFormatting.LIGHT_PURPLE);
+        Set<ServerPlayer> wie = new HashSet<>(strijders());
+        wie.addAll(jagers(sl));
+        for (ServerPlayer p : wie) {
+            meldZit(p);
+        }
         sl.playSound(null, blockPosition(), SoundEvents.PHANTOM_FLAP, SoundSource.HOSTILE, 3f, 0.5f);
     }
 
-    /** The pink light trail from the Kale Kruin to the perch (30 s). */
-    private void vluchtSpoor(ServerLevel sl) {
+    /** "He sits on his other treetop at x, y, z": the perch is 200+ blocks off, out of sight (and out of the ticking range). */
+    private void meldZit(ServerPlayer p) {
+        if (zit != null) {
+            p.sendSystemMessage(net.minecraft.network.chat.Component.translatable("vadsrijk.z3bazen.kr.waar", zit.getX(), zit.getY(), zit.getZ())
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
+        }
+    }
+
+    /** His fighters that are still around: everyone who hurt him, online in this level and alive. */
+    private List<ServerPlayer> jagers(ServerLevel sl) {
+        List<ServerPlayer> l = new java.util.ArrayList<>();
+        for (UUID u : bijdragen().spelers()) {
+            if (sl.getEntity(u) instanceof ServerPlayer p && p.isAlive() && !p.isSpectator() && testFilter.test(p)) {
+                l.add(p);
+            }
+        }
+        return l;
+    }
+
+    /**
+     * (Live 2026-11-24) The empty-arena reset came while nobody stood at the perch yet: does he keep waiting? Yes during the chase,
+     * for {@link #JACHT_GEDULD}, while one of his fighters is still around (they get the perch's coordinates again).
+     */
+    public boolean wachtOpJagers(ServerLevel sl) {
+        if (zit == null || jachtStart < 0 || sl.getGameTime() - jachtStart >= JACHT_GEDULD) {
+            return false;
+        }
+        List<ServerPlayer> l = jagers(sl);
+        for (ServerPlayer p : l) {
+            meldZit(p);
+        }
+        return !l.isEmpty();
+    }
+
+    /** The pink light trail from the Kale Kruin to the perch (30 s, and on as long as nobody has reached the perch). */
+    private void vluchtSpoor(ServerLevel sl, boolean niemandBijZit) {
         long t = sl.getGameTime() - jachtStart;
-        if (t > 20 * 30 || t % 10 != 0 || zit == null) {
+        if ((t > 20 * 30 && !niemandBijZit) || t % 10 != 0 || zit == null) {
             return;
         }
         Vec3 a = Vec3.atBottomCenterOf(Z3BazenPlekken.ROOF_CENTRUM).add(0, 2, 0), b = Vec3.atBottomCenterOf(zit).add(0, 2, 0);
@@ -486,6 +529,10 @@ public class Kruinroofvogel extends Z3Baas {
 
     @Override
     protected void zLeeg() {
+        if (level() instanceof ServerLevel sl && wachtOpJagers(sl)) {
+            gewacht++;
+            return;   // (the chase: his fighters are on their way to the perch)
+        }
         jachtActief = false;
         super.zLeeg();
     }
