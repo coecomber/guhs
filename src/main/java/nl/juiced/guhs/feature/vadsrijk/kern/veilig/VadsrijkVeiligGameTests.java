@@ -118,4 +118,34 @@ public class VadsrijkVeiligGameTests {
         helper.assertFalse(Opsluiting.ingesloten(sl, helper.absolutePos(new BlockPos(2, 5, 2)), 3, 500), "1 deep: you just step out");
         helper.succeed();
     }
+
+    /**
+     * 1.10.15 (Luc, zone 3 past Baron Bleu ~1480, y < 28, -566): the root caves under the Schemerwortel have real floors down to
+     * y ~3 (live: purple terracotta floor at y 4, open up to y 20). "Under the map" is only: nothing under your feet down to the
+     * bottom of the world. Here the bottom is the test's own floor level ({@code minY}), the column above it is the "world".
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void grotbodemIsGeenValUitDeWereld(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int y = 1; y <= 12; y++) {
+            helper.setBlock(new BlockPos(1, y, 1), Blocks.AIR);
+            helper.setBlock(new BlockPos(3, y, 1), Blocks.AIR);
+            helper.setBlock(new BlockPos(5, y, 1), Blocks.AIR);
+        }
+        int bodem = helper.absolutePos(new BlockPos(1, 1, 1)).getY();
+        // column 1: nothing at all below the feet -> fell under the map (the rescue)
+        helper.assertTrue(Losknuffelen.geenVloer(sl, helper.absolutePos(new BlockPos(1, 10, 1)), bodem), "open void: rescue");
+        // column 3: a cave floor (a root of purple terracotta + a spruce slab, as at 1480, 4/21, -566) 7 blocks below the feet
+        helper.setBlock(new BlockPos(3, 2, 1), Blocks.PURPLE_TERRACOTTA);
+        helper.assertFalse(Losknuffelen.geenVloer(sl, helper.absolutePos(new BlockPos(3, 10, 1)), bodem), "a floor far below: no rescue");
+        helper.assertFalse(Losknuffelen.geenVloer(sl, helper.absolutePos(new BlockPos(3, 3, 1)), bodem), "standing on it: no rescue");
+        helper.setBlock(new BlockPos(3, 6, 1), Blocks.SPRUCE_SLAB);
+        helper.assertFalse(Losknuffelen.geenVloer(sl, helper.absolutePos(new BlockPos(3, 6, 1)), bodem), "on a slab (feet inside its block): no rescue");
+        // column 5: water at the bottom is something to land in
+        helper.setBlock(new BlockPos(5, 1, 1), Blocks.WATER);
+        helper.assertFalse(Losknuffelen.geenVloer(sl, helper.absolutePos(new BlockPos(5, 10, 1)), bodem), "water below: no rescue");
+        // the real zone-3 numbers: feet at y 5 in the cave under Baron Bleu are far below BODEM_Y, so the y alone may never decide
+        helper.assertTrue(5 < Losknuffelen.BODEM_Y && 21 < Losknuffelen.DIEP_Y, "zone-3 cave floors lie below both thresholds");
+        helper.succeed();
+    }
 }
