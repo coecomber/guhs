@@ -226,7 +226,7 @@ public final class NpcPlekken {
         KNUFFEL.put("druipnis", w("knuffel_9"));
         KNUFFEL.put("tempeltrap", w("knuffel_10"));
     }
-    public static final double VIND_STRAAL = 3, VIND_HOOGTE = 8;
+    public static final double VIND_STRAAL = 4, VIND_HOOGTE = 8;   // (1.10.15: 3 -> 4, the user's wish: easier to find)
 
     @Nullable
     public static BlockPos poi(String id) {

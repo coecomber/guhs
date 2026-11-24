@@ -231,7 +231,7 @@ public final class Z4VerhaalPlekken {
 
     // ---- POIs: quest targets (radius POI_STRAAL, height POI_HOOGTE) ----------------------------------------------------------------
     public static final Map<String, BlockPos> POI = new LinkedHashMap<>();
-    public static final int POI_STRAAL = 6, POI_HOOGTE = 8, VIND_STRAAL = 3, VIND_HOOGTE = 4;
+    public static final int POI_STRAAL = 6, POI_HOOGTE = 8, VIND_STRAAL = 4, VIND_HOOGTE = 4;   // (1.10.15: 3 -> 4, the user's wish: easier to find)
 
     static void poi(String id, BlockPos b) {
         POI.put(id, b);

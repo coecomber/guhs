@@ -248,7 +248,7 @@ public final class Z2NpcPlekken {
         SCHAT.put("onder_de_brug", p(-180, 128, -2774));         // (requested: a chest under the west bridge, POI:brug_2)
         volgKaart(SCHAT, "schat.");
     }
-    public static final double VIND_STRAAL = 3, VIND_HOOGTE = 8;
+    public static final double VIND_STRAAL = 4, VIND_HOOGTE = 8;   // (1.10.15: 3 -> 4, the user's wish: easier to find)
 
     @Nullable
     public static BlockPos poi(String id) {

@@ -1061,6 +1061,7 @@ OVERIG = {
                                        "Vadsvoet in Zwamzoet.",
     P + "reis.slot.kandijkom_level": "Brrr, in de Splinterpieken is het ijskoud en gevaarlijk. Kom terug als je level 20 bent (nu level %s).",
     P + "optie.rol.smid": "Naar de smidse",
+    P + "schatkistje.klik": "Een schatkistje! Kom er vlak naast staan, dan vind je de schat vanzelf (één keer per avonturier).",   # 1.10.15: the treasure chests (SchatKistjes)
     P + "optie.rol.winkel": "Laat je winkel zien",
     P + "optie.rol.wapenwinkel": "Laat je wapens zien",
     P + "optie.rol.markt": "Naar het veilinghuis",

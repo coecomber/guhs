@@ -67,6 +67,7 @@ public final class NpcRegistry {
         Werver.init();
         RijdierQuests.init();
         NpcHaken.registreer();
+        SchatKistjes.registreer();   // 1.10.15: real chests at the secret treasures
         Escortes.init();
         nl.juiced.guhs.world.TikWacht.post("NpcRegistry:71", e -> {
             Npcs.tick(e.getServer());
@@ -77,6 +78,7 @@ public final class NpcRegistry {
             Verhaal.tick(e.getServer());
             Werver.tick(e.getServer());
             RijdierQuests.tick(e.getServer());
+            SchatKistjes.tick(e.getServer());
         });
         NeoForge.EVENT_BUS.addListener((ServerStartedEvent e) -> {
             Quests.alle();
