@@ -17,6 +17,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.Relative;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -34,10 +36,16 @@ import nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas;
  * main network within 64 blocks, paths/campfires preferred; else your last campfire). Once a minute; not in a boss fight
  * (there you faint or walk out through the door). Also: a "Vast? Druk op U" hint when you hang around in a closed hole for
  * 20 s or are below y 40, and falling under the map (y < 20) brings you back to safety right away.
+ * <p>1.10.15: "under the map" = below that y with NOTHING under your feet down to the bottom of the world ({@link #geenVloer}).
+ * Zone 3's root caves under the Schemerwortel (Het Hart, the Wortelduister, round Baron Bleu's / the Wortelwurger's arenas) have
+ * real floors down to y ~3; there the old plain y rule put walking players back at their campfire ("Oei, je viel van de wereld!").
  */
 public final class Losknuffelen {
     public static final int KANAAL_TICKS = 60, COOLDOWN_TICKS = 1200, VAST_TICKS = 400;
-    /** Below this (feet y) the "Vast?" hint shows; below {@link #BODEM_Y} you are rescued at once. Lowest walkable floor of the map: ~53. */
+    /**
+     * Below this (feet y) with no floor under you ({@link #geenVloer}) the "Vast?" hint shows; below {@link #BODEM_Y} you are
+     * rescued at once. (Most of the map's floors are at y 53+, but zone 3's root caves go down to y ~3: a y alone is no proof.)
+     */
     public static final int DIEP_Y = 40, BODEM_Y = 20;
     static final int STRAAL_OPSLUITING = 8, MAX_KNOPEN = 3000;
     private static final String L = "vadsrijk.kern.vast.";
@@ -161,7 +169,7 @@ public final class Losknuffelen {
             if (p.isCreative() || p.isSpectator()) {
                 continue;
             }
-            if (p.getY() < BODEM_Y) {
+            if (p.getY() < BODEM_Y && geenVloer(sl, p.blockPosition(), sl.getMinY())) {
                 red(sl, p);
                 continue;
             }
@@ -209,13 +217,29 @@ public final class Losknuffelen {
         if (nu < w.hintOp || KANALEN.containsKey(p.getUUID())) {
             return;
         }
-        boolean diep = p.getY() < DIEP_Y;
+        boolean diep = p.getY() < DIEP_Y && geenVloer(sl, p.blockPosition(), sl.getMinY());
         if (diep || (nu - w.sinds >= VAST_TICKS && Opsluiting.ingesloten(sl, p.blockPosition(), STRAAL_OPSLUITING, MAX_KNOPEN))) {
             hint(p);
             w.hintOp = nu + (diep ? 300 : 600);
         } else if (nu - w.sinds >= VAST_TICKS) {
             w.hintOp = nu + 200;   // standing still but not shut in (AFK at a campfire): look again in 10 s
         }
+    }
+
+    /**
+     * Fell under the map: from the feet down to {@code minY} there is nothing to stand on or land in (no block with a collision
+     * shape, no fluid). A cave floor (zone 3's roots, y ~3..50) or a sea bottom below you means you are simply down there.
+     */
+    public static boolean geenVloer(BlockGetter w, BlockPos voet, int minY) {
+        BlockPos.MutableBlockPos m = voet.mutable();
+        for (int y = voet.getY(); y >= minY; y--) {
+            m.setY(y);
+            BlockState s = w.getBlockState(m);
+            if (!s.getCollisionShape(w, m).isEmpty() || !s.getFluidState().isEmpty()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     static void hint(ServerPlayer p) {
