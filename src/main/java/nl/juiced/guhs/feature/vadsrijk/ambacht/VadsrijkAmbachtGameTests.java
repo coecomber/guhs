@@ -186,9 +186,9 @@ public class VadsrijkAmbachtGameTests {
     @GuhTest(template = "empty", batch = BATCH)
     public static void scanBinnen(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
-        for (int x = 0; x < 12; x++) {
-            for (int z = 0; z < 12; z++) {
-                boolean rand = x == 0 || z == 0 || x == 11 || z == 11;
+        for (int x = 0; x < 8; x++) {   // (small: the roof of a bigger room hung over the neighbouring pier test)
+            for (int z = 0; z < 8; z++) {
+                boolean rand = x == 0 || z == 0 || x == 7 || z == 7;
                 helper.setBlock(new BlockPos(x, 0, z), Blocks.STONE.defaultBlockState());
                 helper.setBlock(new BlockPos(x, 1, z), rand ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());   // the hollow
                 helper.setBlock(new BlockPos(x, 2, z), rand ? Blocks.STONE.defaultBlockState() : Blocks.AIR.defaultBlockState());
@@ -201,14 +201,14 @@ public class VadsrijkAmbachtGameTests {
                 helper.setBlock(new BlockPos(x, 9, z), Blocks.AIR.defaultBlockState());
             }
         }
-        BlockPos anker = helper.absolutePos(new BlockPos(6, 4, 6));
+        BlockPos anker = helper.absolutePos(new BlockPos(4, 4, 4));
         List<Spot> l = PlekWereld.scan(sl, anker, new Groep("z2_mijn_ijsgrot", 2, "x", NodeSoort.ERTS, 2, 3, 16, Zoek.STEEN, ""));
         helper.assertTrue(!l.isEmpty(), "spots in the room");
         for (Spot s : l) {
             for (BlockPos p : s.posities()) {
                 helper.assertTrue(p.getY() == anker.getY(), "a room spot lies on the room floor: " + p + " (anchor " + anker + ")");
                 BlockPos rel = p.subtract(helper.absolutePos(BlockPos.ZERO));
-                helper.assertTrue(rel.getX() > 0 && rel.getX() < 11 && rel.getZ() > 0 && rel.getZ() < 11, "inside the room: " + p);
+                helper.assertTrue(rel.getX() > 0 && rel.getX() < 7 && rel.getZ() > 0 && rel.getZ() < 7, "inside the room: " + p);
             }
         }
         // a version-3 save drops the IJsgrot (scanned again), the rest stays

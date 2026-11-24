@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
-import net.neoforged.neoforge.event.level.BlockEvent;
+import net.neoforged.neoforge.event.level.block.BreakBlockEvent;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 
 /**
@@ -115,9 +115,9 @@ public final class SchatKistjes {
         }
     }
 
-    private static void breek(BlockEvent.BreakEvent e) {
-        if (e.getLevel() instanceof ServerLevel sl && Vadsrijk.in(sl) && !e.getPlayer().isCreative() && e.getState().getBlock() instanceof ChestBlock
-                && isSchat(e.getPos())) {
+    private static void breek(BreakBlockEvent e) {
+        var p = e.getPlayer();
+        if (p != null && Vadsrijk.in(p) && !p.isCreative() && p.level().getBlockState(e.getPos()).getBlock() instanceof ChestBlock && isSchat(e.getPos())) {
             e.setCanceled(true);
         }
     }
