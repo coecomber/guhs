@@ -34,6 +34,7 @@
   "vadsrijk.ambacht.recept.wolkendekentje": "Cloud Blanket (story)",
   "vadsrijk.ambacht.verhaal.brief": "Master Tinker sent you a letter: 'Dear adventurer, will you come and learn the crafts on the Craft Island? The lantern path starts at the Camp Snuggle campfire. Bring your paws!'",
   "vadsrijk.ambacht.verhaal.gemist": "New in the story: craft steps! You missed %s of them. They are in your quest log (J). You need them for the next zone.",
+  "vadsrijk.ambacht.verhaal.verkeerd": "Mind you: this is plain %s. Your story step asks for '%s': it is at the top of the workshop's recipe list.",
   "vadsrijk.ambacht.werk.verhaal_niet": "You only make this when the story asks for it.",
   "vadsrijk.npc.naam.amb_kok_eiland": "Cook Nibbles",
   "vadsrijk.npc.naam.amb_smid_eiland": "Smithguh Sparky",

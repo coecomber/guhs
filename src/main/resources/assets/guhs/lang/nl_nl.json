@@ -49213,5 +49213,6 @@
   "gui.guhs.bouwhulp.spook.dekking.vraag": "Er ontbreekt nog %s%%: %s blokjes blijven open (lucht). Toch bouwen? Die gaatjes vul je daarna zelf.",
   "gui.guhs.bouwhulp.spook.open": "Klaar! %s blokjes zijn open gebleven (lucht): vul ze zelf in met iets wat erop lijkt, njeg!",
   "gui.guhs.bouwhulp.lijstje.dekking": "Aanwezig: %s%% (vanaf %s%% bouwt de keet; de rest blijft open)",
-  "gui.guhs.bouwkeet.dekking": "Er is %s%%:"
+  "gui.guhs.bouwkeet.dekking": "Er is %s%%:",
+  "vadsrijk.ambacht.verhaal.verkeerd": "Let op: dit is gewone %s. Je verhaalstap vraagt om '%s': die staat bovenaan het receptenlijstje van de werkplaats."
 }

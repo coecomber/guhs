@@ -155,6 +155,22 @@ public final class AmbachtVerhaal {
         }
     }
 
+    /**
+     * 1.10.15: craft-step spots that are a hub's workshop guh (the smid/kok stand in a ring 7-16 blocks round the square, found at
+     * runtime): spot id -> the guh. Until he is placed the spot is the square's centre, then the guh ({@link #geplaatst}), so the
+     * tracker beam ends at the kok of Kandijkom instead of the middle of the square.
+     */
+    public static final Map<String, String> WERK_POI = Map.of("amb_smidse_z1", "amb_smid_z1", "amb_keuken_z2", "amb_kok_z2", "amb_keuken_z3", "amb_kok_z3");
+
+    /** AmbachtNpcs.plaats: workshop guh {@code npc} now stands at {@code plek}. */
+    static void geplaatst(String npc, BlockPos plek) {
+        for (Map.Entry<String, String> e : WERK_POI.entrySet()) {
+            if (e.getValue().equals(npc)) {
+                QuestPlek.POI.put(e.getKey(), plek);
+            }
+        }
+    }
+
     // ---- the chains ------------------------------------------------------------------------------------------------------------------
 
     @Nullable
@@ -366,6 +382,29 @@ public final class AmbachtVerhaal {
         NpcApi.meld(p, "ambacht_maak", r.id());
         NpcApi.meld(p, "ambacht_maak", r.soort() + "_" + r.doel());
         Questlog.kijkLive(p);   // (a story item in the bag: "go back to ...")
+        Recepten.Recept v = naamgenoot(p, r);
+        if (v != null) {   // 1.10.15: plain "Kandijsoep" while the step asks for "Warme kandijsoep": say so
+            p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.verhaal.verkeerd", Component.translatable(r.naamKey()),
+                    Component.translatable(v.naamKey())).withStyle(ChatFormatting.GOLD));
+        }
+    }
+
+    /**
+     * 1.10.15: the story recipe a player may have meant when he made plain recipe {@code r} instead (same ambacht, its id ends with
+     * r's id, e.g. warme_kandijsoep for kandijsoep, and its step still asks for it), or null.
+     */
+    @Nullable
+    public static Recepten.Recept naamgenoot(ServerPlayer p, Recepten.Recept r) {
+        if (r.soort().equals("verhaal")) {
+            return null;
+        }
+        for (String id : RECEPT_STAP.keySet()) {
+            Recepten.Recept v = Recepten.van(id);
+            if (v != null && v.ambacht() == r.ambacht() && id.endsWith("_" + r.id()) && magMaken(p, id)) {
+                return v;
+            }
+        }
+        return null;
     }
 
     // ---- (tests) ---------------------------------------------------------------------------------------------------------------------

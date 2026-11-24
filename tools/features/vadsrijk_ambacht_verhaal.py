@@ -195,6 +195,9 @@ t(A + "verhaal.gemist", "Nieuw in het verhaal: ambachtstappen! Je hebt er %s gem
   "de volgende zone.", "New in the story: craft steps! You missed %s of them. They are in your quest log (J). You need them for the "
   "next zone.")
 t(A + "werk.verhaal_niet", "Dit maak je alleen als het verhaal erom vraagt.", "You only make this when the story asks for it.")
+# 1.10.15: made the plain namesake (Kandijsoep) while the step asks for the story recipe (Warme kandijsoep)
+t(A + "verhaal.verkeerd", "Let op: dit is gewone %s. Je verhaalstap vraagt om '%s': die staat bovenaan het receptenlijstje van de werkplaats.",
+  "Mind you: this is plain %s. Your story step asks for '%s': it is at the top of the workshop's recipe list.")
 t("vadsrijk.zonepoort.ambacht.titel", "Volgende: ambachtstap '%s'", "Next: craft step '%s'")
 t("vadsrijk.zonepoort.eis.kaart_ambacht", "Doe eerst je ambachtstappen: nog %s te gaan (questlog, toets J)",
   "Do your craft steps first: %s to go (quest log, key J)")

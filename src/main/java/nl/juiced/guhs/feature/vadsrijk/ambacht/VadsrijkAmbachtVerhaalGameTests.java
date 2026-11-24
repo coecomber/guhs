@@ -323,6 +323,58 @@ public class VadsrijkAmbachtVerhaalGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.15 (Luc, Coecomber on live): "Warme kandijsoep" never counted because they cooked plain "Kandijsoep" (same Koken 12, on
+     * page 1; the story recipe sat 4 pages down). Now the story recipe heads the list, plain Kandijsoep says which one the step wants,
+     * the live state (step active, v [0], z2_hq07 already done) completes by cooking the right one, and the beam ends at the kok.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void kandijsoepBovenaan(GameTestHelper helper) {
+        ServerPlayer p = speler(helper);
+        net.minecraft.core.BlockPos oud = nl.juiced.guhs.feature.vadsrijk.npc.QuestPlek.POI.get("amb_keuken_z2");
+        try {
+            Quest soep = Quests.van("z2_hq06b_kandijsoep");
+            zetKlaar(p, Quests.van("z2_hq06a_ijsforellen"));
+            zetKlaar(p, Quests.van("z2_hq07_onder_het_ijs"));   // (like both players: the story went on before the craft steps)
+            Questlog.neemAan(p, soep);
+            AmbachtData.zetLevel(p, Ambacht.KOKEN, 13);
+            helper.assertTrue(AmbachtSchermen.opVolgorde(p, Ambacht.KOKEN).get(0).id().equals("warme_kandijsoep"), "the story recipe heads the Koken list");
+            net.minecraft.nbt.ListTag l = AmbachtSchermen.recepten(p, Ambacht.KOKEN, new ArrayList<>(), true);
+            helper.assertTrue(l.getCompoundOrEmpty(0).getStringOr("id", "").equals("warme_kandijsoep"), "the workshop screen opens on it");
+            // the wrong soup: made fine, the step does not count, the player is told which one
+            for (String m : new String[] {"ijsbloem", "ijsbloem", "kristalden"}) {
+                MateriaalTas.geef(p, Materialen.stack(m, 0, 1));
+            }
+            MateriaalTas.geef(p, new ItemStack(Questlog.item("guhs:vr_amb_spiegelforel"), 6));
+            Recepten.Recept gewoon = Recepten.van("kandijsoep");
+            helper.assertTrue(AmbachtVerhaal.naamgenoot(p, gewoon) == Recepten.van("warme_kandijsoep"), "plain Kandijsoep points at the story soup");
+            helper.assertTrue(AmbachtVerhaal.naamgenoot(p, Recepten.van("grote_vadsdrank")) == null, "other recipes: no hint");
+            String m = Werkplaats.maak(p, "kandijsoep", List.of(), null, null, 0, 1);
+            helper.assertTrue((m.equals("vadsrijk.ambacht.werk.klaar") || m.equals("vadsrijk.ambacht.werk.vadsig")) && !Questlog.allesKlaar(p, soep),
+                    "plain Kandijsoep made (" + m + "), step still open");
+            // the right one: counts, the hint and the top spot go away
+            m = Werkplaats.maak(p, "warme_kandijsoep", List.of(), null, null, 0, 1);
+            helper.assertTrue(m.equals("vadsrijk.ambacht.werk.klaar") || m.equals("vadsrijk.ambacht.werk.vadsig"), "made " + m);
+            helper.assertTrue(Questlog.allesKlaar(p, soep), "the step counts");
+            helper.assertTrue(AmbachtVerhaal.naamgenoot(p, gewoon) == null && !AmbachtSchermen.opVolgorde(p, Ambacht.KOKEN).get(0).soort().equals("verhaal"),
+                    "done: back to the normal list");
+            inleveren(p, soep);
+            helper.assertTrue(Questlog.klaar(p, soep.id()), "handed in");
+            // the beam: the plein until the kok stands, then the kok
+            net.minecraft.core.BlockPos kok = AmbachtPlekken.plek(2, "plein").offset(-7, 0, -1);
+            AmbachtVerhaal.geplaatst("amb_kok_z2", kok);
+            helper.assertTrue(kok.equals(nl.juiced.guhs.feature.vadsrijk.npc.QuestPlek.pos(null, "poi:amb_keuken_z2")), "the beam ends at the kok");
+            helper.assertTrue(AmbachtPlekken.werkplaats("amb_kok_z2") != null && AmbachtPlekken.werkplaats("amb_kok_z3") != null
+                    && AmbachtPlekken.werkplaats("amb_smid_z1") != null, "every WERK_POI guh exists");
+        } finally {
+            if (oud != null) {
+                nl.juiced.guhs.feature.vadsrijk.npc.QuestPlek.POI.put("amb_keuken_z2", oud);
+            }
+            opruimen(p);
+        }
+        helper.succeed();
+    }
+
     // ---- the gate ------------------------------------------------------------------------------------------------------------------
 
     /** An older player: story + book done, craft steps missing: the next zone stays closed, everywhere says why; done = open. */
