@@ -293,7 +293,7 @@ def textures(a_dir):
 # which model (geo) each boss animation file belongs to when the names differ (the rest: same name)
 GEO_VAN = {"vr_z3_baas_vahoegnir": "vadsrijk/wezens/draak"}
 # boss models outside the vr_*baas_* naming: the Klodderreus once t-models gives it a GeckoLib model (NOTITIES_T_VFX: bone names)
-EXTRA = ["vr_klodderreus", "vadsrijk/klodderreus"]
+EXTRA = ["vr_klodderreus", "vadsrijk/klodderreus", "vr_z3_imker_mika"]   # (1.10.17: the Mika-imker is a boss without "baas" in its name: it crashed every client that saw a vfx moment)
 LINKS = ["arm_left", "arm_l", "leg_front_left", "pootvl", "vleugel_l", "wing_l"]
 RECHTS = ["arm_right", "arm_r", "leg_front_right", "pootvr", "vleugel_r", "wing_r"]
 NAMEN = ["vfx_windup", "vfx_treffer", "vfx_geraakt", "vfx_fase", "vfx_woede", "vfx_juich"]

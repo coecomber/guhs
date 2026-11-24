@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.17 — Minecraft 26.1.2
+
+- **Mika de Imker no longer crashes clients:** every zone-3 boss triggers the shared vfx moments (`vfx_windup`, `vfx_treffer`, `vfx_geraakt`...), which `tools/features/vadsrijk_t_vfx.py` merges into each boss's animation file, but it only picked files named `vr_*baas_*`: the Mika-imker (`vr_z3_imker_mika`) never got them, and GeckoLib crashes the client ("NoSuchElementException ... AnimationTimeline.create") when a triggered animation is missing. Anyone who saw him in a vfx moment crashed, again right after logging back in next to him. The tool now includes him (`EXTRA`) and his file has the six vfx animations. Gametest `BaasAnimsGameTests`.
+
 ## 1.10.16 — Minecraft 26.1.2
 
 - **Kruinroofvogel reaches his perch:** his fase-3 perches lie 225-280 blocks from the Kale Kruin, outside every player's ticking range. Mid-flight he entered unloaded chunks and froze, so his pink trail stopped, nothing sat at the perch coordinates from the chat, and the arena, not seeing him, spawned a fresh bird. During the chase he now keeps his own chunk, the perch and (while flying) the route loaded and ticking with a self-expiring ticket (`SceneLaden.BAAS_JACHT`, `Kruinroofvogel.houdGeladen`).
