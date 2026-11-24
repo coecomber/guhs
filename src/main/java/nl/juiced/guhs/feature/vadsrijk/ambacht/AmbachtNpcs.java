@@ -149,6 +149,7 @@ public final class AmbachtNpcs {
             }
             gekozen.add(plek);
             GEZET.put(w.npc(), plek);
+            AmbachtVerhaal.geplaatst(w.npc(), plek);   // 1.10.15: the craft step's tracker beam ends at this guh
             BlockPos kijk = AmbachtPlekken.kijkNaar(w);   // 1.10.4: the islet's hut masters face the square
             float yaw = yaw(plek, kijk == null ? a : kijk);
             Npcs.voegToe(new NpcDef(w.npc(), plek, yaw, variant(w), kleren(w.ambacht()), NpcDef.Gedrag.STAAN, "ambacht", 1f));

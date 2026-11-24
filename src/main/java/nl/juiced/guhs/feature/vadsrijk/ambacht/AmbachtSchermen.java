@@ -146,9 +146,9 @@ public final class AmbachtSchermen {
         AmbachtPayloads.stuur(p, d, items);
     }
 
-    private static ListTag recepten(ServerPlayer p, Ambacht a, List<ItemStack> items, boolean werk) {
+    static ListTag recepten(ServerPlayer p, Ambacht a, List<ItemStack> items, boolean werk) {
         ListTag l = new ListTag();
-        for (Recept r : Recepten.van(a)) {
+        for (Recept r : opVolgorde(p, a)) {
             if (r.soort().equals("verhaal") && !AmbachtVerhaal.magMaken(p, r.id())) {
                 continue;   // 1.10.4: a story item only shows (and can only be made) while its story step asks for it
             }
@@ -191,6 +191,17 @@ public final class AmbachtSchermen {
             }
             l.add(e);
         }
+        return l;
+    }
+
+    /**
+     * 1.10.15: the recipes of an ambacht in list order, the story recipe(s) its story step asks for FIRST (so the workshop screen
+     * opens on it). They used to come last, 4 pages down the Koken list, while the plain "Kandijsoep" (same level 12) sat on page 1:
+     * players cooked that one and the step "Warme kandijsoep" never counted.
+     */
+    static List<Recept> opVolgorde(ServerPlayer p, Ambacht a) {
+        List<Recept> l = new ArrayList<>(Recepten.van(a));
+        l.sort(java.util.Comparator.comparingInt(r -> r.soort().equals("verhaal") && AmbachtVerhaal.magMaken(p, r.id()) ? 0 : 1));   // (stable)
         return l;
     }
 

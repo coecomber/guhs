@@ -49214,5 +49214,6 @@
   "gui.guhs.bouwhulp.spook.dekking.vraag": "Still %s%% missing: %s blocks stay open (air). Build anyway? You fill those gaps yourself afterwards.",
   "gui.guhs.bouwhulp.spook.open": "Done! %s blocks stayed open (air): fill them yourself with something similar!",
   "gui.guhs.bouwhulp.lijstje.dekking": "There: %s%% (the shed builds from %s%%; the rest stays open)",
-  "gui.guhs.bouwkeet.dekking": "%s%% there:"
+  "gui.guhs.bouwkeet.dekking": "%s%% there:",
+  "vadsrijk.ambacht.verhaal.verkeerd": "Mind you: this is plain %s. Your story step asks for '%s': it is at the top of the workshop's recipe list."
 }
