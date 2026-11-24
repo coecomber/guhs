@@ -445,6 +445,34 @@ public class Kruinroofvogel extends Z3Baas {
         }
     }
 
+    @Override
+    public void tick() {
+        super.tick();
+        if (zit != null && jachtStart >= 0 && tickCount % 20 == 0 && level() instanceof ServerLevel sl) {
+            houdGeladen(sl);
+        }
+    }
+
+    /**
+     * 1.10.16 (live, Luc): during the chase his own chunk, the perch and (while flying) the whole route stay loaded and ticking. The
+     * perch is out of every player's range at first: he froze mid-flight, the trail stopped, and the arena spawned a new bird.
+     */
+    public void houdGeladen(ServerLevel sl) {
+        var cs = sl.getChunkSource();
+        var t = nl.juiced.guhs.feature.vadsrijk.kern.scene.SceneLaden.BAAS_JACHT.get();
+        cs.addTicketWithRadius(t, net.minecraft.world.level.ChunkPos.containing(blockPosition()), 2);
+        if (zit.distSqr(blockPosition()) <= 512 * 512) {
+            cs.addTicketWithRadius(t, net.minecraft.world.level.ChunkPos.containing(zit), 2);
+        }
+        if (vluchtBezig && van != null) {
+            Vec3 b = Vec3.atBottomCenterOf(zit);
+            double len = van.distanceTo(b);
+            for (double s = 0; len <= 512 && s < len; s += 32) {   // (a real route is <= 280 blocks; never a strip across the world)
+                cs.addTicketWithRadius(t, net.minecraft.world.level.ChunkPos.containing(BlockPos.containing(van.lerp(b, s / len))), 1);
+            }
+        }
+    }
+
     /** Fase 3: he flees to one of his other perches. */
     public void vlucht(ServerLevel sl) {
         if (gegrepen != null && sl.getEntity(gegrepen) instanceof ServerPlayer p) {
@@ -455,6 +483,7 @@ public class Kruinroofvogel extends Z3Baas {
         jachtStart = sl.getGameTime();
         jachtActief = true;
         vluchtBezig = true;
+        houdGeladen(sl);   // (1.10.16: before he leaves the players' range)
         snel.clear();
         start(Actie.VLUCHT, 200);
         zetVliegt(true);

@@ -55,6 +55,13 @@ public final class SceneLaden {
     /** Loads the chunks around a far cutscene camera; times out by itself (refreshed while the scene runs). */
     static final DeferredHolder<TicketType, TicketType> TICKET = TICKETS.register("vr_scene_camera",
             () -> new TicketType(80L, TicketType.FLAG_LOADING));
+    /**
+     * 1.10.16: keeps the chunks of a boss that flies far from its arena (the Kruinroofvogel's fase-3 chase: 225-280 blocks) loaded AND
+     * ticking while nobody is near; times out by itself (the boss refreshes it). Without it he froze mid-flight in an unloaded chunk,
+     * his trail stopped and the arena, not seeing him, spawned a fresh one.
+     */
+    public static final DeferredHolder<TicketType, TicketType> BAAS_JACHT = TICKETS.register("vr_baas_jacht",
+            () -> new TicketType(100L, TicketType.FLAG_LOADING | TicketType.FLAG_SIMULATION));
 
     private record Lopend(RijkScene scene, long start, ResourceKey<Level> dim, int straal, int normaal, ChunkPos[] centrum) {
     }

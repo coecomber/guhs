@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.16 — Minecraft 26.1.2
+
+- **Kruinroofvogel reaches his perch:** his fase-3 perches lie 225-280 blocks from the Kale Kruin, outside every player's ticking range. Mid-flight he entered unloaded chunks and froze, so his pink trail stopped, nothing sat at the perch coordinates from the chat, and the arena, not seeing him, spawned a fresh bird. During the chase he now keeps his own chunk, the perch and (while flying) the route loaded and ticking with a self-expiring ticket (`SceneLaden.BAAS_JACHT`, `Kruinroofvogel.houdGeladen`).
+
 ## 1.10.15 — Minecraft 26.1.2
 
 - **Warme kandijsoep (and every craft step) can be found:** the story recipe "Warme kandijsoep (verhaal)" stood at the very bottom of the kitchen's list (~4 pages), right under the plain "Kandijsoep" on page 1, so players cooked the plain soup and the step never counted. `AmbachtSchermen.opVolgorde` puts the story recipes the active step asks for on top (and preselects them); cooking the plain namesake while the step is open gives a hint (`vadsrijk.ambacht.verhaal.verkeerd`). The tracker beams of `amb_keuken_z2`, `amb_keuken_z3` and `amb_smidse_z1` pointed at the square's centre (a monument) instead of the kok/smid guh; `AmbachtVerhaal.WERK_POI` follows the guh once it is placed. Gametest `kandijsoepBovenaan`.
