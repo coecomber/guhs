@@ -127,6 +127,41 @@ public class Z4VerhaalGameTests {
         helper.succeed();
     }
 
+    /**
+     * Luc (live, 1.10.18): stuck on 3/6 knuffels. Spots 1-3 sat 4-5 blocks out in the open sea, 4 above the water, with a radius of
+     * 3: from the beach (where the grey knuffel blocks lie) you never came close enough. Now each spot is a knuffel block on the
+     * waterline: standing on the sand right next to it (same height, one block over) must count through the real tick hook.
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 200)
+    public static void knuffeltijVanafHetStrand(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Questlog.wisAlles(p);
+        Z4Haken.vergeet(p);
+        Quest q = Quests.van(Z4Haken.HQ02);
+        Questlog.neemAan(p, q);
+        for (int i = 0; i < 3; i++) {
+            Quest.Doel d = q.doelen().get(i);
+            Questlog.tel(p, d.type(), x -> x == d, d.n());
+        }
+        helper.assertTrue(Z4Haken.doelKlaar(p, Z4Haken.HQ02, 1) && !Z4Haken.doelKlaar(p, Z4Haken.HQ02, 3), "at the knuffel step");
+        Vec3 was = p.position();
+        int n = 0;
+        for (var e : Z4VerhaalPlekken.TIJKNUFFEL.entrySet()) {
+            BlockPos b = e.getValue();
+            helper.assertTrue(b.getY() <= 64, e.getKey() + " lies on the waterline (y " + b.getY() + "), not hanging above the sea");
+            p.setPos(b.getX() + 1.5, b.getY(), b.getZ() + 0.5);   // (on the sand, one block beside the knuffel)
+            Z4Haken.stap(p, helper.getLevel(), 100000L + n * 1000L);
+            n++;
+            helper.assertTrue(Questlog.map(p, Z4Haken.TIJ).getBooleanOr(e.getKey(), false), e.getKey() + " counts from right beside it");
+        }
+        p.setPos(was.x, was.y, was.z);
+        helper.assertTrue(Z4Haken.doelKlaar(p, Z4Haken.HQ02, 3), "6/6: the knuffel step is done");
+        Z4Verhaal.vergeet(p);
+        Z4Haken.vergeet(p);
+        Questlog.wisAlles(p);
+        helper.succeed();
+    }
+
     @GuhTest(template = "empty", batch = B, timeoutTicks = 200)
     public static void spelletjesEnReiskaart(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);

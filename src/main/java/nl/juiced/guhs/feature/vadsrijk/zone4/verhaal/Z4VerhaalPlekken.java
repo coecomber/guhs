@@ -357,8 +357,10 @@ public final class Z4VerhaalPlekken {
     }
 
     static {
-        vul(TIJKNUFFEL, "strand_", "tijknuffel_", new int[][] {{1905, 66, -313}, {1917, 66, -315}, {1929, 66, -313}, {1941, 66, -315}, {1953, 66, -313},
-                {1965, 66, -316}});
+        // (after 1.10.18) the six sat in the open sea, 4-5 blocks off the beach and 4 above the water (only _4.._6 were reachable from
+        // the sand): now each one IS one of the grey knuffel blocks eilanden.knuffeltij() put on the waterline (live world, y = the block)
+        vul(TIJKNUFFEL, "strand_", "tijknuffel_", new int[][] {{1900, 64, -323}, {1919, 64, -318}, {1931, 64, -318}, {1945, 64, -317}, {1959, 64, -316},
+                {1968, 64, -317}});
         for (int i = 1; i <= 4; i++) {
             GROTE_KNUFFEL.put("groot_" + i, POI.get("z4_grote_knuffel_" + i));
         }
