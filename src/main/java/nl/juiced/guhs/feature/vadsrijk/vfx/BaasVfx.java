@@ -44,6 +44,11 @@ public final class BaasVfx {
     private static final Map<VadsrijkBaas, Staat> STATEN = new WeakHashMap<>();
     /** Soft enrage after this long in one fight (ticks): attacks come twice as often, the boss glows red. */
     public static final int WOEDE_NA = 20 * 60 * 6;
+
+    /** Balans-bazen: {@link #WOEDE_NA} for this boss (x [bazen] enrage_vanaf_zone4 from zone 4 on: it has more Vads). */
+    public static long woedeNa(VadsrijkBaas b) {
+        return Math.round(WOEDE_NA * nl.juiced.guhs.feature.vadsrijk.kern.Balans.bazenEnrageZone(b.baasZone()));
+    }
     /** At least this long between two bouwdoos attacks (ticks; halved in enrage). */
     public static final int TUSSEN = 180;
     /** Gametests: let {@link #probeer} start attacks on the gametest server too (off by default). */
@@ -116,7 +121,7 @@ public final class BaasVfx {
                 s.gevechtStart = -1;   // a reset fight starts over
                 s.woede = false;
             }
-            if (vecht && !s.woede && s.gevechtStart >= 0 && nu - s.gevechtStart > WOEDE_NA) {
+            if (vecht && !s.woede && s.gevechtStart >= 0 && nu - s.gevechtStart > woedeNa(b)) {
                 s.woede = true;
                 BaasAnims.speel(b, "vfx_woede");
                 Vfx.pose(sl, b, "fase", 20);

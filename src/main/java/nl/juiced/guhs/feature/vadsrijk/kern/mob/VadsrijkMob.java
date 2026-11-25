@@ -513,6 +513,7 @@ public abstract class VadsrijkMob extends Monster {
         out.putBoolean("vr_elite", elite);
         out.putBoolean("vr_ontvadst", ontvadst());
         out.putFloat("vr_vads", (float) vads());
+        out.putFloat("vr_max", (float) maxVads());   // balans-bazen: so a balance change keeps the HP fraction on load
         out.putString("vr_spawner", spawner);
         out.putString("vr_affixen", String.join(",", affixen.stream().map(Enum::name).toList()));
     }
@@ -535,8 +536,22 @@ public abstract class VadsrijkMob extends Monster {
         }
         stelIn(lvl, Element.values()[Math.max(0, Math.min(Element.values().length - 1, el))], el2, af);
         zetOntvadst(in.getBooleanOr("vr_ontvadst", true));
-        entityData.set(VADS, Math.min((float) maxVads(), in.getFloatOr("vr_vads", (float) maxVads())));
+        float max = in.getFloatOr("vr_max", -1f), v = in.getFloatOr("vr_vads", (float) maxVads());
+        if (max > 0) {
+            v = (float) (v / max * maxVads());   // balans-bazen: the saved max can differ from today's (a balance change): keep the fraction
+        } else if (volNaOudeOpslag()) {
+            v = (float) maxVads();
+        }
+        entityData.set(VADS, Math.min((float) maxVads(), v));
         spawner = in.getStringOr("vr_spawner", "");
         naamplaatje();
+    }
+
+    /**
+     * Balans-bazen: a save from before {@code vr_max} existed: start at full Vads instead of the old absolute value (bosses: their max
+     * Vads changed, a full boss would otherwise load at a fraction of it). Default false (creatures keep their saved Vads).
+     */
+    protected boolean volNaOudeOpslag() {
+        return false;
     }
 }

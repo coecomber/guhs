@@ -161,9 +161,15 @@ public abstract class Z6RaidBaas extends Z3Baas {
         return 20 * 60 * 8;
     }
 
-    /** The enrage time in seconds (the raid HUD counts down to it). */
+    /** The enrage time in seconds (the raid HUD counts down to it; balans-bazen: x [bazen] enrage_vanaf_zone4). */
     public int enrageSeconden() {
-        return enrageTicks() / 20;
+        return enrageTijd() / 20;
+    }
+
+    /** Balans-bazen: a zone-6 boss ([bazen] leven_vanaf_zone4 / enrage_vanaf_zone4). */
+    @Override
+    public int baasZone() {
+        return 6;
     }
 
     /** Extra bars in the raid HUD: {lang key, fraction 0..1, done?} (the Sterrenbeelden show all three). */
@@ -229,7 +235,7 @@ public abstract class Z6RaidBaas extends Z3Baas {
         gietT = 0;
         gietDuur = Math.max(10, ticks);
         gietSchade = 0;
-        gietNodig = Math.max(1, maxVads() * breek);
+        gietNodig = Math.max(1, maxVadsZonderZone() * breek);   // balans-bazen: the interrupt stays as hard as before
         gietKlaar = klaar;
         gietBreuk = bijBreuk;
         Vfx.cast(this, "vadsrijk.vfx.aanval." + aanvalId, gietDuur, true);

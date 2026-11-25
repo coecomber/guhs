@@ -429,6 +429,11 @@ public abstract class Z3Baas extends Z2Baas {
         return 20 * 60 * 7;
     }
 
+    /** Balans-bazen: the real enrage time = {@link #enrageTicks} x [bazen] enrage_vanaf_zone4 for a boss of zone 4+. */
+    public int enrageTijd() {
+        return (int) Math.round(enrageTicks() * nl.juiced.guhs.feature.vadsrijk.kern.Balans.bazenEnrageZone(baasZone()));
+    }
+
     public boolean enraged() {
         return enraged;
     }
@@ -452,7 +457,7 @@ public abstract class Z3Baas extends Z2Baas {
     protected void actieTick(ServerLevel sl, List<ServerPlayer> l) {
         if (!l.isEmpty()) {
             gevechtT++;
-            int e = enrageTicks();
+            int e = enrageTijd();
             if (vahoeg && VahoegModus.zegel() == VahoegModus.Zegel.HAASTIG) {
                 e = e * 3 / 4;
             }

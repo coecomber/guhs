@@ -45,6 +45,12 @@ public abstract class Z6Baas extends Z3Baas {
         return "vadsrijk.z6wezens.baas." + baasId();
     }
 
+    /** Balans-bazen: a zone-6 boss ([bazen] leven_vanaf_zone4 / enrage_vanaf_zone4). */
+    @Override
+    public int baasZone() {
+        return 6;
+    }
+
     @Override
     public void intro(ServerPlayer p, boolean eersteKeer) {
         super.intro(p, eersteKeer);

@@ -290,7 +290,7 @@ public class Zeeslurf extends Z4Baas {
             Vec3 v = g.add(Math.cos(a) * 5, 0, Math.sin(a) * 5);
             v = new Vec3(v.x, bodem(sl, v), v.z);
             if (Z4BazenRegistry.POLIEP.get().create(sl, EntitySpawnReason.MOB_SUMMONED) instanceof Z3Doel d) {
-                d.koppel(this, i, maxVads() * 0.05, v);
+                d.koppel(this, i, maxVadsZonderZone() * 0.05, v);   // balans-bazen: polyps as before
                 sl.addFreshEntity(d);
                 polypen.add(d.getUUID());
             }

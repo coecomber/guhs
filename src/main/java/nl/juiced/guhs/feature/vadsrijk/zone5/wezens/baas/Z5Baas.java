@@ -28,6 +28,12 @@ public abstract class Z5Baas extends Z3Baas {
         return "vadsrijk.z5wezens.baas." + baasId();
     }
 
+    /** Balans-bazen: a zone-5 boss ([bazen] leven_vanaf_zone4 / enrage_vanaf_zone4). */
+    @Override
+    public int baasZone() {
+        return 5;
+    }
+
     @Override
     public int xp() {
         int l = Math.max(1, Math.min(Levels.MAX - 1, mobLevel()));

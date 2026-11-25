@@ -150,6 +150,15 @@ public class Vliegervanger extends Z4Baas {
         return "vadsrijk.z4bazen.vliegervanger.immuun";
     }
 
+    /**
+     * Balans-bazen: in fase 2 (also in the crash window: stunned, +50 %) he can't drop past the fase-3 threshold in one go; the hit
+     * that would stops just below 25 %, so the Knuffelregen always starts (live, a burst in the stun window skipped fase 3).
+     */
+    @Override
+    protected double vadsVloer() {
+        return fase() == 2 ? fases()[1] - 1e-4 : 0;
+    }
+
     @Override
     protected double schadeFactor(@Nullable LivingEntity bron) {
         return verdoofdT > 0 && neergehaald ? 1.5 : 1;
