@@ -601,7 +601,7 @@ Q("z4_s02_wedstrijd", "zij", "z4_windmeester", "De grote vliegerwedstrijd",
 
 Q("z4_s03_vissen", "zij", "z4_visser", "Wat bijt er vandaag?",
   "Visser Dobber wil weten wat er bijt aan De Lampionkust. Vang vijf vissen met een hengel, waar je maar wilt in de roze zee.",
-  [D("meld", "z4_vis:gevangen", 5, "Vang 5 vissen met een hengel aan De Lampionkust (vanaf een steiger of vanuit je bootje)",
+  [D("meld", "z4_vis:gevangen", 5, "Vang 5 vissen op de visplekjes van De Lampionkust (Vissen 32 nodig; vanaf een steiger of vanuit je bootje)",
      plek="npc:z4_visser")],
   [("npc", "Vissen is wachten, zei ik al. Maar ik wacht nu al drie dagen. Er bijt niks. Bij mij."),
    ("npc", "Misschien bijten ze wel bij jou. Vang er vijf, dan weet ik dat er nog vis in de zee zit. Hengel uitgooien en geduld hebben.")],
