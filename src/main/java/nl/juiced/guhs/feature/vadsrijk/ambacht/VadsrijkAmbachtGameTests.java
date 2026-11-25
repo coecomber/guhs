@@ -259,6 +259,43 @@ public class VadsrijkAmbachtGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.22: a wood group without a single trunk (live: the Vuurtoreneiland 1 of 6 spots, the Vliegereiland 1 of 8) still gets its
+     * spot: driftwood on the bare sand, never on the deck beside it, never on top of a node of an earlier scan (the node's own place
+     * counts as free). Floor only, x/z -1..7: the radius-4 circle stays inside this test's own cleared area.
+     */
+    @GuhTest(template = "empty", batch = BATCH + "_b")
+    public static void scanDrijfhout(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int x = -1; x < 8; x++) {
+            for (int z = -1; z < 8; z++) {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.DIRT.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 1, z), x <= 3 ? Blocks.SAND.defaultBlockState() : Blocks.OAK_PLANKS.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 2, z), Blocks.AIR.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 3, z), Blocks.AIR.defaultBlockState());
+            }
+        }
+        helper.setBlock(new BlockPos(-1, 2, 3), Grondstoffen.staat(NodeSoort.HOUT, 4, true));   // an old wood node on the sand
+        BlockPos anker = helper.absolutePos(new BlockPos(3, 2, 3));
+        List<Spot> l = PlekWereld.scan(sl, anker, new Groep("t_drijfhout", 4, "x", NodeSoort.HOUT, 4, 1, 4, Zoek.BOOM, ""));
+        helper.assertTrue(l.size() == 1 && l.get(0).posities().size() == AmbachtPlekken.POSITIES, "driftwood: 1 spot with 4 positions: " + l);
+        for (BlockPos p : l.get(0).posities()) {
+            helper.assertTrue(p.getY() == anker.getY() && sl.getBlockState(p.below()).is(Blocks.SAND),
+                    "on the sand (not the deck, not on the node): " + p.subtract(helper.absolutePos(BlockPos.ZERO)));
+        }
+        helper.assertTrue(new java.util.HashSet<>(l.get(0).posities()).size() == AmbachtPlekken.POSITIES, "4 different positions");
+        // a version-5 save drops the incomplete groups (scanned again with these rules), complete ones stay
+        Groep vuur = AmbachtPlekken.groep("z4_hout_vuurtoren"), kamp = AmbachtPlekken.groep("z1_pluk_kamp");
+        helper.assertTrue(vuur != null && vuur.anker() != null && kamp != null, "groups with an anchor");
+        net.minecraft.nbt.CompoundTag v5 = new net.minecraft.nbt.CompoundTag();
+        v5.putInt(PlekWereld.VERSIE_SLEUTEL, 5);
+        v5.put(vuur.id(), groepTag(vuur, 1));
+        v5.put(kamp.id(), groepTag(kamp, kamp.aantal()));
+        PlekWereld w = PlekWereld.load(v5);
+        helper.assertTrue(PlekWereld.VERSIE == 6 && w.bekend(vuur) == null && w.bekend(kamp) != null, "version 5: incomplete dropped, complete kept");
+        helper.succeed();
+    }
+
     /** 1.10.13: a frozen lake (the Knuffelmeer froze over on live: 0 spots): fished through holes in the ice; a node may stand there. */
     @GuhTest(template = "empty", batch = BATCH + "_b")   // (own batch: its blocks hung over the pier test)
     public static void scanIjs(GameTestHelper helper) {

@@ -39,14 +39,17 @@ import nl.juiced.guhs.storage.GuhSavedData;
  * <ul>
  *   <li>GROND: a natural floor (grass, moss, podzol, snow...) with 2 free blocks above;</li>
  *   <li>STEEN: a rock floor (stone kinds, dripstone, calcite...), caves included;</li>
- *   <li>BOOM: a natural floor right beside a trunk;</li>
+ *   <li>BOOM: a natural floor right beside a trunk (1.10.22: a group that is still short takes driftwood spots on bare grass or sand,
+ *   see {@link #strand}: the Vuurtoreneiland has no tree at all);</li>
  *   <li>WATER: a still water surface with land within 2 blocks (fished from the shore; 1.10.12: or from a pier/quay up to 3 higher);</li>
  *   <li>BLOEM: a natural floor with flowers within 6 blocks (the hives; the flowers are kept: the bees fly to them);</li>
  *   <li>KORAAL (U-AMBACHT2, coral diving): a sea floor block with still water above it and the surface 2-{@link #DUIK_DIEP} blocks
  *   up (walkability: a diver always comes up within a few blocks; never in a cave without air above). The spot is the water
  *   block on the floor.</li>
  * </ul>
- * A strict pass first; if it finds too little (an unusual zone), a relaxed pass (any solid non-building floor) fills up.
+ * A strict pass first; if it finds too little (an unusual zone), a relaxed pass (any solid non-building floor) fills up. A group that is
+ * still short then tries every column of its circle (1.10.19 fishing; 1.10.22 every kind but the hives, caves too), last with the
+ * spots closer together ({@link #KRAP}).
  */
 public final class PlekWereld extends SavedData {
     public static final SavedDataType<PlekWereld> TYPE = GuhSavedData.tagType("vr_ambacht_plekken", PlekWereld::new, PlekWereld::load, PlekWereld::save);
@@ -139,12 +142,7 @@ public final class PlekWereld extends SavedData {
             for (int poging = 0; poging < nodig * 40 && gevonden.size() < nodig; poging++) {
                 double hoek = r.nextDouble() * Math.PI * 2, afstand = 3 + r.nextDouble() * (g.straal() - 3);
                 int x = anker.getX() + (int) Math.round(Math.cos(hoek) * afstand), z = anker.getZ() + (int) Math.round(Math.sin(hoek) * afstand);
-                BlockPos p = grot != null ? zoekGrotY(l, x, z, anker.getY(), g.zoek(), streng, grot)
-                        : binnen != null ? zoekBinnenY(l, x, z, anker.getY(), g.zoek(), streng, binnen)
-                        : zoekY(l, x, z, anker.getY(), g.zoek(), streng);
-                if (p == null && honing) {
-                    p = zoekHoningY(l, x, z, anker.getY());
-                }
+                BlockPos p = kolom(l, x, z, anker, g.zoek(), streng, false, grot, binnen, honing);
                 if (p == null || teDichtbij(gevonden, p, afstand2)) {
                     continue;
                 }
@@ -160,8 +158,10 @@ public final class PlekWereld extends SavedData {
         }
         // 1.10.19: fishing groups whose water lies off-centre (a swamp at the edge of the circle, a brook far from the anchor) found
         // only a few spots by random tries (live: the Honingmoeras 1 of 6, zone 3 had 1 fishing spot in all): then every column of the
-        // circle is tried, in a fixed shuffled order
-        if (g.zoek() == Zoek.WATER && grot == null && binnen == null && gevonden.size() < nodig) {
+        // circle is tried, in a fixed shuffled order. 1.10.22: every kind but the hives, in caves and closed rooms too, and last with
+        // the spots closer together (live: the Koraalgrot pool 3 of 4 spots, its ore 5 of 6; the Vliegereiland wood 1 of 8 and the
+        // Vuurtoreneiland wood 1 of 6: islands with 2 trees and none, now driftwood on the grass and the beach)
+        if (g.zoek() != Zoek.BLOEM && gevonden.size() < nodig) {
             List<int[]> kolommen = new ArrayList<>();
             int s = g.straal();
             for (int dx = -s; dx <= s; dx++) {
@@ -178,16 +178,15 @@ public final class PlekWereld extends SavedData {
                 kolommen.set(i, kolommen.get(j));
                 kolommen.set(j, t);
             }
-            for (int[] k : kolommen) {
-                if (gevonden.size() >= nodig) {
-                    break;
-                }
-                BlockPos p = zoekY(l, k[0], k[1], anker.getY(), Zoek.WATER, true);
-                if (p == null && honing) {
-                    p = zoekHoningY(l, k[0], k[1], anker.getY());
-                }
-                if (p != null && !teDichtbij(gevonden, p, afstand2)) {
-                    gevonden.add(p);
+            for (Ronde ronde : rondes(g.zoek(), afstand2)) {
+                for (int[] k : kolommen) {
+                    if (gevonden.size() >= nodig) {
+                        break;
+                    }
+                    BlockPos p = kolom(l, k[0], k[1], anker, g.zoek(), ronde.streng(), ronde.los(), grot, binnen, honing);
+                    if (p != null && !teDichtbij(gevonden, p, ronde.afstand2())) {
+                        gevonden.add(p);
+                    }
                 }
             }
         }
@@ -209,6 +208,40 @@ public final class PlekWereld extends SavedData {
         return uit;
     }
 
+    /** 1.10.22: one sweep over every column of the circle: its floor rule ({@code los}: wood without a trunk) and spacing. */
+    record Ronde(boolean streng, boolean los, int afstand2) {
+    }
+
+    /**
+     * 1.10.22: how close (squared distance; normally fishing 4, the rest 9) the last sweep may put spots. The Koraalgrot pool is a ring
+     * of shore water 2-3 wide: 16 fishing positions 2 apart did not fit in it, nor 24 ore positions 3 apart in its ore room.
+     */
+    public static final int KRAP = 4, KRAP_WATER = 2;
+
+    /** 1.10.22: the sweeps of a group that is still short after its random tries, in order. */
+    static List<Ronde> rondes(Zoek zoek, int afstand2) {
+        return switch (zoek) {
+            case WATER -> List.of(new Ronde(true, false, afstand2), new Ronde(true, false, KRAP_WATER));
+            // wood: beside a trunk first; then driftwood on bare grass or sand (an island without trees)
+            case BOOM -> List.of(new Ronde(true, false, afstand2), new Ronde(false, false, afstand2), new Ronde(false, true, afstand2),
+                    new Ronde(false, true, KRAP));
+            default -> List.of(new Ronde(true, false, afstand2), new Ronde(false, false, afstand2), new Ronde(false, false, KRAP));
+        };
+    }
+
+    /** The spot position in one column, the group's way: on the cave floor, in the closed room or in the open terrain; honey ponds. */
+    @Nullable
+    private static BlockPos kolom(Level l, int x, int z, BlockPos anker, Zoek zoek, boolean streng, boolean los, @Nullable GrotData.Grot grot,
+            @Nullable Set<Long> binnen, boolean honing) {
+        BlockPos p = grot != null ? zoekGrotY(l, x, z, anker.getY(), zoek, streng, los, grot)
+                : binnen != null ? zoekBinnenY(l, x, z, anker.getY(), zoek, streng, los, binnen)
+                : zoekY(l, x, z, anker.getY() + 20, anker.getY() - 30, zoek, streng, los);
+        if (p == null && honing) {
+            p = zoekHoningY(l, x, z, anker.getY());
+        }
+        return p;
+    }
+
     private static boolean teDichtbij(List<BlockPos> l, BlockPos p, int afstand2) {
         for (BlockPos q : l) {
             if (q.distSqr(p) < afstand2) {
@@ -228,6 +261,11 @@ public final class PlekWereld extends SavedData {
      */
     @Nullable
     static BlockPos zoekGrotY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng, GrotData.Grot grot) {
+        return zoekGrotY(l, x, z, ankerY, zoek, streng, false, grot);
+    }
+
+    @Nullable
+    static BlockPos zoekGrotY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng, boolean los, GrotData.Grot grot) {
         if (!grot.bevat(x + 0.5, ankerY + 3.5, z + 0.5)) {
             return null;
         }
@@ -235,7 +273,7 @@ public final class PlekWereld extends SavedData {
             if (!grot.bevat(x + 0.5, y + 0.5, z + 0.5)) {
                 continue;
             }
-            BlockPos p = zoekY(l, x, z, y, y, zoek, streng);
+            BlockPos p = zoekY(l, x, z, y, y, zoek, streng, los);
             if (p != null) {
                 return p;
             }
@@ -271,9 +309,9 @@ public final class PlekWereld extends SavedData {
 
     /** 1.10.14: a room spot: floor - 1 .. floor + 1 around the anchor height, and only where a player can walk from the anchor. */
     @Nullable
-    static BlockPos zoekBinnenY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng, java.util.Set<Long> bereik) {
+    static BlockPos zoekBinnenY(Level l, int x, int z, int ankerY, Zoek zoek, boolean streng, boolean los, java.util.Set<Long> bereik) {
         for (int y = ankerY - 1; y <= ankerY + 1; y++) {
-            BlockPos p = zoekY(l, x, z, y, y, zoek, streng);
+            BlockPos p = zoekY(l, x, z, y, y, zoek, streng, los);
             if (p != null && bereik.contains(p.asLong())) {
                 return p;
             }
@@ -323,6 +361,12 @@ public final class PlekWereld extends SavedData {
     /** The highest spot position in this column from {@code hoog} down to {@code laag} (both included). */
     @Nullable
     static BlockPos zoekY(Level l, int x, int z, int hoog, int laag, Zoek zoek, boolean streng) {
+        return zoekY(l, x, z, hoog, laag, zoek, streng, false);
+    }
+
+    /** {@code los} (1.10.22, BOOM only): no trunk needed, but the floor must be bare grass, dirt or sand ({@link #strand}). */
+    @Nullable
+    static BlockPos zoekY(Level l, int x, int z, int hoog, int laag, Zoek zoek, boolean streng, boolean los) {
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
         for (int y = hoog; y >= laag; y--) {
             m.set(x, y, z);
@@ -347,13 +391,16 @@ public final class PlekWereld extends SavedData {
                 }
                 continue;
             }
+            if (onder.getBlock() instanceof GrondstofBlok) {
+                continue;   // 1.10.22: never on top of a node of an earlier scan (the node itself counts as free, see vrij)
+            }
             if (!vrij(l, m) || !vrij(l, m.above()) || !onder.isCollisionShapeFullBlock(l, m.below()) || !l.getFluidState(m).isEmpty()) {
                 continue;
             }
             boolean ok = switch (zoek) {
                 case STEEN -> streng ? steen(onder) : natuur(onder);
                 case GROND, BLOEM -> streng ? grond(onder) : natuur(onder);
-                case BOOM -> (streng ? grond(onder) : natuur(onder)) && stamBij(l, m);
+                case BOOM -> los ? strand(onder) : (streng ? grond(onder) : natuur(onder)) && stamBij(l, m);
                 default -> false;
             };
             if (ok) {
@@ -378,7 +425,9 @@ public final class PlekWereld extends SavedData {
 
     private static boolean vrij(Level l, BlockPos p) {
         BlockState s = l.getBlockState(p);
-        return s.isAir() || (s.canBeReplaced() && s.getFluidState().isEmpty() && s.getCollisionShape(l, p).isEmpty());
+        // (1.10.22: a node of an earlier scan counts as free: it leaves when its group is scanned again)
+        return s.isAir() || (s.canBeReplaced() && s.getFluidState().isEmpty() && s.getCollisionShape(l, p).isEmpty())
+                || s.getBlock() instanceof GrondstofBlok;
     }
 
     private static final Set<Block> GROND = Set.of(Blocks.GRASS_BLOCK, Blocks.MOSS_BLOCK, Blocks.PODZOL, Blocks.MYCELIUM, Blocks.ROOTED_DIRT,
@@ -390,6 +439,14 @@ public final class PlekWereld extends SavedData {
 
     static boolean grond(BlockState s) {
         return GROND.contains(s.getBlock());
+    }
+
+    /**
+     * 1.10.22: driftwood ground for a wood group that is short of trees: bare grass, dirt or sand (the guh kinds too: knuffelgras, roze
+     * zand), never a path, a deck or a roof.
+     */
+    static boolean strand(BlockState s) {
+        return grond(s) || s.is(BlockTags.DIRT) || s.is(BlockTags.SAND);
     }
 
     static boolean steen(BlockState s) {
@@ -506,8 +563,10 @@ public final class PlekWereld extends SavedData {
      * spots now. Nodes of spots that no longer exist are cleaned up by {@code Grondstoffen.opruimen}.
      * 1.10.14 (version 4): the groups in {@link #BINNEN} (the IJsgrot) are scanned again on their floor.
      * 1.10.19 (version 5): incomplete non-hive groups once more (fishing: the full-circle pass, honey ponds, the Mosvoet brook).
+     * 1.10.22 (version 6): incomplete non-hive groups once more (every kind sweeps its full circle, caves too, last closer together;
+     * driftwood where a wood group has too few trees: the Vliegereiland, the Vuurtoreneiland, the Wortelgrot).
      */
-    public static final int VERSIE = 5;
+    public static final int VERSIE = 6;
     static final String VERSIE_SLEUTEL = "_versie";
 
     CompoundTag save() {
@@ -562,8 +621,8 @@ public final class PlekWereld extends SavedData {
                 CompoundTag s = spots.getCompoundOrEmpty(i);
                 l.add(new Spot(id + "_" + i, g, posities(s.getListOrEmpty("pos")), posities(s.getListOrEmpty("bloem"))));
             }
-            if (versie < 5 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
-                continue;   // 1.10.12 / 1.10.13: scanned again with the new rules (when a player comes near)
+            if (versie < 6 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
+                continue;   // 1.10.12 / 1.10.13 / 1.10.19 / 1.10.22: scanned again with the new rules (when a player comes near)
             }
             if (versie < 4 && BINNEN.contains(id)) {
                 continue;   // 1.10.14: the IJsgrot scanned again on its floor
