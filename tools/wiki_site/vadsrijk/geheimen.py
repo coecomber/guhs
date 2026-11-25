@@ -29,13 +29,260 @@ SOORT_VAN = {"KNUFFEL": "knuffel", "SCHAT": "schat", "AANWIJZING": "aanwijzing",
 SCHAT_MUNTEN = {"zone1": 2500, "zone2": 6000, "zone3": 9000, "zone4": 15000, "zone5": 15000, "zone6": 20000}
 SCHAT_EPISCH = {"kristalkamer", "burchtdak", "onder_de_tak", "mist", "staartvin", "mesa"}
 SOORTEN = [  # kind, en, nl (headers + summaries)
+    ("verborgen", "Secret quests, bosses and places", "Geheime quests, bazen en plekken"),
     ("knuffel", "Hidden knuffels", "Verborgen knuffels"), ("schat", "Treasures", "Schatten"),
     ("aanwijzing", "Clues and traces", "Aanwijzingen en sporen"), ("relief", "Reliefs", "Reliëfs"),
     ("brief", "Letters, notes and tablets", "Brieven, briefjes en tabletten"), ("puzzel", "Puzzles and star beacons", "Puzzels en sterrenbakens"),
     ("grotschat", "Cave treasures", "Grotschatten"), ("uitkijk", "Viewpoints", "Uitkijkpunten"), ("kampvuur", "Campfires", "Kampvuren")]
 ENKEL = {"knuffel": ("Hidden knuffel", "Verborgen knuffel"), "schat": ("Treasure", "Schat"), "aanwijzing": ("Clue", "Aanwijzing"),
          "relief": ("Relief", "Reliëf"), "brief": ("Letter", "Briefje"), "puzzel": ("Puzzle", "Puzzel"), "grotschat": ("Cave treasure", "Grotschat"),
-         "uitkijk": ("Viewpoint", "Uitkijkpunt"), "kampvuur": ("Campfire", "Kampvuur")}
+         "uitkijk": ("Viewpoint", "Uitkijkpunt"), "kampvuur": ("Campfire", "Kampvuur"), "verborgen": ("Secret", "Geheim")}
+# the generated map classes (the same lists as POI_*.md; at runtime the *Plekken classes look ids up here first)
+WERELD = {"zone1": "wereld/WereldPlekken.java", "zone2": "zone2/wereld/Z2WereldPlekken.java", "zone3": "zone3/wereld/Z3WereldPlekken.java",
+          "zone4": "zone4/wereld/Z4WereldPlekken.java", "zone5": "zone5/wereld/Z5WereldPlekken.java", "zone6": "zone6/wereld/Z6WereldPlekken.java"}
+Z2_DX, Z2_DZ = 704, 1344   # indeling/VadsrijkZones: zone 2's v1 numbers (Z2NpcPlekken.p) are shifted by this
+# 1.10.21: the secret IJsgrot's way in is the scaffolding shaft through the dome's roof (EINDRAPPORT_RONDE_W, SPIEKBRIEF 1.12); the map's
+# geheim_ijsgrot_ingang is the old tunnel mouth high above the lake
+IJSGROT_DAKGAT = (466, 113, -1064)
+
+# ---- 1.10.21: hidden quests, hidden bosses and secret places (kind "verborgen"; truth = the Java named per entry) -------------------
+# plek / plekken: (zone, map id or "arena:<runtime arena id>", fallback xyz); the first one that resolves wins.
+# quest: its xp/coins/loot come from the quest JSON; baas: its named items come from the *Loot.java Benoemd lines (bron._benoemd);
+# huisdier: the pet of its first kill; boek: the Verkenningsboek row (category, row id) that counts it.
+VERBORGEN = [
+    # ======== zone 1 ========
+    dict(zone="zone1", id="mika_spion", quest="geheim_spion", baas="mika_spion", boek=("baas", "baas_mika_spion"),
+         soort=("Secret quest + secret boss", "Geheime quest + geheime baas"),
+         naam=("Who is Akim the Cheese Guh? (the Mika spy)", "Wie is Akim de Kaasguh? (de Mika-spion)"),
+         hint=("Something is off at the Zwamzoet market.", "Er klopt iets niet op de markt van Zwamzoet."),
+         plek=("zone1", "mika_spion_kraam", (-28, 64, 52)),
+         plekken=[(("Cap south-west", "Hoed zuidwest"), ("zone1", "hoed_zuidw", (-78, 122, 32))),
+                  (("Cap west", "Hoed west"), ("zone1", "hoed_west", (-66, 144, -30))),
+                  (("Cap east", "Hoed oost"), ("zone1", "hoed_oost", (66, 154, -36)))],
+         tekst=("Find one of the five clues of zone 1 (the Clues list above) and the secret quest starts by itself. With all five, "
+                "walk to Akim the Cheese Guh at his cheese stall on the Zwamzoet market and talk to him: you unmask him. He is a "
+                "Mika (lv 15)! He leaps up the mushroom caps and you chase him over three caps (the Zwamzoet guhs shoot you after "
+                "him). Grey circles = de-vads powder: get out. At 15 % he floats off on a balloon: pop it quickly, or he escapes "
+                "(he is back in disguise 2 minutes later). After a capture he returns 10 minutes later, so friends can do it too. "
+                "Hand the quest in with Grand Master Vadsvoet.",
+                "Vind één van de vijf aanwijzingen van zone 1 (zie Aanwijzingen hierboven): dan begint de geheime quest vanzelf. "
+                "Heb je ze alle vijf? Loop naar Akim de Kaasguh bij zijn kaaskraam op de markt van Zwamzoet en praat met hem: je "
+                "ontmaskert hem. Het is een Mika (lv 15)! Hij springt de paddenstoelhoeden op en jij gaat erachteraan, over drie "
+                "hoeden (de guhs van Zwamzoet schieten je met een sporenkatapult achter hem aan). Grijze cirkels = "
+                "ontvadsings-poeder: eruit! Bij 15 % zweeft hij weg aan een ballon: prik die snel kapot, anders ontsnapt hij (twee "
+                "minuten later staat hij weer verkleed op de markt). Gevangen? Na 10 minuten is hij terug, zodat vriendjes het ook "
+                "kunnen doen. Je levert de quest in bij Grootmeester Vadsvoet.")),
+    dict(zone="zone1", id="tempelkamer", soort=("Secret room", "Geheime kamer"),
+         naam=("The hidden temple room", "De geheime tempelkamer"),
+         hint=("A crack in a wall of the Zwamtempel.", "Een barst in een muur van de Zwamtempel."),
+         plek=("zone1", "geheim_tempelkamer", (311, 152, -416)),
+         plekken=[(("The crumbled gap", "De bres in de muur"), ("zone1", "geheim_tempelkamer_muur", (317, 152, -416)))],
+         tekst=("In the first room of the Zwamtempel (the Lichtzwamkamer, behind the big temple door that opens from lv 16) the west wall is cracked. "
+                "Low down there is a crumbled gap, two blocks high: squeeze through it and you stand in a quiet little room "
+                "with a chest and a lantern.",
+                "In de eerste kamer van de Zwamtempel (de Lichtzwamkamer, achter de grote tempeldeur die vanaf lv 16 opengaat) zit een barst in de "
+                "westmuur. Onderin is een bres van twee blokken hoog gebrokkeld: wurm je erdoor en je staat in een stil "
+                "kamertje met een kist en een lantaarn."),
+         beloning=("Just the joy of finding it: the chest is decoration (there is no storage in the Vadsrijk).",
+                   "Alleen de pret van het vinden: de kist is versiering (in het Vadsrijk kun je niets opbergen).")),
+    dict(zone="zone1", id="kristalkamer", soort=("Secret room", "Geheime kamer"), quest="z09_kristal",
+         naam=("The hidden crystal chamber", "De verborgen kristalkamer"),
+         hint=("Something sparkles very deep in the Druipgrotten.", "Heel diep in de Druipgrotten glinstert iets."),
+         plek=("zone1", "kristalkamer", (-490, 46, -520)),
+         plekken=[(("Cave mouth 1", "Grotingang 1"), ("zone1", "grot_ingangen.1", (-300, 90, -220))),
+                  (("Cave mouth 2", "Grotingang 2"), ("zone1", "grot_ingangen.2", (-420, 83, -300))),
+                  (("Cave mouth 3", "Grotingang 3"), ("zone1", "grot_ingangen.3", (-180, 111, -360)))],
+         tekst=("A sparkling cave of amethyst and guh crystal in the farthest corner of the Druipgrotten. Go in through one of "
+                "the cave mouths and keep going down and west. Inside: the treasure 'The crystal chamber' (Epic!), the Mika clue "
+                "'scratches' (a black carpet and a Mika stone), and elite crystal creatures that guard it. Professor Pluis's side "
+                "quest asks you to find it.",
+                "Een fonkelende grot van amethist en guhkristal in het verste hoekje van de Druipgrotten. Ga naar binnen via "
+                "één van de grotingangen en blijf omlaag en naar het westen lopen. Binnen: de schat 'De kristalkamer' (Episch!), "
+                "de Mika-aanwijzing 'krassen' (een zwart kleedje en een Mika-steen) en elite kristalwezens die alles bewaken. De "
+                "zijquest van Professor Pluis vraagt je hem te vinden."),
+         beloning=("The Epic treasure of zone 1 + a clue for the Mika spy + the side quest goal.",
+                   "De Epische schat van zone 1 + een aanwijzing voor de Mika-spion + het doel van de zijquest.")),
+    # ======== zone 2 ========
+    dict(zone="zone2", id="boormeester", quest="z2_geheim_boormeester", baas="boormeester", boek=("baas", "baas_boormeester"),
+         soort=("Secret quest + secret boss", "Geheime quest + geheime baas"),
+         naam=("The hum in the mountain (the Mika drill master)", "Het gebrom in de berg (de Mika-boormeester)"),
+         hint=("A deep hum under the Splinterkloof.", "Een diep gebrom onder de Splinterkloof."),
+         plek=("zone2", "arena_boormeester", (674, 66, -1270)),
+         plekken=[(("The hidden drill hall (door)", "De verborgen boorhal (deur)"), ("zone2", "arena_boormeester_deur", (674, 66, -1215))),
+                  (("Clue tower (east)", "Boortoren (oost)"), ("zone2", "boortoren_3", (908, 144, -1178)))],
+         tekst=("Find one of the five drill traces of zone 2 (the Clues list above) and the secret quest starts by itself. All "
+                "five point to the bottom of the Splinterkloof: the hidden drill hall in its north wall opens for you. Inside "
+                "sleeps a huge drilling machine with a Mika in it (lv 28): right-click it to wake it. Hit the three drill heads "
+                "until they overheat, in the order the control panel plays (light + tone, every 15 s). Wrong order = steam! "
+                "Beaten, he races off on a mine cart; the machine is back 10 minutes later (within 30 s if you still need him). "
+                "Hand the quest in with Inventor Tandwiel.",
+                "Vind één van de vijf boorsporen van zone 2 (zie Aanwijzingen hierboven): dan begint de geheime quest vanzelf. "
+                "Alle vijf wijzen naar de bodem van de Splinterkloof: de verborgen boorhal in de noordwand gaat voor je open. "
+                "Binnen slaapt een enorme boormachine met een Mika erin (lv 28): rechtsklik om hem te wekken. Sla de drie "
+                "boorkoppen tot ze oververhit raken, in de volgorde die het paneel laat zien (licht + toon, elke 15 s). "
+                "Verkeerde volgorde = stoom! Verslagen rijdt hij weg in een mijnkarretje; na 10 minuten staat de machine er weer "
+                "(binnen 30 s als je hem nog nodig hebt). Je levert de quest in bij Uitvinder Tandwiel.")),
+    dict(zone="zone2", id="ijsgrot", soort=("Secret place", "Geheime plek"),
+         naam=("The secret Ice Cave", "De geheime IJsgrot"),
+         hint=("A dome of blue ice in the Splinterpieken.", "Een koepel van blauw ijs in de Splinterpieken."),
+         plek=("zone2", "geheim_ijsgrot", (464, 105, -1066)),
+         plekken=[(("Way in: the hole with scaffolding in the roof", "Ingang: het gat met steigerwerk in het dak"), ("zone2", "", IJSGROT_DAKGAT)),
+                  (("The old tunnel mouth (high above the lake)", "De oude tunnelingang (hoog boven het meer)"),
+                   ("zone2", "geheim_ijsgrot_ingang", (453, 99, -1066)))],
+         tekst=("Climb onto the ice dome. In its roof there is a hole with scaffolding going down: on scaffolding, jump = up and "
+                "sneak = down. Inside the blue cave lie a forgotten chest of the Kristalwacht and a secret ore vein for your "
+                "crafts (Ambachtenboek).",
+                "Klim op de ijskoepel. In het dak zit een gat met steigerwerk naar beneden: op een steiger is springen = omhoog "
+                "en sluipen = omlaag. In de blauwe grot liggen een vergeten kist van de Kristalwacht en een geheime ertsader "
+                "voor je ambachten (Ambachtenboek)."),
+         beloning=("The treasure 'The blue ice cave' (a Rare piece + 6000 bronze) and a secret ore vein.",
+                   "De schat 'De blauwe ijsgrot' (een Zeldzaam stuk + 6000 brons) en een geheime ertsader.")),
+    dict(zone="zone2", id="galmgrot", soort=("Secret place", "Geheime plek"),
+         naam=("The Echo Cave", "De Galmgrot"),
+         hint=("Behind a frozen waterfall, something sings.", "Achter een bevroren waterval zingt iets."),
+         plek=("zone2", "geheim_galmgrot", (940, 121, -1002)),
+         plekken=[(("Way in: the snow stairs", "Ingang: de sneeuwtrap"), ("zone2", "geheim_galmgrot_ingang", (927, 118, -1002)))],
+         tekst=("A stair of snow blocks leads up to the tunnel behind the frozen waterfall. Follow it into a cave full of "
+                "singing crystals.",
+                "Een trap van sneeuwblokken gaat omhoog naar de tunnel achter de bevroren waterval. Volg hem naar een grot vol "
+                "zingende kristallen."),
+         beloning=("The treasure 'The Echo Cave' (a Rare piece + 6000 bronze).", "De schat 'De Galmgrot' (een Zeldzaam stuk + 6000 brons).")),
+    # ======== zone 3 ========
+    dict(zone="zone3", id="mika_imker", quest="z3_geheim_imker", huisdier="zoempje", boek=("baas", "baas_imker"),
+         soort=("Secret quest + secret boss", "Geheime quest + geheime baas"),
+         naam=("The grey honey (Mika the Beekeeper)", "De grauwe honing (Mika de Imker)"),
+         hint=("Someone hides under the Raattros.", "Iemand verstopt zich onder de Raattros."),
+         plek=("zone3", "arena:z3imker:mika_imker", (1459, 145, -573)), waar="Honingtak (onder de Raattros)",
+         plekken=[(("The hatch in the Raattros", "Het luik in de Raattros"), ("zone3", "mika_imker_luik", (1457, 157, -565))),
+                  (("The Raattros door", "De deur van de Raattros"), ("zone3", "gebouw.raattros.deur", (1462, 157, -566)))],
+         tekst=("Find one of the five beekeeper traces in Honingtak (the Clues list above) and the secret quest starts by "
+                "itself. With all five the hatch in the floor of the Raattros opens: climb down the ladder into the honeycomb "
+                "hall. Mika the Beekeeper (lv 47, Nature) is turning the bee queen grey with cheese honey. Lead his angry swarm "
+                "through a smoke pot to put it to sleep, turn the queen's hive so its bee stream stings HIM while he pours, and "
+                "stand together in the yellow circle at the hive for his big smoke bomb. After the quest you can fight him again "
+                "(every 10 minutes). Hand the quest in with Raatwever Wasje.",
+                "Vind één van de vijf imkersporen in Honingtak (zie Aanwijzingen hierboven): dan begint de geheime quest vanzelf. "
+                "Met alle vijf gaat het luik in de vloer van de Raattros open: klim de ladder af, de raatzaal in. Mika de Imker "
+                "(lv 47, Natuur) maakt de bijenkoningin grauw met kaas-honing. Lok zijn boze zwerm door een rookpotje (dan valt "
+                "hij in slaap), draai de korf van de koningin zodat haar bijenstraal HEM steekt terwijl hij giet, en sta samen in "
+                "de gele cirkel bij de korf als hij zijn grote rookbom gooit. Na de quest kun je hem opnieuw bevechten (elke 10 "
+                "minuten). Je levert de quest in bij Raatwever Wasje.")),
+    dict(zone="zone3", id="kruinroofvogel", baas="kruinroofvogel", huisdier="kruinroofvogel", boek=("baas", "baas_kruinroofvogel"),
+         soort=("Boss without a quest", "Baas zonder quest"),
+         naam=("The Crown Raptor", "De Kruinroofvogel"),
+         hint=("Something big circles over the Kale Kruin.", "Op de Kale Kruin cirkelt iets groots."),
+         plek=("zone3", "arena:z3bazen:kruinroofvogel", (1259, 226, -530)),
+         plekken=[(("Arena entrance", "Ingang van de arena"), ("zone3", "arena_kruinroofvogel_deur", (1288, 229, -549))),
+                  (("Perch 1 (he flees here)", "Zitplek 1 (hij vlucht hierheen)"), ("zone3", "kruinroofvogel_zit_1", (1471, 210, -452))),
+                  (("Perch 2", "Zitplek 2"), ("zone3", "kruinroofvogel_zit_2", (1530, 200, -587)))],
+         tekst=("A world boss (lv 38) that no quest sends you to: just walk onto his nest on the Kale Kruin. Red = his dive, "
+                "purple = he grabs or blows. At 35 % he flees to one of his two other perches (a pink light trail shows which): "
+                "you may call your mount in his arena then. He waits there for you. Respawn 25 minutes.",
+                "Een wereldbaas (lv 38) waar geen quest je heen stuurt: loop gewoon zijn nest op de Kale Kruin op. Rood = zijn "
+                "duikvlucht, paars = hij grijpt of blaast. Bij 35 % vlucht hij naar één van zijn twee andere zitplekken (een "
+                "roze lichtspoor wijst welke): dan mag je je rijdier roepen in zijn arena. Hij wacht daar op je. Terug na 25 "
+                "minuten.")),
+    dict(zone="zone3", id="rijdierlooks", soort=("Secret mount looks", "Geheime rijdierlooks"),
+         naam=("Secret looks for your mount", "Geheime looks voor je rijdier"),
+         hint=("Some looks only show up for real sleuths.", "Sommige looks krijg je alleen als echte speurneus."),
+         plek=("zone3", "gebouw.pluimstal.npc", (1378, 75, -672)),
+         tekst=("These looks are not for sale: you earn them by finding secrets in all zones together. They appear by themselves "
+                "(press N, pick a mount and click Dress up). Hat (tack, every land mount): 8 treasures. Night coat for the "
+                "Knuffelhert: 20 hidden knuffels. Night coat for Slakkie: 15 treasures. Glow-mushroom coat for the "
+                "Zwamzwijntje: 10 clues.",
+                "Deze looks kun je niet kopen: je verdient ze met geheimen uit alle zones samen. Ze komen vanzelf (druk N, kies "
+                "een rijdier en klik Aankleden). Hoedje (tuig, elk landrijdier): 8 schatten. Nachtvacht voor het Knuffelhert: "
+                "20 verborgen knuffels. Nachtvacht voor Slakkie: 15 schatten. Glimzwamvacht voor het Zwamzwijntje: 10 "
+                "aanwijzingen."),
+         beloning=("Four secret looks (cosmetic: looks never change speed or jump).",
+                   "Vier geheime looks (alleen uiterlijk: een look verandert nooit de snelheid of sprong).")),
+    # ======== zone 4 ========
+    dict(zone="zone4", id="duinhupper", soort=("Secret mount", "Geheim rijdier"), quest="z4_s15_strandavond",
+         naam=("The Dune Hopper", "De Duinhupper"),
+         hint=("A springy beach hare that only comes to look for sleuths.", "Een springerige strandhaas die alleen speurneuzen komt bekijken."),
+         plek=("zone4", "strandfeest_dansvloer", (1991, 67, -592)),   # (Z4VerhaalPlekken ALIAS npc_strandfeest)
+         tekst=("Two ways to get it. The secret way: find 10 hidden knuffels in the Vadsrijk (all zones count) once you have "
+                "your first mount: then a Dune Hopper comes to look. Or finish the side quest 'Party at the campfire' of "
+                "Feestguh Confetti at the beach party. It jumps the highest of all mounts (almost 6 blocks).",
+                "Je kunt hem op twee manieren krijgen. De geheime manier: vind 10 verstopte knuffels in het Vadsrijk (alle "
+                "zones tellen mee) als je je eerste rijdier al hebt: dan komt er een Duinhupper kijken. Of maak de zijquest "
+                "'Feest bij het kampvuur' af van Feestguh Confetti op het strandfeest. Hij springt het allerhoogst van alle "
+                "rijdiers (bijna 6 blokken)."),
+         beloning=("The Dune Hopper mount.", "Het rijdier Duinhupper.")),
+    # ======== zone 5 ========
+    dict(zone="zone5", id="gorgonzola", baas="gorgonzola", huisdier="warmpje",
+         soort=("Boss without a quest", "Baas zonder quest"),
+         naam=("Overseer Gorgonzola", "Opzichter Gorgonzola"),
+         hint=("It is getting cold inside the whale.", "Het wordt koud in de buik van de walvis."),
+         plek=("zone5", "arena:z5wezens:gorgonzola", (2792, 166, -520)),
+         plekken=[(("Hatch in the cellar of the Grote Soepkeuken", "Luik in de kelder van de Grote Soepkeuken"), ("zone5", "z5w_buik_luik", (2732, 219, -541))),
+                  (("Bottom of the ladder", "Onderaan de ladder"), ("zone5", "z5w_buik_ladder_onder", (2733, 165, -539)))],
+         tekst=("No quest sends you here. Climb down the hatch in the cellar of the Grote Soepkeuken into De Buikgangen (the "
+                "tunnels inside Moeder Wolkwal) and walk to the Ketelkamer at the far end. Gorgonzola (lv 59, Fire) turns the "
+                "four warm-air valves shut: right-click a closed (purple) valve 3 times to open it again. At 25 % he shuts them "
+                "all. Respawn 5 minutes.",
+                "Geen quest stuurt je hierheen. Klim via het luik in de kelder van de Grote Soepkeuken De Buikgangen in (de "
+                "gangen binnen in Moeder Wolkwal) en loop naar de Ketelkamer helemaal achterin. Gorgonzola (lv 59, Vuur) draait "
+                "de vier warme-luchtkleppen dicht: rechtsklik een dichte (paarse) klep 3 keer om hem weer open te draaien. Bij "
+                "25 % draait hij ze allemaal tegelijk dicht. Terug na 5 minuten.")),
+    dict(zone="zone5", id="donderbuik", baas="donderbuik", huisdier="donderbuikje",
+         soort=("Boss without a quest", "Baas zonder quest"),
+         naam=("Donderbuik, the grey thundercloud", "Donderbuik, de Grauwe Onweerswolk"),
+         hint=("It rumbles on the whale's tail.", "Op de staart van de walvis rommelt het."),
+         plek=("zone5", "arena:z5wezens:donderbuik", (2968, 206, -582)),
+         plekken=[(("Arena entrance", "Ingang van de arena"), ("zone5", "z5w_donderbuik_deur", (2951, 207, -569)))],
+         tekst=("A world boss (lv 60, Water) on the tail fluke of Moeder Wolkwal (De Staartvlakte), without a quest. Pink "
+                "circles = cloud cushions: stand on one when he starts to suck, or he pulls you to his belly. Yellow circle = "
+                "stand in it together. Fall off the fluke? A cloud catches you. Beaten, he turns pink and giggles. Respawn 20 "
+                "minutes.",
+                "Een wereldbaas (lv 60, Water) op de staartvin van Moeder Wolkwal (De Staartvlakte), zonder quest. Roze "
+                "cirkels = wolkenkussens: sta erop als hij gaat zuigen, anders trekt hij je naar zijn buik. Gele cirkel = sta "
+                "er samen in. Val je van de staart? Een wolkje vangt je op. Verslagen wordt hij roze en giechelt hij. Terug na "
+                "20 minuten.")),
+    dict(zone="zone5", id="schuilnest", soort=("Secret place", "Geheime plek"),
+         naam=("The Hideout Nest", "Het Schuilnest"),
+         hint=("Behind the crates of the Luchthaven there is a loose plank.", "Achter de kisten van de Luchthaven zit een losse plank."),
+         plek=("zone5", "z5w_schuilnest", (2606, 188, -427)),
+         plekken=[(("The loose plank (hatch)", "De losse plank (luik)"), ("zone5", "z5w_schuilnest_luik", (2612, 217, -444))),
+                  (("Bottom of the ladder", "Onderaan de ladder"), ("zone5", "z5w_schuilnest_ladder_onder", (2611, 187, -441)))],
+         tekst=("A secret Mika hideout inside the whale, under the Luchthaven. Go in through the loose plank behind the crates "
+                "of the station and climb down. Barrels, cheese, sacks of grey fluff, and Mika's in disguise (lv 58-60): a red "
+                "circle behind you = one appears there, step away. Their leader is Master of Disguise Feta.",
+                "Een geheime Mika-schuilplaats binnen in de walvis, onder de Luchthaven. Ga naar binnen via de losse plank "
+                "achter de kisten van het station en klim omlaag. Tonnen, kaas, zakken grauwe pluis en vermomde Mika's (lv "
+                "58-60): een rode cirkel achter je = daar duikt er een op, stap weg. Hun leider is Meester-Vermommer Feta."),
+         beloning=("Elite fights with Mika loot; mostly a great place to discover.", "Elitegevechten met Mika-buit; vooral een geweldig plekje om te ontdekken.")),
+    # ======== zone 6 ========
+    dict(zone="zone6", id="zoutkolos", baas="zoutkolos", huisdier="zoutklontje", boek=("baas", "baas_zoutkolos"),
+         soort=("Boss without a quest", "Baas zonder quest"),
+         naam=("The Salt Colossus", "De Zoutkolos"),
+         hint=("At night something moves on De Zoutvlakte.", "'s Nachts beweegt er iets op De Zoutvlakte."),
+         plek=("zone6", "arena:z6wezens:zoutkolos", (3995, 69, -560)),
+         tekst=("A field boss (lv 66) of star salt that guards the Zoutbaken, ONLY at night and without a quest. Phase 2: "
+                "his pink crystals sing (listen for the high note and step out of the purple ring, or break them). Phase 3: "
+                "look straight at his glowing heart while you hit him for double damage (x2.5 with the Sterrenlens in your "
+                "hand). Respawn 20 minutes.",
+                "Een veldbaas (lv 66) van sterrenzout die het Zoutbaken bewaakt, ALLEEN 's nachts en zonder quest. Fase 2: zijn "
+                "roze kristallen zingen (luister naar de hoge toon en stap uit de paarse ring, of sla ze kapot). Fase 3: kijk "
+                "recht naar zijn gloeiende hart terwijl je slaat, dan doe je dubbele schade (x2,5 met de Sterrenlens in je "
+                "hand). Terug na 20 minuten.")),
+    dict(zone="zone6", id="ringeling", boek=("baas", "baas_ringeling"), pagina=("raid/index.html", ("The raid page", "De raidpagina")),
+         soort=("Secret boss", "Geheime baas"),
+         naam=("Duchess Ringeling", "Hertogin Ringeling"),
+         hint=("At the top of the tower someone sad is waiting.", "Boven in de toren wacht iemand die verdrietig is."),
+         plek=("zone6", "raid_toren_poort", (4123, 85, -688)),
+         plekken=[(("Her floor (the 4th)", "Haar verdieping (de 4e)"), ("zone6", "arena:z6raid:ringeling", (4140, 52, -688)))],
+         tekst=("The last boss of the raid De Sterrendovende Toren at the Moederoase (2-10 players, lv 70). Her book row stays "
+                "??? until you cheer her up: climb all four floors with your group. Afterwards she is your friend in "
+                "Saffraanpoort.",
+                "De laatste baas van de raid De Sterrendovende Toren bij de Moederoase (2-10 spelers, lv 70). Haar regel in het "
+                "boek blijft ??? tot je haar opvrolijkt: klim met je groepje alle vier de verdiepingen op. Daarna is ze je "
+                "vriendin in Saffraanpoort."),
+         beloning=("A raid chest (every clear), the title 'Friend of Ringeling' and her book row.",
+                   "Een raidkist (bij elke clear), de titel 'Vriend van Ringeling' en haar regel in het boek.")),
+]
+ZELD = {"legendarisch": ("Legendary", "Legendarisch"), "guhddelijk": ("Guhddelijk", "Guhddelijk"), "episch": ("Epic", "Episch"),
+        "zeldzaam": ("Rare", "Zeldzaam")}
 
 
 def _koords(body):
@@ -48,6 +295,8 @@ def _lees_plekken(tekst):
     out = []
     for m in re.finditer(r'\b([A-Z_]+)\.put\("([a-z0-9_]+)", w\("([a-z0-9_]+)"(?:, (-?\d+), (-?\d+), (-?\d+))?\)', tekst):
         out.append((m[1], m[2], m[3], (int(m[4]), int(m[5]), int(m[6])) if m[4] else None))
+    for m in re.finditer(r'\b([A-Z_]+)\.put\("([a-z0-9_]+)", w\("([a-z0-9_]+)", (-?\d+), (-?\d+)\)\)', tekst):   # w(id, dx, dz): the spot moved a little
+        out.append((m[1], m[2], m[3], ("+", int(m[4]), int(m[5]))))
     ints = {m[1]: _koords(m[2]) for m in re.finditer(r"int\[\]\[\] (\w+) = \{(.*?)\};", tekst, re.S)}
     strs = {m[1]: re.findall(r'"([a-z0-9_]+)"', m[2]) for m in re.finditer(r"String\[\] (\w+) = \{(.*?)\};", tekst, re.S)}
     for m in re.finditer(r'\b([A-Z_]+)\.put\((?:"([a-z_]+)" \+ \(i \+ 1\)|(\w+)\[i\]), w\("([a-z0-9_]+)" \+ \(i \+ 1\), (\w+)\[i\]\[0\]', tekst):
@@ -61,8 +310,13 @@ def _lees_plekken(tekst):
         y = int(m[4]) if m[4].lstrip("-").isdigit() else consts.get(m[4])
         if y is not None:
             out.append((m[1], m[2], "_p_" + m[2], (int(m[3]), y, int(m[5]))))
-    for m in re.finditer(r'poi\("(z5_uitkijk_[a-z_]+)", w\("([a-z0-9_]+)", (-?\d+), (-?\d+), (-?\d+)\)\)', tekst):   # zone 5's viewpoints
+    for m in re.finditer(r'poi\("(z[56]_uitkijk_[a-z_]+)", w\("([a-z0-9_]+)", (-?\d+), (-?\d+), (-?\d+)\)\)', tekst):   # zone 5 + 6's viewpoints
         out.append(("UITKIJK", m[1], m[2], (int(m[3]), int(m[4]), int(m[5]))))
+    vast = {m[1]: (m[2], (int(m[3]), int(m[4]), int(m[5])))
+            for m in re.finditer(r'static final BlockPos (\w+) = w\("([a-z0-9_]+)", (-?\d+), (-?\d+), (-?\d+)\);', tekst)}
+    for m in re.finditer(r'poi\("(z[56]_uitkijk_[a-z_]+)", ([A-Z_]+)\)', tekst):   # (1.10.21: z5_uitkijk_oog = the constant BALKON_OOG)
+        if m[2] in vast:
+            out.append(("UITKIJK", m[1], vast[m[2]][0], vast[m[2]][1]))
     for m in re.finditer(r'vul\((\w+), "([a-z_]+)", "([a-z_]+)", new int\[\]\[\] \{(.*?)\}\);', tekst, re.S):
         for i, xyz in enumerate(_koords(m[4])):
             out.append((m[1], m[2] + str(i + 1), m[3] + str(i + 1), xyz))
@@ -89,11 +343,27 @@ def data(bron, pois, gebieden, punten, puzzels):
                 return bron.schoon(nl[k])
         return ""
 
-    def waar(zone, poi, xyz):
+    java = _wereld_plekken(root)
+
+    def waar(zone, poi, xyz, mapnaam="", nid=""):
+        """The game's spot: like the *Plekken classes, the generated map class first (1.10.21: it wins over the POI file), then
+        the POI file, then the fallback numbers (zone 2's v1 numbers shifted like VadsrijkZones.z2)."""
+        if zone == "zone2" and mapnaam in ("AANWIJZING", "SCHAT"):   # Z2NpcPlekken.volgKaart: "aanwijzing.<id>" / "schat.<id>" win
+            k = ("aanwijzing." if mapnaam == "AANWIJZING" else "schat.") + nid
+            if (zone, k) in java:
+                return list(java[(zone, k)])
         for cand in (poi, poi.replace("_z6_", "_"), poi.replace("geheim_z6_", "geheim_")):
+            if (zone, cand) in java:
+                b = java[(zone, cand)]
+                return [b[0] + xyz[1], b[1], b[2] + xyz[2]] if xyz and xyz[0] == "+" else list(b)
             if (zone, cand) in pois:
-                return list(pois[(zone, cand)][2])
-        return list(xyz) if xyz else None
+                b = pois[(zone, cand)][2]
+                return [b[0] + xyz[1], b[1], b[2] + xyz[2]] if xyz and xyz[0] == "+" else list(b)
+        if not xyz or xyz[0] == "+":
+            return None
+        if zone == "zone2":   # (Z2NpcPlekken.p / w: the fallback numbers are v1, shifted like VadsrijkZones.z2)
+            return [xyz[0] + Z2_DX, xyz[1], xyz[2] + Z2_DZ]
+        return list(xyz)
 
     def gebied(pos):
         g = bron.gebied_op(gebieden, pos[0], pos[1], pos[2]) if pos else None
@@ -111,7 +381,7 @@ def data(bron, pois, gebieden, punten, puzzels):
             soort = SOORT_VAN.get(mapnaam)
             if not soort or (zone, soort, nid) in gezien:
                 continue
-            pos = waar(zone, poi, xyz)
+            pos = waar(zone, poi, xyz, mapnaam, nid)
             if not pos:
                 continue
             gezien.add((zone, soort, nid))
@@ -123,6 +393,9 @@ def data(bron, pois, gebieden, punten, puzzels):
             elif soort == "schat":
                 naam = f"Schat: {gnaam}" if gnaam else "Schat"
                 tekst_nl = zoek(ns, "schat", nid)
+                ingang = IJSGROT_DAKGAT if (zone, nid) == ("zone2", "ijsgrot") else java.get((zone, f"geheim_{nid}_ingang"))
+                if ingang:   # 1.10.21: how to get in
+                    tekst_nl += f" (Ingang: x {ingang[0]}, y {ingang[1]}, z {ingang[2]}.)"
                 bel = (f"Een uitrustingsstuk op jouw level ({'Episch' if nid in SCHAT_EPISCH else 'Zeldzaam'}) + "
                        f"{SCHAT_MUNTEN[zone]} brons ({SCHAT_MUNTEN[zone] // 100} zilver).")
             elif soort == "aanwijzing":
@@ -194,8 +467,100 @@ def data(bron, pois, gebieden, punten, puzzels):
                             gebied_naam=bron.gebied_naam(pt["gebied"])[0] if pt.get("gebied") else "",
                             beloning="Een panorama + een vinkje in je Verkenningsboek." if pt["soort"] == "uitkijk"
                             else "Rechtsklik: je checkpoint (hier word je wakker als je flauwvalt) + een vinkje in je Verkenningsboek."))
+    # 1.10.21: one viewpoint can be both a world viewpoint (punten) and a story one (z5/z6_uitkijk_*): list it once
+    gezien_pos, uniek = set(), []
+    for g in out:
+        k = (g["zone"], g["soort"], tuple(g["pos"]))
+        if k not in gezien_pos:
+            gezien_pos.add(k)
+            uniek.append(g)
+    out = uniek + _verborgen(bron, java, gebied)
     volgorde = {s[0]: i for i, s in enumerate(SOORTEN)}
-    out.sort(key=lambda g: (g["zone"], volgorde.get(g["soort"], 99), g["naam"]))
+    out.sort(key=lambda g: (g["zone"], volgorde.get(g["soort"], 99), g.get("volg", 0), g["naam"]))
+    return out
+
+
+def _wereld_plekken(root):
+    """{(zone, id): (x, y, z)} from the generated map classes (Map.entry("id", new BlockPos(x, y, z)))."""
+    out = {}
+    for zone, rel in WERELD.items():
+        try:
+            tekst = open(os.path.join(root, *JAVA, *rel.split("/")), encoding="utf-8").read()
+        except OSError:
+            continue
+        for m in re.finditer(r'Map\.entry\("([a-z0-9_.]+)", new BlockPos\((-?\d+), (-?\d+), (-?\d+)\)\)', tekst):
+            out[(zone, m[1])] = (int(m[2]), int(m[3]), int(m[4]))
+    return out
+
+
+def _quests_json(root):
+    """{quest id: quest} from data/guhs/vadsrijk/npc/quests*.json (only what the secret entries need: the reward)."""
+    import glob
+    import json
+    out = {}
+    for f in glob.glob(os.path.join(root, "src", "main", "resources", "data", "guhs", "vadsrijk", "npc", "quests*.json")):
+        try:
+            d = json.load(open(f, encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        qs = d if isinstance(d, list) else d.get("quests", d)
+        for q in (qs.values() if isinstance(qs, dict) else qs):
+            if isinstance(q, dict) and q.get("id"):
+                out[q["id"]] = q
+    return out
+
+
+def _verborgen(bron, java, gebied):
+    """1.10.21: the hidden quests, hidden bosses and secret places (VERBORGEN), each with its spots from the game's own maps."""
+    arenas = {a["id"]: a for a in (bron.rt or {}).get("arenas", [])}
+    quests = _quests_json(bron.root)
+    benoemd = bron._benoemd()
+
+    def plek(spec):
+        zone, pid, terug = spec
+        if pid.startswith("arena:") and pid[6:] in arenas:
+            return list(arenas[pid[6:]]["centrum"])
+        if pid and (zone, pid) in java:
+            return list(java[(zone, pid)])
+        return list(terug)   # (= the Java class's own fallback numbers)
+
+    def tt(paar):
+        return dict(en=paar[0], nl=paar[1])
+    out = []
+    for i, v in enumerate(VERBORGEN):
+        pos = plek(v["plek"])
+        gid, gnaam = gebied(pos)
+        gnaam = v.get("waar") or gnaam
+        bel_nl, bel_en = [], []
+        q = quests.get(v.get("quest") or "")
+        if q and q.get("soort") == "geheim":
+            b = q.get("beloning") or {}
+            loot = {"episch": ("an Epic piece", "een Episch stuk"), "zeldzaam": ("a Rare piece", "een Zeldzaam stuk")}.get(b.get("loot") or "")
+            bel_nl.append("Quest: " + ", ".join(x for x in (f"{b.get('xp', 0)} xp", f"{b.get('munten', 0)} brons ({b.get('munten', 0) // 100} zilver)",
+                                                           loot[1] if loot else "") if x))
+            bel_en.append("Quest: " + ", ".join(x for x in (f"{b.get('xp', 0)} xp", f"{b.get('munten', 0)} bronze ({b.get('munten', 0) // 100} silver)",
+                                                           loot[0] if loot else "") if x))
+        if v.get("baas"):
+            items = sorted(((iid, d) for iid, d in benoemd.items() if d["baas"] == v["baas"]), key=lambda x: -x[1]["kans"])
+            if items:
+                zn = [f'{bron.t("vadsrijk.loot." + iid, iid)} ({ZELD.get(d["zeldzaamheid"], ("", d["zeldzaamheid"]))[1]}, {round(d["kans"] * 100)} %)' for iid, d in items]
+                ze = [f'{bron.en.get("vadsrijk.loot." + iid, bron.t("vadsrijk.loot." + iid, iid))} ({ZELD.get(d["zeldzaamheid"], (d["zeldzaamheid"], ""))[0]}, '
+                      f'{round(d["kans"] * 100)} %)' for iid, d in items]
+                bel_nl.append("Baas: buit + kans op " + ", ".join(zn))
+                bel_en.append("Boss: loot + a chance at " + ", ".join(ze))
+        if v.get("huisdier"):
+            hn, he = bron.tx(f"vadsrijk.huisdier.{v['huisdier']}.naam", v["huisdier"])
+            bel_nl.append(f"Je eerste overwinning: het huisdiertje {hn}")
+            bel_en.append(f"Your first win: the pet {he}")
+        if v.get("beloning"):
+            bel_en.append(v["beloning"][0])
+            bel_nl.append(v["beloning"][1])
+        plekken = [dict(label=tt(lab), pos=plek(spec)) for lab, spec in v.get("plekken", [])]
+        out.append(dict(zone=v["zone"], soort="verborgen", id=f'{v["zone"]}:verborgen:{v["id"]}', volg=i, naam=v["naam"][1], naam_en=v["naam"][0],
+                        tekst=v["tekst"][1], tekst_en=v["tekst"][0], hint=tt(v["hint"]), label=tt(v["soort"]), pos=pos, plekken=plekken,
+                        gebied=gid, gebied_naam=gnaam, beloning=". ".join(x.rstrip(".") for x in bel_nl) + ".", beloning_en=". ".join(x.rstrip(".") for x in bel_en) + ".",
+                        quest=v.get("quest"), baas=v.get("baas"), boek=list(v["boek"]) if v.get("boek") else None,
+                        pagina=dict(url=v["pagina"][0], en=v["pagina"][1][0], nl=v["pagina"][1][1]) if v.get("pagina") else None))
     return out
 
 

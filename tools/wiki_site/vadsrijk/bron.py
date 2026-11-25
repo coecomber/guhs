@@ -6,7 +6,8 @@ regenerate the map + POI files and the runtime dump, and the site follows.
 
 Privacy/spoiler rules live HERE (an allowlist): the public map layers only get the PUBLIEK kinds; secrets (knuffels, treasures,
 clues, reliefs, letters, puzzles, cave treasures) get their positions ONLY in geheimen.py's list (user decision 2026-11-08), which the
-site shows behind a spoiler click per entry and in a map layer that is off by default. Secret quest goals stay without a position.
+site shows behind a spoiler click per entry and in a map layer that is off by default. wiki-gids (2026-11-25): every quest goal, secret ones too, carries its places
+(vindplekken.py); the pages keep secret steps behind a spoiler.
 Only static game content; never player data.
 """
 import collections
@@ -385,6 +386,8 @@ class Bron:
         data["geheimen_lijst"] = geheimen.data(self, pois, gebieden, punten, data["puzzels"]["lijst"])
         from . import boekspiegel   # 1.10.3: the secrets page mirrors the Verkenningsboek
         data["boek"] = boekspiegel.data(self, data["geheimen_lijst"])
+        from . import vindplekken   # wiki-gids: every findable WITH its coordinates (vindplekken/index.html)
+        data["vindplekken"] = vindplekken.data(self, data["quests"], gb_out)
         data["kleding"] = self._kleding()
         data["rij_uiterlijk"] = self._rij_uiterlijk()
         data["krachten"] = self._krachten()
@@ -442,6 +445,11 @@ class Bron:
         return out, zone_van
 
     def _quests(self, npc_plek, poi_plek, npc_zone):
+        """wiki-gids (2026-11-25, spoilers allowed): EVERY goal gets its places, secret ones too (the pages keep those behind a
+        spoiler): vindplekken.Gids follows the in-game tracker's rules on the evaluated *Plekken.java and adds all spots of a
+        counted find, both ends of an escort and the middle of the creatures for kill goals. pos = the first point (old users)."""
+        from . import vindplekken
+        G = vindplekken.gids(self)
         out = []
         base = os.path.join(self.root, "src", "main", "resources", "data", "guhs", "vadsrijk", "npc")
         for z in ZONES:
@@ -451,15 +459,11 @@ class Bron:
                 p = f"vadsrijk.npc.q.{qid}."
                 doelen = []
                 for j, d in enumerate(qd["doelen"]):
-                    pos = None
                     geheim = d["soort"] == "geheim" or qd["soort"] == "geheim"
-                    if not geheim:
-                        ref = d.get("plek") or (("npc:" + d["doel"]) if d["soort"] == "praat" else d["doel"] if str(d["doel"]).startswith("poi:") else "")
-                        if ref.startswith("npc:"):
-                            pos = npc_plek.get(ref[4:])
-                        elif ref.startswith("poi:") and not GEHEIM.match(ref[4:]):
-                            pos = poi_plek.get(ref[4:])
-                    doelen.append(dict(tekst=self.t(p + f"doel.{j}", d["doel"]), soort=d["soort"], n=d["n"], pos=pos, geheim=geheim))
+                    w = G.doel(qd, d)
+                    pos = w["plekken"][0]["pos"] if w["plekken"] else None
+                    doelen.append(dict(tekst=self.t(p + f"doel.{j}", d["doel"]), soort=d["soort"], n=d["n"], pos=pos, geheim=geheim,
+                                       ref=str(d["doel"]), **w))
 
                 def dialoog(soort, wie):
                     regels = []
@@ -784,9 +788,10 @@ class Bron:
         recepten = []
         for blok in regels:
             for m in rx.finditer(blok):
-                ingr = []
+                ingr, ingr_id = [], []
                 for im in re.finditer(r"i\((\d+), ([^)]*)\)", m[7] or ""):
                     opties = re.findall(r'"([a-z_]+)"', im[2])
+                    ingr_id.append([int(im[1]), opties or lijsten.get(im[2].strip()) or [im[2].strip()]])   # (ambachtgids.py: material ids, or the list's name)
                     if not opties:
                         lijst = im[2].strip()
                         naam = {"VIS1": "vis (tier 1)", "VIS2": "vis (tier 2)", "VIS3": "vis (tier 3)", "HONING": "honing",
@@ -796,7 +801,7 @@ class Bron:
                     ingr.append([int(im[1]), naam])
                 soort, _, doel = m[5].partition(":")
                 recepten.append(dict(id=m[1], ambacht=m[2].lower(), level=int(m[3]), tier=int(m[4]), soort=soort, doel=doel,
-                                     aantal=int(m[6]), naam=self.t("vadsrijk.ambacht.recept." + m[1], m[1]), in_=ingr))
+                                     aantal=int(m[6]), naam=self.t("vadsrijk.ambacht.recept." + m[1], m[1]), in_=ingr, in_id=ingr_id))
         recepten.sort(key=lambda r: (r["ambacht"], r["level"], r["naam"]))
         plekken = collections.defaultdict(list)
         for k, v in self.nl.items():

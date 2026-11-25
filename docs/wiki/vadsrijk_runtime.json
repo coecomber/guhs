@@ -6,8 +6,8 @@
       "doos": [
         2477,
         -560,
-        2554,
-        -483
+        2559,
+        -455
       ],
       "min_lv": 58,
       "max_lv": 60,
@@ -20,16 +20,16 @@
     {
       "id": "grot_koraalgrot",
       "doos": [
-        2197,
-        -625,
+        2134,
+        -628,
         2273,
-        -569
+        -523
       ],
       "min_lv": 53,
       "max_lv": 55,
       "stad": false,
       "laag": {
-        "min_y": 38,
+        "min_y": 36,
         "max_y": 57
       }
     },
@@ -37,31 +37,31 @@
       "id": "grot_wortelgrot",
       "doos": [
         1349,
-        -744,
-        1447,
-        -695
+        -765,
+        1529,
+        -693
       ],
       "min_lv": 44,
       "max_lv": 46,
       "stad": false,
       "laag": {
-        "min_y": 39,
-        "max_y": 56
+        "min_y": 42,
+        "max_y": 57
       }
     },
     {
       "id": "grot_kristalgrot",
       "doos": [
         856,
-        -1166,
-        955,
-        -1081
+        -1145,
+        960,
+        -1020
       ],
       "min_lv": 22,
       "max_lv": 24,
       "stad": false,
       "laag": {
-        "min_y": 107,
+        "min_y": 96,
         "max_y": 128
       }
     },
@@ -4882,8 +4882,8 @@
         -221
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 24,
+      "max": 2,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -4894,13 +4894,13 @@
       "id": "wezens:druipgrotten_gang_1#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -307,
-        80,
-        -234
+        -306,
+        77,
+        -240
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 24,
+      "respawn_s": 61,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -4911,13 +4911,13 @@
       "id": "wezens:druipgrotten_gang_2#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -304,
-        73,
-        -249
+        -305,
+        68,
+        -260
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 17,
+      "respawn_s": 59,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -4928,13 +4928,13 @@
       "id": "wezens:druipgrotten_gang_3#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
-        -307,
-        67,
-        -262
+        -317,
+        59,
+        -276
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 15,
+      "max": 2,
+      "respawn_s": 52,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -4942,41 +4942,7 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_4#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -315,
-        60,
-        -274
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 21,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_5#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -321,
-        54,
-        -286
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 18,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_6#knaag",
+      "id": "wezens:druipgrotten_gang_4#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
         -423,
@@ -4984,8 +4950,8 @@
         -303
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 22,
+      "max": 2,
+      "respawn_s": 64,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -4993,16 +4959,16 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_7#druipslijm",
+      "id": "wezens:druipgrotten_gang_5#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -419,
-        73,
-        -316
+        -416,
+        71,
+        -321
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 22,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5010,50 +4976,16 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_8#glimzwam",
-      "type": "guhs:vr_mob_glimzwam",
-      "centrum": [
-        -410,
-        67,
-        -328
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 16,
-      "min_lv": 13,
-      "max_lv": 18,
-      "element": "natuur",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_9#knaag",
-      "type": "guhs:vr_mob_knaag",
+      "id": "wezens:druipgrotten_gang_6#druipslijm",
+      "type": "guhs:vr_mob_druipslijm",
       "centrum": [
         -406,
-        61,
-        -341
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 19,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_10#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -408,
-        54,
-        -355
+        62,
+        -338
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 15,
+      "respawn_s": 61,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5061,24 +4993,24 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_11#kristalklodder",
-      "type": "guhs:vr_mob_kristalklodder",
+      "id": "wezens:druipgrotten_gang_7#knaag",
+      "type": "guhs:vr_mob_knaag",
       "centrum": [
-        -407,
-        48,
-        -369
+        -408,
+        53,
+        -358
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 15,
-      "min_lv": 13,
+      "respawn_s": 62,
+      "min_lv": 12,
       "max_lv": 17,
-      "element": "water",
+      "element": "geen",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_12#knaag",
+      "id": "wezens:druipgrotten_gang_8#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
         -183,
@@ -5086,8 +5018,8 @@
         -359
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 15,
+      "max": 2,
+      "respawn_s": 48,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5095,16 +5027,16 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_13#glimzwam",
+      "id": "wezens:druipgrotten_gang_9#glimzwam",
       "type": "guhs:vr_mob_glimzwam",
       "centrum": [
-        -194,
-        98,
-        -365
+        -197,
+        95,
+        -369
       ],
       "straal": 3,
       "max": 1,
-      "respawn_s": 24,
+      "respawn_s": 45,
       "min_lv": 13,
       "max_lv": 18,
       "element": "natuur",
@@ -5112,16 +5044,50 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_14#kristalklodder",
-      "type": "guhs:vr_mob_kristalklodder",
+      "id": "wezens:druipgrotten_gang_10#druipslijm",
+      "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -202,
-        91,
-        -376
+        -208,
+        84,
+        -385
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 21,
+      "respawn_s": 63,
+      "min_lv": 12,
+      "max_lv": 16,
+      "element": "water",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_11#knaag",
+      "type": "guhs:vr_mob_knaag",
+      "centrum": [
+        -222,
+        73,
+        -396
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 47,
+      "min_lv": 12,
+      "max_lv": 17,
+      "element": "geen",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_12#kristalklodder",
+      "type": "guhs:vr_mob_kristalklodder",
+      "centrum": [
+        -240,
+        62,
+        -401
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 45,
       "min_lv": 13,
       "max_lv": 17,
       "element": "water",
@@ -5129,75 +5095,7 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_15#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -210,
-        83,
-        -387
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 24,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_16#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -220,
-        75,
-        -394
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 21,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_17#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -233,
-        67,
-        -399
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 17,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_18#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -245,
-        59,
-        -404
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 24,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_19#druipslijm",
+      "id": "wezens:druipgrotten_gang_13#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
         -255,
@@ -5206,7 +5104,7 @@
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 22,
+      "respawn_s": 50,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5214,7 +5112,7 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_20#knaag",
+      "id": "wezens:druipgrotten_gang_14#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
         -330,
@@ -5222,8 +5120,8 @@
         -304
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 17,
+      "max": 2,
+      "respawn_s": 50,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5231,84 +5129,33 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_21#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
+      "id": "wezens:druipgrotten_gang_15#kristalklodder",
+      "type": "guhs:vr_mob_kristalklodder",
       "centrum": [
-        -341,
+        -344,
         46,
-        -315
+        -320
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 20,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_22#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -348,
-        46,
-        -329
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 17,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_23#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -355,
-        45,
-        -342
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 16,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_24#glimzwam",
-      "type": "guhs:vr_mob_glimzwam",
-      "centrum": [
-        -368,
-        44,
-        -351
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 20,
+      "respawn_s": 48,
       "min_lv": 13,
-      "max_lv": 18,
-      "element": "natuur",
+      "max_lv": 17,
+      "element": "water",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_25#druipslijm",
+      "id": "wezens:druipgrotten_gang_16#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -383,
-        44,
-        -358
+        -353,
+        45,
+        -340
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 16,
+      "respawn_s": 62,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5316,16 +5163,16 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_26#knaag",
+      "id": "wezens:druipgrotten_gang_17#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
-        -394,
-        43,
-        -367
+        -371,
+        44,
+        -352
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 17,
+      "max": 2,
+      "respawn_s": 56,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5333,7 +5180,24 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_27#knaag",
+      "id": "wezens:druipgrotten_gang_18#druipslijm",
+      "type": "guhs:vr_mob_druipslijm",
+      "centrum": [
+        -390,
+        43,
+        -363
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 48,
+      "min_lv": 12,
+      "max_lv": 16,
+      "element": "water",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_19#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
         -391,
@@ -5341,8 +5205,8 @@
         -386
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 17,
+      "max": 2,
+      "respawn_s": 50,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5350,16 +5214,16 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_28#druipslijm",
+      "id": "wezens:druipgrotten_gang_20#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -377,
+        -371,
         43,
-        -392
+        -393
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 21,
+      "respawn_s": 64,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5367,93 +5231,59 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_29#kristalklodder",
-      "type": "guhs:vr_mob_kristalklodder",
+      "id": "wezens:druipgrotten_gang_21#glimzwam",
+      "type": "guhs:vr_mob_glimzwam",
       "centrum": [
-        -362,
-        43,
-        -394
+        -350,
+        44,
+        -393
+      ],
+      "straal": 3,
+      "max": 1,
+      "respawn_s": 51,
+      "min_lv": 13,
+      "max_lv": 18,
+      "element": "natuur",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_22#knaag",
+      "type": "guhs:vr_mob_knaag",
+      "centrum": [
+        -328,
+        44,
+        -395
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 24,
-      "min_lv": 13,
+      "respawn_s": 54,
+      "min_lv": 12,
       "max_lv": 17,
+      "element": "geen",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_23#druipslijm",
+      "type": "guhs:vr_mob_druipslijm",
+      "centrum": [
+        -309,
+        44,
+        -405
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 62,
+      "min_lv": 12,
+      "max_lv": 16,
       "element": "water",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_30#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -347,
-        44,
-        -393
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 22,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_31#glimzwam",
-      "type": "guhs:vr_mob_glimzwam",
-      "centrum": [
-        -331,
-        44,
-        -394
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 19,
-      "min_lv": 13,
-      "max_lv": 18,
-      "element": "natuur",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_32#glimzwam",
-      "type": "guhs:vr_mob_glimzwam",
-      "centrum": [
-        -317,
-        44,
-        -400
-      ],
-      "straal": 3,
-      "max": 1,
-      "respawn_s": 17,
-      "min_lv": 13,
-      "max_lv": 18,
-      "element": "natuur",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_33#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -304,
-        45,
-        -408
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 22,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_34#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
+      "id": "wezens:druipgrotten_gang_24#kristalklodder",
+      "type": "guhs:vr_mob_kristalklodder",
       "centrum": [
         -291,
         45,
@@ -5461,32 +5291,32 @@
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 16,
-      "min_lv": 12,
-      "max_lv": 16,
+      "respawn_s": 46,
+      "min_lv": 13,
+      "max_lv": 17,
       "element": "water",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_35#glimzwam",
-      "type": "guhs:vr_mob_glimzwam",
+      "id": "wezens:druipgrotten_gang_25#knaag",
+      "type": "guhs:vr_mob_knaag",
       "centrum": [
-        -276,
+        -270,
         45,
         -420
       ],
       "straal": 3,
-      "max": 1,
-      "respawn_s": 20,
-      "min_lv": 13,
-      "max_lv": 18,
-      "element": "natuur",
+      "max": 2,
+      "respawn_s": 45,
+      "min_lv": 12,
+      "max_lv": 17,
+      "element": "geen",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_36#knaag",
+      "id": "wezens:druipgrotten_gang_26#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
         -409,
@@ -5494,8 +5324,8 @@
         -386
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 22,
+      "max": 2,
+      "respawn_s": 51,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5503,16 +5333,67 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_37#kristalklodder",
-      "type": "guhs:vr_mob_kristalklodder",
+      "id": "wezens:druipgrotten_gang_27#druipslijm",
+      "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -417,
+        -419,
         43,
-        -399
+        -405
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 17,
+      "respawn_s": 56,
+      "min_lv": 12,
+      "max_lv": 16,
+      "element": "water",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_28#druipslijm",
+      "type": "guhs:vr_mob_druipslijm",
+      "centrum": [
+        -425,
+        43,
+        -426
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 56,
+      "min_lv": 12,
+      "max_lv": 16,
+      "element": "water",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_29#knaag",
+      "type": "guhs:vr_mob_knaag",
+      "centrum": [
+        -441,
+        43,
+        -441
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 63,
+      "min_lv": 12,
+      "max_lv": 17,
+      "element": "geen",
+      "elite_kans": 0.06,
+      "grot": true
+    },
+    {
+      "id": "wezens:druipgrotten_gang_30#kristalklodder",
+      "type": "guhs:vr_mob_kristalklodder",
+      "centrum": [
+        -456,
+        43,
+        -456
+      ],
+      "straal": 3,
+      "max": 2,
+      "respawn_s": 46,
       "min_lv": 13,
       "max_lv": 17,
       "element": "water",
@@ -5520,92 +5401,7 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_38#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -421,
-        43,
-        -414
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 19,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_39#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -426,
-        43,
-        -429
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 20,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_40#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -438,
-        43,
-        -439
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 23,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_41#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -451,
-        43,
-        -448
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 17,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_42#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -458,
-        43,
-        -461
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 23,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_43#knaag",
+      "id": "wezens:druipgrotten_gang_31#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
         -318,
@@ -5613,8 +5409,8 @@
         -310
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 20,
+      "max": 2,
+      "respawn_s": 52,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5622,50 +5418,50 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_44#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
+      "id": "wezens:druipgrotten_gang_32#glimzwam",
+      "type": "guhs:vr_mob_glimzwam",
       "centrum": [
-        -313,
+        -310,
         47,
-        -325
+        -330
       ],
       "straal": 3,
-      "max": 2,
-      "respawn_s": 16,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
+      "max": 1,
+      "respawn_s": 61,
+      "min_lv": 13,
+      "max_lv": 18,
+      "element": "natuur",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_45#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
+      "id": "wezens:druipgrotten_gang_33#glimzwam",
+      "type": "guhs:vr_mob_glimzwam",
       "centrum": [
-        -304,
+        -295,
         47,
-        -337
+        -345
       ],
       "straal": 3,
-      "max": 2,
-      "respawn_s": 22,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
+      "max": 1,
+      "respawn_s": 59,
+      "min_lv": 13,
+      "max_lv": 18,
+      "element": "natuur",
       "elite_kans": 0.06,
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_46#knaag",
+      "id": "wezens:druipgrotten_gang_34#knaag",
       "type": "guhs:vr_mob_knaag",
       "centrum": [
-        -292,
-        47,
-        -348
+        -283,
+        46,
+        -363
       ],
       "straal": 3,
-      "max": 3,
-      "respawn_s": 23,
+      "max": 2,
+      "respawn_s": 54,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5673,16 +5469,16 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_47#druipslijm",
+      "id": "wezens:druipgrotten_gang_35#druipslijm",
       "type": "guhs:vr_mob_druipslijm",
       "centrum": [
-        -284,
+        -279,
         46,
-        -360
+        -385
       ],
       "straal": 3,
       "max": 2,
-      "respawn_s": 18,
+      "respawn_s": 49,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5690,53 +5486,19 @@
       "grot": true
     },
     {
-      "id": "wezens:druipgrotten_gang_48#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
-      "centrum": [
-        -281,
-        46,
-        -375
-      ],
-      "straal": 3,
-      "max": 2,
-      "respawn_s": 18,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_49#knaag",
-      "type": "guhs:vr_mob_knaag",
-      "centrum": [
-        -278,
-        46,
-        -391
-      ],
-      "straal": 3,
-      "max": 3,
-      "respawn_s": 17,
-      "min_lv": 12,
-      "max_lv": 17,
-      "element": "geen",
-      "elite_kans": 0.06,
-      "grot": true
-    },
-    {
-      "id": "wezens:druipgrotten_gang_50#druipslijm",
-      "type": "guhs:vr_mob_druipslijm",
+      "id": "wezens:druipgrotten_gang_36#glimzwam",
+      "type": "guhs:vr_mob_glimzwam",
       "centrum": [
         -273,
         46,
         -405
       ],
       "straal": 3,
-      "max": 2,
-      "respawn_s": 22,
-      "min_lv": 12,
-      "max_lv": 16,
-      "element": "water",
+      "max": 1,
+      "respawn_s": 62,
+      "min_lv": 13,
+      "max_lv": 18,
+      "element": "natuur",
       "elite_kans": 0.06,
       "grot": true
     },
@@ -5750,7 +5512,7 @@
       ],
       "straal": 8,
       "max": 2,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5767,7 +5529,7 @@
       ],
       "straal": 8,
       "max": 3,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5784,7 +5546,7 @@
       ],
       "straal": 8,
       "max": 1,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 13,
       "max_lv": 18,
       "element": "natuur",
@@ -5818,7 +5580,7 @@
       ],
       "straal": 9,
       "max": 2,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 13,
       "max_lv": 17,
       "element": "water",
@@ -5835,7 +5597,7 @@
       ],
       "straal": 9,
       "max": 2,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5869,7 +5631,7 @@
       ],
       "straal": 7,
       "max": 3,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 17,
       "element": "geen",
@@ -5886,7 +5648,7 @@
       ],
       "straal": 7,
       "max": 2,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 13,
       "max_lv": 17,
       "element": "water",
@@ -5920,7 +5682,7 @@
       ],
       "straal": 6,
       "max": 2,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 12,
       "max_lv": 16,
       "element": "water",
@@ -5937,7 +5699,7 @@
       ],
       "straal": 6,
       "max": 2,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 13,
       "max_lv": 17,
       "element": "water",
@@ -5954,7 +5716,7 @@
       ],
       "straal": 6,
       "max": 1,
-      "respawn_s": 25,
+      "respawn_s": 60,
       "min_lv": 13,
       "max_lv": 18,
       "element": "natuur",
@@ -13815,32 +13577,32 @@
       "per_level": {
         "1": {
           "vads": 12.0,
-          "behendigheid": 3.45,
+          "behendigheid": 3.3,
           "verdediging": 2.81
         },
         "10": {
           "vads": 30.0,
-          "behendigheid": 7.5,
+          "behendigheid": 6.0,
           "verdediging": 7.85
         },
         "20": {
           "vads": 50.0,
-          "behendigheid": 12.0,
+          "behendigheid": 9.0,
           "verdediging": 13.45
         },
         "30": {
           "vads": 70.0,
-          "behendigheid": 16.5,
+          "behendigheid": 12.0,
           "verdediging": 19.05
         },
         "40": {
           "vads": 90.0,
-          "behendigheid": 21.0,
+          "behendigheid": 15.0,
           "verdediging": 24.65
         },
         "50": {
           "vads": 110.0,
-          "behendigheid": 25.5,
+          "behendigheid": 18.0,
           "verdediging": 30.25
         }
       }
@@ -13855,32 +13617,32 @@
       "per_level": {
         "1": {
           "vads": 18.0,
-          "behendigheid": 4.6,
+          "behendigheid": 4.4,
           "verdediging": 4.69
         },
         "10": {
           "vads": 45.0,
-          "behendigheid": 10.0,
+          "behendigheid": 8.0,
           "verdediging": 13.15
         },
         "20": {
           "vads": 75.0,
-          "behendigheid": 16.0,
+          "behendigheid": 12.0,
           "verdediging": 22.55
         },
         "30": {
           "vads": 105.0,
-          "behendigheid": 22.0,
+          "behendigheid": 16.0,
           "verdediging": 31.95
         },
         "40": {
           "vads": 135.0,
-          "behendigheid": 28.0,
+          "behendigheid": 20.0,
           "verdediging": 41.35
         },
         "50": {
           "vads": 165.0,
-          "behendigheid": 34.0,
+          "behendigheid": 24.0,
           "verdediging": 50.75
         }
       }
@@ -13895,32 +13657,32 @@
       "per_level": {
         "1": {
           "vads": 14.4,
-          "behendigheid": 3.45,
+          "behendigheid": 3.3,
           "verdediging": 3.75
         },
         "10": {
           "vads": 36.0,
-          "behendigheid": 7.5,
+          "behendigheid": 6.0,
           "verdediging": 10.5
         },
         "20": {
           "vads": 60.0,
-          "behendigheid": 12.0,
+          "behendigheid": 9.0,
           "verdediging": 18.0
         },
         "30": {
           "vads": 84.0,
-          "behendigheid": 16.5,
+          "behendigheid": 12.0,
           "verdediging": 25.5
         },
         "40": {
           "vads": 108.0,
-          "behendigheid": 21.0,
+          "behendigheid": 15.0,
           "verdediging": 33.0
         },
         "50": {
           "vads": 132.0,
-          "behendigheid": 25.5,
+          "behendigheid": 18.0,
           "verdediging": 40.5
         }
       }
@@ -13935,37 +13697,37 @@
       "per_level": {
         "1": {
           "vads": 9.6,
-          "behendigheid": 2.3,
+          "behendigheid": 2.2,
           "verdediging": 1.88,
           "loopsnelheid": 3.0
         },
         "10": {
           "vads": 24.0,
-          "behendigheid": 5.0,
+          "behendigheid": 4.0,
           "verdediging": 5.3,
           "loopsnelheid": 3.0
         },
         "20": {
           "vads": 40.0,
-          "behendigheid": 8.0,
+          "behendigheid": 6.0,
           "verdediging": 9.1,
           "loopsnelheid": 3.0
         },
         "30": {
           "vads": 56.0,
-          "behendigheid": 11.0,
+          "behendigheid": 8.0,
           "verdediging": 12.9,
           "loopsnelheid": 3.0
         },
         "40": {
           "vads": 72.0,
-          "behendigheid": 14.0,
+          "behendigheid": 10.0,
           "verdediging": 16.7,
           "loopsnelheid": 3.0
         },
         "50": {
           "vads": 88.0,
-          "behendigheid": 17.0,
+          "behendigheid": 12.0,
           "verdediging": 20.5,
           "loopsnelheid": 3.0
         }
@@ -13981,32 +13743,32 @@
       "per_level": {
         "1": {
           "vads": 14.4,
-          "wijsheid": 3.45,
+          "wijsheid": 3.3,
           "verdediging": 2.81
         },
         "10": {
           "vads": 36.0,
-          "wijsheid": 7.5,
+          "wijsheid": 6.0,
           "verdediging": 7.85
         },
         "20": {
           "vads": 60.0,
-          "wijsheid": 12.0,
+          "wijsheid": 9.0,
           "verdediging": 13.45
         },
         "30": {
           "vads": 84.0,
-          "wijsheid": 16.5,
+          "wijsheid": 12.0,
           "verdediging": 19.05
         },
         "40": {
           "vads": 108.0,
-          "wijsheid": 21.0,
+          "wijsheid": 15.0,
           "verdediging": 24.65
         },
         "50": {
           "vads": 132.0,
-          "wijsheid": 25.5,
+          "wijsheid": 18.0,
           "verdediging": 30.25
         }
       }
@@ -14021,37 +13783,37 @@
       "per_level": {
         "1": {
           "vads": 19.2,
-          "wijsheid": 4.6,
+          "wijsheid": 4.4,
           "verdediging": 4.69,
           "healkracht": 3.0
         },
         "10": {
           "vads": 48.0,
-          "wijsheid": 10.0,
+          "wijsheid": 8.0,
           "verdediging": 13.15,
           "healkracht": 3.0
         },
         "20": {
           "vads": 80.0,
-          "wijsheid": 16.0,
+          "wijsheid": 12.0,
           "verdediging": 22.55,
           "healkracht": 3.0
         },
         "30": {
           "vads": 112.0,
-          "wijsheid": 22.0,
+          "wijsheid": 16.0,
           "verdediging": 31.95,
           "healkracht": 3.0
         },
         "40": {
           "vads": 144.0,
-          "wijsheid": 28.0,
+          "wijsheid": 20.0,
           "verdediging": 41.35,
           "healkracht": 3.0
         },
         "50": {
           "vads": 176.0,
-          "wijsheid": 34.0,
+          "wijsheid": 24.0,
           "verdediging": 50.75,
           "healkracht": 3.0
         }
@@ -14067,32 +13829,32 @@
       "per_level": {
         "1": {
           "vads": 15.6,
-          "wijsheid": 3.45,
+          "wijsheid": 3.3,
           "verdediging": 3.75
         },
         "10": {
           "vads": 39.0,
-          "wijsheid": 7.5,
+          "wijsheid": 6.0,
           "verdediging": 10.5
         },
         "20": {
           "vads": 65.0,
-          "wijsheid": 12.0,
+          "wijsheid": 9.0,
           "verdediging": 18.0
         },
         "30": {
           "vads": 91.0,
-          "wijsheid": 16.5,
+          "wijsheid": 12.0,
           "verdediging": 25.5
         },
         "40": {
           "vads": 117.0,
-          "wijsheid": 21.0,
+          "wijsheid": 15.0,
           "verdediging": 33.0
         },
         "50": {
           "vads": 143.0,
-          "wijsheid": 25.5,
+          "wijsheid": 18.0,
           "verdediging": 40.5
         }
       }
@@ -14107,32 +13869,32 @@
       "per_level": {
         "1": {
           "vads": 10.8,
-          "wijsheid": 2.3,
+          "wijsheid": 2.2,
           "verdediging": 1.88
         },
         "10": {
           "vads": 27.0,
-          "wijsheid": 5.0,
+          "wijsheid": 4.0,
           "verdediging": 5.3
         },
         "20": {
           "vads": 45.0,
-          "wijsheid": 8.0,
+          "wijsheid": 6.0,
           "verdediging": 9.1
         },
         "30": {
           "vads": 63.0,
-          "wijsheid": 11.0,
+          "wijsheid": 8.0,
           "verdediging": 12.9
         },
         "40": {
           "vads": 81.0,
-          "wijsheid": 14.0,
+          "wijsheid": 10.0,
           "verdediging": 16.7
         },
         "50": {
           "vads": 99.0,
-          "wijsheid": 17.0,
+          "wijsheid": 12.0,
           "verdediging": 20.5
         }
       }
@@ -14858,37 +14620,37 @@
       "per_level": {
         "1": {
           "vads": 33.6,
-          "wijsheid": 6.9,
+          "wijsheid": 6.6,
           "verdediging": 8.44,
           "elementweerstand": 4.24
         },
         "10": {
           "vads": 84.0,
-          "wijsheid": 15.0,
+          "wijsheid": 12.0,
           "verdediging": 23.65,
           "elementweerstand": 6.4
         },
         "20": {
           "vads": 140.0,
-          "wijsheid": 24.0,
+          "wijsheid": 18.0,
           "verdediging": 40.55,
           "elementweerstand": 8.8
         },
         "30": {
           "vads": 196.0,
-          "wijsheid": 33.0,
+          "wijsheid": 24.0,
           "verdediging": 57.45,
           "elementweerstand": 11.2
         },
         "40": {
           "vads": 252.0,
-          "wijsheid": 42.0,
+          "wijsheid": 30.0,
           "verdediging": 74.35,
           "elementweerstand": 13.6
         },
         "50": {
           "vads": 308.0,
-          "wijsheid": 51.0,
+          "wijsheid": 36.0,
           "verdediging": 91.25,
           "elementweerstand": 16.0
         }
@@ -14904,32 +14666,32 @@
       "per_level": {
         "1": {
           "vads": 55.2,
-          "wijsheid": 8.05,
+          "wijsheid": 7.7,
           "verdediging": 14.06
         },
         "10": {
           "vads": 138.0,
-          "wijsheid": 17.5,
+          "wijsheid": 14.0,
           "verdediging": 39.35
         },
         "20": {
           "vads": 230.0,
-          "wijsheid": 28.0,
+          "wijsheid": 21.0,
           "verdediging": 67.45
         },
         "30": {
           "vads": 322.0,
-          "wijsheid": 38.5,
+          "wijsheid": 28.0,
           "verdediging": 95.55
         },
         "40": {
           "vads": 414.0,
-          "wijsheid": 49.0,
+          "wijsheid": 35.0,
           "verdediging": 123.65
         },
         "50": {
           "vads": 506.0,
-          "wijsheid": 59.5,
+          "wijsheid": 42.0,
           "verdediging": 151.75
         }
       }
@@ -14944,32 +14706,32 @@
       "per_level": {
         "1": {
           "vads": 45.6,
-          "wijsheid": 6.9,
+          "wijsheid": 6.6,
           "verdediging": 11.25
         },
         "10": {
           "vads": 114.0,
-          "wijsheid": 15.0,
+          "wijsheid": 12.0,
           "verdediging": 31.5
         },
         "20": {
           "vads": 190.0,
-          "wijsheid": 24.0,
+          "wijsheid": 18.0,
           "verdediging": 54.0
         },
         "30": {
           "vads": 266.0,
-          "wijsheid": 33.0,
+          "wijsheid": 24.0,
           "verdediging": 76.5
         },
         "40": {
           "vads": 342.0,
-          "wijsheid": 42.0,
+          "wijsheid": 30.0,
           "verdediging": 99.0
         },
         "50": {
           "vads": 418.0,
-          "wijsheid": 51.0,
+          "wijsheid": 36.0,
           "verdediging": 121.5
         }
       }
@@ -14984,37 +14746,37 @@
       "per_level": {
         "1": {
           "vads": 28.8,
-          "wijsheid": 4.6,
+          "wijsheid": 4.4,
           "verdediging": 6.56,
           "elementweerstand": 3.18
         },
         "10": {
           "vads": 72.0,
-          "wijsheid": 10.0,
+          "wijsheid": 8.0,
           "verdediging": 18.35,
           "elementweerstand": 4.8
         },
         "20": {
           "vads": 120.0,
-          "wijsheid": 16.0,
+          "wijsheid": 12.0,
           "verdediging": 31.45,
           "elementweerstand": 6.6
         },
         "30": {
           "vads": 168.0,
-          "wijsheid": 22.0,
+          "wijsheid": 16.0,
           "verdediging": 44.55,
           "elementweerstand": 8.4
         },
         "40": {
           "vads": 216.0,
-          "wijsheid": 28.0,
+          "wijsheid": 20.0,
           "verdediging": 57.65,
           "elementweerstand": 10.2
         },
         "50": {
           "vads": 264.0,
-          "wijsheid": 34.0,
+          "wijsheid": 24.0,
           "verdediging": 70.75,
           "elementweerstand": 12.0
         }
@@ -15030,37 +14792,37 @@
       "per_level": {
         "1": {
           "vads": 30.0,
-          "kracht": 5.75,
+          "kracht": 5.5,
           "verdediging": 7.5,
           "kritiek": 2.12
         },
         "10": {
           "vads": 75.0,
-          "kracht": 12.5,
+          "kracht": 10.0,
           "verdediging": 21.0,
           "kritiek": 3.2
         },
         "20": {
           "vads": 125.0,
-          "kracht": 20.0,
+          "kracht": 15.0,
           "verdediging": 36.0,
           "kritiek": 4.4
         },
         "30": {
           "vads": 175.0,
-          "kracht": 27.5,
+          "kracht": 20.0,
           "verdediging": 51.0,
           "kritiek": 5.6
         },
         "40": {
           "vads": 225.0,
-          "kracht": 35.0,
+          "kracht": 25.0,
           "verdediging": 66.0,
           "kritiek": 6.8
         },
         "50": {
           "vads": 275.0,
-          "kracht": 42.5,
+          "kracht": 30.0,
           "verdediging": 81.0,
           "kritiek": 8.0
         }
@@ -15076,38 +14838,38 @@
       "per_level": {
         "1": {
           "vads": 48.0,
-          "kracht": 6.9,
-          "behendigheid": 4.6,
+          "kracht": 6.6,
+          "behendigheid": 4.4,
           "verdediging": 12.19
         },
         "10": {
           "vads": 120.0,
-          "kracht": 15.0,
-          "behendigheid": 10.0,
+          "kracht": 12.0,
+          "behendigheid": 8.0,
           "verdediging": 34.15
         },
         "20": {
           "vads": 200.0,
-          "kracht": 24.0,
-          "behendigheid": 16.0,
+          "kracht": 18.0,
+          "behendigheid": 12.0,
           "verdediging": 58.55
         },
         "30": {
           "vads": 280.0,
-          "kracht": 33.0,
-          "behendigheid": 22.0,
+          "kracht": 24.0,
+          "behendigheid": 16.0,
           "verdediging": 82.95
         },
         "40": {
           "vads": 360.0,
-          "kracht": 42.0,
-          "behendigheid": 28.0,
+          "kracht": 30.0,
+          "behendigheid": 20.0,
           "verdediging": 107.35
         },
         "50": {
           "vads": 440.0,
-          "kracht": 51.0,
-          "behendigheid": 34.0,
+          "kracht": 36.0,
+          "behendigheid": 24.0,
           "verdediging": 131.75
         }
       }
@@ -15122,32 +14884,32 @@
       "per_level": {
         "1": {
           "vads": 40.8,
-          "behendigheid": 6.9,
+          "behendigheid": 6.6,
           "verdediging": 10.31
         },
         "10": {
           "vads": 102.0,
-          "behendigheid": 15.0,
+          "behendigheid": 12.0,
           "verdediging": 28.85
         },
         "20": {
           "vads": 170.0,
-          "behendigheid": 24.0,
+          "behendigheid": 18.0,
           "verdediging": 49.45
         },
         "30": {
           "vads": 238.0,
-          "behendigheid": 33.0,
+          "behendigheid": 24.0,
           "verdediging": 70.05
         },
         "40": {
           "vads": 306.0,
-          "behendigheid": 42.0,
+          "behendigheid": 30.0,
           "verdediging": 90.65
         },
         "50": {
           "vads": 374.0,
-          "behendigheid": 51.0,
+          "behendigheid": 36.0,
           "verdediging": 111.25
         }
       }
@@ -15162,37 +14924,37 @@
       "per_level": {
         "1": {
           "vads": 26.4,
-          "behendigheid": 4.6,
+          "behendigheid": 4.4,
           "verdediging": 5.63,
           "loopsnelheid": 4.24
         },
         "10": {
           "vads": 66.0,
-          "behendigheid": 10.0,
+          "behendigheid": 8.0,
           "verdediging": 15.8,
           "loopsnelheid": 6.4
         },
         "20": {
           "vads": 110.0,
-          "behendigheid": 16.0,
+          "behendigheid": 12.0,
           "verdediging": 27.1,
           "loopsnelheid": 8.8
         },
         "30": {
           "vads": 154.0,
-          "behendigheid": 22.0,
+          "behendigheid": 16.0,
           "verdediging": 38.4,
           "loopsnelheid": 11.2
         },
         "40": {
           "vads": 198.0,
-          "behendigheid": 28.0,
+          "behendigheid": 20.0,
           "verdediging": 49.7,
           "loopsnelheid": 13.6
         },
         "50": {
           "vads": 242.0,
-          "behendigheid": 34.0,
+          "behendigheid": 24.0,
           "verdediging": 61.0,
           "loopsnelheid": 16.0
         }
@@ -16415,37 +16177,37 @@
       "per_level": {
         "1": {
           "vads": 45.6,
-          "behendigheid": 9.2,
+          "behendigheid": 8.8,
           "verdediging": 11.25,
           "kritiek": 2.12
         },
         "10": {
           "vads": 114.0,
-          "behendigheid": 20.0,
+          "behendigheid": 16.0,
           "verdediging": 31.5,
           "kritiek": 3.2
         },
         "20": {
           "vads": 190.0,
-          "behendigheid": 32.0,
+          "behendigheid": 24.0,
           "verdediging": 54.0,
           "kritiek": 4.4
         },
         "30": {
           "vads": 266.0,
-          "behendigheid": 44.0,
+          "behendigheid": 32.0,
           "verdediging": 76.5,
           "kritiek": 5.6
         },
         "40": {
           "vads": 342.0,
-          "behendigheid": 56.0,
+          "behendigheid": 40.0,
           "verdediging": 99.0,
           "kritiek": 6.8
         },
         "50": {
           "vads": 418.0,
-          "behendigheid": 68.0,
+          "behendigheid": 48.0,
           "verdediging": 121.5,
           "kritiek": 8.0
         }
@@ -16461,32 +16223,32 @@
       "per_level": {
         "1": {
           "vads": 74.4,
-          "behendigheid": 11.5,
+          "behendigheid": 11.0,
           "verdediging": 18.75
         },
         "10": {
           "vads": 186.0,
-          "behendigheid": 25.0,
+          "behendigheid": 20.0,
           "verdediging": 52.5
         },
         "20": {
           "vads": 310.0,
-          "behendigheid": 40.0,
+          "behendigheid": 30.0,
           "verdediging": 90.0
         },
         "30": {
           "vads": 434.0,
-          "behendigheid": 55.0,
+          "behendigheid": 40.0,
           "verdediging": 127.5
         },
         "40": {
           "vads": 558.0,
-          "behendigheid": 70.0,
+          "behendigheid": 50.0,
           "verdediging": 165.0
         },
         "50": {
           "vads": 682.0,
-          "behendigheid": 85.0,
+          "behendigheid": 60.0,
           "verdediging": 202.5
         }
       }
@@ -16501,37 +16263,37 @@
       "per_level": {
         "1": {
           "vads": 64.8,
-          "behendigheid": 9.2,
+          "behendigheid": 8.8,
           "verdediging": 15.94,
           "kritiekschade": 4.24
         },
         "10": {
           "vads": 162.0,
-          "behendigheid": 20.0,
+          "behendigheid": 16.0,
           "verdediging": 44.65,
           "kritiekschade": 6.4
         },
         "20": {
           "vads": 270.0,
-          "behendigheid": 32.0,
+          "behendigheid": 24.0,
           "verdediging": 76.55,
           "kritiekschade": 8.8
         },
         "30": {
           "vads": 378.0,
-          "behendigheid": 44.0,
+          "behendigheid": 32.0,
           "verdediging": 108.45,
           "kritiekschade": 11.2
         },
         "40": {
           "vads": 486.0,
-          "behendigheid": 56.0,
+          "behendigheid": 40.0,
           "verdediging": 140.35,
           "kritiekschade": 13.6
         },
         "50": {
           "vads": 594.0,
-          "behendigheid": 68.0,
+          "behendigheid": 48.0,
           "verdediging": 172.25,
           "kritiekschade": 16.0
         }
@@ -16547,37 +16309,37 @@
       "per_level": {
         "1": {
           "vads": 40.8,
-          "behendigheid": 6.9,
+          "behendigheid": 6.6,
           "verdediging": 9.38,
           "loopsnelheid": 5.3
         },
         "10": {
           "vads": 102.0,
-          "behendigheid": 15.0,
+          "behendigheid": 12.0,
           "verdediging": 26.3,
           "loopsnelheid": 8.0
         },
         "20": {
           "vads": 170.0,
-          "behendigheid": 24.0,
+          "behendigheid": 18.0,
           "verdediging": 45.1,
           "loopsnelheid": 11.0
         },
         "30": {
           "vads": 238.0,
-          "behendigheid": 33.0,
+          "behendigheid": 24.0,
           "verdediging": 63.9,
           "loopsnelheid": 14.0
         },
         "40": {
           "vads": 306.0,
-          "behendigheid": 42.0,
+          "behendigheid": 30.0,
           "verdediging": 82.7,
           "loopsnelheid": 17.0
         },
         "50": {
           "vads": 374.0,
-          "behendigheid": 51.0,
+          "behendigheid": 36.0,
           "verdediging": 101.5,
           "loopsnelheid": 20.0
         }
@@ -16593,32 +16355,32 @@
       "per_level": {
         "1": {
           "vads": 55.2,
-          "kracht": 8.05,
+          "kracht": 7.7,
           "verdediging": 19.31
         },
         "10": {
           "vads": 138.0,
-          "kracht": 17.5,
+          "kracht": 14.0,
           "verdediging": 51.35
         },
         "20": {
           "vads": 230.0,
-          "kracht": 28.0,
+          "kracht": 21.0,
           "verdediging": 86.95
         },
         "30": {
           "vads": 322.0,
-          "kracht": 38.5,
+          "kracht": 28.0,
           "verdediging": 122.55
         },
         "40": {
           "vads": 414.0,
-          "kracht": 49.0,
+          "kracht": 35.0,
           "verdediging": 158.15
         },
         "50": {
           "vads": 506.0,
-          "kracht": 59.5,
+          "kracht": 42.0,
           "verdediging": 193.75
         }
       }
@@ -16633,32 +16395,32 @@
       "per_level": {
         "1": {
           "vads": 91.2,
-          "kracht": 10.35,
+          "kracht": 9.9,
           "verdediging": 31.28
         },
         "10": {
           "vads": 228.0,
-          "kracht": 22.5,
+          "kracht": 18.0,
           "verdediging": 83.3
         },
         "20": {
           "vads": 380.0,
-          "kracht": 36.0,
+          "kracht": 27.0,
           "verdediging": 141.1
         },
         "30": {
           "vads": 532.0,
-          "kracht": 49.5,
+          "kracht": 36.0,
           "verdediging": 198.9
         },
         "40": {
           "vads": 684.0,
-          "kracht": 63.0,
+          "kracht": 45.0,
           "verdediging": 256.7
         },
         "50": {
           "vads": 836.0,
-          "kracht": 76.5,
+          "kracht": 54.0,
           "verdediging": 314.5
         }
       }
@@ -16673,32 +16435,32 @@
       "per_level": {
         "1": {
           "vads": 76.8,
-          "kracht": 9.2,
+          "kracht": 8.8,
           "verdediging": 20.63
         },
         "10": {
           "vads": 192.0,
-          "kracht": 20.0,
+          "kracht": 16.0,
           "verdediging": 57.8
         },
         "20": {
           "vads": 320.0,
-          "kracht": 32.0,
+          "kracht": 24.0,
           "verdediging": 99.1
         },
         "30": {
           "vads": 448.0,
-          "kracht": 44.0,
+          "kracht": 32.0,
           "verdediging": 140.4
         },
         "40": {
           "vads": 576.0,
-          "kracht": 56.0,
+          "kracht": 40.0,
           "verdediging": 181.7
         },
         "50": {
           "vads": 704.0,
-          "kracht": 68.0,
+          "kracht": 48.0,
           "verdediging": 223.0
         }
       }
@@ -16747,37 +16509,37 @@
       "per_level": {
         "1": {
           "vads": 57.6,
-          "wijsheid": 10.35,
+          "wijsheid": 9.9,
           "verdediging": 14.06,
           "elementweerstand": 5.3
         },
         "10": {
           "vads": 144.0,
-          "wijsheid": 22.5,
+          "wijsheid": 18.0,
           "verdediging": 39.35,
           "elementweerstand": 8.0
         },
         "20": {
           "vads": 240.0,
-          "wijsheid": 36.0,
+          "wijsheid": 27.0,
           "verdediging": 67.45,
           "elementweerstand": 11.0
         },
         "30": {
           "vads": 336.0,
-          "wijsheid": 49.5,
+          "wijsheid": 36.0,
           "verdediging": 95.55,
           "elementweerstand": 14.0
         },
         "40": {
           "vads": 432.0,
-          "wijsheid": 63.0,
+          "wijsheid": 45.0,
           "verdediging": 123.65,
           "elementweerstand": 17.0
         },
         "50": {
           "vads": 528.0,
-          "wijsheid": 76.5,
+          "wijsheid": 54.0,
           "verdediging": 151.75,
           "elementweerstand": 20.0
         }
@@ -16793,37 +16555,37 @@
       "per_level": {
         "1": {
           "vads": 91.2,
-          "wijsheid": 12.65,
+          "wijsheid": 12.1,
           "verdediging": 22.5,
           "healkracht": 4.24
         },
         "10": {
           "vads": 228.0,
-          "wijsheid": 27.5,
+          "wijsheid": 22.0,
           "verdediging": 63.0,
           "healkracht": 6.4
         },
         "20": {
           "vads": 380.0,
-          "wijsheid": 44.0,
+          "wijsheid": 33.0,
           "verdediging": 108.0,
           "healkracht": 8.8
         },
         "30": {
           "vads": 532.0,
-          "wijsheid": 60.5,
+          "wijsheid": 44.0,
           "verdediging": 153.0,
           "healkracht": 11.2
         },
         "40": {
           "vads": 684.0,
-          "wijsheid": 77.0,
+          "wijsheid": 55.0,
           "verdediging": 198.0,
           "healkracht": 13.6
         },
         "50": {
           "vads": 836.0,
-          "wijsheid": 93.5,
+          "wijsheid": 66.0,
           "verdediging": 243.0,
           "healkracht": 16.0
         }
@@ -16839,37 +16601,37 @@
       "per_level": {
         "1": {
           "vads": 79.2,
-          "wijsheid": 10.35,
+          "wijsheid": 9.9,
           "verdediging": 19.69,
           "elementweerstand": 4.24
         },
         "10": {
           "vads": 198.0,
-          "wijsheid": 22.5,
+          "wijsheid": 18.0,
           "verdediging": 55.15,
           "elementweerstand": 6.4
         },
         "20": {
           "vads": 330.0,
-          "wijsheid": 36.0,
+          "wijsheid": 27.0,
           "verdediging": 94.55,
           "elementweerstand": 8.8
         },
         "30": {
           "vads": 462.0,
-          "wijsheid": 49.5,
+          "wijsheid": 36.0,
           "verdediging": 133.95,
           "elementweerstand": 11.2
         },
         "40": {
           "vads": 594.0,
-          "wijsheid": 63.0,
+          "wijsheid": 45.0,
           "verdediging": 173.35,
           "elementweerstand": 13.6
         },
         "50": {
           "vads": 726.0,
-          "wijsheid": 76.5,
+          "wijsheid": 54.0,
           "verdediging": 212.75,
           "elementweerstand": 16.0
         }
@@ -16885,37 +16647,37 @@
       "per_level": {
         "1": {
           "vads": 50.4,
-          "wijsheid": 6.9,
+          "wijsheid": 6.6,
           "verdediging": 12.19,
           "cooldownreductie": 3.18
         },
         "10": {
           "vads": 126.0,
-          "wijsheid": 15.0,
+          "wijsheid": 12.0,
           "verdediging": 34.15,
           "cooldownreductie": 4.8
         },
         "20": {
           "vads": 210.0,
-          "wijsheid": 24.0,
+          "wijsheid": 18.0,
           "verdediging": 58.55,
           "cooldownreductie": 6.6
         },
         "30": {
           "vads": 294.0,
-          "wijsheid": 33.0,
+          "wijsheid": 24.0,
           "verdediging": 82.95,
           "cooldownreductie": 8.4
         },
         "40": {
           "vads": 378.0,
-          "wijsheid": 42.0,
+          "wijsheid": 30.0,
           "verdediging": 107.35,
           "cooldownreductie": 10.2
         },
         "50": {
           "vads": 462.0,
-          "wijsheid": 51.0,
+          "wijsheid": 36.0,
           "verdediging": 131.75,
           "cooldownreductie": 12.0
         }
@@ -17033,38 +16795,38 @@
       "per_level": {
         "1": {
           "vads": 76.8,
-          "kracht": 9.2,
-          "behendigheid": 6.9,
+          "kracht": 8.8,
+          "behendigheid": 6.6,
           "verdediging": 23.14
         },
         "10": {
           "vads": 192.0,
-          "kracht": 20.0,
-          "behendigheid": 15.0,
+          "kracht": 16.0,
+          "behendigheid": 12.0,
           "verdediging": 62.65
         },
         "20": {
           "vads": 320.0,
-          "kracht": 32.0,
-          "behendigheid": 24.0,
+          "kracht": 24.0,
+          "behendigheid": 18.0,
           "verdediging": 106.55
         },
         "30": {
           "vads": 448.0,
-          "kracht": 44.0,
-          "behendigheid": 33.0,
+          "kracht": 32.0,
+          "behendigheid": 24.0,
           "verdediging": 150.45
         },
         "40": {
           "vads": 576.0,
-          "kracht": 56.0,
-          "behendigheid": 42.0,
+          "kracht": 40.0,
+          "behendigheid": 30.0,
           "verdediging": 194.35
         },
         "50": {
           "vads": 704.0,
-          "kracht": 68.0,
-          "behendigheid": 51.0,
+          "kracht": 48.0,
+          "behendigheid": 36.0,
           "verdediging": 238.25
         }
       }
@@ -17079,32 +16841,32 @@
       "per_level": {
         "1": {
           "vads": 124.8,
-          "kracht": 12.65,
+          "kracht": 12.1,
           "verdediging": 38.78
         },
         "10": {
           "vads": 312.0,
-          "kracht": 27.5,
+          "kracht": 22.0,
           "verdediging": 104.3
         },
         "20": {
           "vads": 520.0,
-          "kracht": 44.0,
+          "kracht": 33.0,
           "verdediging": 177.1
         },
         "30": {
           "vads": 728.0,
-          "kracht": 60.5,
+          "kracht": 44.0,
           "verdediging": 249.9
         },
         "40": {
           "vads": 936.0,
-          "kracht": 77.0,
+          "kracht": 55.0,
           "verdediging": 322.7
         },
         "50": {
           "vads": 1144.0,
-          "kracht": 93.5,
+          "kracht": 66.0,
           "verdediging": 395.5
         }
       }
@@ -17119,37 +16881,37 @@
       "per_level": {
         "1": {
           "vads": 105.6,
-          "behendigheid": 11.5,
+          "behendigheid": 11.0,
           "verdediging": 27.19,
           "kritiek": 2.12
         },
         "10": {
           "vads": 264.0,
-          "behendigheid": 25.0,
+          "behendigheid": 20.0,
           "verdediging": 76.15,
           "kritiek": 3.2
         },
         "20": {
           "vads": 440.0,
-          "behendigheid": 40.0,
+          "behendigheid": 30.0,
           "verdediging": 130.55,
           "kritiek": 4.4
         },
         "30": {
           "vads": 616.0,
-          "behendigheid": 55.0,
+          "behendigheid": 40.0,
           "verdediging": 184.95,
           "kritiek": 5.6
         },
         "40": {
           "vads": 792.0,
-          "behendigheid": 70.0,
+          "behendigheid": 50.0,
           "verdediging": 239.35,
           "kritiek": 6.8
         },
         "50": {
           "vads": 968.0,
-          "behendigheid": 85.0,
+          "behendigheid": 60.0,
           "verdediging": 293.75,
           "kritiek": 8.0
         }
@@ -17165,37 +16927,37 @@
       "per_level": {
         "1": {
           "vads": 67.2,
-          "kracht": 6.9,
+          "kracht": 6.6,
           "verdediging": 15.94,
           "loopsnelheid": 5.3
         },
         "10": {
           "vads": 168.0,
-          "kracht": 15.0,
+          "kracht": 12.0,
           "verdediging": 44.65,
           "loopsnelheid": 8.0
         },
         "20": {
           "vads": 280.0,
-          "kracht": 24.0,
+          "kracht": 18.0,
           "verdediging": 76.55,
           "loopsnelheid": 11.0
         },
         "30": {
           "vads": 392.0,
-          "kracht": 33.0,
+          "kracht": 24.0,
           "verdediging": 108.45,
           "loopsnelheid": 14.0
         },
         "40": {
           "vads": 504.0,
-          "kracht": 42.0,
+          "kracht": 30.0,
           "verdediging": 140.35,
           "loopsnelheid": 17.0
         },
         "50": {
           "vads": 616.0,
-          "kracht": 51.0,
+          "kracht": 36.0,
           "verdediging": 172.25,
           "loopsnelheid": 20.0
         }
@@ -17211,37 +16973,37 @@
       "per_level": {
         "1": {
           "vads": 74.4,
-          "wijsheid": 12.65,
+          "wijsheid": 12.1,
           "verdediging": 17.81,
           "elementschade": 4.24
         },
         "10": {
           "vads": 186.0,
-          "wijsheid": 27.5,
+          "wijsheid": 22.0,
           "verdediging": 49.85,
           "elementschade": 6.4
         },
         "20": {
           "vads": 310.0,
-          "wijsheid": 44.0,
+          "wijsheid": 33.0,
           "verdediging": 85.45,
           "elementschade": 8.8
         },
         "30": {
           "vads": 434.0,
-          "wijsheid": 60.5,
+          "wijsheid": 44.0,
           "verdediging": 121.05,
           "elementschade": 11.2
         },
         "40": {
           "vads": 558.0,
-          "wijsheid": 77.0,
+          "wijsheid": 55.0,
           "verdediging": 156.65,
           "elementschade": 13.6
         },
         "50": {
           "vads": 682.0,
-          "wijsheid": 93.5,
+          "wijsheid": 66.0,
           "verdediging": 192.25,
           "elementschade": 16.0
         }
@@ -17257,37 +17019,37 @@
       "per_level": {
         "1": {
           "vads": 120.0,
-          "wijsheid": 16.1,
+          "wijsheid": 15.4,
           "verdediging": 29.06,
           "healkracht": 6.36
         },
         "10": {
           "vads": 300.0,
-          "wijsheid": 35.0,
+          "wijsheid": 28.0,
           "verdediging": 81.35,
           "healkracht": 9.6
         },
         "20": {
           "vads": 500.0,
-          "wijsheid": 56.0,
+          "wijsheid": 42.0,
           "verdediging": 139.45,
           "healkracht": 13.2
         },
         "30": {
           "vads": 700.0,
-          "wijsheid": 77.0,
+          "wijsheid": 56.0,
           "verdediging": 197.55,
           "healkracht": 16.8
         },
         "40": {
           "vads": 900.0,
-          "wijsheid": 98.0,
+          "wijsheid": 70.0,
           "verdediging": 255.65,
           "healkracht": 20.4
         },
         "50": {
           "vads": 1100.0,
-          "wijsheid": 119.0,
+          "wijsheid": 84.0,
           "verdediging": 313.75,
           "healkracht": 24.0
         }
@@ -17303,37 +17065,37 @@
       "per_level": {
         "1": {
           "vads": 103.2,
-          "wijsheid": 12.65,
+          "wijsheid": 12.1,
           "verdediging": 25.31,
           "elementweerstand": 5.3
         },
         "10": {
           "vads": 258.0,
-          "wijsheid": 27.5,
+          "wijsheid": 22.0,
           "verdediging": 70.85,
           "elementweerstand": 8.0
         },
         "20": {
           "vads": 430.0,
-          "wijsheid": 44.0,
+          "wijsheid": 33.0,
           "verdediging": 121.45,
           "elementweerstand": 11.0
         },
         "30": {
           "vads": 602.0,
-          "wijsheid": 60.5,
+          "wijsheid": 44.0,
           "verdediging": 172.05,
           "elementweerstand": 14.0
         },
         "40": {
           "vads": 774.0,
-          "wijsheid": 77.0,
+          "wijsheid": 55.0,
           "verdediging": 222.65,
           "elementweerstand": 17.0
         },
         "50": {
           "vads": 946.0,
-          "wijsheid": 93.5,
+          "wijsheid": 66.0,
           "verdediging": 273.25,
           "elementweerstand": 20.0
         }
@@ -17349,37 +17111,37 @@
       "per_level": {
         "1": {
           "vads": 64.8,
-          "wijsheid": 9.2,
+          "wijsheid": 8.8,
           "verdediging": 15.94,
           "cooldownreductie": 3.18
         },
         "10": {
           "vads": 162.0,
-          "wijsheid": 20.0,
+          "wijsheid": 16.0,
           "verdediging": 44.65,
           "cooldownreductie": 4.8
         },
         "20": {
           "vads": 270.0,
-          "wijsheid": 32.0,
+          "wijsheid": 24.0,
           "verdediging": 76.55,
           "cooldownreductie": 6.6
         },
         "30": {
           "vads": 378.0,
-          "wijsheid": 44.0,
+          "wijsheid": 32.0,
           "verdediging": 108.45,
           "cooldownreductie": 8.4
         },
         "40": {
           "vads": 486.0,
-          "wijsheid": 56.0,
+          "wijsheid": 40.0,
           "verdediging": 140.35,
           "cooldownreductie": 10.2
         },
         "50": {
           "vads": 594.0,
-          "wijsheid": 68.0,
+          "wijsheid": 48.0,
           "verdediging": 172.25,
           "cooldownreductie": 12.0
         }
@@ -17760,33 +17522,33 @@
       "flavours": 3,
       "per_level": {
         "1": {
-          "kracht": 6.9,
-          "behendigheid": 6.9,
+          "kracht": 6.6,
+          "behendigheid": 6.6,
           "verdediging": 14.95
         },
         "10": {
-          "kracht": 15.0,
-          "behendigheid": 15.0,
+          "kracht": 12.0,
+          "behendigheid": 12.0,
           "verdediging": 32.5
         },
         "20": {
-          "kracht": 24.0,
-          "behendigheid": 24.0,
+          "kracht": 18.0,
+          "behendigheid": 18.0,
           "verdediging": 52.0
         },
         "30": {
-          "kracht": 33.0,
-          "behendigheid": 33.0,
+          "kracht": 24.0,
+          "behendigheid": 24.0,
           "verdediging": 71.5
         },
         "40": {
-          "kracht": 42.0,
-          "behendigheid": 42.0,
+          "kracht": 30.0,
+          "behendigheid": 30.0,
           "verdediging": 91.0
         },
         "50": {
-          "kracht": 51.0,
-          "behendigheid": 51.0,
+          "kracht": 36.0,
+          "behendigheid": 36.0,
           "verdediging": 110.5
         }
       }
@@ -17801,32 +17563,32 @@
       "per_level": {
         "1": {
           "vads": 69.0,
-          "wijsheid": 10.35,
+          "wijsheid": 9.9,
           "healkracht": 4.24
         },
         "10": {
           "vads": 150.0,
-          "wijsheid": 22.5,
+          "wijsheid": 18.0,
           "healkracht": 6.4
         },
         "20": {
           "vads": 240.0,
-          "wijsheid": 36.0,
+          "wijsheid": 27.0,
           "healkracht": 8.8
         },
         "30": {
           "vads": 330.0,
-          "wijsheid": 49.5,
+          "wijsheid": 36.0,
           "healkracht": 11.2
         },
         "40": {
           "vads": 420.0,
-          "wijsheid": 63.0,
+          "wijsheid": 45.0,
           "healkracht": 13.6
         },
         "50": {
           "vads": 510.0,
-          "wijsheid": 76.5,
+          "wijsheid": 54.0,
           "healkracht": 16.0
         }
       }
@@ -18186,38 +17948,38 @@
       "per_level": {
         "1": {
           "vads": 69.6,
-          "kracht": 6.9,
-          "wijsheid": 6.9,
+          "kracht": 6.6,
+          "wijsheid": 6.6,
           "verdediging": 23.93
         },
         "10": {
           "vads": 174.0,
-          "kracht": 15.0,
-          "wijsheid": 15.0,
+          "kracht": 12.0,
+          "wijsheid": 12.0,
           "verdediging": 63.8
         },
         "20": {
           "vads": 290.0,
-          "kracht": 24.0,
-          "wijsheid": 24.0,
+          "kracht": 18.0,
+          "wijsheid": 18.0,
           "verdediging": 108.1
         },
         "30": {
           "vads": 406.0,
-          "kracht": 33.0,
-          "wijsheid": 33.0,
+          "kracht": 24.0,
+          "wijsheid": 24.0,
           "verdediging": 152.4
         },
         "40": {
           "vads": 522.0,
-          "kracht": 42.0,
-          "wijsheid": 42.0,
+          "kracht": 30.0,
+          "wijsheid": 30.0,
           "verdediging": 196.7
         },
         "50": {
           "vads": 638.0,
-          "kracht": 51.0,
-          "wijsheid": 51.0,
+          "kracht": 36.0,
+          "wijsheid": 36.0,
           "verdediging": 241.0
         }
       }
@@ -18266,38 +18028,38 @@
       "per_level": {
         "1": {
           "vads": 98.4,
-          "kracht": 6.9,
-          "behendigheid": 9.2,
+          "kracht": 6.6,
+          "behendigheid": 8.8,
           "verdediging": 26.25
         },
         "10": {
           "vads": 246.0,
-          "kracht": 15.0,
-          "behendigheid": 20.0,
+          "kracht": 12.0,
+          "behendigheid": 16.0,
           "verdediging": 73.5
         },
         "20": {
           "vads": 410.0,
-          "kracht": 24.0,
-          "behendigheid": 32.0,
+          "kracht": 18.0,
+          "behendigheid": 24.0,
           "verdediging": 126.0
         },
         "30": {
           "vads": 574.0,
-          "kracht": 33.0,
-          "behendigheid": 44.0,
+          "kracht": 24.0,
+          "behendigheid": 32.0,
           "verdediging": 178.5
         },
         "40": {
           "vads": 738.0,
-          "kracht": 42.0,
-          "behendigheid": 56.0,
+          "kracht": 30.0,
+          "behendigheid": 40.0,
           "verdediging": 231.0
         },
         "50": {
           "vads": 902.0,
-          "kracht": 51.0,
-          "behendigheid": 68.0,
+          "kracht": 36.0,
+          "behendigheid": 48.0,
           "verdediging": 283.5
         }
       }
@@ -18351,33 +18113,33 @@
       "flavours": 3,
       "per_level": {
         "1": {
-          "kracht": 6.9,
-          "behendigheid": 6.9,
+          "kracht": 6.6,
+          "behendigheid": 6.6,
           "verdediging": 13.8
         },
         "10": {
-          "kracht": 15.0,
-          "behendigheid": 15.0,
+          "kracht": 12.0,
+          "behendigheid": 12.0,
           "verdediging": 30.0
         },
         "20": {
-          "kracht": 24.0,
-          "behendigheid": 24.0,
+          "kracht": 18.0,
+          "behendigheid": 18.0,
           "verdediging": 48.0
         },
         "30": {
-          "kracht": 33.0,
-          "behendigheid": 33.0,
+          "kracht": 24.0,
+          "behendigheid": 24.0,
           "verdediging": 66.0
         },
         "40": {
-          "kracht": 42.0,
-          "behendigheid": 42.0,
+          "kracht": 30.0,
+          "behendigheid": 30.0,
           "verdediging": 84.0
         },
         "50": {
-          "kracht": 51.0,
-          "behendigheid": 51.0,
+          "kracht": 36.0,
+          "behendigheid": 36.0,
           "verdediging": 102.0
         }
       }
@@ -19257,38 +19019,38 @@
       "per_level": {
         "1": {
           "vads": 79.2,
-          "kracht": 8.05,
-          "behendigheid": 8.05,
+          "kracht": 7.7,
+          "behendigheid": 7.7,
           "verdediging": 26.74
         },
         "10": {
           "vads": 198.0,
-          "kracht": 17.5,
-          "behendigheid": 17.5,
+          "kracht": 14.0,
+          "behendigheid": 14.0,
           "verdediging": 71.65
         },
         "20": {
           "vads": 330.0,
-          "kracht": 28.0,
-          "behendigheid": 28.0,
+          "kracht": 21.0,
+          "behendigheid": 21.0,
           "verdediging": 121.55
         },
         "30": {
           "vads": 462.0,
-          "kracht": 38.5,
-          "behendigheid": 38.5,
+          "kracht": 28.0,
+          "behendigheid": 28.0,
           "verdediging": 171.45
         },
         "40": {
           "vads": 594.0,
-          "kracht": 49.0,
-          "behendigheid": 49.0,
+          "kracht": 35.0,
+          "behendigheid": 35.0,
           "verdediging": 221.35
         },
         "50": {
           "vads": 726.0,
-          "kracht": 59.5,
-          "behendigheid": 59.5,
+          "kracht": 42.0,
+          "behendigheid": 42.0,
           "verdediging": 271.25
         }
       }
@@ -19303,32 +19065,32 @@
       "per_level": {
         "1": {
           "vads": 129.6,
-          "kracht": 12.65,
+          "kracht": 12.1,
           "verdediging": 43.31
         },
         "10": {
           "vads": 324.0,
-          "kracht": 27.5,
+          "kracht": 22.0,
           "verdediging": 115.85
         },
         "20": {
           "vads": 540.0,
-          "kracht": 44.0,
+          "kracht": 33.0,
           "verdediging": 196.45
         },
         "30": {
           "vads": 756.0,
-          "kracht": 60.5,
+          "kracht": 44.0,
           "verdediging": 277.05
         },
         "40": {
           "vads": 972.0,
-          "kracht": 77.0,
+          "kracht": 55.0,
           "verdediging": 357.65
         },
         "50": {
           "vads": 1188.0,
-          "kracht": 93.5,
+          "kracht": 66.0,
           "verdediging": 438.25
         }
       }
@@ -19343,37 +19105,37 @@
       "per_level": {
         "1": {
           "vads": 110.4,
-          "behendigheid": 12.65,
+          "behendigheid": 12.1,
           "verdediging": 29.06,
           "kritiek": 3.18
         },
         "10": {
           "vads": 276.0,
-          "behendigheid": 27.5,
+          "behendigheid": 22.0,
           "verdediging": 81.35,
           "kritiek": 4.8
         },
         "20": {
           "vads": 460.0,
-          "behendigheid": 44.0,
+          "behendigheid": 33.0,
           "verdediging": 139.45,
           "kritiek": 6.6
         },
         "30": {
           "vads": 644.0,
-          "behendigheid": 60.5,
+          "behendigheid": 44.0,
           "verdediging": 197.55,
           "kritiek": 8.4
         },
         "40": {
           "vads": 828.0,
-          "behendigheid": 77.0,
+          "behendigheid": 55.0,
           "verdediging": 255.65,
           "kritiek": 10.2
         },
         "50": {
           "vads": 1012.0,
-          "behendigheid": 93.5,
+          "behendigheid": 66.0,
           "verdediging": 313.75,
           "kritiek": 12.0
         }
@@ -19389,37 +19151,37 @@
       "per_level": {
         "1": {
           "vads": 72.0,
-          "kracht": 6.9,
+          "kracht": 6.6,
           "verdediging": 17.81,
           "loopsnelheid": 6.36
         },
         "10": {
           "vads": 180.0,
-          "kracht": 15.0,
+          "kracht": 12.0,
           "verdediging": 49.85,
           "loopsnelheid": 9.6
         },
         "20": {
           "vads": 300.0,
-          "kracht": 24.0,
+          "kracht": 18.0,
           "verdediging": 85.45,
           "loopsnelheid": 13.2
         },
         "30": {
           "vads": 420.0,
-          "kracht": 33.0,
+          "kracht": 24.0,
           "verdediging": 121.05,
           "loopsnelheid": 16.8
         },
         "40": {
           "vads": 540.0,
-          "kracht": 42.0,
+          "kracht": 30.0,
           "verdediging": 156.65,
           "loopsnelheid": 20.4
         },
         "50": {
           "vads": 660.0,
-          "kracht": 51.0,
+          "kracht": 36.0,
           "verdediging": 192.25,
           "loopsnelheid": 24.0
         }
@@ -19434,33 +19196,33 @@
       "flavours": 3,
       "per_level": {
         "1": {
-          "kracht": 8.05,
-          "behendigheid": 8.05,
+          "kracht": 7.7,
+          "behendigheid": 7.7,
           "verdediging": 14.95
         },
         "10": {
-          "kracht": 17.5,
-          "behendigheid": 17.5,
+          "kracht": 14.0,
+          "behendigheid": 14.0,
           "verdediging": 32.5
         },
         "20": {
-          "kracht": 28.0,
-          "behendigheid": 28.0,
+          "kracht": 21.0,
+          "behendigheid": 21.0,
           "verdediging": 52.0
         },
         "30": {
-          "kracht": 38.5,
-          "behendigheid": 38.5,
+          "kracht": 28.0,
+          "behendigheid": 28.0,
           "verdediging": 71.5
         },
         "40": {
-          "kracht": 49.0,
-          "behendigheid": 49.0,
+          "kracht": 35.0,
+          "behendigheid": 35.0,
           "verdediging": 91.0
         },
         "50": {
-          "kracht": 59.5,
-          "behendigheid": 59.5,
+          "kracht": 42.0,
+          "behendigheid": 42.0,
           "verdediging": 110.5
         }
       }
@@ -19515,37 +19277,37 @@
       "per_level": {
         "1": {
           "vads": 76.8,
-          "wijsheid": 13.8,
+          "wijsheid": 13.2,
           "verdediging": 19.69,
           "elementschade": 5.3
         },
         "10": {
           "vads": 192.0,
-          "wijsheid": 30.0,
+          "wijsheid": 24.0,
           "verdediging": 55.15,
           "elementschade": 8.0
         },
         "20": {
           "vads": 320.0,
-          "wijsheid": 48.0,
+          "wijsheid": 36.0,
           "verdediging": 94.55,
           "elementschade": 11.0
         },
         "30": {
           "vads": 448.0,
-          "wijsheid": 66.0,
+          "wijsheid": 48.0,
           "verdediging": 133.95,
           "elementschade": 14.0
         },
         "40": {
           "vads": 576.0,
-          "wijsheid": 84.0,
+          "wijsheid": 60.0,
           "verdediging": 173.35,
           "elementschade": 17.0
         },
         "50": {
           "vads": 704.0,
-          "wijsheid": 102.0,
+          "wijsheid": 72.0,
           "verdediging": 212.75,
           "elementschade": 20.0
         }
@@ -19561,37 +19323,37 @@
       "per_level": {
         "1": {
           "vads": 124.8,
-          "wijsheid": 17.25,
+          "wijsheid": 16.5,
           "verdediging": 31.88,
           "healkracht": 7.42
         },
         "10": {
           "vads": 312.0,
-          "wijsheid": 37.5,
+          "wijsheid": 30.0,
           "verdediging": 89.3,
           "healkracht": 11.2
         },
         "20": {
           "vads": 520.0,
-          "wijsheid": 60.0,
+          "wijsheid": 45.0,
           "verdediging": 153.1,
           "healkracht": 15.4
         },
         "30": {
           "vads": 728.0,
-          "wijsheid": 82.5,
+          "wijsheid": 60.0,
           "verdediging": 216.9,
           "healkracht": 19.6
         },
         "40": {
           "vads": 936.0,
-          "wijsheid": 105.0,
+          "wijsheid": 75.0,
           "verdediging": 280.7,
           "healkracht": 23.8
         },
         "50": {
           "vads": 1144.0,
-          "wijsheid": 127.5,
+          "wijsheid": 90.0,
           "verdediging": 344.5,
           "healkracht": 28.0
         }
@@ -19607,37 +19369,37 @@
       "per_level": {
         "1": {
           "vads": 108.0,
-          "wijsheid": 13.8,
+          "wijsheid": 13.2,
           "verdediging": 27.19,
           "elementweerstand": 6.36
         },
         "10": {
           "vads": 270.0,
-          "wijsheid": 30.0,
+          "wijsheid": 24.0,
           "verdediging": 76.15,
           "elementweerstand": 9.6
         },
         "20": {
           "vads": 450.0,
-          "wijsheid": 48.0,
+          "wijsheid": 36.0,
           "verdediging": 130.55,
           "elementweerstand": 13.2
         },
         "30": {
           "vads": 630.0,
-          "wijsheid": 66.0,
+          "wijsheid": 48.0,
           "verdediging": 184.95,
           "elementweerstand": 16.8
         },
         "40": {
           "vads": 810.0,
-          "wijsheid": 84.0,
+          "wijsheid": 60.0,
           "verdediging": 239.35,
           "elementweerstand": 20.4
         },
         "50": {
           "vads": 990.0,
-          "wijsheid": 102.0,
+          "wijsheid": 72.0,
           "verdediging": 293.75,
           "elementweerstand": 24.0
         }
@@ -19653,37 +19415,37 @@
       "per_level": {
         "1": {
           "vads": 69.6,
-          "wijsheid": 10.35,
+          "wijsheid": 9.9,
           "verdediging": 17.81,
           "cooldownreductie": 3.18
         },
         "10": {
           "vads": 174.0,
-          "wijsheid": 22.5,
+          "wijsheid": 18.0,
           "verdediging": 49.85,
           "cooldownreductie": 4.8
         },
         "20": {
           "vads": 290.0,
-          "wijsheid": 36.0,
+          "wijsheid": 27.0,
           "verdediging": 85.45,
           "cooldownreductie": 6.6
         },
         "30": {
           "vads": 406.0,
-          "wijsheid": 49.5,
+          "wijsheid": 36.0,
           "verdediging": 121.05,
           "cooldownreductie": 8.4
         },
         "40": {
           "vads": 522.0,
-          "wijsheid": 63.0,
+          "wijsheid": 45.0,
           "verdediging": 156.65,
           "cooldownreductie": 10.2
         },
         "50": {
           "vads": 638.0,
-          "wijsheid": 76.5,
+          "wijsheid": 54.0,
           "verdediging": 192.25,
           "cooldownreductie": 12.0
         }
@@ -19698,32 +19460,32 @@
       "flavours": 3,
       "per_level": {
         "1": {
-          "wijsheid": 10.35,
+          "wijsheid": 9.9,
           "verdediging": 9.2,
           "elementschade": 6.36
         },
         "10": {
-          "wijsheid": 22.5,
+          "wijsheid": 18.0,
           "verdediging": 20.0,
           "elementschade": 9.6
         },
         "20": {
-          "wijsheid": 36.0,
+          "wijsheid": 27.0,
           "verdediging": 32.0,
           "elementschade": 13.2
         },
         "30": {
-          "wijsheid": 49.5,
+          "wijsheid": 36.0,
           "verdediging": 44.0,
           "elementschade": 16.8
         },
         "40": {
-          "wijsheid": 63.0,
+          "wijsheid": 45.0,
           "verdediging": 56.0,
           "elementschade": 20.4
         },
         "50": {
-          "wijsheid": 76.5,
+          "wijsheid": 54.0,
           "verdediging": 68.0,
           "elementschade": 24.0
         }
@@ -19739,32 +19501,32 @@
       "per_level": {
         "1": {
           "vads": 66.7,
-          "wijsheid": 6.9,
+          "wijsheid": 6.6,
           "healkracht": 8.48
         },
         "10": {
           "vads": 145.0,
-          "wijsheid": 15.0,
+          "wijsheid": 12.0,
           "healkracht": 12.8
         },
         "20": {
           "vads": 232.0,
-          "wijsheid": 24.0,
+          "wijsheid": 18.0,
           "healkracht": 17.6
         },
         "30": {
           "vads": 319.0,
-          "wijsheid": 33.0,
+          "wijsheid": 24.0,
           "healkracht": 22.4
         },
         "40": {
           "vads": 406.0,
-          "wijsheid": 42.0,
+          "wijsheid": 30.0,
           "healkracht": 27.2
         },
         "50": {
           "vads": 493.0,
-          "wijsheid": 51.0,
+          "wijsheid": 36.0,
           "healkracht": 32.0
         }
       }
@@ -20206,33 +19968,33 @@
       "flavours": 3,
       "per_level": {
         "1": {
-          "kracht": 9.2,
-          "behendigheid": 9.2,
+          "kracht": 8.8,
+          "behendigheid": 8.8,
           "verdediging": 18.4
         },
         "10": {
-          "kracht": 20.0,
-          "behendigheid": 20.0,
+          "kracht": 16.0,
+          "behendigheid": 16.0,
           "verdediging": 40.0
         },
         "20": {
-          "kracht": 32.0,
-          "behendigheid": 32.0,
+          "kracht": 24.0,
+          "behendigheid": 24.0,
           "verdediging": 64.0
         },
         "30": {
-          "kracht": 44.0,
-          "behendigheid": 44.0,
+          "kracht": 32.0,
+          "behendigheid": 32.0,
           "verdediging": 88.0
         },
         "40": {
-          "kracht": 56.0,
-          "behendigheid": 56.0,
+          "kracht": 40.0,
+          "behendigheid": 40.0,
           "verdediging": 112.0
         },
         "50": {
-          "kracht": 68.0,
-          "behendigheid": 68.0,
+          "kracht": 48.0,
+          "behendigheid": 48.0,
           "verdediging": 136.0
         }
       }
@@ -20247,32 +20009,32 @@
       "per_level": {
         "1": {
           "vads": 92.0,
-          "wijsheid": 6.9,
+          "wijsheid": 6.6,
           "elementweerstand": 7.42
         },
         "10": {
           "vads": 200.0,
-          "wijsheid": 15.0,
+          "wijsheid": 12.0,
           "elementweerstand": 11.2
         },
         "20": {
           "vads": 320.0,
-          "wijsheid": 24.0,
+          "wijsheid": 18.0,
           "elementweerstand": 15.4
         },
         "30": {
           "vads": 440.0,
-          "wijsheid": 33.0,
+          "wijsheid": 24.0,
           "elementweerstand": 19.6
         },
         "40": {
           "vads": 560.0,
-          "wijsheid": 42.0,
+          "wijsheid": 30.0,
           "elementweerstand": 23.8
         },
         "50": {
           "vads": 680.0,
-          "wijsheid": 51.0,
+          "wijsheid": 36.0,
           "elementweerstand": 28.0
         }
       }
@@ -20327,43 +20089,43 @@
       "per_level": {
         "1": {
           "vads": 81.6,
-          "kracht": 6.9,
-          "wijsheid": 6.9,
+          "kracht": 6.6,
+          "wijsheid": 6.6,
           "verdediging": 20.63,
           "loopsnelheid": 7.42
         },
         "10": {
           "vads": 204.0,
-          "kracht": 15.0,
-          "wijsheid": 15.0,
+          "kracht": 12.0,
+          "wijsheid": 12.0,
           "verdediging": 57.8,
           "loopsnelheid": 11.2
         },
         "20": {
           "vads": 340.0,
-          "kracht": 24.0,
-          "wijsheid": 24.0,
+          "kracht": 18.0,
+          "wijsheid": 18.0,
           "verdediging": 99.1,
           "loopsnelheid": 15.4
         },
         "30": {
           "vads": 476.0,
-          "kracht": 33.0,
-          "wijsheid": 33.0,
+          "kracht": 24.0,
+          "wijsheid": 24.0,
           "verdediging": 140.4,
           "loopsnelheid": 19.6
         },
         "40": {
           "vads": 612.0,
-          "kracht": 42.0,
-          "wijsheid": 42.0,
+          "kracht": 30.0,
+          "wijsheid": 30.0,
           "verdediging": 181.7,
           "loopsnelheid": 23.8
         },
         "50": {
           "vads": 748.0,
-          "kracht": 51.0,
-          "wijsheid": 51.0,
+          "kracht": 36.0,
+          "wijsheid": 36.0,
           "verdediging": 223.0,
           "loopsnelheid": 28.0
         }
@@ -20379,43 +20141,43 @@
       "per_level": {
         "1": {
           "vads": 88.8,
-          "kracht": 9.2,
-          "wijsheid": 9.2,
+          "kracht": 8.8,
+          "wijsheid": 8.8,
           "verdediging": 24.38,
           "kritiek": 3.18
         },
         "10": {
           "vads": 222.0,
-          "kracht": 20.0,
-          "wijsheid": 20.0,
+          "kracht": 16.0,
+          "wijsheid": 16.0,
           "verdediging": 68.3,
           "kritiek": 4.8
         },
         "20": {
           "vads": 370.0,
-          "kracht": 32.0,
-          "wijsheid": 32.0,
+          "kracht": 24.0,
+          "wijsheid": 24.0,
           "verdediging": 117.1,
           "kritiek": 6.6
         },
         "30": {
           "vads": 518.0,
-          "kracht": 44.0,
-          "wijsheid": 44.0,
+          "kracht": 32.0,
+          "wijsheid": 32.0,
           "verdediging": 165.9,
           "kritiek": 8.4
         },
         "40": {
           "vads": 666.0,
-          "kracht": 56.0,
-          "wijsheid": 56.0,
+          "kracht": 40.0,
+          "wijsheid": 40.0,
           "verdediging": 214.7,
           "kritiek": 10.2
         },
         "50": {
           "vads": 814.0,
-          "kracht": 68.0,
-          "wijsheid": 68.0,
+          "kracht": 48.0,
+          "wijsheid": 48.0,
           "verdediging": 263.5,
           "kritiek": 12.0
         }
@@ -20471,38 +20233,38 @@
       "per_level": {
         "1": {
           "vads": 122.4,
-          "behendigheid": 10.35,
-          "wijsheid": 10.35,
+          "behendigheid": 9.9,
+          "wijsheid": 9.9,
           "verdediging": 32.81
         },
         "10": {
           "vads": 306.0,
-          "behendigheid": 22.5,
-          "wijsheid": 22.5,
+          "behendigheid": 18.0,
+          "wijsheid": 18.0,
           "verdediging": 91.85
         },
         "20": {
           "vads": 510.0,
-          "behendigheid": 36.0,
-          "wijsheid": 36.0,
+          "behendigheid": 27.0,
+          "wijsheid": 27.0,
           "verdediging": 157.45
         },
         "30": {
           "vads": 714.0,
-          "behendigheid": 49.5,
-          "wijsheid": 49.5,
+          "behendigheid": 36.0,
+          "wijsheid": 36.0,
           "verdediging": 223.05
         },
         "40": {
           "vads": 918.0,
-          "behendigheid": 63.0,
-          "wijsheid": 63.0,
+          "behendigheid": 45.0,
+          "wijsheid": 45.0,
           "verdediging": 288.65
         },
         "50": {
           "vads": 1122.0,
-          "behendigheid": 76.5,
-          "wijsheid": 76.5,
+          "behendigheid": 54.0,
+          "wijsheid": 54.0,
           "verdediging": 354.25
         }
       }
@@ -21370,6 +21132,40 @@
       }
     },
     {
+      "id": "mw_t1_armband",
+      "item": "guhs:vr_amb_mw_armband",
+      "slot": "armband",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "aanvalssnelheid": 1.11,
+          "cooldownreductie": 0.74
+        },
+        "10": {
+          "aanvalssnelheid": 1.68,
+          "cooldownreductie": 1.12
+        },
+        "20": {
+          "aanvalssnelheid": 2.31,
+          "cooldownreductie": 1.54
+        },
+        "30": {
+          "aanvalssnelheid": 2.94,
+          "cooldownreductie": 1.96
+        },
+        "40": {
+          "aanvalssnelheid": 3.57,
+          "cooldownreductie": 2.38
+        },
+        "50": {
+          "aanvalssnelheid": 4.2,
+          "cooldownreductie": 2.8
+        }
+      }
+    },
+    {
       "id": "mw_t2_zwaard",
       "item": "guhs:vr_amb_mw_zwaard",
       "slot": "wapen",
@@ -21709,6 +21505,40 @@
         "50": {
           "cooldownreductie": 6.2,
           "elementschade": 27.28
+        }
+      }
+    },
+    {
+      "id": "mw_t2_armband",
+      "item": "guhs:vr_amb_mw_armband",
+      "slot": "armband",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "aanvalssnelheid": 1.97,
+          "cooldownreductie": 1.31
+        },
+        "10": {
+          "aanvalssnelheid": 2.98,
+          "cooldownreductie": 1.98
+        },
+        "20": {
+          "aanvalssnelheid": 4.09,
+          "cooldownreductie": 2.73
+        },
+        "30": {
+          "aanvalssnelheid": 5.21,
+          "cooldownreductie": 3.47
+        },
+        "40": {
+          "aanvalssnelheid": 6.32,
+          "cooldownreductie": 4.22
+        },
+        "50": {
+          "aanvalssnelheid": 7.44,
+          "cooldownreductie": 4.96
         }
       }
     },
@@ -22056,6 +21886,40 @@
       }
     },
     {
+      "id": "mw_t3_armband",
+      "item": "guhs:vr_amb_mw_armband",
+      "slot": "armband",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "aanvalssnelheid": 3.18,
+          "cooldownreductie": 2.12
+        },
+        "10": {
+          "aanvalssnelheid": 4.8,
+          "cooldownreductie": 3.2
+        },
+        "20": {
+          "aanvalssnelheid": 6.6,
+          "cooldownreductie": 4.4
+        },
+        "30": {
+          "aanvalssnelheid": 8.4,
+          "cooldownreductie": 5.6
+        },
+        "40": {
+          "aanvalssnelheid": 10.2,
+          "cooldownreductie": 6.8
+        },
+        "50": {
+          "aanvalssnelheid": 12.0,
+          "cooldownreductie": 8.0
+        }
+      }
+    },
+    {
       "id": "mw_t4_zwaard",
       "item": "guhs:vr_amb_mw_zwaard",
       "slot": "wapen",
@@ -22395,6 +22259,40 @@
         "50": {
           "cooldownreductie": 11.8,
           "elementschade": 51.92
+        }
+      }
+    },
+    {
+      "id": "mw_t4_armband",
+      "item": "guhs:vr_amb_mw_armband",
+      "slot": "armband",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "aanvalssnelheid": 3.75,
+          "cooldownreductie": 2.5
+        },
+        "10": {
+          "aanvalssnelheid": 5.66,
+          "cooldownreductie": 3.78
+        },
+        "20": {
+          "aanvalssnelheid": 7.79,
+          "cooldownreductie": 5.19
+        },
+        "30": {
+          "aanvalssnelheid": 9.91,
+          "cooldownreductie": 6.61
+        },
+        "40": {
+          "aanvalssnelheid": 12.04,
+          "cooldownreductie": 8.02
+        },
+        "50": {
+          "aanvalssnelheid": 14.16,
+          "cooldownreductie": 9.44
         }
       }
     },
@@ -22742,6 +22640,417 @@
       }
     },
     {
+      "id": "mw_t5_armband",
+      "item": "guhs:vr_amb_mw_armband",
+      "slot": "armband",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "aanvalssnelheid": 4.32,
+          "cooldownreductie": 2.88
+        },
+        "10": {
+          "aanvalssnelheid": 6.53,
+          "cooldownreductie": 4.35
+        },
+        "20": {
+          "aanvalssnelheid": 8.98,
+          "cooldownreductie": 5.98
+        },
+        "30": {
+          "aanvalssnelheid": 11.42,
+          "cooldownreductie": 7.62
+        },
+        "40": {
+          "aanvalssnelheid": 13.87,
+          "cooldownreductie": 9.25
+        },
+        "50": {
+          "aanvalssnelheid": 16.32,
+          "cooldownreductie": 10.88
+        }
+      }
+    },
+    {
+      "id": "mw_t6_zwaard",
+      "item": "guhs:vr_amb_mw_zwaard",
+      "slot": "wapen",
+      "soort": "zwaard",
+      "klasse": "knuffelridder",
+      "element": "roze",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "kracht": 11.12,
+          "schade": 7.45
+        },
+        "10": {
+          "kracht": 13.95,
+          "schade": 18.63
+        },
+        "20": {
+          "kracht": 17.1,
+          "schade": 31.05
+        },
+        "30": {
+          "kracht": 20.25,
+          "schade": 43.47
+        },
+        "40": {
+          "kracht": 23.4,
+          "schade": 55.89
+        },
+        "50": {
+          "kracht": 26.55,
+          "schade": 68.31
+        }
+      }
+    },
+    {
+      "id": "mw_t6_boog",
+      "item": "guhs:vr_amb_mw_boog",
+      "slot": "wapen",
+      "soort": "boog",
+      "klasse": "pluisjager",
+      "element": "natuur",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "behendigheid": 11.12,
+          "schade": 7.45
+        },
+        "10": {
+          "behendigheid": 13.95,
+          "schade": 18.63
+        },
+        "20": {
+          "behendigheid": 17.1,
+          "schade": 31.05
+        },
+        "30": {
+          "behendigheid": 20.25,
+          "schade": 43.47
+        },
+        "40": {
+          "behendigheid": 23.4,
+          "schade": 55.89
+        },
+        "50": {
+          "behendigheid": 26.55,
+          "schade": 68.31
+        }
+      }
+    },
+    {
+      "id": "mw_t6_staf",
+      "item": "guhs:vr_amb_mw_staf",
+      "slot": "wapen",
+      "soort": "staf",
+      "klasse": "vadsmagier",
+      "element": "vuur",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "wijsheid": 11.12,
+          "schade": 7.45
+        },
+        "10": {
+          "wijsheid": 13.95,
+          "schade": 18.63
+        },
+        "20": {
+          "wijsheid": 17.1,
+          "schade": 31.05
+        },
+        "30": {
+          "wijsheid": 20.25,
+          "schade": 43.47
+        },
+        "40": {
+          "wijsheid": 23.4,
+          "schade": 55.89
+        },
+        "50": {
+          "wijsheid": 26.55,
+          "schade": 68.31
+        }
+      }
+    },
+    {
+      "id": "mw_t6_helm",
+      "item": "guhs:vr_amb_mw_helm",
+      "slot": "hoofd",
+      "soort": "harnas",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "vads": 62.64,
+          "verdediging": 21.94
+        },
+        "10": {
+          "vads": 156.6,
+          "verdediging": 61.45
+        },
+        "20": {
+          "vads": 261.0,
+          "verdediging": 105.35
+        },
+        "30": {
+          "vads": 365.4,
+          "verdediging": 149.25
+        },
+        "40": {
+          "vads": 469.8,
+          "verdediging": 193.15
+        },
+        "50": {
+          "vads": 574.2,
+          "verdediging": 237.05
+        }
+      }
+    },
+    {
+      "id": "mw_t6_borstplaat",
+      "item": "guhs:vr_amb_mw_borstplaat",
+      "slot": "borst",
+      "soort": "harnas",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "vads": 103.68,
+          "verdediging": 36.29
+        },
+        "10": {
+          "vads": 259.2,
+          "verdediging": 101.63
+        },
+        "20": {
+          "vads": 432.0,
+          "verdediging": 174.23
+        },
+        "30": {
+          "vads": 604.8,
+          "verdediging": 246.83
+        },
+        "40": {
+          "vads": 777.6,
+          "verdediging": 319.43
+        },
+        "50": {
+          "vads": 950.4,
+          "verdediging": 392.03
+        }
+      }
+    },
+    {
+      "id": "mw_t6_broek",
+      "item": "guhs:vr_amb_mw_broek",
+      "slot": "benen",
+      "soort": "harnas",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "vads": 88.56,
+          "verdediging": 23.62
+        },
+        "10": {
+          "vads": 221.4,
+          "verdediging": 66.1
+        },
+        "20": {
+          "vads": 369.0,
+          "verdediging": 113.3
+        },
+        "30": {
+          "vads": 516.6,
+          "verdediging": 160.5
+        },
+        "40": {
+          "vads": 664.2,
+          "verdediging": 207.7
+        },
+        "50": {
+          "vads": 811.8,
+          "verdediging": 254.9
+        }
+      }
+    },
+    {
+      "id": "mw_t6_schoentjes",
+      "item": "guhs:vr_amb_mw_schoentjes",
+      "slot": "voeten",
+      "soort": "harnas",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "vads": 56.16,
+          "verdediging": 18.56
+        },
+        "10": {
+          "vads": 140.4,
+          "verdediging": 51.95
+        },
+        "20": {
+          "vads": 234.0,
+          "verdediging": 89.05
+        },
+        "30": {
+          "vads": 327.6,
+          "verdediging": 126.15
+        },
+        "40": {
+          "vads": 421.2,
+          "verdediging": 163.25
+        },
+        "50": {
+          "vads": 514.8,
+          "verdediging": 200.35
+        }
+      }
+    },
+    {
+      "id": "mw_t6_ring",
+      "item": "guhs:vr_amb_mw_ring",
+      "slot": "ring",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "kritiek": 6.36,
+          "kritiekschade": 15.9
+        },
+        "10": {
+          "kritiek": 9.6,
+          "kritiekschade": 24.0
+        },
+        "20": {
+          "kritiek": 13.2,
+          "kritiekschade": 33.0
+        },
+        "30": {
+          "kritiek": 16.8,
+          "kritiekschade": 42.0
+        },
+        "40": {
+          "kritiek": 20.4,
+          "kritiekschade": 51.0
+        },
+        "50": {
+          "kritiek": 24.0,
+          "kritiekschade": 60.0
+        }
+      }
+    },
+    {
+      "id": "mw_t6_ketting",
+      "item": "guhs:vr_amb_mw_ketting",
+      "slot": "ketting",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "vads": 79.5,
+          "verdediging": 19.08
+        },
+        "10": {
+          "vads": 120.0,
+          "verdediging": 28.8
+        },
+        "20": {
+          "vads": 165.0,
+          "verdediging": 39.6
+        },
+        "30": {
+          "vads": 210.0,
+          "verdediging": 50.4
+        },
+        "40": {
+          "vads": 255.0,
+          "verdediging": 61.2
+        },
+        "50": {
+          "vads": 300.0,
+          "verdediging": 72.0
+        }
+      }
+    },
+    {
+      "id": "mw_t6_oorbel",
+      "item": "guhs:vr_amb_mw_oorbel",
+      "slot": "oorbel",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "cooldownreductie": 3.98,
+          "elementschade": 17.49
+        },
+        "10": {
+          "cooldownreductie": 6.0,
+          "elementschade": 26.4
+        },
+        "20": {
+          "cooldownreductie": 8.25,
+          "elementschade": 36.3
+        },
+        "30": {
+          "cooldownreductie": 10.5,
+          "elementschade": 46.2
+        },
+        "40": {
+          "cooldownreductie": 12.75,
+          "elementschade": 56.1
+        },
+        "50": {
+          "cooldownreductie": 15.0,
+          "elementschade": 66.0
+        }
+      }
+    },
+    {
+      "id": "mw_t6_armband",
+      "item": "guhs:vr_amb_mw_armband",
+      "slot": "armband",
+      "soort": "sieraad",
+      "element": "geen",
+      "flavours": 0,
+      "per_level": {
+        "1": {
+          "aanvalssnelheid": 4.77,
+          "cooldownreductie": 3.18
+        },
+        "10": {
+          "aanvalssnelheid": 7.2,
+          "cooldownreductie": 4.8
+        },
+        "20": {
+          "aanvalssnelheid": 9.9,
+          "cooldownreductie": 6.6
+        },
+        "30": {
+          "aanvalssnelheid": 12.6,
+          "cooldownreductie": 8.4
+        },
+        "40": {
+          "aanvalssnelheid": 15.3,
+          "cooldownreductie": 10.2
+        },
+        "50": {
+          "aanvalssnelheid": 18.0,
+          "cooldownreductie": 12.0
+        }
+      }
+    },
+    {
       "id": "pluiswantjes",
       "item": "guhs:vr_t_pluiswantjes",
       "slot": "handschoenen",
@@ -22750,27 +23059,27 @@
       "flavours": 2,
       "per_level": {
         "1": {
-          "kracht": 2.3,
+          "kracht": 2.2,
           "verdediging": 2.3
         },
         "10": {
-          "kracht": 5.0,
+          "kracht": 4.0,
           "verdediging": 5.0
         },
         "20": {
-          "kracht": 8.0,
+          "kracht": 6.0,
           "verdediging": 8.0
         },
         "30": {
-          "kracht": 11.0,
+          "kracht": 8.0,
           "verdediging": 11.0
         },
         "40": {
-          "kracht": 14.0,
+          "kracht": 10.0,
           "verdediging": 14.0
         },
         "50": {
-          "kracht": 17.0,
+          "kracht": 12.0,
           "verdediging": 17.0
         }
       }
@@ -22784,32 +23093,32 @@
       "flavours": 2,
       "per_level": {
         "1": {
-          "behendigheid": 2.3,
+          "behendigheid": 2.2,
           "verdediging": 2.3,
           "kritiek": 1.06
         },
         "10": {
-          "behendigheid": 5.0,
+          "behendigheid": 4.0,
           "verdediging": 5.0,
           "kritiek": 1.6
         },
         "20": {
-          "behendigheid": 8.0,
+          "behendigheid": 6.0,
           "verdediging": 8.0,
           "kritiek": 2.2
         },
         "30": {
-          "behendigheid": 11.0,
+          "behendigheid": 8.0,
           "verdediging": 11.0,
           "kritiek": 2.8
         },
         "40": {
-          "behendigheid": 14.0,
+          "behendigheid": 10.0,
           "verdediging": 14.0,
           "kritiek": 3.4
         },
         "50": {
-          "behendigheid": 17.0,
+          "behendigheid": 12.0,
           "verdediging": 17.0,
           "kritiek": 4.0
         }
@@ -22859,27 +23168,27 @@
       "per_level": {
         "1": {
           "vads": 11.5,
-          "wijsheid": 2.3
+          "wijsheid": 2.2
         },
         "10": {
           "vads": 25.0,
-          "wijsheid": 5.0
+          "wijsheid": 4.0
         },
         "20": {
           "vads": 40.0,
-          "wijsheid": 8.0
+          "wijsheid": 6.0
         },
         "30": {
           "vads": 55.0,
-          "wijsheid": 11.0
+          "wijsheid": 8.0
         },
         "40": {
           "vads": 70.0,
-          "wijsheid": 14.0
+          "wijsheid": 10.0
         },
         "50": {
           "vads": 85.0,
-          "wijsheid": 17.0
+          "wijsheid": 12.0
         }
       }
     },
@@ -22982,27 +23291,27 @@
       "flavours": 2,
       "per_level": {
         "1": {
-          "wijsheid": 5.75,
+          "wijsheid": 5.5,
           "verdediging": 5.75
         },
         "10": {
-          "wijsheid": 12.5,
+          "wijsheid": 10.0,
           "verdediging": 12.5
         },
         "20": {
-          "wijsheid": 20.0,
+          "wijsheid": 15.0,
           "verdediging": 20.0
         },
         "30": {
-          "wijsheid": 27.5,
+          "wijsheid": 20.0,
           "verdediging": 27.5
         },
         "40": {
-          "wijsheid": 35.0,
+          "wijsheid": 25.0,
           "verdediging": 35.0
         },
         "50": {
-          "wijsheid": 42.5,
+          "wijsheid": 30.0,
           "verdediging": 42.5
         }
       }
@@ -23051,33 +23360,33 @@
       "per_level": {
         "1": {
           "vads": 25.3,
-          "kracht": 4.6,
-          "behendigheid": 3.45
+          "kracht": 4.4,
+          "behendigheid": 3.3
         },
         "10": {
           "vads": 55.0,
-          "kracht": 10.0,
-          "behendigheid": 7.5
+          "kracht": 8.0,
+          "behendigheid": 6.0
         },
         "20": {
           "vads": 88.0,
-          "kracht": 16.0,
-          "behendigheid": 12.0
+          "kracht": 12.0,
+          "behendigheid": 9.0
         },
         "30": {
           "vads": 121.0,
-          "kracht": 22.0,
-          "behendigheid": 16.5
+          "kracht": 16.0,
+          "behendigheid": 12.0
         },
         "40": {
           "vads": 154.0,
-          "kracht": 28.0,
-          "behendigheid": 21.0
+          "kracht": 20.0,
+          "behendigheid": 15.0
         },
         "50": {
           "vads": 187.0,
-          "kracht": 34.0,
-          "behendigheid": 25.5
+          "kracht": 24.0,
+          "behendigheid": 18.0
         }
       }
     },
@@ -23124,32 +23433,32 @@
       "flavours": 2,
       "per_level": {
         "1": {
-          "behendigheid": 8.05,
+          "behendigheid": 7.7,
           "verdediging": 8.05,
           "kritiek": 2.12
         },
         "10": {
-          "behendigheid": 17.5,
+          "behendigheid": 14.0,
           "verdediging": 17.5,
           "kritiek": 3.2
         },
         "20": {
-          "behendigheid": 28.0,
+          "behendigheid": 21.0,
           "verdediging": 28.0,
           "kritiek": 4.4
         },
         "30": {
-          "behendigheid": 38.5,
+          "behendigheid": 28.0,
           "verdediging": 38.5,
           "kritiek": 5.6
         },
         "40": {
-          "behendigheid": 49.0,
+          "behendigheid": 35.0,
           "verdediging": 49.0,
           "kritiek": 6.8
         },
         "50": {
-          "behendigheid": 59.5,
+          "behendigheid": 42.0,
           "verdediging": 59.5,
           "kritiek": 8.0
         }
@@ -23199,32 +23508,32 @@
       "per_level": {
         "1": {
           "vads": 41.4,
-          "wijsheid": 8.05,
+          "wijsheid": 7.7,
           "elementweerstand": 5.3
         },
         "10": {
           "vads": 90.0,
-          "wijsheid": 17.5,
+          "wijsheid": 14.0,
           "elementweerstand": 8.0
         },
         "20": {
           "vads": 144.0,
-          "wijsheid": 28.0,
+          "wijsheid": 21.0,
           "elementweerstand": 11.0
         },
         "30": {
           "vads": 198.0,
-          "wijsheid": 38.5,
+          "wijsheid": 28.0,
           "elementweerstand": 14.0
         },
         "40": {
           "vads": 252.0,
-          "wijsheid": 49.0,
+          "wijsheid": 35.0,
           "elementweerstand": 17.0
         },
         "50": {
           "vads": 306.0,
-          "wijsheid": 59.5,
+          "wijsheid": 42.0,
           "elementweerstand": 20.0
         }
       }
@@ -28827,9 +29136,9 @@
       "id": "pluisjager",
       "naam_key": "vadsrijk.klassen.klasse.pluisjager",
       "wapens": [
-        "kruisboog",
         "boog",
-        "katapult"
+        "katapult",
+        "kruisboog"
       ],
       "per_level": {
         "1": {
@@ -28898,9 +29207,9 @@
       "id": "vadsmagier",
       "naam_key": "vadsrijk.klassen.klasse.vadsmagier",
       "wapens": [
-        "toverstok",
         "staf",
-        "boek"
+        "boek",
+        "toverstok"
       ],
       "per_level": {
         "1": {
@@ -30841,6 +31150,11 @@
         2468,
         71,
         -572
+      ],
+      "meester_knutsel": [
+        -604,
+        87,
+        1029
       ],
       "bond_klerk": [
         2843,
@@ -34430,9 +34744,9 @@
               "ha": "vadsrijk.grotten.naam.kristalgrot",
               "geheim": false,
               "pos": [
-                940,
-                112,
-                -1151
+                930,
+                99,
+                -1034
               ]
             },
             {
@@ -34456,9 +34770,9 @@
               "ha": "vadsrijk.grotten.naam.kristalgrot",
               "geheim": false,
               "pos": [
-                950,
-                112,
-                -1161
+                949,
+                99,
+                -1025
               ]
             },
             {
@@ -34469,9 +34783,9 @@
               "ha": "vadsrijk.grotkerker.grot.kristalgrot",
               "geheim": false,
               "pos": [
-                940,
-                112,
-                -1151
+                930,
+                99,
+                -1034
               ]
             }
           ]
@@ -35763,9 +36077,9 @@
               "ha": "vadsrijk.grotten.naam.wortelgrot",
               "geheim": false,
               "pos": [
-                1430,
-                41,
-                -709
+                1510,
+                44,
+                -712
               ]
             },
             {
@@ -35789,9 +36103,9 @@
               "ha": "vadsrijk.grotten.naam.wortelgrot",
               "geheim": false,
               "pos": [
-                1442,
-                41,
-                -700
+                1524,
+                44,
+                -698
               ]
             },
             {
@@ -35802,9 +36116,9 @@
               "ha": "vadsrijk.grotkerker.grot.wortelgrot",
               "geheim": false,
               "pos": [
-                1430,
-                41,
-                -709
+                1510,
+                44,
+                -712
               ]
             }
           ]
@@ -36634,9 +36948,9 @@
               "ha": "vadsrijk.grotten.naam.koraalgrot",
               "geheim": false,
               "pos": [
-                2212,
-                44,
-                -611
+                2232,
+                40,
+                -545
               ]
             },
             {
@@ -36660,9 +36974,9 @@
               "ha": "vadsrijk.grotten.naam.koraalgrot",
               "geheim": false,
               "pos": [
-                2202,
-                44,
-                -620
+                2238,
+                40,
+                -528
               ]
             },
             {
@@ -36673,9 +36987,9 @@
               "ha": "vadsrijk.grotkerker.grot.koraalgrot",
               "geheim": false,
               "pos": [
-                2212,
-                44,
-                -611
+                2232,
+                40,
+                -545
               ]
             }
           ]
@@ -37312,9 +37626,9 @@
               "ha": "vadsrijk.grotten.naam.wolkengrot",
               "geheim": false,
               "pos": [
-                2549,
+                2554,
                 179,
-                -494
+                -520
               ]
             },
             {
@@ -38127,7 +38441,7 @@
               "n": "vadsrijk.ambacht.groep.z1_pluk_kamp",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38135,7 +38449,7 @@
               "n": "vadsrijk.ambacht.groep.z1_pluk_weide_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38143,7 +38457,7 @@
               "n": "vadsrijk.ambacht.groep.z1_pluk_weide_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38151,7 +38465,7 @@
               "n": "vadsrijk.ambacht.groep.z1_pluk_weide_3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38159,7 +38473,7 @@
               "n": "vadsrijk.ambacht.groep.z1_hout_bos_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38167,7 +38481,7 @@
               "n": "vadsrijk.ambacht.groep.z1_hout_bos_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38175,7 +38489,7 @@
               "n": "vadsrijk.ambacht.groep.z1_hout_bos_3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38183,7 +38497,7 @@
               "n": "vadsrijk.ambacht.groep.z1_mijn_grot_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38191,7 +38505,7 @@
               "n": "vadsrijk.ambacht.groep.z1_mijn_grot_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38199,7 +38513,7 @@
               "n": "vadsrijk.ambacht.groep.z1_mijn_grot_3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38207,7 +38521,7 @@
               "n": "vadsrijk.ambacht.groep.z1_mijn_tempel",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38215,7 +38529,7 @@
               "n": "vadsrijk.ambacht.groep.z1_vis_vijver",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38223,7 +38537,7 @@
               "n": "vadsrijk.ambacht.groep.z1_vis_waterval",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38231,7 +38545,7 @@
               "n": "vadsrijk.ambacht.groep.z1_vis_haven",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38239,15 +38553,63 @@
               "n": "vadsrijk.ambacht.groep.z1_vis_druipmeer",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": true
+            },
+            {
+              "id": "eiland_groeve",
+              "n": "vadsrijk.ambacht.groep.eiland_groeve",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.erts",
+              "geheim": false
+            },
+            {
+              "id": "eiland_bosje",
+              "n": "vadsrijk.ambacht.groep.eiland_bosje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.hout",
+              "geheim": false
+            },
+            {
+              "id": "eiland_bloemenwei",
+              "n": "vadsrijk.ambacht.groep.eiland_bloemenwei",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.kruid",
+              "geheim": false
+            },
+            {
+              "id": "eiland_bijenhofje",
+              "n": "vadsrijk.ambacht.groep.eiland_bijenhofje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.korf",
+              "geheim": false
+            },
+            {
+              "id": "eiland_visvijver",
+              "n": "vadsrijk.ambacht.groep.eiland_visvijver",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.vis",
+              "geheim": false
+            },
+            {
+              "id": "eiland_vissteiger",
+              "n": "vadsrijk.ambacht.groep.eiland_vissteiger",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.vis",
+              "geheim": false
             },
             {
               "id": "grot_zwamgrot_amb_1",
               "n": "vadsrijk.ambacht.groep.grot_zwamgrot_amb_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38255,7 +38617,7 @@
               "n": "vadsrijk.ambacht.groep.grot_zwamgrot_amb_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             }
           ]
@@ -38271,7 +38633,7 @@
               "n": "vadsrijk.ambacht.groep.z2_pluk_helling_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38279,7 +38641,7 @@
               "n": "vadsrijk.ambacht.groep.z2_pluk_helling_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38287,7 +38649,7 @@
               "n": "vadsrijk.ambacht.groep.z2_pluk_helling_3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38295,7 +38657,7 @@
               "n": "vadsrijk.ambacht.groep.z2_hout_kristalbos_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38303,7 +38665,7 @@
               "n": "vadsrijk.ambacht.groep.z2_hout_kristalbos_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38311,7 +38673,7 @@
               "n": "vadsrijk.ambacht.groep.z2_hout_kristalbos_3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38319,7 +38681,7 @@
               "n": "vadsrijk.ambacht.groep.z2_mijn_kloof_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38327,7 +38689,7 @@
               "n": "vadsrijk.ambacht.groep.z2_mijn_kloof_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38335,7 +38697,7 @@
               "n": "vadsrijk.ambacht.groep.z2_mijn_kloof_3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38343,7 +38705,7 @@
               "n": "vadsrijk.ambacht.groep.z2_mijn_ijsgrot",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": true
             },
             {
@@ -38351,7 +38713,7 @@
               "n": "vadsrijk.ambacht.groep.z2_vis_meer_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38359,7 +38721,7 @@
               "n": "vadsrijk.ambacht.groep.z2_vis_meer_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38367,7 +38729,7 @@
               "n": "vadsrijk.ambacht.groep.z2_vis_bron",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38375,7 +38737,7 @@
               "n": "vadsrijk.ambacht.groep.grot_kristalgrot_amb_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38383,7 +38745,7 @@
               "n": "vadsrijk.ambacht.groep.grot_kristalgrot_amb_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             }
           ]
@@ -38399,7 +38761,7 @@
               "n": "vadsrijk.ambacht.groep.z3_pluk_kever",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38407,7 +38769,7 @@
               "n": "vadsrijk.ambacht.groep.z3_pluk_bloesemdal",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38415,7 +38777,7 @@
               "n": "vadsrijk.ambacht.groep.z3_pluk_mosvoet",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38423,7 +38785,7 @@
               "n": "vadsrijk.ambacht.groep.z3_hout_kever",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38431,7 +38793,7 @@
               "n": "vadsrijk.ambacht.groep.z3_hout_wortelweg",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38439,7 +38801,7 @@
               "n": "vadsrijk.ambacht.groep.z3_hout_bloesemdal",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38447,7 +38809,7 @@
               "n": "vadsrijk.ambacht.groep.z3_mijn_gewelf",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38455,7 +38817,7 @@
               "n": "vadsrijk.ambacht.groep.z3_mijn_wortelgang_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38463,7 +38825,7 @@
               "n": "vadsrijk.ambacht.groep.z3_mijn_wortelgang_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38471,7 +38833,7 @@
               "n": "vadsrijk.ambacht.groep.z3_vis_moeras",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38479,7 +38841,7 @@
               "n": "vadsrijk.ambacht.groep.z3_vis_waterrad",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38487,7 +38849,7 @@
               "n": "vadsrijk.ambacht.groep.z3_vis_honingvijver",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38495,7 +38857,7 @@
               "n": "vadsrijk.ambacht.groep.z3_korf_bloesemdal",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38503,7 +38865,7 @@
               "n": "vadsrijk.ambacht.groep.z3_korf_raatweide",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38511,7 +38873,7 @@
               "n": "vadsrijk.ambacht.groep.z3_korf_kever",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38519,7 +38881,7 @@
               "n": "vadsrijk.ambacht.groep.grot_wortelgrot_amb_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38527,7 +38889,7 @@
               "n": "vadsrijk.ambacht.groep.grot_wortelgrot_amb_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             }
           ]
@@ -38543,7 +38905,7 @@
               "n": "vadsrijk.ambacht.groep.z4_pluk_bloemeneiland",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38551,7 +38913,7 @@
               "n": "vadsrijk.ambacht.groep.z4_pluk_knuffeltij",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38559,7 +38921,7 @@
               "n": "vadsrijk.ambacht.groep.z4_pluk_strandfeest",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38567,7 +38929,7 @@
               "n": "vadsrijk.ambacht.groep.z4_hout_vliegereiland",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38575,7 +38937,7 @@
               "n": "vadsrijk.ambacht.groep.z4_hout_vuurtoren",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38583,7 +38945,7 @@
               "n": "vadsrijk.ambacht.groep.z4_hout_mysterie",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38591,7 +38953,7 @@
               "n": "vadsrijk.ambacht.groep.z4_mijn_pierkop",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38599,7 +38961,7 @@
               "n": "vadsrijk.ambacht.groep.z4_mijn_vuurtoren",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38607,7 +38969,7 @@
               "n": "vadsrijk.ambacht.groep.z4_mijn_mysterie",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38615,7 +38977,7 @@
               "n": "vadsrijk.ambacht.groep.z4_vis_haven",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38623,7 +38985,7 @@
               "n": "vadsrijk.ambacht.groep.z4_vis_kade",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38631,7 +38993,7 @@
               "n": "vadsrijk.ambacht.groep.z4_vis_koraal",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38639,7 +39001,7 @@
               "n": "vadsrijk.ambacht.groep.z4_vis_wrak",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38647,7 +39009,7 @@
               "n": "vadsrijk.ambacht.groep.z4_vis_vuurtoren",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38655,7 +39017,7 @@
               "n": "vadsrijk.ambacht.groep.z4_duik_koraalbaai",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.duik",
               "geheim": false
             },
             {
@@ -38663,7 +39025,7 @@
               "n": "vadsrijk.ambacht.groep.z4_duik_grotjes",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.duik",
               "geheim": false
             },
             {
@@ -38671,7 +39033,7 @@
               "n": "vadsrijk.ambacht.groep.z4_korf_bloemeneiland",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38679,7 +39041,7 @@
               "n": "vadsrijk.ambacht.groep.z4_korf_duinen",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38687,7 +39049,7 @@
               "n": "vadsrijk.ambacht.groep.grot_koraalgrot_amb_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38695,7 +39057,7 @@
               "n": "vadsrijk.ambacht.groep.grot_koraalgrot_amb_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             }
           ]
@@ -38711,7 +39073,7 @@
               "n": "vadsrijk.ambacht.groep.z5_pluk_staartpark",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38719,7 +39081,7 @@
               "n": "vadsrijk.ambacht.groep.z5_pluk_ooggaarde",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38727,7 +39089,7 @@
               "n": "vadsrijk.ambacht.groep.z5_pluk_wolkbessen",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
               "geheim": false
             },
             {
@@ -38735,7 +39097,7 @@
               "n": "vadsrijk.ambacht.groep.z5_hout_staartpark_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38743,7 +39105,7 @@
               "n": "vadsrijk.ambacht.groep.z5_hout_staartpark_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38751,7 +39113,7 @@
               "n": "vadsrijk.ambacht.groep.z5_hout_ooggaarde",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.houthakken",
+              "ha": "vadsrijk.ambacht.soort.hout",
               "geheim": false
             },
             {
@@ -38759,7 +39121,7 @@
               "n": "vadsrijk.ambacht.groep.z5_mijn_noordvin",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38767,7 +39129,7 @@
               "n": "vadsrijk.ambacht.groep.z5_mijn_zuidvin",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38775,7 +39137,7 @@
               "n": "vadsrijk.ambacht.groep.z5_mijn_staartvin",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38783,7 +39145,7 @@
               "n": "vadsrijk.ambacht.groep.z5_vis_staartvijver",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38791,7 +39153,7 @@
               "n": "vadsrijk.ambacht.groep.z5_vis_fontein",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38799,7 +39161,7 @@
               "n": "vadsrijk.ambacht.groep.z5_vis_spuitgat",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.vissen",
+              "ha": "vadsrijk.ambacht.soort.vis",
               "geheim": false
             },
             {
@@ -38807,7 +39169,7 @@
               "n": "vadsrijk.ambacht.groep.z5_korf_staartpark",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38815,7 +39177,7 @@
               "n": "vadsrijk.ambacht.groep.z5_korf_ooggaarde",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.imkeren",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             },
             {
@@ -38823,7 +39185,7 @@
               "n": "vadsrijk.ambacht.groep.grot_wolkengrot_amb_1",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.mijnen",
+              "ha": "vadsrijk.ambacht.soort.erts",
               "geheim": false
             },
             {
@@ -38831,7 +39193,127 @@
               "n": "vadsrijk.ambacht.groep.grot_wolkengrot_amb_2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.plek",
-              "ha": "vadsrijk.ambacht.naam.plukken",
+              "ha": "vadsrijk.ambacht.soort.kruid",
+              "geheim": false
+            }
+          ]
+        },
+        {
+          "id": "plekken_6",
+          "naam": "vadsrijk.ambacht.boek.cat.plekken.6",
+          "icoon": "minecraft:string",
+          "later": false,
+          "dingen": [
+            {
+              "id": "z6_pluk_rozenkloof",
+              "n": "vadsrijk.ambacht.groep.z6_pluk_rozenkloof",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.kruid",
+              "geheim": false
+            },
+            {
+              "id": "z6_pluk_kanaalwijk",
+              "n": "vadsrijk.ambacht.groep.z6_pluk_kanaalwijk",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.kruid",
+              "geheim": false
+            },
+            {
+              "id": "z6_pluk_moerbei",
+              "n": "vadsrijk.ambacht.groep.z6_pluk_moerbei",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.kruid",
+              "geheim": false
+            },
+            {
+              "id": "z6_hout_palmenbos",
+              "n": "vadsrijk.ambacht.groep.z6_hout_palmenbos",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.hout",
+              "geheim": false
+            },
+            {
+              "id": "z6_hout_duinput",
+              "n": "vadsrijk.ambacht.groep.z6_hout_duinput",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.hout",
+              "geheim": false
+            },
+            {
+              "id": "z6_hout_oase",
+              "n": "vadsrijk.ambacht.groep.z6_hout_oase",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.hout",
+              "geheim": false
+            },
+            {
+              "id": "z6_mijn_zoutgrot",
+              "n": "vadsrijk.ambacht.groep.z6_mijn_zoutgrot",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.erts",
+              "geheim": false
+            },
+            {
+              "id": "z6_mijn_zoutrots",
+              "n": "vadsrijk.ambacht.groep.z6_mijn_zoutrots",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.erts",
+              "geheim": false
+            },
+            {
+              "id": "z6_mijn_mesa",
+              "n": "vadsrijk.ambacht.groep.z6_mijn_mesa",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.erts",
+              "geheim": false
+            },
+            {
+              "id": "z6_vis_kanaal",
+              "n": "vadsrijk.ambacht.groep.z6_vis_kanaal",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.vis",
+              "geheim": false
+            },
+            {
+              "id": "z6_vis_saffraanbrug",
+              "n": "vadsrijk.ambacht.groep.z6_vis_saffraanbrug",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.vis",
+              "geheim": false
+            },
+            {
+              "id": "z6_vis_oase",
+              "n": "vadsrijk.ambacht.groep.z6_vis_oase",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.vis",
+              "geheim": false
+            },
+            {
+              "id": "z6_vis_zeemond",
+              "n": "vadsrijk.ambacht.groep.z6_vis_zeemond",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.vis",
+              "geheim": false
+            },
+            {
+              "id": "z6_korf_paradijstuin",
+              "n": "vadsrijk.ambacht.groep.z6_korf_paradijstuin",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.plek",
+              "ha": "vadsrijk.ambacht.soort.korf",
               "geheim": false
             }
           ]
@@ -38961,6 +39443,30 @@
               "h": "vadsrijk.ambacht.boek.hint.vis.regen",
               "ha": "vadsrijk.ambacht.tier.5",
               "geheim": false
+            },
+            {
+              "id": "oasekarper",
+              "n": "item.guhs.vr_amb_oasekarper",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.vis.altijd",
+              "ha": "vadsrijk.ambacht.tier.6",
+              "geheim": false
+            },
+            {
+              "id": "sterrenschubvis",
+              "n": "item.guhs.vr_amb_sterrenschubvis",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.vis.nacht",
+              "ha": "vadsrijk.ambacht.tier.6",
+              "geheim": false
+            },
+            {
+              "id": "zandaal",
+              "n": "item.guhs.vr_amb_zandaal",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.vis.regen",
+              "ha": "vadsrijk.ambacht.tier.6",
+              "geheim": false
             }
           ]
         },
@@ -39025,6 +39531,22 @@
               "h": "vadsrijk.ambacht.boek.hint.honing",
               "ha": "",
               "geheim": false
+            },
+            {
+              "id": "klaverhoning",
+              "n": "item.guhs.vr_amb_klaverhoning",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.honing",
+              "ha": "",
+              "geheim": false
+            },
+            {
+              "id": "saffraanhoning",
+              "n": "item.guhs.vr_amb_saffraanhoning",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.honing",
+              "ha": "",
+              "geheim": false
             }
           ]
         },
@@ -39043,8 +39565,40 @@
               "geheim": false
             },
             {
+              "id": "vadsdrankje",
+              "n": "vadsrijk.ambacht.recept.vadsdrankje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
               "id": "visstoofje",
               "n": "vadsrijk.ambacht.recept.visstoofje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "energiedrankje",
+              "n": "vadsrijk.ambacht.recept.energiedrankje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "snelpootjesdrankje",
+              "n": "vadsrijk.ambacht.recept.snelpootjesdrankje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "vahoegdrankje",
+              "n": "vadsrijk.ambacht.recept.vahoegdrankje",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.koken",
@@ -39059,8 +39613,32 @@
               "geheim": false
             },
             {
+              "id": "slijp_geslepen",
+              "n": "vadsrijk.ambacht.recept.slijp_geslepen",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
               "id": "kandijsoep",
               "n": "vadsrijk.ambacht.recept.kandijsoep",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "grote_vadsdrank",
+              "n": "vadsrijk.ambacht.recept.grote_vadsdrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "grote_energiedrank",
+              "n": "vadsrijk.ambacht.recept.grote_energiedrank",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.koken",
@@ -39091,8 +39669,32 @@
               "geheim": false
             },
             {
+              "id": "reuzen_vadsdrank",
+              "n": "vadsrijk.ambacht.recept.reuzen_vadsdrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "reuzen_energiedrank",
+              "n": "vadsrijk.ambacht.recept.reuzen_energiedrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
               "id": "wortelstamppot",
               "n": "vadsrijk.ambacht.recept.wortelstamppot",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "slijp_stralend",
+              "n": "vadsrijk.ambacht.recept.slijp_stralend",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.koken",
@@ -39107,216 +39709,16 @@
               "geheim": false
             },
             {
-              "id": "vadsdrankje",
-              "n": "vadsrijk.ambacht.recept.vadsdrankje",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "energiedrankje",
-              "n": "vadsrijk.ambacht.recept.energiedrankje",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "slijp_geslepen",
-              "n": "vadsrijk.ambacht.recept.slijp_geslepen",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "grote_vadsdrank",
-              "n": "vadsrijk.ambacht.recept.grote_vadsdrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "grote_energiedrank",
-              "n": "vadsrijk.ambacht.recept.grote_energiedrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "reuzen_vadsdrank",
-              "n": "vadsrijk.ambacht.recept.reuzen_vadsdrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "reuzen_energiedrank",
-              "n": "vadsrijk.ambacht.recept.reuzen_energiedrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "slijp_stralend",
-              "n": "vadsrijk.ambacht.recept.slijp_stralend",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
               "id": "honingelixer",
               "n": "vadsrijk.ambacht.recept.honingelixer",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "zwaard_t1",
-              "n": "vadsrijk.ambacht.recept.zwaard_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "zwaard_t2",
-              "n": "vadsrijk.ambacht.recept.zwaard_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "zwaard_t3",
-              "n": "vadsrijk.ambacht.recept.zwaard_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "boog_t1",
-              "n": "vadsrijk.ambacht.recept.boog_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "boog_t2",
-              "n": "vadsrijk.ambacht.recept.boog_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "boog_t3",
-              "n": "vadsrijk.ambacht.recept.boog_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "staf_t1",
-              "n": "vadsrijk.ambacht.recept.staf_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "staf_t2",
-              "n": "vadsrijk.ambacht.recept.staf_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "staf_t3",
-              "n": "vadsrijk.ambacht.recept.staf_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "helm_t1",
-              "n": "vadsrijk.ambacht.recept.helm_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "helm_t2",
-              "n": "vadsrijk.ambacht.recept.helm_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "helm_t3",
-              "n": "vadsrijk.ambacht.recept.helm_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "borstplaat_t1",
-              "n": "vadsrijk.ambacht.recept.borstplaat_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "borstplaat_t2",
-              "n": "vadsrijk.ambacht.recept.borstplaat_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "borstplaat_t3",
-              "n": "vadsrijk.ambacht.recept.borstplaat_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
+              "ha": "vadsrijk.ambacht.naam.koken",
               "geheim": false
             },
             {
               "id": "ring_t1",
               "n": "vadsrijk.ambacht.recept.ring_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ring_t2",
-              "n": "vadsrijk.ambacht.recept.ring_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ring_t3",
-              "n": "vadsrijk.ambacht.recept.ring_t3",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
@@ -39331,24 +39733,64 @@
               "geheim": false
             },
             {
-              "id": "ketting_t2",
-              "n": "vadsrijk.ambacht.recept.ketting_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ketting_t3",
-              "n": "vadsrijk.ambacht.recept.ketting_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
               "id": "oorbel_t1",
               "n": "vadsrijk.ambacht.recept.oorbel_t1",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "armband_t1",
+              "n": "vadsrijk.ambacht.recept.armband_t1",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ring_t1",
+              "n": "vadsrijk.ambacht.recept.meester_ring_t1",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ketting_t1",
+              "n": "vadsrijk.ambacht.recept.meester_ketting_t1",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_oorbel_t1",
+              "n": "vadsrijk.ambacht.recept.meester_oorbel_t1",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_armband_t1",
+              "n": "vadsrijk.ambacht.recept.meester_armband_t1",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ring_t2",
+              "n": "vadsrijk.ambacht.recept.ring_t2",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ketting_t2",
+              "n": "vadsrijk.ambacht.recept.ketting_t2",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
@@ -39363,8 +39805,232 @@
               "geheim": false
             },
             {
+              "id": "armband_t2",
+              "n": "vadsrijk.ambacht.recept.armband_t2",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ring_t2",
+              "n": "vadsrijk.ambacht.recept.meester_ring_t2",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ketting_t2",
+              "n": "vadsrijk.ambacht.recept.meester_ketting_t2",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_oorbel_t2",
+              "n": "vadsrijk.ambacht.recept.meester_oorbel_t2",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_armband_t2",
+              "n": "vadsrijk.ambacht.recept.meester_armband_t2",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ring_t3",
+              "n": "vadsrijk.ambacht.recept.ring_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ketting_t3",
+              "n": "vadsrijk.ambacht.recept.ketting_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
               "id": "oorbel_t3",
               "n": "vadsrijk.ambacht.recept.oorbel_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "armband_t3",
+              "n": "vadsrijk.ambacht.recept.armband_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ring_t3",
+              "n": "vadsrijk.ambacht.recept.meester_ring_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ketting_t3",
+              "n": "vadsrijk.ambacht.recept.meester_ketting_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_oorbel_t3",
+              "n": "vadsrijk.ambacht.recept.meester_oorbel_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_armband_t3",
+              "n": "vadsrijk.ambacht.recept.meester_armband_t3",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ring_t4",
+              "n": "vadsrijk.ambacht.recept.ring_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ketting_t4",
+              "n": "vadsrijk.ambacht.recept.ketting_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "oorbel_t4",
+              "n": "vadsrijk.ambacht.recept.oorbel_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "armband_t4",
+              "n": "vadsrijk.ambacht.recept.armband_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ring_t4",
+              "n": "vadsrijk.ambacht.recept.meester_ring_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ketting_t4",
+              "n": "vadsrijk.ambacht.recept.meester_ketting_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_oorbel_t4",
+              "n": "vadsrijk.ambacht.recept.meester_oorbel_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_armband_t4",
+              "n": "vadsrijk.ambacht.recept.meester_armband_t4",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ring_t5",
+              "n": "vadsrijk.ambacht.recept.ring_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ketting_t5",
+              "n": "vadsrijk.ambacht.recept.ketting_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "oorbel_t5",
+              "n": "vadsrijk.ambacht.recept.oorbel_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "armband_t5",
+              "n": "vadsrijk.ambacht.recept.armband_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ring_t5",
+              "n": "vadsrijk.ambacht.recept.meester_ring_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ketting_t5",
+              "n": "vadsrijk.ambacht.recept.meester_ketting_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_oorbel_t5",
+              "n": "vadsrijk.ambacht.recept.meester_oorbel_t5",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_armband_t5",
+              "n": "vadsrijk.ambacht.recept.meester_armband_t5",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
@@ -39395,8 +40061,128 @@
               "geheim": false
             },
             {
+              "id": "kern_lampion",
+              "n": "vadsrijk.ambacht.recept.kern_lampion",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "kern_wolk",
+              "n": "vadsrijk.ambacht.recept.kern_wolk",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ring_t6",
+              "n": "vadsrijk.ambacht.recept.ring_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "ketting_t6",
+              "n": "vadsrijk.ambacht.recept.ketting_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "oorbel_t6",
+              "n": "vadsrijk.ambacht.recept.oorbel_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "armband_t6",
+              "n": "vadsrijk.ambacht.recept.armband_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ring_t6",
+              "n": "vadsrijk.ambacht.recept.meester_ring_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_ketting_t6",
+              "n": "vadsrijk.ambacht.recept.meester_ketting_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_oorbel_t6",
+              "n": "vadsrijk.ambacht.recept.meester_oorbel_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "meester_armband_t6",
+              "n": "vadsrijk.ambacht.recept.meester_armband_t6",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "kern_sterren",
+              "n": "vadsrijk.ambacht.recept.kern_sterren",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "post_kokschort",
+              "n": "vadsrijk.ambacht.recept.post_kokschort",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
               "id": "post_mijnhelm",
               "n": "vadsrijk.ambacht.recept.post_mijnhelm",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "post_vaandel",
+              "n": "vadsrijk.ambacht.recept.post_vaandel",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "post_vissershoedje",
+              "n": "vadsrijk.ambacht.recept.post_vissershoedje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "post_tuinhoedje",
+              "n": "vadsrijk.ambacht.recept.post_tuinhoedje",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
@@ -39411,6 +40197,14 @@
               "geheim": false
             },
             {
+              "id": "post_imkershoed",
+              "n": "vadsrijk.ambacht.recept.post_imkershoed",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
               "id": "post_mini_koning",
               "n": "vadsrijk.ambacht.recept.post_mini_koning",
               "na": "",
@@ -39419,99 +40213,19 @@
               "geheim": false
             },
             {
-              "id": "broek_t1",
-              "n": "vadsrijk.ambacht.recept.broek_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "broek_t2",
-              "n": "vadsrijk.ambacht.recept.broek_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "broek_t3",
-              "n": "vadsrijk.ambacht.recept.broek_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "schoentjes_t1",
-              "n": "vadsrijk.ambacht.recept.schoentjes_t1",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "schoentjes_t2",
-              "n": "vadsrijk.ambacht.recept.schoentjes_t2",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "schoentjes_t3",
-              "n": "vadsrijk.ambacht.recept.schoentjes_t3",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "post_kokschort",
-              "n": "vadsrijk.ambacht.recept.post_kokschort",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "post_vaandel",
-              "n": "vadsrijk.ambacht.recept.post_vaandel",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "post_vissershoedje",
-              "n": "vadsrijk.ambacht.recept.post_vissershoedje",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "post_tuinhoedje",
-              "n": "vadsrijk.ambacht.recept.post_tuinhoedje",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "post_imkershoed",
-              "n": "vadsrijk.ambacht.recept.post_imkershoed",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
               "id": "post_klodderknuffel",
               "n": "vadsrijk.ambacht.recept.post_klodderknuffel",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
+              "ha": "vadsrijk.ambacht.naam.smeden",
+              "geheim": false
+            },
+            {
+              "id": "post_vlieger",
+              "n": "vadsrijk.ambacht.recept.post_vlieger",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.smeden",
               "geheim": false
             },
             {
@@ -39523,8 +40237,24 @@
               "geheim": false
             },
             {
+              "id": "zee_vadsdrank",
+              "n": "vadsrijk.ambacht.recept.zee_vadsdrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
               "id": "koraalvissoep",
               "n": "vadsrijk.ambacht.recept.koraalvissoep",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "zee_energiedrank",
+              "n": "vadsrijk.ambacht.recept.zee_energiedrank",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.koken",
@@ -39555,8 +40285,24 @@
               "geheim": false
             },
             {
+              "id": "wolken_vadsdrank",
+              "n": "vadsrijk.ambacht.recept.wolken_vadsdrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
               "id": "donderstoofpot",
               "n": "vadsrijk.ambacht.recept.donderstoofpot",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "wolken_energiedrank",
+              "n": "vadsrijk.ambacht.recept.wolken_energiedrank",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.koken",
@@ -39571,227 +40317,115 @@
               "geheim": false
             },
             {
-              "id": "zee_vadsdrank",
-              "n": "vadsrijk.ambacht.recept.zee_vadsdrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "zee_energiedrank",
-              "n": "vadsrijk.ambacht.recept.zee_energiedrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "wolken_vadsdrank",
-              "n": "vadsrijk.ambacht.recept.wolken_vadsdrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
-              "id": "wolken_energiedrank",
-              "n": "vadsrijk.ambacht.recept.wolken_energiedrank",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
-              "geheim": false
-            },
-            {
               "id": "hemelelixer",
               "n": "vadsrijk.ambacht.recept.hemelelixer",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.brouwen",
+              "ha": "vadsrijk.ambacht.naam.koken",
               "geheim": false
             },
             {
-              "id": "zwaard_t4",
-              "n": "vadsrijk.ambacht.recept.zwaard_t4",
+              "id": "saffraanrijst",
+              "n": "vadsrijk.ambacht.recept.saffraanrijst",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "saffraan_vadsdrank",
+              "n": "vadsrijk.ambacht.recept.saffraan_vadsdrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "dadelstoofpot",
+              "n": "vadsrijk.ambacht.recept.dadelstoofpot",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "saffraan_energiedrank",
+              "n": "vadsrijk.ambacht.recept.saffraan_energiedrank",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "sterrenfeestmaal",
+              "n": "vadsrijk.ambacht.recept.sterrenfeestmaal",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "sterrenelixer",
+              "n": "vadsrijk.ambacht.recept.sterrenelixer",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "tempelsleutel",
+              "n": "vadsrijk.ambacht.recept.tempelsleutel",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
               "geheim": false
             },
             {
-              "id": "zwaard_t5",
-              "n": "vadsrijk.ambacht.recept.zwaard_t5",
+              "id": "warme_kandijsoep",
+              "n": "vadsrijk.ambacht.recept.warme_kandijsoep",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "lijmdrankje",
+              "n": "vadsrijk.ambacht.recept.lijmdrankje",
+              "na": "",
+              "h": "vadsrijk.ambacht.boek.hint.recept",
+              "ha": "vadsrijk.ambacht.naam.koken",
+              "geheim": false
+            },
+            {
+              "id": "koraallampion",
+              "n": "vadsrijk.ambacht.recept.koraallampion",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
               "geheim": false
             },
             {
-              "id": "boog_t4",
-              "n": "vadsrijk.ambacht.recept.boog_t4",
+              "id": "wolkendekentje",
+              "n": "vadsrijk.ambacht.recept.wolkendekentje",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
               "geheim": false
             },
             {
-              "id": "boog_t5",
-              "n": "vadsrijk.ambacht.recept.boog_t5",
+              "id": "kompaskoord",
+              "n": "vadsrijk.ambacht.recept.kompaskoord",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
               "ha": "vadsrijk.ambacht.naam.smeden",
               "geheim": false
             },
             {
-              "id": "staf_t4",
-              "n": "vadsrijk.ambacht.recept.staf_t4",
+              "id": "klein_vadsdrankje",
+              "n": "vadsrijk.ambacht.recept.klein_vadsdrankje",
               "na": "",
               "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "staf_t5",
-              "n": "vadsrijk.ambacht.recept.staf_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "helm_t4",
-              "n": "vadsrijk.ambacht.recept.helm_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "helm_t5",
-              "n": "vadsrijk.ambacht.recept.helm_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "borstplaat_t4",
-              "n": "vadsrijk.ambacht.recept.borstplaat_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "borstplaat_t5",
-              "n": "vadsrijk.ambacht.recept.borstplaat_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ring_t4",
-              "n": "vadsrijk.ambacht.recept.ring_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ring_t5",
-              "n": "vadsrijk.ambacht.recept.ring_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ketting_t4",
-              "n": "vadsrijk.ambacht.recept.ketting_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "ketting_t5",
-              "n": "vadsrijk.ambacht.recept.ketting_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "oorbel_t4",
-              "n": "vadsrijk.ambacht.recept.oorbel_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "oorbel_t5",
-              "n": "vadsrijk.ambacht.recept.oorbel_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "kern_lampion",
-              "n": "vadsrijk.ambacht.recept.kern_lampion",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "kern_wolk",
-              "n": "vadsrijk.ambacht.recept.kern_wolk",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.smeden",
-              "geheim": false
-            },
-            {
-              "id": "broek_t4",
-              "n": "vadsrijk.ambacht.recept.broek_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "broek_t5",
-              "n": "vadsrijk.ambacht.recept.broek_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "schoentjes_t4",
-              "n": "vadsrijk.ambacht.recept.schoentjes_t4",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "schoentjes_t5",
-              "n": "vadsrijk.ambacht.recept.schoentjes_t5",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
-              "geheim": false
-            },
-            {
-              "id": "post_vlieger",
-              "n": "vadsrijk.ambacht.recept.post_vlieger",
-              "na": "",
-              "h": "vadsrijk.ambacht.boek.hint.recept",
-              "ha": "vadsrijk.ambacht.naam.naaien",
+              "ha": "vadsrijk.ambacht.naam.koken",
               "geheim": false
             }
           ]

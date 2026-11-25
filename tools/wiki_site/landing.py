@@ -93,7 +93,7 @@ img{max-width:100%;height:auto}
 @keyframes bob{50%{transform:translateY(-8px) rotate(-1.5deg)}}
 @media (prefers-reduced-motion:reduce){.art img,.status.on .dot{animation:none}}
 /* tiles */
-.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin:0 0 26px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;margin:0 0 26px}
 .tile{position:relative;display:flex;flex-direction:column;text-decoration:none;color:var(--ink);background:var(--card);border:2px solid var(--line2);
   border-radius:28px;overflow:hidden;box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
 .tile:hover{transform:translateY(-4px) rotate(-.4deg);border-color:var(--c)}
@@ -108,7 +108,7 @@ img{max-width:100%;height:auto}
 .tile .num{position:absolute;top:12px;left:12px;width:38px;height:38px;border-radius:50%;background:var(--c);color:#fff;
   font:700 20px/38px var(--display);text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.18);z-index:2}
 .t-map{--c:var(--mint);--cs:var(--mint-soft)}.t-join{--c:var(--rasp);--cs:var(--rasp-soft)}.t-wiki{--c:var(--lilac);--cs:var(--lilac-soft)}
-.t-dl{--c:var(--mint);--cs:var(--mint-soft)}.t-guide{--c:var(--rasp);--cs:var(--rasp-soft)}
+.t-dl{--c:var(--mint);--cs:var(--mint-soft)}.t-guide{--c:var(--rasp);--cs:var(--rasp-soft)}.t-vr{--c:var(--cheese);--cs:var(--cheese-soft)}
 /* facts + links */
 .facts{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 22px;justify-content:center}
 .facts li{background:var(--card);border:1.5px solid var(--line2);border-radius:999px;padding:6px 14px;font-size:14.5px}
@@ -226,6 +226,10 @@ class Landing:
              "Everything about the guhs: taming, the Guhmension, minigames, stories, clothes and over a thousand pages.",
              "Open de wiki", "Open the wiki"),
         ]
+        if self.vadsrijk:   # 1.10.18 (user): a 4th Dutch tile for Het Vadsrijk (the RPG dimension), next to map / join / wiki
+            tiles.append(("t-vr", "vadsrijk/", 4, "raw:vadsrijk/img/welkom.webp", True, "Het Vadsrijk", None,
+                          "De RPG-dimensie: klassen, quests, bazen, ambachten en geheimen. Met kaart, gidsen en highscores.", None,
+                          "Naar het Vadsrijk", None))
 
         def tt(nl, en):        # a text in one or both languages
             return nl if en is None else en if nl is None else _t(nl, en)
@@ -236,7 +240,10 @@ class Landing:
             h_nl = h_nl.split("|")[0] if h_nl else None
             badge = f'<span class="badge">{_t("binnenkort", "soon")}</span>' if soon else ""
             ext = ' rel="noopener"' if href.startswith("http") else ""
-            pic_html = self.img(pic, "") if pic else ""
+            if pic and pic.startswith("raw:"):   # an image of the site itself (not from the wiki's image set)
+                pic_html = f'<img src="{pic[4:]}" alt="" width="768" height="384" loading="lazy">'
+            else:
+                pic_html = self.img(pic, "") if pic else ""
             tile_html += (f'<a class="tile {cls}"{only} href="{href}"{ext}><span class="num" aria-hidden="true">{num}</span>{badge}'
                           f'<span class="pic{" photo" if photo else ""}">{pic_html}</span>'
                           f'<span class="txt"><b>{tt(h_nl, h_en)}</b><span class="d">{tt(d_nl, d_en)}</span>'

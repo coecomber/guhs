@@ -116,7 +116,8 @@ class Bouwer:
     NAV = [("index.html", "Start", "Start"), ("kaart.html", "Map", "Kaart"), ("gids.html", "Guide", "Gids"),
            ("zones/index.html", "Zones", "Zones"), ("quests/index.html", "Quests", "Quests"), ("wezens/index.html", "Creatures", "Wezens"),
            ("bazen/index.html", "Bosses", "Bazen"), ("items/index.html", "Items", "Items"), ("systemen/index.html", "Mechanics", "Systemen"),
-           ("geheimen/index.html", "Secrets", "Geheimen"), ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
+           ("ambachten/index.html", "Crafts", "Ambachten"),
+           ("geheimen/index.html", "Secrets", "Geheimen"), ("vindplekken/index.html", "Findables", "Vindplekken"), ("verhaal.html", "Lore", "Verhaal"), ("highscores.html", "Highscores", "Highscores"), ("live.html", "Live", "Live"),
            ("patchnotes/index.html", "Patch notes", "Patch notes")]
 
     def __init__(self, data, root, out, live_url, voorbeeld=False, wiki_url="https://guhs.nl/wiki/", site_url="https://guhs.nl/",
@@ -494,8 +495,12 @@ class Bouwer:
         raid.paginas(self)
         from . import boekspiegel   # 1.10.3: the Verkenningsboek mirror (falls back on geheimen.pagina)
         boekspiegel.pagina(self)
+        from . import vindplekken   # wiki-gids: every findable with coordinates
+        vindplekken.pagina(self)
         self.items_()
         self.systemen()
+        from . import ambachtgids   # 1.10.18: the Ambachten levelling guide (ambachten/index.html)
+        ambachtgids.pagina(self)
         self.verhaal()
         self.highscores()
         self.speler()
@@ -676,6 +681,40 @@ class Bouwer:
         return f'<div class="kaartje" data-zone="{n}">{inner}</div>'
 
     # quests
+    def _stap_waar(self, d, P):
+        """wiki-gids: the places of one walkthrough step: the game's own where-text, the area(s), every spot (one map link each; a
+        counted find lists all of them), the creatures that live there (kill / cheer-up / collect goals) and a link to the findables page."""
+        delen = []
+        if d.get("waar") and d["waar"][:28] not in d["tekst"]:   # (not when the step text already says it)
+            delen.append(f'<span class="muted">{t(d.get("waar_en") or d["waar"], d["waar"])}</span>')
+        gs = [g for g in d.get("gebieden") or [] if g in self.gebied]
+        if gs:
+            delen.append(t("Area: ", "Gebied: ") + ", ".join(self.l_gebied(g, P) for g in gs[:6]) + (" ..." if len(gs) > 6 else ""))
+        pl = d.get("plekken") or []
+        if len(pl) == 1 and not pl[0].get("label"):
+            delen.append(self.l_kaart(pl[0]["pos"], P, ""))
+        elif pl:
+            li = "".join(f'<li>{self._kaart_t(dict(x, label=x.get("label") or f"#{i}", label_en=x.get("label_en") or f"#{i}"), P)}</li>'
+                         for i, x in enumerate(pl, 1))
+            delen.append(f'<ul class="komma">{li}</ul>')
+        elif d.get("geen") == "level":
+            delen.append(t("Just level up: anywhere.", "Gewoon levelen: dat kan overal."))
+        elif d.get("geen"):
+            delen.append(t("No fixed spot: anywhere in the zone.", "Geen vaste plek: overal in de zone."))
+        if d["soort"] in ("opvrolijk", "elite", "verzamel") and len(gs) == 1:
+            ws = [w for w in self.d["wezens"] if gs[0] in (w.get("gebieden") or []) and not w.get("critter")]
+            if ws:
+                delen.append(t("Creatures here: ", "Wezens hier: ") + ", ".join(self.l_wezen(w["id"], P) for w in ws[:10]))
+        if d.get("vind"):
+            delen.append(f'<a href="{self.r(P)}vindplekken/index.html#{d["vind"]}">{t("All spots on the Findables page", "Alle plekken op de Vindplekken-pagina")}</a>')
+        return "<br>".join(delen)
+
+    def _kaart_t(self, x, P):
+        """A map link with a (game-text or two-language) label."""
+        a, b = x.get("label_en") or x["label"], x["label"]
+        pos = x["pos"]
+        return (f'<a href="{self.r(P)}kaart.html?x={pos[0]}&amp;z={pos[2]}">{t(a, b)}: <span class="tagref">x {pos[0]}, y {pos[1]}, z {pos[2]}</span></a>')
+
     def quests(self):
         P = "quests/index.html"
         delen = []
@@ -709,11 +748,10 @@ class Bouwer:
             volgende = self.l_quest(rij[i + 1]["id"], P) if i + 1 < len(rij) else ""
             stappen = []
             for d in q["doelen"]:
-                waar = ""
-                if d["geheim"]:
-                    waar = f'<div class="waar muted">{t("A secret: find it yourself!", "Een geheim: zoek het zelf!")}</div>'
-                elif d["pos"]:
-                    waar = f'<div class="waar">{self.l_kaart(d["pos"], P, "")}</div>'
+                waar = self._stap_waar(d, P)
+                if waar and d["geheim"] and q["soort"] != "geheim":   # wiki-gids: secret steps keep their own spoiler (a secret quest is one already)
+                    waar = spoiler(waar, "A secret: click for the spot", "Een geheim: klik voor de plek")
+                waar = f'<div class="waar">{waar}</div>' if waar else ""
                 stappen.append(f"<li>{ESC(d['tekst'])}{(' <small class=muted>(' + str(d['n']) + 'x)</small>') if d['n'] > 1 else ''}{waar}</li>")
             stap_h = '<ol class="stappen">' + "".join(stappen) + "</ol>"
 
