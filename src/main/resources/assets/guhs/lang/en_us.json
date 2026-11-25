@@ -39904,7 +39904,7 @@
   "vadsrijk.ambacht.oogst.rustig": "Easy now...",
   "vadsrijk.ambacht.oogst.zeldzaam": "Rare! You found: %s",
   "vadsrijk.ambacht.oogst.afk": "You've been standing in the same spot for a while: the harvest is halved. Walk around a bit!",
-  "vadsrijk.ambacht.korf.vol": "You already have enough hives (max %s at this level).",
+  "vadsrijk.ambacht.korf.vol": "You already have %s hives in this zone: no room for more. Put one in another zone, or harvest your own hives.",
   "vadsrijk.ambacht.korf.plek": "%s (near x %s, z %s)",
   "vadsrijk.ambacht.korf.vol.waar": "Your hives stand at: %s. Click your own hive to harvest.",
   "vadsrijk.ambacht.korf.neergezet": "Your hive is up! Your bees are off to fetch nectar for %s.",

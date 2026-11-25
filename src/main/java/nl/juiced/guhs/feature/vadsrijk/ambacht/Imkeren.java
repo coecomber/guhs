@@ -28,10 +28,28 @@ public final class Imkeren {
     }
 
     /**
-     * How many hives this Verzamelen level may keep (1.10.4: the old Imkeren steps 15/30/45/55 on the new tier scale: 9/19/29/40).
+     * 1.10.18 (the user's wish): hives are limited per ZONE, not by level for the whole Vadsrijk (was 1..5 in total by Verzamelen
+     * level: players had to pick between the meadows of different zones). The meadows keep their own level gate ({@link #korfLevel}).
+     * The Ambachtseiland's Bijenhofje counts as zone 1.
      */
-    public static int max(int level) {
-        return level >= 40 ? 5 : level >= 29 ? 4 : level >= 19 ? 3 : level >= 9 ? 2 : 1;
+    public static final int PER_ZONE = 4;
+
+    /** How many hives this player has in this zone. */
+    public static int inZone(ServerPlayer p, int zone) {
+        int n = 0;
+        CompoundTag alle = korven(p);
+        for (String id : alle.keySet()) {
+            int z = alle.getCompoundOrEmpty(id).getIntOr("zone", -1);
+            if (z < 0) {   // (a hive from before 1.10.18: its group knows the zone)
+                int i = id.lastIndexOf('_');
+                AmbachtPlekken.Groep g = i > 0 ? AmbachtPlekken.groep(id.substring(0, i)) : null;
+                z = g == null ? -1 : g.zone();
+            }
+            if (z == zone) {
+                n++;
+            }
+        }
+        return n;
     }
 
     /**
@@ -73,6 +91,7 @@ public final class Imkeren {
         CompoundTag k = new CompoundTag();
         k.putLong("laatst", AmbachtData.nu());
         k.putInt("raten", raten);
+        k.putInt("zone", s.groep().zone());   // 1.10.18: for the per-zone limit
         alle.put(s.id(), k);
         t.put("korven", alle);
     }
@@ -97,10 +116,10 @@ public final class Imkeren {
             return "vadsrijk.ambacht.oogst.te_laag";
         }
         if (!eigen(p, s)) {
-            int n = korven(p).keySet().size();
-            if (n >= max(lv)) {
-                p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.korf.vol", max(lv)).withStyle(ChatFormatting.RED));
-                Component waar = waarZijnKorven(p);   // 1.10.12: say where your hives stand (a player had a full one right there)
+            int zone = s.groep().zone();
+            if (inZone(p, zone) >= PER_ZONE) {
+                p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.korf.vol", PER_ZONE).withStyle(ChatFormatting.RED));
+                Component waar = waarZijnKorven(p, zone);   // 1.10.12: say where your hives stand (1.10.18: the ones in this zone)
                 if (waar != null) {
                     p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.vol.waar", waar).withStyle(ChatFormatting.GOLD));
                 }
@@ -154,6 +173,12 @@ public final class Imkeren {
      */
     @javax.annotation.Nullable
     public static Component waarZijnKorven(ServerPlayer p) {
+        return waarZijnKorven(p, -1);
+    }
+
+    /** Only the hives in this zone ({@code zone} < 0: all). */
+    @javax.annotation.Nullable
+    public static Component waarZijnKorven(ServerPlayer p, int zone) {
         net.minecraft.server.MinecraftServer server = p.level().getServer();
         if (server == null) {
             return null;
@@ -161,7 +186,7 @@ public final class Imkeren {
         net.minecraft.network.chat.MutableComponent uit = null;
         for (String id : new java.util.TreeSet<>(korven(p).keySet())) {
             Spot s = Verzamelen.spot(server, id);
-            if (s == null || s.posities().isEmpty()) {
+            if (s == null || s.posities().isEmpty() || (zone >= 0 && s.groep().zone() != zone)) {
                 continue;
             }
             BlockPos q = Verzamelen.positie(p, s);

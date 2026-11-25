@@ -495,8 +495,7 @@ public class VadsrijkAmbachtGameTests {
         } finally {
             AmbachtData.KLOK = oud;
         }
-        helper.assertTrue(Imkeren.max(1) == 1 && Imkeren.max(9) == 2 && Imkeren.max(19) == 3 && Imkeren.max(29) == 4 && Imkeren.max(40) == 5,
-                "more hives with level (1.10.4 scale)");
+        helper.assertTrue(Imkeren.inZone(p, 3) == 1 && Imkeren.inZone(p, 4) == 0, "1.10.18: hives are counted per zone");
         helper.succeed();
     }
 

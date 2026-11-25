@@ -280,7 +280,7 @@ t(S + "oogst.rustig", "Rustig aan...", "Easy now...")
 t(S + "oogst.zeldzaam", "Zeldzaam! Je vond: %s", "Rare! You found: %s")
 t(S + "oogst.afk", "Je staat al een tijdje op dezelfde plek: de oogst is gehalveerd. Loop even rond!",
   "You have been standing in one spot for a while: the yield is halved. Walk around a bit!")
-t(S + "korf.vol", "Je hebt al genoeg korven (max %s op dit niveau).", "You already have enough hives (max %s at this level).")
+t(S + "korf.vol", "Je hebt al %s korven in deze zone: meer passen er niet. Zet er een in een andere zone, of oogst je eigen korven.", "You already have enough hives (max %s at this level).")
 # 1.10.12: where your hives stand (after "korf.vol")
 t(S + "korf.vol.waar", "Je korven staan bij: %s. Klik op je eigen korf om te oogsten.", "Your hives stand at: %s. Click your own hive to harvest.")
 t(S + "korf.plek", "%s (bij x %s, z %s)", "%s (near x %s, z %s)")

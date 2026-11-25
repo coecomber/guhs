@@ -122,6 +122,19 @@ final class KernEvents {
                 e.setCanceled(true);   // (a number/hologram left behind by a crash or an unloaded chunk)
             }
         });
+        // 1.10.19 (live): nothing falls in Het Vadsrijk. The zone-4 beaches are pink concrete powder with air under it: lighting a
+        // campfire (a block update) made a whole beach collapse, block by block, onto the island below. A falling block that tries to
+        // start here is put back where it was, without updating its neighbours (that would only start the next one).
+        NeoForge.EVENT_BUS.addListener(net.neoforged.bus.api.EventPriority.HIGHEST, (EntityJoinLevelEvent e) -> {
+            if (!e.loadedFromDisk() && e.getEntity() instanceof net.minecraft.world.entity.item.FallingBlockEntity f && !e.getLevel().isClientSide()
+                    && Vadsrijk.in(e.getLevel())) {
+                net.minecraft.core.BlockPos pos = f.blockPosition();
+                if (e.getLevel().getBlockState(pos).isAir() || e.getLevel().getBlockState(pos).canBeReplaced()) {
+                    e.getLevel().setBlock(pos, f.getBlockState(), net.minecraft.world.level.block.Block.UPDATE_CLIENTS);
+                }
+                e.setCanceled(true);
+            }
+        });
         Schade.NA_KLAP.add(u -> {
             if (u.klap().doel() instanceof ServerPlayer p && u.klap().bron() instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas b) {
                 b.bijdragen().tank(p.getUUID(), u.schade());

@@ -39904,7 +39904,7 @@
   "vadsrijk.ambacht.oogst.rustig": "Rustig aan...",
   "vadsrijk.ambacht.oogst.zeldzaam": "Zeldzaam! Je vond: %s",
   "vadsrijk.ambacht.oogst.afk": "Je staat al een tijdje op dezelfde plek: de oogst is gehalveerd. Loop even rond!",
-  "vadsrijk.ambacht.korf.vol": "Je hebt al genoeg korven (max %s op dit niveau).",
+  "vadsrijk.ambacht.korf.vol": "Je hebt al %s korven in deze zone: meer passen er niet. Zet er een in een andere zone, of oogst je eigen korven.",
   "vadsrijk.ambacht.korf.plek": "%s (bij x %s, z %s)",
   "vadsrijk.ambacht.korf.vol.waar": "Je korven staan bij: %s. Klik op je eigen korf om te oogsten.",
   "vadsrijk.ambacht.korf.neergezet": "Je korf staat! Je bijen gaan nectar halen voor %s.",
