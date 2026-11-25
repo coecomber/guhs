@@ -301,13 +301,39 @@ public final class AmbachtRegistry {
             return 1;
         }));
         // 1.10.12: an admin takes back all hives of a player (a player was stuck at the hive maximum); the rest of the data stays
-        k.then(Commands.literal("korven").then(Commands.literal("weg").then(Commands.argument("speler",
-                net.minecraft.commands.arguments.EntityArgument.player()).executes(c -> {
+        k.then(Commands.literal("korven")
+                // 1.10.21: list one player's hives, and take back a single hive (the whole set stays the fallback)
+                .then(Commands.argument("wie", net.minecraft.commands.arguments.EntityArgument.player()).executes(c -> {
+                    ServerPlayer p = net.minecraft.commands.arguments.EntityArgument.getPlayer(c, "wie");
+                    List<String> l = Imkeren.lijst(p);
+                    zeg(c, p.getGameProfile().name() + " heeft " + l.size() + " korf/korven:");
+                    for (String r : l) {
+                        zeg(c, " " + r);
+                    }
+                    return l.size();
+                }))
+                .then(Commands.literal("weg").then(Commands.argument("speler", net.minecraft.commands.arguments.EntityArgument.player()).executes(c -> {
                     ServerPlayer p = net.minecraft.commands.arguments.EntityArgument.getPlayer(c, "speler");
                     int n = Imkeren.allesWeg(p);
                     zeg(c, n + " korf/korven van " + p.getGameProfile().name() + " weggehaald.");
                     return n;
-                }))));
+                }).then(Commands.argument("korf", StringArgumentType.word()).suggests((c, b) -> {
+                    try {
+                        return SharedSuggestionProvider.suggest(Imkeren.ids(net.minecraft.commands.arguments.EntityArgument.getPlayer(c, "speler")), b);
+                    } catch (Exception e) {
+                        return b.buildFuture();
+                    }
+                }).executes(c -> {
+                    ServerPlayer p = net.minecraft.commands.arguments.EntityArgument.getPlayer(c, "speler");
+                    String id = StringArgumentType.getString(c, "korf");
+                    if (!Imkeren.eenWeg(p, id)) {
+                        c.getSource().sendFailure(net.minecraft.network.chat.Component.literal(p.getGameProfile().name() + " heeft geen korf " + id
+                                + ". Zie: /guhs vadsrijk ambacht korven " + p.getGameProfile().name()));
+                        return 0;
+                    }
+                    zeg(c, "Korf " + id + " van " + p.getGameProfile().name() + " weggehaald (" + Imkeren.ids(p).size() + " over).");
+                    return 1;
+                })))));
         k.then(Commands.literal("scan").executes(c -> {
             ServerLevel vr = nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.level(c.getSource().getServer());
             if (vr != null) {

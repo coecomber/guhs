@@ -214,4 +214,38 @@ public final class Imkeren {
         alle.remove(s.id());
         AmbachtData.tag(p).put("korven", alle);
     }
+
+    /** 1.10.21 (admin, {@code korven weg <speler> <korf>}): takes back ONE hive by its id; false when the player has no such hive. */
+    public static boolean eenWeg(ServerPlayer p, String id) {
+        CompoundTag alle = korven(p).copy();
+        if (!alle.contains(id)) {
+            return false;
+        }
+        alle.remove(id);
+        AmbachtData.tag(p).put("korven", alle);
+        Verzamelen.sync(p, true);
+        return true;
+    }
+
+    /** 1.10.21 (admin): the hive ids of this player, sorted. */
+    public static java.util.List<String> ids(ServerPlayer p) {
+        return new java.util.ArrayList<>(new java.util.TreeSet<>(korven(p).keySet()));
+    }
+
+    /** 1.10.21 (admin, {@code korven <speler>}): one line per hive: id, meadow, x/z, zone, combs now. */
+    public static java.util.List<String> lijst(ServerPlayer p) {
+        java.util.List<String> uit = new java.util.ArrayList<>();
+        net.minecraft.server.MinecraftServer server = p.level().getServer();
+        for (String id : ids(p)) {
+            Spot s = server == null ? null : Verzamelen.spot(server, id);
+            if (s == null || s.posities().isEmpty()) {
+                uit.add(id + " (plek niet geladen/bekend)");
+                continue;
+            }
+            BlockPos q = Verzamelen.positie(p, s);
+            uit.add(id + ": " + s.groep().id() + " bij " + q.getX() + ", " + q.getY() + ", " + q.getZ() + " (zone " + s.groep().zone() + ", "
+                    + raten(p, s) + " raten)");
+        }
+        return uit;
+    }
 }

@@ -3,6 +3,17 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.21 — Minecraft 26.1.2
+
+- **Bosses from zone 4 on x5 HP** (balans config versie 7, new `[bazen] leven_vanaf_zone4 = 5.0`): every boss of zone 4+ (Z4Baas, Z5Baas, Z6Baas, Z6RaidBaas, and the koraalgrot/wolkengrot/zoutgrot cave bosses via their kerker zone; `VadsrijkBaas.baasZone()`), not their helpers. Live: a lv-56 mage with a +10 Legendarisch staff beat Kootje (89k Vads) in 59 s and the koraalgrot boss in 9 s; a class comparison (same gear, +10) showed knight ~6.3k, mage ~5.6k, archer ~4.9-5.8k dps, so the bosses simply had too few Vads. Adds and interrupt meters sized from the boss (Zeeslurf polyps, Grauwe Droom tendrils, Bouwdoos `onderbreek`, raid `giet`) use `maxVadsZonderZone()` and stay as before. `[bazen] enrage_vanaf_zone4 = 2.0`: their enrage (`Z3Baas.enrageTijd`, raid HUD) and soft woede (`BaasVfx.woedeNa`) come twice as late.
+- **Smid stars milder:** `[gevecht] ster_schade = 0.25`: +10 = x1.25 weapon damage (was x1.55), +5 = x1.11; same curve shape, existing items keep their stars.
+- **Kootje can't skip the Knuffelregen:** in fase 2 (incl. the 6 s crash window, +50 %) a hit stops just below 25 % (`Vliegervanger.vadsVloer`).
+- **Saved bosses keep their HP fraction** when their max Vads changes (`vr_max` in the save); a boss saved before this starts full in fase 1. Gametests `VadsrijkBalansBazenGameTests` (5); `vliegervangerLieren` checks the floor.
+- **De Grauwe Mistbank:** Verdwaalde Nevel stood at the boat landing on a narrow step of a steep staircase (26 blocks from and 14 below the grey gate, in thick fog; the `npc_mysterie` alias pointed at `mysterie_strand`), and Luc could not click him. He now stands on flat ground in front of the gate (`mysterie_poort`, fallback 2478,79,-328). Gametest `Z4NevelGameTests`.
+- **"Wat bijt er vandaag?"** names its real requirement: the zone-4 fishing spots, Vissen 32 (no vanilla rods in the Vadsrijk).
+- **Admin hives:** `/guhs vadsrijk ambacht korven <speler>` lists a player's hives (id, place, zone, combs); `korven weg <speler> <korf>` takes back one hive (`korven weg <speler>` still takes all).
+- Gametests: the scan tests that build above their floor (scanBinnen, scanHoningEnRand, scanIjs, weesNodeOpruimen) run in batch `vadsrijk_t_ambacht_b` (they hung over the pier test).
+
 ## 1.10.20 — Minecraft 26.1.2
 
 - **De Grote Knuffeltij can be finished:** the six counting points of step 4 ("Vrolijk 6 grauwe knuffels op") were old fallback coordinates, three of them in open sea ~4 blocks above the water, so players stuck at 3/6. They are now the grey knuffels on the live waterline, the find radius is 4, and the texts say to walk past the knuffels where grey fluff drifts. Players keep what they found. Gametest `knuffeltijVanafHetStrand`.

@@ -260,7 +260,7 @@ public class VadsrijkAmbachtGameTests {
     }
 
     /** 1.10.13: a frozen lake (the Knuffelmeer froze over on live: 0 spots): fished through holes in the ice; a node may stand there. */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH + "_b")   // (own batch: its blocks hung over the pier test)
     public static void scanIjs(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         for (int x = 0; x < 12; x++) {
@@ -284,7 +284,7 @@ public class VadsrijkAmbachtGameTests {
     }
 
     /** 1.10.13: a node whose spot no longer exists (a rescan found fewer spots) leaves the world; its original block comes back. */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH + "_b")   // (own batch: its blocks hung over the pier test)
     public static void weesNodeOpruimen(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         Groep g = AmbachtPlekken.groep("z2_vis_meer_1");
@@ -401,6 +401,16 @@ public class VadsrijkAmbachtGameTests {
         helper.assertTrue(AmbachtData.tag(p).getCompoundOrEmpty("korven").isEmpty(), "no hives left");
         helper.assertTrue(AmbachtData.xp(p, Ambacht.VERZAMELEN) == xp && AmbachtData.heeft(p, "plekken", "z1_pluk_kamp"), "the rest stays");
         helper.assertTrue(Imkeren.allesWeg(p) == 0, "again: none");
+        // 1.10.21: one hive by its id, the others stay (and their zone count drops)
+        net.minecraft.nbt.CompoundTag k2 = new net.minecraft.nbt.CompoundTag();
+        k2.put("z3_korf_raatweide_0", new net.minecraft.nbt.CompoundTag());
+        k2.put("z3_korf_raatweide_1", new net.minecraft.nbt.CompoundTag());
+        k2.put("z3_korf_kever_2", new net.minecraft.nbt.CompoundTag());
+        AmbachtData.tag(p).put("korven", k2);
+        helper.assertTrue(Imkeren.inZone(p, 3) == 3, "three zone-3 hives");
+        helper.assertTrue(Imkeren.eenWeg(p, "z3_korf_raatweide_1") && !Imkeren.eenWeg(p, "z3_korf_raatweide_1"), "one hive taken back, once");
+        helper.assertTrue(Imkeren.ids(p).equals(java.util.List.of("z3_korf_kever_2", "z3_korf_raatweide_0")) && Imkeren.inZone(p, 3) == 2,
+                "the other two stay: " + Imkeren.ids(p));
         helper.succeed();
     }
 
