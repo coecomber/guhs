@@ -33,7 +33,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.VadsrijkCommando;
 import nl.juiced.guhs.feature.vadsrijk.kern.wereld.TegelBlokken;
 
 /**
- * 1.10.19 (live): repairs collapsed sand. The zone-4 beaches are pink concrete powder with air under it; lighting a campfire gave a
+ * 1.10.19 (live): repairs collapsed sand (1.10.20: only columns with a hole above a pile, see {@code loop}). The zone-4 beaches are pink concrete powder with air under it; lighting a campfire gave a
  * block update and whole beaches fell onto the islands below (part of it turned to concrete in the water). Since 1.10.19 nothing
  * falls in Het Vadsrijk ({@code KernEvents}); this puts the map tiles back where falling blocks changed them.
  * <p>{@code /guhs vadsrijk zandherstel <naam> <x1> <z1> <x2> <z2> proef|doe} and {@code zandherstel <naam> herstel} (op only):
@@ -71,6 +71,11 @@ public final class ZandHerstel {
 
     static boolean beton(BlockState s) {
         return BuiltInRegistries.BLOCK.getKey(s.getBlock()).getPath().endsWith("_concrete");
+    }
+
+    /** Air, water or a plant: where a falling block can leave a hole or land. */
+    static boolean open(BlockState s) {
+        return s.isAir() || s.canBeReplaced() || !s.getFluidState().isEmpty();
     }
 
     /** Should this live cell go back to the tile? (only damage done by falling blocks) Public for the gametests. */
@@ -118,11 +123,25 @@ public final class ZandHerstel {
                         if (!t.heeftTegel(kolom)) {
                             continue;
                         }
+                        // 1.10.20: only a column where something really FELL: a hole (the tile's falling block gone) above a pile (a
+                        // falling block or set concrete where the tile has air/water). Other differences with the tiles are later
+                        // stamp patches (portals, puzzles...), which may hold sand or concrete themselves: never touch those.
+                        List<BlockPos> gat = new ArrayList<>(), hoop = new ArrayList<>();
                         for (int y = minY; y <= maxY; y++) {
                             BlockPos b = new BlockPos(x, y, z);
-                            if (moetTerug(l.getBlockState(b), t.staat(b))) {
-                                cellen.add(b);
+                            BlockState nu = l.getBlockState(b), moet = t.staat(b);
+                            if (nu == moet) {
+                                continue;
                             }
+                            if (valt(moet) && open(nu)) {
+                                gat.add(b);
+                            } else if ((valt(nu) || beton(nu)) && !valt(moet) && open(moet)) {
+                                hoop.add(b);
+                            }
+                        }
+                        if (!gat.isEmpty() && !hoop.isEmpty() && hoop.get(0).getY() < gat.get(gat.size() - 1).getY()) {
+                            cellen.addAll(gat);
+                            cellen.addAll(hoop);
                         }
                     }
                 }

@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.20 — Minecraft 26.1.2
+
+- **De Grote Knuffeltij can be finished:** the six counting points of step 4 ("Vrolijk 6 grauwe knuffels op") were old fallback coordinates, three of them in open sea ~4 blocks above the water, so players stuck at 3/6. They are now the grey knuffels on the live waterline, the find radius is 4, and the texts say to walk past the knuffels where grey fluff drifts. Players keep what they found. Gametest `knuffeltijVanafHetStrand`.
+- **Zandherstel only restores real collapses:** a column is repaired only with a hole (the tile's falling block gone) above a pile (sand or set concrete where the tile has air/water). Other differences with the map tiles are later stamp patches (portals, puzzles) that may contain sand or concrete themselves.
+
 ## 1.10.19 — Minecraft 26.1.2
 
 - **Nothing falls in Het Vadsrijk:** the zone-4 beaches are pink concrete powder with air under it; lighting a campfire (a block update) made whole beaches collapse onto the islands below (live, right after zones 4-5 opened). A falling block that tries to start in the Vadsrijk is put back where it was, without updating its neighbours (`KernEvents`).
