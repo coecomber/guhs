@@ -649,8 +649,8 @@ class Gids:
                     zr.append(self.quest_rij(q["id"], zn))
             uit += f'<h3>{t("Side quests", "Zijquests")}</h3>' + self.tabel([("Zone", 0), ("Quest", 0), (t("Steps, craft level and where", "Stappen, ambachtniveau en waar"), 0)], zr)
             if any(q["id"] == "z4_s03_vissen" for q in zij) and self.toon(4):
-                uit += ('<div data-zone="4">' + p(ESC("Tip for \"Wat bijt er vandaag?\": every fish you catch in zone 4 counts, also with a normal fishing rod (any level). With the craft: the zone-4 fishing spots need Fishing 32, but the cave water in the Koraalgrot (tier 3) also lies in zone 4 and needs only Fishing 22."),
-                                                     ESC("Tip voor \"Wat bijt er vandaag?\": elke vis die je in zone 4 vangt telt, ook met een gewone hengel (elk niveau). Met het ambacht: de visplekken van zone 4 vragen Vissen 32, maar het grotwater in de Koraalgrot (tier 3) ligt ook in zone 4 en vraagt maar Vissen 22."))
+                uit += ('<div data-zone="4">' + p(ESC("Tip for \"Wat bijt er vandaag?\": you need Fishing 32. Only the zone-4 fishing spots count (normal fishing rods don't work in the Vadsrijk). Level Fishing first at the zone-3 spots (tier 3, from 22)."),
+                                                     ESC("Tip voor \"Wat bijt er vandaag?\": je hebt Vissen 32 nodig. Alleen de visplekken van zone 4 tellen (gewone hengels werken niet in het Vadsrijk). Level Vissen eerst bij de visplekken van zone 3 (tier 3, vanaf 22)."))
                         + "</div>")
         # the masters' stories
         lv = br.verhaal_levels

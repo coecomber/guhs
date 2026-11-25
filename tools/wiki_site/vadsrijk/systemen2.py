@@ -76,8 +76,8 @@ def ambachten(b):
 <li>{t("Ore: tap three times on the pink.", "Erts: drie keer tikken op het roze.")}</li>
 <li>{t("Wood: tap twice, quickly.", "Hout: twee keer snel tikken.")}</li>
 <li>{t("Fishing: wait for BITE! and click at once. Other fish bite at night and in the rain.", "Vissen: wacht op BEET! en klik meteen. 's Nachts en bij regen bijten andere soorten.")}</li>
-<li>{t("Beehives (zone 3 on, part of Gathering): place your hive near the flowers; combs fill in real time. Harvest with smoke: too early = grumpy bees (sticky, never damage). More hives at Gathering level 9, 19, 29 and 40.",
-       "Bijenkorven (vanaf zone 3, hoort bij Verzamelen): zet je korf bij de bloemen; de raten vullen in echte tijd. Oogsten met rook: te vroeg = chagrijnige bijen (plakkerig, nooit schade). Meer korven op Verzamelen-niveau 9, 19, 29 en 40.")}</li>
+<li>{t("Beehives (zone 3 on, part of Gathering): place your hive near the flowers; combs fill in real time. Harvest with smoke: too early = grumpy bees (sticky, never damage). At most 4 hives per zone (the Ambachtseiland counts as zone 1).",
+       "Bijenkorven (vanaf zone 3, hoort bij Verzamelen): zet je korf bij de bloemen; de raten vullen in echte tijd. Oogsten met rook: te vroeg = chagrijnige bijen (plakkerig, nooit schade). Hooguit 4 korven per zone (het Ambachtseiland telt als zone 1).")}</li>
 <li>{t("A golden, glittering spot is rare: triple harvest and a chance on something special.", "Een gouden, glinsterende plek is zeldzaam: driedubbele oogst en kans op iets bijzonders.")}</li>
 <li>{t("Rested: offline time builds up double craft xp (max 2 hours).", "Uitgerust: offline bouw je dubbele ambachts-xp op (max 2 uur).")}</li>
 </ul>
