@@ -3,6 +3,18 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.22 — Minecraft 26.1.2
+
+- **Zone-4 gathering spots complete (live: Vliegereiland wood 1/8, Vuurtoreneiland wood 1/6, Koraalgrot pool 3/4 and ore 5/6):** a group that is still short after its random tries now tries every column of its circle for every kind except hives, in caves and closed rooms too (`PlekWereld.scan`; before: open-world fishing only). The last pass may put spots closer together (`KRAP` 4, fishing `KRAP_WATER` 2): the Koraalgrot pool is a 2-3 wide ring of shore water.
+  - Wood groups with too few trees (the Vuurtoreneiland has none, the Vliegereiland 2 at its far edge) take driftwood spots on bare grass, dirt or sand (`PlekWereld.strand`: also knuffelgras and roze zand), never on paths, decks or roofs.
+  - A gathering block of an earlier scan counts as free during a rescan, and no spot is put on top of one.
+  - Save version 6: incomplete non-hive groups scan once more (also the Wortelgrot wood 4/6 and the Honingmoeras 5/6). Checked against the live terrain: Vliegereiland 8/8, Vuurtoreneiland 6/6, Koraalgrot 4/4 and 6/6, Wortelgrot 6/6, Honingmoeras 6/6. Gametest `scanDrijfhout`.
+- **Zone 4 can cook tier 4:** Kok Garnaal in visrestaurant De Blije Bot (Lampionhaven, 1909,66,-489) has a new talk option "Keuken (zelf koken)" that opens the Koken workshop (`HoogvadsGilde.LAMPIONHAVEN`, `Werkplaats.magHier`). Before, Lampionhaven's only workshop (Werkmeester Krul) opened Smeden, so T4 Koken could only be made in Hoogvads' Ambachtsgilde. T5 stays Gilde-only. The zone-5 Gilde teachers' "Leer me koken" no longer says the workshops "open soon". Gametest `lampionhavenKeuken`.
+- **IJsgrot entrance marker:** `geheim_ijsgrot_ingang` is the roof hole of the dome (465,114,-1064) instead of the old tunnel mouth above the lake.
+- **Schuilnest (zone 5):** `z5w_schuilnest`, `_aankomst`, `_uitluik` and `z5w_leider_meestervermommer` are published on the room floor (y 186); its spawners, leader and drop-in point stood 2 blocks in the air (`NEST_Y` 188 -> 186).
+- **Old Hoedhupper name:** the star-field puzzle clue says "Schaapjeswei"; the return quest `rijdier_hoedhupper` (Een eigen Wolkenschaapje) stays, it is live content.
+- **Line E:** the wiki's airship stop uses `haven_z5_z6_vertrek`; the zone-6 opening film (after `z5_hq10_stormrand`) waits while zone 6 is closed (`Z6Haken.uitgesteld`, `ZonePoort.serverDicht`). Gametests `VadsrijkKleineDataGameTests`, `zwemtochtWachtOpDePoort`.
+
 ## 1.10.21 — Minecraft 26.1.2
 
 - **Bosses from zone 4 on x5 HP** (balans config versie 7, new `[bazen] leven_vanaf_zone4 = 5.0`): every boss of zone 4+ (Z4Baas, Z5Baas, Z6Baas, Z6RaidBaas, and the koraalgrot/wolkengrot/zoutgrot cave bosses via their kerker zone; `VadsrijkBaas.baasZone()`), not their helpers. Live: a lv-56 mage with a +10 Legendarisch staff beat Kootje (89k Vads) in 59 s and the koraalgrot boss in 9 s; a class comparison (same gear, +10) showed knight ~6.3k, mage ~5.6k, archer ~4.9-5.8k dps, so the bosses simply had too few Vads. Adds and interrupt meters sized from the boss (Zeeslurf polyps, Grauwe Droom tendrils, Bouwdoos `onderbreek`, raid `giet`) use `maxVadsZonderZone()` and stay as before. `[bazen] enrage_vanaf_zone4 = 2.0`: their enrage (`Z3Baas.enrageTijd`, raid HUD) and soft woede (`BaasVfx.woedeNa`) come twice as late.
