@@ -172,6 +172,7 @@ class Bouwer:
 {'<meta name="robots" content="noindex, nofollow">' if self.noindex else ''}
 <meta name="theme-color" content="#c2577f">
 <script>{EARLY_JS}</script>
+<script>try{{var z=sessionStorage.getItem('guhs-vr-zonetot');if(z&&/^[1-6]$/.test(z))document.documentElement.setAttribute('data-zonetot',z);}}catch(e){{}}</script>
 <link rel="icon" type="image/png" sizes="32x32" href="{r}img/favicon-32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&amp;family=Nunito+Sans:ital,wght@0,400;0,700;1,400&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap">

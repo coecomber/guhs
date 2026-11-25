@@ -185,15 +185,20 @@ JS = r"""
   showTheme();
   // spoiler switch: show everything up to zone X
   var zs=document.getElementById('zonetot');
-  // W-SITE (user request): EVERY page load starts at zone 1 (tutorial + zone 1); a higher choice is never remembered
-  function setZone(z){html.setAttribute('data-zonetot',z);if(zs)zs.value=z;document.dispatchEvent(new Event('vr-zone'));}
+  // W-SITE: a new visit starts at zone 1 (tutorial + zone 1). 1.10.18 (user): the choice holds while you click through the site
+  // in this tab (sessionStorage), so another page no longer jumps back to zone 1; a new tab/visit starts at zone 1 again.
+  function sread(k){try{return sessionStorage.getItem(k);}catch(e){return null;}}
+  function sstore(k,v){try{sessionStorage.setItem(k,v);}catch(e){}}
+  function setZone(z,bewaar){html.setAttribute('data-zonetot',z);if(zs)zs.value=z;if(bewaar)sstore('guhs-vr-zonetot',z);document.dispatchEvent(new Event('vr-zone'));}
   try{localStorage.removeItem('guhs-vr-zonetot');}catch(e){}
-  setZone('1');
+  var gekozen=sread('guhs-vr-zonetot');
+  if(gekozen&&(!zs||!Array.prototype.some.call(zs.options,function(o){return o.value===gekozen;})))gekozen=null;   // (a zone not on this site)
+  setZone(gekozen||'1');
   // W-SITE: a friendly note on load; "niet meer tonen" only hides the NOTE next time (the switch still starts at zone 1)
   var uitleg=null;
   function sluitUitleg(){if(uitleg){uitleg.remove();uitleg=null;}}
-  if(zs){zs.addEventListener('change',function(){setZone(zs.value);sluitUitleg();});}
-  if(read('guhs-vr-spoileruitleg-weg')!=='1'&&zs&&zs.options.length>1){   // X-SITE: only one open zone = nothing to explain
+  if(zs){zs.addEventListener('change',function(){setZone(zs.value,true);sluitUitleg();});}
+  if(!gekozen&&read('guhs-vr-spoileruitleg-weg')!=='1'&&zs&&zs.options.length>1){   // (not again once a zone was chosen this visit)   // X-SITE: only one open zone = nothing to explain
     uitleg=document.createElement('div');uitleg.className='spoileruitleg';uitleg.setAttribute('role','dialog');uitleg.setAttribute('aria-live','polite');
     uitleg.setAttribute('aria-label','Spoilers');
     uitleg.innerHTML='<p><span lang="nl">Alle informatie toont alleen de tutorial en de eerste zone. Spoilers of meer informatie? Kies rechtsboven bij <b>Toon tot</b> tot welke zone je alles wilt zien.</span>'+
