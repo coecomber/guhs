@@ -99,7 +99,10 @@ public final class Z4VerhaalPlekken {
             Map.entry("npc_bijenboerderij", new Alias("npc_imker", 0, 0)),
             Map.entry("npc_bloemenvelden", new Alias("eiland_bloemeneiland", 0, 0)),
             Map.entry("npc_schildpad", new Alias("schildpad_rug", 0, 0)),
-            Map.entry("npc_mysterie", new Alias("mysterie_strand", 0, 0)),
+            // 1.10.21 (Luc, "De Grauwe Mistbank"): Verdwaalde Nevel stood on the boat landing (mysterie_strand), a one-block step of
+            // the 45-degree stone staircase above the water, 26 blocks from and 14 below the gate where every text sends you; now
+            // he waits on the flat moss in front of the west pillar of the grey gate (2 west, 1 north of the gate spot).
+            Map.entry("npc_mysterie", new Alias("mysterie_poort", -2, -1)),
             Map.entry("npc_pierwachter", new Alias("opstijgpier_begin", 0, 0)),
             Map.entry("npc_hemelkapitein", new Alias("haven_4_5_kapitein", 0, 0)),
             Map.entry("kampvuur_havenplein", new Alias("kampvuur_lampionhaven", 0, 0)),
@@ -215,7 +218,7 @@ public final class Z4VerhaalPlekken {
         npc("z4_imker", w("npc_bijenboerderij", 2081, 70, -415));
         npc("z4_madelief", w("npc_bloemenvelden", 2090, 70, -392));
         npc("z4_schelpie", w("npc_schildpad", 2237, 71, -447));
-        npc("z4_nevel", w("npc_mysterie", 2476, 78, -326));
+        npc("z4_nevel", w("npc_mysterie", 2478, 79, -328));
         npc("z4_pierwachter", w("npc_pierwachter", 2478, 72, -563));
         npc("z4_hemelkapitein", w("npc_hemelkapitein", 2512, 72, -565));
         // the Kustwacht at the campfires
