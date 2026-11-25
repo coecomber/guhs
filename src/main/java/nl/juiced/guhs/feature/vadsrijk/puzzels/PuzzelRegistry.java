@@ -125,6 +125,7 @@ public final class PuzzelRegistry {
         });
         NeoForge.EVENT_BUS.addListener(PuzzelRegistry::commando);
         NeoForge.EVENT_BUS.addListener(TegelPatch::commando);   // 1.10.3 npc-vloer
+        NeoForge.EVENT_BUS.addListener(ZandHerstel::commando);   // 1.10.19: collapsed zone-4 beaches
     }
 
     // ---- commands ------------------------------------------------------------------------------------------------------------
