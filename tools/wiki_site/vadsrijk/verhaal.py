@@ -138,6 +138,12 @@ PERSONEN = [
      "The oasis is being pumped empty towards the east. Cheer up Moeder Bron and she shows the star road again.",
      "De oase wordt leeggepompt naar het oosten. Vrolijk Moeder Bron op en ze wijst de sterrenweg weer.", False),
 ]
+def _vinger_zone(z):
+    """1.10.18: a Finger of a zone that exists in the game (<= 6) carries its own zone, so --open-zones 5 does not publish Ringeling."""
+    nr = int(z.split()[-1])
+    return f' data-zone="{nr}"' if 5 < nr <= 6 else ""
+
+
 VINGERS = [("De Pink", "Graaf Piepvel", "zone 3"), ("De Ringvinger", "Hertogin Ringeling", "zone 6"), ("De Lange Vinger", "Generaal Brie van Bluf", "zone 9"),
            ("De Wijsvinger", "Kanselier Wijsneus", "zone 12"), ("De Duim", "Maarschalk Drukduim", "zone 16")]
 
@@ -266,7 +272,7 @@ def verhaal(b):
     vingers = ('<div data-zone="5">' + spoiler('<p>' + t("Waar mijn armen niet reiken, reiken mijn Vingers. (The Keizer's five generals; 'Finger' is only a nickname.)",
                                                           "Waar mijn armen niet reiken, reiken mijn Vingers. (De vijf generaals van de Keizer; 'Vinger' is alleen een bijnaam.)") + "</p>"
                                               + '<div class="tscroll"><table class="data"><thead><tr><th>' + t("Finger", "Vinger") + "</th><th>" + t("Name", "Naam") + "</th><th>Zone</th></tr></thead><tbody>"
-                                              + "".join(f"<tr><td>{ESC(a)}</td><td>{ESC(n)}</td><td>{ESC(z)}</td></tr>" for a, n, z in VINGERS) + "</tbody></table></div>",
+                                              + "".join(f"<tr{_vinger_zone(z)}><td>{ESC(a)}</td><td>{ESC(n)}</td><td>{ESC(z)}</td></tr>" for a, n, z in VINGERS) + "</tbody></table></div>",
                                               "The five Fingers (big spoiler)", "De vijf Vingers (grote spoiler)") + "</div>")
 
     # timeline
