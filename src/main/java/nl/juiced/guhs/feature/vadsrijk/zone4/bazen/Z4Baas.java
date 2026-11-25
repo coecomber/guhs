@@ -37,6 +37,12 @@ public abstract class Z4Baas extends Z3Baas {
         return "vadsrijk.z4bazen." + baasId();
     }
 
+    /** Balans-bazen: a zone-4 boss ([bazen] leven_vanaf_zone4 / enrage_vanaf_zone4). */
+    @Override
+    public int baasZone() {
+        return 4;
+    }
+
     @Override
     public void intro(ServerPlayer p, boolean eersteKeer) {
         super.intro(p, eersteKeer);

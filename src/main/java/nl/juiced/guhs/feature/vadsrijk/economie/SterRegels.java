@@ -155,10 +155,18 @@ public final class SterRegels {
         return s;
     }
 
-    /** Weapon damage factor of the stars: +4 % per star, +5 % extra at +5, +10 % extra at +10. */
+    /**
+     * Weapon damage factor of the stars. The shape: +4 % per star, +5 % extra at +5, +10 % extra at +10 (= +55 % at +10), scaled
+     * so +10 gives {@code [gevecht] ster_schade} (balans-bazen, default 0.25: +10 = x1.25, +5 = x1.11; was x1.55 / x1.25).
+     */
     public static double schade(Uitrusting u) {
-        int n = u.sterren();
-        return 1 + 0.04 * n + (n >= 5 ? 0.05 : 0) + (n >= MAX ? 0.10 : 0);
+        return schade(u.sterren());
+    }
+
+    /** The star factor for n stars (pure: tests). */
+    public static double schade(int n) {
+        double vorm = 0.04 * n + (n >= 5 ? 0.05 : 0) + (n >= MAX ? 0.10 : 0);
+        return 1 + vorm / nl.juiced.guhs.feature.vadsrijk.kern.Balans.STER_SCHADE_OUD * nl.juiced.guhs.feature.vadsrijk.kern.Balans.sterSchade();
     }
 
     public static Stat hoofdStat(String klasse) {

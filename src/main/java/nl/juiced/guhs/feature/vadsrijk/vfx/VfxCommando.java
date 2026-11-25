@@ -114,7 +114,7 @@ final class VfxCommando {
                 return zeg(c, "Geen baas binnen 64 blokken.");
             }
             BaasVfx.Staat s = BaasVfx.staat(baas);
-            s.gevechtStart = baas.level().getGameTime() - BaasVfx.WOEDE_NA - 1;
+            s.gevechtStart = baas.level().getGameTime() - BaasVfx.woedeNa(baas) - 1;
             return zeg(c, "Woede (soft enrage) komt binnen 1 s: aanvallen 2x zo vaak, rode rook.");
         }));
         v.then(dev("stop").executes(c -> {

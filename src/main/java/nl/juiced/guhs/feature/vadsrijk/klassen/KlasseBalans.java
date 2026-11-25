@@ -58,16 +58,17 @@ public final class KlasseBalans {
      * 2 = 1.10.1 (schade 1.69, leven 1.4), 3 = 1.10.2 (schade 2.028, leven 1.75, new section {@code [bazen]}),
      * 4 = 1.10.3 ({@code [bazen] leven} 1.25 -> 1.9), 5 = 1.10.3 schade-audit ({@code [bazen] leven} 1.9 -> 3.4; the new
      * section {@code [gevecht]} needs no migration: it starts at its defaults), 6 = 1.10.18 ({@code [bazen] leven} 3.4 -> 3.74,
-     * {@code [bazen] schade} 1.2 -> 1.4).
+     * {@code [bazen] schade} 1.2 -> 1.4), 7 = balans-bazen (new keys {@code [bazen] leven_vanaf_zone4} 5.0 / {@code enrage_vanaf_zone4}
+     * 2.0 and {@code [gevecht] ster_schade} 0.25: nothing to move, the bump only writes the new keys into the file).
      */
-    public static final int MOBS_VERSIE = 6;
+    public static final int MOBS_VERSIE = 7;
     /** 1102-balans: bosses + boss helpers ({@code [bazen] leven} x1.25 max Vads, {@code [bazen] schade} x1.2 final damage of bosses). */
     public static final String BAZEN = "bazen";
-    public static final List<String> BAZEN_SLEUTELS = List.of("leven", "schade");
+    public static final List<String> BAZEN_SLEUTELS = List.of("leven", "schade", "leven_vanaf_zone4", "enrage_vanaf_zone4");
     /** 1.10.3 schade-audit: how much of a player's stacked offensive stats counts ({@code [gevecht]}; pushed to kern Balans.zetGevecht). */
     public static final String GEVECHT = "gevecht";
     public static final List<String> GEVECHT_SLEUTELS = List.of("hoofd_rendement", "kritiekschade_rendement", "elementschade_rendement",
-            "aanvalssnelheid_rendement", "kritiek_max");
+            "aanvalssnelheid_rendement", "kritiek_max", "ster_schade");
     /** I-MOUNTS: the mount knobs ({@code [rijdieren]}; pushed to economie's {@code RijdierSoort.Balans}). */
     public static final String RIJDIEREN = "rijdieren";
     public static final List<String> RIJDIEREN_SLEUTELS = List.of("snelheid", "sprong", "groei_snelheid", "groei_sprong");
@@ -102,11 +103,17 @@ public final class KlasseBalans {
             return switch (sleutel) {
                 case "hoofd_rendement" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.HOOFD_RENDEMENT_STANDAARD;
                 case "kritiek_max" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.KRITIEK_MAX_STANDAARD;
+                case "ster_schade" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.STER_SCHADE_STANDAARD;   // balans-bazen
                 default -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.PROCENT_RENDEMENT_STANDAARD;
             };
         }
         if (BAZEN.equals(klasse)) {   // 1102-balans
-            return "leven".equals(sleutel) ? nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD : nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_STANDAARD;
+            return switch (sleutel) {
+                case "leven" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD;
+                case "leven_vanaf_zone4" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_ZONE4_STANDAARD;   // balans-bazen
+                case "enrage_vanaf_zone4" -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_ENRAGE_ZONE4_STANDAARD;
+                default -> nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_STANDAARD;
+            };
         }
         return switch (sleutel) {
             case "melee_reductie" -> Klassen.RIDDER.equals(klasse) ? 0.20 : 0;
@@ -184,6 +191,8 @@ public final class KlasseBalans {
         nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetBazenSchade(get(BAZEN, "schade"));
         nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetGevecht(get(GEVECHT, "hoofd_rendement"), get(GEVECHT, "kritiekschade_rendement"),
                 get(GEVECHT, "elementschade_rendement"), get(GEVECHT, "aanvalssnelheid_rendement"), get(GEVECHT, "kritiek_max"));   // 1.10.3 schade-audit
+        nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetSterSchade(get(GEVECHT, "ster_schade"));   // balans-bazen
+        nl.juiced.guhs.feature.vadsrijk.kern.Balans.zetBazenZone4(get(BAZEN, "leven_vanaf_zone4"), get(BAZEN, "enrage_vanaf_zone4"));
         nl.juiced.guhs.feature.vadsrijk.economie.RijdierSoort.Balans.zet(get(RIJDIEREN, "snelheid"), get(RIJDIEREN, "sprong"),
                 get(RIJDIEREN, "groei_snelheid"), get(RIJDIEREN, "groei_sprong"));
         nl.juiced.guhs.feature.vadsrijk.items.ItemsBalans.zet(k -> get(ITEMS, k));   // T-ITEMS
@@ -335,6 +344,10 @@ public final class KlasseBalans {
                 l.add("[bazen] schade " + schade + " blijft (met de hand gezet)");
             }
         }
+        if (versie < 7) {   // balans-bazen: only new keys (they start at their defaults); the rewrite puts them in the file
+            l.add("[bazen] leven_vanaf_zone4=" + get(BAZEN, "leven_vanaf_zone4") + " enrage_vanaf_zone4=" + get(BAZEN, "enrage_vanaf_zone4")
+                    + ", [gevecht] ster_schade=" + get(GEVECHT, "ster_schade"));
+        }
         m.put("versie", (double) MOBS_VERSIE);
         return "migratie [mobs] versie " + versie + " -> " + MOBS_VERSIE + ": " + String.join(", ", l);
     }
@@ -364,9 +377,12 @@ public final class KlasseBalans {
         b.append("# [mobs] versie = niet aanpassen (de mod zet hiermee oude standaardwaarden om bij een update).\n");
         b.append("# [bazen] leven = vermenigvuldiger op de max Vads van alle bazen en baas-hulpjes (kerker-, zone- en raidbazen); 3.4 = +240 %.\n");   // 1102-balans
         b.append("# [bazen] schade = vermenigvuldiger op de eindschade van bazen (na Verdediging); 1.2 = +20 %. Hulpjes slaan via [mobs] schade.\n");
+        b.append("# [bazen] leven_vanaf_zone4 = extra vermenigvuldiger (bovenop leven) op de max Vads van alle bazen vanaf zone 4 (zone-, kerker-,\n");   // balans-bazen
+        b.append("# grot- en raidbazen; geen hulpjes); 5.0 = x5. enrage_vanaf_zone4 = hun enrage-/woedetijd x dit getal (2.0 = twee keer zo laat).\n");
         b.append("# [gevecht] = hoeveel van gestapelde aanvalsstats van spelers meetelt: hoofd_rendement = deel van Kracht/Behendigheid/\n");   // 1.10.3 schade-audit
         b.append("# Wijsheid BOVEN het balansmodel (14 + 3,2 x klasselevel); *_rendement = deel van Kritiekschade/Elementschade/\n");
         b.append("# Aanvalssnelheid BOVEN de eigen basis van je klasse (0.4 = 40 %; 1.0 = alles telt); kritiek_max = maximale Kritiek %.\n");
+        b.append("# ster_schade = extra wapenschade van een +10 wapen bij de smid (0.25 = x1,25; was x1,55); lagere sterren naar verhouding.\n");   // balans-bazen
         b.append("# [rijdieren] snelheid/sprong = vermenigvuldigers op alle rijdieren; groei_snelheid = extra snelheid per rijdierlevel\n");
         b.append("# (0.015 = +1,5 %), groei_sprong = extra sprongkracht per rijdierlevel (0.01 = ongeveer +0,07 blok).\n");
         b.append("# [items] = itemisatie 2.0: budget_* = vermenigvuldiger op alles wat een stuk in dat vak geeft; pity, Vertrouwd,\n");   // T-ITEMS

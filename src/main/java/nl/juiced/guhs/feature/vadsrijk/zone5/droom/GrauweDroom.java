@@ -423,7 +423,7 @@ public class GrauweDroom extends Z5Baas {
                 return;
             }
             Vec3 v = voetVan(ring(zMidden(), 4 + getRandom().nextDouble() * (NOOT_AFSTAND - 6), getRandom().nextDouble() * Math.PI * 2));
-            d.koppel(this, 100 + i, Math.max(300, maxVads() * 0.015), v);
+            d.koppel(this, 100 + i, Math.max(300, maxVadsZonderZone() * 0.015), v);
             d.zetRaakbaar(true);
             sl.addFreshEntity(d);
             ranken.add(d.getUUID());

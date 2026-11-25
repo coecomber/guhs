@@ -453,7 +453,29 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     /** 1101-balans: bosses never get [mobs] leven / the slope fix, only the compensation for the flatter main stat (1102: x [bazen] leven). */
     @Override
     protected double levenFactor(int level) {
-        return nl.juiced.guhs.feature.vadsrijk.kern.mob.MobBalans.baas(level);
+        return nl.juiced.guhs.feature.vadsrijk.kern.mob.MobBalans.baas(level) * nl.juiced.guhs.feature.vadsrijk.kern.Balans.bazenLevenZone(baasZone());
+    }
+
+    /**
+     * Balans-bazen: the zone this boss belongs to (0 = unknown/zones 1-3). From zone 4 on {@code [bazen] leven_vanaf_zone4} multiplies
+     * its max Vads and {@code [bazen] enrage_vanaf_zone4} its enrage time. Overridden by Z4Baas/Z5Baas/Z6Baas/Z6RaidBaas and GrotBaas.
+     */
+    public int baasZone() {
+        return 0;
+    }
+
+    /**
+     * Balans-bazen: max Vads WITHOUT the zone-4+ multiplier. For what is sized as a fraction of the boss (add HP, the interrupt
+     * meter of a cast), so those mechanics stay as long/hard as before while the boss itself has more Vads.
+     */
+    public double maxVadsZonderZone() {
+        return maxVads() / nl.juiced.guhs.feature.vadsrijk.kern.Balans.bazenLevenZone(baasZone());
+    }
+
+    /** Balans-bazen: a boss from an old save starts full (its max Vads may have changed with the balance). */
+    @Override
+    protected boolean volNaOudeOpslag() {
+        return true;
     }
 
     /** Max Vads for this many players in the arena (+75 % per extra player), keeping the HP fraction. */
@@ -675,6 +697,6 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
     protected void readAdditionalSaveData(ValueInput in) {
         super.readAdditionalSaveData(in);
         arenaId = in.getStringOr("vr_arena", "");
-        fase = in.getIntOr("vr_fase", 1);
+        fase = in.getFloatOr("vr_max", -1f) > 0 ? in.getIntOr("vr_fase", 1) : 1;   // balans-bazen: an old save starts full (volNaOudeOpslag)
     }
 }

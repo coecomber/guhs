@@ -221,7 +221,7 @@ public class Zandwachter extends Z6RaidBaas {
             if (Z6RaidRegistry.ZANDPILAAR.get().create(sl, EntitySpawnReason.MOB_SUMMONED) instanceof Z3Doel d) {
                 double a = start + i * Math.PI * 2 / m;
                 Vec3 v = zMidden().add(Math.cos(a) * 14, 0, Math.sin(a) * 14);
-                d.koppel(this, i, maxVads() * 0.025, v);
+                d.koppel(this, i, maxVadsZonderZone() * 0.025, v);
                 sl.addFreshEntity(d);
                 pilaren.add(d.getUUID());
                 Vfx.zuil(sl, v, 4, ZAND, 20);

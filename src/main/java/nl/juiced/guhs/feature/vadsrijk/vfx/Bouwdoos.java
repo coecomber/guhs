@@ -92,7 +92,7 @@ public final class Bouwdoos {
         baas.getNavigation().stop();
         // the interrupt (a stun counts too)
         if (aanval.onderbreekbaar()) {
-            double nodig = aanval.onderbreek * Math.max(1, baas.maxVads());
+            double nodig = aanval.onderbreek * Math.max(1, baas.maxVadsZonderZone());   // balans-bazen: not x the zone-4+ HP
             float breuk = (float) Math.min(1, castSchade / nodig);
             if (breuk >= 1 || Statussen.heeft(baas, Status.VERDOOFD)) {
                 onderbreek(sl);

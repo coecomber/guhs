@@ -195,7 +195,7 @@ public class Zoutkolos extends Z6Baas {
             inslag(v, 2, tg(20), 0.15, "kristalworp", null, ParticleTypes.END_ROD);
             later(tg(20), () -> {
                 if (Z6WezensRegistry.ZINGKRISTAL.get().create(sl, EntitySpawnReason.MOB_SUMMONED) instanceof Z3Doel d) {
-                    d.koppel(this, kristallen.size(), maxVads() * 0.025, v);
+                    d.koppel(this, kristallen.size(), maxVadsZonderZone() * 0.025, v);
                     sl.addFreshEntity(d);
                     kristallen.add(d.getUUID());
                 }

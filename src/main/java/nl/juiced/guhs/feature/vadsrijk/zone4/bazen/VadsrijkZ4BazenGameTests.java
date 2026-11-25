@@ -137,8 +137,9 @@ public class VadsrijkZ4BazenGameTests {
             v = g.vads();
             g.krijgSchade(100, p);
             helper.assertTrue(v - g.vads() > 140, "crashed: +50 % damage (" + (v - g.vads()) + ")");
-            g.krijgSchade(g.vads() - g.maxVads() * 0.24, p);
-            helper.assertTrue(g.fase() == 3, "fase 3: the plushie rain");
+            g.krijgSchade(g.maxVads(), p);   // balans-bazen: a burst in the crash window can't skip fase 3
+            double frac = g.vads() / g.maxVads();
+            helper.assertTrue(g.fase() == 3 && !g.geplofd() && frac > 0.249 && frac < 0.25, "fase 3 (the plushie rain) starts, he stops just below 25 %: " + frac);
             g.krijgSchade(g.vads() + 10, p);
             helper.assertTrue(g.geplofd(), "beaten: he flees in smoke");
             helper.succeed();

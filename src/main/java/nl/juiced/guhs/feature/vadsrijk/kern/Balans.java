@@ -51,11 +51,58 @@ public final class Balans {
      */
     public static final double HOOFD_RENDEMENT_STANDAARD = 0.35, PROCENT_RENDEMENT_STANDAARD = 0.4, KRITIEK_MAX_STANDAARD = 40;
 
+    /**
+     * Balans-bazen (config versie 7): {@code [bazen] leven_vanaf_zone4} = an extra HP multiplier for every boss of zone 4 and up
+     * (zone bosses, dungeon end bosses, cave-dungeon bosses, raid bosses; NOT their helpers), on top of {@code [bazen] leven}:
+     * live, a geared lv-56 mage killed Kootje de Vliegervanger in 59 s and the zone-4 cave boss in 9 s. {@code [bazen]
+     * enrage_vanaf_zone4} stretches those bosses' enrage timers (and the soft "woede") by this factor, so a 5x longer fight
+     * doesn't run into the enrage.
+     */
+    public static final double BAZEN_LEVEN_ZONE4_STANDAARD = 5.0, BAZEN_ENRAGE_ZONE4_STANDAARD = 2.0;
+    /** From this zone on the two knobs above count. */
+    public static final int BAZEN_VANAF_ZONE = 4;
+
+    /**
+     * Balans-bazen, {@code [gevecht] ster_schade}: the weapon damage bonus of a +10 weapon from the smid's stars (0.25 = x1.25; was
+     * a fixed x1.55). The curve keeps its shape (+4 % a star, a bump at +5 and +10), scaled so +10 lands here
+     * ({@code economie.SterRegels#schade}); the stars' small main-stat bonus is unchanged.
+     */
+    public static final double STER_SCHADE_STANDAARD = 0.25, STER_SCHADE_OUD = 0.55;
+
     private static volatile double hoofdRendement = HOOFD_RENDEMENT_STANDAARD;
     private static volatile double kritiekschadeRendement = PROCENT_RENDEMENT_STANDAARD;
     private static volatile double elementschadeRendement = PROCENT_RENDEMENT_STANDAARD;
     private static volatile double aanvalssnelheidRendement = PROCENT_RENDEMENT_STANDAARD;
     private static volatile double kritiekMax = KRITIEK_MAX_STANDAARD;
+    private static volatile double sterSchade = STER_SCHADE_STANDAARD;
+    private static volatile double bazenLevenZone4 = BAZEN_LEVEN_ZONE4_STANDAARD;
+    private static volatile double bazenEnrageZone4 = BAZEN_ENRAGE_ZONE4_STANDAARD;
+
+    /** From KlasseBalans ([gevecht] ster_schade), clamped to 0..1. */
+    public static void zetSterSchade(double v) {
+        sterSchade = Math.max(0, Math.min(1, v));
+    }
+
+    /** The weapon damage bonus at +10 stars (default 0.25 = x1.25). */
+    public static double sterSchade() {
+        return sterSchade;
+    }
+
+    /** From KlasseBalans ([bazen] leven_vanaf_zone4 / enrage_vanaf_zone4), clamped to 0.1..20 and 1..10. */
+    public static void zetBazenZone4(double leven, double enrage) {
+        bazenLevenZone4 = Math.max(0.1, Math.min(20.0, leven));
+        bazenEnrageZone4 = Math.max(1.0, Math.min(10.0, enrage));
+    }
+
+    /** The extra boss HP factor for a boss of this zone: [bazen] leven_vanaf_zone4 from zone 4 on, else 1. */
+    public static double bazenLevenZone(int zone) {
+        return zone >= BAZEN_VANAF_ZONE ? bazenLevenZone4 : 1;
+    }
+
+    /** The enrage-time factor for a boss of this zone: [bazen] enrage_vanaf_zone4 from zone 4 on, else 1. */
+    public static double bazenEnrageZone(int zone) {
+        return zone >= BAZEN_VANAF_ZONE ? bazenEnrageZone4 : 1;
+    }
 
     /** From KlasseBalans ([gevecht], file/command): the shares clamped to 0..1, the crit cap to 0..100. */
     public static void zetGevecht(double hoofd, double kritiekschade, double elementschade, double aanvalssnelheid, double kritMax) {

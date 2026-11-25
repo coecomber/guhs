@@ -236,7 +236,7 @@ public class Wormelien extends Z6Baas {
         }
         korstGehad = true;
         if (Z6WezensRegistry.ZOUTKORST.get().create(sl, EntitySpawnReason.MOB_SUMMONED) instanceof Z3Doel d) {
-            d.koppel(this, 0, maxVads() * 0.06, korstPlek());
+            d.koppel(this, 0, maxVadsZonderZone() * 0.06, korstPlek());
             sl.addFreshEntity(d);
             korst = d.getUUID();
         }

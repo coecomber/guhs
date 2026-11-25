@@ -75,6 +75,13 @@ public class GrotBaas extends VadsrijkBaas implements GeoEntity {
         return Kerkers.van(grot());
     }
 
+    /** Balans-bazen: the zone of its cave dungeon (koraalgrot 4, wolkengrot 5, zoutgrot 6: [bazen] leven_vanaf_zone4). */
+    @Override
+    public int baasZone() {
+        Kerker k = kerker();
+        return k == null ? 0 : k.zone();
+    }
+
     @Nullable
     Kamer kamer() {
         Kerker k = kerker();
