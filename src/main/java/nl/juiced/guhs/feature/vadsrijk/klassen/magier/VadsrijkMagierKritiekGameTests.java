@@ -151,4 +151,40 @@ public class VadsrijkMagierKritiekGameTests {
             d.klasse = oud;
         }
     }
+
+    /**
+     * 1.10.18 (Luc_Ermeling fainted 9x in 3 minutes at the Spiegelburcht, lv 48): the Spiegelwacht mirrored 40 % of every hit as true
+     * damage with the [mobs] multiplier on top and no cap. Now one mirror is at most 15 % of max Vads (no multiplier), and automatic
+     * procs (Liedpuls) are never mirrored.
+     */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 200)
+    public static void spiegelwachtNietDodelijk(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        p.setGameMode(GameType.SURVIVAL);
+        SpelerData d = Spelers.data(p);
+        String oud = d.klasse;
+        d.klasse = Klassen.MAGIER;
+        Spelers.zetLevel(p, 48);
+        var w = helper.spawn(nl.juiced.guhs.feature.vadsrijk.zone2.wezens.Z2WezensRegistry.SPIEGELWACHT.get(), 3, 1, 3);
+        try {
+            w.stelIn(33, null, false, Set.of());
+            double dx = p.getX() - w.getX(), dz = p.getZ() - w.getZ();
+            w.setYRot((float) Math.toDegrees(Math.atan2(-dx, dz)));   // (face the player: Z2Wezen.voor())
+            helper.assertTrue(w.spiegelt(p), "the Spiegelwacht faces the mage");
+            helper.assertTrue(Weerkaatsen.automatisch("liedpuls") && !Weerkaatsen.automatisch("roze_vuurbal"), "automatic procs are never mirrored");
+            double max = Spelers.maxVads(p);
+            helper.assertTrue(Math.abs(Weerkaatsen.gespiegeld(p, 1e9) - max * Weerkaatsen.MAX_DEEL) < 1e-6, "one mirror is capped at 15 % of max Vads");
+            d.vads = max;
+            double voor = Spelers.vads(p);
+            Vadsmagier.vuurbalTreffer(p, w, 50_000, Element.ROZE);   // a huge hit: the old mirror took ~81 % of it back
+            double verlies = voor - Spelers.vads(p);
+            helper.assertTrue(verlies > 0, "the hit was mirrored");
+            helper.assertTrue(verlies <= max * Weerkaatsen.MAX_DEEL + 1e-6, "one mirror costs at most 15 % of max Vads: lost " + verlies + " of " + max);
+            helper.succeed();
+        } finally {
+            w.discard();
+            d.klasse = oud;
+            Spelers.zetLevel(p, 1);
+        }
+    }
 }

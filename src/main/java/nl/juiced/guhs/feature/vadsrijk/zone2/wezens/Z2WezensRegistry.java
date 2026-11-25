@@ -202,7 +202,10 @@ public final class Z2WezensRegistry {
                 } else if (bron != null) {
                     s.spiegelEffect(sl);
                     Getallen.tekst(sl, s.getX(), s.getY() + s.getBbHeight() + 0.3, s.getZ(), Component.translatable("vadsrijk.z2wezens.gespiegeld"), 0.8f);
-                    Schade.doe(new Schade.Klap(s, bron, n * 0.4, s.element(), Schade.Soort.WAAR, false, "gespiegeld"));
+                    if (!nl.juiced.guhs.feature.vadsrijk.wezens.Weerkaatsen.automatisch(k.skillId())) {   // 1.10.18: capped, no [mobs] multiplier
+                        Schade.doe(new Schade.Klap(s, bron, nl.juiced.guhs.feature.vadsrijk.wezens.Weerkaatsen.gespiegeld(bron, n), s.element(), Schade.Soort.WAAR,
+                                false, nl.juiced.guhs.feature.vadsrijk.wezens.Weerkaatsen.SKILL));
+                    }
                     return 0;
                 }
             }

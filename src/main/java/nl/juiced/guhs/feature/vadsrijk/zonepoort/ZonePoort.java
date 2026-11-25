@@ -65,10 +65,12 @@ public final class ZonePoort {
     static final int[] PLAFOND = {0, 20, 30, 50, 56, 60, 0};
     /**
      * 1.10.2: the top level of each zone (index = zone; 0 = the camp counts as zone 1). The per-player level cap is the top of the
-     * highest zone you ENTERED + {@link #CAP_EXTRA}: zone 1 -> 25, 2 -> 35, 3 -> 55, 4 -> 61, 5 -> 65, 6 -> 70 (= Levels.MAX: no cap).
+     * highest zone you ENTERED + {@link #CAP_EXTRA}: zone 1 -> 22, 2 -> 32, 3 -> 52, 4 -> 58, 5 -> 62, 6 -> 70 (= Levels.MAX: no cap).
+     * 1.10.18: +5 -> +2. Zones 4 (50-56) and 5 (56-60) are narrow: with +5 a zone-3 completionist entered zone 4 at its top (55)
+     * and walked through zone 5 above its whole range.
      */
     static final int[] TOP = {20, 20, 30, 50, 56, 60, 70};
-    public static final int CAP_EXTRA = 5;
+    public static final int CAP_EXTRA = 2;
 
     /** 1.10.4 (xp brake for quests and exploration): the top level of a zone (1..6; anything else counts as zone 1). */
     public static int zoneTop(int zone) {
