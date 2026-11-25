@@ -5,6 +5,9 @@ All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 
 ## 1.10.19 — Minecraft 26.1.2
 
+- **Nothing falls in Het Vadsrijk:** the zone-4 beaches are pink concrete powder with air under it; lighting a campfire (a block update) made whole beaches collapse onto the islands below (live, right after zones 4-5 opened). A falling block that tries to start in the Vadsrijk is put back where it was, without updating its neighbours (`KernEvents`).
+- **Admin repair `/guhs vadsrijk zandherstel <naam> <x1> <z1> <x2> <z2> proef|doe`** (+ `<naam> herstel`): puts the map tiles back where falling blocks changed them (holes, piles, powder that set to concrete in water), in loaded chunks, with a backup in `guhs_patches/zand_<naam>.nbt`. Gametest `ZandHerstelGameTests`.
+- **Hives per zone:** 4 hives per zone (the Ambachtseiland's Bijenhofje counts as zone 1) instead of 1-5 in total by Verzamelen level (`Imkeren.PER_ZONE`, `inZone`; a hive remembers its zone). The meadows keep their level gate.
 - **Zone 3 can be fished (live: 1 fishing spot in the whole zone):** the Honingmoeras found 1 spot of 6, the Mosvoet waterwheel 0, the honey ponds 0.
   - Fishing groups whose water lies off-centre now try every column of their circle when the random tries find too few (`PlekWereld.scan`, fixed shuffled order), and fishing positions may lie 2 blocks apart (shores are narrow strips; one node per spot at a time).
   - The honey ponds in the Kruinzee are honey blocks: `z3_vis_honingvijver` fishes in honey (`PlekWereld.honing`, also in `Grondstoffen.magHier`; the honey comes back when the spot moves).

@@ -183,7 +183,7 @@ public class VadsrijkAmbachtGameTests {
      * 1.10.14: the secret IJsgrot: a closed room with a roof, a sealed hollow under its floor and a ledge on its roof. Its spots lie on
      * the room floor only, where a player can walk (live: 0 of 12 positions were reachable).
      */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH + "_b")   // (own batch: its blocks above the floor hung over the pier test)
     public static void scanBinnen(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         for (int x = 0; x < 8; x++) {   // (small: the roof of a bigger room hung over the neighbouring pier test)
@@ -226,7 +226,7 @@ public class VadsrijkAmbachtGameTests {
      * 1.10.19: fishing in the honey ponds (honey blocks, no water) and in water that lies off-centre (the full-circle pass: the
      * Honingmoeras found 1 spot of 6 by random tries, the Mosvoet waterwheel 0).
      */
-    @GuhTest(template = "empty", batch = BATCH)
+    @GuhTest(template = "empty", batch = BATCH + "_b")   // (own batch: its blocks above the floor hung over the pier test)
     public static void scanHoningEnRand(GameTestHelper helper) {
         ServerLevel sl = helper.getLevel();
         for (int x = 0; x < 8; x++) {
