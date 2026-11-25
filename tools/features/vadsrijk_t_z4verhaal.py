@@ -326,7 +326,7 @@ PLEK_BAAS = {
     "z4_wrak": "in het Wrak van de Vliegervanger, ten noorden van de Koraalbaai",
 }
 PLEK_OVERIG = {
-    P + "plek.overal.teller:z4_tijknuffels": "langs de vloedlijn van het Knuffeltij-strand (grauwe pluisjes in de branding)",
+    P + "plek.overal.teller:z4_tijknuffels": "langs de vloedlijn van het Knuffeltij-strand (grauwe knuffels met grijze pluisjes, aan de waterkant)",
     P + "plek.overal.teller:z4_vliegerspul": "op het Vliegereiland (lat, stof, touw en lint waaien overal rond)",
     P + "plek.overal.teller:z4_parels": "onder water in de lagune van de Koraalbaai (glinstertjes)",
     P + "plek.overal.teller:z4_schelpen": "op de stranden van het Strandfeesteiland",
@@ -440,7 +440,7 @@ Q("z4_hq02_knuffeltij", "hoofd", "z4_havenmeester", "De Grote Knuffeltij",
    D("gebied", "poi:z4_knuffeltij_strand", 1, "Vaar met je zeilbootje naar het Knuffeltij-strand, het eiland ten zuidoosten van Lampionhaven",
      plek="poi:z4_knuffeltij_strand"),
    D("praat", "z4_wasguh", 1, "Praat met Wasguh Sopje bij de knuffelwas naast het opvangcentrum op het Knuffeltij-strand", plek="npc:z4_wasguh"),
-   D("geheim", "teller:z4_tijknuffels", 6, "Vrolijk 6 grauwe knuffels op langs de vloedlijn van het Knuffeltij-strand (loop naar de grauwe pluisjes in de branding)",
+   D("geheim", "teller:z4_tijknuffels", 6, "Vrolijk 6 grauwe knuffels op langs de vloedlijn van het Knuffeltij-strand (loop naar de grauwe knuffels aan de waterkant waar grijze pluisjes boven dwarrelen)",
      plek="poi:z4_knuffeltij_strand")],
   [("npc", "Het Knuffeltij-strand ligt op een eilandje. Lopen gaat niet, zwemmen is koud. Je hebt een bootje nodig."),
    ("npc", "Botenguh Zeiltje aan de noordelijke steiger heeft er eentje voor je. Met oortjes op het zeil. Echt waar."),

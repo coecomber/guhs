@@ -369,7 +369,7 @@ public final class Z4Haken {
 
     static void knuffeltij(ServerPlayer p, ServerLevel sl) {
         if (Questlog.actief(p, HQ02) && doelKlaar(p, HQ02, 1)) {
-            zoek(p, sl, Z4VerhaalPlekken.TIJKNUFFEL, TIJ, new DustParticleOptions(0x9A93A2, 1.4f), 3);
+            zoek(p, sl, Z4VerhaalPlekken.TIJKNUFFEL, TIJ, new DustParticleOptions(0x9A93A2, 1.4f), Z4VerhaalPlekken.VIND_STRAAL);
         }
         if (Questlog.actief(p, HQ03)) {
             zoek(p, sl, Z4VerhaalPlekken.GROTE_KNUFFEL, GROOT, new DustParticleOptions(0x9A93A2, 2.4f), 5);
