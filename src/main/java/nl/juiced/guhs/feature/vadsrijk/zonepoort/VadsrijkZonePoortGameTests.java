@@ -187,8 +187,8 @@ public class VadsrijkZonePoortGameTests {
                 Questlog.zetVlag(p, v, true);
             }
             Spelers.zetLevel(p, 50);
-            helper.assertTrue(ZonePoort.hoogste(p) == 3 && ZonePoort.plafond(p) == 55,
-                    "zones 1-3 played: the per-player cap is zone 3's top 50 + 5 = 55: " + ZonePoort.hoogste(p) + " / " + ZonePoort.plafond(p));
+            helper.assertTrue(ZonePoort.hoogste(p) == 3 && ZonePoort.plafond(p) == 52,
+                    "zones 1-3 played: the per-player cap is zone 3's top 50 + 2 = 52: " + ZonePoort.hoogste(p) + " / " + ZonePoort.plafond(p));
             // the ways to zones 2 and 3 work; zone 4 says soon
             helper.assertTrue(!ZonePoort.isPoortSlot(Poorten.dicht(p, Lijnen.vanId("z1_z2"), true)), "gate 3: line A to zone 2 open");
             helper.assertTrue(!ZonePoort.isPoortSlot(Poorten.dicht(p, Lijnen.vanId("z2_z3"), true)), "gate 3: line B to zone 3 open");
@@ -248,41 +248,41 @@ public class VadsrijkZonePoortGameTests {
     }
 
     /**
-     * 1.10.2: the level cap is per player: the top of the highest zone he ENTERED + 5 (zone 1 -> 25, 2 -> 35, 3 -> 55, 4 -> 61,
-     * 5 -> 65, 6 -> none), whatever the server gate. Standing in a zone (the safety-net tick) raises it; finishing a zone's quest too.
+     * 1.10.2: the level cap is per player: the top of the highest zone he ENTERED + 5 (1.10.18: + 2: zone 1 -> 22, 2 -> 32, 3 -> 52, 4 -> 58,
+     * 5 -> 62, 6 -> none), whatever the server gate. Standing in a zone (the safety-net tick) raises it; finishing a zone's quest too.
      */
     @GuhTest(template = "empty", batch = BATCH)
     public static void plafondPerSpeler(GameTestHelper helper) {
         ServerPlayer p = speler(helper);
         try {
             poort(3);
-            int[] verwacht = {25, 25, 35, 55, 61, 65, 0};
+            int[] verwacht = {22, 22, 32, 52, 58, 62, 0};
             for (int z = 1; z <= 6; z++) {
                 ZonePoort.zetHoogste(p, z);
                 helper.assertTrue(ZonePoort.plafond(p) == verwacht[z], "highest zone " + z + ": cap " + verwacht[z] + ", got " + ZonePoort.plafond(p));
             }
             ZonePoort.zetHoogste(p, 1);
             poort(1);
-            helper.assertTrue(ZonePoort.plafond(p) == 25, "never in zone 2: 25, also with the server gate at 1");
+            helper.assertTrue(ZonePoort.plafond(p) == 22, "never in zone 2: 22, also with the server gate at 1");
             poort(6);
-            helper.assertTrue(ZonePoort.plafond(p) == 25, "never in zone 2: 25, also with every zone open on the server");
+            helper.assertTrue(ZonePoort.plafond(p) == 22, "never in zone 2: 22, also with every zone open on the server");
             // standing in zone 2 (gate 6, book off, zone-1 story done) raises it
             Questlog.zetVlag(p, NpcApi.ZONE1_VLAG, true);
             ambachtKlaar(p, 1);
             ZonePoort.vergeetCache(p.getUUID());
             p.snapTo(704.5, 100, -1100.5);
             ZonePoort.controleer(helper.getLevel(), p, 4);
-            helper.assertTrue(ZonePoort.hoogste(p) == 2 && ZonePoort.plafond(p) == 35, "entered zone 2: cap 35: " + ZonePoort.hoogste(p));
+            helper.assertTrue(ZonePoort.hoogste(p) == 2 && ZonePoort.plafond(p) == 32, "entered zone 2: cap 32: " + ZonePoort.hoogste(p));
             // finishing a zone-3 quest counts as having been there
             Quest z3 = Quests.van("z3_hq01_boom");
             Questlog.voltooi(p, z3);
-            helper.assertTrue(ZonePoort.hoogste(p) == 3 && ZonePoort.plafond(p) == 55, "a finished zone-3 quest: cap 55");
+            helper.assertTrue(ZonePoort.hoogste(p) == 3 && ZonePoort.plafond(p) == 52, "a finished zone-3 quest: cap 52");
             // the level stops at the cap (generic + class), the rest is banked
             ZonePoort.zetHoogste(p, 1);
-            Spelers.zetLevel(p, 24);
+            Spelers.zetLevel(p, 21);
             SpelerData d = Spelers.data(p);
             Spelers.geefXp(p, 50_000_000, "test", d.klasse);
-            helper.assertTrue(d.level() == 25 && d.level(d.klasse) == 25 && ZonePoort.opPlafond(p, d), "the level stops at 25: " + d.level() + " / " + d.level(d.klasse));
+            helper.assertTrue(d.level() == 22 && d.level(d.klasse) == 22 && ZonePoort.opPlafond(p, d), "the level stops at 22: " + d.level() + " / " + d.level(d.klasse));
         } finally {
             herstel();
             Questlog.wisAlles(p);
@@ -538,15 +538,15 @@ public class VadsrijkZonePoortGameTests {
         ServerPlayer p = speler(helper);
         try {
             poort(1);
-            ZonePoort.zetHoogste(p, 1);   // (1.10.2: never in zone 2 -> cap 25)
-            Spelers.zetLevel(p, 24);
+            ZonePoort.zetHoogste(p, 1);   // (1.10.2: never in zone 2 -> cap 22)
+            Spelers.zetLevel(p, 21);
             SpelerData d = Spelers.data(p);
             String k = d.klasse;
             Spelers.geefXp(p, 200_000, "test", k);
-            helper.assertTrue(d.level() == 25 && d.generiekXp == Levels.totaalVoorGeneriek(25), "generic level stops at 25: " + d.level());
-            helper.assertTrue(d.level(k) == 25, "class level stops at 25: " + d.level(k));
+            helper.assertTrue(d.level() == 22 && d.generiekXp == Levels.totaalVoorGeneriek(22), "generic level stops at 22: " + d.level());
+            helper.assertTrue(d.level(k) == 22, "class level stops at 22: " + d.level(k));
             long pot = ZonePoort.gespaard(d, null);
-            long max = Levels.totaalVoorGeneriek(25 + ZonePoort.BANK_LEVELS) - Levels.totaalVoorGeneriek(25);
+            long max = Levels.totaalVoorGeneriek(22 + ZonePoort.BANK_LEVELS) - Levels.totaalVoorGeneriek(22);
             helper.assertTrue(pot > 0 && pot <= max, "the rest is banked (max " + ZonePoort.BANK_LEVELS + " levels): " + pot);
             helper.assertTrue(ZonePoort.opPlafond(p, d), "at the soft cap (HUD full, menu 'hoogste level voor nu')");
             Spelers.geefXp(p, 10_000_000, "test", k);

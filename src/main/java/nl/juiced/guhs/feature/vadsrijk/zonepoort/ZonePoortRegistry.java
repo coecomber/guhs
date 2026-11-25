@@ -5,6 +5,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
@@ -68,6 +69,36 @@ public final class ZonePoortRegistry {
             return 1;
         }));
         event.getDispatcher().register(VadsrijkCommando.wortel(z));
+        // 1.10.18: /guhs vadsrijk bank <speler> (show) and /guhs vadsrijk bank <speler> leeg (empty the soft-cap xp bank, all classes)
+        LiteralArgumentBuilder<CommandSourceStack> b = Commands.literal("bank").requires(Commands.hasPermission(Commands.LEVEL_GAMEMASTERS));
+        b.then(Commands.argument("speler", EntityArgument.player())
+                .executes(c -> bank(c.getSource(), EntityArgument.getPlayer(c, "speler"), false))
+                .then(Commands.literal("leeg").executes(c -> bank(c.getSource(), EntityArgument.getPlayer(c, "speler"), true))));
+        event.getDispatcher().register(VadsrijkCommando.wortel(b));
+    }
+
+    /** 1.10.18: show (or empty) the soft-cap xp bank of a player: "g" (generic) and every "k_<class>". */
+    private static int bank(CommandSourceStack s, ServerPlayer p, boolean leeg) {
+        net.minecraft.nbt.CompoundTag t = ZonePoort.bank(Spelers.data(p));
+        StringBuilder sb = new StringBuilder();
+        int n = 0;
+        for (String k : java.util.List.copyOf(t.keySet())) {
+            if (k.equals("g") || k.startsWith("k_")) {
+                sb.append(sb.isEmpty() ? "" : ", ").append(k).append('=').append(t.getLongOr(k, 0L));
+                if (leeg) {
+                    t.putLong(k, 0L);
+                }
+                n++;
+            }
+        }
+        String inhoud = sb.isEmpty() ? "leeg" : sb.toString();
+        if (leeg) {
+            Spelers.sync(p);
+            com.mojang.logging.LogUtils.getLogger().info("[Vadsrijk] xp bank emptied for {}: {}", p.getGameProfile().name(), inhoud);
+        }
+        s.sendSuccess(() -> Component.literal("Xp-bank van " + p.getGameProfile().name() + (leeg ? " leeggemaakt (was: " : ": ") + inhoud + (leeg ? ")." : "")
+                + " Level-plafond nu " + ZonePoort.plafond(p) + "."), leeg);
+        return n;
     }
 
     private static int alsSpeler(CommandSourceStack s, boolean aan) {
@@ -80,7 +111,7 @@ public final class ZonePoortRegistry {
     private static int status(CommandSourceStack s) {
         int n = ZonePoort.open();
         s.sendSuccess(() -> Component.literal("Het Vadsrijk: zones 1-" + n + " open" + (n >= 6 ? " (alles)." : ", zone " + (n + 1) + "-6 binnenkort.")
-                + " Per speler: naar zone N+1 na het hoofdverhaal + " + ZonePoortConfig.boek() + "% Verkenningsboek van zone N; level-plafond = hoogste betreden zone + 5." + " Ops/creative mogen overal in. Wijzig met /guhs vadsrijk zones open <1-6>."), false);
+                + " Per speler: naar zone N+1 na het hoofdverhaal + " + ZonePoortConfig.boek() + "% Verkenningsboek van zone N; level-plafond = top van de hoogste betreden zone + " + ZonePoort.CAP_EXTRA + "." + " Ops/creative mogen overal in. Wijzig met /guhs vadsrijk zones open <1-6>."), false);
         return n;
     }
 }

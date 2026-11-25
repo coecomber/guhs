@@ -223,7 +223,7 @@ public class VadsrijkAmbachtGameTests {
     }
 
     /**
-     * 1.10.18: fishing in the honey ponds (honey blocks, no water) and in water that lies off-centre (the full-circle pass: the
+     * 1.10.19: fishing in the honey ponds (honey blocks, no water) and in water that lies off-centre (the full-circle pass: the
      * Honingmoeras found 1 spot of 6 by random tries, the Mosvoet waterwheel 0).
      */
     @GuhTest(template = "empty", batch = BATCH)
@@ -495,7 +495,7 @@ public class VadsrijkAmbachtGameTests {
         } finally {
             AmbachtData.KLOK = oud;
         }
-        helper.assertTrue(Imkeren.inZone(p, 3) == 1 && Imkeren.inZone(p, 4) == 0, "1.10.18: hives are counted per zone");
+        helper.assertTrue(Imkeren.inZone(p, 3) == 1 && Imkeren.inZone(p, 4) == 0, "1.10.19: hives are counted per zone");
         helper.succeed();
     }
 

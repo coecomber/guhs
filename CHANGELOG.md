@@ -3,13 +3,20 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
-## 1.10.18 — Minecraft 26.1.2
+## 1.10.19 — Minecraft 26.1.2
 
 - **Zone 3 can be fished (live: 1 fishing spot in the whole zone):** the Honingmoeras found 1 spot of 6, the Mosvoet waterwheel 0, the honey ponds 0.
   - Fishing groups whose water lies off-centre now try every column of their circle when the random tries find too few (`PlekWereld.scan`, fixed shuffled order), and fishing positions may lie 2 blocks apart (shores are narrow strips; one node per spot at a time).
   - The honey ponds in the Kruinzee are honey blocks: `z3_vis_honingvijver` fishes in honey (`PlekWereld.honing`, also in `Grondstoffen.magHier`; the honey comes back when the spot moves).
   - The Mosvoet waterwheel stands dry: `z3_vis_waterrad` searches 100 blocks around it and is called "de beek bij Mosvoet" (the brook lies 74-100 blocks south).
   - Save version 5: incomplete non-hive groups scan once more (also zone 1's waterfall 1/5, zone 2's warm spring 1/4, the Ambachtseiland pier and pond 2 each). Checked against the live terrain: Honingmoeras 6/6, the brook 5/5, honey ponds 4/4. Gametest `scanHoningEnRand`.
+
+## 1.10.18 — Minecraft 26.1.2
+
+- **Zones 4 and 5 open** (server `openZones = 5`, wiki `--open-zones 5`).
+- **Level cap +2 instead of +5** (`ZonePoort.CAP_EXTRA`): the per-player cap is now the top of the highest zone you entered + 2 (22 / 32 / 52 / 58 / 62 / none). Zones 4 (lv 50-56) and 5 (56-60) are narrow: with +5 a zone-3 completionist entered zone 4 at its top (55) and walked through zone 5 above its whole range. Players already above their new cap keep their level; new xp goes to the bank. Admin `/guhs vadsrijk bank <speler> [leeg]` shows or empties someone's soft-cap xp bank.
+- **Bosses tougher** (balans config versie 6): `[bazen] leven` 3.4 -> 3.74 (+10 % HP), `[bazen] schade` 1.2 -> 1.4. Only values still at the old defaults move. Live data: a lv-55 mage beat the zone-3 bosses in 10-75 s and fainted only 8 times in zones 1-3 outside one Spiegelwacht.
+- **Spiegelwacht mirror capped:** it reflected 40 % of every ranged/magic hit from the front as true damage, uncapped and with the `[mobs] schade` multiplier on top (~81 % of the hit): a lv-48 mage fainted 9 times in 3 minutes at the Spiegelburcht. The mirror is now at most 15 % of the caster's max Vads, without the multiplier, and never for automatic procs (Liedpuls etc.; `Weerkaatsen.gespiegeld/automatisch`). Gametest `spiegelwachtNietDodelijk`.
 
 ## 1.10.17 — Minecraft 26.1.2
 

@@ -134,7 +134,7 @@ public class VadsrijkAmbachtZonesGameTests {
         Verzamelen.doeOogst(p, sl, k, 2);
         helper.assertTrue(MateriaalTas.tel(p, s -> Materialen.van(s) != null && Materialen.van(s).id().equals("lampionhoning")) == Imkeren.MAX_RATEN,
                 "lampionhoning harvested");
-        helper.assertTrue(Imkeren.inZone(p, 4) == 1 && Imkeren.PER_ZONE == 4, "1.10.18: a zone-4 hive counts for zone 4 (4 per zone)");
+        helper.assertTrue(Imkeren.inZone(p, 4) == 1 && Imkeren.PER_ZONE == 4, "1.10.19: a zone-4 hive counts for zone 4 (4 per zone)");
         helper.succeed();
     }
 

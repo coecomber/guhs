@@ -30,7 +30,12 @@ public final class Balans {
      * (SCHADE_1103_AUDIT.md, config versie 5): 1.9 -> 3.4, together with the [gevecht] rendement below (geared lv-35 players did
      * ~10x the modelled damage; the Galmwolf died in 5-16 s).
      */
-    public static final double BAZEN_LEVEN_STANDAARD = 3.4, BAZEN_SCHADE_STANDAARD = 1.2, BAZEN_LEVEN_V3 = 1.25, BAZEN_LEVEN_V4 = 1.9;
+    /**
+     * 1.10.18 (config versie 6, before zones 4-5 open): bosses +10 % HP (3.4 -> 3.74) and hit harder (1.2 -> 1.4); live, a lv-55 mage
+     * killed the zone-3 bosses in 10-75 s and fainted only 8 times outside one Spiegelwacht in all of zones 1-3.
+     */
+    public static final double BAZEN_LEVEN_STANDAARD = 3.74, BAZEN_SCHADE_STANDAARD = 1.4, BAZEN_LEVEN_V3 = 1.25, BAZEN_LEVEN_V4 = 1.9,
+            BAZEN_LEVEN_V5 = 3.4, BAZEN_SCHADE_V5 = 1.2;
 
     /**
      * 1.10.3 schade-audit, {@code [gevecht]}: how much of a player's offensive stats counts ({@link Spelers#stats} applies it last,

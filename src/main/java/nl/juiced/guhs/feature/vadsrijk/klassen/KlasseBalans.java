@@ -57,9 +57,10 @@ public final class KlasseBalans {
      * stays), then the file is written again with {@code versie = }{@link #MOBS_VERSIE}. 1 = 1.10.0 (schade 1.3, no leven),
      * 2 = 1.10.1 (schade 1.69, leven 1.4), 3 = 1.10.2 (schade 2.028, leven 1.75, new section {@code [bazen]}),
      * 4 = 1.10.3 ({@code [bazen] leven} 1.25 -> 1.9), 5 = 1.10.3 schade-audit ({@code [bazen] leven} 1.9 -> 3.4; the new
-     * section {@code [gevecht]} needs no migration: it starts at its defaults).
+     * section {@code [gevecht]} needs no migration: it starts at its defaults), 6 = 1.10.18 ({@code [bazen] leven} 3.4 -> 3.74,
+     * {@code [bazen] schade} 1.2 -> 1.4).
      */
-    public static final int MOBS_VERSIE = 5;
+    public static final int MOBS_VERSIE = 6;
     /** 1102-balans: bosses + boss helpers ({@code [bazen] leven} x1.25 max Vads, {@code [bazen] schade} x1.2 final damage of bosses). */
     public static final String BAZEN = "bazen";
     public static final List<String> BAZEN_SLEUTELS = List.of("leven", "schade");
@@ -295,7 +296,7 @@ public final class KlasseBalans {
             }
             Map<String, Double> bz = WAARDEN.computeIfAbsent(BAZEN, x -> new LinkedHashMap<>());
             bz.putIfAbsent("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V3);   // (1.10.3: then versie 4 takes it to 1.9, versie 5 to 3.4)
-            bz.putIfAbsent("schade", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_STANDAARD);
+            bz.putIfAbsent("schade", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_V5);   // (versie 6 takes it to 1.4)
             l.add("[bazen] leven=" + bz.get("leven") + " schade=" + bz.get("schade"));
         }
         if (versie < 4) {   // 1.10.3: bosses +50 % HP ([bazen] leven 1.25 -> 1.9), only when still at the 1.10.2 default
@@ -312,10 +313,26 @@ public final class KlasseBalans {
             Map<String, Double> bz = WAARDEN.computeIfAbsent(BAZEN, x -> new LinkedHashMap<>());
             Double leven = bz.get("leven");
             if (leven == null || Math.abs(leven - nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V4) < 1e-9) {
+                bz.put("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V5);
+                l.add("[bazen] leven " + (leven == null ? "-" : leven) + " -> " + nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V5);
+            } else {
+                l.add("[bazen] leven " + leven + " blijft (met de hand gezet)");
+            }
+        }
+        if (versie < 6) {   // 1.10.18: [bazen] leven 3.4 -> 3.74, schade 1.2 -> 1.4, each only when still at the versie-5 default
+            Map<String, Double> bz = WAARDEN.computeIfAbsent(BAZEN, x -> new LinkedHashMap<>());
+            Double leven = bz.get("leven"), schade = bz.get("schade");
+            if (leven == null || Math.abs(leven - nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_V5) < 1e-9) {
                 bz.put("leven", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD);
                 l.add("[bazen] leven " + (leven == null ? "-" : leven) + " -> " + nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_LEVEN_STANDAARD);
             } else {
                 l.add("[bazen] leven " + leven + " blijft (met de hand gezet)");
+            }
+            if (schade == null || Math.abs(schade - nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_V5) < 1e-9) {
+                bz.put("schade", nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_STANDAARD);
+                l.add("[bazen] schade " + (schade == null ? "-" : schade) + " -> " + nl.juiced.guhs.feature.vadsrijk.kern.Balans.BAZEN_SCHADE_STANDAARD);
+            } else {
+                l.add("[bazen] schade " + schade + " blijft (met de hand gezet)");
             }
         }
         m.put("versie", (double) MOBS_VERSIE);

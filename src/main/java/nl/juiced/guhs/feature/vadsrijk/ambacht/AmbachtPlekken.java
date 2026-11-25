@@ -113,7 +113,7 @@ public final class AmbachtPlekken {
         g("z3_mijn_wortelgang_1", 3, "kampvuur_wortelgang_1", NodeSoort.ERTS, 3, 8, 36, Zoek.STEEN);
         g("z3_mijn_wortelgang_2", 3, "kampvuur_wortelgang_2", NodeSoort.ERTS, 3, 8, 36, Zoek.STEEN);
         g("z3_vis_moeras", 3, "honingmoeras", NodeSoort.VIS, 3, 6, 40, Zoek.WATER);
-        g("z3_vis_waterrad", 3, "mosvoet_waterrad", NodeSoort.VIS, 3, 5, 100, Zoek.WATER);   // 1.10.18: the wheel is dry: the brook lies 74-100 blocks south
+        g("z3_vis_waterrad", 3, "mosvoet_waterrad", NodeSoort.VIS, 3, 5, 100, Zoek.WATER);   // 1.10.19: the wheel is dry: the brook lies 74-100 blocks south
         g("z3_vis_honingvijver", 3, "honingvijver_1", NodeSoort.VIS, 3, 4, 24, Zoek.WATER);
         // ---- zone 4 (T4, De Lampionkust, t-z4wereld POIs; U-AMBACHT2): the islands' meadows, driftwood + kite bamboo, the cliffs;
         // fishing everywhere round the islands (every zone-4 catch also reports z4_vis/gevangen, T-INT) + coral diving in the Koraalbaai

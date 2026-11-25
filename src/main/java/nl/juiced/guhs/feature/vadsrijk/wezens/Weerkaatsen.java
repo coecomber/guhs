@@ -53,6 +53,28 @@ public final class Weerkaatsen {
         return Math.max(0, t);
     }
 
+    /**
+     * 1.10.18 (Luc_Ermeling fainted 9x in 3 minutes): the zone-2 Spiegelwacht mirrors {@link #SPIEGEL_DEEL} of every ranged/magic
+     * hit from the front back as true damage. It used to be uncapped AND got the [mobs] schade multiplier (x2.028): ~81 % of a
+     * lv-48 mage's own hit came back (up to 2705 of 4455 Vads). Now: no multiplier (skill {@link #SKILL}), at most {@link #MAX_DEEL}
+     * of the caster's max Vads, and never for automatic/passive procs ({@link #automatisch}).
+     */
+    public static final double SPIEGEL_DEEL = 0.4;
+
+    /** An automatic/passive proc (Liedpuls, puddles, chain bolts, statuses, vfx): never reflected or mirrored. */
+    public static boolean automatisch(String skill) {
+        return skill == null || NOOIT.contains(skill) || skill.startsWith("vfx_");
+    }
+
+    /** The Spiegelwacht's mirrored amount: {@link #SPIEGEL_DEEL} of the hit, at most {@link #MAX_DEEL} of the caster's max Vads. */
+    public static double gespiegeld(LivingEntity bron, double n) {
+        double t = n * SPIEGEL_DEEL;
+        if (bron instanceof ServerPlayer p) {
+            t = Math.min(t, Spelers.maxVads(p) * MAX_DEEL);
+        }
+        return Math.max(0, t);
+    }
+
     /** (tests) forget the rolled casts. */
     public static void vergeet(UUID id) {
         GEROLD.remove(id);

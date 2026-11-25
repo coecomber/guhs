@@ -28,7 +28,7 @@ public final class Imkeren {
     }
 
     /**
-     * 1.10.18 (the user's wish): hives are limited per ZONE, not by level for the whole Vadsrijk (was 1..5 in total by Verzamelen
+     * 1.10.19 (the user's wish): hives are limited per ZONE, not by level for the whole Vadsrijk (was 1..5 in total by Verzamelen
      * level: players had to pick between the meadows of different zones). The meadows keep their own level gate ({@link #korfLevel}).
      * The Ambachtseiland's Bijenhofje counts as zone 1.
      */
@@ -40,7 +40,7 @@ public final class Imkeren {
         CompoundTag alle = korven(p);
         for (String id : alle.keySet()) {
             int z = alle.getCompoundOrEmpty(id).getIntOr("zone", -1);
-            if (z < 0) {   // (a hive from before 1.10.18: its group knows the zone)
+            if (z < 0) {   // (a hive from before 1.10.19: its group knows the zone)
                 int i = id.lastIndexOf('_');
                 AmbachtPlekken.Groep g = i > 0 ? AmbachtPlekken.groep(id.substring(0, i)) : null;
                 z = g == null ? -1 : g.zone();
@@ -91,7 +91,7 @@ public final class Imkeren {
         CompoundTag k = new CompoundTag();
         k.putLong("laatst", AmbachtData.nu());
         k.putInt("raten", raten);
-        k.putInt("zone", s.groep().zone());   // 1.10.18: for the per-zone limit
+        k.putInt("zone", s.groep().zone());   // 1.10.19: for the per-zone limit
         alle.put(s.id(), k);
         t.put("korven", alle);
     }
@@ -119,7 +119,7 @@ public final class Imkeren {
             int zone = s.groep().zone();
             if (inZone(p, zone) >= PER_ZONE) {
                 p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.korf.vol", PER_ZONE).withStyle(ChatFormatting.RED));
-                Component waar = waarZijnKorven(p, zone);   // 1.10.12: say where your hives stand (1.10.18: the ones in this zone)
+                Component waar = waarZijnKorven(p, zone);   // 1.10.12: say where your hives stand (1.10.19: the ones in this zone)
                 if (waar != null) {
                     p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.vol.waar", waar).withStyle(ChatFormatting.GOLD));
                 }
