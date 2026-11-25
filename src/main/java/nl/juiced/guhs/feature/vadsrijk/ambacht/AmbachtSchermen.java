@@ -41,6 +41,13 @@ public final class AmbachtSchermen {
         WERK.remove(id);
     }
 
+    /** The workshop a player has open now as {@code <ambacht>@<npc>} (gametests), or null. */
+    @Nullable
+    static String open(ServerPlayer p) {
+        Open o = WERK.get(p.getUUID());
+        return o == null ? null : o.ambacht().id + "@" + o.npc();
+    }
+
     // ---- actions ---------------------------------------------------------------------------------------------------------------
 
     static void doe(ServerPlayer p, String actie, CompoundTag a) {

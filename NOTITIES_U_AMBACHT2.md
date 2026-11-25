@@ -32,7 +32,8 @@ Branch `110-u-ambacht2` (from eaee06d08, 110-t-int). Java: `feature/vadsrijk/amb
 - **Imkeren:** hive level gates are SOFT (Imkeren starts in zone 3 for everyone): zone 3 = 1, zone 4 = 20, zone 5 = 35
   (`Imkeren.korfLevel`); a 5th hive at Imkeren 55.
 - **Hoogvads = the professions capital** (`HoogvadsGilde`, `Werkplaats.magHier`):
-  - T4/T5 recipes are made ONLY at the Gilde teachers (`z5_leermeester_*`); T4 also at Lampionhaven's workshop (`z4_werkplaats`).
+  - T4/T5 recipes are made ONLY at the Gilde teachers (`z5_leermeester_*`); T4 also in Lampionhaven: Smeden at the workshop (`z4_werkplaats`),
+    Koken at Kok Garnaal's kitchen in De Blije Bot (`z4_kok`, 1.10.22; `HoogvadsGilde.LAMPIONHAVEN`).
     The hub workshops (zones 1-3) show them with a red line "Alleen in het Ambachtsgilde van Hoogvads".
   - **Story steps 6 + 7** (lv 55 / 60) at the Gilde: the teachers of Koken/Brouwen/Smeden/Naaien/Imkeren tell their own; the
     Gildemeester tells the gatherers' (Mijnen, Houthakken, Plukken, Vissen). Option "Vertel eens..." on every Gilde guh. The hub

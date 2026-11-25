@@ -220,7 +220,7 @@ public final class Recepten {
         r("post_vlieger", Ambacht.SMEDEN, 35, 4, "post:vlieger", 1, i(3, "zeegaren"), i(2, "vliegerbamboe"));
 
         // ---- U-AMBACHT2: T4 (zone 4, De Lampionkust) and T5 (zone 5, Hoogvads) Koken ------------------------------------------------
-        // (T4/T5 are made in Hoogvads' Ambachtsgilde; T4 also in Lampionhaven's workshop: see Werkplaats.magHier)
+        // (T4/T5 are made in Hoogvads' Ambachtsgilde; T4 Koken also at Kok Garnaal's kitchen in Lampionhaven: see Werkplaats.magHier)
         r("zeekraalsalade", Ambacht.KOKEN, 32, 4, "eten:zeekraalsalade", 2, i(2, "zeekraal"), i(1, VIS4));
         r("zee_vadsdrank", Ambacht.KOKEN, 32, 4, "drank:zee_vadsdrank", 2, i(2, "zeekraal"), i(1, "zeesponsje"));
         r("koraalvissoep", Ambacht.KOKEN, 34, 4, "eten:koraalvissoep", 2, i(2, VIS4), i(1, "zeekraal"), i(1, "roze_koraal"));

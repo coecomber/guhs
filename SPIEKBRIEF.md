@@ -2508,7 +2508,7 @@ Gametests: `runGameTestServer -Pgt=VadsrijkImker` (3 tests).
   - verzamelplekken in zone 4;
   - koraalduiken (houd vast en laat los: "Duiken!");
   - lampionhoning;
-  - T4-recepten ook in de werkplaats van Lampionhaven.
+  - T4-recepten ook in Lampionhaven: smeden bij Werkmeester Krul (werkplaats), koken bij Kok Garnaal (De Blije Bot, optie "Keuken").
 ```
 /guhs vadsrijk ambacht tp z4_duik_koraalbaai
 ```

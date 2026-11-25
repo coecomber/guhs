@@ -131,6 +131,8 @@ t(S + "optie.opdracht", "Opdrachtenbord (van spelers)", "Player order board")
 t(S + "optie.winkel", "Knutselwinkel", "Craft shop")
 t(S + "werk.gilde", "Alleen in het Ambachtsgilde van Hoogvads.", "Only at the Ambachtsgilde in Hoogvads.")
 t(S + "werk.gilde4", "Alleen in het Ambachtsgilde van Hoogvads (of in Lampionhaven).", "Only at the Ambachtsgilde in Hoogvads (or in Lampionhaven).")
+# 1.10.22: Kok Garnaal (De Blije Bot, Lampionhaven) opens his kitchen: T1-T4 Koken in zone 4 (HoogvadsGilde.LAMPIONHAVEN)
+t(S + "optie.keuken", "Keuken (zelf koken)", "Kitchen (cook it yourself)")
 t(S + "vis.duik", "Een duikvondst (geen vis).", "A diving find (not a fish).")
 t(S + "mini.duiken", "Duiken! Houd vast en laat los in het groen", "Diving! Hold and let go in the green")
 for _z in (4, 5):

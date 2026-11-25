@@ -39,9 +39,17 @@ public final class HoogvadsGilde {
     private HoogvadsGilde() {
     }
 
+    /**
+     * Lampionhaven's makers (zone 4: T1-T4, {@link Werkplaats#magHier}): Werkmeester Krul's workshop = the smithy, Kok Garnaal's kitchen in
+     * visrestaurant De Blije Bot = the kitchen (1.10.22: before, zone 4 had no place to cook T4).
+     */
+    public static final Map<String, Ambacht> LAMPIONHAVEN = Map.of("z4_werkplaats", Ambacht.SMEDEN, "z4_kok", Ambacht.KOKEN);
+
     static void koppel() {
         // T-INT: t-z4verhaal's Lampionhaven workshop NPC (role "werkplaats", a carpenter with a tool belt) = the smithy
         nl.juiced.guhs.feature.vadsrijk.npc.NpcRollen.koppel("werkplaats", p -> AmbachtSchermen.werkplaats(p, Ambacht.SMEDEN, "z4_werkplaats"));
+        // 1.10.22: Kok Garnaal (role "z4_vissoep": his soup stays) also opens his kitchen = the Koken workshop
+        optie("z4_kok", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.keuken", p -> true, p -> AmbachtSchermen.werkplaats(p, Ambacht.KOKEN, "z4_kok")));
         LEERMEESTERS.forEach((npc, a) -> optie(npc, new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.werk", p -> true,
                 p -> AmbachtSchermen.werkplaats(p, a, npc))));
         optie("z5_gildemeester", new QuestMotor.ExtraOptie("vadsrijk.ambacht.optie.boek", p -> true,

@@ -37,7 +37,8 @@ public final class Werkplaats {
 
     /**
      * U-AMBACHT2 (Hoogvads is the professions capital): T1-T3 recipes work at every workshop; T4 only in Hoogvads' Ambachtsgilde
-     * (the z5_leermeester_* teachers) or Lampionhaven's workshop ({@code z4_werkplaats}); T5 only at the Gilde. 1.10.4: T6 only at
+     * (the z5_leermeester_* teachers) or in Lampionhaven ({@link HoogvadsGilde#LAMPIONHAVEN}: Smeden at {@code z4_werkplaats}, 1.10.22:
+     * Koken at Kok Garnaal {@code z4_kok}); T5 only at the Gilde. 1.10.4: T6 only at
      * the zone-6 teachers in Saffraanpoort ({@link Zone6Haken#werkplaats}), who can make T4/T5 too. {@code npc} null = the dev
      * command (anywhere).
      */
@@ -54,7 +55,7 @@ public final class Werkplaats {
         if (npc.startsWith("z5_leermeester") || npc.equals("z5_gildemeester")) {
             return true;
         }
-        return r.tier() == 4 && npc.equals("z4_werkplaats");
+        return r.tier() == 4 && HoogvadsGilde.LAMPIONHAVEN.containsKey(npc);
     }
 
     /** The "not here" line of a recipe tier (T4: Gilde or Lampionhaven, T5: Gilde, T6: Saffraanpoort). */

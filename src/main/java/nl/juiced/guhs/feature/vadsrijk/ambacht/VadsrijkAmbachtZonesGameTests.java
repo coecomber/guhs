@@ -167,6 +167,44 @@ public class VadsrijkAmbachtZonesGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.22: zone 4 has a kitchen for T4 Koken: Kok Garnaal (De Blije Bot, Lampionhaven) opens the Koken workshop, where T4 dishes
+     * and potions may be made (before, only Werkmeester Krul's smithy was there and T4 Koken could only be made in Hoogvads).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void lampionhavenKeuken(GameTestHelper helper) {
+        Recepten.Recept salade = Recepten.van("zeekraalsalade"), taart = Recepten.van("wolkbessentaart"), rijst = Recepten.van("saffraanrijst");
+        Recepten.Recept ring4 = Recepten.van("ring_t4");
+        helper.assertTrue(salade.ambacht() == Ambacht.KOKEN && salade.tier() == 4, "zeekraalsalade = T4 Koken");
+        helper.assertTrue(Werkplaats.magHier("z4_kok", salade) && Werkplaats.magHier("z4_werkplaats", ring4) && !Werkplaats.magHier("amb_kok_z3", salade)
+                && !Werkplaats.magHier("z4_kok", taart) && !Werkplaats.magHier("z4_kok", rijst) && Werkplaats.magHier("z5_leermeester_koken", taart),
+                "T4 Koken at Kok Garnaal, T5 still only at the Gilde, T6 only in Saffraanpoort");
+        helper.assertTrue(HoogvadsGilde.LAMPIONHAVEN.get("z4_kok") == Ambacht.KOKEN && HoogvadsGilde.LAMPIONHAVEN.get("z4_werkplaats") == Ambacht.SMEDEN,
+                "Lampionhaven: a kitchen and a smithy");
+        helper.assertTrue(nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4VerhaalPlekken.NPC.get("z4_kok") != null, "Kok Garnaal has a spot");
+        // his talk menu has the kitchen, and it opens the Koken workshop at him
+        nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.ExtraOptie keuken = null;
+        for (var o : nl.juiced.guhs.feature.vadsrijk.npc.QuestMotor.EXTRA.getOrDefault("z4_kok", List.of())) {
+            if (o.tekstKey().equals("vadsrijk.ambacht.optie.keuken")) {
+                keuken = o;
+            }
+        }
+        helper.assertTrue(keuken != null, "Kok Garnaal offers his kitchen");
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        AmbachtData.reset(p);
+        helper.assertTrue(keuken.zichtbaar().test(p), "always visible");
+        keuken.doe().accept(p);
+        helper.assertTrue("koken@z4_kok".equals(AmbachtSchermen.open(p)), "the Koken workshop of z4_kok is open: " + AmbachtSchermen.open(p));
+        // and a T4 dish can be made from zone-4 ingredients at Koken 32
+        AmbachtData.zetLevel(p, Ambacht.KOKEN, 32);
+        MateriaalTas.geef(p, Materialen.stack("zeekraal", 1, 4));
+        MateriaalTas.geef(p, Materialen.stack("koraalbaars", 1, 2));
+        String r = Werkplaats.maak(p, "zeekraalsalade", List.of(), null, null, 1, 1);
+        helper.assertTrue(r.equals("vadsrijk.ambacht.werk.klaar") || r.equals("vadsrijk.ambacht.werk.vadsig"), "made: " + r);
+        AmbachtSchermen.vergeet(p.getUUID());
+        helper.succeed();
+    }
+
     @GuhTest(template = "empty", batch = BATCH)
     public static void knutselwinkel(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);

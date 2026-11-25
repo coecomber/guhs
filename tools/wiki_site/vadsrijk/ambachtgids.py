@@ -490,6 +490,9 @@ class Gids:
             return t("any workshop (Ambachtseiland, every town)", "elke werkplaats (Ambachtseiland, elke stad)"), 1
         if tier == 4 and aid == "smeden":
             return t("Werkmeester Krul in Lampionhaven, or the Ambachtsgilde in Hoogvads", "Werkmeester Krul in Lampionhaven, of het Ambachtsgilde in Hoogvads"), 5
+        if tier == 4 and aid == "koken":   # 1.10.22: Kok Garnaal's kitchen (HoogvadsGilde.LAMPIONHAVEN)
+            return t("Kok Garnaal in De Blije Bot (Lampionhaven), or the Ambachtsgilde in Hoogvads",
+                     "Kok Garnaal in De Blije Bot (Lampionhaven), of het Ambachtsgilde in Hoogvads"), 5
         if tier <= 5:
             return t("the Ambachtsgilde in Hoogvads", "het Ambachtsgilde in Hoogvads"), 5
         return t("the teachers of Saffraanpoort", "de leermeesters van Saffraanpoort"), 6
