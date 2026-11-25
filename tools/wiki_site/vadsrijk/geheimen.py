@@ -41,9 +41,10 @@ ENKEL = {"knuffel": ("Hidden knuffel", "Verborgen knuffel"), "schat": ("Treasure
 WERELD = {"zone1": "wereld/WereldPlekken.java", "zone2": "zone2/wereld/Z2WereldPlekken.java", "zone3": "zone3/wereld/Z3WereldPlekken.java",
           "zone4": "zone4/wereld/Z4WereldPlekken.java", "zone5": "zone5/wereld/Z5WereldPlekken.java", "zone6": "zone6/wereld/Z6WereldPlekken.java"}
 Z2_DX, Z2_DZ = 704, 1344   # indeling/VadsrijkZones: zone 2's v1 numbers (Z2NpcPlekken.p) are shifted by this
-# 1.10.21: the secret IJsgrot's way in is the scaffolding shaft through the dome's roof (EINDRAPPORT_RONDE_W, SPIEKBRIEF 1.12); the map's
-# geheim_ijsgrot_ingang is the old tunnel mouth high above the lake
-IJSGROT_DAKGAT = (466, 113, -1064)
+# 1.10.21: the secret IJsgrot's way in is the scaffolding shaft through the dome's roof (EINDRAPPORT_RONDE_W, SPIEKBRIEF 1.12);
+# 1.10.22: the map's geheim_ijsgrot_ingang is now that roof hole too (the spot on the dome top next to the hole 466,113,-1064)
+IJSGROT_DAKGAT = (465, 114, -1064)
+IJSGROT_TUNNEL = (453, 99, -1066)   # the old tunnel mouth high above the lake (no map id any more)
 
 # ---- 1.10.21: hidden quests, hidden bosses and secret places (kind "verborgen"; truth = the Java named per entry) -------------------
 # plek / plekken: (zone, map id or "arena:<runtime arena id>", fallback xyz); the first one that resolves wins.
@@ -126,9 +127,9 @@ VERBORGEN = [
          naam=("The secret Ice Cave", "De geheime IJsgrot"),
          hint=("A dome of blue ice in the Splinterpieken.", "Een koepel van blauw ijs in de Splinterpieken."),
          plek=("zone2", "geheim_ijsgrot", (464, 105, -1066)),
-         plekken=[(("Way in: the hole with scaffolding in the roof", "Ingang: het gat met steigerwerk in het dak"), ("zone2", "", IJSGROT_DAKGAT)),
+         plekken=[(("Way in: the hole with scaffolding in the roof", "Ingang: het gat met steigerwerk in het dak"), ("zone2", "geheim_ijsgrot_ingang", IJSGROT_DAKGAT)),
                   (("The old tunnel mouth (high above the lake)", "De oude tunnelingang (hoog boven het meer)"),
-                   ("zone2", "geheim_ijsgrot_ingang", (453, 99, -1066)))],
+                   ("zone2", "", IJSGROT_TUNNEL))],
          tekst=("Climb onto the ice dome. In its roof there is a hole with scaffolding going down: on scaffolding, jump = up and "
                 "sneak = down. Inside the blue cave lie a forgotten chest of the Kristalwacht and a secret ore vein for your "
                 "crafts (Ambachtenboek).",
@@ -393,7 +394,7 @@ def data(bron, pois, gebieden, punten, puzzels):
             elif soort == "schat":
                 naam = f"Schat: {gnaam}" if gnaam else "Schat"
                 tekst_nl = zoek(ns, "schat", nid)
-                ingang = IJSGROT_DAKGAT if (zone, nid) == ("zone2", "ijsgrot") else java.get((zone, f"geheim_{nid}_ingang"))
+                ingang = java.get((zone, f"geheim_{nid}_ingang"))   # (1.10.22: the IJsgrot's id is its roof hole now)
                 if ingang:   # 1.10.21: how to get in
                     tekst_nl += f" (Ingang: x {ingang[0]}, y {ingang[1]}, z {ingang[2]}.)"
                 bel = (f"Een uitrustingsstuk op jouw level ({'Episch' if nid in SCHAT_EPISCH else 'Zeldzaam'}) + "

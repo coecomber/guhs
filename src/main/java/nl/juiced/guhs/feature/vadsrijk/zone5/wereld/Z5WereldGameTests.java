@@ -34,7 +34,8 @@ public class Z5WereldGameTests {
             "kampvuur_luchthaven", "kampvuur_markt", "kampvuur_staartpark", "kampvuur_ooggaarde", "soepkeuken_rij_4", "burger_6", "wolkwacht_6",
             "academie_parcours_4", "staartpark_boom_4", "geheim_knuffel_8", "geheim_schat_3", "wolkbes_8", "wolbol_3",
             // t-z5wezens
-            "z5w_proefarena", "z5w_buik_luik", "z5w_buik_uit", "z5w_schuilnest_luik", "z5w_schuilnest_uit", "z5w_zuidvin", "z5w_noordvin",
+            "z5w_proefarena", "z5w_buik_luik", "z5w_buik_uit", "z5w_schuilnest_luik", "z5w_schuilnest_uit", "z5w_schuilnest",
+            "z5w_schuilnest_aankomst", "z5w_schuilnest_uitluik", "z5w_leider_meestervermommer", "z5w_zuidvin", "z5w_noordvin",
             "z5w_lift_zuidvin_boven", "z5w_lift_zuidvin_onder", "z5w_lift_noordvin_boven", "z5w_lift_noordvin_onder", "z5w_lift_staart_boven",
             "z5w_lift_staart_onder", "z5w_staartvlakte_noord", "z5w_donderbuik_arena", "z5w_donderbuik_deur", "z5w_wolkwaldroom_deur",
             "z5w_leider_strobaal", "z5w_leider_mistmoeder", "z5w_buikgangen_min", "z5w_buikgangen_max",

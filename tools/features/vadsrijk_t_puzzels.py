@@ -198,7 +198,7 @@ puzzel("z1_sterrenveld", 1, "patroon", ("z1", "hoedhupperwei", 0, -14), [
     uitleg="Alleen 's nachts! Lees de sterrenkaart en laat de juiste sterrenstenen oplichten. Druk dan op de knop.",
     hint1="Het sterrenbeeld heet De Knuffelster: het is een hartje.",
     hint2="Klik de sterrenkaart nog eens: elke ster op de kaart is één steen. Bovenste rij: de 2e en 4e steen.",
-    aanwijzing="Op de Hoedhupperwei liggen stenen die alleen 's nachts wakker worden.",
+    aanwijzing="Op de Schaapjeswei liggen stenen die alleen 's nachts wakker worden.",
     beloning=dict(munten=700, ontgrendel="pz_vleugels_sterrenstof"))
 
 puzzel("z1_vuurtorenschuur", 1, "geheim", ("z1", "kampvuur_vuurtoren", 8, 8), [

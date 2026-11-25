@@ -91,8 +91,9 @@ LUCHTSCHIP = {"knuffelkamp": ("kapitein", "zone1"), "dehaven": ("luchtschipper",
               # U-SITE: line C (zone 3 -> Lampionhaven) and line D (the Opstijgpier -> Hoogvads); "poi:" = a POI position
               "lampionhaven": ("poi:haven_3_4_kapitein", "zone4"), "opstijgpier": ("poi:haven_4_5_kapitein", "zone4"),
               "hoogvads": ("poi:haven_5_4_kapitein", "zone5"),
-              # U-SITE round 3: line E (Hoogvads' Staarthaven -> the Luchthaven of Rozenkloof)
-              "staarthaven": ("poi:haven_5_6_vertrekbord", "zone5"), "rozenkloof": ("poi:haven_6_5_kapitein", "zone6")}
+              # U-SITE round 3: line E (Hoogvads' Staarthaven -> the Luchthaven of Rozenkloof); 1.10.22: the Staarthaven is the tail tip
+              # (haven_z5_z6_vertrek, where Z6Lijn docks), not the plain board on pier 3 of the Luchthaven (haven_5_6_vertrekbord)
+              "staarthaven": ("poi:haven_z5_z6_vertrek", "zone5"), "rozenkloof": ("poi:haven_6_5_kapitein", "zone6")}
 STOP_NAAM = {"lampionhaven": "Lampionhaven", "opstijgpier": "De Opstijgpier", "hoogvads": "Hoogvads (Luchthaven)",
              "staarthaven": "Hoogvads (Staarthaven)", "rozenkloof": "Rozenkloof (Luchthaven)"}
 LIJNEN = [("knuffelkamp", "dehaven"), ("dehaven", "kandijkom"), ("dehaven", "honingtak"), ("kandijkom", "honingtak"),
