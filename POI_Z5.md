@@ -252,6 +252,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `z5w_buikgangen_min` | 2704, 164, -530 |
 | `z5w_donderbuik_arena` | 2968, 206, -582 |
 | `z5w_donderbuik_deur` | 2951, 207, -569 |
+| `z5w_leider_meestervermommer` | 2612, 186, -425 |
 | `z5w_leider_mistmoeder` | 2970, 206, -450 |
 | `z5w_leider_strobaal` | 2714, 215, -578 |
 | `z5w_lift_noordvin_boven` | 2609, 217, -432 |
@@ -262,11 +263,14 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `z5w_lift_zuidvin_onder` | 2610, 154, -611 |
 | `z5w_noordvin` | 2610, 154, -392 |
 | `z5w_proefarena` | 2714, 215, -570 |
+| `z5w_schuilnest` | 2606, 186, -427 |
+| `z5w_schuilnest_aankomst` | 2594, 186, -427 |
 | `z5w_schuilnest_ladder_onder` | 2611, 187, -441 |
 | `z5w_schuilnest_luik` | 2612, 217, -444 |
 | `z5w_schuilnest_max` | 2624, 194, -414 |
 | `z5w_schuilnest_min` | 2588, 186, -440 |
 | `z5w_schuilnest_uit` | 2613, 217, -445 |
+| `z5w_schuilnest_uitluik` | 2591, 186, -430 |
 | `z5w_staartvlakte_noord` | 2968, 206, -458 |
 | `z5w_wolkwaldroom_deur` | 2587, 167, -520 |
 | `z5w_wolkwaldroom_uitluik` | 2586, 167, -520 |

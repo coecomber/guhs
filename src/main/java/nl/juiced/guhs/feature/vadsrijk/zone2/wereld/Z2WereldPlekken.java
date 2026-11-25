@@ -270,7 +270,7 @@ public final class Z2WereldPlekken {
             Map.entry("geheim_galmgrot", new BlockPos(940, 121, -1002)),
             Map.entry("geheim_galmgrot_ingang", new BlockPos(927, 118, -1002)),
             Map.entry("geheim_ijsgrot", new BlockPos(464, 105, -1066)),
-            Map.entry("geheim_ijsgrot_ingang", new BlockPos(453, 99, -1066)),
+            Map.entry("geheim_ijsgrot_ingang", new BlockPos(465, 114, -1064)),
             Map.entry("gehucht_galmdorpje", new BlockPos(832, 104, -1070)),
             Map.entry("gehucht_meerkamp", new BlockPos(592, 101, -962)),
             Map.entry("gehucht_plateaukamp", new BlockPos(764, 130, -1256)),

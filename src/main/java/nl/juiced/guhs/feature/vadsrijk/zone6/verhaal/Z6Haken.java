@@ -378,12 +378,16 @@ public final class Z6Haken {
         }
     }
 
-    /** Films that wait for a quiet moment: the great swim after zone 5, Ringeling after the raid. */
+    /**
+     * Films that wait for a quiet moment: the great swim after zone 5, Ringeling after the raid. 1.10.22: the swim (zone 6's opening,
+     * it opens line E) waits while the server keeps zone 6 closed (ZonePoort); it plays by itself once the gate is raised.
+     */
     static void uitgesteld(ServerPlayer p) {
         if (RijkScenes.bezig(p) || Z6Verhaal.bezig(p) || Praat.bezig(p)) {
             return;
         }
-        if (Questlog.klaar(p, Z5_LAATSTE) && !Questlog.vlag(p, Z6Verhaal.VLAG_LIJN_E)) {
+        if (Questlog.klaar(p, Z5_LAATSTE) && !Questlog.vlag(p, Z6Verhaal.VLAG_LIJN_E)
+                && !nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.serverDicht(p, 6)) {
             Z6Verhaal.wolkwaltocht(p);
         } else if (Questlog.vlag(p, Z6Verhaal.VLAG_RINGELING) && !Spelers.data(p).gezien.contains("npc:z6_ringeling")) {
             Z6Verhaal.ringelingScene(p);

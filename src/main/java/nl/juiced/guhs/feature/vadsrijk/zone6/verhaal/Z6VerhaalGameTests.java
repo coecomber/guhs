@@ -171,6 +171,33 @@ public class Z6VerhaalGameTests {
         helper.succeed();
     }
 
+    /** 1.10.22: while the server keeps zone 6 closed (ZonePoort), the great swim after zone 5 waits (it is zone 6's opening). */
+    @GuhTest(template = "empty", batch = B)
+    public static void zwemtochtWachtOpDePoort(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        schoon(p);
+        Questlog.wisAlles(p);
+        Quest z5 = Quests.van(Z6Haken.Z5_LAATSTE);
+        Questlog.neemAan(p, z5);
+        Questlog.voltooi(p, z5);
+        Integer oud = nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST;
+        nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.TEST_STRENG = true;
+        try {
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = 5;
+            Z6Haken.uitgesteld(p);
+            helper.assertTrue(!Z6Verhaal.speelt(p, "wolkwaltocht") && !Z6VerhaalApi.lijnEOpen(p), "zone 6 closed: no swim, line E stays shut");
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = 6;
+            Z6Haken.uitgesteld(p);
+            helper.assertTrue(Z6Verhaal.speelt(p, "wolkwaltocht"), "zone 6 opened: the swim plays by itself");
+        } finally {
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoort.TEST_STRENG = false;
+            nl.juiced.guhs.feature.vadsrijk.zonepoort.ZonePoortConfig.TEST = oud;
+            schoon(p);
+            Questlog.wisAlles(p);
+        }
+        helper.succeed();
+    }
+
     @GuhTest(template = "empty", batch = B)
     public static void ringelingNaDeRaid(GameTestHelper helper) {
         ServerPlayer p = GuhMockPlayer.of(helper);

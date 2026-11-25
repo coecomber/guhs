@@ -86,11 +86,18 @@ def plekken():
     P["haven_5_4_kapitein"] = (70, hy, -150)
     P["haven_5_4_luchtschip"] = (72, hy - 1, -178)         # middle of the docked ship (deck height; W-SCHEPEN: tip + UIT)
     P["haven_5_4_mast"] = (69, hy + 8, -168)               # (W-SCHEPEN: the lowered mast's top)
-    # pier 3: future line E (zone 5 -> 6 Stormrand), board only
+    # pier 3: a plain board only (an old plan for line E; line E departs from the Staarthaven at the tail tip: haven_z5_z6_vertrek,
+    # bouw5.staarthaven, Z6Lijn)
     P["haven_5_6_vertrekbord"] = (94, hy, -152)
     P["kampvuur_luchthaven"] = (34, hy, -66)
     P["z5w_schuilnest_luik"] = (91, hy, -76)               # loose plank behind the crates (station corner)
     P["z5w_schuilnest_uit"] = (89, hy, -75)
+    # 1.10.22: the spots INSIDE t-z5wezens' Schuilnest (WEZENS_KAMERS: carved by bouw5.wezens_toegang, floor y 205 local, stand y 206
+    # = game 186); before this they used Z5WezensPlekken's fallbacks at y 188 (2 above the real floor)
+    P["z5w_schuilnest"] = (96, 206, -93)                    # the middle of the room (spawners)
+    P["z5w_schuilnest_aankomst"] = (108, 206, -93)          # where the loose plank drops you
+    P["z5w_schuilnest_uitluik"] = (111, 206, -90)           # the exit hatch inside
+    P["z5w_leider_meestervermommer"] = (90, 206, -95)       # the area leader
     # ---- cathedral (KA: X0 west front, Y0 floor, nave z -12..12, crossing X_KRUIS, apse X_KOOR)
     Y0 = KA.Y0
     P["kathedraal_plein"] = (6, 241, 0)

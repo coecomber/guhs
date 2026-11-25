@@ -374,7 +374,7 @@ All positions are **stand positions** (the air block a player/NPC stands in) in 
 | `geheim_galmgrot` | 940, 121, -1002 |
 | `geheim_galmgrot_ingang` | 927, 118, -1002 |
 | `geheim_ijsgrot` | 464, 105, -1066 |
-| `geheim_ijsgrot_ingang` | 453, 99, -1066 |
+| `geheim_ijsgrot_ingang` | 465, 114, -1064 |
 
 ## Other
 

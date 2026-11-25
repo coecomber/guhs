@@ -1406,7 +1406,12 @@ def grotje(W, K, P, naam, x, z, soort):
         S.box(hx, g + 1, hz, hx, g + 8, hz, "minecraft:scaffolding[bottom=false,distance=0,waterlogged=false]")
     P[naam] = [x, g + 1, z]
     W.stempel(S.stempel(naam))
-    P[naam + "_ingang"] = [x - 11 - trede, hoogste(W, x - 11 - trede, z) + 1, z]
+    if soort != "galm":
+        # the real way in is the roof hole (the tunnel mouth hangs above the lake): the entrance spot stands on the dome top,
+        # right next to the hole (live: hole 466,113,-1064, spot 465,114,-1064)
+        P[naam + "_ingang"] = [hx - 1, hoogste(W, hx - 1, hz) + 1, hz]
+    else:
+        P[naam + "_ingang"] = [x - 11 - trede, hoogste(W, x - 11 - trede, z) + 1, z]
 
 
 # ================================================================================================ Het Bevroren Knuffelmeer

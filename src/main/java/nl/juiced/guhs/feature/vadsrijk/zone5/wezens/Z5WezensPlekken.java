@@ -113,12 +113,14 @@ public final class Z5WezensPlekken {
     public static final BlockPos DONDERBUIK_DEUR = w("z5w_donderbuik_deur", 2952, 228, -575);
     public static final int DONDER_STRAAL = 20;
 
-    // ---- 4. Het Schuilnest (own room under the Luchthaven, floor y 208) -------------------------------------------------------------
-    public static final int NEST_Y = 188;   // (T-INT: the whale is 20 lower: was 208)
-    public static final BlockPos NEST_LUIK = w("z5w_schuilnest_luik", 2612, 237, -446);
+    // ---- 4. Het Schuilnest (own room under the Luchthaven, stand y 186) -------------------------------------------------------------
+    // (T-INT: the whale is 20 lower: was 208; 1.10.22: 186, the floor of the room t-z5wereld carved (z5w_schuilnest_min) is 185, the
+    // old 188 put every fallback spot 2 blocks in the air)
+    public static final int NEST_Y = 186;
+    public static final BlockPos NEST_LUIK = w("z5w_schuilnest_luik", 2612, 217, -444);
     public static final BlockPos NEST_AANKOMST = w("z5w_schuilnest_aankomst", 2594, NEST_Y, -427);
     public static final BlockPos NEST_UITLUIK = w("z5w_schuilnest_uitluik", 2591, NEST_Y, -430);
-    public static final BlockPos NEST_UIT = w("z5w_schuilnest_uit", 2610, 238, -444);
+    public static final BlockPos NEST_UIT = w("z5w_schuilnest_uit", 2613, 217, -445);
     public static final BlockPos SCHUILNEST = w("z5w_schuilnest", 2606, NEST_Y, -427);
 
     // ---- the spy finale (t-z5verhaal's Wolkwaldroom: Z5VerhaalPlekken.WOLKWALDROOM, entrance SPUITGAT) ------------------------------
