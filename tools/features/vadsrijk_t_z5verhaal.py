@@ -853,7 +853,7 @@ OVERIG = {
                               "moet minstens level 55 zijn. Je bent nu level %s.",
     P + "reis.slot.hoogvads.kort": "Na de Lampionkust, vanaf level 55",
     P + "reiskaart.plek.hoogvads": "Hoogvads",
-    Z + "ambacht.binnenkort": "De werkplaatsen van het Ambachtsgilde gaan binnenkort open. Kom dan terug!",
+    Z + "ambacht.binnenkort": "De werkplaats van het Ambachtsgilde is open! Kies "Werkplaats" om hier te koken en te brouwen.",
     Z + "ambacht.gilde": "Het Ambachtsgilde leert je de Meesterwerken van de vier ambachten. Binnenkort gaan de deuren open. Tot die tijd: oefen in de "
                          "werkplaatsen van je eigen stad.",
     # the teasers
