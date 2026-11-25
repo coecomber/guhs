@@ -465,7 +465,8 @@ public final class Grondstoffen extends SavedData {
             }
             case VIS -> {
                 return (st.is(Blocks.WATER) && sl.getFluidState(t).isSource() && sl.getBlockState(t.above()).isAir())
-                        || PlekWereld.wak(sl, t);   // 1.10.13: or a hole in the ice of a frozen lake
+                        || PlekWereld.wak(sl, t)   // 1.10.13: or a hole in the ice of a frozen lake
+                        || PlekWereld.honing(sl, t);   // 1.10.18: or a honey pond
             }
             case DUIK -> {
                 BlockState onder = sl.getBlockState(t.below());

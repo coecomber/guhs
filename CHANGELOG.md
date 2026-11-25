@@ -3,6 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.18 — Minecraft 26.1.2
+
+- **Zone 3 can be fished (live: 1 fishing spot in the whole zone):** the Honingmoeras found 1 spot of 6, the Mosvoet waterwheel 0, the honey ponds 0.
+  - Fishing groups whose water lies off-centre now try every column of their circle when the random tries find too few (`PlekWereld.scan`, fixed shuffled order), and fishing positions may lie 2 blocks apart (shores are narrow strips; one node per spot at a time).
+  - The honey ponds in the Kruinzee are honey blocks: `z3_vis_honingvijver` fishes in honey (`PlekWereld.honing`, also in `Grondstoffen.magHier`; the honey comes back when the spot moves).
+  - The Mosvoet waterwheel stands dry: `z3_vis_waterrad` searches 100 blocks around it and is called "de beek bij Mosvoet" (the brook lies 74-100 blocks south).
+  - Save version 5: incomplete non-hive groups scan once more (also zone 1's waterfall 1/5, zone 2's warm spring 1/4, the Ambachtseiland pier and pond 2 each). Checked against the live terrain: Honingmoeras 6/6, the brook 5/5, honey ponds 4/4. Gametest `scanHoningEnRand`.
+
 ## 1.10.17 — Minecraft 26.1.2
 
 - **Mika de Imker no longer crashes clients:** every zone-3 boss triggers the shared vfx moments (`vfx_windup`, `vfx_treffer`, `vfx_geraakt`...), which `tools/features/vadsrijk_t_vfx.py` merges into each boss's animation file, but it only picked files named `vr_*baas_*`: the Mika-imker (`vr_z3_imker_mika`) never got them, and GeckoLib crashes the client ("NoSuchElementException ... AnimationTimeline.create") when a triggered animation is missing. Anyone who saw him in a vfx moment crashed, again right after logging back in next to him. The tool now includes him (`EXTRA`) and his file has the six vfx animations. Gametest `BaasAnimsGameTests`.

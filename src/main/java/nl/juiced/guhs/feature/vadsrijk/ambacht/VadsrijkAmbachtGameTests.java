@@ -222,6 +222,43 @@ public class VadsrijkAmbachtGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.18: fishing in the honey ponds (honey blocks, no water) and in water that lies off-centre (the full-circle pass: the
+     * Honingmoeras found 1 spot of 6 by random tries, the Mosvoet waterwheel 0).
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void scanHoningEnRand(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        for (int x = 0; x < 8; x++) {
+            for (int z = 0; z < 8; z++) {
+                helper.setBlock(new BlockPos(x, 0, z), Blocks.DIRT.defaultBlockState());
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.GRASS_BLOCK.defaultBlockState());
+                for (int y = 2; y < 6; y++) {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR.defaultBlockState());
+                }
+            }
+        }
+        for (int x = 4; x < 8; x++) {   // a honey pond in one corner, sunk into the grass
+            for (int z = 4; z < 8; z++) {
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.HONEY_BLOCK.defaultBlockState());
+            }
+        }
+        BlockPos anker = helper.absolutePos(new BlockPos(1, 2, 1));
+        List<Spot> hon = PlekWereld.scan(sl, anker, new Groep("z3_vis_honingvijver", 3, "x", NodeSoort.VIS, 3, 1, 8, Zoek.WATER, ""));
+        helper.assertTrue(hon.size() == 1 && hon.get(0).posities().size() == 4, "honey-pond spot with 4 positions: " + hon);
+        for (BlockPos p : hon.get(0).posities()) {
+            helper.assertTrue(sl.getBlockState(p).is(Blocks.HONEY_BLOCK) && Grondstoffen.magHier(sl, NodeSoort.VIS, p), "a honey position: " + p);
+        }
+        for (int x = 4; x < 8; x++) {   // the same corner as water: an ordinary group finds it through the full-circle pass
+            for (int z = 4; z < 8; z++) {
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.WATER.defaultBlockState());
+            }
+        }
+        List<Spot> rand = PlekWereld.scan(sl, anker, new Groep("t_rand", 3, "x", NodeSoort.VIS, 3, 1, 8, Zoek.WATER, ""));
+        helper.assertTrue(rand.size() == 1 && rand.get(0).posities().size() >= 3, "the water in the corner is found (its outer rim has no shore): " + rand);
+        helper.succeed();
+    }
+
     /** 1.10.13: a frozen lake (the Knuffelmeer froze over on live: 0 spots): fished through holes in the ice; a node may stand there. */
     @GuhTest(template = "empty", batch = BATCH)
     public static void scanIjs(GameTestHelper helper) {

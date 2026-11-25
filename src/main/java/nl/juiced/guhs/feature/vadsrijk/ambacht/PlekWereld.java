@@ -131,6 +131,9 @@ public final class PlekWereld extends SavedData {
         GrotData.Grot grot = Grotten.op(anker.getX() + 0.5, anker.getY() + 3.5, anker.getZ() + 0.5);
         // 1.10.14: a group inside a small closed room (the secret IJsgrot dome) only takes floor spots a player can walk to
         java.util.Set<Long> binnen = BINNEN.contains(g.id()) ? bereikbaar(l, anker, g.straal()) : null;
+        boolean honing = HONING.contains(g.id());   // 1.10.18: the honey ponds are fished in honey
+        // 1.10.18: fishing positions may lie 2 blocks apart (only one node per spot stands at a time; shores are narrow strips)
+        int afstand2 = g.zoek() == Zoek.WATER ? 4 : 9;
         for (int pass = 0; pass < 2 && gevonden.size() < nodig; pass++) {
             boolean streng = pass == 0;
             for (int poging = 0; poging < nodig * 40 && gevonden.size() < nodig; poging++) {
@@ -139,7 +142,10 @@ public final class PlekWereld extends SavedData {
                 BlockPos p = grot != null ? zoekGrotY(l, x, z, anker.getY(), g.zoek(), streng, grot)
                         : binnen != null ? zoekBinnenY(l, x, z, anker.getY(), g.zoek(), streng, binnen)
                         : zoekY(l, x, z, anker.getY(), g.zoek(), streng);
-                if (p == null || teDichtbij(gevonden, p)) {
+                if (p == null && honing) {
+                    p = zoekHoningY(l, x, z, anker.getY());
+                }
+                if (p == null || teDichtbij(gevonden, p, afstand2)) {
                     continue;
                 }
                 if (g.zoek() == Zoek.BLOEM) {
@@ -150,6 +156,39 @@ public final class PlekWereld extends SavedData {
                     bloemen.put(p, b);
                 }
                 gevonden.add(p);
+            }
+        }
+        // 1.10.18: fishing groups whose water lies off-centre (a swamp at the edge of the circle, a brook far from the anchor) found
+        // only a few spots by random tries (live: the Honingmoeras 1 of 6, zone 3 had 1 fishing spot in all): then every column of the
+        // circle is tried, in a fixed shuffled order
+        if (g.zoek() == Zoek.WATER && grot == null && binnen == null && gevonden.size() < nodig) {
+            List<int[]> kolommen = new ArrayList<>();
+            int s = g.straal();
+            for (int dx = -s; dx <= s; dx++) {
+                for (int dz = -s; dz <= s; dz++) {
+                    int d2 = dx * dx + dz * dz;
+                    if (d2 >= 9 && d2 <= s * s) {
+                        kolommen.add(new int[] {anker.getX() + dx, anker.getZ() + dz});
+                    }
+                }
+            }
+            for (int i = kolommen.size() - 1; i > 0; i--) {   // (deterministic: the group's own random)
+                int j = r.nextInt(i + 1);
+                int[] t = kolommen.get(i);
+                kolommen.set(i, kolommen.get(j));
+                kolommen.set(j, t);
+            }
+            for (int[] k : kolommen) {
+                if (gevonden.size() >= nodig) {
+                    break;
+                }
+                BlockPos p = zoekY(l, k[0], k[1], anker.getY(), Zoek.WATER, true);
+                if (p == null && honing) {
+                    p = zoekHoningY(l, k[0], k[1], anker.getY());
+                }
+                if (p != null && !teDichtbij(gevonden, p, afstand2)) {
+                    gevonden.add(p);
+                }
             }
         }
         // spot i gets positions i*POSITIES.. (the list is in random order, so a spot wanders over the whole group area)
@@ -170,9 +209,9 @@ public final class PlekWereld extends SavedData {
         return uit;
     }
 
-    private static boolean teDichtbij(List<BlockPos> l, BlockPos p) {
+    private static boolean teDichtbij(List<BlockPos> l, BlockPos p, int afstand2) {
         for (BlockPos q : l) {
-            if (q.distSqr(p) < 9) {
+            if (q.distSqr(p) < afstand2) {
                 return true;
             }
         }
@@ -199,6 +238,26 @@ public final class PlekWereld extends SavedData {
             BlockPos p = zoekY(l, x, z, y, y, zoek, streng);
             if (p != null) {
                 return p;
+            }
+        }
+        return null;
+    }
+
+    /** 1.10.18: fishing groups in honey (the honey ponds in the Kruinzee are honey blocks, not water: 0 spots on live). */
+    public static final Set<String> HONING = Set.of("z3_vis_honingvijver");
+
+    /** 1.10.18: a honey block with room above: a honey-fishing spot (the node replaces it; the honey comes back when it moves). */
+    public static boolean honing(Level l, BlockPos p) {
+        return l.getBlockState(p).is(Blocks.HONEY_BLOCK) && vrij(l, p.above()) && vrij(l, p.above(2));
+    }
+
+    @Nullable
+    static BlockPos zoekHoningY(Level l, int x, int z, int ankerY) {
+        BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
+        for (int y = ankerY + 20; y >= ankerY - 30; y--) {
+            m.set(x, y, z);
+            if (honing(l, m)) {
+                return m.immutable();
             }
         }
         return null;
@@ -446,8 +505,9 @@ public final class PlekWereld extends SavedData {
      * Incomplete non-hive groups are dropped once more too: frozen lakes ({@link #wak}) and the Kristalbos (crystal trunks) find
      * spots now. Nodes of spots that no longer exist are cleaned up by {@code Grondstoffen.opruimen}.
      * 1.10.14 (version 4): the groups in {@link #BINNEN} (the IJsgrot) are scanned again on their floor.
+     * 1.10.18 (version 5): incomplete non-hive groups once more (fishing: the full-circle pass, honey ponds, the Mosvoet brook).
      */
-    public static final int VERSIE = 4;
+    public static final int VERSIE = 5;
     static final String VERSIE_SLEUTEL = "_versie";
 
     CompoundTag save() {
@@ -502,7 +562,7 @@ public final class PlekWereld extends SavedData {
                 CompoundTag s = spots.getCompoundOrEmpty(i);
                 l.add(new Spot(id + "_" + i, g, posities(s.getListOrEmpty("pos")), posities(s.getListOrEmpty("bloem"))));
             }
-            if (versie < 3 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
+            if (versie < 5 && g.soort() != NodeSoort.KORF && l.size() < g.aantal()) {
                 continue;   // 1.10.12 / 1.10.13: scanned again with the new rules (when a player comes near)
             }
             if (versie < 4 && BINNEN.contains(id)) {
