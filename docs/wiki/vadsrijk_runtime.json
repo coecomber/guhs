@@ -157,8 +157,8 @@
       "max_lv": 60,
       "stad": false,
       "laag": {
-        "min_y": 184,
-        "max_y": 198
+        "min_y": 182,
+        "max_y": 196
       }
     },
     {
@@ -11406,7 +11406,7 @@
       "type": "guhs:vr_z5_mob_vermomde_mika",
       "centrum": [
         2606,
-        188,
+        186,
         -427
       ],
       "straal": 10,
@@ -11423,7 +11423,7 @@
       "type": "guhs:vr_z5_mob_mika_saboteur",
       "centrum": [
         2600,
-        188,
+        186,
         -427
       ],
       "straal": 6,
@@ -11440,7 +11440,7 @@
       "type": "guhs:vr_z5_mob_mika_lontlegger",
       "centrum": [
         2614,
-        188,
+        186,
         -427
       ],
       "straal": 6,
@@ -11491,7 +11491,7 @@
       "type": "guhs:vr_z5_mob_vermomde_mika",
       "centrum": [
         2612,
-        188,
+        186,
         -425
       ],
       "straal": 3,
@@ -29077,8 +29077,8 @@
       "id": "knuffelridder",
       "naam_key": "vadsrijk.kern.klasse.knuffelridder",
       "wapens": [
-        "hamer",
         "knots",
+        "hamer",
         "zwaard"
       ],
       "per_level": {
@@ -29137,8 +29137,8 @@
       "naam_key": "vadsrijk.klassen.klasse.pluisjager",
       "wapens": [
         "kruisboog",
-        "katapult",
-        "boog"
+        "boog",
+        "katapult"
       ],
       "per_level": {
         "1": {
@@ -29207,8 +29207,8 @@
       "id": "vadsmagier",
       "naam_key": "vadsrijk.klassen.klasse.vadsmagier",
       "wapens": [
-        "staf",
         "toverstok",
+        "staf",
         "boek"
       ],
       "per_level": {
