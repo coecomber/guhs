@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.23 — Minecraft 26.1.2
+
+- **Thin grey Vadsrijk NPCs can be talked to again (live: Luc stuck on "De Grauwe Mistbank" and "Soep voor iedereen"):** `GuheindeEvents.onInteract` answered every guh of the `MAGER` variant with the Knabbelkelder's "heb je een kaasknabbel?" line and cancelled the click, so the quest motor never heard it. The refugees of zones 4-6 are `MAGER` guhs (Verdwaalde Nevel, Grijsje, Opa Dun, Vaaltje, Mama Pluis, Mientje, Grauwsnor, Pluisje, the zone-5/6 vluchtelingen): their talk steps showed the white "?" but never counted. Vadsrijk NPCs (`RijkGuh`) are now skipped there. Gametest `echteKlikOpMagereNevel` clicks through the real interaction event (the 1.10.21 test called `QuestMotor.klik` directly and missed this).
+- **Flessenpost 5 (Vuurtoreneiland):** it lay inside the hollow island, behind the calcite cliff (2385,66,-515: only two cliff cells within find range). Now on the foam at the foot of that cliff, west side (2377,64,-517), reachable on foot from the dock. Gametest `flessenpostIsTeVinden`.
+
 ## 1.10.22 — Minecraft 26.1.2
 
 - **Zone-4 gathering spots complete (live: Vliegereiland wood 1/8, Vuurtoreneiland wood 1/6, Koraalgrot pool 3/4 and ore 5/6):** a group that is still short after its random tries now tries every column of its circle for every kind except hives, in caves and closed rooms too (`PlekWereld.scan`; before: open-world fishing only). The last pass may put spots closer together (`KRAP` 4, fishing `KRAP_WATER` 2): the Koraalgrot pool is a 2-3 wide ring of shore water.

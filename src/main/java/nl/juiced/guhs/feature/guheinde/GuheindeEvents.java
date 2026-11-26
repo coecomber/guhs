@@ -99,6 +99,11 @@ public final class GuheindeEvents {
                 || !(event.getEntity() instanceof ServerPlayer player)) {
             return;
         }
+        // 1.10.23 (Luc: Verdwaalde Nevel only said "heb je een kaasknabbel?"): Vadsrijk NPCs are guhs too, and the thin grey refugees
+        // of zones 4-6 use the MAGER variant: their clicks belong to the quest motor, not to the Knabbelkelder's starved guhs
+        if (guh instanceof nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh) {
+            return;
+        }
         ItemStack hand = player.getMainHandItem();
         if (guh.getVariant() == GuhVariant.MAGER) {
             if (GuheindeReis.isKnabbel(hand)) {

@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcMarkers;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcVloer;
@@ -87,6 +88,60 @@ public class Z4NevelGameTests {
         nevel.discard();
         Z4Haken.vergeet(p);
         Questlog.wisAlles(p);
+        helper.succeed();
+    }
+
+    /**
+     * 1.10.23 (Luc, live): the real right-click on Nevel, through the interaction event. GuheindeEvents answered every MAGER-variant
+     * guh with "heb je een kaasknabbel?" and cancelled the click, so the quest motor never heard it (the test above calls the motor
+     * directly and missed that). Nevel and the other grey refugees of zones 4-6 are MAGER guhs.
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 200)
+    public static void echteKlikOpMagereNevel(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        Questlog.wisAlles(p);
+        Z4Haken.vergeet(p);
+        Quest q = Quests.van(Z4Haken.HQ04);
+        Questlog.neemAan(p, q);
+        for (int i = 0; i < 2; i++) {
+            Quest.Doel d = q.doelen().get(i);
+            Questlog.tel(p, d.type(), x -> x == d, d.n());
+        }
+        RijkGuh nevel = helper.spawn(NpcRegistry.GUH.get(), new BlockPos(1, 1, 1));
+        nevel.stelIn(Npcs.van("z4_nevel"));
+        helper.assertTrue(nevel.getVariant() == nl.juiced.guhs.entity.GuhVariant.MAGER, "self-check: Nevel is a MAGER guh");
+        p.interactOn(nevel, InteractionHand.MAIN_HAND, nevel.getBoundingBox().getCenter().subtract(nevel.position()));
+        helper.assertTrue(Z4Haken.doelKlaar(p, Z4Haken.HQ04, 2), "a real right-click on Nevel counts the step (not the Knabbelkelder's hunger line)");
+        QuestMotor.vergeet(p);
+        nevel.discard();
+        Z4Haken.vergeet(p);
+        Questlog.wisAlles(p);
+        helper.succeed();
+    }
+
+    /** 1.10.23 (Luc): every flessenpost lies in the open with a free floor within find range (fles_5 lay inside the hollow Vuurtoreneiland). */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 600)
+    public static void flessenpostIsTeVinden(GameTestHelper helper) {
+        TegelVloer w = new TegelVloer(helper.getLevel());
+        for (var e : Z4VerhaalPlekken.FLESSENPOST.entrySet()) {
+            BlockPos b = e.getValue();
+            if (!w.heeftTegel(b)) {
+                continue;
+            }
+            // (the old fles_5 had 2 such cells: two steps of the cliff face beside the hollow island; a beach has dozens)
+            int n = 0;
+            for (int dx = -3; dx <= 3; dx++) {
+                for (int dz = -3; dz <= 3; dz++) {
+                    for (int dy = -Z4VerhaalPlekken.VIND_HOOGTE; dy <= Z4VerhaalPlekken.VIND_HOOGTE; dy++) {
+                        BlockPos s = b.offset(dx, dy, dz);
+                        if (NpcVloer.staan(w, s) && !w.afgesloten(s, 20000)) {
+                            n++;
+                        }
+                    }
+                }
+            }
+            helper.assertTrue(n >= 6, e.getKey() + " " + b.toShortString() + ": free floor within find range (" + n + " cells, want 6+)");
+        }
         helper.succeed();
     }
 }
