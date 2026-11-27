@@ -64,20 +64,38 @@ public final class SmidTabs {
     private SmidTabs() {
     }
 
-    /** The tab row; returns the y under it. */
+    /** 1.10.24: the height of a tab in the row (was 11: the text touched the edges). */
+    public static final int TAB_H = 15;
+
+    /** The tab row; returns the y under it. 1.10.24: taller tabs, a label that does not fit is cut off (never over the next tab). */
     public static int tabRij(Brug b, GuiGraphicsExtractor g, int mx, int my, int x, int y, int w, int tab, IntConsumer kies) {
         int bw = w / TABS.length;
+        Font f = b.font();
         for (int i = 0; i < TABS.length; i++) {
             int tx = x + i * bw;
             boolean aan = i == tab;
-            boolean hover = mx >= tx && mx < tx + bw - 1 && my >= y && my < y + 11;
-            g.fill(tx, y, tx + bw - 1, y + 11, aan ? 0xFFFF7FC0 : hover ? 0xFFFFB8DC : 0xFFFFD6EB);
+            boolean hover = mx >= tx && mx < tx + bw - 2 && my >= y && my < y + TAB_H;
+            g.fill(tx, y, tx + bw - 2, y + TAB_H, aan ? 0xFFFF5FAF : hover ? 0xFFFFB8DC : 0xFFFFD6EB);
+            if (aan) {
+                g.fill(tx, y + TAB_H - 2, tx + bw - 2, y + TAB_H, 0xFFC0287C);
+            }
             Component c = Component.translatable("vadsrijk.items.smid.tab." + TABS[i]);
-            g.centeredText(b.font(), c, tx + bw / 2, y + 2, aan ? 0xFFFFFFFF : TEKST);
+            var r = kort(f, c, bw - 6);
+            g.text(f, r, tx + (bw - 2 - f.width(r)) / 2, y + (TAB_H - 8) / 2, aan ? 0xFFFFFFFF : TEKST, false);
             final int t = i;
-            b.klikvlak(tx, y, bw - 1, 11, () -> kies.accept(t));
+            b.klikvlak(tx, y, bw - 2, TAB_H, () -> kies.accept(t));
         }
-        return y + 14;
+        return y + TAB_H + 5;
+    }
+
+    /** 1.10.24: a text cut to width {@code w} with an ellipsis. */
+    public static net.minecraft.util.FormattedCharSequence kort(Font f, Component c, int w) {
+        if (f.width(c) <= w) {
+            return c.getVisualOrderText();
+        }
+        var deel = f.substrByWidth(c, Math.max(4, w - f.width("…")));
+        return net.minecraft.util.FormattedCharSequence.composite(net.minecraft.locale.Language.getInstance().getVisualOrder(deel),
+                Component.literal("…").getVisualOrderText());
     }
 
     /**
@@ -128,17 +146,20 @@ public final class SmidTabs {
         double[] risico = SterRegels.risico(u.sterren());
         if (risico[0] > 0 || heb > 0) {
             Component vink = Component.literal(aan ? "☑ " : "☐ ").append(Component.translatable("vadsrijk.items.smid.talisman", heb));
-            int vw = f.width(vink);
-            g.text(f, vink, x, y, aan ? PAARS : ZACHT, false);
-            b.klikvlak(x, y - 1, vw, 10, () -> {
+            // 1.10.24: the buy button gets its own room on the right; the line is cut before it (it ran under the button)
+            int kw = Math.max(50, f.width(Component.translatable("vadsrijk.items.smid.koop")) + 12);
+            var vr = kort(f, vink, w - kw - 6);
+            int vw = f.width(vr);
+            g.text(f, vr, x, y + 3, aan ? PAARS : ZACHT, false);
+            b.klikvlak(x, y, vw, 14, () -> {
                 CompoundTag t = new CompoundTag();
                 t.putInt("aan", aan ? 0 : 1);
                 b.doe("talisman", t);
             });
             long prijs = Vangnet.talismanPrijs(u.level());
-            b.knop(g, mx, my, x + w - 46, y - 2, 46, 11, Component.translatable("vadsrijk.items.smid.koop"), d.getLongOr("munten", 0) >= prijs,
+            b.knop(g, mx, my, x + w - kw, y, kw, 14, Component.translatable("vadsrijk.items.smid.koop"), d.getLongOr("munten", 0) >= prijs,
                     () -> b.doe("koop_talisman", slotArgs(b)));
-            y += 11;
+            y += 17;
             if (aan && heb > 0 && risico[0] > 0) {
                 y = regels(f, g, Component.translatable("vadsrijk.items.smid.talisman_aan"), x, y, w, PAARS);
             }
@@ -194,18 +215,19 @@ public final class SmidTabs {
         y = regels(f, g, Component.translatable("vadsrijk.items.smid.polijst_bereik", Component.translatable(bo.stat().key()),
                 getal(bo.stat(), r[0] * budget), getal(bo.stat(), r[1] * budget), getal(bo.stat(), bo.waarde() * budget)), x, y, w, TEKST) + 1;
         long prijs = Erfstukken.polijstPrijs(u);
-        b.munten(g, x + w, y + 3, prijs);
-        b.knop(g, mx, my, x, y, w - 50, 14, Component.translatable("vadsrijk.items.smid.knop.polijst"), b.data().getLongOr("munten", 0) >= prijs, () -> {
+        int mb = b.munten(g, x + w, y + 5, prijs);   // 1.10.24: the price first; the button stops before it (it ran under the coins)
+        b.knop(g, mx, my, x, y, w - mb - 8, 17, Component.translatable("vadsrijk.items.smid.knop.polijst"), b.data().getLongOr("munten", 0) >= prijs, () -> {
             CompoundTag t = slotArgs(b);
             t.putInt("bonus", gekozen);
             b.doe("polijst", t);
         });
-        return y + 17;
+        return y + 21;
     }
 
     // ---- Doorgroeien ------------------------------------------------------------------------------------------------------
 
-    public static void doorgroei(Brug b, GuiGraphicsExtractor g, int mx, int my, int x, int y, int w, Uitrusting u) {
+    /** Returns the y under it (1.10.24: the smid scrolls a tab that is taller than its panel). */
+    public static int doorgroei(Brug b, GuiGraphicsExtractor g, int mx, int my, int x, int y, int w, Uitrusting u) {
         Font f = b.font();
         y = regels(f, g, Component.translatable("vadsrijk.items.smid.doorgroei_uitleg"), x, y, w, ZACHT);
         y = regels(f, g, Component.translatable("vadsrijk.items.smid.vertrouwd", Erfstukken.vertrouwd(u), Erfstukken.MAX_VERTROUWD), x, y, w,
@@ -216,7 +238,7 @@ public final class SmidTabs {
                 g.text(f, r, x, y, ROOD, false);
                 y += 9;
             }
-            return;
+            return y;
         }
         Uitrusting na = Erfstukken.doorgroei(u);
         g.text(f, Component.translatable("vadsrijk.items.smid.level_van_naar", u.level(), na.level()).withStyle(ChatFormatting.BOLD), x, y, GOUD, false);
@@ -231,14 +253,16 @@ public final class SmidTabs {
         g.text(f, Component.literal(heb + " / " + pluis), x + 18, y + 2, heb >= pluis ? GROEN : ROOD, false);
         long prijs = Erfstukken.doorgroeiPrijs(u);
         b.munten(g, x + w, y + 2, prijs);
-        y += 16;
-        b.knop(g, mx, my, x, y, w, 16, Component.translatable("vadsrijk.items.smid.knop.doorgroei").withStyle(ChatFormatting.BOLD),
+        y += 18;
+        b.knop(g, mx, my, x, y, w, 18, Component.translatable("vadsrijk.items.smid.knop.doorgroei").withStyle(ChatFormatting.BOLD),
                 heb >= pluis && b.data().getLongOr("munten", 0) >= prijs, () -> b.doe("doorgroei", slotArgs(b)));
+        return y + 22;
     }
 
     // ---- Overvadsen -------------------------------------------------------------------------------------------------------
 
-    public static void overvads(Brug b, GuiGraphicsExtractor g, int mx, int my, int x, int y, int w, Uitrusting u) {
+    /** Returns the y under it (1.10.24: the smid scrolls a tab that is taller than its panel). */
+    public static int overvads(Brug b, GuiGraphicsExtractor g, int mx, int my, int x, int y, int w, Uitrusting u) {
         Font f = b.font();
         if (voorKies != b.kies()) {
             voorKies = b.kies();
@@ -259,8 +283,8 @@ public final class SmidTabs {
             if (slot == b.kies() || x2 == null || x2.bonussen().isEmpty()) {
                 continue;
             }
-            if (n < 10) {
-                int sx = x + n * 19;
+            if (n < Math.max(1, w / 20)) {
+                int sx = x + n * 20;
                 b.slot(g, mx, my, sx, y, s, slot == offer);
                 b.klikvlak(sx, y, 18, 18, () -> {
                     offer = slot;
@@ -273,25 +297,23 @@ public final class SmidTabs {
             n++;
         }
         if (n == 0) {
-            regels(f, g, Component.translatable("vadsrijk.items.smid.overvads_geen"), x, y + 4, w, ROOD);
-            return;
+            return regels(f, g, Component.translatable("vadsrijk.items.smid.overvads_geen"), x, y + 4, w, ROOD);
         }
-        y += 21;
+        y += 22;
         if (o == null) {
-            regels(f, g, Component.translatable("vadsrijk.items.smid.overvads_kies_offer"), x, y, w, ZACHT);
-            return;
+            return regels(f, g, Component.translatable("vadsrijk.items.smid.overvads_kies_offer"), x, y, w, ZACHT);
         }
         // 2. which bonus of the old piece
         int half = w / 2 - 2;
-        g.text(f, Component.translatable("vadsrijk.items.smid.overvads_van"), x, y, TEKST, false);
-        g.text(f, Component.translatable("vadsrijk.items.smid.overvads_naar"), x + half + 4, y, TEKST, false);
-        y += 10;
+        g.text(f, kort(f, Component.translatable("vadsrijk.items.smid.overvads_van"), half), x, y, TEKST, false);
+        g.text(f, kort(f, Component.translatable("vadsrijk.items.smid.overvads_naar"), half), x + half + 4, y, TEKST, false);
+        y += 12;
         for (int i = 0; i < o.bonussen().size(); i++) {
             Bonus bo = o.bonussen().get(i);
-            int by = y + i * 10;
+            int by = y + i * 12;
             final int idx = i;
-            g.text(f, Component.literal(i == offerBonus ? "» " : "• ").append(Component.translatable(bo.stat().key())), x, by, i == offerBonus ? GOUD : TEKST, false);
-            b.klikvlak(x, by - 1, half, 10, () -> offerBonus = idx);
+            g.text(f, kort(f, Component.literal(i == offerBonus ? "» " : "• ").append(Component.translatable(bo.stat().key())), half), x, by, i == offerBonus ? GOUD : TEKST, false);
+            b.klikvlak(x, by - 2, half, 12, () -> offerBonus = idx);
         }
         // 3. which bonus of the target it replaces (or a new one)
         int ty = y;
@@ -301,18 +323,17 @@ public final class SmidTabs {
             }
             Component c = j < 0 ? Component.translatable("vadsrijk.items.smid.overvads_erbij") : Component.translatable(u.bonussen().get(j).stat().key());
             final int idx = j;
-            g.text(f, Component.literal(j == doelBonus ? "» " : "• ").append(c), x + half + 4, ty, j == doelBonus ? GOUD : TEKST, false);
-            b.klikvlak(x + half + 4, ty - 1, half, 10, () -> doelBonus = idx);
-            ty += 10;
+            g.text(f, kort(f, Component.literal(j == doelBonus ? "» " : "• ").append(c), half), x + half + 4, ty, j == doelBonus ? GOUD : TEKST, false);
+            b.klikvlak(x + half + 4, ty - 2, half, 12, () -> doelBonus = idx);
+            ty += 12;
         }
-        y = Math.max(y + o.bonussen().size() * 10, ty) + 3;
+        y = Math.max(y + o.bonussen().size() * 12, ty) + 3;
         if (offerBonus < 0) {
-            return;
+            return y;
         }
         String waarom = Erfstukken.kanOvervadsen(u, o, offerBonus, doelBonus);
         if (!waarom.isEmpty()) {
-            regels(f, g, Component.translatable(waarom), x, y, w, ROOD);
-            return;
+            return regels(f, g, Component.translatable(waarom), x, y, w, ROOD);
         }
         Uitrusting na = Erfstukken.overvads(u, o, offerBonus, doelBonus, false), lief = Erfstukken.overvads(u, o, offerBonus, doelBonus, true);
         Bonus nb = doelBonus < 0 ? na.bonussen().get(na.bonussen().size() - 1) : na.bonussen().get(doelBonus);
@@ -322,8 +343,8 @@ public final class SmidTabs {
                 pct(ItemsBalans.get("overvads_mislukking")), getal(lb.stat(), lb.waarde() * budget)), x, y, w, GROEN);
         y = regels(f, g, Component.translatable("vadsrijk.items.smid.overvads_weg"), x, y, w, ROOD) + 1;
         long prijs = Erfstukken.overvadsPrijs(u);
-        b.munten(g, x + w, y + 3, prijs);
-        b.knop(g, mx, my, x, y, w - 50, 15, Component.translatable("vadsrijk.items.smid.knop.overvads"), b.data().getLongOr("munten", 0) >= prijs, () -> {
+        int mb = b.munten(g, x + w, y + 5, prijs);   // 1.10.24: the price first; the button stops before it
+        b.knop(g, mx, my, x, y, w - mb - 8, 17, Component.translatable("vadsrijk.items.smid.knop.overvads"), b.data().getLongOr("munten", 0) >= prijs, () -> {
             CompoundTag t = slotArgs(b);
             t.putInt("offer", offer);
             t.putInt("bonus", offerBonus);
@@ -333,6 +354,7 @@ public final class SmidTabs {
             offerBonus = -1;
             doelBonus = -1;
         });
+        return y + 21;
     }
 
     private static CompoundTag slotArgs(Brug b) {

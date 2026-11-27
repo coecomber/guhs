@@ -103,10 +103,22 @@ public final class MenuIndeling {
 
     /**
      * The frame on a screen of (gui-scaled) size sw x sh. {@code schaal} &lt; 1 when even the smallest frame does not fit: the
-     * panel then works in a LOGICAL screen of {@code lw x lh} (= sw/schaal x sh/schaal) and is drawn scaled down.
+     * panel then works in a LOGICAL screen of {@code lw x lh} (= sw/schaal x sh/schaal) and is drawn scaled down; 1.10.24:
+     * {@code schaal} &gt; 1 when even the largest frame leaves room: the same, drawn scaled up (bigger text and buttons).
      * left/top/w/h = the panel (title band included); the main tab row sits above top.
      */
     public record Kader(float schaal, int lw, int lh, int left, int top, int w, int h) {
+    }
+
+    /** 1.10.24: the largest a screen is scaled up (2 = GUI scale 2 looks like GUI scale 4). */
+    public static final float MAX_SCHAAL = 2f;
+
+    /** 1.10.24: a scale-up factor that fits (room / needed), in steps of 0.05, 1 below 1.05, at most {@link #MAX_SCHAAL}. */
+    public static float opschaal(float past) {
+        if (past < 1.05f) {
+            return 1f;
+        }
+        return Math.min(MAX_SCHAAL, (float) Math.floor(past * 20f) / 20f);
     }
 
     public static Kader kader(int sw, int sh) {
@@ -118,6 +130,10 @@ public final class MenuIndeling {
         int mw = Math.max(MIN_W, minW), mh = Math.max(MIN_H, minH), xw = Math.max(MAX_W, mw), xh = Math.max(MAX_H, mh);
         int nodigW = mw + 2 * MARGE, nodigH = mh + TABS_H + 2 * MARGE + 4;
         float s = Math.min(1f, Math.min(sw / (float) nodigW, sh / (float) nodigH));
+        if (s >= 1f) {
+            // 1.10.24 ("maak interfaces groter en gebruik meer ruimte"): with room to spare the full-size frame is drawn scaled UP
+            s = opschaal(Math.min(sw / (float) (xw + 2 * MARGE + 8), sh / (float) (xh + TABS_H + 2 * MARGE + 4)));
+        }
         int lw = (int) Math.floor(sw / s), lh = (int) Math.floor(sh / s);
         int w = Math.max(mw, Math.min(xw, lw - 2 * MARGE - 8));
         int h = Math.max(mh, Math.min(xh, lh - 2 * MARGE - TABS_H - 4));

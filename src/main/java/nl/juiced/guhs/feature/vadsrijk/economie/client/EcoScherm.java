@@ -37,7 +37,28 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
     /** U-TABS: the scale of the Vadsrijk-menu frame (1 = none; below 1 the screen works in a logical size, see Geschaald). */
     protected float menuSchaal = 1f;
 
-    private record Knop(int x, int y, int w, int h, Runnable actie) {
+    private record Knop(int x, int y, int w, int h, Runnable actie, int[] klip) {
+        boolean raak(int mx, int my) {
+            return mx >= x && mx < x + w && my >= y && my < y + h
+                    && (klip == null || mx >= klip[0] && mx < klip[2] && my >= klip[1] && my < klip[3]);
+        }
+    }
+
+    /** 1.10.24: the clip rectangle of a scrolled part (buttons outside it do not react), or null. */
+    @Nullable
+    private int[] klip;
+
+    /** 1.10.24: from now on buttons/click areas only react inside this rectangle (a scrolled part); also clips the drawing. */
+    protected void zetKlip(GuiGraphicsExtractor g, int x0, int y0, int x1, int y1) {
+        klip = new int[] {x0, y0, x1, y1};
+        g.enableScissor(x0, y0, x1, y1);
+    }
+
+    protected void geenKlip(GuiGraphicsExtractor g) {
+        if (klip != null) {
+            g.disableScissor();
+        }
+        klip = null;
     }
 
     private final List<Knop> knoppen = new ArrayList<>();
@@ -81,9 +102,15 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
             h = k.h();
             return;
         }
-        menuSchaal = 1f;
+        // 1.10.24 ("maak interfaces groter en gebruik meer ruimte"): a loose screen is drawn scaled to the window: up (bigger text and
+        // buttons) when there is room, down when the window is smaller than the panel. Works through Geschaald like the menu frame.
+        int sw = width, sh = height;
+        float past = Math.min((sw - 16) / (float) w, (sh - 20) / (float) h);
+        menuSchaal = past >= 1f ? nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.opschaal(past) : Math.max(0.5f, past);
+        width = (int) Math.floor(sw / menuSchaal);
+        height = (int) Math.floor(sh / menuSchaal);
         left = (width - w) / 2;
-        top = (height - h) / 2;
+        top = Math.max(8, (height - h) / 2);
     }
 
     @Override
@@ -168,6 +195,7 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         knoppen.clear();
         hoverItem = null;
         hoverTekst = null;
+        klip = null;
         super.extractRenderState(g, mouseX, mouseY, partialTick);
         inhoud(g, mouseX, mouseY, partialTick);
         if (vraag != null) {   // 1.10.1: a confirm window on top: only its two buttons work
@@ -251,21 +279,35 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         return mx >= x && mx < x + bw && my >= y && my < y + bh;
     }
 
-    /** A pink button (drawn now, clickable until the next frame). */
+    /**
+     * A pink button (drawn now, clickable until the next frame). 1.10.24: a label wider than the button is cut off with "…" (the
+     * full text as a tooltip) instead of running over the edge and the buttons next to it.
+     */
     protected void knop(GuiGraphicsExtractor g, int mx, int my, int x, int y, int bw, int bh, Component label, boolean actief, Runnable actie) {
-        boolean hover = actief && binnen(mx, my, x, y, bw, bh);
+        boolean hover = binnen(mx, my, x, y, bw, bh);
         g.fill(x, y, x + bw, y + bh, actief ? (hover ? 0xFFC0287C : 0xFFE0489A) : 0xFFC8A8BC);
         g.fill(x + 1, y + 1, x + bw - 1, y + bh - 1, actief ? (hover ? 0xFFFF8CC8 : 0xFFFF6FB5) : 0xFFE4D0DC);
         g.fill(x + 1, y + 1, x + bw - 1, y + 2, actief ? 0x60FFFFFF : 0x30FFFFFF);
-        g.centeredText(font, label, x + bw / 2, y + (bh - 8) / 2, actief ? WIT : 0xFF9A8094);
+        int kleur = actief ? WIT : 0xFF9A8094;
+        if (font.width(label) <= bw - 6) {
+            g.centeredText(font, label, x + bw / 2, y + (bh - 8) / 2, kleur);
+        } else {
+            var kort = font.substrByWidth(label, Math.max(4, bw - 6 - font.width("…")));
+            var regel = net.minecraft.util.FormattedCharSequence.composite(net.minecraft.locale.Language.getInstance().getVisualOrder(kort),
+                    Component.literal("…").getVisualOrderText());
+            g.text(font, regel, x + (bw - font.width(regel)) / 2, y + (bh - 8) / 2, kleur, false);
+            if (hover) {
+                hoverTekst = List.of(label);
+            }
+        }
         if (actief) {
-            knoppen.add(new Knop(x, y, bw, bh, actie));
+            knoppen.add(new Knop(x, y, bw, bh, actie, klip));
         }
     }
 
     /** A clickable area without drawing (rows, slots). */
     protected void klikvlak(int x, int y, int bw, int bh, Runnable actie) {
-        knoppen.add(new Knop(x, y, bw, bh, actie));
+        knoppen.add(new Knop(x, y, bw, bh, actie, klip));
     }
 
     /** An item slot (18x18) with its tooltip on hover. */
@@ -275,7 +317,7 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         if (!s.isEmpty()) {
             g.item(s, x + 1, y + 1);
             g.itemDecorations(font, s, x + 1, y + 1);
-            if (binnen(mx, my, x, y, 18, 18)) {
+            if (binnen(mx, my, x, y, 18, 18) && (klip == null || mx >= klip[0] && mx < klip[2] && my >= klip[1] && my < klip[3])) {
                 hoverItem = s;
             }
         }
@@ -370,7 +412,7 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         }
         if (event.button() == 0) {
             for (Knop k : List.copyOf(knoppen)) {
-                if (binnen((int) event.x(), (int) event.y(), k.x(), k.y(), k.w(), k.h())) {
+                if (k.raak((int) event.x(), (int) event.y())) {
                     geluid(SoundEvents.UI_BUTTON_CLICK, 1.2f);
                     k.actie().run();
                     return true;

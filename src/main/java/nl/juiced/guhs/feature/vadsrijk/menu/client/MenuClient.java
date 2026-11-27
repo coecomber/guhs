@@ -45,7 +45,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, (ScreenEvent.Render.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s >= 1f || bezig) {
+            if (s == 1f || bezig) {   // 1.10.24: also scaled up (s > 1)
                 return;
             }
             e.setCanceled(true);
@@ -62,7 +62,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseButtonPressed.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s < 1f && !bezig) {
+            if (s != 1f && !bezig) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -74,7 +74,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseButtonReleased.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s < 1f && !bezig) {
+            if (s != 1f && !bezig) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -86,7 +86,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseDragged.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s < 1f && !bezig) {
+            if (s != 1f && !bezig) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -98,7 +98,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseScrolled.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s < 1f && !bezig) {
+            if (s != 1f && !bezig) {
                 e.setCanceled(true);
                 bezig = true;
                 try {

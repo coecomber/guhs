@@ -66,7 +66,7 @@ public class VadsrijkMenuGameTests {
             for (int[] nodig : new int[][] {{0, 0}, {400, 399}}) {   // (a normal tab, and a very tall skill tree)
                 MenuIndeling.Kader k = MenuIndeling.kader(m[0], m[1], nodig[0], nodig[1]);
                 String w = m[0] + "x" + m[1] + " " + k;
-                helper.assertTrue(k.schaal() > 0f && k.schaal() <= 1f, "scale in (0,1]: " + w);
+                helper.assertTrue(k.schaal() > 0f && k.schaal() <= MenuIndeling.MAX_SCHAAL, "scale in (0,2]: " + w);
                 helper.assertTrue(Math.abs(k.lw() * k.schaal() - m[0]) <= 2 && Math.abs(k.lh() * k.schaal() - m[1]) <= 2, "logical size = real / scale: " + w);
                 helper.assertTrue(k.left() >= 0 && k.left() + k.w() <= k.lw(), "frame inside the screen (x): " + w);
                 helper.assertTrue(k.top() - MenuIndeling.TABS_H >= 0 && k.top() + k.h() <= k.lh(), "frame + tab row inside the screen (y): " + w);
@@ -76,12 +76,13 @@ public class VadsrijkMenuGameTests {
             MenuIndeling.Kader k = MenuIndeling.kader(m[0], m[1]);
             if (m[0] == 960 && m[1] == 540) {
                 eerste = k;
-                helper.assertTrue(k.schaal() == 1f && k.w() == MenuIndeling.MAX_W && k.h() == MenuIndeling.MAX_H, "GUI 2 at 1080p: full size, no scaling");
+                helper.assertTrue(k.schaal() > 1.3f && k.w() == MenuIndeling.MAX_W && k.h() == MenuIndeling.MAX_H, "GUI 2 at 1080p: full size, scaled UP (1.10.24): " + k);
             }
         }
         // every tab gets the same frame on the same screen (the frame does not depend on the tab)
         helper.assertTrue(eerste != null && eerste.equals(MenuIndeling.kader(960, 540)), "same frame for every tab");
         helper.assertTrue(MenuIndeling.kader(640, 360).schaal() == 1f, "GUI 3 at 1080p: no scaling");
+        helper.assertTrue(MenuIndeling.kader(2560, 1440).schaal() == MenuIndeling.MAX_SCHAAL, "GUI 1 at 1440p: scaled up to the max");
         helper.succeed();
     }
 

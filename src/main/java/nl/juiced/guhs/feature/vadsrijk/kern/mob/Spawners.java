@@ -182,6 +182,14 @@ public final class Spawners {
         GEBIED.remove(s.id());
     }
 
+    /** Remove a spawner again (gametests). */
+    public static synchronized void afmelden(String id) {
+        ALLE.remove(id);
+        GEBIED.remove(id);
+        WACHTRIJ.remove(id);
+        LAATST_ACTIEF.remove(id);
+    }
+
     @Nullable
     public static Spawner van(String id) {
         return ALLE.get(id);
@@ -246,6 +254,7 @@ public final class Spawners {
         long nu = sl.getGameTime();
         if ((nu / 20) % 5 == 0) {
             onderDeKaartWeg(sl);   // 1.10.3 npc-vloer
+            buitenBereikWeg(sl);   // 1.10.24 opgestapelde Lantaarnlozen
         }
         int actief = 0, gespawnd = 0, weg = 0, totaal = 0;
         Map<String, Integer> perGebied = new HashMap<>();
@@ -383,6 +392,30 @@ public final class Spawners {
             n++;
         }
         onderDeKaartWeg += n;
+        return n;
+    }
+
+    /** How many mobs {@link #buitenBereikWeg} removed since the start (dev/test). */
+    public static int buitenBereikWeg;
+
+    /**
+     * 1.10.24 (Luc: "100+ vliegende mobs bovenin de Schemerwortel"): a mob that leaves its spawner's counting box
+     * ({@link Spawner#gebied}) is no longer counted by it, so the spawner refills, and no rule ever removed the stray: the Schorsstad's
+     * Lantaarnlozen (y 81-177) drifted up the hollow trunk to y ~290 and 230 of them piled up there. Every 5 s every (non-boss)
+     * spawner mob outside its own spawner's box goes, unless it is fighting someone. Returns how many.
+     */
+    public static int buitenBereikWeg(ServerLevel sl) {
+        int n = 0;
+        for (VadsrijkMob m : sl.getEntities(net.minecraft.world.level.entity.EntityTypeTest.forClass(VadsrijkMob.class),
+                m -> !m.spawner.isEmpty() && !(m instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.VadsrijkBaas))) {
+            Spawner s = ALLE.get(m.spawner);
+            if (s == null || m.getTarget() != null || m.geplofd() || s.gebied().contains(m.position())) {
+                continue;
+            }
+            m.discard();
+            n++;
+        }
+        buitenBereikWeg += n;
         return n;
     }
 

@@ -489,7 +489,9 @@ public class RijdierScherm extends EcoScherm {
         var state = mc.getEntityRenderDispatcher().extractEntity(e, 1.0F);
         state.shadowPieces.clear();
         state.outlineColor = 0;
-        g.entity(state, schaal, new Vector3f(0, hoog * 0.5f + 4f / schaal, 0), pose, camera, x1, y1, x2, y2);
+        // 1.10.24: the model is a picture-in-picture in REAL screen pixels (a scaled screen's pose does not reach it)
+        float ms = menuSchaal;
+        g.entity(state, schaal * ms, new Vector3f(0, hoog * 0.5f + 4f / schaal, 0), pose, camera, Math.round(x1 * ms), Math.round(y1 * ms), Math.round(x2 * ms), Math.round(y2 * ms));
         g.disableScissor();
     }
 }

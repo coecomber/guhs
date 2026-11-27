@@ -81,7 +81,12 @@ public class KledingScherm extends EcoScherm {
         int px = left + 8, py = top + 24;
         g.fill(px, py, px + 82, py + 150, 0xFFFFF4FA);
         if (mc.player != null) {
-            InventoryScreen.extractEntityInInventoryFollowsMouse(g, px, py, px + 82, py + 146, 52, 0.0625f, mx, my, mc.player);
+            // 1.10.24: the 3D model is a picture-in-picture drawn in REAL screen pixels (the pose of a scaled menu does not reach it):
+            // hand it the scaled rectangle and size, the angles from the logical mouse
+            float s = menuSchaal;
+            float xa = (float) Math.atan((px + 41 - mx) / 40f), ya = (float) Math.atan((py + 73 - my) / 40f);
+            InventoryScreen.renderEntityInInventoryFollowsAngle(g, Math.round(px * s), Math.round(py * s), Math.round((px + 82) * s), Math.round((py + 146) * s),
+                    Math.round(52 * s), 0.0625f, xa, ya, mc.player);
         }
         knop(g, mx, my, px, py + 154, 82, 16, Component.translatable("vadsrijk.kleding.anderen",
                 Component.translatable("vadsrijk.kleding.niveau." + KledingCache.anderen().name().toLowerCase(Locale.ROOT))), true,

@@ -122,6 +122,50 @@ public class VadsrijkGrotRuimteGameTests {
         helper.succeed();
     }
 
+    /**
+     * 1.10.24 (230 Lantaarnlozen piled up at the top of the Schemerwortel: flyers drifted out of their Schorsstad spawner's box, were
+     * no longer counted and never removed): a spawner mob outside its spawner's box goes on the 5-s sweep, one inside stays, and so
+     * does a stray that is fighting someone.
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 100)
+    public static void dwalersBuitenHetVakWeg(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        BlockPos c = helper.absolutePos(new BlockPos(2, 1, 2));
+        String id = "test:dwaler#proef";
+        Spawners.Spawner s = new Spawners.Spawner(id, c, 4, KernRegistry.PROEFKLODDER, 3, 20, 1, 2, Element.GEEN, 0).grot(c.getY() - 2, c.getY() + 6);
+        Spawners.registreer(s);
+        List<ProefKlodder> mobs = new ArrayList<>();
+        try {
+            ProefKlodder thuis = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 2, 2);
+            ProefKlodder dwaler = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 2, 2);
+            ProefKlodder vechter = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 2, 2);
+            ProefKlodder vreemd = helper.spawn(KernRegistry.PROEFKLODDER.get(), 2, 2, 2);
+            mobs.addAll(List.of(thuis, dwaler, vechter, vreemd));
+            thuis.spawner = id;
+            dwaler.spawner = id;
+            vechter.spawner = id;
+            vreemd.spawner = "";   // (not a spawner mob: a quest/contract mob is never touched)
+            double hoog = s.gebied().maxY + 40;
+            for (ProefKlodder m : List.of(dwaler, vechter, vreemd)) {
+                m.setPos(m.getX(), hoog, m.getZ());
+            }
+            var speler = nl.juiced.guhs.gametest.GuhMockPlayer.of(helper);
+            speler.setGameMode(net.minecraft.world.level.GameType.SURVIVAL);
+            vechter.setTarget(speler);
+            helper.assertTrue(vechter.getTarget() == speler, "the test setup: the fighter has a target");
+            helper.assertTrue(s.gebied().contains(thuis.position()) && !s.gebied().contains(dwaler.position()), "the test setup: one inside, one far above the box");
+            Spawners.buitenBereikWeg(sl);
+            helper.assertTrue(dwaler.isRemoved(), "the stray above its spawner's box is removed");
+            helper.assertTrue(!thuis.isRemoved(), "the mob inside its box stays");
+            helper.assertTrue(!vechter.isRemoved(), "a stray that is fighting stays (until the fight ends)");
+            helper.assertTrue(!vreemd.isRemoved(), "a mob without a spawner is never touched");
+            helper.succeed();
+        } finally {
+            mobs.forEach(m -> m.discard());
+            Spawners.afmelden(id);
+        }
+    }
+
     @SuppressWarnings("unused")
     private static final Set<String> NIETS = Set.of();
 }

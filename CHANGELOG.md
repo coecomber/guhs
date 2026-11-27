@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.24 — Minecraft 26.1.2
+
+- **Lantaarnlozen piling up at the top of the Schemerwortel (live: 232 of them at y ~290 above the trunk axis):** the Schorsstad spawners (ring terraces y 81-177) count their mobs only inside `Spawner.gebied()` (y min-6..max+6). The flying Lantaarnloze drifted up the hollow trunk out of that box, was no longer counted, so its spawner refilled, and nothing ever removed the stray. New 5-s sweep `Spawners.buitenBereikWeg`: every non-boss spawner mob outside its own spawner's box goes unless it is fighting (all zones). Gametest `dwalersBuitenHetVakWeg`.
+- **Smid screen re-laid out (live: "knoppen met slecht leesbare tekst, knoppen over elkaar"):** logical size 460-540 x 250-320, a 7-wide gear grid that scrolls, 17-20 px buttons, 15 px tabs, prices drawn first with the buttons stopping before them (polijsten, overvadsen, talisman), the tab content in a clipped box that scrolls (`EcoScherm.zetKlip`: buttons outside the clip don't react).
+- **Vadsrijk screens scale up with the window:** `MenuIndeling.kader` scales the full-size menu frame up when the window has room (`opschaal`, steps of 0.05, max x2), and loose `EcoScherm` screens (smid, winkel, markt, juwelier, ...) scale to the window (up when there is room, down when it is too small). `MenuClient` now handles any scale != 1 (it was only < 1).
+- **Buttons with a too-long label** cut it with "…" and show the full text as a tooltip (`EcoScherm.knop`, `SmidTabs.kort`).
+
 ## 1.10.23 — Minecraft 26.1.2
 
 - **Thin grey Vadsrijk NPCs can be talked to again (live: Luc stuck on "De Grauwe Mistbank" and "Soep voor iedereen"):** `GuheindeEvents.onInteract` answered every guh of the `MAGER` variant with the Knabbelkelder's "heb je een kaasknabbel?" line and cancelled the click, so the quest motor never heard it. The refugees of zones 4-6 are `MAGER` guhs (Verdwaalde Nevel, Grijsje, Opa Dun, Vaaltje, Mama Pluis, Mientje, Grauwsnor, Pluisje, the zone-5/6 vluchtelingen): their talk steps showed the white "?" but never counted. Vadsrijk NPCs (`RijkGuh`) are now skipped there. Gametest `echteKlikOpMagereNevel` clicks through the real interaction event (the 1.10.21 test called `QuestMotor.klik` directly and missed this).
