@@ -76,13 +76,22 @@ public class VadsrijkMenuGameTests {
             MenuIndeling.Kader k = MenuIndeling.kader(m[0], m[1]);
             if (m[0] == 960 && m[1] == 540) {
                 eerste = k;
-                helper.assertTrue(k.schaal() > 1.3f && k.w() == MenuIndeling.MAX_W && k.h() == MenuIndeling.MAX_H, "GUI 2 at 1080p: full size, scaled UP (1.10.24): " + k);
+                helper.assertTrue(k.schaal() == 1f && k.w() == MenuIndeling.MAX_W && k.h() == MenuIndeling.MAX_H, "GUI 2 at 1080p (no GUI scale given): full size, no scaling");
             }
         }
         // every tab gets the same frame on the same screen (the frame does not depend on the tab)
         helper.assertTrue(eerste != null && eerste.equals(MenuIndeling.kader(960, 540)), "same frame for every tab");
         helper.assertTrue(MenuIndeling.kader(640, 360).schaal() == 1f, "GUI 3 at 1080p: no scaling");
         helper.assertTrue(MenuIndeling.kader(2560, 1440).schaal() == MenuIndeling.MAX_SCHAAL, "GUI 1 at 1440p: scaled up to the max");
+        // 1.10.24: the scale-up keeps the real pixel scale whole (crisp font): GUI 2 at 1080p -> x1.5 (= 3 real px), GUI 3 -> x1, GUI 4 -> x1
+        MenuIndeling.Kader g2 = MenuIndeling.kader(960, 540, 0, 0, true, 2);
+        helper.assertTrue(g2.schaal() == 1.5f && g2.w() >= MenuIndeling.RUIM_W && g2.h() >= MenuIndeling.RUIM_H, "GUI 2 at 1080p: x1.5, still roomy: " + g2);
+        helper.assertTrue(MenuIndeling.kader(640, 360, 0, 0, true, 3).schaal() == 1f && MenuIndeling.kader(480, 270, 0, 0, true, 4).schaal() <= 1f, "GUI 3/4 at 1080p: no scale-up");
+        helper.assertTrue(MenuIndeling.kader(960, 540, 0, 0, false, 2).schaal() == 1f, "a container screen is never scaled up");
+        for (int gs = 1; gs <= 4; gs++) {
+            float sc = MenuIndeling.kader(1920 / gs, 1080 / gs, 0, 0, true, gs).schaal();
+            helper.assertTrue(sc < 1f || Math.abs(sc * gs - Math.round(sc * gs)) < 1e-4, "a scale-UP keeps a whole real pixel scale at GUI " + gs + ": " + sc);
+        }
         helper.succeed();
     }
 

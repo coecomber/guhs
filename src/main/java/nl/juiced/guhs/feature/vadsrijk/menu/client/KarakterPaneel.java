@@ -136,7 +136,7 @@ public class KarakterPaneel extends MenuPaneel {
             String waarde = p ? String.format(Locale.ROOT, "%.1f%%", v) : String.format(Locale.ROOT, "%.0f", v);
             g.fill(x3 - 2, sy - 1, x3 + kolom - 4, sy + 10, i % 2 == 0 ? RIJ_A : RIJ_B);
             Component naam = Component.translatable(s.getStringOr("k", ""));
-            g.text(font, font.plainSubstrByWidth(naam.getString(), kolom - 12 - font.width(waarde)), x3, sy, TEKST, false);
+            g.text(font, nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.kort(font, naam, kolom - 18 - font.width(waarde)), x3, sy, TEKST, false);   // 1.10.24: "…" and a gap before the number
             g.text(font, waarde, x3 + kolom - 8 - font.width(waarde), sy, hoofd ? TEKST : GOUD, false);
             String uitleg = s.getStringOr("k", "") + ".uitleg";
             if (net.minecraft.locale.Language.getInstance().has(uitleg)) {

@@ -193,7 +193,14 @@ public final class AmbachtRegistry {
                         AmbachtSchermen.werkplaats(speler(c), a, null);
                     }
                     return 1;
-                })));
+                }).then(Commands.argument("recept", StringArgumentType.word()).executes(c -> {   // 1.10.24: (dev/autocheck) with a recipe chosen
+                    Ambacht a = Ambacht.van(StringArgumentType.getString(c, "ambacht"));
+                    if (a != null) {
+                        AmbachtSchermen.werkplaats(speler(c), a, null);
+                        AmbachtSchermen.stuurWerk(speler(c), a, "", StringArgumentType.getString(c, "recept"));
+                    }
+                    return 1;
+                }))));
         k.then(Commands.literal("level").then(Commands.argument("ambacht", StringArgumentType.word())
                 .suggests((c, b) -> SharedSuggestionProvider.suggest(lijstMetAlle(), b))
                 .then(Commands.argument("n", IntegerArgumentType.integer(1, 100)).executes(c -> {

@@ -106,7 +106,8 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         // buttons) when there is room, down when the window is smaller than the panel. Works through Geschaald like the menu frame.
         int sw = width, sh = height;
         float past = Math.min((sw - 16) / (float) w, (sh - 20) / (float) h);
-        menuSchaal = past >= 1f ? nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.opschaal(past) : Math.max(0.5f, past);
+        menuSchaal = past >= 1f ? nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.opschaal(sw, sh, w + 16, h + 20,
+                nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.guiSchaal()) : Math.max(0.5f, past);
         width = (int) Math.floor(sw / menuSchaal);
         height = (int) Math.floor(sh / menuSchaal);
         left = (width - w) / 2;
@@ -296,7 +297,7 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
             var regel = net.minecraft.util.FormattedCharSequence.composite(net.minecraft.locale.Language.getInstance().getVisualOrder(kort),
                     Component.literal("…").getVisualOrderText());
             g.text(font, regel, x + (bw - font.width(regel)) / 2, y + (bh - 8) / 2, kleur, false);
-            if (hover) {
+            if (hover && (klip == null || mx >= klip[0] && mx < klip[2] && my >= klip[1] && my < klip[3])) {
                 hoverTekst = List.of(label);
             }
         }
@@ -324,7 +325,7 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
     }
 
     protected void tip(int mx, int my, int x, int y, int bw, int bh, List<Component> tekst) {
-        if (binnen(mx, my, x, y, bw, bh)) {
+        if (binnen(mx, my, x, y, bw, bh) && (klip == null || mx >= klip[0] && mx < klip[2] && my >= klip[1] && my < klip[3])) {
             hoverTekst = tekst;
         }
     }

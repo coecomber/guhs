@@ -112,13 +112,25 @@ public final class MenuIndeling {
 
     /** 1.10.24: the largest a screen is scaled up (2 = GUI scale 2 looks like GUI scale 4). */
     public static final float MAX_SCHAAL = 2f;
+    /** 1.10.24: the menu frame is only scaled up while it still gets at least this logical size (comfortable, above MIN). */
+    public static final int RUIM_W = 520, RUIM_H = 300;
 
-    /** 1.10.24: a scale-up factor that fits (room / needed), in steps of 0.05, 1 below 1.05, at most {@link #MAX_SCHAAL}. */
-    public static float opschaal(float past) {
-        if (past < 1.05f) {
-            return 1f;
+    /**
+     * 1.10.24: the scale-up factor: the largest k / guiScale (k whole, so the REAL pixel scale guiScale x s stays a whole number and
+     * the pixel font stays crisp; 1.45 made uneven letters) at which the logical screen sw/s x sh/s still holds needW x needH; at most
+     * {@link #MAX_SCHAAL}; 1 when even the next step does not fit.
+     */
+    public static float opschaal(int sw, int sh, int needW, int needH, int guiScale) {
+        int gs = Math.max(1, guiScale);
+        float best = 1f;
+        for (int k = gs + 1; k <= Math.round(gs * MAX_SCHAAL); k++) {
+            float s = k / (float) gs;
+            if (sw / s < needW || sh / s < needH) {
+                break;
+            }
+            best = s;
         }
-        return Math.min(MAX_SCHAAL, (float) Math.floor(past * 20f) / 20f);
+        return best;
     }
 
     public static Kader kader(int sw, int sh) {
@@ -127,12 +139,21 @@ public final class MenuIndeling {
 
     /** The frame for a panel that needs at least minW x minH (e.g. a tall skill tree): bigger than the others only then. */
     public static Kader kader(int sw, int sh, int minW, int minH) {
+        return kader(sw, sh, minW, minH, true, 1);
+    }
+
+    /**
+     * 1.10.24: {@code opschalen} false = never scaled UP (container screens: JEI and other overlays place their item list from the
+     * screen's own, unscaled panel rectangle, so a scaled-up knapzak got JEI's list drawn through it). {@code guiScale}: the
+     * window's GUI scale (the scale-up keeps the real pixel scale whole).
+     */
+    public static Kader kader(int sw, int sh, int minW, int minH, boolean opschalen, int guiScale) {
         int mw = Math.max(MIN_W, minW), mh = Math.max(MIN_H, minH), xw = Math.max(MAX_W, mw), xh = Math.max(MAX_H, mh);
         int nodigW = mw + 2 * MARGE, nodigH = mh + TABS_H + 2 * MARGE + 4;
         float s = Math.min(1f, Math.min(sw / (float) nodigW, sh / (float) nodigH));
-        if (s >= 1f) {
-            // 1.10.24 ("maak interfaces groter en gebruik meer ruimte"): with room to spare the full-size frame is drawn scaled UP
-            s = opschaal(Math.min(sw / (float) (xw + 2 * MARGE + 8), sh / (float) (xh + TABS_H + 2 * MARGE + 4)));
+        if (s >= 1f && opschalen) {
+            // 1.10.24 ("maak interfaces groter en gebruik meer ruimte"): with room to spare the frame is drawn scaled UP
+            s = opschaal(sw, sh, Math.max(RUIM_W, mw) + 2 * MARGE + 8, Math.max(RUIM_H, mh) + TABS_H + 2 * MARGE + 4, guiScale);
         }
         int lw = (int) Math.floor(sw / s), lh = (int) Math.floor(sh / s);
         int w = Math.max(mw, Math.min(xw, lw - 2 * MARGE - 8));

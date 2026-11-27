@@ -87,7 +87,8 @@ neoForge {
             systemProperty 'guhs.autocheck', file(project.findProperty('autocheckScript') ?: 'tools/autocheck/autocheck.txt').absolutePath
             // (-PautocheckTimeout=60: minutes before the round gives up, default 30)
             systemProperty 'guhs.autocheck.timeoutMinutes', (project.findProperty('autocheckTimeout') ?: '30').toString()
-            programArguments.addAll '--width', '1280', '--height', '720'
+            // (1.10.24: -PautocheckWidth=1920 -PautocheckHeight=1080: another window size, e.g. to check the GUI scales of a 1080p screen)
+            programArguments.addAll '--width', (project.findProperty('autocheckWidth') ?: '1280').toString(), '--height', (project.findProperty('autocheckHeight') ?: '720').toString()
         }
 
         server {

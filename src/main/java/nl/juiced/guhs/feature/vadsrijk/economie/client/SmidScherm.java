@@ -87,6 +87,10 @@ public class SmidScherm extends EcoScherm {
     public SmidScherm(CompoundTag data, List<ItemStack> items) {
         super(EcoPayloads.SMID, Component.translatable("vadsrijk.economie.smid.titel"), data, items, 330, 232);
         kies = data.getIntOr("kies", -1);
+        ListTag gear = data.getListOrEmpty("gear");
+        if (kies < 0 && !gear.isEmpty()) {
+            kies = gear.getCompoundOrEmpty(0).getIntOr("slot", -1);   // 1.10.24: open on your first piece instead of an empty anvil
+        }
     }
 
     @Override

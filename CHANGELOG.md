@@ -3,6 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.25 — Minecraft 26.1.2
+
+- **Workshop screen re-laid out (live: "knoppen rechts onderin buiten beeld, Maak en Nu over de andere knoppen"):** `WerkplaatsScherm` (smeden, koken, ...) was a fixed 340 x 236 panel whose Maatwerk stat buttons and Meesterwerk properties grew down under the fixed Maak bar and past the bottom (and with 1.10.24's scale-up past the window edge). Now 460-560 x 260-330 logical, the recipe list as tall as the panel, the chosen recipe in a clipped box that scrolls (scroll bar), the Maak / Maak 10x bar fixed at the bottom, the timing bar and "Nu!" side by side. Narrow stat buttons show the short name (before the brackets) with the full one as a tooltip.
+- **Crisp scale-up:** `MenuIndeling.opschaal(sw, sh, needW, needH, guiScale)` picks the largest k / guiScale (whole real pixel scale), so the pixel font no longer gets uneven strokes (1.10.24 used steps of 0.05: e.g. x1.45). The menu frame scales up while it keeps at least 520 x 300 logical (`RUIM_W/H`): GUI 2 at 1080p -> x1.5. Loose `EcoScherm` screens likewise.
+- **Container screens never scale up** (`MenuIndeling.kader(..., opschalen false)`, `VadsrijkMenu.kaderVast`): JEI places its item list from the unscaled panel rectangle, so it was drawn through a scaled-up knapzak / materiaaltas.
+- The smid opens on your first piece; Karakter stat names get "…" and a gap before the number; tooltips and click areas respect a scroll clip.
+- Dev: `/guhs vadsrijk ambacht werk <ambacht> <recept>` opens the workshop on a recipe; `runAutocheckClient -PautocheckWidth/-PautocheckHeight`; script `tools/autocheck/ui_1024.txt` (workshop, smid, shop, knapzak, menu tabs at GUI 2/3/4).
+
 ## 1.10.24 — Minecraft 26.1.2
 
 - **Lantaarnlozen piling up at the top of the Schemerwortel (live: 232 of them at y ~290 above the trunk axis):** the Schorsstad spawners (ring terraces y 81-177) count their mobs only inside `Spawner.gebied()` (y min-6..max+6). The flying Lantaarnloze drifted up the hollow trunk out of that box, was no longer counted, so its spawner refilled, and nothing ever removed the stray. New 5-s sweep `Spawners.buitenBereikWeg`: every non-boss spawner mob outside its own spawner's box goes unless it is fighting (all zones). Gametest `dwalersBuitenHetVakWeg`.

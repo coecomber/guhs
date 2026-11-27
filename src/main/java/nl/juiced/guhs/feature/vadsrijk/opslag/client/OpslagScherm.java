@@ -76,7 +76,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
         }
         var win = net.minecraft.client.Minecraft.getInstance().getWindow();
         int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 18;
-        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kader(win.getGuiScaledWidth(), win.getGuiScaledHeight(), imageWidth + 2 * 80, imageHeight + boven + 8);
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kaderVast(win.getGuiScaledWidth(), win.getGuiScaledHeight(), imageWidth + 2 * 80, imageHeight + boven + 8);
         width = kader.lw();
         height = kader.lh();
         leftPos = kader.left() + (kader.w() - imageWidth) / 2;

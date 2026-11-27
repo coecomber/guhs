@@ -140,12 +140,22 @@ public final class VadsrijkMenu {
 
     /** The frame on a screen of (gui-scaled) size sw x sh (see {@link MenuIndeling#kader}). */
     public static Kader kader(int sw, int sh) {
-        return MenuIndeling.kader(sw, sh);
+        return kader(sw, sh, 0, 0);
+    }
+
+    /** 1.10.24: the window's GUI scale (for a crisp scale-up, see MenuIndeling.opschaal). */
+    public static int guiSchaal() {
+        return (int) Math.round(net.minecraft.client.Minecraft.getInstance().getWindow().getGuiScale());
     }
 
     /** The frame for a panel that needs at least minW x minH (e.g. a tall skill tree). */
     public static Kader kader(int sw, int sh, int minW, int minH) {
-        return MenuIndeling.kader(sw, sh, minW, minH);
+        return MenuIndeling.kader(sw, sh, minW, minH, true, guiSchaal());
+    }
+
+    /** 1.10.24: the same, never scaled up (container screens: JEI places its item list from the unscaled panel). */
+    public static Kader kaderVast(int sw, int sh, int minW, int minH) {
+        return MenuIndeling.kader(sw, sh, minW, minH, false, guiSchaal());
     }
 
     // ---- drawing --------------------------------------------------------------------------------------------------------------

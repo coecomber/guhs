@@ -1,0 +1,145 @@
+# 1.10.24 UI check: the workshop, the smid, a shop, the knapzak and two menu tabs at GUI scale 2, 3 and 4.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/ui_1024.txt -PautocheckWidth=1920 -PautocheckHeight=1080
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+/guhs vadsrijk munten 50000
+/guhs vadsrijk eco spul
+/guhs vadsrijk loot episch kussenzwaard 8
+/guhs vadsrijk loot legendarisch klodderhesje 10
+/guhs vadsrijk ambacht level smeden 60
+/guhs vadsrijk ambacht level koken 60
+/guhs vadsrijk ambacht geef alles
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 20
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+wait 40
+
+section GUI 2
+guiscale 2
+wait 10
+gui keep
+/guhs vadsrijk ambacht werk smeden meester_ring_t1
+wait 30
+shot ui_werk_meester_g2 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk koken
+wait 30
+shot ui_werk_koken_g2 gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 30
+shot ui_smid_g2 gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 30
+shot ui_winkel_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot ui_knapzak_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot ui_karakter_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu kledingkast
+wait 30
+shot ui_kleding_g2 gui
+gui close
+
+section GUI 3
+guiscale 3
+wait 10
+gui keep
+/guhs vadsrijk ambacht werk smeden meester_ring_t1
+wait 30
+shot ui_werk_meester_g3 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk koken
+wait 30
+shot ui_werk_koken_g3 gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 30
+shot ui_smid_g3 gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 30
+shot ui_winkel_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot ui_knapzak_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot ui_karakter_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu kledingkast
+wait 30
+shot ui_kleding_g3 gui
+gui close
+
+section GUI 4
+guiscale 4
+wait 10
+gui keep
+/guhs vadsrijk ambacht werk smeden meester_ring_t1
+wait 30
+shot ui_werk_meester_g4 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk koken
+wait 30
+shot ui_werk_koken_g4 gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 30
+shot ui_smid_g4 gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 30
+shot ui_winkel_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot ui_knapzak_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot ui_karakter_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu kledingkast
+wait 30
+shot ui_kleding_g4 gui
+gui close
+quit
