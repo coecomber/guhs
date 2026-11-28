@@ -62,10 +62,8 @@ public class WerkplaatsScherm extends EcoScherm {
     private int[] lijstVak = new int[4], detailVak = new int[4];
 
     @Override
-    protected void init() {
-        w = Math.max(460, Math.min(560, width - 16));
-        h = Math.max(260, Math.min(330, height - 20));
-        super.init();
+    protected int[] groeit() {
+        return new int[] {460, 260, 560, 330};
     }
 
     @Override

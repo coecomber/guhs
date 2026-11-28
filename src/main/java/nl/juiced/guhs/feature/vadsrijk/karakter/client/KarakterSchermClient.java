@@ -26,14 +26,17 @@ import nl.juiced.guhs.feature.vadsrijk.karakter.Modus;
  */
 public class KarakterSchermClient extends EcoScherm {
     public static final String TAB = "ridders";
-    private static final int KAART_W = 116, KAART_H = 156, MARGE = 8;
+    private static final int KAART_BASIS = 116, KAART_H = 156, MARGE = 8;
+    /** 1.10.27: the width of a card: grows with the frame (set in init), so "Maak een Knuffelridder" fits its button. */
+    private int KAART_W = KAART_BASIS;
+
     /** -1 = the overview; else the slot being created / renamed. */
     private int maakSlot = -1, naamSlot = -1;
     @Nullable
     private EditBox naamVeld;
 
     public KarakterSchermClient(CompoundTag data) {
-        super("karakter", Component.translatable("vadsrijk.karakter.scherm.titel"), data, List.of(), 3 * KAART_W + 4 * MARGE, 226);
+        super("karakter", Component.translatable("vadsrijk.karakter.scherm.titel"), data, List.of(), 3 * KAART_BASIS + 4 * MARGE, 226);
     }
 
     @Override
@@ -53,6 +56,7 @@ public class KarakterSchermClient extends EcoScherm {
     @Override
     protected void init() {
         super.init();
+        KAART_W = Math.max(KAART_BASIS, Math.min(160, (w - 4 * MARGE) / 3));   // 1.10.27
         String oud = naamVeld == null ? "" : naamVeld.getValue();
         naamVeld = new EditBox(font, left + 16, top + 44, 160, 16, Component.translatable("vadsrijk.karakter.scherm.naam"));
         naamVeld.setMaxLength(16);
@@ -135,10 +139,13 @@ public class KarakterSchermClient extends EcoScherm {
             kaart(g, mx, my, left + (w - 3 * KAART_W - 2 * MARGE) / 2 + i * (KAART_W + MARGE), kaartTop(), slots.get(i), i == actief, mag);   // V-INT: u-karakter's cards, centred (u-tabs: the menu frame can be wider)
         }
         int y = kaartTop() + KAART_H + 5;
-        if (!mag) {
-            g.centeredText(font, Component.translatable(data.getStringOr("waarom", "vadsrijk.karakter.niet.plek")), left + w / 2, y, ROOD);
-        } else if (!welkom()) {
-            g.centeredText(font, Component.translatable("vadsrijk.karakter.scherm.uitleg_kort"), left + w / 2, y, ZACHT);
+        if (!mag || !welkom()) {   // 1.10.27: wrapped to the panel (one long line ran over both edges in the smallest frame)
+            Component c = !mag ? Component.translatable(data.getStringOr("waarom", "vadsrijk.karakter.niet.plek")) : Component.translatable("vadsrijk.karakter.scherm.uitleg_kort");
+            for (var regel : font.split(c, w - 24)) {
+                g.centeredText(font, regel, left + w / 2, y, !mag ? ROOD : ZACHT);
+                y += 10;
+            }
+            y -= 10;
         }
         if (data.getBooleanOr("aankomst", false) && y + 12 + 16 <= top + h) {
             CompoundTag a = actief < slots.size() ? slots.get(actief) : new CompoundTag();

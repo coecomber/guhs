@@ -75,10 +75,18 @@ public class PremieScherm extends EcoScherm {
         g.text(font, veren, left + w - 8 - font.width(veren), top + h - 26, GOUD, false);
     }
 
+    /** 1.10.27: a centred text wrapped to the panel (one long line ran over both edges). */
+    private void midden(GuiGraphicsExtractor g, Component c, int y) {
+        for (var regel : font.split(c, w - 24)) {
+            g.centeredText(font, regel, left + w / 2, y, ZACHT);
+            y += 10;
+        }
+    }
+
     private void premies(GuiGraphicsExtractor g, int mx, int my) {
         int lv = data.getIntOr("level", 1), min = data.getIntOr("minLevel", 40);
         if (lv < min) {
-            g.centeredText(font, Component.translatable("vadsrijk.z3.systemen.premie.te_laag_lv", min), left + w / 2, top + 80, ZACHT);
+            midden(g, Component.translatable("vadsrijk.z3.systemen.premie.te_laag_lv", min), top + 80);
             return;
         }
         ListTag l = data.getListOrEmpty("premies");
@@ -121,7 +129,7 @@ public class PremieScherm extends EcoScherm {
         int lv = data.getIntOr("level", 1), min = data.getIntOr("contractLevel", 45);
         g.text(font, Component.translatable("vadsrijk.z3.systemen.bord.jacht_uitleg"), left + 8, top + 42, ZACHT, false);
         if (lv < min) {
-            g.centeredText(font, Component.translatable("vadsrijk.z3.systemen.contract.te_laag_lv", min), left + w / 2, top + 90, ZACHT);
+            midden(g, Component.translatable("vadsrijk.z3.systemen.contract.te_laag_lv", min), top + 90);
             return;
         }
         String actief = data.getStringOr("actief", "");

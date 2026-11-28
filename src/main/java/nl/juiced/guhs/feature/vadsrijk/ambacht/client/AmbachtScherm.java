@@ -67,14 +67,17 @@ public class AmbachtScherm extends EcoScherm {
         for (String t : TABS) {
             som += font.width(Component.translatable("vadsrijk.ambacht.tab." + t)) + 3;
         }
-        int pad = Math.max(4, Math.min(12, (w - 16 - som) / TABS.length));   // (all tabs always fit)
+        // (all tabs always fit. 1.10.27: at least 6, the room a button label needs: with 4 every tab ended in "…" in the smallest
+        // frame; the gap between the tabs gives way first)
+        int pad = Math.max(6, Math.min(12, (w - 16 - som) / TABS.length));
+        int tabGat = w - 16 - som - pad * TABS.length >= 0 ? 3 : 1;
         for (String t : TABS) {
             boolean nu = t.equals(tab());
             Component naam = Component.translatable("vadsrijk.ambacht.tab." + t);
             int bw = font.width(naam) + pad;
             knop(g, mx, my, tx, top + 22, bw, 14, nu ? naam.copy().withStyle(ChatFormatting.UNDERLINE) : naam, !nu,
                     () -> open(t, data.getStringOr("ambacht", "verzamelen"), ""));
-            tx += bw + 3;
+            tx += bw + tabGat;
         }
         switch (tab()) {
             case "recepten" -> recepten(g, mx, my);

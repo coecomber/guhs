@@ -96,16 +96,37 @@ public class BoekScherm extends EcoScherm {
         }
         // ---- zone bookmarks (U-TABS: a row of equal tabs under the title band; they ran off the left edge in the band) ------
         int rij = top + 21, gat = 3, n = zl.size();
-        int bwElk = Math.max(24, (w - 12 - gat * (n - 1)) / n);
+        // 1.10.27: the tabs are as wide as their names need (they were equal and cut the names mid-word): the open zone keeps its
+        // whole name, the others share the rest in proportion and end in "…" when they are still too long
+        int ruimte = w - 12 - gat * (n - 1), som = 0, gekozenB = 0;
+        int[] breed = new int[n];
+        for (int i = 0; i < n; i++) {
+            breed[i] = font.width(Component.translatable(zl.getCompoundOrEmpty(i).getStringOr("naam", ""))) + 8;
+            som += breed[i];
+            if (i == zone) {
+                gekozenB = Math.min(breed[i], ruimte / 2);
+            }
+        }
+        if (som > ruimte) {
+            int rest = Math.max(1, som - breed[Math.min(zone, n - 1)]), over = ruimte - gekozenB;
+            for (int i = 0; i < n; i++) {
+                breed[i] = i == zone ? gekozenB : Math.max(20, breed[i] * over / rest);
+            }
+        } else {
+            for (int i = 0; i < n; i++) {
+                breed[i] += (ruimte - som) / n;
+            }
+        }
         int bx = left + 6;
         for (int i = 0; i < n; i++) {
             CompoundTag zt = zl.getCompoundOrEmpty(i);
             Component naam = Component.translatable(zt.getStringOr("naam", ""));
+            int bwElk = breed[i];
             boolean sel = i == zone, hover = binnen(mx, my, bx, rij, bwElk, 14);
             g.fill(bx, rij, bx + bwElk, rij + 14, sel ? 0xFFFF7FC0 : hover ? 0xFFFFB0D8 : 0xFFFFC8E4);
             int k = zt.getIntOr("k", 0), t = zt.getIntOr("t", 0), pct = t == 0 ? 100 : (int) Math.floor(k * 100.0 / t);
-            String label = font.plainSubstrByWidth(naam.getString(), bwElk - 8);
-            g.centeredText(font, Component.literal(label), bx + bwElk / 2, rij + 3, sel ? WIT : TEKST);
+            var label = nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.kort(font, naam, bwElk - 6);
+            g.text(font, label, bx + (bwElk - font.width(label)) / 2, rij + 3, sel ? WIT : TEKST, false);
             if (hover) {
                 tip(mx, my, bx, rij, bwElk, 14, List.of(naam.copy().withStyle(ChatFormatting.BOLD), Component.translatable("vadsrijk.voltooiing.verkend", k, t)
                         .append(" (" + pct + "%)").withStyle(ChatFormatting.GRAY)));
@@ -176,6 +197,8 @@ public class BoekScherm extends EcoScherm {
         // the categories
         ListTag cl = cats();
         categorie = Math.min(categorie, Math.max(0, cl.size() - 1));
+        // 1.10.27: the rows get lower when the page is short (the last categories fell off the page in the smallest frame)
+        final int RIJ = Math.max(10, Math.min(BoekScherm.RIJ, (onder - y) / Math.max(1, cl.size())));
         for (int i = 0; i < cl.size() && y + RIJ <= onder; i++) {
             CompoundTag c = cl.getCompoundOrEmpty(i);
             int ck = c.getIntOr("k", 0), ct = c.getIntOr("t", 0);
@@ -187,7 +210,7 @@ public class BoekScherm extends EcoScherm {
                 g.fill(x - 2, y, x, y + RIJ, LINT);
             }
             g.pose().pushMatrix();
-            g.pose().translate(x + 1, y + 1);
+            g.pose().translate(x + 1, y + (RIJ - 11) / 2);
             g.pose().scale(0.6875f, 0.6875f);
             g.item(icoon(c.getStringOr("icoon", "")), 0, 0);
             g.pose().popMatrix();
@@ -199,11 +222,12 @@ public class BoekScherm extends EcoScherm {
                     tip(mx, my, x - 2, y, pw + 4, RIJ, List.of(Component.translatable("vadsrijk.voltooiing.later.tip").withStyle(ChatFormatting.GRAY)));
                 }
             }
-            g.text(font, cnaam, x + 15, y + 3, vol ? GROEN : later ? ZACHT : TEKST, false);
+            int ty = y + (RIJ - 8) / 2 + 1;
+            g.text(font, cnaam, x + 15, ty, vol ? GROEN : later ? ZACHT : TEKST, false);
             String teller = ck + "/" + ct;
             int tx = x + pw - 34 - font.width(teller);
-            g.text(font, teller, tx, y + 3, vol ? GROEN : ZACHT, false);
-            balk(g, x + pw - 30, y + 5, 30, 3, ct == 0 ? 1 : ck / (float) ct, vol);
+            g.text(font, teller, tx, ty, vol ? GROEN : ZACHT, false);
+            balk(g, x + pw - 30, ty + 2, 30, 3, ct == 0 ? 1 : ck / (float) ct, vol);
             final int idx = i;
             klikvlak(x - 2, y, pw + 4, RIJ, () -> {
                 categorie = idx;

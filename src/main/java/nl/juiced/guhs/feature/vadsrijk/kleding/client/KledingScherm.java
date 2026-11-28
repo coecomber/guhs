@@ -150,12 +150,12 @@ public class KledingScherm extends EcoScherm {
         switch (tab) {
             case "harnas" -> {
                 if (!data.getBooleanOr("binnen", true)) {
-                    l.add(tekst(Component.translatable("vadsrijk.kleding.harnas.thuis")));
+                    l.addAll(tekst(Component.translatable("vadsrijk.kleding.harnas.thuis")));
                 }
                 for (EquipmentSlot s : Kledingkast.HARNAS) {
                     l.add(harnasRij(s));
                 }
-                l.add(tekst(Component.translatable("vadsrijk.kleding.harnas.uitleg")));
+                l.addAll(tekst(Component.translatable("vadsrijk.kleding.harnas.uitleg")));
             }
             case "titel" -> {
                 String nu = data.getStringOr("titel", "");
@@ -168,7 +168,7 @@ public class KledingScherm extends EcoScherm {
                     }
                 }
                 if (data.getListOrEmpty("titels").isEmpty()) {
-                    l.add(tekst(Component.translatable("vadsrijk.kleding.geen_titels")));
+                    l.addAll(tekst(Component.translatable("vadsrijk.kleding.geen_titels")));
                 }
             }
             default -> {
@@ -185,10 +185,10 @@ public class KledingScherm extends EcoScherm {
                 }));
                 boolean binnen = data.getBooleanOr("binnen", true);
                 if (!binnen) {   // Y-COSMETICA: at home: looks only
-                    l.add(tekst(Component.translatable(heeft.isEmpty() ? "vadsrijk.kleding.garderobe.leeg" : "vadsrijk.kleding.garderobe.thuis")
+                    l.addAll(tekst(Component.translatable(heeft.isEmpty() ? "vadsrijk.kleding.garderobe.leeg" : "vadsrijk.kleding.garderobe.thuis")
                             .withStyle(ChatFormatting.ITALIC)));
                 } else if (tab.equals("rug")) {
-                    l.add(tekst(Component.translatable(data.getBooleanOr("zweven", false) ? "vadsrijk.kleding.rug.zweven" : "vadsrijk.kleding.rug.nogniet")
+                    l.addAll(tekst(Component.translatable(data.getBooleanOr("zweven", false) ? "vadsrijk.kleding.rug.zweven" : "vadsrijk.kleding.rug.nogniet")
                             .withStyle(ChatFormatting.ITALIC)));
                 }
                 int poort = data.getIntOr("poort", 6);
@@ -204,15 +204,20 @@ public class KledingScherm extends EcoScherm {
                     }
                 }
                 if (verstopt) {
-                    l.add(tekst(Component.translatable("vadsrijk.kleding.garderobe.meer").withStyle(ChatFormatting.ITALIC)));
+                    l.addAll(tekst(Component.translatable("vadsrijk.kleding.garderobe.meer").withStyle(ChatFormatting.ITALIC)));
                 }
             }
         }
         return l;
     }
 
-    private Rij tekst(Component c) {
-        return (g, mx, my, x, y, bw, even) -> g.text(font, font.plainSubstrByWidth(c.getString(), bw - 6), x + 3, y + 3, ZACHT, false);
+    /** A text in the list. 1.10.27: wrapped over as many rows as it needs (it was one row, cut at the edge of the list). */
+    private List<Rij> tekst(Component c) {
+        List<Rij> l = new ArrayList<>();
+        for (var regel : font.split(c, Math.max(40, w - 198))) {   // (the list is w - 190 wide, see inhoud)
+            l.add((g, mx, my, x, y, bw, even) -> g.text(font, regel, x + 3, y + 3, ZACHT, false));
+        }
+        return l;
     }
 
     private Rij keuzeRij(Component naam, boolean aan, Runnable kies) {

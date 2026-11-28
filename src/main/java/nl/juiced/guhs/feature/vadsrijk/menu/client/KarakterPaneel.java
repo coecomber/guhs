@@ -30,8 +30,23 @@ public class KarakterPaneel extends MenuPaneel {
             g.text(font, Component.translatable("vadsrijk.menu.laden"), left + 10, top + 26, ZACHT, false);
             return;
         }
-        int kolom = (w - 24) / 3;
-        int x1 = left + 8, x2 = x1 + kolom + 4, x3 = x2 + kolom + 4, y0 = top + 24;
+        // 1.10.27: three columns sized to what they hold (they were equal thirds: the gear names were cut mid-word and the left
+        // lines ran under the gear column): the gear column fits the longest slot name of its left half (the first 5 slots) and of
+        // its right half when the frame has the room
+        int naamLinks = 0, naamRechts = 0;
+        for (int i = 0; i < MenuServer.GEAR.length; i++) {
+            int nb = font.width(Component.translatable(MenuServer.GEAR[i].key()));
+            if (i >= 5) {
+                naamRechts = Math.max(naamRechts, nb);
+            } else {
+                naamLinks = Math.max(naamLinks, nb);
+            }
+        }
+        int alles = w - 24;
+        int gearB = Math.max(alles * 30 / 100, Math.min(27 + naamLinks + 25 + naamRechts + 6, alles * 38 / 100));
+        int linksB = (alles - gearB) * 48 / 100, statsB = alles - gearB - linksB;
+        int kolom = linksB;
+        int x1 = left + 8, x2 = x1 + linksB + 4, x3 = x2 + gearB + 4, y0 = top + 24;
         // ---- left: who you are -------------------------------------------------------------------------------------------------
         int y = y0;
         kop(g, Component.literal(data.getStringOr("naam", "?")), x1, y);
@@ -49,9 +64,12 @@ public class KarakterPaneel extends MenuPaneel {
         y += 12;
         g.text(font, Component.translatable(data.getStringOr("titel", "")).withStyle(ChatFormatting.BOLD), x1, y, 0xFFD0307A, false);
         y += 11;
-        g.text(font, Component.translatable("vadsrijk.menu.karakter.klasse", Component.translatable(data.getStringOr("klasse", "")),
-                data.getIntOr("klasseLevel", 1)), x1, y, TEKST, false);
-        y += 14;
+        for (var regel : font.split(Component.translatable("vadsrijk.menu.karakter.klasse", Component.translatable(data.getStringOr("klasse", "")),
+                data.getIntOr("klasseLevel", 1)), kolom - 8)) {
+            g.text(font, regel, x1, y, TEKST, false);
+            y += 10;
+        }
+        y += 4;
         g.text(font, Component.translatable("vadsrijk.menu.karakter.klassen").withStyle(ChatFormatting.BOLD), x1, y, TEKST, false);
         y += 11;
         ListTag kl = data.getListOrEmpty("klassen");
@@ -74,10 +92,13 @@ public class KarakterPaneel extends MenuPaneel {
             }
         }
         y += 4;
-        g.text(font, Component.translatable("vadsrijk.menu.karakter.schade", String.format(Locale.ROOT, "%.1f", data.getDoubleOr("wapenSchade", 0))), x1, y, TEKST,
-                false);
         tip(mx, my, x1, y - 1, kolom - 8, 10, List.of(Component.translatable("vadsrijk.menu.karakter.schade.uitleg")));
-        y += 12;
+        for (var regel : font.split(Component.translatable("vadsrijk.menu.karakter.schade", String.format(Locale.ROOT, "%.1f", data.getDoubleOr("wapenSchade", 0))),
+                kolom - 8)) {
+            g.text(font, regel, x1, y, TEKST, false);
+            y += 10;
+        }
+        y += 2;
         munten(g, x1, y, data.getLongOr("munten", 0), false, false);
         y += 13;
         ListTag extra = data.getListOrEmpty("extra");
@@ -93,9 +114,10 @@ public class KarakterPaneel extends MenuPaneel {
         }
 
         // ---- middle: gear --------------------------------------------------------------------------------------------------------
+        kolom = gearB;
         g.fill(x2 - 2, y0 - 2, x2 + kolom, top + h - 6, 0xFFFFF4FA);
         kop(g, Component.translatable("vadsrijk.menu.karakter.uitrusting"), x2 + 2, y0);
-        int gy = y0 + 13, half = (kolom - 4) / 2;
+        int gy = y0 + 13, half = Math.min((kolom - 4) * 2 / 3, Math.max((kolom - 4) / 3, 27 + naamLinks));   // (where the right half starts)
         for (int i = 0; i < MenuServer.GEAR.length; i++) {
             Slot s = MenuServer.GEAR[i];
             boolean rechts = i >= 5;
@@ -103,7 +125,7 @@ public class KarakterPaneel extends MenuPaneel {
             ItemStack st = item(i);
             slot(g, mx, my, sx, sy, st, false);
             Component naam = Component.translatable(s.key());
-            g.text(font, font.plainSubstrByWidth(naam.getString(), half - 24), sx + 21, sy + 5, st.isEmpty() ? 0xFFB8A0B4 : ZACHT, false);
+            g.text(font, nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.kort(font, naam, (rechts ? kolom - 4 - half : half) - 24), sx + 21, sy + 5, st.isEmpty() ? 0xFFB8A0B4 : ZACHT, false);
             if (st.isEmpty()) {
                 tip(mx, my, sx, sy, 18, 18, List.of(naam.copy().withStyle(ChatFormatting.LIGHT_PURPLE),
                         Component.translatable("vadsrijk.menu.karakter.leeg").withStyle(ChatFormatting.GRAY)));
@@ -119,6 +141,7 @@ public class KarakterPaneel extends MenuPaneel {
         }
 
         // ---- right: stats --------------------------------------------------------------------------------------------------------
+        kolom = statsB;
         kop(g, Component.translatable("vadsrijk.menu.karakter.stats"), x3, y0);
         int sy = y0 + 13;
         ListTag sl = data.getListOrEmpty("stats");
@@ -136,12 +159,22 @@ public class KarakterPaneel extends MenuPaneel {
             String waarde = p ? String.format(Locale.ROOT, "%.1f%%", v) : String.format(Locale.ROOT, "%.0f", v);
             g.fill(x3 - 2, sy - 1, x3 + kolom - 4, sy + 10, i % 2 == 0 ? RIJ_A : RIJ_B);
             Component naam = Component.translatable(s.getStringOr("k", ""));
-            g.text(font, nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.kort(font, naam, kolom - 18 - font.width(waarde)), x3, sy, TEKST, false);   // 1.10.24: "…" and a gap before the number
+            // 1.10.24: "…" and a gap before the number. 1.10.27: a name that does not fit first loses its "(explanation)" (it is in
+            // the tooltip), so "Kracht" instead of "Kracht (schade van dich…"
+            int naamB = kolom - 18 - font.width(waarde);
+            Component toon = naam;
+            int haak = naam.getString().indexOf(" (");
+            if (font.width(naam) > naamB && haak > 0) {
+                toon = Component.literal(naam.getString().substring(0, haak));
+            }
+            g.text(font, nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.kort(font, toon, naamB), x3, sy, TEKST, false);
             g.text(font, waarde, x3 + kolom - 8 - font.width(waarde), sy, hoofd ? TEKST : GOUD, false);
             String uitleg = s.getStringOr("k", "") + ".uitleg";
             if (net.minecraft.locale.Language.getInstance().has(uitleg)) {
                 tip(mx, my, x3 - 2, sy - 1, kolom - 2, 11, List.of(naam.copy().withStyle(ChatFormatting.LIGHT_PURPLE),
                         Component.translatable(uitleg).withStyle(ChatFormatting.GRAY)));
+            } else if (toon != naam) {
+                tip(mx, my, x3 - 2, sy - 1, kolom - 2, 11, List.of(naam));
             }
             sy += 11;
         }

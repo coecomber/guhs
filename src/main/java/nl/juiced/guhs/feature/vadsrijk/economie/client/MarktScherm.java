@@ -30,7 +30,7 @@ public class MarktScherm extends EcoScherm {
     private EditBox zoek, prijs;
 
     public MarktScherm(CompoundTag data, List<ItemStack> items) {
-        super(EcoPayloads.MARKT, Component.translatable("vadsrijk.economie.markt.titel"), data, items, 344, 244);
+        super(EcoPayloads.MARKT, Component.translatable("vadsrijk.economie.markt.titel"), data, items, 420, 244);   // (1.10.27: 344 -> 420 wide: the tab and filter labels did not fit their buttons)
     }
 
     @Override
@@ -135,14 +135,21 @@ public class MarktScherm extends EcoScherm {
     protected void inhoud(GuiGraphicsExtractor g, int mx, int my, float pt) {
         int y = top + 22;
         String[] tabs = {"vadsrijk.economie.markt.tab.kopen", "vadsrijk.economie.markt.tab.verkopen", "vadsrijk.economie.markt.tab.mijn"};
+        // 1.10.27: tabs and the collect button as wide as their labels (fixed 72 / 100 cut "Mijn spullen (n)" and "Opbrengst ophalen",
+        // and the amount to collect was drawn over the third tab)
+        int tx = left + 8;
         for (int i = 0; i < 3; i++) {
             final int t = i;
-            knop(g, mx, my, left + 8 + i * 74, y, 72, 14, Component.translatable(tabs[i], data.getIntOr("mijn", 0)), tab != i, () -> zetTab(t));
+            Component c = Component.translatable(tabs[i], data.getIntOr("mijn", 0));
+            int bw = font.width(c) + 12;
+            knop(g, mx, my, tx, y, bw, 14, c, tab != i, () -> zetTab(t));
+            tx += bw + 2;
         }
         long op = data.getLongOr("opbrengst", 0);
-        knop(g, mx, my, left + w - 108, y, 100, 14, Component.translatable("vadsrijk.economie.markt.haalop"), op > 0, () -> doe("haalop"));
+        int hw = Math.min(left + w - 8 - tx - 4, font.width(Component.translatable("vadsrijk.economie.markt.haalop")) + 12);
+        knop(g, mx, my, left + w - 8 - hw, y, hw, 14, Component.translatable("vadsrijk.economie.markt.haalop"), op > 0, () -> doe("haalop"));
         if (op > 0) {
-            munten(g, left + w - 112, y + 3, op, true, false);
+            munten(g, left + w - 12 - hw, y + 3, op, true, false);
         }
         if (tab == 1) {
             verkopen(g, mx, my);
@@ -150,22 +157,22 @@ public class MarktScherm extends EcoScherm {
         }
         if (tab == 0) {
             int fx = left + 108;
-            knop(g, mx, my, fx, top + 40, 56, 14, Component.translatable("vadsrijk.economie.markt.f.slot." + (fSlot == 0 ? "alle" : SLOTS[fSlot])), true, () -> {
+            knop(g, mx, my, fx, top + 40, 74, 14, Component.translatable("vadsrijk.economie.markt.f.slot." + (fSlot == 0 ? "alle" : SLOTS[fSlot])), true, () -> {
                 fSlot = (fSlot + 1) % SLOTS.length;
                 scroll = 0;
             });
-            knop(g, mx, my, fx + 58, top + 40, 56, 14, fKlasse == 0 ? Component.translatable("vadsrijk.economie.markt.f.klasse")
+            knop(g, mx, my, fx + 76, top + 40, 74, 14, fKlasse == 0 ? Component.translatable("vadsrijk.economie.markt.f.klasse")
                     : Component.translatable("vadsrijk.economie.markt.f.klasse." + KLASSEN[fKlasse]), true, () -> {
                         fKlasse = (fKlasse + 1) % KLASSEN.length;
                         scroll = 0;
                     });
             Component zc = fZeld < 0 ? Component.translatable("vadsrijk.economie.markt.f.zeldzaam")
                     : Component.translatable(Zeldzaamheid.values()[fZeld].key()).withColor(Zeldzaamheid.values()[fZeld].rgb);
-            knop(g, mx, my, fx + 116, top + 40, 60, 14, zc, true, () -> {
+            knop(g, mx, my, fx + 152, top + 40, 78, 14, zc, true, () -> {
                 fZeld = fZeld + 1 >= Zeldzaamheid.values().length ? -1 : fZeld + 1;
                 scroll = 0;
             });
-            knop(g, mx, my, fx + 178, top + 40, 50, 14, fLevel == 0 ? Component.translatable("vadsrijk.economie.markt.f.level")
+            knop(g, mx, my, fx + 232, top + 40, 72, 14, fLevel == 0 ? Component.translatable("vadsrijk.economie.markt.f.level")
                     : Component.literal("Lv " + LEVELS[fLevel][0] + "-" + LEVELS[fLevel][1]), true, () -> {
                         fLevel = (fLevel + 1) % LEVELS.length;
                         scroll = 0;

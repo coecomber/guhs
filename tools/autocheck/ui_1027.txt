@@ -1,0 +1,347 @@
+# 1.10.27 UI check: every Vadsrijk-menu tab and the loose screens (workshop, smid, shops, stal, juwelier, premiebord) at GUI scale 2
+# and 4, a few at 3; the Huisdieren tab with pets on two pages (opens on the page of the pet that walks along, then page 1 and 2).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/ui_1027.txt -PautocheckWidth=1920 -PautocheckHeight=1080
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+# pets on both pages (each gives a "Nieuw huisdier!" card: the waits below let them pass before the first shot)
+/guhs vadsrijk huisdier geef klodderreus
+/guhs vadsrijk huisdier geef koning_klodder
+/guhs vadsrijk huisdier geef galmwolf
+/guhs vadsrijk huisdier geef zoempje
+/guhs vadsrijk huisdier geef vahoegje
+/guhs vadsrijk huisdier geef lokpopje
+/guhs vadsrijk huisdier geef warmpje
+/guhs vadsrijk huisdier kies lokpopje
+/guhs vadsrijk mount alle
+/guhs vadsrijk munten 50000
+/guhs vadsrijk eco spul
+/guhs vadsrijk loot episch kussenzwaard 8
+/guhs vadsrijk loot legendarisch klodderhesje 10
+/guhs vadsrijk ambacht level smeden 60
+/guhs vadsrijk ambacht level koken 60
+/guhs vadsrijk ambacht geef alles
+wait 20
+/tp @e[type=item,distance=..8] @s
+wait 20
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+wait 600
+
+section GUI 2
+guiscale 2
+wait 10
+gui keep
+/guhs vadsrijk menu huisdieren
+wait 30
+shot ui_huisdieren_open_g2 gui
+scroll 250 150 1
+scroll 250 150 1
+wait 5
+shot ui_huisdieren_p1_g2 gui
+scroll 250 150 -1
+wait 5
+shot ui_huisdieren_p2_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot ui_karakter_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu skillboom
+wait 30
+shot ui_skillboom_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu questlog
+wait 30
+shot ui_questlog_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu voltooiing
+wait 30
+shot ui_voltooiing_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu rijdieren
+wait 30
+shot ui_rijdieren_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu zeilbootje
+wait 30
+shot ui_zeilbootje_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu kledingkast
+wait 30
+shot ui_kledingkast_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot ui_knapzak_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+shot ui_materiaaltas_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu ambachten
+wait 30
+shot ui_ambachten_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu puzzels
+wait 30
+shot ui_puzzels_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu ridders
+wait 30
+shot ui_ridders_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu reiskaart
+wait 30
+shot ui_reiskaart_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu bazen
+wait 30
+shot ui_bazen_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu instellingen
+wait 30
+shot ui_instellingen_g2 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk smeden meester_ring_t1
+wait 30
+shot ui_werk_meester_g2 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk koken
+wait 30
+shot ui_werk_koken_g2 gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 30
+shot ui_smid_g2 gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 30
+shot ui_winkel_g2 gui
+gui close
+gui keep
+/guhs vadsrijk eco markt
+wait 30
+shot ui_markt_g2 gui
+gui close
+gui keep
+/guhs vadsrijk eco stal
+wait 30
+shot ui_stal_g2 gui
+gui close
+gui keep
+/guhs vadsrijk z2systemen juwelier
+wait 30
+shot ui_juwelier_g2 gui
+gui close
+gui keep
+/guhs vadsrijk z3systemen bord
+wait 30
+shot ui_bord_g2 gui
+gui close
+
+section GUI 4
+guiscale 4
+wait 10
+gui keep
+/guhs vadsrijk menu huisdieren
+wait 30
+shot ui_huisdieren_open_g4 gui
+scroll 250 150 1
+scroll 250 150 1
+wait 5
+shot ui_huisdieren_p1_g4 gui
+scroll 250 150 -1
+wait 5
+shot ui_huisdieren_p2_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot ui_karakter_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu skillboom
+wait 30
+shot ui_skillboom_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu questlog
+wait 30
+shot ui_questlog_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu voltooiing
+wait 30
+shot ui_voltooiing_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu rijdieren
+wait 30
+shot ui_rijdieren_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu zeilbootje
+wait 30
+shot ui_zeilbootje_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu kledingkast
+wait 30
+shot ui_kledingkast_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot ui_knapzak_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+shot ui_materiaaltas_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu ambachten
+wait 30
+shot ui_ambachten_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu puzzels
+wait 30
+shot ui_puzzels_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu ridders
+wait 30
+shot ui_ridders_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu reiskaart
+wait 30
+shot ui_reiskaart_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu bazen
+wait 30
+shot ui_bazen_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu instellingen
+wait 30
+shot ui_instellingen_g4 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk smeden meester_ring_t1
+wait 30
+shot ui_werk_meester_g4 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk koken
+wait 30
+shot ui_werk_koken_g4 gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 30
+shot ui_smid_g4 gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 30
+shot ui_winkel_g4 gui
+gui close
+gui keep
+/guhs vadsrijk eco markt
+wait 30
+shot ui_markt_g4 gui
+gui close
+gui keep
+/guhs vadsrijk eco stal
+wait 30
+shot ui_stal_g4 gui
+gui close
+gui keep
+/guhs vadsrijk z2systemen juwelier
+wait 30
+shot ui_juwelier_g4 gui
+gui close
+gui keep
+/guhs vadsrijk z3systemen bord
+wait 30
+shot ui_bord_g4 gui
+gui close
+
+section GUI 3
+guiscale 3
+wait 10
+gui keep
+/guhs vadsrijk menu huisdieren
+wait 30
+shot ui_huisdieren_open_g3 gui
+scroll 250 150 1
+scroll 250 150 1
+wait 5
+shot ui_huisdieren_p1_g3 gui
+scroll 250 150 -1
+wait 5
+shot ui_huisdieren_p2_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot ui_karakter_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu rijdieren
+wait 30
+shot ui_rijdieren_g3 gui
+gui close
+gui keep
+/guhs vadsrijk ambacht werk smeden meester_ring_t1
+wait 30
+shot ui_werk_meester_g3 gui
+gui close
+gui keep
+/guhs vadsrijk eco smid
+wait 30
+shot ui_smid_g3 gui
+gui close
+gui keep
+/guhs vadsrijk eco winkel algemeen
+wait 30
+shot ui_winkel_g3 gui
+gui close
+gui keep
+/guhs vadsrijk z2systemen juwelier
+wait 30
+shot ui_juwelier_g3 gui
+gui close
+quit
