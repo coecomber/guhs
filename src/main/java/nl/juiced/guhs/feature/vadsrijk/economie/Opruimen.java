@@ -122,9 +122,9 @@ public final class Opruimen {
         return false;
     }
 
-    /** Worth a confirmation before salvaging: blue and up, stars, or a crystal in a socket. */
+    /** Worth a confirmation before salvaging: purple and up (1.10.27: was blue and up), stars, or a crystal in a socket. */
     public static boolean kostbaar(Uitrusting u) {
-        return u.zeldzaamheid().ordinal() >= Zeldzaamheid.ZELDZAAM.ordinal() || u.sterren() > 0 || heeftKristal(u);
+        return u.zeldzaamheid().ordinal() >= Zeldzaamheid.EPISCH.ordinal() || u.sterren() > 0 || heeftKristal(u);
     }
 
     // =====================================================================================================================

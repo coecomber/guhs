@@ -72,9 +72,10 @@ public class VadsrijkOpruimenGameTests {
         helper.assertTrue(Opruimen.aantal(kaal("kussenzwaard", 40, Zeldzaamheid.ONGEWOON)) == 3, "green lv40: 1 + 2");
         helper.assertTrue(Opruimen.aantal(kaal("kussenzwaard", 50, Zeldzaamheid.EPISCH)) == 4, "purple lv50: 2 + 2");
         helper.assertTrue(Opruimen.aantal(kaal("kussenzwaard", 10, Zeldzaamheid.ZELDZAAM).metSterren(5)) == 3, "stars: + 1 per 2");
-        // blue+ and starred pieces ask first; grey/green not
+        // purple+ and starred pieces ask first; grey/green/blue not (1.10.27: blue no longer asks)
         helper.assertFalse(Opruimen.kostbaar(kaal("kussenzwaard", 5, Zeldzaamheid.ONGEWOON)), "green: no confirm");
-        helper.assertTrue(Opruimen.kostbaar(kaal("kussenzwaard", 5, Zeldzaamheid.ZELDZAAM)), "blue: confirm");
+        helper.assertFalse(Opruimen.kostbaar(kaal("kussenzwaard", 5, Zeldzaamheid.ZELDZAAM)), "blue: no confirm");
+        helper.assertTrue(Opruimen.kostbaar(kaal("kussenzwaard", 5, Zeldzaamheid.EPISCH)), "purple: confirm");
         helper.assertTrue(Opruimen.kostbaar(kaal("kussenzwaard", 5, Zeldzaamheid.GEWOON).metSterren(1)), "stars: confirm");
         // through a real bag: grey gives stofjes, a blue piece only after the confirm
         ServerPlayer p = leeg(helper);
@@ -83,10 +84,13 @@ public class VadsrijkOpruimenGameTests {
         helper.assertTrue(r[0].equals(Opruimen.K + "ontmanteld") && p.getInventory().getItem(3).isEmpty(), "grey salvaged: " + r[0]);
         helper.assertTrue(p.getInventory().countItem(EcoSpul.SMEEDSTOFJE.get()) == 2, "2 stofjes");
         p.getInventory().setItem(4, stack(kaal("kussenzwaard", 1, Zeldzaamheid.ZELDZAAM)));
+        helper.assertTrue(Opruimen.ontmantel(p, 4, false)[0].equals(Opruimen.K + "ontmanteld") && p.getInventory().countItem(EcoSpul.SMEEDKRISTAL.get()) == 1,
+                "blue salvaged without a confirm");
+        p.getInventory().setItem(4, stack(kaal("kussenzwaard", 1, Zeldzaamheid.EPISCH)));
         helper.assertTrue(Opruimen.ontmantel(p, 4, false)[0].equals(Opruimen.K + "bevestig") && !p.getInventory().getItem(4).isEmpty(),
-                "blue waits for the confirm");
-        helper.assertTrue(Opruimen.ontmantel(p, 4, true)[0].equals(Opruimen.K + "ontmanteld") && p.getInventory().countItem(EcoSpul.SMEEDKRISTAL.get()) == 1,
-                "blue salvaged after the confirm");
+                "purple waits for the confirm");
+        helper.assertTrue(Opruimen.ontmantel(p, 4, true)[0].equals(Opruimen.K + "ontmanteld") && p.getInventory().countItem(EcoSpul.SMEEDKRISTAL.get()) == 3,
+                "purple salvaged after the confirm");
         // melting: 3 stofjes -> 1 steentje (only 2: refused, nothing taken)
         helper.assertTrue(Opruimen.omsmelt(p, "stofje_steentje")[0].equals(Opruimen.K + "te_weinig")
                 && p.getInventory().countItem(EcoSpul.SMEEDSTOFJE.get()) == 2, "not enough: nothing taken");
