@@ -63,7 +63,7 @@ public final class WereldPatch {
     /** 1.10.4: the STAMP patches ({@link WereldStempel}: a region of the map tiles, cell by cell, over several ticks). */
     public static final List<String> STEMPELS = List.of("ambachtseiland", "kamp_pad");
     /** The registry: every patch name that has a json under data/guhs/vadsrijk/patch/. Add new patches here. */
-    public static final List<String> NAMEN = java.util.stream.Stream.of(java.util.stream.Stream.of("spiegelzaal"), PORTALEN.stream(), STEMPELS.stream())
+    public static final List<String> NAMEN = java.util.stream.Stream.of(java.util.stream.Stream.of("spiegelzaal", "sterrenwacht_telescoop"), PORTALEN.stream(), STEMPELS.stream())
             .flatMap(x -> x).toList();
     /** Named groups ({@code /guhs vadsrijk patch <groep> [--echt]} runs every member). */
     public static final Map<String, List<String>> GROEPEN = Map.of("alle-portalen", PORTALEN, "ambacht", STEMPELS);

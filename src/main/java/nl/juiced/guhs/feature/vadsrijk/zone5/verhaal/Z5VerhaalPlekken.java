@@ -94,6 +94,20 @@ public final class Z5VerhaalPlekken {
     public static final BlockPos OPSTIJGPIER = wereld("opstijgpier") != null ? wereld("opstijgpier")
             : nl.juiced.guhs.feature.vadsrijk.zone4.verhaal.Z4VerhaalPlekken.POI.getOrDefault("z4_opstijgpier", new BlockPos(2512, 72, -565));
 
+    /**
+     * The dome room on top of the observatory tower of the university (the spiral stair's last landing, also the lookout). The side
+     * quest z5_s04_oog used the FOOT of the stair here ("universiteit_sterrenwacht", outside the tower door, 45 blocks below): "climb
+     * to the observatory" was done before the first step of the stair, and there was nothing to see or click.
+     */
+    public static final BlockPos STERRENWACHT = w("universiteit_sterrenwacht_top", 2772, 262, -440);
+    /**
+     * The big telescope in that room: a {@code guhs:guh_telescoop} on a pedestal (the pedestal is the block below). The city tiles
+     * never had one: on a generated world it is placed by {@code /guhs vadsrijk patch sterrenwacht_telescoop --echt} (WereldPatch,
+     * data/guhs/vadsrijk/patch/sterrenwacht_telescoop.json: the same two cells). Without it the measurement counts by standing in
+     * the room (Z5Haken.verhaal).
+     */
+    public static final BlockPos TELESCOOP = STERRENWACHT.offset(0, 1, 4);
+
     // ---- the NPCs (id -> stand spot; they snap to the nearest floor within 12 blocks, or hover) ----------------------------------
     public static final Map<String, BlockPos> NPC = new LinkedHashMap<>();
 
@@ -161,7 +175,9 @@ public final class Z5VerhaalPlekken {
 
     // ---- POIs: quest targets (radius POI_STRAAL, height POI_HOOGTE) ------------------------------------------------------------
     public static final Map<String, BlockPos> POI = new LinkedHashMap<>();
-    public static final int POI_STRAAL = 5, POI_HOOGTE = 6, VIND_STRAAL = 4, VIND_HOOGTE = 4;   // (1.10.15: 3 -> 4, the user's wish: easier to find)
+    // (telescoop fix: 5/6 -> 6/10, the shared ticker's reach (NpcPlekken.POI_STRAAL/POI_HOOGTE). Zone 5 now counts its spots alone
+    // (NpcHaken.EIGEN_POI), and no step may get harder to reach than it was while both tickers counted.)
+    public static final int POI_STRAAL = 6, POI_HOOGTE = 10, VIND_STRAAL = 4, VIND_HOOGTE = 4;   // (1.10.15: 3 -> 4, the user's wish: easier to find)
 
     static void poi(String id, BlockPos b) {
         POI.put(id, b);
@@ -183,7 +199,7 @@ public final class Z5VerhaalPlekken {
         poi("z5_pier_oost", w("luchthaven_pier_oost", 2600, 237, -424));
         poi("z5_kanselarij", w("paleis_kanselarij_bureau", 2806, 253, -535));
         // side quests
-        poi("z5_sterrenwacht", w("universiteit_sterrenwacht", 2772, 250, -440));
+        poi("z5_sterrenwacht", STERRENWACHT);   // (telescoop fix: the dome room, not the foot of the stair)
         poi("z5_spuitgat_noord", w("spuitgat_noord", 2562, 240, -495));
         poi("z5_spuitgat_zuid", w("spuitgat_zuid", 2562, 240, -545));
         for (int i = 1; i <= 4; i++) {
@@ -197,7 +213,7 @@ public final class Z5VerhaalPlekken {
         }
         poi("z5_flap", w("kathedraal_apsis", 2612, 248, -520));
         // W-BEREIK: the generated spot lies on the light pool right under the window, behind the transept balustrade (7 from the
-        // nearest walkable cell, POI_STRAAL 5): the quest spot is 4 blocks into the transept, in front of the balustrade
+        // nearest walkable cell, POI_STRAAL was 5): the quest spot is 4 blocks into the transept, in front of the balustrade
         poi("z5_roosvenster_noord", w("kathedraal_roos_noord", 2619, 248, -504).offset(0, 0, -4));
         poi("z5_roosvenster_zuid", w("kathedraal_roos_zuid", 2619, 248, -536).offset(0, 0, 4));
         poi("z5_eerste_knuffel", KATHEDRAAL_ALTAAR);

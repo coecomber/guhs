@@ -62,6 +62,8 @@ public final class Z5Haken {
     public static final String HQ01 = "z5_hq01_stad", HQ02 = "z5_hq02_verraad", HQ03 = "z5_hq03_mol", HQ04 = "z5_hq04_soep", HQ05 = "z5_hq05_logboek",
             HQ06 = "z5_hq06_verhoren", HQ07 = "z5_hq07_bewijsbord", HQ08 = "z5_hq08_wolkwaldroom", HQ09 = "z5_hq09_slaaplied", HQ10 = "z5_hq10_stormrand";
     public static final List<String> HOOFD = List.of(HQ01, HQ02, HQ03, HQ04, HQ05, HQ06, HQ07, HQ08, HQ09, HQ10);
+    /** The side quest "Het Oog meten": up to the dome room of the observatory, then a look through the big telescope. */
+    public static final String OOG = "z5_s04_oog";
 
     private Z5Haken() {
     }
@@ -70,6 +72,9 @@ public final class Z5Haken {
         Haken.VERSLAGEN.add(Z5Haken::verslagen);
         Haken.GEBIED_BETREDEN.add(Z5Haken::gebied);
         QuestMotor.KLIK_VOOR.add(Z5Haken::klikVoor);
+        // the spots of zone 5 are counted HERE only (plekken + bijPlek): the shared ticker counted them too, wider, and when it was
+        // first the moment at the spot never came (the telescope: the quest could not be finished any more)
+        NpcHaken.EIGEN_POI.add(id -> id.startsWith("z5_"));
         QuestMotor.ACTIES.put("z5_vlieg", (p, a) -> Z5Verhaal.vlieg(p));
         QuestMotor.ACTIES.put("z5_klaar", (p, a) -> Z5Verhaal.zone5Klaar(p));
         QuestMotor.ACTIES.put("z5_cliffhanger", (p, a) -> Z5Verhaal.cliffhanger(p));
@@ -284,6 +289,7 @@ public final class Z5Haken {
     /** One check of everything zone 5 does for this player (also called by the gametest). */
     static void stap(ServerPlayer p, ServerLevel sl) {
         plekken(p, sl);
+        inhalen(p, sl);
         verhaal(p, sl);
         geheimen(p, sl);
     }
@@ -304,6 +310,43 @@ public final class Z5Haken {
                 }
             }
         }
+    }
+
+    /**
+     * Spots whose moment gives something that lasts (a clue for the Speurdersboekje, an item) -> is it still missing? Before the
+     * telescoop fix the shared ticker could count such a spot first, and then the moment never came: whoever stands there again
+     * with the objective counted (or the quest handed in) but without the find, gets it now.
+     */
+    private static final Map<String, java.util.function.Predicate<ServerPlayer>> GEMIST = Map.of(
+            "z5_lessenaar", p -> !Z5Speurwerk.heeft(p, "haren"),
+            "z5_kastje", p -> !Z5Speurwerk.heeft(p, "bevelbrief") || eenmaligNog(p, "bevelbrief"),
+            "z5_logboek", p -> !Z5Speurwerk.heeft(p, "logboek"),
+            "z5_flap", p -> eenmaligNog(p, "flap"));
+
+    static void inhalen(ServerPlayer p, ServerLevel sl) {
+        for (Map.Entry<String, java.util.function.Predicate<ServerPlayer>> e : GEMIST.entrySet()) {
+            BlockPos b = Z5VerhaalPlekken.poi(e.getKey());
+            if (b != null && NpcHaken.bij(p, b, Z5VerhaalPlekken.POI_STRAAL, Z5VerhaalPlekken.POI_HOOGTE) && e.getValue().test(p) && geweest(p, e.getKey())) {
+                bijPlek(p, sl, e.getKey(), b);
+            }
+        }
+    }
+
+    /** Was this spot's objective counted for the player (in a running quest, or in one already handed in)? */
+    static boolean geweest(ServerPlayer p, String poi) {
+        for (Quest q : Quests.alle().values()) {
+            if (!q.id().startsWith("z5_")) {
+                continue;
+            }
+            for (int i = 0; i < q.doelen().size(); i++) {
+                Quest.Doel d = q.doelen().get(i);
+                if (d.type() == Quest.Doel.Type.GEBIED && d.doel().equals("poi:" + poi)
+                        && (Questlog.klaar(p, q.id()) || Questlog.actief(p, q.id()) && Questlog.doelKlaar(p, q, i))) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /** A poi objective was just reached. */
@@ -341,9 +384,12 @@ public final class Z5Haken {
                 }
             }
             case "z5_sterrenwacht" -> {
-                if (actief(p, "z5_s04_oog")) {
-                    Z5Verhaal.zeg(p, "oog.gemeten", ChatFormatting.DARK_PURPLE);
-                    NpcApi.meld(p, "z5", "oog_gemeten");
+                if (actief(p, OOG)) {
+                    if (telescoopStaat(sl)) {
+                        Z5Verhaal.zeg(p, "oog.telescoop", ChatFormatting.DARK_PURPLE);   // (the click on it measures: telescoopKlik)
+                    } else {
+                        meetOog(p);
+                    }
                 }
             }
             case "z5_flap" -> {
@@ -393,6 +439,12 @@ public final class Z5Haken {
         if (wachtOp(p, "z5:cliffhanger") && NpcHaken.bij(p, Z5VerhaalPlekken.POI.get("z5_pier_oost"), 6, 6)) {
             Z5Verhaal.cliffhanger(p);
         }
+        // s04: the measurement is a click on the big telescope (telescoopKlik). No telescope standing in the dome room (a world where
+        // the patch sterrenwacht_telescoop has not run): being up there counts, also for who was stuck on this step before the fix
+        if (wachtOp(p, "z5:oog_gemeten") && !telescoopStaat(sl)
+                && NpcHaken.bij(p, Z5VerhaalPlekken.STERRENWACHT, Z5VerhaalPlekken.POI_STRAAL, Z5VerhaalPlekken.POI_HOOGTE)) {
+            meetOog(p);
+        }
         // the Grauwe brief can be found without the quest too, once the traitor is unmasked
         if (Z5VerhaalApi.ontmaskerd(p) && eenmaligNog(p, "grauwe_brief") && NpcHaken.bij(p, Z5VerhaalPlekken.POI.get("z5_kanselarij"), 3, 3)) {
             Z5Verhaal.brief(p);
@@ -407,6 +459,55 @@ public final class Z5Haken {
                 }
                 return;
             }
+        }
+    }
+
+    // ---- the big telescope (side quest z5_s04_oog) -----------------------------------------------------------------------------------
+
+    /** Does the big telescope stand in the dome room of the observatory (in a loaded chunk)? */
+    static boolean telescoopStaat(ServerLevel sl) {
+        return sl.isLoaded(Z5VerhaalPlekken.TELESCOOP)
+                && sl.getBlockState(Z5VerhaalPlekken.TELESCOOP).getBlock() instanceof nl.juiced.guhs.feature.sterrenwacht.TelescoopBlock;
+    }
+
+    /** The measurement itself: counts "z5:oog_gemeten" (and the climb before it: you are up there). Nothing when it is not asked. */
+    static boolean meetOog(ServerPlayer p) {
+        Quest q = Quests.van(OOG);
+        if (q == null || !actief(p, OOG) || doelKlaar(p, OOG, 1)) {
+            return false;
+        }
+        Quest.Doel klim = q.doelen().get(0);
+        Questlog.tel(p, klim.type(), d -> d == klim, 1);
+        Z5Verhaal.zeg(p, "oog.gemeten", ChatFormatting.DARK_PURPLE);
+        p.level().playSound(null, p.blockPosition(), SoundEvents.SPYGLASS_USE, SoundSource.PLAYERS, 1f, 1f);
+        NpcApi.meld(p, "z5", "oog_gemeten");
+        return true;
+    }
+
+    /**
+     * A right-click on the big telescope: the measurement while the quest asks for it, else just a look. True = this was the big
+     * telescope (the click is ours: no star gazing minigame of the Guh-Sterrenwacht here).
+     */
+    static boolean telescoopKlik(ServerPlayer p, ServerLevel sl, BlockPos pos) {
+        if (!pos.equals(Z5VerhaalPlekken.TELESCOOP) || !telescoopStaat(sl)) {
+            return false;
+        }
+        if (!meetOog(p)) {
+            Z5Verhaal.zeg(p, "oog.kijk", ChatFormatting.DARK_PURPLE);
+        }
+        return true;
+    }
+
+    /** (PlayerInteractEvent.RightClickBlock, server side) */
+    static void telescoopKlik(net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock e) {
+        if (!(e.getEntity() instanceof ServerPlayer p) || !(p.level() instanceof ServerLevel sl) || !Vadsrijk.in(sl)
+                || !e.getPos().equals(Z5VerhaalPlekken.TELESCOOP) || !telescoopStaat(sl)) {
+            return;
+        }
+        e.setCanceled(true);
+        e.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+        if (e.getHand() == net.minecraft.world.InteractionHand.MAIN_HAND && !p.isSpectator()) {
+            telescoopKlik(p, sl, e.getPos());
         }
     }
 
