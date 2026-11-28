@@ -34,6 +34,7 @@ import nl.juiced.guhs.feature.vadsrijk.zone2.systemen.Kristallen;
  *   <li>{@code knapzak [tab]}, {@code tas}, {@code bank}: open (bank here = as if at a banker);</li>
  *   <li>{@code stand}: what is in your knapzak / bank / bag;</li>
  *   <li>{@code knapzak ontgrendel <bron>}, {@code knapzak reset}, {@code bank tabs <0-4>}: unlocks;</li>
+ *   <li>{@code knapzak proef}: sample stacks (big ones too) into the free slots of tab 1;</li>
  *   <li>U-OPSLAGVIP: {@code vipgrap [reset|stand]} (the VIP joke), {@code prijzen [sleutel waarde]} (the price curve),
  *   {@code knapzak gekocht <n>};</li>
  *   <li>{@code strooi}: drops materials around you (auto-pickup test); {@code materiaal <n>}: n Verbetersteentjes into the bag;</li>
@@ -64,6 +65,27 @@ public final class OpslagCommando {
                     zeg(c, "knapzak: " + Knapzak.tabs(p) + " tabs" + (nieuw ? "" : " (die bron telde al)"));
                     return 1;
                 })))
+                .then(Commands.literal("proef").executes(c -> {   // Knapzak-groter: sample stacks (big, small, gear) into the free slots of tab 1
+                    ServerPlayer p = speler(c);
+                    Vak v = Knapzak.zak(p).tab(0);
+                    net.minecraft.world.item.ItemStack[] proef = {
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.COOKIE, 64 * Knapzak.STAPEL_FACTOR),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.BREAD, 418),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.ENDER_PEARL, 16 * Knapzak.STAPEL_FACTOR),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.APPLE, 100),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.GOLDEN_CARROT, 64),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.HONEY_BOTTLE, 111),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.IRON_SWORD),
+                            new net.minecraft.world.item.ItemStack(net.minecraft.world.item.Items.CAKE)};
+                    int n = 0;
+                    for (int i = 0; i < v.getContainerSize() && n < proef.length; i++) {
+                        if (v.getItem(i).isEmpty()) {
+                            v.setItem(i, proef[n++]);
+                        }
+                    }
+                    zeg(c, "knapzak: " + n + " proefstapels in vak 1");
+                    return 1;
+                }))
                 .then(Commands.literal("reset").executes(c -> {
                     ServerPlayer p = speler(c);
                     OpslagData.Zak z = Knapzak.zak(p);

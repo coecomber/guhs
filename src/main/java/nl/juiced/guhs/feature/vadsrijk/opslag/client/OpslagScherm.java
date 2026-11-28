@@ -22,12 +22,14 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.opslag.OpslagMenu;
 
 /**
- * T-OPSLAG: the knapzak / bank screen: the familiar chest look, tab flaps above it (1..5; a locked one shows how to unlock it,
+ * T-OPSLAG: the knapzak / bank screen: the familiar chest look, tab flaps above it (1..7; a locked one shows how to unlock it,
  * a buyable one asks for a second click), and three buttons to the right: Sorteren, Materialen naar de tas, Materiaaltas.
  */
 public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: in the Vadsrijk-menu (knapzak only)
     private static final Identifier ACHTERGROND = Identifier.withDefaultNamespace("textures/gui/container/generic_54.png");
-    private static final int FLAP_B = 26, FLAP_H = 15, FLAP_STAP = 28;
+    private static final int FLAP_H = 15;
+    /** Knapzak-groter: the flaps share the panel's width (5 tabs: 26 wide, a step of 28, as before; the knapzak's 7: 22 / 24). */
+    private final int flapB, flapStap;
     private static final int TAB_AAN = 0xFFC6C6C6, TAB_UIT = 0xFF8B8B8B, TAB_DICHT = 0xFF5A4A55, RAND = 0xFF373737, ROZE = 0xFFFF7FC0;
     private long bevestigTot;
     /** U-OPSLAGVIP: the "WORD GUH VIP++" joke on top of this screen (null = not running). */
@@ -37,6 +39,8 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
     public OpslagScherm(OpslagMenu menu, Inventory inv, Component title) {
         super(menu, inv, title, 176, 114 + menu.rijen * 18);
         this.inventoryLabelY = this.imageHeight - 94;
+        this.flapStap = Math.min(28, (this.imageWidth - 6) / Math.max(1, menu.maxTabs));
+        this.flapB = flapStap - 2;
     }
 
     @Override
@@ -137,10 +141,10 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
             int fx = flapX(i), fy = topPos - FLAP_H + 2;
             boolean actief = i == menu.huidigeTab(), open = i < menu.openTabs();
             int kleur = actief ? TAB_AAN : open ? TAB_UIT : binnenkort(i) ? 0xFF4A4448 : TAB_DICHT;   // U-OPSLAGVIP: greyed "Binnenkort!"
-            g.fill(fx - 1, fy - 1, fx + FLAP_B + 1, fy + FLAP_H + (actief ? 2 : 0), RAND);
-            g.fill(fx, fy, fx + FLAP_B, fy + FLAP_H + (actief ? 2 : 0), kleur);
+            g.fill(fx - 1, fy - 1, fx + flapB + 1, fy + FLAP_H + (actief ? 2 : 0), RAND);
+            g.fill(fx, fy, fx + flapB, fy + FLAP_H + (actief ? 2 : 0), kleur);
             if (actief) {
-                g.fill(fx, fy, fx + FLAP_B, fy + 2, ROZE);
+                g.fill(fx, fy, fx + flapB, fy + 2, ROZE);
             }
         }
         g.blit(RenderPipelines.GUI_TEXTURED, ACHTERGROND, x, y, 0, 0, imageWidth, rijen * 18 + 17, 256, 256);
@@ -149,19 +153,38 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
             int fx = flapX(i), fy = topPos - FLAP_H + 2;
             boolean open = i < menu.openTabs();
             if (binnenkort(i)) {   // U-OPSLAGVIP: a little lock instead of "?"
-                slotje(g, fx + FLAP_B / 2, fy + 2, 0xFF9A9498);
-                if (isHovering(fx - leftPos, fy - topPos, FLAP_B, FLAP_H, mx, my)) {
-                    g.fill(fx, fy, fx + FLAP_B, fy + FLAP_H, 0x20FFFFFF);
+                slotje(g, fx + flapB / 2, fy + 2, 0xFF9A9498);
+                if (isHovering(fx - leftPos, fy - topPos, flapB, FLAP_H, mx, my)) {
+                    g.fill(fx, fy, fx + flapB, fy + FLAP_H, 0x20FFFFFF);
                 }
                 continue;
             }
             String s = open ? String.valueOf(i + 1) : koopbaar(i) ? "+" : "?";
             int kleur = open ? (i == menu.huidigeTab() ? 0xFF404040 : 0xFF2A2A2A) : koopbaar(i) ? 0xFFFFD86B : 0xFFB8A8B0;
-            g.text(font, s, fx + FLAP_B / 2 - font.width(s) / 2, fy + 4, kleur, false);
-            if (isHovering(fx - leftPos, fy - topPos, FLAP_B, FLAP_H, mx, my)) {
-                g.fill(fx, fy, fx + FLAP_B, fy + FLAP_H, 0x40FFFFFF);
+            g.text(font, s, fx + flapB / 2 - font.width(s) / 2, fy + 4, kleur, false);
+            if (isHovering(fx - leftPos, fy - topPos, flapB, FLAP_H, mx, my)) {
+                g.fill(fx, fy, fx + flapB, fy + FLAP_H, 0x40FFFFFF);
             }
         }
+    }
+
+    /**
+     * Knapzak-groter: a count of three digits is as wide as the slot, so two big stacks next to each other ran into one number.
+     * Counts above 99 are drawn small (the materiaaltas' size), right-aligned in the slot; everything else is vanilla.
+     */
+    @Override
+    protected void renderSlotContents(GuiGraphicsExtractor g, net.minecraft.world.item.ItemStack stack, net.minecraft.world.inventory.Slot slot,
+            @javax.annotation.Nullable String itemCount) {
+        if (itemCount != null || stack.getCount() <= 99) {
+            super.renderSlotContents(g, stack, slot, itemCount);
+            return;
+        }
+        super.renderSlotContents(g, stack, slot, "");   // (the item, its bar and cooldown, no number)
+        String n = String.valueOf(stack.getCount());
+        g.pose().pushMatrix();
+        g.pose().scale(0.66f, 0.66f);
+        g.text(font, n, (int) ((slot.x + 17 - font.width(n) * 0.66f) / 0.66f), (int) ((slot.y + 11) / 0.66f), 0xFFFFFFFF, true);
+        g.pose().popMatrix();
     }
 
     @Override
@@ -228,7 +251,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
     }
 
     private int flapX(int i) {
-        return leftPos + 4 + i * FLAP_STAP;
+        return leftPos + 4 + i * flapStap;
     }
 
     private int flapOnder(double mx, double my) {
@@ -238,7 +261,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
         }
         for (int i = 0; i < menu.maxTabs; i++) {
             int fx = flapX(i);
-            if (mx >= fx && mx < fx + FLAP_B) {
+            if (mx >= fx && mx < fx + flapB) {
                 return i;
             }
         }
@@ -326,7 +349,7 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
             onClose();
             return true;
         }
-        int nr = event.key() - org.lwjgl.glfw.GLFW.GLFW_KEY_1;   // (Ctrl+1..5: switch tab; plain 1..9 stays the vanilla hotbar swap)
+        int nr = event.key() - org.lwjgl.glfw.GLFW.GLFW_KEY_1;   // (Ctrl+1..7: switch tab; plain 1..9 stays the vanilla hotbar swap)
         if (event.hasControlDown() && nr >= 0 && nr < menu.openTabs()) {
             knop(OpslagMenu.KNOP_TAB + nr);
             return true;

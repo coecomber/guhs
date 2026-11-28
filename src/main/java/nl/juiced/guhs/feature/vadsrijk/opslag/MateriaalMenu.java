@@ -124,7 +124,7 @@ public final class MateriaalMenu extends AbstractContainerMenu {
                 }
             }
             case STOP_HAND -> stopHand(p, knop);
-            case ALLES -> Materiaaltas.allesOpbergen(p, data);
+            case ALLES -> Materiaaltas.meldOpgeborgen(p, Materiaaltas.allesOpbergen(p, data));   // (inventory + every knapzak tab)
             case AUTO -> {
                 data.autoUit = !data.autoUit;
                 data.tasVersie++;

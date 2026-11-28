@@ -29,12 +29,12 @@ public class VadsrijkUOpslagVipGameTests {
             helper.assertTrue(Knapzak.binnenkortVanaf(p) == Knapzak.tabs(p) + 1 + 2, "binnenkort after: open + 1 buy + 2 story tabs");
             Knapzak.koop(p);
             OpslagData.Zak z = Knapzak.zak(p);
-            helper.assertTrue(z.gekochtAantal() == 1 && Knapzak.tabs(p) == 2 && Spelers.data(p).munten == start - 2500, "bought 1 knapzak tab");
+            helper.assertTrue(z.gekochtAantal() == 1 && Knapzak.tabs(p) == Knapzak.GRATIS + 1 && Spelers.data(p).munten == start - 2500, "bought 1 knapzak tab");
             helper.assertTrue(!Knapzak.koopbaar(p) && Knapzak.prijs(p) == 0, "the second knapzak tab is not for sale");
             Knapzak.koop(p);
             helper.assertTrue(z.gekochtAantal() == 1 && Spelers.data(p).munten == start - 2500, "a second buy does nothing");
             CompoundTag info = Knapzak.info(p, z);
-            helper.assertTrue(info.getLongOr("prijs", -1) == 0 && info.getIntOr("binnenkort", -1) == 4, "screen info: no price, tab 5 binnenkort");
+            helper.assertTrue(info.getLongOr("prijs", -1) == 0 && info.getIntOr("binnenkort", -1) == Knapzak.MAX_TABS - 1, "screen info: no price, the last tab binnenkort");
             // bank: the same
             helper.assertTrue(Bank.koopbaar(p) && Bank.prijs(p) == 1000 && Bank.binnenkortVanaf(p) == 2, "first bank tab for sale at 1000");
             Bank.koop(p, p.position());

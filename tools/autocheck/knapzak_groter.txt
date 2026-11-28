@@ -1,0 +1,50 @@
+# Knapzak-groter: the knapzak with 7 tab flaps and big stacks (640 / 418 / 160 / 100 / 111 in a slot) at GUI scale 2, 3 and 4.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/knapzak_groter.txt -PautocheckWidth=1920 -PautocheckHeight=1080
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+/guhs vadsrijk munten 50000
+wait 20
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+wait 200
+/guhs vadsrijk opslag knapzak proef
+/guhs vadsrijk opslag knapzak ontgrendel proef_a
+wait 10
+
+section GUI 2
+guiscale 2
+wait 10
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot knapzak_groter_g2 gui
+gui close
+
+section GUI 3
+guiscale 3
+wait 10
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot knapzak_groter_g3 gui
+gui close
+
+section GUI 4
+guiscale 4
+wait 10
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+shot knapzak_groter_g4 gui
+gui close
+quit

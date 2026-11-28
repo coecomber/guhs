@@ -18,7 +18,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Tips;
 /**
  * T-OPSLAG: the Knapzak (VOORSTEL_ROADMAP §6.2, R5 "virtueel"): extra inventory tabs, PER CHARACTER, opened anywhere in the
  * Vadsrijk with I (key {@code key.guhs.vr_knapzak}) or {@code /guhs vadsrijk opslag knapzak}.
- * Tab 1 (27 slots) is free; every unlock source gives one more tab, up to {@link #MAX_TABS}:
+ * The first {@link #GRATIS} tabs (27 slots each) are free; every unlock source gives one more tab, up to {@link #MAX_TABS}:
  * <ol>
  *   <li>the zone-1 story done ({@code zone1_klaar});</li>
  *   <li>the zone-2 story done ({@code zone2_klaar});</li>
@@ -29,7 +29,17 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Tips;
  * </ol>
  */
 public final class Knapzak {
-    public static final int VAKKEN = 27, MAX_TABS = 5;
+    /**
+     * Knapzak-groter: two more tabs (5 -> 7), free for everyone ({@link #GRATIS} 1 -> 3: unlocks only COUNT, so every tab a
+     * character already had keeps its index and its contents and the two new ones come after them, empty).
+     */
+    public static final int VAKKEN = 27, MAX_TABS = 7, GRATIS = 3;
+    /**
+     * Knapzak-groter: one slot holds this many normal stacks of a thing (64 -> 640; see {@link Vak#plafond}). The cursor and
+     * the inventory never hold more than a normal stack ({@link OpslagMenu}); the save splits a big stack into normal ones
+     * ({@link OpslagData}).
+     */
+    public static final int STAPEL_FACTOR = 10;
     /** U-OPSLAGVIP: the price of the NEXT bought tab for this character (0 = none can be bought now). */
     public static long prijs(ServerPlayer p) {
         return koopbaar(p) ? OpslagBalans.knapzakPrijs(zak(p).gekochtAantal()) : 0;
@@ -69,10 +79,10 @@ public final class Knapzak {
         return Opslag.data(p).zak(Opslag.KARAKTER.apply(p));
     }
 
-    /** How many tabs this character has open (1..MAX_TABS). */
+    /** How many tabs this character has open (GRATIS..MAX_TABS). */
     public static int tabs(ServerPlayer p) {
         OpslagData.Zak z = zak(p);
-        int n = 1 + z.gekochtAantal() + z.bronnen.size();
+        int n = GRATIS + z.gekochtAantal() + z.bronnen.size();
         for (Bron b : BRONNEN) {
             if (!z.bronnen.contains(b.id()) && b.heeft().test(p)) {
                 n++;
