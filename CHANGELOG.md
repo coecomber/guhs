@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.33 — Minecraft 26.1.2
+
+- **Skillboom in the common menu frame (owner: "hij verspringt bij die pagina's"):** `BoomScherm` asked for its own 400 x 423 minimum, which defeated the scale-up; it now takes `MenuClient.kader()` like every other tab. New `klassen/boom/BoomIndeling` (geometry): the tree column is a scissor-clipped view that scrolls by wheel, by dragging the tree or the scroll bar; rows 34-38 px apart; badges beside the tree when there is room; a node is clicked on release and only without a drag; the Done button sits in the title band.
+- **Boss cores and kernsplinters (owner, after Luc's "ik krijg ze niet"):** a boss gives its zone's core 25 % of the time (was 15 %) and for certain the first time a player defeats that boss (`AmbachtData "kern_bazen"`; bosses defeated before this version count as new once); a boss kill without a core always gives one kernsplinter; elites give a splinter 10 % of the time (was 3 %). `AmbachtRegistry.KERN_KANS` / `SPLINTER_KANS` / `buit`.
+
 ## 1.10.32 — Minecraft 26.1.2
 
 - **Knapzak: 6 rows per vak (owner: "meer rijen, niet grotere stapels"):** `Knapzak.RIJEN = 6`, 54 slots per vak (was 27); the 640 stacks, 7 vakken and 3 free stay. Slot addressing in the save is per tab, so slots 0..26 keep their index and rows 4-6 start empty (a 1.10.31 reader keeps 27..53 in `onleesbaar`). Bank unchanged.
