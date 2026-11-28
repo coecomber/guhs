@@ -742,6 +742,41 @@ public final class AutoCheck {
                     }
                     return true;
                 };
+            case "rclick":
+                // rclick <guiX> <guiY> [button] [shift]: a REAL click: the cursor moves there and the press + release go through the
+                // game's own mouse handler (NeoForge's screen events and every mod's listeners included: the Vadsrijk-menu's scaling,
+                // JEI). x/y = gui pixels of the window (not a scaled screen's logical ones). "click" calls the screen directly.
+                return mc2 -> {
+                    double s = mc2.getWindow().getGuiScale();
+                    setCursor(mc2, Double.parseDouble(a[1]) * s, Double.parseDouble(a[2]) * s);
+                    int b = a.length > 3 ? Integer.parseInt(a[3]) : 0;
+                    int mods = a.length > 4 && a[4].equalsIgnoreCase("shift") ? org.lwjgl.glfw.GLFW.GLFW_MOD_SHIFT : 0;
+                    try {
+                        var m = net.minecraft.client.MouseHandler.class.getDeclaredMethod("onButton", long.class,
+                                net.minecraft.client.input.MouseButtonInfo.class, int.class);
+                        m.setAccessible(true);
+                        var info = new net.minecraft.client.input.MouseButtonInfo(b, mods);
+                        m.invoke(mc2.mouseHandler, mc2.getWindow().handle(), info, 1);
+                        m.invoke(mc2.mouseHandler, mc2.getWindow().handle(), info, 0);
+                    } catch (ReflectiveOperationException | RuntimeException e) {
+                        problem("rclick: " + e + (e.getCause() != null ? " / " + e.getCause() : ""));
+                    }
+                    return true;
+                };
+            case "rscroll":
+                // rscroll <guiX> <guiY> <amount>: a REAL mouse wheel step there (through the game's mouse handler, like rclick)
+                return mc2 -> {
+                    double s = mc2.getWindow().getGuiScale();
+                    setCursor(mc2, Double.parseDouble(a[1]) * s, Double.parseDouble(a[2]) * s);
+                    try {
+                        var m = net.minecraft.client.MouseHandler.class.getDeclaredMethod("onScroll", long.class, double.class, double.class);
+                        m.setAccessible(true);
+                        m.invoke(mc2.mouseHandler, mc2.getWindow().handle(), 0.0, Double.parseDouble(a[3]));
+                    } catch (ReflectiveOperationException | RuntimeException e) {
+                        problem("rscroll: " + e + (e.getCause() != null ? " / " + e.getCause() : ""));
+                    }
+                    return true;
+                };
             case "drag":
                 // drag <x1> <y1> <x2> <y2>: press, drag and release on the open screen (e.g. turning a 3D preview)
                 return mc2 -> {

@@ -1,0 +1,162 @@
+# Knapzak-klik: REAL mouse clicks (rclick / rscroll: through the game's mouse handler, so with the Vadsrijk-menu's scaling and JEI)
+# in the materiaaltas and the knapzak at 1920x1080, GUI 2 (the menu is drawn at x1.5) and GUI 3 (x1), and on JEI's list at GUI 2.
+# Coordinates: the panel's logical place (left 232, top 101; slots 248 + 18c, 127 + 18r; the materiaaltas: top 100, grid at
+# 136 + 18r, inventory rows at 238 + 18r) times the scale. (No /give: the Vadsrijk inventory does not take it.)
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/knapzak_klik.txt -PautocheckWidth=1920 -PautocheckHeight=1080
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+wait 200
+/guhs vadsrijk opslag knapzak proef
+/guhs vadsrijk opslag materiaal 50
+wait 10
+
+section GUI 2
+guiscale 2
+wait 10
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+mouse 372.0 204.0
+wait 12
+shot klik_g2_01_tas_hover gui
+rclick 372.0 204.0
+wait 8
+mouse 480.0 270.0
+wait 12
+shot klik_g2_02_tas_oppakken gui
+rclick 480.0 384.0
+wait 12
+shot klik_g2_03_tas_neerleggen gui
+gui close
+wait 5
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+mouse 372.0 190.5
+wait 12
+shot klik_g2_04_hover gui
+rclick 480.0 190.5
+wait 8
+mouse 480.0 271.5
+wait 12
+shot klik_g2_05_oppakken gui
+rclick 588.0 325.5
+wait 12
+shot klik_g2_06_neerleggen_rij6 gui
+rclick 372.0 190.5 1
+wait 8
+mouse 480.0 271.5
+wait 12
+shot klik_g2_07_rechtsklik_640 gui
+rclick 372.0 325.5
+wait 12
+shot klik_g2_08_neerleggen gui
+rclick 561.0 190.5 0 shift
+wait 12
+shot klik_g2_09_shift_eruit gui
+rclick 588.0 445.5 0 shift
+wait 12
+shot klik_g2_10_shift_erin gui
+rclick 406.5 142.5
+wait 12
+shot klik_g2_11_vak2 gui
+rclick 370.5 142.5
+wait 12
+shot klik_g2_12_vak1 gui
+rclick 666.0 198.0
+wait 8
+mouse 480.0 271.5
+wait 12
+shot klik_g2_13_alles_naar_tas gui
+mouse 891 164
+wait 12
+shot klik_g2_14_jei_voor gui
+rscroll 891 164 -1
+wait 12
+shot klik_g2_15_jei_wiel gui
+rclick 891 164
+wait 12
+shot klik_g2_16_jei_klik gui
+gui close
+wait 10
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+mouse 480.0 271.5
+wait 12
+shot klik_g2_17_na_jei gui
+gui close
+
+section GUI 3
+guiscale 3
+wait 10
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+mouse 248.0 136.0
+wait 12
+shot klik_g3_01_tas_hover gui
+rclick 248.0 136.0
+wait 8
+mouse 320.0 180.0
+wait 12
+shot klik_g3_02_tas_oppakken gui
+rclick 320.0 256.0
+wait 12
+shot klik_g3_03_tas_neerleggen gui
+gui close
+wait 5
+gui keep
+/guhs vadsrijk menu knapzak
+wait 30
+mouse 248.0 127.0
+wait 12
+shot klik_g3_04_hover gui
+rclick 356.0 127.0
+wait 8
+mouse 320.0 181.0
+wait 12
+shot klik_g3_05_oppakken gui
+rclick 374.0 217.0
+wait 12
+shot klik_g3_06_neerleggen_rij6 gui
+rclick 248.0 127.0 1
+wait 8
+mouse 320.0 181.0
+wait 12
+shot klik_g3_07_rechtsklik_640 gui
+rclick 266.0 217.0
+wait 12
+shot klik_g3_08_neerleggen gui
+rclick 320.0 127.0 0 shift
+wait 12
+shot klik_g3_09_shift_eruit gui
+rclick 392.0 297.0 0 shift
+wait 12
+shot klik_g3_10_shift_erin gui
+rclick 271.0 95.0
+wait 12
+shot klik_g3_11_vak2 gui
+rclick 247.0 95.0
+wait 12
+shot klik_g3_12_vak1 gui
+rclick 444.0 132.0
+wait 8
+mouse 320.0 181.0
+wait 12
+shot klik_g3_13_alles_naar_tas gui
+gui close
+
+quit
