@@ -284,27 +284,52 @@ public final class Z5Bouw {
         }
     }
 
-    /** A player who falls off a fin or the tail fluke is caught by a cloud and put back at the lift (never a long fall into the sea). */
-    public static boolean vangnet(ServerPlayer p, ServerLevel sl) {
-        if (p.isCreative() || p.isSpectator()) {
-            return false;
-        }
+    /**
+     * May the fall net catch this player at all? Not creative/spectator, and never a passenger of a scheduled airship: line D's way
+     * down (Walvisrughaven -> Opstijgpier) passes right under the south fin at y ~96..102, inside the catch box of
+     * {@code z5_wolkrand_zuid}, so the net pulled every passenger off the ship and set them down at the Zuidvin lift: the way back
+     * to zone 4 never arrived.
+     */
+    public static boolean vangbaar(ServerPlayer p) {
+        return !p.isCreative() && !p.isSpectator()
+                && !(p.getRootVehicle() instanceof nl.juiced.guhs.feature.vadsrijk.luchtschip.LuchtschipEntity);
+    }
+
+    /** Pure rule: the lift a faller at this spot is put back at (under a fin / the tail fluke, up to 90 below its floor), or null. */
+    @javax.annotation.Nullable
+    public static BlockPos vangplek(double x, double y, double z) {
         for (Map.Entry<String, BlockPos> e : Z5WezensPlekken.VANGNET.entrySet()) {
             Gebieden.Gebied g = Z5WezensPlekken.gebied(e.getKey());
-            if (g == null || g.laag() == null || !g.bevat(p.getX(), p.getZ())) {
+            if (g == null || g.laag() == null || !g.bevat(x, z)) {
                 continue;
             }
             int bodem = g.laag().minY();
-            if (p.getY() < bodem && p.getY() > bodem - 90) {
-                BlockPos t = e.getValue();
-                p.teleportTo(sl, t.getX() + 0.5, t.getY() + 0.1, t.getZ() + 0.5, Set.of(), p.getYRot(), p.getXRot(), true);
-                p.resetFallDistance();
-                p.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0, false, false));
-                p.sendOverlayMessage(Component.translatable("vadsrijk.z5wezens.vangnet").withStyle(ChatFormatting.LIGHT_PURPLE));
-                sl.playSound(null, t, SoundEvents.WOOL_PLACE, SoundSource.PLAYERS, 1f, 0.7f);
-                return true;
+            if (y < bodem && y > bodem - 90) {
+                return e.getValue();
             }
         }
-        return false;
+        return null;
+    }
+
+    /** A player who falls off a fin or the tail fluke is caught by a cloud and put back at the lift (never a long fall into the sea). */
+    public static boolean vangnet(ServerPlayer p, ServerLevel sl) {
+        return vangnet(p, sl, p.getX(), p.getY(), p.getZ());
+    }
+
+    /** (tests: the spot is given, so the rule can be tried anywhere) */
+    static boolean vangnet(ServerPlayer p, ServerLevel sl, double x, double y, double z) {
+        if (!vangbaar(p)) {
+            return false;
+        }
+        BlockPos t = vangplek(x, y, z);
+        if (t == null) {
+            return false;
+        }
+        p.teleportTo(sl, t.getX() + 0.5, t.getY() + 0.1, t.getZ() + 0.5, Set.of(), p.getYRot(), p.getXRot(), true);
+        p.resetFallDistance();
+        p.addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 60, 0, false, false));
+        p.sendOverlayMessage(Component.translatable("vadsrijk.z5wezens.vangnet").withStyle(ChatFormatting.LIGHT_PURPLE));
+        sl.playSound(null, t, SoundEvents.WOOL_PLACE, SoundSource.PLAYERS, 1f, 0.7f);
+        return true;
     }
 }
