@@ -1,17 +1,21 @@
 package nl.juiced.guhs.feature.vadsrijk.zone3.bazen.werf;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -23,6 +27,7 @@ import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -31,11 +36,14 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Status;
 import nl.juiced.guhs.feature.vadsrijk.kern.Statussen;
 import nl.juiced.guhs.feature.vadsrijk.kern.baas.Telegraaf;
 import nl.juiced.guhs.feature.vadsrijk.kern.beleving.Beleving;
+import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
+import nl.juiced.guhs.feature.vadsrijk.vfx.Vfx;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Baas;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenPlekken;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3BazenRegistry;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Doel;
 import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Hulpje;
+import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Toegang;
 
 /**
  * Kapitein Roquefort, the last boss of the Kaaszeppelinwerf (lv 40, Vuur), on the deck of his flagship.
@@ -44,9 +52,10 @@ import nl.juiced.guhs.feature.vadsrijk.zone3.bazen.Z3Hulpje;
  *   <li>Fase 2 (66 %): the deck tilts (screen shake, everyone slides, crates slide down red lanes). Pop the 4 balloon segments
  *       (purple markers, they hang at the deck's edge: shoot them or jump): each pops = 6 % of his Vads. He can't drop below 33 %
  *       while one is left.</li>
- *   <li>Fase 3 (33 %): the zeppelin sinks: jump to the wreck next to you (pink circle) within 6 s; whoever stays on the deck takes
- *       30 % every second and slides toward the wreck. The fight goes on on the wreck. Vahoeg: a second zeppelin shells the
- *       wreck.</li>
+ *   <li>Fase 3 (33 %): the zeppelin sinks: walk to the wreck beside the deck (pink circle + a pink light pillar; its floor lies
+ *       3 below the deck, you step off the edge) within 10 s ({@link #ZINK_TICKS}; the card and a countdown stay on screen that
+ *       long). Whoever is still on the deck then takes 15 % after 1 and 2 s, 30 % every second after that, and is thrown toward
+ *       the wreck. The fight goes on on the wreck. Vahoeg: a second zeppelin shells the wreck.</li>
  *   <li>Defeat: he floats off under his umbrella in a smoke puff.</li>
  * </ul>
  */
@@ -55,6 +64,19 @@ public class Roquefort extends Z3Baas {
     private final List<Z3Doel> ballonnen = new ArrayList<>();
     private int enterCd = 60, kantelCd = 0, matroosCd = 200, salvoCd = 100, zinkT = -1;
     private boolean opWrak;
+    /** The sinking telegraph: 10 s (it was 6: from the far rail the wreck is 36 blocks away, and nobody found it in time). */
+    public static final int ZINK_TICKS = 200;
+    /** Safe in fase 3: within WRAK_VEILIG of the wreck's centre (its floor is a disc of 6.5), or on its hull rim (lower, up to WRAK_ROMP). */
+    public static final double WRAK_VEILIG = 7, WRAK_ROMP = 10;
+    /** A sinking hit: the first ZINK_ZACHT ones (1 and 2 s after the deck sank) are halved. */
+    public static final double ZINK_SCHADE = 0.3;
+    public static final int ZINK_ZACHT = 2;
+    /** The wreck's stand position (gametests move it next to their own deck). */
+    public BlockPos wrak = Z3BazenPlekken.ROQUEFORT_WRAK;
+    /** Ticks since the deck sank (the sinking hits count from here, so the first one comes a full second after it). */
+    private int wrakT;
+    /** Gametests: the sinking hits per player (the fraction asked of {@link #mech}), in order. */
+    public final Map<UUID, List<Double>> zinkHits = new HashMap<>();
     private Vec3 van = Vec3.ZERO, naar = Vec3.ZERO;
     private int enterT = -1;
     private final Set<UUID> enterGeraakt = new HashSet<>();
@@ -139,7 +161,51 @@ public class Roquefort extends Z3Baas {
 
     @Override
     public Vec3 zMidden() {
-        return opWrak ? Vec3.atBottomCenterOf(Z3BazenPlekken.ROQUEFORT_WRAK) : super.zMidden();
+        return opWrak ? wrakPlek() : super.zMidden();
+    }
+
+    private Vec3 wrakPlek() {
+        return Vec3.atBottomCenterOf(wrak);
+    }
+
+    /** Gametests: ticks left of the sinking telegraph (-1 = not sinking), and is the deck gone? */
+    public int zinkRest() {
+        return zinkT;
+    }
+
+    public boolean opWrak() {
+        return opWrak;
+    }
+
+    /**
+     * Is this spot safe once the deck has sunk? On the wreck's floor (within {@link #WRAK_VEILIG} of its centre), on its hull rim
+     * (the hull is wider than the floor and 2-3 lower: nobody can climb back from there, so it counts as "on the wreck"), or
+     * fallen far below it.
+     */
+    public boolean veiligOpWrak(Vec3 v) {
+        Vec3 w = wrakPlek();
+        double dx = v.x - w.x, dz = v.z - w.z, d2 = dx * dx + dz * dz;
+        return d2 <= WRAK_VEILIG * WRAK_VEILIG || v.y <= w.y - 12 || d2 <= WRAK_ROMP * WRAK_ROMP && v.y < w.y - 0.4;
+    }
+
+    /** From the sinking on, the whole wreck is part of the fight: a third of its floor lies outside the arena's disc round the deck. */
+    private boolean bijWrak(Player p) {
+        if (zinkT < 0 && !opWrak) {
+            return false;
+        }
+        Vec3 w = wrakPlek();
+        double dx = p.getX() - w.x, dz = p.getZ() - w.z, dy = p.getY() - w.y;
+        return dx * dx + dz * dz <= WRAK_ROMP * WRAK_ROMP && dy > -Z3BazenPlekken.KERKER_ONDER && dy < Z3BazenPlekken.KERKER_BOVEN;
+    }
+
+    @Override
+    public boolean zDoetMee(Player p) {
+        return super.zDoetMee(p) || !p.isSpectator() && p.isAlive() && bijWrak(p) && (!(p instanceof ServerPlayer sp) || Z3Toegang.mag(sp, this));
+    }
+
+    @Override
+    public boolean inGevecht(Player p) {
+        return super.inGevecht(p) || !p.isSpectator() && bijWrak(p);
     }
 
     @Override
@@ -163,15 +229,41 @@ public class Roquefort extends Z3Baas {
             spawnBallonnen(sl);
             kantelCd = 0;
         } else if (fase == 3) {
-            kaart("vadsrijk.z3bazen.rq.fase3", ROOD);
             ballonnen.forEach(b -> b.discard());
-            Vec3 w = Vec3.atBottomCenterOf(Z3BazenPlekken.ROQUEFORT_WRAK);
-            Telegraaf.cirkel(sl, w, 6, tg(120), ROZE);
-            Telegraaf.cirkel(sl, super.zMidden(), super.zStraal(), tg(120), ROOD);
-            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "zinkend_schip", tg(120));   // T-VFX: cast bar
-            zeg("vadsrijk.z3bazen.rq.zinkt", ChatFormatting.RED);
-            zinkT = tg(120);
+            int t = tg(ZINK_TICKS);
+            zinkT = t;
+            wrakT = 0;
+            zinkHits.clear();
+            Vec3 w = wrakPlek();
+            Telegraaf.cirkel(sl, w, 6, t, ROZE);
+            // red = the deck, but never over the wreck: decals follow the ground, so a circle round the whole deck also painted
+            // two thirds of the wreck's floor (and the pink circle on it) red. The biggest circle that stays clear of the wreck:
+            Vec3 m = super.zMidden(), weg = m.subtract(w).multiply(1, 0, 1);
+            double straal = super.zStraal(), ver = weg.length(), r = Math.min(straal, (ver + straal - WRAK_VEILIG - 0.5) / 2);
+            if (ver > 0.01 && r >= 3) {
+                Vec3 c = w.add(weg.normalize().scale(WRAK_VEILIG + 0.5 + r));
+                Telegraaf.cirkel(sl, new Vec3(c.x, m.y, c.z), r, t, ROOD);
+            }
+            nl.juiced.guhs.feature.vadsrijk.vfx.BaasVfx.cast(this, "zinkend_schip", t);   // T-VFX: cast bar
+            for (ServerPlayer p : sl.players()) {   // the card stays for the whole telegraph (a plain kaart is gone after 2.5 s)
+                if (zDoetMee(p)) {
+                    RijkScenes.titel(p, Component.translatable("vadsrijk.z3bazen.rq.fase3").withStyle(ChatFormatting.BOLD),
+                            Component.translatable("vadsrijk.z3bazen.rq.fase3.onder"), t, ROOD);
+                }
+            }
+            zinkMelding();
+            wrakBaken(sl);
         }
+    }
+
+    /** The instruction with the seconds left, above the hotbar (sent again every second: an overlay line fades after 3 s). */
+    private void zinkMelding() {
+        zeg("vadsrijk.z3bazen.rq.zinkt", ChatFormatting.RED, (zinkT + 19) / 20);
+    }
+
+    /** "Go here": a pink light pillar on the wreck. Sent again every 2 s (each one fades in and out, and reaches new arrivals). */
+    private void wrakBaken(ServerLevel sl) {
+        Vfx.zuil(sl, wrakPlek(), 24, ROZE, 80);
     }
 
     private void spawnBallonnen(ServerLevel sl) {
@@ -300,17 +392,26 @@ public class Roquefort extends Z3Baas {
         }
         if (zinkT >= 0) {
             zinkT--;
+            if (zinkT > 0 && zinkT % 20 == 0) {
+                zinkMelding();
+            }
             if (zinkT == 0) {
                 opWrak = true;
-                zSpring(Vec3.atBottomCenterOf(Z3BazenPlekken.ROQUEFORT_WRAK), 20, 6);
+                wrakT = 0;
+                zSpring(wrakPlek(), 20, 6);
                 sl.playSound(null, blockPosition(), SoundEvents.WOOD_BREAK, SoundSource.HOSTILE, 3f, 0.4f);
             }
         }
-        if (opWrak && tickCount % 20 == 0) {
-            Vec3 w = Vec3.atBottomCenterOf(Z3BazenPlekken.ROQUEFORT_WRAK);
+        if ((zinkT > 0 || opWrak) && tickCount % 40 == 0) {
+            wrakBaken(sl);
+        }
+        if (opWrak && ++wrakT % 20 == 0) {
+            Vec3 w = wrakPlek();
+            double f = wrakT / 20 <= ZINK_ZACHT ? ZINK_SCHADE / 2 : ZINK_SCHADE;
             for (ServerPlayer p : l) {   // still on the sinking deck
-                if (p.position().distanceToSqr(w.x, p.getY(), w.z) > 7 * 7 && p.getY() > w.y - 12) {
-                    mech(p, 0.3, "zinkt");
+                if (!veiligOpWrak(p.position())) {
+                    zinkHits.computeIfAbsent(p.getUUID(), k -> new ArrayList<>()).add(f);
+                    mech(p, f, "zinkt");
                     Vec3 r = w.subtract(p.position()).multiply(1, 0, 1).normalize();
                     p.setDeltaMovement(r.x * 0.9, 0.5, r.z * 0.9);
                     p.hurtMarked = true;
