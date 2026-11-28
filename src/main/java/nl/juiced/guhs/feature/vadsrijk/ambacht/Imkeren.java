@@ -39,17 +39,28 @@ public final class Imkeren {
         int n = 0;
         CompoundTag alle = korven(p);
         for (String id : alle.keySet()) {
-            int z = alle.getCompoundOrEmpty(id).getIntOr("zone", -1);
-            if (z < 0) {   // (a hive from before 1.10.19: its group knows the zone)
-                int i = id.lastIndexOf('_');
-                AmbachtPlekken.Groep g = i > 0 ? AmbachtPlekken.groep(id.substring(0, i)) : null;
-                z = g == null ? -1 : g.zone();
-            }
-            if (z == zone) {
+            if (zoneVan(alle, id) == zone) {
                 n++;
             }
         }
         return n;
+    }
+
+    /** The zone this hive counts for (-1: unknown). */
+    static int zoneVan(CompoundTag alle, String id) {
+        int z = alle.getCompoundOrEmpty(id).getIntOr("zone", -1);
+        if (z < 0) {   // (a hive from before 1.10.19: its group knows the zone)
+            AmbachtPlekken.Groep g = groepVan(id);
+            z = g == null ? -1 : g.zone();
+        }
+        return z;
+    }
+
+    /** The group of a hive id ({@code <group>_<n>}), or null. */
+    @javax.annotation.Nullable
+    private static AmbachtPlekken.Groep groepVan(String id) {
+        int i = id.lastIndexOf('_');
+        return i > 0 ? AmbachtPlekken.groep(id.substring(0, i)) : null;
     }
 
     /**
@@ -70,11 +81,14 @@ public final class Imkeren {
 
     /** The combs in this player's hive now (0 when not theirs). */
     public static int raten(ServerPlayer p, Spot s) {
-        CompoundTag k = korven(p).getCompoundOrEmpty(s.id());
+        return raten(korven(p).getCompoundOrEmpty(s.id()), s.bloemen().size());
+    }
+
+    private static int raten(CompoundTag k, int bloemen) {
         if (k.isEmpty()) {
             return 0;
         }
-        double factor = 0.5 + 0.5 * Math.min(1.0, s.bloemen().size() / 6.0);
+        double factor = 0.5 + 0.5 * Math.min(1.0, bloemen / 6.0);
         long ms = (long) (RAAT_MINUTEN * 60_000L / factor);
         long erbij = Math.max(0, (AmbachtData.nu() - k.getLongOr("laatst", AmbachtData.nu())) / ms);
         return (int) Math.min(MAX_RATEN, k.getIntOr("raten", 0) + erbij);
@@ -119,17 +133,17 @@ public final class Imkeren {
             int zone = s.groep().zone();
             if (inZone(p, zone) >= PER_ZONE) {
                 p.sendOverlayMessage(Component.translatable("vadsrijk.ambacht.korf.vol", PER_ZONE).withStyle(ChatFormatting.RED));
-                Component waar = waarZijnKorven(p, zone);   // 1.10.12: say where your hives stand (1.10.19: the ones in this zone)
-                if (waar != null) {
-                    p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.vol.waar", waar).withStyle(ChatFormatting.GOLD));
+                // "Korf verplaatsen": a window that offers to take one of your hives in this zone away for this stand (the chat line
+                // that says where they stand stays the fallback when there is nothing to list)
+                if (!stuurWissel(p, s)) {
+                    Component waar = waarZijnKorven(p, zone);   // 1.10.12: say where your hives stand (1.10.19: the ones in this zone)
+                    if (waar != null) {
+                        p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.vol.waar", waar).withStyle(ChatFormatting.GOLD));
+                    }
                 }
                 return "vadsrijk.ambacht.korf.vol";
             }
-            zet(p, s, 0);
-            p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.neergezet", Component.translatable("item.guhs.vr_amb_" + s.groep().honing()))
-                    .withStyle(ChatFormatting.GOLD));
-            nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, "vadsrijk.ambacht.tip.korf");
-            Verzamelen.sync(p, true);
+            plaats(p, s);
             return "";
         }
         int raten = raten(p, s);
@@ -164,6 +178,158 @@ public final class Imkeren {
             Verzamelen.effect(p, sl, Verzamelen.positie(p, s), NodeSoort.KORF, q, false);
         }
         Verzamelen.sync(p, true);
+        return "";
+    }
+
+    /** Puts this player's (empty) hive on this stand: the data, the chat line, the first-hive tip and a sync. */
+    private static void plaats(ServerPlayer p, Spot s) {
+        zet(p, s, 0);
+        p.sendSystemMessage(Component.translatable("vadsrijk.ambacht.korf.neergezet", Component.translatable("item.guhs.vr_amb_" + s.groep().honing()))
+                .withStyle(ChatFormatting.GOLD));
+        nl.juiced.guhs.feature.vadsrijk.kern.Tips.toon(p, "vadsrijk.ambacht.tip.korf");
+        Verzamelen.sync(p, true);
+    }
+
+    // ---- "Korf verplaatsen" (the user: at 4/4 a window that lets you take another hive away, with a warning) ------------------------
+
+    /** The stand the swap window was offered for, per player (only that stand can be swapped to; cleared when the window closes). */
+    private static final java.util.Map<java.util.UUID, String> WISSEL = new java.util.concurrent.ConcurrentHashMap<>();
+    public static final String WISSEL_SCHERM = "korfwissel", K_WISSEL = "vadsrijk.ambacht.korf.wissel.";
+
+    static void vergeet(java.util.UUID id) {
+        WISSEL.remove(id);
+    }
+
+    /** The stand id the swap window is open for (gametests), or null. */
+    @javax.annotation.Nullable
+    static String wisselOpen(ServerPlayer p) {
+        return WISSEL.get(p.getUUID());
+    }
+
+    /**
+     * Opens the swap window for this free stand: the player's hives in its zone (meadow, x/z, combs now, honey kind); the client
+     * picks one, warns that its combs are lost and sends {@code korf_wissel}. False: no hive of theirs in this zone to list.
+     */
+    static boolean stuurWissel(ServerPlayer p, Spot nieuw) {
+        int zone = nieuw.groep().zone();
+        net.minecraft.server.MinecraftServer server = p.level().getServer();
+        CompoundTag alle = korven(p);
+        ListTag l = new ListTag();
+        java.util.List<net.minecraft.world.item.ItemStack> items = new java.util.ArrayList<>();
+        for (String id : new java.util.TreeSet<>(alle.keySet())) {
+            if (zoneVan(alle, id) != zone) {
+                continue;
+            }
+            Spot s = server == null ? null : Verzamelen.spot(server, id);
+            AmbachtPlekken.Groep g = s != null ? s.groep() : groepVan(id);
+            BlockPos q = s == null || s.posities().isEmpty() ? null : Verzamelen.positie(p, s);
+            l.add(wisselRij(id, g, q, ratenVan(p, id), items));
+        }
+        if (l.isEmpty()) {
+            return false;
+        }
+        WISSEL.put(p.getUUID(), nieuw.id());
+        AmbachtPayloads.stuur(p, wisselData(nieuw.id(), zone, nieuw.groep().honing(), l), items);
+        return true;
+    }
+
+    private static CompoundTag wisselData(String spot, int zone, String honing, ListTag korven) {
+        CompoundTag d = new CompoundTag();
+        d.putString("scherm", WISSEL_SCHERM);
+        d.putString("spot", spot);
+        d.putInt("zone", zone);
+        d.putInt("max", PER_ZONE);
+        d.putString("honing", honing);
+        d.put("korven", korven);
+        return d;
+    }
+
+    private static CompoundTag wisselRij(String id, @javax.annotation.Nullable AmbachtPlekken.Groep g, @javax.annotation.Nullable BlockPos q, int raten,
+            java.util.List<net.minecraft.world.item.ItemStack> items) {
+        CompoundTag e = new CompoundTag();
+        e.putString("id", id);
+        e.putString("groep", g == null ? "" : g.id());
+        e.putString("honing", g == null ? "" : g.honing());
+        e.putInt("raten", raten);
+        if (q != null) {
+            e.putBoolean("waar", true);
+            e.putInt("x", q.getX());
+            e.putInt("z", q.getZ());
+        }
+        e.putInt("item", items.size());
+        items.add(g == null || !Materialen.ALLE.containsKey(g.honing()) ? net.minecraft.world.item.ItemStack.EMPTY
+                : Materialen.stack(g.honing(), 0, Math.max(1, raten)));
+        return e;
+    }
+
+    /** Dev ({@code /guhs vadsrijk ambacht korfwissel}): the swap window with four example hives (UI check; changes nothing). */
+    public static void demoWissel(ServerPlayer p) {
+        ListTag l = new ListTag();
+        java.util.List<net.minecraft.world.item.ItemStack> items = new java.util.ArrayList<>();
+        String[] groepen = {"z3_korf_bloesemdal", "z3_korf_bloesemdal", "z3_korf_raatweide", "z4_korf_bloemeneiland"};
+        int[] raten = {8, 3, 0, 5};
+        for (int i = 0; i < groepen.length; i++) {
+            l.add(wisselRij(groepen[i] + "_" + i, AmbachtPlekken.groep(groepen[i]), new BlockPos(-1480 + i * 37, 70, 2210 - i * 53), raten[i], items));
+        }
+        AmbachtPayloads.stuur(p, wisselData("demo", 3, "bloesemhoning", l), items);
+    }
+
+    /** The combs in the hive with this id now (0: not theirs); a hive whose stand is not known (yet) counts as one with few flowers. */
+    public static int ratenVan(ServerPlayer p, String id) {
+        net.minecraft.server.MinecraftServer server = p.level().getServer();
+        Spot s = server == null ? null : Verzamelen.spot(server, id);
+        return raten(korven(p).getCompoundOrEmpty(id), s == null ? 0 : s.bloemen().size());
+    }
+
+    /**
+     * {@code korf_wissel} from the swap window: take hive {@code wegId} away and put a hive on stand {@code nieuwId}. The stand must
+     * exist and be within reach; the rest: {@link #doeWissel}. Returns "" or a message key.
+     */
+    static String wissel(ServerPlayer p, String wegId, String nieuwId) {
+        net.minecraft.server.MinecraftServer server = p.level().getServer();
+        Spot nieuw = server == null ? null : Verzamelen.spot(server, nieuwId);
+        String m;
+        if (nieuw == null || nieuw.posities().isEmpty()) {
+            m = K_WISSEL + "kan_niet";
+        } else if (p.getEyePosition().distanceToSqr(net.minecraft.world.phys.Vec3.atCenterOf(Verzamelen.positie(p, nieuw))) > Verzamelen.BEREIK * Verzamelen.BEREIK) {
+            m = "vadsrijk.ambacht.oogst.te_ver";
+        } else {
+            return doeWissel(p, wegId, nieuw);
+        }
+        WISSEL.remove(p.getUUID());
+        p.sendOverlayMessage(Component.translatable(m).withStyle(ChatFormatting.RED));
+        return m;
+    }
+
+    /**
+     * The swap itself (no reach check: the gametests call this). Refused unless: the window was offered for this stand and is still
+     * open, the stand is a free hive stand the player's level allows, {@code wegId} is a hive of THIS player in the SAME zone, and
+     * the zone is full (else a plain click places).
+     * Then the old hive goes with every comb in it (nothing is given: the window warned) and, when the zone has room now, the new
+     * hive stands at once. A player with more than {@link #PER_ZONE} hives in the zone (from before 1.10.19) gets the window again.
+     */
+    public static String doeWissel(ServerPlayer p, String wegId, Spot nieuw) {
+        boolean aangeboden = nieuw.id().equals(WISSEL.remove(p.getUUID()));
+        CompoundTag alle = korven(p);
+        int zone = nieuw.groep().zone();
+        if (!aangeboden || nieuw.groep().soort() != NodeSoort.KORF || eigen(p, nieuw) || !alle.contains(wegId) || zoneVan(alle, wegId) != zone
+                || inZone(p, zone) < PER_ZONE || AmbachtData.level(p, Ambacht.VERZAMELEN) < korfLevel(nieuw.groep().tier())) {
+            p.sendOverlayMessage(Component.translatable(K_WISSEL + "kan_niet").withStyle(ChatFormatting.RED));
+            return K_WISSEL + "kan_niet";
+        }
+        int weg = ratenVan(p, wegId);
+        AmbachtPlekken.Groep g = groepVan(wegId);
+        CompoundTag over = alle.copy();
+        over.remove(wegId);
+        AmbachtData.tag(p).put("korven", over);
+        p.sendSystemMessage(Component.translatable(K_WISSEL + "weg", g == null ? Component.literal(wegId) : Component.translatable("vadsrijk.ambacht.groep." + g.id()),
+                weg).withStyle(ChatFormatting.GOLD));
+        if (inZone(p, zone) < PER_ZONE) {
+            plaats(p, nieuw);
+        } else {
+            Verzamelen.sync(p, true);
+            stuurWissel(p, nieuw);
+        }
         return "";
     }
 

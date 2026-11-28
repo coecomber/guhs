@@ -39,6 +39,7 @@ public final class AmbachtSchermen {
 
     static void vergeet(UUID id) {
         WERK.remove(id);
+        Imkeren.vergeet(id);
     }
 
     /** The workshop a player has open now as {@code <ambacht>@<npc>} (gametests), or null. */
@@ -93,8 +94,8 @@ public final class AmbachtSchermen {
                     stuurWerk(p, o.ambacht(), m, r == null ? "" : r.id());
                 }
             }
-            case "dicht" -> {
-            }
+            case "korf_wissel" -> Imkeren.wissel(p, a.getStringOr("weg", ""), a.getStringOr("spot", ""));   // "Korf verplaatsen"
+            case "dicht" -> Imkeren.vergeet(p.getUUID());   // (a closed swap window can no longer be confirmed)
             default -> {
             }
         }

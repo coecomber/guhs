@@ -85,6 +85,8 @@ public final class AmbachtClient {
             } else {
                 mc.setScreen(new WerkplaatsScherm(d, items));
             }
+        } else if (s.equals(nl.juiced.guhs.feature.vadsrijk.ambacht.Imkeren.WISSEL_SCHERM)) {
+            mc.setScreen(new KorfWisselScherm(d, items));   // "Korf verplaatsen": your zone is full, take another hive away?
         } else if (mc.screen instanceof AmbachtScherm b) {
             b.update(d, items);
         } else {

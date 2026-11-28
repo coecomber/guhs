@@ -1,0 +1,41 @@
+# "Korf verplaatsen" (the window you get on a free hive stand while your zone is 4/4): the list and the warning page, GUI scale 2 and 4.
+# The dev command shows example hives (changes nothing).
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/korfwissel.txt -PautocheckWidth=1920 -PautocheckHeight=1080
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+
+section GUI 2
+guiscale 2
+wait 10
+gui keep
+/guhs vadsrijk ambacht korfwissel
+wait 30
+shot korfwissel_lijst_g2 gui
+click 378 135
+wait 5
+shot korfwissel_vraag_g2 gui
+click 290 210
+wait 5
+click 378 159
+wait 5
+shot korfwissel_vraag_leeg_g2 gui
+gui close
+
+section GUI 4
+guiscale 4
+wait 10
+gui keep
+/guhs vadsrijk ambacht korfwissel
+wait 30
+shot korfwissel_lijst_g4 gui
+click 378 135
+wait 5
+shot korfwissel_vraag_g4 gui
+gui close
+quit
