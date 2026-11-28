@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.27 — Minecraft 26.1.2
+
+- **Zone 5 "Het Oog meten" softlock (live: Luc_Ermeling, "ik kan nergens klikken en zie geen grote telescoop"):** zone 5 copies its POIs into the shared map, so the shared ticker `NpcHaken.plekken` could count a zone-5 spot objective before `Z5Haken.plekken`, which then skipped the moment at the spot, the only thing that reports `z5:oog_gemeten`. The shared ticker now skips zone-owned spots (`NpcHaken.EIGEN_POI`), zone 5's reach is 6/10 like the shared one, and swallowed moments are caught up. The quest spot moved from the foot of the tower stair (2706,215,-444) to the dome room (2702,260,-446); a click on the telescope measures, and without a telescope block standing in the dome room measures. New world patch `sterrenwacht_telescoop` (pedestal + `guhs:guh_telescoop` at 2702,260..261,-442; only replaces air). Live: `/guhs vadsrijk patch sterrenwacht_telescoop --echt`.
+- **Zone 5 "Proef van de Wolkwacht: de verdwaalde kadet" (live: Kadet Dons picked up, nothing registers):** the ESCORTE objective carried a fixed `plek: npc:z5_kadet_dons`, so the tracker kept pointing at the pier after the pick-up (`QuestStap.doel` now ignores the fixed spot for escorts: NPC before the pick-up, destination while a copy follows), and the arrival only counted within 8 blocks of `academie_oefenplein`, 27 blocks from the hand-in NPC (`Escortes`: arriving within 10 blocks of the hand-in NPC counts too, when its post is within 48 blocks of the destination).
+- **Airship Hoogvads -> zone 4 dropped you at the Zuidvin (live: "de boot terug naar zone 4"):** line D's way down is the reversed route shifted 22 blocks, which crosses the south fin's fall-net box, and `Z5Bouw.vangnet` did not exempt airship passengers. It now skips players whose root vehicle is a `LuchtschipEntity` (all lines).
+- **Opruimen:** salvaging asks for a confirmation from purple up (was blue); stars or a socketed crystal still ask.
+
 ## 1.10.26 — Minecraft 26.1.2
 
 - **Client crash at every zone-5 boss (live: Luc_Ermeling, Hoogvads):** the Donderbuik, Gorgonzola, Zilverstaart and the Grauwe Droom extend `Z3Baas` (so they have the "vfx" controller and `BaasVfx` triggers `vfx_geraakt` / `vfx_fase` / ... on them), but their animation files live under `vadsrijk/zone5/` and `tools/features/vadsrijk_t_vfx.py` only merged the six `vfx_*` animations into `vr_*baas_*` files: GeckoLib then crashes every client that sees the moment (the same defect as the Mika-imker in 1.10.17). The four are now in the tool's `EXTRA` list and have the animations.
