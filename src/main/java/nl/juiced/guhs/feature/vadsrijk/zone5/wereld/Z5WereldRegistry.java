@@ -56,6 +56,10 @@ public final class Z5WereldRegistry {
     }
 
     private static final Map<UUID, Veilig> LAATST_VEILIG = new HashMap<>();
+    /** Where each player was on the previous tick (a jump between two ticks = a teleport, see {@link #zelfdeVal}). */
+    private static final Map<UUID, Vec3> VORIG = new HashMap<>();
+    /** More than this many blocks sideways (or up) in one tick is a teleport, never a fall (a fall is at most ~4 down per tick). */
+    public static final double SPRONG = 8;
 
     private Z5WereldRegistry() {
     }
@@ -78,9 +82,10 @@ public final class Z5WereldRegistry {
                 Z5Bewoners.tick(sl);
             }
         });
-        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> LAATST_VEILIG.remove(e.getEntity().getUUID()));
+        NeoForge.EVENT_BUS.addListener((PlayerEvent.PlayerLoggedOutEvent e) -> vergeet(e.getEntity().getUUID()));
         NeoForge.EVENT_BUS.addListener((ServerStoppedEvent e) -> {
             LAATST_VEILIG.clear();
+            VORIG.clear();
             Z5Bewoners.wis();
         });
         NeoForge.EVENT_BUS.addListener(Z5WereldRegistry::commandos);
@@ -124,19 +129,51 @@ public final class Z5WereldRegistry {
                 && z >= Z5WereldPlekken.MIN_Z - 40 && z <= Z5WereldPlekken.MAX_Z + 40;
     }
 
+    /**
+     * Pure rule (tested): is the player, one tick on, still in the SAME fall off the whale? No after a teleport (more than
+     * {@link #SPRONG} blocks sideways or up between two ticks) and no once he stands or swims below the catch height. Then the
+     * "last safe spot on the whale" is forgotten, so the net only ever catches somebody who really fell off.
+     * <p>
+     * 1.10.31 report (Luc): campfire travel from a Hoogvads campfire to the Vuurtoreneiland put her back in Hoogvads. The island
+     * (and the Pierkop) lie inside the net's x/z box, below its height; she had stood on the whale less than {@link #VANG_TIJD}
+     * ago, so her first step down the island's slope (falling faster than 0.2) counted as "fell off the whale".
+     */
+    public static boolean zelfdeVal(@Nullable Vec3 vorig, Vec3 nu, boolean opGrond, boolean inWater) {
+        if (vorig != null) {
+            double dx = nu.x - vorig.x, dz = nu.z - vorig.z;
+            if (dx * dx + dz * dz > SPRONG * SPRONG || nu.y - vorig.y > SPRONG) {
+                return false;
+            }
+        }
+        return !((opGrond || inWater) && nu.y < VANG_Y);
+    }
+
     static void vangnet(ServerLevel sl, ServerPlayer p, long t) {
+        UUID id = p.getUUID();
+        Vec3 nu = p.position();
+        Vec3 vorig = VORIG.put(id, nu);
         if (p.isSpectator() || p.isPassenger() || p.getAbilities().flying || p.isFallFlying()) {
+            LAATST_VEILIG.remove(id);   // (riding or flying away from the whale is not a fall; stepping off below is no catch)
             return;
         }
-        UUID id = p.getUUID();
-        if (p.onGround() && Z5WereldPlekken.inZone5(p.getX(), p.getY(), p.getZ()) && p.getY() > 150) {
+        boolean sprong = !zelfdeVal(vorig, nu, false, false);
+        if (!sprong && p.onGround() && Z5WereldPlekken.inZone5(p.getX(), p.getY(), p.getZ()) && p.getY() > 150) {
             if (t % 10 == 0) {
                 LAATST_VEILIG.put(id, new Veilig(p.blockPosition(), t));
             }
             return;
         }
         Veilig v = LAATST_VEILIG.get(id);
-        if (v == null || !vangen(p.getX(), p.getY(), p.getZ(), p.getDeltaMovement().y, t, v.tijd())) {
+        if (v == null) {
+            return;
+        }
+        // (a teleport, or landed below the net: not falling off the whale any more. onGround can be stale right after a teleport,
+        // so the jump itself counts too.)
+        if (sprong || !zelfdeVal(vorig, nu, p.onGround(), p.isInWater())) {
+            LAATST_VEILIG.remove(id);
+            return;
+        }
+        if (!vangen(p.getX(), p.getY(), p.getZ(), p.getDeltaMovement().y, t, v.tijd())) {
             return;
         }
         BlockPos terug = dichtstbijzijnde(v.pos());
@@ -149,6 +186,19 @@ public final class Z5WereldRegistry {
         sl.playSound(null, terug, SoundEvents.WOOL_PLACE, SoundSource.PLAYERS, 1f, 0.7f);
         p.sendOverlayMessage(Component.translatable("vadsrijk.z5wereld.vangnet").withStyle(ChatFormatting.LIGHT_PURPLE));
         LAATST_VEILIG.put(id, new Veilig(terug, t));
+        VORIG.put(id, p.position());   // (the net's own way back is not "a teleport away from the whale")
+    }
+
+    /** The last safe spot on the whale the net remembers for this player (tests), or null. */
+    @Nullable
+    static BlockPos laatstVeilig(UUID id) {
+        Veilig v = LAATST_VEILIG.get(id);
+        return v == null ? null : v.pos();
+    }
+
+    static void vergeet(UUID id) {
+        LAATST_VEILIG.remove(id);
+        VORIG.remove(id);
     }
 
     /** Where the cloud sets you down: your last safe spot, unless one of the town squares is close by (always solid ground). */
