@@ -253,6 +253,10 @@ public final class AmbachtRegistry {
                     IntegerArgumentType.getInteger(c, "n")));
             return 1;
         })))));
+        k.then(Commands.literal("korfwissel").executes(c -> {   // (dev/autocheck) the "Korf verplaatsen" window with example hives
+            Imkeren.demoWissel(speler(c));
+            return 1;
+        }));
         k.then(Commands.literal("plekken").executes(c -> {
             ServerPlayer p = speler(c);
             List<Spot> l = Verzamelen.inBuurt(p, 96);
