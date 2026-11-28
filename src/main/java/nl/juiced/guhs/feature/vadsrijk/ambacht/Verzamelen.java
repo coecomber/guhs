@@ -46,12 +46,15 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 public final class Verzamelen {
     public static final int LEEG_MIN = AmbachtPlekken.LEEG_MIN, LEEG_MAX = AmbachtPlekken.LEEG_MAX, ZICHT = 64, AFK_MINUTEN = 10, AFK_AFSTAND = 5;
     public static final double ZELDZAAM_KANS = 0.05, ZELDZAAM_MATERIAAL = 0.35, BEREIK = 6.0;
-    /** 1.10.30: a glittering ORE spot gives its rare material (Glinstergruis) half the time (the other kinds keep {@link #ZELDZAAM_MATERIAAL}). */
-    public static final double ZELDZAAM_MATERIAAL_ERTS = 0.50;
+    /** 1.10.30 (owner): an ORE spot gives its rare material (Glinstergruis) always when it glitters, and 1 in 5 times when it does not. */
+    public static final double ERTS_GRUIS_GLINSTER = 1.0, ERTS_GRUIS_GEWOON = 0.20;
 
-    /** The chance that a rare (glittering) spot of this kind gives its rare material. */
-    public static double zeldzaamMateriaalKans(NodeSoort soort) {
-        return soort == NodeSoort.ERTS ? ZELDZAAM_MATERIAAL_ERTS : ZELDZAAM_MATERIAAL;
+    /** The chance that a spot of this kind gives its rare material ({@code zeldzaam}: a glittering spot). Only ore gives it on a plain spot. */
+    public static double zeldzaamMateriaalKans(NodeSoort soort, boolean zeldzaam) {
+        if (soort == NodeSoort.ERTS) {
+            return zeldzaam ? ERTS_GRUIS_GLINSTER : ERTS_GRUIS_GEWOON;
+        }
+        return zeldzaam ? ZELDZAAM_MATERIAAL : 0;
     }
 
     /** One hive stand's place for one player (1.10.4: the other spots are shared, {@link Grondstoffen}). */
@@ -322,7 +325,7 @@ public final class Verzamelen {
             }
         }
         // extras: the rare material on a rare spot, a raw crystal on a perfect ore swing, resin from schemerhout
-        if (zeld && p.getRandom().nextDouble() < zeldzaamMateriaalKans(g.soort())) {
+        if (p.getRandom().nextDouble() < zeldzaamMateriaalKans(g.soort(), zeld)) {
             Materiaal r = Materialen.zeldzaam(g.soort());
             if (r != null) {
                 MateriaalTas.geef(p, Materialen.stack(r.id(), q, 1));

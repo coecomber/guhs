@@ -265,4 +265,18 @@ public class VadsrijkGrondstofGameTests {
                 && !Grondstoffen.staat(NodeSoort.HOUT, 1, true).getValue(GrondstofBlok.WATERLOGGED), "only water spots are waterlogged");
         helper.succeed();
     }
+
+    /** 1.10.30 (owner): ore gives Glinstergruis always on a glittering spot and 1 in 5 times on a plain one; the other kinds only on a glittering spot. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void gruisKansen(GameTestHelper helper) {
+        helper.assertTrue(Verzamelen.zeldzaamMateriaalKans(NodeSoort.ERTS, true) == 1.0, "glittering ore: always");
+        helper.assertTrue(Verzamelen.zeldzaamMateriaalKans(NodeSoort.ERTS, false) == 0.20, "plain ore: 1 in 5");
+        for (NodeSoort n : NodeSoort.values()) {
+            if (n != NodeSoort.ERTS) {
+                helper.assertTrue(Verzamelen.zeldzaamMateriaalKans(n, false) == 0 && Verzamelen.zeldzaamMateriaalKans(n, true) == Verzamelen.ZELDZAAM_MATERIAAL,
+                        n + ": only on a glittering spot");
+            }
+        }
+        helper.succeed();
+    }
 }

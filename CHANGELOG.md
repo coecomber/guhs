@@ -3,6 +3,13 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.30 — Minecraft 26.1.2
+
+- **Knapzak bigger (owner request):** 7 tabs instead of 5 (`Knapzak.MAX_TABS`), 3 free for every character instead of 1 (`GRATIS`), and every slot holds ten normal stacks (640 / 160; unstackables stay 1). A big stack is saved as several vanilla entries with the same slot (the item codec's 99 limit), so old saves load unchanged and a rollback keeps the rest in `onleesbaar`. The menu caps cursor / hotbar / shift-click moves at a normal stack; counts above 99 are drawn small. Bank and Knuffelbond bank unchanged.
+- **"Alles ➜ tas"** in the knapzak and "Alles opbergen" in the Materiaaltas share `Materiaaltas.allesOpbergen`, which now also sweeps every tab of the active character's knapzak (was: the 36 inventory slots only), with a feedback line.
+- **Korf at 4/4 in a zone (owner request):** a click on a free hive stand opens `KorfWisselScherm`: your hives in that zone with their combs, pick one to remove, a warning that its saved-up honey is lost, and on confirm the old hive is deleted and the new one placed in the same action (`Imkeren.wissel`, server-validated offer). Dev: `/guhs vadsrijk ambacht korfwissel`.
+- **Glinstergruis (owner):** a glittering ore spot always gives it (was 35%), a plain ore spot 1 in 5 times (was never); `Verzamelen.zeldzaamMateriaalKans`. Other kinds unchanged (35% on a glittering spot only). Was about 1 per 57 ore harvests, now about 1 per 4.
+
 ## 1.10.29 — Minecraft 26.1.2
 
 - **Quest marker sent you from the whale's head to Lampionhaven (live: "De adem van Moeder Wolkwal", ~750 blocks):** `Z4Haken.route` tested "in zone 4" by x/z only, and zone 4's box runs to x 2559 under the west end of Hoogvads, so a player at x < 2560 on the whale with a target at x >= 2560 got "take Windvaan's airship first". New `Z4Haken.opDeKust(x,y,z)` (zone 4's box minus y >= 150 inside zone 5's box) for player and target. Affected every zone-5 step seen from the middle blowhole, Ooggaarde and eye balcony (432 targets in the new `Z5TrackerGameTests`). `QuestStap.inRijk` / `TEST_IN_RIJK`: a test seam so zone routes run on the gametest server.
