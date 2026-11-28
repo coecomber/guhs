@@ -3,6 +3,14 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.28 — Minecraft 26.1.2
+
+- **No chest after Zilverstaart -> Grauwe Droom (live: Luc_Ermeling):** `Z5Droom.tick` read "no chest block at the chest spot" as "chest opened", but on a real server the chest first falls from the sky (`Kistceremonie`), so the player woke within half a second of the defeat; and `Z5Baas.verslagen` started the dream right after handing out Zilverstaart's chest. Now the player only wakes once the chest was seen standing and is gone again (90 s maximum stays), chests left on the cloud and in the Wolkwaldroom are handed over on waking (`BaasKist.lever` / `vanSpeler`), and once per server run for a player who cheered up the dream and comes within 6 blocks of the middle blowhole (also finds chests from before the fix).
+- **Vadsrijk menu about 10% smaller** (`MenuIndeling`: at most 80% of the window width, 86% of the height; loose `EcoScherm` screens via `MenuIndeling.los`), crisp whole-pixel steps kept, containers unscaled.
+- **Huisdieren tab paged** at 4 x 4 with Vorige / "Pagina x van y" / Volgende (mouse wheel too, opens on the chosen pet's page; `menu/Paginas`); the explanation no longer runs over the icons.
+- Layout defects fixed in Karakter, Verkenningsboek, Rijdieren / stal, Ambachten, Instellingen, Ridders, Kledingkast, Materiaaltas, Markt and Premiebord (wrapping, column widths, buttons sized to their labels). Script `tools/autocheck/ui_1027.txt`.
+- Known: `Z5DroomGameTests.haakEnWolk` fails (cloud floor count), also before this version.
+
 ## 1.10.27 — Minecraft 26.1.2
 
 - **Zone 5 "Het Oog meten" softlock (live: Luc_Ermeling, "ik kan nergens klikken en zie geen grote telescoop"):** zone 5 copies its POIs into the shared map, so the shared ticker `NpcHaken.plekken` could count a zone-5 spot objective before `Z5Haken.plekken`, which then skipped the moment at the spot, the only thing that reports `z5:oog_gemeten`. The shared ticker now skips zone-owned spots (`NpcHaken.EIGEN_POI`), zone 5's reach is 6/10 like the shared one, and swallowed moments are caught up. The quest spot moved from the foot of the tower stair (2706,215,-444) to the dome room (2702,260,-446); a click on the telescope measures, and without a telescope block standing in the dome room measures. New world patch `sterrenwacht_telescoop` (pedestal + `guhs:guh_telescoop` at 2702,260..261,-442; only replaces air). Live: `/guhs vadsrijk patch sterrenwacht_telescoop --echt`.
