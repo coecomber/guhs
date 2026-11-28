@@ -43,7 +43,7 @@ public class RijdierScherm extends EcoScherm {
 
     public RijdierScherm(CompoundTag data, List<ItemStack> items) {
         super(EcoPayloads.STAL, Component.translatable(data.getBooleanOr("stal", false) ? "vadsrijk.economie.stal.titel" : "vadsrijk.economie.rijdieren.titel"),
-                data, items, 380, 256);   // (T-RIJDIER: wider/taller for the Aankleden panel)
+                data, items, 410, 256);   // (T-RIJDIER: wider/taller for the Aankleden panel; 1.10.27: 380 -> 410, the stat lines touched the edge)
     }
 
     /** (fix round 3) The collection tabs (Rijdieren | Huisdieren | ...) replace the old "Huisdieren" button; not at the stal. */
@@ -126,12 +126,18 @@ public class RijdierScherm extends EcoScherm {
                 g.fill(x + 3, y + 1, x + 21, y + rh - 1, 0xB0E6DCE4);
                 g.text(font, "?", x + 10, y + rh / 2 - 4, 0xFF8A5A84, false);
             }
-            g.text(font, Component.translatable(s.naamKey()).withStyle(ChatFormatting.BOLD), x + 26, y + 1, heeft ? TEKST : ZACHT, false);
-            Component sub = heeft ? Component.translatable("vadsrijk.economie.stal.level", t.getIntOr("level", 1), RijdierSoort.MAX_LEVEL)
-                    : Component.translatable("vadsrijk.economie.rijdieren.nog_niet");
-            g.text(font, sub, x + 26, y + rh - 9, heeft ? GOUD : ZACHT, false);
+            // 1.10.27: a row lower than two text lines shows the name only (name and level were drawn through each other with 10+
+            // mounts; the level is in the info on the right)
+            boolean tweeRegels = rh >= 20;
+            g.text(font, Component.translatable(s.naamKey()).withStyle(ChatFormatting.BOLD), x + 26, tweeRegels ? y + 1 : y + (rh - 8) / 2, heeft ? TEKST : ZACHT,
+                    false);
+            if (tweeRegels) {
+                Component sub = heeft ? Component.translatable("vadsrijk.economie.stal.level", t.getIntOr("level", 1), RijdierSoort.MAX_LEVEL)
+                        : Component.translatable("vadsrijk.economie.rijdieren.nog_niet");
+                g.text(font, sub, x + 26, y + rh - 9, heeft ? GOUD : ZACHT, false);
+            }
             if (t.getBooleanOr("actief", false)) {
-                g.text(font, "★", x + bw - 12, y + 2, 0xFFFF5FAF, false);
+                g.text(font, "★", x + bw - 12, tweeRegels ? y + 2 : y + (rh - 8) / 2, 0xFFFF5FAF, false);
             }
             final int idx = i;
             klikvlak(x, y, bw, rh, () -> {

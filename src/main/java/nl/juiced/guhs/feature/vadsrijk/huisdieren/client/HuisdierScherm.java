@@ -23,6 +23,7 @@ import nl.juiced.guhs.feature.vadsrijk.huisdieren.Huisdier;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierEntity;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierPayloads;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.Huisdieren;
+import nl.juiced.guhs.feature.vadsrijk.menu.Paginas;
 import nl.juiced.guhs.feature.vadsrijk.rijdier.Maatjes;
 import nl.juiced.guhs.feature.vadsrijk.rijdier.Vahoegje;
 import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry;
@@ -31,9 +32,16 @@ import nl.juiced.guhs.feature.vadsrijk.huisdieren.HuisdierenRegistry;
  * G-PETS: the pet screen (same pink style as the mount screen). Top right "Verzameld x/y"; left every pet in a grid (yours in
  * colour, the rest as dark silhouettes with a "?"; a star on the one walking with you); hover = name, flavour text and how to get it;
  * click = select. Right: a turning preview of the selected pet, its text, how to get it, and "Meenemen" / "Thuislaten".
+ * <p>1.10.27: the grid is paged, 4 x 4 pets per page ({@link Paginas}; it was one 4 x 7 grid that ran through the explanation under
+ * it): "Vorige" / "Pagina x van y" / "Volgende" above the grid (the mouse wheel turns the page too), it opens on the page of the
+ * pet that walks with you, and the explanation is only drawn in the room that is really left under the grid (else as a tooltip).
  */
 public class HuisdierScherm extends EcoScherm {
-    private static final int KOLOMMEN = 4, VAK = 36;
+    private static final int KOLOMMEN = 4, RIJEN = 4, PER_PAGINA = KOLOMMEN * RIJEN, VAK = 42, GAT = 3;
+    /** Width (= height) of the whole grid. */
+    private static final int ROOSTER = KOLOMMEN * VAK + (KOLOMMEN - 1) * GAT;
+    /** 1.10.27: the page of the grid shown (0 = the first). */
+    private int pagina;
     private final Map<String, HuisdierEntity> voorbeelden = new HashMap<>();
     @Nullable
     private String gekozen;
@@ -68,6 +76,11 @@ public class HuisdierScherm extends EcoScherm {
         if (gekozen == null) {
             List<Huisdier> alle = List.copyOf(Huisdieren.alle());
             gekozen = !actief().isEmpty() ? actief() : !bezit().isEmpty() ? bezit().get(0) : alle.isEmpty() ? null : alle.get(0).id();
+            for (int i = 0; i < alle.size(); i++) {   // 1.10.27: open on the page of the chosen pet
+                if (alle.get(i).id().equals(gekozen)) {
+                    pagina = Paginas.van(i, PER_PAGINA);
+                }
+            }
         }
     }
 
@@ -116,11 +129,24 @@ public class HuisdierScherm extends EcoScherm {
         Component teller = Component.translatable("vadsrijk.huisdieren.verzameld", bezit.size(), alle.size());
         g.text(font, teller.copy().withStyle(ChatFormatting.BOLD), left + w - 8 - font.width(teller.copy().withStyle(ChatFormatting.BOLD)), top + 5, WIT, true);
 
-        // ---- the grid ------------------------------------------------------------------------------------------------------------
-        int gx = left + 8, gy = top + 24;
-        for (int i = 0; i < alle.size(); i++) {
+        // ---- the grid: one page of 4 x 4, with Vorige | Pagina x van y | Volgende above it ------------------------------------------
+        int gx = left + 8, ky = top + 21, gy = ky + 16;
+        int paginas = Paginas.aantal(alle.size(), PER_PAGINA);
+        pagina = Paginas.klem(pagina, alle.size(), PER_PAGINA);
+        Component vorige = Component.translatable("vadsrijk.menu.pagina.vorige"), volgende = Component.translatable("vadsrijk.menu.pagina.volgende");
+        Component pag = Component.translatable("vadsrijk.menu.pagina", pagina + 1, paginas);
+        int vw = font.width(vorige) + 8, nw = font.width(volgende) + 8;
+        int over = ROOSTER - font.width(pag) - 8;   // (what the two buttons may take together)
+        if (vw + nw > over) {   // (a long translation: both buttons shrink, EcoScherm.knop cuts the label with an ellipsis)
+            vw = over / 2;
+            nw = over - vw;
+        }
+        knop(g, mx, my, gx, ky, vw, 14, vorige, pagina > 0, () -> pagina--);
+        knop(g, mx, my, gx + ROOSTER - nw, ky, nw, 14, volgende, pagina < paginas - 1, () -> pagina++);
+        g.centeredText(font, pag, gx + vw + (ROOSTER - vw - nw) / 2, ky + 3, TEKST);
+        for (int i = Paginas.eerste(pagina, PER_PAGINA), eind = Paginas.eind(pagina, alle.size(), PER_PAGINA), n = 0; i < eind; i++, n++) {
             Huisdier h = alle.get(i);
-            int x = gx + (i % KOLOMMEN) * (VAK + 3), y = gy + (i / KOLOMMEN) * (VAK + 3);
+            int x = gx + (n % KOLOMMEN) * (VAK + GAT), y = gy + (n / KOLOMMEN) * (VAK + GAT);
             boolean heeft = bezit.contains(h.id()), sel = h.id().equals(gekozen), hover = binnen(mx, my, x, y, VAK, VAK);
             g.fill(x, y, x + VAK, y + VAK, sel ? 0xFFFF2F8F : hover ? 0xFFFFB8DC : heeft ? 0xFFF0B8D8 : 0xFFC8B8C4);
             g.fill(x + 1, y + 1, x + VAK - 1, y + VAK - 1, heeft ? (sel ? 0xFFFFE0F0 : 0xFFFFF6FB) : 0xFFE2DAE2);
@@ -154,24 +180,38 @@ public class HuisdierScherm extends EcoScherm {
             tip(mx, my, x, y, VAK, VAK, tip);
             klikvlak(x, y, VAK, VAK, () -> gekozen = h.id());
         }
-        // the explanation under the grid
-        int uy = top + h - 52;
-        for (var line : font.split(Component.translatable("vadsrijk.huisdieren.uitleg"), (int) ((KOLOMMEN * (VAK + 3)) / 0.75f))) {
-            g.pose().pushMatrix();
-            g.pose().translate(gx, uy);
-            g.pose().scale(0.75f, 0.75f);
-            g.text(font, line, 0, 0, ZACHT, false);
-            g.pose().popMatrix();
-            uy += 7;
+        // the explanation under the grid, full-size letters, only in the room that is really left (1.10.27: it was drawn at a fixed
+        // height in x0.75 letters, straight through the bottom rows): both texts when they fit, else the short one, else neither;
+        // hovering there (or the counter) then tells both
+        Component uitleg = Component.translatable("vadsrijk.huisdieren.uitleg"), helpt = Component.translatable("vadsrijk.huisdieren.geen_schade");
+        var uitlegRegels = font.split(uitleg, ROOSTER);
+        var helptRegels = font.split(helpt, ROOSTER);
+        int uy = gy + ROOSTER + 3, ruimte = top + h - 3 - uy;
+        boolean beide = (uitlegRegels.size() + helptRegels.size()) * 9 + 3 <= ruimte, kort = helptRegels.size() * 9 <= ruimte;
+        if (beide) {
+            for (var line : uitlegRegels) {
+                g.text(font, line, gx, uy, ZACHT, false);
+                uy += 9;
+            }
+            uy += 3;
         }
-
-        for (var line : font.split(Component.translatable("vadsrijk.huisdieren.geen_schade"), (int) ((KOLOMMEN * (VAK + 3)) / 0.75f))) {
-            g.pose().pushMatrix();
-            g.pose().translate(gx, uy + 2);
-            g.pose().scale(0.75f, 0.75f);
-            g.text(font, line, 0, 0, 0xFF2E7A5A, false);
-            g.pose().popMatrix();
-            uy += 7;
+        if (beide || kort) {
+            for (var line : helptRegels) {
+                g.text(font, line, gx, uy, 0xFF2E7A5A, false);
+                uy += 9;
+            }
+        }
+        if (!beide) {
+            List<Component> meer = new ArrayList<>();
+            for (var line : font.getSplitter().splitLines(uitleg, 200, net.minecraft.network.chat.Style.EMPTY)) {
+                meer.add(Component.literal(line.getString()).withStyle(ChatFormatting.GRAY));
+            }
+            for (var line : font.getSplitter().splitLines(helpt, 200, net.minecraft.network.chat.Style.EMPTY)) {
+                meer.add(Component.literal(line.getString()).withStyle(ChatFormatting.GREEN));
+            }
+            tip(mx, my, gx, gy + ROOSTER + 2, ROOSTER, Math.max(0, top + h - gy - ROOSTER - 4), meer);
+            int tw = font.width(teller.copy().withStyle(ChatFormatting.BOLD));
+            tip(mx, my, left + w - 8 - tw, top, tw, 18, meer);
         }
 
         // ---- the selected pet ------------------------------------------------------------------------------------------------------
@@ -180,7 +220,8 @@ public class HuisdierScherm extends EcoScherm {
             return;
         }
         boolean heeft = bezit.contains(h.id()), loopt = h.id().equals(actief());
-        int px = gx + KOLOMMEN * (VAK + 3) + 6, pw = left + w - 8 - px, py = top + 24, ph = 62;
+        // (the preview gets most of the extra height of a taller frame; the texts under it were made for the first 250)
+        int px = gx + ROOSTER + 8, pw = left + w - 8 - px, py = top + 21, ph = Mth.clamp(62 + (this.h - 250) * 2 / 3, 62, 100);
         g.fill(px, py, px + pw, py + ph, 0xFFF0B8D8);
         g.fill(px + 1, py + 1, px + pw - 1, py + ph - 1, heeft ? 0xFFFFF8FC : 0xFFEDE6EE);
         g.fill(px + 1, py + ph - 16, px + pw - 1, py + ph - 1, heeft ? 0xFFFFE6F3 : 0xFFE2DAE4);   // a little floor
@@ -219,7 +260,9 @@ public class HuisdierScherm extends EcoScherm {
         iy += 12;
         g.text(font, Component.translatable(kracht.naamKey()).withStyle(ChatFormatting.BOLD), px, iy, GOUD, false);
         iy += 10;
-        int stop = top + h() - 30;   // (never into the button)
+        // (never into the button; 1.10.27: nor into the "geen huisdier mee" line above it)
+        boolean geenMee = actief().isEmpty();
+        int stop = top + h() - (geenMee ? 45 : 34);
         for (var line : font.split(Component.translatable(kracht.tekstKey()), pw)) {
             if (iy > stop - 30) {
                 break;
@@ -289,16 +332,24 @@ public class HuisdierScherm extends EcoScherm {
         } else if (loopt) {
             knop(g, mx, my, px, by, pw, 18, Component.translatable("vadsrijk.huisdieren.thuislaten"), true, () -> doe("geen"));
         }
-        if (actief().isEmpty()) {
-            for (var line : font.split(Component.translatable("vadsrijk.huisdieren.geen_actief"), (int) (pw / 0.75f))) {
-                g.pose().pushMatrix();
-                g.pose().translate(px, by - 9);
-                g.pose().scale(0.75f, 0.75f);
-                g.text(font, line, 0, 0, ZACHT, false);
-                g.pose().popMatrix();
-                break;
-            }
+        if (geenMee) {   // 1.10.27: full-size letters on its own line (it was x0.75 through the last text line)
+            Component c = Component.translatable("vadsrijk.huisdieren.geen_actief");
+            g.text(font, font.width(c) <= pw ? c.getVisualOrderText() : font.split(c, pw).get(0), px, by - 11, ZACHT, false);
         }
+    }
+
+    /** 1.10.27: the mouse wheel over the panel turns the page of the grid. */
+    @Override
+    public boolean mouseScrolled(double mx, double my, double sx, double sy) {
+        if (sy != 0 && binnen((int) mx, (int) my, left, top, w, h)) {
+            int oud = pagina;
+            pagina = Paginas.klem(pagina + (sy < 0 ? 1 : -1), Huisdieren.alle().size(), PER_PAGINA);
+            if (pagina != oud) {
+                geluid(net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.2f);
+            }
+            return true;
+        }
+        return super.mouseScrolled(mx, my, sx, sy);
     }
 
     private int h() {

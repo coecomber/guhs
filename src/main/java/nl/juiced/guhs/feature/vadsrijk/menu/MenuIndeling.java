@@ -112,8 +112,20 @@ public final class MenuIndeling {
 
     /** 1.10.24: the largest a screen is scaled up (2 = GUI scale 2 looks like GUI scale 4). */
     public static final float MAX_SCHAAL = 2f;
-    /** 1.10.24: the menu frame is only scaled up while it still gets at least this logical size (comfortable, above MIN). */
-    public static final int RUIM_W = 520, RUIM_H = 300;
+    /**
+     * 1.10.24: the menu frame is only scaled up while it still gets at least this logical size (comfortable, above MIN). 1.10.27: was
+     * 520 x 300; the frame now takes a smaller share of the window, so the comfortable size went down with it.
+     */
+    public static final int RUIM_W = 480, RUIM_H = 280;
+    /**
+     * 1.10.27 ("gebruikt net wat te veel van het scherm"): the largest share of the window the menu takes: the frame of the width, the
+     * tab row + frame of the height (was about 0.875 x 0.955 at 1080p; a panel that needs more than this still gets what it needs).
+     */
+    public static final float AANDEEL_W = 0.80f, AANDEEL_H = 0.86f;
+    /** 1.10.27: a loose screen that grows with the window takes at most this share of the height (no tab row above it). */
+    public static final float LOS_H = 0.82f;
+    /** 1.10.27: a loose screen of a fixed size is only scaled up while it stays within this share of the window (both ways). */
+    public static final float LOS_MAX = 0.86f;
 
     /**
      * 1.10.24: the scale-up factor: the largest k / guiScale (k whole, so the REAL pixel scale guiScale x s stays a whole number and
@@ -145,7 +157,8 @@ public final class MenuIndeling {
     /**
      * 1.10.24: {@code opschalen} false = never scaled UP (container screens: JEI and other overlays place their item list from the
      * screen's own, unscaled panel rectangle, so a scaled-up knapzak got JEI's list drawn through it). {@code guiScale}: the
-     * window's GUI scale (the scale-up keeps the real pixel scale whole).
+     * window's GUI scale (the scale-up keeps the real pixel scale whole). 1.10.27: the frame takes at most
+     * {@link #AANDEEL_W} x {@link #AANDEEL_H} of the window (never less than the panel needs).
      */
     public static Kader kader(int sw, int sh, int minW, int minH, boolean opschalen, int guiScale) {
         int mw = Math.max(MIN_W, minW), mh = Math.max(MIN_H, minH), xw = Math.max(MAX_W, mw), xh = Math.max(MAX_H, mh);
@@ -153,13 +166,31 @@ public final class MenuIndeling {
         float s = Math.min(1f, Math.min(sw / (float) nodigW, sh / (float) nodigH));
         if (s >= 1f && opschalen) {
             // 1.10.24 ("maak interfaces groter en gebruik meer ruimte"): with room to spare the frame is drawn scaled UP
-            s = opschaal(sw, sh, Math.max(RUIM_W, mw) + 2 * MARGE + 8, Math.max(RUIM_H, mh) + TABS_H + 2 * MARGE + 4, guiScale);
+            // (the share of the window counts for the comfortable size; a panel that needs more, like the skill tree, only has to fit)
+            s = opschaal(sw, sh, Math.max(Math.max(RUIM_W, mw) + 2 * MARGE + 8, (int) Math.ceil(RUIM_W / AANDEEL_W)),
+                    Math.max(Math.max(RUIM_H, mh) + TABS_H + 2 * MARGE + 4, (int) Math.ceil((RUIM_H + TABS_H) / AANDEEL_H)), guiScale);
         }
         int lw = (int) Math.floor(sw / s), lh = (int) Math.floor(sh / s);
-        int w = Math.max(mw, Math.min(xw, lw - 2 * MARGE - 8));
-        int h = Math.max(mh, Math.min(xh, lh - 2 * MARGE - TABS_H - 4));
+        int w = Math.max(mw, Math.min(xw, Math.min(lw - 2 * MARGE - 8, (int) (lw * AANDEEL_W))));
+        int h = Math.max(mh, Math.min(xh, Math.min(lh - 2 * MARGE - TABS_H - 4, (int) (lh * AANDEEL_H) - TABS_H)));
         int left = (lw - w) / 2;
         int top = Math.max(MARGE + TABS_H + 2, (lh - h + TABS_H) / 2);
         return new Kader(s, lw, lh, left, top, w, h);
+    }
+
+    /**
+     * 1.10.27: the place of a LOOSE screen (smid, winkel, werkplaats, ...: no tab row) on a screen of (gui-scaled) size sw x sh. The
+     * panel is minW x minH; with maxW/maxH above that it grows with the window, up to {@link #AANDEEL_W} x {@link #LOS_H} of it.
+     * Scaled up in whole real pixels ({@link #opschaal}) while the panel stays within {@link #LOS_MAX} of the window, scaled down
+     * (at least x0.5) when the window is smaller than the panel. {@code top} = the top of the panel.
+     */
+    public static Kader los(int sw, int sh, int minW, int minH, int maxW, int maxH, int guiScale) {
+        float past = Math.min((sw - 16) / (float) minW, (sh - 20) / (float) minH);
+        float s = past >= 1f ? opschaal(sw, sh, Math.max(minW + 16, (int) Math.ceil(minW / LOS_MAX)), Math.max(minH + 20, (int) Math.ceil(minH / LOS_MAX)), guiScale)
+                : Math.max(0.5f, past);
+        int lw = (int) Math.floor(sw / s), lh = (int) Math.floor(sh / s);
+        int w = Math.max(minW, Math.min(maxW, Math.min(lw - 16, (int) (lw * AANDEEL_W))));
+        int h = Math.max(minH, Math.min(maxH, Math.min(lh - 20, (int) (lh * LOS_H))));
+        return new Kader(s, lw, lh, (lw - w) / 2, Math.max(8, (lh - h) / 2), w, h);
     }
 }

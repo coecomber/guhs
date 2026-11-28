@@ -186,10 +186,8 @@ public class SmidScherm extends EcoScherm {
      * instead of under them, and a tab that is taller than its panel scrolls instead of running over the bottom.
      */
     @Override
-    protected void init() {
-        w = Math.max(460, Math.min(540, width - 16));
-        h = Math.max(250, Math.min(320, height - 20));
-        super.init();
+    protected int[] groeit() {
+        return new int[] {460, 250, 540, 320};
     }
 
     @Override

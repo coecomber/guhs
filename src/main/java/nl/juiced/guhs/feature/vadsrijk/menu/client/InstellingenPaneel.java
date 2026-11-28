@@ -191,9 +191,20 @@ public class InstellingenPaneel extends MenuPaneel {
             g.fill(x, y + 10, x + bw, y + 11, 0xFFFFB0D8);
             return;
         }
+        // 1.10.27: the label column of the slider rows fits their longest label + value (it was 45 % and cut "Omgevingsge",
+        // "Tekstsn"; a slider can be shorter, at least 60 px); the button rows keep 45 % so their buttons hold their labels. A label
+        // that is still too long ends in "…" (the tooltip has it whole)
         int lw = bw * 9 / 20;
+        if (o instanceof Schuif) {
+            for (Optie p : opties) {
+                if (p instanceof Schuif s1) {
+                    lw = Math.max(lw, font.width(p.naam()) + font.width(s1.procent() ? "100%" : tekstSnelheid(s1.waarde())) + 16);
+                }
+            }
+            lw = Math.min(lw, Math.max(bw * 9 / 20, bw - 60));
+        }
         String waardeTekst = o instanceof Schuif s0 ? (s0.procent() ? s0.waarde() + "%" : tekstSnelheid(s0.waarde())) : "";
-        g.text(font, font.plainSubstrByWidth(o.naam().getString(), lw - 8 - font.width(waardeTekst)), x, y + 4, TEKST, false);
+        g.text(font, nl.juiced.guhs.feature.vadsrijk.items.client.SmidTabs.kort(font, o.naam(), lw - 10 - font.width(waardeTekst)), x, y + 4, TEKST, false);
         g.text(font, waardeTekst, x + lw - 6 - font.width(waardeTekst), y + 4, ZACHT, false);
         if (o.uitleg() != null) {
             tip(mx, my, x, y, lw, 16, List.of(o.naam().copy().withStyle(ChatFormatting.LIGHT_PURPLE), o.uitleg().copy().withStyle(ChatFormatting.GRAY)));

@@ -104,14 +104,34 @@ public abstract class EcoScherm extends Screen implements nl.juiced.guhs.feature
         }
         // 1.10.24 ("maak interfaces groter en gebruik meer ruimte"): a loose screen is drawn scaled to the window: up (bigger text and
         // buttons) when there is room, down when the window is smaller than the panel. Works through Geschaald like the menu frame.
-        int sw = width, sh = height;
-        float past = Math.min((sw - 16) / (float) w, (sh - 20) / (float) h);
-        menuSchaal = past >= 1f ? nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.opschaal(sw, sh, w + 16, h + 20,
-                nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.guiSchaal()) : Math.max(0.5f, past);
-        width = (int) Math.floor(sw / menuSchaal);
-        height = (int) Math.floor(sh / menuSchaal);
-        left = (width - w) / 2;
-        top = Math.max(8, (height - h) / 2);
+        // 1.10.27: the place comes from MenuIndeling.los (a smaller share of the window; growing screens see groeit()).
+        if (basisW == 0) {
+            basisW = w;
+            basisH = h;
+        }
+        int[] max = groeit();
+        nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader k = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.los(width, height,
+                max == null ? basisW : max[0], max == null ? basisH : max[1], max == null ? basisW : max[2], max == null ? basisH : max[3],
+                nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.guiSchaal());
+        menuSchaal = k.schaal();
+        width = k.lw();
+        height = k.lh();
+        left = k.left();
+        top = k.top();
+        w = k.w();
+        h = k.h();
+    }
+
+    /** The size given to the constructor (w/h change when the screen grows or sits in the menu frame). */
+    private int basisW, basisH;
+
+    /**
+     * 1.10.27: a loose screen that grows with the window returns {minW, minH, maxW, maxH} (logical); null = the fixed size of the
+     * constructor.
+     */
+    @Nullable
+    protected int[] groeit() {
+        return null;
     }
 
     @Override

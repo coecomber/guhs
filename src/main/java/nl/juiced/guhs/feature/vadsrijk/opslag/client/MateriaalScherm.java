@@ -56,12 +56,14 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> impl
         zoek.setMaxLength(40);
         addRenderableWidget(zoek);
         int x = leftPos + imageWidth + 3, y = topPos + 4;
+        // 1.10.27: as wide as the longest label needs (70 cut "Alles opbergen"), inside the 80 px the frame keeps beside the panel
+        int kb = Math.max(70, Math.min(78, 8 + Math.max(font.width(Component.translatable("vadsrijk.opslag.knop.alles")), font.width(autoTekst()))));
         addRenderableWidget(Button.builder(Component.translatable("vadsrijk.opslag.knop.alles"), b -> stuur(MateriaalMenu.ALLES, ItemStack.EMPTY, 0, false))
-                .bounds(x, y, 70, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.alles.uitleg"))).build());
+                .bounds(x, y, kb, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.alles.uitleg"))).build());
         auto = addRenderableWidget(Button.builder(autoTekst(), b -> stuur(MateriaalMenu.AUTO, ItemStack.EMPTY, 0, false))
-                .bounds(x, y + 19, 70, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.auto.uitleg"))).build());
+                .bounds(x, y + 19, kb, 16).tooltip(Tooltip.create(Component.translatable("vadsrijk.opslag.knop.auto.uitleg"))).build());
         addRenderableWidget(Button.builder(Component.translatable("vadsrijk.opslag.knop.knapzak"), b -> stuur(MateriaalMenu.KNAPZAK, ItemStack.EMPTY, 0, false))
-                .bounds(x, y + 38, 70, 16).build());
+                .bounds(x, y + 38, kb, 16).build());
         ververs(true);
     }
 
@@ -184,11 +186,17 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> impl
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor g, int mx, int my) {
-        g.text(font, title, titleLabelX, titleLabelY, TEKST, false);
         g.text(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEKST, false);
         long totaal = menu.inhoud().totalItems();
         String s = Component.translatable("vadsrijk.opslag.tas.samen", BankGuhScreen.shortCount(totaal), menu.inhoud().entries().size()).getString();
-        g.text(font, s, imageWidth - 8 - font.width(s), titleLabelY, 0xFF8B4A68, false);
+        // 1.10.27: the count was drawn through the title ("Materiaalt882 stuks"): when both do not fit on the line the title goes
+        // (the tab right above it already says Materiaaltas) and the count takes the line
+        if (titleLabelX + font.width(title) + 6 <= imageWidth - 8 - font.width(s)) {
+            g.text(font, title, titleLabelX, titleLabelY, TEKST, false);
+            g.text(font, s, imageWidth - 8 - font.width(s), titleLabelY, 0xFF8B4A68, false);
+        } else {
+            g.text(font, s, titleLabelX, titleLabelY, TEKST, false);
+        }
         int start = scroll * MateriaalMenu.KOLOMMEN;
         for (int i = 0; i < MateriaalMenu.KOLOMMEN * MateriaalMenu.RIJEN && start + i < zicht.size(); i++) {
             BankContents.Entry e = zicht.get(start + i);
