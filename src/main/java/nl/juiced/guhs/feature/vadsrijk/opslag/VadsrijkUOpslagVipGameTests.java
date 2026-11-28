@@ -66,7 +66,7 @@ public class VadsrijkUOpslagVipGameTests {
             OpslagData d = Opslag.data(p);
             helper.assertTrue(!d.vipGrapGezien && !Knapzak.info(p, Knapzak.zak(p)).getBooleanOr("vip", true), "a new account has not seen the joke");
             OpslagData.Zak z = Knapzak.zak(p);
-            p.openMenu(new SimpleMenuProvider((id, inv, pl) -> new OpslagMenu(id, inv, OpslagMenu.KNAPZAK, 3, Knapzak.MAX_TABS, z::tab,
+            p.openMenu(new SimpleMenuProvider((id, inv, pl) -> new OpslagMenu(id, inv, OpslagMenu.KNAPZAK, Knapzak.RIJEN, Knapzak.MAX_TABS, z::tab,
                     () -> 1, sp -> true, new CompoundTag(), null, 0), Component.literal("test")));
             OpslagMenu m = (OpslagMenu) p.containerMenu;
             helper.assertTrue(m.clickMenuButton(p, OpslagMenu.KNOP_VIP_GEZIEN) && d.vipGrapGezien, "the client's button sets the flag");

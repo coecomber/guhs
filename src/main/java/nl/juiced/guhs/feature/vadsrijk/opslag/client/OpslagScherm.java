@@ -37,8 +37,8 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
     private VipGrapOverlay vip;
 
     public OpslagScherm(OpslagMenu menu, Inventory inv, Component title) {
-        super(menu, inv, title, 176, 114 + menu.rijen * 18);
-        this.inventoryLabelY = this.imageHeight - 94;
+        super(menu, inv, title, OpslagMenu.BEELD_B, menu.beeldH());   // (the bank: the vanilla 114 + rows x 18)
+        this.inventoryLabelY = menu.soort == OpslagMenu.KNAPZAK ? -10000 : this.imageHeight - 94;   // Knapzak-rijen: no label row
         this.flapStap = Math.min(28, (this.imageWidth - 6) / Math.max(1, menu.maxTabs));
         this.flapB = flapStap - 2;
     }
@@ -78,13 +78,19 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
         if (!inMenu()) {
             return;
         }
-        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
-        int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 18;
-        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kaderVast(win.getGuiScaledWidth(), win.getGuiScaledHeight(), imageWidth + 2 * 80, imageHeight + boven + 8);
+        // Knapzak-kader: the frame of every other tab (same rectangle, same scale: the menu no longer jumps at the knapzak). Six
+        // rows fit its smallest size: 36 (band + flaps) + 213 = 249 of the 250.
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.kader();
         width = kader.lw();
         height = kader.lh();
-        leftPos = kader.left() + (kader.w() - imageWidth) / 2;
-        topPos = kader.top() + boven + Math.max(0, (kader.h() - boven - 8 - imageHeight) / 2);
+        int[] plek = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.containerPlek(kader, imageWidth, imageHeight);
+        leftPos = plek[0];
+        topPos = plek[1];
+    }
+
+    @Override
+    public int[] echtVlak() {
+        return inMenu() && kader != null ? nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.echtVlak(kader) : null;
     }
 
     private boolean inKader(double mx, double my) {
@@ -148,7 +154,8 @@ public class OpslagScherm extends AbstractContainerScreen<OpslagMenu> implements
             }
         }
         g.blit(RenderPipelines.GUI_TEXTURED, ACHTERGROND, x, y, 0, 0, imageWidth, rijen * 18 + 17, 256, 256);
-        g.blit(RenderPipelines.GUI_TEXTURED, ACHTERGROND, x, y + rijen * 18 + 17, 0, 126, imageWidth, 96, 256, 256);
+        int knip = 18 + rijen * 18 + 13 - menu.invY();   // (the knapzak: 9 px of the label row cut out of the texture; the bank: 0)
+        g.blit(RenderPipelines.GUI_TEXTURED, ACHTERGROND, x, y + rijen * 18 + 17, 0, 126 + knip, imageWidth, 96 - knip, 256, 256);
         for (int i = 0; i < menu.maxTabs; i++) {   // the flap labels on top
             int fx = flapX(i), fy = topPos - FLAP_H + 2;
             boolean open = i < menu.openTabs();

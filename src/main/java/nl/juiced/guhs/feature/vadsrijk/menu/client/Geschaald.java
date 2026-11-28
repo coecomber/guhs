@@ -8,4 +8,15 @@ package nl.juiced.guhs.feature.vadsrijk.menu.client;
  */
 public interface Geschaald {
     float menuSchaal();
+
+    /**
+     * Knapzak-kader: the rectangle this screen really covers on the window (gui pixels, NOT logical ones): {x, y, w, h}, or null
+     * for "the whole window" (the default). Only the container tabs (knapzak, materiaaltas) give one: next to it another mod
+     * (JEI's item list) may draw and take the mouse, so outside this rectangle {@link MenuClient} leaves mouse events alone
+     * and hands the screen the real mouse position, and compat/jei tells JEI this rectangle instead of the logical panel.
+     */
+    @javax.annotation.Nullable
+    default int[] echtVlak() {
+        return null;
+    }
 }

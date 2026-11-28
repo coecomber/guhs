@@ -97,7 +97,7 @@ public class VadsrijkKnapzakGroterGameTests {
     /** A knapzak menu like Knapzak.open makes, but without the dimension check (the tests run in the overworld). */
     private static OpslagMenu openZak(ServerPlayer p, int tabs) {
         OpslagData.Zak z = Knapzak.zak(p);
-        p.openMenu(new SimpleMenuProvider((id, inv, pl) -> new OpslagMenu(id, inv, OpslagMenu.KNAPZAK, 3, Knapzak.MAX_TABS, z::tab,
+        p.openMenu(new SimpleMenuProvider((id, inv, pl) -> new OpslagMenu(id, inv, OpslagMenu.KNAPZAK, Knapzak.RIJEN, Knapzak.MAX_TABS, z::tab,
                 () -> tabs, sp -> true, new CompoundTag(), null, 0), Component.literal("test")));
         return (OpslagMenu) p.containerMenu;
     }
@@ -262,7 +262,7 @@ public class VadsrijkKnapzakGroterGameTests {
         }
         p.getInventory().setItem(0, new ItemStack(Items.DIAMOND, 64));
         m.clicked(hotbar0, 0, ContainerInput.QUICK_MOVE, p);
-        helper.assertTrue(p.getInventory().getItem(0).getCount() == 64 && telVak(tab, Items.DIAMOND) == 27L * GROOT, "a full tab takes nothing");
+        helper.assertTrue(p.getInventory().getItem(0).getCount() == 64 && telVak(tab, Items.DIAMOND) == (long) tab.getContainerSize() * GROOT, "a full tab takes nothing");
         // the bank keeps normal stacks
         Vak bank = Opslag.data(p).bankTab(0);
         helper.assertTrue(bank.getMaxStackSize(new ItemStack(Items.COOKIE)) == 64 && tab.getMaxStackSize(new ItemStack(Items.COOKIE)) == GROOT,
@@ -451,6 +451,150 @@ public class VadsrijkKnapzakGroterGameTests {
         t.deserialize(Nbt.input(p.registryAccess(), Nbt.write(p.registryAccess(), Opslag.data(p)::serialize)));
         helper.assertTrue(telVak(t.zak("1").tab(0), Items.COOKIE) == telVak(tab, Items.COOKIE)
                 && telVak(t.zak("1").tab(1), Items.COOKIE) == telVak(Knapzak.zak(p).tab(1), Items.COOKIE), "saved = live");
+        helper.succeed();
+    }
+
+    /**
+     * Knapzak-rijen: six rows per tab (54 slots, was 27). A save with 27-slot tabs (a big stack in parts and an unreadable rest
+     * in it) loads with everything at its old index; slots 27..53 take items, are saved and loaded; shift-click runs on into
+     * the new rows; sorting and "store all" cover all 54; the bank is as it was.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void zesRijen(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        RegistryOps<Tag> ops = p.registryAccess().createSerializationContext(NbtOps.INSTANCE);
+        helper.assertTrue(Knapzak.RIJEN == 6 && Knapzak.VAKKEN == 54 && Knapzak.MAX_TABS == 7 && Knapzak.GRATIS == 3, "6 rows of 9, 7 tabs, 3 free");
+        helper.assertTrue(Bank.VAKKEN == 54 && Opslag.data(p).bankTab(0).getContainerSize() == 54
+                && Opslag.data(p).bankTab(0).getMaxStackSize(new ItemStack(Items.COOKIE)) == 64, "the bank: 54 slots of 64, as before");
+        // a save of 1.10.31: 27-slot tabs, a big stack as ten parts in slot 0, something in the last old slot, an unreadable rest
+        ListTag tab0 = new ListTag();
+        for (int i = 0; i < 10; i++) {
+            tab0.add(oud(ops, 0, new ItemStack(Items.COOKIE, 64)));
+        }
+        tab0.add(oud(ops, 13, new ItemStack(Items.IRON_SWORD)));
+        tab0.add(oud(ops, 26, new ItemStack(Items.ENDER_PEARL, 16)));
+        CompoundTag weg = new CompoundTag();
+        weg.putString("id", "verdwenenmod:ding");
+        weg.putInt("count", 3);
+        weg.putByte("Slot", (byte) 5);
+        tab0.add(weg);
+        CompoundTag zak = new CompoundTag();
+        zak.put("tab0", tab0.copy());
+        zak.putInt("tabs", 1);
+        CompoundTag zakken = new CompoundTag();
+        zakken.put("1", zak);
+        CompoundTag oudeSave = Nbt.write(p.registryAccess(), new OpslagData()::serialize);
+        oudeSave.put("knapzakken", zakken);
+        OpslagData d = Opslag.data(p);
+        d.deserialize(Nbt.input(p.registryAccess(), oudeSave));
+        Vak tab = d.zak("1").tab(0);
+        helper.assertTrue(tab.getContainerSize() == 54, "a loaded tab has 54 slots: " + tab.getContainerSize());
+        helper.assertTrue(tab.getItem(0).is(Items.COOKIE) && tab.getItem(0).getCount() == GROOT, "slot 0: the 640 cookies");
+        helper.assertTrue(tab.getItem(13).is(Items.IRON_SWORD) && tab.getItem(26).is(Items.ENDER_PEARL) && tab.getItem(26).getCount() == 16,
+                "slots 13 and 26 as they were");
+        helper.assertTrue(tab.gevuld() == 3, "nothing else: " + tab.gevuld());
+        for (int i = 27; i < 54; i++) {
+            helper.assertTrue(tab.getItem(i).isEmpty(), "the new rows start empty (slot " + i + ")");
+        }
+        helper.assertTrue(d.onleesbaar.getOrDefault("knapzak/1/0", List.of()).size() == 1, "the unreadable rest is kept aside: " + d.onleesbaar);
+        helper.assertTrue(Nbt.write(p.registryAccess(), d::serialize).getCompoundOrEmpty("knapzakken").getCompoundOrEmpty("1").getListOrEmpty("tab0")
+                .equals(tab0), "and the tab is written back exactly as it was");
+        // the new rows through the screen
+        OpslagMenu m = openZak(p, 3);
+        int n = m.vakken(), hotbar0 = n + 27;
+        helper.assertTrue(n == 54 && m.slots.size() == 54 + 36, "the screen has 54 grid slots: " + n);
+        for (int i = 1; i < 27; i++) {   // the old three rows full of something else
+            if (tab.getItem(i).isEmpty()) {
+                tab.setItem(i, new ItemStack(Items.DIRT, GROOT));
+            }
+        }
+        p.getInventory().setItem(0, new ItemStack(Items.EMERALD, 64));
+        m.clicked(hotbar0, 0, ContainerInput.QUICK_MOVE, p);
+        helper.assertTrue(tab.getItem(27).is(Items.EMERALD) && tab.getItem(27).getCount() == 64 && p.getInventory().getItem(0).isEmpty(),
+                "shift-click runs on into row 4 (slot 27)");
+        p.getInventory().setItem(0, new ItemStack(Items.EMERALD, 30));
+        m.clicked(hotbar0, 0, ContainerInput.PICKUP, p);
+        m.clicked(53, 0, ContainerInput.PICKUP, p);
+        helper.assertTrue(tab.getItem(53).getCount() == 30 && m.getCarried().isEmpty(), "by hand into the last slot (53)");
+        tab.setItem(40, new ItemStack(Items.EMERALD, GROOT));
+        klopt(helper, p, Items.EMERALD, 64 + 30 + GROOT, "new rows");
+        // saved and loaded: the same slots
+        CompoundTag tag = Nbt.write(p.registryAccess(), d::serialize);
+        OpslagData t = new OpslagData();
+        t.deserialize(Nbt.input(p.registryAccess(), tag));
+        Vak terug = t.zak("1").tab(0);
+        helper.assertTrue(terug.getItem(27).getCount() == 64 && terug.getItem(53).getCount() == 30 && terug.getItem(40).getCount() == GROOT
+                && terug.getItem(0).getCount() == GROOT && terug.getItem(26).getCount() == 16, "slots 0, 26, 27, 40 and 53 after save + load");
+        helper.assertTrue(t.onleesbaar.getOrDefault("knapzak/1/0", List.of()).size() == 1 && terug.gevuld() == tab.gevuld(), "and nothing moved or went aside");
+        // shift-click out of a new row
+        m.clicked(53, 0, ContainerInput.QUICK_MOVE, p);
+        helper.assertTrue(tab.getItem(53).isEmpty() && inInv(p, Items.EMERALD) == 30, "shift-click out of slot 53");
+        klopt(helper, p, Items.EMERALD, 64 + 30 + GROOT, "out of the new rows");
+        // sorting takes all 54 slots: the emeralds of 27 and 40 become one full stack and the rest
+        tab.setItem(52, new ItemStack(Items.APPLE, 5));
+        long dirt = telVak(tab, Items.DIRT);
+        m.clickMenuButton(p, OpslagMenu.KNOP_SORTEER);
+        helper.assertTrue(telVak(tab, Items.EMERALD) == 64 + GROOT && telVak(tab, Items.DIRT) == dirt && telVak(tab, Items.COOKIE) == GROOT
+                && telVak(tab, Items.APPLE) == 5 && telVak(tab, Items.ENDER_PEARL) == 16 && telVak(tab, Items.IRON_SWORD) == 1, "sorting keeps every count");
+        helper.assertTrue(tab.getItem(0).is(Items.APPLE) && tab.getItem(52).isEmpty(), "and the apples of slot 52 are sorted to the front");
+        p.closeContainer();
+        // "store all" reaches the new rows too
+        Item steen = EcoSpul.VERBETERSTEENTJE.get();
+        tab.setItem(45, new ItemStack(steen, 20));
+        d.zak("1").tab(2).setItem(53, new ItemStack(steen, 4));
+        new MateriaalMenu(0, p.getInventory(), d, sp -> true).actie(p, MateriaalMenu.ALLES, ItemStack.EMPTY, 0, false);
+        helper.assertTrue(Materiaaltas.tel(p, steen) == 24 && tab.getItem(45).isEmpty() && d.zak("1").tab(2).getItem(53).isEmpty(),
+                "store all: the stones of slots 45 and 53 are in the bag: " + Materiaaltas.tel(p, steen));
+        helper.succeed();
+    }
+
+    /**
+     * Knapzak-kader: the knapzak and the materiaaltas sit in the frame of every other Vadsrijk-menu tab (the default
+     * {@code MenuIndeling.kader(sw, sh)}; they never ask for a bigger one). For a set of windows and GUI scales: the panel, its
+     * tab flaps and side buttons lie inside that frame, all 54 + 36 slots lie inside the panel without touching each other, and
+     * the rectangle the frame really covers (what JEI is told) lies inside the window.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void zelfdeKaderAlsDeRest(GameTestHelper helper) {
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        OpslagMenu m = openZak(p, 3);
+        var MI = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.class;
+        int bw = OpslagMenu.BEELD_B, bh = m.beeldH(), boven = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.CONTAINER_BOVEN;
+        helper.assertTrue(m.slots.size() == 54 + 36 && bh == 213, "54 + 36 slots in a panel of 176 x 213: " + m.slots.size() + ", " + bh);
+        // the knapzak (213) and the materiaaltas (214) fit the SMALLEST common frame, so they never need their own
+        helper.assertTrue(boven + bh <= nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.MIN_H
+                && boven + MateriaalMenu.INV_Y + 84 <= nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.MIN_H
+                && bw + 2 * 80 <= nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.MIN_W, "both panels fit the smallest frame (" + MI.getSimpleName() + ")");
+        int[][] vensters = {{1920, 1080}, {2560, 1440}, {3840, 2160}, {1366, 768}, {1280, 720}, {1600, 900}, {1024, 768}, {854, 480}};
+        for (int[] v : vensters) {
+            for (int gs = 1; gs <= 4; gs++) {
+                int sw = v[0] / gs, sh = v[1] / gs;
+                String wat = v[0] + "x" + v[1] + " GUI " + gs;
+                // the frame of a normal tab (MenuClient.kader() = this call); the knapzak screen takes exactly this one
+                var k = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.kader(sw, sh, nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.MIN_W,
+                        nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.MIN_H, true, gs);
+                helper.assertTrue(k.equals(nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.kader(sw, sh, bw + 2 * 80, boven + bh, true, gs)),
+                        "the knapzak's needs give the very same frame: " + wat);
+                int[] plek = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.containerPlek(k, bw, bh);
+                int l = plek[0], t = plek[1];
+                helper.assertTrue(l >= k.left() && l + bw <= k.left() + k.w(), "panel inside the frame (x): " + wat);
+                helper.assertTrue(t - 13 >= k.top() + nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.BAND && t + bh <= k.top() + k.h(),
+                        "flaps under the band, panel inside the frame (y): " + wat + " top " + t + " frame " + k.top() + "+" + k.h());
+                helper.assertTrue(l + bw + 3 + 66 <= k.left() + k.w(), "the side buttons inside the frame: " + wat);
+                for (int i = 0; i < m.slots.size(); i++) {
+                    var a = m.slots.get(i);
+                    helper.assertTrue(a.x >= 8 && a.x + 16 <= bw - 8 && a.y >= 18 && a.y + 16 <= bh - 7, "slot " + i + " inside the panel: " + a.x + "," + a.y);
+                    for (int j = i + 1; j < m.slots.size(); j++) {
+                        var b = m.slots.get(j);
+                        helper.assertTrue(Math.abs(a.x - b.x) >= 18 || Math.abs(a.y - b.y) >= 18, "slots " + i + " and " + j + " overlap");
+                    }
+                }
+                int[] echt = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.echtVlak(k);
+                helper.assertTrue(echt[0] >= 0 && echt[1] >= 0 && echt[0] + echt[2] <= sw && echt[1] + echt[3] <= sh,
+                        "the real rectangle inside the window: " + wat + " " + java.util.Arrays.toString(echt) + " in " + sw + "x" + sh);
+            }
+        }
+        p.closeContainer();
         helper.succeed();
     }
 

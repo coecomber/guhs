@@ -68,7 +68,7 @@ public class VadsrijkTOpslagGameTests {
     /** A knapzak menu like Knapzak.open makes, but without the dimension check (the tests run in the overworld). */
     private static OpslagMenu openZak(ServerPlayer p, int tabs) {
         OpslagData.Zak z = Knapzak.zak(p);
-        p.openMenu(new SimpleMenuProvider((id, inv, pl) -> new OpslagMenu(id, inv, OpslagMenu.KNAPZAK, 3, Knapzak.MAX_TABS, z::tab,
+        p.openMenu(new SimpleMenuProvider((id, inv, pl) -> new OpslagMenu(id, inv, OpslagMenu.KNAPZAK, Knapzak.RIJEN, Knapzak.MAX_TABS, z::tab,
                 () -> tabs, sp -> true, new CompoundTag(), null, 0), Component.literal("test")));
         return (OpslagMenu) p.containerMenu;
     }
@@ -79,7 +79,7 @@ public class VadsrijkTOpslagGameTests {
         p.getInventory().setItem(0, new ItemStack(Items.DIAMOND, 64));
         p.getInventory().setItem(1, new ItemStack(Items.DIAMOND, 10));
         OpslagMenu m = openZak(p, 2);
-        int n = m.vakken();   // 27 grid slots, then 27 main inventory slots, then 9 hotbar slots
+        int n = m.vakken();   // the grid slots (6 rows), then 27 main inventory slots, then 9 hotbar slots
         int hotbar0 = n + 27;
         helper.assertTrue(overal(p, Items.DIAMOND) == 74, "start 74");
         // shift-click into the knapzak

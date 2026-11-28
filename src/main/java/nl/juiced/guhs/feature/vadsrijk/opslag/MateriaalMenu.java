@@ -27,7 +27,7 @@ import nl.juiced.guhs.storage.BankContents;
  */
 public final class MateriaalMenu extends AbstractContainerMenu {
     public static final int NEEM = 0, STOP_HAND = 1, ALLES = 2, AUTO = 3, KNAPZAK = 4;
-    public static final int GRID_X = 8, GRID_Y = 30, KOLOMMEN = 9, RIJEN = 5, INV_Y = GRID_Y + RIJEN * 18 + 26;
+    public static final int GRID_X = 8, GRID_Y = 28, KOLOMMEN = 9, RIJEN = 5, INV_Y = GRID_Y + RIJEN * 18 + 12;   // Knapzak-kader: was 30 / + 26
 
     @Nullable
     private final OpslagData data;

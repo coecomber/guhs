@@ -102,9 +102,25 @@ public final class OpslagMenu extends AbstractContainerMenu {
                         : new Slot(zicht, c + r * 9, 8 + c * 18, 18 + r * 18));
             }
         }
-        addStandardInventorySlots(inv, 8, 18 + rijen * 18 + 13);
+        addStandardInventorySlots(inv, 8, invY());
         addDataSlot(huidig);
         addDataSlot(open);
+    }
+
+    /**
+     * The y of the player inventory's first row. Knapzak-rijen: the knapzak (six rows inside the Vadsrijk-menu frame) leaves out
+     * the "Inventory" label row (9 px less), so the frame needs no more height than it had with three rows and is not drawn
+     * smaller at GUI scale 4. The bank keeps the vanilla chest layout.
+     */
+    public int invY() {
+        return 18 + rijen * 18 + (soort == KNAPZAK ? 4 : 13);
+    }
+
+    /** The panel's size (the screen's imageWidth x imageHeight): 3 inventory rows + 4 + the hotbar + 7 under {@link #invY}. */
+    public static final int BEELD_B = 176;
+
+    public int beeldH() {
+        return invY() + 83;
     }
 
     public int huidigeTab() {

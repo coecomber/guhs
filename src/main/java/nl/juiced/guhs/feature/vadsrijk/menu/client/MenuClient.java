@@ -54,7 +54,12 @@ public final class MenuClient {
             g.pose().pushMatrix();
             try {
                 g.pose().scale(s, s);
-                e.getScreen().extractRenderStateWithTooltipAndSubtitles(g, (int) (e.getMouseX() / s), (int) (e.getMouseY() / s), e.getPartialTick());
+                // Knapzak-kader: next to a container tab (over JEI's list) the screen gets the mouse as it is: JEI draws its hover and
+                // tooltip from it. Not with an item on the cursor: that is drawn at the mouse and must stay under it.
+                boolean echt = buiten(e.getScreen(), e.getMouseX(), e.getMouseY())
+                        && !(e.getScreen() instanceof net.minecraft.client.gui.screens.inventory.AbstractContainerScreen<?> c && !c.getMenu().getCarried().isEmpty());
+                e.getScreen().extractRenderStateWithTooltipAndSubtitles(g, echt ? e.getMouseX() : (int) (e.getMouseX() / s),
+                        echt ? e.getMouseY() : (int) (e.getMouseY() / s), e.getPartialTick());
             } finally {
                 g.pose().popMatrix();
                 bezig = false;
@@ -62,7 +67,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseButtonPressed.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s != 1f && !bezig) {
+            if (s != 1f && !bezig && !buiten(e.getScreen(), e.getMouseButtonEvent().x(), e.getMouseButtonEvent().y())) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -74,7 +79,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseButtonReleased.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s != 1f && !bezig) {
+            if (s != 1f && !bezig && !buiten(e.getScreen(), e.getMouseButtonEvent().x(), e.getMouseButtonEvent().y())) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -86,7 +91,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseDragged.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s != 1f && !bezig) {
+            if (s != 1f && !bezig && !buiten(e.getScreen(), e.getMouseButtonEvent().x(), e.getMouseButtonEvent().y())) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -98,7 +103,7 @@ public final class MenuClient {
         });
         NeoForge.EVENT_BUS.addListener(EventPriority.HIGHEST, (ScreenEvent.MouseScrolled.Pre e) -> {
             float s = schaal(e.getScreen());
-            if (s != 1f && !bezig) {
+            if (s != 1f && !bezig && !buiten(e.getScreen(), e.getMouseX(), e.getMouseY())) {
                 e.setCanceled(true);
                 bezig = true;
                 try {
@@ -108,6 +113,16 @@ public final class MenuClient {
                 }
             }
         });
+    }
+
+    /**
+     * Knapzak-kader: is this (real) mouse position outside the rectangle a container tab really covers? There the event is not
+     * re-sent with logical coordinates: it goes on as it is, first to other mods (JEI's item list: clicks, the wheel), then to
+     * the screen, which sees a click outside its panel (an item on the cursor is dropped there, as in any container).
+     */
+    private static boolean buiten(Screen s, double x, double y) {
+        int[] v = s instanceof Geschaald g ? g.echtVlak() : null;
+        return v != null && (x < v[0] || y < v[1] || x >= v[0] + v[2] || y >= v[1] + v[3]);
     }
 
     private static float schaal(Screen s) {

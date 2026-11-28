@@ -1,4 +1,6 @@
-# Knapzak-groter: the knapzak with 7 tab flaps and big stacks (640 / 418 / 160 / 100 / 111 in a slot) at GUI scale 2, 3 and 4.
+# Knapzak-groter: the knapzak with 7 tab flaps, six rows per tab and big stacks (640 / 418 / 160 / 100 / 111 in a slot) at GUI
+# scale 2, 3 and 4; next to it the Karakter tab and the materiaaltas: the frame of all three must be the same rectangle, with
+# JEI's item list next to it (never through it).
 #   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/knapzak_groter.txt -PautocheckWidth=1920 -PautocheckHeight=1080
 section setup
 guhstaal nl
@@ -25,26 +27,57 @@ section GUI 2
 guiscale 2
 wait 10
 gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot kader_karakter_g2 gui
+gui close
+gui keep
 /guhs vadsrijk menu knapzak
 wait 30
 shot knapzak_groter_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+shot kader_materiaaltas_g2 gui
 gui close
 
 section GUI 3
 guiscale 3
 wait 10
 gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot kader_karakter_g3 gui
+gui close
+gui keep
 /guhs vadsrijk menu knapzak
 wait 30
 shot knapzak_groter_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+shot kader_materiaaltas_g3 gui
 gui close
 
 section GUI 4
 guiscale 4
 wait 10
 gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot kader_karakter_g4 gui
+gui close
+gui keep
 /guhs vadsrijk menu knapzak
 wait 30
 shot knapzak_groter_g4 gui
 gui close
+gui keep
+/guhs vadsrijk menu materiaaltas
+wait 30
+shot kader_materiaaltas_g4 gui
+gui close
+
 quit

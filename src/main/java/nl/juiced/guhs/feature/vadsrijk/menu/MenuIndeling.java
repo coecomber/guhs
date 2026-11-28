@@ -149,6 +149,26 @@ public final class MenuIndeling {
         return kader(sw, sh, MIN_W, MIN_H);
     }
 
+    /** Knapzak-kader: what a container panel inside the frame keeps free above itself (the title band + its own tab flaps). */
+    public static final int CONTAINER_BOVEN = BAND + 18;
+
+    /**
+     * Knapzak-kader: the container tabs (knapzak, materiaaltas) sit in the SAME frame as every other tab (they had their own,
+     * never scaled up, so the menu jumped at those two): {left, top} of a panel of bw x bh, centred under the band. The panel
+     * must fit the smallest frame: bw <= {@link #MIN_W}, {@link #CONTAINER_BOVEN} + bh <= {@link #MIN_H}.
+     */
+    public static int[] containerPlek(Kader k, int bw, int bh) {
+        return new int[] {k.left() + (k.w() - bw) / 2, k.top() + CONTAINER_BOVEN + Math.max(0, (k.h() - CONTAINER_BOVEN - bh) / 2)};
+    }
+
+    /** Knapzak-kader: the rectangle the frame and its tab row really cover on the window (gui pixels): {x, y, w, h}. */
+    public static int[] echtVlak(Kader k) {
+        float s = k.schaal();
+        int x0 = (int) Math.floor(k.left() * s), y0 = (int) Math.floor((k.top() - TABS_H) * s);
+        int x1 = (int) Math.ceil((k.left() + k.w()) * s), y1 = (int) Math.ceil((k.top() + k.h()) * s);
+        return new int[] {x0, y0, x1 - x0, y1 - y0};
+    }
+
     /** The frame for a panel that needs at least minW x minH (e.g. a tall skill tree): bigger than the others only then. */
     public static Kader kader(int sw, int sh, int minW, int minH) {
         return kader(sw, sh, minW, minH, true, 1);

@@ -47,6 +47,30 @@ public class GuhsJeiPlugin implements IModPlugin {
         registration.addRecipeTransferHandler(new BankTransfer(registration.getTransferHelper()), RecipeTypes.CRAFTING);
     }
 
+    /**
+     * Knapzak-kader: the knapzak and the materiaaltas sit in the Vadsrijk-menu frame, which is drawn scaled; their own
+     * leftPos/imageWidth are logical. JEI gets the rectangle the frame really covers, so its item list starts next to the frame
+     * (or hides when there is no room) instead of drawing through it. Null = not in the frame (the bank): JEI's own handler.
+     */
+    @Override
+    public void registerGuiHandlers(mezz.jei.api.registration.IGuiHandlerRegistration registration) {
+        registration.addGuiScreenHandler(nl.juiced.guhs.feature.vadsrijk.opslag.client.OpslagScherm.class, s -> vlak(s, s.echtVlak()));
+        registration.addGuiScreenHandler(nl.juiced.guhs.feature.vadsrijk.opslag.client.MateriaalScherm.class, s -> vlak(s, s.echtVlak()));
+    }
+
+    @javax.annotation.Nullable
+    private static mezz.jei.api.gui.handlers.IGuiProperties vlak(net.minecraft.client.gui.screens.Screen s, @javax.annotation.Nullable int[] v) {
+        if (v == null) {
+            return null;
+        }
+        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
+        return new Vlak(s.getClass(), v[0], v[1], v[2], v[3], win.getGuiScaledWidth(), win.getGuiScaledHeight());
+    }
+
+    private record Vlak(Class<? extends net.minecraft.client.gui.screens.Screen> screenClass, int guiLeft, int guiTop, int guiXSize, int guiYSize,
+            int screenWidth, int screenHeight) implements mezz.jei.api.gui.handlers.IGuiProperties {
+    }
+
     /** 1.2.5: the Guhoven bakes the furnace's smelting recipes (on guh power): JEI lists it next to the furnace. */
     @Override
     public void registerRecipeCatalysts(mezz.jei.api.registration.IRecipeCatalystRegistration registration) {

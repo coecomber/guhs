@@ -43,7 +43,7 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> impl
 
     public MateriaalScherm(MateriaalMenu menu, Inventory inv, Component title) {
         super(menu, inv, title, 176, MateriaalMenu.INV_Y + 84);
-        this.inventoryLabelY = MateriaalMenu.INV_Y - 11;
+        this.inventoryLabelY = -10000;   // Knapzak-kader: no "Inventory" label row (the panel must fit the common frame)
         this.titleLabelY = 6;
     }
 
@@ -85,13 +85,18 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> impl
         if (!inMenu()) {
             return;
         }
-        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
-        int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 18;
-        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kaderVast(win.getGuiScaledWidth(), win.getGuiScaledHeight(), imageWidth + 2 * 80, imageHeight + boven + 8);
+        // Knapzak-kader: the frame of every other tab (see OpslagScherm): 36 + 214 = the 250 of its smallest size
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.kader();
         width = kader.lw();
         height = kader.lh();
-        leftPos = kader.left() + (kader.w() - imageWidth) / 2;
-        topPos = kader.top() + boven + Math.max(0, (kader.h() - boven - 8 - imageHeight) / 2);
+        int[] plek = nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.containerPlek(kader, imageWidth, imageHeight);
+        leftPos = plek[0];
+        topPos = plek[1];
+    }
+
+    @Override
+    public int[] echtVlak() {
+        return kader != null ? nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.echtVlak(kader) : null;
     }
 
     private boolean inKader(double mx, double my) {
@@ -186,7 +191,6 @@ public class MateriaalScherm extends AbstractContainerScreen<MateriaalMenu> impl
 
     @Override
     protected void extractLabels(GuiGraphicsExtractor g, int mx, int my) {
-        g.text(font, playerInventoryTitle, inventoryLabelX, inventoryLabelY, TEKST, false);
         long totaal = menu.inhoud().totalItems();
         String s = Component.translatable("vadsrijk.opslag.tas.samen", BankGuhScreen.shortCount(totaal), menu.inhoud().entries().size()).getString();
         // 1.10.27: the count was drawn through the title ("Materiaalt882 stuks"): when both do not fit on the line the title goes
