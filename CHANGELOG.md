@@ -3,6 +3,12 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.29 — Minecraft 26.1.2
+
+- **Quest marker sent you from the whale's head to Lampionhaven (live: "De adem van Moeder Wolkwal", ~750 blocks):** `Z4Haken.route` tested "in zone 4" by x/z only, and zone 4's box runs to x 2559 under the west end of Hoogvads, so a player at x < 2560 on the whale with a target at x >= 2560 got "take Windvaan's airship first". New `Z4Haken.opDeKust(x,y,z)` (zone 4's box minus y >= 150 inside zone 5's box) for player and target. Affected every zone-5 step seen from the middle blowhole, Ooggaarde and eye balcony (432 targets in the new `Z5TrackerGameTests`). `QuestStap.inRijk` / `TEST_IN_RIJK`: a test seam so zone routes run on the gametest server.
+- **Ambachten zone 5, fishing place 12 had no spots (live: 0 found):** `z5_vis_spuitgat` was anchored at `spuitgat_midden`, a street crossing without water. Now anchored at `spuitgat_zuid`, radius 28, 1 spot (the park fountain at 2586..2588,225,-544..-542), named "de fontein bij het zuidelijke spuitgat"; the changed anchor makes the server rescan it by itself. New test `hoogvadsVisplekkenHebbenWater`.
+- Known, not changed: north/south words in Hoogvads texts are flipped versus Minecraft (the "noordelijke" blowhole is at z -495).
+
 ## 1.10.28 — Minecraft 26.1.2
 
 - **No chest after Zilverstaart -> Grauwe Droom (live: Luc_Ermeling):** `Z5Droom.tick` read "no chest block at the chest spot" as "chest opened", but on a real server the chest first falls from the sky (`Kistceremonie`), so the player woke within half a second of the defeat; and `Z5Baas.verslagen` started the dream right after handing out Zilverstaart's chest. Now the player only wakes once the chest was seen standing and is gone again (90 s maximum stays), chests left on the cloud and in the Wolkwaldroom are handed over on waking (`BaasKist.lever` / `vanSpeler`), and once per server run for a player who cheered up the dream and comes within 6 blocks of the middle blowhole (also finds chests from before the fix).
