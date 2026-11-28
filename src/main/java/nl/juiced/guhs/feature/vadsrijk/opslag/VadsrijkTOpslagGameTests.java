@@ -260,9 +260,9 @@ public class VadsrijkTOpslagGameTests {
         ServerPlayer p = GuhMockPlayer.of(helper);
         var oud = Opslag.KARAKTER;
         try {
-            int basis = Knapzak.tabs(p);   // (1 + any story flags of a fresh player: none)
-            helper.assertTrue(basis == 1, "a new character has 1 tab: " + basis);
-            helper.assertTrue(Knapzak.ontgrendel(p, "test_a") && !Knapzak.ontgrendel(p, "test_a") && Knapzak.tabs(p) == 2, "a source counts once");
+            int basis = Knapzak.tabs(p);   // (the free tabs + any story flags of a fresh player: none)
+            helper.assertTrue(basis == Knapzak.GRATIS, "a new character has " + Knapzak.GRATIS + " tabs: " + basis);
+            helper.assertTrue(Knapzak.ontgrendel(p, "test_a") && !Knapzak.ontgrendel(p, "test_a") && Knapzak.tabs(p) == basis + 1, "a source counts once");
             Knapzak.zak(p).gekocht = true;
             Knapzak.ontgrendel(p, "test_b");
             Knapzak.ontgrendel(p, "test_c");
@@ -270,7 +270,7 @@ public class VadsrijkTOpslagGameTests {
             helper.assertTrue(Knapzak.tabs(p) == Knapzak.MAX_TABS, "capped at " + Knapzak.MAX_TABS);
             Knapzak.zak(p).tab(0).setItem(0, new ItemStack(Items.CAKE));
             Opslag.KARAKTER = sp -> "2";
-            helper.assertTrue(Knapzak.tabs(p) == 1 && Knapzak.zak(p).tab(0).isEmpty(), "character 2 has its own knapzak");
+            helper.assertTrue(Knapzak.tabs(p) == Knapzak.GRATIS && Knapzak.zak(p).tab(0).isEmpty(), "character 2 has its own knapzak");
             Opslag.data(p).bankTab(0).setItem(0, new ItemStack(Items.BELL));
             Opslag.KARAKTER = oud;
             helper.assertTrue(Opslag.data(p).bankTab(0).getItem(0).is(Items.BELL), "the bank is shared by the characters");

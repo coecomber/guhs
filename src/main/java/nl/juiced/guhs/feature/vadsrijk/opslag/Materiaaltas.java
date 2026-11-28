@@ -181,7 +181,12 @@ public final class Materiaaltas {
         }
     }
 
-    /** Puts every material from the main inventory (hotbar + bag, 36 slots) into the bag; returns how many items moved. */
+    /**
+     * Puts every material from the main inventory (hotbar + bag, 36 slots) AND from every tab of the active character's knapzak
+     * into the bag; returns how many items moved. (Knapzak-groter: the knapzak tabs are new. The bag has no limit, so everything
+     * that is a material always fits; anything else, worn gear and the off-hand stay where they are.) Both buttons use this:
+     * "Materialen ➜ tas" in the knapzak screen and "Alles opbergen" in the materiaaltas screen.
+     */
     public static long allesOpbergen(ServerPlayer p) {
         if (!Opslag.magOpenen(p)) {
             return 0;
@@ -201,7 +206,28 @@ public final class Materiaaltas {
             }
         }
         inv.setChanged();
+        for (Vak v : d.zak(Opslag.KARAKTER.apply(p)).tabs) {
+            boolean iets = false;
+            for (int i = 0; i < v.getContainerSize(); i++) {
+                ItemStack s = v.getItem(i);
+                if (isMateriaal(s)) {
+                    ItemStack weg = s.copy();   // (a big stack goes in whole: the bag counts in longs)
+                    v.setItem(i, ItemStack.EMPTY);
+                    n += stop(d, weg);
+                    iets = true;
+                }
+            }
+            if (iets) {
+                v.setChanged();
+            }
+        }
         return n;
+    }
+
+    /** The feedback line of both "store all" buttons: how many went in, or that there was nothing to store. */
+    static void meldOpgeborgen(ServerPlayer p, long n) {
+        p.sendOverlayMessage(n > 0 ? Component.translatable("vadsrijk.opslag.tas.opgeborgen", n).withStyle(ChatFormatting.LIGHT_PURPLE)
+                : Component.translatable("vadsrijk.opslag.tas.niets_opgeborgen").withStyle(ChatFormatting.GRAY));
     }
 
     // ---- automatic pickup -----------------------------------------------------------------------------------------------

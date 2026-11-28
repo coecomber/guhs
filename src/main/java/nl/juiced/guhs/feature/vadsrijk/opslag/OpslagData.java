@@ -33,7 +33,8 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
  * and a bank/knapzak/materiaaltas is atomic: a crash keeps both sides or neither.
  * <ul>
  *   <li><b>Knapzak</b> (per character): {@link #knapzakken}, keyed by the character key ({@link Opslag#KARAKTER}; "1" until
- *   t-karakter's slots exist). Up to {@link Knapzak#MAX_TABS} tabs of {@link Knapzak#VAKKEN} slots, plus how they were unlocked.</li>
+ *   t-karakter's slots exist). Up to {@link Knapzak#MAX_TABS} tabs of {@link Knapzak#VAKKEN} slots (each slot up to
+ *   {@link Knapzak#STAPEL_FACTOR} normal stacks, saved as several entries with the same slot), plus how they were unlocked.</li>
  *   <li><b>Bank</b> (account-wide): {@link #bank}, up to {@link Bank#MAX_TABS} tabs of {@link Bank#VAKKEN}; {@link #bankGekocht}.</li>
  *   <li><b>Materiaaltas</b> (account-wide): {@link #materialen}, one entry per kind (item + components, count 1) with a long count.</li>
  * </ul>
@@ -62,7 +63,7 @@ public final class OpslagData implements ValueIOSerializable {
 
         public Vak tab(int i) {
             while (tabs.size() <= i) {
-                tabs.add(new Vak(Knapzak.VAKKEN));
+                tabs.add(new Vak(Knapzak.VAKKEN, Knapzak.STAPEL_FACTOR));
             }
             return tabs.get(i);
         }
@@ -171,11 +172,19 @@ public final class OpslagData implements ValueIOSerializable {
             if (st.isEmpty()) {
                 continue;
             }
-            Optional<Tag> t = ItemStackWithSlot.CODEC.encodeStart(ops, new ItemStackWithSlot(s, st)).result();
-            if (t.isPresent() && t.get() instanceof CompoundTag c) {
-                l.add(c);
-            } else {
-                LOG.error("T-OPSLAG: could not write {} in {}", st, plek);
+            // Knapzak-groter: a slot may hold more than a normal stack and the item codec stops at 99, so a big stack is written
+            // as several entries of at most a normal stack with the SAME slot (lees adds them up again). A stack of normal size
+            // is one entry, exactly as before. The version before this one reads the first entry into the slot, keeps the
+            // others aside (onleesbaar) and writes them back, so even a rollback of the mod loses nothing.
+            int deel = Math.max(1, Math.min(st.getMaxStackSize(), 99));
+            for (int over = st.getCount(); over > 0; over -= deel) {
+                int k = Math.min(over, deel);
+                Optional<Tag> t = ItemStackWithSlot.CODEC.encodeStart(ops, new ItemStackWithSlot(s, st.copyWithCount(k))).result();
+                if (t.isPresent() && t.get() instanceof CompoundTag c) {
+                    l.add(c);
+                } else {
+                    LOG.error("T-OPSLAG: could not write {} x{} in {}", st, k, plek);
+                }
             }
         }
         l.addAll(onleesbaar.getOrDefault(plek, List.of()));
@@ -234,14 +243,49 @@ public final class OpslagData implements ValueIOSerializable {
                 l.add(c);
             }
         }));
+        List<CompoundTag> bezet = new ArrayList<>();   // (readable, but its slot holds something else or is full)
         for (CompoundTag c : l) {
             Optional<ItemStackWithSlot> s = ItemStackWithSlot.CODEC.parse(ops, c).result();
-            if (s.isPresent() && !s.get().stack().isEmpty() && s.get().slot() >= 0 && s.get().slot() < v.getContainerSize()
-                    && v.getItem(s.get().slot()).isEmpty()) {
-                v.setItem(s.get().slot(), s.get().stack());
+            if (s.isPresent() && !s.get().stack().isEmpty() && s.get().slot() >= 0 && s.get().slot() < v.getContainerSize()) {
+                ItemStack st = s.get().stack(), nu = v.getItem(s.get().slot());
+                if (nu.isEmpty()) {
+                    v.setItem(s.get().slot(), st);
+                } else if (past(v, nu, st)) {
+                    nu.grow(st.getCount());   // Knapzak-groter: the next part of a big stack (see schrijf)
+                } else {
+                    bezet.add(c);
+                }
             } else {
                 onleesbaar.computeIfAbsent(plek, x -> new ArrayList<>()).add(c);
             }
         }
+        // Knapzak-groter: parts whose slot was taken (only after a rollback to an older version and back): onto an equal stack
+        // or into a free slot of the same tab; kept aside as before only when the tab has no room.
+        for (CompoundTag c : bezet) {
+            ItemStack st = ItemStackWithSlot.CODEC.parse(ops, c).result().map(ItemStackWithSlot::stack).orElse(ItemStack.EMPTY);
+            int vrij = -1;
+            for (int i = 0; i < v.getContainerSize() && vrij < 0 && !st.isEmpty(); i++) {
+                if (past(v, v.getItem(i), st)) {
+                    vrij = i;
+                }
+            }
+            for (int i = 0; i < v.getContainerSize() && vrij < 0 && !st.isEmpty(); i++) {
+                if (v.getItem(i).isEmpty()) {
+                    vrij = i;
+                }
+            }
+            if (vrij < 0) {
+                onleesbaar.computeIfAbsent(plek, x -> new ArrayList<>()).add(c);
+            } else if (v.getItem(vrij).isEmpty()) {
+                v.setItem(vrij, st);
+            } else {
+                v.getItem(vrij).grow(st.getCount());
+            }
+        }
+    }
+
+    /** Does all of {@code erbij} fit onto the (non-empty) stack {@code nu} of this tab? */
+    private static boolean past(Vak v, ItemStack nu, ItemStack erbij) {
+        return !nu.isEmpty() && ItemStack.isSameItemSameComponents(nu, erbij) && nu.getCount() + erbij.getCount() <= v.getMaxStackSize(nu);
     }
 }
