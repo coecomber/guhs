@@ -202,6 +202,14 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         return new QuestStap(q.id(), q.hoofd(), titel, wat, waar, pos, extra);
     }
 
+    /** (gametests) Players the zone routes treat as being in the Vadsrijk: the gametest server has no Vadsrijk level. Empty in game. */
+    public static final java.util.Set<java.util.UUID> TEST_IN_RIJK = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
+    /** Is this player in the Vadsrijk (the zones' airship hops only apply there)? */
+    public static boolean inRijk(ServerPlayer p) {
+        return nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk.in(p) || !TEST_IN_RIJK.isEmpty() && TEST_IN_RIJK.contains(p.getUUID());
+    }
+
     /** Routes other zones add (zone 2: out of the Kandijkom geode through a gate first); applied after the airship hop. */
     public static final List<java.util.function.BiFunction<ServerPlayer, QuestStap, QuestStap>> ROUTES = new java.util.concurrent.CopyOnWriteArrayList<>();
 

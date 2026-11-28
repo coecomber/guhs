@@ -220,13 +220,25 @@ public final class Z4Haken {
         }
     }
 
+    /**
+     * On the Lampionkust itself: zone 4's tile box minus what is Hoogvads' (zone 5: from y 150 up in its own box, which overlaps
+     * this one for x 2432..2559; the same rule as {@code VadsrijkZones.zoneVan(x, y, z)} and zone 5's own route).
+     */
+    public static boolean opDeKust(double x, double y, double z) {
+        return Z4VerhaalPlekken.zone4(x, z) && !(y >= nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Z5_VANAF_Y
+                && nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.in(nl.juiced.guhs.feature.vadsrijk.indeling.VadsrijkZones.Zone.Z5, x, z));
+    }
+
     /** The tracker: in zone 4 with a target outside it: first Windvaan's airship; outside with a target inside: the line to the coast. */
     static QuestStap route(ServerPlayer p, QuestStap s) {
         BlockPos d = s.doel();
-        if (d == null || !Vadsrijk.in(p) || !Questlog.klaar(p, "hq05_klodderreus")) {
+        if (d == null || !QuestStap.inRijk(p) || !Questlog.klaar(p, "hq05_klodderreus")) {
             return s;
         }
-        boolean ik = Z4VerhaalPlekken.zone4(p.getX(), p.getZ()), doel = Z4VerhaalPlekken.zone4(d.getX(), d.getZ());
+        // (Luc, z5_s05_adem) by HEIGHT too: Hoogvads floats above the east end of this zone's tile box (x 2432..2559). Flat, a player
+        // on the whale's head (the Ooggaarde, the middle blowhole) stood "in zone 4" and every target in the rest of the city
+        // (x >= 2560) lay "outside": the tracker sent them to Windvaan in Lampionhaven, some 750 blocks away
+        boolean ik = opDeKust(p.getX(), p.getY(), p.getZ()), doel = opDeKust(d.getX(), d.getY(), d.getZ());
         if (ik == doel) {
             return s;
         }
