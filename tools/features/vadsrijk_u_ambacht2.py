@@ -82,7 +82,7 @@ GROEPEN = {
     "z5_hout_staartpark_1": "de bomen van het Staartpark (zuid)", "z5_hout_staartpark_2": "de bomen van het Staartpark (noord)",
     "z5_hout_ooggaarde": "de bomen van de Ooggaarde", "z5_mijn_noordvin": "de noordvin van Moeder Wolkwal", "z5_mijn_zuidvin": "de zuidvin van Moeder Wolkwal",
     "z5_mijn_staartvin": "de staartvin van Moeder Wolkwal", "z5_vis_staartvijver": "de vijver in het Staartpark", "z5_vis_fontein": "de fontein op de Marktlaan",
-    "z5_vis_spuitgat": "het spuitgat van Moeder Wolkwal", "z5_korf_staartpark": "de bijenwei in het Staartpark", "z5_korf_ooggaarde": "de bijenwei in de Ooggaarde",
+    "z5_vis_spuitgat": "de fontein bij het zuidelijke spuitgat", "z5_korf_staartpark": "de bijenwei in het Staartpark", "z5_korf_ooggaarde": "de bijenwei in de Ooggaarde",
 }
 
 # the Gilde story steps (Hoogvads' Ambachtsgilde): per ambacht 2 steps (lv 55 / 60) x (teacher, you, teacher)

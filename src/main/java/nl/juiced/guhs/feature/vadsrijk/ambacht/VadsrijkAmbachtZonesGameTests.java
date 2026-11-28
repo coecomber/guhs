@@ -1,5 +1,6 @@
 package nl.juiced.guhs.feature.vadsrijk.ambacht;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,12 +13,14 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import nl.juiced.guhs.feature.titels.Titels;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken.Groep;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.AmbachtPlekken.Zoek;
 import nl.juiced.guhs.feature.vadsrijk.ambacht.PlekWereld.Spot;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.Stat;
+import nl.juiced.guhs.feature.vadsrijk.kern.wereld.TegelBlokken;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisType;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.BasisTypes;
 import nl.juiced.guhs.feature.vadsrijk.kern.loot.Rollen;
@@ -71,6 +74,63 @@ public class VadsrijkAmbachtZonesGameTests {
         helper.assertTrue(z5borst != null && z5ring != null && z5ring.basis().get(Stat.KRITIEK) > z3ring.basis().get(Stat.KRITIEK), "T5 above T3");
         helper.assertTrue(Materialen.KERNEN.size() == 6 && AmbachtRegistry.kernVoor(52, 0, 64, 0).equals("lampionkern")
                 && AmbachtRegistry.kernVoor(58, 0, 64, 0).equals("wolkkern") && AmbachtRegistry.kernVoor(40, 0, 64, 0).equals("wortelkern"), "boss cores per zone");
+        helper.succeed();
+    }
+
+    /**
+     * After 1.10.28 (live: entry 12 of the zone-5 places, "het spuitgat van Moeder Wolkwal", had 0 fishing spots: its anchor was a
+     * street crossing without water): every fishing group of Hoogvads finds real water in the MAP TILES round its anchor. The tile
+     * cells round each anchor are copied into the test world (far away, same height) and scanned with the real group.
+     */
+    @GuhTest(template = "empty", batch = BATCH, timeoutTicks = 600)
+    public static void hoogvadsVisplekkenHebbenWater(GameTestHelper helper) {
+        ServerLevel sl = helper.getLevel();
+        TegelBlokken tegels = new TegelBlokken(sl);
+        int nr = 0;
+        for (Groep g : List.copyOf(AmbachtPlekken.GROEPEN)) {
+            if (g.zone() != 5 || g.soort() != NodeSoort.VIS) {
+                continue;
+            }
+            BlockPos a = g.anker();
+            helper.assertTrue(a != null && tegels.heeftTegel(a), g.id() + ": its anchor is on the map tiles");
+            BlockPos naar = new BlockPos(59016 + 200 * nr++, a.getY(), 59016);
+            BlockPos d = naar.subtract(a);
+            int r = g.straal() + 3;
+            List<BlockPos> gezet = new ArrayList<>();
+            for (int x = a.getX() - r; x <= a.getX() + r; x++) {
+                for (int z = a.getZ() - r; z <= a.getZ() + r; z++) {
+                    sl.getChunk(new BlockPos(x, 0, z).offset(d));
+                    for (int y = a.getY() - 32; y <= a.getY() + 25; y++) {
+                        BlockPos p = new BlockPos(x, y, z), q = p.offset(d);
+                        BlockState s = tegels.staat(p);
+                        if (!s.isAir()) {
+                            sl.setBlock(q, s, 2 | 16);
+                            gezet.add(q);
+                        } else if (!sl.getBlockState(q).isAir()) {
+                            sl.setBlock(q, Blocks.AIR.defaultBlockState(), 2 | 16);
+                        }
+                    }
+                }
+            }
+            List<Spot> l = PlekWereld.scan(sl, naar, g);
+            int posities = l.stream().mapToInt(s -> s.posities().size()).sum();
+            boolean ok = !l.isEmpty() && l.get(0).posities().size() >= 3;
+            String waar = l.isEmpty() ? "-" : l.get(0).posities().get(0).subtract(d).toShortString();
+            for (Spot s : l) {
+                for (BlockPos q : s.posities()) {
+                    ok &= Grondstoffen.magHier(sl, NodeSoort.VIS, q) && q.distSqr(naar) <= (g.straal() + 1.0) * (g.straal() + 1.0);
+                }
+            }
+            for (BlockPos q : gezet) {
+                sl.setBlock(q, Blocks.AIR.defaultBlockState(), 2 | 16);
+            }
+            helper.assertTrue(ok, g.id() + " at " + a.toShortString() + " (straal " + g.straal() + "): " + l.size() + " spots, " + posities
+                    + " positions in the map tiles, first at " + waar);
+        }
+        helper.assertTrue(nr >= 3, "the three fishing groups of Hoogvads: " + nr);
+        // the place the report was about: one spot in the park fountain by the southern blowhole, named after it
+        Groep spuitgat = AmbachtPlekken.groep("z5_vis_spuitgat");
+        helper.assertTrue(spuitgat != null && spuitgat.poi().equals("spuitgat_zuid") && spuitgat.ambacht() == Ambacht.VISSEN, "anchored at the southern blowhole");
         helper.succeed();
     }
 

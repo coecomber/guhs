@@ -134,7 +134,7 @@ public final class AmbachtPlekken {
         g("z4_duik_koraalbaai", 4, "duiksteiger", NodeSoort.DUIK, 4, 6, 30, Zoek.KORAAL);
         g("z4_duik_grotjes", 4, "eiland_koraalbaai", NodeSoort.DUIK, 4, 5, 36, Zoek.KORAAL);
         // ---- zone 5 (T5, Hoogvads on Moeder Wolkwal, t-z5wereld POIs; U-AMBACHT2): the gardens, the park trees, the whale's fins
-        // (rock-hard skin), the pond, the market fountain and the blowhole
+        // (rock-hard skin), the pond, the market fountain and the little park fountain by the southern blowhole
         g("z5_pluk_staartpark", 5, "staartpark_prieel", NodeSoort.KRUID, 5, 8, 36, Zoek.GROND);
         g("z5_pluk_ooggaarde", 5, "ooggaarde_tuin", NodeSoort.KRUID, 5, 8, 30, Zoek.GROND);
         g("z5_pluk_wolkbessen", 5, "wolkbes_3", NodeSoort.KRUID, 5, 6, 30, Zoek.GROND);
@@ -146,7 +146,10 @@ public final class AmbachtPlekken {
         g("z5_mijn_staartvin", 5, "staartvin_top", NodeSoort.ERTS, 5, 6, 26, Zoek.STEEN);
         g("z5_vis_staartvijver", 5, "staartpark_vijver", NodeSoort.VIS, 5, 5, 20, Zoek.WATER);
         g("z5_vis_fontein", 5, "markt_fontein", NodeSoort.VIS, 5, 3, 12, Zoek.WATER);
-        g("z5_vis_spuitgat", 5, "spuitgat_midden", NodeSoort.VIS, 5, 4, 20, Zoek.WATER);
+        // (after 1.10.28: this group stood at "spuitgat_midden" (straal 20), a street crossing without a drop of water: 0 spots on
+        // live, so nobody could find this place for the Ambachtsboek. The only fishable water by the blowholes is the small park
+        // fountain 24 blocks east of the southern one (a ring of 8 water blocks: one spot). The new anchor makes live scan it again.)
+        g("z5_vis_spuitgat", 5, "spuitgat_zuid", NodeSoort.VIS, 5, 1, 28, Zoek.WATER);
         // Imkeren (A3: own hives in the zones from zone 3 on; the bees fetch nectar from the flowers round them)
         korf("z3_korf_bloesemdal", "paddenbloesemdal", "bloesemhoning");
         korf("z3_korf_raatweide", "raatweide_plein", "schemerhoning");
