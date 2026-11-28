@@ -32,6 +32,7 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Element;
 import nl.juiced.guhs.feature.vadsrijk.kern.Gebieden;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
+import nl.juiced.guhs.feature.vadsrijk.kern.baas.BaasKist;
 import nl.juiced.guhs.feature.vadsrijk.kern.party.Partijen;
 import nl.juiced.guhs.feature.vadsrijk.kern.scene.RijkScenes;
 import nl.juiced.guhs.feature.vadsrijk.zone5.verhaal.Z5Finale;
@@ -48,8 +49,9 @@ import nl.juiced.guhs.feature.vadsrijk.zone5.wezens.Z5WezensPlekken;
  *   <li><b>De Grauwe Droom</b> ({@link GrauweDroom}, a loose boss, lv 60) swims rounds over the cloud. Falling off = a cloud catches
  *       you and puts you back ({@link #vangnet}).</li>
  *   <li><b>Opgevrolijkt:</b> every helper counts for the story ({@code Z5Finale.droomOpgevrolijkt}), the personal chests land on the
- *       cloud, and each player <b>wakes up</b> at the middle blowhole once their chest is opened (or after {@link #WAKKER_MAX}). After
- *       the fight, stepping off the cloud also wakes you.</li>
+ *       cloud, and each player <b>wakes up</b> at the middle blowhole once their chest has landed and is opened (or after
+ *       {@link #WAKKER_MAX}). After the fight, stepping off the cloud also wakes you. A chest that is still standing when you wake
+ *       (and the spy's chest, left behind in the Wolkwaldroom when the dream took you) is brought after you: {@link #nabrengen}.</li>
  *   <li><b>Herinnering</b> (replay, loot + pet): after the story, sneak 2 s on the middle blowhole ({@code Z5VerhaalPlekken.SPUITGAT})
  *       to dream it again.</li>
  * </ol>
@@ -74,6 +76,11 @@ public final class Z5Droom {
     private static final Map<UUID, Long> WAKKER = new HashMap<>();
     /** Player -> where their chest stands (woken as soon as it is gone). */
     private static final Map<UUID, BlockPos> KIST = new HashMap<>();
+    /** Players whose chest was seen standing: it falls from the sky first (kern's chest ceremony), so "no chest there" only means
+     *  "opened" after it has landed. */
+    private static final Set<UUID> KIST_STOND = new java.util.HashSet<>();
+    /** Players whose left-behind chests were already looked for at the blowhole (once per server run). */
+    private static final Set<UUID> NAGEKEKEN = new java.util.HashSet<>();
     /** Player -> ticks sneaking on the blowhole (the replay). */
     private static final Map<UUID, Integer> HURKEN = new HashMap<>();
     private static boolean gebouwd;
@@ -159,6 +166,7 @@ public final class Z5Droom {
         INTRO.put(q.getUUID(), sl.getGameTime() + INTRO_NA);
         WAKKER.remove(q.getUUID());
         KIST.remove(q.getUUID());
+        KIST_STOND.remove(q.getUUID());
     }
 
     // ---- the end ---------------------------------------------------------------------------------------------------------------------
@@ -176,6 +184,51 @@ public final class Z5Droom {
     /** The boss put this player's chest here (they wake once it is opened). */
     static void kist(ServerPlayer p, BlockPos pos) {
         KIST.put(p.getUUID(), pos);
+        KIST_STOND.remove(p.getUUID());
+    }
+
+    /**
+     * Has this player opened their dream chest? Only true once the chest was seen standing and is gone again: on a real server
+     * it lands seconds after the plof, and "not there yet" must never count as "opened" (that woke the player before the chest
+     * landed, so it stood on the cloud where nobody could reach it).
+     */
+    static boolean kistOpen(ServerLevel sl, ServerPlayer p) {
+        BlockPos k = KIST.get(p.getUUID());
+        if (k == null) {
+            return false;
+        }
+        if (sl.getBlockState(k).getBlock() instanceof BaasKist) {
+            KIST_STOND.add(p.getUUID());
+            return false;
+        }
+        return KIST_STOND.contains(p.getUUID());
+    }
+
+    /**
+     * Brings the chests this player could not open after them: their own chests still standing on the dream cloud and in the
+     * Wolkwaldroom (the spy's chest lands there after the dream already took them). The loot goes straight into their bags
+     * ({@link BaasKist#lever}). Looks at the blocks, not at memory, so it also finds chests from before a restart. Returns how many.
+     */
+    public static int nabrengen(ServerLevel sl, ServerPlayer p) {
+        NAGEKEKEN.add(p.getUUID());
+        return nabrengen(sl, p, PLEK, Z5WezensPlekken.WOLKWALDROOM);
+    }
+
+    static int nabrengen(ServerLevel sl, ServerPlayer p, BlockPos wolk, BlockPos arena) {
+        java.util.List<BlockPos> kisten = new java.util.ArrayList<>(BaasKist.vanSpeler(sl, p.getUUID(), wolk.offset(-STRAAL - 6, -4, -STRAAL - 6),
+                wolk.offset(STRAAL + 6, 10, STRAAL + 6)));
+        int r = Z5WezensPlekken.DROOM_STRAAL;
+        kisten.addAll(BaasKist.vanSpeler(sl, p.getUUID(), arena.offset(-r, -4, -r), arena.offset(r, 10, r)));
+        int n = 0;
+        for (BlockPos k : kisten) {
+            if (n == 0) {
+                p.sendSystemMessage(Component.translatable("vadsrijk.z5droom.kist.nagebracht").withStyle(ChatFormatting.LIGHT_PURPLE));
+            }
+            if (BaasKist.lever(sl, k, p)) {
+                n++;
+            }
+        }
+        return n;
     }
 
     public static boolean alOpgevrolijkt(ServerPlayer p) {
@@ -186,6 +239,7 @@ public final class Z5Droom {
     public static void wakker(ServerPlayer p) {
         WAKKER.remove(p.getUUID());
         KIST.remove(p.getUUID());
+        KIST_STOND.remove(p.getUUID());
         INTRO.remove(p.getUUID());
         if (!(p.level() instanceof ServerLevel sl)) {
             return;
@@ -198,6 +252,7 @@ public final class Z5Droom {
         p.resetFallDistance();
         sl.sendParticles(new DustParticleOptions(0xFF8AD0, 1.6f), doel.getX() + 0.5, doel.getY() + 1, doel.getZ() + 0.5, 40, 0.8, 1, 0.8, 0);
         sl.playSound(null, doel, SoundEvents.BREEZE_IDLE_GROUND, SoundSource.PLAYERS, 1f, 1.3f);
+        nabrengen(sl, p);   // (after the teleport: what does not fit in the bags lands at their feet here)
     }
 
     /** The first spot from here upward (8 blocks) with a floor and two free blocks; else the spot itself. */
@@ -241,15 +296,29 @@ public final class Z5Droom {
             if (!(sl.getEntity(e.getKey()) instanceof ServerPlayer p)) {
                 continue;
             }
-            BlockPos k = KIST.get(p.getUUID());
-            boolean kistOpen = k != null && nu % 10 == 0 && !(sl.getBlockState(k).getBlock() instanceof nl.juiced.guhs.feature.vadsrijk.kern.baas.BaasKist);
-            if (nu >= e.getValue() || kistOpen) {
+            if (nu >= e.getValue() || nu % 10 == 0 && kistOpen(sl, p)) {
                 wakker(p);
             }
         }
         if (nu % 5 == 0) {
             vangnet(sl);
             herinnering(sl);
+            nakijken(sl);
+        }
+    }
+
+    /**
+     * At the middle blowhole (where you wake up, and where the replay starts): once per server run, a player who cheered the
+     * dream up gets the chests they had to leave behind ({@link #nabrengen}; also those from before this fix).
+     */
+    static void nakijken(ServerLevel sl) {
+        BlockPos s = Z5VerhaalPlekken.SPUITGAT;
+        for (ServerPlayer p : sl.players()) {
+            if (NAGEKEKEN.contains(p.getUUID()) || p.isSpectator() || p.distanceToSqr(s.getX() + 0.5, s.getY(), s.getZ() + 0.5) > 6 * 6
+                    || !alOpgevrolijkt(p) || WAKKER.containsKey(p.getUUID())) {
+                continue;
+            }
+            nabrengen(sl, p);
         }
     }
 

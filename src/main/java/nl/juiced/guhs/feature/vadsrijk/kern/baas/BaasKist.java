@@ -119,6 +119,12 @@ public class BaasKist extends BaseEntityBlock {
             p.sendOverlayMessage(Component.translatable("vadsrijk.kern.baaskist.niet_jouw", in.naam).withStyle(ChatFormatting.GRAY));
             return InteractionResult.SUCCESS;
         }
+        open(sl, pos, p, in, pos);
+        return InteractionResult.SUCCESS;
+    }
+
+    /** The owner gets the loot and the chest goes "plof"; the opening ceremony plays at {@code toon}. */
+    private static void open(ServerLevel sl, BlockPos pos, ServerPlayer p, Inhoud in, BlockPos toon) {
         List<ItemStack> buit = new ArrayList<>();   // (BELEVING: for the opening ceremony)
         for (CompoundTag t : in.items) {
             ItemStack s = Nbt.parseStack(sl.registryAccess(), t);
@@ -137,15 +143,44 @@ public class BaasKist extends BaseEntityBlock {
             buit.add(kopie);
         }
         in.items.clear();
-        Vec3 c = Vec3.atCenterOf(pos);
+        Vec3 c = Vec3.atCenterOf(toon);
         sl.sendParticles(ParticleTypes.CHERRY_LEAVES, c.x, c.y, c.z, 30, 0.4, 0.4, 0.4, 0.05);
-        sl.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1f, 1.2f);
-        sl.playSound(null, pos, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.6f, 1.8f);
+        sl.playSound(null, toon, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1f, 1.2f);
+        sl.playSound(null, toon, SoundEvents.PLAYER_LEVELUP, SoundSource.BLOCKS, 0.6f, 1.8f);
         sl.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
         if (CEREMONIE != null) {
-            CEREMONIE.open(sl, p, pos, buit);   // BELEVING (fix round 1)
+            CEREMONIE.open(sl, p, toon, buit);   // BELEVING (fix round 1)
         }
-        return InteractionResult.SUCCESS;
+    }
+
+    /**
+     * Brings the chest at {@code pos} to its owner {@code p}, wherever they are: the loot goes into their bags exactly as if they
+     * had opened it (the rest lands at their feet) and the chest block disappears. For a chest its owner can no longer walk to
+     * (a boss whose defeat teleports the helpers away). False: no chest there, or it is not theirs.
+     */
+    public static boolean lever(ServerLevel sl, BlockPos pos, ServerPlayer p) {
+        if (!(sl.getBlockEntity(pos) instanceof Inhoud in) || in.eigenaar == null || !in.eigenaar.equals(p.getUUID())) {
+            return false;
+        }
+        open(sl, pos, p, in, p.blockPosition());
+        return true;
+    }
+
+    /** The standing chests of this player inside the box (both corners inclusive). Loads the chunks of the box. */
+    public static List<BlockPos> vanSpeler(ServerLevel sl, UUID eigenaar, BlockPos min, BlockPos max) {
+        List<BlockPos> uit = new ArrayList<>();
+        for (int cx = min.getX() >> 4; cx <= max.getX() >> 4; cx++) {
+            for (int cz = min.getZ() >> 4; cz <= max.getZ() >> 4; cz++) {
+                for (BlockEntity be : sl.getChunk(cx, cz).getBlockEntities().values()) {
+                    BlockPos b = be.getBlockPos();
+                    if (be instanceof Inhoud in && eigenaar.equals(in.eigenaar) && b.getX() >= min.getX() && b.getX() <= max.getX()
+                            && b.getY() >= min.getY() && b.getY() <= max.getY() && b.getZ() >= min.getZ() && b.getZ() <= max.getZ()) {
+                        uit.add(b);
+                    }
+                }
+            }
+        }
+        return uit;
     }
 
     /** The chest's owner and loot (raw item tags). */
