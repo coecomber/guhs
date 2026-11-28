@@ -225,7 +225,7 @@ public final class Z5Haken {
     /** The tracker: a target in Hoogvads while you are elsewhere (or the other way round): first the airship. */
     static QuestStap route(ServerPlayer p, QuestStap s) {
         BlockPos d = s.doel();
-        if (d == null || !Vadsrijk.in(p)) {
+        if (d == null || !QuestStap.inRijk(p)) {
             return s;
         }
         boolean ik = Z5VerhaalPlekken.zone5(p.getX(), p.getY(), p.getZ()), doel = Z5VerhaalPlekken.zone5(d.getX(), d.getY(), d.getZ());

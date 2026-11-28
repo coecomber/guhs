@@ -309,7 +309,7 @@ public final class Z6Haken {
     /** The tracker: a target in the Zijdeland while you are elsewhere (or the other way round): first the airship. */
     static QuestStap route(ServerPlayer p, QuestStap s) {
         BlockPos d = s.doel();
-        if (d == null || !Vadsrijk.in(p)) {
+        if (d == null || !QuestStap.inRijk(p)) {
             return s;
         }
         boolean ik = Z6VerhaalPlekken.zone6(p.getX(), p.getY(), p.getZ()), doel = Z6VerhaalPlekken.zone6(d.getX(), d.getY(), d.getZ());
