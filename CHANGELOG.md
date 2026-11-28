@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.32 — Minecraft 26.1.2
+
+- **Knapzak: 6 rows per vak (owner: "meer rijen, niet grotere stapels"):** `Knapzak.RIJEN = 6`, 54 slots per vak (was 27); the 640 stacks, 7 vakken and 3 free stay. Slot addressing in the save is per tab, so slots 0..26 keep their index and rows 4-6 start empty (a 1.10.31 reader keeps 27..53 in `onleesbaar`). Bank unchanged.
+- **Knapzak and Materiaaltas use the same frame as every other menu tab** (owner: "hij verspringt bij die pagina's"): both go through `MenuClient.kader()` again (the "Inventory" label row is dropped there to fit 6 rows in the common frame; the Materiaaltas panel is 16 px tighter). JEI is told the real on-screen rectangle (`GuhsJeiPlugin.registerGuiHandlers`, `Geschaald.echtVlak` / `MenuIndeling.echtVlak`), so its list sits beside the frame or hides; `MenuClient` lets mouse events outside the real frame through to JEI. Verified with real mouse clicks at 1080p GUI 2 (x1.5) and GUI 3 (x1.0) through the new dev commands `rclick` / `rscroll` in `AutoCheck` (script `tools/autocheck/knapzak_klik.txt`).
+
 ## 1.10.31 — Minecraft 26.1.2
 
 - **Kapitein Roquefort, fase 3 (owner: "veel te kort, ik ga direct dood, geheel onduidelijk"):** the sinking telegraph is 10 s (`ZINK_TICKS = 200`, was 120), the fase-3 card stays for the whole telegraph, the overlay line counts down every second, and a pink `Vfx.zuil` stands on the wreck for the rest of the fight. Hits count from the moment the deck sank: the first about a second later, the first two 15 %, then 30 %. The red deck circle no longer covers the wreck (it lies 3 blocks down in a pit beside the deck: `roquefort_wrak` = 1686,221,-805, arena 1692,224,-821), the hull rim counts as on the wreck, and from the sinking on the whole wreck counts as the fight (35 of its 105 floor cells lay outside the arena disc). New `VadsrijkZ3RoquefortGameTests` on the real tiles.
