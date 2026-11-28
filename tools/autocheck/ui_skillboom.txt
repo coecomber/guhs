@@ -1,0 +1,101 @@
+# Skillboom tab = the same frame as every other Vadsrijk-menu tab (GUI scale 2, 3 and 4); the tree scrolls inside it. Also: a
+# click on a node after scrolling (row 2 of the trunk is learned with the view scrolled one row), a drag, and the class desk.
+#   gradlew runAutocheckClient -PautocheckScript=tools/autocheck/ui_skillboom.txt -PautocheckWidth=1920 -PautocheckHeight=1080
+section setup
+guhstaal nl
+/gamemode creative
+/time set noon
+/gamerule doDaylightCycle false
+/guhs vadsrijk proeftuin
+wait 100
+waitrender 300
+gui keep
+/guhs vadsrijk klasse kies
+wait 20
+press Word Knuffelridder!
+wait 20
+gui close
+/guhs vadsrijk level 30
+wait 200
+
+section GUI 2
+guiscale 2
+wait 10
+mouse 5 5
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot sb_karakter_g2 gui
+gui close
+gui keep
+/guhs vadsrijk menu skillboom
+wait 30
+shot sb_skillboom_g2 gui
+# learn the first trunk node (click = select, click again = learn), then scroll one row and learn the one below it
+click 149 149
+click 149 149
+wait 20
+scroll 150 200 -1
+click 149 149
+click 149 149
+wait 20
+shot sb_skillboom_klik_g2 gui
+scroll 150 200 -20
+wait 5
+shot sb_skillboom_onder_g2 gui
+drag 100 200 100 260
+wait 5
+shot sb_skillboom_sleep_g2 gui
+gui close
+
+section GUI 3
+guiscale 3
+wait 10
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot sb_karakter_g3 gui
+gui close
+gui keep
+/guhs vadsrijk menu skillboom
+wait 30
+shot sb_skillboom_g3 gui
+scroll 150 200 -20
+wait 5
+shot sb_skillboom_onder_g3 gui
+gui close
+
+section GUI 4
+guiscale 4
+wait 10
+gui keep
+/guhs vadsrijk menu karakter
+wait 30
+shot sb_karakter_g4 gui
+gui close
+gui keep
+/guhs vadsrijk menu skillboom
+wait 30
+shot sb_skillboom_g4 gui
+scroll 150 150 -3
+wait 5
+shot sb_skillboom_midden_g4 gui
+scroll 150 150 -20
+wait 5
+shot sb_skillboom_onder_g4 gui
+gui close
+
+section balie
+gui keep
+/guhs vadsrijk klasse balie
+wait 30
+shot sb_balie_g4 gui
+gui close
+guiscale 2
+wait 10
+gui keep
+/guhs vadsrijk klasse balie
+wait 30
+shot sb_balie_g2 gui
+gui close
+quit

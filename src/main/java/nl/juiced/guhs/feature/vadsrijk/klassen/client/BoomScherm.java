@@ -29,25 +29,38 @@ import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Vaardigheid;
 import nl.juiced.guhs.feature.vadsrijk.klassen.KlassenPayloads;
 import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Bomen;
 import nl.juiced.guhs.feature.vadsrijk.klassen.boom.Boom;
+import nl.juiced.guhs.feature.vadsrijk.klassen.boom.BoomIndeling;
 import nl.juiced.guhs.feature.vadsrijk.klassen.spec.Spec;
 import org.lwjgl.glfw.GLFW;
 
 /**
  * The skill tree screen (key K in the dimension) and, opened at the ordetempel, the class desk (switch class, free respec,
- * the advancement ceremony). Pink, readable: a 4x3 grid of nodes with their item icons, lines to what they need, a cost
+ * the advancement ceremony). Pink, readable: a grid of nodes with their item icons, lines to what they need, a cost
  * badge, and a tooltip with what the node really does. Click a node once to select it, again to learn it.
  */
 public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.vadsrijk.menu.client.Geschaald {   // U-TABS: in the Vadsrijk-menu
-    private static final int W = 384;
-    /** z2-systemen: the height and row distance depend on the rows of the tree (4 in zone 1, 6 with the zone-2 rows). */
-    private int H = 240, DY = 38;
     private static final int ROZE = 0xFFFF7AC8, LICHT = 0xFFFFC2E8, DIEP = 0xFF2A1022, PANEEL = 0xF0401A34, GOUD = 0xFFFFD24A, GRIJS = 0xFF8A6A7E;
     /** U-SPECS: 4 columns (spec A, trunk, spec B, side branch), a bit closer together. */
-    private static final int KNOOP = 26, DX = 44;
+    private static final int KNOOP = BoomIndeling.KNOOP, DX = BoomIndeling.DX;
     private CompoundTag t;
-    private int left, top;
-    /** U-TABS: the Vadsrijk-menu frame around the tree (taller than the others only for a tall tree). */
+    /** The dark tree panel: it fills the common menu frame (W x H follow the frame, DY the rows that fit). */
+    private int left, top, W = 384, H = 240, DY = 38;
+    /** U-TABS: the Vadsrijk-menu frame around the tree: the SAME frame as every other tab (the tree scrolls inside it). */
     private nl.juiced.guhs.feature.vadsrijk.menu.MenuIndeling.Kader kader;
+    private BoomIndeling in;
+    /** The scroll of the tree column, and the class it was last aimed for (a new class = show its next node again). */
+    private double scroll;
+    @Nullable
+    private String scrollKlasse;
+    /** A press in the tree view: a short one clicks the node under it, a long one drags the tree. */
+    private boolean druk, balkSleep;
+    private double sleep;
+    @Nullable
+    private String drukKnoop;
+    /** The advancement badges sit on the right side when there is room, else below the tree (in the scrolled view). */
+    private boolean badgesRechts;
+    /** Top of the badges on the right side (relative to top), and how many lines of the hint text fit. */
+    private int badgesRechtsY, hintRegels;
     @Nullable
     private String gekozen;
 
@@ -90,25 +103,65 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
         return r;
     }
 
-    /** z2-systemen: top of the advancement badges (relative to top). */
-    private int badgeY() {
-        return rijen() <= Bomen.RIJEN ? H - 34 : 46 + (rijen() - 1) * DY + KNOOP + 20;
+    /** The skills listed on the right side: the class's first four and the Knuffelsprong. */
+    private int skillRegels() {
+        return Math.min(4, klasse().vaardigheden().size()) + 1;
+    }
+
+    private int skillStap() {
+        return in.krap() ? 17 : 19;
+    }
+
+    /** The y positions (relative to top) of the class desk on the right side; a low panel packs them tighter. */
+    private record Balie(int rijY, int rijStap, int rijH, int respecTekstY, int respecY, int advY, int specY, int advTekstY, int knopH) {
+    }
+
+    private Balie balieIndeling() {
+        boolean krap = in.krap(), adv = t.getBooleanOr("advBalie", true);
+        int stap = krap ? 24 : 30, rijH = krap ? 22 : 26, knopH = krap ? 16 : 18, gat = krap ? 2 : 4;
+        int y = 48 + 3 * stap;
+        int respecY = krap ? y + 2 : y + 6;
+        int advY = adv ? respecY + knopH + gat : -1;
+        int specY = (adv ? advY : respecY) + knopH + gat;
+        return new Balie(48, stap, rijH, krap ? -1 : y - 3, respecY, advY, specY, adv ? specY + knopH + 3 : -1, knopH);
     }
 
     @Override
     protected void init() {
-        int rijen = rijen();
-        DY = rijen <= Bomen.RIJEN ? 38 : rijen <= 6 ? 32 : rijen <= 8 ? 29 : 25;   // (z3-systemen: 8 rows with the zone-3 rows 6/7; V-INT: 10 with the zone-6 rows)
-        H = rijen <= Bomen.RIJEN ? 240 : 46 + (rijen - 1) * DY + KNOOP + 20 + 22 + 26 + 8;
-        // U-TABS: inside the menu frame: band, then the class tabs (21 px), then the tree panel; scales down when it does not fit
-        var win = net.minecraft.client.Minecraft.getInstance().getWindow();
-        int boven = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.BAND + 24;
-        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.kader(win.getGuiScaledWidth(), win.getGuiScaledHeight(), W + 16, H + boven + 8);
+        // U-TABS: inside the common menu frame: band, then the class tabs (21 px), then the tree panel, which fills the frame. The
+        // tree column scrolls when its rows do not fit (the frame is never made taller for it: that made the frame jump between tabs).
+        kader = nl.juiced.guhs.feature.vadsrijk.menu.client.MenuClient.kader();
         width = kader.lw();
         height = kader.lh();
-        left = kader.left() + (kader.w() - W) / 2;
-        top = kader.top() + boven + Math.max(0, (kader.h() - boven - 8 - H) / 2);
-        int rx = left + 214, rw = W - 214 - 10;
+        boolean specKnop = !balie() && t.getBooleanOr("specOpen", false);
+        // first as if the badges sit below the tree: the right side then tells whether they fit there instead
+        in = BoomIndeling.van(kader, rijen(), true);
+        badgesRechts = false;
+        hintRegels = 0;
+        if (!balie()) {
+            int onder = in.h() - 6 - (specKnop ? 22 : 0);
+            int hintY = 50 + skillRegels() * skillStap() + 4;
+            int regels = font.split(Component.translatable("vadsrijk.klassen.scherm.ordetempel"), in.rw()).size();
+            hintRegels = Math.max(0, Math.min(regels, (onder - hintY) / 9));
+            int vrij = hintY + hintRegels * 9 + 4;
+            badgesRechts = hintRegels == regels && in.rw() >= BoomIndeling.BADGES * 80 + (BoomIndeling.BADGES - 1) * 4
+                    && vrij + 10 + BoomIndeling.BADGE_H <= onder;
+            badgesRechtsY = vrij + 10;
+            if (badgesRechts) {
+                in = BoomIndeling.van(kader, rijen(), false);
+            }
+        }
+        left = in.left();
+        top = in.top();
+        W = in.w();
+        H = in.h();
+        DY = in.dy();
+        if (!klasse().id().equals(scrollKlasse)) {
+            scrollKlasse = klasse().id();
+            scroll = in.scrollVoor(volgendeRij());
+        }
+        scroll = in.klem(scroll);
+        int rx = in.rx(), rw = in.rw();
         // g-klassen: a tab per class (you are always all three; the active one = the weapon you last attacked with)
         int tx = left;
         for (Klasse k : Klassen.alle()) {
@@ -123,41 +176,63 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
             tx += 104;
         }
         if (balie()) {
-            int y = top + 46;
+            Balie bl = balieIndeling();
+            int y = top + bl.rijY();
             long prijs = t.getLongOr("prijs", 30);
             for (Klasse k : Klassen.alle()) {
                 boolean had = t.getBooleanOr("start_" + k.id(), false);
                 Button b = Button.builder(had ? Component.translatable("vadsrijk.klassen.scherm.wapen.koop", nl.juiced.guhs.feature.vadsrijk.kern.Spelers.munten(prijs))
-                        : Component.translatable("vadsrijk.klassen.scherm.wapen.gratis"), x -> stuur("wapen", k.id())).bounds(rx + rw - 74, y + 4, 72, 16)
+                        : Component.translatable("vadsrijk.klassen.scherm.wapen.gratis"), x -> stuur("wapen", k.id())).bounds(rx + rw - 74, y + (bl.rijH() - 16) / 2, 72, 16)
                         .tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.wapen.tip", Component.translatable(k.naamKey())))).build();
                 addRenderableWidget(b);
-                y += 30;
+                y += bl.rijStap();
             }
             long respec = t.getLongOr("respec", 0);
             Button r = Button.builder(respec > 0 ? Component.translatable("vadsrijk.klassen.scherm.respec.wacht", tijd(respec))
                     : Component.translatable("vadsrijk.klassen.scherm.respec"), x -> stuur("respec", ""))
-                    .bounds(rx, top + 144, rw, 18).tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.respec.tip"))).build();
+                    .bounds(rx, top + bl.respecY(), rw, bl.knopH()).tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.respec.tip"))).build();
             r.active = respec <= 0 && !knopen().stream().allMatch(id -> id.contains("_adv") || id.contains("_spec_"));
             addRenderableWidget(r);
-            if (t.getBooleanOr("advBalie", true)) {
+            if (bl.advY() >= 0) {
                 Button a = Button.builder(Component.translatable("vadsrijk.klassen.scherm.adv").withStyle(ChatFormatting.GOLD), x -> {
                     stuur("adv", "");
                     onClose();
-                }).bounds(rx, top + 166, rw, 18).tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.adv.tip"))).build();
+                }).bounds(rx, top + bl.advY(), rw, bl.knopH()).tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.scherm.adv.tip"))).build();
                 a.active = t.getBooleanOr("kanAdv", false);
                 addRenderableWidget(a);
             }
             // U-SPECS: the spec screen (first choice or switch) from the desk
             addRenderableWidget(Button.builder(Component.translatable(t.getBooleanOr("specOpen", false) ? "vadsrijk.klassen.spec.knop.kies"
                     : "vadsrijk.klassen.spec.knop").withStyle(ChatFormatting.GOLD), x -> stuur("spec_scherm", ""))
-                    .bounds(rx, top + (t.getBooleanOr("advBalie", true) ? 188 : 166), rw, 18)
+                    .bounds(rx, top + bl.specY(), rw, bl.knopH())
                     .tooltip(Tooltip.create(Component.translatable("vadsrijk.klassen.spec.knop.tip"))).build());
-        } else if (t.getBooleanOr("specOpen", false)) {
+        } else if (specKnop) {
             // U-SPECS: the first spec choice is open (after the step-1 quest): free, from anywhere
             addRenderableWidget(Button.builder(Component.translatable("vadsrijk.klassen.spec.knop.kies").withStyle(ChatFormatting.GOLD),
-                    x -> stuur("spec_scherm", "")).bounds(rx, top + H - 50, rw, 18).build());
+                    x -> stuur("spec_scherm", "")).bounds(rx, top + H - 24, rw, 18).build());
         }
-        addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose()).bounds(left + W - 70, top + H - 26, 60, 18).build());
+        // (the Done button sits in the title band: the panel itself is full with the tree and the right side)
+        addRenderableWidget(Button.builder(Component.translatable("gui.done"), b -> onClose())
+                .bounds(kader.left() + kader.w() - 56, kader.top() + 2, 52, 14).build());
+    }
+
+    /** The row to show when the tab opens: the first node you can learn now, else the last one you have, else the top. */
+    private int volgendeRij() {
+        Klasse k = klasse();
+        Set<String> heeft = knopen();
+        int level = t.getIntOr("level", 1);
+        int kan = -1, had = -1;
+        for (BoomKnoop b : k.boom()) {
+            if (b.rij() < 0) {
+                continue;
+            }
+            if (heeft.contains(b.id())) {
+                had = Math.max(had, b.rij());
+            } else if (Boom.waaromNiet(k, heeft, level, b.id()) == null && (kan < 0 || b.rij() < kan)) {
+                kan = b.rij();
+            }
+        }
+        return kan >= 0 ? kan : Math.max(0, had);
     }
 
     private static String tijd(long sec) {
@@ -174,7 +249,7 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
         g.fill(left - 2, top - 2, left + W + 2, top + H + 2, LICHT);
         g.fill(left, top, left + W, top + H, PANEEL);
         g.fillGradient(left, top, left + W, top + 34, 0xF0C2457E, 0xF0401A34);
-        g.fill(left + 210, top + 38, left + 211, top + H - 8, 0x60FFC2E8);
+        g.fill(left + BoomIndeling.SCHEIDING, top + 38, left + BoomIndeling.SCHEIDING + 1, top + H - 8, 0x60FFC2E8);
     }
 
     @Override
@@ -197,9 +272,12 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
             Component h = Component.translatable("vadsrijk.klassen.scherm.punten.tip");
             g.text(font, h, left + W - 12 - font.width(h), top + 22, 0xFFFFE7A0, false);
         }
-        // the tree
-        int gx = left + 20, gy = top + 46;
-        List<Component> tip = takken(g, k, gx, gy, mx, my);   // U-SPECS: column strips + headers (spec A, trunk, spec B, side)
+        // the tree: a clipped view that scrolls (wheel, drag, the bar); the column names above it stay put
+        int sc = in.klem(scroll);
+        int gx = in.knoopX(0), gy = in.vy0() + in.knoopY(0) - sc;
+        boolean inKijk = in.inKijk(mx, my);
+        List<Component> tip = takken(g, k, gx, sc, mx, my);   // U-SPECS: column strips + headers (spec A, trunk, spec B, side)
+        g.enableScissor(in.vx0(), in.vy0(), in.vx1() - 6, in.vy1());
         for (BoomKnoop b : k.boom()) {
             if (b.rij() < 0) {
                 continue;
@@ -234,9 +312,12 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
                 continue;
             }
             int x = gx + b.kolom() * DX, y = gy + b.rij() * DY;
+            if (y + KNOOP + 2 < in.vy0() || y - 4 >= in.vy1()) {
+                continue;   // (scrolled out of the view)
+            }
             String nee = Boom.waaromNiet(k, heeft, level, b.id());
             boolean al = heeft.contains(b.id()), kan = nee == null, uit = "uitgesloten".equals(nee);
-            boolean hover = mx >= x && mx < x + KNOOP && my >= y && my < y + KNOOP;
+            boolean hover = inKijk && mx >= x && mx < x + KNOOP && my >= y && my < y + KNOOP;
             boolean sel = b.id().equals(gekozen);
             int rand = al ? GOUD : sel ? 0xFFFFFFFF : kan ? (System.currentTimeMillis() / 400 % 2 == 0 ? 0xFFFFFFFF : LICHT) : 0xFF6A4A5A;
             int vul = al ? ROZE : kan ? 0xFF9A3C7A : uit ? 0xFF22121C : 0xFF3A2433;
@@ -260,55 +341,56 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
                 tip = knoopTip(b, nee, al, sel);
             }
         }
-        // advancement badges
-        int stap = t.getIntOr("adv_" + k.id(), 0);
-        int by = top + badgeY();
-        g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.kop").withStyle(ChatFormatting.BOLD), gx - 8, by - 12, LICHT, false);
-        for (int s = 1; s <= nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.MAX_STAP; s++) {
-            int bx = gx - 8 + ((s - 1) % 2) * 94;   // z2-systemen: step 3 on a second line
-            if (s > 2) {
-                by = top + badgeY() + 26;
-            }
-            boolean open = stap >= s;
-            boolean hover = mx >= bx && mx < bx + 90 && my >= by && my < by + 22;
-            g.fill(bx, by, bx + 90, by + 22, open ? 0xFFB8436F : 0xFF3A2433);
-            g.outline(bx, by, 90, 22, open ? GOUD : 0xFF6A4A5A);
-            g.item(new ItemStack(open ? Items.NETHER_STAR : Items.GRAY_DYE), bx + 3, by + 3);
-            g.pose().pushMatrix();
-            g.pose().translate(bx + 22, by + 4);
-            g.pose().scale(0.75f, 0.75f);
-            g.text(font, Component.translatable(t.getStringOr("adv_titel_" + s, "vadsrijk.klassen.titel." + k.id() + "." + s)), 0, 0, open ? 0xFFFFFFFF : GRIJS, false);
-            g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.lv", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.levelVan(s)), 0, 11, open ? GOUD : GRIJS, false);
-            g.pose().popMatrix();
-            if (hover) {
-                tip = new ArrayList<>();
-                tip.add(Component.translatable(t.getStringOr("adv_titel_" + s, "vadsrijk.klassen.titel." + k.id() + "." + s)).withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
-                tip.addAll(regels(t.getStringOr("adv_uitleg_" + s, "vadsrijk.klassen.adv.uitleg.geen." + s), ChatFormatting.WHITE));
-                tip.add(Component.translatable(open ? "vadsrijk.klassen.scherm.adv.open" : "vadsrijk.klassen.scherm.adv.dicht", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.levelVan(s))
-                        .withStyle(open ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+        // advancement badges: below the tree (scrolled along) or, with room, on the right side
+        if (!badgesRechts) {
+            g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.kop").withStyle(ChatFormatting.BOLD), in.badgeX(0), in.vy0() + in.badgeKopY() - sc + 1, LICHT, false);
+            for (int s = 1; s <= BoomIndeling.BADGES; s++) {
+                List<Component> bt = badge(g, k, s, in.badgeX(s - 1), in.vy0() + in.badgeY(s - 1) - sc, BoomIndeling.BADGE_W, mx, my, inKijk);
+                tip = bt != null ? bt : tip;
             }
         }
+        g.disableScissor();
+        if (in.maxScroll() > 0) {
+            int x0 = in.vx0(), x1 = in.vx1() - 6, kleur = PANEEL & 0xFFFFFF;
+            if (sc > 0) {
+                g.fillGradient(x0, in.vy0(), x1, in.vy0() + 8, 0xF0000000 | kleur, kleur);   // (more above)
+            }
+            if (sc < in.maxScroll()) {
+                g.fillGradient(x0, in.vy1() - 8, x1, in.vy1(), kleur, 0xF0000000 | kleur);   // (more below)
+            }
+            int hoog = in.kijkH(), duim = Math.max(14, hoog * hoog / in.inhoudH());
+            int dy0 = in.vy0() + (hoog - duim) * sc / in.maxScroll();
+            g.fill(in.vx1() - 5, in.vy0(), in.vx1() - 2, in.vy1(), 0x40FFC2E8);
+            g.fill(in.vx1() - 5, dy0, in.vx1() - 2, dy0 + duim, balkSleep || (mx >= in.vx1() - 7 && mx < in.vx1() && inKijk) ? 0xFFFFFFFF : ROZE);
+        }
         // right side
-        int rx = left + 214, rw = W - 214 - 10;
+        int stap = t.getIntOr("adv_" + k.id(), 0);
+        int rx = in.rx(), rw = in.rw();
         if (balie()) {
+            Balie bl = balieIndeling();
             g.text(font, Component.translatable("vadsrijk.klassen.scherm.balie").withStyle(ChatFormatting.BOLD), rx, top + 38, GOUD, false);
-            int y = top + 46;
+            int y = top + bl.rijY();
             for (Klasse x : Klassen.alle()) {
                 boolean nu = x.id().equals(t.getStringOr("actief", k.id()));
-                g.fill(rx, y, rx + rw, y + 26, nu ? 0x70FF7AC8 : 0x40FFFFFF);
-                g.text(font, Component.translatable(t.getStringOr("titel_" + x.id(), x.naamKey())), rx + 4, y + 3, nu ? 0xFFFFFFFF : LICHT, false);
-                g.text(font, Component.translatable("vadsrijk.klassen.scherm.nv", t.getIntOr("lv_" + x.id(), 1)), rx + 4, y + 14, GOUD, false);
-                y += 30;
+                g.fill(rx, y, rx + rw, y + bl.rijH(), nu ? 0x70FF7AC8 : 0x40FFFFFF);
+                g.text(font, Component.translatable(t.getStringOr("titel_" + x.id(), x.naamKey())), rx + 4, y + 2, nu ? 0xFFFFFFFF : LICHT, false);
+                g.text(font, Component.translatable("vadsrijk.klassen.scherm.nv", t.getIntOr("lv_" + x.id(), 1)), rx + 4, y + bl.rijH() - 10, GOUD, false);
+                y += bl.rijStap();
             }
             long respec = t.getLongOr("respec", 0);
-            g.text(font, Component.translatable(respec > 0 ? "vadsrijk.klassen.scherm.respec.uitleg_wacht" : "vadsrijk.klassen.scherm.respec.uitleg"),
-                    rx, top + 135, GRIJS, false);
-            if (t.getBooleanOr("advBalie", true)) {
+            if (bl.respecTekstY() >= 0) {
+                g.text(font, Component.translatable(respec > 0 ? "vadsrijk.klassen.scherm.respec.uitleg_wacht" : "vadsrijk.klassen.scherm.respec.uitleg"),
+                        rx, top + bl.respecTekstY(), GRIJS, false);
+            }
+            if (bl.advTekstY() >= 0) {
                 Component a = t.getBooleanOr("kanAdv", false) ? Component.translatable("vadsrijk.klassen.scherm.adv.klaar")
                         : stap >= nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.MAX_STAP ? Component.translatable("vadsrijk.klassen.scherm.adv.alles")
                         : Component.translatable("vadsrijk.klassen.scherm.adv.nog", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.nodigLevel(stap));
-                int yy = top + 188;
+                int yy = top + bl.advTekstY();
                 for (var l : font.split(a, rw)) {
+                    if (yy + 9 > top + H - 2) {
+                        break;
+                    }
                     g.text(font, l, rx, yy, LICHT, false);
                     yy += 9;
                 }
@@ -317,7 +399,7 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
             g.text(font, Component.translatable("vadsrijk.klassen.scherm.skills").withStyle(ChatFormatting.BOLD), rx, top + 38, GOUD, false);
             // fix round 2 (g-ui): each skill with its icon; hover = the full skill info with the tree improvements
             String[] toets = {"R", "V", "G", "Z", "C"};
-            int y = top + 50;
+            int y = top + 50, ss = skillStap();
             List<Vaardigheid> vs = k.vaardigheden();
             List<String> ids = new ArrayList<>();
             List<String> namen = new ArrayList<>();
@@ -329,9 +411,9 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
             namen.add("vadsrijk.kern.skill.knuffelsprong");
             for (int i = 0; i < ids.size(); i++) {
                 int slot = i < ids.size() - 1 ? i : 4;
-                boolean hover = mx >= rx && mx < rx + rw && my >= y - 1 && my < y + 17;
+                boolean hover = mx >= rx && mx < rx + rw && my >= y - 1 && my < y + ss - 2;
                 if (hover) {
-                    g.fill(rx - 2, y - 2, rx + rw, y + 18, 0x40FFC2E8);
+                    g.fill(rx - 2, y - 1, rx + rw, y + ss - 2, 0x40FFC2E8);
                 }
                 g.fill(rx, y + 1, rx + 12, y + 15, slot == 3 ? GOUD : slot == 4 ? 0xFF8FD4FF : ROZE);
                 g.centeredText(font, toets[slot], rx + 6, y + 4, 0xFF2A1022);
@@ -343,12 +425,23 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
                 if (hover) {
                     tip = SkillInfo.tip(ids.get(i), slot, font, heeft::contains);
                 }
-                y += 19;
+                y += ss;
             }
-            int yy = y + 6;
+            int yy = y + 4, n = 0;
             for (var l : font.split(Component.translatable("vadsrijk.klassen.scherm.ordetempel"), rw)) {
+                if (n++ >= hintRegels) {
+                    break;
+                }
                 g.text(font, l, rx, yy, GRIJS, false);
                 yy += 9;
+            }
+            if (badgesRechts) {
+                int by = top + badgesRechtsY, bw = (rw - (BoomIndeling.BADGES - 1) * 4) / BoomIndeling.BADGES;
+                g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.kop").withStyle(ChatFormatting.BOLD), rx, by - 10, LICHT, false);
+                for (int s = 1; s <= BoomIndeling.BADGES; s++) {
+                    List<Component> bt = badge(g, k, s, rx + (s - 1) * (bw + 4), by, bw, mx, my, true);
+                    tip = bt != null ? bt : tip;
+                }
             }
         }
         super.extractRenderState(g, mx, my, pt);
@@ -357,31 +450,62 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
         }
     }
 
+    /** One advancement badge (step s) at (bx, by), bw wide; returns its tooltip while hovered ({@code raakbaar}: not clipped away). */
+    @Nullable
+    private List<Component> badge(GuiGraphicsExtractor g, Klasse k, int s, int bx, int by, int bw, int mx, int my, boolean raakbaar) {
+        boolean open = t.getIntOr("adv_" + k.id(), 0) >= s;
+        int bh = BoomIndeling.BADGE_H;
+        g.fill(bx, by, bx + bw, by + bh, open ? 0xFFB8436F : 0xFF3A2433);
+        g.outline(bx, by, bw, bh, open ? GOUD : 0xFF6A4A5A);
+        g.item(new ItemStack(open ? Items.NETHER_STAR : Items.GRAY_DYE), bx + 3, by + 3);
+        Component titel = Component.translatable(t.getStringOr("adv_titel_" + s, "vadsrijk.klassen.titel." + k.id() + "." + s));
+        float ts = Math.min(0.75f, (bw - 24) / (float) Math.max(1, font.width(titel)));   // (a long title shrinks to fit)
+        g.pose().pushMatrix();
+        g.pose().translate(bx + 22, by + 4);
+        g.pose().pushMatrix();
+        g.pose().scale(ts, ts);
+        g.text(font, titel, 0, 0, open ? 0xFFFFFFFF : GRIJS, false);
+        g.pose().popMatrix();
+        g.pose().scale(0.75f, 0.75f);
+        g.text(font, Component.translatable("vadsrijk.klassen.scherm.adv.lv", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.levelVan(s)), 0, 11, open ? GOUD : GRIJS, false);
+        g.pose().popMatrix();
+        if (!raakbaar || mx < bx || mx >= bx + bw || my < by || my >= by + bh) {
+            return null;
+        }
+        List<Component> tip = new ArrayList<>();
+        tip.add(titel.copy().withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD));
+        tip.addAll(regels(t.getStringOr("adv_uitleg_" + s, "vadsrijk.klassen.adv.uitleg.geen." + s), ChatFormatting.WHITE));
+        tip.add(Component.translatable(open ? "vadsrijk.klassen.scherm.adv.open" : "vadsrijk.klassen.scherm.adv.dicht", nl.juiced.guhs.feature.vadsrijk.klassen.Advancement.levelVan(s))
+                .withStyle(open ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+        return tip;
+    }
+
     /**
      * U-SPECS: a soft strip behind every column with its name on top (spec A, Stam, spec B, Tank/Steun/Heel). The spec you don't
-     * have is dimmed and marked; hovering a header tells what the branch is. Returns a tooltip or null.
+     * have is dimmed and marked; hovering a header tells what the branch is. Returns a tooltip or null. The names sit above the
+     * scrolled view (they stay while the rows scroll); the strips run down to the last row.
      */
     @Nullable
-    private List<Component> takken(GuiGraphicsExtractor g, Klasse k, int gx, int gy, int mx, int my) {
+    private List<Component> takken(GuiGraphicsExtractor g, Klasse k, int gx, int sc, int mx, int my) {
         List<Spec> specs = Spec.vanKlasse(k.id());
         String mijn = t.getStringOr("spec", "");
-        int onder = gy + (rijen() - 1) * DY + KNOOP + 3;
+        int kopY = top + BoomIndeling.KOP, onder = Math.min(in.vy1(), in.vy0() + in.boomOnder() - sc);
         List<Component> tip = null;
         for (int kol = 0; kol < 4; kol++) {
             Spec sp = kol == 0 && !specs.isEmpty() ? specs.get(0) : kol == 2 && specs.size() > 1 ? specs.get(1) : null;
             int kleur = sp != null ? 0xFF000000 | sp.kleur : kol == 1 ? 0xFFFFC2E8 : 0xFF8FD4FF;
             boolean dicht = sp != null && !sp.id.equals(mijn);
             int x0 = gx + kol * DX - 6, x1 = x0 + KNOOP + 12;
-            g.fill(x0, gy - 12, x1, onder, (dicht ? 0x10000000 : 0x26000000) | (kleur & 0xFFFFFF));
-            g.fill(x0, gy - 12, x1, gy - 11, (kleur & 0xFFFFFF) | 0xA0000000);
+            g.fill(x0, kopY, x1, Math.max(in.vy0(), onder), (dicht ? 0x10000000 : 0x26000000) | (kleur & 0xFFFFFF));
+            g.fill(x0, kopY, x1, kopY + 1, (kleur & 0xFFFFFF) | 0xA0000000);
             String sleutel = kol == 1 ? "stam" : "zij." + k.id();
             Component kop = sp != null ? Component.translatable(sp.naamKey()) : Component.translatable("vadsrijk.klassen.tak." + sleutel);
             g.pose().pushMatrix();
-            g.pose().translate(x0 + (x1 - x0) / 2f, gy - 9);
+            g.pose().translate(x0 + (x1 - x0) / 2f, kopY + 3);
             g.pose().scale(0.6f, 0.6f);
             g.centeredText(font, dicht ? Component.literal("× ").append(kop) : kop, 0, 0, dicht ? GRIJS : kleur);
             g.pose().popMatrix();
-            if (mx >= x0 && mx < x1 && my >= gy - 12 && my < gy - 2) {
+            if (mx >= x0 && mx < x1 && my >= kopY && my < kopY + 10) {
                 tip = new ArrayList<>();
                 tip.add(kop.copy().withStyle(ChatFormatting.BOLD));
                 tip.addAll(regels(sp != null ? "vadsrijk.klassen.spec." + sp.id + ".kort" : "vadsrijk.klassen.tak." + sleutel + ".uitleg", ChatFormatting.WHITE));
@@ -452,37 +576,98 @@ public final class BoomScherm extends Screen implements nl.juiced.guhs.feature.v
         return l;
     }
 
+    /** The node under a point in the tree view (the scroll counted in), or null. */
+    @Nullable
+    private BoomKnoop knoopOp(double mx, double my) {
+        if (!in.inKijk(mx, my)) {
+            return null;
+        }
+        int sc = in.klem(scroll);
+        for (BoomKnoop b : klasse().boom()) {
+            if (b.rij() < 0) {
+                continue;
+            }
+            int x = in.knoopX(b.kolom()), y = in.vy0() + in.knoopY(b.rij()) - sc;
+            if (mx >= x && mx < x + KNOOP && my >= y && my < y + KNOOP) {
+                return b;
+            }
+        }
+        return null;
+    }
+
     @Override
     public boolean mouseClicked(MouseButtonEvent event, boolean doubleClick) {
         if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT && kader != null && nl.juiced.guhs.feature.vadsrijk.menu.client.VadsrijkMenu.klik(font, event.x(), event.y(),
                 kader.left(), kader.top(), kader.w(), font.width(title.copy().withStyle(ChatFormatting.BOLD)), "skillboom")) {   // U-TABS
             return true;
         }
-        if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
-            double mx = event.x(), my = event.y();
-            Klasse k = klasse();
-            int gx = left + 20, gy = top + 46;
-            for (BoomKnoop b : k.boom()) {
-                if (b.rij() < 0) {
-                    continue;
-                }
-                int x = gx + b.kolom() * DX, y = gy + b.rij() * DY;
-                if (mx >= x && mx < x + KNOOP && my >= y && my < y + KNOOP) {
-                    if (Boom.waaromNiet(k, knopen(), t.getIntOr("level", 1), b.id()) == null) {
-                        if (b.id().equals(gekozen)) {
-                            stuur("koop", b.id());
-                            gekozen = null;
-                        } else {
-                            gekozen = b.id();
-                        }
-                        minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
-                                net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.2f));
-                    }
-                    return true;
-                }
-            }
+        if (event.button() == GLFW.GLFW_MOUSE_BUTTON_LEFT && in != null && in.inKijk(event.x(), event.y())) {
+            // a press in the tree view: released without dragging = a click on the node under it, dragged = the tree moves
+            balkSleep = in.maxScroll() > 0 && event.x() >= in.vx1() - 7;
+            druk = !balkSleep;
+            sleep = 0;
+            BoomKnoop b = druk ? knoopOp(event.x(), event.y()) : null;
+            drukKnoop = b == null ? null : b.id();
+            return true;
         }
         return super.mouseClicked(event, doubleClick);
+    }
+
+    @Override
+    public boolean mouseDragged(MouseButtonEvent event, double dx, double dy) {
+        if (druk) {
+            sleep += Math.abs(dx) + Math.abs(dy);
+            scroll = Math.max(0, Math.min(in.maxScroll(), scroll - dy));
+            return true;
+        }
+        if (balkSleep) {
+            scroll = Math.max(0, Math.min(in.maxScroll(), scroll + dy * in.inhoudH() / Math.max(1, in.kijkH())));
+            return true;
+        }
+        return super.mouseDragged(event, dx, dy);
+    }
+
+    @Override
+    public boolean mouseReleased(MouseButtonEvent event) {
+        if (balkSleep) {
+            balkSleep = false;
+            scroll = in.klem(scroll);
+            return true;
+        }
+        if (druk) {
+            druk = false;
+            scroll = in.klem(scroll);
+            BoomKnoop b = sleep < 4 ? knoopOp(event.x(), event.y()) : null;
+            if (b != null && b.id().equals(drukKnoop)) {
+                klikKnoop(b);
+            }
+            drukKnoop = null;
+            return true;
+        }
+        return super.mouseReleased(event);
+    }
+
+    /** Click a node once to select it, again to learn it. */
+    private void klikKnoop(BoomKnoop b) {
+        if (Boom.waaromNiet(klasse(), knopen(), t.getIntOr("level", 1), b.id()) == null) {
+            if (b.id().equals(gekozen)) {
+                stuur("koop", b.id());
+                gekozen = null;
+            } else {
+                gekozen = b.id();
+            }
+            minecraft.getSoundManager().play(net.minecraft.client.resources.sounds.SimpleSoundInstance.forUI(
+                    net.minecraft.sounds.SoundEvents.UI_BUTTON_CLICK, 1.2f));
+        }
+    }
+
+    @Override
+    public boolean mouseScrolled(double mx, double my, double dx, double dy) {
+        if (in != null && in.maxScroll() > 0 && mx >= left && mx < left + BoomIndeling.SCHEIDING && my >= top && my < top + H) {
+            scroll = in.klem(in.klem(scroll) - dy * DY);
+            return true;
+        }
+        return super.mouseScrolled(mx, my, dx, dy);
     }
 
     @Override

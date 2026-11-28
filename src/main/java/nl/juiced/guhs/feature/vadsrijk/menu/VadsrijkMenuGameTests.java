@@ -8,6 +8,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
+import nl.juiced.guhs.feature.vadsrijk.kern.klasse.BoomKnoop;
+import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klasse;
+import nl.juiced.guhs.feature.vadsrijk.kern.klasse.Klassen;
+import nl.juiced.guhs.feature.vadsrijk.klassen.boom.BoomIndeling;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
 
@@ -100,6 +104,68 @@ public class VadsrijkMenuGameTests {
             float sc = MenuIndeling.kader(1920 / gs, 1080 / gs, 0, 0, true, gs).schaal();
             helper.assertTrue(sc < 1f || Math.abs(sc * gs - Math.round(sc * gs)) < 1e-4, "a scale-UP keeps a whole real pixel scale at GUI " + gs + ": " + sc);
         }
+        helper.succeed();
+    }
+
+    /**
+     * The Skillboom tab has the frame of every other tab at every window size and GUI scale (it used to ask for a taller frame, so
+     * the frame jumped when you switched to it); its tree scrolls inside that frame and every node can be scrolled into view.
+     */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void skillboomZelfdeKader(GameTestHelper helper) {
+        int nodes = 0;
+        for (int gs = 1; gs <= 4; gs++) {
+            for (int[] venster : new int[][] {{1920, 1080}, {1920, 1009}, {1366, 768}, {1280, 720}, {854, 480}, {2560, 1440}, {3840, 2160}}) {
+                int sw = venster[0] / gs, sh = venster[1] / gs;
+                MenuIndeling.Kader gewoon = MenuIndeling.kader(sw, sh, 0, 0, true, gs);
+                MenuIndeling.Kader boom = BoomIndeling.kader(sw, sh, gs);
+                String w = sw + "x" + sh + " gui " + gs + " ";
+                helper.assertTrue(boom.equals(gewoon), "the Skillboom frame = the frame of a normal tab: " + w + boom + " / " + gewoon);
+                for (Klasse k : Klassen.alle()) {
+                    int rijen = 4;
+                    for (BoomKnoop b : k.boom()) {
+                        rijen = Math.max(rijen, b.rij() + 1);
+                    }
+                    for (boolean onder : new boolean[] {true, false}) {
+                        BoomIndeling in = BoomIndeling.van(boom, rijen, onder);
+                        String wi = w + k.id() + " " + in;
+                        helper.assertTrue(in.left() >= boom.left() && in.left() + in.w() <= boom.left() + boom.w()
+                                && in.top() >= boom.top() + MenuIndeling.BAND && in.top() + in.h() <= boom.top() + boom.h(), "the tree panel inside the frame: " + wi);
+                        helper.assertTrue(in.vx0() >= in.left() && in.vx1() <= in.left() + in.w() && in.vy0() > in.top() && in.vy1() <= in.top() + in.h()
+                                && in.kijkH() >= BoomIndeling.KNOOP + 8, "the tree view inside the panel, taller than a node: " + wi);
+                        helper.assertTrue(in.rx() > in.vx1() && in.rw() >= 160 && in.rx() + in.rw() <= in.left() + in.w(), "the right side keeps its room: " + wi);
+                        helper.assertTrue(in.dy() >= BoomIndeling.MIN_DY && in.dy() <= BoomIndeling.MAX_DY && in.dy() > BoomIndeling.KNOOP, "rows never overlap: " + wi);
+                        helper.assertTrue(in.klem(-5) == 0 && in.klem(1e9) == in.maxScroll() && in.maxScroll() == Math.max(0, in.inhoudH() - in.kijkH()), "scroll range: " + wi);
+                        for (BoomKnoop b : k.boom()) {
+                            if (b.rij() < 0) {
+                                continue;
+                            }
+                            nodes++;
+                            int x = in.knoopX(b.kolom()), y = in.knoopY(b.rij());
+                            helper.assertTrue(x - 2 >= in.vx0() && x + BoomIndeling.KNOOP + 2 <= in.vx1() - 6, "node " + b.id() + " inside the view (x): " + wi);
+                            helper.assertTrue(y - 2 >= 0 && y + BoomIndeling.KNOOP + 2 <= in.inhoudH(), "node " + b.id() + " inside the scrolled content (y): " + wi);
+                            // scrolled to its row, the whole node is in the view (so it can be seen, hovered and clicked)
+                            int sy = in.vy0() + y - in.scrollVoor(b.rij());
+                            helper.assertTrue(sy >= in.vy0() && sy + BoomIndeling.KNOOP <= in.vy1() && in.inKijk(x, sy) && in.inKijk(x + BoomIndeling.KNOOP - 1, sy + BoomIndeling.KNOOP - 1),
+                                    "node " + b.id() + " reachable by scrolling: " + wi);
+                        }
+                        if (onder) {
+                            for (int i = 0; i < BoomIndeling.BADGES; i++) {
+                                helper.assertTrue(in.badgeX(i) >= in.vx0() && in.badgeX(i) + BoomIndeling.BADGE_W <= in.vx1() - 6 && in.badgeY(i) >= in.boomOnder()
+                                        && in.badgeY(i) + BoomIndeling.BADGE_H <= in.inhoudH(), "badge " + i + " inside the scrolled content: " + wi);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        helper.assertTrue(nodes > 0, "the class trees have nodes");
+        // 1080p: GUI 2 = x1.5 like every tab (was x1 with a 423 high frame), the 10-row tree scrolls there
+        MenuIndeling.Kader g2 = BoomIndeling.kader(960, 540, 2);
+        helper.assertTrue(g2.schaal() == 1.5f && g2.w() == 512 && g2.h() == 289, "Skillboom at 1080p GUI 2: " + g2);
+        BoomIndeling tien = BoomIndeling.van(g2, 10, false), vier = BoomIndeling.van(g2, 4, false);
+        helper.assertTrue(tien.dy() == BoomIndeling.MIN_DY && tien.maxScroll() > 0, "10 rows scroll: " + tien);
+        helper.assertTrue(vier.dy() == BoomIndeling.MAX_DY && vier.maxScroll() == 0, "4 rows fit without scrolling, roomy: " + vier);
         helper.succeed();
     }
 
