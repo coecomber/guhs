@@ -39,6 +39,10 @@ public final class Escortes {
     public static final double KWIJT = 64;
     /** Party members within this of the destination get the arrival too. */
     public static final double PARTY_STRAAL = 48;
+    /** 1.10.27: the hand-in NPC "waits at the destination" when its post is within this of it ({@link #bijInleveraar}). */
+    public static final double BIJ_BESTEMMING = 48;
+    /** 1.10.27: the copy within this of that hand-in NPC has arrived (it stops ~3 blocks behind you, you stand at the NPC). */
+    public static final double BIJ_INLEVERAAR = 10;
 
     /** One running escort. */
     public static final class Escorte {
@@ -239,10 +243,25 @@ public final class Escortes {
                 stop(sl, e, l != null);
                 continue;
             }
-            if (NpcHaken.bij(g, e.naar, NpcPlekken.POI_STRAAL + 2, NpcPlekken.POI_HOOGTE)) {
+            if (NpcHaken.bij(g, e.naar, NpcPlekken.POI_STRAAL + 2, NpcPlekken.POI_HOOGTE) || bijInleveraar(sl, e, g, q)) {
                 aankomst(sl, e, g, q, l);
             }
         }
+    }
+
+    /**
+     * 1.10.27 (z5_s07_kadet): bringing the copy to the NPC you hand the quest in to counts as the arrival too, when that NPC waits
+     * at the destination (its post within {@link #BIJ_BESTEMMING} of it). Kapitein Veerkracht stands 27 blocks from the spot
+     * "z5_academie" (the north-east corner of the oefenplein, arrival radius 8), so walking Kadet Dons up to the captain did nothing.
+     * Not when the escorted NPC is the hand-in NPC itself (hq09, z10_rammel, z3_s02: its post is where you picked it up).
+     */
+    static boolean bijInleveraar(ServerLevel sl, Escorte e, RijkGuh g, Quest q) {
+        NpcDef in = q.inleveren().equals(e.npc) ? null : Npcs.van(q.inleveren());
+        if (in == null || in.plek() == null || !in.plek().closerThan(e.naar, BIJ_BESTEMMING)) {
+            return false;
+        }
+        RijkGuh echt = Npcs.levend(sl, in.id());
+        return NpcHaken.bij(g, echt != null ? echt.blockPosition() : in.plek(), BIJ_INLEVERAAR, NpcPlekken.POI_HOOGTE);
     }
 
     /** The leader when still here (logged in with the same player object, so a relog or a respawn ends the escort). */

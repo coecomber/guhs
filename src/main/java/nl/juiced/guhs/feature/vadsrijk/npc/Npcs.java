@@ -218,6 +218,15 @@ public final class Npcs {
         return NpcVloer.staan(NpcVloer.van(sl), b);
     }
 
+    /** Tests: this guh stands for NPC {@code id} now (null: nobody), as if {@link #zet} had spawned it. */
+    static void testLevend(String id, @Nullable RijkGuh g) {
+        if (g == null) {
+            LEVEND.remove(id);
+        } else {
+            LEVEND.put(id, g.getUUID());
+        }
+    }
+
     /** Dev: every NPC away (they come back within a second when a player is near). */
     static int wisAlles(ServerLevel sl) {
         int n = 0;
