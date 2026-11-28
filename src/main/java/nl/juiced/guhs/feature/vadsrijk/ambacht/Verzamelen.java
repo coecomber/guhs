@@ -46,6 +46,13 @@ import nl.juiced.guhs.feature.vadsrijk.kern.Vadsrijk;
 public final class Verzamelen {
     public static final int LEEG_MIN = AmbachtPlekken.LEEG_MIN, LEEG_MAX = AmbachtPlekken.LEEG_MAX, ZICHT = 64, AFK_MINUTEN = 10, AFK_AFSTAND = 5;
     public static final double ZELDZAAM_KANS = 0.05, ZELDZAAM_MATERIAAL = 0.35, BEREIK = 6.0;
+    /** 1.10.30: a glittering ORE spot gives its rare material (Glinstergruis) half the time (the other kinds keep {@link #ZELDZAAM_MATERIAAL}). */
+    public static final double ZELDZAAM_MATERIAAL_ERTS = 0.50;
+
+    /** The chance that a rare (glittering) spot of this kind gives its rare material. */
+    public static double zeldzaamMateriaalKans(NodeSoort soort) {
+        return soort == NodeSoort.ERTS ? ZELDZAAM_MATERIAAL_ERTS : ZELDZAAM_MATERIAAL;
+    }
 
     /** One hive stand's place for one player (1.10.4: the other spots are shared, {@link Grondstoffen}). */
     static final class Staat {
@@ -315,7 +322,7 @@ public final class Verzamelen {
             }
         }
         // extras: the rare material on a rare spot, a raw crystal on a perfect ore swing, resin from schemerhout
-        if (zeld && p.getRandom().nextDouble() < ZELDZAAM_MATERIAAL) {
+        if (zeld && p.getRandom().nextDouble() < zeldzaamMateriaalKans(g.soort())) {
             Materiaal r = Materialen.zeldzaam(g.soort());
             if (r != null) {
                 MateriaalTas.geef(p, Materialen.stack(r.id(), q, 1));
