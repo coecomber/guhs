@@ -279,4 +279,19 @@ public class VadsrijkGrondstofGameTests {
         }
         helper.succeed();
     }
+
+    /** 1.10.33 (owner): boss core 25 % and certain the first time, else a kernsplinter; elites 10 % a splinter. */
+    @GuhTest(template = "empty", batch = BATCH)
+    public static void kernEnSplinterKansen(GameTestHelper helper) {
+        var kern = Materialen.KERN.get("lampionkern").get();
+        var splinter = Materialen.KERNSPLINTER.get();
+        helper.assertTrue(AmbachtRegistry.KERN_KANS == 0.25 && AmbachtRegistry.SPLINTER_KANS == 0.10, "the chances");
+        helper.assertTrue(AmbachtRegistry.buit(true, true, "lampionkern", 0.99).is(kern), "first kill of a boss: the core for sure");
+        helper.assertTrue(AmbachtRegistry.buit(true, false, "lampionkern", 0.24).is(kern), "boss, lucky roll: the core");
+        helper.assertTrue(AmbachtRegistry.buit(true, false, "lampionkern", 0.25).is(splinter), "boss, no core: one splinter");
+        helper.assertTrue(AmbachtRegistry.buit(false, false, "lampionkern", 0.09).is(splinter), "elite, lucky roll: a splinter");
+        helper.assertTrue(AmbachtRegistry.buit(false, false, "lampionkern", 0.10).isEmpty(), "elite, no luck: nothing");
+        helper.assertTrue(AmbachtRegistry.buit(true, false, "lampionkern", 0.9).getCount() == 1, "one splinter");
+        helper.succeed();
+    }
 }

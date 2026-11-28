@@ -581,6 +581,11 @@ public abstract class VadsrijkBaas extends VadsrijkMob {
         return "baaskill:" + net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(getType());
     }
 
+    /** 1.10.33: this boss's kill key for other packages (the guaranteed first boss core in ambacht). */
+    public final String killSleutelVoorBuit() {
+        return killSleutel();
+    }
+
     private static final org.slf4j.Logger GEVECHT_LOG = com.mojang.logging.LogUtils.getLogger();
 
     /**

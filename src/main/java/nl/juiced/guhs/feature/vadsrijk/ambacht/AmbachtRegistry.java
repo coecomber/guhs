@@ -110,9 +110,15 @@ public final class AmbachtRegistry {
         AmbachtPayloads.register(registrar);
     }
 
+    /** 1.10.33 (owner): a boss gives its zone's core 1 in 4 times (was 15 %), an elite a kernsplinter 1 in 10 (was 3 %). */
+    public static final double KERN_KANS = 0.25, SPLINTER_KANS = 0.10;
+    /** AmbachtData list: the bosses (kill key) whose guaranteed first core this player has had. */
+    static final String KERN_BAZEN = "kern_bazen";
+
     /**
-     * Boss cores (Meesterwerk): every boss 15 % per helper, by its zone (U-AMBACHT2: zone 4 = Lampionkern, zone 5 = Wolkkern, by
-     * where it falls; zones 1-3 by level); elites 3 % a kernsplinter.
+     * Boss cores (Meesterwerk): per helper, by the boss's zone (U-AMBACHT2: zone 4 = Lampionkern, zone 5 = Wolkkern, by where it
+     * falls; zones 1-3 by level). 1.10.33: the FIRST time a player defeats a boss the core is certain, after that {@link #KERN_KANS};
+     * a boss kill without a core always gives one kernsplinter (5 make a core). Elites: {@link #SPLINTER_KANS} a kernsplinter.
      */
     static void kernDrop(Haken.Verslagen v) {
         boolean baas = v.mob() instanceof VadsrijkBaas;
@@ -120,13 +126,22 @@ public final class AmbachtRegistry {
             return;
         }
         String kern = kernVoor(v.mob().mobLevel(), v.mob().getX(), v.mob().getY(), v.mob().getZ());
+        String sleutel = v.mob() instanceof VadsrijkBaas b ? b.killSleutelVoorBuit() : "";
         for (ServerPlayer p : v.helpers()) {
-            ItemStack s = baas ? (p.getRandom().nextDouble() < 0.15 ? new ItemStack(Materialen.KERN.get(kern).get()) : ItemStack.EMPTY)
-                    : (p.getRandom().nextDouble() < 0.03 ? new ItemStack(Materialen.KERNSPLINTER.get()) : ItemStack.EMPTY);
+            boolean eerste = baas && !sleutel.isEmpty() && AmbachtData.voegToe(p, KERN_BAZEN, sleutel);
+            ItemStack s = buit(baas, eerste, kern, p.getRandom().nextDouble());
             if (!s.isEmpty()) {
                 LootBundel.laatVallen(p, v.mob().position().add(0, 0.5, 0), new LootTabel.Resultaat(List.of(s), 0), baas ? 3 : 2);
             }
         }
+    }
+
+    /** What one helper gets ({@code worp}: a random number in [0, 1)): pure, for the tests. */
+    static ItemStack buit(boolean baas, boolean eersteKeer, String kern, double worp) {
+        if (baas) {
+            return eersteKeer || worp < KERN_KANS ? new ItemStack(Materialen.KERN.get(kern).get()) : new ItemStack(Materialen.KERNSPLINTER.get());
+        }
+        return worp < SPLINTER_KANS ? new ItemStack(Materialen.KERNSPLINTER.get()) : ItemStack.EMPTY;
     }
 
     /** The boss core of a boss at this level and place (zone 5 above zone 4: same x/z, from y 118 up). */
