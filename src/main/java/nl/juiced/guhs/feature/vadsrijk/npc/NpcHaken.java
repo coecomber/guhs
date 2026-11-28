@@ -204,12 +204,32 @@ public final class NpcHaken {
         }
     }
 
+    /**
+     * Poi ids (without "poi:") whose GEBIED objectives a zone counts ITSELF, with its own radius and with what happens at the spot
+     * (zone 5: Z5Haken.plekken + bijPlek). The shared ticker below skips them: it used to count them too, with its wider radius, and
+     * whenever it was first the zone never saw the arrival, so the moment at the spot was lost (the telescope of z5_s04_oog: the
+     * step after it could never be done).
+     */
+    public static final List<java.util.function.Predicate<String>> EIGEN_POI = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+    static boolean eigenPoi(String id) {
+        for (java.util.function.Predicate<String> f : EIGEN_POI) {
+            if (f.test(id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** poi objectives (GEBIED / GEHEIM "poi:x"): you are there. */
     static void plekken(ServerPlayer p) {
         for (Quest q : Questlog.actieve(p)) {
             for (int i = 0; i < q.doelen().size(); i++) {
                 Quest.Doel d = q.doelen().get(i);
                 if ((d.type() == Quest.Doel.Type.GEBIED || d.type() == Quest.Doel.Type.GEHEIM) && d.doel().startsWith("poi:") && !Questlog.doelKlaar(p, q, i)) {
+                    if (d.type() == Quest.Doel.Type.GEBIED && eigenPoi(d.doel().substring(4))) {
+                        continue;   // (the zone's own ticker counts this one)
+                    }
                     BlockPos b = NpcPlekken.poi(d.doel().substring(4));
                     if (b != null && bij(p, b, NpcPlekken.POI_STRAAL, NpcPlekken.hoogteVan(d.doel().substring(4)))) {
                         Questlog.tel(p, d.type(), x -> x == d, 1);

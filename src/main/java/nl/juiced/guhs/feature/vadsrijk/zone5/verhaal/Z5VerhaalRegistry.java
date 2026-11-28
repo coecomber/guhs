@@ -90,6 +90,8 @@ public final class Z5VerhaalRegistry {
             gebieden();
         });
         NeoForge.EVENT_BUS.addListener((RegisterCommandsEvent e) -> commando(e));
+        NeoForge.EVENT_BUS.addListener(EventPriority.HIGH,
+                (net.neoforged.neoforge.event.entity.player.PlayerInteractEvent.RightClickBlock e) -> Z5Haken.telescoopKlik(e));
     }
 
     /** The havenmeester's lines, and Hoogvads on the other captains' lists (shown once zone 4 is done: QuestMotor.reisDoelen). */

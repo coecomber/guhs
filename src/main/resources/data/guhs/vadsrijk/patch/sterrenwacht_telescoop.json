@@ -1,0 +1,19 @@
+{
+  "_uitleg": "telescoop fix (after 1.10.25): side quest z5_s04_oog 'Het Oog meten' asks for a look through the big telescope of the university observatory in Hoogvads, but the city tiles never had one. This puts it in the dome room on top of the tower (floor y 259, room x 2696..2704 / z -448..-440): a pedestal with a guhs:guh_telescoop on it, at Z5VerhaalPlekken.TELESCOOP (checked by Z5VerhaalGameTests.telescoopInDeSterrenwacht). Only air is replaced; a second run changes nothing.",
+  "dimensie": "guhs:vadsrijk",
+  "beschrijving": "Hoogvads: de grote telescoop in de koepelkamer van de sterrenwacht (zijquest Het Oog meten)",
+  "dozen": [
+    {
+      "naam": "sokkel",
+      "min": [2702, 260, -442],
+      "max": [2702, 260, -442],
+      "blok": "guhs:roze_marmer_gepolijst"
+    },
+    {
+      "naam": "telescoop",
+      "min": [2702, 261, -442],
+      "max": [2702, 261, -442],
+      "blok": "guhs:guh_telescoop[facing=north]"
+    }
+  ]
+}

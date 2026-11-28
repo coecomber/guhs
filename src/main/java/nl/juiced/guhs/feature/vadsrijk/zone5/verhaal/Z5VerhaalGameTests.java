@@ -7,9 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.locale.Language;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
 import nl.juiced.guhs.feature.vadsrijk.kern.Spelers;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcApi;
+import nl.juiced.guhs.feature.vadsrijk.npc.NpcHaken;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcDef;
 import nl.juiced.guhs.feature.vadsrijk.npc.NpcRegistry;
 import nl.juiced.guhs.feature.vadsrijk.npc.Npcs;
@@ -19,6 +21,7 @@ import nl.juiced.guhs.feature.vadsrijk.npc.QuestPlek;
 import nl.juiced.guhs.feature.vadsrijk.npc.Questlog;
 import nl.juiced.guhs.feature.vadsrijk.npc.Quests;
 import nl.juiced.guhs.feature.vadsrijk.npc.RijkGuh;
+import nl.juiced.guhs.feature.vadsrijk.wereld.WereldPatch;
 import nl.juiced.guhs.feature.verhaal.Praat;
 import nl.juiced.guhs.gametest.GuhMockPlayer;
 import nl.juiced.guhs.gametest.GuhTest;
@@ -179,6 +182,123 @@ public class Z5VerhaalGameTests {
         helper.assertTrue(QuestMotor.reisSlot(p, "hoogvads") != null, "below the line's level: locked");
         schoon(p);
         Questlog.wisAlles(p);
+        helper.succeed();
+    }
+
+    /**
+     * The telescoop fix (after 1.10.25, side quest z5_s04_oog "Het Oog meten"; run: {@code -Pgt=Z5VerhaalGameTests}). On live a
+     * player stood at "climb: done, measure: open" for good: the shared poi ticker (NpcHaken.plekken, a wider radius) had counted the
+     * climb before zone 5's own ticker saw it, so the measurement at the spot never came; and the spot was the FOOT of the tower stair,
+     * with no telescope anywhere. Now: (1) the spot is the dome room on top and the patch sterrenwacht_telescoop puts a telescope
+     * there, idempotent; (2) the shared ticker leaves zone-5 spots alone; (3) without a telescope standing there, being in the room
+     * measures, also for who was stuck; (4) with the telescope, a click on it measures; (5) a find the old race swallowed is given
+     * the next time you stand at its spot.
+     */
+    @GuhTest(template = "empty", batch = B, timeoutTicks = 200)
+    public static void telescoopInDeSterrenwacht(GameTestHelper helper) throws Exception {
+        net.minecraft.server.level.ServerLevel l = helper.getLevel();
+        ServerPlayer p = GuhMockPlayer.of(helper);
+        schoon(p);
+        Quest q = Quests.van(Z5Haken.OOG);
+        BlockPos kamer = Z5VerhaalPlekken.STERRENWACHT, tel = Z5VerhaalPlekken.TELESCOOP;
+        Language t = Language.getInstance();
+
+        // 1. the spot is the dome room (the lookout on top of the tower), the telescope stands in it, the patch puts it exactly there
+        helper.assertTrue(q != null && q.doelen().size() == 2 && q.doelen().get(0).doel().equals("poi:z5_sterrenwacht")
+                && q.doelen().get(1).doel().equals("z5:oog_gemeten"), "z5_s04_oog: climb, then measure");
+        BlockPos top = Z5VerhaalPlekken.wereld("universiteit_sterrenwacht_top"), voet = Z5VerhaalPlekken.wereld("universiteit_sterrenwacht");
+        helper.assertTrue(top != null && kamer.equals(top) && kamer.equals(Z5VerhaalPlekken.poi("z5_sterrenwacht"))
+                && kamer.equals(QuestPlek.pos(null, "poi:z5_sterrenwacht")), "the quest spot (and the tracker) is the dome room on top: " + kamer);
+        helper.assertTrue(voet != null && kamer.getY() - voet.getY() >= 40, "not the foot of the stair any more: " + voet + " -> " + kamer);
+        helper.assertTrue(tel.getY() == kamer.getY() + 1 && Math.abs(tel.getX() - kamer.getX()) <= 4 && Math.abs(tel.getZ() - kamer.getZ()) <= 4,
+                "the telescope stands in the dome room: " + tel);
+        WereldPatch.Patch patch = WereldPatch.laad("sterrenwacht_telescoop").orElse(null);
+        helper.assertTrue(patch != null && patch.dozen().size() == 2 && patch.cellen() == 2
+                && patch.dim().identifier().toString().equals("guhs:vadsrijk"), "the patch sterrenwacht_telescoop loads: a pedestal and the telescope, in the Vadsrijk");
+        helper.assertTrue(patch.dozen().get(0).min().equals(tel.below()) && patch.dozen().get(1).min().equals(tel)
+                && patch.dozen().get(1).blok().getBlock() instanceof nl.juiced.guhs.feature.sterrenwacht.TelescoopBlock,
+                "the patch puts the telescope at Z5VerhaalPlekken.TELESCOOP, on its pedestal");
+        for (String key : List.of(q.doelKey(0), q.doelKey(1), "vadsrijk.npc.plek.poi.z5_sterrenwacht", Z5Verhaal.Z + "oog.gemeten", Z5Verhaal.Z + "oog.telescoop",
+                Z5Verhaal.Z + "oog.kijk")) {
+            helper.assertTrue(t.has(key), "text " + key);
+        }
+        helper.assertTrue(!t.getOrDefault(q.doelKey(1)).contains("als je er staat"), "the step no longer says 'klik als je er staat'");
+
+        Vec3 was = p.position();
+        java.nio.file.Path backup = null;
+        try {
+            // 2. the shared ticker leaves the spot alone (it used to count the climb and swallow the measurement); zone 5 counts it
+            Questlog.neemAan(p, q);
+            p.setPos(kamer.getX() + 0.5, kamer.getY(), kamer.getZ() + 0.5);
+            NpcHaken.robotPlekken(p);
+            helper.assertTrue(!Questlog.doelKlaar(p, q, 0) && !Questlog.doelKlaar(p, q, 1), "the shared poi ticker does not count a zone-5 spot");
+            helper.assertTrue(!Z5Haken.telescoopStaat(l), "(no telescope in this world yet)");
+            Z5Haken.stap(p, l);
+            helper.assertTrue(Questlog.allesKlaar(p, q), "no telescope standing: being in the dome room counts the climb AND the measurement");
+
+            // 3. the state of the live report: climb counted, measurement open; standing far below does nothing, in the room it counts
+            Questlog.vergeet(p, q.id());
+            Questlog.neemAan(p, q);
+            Questlog.tel(p, Quest.Doel.Type.GEBIED, d -> d == q.doelen().get(0), 1);
+            helper.assertTrue(Questlog.doelKlaar(p, q, 0) && !Questlog.doelKlaar(p, q, 1), "stuck as on live: [1, 0]");
+            p.setPos(voet.getX() + 0.5, voet.getY(), voet.getZ() + 0.5);
+            Z5Haken.stap(p, l);
+            helper.assertTrue(!Questlog.doelKlaar(p, q, 1), "at the foot of the stair nothing is measured");
+            p.setPos(kamer.getX() + 0.5, kamer.getY(), kamer.getZ() + 0.5);
+            Z5Haken.stap(p, l);
+            helper.assertTrue(Questlog.allesKlaar(p, q), "who was stuck gets the measurement in the dome room");
+
+            // 4. the patch on an existing world: places both blocks once, a second run changes nothing; then the CLICK measures
+            l.getChunk(tel);
+            for (BlockPos b : BlockPos.betweenClosed(tel.offset(-1, -2, -1), tel.offset(1, 1, 1))) {
+                l.setBlock(b, Blocks.AIR.defaultBlockState(), 2 | 16);
+            }
+            l.setBlock(tel.below(2), Blocks.DARK_OAK_PLANKS.defaultBlockState(), 2 | 16);
+            WereldPatch.Uitslag proef = WereldPatch.toepassen(l, patch, false);
+            helper.assertTrue(proef.fout() == null && proef.plaatsen() == 2 && !Z5Haken.telescoopStaat(l), "dry run: 2 to place, nothing placed: " + proef.fout());
+            WereldPatch.Uitslag echt = WereldPatch.toepassen(l, patch, true);
+            helper.assertTrue(echt.fout() == null && echt.plaatsen() == 2 && echt.backup() != null, "--echt places 2 blocks with a backup: " + echt.fout());
+            backup = l.getServer().getWorldPath(net.minecraft.world.level.storage.LevelResource.ROOT).resolve("data").resolve(echt.backup());
+            helper.assertTrue(Z5Haken.telescoopStaat(l), "the telescope stands");
+            WereldPatch.Uitslag nog = WereldPatch.toepassen(l, patch, true);
+            helper.assertTrue(nog.fout() == null && nog.plaatsen() == 0 && nog.alGoed() == 2 && nog.backup() == null, "a second run changes nothing");
+
+            Questlog.vergeet(p, q.id());
+            Questlog.neemAan(p, q);
+            Z5Haken.stap(p, l);
+            helper.assertTrue(Questlog.doelKlaar(p, q, 0) && !Questlog.doelKlaar(p, q, 1), "with the telescope: the room counts the climb, the measurement waits for the click");
+            helper.assertTrue(!Z5Haken.telescoopKlik(p, l, tel.below()) && !Questlog.doelKlaar(p, q, 1), "a click on another block is not ours");
+            helper.assertTrue(Z5Haken.telescoopKlik(p, l, tel) && Questlog.allesKlaar(p, q), "a click on the telescope measures the Eye");
+            helper.assertTrue(Z5Haken.telescoopKlik(p, l, tel) && Questlog.allesKlaar(p, q), "another click is just a look");
+            // (a click before the room was counted counts the climb too)
+            Questlog.vergeet(p, q.id());
+            Questlog.neemAan(p, q);
+            helper.assertTrue(Z5Haken.telescoopKlik(p, l, tel) && Questlog.allesKlaar(p, q), "the click counts the climb too");
+            Questlog.vergeet(p, q.id());
+
+            // 5. a find the old race swallowed: the lockers counted (as the shared ticker did), no clue, no letter -> given at the spot
+            Quest mol = Quests.van(Z5Haken.HQ03);
+            Questlog.neemAan(p, mol);
+            for (Quest.Doel d : mol.doelen()) {
+                if (d.doel().equals("poi:z5_kastje")) {
+                    Questlog.tel(p, d.type(), x -> x == d, 1);
+                }
+            }
+            helper.assertTrue(Z5Haken.geweest(p, "z5_kastje") && !Z5Speurwerk.heeft(p, "bevelbrief"), "the lockers were counted without their clue");
+            BlockPos kastje = Z5VerhaalPlekken.poi("z5_kastje");
+            p.setPos(kastje.getX() + 0.5, kastje.getY(), kastje.getZ() + 0.5);
+            Z5Haken.stap(p, l);
+            helper.assertTrue(Z5Speurwerk.heeft(p, "bevelbrief") && !Z5Haken.eenmaligNog(p, "bevelbrief"), "back at the lockers: the clue and the letter after all");
+        } finally {
+            p.setPos(was.x, was.y, was.z);
+            for (int dy = 0; dy <= 2; dy++) {
+                l.setBlock(tel.below(dy), Blocks.AIR.defaultBlockState(), 2 | 16);
+            }
+            if (backup != null) {
+                java.nio.file.Files.deleteIfExists(backup);
+            }
+            schoon(p);
+        }
         helper.succeed();
     }
 
