@@ -3,6 +3,11 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.26 — Minecraft 26.1.2
+
+- **Client crash at every zone-5 boss (live: Luc_Ermeling, Hoogvads):** the Donderbuik, Gorgonzola, Zilverstaart and the Grauwe Droom extend `Z3Baas` (so they have the "vfx" controller and `BaasVfx` triggers `vfx_geraakt` / `vfx_fase` / ... on them), but their animation files live under `vadsrijk/zone5/` and `tools/features/vadsrijk_t_vfx.py` only merged the six `vfx_*` animations into `vr_*baas_*` files: GeckoLib then crashes every client that sees the moment (the same defect as the Mika-imker in 1.10.17). The four are now in the tool's `EXTRA` list and have the animations.
+- `BaasAnimsGameTests.elkeBaasMetVfxControllerHeeftDeAnimaties` no longer checks a fixed list: it creates every registered `guhs:vr_*` entity, and each one with a "vfx" controller must have all six animations in its file.
+
 ## 1.10.25 — Minecraft 26.1.2
 
 - **Workshop screen re-laid out (live: "knoppen rechts onderin buiten beeld, Maak en Nu over de andere knoppen"):** `WerkplaatsScherm` (smeden, koken, ...) was a fixed 340 x 236 panel whose Maatwerk stat buttons and Meesterwerk properties grew down under the fixed Maak bar and past the bottom (and with 1.10.24's scale-up past the window edge). Now 460-560 x 260-330 logical, the recipe list as tall as the panel, the chosen recipe in a clipped box that scrolls (scroll bar), the Maak / Maak 10x bar fixed at the bottom, the timing bar and "Nu!" side by side. Narrow stat buttons show the short name (before the brackets) with the full one as a tooltip.

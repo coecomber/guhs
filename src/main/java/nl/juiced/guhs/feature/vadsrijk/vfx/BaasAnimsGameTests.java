@@ -51,4 +51,62 @@ public final class BaasAnimsGameTests {
         }
         helper.succeed();
     }
+
+    /** Type id -> animation file, where the two differ (the rest: the file is named after the type id). */
+    private static final java.util.Map<String, String> AFWIJKEND = java.util.Map.of(
+            "vr_z5_baas_donderbuik", "vadsrijk/zone5/wezens/donderbuik",
+            "vr_z5_baas_gorgonzola", "vadsrijk/zone5/wezens/gorgonzola",
+            "vr_z5_baas_zilverstaart", "vadsrijk/zone5/wezens/zilverstaart",
+            "vr_z5_baas_grauwe_droom", "vadsrijk/zone5/droom/grauwe_droom");
+
+    /**
+     * 1.10.26: EVERY registered guhs entity with the "vfx" controller (not a fixed list) has the six vfx animations in its
+     * animation file. The zone-5 bosses (files under vadsrijk/zone5/, skipped by the tool's vr_*baas_* glob) crashed every
+     * client that hit one. A new boss whose file is not named after its type id: add it to AFWIJKEND and to EXTRA in
+     * tools/features/vadsrijk_t_vfx.py.
+     */
+    @GuhTest(template = "empty", batch = B)
+    public static void elkeBaasMetVfxControllerHeeftDeAnimaties(GameTestHelper helper) {
+        java.util.List<String> fout = new java.util.ArrayList<>();
+        int n = 0;
+        for (var type : net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE) {
+            var id = net.minecraft.core.registries.BuiltInRegistries.ENTITY_TYPE.getKey(type);
+            if (!"guhs".equals(id.getNamespace()) || !id.getPath().startsWith("vr_")) {
+                continue;
+            }
+            net.minecraft.world.entity.Entity e;
+            try {
+                e = type.create(helper.getLevel(), net.minecraft.world.entity.EntitySpawnReason.COMMAND);
+            } catch (RuntimeException ex) {
+                continue;
+            }
+            if (!(e instanceof com.geckolib.animatable.GeoEntity g) || e instanceof nl.juiced.guhs.feature.vadsrijk.bazen.mika.MikaSpion) {
+                continue;   // (the Mika spy uses the shared guh animations: BaasAnims.speel skips it)
+            }
+            boolean vfx;
+            try {
+                vfx = g.getAnimatableInstanceCache().getManagerForId(e.getId()).getAnimationControllers().containsKey(BaasAnims.CONTROLLER);
+            } catch (RuntimeException ex) {
+                continue;
+            }
+            if (!vfx) {
+                continue;
+            }
+            n++;
+            String model = AFWIJKEND.getOrDefault(id.getPath(), id.getPath());
+            JsonObject a = animaties(model);
+            if (a == null) {
+                fout.add(id.getPath() + ": no animation file " + model);
+            } else {
+                for (String naam : BaasAnims.STANDAARD) {
+                    if (!a.has(naam)) {
+                        fout.add(id.getPath() + ": " + naam + " missing in " + model);
+                    }
+                }
+            }
+        }
+        helper.assertTrue(n >= 20, "bosses with a vfx controller found: " + n);
+        helper.assertTrue(fout.isEmpty(), "boss vfx animations: " + fout);
+        helper.succeed();
+    }
 }
