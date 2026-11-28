@@ -3,6 +3,10 @@
 All notable changes to Guhs. Versions follow `MAJOR.MINOR.PATCH`.
 (The history from before the first public release is in [CHANGELOG-DEV.md](CHANGELOG-DEV.md).)
 
+## 1.10.31 — Minecraft 26.1.2
+
+- **Kapitein Roquefort, fase 3 (owner: "veel te kort, ik ga direct dood, geheel onduidelijk"):** the sinking telegraph is 10 s (`ZINK_TICKS = 200`, was 120), the fase-3 card stays for the whole telegraph, the overlay line counts down every second, and a pink `Vfx.zuil` stands on the wreck for the rest of the fight. Hits count from the moment the deck sank: the first about a second later, the first two 15 %, then 30 %. The red deck circle no longer covers the wreck (it lies 3 blocks down in a pit beside the deck: `roquefort_wrak` = 1686,221,-805, arena 1692,224,-821), the hull rim counts as on the wreck, and from the sinking on the whole wreck counts as the fight (35 of its 105 floor cells lay outside the arena disc). New `VadsrijkZ3RoquefortGameTests` on the real tiles.
+
 ## 1.10.30 — Minecraft 26.1.2
 
 - **Knapzak bigger (owner request):** 7 tabs instead of 5 (`Knapzak.MAX_TABS`), 3 free for every character instead of 1 (`GRATIS`), and every slot holds ten normal stacks (640 / 160; unstackables stay 1). A big stack is saved as several vanilla entries with the same slot (the item codec's 99 limit), so old saves load unchanged and a rollback keeps the rest in `onleesbaar`. The menu caps cursor / hotbar / shift-click moves at a normal stack; counts above 99 are drawn small. Bank and Knuffelbond bank unchanged.
