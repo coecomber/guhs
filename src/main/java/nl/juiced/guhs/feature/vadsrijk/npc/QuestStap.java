@@ -103,7 +103,10 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
         Component waar;
         BlockPos pos;
         // (integration, zone 2) an explicit target on the objective wins (QuestPlek: "npc:"/"poi:"/"gebied:"/"baas:")
-        if (d.plek() != null && !d.plek().isEmpty()) {
+        // 1.10.27 (Luc, z5_s07_kadet): NOT for an escort. Its target moves: first the NPC to pick up, then (a copy follows you) the
+        // destination. The fixed "npc:z5_kadet_dons" kept the tracker and the beam on Kadet Dons' pier after the pick-up, so the
+        // quest looked as if it had not noticed it (z3_s02 pointed at the destination before the pick-up). The ESCORTE case below.
+        if (d.type() != Quest.Doel.Type.ESCORTE && d.plek() != null && !d.plek().isEmpty()) {
             String plek = d.plek();
             for (java.util.function.BiFunction<ServerPlayer, String, String> k : PLEK_KIEZER) {   // V-INT
                 plek = k.apply(p, plek);
@@ -123,7 +126,7 @@ public record QuestStap(String quest, boolean hoofd, Component titel, Component 
                 String poi = d.bron().startsWith("poi:") ? d.bron().substring(4) : d.bron();
                 if (g != null) {
                     waar = poiPlek(poi);
-                    pos = NpcPlekken.poi(poi);
+                    pos = Escortes.bestemming(d);
                 } else {
                     waar = Component.translatable(P + "escorte.ophalen", naam(d.doel()), npcPlek(d.doel()));
                     pos = npcPos(p, d.doel());
